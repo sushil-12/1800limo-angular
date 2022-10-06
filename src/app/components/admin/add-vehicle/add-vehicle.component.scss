@@ -1,0 +1,52 @@
+.vehtype_extint img {
+	height       : 200px;
+	border-radius: 15px;
+}
+
+.vehtype_extint .emptyImage {
+	height: 200px;
+}
+
+.vehtype_extint .emptyImage img {
+	height: 195px;
+}
+
+.camera-svg {
+	height    : 35px;
+	margin-top: -5px;
+	cursor    : pointer;
+}
+
+.camera-svg:hover {
+	transform: scale(1.2, 1.2);
+}
+
+.camera-svg:focus {
+	outline  : none;
+	transform: scale(1.2, 1.2);
+}
+
+@media only screen and (min-width:1199px) {
+	.input-container:focus {
+		outline: none;
+
+		.radio-button:checked+.radio-tile {
+			color    : #000 !important;
+			transform: scale(1, 1);
+
+			.radio-tile-label {
+				color: #000 !important;
+			}
+		}
+
+		.radio-tile-label {
+			color: #000 !important;
+		}
+	}
+}
+
+@media only screen and (max-width:767px) {
+	.mobilePadding {
+		padding: 0px 15px !important;
+	}
+}

@@ -1,0 +1,133 @@
+<ngx-spinner></ngx-spinner>
+<main>
+	<!-- Main page content-->
+	<section class="user_information">
+		<h2 class="headinginfo"> Driver languages </h2>
+		<div class="containeredd">
+			<div class="row">
+				<div class="col-md-12">
+					<button class="custom-btn add-button" data-toggle="modal" data-target="#addDriverLanguageModal">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-plus-circle"
+							viewBox="0 0 16 16">
+							<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+							<path
+								d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+						</svg> Add Driver Language
+					</button>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<label class="alert alert-danger">Note: Add each Driver Language.</label>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-12 mb-3">
+					<mat-form-field appearance="outline">
+						<mat-label>Search Driver Language</mat-label>
+						<input matInput type="text" placeholder="Search Driver Language"
+							(input)="serach($event.target.value)">
+					</mat-form-field>
+				</div>
+			</div>
+		</div>
+
+		<div class="containeredd driverside_table">
+			<div class="row">
+				<div class="col-md-12 custom_table table-responsive">
+					<table class="table table-striped dataTable dt-responsive" id="dataTable" role="grid"
+						aria-describedby="dataTable_info" style="width: 100%;" width="100%" cellspacing="0">
+						<thead>
+							<tr role="row">
+								<th>Driver Language</th>
+								<th>Status</th>
+								<th>Actions</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr *ngFor="let driverLanguage of driverLanguage" role="row" class="odd">
+								<td>
+									<p>{{driverLanguage.name}}</p>
+								</td>
+								<td>
+									<mat-slide-toggle class="example-margin" [color]="colorToggle"
+										[checked]="driverLanguage.status" [disabled]="disabled"
+										(change)="enableDisableClicked($event,driverLanguage.id)">
+									</mat-slide-toggle>
+								</td>
+								<td>
+									<a class="user-profileded btn btn-icon btn-transparent-dark"
+										id="navbarDropdownUserImage" (click)="editDriverLanguage(driverLanguage.id)"
+										role="button" tabindex="1"> <span>Edit</span>
+									</a>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</section>
+</main>
+
+
+<!-- Add driverLanguage type modal -->
+<div class="modal fade" id="addDriverLanguageModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+	aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header pb-0">
+				<h3 class="text-center mb-0">Add Driver Language</h3>
+			</div>
+
+			<div class="modal-body pt-0">
+				<form [formGroup]="addDriverLanguageForm">
+					<div class="form-group">
+						<mat-form-field appearance="outline">
+							<mat-label>Driver Language</mat-label>
+							<input type="text" matInput formControlName="name" placeholder="Driver Language">
+						</mat-form-field>
+						<div *ngIf="submitted && f.name.errors" class="text-danger">
+							<div *ngIf="f.name.errors.required">The Driver Language is required</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer p-0">
+				<button type="button" class="custom-btn button2" (click)="submitForm()"
+					[disabled]="disableAddButton">Save</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Edit driverLanguage type modal-->
+<div class="modal fade" id="editDriverLanguageModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+	aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header pb-0">
+				<h3 class="text-center mb-0">Add Driver Language</h3>
+			</div>
+
+			<div class="modal-body pt-0">
+				<form [formGroup]="editDriverLanguageForm">
+					<div class="form-group">
+						<mat-form-field appearance="outline">
+							<mat-label>Driver Language</mat-label>
+							<input type="text" matInput formControlName="name" placeholder="Driver Language">
+						</mat-form-field>
+						<div *ngIf="submitted && f.name.errors" class="text-danger">
+							<div *ngIf="f.name.errors.required">The Driver Language is required</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer p-0">
+				<button type="button" class="custom-btn button2" (click)="updateDriverLanguageForm()"
+					[disabled]="disableAddButton">Update</button>
+			</div>
+		</div>
+	</div>
+</div>

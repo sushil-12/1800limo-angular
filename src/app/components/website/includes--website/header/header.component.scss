@@ -1,0 +1,32 @@
+.dropdown-item {
+	color: #000 !important;
+}
+
+.dropdown-item:hover {
+	color: var(--orange-color) !important;
+}
+
+.navbar-dark .navbar-nav .nav-item .nav-link:hover {
+	color: var(--orange-color) !important;
+}
+
+.nav-item {
+	padding-right: 0 !important;
+}
+
+#navbarDropdownUserImage:hover {
+	color: var(--orange-color) !important;
+}
+
+#navbarsExample05 {
+	z-index: 999;
+}
+
+.navbar-nav li {
+	cursor: pointer;
+}
+
+.dropdown-menu hr {
+	margin    : 5px 10px 5px 10px;
+	background: #646464;
+}

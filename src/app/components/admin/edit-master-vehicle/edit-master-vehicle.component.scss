@@ -1,0 +1,84 @@
+.vehtype_extint img {
+    height: 200px;
+    border-radius: 15px;
+	object-fit: contain;
+}
+
+.vehtype_extint .emptyImage {
+    height: 200px;
+}
+
+.vehtype_extint .emptyImage img {
+    height: 195px;
+}
+
+.vehtype_extint p {
+    margin-bottom: 0 !important;
+}
+
+.camera-svg {
+    height: 35px;
+    margin-top: -5px;
+    cursor: pointer;
+}
+
+.camera-svg:hover {
+    transform: scale(1.2, 1.2);
+}
+
+.camera-svg:focus {
+    outline: none;
+    transform: scale(1.2, 1.2);
+}
+
+
+
+.input-checkbox {
+	width: 100%;
+	height: 100%;
+	cursor: pointer;
+
+	.checkbox {
+		width: auto;
+		height: auto;
+		font-size: 1rem;
+		text-align: center;
+		text-transform: uppercase;
+		font-weight: 500;
+		border: 3px solid #52a87a;
+		border-radius: 7px;
+		padding: 1rem 2rem;
+		color: var(--orange-color);
+	}
+
+	.checkbox.active {
+		background-color: #52a87a;
+		color: #fff;
+	}
+
+}
+
+@media only screen and (min-width:1199px) {
+    .input-container:focus {
+        outline: none;
+
+        .radio-button:checked+.radio-tile {
+            color: #000 !important;
+            transform: scale(1, 1);
+
+            .radio-tile-label {
+                color: #000 !important;
+            }
+        }
+
+        .radio-tile-label {
+            color: #000 !important;
+        }
+    }
+}
+
+@media only screen and (max-width:767px) {
+    .mobilePadding {
+        padding: 0px 15px !important;
+    }
+}

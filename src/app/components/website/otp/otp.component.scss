@@ -1,0 +1,32 @@
+.timerButton {
+    background   : transparent;
+    border-radius: 5px;
+    height       : 54px;
+    width        : 212px;
+    border       : 2px solid var(--orange-color);
+    color        : var(--orange-color);
+}
+
+.resend-otp {
+    cursor: pointer;
+    color : var(--orange-color);
+}
+
+#resendOtpModal h3 {
+    margin: 0;
+}
+
+.mat-form-field {
+    margin-top: 0px;
+}
+
+.back-svg {
+    fill: var(--orange-color);
+}
+
+@media only screen and (max-width: 767px) {
+    .back-svg {
+        top : 10px;
+        left: 10px;
+    }
+}

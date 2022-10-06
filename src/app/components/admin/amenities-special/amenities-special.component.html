@@ -1,0 +1,137 @@
+<ngx-spinner></ngx-spinner>
+<main>
+
+	<!-- Main page content-->
+	<section class="user_information">
+		<h2 class="headinginfo">Special Amenities </h2>
+		<div class="containeredd">
+			<div class="row">
+				<div class="col-md-12">
+					<button class="custom-btn add-button" data-toggle="modal" data-target="#addAmenityModal">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-plus-circle"
+							viewBox="0 0 16 16">
+							<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+							<path
+								d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+						</svg> Add Special Amenity
+					</button>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-12">
+					<label class="alert alert-danger">Note: Add each Special Amenities.</label>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-12 mb-3">
+					<mat-form-field appearance="outline">
+						<mat-label>Search Special Amenity</mat-label>
+						<input matInput type="text" placeholder="Search Special Amenity"
+							(input)="serach($event.target.value)">
+					</mat-form-field>
+				</div>
+			</div>
+		</div>
+
+		<div class="containeredd driverside_table">
+			<div class="row">
+				<div class="col-md-12 custom_table table-responsive">
+					<table class="table table-striped dataTable dt-responsive" id="dataTable" role="grid"
+						aria-describedby="dataTable_info" style="width: 100%;" width="100%" cellspacing="0">
+						<thead>
+							<tr role="row">
+								<th>Special Amenities</th>
+								<th>Status</th>
+								<th>Actions</th>
+							</tr>
+						</thead>
+						<tbody cdkDropList (cdkDropListDropped)="drop($event)">
+							<tr *ngFor="let amenity of specialAmenities" role="row" class="odd" cdkDrag>
+								<td>
+									<p>{{amenity.name}}</p>
+								</td>
+								<td>
+									<mat-slide-toggle class="example-margin" [color]="color" [checked]="amenity.status"
+										[disabled]="disabled" (change)="enableDisableClicked($event,amenity.id)">
+									</mat-slide-toggle>
+								</td>
+								<td>
+									<a class="user-profileded btn btn-icon btn-transparent-dark"
+										id="navbarDropdownUserImage" (click)="editSpecialAmenity(amenity.id)"
+										role="button" tabindex="1"> <span>Edit</span>
+									</a>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</section>
+</main>
+
+
+<!-- Add amenity type modal -->
+<div class="modal fade" id="addAmenityModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+	aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<button type="button" class="close closeButton" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+			<div class="modal-header pb-0">
+				<h3 class="mb-0">Add Special Amenity</h3>
+			</div>
+			<div class="modal-body pt-0">
+				<form [formGroup]="addAmenitiesForm">
+					<div class="form-group">
+						<mat-form-field appearance="outline">
+							<mat-label>Special Amenity</mat-label>
+							<input type="text" matInput formControlName="name" placeholder="Special Amenity">
+						</mat-form-field>
+						<div *ngIf="submitted && f.name.errors" class="text-danger">
+							<div *ngIf="f.name.errors.required">The Special Amenity is required</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer p-0">
+				<button type="button" class="custom-btn button2" (click)="submitForm()"
+					[disabled]="disableAddButton">Save</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!-- Edit amenity type modal-->
+<div class="modal fade" id="editAmenityModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+	aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header pb-0">
+				<h3 class="text-center mb-0">Edit Special Amenity</h3>
+			</div>
+			<div class="modal-body pt-0">
+				<form [formGroup]="editAmenitiesForm">
+					<input type="hidden" formControlName="id">
+					<div class="form-group">
+						<mat-form-field appearance="outline">
+							<mat-label>Special Amenity</mat-label>
+							<input type="text" matInput formControlName="name" placeholder="Special Amenity">
+						</mat-form-field>
+						<div *ngIf="submitted && f.name.errors" class="text-danger">
+							<div *ngIf="f.name.errors.required">The Special Amenity is required</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer p-0">
+				<button type="button" class="custom-btn button2" (click)="updateAmenityForm()"
+					[disabled]="disableAddButton">Update</button>
+			</div>
+		</div>
+	</div>
+</div>

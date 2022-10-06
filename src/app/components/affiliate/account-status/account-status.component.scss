@@ -1,0 +1,116 @@
+.iconStyle a {
+	display: inline-block !important;
+}
+
+.iconStyle i.fa-facebook {
+	color: #385593;
+}
+
+.iconStyle i.fa-facebook:hover {
+	transform: scale(1.2, 1.2);
+}
+
+.iconStyle i.fa-twitter {
+	color: #00a6e4;
+}
+
+.iconStyle i.fa-twitter:hover {
+	transform: scale(1.2, 1.2);
+}
+
+.iconStyle i.fa-linkedin {
+	color: #0073ae;
+}
+
+.iconStyle i.fa-linkedin:hover {
+	transform: scale(1.2, 1.2);
+}
+
+.iconStyle i.fa-youtube {
+	color: #c7171e;
+}
+
+.iconStyle i.fa-youtube:hover {
+	transform: scale(1.2, 1.2);
+}
+
+.modal-content {
+	align-items: center;
+}
+
+.modal-header h3 {
+	margin: 0;
+}
+
+.modal-body {
+	padding: 0;
+}
+
+.modal-body p {
+	text-align: center;
+	font-size : 16px;
+	padding   : 0 30px;
+}
+
+.modal-footer {
+	padding: 0;
+}
+
+@media only screen and (max-width:320px) {
+	.socials {
+		text-align: left;
+	}
+
+	.socials i {
+		font-size: 26px;
+	}
+
+	.socials svg {
+		width     : 26px;
+		margin    : 0px 14px 0px 14px;
+		margin-top: -8px;
+	}
+}
+
+@media (min-width:328px) and (max-width:767px) {
+	.socials {
+		text-align: center;
+	}
+}
+
+.step0Div li {
+	font-size: 16px;
+}
+
+button.close {
+	background-color: #fff !important;
+	position        : absolute;
+	z-index         : 999;
+	right           : -30px;
+	top             : -18px;
+	width           : 30px;
+	height          : 30px;
+	border-radius   : 60px;
+	opacity         : 1;
+}
+
+.close span {
+	color      : #ff0000 !important;
+	box-shadow : none;
+	text-shadow: none;
+	font-size  : 30px;
+}
+
+.alertBox {
+	background   : var(--orange-color);
+	width        : 500px;
+	border-radius: 10px;
+	height       : 70px;
+	padding      : 10px;
+	margin-top   : 20px;
+}
+
+.button2 {
+	background-color: var(--orange-color) !important;
+	border          : none !important;
+}

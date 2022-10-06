@@ -1,0 +1,37 @@
+.approval_status{
+    font-size:medium;
+    color:#fff;
+}
+.in-progress{
+    background-color: #0474fc;
+}
+.completed{
+    background-color: #f7905d;
+}
+.accepted{
+    background-color: #00bd1f;
+}
+.rejected{
+    background-color: #fc0404;
+}
+
+.acceptButton{
+    background-color: #00bd1f;
+    color: #fff;
+    border: none;
+    border-radius: 10rem;
+    margin-right: 0.5rem;
+}
+.rejectButton{
+    background-color: #fc0404;
+    color: #fff;
+    border: none;
+    border-radius: 10rem;
+}
+
+.btnclass
+{
+    margin-top: 20px;
+    height: 60px;
+    width: 100%;
+}

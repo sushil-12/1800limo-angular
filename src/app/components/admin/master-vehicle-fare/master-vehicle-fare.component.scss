@@ -1,0 +1,208 @@
+.imageSection {
+	margin-top: 30px;
+}
+
+.vehicleData {
+	list-style-type: none;
+	padding-left   : 0;
+	margin-bottom  : 0;
+}
+
+@media only screen and (min-width:768px) {
+	.vehicleData li {
+		margin-bottom: 10px;
+		font-size    : 18px;
+		font-weight  : 600;
+	}
+}
+
+@media only screen and (max-width:767px) {
+	.vehicleData li {
+		margin-top: 10px;
+	}
+}
+
+.cityTax {
+	margin-top   : 0px;
+	margin-bottom: 0px;
+}
+
+.cityTaxErrorMsg {
+	margin-bottom: 20px;
+}
+
+.mile_km_radio li p label {
+	font-size: 1rem;
+}
+
+.vehicleImage img {
+	width        : 280px;
+	height       : 200px;
+	max-width    : 100%;
+	border-radius: 20px;
+	object-fit   : contain;
+}
+
+.taxesStyle .input-container {
+	margin-top: 0;
+}
+
+@media only screen and (min-width:1199px) {
+	.input-container:focus {
+		outline: none;
+
+		.radio-button:checked+.radio-tile {
+			color    : #000 !important;
+			transform: scale(1, 1);
+
+			.radio-tile-label {
+				color: #000 !important;
+			}
+		}
+
+		.radio-tile-label {
+			color: #000 !important;
+		}
+	}
+}
+
+@media only screen and (max-width:991px) {
+	.vehicleImage img {
+		width : 100%;
+		height: auto;
+	}
+}
+
+@media only screen and (max-width:767px) {
+	.mobilePadding {
+		padding: 0px 15px !important;
+	}
+
+	.cityTax {
+		margin-top   : 10px;
+		margin-bottom: 0px;
+	}
+
+	.flatRange {
+		margin-top: 0px;
+	}
+}
+
+@media only screen and (max-width:575px) {
+	.vehicleData li:first-child {
+		margin-top: 0px;
+	}
+
+	.vehicleData li {
+		margin-top: 0px;
+		font-size : 14px;
+	}
+
+	.vehicleImage img {
+		width : 100%;
+		height: auto;
+	}
+}
+
+.gratuityLabel {
+	font-size   : 24px;
+	position    : absolute;
+	font-weight : 600;
+	top         : -5px;
+	padding-left: 10px;
+}
+
+.amenityLabel {
+	font-weight: 600;
+}
+
+
+div.row {
+	padding: 10px 17px;
+
+	div#radio-button-type {
+		display        : flex;
+		flex-direction : row;
+		align-items    : center;
+		justify-content: center;
+		flex-wrap      : nowrap;
+		cursor         : pointer;
+
+		&>div {
+			padding         : 1rem 1.5rem;
+			font-size       : 0.8rem;
+			text-transform  : uppercase;
+			background-color: #fff;
+			color           : #000;
+			border          : 2.5px solid #52a87a;
+			width           : 100%;
+			height          : auto;
+			letter-spacing  : 1.6px
+		}
+
+		&>div:first-child {
+			border-top-left-radius   : 7px;
+			border-bottom-left-radius: 7px;
+		}
+
+		&>div:last-child {
+			border-top-right-radius   : 7px;
+			border-bottom-right-radius: 7px;
+		}
+
+		&>div.active {
+			background-color: #52a87a;
+			color           : #fff;
+		}
+	}
+}
+
+
+div#rate-manager-slider {
+	width: 100%;
+
+	&>span {
+		cursor: pointer;
+
+		input {
+			width: 80%;
+		}
+	}
+
+	&>p {
+		width : 83.5%;
+		cursor: pointer;
+	}
+
+	#slider {
+		background-color: #908c8c;
+		appearance      : none;
+		outline         : none;
+		border-radius   : 10px;
+		height          : 3px
+	}
+
+	#slider::-webkit-slider-thumb {
+		-webkit-appearance: none;
+		appearance        : none;
+		width             : 25px;
+		height            : 25px;
+		border-radius     : 50%;
+		background-color  : var(--orange-color);
+		cursor            : pointer;
+		border            : 3px solid var(--orange-color);
+	}
+
+	#slider::-moz-range-thumb {
+		width           : 25px;
+		height          : 25px;
+		border-radius   : 50%;
+		background-color: var(--orange-color);
+		cursor          : pointer;
+		border          : 3px solid var(--orange-color);
+	}
+}
+
+.input-container {
+	margin-top: 0 !important;
+}

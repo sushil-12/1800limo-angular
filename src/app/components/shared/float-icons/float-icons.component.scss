@@ -1,0 +1,169 @@
+li {
+	list-style: none;
+}
+
+svg {
+	width        : 50px;
+	height       : 50px;
+	margin-bottom: 10px;
+	margin-top   : -25px;
+}
+
+.mailBoxStyle svg {
+	width        : 60px;
+	height       : 60px;
+	margin-bottom: 5px;
+	margin-top   : -30px;
+}
+
+.button {
+	width: 180px;
+}
+
+.button.expanded {
+	width: 390px;
+}
+
+.col {
+	text-align: center;
+	margin-top: 15px;
+	width     : 86px;
+}
+
+h3 a {
+	text-decoration: none;
+	color          : #000;
+}
+
+.col li a {
+	text-decoration: none;
+	color          : #000;
+}
+
+.floatIcons {
+	position  : fixed;
+	bottom    : 15px;
+	right     : 15px;
+	opacity   : 1;
+	transition: all .2s ease-in-out;
+	z-index   : 99999;
+}
+
+
+
+mat-form-field {
+	margin-right    : 12px;
+	background-color: rgb(3, 3, 3);
+}
+
+
+
+
+#fixed-form-container {
+	position  : fixed;
+	bottom    : 0px;
+	right     : 0;
+	text-align: center;
+	margin    : 0;
+	z-index   : 4;
+
+}
+
+#fixed-form-container .button {
+	font-size            : 18px;
+	cursor               : pointer;
+	margin-left          : auto;
+	margin-right         : auto;
+	right                : 0;
+	top                  : -40px;
+	position             : absolute;
+	-moz-border-radius   : 5px;
+	-webkit-border-radius: 5px;
+	border-radius        : 50px 0px 0px 0px;
+	padding              : 8px 8px 8px 45px;
+	background-image     : linear-gradient(to bottom, #5fc6f2, #26acec, #0090e4, #0073d7, #1954c5);
+	color                : #fff;
+	display              : inline-block;
+	text-align           : center;
+	text-decoration      : none;
+}
+
+#fixed-form-container .body {
+	background-color: #dcdcdc;
+	padding         : 10px;
+}
+
+#fixed-form-container .button p {
+	position: absolute;
+	top     : 10px;
+	right   : 10px;
+}
+
+#fixed-form-container .button span {
+	margin-left: -25px;
+}
+
+#fixed-form-container .button.expanded span {
+	margin-left: 0px;
+}
+
+@media only screen and (max-width:767px) {
+	#fixed-form-container .button {
+		margin            : 0;
+		-webkit-transition: all 0.2s ease-in;
+		-moz-transition   : all 0.2s ease-in;
+		-ms-transition    : all 0.2s ease-in;
+		transition        : all 0.2s ease-in;
+	}
+
+	#fixed-form-container {
+		width: 100%;
+	}
+
+	.button {
+		width: 120px;
+	}
+
+	.button.expanded {
+		width: 100%;
+	}
+
+	#fixed-form-container .button {
+		font-size            : 16px;
+		cursor               : pointer;
+		margin-left          : auto;
+		margin-right         : auto;
+		right                : 0;
+		top                  : -40px;
+		position             : absolute;
+		-moz-border-radius   : 5px;
+		-webkit-border-radius: 5px;
+		border-radius        : 50px 0px 0px 0px;
+		padding              : 8px 8px 8px 20px;
+		background-image     : linear-gradient(to bottom, #5fc6f2, #26acec, #0090e4, #0073d7, #1954c5);
+		color                : #fff;
+		display              : inline-block;
+		text-align           : center;
+		text-decoration      : none;
+	}
+}
+
+@media only screen and (min-width:768px) {
+	#fixed-form-container .button {
+		margin            : 0;
+		-webkit-transition: all 0.2s ease-in;
+		-moz-transition   : all 0.2s ease-in;
+		-ms-transition    : all 0.2s ease-in;
+		transition        : all 0.2s ease-in;
+	}
+
+	#fixed-form-container {
+		width: 390px;
+		float: right;
+	}
+
+	#fixed-form-container .body {
+		padding         : 30px;
+		background-color: #dcdcdc;
+	}
+}

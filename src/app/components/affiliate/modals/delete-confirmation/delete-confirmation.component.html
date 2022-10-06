@@ -1,0 +1,26 @@
+<div class="modal fade" id="deleteConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <button type="button" class="close closeButton" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <div class="text-center">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" height="70">
+          <g data-name="Layer 51" fill="#ea4444" class="color000 svgShape">
+            <path d="M16,2A14,14,0,1,0,30,16,14,14,0,0,0,16,2Zm0,26A12,12,0,1,1,28,16,12,12,0,0,1,16,28Z" fill="#ea4444"
+              class="color000 svgShape"></path>
+            <path
+              d="M22.71,9.29a1,1,0,0,0-1.42,0L16,14.59l-5.29-5.3a1,1,0,0,0-1.42,1.42L14.59,16l-5.3,5.29a1,1,0,0,0,0,1.42,1,1,0,0,0,1.42,0L16,17.41l5.29,5.3a1,1,0,0,0,1.42,0,1,1,0,0,0,0-1.42L17.41,16l5.3-5.29A1,1,0,0,0,22.71,9.29Z"
+              fill="#ea4444" class="color000 svgShape"></path>
+          </g>
+        </svg>
+        <h5 class="modal-title my-3" id="exampleModalLabel">{{alertMessage}}</h5>
+      </div>
+      <div class="text-center">
+        <button type="button" class="custom-btn yes-btn mr-2" (click)="delete()">Yes</button>
+        <button type="button" class="custom-btn no-btn" data-dismiss="modal" aria-label="Close">No</button>
+      </div>
+    </div>
+  </div>
+</div>

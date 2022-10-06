@@ -1,0 +1,49 @@
+<ngx-spinner></ngx-spinner>
+<main>
+	<!-- Main page content-->
+	<section class="user_information">
+		<h2 class="headinginfo">{{heading}}</h2>
+
+		<div class="containeredd driverside_table">
+			<div class="row">
+				<div class="col-md-12 custom_table table-responsive">
+					<table class="table table-striped dataTable dt-responsive" id="dataTable" role="grid"
+						aria-describedby="dataTable_info" style="width: 100%;" width="100%" cellspacing="0">
+						<thead>
+							<tr role="row">
+								<th>Postion</th>
+								<th>Section Title</th>
+
+								<th>Status</th>
+								<th>Actions</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr role="row" class="odd" *ngFor="let step0Content of step0Contents">
+								<td>{{ step0Content.section_sort_order }}</td>
+								<td>{{ step0Content.title | slice:0 : 70}}{{((step0Content.title + '').length > 70) ?
+									'...':'' }} </td>
+
+								<td>
+									<mat-slide-toggle class="example-margin" [color]="color"
+										[checked]="step0Content.section_status" [disabled]="disabled"
+										(change)="changeStep0SectionStatus($event, step0Content.id)">
+									</mat-slide-toggle>
+								</td>
+								<td>
+									<a class="user-profileded btn btn-icon btn-transparent-dark"
+										id="navbarDropdownUserImage" (click)="editAction(step0Content.id)" role="button"
+										tabindex="1"> <span>Edit</span>
+									</a>
+								</td>
+							</tr>
+
+						</tbody>
+					</table>
+				</div>
+				<!----BACK BTN---->
+
+			</div>
+		</div>
+	</section>
+</main>

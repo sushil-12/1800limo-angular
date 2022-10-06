@@ -1,0 +1,108 @@
+<ngx-spinner></ngx-spinner>
+<main>
+    <!-- Main page content-->
+    <div class="container">
+        <div class="invoice_chargewrap">
+            <div class="invoice_chargemrgt">
+                <div class="invoice_chargergt">
+                    <h2>Charges</h2>
+                    <div *ngIf="paymentData">
+                        <div *ngIf="paymentData.priceDetail">
+                            <div *ngFor="let priceObj of paymentData.priceDetail | keyvalue">
+                                <h4>{{priceObj.key}}</h4>
+                                <ul class="invoice_chargebtm">
+                                    <!-- {{price | json}} -->
+                                    <li *ngFor="let price of priceObj.value">
+                                        <h3>{{price.rate_label}}</h3>
+                                        <label>${{price.amount}}</label>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <ul class="invoice_chargettl" *ngIf="paymentData">
+                        <li>
+                            <h3>Total Amount</h3>
+                            <label>${{paymentData.grand_total}}</label>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <form [formGroup]="PBEform">
+            <!-----BILLING INFO-------------->
+            <section class="billing_inforamtion">
+                <h2 class="headinginfo"> Booking Payment </h2>
+                <div class="" id="accordionSidebar1">
+                    <div class="card mt-3">
+                        <a class="card-header nav-link collapsed" href="#" data-toggle="collapse"
+                            data-target="#secondary_card" aria-expanded="true" aria-controls="collapseUtilities">
+                            <span>Credit Card <img class="creditcard_pay"
+                                    src="assets/admin/images/creditcard_pay.png"></span> </a>
+                        <div id="secondary_card" class="card-body collapse show" aria-labelledby="headingUtilities"
+                            data-parent="#accordionSidebar1">
+                            <div class="bg-white py-2 collapse-inner rounded">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label>Card No#*</label>
+                                        <input type="text" placeholder="Card No#" formControlName="cc_number">
+                                        <div *ngIf="submittedForm && f.cc_number.errors" class="text-danger">
+                                            <div *ngIf="f.cc_number.errors.required">This field is required</div>
+                                            <div *ngIf="f.cc_number.errors.pattern">This field should be a number</div>
+                                            <div *ngIf="f.cc_number.errors.minlength">Minimum length should be 16</div>
+                                            <div *ngIf="f.cc_number.errors.maxlength">Maximum length should be 16</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label>CSC*</label>
+                                        <input type="text" placeholder="CSC" formControlName="cvc">
+                                        <div *ngIf="submittedForm && f.cvc.errors" class="text-danger">
+                                            <div *ngIf="f.cvc.errors.required">This field is required</div>
+                                            <div *ngIf="f.cvc.errors.pattern">This field should be a number</div>
+                                            <div *ngIf="f.cvc.errors.minlength">Minimum length should be 3</div>
+                                            <div *ngIf="f.cvc.errors.maxlength">Maximum length should be 3</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label>Month *</label>
+                                        <input type="text" placeholder="MM" formControlName="cc_expiry_month">
+                                        <div *ngIf="submittedForm && f.cc_expiry_month.errors" class="text-danger">
+                                            <div *ngIf="f.cc_expiry_month.errors.required">This field is required</div>
+                                            <div *ngIf="f.cc_expiry_month.errors.pattern">Please enter valid MM/YY</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label>Year *</label>
+                                        <input type="text" placeholder="YY" formControlName="cc_expiry_year">
+                                        <div *ngIf="submittedForm && f.cc_expiry_year.errors" class="text-danger">
+                                            <div *ngIf="f.cc_expiry_year.errors.required">This field is required</div>
+                                            <div *ngIf="f.cc_expiry_year.errors.pattern">This field should be a number
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label>Name on the card*</label>
+                                        <input type="text" placeholder="Country of Region Residence"
+                                            formControlName="name_on_card">
+                                        <div *ngIf="submittedForm && f.name_on_card.errors" class="text-danger">
+                                            <div *ngIf="f.name_on_card.errors.required">This field is required</div>
+                                            <div *ngIf="f.name_on_card.errors.pattern">This field should be a number
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <ul>
+                    <li><button class="forstep_booknow" (click)="submitForm()"
+                            [disabled]="disableSubmitButton">Payment</button> </li>
+                </ul>
+            </section>
+        </form>
+    </div>
+
+</main>

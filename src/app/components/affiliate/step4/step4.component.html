@@ -1,0 +1,123 @@
+<section class="driverbooking_top  user_information">
+	<h2 class="headinginfo">Add Driver</h2>
+	<div class="containeredd">
+		<div class="row mt-3">
+			<div class="col-md-12 mb-2">
+				<label class="alert alert-danger" *ngIf="affiliateType=='fleet_operator'; else otherOperator">Note :
+					Fleet Operators can enter unlimited drivers.</label>
+				<ng-template #otherOperator>
+					<label class="alert alert-danger">Note: Black Car / Limo Op / Taxi / Gig Op Can Only Enter 1
+						Driver.</label>
+				</ng-template>
+			</div>
+		</div>
+		<div class="row" *ngIf="driverList">
+			<div class="col-md-12" *ngIf="affiliateType==='fleet_operator' || driverList.length==0">
+				<button class="custom-btn add-button" (click)="addDriverClick(accountId)" tabindex="1">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-plus-circle"
+						viewBox="0 0 16 16">
+						<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+						<path
+							d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+					</svg> Add Driver
+				</button>
+			</div>
+		</div>
+	</div>
+	<div class="containeredd driverside_table">
+		<div class="row">
+			<div class="col-md-12 custom_table table-responsive">
+				<table class="table table-striped dataTable dt-responsive" id="dataTable" role="grid"
+					aria-describedby="dataTable_info" style="width: 100%;" width="100%" cellspacing="0">
+					<thead>
+						<tr role="row">
+							<th>Driver Image</th>
+							<th>Name</th>
+							<th>Cell</th>
+							<th>Email</th>
+							<th>Delete</th>
+							<th [hidden]="affiliateType!='fleet_operator'">Account Status</th>
+							<th class="tableWidth">Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						<ng-container *ngIf="driverList">
+							<tr role="row" class="odd" *ngFor="let driver of driverList">
+								<td><img class="rounded-circle" src="{{driver.DriverImage.image}}"></td>
+								<td>{{driver.FirstName+' '+driver.MiddleName+' '+driver.LastName}}</td>
+								<td class="pointer"><a href="tel:{{driver.CellIsd+' '+driver.CellNumber}}"
+										tabindex="-1">{{driver.CellIsd+' '+driver.CellNumber}}</a></td>
+								<td class="pointer"><a href="mailto:{{driver.Email}}" tabindex="-1">{{driver.Email}}</a>
+								</td>
+								<td>
+									<i class="fa fa-trash pointer" style="font-size: x-large; color:#d64646"
+										(click)="enableDisableClicked(driver.id)" data-toggle="modal"
+										data-target="#deleteConfirmationModal"></i>
+								</td>
+								<td [hidden]="affiliateType!='fleet_operator'">
+									<div class="row">
+										<div class="col-md-12">
+											<label id="Continue_{{driver.id}}" class="toggle toggle-left continueLabel"
+												[ngClass]="driver.status=='enable' ? 'checkedContinueLabel' : ''"
+												(click)="driverAccountStatus(driver.id, 'Activate')" data-toggle="modal"
+												data-target="#suspendModal">Active</label>
+
+											<label id="Suspend_{{driver.id}}" class="toggle toggle-right suspendLabel"
+												[ngClass]="driver.status=='suspend' ? 'checkedSuspendLabel' : ''"
+												data-toggle="modal" data-target="#suspendModal"
+												(click)="driverAccountStatus(driver.id, 'suspend')">Suspend</label>
+										</div>
+									</div>
+								</td>
+								<td class="tableWidth">
+									<a class="user-profileded btn btn-icon btn-transparent-dark"
+										id="navbarDropdownUserImage" (click)="clickEditDriver(driver.id)" role="button"
+										tabindex="1"> <span>Edit Driver</span>
+									</a>
+								</td>
+							</tr>
+							<tr *ngIf="!driverList?.length">
+								<td colspan="6">No Driver Found!</td>
+							</tr>
+						</ng-container>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</section>
+
+<!-- Delete confirmation modal -->
+<app-delete-confirmation (deleteRecord)="delete()" [alertMessage]="alertMessage"></app-delete-confirmation>
+
+<!-- Suspend/Continue Confirmation modal -->
+<div class="modal fade" id="suspendModal" data-backdrop="static" tabindex="-1" role="dialog"
+	aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<button type="button" class="close closeButton" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+			<div class="text-center">
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" height="70">
+					<g data-name="Layer 51" fill="#ea4444" class="color000 svgShape">
+						<path d="M16,2A14,14,0,1,0,30,16,14,14,0,0,0,16,2Zm0,26A12,12,0,1,1,28,16,12,12,0,0,1,16,28Z"
+							fill="#ea4444" class="color000 svgShape"></path>
+						<path
+							d="M22.71,9.29a1,1,0,0,0-1.42,0L16,14.59l-5.29-5.3a1,1,0,0,0-1.42,1.42L14.59,16l-5.3,5.29a1,1,0,0,0,0,1.42,1,1,0,0,0,1.42,0L16,17.41l5.29,5.3a1,1,0,0,0,1.42,0,1,1,0,0,0,0-1.42L17.41,16l5.3-5.29A1,1,0,0,0,22.71,9.29Z"
+							fill="#ea4444" class="color000 svgShape"></path>
+					</g>
+				</svg>
+				<h5 class="modal-title my-3" id="exampleModalLabel">Are you sure you want to {{storeStatus}} this
+					Driver?</h5>
+			</div>
+			<div class="text-center">
+				<button type="button" class="custom-btn yes-btn mr-2" *ngIf="storeStatus == 'Activate'"
+					(click)="accountStatus('enable')">Yes</button>
+				<button type="button" class="custom-btn yes-btn mr-2" *ngIf="storeStatus == 'suspend'"
+					(click)="accountStatus('suspend')">Yes</button>
+				<button type="button" class="custom-btn no-btn" data-dismiss="modal" aria-label="Close">No</button>
+			</div>
+		</div>
+	</div>
+</div>

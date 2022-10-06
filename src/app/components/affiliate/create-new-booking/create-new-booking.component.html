@@ -1,0 +1,1535 @@
+<ngx-spinner name="fetchspinner">
+	<p style="color: white; font-size: 0.95rem; width: max-content">
+		Searching our large database of vehicles and drivers....
+	</p>
+</ngx-spinner>
+<ngx-spinner name="savespinner">
+	<p style="color: white; font-size: 0.95rem; width: max-content">
+		Saving your details. Please Wait...
+	</p>
+</ngx-spinner>
+
+
+
+<main>
+	<form class="step_form_wrapper" [formGroup]="bookingForm">
+		<!-- CREATE BOOKING SECTION -->
+		<section id="create-booking" class="user_information">
+			<h2 class="headinginfo"> Create Booking </h2>
+			<!-- Create Booking -->
+			<div class="container">
+				<!-- Service Type | Transfer Type -->
+				<div class="row">
+					<!-- Service Type -->
+					<div [ngClass]="Form.service_type.value == 'round_trip' ? 'col-md-4' : 'col-md-6'">
+						<mat-form-field appearance="outline">
+							<mat-label>
+								Service Type <span class="asterisk"></span>
+							</mat-label>
+							<mat-select formControlName="service_type" (selectionChange)="changeDetection.service_type()">
+								<mat-option value="one_way">One Way</mat-option>
+								<mat-option value="round_trip">Round Trip</mat-option>
+								<mat-option value="charter_tour">Charter/Tour</mat-option>
+							</mat-select>
+						</mat-form-field>
+						<!-- <div class="text-danger">
+							<div>
+								This field is required
+							</div>
+						</div> -->
+					</div>
+
+					<!-- Transfer Type -->
+					<div [ngClass]="Form.service_type.value == 'round_trip' ? 'col-md-4' : 'col-md-6'">
+						<mat-form-field appearance="outline">
+							<mat-label>
+								Transfer Type <span class="asterisk"></span>
+							</mat-label>
+							<mat-select formControlName="transfer_type" (selectionChange)="changeDetection.transfer_type()">
+								<mat-option value="airport_to_city">Airport to City</mat-option>
+								<mat-option value="airport_to_cruise">Airport to Cruise Port</mat-option>
+								<mat-option value="airport_to_airport">Airport to Airport</mat-option>
+								<mat-option value="city_to_airport">City to Airport</mat-option>
+								<mat-option value="city_to_city">City to City</mat-option>
+								<mat-option value="city_to_cruise">City to Cruise Port</mat-option>
+								<mat-option value="cruise_to_city">Cruise Port to City</mat-option>
+								<mat-option value="cruise_to_airport">Cruise Port to Airport</mat-option>
+							</mat-select>
+						</mat-form-field>
+						<!-- <div class="text-danger">
+							<div>
+								This field is required
+							</div>
+						</div> -->
+					</div>
+
+					<!-- Return Transfer Type -->
+					<div class="col-md-4" *ngIf="Form.service_type.value == 'round_trip'">
+						<mat-form-field appearance="outline">
+							<mat-label>
+								Return Transfer Type <span class="asterisk"></span>
+							</mat-label>
+							<mat-select formControlName="return_transfer_type">
+								<mat-option value="airport_to_city">Airport to City</mat-option>
+								<mat-option value="airport_to_cruise">Airport to Cruise Port</mat-option>
+								<mat-option value="airport_to_airport">Airport to Airport</mat-option>
+								<mat-option value="city_to_airport">City to Airport</mat-option>
+								<mat-option value="city_to_city">City to City</mat-option>
+								<mat-option value="city_to_cruise">City to Cruise Port</mat-option>
+								<mat-option value="cruise_to_city">Cruise Port to City</mat-option>
+								<mat-option value="cruise_to_airport">Cruise Port to Airport</mat-option>
+							</mat-select>
+						</mat-form-field>
+						<!-- <div class="text-danger">
+							<div>
+								This field is required
+							</div>
+						</div> -->
+					</div>
+					<!-- Return Transfer Type Ends -->
+				</div>
+			</div>
+			<!-- Create Booking Ends -->
+		</section>
+		<!-- CREATE BOOKING SECTION ENDS -->
+
+		<!-- JOURNEY SECTION-->
+		<section id="journey-details" class="user_information">
+			<!-- Journey Details -->
+			<h2 class="headinginfo "> Journey Details </h2>
+			<div class="container">
+				<!-- Meet & Greet Choices -->
+				<div id="meet-greet-row" class="row">
+					<div class="col-md-12">
+						<mat-form-field appearance="outline">
+							<mat-label>
+								Meet and Greet Choices <span class="asterisk"></span>
+							</mat-label>
+							<mat-select formControlName="meet_greet_choices">
+								<mat-option *ngFor="let meetGreet of big_data_list?.meetGreets" [value]="meetGreet.id">
+									{{ meetGreet.message }}
+								</mat-option>
+							</mat-select>
+						</mat-form-field>
+					</div>
+				</div>
+
+				<div id="travel-date-time-row" class="row">
+					<!-- Travel Date -->
+					<div class="col-md-6">
+						<mat-form-field appearance="outline">
+							<mat-label>Travel Date<span class="asterisk">*</span></mat-label>
+							<input matInput [setOutputDateFormat]="outputDateFormat" [matDatepicker]="picker1"
+								placeholder="Travel Date" id="id_4"
+								(dateChangeWithFormat)="changeDetection.selectDate('pickupDate',$event)"
+								formControlName="pickup_date" (click)="picker1.open()" />
+							<mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+							<mat-datepicker #picker1></mat-datepicker>
+						</mat-form-field>
+						<!-- <mat-form-field appearance="outline">
+										<mat-label>
+											Travel Date <span class="asterisk"></span>
+										</mat-label>
+										<input matInput [matDatepicker]="picker1" placeholder="Travel Date" id="id_4"
+											formControlName="pickup_date" (click)="picker1.open()">
+										<mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+										<mat-datepicker #picker1></mat-datepicker>
+									</mat-form-field> -->
+					</div>
+
+					<!-- Travel Time -->
+					<div class="col-md-6">
+						<mat-form-field appearance="outline">
+							<mat-label>
+								Travel Time <span class="asterisk"></span>
+							</mat-label>
+							<mat-select formControlName="pickup_time">
+								<mat-option *ngFor="let time of constants_data.time_values; index as time_index"
+									[value]="time.return_value">
+									{{ time.display_value }}
+								</mat-option>
+							</mat-select>
+						</mat-form-field>
+						<!-- <div class="text-danger">
+										<div>
+											This field is required
+										</div>
+									</div> -->
+					</div>
+				</div>
+
+				<h3 class="headinginfoH3">Pickup</h3>
+
+				<div *ngIf="searchSubstring(Form.transfer_type.value, 'airport_')">
+					<!-- Pickup Airport | Pickup Airline -->
+					<div class="row">
+						<!-- Airport -->
+						<div class="col-md-6">
+							<mat-form-field appearance="outline">
+								<mat-label>
+									Airport <span class="asterisk"></span>
+								</mat-label>
+								<input type="text" placeholder="Search by Name or Airport Code" matInput
+									(keyup)="searchAirport($event.target.value)" [matAutocomplete]="auto1"
+									[value]="fillBigDataListValue('airport', 'pickup_airport')">
+								<mat-autocomplete #auto1="matAutocomplete">
+									<mat-option *ngFor="let airport of big_data_list?.airportsData" [value]="airport.name"
+										(onSelectionChange)="chooseAirportAirline(airport.id, 'pickup_airport')">
+										{{ airport.name }}
+									</mat-option>
+								</mat-autocomplete>
+								<!-- <mat-select formControlName="pickup_airport"
+												(selectionChange)="chooseAirport($event.value, 'pickup_airport')">
+												<mat-option *ngFor="let airport of big_data_list?.airportsData" [value]="airport.id">
+													{{ airport.name }}
+												</mat-option>
+											</mat-select> -->
+							</mat-form-field>
+						</div>
+
+						<!-- Airline Name -->
+						<div class="col-md-6">
+							<mat-form-field appearance="outline">
+								<mat-label>
+									Airline Name <span class="asterisk"></span>
+								</mat-label>
+								<input type="text" placeholder="Search by Name" matInput
+									(keyup)="searchAirline($event.target.value)" [matAutocomplete]="auto2">
+								<mat-autocomplete #auto2="matAutocomplete">
+									<mat-option *ngFor="let airline of big_data_list?.airlinesData" [value]="airline.name"
+										(onSelectionChange)="chooseAirportAirline(airline.id, 'pickup_airline')">
+										{{ airline.name }}
+									</mat-option>
+								</mat-autocomplete>
+								<!-- <mat-select formControlName="pickup_airline">
+												<mat-option *ngFor="let airline of big_data_list?.airlinesData" [value]="airline.id">
+													{{ airline.name }}
+												</mat-option>
+											</mat-select> -->
+							</mat-form-field>
+						</div>
+					</div>
+
+					<!-- Flight Number | Origin Airport/City -->
+					<div class="row">
+						<!-- Flight Number -->
+						<div class="col-md-6">
+							<mat-form-field appearance="outline">
+								<mat-label>
+									Flight Number <span class="asterisk"></span>
+								</mat-label>
+								<input type="text" formControlName="pickup_flight" matInput placeholder="Flight Number">
+							</mat-form-field>
+						</div>
+
+						<!-- Origin Airport/City -->
+						<div class="col-md-6">
+							<mat-form-field appearance="outline">
+								<mat-label>
+									Origin Airport / City <span class="asterisk"></span>
+								</mat-label>
+								<input formControlName="origin_airport_city" type="text" matInput
+									placeholder="Origin Airport / City">
+							</mat-form-field>
+						</div>
+					</div>
+				</div>
+
+				<!-- CUISE DETAILS -->
+				<div *ngIf="searchSubstring(Form.transfer_type.value, 'cruise_')">
+					<div class="row">
+						<div class="col-md-4">
+							<mat-form-field appearance="outline">
+								<mat-label>
+									Ship Name <span class="asterisk"></span>
+								</mat-label>
+								<input type="text" placeholder="Cruise Ship Name" matInput
+									(keyup)="searchCruise($event.target.value)" formControlName="cruise_name">
+							</mat-form-field>
+						</div>
+
+						<div class="col-md-4">
+							<mat-form-field appearance="outline">
+								<mat-label>
+									Port <span class="asterisk"></span>
+								</mat-label>
+								<input type="text" placeholder="Cruise Port" matInput (keyup)="searchCruise($event.target.value)"
+									formControlName="cruise_port">
+							</mat-form-field>
+						</div>
+
+						<div class="col-md-4">
+							<mat-form-field appearance="outline">
+								<mat-label>
+									Time <span class="asterisk"></span>
+								</mat-label>
+								<mat-select formControlName="cruise_time">
+									<mat-option *ngFor="let time of constants_data.time_values; index as time_index"
+										[value]="time.return_value">
+										{{ time.display_value }}
+									</mat-option>
+								</mat-select>
+							</mat-form-field>
+						</div>
+					</div>
+				</div>
+				<!-- CRUISE DETAILS ENDS -->
+
+				<!-- Pickup Address Fields -->
+				<div class="row" *ngIf="!searchSubstring(Form.transfer_type.value, 'airport_')">
+					<div class="col-md-12">
+						<mat-form-field appearance="outline">
+							<mat-label>
+								Pickup Address <span class="asterisk"></span>
+							</mat-label>
+							<!-- <input type="text" formControlName="pickup" matInput placeholder="Pickup Address" #search1> -->
+							<input matInput matGoogleMapsAutocomplete formControlName="pickup"
+								(onAutocompleteSelected)="onAutocompleteSelected($event, 'pickup')"
+								(onLocationSelected)="onLocationSelected($event, 'pickup')" [value]="Form.pickup.value">
+						</mat-form-field>
+						<!-- <div class="text-danger">
+								<div>
+									Pickup Address is required
+								</div>
+							</div> -->
+					</div>
+				</div>
+
+
+
+				<!-- EXTRA STOPS -->
+				<h4 class="headinginfoH3">
+					Extra Stops
+				</h4>
+				<div class="row">
+					<!-- Extra Stop 1 -->
+					<div class="col-md-6">
+						<mat-form-field appearance="outline">
+							<mat-label>
+								Extra Stop 2
+							</mat-label>
+							<input matInput matGoogleMapsAutocomplete formControlName="stop_1" [value]="Form.stop_1.value"
+								(onAutocompleteSelected)="onAutocompleteSelected($event, 'stop_1')"
+								(onLocationSelected)="onLocationSelected($event, 'stop_1')">
+						</mat-form-field>
+					</div>
+					<!-- Extra Stop 1 Ends -->
+
+					<!-- Extra Stop 2 -->
+					<div class="col-md-6">
+						<mat-form-field appearance="outline">
+							<mat-label>
+								Extra Stop 3
+							</mat-label>
+							<input matInput matGoogleMapsAutocomplete formControlName="stop_2" [value]="Form.stop_2.value"
+								(onAutocompleteSelected)="onAutocompleteSelected($event, 'stop_2')"
+								(onLocationSelected)="onLocationSelected($event, 'stop_2')">
+						</mat-form-field>
+					</div>
+					<!-- Extra Stop 2 Ends -->
+				</div>
+				<!-- EXTRA STOPS ENDS -->
+
+
+				<h3 class="headinginfoH3"> Drop Off </h3>
+
+				<!-- Dropoff Airport -->
+				<div class="row" *ngIf="searchSubstring(Form.transfer_type.value, '_airport')">
+					<!-- Airport -->
+					<div class="col-md-6">
+						<mat-form-field appearance="outline">
+							<mat-label>
+								Airport <span class="asterisk"></span>
+							</mat-label>
+							<input type="text" placeholder="Search by Name or Airport Code" matInput
+								(keyup)="searchAirport($event.target.value)" [matAutocomplete]="auto3">
+							<mat-autocomplete #auto3="matAutocomplete">
+								<mat-option *ngFor="let airport of big_data_list?.airportsData" [value]="airport.name"
+									(onSelectionChange)="chooseAirportAirline(airport.id, 'dropoff_airport')">
+									{{ airport.name }}
+								</mat-option>
+							</mat-autocomplete>
+							<!-- <input type="text" formControlName="dropoff_airport" list="airport-codes" matInput /> -->
+							<!-- <mat-select formControlName="dropoff_airport"
+											(selectionChange)="chooseAirport($event.value, 'dropoff_airport')">
+											<mat-option *ngFor="let airport of big_data_list?.airportsData" value="{{airport.id}}">
+												{{ airport.name }}
+											</mat-option>
+										</mat-select> -->
+						</mat-form-field>
+					</div>
+
+					<!-- Airline Name -->
+					<div class="col-md-6">
+						<mat-form-field appearance="outline">
+							<mat-label>
+								Airline Name <span class="asterisk"></span>
+							</mat-label>
+							<input type="text" placeholder="Search by Name" matInput (keyup)="searchAirline($event.target.value)"
+								[matAutocomplete]="auto4">
+							<mat-autocomplete #auto4="matAutocomplete">
+								<mat-option *ngFor="let airline of big_data_list?.airlinesData" [value]="airline.name"
+									(onSelectionChange)="chooseAirportAirline(airline.id, 'dropoff_airline')">
+									{{ airline.name }}
+								</mat-option>
+							</mat-autocomplete>
+							<!-- <mat-select formControlName="dropoff_airline">
+											<mat-option *ngFor="let airline of big_data_list?.airlinesData" value="{{airline.id}}">
+												{{ airline.name }}
+											</mat-option>
+										</mat-select> -->
+						</mat-form-field>
+					</div>
+
+					<!-- Flight Number -->
+					<div class="col-md-12">
+						<mat-form-field appearance="outline">
+							<mat-label>
+								Flight Number <span class="asterisk"></span>
+							</mat-label>
+							<input formControlName="dropoff_flight" type="text" matInput placeholder="Flight Number">
+						</mat-form-field>
+					</div>
+				</div>
+				<!-- Dropoff Aiport Ends -->
+
+				<!-- CRUISE DETAILS -->
+				<div *ngIf="searchSubstring(Form.return_transfer_type.value, '_cruise')">
+					<div class="row">
+						<div class="col-md-4">
+							<mat-form-field appearance="outline">
+								<mat-label>
+									Ship Name <span class="asterisk"></span>
+								</mat-label>
+								<input type="text" placeholder="Cruise Ship Name" matInput
+									(keyup)="searchCruise($event.target.value)" formControlName="cruise_name">
+							</mat-form-field>
+						</div>
+
+						<div class="col-md-4">
+							<mat-form-field appearance="outline">
+								<mat-label>
+									Port <span class="asterisk"></span>
+								</mat-label>
+								<input type="text" placeholder="Cruise Port" matInput (keyup)="searchCruise($event.target.value)"
+									formControlName="cruise_port">
+							</mat-form-field>
+						</div>
+
+						<div class="col-md-4">
+							<mat-form-field appearance="outline">
+								<mat-label>
+									Time <span class="asterisk"></span>
+								</mat-label>
+								<mat-select formControlName="cruise_time">
+									<mat-option *ngFor="let time of constants_data.time_values; index as time_index"
+										[value]="time.return_value">
+										{{ time.display_value }}
+									</mat-option>
+								</mat-select>
+							</mat-form-field>
+						</div>
+					</div>
+				</div>
+				<!-- CRUISE DETAILS ENDS -->
+
+				<!-- Dropoff Address Fields -->
+				<div class="row" *ngIf="!searchSubstring(Form.transfer_type.value, '_airport')">
+					<div class="col-md-12">
+						<mat-form-field appearance="outline">
+							<mat-label>
+								Dropoff Address <span class="asterisk"></span>
+							</mat-label>
+							<!-- <input formControlName="dropoff" type="text" matInput placeholder="Drop Address" #search2> -->
+							<input matInput matGoogleMapsAutocomplete formControlName="dropoff"
+								(onAutocompleteSelected)="onAutocompleteSelected($event, 'dropoff')"
+								(onLocationSelected)="onLocationSelected($event, 'dropoff')" [value]="Form.dropoff.value">
+						</mat-form-field>
+					</div>
+				</div>
+				<!-- Dropoff Address Fields Ends -->
+
+				<!-- AGM Map -->
+				<div class="row">
+					<!-- AGM Map -->
+					<div class="col-md-12">
+						<div class="map-block">
+							<div class="google_map">
+								<div id="oneway_map" class="map"></div>
+							</div>
+						</div>
+					</div>
+					<!-- AGM Map Ends -->
+				</div>
+				<!-- AGM Map -->
+			</div>
+			<!-- Journey Details Ends -->
+		</section>
+		<!-- JOURNEY SECTION ENDS -->
+
+
+
+
+
+
+		<!-- ##################################### RETURN JOURNEY ############################################# -->
+
+
+
+
+		<!-- RETURN JOURNEY SECTION -->
+		<section *ngIf="Form.service_type.value == 'round_trip'" class="user_information">
+			<h2 class="headinginfo "> Return Details </h2>
+			<!-- Return Details -->
+			<div class="container">
+				<div id="return-meet-greet-row" class="row">
+					<!-- Meet & Greet Choices -->
+					<div class="col-md-12">
+						<mat-form-field appearance="outline">
+							<mat-label>
+								Meet and Greet Choices <span class="asterisk"></span>
+							</mat-label>
+							<mat-select formControlName="return_meet_greet_choices">
+								<mat-option *ngFor="let meetGreet of big_data_list?.meetGreets" [value]="meetGreet.id">
+									{{ meetGreet.message }}
+								</mat-option>
+							</mat-select>
+						</mat-form-field>
+					</div>
+				</div>
+
+				<div id="return-travel-date-time-row" class="row">
+					<!-- Travel Date -->
+					<div class="col-md-6">
+						<mat-form-field appearance="outline">
+							<mat-label>Travel Date<span class="asterisk">*</span></mat-label>
+							<input matInput [setOutputDateFormat]="outputDateFormat" [matDatepicker]="picker2"
+								(dateChangeWithFormat)="changeDetection.selectDate('returnPickupDate',$event)"
+								placeholder="Travel Date" id="id_5" formControlName="return_pickup_date"
+								(click)="picker2.open()" />
+							<mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+							<mat-datepicker #picker2></mat-datepicker>
+						</mat-form-field>
+						<!-- <mat-form-field appearance="outline">
+									<mat-label>
+										Travel Date <span class="asterisk"></span>
+									</mat-label>
+									<input matInput [matDatepicker]="picker2" placeholder="Travel Date" id="id_5"
+										formControlName="return_pickup_date" (click)="picker2.open()">
+									<mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+									<mat-datepicker #picker2></mat-datepicker>
+								</mat-form-field> -->
+					</div>
+
+					<!--Travel Time -->
+					<div class="col-md-6">
+						<mat-form-field appearance="outline">
+							<mat-label>
+								Travel Time <span class="asterisk"></span>
+							</mat-label>
+							<mat-select formControlName="return_pickup_time">
+								<mat-option *ngFor="let time of constants_data.time_values; index as time_index"
+									[value]="time.return_value">
+									{{ time.display_value }}
+								</mat-option>
+							</mat-select>
+						</mat-form-field>
+						<!-- <div class="text-danger">
+											<div>
+												This field is required
+											</div>
+										</div> -->
+					</div>
+				</div>
+
+				<h3 class="headinginfoH3"> Pickup </h3>
+
+				<!-- Return Pickup Airport Fields -->
+				<div class="row" *ngIf="searchSubstring(Form.return_transfer_type.value, 'airport_')">
+					<!-- Airport -->
+					<div class="col-md-6">
+						<mat-form-field appearance="outline">
+							<mat-label>
+								Airport <span class="asterisk"></span>
+							</mat-label>
+							<input type="text" placeholder="Search by Name or Airport Code" matInput
+								(keyup)="searchAirport($event.target.value)" [matAutocomplete]="auto1"
+								[value]="fillBigDataListValue('airport', 'return_pickup_airport')">
+							<mat-autocomplete #auto1="matAutocomplete">
+								<mat-option *ngFor="let airport of big_data_list?.airportsData" [value]="airport.name"
+									(onSelectionChange)="chooseAirportAirline(airport.id, 'return_pickup_airport')">
+									{{ airport.name }}
+								</mat-option>
+							</mat-autocomplete>
+							<!-- <mat-select formControlName="return_pickup_airport"
+												(selectionChange)="chooseAirport($event.value, 'return_pickup_airport')">
+												<mat-option *ngFor="let airport of big_data_list?.airportsData" value="{{airport.id}}">
+													{{ airport.name }}
+												</mat-option>
+											</mat-select> -->
+						</mat-form-field>
+					</div>
+
+					<!-- Airline Name -->
+					<div class="col-md-6">
+						<mat-form-field appearance="outline">
+							<mat-label>
+								Airline Name <span class="asterisk"></span>
+							</mat-label>
+							<input type="text" placeholder="Search by Name" matInput (keyup)="searchAirline($event.target.value)"
+								[matAutocomplete]="auto6">
+							<mat-autocomplete #auto1="matAutocomplete">
+								<mat-option *ngFor="let airline of big_data_list?.airlinesData" [value]="airline.name"
+									(onSelectionChange)="chooseAirportAirline(airline.id, 'return_pickup_airline')">
+									{{ airline.name }}
+								</mat-option>
+							</mat-autocomplete>
+							<!-- <mat-select formControlName="return_pickup_airline">
+												<mat-option *ngFor="let airline of big_data_list?.airlinesData" [value]="airline.id">
+													{{ airline.name }}
+												</mat-option>
+											</mat-select> -->
+						</mat-form-field>
+					</div>
+
+					<!-- Flight Number -->
+					<div class="col-md-12">
+						<mat-form-field appearance="outline">
+							<mat-label>
+								Flight Number <span class="asterisk"></span>
+							</mat-label>
+							<input type="text" formControlName="return_pickup_flight" matInput placeholder="Flight Number">
+						</mat-form-field>
+					</div>
+				</div>
+				<!-- Return Pickup Airport Fields Ends -->
+
+
+				<!-- CRUISE DETAILS -->
+				<div *ngIf="searchSubstring(Form.return_transfer_type.value, 'cruise_')">
+					<div class="row">
+						<div class="col-md-4">
+							<mat-form-field appearance="outline">
+								<mat-label>
+									Ship Name <span class="asterisk"></span>
+								</mat-label>
+								<input type="text" placeholder="Cruise Ship Name" matInput
+									(keyup)="searchCruise($event.target.value)" formControlName="return_cruise_name">
+							</mat-form-field>
+						</div>
+
+						<div class="col-md-4">
+							<mat-form-field appearance="outline">
+								<mat-label>
+									Port <span class="asterisk"></span>
+								</mat-label>
+								<input type="text" placeholder="Cruise Port" matInput (keyup)="searchCruise($event.target.value)"
+									formControlName="return_cruise_port">
+							</mat-form-field>
+						</div>
+
+						<div class="col-md-4">
+							<mat-form-field appearance="outline">
+								<mat-label>
+									Time <span class="asterisk"></span>
+								</mat-label>
+								<mat-select formControlName="return_cruise_time">
+									<mat-option *ngFor="let time of constants_data.time_values; index as time_index"
+										[value]="time.return_value">
+										{{ time.display_value }}
+									</mat-option>
+								</mat-select>
+							</mat-form-field>
+						</div>
+					</div>
+				</div>
+				<!-- CRUISE DETAILS ENDS -->
+
+				<!-- Return Pickup Address Field -->
+				<div class="row" *ngIf="!searchSubstring(Form.return_transfer_type.value, 'airport_')">
+					<div class="col-md-12">
+						<mat-form-field appearance="outline">
+							<mat-label>
+								Pickup Address <span class="asterisk"></span>
+							</mat-label>
+							<!-- <input type="text" formControlName="return_pickup" matInput placeholder="Pickup Address"
+												#search5"> -->
+							<input matInput matGoogleMapsAutocomplete formControlName="return_pickup"
+								(onAutocompleteSelected)="onAutocompleteSelected($event, 'return_pickup')"
+								(onLocationSelected)="onLocationSelected($event, 'return_pickup')"
+								[value]="Form.return_pickup.value">
+						</mat-form-field>
+						<!-- <div class="text-danger">
+											<div>
+												Pickup Address is required
+											</div>
+										</div> -->
+					</div>
+				</div>
+				<!-- Return Pickup Address Field Ends -->
+
+
+				<!-- EXTRA STOPS -->
+				<h4 class="headinginfoH3">
+					Extra Stops
+				</h4>
+				<div class="row">
+					<!-- Extra Stop 2 -->
+					<div class="col-md-6">
+						<mat-form-field appearance="outline">
+							<mat-label>
+								Extra Stop 2
+							</mat-label>
+							<!-- <input formControlName="return_stop_1" type="text" matInput placeholder="Extra Stop"
+																		#search7> -->
+							<input matInput matGoogleMapsAutocomplete formControlName="return_stop_1"
+								[value]="Form.return_stop_1.value"
+								(onAutocompleteSelected)="onAutocompleteSelected($event, 'return_stop_1')"
+								(onLocationSelected)="onLocationSelected($event, 'return_stop_1')">
+						</mat-form-field>
+					</div>
+
+					<!-- Extra Stop 3 -->
+					<div class="col-md-6">
+						<mat-form-field appearance="outline">
+							<mat-label>
+								Extra Stop 3
+							</mat-label>
+							<!-- <input formControlName="return_stop_2" type="text" matInput placeholder="Extra Stop"
+																		#search8> -->
+							<input type="text" matInput matGoogleMapsAutocomplete formControlName="return_stop_2"
+								[value]="Form.return_stop_2.value"
+								(onAutocompleteSelected)="onAutocompleteSelected($event, 'return_stop_2')"
+								(onLocationSelected)="onLocationSelected($event, 'return_stop_2')">
+						</mat-form-field>
+					</div>
+				</div>
+				<!-- EXTRA STOPS ENDS -->
+
+				<h3 class="headinginfoH3"> Drop Off </h3>
+
+				<!-- Return Dropoff Airport Fields -->
+				<div class="row" *ngIf="searchSubstring(Form.return_transfer_type.value, '_airport')">
+					<!-- Airport -->
+					<div class="col-md-6">
+						<mat-form-field appearance="outline">
+							<mat-label>
+								Airport <span class="asterisk"></span>
+							</mat-label>
+							<input type="text" placeholder="Search by Name or Airport Code" matInput
+								(keyup)="searchAirport($event.target.value)" [matAutocomplete]="auto1"
+								[value]="fillBigDataListValue('airport', 'return_dropoff_airport')">
+							<mat-autocomplete #auto1="matAutocomplete">
+								<mat-option *ngFor="let airport of big_data_list?.airportsData" [value]="airport.name"
+									(onSelectionChange)="chooseAirportAirline(airport.id, 'return_dropoff_airport')">
+									{{ airport.name }}
+								</mat-option>
+							</mat-autocomplete>
+							<!-- <mat-select formControlName="return_dropoff_airport"
+												(selectionChange)="chooseAirport($event.value, 'return_dropoff_airport')">
+												<mat-option *ngFor="let airport of big_data_list?.airportsData" [value]="airport.id">
+													{{ airport.name }}
+												</mat-option>
+											</mat-select> -->
+						</mat-form-field>
+					</div>
+
+					<!-- Return Airline Name -->
+					<div class="col-md-6">
+						<mat-form-field appearance="outline">
+							<mat-label>
+								Airline Name <span class="asterisk"></span>
+							</mat-label>
+							<input type="text" placeholder="Search by Name" matInput (keyup)="searchAirline($event.target.value)"
+								[matAutocomplete]="auto8">
+							<mat-autocomplete #auto8="matAutocomplete">
+								<mat-option *ngFor="let airline of big_data_list?.airlinesData" [value]="airline.name"
+									(onSelectionChange)="chooseAirportAirline(airline.id, 'return_dropoff_airline')">
+									{{ airline.name }}
+								</mat-option>
+							</mat-autocomplete>
+							<!-- <mat-select formControlName="return_dropoff_airline">
+												<mat-option *ngFor="let airline of big_data_list?.airlinesData" [value]="airline.id">
+													{{ airline.name }}
+												</mat-option>
+											</mat-select> -->
+						</mat-form-field>
+					</div>
+
+					<!-- Flight Number -->
+					<div class="col-md-12">
+						<mat-form-field appearance="outline">
+							<mat-label>
+								Flight Number <span class="asterisk"></span>
+							</mat-label>
+							<input formControlName="return_dropoff_flight" type="text" matInput placeholder="Flight Number">
+						</mat-form-field>
+					</div>
+				</div>
+				<!-- Return Dropoff Airport Fields Ends -->
+
+				<!-- CRUISE DETAILS -->
+				<div *ngIf="searchSubstring(Form.return_transfer_type.value, '_cruise')">
+					<div class="row">
+						<div class="col-md-4">
+							<mat-form-field appearance="outline">
+								<mat-label>
+									Ship Name <span class="asterisk"></span>
+								</mat-label>
+								<input type="text" placeholder="Cruise Ship Name" matInput
+									(keyup)="searchCruise($event.target.value)" formControlName="return_cruise_name">
+							</mat-form-field>
+						</div>
+
+						<div class="col-md-4">
+							<mat-form-field appearance="outline">
+								<mat-label>
+									Port <span class="asterisk"></span>
+								</mat-label>
+								<input type="text" placeholder="Cruise Port" matInput (keyup)="searchCruise($event.target.value)"
+									formControlName="return_cruise_port">
+							</mat-form-field>
+						</div>
+
+						<div class="col-md-4">
+							<mat-form-field appearance="outline">
+								<mat-label>
+									Time <span class="asterisk"></span>
+								</mat-label>
+								<mat-select formControlName="return_cruise_time">
+									<mat-option *ngFor="let time of constants_data.time_values; index as time_index"
+										[value]="time.return_value">
+										{{ time.display_value }}
+									</mat-option>
+								</mat-select>
+							</mat-form-field>
+						</div>
+					</div>
+				</div>
+				<!-- CRUISE DETAILS ENDS -->
+
+				<!-- Return Dropoff Address Field -->
+				<div class="row" *ngIf="!searchSubstring(Form.return_transfer_type.value, '_airport')">
+					<div class="col-md-12">
+						<mat-form-field appearance="outline">
+							<mat-label>
+								Dropoff Address <span class="asterisk"></span>
+							</mat-label>
+							<!-- <input formControlName="return_dropoff" type="text" matInput placeholder="Drop Address"
+												#search6> -->
+							<input matInput matGoogleMapsAutocomplete formControlName="return_dropoff"
+								(onAutocompleteSelected)="onAutocompleteSelected($event, 'return_dropoff')"
+								(onLocationSelected)="onLocationSelected($event, 'return_dropoff')"
+								[value]="Form.return_dropoff.value">
+						</mat-form-field>
+					</div>
+				</div>
+				<!-- Return Dropoff Address Field Ends -->
+
+				<!-- AGM Map -->
+				<div class="row">
+					<!-- Return AGM Map -->
+					<div class="col-md-12">
+						<div class="map-block">
+							<div class="google_map">
+								<div id="return_map" class="map"></div>
+							</div>
+						</div>
+					</div>
+					<!-- Return AGM Map Ends -->
+				</div>
+				<!-- AGM Map -->
+			</div>
+			<!-- RETURN JOURNEY DETAILS ENDS -->
+		</section>
+		<!-- RETURN JOURNEY SECTION ENDS -->
+
+		<section class="user_information" *ngIf="vehicle_selected != null">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<h2>
+							Vehicle Details
+						</h2>
+						<div class="row" *ngFor="let detail of vehicle_details">
+							<div class="col-md-3">
+								<p>
+									{{ formatString(detail[0]) | titlecase }}
+								</p>
+							</div>
+							<div class="col-auto" *ngIf="!thisArray(vehicle_selected[detail[1]]); else isArray">
+								<p class="font-weight-bolder">
+									{{ vehicle_selected[detail[1]] }}
+								</p>
+							</div>
+							<ng-template #isArray>
+								<div class="col-auto">
+									<button class="small-btn" data-toggle="modal" data-target="#smallModal"
+										(click)="openModal(vehicle_selected[detail[1]], true)">
+										View Chargeable
+									</button>
+									<button class="small-btn" data-toggle="modal" data-target="#smallModal"
+										(click)="openModal(vehicle_selected[detail[1]], false)">
+										View Non-Chargeable
+									</button>
+								</div>
+							</ng-template>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Submit buttons -->
+		<section class="billing_inforamtion">
+			<ul>
+				<li>
+					<button class="custom-btn savebutton" (click)="submitForm()">
+						SAVE
+					</button>
+				</li>
+				<li>
+					<button class="custom-btn resetbutton" (click)="resetForm()">
+						RESET
+					</button>
+				</li>
+			</ul>
+		</section>
+	</form>
+</main>
+
+<app-image-modal (closeTab)="closeImageModal()" [modalImage]="modal_image"></app-image-modal>
+
+<div class="modal fade" id="smallModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body" *ngFor="let data of modal_data">
+				{{ data.name }}
+			</div>
+			<div class="modal-footer" style="justify-content: flex-end !important;">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal" tabindex="-1" id="previewModal">
+	<div class="modal-dialog modal-md modal-lg modal-dialog-scrollable modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">
+					Booking Preview
+				</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body" style="font-family: pt_serifregular">
+				<div class="container-fluid">
+					<div class="row" *ngIf="bookingForm.value.service_type != ''">
+						<div class="col-md-4">
+							<p>
+								Service Type:
+							</p>
+						</div>
+						<div class="col-md-8 font-weight-bolder">
+							{{ textFormat(bookingForm.value.service_type) | titlecase }}
+						</div>
+					</div>
+					<div class="row" *ngIf="bookingForm.value.transfer_type != ''">
+						<div class="col-md-4">
+							<p>
+								Transfer Type:
+							</p>
+						</div>
+						<div class="col-md-8 font-weight-bolder">
+							{{ textFormat(bookingForm.value.transfer_type) | titlecase }}
+						</div>
+					</div>
+
+					<div class="row" *ngIf="bookingForm.value.return_transfer_type != ''">
+						<div class="col-md-4">
+							<p>
+								Return Transfer Type:
+							</p>
+						</div>
+						<div class="col-md-8 font-weight-bolder">
+							{{ textFormat(bookingForm.value.return_transfer_type) | titlecase }}
+						</div>
+					</div>
+
+					<!-- Journey Details -->
+					<h2 class="headinginfoH2  pl-0">
+						Journey Details
+					</h2>
+					<div class="row" *ngIf="bookingForm.value.pickup_airport != ''">
+						<div class="col-md-4">
+							<p>
+								Airport Name:
+							</p>
+						</div>
+						<div class="col-md-8 font-weight-bolder">
+							{{ textFormat(bookingForm.value.pickup_airport, 'airportsData') }}
+						</div>
+					</div>
+					<div class="row" *ngIf="bookingForm.value.pickup_airline != ''">
+						<div class="col-md-4">
+							<p>
+								Airline Name:
+							</p>
+						</div>
+						<div class="col-md-8 font-weight-bolder">
+							{{ textFormat(bookingForm.value.pickup_airline, 'airlinesData') }}
+						</div>
+					</div>
+					<div class="row" *ngIf="bookingForm.value.pickup_flight != ''">
+						<div class="col-md-4">
+							<p>
+								Flight Name:
+							</p>
+						</div>
+						<div class="col-md-8 font-weight-bolder">
+							{{ textFormat(bookingForm.value.pickup_flight) }}
+						</div>
+					</div>
+					<div class="row" *ngIf="bookingForm.value.pickup != ''">
+						<div class="col-md-4">
+							<p>
+								Pickup Address:
+							</p>
+						</div>
+						<div class="col-md-8 font-weight-bolder">
+							{{ textFormat(bookingForm.value.pickup) }}
+						</div>
+					</div>
+					<div class="row" *ngIf="bookingForm.value.origin_airport_city != ''">
+						<div class="col-md-4">
+							<p>
+								Origin Airport / City:
+							</p>
+						</div>
+						<div class="col-md-8 font-weight-bolder">
+							{{ textFormat(bookingForm.value.origin_airport_city) }}
+						</div>
+					</div>
+					<br>
+					<div class="row" *ngIf="bookingForm.value.dropoff_airport != ''">
+						<div class="col-md-4">
+							<p>
+								Airport Name:
+							</p>
+						</div>
+						<div class="col-md-8 font-weight-bolder">
+							{{ textFormat(bookingForm.value.dropoff_airport, 'airportsData') }}
+						</div>
+					</div>
+					<div class="row" *ngIf="bookingForm.value.dropoff_airline != ''">
+						<div class="col-md-4">
+							<p>
+								Airline Name:
+							</p>
+						</div>
+						<div class="col-md-8 font-weight-bolder">
+							{{ textFormat(bookingForm.value.dropoff_airline, 'airlinesData') }}
+						</div>
+					</div>
+					<div class="row" *ngIf="bookingForm.value.dropoff_flight != ''">
+						<div class="col-md-4">
+							<p>
+								Flight Name:
+							</p>
+						</div>
+						<div class="col-md-8 font-weight-bolder">
+							{{ textFormat(bookingForm.value.dropoff_flight) }}
+						</div>
+					</div>
+					<div class="row" *ngIf="bookingForm.value.dropoff != ''">
+						<div class="col-md-4">
+							<p>
+								Dropoff Address:
+							</p>
+						</div>
+						<div class="col-md-8 font-weight-bolder">
+							{{ textFormat(bookingForm.value.dropoff) }}
+						</div>
+					</div>
+					<br>
+					<div class="row" *ngIf="bookingForm.value.stop_1 != ''">
+						<div class="col-md-4">
+							<p>
+								Extra Stop 1:
+							</p>
+						</div>
+						<div class="col-md-8 font-weight-bolder">
+							{{ textFormat(bookingForm.value.stop_1) }}
+						</div>
+					</div>
+					<div class="row" *ngIf="bookingForm.value.stop_2 != ''">
+						<div class="col-md-4">
+							<p>
+								Extra Stop 2:
+							</p>
+						</div>
+						<div class="col-md-8 font-weight-bolder">
+							{{ textFormat(bookingForm.value.stop_2) }}
+						</div>
+					</div>
+					<div class="row" *ngIf="bookingForm.value.meet_greet_choices != ''">
+						<div class="col-md-4">
+							<p>
+								Meet n Greet Choice:
+							</p>
+						</div>
+						<div class="col-md-8 font-weight-bolder">
+							{{ textFormat(bookingForm.value.meet_greet_choices, 'meetGreets') }}
+						</div>
+					</div>
+					<div class="row" *ngIf="bookingForm.value.pickup_date != ''">
+						<div class="col-md-4">
+							<p>
+								Travel Date:
+							</p>
+						</div>
+						<div class="col-md-8 font-weight-bolder">
+							{{ textFormat(bookingForm.value.pickup_date) }}
+						</div>
+					</div>
+					<div class="row" *ngIf="bookingForm.value.pickup_time != ''">
+						<div class="col-md-4">
+							<p>
+								Travel Time:
+							</p>
+						</div>
+						<div class="col-md-8 font-weight-bolder">
+							{{ textFormat(bookingForm.value.pickup_time) }}
+						</div>
+					</div>
+
+					<h2 class="headinginfoH2  pl-0" *ngIf="bookingForm.value.service_type=='round_trip'">
+						Return Details
+					</h2>
+					<div *ngIf="bookingForm.value.service_type == 'round_trip'">
+						<div class="row" *ngIf="bookingForm.value.return_pickup_airport != ''">
+							<div class="col-md-4">
+								<p>
+									Airport Name:
+								</p>
+							</div>
+							<div class="col-md-8 font-weight-bolder">
+								{{ textFormat(bookingForm.value.return_pickup_airport, 'airportsData') }}
+							</div>
+						</div>
+						<div class="row" *ngIf="bookingForm.value.return_pickup_airline != ''">
+							<div class="col-md-4">
+								<p>
+									Airline Name:
+								</p>
+							</div>
+							<div class="col-md-8 font-weight-bolder">
+								{{ textFormat(bookingForm.value.return_pickup_airline, 'airlinesData') }}
+							</div>
+						</div>
+						<div class="row" *ngIf="bookingForm.value.return_pickup_flight != ''">
+							<div class="col-md-4">
+								<p>
+									Flight Name:
+								</p>
+							</div>
+							<div class="col-md-8 font-weight-bolder">
+								{{ textFormat(bookingForm.value.return_pickup_flight) }}
+							</div>
+						</div>
+						<div class="row" *ngIf="bookingForm.value.pickup != ''">
+							<div class="col-md-4">
+								<p>
+									Pickup Address:
+								</p>
+							</div>
+							<div class="col-md-8 font-weight-bolder">
+								{{ textFormat(bookingForm.value.return_pickup) }}
+							</div>
+						</div>
+						<h4 class="ml-4"> Dropoff Details </h4>
+						<div class="row" *ngIf="bookingForm.value.return_dropoff_airport != ''">
+							<div class="col-md-4">
+								<p>
+									Airport Name:
+								</p>
+							</div>
+							<div class="col-md-8 font-weight-bolder">
+								{{ textFormat(bookingForm.value.return_dropoff_airport, 'airportsData') }}
+							</div>
+						</div>
+						<div class="row" *ngIf="bookingForm.value.return_dropoff_airline != ''">
+							<div class="col-md-4">
+								<p>
+									Airline Name:
+								</p>
+							</div>
+							<div class="col-md-8 font-weight-bolder">
+								{{ textFormat(bookingForm.value.return_dropoff_airline, 'airlinesData') }}
+							</div>
+						</div>
+						<div class="row" *ngIf="bookingForm.value.return_dropoff_flight != ''">
+							<div class="col-md-4">
+								<p>
+									Flight Name:
+								</p>
+							</div>
+							<div class="col-md-8 font-weight-bolder">
+								{{ textFormat(bookingForm.value.return_dropoff_flight) }}
+							</div>
+						</div>
+						<div class="row" *ngIf="bookingForm.value.return_dropoff != ''">
+							<div class="col-md-4">
+								<p>
+									Dropoff Address:
+								</p>
+							</div>
+							<div class="col-md-8 font-weight-bolder">
+								{{ textFormat(bookingForm.value.return_dropoff) }}
+							</div>
+						</div>
+						<div class="row" *ngIf="bookingForm.value.return_stop_1 != ''">
+							<div class="col-md-4">
+								<p>
+									Extra Stop 1:
+								</p>
+							</div>
+							<div class="col-md-8 font-weight-bolder">
+								{{ textFormat(bookingForm.value.return_stop_1) }}
+							</div>
+						</div>
+						<div class="row" *ngIf="bookingForm.value.return_stop_2 != ''">
+							<div class="col-md-4">
+								<p>
+									Extra Stop 2:
+								</p>
+							</div>
+							<div class="col-md-8 font-weight-bolder">
+								{{ textFormat(bookingForm.value.return_stop_2) }}
+							</div>
+						</div>
+						<div class="row" *ngIf="bookingForm.value.return_meet_greet_choices != ''">
+							<div class="col-md-4">
+								<p>
+									Meet n Greet Choice:
+								</p>
+							</div>
+							<div class="col-md-8 font-weight-bolder">
+								{{ textFormat(bookingForm.value.return_meet_greet_choices, 'meetGreets') }}
+							</div>
+						</div>
+						<div class="row" *ngIf="bookingForm.value.return_pickup_date != ''">
+							<div class="col-md-4">
+								<p>
+									Travel Date:
+								</p>
+							</div>
+							<div class="col-md-8 font-weight-bolder">
+								{{ textFormat(bookingForm.value.return_pickup_date) }}
+							</div>
+						</div>
+						<div class="row" *ngIf="bookingForm.value.return_pickup_time != ''">
+							<div class="col-md-4">
+								<p>
+									Travel Time:
+								</p>
+							</div>
+							<div class="col-md-8 font-weight-bolder">
+								{{ textFormat(bookingForm.value.return_pickup_time) }}
+							</div>
+						</div>
+					</div>
+
+					<h2 class="headinginfoH2  pl-0">
+						Client Accounts
+					</h2>
+					<div class="row" *ngIf="bookingForm.value.account_type != ''">
+						<div class="col-md-4">
+							<p>
+								Account Type:
+							</p>
+						</div>
+						<div class="col-md-8 font-weight-bolder">
+							{{ textFormat(bookingForm.value.account_type) | titlecase }}
+						</div>
+					</div>
+					<div class="row" *ngIf="bookingForm.value.passenger_name != ''">
+						<div class="col-md-4">
+							<p>
+								Passenger Name:
+							</p>
+						</div>
+						<div class="col-md-8 font-weight-bolder">
+							{{ textFormat(bookingForm.value.passenger_name) }}
+						</div>
+					</div>
+					<div class="row" *ngIf="bookingForm.value.passenger_cell != ''">
+						<div class="col-md-4">
+							<p>
+								Passenger Cell Phone:
+							</p>
+						</div>
+						<div class="col-md-8 font-weight-bolder">
+							{{ bookingForm.value.passenger_cell_isd }} {{ textFormat(bookingForm.value.passenger_cell)
+							}}
+						</div>
+					</div>
+					<div class="row" *ngIf="bookingForm.value.passenger_email != ''">
+						<div class="col-md-4">
+							<p>
+								Passenger Email:
+							</p>
+						</div>
+						<div class="col-md-8 font-weight-bolder">
+							{{ textFormat(bookingForm.value.passenger_email) }}
+						</div>
+					</div>
+					<div class="row" *ngIf="bookingForm.value.total_passengers != ''">
+						<div class="col-md-4">
+							<p>
+								Total Passengers:
+							</p>
+						</div>
+						<div class="col-md-8 font-weight-bolder">
+							{{ textFormat(bookingForm.value.total_passengers) }}
+						</div>
+					</div>
+					<div class="row" *ngIf="bookingForm.value.luggage_count != ''">
+						<div class="col-md-4">
+							<p>
+								Total Luggage:
+							</p>
+						</div>
+						<div class="col-md-8 font-weight-bolder">
+							{{ textFormat(bookingForm.value.luggage_count) }}
+						</div>
+					</div>
+					<div class="row" *ngIf="bookingForm.value.booking_instructions != ''">
+						<div class="col-md-4">
+							<p>
+								Booking Instructions:
+							</p>
+						</div>
+						<div class="col-md-8 font-weight-bolder">
+							{{ textFormat(bookingForm.value.booking_instructions) }}
+						</div>
+					</div>
+					<div class="row" *ngIf="bookingForm.value.number_of_hours != ''">
+						<div class="col-md-4">
+							<p>
+								Booking Hours:
+							</p>
+						</div>
+						<div class="col-md-8 font-weight-bolder">
+							{{ textFormat(bookingForm.value.number_of_hours) }} Hours
+						</div>
+					</div>
+					<h2 class="headinginfoH2  pl-0"> Affiliate / Vehicle Details </h2>
+					<div class="row" *ngIf="bookingForm.value.affiliate_type != ''">
+						<div class="col-md-4">
+							<p>
+								Affiliate Type:
+							</p>
+						</div>
+						<div class="col-md-8 font-weight-bolder">
+							{{ textFormat(bookingForm.value.affiliate_type) | titlecase }}
+						</div>
+					</div>
+					<div class="row" *ngIf="bookingForm.value.driver_name != ''">
+						<div class="col-md-4">
+							<p>
+								Driver Name:
+							</p>
+						</div>
+						<div class="col-md-8 font-weight-bolder">
+							{{ textFormat(bookingForm.value.driver_name) }}
+						</div>
+					</div>
+					<div class="row" *ngIf="bookingForm.value.driver_gender != ''">
+						<div class="col-md-4">
+							<p>
+								Driver Gender:
+							</p>
+						</div>
+						<div class="col-md-8 font-weight-bolder">
+							{{ textFormat(bookingForm.value.driver_gender) | titlecase }}
+						</div>
+					</div>
+					<div class="row" *ngIf="bookingForm.value.driver_cell != ''">
+						<div class="col-md-4">
+							<p>
+								Driver Cell Phone:
+							</p>
+						</div>
+						<div class="col-md-8 font-weight-bolder">
+							{{ bookingForm.value.driver_cell_isd }} {{ textFormat(bookingForm.value.driver_cell) }}
+						</div>
+					</div>
+					<div class="row" *ngIf="bookingForm.value.driver_email != ''">
+						<div class="col-md-4">
+							<p>
+								Driver Email:
+							</p>
+						</div>
+						<div class="col-md-8 font-weight-bolder">
+							{{ textFormat(bookingForm.value.driver_email) }}
+						</div>
+					</div>
+					<div class="row" *ngIf="bookingForm.value.driver_phone_type">
+						<div class="col-md-4">
+							<p>
+								Driver Phone Model:
+							</p>
+						</div>
+						<div class="col-md-8 font-weight-bolder">
+							{{ textFormat(bookingForm.value.driver_phone_type) }}
+						</div>
+					</div>
+					<!-- <div class="row" *ngIf="bookingForm.value.driver_dresses.length > 0">
+						<div class="col-md-4">
+							<p>
+								Driver Dress:
+							</p>
+						</div>
+						<div class="col-md-8 font-weight-bolder">
+							{{ textFormat(bookingForm.value.driver_dresses, big_data_list?.driverDresses) }}
+						</div>
+					</div>
+					<div class="row" *ngIf="bookingForm.value.driver_languages != ''">
+						<div class="col-md-4">
+							<p>
+								Driver Languages:
+							</p>
+						</div>
+						<div class="col-md-8 font-weight-bolder">
+							{{ textFormat(bookingForm.value.driver_languages, big_data_list?.driverLanguage) }}
+						</div> 
+					</div> -->
+					<!-- <div class="row" *ngIf="bookingForm.value.vehicle_type != ''">
+						<div class="col-md-4">
+							<p>
+								Vehicle Type:
+							</p>
+						</div>
+						<div class="col-md-8 font-weight-bolder">
+							{{ textFormat(bookingForm.value.vehicle_type) }}
+						</div>
+					</div>
+					<div class="row" *ngIf="bookingForm.value.vehicle_make != ''">
+						<div class="col-md-4">
+							<p>
+								Make:
+							</p>
+						</div>
+						<div class="col-md-8 font-weight-bolder">
+							{{ textFormat(bookingForm.value.vehicle_make, 'vehicleMakes') }}
+						</div>
+					</div>
+					<div class="row" *ngIf="bookingForm.value.vehicle_model != ''">
+						<div class="col-md-4">
+							<p>
+								Model:
+							</p>
+						</div>
+						<div class="col-md-8 font-weight-bolder">
+							{{ textFormat(bookingForm.value.vehicle_model, 'vehicleModels') }}
+						</div>
+					</div>
+					<div class="row" *ngIf="bookingForm.value.vehicle_year != ''">
+						<div class="col-md-4">
+							<p>
+								Year:
+							</p>
+						</div>
+						<div class="col-md-8 font-weight-bolder">
+							{{ textFormat(bookingForm.value.vehicle_year, 'vehicleYears') }}
+						</div>
+					</div>
+					<div class="row" *ngIf="bookingForm.value.vehicle_color != ''">
+						<div class="col-md-4">
+							<p>
+								Color:
+							</p>
+						</div>
+						<div class="col-md-8 font-weight-bolder">
+							{{ textFormat(bookingForm.value.vehicle_color, 'vehicleColors') }}
+						</div>
+					</div> -->
+					<div class="row" *ngIf="bookingForm.value.license_plate != ''">
+						<div class="col-md-4">
+							<p>
+								License Plate:
+							</p>
+						</div>
+						<div class="col-md-8 font-weight-bolder">
+							{{ textFormat(bookingForm.value.license_plate) }}
+						</div>
+					</div>
+					<div class="row" *ngIf="bookingForm.value.number_of_seats != ''">
+						<div class="col-md-4">
+							<p>
+								Seats:
+							</p>
+						</div>
+						<div class="col-md-8 font-weight-bolder">
+							{{ textFormat(bookingForm.value.number_of_seats) }}
+						</div>
+					</div>
+					<!-- <div class="row" *ngIf="bookingForm.value.amenities != ''">
+						<div class="col-md-4">
+							<p>
+								Vehicle Amenities:
+							</p>
+						</div>
+						<div class="col-md-8 font-weight-bolder">
+							{{ textFormat(bookingForm.value.amenities) }}
+						</div>
+					</div> -->
+					<div class="row" *ngIf="bookingForm.value.lose_affiliate_name != ''">
+						<div class="col-md-4">
+							<p>
+								Loose Affiliate Name:
+							</p>
+						</div>
+						<div class="col-md-8 font-weight-bolder">
+							{{ textFormat(bookingForm.value.lose_affiliate_name) }}
+						</div>
+					</div>
+					<div class="row" *ngIf="bookingForm.value.lose_affiliate_phone != ''">
+						<div class="col-md-4">
+							<p>
+								Loose Affiliate Cell Phone:
+							</p>
+						</div>
+						<div class="col-md-8 font-weight-bolder">
+							{{ textFormat(bookingForm.value.lose_affiliate_phone) }}
+						</div>
+					</div>
+					<div class="row" *ngIf="bookingForm.value.lose_affiliate_email != ''">
+						<div class="col-md-4">
+							<p>
+								Loose Affiliate Email:
+							</p>
+						</div>
+						<div class="col-md-8 font-weight-bolder">
+							{{ textFormat(bookingForm.value.lose_affiliate_email) }}
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary" data-dismiss="modal" (click)="submitForm(true)">Save
+					changes</button>
+			</div>
+		</div>
+	</div>
+</div>

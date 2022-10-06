@@ -1,0 +1,158 @@
+<ngx-spinner></ngx-spinner>
+<main>
+	<!-- Main page content-->
+	<section class="user_information">
+		<h2 class="headinginfo"> Model </h2>
+		<div class="containeredd">
+			<div class="row">
+				<div class="col-md-12">
+					<button class="custom-btn add-button" data-toggle="modal" data-target="#addModelModal">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-plus-circle"
+							viewBox="0 0 16 16">
+							<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+							<path
+								d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+						</svg> Add Model
+					</button>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<label class="alert alert-danger">Note: Add each Model.</label>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-12 mb-3">
+					<mat-form-field appearance="outline">
+						<mat-label>Search Model</mat-label>
+						<input matInput type="text" placeholder="Search Model" (input)="serach($event.target.value)">
+					</mat-form-field>
+				</div>
+			</div>
+		</div>
+
+		<div class="containeredd driverside_table">
+			<div class="row">
+				<div class="col-md-12 custom_table table-responsive">
+					<table class="table table-striped dataTable dt-responsive" id="dataTable" role="grid"
+						aria-describedby="dataTable_info" style="width: 100%;" width="100%" cellspacing="0">
+						<thead>
+							<tr role="row">
+								<th>Model</th>
+								<th>Make</th>
+								<th>Status</th>
+								<th>Actions</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr *ngFor="let model of model" role="row" class="odd">
+								<td>
+									<p>{{model.name}}</p>
+								</td>
+								<td>
+									<p>{{model.make_name}}</p>
+								</td>
+								<td>
+									<mat-slide-toggle class="example-margin" [color]="colorToggle"
+										[checked]="model.status" [disabled]="disabled"
+										(change)="enableDisableClicked($event,model.id)">
+									</mat-slide-toggle>
+								</td>
+								<td>
+									<a class="user-profileded btn btn-icon btn-transparent-dark"
+										id="navbarDropdownUserImage" (click)="editModel(model.id)" role="button"
+										tabindex="1"> <span>Edit</span>
+									</a>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</section>
+</main>
+
+
+<!-- Add model type modal -->
+<div class="modal fade" id="addModelModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+	aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header pb-0">
+				<h3 class="text-center mb-0">Add Model</h3>
+			</div>
+
+			<div class="modal-body pt-0">
+				<form [formGroup]="addModelForm">
+					<div class="form-group">
+						<mat-form-field appearance="outline">
+							<mat-label>Model</mat-label>
+							<input type="text" matInput formControlName="name" placeholder="Model">
+						</mat-form-field>
+						<div *ngIf="submitted && f.name.errors" class="text-danger">
+							<div *ngIf="f.name.errors.required">The Model is required</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<mat-form-field appearance="outline">
+							<mat-label class="aaaaaass">Make</mat-label>
+							<mat-select formControlName="make_id" tabIndex="1">
+								<mat-option *ngFor="let mk of make" value="{{mk.ID}}">{{mk.name}}</mat-option>
+							</mat-select>
+						</mat-form-field>
+						<div *ngIf="submitted && f.make_id.errors" class="text-danger">
+							<div *ngIf="f.make_id.errors.required">The Make is required</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer p-0">
+				<button type="button" class="custom-btn button2" (click)="submitForm()"
+					[disabled]="disableAddButton">Save</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Edit model type modal-->
+<div class="modal fade" id="editModelModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+	aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header pb-0">
+				<h3 class="text-center mb-0">Edit Model</h3>
+			</div>
+
+			<div class="modal-body pt-0">
+				<form [formGroup]="editModelForm">
+					<div class="form-group">
+						<mat-form-field appearance="outline">
+							<mat-label>Model</mat-label>
+							<input type="text" matInput formControlName="name" placeholder="Model">
+						</mat-form-field>
+						<div *ngIf="submitted && f.name.errors" class="text-danger">
+							<div *ngIf="f.name.errors.required">The Model is required</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<mat-form-field appearance="outline">
+							<mat-label class="aaaaaass">Make</mat-label>
+							<mat-select formControlName="make_id" tabIndex="1">
+								<mat-option *ngFor="let mk of make" value="{{mk.ID}}">{{mk.name}}</mat-option>
+							</mat-select>
+						</mat-form-field>
+						<div *ngIf="submitted && f.make_id.errors" class="text-danger">
+							<div *ngIf="f.make_id.errors.required">The Make is required</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer p-0">
+				<button type="button" class="custom-btn button2" (click)="updateModelForm()"
+					[disabled]="disableAddButton">Update</button>
+			</div>
+		</div>
+	</div>
+</div>

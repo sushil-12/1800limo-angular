@@ -1,0 +1,60 @@
+.adminbox_shadow.user_information,
+.adminbox_shadow.user_information .mat-form-field,
+.mat-calendar {
+	font-family: 'PT Serif', serif !important;
+}
+
+.booking_status {
+	font-size: medium;
+	color    : #fff;
+}
+
+.btnclass {
+	margin-top: 20px;
+	height    : 60px;
+	width     : 100%;
+}
+
+.pending {
+	background-color: #0474fc;
+}
+
+.assigned {
+	background-color: #543424;
+}
+
+.rejected {
+	background-color: #fc6404;
+}
+
+.cancelled {
+	background-color: #dc3545;
+}
+
+.en_route_pu {
+	background-color: #6454ac;
+}
+
+.on_location {
+	background-color: #7289da;
+}
+
+.en_route_do {
+	background-color: #1abc9c;
+}
+
+.ended {
+	background-color: #8cc43c;
+}
+
+.finalized {
+	background-color: #fcac04;
+}
+
+.non_payable {
+	background-color: #ec4c8c;
+}
+
+.comped {
+	background-color: #7c7c84;
+}

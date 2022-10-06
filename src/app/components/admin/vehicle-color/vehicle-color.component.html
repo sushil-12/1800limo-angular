@@ -1,0 +1,133 @@
+<ngx-spinner></ngx-spinner>
+<main>
+	<!-- Main page content-->
+	<section class="user_information">
+		<h2 class="headinginfo"> Colors </h2>
+		<div class="containeredd">
+			<div class="row">
+				<div class="col-md-12">
+					<button class="custom-btn add-button" data-toggle="modal" data-target="#addColorModal">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-plus-circle"
+							viewBox="0 0 16 16">
+							<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+							<path
+								d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+						</svg> Add Color
+					</button>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<label class="alert alert-danger">Note: Add each color.</label>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-12 mb-3">
+					<mat-form-field appearance="outline">
+						<mat-label>Search Color</mat-label>
+						<input matInput type="text" placeholder="Search Color" (input)="serach($event.target.value)">
+					</mat-form-field>
+				</div>
+			</div>
+		</div>
+
+		<div class="containeredd driverside_table">
+			<div class="row">
+				<div class="col-md-12 custom_table table-responsive">
+					<table class="table table-striped dataTable dt-responsive" id="dataTable" role="grid"
+						aria-describedby="dataTable_info" style="width: 100%;" width="100%" cellspacing="0">
+						<thead>
+							<tr role="row">
+								<th>Colors</th>
+								<th>Status</th>
+								<th>Actions</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr *ngFor="let color of colors" role="row" class="odd">
+								<td>
+									<p>{{color.name}}</p>
+								</td>
+								<td>
+									<mat-slide-toggle class="example-margin" [color]="colorToggle"
+										[checked]="color.status" [disabled]="disabled"
+										(change)="enableDisableClicked($event,color.id)">
+									</mat-slide-toggle>
+								</td>
+								<td>
+									<a class="user-profileded btn btn-icon btn-transparent-dark"
+										id="navbarDropdownUserImage" (click)="editColor(color.id)" role="button"
+										tabindex="1"> <span>Edit</span>
+									</a>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</section>
+</main>
+
+
+<!-- Add color type modal -->
+<div class="modal fade" id="addColorModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+	aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header pb-0">
+				<h3 class="text-center mb-0">Add Color</h3>
+			</div>
+
+			<div class="modal-body pt-0">
+				<form [formGroup]="addColorsForm">
+					<div class="form-group">
+						<mat-form-field appearance="outline">
+							<mat-label>Color</mat-label>
+							<input type="text" matInput formControlName="name" placeholder="Color">
+						</mat-form-field>
+						<div *ngIf="submitted && f.name.errors" class="text-danger">
+							<div *ngIf="f.name.errors.required">The Color is required</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer p-0">
+				<button type="button" class="custom-btn button2" (click)="submitForm()"
+					[disabled]="disableAddButton">Save</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!-- Edit color type modal-->
+<div class="modal fade" id="editColorModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+	aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header pb-0">
+				<h3 class="text-center mb-0">Edit Color</h3>
+			</div>
+
+			<div class="modal-body pt-0">
+				<form [formGroup]="editColorsForm">
+					<div class="form-group">
+						<mat-form-field appearance="outline">
+							<mat-label>Color</mat-label>
+							<input type="text" matInput formControlName="name" placeholder="Color">
+						</mat-form-field>
+						<div *ngIf="submitted && f.name.errors" class="text-danger">
+							<div *ngIf="f.name.errors.required">The Color is required</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer p-0">
+				<button type="button" class="custom-btn button2" (click)="updateColorForm()"
+					[disabled]="disableAddButton">Update</button>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,46 @@
+[
+	{
+		"label": "2 Hr",
+		"value": "2"
+	},
+	{
+		"label": "3 Hr",
+		"value": "3"
+	},
+	{
+		"label": "4 Hr",
+		"value": "4"
+	},
+	{
+		"label": "5 Hr",
+		"value": "5"
+	},
+	{
+		"label": "6 Hr",
+		"value": "6"
+	},
+	{
+		"label": "12 Hr",
+		"value": "12"
+	},
+	{
+		"label": "24 Hr",
+		"value": "24"
+	},
+	{
+		"label": "1 Wk",
+		"value": "168"
+	},
+	{
+		"label": "2 Wk",
+		"value": "336"
+	},
+	{
+		"label": "3 Wk",
+		"value": "504"
+	},
+	{
+		"label": "4 Wk",
+		"value": "672"
+	}
+]

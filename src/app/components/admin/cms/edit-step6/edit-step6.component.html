@@ -1,0 +1,268 @@
+<ngx-spinner></ngx-spinner>
+<main>
+	<form class="step6_form" id="step6_form" [formGroup]="Step6ContentForm">
+		<section class="user_information">
+			<h2 class="headinginfo">
+				Edit <em> {{title}} </em> section of <em> Terms And Conditions </em> Page
+			</h2>
+			<div id="accordionSidebar1">
+				<div>
+					<div class="container py-2">
+						<!-- 
+							Main Top Content
+						-->
+						<div class="row">
+							<div class="col-md-12" *ngIf="title">
+								<mat-form-field appearance="outline">
+									<mat-label>Title</mat-label>
+									<input matInput placeholder="Title" formControlName="title">
+								</mat-form-field>
+							</div>
+							<div class="col-md-12" *ngIf="subtitle">
+								<mat-form-field appearance="outline">
+									<mat-label>Subtitle</mat-label>
+									<input matInput placeholder="Subtitle" formControlName="subtitle">
+								</mat-form-field>
+							</div>
+							<div class="col-md-12" *ngIf="content">
+								<mat-form-field appearance="outline">
+									<mat-label>Content</mat-label>
+									<textarea matInput placeholder="Content" rows="4" formControlName="content"
+										(change)="formatContent()"></textarea>
+								</mat-form-field>
+							</div>
+						</div>
+						<!-- 
+							Main Top Content
+						-->
+
+						<!-- 
+							Middle Listing and its content
+						-->
+						<div class="row" *ngIf="ol_arr > 0">
+							<div class="col-md-12">
+								<div class="p-3 border mt-3" formArrayName="other_listing_arr">
+									<h3 class="headinginfoH3">Other Listing Content Group</h3>
+									<div class="col-md-12"
+										*ngFor="let _ of Object_other_listing_arr.controls; index as i">
+										<div class="row mt-4 d-flex justify-content-between align-items-center">
+											<div class="col-md-9">
+												<mat-form-field appearance="outline" class="mt-0">
+													<mat-label>Content</mat-label>
+													<textarea matInput placeholder="Content" rows="4"
+														[formControlName]="i"></textarea>
+												</mat-form-field>
+											</div>
+
+											<!-- Buttons will be shown only on the last item of list -->
+											<div class="col-md-3 d-flex">
+												<div class="mx-2" *ngIf="i > 0">
+													<!-- Will not be visible on first item -->
+													<button class="custom-btn delete-btn" type="button"
+														(click)="deleteListingField(i)">
+														Delete
+													</button>
+												</div>
+												<div class="mx-2" *ngIf="i == (ol_arr - 1)">
+													<button class="custom-btn changeuploaded" type="button"
+														(click)="addListingField()">
+														Add
+													</button>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- 
+							Middle listing and its content ends
+						-->
+
+						<!-- 
+							Title Content Listing Data
+						-->
+						<div class="row" *ngIf="tcl_arr.length > 0">
+							<div class="col-md-12 p-3 border rounded-lg mt-4" formArrayName="title_content_list_arr">
+								<h3 class="headingInfo">
+									Title Content List Group
+								</h3>
+								<div class="mt-2 p-4" data-label="title-content-groups"
+									*ngFor="let _ of Object_title_content_list_arr.controls; index as i">
+									<div class="border rounded-lg p-3">
+										<p class="text-uppercase font-weight-bold">
+											Group {{i + 1}}
+										</p>
+
+										<div id="input-fields" data-label="input-fields">
+											<div class="d-block col-md-12" [formGroupName]="i">
+												<mat-form-field appearance="outline" class="mt-0">
+													<mat-label>Title</mat-label>
+													<input matInput placeholder="Title" formControlName="list_title">
+												</mat-form-field>
+											</div>
+											<div class="d-block col-md-12 mt-3" [formGroupName]="i">
+												<mat-form-field appearance="outline" class="mt-0">
+													<mat-label>Content</mat-label>
+													<input matInput placeholder="Content"
+														formControlName="list_content">
+												</mat-form-field>
+											</div>
+
+											<!-- Hidden if no list points are generated - mainly after adding a new group or no list points are fetched from database -->
+											<div class="col-md-12 mt-3" [formGroupName]="i"
+												*ngIf="tcl_arr[i].list_points > 0">
+												<div class="col-md-12 p-3 border rounded-lg">
+													<p class="text-uppercase font-weight-bold">
+														List Points
+													</p>
+													<!-- inner loop for list_points; index as j-->
+													<div class="d-flex align-items-center mt-3 justify-content-between"
+														*ngFor="let _ of Object_form_list_points(i).controls; index as j">
+														<div class="col-10" formArrayName="list_points">
+															<mat-form-field appearance="outline" class="mt-0">
+																<mat-label>List Content</mat-label>
+																<textarea matInput placeholder="List Content" rows="4"
+																	[formControlName]="j"></textarea>
+															</mat-form-field>
+														</div>
+														<div data-label="list-action-buttons" class="d-flex col">
+															<!-- will be hidden for first but will be visible for all after first -->
+															<div class="mx-2" *ngIf="j >= 0">
+																<button class="custom-btn delete-btn" type="button"
+																	(click)="deleteListPointField(i, j)">
+																	Delete
+																</button>
+															</div>
+															<div class="mx-2" *ngIf="j == (tcl_arr[i].list_points - 1)">
+																<button class="custom-btn changeuploaded" type="button"
+																	(click)="addListPointField(i)">
+																	Add More
+																</button>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<!-- will be visible only one time after adding a new group -->
+											<div class="col-md-12 mt-3" *ngIf="tcl_arr[i].list_points == 0">
+												<button class="custom-btn changeuploaded" id="addlistpoint"
+													type="button" (click)="addListPointField(i)">
+													Add Listing Points
+												</button>
+											</div>
+											<div class="d-block col-md-12 mt-3" [formGroupName]="i">
+												<mat-form-field appearance="outline" class="mt-0">
+													<mat-label>Sub Content</mat-label>
+													<input matInput placeholder="Sub Content"
+														formControlName="list_subcontent">
+												</mat-form-field>
+											</div>
+										</div>
+										<div class="col-md-12 d-flex justify-content-end align-items-center"
+											data-label="group-action-buttons">
+											<div class="mx-2">
+												<button class="custom-btn delete-btn" id="deletegroup" type="button"
+													(click)="deleteTitleContentListingField(i)">
+													Delete Group
+												</button>
+											</div>
+											<div class="mx-2" *ngIf="i == (tcl_arr.length - 1)">
+												<button class="custom-btn add-button" type="button"
+													(click)="addTitleContentListingField()">
+													Add Group
+												</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+
+						<!-- <div class="row" *ngIf="title_content_list_arr.length > 0">
+							<div class="col-md-12">
+								<div class="p-3 border mt-3" formArrayName="title_content_list_arr">
+									<h3 class="headinginfoH3">Title Content List Group</h3>
+									<div class="col-md-12" *ngFor="let _ of Object_title_content_list_arr.controls; index as j">
+										<div class="row mt-4 d-flex flex-column justify-content-between align-items-center">
+											<div class="col-md-12" [formGroupName]="j">
+												<mat-form-field appearance="outline" class="mt-0">
+													<mat-label>Title</mat-label>
+													<input matInput placeholder="Title" formControlName="list_title">
+												</mat-form-field>
+											</div>
+											<div class="col-md-12 mt-4" [formGroupName]="j">
+												<mat-form-field appearance="outline" class="mt-0">
+													<mat-label>Content</mat-label>
+													<input matInput placeholder="Content" formControlName="content">
+												</mat-form-field>
+											</div>
+											<div class="col-md-11 mt-4 border rounded-lg p-3">
+												<h5 class="headinginfo"> List Content </h5>
+												<div class="d-flex justify-content-between align-items-center" [formGroupName]="j"
+													 *ngFor="let _ of Object_form_list_points(j).controls; index as k">
+													<div class="col-9 mt-3 d-block" formArrayName="list_points">
+														<mat-form-field appearance="outline" class="mt-0">
+															<mat-label>List Content</mat-label>
+															<textarea matInput placeholder="List Content" [formControlName]="k" rows="4">
+															</textarea>
+														</mat-form-field>
+													</div>
+													<div class="buttons col-3 d-flex">
+														<div class="mx-2">
+															<button class="custom-btn delete-btn" type="button">Delete List
+															</button>
+														</div>
+														<div class="mx-2">
+															<button class="custom-btn changeuploaded" type="button">Add List
+															</button>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="col-md-12 d-flex justify-content-end mt-4 align-items-center">
+												<div class="mx-2">
+													<button class="custom-btn delete-btn" type="button">Delete
+													</button>
+												</div>
+												<div class="mx-2">
+													<button class="custom-btn changeuploaded" type="button">Add
+													</button>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div> -->
+						<!-- Title Content Listing Data ends -->
+
+
+						<!-- Section Status -->
+						<div class="row">
+							<div class="col-md-12">
+								<mat-form-field appearance="outline">
+									<mat-label>Status</mat-label>
+									<mat-select formControlName="section_status">
+										<mat-option value="enable">Enable</mat-option>
+										<mat-option value="disable">Disable</mat-option>
+									</mat-select>
+								</mat-form-field>
+							</div>
+						</div>
+						<!-- Section Status ends -->
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Save | Go Back -->
+		<section class="billing_inforamtion">
+			<ul>
+				<li><button class="custom-btn savebutton" (click)="saveStep6ContentForm()">SAVE</button> </li>
+				<li><button class="custom-btn backbutton" (click)="backButton()">BACK</button> </li>
+			</ul>
+		</section>
+	</form>
+</main>

@@ -1,0 +1,51 @@
+<main>
+	<ngx-spinner></ngx-spinner>
+	<div class="md-stepper-horizontal orange" tabindex="-1">
+		<div class="md-step"
+			[ngClass]="currentStep==1 ? (stepCompleted && stepCompleted.includes('1') ? 'active completed' : 'active') : (stepCompleted && stepCompleted.includes('1') ? 'completed' : '')"
+			(click)="stepClicked(1)" id="step_1">
+			<div class="md-step-circle"><span>1</span></div>
+			<div class="md-step-title">Step 1</div>
+			<div class="md-step-optional">Affiliate Settings</div>
+			<div class="md-step-bar-left"></div>
+			<div class="md-step-bar-right"></div>
+		</div>
+		<div class="md-step"
+			[ngClass]="currentStep==2 ? (stepCompleted && stepCompleted.includes('2') ? 'active completed' : 'active') : (stepCompleted && stepCompleted.includes('2') ? 'completed' : '')"
+			(click)="stepClicked(2)" id="step_2">
+			<div class="md-step-circle"><span>2</span></div>
+			<div class="md-step-title">Step 2</div>
+			<div class="md-step-optional">Stripe Banking / Map Fix</div>
+			<div class="md-step-bar-left"></div>
+			<div class="md-step-bar-right"></div>
+		</div>
+		<div class="md-step"
+			[ngClass]="currentStep==3 ? (stepCompleted && stepCompleted.includes('3') ? 'active completed' : 'active') : (stepCompleted && stepCompleted.includes('3') ? 'completed' : '')"
+			(click)="stepClicked(3)" id="step_3">
+			<div class="md-step-circle"><span>3</span></div>
+			<div class="md-step-title">Step 3</div>
+			<div class="md-step-optional">Insurance Setting</div>
+			<div class="md-step-bar-left"></div>
+			<div class="md-step-bar-right"></div>
+		</div>
+		<div class="md-step"
+			[ngClass]="currentStep==4 ? (stepCompleted && stepCompleted.includes('4') ? 'active completed' : 'active') : (stepCompleted && stepCompleted.includes('4') ? 'completed' : '')"
+			(click)="stepClicked(4)" id="step_4">
+			<div class="md-step-circle"><span>4</span></div>
+			<div class="md-step-title">Step 4</div>
+			<div class="md-step-optional">Driver Settings</div>
+			<div class="md-step-bar-left"></div>
+			<div class="md-step-bar-right"></div>
+		</div>
+		<div class="md-step"
+			[ngClass]="currentStep==5 ? (stepCompleted && stepCompleted.includes('5') ? 'active completed' : 'active') : (stepCompleted && stepCompleted.includes('5') ? 'completed' : '')"
+			(click)="stepClicked(5)" id="step_5">
+			<div class="md-step-circle"><span>5</span></div>
+			<div class="md-step-title">Step 5</div>
+			<div class="md-step-optional">Vehicle Settings / Rates</div>
+			<div class="md-step-bar-left"></div>
+			<div class="md-step-bar-right"></div>
+		</div>
+	</div>
+	<router-outlet></router-outlet>
+</main>

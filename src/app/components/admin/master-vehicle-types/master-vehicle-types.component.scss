@@ -1,0 +1,27 @@
+.modal-header .close {
+	margin : 0 !important;
+	padding: 0 !important;
+}
+
+.modal-dialog {
+	max-width: 530px !important;
+}
+
+.modal .modal-body ul {
+	margin-left: 5px !important;
+	padding    : 0 !important;
+	height     : 35px !important;
+}
+
+.number.passengers_qty button {
+	background-color: #a9a9aa !important;
+}
+
+.passengers_qty input[type="number"] {
+	border          : 2px solid #808080 !important;
+	background-color: #e9e9e9 !important;
+}
+
+.modal-header {
+	justify-content: center !important;
+}

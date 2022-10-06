@@ -1,0 +1,102 @@
+<ngx-spinner></ngx-spinner>
+
+<section class="adminbox_shadow user_information">
+	<h2 class="headinginfo">
+		Farm Out Bookings
+	</h2>
+	<!-- DIVISION: SEARCH PARAMETERS -->
+	<div class="row px-4">
+		<!-- START DATE -->
+		<div class="col-md-3">
+			<mat-form-field appearance="outline">
+				<mat-label>
+					Start Date <span class="asterisk"> * </span>
+				</mat-label>
+				<input matInput [setOutputDateFormat]="OUTPUTDATEFORMAT" [matDatepicker]="picker1" placeholder="Start Date"
+					[max]="end_date" id="id_4" (dateChangeWithFormat)="start_date = $event" (click)="picker1.open()"
+					[value]="start_date" />
+				<mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+				<mat-datepicker #picker1></mat-datepicker>
+			</mat-form-field>
+		</div>
+
+		<!-- END DATE -->
+		<div class="col-md-3">
+			<mat-form-field appearance="outline">
+				<mat-label>End Date<span class="asterisk">*</span></mat-label>
+				<input matInput [setOutputDateFormat]="OUTPUTDATEFORMAT" [matDatepicker]="picker2" placeholder="End Date"
+					[min]="start_date" id="id_5" (dateChangeWithFormat)="end_date = $event" (click)="picker2.open()"
+					[value]="end_date" />
+				<mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+				<mat-datepicker #picker2></mat-datepicker>
+			</mat-form-field>
+		</div>
+
+		<!-- SEARCH FIELD -->
+		<div class="col-md-4  startdate2">
+			<mat-form-field appearance="outline">
+				<mat-label>Search</mat-label>
+				<input matInput type="text" placeholder="Search by Date, Name or keyword" id="keyword">
+			</mat-form-field>
+		</div>
+
+		<!-- SEARCH BUTTON -->
+		<div class="col-md-2  startdate3">
+			<label></label>
+			<button class="custom-btn btnclass savebutton">SEARCH</button>
+		</div>
+	</div>
+	<!-- DIVISION: SEARCH PARAMETERS ENDS -->
+
+	<!-- DIVISION: CREATE NEW FARMOUT BUTTON -->
+	<div class="row px-4">
+		<div class="col-auto">
+			<div id="create-new-btn" class="my-3">
+				<button id="farmout-btn" class="custom-btn btnclass savebutton m-0" [routerLink]="['/']"
+					style="gap: 0.45rem; align-items:center; padding: 0 25px !important; font-size: 1.1rem">
+					<i class="bi bi-plus-lg"></i>
+					New Farmout
+				</button>
+			</div>
+		</div>
+	</div>
+	<!-- DIVISION: CREATE NEW FARMOUT BUTTON ENDS -->
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- FARMOUT MODAL -->
+<div class="modal fade" id="farmout-modal" data-backdrop="static" data-keyboard="false" tabindex="-1"
+	aria-labelledby="farmoutModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel"> Farm Out Booking </h5>
+				<!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button> -->
+			</div>
+			<div class="modal-body" [innerHTML]="farmout_modal_body">
+			</div>
+			<div class="modal-footer">
+				<button type="button" id="sec-btn" data-dismiss="modal">
+					No
+				</button>
+				<button type="button" id="prim-btn" [routerLink]="['/']" data-dismiss="modal">
+					Yes
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- FARMOUT MODAL ENDS -->

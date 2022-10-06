@@ -1,0 +1,151 @@
+<section class="driverbooking_top user_information">
+	<h2 class="headinginfo">Add Vehicle<span
+			*ngIf="affiliate_type == 'black_limo_operator' || affiliate_type == 'fleet_operator'">(s)</span></h2>
+	<div class="containeredd">
+		<div class="row mt-3">
+			<div class="col-md-12 mb-2">
+				<label class="alert alert-danger"
+					*ngIf="affiliate_type == 'fleet_operator'; else black_limo_operator">Enter only one vehicle to
+					complete
+					registeration. Enter more vehicles later.</label>
+				<ng-template #black_limo_operator>
+					<label class="alert alert-danger" *ngIf="affiliate_type == 'black_limo_operator'">
+						Add Up To 2 Vehicles Only.
+					</label>
+				</ng-template>
+				<label class="alert alert-danger"
+					*ngIf="affiliate_type == 'gig_operator' || affiliate_type == 'taxi_operator'">
+					Enter only one vehicle to complete registeration.
+				</label>
+			</div>
+			<div class="col-md-12 mb-2"
+				[hidden]="affiliate_type == 'taxi_operator' && affiliate_type == 'gig_operator'">
+				<label class="alert alert-danger" *ngIf="instructionBasedOnAffiliate"
+					[innerHTML]="instructionBasedOnAffiliate"></label>
+			</div>
+		</div>
+		<div class="row" *ngIf="canAddVehicle">
+			<div class="col-md-12">
+				<button type="button" class="custom-btn add-button" (click)="addVehicleClick(vehicleTypeId)"
+					tabindex="1">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-plus-circle"
+						viewBox="0 0 16 16">
+						<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+						<path
+							d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+					</svg> Add Vehicle
+				</button>
+			</div>
+		</div>
+	</div>
+	<div class="containeredd driverside_table">
+		<div class="row">
+			<div class="col-md-12 custom_table">
+				<div class="table-responsive">
+					<table class="table table-striped dataTable dt-responsive" id="dataTable" role="grid"
+						aria-describedby="dataTable_info" style="width: 100%;" width="100%" cellspacing="0">
+						<thead>
+							<tr role="row">
+								<th>Image</th>
+								<th>Vehicle Type</th>
+								<th># of Vehicles</th>
+								<th>Seats</th>
+								<th>Year</th>
+								<th>Make</th>
+								<th>Model</th>
+								<th>Color</th>
+								<th>Amenities</th>
+								<th>Plate #</th>
+								<th>Delete</th>
+								<th>Actions</th>
+							</tr>
+						</thead>
+						<tbody>
+							<ng-container *ngIf="vehicles">
+								<tr role="row" class="odd" *ngFor="let vehicle of vehicles">
+									<td><img src="{{vehicle.vehicleImage}}"></td>
+									<td>{{vehicle.vehicleType}}</td>
+									<td>{{vehicle.numberOfVehicles}}</td>
+									<td>{{vehicle.seats}}</td>
+									<td>{{vehicle.year}}</td>
+									<td>{{vehicle.make}}</td>
+									<td>{{vehicle.model}}</td>
+									<td>{{vehicle.color}}</td>
+									<td><button (click)="updateAmenityList(vehicle.amenities)" class="button2"
+											tabindex="1">Amenity
+											List</button></td>
+									<td>{{vehicle.licensePlate}}</td>
+									<td>
+										<i class="fa fa-trash" style="font-size: x-large; color:#d64646"
+											(click)="enableDisableClicked(vehicle.id)" data-toggle="modal"
+											data-target="#deleteConfirmationModal"></i>
+									</td>
+									<td>
+										<a *ngIf="vehicle.isRatesCompleted; else pendingRates"
+											class="user-profileded btn btn-icon btn-transparent-dark dropdown-toggle"
+											data-toggle="dropdown" id="navbarDropdownUserImage"
+											href="javascript:void(0);" role="button" aria-haspopup="true"
+											aria-expanded="false" tabindex="1"> <span>View</span>
+										</a>
+										<ng-template #pendingRates>
+											<a class="user-profileded btn btn-icon btn-transparent-dark dropdown-toggle notCompleted"
+												data-placement="bottom" title="Rates are not entered."
+												data-toggle="dropdown" id="navbarDropdownUserImage"
+												href="javascript:void(0);" role="button" aria-haspopup="true"
+												aria-expanded="false" tabindex="1"> <span>View</span>
+											</a>
+										</ng-template>
+										<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
+											aria-labelledby="navbarDropdownUserImage">
+											<a class="dropdown-item" (click)="clickEditVehicle(vehicle.ID)">
+												<div class="dropdown-item-icon"></div>
+												Edit Vehicle
+											</a>
+											<a class="dropdown-item"
+												[ngClass]="{notCompleted: !vehicle.isRatesCompleted}"
+												(click)="clickEditVehicleRates(vehicle.ID)">
+												<div class="dropdown-item-icon"></div>
+												Edit Rates
+											</a>
+											<a *ngIf="canAddVehicle" class="dropdown-item"
+												(click)="clickDuplicateVehicle(vehicle.ID)">
+												<div class="dropdown-item-icon"></div>
+												Duplicate Vehicle
+											</a>
+										</div>
+									</td>
+								</tr>
+								<tr *ngIf="!vehicles?.length">
+									<td colspan="12">No vehicle found!</td>
+								</tr>
+							</ng-container>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<!-- Delete confirmation modal -->
+<app-delete-confirmation (deleteRecord)="delete()" [alertMessage]="alertMessage"></app-delete-confirmation>
+
+<!-- Amenity list modal -->
+<div class="modal fade" id="amenityListModal" tabindex="-1" role="dialog" aria-labelledby="amenityListModal"
+	aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-body">
+				<ul class="mb-0">
+					<li *ngFor="let amenity of amenityList">
+						<i class="bi bi-currency-dollar text-danger" *ngIf="amenity.name.chargeable == 'yes'"></i>
+						{{amenity.name.name}}
+					</li>
+				</ul>
+			</div>
+			<div class="modal-footer py-0">
+				<button type="button" class="custom-btn button2" data-dismiss="modal">OK</button>
+			</div>
+		</div>
+	</div>
+</div>

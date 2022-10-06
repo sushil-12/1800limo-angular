@@ -1,0 +1,118 @@
+<nav class="topnav navbar navbar-expand shadow navbar-light bg-white" id="sidenavAccordion">
+   <a class="navbar-brand active" routerLink="/user">
+      <img src="assets/admin/images/logo.png">
+   </a>
+   <button class="btn btn-icon btn-transparent-dark order-1 order-lg-0 mr-lg-2" id="sidebarToggle">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+         class="feather feather-menu">
+         <line x1="3" y1="12" x2="21" y2="12"></line>
+         <line x1="3" y1="6" x2="21" y2="6"></line>
+         <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+   </button>
+   <ul class="navbar-nav align-items-center ml-auto">
+      <li class="nav-item dropdown no-caret mr-2 dropdown-user">
+         <a class="user-profile btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownUserImage"
+            href="javascript:void(0);" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <img class="img-fluid" src="{{userImage}}"> <span>{{userName}}</span>
+         </a>
+         <div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
+            aria-labelledby="navbarDropdownUserImage">
+            <h6 class="dropdown-header d-flex align-items-center">
+               <img class="dropdown-user-img" src="{{userImage}}">
+               <div class="dropdown-user-details">
+                  <div class="dropdown-user-details-name">{{userName}}</div>
+                  <div class="dropdown-user-details-email">{{userEmail}}</div>
+               </div>
+            </h6>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" routerLink="account">
+               <div class="dropdown-item-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                     class="feather feather-settings">
+                     <circle cx="12" cy="12" r="3"></circle>
+                     <path
+                        d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+                     </path>
+                  </svg>
+               </div>
+               Account
+            </a>
+            <a class="dropdown-item" (click)="logout()">
+               <div class="dropdown-item-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                     class="feather feather-log-out">
+                     <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                     <polyline points="16 17 21 12 16 7"></polyline>
+                     <line x1="21" y1="12" x2="9" y2="12"></line>
+                  </svg>
+               </div>
+               Logout
+            </a>
+         </div>
+      </li>
+   </ul>
+</nav>
+<div id="layoutSidenav">
+   <div id="layoutSidenav_nav">
+      <nav class="sidenav shadow-right sidenav-light">
+         <div class="sidenav-menu">
+            <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+               <!---1st--->
+               <li class="nav-item">
+                  <a class="nav-link collapsed" [routerLinkActive]="['active']" routerLink="account">
+                     <img src="assets/admin/images/veh_user.png"> <span>Account</span>
+                  </a>
+               </li>
+               <!--2nd -->
+               <li class="nav-item">
+                  <a class="nav-link collapsed" [routerLinkActive]="['active']" routerLink="my-bookings">
+                     <img src="assets/admin/images/booking.png"> <span>My Booking</span>
+                  </a>
+               </li>
+               <li class="nav-item">
+                  <a class="nav-link collapsed" [routerLinkActive]="['active']" routerLink="create-booking">
+                     <img src="assets/admin/images/booking.png"> <span>Create booking</span>
+                  </a>
+               </li>
+               <!-- 3rd -->
+               <li class="nav-item">
+                  <a class="nav-link collapsed" [routerLinkActive]="['active']" routerLink="reports">
+                     <img src="assets/admin/images/report.png"> <span>Reports</span>
+                  </a>
+               </li>
+               <!-- 4th -->
+               <li class="nav-item">
+                  <a class="nav-link collapsed" [routerLinkActive]="['active']" routerLink="user-manual">
+                     <img src="assets/admin/images/booking.png"> <span>User Manual</span>
+                  </a>
+               </li>
+               <!-- 5th -->
+               <li class="nav-item">
+                  <a class="nav-link collapsed" [routerLinkActive]="['active']" routerLink="terms">
+                     <img src="assets/admin/images/terms.png"> <span>Terms</span>
+                  </a>
+               </li>
+               <hr class="sidebar-divider d-none d-md-block">
+               <div class="text-center d-none d-md-inline">
+                  <button class="rounded-circle border-0" id="sidebarToggle"></button>
+               </div>
+            </ul>
+         </div>
+      </nav>
+   </div>
+   <div id="layoutSidenav_content">
+      <router-outlet></router-outlet>
+      <footer class="footer mt-auto footer-light">
+         <div class="container-fluid">
+            <div class="row">
+               <div class="col-md-6 small">Copyright © Your Website 2020</div>
+               <div class="col-md-6 text-md-right small"></div>
+            </div>
+         </div>
+      </footer>
+   </div>
+</div>

@@ -1,0 +1,663 @@
+import { Component, OnInit, AfterViewInit, Input, EventEmitter, ViewChild, ElementRef, NgZone } from '@angular/core';
+import { AuthService } from '../../../services/auth.service';
+import { StateManagementService } from '../../../services/statemanagement.service';
+import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { NgxSpinnerService } from "ngx-spinner";
+import { catchError } from 'rxjs/operators';
+import { throwError, from } from 'rxjs';
+import { CustomvalidationService } from '../../../services/customvalidation.service';
+import { MapsAPILoader } from '@agm/core';
+import { data } from 'jquery';
+import { AdminService } from 'src/app/services/admin.service';
+declare var $: any;
+
+@Component({
+	selector: 'app-affiliate-step1',
+	templateUrl: './affiliate-step1.component.html',
+	styleUrls: ['./affiliate-step1.component.scss']
+})
+
+export class AffiliateStep1Component implements OnInit
+{
+
+	public addAffiliateAccountForm: FormGroup;
+	public submittedForm: boolean;
+	public disableSubmitButton: boolean = false;
+	public response: any;
+	public response2: any;
+	public languages: any;
+	public associations: any;
+	public languagesFormControl: any;
+	public AssociationsFormControl: any;
+	public affiliateId: string;
+	public imageSrc: string;
+	public affiliateType: string;
+	updatedAffiliateEmail: any;
+	affiliateEmailStatus: any;
+	affiliateEmailButton: string;
+	affiliateEmailReadonly: boolean;
+	updatedDispatchEmail: any;
+	dispatchEmailStatus: any;
+	dispatchEmailButton: string;
+	dispatchEmailReadonly: boolean;
+	CellNumberObject: any;
+	BusinessFrontPhoto: any;
+	BusinessBackPhoto: any;
+	BusinessFrontPhotoId: any;
+	BusinessBackPhotoId: any;
+	CompanyCellNumberObject: any;
+	DispatchObject: any;
+	FaxObject: any;
+	showCompanyInformation: boolean;
+	selectedAffiliate: string;
+	affiliateInstructionHeading: string;
+	affiliateInstruction: string;
+	currentUser: any;
+	modalAlertMessage: string;
+	public modalImage: string;
+	public notify_sms: boolean;
+	public notify_email: boolean;
+	// stateManagementService: any;
+
+	constructor(
+		private adminService: AdminService,
+		private router: Router,
+		private spinner: NgxSpinnerService,
+		private formBuilder: FormBuilder,
+		private authService: AuthService,
+		private activatedroute: ActivatedRoute,
+		private mapsAPILoader: MapsAPILoader,
+		private stateManagementService: StateManagementService,
+		private ngZone: NgZone,
+		private customValidator: CustomvalidationService
+	) { }
+	@Input() closeTab: EventEmitter<any> = new EventEmitter();
+
+
+	//google map autocomplete
+	latitude: number;
+	longitude: number;
+	zoom: number;
+	address: string;
+	private geoCoder;
+	@ViewChild('search1')
+	public searchElementRef: ElementRef;
+
+	ngAfterViewInit()
+	{
+		//set current user country as default in phone number
+		this.CellNumberObject.setCountry(this.currentUser.phoneCountry);
+		this.DispatchObject.setCountry(this.currentUser.phoneCountry);
+		this.FaxObject.setCountry(this.currentUser.phoneCountry);
+		this.CompanyCellNumberObject.setCountry(this.currentUser.phoneCountry);
+	}
+
+	ngOnInit(): void
+	{
+
+		this.currentUser = this.authService.currentUserValue;
+		//add amenity form validation
+		this.addAffiliateAccountForm = this.formBuilder.group({
+			id: [''],
+			AffiliateType: ['', Validators.required],
+			Title: ['mr', Validators.required],
+			FirstName: ['', Validators.required],
+			MiddleName: [''],
+			LastName: ['', Validators.required],
+			Gender: ['male', Validators.required],
+			CellNumber: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
+			CellIsd: ['+1', Validators.required],
+			Email: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
+			latitude: [''],
+			longitude: [''],
+			FirstYearBusiness: ['', Validators.required],
+			CellNumberCountry: ['us', Validators.required],
+			CompanyName: ['', Validators.required],
+			DBA: [''],
+			dispatchEmail: ['', [Validators.pattern("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")]],
+			Dispatch: [''],
+			DispatchIsd: ['+1'],
+			DispatchCountry: ['us'],
+			BusinessFrontPhoto: [''],
+			BusinessBackPhoto: [''],
+			CompanyCellNumber: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
+			CompanyCellIsd: ['+1', Validators.required],
+			CompanyCellNumberCountry: ['us'],
+			FaxCountry: ['us'],
+			Fax: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(10), Validators.maxLength(10)]],
+			cpcn_tpc: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
+			FaxIsd: ['+1', Validators.required],
+			LanguagesGet: this.formBuilder.array([]),
+			Associations: this.formBuilder.array([]),
+			AssociationsGet: this.formBuilder.array([]),
+			LanguagesSpoken: this.formBuilder.array([], [Validators.required]),
+			notify_sms: [''],
+			notify_email: [''],
+		});
+
+		this.stateManagementService.setprogressBar(true);
+		// Load Our languages using API
+		this.adminService.getAssicationsLanguages()
+			.pipe(
+				catchError(err =>
+				{
+					this.stateManagementService.setprogressBar(false);
+					return throwError(err);
+				})
+			).subscribe(result =>
+			{
+				this.response = result;
+				this.languages = this.response.data.languages;
+				this.associations = this.response.data.associations;
+
+				this.affiliateId = sessionStorage.getItem("affiliateId");
+				this.affiliateType = sessionStorage.getItem("affiliateType");
+				this.addAffiliateAccountForm.patchValue({
+					AffiliateType: this.affiliateType
+				});
+				if (this.affiliateId)
+				{
+					this.adminService.getAffiliateAccount(this.affiliateId)
+						.pipe(
+							catchError(err =>
+							{
+								this.stateManagementService.setprogressBar(false);
+								return throwError(err);
+							})
+						).subscribe(result2 =>
+						{
+							this.response2 = result2;
+							this.addAffiliateAccountForm.patchValue({
+								id: this.response2.data.id,
+								FirstName: this.response2.data.FirstName,
+								LastName: this.response2.data.LastName,
+								MiddleName: this.response2.data.MiddleName,
+								Email: this.response2.data.Email,
+								CellNumber: this.response2.data.CellNumber,
+								Gender: this.response2.data.Gender,
+								AffiliateType: this.response2.data.AffiliateType,
+								FirstYearBusiness: this.response2.data.FirstYearBusiness,
+							});
+							this.affiliateTypeSwitch(this.response2.data.AffiliateType)
+
+							sessionStorage.setItem("affiliateUserData", JSON.stringify(this.response2.data));
+							sessionStorage.setItem("affiliateType", this.response2.data.AffiliateType)
+							if (this.response2.data.step_completed && Array.isArray(this.response2.data.step_completed))
+							{
+								this.response2.data.step_completed.forEach((item: any) =>
+								{
+									this.adminService.setSessionStepsCompleted(item)
+								})
+							} else
+							{
+								this.adminService.setSessionStepsCompleted(this.response2.data.step_completed)
+							}
+							console.log(this.response2.data.CellNumberCountry, "cellnumbercountry")
+							//set country flag in phone number fields
+							this.CellNumberObject.setCountry(this.response2.data.CellNumberCountry);
+							console.log(this.response2.data.AffiliateType, "response not cominng")
+							if (this.response2.data.AffiliateType != 'gig_operator')
+							{
+								//set images and their ID
+								this.BusinessFrontPhoto = this.response2.data.BusinessFrontPhoto.image;
+								this.BusinessBackPhoto = this.response2.data.BusinessBackPhoto.image;
+								this.BusinessFrontPhotoId = this.response2.data.BusinessFrontPhoto.ID;
+								this.BusinessBackPhotoId = this.response2.data.BusinessBackPhoto.ID;
+								this.addAffiliateAccountForm.patchValue({
+									CompanyName: this.response2.data.CompanyName,
+									DBA: this.response2.data.DBA,
+									Dispatch: this.response2.data.Dispatch,
+									dispatchEmail: this.response2.data.dispatchEmail,
+									CompanyCellNumber: this.response2.data.CompanyCellNumber,
+									Fax: this.response2.data.Fax,
+									cpcn_tpc: this.response2.data.cpcn_tpc,
+									BusinessFrontPhoto: this.response2.data.BusinessFrontPhoto.ID,
+									BusinessBackPhoto: this.response2.data.BusinessBackPhoto.ID,
+								});
+
+								this.CompanyCellNumberObject.setCountry(this.response2.data.CompanyCellNumberCountry);
+								this.DispatchObject.setCountry(this.response2.data.DispatchCountry);
+								this.FaxObject.setCountry(this.response2.data.FaxCountry);
+							}
+
+							const languagesGet: FormArray = this.addAffiliateAccountForm.get('LanguagesGet') as FormArray;
+							const languageSpoken: FormArray = this.addAffiliateAccountForm.get('LanguagesSpoken') as FormArray;
+							var i;
+							const totalLanguages: any = this.languages;
+							const selectedLanguages = this.response2.data.LanguagesSpoken;
+							for (i = 0; i < totalLanguages.length; i++)
+							{
+								// console.log(totalLanguages[i]);
+								var checkedLanguage = selectedLanguages.findIndex(function (post)
+								{
+									if (post == totalLanguages[i].id)
+										return true;
+								});
+								// console.log(checkedLanguage);
+								if (checkedLanguage >= 0)
+								{
+									var checkBool = true;
+								}
+								else
+								{
+									var checkBool = false;
+								}
+								languagesGet.push(new FormControl(checkBool));
+							}
+							this.languagesFormControl = languagesGet.controls;
+							var j;
+							for (j = 0; j < selectedLanguages.length; j++)
+							{
+								languageSpoken.push(new FormControl(selectedLanguages[j]));
+							}
+							// console.log(languageSpoken);
+							//get and set languages ends
+
+							//get and set associations
+							const AssociationsGet: FormArray = this.addAffiliateAccountForm.get('AssociationsGet') as FormArray;
+							const associations: FormArray = this.addAffiliateAccountForm.get('Associations') as FormArray;
+							var i;
+							const totalAssociations: any = this.associations;
+							const selectedAssociations = this.response2.data.Associations;
+							for (i = 0; i < totalAssociations.length; i++)
+							{
+								var checkedAssociation = selectedAssociations.findIndex(function (post)
+								{
+									if (post == totalAssociations[i].id)
+										return true;
+								});
+								if (checkedAssociation >= 0)
+								{
+									var checkBool = true;
+								}
+								else
+								{
+									var checkBool = false;
+								}
+								AssociationsGet.push(new FormControl(checkBool));
+							}
+							this.AssociationsFormControl = AssociationsGet.controls;
+							var j;
+							for (j = 0; j < selectedAssociations.length; j++)
+							{
+								associations.push(new FormControl(selectedAssociations[j]));
+							}
+							console.log('associations');
+							//
+							this.stateManagementService.setprogressBar(false);
+						});
+				} else
+				{
+					this.addAffiliateAccountForm.patchValue({
+						AffiliateType: (this.affiliateType ? this.affiliateType : 'black_limo_operator')
+					});
+					this.stateManagementService.setprogressBar(false);
+
+					this.onLanguageChange('1', true);//set english as default language
+				}
+				this.stateManagementService.setprogressBar(false);
+			});
+
+		if (sessionStorage.getItem("affiliateType") != "all_operators")
+		{
+			this.affiliateTypeSwitch(sessionStorage.getItem("affiliateType"))
+		}
+	}
+
+	affiliateTypeSwitch(affiliateType)
+	{
+		$('#FirstName').focus();
+		switch (affiliateType)
+		{
+			case 'fleet_operator': {
+				this.showCompanyInformation = true;
+				this.conditionalValidations('fleet_operator');
+				break;
+			}
+			case 'black_limo_operator': {
+				if (this.affiliateId)
+				{
+					if (this.f.AffiliateType.value == 'fleet_operator')
+					{
+						this.modalAlertMessage = "Fleet Operator can not change on Black Car / Owner Operators";
+						$('#affiliateAlertMessageModal').modal('show');
+						return false;
+					}
+				}
+				this.showCompanyInformation = true;
+				this.conditionalValidations('black_limo_operator');
+				break;
+			}
+			case 'taxi_operator': {
+				if (this.affiliateId)
+				{
+					switch (this.f.AffiliateType.value)
+					{
+						case 'black_limo_operator': {
+							this.modalAlertMessage = "Black Car / Owner Operators can not change on Taxi Operators";
+							$('#affiliateAlertMessageModal').modal('show');
+							return false;
+						}
+						case 'fleet_operator': {
+							this.modalAlertMessage = "Fleet Operators can not change on Taxi Operators";
+							$('#affiliateAlertMessageModal').modal('show');
+							return false;
+						}
+						case 'gig_operator': {
+							this.modalAlertMessage = "Gig Operators can not change on Taxi Operators";
+							$('#affiliateAlertMessageModal').modal('show');
+							return false;
+						}
+					}
+				}
+				this.showCompanyInformation = true;
+				this.conditionalValidations('taxi_operator');
+				break;
+			}
+			case 'gig_operator': {
+				if (this.affiliateId)
+				{
+					if (this.f.AffiliateType.value == 'fleet_operator')
+					{
+						this.modalAlertMessage = "Fleet Operator can not change on Gig Operators";
+						$('#affiliateAlertMessageModal').modal('show');
+						return false;
+					}
+				}
+				this.showCompanyInformation = false;
+				this.conditionalValidations('gig_operator');
+				break;
+			}
+		}
+	}
+
+
+
+	businessCardImageChange(event, imageType, imageId = null)
+	{
+		this.stateManagementService.setprogressBar(true); //show progressBar
+		const reader = new FileReader();
+		if (event.target.files && event.target.files.length)
+		{
+			const [file] = event.target.files;
+			reader.readAsDataURL(file);
+			reader.onload = () =>
+			{
+				this.imageSrc = reader.result as string;
+				this.adminService.uploadVehicleImage(this.imageSrc)
+					.pipe(
+						catchError(err =>
+						{
+							this.stateManagementService.setprogressBar(false); // hide progressBar
+							return throwError(err);
+						})
+					)
+					.subscribe(({ data }: any) =>
+					{
+						switch (imageType)
+						{
+							case 'BusinessFrontPhoto': {
+								this.addAffiliateAccountForm.patchValue({
+									BusinessFrontPhoto: data.id,
+								});
+								this.BusinessFrontPhoto = data.image;
+								this.BusinessFrontPhotoId = data.id;
+								break;
+							}
+							case 'BusinessBackPhoto': {
+								this.addAffiliateAccountForm.patchValue({
+									BusinessBackPhoto: data.id,
+								});
+								this.BusinessBackPhoto = data.image;
+								this.BusinessBackPhotoId = data.id;
+								break;
+							}
+							default: {
+								break;
+							}
+						}
+						this.stateManagementService.setprogressBar(false); // hide progressBar
+					});
+			};
+		}
+		// console.log(this.addInsuranceForm.value);
+	}
+
+	deleteImage(id, imageType)
+	{
+		switch (imageType)
+		{
+			case 'BusinessFrontPhoto': {
+				this.addAffiliateAccountForm.patchValue({
+					BusinessFrontPhoto: '',
+				});
+				this.BusinessFrontPhoto = '';
+				break;
+			}
+			case 'BusinessBackPhoto': {
+				this.addAffiliateAccountForm.patchValue({
+					BusinessBackPhoto: '',
+				});
+				this.BusinessBackPhoto = '';
+				break;
+			}
+			default: {
+				break;
+			}
+		}
+	}
+
+	closeButton()
+	{
+		this.closeTab.emit();
+	}
+
+	showImageInModal(imageUrl)
+	{
+		this.modalImage = imageUrl;
+		// console.log("11111",imageUrl)
+		$("#imageModal").addClass("showImage");
+		$("#imageModal").removeClass("d-none");
+		// $("#imageModal").show();
+	}
+
+	conditionalValidations(affiliateType)
+	{
+		if (affiliateType != 'gig_operator')
+		{
+			this.addAffiliateAccountForm.controls['CompanyName'].setValidators([Validators.required]);
+			this.addAffiliateAccountForm.controls['dispatchEmail'].setValidators([Validators.required]);
+			this.addAffiliateAccountForm.controls['Dispatch'].setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15), this.customValidator.dashValidator(), this.customValidator.plusValidator()]);
+			this.addAffiliateAccountForm.controls['DispatchIsd'].setValidators([Validators.required]);
+			this.addAffiliateAccountForm.controls['DispatchCountry'].setValidators([Validators.required]);
+			this.addAffiliateAccountForm.controls['BusinessFrontPhoto'].setValidators([Validators.required]);
+		}
+		else
+		{
+			this.addAffiliateAccountForm.controls['CompanyName'].clearValidators();
+			this.addAffiliateAccountForm.controls['dispatchEmail'].clearValidators();
+			this.addAffiliateAccountForm.controls['Dispatch'].clearValidators();
+			this.addAffiliateAccountForm.controls['DispatchIsd'].clearValidators();
+			this.addAffiliateAccountForm.controls['DispatchCountry'].clearValidators();
+			this.addAffiliateAccountForm.controls['BusinessFrontPhoto'].clearValidators();
+		}
+		this.addAffiliateAccountForm.controls['CompanyName'].updateValueAndValidity();
+		this.addAffiliateAccountForm.controls['dispatchEmail'].updateValueAndValidity();
+		this.addAffiliateAccountForm.controls['Dispatch'].updateValueAndValidity();
+		this.addAffiliateAccountForm.controls['DispatchIsd'].updateValueAndValidity();
+		this.addAffiliateAccountForm.controls['DispatchCountry'].updateValueAndValidity();
+		this.addAffiliateAccountForm.controls['BusinessFrontPhoto'].updateValueAndValidity();
+	}
+
+	onCountryChange(event, type)
+	{
+		console.log(event)
+		if (type == 'CellNumber')
+		{
+			this.addAffiliateAccountForm.patchValue({
+				CellIsd: '+' + event.dialCode,
+				CellNumberCountry: event.iso2
+			});
+		}
+		else if (type == 'CompanyCellNumber')
+		{
+			this.addAffiliateAccountForm.patchValue({
+				CompanyCellIsd: '+' + event.dialCode,
+				CompanyCellNumberCountry: event.iso2
+			});
+		}
+		else if (type == 'Dispatch')
+		{
+			this.addAffiliateAccountForm.patchValue({
+				DispatchIsd: '+' + event.dialCode,
+				DispatchCountry: event.iso2
+			});
+		}
+		else
+		{
+			this.addAffiliateAccountForm.patchValue({
+				FaxIsd: '+' + event.dialCode,
+				FaxCountry: event.iso2
+			});
+		}
+	}
+
+	telInputObjectCell(obj)
+	{
+		this.CellNumberObject = obj;
+	}
+	telInputObjectCompanyCell(obj)
+	{
+		this.CompanyCellNumberObject = obj;
+	}
+	telInputObjectFax(obj)
+	{
+		this.FaxObject = obj;
+	}
+	telInputObjectDispatch(obj)
+	{
+		this.DispatchObject = obj;
+	}
+
+	onLanguageChange(val, ischecked)
+	{
+		const languageSpoken: FormArray = this.addAffiliateAccountForm.get('LanguagesSpoken') as FormArray;
+
+		if (ischecked)
+		{
+			languageSpoken.push(new FormControl(val));
+		} else
+		{
+			const index = languageSpoken.controls.findIndex(x => x.value === val);
+			languageSpoken.removeAt(index);
+		}
+	}
+
+	onAssociationChange(e)
+	{
+		const associations: FormArray = this.addAffiliateAccountForm.get('Associations') as FormArray;
+
+		if (e.target.checked)
+		{
+			associations.push(new FormControl(e.target.value));
+		} else
+		{
+			const index = associations.controls.findIndex(x => x.value === e.target.value);
+			associations.removeAt(index);
+		}
+	}
+
+	onAffiliateTypeChange(e)
+	{
+		const AffiliateType: FormArray = this.addAffiliateAccountForm.get('AffiliateType') as FormArray;
+
+		if (e.target.checked)
+		{
+			AffiliateType.push(new FormControl(e.target.value));
+		} else
+		{
+			const index = AffiliateType.controls.findIndex(x => x.value === e.target.value);
+			AffiliateType.removeAt(index);
+		}
+	}
+
+	get f()
+	{
+		return this.addAffiliateAccountForm.controls;
+	}
+
+
+	submitForm()
+	{
+		console.log(this.addAffiliateAccountForm);
+		// console.log(JSON.stringify(this.addVehicleRatesForm.value));
+		this.submittedForm = true;
+		// stop here if form is invalid
+		if (this.addAffiliateAccountForm.invalid)
+		{
+			return;
+		}
+
+		this.addAffiliateAccountForm.value.stepCompleted = ['0', '1'];
+		this.addAffiliateAccountForm.get('acc_id')
+		// console.log(this.addAffiliateAccountForm.value);
+		// console.log(JSON.stringify(this.addVehicleRatesForm.value));
+		this.spinner.show();
+		this.disableSubmitButton = true; //disable submit button
+
+		this.adminService.addAffiliateAccount(this.addAffiliateAccountForm.value)
+			.pipe(
+				catchError(err =>
+				{
+					this.spinner.hide();//hide spinner
+					this.disableSubmitButton = false; //enable submit button
+					return throwError(err);
+				})
+			)
+			.subscribe(result =>
+			{
+				this.response = result;
+				this.spinner.hide();//hide spinner
+				this.disableSubmitButton = false; //enable submit button
+				sessionStorage.setItem("affiliateUserData", JSON.stringify(this.addAffiliateAccountForm.value));
+				console.log("valueset", this.addAffiliateAccountForm.value.id)
+				if (!this.addAffiliateAccountForm.value.id)
+				{
+					sessionStorage.setItem("affiliateId", this.response.data.acc_id);
+					sessionStorage.setItem("affiliateType", this.addAffiliateAccountForm.value.AffiliateType);
+					console.log("valueset", this.response.data.acc_id)
+					if (this.response.success == true)
+					{
+						this.adminService.setSessionStepsCompleted('0');
+						this.adminService.setSessionStepsCompleted('1');
+					}
+					if (this.response.errors || this.response.error)
+					{
+						this.adminService.unsetSessionStepsCompleted(0)
+						this.adminService.unsetSessionStepsCompleted(1)
+					}
+					this.router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
+						this.router.navigate(['/admin/affiliate/step2'])
+					);
+				}
+				else
+				{
+					// this.router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
+					// 	this.router.navigate(['/admin/affiliate/step1'])
+					// );
+					this.router.navigate(['/admin/affiliate/step1'])
+				}
+			});
+	}
+
+
+
+	resetForm()
+	{
+		this.addAffiliateAccountForm.reset();
+		this.BusinessFrontPhoto = "";
+		this.BusinessBackPhoto = "";
+	}
+
+}

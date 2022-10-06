@@ -1,0 +1,28 @@
+.mat-form-field-empty.mat-form-field-label {
+    color: #808080;
+}
+
+body{
+	overscroll-behavior: contain;
+}
+body.bg-fade:before{
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: -1px;
+	bottom: -1px;
+	background-color: #000000;
+	content: '';
+	z-index: 9;
+	opacity: 0.5;
+	visibility: visible;
+	display: block
+}
+* {
+	--orange: #F3933D;
+}
+
+.text-orange
+{
+	color: var(--orange) !important
+}

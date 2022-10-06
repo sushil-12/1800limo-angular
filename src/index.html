@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<title>Limo1800</title>
+	<base href="/">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="icon" type="image/x-icon" href="favicon.ico">
+	<!-- Material theme css -->
+	<link rel="stylesheet" href="assets/css/indigo-pink.css">
+
+	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="assets/css/owl.carousel.min.css">
+	<link rel="stylesheet" href="assets/css/owl.theme.default.min.css">
+	<link rel='stylesheet'
+		href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css'>
+	<script src="https://kit.fontawesome.com/0cd3282a96.js"></script>
+	<link rel="stylesheet" href="assets/css/style.css">
+	<link href="assets/admin/css/custom-admin.css" rel="stylesheet">
+</head>
+
+<body class="mat-typography">
+	<div class="allinner_wrapper">
+		<app-root></app-root>
+	</div>
+	<!-- Optional JavaScript -->
+	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+	<script src="https://code.jquery.com/jquery-3.5.1.js" crossorigin="anonymous"></script>
+	<script src="assets/js/bootstrap-input-spinner.js"></script>
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js'></script>
+	<script
+		src='https://cdnjs.cloudflare.com/ajax/libs/eonasdan-bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js'></script>
+	<script src="assets/js/owl.carousel.js"></script>
+	<script type="text/javascript"
+		src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.min.js"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+
+
+	<script>
+		$( "input[type='number']" ).inputSpinner()
+	</script>
+
+	<!----form date picker---------->
+
+	<!----header menu---------->
+	<script>
+		$( document ).ready( function ()
+		{
+			$( "button.navbar-toggler" ).click( function ()
+			{
+				$( ".navbar-toggler" ).toggleClass( "closemenus" );
+			} );
+
+			$( ".close-sidebar a" ).click( function ()
+			{
+				$( ".navbar-collapse" ).removeClass( "show" );
+				$( 'body' ).removeClass( "bg-fade" );
+			} );
+
+			$( "#filters-button" ).click( function ()
+			{
+				$( 'body' ).addClass( "bg-fade" );
+			} );
+
+			$( '.clr-Fil' ).on( 'click', function ()
+			{
+				$( this ).siblings().removeClass( 'active' )
+				$( this ).addClass( 'active' );
+			} )
+			if ( /Mobi/.test( navigator.userAgent ) )
+			{
+				// if mobile device, use native pickers
+				$( ".time input" ).attr( "type", "time" );
+			} else
+			{
+				$( "#timepicker" ).datetimepicker( {
+					format: "HH:mm",
+					allowInputToggle: true,
+					icons: {
+						up: "fa fa-chevron-up",
+						down: "fa fa-chevron-down"
+					}
+				} );
+			}
+		} );
+	</script>
+
+
+	<script src="assets/js/spinner_picker.js"></script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,37 @@
+.vehtype_extint img {
+	height       : 225px;
+	border-radius: 15px;
+}
+
+.vehtype_extint .emptyImage {
+	height: 225px;
+}
+
+.vehtype_extint .emptyImage img {
+	height: 220px;
+}
+
+.policyMonth {
+	padding-right: 5px;
+}
+
+.policyDay {
+	padding: 0 5px;
+}
+
+.policyYear {
+	padding-left: 5px;
+}
+
+.topLabelClass.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
+	padding-left    : 0px;
+	background-color: #fff;
+	max-width       : 250px;
+	text-align      : center;
+	left            : -6px;
+}
+
+.vehtype_extintwrap .row {
+	justify-content: space-between !important;
+	padding        : 0 50px !important;
+}

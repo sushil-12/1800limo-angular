@@ -1,0 +1,116 @@
+<ngx-spinner></ngx-spinner>
+<main>
+    <!-- Main page content-->
+    <form  [formGroup]="editCardForm">
+        <!-----BILLING INFO-------------->
+        <section class="billing_inforamtion">
+            <h2 class="headinginfo"> Billing Information  </h2>
+            <div class="" id="accordionSidebar1">
+                <div class="card mt-3">
+                    <a class="card-header nav-link collapsed" href="#" data-toggle="collapse" data-target="#secondary_card" aria-expanded="true" aria-controls="collapseUtilities"> <span>Edit Credit Card  <img class="creditcard_pay" src="assets/admin/images/creditcard_pay.png"></span> </a>
+                    <div id="secondary_card" class="card-body collapse show" aria-labelledby="headingUtilities" data-parent="#accordionSidebar1">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <div class="row">
+                                <div class="col-md-12 mb-2">
+                                    <div class="form-group d-flex">
+                                        <div class="custom-control custom-radio">
+                                            <input class="custom-control-input" id="personal" type="radio" name="secondaryCardType" checked="" formControlName="secondaryCardType" value="personal">
+                                            <label class="custom-control-label" for="personal">Personal</label>
+                                        </div>
+                                        <div class="custom-control custom-radio">
+                                            <input class="custom-control-input" id="business" type="radio" name="secondaryCardType" formControlName="secondaryCardType" value="business">
+                                            <label class="custom-control-label" for="business">Business</label>
+                                        </div>
+                                        <div *ngIf="submittedForm && f.secondaryCardType.errors" class="text-danger">
+                                           <div *ngIf="f.secondaryCardType.errors.required">This field is required</div>
+                                           <div *ngIf="f.secondaryCardType.errors.pattern">This field should be a number</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label>Card No#*</label>
+                                    <input type="text" placeholder="Card No#" formControlName="secondaryCardNumber" readonly>
+                                </div>
+                                <div class="col-md-4">
+                                    <label>Country of Region Residence*</label>
+                                    <input type="text" placeholder="Country of Region Residence" formControlName="secondaryCountryOfRegionResidence">
+                                    <div *ngIf="submittedForm && f.secondaryCountryOfRegionResidence.errors" class="text-danger">
+                                       <div *ngIf="f.secondaryCountryOfRegionResidence.errors.required">This field is required</div>
+                                       <div *ngIf="f.secondaryCountryOfRegionResidence.errors.pattern">This field should be a number</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label>MM/YY*</label>
+                                    <input type="text" placeholder="MM/YY" formControlName="secondaryMMYY" readonly>
+                                </div>
+                                <div class="col-md-4">
+                                    <label>First Name*</label>
+                                    <input type="text" placeholder="First Name" formControlName="secondaryFirstName"> 
+                                    <div *ngIf="submittedForm && f.secondaryFirstName.errors" class="text-danger">
+                                       <div *ngIf="f.secondaryFirstName.errors.required">This field is required</div>
+                                       <div *ngIf="f.secondaryFirstName.errors.pattern">This field should be a number</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label>Last Name*</label>
+                                    <input type="text" placeholder="Last Name" formControlName="secondaryLastName"> 
+                                    <div *ngIf="submittedForm && f.secondaryLastName.errors" class="text-danger">
+                                       <div *ngIf="f.secondaryLastName.errors.required">This field is required</div>
+                                       <div *ngIf="f.secondaryLastName.errors.pattern">This field should be a number</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label>Phone Number*</label>
+                                    <input type="text" placeholder="Phone Number" formControlName="secondaryPhone"> 
+                                    <div *ngIf="submittedForm && f.secondaryPhone.errors" class="text-danger">
+                                       <div *ngIf="f.secondaryPhone.errors.required">This field is required</div>
+                                       <div *ngIf="f.secondaryPhone.errors.pattern">This field should be a number</div>
+                                       <div *ngIf="f.secondaryPhone.errors.minlength">Minimum length should be 10</div>
+                                       <div *ngIf="f.secondaryPhone.errors.maxlength">Maximum length should be 10</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label>Street Address*</label>
+                                    <input type="text" placeholder="Street Address" formControlName="secondaryStreetAddress" #search1> 
+                                    <div *ngIf="submittedForm && f.secondaryStreetAddress.errors" class="text-danger">
+                                       <div *ngIf="f.secondaryStreetAddress.errors.required">This field is required</div>
+                                       <div *ngIf="f.secondaryStreetAddress.errors.pattern">This field should be a number</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label>City*</label>
+                                    <input type="text" placeholder="City" formControlName="secondaryCity"> 
+                                    <div *ngIf="submittedForm && f.secondaryCity.errors" class="text-danger">
+                                       <div *ngIf="f.secondaryCity.errors.required">This field is required</div>
+                                       <div *ngIf="f.secondaryCity.errors.pattern">This field should be a number</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label>State*</label>
+                                    <input type="text" placeholder="State" formControlName="secondaryState"> 
+                                    <div *ngIf="submittedForm && f.secondaryState.errors" class="text-danger">
+                                       <div *ngIf="f.secondaryState.errors.required">This field is required</div>
+                                       <div *ngIf="f.secondaryState.errors.pattern">This field should be a number</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label>Zip Code*</label>
+                                    <input type="text" placeholder="Zip Code" formControlName="secondaryZip"> 
+                                    <div *ngIf="submittedForm && f.secondaryZip.errors" class="text-danger">
+                                       <div *ngIf="f.secondaryZip.errors.required">This field is required</div>
+                                       <div *ngIf="f.secondaryZip.errors.pattern">This field should be a number</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <ul>
+                <li><button class="forstep_booknow" (click)="submitForm()" [disabled]="disableSubmitButton">SAVE</button> </li>
+                <li><button class="forstep_back" (click)="resetForm()">RESET</button> </li>
+                <li><button class="forstep_nextveh" (click)="backButton()">BACK</button> </li>
+            </ul>
+        </section>
+    </form>
+</main>

@@ -1,0 +1,9 @@
+@media (min-width: 768px) and (max-width: 991px) {
+    #photoInstructionsModal .modal-dialog {
+        position      : relative;
+        width         : auto;
+        margin        : 0.5rem auto !important;
+        margin-top    : 2.5rem !important;
+        pointer-events: none;
+    }
+}

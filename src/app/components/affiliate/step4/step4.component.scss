@@ -1,0 +1,95 @@
+.tableWidth .dropdown-menu {
+	width: 0 !important;
+	left : 15px !important;
+}
+
+.pointer {
+	cursor: pointer;
+}
+
+.pointer a {
+	text-decoration: none;
+	color          : #000;
+}
+
+.table-responsive i {
+	cursor: pointer;
+}
+
+.table-responsive svg {
+	cursor: pointer;
+}
+
+// toggle button css
+body,
+html {
+	background     : #efefef;
+	display        : flex;
+	justify-content: center;
+	align-items    : center;
+	min-height     : 100%;
+	z-index        : -1;
+}
+
+.continueLabel {
+	border    : 2px solid #5dbd8a;
+	display   : inline-block;
+	padding   : 10px;
+	position  : relative;
+	text-align: center;
+	color     : #5dbd8a;
+}
+
+.suspendLabel {
+	border    : 2px solid #dc3545;
+	display   : inline-block;
+	padding   : 10px;
+	position  : relative;
+	text-align: center;
+	color     : #dc3545;
+}
+
+.toggle-left {
+	border-right             : 0;
+	border-bottom-left-radius: 25px;
+	border-top-left-radius   : 25px;
+
+	&:after {
+		left: 100%
+	}
+}
+
+.toggle-right {
+	margin-left               : -5px;
+	border-top-right-radius   : 25px;
+	border-bottom-right-radius: 25px;
+
+
+	&:after {
+		left: -100%;
+	}
+}
+
+.checkedContinueLabel {
+	cursor          : default;
+	color           : #fff;
+	background-color: #5dbd8a;
+	z-index         : 1;
+	width           : 85px;
+	transition      : color 200ms;
+
+	&:after {
+		left: 0;
+	}
+}
+
+.checkedSuspendLabel {
+	cursor          : default;
+	color           : #fff;
+	background-color: #dc3545;
+	transition      : color 200ms;
+
+	&:after {
+		left: 0;
+	}
+}

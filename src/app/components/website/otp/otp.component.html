@@ -1,0 +1,64 @@
+<div class="loginwrapper loginfadeInDown">
+   <div id="formContent">
+      <a routerLink="/login">
+         <svg class="back-svg mb-3" xmlns="http://www.w3.org/2000/svg" width="50px" viewBox="0 0 32 32">
+            <g data-name="back">
+               <path d="M16,3A13,13,0,1,0,29,16,13,13,0,0,0,16,3Zm0,24A11,11,0,1,1,27,16,11,11,0,0,1,16,27Z" />
+               <path
+                  d="M22,12H17V11a1,1,0,0,0-1.58-.81l-7,5a1,1,0,0,0,0,1.62l7,5A.94.94,0,0,0,16,22a1.07,1.07,0,0,0,.46-.11A1,1,0,0,0,17,21V20h5a1,1,0,0,0,1-1V13A1,1,0,0,0,22,12Zm-1,6H16a1,1,0,0,0-1,1v.06L10.72,16,15,12.94V13a1,1,0,0,0,1,1h5Z" />
+            </g>
+         </svg>
+      </a>
+      <!-- Tabs Titles -->
+      <!-- Icon -->
+      <div class="fadeIn first">
+         <img src="assets/admin/images/login_logo.png" id="icon" alt="User Icon" />
+         <h2>Hello, Sign in.</h2>
+      </div>
+      <!-- Login Form -->
+      <form [formGroup]="otpForm">
+         <h3>Enter Your OTP Number</h3>
+         <!-- progress bar -->
+         <mat-progress-bar class="my-color my-4" mode="indeterminate" *ngIf="showProgressBar"></mat-progress-bar>
+         <mat-form-field appearance="outline">
+            <mat-label>OTP</mat-label>
+            <input matInput placeholder="OTP Number" formControlName="otp">
+         </mat-form-field>
+         <div *ngIf="submitted && f.otp.errors" class="text-danger">
+            <div *ngIf="f.otp.errors.required">The OTP is required</div>
+            <div *ngIf="f.otp.errors.pattern; else phoneNumberError">The OTP is not valid</div>
+            <ng-template #phoneNumberError>
+               <div *ngIf="f.otp.errors.minlength">OTP should contain at least 6 characters</div>
+               <div *ngIf="f.otp.errors.maxlength">OTP should contain maximum of 6 characters</div>
+            </ng-template>
+         </div>
+         <button class="custom-btn button1 my-3" (click)="otpCheck()" [disabled]="disableSubmit">VERIFY</button>
+         <p *ngIf="secondsToDday>0"><button class="timerButton">{{secondsToDday}}</button></p>
+         <p *ngIf="resendOtpVisible" class="resend-otp" (click)="resendOtp()">Resend OTP</p>
+      </form>
+      <!-- Remind Passowrd -->
+      <div id="formFooter">
+         <p class="firebaseui-tos firebaseui-phone-tos">By tapping Verify, you are indicating that you accept our <a
+               href="javascript:void(0)" class="common-anchor" target="_blank">Terms of Service</a> and <a
+               href="javascript:void(0)" class="common-anchor" target="_blank">Privacy Policy</a>. An SMS may be sent.
+            Message &amp; data rates may apply.</p>
+      </div>
+   </div>
+</div>
+
+<!-- Instructions modal -->
+<div class="modal fade" id="resendOtpModal" tabindex="-1" role="dialog" aria-labelledby="resendOtpModal"
+   aria-hidden="true">
+   <div class="modal-dialog" role="document">
+      <div class="modal-content">
+         <div class="modal-body">
+            <h3 class="text-center">
+               OTP resend Successfully.
+            </h3>
+         </div>
+         <div class="modal-footer">
+            <button type="button" class="custom-btn button2" data-dismiss="modal">Close</button>
+         </div>
+      </div>
+   </div>
+</div>

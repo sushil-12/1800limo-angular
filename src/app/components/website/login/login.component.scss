@@ -1,0 +1,71 @@
+.mat-form-field {
+	margin-top: 0px;
+}
+
+.topLabelClass.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
+	background-color: #fff;
+	max-width       : 120px;
+	top             : 30px;
+	padding-left    : 0px;
+	text-align      : center;
+	left            : -5px;
+}
+
+$bg         : #5dbd8a;
+$borderWidth: 2px;
+
+body {
+	background : $bg;
+	font-family: roboto;
+}
+
+input[type=radio] {
+	position  : absolute;
+	visibility: hidden;
+	display   : none;
+}
+
+.role label {
+	color         : #000;
+	display       : table-cell;
+	cursor        : pointer;
+	font-weight   : bold;
+	padding       : 5px 10px;
+	margin        : 0;
+	vertical-align: middle;
+	text-align    : start;
+	left          : 40px;
+	font-size     : 13px !important;
+}
+
+input[type=radio]:checked+label {
+	color     : lighten($bg, 60%);
+	background: $bg;
+}
+
+label+input[type=radio]+label {
+	border-left: solid $borderWidth $bg;
+	text-align : center;
+}
+
+.radio-group {
+	border       : solid $borderWidth $bg;
+	display      : inline-block;
+	border-radius: 10px;
+	overflow     : hidden;
+}
+
+@media only screen and (max-width:767px) {
+	.radio-group {
+		border       : solid $borderWidth $bg;
+		display      : grid;
+		border-radius: 10px;
+		overflow     : hidden;
+	}
+
+	label+input[type=radio]+label {
+		border-left: none;
+		border-top : solid $borderWidth $bg;
+		text-align : center;
+	}
+}

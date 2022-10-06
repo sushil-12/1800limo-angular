@@ -1,0 +1,28 @@
+.vehtype_extint img {
+    height       : 200px;
+    border-radius: 15px;
+}
+
+.single-image .row {
+    justify-content: inherit;
+}
+
+.deactivate-button {
+    color           : #fff !important;
+    background-color: #F33C2F;
+    border-color    : #F33C2F;
+    padding         : 15px 40px;
+}
+
+@media only screen and (min-width:1199px) {
+	.deactivate-button:hover {
+		background-color: #d12c20;
+		color           : #fff;
+		text-decoration : none;
+	}
+
+	.deactivate-button:focus {
+		transform       : scale(1.1, 1.1);
+		background-color: #d12c20;
+	}
+}

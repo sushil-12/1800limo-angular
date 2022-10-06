@@ -1,0 +1,174 @@
+import { AfterViewChecked, Component, OnInit } from '@angular/core';
+import { AffiliateService } from '../../../services/affiliate.service';
+import { StateManagementService } from '../../../services/statemanagement.service';
+import { Router, ActivatedRoute } from '@angular/router';
+import { catchError } from 'rxjs/operators';
+import { throwError } from 'rxjs';
+import { NgxSpinnerService } from 'ngx-spinner';
+declare var $: any;
+
+@Component({
+	selector: 'app-step5',
+	templateUrl: './step5.component.html',
+	styleUrls: ['./step5.component.scss']
+})
+export class Step5Component implements OnInit, AfterViewChecked
+{
+
+	public paramResponse: any;
+	public vehicleTypeId: string;
+	public vehiclesRes: any;
+	public vehicles: any;
+	public affiliateId: any;
+	public canAddVehicle: boolean = false;
+	public currentUser: any = {};
+	public vehicleToDelete: number;
+	public instructionBasedOnAffiliate: string;
+	public amenityList: Array<string>;
+	public stepCompleted: any;
+	public alertMessage: string;
+	public showInstructionIfStepNotCompleted: boolean = false;
+	affiliate_type: any;
+
+	constructor(
+		private affiliateService: AffiliateService,
+		private stateManagementService: StateManagementService,
+		private router: Router,
+		private spinner: NgxSpinnerService,
+		private activatedroute: ActivatedRoute) { }
+
+
+	ngAfterViewChecked()
+	{
+		$(".dropdown-toggle").tooltip({
+			trigger: 'hover'
+		});
+		$(".dropdown-toggle").on('mouseleave', function ()
+		{
+			$(this).tooltip('dispose');
+		});
+		$(".dropdown-toggle").on('click', function ()
+		{
+			$(this).tooltip('dispose');
+		});
+	}
+
+	ngOnInit(): void
+	{
+
+		this.spinner.show(); //show spinner
+
+		this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
+		this.affiliateId = this.currentUser.account_id;
+
+		this.stepCompleted = this.affiliateService.getLocalStepCompleted();
+		if (!this.stepCompleted.includes('5') && this.currentUser.affiliate_type == 'fleet_operator')
+		{
+			this.showInstructionIfStepNotCompleted = true;
+		}
+
+		// Load Our vehicles using API
+		this.affiliateService.affiliateVehicleList().then(result =>
+		{
+			this.vehiclesRes = result;
+			this.vehicles = this.vehiclesRes.data.vehicleList;
+			this.affiliate_type = this.currentUser.affiliate_type;
+			switch (this.currentUser.affiliate_type)
+			{
+				case 'gig_operator':
+					this.checkCanAddVehicle(1)
+					break;
+				case 'taxi_operator':
+					this.checkCanAddVehicle(1)
+					break;
+				case 'black_limo_operator':
+					this.instructionBasedOnAffiliate = 'Click <img src="/assets/images/roundedPlus.png" width="20" height="20" alt="Add free icon" title="Add free icon"> Add Vehicle - If Different Year, Make, Model.';
+					this.checkCanAddVehicle(2)
+					break;
+				case 'fleet_operator':
+					this.instructionBasedOnAffiliate = '1. Click <img src="/assets/images/roundedPlus.png" width="20" height="20" alt="Add free icon" title="Add free icon"> Add Vehicle - If Different Year, Make, Model. <br> 2. Duplicate A Vehicle - Click View And Then Click Duplicate If Same Make and Model But Different Year, Color, Rate, etc. <br> 3. Fleet Operators can add unlimited vehicles. ';
+					this.canAddVehicle = true;//can add any number of vehicles
+					break;
+			}
+			this.spinner.hide(); //hide spinner
+			this.stateManagementService.setNumberOfVehicles(this.vehiclesRes.data.totalNumberOfVehicles);
+			setTimeout(() =>
+			{
+				$('[data-toggle="dropdown"]').tooltip();//Bootstrap tooltip
+			}, 500);
+		});
+	}
+
+	checkCanAddVehicle(numOfVehicles)
+	{
+		if (this.vehiclesRes.data.totalNumberOfVehicles >= numOfVehicles)
+		{
+			this.canAddVehicle = false;
+		}
+		else
+		{
+			this.canAddVehicle = true;
+		}
+	}
+
+	updateAmenityList(amenityList)
+	{
+		this.amenityList = amenityList;
+		$('#amenityListModal').modal('show');
+	}
+
+	addVehicleClick(vehicleTypeId)
+	{
+		this.router.navigate(['/affiliate/step5/add-vehicle'], { queryParams: { vehicleTypeId: vehicleTypeId } });
+	}
+
+	clickEditVehicle(vehicleId)
+	{
+		this.router.navigate(['/affiliate/step5/edit-vehicle'], { queryParams: { vehicleId: vehicleId, vehicleTypeId: this.vehicleTypeId } });
+	}
+
+	clickDuplicateVehicle(vehicleId)
+	{
+		this.router.navigate(['/affiliate/step5/duplicate-vehicle'], { queryParams: { duplicateVehicleId: vehicleId } });
+	}
+
+	clickEditVehicleRates(vehicleId)
+	{
+		this.router.navigate(['/affiliate/step5/edit-vehicle-rates'], { queryParams: { vehicleId: vehicleId, vehicleTypeId: this.vehicleTypeId } });
+	}
+
+	enableDisableClicked(id)
+	{
+		this.vehicleToDelete = id;
+		this.alertMessage = "Are you sure you want to delete this Vehicle?"
+	}
+
+	delete()
+	{
+		this.stateManagementService.setprogressBar(true);
+		var status = 'disable';
+		$('#deleteConfirmationModal').modal('hide');
+
+		this.affiliateService.vehicleStatus(this.vehicleToDelete, status)
+			.pipe(
+				catchError(err =>
+				{
+					this.stateManagementService.setprogressBar(false);
+					return throwError(err);
+				})
+			).subscribe(result =>
+			{
+				this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() =>
+				{
+					this.router.navigate(['/affiliate/step5']);
+				});
+				this.stateManagementService.setprogressBar(false);
+			});
+
+	}
+
+
+
+
+}
+

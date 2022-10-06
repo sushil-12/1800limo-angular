@@ -1,0 +1,13 @@
+.scrollTopButton {
+    position: fixed;
+    bottom: 65px;
+    right: 3px;
+    opacity: 0;
+    transition: all .2s ease-in-out;
+    // z-index: 99999;
+}
+
+.show-scrollTop {
+    opacity: 1;
+    transition: all .2s ease-in-out;
+}

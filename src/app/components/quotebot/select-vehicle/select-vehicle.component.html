@@ -1,0 +1,536 @@
+<ngx-spinner></ngx-spinner>
+
+<!-- FILTERS AND SORT BUTTON SECTION -->
+<section id="fixed-filters-sortby-button" class="fixed-bottom">
+	<div id="fixed-section-container" class="container-fluid mb-4">
+		<div id="fixed-section-box" class="d-flex justify-content-center align-items-center">
+			<div id="filters-button" class="d-block d-lg-none">
+				<button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
+					class="btn btn-secondary dropdown-toggle pl-4" data-target="#navbarSupportedContent" data-toggle="collapse"
+					type="button">
+					Filters
+					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-filter"
+						viewBox="0 0 16 16">
+						<path
+							d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z" />
+					</svg>
+				</button>
+			</div>
+			<div id="sort-button">
+				<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+					aria-controls="dropdownMenu" aria-label="Toggle Navigation" aria-expanded="false">
+					<span class="mr-2"> Sort By </span>
+					<i class="fas fa-sort"></i>
+				</button>
+				<div class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="dropdownMenu">
+					<a class="dropdown-item" (click)="Sort.LowToHigh()"> Price: Low to High </a>
+					<a class="dropdown-item" (click)="Sort.HighToLow()"> Price: High to Low </a>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<!-- FILTERS AND SORT BUTTON SECTION ENDS -->
+
+
+
+
+<!-- FILTERS AND VEHICLE LISTING SECTION -->
+<section class="container-fluid pt-2 pb-5">
+	<div id="page-instruction-text" class="mx-2 my-4 mb-5">
+		<h5>
+			Select the vehicle that meets your requirements.
+		</h5>
+		<span style="font-size: 15px; color: #464646">
+			Use Filter / Sort for more specific choices to match your search for rates.
+		</span>
+	</div>
+	<p class="clearfix"></p>
+	<div class="row">
+		<!-- FILTERS SECTION -->
+		<section id=" filters-container" class="col-lg-3">
+			<div class="navbar-expand-lg pro-Fil">
+				<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<div class="close-sidebar">
+						<a href="javascript:void(0)">
+							<i class="fas fa-times"></i>
+						</a>
+					</div>
+					<aside class="sidebar">
+						<button type="button" (click)="getVehicleDetails(filters_data)" class="btn btn-success mr-3 mb-4">
+							Apply filters
+						</button>
+						<button type="button" (click)="clearFilters(null)" class="btn btn-primary mb-4">
+							Clear filters
+						</button>
+
+						<!-- THE SELECTED FILTERS LIST -->
+						<div class="fil-itm">
+							<div class="btn-custom-btn btn btn-outline-dark" *ngFor="let obj of selected_filters; index as i"
+								(click)="clearFilters(obj)">
+								<span class="close" aria-hidden="true">
+									&times;
+								</span>
+								{{ obj.name }}
+							</div>
+						</div>
+						<!-- THE SELECTED FILTERS LIST ENDS -->
+
+						<!-- THE FILTER LIST - ACCORDION -->
+						<div class="filter-list" *ngIf="filters != undefined">
+							<div class="accordion" id="accordionExample">
+								<!-- OUTER CARD -->
+								<div class="card" *ngFor="let filter_text of FILTERS_ORDER; index as filter_text_index">
+									<!-- FILTER TITLE -->
+									<div class="card-header" [attr.id]="'card_' + filter_text_index">
+										<h2 class="mb-0">
+											<button type="button" class="btn-custom-btn btn btn-link btn-block text-left"
+												[ngClass]="filter_text_index > 0 ? 'collapsed' : ''"
+												[attr.aria-controls]="'filter_' + filter_text_index"
+												[attr.data-target]="'#filter_' + filter_text_index" aria-expanded="true"
+												data-toggle="collapse">
+												{{ formatter(filter_text.dp) | titlecase }}
+											</button>
+										</h2>
+									</div>
+									<!-- FILTER TITLE ENDS -->
+
+									<!-- FILTER COLLAPSIBLE CARD - uncollapsed for first card-->
+									<div class="collapse" data-parent="#accordionExample"
+										[attr.aria-labelledby]="'card_' + filter_text_index"
+										[attr.id]="'filter_' + filter_text_index"
+										[ngClass]="filter_text_index == 0 ? 'show' : ''">
+										<!-- IF RP IS A STRING -->
+										<div class="card-body" *ngIf="!isArray(filter_text.rp)">
+											<!-- Search Field -->
+											<!-- <div class="filter-field my-2">
+												<input class="form-control"
+													placeholder="Choose Multiple {{ formatter(filter_text.dp) | titlecase }}" />
+											</div> -->
+											<!-- Search Field Ends -->
+
+											<!-- FILTER CHECKLIST AND FILTER CONTENT AREA -->
+											<div class="checkbox-block">
+												<!-- INPUT AND LABEL -->
+												<div class="custom-control custom-checkbox"
+													[ngClass]="filters['amenities'][14]?.chargeable == 'yes' && filter_index == 14 ? 'border-bottom border-secondary' : ''"
+													*ngFor="let filter of filters[filter_text.rp]; index as filter_index">
+													<input type="checkbox" class="custom-control-input"
+														[attr.id]="filter_text.dp + '_' + '_' + filter_index"
+														[attr.name]="filter_text.dp + '_' + '_' + filter_index"
+														(change)="selectedFilters($event, filter_text.rp, filter)"
+														[checked]="includes(selected_filters, 'name', filter, filter_text.rp)" />
+													<label class="custom-control-label"
+														[attr.for]="filter_text.dp + '_' + '_' + filter_index">
+														{{ filter.name | titlecase }}
+														<i class="bi bi-currency-dollar text-orange"
+															*ngIf="filter.chargeable == 'yes'"></i>
+													</label>
+												</div>
+												<!-- INPUT AND LABEL ENDS -->
+
+												<!-- SHOW MORE BUTTON -->
+												<div class="dropdown" [attr.id]="filter_text.rp"
+													*ngIf="filtersList && !isArray(filter_text.rp) && filtersList[filter_text.rp]?.length > min_length">
+													<!-- <button type="button"
+																class="btn-custom-btn btn btn-secondary dropdown-toggle org-Btn show-More"
+																id="dropdownMenuButton">
+																Show More
+															</button> -->
+													<span class="btn-custom-btn btn show-More" style="color:#ff7800"
+														[attr.id]="'showMore_' + filter_text_index"
+														(click)="showMore(filter_text.rp)">
+														{{ is_show_more_button_hidden ? 'Show Less' : 'Show More'}}
+														<i class="bi font-weight-bolder"
+															[ngClass]="is_show_more_button_hidden ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+													</span>
+												</div>
+												<!-- SHOW MORE BUTTON ENDS -->
+											</div>
+											<!-- FILTER CHECKLIST AND FILTER CONTENT AREA ENDS -->
+										</div>
+
+										<!-- IF RP IS AN ARRAY -->
+										<!-- INNER ACCORDION -->
+										<div class="accordion pl-4" id="innerAccordionExample">
+											<div class="card-body" *ngIf="isArray(filter_text.rp)">
+												<!-- INNER CARD 1 -->
+												<div class="card"
+													*ngFor="let inner_filter_text of filter_text.rp; index as inner_filter_text_index">
+													<!-- FILTER TITLE -->
+													<div class="card-header" [attr.id]="'inner_card_' + inner_filter_text_index">
+														<h2 class="mb-0">
+															<button type="button"
+																class="btn-custom-btn btn btn-link btn-block text-left"
+																[ngClass]="inner_filter_text_index > 0 ? 'collapsed' : ''"
+																[attr.aria-controls]="'inner_filter_' + filter_text.dp + '_' + inner_filter_text_index"
+																[attr.data-target]="'#inner_filter_' + filter_text.dp + '_' + inner_filter_text_index"
+																aria-expanded="true" data-toggle="collapse">
+																{{ formatter(inner_filter_text.dp) | titlecase }}
+															</button>
+														</h2>
+													</div>
+													<!-- FILTER TITLE ENDS -->
+
+													<!-- FILTER COLLAPSIBLE CARD - uncollapsed for first card-->
+													<div class="collapse" data-parent="#innerAccordionExample"
+														[attr.aria-labelledby]="'inner_card_' + inner_filter_text_index"
+														[attr.id]="'inner_filter_' + filter_text.dp + '_' + inner_filter_text_index"
+														[ngClass]="inner_filter_text_index == 0 ? 'show' : ''">
+														<!-- IF RP HAS A STRING -->
+														<div class="card-body" *ngIf="!isArray(inner_filter_text.rp)">
+															<!-- Search Field -->
+															<!-- <div class="filter-field my-2">
+																<input class="form-control"
+																	placeholder="Choose Multiple {{ formatter(inner_filter_text.dp) | titlecase }}" />
+															</div> -->
+															<!-- Search Field Ends -->
+
+															<!-- FILTER CHECKLIST AND FILTER CONTENT AREA -->
+															<div class="checkbox-block">
+																<!-- INPUT AND LABEL -->
+																<div class="custom-control custom-checkbox"
+																	*ngFor="let inner_filter of filters[inner_filter_text.rp]; index as inner_filter_index">
+																	<input type="checkbox" class="custom-control-input"
+																		[attr.id]="inner_filter_text.dp + '_' + '_' + inner_filter_index"
+																		[attr.name]="inner_filter_text.dp + '_' + '_' + inner_filter_index"
+																		[checked]="includes(selected_filters, 'name', inner_filter, inner_filter_text.rp)"
+																		(change)="selectedFilters($event, inner_filter_text.rp, inner_filter)" />
+																	<label class="custom-control-label"
+																		[attr.for]="inner_filter_text.dp + '_' + '_' + inner_filter_index">
+																		<span *ngIf="inner_filter.name != 'LGBTQIA+'">
+																			{{ inner_filter.name | titlecase }}
+																		</span>
+																		<span *ngIf="inner_filter.name == 'LGBTQIA+'">
+																			{{ inner_filter.name }}
+																		</span>
+																	</label>
+																</div>
+																<!-- INPUT AND LABEL ENDS -->
+
+																<!-- SHOW MORE BUTTON -->
+																<div class="dropdown"
+																	*ngIf="!isArray(inner_filter_text.rp) && filtersList[inner_filter_text.rp]?.length > min_length">
+																	<!-- <button type="button"
+																				class="btn-custom-btn btn btn-secondary dropdown-toggle org-Btn show-More"
+																				id="dropdownMenuButton">
+																				Show More
+																			</button> -->
+																	<span class="btn-custom-btn btn show-More"
+																		style="color:#ff7800"
+																		[attr.id]="'showMore_' + inner_filter_text_index"
+																		(click)="showMore(inner_filter_text.rp)">
+																		{{ is_show_more_button_hidden ? 'Show Less' :
+																		'Show More'}}
+																		<i class="bi font-weight-bolder"
+																			[ngClass]="is_show_more_button_hidden ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+																	</span>
+																</div>
+																<!-- SHOW MORE BUTTON ENDS -->
+															</div>
+															<!-- FILTER CHECKLIST AND FILTER CONTENT AREA ENDS -->
+														</div>
+													</div>
+												</div>
+												<!-- INNER CARD 1 ENDS -->
+											</div>
+										</div>
+										<!-- INNER ACCORDION ENDS -->
+									</div>
+								</div>
+								<!-- OUTER CARD -->
+							</div>
+							<button type="button" (click)="getVehicleDetails(filters_data)" class="btn btn-success mr-3 mt-4">
+								Apply filters
+							</button>
+							<button type="button" (click)="clearFilters(null)" class="btn btn-primary mt-4">
+								Clear filters
+							</button>
+						</div>
+						<!-- FILTER LIST ENDS - ACCORDION-->
+					</aside>
+				</div>
+			</div>
+		</section>
+		<!-- FILTERS SECTION ENDS -->
+
+		<!-- VEHICLE LISTING SECTION -->
+		<section id="vehicle-listing-container" class="col-md-10 col-lg-9"
+			*ngIf="vehicleDetails.length > 0; else MasterVehiclesSection">
+			<!-- Loop here for different vehicle images and its details -->
+			<div id="vehicle-details-article" *ngFor="let vehinfo of vehicleDetails; index as vehinfo_index"
+				class="car-Details row mb-5">
+				<div class="img-Block col-5 col-md-4">
+					<span class="dri-Ico">
+						<img alt="" class="img-fluid" src="assets/images/select_vehicle/driIco.png" title="Driver Image" />
+					</span>
+					<!-- <img alt="" class="img-fluid" src="assets/images/select_vehicle/car.jpg" title="Vehicle Image" /> -->
+					<img [src]="vehinfo.vehicle_images[0]" id="V_Image_0" class="img-fluid" alt="Vehicle Image"
+						*ngIf="vehinfo.vehicle_images?.length > 0" />
+				</div>
+				<div class="cont-Block col-7 col-md-auto">
+					<h5>
+						{{ vehinfo.name }}
+					</h5>
+					<p>
+						{{ vehinfo.description }}
+					</p>
+					<div class="car-cap d-flex">
+						<div class="pass-det org-Btn">
+							<img alt="" class="img-fluid mr-3" src="assets/images/select_vehicle/pass.png" /> {{
+							vehinfo.passenger }}
+						</div>
+						<div class="pass-det org-Btn">
+							<img alt="" class="img-fluid mr-3" src="assets/images/select_vehicle/lug.png" /> {{
+							vehinfo.luggage }}
+						</div>
+					</div>
+					<div class="price-Blc">
+						<p>
+							${{ vehinfo['rate_breakdown_' + getKeyName()].grand_total != undefined ?
+							vehinfo['rate_breakdown_'
+							+ getKeyName()].grand_total : '0.00' }}
+							<small>
+								All-Inclusive Rate*
+							</small>
+						</p>
+					</div>
+					<div class="btn-Area d-flex flex-wrap">
+						<button (click)="viewDetails(vehinfo)" class="custom-btn" type="button">
+							Veh. Images/Driver Info
+						</button>
+						<button (click)="showModal(vehinfo, 'amenities')" class="custom-btn" *ngIf="vehinfo.amenities.length > 0">
+							Amenities
+						</button>
+						<!-- <button (click)="showModal(vehinfo, 'driver_info')" class="custom-btn"
+							type="button">
+							Driver Info
+						</button> -->
+						<button (click)="bookNow(vehinfo)" class="custom-btn" type="button">
+							Book Now
+						</button>
+					</div>
+					<div class="cancel-policy">
+						<p class="text-danger m-0" style="font-size: 1.15rem">
+							Cancel: 2Hr - No Charge <br />Insurance Limit - $500,000<br />Driver Exp - 5 years
+						</p>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- VEHICLE LISTING SECTION ENDS -->
+
+		<!-- MASTER VEHICLE TYPES SECTION -->
+		<ng-template #MasterVehiclesSection>
+			<div class="col-md-12 col-lg-9" *ngIf="vehicleDetails.length == 0 || master_vehicles.length == 0">
+				<p style="font-size: 1rem; font-weight: 500; color: #e63232"
+					*ngIf="(vehicleDetails.length == 0 && selected_filters.length > 0) || master_vehicles.length == 0">
+					{{ no_vehicle_msg }}
+				</p>
+				<div id="master-vehicle-box-container" class="row">
+					<div id="master-vehicle-box" class="col-md-3 mb-5 d-flex flex-nowrap flex-md-wrap cursor-pointer"
+						style="gap: 10px" *ngFor="let vehicle_obj of master_vehicles; index as vehicle_obj_index">
+						<div id="vehicle-image" class="imageStyle" (click)="selectCategory(vehicle_obj)">
+							<img [src]="vehicle_obj.cat_img" class="img-fluid" [attr.id]="'vehicle_' + vehicle_obj_index" />
+						</div>
+						<div id="vehicle-information" class="">
+							<p id="vehicle-name" class="font-weight-bolder">
+								{{ vehicle_obj?.name }}
+							</p>
+							<p id="vehicle-price"
+								*ngIf="('rate_breakdown_' + getKeyName()) != undefined || ('rate_breakdown_' + getKeyName()).length <= 0">
+								From&nbsp;
+								<span style="color: #e17515; font-weight: 500;">
+									$ {{ vehicle_obj['rate_breakdown_'+ getKeyName()].grand_total }}
+								</span>
+							</p>
+							<div id="icons">
+								<img alt="" src="assets/images/select_vehicle/pass.png" class="mx-1" style="width: 13px" />
+								<span class="marginText mx-2">{{ vehicle_obj?.passenger }}</span>
+								<img alt="" src="assets/images/select_vehicle/lug.png" class="mx-1" />
+								<span class="marginText2 mx-2">{{ vehicle_obj?.luggage }}</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</ng-template>
+		<!-- MASTER VEHICLE TYPES SECTION ENDS -->
+	</div>
+</section>
+
+
+
+
+
+
+
+
+
+<!-- --------------------------------------- MODALS -------------------------------------- -->
+
+<div aria-hidden="true" aria-labelledby="filtersModal" class="modal" id="filtersModal" tab-index="-1">
+	<div class="modal-dialog modal-dialog-scrollable modal-lg ">
+		<div class=" modal-content">
+			<div class="modal-header d-block" style="font-family: 'pt_serifregular'">
+				<h4 class="modal-title">
+					{{ formatter(vehicle_selected?.selection_button) | titlecase }}
+				</h4>
+				<div class="modal-body">
+					<div>
+						<div *ngIf="vehicle_selected?.selection_button == 'amenities'">
+							<table class="table">
+								<thead>
+									<tr>
+										<th> Name </th>
+										<th> Chargeable/Non-Chargeable </th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr *ngFor="let amenity of vehicle_selected?.amenities">
+										<td> <strong> {{ amenity.name }} </strong></td>
+										<td> {{ amenity.chargeable == 'yes' ? 'Chargeable' : 'Non-Chargeable' }}
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div *ngIf="vehicle_selected?.selection_button == 'driver_info'">
+						<div class="d-flex align-items-center" *ngIf="vehicle_selected?.driverInformation; else noinfotext">
+							<div class="align-self-center justify-self-center">
+								<img [src]="vehicle_selected?.driverInformation?.imageUrl" class="driver_image" />
+							</div>
+							<div id="driver-info" style="width: 100%" class="align-self-start">
+								<div class="row mx-3 my-2" *ngFor="let item of modal_driver_info_labels">
+									<div class="col-md-5">
+										{{ formatter(item) | titlecase }}
+									</div>
+									<div class="col-md-auto">
+										<strong *ngIf="item != 'starRating'">
+											{{ vehicle_selected.driverInformation[item] != '' ?
+											formatter(vehicle_selected.driverInformation[item]) : 'No' }}
+										</strong>
+										<strong *ngIf="item == 'starRating'">
+											{{ vehicle_selected.driverInformation[item] != '' ?
+											formatter(vehicle_selected.driverInformation[item]) : 'Not Rated' }}
+										</strong>
+									</div>
+								</div>
+							</div>
+						</div>
+						<ng-template #noinfotext>
+							<p class="text-danger">
+								No Information available
+							</p>
+						</ng-template>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<div class="btn-Area">
+						<button class="btn-custom-btn btn btn-secondary px-5" data-dismiss="modal" type="button">
+							Close
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+<div class="modal fade show" id="myModal" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<button type="button" class="close closeButton" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+			<div class="modal-header pb-0">
+				<h3 class="modal-title mb-0">Edit Passengers / Luggages</h3>
+			</div>
+			<hr>
+			<div class="modal-body">
+				<div class="row">
+					<!-- Number of Passengers -->
+					<div class="col-6 col-md-6">
+						<label>
+							# of Passengers
+						</label>
+						<div>
+							<ul class="number passengers_qty">
+								<li class="user_grp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#fff"
+										height="22px">
+										<path
+											d="M15.71,12.71a6,6,0,1,0-7.42,0,10,10,0,0,0-6.22,8.18,1,1,0,0,0,2,.22,8,8,0,0,1,15.9,0,1,1,0,0,0,1,.89h.11a1,1,0,0,0,.88-1.1A10,10,0,0,0,15.71,12.71ZM12,12a4,4,0,1,1,4-4A4,4,0,0,1,12,12Z" />
+									</svg>
+								</li>
+								<li>
+									<div class="input-group">
+										<div class="input-group-prepend">
+											<button style="min-width: 2.5rem"
+												class="btn-custom-btn btn btn-decrement btn-outline-secondary" type="button"
+												(click)="change('d','p')">
+												<strong>-</strong>
+											</button>
+										</div>
+										<input type="number" [value]="quotebot_form.no_of_passenger" min="0" max="1000" step="1"
+											inputmode="decimal" style="text-align: center" class="form-control" placeholder="">
+										<div class="input-group-append">
+											<button style="min-width: 2.5rem"
+												class="btn-custom-btn btn btn-increment btn-outline-secondary" type="button"
+												(click)="change('i','p')">
+												<strong>+</strong>
+											</button>
+										</div>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+
+					<!-- Number of Luggage -->
+					<div class="col-6 col-md-6">
+						<label># of Luggage</label>
+						<div>
+							<ul class="number passengers_qty">
+								<li class="user_grp"><svg xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd"
+										stroke-linejoin="round" stroke-miterlimit="1.414" clip-rule="evenodd" viewBox="0 0 65 64"
+										fill="#fff" height="22px">
+										<rect width="64" height="64" x=".749" fill="none" />
+										<path fill-rule="nonzero"
+											d="M24.784,11.883l0,-2.92c0.01,-1.551 1.341,-2.959 2.954,-2.989c4.016,-0.026 8.032,-0.026 12.048,0c1.549,0.029 2.943,1.364 2.954,2.989l0,2.944c4.998,0.016 9.996,0.037 14.994,0.052c2.578,0.024 4.932,2.258 4.957,4.957c0.035,12.002 0.111,24.004 0,36.005c-0.04,2.551 -2.246,4.883 -4.926,4.925c-16.001,0.149 -32.005,0.149 -48.007,0c-2.561,-0.04 -4.883,-2.229 -4.925,-4.925c-0.112,-12.012 -0.112,-24.025 0,-36.036c0.04,-2.548 2.238,-4.884 4.925,-4.926c5.009,-0.046 10.017,-0.069 15.026,-0.076Zm32.938,2.071c-5.268,-0.016 -42.618,0 -47.9,0c-1.552,0.005 -2.979,1.335 -2.994,2.974c-0.037,11.989 -0.112,23.979 0,35.968c0.024,1.545 1.364,2.941 2.974,2.956c15.979,0.05 31.96,0.148 47.938,-0.001c1.545,-0.024 2.941,-1.393 2.956,-2.973c0.035,-11.99 0.111,-23.98 0,-35.968c-0.024,-1.545 -1.355,-2.941 -2.974,-2.956Zm-44.909,5.985l-0.997,0c-0.577,-0.037 -0.697,-0.209 -0.864,-0.498c-0.343,-0.594 0.102,-1.447 0.864,-1.497l43.892,0c0.044,0.003 0.087,0.006 0.13,0.009c0.419,0.083 0.516,0.192 0.662,0.382c0.438,0.571 0.043,1.55 -0.792,1.604l-40.9,0l0,4.988c-0.023,0.979 -1.96,1.461 -1.995,0l0,-4.988Zm27.932,-8.038c0,-0.987 0.018,-1.974 -0.001,-2.961c-0.016,-0.512 -0.467,-0.961 -0.984,-0.971c-3.993,-0.025 -7.987,0 -11.98,0c-0.525,0.003 -0.998,0.454 -1.001,1l0,2.912c4.655,-0.003 9.311,0.006 13.966,0.02Z" />
+									</svg>
+								</li>
+								<li>
+									<div class="input-group  ">
+										<div class="input-group-prepend">
+											<button style="min-width: 2.5rem"
+												class="btn-custom-btn btn btn-decrement btn-outline-secondary" type="button"
+												(click)="change('d','l')">
+												<strong>-</strong>
+											</button>
+										</div>
+										<input type="number" [value]="quotebot_form.no_of_luggage" min="0" max="2000" step="1"
+											inputmode="decimal" style="text-align: center" class="form-control " placeholder="">
+										<div class="input-group-append">
+											<button style="min-width: 2.5rem"
+												class="btn-custom-btn btn btn-increment btn-outline-secondary" type="button"
+												(click)="change('i','l')">
+												<strong>+</strong>
+											</button>
+										</div>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer pt-0">
+				<button class="custom-btn-custom-btn btn savebutton" data-dismiss="modal" (click)="fetchMasterVehicles()"
+					tabindex="1">SAVE</button>
+			</div>
+		</div>
+	</div>
+</div>

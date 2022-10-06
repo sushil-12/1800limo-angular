@@ -1,0 +1,3482 @@
+[{
+	"type": "hash",
+	"value": [{
+		"name": "country",
+		"value": "AR"
+	}, {
+		"name": "identity",
+		"value": {
+			"type": "array",
+			"value": [{
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Passport"
+				}, {
+					"name": "localized_name",
+					"value": "Pasaporte"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "National ID"
+				}, {
+					"name": "localized_name",
+					"value": "Documento Nacional de Identidad (DNI)"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Resident Permit"
+				}, {
+					"name": "localized_name",
+					"value": "DNI para Extranjeros"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}]
+		}
+	}]
+}, {
+	"type": "hash",
+	"value": [{
+		"name": "country",
+		"value": "AU"
+	}, {
+		"name": "identity",
+		"value": {
+			"type": "array",
+			"value": [{
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Passport"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Driver's license"
+				}, {
+					"name": "localized_name",
+					"value": "Driver Licence"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Photo Card"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "New South Wales Driving Instructor Licence"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Tasmanian Government Personal Information Card"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "ImmiCard"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Proof of Age card"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Military ID"
+				}, {
+					"name": "localized_name",
+					"value": "Australian Defence Force (ADF) identification card"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}]
+		}
+	}]
+}, {
+	"type": "hash",
+	"value": [{
+		"name": "country",
+		"value": "AT"
+	}, {
+		"name": "identity",
+		"value": {
+			"type": "array",
+			"value": [{
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Passport"
+				}, {
+					"name": "localized_name",
+					"value": "Reisepass"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Driver's license"
+				}, {
+					"name": "localized_name",
+					"value": "Führerschein"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Identity card"
+				}, {
+					"name": "localized_name",
+					"value": "Personalausweis Republik Österreich"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Residence permit"
+				}, {
+					"name": "localized_name",
+					"value": "Aufenthaltstitel"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Identity card for foreigners"
+				}, {
+					"name": "localized_name",
+					"value": "Identitätskarte für Fremde"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Alien's Passport"
+				}, {
+					"name": "localized_name",
+					"value": "Fremdenpässe"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Passport for asylum seekers"
+				}, {
+					"name": "localized_name",
+					"value": "Konventionsreisepass"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Temporary residence permit"
+				}, {
+					"name": "localized_name",
+					"value": "Duldungskarte"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}]
+		}
+	}]
+}, {
+	"type": "hash",
+	"value": [{
+		"name": "country",
+		"value": "BE"
+	}, {
+		"name": "identity",
+		"value": {
+			"type": "array",
+			"value": [{
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Passport"
+				}, {
+					"name": "localized_name",
+					"value": "Paspoort \u002F Passeport \u002F Reisepass"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Driver's license"
+				}, {
+					"name": "localized_name",
+					"value": "Rijbewijs \u002F Permis de conduire \u002F Führerschein"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Identity card"
+				}, {
+					"name": "localized_name",
+					"value": "Elektronische identiteitskaart \u002F Carte d'identité \u002F eID"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Identity card for foreigners"
+				}, {
+					"name": "localized_name",
+					"value": "Elektronische vreemdelingenkaart \u002F Carte d’identité d’étranger \u002F Elektronische Ausländerkarte"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Residence permit"
+				}, {
+					"name": "localized_name",
+					"value": "Verblijfsvergunning \u002F Permis de résidence \u002F Aufenthaltsgenehmigung"
+				}, {
+					"name": "expiration_policy",
+					"value": "government_issued_document_12_months"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}]
+		}
+	}]
+}, {
+	"type": "hash",
+	"value": [{
+		"name": "country",
+		"value": "BO"
+	}, {
+		"name": "identity",
+		"value": {
+			"type": "array",
+			"value": [{
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Passport"
+				}, {
+					"name": "localized_name",
+					"value": "Pasaporte"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "National ID"
+				}, {
+					"name": "localized_name",
+					"value": "Cedula de Identidad"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Resident Permit"
+				}, {
+					"name": "localized_name",
+					"value": "Cedula de identidad de Extranjero"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}]
+		}
+	}]
+}, {
+	"type": "hash",
+	"value": [{
+		"name": "country",
+		"value": "BR"
+	}, {
+		"name": "identity",
+		"value": {
+			"type": "array",
+			"value": [{
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Non-Brazilian Passport"
+				}, {
+					"name": "localized_name",
+					"value": "Passaporte de estrangeiros"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Driver's license"
+				}, {
+					"name": "localized_name",
+					"value": "Carteira de Motorista (CNH)"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "National ID"
+				}, {
+					"name": "localized_name",
+					"value": "Carteira de Identidade (RG)"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}]
+		}
+	}]
+}, {
+	"type": "hash",
+	"value": [{
+		"name": "country",
+		"value": "BG"
+	}, {
+		"name": "identity",
+		"value": {
+			"type": "array",
+			"value": [{
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Passport"
+				}, {
+					"name": "localized_name",
+					"value": "паспорт"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Identity card"
+				}, {
+					"name": "localized_name",
+					"value": "лична карта"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Driver's license"
+				}, {
+					"name": "localized_name",
+					"value": "Свидетелство за управление на мпс"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Residence permit"
+				}, {
+					"name": "localized_name",
+					"value": "Разрешение за пребиваване"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}]
+		}
+	}]
+}, {
+	"type": "hash",
+	"value": [{
+		"name": "country",
+		"value": "CA"
+	}, {
+		"name": "identity",
+		"value": {
+			"type": "array",
+			"value": [{
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Passport"
+				}, {
+					"name": "localized_name",
+					"value": "passeport"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Driver's licence"
+				}, {
+					"name": "localized_name",
+					"value": "permis de conduire"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Certificate of Indian Status card"
+				}, {
+					"name": "localized_name",
+					"value": "carte de statut d'Indien"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Permanent resident card"
+				}, {
+					"name": "localized_name",
+					"value": "carte de résident permanent"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Identity card"
+				}, {
+					"name": "localized_name",
+					"value": "carte d'identité"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Non-driver photo ID"
+				}, {
+					"name": "localized_name",
+					"value": "carte d'identité autre que le permis de conduire"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Photo card"
+				}, {
+					"name": "localized_name",
+					"value": "carte d'identité avec photo"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}]
+		}
+	}]
+}, {
+	"type": "hash",
+	"value": [{
+		"name": "country",
+		"value": "CL"
+	}, {
+		"name": "identity",
+		"value": {
+			"type": "array",
+			"value": [{
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Passport"
+				}, {
+					"name": "localized_name",
+					"value": "Pasaporte"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "National ID"
+				}, {
+					"name": "localized_name",
+					"value": "Cedula de Identidad"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Resident Permit"
+				}, {
+					"name": "localized_name",
+					"value": "Cédula de identidad para extranjeros"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}]
+		}
+	}]
+}, {
+	"type": "hash",
+	"value": [{
+		"name": "country",
+		"value": "CO"
+	}, {
+		"name": "identity",
+		"value": {
+			"type": "array",
+			"value": [{
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Passport"
+				}, {
+					"name": "localized_name",
+					"value": "Pasaporte"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Driver's license"
+				}, {
+					"name": "localized_name",
+					"value": "Licencia de Conducion"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "National ID"
+				}, {
+					"name": "localized_name",
+					"value": "Tarjeta de Identidad"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "ID card"
+				}, {
+					"name": "localized_name",
+					"value": "Cedula de Ciudadania"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Resident Permit"
+				}, {
+					"name": "localized_name",
+					"value": "Cedula de Extrajeria"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}]
+		}
+	}]
+}, {
+	"type": "hash",
+	"value": [{
+		"name": "country",
+		"value": "HR"
+	}, {
+		"name": "identity",
+		"value": {
+			"type": "array",
+			"value": [{
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Passport"
+				}, {
+					"name": "localized_name",
+					"value": "Hrvatska putovnica"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Driver's license"
+				}, {
+					"name": "localized_name",
+					"value": "vozačka dozvola"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "ID card"
+				}, {
+					"name": "localized_name",
+					"value": "Osobna iskaznica"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "National ID"
+				}, {
+					"name": "localized_name",
+					"value": "Osobni identifikacijski broj (OIB)"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Resident Permit"
+				}, {
+					"name": "localized_name",
+					"value": "Dolzvola Boravka"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}]
+		}
+	}]
+}, {
+	"type": "hash",
+	"value": [{
+		"name": "country",
+		"value": "CY"
+	}, {
+		"name": "identity",
+		"value": {
+			"type": "array",
+			"value": [{
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Passport"
+				}, {
+					"name": "localized_name",
+					"value": "Διαβατήριο \u002F Pasaport"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Identity card"
+				}, {
+					"name": "localized_name",
+					"value": "Δελτίου Ταυτότητας \u002F Kimlik kartı"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Driver's license"
+				}, {
+					"name": "localized_name",
+					"value": "Άδεια Οδήγησης \u002F Ehliyet"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}]
+		}
+	}]
+}, {
+	"type": "hash",
+	"value": [{
+		"name": "country",
+		"value": "CZ"
+	}, {
+		"name": "identity",
+		"value": {
+			"type": "array",
+			"value": [{
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Passport"
+				}, {
+					"name": "localized_name",
+					"value": "Cestovní pas"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Identity card"
+				}, {
+					"name": "localized_name",
+					"value": "Občanský průkaz"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Driver's license"
+				}, {
+					"name": "localized_name",
+					"value": "Řidičský průkaz"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Residence permit"
+				}, {
+					"name": "localized_name",
+					"value": "Povolení k pobytu"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}]
+		}
+	}]
+}, {
+	"type": "hash",
+	"value": [{
+		"name": "country",
+		"value": "DK"
+	}, {
+		"name": "identity",
+		"value": {
+			"type": "array",
+			"value": [{
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Passport"
+				}, {
+					"name": "localized_name",
+					"value": "Pas"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Driver's license"
+				}, {
+					"name": "localized_name",
+					"value": "Kørekort"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "City of Copenhagen Identity card"
+				}, {
+					"name": "localized_name",
+					"value": "Identitetskort fra København"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Residence permit"
+				}, {
+					"name": "localized_name",
+					"value": "Opholdstilladelse"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Military identity card"
+				}, {
+					"name": "localized_name",
+					"value": "Militært identitetskort"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Police identity card"
+				}, {
+					"name": "localized_name",
+					"value": "Identitetskort fra politiet"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}]
+		}
+	}]
+}, {
+	"type": "hash",
+	"value": [{
+		"name": "country",
+		"value": "DO"
+	}, {
+		"name": "identity",
+		"value": {
+			"type": "array",
+			"value": [{
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Passport"
+				}, {
+					"name": "localized_name",
+					"value": "Pasaporte"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "ID card"
+				}, {
+					"name": "localized_name",
+					"value": "Cedula de identidad y electoral"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Resident Permit"
+				}, {
+					"name": "localized_name",
+					"value": "Cedula de identidad y electoral para extranjeros"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}]
+		}
+	}]
+}, {
+	"type": "hash",
+	"value": [{
+		"name": "country",
+		"value": "EG"
+	}, {
+		"name": "identity",
+		"value": {
+			"type": "array",
+			"value": [{
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Passport"
+				}, {
+					"name": "localized_name",
+					"value": "جواز السفر المصري, Egyptian passport\u002F جمهورية مصر العربية - Arab Republic of Egypt passport"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}]
+		}
+	}]
+}, {
+	"type": "hash",
+	"value": [{
+		"name": "country",
+		"value": "EE"
+	}, {
+		"name": "identity",
+		"value": {
+			"type": "array",
+			"value": [{
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Passport"
+				}, {
+					"name": "localized_name",
+					"value": "Pass"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Driver's license"
+				}, {
+					"name": "localized_name",
+					"value": "Juhiluba"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Identity card"
+				}, {
+					"name": "localized_name",
+					"value": "ID-kaart"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Residence permit"
+				}, {
+					"name": "localized_name",
+					"value": "Elamisluba"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}]
+		}
+	}]
+}, {
+	"type": "hash",
+	"value": [{
+		"name": "country",
+		"value": "FI"
+	}, {
+		"name": "identity",
+		"value": {
+			"type": "array",
+			"value": [{
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Passport"
+				}, {
+					"name": "localized_name",
+					"value": "Passi \u002F Pass"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Driver's license"
+				}, {
+					"name": "localized_name",
+					"value": "Ajokortti Körkort"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Identity card"
+				}, {
+					"name": "localized_name",
+					"value": "Henkilökortti \u002F Identitetskort"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Residence card"
+				}, {
+					"name": "localized_name",
+					"value": "Oleskelukortti \u002F Uppehållstillstånd"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}]
+		}
+	}]
+}, {
+	"type": "hash",
+	"value": [{
+		"name": "country",
+		"value": "FR"
+	}, {
+		"name": "identity",
+		"value": {
+			"type": "array",
+			"value": [{
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Passport"
+				}, {
+					"name": "localized_name",
+					"value": "Passeport"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Driver's license"
+				}, {
+					"name": "localized_name",
+					"value": "Permis de conduire"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Identity card"
+				}, {
+					"name": "localized_name",
+					"value": "Carte d'identité"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Health insurance card"
+				}, {
+					"name": "localized_name",
+					"value": "Carte Vitale avec photo"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Military identity card"
+				}, {
+					"name": "localized_name",
+					"value": "Carte d'identité avec photographie délivrée par les autorités militaires"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Parliamentary identity card"
+				}, {
+					"name": "localized_name",
+					"value": "Carte d'identité de parlementaire"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Elected official identity card"
+				}, {
+					"name": "localized_name",
+					"value": "Carte d'identité d'élu local"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Veteran's identity card"
+				}, {
+					"name": "localized_name",
+					"value": "Carte du combattant avec photographie"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}]
+		}
+	}]
+}, {
+	"type": "hash",
+	"value": [{
+		"name": "country",
+		"value": "DE"
+	}, {
+		"name": "identity",
+		"value": {
+			"type": "array",
+			"value": [{
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Passport"
+				}, {
+					"name": "localized_name",
+					"value": "Reisepass"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Driver's license"
+				}, {
+					"name": "localized_name",
+					"value": "Führerschein"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Identity card"
+				}, {
+					"name": "localized_name",
+					"value": "Personalausweis"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Residence permit"
+				}, {
+					"name": "localized_name",
+					"value": "Aufenthaltstitel"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}]
+		}
+	}]
+}, {
+	"type": "hash",
+	"value": [{
+		"name": "country",
+		"value": "GR"
+	}, {
+		"name": "identity",
+		"value": {
+			"type": "array",
+			"value": [{
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Passport"
+				}, {
+					"name": "localized_name",
+					"value": "Διαβατήριο"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Identity card"
+				}, {
+					"name": "localized_name",
+					"value": "Δελτίο Ταυτότητας"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Residence Certificate"
+				}, {
+					"name": "localized_name",
+					"value": "Βεβαίωση Διαμονής"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}]
+		}
+	}]
+}, {
+	"type": "hash",
+	"value": [{
+		"name": "country",
+		"value": "HK"
+	}, {
+		"name": "identity",
+		"value": {
+			"type": "array",
+			"value": [{
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Passport"
+				}, {
+					"name": "localized_name",
+					"value": "護照 \u002F Passport"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Identity card"
+				}, {
+					"name": "localized_name",
+					"value": "身份證 \u002F Identity card"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Certificate of Registered Particulars"
+				}, {
+					"name": "localized_name",
+					"value": "登記事項證明書 \u002F Certificate of Registered Particulars"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Certificate of Exemption"
+				}, {
+					"name": "localized_name",
+					"value": "豁免證明書 \u002F Certificate of Exemption"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Vietnamese refugee card"
+				}, {
+					"name": "localized_name",
+					"value": "越南難民證 \u002F Vietnamese refugee card"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}]
+		}
+	}]
+}, {
+	"type": "hash",
+	"value": [{
+		"name": "country",
+		"value": "HU"
+	}, {
+		"name": "identity",
+		"value": {
+			"type": "array",
+			"value": [{
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Passport"
+				}, {
+					"name": "localized_name",
+					"value": "Útlevél"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Identity card"
+				}, {
+					"name": "localized_name",
+					"value": "Személyazonosító igazolvány"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Residence permit"
+				}, {
+					"name": "localized_name",
+					"value": "Tartózkodási engedély"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}]
+		}
+	}]
+}, {
+	"type": "hash",
+	"value": [{
+		"name": "country",
+		"value": "IN"
+	}, {
+		"name": "identity",
+		"value": {
+			"type": "array",
+			"value": [{
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Passport"
+				}, {
+					"name": "localized_name",
+					"value": "पासपोर्ट"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "PAN Card"
+				}, {
+					"name": "localized_name",
+					"value": "पैन कार्ड"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Driver's License"
+				}, {
+					"name": "localized_name",
+					"value": "ड्राइविंग लाइसेंस"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Voter ID Card"
+				}, {
+					"name": "localized_name",
+					"value": "वोटर आईडी कार्ड"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}]
+		}
+	}]
+}, {
+	"type": "hash",
+	"value": [{
+		"name": "country",
+		"value": "IS"
+	}, {
+		"name": "identity",
+		"value": {
+			"type": "array",
+			"value": [{
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Passport"
+				}, {
+					"name": "localized_name",
+					"value": "Vegabréf \u002F Passeport"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Driver's license"
+				}, {
+					"name": "localized_name",
+					"value": "ökuskírteini"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}]
+		}
+	}]
+}, {
+	"type": "hash",
+	"value": [{
+		"name": "country",
+		"value": "ID"
+	}, {
+		"name": "identity",
+		"value": {
+			"type": "array",
+			"value": []
+		}
+	}]
+}, {
+	"type": "hash",
+	"value": [{
+		"name": "country",
+		"value": "IE"
+	}, {
+		"name": "identity",
+		"value": {
+			"type": "array",
+			"value": [{
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Passport"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Driver's license"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "National Age Card"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}]
+		}
+	}]
+}, {
+	"type": "hash",
+	"value": [{
+		"name": "country",
+		"value": "IL"
+	}, {
+		"name": "identity",
+		"value": {
+			"type": "array",
+			"value": [{
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Passport"
+				}, {
+					"name": "localized_name",
+					"value": "דרכון ישראלי, Darkon Yisre'eli"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Driver's license"
+				}, {
+					"name": "localized_name",
+					"value": "רשיון נהיגה, Rishion nehega"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}]
+		}
+	}]
+}, {
+	"type": "hash",
+	"value": [{
+		"name": "country",
+		"value": "IT"
+	}, {
+		"name": "identity",
+		"value": {
+			"type": "array",
+			"value": [{
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Passport"
+				}, {
+					"name": "localized_name",
+					"value": "Passaporto"
+				}, {
+					"name": "expiration_policy",
+					"value": "document_with_expiry_date"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Driver’s license"
+				}, {
+					"name": "localized_name",
+					"value": "Patente di guida"
+				}, {
+					"name": "expiration_policy",
+					"value": "document_with_expiry_date"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Identity card"
+				}, {
+					"name": "localized_name",
+					"value": "Carta di identità \u002F Carta d'identità"
+				}, {
+					"name": "expiration_policy",
+					"value": "document_with_expiry_date"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Boat license"
+				}, {
+					"name": "localized_name",
+					"value": "Patente nautica"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Weapons license"
+				}, {
+					"name": "localized_name",
+					"value": "Porto d’armi"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Pension book"
+				}, {
+					"name": "localized_name",
+					"value": "Libretto di pensione"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}]
+		}
+	}]
+}, {
+	"type": "hash",
+	"value": [{
+		"name": "country",
+		"value": "JP"
+	}, {
+		"name": "identity",
+		"value": {
+			"type": "array",
+			"value": [{
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Passport"
+				}, {
+					"name": "localized_name",
+					"value": "パスポート"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Driver's license"
+				}, {
+					"name": "localized_name",
+					"value": "運転免許証"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Residence Card"
+				}, {
+					"name": "localized_name",
+					"value": "在留カード・特別永住者証明書"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "My Number Card, with photo"
+				}, {
+					"name": "localized_name",
+					"value": "マイナンバーカード (顔写真付き)"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Juki Card, with photo"
+				}, {
+					"name": "localized_name",
+					"value": "住民基本台帳カード (顔写真付き)\u002F住基カード (顔写真付き)"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}]
+		}
+	}]
+}, {
+	"type": "hash",
+	"value": [{
+		"name": "country",
+		"value": "LV"
+	}, {
+		"name": "identity",
+		"value": {
+			"type": "array",
+			"value": [{
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Passport"
+				}, {
+					"name": "localized_name",
+					"value": "Pase"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Identity Card"
+				}, {
+					"name": "localized_name",
+					"value": "Personas apliecība"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Residence Permit"
+				}, {
+					"name": "localized_name",
+					"value": "Uzturēšanās atļauja"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}]
+		}
+	}]
+}, {
+	"type": "hash",
+	"value": [{
+		"name": "country",
+		"value": "LI"
+	}, {
+		"name": "identity",
+		"value": {
+			"type": "array",
+			"value": [{
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Passport"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Driver's license"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Identity Card"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}]
+		}
+	}]
+}, {
+	"type": "hash",
+	"value": [{
+		"name": "country",
+		"value": "LT"
+	}, {
+		"name": "identity",
+		"value": {
+			"type": "array",
+			"value": [{
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Passport"
+				}, {
+					"name": "localized_name",
+					"value": "Pasas"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Identity Card"
+				}, {
+					"name": "localized_name",
+					"value": "Asmens tapatybės kortelė"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Driver’s License"
+				}, {
+					"name": "localized_name",
+					"value": "Vairuotojo pažymėjimas"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}]
+		}
+	}]
+}, {
+	"type": "hash",
+	"value": [{
+		"name": "country",
+		"value": "LU"
+	}, {
+		"name": "identity",
+		"value": {
+			"type": "array",
+			"value": [{
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Passport"
+				}, {
+					"name": "localized_name",
+					"value": "Passeport \u002F Reisepass"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Driver’s license"
+				}, {
+					"name": "localized_name",
+					"value": "Permis de conduire \u002F Führerschein"
+				}, {
+					"name": "expiration_policy",
+					"value": "document_with_expiry_date"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Identity card"
+				}, {
+					"name": "localized_name",
+					"value": "Carte d'identité \u002F Personalausweis"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Resident permit ID"
+				}, {
+					"name": "localized_name",
+					"value": "Permis de conduire local \u002F Aufenthaltserlaubnis"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}]
+		}
+	}]
+}, {
+	"type": "hash",
+	"value": [{
+		"name": "country",
+		"value": "MY"
+	}, {
+		"name": "identity",
+		"value": {
+			"type": "array",
+			"value": [{
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Identity Card"
+				}, {
+					"name": "localized_name",
+					"value": "Kad Pengenalan \u002F MyKad"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Passport"
+				}, {
+					"name": "localized_name",
+					"value": "Pasport"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Driving Licence"
+				}, {
+					"name": "localized_name",
+					"value": "Lesen Memandu"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}]
+		}
+	}]
+}, {
+	"type": "hash",
+	"value": [{
+		"name": "country",
+		"value": "MT"
+	}, {
+		"name": "identity",
+		"value": {
+			"type": "array",
+			"value": [{
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Passport"
+				}, {
+					"name": "localized_name",
+					"value": "passaport"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Identity Card"
+				}, {
+					"name": "localized_name",
+					"value": "Karta Tal-Identita"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Driver License"
+				}, {
+					"name": "localized_name",
+					"value": "Liċenzja tas-Sewqan"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Residence Permit"
+				}, {
+					"name": "localized_name",
+					"value": "Permess ta' Residenza"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}]
+		}
+	}]
+}, {
+	"type": "hash",
+	"value": [{
+		"name": "country",
+		"value": "MX"
+	}, {
+		"name": "identity",
+		"value": {
+			"type": "array",
+			"value": [{
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Passport"
+				}, {
+					"name": "localized_name",
+					"value": "Pasaporte"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "ID card"
+				}, {
+					"name": "localized_name",
+					"value": "Tarjeta de identificación"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Consular ID\u002FMatricular Consular ID Card"
+				}, {
+					"name": "localized_name",
+					"value": "ID consular \u002F ID matricular consular"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Voter ID card"
+				}, {
+					"name": "localized_name",
+					"value": "Credencial de elector"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "CURP, Clave Única de Registro de Población"
+				}, {
+					"name": "localized_name",
+					"value": "CURP, Clave Única de Registro de Población"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Birth Certificate"
+				}, {
+					"name": "localized_name",
+					"value": "Acta de nacimiento"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Driver license"
+				}, {
+					"name": "localized_name",
+					"value": "Licencia de conducir"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}]
+		}
+	}]
+}, {
+	"type": "hash",
+	"value": [{
+		"name": "country",
+		"value": "NL"
+	}, {
+		"name": "identity",
+		"value": {
+			"type": "array",
+			"value": [{
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Passport"
+				}, {
+					"name": "localized_name",
+					"value": "paspoort"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Driver license"
+				}, {
+					"name": "localized_name",
+					"value": "rijbewijs"
+				}, {
+					"name": "expiration_policy",
+					"value": "document_with_expiry_date"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "National ID"
+				}, {
+					"name": "localized_name",
+					"value": "nationaal ID-bewijs"
+				}, {
+					"name": "expiration_policy",
+					"value": "document_with_expiry_date"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Resident permit ID"
+				}, {
+					"name": "localized_name",
+					"value": "verblijfsvergunning"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Dutch aliens document"
+				}, {
+					"name": "localized_name",
+					"value": "Nederlands vreemdelingendocument"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}]
+		}
+	}]
+}, {
+	"type": "hash",
+	"value": [{
+		"name": "country",
+		"value": "NZ"
+	}, {
+		"name": "identity",
+		"value": {
+			"type": "array",
+			"value": [{
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Passport"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Driver license"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "New Zealand emergency travel document"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "New Zealand refugee travel document"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "New Zealand certificate of identity"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}]
+		}
+	}]
+}, {
+	"type": "hash",
+	"value": [{
+		"name": "country",
+		"value": "NO"
+	}, {
+		"name": "identity",
+		"value": {
+			"type": "array",
+			"value": [{
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Passport"
+				}, {
+					"name": "localized_name",
+					"value": "Pass"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Driver License"
+				}, {
+					"name": "localized_name",
+					"value": "Førerkort"
+				}, {
+					"name": "expiration_policy",
+					"value": "document_with_expiry_date"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "ID card"
+				}, {
+					"name": "localized_name",
+					"value": "ID-kort"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Resident permit ID"
+				}, {
+					"name": "localized_name",
+					"value": "Oppholdskort"
+				}, {
+					"name": "expiration_policy",
+					"value": "government_issued_document_12_months"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}]
+		}
+	}]
+}, {
+	"type": "hash",
+	"value": [{
+		"name": "country",
+		"value": "PY"
+	}, {
+		"name": "identity",
+		"value": {
+			"type": "array",
+			"value": [{
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Passport"
+				}, {
+					"name": "localized_name",
+					"value": "Pasaporte"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "National ID"
+				}, {
+					"name": "localized_name",
+					"value": "Cedula de Identidad"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Resident Permit"
+				}, {
+					"name": "localized_name",
+					"value": "Cedula de identidad a Extranjero"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}]
+		}
+	}]
+}, {
+	"type": "hash",
+	"value": [{
+		"name": "country",
+		"value": "PE"
+	}, {
+		"name": "identity",
+		"value": {
+			"type": "array",
+			"value": [{
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Passport"
+				}, {
+					"name": "localized_name",
+					"value": "Pasaporte"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "National ID"
+				}, {
+					"name": "localized_name",
+					"value": "Documento Nacional de Identidad (DNI)"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Electronic National ID"
+				}, {
+					"name": "localized_name",
+					"value": "Documento Nacional de Identidad Electrónico (DNIe)"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Immigration Card"
+				}, {
+					"name": "localized_name",
+					"value": "Carné de Extranjería"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Driver License"
+				}, {
+					"name": "localized_name",
+					"value": "Licencia de conducir \u002F Brevete"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Resident Permit"
+				}, {
+					"name": "localized_name",
+					"value": "DNI para Extranjeros"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}]
+		}
+	}]
+}, {
+	"type": "hash",
+	"value": [{
+		"name": "country",
+		"value": "PL"
+	}, {
+		"name": "identity",
+		"value": {
+			"type": "array",
+			"value": [{
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Passport"
+				}, {
+					"name": "localized_name",
+					"value": "Paszport"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Drivers License"
+				}, {
+					"name": "localized_name",
+					"value": "Prawo jazdy"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Identity Card"
+				}, {
+					"name": "localized_name",
+					"value": "Dowód osobisty"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Residence Permit"
+				}, {
+					"name": "localized_name",
+					"value": "Zezwolenie na pobyt"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}]
+		}
+	}]
+}, {
+	"type": "hash",
+	"value": [{
+		"name": "country",
+		"value": "PT"
+	}, {
+		"name": "identity",
+		"value": {
+			"type": "array",
+			"value": [{
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Passport"
+				}, {
+					"name": "localized_name",
+					"value": "Passaporte"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Driver license"
+				}, {
+					"name": "localized_name",
+					"value": "Carta de condução"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "ID card"
+				}, {
+					"name": "localized_name",
+					"value": "Cartão de identidade"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Citizen card"
+				}, {
+					"name": "localized_name",
+					"value": "Cartão de cidadão"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Residence Permit"
+				}, {
+					"name": "localized_name",
+					"value": "Título de residência"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}]
+		}
+	}]
+}, {
+	"type": "hash",
+	"value": [{
+		"name": "country",
+		"value": "RO"
+	}, {
+		"name": "identity",
+		"value": {
+			"type": "array",
+			"value": [{
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Passport"
+				}, {
+					"name": "localized_name",
+					"value": "Paşaport"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Identity Card"
+				}, {
+					"name": "localized_name",
+					"value": "Carte de identitate \u002F Buletin"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Residence Permit"
+				}, {
+					"name": "localized_name",
+					"value": "Permis de şedere"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Driver License"
+				}, {
+					"name": "localized_name",
+					"value": "Permis de conducere"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}]
+		}
+	}]
+}, {
+	"type": "hash",
+	"value": [{
+		"name": "country",
+		"value": "SG"
+	}, {
+		"name": "identity",
+		"value": {
+			"type": "array",
+			"value": [{
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Passport"
+				}, {
+					"name": "localized_name",
+					"value": "护照"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Driver license"
+				}, {
+					"name": "localized_name",
+					"value": "驾驶执照"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "ID card"
+				}, {
+					"name": "localized_name",
+					"value": "身份证"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "National ID"
+				}, {
+					"name": "localized_name",
+					"value": "居民身份证"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Singapore Work Permit or Pass"
+				}, {
+					"name": "localized_name",
+					"value": "新加坡工作许可证或通行证"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Singapore Armed Forces Card"
+				}, {
+					"name": "localized_name",
+					"value": "新加坡军人身份证"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Singapore National Service Identity Card"
+				}, {
+					"name": "localized_name",
+					"value": "新加坡国民服务身份证"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}]
+		}
+	}]
+}, {
+	"type": "hash",
+	"value": [{
+		"name": "country",
+		"value": "SK"
+	}, {
+		"name": "identity",
+		"value": {
+			"type": "array",
+			"value": [{
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Passport"
+				}, {
+					"name": "localized_name",
+					"value": "Cestovný pas"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "ID Card"
+				}, {
+					"name": "localized_name",
+					"value": "Občiansky preukaz"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Driver License"
+				}, {
+					"name": "localized_name",
+					"value": "Vodičský preukaz"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Residence Permit"
+				}, {
+					"name": "localized_name",
+					"value": "Povolenie na pobyt"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}]
+		}
+	}]
+}, {
+	"type": "hash",
+	"value": [{
+		"name": "country",
+		"value": "SI"
+	}, {
+		"name": "identity",
+		"value": {
+			"type": "array",
+			"value": [{
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Passport"
+				}, {
+					"name": "localized_name",
+					"value": "Potni list"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "ID Card"
+				}, {
+					"name": "localized_name",
+					"value": "Osebna izkaznica"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Driver License"
+				}, {
+					"name": "localized_name",
+					"value": "Vozniško dovoljenje"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Residence Permit"
+				}, {
+					"name": "localized_name",
+					"value": "Dovoljenje za prebivanje"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}]
+		}
+	}]
+}, {
+	"type": "hash",
+	"value": [{
+		"name": "country",
+		"value": "ES"
+	}, {
+		"name": "identity",
+		"value": {
+			"type": "array",
+			"value": [{
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Passport"
+				}, {
+					"name": "localized_name",
+					"value": "Pasaporte"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Driver license"
+				}, {
+					"name": "localized_name",
+					"value": "Permiso de conducir"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "National ID"
+				}, {
+					"name": "localized_name",
+					"value": "Documento nacional de identidad (DNI)"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Resident permit ID"
+				}, {
+					"name": "localized_name",
+					"value": "Tarjeta de Identidad de Extranjero Card"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}]
+		}
+	}]
+}, {
+	"type": "hash",
+	"value": [{
+		"name": "country",
+		"value": "SE"
+	}, {
+		"name": "identity",
+		"value": {
+			"type": "array",
+			"value": [{
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Passport"
+				}, {
+					"name": "localized_name",
+					"value": "Pass"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Driver license"
+				}, {
+					"name": "localized_name",
+					"value": "Körkort"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "National ID"
+				}, {
+					"name": "localized_name",
+					"value": "Nationellt ID-kort"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Birth Certificate"
+				}, {
+					"name": "localized_name",
+					"value": "Personbevis"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Swedish Standards Institute (SIS) approved ID cards"
+				}, {
+					"name": "localized_name",
+					"value": "ID-kort"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}]
+		}
+	}]
+}, {
+	"type": "hash",
+	"value": [{
+		"name": "country",
+		"value": "CH"
+	}, {
+		"name": "identity",
+		"value": {
+			"type": "array",
+			"value": [{
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Passport"
+				}, {
+					"name": "localized_name",
+					"value": "Reisepass \u002F Passeport \u002F Passaporto"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Driver license"
+				}, {
+					"name": "localized_name",
+					"value": "Führerschein \u002F Permis de conduire \u002F Licenza di condurre"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "National ID"
+				}, {
+					"name": "localized_name",
+					"value": "Identitäskarte \u002F Carte d'identité \u002F Carta d'identità"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Residence permit"
+				}, {
+					"name": "localized_name",
+					"value": "Aufenthaltsbewilligung \u002F Permis de séjour \u002F Libretto per stranieri"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}]
+		}
+	}]
+}, {
+	"type": "hash",
+	"value": [{
+		"name": "country",
+		"value": "TT"
+	}, {
+		"name": "identity",
+		"value": {
+			"type": "array",
+			"value": [{
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Passport"
+				}, {
+					"name": "localized_name",
+					"value": "Pasaporte"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}]
+		}
+	}]
+}, {
+	"type": "hash",
+	"value": [{
+		"name": "country",
+		"value": "AE"
+	}, {
+		"name": "identity",
+		"value": {
+			"type": "array",
+			"value": [{
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Emirates ID"
+				}, {
+					"name": "localized_name",
+					"value": "Emirates ID"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Passport"
+				}, {
+					"name": "localized_name",
+					"value": "Passport"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Passport visa page"
+				}, {
+					"name": "localized_name",
+					"value": "Passport visa page"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Company Authorization"
+				}, {
+					"name": "localized_name",
+					"value": "Power of Attorney"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}]
+		}
+	}]
+}, {
+	"type": "hash",
+	"value": [{
+		"name": "country",
+		"value": "GB"
+	}, {
+		"name": "identity",
+		"value": {
+			"type": "array",
+			"value": [{
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Passport"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Driver license"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Resident permit"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Citizen Card"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Electoral ID"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Validate UK"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}]
+		}
+	}]
+}, {
+	"type": "hash",
+	"value": [{
+		"name": "country",
+		"value": "US"
+	}, {
+		"name": "identity",
+		"value": {
+			"type": "array",
+			"value": [{
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Passport"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Passport card"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Driver license"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "State issued ID card"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Resident permit ID \u002F U.S. Green Card"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Border crossing card"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Child ID card"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "NYC card"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "U.S. visa card"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Birth Certificate"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}]
+		}
+	}]
+}, {
+	"type": "hash",
+	"value": [{
+		"name": "country",
+		"value": "UY"
+	}, {
+		"name": "identity",
+		"value": {
+			"type": "array",
+			"value": [{
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Passport"
+				}, {
+					"name": "localized_name",
+					"value": "Pasaporte"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Driver's license"
+				}, {
+					"name": "localized_name",
+					"value": "Licencia de conducir"
+				}, {
+					"name": "double_sided",
+					"value": false
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "National ID"
+				}, {
+					"name": "localized_name",
+					"value": "Cedula De Identidad"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}, {
+				"type": "hash",
+				"value": [{
+					"name": "name",
+					"value": "Resident Permit"
+				}, {
+					"name": "localized_name",
+					"value": "Cedula De Identidad para extranjeros"
+				}, {
+					"name": "double_sided",
+					"value": true
+				}]
+			}]
+		}
+	}]
+}]
+

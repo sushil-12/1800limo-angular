@@ -1,0 +1,47 @@
+.button2 {
+	border       : 0;
+	border-radius: 7px;
+	padding      : 8px 15px;
+}
+
+#amenityListModal .modal-dialog {
+	max-width: 300px;
+}
+
+a.notCompleted {
+	background-color: #F33C2F !important;
+}
+
+.table-responsive i {
+	cursor: pointer;
+}
+
+@media only screen and (min-width:1199px) {
+	a.notCompleted:hover {
+		background-color: #d12c20 !important;
+		color           : #fff;
+		text-decoration : none;
+	}
+
+	a.notCompleted:focus {
+		transform       : scale(1.2, 1.2);
+		background-color: #d12c20 !important;
+	}
+}
+
+.text-danger {
+	color: var(--orange-color) !important;
+}
+
+.modal-content {
+	align-items: center;
+}
+
+.modal-content h2 {
+	color        : #5dbd8a;
+	margin-bottom: 0;
+}
+
+.modal-content img {
+	width: 80px;
+}
