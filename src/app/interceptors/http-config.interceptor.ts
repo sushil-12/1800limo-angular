@@ -14,6 +14,7 @@ import { map, catchError } from 'rxjs/operators';
 import { ErrorDialogService } from '../services/error-dialog/errordialog.service';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Injectable()
 export class HttpConfigInterceptor implements HttpInterceptor
@@ -23,6 +24,7 @@ export class HttpConfigInterceptor implements HttpInterceptor
 		public errorDialogService: ErrorDialogService,
 		private authService: AuthService,
 		private router: Router,
+		private $spinner: NgxSpinnerService,
 		private stateManagementService: StateManagementService
 	) { }
 
@@ -53,6 +55,7 @@ export class HttpConfigInterceptor implements HttpInterceptor
 			}),
 			catchError((errorData: HttpErrorResponse) =>
 			{
+				this.$spinner.hide()
 				if (errorData.status == 401)
 				{
 					console.log('auth error', errorData.error);

@@ -851,10 +851,11 @@
 									Model
 								</mat-label>
 								<input type="text" placeholder="Search by Name" matInput
-									(keyup)="searchModel($event.target.value)" [matAutocomplete]="automodel">
+									(keyup)="searchBigDataListValue('model', $event.target.value)" [matAutocomplete]="automodel"
+									[value]="fillBigDataListValue('model', 'vehicle_model')">
 								<mat-autocomplete #automodel="matAutocomplete">
-									<mat-option *ngFor="let model of big_data_list?.vehicleModel" [value]="model.name"
-										(onSelectionChange)="selectModel(model.id, 'vehicle_model')">
+									<mat-option *ngFor="let model of big_data_list?.vehicleModels" [value]="model.name"
+										(onSelectionChange)="selectBigDataListValue('model', model.id, 'vehicle_model')">
 										{{ model.name }}
 									</mat-option>
 								</mat-autocomplete>
@@ -880,11 +881,11 @@
 									Year
 								</mat-label>
 								<input type="text" placeholder="Search by Name" matInput
-									(keyup)="search($event.target.value, 'year')" [matAutocomplete]="autoyear"
-									[value]="fillValue('year')">
+									(keyup)="searchBigDataListValue('year', $event.target.value)" [matAutocomplete]="autoyear"
+									[value]="fillBigDataListValue('year', 'vehicle_year')">
 								<mat-autocomplete #autoyear="matAutocomplete">
-									<mat-option *ngFor="let year of big_data_list?.vehicleYear" [value]="year.name"
-										(onSelectionChange)="selectValue(year.id, 'vehicle_year')">
+									<mat-option *ngFor="let year of big_data_list?.vehicleYears" [value]="year.name"
+										(onSelectionChange)="selectBigDataListValue('year', year.id, 'vehicle_year')">
 										{{ year.name }}
 									</mat-option>
 								</mat-autocomplete>

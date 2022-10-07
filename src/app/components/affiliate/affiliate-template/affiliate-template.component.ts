@@ -109,6 +109,7 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 				// if the account is sent for verification after completing all steps, stop hitting the api
 				if (Object.values(steps_completed).length == 7 && Object.values(steps_completed).filter(item => item != 'completed').length == 0)
 				{
+					console.log('Interval Cleared')
 					clearInterval(interval)
 					return
 				}
@@ -127,25 +128,33 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 					this.is_show_verification_icon = true	// show the verification icon and the red status
 
 					// check for email verification from backend and stop checking if verified
-					if (response['is_email_verified'] == 'yes' && !this.is_email_verified)
+					if (response['is_email_verified'] == 'yes')
 					{
 						if (response['affiliate_type'] == 'gig_operator')
 						{
+							console.log('Gig Operator')
 							// for gig only check for one email
 							this.is_email_verified = true
 							this.getStatusData()
 						}
 						if (response['dispatch_is_email_verified'] == 'yes')
 						{
+							console.log('Dispatch verified')
 							this.getStatusData()
 							this.is_email_verified = true	// remove the icon and show green status
+							clearInterval(interval)
 						}
 					}
 
+
 					// check for stripe verification from backend and stop checking if verified
-					if ((response['stripe_address_status'] == 'valid' && response['transfer_status'] == 'active' && response['additional_doc_verification_status'].toLowerCase() == 'verified') || steps_completed['step2'] == 'uncompleted')
+					if ((response['stripe_address_status'] == 'valid' && response['transfer_status'] == 'active' && response['additional_doc_verification_status'].toLowerCase() == 'verified'))
 					{
-						clearInterval(interval)
+						if (steps_completed['step2'] == 'completed')
+						{
+							console.log('Interval Cleared 2')
+							clearInterval(interval)
+						}
 						this.is_bank_verified = true
 					}
 				})

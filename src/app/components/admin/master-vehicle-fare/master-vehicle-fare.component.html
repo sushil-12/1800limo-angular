@@ -8,8 +8,7 @@
 			<div class="container">
 				<div class="row imageSection">
 					<div class="col-lg-3 col-6 vehicleImage">
-						<img *ngIf="vehicle_info?.vehicle_image" [src]="vehicle_info?.vehicle_image"
-							alt="vehicle image">
+						<img *ngIf="vehicle_info?.vehicle_image" [src]="vehicle_info?.vehicle_image" alt="vehicle image">
 					</div>
 					<div class="col-lg-3 col-6">
 						<ul class="vehicleData">
@@ -71,8 +70,7 @@
 						[ngClass]="form.km_mile.value == 'mile' ? 'active' : ''">
 						Mile
 					</div>
-					<div id="type-kilometer" class="text-center"
-						(click)="changeDetection.radioButton('kilometer', 'km_mile')"
+					<div id="type-kilometer" class="text-center" (click)="changeDetection.radioButton('kilometer', 'km_mile')"
 						[ngClass]="form.km_mile.value == 'kilometer' ? 'active' : ''">
 						Kilometer
 					</div>
@@ -88,8 +86,8 @@
 						<ng-template #hideZero>
 							<span matPrefix>{{currency_symbol}} &nbsp;</span>
 						</ng-template>
-						<input matInput placeholder="Milage Rate" type="number" formControlName="milage_rate"
-							tabindex="1" value="0" (change)="updateRateRangeObject()" />
+						<input matInput placeholder="Milage Rate" type="number" formControlName="milage_rate" tabindex="1"
+							value="0" (change)="updateRateRangeObject()" (focus)="$event.target.select()" />
 					</mat-form-field>
 					<div *ngIf="is_form_submitted && form.milage_rate.errors || form.milage_rate.touched && form.milage_rate.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -111,8 +109,8 @@
 							<ng-template #hideZero>
 								<span matPrefix>{{currency_symbol}} &nbsp;</span>
 							</ng-template>
-							<input matInput placeholder="Kilometer Rate" formControlName="kilometer_rate" tabindex="1"
-								(change)="updateRateRangeObject()" />
+							<input matInput placeholder="Kilometer Rate" type="number" formControlName="kilometer_rate"
+								tabindex="1" (change)="updateRateRangeObject()" (focus)="$event.target.select()" />
 						</mat-form-field>
 						<div *ngIf="is_form_submitted && form.kilometer_rate.errors || form.kilometer_rate.touched && form.kilometer_rate.errors"
 							class="text-danger margin-bottom-thin my-mat-hint">
@@ -141,7 +139,7 @@
 							<span matPrefix>{{currency_symbol}} &nbsp;</span>
 						</ng-template>
 						<input matInput placeholder="Hourly Rate" formControlName="hourly_rate" tabindex="1"
-							(change)="updateRateRangeObject()" />
+							(change)="updateRateRangeObject()" type="number" (focus)="$event.target.select()" />
 					</mat-form-field>
 					<div *ngIf="is_form_submitted && form.hourly_rate.errors || form.hourly_rate.touched && form.hourly_rate.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -162,16 +160,15 @@
 						<ng-template #hideZero2>
 							<span matPrefix>{{currency_symbol}} &nbsp;</span>
 						</ng-template>
-						<input matInput placeholder="Hourly Rate After 5 Hours"
-							formControlName="hourly_rate_after_five_hours" tabindex="1"
-							(change)="updateRateRangeObject()" />
+						<input matInput placeholder="Hourly Rate After 5 Hours" type="number"
+							formControlName="hourly_rate_after_five_hours" tabindex="1" (change)="updateRateRangeObject()"
+							(focus)="$event.target.select()" />
 					</mat-form-field>
 					<div *ngIf="is_form_submitted && form.hourly_rate_after_five_hours.errors || form.hourly_rate_after_five_hours.touched && form.hourly_rate_after_five_hours.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="form.hourly_rate_after_five_hours.errors.required">This field is required</div>
 					</div>
-					<div *ngIf="form.hourly_rate_after_five_hours.errors"
-						class="text-danger margin-bottom-thin my-mat-hint">
+					<div *ngIf="form.hourly_rate_after_five_hours.errors" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="form.hourly_rate_after_five_hours.errors.pattern">Enter Numbers only</div>
 					</div>
 				</div>
@@ -187,8 +184,7 @@
 							# Hours = Day Rate Extension
 						</mat-label>
 						<span matPrefix># &nbsp;</span>
-						<mat-select formControlName="hours_day_rate" tabindex="1"
-							(onSelectionChange)="updateRateRangeObject()">
+						<mat-select formControlName="hours_day_rate" tabindex="1" (onSelectionChange)="updateRateRangeObject()">
 							<mat-option value="">Choose Hours</mat-option>
 							<mat-option [value]="8">8</mat-option>
 							<mat-option [value]="10">10</mat-option>
@@ -215,7 +211,7 @@
 							<span matPrefix>{{currency_symbol}} &nbsp;</span>
 						</ng-template>
 						<input matInput placeholder="Day Rate Extension" formControlName="day_rate" tabindex="1"
-							(change)="updateRateRangeObject()" />
+							(change)="updateRateRangeObject()" type="number" />
 					</mat-form-field>
 					<div *ngIf="is_form_submitted && form.day_rate.errors || form.day_rate.touched && form.day_rate.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -235,8 +231,9 @@
 						<ng-template #hideZero5>
 							<span matPrefix>{{currency_symbol}} &nbsp;</span>
 						</ng-template>
-						<input matInput placeholder="Minimum Intra City Rate" formControlName="minimum_city_rate"
-							tabindex="1" (change)="updateRateRangeObject()" autocomplete="off" />
+						<input matInput placeholder="Minimum Intra City Rate" formControlName="minimum_city_rate" tabindex="1"
+							type="number" (focus)="$event.target.select()" (change)="updateRateRangeObject()"
+							autocomplete="off" />
 					</mat-form-field>
 					<div *ngIf="is_form_submitted && form.minimum_city_rate.errors || form.minimum_city_rate.touched && form.minimum_city_rate.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -258,14 +255,16 @@
 							Minimum Airport Rate - Arrival <span class="asterisk">*</span>
 						</mat-label>
 						<span matPrefix
-							*ngIf="form.minimum_airport_arrival_rate.value == null || form.minimum_airport_arrival_rate.value == ''; else hideZero7">{{currency_symbol}}
-							0 &nbsp;</span>
+							*ngIf="form.minimum_airport_arrival_rate.value == null || form.minimum_airport_arrival_rate.value == ''; else hideZero7">
+							{{currency_symbol}} 0 &nbsp;
+						</span>
 						<ng-template #hideZero7>
-							<span matPrefix>{{currency_symbol}} &nbsp;</span>
+							<span matPrefix> {{currency_symbol}} &nbsp; </span>
 						</ng-template>
-						<input matInput placeholder="Minimum Airport Rate - Arrival"
-							formControlName="minimum_airport_arrival_rate" (change)="updateRateRangeObject()"
-							tabindex="1">
+						<input matInput placeholder="Minimum Airport Rate - Arrival" (focus)="$event.target.select()"
+							formControlName="minimum_airport_arrival_rate" type="number"
+							(change)="updateRateRangeObject(); cloneValue('minimum_airport_arrival_rate', 'minimum_airport_departure_rate')"
+							tabindex="1" />
 					</mat-form-field>
 					<div *ngIf="is_form_submitted && form.minimum_airport_arrival_rate.errors || form.minimum_airport_arrival_rate.touched && form.minimum_airport_arrival_rate.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -290,9 +289,9 @@
 						<ng-template #hideZero6>
 							<span matPrefix>{{currency_symbol}} &nbsp;</span>
 						</ng-template>
-						<input matInput placeholder="Minimum Airport Rate - Departure"
-							formControlName="minimum_airport_departure_rate" tabindex="1"
-							(change)="updateRateRangeObject()" />
+						<input matInput placeholder="Minimum Airport Rate - Departure" (focus)="$event.target.select()"
+							formControlName="minimum_airport_departure_rate" type="number" (change)="updateRateRangeObject()"
+							tabindex="1" />
 					</mat-form-field>
 					<div *ngIf="is_form_submitted && form.minimum_airport_departure_rate.errors || form.minimum_airport_departure_rate.touched && form.minimum_airport_departure_rate.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -319,8 +318,8 @@
 								{{currency_symbol}} &nbsp;
 							</span>
 						</ng-template>
-						<input matInput placeholder="Minimum Cruise Port Rate - Arrival"
-							formControlName="minimum_cruise_port_arrival_rate" tabindex="1"
+						<input matInput placeholder="Minimum Cruise Port Rate - Arrival" (focus)="$event.target.select()"
+							formControlName="minimum_cruise_port_arrival_rate" type="number" tabindex="1"
 							(change)="updateRateRangeObject()" />
 					</mat-form-field>
 					<div *ngIf="is_form_submitted && form.minimum_cruise_port_arrival_rate.errors || form.minimum_cruise_port_arrival_rate.touched && form.minimum_cruise_port_arrival_rate.errors"
@@ -345,8 +344,8 @@
 						<ng-template #hideZero9>
 							<span matPrefix>{{currency_symbol}} &nbsp;</span>
 						</ng-template>
-						<input matInput placeholder="Minimum Cruise Port Rate - Departure"
-							formControlName="minimum_cruise_port_departure_rate" tabindex="1"
+						<input matInput placeholder="Minimum Cruise Port Rate - Departure" type="number"
+							formControlName="minimum_cruise_port_departure_rate" tabindex="1" (focus)="$event.target.select()"
 							(change)="updateRateRangeObject()" />
 					</mat-form-field>
 					<div *ngIf="is_form_submitted && form.minimum_cruise_port_departure_rate.errors || form.minimum_cruise_port_departure_rate.touched && form.minimum_cruise_port_departure_rate.errors"
@@ -376,9 +375,9 @@
 						<ng-template #hideZero11>
 							<span matPrefix>{{currency_symbol}} &nbsp;</span>
 						</ng-template>
-						<input matInput placeholder="Airport / Cruise Port Cancel Rate"
-							formControlName="airport_city_percentage_booking_cancel_charges" tabindex="1"
-							(change)="updateRateRangeObject()" />
+						<input matInput placeholder="Airport / Cruise Port Cancel Rate" type="number"
+							(focus)="$event.target.select()" formControlName="airport_city_percentage_booking_cancel_charges"
+							tabindex="1" (change)="updateRateRangeObject()" />
 					</mat-form-field>
 					<div *ngIf="is_form_submitted && form.airport_city_percentage_booking_cancel_charges.errors || form.airport_city_percentage_booking_cancel_charges.touched && form.airport_city_percentage_booking_cancel_charges.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -402,9 +401,9 @@
 						<ng-template #hideZero12>
 							<span matPrefix>{{currency_symbol}} &nbsp;</span>
 						</ng-template>
-						<input matInput placeholder="Shared Ride Rate - Per Person"
-							formControlName="per_person_group_ride_rate" (change)="updateRateRangeObject()"
-							tabindex="1" />
+						<input type="number" matInput placeholder="Shared Ride Rate - Per Person"
+							formControlName="per_person_group_ride_rate" (focus)="$event.target.select()"
+							(change)="updateRateRangeObject()" tabindex="1" />
 					</mat-form-field>
 					<div *ngIf="is_form_submitted && form.per_person_group_ride_rate.errors || form.per_person_group_ride_rate.touched && form.per_person_group_ride_rate.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -431,8 +430,8 @@
 						<ng-template #hideZero21>
 							<span matPrefix>{{currency_symbol}} &nbsp;</span>
 						</ng-template>
-						<input matInput placeholder="Early Am/Late Pm" formControlName="early_late_charges" tabindex="1"
-							(change)="updateRateRangeObject()" />
+						<input type="number" matInput placeholder="Early Am/Late Pm" formControlName="early_late_charges"
+							tabindex="1" (change)="updateRateRangeObject()" (focus)="$event.target.select()" />
 					</mat-form-field>
 					<div *ngIf="is_form_submitted && form.early_late_charges.errors || form.early_late_charges.touched && form.early_late_charges.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -454,8 +453,8 @@
 						<ng-template #hideZero22>
 							<span matPrefix>{{currency_symbol}} &nbsp;</span>
 						</ng-template>
-						<input matInput placeholder="Holiday Rate" formControlName="holiday_charges" tabindex="1"
-							(change)="updateRateRangeObject()" />
+						<input type="number" matInput placeholder="Holiday Rate" formControlName="holiday_charges" tabindex="1"
+							(change)="updateRateRangeObject()" (focus)="$event.target.select()" />
 					</mat-form-field>
 					<div *ngIf="is_form_submitted && form.holiday_charges.errors || form.holiday_charges.touched && form.holiday_charges.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -483,8 +482,9 @@
 								{{currency_symbol}} &nbsp;
 							</span>
 						</ng-template>
-						<input matInput placeholder="Friday/Saturday Night" formControlName="friday_saturday_charges"
-							tabindex="1" (change)="updateRateRangeObject()" />
+						<input type="number" matInput placeholder="Friday/Saturday Night"
+							formControlName="friday_saturday_charges" tabindex="1" (focus)="$event.target.select()"
+							(change)="updateRateRangeObject()" />
 					</mat-form-field>
 					<div *ngIf="is_form_submitted && form.friday_saturday_charges.errors || form.friday_saturday_charges.touched && form.friday_saturday_charges.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -525,7 +525,7 @@
 
 					<!-- SLIDER -->
 					<div id="rate-manager-slider" class="col-md-6 mt-3">
-						<span id="sign-percent-minus">
+						<span id="sign-percent-minus" (click)="changeThumb(1, '-')">
 							-
 							<i class="bi text-orange"
 								[ngClass]="form.rate_range_percent_flat.value == 'percent' ? 'bi-percent' : 'bi-currency-dollar'"></i>
@@ -534,39 +534,36 @@
 							<input type="range" [value]="form.rate_range.value" min="-50" max="50" id="slider"
 								(input)="getRateRange($event.target.value)" />
 						</span>
-						<span id="sign-percent-plus">
+						<span id="sign-percent-plus" (click)="changeThumb(1, '+')">
 							+
 							<i class="bi text-orange"
 								[ngClass]="form.rate_range_percent_flat.value == 'percent' ? 'bi-percent' : 'bi-currency-dollar'"></i>
 						</span>
 						<p id="thumb-value" class="text-center m-0 mt-3" (click)="getRateRange(0)">
-							<i class="bi bi-currency-dollar text-orange"
-								*ngIf="form.rate_range_percent_flat.value == 'flat'"></i>
+							<i class="bi bi-currency-dollar text-orange" *ngIf="form.rate_range_percent_flat.value == 'flat'"></i>
 							{{ thumb_value }}
-							<i class="bi bi-percent text-orange"
-								*ngIf="form.rate_range_percent_flat.value == 'percent'"></i>
+							<i class="bi bi-percent text-orange" *ngIf="form.rate_range_percent_flat.value == 'percent'"></i>
 						</p>
 					</div>
 				</div>
 			</div>
 			<!-- RATE MANAGER ENDS -->
 
-			<!-- NOTE: GRATUITY -->
+			<!-- GRATUITY -->
 			<div class="row">
 				<div class="col-md-12">
 					<h3 class="mt-4 addveh_top d-md-flex justify-content-between align-items-center">
 						<label class="alert alert-danger">Turn Off Auto Add 20%</label>
 					</h3>
 					<div class="px-3 custom-control custom-checkbox pl-0">
-						<mat-slide-toggle class="example-margin gratuityToggle"
-							[checked]="form.is_gratuity.value == 'yes'"
+						<mat-slide-toggle class="example-margin gratuityToggle" [checked]="form.is_gratuity.value == 'yes'"
 							(change)="changeDetection.gratuity($event.checked, 'is_gratuity')" tabindex="1">
 						</mat-slide-toggle>
 						<label class="gratuityLabel ml-2">Gratuity <span class="theme-color">(Optional)</span></label>
 					</div>
 				</div>
 			</div>
-			<!-- NOTE: GRATUITY ENDS -->
+			<!-- GRATUITY ENDS -->
 
 			<!-- AMENITY RATES -->
 			<div>
@@ -587,9 +584,9 @@
 							<ng-template #hideZero18>
 								<span matPrefix>{{currency_symbol}} &nbsp;</span>
 							</ng-template>
-							<input matInput placeholder={{amenity.value.value.name}} formControlName="price"
-								[id]="amenity.value.value.label"
-								(input)="changeAmenityRate(amenity.key,amenity.value.value)" tabindex="1">
+							<input type="number" matInput placeholder={{amenity.value.value.name}} formControlName="price"
+								[id]="amenity.value.value.label" (input)="changeAmenityRate(amenity.key,amenity.value.value)"
+								tabindex="1">
 						</mat-form-field>
 					</div>
 				</div>
@@ -618,8 +615,8 @@
 									{{currency_symbol}} &nbsp;
 								</span>
 							</ng-template>
-							<input matInput placeholder="Airport Arrival Tax"
-								formControlName="airport_arrival_tax_per_us" tabindex="1">
+							<input matInput placeholder="Airport Arrival Tax" formControlName="airport_arrival_tax_per_us"
+								tabindex="1">
 						</mat-form-field>
 						<div *ngIf="is_form_submitted && form.airport_arrival_tax_per_us.errors || form.airport_arrival_tax_per_us.touched && form.airport_arrival_tax_per_us.errors"
 							class="text-danger margin-bottom-thin my-mat-hint">
@@ -644,8 +641,8 @@
 									{{currency_symbol}} &nbsp;
 								</span>
 							</ng-template>
-							<input matInput placeholder="Airport Departure Tax"
-								formControlName="airport_departure_tax_per_us" tabindex="1">
+							<input matInput placeholder="Airport Departure Tax" formControlName="airport_departure_tax_per_us"
+								tabindex="1">
 						</mat-form-field>
 						<div *ngIf="is_form_submitted && form.airport_departure_tax_per_us.errors || form.airport_departure_tax_per_us.touched && form.airport_departure_tax_per_us.errors"
 							class="text-danger margin-bottom-thin my-mat-hint">
@@ -670,8 +667,7 @@
 									{{currency_symbol}} &nbsp;
 								</span>
 							</ng-template>
-							<input matInput placeholder="Sea Port Tax" formControlName="sea_port_tax_per_us"
-								tabindex="1">
+							<input matInput placeholder="Sea Port Tax" formControlName="sea_port_tax_per_us" tabindex="1">
 						</mat-form-field>
 						<div *ngIf="is_form_submitted && form.sea_port_tax_per_us.errors || form.sea_port_tax_per_us.touched && form.sea_port_tax_per_us.errors"
 							class="text-danger margin-bottom-thin my-mat-hint">
@@ -695,8 +691,8 @@
 									{{currency_symbol}} &nbsp;
 								</span>
 							</ng-template>
-							<input matInput placeholder="City Congestion Tax"
-								formControlName="city_congestion_tax_per_us" tabindex="1" autocomplete="off" />
+							<input matInput placeholder="City Congestion Tax" formControlName="city_congestion_tax_per_us"
+								tabindex="1" autocomplete="off" />
 						</mat-form-field>
 						<div *ngIf="is_form_submitted && form.city_congestion_tax_per_us.errors || form.city_congestion_tax_per_us.touched && form.city_congestion_tax_per_us.errors"
 							class="text-danger margin-bottom-thin my-mat-hint">
@@ -717,8 +713,7 @@
 								<div class="form-group radio-tile-group assment_radio">
 									<div class="custom-radio input-container">
 										<input class="radio-button" type="radio" id="test1" name="city_tax_percent_flat"
-											checked="" formControlName="city_tax_percent_flat" value="percent"
-											tabindex="-1">
+											checked="" formControlName="city_tax_percent_flat" value="percent" tabindex="-1">
 										<div class="radio-tile">
 											<label class="radio-tile-label" for="test1">
 												Percent (<span class="prefix">%</span>)
@@ -759,12 +754,10 @@
 							<div class="col-md-6 col-lg-3 pr-0 borderright mobilePadding">
 								<div class="form-group radio-tile-group assment_radio">
 									<div class="custom-radio input-container">
-										<input class="radio-button" type="radio" id="test3"
-											name="state_tax_percent_flat" checked=""
-											formControlName="state_tax_percent_flat" value="percent" tabindex="-1">
+										<input class="radio-button" type="radio" id="test3" name="state_tax_percent_flat"
+											checked="" formControlName="state_tax_percent_flat" value="percent" tabindex="-1">
 										<div class="radio-tile">
-											<label class="radio-tile-label" for="test3">Percent (<span
-													class="prefix">%</span>)
+											<label class="radio-tile-label" for="test3">Percent (<span class="prefix">%</span>)
 											</label>
 										</div>
 									</div>
@@ -773,9 +766,8 @@
 							<div class="col-md-6 col-lg-3 pl-0 mobilePadding">
 								<div class="form-group radio-tile-group assment_radio">
 									<div class="custom-radio input-container">
-										<input class="radio-button" type="radio" id="test4"
-											name="state_tax_percent_flat" formControlName="state_tax_percent_flat"
-											value="flat" tabindex="-1">
+										<input class="radio-button" type="radio" id="test4" name="state_tax_percent_flat"
+											formControlName="state_tax_percent_flat" value="flat" tabindex="-1">
 										<div class="radio-tile">
 											<label class="radio-tile-label" for="test4">Flat (<span
 													class="prefix">{{currency_symbol}}</span>) </label>
@@ -802,11 +794,10 @@
 							<div class="col-md-6 col-lg-3 pr-0 borderright mobilePadding">
 								<div class="form-group radio-tile-group assment_radio">
 									<div class="custom-radio input-container">
-										<input class="radio-button" type="radio" id="test5" name="vat_percent_flat"
-											checked="" formControlName="vat_percent_flat" value="percent" tabindex="-1">
+										<input class="radio-button" type="radio" id="test5" name="vat_percent_flat" checked=""
+											formControlName="vat_percent_flat" value="percent" tabindex="-1">
 										<div class="radio-tile">
-											<label class="radio-tile-label" for="test5">Percent (<span
-													class="prefix">%</span>)
+											<label class="radio-tile-label" for="test5">Percent (<span class="prefix">%</span>)
 											</label>
 										</div>
 									</div>
@@ -843,12 +834,10 @@
 							<div class="col-md-6 col-lg-3 pr-0 borderright mobilePadding">
 								<div class="form-group radio-tile-group assment_radio">
 									<div class="custom-radio input-container">
-										<input class="radio-button" type="radio" id="test7"
-											name="workman_comp_percent_flat" checked=""
-											formControlName="workman_comp_percent_flat" value="percent" tabindex="-1">
+										<input class="radio-button" type="radio" id="test7" name="workman_comp_percent_flat"
+											checked="" formControlName="workman_comp_percent_flat" value="percent" tabindex="-1">
 										<div class="radio-tile">
-											<label class="radio-tile-label" for="test7">Percent (<span
-													class="prefix">%</span>)
+											<label class="radio-tile-label" for="test7">Percent (<span class="prefix">%</span>)
 											</label>
 										</div>
 									</div>
@@ -857,9 +846,8 @@
 							<div class="col-md-6 col-lg-3 pl-0 mobilePadding">
 								<div class="form-group radio-tile-group assment_radio">
 									<div class="custom-radio input-container">
-										<input class="radio-button" type="radio" id="test8"
-											name="workman_comp_percent_flat" formControlName="workman_comp_percent_flat"
-											value="flat" tabindex="-1">
+										<input class="radio-button" type="radio" id="test8" name="workman_comp_percent_flat"
+											formControlName="workman_comp_percent_flat" value="flat" tabindex="-1">
 										<div class="radio-tile">
 											<label class="radio-tile-label" for="test8">Flat (<span
 													class="prefix">{{currency_symbol}}</span>) </label>
@@ -870,8 +858,7 @@
 							<div class="col-md-12 col-lg-6 cityTaxErrorMsg">
 								<mat-form-field class="mat-form-field-rates" appearance="outline" class="cityTax">
 									<mat-label>Workman's Comp</mat-label>
-									<input matInput placeholder="Workman's Comp" formControlName="workmans_comp"
-										tabindex="1">
+									<input matInput placeholder="Workman's Comp" formControlName="workmans_comp" tabindex="1">
 								</mat-form-field>
 								<div *ngIf="is_form_submitted && form.workmans_comp.errors || form.workmans_comp.touched && form.workmans_comp.errors"
 									class="text-danger margin-bottom-thin my-mat-hint">
@@ -889,11 +876,9 @@
 									<div class="custom-radio input-container">
 										<input class="radio-button" type="radio" id="test9"
 											name="other_transportation_tax_percent_flat" checked=""
-											formControlName="other_transportation_tax_percent_flat" value="percent"
-											tabindex="-1">
+											formControlName="other_transportation_tax_percent_flat" value="percent" tabindex="-1">
 										<div class="radio-tile">
-											<label class="radio-tile-label" for="test9">Percent (<span
-													class="prefix">%</span>)
+											<label class="radio-tile-label" for="test9">Percent (<span class="prefix">%</span>)
 											</label>
 										</div>
 									</div>
@@ -904,8 +889,7 @@
 									<div class="custom-radio input-container">
 										<input class="radio-button" type="radio" id="test10"
 											name="other_transportation_tax_percent_flat"
-											formControlName="other_transportation_tax_percent_flat" value="flat"
-											tabindex="-1">
+											formControlName="other_transportation_tax_percent_flat" value="flat" tabindex="-1">
 										<div class="radio-tile">
 											<label class="radio-tile-label" for="test10">Flat (<span
 													class="prefix">{{currency_symbol}}</span>) </label>
