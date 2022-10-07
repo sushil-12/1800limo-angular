@@ -525,7 +525,6 @@
 							[ngClass]="form.rate_range_percent_flat.value == 'percent' ? 'bi-percent' : 'bi-currency-dollar'"></i>
 					</span>
 					<span class="mx-lg-1">
-						{{ form.rate_range.value}}
 						<input type="range" [value]="form.rate_range.value" min="-50" max="50" id="slider"
 							(input)="getRateRange($event.target.value)" />
 					</span>
