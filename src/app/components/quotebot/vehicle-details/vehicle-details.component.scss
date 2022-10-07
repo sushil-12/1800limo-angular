@@ -141,14 +141,22 @@
     padding: 3px 7px;
 }
 
-.price-Blc label.custom-control-label {
-    font-size: 1.3rem;
-    margin-top: 14px;
-    margin-bottom: 14px;
-    font-weight: 600;
+.price-Blc 
+{
     small
     {
-        font-size: 1rem;
+        font-size: 0.97rem;
+    }
+    label.custom-control-label 
+    {
+        font-size: 1.3rem;
+        margin-top: 14px;
+        margin-bottom: 14px;
+        font-weight: 600;
+        small
+        {
+            font-size: 1rem;
+        }
     }
 }
 

@@ -1048,7 +1048,6 @@ export class CreateNewBookingComponent implements OnInit
 		if (preview)
 		{
 			this._spinner.show('savespinner')
-			this.is_save_button_disabled = true
 			this.bookingForm.value.number_of_vehicles = this.bookingForm.value.number_of_vehicles != null ? parseInt(this.bookingForm.value.number_of_vehicles) : 1
 			this._adminService.createBooking(this.bookingForm.value).subscribe((response: any) =>
 			{
@@ -1101,10 +1100,10 @@ export class CreateNewBookingComponent implements OnInit
 	searchBigDataListValue(type: string, text: string)
 	{
 		const model = {
-			year: 'vehicleYear',
-			color: 'vehicleColor',
+			year: 'vehicleYears',
+			color: 'vehicleColors',
 			make: 'vehicleMakes',
-			model: 'vehicleModel'
+			model: 'vehicleModels'
 		}
 
 		if (text == '')
@@ -1129,10 +1128,10 @@ export class CreateNewBookingComponent implements OnInit
 	fillBigDataListValue(type: string, form_control: string)
 	{
 		const model = {
-			year: 'vehicleYear',
-			color: 'vehicleColor',
+			year: 'vehicleYears',
+			color: 'vehicleColors',
 			make: 'vehicleMakes',
-			model: 'vehicleModel'
+			model: 'vehicleModels'
 		}
 
 		if (this.Form[form_control].value)

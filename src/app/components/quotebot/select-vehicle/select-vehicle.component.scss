@@ -383,21 +383,18 @@ img.img-cir {
 .btn-Area
 {
 	button.custom-btn
-{
-	height: fit-content;
-	width: fit-content;
-	padding: 0.375rem .85rem;
-	background-color: var(--orange);
-	border: 1.5px solid var(--orange);
-	color: #000;
-	font-weight: 500;
-	font-size: 13px;
-	&:last-child
 	{
-		background-color: var(--green);
-		border: 1.5px solid var(--green);
+		height: fit-content;
+		width: fit-content;
+		padding: 0.375rem .85rem;
+		background-color: var(--orange);
+		border: 1.5px solid var(--orange);
+		color: #000;
+		font-weight: 500;
+		font-size: 13px;
+		background-color: var(--orange);
+		border: 1.5px solid var(--orange);
 	}
-}
 }
 
 @media only screen and (max-width: 991px) {
@@ -808,7 +805,10 @@ img.img-cir {
 }
 
 .passengers_qty input[type="number"] {
+	appearance: textfield;
 	-moz-appearance : textfield;
+	-webkit-appearance: textfield;
+	-ms-appearance: textfield;
 	width           : 100%;
 	margin          : 0 !important;
 	height          : auto;

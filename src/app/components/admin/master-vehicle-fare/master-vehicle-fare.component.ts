@@ -144,45 +144,45 @@ export class MasterVehicleFareComponent implements OnInit
 			acc_id: [''],
 			vehicle_id: ['', [Validators.required, Validators.pattern("^[0-9]*$")]],
 			currency: ['$', Validators.required],
-			hourly_rate: ['', [Validators.required, Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
-			hourly_rate_after_five_hours: ['', [Validators.required, Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
+			hourly_rate: [0, [Validators.required, Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
+			hourly_rate_after_five_hours: [0, [Validators.required, Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			hours_day_rate: [8, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
-			day_rate: ['', [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
+			day_rate: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			km_mile: ['mile', Validators.required],
-			milage_rate: ['', [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
-			kilometer_rate: ['', [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
-			minimum_airport_departure_rate: ['', [Validators.required, Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
-			minimum_airport_arrival_rate: ['', [Validators.required, Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
-			minimum_city_rate: ['', [Validators.required, Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
-			minimum_cruise_port_arrival_rate: ['', [Validators.required, Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
-			minimum_cruise_port_departure_rate: ['', [Validators.required, Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
-			minimum_on_demand_rate: ['', [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
-			per_person_group_ride_rate: ['', [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
-			airport_city_percentage_booking_cancel_charges: ['', [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
-			early_late_charges: ['', [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
-			holiday_charges: ['', [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
-			friday_saturday_charges: ['', [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
-			charter_percentage_booking_cancel_charges: ['', [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
+			milage_rate: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
+			kilometer_rate: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
+			minimum_airport_departure_rate: [0, [Validators.required, Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
+			minimum_airport_arrival_rate: [0, [Validators.required, Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
+			minimum_city_rate: [0, [Validators.required, Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
+			minimum_cruise_port_arrival_rate: [0, [Validators.required, Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
+			minimum_cruise_port_departure_rate: [0, [Validators.required, Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
+			minimum_on_demand_rate: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
+			per_person_group_ride_rate: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
+			airport_city_percentage_booking_cancel_charges: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
+			early_late_charges: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
+			holiday_charges: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
+			friday_saturday_charges: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
+			charter_percentage_booking_cancel_charges: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			rate_range: ['0'],
 			gratuity: ['20', [Validators.required, Validators.pattern("^[0-9]*$")]],
 			is_gratuity: ['yes', Validators.required],
 			amenities_rates: new FormGroup({}),
-			airport_arrival_tax_per_us: ['', [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
-			airport_departure_tax_per_us: ['', [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
-			sea_port_tax_per_us: ['', [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
-			city_congestion_tax_per_us: ['', [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
+			airport_arrival_tax_per_us: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
+			airport_departure_tax_per_us: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
+			sea_port_tax_per_us: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
+			city_congestion_tax_per_us: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			rate_range_percent_flat: ['flat'],
 			city_tax_percent_flat: ['flat'],
 			state_tax_percent_flat: ['flat'],
 			vat_percent_flat: ['flat'],
 			workman_comp_percent_flat: ['flat'],
 			other_transportation_tax_percent_flat: ['flat'],
-			city_tax: ['', [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
-			state_tax: ['', [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
-			vat: ['', [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
-			workmans_comp: ['', [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
-			other_transportation_tax: ['', [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]]
-		});
+			city_tax: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
+			state_tax: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
+			vat: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
+			workmans_comp: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
+			other_transportation_tax: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]]
+		})
 
 		if (this.VehicleRateSettingsForm)
 		{
@@ -200,12 +200,6 @@ export class MasterVehicleFareComponent implements OnInit
 			value =>
 			{
 				this.VehicleRateSettingsForm.patchValue({ hourly_rate_after_five_hours: value });
-			}
-		);
-		this.VehicleRateSettingsForm.get('minimum_airport_departure_rate').valueChanges.subscribe(
-			value =>
-			{
-				this.VehicleRateSettingsForm.patchValue({ minimum_airport_arrival_rate: value });
 			}
 		);
 		this.VehicleRateSettingsForm.get('hourly_rate').valueChanges.subscribe(
@@ -260,7 +254,7 @@ export class MasterVehicleFareComponent implements OnInit
 				day_rate: response.data.day_rate,
 				milage_rate: response.data.milage_rate,
 				km_mile: response.data.km_mile,
-				kilometer_rate: response.data.kilometer_rate,
+				kilometer_rate: response.data.kilometer_rate ?? 0,
 				minimum_airport_departure_rate: response.data.minimum_airport_departure_rate,
 				minimum_airport_arrival_rate: response.data.minimum_airport_arrival_rate,
 				minimum_city_rate: response.data.minimum_city_rate,
@@ -431,6 +425,18 @@ export class MasterVehicleFareComponent implements OnInit
 			});
 	}
 
+	/**
+	 * Clone the values of source into target
+	 *
+	 * @params form_control_source: Source string to copy the value from
+	 * @params form_control_target: Target string to copy the value to
+	 */
+	cloneValue(form_control_source: string, form_control_target: string)
+	{
+		console.log('Cloning.')
+		this.SetFormValue(form_control_target, this.VehicleRateSettingsForm.get(form_control_source).value)
+	}
+
 
 
 
@@ -469,8 +475,10 @@ export class MasterVehicleFareComponent implements OnInit
 	{
 		for (let form_name in this.rate_range_object)
 		{
-			this.rate_range_object[form_name] = parseInt(this.VehicleRateSettingsForm.get(form_name).value)
+			// console.log(form_name, typeof this.VehicleRateSettingsForm.get(form_name).value)
+			this.rate_range_object[form_name] = parseFloat(this.VehicleRateSettingsForm.get(form_name).value.toFixed(2))
 		}
+		console.log(this.rate_range_object)
 	}
 
 	/**
@@ -481,17 +489,16 @@ export class MasterVehicleFareComponent implements OnInit
 	{
 		console.log('range_value', range_value)
 		this.thumb_value = range_value
+		this.SetFormValue('rate_range', range_value)
 		// --------- For Flat ------------------
 		if (this.form.rate_range_percent_flat.value == 'flat')
 		{
-			console.log('A')
 			// for neutral
 			if (range_value == 0)
 			{
-				console.log('B')
 				for (const key in this.rate_range_object)
 				{
-					this.SetFormValue('rate_range', 0)
+					this.SetFormValue('rate_range', '0')
 					this.SetFormValue(key, this.rate_range_object[key])
 				}
 			}
@@ -499,13 +506,12 @@ export class MasterVehicleFareComponent implements OnInit
 			// for negative side indicator
 			if (range_value < 0)
 			{
-				console.log('C')
 				for (const key in this.rate_range_object)
 				{
 					this.rate_range_object[key] == null && this.SetFormValue(key, 0)	// set 0 if null
-
 					// decrease by number and set value upto two decimal places and update
-					let value = Math.round(Number.EPSILON + (this.rate_range_object[key] - Math.abs(range_value)) * 100) / 100
+					// let value = Math.round(Number.EPSILON + (Math.abs(parseInt(this.rate_range_object[key])) - Math.abs(range_value)) * 100) / 100
+					let value = parseFloat(Math.abs(this.rate_range_object[key] - Math.abs(range_value)).toFixed(2))
 					this.SetFormValue(key, value)
 				}
 			}
@@ -513,13 +519,14 @@ export class MasterVehicleFareComponent implements OnInit
 			// for positive side indicator
 			if (range_value > 0)
 			{
-				console.log('D')
 				for (const key in this.rate_range_object)
 				{
 					this.rate_range_object[key] == null && this.SetFormValue(key, 0) 	// set 0 if null
 
+					// let value = this.rate_range_object[key]
 					// increase by number and set value upto two decimal places and update
-					let value = Math.round(Number.EPSILON + (this.rate_range_object[key] + Math.abs(range_value)) * 100) / 100
+					// let value = Math.round(Number.EPSILON + (Math.abs(parseInt(this.rate_range_object[key])) + Math.abs(range_value)) * 100) / 100
+					let value = parseFloat(Math.abs(this.rate_range_object[key] + Math.abs(range_value)).toFixed(2))
 					this.SetFormValue(key, value)
 				}
 			}
@@ -533,6 +540,7 @@ export class MasterVehicleFareComponent implements OnInit
 			{
 				for (const key in this.rate_range_object)
 				{
+					this.SetFormValue('rate_range', '0')
 					this.SetFormValue(key, this.rate_range_object[key])
 				}
 			}
@@ -575,13 +583,12 @@ export class MasterVehicleFareComponent implements OnInit
 	{
 		if (style == '+')
 		{
-			this.thumb_value += value
+			this.getRateRange(this.thumb_value + value)
 		}
 		if (style == '-')
 		{
-			this.thumb_value -= value
+			this.getRateRange(this.thumb_value - value)
 		}
-		this.getRateRange(this.thumb_value)
 	}
 
 

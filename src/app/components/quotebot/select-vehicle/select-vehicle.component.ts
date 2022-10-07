@@ -158,7 +158,6 @@ export class SelectVehicleComponent implements OnInit
 			return
 		} else
 		{
-			console.log('Quotebot Form filled true')
 			this.quotebot_form = JSON.parse(localStorage.getItem('quotebot_form'))
 		}
 
@@ -254,6 +253,12 @@ export class SelectVehicleComponent implements OnInit
 	 */
 	selectCategory(vehicle: any)
 	{
+		// this._router.navigate([], {
+		// 	queryParams: {
+		// 		category: vehicle.vehicle_id
+		// 	},
+		// 	relativeTo: this._activatedRoute
+		// })
 		this.selectedFilters({ target: { checked: true } }, 'vehicle-type', vehicle)
 		this.getVehicleDetails(this.filters_data)
 	}
@@ -364,6 +369,7 @@ export class SelectVehicleComponent implements OnInit
 	 */
 	getVehicleDetails(filters_data: any)
 	{
+		console.log('Fetching Vehicle Details. ')
 		this._spinner.show()
 		let data = {}
 		if (this.quotebot_form != null)
@@ -480,9 +486,9 @@ export class SelectVehicleComponent implements OnInit
 
 		// this.getVehicleDetails(this.filters_data)	// THE API HIT - FETCH THE VEHICLE DETAILS UPON GENERATED FILTERS DATA
 
-		// console.log('Selected Filters: ', this.selected_filters, '\n')
-		// console.log('Filters Data: ', this.filters_data, '\n')
-		// console.log('Filters: ', this.filters, '\n')
+		console.log('Selected Filters: ', this.selected_filters, '\n')
+		console.log('Filters Data: ', this.filters_data, '\n')
+		console.log('Filters: ', this.filters, '\n')
 	}
 
 

@@ -42,12 +42,12 @@
 									selected_vehicle.luggage }}
 								</div>
 							</div>
-							<div class="textArea mt-3">
+							<div class="textArea mt-3" *ngIf="selected_vehicle.description">
 								{{ selected_vehicle.description }}
 							</div>
 
-							<div class="price-Blc price-Blc-n">
-								<div class="checkbox-block d-md-flex my-3" (change)="selectPrice()">
+							<div class=" price-Blc price-Blc-n my-3">
+								<div class="checkbox-block d-md-flex" (change)="selectPrice()">
 									<!-- One Way -->
 									<div class="custom-control custom-checkbox custom-control-inline">
 										<input type="checkbox" id="price1" name="price1" class="custom-control-input"
@@ -75,6 +75,7 @@
 										</label>
 									</div>
 								</div>
+								<small> All Inclusive Rates (Some Taxes, and Tolls are additional) </small>
 							</div>
 							<div class="btn-Area d-flex flex-wrap">
 								<button type="button" class="custom-btn" data-toggle="modal" data-target="#detailFareRateModal">
