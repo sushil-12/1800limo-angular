@@ -4,7 +4,7 @@
 		<div class="row">
 			<div class="col-lg-12">
 				<!-- Vehicle Selected details -->
-				<article class="car-Details row mb-4">
+				<div class="car-Details row">
 					<!-- OWL CAROUSEL -->
 					<div class="slider-Block col-md-6">
 						<div class="outer">
@@ -27,6 +27,7 @@
 					</div>
 					<!-- OWL CAROUSEL ENDS -->
 
+					<!-- VEHICLE INFORMATION BLOCK -->
 					<div class="col-md-6">
 						<div class="cont-Block w-100 pl-lg-4">
 							<h5>
@@ -77,22 +78,30 @@
 								</div>
 								<small> All Inclusive Rates (Some Taxes, and Tolls are additional) </small>
 							</div>
-							<div class="btn-Area d-flex flex-wrap">
-								<button type="button" class="custom-btn" data-toggle="modal" data-target="#detailFareRateModal">
-									View Subtotals
-								</button>
-								<button type="button" class="custom-btn" data-toggle="modal" data-target="#driverFareRateModal">
-									Driver Info
-								</button>
-								<button type="button" class="custom-btn" data-toggle="modal"
-									data-target="#amenitiesFareRateModal">
-									Amenities
-								</button>
-								<button type="button" class="custom-btn" (click)="bookNow()">
-									Book Now
-								</button>
-							</div>
 						</div>
+					</div>
+					<!-- ṾEHICLE INFORAMATION BLOCK ENDS -->
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="btn-Area d-flex flex-wrap">
+							<button type="button" class="custom-btn" data-toggle="modal" data-target="#detailFareRateModal">
+								View Subtotals
+							</button>
+							<button type="button" class="custom-btn" data-toggle="modal" data-target="#driverFareRateModal">
+								Driver Info
+							</button>
+							<button type="button" class="custom-btn" data-toggle="modal" data-target="#amenitiesFareRateModal">
+								Amenities
+							</button>
+							<!-- <button type="button" class="custom-btn" (click)="bookNow()">
+								Book Now
+							</button> -->
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
 						<div class="col-lg-12">
 							<div class="map-image img-Block mt-4 mt-lg-0">
 								<div id="google_map">
@@ -101,7 +110,7 @@
 							</div>
 						</div>
 					</div>
-				</article>
+				</div>
 				<!-- VEHICLE SELECTED DETAILS ENDS -->
 			</div>
 		</div>
