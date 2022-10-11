@@ -6,8 +6,7 @@
 		<div id="fixed-section-box" class="d-flex justify-content-center align-items-center">
 			<div id="filters-button" class="d-block d-lg-none">
 				<button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
-					class="btn btn-secondary dropdown-toggle pl-4" data-target="#navbarSupportedContent" data-toggle="collapse"
-					type="button">
+					class="btn btn-secondary dropdown-toggle pl-4" (click)="openfilters = true" type="button">
 					Filters
 					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-filter"
 						viewBox="0 0 16 16">
@@ -50,14 +49,15 @@
 		<!-- FILTERS SECTION -->
 		<section id=" filters-container" class="col-lg-3">
 			<div class="navbar-expand-lg pro-Fil">
-				<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<div class="collapse navbar-collapse" id="navbarSupportedContent" [ngClass]="openfilters ? 'show' : ''">
 					<div class="close-sidebar">
-						<a href="javascript:void(0)">
+						<span (click)="openfilters = false">
 							<i class="fas fa-times"></i>
-						</a>
+						</span>
 					</div>
 					<aside class="sidebar">
-						<button type="button" (click)="getVehicleDetails(filters_data)" class="btn btn-success mr-3 mb-4">
+						<button type="button" (click)="getVehicleDetails(filters_data); openfilters=false"
+							class="btn btn-success mr-3 mb-4">
 							Apply filters
 						</button>
 						<button type="button" (click)="clearFilters(null)" class="btn btn-primary mb-4">
@@ -240,7 +240,8 @@
 								</div>
 								<!-- OUTER CARD -->
 							</div>
-							<button type="button" (click)="getVehicleDetails(filters_data)" class="btn btn-success mr-3 mt-4">
+							<button type="button" (click)="getVehicleDetails(filters_data); openfilters=false"
+								class="btn btn-success mr-3 mt-4">
 								Apply filters
 							</button>
 							<button type="button" (click)="clearFilters(null)" class="btn btn-primary mt-4">
@@ -255,11 +256,11 @@
 		<!-- FILTERS SECTION ENDS -->
 
 		<!-- VEHICLE LISTING SECTION -->
-		<section id="vehicle-listing-container" class="col-md-10 col-lg-9"
+		<section id="vehicle-listing-container" class="col-md-auto col-lg-9 d-flex flex-column" style="gap: 50px"
 			*ngIf="vehicleDetails.length > 0; else MasterVehiclesSection">
 			<!-- Loop here for different vehicle images and its details -->
 			<div id="vehicle-details-article" *ngFor="let vehinfo of vehicleDetails; index as vehinfo_index"
-				class="car-Details row mb-5">
+				class="car-Details row align-items-center justify-content-between">
 				<div class="img-Block col-5 col-md-4">
 					<span class="dri-Ico">
 						<img alt="" class="img-fluid" src="assets/images/select_vehicle/driIco.png" title="Driver Image" />
@@ -268,23 +269,13 @@
 					<img [src]="vehinfo.vehicle_images[0]" id="V_Image_0" class="img-fluid" alt="Vehicle Image"
 						*ngIf="vehinfo.vehicle_images?.length > 0" />
 				</div>
-				<div class="cont-Block col-7 col-md-auto">
+				<div class="cont-Block col-7 col-md-4">
 					<h5>
 						{{ vehinfo.name }}
 					</h5>
 					<p>
 						{{ vehinfo.description }}
 					</p>
-					<div class="car-cap d-flex">
-						<div class="pass-det org-Btn">
-							<img alt="" class="img-fluid mr-3" src="assets/images/select_vehicle/pass.png" /> {{
-							vehinfo.passenger }}
-						</div>
-						<div class="pass-det org-Btn">
-							<img alt="" class="img-fluid mr-3" src="assets/images/select_vehicle/lug.png" /> {{
-							vehinfo.luggage }}
-						</div>
-					</div>
 					<div class="price-Blc">
 						<p>
 							${{ vehinfo['rate_breakdown_' + getKeyName()].grand_total != undefined ?
@@ -295,7 +286,7 @@
 							</small>
 						</p>
 					</div>
-					<div class="btn-Area d-flex flex-wrap">
+					<div class="btn-Area">
 						<button (click)="viewDetails(vehinfo)" class="custom-btn" type="button">
 							Preview Vehicle Details
 						</button>
@@ -309,6 +300,18 @@
 						<!-- <button (click)="bookNow(vehinfo)" class="custom-btn" type="button">
 							Book Now
 						</button> -->
+					</div>
+				</div>
+				<div class="col-auto">
+					<div class="car-cap d-flex">
+						<div class="pass-det org-Btn">
+							<img alt="" class="img-fluid mr-3" src="assets/images/select_vehicle/pass.png" /> {{
+							vehinfo.passenger }}
+						</div>
+						<div class="pass-det org-Btn">
+							<img alt="" class="img-fluid mr-3" src="assets/images/select_vehicle/lug.png" /> {{
+							vehinfo.luggage }}
+						</div>
 					</div>
 					<div class="cancel-policy">
 						<p class="text-danger m-0" style="font-size: 1.15rem">

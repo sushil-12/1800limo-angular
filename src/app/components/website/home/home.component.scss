@@ -7,6 +7,21 @@ mat-form-field input {
 	font-size: 16px !important;
 }
 
+button#quotebot-search-btn
+{
+	border: 2px solid #5dbd8a;
+	width: auto;
+	margin: 15px auto;
+	background-color: #5dbd8a;
+	-webkit-appearance: none;
+	appearance: none;
+	height: auto;
+	display: block;
+	font-size: 1.1rem;
+	border-radius: 25px;
+	padding: 0.8rem 0.9rem;
+	color: #fff;
+}
 
 // .container:not(.checkourveh_wrapper) {
 // 		max-width: 900px;

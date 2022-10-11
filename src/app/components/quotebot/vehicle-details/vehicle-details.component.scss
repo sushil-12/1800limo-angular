@@ -324,7 +324,7 @@ img.img-cir {
 .b-cus.btn.btn-back {
     background: #cccccc;
     border-color: #9f9f9f;
-    color: #fff;
+    color: #1d1d1d;
 }
 
 // Owl Theme Container
@@ -342,7 +342,8 @@ img.img-cir {
     text-align: center;
     img {
         height: 190px;
-        width: 70%;
+        width: auto;
+        object-fit: cover;
         margin: 0 auto;
     }
 }
@@ -401,11 +402,11 @@ button.custom-btn
     border: 1.5px solid var(--orange);
     margin: 8px 4.5px;
     border-radius: 25px;
-    &:last-child
-    {
-        background-color: var(--green);
-        border-color: var(--green);
-    }
+    // &:last-child
+    // {
+    //     background-color: var(--green);
+    //     border-color: var(--green);
+    // }
 }
 
 @media only screen and (max-width: 1100px) and (min-width: 768px) {
@@ -453,16 +454,13 @@ button.custom-btn
     }
 }
 
-@media (min-width:381px) and (max-width:767px) {
+@media (min-width:381px) and (max-width:667px) {
     #thumbs .item img {
         padding: 0px 10px 0px 0px;
         height: 30px;
         -o-object-fit: contain;
         object-fit: contain;
         width: 65px;
-    }
-    #big .item img {
-        width: 50%;
     }
 }
 
@@ -474,9 +472,6 @@ button.custom-btn
         object-fit: contain;
         width: 45px;
     }
-    #big .item img {
-        width: 85%;
-    }
     .owl-carousel {
         width: 350px !important;
     }
@@ -487,11 +482,10 @@ button.custom-btn
         padding: 0px 10px 0px 0px;
         height: 30px;
         -o-object-fit: contain;
+        -webkit-object-fit: contain;
+        -moz-object-fit: contain;
         object-fit: contain;
         width: 50px;
-    }
-    #big .item img {
-        width: 68%;
     }
     .owl-carousel {
         width: 500px !important;
@@ -502,14 +496,5 @@ button.custom-btn
         -o-object-fit: contain;
         object-fit: contain;
         width: 65px;
-    }
-}
-
-@media only screen and (min-width: 1199px)
-{
-    #big .item img
-    {
-        width: 60%;
-        height: 250px;
     }
 }

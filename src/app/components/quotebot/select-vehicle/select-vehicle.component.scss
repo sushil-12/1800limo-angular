@@ -452,18 +452,18 @@ img.img-cir {
 					display: block !important
 				}
 		
-				.close-sidebar a {
+				.close-sidebar span {
 					width: 40px;
 					height: 40px;
 					display: inline-block;
 					line-height: 40px;
 					text-align: center;
-					border: 1px solid #f3933d;
+					border: 1px solid #ff0000;
 					border-radius: 50px;
 				}
 		
-				.close-sidebar a i {
-					color: #f3933d !important
+				.close-sidebar span i {
+					color: #ff0000 !important
 				}
 		
 // .navbar-collapse.show .navbar-expand-lg.pro-Fil:before{opacity:0.5;visibility: visible;}
@@ -529,68 +529,6 @@ img.img-cir {
 			width : 250px !important;
 			margin: 0 auto
 		}
-
-	// .pro-Fil .navbar-collapse {
-	// 	position          : fixed;
-	// 	width             : 0%;
-	// 	top               : 0;
-	// 	bottom            : 0;
-	// 	right             : auto;
-	// 	background-color  : #fff;
-	// 	z-index           : 9999;
-	// 	left              : 0;
-	// 	height            : auto !important;
-	// 	display           : block !important;
-	// 	overflow          : auto !important;
-	// 	padding           : 0px 0px !important;
-	// 	box-shadow        : 0 0 10px rgba(0, 0, 0, 0.4);
-	// 	-webkit-transition: all 0.5s ease 0s;
-	// 	-moz-transition   : all 0.5s ease 0s;
-	// 	-ms-transition    : all 0.5s ease 0s;
-	// 	transition        : all 0.5s ease 0s;
-	// }
-
-	
-
-	// // .pro-Fil .navbar-collapse:after{
-	// //     position: fixed;
-	// //     content:'';
-	// //     top: 0;
-	// //     left: 0;
-	// //     z-index: 1040;
-	// //     width: 100vw;
-	// //     height: 100vh;
-	// //     background-color: #000;
-	// // display:none}
-	// //     .pro-Fil .navbar-collapse.show:after{opacity:0.5;display:block!important}
-	// .pro-Fil .navbar-collapse.show {
-	// 	width             : 79.5%;
-	// 	padding           : 0px 10px !important;
-	// 	-webkit-transition: all 0.5s ease 0s;
-	// 	-moz-transition   : all 0.5s ease 0s;
-	// 	-ms-transition    : all 0.5s ease 0s;
-	// 	transition        : all 0.5s ease 0s;
-	// }
-
-	// .close-sidebar {
-	// 	text-align: right;
-	// 	padding   : 5px 0px 0px 0px;
-	// 	display   : block !important
-	// }
-
-	// .close-sidebar a {
-	// 	width        : 40px;
-	// 	height       : 40px;
-	// 	display      : inline-block;
-	// 	line-height  : 40px;
-	// 	text-align   : center;
-	// 	border       : 1px solid #f3933d;
-	// 	border-radius: 50px;
-	// }
-
-	// .close-sidebar a i {
-	// 	color: #f3933d !important
-	// }
 }
 
 // Owl Theme Container
@@ -817,4 +755,16 @@ img.img-cir {
 	text-align      : center;
 	height          : 40px;
 	font-weight     : 600;
+}
+
+
+@supports (-webkit-touch-callout: none) and (not(translate: none))
+{
+	#vehicle-listing-container
+	{
+		#vehicle-details-article
+		{
+			margin-bottom: 50px;
+		}
+	}
 }

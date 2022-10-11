@@ -5,7 +5,8 @@
 		<form [formGroup]="loginForm">
 			<!-- Icon -->
 			<div class="fadeIn first">
-				<img src="assets/admin/images/login_logo.png" id="icon" alt="User Icon" />
+				<img src="assets/admin/images/login_logo.png" class="cursor-pointer" id="icon" alt="User Icon"
+					[routerLink]="['/home']" />
 				<h2 *ngIf=" Role == 'admin'; else userLogin ">Welcome Admin</h2>
 				<ng-template #userLogin>
 					<h2>Hello, Create an Account or Sign In.</h2>
@@ -14,20 +15,20 @@
 			<div class="row" *ngIf="Role != 'admin' && Role !='sub_admin'">
 				<div class="col-md-12 mt-3">
 					<div class="radio-group role">
-						<input type="radio" id="individual" name="role" checked="" value="individual"
-							formControlName="role" (click)="loginButtons('individual')">
+						<input type="radio" id="individual" name="role" checked="" value="individual" formControlName="role"
+							(click)="loginButtons('individual')">
 						<label for="individual" class="text-center">Individual</label>
 
-						<input type="radio" id="corporate" name="role" checked="" value="corporate"
-							formControlName="role" (click)="loginButtons('corporate')">
+						<input type="radio" id="corporate" name="role" checked="" value="corporate" formControlName="role"
+							(click)="loginButtons('corporate')">
 						<label for="corporate">Corporate</label>
 
-						<input type="radio" id="travel_agent" name="role" checked="" value="travel_agent"
-							formControlName="role" (click)="loginButtons('travel_agent')">
+						<input type="radio" id="travel_agent" name="role" checked="" value="travel_agent" formControlName="role"
+							(click)="loginButtons('travel_agent')">
 						<label for="travel_agent">Travel Agent</label>
 
-						<input type="radio" id="driver/fleet" name="role" checked="" value="driver"
-							formControlName="role" (click)="loginButtons('driver')">
+						<input type="radio" id="driver/fleet" name="role" checked="" value="driver" formControlName="role"
+							(click)="loginButtons('driver')">
 						<label for="driver/fleet">Driver / Chauffeur / Fleet - To Drive</label>
 					</div>
 				</div>

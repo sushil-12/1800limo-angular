@@ -529,7 +529,7 @@ export class HomeComponent implements OnInit
 		{
 			this.airports_data = this.airports_data_copy.filter((item: any) => 
 			{
-				return item.airport.split('-')[0].toLowerCase().includes(letter.toLowerCase()) || item.airport.toLowerCase().includes(letter.toLowerCase())
+				return item.airport.split('-')[0].toLowerCase().includes(letter.toLowerCase())
 			})
 		}
 

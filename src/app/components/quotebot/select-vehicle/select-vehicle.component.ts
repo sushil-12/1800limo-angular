@@ -124,6 +124,8 @@ export class SelectVehicleComponent implements OnInit
 	vehicle_selected: any
 	quotebot_form: any
 
+	openfilters: boolean = false
+
 	is_show_more_button_hidden: boolean = false
 
 

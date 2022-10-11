@@ -136,7 +136,7 @@ export class Step2Component implements OnInit
 			city: ['', Validators.required],
 			state: ['', Validators.required],
 			country: ['', Validators.required],
-			zipCode: ['', [Validators.required, this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
+			zipCode: ['', [Validators.required, this.customValidator.plusValidator()]],
 			unit: [''],
 			primaryCardType: ['personal'],
 			primaryCardNumber: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(16), Validators.maxLength(16), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
