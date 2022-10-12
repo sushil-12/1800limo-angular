@@ -3,24 +3,25 @@ mat-form-field input {
 	margin-bottom   : 0;
 }
 
-.font-weight-bolder{
-	font-size: 16px !important;
+#search-button-container
+{
+	height: 100px;
+	width: 100%;
+	display: table;
+	#search-button-box
+	{
+		display: table-cell;
+		text-align: center;
+		vertical-align: middle;
+		button
+		{
+			padding: 0.975rem 1.258rem;
+		}
+	}
 }
 
-button#quotebot-search-btn
-{
-	border: 2px solid #5dbd8a;
-	width: auto;
-	margin: 15px auto;
-	background-color: #5dbd8a;
-	-webkit-appearance: none;
-	appearance: none;
-	height: auto;
-	display: block;
-	font-size: 1.1rem;
-	border-radius: 25px;
-	padding: 0.8rem 0.9rem;
-	color: #fff;
+.font-weight-bolder{
+	font-size: 16px !important;
 }
 
 // .container:not(.checkourveh_wrapper) {

@@ -167,7 +167,8 @@
 				<div class="col-md-4">
 					<mat-form-field appearance="outline">
 						<mat-label>First Name <span class="asterisk">*</span></mat-label>
-						<input matInput placeholder="First Name" formControlName="FirstName" id="FirstName" tabIndex="1">
+						<input matInput (focus)="$event.target.select()" placeholder="First Name" formControlName="FirstName"
+							id="FirstName" tabIndex="1">
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.FirstName.errors || f.FirstName.touched && f.FirstName.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -177,7 +178,8 @@
 				<div class="col-md-4">
 					<mat-form-field appearance="outline">
 						<mat-label>Middle Name</mat-label>
-						<input matInput placeholder="Middle Name" formControlName="MiddleName" tabIndex="1">
+						<input matInput placeholder="Middle Name" (focus)="$event.target.select()" formControlName="MiddleName"
+							tabIndex="1">
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.MiddleName.errors || f.MiddleName.touched && f.MiddleName.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -187,7 +189,8 @@
 				<div class="col-md-4">
 					<mat-form-field appearance="outline">
 						<mat-label>Last Name <span class="asterisk">*</span></mat-label>
-						<input matInput placeholder="Last Name" formControlName="LastName" tabIndex="1">
+						<input matInput placeholder="Last Name" (focus)="$event.target.select()" formControlName="LastName"
+							tabIndex="1">
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.LastName.errors || f.LastName.touched && f.LastName.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -197,7 +200,8 @@
 				<div class="col-md-6" *ngIf="!affiliateId; else showEditEmailButton">
 					<mat-form-field appearance="outline">
 						<mat-label>Owner / Admin E-mail <span class="asterisk">*</span></mat-label>
-						<input matInput placeholder="Owner / Admin E-mail" formControlName="Email" tabIndex="1">
+						<input matInput placeholder="Owner / Admin E-mail" (focus)="$event.target.select()"
+							formControlName="Email" tabIndex="1">
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.Email.errors || f.Email.touched && f.Email.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -212,7 +216,8 @@
 						<mat-form-field appearance="outline" [class.read-only]="affiliateEmailReadonly == true">
 							<mat-label>Owner / Admin E-mail <span class="asterisk">*</span></mat-label>
 							<input [class.errorColor]="affiliateEmailStatus=='no'" matInput placeholder="Owner / Admin E-mail"
-								formControlName="Email" [readonly]="affiliateEmailReadonly" tabIndex="1" id="email_verified">
+								(focus)="$event.target.select()" formControlName="Email" [readonly]="affiliateEmailReadonly"
+								tabIndex="1" id="email_verified">
 							<svg *ngIf="affiliateEmailStatus=='yes'" xmlns="http://www.w3.org/2000/svg" class="email-verified"
 								viewBox="0 0 48 48">
 								<path fill="none" d="M0 0h48v48h-48z" />
@@ -272,9 +277,10 @@
 					<mat-form-field appearance="outline" class="read-only mat-custom-phone cellLabelClass">
 						<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Cell<span class="asterisk">
 								*</span></label>
-						<input matInput placeholder="Cell" formControlName="CellNumber" ng2TelInput
-							[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}" placeholder="1234567890"
-							class="phoneNumberClass" (countryChange)="onCountryChange($event,'CellNumber')"
+						<input matInput placeholder="Cell" (focus)="$event.target.select()" formControlName="CellNumber"
+							ng2TelInput [ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
+							placeholder="1234567890" class="phoneNumberClass"
+							(countryChange)="onCountryChange($event,'CellNumber')"
 							(intlTelInputObject)="telInputObjectCell($event)" readonly tabIndex="1" />
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.CellNumber.errors || f.CellNumber.touched && f.CellNumber.errors"
@@ -319,7 +325,8 @@
 							<span class="asterisk">*</span>
 						</mat-label>
 						<input matInput placeholder="First Year Professional Driver (Example: 1998)"
-							formControlName="FirstYearBusiness" id="FirstYearBusiness" tabIndex="1">
+							(focus)="$event.target.select()" formControlName="FirstYearBusiness" id="FirstYearBusiness"
+							tabIndex="1">
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.FirstYearBusiness.errors || f.FirstYearBusiness.touched && f.FirstYearBusiness.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -346,7 +353,8 @@
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
 						<mat-label>Your Company Name <span class="asterisk">*</span></mat-label>
-						<input matInput placeholder="Your Company Name" formControlName="CompanyName" tabIndex="1">
+						<input matInput placeholder="Your Company Name" (focus)="$event.target.select()"
+							formControlName="CompanyName" tabIndex="1">
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.CompanyName.errors || f.CompanyName.touched && f.CompanyName.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -356,7 +364,7 @@
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
 						<mat-label>DBA</mat-label>
-						<input matInput placeholder="DBA" formControlName="DBA" tabIndex="1">
+						<input matInput placeholder="DBA" (focus)="$event.target.select()" formControlName="DBA" tabIndex="1">
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.DBA.errors || f.DBA.touched && f.DBA.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -366,7 +374,8 @@
 				<div class="col-md-6" *ngIf="!affiliateId; else showEditDispatchEmailButton">
 					<mat-form-field appearance="outline">
 						<mat-label>24 Hr Dispatch E-mail <span class="asterisk">*</span></mat-label>
-						<input matInput placeholder="24 Hr Dispatch E-mail" formControlName="dispatchEmail" tabIndex="1">
+						<input matInput placeholder="24 Hr Dispatch E-mail" (focus)="$event.target.select()"
+							formControlName="dispatchEmail" tabIndex="1">
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.dispatchEmail.errors || f.dispatchEmail.touched && f.dispatchEmail.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -381,7 +390,8 @@
 						<mat-form-field appearance="outline" [class.read-only]="dispatchEmailReadonly == true">
 							<mat-label>24 Hr Dispatch E-mail <span class="asterisk">*</span></mat-label>
 							<input [class.errorColor]="dispatchEmailStatus=='no'" matInput placeholder="24 Hr Dispatch E-mail"
-								formControlName="dispatchEmail" [readonly]="dispatchEmailReadonly" tabIndex="1">
+								(focus)="$event.target.select()" formControlName="dispatchEmail"
+								[readonly]="dispatchEmailReadonly" tabIndex="1">
 							<svg *ngIf="dispatchEmailStatus=='yes'" xmlns="http://www.w3.org/2000/svg" class="email-verified"
 								viewBox="0 0 48 48">
 								<path fill="none" d="M0 0h48v48h-48z" />
@@ -441,7 +451,7 @@
 					<mat-form-field appearance="outline" class="mat-custom-phone topLabelClass">
 						<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">24Hr Dispatch
 							Tel # <span class="asterisk"> *</span></label>
-						<input matInput formControlName="Dispatch" ng2TelInput
+						<input matInput formControlName="Dispatch" ng2TelInput (focus)="$event.target.select()"
 							[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}" placeholder="1234567890"
 							class="phoneNumberClass" (countryChange)="onCountryChange($event,'Dispatch')" type="tel" id="phone"
 							(intlTelInputObject)="telInputObjectDispatch($event)" tabIndex="1" />
@@ -472,7 +482,7 @@
 					<mat-form-field appearance="outline" class="mat-custom-phone topLabelClass">
 						<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Business
 							Telephone</label>
-						<input matInput formControlName="CompanyCellNumber" ng2TelInput
+						<input matInput formControlName="CompanyCellNumber" ng2TelInput (focus)="$event.target.select()"
 							[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}" placeholder="1234567890"
 							class="phoneNumberClass" (countryChange)="onCountryChange($event,'CompanyCellNumber')"
 							(intlTelInputObject)="telInputObjectCompanyCell($event)" tabIndex="1" />
@@ -502,7 +512,7 @@
 				<div class="col-md-6">
 					<mat-form-field appearance="outline" class="mat-custom-phone">
 						<mat-label>FAX</mat-label>
-						<input matInput placeholder="FAX" formControlName="Fax" ng2TelInput
+						<input matInput placeholder="FAX" formControlName="Fax" ng2TelInput (focus)="$event.target.select()"
 							[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
 							(countryChange)="onCountryChange($event,'Fax')" (intlTelInputObject)="telInputObjectFax($event)"
 							tabIndex="1" />
@@ -528,7 +538,8 @@
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
 						<mat-label>CPCN/TPC #</mat-label>
-						<input matInput placeholder="CPCN/TPC #" formControlName="cpcn_tpc" tabIndex="1" />
+						<input matInput placeholder="CPCN/TPC #" (focus)="$event.target.select()" formControlName="cpcn_tpc"
+							tabIndex="1" />
 					</mat-form-field>
 					<div *ngIf="f.cpcn_tpc.errors" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.cpcn_tpc.errors?.invalid_Pattern;else plusError">Do not add Dashes
@@ -862,7 +873,7 @@
 							<div class="col-12">
 								<mat-form-field appearance="outline">
 									<mat-label>Enter OTP sent to {{addAffiliateAccountForm.value.Email}}*</mat-label>
-									<input matInput formControlName="emailOtp" id="emailOtp">
+									<input matInput formControlName="emailOtp" (focus)="$event.target.select()" id="emailOtp">
 								</mat-form-field>
 								<div *ngIf="submittedAffiliateEmailForm && fAffiliateEmail.emailOtp.errors || fAffiliateEmail.emailOtp.touched && fAffiliateEmail.emailOtp.errors"
 									class="text-danger margin-bottom-thin my-mat-hint">
@@ -894,7 +905,7 @@
 								<mat-form-field appearance="outline">
 									<mat-label>Enter OTP sent to {{addAffiliateAccountForm.value.CellNumber}}*
 									</mat-label>
-									<input matInput formControlName="phoneOtp" id="phoneOtp">
+									<input matInput formControlName="phoneOtp" (focus)="$event.target.select()" id="phoneOtp">
 								</mat-form-field>
 								<div *ngIf="submittedAffiliateEmailForm && fAffiliateEmail.phoneOtp.errors || fAffiliateEmail.phoneOtp.touched && fAffiliateEmail.phoneOtp.errors"
 									class="text-danger margin-bottom-thin my-mat-hint">
@@ -971,7 +982,7 @@
 								<mat-form-field appearance="outline">
 									<mat-label>Enter OTP sent to {{addAffiliateAccountForm.value.dispatchEmail}}*
 									</mat-label>
-									<input matInput formControlName="emailOtp" id="emailOtp">
+									<input matInput formControlName="emailOtp" (focus)="$event.target.select()" id="emailOtp">
 								</mat-form-field>
 								<div *ngIf="submittedDispatchEmailForm && fDispatchEmail.emailOtp.errors || fDispatchEmail.emailOtp.touched && fDispatchEmail.emailOtp.errors"
 									class="text-danger margin-bottom-thin my-mat-hint">
@@ -1003,7 +1014,7 @@
 								<mat-form-field appearance="outline">
 									<mat-label>Enter OTP sent to {{addAffiliateAccountForm.value.CellNumber}}*
 									</mat-label>
-									<input matInput formControlName="phoneOtp" id="phoneOtp">
+									<input matInput formControlName="phoneOtp" (focus)="$event.target.select()" id="phoneOtp">
 								</mat-form-field>
 								<div *ngIf="submittedDispatchEmailForm && fDispatchEmail.phoneOtp.errors || fDispatchEmail.phoneOtp.touched && fDispatchEmail.phoneOtp.errors"
 									class="text-danger margin-bottom-thin my-mat-hint">
