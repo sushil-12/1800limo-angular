@@ -399,7 +399,7 @@ export class AddDriverFromAffiliateComponent implements OnInit, AfterViewInit, A
 					else
 					{
 
-						this.DriverLicense = localStorage.getItem("driverFrontLicense")
+						// this.DriverLicense = localStorage.getItem("driverFrontLicense")
 						this.onLanguageChange('1', true);//set english as default language
 						if (this.currentUser.affiliate_type != 'fleet_operator')
 						{

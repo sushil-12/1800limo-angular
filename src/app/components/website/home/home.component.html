@@ -741,9 +741,13 @@
 								</div>
 								<span>1 large luggage = 2 carry on. Golf Bag / Skis = Minivan / SUV</span>
 							</form>
-							<button type="button" id="quotebot-search-btn" (click)="fileTheQuote()">
-								Search Current Rates
-							</button>
+							<div id="search-button-container">
+								<div id="search-button-box">
+									<button type="button" class="custom-filled-button" (click)="fileTheQuote()">
+										Search Current Rates
+									</button>
+								</div>
+							</div>
 							<!-- 
 								Quotebot Form ends
 							 -->
@@ -773,7 +777,7 @@
 		<div class="chk_vehicles_parent">
 			<div class="chk_vehicles owl-carousel owl-theme viewVehicleCarousel">
 				<div class="item" *ngFor="let vehicle of vehicles">
-					<a (click)="scroll(target)" class="ns-user">
+					<a class="ns-user">
 						<img src="{{vehicle.vehicle_image}}" alt="semi">
 						<p>{{vehicle.vehicle_name}}</p>
 					</a>

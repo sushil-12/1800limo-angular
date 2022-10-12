@@ -12,7 +12,7 @@
       <!-- Tabs Titles -->
       <!-- Icon -->
       <div class="fadeIn first">
-         <img src="assets/admin/images/login_logo.png" id="icon" alt="User Icon" />
+         <img src="assets/admin/images/login_logo.png" id="icon" alt="User Icon" [routerLink]="['/home']" />
          <h2>Hello, Sign in.</h2>
       </div>
       <!-- Login Form -->
@@ -32,7 +32,7 @@
                <div *ngIf="f.otp.errors.maxlength">OTP should contain maximum of 6 characters</div>
             </ng-template>
          </div>
-         <button class="custom-btn button1 my-3" (click)="otpCheck()" [disabled]="disableSubmit">VERIFY</button>
+         <button class="custom-filled-button my-3" (click)="otpCheck()" [disabled]="disableSubmit">VERIFY</button>
          <p *ngIf="secondsToDday>0"><button class="timerButton">{{secondsToDday}}</button></p>
          <p *ngIf="resendOtpVisible" class="resend-otp" (click)="resendOtp()">Resend OTP</p>
       </form>
@@ -47,8 +47,7 @@
 </div>
 
 <!-- Instructions modal -->
-<div class="modal fade" id="resendOtpModal" tabindex="-1" role="dialog" aria-labelledby="resendOtpModal"
-   aria-hidden="true">
+<div class="modal fade" id="resendOtpModal" tabindex="-1" role="dialog" aria-labelledby="resendOtpModal" aria-hidden="true">
    <div class="modal-dialog" role="document">
       <div class="modal-content">
          <div class="modal-body">
