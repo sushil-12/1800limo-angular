@@ -135,7 +135,7 @@ export class HomeComponent implements OnInit
 		}
 		else
 		{
-			this.value = " Affiliate Dashboard / Steps";
+			this.value = "Continue Affiliate Set-Up";
 		}
 
 		// PersonalilzedList
