@@ -9,8 +9,9 @@
 					<mat-form-field appearance="outline"
 						[ngClass]="(errorMsg && f.vehicleType.errors) || (submittedForm && f.vehicleType.errors) ? 'mat-form-field-invalid ng-invalid' : ''">
 						<mat-label>Vehicle Type <span class="asterisk">*</span></mat-label>
-						<input type="text" id="vehicleTypeField" placeholder="Choose One" aria-label="Number" matInput
-							(keyup)="searchVehicleType($event.target.value)" [matAutocomplete]="auto1" tabindex="1">
+						<input type="text" id="vehicleTypeField" placeholder="Choose One" (focus)="$event.target.select()"
+							aria-label="Number" matInput (keyup)="searchVehicleType($event.target.value)"
+							[matAutocomplete]="auto1" tabindex="1">
 						<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
 							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
 							style="enable-background:new 0 0 122.88 63.9" xml:space="preserve">
@@ -41,7 +42,8 @@
 						[ngClass]="(errorMsg1 && f.make.errors) || (submittedForm && f.make.errors) ? 'mat-form-field-invalid ng-invalid' : ''">
 						<mat-label>Enter Make <span class="asterisk">*</span></mat-label>
 						<input type="search" id="makeField" placeholder="Type First Letters of Make" aria-label="Number" matInput
-							(keyup)="searchMake($event.target.value)" [matAutocomplete]="auto2" tabindex="1">
+							(focus)="$event.target.select()" (keyup)="searchMake($event.target.value)" [matAutocomplete]="auto2"
+							tabindex="1">
 						<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
 							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
 							style="enable-background:new 0 0 122.88 63.9" xml:space="preserve">
@@ -72,7 +74,8 @@
 						[ngClass]="(errorMsg2 && f.model.errors) || (submittedForm && f.model.errors) ? 'mat-form-field-invalid ng-invalid' : ''">
 						<mat-label>Model <span class="asterisk">*</span></mat-label>
 						<input type="search" id="modelField" placeholder="Choose One" aria-label="Number" matInput
-							(keyup)="searchModel($event.target.value)" [matAutocomplete]="auto3" tabindex="1">
+							(keyup)="searchModel($event.target.value)" (focus)="$event.target.select()" [matAutocomplete]="auto3"
+							tabindex="1">
 						<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
 							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
 							style="enable-background:new 0 0 122.88 63.9" xml:space="preserve">
@@ -125,7 +128,8 @@
 						[ngClass]="(errorMsg3 && f.year.errors) || (submittedForm && f.year.errors) ? 'mat-form-field-invalid ng-invalid' : ''">
 						<mat-label>Year <span class="asterisk">*</span></mat-label>
 						<input type="search" id="yearField" placeholder="Choose One" aria-label="Number" matInput
-							(keyup)="searchYear($event.target.value)" [matAutocomplete]="auto4" tabindex="1">
+							(keyup)="searchYear($event.target.value)" (focus)="$event.target.select()" [matAutocomplete]="auto4"
+							tabindex="1">
 						<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
 							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
 							style="enable-background:new 0 0 122.88 63.9" xml:space="preserve">
@@ -156,7 +160,8 @@
 						[ngClass]="(errorMsg4 && f.color.errors) || (submittedForm && f.color.errors) ? 'mat-form-field-invalid ng-invalid' : ''">
 						<mat-label>Color <span class="asterisk">*</span></mat-label>
 						<input type="search" id="colorField" placeholder="Choose One" aria-label="Number" matInput
-							(keyup)="searchColor($event.target.value)" [matAutocomplete]="auto5" tabindex="1">
+							(keyup)="searchColor($event.target.value)" (focus)="$event.target.select()" [matAutocomplete]="auto5"
+							tabindex="1">
 						<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
 							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
 							style="enable-background:new 0 0 122.88 63.9" xml:space="preserve">
@@ -191,7 +196,8 @@
 								<span class="theme-color">(optional)</span>
 							</ng-template>
 						</mat-label>
-						<input matInput placeholder="License Plate" formControlName="licensePlate" tabindex="1">
+						<input matInput placeholder="License Plate" (focus)="$event.target.select()"
+							formControlName="licensePlate" tabindex="1">
 					</mat-form-field>
 				</div>
 				<div class="col-md-6">

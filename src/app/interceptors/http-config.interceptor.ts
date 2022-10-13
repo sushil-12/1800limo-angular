@@ -30,6 +30,7 @@ export class HttpConfigInterceptor implements HttpInterceptor
 
 	intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>>
 	{
+		this.$spinner.show()
 		const token: string = localStorage.getItem('token');
 
 		if (token)
@@ -49,6 +50,7 @@ export class HttpConfigInterceptor implements HttpInterceptor
 			{
 				if (event instanceof HttpResponse)
 				{
+					this.$spinner.hide()
 					console.log('\n\nevent--->>>', event, '\n\n');
 				}
 				return event;

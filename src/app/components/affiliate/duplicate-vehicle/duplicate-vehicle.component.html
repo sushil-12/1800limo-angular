@@ -8,8 +8,9 @@
 					<mat-form-field appearance="outline"
 						[ngClass]="(errorMsg && f.vehicleType.errors) || (submittedForm && f.vehicleType.errors) ? 'mat-form-field-invalid ng-invalid' : ''">
 						<mat-label>Vehicle Type <span class="asterisk">*</span></mat-label>
-						<input type="text" id="vehicleTypeField" placeholder="Pick one" aria-label="Number" matInput
-							(keyup)="searchVehicleType($event.target.value)" [matAutocomplete]="auto1" tabindex="1">
+						<input type="text" id="vehicleTypeField" (focus)="$event.target.select()" placeholder="Pick one"
+							aria-label="Number" matInput (keyup)="searchVehicleType($event.target.value)"
+							[matAutocomplete]="auto1" tabindex="1">
 						<mat-autocomplete #auto1="matAutocomplete">
 							<mat-option *ngFor="let vehicleType of filteredVehicleTypes" [value]="vehicleType.name"
 								(onSelectionChange)="selectVehicleType(vehicleType.ID,$event.isUserInput)">
@@ -26,8 +27,9 @@
 					<mat-form-field appearance="outline"
 						[ngClass]="(errorMsg1 && f.make.errors) || (submittedForm && f.make.errors) ? 'mat-form-field-invalid ng-invalid' : ''">
 						<mat-label>Make <span class="asterisk">*</span></mat-label>
-						<input type="search" id="makeField" placeholder="Pick one" aria-label="Number" matInput
-							(keyup)="searchMake($event.target.value)" [matAutocomplete]="auto2" tabindex="1">
+						<input type="search" id="makeField" (focus)="$event.target.select()" placeholder="Pick one"
+							aria-label="Number" matInput (keyup)="searchMake($event.target.value)" [matAutocomplete]="auto2"
+							tabindex="1">
 						<mat-autocomplete #auto2="matAutocomplete">
 							<mat-option *ngFor="let m of filteredMake" [value]="m.name"
 								(onSelectionChange)="selectMake(m.ID,$event.isUserInput)">
@@ -44,8 +46,9 @@
 					<mat-form-field appearance="outline"
 						[ngClass]="(errorMsg2 && f.model.errors) || (submittedForm && f.model.errors) ? 'mat-form-field-invalid ng-invalid' : ''">
 						<mat-label>Model <span class="asterisk">*</span></mat-label>
-						<input type="search" id="modelField" placeholder="Pick one" aria-label="Number" matInput
-							(keyup)="searchModel($event.target.value)" [matAutocomplete]="auto3" tabindex="1">
+						<input type="search" id="modelField" (focus)="$event.target.select()" placeholder="Pick one"
+							aria-label="Number" matInput (keyup)="searchModel($event.target.value)" [matAutocomplete]="auto3"
+							tabindex="1">
 						<mat-autocomplete #auto3="matAutocomplete">
 							<mat-option *ngFor="let m of filteredModel" [value]="m.name"
 								(onSelectionChange)="selectModel(m.ID,$event.isUserInput)">
@@ -85,7 +88,8 @@
 						[ngClass]="(errorMsg3 && f.year.errors) || (submittedForm && f.year.errors) ? 'mat-form-field-invalid ng-invalid' : ''">
 						<mat-label>Year <span class="asterisk">*</span></mat-label>
 						<input type="search" id="yearField" placeholder="Pick one" aria-label="Number" matInput
-							(keyup)="searchYear($event.target.value)" [matAutocomplete]="auto4" tabindex="1">
+							(keyup)="searchYear($event.target.value)" (focus)="$event.target.select()" [matAutocomplete]="auto4"
+							tabindex="1">
 						<mat-autocomplete #auto4="matAutocomplete">
 							<mat-option *ngFor="let year of filteredYear" [value]="year.name"
 								(onSelectionChange)="selectYear(year.ID,$event.isUserInput)">
@@ -103,7 +107,8 @@
 						[ngClass]="(errorMsg4 && f.color.errors) || (submittedForm && f.color.errors) ? 'mat-form-field-invalid ng-invalid' : ''">
 						<mat-label>Color <span class="asterisk">*</span></mat-label>
 						<input type="search" id="colorField" placeholder="Pick one" aria-label="Number" matInput
-							(keyup)="searchColor($event.target.value)" [matAutocomplete]="auto5" tabindex="1">
+							(keyup)="searchColor($event.target.value)" (focus)="$event.target.select()" [matAutocomplete]="auto5"
+							tabindex="1">
 						<mat-autocomplete #auto5="matAutocomplete">
 							<mat-option *ngFor="let color of filteredColor" [value]="color.name"
 								(onSelectionChange)="selectColor(color.ID,$event.isUserInput)">
@@ -125,7 +130,8 @@
 								<span class="theme-color">(optional)</span>
 							</ng-template>
 						</mat-label>
-						<input matInput placeholder="License Plate" formControlName="licensePlate" tabindex="1">
+						<input matInput placeholder="License Plate" (focus)="$event.target.select()"
+							formControlName="licensePlate" tabindex="1">
 					</mat-form-field>
 				</div>
 				<div class="col-md-6">

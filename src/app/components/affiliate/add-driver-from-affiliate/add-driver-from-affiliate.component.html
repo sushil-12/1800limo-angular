@@ -7,7 +7,8 @@
 				<div class="col-md-4">
 					<mat-form-field appearance="outline">
 						<mat-label>First Name <span class="asterisk">*</span></mat-label>
-						<input matInput placeholder="First Name" id="firstName" formControlName="FirstName" tabindex="1">
+						<input matInput placeholder="First Name" (focus)="$event.target.select()" id="firstName"
+							formControlName="FirstName" tabindex="1">
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.FirstName.errors || f.FirstName.touched && f.FirstName.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -17,7 +18,8 @@
 				<div class="col-md-4">
 					<mat-form-field appearance="outline">
 						<mat-label>Middle Name</mat-label>
-						<input matInput placeholder="Middle Name" formControlName="MiddleName" tabindex="1">
+						<input matInput placeholder="Middle Name" (focus)="$event.target.select()" formControlName="MiddleName"
+							tabindex="1">
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.MiddleName.errors || f.MiddleName.touched && f.MiddleName.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -27,7 +29,8 @@
 				<div class="col-md-4">
 					<mat-form-field appearance="outline">
 						<mat-label>Last Name <span class="asterisk">*</span></mat-label>
-						<input matInput placeholder="Last Name" formControlName="LastName" tabindex="1">
+						<input matInput placeholder="Last Name" (focus)="$event.target.select()" formControlName="LastName"
+							tabindex="1">
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.LastName.errors || f.LastName.touched && f.LastName.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -53,7 +56,7 @@
 						<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Cell<span class="asterisk">
 								*</span></label>
 						<input matInput placeholder="1234567890" formControlName="CellNumber" ng2TelInput
-							[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
+							[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}" (focus)="$event.target.select()"
 							(countryChange)="onCountryChange($event,'CellNumber')" class="phoneNumberClass"
 							(intlTelInputObject)="telInputObjectCell($event)" tabindex="1" />
 					</mat-form-field>
@@ -83,8 +86,8 @@
 					<mat-form-field appearance="outline">
 						<mat-label>Driver E-mail (Fleet Operator - <span class="theme-color">Optional</span>)
 						</mat-label>
-						<input matInput placeholder="Driver E-mail (Fleet Operator - Optional)" formControlName="Email"
-							tabindex="1">
+						<input matInput placeholder="Driver E-mail (Fleet Operator - Optional)" (focus)="$event.target.select()"
+							formControlName="Email" tabindex="1">
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.Email.errors || f.Email.touched && f.Email.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -112,7 +115,7 @@
 						<mat-label>First Year Professional Driving <span class="theme-color">(Example: 1998)</span>
 						</mat-label>
 						<input matInput formControlName="StartDate" placeholder="First Year Professional Driving (Example: 1998)"
-							tabindex="1">
+							(focus)="$event.target.select()" tabindex="1">
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.StartDate.errors || f.StartDate.touched && f.StartDate.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -207,12 +210,12 @@
 											Change
 										</button>
 									</li>
-									<li><a class="delete-btn" (click)="deleteImage(DriverImageId,'DriverImage')" tabindex="1">
+									<!-- <li><a class="delete-btn" (click)="deleteImage(DriverImageId,'DriverImage')" tabindex="1">
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 												<path
 													d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
 											</svg>
-											Delete</a></li>
+											Delete</a></li> -->
 								</ul>
 							</div>
 						</div>
@@ -276,12 +279,12 @@
 											Change
 										</button>
 									</li>
-									<li><a class="delete-btn" (click)="deleteImage(DriverLicenseId,'DriverLicense')" tabindex="1">
+									<!-- <li><a class="delete-btn" (click)="deleteImage(DriverLicenseId,'DriverLicense')" tabindex="1">
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 												<path
 													d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
 											</svg>
-											Delete</a></li>
+											Delete</a></li> -->
 								</ul>
 							</div>
 						</div>
@@ -1000,7 +1003,7 @@
 							<mat-form-field appearance="outline">
 								<mat-label>Name of Department <span class="asterisk">*</span></mat-label>
 								<input matInput placeholder="Name of Department" formControlName="LastPoliceDepartment"
-									tabindex="1">
+									tabindex="1" (focus)="$event.target.select()" />
 							</mat-form-field>
 							<div *ngIf="submittedForm && f.LastPoliceDepartment.errors || f.LastPoliceDepartment.touched && f.LastPoliceDepartment.errors"
 								class="text-danger margin-bottom-thin my-mat-hint">
@@ -1013,6 +1016,7 @@
 								<input matInput placeholder="Police Depart. Tel #" formControlName="PoliceForceTelephone"
 									ng2TelInput [ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
 									(countryChange)="onCountryChange($event,'PoliceForceTelephone')"
+									(focus)="$event.target.select()"
 									(intlTelInputObject)="telInputObjectPoliceForceTelephone($event)" tabindex="1" />
 							</mat-form-field>
 							<div *ngIf="f.PoliceForceTelephone.errors" class="text-danger margin-bottom-thin my-mat-hint">
@@ -1070,7 +1074,8 @@
 						<div class="col-md-6">
 							<mat-form-field appearance="outline">
 								<mat-label>City <span class="asterisk">*</span></mat-label>
-								<input matInput placeholder="City" formControlName="City" tabindex="1">
+								<input matInput placeholder="City" formControlName="City" tabindex="1"
+									(focus)="$event.target.select()" />
 							</mat-form-field>
 							<div *ngIf="submittedForm && f.City.errors || f.City.touched && f.City.errors"
 								class="text-danger margin-bottom-thin my-mat-hint">
@@ -1080,7 +1085,8 @@
 						<div class="col-md-6">
 							<mat-form-field appearance="outline">
 								<mat-label>Zip Code <span class="asterisk">*</span></mat-label>
-								<input matInput placeholder="Zip Code" formControlName="ZipCode" tabindex="1">
+								<input matInput placeholder="Zip Code" (focus)="$event.target.select()" formControlName="ZipCode"
+									tabindex="1" />
 							</mat-form-field>
 							<div *ngIf="submittedForm && f.ZipCode.errors || f.ZipCode.touched && f.ZipCode.errors"
 								class="text-danger margin-bottom-thin my-mat-hint">
