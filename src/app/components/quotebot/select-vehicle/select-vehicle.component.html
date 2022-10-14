@@ -44,6 +44,14 @@
 			Use Filter / Sort for more specific choices to match your search for rates.
 		</span>
 	</div>
+	<div id="cancel-policy-note" class="d-flex">
+		<span class="asterisk"> * </span>
+		<div class="light-red-note-box d-flex flex-wrap">
+			<p>Cancel: 2Hr - No Charge &nbsp; &nbsp;</p>
+			<p>Insurance Limit - $500,000 &nbsp; &nbsp;</p>
+			<p>Driver Exp - 5 years</p>
+		</div>
+	</div>
 	<p class="clearfix"></p>
 	<div class="row">
 		<!-- FILTERS SECTION -->
@@ -269,7 +277,7 @@
 					<img [src]="vehinfo.vehicle_images[0]" id="V_Image_0" class="img-fluid" alt="Vehicle Image"
 						*ngIf="vehinfo.vehicle_images?.length > 0" />
 				</div>
-				<div class="cont-Block col-7 col-md-4">
+				<div class="cont-Block col-6 col-md-4">
 					<h5>
 						{{ vehinfo.name }}
 					</h5>
@@ -278,14 +286,33 @@
 					</p>
 					<div class="price-Blc">
 						<p>
-							${{ vehinfo['rate_breakdown_' + getKeyName()].grand_total != undefined ?
-							vehinfo['rate_breakdown_'
-							+ getKeyName()].grand_total : '0.00' }}
+							From ${{ vehinfo['rate_breakdown_' + getKeyName()].grand_total != undefined ?
+							vehinfo['rate_breakdown_' + getKeyName()].grand_total : '0.00' }}
 							<small>
 								All-Inclusive Rate*
 							</small>
 						</p>
+						<div class="cancel-policy" *ngIf="innerWidth < 750">
+							<p class="m-0" style="font-size: 00.85rem">
+								Cancel Policy<span class="asterisk">*</span>
+								<!-- Cancel: 2Hr - No Charge <br />
+							Insurance Limit - $500,000<br />
+							Driver Exp - 5 years -->
+							</p>
+						</div>
 					</div>
+					<div class="car-cap d-flex">
+						<div class="pass-det org-Btn">
+							<img alt="" class="img-fluid mr-3" src="assets/images/select_vehicle/pass.png" /> {{
+							vehinfo.passenger }}
+						</div>
+						<div class="pass-det org-Btn">
+							<img alt="" class="img-fluid mr-3" src="assets/images/select_vehicle/lug.png" /> {{
+							vehinfo.luggage }}
+						</div>
+					</div>
+				</div>
+				<div class="col-auto" [ngStyle]="innerWidth < 750 ? 'width: 100%; text-align:center;' : ''">
 					<div class="btn-Area">
 						<button (click)="viewDetails(vehinfo)" class="custom-btn" type="button">
 							Preview Vehicle Details
@@ -301,21 +328,12 @@
 							Book Now
 						</button> -->
 					</div>
-				</div>
-				<div class="col-auto">
-					<div class="car-cap d-flex">
-						<div class="pass-det org-Btn">
-							<img alt="" class="img-fluid mr-3" src="assets/images/select_vehicle/pass.png" /> {{
-							vehinfo.passenger }}
-						</div>
-						<div class="pass-det org-Btn">
-							<img alt="" class="img-fluid mr-3" src="assets/images/select_vehicle/lug.png" /> {{
-							vehinfo.luggage }}
-						</div>
-					</div>
-					<div class="cancel-policy">
-						<p class="text-danger m-0" style="font-size: 1.15rem">
-							Cancel: 2Hr - No Charge <br />Insurance Limit - $500,000<br />Driver Exp - 5 years
+					<div class="cancel-policy" *ngIf="innerWidth > 750">
+						<p class="m-0" style="font-size: 1.15rem">
+							Cancel Policy<span class="asterisk">*</span>
+							<!-- Cancel: 2Hr - No Charge <br />
+							Insurance Limit - $500,000<br />
+							Driver Exp - 5 years -->
 						</p>
 					</div>
 				</div>

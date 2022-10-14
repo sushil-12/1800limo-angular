@@ -528,7 +528,7 @@ header {
 .bannerform_wrapper .nav-item a {
 	color         : #fff;
 	text-align    : center;
-	font-size     : 14px;
+	font-size     : 1.15em;
 	text-transform: uppercase;
 }
 
@@ -3518,10 +3518,6 @@ header .navbar-toggler {
 		height: 125px;
 	}
 
-	.bannerform_wrapper .nav-item a {
-		font-size: 15px;
-	}
-
 	.aboutnw_history img {
 		margin : 0px auto 30px auto;
 		display: block;
@@ -3990,9 +3986,6 @@ header .navbar-toggler {
 		font-size: 12px
 	}
 
-	.bannerform_wrapper .nav-item a {
-		font-size: 18px
-	}
 
 	.bannerform_wrapper {
 		flex-wrap: wrap;
