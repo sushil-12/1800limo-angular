@@ -204,12 +204,9 @@
 	font-size  : 18px;
 }
 
-.cancel-policy {
-	margin-top: 17px;
-	font-size : 15px;
-}
 
 aside.sidebar {
+	position: -webkit-sticky;
 	position: sticky;
 	top     : 10px;
 }
@@ -316,7 +313,9 @@ img.img-cir {
 	width          : 182px;
 	height         : 182px;
 	border-radius  : 100px;
+	-o-object-fit     : cover;
 	object-fit     : cover;
+	-o-object-position: center top;
 	object-position: center top;
 }
 
@@ -351,7 +350,31 @@ img.img-cir {
 	border-color: #9f9f9f;
 	color       : #fff;
 }
-
+.asterisk
+{
+	color: #ff0000;
+	font-size: 1rem;
+	margin: 0 2px;
+}
+.light-red-note-box
+{
+	width: auto;
+	min-width: -webkit-fit-content;
+	min-width: -moz-fit-content;
+	min-width: fit-content;
+	max-width: 100%;
+	// border: 1.5px solid #ff8282;
+	background-color: #f9d4d4;
+	padding: 0.6rem 0.8rem;
+	border-radius: 0.8rem;
+}
+@media only screen and (min-width: 998px)
+{
+	.light-red-note-box
+	{
+		width: 50%;
+	}
+}
 
 .modal-footer {
 	justify-content: flex-end !important;
@@ -384,7 +407,11 @@ img.img-cir {
 {
 	button.custom-btn
 	{
+		height: -webkit-fit-content;
+		height: -moz-fit-content;
 		height: fit-content;
+		width: -webkit-fit-content;
+		width: -moz-fit-content;
 		width: fit-content;
 		padding: 0.375rem .85rem;
 		background-color: var(--orange);
@@ -421,9 +448,6 @@ img.img-cir {
 					overflow: auto !important;
 					padding: 0px 0px !important;
 					box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
-					-webkit-transition: all 0.2s ease 0.05s;
-					-moz-transition: all 0.2s ease 0.05s;
-					-ms-transition: all 0.2s ease 0.05s;
 					transition: all 0.2s ease 0.05s;
 				}
 		
@@ -569,7 +593,6 @@ img.img-cir {
 }
 
 .owl-theme .owl-nav [class*='owl-'] {
-	-webkit-transition: all .3s ease;
 	transition        : all .3s ease;
 }
 

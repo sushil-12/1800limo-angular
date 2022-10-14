@@ -61,8 +61,8 @@
 			<div class="row clearfix">
 				<div class="col-md-12 block login_btn text-center">
 					<div class="dropdown" *ngIf="!currentUser; else loggedInUser">
-						<a class="dropdown-toggle logbutton" href="#" id="dropdownFooter" data-toggle="dropdown"
-							aria-haspopup="true" aria-expanded="false">LOGIN / CREATE</a>
+						<button class="dropdown-toggle custom-filled-button" href="#" id="dropdownFooter" data-toggle="dropdown"
+							aria-haspopup="true" aria-expanded="false">LOGIN / CREATE</button>
 						<div class="dropdown-menu" aria-labelledby="dropdownFooter">
 							<a class="dropdown-item" (click)="loginButtons('individual')">Individual</a>
 							<a class="dropdown-item" (click)="loginButtons('corporate')">Corporate</a>

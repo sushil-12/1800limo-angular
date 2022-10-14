@@ -13,8 +13,8 @@
 					<!-- MOBILE -->
 					<div class="text_mobile">
 						<div class="nav-item dropdown button-signin" *ngIf="!currentUser; else loggedInUser">
-							<a class="nav-link dropdown-toggle logbutton" href="#" id="dropdown05" data-toggle="dropdown"
-								aria-haspopup="true" aria-expanded="false">LOGIN / CREATE</a>
+							<button class="nav-link dropdown-toggle custom-filled-button" href="#" id="dropdown05"
+								data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">LOGIN / CREATE</button>
 							<div class="dropdown-menu" aria-labelledby="dropdown05">
 								<a class="dropdown-item" (click)="loginButtons('individual')">Individual</a>
 								<a class="dropdown-item" (click)="loginButtons('corporate')">Corporate</a>

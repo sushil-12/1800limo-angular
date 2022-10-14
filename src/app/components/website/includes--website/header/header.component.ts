@@ -63,7 +63,7 @@ export class HeaderComponent implements OnInit
 		}
 		else
 		{
-			this.Value = " Affiliate Dashboard / Steps";
+			this.Value = "Continue Affiliate Set-Up";
 		}
 
 	}

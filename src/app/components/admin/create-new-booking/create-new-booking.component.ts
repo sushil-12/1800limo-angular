@@ -59,8 +59,7 @@ export class CreateNewBookingComponent implements OnInit
 	affiliate_vehicle_list: Array<any> = []
 	affiliate_driver_list: Array<any> = []
 	affiliate_list: Array<any> = []
-	passenger_count: Array<number> = []
-	luggage_count: Array<number> = []
+	number_count: Array<number> = []
 
 	close_image_modal: EventEmitter<any> = new EventEmitter()
 
@@ -112,6 +111,10 @@ export class CreateNewBookingComponent implements OnInit
 
 		this.fetchUserList('individual')
 		this.fetchAffiliatesList('affiliate')
+		for (let i = 1; i <= 70; i++)
+		{
+			this.number_count.push(i)
+		}
 	}
 	// ngOnInit ends
 
@@ -127,6 +130,8 @@ export class CreateNewBookingComponent implements OnInit
 			transfer_type: ['', Validators.required],
 			return_transfer_type: [''],
 			pickup_airport: [''],
+			pickup_airport_latitude: [''],
+			pickup_airport_longitude: [''],
 			pickup_airline: [''],
 			pickup_flight: [''],
 			origin_airport_city: [''],
@@ -137,6 +142,8 @@ export class CreateNewBookingComponent implements OnInit
 			pickup_latitude: [''],
 			pickup_longitude: [''],
 			dropoff_airport: [''],
+			dropoff_airport_latitude: [''],
+			dropoff_airport_longitude: [''],
 			dropoff_airline: [''],
 			dropoff_flight: [''],
 			dropoff: [''],
@@ -152,12 +159,16 @@ export class CreateNewBookingComponent implements OnInit
 			pickup_date: [''],
 			pickup_time: [''],
 			return_pickup_airport: [''],
+			return_pickup_airport_latitude: [''],
+			return_pickup_airport_longitude: [''],
 			return_pickup_airline: [''],
 			return_pickup_flight: [''],
 			return_pickup: [''],
 			return_pickup_latitude: [''],
 			return_pickup_longitude: [''],
 			return_dropoff_airport: [''],
+			return_dropoff_airport_latitude: [''],
+			return_dropoff_airport_longitude: [''],
 			return_dropoff_airline: [''],
 			return_dropoff_flight: [''],
 			return_dropoff: [''],
@@ -248,7 +259,9 @@ export class CreateNewBookingComponent implements OnInit
 					service_type: response.data.service_type == 'oneway' ? 'one_way' : response.data['service_type'] == 'roundtrip' ? 'round_trip' : 'charter_tour',
 					transfer_type: response.data.transfer_type != null ? response.data.transfer_type : '',
 					return_transfer_type: response.data.return_transfer_type != null ? response.data.return_transfer_type : '',
-					pickup_airport: response.data.pickup_airport != null ? response.data.pickup_airport : '',
+					pickup_airport: response.data.pickup_airport ?? '',
+					pickup_airport_latitude: response.data.pickup_airport_latitude ?? '',
+					pickup_airport_longitude: response.data.pickup_airport_longitude ?? '',
 					pickup_airline: response.data.pickup_airline != null ? response.data.pickup_airline : '',
 					pickup_flight: response.data.pickup_flight != null ? response.data.pickup_flight : '',
 					origin_airport_city: response.data.origin_airport_city != null ? response.data.origin_airport_city : '',
@@ -258,7 +271,9 @@ export class CreateNewBookingComponent implements OnInit
 					pickup: response.data.pickup != null ? response.data.pickup : '',
 					pickup_latitude: response.data.pickup_latitude != null ? response.data.pickup_latitude : '',
 					pickup_longitude: response.data.pickup_longitude != null ? response.data.pickup_longitude : '',
-					dropoff_airport: response.data.dropoff_airport != null ? response.data.dropoff_airport : '',
+					dropoff_airport: response.data.dropoff_airport ?? '',
+					dropoff_airport_latitude: response.data.dropoff_airport_latitude ?? '',
+					dropoff_airport_longitude: response.data.dropoff_airport_longitude ?? '',
 					dropoff_airline: response.data.dropoff_airline != null ? response.data.dropoff_airline : '',
 					dropoff_flight: response.data.dropoff_flight != null ? response.data.dropoff_flight : '',
 					dropoff: response.data.dropoff != null ? response.data.dropoff : '',
@@ -276,13 +291,17 @@ export class CreateNewBookingComponent implements OnInit
 					meet_greet_choices: response.data.meet_greet_choices != null ? response.data.meet_greet_choices : '',
 					pickup_date: response.data.pickup_date != null ? response.data.pickup_date : '',
 					pickup_time: response.data.pickup_time != null ? response.data.pickup_time : '',
-					return_pickup_airport: response.data.return_pickup_airport != null ? response.data.return_pickup_airport : '',
+					return_pickup_airport: response.data.return_pickup_airport ?? '',
+					return_pickup_airport_latitude: response.data.return_pickup_airport_latitude ?? '',
+					return_pickup_airport_longitude: response.data.return_pickup_airport_longitude ?? '',
 					return_pickup_airline: response.data.return_pickup_airline != null ? response.data.return_pickup_airline : '',
 					return_pickup_flight: response.data.return_pickup_flight != null ? response.data.return_pickup_flight : '',
 					return_pickup: response.data.return_pickup != null ? response.data.return_pickup : '',
 					return_pickup_latitude: response.data.return_pickup_latitude != null ? response.data.return_pickup_latitude : '',
 					return_pickup_longitude: response.data.return_pickup_longitude != null ? response.data.return_pickup_longitude : '',
-					return_dropoff_airport: response.data.return_dropoff_airport != null ? response.data.return_dropoff_airport : '',
+					return_dropoff_airport: response.data.return_dropoff_airport ?? '',
+					return_dropoff_airport_latitude: response.data.return_dropoff_airport_latitude ?? '',
+					return_dropoff_airport_longitude: response.data.return_dropoff_airport_longitude ?? '',
 					return_dropoff_airline: response.data.return_dropoff_airline != null ? response.data.return_dropoff_airline : '',
 					return_dropoff_flight: response.data.return_dropoff_flight != null ? response.data.return_dropoff_flight : '',
 					return_dropoff: response.data.return_dropoff != null ? response.data.return_dropoff : '',
@@ -365,9 +384,17 @@ export class CreateNewBookingComponent implements OnInit
 				pickup_date: data['pickup_date'],
 				pickup_time: data['pickup_time'],
 				pickup_airport: data['pickup_airport'],
-				return_pickup_airport: data['pickup_airport'],
+				pickup_airport_latitude: data['pickup_airport_lat'],
+				pickup_airport_longitude: data['pickup_airport_long'],
+				return_pickup_airport: data['return_pickup_airport'],
+				return_pickup_airport_latitude: data['return_pickup_airport_lat'],
+				return_pickup_airport_longitude: data['return_pickup_airport_long'],
 				dropoff_airport: data['dropoff_airport'],
+				dropoff_airport_latitude: data['dropoff_airport_lat'],
+				dropoff_airport_longitude: data['dropoff_airport_long'],
 				return_dropoff_airport: data['return_dropoff_airport'],
+				return_dropoff_airport_latitude: data['return_dropoff_airport_lat'],
+				return_dropoff_airport_longitude: data['return_dropoff_airport_long'],
 				dropoff: data['dropoff_address'],
 				dropoff_latitude: data['dropoff_address_lat'],
 				dropoff_longitude: data['dropoff_address_long'],
@@ -495,11 +522,25 @@ export class CreateNewBookingComponent implements OnInit
 
 			// build request
 			let request = {
-				origin: new google.maps.LatLng(this.Form.pickup_latitude.value, this.Form.pickup_longitude.value),
-				destination: new google.maps.LatLng(this.Form.dropoff_latitude.value, this.Form.dropoff_longitude.value),
 				waypoints: waypoints,
 				optimizeWaypoints: true,
 				travelMode: google.maps.TravelMode.DRIVING
+			}
+
+			if (this.searchSubstring(this.Form.transfer_type.value, 'city_'))
+			{
+				request['origin'] = new google.maps.LatLng(this.Form.pickup_latitude.value, this.Form.pickup_longitude.value)
+				request['destination'] = new google.maps.LatLng(this.Form.dropoff_latitude.value, this.Form.dropoff_longitude.value)
+			}
+			if (this.searchSubstring(this.Form.transfer_type.value, 'airport_'))
+			{
+				request['origin'] = new google.maps.LatLng(this.Form.pickup_airport_latitude.value, this.Form.pickup_airport_longitude.value)
+				request['destination'] = new google.maps.LatLng(this.Form.dropoff_airport_latitude.value, this.Form.dropoff_airport_longitude.value)
+			}
+			if (this.searchSubstring(this.Form.transfer_type.value, '_city'))
+			{
+				request['origin'] = new google.maps.LatLng(this.Form.pickup_address_latitude.value, this.Form.pickup_address_longitude.value)
+				request['destination'] = new google.maps.LatLng(this.Form.dropoff_airport_latitude.value, this.Form.dropoff_airport_longitude.value)
 			}
 
 			directionsService.route(request, (response: any, status: string) =>
@@ -1047,13 +1088,11 @@ export class CreateNewBookingComponent implements OnInit
 
 		if (preview)
 		{
-			this._spinner.show('savespinner')
 			this.bookingForm.value.number_of_vehicles = this.bookingForm.value.number_of_vehicles != null ? parseInt(this.bookingForm.value.number_of_vehicles) : 1
 			this._adminService.createBooking(this.bookingForm.value).subscribe((response: any) =>
 			{
 				if (response)
 				{
-					this._spinner.hide('savespinner')
 					this._router.navigate(['/admin/daily-bookings-admin'])
 					return
 					// 	, {

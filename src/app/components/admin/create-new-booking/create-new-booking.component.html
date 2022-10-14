@@ -279,7 +279,7 @@
 								No. of Passengers <span class="asterisk"></span>
 							</mat-label>
 							<mat-select formControlName="total_passengers">
-								<mat-option *ngFor="let option of passenger_count" [value]="option">
+								<mat-option *ngFor="let option of number_count" [value]="option">
 									{{ option }}
 								</mat-option>
 							</mat-select>
@@ -298,7 +298,8 @@
 								Luggage Count <span class="asterisk"></span>
 							</mat-label>
 							<mat-select formControlName="luggage_count">
-								<mat-option *ngFor="let option of luggage_count" [value]="option">
+								<mat-option value="0"> 0 </mat-option>
+								<mat-option *ngFor="let option of number_count" [value]="option">
 									{{ option }}
 								</mat-option>
 							</mat-select>
@@ -1528,6 +1529,7 @@
 								Airport <span class="asterisk"></span>
 							</mat-label>
 							<input type="text" placeholder="Search by Name or Airport Code" matInput
+								[value]="fillValue(big_data_list?.airportsData, Form.dropoff_airport.value, 'id', 'name')"
 								(keyup)="searchAirport($event.target.value)" [matAutocomplete]="auto3">
 							<mat-autocomplete #auto3="matAutocomplete">
 								<mat-option *ngFor="let airport of big_data_list?.airportsData" [value]="airport.name"
