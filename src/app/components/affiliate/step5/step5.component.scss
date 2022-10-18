@@ -8,8 +8,14 @@
 	max-width: 300px;
 }
 
-a.notCompleted {
-	background-color: #F33C2F !important;
+a.dropdown-toggle.notCompleted {
+	background-color: var(--orange) !important;
+	color: white;
+	text-decoration: none;
+}
+a.dropdown-item.notCompleted
+{
+	background-color: #f8f87c !important;
 }
 
 .table-responsive i {
@@ -17,21 +23,13 @@ a.notCompleted {
 }
 
 @media only screen and (min-width:1199px) {
-	a.notCompleted:hover {
-		background-color: #d12c20 !important;
-		color           : #fff;
-		text-decoration : none;
-	}
 
 	a.notCompleted:focus {
 		transform       : scale(1.2, 1.2);
-		background-color: #d12c20 !important;
+		background-color: var(--orange) !important;
 	}
 }
 
-.text-danger {
-	color: var(--orange-color) !important;
-}
 
 .modal-content {
 	align-items: center;

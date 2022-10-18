@@ -45,7 +45,6 @@ import { ProfileComponent } from './profile/profile.component';
 import { InvoiceSummaryComponent } from './invoice-summary/invoice-summary.component';
 import { FarmOutComponent } from './farm-out/farm-out.component';
 import { VehicleRateSettingsComponent } from './vehicle-rate-settings/vehicle-rate-settings.component';
-import { VehicleSettingsComponent } from './vehicle-settings/vehicle-settings.component';
 
 @NgModule({
 	declarations: [
@@ -73,8 +72,7 @@ import { VehicleSettingsComponent } from './vehicle-settings/vehicle-settings.co
 		ProfileComponent,
 		InvoiceSummaryComponent,
 		FarmOutComponent,
-		VehicleRateSettingsComponent,
-		VehicleSettingsComponent
+		VehicleRateSettingsComponent
 	],
 	imports: [
 		CommonModule,

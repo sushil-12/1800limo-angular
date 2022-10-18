@@ -231,13 +231,13 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 		}
 
 		/** progress bar starts on init */
-		this.stateManagementService.setprogressBar(true);
+		this.spinner.show()
 		// Load field data using API
 		this.affiliateService.getFieldsData()
 			.pipe(
 				catchError(err =>
 				{
-					this.stateManagementService.setprogressBar(false);
+					this.spinner.hide()
 					return throwError(err);
 				})
 			).subscribe(result =>
@@ -273,7 +273,7 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 					.pipe(
 						catchError(err =>
 						{
-							this.stateManagementService.setprogressBar(false);
+							this.spinner.hide()
 							return throwError(err);
 						})
 					).subscribe(result2 =>
@@ -484,7 +484,7 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 							this.addVehicleForm.controls['numberOfVehicles'].updateValueAndValidity();
 						});
 					});
-				this.stateManagementService.setprogressBar(false);
+				this.spinner.hide();
 			});
 
 
