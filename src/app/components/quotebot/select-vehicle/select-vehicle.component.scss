@@ -388,14 +388,6 @@ img.img-cir {
 	display: none
 }
 
-#vehicle-details-article .img-Block img[src*="driIco.png"] {
-	display: none !important;
-}
-
-#vehicle-details-article .img-Block img {
-	border-radius: 10px;
-}
-
 .btn-Area > button
 {
 	font-weight: 400;
@@ -615,12 +607,6 @@ img.img-cir {
 	margin-bottom: 10px;
 }
 
-#vehicle-information {
-	p {
-		margin: 0 !important;
-	}
-}
-
 .imageStyle {
 	width    : 50%;
 }
@@ -781,13 +767,13 @@ img.img-cir {
 }
 
 
-@supports (-webkit-touch-callout: none) and (not(translate: none))
-{
-	#vehicle-listing-container
-	{
-		#vehicle-details-article
-		{
-			margin-bottom: 50px;
-		}
-	}
-}
+// @supports (-webkit-touch-callout: none) and (not(translate: none))
+// {
+// 	#vehicle-listing-container
+// 	{
+// 		#vehicle-details-article
+// 		{
+// 			margin-bottom: 50px;
+// 		}
+// 	}
+// }
