@@ -39,8 +39,7 @@
 						<mat-label>
 							Currency <span class="asterisk">*</span>
 						</mat-label>
-						<mat-select formControlName="currency" (selectionChange)="changeDetection.currencySymbol($event.value)"
-							tabindex="1">
+						<mat-select formControlName="currency" (selectionChange)="changeDetection.currencySymbol($event.value)" tabindex="1">
 							<mat-option value="">Choose Currency</mat-option>
 							<mat-option *ngFor="let currencyOption of currency_options | keyvalue" [value]="currencyOption.key">
 								{{currencyOption.value.countryName}} -
@@ -77,8 +76,7 @@
 			<div class="col-md-6" *ngIf="form.km_mile.value == 'mile'; else kilometer_rate">
 				<mat-form-field class="mat-form-field-rates m-0" appearance="outline">
 					<mat-label>Milage Rate <span class="asterisk">*</span></mat-label>
-					<span matPrefix
-						*ngIf="form.milage_rate.value == null || form.milage_rate.value == ''; else hideZero">{{currency_symbol}}
+					<span matPrefix *ngIf="form.milage_rate.value == null || form.milage_rate.value == ''; else hideZero">{{currency_symbol}}
 						0 &nbsp;</span>
 					<ng-template #hideZero>
 						<span matPrefix>{{currency_symbol}} &nbsp;</span>
@@ -129,8 +127,7 @@
 					<mat-label>
 						Hourly Rate <span class="asterisk">*</span>
 					</mat-label>
-					<span matPrefix
-						*ngIf="form.hourly_rate.value == null || form.hourly_rate.value == ''; else hideZero1">{{currency_symbol}}
+					<span matPrefix *ngIf="form.hourly_rate.value == null || form.hourly_rate.value == ''; else hideZero1">{{currency_symbol}}
 						0 &nbsp;</span>
 					<ng-template #hideZero1>
 						<span matPrefix>{{currency_symbol}} &nbsp;</span>
@@ -157,9 +154,8 @@
 					<ng-template #hideZero2>
 						<span matPrefix>{{currency_symbol}} &nbsp;</span>
 					</ng-template>
-					<input type="number" matInput placeholder="Hourly Rate After 5 Hours"
-						formControlName="hourly_rate_after_five_hours" tabindex="1" (change)="updateRateRangeObject()"
-						(focus)="$event.target.select()" />
+					<input type="number" matInput placeholder="Hourly Rate After 5 Hours" formControlName="hourly_rate_after_five_hours" tabindex="1"
+						(change)="updateRateRangeObject()" (focus)="$event.target.select()" />
 				</mat-form-field>
 				<div *ngIf="is_form_submitted && form.hourly_rate_after_five_hours.errors || form.hourly_rate_after_five_hours.touched && form.hourly_rate_after_five_hours.errors"
 					class="text-danger margin-bottom-thin my-mat-hint">
@@ -201,8 +197,7 @@
 					<mat-label>
 						Day Rate Extension
 					</mat-label>
-					<span matPrefix
-						*ngIf="form.day_rate.value == null || form.day_rate.value == ''; else hideZero4">{{currency_symbol}}
+					<span matPrefix *ngIf="form.day_rate.value == null || form.day_rate.value == ''; else hideZero4">{{currency_symbol}}
 						0 &nbsp;</span>
 					<ng-template #hideZero4>
 						<span matPrefix>{{currency_symbol}} &nbsp;</span>
@@ -228,8 +223,8 @@
 					<ng-template #hideZero5>
 						<span matPrefix>{{currency_symbol}} &nbsp;</span>
 					</ng-template>
-					<input type="number" matInput placeholder="Minimum Intra City Rate" formControlName="minimum_city_rate"
-						tabindex="1" (change)="updateRateRangeObject()" autocomplete="off" (focus)="$event.target.select()" />
+					<input type="number" matInput placeholder="Minimum Intra City Rate" formControlName="minimum_city_rate" tabindex="1"
+						(change)="updateRateRangeObject()" autocomplete="off" (focus)="$event.target.select()" />
 				</mat-form-field>
 				<div *ngIf="is_form_submitted && form.minimum_city_rate.errors || form.minimum_city_rate.touched && form.minimum_city_rate.errors"
 					class="text-danger margin-bottom-thin my-mat-hint">
@@ -256,10 +251,9 @@
 					<ng-template #hideZero7>
 						<span matPrefix>{{currency_symbol}} &nbsp;</span>
 					</ng-template>
-					<input type="number" matInput placeholder="Minimum Airport Rate - Arrival"
-						formControlName="minimum_airport_arrival_rate" (focus)="$event.target.select()"
-						(change)="updateRateRangeObject(); cloneValue('minimum_airport_arrival_rate', 'minimum_airport_departure_rate')"
-						tabindex="1">
+					<input type="number" matInput placeholder="Minimum Airport Rate - Arrival" formControlName="minimum_airport_arrival_rate"
+						(focus)="$event.target.select()"
+						(change)="updateRateRangeObject(); cloneValue('minimum_airport_arrival_rate', 'minimum_airport_departure_rate')" tabindex="1">
 				</mat-form-field>
 				<div *ngIf="is_form_submitted && form.minimum_airport_arrival_rate.errors || form.minimum_airport_arrival_rate.touched && form.minimum_airport_arrival_rate.errors"
 					class="text-danger margin-bottom-thin my-mat-hint">
@@ -314,9 +308,8 @@
 							{{currency_symbol}} &nbsp;
 						</span>
 					</ng-template>
-					<input type="number" matInput placeholder="Minimum Cruise Port Rate - Arrival"
-						(focus)="$event.target.select()" formControlName="minimum_cruise_port_arrival_rate" tabindex="1"
-						(change)="updateRateRangeObject()" />
+					<input type="number" matInput placeholder="Minimum Cruise Port Rate - Arrival" (focus)="$event.target.select()"
+						formControlName="minimum_cruise_port_arrival_rate" tabindex="1" (change)="updateRateRangeObject()" />
 				</mat-form-field>
 				<div *ngIf="is_form_submitted && form.minimum_cruise_port_arrival_rate.errors || form.minimum_cruise_port_arrival_rate.touched && form.minimum_cruise_port_arrival_rate.errors"
 					class="text-danger margin-bottom-thin my-mat-hint">
@@ -340,9 +333,8 @@
 					<ng-template #hideZero9>
 						<span matPrefix>{{currency_symbol}} &nbsp;</span>
 					</ng-template>
-					<input type="number" matInput placeholder="Minimum Cruise Port Rate - Departure"
-						(focus)="$event.target.select()" formControlName="minimum_cruise_port_departure_rate" tabindex="1"
-						(change)="updateRateRangeObject()" />
+					<input type="number" matInput placeholder="Minimum Cruise Port Rate - Departure" (focus)="$event.target.select()"
+						formControlName="minimum_cruise_port_departure_rate" tabindex="1" (change)="updateRateRangeObject()" />
 				</mat-form-field>
 				<div *ngIf="is_form_submitted && form.minimum_cruise_port_departure_rate.errors || form.minimum_cruise_port_departure_rate.touched && form.minimum_cruise_port_departure_rate.errors"
 					class="text-danger margin-bottom-thin my-mat-hint">
@@ -371,8 +363,7 @@
 						<span matPrefix>{{currency_symbol}} &nbsp;</span>
 					</ng-template>
 					<input type="number" matInput placeholder="Airport / Cruise Port Cancel Rate" (focus)="$event.target.select()"
-						formControlName="airport_city_percentage_booking_cancel_charges" tabindex="1"
-						(change)="updateRateRangeObject()" />
+						formControlName="airport_city_percentage_booking_cancel_charges" tabindex="1" (change)="updateRateRangeObject()" />
 				</mat-form-field>
 				<div *ngIf="is_form_submitted && form.airport_city_percentage_booking_cancel_charges.errors || form.airport_city_percentage_booking_cancel_charges.touched && form.airport_city_percentage_booking_cancel_charges.errors"
 					class="text-danger margin-bottom-thin my-mat-hint">
@@ -396,9 +387,8 @@
 					<ng-template #hideZero12>
 						<span matPrefix>{{currency_symbol}} &nbsp;</span>
 					</ng-template>
-					<input type="number" matInput placeholder="Shared Ride Rate - Per Person"
-						formControlName="per_person_group_ride_rate" (focus)="$event.target.select()"
-						(change)="updateRateRangeObject()" tabindex="1" />
+					<input type="number" matInput placeholder="Shared Ride Rate - Per Person" formControlName="per_person_group_ride_rate"
+						(focus)="$event.target.select()" (change)="updateRateRangeObject()" tabindex="1" />
 				</mat-form-field>
 				<div *ngIf="is_form_submitted && form.per_person_group_ride_rate.errors || form.per_person_group_ride_rate.touched && form.per_person_group_ride_rate.errors"
 					class="text-danger margin-bottom-thin my-mat-hint">
@@ -411,15 +401,14 @@
 		<!-- ROW 5 ENDS -->
 
 		<!-- ROW 6 -->
-		<div class="row">
+		<div class="row" *ngIf="false">
 			<!-- EARLY AM/LATE PM  -->
 			<div class="col-md-6">
 				<mat-form-field class="mat-form-field-rates" appearance="outline">
 					<mat-label>
 						Early AM / Late PM
 					</mat-label>
-					<span matPrefix
-						*ngIf="form.early_late_charges.value == null || form.early_late_charges.value == ''; else hideZero21">
+					<span matPrefix *ngIf="form.early_late_charges.value == null || form.early_late_charges.value == ''; else hideZero21">
 						{{currency_symbol}} 0 &nbsp;
 					</span>
 					<ng-template #hideZero21>
@@ -442,8 +431,7 @@
 					<mat-label>
 						Holiday Rate
 					</mat-label>
-					<span matPrefix
-						*ngIf="form.holiday_charges.value == null || form.holiday_charges.value == ''; else hideZero22">
+					<span matPrefix *ngIf="form.holiday_charges.value == null || form.holiday_charges.value == ''; else hideZero22">
 						{{currency_symbol}} 0 &nbsp;</span>
 					<ng-template #hideZero22>
 						<span matPrefix>{{currency_symbol}} &nbsp;</span>
@@ -462,23 +450,22 @@
 		<!-- ROW 6 ENDS -->
 
 		<!-- ROW 7 -->
-		<div class="row">
+		<div class="row" *ngIf="false">
 			<!-- FRIDAY/SATURDAY RATE -->
 			<div class="col-md-6">
 				<mat-form-field class="mat-form-field-rates" appearance="outline">
 					<mat-label>
 						Friday/Saturday Night
 					</mat-label>
-					<span matPrefix
-						*ngIf="form.friday_saturday_charges.value == null || form.friday_saturday_charges.value == ''; else hideZero23">
+					<span matPrefix *ngIf="form.friday_saturday_charges.value == null || form.friday_saturday_charges.value == ''; else hideZero23">
 						{{currency_symbol}} 0 &nbsp;</span>
 					<ng-template #hideZero23>
 						<span matPrefix>
 							{{currency_symbol}} &nbsp;
 						</span>
 					</ng-template>
-					<input type="number" matInput placeholder="Friday/Saturday Night" formControlName="friday_saturday_charges"
-						tabindex="1" (focus)="$event.target.select()" (change)="updateRateRangeObject()" />
+					<input type="number" matInput placeholder="Friday/Saturday Night" formControlName="friday_saturday_charges" tabindex="1"
+						(focus)="$event.target.select()" (change)="updateRateRangeObject()" />
 				</mat-form-field>
 				<div *ngIf="is_form_submitted && form.friday_saturday_charges.errors || form.friday_saturday_charges.touched && form.friday_saturday_charges.errors"
 					class="text-danger margin-bottom-thin my-mat-hint">
@@ -505,20 +492,18 @@
 			<div id="radio-button" class="row">
 				<!-- TYPE -->
 				<div id="radio-button-type" class="col-md-6">
-					<div id="rate-manager-percent" class="text-center"
-						(click)="changeDetection.radioButton('percent', 'rate_range_percent_flat')"
+					<div id="rate-manager-percent" class="text-center" (click)="changeDetection.radioButton('percent', 'rate_range_percent_flat')"
 						[ngClass]="form.rate_range_percent_flat.value == 'percent' ? 'active' : ''">
 						Percent (%)
 					</div>
-					<div id="rate-manager-flat" class="text-center"
-						(click)="changeDetection.radioButton('flat', 'rate_range_percent_flat')"
+					<div id="rate-manager-flat" class="text-center" (click)="changeDetection.radioButton('flat', 'rate_range_percent_flat')"
 						[ngClass]="form.rate_range_percent_flat.value == 'flat' ? 'active' : ''">
 						Flat ($)
 					</div>
 				</div>
 
 				<!-- SLIDER -->
-				<div id="rate-manager-slider" class="col-md-6 mt-3">
+				<div id="rate-manager-slider" class="col-md-6 mt-3 p-0">
 					<span id="sign-percent-minus" (click)="changeThumb(1, '-')">
 						-
 						<i class="bi text-orange"
@@ -543,17 +528,19 @@
 		</div>
 		<!-- RATE MANAGER ENDS -->
 
-		<!-- NOTE: GRATUITY -->
-		<div class="row">
+		<!-- GRATUITY -->
+		<div class="row mb-5">
 			<div class="col-md-12">
-				<h3 class="mt-4 addveh_top d-md-flex justify-content-between align-items-center">
-					<label class="alert alert-danger">Turn Off Auto Add 20%</label>
+				<h3 class="my-3">
+					<label class="alert alert-danger"> Surge Protection </label>
 				</h3>
-				<div class="px-3 custom-control custom-checkbox pl-0">
+				<div class="px-3 custom-control custom-checkbox pl-0 d-flex flex-wrap align-items-center">
 					<mat-slide-toggle class="example-margin gratuityToggle" [checked]="form.is_gratuity.value == 'yes'"
 						(change)="changeDetection.gratuity($event.checked, 'is_gratuity')" tabindex="1">
 					</mat-slide-toggle>
-					<label class="gratuityLabel ml-2">Gratuity <span class="theme-color">(Optional)</span></label>
+					<label class="text-orange ml-2">
+						Turn on 20% surge pricing for high demand events.
+					</label>
 				</div>
 			</div>
 		</div>
@@ -571,8 +558,7 @@
 						<mat-label class="amenityLabel">
 							{{amenity.value.value.name}}
 						</mat-label>
-						<span matPrefix
-							*ngIf="amenity.value.value.price == null || amenity.value.value.price == ''; else hideZero18">
+						<span matPrefix *ngIf="amenity.value.value.price == null || amenity.value.value.price == ''; else hideZero18">
 							{{currency_symbol}} 0 &nbsp;</span>
 						<ng-template #hideZero18>
 							<span matPrefix>{{currency_symbol}} &nbsp;</span>
@@ -608,8 +594,8 @@
 								{{currency_symbol}} &nbsp;
 							</span>
 						</ng-template>
-						<input type="number" matInput placeholder="Airport Arrival Tax"
-							formControlName="airport_arrival_tax_per_us" tabindex="1" (focus)="$event.target.select()">
+						<input type="number" matInput placeholder="Airport Arrival Tax" formControlName="airport_arrival_tax_per_us" tabindex="1"
+							(focus)="$event.target.select()">
 					</mat-form-field>
 					<div *ngIf="is_form_submitted && form.airport_arrival_tax_per_us.errors || form.airport_arrival_tax_per_us.touched && form.airport_arrival_tax_per_us.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -634,8 +620,8 @@
 								{{currency_symbol}} &nbsp;
 							</span>
 						</ng-template>
-						<input type="number" matInput placeholder="Airport Departure Tax"
-							formControlName="airport_departure_tax_per_us" tabindex="1" (focus)="$event.target.select()" />
+						<input type="number" matInput placeholder="Airport Departure Tax" formControlName="airport_departure_tax_per_us" tabindex="1"
+							(focus)="$event.target.select()" />
 					</mat-form-field>
 					<div *ngIf="is_form_submitted && form.airport_departure_tax_per_us.errors || form.airport_departure_tax_per_us.touched && form.airport_departure_tax_per_us.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -651,8 +637,7 @@
 						<mat-label>
 							Sea Port Tax
 						</mat-label>
-						<span matPrefix
-							*ngIf="form.sea_port_tax_per_us.value == null || form.sea_port_tax_per_us.value == ''; else hideZero16">
+						<span matPrefix *ngIf="form.sea_port_tax_per_us.value == null || form.sea_port_tax_per_us.value == ''; else hideZero16">
 							{{currency_symbol}} 0 &nbsp;
 						</span>
 						<ng-template #hideZero16>
@@ -685,8 +670,8 @@
 								{{currency_symbol}} &nbsp;
 							</span>
 						</ng-template>
-						<input type="number" matInput placeholder="City Congestion Tax"
-							formControlName="city_congestion_tax_per_us" tabindex="1" autocomplete="off" />
+						<input type="number" matInput placeholder="City Congestion Tax" formControlName="city_congestion_tax_per_us" tabindex="1"
+							autocomplete="off" />
 					</mat-form-field>
 					<div *ngIf="is_form_submitted && form.city_congestion_tax_per_us.errors || form.city_congestion_tax_per_us.touched && form.city_congestion_tax_per_us.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -731,8 +716,8 @@
 						<div class="col-md-12 col-lg-6 cityTaxErrorMsg ">
 							<mat-form-field class="mat-form-field-rates" appearance="outline" class="cityTax">
 								<mat-label>City Tax</mat-label>
-								<input type="number" matInput placeholder="City Tax" (focus)="$event.target.select()"
-									formControlName="city_tax" tabindex="1" autocomplete="off" />
+								<input type="number" matInput placeholder="City Tax" (focus)="$event.target.select()" formControlName="city_tax"
+									tabindex="1" autocomplete="off" />
 							</mat-form-field>
 							<div *ngIf="is_form_submitted && form.city_tax.errors || form.city_tax.touched && form.city_tax.errors"
 								class="text-danger margin-bottom-thin my-mat-hint">
@@ -763,8 +748,7 @@
 									<input class="radio-button" type="radio" id="test4" name="state_tax_percent_flat"
 										formControlName="state_tax_percent_flat" value="flat" tabindex="-1">
 									<div class="radio-tile">
-										<label class="radio-tile-label" for="test4">Flat (<span
-												class="prefix">{{currency_symbol}}</span>) </label>
+										<label class="radio-tile-label" for="test4">Flat (<span class="prefix">{{currency_symbol}}</span>) </label>
 									</div>
 								</div>
 							</div>
@@ -801,11 +785,10 @@
 						<div class="col-md-6 col-lg-3 pl-0 mobilePadding">
 							<div class="form-group radio-tile-group assment_radio">
 								<div class="custom-radio input-container">
-									<input class="radio-button" type="radio" id="test6" name="vat_percent_flat"
-										formControlName="vat_percent_flat" value="flat" tabindex="-1">
+									<input class="radio-button" type="radio" id="test6" name="vat_percent_flat" formControlName="vat_percent_flat"
+										value="flat" tabindex="-1">
 									<div class="radio-tile">
-										<label class="radio-tile-label" for="test6">Flat (<span
-												class="prefix">{{currency_symbol}}</span>) </label>
+										<label class="radio-tile-label" for="test6">Flat (<span class="prefix">{{currency_symbol}}</span>) </label>
 									</div>
 								</div>
 							</div>
@@ -813,8 +796,7 @@
 						<div class="col-md-12 col-lg-6 cityTaxErrorMsg">
 							<mat-form-field class="mat-form-field-rates" appearance="outline" class="cityTax">
 								<mat-label>VAT</mat-label>
-								<input type="number" matInput placeholder="VAT" formControlName="vat" tabindex="1"
-									(focus)="$event.target.select()" />
+								<input type="number" matInput placeholder="VAT" formControlName="vat" tabindex="1" (focus)="$event.target.select()" />
 							</mat-form-field>
 							<div *ngIf="is_form_submitted && form.vat.errors || form.vat.touched && form.vat.errors"
 								class="text-danger margin-bottom-thin my-mat-hint">
@@ -830,8 +812,8 @@
 						<div class="col-md-6 col-lg-3 pr-0 borderright mobilePadding">
 							<div class="form-group radio-tile-group assment_radio">
 								<div class="custom-radio input-container">
-									<input class="radio-button" type="radio" id="test7" name="workman_comp_percent_flat"
-										checked="" formControlName="workman_comp_percent_flat" value="percent" tabindex="-1">
+									<input class="radio-button" type="radio" id="test7" name="workman_comp_percent_flat" checked=""
+										formControlName="workman_comp_percent_flat" value="percent" tabindex="-1">
 									<div class="radio-tile">
 										<label class="radio-tile-label" for="test7">Percent (<span class="prefix">%</span>)
 										</label>
@@ -845,8 +827,7 @@
 									<input class="radio-button" type="radio" id="test8" name="workman_comp_percent_flat"
 										formControlName="workman_comp_percent_flat" value="flat" tabindex="-1">
 									<div class="radio-tile">
-										<label class="radio-tile-label" for="test8">Flat (<span
-												class="prefix">{{currency_symbol}}</span>) </label>
+										<label class="radio-tile-label" for="test8">Flat (<span class="prefix">{{currency_symbol}}</span>) </label>
 									</div>
 								</div>
 							</div>
@@ -854,8 +835,8 @@
 						<div class="col-md-12 col-lg-6 cityTaxErrorMsg">
 							<mat-form-field class="mat-form-field-rates" appearance="outline" class="cityTax">
 								<mat-label>Workman's Comp</mat-label>
-								<input type="number" matInput placeholder="Workman's Comp" formControlName="workmans_comp"
-									tabindex="1" (focus)="$event.target.select()" />
+								<input type="number" matInput placeholder="Workman's Comp" formControlName="workmans_comp" tabindex="1"
+									(focus)="$event.target.select()" />
 							</mat-form-field>
 							<div *ngIf="is_form_submitted && form.workmans_comp.errors || form.workmans_comp.touched && form.workmans_comp.errors"
 								class="text-danger margin-bottom-thin my-mat-hint">
@@ -871,8 +852,7 @@
 						<div class="col-md-6 col-lg-3 pr-0 borderright mobilePadding">
 							<div class="form-group radio-tile-group assment_radio">
 								<div class="custom-radio input-container">
-									<input class="radio-button" type="radio" id="test9"
-										name="other_transportation_tax_percent_flat" checked=""
+									<input class="radio-button" type="radio" id="test9" name="other_transportation_tax_percent_flat" checked=""
 										formControlName="other_transportation_tax_percent_flat" value="percent" tabindex="-1">
 									<div class="radio-tile">
 										<label class="radio-tile-label" for="test9">Percent (<span class="prefix">%</span>)
@@ -884,12 +864,10 @@
 						<div class="col-md-6 col-lg-3 pl-0 mobilePadding">
 							<div class="form-group radio-tile-group assment_radio">
 								<div class="custom-radio input-container">
-									<input class="radio-button" type="radio" id="test10"
-										name="other_transportation_tax_percent_flat"
+									<input class="radio-button" type="radio" id="test10" name="other_transportation_tax_percent_flat"
 										formControlName="other_transportation_tax_percent_flat" value="flat" tabindex="-1">
 									<div class="radio-tile">
-										<label class="radio-tile-label" for="test10">Flat (<span
-												class="prefix">{{currency_symbol}}</span>) </label>
+										<label class="radio-tile-label" for="test10">Flat (<span class="prefix">{{currency_symbol}}</span>) </label>
 									</div>
 								</div>
 							</div>
@@ -897,8 +875,8 @@
 						<div class="col-md-12 col-lg-6 cityTaxErrorMsg">
 							<mat-form-field class="mat-form-field-rates" appearance="outline" class="cityTax">
 								<mat-label>Other Transportation Tax</mat-label>
-								<input type="number" matInput placeholder="Other Transportation Tax"
-									formControlName="other_transportation_tax" (focus)="$event.target.select()" tabindex="1">
+								<input type="number" matInput placeholder="Other Transportation Tax" formControlName="other_transportation_tax"
+									(focus)="$event.target.select()" tabindex="1">
 							</mat-form-field>
 							<div *ngIf="is_form_submitted && form.other_transportation_tax.errors || form.other_transportation_tax.touched && form.other_transportation_tax.errors"
 								class="text-danger margin-bottom-thin my-mat-hint">
@@ -918,8 +896,7 @@
 
 	<section class="billing_inforamtion">
 		<ul>
-			<li><button class="custom-btn savebutton" (click)="submitForm()" [disabled]="is_form_submitted"
-					tabindex="1">SAVE</button> </li>
+			<li><button class="custom-btn savebutton" (click)="submitForm()" [disabled]="is_form_submitted" tabindex="1">SAVE</button> </li>
 			<li><button class="custom-btn resetbutton" (click)="resetForm()" tabindex="1">RESET</button> </li>
 			<!-- <li><button class="custom-btn backbutton" (click)="backButton()" data-toggle="tooltip" data-placement="top"
 					title="Clicking back button deletes all fields." tabindex="1">BACK</button> </li> -->

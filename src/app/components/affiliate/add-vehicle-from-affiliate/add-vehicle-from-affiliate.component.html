@@ -9,12 +9,10 @@
 					<mat-form-field appearance="outline"
 						[ngClass]="(errorMsg && f.vehicleType.errors) || (submittedForm && f.vehicleType.errors) ? 'mat-form-field-invalid ng-invalid' : ''">
 						<mat-label>Vehicle Type <span class="asterisk">*</span></mat-label>
-						<input type="text" id="vehicleTypeField" placeholder="Choose One" (focus)="$event.target.select()"
-							aria-label="Number" matInput (keyup)="searchVehicleType($event.target.value)"
-							[matAutocomplete]="auto1" tabindex="1">
-						<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
-							style="enable-background:new 0 0 122.88 63.9" xml:space="preserve">
+						<input type="text" id="vehicleTypeField" placeholder="Choose One" (focus)="$event.target.select()" aria-label="Number"
+							matInput (keyup)="searchVehicleType($event.target.value)" [matAutocomplete]="auto1" tabindex="1">
+						<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+							viewBox="0 0 122.88 63.9" style="enable-background:new 0 0 122.88 63.9" xml:space="preserve">
 							<style type="text/css">
 								.sty0 {
 									fill-rule: evenodd;
@@ -42,11 +40,9 @@
 						[ngClass]="(errorMsg1 && f.make.errors) || (submittedForm && f.make.errors) ? 'mat-form-field-invalid ng-invalid' : ''">
 						<mat-label>Enter Make <span class="asterisk">*</span></mat-label>
 						<input type="search" id="makeField" placeholder="Type First Letters of Make" aria-label="Number" matInput
-							(focus)="$event.target.select()" (keyup)="searchMake($event.target.value)" [matAutocomplete]="auto2"
-							tabindex="1">
-						<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
-							style="enable-background:new 0 0 122.88 63.9" xml:space="preserve">
+							(focus)="$event.target.select()" (keyup)="searchMake($event.target.value)" [matAutocomplete]="auto2" tabindex="1">
+						<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+							viewBox="0 0 122.88 63.9" style="enable-background:new 0 0 122.88 63.9" xml:space="preserve">
 							<style type="text/css">
 								.sty0 {
 									fill-rule: evenodd;
@@ -58,14 +54,12 @@
 							</g>
 						</svg>
 						<mat-autocomplete #auto2="matAutocomplete">
-							<mat-option *ngFor="let m of filteredMake" [value]="m.name"
-								(onSelectionChange)="selectMake(m.ID,$event.isUserInput)">
+							<mat-option *ngFor="let m of filteredMake" [value]="m.name" (onSelectionChange)="selectMake(m.ID,$event.isUserInput)">
 								{{m.name}}
 							</mat-option>
 						</mat-autocomplete>
 					</mat-form-field>
-					<div *ngIf="(errorMsg1 && f.make.errors) || (submittedForm && f.make.errors)"
-						class="text-danger margin-bottom-thin my-mat-hint">
+					<div *ngIf="(errorMsg1 && f.make.errors) || (submittedForm && f.make.errors)" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.make.errors.required">The Make and Model is required</div>
 					</div>
 				</div>
@@ -74,11 +68,9 @@
 						[ngClass]="(errorMsg2 && f.model.errors) || (submittedForm && f.model.errors) ? 'mat-form-field-invalid ng-invalid' : ''">
 						<mat-label>Model <span class="asterisk">*</span></mat-label>
 						<input type="search" id="modelField" placeholder="Choose One" aria-label="Number" matInput
-							(keyup)="searchModel($event.target.value)" (focus)="$event.target.select()" [matAutocomplete]="auto3"
-							tabindex="1">
-						<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
-							style="enable-background:new 0 0 122.88 63.9" xml:space="preserve">
+							(keyup)="searchModel($event.target.value)" (focus)="$event.target.select()" [matAutocomplete]="auto3" tabindex="1">
+						<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+							viewBox="0 0 122.88 63.9" style="enable-background:new 0 0 122.88 63.9" xml:space="preserve">
 							<style type="text/css">
 								.sty0 {
 									fill-rule: evenodd;
@@ -90,8 +82,7 @@
 							</g>
 						</svg>
 						<mat-autocomplete #auto3="matAutocomplete">
-							<mat-option *ngFor="let m of filteredModel" [value]="m.name"
-								(onSelectionChange)="selectModel(m.ID,$event.isUserInput)">
+							<mat-option *ngFor="let m of filteredModel" [value]="m.name" (onSelectionChange)="selectModel(m.ID,$event.isUserInput)">
 								{{m.name}}
 							</mat-option>
 						</mat-autocomplete>
@@ -106,8 +97,7 @@
 						<mat-label>
 							Number of Vehicles <span class="asterisk">*</span>
 						</mat-label>
-						<input matInput type="number" placeholder="Number of Vehicles" formControlName="numberOfVehicles"
-							tabindex="1">
+						<input matInput type="number" placeholder="Number of Vehicles" formControlName="numberOfVehicles" tabindex="1">
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.numberOfVehicles.errors || f.numberOfVehicles.touched && f.numberOfVehicles.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -128,11 +118,9 @@
 						[ngClass]="(errorMsg3 && f.year.errors) || (submittedForm && f.year.errors) ? 'mat-form-field-invalid ng-invalid' : ''">
 						<mat-label>Year <span class="asterisk">*</span></mat-label>
 						<input type="search" id="yearField" placeholder="Choose One" aria-label="Number" matInput
-							(keyup)="searchYear($event.target.value)" (focus)="$event.target.select()" [matAutocomplete]="auto4"
-							tabindex="1">
-						<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
-							style="enable-background:new 0 0 122.88 63.9" xml:space="preserve">
+							(keyup)="searchYear($event.target.value)" (focus)="$event.target.select()" [matAutocomplete]="auto4" tabindex="1">
+						<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+							viewBox="0 0 122.88 63.9" style="enable-background:new 0 0 122.88 63.9" xml:space="preserve">
 							<style type="text/css">
 								.sty0 {
 									fill-rule: evenodd;
@@ -150,8 +138,7 @@
 							</mat-option>
 						</mat-autocomplete>
 					</mat-form-field>
-					<div *ngIf="(errorMsg3 && f.year.errors) || (submittedForm && f.year.errors)"
-						class="text-danger margin-bottom-thin my-mat-hint">
+					<div *ngIf="(errorMsg3 && f.year.errors) || (submittedForm && f.year.errors)" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.year.errors.required">The Year is required</div>
 					</div>
 				</div>
@@ -160,11 +147,9 @@
 						[ngClass]="(errorMsg4 && f.color.errors) || (submittedForm && f.color.errors) ? 'mat-form-field-invalid ng-invalid' : ''">
 						<mat-label>Color <span class="asterisk">*</span></mat-label>
 						<input type="search" id="colorField" placeholder="Choose One" aria-label="Number" matInput
-							(keyup)="searchColor($event.target.value)" (focus)="$event.target.select()" [matAutocomplete]="auto5"
-							tabindex="1">
-						<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
-							style="enable-background:new 0 0 122.88 63.9" xml:space="preserve">
+							(keyup)="searchColor($event.target.value)" (focus)="$event.target.select()" [matAutocomplete]="auto5" tabindex="1">
+						<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+							viewBox="0 0 122.88 63.9" style="enable-background:new 0 0 122.88 63.9" xml:space="preserve">
 							<style type="text/css">
 								.sty0 {
 									fill-rule: evenodd;
@@ -196,8 +181,7 @@
 								<span class="theme-color">(optional)</span>
 							</ng-template>
 						</mat-label>
-						<input matInput placeholder="License Plate" (focus)="$event.target.select()"
-							formControlName="licensePlate" tabindex="1">
+						<input matInput placeholder="License Plate" (focus)="$event.target.select()" formControlName="licensePlate" tabindex="1">
 					</mat-form-field>
 				</div>
 				<div class="col-md-6">
@@ -241,8 +225,8 @@
 						<mat-label>Airport / City Cancel Times <span class="asterisk">*</span></mat-label>
 						<mat-select formControlName="nonCharterCancelPolicy" tabindex="1">
 							<mat-option value="">Choose Airport / City Cancel Times</mat-option>
-							<mat-option *ngFor="let nonCharterCancelOption of nonCharterCancelOptions"
-								[value]="nonCharterCancelOption.value">{{nonCharterCancelOption.label}}</mat-option>
+							<mat-option *ngFor="let nonCharterCancelOption of nonCharterCancelOptions" [value]="nonCharterCancelOption.value">
+								{{nonCharterCancelOption.label}}</mat-option>
 						</mat-select>
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.nonCharterCancelPolicy.errors || f.nonCharterCancelPolicy.touched && f.nonCharterCancelPolicy.errors"
@@ -259,8 +243,8 @@
 						<mat-label>Charter Cancel Times <span class="asterisk">*</span></mat-label>
 						<mat-select formControlName="charterCancelPolicy" tabindex="1">
 							<mat-option value="">Choose Charter Cancel Times</mat-option>
-							<mat-option *ngFor="let charterCancelOption of charterCancelOptions"
-								[value]="charterCancelOption.value">{{charterCancelOption.label}}</mat-option>
+							<mat-option *ngFor="let charterCancelOption of charterCancelOptions" [value]="charterCancelOption.value">
+								{{charterCancelOption.label}}</mat-option>
 						</mat-select>
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.charterCancelPolicy.errors || f.charterCancelPolicy.touched && f.charterCancelPolicy.errors"
@@ -304,8 +288,7 @@
 			<div class="row mt-3">
 				<div class="col-md-4">
 					<div class="input-checkbox">
-						<div class="checkbox" [ngClass]="service.includes('local') ? 'active' : ''"
-							(click)="onServiceChange('local')">
+						<div class="checkbox" [ngClass]="service.includes('local') ? 'active' : ''" (click)="onServiceChange('local')">
 							Local Service Only
 						</div>
 					</div>
@@ -320,8 +303,7 @@
 				</div>
 				<div class="col-md-4">
 					<div class="input-checkbox">
-						<div class="checkbox" [ngClass]="service.includes('shuttle') ? 'active' : ''"
-							(click)="onServiceChange('shuttle')">
+						<div class="checkbox" [ngClass]="service.includes('shuttle') ? 'active' : ''" (click)="onServiceChange('shuttle')">
 							Shuttle Service
 						</div>
 					</div>
@@ -339,8 +321,7 @@
 			<div class="choose_ameniteslist mt-3">
 				<div class="custom-control custom-checkbox" *ngFor="let chargableAmenity of chargableAmenities">
 					<!-- {{chargableAmenity.value | json}}<br> -->
-					<input type="checkbox" class="custom-control-input" id="amenity_{{chargableAmenity.name}}"
-						[value]="chargableAmenity.id"
+					<input type="checkbox" class="custom-control-input" id="amenity_{{chargableAmenity.name}}" [value]="chargableAmenity.id"
 						(change)="onAmenitiesCheckboxChange($event.target.value,$event.target.checked)" tabindex="1">
 					<label class="custom-control-label" for="amenity_{{chargableAmenity.name}}">
 						<span *ngIf="chargableAmenity.chargeable==='yes'" class="amenity-dollar">&nbsp; $</span>
@@ -353,21 +334,18 @@
 			</div>
 		</div>
 
-		<h2 class="headinginfo topMargin"> Choose Non Chargable Amenities <span class="asterisk">* </span> <span
-				class="spanText">(
+		<h2 class="headinginfo topMargin"> Choose Non Chargable Amenities <span class="asterisk">* </span> <span class="spanText">(
 				Choose
 				each non chargable amenity
 				you supply or provide )</span> </h2>
 		<div class="container mt-1 non-chargable-amenity">
 			<div class="choose_ameniteslist mt-3" *ngFor="let nonChargableAmenityGroup of nonChargableAmenities | keyvalue">
-				<div class="custom-control custom-checkbox"
-					*ngFor="let nonChargableAmenity of nonChargableAmenityGroup.value | keyvalue">
+				<div class="custom-control custom-checkbox" *ngFor="let nonChargableAmenity of nonChargableAmenityGroup.value | keyvalue">
 					<!-- {{nonChargableAmenity.value | json}}<br> -->
 					<input type="checkbox" class="custom-control-input" id="amenity_{{nonChargableAmenity.value.name}}"
-						[value]="nonChargableAmenity.value.id"
-						(change)="onAmenitiesCheckboxChange($event.target.value,$event.target.checked)" tabindex="1">
-					<label class="custom-control-label"
-						for="amenity_{{nonChargableAmenity.value.name}}">{{nonChargableAmenity.value.name}}</label>
+						[value]="nonChargableAmenity.value.id" (change)="onAmenitiesCheckboxChange($event.target.value,$event.target.checked)"
+						tabindex="1">
+					<label class="custom-control-label" for="amenity_{{nonChargableAmenity.value.name}}">{{nonChargableAmenity.value.name}}</label>
 					<label *ngIf="nonChargableAmenity.value.chargeable==='yes'" class="amenity-dollar">&nbsp; $</label>
 				</div>
 			</div>
@@ -384,10 +362,9 @@
 		<div class="container mt-1 ">
 			<div class="choose_ameniteslist">
 				<div class="custom-control custom-checkbox" *ngFor="let specialAmenity of specialAmenities">
-					<input type="checkbox" class="custom-control-input" id="specialAmenity_{{specialAmenity.name}}"
-						[value]="specialAmenity.id" (change)="onSpecialAmenitiesCheckboxChange($event)" tabindex="1">
-					<label class="custom-control-label"
-						for="specialAmenity_{{specialAmenity.name}}">{{specialAmenity.name}}</label>
+					<input type="checkbox" class="custom-control-input" id="specialAmenity_{{specialAmenity.name}}" [value]="specialAmenity.id"
+						(change)="onSpecialAmenitiesCheckboxChange($event)" tabindex="1">
+					<label class="custom-control-label" for="specialAmenity_{{specialAmenity.name}}">{{specialAmenity.name}}</label>
 				</div>
 			</div>
 			<div *ngIf="submittedForm && f.specialAmenities.errors" class="text-danger margin-bottom-thin my-mat-hint">
@@ -397,14 +374,20 @@
 	</section>
 
 	<section class="user_information">
-		<h2 class="headinginfo"> Choose Interiors <span class="asterisk">* </span> <span class="spanText">( Choose each
-				interior option
-				for this vehicle )</span></h2>
+		<h2 class="headinginfo">
+			Choose Interiors
+			<span class="asterisk">* </span>
+			<span class="spanText">
+				( Choose each interior option for this vehicle )
+			</span>
+		</h2>
+		<p style="margin: 8px 1rem 12px;" class="text-orange">
+			Please select at least one interior
+		</p>
 		<div class="container mt-1 ">
 			<div class="choose_ameniteslist">
 				<div class="custom-control custom-checkbox" *ngFor="let interior of interiors">
-					<input type="checkbox" class="custom-control-input" id="interior_{{interior.name}}"
-						[checked]="interior.id==1 ? true : false" [value]="interior.id"
+					<input type="checkbox" class="custom-control-input" id="interior_{{interior.name}}" [value]="interior.id"
 						(change)="onInteriorsCheckboxChange($event)" tabindex="1">
 					<label class="custom-control-label" for="interior_{{interior.name}}">{{interior.name}}</label>
 				</div>
@@ -417,9 +400,11 @@
 
 	<!-- Main page content-->
 	<section class="user_information">
-		<h2 class="headinginfo">Exterior and Interior <span class="spanText">( Exterior And Interior – Photo Tip –<svg
-					data-toggle="modal" data-placement="top" title="Click for Photo Tip" data-target="#photoInstructionsModal"
-					class="camera-svg" viewBox="0 0 297.88 216" xml:space="preserve" tabindex="1">
+		<h2 class="headinginfo">
+			Exterior and Interior
+			<span class="spanText">
+				(Exterior And Interior – Photo Tip –
+				<svg data-toggle="modal" data-placement="top" class="camera-svg" viewBox="0 0 297.88 216" xml:space="preserve" tabindex="1">
 					<style type="text/css">
 						.st0 {
 							fill: #F89B41;
@@ -435,7 +420,10 @@
 						<path class="st0"
 							d="M129.22,119.75c-0.02-11.43,8.36-19.82,19.76-19.8c11.39,0.02,19.68,8.43,19.64,19.91c-0.04,11.25-8.79,20.18-19.76,20.14C137.87,139.96,129.24,131.07,129.22,119.75z" />
 					</g>
-				</svg> Take Interior Pix On Cloudy Days )</span></h2>
+				</svg>
+				Take Interior Pix On Cloudy Days)
+			</span>
+		</h2>
 		<div class="container mt-1">
 			<span class="alert alert-danger row ml-2 mr-2 mt-3 mb-2 d-lg-none">
 				All Photos to be uploaded from Desktop or File.
@@ -892,7 +880,9 @@
 					<div class="col-md-4" *ngIf="rearPlateImage; else noRearPlateImage">
 						<div class="vehtype_extint">
 							<div>
-								<p>Rear Plate <span class="optionalTextStyle">(w/exp decal) </span>
+								<p>
+									Rear Plate
+									<span class="optionalTextStyle">(w/exp decal) </span>
 									<span *ngIf="affiliateType!='fleet_operator'; else nonFleetOperator" class="asterisk">*</span>
 									<ng-template #nonFleetOperator>
 										<span class="optionalTextStyle">(optional)</span>
@@ -902,9 +892,7 @@
 								<ul class="mt-3">
 									<li>
 										<button class="changeuploaded" tabindex="1">
-											<input type="file"
-												(change)="vehicleOfficialImagesChange($event,'rearPlate',rearPlateId)"
-												tabindex="-1">
+											<input type="file" (change)="vehicleOfficialImagesChange($event,'rearPlate',rearPlateId)" tabindex="-1">
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -914,8 +902,8 @@
 											Change
 										</button>
 									</li>
-									<li *ngIf="affiliateType=='fleet_operator'"><a class="delete-btn"
-											(click)="deleteImage(rearPlateId,'rearPlate')" tabindex="1">
+									<li *ngIf="affiliateType=='fleet_operator'"><a class="delete-btn" (click)="deleteImage(rearPlateId,'rearPlate')"
+											tabindex="1">
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 												<path
 													d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
@@ -933,15 +921,20 @@
 						<div class="col-md-4">
 							<div class="vehtype_extint">
 								<div>
-									<p>Window Permit</p>
+									<p>
+										Rear Plate Image
+										<span *ngIf="affiliateType!='fleet_operator'; else nonFleetOperator" class="asterisk">*</span>
+										<ng-template #nonFleetOperator>
+											<span class="optionalTextStyle">(optional)</span>
+										</ng-template>
+									</p>
 									<div class="emptyImage">
 										<img src="../../../../assets/images/empty-image.png" tabindex="-1">
 									</div>
 									<ul class="mt-3">
 										<li>
 											<button class="adduploaded" tabindex="1">
-												<input type="file"
-													(change)="vehicleOfficialImagesChange($event,'windowPermit',windowPermitId)"
+												<input type="file" (change)="vehicleOfficialImagesChange($event,'rearPlate',rearPlateId)"
 													tabindex="-1">
 												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 													<path fill="none" d="M0 0h24v24H0V0z" />
@@ -961,13 +954,18 @@
 					<div class="col-md-4" *ngIf="windowPermitImage; else noWindowPermitImage">
 						<div class="vehtype_extint">
 							<div>
-								<p>Window Permit</p>
+								<p>
+									Window Permit
+									<span *ngIf="affiliateType!='fleet_operator'; else nonFleetOperator" class="asterisk">*</span>
+									<ng-template #nonFleetOperator>
+										<span class="optionalTextStyle">(Optional)</span>
+									</ng-template>
+								</p>
 								<img src="{{windowPermitImage}}" (click)="showImageInModal(windowPermitImage)" tabindex="-1">
 								<ul class="mt-3">
 									<li>
 										<button class="changeuploaded" tabindex="1">
-											<input type="file"
-												(change)="vehicleOfficialImagesChange($event,'windowPermit',windowPermitId)"
+											<input type="file" (change)="vehicleOfficialImagesChange($event,'windowPermit',windowPermitId)"
 												tabindex="-1">
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
@@ -993,15 +991,20 @@
 						<div class="col-md-4">
 							<div class="vehtype_extint">
 								<div>
-									<p>Window Permit</p>
+									<p>
+										Window Permit
+										<span *ngIf="affiliateType!='fleet_operator'; else nonFleetOperator" class="asterisk">*</span>
+										<ng-template #nonFleetOperator>
+											<span class="optionalTextStyle">(optional)</span>
+										</ng-template>
+									</p>
 									<div class="emptyImage">
 										<img src="../../../../assets/images/empty-image.png" tabindex="-1">
 									</div>
 									<ul class="mt-3">
 										<li>
 											<button class="adduploaded" tabindex="1">
-												<input type="file"
-													(change)="vehicleOfficialImagesChange($event,'windowPermit',windowPermitId)"
+												<input type="file" (change)="vehicleOfficialImagesChange($event,'windowPermit',windowPermitId)"
 													tabindex="-1">
 												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 													<path fill="none" d="M0 0h24v24H0V0z" />
@@ -1021,13 +1024,18 @@
 					<div class="col-md-4" *ngIf="windowPermit2Image; else noWindowPermit2Image">
 						<div class="vehtype_extint">
 							<div>
-								<p>Secretary of State</p>
+								<p>
+									Secretary of State
+									<span *ngIf="affiliateType!='fleet_operator'; else nonFleetOperator" class="asterisk">*</span>
+									<ng-template #nonFleetOperator>
+										<span class="optionalTextStyle">(optional)</span>
+									</ng-template>
+								</p>
 								<img src="{{windowPermit2Image}}" (click)="showImageInModal(windowPermit2Image)" tabindex="-1">
 								<ul class="mt-3">
 									<li>
 										<button class="changeuploaded" tabindex="1">
-											<input type="file"
-												(change)="vehicleOfficialImagesChange($event,'windowPermit2',windowPermit2Id)"
+											<input type="file" (change)="vehicleOfficialImagesChange($event,'windowPermit2',windowPermit2Id)"
 												tabindex="-1">
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
@@ -1053,15 +1061,20 @@
 						<div class="col-md-4">
 							<div class="vehtype_extint">
 								<div>
-									<p>Secretary of State</p>
+									<p>
+										Secretary of State
+										<span *ngIf="affiliateType!='fleet_operator'; else nonFleetOperator" class="asterisk">*</span>
+										<ng-template #nonFleetOperator>
+											<span class="optionalTextStyle">(optional)</span>
+										</ng-template>
+									</p>
 									<div class="emptyImage">
 										<img src="../../../../assets/images/empty-image.png" tabindex="-1">
 									</div>
 									<ul class="mt-3">
 										<li>
 											<button class="adduploaded" tabindex="1">
-												<input type="file"
-													(change)="vehicleOfficialImagesChange($event,'windowPermit2',windowPermit2Id)"
+												<input type="file" (change)="vehicleOfficialImagesChange($event,'windowPermit2',windowPermit2Id)"
 													tabindex="-1">
 												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 													<path fill="none" d="M0 0h24v24H0V0z" />
@@ -1083,13 +1096,18 @@
 					<div class="col-md-4" *ngIf="usdotPermitImage; else noUsdotPermitImage">
 						<div class="vehtype_extint">
 							<div>
-								<p>USDOT Permit</p>
+								<p>
+									USDOT Permit
+									<span *ngIf="affiliateType!='fleet_operator'; else nonFleetOperator" class="asterisk">*</span>
+									<ng-template #nonFleetOperator>
+										<span class="optionalTextStyle">(optional)</span>
+									</ng-template>
+								</p>
 								<img src="{{usdotPermitImage}}" (click)="showImageInModal(usdotPermitImage)" tabindex="-1">
 								<ul class="mt-3">
 									<li>
 										<button class="changeuploaded" tabindex="1">
-											<input type="file"
-												(change)="vehicleOfficialImagesChange($event,'usdotPermit',usdotPermitId)"
+											<input type="file" (change)="vehicleOfficialImagesChange($event,'usdotPermit',usdotPermitId)"
 												tabindex="-1">
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
@@ -1115,15 +1133,20 @@
 						<div class="col-md-4">
 							<div class="vehtype_extint">
 								<div>
-									<p>USDOT Permit</p>
+									<p>
+										USDOT Permit
+										<span *ngIf="affiliateType!='fleet_operator'; else nonFleetOperator" class="asterisk">*</span>
+										<ng-template #nonFleetOperator>
+											<span class="optionalTextStyle">(optional)</span>
+										</ng-template>
+									</p>
 									<div class="emptyImage">
 										<img src="../../../../assets/images/empty-image.png" tabindex="-1">
 									</div>
 									<ul class="mt-3">
 										<li>
 											<button class="adduploaded" tabindex="1">
-												<input type="file"
-													(change)="vehicleOfficialImagesChange($event,'usdotPermit',usdotPermitId)"
+												<input type="file" (change)="vehicleOfficialImagesChange($event,'usdotPermit',usdotPermitId)"
 													tabindex="-1">
 												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 													<path fill="none" d="M0 0h24v24H0V0z" />
@@ -1143,13 +1166,18 @@
 					<div class="col-md-4" *ngIf="mcImage; else noMcImage">
 						<div class="vehtype_extint">
 							<div>
-								<p>Vehicle Inspection Certificate</p>
+								<p>
+									Vehicle Inspection Certificate
+									<span *ngIf="affiliateType!='fleet_operator'; else nonFleetOperator" class="asterisk">*</span>
+									<ng-template #nonFleetOperator>
+										<span class="optionalTextStyle">(optional)</span>
+									</ng-template>
+								</p>
 								<img src="{{mcImage}}" (click)="showImageInModal(mcImage)" tabindex="-1">
 								<ul class="mt-3">
 									<li>
 										<button class="changeuploaded" tabindex="1">
-											<input type="file" (change)="vehicleOfficialImagesChange($event,'mc',mcId)"
-												tabindex="-1">
+											<input type="file" (change)="vehicleOfficialImagesChange($event,'mc',mcId)" tabindex="-1">
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -1174,15 +1202,20 @@
 						<div class="col-md-4">
 							<div class="vehtype_extint">
 								<div>
-									<p>Vehicle Inspection Certificate</p>
+									<p>
+										Vehicle Inspection Certificate
+										<span *ngIf="affiliateType!='fleet_operator'; else nonFleetOperator" class="asterisk">*</span>
+										<ng-template #nonFleetOperator>
+											<span class="optionalTextStyle">(optional)</span>
+										</ng-template>
+									</p>
 									<div class="emptyImage">
 										<img src="../../../../assets/images/empty-image.png" tabindex="-1">
 									</div>
 									<ul class="mt-3">
 										<li>
 											<button class="adduploaded" tabindex="1">
-												<input type="file" (change)="vehicleOfficialImagesChange($event,'mc',mcId)"
-													tabindex="-1">
+												<input type="file" (change)="vehicleOfficialImagesChange($event,'mc',mcId)" tabindex="-1">
 												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 													<path fill="none" d="M0 0h24v24H0V0z" />
 													<circle cx="12" cy="12" r="3" />
@@ -1203,11 +1236,10 @@
 	</section>
 	<section class="billing_inforamtion">
 		<ul>
-			<li><button class="custom-btn savebutton" (click)="submitForm()" [disabled]="disableSubmitButton"
-					tabindex="1">SAVE</button> </li>
+			<li><button class="custom-btn savebutton" (click)="submitForm()" [disabled]="disableSubmitButton" tabindex="1">SAVE</button> </li>
 			<li><button class="custom-btn resetbutton" (click)="resetForm()" tabindex="1">RESET</button> </li>
-			<li><button class="custom-btn backbutton" type="button" (click)="backButton()" data-toggle="modal"
-					data-placement="top" title="Clicking back button deletes all fields." tabindex="1">BACK</button>
+			<li><button class="custom-btn backbutton" type="button" (click)="backButton()" data-toggle="modal" data-placement="top"
+					title="Clicking back button deletes all fields." tabindex="1">BACK</button>
 			</li>
 		</ul>
 	</section>

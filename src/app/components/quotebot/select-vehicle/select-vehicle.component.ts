@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { bindCallback, throwError } from 'rxjs';
+import { bindCallback, Observable, throwError } from 'rxjs';
 import { catchError, filter } from 'rxjs/operators';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
+import { StateManagementService } from 'src/app/services/statemanagement.service';
 import { QuotebotService } from '../../../services/quotebot.service';
 
 declare let $: any
@@ -134,7 +135,8 @@ export class SelectVehicleComponent implements OnInit
 		private _spinner: NgxSpinnerService,
 		private _router: Router,
 		private _errorDialog: ErrorDialogService,
-		private _activatedRoute: ActivatedRoute
+		private _activatedRoute: ActivatedRoute,
+		private $state: StateManagementService
 	) { }
 
 	/**
@@ -163,32 +165,20 @@ export class SelectVehicleComponent implements OnInit
 			this.quotebot_form = JSON.parse(localStorage.getItem('quotebot_form'))
 		}
 
-		// fetch the category of vehicle
-		// this._activatedRoute.queryParams.subscribe((params: any) =>
-		// {
-		// 	this.category_selected = params.category
-		// })
-
-		// check if the category is fetched from the url else load only categories and filters data asynchronously
-		if (this.category_selected != undefined)
-		{
-			this.fetchMasterVehicles().then((response: any) =>
-			{
-				this.category_selected = response.find((item: any) => item.id == this.category_selected)
-				this.filters_data['vehicle-type'] = [this.category_selected.id]
-				this.selected_filters.push({
-					category: 'vehicle-type',
-					name: this.category_selected.name
-				})
-				this.getVehicleDetails(this.filters_data)
-			})
-		} else
-		{
-			this.fetchMasterVehicles()
-		}
+		this.fetchMasterVehicles()
 		this.getAllFilters()	// fetch filters from database
-		// this.getVehicleDetails(this.filters_data)
 
+		// fetch the last selected category
+		this.$state.getState().subscribe((data: any) =>
+		{
+			console.log(data)
+			if (data.selected_filters != undefined)
+			{
+				this.selected_filters = data.selected_filters
+				this.filters_data = data.filters_data
+				this.getVehicleDetails(this.filters_data)
+			}
+		})
 	}
 	// ngOnInit ends
 
@@ -230,7 +220,7 @@ export class SelectVehicleComponent implements OnInit
 
 	fetchMasterVehicles()
 	{
-		const promise = new Promise((resolve) =>
+		return new Promise((resolve, reject) =>
 		{
 			this._quotebotService.getMasterVehicleTypes(this.quotebot_form).pipe(
 				catchError(err => throwError(err))
@@ -239,12 +229,14 @@ export class SelectVehicleComponent implements OnInit
 				if (response.data.length == 0)
 				{
 					this.no_vehicle_msg = "No Vehicle Categories Found. "
+					reject('No Master Vehicle Found.')
+					return
 				}
 				this.master_vehicles = response.data
 				resolve(this.master_vehicles)
+				return
 			})
 		})
-		return promise
 	}
 
 
@@ -255,14 +247,7 @@ export class SelectVehicleComponent implements OnInit
 	 */
 	selectCategory(vehicle: any)
 	{
-		// this._router.navigate([], {
-		// 	queryParams: {
-		// 		category: vehicle.vehicle_id
-		// 	},
-		// 	relativeTo: this._activatedRoute
-		// })
-		this.selectedFilters({ target: { checked: true } }, 'vehicle-type', vehicle)
-		this.getVehicleDetails(this.filters_data)
+		this.selectedFilters({ target: { checked: true }, fetch_vehicles: true }, 'vehicle-type', vehicle)
 	}
 
 
@@ -379,8 +364,8 @@ export class SelectVehicleComponent implements OnInit
 			data = this.quotebot_form
 			data['filters'] = filters_data
 		}
-		// console.group('Sending Data to backend ... ', data)
-		// console.groupEnd()
+		console.group('Sending Data to backend ... ', data)
+		console.groupEnd()
 		// fetch the vehicle details - API HIT
 		this._quotebotService.getVehicleDetails(data).subscribe((response: any) =>
 		{
@@ -411,6 +396,17 @@ export class SelectVehicleComponent implements OnInit
 	selectedFilters(event: any, category: string, filter_obj: Filters)
 	{
 		console.log(`\n\n\nChecked: ${event.target.checked}\nCategory: ${category}\nFilter: `, filter_obj)
+
+		if (JSON.parse(sessionStorage.getItem('selected_filters')) == null)
+		{
+			this.selected_filters = []
+		} else
+		{
+			this.selected_filters = JSON.parse(sessionStorage.getItem('selected_filters'))
+			this.getVehicleDetails(JSON.parse(sessionStorage.getItem('filters_data')))
+			return
+		}
+
 
 		if (filter_obj.name.includes('any or all') && event.target.checked)
 		{
@@ -488,9 +484,13 @@ export class SelectVehicleComponent implements OnInit
 
 		// this.getVehicleDetails(this.filters_data)	// THE API HIT - FETCH THE VEHICLE DETAILS UPON GENERATED FILTERS DATA
 
-		console.log('Selected Filters: ', this.selected_filters, '\n')
-		console.log('Filters Data: ', this.filters_data, '\n')
-		console.log('Filters: ', this.filters, '\n')
+		if (event.fetch_vehicles)
+		{
+			this.getVehicleDetails(this.filters_data)
+		}
+		// 	console.log('Selected Filters: ', this.selected_filters, '\n')
+		// 	console.log('Filters Data: ', this.filters_data, '\n')
+		// 	console.log('Filters: ', this.filters, '\n')
 	}
 
 
@@ -528,6 +528,10 @@ export class SelectVehicleComponent implements OnInit
 	viewDetails(vehicle_selected: any)
 	{
 		sessionStorage.setItem('selected_vehicle', JSON.stringify(vehicle_selected))
+		this.$state.setState({
+			selected_filters: this.selected_filters,
+			filters_data: this.filters_data
+		})
 		this._router.navigate(['quotebot/vehicle-details'], {
 			queryParamsHandling: 'preserve'
 		})

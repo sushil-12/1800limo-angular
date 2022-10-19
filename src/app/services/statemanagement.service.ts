@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 
 @Injectable({
 	providedIn: 'root'
@@ -73,5 +73,17 @@ export class StateManagementService
 		localStorage.removeItem('step_completed_obj');
 		localStorage.removeItem('userData')
 	}
+
+
+	private state = new BehaviorSubject({})
+	setState(value: any)
+	{
+		this.state.next(value)
+	}
+	getState()
+	{
+		return this.state
+	}
+
 
 }

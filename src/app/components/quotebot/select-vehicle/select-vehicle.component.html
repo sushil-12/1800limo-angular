@@ -263,86 +263,80 @@
 		</section>
 		<!-- FILTERS SECTION ENDS -->
 
+		<ng-container *ngIf="vehicleDetails.length > 0; then vehicleListing else MasterVehicleListing"></ng-container>
 		<!-- VEHICLE LISTING SECTION -->
-		<section id="vehicle-listing-container" class="col-md-auto col-lg-9 d-flex flex-column" style="gap: 50px"
-			*ngIf="vehicleDetails.length > 0; else MasterVehiclesSection">
-			<!-- Loop here for different vehicle images and its details -->
-			<div id="vehicle-details-article" *ngFor="let vehinfo of vehicleDetails; index as vehinfo_index"
-				class="car-Details row align-items-center">
-				<div class="img-Block col-5 col-md-4">
-					<span class="dri-Ico">
-						<img alt="" class="img-fluid" src="assets/images/select_vehicle/driIco.png" title="Driver Image" />
-					</span>
-					<!-- <img alt="" class="img-fluid" src="assets/images/select_vehicle/car.jpg" title="Vehicle Image" /> -->
-					<img [src]="vehinfo.vehicle_images[0]" id="V_Image_0" class="img-fluid" alt="Vehicle Image"
-						*ngIf="vehinfo.vehicle_images?.length > 0" />
-				</div>
-				<div class="cont-Block col-auto col-md-4">
-					<h5>
-						{{ vehinfo.name }}
-					</h5>
-					<p>
-						{{ vehinfo.description }}
-					</p>
-					<div class="price-Blc">
+		<ng-template #vehicleListing>
+			<section id="vehicle-listing-container" class="col-md-auto col-lg-9 d-flex flex-row flex-wrap" style="gap: 50px">
+				<div id="vehicle-details-article" *ngFor="let vehinfo of vehicleDetails; index as vehinfo_index"
+					class="car-Details d-flex flex-column p-3 h-auto">
+					<!-- IMAGE BLOCK -->
+					<div class="img-Block col-5 col-md-4">
+						<span class="dri-Ico">
+							<img alt="" class="img-fluid" src="assets/images/select_vehicle/driIco.png" title="Driver Image" />
+						</span>
+						<!-- <img alt="" class="img-fluid" src="assets/images/select_vehicle/car.jpg" title="Vehicle Image" /> -->
+						<img [src]="vehinfo.vehicle_images[0]" id="V_Image_0" class="img-fluid" alt="Vehicle Image"
+							*ngIf="vehinfo.vehicle_images?.length > 0" />
+					</div>
+					<!-- CONTENT BLOCK -->
+					<div class="cont-Block col-auto col-md-4">
+						<h5>
+							{{ vehinfo.name }}
+						</h5>
 						<p>
-							From ${{ vehinfo['rate_breakdown_' + getKeyName()].grand_total != undefined ?
-							vehinfo['rate_breakdown_' + getKeyName()].grand_total : '0.00' }}
-							<small>
-								All-Inclusive Rate*
-							</small>
+							{{ vehinfo.description }}
 						</p>
-					</div>
-					<div class="car-cap d-flex">
-						<div class="pass-det org-Btn">
-							<img alt="" class="img-fluid mr-3" src="assets/images/select_vehicle/pass.png" /> {{
-							vehinfo.passenger }}
+						<div class="price-Blc">
+							<p>
+								From ${{ vehinfo['rate_breakdown_' + getKeyName()].grand_total != undefined ?
+								vehinfo['rate_breakdown_' + getKeyName()].grand_total : '0.00' }}
+								<small>
+									All-Inclusive Rate*
+								</small>
+							</p>
 						</div>
-						<div class="pass-det org-Btn">
-							<img alt="" class="img-fluid mr-3" src="assets/images/select_vehicle/lug.png" /> {{
-							vehinfo.luggage }}
+						<div class="car-cap d-flex">
+							<div class="pass-det org-Btn">
+								<img alt="" class="img-fluid mr-3" src="assets/images/select_vehicle/pass.png" /> {{
+								vehinfo.passenger }}
+							</div>
+							<div class="pass-det org-Btn">
+								<img alt="" class="img-fluid mr-3" src="assets/images/select_vehicle/lug.png" /> {{
+								vehinfo.luggage }}
+							</div>
 						</div>
-					</div>
-					<div class="btn-Area">
-						<button (click)="viewDetails(vehinfo)" class="custom-btn" type="button">
-							Preview Vehicle Details
-						</button>
-						<!-- <button (click)="showModal(vehinfo, 'amenities')" class="custom-btn" *ngIf="vehinfo.amenities.length > 0">
+						<div class="btn-Area">
+							<button (click)="viewDetails(vehinfo)" class="custom-btn" type="button">
+								Preview Vehicle Details
+							</button>
+							<!-- <button (click)="showModal(vehinfo, 'amenities')" class="custom-btn" *ngIf="vehinfo.amenities.length > 0">
 							Amenities
 						</button> -->
-						<!-- <button (click)="showModal(vehinfo, 'driver_info')" class="custom-btn"
+							<!-- <button (click)="showModal(vehinfo, 'driver_info')" class="custom-btn"
 							type="button">
 							Driver Info
 						</button> -->
-						<!-- <button (click)="bookNow(vehinfo)" class="custom-btn" type="button">
+							<!-- <button (click)="bookNow(vehinfo)" class="custom-btn" type="button">
 							Book Now
 						</button> -->
+						</div>
 					</div>
-				</div>
-				<div class="cancel-policy">
-					<p class="text-danger" style="margin-left: 4rem; font-size: 1rem">
-						<!-- Cancel Policy<span class="asterisk">*</span> -->
-						Cancel: 2Hr - No Charge &nbsp; &nbsp;
-						Insurance Limit - $500,000 &nbsp; &nbsp;
-						Driver Exp - 5 years
-					</p>
-				</div>
-				<!-- <div class="col-auto" [ngStyle]="innerWidth < 750 ? 'width: 100%; text-align:center;' : ''">
-					<div class="cancel-policy" *ngIf="innerWidth > 750">
-						<p class="m-0" style="font-size: 1.15rem">
-							Cancel Policy<span class="asterisk">*</span>
-							<!- Cancel: 2Hr - No Charge <br />
-							Insurance Limit - $500,000<br />
-							Driver Exp - 5 years --
+					<!-- CANCEL POLICY -->
+					<div class="cancel-policy">
+						<p class="text-danger" style="margin-left: 4rem; font-size: 1rem">
+							<!-- Cancel Policy<span class="asterisk">*</span> -->
+							Cancel: 2Hr - No Charge &nbsp; &nbsp;
+							Insurance Limit - $500,000 &nbsp; &nbsp;
+							Driver Exp - 5 years
 						</p>
 					</div>
-				</div> -->
-			</div>
-		</section>
+				</div>
+			</section>
+		</ng-template>
 		<!-- VEHICLE LISTING SECTION ENDS -->
 
 		<!-- MASTER VEHICLE TYPES SECTION -->
-		<ng-template #MasterVehiclesSection>
+		<ng-template #MasterVehicleListing>
 			<div class="col-md-12 col-lg-9" *ngIf="vehicleDetails.length == 0 || master_vehicles.length == 0">
 				<p style="font-size: 1rem; font-weight: 500; color: #e63232"
 					*ngIf="(vehicleDetails.length == 0 && selected_filters.length > 0) || master_vehicles.length == 0">
@@ -354,7 +348,7 @@
 						<div id="vehicle-image" class="imageStyle" (click)="selectCategory(vehicle_obj)">
 							<img [src]="vehicle_obj.cat_img" class="img-fluid" [attr.id]="'vehicle_' + vehicle_obj_index" />
 						</div>
-						<div id="vehicle-information" class="">
+						<div id="vehicle-information" class="m-0">
 							<p id="vehicle-name" class="font-weight-bolder">
 								{{ vehicle_obj?.name }}
 							</p>
