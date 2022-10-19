@@ -194,6 +194,7 @@
 }
 
 aside.sidebar {
+    position: -webkit-sticky;
     position: sticky;
     top: 10px;
 }
@@ -291,8 +292,10 @@ img.img-cir {
     height: 182px;
     border-radius: 100px;
     border: 2px solid #00000081;
-    object-fit: cover;
-    object-position: center top;
+    -o-object-fit: cover;
+       object-fit: cover;
+    -o-object-position: center top;
+       object-position: center top;
 }
 
 .list-box ul {
@@ -338,7 +341,8 @@ img.img-cir {
     img {
         height: 190px;
         width: auto;
-        object-fit: cover;
+        -o-object-fit: cover;
+           object-fit: cover;
         margin: 0 auto;
     }
 }
@@ -357,13 +361,13 @@ img.img-cir {
     img {
         padding: 0px 10px 0px 0px;
         height: 60px;
-        object-fit: contain;
+        -o-object-fit: contain;
+           object-fit: contain;
         width: 60px;
     }
 }
 
 .owl-theme .owl-nav [class*='owl-'] {
-    -webkit-transition: all .3s ease;
     transition: all .3s ease;
 }
 
@@ -390,7 +394,11 @@ img.img-cir {
 
 button.custom-btn
 {
+    width: -webkit-fit-content;
+    width: -moz-fit-content;
     width: fit-content;
+    height: -webkit-fit-content;
+    height: -moz-fit-content;
     height: fit-content;
     padding: 0.375rem 0.87rem;
     background-color: var(--orange);

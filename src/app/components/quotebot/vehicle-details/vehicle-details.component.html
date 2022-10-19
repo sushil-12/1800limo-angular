@@ -18,8 +18,7 @@
 								<div class="item" *ngFor="let item of selected_vehicle.vehicle_images; index as item_index">
 									<h1>
 										<!-- {{ item }} -->
-										<img [src]="item" alt="Vehicle Image {{ item_index + 1 }}"
-											id="V_Image_{{ item_index + 1 }}">
+										<img [src]="item" alt="Vehicle Image {{ item_index + 1 }}" id="V_Image_{{ item_index + 1 }}">
 									</h1>
 								</div>
 							</div>
@@ -29,6 +28,7 @@
 
 					<!-- VEHICLE INFORMATION BLOCK -->
 					<div class="col-md-6">
+						<!-- CONTENT BLOCK -->
 						<div class="cont-Block w-100 pl-lg-4">
 							<h5>
 								{{ selected_vehicle.name }}
@@ -47,7 +47,8 @@
 								{{ selected_vehicle.description }}
 							</div>
 
-							<div class=" price-Blc price-Blc-n my-3">
+							<!-- PRICE BLOCK -->
+							<div class="price-Blc price-Blc-n my-3">
 								<div class="checkbox-block d-md-flex" (change)="selectPrice()">
 									<!-- One Way -->
 									<div class="custom-control custom-checkbox custom-control-inline">
@@ -78,10 +79,14 @@
 								</div>
 								<small> All Inclusive Rates (Some Taxes, and Tolls are additional) </small>
 							</div>
+							<!-- PRICE BLOCK ENDS -->
 						</div>
+						<!-- CONTENT BLOCK ENDS -->
 					</div>
 					<!-- ṾEHICLE INFORAMATION BLOCK ENDS -->
 				</div>
+
+				<!-- FUNCTIONAL BUTTONS -->
 				<div class="row">
 					<div class="col-md-12">
 						<div class="btn-Area d-flex flex-wrap">
@@ -100,6 +105,8 @@
 						</div>
 					</div>
 				</div>
+
+				<!-- MAP -->
 				<div class="row">
 					<div class="col-md-12">
 						<div class="col-lg-12">
@@ -340,11 +347,11 @@
 
 
 
-<!-- Driver Details -->
+<!-- --------------------------------x-------------------x---------------------------------- -->
 
 
 
-<!-- Amenities -->
+<!-- --------------- MODALS ------------------------- -->
 
 
 
@@ -384,9 +391,9 @@
 						<tr>
 							<td> Gratuity: </td>
 							<td>
-								{{ rates?.rateArray?.others.Gratuity.percentage }}%
+								{{ rates?.rateArray?.others?.Gratuity?.percentage }}%
 							</td>
-							<td> {{ rates?.rateArray?.others.Gratuity.amount }} </td>
+							<td> {{ rates?.rateArray?.others?.Gratuity?.amount }} </td>
 						</tr>
 						<tr class="total-fields">
 							<td class="font-weight-bolder">
@@ -420,6 +427,7 @@
 	</div>
 </div>
 
+
 <div aria-hidden="true" aria-labelledby="driverFareRateModal" class="modal fade" id="driverFareRateModal" tab-index="-1">
 	<div class="modal-dialog modal-sm modal-lg">
 		<div class="modal-content">
@@ -443,8 +451,7 @@
 							<div class="col-lg-4" *ngIf="selected_vehicle.driverInformation">
 								<div class="img-Block mb-4 mb-lg-0 text-md-left text-center">
 									<!-- <img src="assets/images/select_vehicle/driver.jpg" class="img-cir" /> -->
-									<img [src]="selected_vehicle.driverInformation?.imageUrl" class="img-cir"
-										alt="Driver Image" />
+									<img [src]="selected_vehicle.driverInformation?.imageUrl" class="img-cir" alt="Driver Image" />
 								</div>
 							</div>
 							<div class="col-lg-8" *ngIf="selected_vehicle.driverInformation">
@@ -565,14 +572,11 @@
 								</h5>
 							</div>
 							<div class="col-md-12">
-								<ul
-									class="list-unstyled d-flex flex-row flex-wrap justify-content-around align-items-start pl-0 pr-0">
-									<li *ngFor="let category of selected_vehicle.amenities | keyvalue"
-										class="fw-bold text-dark mr-5 flex-grow-1 p-0">
+								<ul class="list-unstyled d-flex flex-row flex-wrap justify-content-around align-items-start pl-0 pr-0">
+									<li *ngFor="let category of selected_vehicle.amenities | keyvalue" class="fw-bold text-dark mr-5 flex-grow-1 p-0">
 										{{ category.key | titlecase }}
 										<ul class="list-unstyled p-0">
-											<li *ngFor="let item of category.value; index as item_index"
-												id="Item_{{ item_index + 1 }}" class="p-0">
+											<li *ngFor="let item of category.value; index as item_index" id="Item_{{ item_index + 1 }}" class="p-0">
 												{{ item.name | titlecase }}
 											</li>
 										</ul>

@@ -8,8 +8,7 @@
 				<button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
 					class="btn btn-secondary dropdown-toggle pl-4" (click)="openfilters = true" type="button">
 					Filters
-					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-filter"
-						viewBox="0 0 16 16">
+					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-filter" viewBox="0 0 16 16">
 						<path
 							d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z" />
 					</svg>
@@ -64,8 +63,7 @@
 						</span>
 					</div>
 					<aside class="sidebar">
-						<button type="button" (click)="getVehicleDetails(filters_data); openfilters=false"
-							class="btn btn-success mr-3 mb-4">
+						<button type="button" (click)="getVehicleDetails(filters_data); openfilters=false" class="btn btn-success mr-3 mb-4">
 							Apply filters
 						</button>
 						<button type="button" (click)="clearFilters(null)" class="btn btn-primary mb-4">
@@ -95,8 +93,7 @@
 											<button type="button" class="btn-custom-btn btn btn-link btn-block text-left"
 												[ngClass]="filter_text_index > 0 ? 'collapsed' : ''"
 												[attr.aria-controls]="'filter_' + filter_text_index"
-												[attr.data-target]="'#filter_' + filter_text_index" aria-expanded="true"
-												data-toggle="collapse">
+												[attr.data-target]="'#filter_' + filter_text_index" aria-expanded="true" data-toggle="collapse">
 												{{ formatter(filter_text.dp) | titlecase }}
 											</button>
 										</h2>
@@ -104,10 +101,8 @@
 									<!-- FILTER TITLE ENDS -->
 
 									<!-- FILTER COLLAPSIBLE CARD - uncollapsed for first card-->
-									<div class="collapse" data-parent="#accordionExample"
-										[attr.aria-labelledby]="'card_' + filter_text_index"
-										[attr.id]="'filter_' + filter_text_index"
-										[ngClass]="filter_text_index == 0 ? 'show' : ''">
+									<div class="collapse" data-parent="#accordionExample" [attr.aria-labelledby]="'card_' + filter_text_index"
+										[attr.id]="'filter_' + filter_text_index" [ngClass]="filter_text_index == 0 ? 'show' : ''">
 										<!-- IF RP IS A STRING -->
 										<div class="card-body" *ngIf="!isArray(filter_text.rp)">
 											<!-- Search Field -->
@@ -128,11 +123,9 @@
 														[attr.name]="filter_text.dp + '_' + '_' + filter_index"
 														(change)="selectedFilters($event, filter_text.rp, filter)"
 														[checked]="includes(selected_filters, 'name', filter, filter_text.rp)" />
-													<label class="custom-control-label"
-														[attr.for]="filter_text.dp + '_' + '_' + filter_index">
+													<label class="custom-control-label" [attr.for]="filter_text.dp + '_' + '_' + filter_index">
 														{{ filter.name | titlecase }}
-														<i class="bi bi-currency-dollar text-orange"
-															*ngIf="filter.chargeable == 'yes'"></i>
+														<i class="bi bi-currency-dollar text-orange" *ngIf="filter.chargeable == 'yes'"></i>
 													</label>
 												</div>
 												<!-- INPUT AND LABEL ENDS -->
@@ -146,8 +139,7 @@
 																Show More
 															</button> -->
 													<span class="btn-custom-btn btn show-More" style="color:#ff7800"
-														[attr.id]="'showMore_' + filter_text_index"
-														(click)="showMore(filter_text.rp)">
+														[attr.id]="'showMore_' + filter_text_index" (click)="showMore(filter_text.rp)">
 														{{ is_show_more_button_hidden ? 'Show Less' : 'Show More'}}
 														<i class="bi font-weight-bolder"
 															[ngClass]="is_show_more_button_hidden ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
@@ -163,13 +155,11 @@
 										<div class="accordion pl-4" id="innerAccordionExample">
 											<div class="card-body" *ngIf="isArray(filter_text.rp)">
 												<!-- INNER CARD 1 -->
-												<div class="card"
-													*ngFor="let inner_filter_text of filter_text.rp; index as inner_filter_text_index">
+												<div class="card" *ngFor="let inner_filter_text of filter_text.rp; index as inner_filter_text_index">
 													<!-- FILTER TITLE -->
 													<div class="card-header" [attr.id]="'inner_card_' + inner_filter_text_index">
 														<h2 class="mb-0">
-															<button type="button"
-																class="btn-custom-btn btn btn-link btn-block text-left"
+															<button type="button" class="btn-custom-btn btn btn-link btn-block text-left"
 																[ngClass]="inner_filter_text_index > 0 ? 'collapsed' : ''"
 																[attr.aria-controls]="'inner_filter_' + filter_text.dp + '_' + inner_filter_text_index"
 																[attr.data-target]="'#inner_filter_' + filter_text.dp + '_' + inner_filter_text_index"
@@ -224,8 +214,7 @@
 																				id="dropdownMenuButton">
 																				Show More
 																			</button> -->
-																	<span class="btn-custom-btn btn show-More"
-																		style="color:#ff7800"
+																	<span class="btn-custom-btn btn show-More" style="color:#ff7800"
 																		[attr.id]="'showMore_' + inner_filter_text_index"
 																		(click)="showMore(inner_filter_text.rp)">
 																		{{ is_show_more_button_hidden ? 'Show Less' :
@@ -248,8 +237,7 @@
 								</div>
 								<!-- OUTER CARD -->
 							</div>
-							<button type="button" (click)="getVehicleDetails(filters_data); openfilters=false"
-								class="btn btn-success mr-3 mt-4">
+							<button type="button" (click)="getVehicleDetails(filters_data); openfilters=false" class="btn btn-success mr-3 mt-4">
 								Apply filters
 							</button>
 							<button type="button" (click)="clearFilters(null)" class="btn btn-primary mt-4">
@@ -266,70 +254,54 @@
 		<ng-container *ngIf="vehicleDetails.length > 0; then vehicleListing else MasterVehicleListing"></ng-container>
 		<!-- VEHICLE LISTING SECTION -->
 		<ng-template #vehicleListing>
-			<section id="vehicle-listing-container" class="col-md-auto col-lg-9 d-flex flex-row flex-wrap" style="gap: 50px">
-				<div id="vehicle-details-article" *ngFor="let vehinfo of vehicleDetails; index as vehinfo_index"
-					class="car-Details d-flex flex-column p-3 h-auto">
-					<!-- IMAGE BLOCK -->
-					<div class="img-Block col-5 col-md-4">
-						<span class="dri-Ico">
-							<img alt="" class="img-fluid" src="assets/images/select_vehicle/driIco.png" title="Driver Image" />
-						</span>
-						<!-- <img alt="" class="img-fluid" src="assets/images/select_vehicle/car.jpg" title="Vehicle Image" /> -->
-						<img [src]="vehinfo.vehicle_images[0]" id="V_Image_0" class="img-fluid" alt="Vehicle Image"
-							*ngIf="vehinfo.vehicle_images?.length > 0" />
-					</div>
-					<!-- CONTENT BLOCK -->
-					<div class="cont-Block col-auto col-md-4">
-						<h5>
+			<section id="vehicle-listing-container"
+				class="col-md-auto col-lg-9 d-flex flex-row flex-wrap justify-content-center justify-content-lg-start" style="gap: 50px">
+				<div id="vehicle-details-card" *ngFor="let vehinfo of vehicleDetails; index as vehinfo_index" class="card">
+					<!-- VEHICLE IMAGE -->
+					<img [src]="vehinfo.vehicle_images[0]" id="V_Image_0" class="card-img-top" alt="Vehicle Image"
+						*ngIf="vehinfo.vehicle_images?.length > 0" />
+					<!-- CARD BODY -->
+					<div class="card-body">
+						<!-- TITLE -->
+						<h4 class="card-title">
 							{{ vehinfo.name }}
-						</h5>
-						<p>
-							{{ vehinfo.description }}
-						</p>
-						<div class="price-Blc">
+						</h4>
+						<!-- LUGGAGE n PASSENGER -->
+						<div class="d-flex mb-3">
+							<div class="pass-det org-Btn">
+								<img alt="" class="img-fluid mr-3" src="assets/images/select_vehicle/pass.png" />
+								{{ vehinfo.passenger }}
+							</div>
+							<div class="pass-det org-Btn">
+								<img alt="" class="img-fluid mr-3" src="assets/images/select_vehicle/lug.png" />
+								{{ vehinfo.luggage }}
+							</div>
+						</div>
+						<!-- VEHICLE PRICE -->
+						<div id="price-area" class="mb-3">
 							<p>
 								From ${{ vehinfo['rate_breakdown_' + getKeyName()].grand_total != undefined ?
 								vehinfo['rate_breakdown_' + getKeyName()].grand_total : '0.00' }}
-								<small>
-									All-Inclusive Rate*
+								<small class="mx-3 d-block">
+									All-Inclusive Rate *
 								</small>
 							</p>
 						</div>
-						<div class="car-cap d-flex">
-							<div class="pass-det org-Btn">
-								<img alt="" class="img-fluid mr-3" src="assets/images/select_vehicle/pass.png" /> {{
-								vehinfo.passenger }}
-							</div>
-							<div class="pass-det org-Btn">
-								<img alt="" class="img-fluid mr-3" src="assets/images/select_vehicle/lug.png" /> {{
-								vehinfo.luggage }}
-							</div>
-						</div>
-						<div class="btn-Area">
-							<button (click)="viewDetails(vehinfo)" class="custom-btn" type="button">
-								Preview Vehicle Details
-							</button>
-							<!-- <button (click)="showModal(vehinfo, 'amenities')" class="custom-btn" *ngIf="vehinfo.amenities.length > 0">
-							Amenities
-						</button> -->
-							<!-- <button (click)="showModal(vehinfo, 'driver_info')" class="custom-btn"
-							type="button">
-							Driver Info
-						</button> -->
-							<!-- <button (click)="bookNow(vehinfo)" class="custom-btn" type="button">
-							Book Now
-						</button> -->
-						</div>
+					</div>
+					<!-- VEHICLE DETAILS BUTTON -->
+					<div class="d-flex justify-content-end">
+						<button (click)="viewDetails(vehinfo)" class="custom-filled-orange-button" type="button">
+							Preview Vehicle Details
+						</button>
 					</div>
 					<!-- CANCEL POLICY -->
-					<div class="cancel-policy">
+					<!-- <div class="cancel-policy">
 						<p class="text-danger" style="margin-left: 4rem; font-size: 1rem">
-							<!-- Cancel Policy<span class="asterisk">*</span> -->
 							Cancel: 2Hr - No Charge &nbsp; &nbsp;
 							Insurance Limit - $500,000 &nbsp; &nbsp;
 							Driver Exp - 5 years
 						</p>
-					</div>
+					</div> -->
 				</div>
 			</section>
 		</ng-template>
@@ -343,8 +315,8 @@
 					{{ no_vehicle_msg }}
 				</p>
 				<div id="master-vehicle-box-container" class="row">
-					<div id="master-vehicle-box" class="col-md-3 mb-5 d-flex flex-nowrap flex-md-wrap cursor-pointer"
-						style="gap: 10px" *ngFor="let vehicle_obj of master_vehicles; index as vehicle_obj_index">
+					<div id="master-vehicle-box" class="col-md-3 mb-5 d-flex flex-nowrap flex-md-wrap cursor-pointer" style="gap: 10px"
+						*ngFor="let vehicle_obj of master_vehicles; index as vehicle_obj_index">
 						<div id="vehicle-image" class="imageStyle" (click)="selectCategory(vehicle_obj)">
 							<img [src]="vehicle_obj.cat_img" class="img-fluid" [attr.id]="'vehicle_' + vehicle_obj_index" />
 						</div>
@@ -474,8 +446,7 @@
 						</label>
 						<div>
 							<ul class="number passengers_qty">
-								<li class="user_grp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#fff"
-										height="22px">
+								<li class="user_grp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#fff" height="22px">
 										<path
 											d="M15.71,12.71a6,6,0,1,0-7.42,0,10,10,0,0,0-6.22,8.18,1,1,0,0,0,2,.22,8,8,0,0,1,15.9,0,1,1,0,0,0,1,.89h.11a1,1,0,0,0,.88-1.1A10,10,0,0,0,15.71,12.71ZM12,12a4,4,0,1,1,4-4A4,4,0,0,1,12,12Z" />
 									</svg>
@@ -483,18 +454,16 @@
 								<li>
 									<div class="input-group">
 										<div class="input-group-prepend">
-											<button style="min-width: 2.5rem"
-												class="btn-custom-btn btn btn-decrement btn-outline-secondary" type="button"
-												(click)="change('d','p')">
+											<button style="min-width: 2.5rem" class="btn-custom-btn btn btn-decrement btn-outline-secondary"
+												type="button" (click)="change('d','p')">
 												<strong>-</strong>
 											</button>
 										</div>
-										<input type="number" [value]="quotebot_form.no_of_passenger" min="0" max="1000" step="1"
-											inputmode="decimal" style="text-align: center" class="form-control" placeholder="">
+										<input type="number" [value]="quotebot_form.no_of_passenger" min="0" max="1000" step="1" inputmode="decimal"
+											style="text-align: center" class="form-control" placeholder="">
 										<div class="input-group-append">
-											<button style="min-width: 2.5rem"
-												class="btn-custom-btn btn btn-increment btn-outline-secondary" type="button"
-												(click)="change('i','p')">
+											<button style="min-width: 2.5rem" class="btn-custom-btn btn btn-increment btn-outline-secondary"
+												type="button" (click)="change('i','p')">
 												<strong>+</strong>
 											</button>
 										</div>
@@ -509,9 +478,8 @@
 						<label># of Luggage</label>
 						<div>
 							<ul class="number passengers_qty">
-								<li class="user_grp"><svg xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd"
-										stroke-linejoin="round" stroke-miterlimit="1.414" clip-rule="evenodd" viewBox="0 0 65 64"
-										fill="#fff" height="22px">
+								<li class="user_grp"><svg xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" stroke-linejoin="round"
+										stroke-miterlimit="1.414" clip-rule="evenodd" viewBox="0 0 65 64" fill="#fff" height="22px">
 										<rect width="64" height="64" x=".749" fill="none" />
 										<path fill-rule="nonzero"
 											d="M24.784,11.883l0,-2.92c0.01,-1.551 1.341,-2.959 2.954,-2.989c4.016,-0.026 8.032,-0.026 12.048,0c1.549,0.029 2.943,1.364 2.954,2.989l0,2.944c4.998,0.016 9.996,0.037 14.994,0.052c2.578,0.024 4.932,2.258 4.957,4.957c0.035,12.002 0.111,24.004 0,36.005c-0.04,2.551 -2.246,4.883 -4.926,4.925c-16.001,0.149 -32.005,0.149 -48.007,0c-2.561,-0.04 -4.883,-2.229 -4.925,-4.925c-0.112,-12.012 -0.112,-24.025 0,-36.036c0.04,-2.548 2.238,-4.884 4.925,-4.926c5.009,-0.046 10.017,-0.069 15.026,-0.076Zm32.938,2.071c-5.268,-0.016 -42.618,0 -47.9,0c-1.552,0.005 -2.979,1.335 -2.994,2.974c-0.037,11.989 -0.112,23.979 0,35.968c0.024,1.545 1.364,2.941 2.974,2.956c15.979,0.05 31.96,0.148 47.938,-0.001c1.545,-0.024 2.941,-1.393 2.956,-2.973c0.035,-11.99 0.111,-23.98 0,-35.968c-0.024,-1.545 -1.355,-2.941 -2.974,-2.956Zm-44.909,5.985l-0.997,0c-0.577,-0.037 -0.697,-0.209 -0.864,-0.498c-0.343,-0.594 0.102,-1.447 0.864,-1.497l43.892,0c0.044,0.003 0.087,0.006 0.13,0.009c0.419,0.083 0.516,0.192 0.662,0.382c0.438,0.571 0.043,1.55 -0.792,1.604l-40.9,0l0,4.988c-0.023,0.979 -1.96,1.461 -1.995,0l0,-4.988Zm27.932,-8.038c0,-0.987 0.018,-1.974 -0.001,-2.961c-0.016,-0.512 -0.467,-0.961 -0.984,-0.971c-3.993,-0.025 -7.987,0 -11.98,0c-0.525,0.003 -0.998,0.454 -1.001,1l0,2.912c4.655,-0.003 9.311,0.006 13.966,0.02Z" />
@@ -520,18 +488,16 @@
 								<li>
 									<div class="input-group  ">
 										<div class="input-group-prepend">
-											<button style="min-width: 2.5rem"
-												class="btn-custom-btn btn btn-decrement btn-outline-secondary" type="button"
-												(click)="change('d','l')">
+											<button style="min-width: 2.5rem" class="btn-custom-btn btn btn-decrement btn-outline-secondary"
+												type="button" (click)="change('d','l')">
 												<strong>-</strong>
 											</button>
 										</div>
-										<input type="number" [value]="quotebot_form.no_of_luggage" min="0" max="2000" step="1"
-											inputmode="decimal" style="text-align: center" class="form-control " placeholder="">
+										<input type="number" [value]="quotebot_form.no_of_luggage" min="0" max="2000" step="1" inputmode="decimal"
+											style="text-align: center" class="form-control " placeholder="">
 										<div class="input-group-append">
-											<button style="min-width: 2.5rem"
-												class="btn-custom-btn btn btn-increment btn-outline-secondary" type="button"
-												(click)="change('i','l')">
+											<button style="min-width: 2.5rem" class="btn-custom-btn btn btn-increment btn-outline-secondary"
+												type="button" (click)="change('i','l')">
 												<strong>+</strong>
 											</button>
 										</div>
@@ -543,8 +509,7 @@
 				</div>
 			</div>
 			<div class="modal-footer pt-0">
-				<button class="custom-btn-custom-btn btn savebutton" data-dismiss="modal" (click)="fetchMasterVehicles()"
-					tabindex="1">SAVE</button>
+				<button class="custom-btn-custom-btn btn savebutton" data-dismiss="modal" (click)="fetchMasterVehicles()" tabindex="1">SAVE</button>
 			</div>
 		</div>
 	</div>

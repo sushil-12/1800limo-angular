@@ -284,8 +284,7 @@ header nav.navbar {
 	color         : #fff;
 	font-size     : 20px;
 	font-weight   : 400;
-	padding       : 10px 0px 10px 0px;
-	border-bottom : 1px solid #514f4f;
+	padding       : 10px 0px 20px 0px;
 	margin        : 0;
 	word-spacing  : 4px;
 	text-transform: uppercase;
@@ -517,7 +516,8 @@ header {
 }
 
 .bannerform_wrapper .nav-tabs {
-	border-bottom: 0px solid #646464 !important;
+	border-bottom: 1px solid #dee2e6 !important;
+	border-top: 1px solid #dee2e6 !important;
 }
 
 .bannerform_wrapper .nav-tabs .nav-item.show .nav-link,

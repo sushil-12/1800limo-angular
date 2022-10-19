@@ -10,6 +10,56 @@
 	min-width: 250px;
 }
 
+section#vehicle-listing-container
+{
+	#vehicle-details-card.card
+	{
+		width: 23.3rem;
+		border-radius: 1.3rem;
+		padding: 0.85rem;
+		border: 1.5px solid var(--orange);
+		height: 29rem;
+		min-height:	28rem;
+		img.card-img-top
+		{
+			width: 14rem;
+			margin: 15px auto;
+			border-radius: 2rem
+		}
+		.card-body 
+		{
+			h4
+			{
+				height: 3.5rem;
+			}
+			#price-area 
+			{
+				p
+				{
+					font-size: 1.5rem;
+					&:not(p small)
+					{
+						color: var(--orange);
+					}
+					small
+					{
+						font-size: 13px;
+						color: #444444;
+						margin: 0 1rem;
+					}
+				}
+			}
+		}
+	}
+}
+@media only screen and (min-width: 991px)
+{
+	section#vehicle-listing-container #vehicle-details-card.card
+	{
+		width: 19rem;
+	}
+}
+
 .fil-itm .btn {
 	border-radius: 8.5px;
 	margin       : 5px;
@@ -278,12 +328,6 @@ aside.sidebar {
 
 .slider-nav .sliderIn {
 	padding: 10px !important;
-}
-
-p small
-{
-	font-size: 12.9px;
-	color: #444444;
 }
 
 .price-Blc-n .custom-control-label::before,
@@ -771,7 +815,7 @@ img.img-cir {
 // {
 // 	#vehicle-listing-container
 // 	{
-// 		#vehicle-details-article
+// 		#vehicle-details-card
 // 		{
 // 			margin-bottom: 50px;
 // 		}
