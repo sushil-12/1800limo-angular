@@ -490,7 +490,7 @@ export class HomeComponent implements OnInit
 		{
 			// fill default values
 			this.quoteBotForm.patchValue({
-				service_type: 'round_trip',
+				service_type: 'one_way',
 				booking_hour: '2',
 				pickup_type: 'city',
 				dropoff_type: 'city',
@@ -502,7 +502,7 @@ export class HomeComponent implements OnInit
 				no_of_luggage: 0,
 			})
 
-			this.quoteBotSwitch('round_trip')
+			this.quoteBotSwitch('one_way')
 		}
 	}
 
