@@ -30,3 +30,16 @@
 	margin    : 5px 10px 5px 10px;
 	background: #646464;
 }
+
+ul
+{
+	background-color: #000;
+}
+
+@media only screen and (min-width: 980px)
+{
+	ul
+	{
+		background-color: transparent;
+	}
+}
