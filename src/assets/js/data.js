@@ -1,18 +1,18 @@
 const time_values = [
 	{
-		display_value: "h 1200 - 12:00 AM",
+		display_value: "h 0000 - 12:00 AM",
 		return_value: "00:00:00",
 	},
 	{
-		display_value: "h 1215 - 12:15 AM",
+		display_value: "h 0015 - 12:15 AM",
 		return_value: "00:15:00",
 	},
 	{
-		display_value: "h 1230 - 12:30 AM",
+		display_value: "h 0030 - 12:30 AM",
 		return_value: "00:30:00",
 	},
 	{
-		display_value: "h 1245 - 12:45 AM",
+		display_value: "h 0045 - 12:45 AM",
 		return_value: "00:45:00",
 	},
 	{

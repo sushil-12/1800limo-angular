@@ -1,7 +1,5 @@
 <header [ngClass]="(currentRoute=='home' || currentRoute=='services' || currentRoute=='quotebot_section')?'home_header':''"
 	id="navbar">
-	<div class="nav_top d-md-block d-none"><a href="tel:+18005466266" class="cell-no">
-			<i class="fas fa-phone-alt" aria-hidden="true"></i> +1-800-5466.266</a> </div>
 	<nav class="navbar navbar-expand-lg navbar-dark ">
 		<a class="navbar-brand" href="">
 			<img src="assets/images/HomepageLogo.png">
@@ -16,7 +14,13 @@
 				</svg></span>
 			<span class="cancel"><i class="cross-btn"></i></span>
 		</button>
-		<div class="collapse navbar-collapse" id="navbarsExample05">
+		<div class="collapse navbar-collapse align-items-center" id="navbarsExample05">
+			<div class="nav_top d-lg-block d-none" style="flex-basis: auto; flex-grow: 1;">
+				<a href="tel:+18005466266" class="cell-no">
+					<i class="fas fa-phone-alt" aria-hidden="true"></i>
+					+1-800-5466.266
+				</a>
+			</div>
 			<ul class="navbar-nav ml-auto">
 				<li class="nav-item"> <a class="nav-link" [routerLinkActive]="['active']" routerLink="/home">Home </a>
 				</li>

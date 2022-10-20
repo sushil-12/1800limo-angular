@@ -52,6 +52,14 @@ section#vehicle-listing-container
 		}
 	}
 }
+@supports (-webkit-touch-callout: none) and (not(translate: none)) {
+	section#vehicle-listing-container {
+		#vehicle-details-card.card {
+			margin-bottom: 50px;
+		}
+	}
+}
+
 @media only screen and (min-width: 991px)
 {
 	section#vehicle-listing-container #vehicle-details-card.card
@@ -809,15 +817,3 @@ img.img-cir {
 	height          : 40px;
 	font-weight     : 600;
 }
-
-
-// @supports (-webkit-touch-callout: none) and (not(translate: none))
-// {
-// 	#vehicle-listing-container
-// 	{
-// 		#vehicle-details-card
-// 		{
-// 			margin-bottom: 50px;
-// 		}
-// 	}
-// }
