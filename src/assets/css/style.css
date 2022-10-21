@@ -210,7 +210,7 @@ header a.nav-link.active {
 	color: var(--orange-color);
 }
 
-.dropdown.button-signin a.dropdown-item {
+.dropdown.button-signin a.dropdown-item:not(a.text-secondary) {
 	color: #000 !important
 }
 
@@ -1258,7 +1258,6 @@ height:280px !important;
 	font-size  : 18px;
 	color      : #000;
 	font-weight: 600;
-	height     : 60px;
 }
 
 @media only screen and (max-width:1023px) {

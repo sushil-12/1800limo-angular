@@ -78,6 +78,7 @@ export class HeaderComponent implements OnInit
 	{
 		if (role != 'driver')
 		{
+			return false
 			this.errorDialogService.openDialog({
 				errors: {
 					error: 'Oops! Currently only Drivers are allowed to Sign In.'

@@ -15,17 +15,17 @@
 			<div class="row" *ngIf="Role != 'admin' && Role !='sub_admin'">
 				<div class="col-md-12 mt-3">
 					<div class="radio-group role">
-						<input type="radio" id="individual" name="role" checked="" value="individual" formControlName="role"
-							(click)="loginButtons('individual')">
-						<label for="individual" class="text-center">Individual</label>
+						<input type="radio" id="individual" name="role" checked="" value="individual" disabled
+							formControlName="role" (click)="loginButtons('individual')">
+						<label for="individual" class="text-center text-secondary" style="cursor: default">Individual</label>
 
-						<input type="radio" id="corporate" name="role" checked="" value="corporate" formControlName="role"
-							(click)="loginButtons('corporate')">
-						<label for="corporate">Corporate</label>
+						<input type="radio" id="corporate" name="role" checked="" value="corporate" disabled
+							formControlName="role" (click)="loginButtons('corporate')">
+						<label for="corporate" class="text-secondary" style="cursor: default;">Corporate</label>
 
 						<input type="radio" id="travel_agent" name="role" checked="" value="travel_agent" formControlName="role"
-							(click)="loginButtons('travel_agent')">
-						<label for="travel_agent">Travel Agent</label>
+							disabled (click)="loginButtons('travel_agent')">
+						<label for="travel_agent" class="text-secondary" style="cursor: default;">Travel Agent</label>
 
 						<input type="radio" id="driver/fleet" name="role" checked="" value="driver" formControlName="role"
 							(click)="loginButtons('driver')">
