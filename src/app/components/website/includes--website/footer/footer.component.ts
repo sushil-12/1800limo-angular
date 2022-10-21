@@ -66,6 +66,10 @@ export class FooterComponent implements OnInit
 	// loginbuttons
 	loginButtons(role: string)
 	{
+		if (role != 'driver')
+		{
+			return
+		}
 		//navigate to login screen
 		this.router.navigateByUrl('/login/' + role);
 	}

@@ -15,7 +15,7 @@
 			<span class="cancel"><i class="cross-btn"></i></span>
 		</button>
 		<div class="collapse navbar-collapse align-items-center" id="navbarsExample05">
-			<div class="nav_top d-lg-block d-none" style="flex-basis: auto; flex-grow: 1;">
+			<div class="nav_top d-lg-block d-none text-center" style="flex-basis: auto; flex-grow: 1;">
 				<a href="tel:+18005466266" class="cell-no">
 					<i class="fas fa-phone-alt" aria-hidden="true"></i>
 					+1-800-5466.266
@@ -38,9 +38,15 @@
 				<a class="nav-link dropdown-toggle" href="#" id="dropdown05" data-toggle="dropdown" aria-haspopup="true"
 					aria-expanded="false">LOGIN / CREATE</a>
 				<div class="dropdown-menu" aria-labelledby="dropdown05">
-					<a class="dropdown-item" (click)="loginButtons('individual')">Individual</a>
-					<a class="dropdown-item" (click)="loginButtons('corporate')">Corporate</a>
-					<a class="dropdown-item" (click)="loginButtons('travel_agent')">Travel Agent</a>
+					<a class="dropdown-item text-secondary" style="cursor: default; " (click)="loginButtons('individual')">
+						Individual
+					</a>
+					<a class="dropdown-item text-secondary" style="cursor: default; " (click)="loginButtons('corporate')">
+						Corporate
+					</a>
+					<a class="dropdown-item text-secondary" style="cursor: default; " (click)="loginButtons('travel_agent')">
+						Travel Agent
+					</a>
 					<hr>
 					<a class="dropdown-item" (click)="loginButtons('driver')">Driver / Chauffeur / Fleet - To
 						Drive</a>

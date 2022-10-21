@@ -256,7 +256,7 @@ a.user-profile:active::after {
 	background: #5dbd8a !important;
 }
 
-.dropdown-item {
+.dropdown-item:not(.text-secondary) {
 	color: #000 !important;
 }
 
