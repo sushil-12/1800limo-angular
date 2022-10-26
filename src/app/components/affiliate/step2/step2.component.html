@@ -33,7 +33,8 @@
 			</div>
 			<div class="col-12" *ngIf="response.data.bankinfo.stripe_account_type=='standard'">
 				<button class="forstep_nextveh" data-toggle="modal" data-target="#verificationDocumentModal"
-					(click)="stripeRefreshAccountLink()" tabindex="-1"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+					(click)="stripeRefreshAccountLink()" tabindex="-1"><i class="fa fa-pencil-square-o"
+						aria-hidden="true"></i>
 					Edit Bank Information on Stripe
 				</button>
 			</div>
@@ -51,15 +52,15 @@
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
 						<mat-label>Bank Name</mat-label>
-						<input matInput placeholder="Bank Name" (focus)="$event.target.select()" formControlName="BankName"
-							tabindex="1">
+						<input matInput placeholder="Bank Name" (focus)="$event.target.select()"
+							formControlName="BankName" tabindex="1">
 					</mat-form-field>
 				</div>
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
-						<mat-label>Bank Address </mat-label>
-						<input matInput placeholder="Bank Address" (focus)="$event.target.select()" formControlName="BankAddress"
-							tabindex="1">
+						<mat-label>Bank Address <span class="optionalText">(Optional)</span> </mat-label>
+						<input matInput placeholder="Bank Address (Optional)" (focus)="$event.target.select()"
+							formControlName="BankAddress" tabindex="1">
 					</mat-form-field>
 				</div>
 				<div class="col-md-4">
@@ -116,8 +117,8 @@
 				</div>
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
-						<mat-label>Bank Branch Number <span class="asterisk">*</span></mat-label>
-						<input matInput placeholder="Checking Routing Number" (focus)="$event.target.select()"
+						<mat-label>Check Routing # / Bank Branch # <span class="asterisk">*</span></mat-label>
+						<input matInput placeholder="Check Routing # / Bank Branch #" (focus)="$event.target.select()"
 							formControlName="Routing" tabindex="1">
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.Routing.errors || f.Routing.touched && f.Routing.errors"
@@ -130,7 +131,7 @@
 						<mat-label>Account Type <span class="asterisk">*</span></mat-label>
 						<mat-select formControlName="AccountType" tabindex="1">
 							<!-- <mat-option value="">Choose Account Type</mat-option> -->
-							<mat-option value="individual">Individual</mat-option>
+							<mat-option value="individual">Personal</mat-option>
 							<mat-option value="company">Business</mat-option>
 						</mat-select>
 					</mat-form-field>
@@ -246,7 +247,8 @@
 							<input class="radio-button" type="radio" id="noEin" value="noEin" name="haveEin" checked=""
 								formControlName="haveEin" (click)="haveEin('noEin')" tabIndex="-1">
 							<div class="radio-tile">
-								<label class="radio-tile-label" for="noEin" [ngClass]="!haveEinNo ? 'radio-active' : ''">
+								<label class="radio-tile-label" for="noEin"
+									[ngClass]="!haveEinNo ? 'radio-active' : ''">
 									I do not have an EIN / Business ID #
 								</label>
 							</div>
@@ -256,10 +258,11 @@
 				<div class="col-md-3 pl-0 mobilePadding">
 					<div class="form-group radio-tile-group">
 						<div class="custom-radio input-container" tabIndex="1">
-							<input class="radio-button" type="radio" id="yesEin" value="yesEin" name="haveEin" checked=""
-								formControlName="haveEin" (click)="haveEin('yesEin')" tabIndex="-1">
+							<input class="radio-button" type="radio" id="yesEin" value="yesEin" name="haveEin"
+								checked="" formControlName="haveEin" (click)="haveEin('yesEin')" tabIndex="-1">
 							<div class="radio-tile">
-								<label class="radio-tile-label" for="yesEin" [ngClass]="haveEinNo ? 'radio-active' : ''">
+								<label class="radio-tile-label" for="yesEin"
+									[ngClass]="haveEinNo ? 'radio-active' : ''">
 									I have an EIN / Business ID #
 								</label>
 							</div>
@@ -269,8 +272,8 @@
 				<div class="col-md-6">
 					<mat-form-field appearance="outline" [hidden]="!haveEinNo">
 						<mat-label>EIN / Business ID #</mat-label>
-						<input matInput placeholder="EIN / Business ID #" (focus)="$event.target.select()" formControlName="ein"
-							tabindex="1">
+						<input matInput placeholder="EIN / Business ID #" (focus)="$event.target.select()"
+							formControlName="ein" tabindex="1">
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.ein.errors || f.ein.touched && f.ein.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -288,8 +291,8 @@
 			<div class="vehtype_extintwrap">
 				<div class="row">
 					<div class="col-md-12 text-center">
-						<button type="button" class="verifyDocButton" data-toggle="modal" data-target="#verificationDocumentModal"
-							tabindex="1">
+						<button type="button" class="verifyDocButton" data-toggle="modal"
+							data-target="#verificationDocumentModal" tabindex="1">
 							Acceptable Country Owner Verification Document
 						</button>
 					</div>
@@ -444,8 +447,8 @@
 			</div>
 			<div class="row">
 				<div class="col-md-12 mb-0" *ngIf="!canChangeAddress">
-					<button type="button" class="adressChangeButton" data-toggle="modal" data-target="#requestAddressChangeModal"
-						tabindex="1">Request Address Change</button>
+					<button type="button" class="adressChangeButton" data-toggle="modal"
+						data-target="#requestAddressChangeModal" tabindex="1">Request Address Change</button>
 				</div>
 				<div class="col-md-6">
 					<mat-form-field appearance="outline" [class.read-only]="!canChangeAddress">
@@ -478,7 +481,8 @@
 						<mat-select formControlName="country" (selectionChange)="changeCountry($event.value)"
 							[disabled]="!canChangeAddress" tabindex="1">
 							<mat-option value="">Choose Country</mat-option>
-							<mat-option *ngFor="let countryOption of countryOptions" [value]="countryOption.countryShortCode">
+							<mat-option *ngFor="let countryOption of countryOptions"
+								[value]="countryOption.countryShortCode">
 								{{countryOption.countryName}}</mat-option>
 						</mat-select>
 					</mat-form-field>
@@ -513,8 +517,8 @@
 				<div class="col-md-6">
 					<mat-form-field appearance="outline" [class.read-only]="!canChangeAddress">
 						<mat-label>Street <span class="asterisk">*</span></mat-label>
-						<input matInput placeholder="Street" formControlName="street" [readonly]="!canChangeAddress" disabled
-							(focus)="$event.target.select()" tabindex="1">
+						<input matInput placeholder="Street" formControlName="street" [readonly]="!canChangeAddress"
+							disabled (focus)="$event.target.select()" tabindex="1">
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.street.errors || f.street.touched && f.street.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -546,8 +550,8 @@
 				<div class="col-md-6">
 					<mat-form-field appearance="outline" [class.read-only]="!canChangeAddress">
 						<mat-label>Zip Code <span class="asterisk">*</span></mat-label>
-						<input matInput placeholder="Zip Code" (focus)="$event.target.select()" formControlName="zipCode"
-							[readonly]="!canChangeAddress" tabindex="1">
+						<input matInput placeholder="Zip Code" (focus)="$event.target.select()"
+							formControlName="zipCode" [readonly]="!canChangeAddress" tabindex="1">
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.zipCode.errors || f.zipCode.touched && f.zipCode.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -585,8 +589,8 @@
 						<div class="col-md-3 pr-0 borderright mobilePadding">
 							<div class="form-group radio-tile-group">
 								<div class="custom-radio input-container" tabindex="1">
-									<input class="radio-button" id="personal" type="radio" name="primaryCardType" checked=""
-										formControlName="primaryCardType" value="personal" tabIndex="-1">
+									<input class="radio-button" id="personal" type="radio" name="primaryCardType"
+										checked="" formControlName="primaryCardType" value="personal" tabIndex="-1">
 									<div class="radio-tile">
 										<label class="radio-tile-label" for="personal">Personal</label>
 									</div>
@@ -596,9 +600,9 @@
 						<div class="col-md-3 pl-0 mobilePadding">
 							<div class="form-group radio-tile-group">
 								<div class="custom-radio input-container" tabindex="1">
-									<input class="radio-button" id="business" type="radio" name="primaryCardType" checked=""
-										(focus)="$event.target.select()" formControlName="primaryCardType" value="business"
-										tabIndex="-1">
+									<input class="radio-button" id="business" type="radio" name="primaryCardType"
+										checked="" (focus)="$event.target.select()" formControlName="primaryCardType"
+										value="business" tabIndex="-1">
 									<div class="radio-tile">
 										<label class="radio-tile-label" for="business">Business</label>
 									</div>
@@ -610,8 +614,9 @@
 						<div class="col-md-6">
 							<mat-form-field appearance="outline">
 								<mat-label>Card Holder First & Last Name</mat-label>
-								<input matInput placeholder="Card Holder First & Last Name" (focus)="$event.target.select()"
-									formControlName="primaryCardHolderName" tabindex="1">
+								<input matInput placeholder="Card Holder First & Last Name"
+									(focus)="$event.target.select()" formControlName="primaryCardHolderName"
+									tabindex="1">
 							</mat-form-field>
 						</div>
 						<div class="col-md-6">
@@ -675,8 +680,8 @@
 						<div class="col-md-4">
 							<mat-form-field appearance="outline">
 								<mat-label>CVV</mat-label>
-								<input matInput placeholder="CVV" (focus)="$event.target.select()" formControlName="primaryCSC"
-									tabindex="1">
+								<input matInput placeholder="CVV" (focus)="$event.target.select()"
+									formControlName="primaryCSC" tabindex="1">
 							</mat-form-field>
 							<div *ngIf="f.primaryCSC.errors" class="text-danger margin-bottom-thin my-mat-hint">
 								<div *ngIf="f.primaryCSC.errors?.invalid_Pattern;else plusError">Do not add Dashes
@@ -732,7 +737,8 @@
 				<div class="row">
 					<div class="col-md-12 custom_table table-responsive">
 						<table class="table table-striped dataTable dt-responsive" id="dataTable" role="grid"
-							aria-describedby="dataTable_info" style="width: 100%;" width="100%" cellspacing="0" tabindex="-1">
+							aria-describedby="dataTable_info" style="width: 100%;" width="100%" cellspacing="0"
+							tabindex="-1">
 							<thead>
 								<tr role="row">
 									<th>Card Holder First & Last Name</th>
@@ -776,8 +782,8 @@
 </form>
 
 <!-- Country wise Document modal -->
-<div class="modal fade" id="verificationDocumentModal" tabindex="-1" role="dialog" aria-labelledby="verificationDocumentModal"
-	aria-hidden="true">
+<div class="modal fade" id="verificationDocumentModal" tabindex="-1" role="dialog"
+	aria-labelledby="verificationDocumentModal" aria-hidden="true">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content user_information">
 			<button type="button" class="close closeButton" data-dismiss="modal" aria-label="Close">
@@ -877,15 +883,20 @@
 <app-delete-confirmation (deleteRecord)="delete()" [alertMessage]="alertMessage"></app-delete-confirmation>
 
 <!-- Affiliate Email sent modal -->
-<div class="modal fade" id="showEmailVerificationAlert" tabindex="-1" role="dialog" aria-labelledby="showEmailVerificationAlert"
-	aria-hidden="true">
+<div class="modal fade" id="showEmailVerificationAlert" tabindex="-1" role="dialog"
+	aria-labelledby="showEmailVerificationAlert" aria-hidden="true">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<button type="button" class="close closeButton" data-dismiss="modal" aria-label="Close">
 				<span aria-hidden="true">&times;</span>
 			</button>
 			<div class="modal-header">
-				<h5 class="modal-title mb-0 text-center">We shot you an email, please verify your email address.
+				<h5 class="modal-title mb-0 text-center">
+					We shot you an email for owner/ 24hr dispatch <br>
+					Please verify one / both email addresses. <br>
+					Operators need to continue seamlessly through All steps without 24hr dispatch verification. <br>
+					Admin cannot turn affiliate on, until verified. Affiliate/admin needs to be alerted that this is the
+					only issue.
 				</h5>
 			</div>
 			<div class="modal-footer">
@@ -899,8 +910,8 @@
 <app-image-modal (closeTab)="closeButton()" [modalImage]="modalImage"></app-image-modal>
 
 <!-- Request Address Change -->
-<div class="modal fade" id="requestAddressChangeModal" tabindex="-1" role="dialog" aria-labelledby="requestAddressChangeModal"
-	aria-hidden="true" style="padding-right: 0!important;">
+<div class="modal fade" id="requestAddressChangeModal" tabindex="-1" role="dialog"
+	aria-labelledby="requestAddressChangeModal" aria-hidden="true" style="padding-right: 0!important;">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<button type="button" class="close closeButton" data-dismiss="modal" aria-label="Close">
@@ -1019,12 +1030,14 @@
 								</div>
 								<div *ngIf="fRequestAddressChange.requestZipCode.errors"
 									class="text-danger margin-bottom-thin my-mat-hint">
-									<div *ngIf="fRequestAddressChange.requestZipCode.errors?.invalid_Pattern;else plusError">
+									<div
+										*ngIf="fRequestAddressChange.requestZipCode.errors?.invalid_Pattern;else plusError">
 										Do not add
 										Dashes
 										with numbers</div>
 									<ng-template #plusError>
-										<div *ngIf="fRequestAddressChange.requestZipCode.errors?.invalidPattern;else allErrors">
+										<div
+											*ngIf="fRequestAddressChange.requestZipCode.errors?.invalidPattern;else allErrors">
 											Do not enter
 											+
 											sign</div>
