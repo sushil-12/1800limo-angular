@@ -79,7 +79,12 @@
 }
 
 .step0Div li {
-	font-size: 16px;
+	font-size  : 18px;
+	font-weight: 500;
+}
+
+ol {
+	padding-left: 20px;
 }
 
 button.close {
@@ -108,6 +113,21 @@ button.close {
 	height       : 70px;
 	padding      : 10px;
 	margin-top   : 20px;
+}
+
+@media only screen and (max-width:767px) {
+	.alertBox {
+		background   : var(--orange-color);
+		width        : 100%;
+		border-radius: 10px;
+		height       : 100%;
+		padding      : 10px;
+		margin-top   : 20px;
+
+		h5 {
+			margin: 0;
+		}
+	}
 }
 
 .button2 {

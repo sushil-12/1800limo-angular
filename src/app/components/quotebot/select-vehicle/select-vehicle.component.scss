@@ -35,7 +35,7 @@ section#vehicle-listing-container {
 					font-size: 1.5rem;
 
 					&:not(p small) {
-						color: var(--orange);
+						color: #000;
 					}
 				}
 			}
@@ -212,13 +212,18 @@ section#vehicle-listing-container {
 }
 
 .btn-success {
-	background-color: #5dbd8a;
+	background-color: var(--green-color);
 	color           : #000;
 	font-weight     : 300;
+	font-weight     : 500;
 	text-decoration : none;
 	border-radius   : 50px;
-	border-color    : #5dbd8a;
+	border-color    : var(--green-color);
 	cursor          : pointer;
+}
+
+.btn-primary {
+	font-weight: 500;
 }
 
 .car-cap .org-Btn {
@@ -267,13 +272,13 @@ section#vehicle-listing-container {
 }
 
 .b-cus.btn-success {
-	background  : #5dbd8a;
-	border-color: #5dbd8a;
+	background  : var(--green-color);
+	border-color: var(--green-color);
 }
 
 .b-cus.btn-success {
-	background  : #5dbd8a;
-	border-color: #5dbd8a;
+	background  : var(--green-color);
+	border-color: var(--green-color);
 }
 
 .b-cus.btn-dark {
@@ -781,8 +786,8 @@ img.img-cir {
 
 .saveButton {
 	color           : #fff !important;
-	background-color: #5dbd8a !important;
-	border-color    : #5dbd8a !important;
+	background-color: var(--green-color) !important;
+	border-color    : var(--green-color) !important;
 	padding         : 10px 25px !important;
 }
 

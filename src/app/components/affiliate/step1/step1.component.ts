@@ -8,6 +8,7 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { catchError } from 'rxjs/operators';
 import { throwError, from } from 'rxjs';
 import { CustomvalidationService } from '../../../services/customvalidation.service';
+import { HttpClient } from '@angular/common/http';
 declare var $: any;
 
 @Component({
@@ -71,11 +72,13 @@ export class Step1Component implements OnInit, AfterViewInit
 	public modalAlertMessage: string;
 	public selectedAffiliate: string;
 	public modalImage: string;
+	public proDriverYears: Array<Object>;
 
 	constructor(
 		private affiliateService: AffiliateService,
 		private stateManagementService: StateManagementService,
 		private authService: AuthService,
+		private httpClient: HttpClient,
 		private router: Router,
 		private spinner: NgxSpinnerService,
 		private formBuilder: FormBuilder,
@@ -107,7 +110,7 @@ export class Step1Component implements OnInit, AfterViewInit
 			CellIsd: ['+1', Validators.required],
 			CellNumberCountry: ['us', Validators.required],
 			Email: ['', [Validators.required, Validators.pattern("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")]],
-			FirstYearBusiness: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(4)]],
+			FirstYearBusiness: ['', [Validators.required]],
 			CompanyName: [''],
 			DBA: [''],
 			Dispatch: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
@@ -134,6 +137,11 @@ export class Step1Component implements OnInit, AfterViewInit
 			this.addAffiliateAccountForm.patchValue({
 				dispatchEmail: val
 			});
+		});
+
+		this.httpClient.get("assets/json/proDriverYear.json").subscribe((data: any) =>
+		{
+			this.proDriverYears = data;
 		});
 
 		this.spinner.show(); //show spinner

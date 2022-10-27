@@ -10,11 +10,11 @@
 
 a.dropdown-toggle.notCompleted {
 	background-color: var(--orange) !important;
-	color: white;
-	text-decoration: none;
+	color           : white;
+	text-decoration : none;
 }
-a.dropdown-item.notCompleted
-{
+
+a.dropdown-item.notCompleted {
 	background-color: #f8f87c !important;
 }
 
@@ -36,7 +36,7 @@ a.dropdown-item.notCompleted
 }
 
 .modal-content h2 {
-	color        : #5dbd8a;
+	color        : var(--green-color);
 	margin-bottom: 0;
 }
 

@@ -5,6 +5,7 @@ import { AuthService } from '../../../services/auth.service';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { CustomvalidationService } from 'src/app/services/customvalidation.service';
+import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 
 @Component({
 	selector: 'app-login',
@@ -25,6 +26,7 @@ export class LoginComponent implements OnInit, AfterViewInit
 	countryChangeObject: any;
 	roleSelected: string;
 	constructor(private formBuilder: FormBuilder, private router: Router, private authService: AuthService, private changeDetectorRef: ChangeDetectorRef,
+		private errorDialogService: ErrorDialogService,
 		private customValidator: CustomvalidationService)
 	{
 		if (this.authService.currentUserValue)
@@ -141,12 +143,20 @@ export class LoginComponent implements OnInit, AfterViewInit
 		}
 	}
 	// loginbuttons
-	loginButtons(_role: string)
+	loginButtons(role: string)
 	{
-		this.roleSelected = _role;
-		this.router.navigate(['/login/' + _role])
+		if (role != 'driver')
+		{
+			this.errorDialogService.openDialog({
+				errors: {
+					error: 'Oops! Currently only Drivers are allowed to Sign In.User accounts coming soon! Recruiting quality vetted drivers, and chauffeurs, only at this time. Refer a trusted driver/ chauffeur to 1-800 - LIMO.COM now! You deserve the best.'
+				}
+			})
+			return
+		}
+		//navigate to login screen
+		this.router.navigateByUrl('/login/' + role);
 	}
-
 	telInputObjectCell(obj)
 	{
 		this.countryChangeObject = obj;

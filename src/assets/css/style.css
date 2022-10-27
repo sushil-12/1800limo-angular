@@ -134,7 +134,7 @@ header a.nav-link.active {
 	.allinner_wrapper header nav .navbar-nav li a {
 		padding-left : 10px !important;
 		padding-right: 10px !important;
-	}	
+	}
 
 	.navbar .collapse {
 		padding-top: 10px;
@@ -437,10 +437,10 @@ header {
 }
 
 .bannerform_wrapper .quoteform_homewrapper .submit-btn {
-	border            : 2px solid #5dbd8a;
+	border            : 2px solid var(--green-color);
 	width             : 210px;
 	margin            : 20px auto;
-	background-color  : #5dbd8a !important;
+	background-color  : var(--green-color) !important;
 	-webkit-appearance: none;
 	appearance        : none;
 	height            : 35px;
@@ -454,7 +454,7 @@ header {
 
 .bannerform_wrapper .quoteform_homewrapper .submit-btn:hover {
 	background-color: transparent !important;
-	color           : #5dbd8a
+	color           : var(--green-color)
 }
 
 .bannerform_wrapper .quoteform_homewrapper label {
@@ -494,7 +494,7 @@ header {
 
 .bannerform_wrapper .nav-tabs {
 	border-bottom: 1px solid #dee2e6 !important;
-	border-top: 1px solid #dee2e6 !important;
+	border-top   : 1px solid #dee2e6 !important;
 }
 
 .bannerform_wrapper .nav-tabs .nav-item.show .nav-link,
@@ -622,11 +622,11 @@ header {
 }
 
 .owl-carousel .owl-nav button.owl-next {
-	position  : absolute;
-	top       : 79px;
-	right     : -55px;
-	background: transparent !important;
-	width     : 18px;
+	position     : absolute;
+	top          : 79px;
+	right        : -55px;
+	background   : transparent !important;
+	width        : 18px;
 	/* height    : 18px; */
 }
 
@@ -647,14 +647,14 @@ header {
 }
 
 .owl-carousel .owl-nav button.owl-prev {
-	position        : absolute;
-	top             : 79px;
-	left            : -55px !important;
-	background      : transparent !important;
-	width           : 18px;
+	position           : absolute;
+	top                : 79px;
+	left               : -55px !important;
+	background         : transparent !important;
+	width              : 18px;
 	/* height          : 18px; */
-	/* border-radius: 50%; */
-	/* opacity      : 1 !important; */
+	/* border-radius   : 50%; */
+	/* opacity         : 1 !important; */
 }
 
 .owl-carousel .owl-nav button.owl-prev svg:hover {
@@ -1186,6 +1186,7 @@ height:280px !important;
 		margin-left: 55px !important;
 	}
 }
+
 @media(max-width:1299px) {
 	.rightPart {
 		margin-left: 0px !important;
@@ -1954,7 +1955,7 @@ url(../images/safetybanner.jpg);*/
 	/* background-size      : 100%;
     background-attachment: fixed; */
 	height                  : calc(100vh - 200px);
-	color                   : #5dbd8a !important;
+	color                   : var(--green-color) !important;
 	display                 : flex;
 	justify-content         : center;
 	align-items             : center;
@@ -1984,7 +1985,7 @@ url(../images/safetybanner.jpg);*/
 }
 
 .safety_wrapper .email-confirmation p {
-	color      : #5dbd8a;
+	color      : var(--green-color);
 	font-weight: 600;
 }
 
@@ -1995,15 +1996,15 @@ url(../images/safetybanner.jpg);*/
 .safety_wrapper .email-confirmation a {
 	width           : auto;
 	color           : #fff !important;
-	background-color: #5dbd8a;
-	border-color    : #5dbd8a;
+	background-color: var(--green-color);
+	border-color    : var(--green-color);
 	text-decoration : none;
 }
 
 .safety_wrapper .email-confirmation a:hover,
 .safety_wrapper .email-confirmation a:focus {
-	background-color: #399161;
-	border-color    : #399161;
+	background-color: #28b24b;
+	border-color    : #28b24b;
 }
 
 
@@ -2591,17 +2592,17 @@ max-width     : 50%;padding:30px;*/
 
 .login-container .login-form input[type="submit"] {
 	text-transform  : uppercase;
-	background-color: #5dbd8a;
+	background-color: var(--green-color);
 	color           : #fff;
 	padding         : 10px 20px;
-	border          : 2px solid #5dbd8a;
+	border          : 2px solid var(--green-color);
 	border-radius   : 25px;
 }
 
 .login-container .login-form input[type="submit"]:hover {
 	background-color: transparent;
-	color           : #5dbd8a;
-	border          : 2px solid #5dbd8a;
+	color           : var(--green-color);
+	border          : 2px solid var(--green-color);
 	border-radius   : 25px;
 }
 
@@ -3272,6 +3273,7 @@ margin-top: 50px !important;
 		display: none !important;
 	}
 }
+
 /* @media (max-width:1024px) {
 	.viewVehicleCarousel .owl-nav {
 		text-align: center;
@@ -4417,7 +4419,7 @@ header .navbar-toggler {
 	justify-content: center;
 	width          : 100%;
 	height         : 100%;
-	border         : 2px solid #52a87a;
+	border         : 2px solid var(--green-color);
 	padding        : 5px;
 	transition     : transform 300ms ease;
 }
@@ -4432,14 +4434,14 @@ header .navbar-toggler {
 }
 
 .radio-button:checked+.radio-tile {
-	background-color: #52a87a;
+	background-color: var(--green-color);
 	color           : #fff;
 	transform       : scale(1, 1);
 }
 
 .radio-button:checked+.radio-tile .radio-tile-label {
 	color           : #fff !important;
-	background-color: #52a87a;
+	background-color: var(--green-color);
 }
 
 @media only screen and (max-width:767px) {
@@ -4450,7 +4452,7 @@ header .navbar-toggler {
 	}
 
 	.borderright .radio-tile {
-		border-right: 2px solid #52a87a;
+		border-right: 2px solid var(--green-color);
 	}
 }
 

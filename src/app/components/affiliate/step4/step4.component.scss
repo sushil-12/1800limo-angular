@@ -32,12 +32,12 @@ html {
 }
 
 .continueLabel {
-	border    : 2px solid #5dbd8a;
+	border    : 2px solid var(--green-color);
 	display   : inline-block;
 	padding   : 10px;
 	position  : relative;
 	text-align: center;
-	color     : #5dbd8a;
+	color     : var(--green-color);
 }
 
 .suspendLabel {
@@ -73,7 +73,7 @@ html {
 .checkedContinueLabel {
 	cursor          : default;
 	color           : #fff;
-	background-color: #5dbd8a;
+	background-color: var(--green-color);
 	z-index         : 1;
 	width           : 85px;
 	transition      : color 200ms;

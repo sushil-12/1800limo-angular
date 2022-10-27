@@ -194,14 +194,14 @@
 
 .project-modal .savebutton {
 	color           : #fff !important;
-	background-color: #5dbd8a;
-	border-color    : #5dbd8a;
+	background-color: var(--green-color);
+	border-color    : var(--green-color);
 	padding         : 15px 40px;
 }
 
 .project-modal .savebutton:hover {
-	background-color: #399161;
-	border-color    : #399161;
+	background-color: #28b24b;
+	border-color    : #28b24b;
 }
 
 .project-modal .headinginfoH2 a {
@@ -233,11 +233,10 @@
 // }
 
 
-.small-btn
-{
-	padding: 7px 14px;
-	border-radius: 13px;
-	margin: auto 13px;
-	border: 1px solid #00abe8;
+.small-btn {
+	padding         : 7px 14px;
+	border-radius   : 13px;
+	margin          : auto 13px;
+	border          : 1px solid #00abe8;
 	background-color: #00abe8;
 }

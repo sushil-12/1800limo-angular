@@ -1032,7 +1032,7 @@ export class HomeComponent implements OnInit
 		{
 			this.errorDialogService.openDialog({
 				errors: {
-					error: 'Oops! Currently only Drivers are allowed to Sign In.'
+					error: 'Oops! Currently only Drivers are allowed to Sign In.User accounts coming soon! Recruiting quality vetted drivers, and chauffeurs, only at this time. Refer a trusted driver/ chauffeur to 1-800 - LIMO.COM now! You deserve the best.'
 				}
 			})
 			return

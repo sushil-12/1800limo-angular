@@ -156,7 +156,7 @@ agm-map {
 .valid,
 .verified,
 .active {
-	background-color: #5dbd8a !important;
+	background-color: var(--green-color) !important;
 }
 
 .text-capitalize {

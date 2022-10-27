@@ -1,5 +1,6 @@
 :root {
 	--orange-color: #F3933D;
+	--green-color : #33c658;
 }
 
 body {
@@ -78,7 +79,7 @@ mat-progress-bar.my-color .mat-progress-bar-fill::after {
 }
 
 .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-thumb {
-	background-color: #5dbd8a;
+	background-color: var(--green-color);
 }
 
 .mat-slide-toggle-bar {
@@ -1047,7 +1048,7 @@ mat-progress-bar.my-color .mat-progress-bar-fill::after {
 }
 
 .dropdown-menu .settingsvg {
-	color: #5dbd8a !important;
+	color: var(--green-color) !important;
 }
 
 .dropdown-menu .dropdown-item-icon svg {
@@ -1430,9 +1431,9 @@ h2.headinginfo .orangeHeading {
 }
 
 .sidenav-menu .nav-item a span {
-	font-size  : 16px;
-	margin: auto 0 auto 20px;
-	cursor     : pointer;
+	font-size: 16px;
+	margin   : auto 0 auto 20px;
+	cursor   : pointer;
 }
 
 .sidenav-menu .nav-item a:hover {
@@ -1872,18 +1873,18 @@ h2.headinginfo .orangeHeading {
 	text-align      : center;
 	border          : 0;
 	overflow        : hidden;
-	background-color: #5dbd8a;
+	background-color: var(--green-color);
 	cursor          : pointer;
 }
 
 @media only screen and (min-width:1199px) {
 	.changeuploaded:hover {
-		background-color: #399161;
+		background-color: #28b24b;
 	}
 
 	.changeuploaded:focus {
 		transform       : scale(1.2, 1.2);
-		background-color: #399161;
+		background-color: #28b24b;
 	}
 }
 
@@ -1919,18 +1920,18 @@ h2.headinginfo .orangeHeading {
 	text-align      : center;
 	border          : 0;
 	overflow        : hidden;
-	background-color: #5dbd8a;
+	background-color: var(--green-color);
 	cursor          : pointer;
 }
 
 @media only screen and (min-width:1199px) {
 	.adduploaded:hover {
-		background-color: #399161;
+		background-color: #28b24b;
 	}
 
 	.adduploaded:focus {
 		transform       : scale(1.2, 1.2);
-		background-color: #399161;
+		background-color: #28b24b;
 	}
 }
 
@@ -2443,7 +2444,7 @@ mat-dialog-container {
 /*7-9-2021*/
 
 table #navbarDropdownUserImage {
-	background-color: #5dbd8a;
+	background-color: var(--green-color);
 	color           : #fff;
 	padding         : 8px 15px !important;
 	border-radius   : 3rem !important;
@@ -2451,12 +2452,12 @@ table #navbarDropdownUserImage {
 
 @media only screen and (min-width:1199px) {
 	table #navbarDropdownUserImage:hover {
-		background-color: #399161;
+		background-color: #28b24b;
 	}
 
 	table #navbarDropdownUserImage:focus {
 		transform       : scale(1.1, 1.1);
-		background-color: #399161;
+		background-color: #28b24b;
 	}
 }
 
@@ -2486,8 +2487,8 @@ table .dropdown-menu {
 
 .button1 {
 	color           : #fff !important;
-	background-color: #5dbd8a;
-	border-color    : #5dbd8a;
+	background-color: var(--green-color);
+	border-color    : var(--green-color);
 	padding         : 15px 80px;
 }
 
@@ -2498,38 +2499,38 @@ table .dropdown-menu {
 
 .button2 {
 	color           : #fff !important;
-	background-color: #5dbd8a;
-	border-color    : #5dbd8a;
+	background-color: var(--green-color);
+	border-color    : var(--green-color);
 	padding         : 10px 40px;
 }
 
 @media only screen and (min-width:1199px) {
 	.button2:hover {
-		background-color: #399161;
+		background-color: #28b24b;
 	}
 
 	.button2:focus {
 		transform       : scale(1.1, 1.1);
-		background-color: #399161;
+		background-color: #28b24b;
 	}
 }
 
 .savebutton {
 	color           : #fff !important;
-	background-color: #5dbd8a;
-	border-color    : #5dbd8a;
+	background-color: var(--green-color);
+	border-color    : var(--green-color);
 	padding         : 15px 40px;
 }
 
 @media only screen and (min-width:1199px) {
 	.savebutton:hover {
-		background-color: #399161;
-		border-color    : #399161;
+		background-color: #28b24b;
+		border-color    : #28b24b;
 	}
 
 	.savebutton:focus {
 		transform       : scale(1.1, 1.1);
-		background-color: #399161;
+		background-color: #28b24b;
 	}
 }
 
@@ -2574,8 +2575,8 @@ table .dropdown-menu {
 
 .add-button {
 	color           : #fff !important;
-	background-color: #5dbd8a;
-	border-color    : #5dbd8a;
+	background-color: var(--green-color);
+	border-color    : var(--green-color);
 	font-size       : 14px;
 	text-transform  : uppercase;
 	text-decoration : none;
@@ -2592,13 +2593,13 @@ table .dropdown-menu {
 
 @media only screen and (min-width:1199px) {
 	.add-button:hover {
-		background-color: #399161;
-		border-color    : #399161;
+		background-color: #28b24b;
+		border-color    : #28b24b;
 	}
 
 	.add-button:focus {
 		transform       : scale(1.1, 1.1);
-		background-color: #399161;
+		background-color: #28b24b;
 	}
 }
 
@@ -2921,7 +2922,7 @@ table .dropdown-menu {
 }
 
 .gratuityToggle .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-thumb {
-	background-color: #5dbd8a;
+	background-color: var(--green-color);
 	height          : 25px;
 	width           : 25px;
 	margin-top      : 3px;
@@ -2997,4 +2998,25 @@ table .dropdown-menu {
 	font-size  : inherit;
 	line-height: 3em;
 	height     : 2.5em !important;
+}
+
+.mat-calendar-body-active {
+	font-size: 18px !important;
+}
+
+.mat-calendar-body-cell {
+	font-size: 18px !important;
+
+}
+
+.mat-calendar-body-disabled {
+	font-size: 13px !important;
+}
+
+.mat-calendar-body-cell-content.mat-focus-indicator {
+	font-weight: 600 !important;
+}
+
+.mat-calendar-body-disabled .mat-calendar-body-cell-content.mat-focus-indicator {
+	font-weight: 400 !important;
 }
