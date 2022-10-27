@@ -278,13 +278,13 @@
 					<img [src]="vehinfo.vehicle_images[0]" id="V_Image_0" class="card-img-top" alt="Vehicle Image"
 						*ngIf="vehinfo.vehicle_images?.length > 0" />
 					<!-- CARD BODY -->
-					<div class="card-body">
+					<div class="card-body pb-0">
 						<!-- TITLE -->
-						<h4 class="card-title">
+						<h4 class="card-title mb-0">
 							{{ vehinfo.name }}
 						</h4>
 						<!-- LUGGAGE n PASSENGER -->
-						<div class="d-flex mb-3">
+						<div class="d-flex mb-2">
 							<div class="pass-det org-Btn">
 								<img alt="" class="img-fluid mr-3" src="assets/images/select_vehicle/pass.png" />
 								{{ vehinfo.passenger }}
