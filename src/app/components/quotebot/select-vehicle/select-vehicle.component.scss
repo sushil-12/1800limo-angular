@@ -16,8 +16,8 @@ section#vehicle-listing-container {
 		border-radius: 1.3rem;
 		padding      : 0.85rem;
 		border       : 1.5px solid var(--orange);
-		height       : 29rem;
-		min-height   : 28rem;
+		height       : 24rem;
+		min-height   : 24rem;
 
 		img.card-img-top {
 			width        : 14rem;
@@ -74,7 +74,7 @@ section#vehicle-listing-container {
 		font-size       : 14px;
 		font-weight     : 500;
 		position        : absolute;
-		bottom          : 35px;
+		bottom          : 30px;
 	}
 }
 
