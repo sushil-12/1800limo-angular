@@ -16,7 +16,8 @@ export class VehicleDetailsComponent implements OnInit
 
 	selected_vehicle: any	// selected vehicle details from previous page
 	quotebot_form: any	// quotebot details from previous page
-	rates: any
+	one_way_rates: any
+	round_trip_rates: any
 
 	constructor(
 		private _router: Router,
@@ -54,8 +55,12 @@ export class VehicleDetailsComponent implements OnInit
 			this.selected_vehicle = JSON.parse(sessionStorage.getItem('selected_vehicle'))
 			this.quotebot_form = JSON.parse(localStorage.getItem('quotebot_form'))
 
-			this.rates = this.selected_vehicle[Object.keys(this.selected_vehicle).find(value => /^rate_breakdown_/g.test(value))]
 
+			this.one_way_rates = this.selected_vehicle[Object.keys(this.selected_vehicle).find(value => /^rate_breakdown_one_way/g.test(value))]
+			console.log(this.one_way_rates, "5555555555555555555")
+
+			this.round_trip_rates = this.selected_vehicle[Object.keys(this.selected_vehicle).find(value => /^rate_breakdown_round_trip/g.test(value))]
+			console.log(this.round_trip_rates, "44444444444444")
 			// Re-categorise list of amenities 
 			let amenities = JSON.parse(JSON.stringify(this.selected_vehicle.amenities))	// make a deep copy
 			this.selected_vehicle.amenities = {} // empty the contents 
@@ -369,7 +374,7 @@ export class VehicleDetailsComponent implements OnInit
 				{
 					obj['location_info'].push(obj['location_info'][0])
 				}
-				obj['service_type'] = 'round_trip'
+				obj['service_type'] = 'one_way'
 				break
 			case 'one_way':
 			case 'charter_tour':

@@ -140,7 +140,7 @@ p {
 	text-align      : center;
 	border          : 0;
 	overflow        : hidden;
-	background-color: #5dbd8a;
+	background-color: var(--green-color);
 	cursor          : pointer;
 	text-decoration : none;
 	height          : 32px;
@@ -196,12 +196,12 @@ div#imageModal {
 
 @media only screen and (min-width:1199px) {
 	.previewImageButton:hover {
-		background-color: #399161;
+		background-color: #28b24b;
 	}
 
 	.previewSvg a:focus {
 		transform       : scale(1.2, 1.2);
-		background-color: #399161;
+		background-color: #28b24b;
 	}
 }
 
@@ -248,8 +248,8 @@ div#imageModal {
 // }
 
 .agreeButton {
-	background-color: #5dbd8a !important;
+	background-color: var(--green-color) !important;
 	color           : #fff;
-	border-color    : #5dbd8a;
+	border-color    : var(--green-color);
 	padding         : 15px 40px;
 }

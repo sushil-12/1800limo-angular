@@ -323,24 +323,15 @@
 				</div>
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
-						<mat-label>First Year Pro Driver <span class="theme-color">(Example: 1998) </span>
-							<span class="asterisk">*</span>
-						</mat-label>
-						<input matInput placeholder="First Year Pro Driver" formControlName="FirstYearBusiness"
-							id="FirstYearBusiness" tabIndex="1">
+						<mat-label>First Year Pro Driver <span class="asterisk">*</span></mat-label>
+						<mat-select formControlName="FirstYearBusiness" tabindex="1">
+							<mat-option *ngFor="let proDriverYear of proDriverYears" [value]="proDriverYear.value">
+								{{proDriverYear.label}}</mat-option>
+						</mat-select>
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.FirstYearBusiness.errors || f.FirstYearBusiness.touched && f.FirstYearBusiness.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.FirstYearBusiness.errors.required">This field is required</div>
-					</div>
-					<div *ngIf="f.FirstYearBusiness.errors" class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.FirstYearBusiness.errors?.pattern;else numberLength">Enter Numbers Without Spaces
-							or Dashes
-						</div>
-						<ng-template #numberLength>
-							<div *ngIf="f.FirstYearBusiness.errors.minlength">Minimum length should be 4</div>
-							<div *ngIf="f.FirstYearBusiness.errors.maxlength">Maximum length should be 4</div>
-						</ng-template>
 					</div>
 				</div>
 			</div>

@@ -1,9 +1,9 @@
 @media only screen and (max-width:767px) {
-  .mobilePadding {
-    padding: 0px 15px !important;
-  }
+	.mobilePadding {
+		padding: 0px 15px !important;
+	}
 
-  .borderright .radio-tile {
-    border-right: 2px solid #52a87a;
-  }
+	.borderright .radio-tile {
+		border-right: 2px solid var(--green-color);
+	}
 }
