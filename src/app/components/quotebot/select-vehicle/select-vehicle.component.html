@@ -298,7 +298,7 @@
 						<div id="price-area" class="mb-3">
 							<p>
 								${{ vehinfo['rate_breakdown_' + getKeyName()].grand_total != undefined ?
-								vehinfo['rate_breakdown_' + getKeyName()].grand_total : '0.00' }}
+								vehinfo['rate_breakdown_' + getKeyName()].total : '0.00' }}
 							</p>
 						</div>
 						<small class="d-block">
@@ -344,10 +344,10 @@
 							</p>
 							<p id="vehicle-price"
 								*ngIf="('rate_breakdown_' + getKeyName()) != undefined || ('rate_breakdown_' + getKeyName()).length <= 0">
-								From&nbsp;
 								<span style="color: #e17515; font-weight: 500;">
-									$ {{ vehicle_obj['rate_breakdown_'+ getKeyName()].grand_total }}
-								</span>
+									From
+								</span>&nbsp;
+								$ {{ vehicle_obj['rate_breakdown_'+ getKeyName()].total }}
 							</p>
 							<div id="icons">
 								<img alt="" src="assets/images/select_vehicle/pass.png" class="mx-1"
