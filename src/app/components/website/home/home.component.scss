@@ -776,3 +776,14 @@ a.user-profile:active::after {
 	border-bottom: 0;
 	border-left  : 0.5em solid transparent;
 }
+
+.whychoose_no a {
+	color        : #000 !important;
+	background   : var(--orange);
+	font-size    : 17px;
+	border       : 1px solid var(--orange);
+	line-height  : 17px;
+	padding      : 5px 15px;
+	transition   : 0.2s;
+	border-radius: 10px;
+}

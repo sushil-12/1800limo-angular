@@ -21,8 +21,10 @@ section#vehicle-listing-container {
 
 		img.card-img-top {
 			width        : 14rem;
+			height       : 8rem;
+			object-fit   : cover;
 			margin       : 15px auto;
-			border-radius: 2rem
+			border-radius: 2rem;
 		}
 
 		.card-body {
