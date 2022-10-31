@@ -4189,23 +4189,31 @@ header .navbar-toggler {
 }
 
 .closeButton {
-	background   : #fff !important;
+	/* background   : #fff !important; */
 	color        : #ff0000 !important;
 	position     : absolute;
-	top          : -15px;
-	right        : -25px;
+	top          : 5px;
+	right        : 15px;
 	border-radius: 20px;
 	width        : 25px;
 	opacity      : 1 !important;
 }
 
+.closeButton span {
+	font-size: 2.5rem;
+}
+
 @media only screen and (max-width:767px) {
 	.closeButton {
 		position     : absolute;
-		top          : -30px;
-		right        : 0px;
+		top          : 0px;
+		right        : 5px;
 		border-radius: 20px;
 		width        : 25px;
+	}
+
+	.closeButton span {
+		font-size: 2rem;
 	}
 
 	#showCountriesModal .closeButton {
@@ -4218,7 +4226,7 @@ header .navbar-toggler {
 	}
 
 	#myModal .closeButton {
-		background   : #fff !important;
+		/* background   : #fff !important; */
 		color        : #ff0000 !important;
 		position     : absolute;
 		top          : 20px;

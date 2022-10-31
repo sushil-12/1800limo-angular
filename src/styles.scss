@@ -74,6 +74,42 @@ button.custom-filled-back-button {
 	-webkit-appearance: button;
 }
 
+@media only screen and (max-width:380px) {
+	button.custom-filled-button {
+		padding           : 15px 0;
+		border-radius     : 1rem;
+		border            : 2px solid var(--green-color);
+		background-color  : var(--green-color);
+		color             : #202020;
+		letter-spacing    : 0.9px;
+		font-size         : 0.875rem;
+		display           : inline-block;
+		min-width         : 8rem;
+		font-family       : 'Roboto', sans-serif;
+		font-weight       : 700;
+		appearance        : button;
+		-moz-appearance   : button;
+		-webkit-appearance: button;
+	}
+
+	button.custom-filled-back-button {
+		padding           : 15px 0;
+		border-radius     : 1rem;
+		border            : 2px solid #a2a3a2;
+		background-color  : #a2a3a2;
+		color             : #202020;
+		letter-spacing    : 0.9px;
+		font-size         : 0.875rem;
+		display           : inline-block;
+		min-width         : 8rem;
+		font-family       : 'Roboto', sans-serif;
+		font-weight       : 700;
+		appearance        : button;
+		-moz-appearance   : button;
+		-webkit-appearance: button;
+	}
+}
+
 button.custom-filled-orange-button {
 	border          : 2px solid var(--orange);
 	border-radius   : 1rem;
