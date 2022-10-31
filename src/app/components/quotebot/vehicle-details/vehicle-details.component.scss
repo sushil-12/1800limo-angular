@@ -47,7 +47,8 @@
 }
 
 .pass-det {
-	padding: 5px 10px;
+	padding  : 5px 10px;
+	font-size: 18px !important;
 }
 
 .show-More {
@@ -145,7 +146,7 @@
 
 .price-Blc {
 	small {
-		font-size: 0.97rem;
+		font-size: 17px;
 	}
 
 	label.custom-control-label {
@@ -186,10 +187,10 @@
 
 .cont-Block h5 {
 	font-weight: bold;
-	font-size  : 18px;
+	font-size  : 20px;
 }
 
-.cont-Block p {
+.pass-det .cont-Block p {
 	opacity: 0.5;
 }
 
@@ -340,7 +341,7 @@ img.img-cir {
 	text-align   : center;
 
 	img {
-		height       : 190px;
+		height       : 290px;
 		width        : auto;
 		-o-object-fit: cover;
 		object-fit   : cover;
@@ -361,11 +362,11 @@ img.img-cir {
 	cursor       : pointer;
 
 	img {
-		padding      : 0px 10px 0px 0px;
+		padding      : 0px 40px;
 		height       : 60px;
 		-o-object-fit: contain;
 		object-fit   : contain;
-		width        : 60px;
+		width        : 145px;
 	}
 }
 
@@ -422,9 +423,9 @@ button.custom-btn {
 		max-width: 100%;
 	}
 
-	.car-Details .cont-Block {
-		margin-top: 20px;
-	}
+	// .car-Details .cont-Block {
+	// 	margin-top: 20px;
+	// }
 }
 
 @media only screen and (max-width: 767px) {
@@ -456,32 +457,60 @@ button.custom-btn {
 }
 
 @media only screen and (max-width:380px) {
+	.pro-Fil {
+		padding: 0 !important;
+	}
+
 	#thumbs .item img {
-		padding      : 0px 10px 0px 0px;
-		height       : 25px;
+		padding      : 0px 15px;
+		height       : 20px;
 		-o-object-fit: contain;
 		object-fit   : contain;
-		width        : 40px;
+		width        : 60px;
+	}
+
+	#big .item img {
+		height       : 160px;
+		width        : auto;
+		-o-object-fit: cover;
+		object-fit   : cover;
+		margin       : 0 auto;
 	}
 }
 
-@media (min-width:381px) and (max-width:667px) {
+@media (min-width:381px) and (max-width:767px) {
+	.pro-Fil {
+		padding: 0 !important;
+	}
+
 	#thumbs .item img {
-		padding      : 0px 10px 0px 0px;
+		padding      : 0px 25px;
 		height       : 30px;
 		-o-object-fit: contain;
 		object-fit   : contain;
-		width        : 65px;
+		width        : 90px;
+	}
+
+	#big .item img {
+		height       : 200px;
+		width        : auto;
+		-o-object-fit: cover;
+		object-fit   : cover;
+		margin       : 0 auto;
 	}
 }
 
 @media (min-width:768px) and (max-width:991px) {
+	.pro-Fil {
+		padding-top: 30px !important;
+	}
+
 	#thumbs .item img {
-		padding      : 0px 10px 0px 0px;
+		padding      : 0px 15px;
 		height       : 30px;
 		-o-object-fit: contain;
 		object-fit   : contain;
-		width        : 45px;
+		width        : 65px;
 	}
 
 	.owl-carousel {
@@ -489,27 +518,37 @@ button.custom-btn {
 	}
 }
 
+@media (min-width:768px) and (max-width:991px) {
+	#big .item img {
+		height       : 190px;
+		width        : auto;
+		-o-object-fit: cover;
+		object-fit   : cover;
+		margin       : 0 auto;
+	}
+}
+
 @media (min-width:992px) and (max-width:1199px) {
 	#thumbs .item img {
-		padding           : 0px 10px 0px 0px;
-		height            : 30px;
+		padding           : 0px 30px;
+		height            : 50px;
 		-o-object-fit     : contain;
 		-webkit-object-fit: contain;
 		-moz-object-fit   : contain;
 		object-fit        : contain;
-		width             : 50px;
+		width             : 110px;
+	}
+
+	#big .item img {
+		height       : 250px;
+		width        : auto;
+		-o-object-fit: cover;
+		object-fit   : cover;
+		margin       : 0 auto;
 	}
 
 	.owl-carousel {
 		width: 500px !important;
-	}
-
-	#thumbs .item img {
-		padding      : 0px 10px 0px 0px;
-		height       : 50px;
-		-o-object-fit: contain;
-		object-fit   : contain;
-		width        : 65px;
 	}
 }
 

@@ -72,7 +72,7 @@ export class Step1Component implements OnInit, AfterViewInit
 	public modalAlertMessage: string;
 	public selectedAffiliate: string;
 	public modalImage: string;
-	public proDriverYears: Array<Object>;
+	public startBusinessYears: Array<Object>;
 
 	constructor(
 		private affiliateService: AffiliateService,
@@ -97,7 +97,7 @@ export class Step1Component implements OnInit, AfterViewInit
 	ngOnInit(): void
 	{
 		this.currentUser = this.authService.currentUserValue;
-
+		$('#instructionsModal').modal('show')
 		//add affiliate form validation
 		this.addAffiliateAccountForm = this.formBuilder.group({
 			acc_id: [''],
@@ -139,9 +139,9 @@ export class Step1Component implements OnInit, AfterViewInit
 			});
 		});
 
-		this.httpClient.get("assets/json/proDriverYear.json").subscribe((data: any) =>
+		this.httpClient.get("assets/json/startBusinessYears.json").subscribe((data: any) =>
 		{
-			this.proDriverYears = data;
+			this.startBusinessYears = data;
 		});
 
 		this.spinner.show(); //show spinner

@@ -399,3 +399,8 @@ div#imageModal {
 	color    : var(--orange-color);
 	font-size: 18px;
 }
+
+#instructionsModal .modal-content li {
+	line-height   : 25px;
+	padding-bottom: 15px;
+}

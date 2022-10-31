@@ -78,7 +78,7 @@ export class VehicleDetailsComponent implements OnInit
 		var config = {
 			items: this.selected_vehicle.vehicle_images.length + 1,
 			dots: false,
-			nav: true,
+			nav: false,
 			smartSpeed: 200,
 			slideSpeed: 500,
 			slideBy: 4,
@@ -97,7 +97,7 @@ export class VehicleDetailsComponent implements OnInit
 				.owlCarousel({
 					items: 1,
 					slideSpeed: 10,
-					nav: true,
+					nav: false,
 					autoplay: false,
 					dots: false,
 					loop: true,
@@ -124,7 +124,7 @@ export class VehicleDetailsComponent implements OnInit
 						},
 						1199: {
 							items: 1,
-							nav: true,
+							nav: false,
 							loop: true,
 							dots: false
 						}
