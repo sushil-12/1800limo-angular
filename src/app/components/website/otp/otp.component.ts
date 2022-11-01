@@ -188,7 +188,6 @@ export class OtpComponent implements OnInit, OnDestroy
 
 				localStorage.setItem('userData', JSON.stringify(loginUserDetail))
 				localStorage.setItem('currentUser', JSON.stringify(this.response.data.user));
-				this.stateManagementService.setUser();
 				localStorage.setItem('access_token', this.response.data.access_token);
 
 				switch (this.response.data.user.roleName)

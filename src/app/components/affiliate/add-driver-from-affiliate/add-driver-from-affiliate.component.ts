@@ -59,6 +59,9 @@ export class AddDriverFromAffiliateComponent implements OnInit, AfterViewInit, A
 	public affiliateType: any;
 	currentUser: any;
 
+
+	proDriverYears: any
+
 	public VeteranCheck: boolean = false;
 	public DoDCheck: boolean = false;
 	public SchoolBusCertifiedCheck: boolean = false;
@@ -99,6 +102,10 @@ export class AddDriverFromAffiliateComponent implements OnInit, AfterViewInit, A
 		this.addDriverForm.patchValue({
 			Country: this.currentUser.phoneCountry.toUpperCase()
 		});
+		this.affiliateService.proDriverYears.subscribe((data) =>
+		{
+			this.proDriverYears = data
+		})
 	}
 	ngAfterViewChecked()
 	{
@@ -150,13 +157,13 @@ export class AddDriverFromAffiliateComponent implements OnInit, AfterViewInit, A
 			StartDate: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(4), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
 			FluentLanguages: this.formBuilder.array([], [Validators.required]),
 			LanguagesGet: this.formBuilder.array([]),
-			Veteran: ['no', Validators.required],
-			DoD: ['no', Validators.required],
-			SchoolBusCertified: ['no', Validators.required],
-			FoidCard: ['no', Validators.required],
-			Covid19Vaccination: ['no', Validators.required],
-			BackgroundCertified: ['no', Validators.required],
-			ExPolice: ['no', Validators.required],
+			Veteran: ['no'],
+			DoD: ['no'],
+			SchoolBusCertified: ['no'],
+			FoidCard: ['no'],
+			Covid19Vaccination: ['no'],
+			BackgroundCertified: ['no'],
+			ExPolice: ['no'],
 			DriverImage: ['', Validators.required],
 			DriverLicense: ['', Validators.required],
 			StarRating: [''],
@@ -179,6 +186,7 @@ export class AddDriverFromAffiliateComponent implements OnInit, AfterViewInit, A
 			State: [''],
 			City: [''],
 			ZipCode: [''],
+			FirstYearBusiness: ['', Validators.required]
 		});
 
 		const affiliateType = this.currentUser.affiliate_type;
@@ -363,6 +371,7 @@ export class AddDriverFromAffiliateComponent implements OnInit, AfterViewInit, A
 									Covid19Vaccination: data.Covid19Vaccination,
 									BackgroundCertified: data.BackgroundCertified,
 									ExPolice: data.ExPolice,
+									FirstYearBusiness: data.FirstYearBusiness
 								});
 
 								//get and set languages
@@ -421,10 +430,12 @@ export class AddDriverFromAffiliateComponent implements OnInit, AfterViewInit, A
 										CellNumber: data.CellNumber,
 										CellIsd: data.CellIsd,
 										Email: data.Email,
-										StartDate: data.FirstYearBusiness,
-										Veteran: data.Veteran,
-										DoD: data.DoD,
+										StartDate: data.FirstYearBusiness
 									});
+
+									data.Veteran && this.SetFormValue('Veteran', data.Veteran);
+									data.DoD && this.SetFormValue('DoD', data.DoD);
+
 									this.CellNumberObject.setCountry(data.CellNumberCountry);
 									if (data.Veteran == 'yes')
 										this.VeteranCheck = true;
@@ -442,6 +453,12 @@ export class AddDriverFromAffiliateComponent implements OnInit, AfterViewInit, A
 			this.f.starRatingValue.setValidators([Validators.required])
 			this.addDriverForm.updateValueAndValidity()
 		}
+	}
+
+	SetFormValue(form_control: string, value: any)
+	{
+		this.addDriverForm.get(form_control).setValue(value)
+		this.addDriverForm.updateValueAndValidity()
 	}
 
 	closeButton()
@@ -859,7 +876,7 @@ export class AddDriverFromAffiliateComponent implements OnInit, AfterViewInit, A
 
 	submitForm()
 	{
-		console.log(this.addDriverForm.value)
+		console.log(this.addDriverForm)
 		this.submittedForm = true;
 		// stop here if form is invalid
 		if (this.addDriverForm.invalid)

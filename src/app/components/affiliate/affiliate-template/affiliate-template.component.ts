@@ -64,10 +64,7 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 
 		this.screenWidth = window.innerWidth;
 		//Get logged in user name
-		this.stateManagementService.getUser().subscribe(user =>
-		{
-			this.currentUser = user;
-		});
+		this.currentUser = this.stateManagementService.getUser()
 
 		//Get ProgressBar
 		this.stateManagementService.getprogressBar().subscribe(commonProgressBar =>
@@ -76,8 +73,6 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 			{
 				this.progressBar = commonProgressBar;
 			});
-
-			console.log("1111")
 		});
 
 		const tree = this.router.parseUrl(this.router.url);

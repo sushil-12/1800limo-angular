@@ -878,7 +878,6 @@ export class Step1Component implements OnInit, AfterViewInit
 					console.log(data, "check data")
 					console.log("Id not get", this.addAffiliateAccountForm.value.id)
 					localStorage.setItem("currentUser", JSON.stringify(data.user));
-					this.stateManagementService.setUser();
 					if (success == true)
 					{
 						this.affiliateService.updateStepsLocal('1');

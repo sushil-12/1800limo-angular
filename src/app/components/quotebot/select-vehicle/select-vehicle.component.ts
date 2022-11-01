@@ -12,17 +12,10 @@ declare let $: any
 
 interface Filters
 {
-	id: number,
-	slug?: string,
-	make_id?: number,
-	name: string
-}
-
-interface FiltersData
-{
-	return_name?: string,
-	data?: Filters,
-	display_name?: string
+	original: Object,
+	copy: Object,
+	request: Object,	// request for the response of selected filters from backend
+	selections: Array<{ fil_index: number, catg_name: string }>,
 }
 
 @Component({
@@ -105,13 +98,17 @@ export class SelectVehicleComponent implements OnInit
 	]
 
 	modal_driver_info_labels: Array<String> = ['name', 'gender', 'phone', 'languages', 'experience', 'dress', 'background', 'starRating']
-	filtersList: Array<any> = [];
 	vehicleDetails: Array<any> = []
 	vehicleImages: Array<any> = []
 	master_vehicles: Array<any> = []
-	filters: any = {}
-	filters_data: any = {}
-	selected_filters: Array<{ category: string, name: string }> = []
+
+	// Filters
+	filters: Filters = {
+		original: {},
+		copy: {},
+		request: {},
+		selections: [{ fil_index: -1, catg_name: '' }]
+	}
 
 	min_length: number = 12 	// number of filters to show in one column and on the filters sidebar
 
@@ -131,11 +128,10 @@ export class SelectVehicleComponent implements OnInit
 
 
 	constructor(
-		private _quotebotService: QuotebotService,
-		private _spinner: NgxSpinnerService,
-		private _router: Router,
-		private _errorDialog: ErrorDialogService,
-		private _activatedRoute: ActivatedRoute,
+		private $quotebotService: QuotebotService,
+		private $spinner: NgxSpinnerService,
+		private $router: Router,
+		private $errorDialog: ErrorDialogService,
 		private $state: StateManagementService
 	) { }
 
@@ -148,20 +144,21 @@ export class SelectVehicleComponent implements OnInit
 	 */
 	ngOnInit(): void
 	{
-		this._spinner.show()
+		this.$spinner.show()
 		sessionStorage.removeItem('selected_vehicle')
-		// Do not add anything here or before below conditional logic. This should be the first step
+		// Note: Do not add anything here or before below conditional logic. This should be the first step
 		if (localStorage.getItem('quotebot_form') == null)
 		{
-			this._errorDialog.openDialog({
+			this.$errorDialog.openDialog({
 				errors: {
 					error: "Please request a Quote before selecting a vehicle. "
 				}
 			})
-			this._router.navigateByUrl('/')
+			this.$router.navigateByUrl('/')
 			return
 		} else
 		{
+			// fetch the user's travelling quote
 			this.quotebot_form = JSON.parse(localStorage.getItem('quotebot_form'))
 		}
 
@@ -169,14 +166,13 @@ export class SelectVehicleComponent implements OnInit
 		this.getAllFilters()	// fetch filters from database
 
 		// fetch the last selected category
-		this.$state.getState().subscribe((data: any) =>
+		this.$state.get().subscribe((data: any) =>
 		{
-			console.log(data)
-			if (data.selected_filters != undefined)
+			if (data && data.filter_selections != undefined)
 			{
-				this.selected_filters = data.selected_filters
-				this.filters_data = data.filters_data
-				this.getVehicleDetails(this.filters_data)
+				this.filters.selections = data.selected_filters
+				this.filters = data.filters_data
+				this.getVehicleDetails(this.filters.request)
 			}
 		})
 	}
@@ -222,7 +218,7 @@ export class SelectVehicleComponent implements OnInit
 	{
 		return new Promise((resolve, reject) =>
 		{
-			this._quotebotService.getMasterVehicleTypes(this.quotebot_form).pipe(
+			this.$quotebotService.getMasterVehicleTypes(this.quotebot_form).pipe(
 				catchError(err => throwError(err))
 			).subscribe((response: any) =>
 			{
@@ -247,7 +243,7 @@ export class SelectVehicleComponent implements OnInit
 	 */
 	selectCategory(vehicle: any)
 	{
-		this.selectedFilters({ target: { checked: true }, fetch_vehicles: true }, 'vehicle-type', vehicle)
+		// TODO: this.selectedFilters({ target: { checked: true }, fetch_vehicles: true }, 'vehicle-type', vehicle)
 	}
 
 
@@ -256,10 +252,10 @@ export class SelectVehicleComponent implements OnInit
 	 */
 	getAllFilters(): void
 	{
-		this._spinner.show()
-		this._quotebotService.getAllFilters().subscribe((response: any) =>
+		this.$spinner.show()
+		this.$quotebotService.getAllFilters().subscribe((response: any) =>
 		{
-			this._spinner.hide()
+			this.$spinner.hide()
 			if (response.success)
 			{
 				for (let filter in response.data)
@@ -269,33 +265,33 @@ export class SelectVehicleComponent implements OnInit
 				}
 
 				// format every filter name from response
-				this.filtersList = JSON.parse(JSON.stringify(response.data)) // create a deep copy of the response object
+				this.filters.original = JSON.parse(JSON.stringify(response.data)) // create a deep copy of the response object
 
 
 				// showing only till min_length
-				for (let filter in this.filtersList)
+				for (let filter in this.filters.original)
 				{
-					if (Array.isArray(this.filtersList[filter]) && this.filtersList[filter].length > this.min_length)
+					if (Array.isArray(this.filters.original[filter]) && this.filters.original[filter].length > this.min_length)
 					{
 						// assign the filter with specified length into a new object
-						this.filters[filter] = this.filtersList[filter].slice(0, this.min_length)
+						this.filters.copy[filter] = this.filters.original[filter].slice(0, this.min_length)
 					} else
 					{
 						// else, assign the filter into the new object
-						this.filters[filter] = this.filtersList[filter]
+						this.filters.copy[filter] = this.filters.original[filter]
 					}
 				}
 
 
-				this.filters['driver-background'] = [{
+				this.filters.copy['driver-background'] = [{
 					slug: 'child_certified_driver',
 					name: 'Child Certified Driver'
 				}]
 
-				// console.group('Filters List: ', this.filters)
+				console.group('Filters List: ', this.filters.copy)
 			}
-			// console.log('--------------------------------\n\n')
-			// console.groupEnd()
+			console.log('--------------------------------\n\n')
+			console.groupEnd()
 		});
 	}
 
@@ -332,19 +328,14 @@ export class SelectVehicleComponent implements OnInit
 
 	/**
 	 * show more filters on click
-	 * @param button_id merely the index of the filter
+	 * @param filter_name name of the filter category to populate
+	 * TODO: Rebuild the functionality 
 	 */
-	showMore(filter_name: string)
+	showMore(filter_name: string): void
 	{
 		this.is_show_more_button_hidden = !this.is_show_more_button_hidden
 		// populate filters list
-		this.filters[filter_name] = this.is_show_more_button_hidden ? this.filtersList[filter_name] : this.filtersList[filter_name].slice(0, this.min_length)
-
-		// show filters in modal
-		// this.filter_body = this.dynamicCreateList(filter_name)
-		// this.filter_title = filter_name
-		// // console.log(this.filter_body)
-		// $('#filtersModal').modal('toggle')
+		this.filters.copy[filter_name] = this.is_show_more_button_hidden ? this.filters.original[filter_name] : this.filters.original[filter_name].slice(0, this.min_length)
 	}
 
 
@@ -357,7 +348,7 @@ export class SelectVehicleComponent implements OnInit
 	getVehicleDetails(filters_data: any)
 	{
 		console.log('Fetching Vehicle Details. ')
-		this._spinner.show()
+		this.$spinner.show()
 		let data = {}
 		if (this.quotebot_form != null)
 		{
@@ -367,7 +358,7 @@ export class SelectVehicleComponent implements OnInit
 		console.group('Sending Data to backend ... ', data)
 		console.groupEnd()
 		// fetch the vehicle details - API HIT
-		this._quotebotService.getVehicleDetails(data).subscribe((response: any) =>
+		this.$quotebotService.getVehicleDetails(data).subscribe((response: any) =>
 		{
 			if (response.data.length == 0)
 			{
@@ -375,24 +366,63 @@ export class SelectVehicleComponent implements OnInit
 			}
 			this.vehicleDetails = response.data
 			this.Sort.LowToHigh() // default sort to Low-High
-			this._spinner.hide()
+			this.$spinner.hide()
 		})
 	}
 
 
+
+
 	/**
-	 * generates three arrays providing different functions.
-	 * array_1: selected_filters : to show only selected filters on top of the filters list
-	 * array_2: filters_data : to send selected filter's id only to backend
-	 * array_3: filters: updating filters simultaneously
-	 *
-	 * @param event: Any [Required] the input[type=checkbox] event
-	 * @param category: String [Required] category of the filter
-	 * @param filter_index: Number [Required] Index of the current filter checked
-	 * @param filter_obj: Filters [Required] the current checked filter object
-	 *
-	 * @returns void
+	 * Identifies the selection and fills the filter's variable intelligently
+	 * @param is_checked :Boolean [Required] is the selection checked or not ? 
+	   * @param selection_category :String [Required] category of the filter that is selected
+	 * @param selection :Object [Required] selection object
 	 */
+	filterSelection(is_checked: boolean, sel_category: string, sel_index: number)
+	{
+		console.log(`\nChecked: ${is_checked}\nCategory: ${sel_category}\nSelection: ${this.filters.copy[sel_category][sel_index]}\n`)
+
+		// the category should not be of Make as of right now. 
+		if (is_checked && sel_category != 'make')
+		{
+			// add to the arrays, but first check the duplicacy
+			if (this.filters.request[sel_category] === undefined)
+			{
+				// uncheck the any or all filter and push into the selections + request
+				this.filters.copy[sel_category][0]['checked'] = false		// uncheck operation
+
+				this.filters.request[sel_category] = []
+				this.filters.request[sel_category].push(this.filters.copy[sel_category][sel_index]['id'])
+			}
+			// push only into existing category 
+			else
+			{
+				// only push
+				this.filters.request[sel_category].push(this.filters.copy[sel_category][sel_index]['id'])
+			}
+
+			// push into the selections everytime
+			this.filters.selections.push({
+				fil_index: sel_index,
+				catg_name: sel_category
+			})
+		}
+
+		// now if the category comes of Make.
+		if (is_checked && sel_category == 'make')
+		{
+			console.log('\nSelection Category is for make.\n')
+		}
+	}
+
+
+
+
+
+
+
+	/*
 	selectedFilters(event: any, category: string, filter_obj: Filters)
 	{
 		console.log(`\n\n\nChecked: ${event.target.checked}\nCategory: ${category}\nFilter: `, filter_obj)
@@ -492,11 +522,24 @@ export class SelectVehicleComponent implements OnInit
 		// 	console.log('Filters Data: ', this.filters_data, '\n')
 		// 	console.log('Filters: ', this.filters, '\n')
 	}
+	*/
 
 
-	/**
-	 * Checks if the specified filter list contains the specified comparison keys
-	 */
+	isFilterAlreadySelected(catg_name: string, fil_index: number): boolean
+	{
+		let sel_index = this.filters.selections.findIndex((item) => item.catg_name == catg_name)
+		let copy_index = this.filters.request[catg_name].findIndex((item: number) => item == this.filters.copy[catg_name][fil_index]['id'])
+
+		// exist in both selections and request
+		if (sel_index != -1 && copy_index != -1)
+		{
+			return true
+		}
+		return false
+	}
+
+
+	/*
 	includes(filter_list: any, comparison_key: string, filter_obj: any, card_header: string)
 	{
 		let array = filter_list.some(item => item[comparison_key] == filter_obj[comparison_key])
@@ -517,6 +560,7 @@ export class SelectVehicleComponent implements OnInit
 		}
 		return array
 	}
+	*/
 
 	showModal(vehicle_selected: any, selection_button: string)
 	{
@@ -528,11 +572,11 @@ export class SelectVehicleComponent implements OnInit
 	viewDetails(vehicle_selected: any)
 	{
 		sessionStorage.setItem('selected_vehicle', JSON.stringify(vehicle_selected))
-		this.$state.setState({
-			selected_filters: this.selected_filters,
-			filters_data: this.filters_data
+		this.$state.set({
+			selected_filters: this.filters.selections,
+			filters_data: this.filters.request
 		})
-		this._router.navigate(['quotebot/vehicle-details'], {
+		this.$router.navigate(['quotebot/vehicle-details'], {
 			queryParamsHandling: 'preserve'
 		})
 	}
@@ -552,24 +596,24 @@ export class SelectVehicleComponent implements OnInit
 		{
 			if (JSON.parse(localStorage.getItem('currentUser'))['roleName'] == 'admin')
 			{
-				this._router.navigate(['/admin/create-new-booking'])
+				this.$router.navigate(['/admin/create-new-booking'])
 			} else
 			{
 				let user = JSON.parse(localStorage.getItem('currentUser'))['roleName']
 				user = user == 'driver' ? 'affiliate' : user	// roleName of driver has to be directed to affiliate/..
 
-				this._router.navigate([
+				this.$router.navigate([
 					'/' + user + '/'
 				])
 			}
 		} else
 		{
-			// this._errorDialog.openDialog({
+			// this.$errorDialog.openDialog({
 			// 	errors: {
 			// 		error: 'Please open an account or login to proceed.'
 			// 	}
 			// })
-			this._router.navigate(['/login/driver'], {
+			this.$router.navigate(['/login/driver'], {
 				skipLocationChange: true
 			})
 		}
@@ -683,6 +727,9 @@ export class SelectVehicleComponent implements OnInit
 
 	clearFilters(filter_name: { category: string, name: string })
 	{
+		// TODO: Rebuild
+		return
+		/*
 		if (this.selected_filters.length == 0) return
 		if (filter_name !== null && this.selected_filters.length > 1)
 		{
@@ -705,55 +752,12 @@ export class SelectVehicleComponent implements OnInit
 			this.getVehicleDetails(this.filters_data)
 		}
 
-
+*/
 		// console.log('Selected Filters: ', this.selected_filters)
 		// console.log('Filters Data: ', this.filters_data)
 		// console.log('Vehicle Details: ', this.vehicleDetails)
 	}
 
-
-	/**
-	 * Create a list of multiple colums and each column having a specific number of items.
-	 * A 2D aray is generated with each 1st level containing a specific number of items.
-	 *
-	 * @param filter_name: String [Required] key name of the datalist
-	 * @param filter_index: Number [Required] Index of the key name
-	 * @param filter_list: Array [Optional] Filters List to consider. (default -> this.filtersList)
-	 */
-	dynamicCreateList(filter_name: string, filter_list: Array<Filters> = this.filtersList)
-	{
-		// // console.log(filter_name, filter_list)	// test the values
-
-		let n = filter_list[filter_name].length		// length of the original filters list
-		// console.log('Length of the Original Filters List: ', n)
-
-		let cols = Math.ceil(n / this.min_length)	// will generate number of columns to show with equal number of items
-		let rows = this.min_length	// number of items in one column
-		// let extra = n % this.min_length	// generates extra number of items to be shown in extra column
-		let modal_filtersList: Array<any> = []
-		let prev = 0
-		let n_rows = []
-
-		// console.log(this.min_length, cols, rows)
-
-		const promise = function ()
-		{
-			// console.log(prev)
-			n_rows = filter_list[filter_name].slice(prev, prev + rows)
-			prev = prev + rows
-			return n_rows
-		}
-
-		for (let i = 0; i < cols; i++)
-		{
-			modal_filtersList.push(promise())
-		}
-		// // console.log(modal_filtersList)	// test the value
-
-
-		// return generated list
-		return modal_filtersList
-	}
 
 	Sort = {
 		// fetch the service_type from quotebot 
@@ -763,7 +767,7 @@ export class SelectVehicleComponent implements OnInit
 			let getKeyName = this.Sort.getkey
 			console.log(getKeyName)
 			// for Master Vehicles
-			if (this.vehicleDetails.length == 0 && this.selected_filters.length == 0)
+			if (this.vehicleDetails.length == 0 && this.filters.selections.length == 0)
 			{
 				this.master_vehicles.length > 1 && this.master_vehicles.sort((a, b) =>
 				{
@@ -792,7 +796,7 @@ export class SelectVehicleComponent implements OnInit
 		{
 			let getKeyName = this.Sort.getkey
 			// for master vehicles
-			if (this.vehicleDetails.length == 0 && this.selected_filters.length == 0)
+			if (this.vehicleDetails.length == 0 && this.filters.selections.length == 0)
 			{
 				this.master_vehicles.length > 1 && this.master_vehicles.sort((a, b) =>
 				{

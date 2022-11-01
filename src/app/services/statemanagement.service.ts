@@ -50,20 +50,16 @@ export class StateManagementService
 	}
 
 	//Login-Logout
-	public currentUser = new BehaviorSubject('');
 	setUser()
 	{
-		const value = JSON.parse(localStorage.getItem("currentUser"));
-		this.currentUser.next(value);
+		JSON.parse(localStorage.getItem("currentUser"));
 	}
 	getUser()
 	{
-		return this.currentUser;
+		return JSON.parse(localStorage.getItem("currentUser"));
 	}
 	removeUser()
 	{
-		this.currentUser.next('');
-
 		// remove user from local storage to logout user
 		localStorage.removeItem('currentUser');
 		localStorage.removeItem('access_token');
@@ -76,11 +72,11 @@ export class StateManagementService
 
 
 	private state = new BehaviorSubject({})
-	setState(value: any)
+	set(value: any)
 	{
 		this.state.next(value)
 	}
-	getState()
+	get()
 	{
 		return this.state
 	}
