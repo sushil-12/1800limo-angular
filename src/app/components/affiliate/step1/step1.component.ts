@@ -139,7 +139,7 @@ export class Step1Component implements OnInit, AfterViewInit
 			});
 		});
 
-		this.httpClient.get("assets/json/startBusinessYears.json").subscribe((data: any) =>
+		this.httpClient.get("assets/json/businessYear.json").subscribe((data: any) =>
 		{
 			this.startBusinessYears = data;
 		});
@@ -899,6 +899,20 @@ export class Step1Component implements OnInit, AfterViewInit
 					sessionStorage.setItem("showEmailVerificationAlert", "yes");
 				}
 			});
+	}
+
+	changeLang(event)
+	{
+		console.log(event)
+
+		var $frame = $('.goog-te-menu-frame:first');
+		if (!$frame.size())
+		{
+			alert("Error: Could not find Google translate frame.");
+			return false;
+		}
+		$frame.contents().find('.goog-te-menu2-item span.text:contains(' + event.value + ')').get(0).click();
+		return false;
 	}
 
 	resetForm()

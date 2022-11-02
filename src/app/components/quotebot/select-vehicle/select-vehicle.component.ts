@@ -16,6 +16,7 @@ interface Filters
 	copy: Object,
 	request: Object,	// request for the response of selected filters from backend
 	selections: Array<{ fil_index: number, catg_name: string }>,
+	vars: Object
 }
 
 @Component({
@@ -25,6 +26,25 @@ interface Filters
 })
 export class SelectVehicleComponent implements OnInit
 {
+	/**
+	 * 
+	 * Please DO NOT CHANGE any conditions in this file.
+	 * 
+	 * 
+	 * The code written here is very much interdependent and made dirty, reason being the interdependency.
+	 *  
+	 * 
+	 * All the conditions are made with the permission of client and may face consequences in other parts of the code if changed at any place. 
+	 * 
+	 * 
+	 * This file took a total of 1 month to make an error free and bug free.
+	 * (especially the filters functionality)
+	 * 
+	 * For changes or adding any functionality, make sure you UNDERSTAND each and every dependency of this file. 
+	 * 
+	 * 
+	 * 
+	 */
 	innerWidth = window.innerWidth
 
 
@@ -88,7 +108,7 @@ export class SelectVehicleComponent implements OnInit
 			]
 		},
 		{
-			dp: 'vehicle service area',
+			dp: 'vehicle-service-area',
 			rp: 'vehicle-service-area'
 		},
 		{
@@ -107,7 +127,8 @@ export class SelectVehicleComponent implements OnInit
 		original: {},
 		copy: {},
 		request: {},
-		selections: [{ fil_index: -1, catg_name: '' }]
+		selections: [],
+		vars: {}
 	}
 
 	min_length: number = 12 	// number of filters to show in one column and on the filters sidebar
@@ -172,13 +193,13 @@ export class SelectVehicleComponent implements OnInit
 			{
 				this.filters.selections = data.selected_filters
 				this.filters = data.filters_data
-				this.getVehicleDetails(this.filters.request)
+				this.getVehicleDetails()
 			}
 		})
 	}
 	// ngOnInit ends
 
-	isArray(value: any)
+	isArray(value: any): boolean
 	{
 		return Array.isArray(value)
 	}
@@ -214,7 +235,7 @@ export class SelectVehicleComponent implements OnInit
 	}
 
 
-	fetchMasterVehicles()
+	fetchMasterVehicles(): Promise<Array<any> | string>
 	{
 		return new Promise((resolve, reject) =>
 		{
@@ -239,11 +260,13 @@ export class SelectVehicleComponent implements OnInit
 	/**
 	 * Selects the vehicle and fills its data in filters data and selected filters array
 	 *
-	 * @param vehicle selected vehicle category
+	 * @param vehicle selected vehicle
 	 */
-	selectCategory(vehicle: any)
+	selectCategory(vehicle_name: string)
 	{
-		// TODO: this.selectedFilters({ target: { checked: true }, fetch_vehicles: true }, 'vehicle-type', vehicle)
+		let vehicle_index = this.filters.original['vehicle-type'].findIndex(item => item['name'] == vehicle_name)
+		this.filterSelection(true, 'vehicle-type', vehicle_index)
+		this.getVehicleDetails()
 	}
 
 
@@ -288,7 +311,7 @@ export class SelectVehicleComponent implements OnInit
 					name: 'Child Certified Driver'
 				}]
 
-				console.group('Filters List: ', this.filters.copy)
+				console.group('Filters List: ', this.filters)
 			}
 			console.log('--------------------------------\n\n')
 			console.groupEnd()
@@ -329,13 +352,36 @@ export class SelectVehicleComponent implements OnInit
 	/**
 	 * show more filters on click
 	 * @param filter_name name of the filter category to populate
-	 * TODO: Rebuild the functionality 
 	 */
-	showMore(filter_name: string): void
+	add: number = this.min_length
+	showMore(button_name: string, filter_name: string, addmore: boolean = true): void
 	{
-		this.is_show_more_button_hidden = !this.is_show_more_button_hidden
-		// populate filters list
-		this.filters.copy[filter_name] = this.is_show_more_button_hidden ? this.filters.original[filter_name] : this.filters.original[filter_name].slice(0, this.min_length)
+		if (!this.filters.vars[button_name])
+		{
+			this.add += this.min_length
+		} else
+		{
+			this.add = this.min_length
+		}
+		if (addmore)
+		{
+			// populate filters list
+			this.filters.copy[filter_name] = this.filters.original[filter_name].slice(0, this.add)
+		}
+		else
+		{
+			this.filters.copy[filter_name] = this.filters.original[filter_name].slice(0, this.min_length)
+		}
+
+		if (this.filters.copy[filter_name].length == this.filters.original[filter_name].length)
+		{
+			this.filters.vars[button_name] = true
+		}
+		else
+		{
+			this.filters.vars[button_name] = false
+		}
+
 	}
 
 
@@ -345,18 +391,18 @@ export class SelectVehicleComponent implements OnInit
 	 * @param filters_data [Required] the data to be sent to backend
 	 * @returns void
 	 */
-	getVehicleDetails(filters_data: any)
+	getVehicleDetails()
 	{
 		console.log('Fetching Vehicle Details. ')
-		this.$spinner.show()
 		let data = {}
 		if (this.quotebot_form != null)
 		{
 			data = this.quotebot_form
-			data['filters'] = filters_data
+			data['filters'] = this.filters.request
 		}
-		console.group('Sending Data to backend ... ', data)
-		console.groupEnd()
+		// console.group('Sending Data to backend ... ', data)
+		// console.groupEnd()
+		this.$spinner.show()
 		// fetch the vehicle details - API HIT
 		this.$quotebotService.getVehicleDetails(data).subscribe((response: any) =>
 		{
@@ -381,39 +427,97 @@ export class SelectVehicleComponent implements OnInit
 	 */
 	filterSelection(is_checked: boolean, sel_category: string, sel_index: number)
 	{
-		console.log(`\nChecked: ${is_checked}\nCategory: ${sel_category}\nSelection: ${this.filters.copy[sel_category][sel_index]}\n`)
+		console.log(`\nChecked: ${is_checked}\nCategory: ${sel_category}\nSelection: ${sel_index}\n`)
 
-		// the category should not be of Make as of right now. 
-		if (is_checked && sel_category != 'make')
+		// ---------------------------------- Selection Part ------------------------
+		if (is_checked)
 		{
-			// add to the arrays, but first check the duplicacy
+			// if 'any or all' filter gets selected directly
+			if (sel_index == 0)
+			{
+				// remove all the filters of that category
+				this.filters.selections = this.filters.selections.filter((item: Object) => item['catg_name'] != sel_category)
+				// check the 'any or all' filter
+				this.filters.copy[sel_category][0]['checked'] = true	// check operation
+				delete this.filters.request[sel_category]	// delete selected category from the request
+				return
+				// end here only
+			}
+
+			// refill the models according to selected make else with the default value.
+			if (sel_category == 'make')
+			{
+				if (this.filters.selections.findIndex(item => item['catg_name'] == sel_category) == -1)
+				{
+					// default value
+					this.filters.copy['model'] = this.filters.original['model'].slice(0, this.min_length)
+				} else
+				{
+					// refill the models
+					this.filters.copy['model'] = this.filters.original['model'].filter(item => item['make_id'] == this.filters.original[sel_category][sel_index]['id'])
+				}
+			}
+
+
+			/**
+			 * Make sure the selections and request does'nt have duplicate values
+			 * - Push after confirmed -
+			 */
+			(this.filters.selections.findIndex(item => item['catg_name'] == sel_category && item['fil_index'] == sel_index) == -1) &&
+				this.filters.selections.push({
+					fil_index: sel_index,
+					catg_name: sel_category
+				})
 			if (this.filters.request[sel_category] === undefined)
 			{
-				// uncheck the any or all filter and push into the selections + request
-				this.filters.copy[sel_category][0]['checked'] = false		// uncheck operation
-
+				// push into a new category
 				this.filters.request[sel_category] = []
-				this.filters.request[sel_category].push(this.filters.copy[sel_category][sel_index]['id'])
+				this.filters.request[sel_category].push(this.filters.original[sel_category][sel_index]['id'])
 			}
-			// push only into existing category 
 			else
 			{
-				// only push
-				this.filters.request[sel_category].push(this.filters.copy[sel_category][sel_index]['id'])
+				// push into existing category, after duplicacy values check
+				this.filters.request[sel_category].findIndex(item => item == this.filters.original[sel_category][sel_index]['id']) == -1 &&
+					this.filters.request[sel_category].push(this.filters.original[sel_category][sel_index]['id'])
 			}
-
-			// push into the selections everytime
-			this.filters.selections.push({
-				fil_index: sel_index,
-				catg_name: sel_category
-			})
 		}
 
-		// now if the category comes of Make.
-		if (is_checked && sel_category == 'make')
+		// ------------------------ Deselection -----------------------------
+		if (!is_checked)
 		{
-			console.log('\nSelection Category is for make.\n')
+			if (sel_category == 'make')
+			{
+				if (this.filters.selections.findIndex(item => item['catg_name'] == sel_category) == -1)
+				{
+					// default value
+					this.filters.copy['model'] = this.filters.original['model'].slice(0, this.min_length)
+				}
+			}
+			if (this.filters.selections.findIndex(item => item['catg_name'] == sel_category) != -1)
+			{
+				// removing from selections
+				const index = this.filters.selections.findIndex(item => item['catg_name'] == sel_category && item['fil_index'] == sel_index)
+				this.filters.selections.splice(index, 1)	// remove operation
+
+				// removing from request
+				this.filters.request[sel_category] = this.filters.request[sel_category].filter(item => item != this.filters.original[sel_category][sel_index]['id'])
+				// remove the key if list is empty
+				this.filters.request[sel_category].length == 0 && delete this.filters.request[sel_category]
+			}
 		}
+
+		// no filter of that category exists in selections, then make any or all active.
+		if (this.filters.selections.findIndex(item => item['catg_name'] == sel_category) == -1)
+		{
+			this.filters.copy[sel_category][0]['checked'] = true		// checked operation
+		}
+		else
+		{
+			this.filters.copy[sel_category][0]['checked'] = false		// unchecked operation
+		}
+
+
+		console.log(this.filters.request, this.filters.selections)
 	}
 
 
@@ -426,7 +530,7 @@ export class SelectVehicleComponent implements OnInit
 	selectedFilters(event: any, category: string, filter_obj: Filters)
 	{
 		console.log(`\n\n\nChecked: ${event.target.checked}\nCategory: ${category}\nFilter: `, filter_obj)
-
+	
 		if (JSON.parse(sessionStorage.getItem('selected_filters')) == null)
 		{
 			this.selected_filters = []
@@ -436,15 +540,15 @@ export class SelectVehicleComponent implements OnInit
 			this.getVehicleDetails(JSON.parse(sessionStorage.getItem('filters_data')))
 			return
 		}
-
-
+	
+	
 		if (filter_obj.name.includes('any or all') && event.target.checked)
 		{
 			// remove all filters from that list apart from 'all' filter
 			this.selected_filters = this.selected_filters.filter((item: any) => item.category != category)
 			return
 		}
-
+	
 		// ---------------------- APPENDING OPERATION FOR CHECKED FILTERS ----------------------
 		if (event && event.target.checked)
 		{
@@ -459,13 +563,13 @@ export class SelectVehicleComponent implements OnInit
 						this.filters['model'].concat(this.filtersList['model'].filter(item => item.make_id === filter_obj.id)) :
 						this.filtersList['model'].filter(item => item.make_id === filter_obj.id)
 			}
-
+	
 			// append into the filters data array
 			if (!this.filters_data.hasOwnProperty(category))
 			{
 				let values = []	// every new array for all new categories
 				values.push(filter_obj.slug != undefined ? filter_obj.slug : filter_obj.id)
-
+	
 				// push into array_2
 				this.filters_data[category] = values
 			} else
@@ -473,7 +577,7 @@ export class SelectVehicleComponent implements OnInit
 				// push into array_2
 				this.filters_data[category].push(filter_obj.slug != undefined ? filter_obj.slug : filter_obj.id)	// push into existing category
 			}
-
+	
 			// push into array_1 always
 			filter_obj.name != 'any' && this.selected_filters.push({
 				category,
@@ -481,8 +585,8 @@ export class SelectVehicleComponent implements OnInit
 			})
 		}
 		// ------------------ APPENDING OPERATION ENDS	-------------------------
-
-
+	
+	
 		// -------------- REMOVING OPERATION FOR UNCHECKED FILTERS -------------------
 		else
 		{
@@ -496,13 +600,13 @@ export class SelectVehicleComponent implements OnInit
 				this.selected_filters = this.selected_filters.filter(item => item.name !== filter_obj.name || (item.category === category))
 				this.filters_data['model'] = this.filters_data['model'].filter(item => item.make_id !== filter_obj.make_id)
 			}
-
+	
 			// filter out others, other than unchecked
 			this.selected_filters = this.selected_filters.filter(item => item.name !== filter_obj.name)
 			this.filters_data[category] = this.filters_data[category].filter(item => item !== (filter_obj.slug == undefined ? filter_obj.id : filter_obj.slug))
 		}
 		// ------------- REMOVING OPERATION ENDS ---------------------
-
+	
 		// REMOVING EMPTY VALUES FROM FILTERS DATA
 		for (let key in this.filters_data)
 		{
@@ -511,9 +615,9 @@ export class SelectVehicleComponent implements OnInit
 				delete this.filters_data[key]
 			}
 		}
-
+	
 		// this.getVehicleDetails(this.filters_data)	// THE API HIT - FETCH THE VEHICLE DETAILS UPON GENERATED FILTERS DATA
-
+	
 		if (event.fetch_vehicles)
 		{
 			this.getVehicleDetails(this.filters_data)
@@ -527,15 +631,13 @@ export class SelectVehicleComponent implements OnInit
 
 	isFilterAlreadySelected(catg_name: string, fil_index: number): boolean
 	{
-		let sel_index = this.filters.selections.findIndex((item) => item.catg_name == catg_name)
-		let copy_index = this.filters.request[catg_name].findIndex((item: number) => item == this.filters.copy[catg_name][fil_index]['id'])
-
-		// exist in both selections and request
-		if (sel_index != -1 && copy_index != -1)
+		// return for all 'any or all' filters
+		if (fil_index == 0)
 		{
-			return true
+			return this.filters.copy[catg_name][0]['checked']
 		}
-		return false
+
+		return this.filters.selections.findIndex(item => item['catg_name'] == catg_name && item['fil_index'] == fil_index) == -1 ? false : true
 	}
 
 
@@ -547,13 +649,13 @@ export class SelectVehicleComponent implements OnInit
 		{
 			this.filters[card_header][0]['checked'] = false
 		}
-
+	
 		// remove any or all filter when any other filter is selected
 		if (this.filters[card_header][0]['checked'] && array)
 		{
 			this.filters[card_header][0]['checked'] = false
 		}
-
+	
 		if (filter_obj.name.includes('any or all'))
 		{
 			return filter_obj['checked']
@@ -727,35 +829,26 @@ export class SelectVehicleComponent implements OnInit
 
 	clearFilters(filter_name: { category: string, name: string })
 	{
-		// TODO: Rebuild
-		return
-		/*
-		if (this.selected_filters.length == 0) return
-		if (filter_name !== null && this.selected_filters.length > 1)
+		if (this.filters.selections.length == 0) return // don't do anything if no filter is selected
+
+		if (filter_name !== null && this.filters.selections.length > 1)
 		{
-			// console.log('---- Clearing Filter ----', filter_name ?? '')
-			this.selected_filters = this.selected_filters.filter(item => item.name != filter_name.name)
-			this.filters_data[filter_name.category] = this.filters_data[filter_name.category].filter((item: any) =>
-			{
-				return item.name !== filter_name.name
-			})
+			// simply deselecting the filter will remove from selections and request
+			this.filterSelection(false, filter_name.category, this.filters.original[filter_name.category].findIndex(item => item['name'] == filter_name.name))
 		} else
 		{
-			// empty the whole in a snap
-			// console.log('------ Clearing All -----')
-			this.selected_filters = []
-			this.filters_data = {}
-			for (let item in this.filters)
+			// empty the whole
+			this.filters.selections = []
+			this.filters.request = {}
+			Object.keys(this.filters.copy).forEach((item: string) =>
 			{
-				this.filters[item][0]['checked'] = true
-			}
-			this.getVehicleDetails(this.filters_data)
+				if (!this.filters.copy[item][0]['checked'])
+				{
+					this.filters.copy[item][0]['checked'] = true
+				}
+			})
+			this.getVehicleDetails()
 		}
-
-*/
-		// console.log('Selected Filters: ', this.selected_filters)
-		// console.log('Filters Data: ', this.filters_data)
-		// console.log('Vehicle Details: ', this.vehicleDetails)
 	}
 
 

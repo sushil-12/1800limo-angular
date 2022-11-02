@@ -153,7 +153,7 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 						this.is_bank_verified = true
 					}
 				})
-			}, 10000)
+			}, 20000)
 		}
 	}
 
