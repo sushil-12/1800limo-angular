@@ -32,11 +32,7 @@ export class FooterComponent implements OnInit
 	ngOnInit()
 	{
 		//Get logged in user name
-		this.stateManagementService.getUser().subscribe(user =>
-		{
-			console.log(user)
-			this.currentUser = user;
-		});
+		this.currentUser = this.stateManagementService.getUser()
 		this.steps = localStorage.getItem("stepCompleted");
 		this.accountStatus = localStorage.getItem("account_approval");
 

@@ -437,6 +437,11 @@ export class AffiliateService
 		return this.httpClient.get('assets/json/charterOptions.json')
 	}
 
+	get proDriverYears()
+	{
+		return this.httpClient.get('assets/json/proDriverYear.json')
+	}
+
 
 
 	affiliateVerificationStatus(user_account_id: number)

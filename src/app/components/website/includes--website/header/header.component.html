@@ -36,7 +36,8 @@
 			</ul>
 			<div class="nav-item dropdown button-signin" *ngIf="!currentUser; else loggedInUser">
 				<a class="nav-link dropdown-toggle" href="#" id="dropdown05" data-toggle="dropdown" aria-haspopup="true"
-					aria-expanded="false">LOGIN / CREATE</a>
+					aria-expanded="false">LOGIN /
+					CREATE</a>
 				<div class="dropdown-menu" aria-labelledby="dropdown05">
 					<a class="dropdown-item text-secondary" style="cursor: default; " (click)="loginButtons('individual')">
 						Individual
@@ -58,7 +59,8 @@
 						<a class="user-profile btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownUserImage"
 							href="javascript:void(0);" role="button" data-toggle="dropdown" aria-haspopup="true"
 							aria-expanded="false">
-							{{currentUser.affiliateCompanyName ? currentUser.affiliateCompanyName : currentUser.name}}
+							{{currentUser.affiliateCompanyName ? currentUser.affiliateCompanyName : currentUser.name ?
+							currentUser.name : currentUser.FirstName + currentUser.LastName.charAt(0)}}
 						</a>
 						<div class="logInDropdown dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
 							aria-labelledby="navbarDropdownUserImage">

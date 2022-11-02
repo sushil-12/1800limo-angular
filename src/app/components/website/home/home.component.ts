@@ -120,11 +120,7 @@ export class HomeComponent implements OnInit
 			$(this).tooltip('hide');
 		});
 
-		this.stateManagementService.getUser().subscribe(user =>
-		{
-			console.log(user)
-			this.currentUser = user;
-		});
+		this.currentUser = this.stateManagementService.getUser()
 
 		this.steps = localStorage.getItem("stepCompleted");
 		this.accountStatus = localStorage.getItem("account_approval");

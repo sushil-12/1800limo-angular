@@ -16,8 +16,6 @@ export class AppComponent implements OnInit{
     this.stateManagementService.getError().subscribe(data => {
       this.errors=data;
     });
-    //set user state
-    this.stateManagementService.setUser();
   }
 
 }
