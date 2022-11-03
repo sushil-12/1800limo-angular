@@ -293,15 +293,15 @@
 							</div>
 						</div>
 						<!-- VEHICLE PRICE -->
-						<div id="price-area" class="mb-3">
+						<div id="price-area" class="mb-1">
 							<p>
 								${{ vehinfo['rate_breakdown_' + getKeyName()].grand_total != undefined ?
 								vehinfo['rate_breakdown_' + getKeyName()].total : '0.00' }}
+								<small class="d-block">
+									All-Inclusive Rate <span class="text-danger">*</span>
+								</small>
 							</p>
 						</div>
-						<small class="d-block">
-							All-Inclusive Rate <span class="text-danger">*</span>
-						</small>
 					</div>
 					<!-- VEHICLE DETAILS BUTTON -->
 					<div class="d-flex justify-content-end">

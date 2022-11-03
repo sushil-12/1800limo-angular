@@ -57,10 +57,9 @@ export class VehicleDetailsComponent implements OnInit
 
 
 			this.one_way_rates = this.selected_vehicle[Object.keys(this.selected_vehicle).find(value => /^rate_breakdown_one_way/g.test(value))]
-			console.log(this.one_way_rates, "5555555555555555555")
 
 			this.round_trip_rates = this.selected_vehicle[Object.keys(this.selected_vehicle).find(value => /^rate_breakdown_round_trip/g.test(value))]
-			console.log(this.round_trip_rates, "44444444444444")
+
 			// Re-categorise list of amenities 
 			let amenities = JSON.parse(JSON.stringify(this.selected_vehicle.amenities))	// make a deep copy
 			this.selected_vehicle.amenities = {} // empty the contents 
@@ -374,7 +373,6 @@ export class VehicleDetailsComponent implements OnInit
 				{
 					obj['location_info'].push(obj['location_info'][0])
 				}
-				obj['service_type'] = 'one_way'
 				break
 			case 'one_way':
 			case 'charter_tour':
@@ -392,6 +390,7 @@ export class VehicleDetailsComponent implements OnInit
 				}
 				break
 		}
+		obj['service_type'] = type
 		localStorage.setItem('quotebot_form', JSON.stringify(obj))
 	}
 
