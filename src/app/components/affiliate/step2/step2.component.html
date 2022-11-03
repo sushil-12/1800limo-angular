@@ -127,74 +127,128 @@
 					</div>
 				</div>
 				<div class="col-md-6">
-					<mat-form-field appearance="outline">
-						<mat-label>Account Type <span class="asterisk">*</span></mat-label>
-						<mat-select formControlName="AccountType" tabindex="1">
-							<!-- <mat-option value="">Choose Account Type</mat-option> -->
-							<mat-option value="individual">Personal</mat-option>
-							<mat-option value="company">Business</mat-option>
-						</mat-select>
-					</mat-form-field>
+					<label class="selectAccountLabel">Account Type <span class="asterisk">*</span></label>
+					<div class="selectStyle">
+						<select class="selectInputStyle" (click)="selectDropdownAccount()" formControlName="AccountType"
+							tabindex="1">
+							<option value="individual">Personal</option>
+							<option value="company">Business</option>
+						</select>
+						<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
+							style="enable-background:new 0 0 122.88 63.9" xml:space="preserve">
+							<style type="text/css">
+								.sty0 {
+									fill-rule: evenodd;
+									clip-rule: evenodd;
+								}
+							</style>
+							<g>
+								<polygon class="sty0" points="61.44,63.9 122.88,0 0,0 61.44,63.9" />
+							</g>
+						</svg>
+					</div>
 					<div *ngIf="submittedForm && f.AccountType.errors || f.AccountType.touched && f.AccountType.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.AccountType.errors.required">This field is required</div>
 					</div>
 				</div>
 				<div class="col-md-2 col-4 birthDay">
-					<mat-form-field appearance="outline">
-						<mat-label>Day of Birth <span class="asterisk">*</span></mat-label>
-						<mat-select formControlName="dobDay" tabindex="1" id="selectDropdown">
-							<mat-option value="">Day</mat-option>
-							<mat-option *ngFor="let day of dobDay" value="{{day}}">{{day}}</mat-option>
-						</mat-select>
-					</mat-form-field>
+					<label class="select-day-label">Day of Birth <span class="asterisk">*</span></label>
+					<div class="selectStyle">
+						<select class="selectInputStyle" (click)="selectDropdownDay()" formControlName="dobDay"
+							tabindex="1" id="selectDropdown">
+							<option value="">Day</option>
+							<option *ngFor="let day of dobDay" value="{{day}}">{{day}}</option>
+						</select>
+						<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
+							style="enable-background:new 0 0 122.88 63.9" xml:space="preserve">
+							<style type="text/css">
+								.sty0 {
+									fill-rule: evenodd;
+									clip-rule: evenodd;
+								}
+							</style>
+							<g>
+								<polygon class="sty0" points="61.44,63.9 122.88,0 0,0 61.44,63.9" />
+							</g>
+						</svg>
+					</div>
 					<div *ngIf="submittedForm && f.dobDay.errors || f.dobDay.touched && f.dobDay.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.dobDay.errors.required">This field is required</div>
 					</div>
 				</div>
 				<div class="col-md-2 col-4 birthMonth">
-					<mat-form-field appearance="outline">
-						<mat-label>Month of Birth <span class="asterisk">*</span></mat-label>
-						<mat-select formControlName="dobMonth" tabindex="1" id="selectDropdown">
-							<mat-option value="">Month</mat-option>
-							<mat-option value='01'>01</mat-option>
-							<mat-option value='02'>02</mat-option>
-							<mat-option value='03'>03</mat-option>
-							<mat-option value='04'>04</mat-option>
-							<mat-option value='05'>05</mat-option>
-							<mat-option value='06'>06</mat-option>
-							<mat-option value='07'>07</mat-option>
-							<mat-option value='08'>08</mat-option>
-							<mat-option value='09'>09</mat-option>
-							<mat-option value='10'>10</mat-option>
-							<mat-option value='11'>11</mat-option>
-							<mat-option value='12'>12</mat-option>
-						</mat-select>
-					</mat-form-field>
+					<label class="select-month-label">Month of Birth <span class="asterisk">*</span></label>
+					<div class="selectStyle">
+						<select class="selectInputStyle" (click)="selectDropdownMonth()" formControlName="dobMonth"
+							tabindex="1" id="selectDropdown">
+							<option value="">Month</option>
+							<option value='01'>01</option>
+							<option value='02'>02</option>
+							<option value='03'>03</option>
+							<option value='04'>04</option>
+							<option value='05'>05</option>
+							<option value='06'>06</option>
+							<option value='07'>07</option>
+							<option value='08'>08</option>
+							<option value='09'>09</option>
+							<option value='10'>10</option>
+							<option value='11'>11</option>
+							<option value='12'>12</option>
+						</select>
+						<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
+							style="enable-background:new 0 0 122.88 63.9" xml:space="preserve">
+							<style type="text/css">
+								.sty0 {
+									fill-rule: evenodd;
+									clip-rule: evenodd;
+								}
+							</style>
+							<g>
+								<polygon class="sty0" points="61.44,63.9 122.88,0 0,0 61.44,63.9" />
+							</g>
+						</svg>
+					</div>
 					<div *ngIf="submittedForm && f.dobMonth.errors || f.dobMonth.touched && f.dobMonth.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.dobMonth.errors.required">This field is required</div>
 					</div>
 				</div>
 				<div class="col-md-2 col-4 birthYear">
-					<mat-form-field appearance="outline">
-						<mat-label>Year of Birth <span class="asterisk">*</span></mat-label>
-						<mat-select formControlName="dobYear" tabindex="1" id="selectDropdown">
-							<mat-option value="">Year</mat-option>
-							<mat-option *ngFor="let year of dobYear" value="{{year}}">{{year}}</mat-option>
-						</mat-select>
-					</mat-form-field>
+					<label class="select-year-label">Year of Birth <span class="asterisk">*</span></label>
+					<div class="selectStyle">
+						<select class="selectInputStyle" (click)="selectDropdownYear()" formControlName="dobYear"
+							tabindex="1" id="selectDropdown">
+							<option value="">Year</option>
+							<option *ngFor="let year of dobYear" value="{{year}}">{{year}}</option>
+						</select>
+						<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
+							style="enable-background:new 0 0 122.88 63.9" xml:space="preserve">
+							<style type="text/css">
+								.sty0 {
+									fill-rule: evenodd;
+									clip-rule: evenodd;
+								}
+							</style>
+							<g>
+								<polygon class="sty0" points="61.44,63.9 122.88,0 0,0 61.44,63.9" />
+							</g>
+						</svg>
+					</div>
 					<div *ngIf="submittedForm && f.dobYear.errors || f.dobYear.touched && f.dobYear.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.dobYear.errors.required">This field is required</div>
 					</div>
 				</div>
 				<div class="col-md-6">
-					<mat-form-field appearance="outline">
-						<mat-label>Currency <span class="asterisk">*</span></mat-label>
-						<!-- Search and Fill functionality -->
-						<!-- <input type="text" placeholder="Search by Name" matInput
+					<label class="select-currency-label">Currency <span class="asterisk">*</span></label>
+					<!-- Search and Fill functionality -->
+					<!-- <input type="text" placeholder="Search by Name" matInput
 							(keyup)="searchGlobalValue('currency', $event.target.value)" [matAutocomplete]="autocurrency"
 							[value]="fillGlobalValue('currency', 'currency')">
 						<mat-autocomplete #autocurrency="matAutocomplete">
@@ -204,15 +258,17 @@
 							</mat-option>
 						</mat-autocomplete> -->
 
-						<!-- Select Functionality -->
-						<mat-select formControlName="currency" tabindex="1">
-							<mat-option value="">Choose Currency</mat-option>
-							<mat-option *ngFor="let currencyOption of currencyOptions"
+					<!-- Select Functionality -->
+					<div class="selectStyle">
+						<select class="selectInputStyle" (click)="selectDropdownCurrency()" formControlName="currency"
+							tabindex="1">
+							<option value="">Choose Currency</option>
+							<option *ngFor="let currencyOption of currencyOptions"
 								[value]="currencyOption.currency + '-' + currencyOption.currencyCountry">
 								{{ currencyOption.countryName }} - {{ currencyOption.symbol }}
-							</mat-option>
-						</mat-select>
-					</mat-form-field>
+							</option>
+						</select>
+					</div>
 					<div *ngIf="submittedForm && f.currency.errors || f.currency.touched && f.currency.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.currency.errors.required">This field is required</div>
@@ -476,30 +532,57 @@
 				</div>
 
 				<div class="col-md-6">
-					<mat-form-field appearance="outline" [class.read-only]="!canChangeAddress">
-						<mat-label>Country <span class="asterisk">*</span></mat-label>
-						<mat-select formControlName="country" (selectionChange)="changeCountry($event.value)"
-							[disabled]="!canChangeAddress" tabindex="1">
-							<mat-option value="">Choose Country</mat-option>
-							<mat-option *ngFor="let countryOption of countryOptions"
+					<label class="select-country-label">Country <span class="asterisk">*</span></label>
+					<div class="selectStyle">
+						<select class="selectInputStyle" (click)="selectDropdownCountry()" formControlName="country"
+							(selectionChange)="changeCountry($event.value)" [disabled]="!canChangeAddress" tabindex="1">
+							<option value="">Choose Country</option>
+							<option *ngFor="let countryOption of countryOptions"
 								[value]="countryOption.countryShortCode">
-								{{countryOption.countryName}}</mat-option>
-						</mat-select>
-					</mat-form-field>
+								{{countryOption.countryName}}</option>
+						</select>
+						<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
+							style="enable-background:new 0 0 122.88 63.9" xml:space="preserve">
+							<style type="text/css">
+								.sty0 {
+									fill-rule: evenodd;
+									clip-rule: evenodd;
+								}
+							</style>
+							<g>
+								<polygon class="sty0" points="61.44,63.9 122.88,0 0,0 61.44,63.9" />
+							</g>
+						</svg>
+					</div>
 					<div *ngIf="submittedForm && f.country.errors || f.country.touched && f.country.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.country.errors.required">This field is required</div>
 					</div>
 				</div>
 				<div class="col-md-6">
-					<mat-form-field appearance="outline" [class.read-only]="!canChangeAddress">
-						<mat-label>State/Province <span class="asterisk">*</span></mat-label>
-						<mat-select formControlName="state" [disabled]="!canChangeAddress" tabindex="1">
-							<mat-option value="">Choose State/Province</mat-option>
-							<mat-option *ngFor="let stateOption of stateOptions" [value]="stateOption.shortCode">
-								{{stateOption.name}}</mat-option>
-						</mat-select>
-					</mat-form-field>
+					<label class="select-state-label">State/Province <span class="asterisk">*</span></label>
+					<div class="selectStyle">
+						<select class="selectInputStyle" (click)="selectDropdownState()" formControlName="state"
+							[disabled]="!canChangeAddress" tabindex="1">
+							<option value="">Choose State/Province</option>
+							<option *ngFor="let stateOption of stateOptions" [value]="stateOption.shortCode">
+								{{stateOption.name}}</option>
+						</select>
+						<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
+							style="enable-background:new 0 0 122.88 63.9" xml:space="preserve">
+							<style type="text/css">
+								.sty0 {
+									fill-rule: evenodd;
+									clip-rule: evenodd;
+								}
+							</style>
+							<g>
+								<polygon class="sty0" points="61.44,63.9 122.88,0 0,0 61.44,63.9" />
+							</g>
+						</svg>
+					</div>
 					<div *ngIf="submittedForm && f.state.errors || f.state.touched && f.state.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.state.errors.required">This field is required</div>
@@ -648,34 +731,62 @@
 							</div>
 						</div>
 						<div class="col-md-4">
-							<mat-form-field appearance="outline">
-								<mat-label>Expiry Month</mat-label>
-								<mat-select formControlName="primaryMM" tabindex="1">
-									<mat-option value="">Choose Expiry Month</mat-option>
-									<mat-option value='1'>01</mat-option>
-									<mat-option value='2'>02</mat-option>
-									<mat-option value='3'>03</mat-option>
-									<mat-option value='4'>04</mat-option>
-									<mat-option value='5'>05</mat-option>
-									<mat-option value='6'>06</mat-option>
-									<mat-option value='7'>07</mat-option>
-									<mat-option value='8'>08</mat-option>
-									<mat-option value='9'>09</mat-option>
-									<mat-option value='10'>10</mat-option>
-									<mat-option value='11'>11</mat-option>
-									<mat-option value='12'>12</mat-option>
-								</mat-select>
-							</mat-form-field>
+							<label class="select-ex-month-label">Expiry Month</label>
+							<div class="selectStyle">
+								<select class="selectInputStyle" (click)="selectDropdownExMonth()"
+									formControlName="primaryMM" tabindex="1">
+									<option value="">Choose Expiry Month</option>
+									<option value='1'>01</option>
+									<option value='2'>02</option>
+									<option value='3'>03</option>
+									<option value='4'>04</option>
+									<option value='5'>05</option>
+									<option value='6'>06</option>
+									<option value='7'>07</option>
+									<option value='8'>08</option>
+									<option value='9'>09</option>
+									<option value='10'>10</option>
+									<option value='11'>11</option>
+									<option value='12'>12</option>
+								</select>
+								<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+									xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
+									style="enable-background:new 0 0 122.88 63.9" xml:space="preserve">
+									<style type="text/css">
+										.sty0 {
+											fill-rule: evenodd;
+											clip-rule: evenodd;
+										}
+									</style>
+									<g>
+										<polygon class="sty0" points="61.44,63.9 122.88,0 0,0 61.44,63.9" />
+									</g>
+								</svg>
+							</div>
 						</div>
 						<div class="col-md-4">
-							<mat-form-field appearance="outline">
-								<mat-label>Expiry Year</mat-label>
-								<mat-select formControlName="primaryYY" tabindex="1">
-									<mat-option value="">Choose Expiry Year</mat-option>
-									<mat-option *ngFor="let yearOption of yearOptions" value="{{yearOption}}">
-										{{yearOption}}</mat-option>
-								</mat-select>
-							</mat-form-field>
+							<label class="select-ex-year-label">Expiry Year</label>
+							<div class="selectStyle">
+								<select class="selectInputStyle" (click)="selectDropdownExYear()"
+									formControlName="primaryYY" tabindex="1">
+									<option value="">Choose Expiry Year</option>
+									<option *ngFor="let yearOption of yearOptions" value="{{yearOption}}">
+										{{yearOption}}</option>
+								</select>
+								<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+									xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
+									style="enable-background:new 0 0 122.88 63.9" xml:space="preserve">
+									<style type="text/css">
+										.sty0 {
+											fill-rule: evenodd;
+											clip-rule: evenodd;
+										}
+									</style>
+									<g>
+										<polygon class="sty0" points="61.44,63.9 122.88,0 0,0 61.44,63.9" />
+									</g>
+								</svg>
+							</div>
 						</div>
 						<div class="col-md-4">
 							<mat-form-field appearance="outline">

@@ -308,28 +308,77 @@
 					</div>
 				</div>
 				<div class="col-md-6">
-					<mat-form-field appearance="outline">
+					<!-- <mat-form-field appearance="outline"
+						[ngClass]="(errorMsg2 && f.Gender.errors) || (submittedForm && f.Gender.errors) ? 'mat-form-field-invalid ng-invalid' : ''">
+						<mat-label>Gender <span class="asterisk">*</span></mat-label>
+						<input type="search" id="	" placeholder="Select Gender" aria-label="Number" matInput
+							(keyup)="searchGender($event.target.value)" (focus)="$event.target.select()"
+							[matAutocomplete]="auto1" tabindex="1">
+						<mat-autocomplete #auto1="matAutocomplete">
+							<mat-option *ngFor="let gender of filteredGender" [value]="gender.value"
+								(onSelectionChange)="selectGender(gender.value,$event.isUserInput)">
+								{{gender.label}}
+							</mat-option>
+						</mat-autocomplete> -->
+					<!-- <mat-form-field appearance="outline">
 						<mat-label>Gender <span class="asterisk">*</span></mat-label>
 						<mat-select formControlName="Gender" tabIndex="1">
 							<mat-option value="male">Male</mat-option>
 							<mat-option value="female">Female</mat-option>
 							<mat-option value="lgbtq+">X (LGBTQAI+)</mat-option>
 						</mat-select>
-					</mat-form-field>
+					</mat-form-field> -->
+					<label class="selectGenderLabel">Gender <span class="asterisk">*</span></label>
+					<div class="selectStyle">
+						<select class="selectInputStyle" (click)="selectDropdownGender()" formControlName="Gender"
+							tabindex="1">
+							<option value="male">Male</option>
+							<option value="female">Female</option>
+							<option value="lgbtq+">X (LGBTQAI+)</option>
+						</select>
+						<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
+							style="enable-background:new 0 0 122.88 63.9" xml:space="preserve">
+							<style type="text/css">
+								.sty0 {
+									fill-rule: evenodd;
+									clip-rule: evenodd;
+								}
+							</style>
+							<g>
+								<polygon class="sty0" points="61.44,63.9 122.88,0 0,0 61.44,63.9" />
+							</g>
+						</svg>
+					</div>
 					<div *ngIf="submittedForm && f.Gender.errors || f.Gender.touched && f.Gender.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.Gender.errors.required">This field is required</div>
 					</div>
 				</div>
 				<div class="col-md-6">
-					<mat-form-field appearance="outline">
-						<mat-label>Start Business Years - Pro Driver <span class="asterisk">*</span></mat-label>
-						<mat-select formControlName="FirstYearBusiness" tabindex="1">
-							<mat-option *ngFor="let startBusinessYear of startBusinessYears"
+					<label class="selectYearLabel">Start Business Years - Pro Driver <span
+							class="asterisk">*</span></label>
+					<div class="selectStyle">
+						<select class="selectInputStyle" (click)="selectDropdownYears()"
+							formControlName="FirstYearBusiness" tabindex="1">
+							<option *ngFor="let startBusinessYear of startBusinessYears"
 								[value]="startBusinessYear.value">
-								{{startBusinessYear.label}}</mat-option>
-						</mat-select>
-					</mat-form-field>
+								{{startBusinessYear.label}}</option>
+						</select>
+						<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
+							style="enable-background:new 0 0 122.88 63.9" xml:space="preserve">
+							<style type="text/css">
+								.sty0 {
+									fill-rule: evenodd;
+									clip-rule: evenodd;
+								}
+							</style>
+							<g>
+								<polygon class="sty0" points="61.44,63.9 122.88,0 0,0 61.44,63.9" />
+							</g>
+						</svg>
+					</div>
 					<div *ngIf="submittedForm && f.FirstYearBusiness.errors || f.FirstYearBusiness.touched && f.FirstYearBusiness.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.FirstYearBusiness.errors.required">This field is required</div>
