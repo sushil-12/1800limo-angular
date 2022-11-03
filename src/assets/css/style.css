@@ -214,10 +214,6 @@ header a.nav-link.active {
 	color: #000 !important
 }
 
-.dropdown.button-signin a.dropdown-item:hover {
-	color: var(--orange-color) !important
-}
-
 .bannerform_wrapper {
 	padding            : 115px 25px 0px 25px;
 	background-image   : url(../images/banner1.jpg);

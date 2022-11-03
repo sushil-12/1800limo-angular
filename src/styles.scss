@@ -40,7 +40,7 @@ button.custom-filled-button {
 	background-color  : var(--green-color);
 	color             : #202020;
 	letter-spacing    : 0.9px;
-	font-size         : 0.875rem;
+	font-size         : 1.18rem;
 	display           : inline-block;
 	min-width         : 10rem;
 	font-family       : 'Roboto', sans-serif;
@@ -50,13 +50,6 @@ button.custom-filled-button {
 	-webkit-appearance: button;
 }
 
-@media only screen and (min-width:991px) {
-	.bookButton {
-		position: absolute !important;
-		left    : 50% !important;
-	}
-}
-
 button.custom-filled-back-button {
 	padding           : 0.675rem 3.258rem;
 	border-radius     : 1rem;
@@ -64,7 +57,7 @@ button.custom-filled-back-button {
 	background-color  : #a2a3a2;
 	color             : #202020;
 	letter-spacing    : 0.9px;
-	font-size         : 0.875rem;
+	font-size         : 1.18rem;
 	display           : inline-block;
 	min-width         : 10rem;
 	font-family       : 'Roboto', sans-serif;
@@ -82,7 +75,7 @@ button.custom-filled-back-button {
 		background-color  : var(--green-color);
 		color             : #202020;
 		letter-spacing    : 0.9px;
-		font-size         : 0.875rem;
+		font-size         : 1.18rem;
 		display           : inline-block;
 		min-width         : 8rem;
 		font-family       : 'Roboto', sans-serif;
@@ -99,7 +92,7 @@ button.custom-filled-back-button {
 		background-color  : #a2a3a2;
 		color             : #202020;
 		letter-spacing    : 0.9px;
-		font-size         : 0.875rem;
+		font-size         : 1.18rem;
 		display           : inline-block;
 		min-width         : 8rem;
 		font-family       : 'Roboto', sans-serif;
@@ -116,5 +109,5 @@ button.custom-filled-orange-button {
 	padding         : 4px 7px;
 	color           : #1d1d1d;
 	background-color: var(--orange);
-	font-size       : 1rem;
+	font-size       : 1.1rem;
 }

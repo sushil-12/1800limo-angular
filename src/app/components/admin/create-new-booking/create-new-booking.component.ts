@@ -107,6 +107,7 @@ export class CreateNewBookingComponent implements OnInit
 			this.big_data_list = data
 			this.big_data_list_copy = JSON.parse(JSON.stringify(data))
 			this.prefillBookingFormGroup()
+
 		})
 
 		this.fetchUserList('individual')
@@ -220,6 +221,7 @@ export class CreateNewBookingComponent implements OnInit
 			driver_dresses: this._formBuilder.array([]),
 			driver_languages: this._formBuilder.array([]),
 			amenities: this._formBuilder.array([]),
+			chargedAmenities: this._formBuilder.array([]),
 			driver_ex_law_officer: [''],
 			driver_veteran: [''],
 			driver_foid_card: [''],
@@ -378,47 +380,55 @@ export class CreateNewBookingComponent implements OnInit
 				service_type: data['service_type'],
 				transfer_type: data['pickup_type'] + '_to_' + data['dropoff_type'],
 				return_transfer_type: data['dropoff_type'] + '_to_' + data['pickup_type'],
+				// pickup address
 				pickup: data['pickup_address'],
 				pickup_latitude: data['pickup_address_lat'],
 				pickup_longitude: data['pickup_address_long'],
+				// return pickup address
+				return_pickup: data['return_pickup_address'] ?? '',
+				return_pickup_latitude: data['return_pickup_address_lat'] ?? '',
+				return_pickup_longitude: data['return_pickup_address_long'] ?? '',
 				pickup_date: data['pickup_date'],
 				pickup_time: data['pickup_time'],
+				return_pickup_date: data['return_pickup_date'] ?? '',
+				return_pickup_time: data['return_pickup_time'] ?? '',
+				// pickup airport
 				pickup_airport: data['pickup_airport'],
 				pickup_airport_latitude: data['pickup_airport_lat'],
 				pickup_airport_longitude: data['pickup_airport_long'],
+				// return pickup airport
 				return_pickup_airport: data['return_pickup_airport'],
 				return_pickup_airport_latitude: data['return_pickup_airport_lat'],
 				return_pickup_airport_longitude: data['return_pickup_airport_long'],
-				dropoff_airport: data['dropoff_airport'],
-				dropoff_airport_latitude: data['dropoff_airport_lat'],
-				dropoff_airport_longitude: data['dropoff_airport_long'],
-				return_dropoff_airport: data['return_dropoff_airport'],
-				return_dropoff_airport_latitude: data['return_dropoff_airport_lat'],
-				return_dropoff_airport_longitude: data['return_dropoff_airport_long'],
+				// dropoff address
 				dropoff: data['dropoff_address'],
 				dropoff_latitude: data['dropoff_address_lat'],
 				dropoff_longitude: data['dropoff_address_long'],
+				// return dropoff address
+				return_dropoff: data['return_dropoff_address'] ?? '',
+				return_dropoff_latitude: data['return_dropoff_address_lat'] ?? '',
+				return_dropoff_longitude: data['return_dropoff_address_long'] ?? '',
+				// dropoff airport
+				dropoff_airport: data['dropoff_airport'],
+				dropoff_airport_latitude: data['dropoff_airport_lat'],
+				dropoff_airport_longitude: data['dropoff_airport_long'],
+				// return dropoff airport
+				return_dropoff_airport: data['return_dropoff_airport'],
+				return_dropoff_airport_latitude: data['return_dropoff_airport_lat'],
+				return_dropoff_airport_longitude: data['return_dropoff_airport_long'],
 				total_passengers: data['no_of_passenger'],
 				luggage_count: data['no_of_luggage'],
 				number_of_hours: data['booking_hour'] ?? '',
 				number_of_vehicles: "1",
-				return_pickup: data['return_pickup_address'] ?? '',
-				return_pickup_latitude: data['return_pickup_address_lat'] ?? '',
-				return_pickup_longitude: data['return_pickup_address_long'] ?? '',
-				return_pickup_date: data['return_pickup_date'] ?? '',
-				return_pickup_time: data['return_pickup_time'] ?? '',
-				return_dropoff: data['return_dropoff_address'] ?? '',
-				return_dropoff_latitude: data['return_dropoff_address_lat'] ?? '',
-				return_dropoff_longitude: data['return_dropoff_address_long'] ?? '',
 				journeyDistance: data['location_info'][0].distance.value,
 				journeyTime: data['location_info'][0].duration.value,
 				returnJourneyDistance: data['location_info'][1] != undefined ? data['location_info'][1].distance.value : '',
 				returnJourneyTime: data['location_info'][1] != undefined ? data['location_info'][1].duration.value : ''
 			})
 		}
-		// filling via Manually
 		else
 		{
+			// filling via Manually
 			console.warn('Prefilling via Manually')
 			this.bookingForm.patchValue({
 				service_type: 'one_way',
@@ -431,7 +441,7 @@ export class CreateNewBookingComponent implements OnInit
 			})
 		}
 
-		// some always filling values
+		// always filling values
 		this.setFormValue('luggage_count', 0)
 		this.setFormValue('account_type', 'individual')
 		console.log('\n\n\n\n')
@@ -439,6 +449,11 @@ export class CreateNewBookingComponent implements OnInit
 		console.log(this.bookingForm)
 		console.log('\n\n\n\n')
 		console.groupEnd()
+		this.initMap()
+		if (this.Form.service_type.value == 'round_trip')
+		{
+			this.initReturnMap()
+		}
 	}
 
 
@@ -453,11 +468,6 @@ export class CreateNewBookingComponent implements OnInit
 		{
 			if (this._adminService.getBookingData() != undefined)
 			{
-				setTimeout(() =>
-				{
-					this.initMap()
-					this.Form.service_type.value == 'round_trip' && this.initReturnMap()
-				}, 5000)
 				resolve(this._adminService.getBookingData())
 			}
 			else
@@ -472,11 +482,6 @@ export class CreateNewBookingComponent implements OnInit
 					{
 						this._spinner.hide('fetchspinner')
 						clearInterval(interval)
-						this.initMap()
-						if (this.Form.service_type.value == 'round_trip')
-						{
-							this.initReturnMap()
-						}
 						resolve(this._adminService.getBookingData())
 					}
 				}, 1500)
@@ -527,21 +532,25 @@ export class CreateNewBookingComponent implements OnInit
 				travelMode: google.maps.TravelMode.DRIVING
 			}
 
-			if (this.searchSubstring(this.Form.transfer_type.value, 'city_'))
+			if (this.Form.pickup.value != '')
 			{
 				request['origin'] = new google.maps.LatLng(this.Form.pickup_latitude.value, this.Form.pickup_longitude.value)
+			}
+			if (this.Form.dropoff.value != '')
+			{
 				request['destination'] = new google.maps.LatLng(this.Form.dropoff_latitude.value, this.Form.dropoff_longitude.value)
 			}
-			if (this.searchSubstring(this.Form.transfer_type.value, 'airport_'))
+			if (this.Form.pickup_airport.value != '')
 			{
 				request['origin'] = new google.maps.LatLng(this.Form.pickup_airport_latitude.value, this.Form.pickup_airport_longitude.value)
-				request['destination'] = new google.maps.LatLng(this.Form.dropoff_airport_latitude.value, this.Form.dropoff_airport_longitude.value)
 			}
-			if (this.searchSubstring(this.Form.transfer_type.value, '_city'))
+			if (this.Form.dropoff_airport.value != '')
 			{
-				request['origin'] = new google.maps.LatLng(this.Form.pickup_address_latitude.value, this.Form.pickup_address_longitude.value)
 				request['destination'] = new google.maps.LatLng(this.Form.dropoff_airport_latitude.value, this.Form.dropoff_airport_longitude.value)
 			}
+
+			console.log(request)
+			return
 
 			directionsService.route(request, (response: any, status: string) =>
 			{
@@ -559,7 +568,6 @@ export class CreateNewBookingComponent implements OnInit
 				}
 			})
 		})
-
 	}
 
 	/**
@@ -640,9 +648,6 @@ export class CreateNewBookingComponent implements OnInit
 							error: 'Please select a valid location point.'
 						}
 					})
-					this.prefillBookingFormGroup()
-					this.initMap()
-					this.initReturnMap()
 					return
 				}
 				else
@@ -773,20 +778,39 @@ export class CreateNewBookingComponent implements OnInit
 			}
 			this.setFormValue('return_transfer_type', ReverseStringChars(this.Form.transfer_type.value))
 		},
-		checkbox: (event: any, form_key: string) =>
+		checkbox: (event: any, form_key: string, chargeable: boolean) =>
 		{
 			if (event.target.checked)
 			{
-				(this.bookingForm.get(form_key) as FormArray).push(new FormControl(event.target.value))
+				if (chargeable)
+				{
+					(this.bookingForm.get('chargedAmenities') as FormArray).push(new FormControl(event.target.value))
+				}
+				else
+				{
+					(this.bookingForm.get(form_key) as FormArray).push(new FormControl(event.target.value))
+				}
 			}
 			else
 			{
-				(this.bookingForm.get(form_key) as FormArray).removeAt(
-					this.Form[form_key].value.findIndex((item: any) =>
-					{
-						item.value == event.target.value
-					})
-				)
+				if (chargeable)
+				{
+					(this.bookingForm.get('chargedAmenities') as FormArray).removeAt(
+						this.Form['chargedAmenities'].value.findIndex((item: any) =>
+						{
+							item.value == event.target.value
+						})
+					)
+				}
+				else
+				{
+					(this.bookingForm.get(form_key) as FormArray).removeAt(
+						this.Form[form_key].value.findIndex((item: any) =>
+						{
+							item.value == event.target.value
+						})
+					)
+				}
 			}
 		},
 		countryChange: (form_key: string, value: any) =>
@@ -837,7 +861,6 @@ export class CreateNewBookingComponent implements OnInit
 		this._adminService.getAccountBytype(account_type).subscribe((response: any) =>
 		{
 			this.user_list = response.data
-			console.log(this.user_list, "111111111111111111111")
 		})
 		// this.MobileObject.setCountry(this.user_list.mobileCountry);
 		// this.WorkObject.setCountry(this.user_list.workCountry);
@@ -1088,6 +1111,7 @@ export class CreateNewBookingComponent implements OnInit
 
 		if (preview)
 		{
+			this._spinner.show()
 			this.bookingForm.value.number_of_vehicles = this.bookingForm.value.number_of_vehicles != null ? parseInt(this.bookingForm.value.number_of_vehicles) : 1
 			this._adminService.createBooking(this.bookingForm.value).subscribe((response: any) =>
 			{
@@ -1711,189 +1735,4 @@ export class CreateNewBookingComponent implements OnInit
 			}
 		}
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	// UNUSABLE
-	initAutoComplete()
-	{
-		this.mapsAPILoader.load().then(() =>
-		{
-			console.log('inside initAutoComplete')
-			let autocomplete1 = new google.maps.places.Autocomplete(this.searchElementRef1.nativeElement)
-			let autocomplete2 = new google.maps.places.Autocomplete(this.searchElementRef2.nativeElement)
-			let autocomplete3 = new google.maps.places.Autocomplete(this.searchElementRef3.nativeElement)
-			let autocomplete4 = new google.maps.places.Autocomplete(this.searchElementRef4.nativeElement)
-			console.log(this.Form.service_type.value)
-			if (this.Form.service_type.value == 'round_trip')
-			{
-				console.log('inside if')
-				let autocomplete5, autocomplete6, autocomplete7, autocomplete8
-				autocomplete5 = new google.maps.places.Autocomplete(this.searchElementRef5.nativeElement)
-				autocomplete6 = new google.maps.places.Autocomplete(this.searchElementRef6.nativeElement)
-				autocomplete7 = new google.maps.places.Autocomplete(this.searchElementRef7.nativeElement)
-				autocomplete8 = new google.maps.places.Autocomplete(this.searchElementRef8.nativeElement)
-
-				autocomplete5.addListener("place_changed", () =>
-				{
-					//get the place result
-					let place = autocomplete5.getPlace();
-					//verify result
-					if (place.geometry === undefined || place.geometry === null)
-					{
-						return;
-					}
-					//Fill one way form pickup address fields
-					this.bookingForm.patchValue({
-						return_pickup_latitude: place.geometry.location.lat(),
-						return_pickup_longitude: place.geometry.location.lng(),
-						return_pickup: place.formatted_address,
-					});
-					console.log(this.bookingForm)
-					this.initMap()
-				});
-				autocomplete6.addListener("place_changed", () =>
-				{
-					//get the place result
-					let place = autocomplete6.getPlace();
-					//verify result
-					if (place.geometry === undefined || place.geometry === null)
-					{
-						return;
-					}
-					//Fill one way form pickup address fields
-					this.bookingForm.patchValue({
-						return_dropoff_latitude: place.geometry.location.lat(),
-						return_dropoff_longitude: place.geometry.location.lng(),
-						return_dropoff: place.formatted_address,
-					});
-					console.log(this.bookingForm)
-					this.initMap()
-				});
-				autocomplete7.addListener("place_changed", () =>
-				{
-					//get the place result
-					let place = autocomplete6.getPlace();
-					//verify result
-					if (place.geometry === undefined || place.geometry === null)
-					{
-						return;
-					}
-					//Fill one way form pickup address fields
-					this.bookingForm.patchValue({
-						return_stop_1_latitude: place.geometry.location.lat(),
-						return_stop_1_longitude: place.geometry.location.lng(),
-						return_stop_1: place.formatted_address,
-					});
-					console.log(this.bookingForm)
-					this.initMap()
-				});
-				autocomplete8.addListener("place_changed", () =>
-				{
-					//get the place result
-					let place = autocomplete6.getPlace();
-					//verify result
-					if (place.geometry === undefined || place.geometry === null)
-					{
-						return;
-					}
-					//Fill one way form pickup address fields
-					this.bookingForm.patchValue({
-						return_stop_2_latitude: place.geometry.location.lat(),
-						return_stop_2_longitude: place.geometry.location.lng(),
-						return_stop_2: place.formatted_address,
-					});
-					console.log(this.bookingForm)
-					this.initMap()
-				});
-			}
-			autocomplete1.addListener("place_changed", () =>
-			{
-				//get the place result
-				let place = autocomplete1.getPlace();
-				//verify result
-				if (place.geometry === undefined || place.geometry === null)
-				{
-					return;
-				}
-				//Fill one way form pickup address fields
-				this.bookingForm.patchValue({
-					pickup_latitude: place.geometry.location.lat(),
-					pickup_longitude: place.geometry.location.lng(),
-					pickup: place.formatted_address,
-				});
-				console.log(this.bookingForm)
-				this.initMap()
-			});
-			autocomplete2.addListener("place_changed", () =>
-			{
-				//get the place result
-				let place = autocomplete2.getPlace();
-				//verify result
-				if (place.geometry === undefined || place.geometry === null)
-				{
-					return;
-				}
-				//Fill one way form Drop Off address fields
-				this.bookingForm.patchValue({
-					dropoff_latitude: place.geometry.location.lat(),
-					dropoff_longitude: place.geometry.location.lng(),
-					dropoff: place.formatted_address,
-				})
-				console.log(this.bookingForm)
-				this.initMap()
-			});
-			autocomplete3.addListener("place_changed", () =>
-			{
-				//get the place result
-				let place = autocomplete3.getPlace();
-				//verify result
-				if (place.geometry === undefined || place.geometry === null)
-				{
-					return;
-				}
-				//Fill one way form pickup address fields
-				this.bookingForm.patchValue({
-					stop_1_latitude: place.geometry.location.lat(),
-					stop_1_longitude: place.geometry.location.lng(),
-					stop_1: place.formatted_address,
-				});
-				console.log(this.bookingForm)
-				this.initMap()
-			});
-			autocomplete4.addListener("place_changed", () =>
-			{
-				//get the place result
-				let place = autocomplete4.getPlace();
-				//verify result
-				if (place.geometry === undefined || place.geometry === null)
-				{
-					return;
-				}
-				//Fill one way form pickup address fields
-				this.bookingForm.patchValue({
-					stop_2_latitude: place.geometry.location.lat(),
-					stop_2_longitude: place.geometry.location.lng(),
-					stop_2: place.formatted_address,
-				});
-				console.log(this.bookingForm)
-				this.initMap()
-			});
-		});
-	}
-
 }
