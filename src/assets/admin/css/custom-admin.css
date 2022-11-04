@@ -3057,3 +3057,31 @@ table .dropdown-menu {
 	border       : 2px solid #3f51b5;
 	border-bottom: 2px solid #3f51b5 !important;
 }
+
+.skiptranslate img {
+	display: none !important;
+}
+
+.goog-te-gadget-simple {
+	white-space     : nowrap;
+	/* width        : 210px; */
+	height          : 40px;
+	padding         : 10px;
+	border          : 1px solid var(--orange-color) !important;
+	border-radius   : 10px;
+}
+
+.goog-te-gadget-simple .goog-te-menu-value span {
+	font-size: 18px;
+	position : relative;
+	top      : 4px;
+	padding  : 5px;
+}
+
+.goog-te-menu-value:hover {
+	text-decoration: none !important;
+}
+
+.goog-te-menu-value:focus {
+	text-decoration: none !important;
+}
