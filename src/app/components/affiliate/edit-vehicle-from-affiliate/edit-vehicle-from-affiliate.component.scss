@@ -80,9 +80,62 @@
 	}
 }
 
-#Layer_1 {
+#Layer_2 {
 	width   : 10px;
 	position: absolute;
 	right   : 5px;
 	fill    : #757575;
+}
+
+.select-seat-label {
+	position  : relative;
+	top       : 15px;
+	left      : 8px;
+	background: #fff;
+	color     : #000 !important;
+	padding   : 0 3px;
+	font-size : 12px !important;
+	transition: 0.3s;
+}
+
+.select-luggage-label {
+	position  : relative;
+	top       : 15px;
+	left      : 8px;
+	background: #fff;
+	color     : #000 !important;
+	padding   : 0 3px;
+	font-size : 12px !important;
+	transition: 0.3s;
+}
+
+@media only screen and (max-width:767px) {
+	.select-luggage-label {
+		text-overflow: ellipsis;
+		overflow     : hidden;
+		width        : 285px;
+		white-space  : nowrap;
+	}
+}
+
+.select-cancel-label {
+	position  : relative;
+	top       : 15px;
+	left      : 8px;
+	background: #fff;
+	color     : #000 !important;
+	padding   : 0 3px;
+	font-size : 12px !important;
+	transition: 0.3s;
+}
+
+.select-charter-cancel-label {
+	position  : relative;
+	top       : 15px;
+	left      : 8px;
+	background: #fff;
+	color     : #000 !important;
+	padding   : 0 3px;
+	font-size : 12px !important;
+	transition: 0.3s;
 }

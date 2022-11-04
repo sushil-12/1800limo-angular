@@ -73,6 +73,9 @@ export class Step1Component implements OnInit, AfterViewInit
 	public selectedAffiliate: string;
 	public modalImage: string;
 	public startBusinessYears: Array<Object>;
+	public filterGender: Array<Object>;;
+	errorMsg2: boolean;
+	public filteredGender: Array<any>;
 
 	constructor(
 		private affiliateService: AffiliateService,
@@ -93,9 +96,25 @@ export class Step1Component implements OnInit, AfterViewInit
 		this.DispatchObject.setCountry(this.currentUser.phoneCountry);
 		this.FaxObject.setCountry(this.currentUser.phoneCountry);
 		this.CompanyCellNumberObject.setCountry(this.currentUser.phoneCountry);
+
 	}
+
 	ngOnInit(): void
 	{
+		this.filterGender = [
+			{
+				'label': 'Male',
+				'value': 'Male'
+			},
+			{
+				'label': 'Female',
+				'value': 'Female'
+			}
+		];
+		$('#genderField').focusout(() =>
+		{
+			this.errorMsg2 = true;
+		})
 		this.currentUser = this.authService.currentUserValue;
 		// no modal unless uncompleted
 		console.log(this.affiliateService.getLocalStepCompleted().findIndex(item => item == '1'), this.affiliateService.getLocalStepCompleted())
@@ -335,8 +354,16 @@ export class Step1Component implements OnInit, AfterViewInit
 				this.spinner.hide(); //hide spinner
 
 			});
-	}
 
+	}
+	selectDropdownGender()
+	{
+		$('.selectGenderLabel').removeClass('selectGenderLabel ').addClass('select-gender-label');
+	}
+	selectDropdownYears()
+	{
+		$('.selectYearLabel').removeClass('selectYearLabel ').addClass('select-year-label');
+	}
 	closeButton()
 	{
 		this.closeTab.emit();
@@ -523,6 +550,61 @@ export class Step1Component implements OnInit, AfterViewInit
 		if (!onRefresh)
 		{
 			$('#affiliateInstructionsModal').modal('show');
+		}
+	}
+
+	searchGender(keyword)
+	{
+		this.addAffiliateAccountForm.patchValue({
+			Gender: '',
+		});
+		if (keyword == '')
+		{
+			this.filteredGender = this.filterGender;
+		}
+		else
+		{
+			this.filteredGender = this.filterGender.filter((gender: any) =>
+			{
+				if (gender.label.toLowerCase() === keyword.toLowerCase())
+				{
+					this.addAffiliateAccountForm.patchValue({
+						Gender: gender.value,
+					});
+				}
+				return gender.label.toLowerCase().includes(keyword.toLowerCase());
+			})
+				.sort((a: any, b: any) =>
+				{
+					return this.searchSorting(keyword, a, b)
+				});
+		}
+	}
+	selectGender(val, isSelected)
+	{
+		if (isSelected)// ignore on deselection of the previous option
+		{
+			this.addAffiliateAccountForm.patchValue({
+				Gender: val,
+			});
+		}
+	}
+
+	searchSorting(keyword, a, b)
+	{
+		// Sort results by matching name with keyword position in name
+		if (a.label.toLowerCase().indexOf(keyword.toLowerCase()) > b.label.toLowerCase().indexOf(keyword.toLowerCase()))
+		{
+			return 1;
+		} else if (a.label.toLowerCase().indexOf(keyword.toLowerCase()) < b.label.toLowerCase().indexOf(keyword.toLowerCase()))
+		{
+			return -1;
+		} else
+		{
+			if (a.label > b.label)
+				return 1;
+			else
+				return -1;
 		}
 	}
 

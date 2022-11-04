@@ -316,7 +316,7 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 			//google translate
 			var v = document.createElement("script");
 			v.type = "text/javascript";
-			v.innerHTML = "function googleTranslateElementInit() { new google.translate.TranslateElement({ pageLanguage: 'en' }, 'google_translate_element_desktop'); } ";
+			v.innerHTML = "function googleTranslateElementInit() { new google.translate.TranslateElement({ pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.SIMPLE }, 'google_translate_element_desktop'); } ";
 			this.elementRef.nativeElement.appendChild(v);
 			var s = document.createElement("script");
 			s.type = "text/javascript";

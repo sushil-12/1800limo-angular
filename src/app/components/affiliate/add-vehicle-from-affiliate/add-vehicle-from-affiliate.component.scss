@@ -26,8 +26,6 @@
 	transform: scale(1.2, 1.2);
 }
 
-
-
 .input-checkbox {
 	width : 100%;
 	height: 100%;
@@ -50,10 +48,9 @@
 		background-color: var(--green-color);
 		color           : #fff;
 	}
-
 }
 
-@media only screen and (min-width:1199px) {
+@media only screen and (min-width: 1199px) {
 	.input-container:focus {
 		outline: none;
 
@@ -72,7 +69,7 @@
 	}
 }
 
-@media only screen and (max-width:767px) {
+@media only screen and (max-width: 767px) {
 	.mobilePadding {
 		padding: 0px 15px !important;
 	}
@@ -82,9 +79,62 @@
 	transform: translateX(0px) translateY(0px) !important;
 }
 
-#Layer_1 {
+#Layer_2 {
 	width   : 10px;
 	position: absolute;
 	right   : 5px;
 	fill    : #757575;
+}
+
+.select-seat-label {
+	position  : relative;
+	top       : 15px;
+	left      : 8px;
+	background: #fff;
+	color     : #000 !important;
+	padding   : 0 3px;
+	font-size : 12px !important;
+	transition: 0.3s;
+}
+
+.select-luggage-label {
+	position  : relative;
+	top       : 15px;
+	left      : 8px;
+	background: #fff;
+	color     : #000 !important;
+	padding   : 0 3px;
+	font-size : 12px !important;
+	transition: 0.3s;
+}
+
+@media only screen and (max-width:767px) {
+	.select-luggage-label {
+		text-overflow: ellipsis;
+		overflow     : hidden;
+		width        : 285px;
+		white-space  : nowrap;
+	}
+}
+
+.select-cancel-label {
+	position  : relative;
+	top       : 15px;
+	left      : 8px;
+	background: #fff;
+	color     : #000 !important;
+	padding   : 0 3px;
+	font-size : 12px !important;
+	transition: 0.3s;
+}
+
+.select-charter-cancel-label {
+	position  : relative;
+	top       : 15px;
+	left      : 8px;
+	background: #fff;
+	color     : #000 !important;
+	padding   : 0 3px;
+	font-size : 12px !important;
+	transition: 0.3s;
 }
