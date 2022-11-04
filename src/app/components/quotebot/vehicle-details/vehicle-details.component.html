@@ -9,16 +9,13 @@
 					<div class="slider-Block col-md-6">
 						<div class="outer">
 							<div id="big" class="owl-carousel owl-theme">
-								<div class="item"
-									*ngFor="let item of selected_vehicle.vehicle_images; index as item_index">
-									<img [src]="item" id="V_Image_{{ item_index + 1 }}"
-										alt="Vehicle Image {{ item_index + 1 }}">
+								<div class="item" *ngFor="let item of selected_vehicle.vehicle_images; index as item_index">
+									<img [src]="item" id="V_Image_{{ item_index + 1 }}" alt="Vehicle Image {{ item_index + 1 }}">
 									<!-- {{item }} -->
 								</div>
 							</div>
 							<div id="thumbs" class="owl-carousel owl-theme">
-								<div class="item"
-									*ngFor="let item of selected_vehicle.vehicle_images; index as item_index">
+								<div class="item" *ngFor="let item of selected_vehicle.vehicle_images; index as item_index">
 									<h1>
 										<!-- {{ item }} -->
 										<img [src]="item" alt="Vehicle Image {{ item_index + 1 }}"
@@ -88,16 +85,13 @@
 						<!-- CONTENT BLOCK ENDS -->
 						<!-- FUNCTIONAL BUTTONS -->
 						<div class="btn-Area d-flex flex-wrap">
-							<button type="button" class="custom-btn" data-toggle="modal"
-								data-target="#detailFareRateModal">
+							<button type="button" class="custom-btn" data-toggle="modal" data-target="#detailFareRateModal">
 								View Subtotals
 							</button>
-							<button type="button" class="custom-btn" data-toggle="modal"
-								data-target="#driverFareRateModal">
+							<button type="button" class="custom-btn" data-toggle="modal" data-target="#driverFareRateModal">
 								Driver Info
 							</button>
-							<button type="button" class="custom-btn" data-toggle="modal"
-								data-target="#amenitiesFareRateModal">
+							<button type="button" class="custom-btn" data-toggle="modal" data-target="#amenitiesFareRateModal">
 								Amenities
 							</button>
 							<!-- <button type="button" class="custom-btn" (click)="bookNow()">
@@ -138,186 +132,209 @@
 			</div>
 			<div class="col-lg-12">
 				<div class="px-4">
-					<!-- Travel Type -->
 					<div class="row my-1">
 						<div class="col-lg-4">
 							<div class="title-block">
-								Service Type:
+								Service Type / Pickup Type / Dropoff Type
 							</div>
 						</div>
-						<div class="col-lg-8">
+						<div class="col-lg-4">
 							<div class="cont-block">
-								{{ formatString(quotebot_form.service_type) | titlecase }}
+								{{ quotebot_form.service_type.includes('charter') ? 'Charter/Tour' : quotebot_form.service_type |
+								titlecase }}
+								/
+								{{ formatString(quotebot_form.pickup_type) | titlecase }}
+								to
+								{{ formatString(quotebot_form.dropoff_type) | titlecase }}
+								and
+								{{ quotebot_form.service_type.includes('round') ? 'Return' : '' }}
 							</div>
+
 						</div>
 					</div>
-					<!-- Service Type -->
-					<!-- <div class="row">
-						<div class="col-lg-4">
-							<div class="title-block">Service Type:</div>
-						</div>
-						<div class="col-lg-8">
-							<div class="cont-block">Round Trip</div>
-						</div>
-					</div> -->
 
 					<hr />
 
-					<!-- One Way Details -->
-					<div>
-						<!-- Pickup Details -->
-						<div class="mb-4">
-							<!-- Pickup Type -->
-							<div class="row my-1">
-								<div class="col-lg-4">
-									<div class="title-block">
-										Pickup Type:
-									</div>
-								</div>
-								<div class="col-lg-8">
-									<div class="cont-block">
-										{{ quotebot_form.pickup_type | titlecase }}
-									</div>
-								</div>
-							</div>
-							<!-- Pickup Address -->
-							<div class="row my-1">
-								<div class="col-lg-4">
-									<div class="title-block">
-										Pickup Address:
-									</div>
-								</div>
-								<div class="col-lg-8">
-									<div class="cont-block">
-										{{ quotebot_form.pickup_address }}
-									</div>
-								</div>
-							</div>
-						</div>
-
-						<!-- Dropoff Details -->
-						<div class="mt-4">
-							<!-- Drop Off Type -->
-							<div class="row my-1">
-								<div class="col-lg-4">
-									<div class="title-block">
-										Drop Off Type:
-									</div>
-								</div>
-								<div class="col-lg-8">
-									<div class="cont-block">
-										{{ formatString(quotebot_form.dropoff_type) | titlecase }}
-									</div>
-								</div>
-							</div>
-							<!-- Drop off Address -->
-							<div class="row my-1">
-								<div class="col-lg-4">
-									<div class="title-block">
-										Drop Off Address:
-									</div>
-								</div>
-								<div class="col-lg-8">
-									<div class="cont-block">
-										{{ quotebot_form.dropoff_address }}
-									</div>
-								</div>
-							</div>
-						</div>
-
-						<!-- Travel Time / Miles -->
-						<div class="row my-3">
+					<div *ngIf="quotebot_form.pickup_type == 'airport'; else pickadd">
+						<div class="row my-1">
 							<div class="col-lg-4">
 								<div class="title-block">
-									Travel Time/Miles:
+									Pickup Airport
 								</div>
 							</div>
-							<div class="col-lg-8">
+							<div class="col-lg-4">
 								<div class="cont-block">
-									{{ quotebot_form.location_info[0].duration.text }} / {{
-									((quotebot_form.location_info[0].distance.value)/1609).toFixed(2) }} miles
+									{{ quotebot_form.other_details.pickup_airport_name }}
 								</div>
 							</div>
 						</div>
 					</div>
-					<!-- One Way Details Ends -->
+
+					<ng-template #pickadd>
+						<div class="row my-1">
+							<div class="col-lg-4">
+								<div class="title-block">
+									Pickup Address
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<div class="cont-block">
+									{{ quotebot_form.pickup_address }}
+								</div>
+							</div>
+						</div>
+					</ng-template>
+
+
+					<hr class="blue-line" />
+
+					<div *ngIf="quotebot_form.dropoff_type == 'airport'; else dropadd">
+						<div class="row my-1">
+							<div class="col-lg-4">
+								<div class="title-block">
+									Dropoff Airport
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<div class="cont-block">
+									{{ quotebot_form.other_details.dropoff_airport_name }}
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<ng-template #dropadd>
+						<div class="row my-1">
+							<div class="col-lg-4">
+								<div class="title-block">
+									Dropoff Address
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<div class="cont-block">
+									{{ quotebot_form.dropoff_address }}
+								</div>
+							</div>
+						</div>
+					</ng-template>
+
+					<!-- Travel Time/Miles -->
+					<div class="row my-2">
+						<div class="col-lg-4">
+							<div class="title-block">
+								Travel Time/Miles
+							</div>
+						</div>
+						<div class="col-lg-4">
+							<div class="cont-block">
+								{{ quotebot_form.location_info[0].duration.text }}
+								/
+								{{ ((quotebot_form.location_info[0].distance.value)/1609).toFixed(2) }} miles
+							</div>
+						</div>
+					</div>
 
 					<hr />
 
 					<!-- Return Details -->
-					<div *ngIf="quotebot_form.travel_type == 'round_trip'">
+					<div *ngIf="quotebot_form.service_type == 'round_trip'">
 						<h5 class="mt-4 text-org"> Return Details </h5>
-						<!-- Return Pickup Details -->
-						<div>
-							<!-- Return Pickup Type
-							<div class="row my-1">
-								<div class="col-lg-4">
-									<div class="title-block">
-										Return Pickup Type:
-									</div>
-								</div>
-								<div class="col-lg-8">
-									<div class="cont-block">
-										{{ quotebot_form.return_pickup_type | titlecase }}
-									</div>
-								</div>
-							</div> -->
-							<!-- Return Pickup Address -->
-							<div class="row my-1">
-								<div class="col-lg-4">
-									<div class="title-block">
-										Return Pickup Address:
-									</div>
-								</div>
-								<div class="col-lg-8">
-									<div class="cont-block">
-										{{ quotebot_form.return_pickup_address | titlecase }}
-									</div>
-								</div>
-							</div>
-						</div>
-
-						<!-- Return Dropoff Details -->
-						<div>
-							<!-- Return Drop Off Type
-							<div class="row">
-								<div class="col-lg-4">
-									<div class="title-block">
-										Return Drop Off Type:
-									</div>
-								</div>
-								<div class="col-lg-8">
-									<div class="cont-block">
-										{{ quotebot_form.return_dropoff_type | titlecase }}
-									</div>
-								</div>
-							</div> -->
-							<!-- Return Dropoff Address -->
-							<div class="row">
-								<div class="col-lg-4">
-									<div class="title-block">
-										Return Drop Off Address:
-									</div>
-								</div>
-								<div class="col-lg-8">
-									<div class="cont-block">
-										{{ quotebot_form.return_dropoff_address | titlecase }}
-									</div>
-								</div>
-							</div>
-						</div>
-
-						<!-- Return Travel Time / Miles -->
-						<div class="row mt-2">
+						<!-- <div class="row my-1">
 							<div class="col-lg-4">
 								<div class="title-block">
-									Travel Time/Miles:
+									Service Type/Pickup Type/Dropoff Type
 								</div>
 							</div>
-							<div class="col-lg-8">
+							<div class="col-lg-4">
 								<div class="cont-block">
-									{{ quotebot_form.location_info[1].duration.text }} / {{
-									((quotebot_form.location_info[1].distance.value)/1609).toFixed(2) }} miles
+									{{ quotebot_form.service_type.includes('charter') ? 'Charter/Tour' :
+									quotebot_form.service_type | titlecase }}
+									/
+									{{ formatString(quotebot_form.dropoff_type) | titlecase }}
+									to
+									{{ formatString(quotebot_form.pickup_type) | titlecase }}
+								</div>
+							</div>
+						</div> -->
+
+						<hr />
+
+
+						<div *ngIf="quotebot_form.return_pickup_type == 'airport'; else pickadd">
+							<div class="row my-1">
+								<div class="col-lg-4">
+									<div class="title-block">
+										Pickup Airport
+									</div>
+								</div>
+								<div class="col-lg-4">
+									<div class="cont-block">
+										{{ quotebot_form.other_details.return_pickup_airport_name }}
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<ng-template #pickadd>
+							<div class="row my-1">
+								<div class="col-lg-4">
+									<div class="title-block">
+										Pickup Address
+									</div>
+								</div>
+								<div class="col-lg-4">
+									<div class="cont-block">
+										{{ quotebot_form.return_pickup_address }}
+									</div>
+								</div>
+							</div>
+						</ng-template>
+
+
+						<hr class="blue-line" />
+
+						<div *ngIf="quotebot_form.return_dropoff_type == 'airport'; else dropadd">
+							<div class="row my-1">
+								<div class="col-lg-4">
+									<div class="title-block">
+										Dropoff Airport
+									</div>
+								</div>
+								<div class="col-lg-4">
+									<div class="cont-block">
+										{{ quotebot_form.other_details.return_dropoff_airport_name }}
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<ng-template #dropadd>
+							<div class="row my-1">
+								<div class="col-lg-4">
+									<div class="title-block">
+										Dropoff Address
+									</div>
+								</div>
+								<div class="col-lg-4">
+									<div class="cont-block">
+										{{ quotebot_form.return_dropoff_address }}
+									</div>
+								</div>
+							</div>
+						</ng-template>
+
+						<!-- Travel Time/Miles -->
+						<div class="row my-2">
+							<div class="col-lg-4">
+								<div class="title-block">
+									Travel Time/Miles
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<div class="cont-block">
+									{{ quotebot_form.location_info[1].duration.text }}
+									/
+									{{ ((quotebot_form.location_info[1].distance.value)/1609).toFixed(2) }} miles
 								</div>
 							</div>
 						</div>
@@ -337,11 +354,11 @@
 		</div>
 	</div>
 	<!-- QuoteBot Preview Section ends -->
-	<div class="btn-Area d-flex mx-4 justify-content-between" style="gap: 1rem">
+	<div class="btn-Area d-flex mx-4 justify-content-start" style="gap: 1rem">
 		<button type="button" class="custom-filled-back-button" (click)="backButton()">
 			Back
 		</button>
-		<button type="button" class="custom-filled-button bookButton" (click)="bookNow()">
+		<button type="button" class="custom-filled-button mx-auto" (click)="bookNow()">
 			Book Now
 		</button>
 	</div>
@@ -359,8 +376,7 @@
 
 
 <!-- Detailed Slip Modal -->
-<div aria-hidden="true" aria-labelledby="detailFareRateModal" class="modal fade" id="detailFareRateModal"
-	tab-index="-1">
+<div aria-hidden="true" aria-labelledby="detailFareRateModal" class="modal fade" id="detailFareRateModal" tab-index="-1">
 	<div class="modal-dialog modal-sm modal-lg">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -379,8 +395,7 @@
 						<th> Amount </th>
 					</thead>
 					<tbody *ngIf="quotebot_form.service_type == 'one_way'">
-						<tr
-							*ngFor="let rate of one_way_rates?.rateArray?.all_inclusive_rates | keyvalue; index as rate_index">
+						<tr *ngFor="let rate of one_way_rates?.rateArray?.all_inclusive_rates | keyvalue; index as rate_index">
 							<td>
 								{{ rate.value.rate_label }}
 							</td>
@@ -420,8 +435,7 @@
 						</tr> -->
 					</tbody>
 					<tbody *ngIf="quotebot_form.service_type == 'round_trip'">
-						<tr
-							*ngFor="let rate of round_trip_rates?.rateArray?.all_inclusive_rates | keyvalue; index as rate_index">
+						<tr *ngFor="let rate of round_trip_rates?.rateArray?.all_inclusive_rates | keyvalue; index as rate_index">
 							<td>
 								{{ rate.value.rate_label }}
 							</td>
@@ -474,8 +488,7 @@
 </div>
 
 
-<div aria-hidden="true" aria-labelledby="driverFareRateModal" class="modal fade" id="driverFareRateModal"
-	tab-index="-1">
+<div aria-hidden="true" aria-labelledby="driverFareRateModal" class="modal fade" id="driverFareRateModal" tab-index="-1">
 	<div class="modal-dialog modal-sm modal-lg">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -599,8 +612,7 @@
 	</div>
 </div>
 
-<div aria-hidden="true" aria-labelledby="amenitiesFareRateModal" class="modal fade" id="amenitiesFareRateModal"
-	tab-index="-1">
+<div aria-hidden="true" aria-labelledby="amenitiesFareRateModal" class="modal fade" id="amenitiesFareRateModal" tab-index="-1">
 	<div class="modal-dialog modal-sm modal-lg">
 		<div class="modal-content">
 			<div class="modal-header">

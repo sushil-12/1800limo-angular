@@ -587,25 +587,6 @@
 								</mat-form-field>
 							</div>
 						</div>
-
-						<!-- List of Amenities -->
-						<!-- <div id="amenities-list-container">
-							<h3 class="fs-4 font-weight-bolder mt-5">
-								Vehicle Amenities
-							</h3>
-							<div class="row">
-								<div class="col-md-12">
-									<ul class="d-flex justify-content-start flex-wrap">
-										<li class="mr-5"
-											*ngFor="let amenity of Form.vehicle_amenities; index as amenity_index">
-											{{ amenity | titlecase }}
-											<span class="text-danger" *ngIf="amenity_obj.chargeable == 'yes'"> $ </span>
-										</li>
-									</ul>
-								</div>
-							</div>
-						</div> -->
-						<!-- List of Amenities Ends -->
 					</div>
 					<!-- Vehicle Selection/Preferences Ends -->
 
@@ -1170,7 +1151,7 @@
 				<!-- Amenities Selection -->
 				<div class="row mt-5 mx-2">
 					<h3 class="fs-4 font-weight-bolder mx-3">
-						Choose Amenities *
+						Choose Amenities
 						<span> (Choose each amenity you supply or provide) </span>
 					</h3>
 					<label class="ml-5 alert alert-danger">
@@ -1181,7 +1162,8 @@
 						<div class="custom-control custom-checkbox"
 							*ngFor="let amenity of big_data_list?.amenity; index as amenity_index">
 							<input type="checkbox" class="custom-control-input" id="amenity_{{ amenity_index }}"
-								[value]="amenity.id" (change)="changeDetection.checkbox($event, 'amenities')"
+								[value]="amenity.id"
+								(change)="changeDetection.checkbox($event, 'amenities', amenity.chargeable == 'yes')"
 								[checked]="isCheckboxSelected(editing_data != undefined ? editing_data.amenities : null, 'id', amenity)">
 							<label class="custom-control-label" for="amenity_{{ amenity_index }}">
 								{{ amenity.name }}

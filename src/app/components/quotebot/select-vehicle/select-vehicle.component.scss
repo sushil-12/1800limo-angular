@@ -11,13 +11,17 @@
 }
 
 section#vehicle-listing-container {
+	&:last-child
+	{
+		margin-bottom: 2rem;
+	}
 	#vehicle-details-card.card {
 		width        : 23.3rem;
 		border-radius: 1.3rem;
 		padding      : 0.85rem;
 		border       : 1.5px solid var(--orange);
-		height       : 24rem;
-		min-height   : 24rem;
+		height       : fit-content;
+		min-height   : 25rem;
 
 		img.card-img-top {
 			width        : 100%;
@@ -39,26 +43,13 @@ section#vehicle-listing-container {
 					&:not(p small) {
 						color: #000;
 					}
-				}
-			}
-
-			small {
-				font-size   : 14px;
-				font-weight : 500;
-				color       : #444444;
-				float       : right;
-				margin-top  : -42px;
-				margin-right: -10px;
-			}
-
-			@media only screen and (max-width:767px) {
-				small {
-					font-size   : 18px;
-					font-weight : 500;
-					color       : #444444;
-					float       : right;
-					margin-top  : -48px;
-					margin-right: -10px;
+					small {
+						font-size   : 14px;
+						font-weight : 500;
+						color       : #444444;
+						float       : right;
+						line-height: 2rem;
+					}
 				}
 			}
 		}

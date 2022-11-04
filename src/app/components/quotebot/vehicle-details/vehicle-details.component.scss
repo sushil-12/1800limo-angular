@@ -1,3 +1,14 @@
+hr
+{
+	margin: 0.5rem 0 0.5rem 0;
+	border-top: 1px solid transparent;
+}
+hr.blue-line
+{
+	border-top: 1px solid #8ab4f8;
+}
+
+
 .pro-Fil * {
 	font-size: 14px;
 	color    : #000;
@@ -362,11 +373,11 @@ img.img-cir {
 	cursor       : pointer;
 
 	img {
-		padding      : 0px 40px;
-		height       : 60px;
-		-o-object-fit: contain;
-		object-fit   : contain;
-		width        : 145px;
+		// padding      : 0px 40px;
+		height       : 35px;
+		-o-object-fit: cover;
+		object-fit   : cover;
+		width        : 115px;
 	}
 }
 
@@ -429,6 +440,17 @@ button.custom-btn {
 }
 
 @media only screen and (max-width: 767px) {
+	.close {
+			position: absolute;
+			top: -20px;
+			right: 15px;
+			border-radius: 45px;
+			width: 20px;
+			color: red !important;
+			height: 20px;
+			background-color: #fff !important;
+		}
+		
 	.img-Block img {
 		max-width: 100%;
 	}
@@ -478,7 +500,7 @@ button.custom-btn {
 	}
 }
 
-@media (min-width:381px) and (max-width:767px) {
+@media only screen and (min-width:381px) and (max-width:767px) {
 	.pro-Fil {
 		padding: 0 !important;
 	}
@@ -500,7 +522,7 @@ button.custom-btn {
 	}
 }
 
-@media (min-width:768px) and (max-width:991px) {
+@media only screen and (min-width:768px) and (max-width:991px) {
 	.pro-Fil {
 		padding-top: 30px !important;
 	}
@@ -518,7 +540,7 @@ button.custom-btn {
 	}
 }
 
-@media (min-width:768px) and (max-width:991px) {
+@media only screen and (min-width:768px) and (max-width:991px) {
 	#big .item img {
 		height       : 190px;
 		width        : auto;
@@ -528,7 +550,7 @@ button.custom-btn {
 	}
 }
 
-@media (min-width:992px) and (max-width:1199px) {
+@media only screen and (min-width:992px) and (max-width:1199px) {
 	#thumbs .item img {
 		padding           : 0px 30px;
 		height            : 50px;
@@ -567,17 +589,4 @@ button.custom-btn {
 	position: relative;
 	top     : -12px;
 	right   : 6px;
-}
-
-@media only screen and (max-width:767px) {
-	.close {
-		position        : absolute;
-		top             : -20px;
-		right           : 15px;
-		border-radius   : 45px;
-		width           : 20px;
-		color           : red !important;
-		height          : 20px;
-		background-color: #fff !important;
-	}
 }

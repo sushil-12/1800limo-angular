@@ -80,6 +80,8 @@ export class HomeComponent implements OnInit
 
 	time_value_for_phone_only: string
 
+	vars: Object = {}
+
 
 	constructor(
 		private mapsAPILoader: MapsAPILoader,
@@ -562,6 +564,9 @@ export class HomeComponent implements OnInit
 		this.SetFormValue(field_name, value.id)
 		this.SetFormValue(field_name + '_lat', value.lat)
 		this.SetFormValue(field_name + '_long', value.lon)
+		this.vars[field_name + '_name'] = value.airport
+		if (field_name.includes('pickup_airport')) this.vars['return_dropoff_airport_name'] = value.airport
+		if (field_name.includes('dropoff_airport')) this.vars['return_pickup_airport_name'] = value.airport
 		this.fillReturnDetails()
 	}
 
@@ -909,6 +914,8 @@ export class HomeComponent implements OnInit
 			// })
 			// ).subscribe( (data: any) =>
 			// {
+			this.quoteBotForm.value['other_details'] = this.vars
+
 			console.log(`\n\n\n Receiving Response after filing the quote .....\n ${response} \n\n\n`)
 			localStorage.setItem('quotebot_form', JSON.stringify(this.quoteBotForm.value));
 			this.router.navigateByUrl('quotebot/select-vehicle');

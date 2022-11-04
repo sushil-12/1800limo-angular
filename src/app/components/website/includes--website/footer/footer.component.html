@@ -79,8 +79,8 @@
 									class="user-profile btn btn-icon btn-transparent-dark dropdown-toggle custom-filled-button"
 									style="padding: 0.875rem 2.258rem;" id="navbarDropdownUserImage" href="javascript:void(0);"
 									role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									{{currentUser.affiliateCompanyName ? currentUser.affiliateCompanyName :
-									currentUser.name}}
+									{{currentUser.affiliateCompanyName ? currentUser.affiliateCompanyName : currentUser.name ?
+									currentUser.name : currentUser.FirstName + currentUser.LastName.charAt(0)}}
 								</button>
 								<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
 									aria-labelledby="navbarDropdownUserImage">
@@ -91,8 +91,11 @@
 												clip-rule="evenodd" />
 										</svg>
 										<div class="dropdown-user-details">
-											<div class="dropdown-user-details-name">{{currentUser.affiliateCompanyName ?
-												currentUser.affiliateCompanyName : currentUser.name}}</div>
+											<div class="dropdown-user-details-name">
+												{{currentUser.affiliateCompanyName ? currentUser.affiliateCompanyName :
+												currentUser.name ?
+												currentUser.name : currentUser.FirstName + currentUser.LastName.charAt(0)}}
+											</div>
 										</div>
 									</h6>
 									<div class="dropdown-divider"></div>

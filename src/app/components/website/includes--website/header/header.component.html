@@ -71,8 +71,10 @@
 										clip-rule="evenodd" />
 								</svg>
 								<div class="dropdown-user-details">
-									<div class="dropdown-user-details-name">{{currentUser.affiliateCompanyName ?
-										currentUser.affiliateCompanyName : currentUser.name}}</div>
+									<div class="dropdown-user-details-name">
+										{{currentUser.affiliateCompanyName ? currentUser.affiliateCompanyName : currentUser.name ?
+										currentUser.name : currentUser.FirstName + currentUser.LastName.charAt(0)}}
+									</div>
 								</div>
 							</h6>
 							<div class="dropdown-divider"></div>

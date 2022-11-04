@@ -185,17 +185,6 @@ export class SelectVehicleComponent implements OnInit
 
 		this.fetchMasterVehicles()
 		this.getAllFilters()	// fetch filters from database
-
-		// fetch the last selected category
-		this.$state.get().subscribe((data: any) =>
-		{
-			if (data && data.filter_selections != undefined)
-			{
-				this.filters.selections = data.selected_filters
-				this.filters = data.filters_data
-				this.getVehicleDetails()
-			}
-		})
 	}
 	// ngOnInit ends
 
@@ -279,42 +268,50 @@ export class SelectVehicleComponent implements OnInit
 		this.$quotebotService.getAllFilters().subscribe((response: any) =>
 		{
 			this.$spinner.hide()
-			if (response.success)
+			for (let filter in response.data)
 			{
-				for (let filter in response.data)
-				{
-					// changing the name here? Do not forget to change in the includes and selected filters function.
-					response.data[filter].unshift({ name: 'any or all', checked: true })
-				}
-
-				// format every filter name from response
-				this.filters.original = JSON.parse(JSON.stringify(response.data)) // create a deep copy of the response object
-
-
-				// showing only till min_length
-				for (let filter in this.filters.original)
-				{
-					if (Array.isArray(this.filters.original[filter]) && this.filters.original[filter].length > this.min_length)
-					{
-						// assign the filter with specified length into a new object
-						this.filters.copy[filter] = this.filters.original[filter].slice(0, this.min_length)
-					} else
-					{
-						// else, assign the filter into the new object
-						this.filters.copy[filter] = this.filters.original[filter]
-					}
-				}
-
-
-				this.filters.copy['driver-background'] = [{
-					slug: 'child_certified_driver',
-					name: 'Child Certified Driver'
-				}]
-
-				console.group('Filters List: ', this.filters)
+				// changing the name here? Do not forget to change in the includes and selected filters function.
+				response.data[filter].unshift({ name: 'any or all', checked: true })
 			}
-			console.log('--------------------------------\n\n')
-			console.groupEnd()
+
+			// format every filter name from response
+			this.filters.original = JSON.parse(JSON.stringify(response.data)) // create a deep copy of the response object
+
+
+			// showing only till min_length
+			for (let filter in this.filters.original)
+			{
+				if (Array.isArray(this.filters.original[filter]) && this.filters.original[filter].length > this.min_length)
+				{
+					// assign the filter with specified length into a new object
+					this.filters.copy[filter] = this.filters.original[filter].slice(0, this.min_length)
+				} else
+				{
+					// else, assign the filter into the new object
+					this.filters.copy[filter] = this.filters.original[filter]
+				}
+			}
+
+
+			this.filters.copy['driver-background'] = [{
+				slug: 'child_certified_driver',
+				name: 'Child Certified Driver'
+			}]
+			// fetch the last selected category
+			this.$state.get().subscribe((data: any) =>
+			{
+				if (data && data.selected_filters != undefined)
+				{
+					data.selected_filters.forEach((item: { catg_name: string, fil_index: number }) => 
+					{
+						this.filterSelection(true, item.catg_name, item.fil_index)
+					})
+					this.getVehicleDetails()
+				}
+			})
+			// console.group('Filters List: ', this.filters)
+			// console.log('--------------------------------\n\n')
+			// console.groupEnd()
 		});
 	}
 
@@ -675,8 +672,7 @@ export class SelectVehicleComponent implements OnInit
 	{
 		sessionStorage.setItem('selected_vehicle', JSON.stringify(vehicle_selected))
 		this.$state.set({
-			selected_filters: this.filters.selections,
-			filters_data: this.filters.request
+			selected_filters: this.filters.selections
 		})
 		this.$router.navigate(['quotebot/vehicle-details'], {
 			queryParamsHandling: 'preserve'
@@ -827,14 +823,14 @@ export class SelectVehicleComponent implements OnInit
 		$('#view_all_images').modal('show')
 	}
 
-	clearFilters(filter_name: { category: string, name: string })
+	clearFilters(filter_name: { catg_name: string, fil_index: number })
 	{
 		if (this.filters.selections.length == 0) return // don't do anything if no filter is selected
 
 		if (filter_name !== null && this.filters.selections.length > 1)
 		{
 			// simply deselecting the filter will remove from selections and request
-			this.filterSelection(false, filter_name.category, this.filters.original[filter_name.category].findIndex(item => item['name'] == filter_name.name))
+			this.filterSelection(false, filter_name.catg_name, filter_name.fil_index)
 		} else
 		{
 			// empty the whole
