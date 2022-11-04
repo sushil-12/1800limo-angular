@@ -97,7 +97,12 @@ export class Step1Component implements OnInit, AfterViewInit
 	ngOnInit(): void
 	{
 		this.currentUser = this.authService.currentUserValue;
-		$('#instructionsModal').modal('show')
+		// no modal unless uncompleted
+		console.log(this.affiliateService.getLocalStepCompleted().findIndex(item => item == '1'), this.affiliateService.getLocalStepCompleted())
+		if (this.affiliateService.getLocalStepCompleted().findIndex(item => item == '1') === -1) 
+		{
+			$('#instructionsModal').modal('show')
+		}
 		//add affiliate form validation
 		this.addAffiliateAccountForm = this.formBuilder.group({
 			acc_id: [''],

@@ -135,25 +135,42 @@
 					<div class="row my-1">
 						<div class="col-lg-4">
 							<div class="title-block">
-								Service Type/Pickup Type/Dropoff Type
+								Service Type / Pickup Type / Dropoff Type
 							</div>
 						</div>
 						<div class="col-lg-4">
 							<div class="cont-block">
-								{{ quotebot_form.service_type.includes('charter') ? 'Charter Tour' : 'One Way' }}
+								{{ quotebot_form.service_type.includes('charter') ? 'Charter/Tour' : quotebot_form.service_type |
+								titlecase }}
 								/
 								{{ formatString(quotebot_form.pickup_type) | titlecase }}
-								/
+								to
 								{{ formatString(quotebot_form.dropoff_type) | titlecase }}
+								and
+								{{ quotebot_form.service_type.includes('round') ? 'Return' : '' }}
 							</div>
+
 						</div>
 					</div>
 
 					<hr />
 
-					<!-- One Way Details -->
-					<div>
-						<!-- Pickup Address -->
+					<div *ngIf="quotebot_form.pickup_type == 'airport'; else pickadd">
+						<div class="row my-1">
+							<div class="col-lg-4">
+								<div class="title-block">
+									Pickup Airport
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<div class="cont-block">
+									{{ quotebot_form.other_details.pickup_airport_name }}
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<ng-template #pickadd>
 						<div class="row my-1">
 							<div class="col-lg-4">
 								<div class="title-block">
@@ -166,10 +183,27 @@
 								</div>
 							</div>
 						</div>
+					</ng-template>
 
-						<hr class="blue-line" />
 
-						<!-- Dropoff Address -->
+					<hr class="blue-line" />
+
+					<div *ngIf="quotebot_form.dropoff_type == 'airport'; else dropadd">
+						<div class="row my-1">
+							<div class="col-lg-4">
+								<div class="title-block">
+									Dropoff Airport
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<div class="cont-block">
+									{{ quotebot_form.other_details.dropoff_airport_name }}
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<ng-template #dropadd>
 						<div class="row my-1">
 							<div class="col-lg-4">
 								<div class="title-block">
@@ -182,20 +216,20 @@
 								</div>
 							</div>
 						</div>
+					</ng-template>
 
-						<!-- Travel Time/Miles -->
-						<div class="row my-2">
-							<div class="col-lg-4">
-								<div class="title-block">
-									Travel Time/Miles
-								</div>
+					<!-- Travel Time/Miles -->
+					<div class="row my-2">
+						<div class="col-lg-4">
+							<div class="title-block">
+								Travel Time/Miles
 							</div>
-							<div class="col-lg-4">
-								<div class="cont-block">
-									{{ quotebot_form.location_info[0].duration.text }}
-									/
-									{{ ((quotebot_form.location_info[0].distance.value)/1609).toFixed(2) }} miles
-								</div>
+						</div>
+						<div class="col-lg-4">
+							<div class="cont-block">
+								{{ quotebot_form.location_info[0].duration.text }}
+								/
+								{{ ((quotebot_form.location_info[0].distance.value)/1609).toFixed(2) }} miles
 							</div>
 						</div>
 					</div>
@@ -205,7 +239,7 @@
 					<!-- Return Details -->
 					<div *ngIf="quotebot_form.service_type == 'round_trip'">
 						<h5 class="mt-4 text-org"> Return Details </h5>
-						<div class="row my-1">
+						<!-- <div class="row my-1">
 							<div class="col-lg-4">
 								<div class="title-block">
 									Service Type/Pickup Type/Dropoff Type
@@ -213,20 +247,35 @@
 							</div>
 							<div class="col-lg-4">
 								<div class="cont-block">
-									{{ quotebot_form.service_type.includes('charter') ? 'Charter Tour' : 'One Way' }}
+									{{ quotebot_form.service_type.includes('charter') ? 'Charter/Tour' :
+									quotebot_form.service_type | titlecase }}
 									/
 									{{ formatString(quotebot_form.dropoff_type) | titlecase }}
-									/
+									to
 									{{ formatString(quotebot_form.pickup_type) | titlecase }}
+								</div>
+							</div>
+						</div> -->
+
+						<hr />
+
+
+						<div *ngIf="quotebot_form.return_pickup_type == 'airport'; else pickadd">
+							<div class="row my-1">
+								<div class="col-lg-4">
+									<div class="title-block">
+										Pickup Airport
+									</div>
+								</div>
+								<div class="col-lg-4">
+									<div class="cont-block">
+										{{ quotebot_form.other_details.return_pickup_airport_name }}
+									</div>
 								</div>
 							</div>
 						</div>
 
-						<hr />
-
-						<!-- Return One Way Details -->
-						<div>
-							<!-- Pickup Address -->
+						<ng-template #pickadd>
 							<div class="row my-1">
 								<div class="col-lg-4">
 									<div class="title-block">
@@ -239,10 +288,27 @@
 									</div>
 								</div>
 							</div>
+						</ng-template>
 
-							<hr class="blue-line" />
 
-							<!-- Dropoff Address -->
+						<hr class="blue-line" />
+
+						<div *ngIf="quotebot_form.return_dropoff_type == 'airport'; else dropadd">
+							<div class="row my-1">
+								<div class="col-lg-4">
+									<div class="title-block">
+										Dropoff Airport
+									</div>
+								</div>
+								<div class="col-lg-4">
+									<div class="cont-block">
+										{{ quotebot_form.other_details.return_dropoff_airport_name }}
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<ng-template #dropadd>
 							<div class="row my-1">
 								<div class="col-lg-4">
 									<div class="title-block">
@@ -255,20 +321,20 @@
 									</div>
 								</div>
 							</div>
+						</ng-template>
 
-							<!-- Travel Time/Miles -->
-							<div class="row my-2">
-								<div class="col-lg-4">
-									<div class="title-block">
-										Travel Time/Miles
-									</div>
+						<!-- Travel Time/Miles -->
+						<div class="row my-2">
+							<div class="col-lg-4">
+								<div class="title-block">
+									Travel Time/Miles
 								</div>
-								<div class="col-lg-4">
-									<div class="cont-block">
-										{{ quotebot_form.location_info[1].duration.text }}
-										/
-										{{ ((quotebot_form.location_info[1].distance.value)/1609).toFixed(2) }} miles
-									</div>
+							</div>
+							<div class="col-lg-4">
+								<div class="cont-block">
+									{{ quotebot_form.location_info[1].duration.text }}
+									/
+									{{ ((quotebot_form.location_info[1].distance.value)/1609).toFixed(2) }} miles
 								</div>
 							</div>
 						</div>
