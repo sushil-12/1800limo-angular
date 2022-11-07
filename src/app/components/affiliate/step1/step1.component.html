@@ -635,11 +635,9 @@
 					<div class="selectStyle">
 						<select
 							class="selectInputStyle"
-							(click)="selectDropdownGender()"
 							formControlName="Gender"
 							tabindex="1"
 						>
-							<option value="">Choose Gender</option>
 							<option value="male">Male</option>
 							<option value="female">Female</option>
 							<option value="lgbtq+">X (LGBTQAI+)</option>
@@ -689,13 +687,9 @@
 					<div class="selectStyle">
 						<select
 							class="selectInputStyle"
-							(click)="selectDropdownYears()"
 							formControlName="FirstYearBusiness"
 							tabindex="1"
 						>
-							<option value="">
-								Choose Start Business Years - Pro Driver
-							</option>
 							<option
 								*ngFor="
 									let startBusinessYear of startBusinessYears

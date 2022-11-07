@@ -488,16 +488,6 @@ export class Step1Component implements OnInit, AfterViewInit {
 			});
 	}
 
-	selectDropdownGender() {
-		$(".selectGenderLabel")
-			.removeClass("selectGenderLabel ")
-			.addClass("select-gender-label");
-	}
-	selectDropdownYears() {
-		$(".selectYearLabel")
-			.removeClass("selectYearLabel ")
-			.addClass("select-year-label");
-	}
 	closeButton() {
 		this.closeTab.emit();
 	}
