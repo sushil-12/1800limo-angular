@@ -7,6 +7,7 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { Router } from '@angular/router';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
+import { state } from '@angular/animations';
 declare var $: any;
 
 @Component({
@@ -76,6 +77,7 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 		});
 
 		const tree = this.router.parseUrl(this.router.url);
+		console.log(tree)
 		this.secondPartUrl = tree.root.children.primary.segments[1].path;
 		const step = this.secondPartUrl.charAt(this.secondPartUrl.length - 1);
 
@@ -91,66 +93,89 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 		this.checkApplicationStatus()
 	}
 
+	/**
+	 * API hit for checking the verification status
+	 * 
+	 * @param account_id: Number [Required] Logged in user account id
+	 * @returns: Promise of type returned data from api
+	 */
+	checkVerification(account_id: number): Promise<any>
+	{
+		return new Promise((resolve, reject) =>
+		{
+			this.affiliateService.affiliateVerificationStatus(account_id).pipe(
+				catchError(err =>
+				{
+					this.spinner.hide(); //hide spinner
+					reject(err)
+					return throwError(err);
+				})
+			).subscribe((response: any) =>
+			{
+				resolve(response.data)
+			})
+		})
+	}
 	checkApplicationStatus()
 	{
 		console.info('Checking Verification Status')
 		let currentUser = JSON.parse(localStorage.getItem('currentUser'))
-		if (currentUser.account_id)
+		let C_V: Array<number> = [] 	// state for completed and verified steps
+		// make sure the driver is logged in before checking the verification status
+		if (currentUser && currentUser.roleName == 'driver' && currentUser.account_id)
 		{
 			const interval = setInterval(() =>
 			{
 				let steps_completed = this.affiliateService.getLocalStepCompletedObject()
-				console.log(Object.values(steps_completed))
-				// if the account is sent for verification after completing all steps, stop hitting the api
-				if (Object.values(steps_completed).length == 7 && Object.values(steps_completed).filter(item => item != 'completed').length == 0)
+				// check for the verification status, api should hit once per interval
+				this.checkVerification(currentUser.account_id).then((data) =>
 				{
-					console.log('Interval Cleared')
-					clearInterval(interval)
-					return
-				}
-
-				// hit the api
-				this.affiliateService.affiliateVerificationStatus(currentUser.account_id).pipe(
-					catchError(err =>
+					// check for step 1
+					if (steps_completed.hasOwnProperty('step1') && steps_completed.step1 != 'uncompleted')
 					{
-						this.spinner.hide(); //hide spinner
-						return throwError(err);
-					})
-				).subscribe((response: any) =>
-				{
-					response = response.data	// just for ease of access to use here
-
-					this.is_show_verification_icon = true	// show the verification icon and the red status
-
-					// check for email verification from backend and stop checking if verified
-					if (response['is_email_verified'] == 'yes')
-					{
-						if (response['affiliate_type'] == 'gig_operator')
+						// toggle the icon and state for email verification
+						// check for only one email in case of Gig Operator
+						if ((data['affiliate_type'] == 'gig_operator' && data['is_email_verified'] == 'yes') || (data['is_email_verified'] == 'yes' && data['dispatch_is_email_verified'] == 'yes'))
 						{
-							console.log('Gig Operator')
-							// for gig only check for one email
 							this.is_email_verified = true
-							this.getStatusData()
+							this.is_show_verification_icon = false
 						}
-						if (response['dispatch_is_email_verified'] == 'yes')
+						else
 						{
-							console.log('Dispatch verified')
-							this.getStatusData()
-							this.is_email_verified = true	// remove the icon and show green status
-							clearInterval(interval)
+							this.is_email_verified = false
+							this.is_show_verification_icon = true
 						}
+					} else
+					{
+						C_V.push(1)
 					}
 
-
-					// check for stripe verification from backend and stop checking if verified
-					if ((response['stripe_address_status'] == 'valid' && response['transfer_status'] == 'active' && response['additional_doc_verification_status'].toLowerCase() == 'verified'))
+					// check for step 2
+					if (steps_completed.hasOwnProperty('step2') && steps_completed.step2 != 'uncompleted')
 					{
-						if (steps_completed['step2'] == 'completed')
+						// toggle the icon and state of bank verification
+						if ((data['stripe_address_status'].toLowerCase() == 'valid' && data['transfer_status'].toLowerCase() == 'active' && data['additional_doc_verification_status'].toLowerCase() == 'verified'))
 						{
-							console.log('Interval Cleared 2')
-							clearInterval(interval)
+							this.is_bank_verified = true
+							this.is_show_verification_icon = false
 						}
-						this.is_bank_verified = true
+						else
+						{
+							this.is_bank_verified = false
+							this.is_show_verification_icon = true
+						}
+					}
+					else
+					{
+						C_V.push(2)
+					}
+
+					// Clear Interval when both steps are completed and verified
+					if (C_V.indexOf(1) != -1 && C_V.indexOf(2) != -1)
+					{
+						clearInterval(interval)
+						console.log('Cleared for both steps are completed and verified.')
+						return
 					}
 				})
 			}, 20000)
