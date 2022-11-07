@@ -1,20 +1,42 @@
-<form [formGroup]="addAffiliateAccountForm" class="step_form_wrapper" appInvalidControlScroll>
+<form
+	[formGroup]="addAffiliateAccountForm"
+	class="step_form_wrapper"
+	appInvalidControlScroll
+>
 	<section class="user_information">
 		<h2 class="headinginfo">Owner Information</h2>
 		<div class="container">
 			<div class="row custom-radio-row">
 				<div class="col-12">
-					<h3 class="headinginfoH3">Choose one<span class="asterisk"> *</span></h3>
+					<h3 class="headinginfoH3">
+						Choose one<span class="asterisk"> *</span>
+					</h3>
 				</div>
 				<div class="col-md-3 selectedAffiliateType">
 					<div class="form-group radio-tile-group">
 						<div class="custom-radio input-container" tabIndex="1">
-							<input class="radio-button" type="radio" id="black_limo" value="black_limo_operator"
-								name="AffiliateType" checked="" formControlName="AffiliateType" selected
-								(click)="affiliateTypeSwitch('black_limo_operator')" tabIndex="-1" />
+							<input
+								class="radio-button"
+								type="radio"
+								id="black_limo"
+								value="black_limo_operator"
+								name="AffiliateType"
+								checked=""
+								formControlName="AffiliateType"
+								selected
+								(click)="
+									affiliateTypeSwitch('black_limo_operator')
+								"
+								tabIndex="-1"
+							/>
 							<div class="radio-tile blacklimo">
-								<div class="check"><svg id="Layer_1" data-name="Layer 1"
-										xmlns="http://www.w3.org/2000/svg" viewBox="0 0 122.88 122.88">
+								<div class="check">
+									<svg
+										id="Layer_1"
+										data-name="Layer 1"
+										xmlns="http://www.w3.org/2000/svg"
+										viewBox="0 0 122.88 122.88"
+									>
 										<defs>
 											<style>
 												.checked-1 {
@@ -32,15 +54,27 @@
 											</style>
 										</defs>
 										<title>confirm</title>
-										<path class="checked-1"
-											d="M61.44,0A61.44,61.44,0,1,1,0,61.44,61.44,61.44,0,0,1,61.44,0Z" />
-										<path class="cls-2"
-											d="M42.37,51.68,53.26,62,79,35.87c2.13-2.16,3.47-3.9,6.1-1.19l8.53,8.74c2.8,2.77,2.66,4.4,0,7L58.14,85.34c-5.58,5.46-4.61,5.79-10.26.19L28,65.77c-1.18-1.28-1.05-2.57.24-3.84l9.9-10.27c1.5-1.58,2.7-1.44,4.22,0Z" />
-									</svg></div>
-								<label class="radio-tile-label"
-									[ngClass]="selectedAffiliate=='black_limo_operator' ? 'active' : ''"
-									for="black_limo">Black
-									Car/Limo Owner Op.</label>
+										<path
+											class="checked-1"
+											d="M61.44,0A61.44,61.44,0,1,1,0,61.44,61.44,61.44,0,0,1,61.44,0Z"
+										/>
+										<path
+											class="cls-2"
+											d="M42.37,51.68,53.26,62,79,35.87c2.13-2.16,3.47-3.9,6.1-1.19l8.53,8.74c2.8,2.77,2.66,4.4,0,7L58.14,85.34c-5.58,5.46-4.61,5.79-10.26.19L28,65.77c-1.18-1.28-1.05-2.57.24-3.84l9.9-10.27c1.5-1.58,2.7-1.44,4.22,0Z"
+										/>
+									</svg>
+								</div>
+								<label
+									class="radio-tile-label"
+									[ngClass]="
+										selectedAffiliate ==
+										'black_limo_operator'
+											? 'active'
+											: ''
+									"
+									for="black_limo"
+									>Black Car/Limo Owner Op.</label
+								>
 							</div>
 						</div>
 					</div>
@@ -48,12 +82,25 @@
 				<div class="col-md-3 selectedAffiliateType">
 					<div class="form-group radio-tile-group">
 						<div class="custom-radio input-container" tabIndex="1">
-							<input class="radio-button" type="radio" id="fleet" value="fleet_operator"
-								name="AffiliateType" checked="" formControlName="AffiliateType"
-								(click)="affiliateTypeSwitch('fleet_operator')" tabIndex="-1" />
+							<input
+								class="radio-button"
+								type="radio"
+								id="fleet"
+								value="fleet_operator"
+								name="AffiliateType"
+								checked=""
+								formControlName="AffiliateType"
+								(click)="affiliateTypeSwitch('fleet_operator')"
+								tabIndex="-1"
+							/>
 							<div class="radio-tile blacklimo">
-								<div class="check"><svg id="Layer_1" data-name="Layer 1"
-										xmlns="http://www.w3.org/2000/svg" viewBox="0 0 122.88 122.88">
+								<div class="check">
+									<svg
+										id="Layer_1"
+										data-name="Layer 1"
+										xmlns="http://www.w3.org/2000/svg"
+										viewBox="0 0 122.88 122.88"
+									>
 										<defs>
 											<style>
 												.checked-1 {
@@ -71,14 +118,26 @@
 											</style>
 										</defs>
 										<title>confirm</title>
-										<path class="checked-1"
-											d="M61.44,0A61.44,61.44,0,1,1,0,61.44,61.44,61.44,0,0,1,61.44,0Z" />
-										<path class="cls-2"
-											d="M42.37,51.68,53.26,62,79,35.87c2.13-2.16,3.47-3.9,6.1-1.19l8.53,8.74c2.8,2.77,2.66,4.4,0,7L58.14,85.34c-5.58,5.46-4.61,5.79-10.26.19L28,65.77c-1.18-1.28-1.05-2.57.24-3.84l9.9-10.27c1.5-1.58,2.7-1.44,4.22,0Z" />
-									</svg></div>
-								<label class="radio-tile-label"
-									[ngClass]="selectedAffiliate=='fleet_operator' ? 'active' : ''" for="fleet">Fleet
-									Operator Owned</label>
+										<path
+											class="checked-1"
+											d="M61.44,0A61.44,61.44,0,1,1,0,61.44,61.44,61.44,0,0,1,61.44,0Z"
+										/>
+										<path
+											class="cls-2"
+											d="M42.37,51.68,53.26,62,79,35.87c2.13-2.16,3.47-3.9,6.1-1.19l8.53,8.74c2.8,2.77,2.66,4.4,0,7L58.14,85.34c-5.58,5.46-4.61,5.79-10.26.19L28,65.77c-1.18-1.28-1.05-2.57.24-3.84l9.9-10.27c1.5-1.58,2.7-1.44,4.22,0Z"
+										/>
+									</svg>
+								</div>
+								<label
+									class="radio-tile-label"
+									[ngClass]="
+										selectedAffiliate == 'fleet_operator'
+											? 'active'
+											: ''
+									"
+									for="fleet"
+									>Fleet Operator Owned</label
+								>
 							</div>
 						</div>
 					</div>
@@ -86,12 +145,24 @@
 				<div class="col-md-3 selectedAffiliateType">
 					<div class="form-group radio-tile-group">
 						<div class="custom-radio input-container" tabIndex="1">
-							<input class="radio-button" type="radio" id="taxi" value="taxi_operator"
-								name="AffiliateType" formControlName="AffiliateType"
-								(click)="affiliateTypeSwitch('taxi_operator')" tabIndex="-1" />
+							<input
+								class="radio-button"
+								type="radio"
+								id="taxi"
+								value="taxi_operator"
+								name="AffiliateType"
+								formControlName="AffiliateType"
+								(click)="affiliateTypeSwitch('taxi_operator')"
+								tabIndex="-1"
+							/>
 							<div class="radio-tile">
-								<div class="check"><svg id="Layer_1" data-name="Layer 1"
-										xmlns="http://www.w3.org/2000/svg" viewBox="0 0 122.88 122.88">
+								<div class="check">
+									<svg
+										id="Layer_1"
+										data-name="Layer 1"
+										xmlns="http://www.w3.org/2000/svg"
+										viewBox="0 0 122.88 122.88"
+									>
 										<defs>
 											<style>
 												.checked-1 {
@@ -109,14 +180,26 @@
 											</style>
 										</defs>
 										<title>confirm</title>
-										<path class="checked-1"
-											d="M61.44,0A61.44,61.44,0,1,1,0,61.44,61.44,61.44,0,0,1,61.44,0Z" />
-										<path class="cls-2"
-											d="M42.37,51.68,53.26,62,79,35.87c2.13-2.16,3.47-3.9,6.1-1.19l8.53,8.74c2.8,2.77,2.66,4.4,0,7L58.14,85.34c-5.58,5.46-4.61,5.79-10.26.19L28,65.77c-1.18-1.28-1.05-2.57.24-3.84l9.9-10.27c1.5-1.58,2.7-1.44,4.22,0Z" />
-									</svg></div>
-								<label class="radio-tile-label"
-									[ngClass]="selectedAffiliate=='taxi_operator' ? 'active' : ''" for="taxi">Taxi
-									Operator</label>
+										<path
+											class="checked-1"
+											d="M61.44,0A61.44,61.44,0,1,1,0,61.44,61.44,61.44,0,0,1,61.44,0Z"
+										/>
+										<path
+											class="cls-2"
+											d="M42.37,51.68,53.26,62,79,35.87c2.13-2.16,3.47-3.9,6.1-1.19l8.53,8.74c2.8,2.77,2.66,4.4,0,7L58.14,85.34c-5.58,5.46-4.61,5.79-10.26.19L28,65.77c-1.18-1.28-1.05-2.57.24-3.84l9.9-10.27c1.5-1.58,2.7-1.44,4.22,0Z"
+										/>
+									</svg>
+								</div>
+								<label
+									class="radio-tile-label"
+									[ngClass]="
+										selectedAffiliate == 'taxi_operator'
+											? 'active'
+											: ''
+									"
+									for="taxi"
+									>Taxi Operator</label
+								>
 							</div>
 						</div>
 					</div>
@@ -124,12 +207,24 @@
 				<div class="col-md-3 selectedAffiliateType">
 					<div class="form-group radio-tile-group">
 						<div class="custom-radio input-container" tabIndex="1">
-							<input class="radio-button" type="radio" id="gig" value="gig_operator" name="AffiliateType"
-								formControlName="AffiliateType" (click)="affiliateTypeSwitch('gig_operator')"
-								tabIndex="-1" />
+							<input
+								class="radio-button"
+								type="radio"
+								id="gig"
+								value="gig_operator"
+								name="AffiliateType"
+								formControlName="AffiliateType"
+								(click)="affiliateTypeSwitch('gig_operator')"
+								tabIndex="-1"
+							/>
 							<div class="radio-tile GigOperator">
-								<div class="check"><svg id="Layer_1" data-name="Layer 1"
-										xmlns="http://www.w3.org/2000/svg" viewBox="0 0 122.88 122.88">
+								<div class="check">
+									<svg
+										id="Layer_1"
+										data-name="Layer 1"
+										xmlns="http://www.w3.org/2000/svg"
+										viewBox="0 0 122.88 122.88"
+									>
 										<defs>
 											<style>
 												.checked-1 {
@@ -147,161 +242,367 @@
 											</style>
 										</defs>
 										<title>confirm</title>
-										<path class="checked-1"
-											d="M61.44,0A61.44,61.44,0,1,1,0,61.44,61.44,61.44,0,0,1,61.44,0Z" />
-										<path class="cls-2"
-											d="M42.37,51.68,53.26,62,79,35.87c2.13-2.16,3.47-3.9,6.1-1.19l8.53,8.74c2.8,2.77,2.66,4.4,0,7L58.14,85.34c-5.58,5.46-4.61,5.79-10.26.19L28,65.77c-1.18-1.28-1.05-2.57.24-3.84l9.9-10.27c1.5-1.58,2.7-1.44,4.22,0Z" />
-									</svg></div>
-								<label class="radio-tile-label"
-									[ngClass]="selectedAffiliate=='gig_operator' ? 'active' : ''" for="gig">Gig
-									Operator</label>
+										<path
+											class="checked-1"
+											d="M61.44,0A61.44,61.44,0,1,1,0,61.44,61.44,61.44,0,0,1,61.44,0Z"
+										/>
+										<path
+											class="cls-2"
+											d="M42.37,51.68,53.26,62,79,35.87c2.13-2.16,3.47-3.9,6.1-1.19l8.53,8.74c2.8,2.77,2.66,4.4,0,7L58.14,85.34c-5.58,5.46-4.61,5.79-10.26.19L28,65.77c-1.18-1.28-1.05-2.57.24-3.84l9.9-10.27c1.5-1.58,2.7-1.44,4.22,0Z"
+										/>
+									</svg>
+								</div>
+								<label
+									class="radio-tile-label"
+									[ngClass]="
+										selectedAffiliate == 'gig_operator'
+											? 'active'
+											: ''
+									"
+									for="gig"
+									>Gig Operator</label
+								>
 							</div>
 						</div>
 					</div>
 				</div>
 				<div class="col-md-12">
-					<div *ngIf="submittedForm && f.AffiliateType.errors || f.AffiliateType.touched && f.AffiliateType.errors"
-						class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.AffiliateType.errors.required">Please choose atleast one affiliate.</div>
+					<div
+						*ngIf="
+							(submittedForm && f.AffiliateType.errors) ||
+							(f.AffiliateType.touched && f.AffiliateType.errors)
+						"
+						class="text-danger margin-bottom-thin my-mat-hint"
+					>
+						<div *ngIf="f.AffiliateType.errors.required">
+							Please choose atleast one affiliate.
+						</div>
 					</div>
 				</div>
 			</div>
 			<div class="row">
 				<div class="col-md-4">
 					<mat-form-field appearance="outline">
-						<mat-label>First Name <span class="asterisk">*</span></mat-label>
-						<input matInput placeholder="First Name" formControlName="FirstName" id="FirstName"
-							tabIndex="1">
+						<mat-label
+							>First Name
+							<span class="asterisk">*</span></mat-label
+						>
+						<input
+							matInput
+							placeholder="First Name"
+							formControlName="FirstName"
+							id="FirstName"
+							tabIndex="1"
+						/>
 					</mat-form-field>
-					<div *ngIf="submittedForm && f.FirstName.errors || f.FirstName.touched && f.FirstName.errors"
-						class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.FirstName.errors.required">This field is required</div>
+					<div
+						*ngIf="
+							(submittedForm && f.FirstName.errors) ||
+							(f.FirstName.touched && f.FirstName.errors)
+						"
+						class="text-danger margin-bottom-thin my-mat-hint"
+					>
+						<div *ngIf="f.FirstName.errors.required">
+							This field is required
+						</div>
 					</div>
 				</div>
 				<div class="col-md-4">
 					<mat-form-field appearance="outline">
 						<mat-label>Middle Name</mat-label>
-						<input matInput placeholder="Middle Name" formControlName="MiddleName" tabIndex="1">
+						<input
+							matInput
+							placeholder="Middle Name"
+							formControlName="MiddleName"
+							tabIndex="1"
+						/>
 					</mat-form-field>
-					<div *ngIf="submittedForm && f.MiddleName.errors || f.MiddleName.touched && f.MiddleName.errors"
-						class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.MiddleName.errors.required">This field is required</div>
+					<div
+						*ngIf="
+							(submittedForm && f.MiddleName.errors) ||
+							(f.MiddleName.touched && f.MiddleName.errors)
+						"
+						class="text-danger margin-bottom-thin my-mat-hint"
+					>
+						<div *ngIf="f.MiddleName.errors.required">
+							This field is required
+						</div>
 					</div>
 				</div>
 				<div class="col-md-4">
 					<mat-form-field appearance="outline">
-						<mat-label>Last Name <span class="asterisk">*</span></mat-label>
-						<input matInput placeholder="Last Name" formControlName="LastName" tabIndex="1">
+						<mat-label
+							>Last Name
+							<span class="asterisk">*</span></mat-label
+						>
+						<input
+							matInput
+							placeholder="Last Name"
+							formControlName="LastName"
+							tabIndex="1"
+						/>
 					</mat-form-field>
-					<div *ngIf="submittedForm && f.LastName.errors || f.LastName.touched && f.LastName.errors"
-						class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.LastName.errors.required">This field is required</div>
+					<div
+						*ngIf="
+							(submittedForm && f.LastName.errors) ||
+							(f.LastName.touched && f.LastName.errors)
+						"
+						class="text-danger margin-bottom-thin my-mat-hint"
+					>
+						<div *ngIf="f.LastName.errors.required">
+							This field is required
+						</div>
 					</div>
 				</div>
-				<div class="col-md-6" *ngIf="!affiliateId; else showEditEmailButton">
+				<div
+					class="col-md-6"
+					*ngIf="!affiliateId; else showEditEmailButton"
+				>
 					<mat-form-field appearance="outline">
-						<mat-label>Owner / Admin E-mail <span class="asterisk">*</span></mat-label>
-						<input matInput placeholder="Owner / Admin E-mail" formControlName="Email" tabIndex="1">
+						<mat-label
+							>Owner / Admin E-mail
+							<span class="asterisk">*</span></mat-label
+						>
+						<input
+							matInput
+							placeholder="Owner / Admin E-mail"
+							formControlName="Email"
+							tabIndex="1"
+						/>
 					</mat-form-field>
-					<div *ngIf="submittedForm && f.Email.errors || f.Email.touched && f.Email.errors"
-						class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.Email.errors.required">This field is required</div>
+					<div
+						*ngIf="
+							(submittedForm && f.Email.errors) ||
+							(f.Email.touched && f.Email.errors)
+						"
+						class="text-danger margin-bottom-thin my-mat-hint"
+					>
+						<div *ngIf="f.Email.errors.required">
+							This field is required
+						</div>
 					</div>
-					<div *ngIf="f.Email.errors" class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.Email.errors.pattern">Email format should be valid</div>
+					<div
+						*ngIf="f.Email.errors"
+						class="text-danger margin-bottom-thin my-mat-hint"
+					>
+						<div *ngIf="f.Email.errors.pattern">
+							Email format should be valid
+						</div>
 					</div>
 				</div>
 				<ng-template #showEditEmailButton>
 					<div class="col-md-6" id="emailText">
-						<mat-form-field appearance="outline" [class.read-only]="affiliateEmailReadonly == true">
-							<mat-label>Owner / Admin E-mail <span class="asterisk">*</span></mat-label>
-							<input [class.errorColor]="affiliateEmailStatus=='no'" matInput
-								placeholder="Owner / Admin E-mail" formControlName="Email"
-								[readonly]="affiliateEmailReadonly" tabIndex="1" id="email_verified">
-							<svg *ngIf="affiliateEmailStatus=='yes'" xmlns="http://www.w3.org/2000/svg"
-								class="email-verified" viewBox="0 0 48 48">
+						<mat-form-field
+							appearance="outline"
+							[class.read-only]="affiliateEmailReadonly == true"
+						>
+							<mat-label
+								>Owner / Admin E-mail
+								<span class="asterisk">*</span></mat-label
+							>
+							<input
+								[class.errorColor]="
+									affiliateEmailStatus == 'no'
+								"
+								matInput
+								placeholder="Owner / Admin E-mail"
+								formControlName="Email"
+								[readonly]="affiliateEmailReadonly"
+								tabIndex="1"
+								id="email_verified"
+							/>
+							<svg
+								*ngIf="affiliateEmailStatus == 'yes'"
+								xmlns="http://www.w3.org/2000/svg"
+								class="email-verified"
+								viewBox="0 0 48 48"
+							>
 								<path fill="none" d="M0 0h48v48h-48z" />
 								<path
-									d="M24 2l-18 8v12c0 11.11 7.67 21.47 18 24 10.33-2.53 18-12.89 18-24v-12l-18-8zm-4 32l-8-8 2.83-2.83 5.17 5.17 13.17-13.17 2.83 2.83-16 16z" />
+									d="M24 2l-18 8v12c0 11.11 7.67 21.47 18 24 10.33-2.53 18-12.89 18-24v-12l-18-8zm-4 32l-8-8 2.83-2.83 5.17 5.17 13.17-13.17 2.83 2.83-16 16z"
+								/>
 							</svg>
-							<svg *ngIf="affiliateEmailStatus=='no'" xmlns="http://www.w3.org/2000/svg"
-								class="email-not-verified" viewBox="0 0 32 32">
+							<svg
+								*ngIf="affiliateEmailStatus == 'no'"
+								xmlns="http://www.w3.org/2000/svg"
+								class="email-not-verified"
+								viewBox="0 0 32 32"
+							>
 								<g data-name="26 - error">
-									<polygon points="16 24 16.5 24 16 23.999 16 24" />
+									<polygon
+										points="16 24 16.5 24 16 23.999 16 24"
+									/>
 									<path
-										d="M29.658,25.354,18.871,3.774a3.21,3.21,0,0,0-5.742,0L2.342,25.354A3.209,3.209,0,0,0,5.212,30H26.788a3.209,3.209,0,0,0,2.87-4.646ZM16,25a1,1,0,1,1,1-1A1,1,0,0,1,16,25Zm1-5a1,1,0,0,1-2,0V12a1,1,0,0,1,2,0Z" />
+										d="M29.658,25.354,18.871,3.774a3.21,3.21,0,0,0-5.742,0L2.342,25.354A3.209,3.209,0,0,0,5.212,30H26.788a3.209,3.209,0,0,0,2.87-4.646ZM16,25a1,1,0,1,1,1-1A1,1,0,0,1,16,25Zm1-5a1,1,0,0,1-2,0V12a1,1,0,0,1,2,0Z"
+									/>
 								</g>
 							</svg>
 						</mat-form-field>
-						<div *ngIf="submittedForm && f.Email.errors || f.Email.touched && f.Email.errors"
-							class="text-danger margin-bottom-thin my-mat-hint">
-							<div *ngIf="f.Email.errors.required">This field is required</div>
+						<div
+							*ngIf="
+								(submittedForm && f.Email.errors) ||
+								(f.Email.touched && f.Email.errors)
+							"
+							class="text-danger margin-bottom-thin my-mat-hint"
+						>
+							<div *ngIf="f.Email.errors.required">
+								This field is required
+							</div>
 						</div>
-						<div *ngIf="f.Email.errors" class="text-danger margin-bottom-thin my-mat-hint">
-							<div *ngIf="f.Email.errors.pattern">Email format should be valid</div>
+						<div
+							*ngIf="f.Email.errors"
+							class="text-danger margin-bottom-thin my-mat-hint"
+						>
+							<div *ngIf="f.Email.errors.pattern">
+								Email format should be valid
+							</div>
 						</div>
 					</div>
 					<div class="col-md-6">
-						<button *ngIf="affiliateEmailButton=='edit'" type="button" class="edit-email"
-							(click)="affiliateEmailButtonClick('edit')" tabIndex="1">
-							<svg xmlns="http://www.w3.org/2000/svg" style="margin-bottom:5px"
-								enable-background="new 0 0 32 32" viewBox="0 0 32 32">
+						<button
+							*ngIf="affiliateEmailButton == 'edit'"
+							type="button"
+							class="edit-email"
+							(click)="affiliateEmailButtonClick('edit')"
+							tabIndex="1"
+						>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								style="margin-bottom: 5px"
+								enable-background="new 0 0 32 32"
+								viewBox="0 0 32 32"
+							>
 								<path
-									d="M12.82373,12.95898l-1.86279,6.21191c-0.1582,0.52832-0.01367,1.10156,0.37646,1.49121c0.28516,0.28516,0.66846,0.43945,1.06055,0.43945c0.14404,0,0.28906-0.02051,0.43066-0.06348l6.2124-1.8623c0.23779-0.07129,0.45459-0.2002,0.62988-0.37598L31.06055,7.41016C31.3418,7.12891,31.5,6.74707,31.5,6.34961s-0.1582-0.7793-0.43945-1.06055l-4.3501-4.34961c-0.58594-0.58594-1.53516-0.58594-2.12109,0L13.2002,12.3291C13.02441,12.50488,12.89551,12.7207,12.82373,12.95898z M15.58887,14.18262L25.6499,4.12109l2.22852,2.22852L17.81738,16.41113l-3.18262,0.9541L15.58887,14.18262z" />
+									d="M12.82373,12.95898l-1.86279,6.21191c-0.1582,0.52832-0.01367,1.10156,0.37646,1.49121c0.28516,0.28516,0.66846,0.43945,1.06055,0.43945c0.14404,0,0.28906-0.02051,0.43066-0.06348l6.2124-1.8623c0.23779-0.07129,0.45459-0.2002,0.62988-0.37598L31.06055,7.41016C31.3418,7.12891,31.5,6.74707,31.5,6.34961s-0.1582-0.7793-0.43945-1.06055l-4.3501-4.34961c-0.58594-0.58594-1.53516-0.58594-2.12109,0L13.2002,12.3291C13.02441,12.50488,12.89551,12.7207,12.82373,12.95898z M15.58887,14.18262L25.6499,4.12109l2.22852,2.22852L17.81738,16.41113l-3.18262,0.9541L15.58887,14.18262z"
+								/>
 								<path
-									d="M30,14.5c-0.82861,0-1.5,0.67188-1.5,1.5v10c0,1.37891-1.12158,2.5-2.5,2.5H6c-1.37842,0-2.5-1.12109-2.5-2.5V6c0-1.37891,1.12158-2.5,2.5-2.5h10c0.82861,0,1.5-0.67188,1.5-1.5S16.82861,0.5,16,0.5H6C2.96729,0.5,0.5,2.96777,0.5,6v20c0,3.03223,2.46729,5.5,5.5,5.5h20c3.03271,0,5.5-2.46777,5.5-5.5V16C31.5,15.17188,30.82861,14.5,30,14.5z" />
+									d="M30,14.5c-0.82861,0-1.5,0.67188-1.5,1.5v10c0,1.37891-1.12158,2.5-2.5,2.5H6c-1.37842,0-2.5-1.12109-2.5-2.5V6c0-1.37891,1.12158-2.5,2.5-2.5h10c0.82861,0,1.5-0.67188,1.5-1.5S16.82861,0.5,16,0.5H6C2.96729,0.5,0.5,2.96777,0.5,6v20c0,3.03223,2.46729,5.5,5.5,5.5h20c3.03271,0,5.5-2.46777,5.5-5.5V16C31.5,15.17188,30.82861,14.5,30,14.5z"
+								/>
 							</svg>
-							Change Email</button>
-						<button *ngIf="affiliateEmailButton=='update'" type="button" class="edit-email"
-							(click)="affiliateEmailButtonClick('save')" tabIndex="-1">
-							<svg xmlns="http://www.w3.org/2000/svg" style="margin-bottom:5px"
-								enable-background="new 0 0 48 48" viewBox="0 0 48 48">
+							Change Email
+						</button>
+						<button
+							*ngIf="affiliateEmailButton == 'update'"
+							type="button"
+							class="edit-email"
+							(click)="affiliateEmailButtonClick('save')"
+							tabIndex="-1"
+						>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								style="margin-bottom: 5px"
+								enable-background="new 0 0 48 48"
+								viewBox="0 0 48 48"
+							>
 								<path
-									d="M24,2.5C12.14,2.5,2.5,12.14,2.5,24S12.14,45.5,24,45.5S45.5,35.86,45.5,24S35.86,2.5,24,2.5z M24,42.5C13.8,42.5,5.5,34.2,5.5,24S13.8,5.5,24,5.5S42.5,13.8,42.5,24S34.2,42.5,24,42.5z" />
+									d="M24,2.5C12.14,2.5,2.5,12.14,2.5,24S12.14,45.5,24,45.5S45.5,35.86,45.5,24S35.86,2.5,24,2.5z M24,42.5C13.8,42.5,5.5,34.2,5.5,24S13.8,5.5,24,5.5S42.5,13.8,42.5,24S34.2,42.5,24,42.5z"
+								/>
 								<path
-									d="M25.12,13c-0.05-0.05-0.1-0.1-0.16-0.14c-0.02-0.01-0.03-0.03-0.05-0.05c-0.11-0.08-0.22-0.15-0.35-0.2c-0.01-0.01-0.02-0.02-0.04-0.02c-0.02-0.01-0.03,0-0.05-0.01c-0.26-0.09-0.54-0.11-0.81-0.05c-0.02,0-0.04,0.01-0.06,0.01c-0.13,0.03-0.26,0.08-0.38,0.16c-0.01,0-0.01,0.01-0.02,0.01c-0.07,0.05-0.15,0.1-0.21,0.15c-0.03,0.03-0.05,0.06-0.08,0.09c-0.01,0.01-0.03,0.02-0.04,0.03l-8,9c-0.55,0.62-0.49,1.57,0.13,2.12c0.62,0.55,1.57,0.5,2.12-0.13l5.38-6.05V35c0,0.83,0.67,1.5,1.5,1.5s1.5-0.67,1.5-1.5V17.94L30.88,24c0.3,0.33,0.71,0.5,1.12,0.5c0.35,0,0.71-0.13,1-0.38c0.62-0.55,0.68-1.5,0.13-2.12L25.12,13z" />
+									d="M25.12,13c-0.05-0.05-0.1-0.1-0.16-0.14c-0.02-0.01-0.03-0.03-0.05-0.05c-0.11-0.08-0.22-0.15-0.35-0.2c-0.01-0.01-0.02-0.02-0.04-0.02c-0.02-0.01-0.03,0-0.05-0.01c-0.26-0.09-0.54-0.11-0.81-0.05c-0.02,0-0.04,0.01-0.06,0.01c-0.13,0.03-0.26,0.08-0.38,0.16c-0.01,0-0.01,0.01-0.02,0.01c-0.07,0.05-0.15,0.1-0.21,0.15c-0.03,0.03-0.05,0.06-0.08,0.09c-0.01,0.01-0.03,0.02-0.04,0.03l-8,9c-0.55,0.62-0.49,1.57,0.13,2.12c0.62,0.55,1.57,0.5,2.12-0.13l5.38-6.05V35c0,0.83,0.67,1.5,1.5,1.5s1.5-0.67,1.5-1.5V17.94L30.88,24c0.3,0.33,0.71,0.5,1.12,0.5c0.35,0,0.71-0.13,1-0.38c0.62-0.55,0.68-1.5,0.13-2.12L25.12,13z"
+								/>
 							</svg>
-							Update</button>
-						<button *ngIf="affiliateEmailButton=='resend_verification'" type="button" class="edit-email"
-							(click)="affiliateEmailButtonClick('resend')" [disabled]="disableAffiliateEmailResendButton"
-							tabIndex="1">
-							<svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 100 100"
-								viewBox="0 0 100 100">
+							Update
+						</button>
+						<button
+							*ngIf="
+								affiliateEmailButton == 'resend_verification'
+							"
+							type="button"
+							class="edit-email"
+							(click)="affiliateEmailButtonClick('resend')"
+							[disabled]="disableAffiliateEmailResendButton"
+							tabIndex="1"
+						>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								enable-background="new 0 0 100 100"
+								viewBox="0 0 100 100"
+							>
 								<path
 									d="M85,31c-0.5,0-1-0.2-1.4-0.6c-0.8-0.8-0.8-2,0-2.8l2.6-2.6H61c-1.1,0-2,0.9-2,2v6h-4v-6c0-3.3,2.7-6,6-6h25.2l-2.6-2.6	c-0.8-0.8-0.8-2,0-2.8c0.8-0.8,2-0.8,2.8,0l6,6c0.8,0.8,0.8,2,0,2.8l-6,6C86,30.8,85.5,31,85,31z M91,33c-1.1,0-2,0.9-2,2v6c0,1.1-0.9,2-2,2h-2v4h2c3.3,0,6-2.7,6-6v-6C93,33.9,92.1,33,91,33z M7.2,39.8C7.1,40.2,7,40.6,7,41v40c0,0.4,0.1,0.8,0.2,1.2L31.7,61L7.2,39.8z M56.3,61l24.5,21.2c0.1-0.4,0.2-0.8,0.2-1.2V47h-8.5L56.3,61z M37.8,61l4.9,4.2c0.8,0.7,1.9,0.7,2.6,0l4.9-4.2l1.8-1.5L66.4,47H61c-3.3,0-6-2.7-6-6v-4H11c-0.3,0-0.6,0-0.8,0.1l25.9,22.4L37.8,61z M47.9,68.2c-1.1,1-2.5,1.5-3.9,1.5s-2.8-0.5-3.9-1.5l-5.3-4.6L10.2,84.9C10.4,85,10.7,85,11,85h66c0.3,0,0.6,0,0.8-0.1L53.2,63.6L47.9,68.2z M77,37H59v4c0,1.1,0.9,2,2,2h20v-2C81,38.8,79.2,37,77,37z"
-									fill="#e8833a" class="color000 svgShape"></path>
+									fill="#e8833a"
+									class="color000 svgShape"
+								></path>
 							</svg>
-							Resend Verification</button>
+							Resend Verification
+						</button>
 					</div>
 				</ng-template>
 				<div class="col-md-6">
-					<mat-form-field appearance="outline" class="read-only mat-custom-phone cellLabelClass">
-						<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Cell<span
-								class="asterisk">
-								*</span></label>
-						<input matInput placeholder="Cell" formControlName="CellNumber" ng2TelInput
-							[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
-							placeholder="1234567890" class="phoneNumberClass"
-							(countryChange)="onCountryChange($event,'CellNumber')"
-							(intlTelInputObject)="telInputObjectCell($event)" readonly tabIndex="1" />
+					<mat-form-field
+						appearance="outline"
+						class="read-only mat-custom-phone cellLabelClass"
+					>
+						<label
+							class="mat-form-field-label mat-empty mat-form-field-empty labelClass"
+							>Cell<span class="asterisk"> *</span></label
+						>
+						<input
+							matInput
+							placeholder="Cell"
+							formControlName="CellNumber"
+							ng2TelInput
+							[ng2TelInputOptions]="{
+								preferredCountries: ['us', 'ca', 'mx', 'gb']
+							}"
+							placeholder="1234567890"
+							class="phoneNumberClass"
+							(countryChange)="
+								onCountryChange($event, 'CellNumber')
+							"
+							(intlTelInputObject)="telInputObjectCell($event)"
+							readonly
+							tabIndex="1"
+						/>
 					</mat-form-field>
-					<div *ngIf="submittedForm && f.CellNumber.errors || f.CellNumber.touched && f.CellNumber.errors"
-						class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.CellNumber.errors.required">This field is required</div>
+					<div
+						*ngIf="
+							(submittedForm && f.CellNumber.errors) ||
+							(f.CellNumber.touched && f.CellNumber.errors)
+						"
+						class="text-danger margin-bottom-thin my-mat-hint"
+					>
+						<div *ngIf="f.CellNumber.errors.required">
+							This field is required
+						</div>
 					</div>
-					<div *ngIf="f.CellNumber.errors" class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.CellNumber.errors?.invalid_Pattern;else plusError">Do not add Dashes
-							with numbers</div>
+					<div
+						*ngIf="f.CellNumber.errors"
+						class="text-danger margin-bottom-thin my-mat-hint"
+					>
+						<div
+							*ngIf="
+								f.CellNumber.errors?.invalid_Pattern;
+								else plusError
+							"
+						>
+							Do not add Dashes with numbers
+						</div>
 						<ng-template #plusError>
-							<div *ngIf="f.CellNumber.errors?.invalidPattern;else allErrors">Do not enter +
-								sign</div>
+							<div
+								*ngIf="
+									f.CellNumber.errors?.invalidPattern;
+									else allErrors
+								"
+							>
+								Do not enter + sign
+							</div>
 							<ng-template #allErrors>
-								<div *ngIf="f.CellNumber.errors?.pattern;else numberLength">Enter Numbers Without
-									Spaces or Dashes
+								<div
+									*ngIf="
+										f.CellNumber.errors?.pattern;
+										else numberLength
+									"
+								>
+									Enter Numbers Without Spaces or Dashes
 								</div>
 								<ng-template #numberLength>
-									<div *ngIf="f.CellNumber.errors.minlength">Minimum length should be 4</div>
-									<div *ngIf="f.CellNumber.errors.maxlength">Maximum length should be 15</div>
+									<div *ngIf="f.CellNumber.errors.minlength">
+										Minimum length should be 4
+									</div>
+									<div *ngIf="f.CellNumber.errors.maxlength">
+										Maximum length should be 15
+									</div>
 								</ng-template>
 							</ng-template>
 						</ng-template>
@@ -328,17 +629,32 @@
 							<mat-option value="lgbtq+">X (LGBTQAI+)</mat-option>
 						</mat-select>
 					</mat-form-field> -->
-					<label class="selectGenderLabel">Gender <span class="asterisk">*</span></label>
+					<label class="select-gender-label"
+						>Gender <span class="asterisk">*</span></label
+					>
 					<div class="selectStyle">
-						<select class="selectInputStyle" (click)="selectDropdownGender()" formControlName="Gender"
-							tabindex="1">
+						<select
+							class="selectInputStyle"
+							(click)="selectDropdownGender()"
+							formControlName="Gender"
+							tabindex="1"
+						>
+							<option value="">Choose Gender</option>
 							<option value="male">Male</option>
 							<option value="female">Female</option>
 							<option value="lgbtq+">X (LGBTQAI+)</option>
 						</select>
-						<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
-							style="enable-background:new 0 0 122.88 63.9" xml:space="preserve">
+						<svg
+							version="1.1"
+							id="Layer_1"
+							xmlns="http://www.w3.org/2000/svg"
+							xmlns:xlink="http://www.w3.org/1999/xlink"
+							x="0px"
+							y="0px"
+							viewBox="0 0 122.88 63.9"
+							style="enable-background: new 0 0 122.88 63.9"
+							xml:space="preserve"
+						>
 							<style type="text/css">
 								.sty0 {
 									fill-rule: evenodd;
@@ -346,28 +662,60 @@
 								}
 							</style>
 							<g>
-								<polygon class="sty0" points="61.44,63.9 122.88,0 0,0 61.44,63.9" />
+								<polygon
+									class="sty0"
+									points="61.44,63.9 122.88,0 0,0 61.44,63.9"
+								/>
 							</g>
 						</svg>
 					</div>
-					<div *ngIf="submittedForm && f.Gender.errors || f.Gender.touched && f.Gender.errors"
-						class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.Gender.errors.required">This field is required</div>
+					<div
+						*ngIf="
+							(submittedForm && f.Gender.errors) ||
+							(f.Gender.touched && f.Gender.errors)
+						"
+						class="text-danger margin-bottom-thin my-mat-hint"
+					>
+						<div *ngIf="f.Gender.errors.required">
+							This field is required
+						</div>
 					</div>
 				</div>
 				<div class="col-md-6">
-					<label class="selectYearLabel">Start Business Years - Pro Driver <span
-							class="asterisk">*</span></label>
+					<label class="select-year-label"
+						>Start Business Years - Pro Driver
+						<span class="asterisk">*</span></label
+					>
 					<div class="selectStyle">
-						<select class="selectInputStyle" (click)="selectDropdownYears()"
-							formControlName="FirstYearBusiness" tabindex="1">
-							<option *ngFor="let startBusinessYear of startBusinessYears"
-								[value]="startBusinessYear.value">
-								{{startBusinessYear.label}}</option>
+						<select
+							class="selectInputStyle"
+							(click)="selectDropdownYears()"
+							formControlName="FirstYearBusiness"
+							tabindex="1"
+						>
+							<option value="">
+								Choose Start Business Years - Pro Driver
+							</option>
+							<option
+								*ngFor="
+									let startBusinessYear of startBusinessYears
+								"
+								[value]="startBusinessYear.value"
+							>
+								{{ startBusinessYear.label }}
+							</option>
 						</select>
-						<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
-							style="enable-background:new 0 0 122.88 63.9" xml:space="preserve">
+						<svg
+							version="1.1"
+							id="Layer_1"
+							xmlns="http://www.w3.org/2000/svg"
+							xmlns:xlink="http://www.w3.org/1999/xlink"
+							x="0px"
+							y="0px"
+							viewBox="0 0 122.88 63.9"
+							style="enable-background: new 0 0 122.88 63.9"
+							xml:space="preserve"
+						>
 							<style type="text/css">
 								.sty0 {
 									fill-rule: evenodd;
@@ -375,205 +723,481 @@
 								}
 							</style>
 							<g>
-								<polygon class="sty0" points="61.44,63.9 122.88,0 0,0 61.44,63.9" />
+								<polygon
+									class="sty0"
+									points="61.44,63.9 122.88,0 0,0 61.44,63.9"
+								/>
 							</g>
 						</svg>
 					</div>
-					<div *ngIf="submittedForm && f.FirstYearBusiness.errors || f.FirstYearBusiness.touched && f.FirstYearBusiness.errors"
-						class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.FirstYearBusiness.errors.required">This field is required</div>
+					<div
+						*ngIf="
+							(submittedForm && f.FirstYearBusiness.errors) ||
+							(f.FirstYearBusiness.touched &&
+								f.FirstYearBusiness.errors)
+						"
+						class="text-danger margin-bottom-thin my-mat-hint"
+					>
+						<div *ngIf="f.FirstYearBusiness.errors.required">
+							This field is required
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</section>
 	<section class="user_information" [hidden]="!showCompanyInformation">
-		<h2 class="headinginfo"> Company Information <span class="spanText">(Enter Company Address on
-				Bank Setting Step)</span></h2>
+		<h2 class="headinginfo">
+			Company Information
+			<span class="spanText"
+				>(Enter Company Address on Bank Setting Step)</span
+			>
+		</h2>
 		<div class="container mt-1">
-			<div class="row ">
+			<div class="row">
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
-						<mat-label>Your Company Name <span class="asterisk">*</span></mat-label>
-						<input matInput placeholder="Your Company Name" formControlName="CompanyName" tabIndex="1">
+						<mat-label
+							>Your Company Name
+							<span class="asterisk">*</span></mat-label
+						>
+						<input
+							matInput
+							placeholder="Your Company Name"
+							formControlName="CompanyName"
+							tabIndex="1"
+						/>
 					</mat-form-field>
-					<div *ngIf="submittedForm && f.CompanyName.errors || f.CompanyName.touched && f.CompanyName.errors"
-						class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.CompanyName.errors.required">This field is required</div>
+					<div
+						*ngIf="
+							(submittedForm && f.CompanyName.errors) ||
+							(f.CompanyName.touched && f.CompanyName.errors)
+						"
+						class="text-danger margin-bottom-thin my-mat-hint"
+					>
+						<div *ngIf="f.CompanyName.errors.required">
+							This field is required
+						</div>
 					</div>
 				</div>
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
 						<mat-label>DBA</mat-label>
-						<input matInput placeholder="DBA" formControlName="DBA" tabIndex="1">
+						<input
+							matInput
+							placeholder="DBA"
+							formControlName="DBA"
+							tabIndex="1"
+						/>
 					</mat-form-field>
-					<div *ngIf="submittedForm && f.DBA.errors || f.DBA.touched && f.DBA.errors"
-						class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.DBA.errors.required">This field is required</div>
+					<div
+						*ngIf="
+							(submittedForm && f.DBA.errors) ||
+							(f.DBA.touched && f.DBA.errors)
+						"
+						class="text-danger margin-bottom-thin my-mat-hint"
+					>
+						<div *ngIf="f.DBA.errors.required">
+							This field is required
+						</div>
 					</div>
 				</div>
-				<div class="col-md-6" *ngIf="!affiliateId; else showEditDispatchEmailButton">
+				<div
+					class="col-md-6"
+					*ngIf="!affiliateId; else showEditDispatchEmailButton"
+				>
 					<mat-form-field appearance="outline">
-						<mat-label>24 Hr Dispatch E-mail <span class="asterisk">*</span></mat-label>
-						<input matInput placeholder="24 Hr Dispatch E-mail" formControlName="dispatchEmail"
-							tabIndex="1">
+						<mat-label
+							>24 Hr Dispatch E-mail
+							<span class="asterisk">*</span></mat-label
+						>
+						<input
+							matInput
+							placeholder="24 Hr Dispatch E-mail"
+							formControlName="dispatchEmail"
+							tabIndex="1"
+						/>
 					</mat-form-field>
-					<div *ngIf="submittedForm && f.dispatchEmail.errors || f.dispatchEmail.touched && f.dispatchEmail.errors"
-						class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.dispatchEmail.errors.required">This field is required</div>
+					<div
+						*ngIf="
+							(submittedForm && f.dispatchEmail.errors) ||
+							(f.dispatchEmail.touched && f.dispatchEmail.errors)
+						"
+						class="text-danger margin-bottom-thin my-mat-hint"
+					>
+						<div *ngIf="f.dispatchEmail.errors.required">
+							This field is required
+						</div>
 					</div>
-					<div *ngIf="f.dispatchEmail.errors" class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.dispatchEmail.errors.pattern">Email format should be valid</div>
+					<div
+						*ngIf="f.dispatchEmail.errors"
+						class="text-danger margin-bottom-thin my-mat-hint"
+					>
+						<div *ngIf="f.dispatchEmail.errors.pattern">
+							Email format should be valid
+						</div>
 					</div>
 				</div>
 				<ng-template #showEditDispatchEmailButton>
 					<div class="col-md-6" id="email_Text">
-						<mat-form-field appearance="outline" [class.read-only]="dispatchEmailReadonly == true">
-							<mat-label>24 Hr Dispatch E-mail <span class="asterisk">*</span></mat-label>
-							<input [class.errorColor]="dispatchEmailStatus=='no'" matInput
-								placeholder="24 Hr Dispatch E-mail" formControlName="dispatchEmail"
-								[readonly]="dispatchEmailReadonly" tabIndex="1">
-							<svg *ngIf="dispatchEmailStatus=='yes'" xmlns="http://www.w3.org/2000/svg"
-								class="email-verified" viewBox="0 0 48 48">
+						<mat-form-field
+							appearance="outline"
+							[class.read-only]="dispatchEmailReadonly == true"
+						>
+							<mat-label
+								>24 Hr Dispatch E-mail
+								<span class="asterisk">*</span></mat-label
+							>
+							<input
+								[class.errorColor]="dispatchEmailStatus == 'no'"
+								matInput
+								placeholder="24 Hr Dispatch E-mail"
+								formControlName="dispatchEmail"
+								[readonly]="dispatchEmailReadonly"
+								tabIndex="1"
+							/>
+							<svg
+								*ngIf="dispatchEmailStatus == 'yes'"
+								xmlns="http://www.w3.org/2000/svg"
+								class="email-verified"
+								viewBox="0 0 48 48"
+							>
 								<path fill="none" d="M0 0h48v48h-48z" />
 								<path
-									d="M24 2l-18 8v12c0 11.11 7.67 21.47 18 24 10.33-2.53 18-12.89 18-24v-12l-18-8zm-4 32l-8-8 2.83-2.83 5.17 5.17 13.17-13.17 2.83 2.83-16 16z" />
+									d="M24 2l-18 8v12c0 11.11 7.67 21.47 18 24 10.33-2.53 18-12.89 18-24v-12l-18-8zm-4 32l-8-8 2.83-2.83 5.17 5.17 13.17-13.17 2.83 2.83-16 16z"
+								/>
 							</svg>
-							<svg *ngIf="dispatchEmailStatus=='no'" xmlns="http://www.w3.org/2000/svg"
-								class="email-not-verified" viewBox="0 0 32 32">
+							<svg
+								*ngIf="dispatchEmailStatus == 'no'"
+								xmlns="http://www.w3.org/2000/svg"
+								class="email-not-verified"
+								viewBox="0 0 32 32"
+							>
 								<g data-name="26 - error">
-									<polygon points="16 24 16.5 24 16 23.999 16 24" />
+									<polygon
+										points="16 24 16.5 24 16 23.999 16 24"
+									/>
 									<path
-										d="M29.658,25.354,18.871,3.774a3.21,3.21,0,0,0-5.742,0L2.342,25.354A3.209,3.209,0,0,0,5.212,30H26.788a3.209,3.209,0,0,0,2.87-4.646ZM16,25a1,1,0,1,1,1-1A1,1,0,0,1,16,25Zm1-5a1,1,0,0,1-2,0V12a1,1,0,0,1,2,0Z" />
+										d="M29.658,25.354,18.871,3.774a3.21,3.21,0,0,0-5.742,0L2.342,25.354A3.209,3.209,0,0,0,5.212,30H26.788a3.209,3.209,0,0,0,2.87-4.646ZM16,25a1,1,0,1,1,1-1A1,1,0,0,1,16,25Zm1-5a1,1,0,0,1-2,0V12a1,1,0,0,1,2,0Z"
+									/>
 								</g>
 							</svg>
 						</mat-form-field>
-						<div *ngIf="submittedForm && f.Email.errors || f.Email.touched && f.Email.errors"
-							class="text-danger margin-bottom-thin my-mat-hint">
-							<div *ngIf="f.Email.errors.required">This field is required</div>
+						<div
+							*ngIf="
+								(submittedForm && f.Email.errors) ||
+								(f.Email.touched && f.Email.errors)
+							"
+							class="text-danger margin-bottom-thin my-mat-hint"
+						>
+							<div *ngIf="f.Email.errors.required">
+								This field is required
+							</div>
 						</div>
-						<div *ngIf="f.Email.errors" class="text-danger margin-bottom-thin my-mat-hint">
-							<div *ngIf="f.Email.errors.pattern">Email format should be valid</div>
+						<div
+							*ngIf="f.Email.errors"
+							class="text-danger margin-bottom-thin my-mat-hint"
+						>
+							<div *ngIf="f.Email.errors.pattern">
+								Email format should be valid
+							</div>
 						</div>
 					</div>
 					<div class="col-md-6">
-						<button *ngIf="dispatchEmailButton=='edit'" type="button" class="edit-email"
-							(click)="dispatchEmailButtonClick('edit')" tabIndex="1">
-							<svg xmlns="http://www.w3.org/2000/svg" style="margin-bottom:5px"
-								enable-background="new 0 0 32 32" viewBox="0 0 32 32">
+						<button
+							*ngIf="dispatchEmailButton == 'edit'"
+							type="button"
+							class="edit-email"
+							(click)="dispatchEmailButtonClick('edit')"
+							tabIndex="1"
+						>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								style="margin-bottom: 5px"
+								enable-background="new 0 0 32 32"
+								viewBox="0 0 32 32"
+							>
 								<path
-									d="M12.82373,12.95898l-1.86279,6.21191c-0.1582,0.52832-0.01367,1.10156,0.37646,1.49121c0.28516,0.28516,0.66846,0.43945,1.06055,0.43945c0.14404,0,0.28906-0.02051,0.43066-0.06348l6.2124-1.8623c0.23779-0.07129,0.45459-0.2002,0.62988-0.37598L31.06055,7.41016C31.3418,7.12891,31.5,6.74707,31.5,6.34961s-0.1582-0.7793-0.43945-1.06055l-4.3501-4.34961c-0.58594-0.58594-1.53516-0.58594-2.12109,0L13.2002,12.3291C13.02441,12.50488,12.89551,12.7207,12.82373,12.95898z M15.58887,14.18262L25.6499,4.12109l2.22852,2.22852L17.81738,16.41113l-3.18262,0.9541L15.58887,14.18262z" />
+									d="M12.82373,12.95898l-1.86279,6.21191c-0.1582,0.52832-0.01367,1.10156,0.37646,1.49121c0.28516,0.28516,0.66846,0.43945,1.06055,0.43945c0.14404,0,0.28906-0.02051,0.43066-0.06348l6.2124-1.8623c0.23779-0.07129,0.45459-0.2002,0.62988-0.37598L31.06055,7.41016C31.3418,7.12891,31.5,6.74707,31.5,6.34961s-0.1582-0.7793-0.43945-1.06055l-4.3501-4.34961c-0.58594-0.58594-1.53516-0.58594-2.12109,0L13.2002,12.3291C13.02441,12.50488,12.89551,12.7207,12.82373,12.95898z M15.58887,14.18262L25.6499,4.12109l2.22852,2.22852L17.81738,16.41113l-3.18262,0.9541L15.58887,14.18262z"
+								/>
 								<path
-									d="M30,14.5c-0.82861,0-1.5,0.67188-1.5,1.5v10c0,1.37891-1.12158,2.5-2.5,2.5H6c-1.37842,0-2.5-1.12109-2.5-2.5V6c0-1.37891,1.12158-2.5,2.5-2.5h10c0.82861,0,1.5-0.67188,1.5-1.5S16.82861,0.5,16,0.5H6C2.96729,0.5,0.5,2.96777,0.5,6v20c0,3.03223,2.46729,5.5,5.5,5.5h20c3.03271,0,5.5-2.46777,5.5-5.5V16C31.5,15.17188,30.82861,14.5,30,14.5z" />
+									d="M30,14.5c-0.82861,0-1.5,0.67188-1.5,1.5v10c0,1.37891-1.12158,2.5-2.5,2.5H6c-1.37842,0-2.5-1.12109-2.5-2.5V6c0-1.37891,1.12158-2.5,2.5-2.5h10c0.82861,0,1.5-0.67188,1.5-1.5S16.82861,0.5,16,0.5H6C2.96729,0.5,0.5,2.96777,0.5,6v20c0,3.03223,2.46729,5.5,5.5,5.5h20c3.03271,0,5.5-2.46777,5.5-5.5V16C31.5,15.17188,30.82861,14.5,30,14.5z"
+								/>
 							</svg>
-							Change Email</button>
-						<button *ngIf="dispatchEmailButton=='update'" type="button" class="edit-email"
-							(click)="dispatchEmailButtonClick('save')">
-							<svg xmlns="http://www.w3.org/2000/svg" style="margin-bottom:5px"
-								enable-background="new 0 0 48 48" viewBox="0 0 48 48">
+							Change Email
+						</button>
+						<button
+							*ngIf="dispatchEmailButton == 'update'"
+							type="button"
+							class="edit-email"
+							(click)="dispatchEmailButtonClick('save')"
+						>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								style="margin-bottom: 5px"
+								enable-background="new 0 0 48 48"
+								viewBox="0 0 48 48"
+							>
 								<path
-									d="M24,2.5C12.14,2.5,2.5,12.14,2.5,24S12.14,45.5,24,45.5S45.5,35.86,45.5,24S35.86,2.5,24,2.5z M24,42.5C13.8,42.5,5.5,34.2,5.5,24S13.8,5.5,24,5.5S42.5,13.8,42.5,24S34.2,42.5,24,42.5z" />
+									d="M24,2.5C12.14,2.5,2.5,12.14,2.5,24S12.14,45.5,24,45.5S45.5,35.86,45.5,24S35.86,2.5,24,2.5z M24,42.5C13.8,42.5,5.5,34.2,5.5,24S13.8,5.5,24,5.5S42.5,13.8,42.5,24S34.2,42.5,24,42.5z"
+								/>
 								<path
-									d="M25.12,13c-0.05-0.05-0.1-0.1-0.16-0.14c-0.02-0.01-0.03-0.03-0.05-0.05c-0.11-0.08-0.22-0.15-0.35-0.2c-0.01-0.01-0.02-0.02-0.04-0.02c-0.02-0.01-0.03,0-0.05-0.01c-0.26-0.09-0.54-0.11-0.81-0.05c-0.02,0-0.04,0.01-0.06,0.01c-0.13,0.03-0.26,0.08-0.38,0.16c-0.01,0-0.01,0.01-0.02,0.01c-0.07,0.05-0.15,0.1-0.21,0.15c-0.03,0.03-0.05,0.06-0.08,0.09c-0.01,0.01-0.03,0.02-0.04,0.03l-8,9c-0.55,0.62-0.49,1.57,0.13,2.12c0.62,0.55,1.57,0.5,2.12-0.13l5.38-6.05V35c0,0.83,0.67,1.5,1.5,1.5s1.5-0.67,1.5-1.5V17.94L30.88,24c0.3,0.33,0.71,0.5,1.12,0.5c0.35,0,0.71-0.13,1-0.38c0.62-0.55,0.68-1.5,0.13-2.12L25.12,13z" />
+									d="M25.12,13c-0.05-0.05-0.1-0.1-0.16-0.14c-0.02-0.01-0.03-0.03-0.05-0.05c-0.11-0.08-0.22-0.15-0.35-0.2c-0.01-0.01-0.02-0.02-0.04-0.02c-0.02-0.01-0.03,0-0.05-0.01c-0.26-0.09-0.54-0.11-0.81-0.05c-0.02,0-0.04,0.01-0.06,0.01c-0.13,0.03-0.26,0.08-0.38,0.16c-0.01,0-0.01,0.01-0.02,0.01c-0.07,0.05-0.15,0.1-0.21,0.15c-0.03,0.03-0.05,0.06-0.08,0.09c-0.01,0.01-0.03,0.02-0.04,0.03l-8,9c-0.55,0.62-0.49,1.57,0.13,2.12c0.62,0.55,1.57,0.5,2.12-0.13l5.38-6.05V35c0,0.83,0.67,1.5,1.5,1.5s1.5-0.67,1.5-1.5V17.94L30.88,24c0.3,0.33,0.71,0.5,1.12,0.5c0.35,0,0.71-0.13,1-0.38c0.62-0.55,0.68-1.5,0.13-2.12L25.12,13z"
+								/>
 							</svg>
-							Update</button>
-						<button *ngIf="dispatchEmailButton=='resend_verification'" type="button" class="edit-email"
-							(click)="dispatchEmailButtonClick('resend')" [disabled]="disableDispatchEmailResendButton"
-							tabIndex="1">
-							<svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 100 100"
-								viewBox="0 0 100 100">
+							Update
+						</button>
+						<button
+							*ngIf="dispatchEmailButton == 'resend_verification'"
+							type="button"
+							class="edit-email"
+							(click)="dispatchEmailButtonClick('resend')"
+							[disabled]="disableDispatchEmailResendButton"
+							tabIndex="1"
+						>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								enable-background="new 0 0 100 100"
+								viewBox="0 0 100 100"
+							>
 								<path
 									d="M85,31c-0.5,0-1-0.2-1.4-0.6c-0.8-0.8-0.8-2,0-2.8l2.6-2.6H61c-1.1,0-2,0.9-2,2v6h-4v-6c0-3.3,2.7-6,6-6h25.2l-2.6-2.6	c-0.8-0.8-0.8-2,0-2.8c0.8-0.8,2-0.8,2.8,0l6,6c0.8,0.8,0.8,2,0,2.8l-6,6C86,30.8,85.5,31,85,31z M91,33c-1.1,0-2,0.9-2,2v6c0,1.1-0.9,2-2,2h-2v4h2c3.3,0,6-2.7,6-6v-6C93,33.9,92.1,33,91,33z M7.2,39.8C7.1,40.2,7,40.6,7,41v40c0,0.4,0.1,0.8,0.2,1.2L31.7,61L7.2,39.8z M56.3,61l24.5,21.2c0.1-0.4,0.2-0.8,0.2-1.2V47h-8.5L56.3,61z M37.8,61l4.9,4.2c0.8,0.7,1.9,0.7,2.6,0l4.9-4.2l1.8-1.5L66.4,47H61c-3.3,0-6-2.7-6-6v-4H11c-0.3,0-0.6,0-0.8,0.1l25.9,22.4L37.8,61z M47.9,68.2c-1.1,1-2.5,1.5-3.9,1.5s-2.8-0.5-3.9-1.5l-5.3-4.6L10.2,84.9C10.4,85,10.7,85,11,85h66c0.3,0,0.6,0,0.8-0.1L53.2,63.6L47.9,68.2z M77,37H59v4c0,1.1,0.9,2,2,2h20v-2C81,38.8,79.2,37,77,37z"
-									fill="#e8833a" class="color000 svgShape"></path>
+									fill="#e8833a"
+									class="color000 svgShape"
+								></path>
 							</svg>
-							Resend Verification</button>
+							Resend Verification
+						</button>
 					</div>
 				</ng-template>
 				<div class="col-md-6">
-					<mat-form-field appearance="outline" class="mat-custom-phone topLabelClass">
-						<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">24Hr Dispatch
-							Tel # <span class="asterisk"> *</span></label>
-						<input matInput formControlName="Dispatch" ng2TelInput
-							[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
-							placeholder="1234567890" class="phoneNumberClass"
-							(countryChange)="onCountryChange($event,'Dispatch')" type="tel" id="phone"
-							(intlTelInputObject)="telInputObjectDispatch($event)" tabIndex="1" />
+					<mat-form-field
+						appearance="outline"
+						class="mat-custom-phone topLabelClass"
+					>
+						<label
+							class="mat-form-field-label mat-empty mat-form-field-empty labelClass"
+							>24Hr Dispatch Tel #
+							<span class="asterisk"> *</span></label
+						>
+						<input
+							matInput
+							formControlName="Dispatch"
+							ng2TelInput
+							[ng2TelInputOptions]="{
+								preferredCountries: ['us', 'ca', 'mx', 'gb']
+							}"
+							placeholder="1234567890"
+							class="phoneNumberClass"
+							(countryChange)="
+								onCountryChange($event, 'Dispatch')
+							"
+							type="tel"
+							id="phone"
+							(intlTelInputObject)="
+								telInputObjectDispatch($event)
+							"
+							tabIndex="1"
+						/>
 					</mat-form-field>
-					<div *ngIf="submittedForm && f.Dispatch.errors || f.Dispatch.touched && f.Dispatch.errors"
-						class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.Dispatch.errors.required">This field is required</div>
+					<div
+						*ngIf="
+							(submittedForm && f.Dispatch.errors) ||
+							(f.Dispatch.touched && f.Dispatch.errors)
+						"
+						class="text-danger margin-bottom-thin my-mat-hint"
+					>
+						<div *ngIf="f.Dispatch.errors.required">
+							This field is required
+						</div>
 					</div>
-					<div *ngIf="f.Dispatch.errors" class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.Dispatch.errors?.invalid_Pattern;else plusError">Do not add Dashes
-							with numbers</div>
+					<div
+						*ngIf="f.Dispatch.errors"
+						class="text-danger margin-bottom-thin my-mat-hint"
+					>
+						<div
+							*ngIf="
+								f.Dispatch.errors?.invalid_Pattern;
+								else plusError
+							"
+						>
+							Do not add Dashes with numbers
+						</div>
 						<ng-template #plusError>
-							<div *ngIf="f.Dispatch.errors?.invalidPattern;else allErrors">Do not enter +
-								sign</div>
+							<div
+								*ngIf="
+									f.Dispatch.errors?.invalidPattern;
+									else allErrors
+								"
+							>
+								Do not enter + sign
+							</div>
 							<ng-template #allErrors>
-								<div *ngIf="f.Dispatch.errors?.pattern;else numberLength">Enter Numbers Without
-									Spaces or Dashes
+								<div
+									*ngIf="
+										f.Dispatch.errors?.pattern;
+										else numberLength
+									"
+								>
+									Enter Numbers Without Spaces or Dashes
 								</div>
 								<ng-template #numberLength>
-									<div *ngIf="f.Dispatch.errors.minlength">Minimum length should be 4</div>
-									<div *ngIf="f.Dispatch.errors.maxlength">Maximum length should be 15</div>
+									<div *ngIf="f.Dispatch.errors.minlength">
+										Minimum length should be 4
+									</div>
+									<div *ngIf="f.Dispatch.errors.maxlength">
+										Maximum length should be 15
+									</div>
 								</ng-template>
 							</ng-template>
 						</ng-template>
 					</div>
 				</div>
 				<div class="col-md-6">
-					<mat-form-field appearance="outline" class="mat-custom-phone topLabelClass">
-						<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Business
-							Telephone</label>
-						<input matInput formControlName="CompanyCellNumber" ng2TelInput
-							[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
-							placeholder="1234567890" class="phoneNumberClass"
-							(countryChange)="onCountryChange($event,'CompanyCellNumber')"
-							(intlTelInputObject)="telInputObjectCompanyCell($event)" tabIndex="1" />
+					<mat-form-field
+						appearance="outline"
+						class="mat-custom-phone topLabelClass"
+					>
+						<label
+							class="mat-form-field-label mat-empty mat-form-field-empty labelClass"
+							>Business Telephone</label
+						>
+						<input
+							matInput
+							formControlName="CompanyCellNumber"
+							ng2TelInput
+							[ng2TelInputOptions]="{
+								preferredCountries: ['us', 'ca', 'mx', 'gb']
+							}"
+							placeholder="1234567890"
+							class="phoneNumberClass"
+							(countryChange)="
+								onCountryChange($event, 'CompanyCellNumber')
+							"
+							(intlTelInputObject)="
+								telInputObjectCompanyCell($event)
+							"
+							tabIndex="1"
+						/>
 					</mat-form-field>
-					<div *ngIf="submittedForm && f.CompanyCellNumber.errors || f.CompanyCellNumber.touched && f.CompanyCellNumber.errors"
-						class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.CompanyCellNumber.errors.required">This field is required</div>
+					<div
+						*ngIf="
+							(submittedForm && f.CompanyCellNumber.errors) ||
+							(f.CompanyCellNumber.touched &&
+								f.CompanyCellNumber.errors)
+						"
+						class="text-danger margin-bottom-thin my-mat-hint"
+					>
+						<div *ngIf="f.CompanyCellNumber.errors.required">
+							This field is required
+						</div>
 					</div>
-					<div *ngIf="f.CompanyCellNumber.errors" class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.CompanyCellNumber.errors?.invalid_Pattern;else plusError">Do not add Dashes
-							with numbers</div>
+					<div
+						*ngIf="f.CompanyCellNumber.errors"
+						class="text-danger margin-bottom-thin my-mat-hint"
+					>
+						<div
+							*ngIf="
+								f.CompanyCellNumber.errors?.invalid_Pattern;
+								else plusError
+							"
+						>
+							Do not add Dashes with numbers
+						</div>
 						<ng-template #plusError>
-							<div *ngIf="f.CompanyCellNumber.errors?.invalidPattern;else allErrors">Do not enter +
-								sign</div>
+							<div
+								*ngIf="
+									f.CompanyCellNumber.errors?.invalidPattern;
+									else allErrors
+								"
+							>
+								Do not enter + sign
+							</div>
 							<ng-template #allErrors>
-								<div *ngIf="f.CompanyCellNumber.errors?.pattern;else numberLength">Enter Numbers Without
-									Spaces or Dashes
+								<div
+									*ngIf="
+										f.CompanyCellNumber.errors?.pattern;
+										else numberLength
+									"
+								>
+									Enter Numbers Without Spaces or Dashes
 								</div>
 								<ng-template #numberLength>
-									<div *ngIf="f.CompanyCellNumber.errors.minlength">Minimum length should be 4</div>
-									<div *ngIf="f.CompanyCellNumber.errors.maxlength">Maximum length should be 15</div>
+									<div
+										*ngIf="
+											f.CompanyCellNumber.errors.minlength
+										"
+									>
+										Minimum length should be 4
+									</div>
+									<div
+										*ngIf="
+											f.CompanyCellNumber.errors.maxlength
+										"
+									>
+										Maximum length should be 15
+									</div>
 								</ng-template>
 							</ng-template>
 						</ng-template>
 					</div>
 				</div>
 				<div class="col-md-6">
-					<mat-form-field appearance="outline" class="mat-custom-phone">
+					<mat-form-field
+						appearance="outline"
+						class="mat-custom-phone"
+					>
 						<mat-label>FAX</mat-label>
-						<input matInput placeholder="FAX" formControlName="Fax" ng2TelInput
-							[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
-							(countryChange)="onCountryChange($event,'Fax')"
-							(intlTelInputObject)="telInputObjectFax($event)" tabIndex="1" />
+						<input
+							matInput
+							placeholder="FAX"
+							formControlName="Fax"
+							ng2TelInput
+							[ng2TelInputOptions]="{
+								preferredCountries: ['us', 'ca', 'mx', 'gb']
+							}"
+							(countryChange)="onCountryChange($event, 'Fax')"
+							(intlTelInputObject)="telInputObjectFax($event)"
+							tabIndex="1"
+						/>
 					</mat-form-field>
-					<div *ngIf="f.Fax.errors" class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.Fax.errors?.invalid_Pattern;else plusError">Do not add Dashes
-							with numbers</div>
+					<div
+						*ngIf="f.Fax.errors"
+						class="text-danger margin-bottom-thin my-mat-hint"
+					>
+						<div
+							*ngIf="
+								f.Fax.errors?.invalid_Pattern;
+								else plusError
+							"
+						>
+							Do not add Dashes with numbers
+						</div>
 						<ng-template #plusError>
-							<div *ngIf="f.Fax.errors?.invalidPattern;else allErrors">Do not enter +
-								sign</div>
+							<div
+								*ngIf="
+									f.Fax.errors?.invalidPattern;
+									else allErrors
+								"
+							>
+								Do not enter + sign
+							</div>
 							<ng-template #allErrors>
-								<div *ngIf="f.Fax.errors?.pattern;else numberLength">Enter Numbers Without Spaces or
-									Dashes
+								<div
+									*ngIf="
+										f.Fax.errors?.pattern;
+										else numberLength
+									"
+								>
+									Enter Numbers Without Spaces or Dashes
 								</div>
 								<ng-template #numberLength>
-									<div *ngIf="f.Fax.errors.minlength">Minimum length should be 4</div>
-									<div *ngIf="f.Fax.errors.maxlength">Maximum length should be 15</div>
+									<div *ngIf="f.Fax.errors.minlength">
+										Minimum length should be 4
+									</div>
+									<div *ngIf="f.Fax.errors.maxlength">
+										Maximum length should be 15
+									</div>
 								</ng-template>
 							</ng-template>
 						</ng-template>
@@ -582,16 +1206,37 @@
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
 						<mat-label>CPCN/TPC #</mat-label>
-						<input matInput placeholder="CPCN/TPC #" formControlName="cpcn_tpc" tabIndex="1" />
+						<input
+							matInput
+							placeholder="CPCN/TPC #"
+							formControlName="cpcn_tpc"
+							tabIndex="1"
+						/>
 					</mat-form-field>
-					<div *ngIf="f.cpcn_tpc.errors" class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.cpcn_tpc.errors?.invalid_Pattern;else plusError">Do not add Dashes
-							with numbers</div>
+					<div
+						*ngIf="f.cpcn_tpc.errors"
+						class="text-danger margin-bottom-thin my-mat-hint"
+					>
+						<div
+							*ngIf="
+								f.cpcn_tpc.errors?.invalid_Pattern;
+								else plusError
+							"
+						>
+							Do not add Dashes with numbers
+						</div>
 						<ng-template #plusError>
-							<div *ngIf="f.cpcn_tpc.errors?.invalidPattern;else allErrors">Do not enter +
-								sign</div>
+							<div
+								*ngIf="
+									f.cpcn_tpc.errors?.invalidPattern;
+									else allErrors
+								"
+							>
+								Do not enter + sign
+							</div>
 							<ng-template #allErrors>
-								<div *ngIf="f.cpcn_tpc.errors?.pattern">Enter Numbers Without Spaces or Dashes
+								<div *ngIf="f.cpcn_tpc.errors?.pattern">
+									Enter Numbers Without Spaces or Dashes
 								</div>
 							</ng-template>
 						</ng-template>
@@ -602,35 +1247,79 @@
 		<div class="container mt-3">
 			<div class="vehtype_extintwrap">
 				<div class="row">
-					<div class="col-md-5" *ngIf="BusinessFrontPhoto; else NoBusinessFrontPhoto">
+					<div
+						class="col-md-5"
+						*ngIf="BusinessFrontPhoto; else NoBusinessFrontPhoto"
+					>
 						<div class="vehtype_extint">
 							<div>
-								<p>Business Card Front Photo <span class="asterisk">*</span></p>
-								<img src="{{BusinessFrontPhoto}}" (click)="showImageInModal(BusinessFrontPhoto)"
-									tabIndex="-1">
+								<p>
+									Business Card Front Photo
+									<span class="asterisk">*</span>
+								</p>
+								<img
+									src="{{ BusinessFrontPhoto }}"
+									(click)="
+										showImageInModal(BusinessFrontPhoto)
+									"
+									tabIndex="-1"
+								/>
 								<ul class="mt-3">
 									<li>
-										<button class="changeuploaded" tabIndex="1">
-											<input type="file" #resetImages
-												(change)="businessCardImageChange($event,'BusinessFrontPhoto',BusinessFrontPhotoId)"
-												tabIndex="-1">
-											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-												<path fill="none" d="M0 0h24v24H0V0z" />
+										<button
+											class="changeuploaded"
+											tabIndex="1"
+										>
+											<input
+												type="file"
+												#resetImages
+												(change)="
+													businessCardImageChange(
+														$event,
+														'BusinessFrontPhoto',
+														BusinessFrontPhotoId
+													)
+												"
+												tabIndex="-1"
+											/>
+											<svg
+												xmlns="http://www.w3.org/2000/svg"
+												viewBox="0 0 24 24"
+											>
+												<path
+													fill="none"
+													d="M0 0h24v24H0V0z"
+												/>
 												<circle cx="12" cy="12" r="3" />
 												<path
-													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
+												/>
 											</svg>
 											Change
 										</button>
 									</li>
-									<li><a class="delete-btn"
-											(click)="deleteImage(BusinessFrontPhotoId,'BusinessFrontPhoto')"
-											tabIndex="1">
-											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+									<li>
+										<a
+											class="delete-btn"
+											(click)="
+												deleteImage(
+													BusinessFrontPhotoId,
+													'BusinessFrontPhoto'
+												)
+											"
+											tabIndex="1"
+										>
+											<svg
+												xmlns="http://www.w3.org/2000/svg"
+												viewBox="0 0 32 32"
+											>
 												<path
-													d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
+													d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z"
+												/>
 											</svg>
-											Delete</a></li>
+											Delete</a
+										>
+									</li>
 								</ul>
 							</div>
 						</div>
@@ -639,65 +1328,155 @@
 						<div class="col-md-5">
 							<div class="vehtype_extint">
 								<div>
-									<p [class.ng-invalid]="submittedForm && f.BusinessFrontPhoto.errors">
-										Business Card Front Photo <span class="asterisk">*</span></p>
+									<p
+										[class.ng-invalid]="
+											submittedForm &&
+											f.BusinessFrontPhoto.errors
+										"
+									>
+										Business Card Front Photo
+										<span class="asterisk">*</span>
+									</p>
 									<div class="emptyImage">
-										<img src="../../../../assets/images/empty-image.png" tabIndex="-1">
+										<img
+											src="../../../../assets/images/empty-image.png"
+											tabIndex="-1"
+										/>
 									</div>
 									<ul class="mt-3">
 										<li>
-											<button class="adduploaded" tabIndex="1">
-												<input type="file" #resetImages
-													(change)="businessCardImageChange($event,'BusinessFrontPhoto')"
-													tabIndex="-1">
-												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-													<path fill="none" d="M0 0h24v24H0V0z" />
-													<circle cx="12" cy="12" r="3" />
+											<button
+												class="adduploaded"
+												tabIndex="1"
+											>
+												<input
+													type="file"
+													#resetImages
+													(change)="
+														businessCardImageChange(
+															$event,
+															'BusinessFrontPhoto'
+														)
+													"
+													tabIndex="-1"
+												/>
+												<svg
+													xmlns="http://www.w3.org/2000/svg"
+													viewBox="0 0 24 24"
+												>
 													<path
-														d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+														fill="none"
+														d="M0 0h24v24H0V0z"
+													/>
+													<circle
+														cx="12"
+														cy="12"
+														r="3"
+													/>
+													<path
+														d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
+													/>
 												</svg>
 												Add
 											</button>
 										</li>
 									</ul>
 								</div>
-								<div *ngIf="submittedForm && f.BusinessFrontPhoto.errors"
-									class="text-danger margin-bottom-thin my-mat-hint text-center mb-4">
-									<div *ngIf="f.BusinessFrontPhoto.errors.required">The Business Card Front Photo
-										is required.</div>
+								<div
+									*ngIf="
+										submittedForm &&
+										f.BusinessFrontPhoto.errors
+									"
+									class="text-danger margin-bottom-thin my-mat-hint text-center mb-4"
+								>
+									<div
+										*ngIf="
+											f.BusinessFrontPhoto.errors.required
+										"
+									>
+										The Business Card Front Photo is
+										required.
+									</div>
 								</div>
 							</div>
 						</div>
 					</ng-template>
 
-					<div class="col-md-5" *ngIf="BusinessBackPhoto; else NoBusinessBackPhoto">
+					<div
+						class="col-md-5"
+						*ngIf="BusinessBackPhoto; else NoBusinessBackPhoto"
+					>
 						<div class="vehtype_extint">
 							<div>
-								<p>Business Card Back Photo <span class="optionalTextStyle">(optional)</span></p>
-								<img src="{{BusinessBackPhoto}}" (click)="showImageInModal(BusinessBackPhoto)"
-									tabIndex="-1">
+								<p>
+									Business Card Back Photo
+									<span class="optionalTextStyle"
+										>(optional)</span
+									>
+								</p>
+								<img
+									src="{{ BusinessBackPhoto }}"
+									(click)="
+										showImageInModal(BusinessBackPhoto)
+									"
+									tabIndex="-1"
+								/>
 								<ul class="mt-3">
 									<li>
-										<button class="changeuploaded" tabIndex="1">
-											<input type="file" #resetImages
-												(change)="businessCardImageChange($event,'BusinessBackPhoto',BusinessBackPhotoId)"
-												tabIndex="-1">
-											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-												<path fill="none" d="M0 0h24v24H0V0z" />
+										<button
+											class="changeuploaded"
+											tabIndex="1"
+										>
+											<input
+												type="file"
+												#resetImages
+												(change)="
+													businessCardImageChange(
+														$event,
+														'BusinessBackPhoto',
+														BusinessBackPhotoId
+													)
+												"
+												tabIndex="-1"
+											/>
+											<svg
+												xmlns="http://www.w3.org/2000/svg"
+												viewBox="0 0 24 24"
+											>
+												<path
+													fill="none"
+													d="M0 0h24v24H0V0z"
+												/>
 												<circle cx="12" cy="12" r="3" />
 												<path
-													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
+												/>
 											</svg>
 											Change
 										</button>
 									</li>
-									<li><a class="delete-btn"
-											(click)="deleteImage(BusinessBackPhotoId,'BusinessBackPhoto')" tabIndex="1">
-											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+									<li>
+										<a
+											class="delete-btn"
+											(click)="
+												deleteImage(
+													BusinessBackPhotoId,
+													'BusinessBackPhoto'
+												)
+											"
+											tabIndex="1"
+										>
+											<svg
+												xmlns="http://www.w3.org/2000/svg"
+												viewBox="0 0 32 32"
+											>
 												<path
-													d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
+													d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z"
+												/>
 											</svg>
-											Delete</a></li>
+											Delete</a
+										>
+									</li>
 								</ul>
 							</div>
 						</div>
@@ -706,21 +1485,52 @@
 						<div class="col-md-5">
 							<div class="vehtype_extint">
 								<div>
-									<p>Business Card Back Photo <span class="optionalTextStyle">(optional)</span></p>
+									<p>
+										Business Card Back Photo
+										<span class="optionalTextStyle"
+											>(optional)</span
+										>
+									</p>
 									<div class="emptyImage">
-										<img src="../../../../assets/images/empty-image.png" tabIndex="-1">
+										<img
+											src="../../../../assets/images/empty-image.png"
+											tabIndex="-1"
+										/>
 									</div>
 									<ul class="mt-3">
 										<li>
-											<button class="adduploaded" tabIndex="1">
-												<input type="file" #resetImages
-													(change)="businessCardImageChange($event,'BusinessBackPhoto',BusinessBackPhotoId)"
-													tabIndex="-1">
-												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-													<path fill="none" d="M0 0h24v24H0V0z" />
-													<circle cx="12" cy="12" r="3" />
+											<button
+												class="adduploaded"
+												tabIndex="1"
+											>
+												<input
+													type="file"
+													#resetImages
+													(change)="
+														businessCardImageChange(
+															$event,
+															'BusinessBackPhoto',
+															BusinessBackPhotoId
+														)
+													"
+													tabIndex="-1"
+												/>
+												<svg
+													xmlns="http://www.w3.org/2000/svg"
+													viewBox="0 0 24 24"
+												>
 													<path
-														d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+														fill="none"
+														d="M0 0h24v24H0V0z"
+													/>
+													<circle
+														cx="12"
+														cy="12"
+														r="3"
+													/>
+													<path
+														d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
+													/>
 												</svg>
 												Add
 											</button>
@@ -735,64 +1545,138 @@
 		</div>
 	</section>
 	<section class="user_information">
-		<h2 class="headinginfo"> Choose Language(s) <span class="asterisk">*</span> <span class="spanText">(Choose
-				Each)</span></h2>
-		<div class="container mt-1 ">
-			<div class="row ">
+		<h2 class="headinginfo">
+			Choose Language(s) <span class="asterisk">*</span>
+			<span class="spanText">(Choose Each)</span>
+		</h2>
+		<div class="container mt-1">
+			<div class="row">
 				<div class="col-md-12" id="LanguagesSpoken">
-					<div class="choose_ameniteslist" *ngIf="!affiliateId; else affiliateIdExist">
-						<div class="custom-control custom-checkbox" *ngFor="let language of languages">
-							<input type="checkbox" class="custom-control-input" id="language_{{language.name}}"
+					<div
+						class="choose_ameniteslist"
+						*ngIf="!affiliateId; else affiliateIdExist"
+					>
+						<div
+							class="custom-control custom-checkbox"
+							*ngFor="let language of languages"
+						>
+							<input
+								type="checkbox"
+								class="custom-control-input"
+								id="language_{{ language.name }}"
 								[value]="language.id"
-								(change)="onLanguageChange($event.target.value,$event.target.checked)"
-								[checked]="language.id==1 ? true : false" tabIndex="1">
-							<label class="custom-control-label"
-								for="language_{{language.name}}">{{language.name}}</label>
+								(change)="
+									onLanguageChange(
+										$event.target.value,
+										$event.target.checked
+									)
+								"
+								[checked]="language.id == 1 ? true : false"
+								tabIndex="1"
+							/>
+							<label
+								class="custom-control-label"
+								for="language_{{ language.name }}"
+								>{{ language.name }}</label
+							>
 						</div>
 					</div>
 					<ng-template #affiliateIdExist>
 						<div class="choose_ameniteslist">
-							<div class="custom-control custom-checkbox"
-								*ngFor="let languagesObj of languagesFormControl; let i=index;">
-								<input type="checkbox" class="custom-control-input" id="amenity_{{languages[i].name}}"
+							<div
+								class="custom-control custom-checkbox"
+								*ngFor="
+									let languagesObj of languagesFormControl;
+									let i = index
+								"
+							>
+								<input
+									type="checkbox"
+									class="custom-control-input"
+									id="amenity_{{ languages[i].name }}"
 									[value]="languages[i].id"
-									(change)="onLanguageChange($event.target.value,$event.target.checked)"
-									[formControl]="languagesObj" tabIndex="1">
-								<label class="custom-control-label"
-									for="amenity_{{languages[i].name}}">{{languages[i].name}}</label>
+									(change)="
+										onLanguageChange(
+											$event.target.value,
+											$event.target.checked
+										)
+									"
+									[formControl]="languagesObj"
+									tabIndex="1"
+								/>
+								<label
+									class="custom-control-label"
+									for="amenity_{{ languages[i].name }}"
+									>{{ languages[i].name }}</label
+								>
 							</div>
 						</div>
 					</ng-template>
-					<div *ngIf="submittedForm && f.LanguagesSpoken.errors"
-						class="text-danger margin-bottom-thin my-mat-hint mt-2">
-						<div *ngIf="f.LanguagesSpoken.errors.required">This field is required</div>
+					<div
+						*ngIf="submittedForm && f.LanguagesSpoken.errors"
+						class="text-danger margin-bottom-thin my-mat-hint mt-2"
+					>
+						<div *ngIf="f.LanguagesSpoken.errors.required">
+							This field is required
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</section>
 	<section class="user_information">
-		<h2 class="headinginfo">Do You Belong To Any Professional Organizations?</h2>
-		<div class="container mt-1 ">
-			<div class="row ">
+		<h2 class="headinginfo">
+			Do You Belong To Any Professional Organizations?
+		</h2>
+		<div class="container mt-1">
+			<div class="row">
 				<div class="col-md-12">
-					<div class="choose_ameniteslist" *ngIf="!affiliateId; else affiliateIdExist2">
-						<div class="custom-control custom-checkbox" *ngFor="let assocition of associations">
-							<input type="checkbox" class="custom-control-input" id="assocition_{{assocition.name}}"
-								[value]="assocition.id" (change)="onAssociationChange($event)" tabIndex="1">
-							<label class="custom-control-label"
-								for="assocition_{{assocition.name}}">{{assocition.name}}</label>
+					<div
+						class="choose_ameniteslist"
+						*ngIf="!affiliateId; else affiliateIdExist2"
+					>
+						<div
+							class="custom-control custom-checkbox"
+							*ngFor="let assocition of associations"
+						>
+							<input
+								type="checkbox"
+								class="custom-control-input"
+								id="assocition_{{ assocition.name }}"
+								[value]="assocition.id"
+								(change)="onAssociationChange($event)"
+								tabIndex="1"
+							/>
+							<label
+								class="custom-control-label"
+								for="assocition_{{ assocition.name }}"
+								>{{ assocition.name }}</label
+							>
 						</div>
 					</div>
 					<ng-template #affiliateIdExist2>
 						<div class="choose_ameniteslist">
-							<div class="custom-control custom-checkbox"
-								*ngFor="let associationsObj of AssociationsFormControl; let i=index;">
-								<input type="checkbox" class="custom-control-input"
-									id="amenity_{{associations[i].name}}" [value]="associations[i].id"
-									(change)="onAssociationChange($event)" [formControl]="associationsObj" tabIndex="1">
-								<label class="custom-control-label"
-									for="amenity_{{associations[i].name}}">{{associations[i].name}}</label>
+							<div
+								class="custom-control custom-checkbox"
+								*ngFor="
+									let associationsObj of AssociationsFormControl;
+									let i = index
+								"
+							>
+								<input
+									type="checkbox"
+									class="custom-control-input"
+									id="amenity_{{ associations[i].name }}"
+									[value]="associations[i].id"
+									(change)="onAssociationChange($event)"
+									[formControl]="associationsObj"
+									tabIndex="1"
+								/>
+								<label
+									class="custom-control-label"
+									for="amenity_{{ associations[i].name }}"
+									>{{ associations[i].name }}</label
+								>
 							</div>
 						</div>
 					</ng-template>
@@ -802,162 +1686,335 @@
 	</section>
 	<section class="billing_inforamtion">
 		<ul>
-			<li><button class="custom-btn savebutton" (click)="submitForm()" [disabled]="disableSubmitButton"
-					tabIndex="1">SAVE</button> </li>
-			<li><button class="custom-btn resetbutton" (click)="resetForm()" tabIndex="1">RESET</button> </li>
+			<li>
+				<button
+					class="custom-btn savebutton"
+					(click)="submitForm()"
+					[disabled]="disableSubmitButton"
+					tabIndex="1"
+				>
+					SAVE
+				</button>
+			</li>
+			<li>
+				<button
+					class="custom-btn resetbutton"
+					(click)="resetForm()"
+					tabIndex="1"
+				>
+					RESET
+				</button>
+			</li>
 		</ul>
 	</section>
 </form>
 
 <!-- Image modal -->
-<app-image-modal (closeTab)="closeButton()" [modalImage]="modalImage"></app-image-modal>
+<app-image-modal
+	(closeTab)="closeButton()"
+	[modalImage]="modalImage"
+></app-image-modal>
 
 <!-- snackbar -->
-<div id="snackbar">{{snackbarMsg}}</div>
+<div id="snackbar">{{ snackbarMsg }}</div>
 
 <!-- Instructions modal -->
-<div class="modal fade" id="instructionsModal" tabindex="-1" role="dialog" aria-labelledby="instructionsModal"
-	aria-hidden="true">
+<div
+	class="modal fade"
+	id="instructionsModal"
+	tabindex="-1"
+	role="dialog"
+	aria-labelledby="instructionsModal"
+	aria-hidden="true"
+>
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
-			<button type="button" class="close closeButton" data-dismiss="modal" aria-label="Close">
+			<button
+				type="button"
+				class="close closeButton"
+				data-dismiss="modal"
+				aria-label="Close"
+			>
 				<span aria-hidden="true">&times;</span>
 			</button>
 			<div class="modal-header text-center">
 				<h3>What You Need To Get Started Now?</h3>
 			</div>
 			<div class="modal-body">
-				<h6 class="text-center font-weight-bold headingH6">Take a picture/screenshot for reference</h6>
+				<h6 class="text-center font-weight-bold headingH6">
+					Take a picture/screenshot for reference
+				</h6>
 				<ul>
 					<li>
-						1-800-LIMO.COM has made Registering is as easy as opening a bank account and advertising
-						yourself
-						on Match.com.
+						1-800-LIMO.COM has made Registering is as easy as
+						opening a bank account and advertising yourself on
+						Match.com.
 					</li>
 					<li>
-						Complete each of the 7 Steps one at a time and always save your work, and after any editing.
+						Complete each of the 7 Steps one at a time and always
+						save your work, and after any editing.
 					</li>
 					<li>
-						Take photos of all legal documents, permits, IDs, licenses, insurance, tax IDs, and bank account
-						and check routing info.
+						Take photos of all legal documents, permits, IDs,
+						licenses, insurance, tax IDs, and bank account and check
+						routing info.
 					</li>
 					<li>
-						Take an attractive driver head and shoulder portrait image. Dress as you do for work. Suit and
-						tie, pantsuit, business casual,
-						uniform, or Tuxedo.
-						Dress professionally and earn more tip hand tips. Nice pictures sell.
+						Take an attractive driver head and shoulder portrait
+						image. Dress as you do for work. Suit and tie, pantsuit,
+						business casual, uniform, or Tuxedo. Dress
+						professionally and earn more tip hand tips. Nice
+						pictures sell.
 					</li>
 					<li>
-						You can add up to 9 exterior and interior images, of each of your vehicles. Good photos sell!
+						You can add up to 9 exterior and interior images, of
+						each of your vehicles. Good photos sell!
 					</li>
 				</ul>
-				<h6 class="text-center font-weight-bold">Or refer to bottom of Step 0 for guidance.</h6>
+				<h6 class="text-center font-weight-bold">
+					Or refer to bottom of Step 0 for guidance.
+				</h6>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="custom-btn button2" data-dismiss="modal">OK</button>
+				<button
+					type="button"
+					class="custom-btn button2"
+					data-dismiss="modal"
+				>
+					OK
+				</button>
 			</div>
 		</div>
 	</div>
 </div>
 
 <!-- Affiliate selection Instructions modal -->
-<div class="modal fade" id="affiliateInstructionsModal" tabindex="-1" role="dialog"
-	aria-labelledby="affiliateInstructionsModal" aria-hidden="true">
+<div
+	class="modal fade"
+	id="affiliateInstructionsModal"
+	tabindex="-1"
+	role="dialog"
+	aria-labelledby="affiliateInstructionsModal"
+	aria-hidden="true"
+>
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
-			<button type="button" class="close closeButton" data-dismiss="modal" aria-label="Close">
+			<button
+				type="button"
+				class="close closeButton"
+				data-dismiss="modal"
+				aria-label="Close"
+			>
 				<span aria-hidden="true">&times;</span>
 			</button>
 			<div class="modal-header">
-				<h3 class="modal-title">Instruction for {{affiliateInstructionHeading}}</h3>
+				<h3 class="modal-title">
+					Instruction for {{ affiliateInstructionHeading }}
+				</h3>
 			</div>
-			<div class="modal-body" [innerHTML]="affiliateInstruction">
-			</div>
+			<div class="modal-body" [innerHTML]="affiliateInstruction"></div>
 			<div class="modal-footer">
-				<button type="button" class="custom-btn button2" data-dismiss="modal" (click)="FocusField()">OK</button>
+				<button
+					type="button"
+					class="custom-btn button2"
+					data-dismiss="modal"
+					(click)="FocusField()"
+				>
+					OK
+				</button>
 			</div>
 		</div>
 	</div>
 </div>
 
 <!-- Affiliate selection alertMessage modal -->
-<div class="modal fade" id="affiliateAlertMessageModal" tabindex="-1" role="dialog"
-	aria-labelledby="affiliateAlertMessageModal" aria-hidden="true">
+<div
+	class="modal fade"
+	id="affiliateAlertMessageModal"
+	tabindex="-1"
+	role="dialog"
+	aria-labelledby="affiliateAlertMessageModal"
+	aria-hidden="true"
+>
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
-			<button type="button" class="close closeButton" data-dismiss="modal" aria-label="Close">
+			<button
+				type="button"
+				class="close closeButton"
+				data-dismiss="modal"
+				aria-label="Close"
+			>
 				<span aria-hidden="true">&times;</span>
 			</button>
 			<div class="text-center">
-				<h5 class="modal-title my-3" id="exampleModalLabel">{{modalAlertMessage}}</h5>
+				<h5 class="modal-title my-3" id="exampleModalLabel">
+					{{ modalAlertMessage }}
+				</h5>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="custom-btn button2" data-dismiss="modal">OK</button>
+				<button
+					type="button"
+					class="custom-btn button2"
+					data-dismiss="modal"
+				>
+					OK
+				</button>
 			</div>
 		</div>
 	</div>
 </div>
 
 <!-- Edit Affiliate Email modal -->
-<div class="modal fade" id="editAffiliateEmailModal" tabindex="-1" role="dialog"
-	aria-labelledby="editAffiliateEmailModal" aria-hidden="true">
+<div
+	class="modal fade"
+	id="editAffiliateEmailModal"
+	tabindex="-1"
+	role="dialog"
+	aria-labelledby="editAffiliateEmailModal"
+	aria-hidden="true"
+>
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
-			<button type="button" class="close closeButton" data-dismiss="modal" aria-label="Close">
+			<button
+				type="button"
+				class="close closeButton"
+				data-dismiss="modal"
+				aria-label="Close"
+			>
 				<span aria-hidden="true">&times;</span>
 			</button>
 			<div *ngIf="displayMsg; else displayForm">
 				<div class="modal-header">
-					<h5 class="text-center mb-2 mt-3">{{displayMsg}}</h5>
+					<h5 class="text-center mb-2 mt-3">{{ displayMsg }}</h5>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="custom-btn button2" data-dismiss="modal">OK</button>
+					<button
+						type="button"
+						class="custom-btn button2"
+						data-dismiss="modal"
+					>
+						OK
+					</button>
 				</div>
 			</div>
 			<ng-template #displayForm>
-				<form [formGroup]="updateAffiliateEmailForm" *ngIf="updateAffiliateEmailForm">
+				<form
+					[formGroup]="updateAffiliateEmailForm"
+					*ngIf="updateAffiliateEmailForm"
+				>
 					<div class="modal-header pb-0">
-						<h3 class="text-center mt-3 mb-1">Verify 2 Different OTP</h3>
-						<p class="text-center mb-0 security-p">(For Maximum Security)</p>
-						<p class="resent-otp" (click)="affiliateEmailButtonClick('save')">Resend OTP</p>
+						<h3 class="text-center mt-3 mb-1">
+							Verify 2 Different OTP
+						</h3>
+						<p class="text-center mb-0 security-p">
+							(For Maximum Security)
+						</p>
+						<p
+							class="resent-otp"
+							(click)="affiliateEmailButtonClick('save')"
+						>
+							Resend OTP
+						</p>
 					</div>
 					<!-- progress bar -->
-					<mat-progress-bar class="mt-3 my-color" mode="indeterminate" *ngIf="affiliateEmailProgressBar">
+					<mat-progress-bar
+						class="mt-3 my-color"
+						mode="indeterminate"
+						*ngIf="affiliateEmailProgressBar"
+					>
 					</mat-progress-bar>
 					<div class="modal-body">
 						<div class="row">
 							<div class="col-12">
-								<div class="text-danger text-center mt-2 emailErrorMsgs">
-									{{emailErrorMsgs}}
+								<div
+									class="text-danger text-center mt-2 emailErrorMsgs"
+								>
+									{{ emailErrorMsgs }}
 								</div>
 							</div>
 							<div class="col-12">
 								<mat-form-field appearance="outline">
-									<mat-label>Enter OTP sent to {{addAffiliateAccountForm.value.Email}}*</mat-label>
-									<input matInput formControlName="emailOtp" id="emailOtp">
+									<mat-label
+										>Enter OTP sent to
+										{{
+											addAffiliateAccountForm.value.Email
+										}}*</mat-label
+									>
+									<input
+										matInput
+										formControlName="emailOtp"
+										id="emailOtp"
+									/>
 								</mat-form-field>
-								<div *ngIf="submittedAffiliateEmailForm && fAffiliateEmail.emailOtp.errors || fAffiliateEmail.emailOtp.touched && fAffiliateEmail.emailOtp.errors"
-									class="text-danger margin-bottom-thin my-mat-hint">
-									<div *ngIf="fAffiliateEmail.emailOtp.errors.required">This field is required</div>
+								<div
+									*ngIf="
+										(submittedAffiliateEmailForm &&
+											fAffiliateEmail.emailOtp.errors) ||
+										(fAffiliateEmail.emailOtp.touched &&
+											fAffiliateEmail.emailOtp.errors)
+									"
+									class="text-danger margin-bottom-thin my-mat-hint"
+								>
+									<div
+										*ngIf="
+											fAffiliateEmail.emailOtp.errors
+												.required
+										"
+									>
+										This field is required
+									</div>
 								</div>
-								<div *ngIf="fAffiliateEmail.emailOtp.errors"
-									class="text-danger margin-bottom-thin my-mat-hint">
-									<div *ngIf="fAffiliateEmail.emailOtp.errors?.invalid_Pattern;else plusError">Do not
-										add Dashes
-										with numbers</div>
+								<div
+									*ngIf="fAffiliateEmail.emailOtp.errors"
+									class="text-danger margin-bottom-thin my-mat-hint"
+								>
+									<div
+										*ngIf="
+											fAffiliateEmail.emailOtp.errors
+												?.invalid_Pattern;
+											else plusError
+										"
+									>
+										Do not add Dashes with numbers
+									</div>
 									<ng-template #plusError>
-										<div *ngIf="fAffiliateEmail.emailOtp.errors?.invalidPattern;else allErrors">Do
-											not enter +
-											sign</div>
+										<div
+											*ngIf="
+												fAffiliateEmail.emailOtp.errors
+													?.invalidPattern;
+												else allErrors
+											"
+										>
+											Do not enter + sign
+										</div>
 										<ng-template #allErrors>
-											<div *ngIf="fAffiliateEmail.emailOtp.errors?.pattern;else numberLength">
-												Enter Numbers Without Spaces or Dashes
+											<div
+												*ngIf="
+													fAffiliateEmail.emailOtp
+														.errors?.pattern;
+													else numberLength
+												"
+											>
+												Enter Numbers Without Spaces or
+												Dashes
 											</div>
 											<ng-template #numberLength>
-												<div *ngIf="fAffiliateEmail.emailOtp.errors.minlength">Minimum length
-													should be 6</div>
-												<div *ngIf="fAffiliateEmail.emailOtp.errors.maxlength">Maximum length
-													should be 6</div>
+												<div
+													*ngIf="
+														fAffiliateEmail.emailOtp
+															.errors.minlength
+													"
+												>
+													Minimum length should be 6
+												</div>
+												<div
+													*ngIf="
+														fAffiliateEmail.emailOtp
+															.errors.maxlength
+													"
+												>
+													Maximum length should be 6
+												</div>
 											</ng-template>
 										</ng-template>
 									</ng-template>
@@ -965,32 +2022,88 @@
 							</div>
 							<div class="col-12">
 								<mat-form-field appearance="outline">
-									<mat-label>Enter OTP sent to {{addAffiliateAccountForm.value.CellNumber}}*
+									<mat-label
+										>Enter OTP sent to
+										{{
+											addAffiliateAccountForm.value
+												.CellNumber
+										}}*
 									</mat-label>
-									<input matInput formControlName="phoneOtp" id="phoneOtp">
+									<input
+										matInput
+										formControlName="phoneOtp"
+										id="phoneOtp"
+									/>
 								</mat-form-field>
-								<div *ngIf="submittedAffiliateEmailForm && fAffiliateEmail.phoneOtp.errors || fAffiliateEmail.phoneOtp.touched && fAffiliateEmail.phoneOtp.errors"
-									class="text-danger margin-bottom-thin my-mat-hint">
-									<div *ngIf="fAffiliateEmail.phoneOtp.errors.required">This field is required</div>
+								<div
+									*ngIf="
+										(submittedAffiliateEmailForm &&
+											fAffiliateEmail.phoneOtp.errors) ||
+										(fAffiliateEmail.phoneOtp.touched &&
+											fAffiliateEmail.phoneOtp.errors)
+									"
+									class="text-danger margin-bottom-thin my-mat-hint"
+								>
+									<div
+										*ngIf="
+											fAffiliateEmail.phoneOtp.errors
+												.required
+										"
+									>
+										This field is required
+									</div>
 								</div>
-								<div *ngIf="fAffiliateEmail.phoneOtp.errors"
-									class="text-danger margin-bottom-thin my-mat-hint">
-									<div *ngIf="fAffiliateEmail.phoneOtp.errors?.invalid_Pattern;else plusError">Do not
-										add Dashes
-										with numbers</div>
+								<div
+									*ngIf="fAffiliateEmail.phoneOtp.errors"
+									class="text-danger margin-bottom-thin my-mat-hint"
+								>
+									<div
+										*ngIf="
+											fAffiliateEmail.phoneOtp.errors
+												?.invalid_Pattern;
+											else plusError
+										"
+									>
+										Do not add Dashes with numbers
+									</div>
 									<ng-template #plusError>
-										<div *ngIf="fAffiliateEmail.phoneOtp.errors?.invalidPattern;else allErrors">Do
-											not enter +
-											sign</div>
+										<div
+											*ngIf="
+												fAffiliateEmail.phoneOtp.errors
+													?.invalidPattern;
+												else allErrors
+											"
+										>
+											Do not enter + sign
+										</div>
 										<ng-template #allErrors>
-											<div *ngIf="fAffiliateEmail.phoneOtp.errors?.pattern;else numberLength">
-												Enter Numbers Without Spaces or Dashes
+											<div
+												*ngIf="
+													fAffiliateEmail.phoneOtp
+														.errors?.pattern;
+													else numberLength
+												"
+											>
+												Enter Numbers Without Spaces or
+												Dashes
 											</div>
 											<ng-template #numberLength>
-												<div *ngIf="fAffiliateEmail.phoneOtp.errors.minlength">Minimum length
-													should be 6</div>
-												<div *ngIf="fAffiliateEmail.phoneOtp.errors.maxlength">Maximum length
-													should be 6</div>
+												<div
+													*ngIf="
+														fAffiliateEmail.phoneOtp
+															.errors.minlength
+													"
+												>
+													Minimum length should be 6
+												</div>
+												<div
+													*ngIf="
+														fAffiliateEmail.phoneOtp
+															.errors.maxlength
+													"
+												>
+													Maximum length should be 6
+												</div>
 											</ng-template>
 										</ng-template>
 									</ng-template>
@@ -999,8 +2112,14 @@
 						</div>
 					</div>
 					<div class="modal-footer pb-0">
-						<button type="button" class="custom-btn button2" (click)="updateAffiliateEmail()"
-							[disabled]="disableSubmitAffiliateEmailButton">Submit</button>
+						<button
+							type="button"
+							class="custom-btn button2"
+							(click)="updateAffiliateEmail()"
+							[disabled]="disableSubmitAffiliateEmailButton"
+						>
+							Submit
+						</button>
 					</div>
 				</form>
 			</ng-template>
@@ -1009,66 +2128,157 @@
 </div>
 
 <!-- Edit Dispatch Email modal -->
-<div class="modal fade" id="editDispatchEmailModal" tabindex="-1" role="dialog" aria-labelledby="editDispatchEmailModal"
-	aria-hidden="true">
+<div
+	class="modal fade"
+	id="editDispatchEmailModal"
+	tabindex="-1"
+	role="dialog"
+	aria-labelledby="editDispatchEmailModal"
+	aria-hidden="true"
+>
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
-			<button type="button" class="close closeButton" data-dismiss="modal" aria-label="Close">
+			<button
+				type="button"
+				class="close closeButton"
+				data-dismiss="modal"
+				aria-label="Close"
+			>
 				<span aria-hidden="true">&times;</span>
 			</button>
 			<div *ngIf="displayMsg; else displayDispatchEmailForm">
 				<div class="modal-header">
-					<h5 class="text-center mt-3 mb-2">{{displayMsg}}</h5>
+					<h5 class="text-center mt-3 mb-2">{{ displayMsg }}</h5>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="custom-btn button2" data-dismiss="modal">OK</button>
+					<button
+						type="button"
+						class="custom-btn button2"
+						data-dismiss="modal"
+					>
+						OK
+					</button>
 				</div>
 			</div>
 			<ng-template #displayDispatchEmailForm>
-				<form [formGroup]="updateDispatchEmailForm" *ngIf="updateDispatchEmailForm">
+				<form
+					[formGroup]="updateDispatchEmailForm"
+					*ngIf="updateDispatchEmailForm"
+				>
 					<div class="modal-header pb-0">
-						<h3 class="text-center mt-3 mb-1">Verify 2 Different OTP</h3>
-						<p class="text-center mb-0 security-p">(For Maximum Security)</p>
-						<p class="resent-otp" (click)="dispatchEmailButtonClick('save')">Resend OTP</p>
+						<h3 class="text-center mt-3 mb-1">
+							Verify 2 Different OTP
+						</h3>
+						<p class="text-center mb-0 security-p">
+							(For Maximum Security)
+						</p>
+						<p
+							class="resent-otp"
+							(click)="dispatchEmailButtonClick('save')"
+						>
+							Resend OTP
+						</p>
 					</div>
 					<!-- progress bar -->
-					<mat-progress-bar class="mt-3 my-color" mode="indeterminate" *ngIf="dispatchEmailProgressBar">
+					<mat-progress-bar
+						class="mt-3 my-color"
+						mode="indeterminate"
+						*ngIf="dispatchEmailProgressBar"
+					>
 					</mat-progress-bar>
 					<div class="modal-body">
 						<div class="row">
 							<div class="col-12">
-								<div class="text-danger text-center mt-2 emailErrorMsgs">
-									{{emailErrorMsgs}}
+								<div
+									class="text-danger text-center mt-2 emailErrorMsgs"
+								>
+									{{ emailErrorMsgs }}
 								</div>
 							</div>
 							<div class="col-12">
 								<mat-form-field appearance="outline">
-									<mat-label>Enter OTP sent to {{addAffiliateAccountForm.value.dispatchEmail}}*
+									<mat-label
+										>Enter OTP sent to
+										{{
+											addAffiliateAccountForm.value
+												.dispatchEmail
+										}}*
 									</mat-label>
-									<input matInput formControlName="emailOtp" id="emailOtp">
+									<input
+										matInput
+										formControlName="emailOtp"
+										id="emailOtp"
+									/>
 								</mat-form-field>
-								<div *ngIf="submittedDispatchEmailForm && fDispatchEmail.emailOtp.errors || fDispatchEmail.emailOtp.touched && fDispatchEmail.emailOtp.errors"
-									class="text-danger margin-bottom-thin my-mat-hint">
-									<div *ngIf="fDispatchEmail.emailOtp.errors.required">This field is required</div>
+								<div
+									*ngIf="
+										(submittedDispatchEmailForm &&
+											fDispatchEmail.emailOtp.errors) ||
+										(fDispatchEmail.emailOtp.touched &&
+											fDispatchEmail.emailOtp.errors)
+									"
+									class="text-danger margin-bottom-thin my-mat-hint"
+								>
+									<div
+										*ngIf="
+											fDispatchEmail.emailOtp.errors
+												.required
+										"
+									>
+										This field is required
+									</div>
 								</div>
-								<div *ngIf="fDispatchEmail.emailOtp.errors"
-									class="text-danger margin-bottom-thin my-mat-hint">
-									<div *ngIf="fDispatchEmail.emailOtp.errors?.invalid_Pattern;else plusError">Do not
-										add Dashes
-										with numbers</div>
+								<div
+									*ngIf="fDispatchEmail.emailOtp.errors"
+									class="text-danger margin-bottom-thin my-mat-hint"
+								>
+									<div
+										*ngIf="
+											fDispatchEmail.emailOtp.errors
+												?.invalid_Pattern;
+											else plusError
+										"
+									>
+										Do not add Dashes with numbers
+									</div>
 									<ng-template #plusError>
-										<div *ngIf="fDispatchEmail.emailOtp.errors?.invalidPattern;else allErrors">Do
-											not enter +
-											sign</div>
+										<div
+											*ngIf="
+												fDispatchEmail.emailOtp.errors
+													?.invalidPattern;
+												else allErrors
+											"
+										>
+											Do not enter + sign
+										</div>
 										<ng-template #allErrors>
-											<div *ngIf="fDispatchEmail.emailOtp.errors?.pattern;else numberLength">Enter
-												Numbers Without Spaces or Dashes
+											<div
+												*ngIf="
+													fDispatchEmail.emailOtp
+														.errors?.pattern;
+													else numberLength
+												"
+											>
+												Enter Numbers Without Spaces or
+												Dashes
 											</div>
 											<ng-template #numberLength>
-												<div *ngIf="fDispatchEmail.emailOtp.errors.minlength">Minimum length
-													should be 6</div>
-												<div *ngIf="fDispatchEmail.emailOtp.errors.maxlength">Maximum length
-													should be 6</div>
+												<div
+													*ngIf="
+														fDispatchEmail.emailOtp
+															.errors.minlength
+													"
+												>
+													Minimum length should be 6
+												</div>
+												<div
+													*ngIf="
+														fDispatchEmail.emailOtp
+															.errors.maxlength
+													"
+												>
+													Maximum length should be 6
+												</div>
 											</ng-template>
 										</ng-template>
 									</ng-template>
@@ -1076,32 +2286,88 @@
 							</div>
 							<div class="col-12">
 								<mat-form-field appearance="outline">
-									<mat-label>Enter OTP sent to {{addAffiliateAccountForm.value.CellNumber}}*
+									<mat-label
+										>Enter OTP sent to
+										{{
+											addAffiliateAccountForm.value
+												.CellNumber
+										}}*
 									</mat-label>
-									<input matInput formControlName="phoneOtp" id="phoneOtp">
+									<input
+										matInput
+										formControlName="phoneOtp"
+										id="phoneOtp"
+									/>
 								</mat-form-field>
-								<div *ngIf="submittedDispatchEmailForm && fDispatchEmail.phoneOtp.errors || fDispatchEmail.phoneOtp.touched && fDispatchEmail.phoneOtp.errors"
-									class="text-danger margin-bottom-thin my-mat-hint">
-									<div *ngIf="fDispatchEmail.phoneOtp.errors.required">This field is required</div>
+								<div
+									*ngIf="
+										(submittedDispatchEmailForm &&
+											fDispatchEmail.phoneOtp.errors) ||
+										(fDispatchEmail.phoneOtp.touched &&
+											fDispatchEmail.phoneOtp.errors)
+									"
+									class="text-danger margin-bottom-thin my-mat-hint"
+								>
+									<div
+										*ngIf="
+											fDispatchEmail.phoneOtp.errors
+												.required
+										"
+									>
+										This field is required
+									</div>
 								</div>
-								<div *ngIf="fDispatchEmail.phoneOtp.errors"
-									class="text-danger margin-bottom-thin my-mat-hint">
-									<div *ngIf="fDispatchEmail.phoneOtp.errors?.invalid_Pattern;else plusError">Do not
-										add Dashes
-										with numbers</div>
+								<div
+									*ngIf="fDispatchEmail.phoneOtp.errors"
+									class="text-danger margin-bottom-thin my-mat-hint"
+								>
+									<div
+										*ngIf="
+											fDispatchEmail.phoneOtp.errors
+												?.invalid_Pattern;
+											else plusError
+										"
+									>
+										Do not add Dashes with numbers
+									</div>
 									<ng-template #plusError>
-										<div *ngIf="fDispatchEmail.phoneOtp.errors?.invalidPattern;else allErrors">Do
-											not enter +
-											sign</div>
+										<div
+											*ngIf="
+												fDispatchEmail.phoneOtp.errors
+													?.invalidPattern;
+												else allErrors
+											"
+										>
+											Do not enter + sign
+										</div>
 										<ng-template #allErrors>
-											<div *ngIf="fDispatchEmail.phoneOtp.errors?.pattern;else numberLength">Enter
-												Numbers Without Spaces or Dashes
+											<div
+												*ngIf="
+													fDispatchEmail.phoneOtp
+														.errors?.pattern;
+													else numberLength
+												"
+											>
+												Enter Numbers Without Spaces or
+												Dashes
 											</div>
 											<ng-template #numberLength>
-												<div *ngIf="fDispatchEmail.phoneOtp.errors.minlength">Minimum length
-													should be 6</div>
-												<div *ngIf="fDispatchEmail.phoneOtp.errors.maxlength">Maximum length
-													should be 6</div>
+												<div
+													*ngIf="
+														fDispatchEmail.phoneOtp
+															.errors.minlength
+													"
+												>
+													Minimum length should be 6
+												</div>
+												<div
+													*ngIf="
+														fDispatchEmail.phoneOtp
+															.errors.maxlength
+													"
+												>
+													Maximum length should be 6
+												</div>
 											</ng-template>
 										</ng-template>
 									</ng-template>
@@ -1110,8 +2376,14 @@
 						</div>
 					</div>
 					<div class="modal-footer pb-0">
-						<button type="button" class="custom-btn button2" (click)="updateDispatchEmail()"
-							[disabled]="disableSubmitAffiliateEmailButton">Submit</button>
+						<button
+							type="button"
+							class="custom-btn button2"
+							(click)="updateDispatchEmail()"
+							[disabled]="disableSubmitAffiliateEmailButton"
+						>
+							Submit
+						</button>
 					</div>
 				</form>
 			</ng-template>
