@@ -35,18 +35,18 @@ export class DispatchEmailConfirmationComponent implements OnInit
 				if (this.email && this.hash)
 				{
 					this.spinner.show();
-					this.websiteService.dispatchEmailVerification(this.email, this.hash)
-						.pipe(
-							catchError(err =>
-							{
-								this.spinner.hide();//hide spinner
-								return throwError(err);
-							})
-						).subscribe(({ message }: any) =>
-						{
-							this.spinner.hide();//hide spinner
-							this.outputMessage = message;
-						});
+					// this.websiteService.dispatchEmailVerification(this.email, this.hash)
+					// 	.pipe(
+					// 		catchError(err =>
+					// 		{
+					// 			this.spinner.hide();//hide spinner
+					// 			return throwError(err);
+					// 		})
+					// 	).subscribe(({ message }: any) =>
+					// 	{
+					// 		this.spinner.hide();//hide spinner
+					// 		this.outputMessage = message;
+					// 	});
 				}
 				else
 				{

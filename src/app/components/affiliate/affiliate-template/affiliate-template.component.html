@@ -12,8 +12,9 @@
 				<line x1="9.37" x2="54.63" y1="54.63" y2="9.37" fill="none" stroke="#010101" stroke-miterlimit="10"
 					stroke-width="4" />
 			</svg> -->
-			<svg *ngIf="showSidebar; else hideSidebar" xmlns="http://www.w3.org/2000/svg" (click)="showSidebarFunc(false)"
-				width="24" height="24" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+			<svg *ngIf="showSidebar; else hideSidebar" xmlns="http://www.w3.org/2000/svg"
+				(click)="showSidebarFunc(false)" width="24" height="24" fill="currentColor" class="bi bi-chevron-right"
+				viewBox="0 0 16 16">
 				<path fill-rule="evenodd"
 					d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
 			</svg>
@@ -26,8 +27,8 @@
 					<line x1="3" y1="6" x2="21" y2="6"></line>
 					<line x1="3" y1="18" x2="21" y2="18"></line>
 				</svg> -->
-				<svg (click)="showSidebarFunc(true)" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
-					class="bi bi-chevron-left" viewBox="0 0 16 16">
+				<svg (click)="showSidebarFunc(true)" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+					fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
 					<path fill-rule="evenodd"
 						d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
 				</svg>
@@ -39,8 +40,8 @@
 			</li>
 			<li class="nav-item dropdown no-caret dropdown-user">
 				<a class="user-profile btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownUserImage"
-					href="javascript:void(0);" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-					tabindex="-1">
+					href="javascript:void(0);" role="button" data-toggle="dropdown" aria-haspopup="true"
+					aria-expanded="false" tabindex="-1">
 					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
 						<path fill="#000" fill-rule="evenodd"
 							d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22ZM15 10C15 11.6569 13.6569 13 12 13C10.3431 13 9 11.6569 9 10C9 8.34315 10.3431 7 12 7C13.6569 7 15 8.34315 15 10ZM5.99927 17C7.36758 15.1783 9.54609 14 11.9998 14C14.4535 14 16.6321 15.1783 18.0004 17C16.6321 18.8217 14.4535 20 11.9998 20C9.54609 20 7.36758 18.8217 5.99927 17Z"
@@ -63,11 +64,12 @@
 						</div>
 					</h6>
 					<div class="dropdown-divider"></div>
-					<a class="dropdown-item" [routerLinkActive]="['active']" routerLink="/affiliate/profile" tabindex="-1">
+					<a class="dropdown-item" [routerLinkActive]="['active']" routerLink="/affiliate/profile"
+						tabindex="-1">
 						<div class="dropdown-item-icon">
 							<svg width="24" height="24" viewBox="0 0 24 24" class=" profileSvg">
-								<g fill="none" fill-rule="evenodd" stroke="#5dbd8a" stroke-linecap="round" stroke-linejoin="round"
-									stroke-width="1.5" transform="translate(4 2.5)">
+								<g fill="none" fill-rule="evenodd" stroke="#5dbd8a" stroke-linecap="round"
+									stroke-linejoin="round" stroke-width="1.5" transform="translate(4 2.5)">
 									<circle cx="7.579" cy="4.778" r="4.778" />
 									<path
 										d="M5.32907052e-15,16.2013731 C-0.00126760558,15.8654831 0.0738531734,15.5336997 0.219695816,15.2311214 C0.677361723,14.3157895 1.96797958,13.8306637 3.0389178,13.610984 C3.81127745,13.4461621 4.59430539,13.3360488 5.38216724,13.2814646 C6.84083861,13.1533327 8.30793524,13.1533327 9.76660662,13.2814646 C10.5544024,13.3366774 11.3373865,13.4467845 12.1098561,13.610984 C13.1807943,13.8306637 14.4714121,14.270023 14.929078,15.2311214 C15.2223724,15.8479159 15.2223724,16.5639836 14.929078,17.1807781 C14.4714121,18.1418765 13.1807943,18.5812358 12.1098561,18.7917621 C11.3383994,18.9634099 10.5550941,19.0766219 9.76660662,19.1304349 C8.57936754,19.2310812 7.38658584,19.2494317 6.19681255,19.1853548 C5.92221301,19.1853548 5.65676678,19.1853548 5.38216724,19.1304349 C4.59663136,19.077285 3.8163184,18.9640631 3.04807112,18.7917621 C1.96797958,18.5812358 0.686515041,18.1418765 0.219695816,17.1807781 C0.0745982583,16.8746908 -0.000447947969,16.5401098 5.32907052e-15,16.2013731 Z" />
@@ -78,9 +80,9 @@
 					</a>
 					<a class="dropdown-item" (click)="logout()" tabindex="-1">
 						<div class="dropdown-item-icon">
-							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-								stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-								class="feather feather-log-out">
+							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+								fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+								stroke-linejoin="round" class="feather feather-log-out">
 								<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
 								<polyline points="16 17 21 12 16 7"></polyline>
 								<line x1="21" y1="12" x2="9" y2="12"></line>
@@ -103,10 +105,12 @@
 						<li class="nav-item"
 							[hidden]="affiliateAccountStatus=='accepted' || affiliateAccountStatus=='in-progress'">
 							<a class="nav-link collapsed" [routerLinkActive]="['active']"
-								[routerLink]="['/affiliate/account-status']" (click)="closeSidebarFunc(false)" tabindex="-1">
+								[routerLink]="['/affiliate/account-status']" (click)="closeSidebarFunc(false)"
+								tabindex="-1">
 								<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-									xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 113.39 122.88"
-									style="enable-background:new 0 0 113.39 122.88" xml:space="preserve">
+									xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+									viewBox="0 0 113.39 122.88" style="enable-background:new 0 0 113.39 122.88"
+									xml:space="preserve">
 									<g>
 										<path
 											d="M39.01,79.72c-1.38,0-2.49-1.33-2.49-2.97c0-1.64,1.12-2.97,2.49-2.97h13.63c1.38,0,2.49,1.33,2.49,2.97 c0,1.64-1.12,2.97-2.49,2.97H39.01L39.01,79.72z M85.66,67.41c7.66,0,14.59,3.1,19.61,8.12c5.02,5.02,8.12,11.95,8.12,19.61 s-3.1,14.59-8.12,19.61c-5.02,5.02-11.95,8.12-19.61,8.12s-14.59-3.1-19.61-8.12c-5.02-5.02-8.12-11.95-8.12-19.61 s3.1-14.59,8.12-19.61C71.07,70.51,78,67.41,85.66,67.41L85.66,67.41z M83.54,82.17c0-1.37,1.11-2.48,2.48-2.48 c1.37,0,2.48,1.11,2.48,2.48v12.92l9.66,5.72c1.18,0.69,1.57,2.21,0.87,3.39c-0.69,1.18-2.21,1.57-3.39,0.87L84.89,98.7 c-0.8-0.41-1.35-1.24-1.35-2.21V82.17L83.54,82.17z M101.77,79.04c-4.12-4.12-9.82-6.67-16.11-6.67c-6.29,0-11.99,2.55-16.11,6.67 c-4.12,4.12-6.67,9.82-6.67,16.11c0,6.29,2.55,11.99,6.67,16.11c4.12,4.12,9.82,6.67,16.11,6.67c6.29,0,11.99-2.55,16.11-6.67 c4.12-4.12,6.67-9.82,6.67-16.11S105.89,83.16,101.77,79.04L101.77,79.04z M44.1,109.94c1.64,0,2.97,1.33,2.97,2.97 c0,1.64-1.33,2.97-2.97,2.97H6.92c-1.9,0-3.63-0.78-4.89-2.03C0.78,112.6,0,110.87,0,108.97V6.92c0-1.91,0.78-3.63,2.03-4.89 C3.28,0.78,5.01,0,6.92,0h84.9c1.9,0,3.63,0.78,4.89,2.03c1.25,1.25,2.03,2.98,2.03,4.89V54.2c0,1.64-1.33,2.97-2.97,2.97 c-1.64,0-2.97-1.33-2.97-2.97V6.92c0-0.26-0.11-0.5-0.29-0.68c-0.18-0.18-0.42-0.29-0.68-0.29H6.92c-0.26,0-0.51,0.11-0.68,0.29 C6.05,6.41,5.94,6.65,5.94,6.92v102.05c0,0.26,0.11,0.51,0.29,0.68c0.18,0.18,0.42,0.29,0.68,0.29H44.1L44.1,109.94z M19.12,72.49 h7.45c0.54,0,0.98,0.44,0.98,0.98v7.45c0,0.54-0.44,0.98-0.98,0.98h-7.45c-0.54,0-0.98-0.44-0.98-0.98v-7.45 C18.15,72.92,18.59,72.49,19.12,72.49L19.12,72.49z M19.12,21.49h7.45c0.54,0,0.98,0.44,0.98,0.98v7.45c0,0.54-0.44,0.98-0.98,0.98 h-7.45c-0.54,0-0.98-0.44-0.98-0.98v-7.45C18.15,21.93,18.59,21.49,19.12,21.49L19.12,21.49z M39.01,28.72 c-1.38,0-2.49-1.33-2.49-2.97s1.12-2.97,2.49-2.97h35.46c1.38,0,2.49,1.33,2.49,2.97s-1.12,2.97-2.49,2.97H39.01L39.01,28.72z M22.17,56.14c-0.64,0.51-1.56,0.38-2.21-0.25c-0.07-0.05-0.14-0.11-0.21-0.18l-3.12-3.22c-0.65-0.68-0.5-1.81,0.34-2.53 c0.84-0.72,2.05-0.76,2.71-0.08l1.7,1.75l5.47-4.4c0.73-0.59,1.85-0.33,2.49,0.57c0.64,0.9,0.56,2.11-0.17,2.7L22.17,56.14 L22.17,56.14z M37.37,53.65c-1.38,0-2.49-1.33-2.49-2.97c0-1.64,1.12-2.97,2.49-2.97h35.46c1.38,0,2.49,1.33,2.49,2.97 c0,1.64-1.12,2.97-2.49,2.97H37.37L37.37,53.65z" />
@@ -115,8 +119,8 @@
 							</a>
 						</li>
 						<li class="nav-item" [hidden]="affiliateAccountStatus!='accepted'">
-							<a class="nav-link collapsed" [routerLinkActive]="['active']" routerLink="/affiliate/my-bookings"
-								(click)="closeSidebarFunc(false)" tabindex="-1">
+							<a class="nav-link collapsed" [routerLinkActive]="['active']"
+								routerLink="/affiliate/my-bookings" (click)="closeSidebarFunc(false)" tabindex="-1">
 								<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"
 									viewBox="0 0 117.78 122.88">
 									<title>timecard</title>
@@ -128,8 +132,8 @@
 						</li>
 						<!-- FARM OUT BOOKING -->
 						<li class="nav-item" [hidden]="affiliateAccountStatus!='accepted'">
-							<a class="nav-link collapsed" [routerLinkActive]="['active']" [routerLink]="['/affiliate/farm-out']"
-								(click)="closeSidebarFunc(false)" tabindex="-1">
+							<a class="nav-link collapsed" [routerLinkActive]="['active']"
+								[routerLink]="['/affiliate/farm-out']" (click)="closeSidebarFunc(false)" tabindex="-1">
 								<!-- SVG ICON -->
 								<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"
 									viewBox="0 0 117.78 122.88">
@@ -146,14 +150,15 @@
 						</li>
 						<li class="nav-item" [hidden]="affiliateAccountStatus=='completed'">
 							<a class="nav-link dropdwn" [routerLinkActive]="['active']" data-toggle="collapse"
-								data-target="#collapse5" aria-expanded="true" aria-controls="collapseUtilities" tabindex="-1"
-								(click)="chevronFunctionality()">
+								data-target="#collapse5" aria-expanded="true" aria-controls="collapseUtilities"
+								tabindex="-1" (click)="chevronFunctionality()">
 								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 									<path fill="none" d="M0 0h24v24H0V0z" />
 									<path
 										d="M7 3v3h2V4h10v16H9v-2H7v3c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2zm2.5 12.5c.29-.12.55-.29.8-.48l-.02.03 1.01.39c.23.09.49 0 .61-.22l.84-1.46c.12-.21.07-.49-.12-.64l-.85-.68-.02.03c.02-.16.05-.32.05-.48s-.03-.32-.05-.48l.02.03.85-.68c.19-.15.24-.43.12-.64l-.84-1.46c-.12-.21-.38-.31-.61-.22l-1.01.39.02.03c-.25-.17-.51-.34-.8-.46l-.17-1.08C9.3 7.18 9.09 7 8.84 7H7.16c-.25 0-.46.18-.49.42L6.5 8.5c-.29.12-.55.29-.8.48l.02-.03-1.02-.39c-.23-.09-.49 0-.61.22l-.84 1.46c-.12.21-.07.49.12.64l.85.68.02-.03c-.02.15-.05.31-.05.47s.03.32.05.48l-.02-.03-.85.68c-.19.15-.24.43-.12.64l.84 1.46c.12.21.38.31.61.22l1.01-.39-.01-.04c.25.19.51.36.8.48l.17 1.07c.03.25.24.43.49.43h1.68c.25 0 .46-.18.49-.42l.17-1.08zM6 12c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2z" />
 								</svg>
-								<span [ngClass]="chevron ? 'bi bi-chevron-down' : 'bi bi-chevron-up'">Initial
+								<span class="m-0"
+									[ngClass]="chevron ? 'bi bi-chevron-down' : 'bi bi-chevron-up'">Initial
 									Setup</span>
 							</a>
 							<div id="collapse5" class="collapse show" aria-labelledby="headingUtilities"
@@ -281,7 +286,7 @@
 						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
 							<rect width="256" height="256" fill="none" />
 							<path
-								d="M128,24A104,104,0,1,0,232,128,104.11791,104.11791,0,0,0,128,24Zm21.458,153.45605a35.99982,35.99982,0,0,1-50.91113,0,8.00052,8.00052,0,0,1,11.31445-11.31445A19.99959,19.99959,0,1,0,124.00293,132a8,8,0,e Setting0,1-6.55469-12.58691l19.1875-27.4209H103.99707a8,8,0,0,1,0-16h48a8,8,0,0,1,6.55469,12.58691L137.5332,118.61816A36.019,36.019,0,0,1,149.458,177.45605Z" />
+								d="M128,24A104,104,0,1,0,232,128,104.11791,104.11791,0,0,0,128,24Zm21.458,153.45605a35.99982,35.99982,0,0,1-50.91113,0,8.00052,8.00052,0,0,1,11.31445-11.31445A19.99959,19.99959,0,1,0,124.00293,132a8,8,0,0,1-6.55469-12.58691l19.1875-27.4209H103.99707a8,8,0,0,1,0-16h48a8,8,0,0,1,6.55469,12.58691L137.5332,118.61816A36.019,36.019,0,0,1,149.458,177.45605Z" />
 						</svg>
 						Insurance Settings
 					</div>
@@ -303,7 +308,7 @@
 							<path
 								d="M128,24A104,104,0,1,0,232,128,104.11791,104.11791,0,0,0,128,24ZM123.88184,116.002A35.99912,35.99912,0,1,1,98.35449,177.4668a7.99985,7.99985,0,1,1,11.291-11.33594,20.20173,20.20173,0,0,0,28.47461-.001,19.91646,19.91646,0,0,0-.001-28.25976,20.20412,20.20412,0,0,0-28.47461.001,7.99971,7.99971,0,0,1-13.541-6.95214l7.835-48.20215A8.00076,8.00076,0,0,1,111.835,76H152a8,8,0,0,1,0,16H118.63965L114.542,117.21094A36.413,36.413,0,0,1,123.88184,116.002Z" />
 						</svg>
-						Vehicle Settings/Rates
+						Vehicle Rates
 					</div>
 				</h1>
 				<h1 class="HeadingH1" *ngIf="currentStep=='6'">

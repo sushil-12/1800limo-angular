@@ -135,7 +135,7 @@ const routes: Routes = [
 					},
 					{
 						path: 'dispatcher-email-confirmation',
-						component: DispatchEmailConfirmationComponent
+						component: AffiliateEmailConfirmationComponent
 					}
 				]
 			}

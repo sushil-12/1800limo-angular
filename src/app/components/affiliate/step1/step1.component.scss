@@ -107,7 +107,7 @@
 .resent-otp {
 	cursor  : pointer;
 	position: absolute;
-	right   : 1rem;
+	left   : 1rem;
 	top     : 1rem;
 	color   : var(--orange-color);
 }
@@ -178,7 +178,7 @@
 
 .radio-tile-label {
 	text-align    : center;
-	font-size     : 0.75rem;
+	font-size     : 1rem;
 	font-weight   : 500;
 	text-transform: uppercase;
 	letter-spacing: 1px;
@@ -212,10 +212,6 @@
 		border          : 2px solid var(--green-color);
 		border-radius   : 5px;
 		transform       : scale(1.1, 1.1);
-
-		.radio-tile-label {
-			color: #fff;
-		}
 	}
 }
 
@@ -229,7 +225,6 @@
 
 	.radio-tile-label {
 		text-align    : center;
-		font-size     : 0.75rem;
 		font-weight   : 500;
 		text-transform: uppercase;
 		letter-spacing: 1px;

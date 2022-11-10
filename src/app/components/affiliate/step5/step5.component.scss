@@ -30,6 +30,15 @@ a.dropdown-item.notCompleted {
 	}
 }
 
+table.dataTable
+{
+	img
+	{
+		width: 7rem;
+		border-radius: 0.3rem;
+		object-fit: cover;
+	}
+}
 
 .modal-content {
 	align-items: center;
