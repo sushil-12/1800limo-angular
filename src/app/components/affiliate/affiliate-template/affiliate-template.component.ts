@@ -139,6 +139,7 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 						{
 							this.is_email_verified = true
 							this.is_show_verification_icon = false
+							this.stepCompletionTick()
 						}
 						else
 						{
@@ -158,6 +159,7 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 						{
 							this.is_bank_verified = true
 							this.is_show_verification_icon = false
+							this.stepCompletionTick()
 						}
 						else
 						{
