@@ -56,7 +56,17 @@ export class HttpConfigInterceptor implements HttpInterceptor
 			catchError((errorData: HttpErrorResponse) =>
 			{
 				this.$spinner.hide()
-				if (errorData.status == 500)
+				console.log(errorData)
+				if (errorData.status == 401)
+				{
+					this.errors = {
+						errors: {
+							error: 'User Session Expired. Please reload the screen.'
+						}
+					}
+					location.reload()
+				}
+				else if (errorData.status == 500)
 				{
 					this.errors = {
 						errors: {
