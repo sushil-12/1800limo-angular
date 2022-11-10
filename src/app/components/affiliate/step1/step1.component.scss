@@ -399,3 +399,25 @@ div#imageModal {
 	line-height   : 25px;
 	padding-bottom: 15px;
 }
+
+.select-year-label {
+	position  : relative;
+	top       : 15px;
+	left      : 8px;
+	background: #fff;
+	color     : #000 !important;
+	padding   : 0 3px;
+	font-size : 12px !important;
+	transition: 0.3s;
+}
+
+.select-gender-label {
+	position  : relative;
+	top       : 15px;
+	left      : 8px;
+	background: #fff;
+	color     : #000 !important;
+	padding   : 0 3px;
+	font-size : 12px !important;
+	transition: 0.3s;
+}

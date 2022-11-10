@@ -3021,3 +3021,68 @@ table .dropdown-menu {
 .mat-calendar-body-disabled .mat-calendar-body-cell-content.mat-focus-indicator {
 	font-weight: 400 !important;
 }
+
+.selectStyle {
+	border          : 1px solid #ccc;
+	height          : 60px;
+	/* margin-top   : -5px; */
+	border-radius   : 5px;
+}
+
+.selectStyle select {
+	appearance: none !important;
+}
+
+.selectStyle #Layer_1 {
+	width   : 10px;
+	position: absolute;
+	right   : 25px;
+	top     : 53px;
+	fill    : #757575;
+}
+
+.user_information .selectInputStyle {
+	border-bottom: 1px solid #ccc !important;
+	background   : #fff !important;
+	padding-left : 10px;
+	height       : 60px;
+	border-radius: 5px;
+}
+
+.user_information .selectInputStyle:hover {
+	border       : 2px solid #000;
+	border-bottom: 2px solid #000 !important;
+}
+
+.user_information .selectInputStyle:active {
+	border       : 2px solid #3f51b5;
+	border-bottom: 2px solid #3f51b5 !important;
+}
+
+.skiptranslate img {
+	display: none !important;
+}
+
+.goog-te-gadget-simple {
+	white-space     : nowrap;
+	/* width        : 210px; */
+	height          : 40px;
+	padding         : 10px;
+	border          : 1px solid var(--orange-color) !important;
+	border-radius   : 10px;
+}
+
+.goog-te-gadget-simple .goog-te-menu-value span {
+	font-size: 18px;
+	position : relative;
+	top      : 4px;
+	padding  : 5px;
+}
+
+.goog-te-menu-value:hover {
+	text-decoration: none !important;
+}
+
+.goog-te-menu-value:focus {
+	text-decoration: none !important;
+}

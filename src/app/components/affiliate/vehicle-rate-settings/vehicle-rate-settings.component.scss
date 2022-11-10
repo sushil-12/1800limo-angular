@@ -212,3 +212,40 @@ div#rate-manager-slider {
 		border          : 3px solid var(--orange-color);
 	}
 }
+
+.select-currency-label {
+	position  : relative;
+	top       : 15px;
+	left      : 8px;
+	background: #fff;
+	color     : #000 !important;
+	padding   : 0 3px;
+	font-size : 12px !important;
+	transition: 0.3s;
+}
+
+.select-extension-label {
+	position  : relative;
+	top       : 15px;
+	left      : 8px;
+	background: #fff;
+	color     : #000 !important;
+	padding   : 0 3px;
+	font-size : 12px !important;
+	transition: 0.3s;
+}
+
+.user_information .rateExtensionStyle {
+	border-bottom: 1px solid #ccc !important;
+	background   : #fff;
+	padding-left : 25px;
+	height       : 60px;
+	border-radius: 5px;
+}
+
+.spanRate {
+	color   : var(--orange-color);
+	position: absolute;
+	top     : 43px;
+	left    : 25px;
+}

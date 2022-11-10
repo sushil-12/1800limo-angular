@@ -1,31 +1,50 @@
-<form [formGroup]="addDriverForm" class="step_form_wrapper" appInvalidControlScroll>
+<form
+	[formGroup]="addDriverForm"
+	class="step_form_wrapper"
+	appInvalidControlScroll
+>
 	<!-- Main page content-->
 	<section class="user_information">
-		<h2 class="headinginfo"> Driver Settings </h2>
-		<div class="container mt-1 ">
-			<div class="row ">
+		<h2 class="headinginfo">Driver Settings</h2>
+		<div class="container mt-1">
+			<div class="row">
 				<div class="col-md-4">
 					<mat-form-field appearance="outline">
 						<mat-label>First Name <span class="asterisk">*</span></mat-label>
 						<input matInput placeholder="First Name" (focus)="$event.target.select()" id="firstName"
 							formControlName="FirstName" tabindex="1">
 					</mat-form-field>
-					<div *ngIf="submittedForm && f.FirstName.errors || f.FirstName.touched && f.FirstName.errors"
-						class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.FirstName.errors.required">This field is required</div>
+					<div
+						*ngIf="
+							(submittedForm && f.FirstName.errors) ||
+							(f.FirstName.touched && f.FirstName.errors)
+						"
+						class="text-danger margin-bottom-thin my-mat-hint"
+					>
+						<div *ngIf="f.FirstName.errors.required">
+							This field is required
+						</div>
 					</div>
 				</div>
 				<div class="col-md-4">
 					<mat-form-field appearance="outline">
 						<mat-label>
-							Middle Name <span class="theme-color">(Optional)</span>
+							Middle Name
+							<span class="theme-color">(Optional)</span>
 						</mat-label>
 						<input matInput placeholder="Middle Name (Optional)" (focus)="$event.target.select()"
 							formControlName="MiddleName" tabindex="1">
 					</mat-form-field>
-					<div *ngIf="submittedForm && f.MiddleName.errors || f.MiddleName.touched && f.MiddleName.errors"
-						class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.MiddleName.errors.required">This field is required</div>
+					<div
+						*ngIf="
+							(submittedForm && f.MiddleName.errors) ||
+							(f.MiddleName.touched && f.MiddleName.errors)
+						"
+						class="text-danger margin-bottom-thin my-mat-hint"
+					>
+						<div *ngIf="f.MiddleName.errors.required">
+							This field is required
+						</div>
 					</div>
 				</div>
 				<div class="col-md-4">
@@ -34,23 +53,68 @@
 						<input matInput placeholder="Last Name" (focus)="$event.target.select()"
 							formControlName="LastName" tabindex="1">
 					</mat-form-field>
-					<div *ngIf="submittedForm && f.LastName.errors || f.LastName.touched && f.LastName.errors"
-						class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.LastName.errors.required">This field is required</div>
+					<div
+						*ngIf="
+							(submittedForm && f.LastName.errors) ||
+							(f.LastName.touched && f.LastName.errors)
+						"
+						class="text-danger margin-bottom-thin my-mat-hint"
+					>
+						<div *ngIf="f.LastName.errors.required">
+							This field is required
+						</div>
 					</div>
 				</div>
 				<div class="col-md-4">
-					<mat-form-field appearance="outline">
-						<mat-label>Gender <span class="asterisk">*</span></mat-label>
-						<mat-select formControlName="Gender" tabindex="1">
-							<mat-option value="male">Male</mat-option>
-							<mat-option value="female">Female</mat-option>
-							<mat-option value="LGBTQIA+">X (LGBTQAI+)</mat-option>
-						</mat-select>
-					</mat-form-field>
-					<div *ngIf="submittedForm && f.Gender.errors || f.Gender.touched && f.Gender.errors"
-						class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.Gender.errors.required">This field is required</div>
+					<label class="selectGenderLabel"
+						>Gender <span class="asterisk">*</span></label
+					>
+					<div class="selectStyle">
+						<select
+							class="selectInputStyle"
+							(click)="selectDropdownGender()"
+							formControlName="Gender"
+							tabindex="1"
+						>
+							<option value="male">Male</option>
+							<option value="female">Female</option>
+							<option value="LGBTQIA+">X (LGBTQAI+)</option>
+						</select>
+						<svg
+							version="1.1"
+							id="Layer_1"
+							xmlns="http://www.w3.org/2000/svg"
+							xmlns:xlink="http://www.w3.org/1999/xlink"
+							x="0px"
+							y="0px"
+							viewBox="0 0 122.88 63.9"
+							style="enable-background: new 0 0 122.88 63.9"
+							xml:space="preserve"
+						>
+							<style type="text/css">
+								.sty0 {
+									fill-rule: evenodd;
+									clip-rule: evenodd;
+								}
+							</style>
+							<g>
+								<polygon
+									class="sty0"
+									points="61.44,63.9 122.88,0 0,0 61.44,63.9"
+								/>
+							</g>
+						</svg>
+					</div>
+					<div
+						*ngIf="
+							(submittedForm && f.Gender.errors) ||
+							(f.Gender.touched && f.Gender.errors)
+						"
+						class="text-danger margin-bottom-thin my-mat-hint"
+					>
+						<div *ngIf="f.Gender.errors.required">
+							This field is required
+						</div>
 					</div>
 				</div>
 				<div class="col-md-4">
@@ -63,23 +127,54 @@
 							(focus)="$event.target.select()" (countryChange)="onCountryChange($event,'CellNumber')"
 							class="phoneNumberClass" (intlTelInputObject)="telInputObjectCell($event)" tabindex="1" />
 					</mat-form-field>
-					<div *ngIf="submittedForm && f.CellNumber.errors || f.CellNumber.touched && f.CellNumber.errors"
-						class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.CellNumber.errors.required">This field is required</div>
+					<div
+						*ngIf="
+							(submittedForm && f.CellNumber.errors) ||
+							(f.CellNumber.touched && f.CellNumber.errors)
+						"
+						class="text-danger margin-bottom-thin my-mat-hint"
+					>
+						<div *ngIf="f.CellNumber.errors.required">
+							This field is required
+						</div>
 					</div>
-					<div *ngIf="f.CellNumber.errors" class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.CellNumber.errors?.invalid_Pattern;else plusError">Do not add Dashes
-							with numbers</div>
+					<div
+						*ngIf="f.CellNumber.errors"
+						class="text-danger margin-bottom-thin my-mat-hint"
+					>
+						<div
+							*ngIf="
+								f.CellNumber.errors?.invalid_Pattern;
+								else plusError
+							"
+						>
+							Do not add Dashes with numbers
+						</div>
 						<ng-template #plusError>
-							<div *ngIf="f.CellNumber.errors?.invalidPattern;else allErrors">Do not enter +
-								sign</div>
+							<div
+								*ngIf="
+									f.CellNumber.errors?.invalidPattern;
+									else allErrors
+								"
+							>
+								Do not enter + sign
+							</div>
 							<ng-template #allErrors>
-								<div *ngIf="f.CellNumber.errors?.pattern;else numberLength">Enter Numbers Without Spaces
-									or Dashes
+								<div
+									*ngIf="
+										f.CellNumber.errors?.pattern;
+										else numberLength
+									"
+								>
+									Enter Numbers Without Spaces or Dashes
 								</div>
 								<ng-template #numberLength>
-									<div *ngIf="f.CellNumber.errors.minlength">Minimum length should be 4</div>
-									<div *ngIf="f.CellNumber.errors.maxlength">Maximum length should be 15</div>
+									<div *ngIf="f.CellNumber.errors.minlength">
+										Minimum length should be 4
+									</div>
+									<div *ngIf="f.CellNumber.errors.maxlength">
+										Maximum length should be 15
+									</div>
 								</ng-template>
 							</ng-template>
 						</ng-template>
@@ -87,74 +182,157 @@
 				</div>
 				<div class="col-md-4">
 					<mat-form-field appearance="outline">
-						<mat-label>Driver E-mail<span class="theme-color">Optional</span>
+						<mat-label
+							>Driver E-mail<span class="theme-color"
+								>Optional</span
+							>
 						</mat-label>
 						<input matInput placeholder="Driver E-mail (Optional)" (focus)="$event.target.select()"
 							formControlName="Email" tabindex="1">
 					</mat-form-field>
-					<div *ngIf="submittedForm && f.Email.errors || f.Email.touched && f.Email.errors"
-						class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.Email.errors.required">This field is required</div>
+					<div
+						*ngIf="
+							(submittedForm && f.Email.errors) ||
+							(f.Email.touched && f.Email.errors)
+						"
+						class="text-danger margin-bottom-thin my-mat-hint"
+					>
+						<div *ngIf="f.Email.errors.required">
+							This field is required
+						</div>
 					</div>
-					<div *ngIf="f.Email.errors" class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.Email.errors.pattern">Email format should be valid</div>
+					<div
+						*ngIf="f.Email.errors"
+						class="text-danger margin-bottom-thin my-mat-hint"
+					>
+						<div *ngIf="f.Email.errors.pattern">
+							Email format should be valid
+						</div>
 					</div>
 				</div>
 				<div class="col-md-4">
-					<mat-form-field appearance="outline">
-						<mat-label>Dress <span class="asterisk">*</span></mat-label>
-						<mat-select formControlName="Dress" tabindex="1">
-							<!-- <mat-option value="">Choose Dress</mat-option> -->
-							<mat-option *ngFor="let dress of dresses" [value]="dress.id">{{dress.name}}</mat-option>
-						</mat-select>
-					</mat-form-field>
-					<div *ngIf="submittedForm && f.Dress.errors || f.Dress.touched && f.Dress.errors"
-						class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.Dress.errors.required">This field is required</div>
+					<label class="select-dress-label"
+						>Dress <span class="asterisk">*</span></label
+					>
+					<div class="selectStyle">
+						<select
+							class="selectInputStyle"
+							(click)="selectDropdownDress()"
+							formControlName="Dress"
+							tabindex="1"
+						>
+							<option
+								*ngFor="let dress of dresses"
+								[value]="dress.id"
+							>
+								{{ dress.name }}
+							</option>
+						</select>
+						<svg
+							version="1.1"
+							id="Layer_1"
+							xmlns="http://www.w3.org/2000/svg"
+							xmlns:xlink="http://www.w3.org/1999/xlink"
+							x="0px"
+							y="0px"
+							viewBox="0 0 122.88 63.9"
+							style="enable-background: new 0 0 122.88 63.9"
+							xml:space="preserve"
+						>
+							<style type="text/css">
+								.sty0 {
+									fill-rule: evenodd;
+									clip-rule: evenodd;
+								}
+							</style>
+							<g>
+								<polygon
+									class="sty0"
+									points="61.44,63.9 122.88,0 0,0 61.44,63.9"
+								/>
+							</g>
+						</svg>
+					</div>
+					<div
+						*ngIf="
+							(submittedForm && f.Dress.errors) ||
+							(f.Dress.touched && f.Dress.errors)
+						"
+						class="text-danger margin-bottom-thin my-mat-hint"
+					>
+						<div *ngIf="f.Dress.errors.required">
+							This field is required
+						</div>
 					</div>
 				</div>
 				<div class="col-md-4">
-					<mat-form-field appearance="outline">
-						<mat-label>First Year Pro Driver <span class="theme-color"> * </span>
-						</mat-label>
-						<!-- <input matInput formControlName="StartDate" placeholder="First Year Pro Driving (Example: 1998)"
-							(focus)="$event.target.select()" tabindex="1"> -->
-						<mat-select formControlName="FirstYearBusiness" tabindex="1">
-							<mat-option *ngFor="let proDriverYear of proDriverYears" [value]="proDriverYear.value">
-								{{proDriverYear.label}}</mat-option>
-						</mat-select>
-					</mat-form-field>
-					<div *ngIf="submittedForm && f.StartDate.errors || f.StartDate.touched && f.StartDate.errors"
-						class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.StartDate.errors.required">This field is required</div>
+					<label class="selectYearBusinessLabel"
+						>First Year Pro Driver
+						<span class="asterisk">*</span></label
+					>
+					<div class="selectStyle">
+						<select
+							class="selectInputStyle"
+							(click)="selectDropdownYearBusiness()"
+							formControlName="StartDate"
+							tabindex="1"
+						>
+							<option
+								*ngFor="let proDriverYear of proDriverYears"
+								[value]="proDriverYear.value"
+							>
+								{{ proDriverYear.label }}
+							</option>
+						</select>
+						<svg
+							version="1.1"
+							id="Layer_1"
+							xmlns="http://www.w3.org/2000/svg"
+							xmlns:xlink="http://www.w3.org/1999/xlink"
+							x="0px"
+							y="0px"
+							viewBox="0 0 122.88 63.9"
+							style="enable-background: new 0 0 122.88 63.9"
+							xml:space="preserve"
+						>
+							<style type="text/css">
+								.sty0 {
+									fill-rule: evenodd;
+									clip-rule: evenodd;
+								}
+							</style>
+							<g>
+								<polygon
+									class="sty0"
+									points="61.44,63.9 122.88,0 0,0 61.44,63.9"
+								/>
+							</g>
+						</svg>
 					</div>
-					<div *ngIf="f.StartDate.errors" class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.StartDate.errors?.invalid_Pattern;else plusError">Do not add Dashes
-							with numbers</div>
-						<ng-template #plusError>
-							<div *ngIf="f.StartDate.errors?.invalidPattern;else allErrors">Do not enter +
-								sign</div>
-							<ng-template #allErrors>
-								<div *ngIf="f.StartDate.errors?.pattern;else numberLength">Enter Numbers Only
-								</div>
-								<ng-template #numberLength>
-									<div *ngIf="f.StartDate.errors.minlength">Minimum length should be 4</div>
-									<div *ngIf="f.StartDate.errors.maxlength">Maximum length should be 4</div>
-								</ng-template>
-							</ng-template>
-						</ng-template>
+					<div
+						*ngIf="
+							(submittedForm && f.StartDate.errors) ||
+							(f.StartDate.touched && f.StartDate.errors)
+						"
+						class="text-danger margin-bottom-thin my-mat-hint"
+					>
+						<div *ngIf="f.StartDate.errors.required">
+							This field is required
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-		<br>
+		<br />
 	</section>
 
 	<!--Language section-->
 	<section class="user_information">
-		<h2 class="headinginfo">Choose Fluent Language <span>(s) </span> <span class="asterisk">*</span>
+		<h2 class="headinginfo">
+			Choose Fluent Language <span>(s) </span>
+			<span class="asterisk">*</span>
 		</h2>
-		<div class="container mt-1 ">
+		<div class="container mt-1">
 			<div class="row">
 				<div class="col-md-12">
 					<div class="choose_ameniteslist" *ngIf="!driverAdded; else driverAlreadyAdded">
@@ -182,9 +360,17 @@
 					</ng-template>
 				</div>
 				<div class="col-md-12">
-					<div *ngIf="submittedForm && f.FluentLanguages.errors || f.FluentLanguages.touched && f.FluentLanguages.errors"
-						class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.FluentLanguages.errors.required">This field is required</div>
+					<div
+						*ngIf="
+							(submittedForm && f.FluentLanguages.errors) ||
+							(f.FluentLanguages.touched &&
+								f.FluentLanguages.errors)
+						"
+						class="text-danger margin-bottom-thin my-mat-hint"
+					>
+						<div *ngIf="f.FluentLanguages.errors.required">
+							This field is required
+						</div>
 					</div>
 				</div>
 			</div>
@@ -193,12 +379,17 @@
 
 	<!-- Main page content-->
 	<section class="user_information">
-		<h2 class="headinginfo">Driver Profile and Documents <span class="spanText">- (IDs are internal use only)</span>
+		<h2 class="headinginfo">
+			Driver Profile and Documents
+			<span class="spanText">- (IDs are internal use only)</span>
 		</h2>
 		<div class="container mt-4">
 			<div class="vehtype_extintwrap">
 				<div class="row">
-					<div class="col-md-4" *ngIf="DriverImage; else noDriverImage">
+					<div
+						class="col-md-4"
+						*ngIf="DriverImage; else noDriverImage"
+					>
 						<div class="vehtype_extint">
 							<div>
 								<p>Driver - Head and Shoulder <span class="optionalTextStyle">(portrait) </span> <span
@@ -214,7 +405,8 @@
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
 												<path
-													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
+												/>
 											</svg>
 											Change
 										</button>
@@ -238,7 +430,10 @@
 										Shoulder <span class="optionalTextStyle">(portrait) </span> <span
 											class="asterisk">*</span></p>
 									<div class="emptyImage">
-										<img src="../../../../assets/images/empty-image.png" tabindex="-1">
+										<img
+											src="../../../../assets/images/empty-image.png"
+											tabindex="-1"
+										/>
 									</div>
 									<ul class="mt-3">
 										<li>
@@ -250,24 +445,33 @@
 													<path fill="none" d="M0 0h24v24H0V0z" />
 													<circle cx="12" cy="12" r="3" />
 													<path
-														d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+														d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
+													/>
 												</svg>
 												Add
 											</button>
 										</li>
 									</ul>
 								</div>
-								<div *ngIf="submittedForm && f.DriverImage.errors"
-									class="text-danger margin-bottom-thin my-mat-hint text-center mb-4">
-									<div *ngIf="f.DriverImage.errors.required">The Driver - Head and Shoulder (portrait)
-										is
-										required.</div>
+								<div
+									*ngIf="
+										submittedForm && f.DriverImage.errors
+									"
+									class="text-danger margin-bottom-thin my-mat-hint text-center mb-4"
+								>
+									<div *ngIf="f.DriverImage.errors.required">
+										The Driver - Head and Shoulder
+										(portrait) is required.
+									</div>
 								</div>
 							</div>
 						</div>
 					</ng-template>
 
-					<div class="col-md-4" *ngIf="DriverLicense; else noDriverLicense">
+					<div
+						class="col-md-4"
+						*ngIf="DriverLicense; else noDriverLicense"
+					>
 						<div class="vehtype_extint">
 							<div>
 								<p>Driver / Chauffeur License <span class="optionalTextStyle">(Front) </span><span
@@ -283,7 +487,8 @@
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
 												<path
-													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
+												/>
 											</svg>
 											Change
 										</button>
@@ -306,7 +511,10 @@
 										Chauffeur License <span class="optionalTextStyle">(Front) </span> <span
 											class="asterisk">*</span></p>
 									<div class="emptyImage">
-										<img src="../../../../assets/images/empty-image.png" tabindex="-1">
+										<img
+											src="../../../../assets/images/empty-image.png"
+											tabindex="-1"
+										/>
 									</div>
 									<ul class="mt-3">
 										<li>
@@ -318,32 +526,47 @@
 													<path fill="none" d="M0 0h24v24H0V0z" />
 													<circle cx="12" cy="12" r="3" />
 													<path
-														d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+														d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
+													/>
 												</svg>
 												Add
 											</button>
 										</li>
 									</ul>
 								</div>
-								<div *ngIf="submittedForm && f.DriverLicense.errors"
-									class="text-danger margin-bottom-thin my-mat-hint text-center mb-4">
-									<div *ngIf="f.DriverLicense.errors.required">The Driver / Chauffeur License (Front)
-										is
-										required.</div>
+								<div
+									*ngIf="
+										submittedForm && f.DriverLicense.errors
+									"
+									class="text-danger margin-bottom-thin my-mat-hint text-center mb-4"
+								>
+									<div
+										*ngIf="f.DriverLicense.errors.required"
+									>
+										The Driver / Chauffeur License (Front)
+										is required.
+									</div>
 								</div>
 							</div>
 						</div>
 					</ng-template>
 				</div>
 			</div>
-			<hr>
-			<div class="vehtype_extintwrap single-image" [hidden]="affiliateType!='gig_operator'">
+			<hr />
+			<div
+				class="vehtype_extintwrap single-image"
+				[hidden]="affiliateType != 'gig_operator'"
+			>
 				<div class="row align-items-center">
 					<div class="col-md-4" *ngIf="StarRating; else noStarRating">
 						<div class="vehtype_extint">
 							<div>
-								<p>Star Rating (Min 4.5) </p>
-								<img src="{{StarRating}}" (click)="showImageInModal(StarRating)" tabindex="-1">
+								<p>Star Rating (Min 4.5)</p>
+								<img
+									src="{{ StarRating }}"
+									(click)="showImageInModal(StarRating)"
+									tabindex="-1"
+								/>
 								<ul class="mt-3">
 									<li>
 										<button class="changeuploaded" tabindex="1">
@@ -354,7 +577,8 @@
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
 												<path
-													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
+												/>
 											</svg>
 											Change
 										</button>
@@ -363,20 +587,29 @@
 											tabindex="1">
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 												<path
-													d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
+													d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z"
+												/>
 											</svg>
-											Delete</a></li>
+											Delete</a
+										>
+									</li>
 								</ul>
 							</div>
 						</div>
 					</div>
 					<ng-template #noStarRating>
-						<div class="col-md-4" [hidden]="affiliateType!='gig_operator'">
+						<div
+							class="col-md-4"
+							[hidden]="affiliateType != 'gig_operator'"
+						>
 							<div class="vehtype_extint">
 								<div>
-									<p>Star Rating (Min 4.5) </p>
+									<p>Star Rating (Min 4.5)</p>
 									<div class="emptyImage">
-										<img src="../../../../assets/images/empty-image.png" tabindex="-1">
+										<img
+											src="../../../../assets/images/empty-image.png"
+											tabindex="-1"
+										/>
 									</div>
 									<ul class="mt-3">
 										<li>
@@ -388,7 +621,17 @@
 													<path fill="none" d="M0 0h24v24H0V0z" />
 													<circle cx="12" cy="12" r="3" />
 													<path
-														d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+														fill="none"
+														d="M0 0h24v24H0V0z"
+													/>
+													<circle
+														cx="12"
+														cy="12"
+														r="3"
+													/>
+													<path
+														d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
+													/>
 												</svg>
 												Add
 											</button>
@@ -404,8 +647,13 @@
 								Star Rating Value <span class="asterisk" *ngIf="affiliateType == 'gig_operator'"> *
 								</span>
 							</mat-label>
-							<mat-select formControlName="starRatingValue" tabindex="1">
-								<mat-option value="">Choose Star Rating Value</mat-option>
+							<mat-select
+								formControlName="starRatingValue"
+								tabindex="1"
+							>
+								<mat-option value=""
+									>Choose Star Rating Value</mat-option
+								>
 								<mat-option value="4.5">4.5</mat-option>
 								<mat-option value="4.6">4.6</mat-option>
 								<mat-option value="4.7">4.7</mat-option>
@@ -439,10 +687,12 @@
 					</div>
 				</div> -->
 			</div>
-			<hr>
+			<hr />
 			<div class="row custom-check-row toggleLabelClass">
 				<div class="col-12">
-					<h5 class="choose-all my-3">Choose all that apply <span class="spanH5">(Optional)</span>
+					<h5 class="choose-all my-3">
+						Choose all that apply
+						<span class="spanH5">(Optional)</span>
 					</h5>
 				</div>
 				<div class="col-12">
@@ -457,7 +707,10 @@
 				<div class="col-12" [hidden]="!VeteranCheck" #veterantarget>
 					<div class="vehtype_extintwrap single-image">
 						<div class="row">
-							<div class="col-md-4" *ngIf="VeteranIdCard; else noVeteranIdCard">
+							<div
+								class="col-md-4"
+								*ngIf="VeteranIdCard; else noVeteranIdCard"
+							>
 								<div class="vehtype_extint">
 									<div>
 										<p>Veteran's ID Card <span class="asterisk">*</span></p>
@@ -473,7 +726,17 @@
 														<path fill="none" d="M0 0h24v24H0V0z" />
 														<circle cx="12" cy="12" r="3" />
 														<path
-															d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+															fill="none"
+															d="M0 0h24v24H0V0z"
+														/>
+														<circle
+															cx="12"
+															cy="12"
+															r="3"
+														/>
+														<path
+															d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
+														/>
 													</svg>
 													Change
 												</button>
@@ -482,9 +745,12 @@
 													(click)="deleteImage(VeteranIdCardId,'VeteranIdCard')" tabindex="1">
 													<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 														<path
-															d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
+															d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z"
+														/>
 													</svg>
-													Delete</a></li>
+													Delete</a
+												>
+											</li>
 										</ul>
 									</div>
 								</div>
@@ -499,36 +765,73 @@
 													Veteran's ID Card <span class="asterisk">*</span></p>
 											</div>
 											<div class="emptyImage">
-												<img src="../../../../assets/images/empty-image.png" tabindex="-1">
+												<img
+													src="../../../../assets/images/empty-image.png"
+													tabindex="-1"
+												/>
 											</div>
 											<ul class="mt-3">
 												<li>
-													<button class="adduploaded" tabindex="1">
-														<input type="file"
-															(change)="vehicleOfficialImagesChange($event,'VeteranIdCard',VeteranIdCardId)"
-															tabindex="-1">
-														<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-															<path fill="none" d="M0 0h24v24H0V0z" />
-															<circle cx="12" cy="12" r="3" />
+													<button
+														class="adduploaded"
+														tabindex="1"
+													>
+														<input
+															type="file"
+															(change)="
+																vehicleOfficialImagesChange(
+																	$event,
+																	'VeteranIdCard',
+																	VeteranIdCardId
+																)
+															"
+															tabindex="-1"
+														/>
+														<svg
+															xmlns="http://www.w3.org/2000/svg"
+															viewBox="0 0 24 24"
+														>
 															<path
-																d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+																fill="none"
+																d="M0 0h24v24H0V0z"
+															/>
+															<circle
+																cx="12"
+																cy="12"
+																r="3"
+															/>
+															<path
+																d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
+															/>
 														</svg>
 														Add
 													</button>
 												</li>
 											</ul>
 										</div>
-										<div *ngIf="submittedForm && f.VeteranIdCard.errors"
-											class="text-danger margin-bottom-thin my-mat-hint text-center mb-4">
-											<div *ngIf="f.VeteranIdCard.errors.required">The Veteran's ID Card Image is
-												required.</div>
+										<div
+											*ngIf="
+												submittedForm &&
+												f.VeteranIdCard.errors
+											"
+											class="text-danger margin-bottom-thin my-mat-hint text-center mb-4"
+										>
+											<div
+												*ngIf="
+													f.VeteranIdCard.errors
+														.required
+												"
+											>
+												The Veteran's ID Card Image is
+												required.
+											</div>
 										</div>
 									</div>
 								</div>
 							</ng-template>
 						</div>
 					</div>
-					<hr>
+					<hr />
 				</div>
 
 				<div class="col-12" id="dodimage">
@@ -543,11 +846,21 @@
 				<div class="col-12" [hidden]="!DoDCheck" #dodtarget>
 					<div class="vehtype_extintwrap single-image">
 						<div class="row">
-							<div class="col-md-4" *ngIf="DoDImage; else noDoDImage">
+							<div
+								class="col-md-4"
+								*ngIf="DoDImage; else noDoDImage"
+							>
 								<div class="vehtype_extint">
 									<div>
-										<p>DoD Image <span class="asterisk">*</span></p>
-										<img src="{{DoDImage}}" (click)="showImageInModal(DoDImage)" tabindex="-1">
+										<p>
+											DoD Image
+											<span class="asterisk">*</span>
+										</p>
+										<img
+											src="{{ DoDImage }}"
+											(click)="showImageInModal(DoDImage)"
+											tabindex="-1"
+										/>
 										<ul class="mt-3">
 											<li>
 												<button class="changeuploaded" tabindex="1">
@@ -558,7 +871,8 @@
 														<path fill="none" d="M0 0h24v24H0V0z" />
 														<circle cx="12" cy="12" r="3" />
 														<path
-															d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+															d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
+														/>
 													</svg>
 													Change
 												</button>
@@ -567,9 +881,12 @@
 													tabindex="1">
 													<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 														<path
-															d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
+															d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z"
+														/>
 													</svg>
-													Delete</a></li>
+													Delete</a
+												>
+											</li>
 										</ul>
 									</div>
 								</div>
@@ -579,13 +896,24 @@
 									<div class="vehtype_extint">
 										<div>
 											<div *ngIf="f.DoDImage.errors">
-												<p [class.ng-invalid]="submittedForm && f.DoDImage.errors.required">DoD
-													Image
-													<span class="asterisk">*</span>
+												<p
+													[class.ng-invalid]="
+														submittedForm &&
+														f.DoDImage.errors
+															.required
+													"
+												>
+													DoD Image
+													<span class="asterisk"
+														>*</span
+													>
 												</p>
 											</div>
 											<div class="emptyImage">
-												<img src="../../../../assets/images/empty-image.png" tabindex="-1">
+												<img
+													src="../../../../assets/images/empty-image.png"
+													tabindex="-1"
+												/>
 											</div>
 											<ul class="mt-3">
 												<li>
@@ -597,23 +925,44 @@
 															<path fill="none" d="M0 0h24v24H0V0z" />
 															<circle cx="12" cy="12" r="3" />
 															<path
-																d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+																fill="none"
+																d="M0 0h24v24H0V0z"
+															/>
+															<circle
+																cx="12"
+																cy="12"
+																r="3"
+															/>
+															<path
+																d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
+															/>
 														</svg>
 														Add
 													</button>
 												</li>
 											</ul>
 										</div>
-										<div *ngIf="submittedForm && f.DoDImage.errors"
-											class="text-danger margin-bottom-thin my-mat-hint text-center mb-4">
-											<div *ngIf="f.DoDImage.errors.required">The DoD Image is required.</div>
+										<div
+											*ngIf="
+												submittedForm &&
+												f.DoDImage.errors
+											"
+											class="text-danger margin-bottom-thin my-mat-hint text-center mb-4"
+										>
+											<div
+												*ngIf="
+													f.DoDImage.errors.required
+												"
+											>
+												The DoD Image is required.
+											</div>
 										</div>
 									</div>
 								</div>
 							</ng-template>
 						</div>
 					</div>
-					<hr>
+					<hr />
 				</div>
 
 				<div class="col-12">
@@ -622,15 +971,21 @@
 							(change)="onChildVeteranDoDChange($event.checked,'Foid'); globalFunctions.scrollIntoView(guntarget)"
 							tabindex="1">
 						</mat-slide-toggle>
-						<label class="ml-3" for="foid">FOID (Gun) Card - <span class="optionalTextStyle">(Only 5 USA
-								States
-								Allow)</span> </label>
+						<label class="ml-3" for="foid"
+							>FOID (Gun) Card -
+							<span class="optionalTextStyle"
+								>(Only 5 USA States Allow)</span
+							>
+						</label>
 					</div>
 				</div>
 				<div #guntarget class="col-12" [hidden]="!FoidCheck">
 					<div class="vehtype_extintwrap single-image">
 						<div class="row">
-							<div class="col-md-4" *ngIf="FoidCardImage; else noFoidCardImage">
+							<div
+								class="col-md-4"
+								*ngIf="FoidCardImage; else noFoidCardImage"
+							>
 								<div class="vehtype_extint">
 									<div>
 										<p>FOID (Gun) Card <span class="asterisk">*</span></p>
@@ -646,7 +1001,8 @@
 														<path fill="none" d="M0 0h24v24H0V0z" />
 														<circle cx="12" cy="12" r="3" />
 														<path
-															d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+															d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
+														/>
 													</svg>
 													Change
 												</button>
@@ -655,9 +1011,12 @@
 													(click)="deleteImage(FoidCardImageId,'FoidCardImage')" tabindex="1">
 													<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 														<path
-															d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
+															d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z"
+														/>
 													</svg>
-													Delete</a></li>
+													Delete</a
+												>
+											</li>
 										</ul>
 									</div>
 								</div>
@@ -673,28 +1032,64 @@
 													(Gun) Card <span class="asterisk">*</span></p>
 											</div>
 											<div class="emptyImage">
-												<img src="../../../../assets/images/empty-image.png" tabindex="-1">
+												<img
+													src="../../../../assets/images/empty-image.png"
+													tabindex="-1"
+												/>
 											</div>
 											<ul class="mt-3">
 												<li>
-													<button class="adduploaded" tabindex="1">
-														<input type="file"
-															(change)="vehicleOfficialImagesChange($event,'FoidCardImage',FoidCardImageId)"
-															tabindex="-1">
-														<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-															<path fill="none" d="M0 0h24v24H0V0z" />
-															<circle cx="12" cy="12" r="3" />
+													<button
+														class="adduploaded"
+														tabindex="1"
+													>
+														<input
+															type="file"
+															(change)="
+																vehicleOfficialImagesChange(
+																	$event,
+																	'FoidCardImage',
+																	FoidCardImageId
+																)
+															"
+															tabindex="-1"
+														/>
+														<svg
+															xmlns="http://www.w3.org/2000/svg"
+															viewBox="0 0 24 24"
+														>
 															<path
-																d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+																fill="none"
+																d="M0 0h24v24H0V0z"
+															/>
+															<circle
+																cx="12"
+																cy="12"
+																r="3"
+															/>
+															<path
+																d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
+															/>
 														</svg>
 														Add
 													</button>
 												</li>
 											</ul>
 										</div>
-										<div *ngIf="submittedForm && f.FoidCardImage.errors"
-											class="text-danger margin-bottom-thin my-mat-hint text-center mb-4">
-											<div *ngIf="f.FoidCardImage.errors.required">The FOID (Gun) Card Image is
+										<div
+											*ngIf="
+												submittedForm &&
+												f.FoidCardImage.errors
+											"
+											class="text-danger margin-bottom-thin my-mat-hint text-center mb-4"
+										>
+											<div
+												*ngIf="
+													f.FoidCardImage.errors
+														.required
+												"
+											>
+												The FOID (Gun) Card Image is
 												required.
 											</div>
 										</div>
@@ -703,22 +1098,43 @@
 							</ng-template>
 						</div>
 					</div>
-					<hr>
+					<hr />
 				</div>
 
 				<div class="col-12">
 					<div class="custom-control custom-checkbox">
-						<mat-slide-toggle class="example-margin" [checked]="SchoolBusCertifiedCheck"
-							(change)="onChildVeteranDoDChange($event.checked,'SchoolBusCertified'); globalFunctions.scrollIntoView(childtarget)"
-							tabindex="1">
+						<mat-slide-toggle
+							class="example-margin"
+							[checked]="SchoolBusCertifiedCheck"
+							(change)="
+								onChildVeteranDoDChange(
+									$event.checked,
+									'SchoolBusCertified'
+								);
+								globalFunctions.scrollIntoView(childtarget)
+							"
+							tabindex="1"
+						>
 						</mat-slide-toggle>
-						<label class="ml-3" for="childSchoolBusCertified">Child/School Bus Certified</label>
+						<label class="ml-3" for="childSchoolBusCertified"
+							>Child/School Bus Certified</label
+						>
 					</div>
 				</div>
-				<div #childtarget class="col-12" [hidden]="!SchoolBusCertifiedCheck">
+				<div
+					#childtarget
+					class="col-12"
+					[hidden]="!SchoolBusCertifiedCheck"
+				>
 					<div class="vehtype_extintwrap single-image">
 						<div class="row">
-							<div class="col-md-4" *ngIf="schoolBusCertificateImage; else noSchoolBusCertificateImage">
+							<div
+								class="col-md-4"
+								*ngIf="
+									schoolBusCertificateImage;
+									else noSchoolBusCertificateImage
+								"
+							>
 								<div class="vehtype_extint">
 									<div>
 										<p>Child/School Bus Certified <span class="asterisk">*</span></p>
@@ -726,15 +1142,37 @@
 											(click)="showImageInModal(schoolBusCertificateImage)" tabindex="-1">
 										<ul class="mt-3">
 											<li>
-												<button class="changeuploaded" tabindex="1">
-													<input type="file"
-														(change)="vehicleOfficialImagesChange($event,'schoolBusCertificateImage',schoolBusCertificateImageIdId)"
-														tabindex="-1">
-													<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-														<path fill="none" d="M0 0h24v24H0V0z" />
-														<circle cx="12" cy="12" r="3" />
+												<button
+													class="changeuploaded"
+													tabindex="1"
+												>
+													<input
+														type="file"
+														(change)="
+															vehicleOfficialImagesChange(
+																$event,
+																'schoolBusCertificateImage',
+																schoolBusCertificateImageIdId
+															)
+														"
+														tabindex="-1"
+													/>
+													<svg
+														xmlns="http://www.w3.org/2000/svg"
+														viewBox="0 0 24 24"
+													>
 														<path
-															d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+															fill="none"
+															d="M0 0h24v24H0V0z"
+														/>
+														<circle
+															cx="12"
+															cy="12"
+															r="3"
+														/>
+														<path
+															d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
+														/>
 													</svg>
 													Change
 												</button>
@@ -744,9 +1182,12 @@
 													tabindex="1">
 													<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 														<path
-															d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
+															d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z"
+														/>
 													</svg>
-													Delete</a></li>
+													Delete</a
+												>
+											</li>
 										</ul>
 									</div>
 								</div>
@@ -761,29 +1202,65 @@
 													Child/School Bus Certified <span class="asterisk">*</span></p>
 											</div>
 											<div class="emptyImage">
-												<img src="../../../../assets/images/empty-image.png" tabindex="-1">
+												<img
+													src="../../../../assets/images/empty-image.png"
+													tabindex="-1"
+												/>
 											</div>
 											<ul class="mt-3">
 												<li>
-													<button class="adduploaded" tabindex="1">
-														<input type="file"
-															(change)="vehicleOfficialImagesChange($event,'schoolBusCertificateImage',schoolBusCertificateImageIdId)"
-															tabindex="-1">
-														<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-															<path fill="none" d="M0 0h24v24H0V0z" />
-															<circle cx="12" cy="12" r="3" />
+													<button
+														class="adduploaded"
+														tabindex="1"
+													>
+														<input
+															type="file"
+															(change)="
+																vehicleOfficialImagesChange(
+																	$event,
+																	'schoolBusCertificateImage',
+																	schoolBusCertificateImageIdId
+																)
+															"
+															tabindex="-1"
+														/>
+														<svg
+															xmlns="http://www.w3.org/2000/svg"
+															viewBox="0 0 24 24"
+														>
 															<path
-																d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+																fill="none"
+																d="M0 0h24v24H0V0z"
+															/>
+															<circle
+																cx="12"
+																cy="12"
+																r="3"
+															/>
+															<path
+																d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
+															/>
 														</svg>
 														Add
 													</button>
 												</li>
 											</ul>
 										</div>
-										<div *ngIf="submittedForm && f.schoolBusCertificateImage.errors"
-											class="text-danger margin-bottom-thin my-mat-hint text-center mb-4">
-											<div *ngIf="f.schoolBusCertificateImage.errors.required">Child/School Bus
-												Certified is
+										<div
+											*ngIf="
+												submittedForm &&
+												f.schoolBusCertificateImage
+													.errors
+											"
+											class="text-danger margin-bottom-thin my-mat-hint text-center mb-4"
+										>
+											<div
+												*ngIf="
+													f.schoolBusCertificateImage
+														.errors.required
+												"
+											>
+												Child/School Bus Certified is
 												required.
 											</div>
 										</div>
@@ -792,22 +1269,44 @@
 							</ng-template>
 						</div>
 					</div>
-					<hr>
+					<hr />
 				</div>
 
 				<div class="col-12">
 					<div class="custom-control custom-checkbox">
-						<mat-slide-toggle class="example-margin" [color]="color" [checked]="BackgroundCertificateCheck"
-							(change)="onChildVeteranDoDChange($event.checked,'BackgroundCertificate'); globalFunctions.scrollIntoView(backgroundtarget)"
-							tabindex="1">
+						<mat-slide-toggle
+							class="example-margin"
+							[color]="color"
+							[checked]="BackgroundCertificateCheck"
+							(change)="
+								onChildVeteranDoDChange(
+									$event.checked,
+									'BackgroundCertificate'
+								);
+								globalFunctions.scrollIntoView(backgroundtarget)
+							"
+							tabindex="1"
+						>
 						</mat-slide-toggle>
-						<label class="ml-3" for="backgroundCertificate">Background Certified</label>
+						<label class="ml-3" for="backgroundCertificate"
+							>Background Certified</label
+						>
 					</div>
 				</div>
-				<div class="col-12" [hidden]="!BackgroundCertificateCheck" #backgroundtarget>
+				<div
+					class="col-12"
+					[hidden]="!BackgroundCertificateCheck"
+					#backgroundtarget
+				>
 					<div class="vehtype_extintwrap single-image">
 						<div class="row">
-							<div class="col-md-4" *ngIf="BackgroundCheckerID; else noBackgroundCheckerID">
+							<div
+								class="col-md-4"
+								*ngIf="
+									BackgroundCheckerID;
+									else noBackgroundCheckerID
+								"
+							>
 								<div class="vehtype_extint">
 									<div>
 										<p>Background ID Image</p>
@@ -815,15 +1314,37 @@
 											(click)="showImageInModal(BackgroundCheckerID)" tabindex="-1">
 										<ul class="mt-3 mb-0">
 											<li>
-												<button class="changeuploaded" tabindex="1">
-													<input type="file"
-														(change)="vehicleOfficialImagesChange($event,'BackgroundCheckerID',BackgroundCheckerIDId)"
-														tabindex="-1">
-													<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-														<path fill="none" d="M0 0h24v24H0V0z" />
-														<circle cx="12" cy="12" r="3" />
+												<button
+													class="changeuploaded"
+													tabindex="1"
+												>
+													<input
+														type="file"
+														(change)="
+															vehicleOfficialImagesChange(
+																$event,
+																'BackgroundCheckerID',
+																BackgroundCheckerIDId
+															)
+														"
+														tabindex="-1"
+													/>
+													<svg
+														xmlns="http://www.w3.org/2000/svg"
+														viewBox="0 0 24 24"
+													>
 														<path
-															d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+															fill="none"
+															d="M0 0h24v24H0V0z"
+														/>
+														<circle
+															cx="12"
+															cy="12"
+															r="3"
+														/>
+														<path
+															d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
+														/>
 													</svg>
 													Change
 												</button>
@@ -833,9 +1354,12 @@
 													tabindex="1">
 													<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 														<path
-															d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
+															d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z"
+														/>
 													</svg>
-													Delete</a></li>
+													Delete</a
+												>
+											</li>
 										</ul>
 									</div>
 								</div>
@@ -846,19 +1370,44 @@
 										<div>
 											<p>Background ID Image</p>
 											<div class="emptyImage">
-												<img src="../../../../assets/images/empty-image.png" tabindex="-1">
+												<img
+													src="../../../../assets/images/empty-image.png"
+													tabindex="-1"
+												/>
 											</div>
 											<ul class="mt-3 mb-0">
 												<li>
-													<button class="adduploaded" tabindex="1">
-														<input type="file"
-															(change)="vehicleOfficialImagesChange($event,'BackgroundCheckerID','BackgroundCheckerIDId')"
-															tabindex="-1">
-														<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-															<path fill="none" d="M0 0h24v24H0V0z" />
-															<circle cx="12" cy="12" r="3" />
+													<button
+														class="adduploaded"
+														tabindex="1"
+													>
+														<input
+															type="file"
+															(change)="
+																vehicleOfficialImagesChange(
+																	$event,
+																	'BackgroundCheckerID',
+																	'BackgroundCheckerIDId'
+																)
+															"
+															tabindex="-1"
+														/>
+														<svg
+															xmlns="http://www.w3.org/2000/svg"
+															viewBox="0 0 24 24"
+														>
 															<path
-																d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+																fill="none"
+																d="M0 0h24v24H0V0z"
+															/>
+															<circle
+																cx="12"
+																cy="12"
+																r="3"
+															/>
+															<path
+																d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
+															/>
 														</svg>
 														Add
 													</button>
@@ -877,9 +1426,16 @@
 								<input matInput placeholder="Background Comapny Name" formControlName="CheckerID"
 									tabindex="1">
 							</mat-form-field>
-							<div *ngIf="submittedForm && f.CheckerID.errors || f.CheckerID.touched && f.CheckerID.errors"
-								class="text-danger margin-bottom-thin my-mat-hint">
-								<div *ngIf="f.CheckerID.errors.required">This field is required</div>
+							<div
+								*ngIf="
+									(submittedForm && f.CheckerID.errors) ||
+									(f.CheckerID.touched && f.CheckerID.errors)
+								"
+								class="text-danger margin-bottom-thin my-mat-hint"
+							>
+								<div *ngIf="f.CheckerID.errors.required">
+									This field is required
+								</div>
 							</div>
 						</div>
 						<div class="col-md-6">
@@ -892,9 +1448,23 @@
 									(intlTelInputObject)="telInputObjectBackgroundCompanyTelNumber($event)"
 									tabindex="1" />
 							</mat-form-field>
-							<div *ngIf="submittedForm && f.BackgroundCompanyTelNumber.errors || f.BackgroundCompanyTelNumber.touched && f.BackgroundCompanyTelNumber.errors"
-								class="text-danger margin-bottom-thin my-mat-hint">
-								<div *ngIf="f.BackgroundCompanyTelNumber.errors.required">This field is required</div>
+							<div
+								*ngIf="
+									(submittedForm &&
+										f.BackgroundCompanyTelNumber.errors) ||
+									(f.BackgroundCompanyTelNumber.touched &&
+										f.BackgroundCompanyTelNumber.errors)
+								"
+								class="text-danger margin-bottom-thin my-mat-hint"
+							>
+								<div
+									*ngIf="
+										f.BackgroundCompanyTelNumber.errors
+											.required
+									"
+								>
+									This field is required
+								</div>
 							</div>
 							<div *ngIf="f.BackgroundCompanyTelNumber.errors"
 								class="text-danger margin-bottom-thin my-mat-hint">
@@ -902,40 +1472,87 @@
 									add Dashes
 									with numbers</div>
 								<ng-template #plusError>
-									<div *ngIf="f.BackgroundCompanyTelNumber.errors?.invalidPattern;else allErrors">Do
-										not enter +
-										sign</div>
+									<div
+										*ngIf="
+											f.BackgroundCompanyTelNumber.errors
+												?.invalidPattern;
+											else allErrors
+										"
+									>
+										Do not enter + sign
+									</div>
 									<ng-template #allErrors>
-										<div *ngIf="f.BackgroundCompanyTelNumber.errors?.pattern;else numberLength">
-											Enter Numbers Without Spaces or Dashes
+										<div
+											*ngIf="
+												f.BackgroundCompanyTelNumber
+													.errors?.pattern;
+												else numberLength
+											"
+										>
+											Enter Numbers Without Spaces or
+											Dashes
 										</div>
 										<ng-template #numberLength>
-											<div *ngIf="f.BackgroundCompanyTelNumber.errors.minlength">Minimum length
-												should be 4</div>
-											<div *ngIf="f.BackgroundCompanyTelNumber.errors.maxlength">Maximum length
-												should be 15</div>
+											<div
+												*ngIf="
+													f.BackgroundCompanyTelNumber
+														.errors.minlength
+												"
+											>
+												Minimum length should be 4
+											</div>
+											<div
+												*ngIf="
+													f.BackgroundCompanyTelNumber
+														.errors.maxlength
+												"
+											>
+												Maximum length should be 15
+											</div>
 										</ng-template>
 									</ng-template>
 								</ng-template>
 							</div>
 						</div>
 					</div>
-					<hr>
+					<hr />
 				</div>
 
 				<div class="col-12">
 					<div class="custom-control custom-checkbox">
-						<mat-slide-toggle class="example-margin" [color]="color" [checked]="Covid19VaccinationCheck"
-							(change)="onChildVeteranDoDChange($event.checked,'Covid19Vaccination'); globalFunctions.scrollIntoView(covidtarget)"
-							tabindex="1">
+						<mat-slide-toggle
+							class="example-margin"
+							[color]="color"
+							[checked]="Covid19VaccinationCheck"
+							(change)="
+								onChildVeteranDoDChange(
+									$event.checked,
+									'Covid19Vaccination'
+								);
+								globalFunctions.scrollIntoView(covidtarget)
+							"
+							tabindex="1"
+						>
 						</mat-slide-toggle>
-						<label class="ml-3" for="Covid19Vaccination">COVID-19 Vaccination Record Card</label>
+						<label class="ml-3" for="Covid19Vaccination"
+							>COVID-19 Vaccination Record Card</label
+						>
 					</div>
 				</div>
-				<div class="col-12" [hidden]="!Covid19VaccinationCheck" #covidtarget>
+				<div
+					class="col-12"
+					[hidden]="!Covid19VaccinationCheck"
+					#covidtarget
+				>
 					<div class="vehtype_extintwrap single-image">
 						<div class="row">
-							<div class="col-md-4" *ngIf="VaccinationCardImage; else noVaccinationCardImage">
+							<div
+								class="col-md-4"
+								*ngIf="
+									VaccinationCardImage;
+									else noVaccinationCardImage
+								"
+							>
 								<div class="vehtype_extint">
 									<div>
 										<p>Vaccination Card Image</p>
@@ -943,15 +1560,37 @@
 											(click)="showImageInModal(VaccinationCardImage)" tabindex="-1">
 										<ul class="mt-3">
 											<li>
-												<button class="changeuploaded" tabindex="1">
-													<input type="file"
-														(change)="vehicleOfficialImagesChange($event,'VaccinationCardImage',VaccinationCardImageId)"
-														tabindex="-1">
-													<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-														<path fill="none" d="M0 0h24v24H0V0z" />
-														<circle cx="12" cy="12" r="3" />
+												<button
+													class="changeuploaded"
+													tabindex="1"
+												>
+													<input
+														type="file"
+														(change)="
+															vehicleOfficialImagesChange(
+																$event,
+																'VaccinationCardImage',
+																VaccinationCardImageId
+															)
+														"
+														tabindex="-1"
+													/>
+													<svg
+														xmlns="http://www.w3.org/2000/svg"
+														viewBox="0 0 24 24"
+													>
 														<path
-															d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+															fill="none"
+															d="M0 0h24v24H0V0z"
+														/>
+														<circle
+															cx="12"
+															cy="12"
+															r="3"
+														/>
+														<path
+															d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
+														/>
 													</svg>
 													Change
 												</button>
@@ -961,9 +1600,12 @@
 													tabindex="1">
 													<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 														<path
-															d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
+															d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z"
+														/>
 													</svg>
-													Delete</a></li>
+													Delete</a
+												>
+											</li>
 										</ul>
 									</div>
 								</div>
@@ -974,37 +1616,73 @@
 										<div>
 											<p>Vaccination Card Image</p>
 											<div class="emptyImage">
-												<img src="../../../../assets/images/empty-image.png" tabindex="-1">
+												<img
+													src="../../../../assets/images/empty-image.png"
+													tabindex="-1"
+												/>
 											</div>
 											<ul class="mt-3">
 												<li>
-													<button class="adduploaded" tabindex="1">
-														<input type="file"
-															(change)="vehicleOfficialImagesChange($event,'VaccinationCardImage','VaccinationCardImageId')"
-															tabindex="-1">
-														<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-															<path fill="none" d="M0 0h24v24H0V0z" />
-															<circle cx="12" cy="12" r="3" />
+													<button
+														class="adduploaded"
+														tabindex="1"
+													>
+														<input
+															type="file"
+															(change)="
+																vehicleOfficialImagesChange(
+																	$event,
+																	'VaccinationCardImage',
+																	'VaccinationCardImageId'
+																)
+															"
+															tabindex="-1"
+														/>
+														<svg
+															xmlns="http://www.w3.org/2000/svg"
+															viewBox="0 0 24 24"
+														>
 															<path
-																d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+																fill="none"
+																d="M0 0h24v24H0V0z"
+															/>
+															<circle
+																cx="12"
+																cy="12"
+																r="3"
+															/>
+															<path
+																d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
+															/>
 														</svg>
 														Add
 													</button>
 												</li>
 											</ul>
 										</div>
-										<div *ngIf="submittedForm && f.VaccinationCardImage.errors"
-											class="text-danger margin-bottom-thin my-mat-hint text-center">
-											<div *ngIf="f.VaccinationCardImage.errors.required">The Vaccination Card
-												Image is
-												required.</div>
+										<div
+											*ngIf="
+												submittedForm &&
+												f.VaccinationCardImage.errors
+											"
+											class="text-danger margin-bottom-thin my-mat-hint text-center"
+										>
+											<div
+												*ngIf="
+													f.VaccinationCardImage
+														.errors.required
+												"
+											>
+												The Vaccination Card Image is
+												required.
+											</div>
 										</div>
 									</div>
 								</div>
 							</ng-template>
 						</div>
 					</div>
-					<hr>
+					<hr />
 				</div>
 
 				<div class="col-12">
@@ -1024,13 +1702,29 @@
 								<input matInput placeholder="Name of Department" formControlName="LastPoliceDepartment"
 									tabindex="1" (focus)="$event.target.select()" />
 							</mat-form-field>
-							<div *ngIf="submittedForm && f.LastPoliceDepartment.errors || f.LastPoliceDepartment.touched && f.LastPoliceDepartment.errors"
-								class="text-danger margin-bottom-thin my-mat-hint">
-								<div *ngIf="f.LastPoliceDepartment.errors.required">This field is required</div>
+							<div
+								*ngIf="
+									(submittedForm &&
+										f.LastPoliceDepartment.errors) ||
+									(f.LastPoliceDepartment.touched &&
+										f.LastPoliceDepartment.errors)
+								"
+								class="text-danger margin-bottom-thin my-mat-hint"
+							>
+								<div
+									*ngIf="
+										f.LastPoliceDepartment.errors.required
+									"
+								>
+									This field is required
+								</div>
 							</div>
 						</div>
 						<div class="col-md-6">
-							<mat-form-field appearance="outline" class="mat-custom-phone">
+							<mat-form-field
+								appearance="outline"
+								class="mat-custom-phone"
+							>
 								<mat-label>Police Depart. Tel #</mat-label>
 								<input matInput placeholder="Police Depart. Tel #"
 									formControlName="PoliceForceTelephone" ng2TelInput
@@ -1045,18 +1739,43 @@
 									Dashes
 									with numbers</div>
 								<ng-template #plusError>
-									<div *ngIf="f.PoliceForceTelephone.errors?.invalidPattern;else allErrors">Do not
-										enter +
-										sign</div>
+									<div
+										*ngIf="
+											f.PoliceForceTelephone.errors
+												?.invalidPattern;
+											else allErrors
+										"
+									>
+										Do not enter + sign
+									</div>
 									<ng-template #allErrors>
-										<div *ngIf="f.PoliceForceTelephone.errors?.pattern;else numberLength">Enter
-											Numbers Without Spaces or Dashes
+										<div
+											*ngIf="
+												f.PoliceForceTelephone.errors
+													?.pattern;
+												else numberLength
+											"
+										>
+											Enter Numbers Without Spaces or
+											Dashes
 										</div>
 										<ng-template #numberLength>
-											<div *ngIf="f.PoliceForceTelephone.errors.minlength">Minimum length should
-												be 4</div>
-											<div *ngIf="f.PoliceForceTelephone.errors.maxlength">Maximum length should
-												be 15</div>
+											<div
+												*ngIf="
+													f.PoliceForceTelephone
+														.errors.minlength
+												"
+											>
+												Minimum length should be 4
+											</div>
+											<div
+												*ngIf="
+													f.PoliceForceTelephone
+														.errors.maxlength
+												"
+											>
+												Maximum length should be 15
+											</div>
 										</ng-template>
 									</ng-template>
 								</ng-template>
@@ -1100,9 +1819,16 @@
 								<input matInput placeholder="City" formControlName="City" tabindex="1"
 									(focus)="$event.target.select()" />
 							</mat-form-field>
-							<div *ngIf="submittedForm && f.City.errors || f.City.touched && f.City.errors"
-								class="text-danger margin-bottom-thin my-mat-hint">
-								<div *ngIf="f.City.errors.required">This field is required</div>
+							<div
+								*ngIf="
+									(submittedForm && f.City.errors) ||
+									(f.City.touched && f.City.errors)
+								"
+								class="text-danger margin-bottom-thin my-mat-hint"
+							>
+								<div *ngIf="f.City.errors.required">
+									This field is required
+								</div>
 							</div>
 						</div>
 						<div class="col-md-6">
@@ -1111,18 +1837,41 @@
 								<input matInput placeholder="Zip Code" (focus)="$event.target.select()"
 									formControlName="ZipCode" tabindex="1" />
 							</mat-form-field>
-							<div *ngIf="submittedForm && f.ZipCode.errors || f.ZipCode.touched && f.ZipCode.errors"
-								class="text-danger margin-bottom-thin my-mat-hint">
-								<div *ngIf="f.ZipCode.errors.required">This field is required</div>
+							<div
+								*ngIf="
+									(submittedForm && f.ZipCode.errors) ||
+									(f.ZipCode.touched && f.ZipCode.errors)
+								"
+								class="text-danger margin-bottom-thin my-mat-hint"
+							>
+								<div *ngIf="f.ZipCode.errors.required">
+									This field is required
+								</div>
 							</div>
-							<div *ngIf="f.ZipCode.errors" class="text-danger margin-bottom-thin my-mat-hint">
-								<div *ngIf="f.ZipCode.errors?.invalid_Pattern;else plusError">Do not add Dashes
-									with numbers</div>
+							<div
+								*ngIf="f.ZipCode.errors"
+								class="text-danger margin-bottom-thin my-mat-hint"
+							>
+								<div
+									*ngIf="
+										f.ZipCode.errors?.invalid_Pattern;
+										else plusError
+									"
+								>
+									Do not add Dashes with numbers
+								</div>
 								<ng-template #plusError>
-									<div *ngIf="f.ZipCode.errors?.invalidPattern;else allErrors">Do not enter +
-										sign</div>
+									<div
+										*ngIf="
+											f.ZipCode.errors?.invalidPattern;
+											else allErrors
+										"
+									>
+										Do not enter + sign
+									</div>
 									<ng-template #allErrors>
-										<div *ngIf="f.ZipCode.errors?.pattern">Enter Numbers Only
+										<div *ngIf="f.ZipCode.errors?.pattern">
+											Enter Numbers Only
 										</div>
 									</ng-template>
 								</ng-template>
@@ -1143,4 +1892,7 @@
 </form>
 
 <!-- Image modal -->
-<app-image-modal (closeTab)="closeButton()" [modalImage]="modalImage"></app-image-modal>
+<app-image-modal
+	(closeTab)="closeButton()"
+	[modalImage]="modalImage"
+></app-image-modal>

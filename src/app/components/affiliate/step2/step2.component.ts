@@ -920,6 +920,41 @@ export class Step2Component implements OnInit
 		}
 	}
 
+	selectDropdownAccount()
+	{
+		$('.selectAccountLabel').removeClass('selectAccountLabel ').addClass('select-account-label');
+	}
 
-
+	selectDropdownDay()
+	{
+		$('.selectDayLabel').removeClass('selectDayLabel ').addClass('select-day-label');
+	}
+	selectDropdownMonth()
+	{
+		$('.selectMonthLabel').removeClass('selectMonthLabel ').addClass('select-month-label');
+	}
+	selectDropdownYear()
+	{
+		$('.selectYearLabel').removeClass('selectYearLabel ').addClass('select-year-label');
+	}
+	selectDropdownCurrency()
+	{
+		$('.selectCurrencyLabel').removeClass('selectCurrencyLabel ').addClass('select-currency-label');
+	}
+	selectDropdownCountry()
+	{
+		$('.selectCountryLabel').removeClass('selectCountryLabel ').addClass('select-country-label');
+	}
+	selectDropdownState()
+	{
+		$('.selectStateLabel').removeClass('selectStateLabel ').addClass('select-state-label');
+	}
+	selectDropdownExMonth()
+	{
+		$('.selectExMonthLabel').removeClass('selectExMonthLabel ').addClass('select-ex-month-label');
+	}
+	selectDropdownExYear()
+	{
+		$('.selectExYearLabel').removeClass('selectExYearLabel ').addClass('select-ex-year-label');
+	}
 }

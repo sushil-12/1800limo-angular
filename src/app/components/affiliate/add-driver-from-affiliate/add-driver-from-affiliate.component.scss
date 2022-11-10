@@ -1,5 +1,5 @@
 .vehtype_extint img {
-	height       : 200px;
+	height: 200px;
 	border-radius: 15px;
 }
 
@@ -39,19 +39,100 @@ hr {
 	color: #dc3545 !important;
 }
 
-.topLabelClass.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
-	padding-left    : 0px;
+.topLabelClass.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float
+	.mat-form-field-label {
+	padding-left: 0px;
 	background-color: #fff;
-	max-width       : 50px;
-	text-align      : center;
-	left            : -6px;
+	max-width: 50px;
+	text-align: center;
+	left: -6px;
 }
 
-@media only screen and (max-width:767px) {
+@media only screen and (max-width: 767px) {
 	.toggleLabelClass label {
-		font-size     : 16px;
-		width         : 80%;
+		font-size: 16px;
+		width: 80%;
 		vertical-align: text-top;
-		margin-top    : -5px;
+		margin-top: -5px;
 	}
+}
+.selectGenderLabel {
+	position: relative;
+	top: 43px;
+	left: 8px;
+	background: #fff;
+	color: #808080 !important;
+	padding: 0 3px;
+	font-size: 16px !important;
+}
+
+.select-gender-label {
+	position: relative;
+	top: 15px;
+	left: 8px;
+	background: #fff;
+	color: #000 !important;
+	padding: 0 3px;
+	font-size: 12px !important;
+	transition: 0.3s;
+}
+.selectDressLabel {
+	position: relative;
+	top: 43px;
+	left: 8px;
+	background: #fff;
+	color: #808080 !important;
+	padding: 0 3px;
+	font-size: 16px !important;
+}
+
+.select-dress-label {
+	position: relative;
+	top: 15px;
+	left: 8px;
+	background: #fff;
+	color: #000 !important;
+	padding: 0 3px;
+	font-size: 12px !important;
+	transition: 0.3s;
+}
+.selectYearBusinessLabel {
+	position: relative;
+	top: 43px;
+	left: 8px;
+	background: #fff;
+	color: #808080 !important;
+	padding: 0 3px;
+	font-size: 16px !important;
+}
+
+.select-year-business-label {
+	position: relative;
+	top: 15px;
+	left: 8px;
+	background: #fff;
+	color: #000 !important;
+	padding: 0 3px;
+	font-size: 12px !important;
+	transition: 0.3s;
+}
+.select-state-label {
+	position: relative;
+	top: 15px;
+	left: 8px;
+	background: #fff;
+	color: #000 !important;
+	padding: 0 3px;
+	font-size: 12px !important;
+	transition: 0.3s;
+}
+.select-country-label {
+	position: relative;
+	top: 15px;
+	left: 8px;
+	background: #fff;
+	color: #000 !important;
+	padding: 0 3px;
+	font-size: 12px !important;
+	transition: 0.3s;
 }
