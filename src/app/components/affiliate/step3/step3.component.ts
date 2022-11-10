@@ -88,7 +88,28 @@ export class Step3Component implements OnInit, AfterViewInit {
 		}
 
 		//add insurance form validation
-		this.addInsuranceForm = this.formBuilder.group(
+		this.addInsuranceForm = this.formBuilder.group({
+			id: [''],//insurance id for edit purpose
+			acc_id: [this.affiliateId, Validators.required],//affiliate account id
+			CompanyName: ['', Validators.required],
+			AgentName: [''],
+			AgentTelephone: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
+			AgentTelephoneIsd: ['+1', Validators.required],
+			AgentTelephoneCountry: ['us', Validators.required],
+			policyNumber: ['', [Validators.required, this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
+			policyExpiredDay: ['', Validators.required],
+			policyExpiredMonth: ['', Validators.required],
+			policyExpiredYear: ['', Validators.required],
+			insuranceLimits: ['1000000', Validators.required],
+			AgentEmail: ['', [Validators.pattern("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")]],
+			insCertificate: ['', Validators.required],
+			insuranceCard: ['', Validators.required],
+		}, { validator: this.customValidationFunction });
+
+
+		if (this.affiliateId)
+		{
+			if (stepCompleted.includes('3'))
 			{
 				id: [""], //insurance id for edit purpose
 				acc_id: [this.affiliateId, Validators.required], //affiliate account id

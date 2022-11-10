@@ -10,18 +10,9 @@
 			<div class="row">
 				<div class="col-md-4">
 					<mat-form-field appearance="outline">
-						<mat-label
-							>First Name
-							<span class="asterisk">*</span></mat-label
-						>
-						<input
-							matInput
-							placeholder="First Name"
-							(focus)="$event.target.select()"
-							id="firstName"
-							formControlName="FirstName"
-							tabindex="1"
-						/>
+						<mat-label>First Name <span class="asterisk">*</span></mat-label>
+						<input matInput placeholder="First Name" (focus)="$event.target.select()" id="firstName"
+							formControlName="FirstName" tabindex="1">
 					</mat-form-field>
 					<div
 						*ngIf="
@@ -41,13 +32,8 @@
 							Middle Name
 							<span class="theme-color">(Optional)</span>
 						</mat-label>
-						<input
-							matInput
-							placeholder="Middle Name (Optional)"
-							(focus)="$event.target.select()"
-							formControlName="MiddleName"
-							tabindex="1"
-						/>
+						<input matInput placeholder="Middle Name (Optional)" (focus)="$event.target.select()"
+							formControlName="MiddleName" tabindex="1">
 					</mat-form-field>
 					<div
 						*ngIf="
@@ -63,17 +49,9 @@
 				</div>
 				<div class="col-md-4">
 					<mat-form-field appearance="outline">
-						<mat-label
-							>Last Name
-							<span class="asterisk">*</span></mat-label
-						>
-						<input
-							matInput
-							placeholder="Last Name"
-							(focus)="$event.target.select()"
-							formControlName="LastName"
-							tabindex="1"
-						/>
+						<mat-label>Last Name <span class="asterisk">*</span></mat-label>
+						<input matInput placeholder="Last Name" (focus)="$event.target.select()"
+							formControlName="LastName" tabindex="1">
 					</mat-form-field>
 					<div
 						*ngIf="
@@ -140,30 +118,14 @@
 					</div>
 				</div>
 				<div class="col-md-4">
-					<mat-form-field
-						appearance="outline"
-						class="mat-custom-phone topLabelClass"
-					>
-						<label
-							class="mat-form-field-label mat-empty mat-form-field-empty labelClass"
-							>Cell<span class="asterisk"> *</span></label
-						>
-						<input
-							matInput
-							placeholder="1234567890"
-							formControlName="CellNumber"
-							ng2TelInput
-							[ng2TelInputOptions]="{
-								preferredCountries: ['us', 'ca', 'mx', 'gb']
-							}"
-							(focus)="$event.target.select()"
-							(countryChange)="
-								onCountryChange($event, 'CellNumber')
-							"
-							class="phoneNumberClass"
-							(intlTelInputObject)="telInputObjectCell($event)"
-							tabindex="1"
-						/>
+					<mat-form-field appearance="outline" class="mat-custom-phone topLabelClass">
+						<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Cell<span
+								class="asterisk">
+								*</span></label>
+						<input matInput placeholder="1234567890" formControlName="CellNumber" ng2TelInput
+							[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
+							(focus)="$event.target.select()" (countryChange)="onCountryChange($event,'CellNumber')"
+							class="phoneNumberClass" (intlTelInputObject)="telInputObjectCell($event)" tabindex="1" />
 					</mat-form-field>
 					<div
 						*ngIf="
@@ -225,13 +187,8 @@
 								>Optional</span
 							>
 						</mat-label>
-						<input
-							matInput
-							placeholder="Driver E-mail (Optional)"
-							(focus)="$event.target.select()"
-							formControlName="Email"
-							tabindex="1"
-						/>
+						<input matInput placeholder="Driver E-mail (Optional)" (focus)="$event.target.select()"
+							formControlName="Email" tabindex="1">
 					</mat-form-field>
 					<div
 						*ngIf="
@@ -378,63 +335,26 @@
 		<div class="container mt-1">
 			<div class="row">
 				<div class="col-md-12">
-					<div
-						class="choose_ameniteslist"
-						*ngIf="!driverAdded; else driverAlreadyAdded"
-					>
-						<div
-							class="custom-control custom-checkbox"
-							*ngFor="let language of languages"
-						>
-							<input
-								type="checkbox"
-								class="custom-control-input"
-								id="language_{{ language.name }}"
+					<div class="choose_ameniteslist" *ngIf="!driverAdded; else driverAlreadyAdded">
+						<div class="custom-control custom-checkbox" *ngFor="let language of languages">
+							<input type="checkbox" class="custom-control-input" id="language_{{language.name}}"
 								[value]="language.id"
-								(change)="
-									onLanguageChange(
-										$event.target.value,
-										$event.target.checked
-									)
-								"
-								[checked]="language.id == 1 ? true : false"
-								tabindex="1"
-							/>
-							<label
-								class="custom-control-label"
-								for="language_{{ language.name }}"
-								>{{ language.name }}</label
-							>
+								(change)="onLanguageChange($event.target.value,$event.target.checked)"
+								[checked]="language.id==1 ? true : false" tabindex="1">
+							<label class="custom-control-label"
+								for="language_{{language.name}}">{{language.name}}</label>
 						</div>
 					</div>
 					<ng-template #driverAlreadyAdded>
 						<div class="choose_ameniteslist">
-							<div
-								class="custom-control custom-checkbox"
-								*ngFor="
-									let languagesObj of languagesFormControl;
-									let i = index
-								"
-							>
-								<input
-									type="checkbox"
-									class="custom-control-input"
-									id="amenity_{{ languages[i].name }}"
+							<div class="custom-control custom-checkbox"
+								*ngFor="let languagesObj of languagesFormControl; let i=index;">
+								<input type="checkbox" class="custom-control-input" id="amenity_{{languages[i].name}}"
 									[value]="languages[i].id"
-									(change)="
-										onLanguageChange(
-											$event.target.value,
-											$event.target.checked
-										)
-									"
-									[formControl]="languagesObj"
-									tabindex="1"
-								/>
-								<label
-									class="custom-control-label"
-									for="amenity_{{ languages[i].name }}"
-									>{{ languages[i].name }}</label
-								>
+									(change)="onLanguageChange($event.target.value,$event.target.checked)"
+									[formControl]="languagesObj" tabindex="1">
+								<label class="custom-control-label"
+									for="amenity_{{languages[i].name}}">{{languages[i].name}}</label>
 							</div>
 						</div>
 					</ng-template>
@@ -472,43 +392,17 @@
 					>
 						<div class="vehtype_extint">
 							<div>
-								<p>
-									Driver - Head and Shoulder
-									<span class="optionalTextStyle"
-										>(portrait)
-									</span>
-									<span class="asterisk">*</span>
-								</p>
-								<img
-									src="{{ DriverImage }}"
-									(click)="showImageInModal(DriverImage)"
-									tabindex="-1"
-								/>
+								<p>Driver - Head and Shoulder <span class="optionalTextStyle">(portrait) </span> <span
+										class="asterisk">*</span></p>
+								<img src="{{DriverImage}}" (click)="showImageInModal(DriverImage)" tabindex="-1">
 								<ul class="mt-3">
 									<li>
-										<button
-											class="changeuploaded"
-											tabindex="1"
-										>
-											<input
-												type="file"
-												(change)="
-													vehicleOfficialImagesChange(
-														$event,
-														'DriverImage',
-														DriverImageId
-													)
-												"
-												tabindex="-1"
-											/>
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												viewBox="0 0 24 24"
-											>
-												<path
-													fill="none"
-													d="M0 0h24v24H0V0z"
-												/>
+										<button class="changeuploaded" tabindex="1">
+											<input type="file"
+												(change)="vehicleOfficialImagesChange($event,'DriverImage',DriverImageId)"
+												tabindex="-1">
+											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
 												<path
 													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
@@ -531,18 +425,10 @@
 						<div class="col-md-4">
 							<div class="vehtype_extint">
 								<div>
-									<p
-										[class.ng-invalid]="
-											submittedForm &&
-											f.DriverImage.errors.required
-										"
-									>
-										Driver - Head and Shoulder
-										<span class="optionalTextStyle"
-											>(portrait)
-										</span>
-										<span class="asterisk">*</span>
-									</p>
+									<p [class.ng-invalid]="submittedForm && f.DriverImage.errors.required">Driver - Head
+										and
+										Shoulder <span class="optionalTextStyle">(portrait) </span> <span
+											class="asterisk">*</span></p>
 									<div class="emptyImage">
 										<img
 											src="../../../../assets/images/empty-image.png"
@@ -551,34 +437,13 @@
 									</div>
 									<ul class="mt-3">
 										<li>
-											<button
-												class="adduploaded"
-												tabindex="1"
-											>
-												<input
-													type="file"
-													(change)="
-														vehicleOfficialImagesChange(
-															$event,
-															'DriverImage',
-															DriverImageId
-														)
-													"
-													tabindex="-1"
-												/>
-												<svg
-													xmlns="http://www.w3.org/2000/svg"
-													viewBox="0 0 24 24"
-												>
-													<path
-														fill="none"
-														d="M0 0h24v24H0V0z"
-													/>
-													<circle
-														cx="12"
-														cy="12"
-														r="3"
-													/>
+											<button class="adduploaded" tabindex="1">
+												<input type="file"
+													(change)="vehicleOfficialImagesChange($event,'DriverImage',DriverImageId)"
+													tabindex="-1">
+												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+													<path fill="none" d="M0 0h24v24H0V0z" />
+													<circle cx="12" cy="12" r="3" />
 													<path
 														d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
 													/>
@@ -609,42 +474,17 @@
 					>
 						<div class="vehtype_extint">
 							<div>
-								<p>
-									Driver / Chauffeur License
-									<span class="optionalTextStyle"
-										>(Front) </span
-									><span class="asterisk">*</span>
-								</p>
-								<img
-									src="{{ DriverLicense }}"
-									(click)="showImageInModal(DriverLicense)"
-									tabindex="-1"
-								/>
+								<p>Driver / Chauffeur License <span class="optionalTextStyle">(Front) </span><span
+										class="asterisk">*</span></p>
+								<img src="{{DriverLicense}}" (click)="showImageInModal(DriverLicense)" tabindex="-1">
 								<ul class="mt-3">
 									<li>
-										<button
-											class="changeuploaded"
-											tabindex="1"
-										>
-											<input
-												type="file"
-												(change)="
-													vehicleOfficialImagesChange(
-														$event,
-														'DriverLicense',
-														DriverLicenseId
-													)
-												"
-												tabindex="-1"
-											/>
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												viewBox="0 0 24 24"
-											>
-												<path
-													fill="none"
-													d="M0 0h24v24H0V0z"
-												/>
+										<button class="changeuploaded" tabindex="1">
+											<input type="file"
+												(change)="vehicleOfficialImagesChange($event,'DriverLicense',DriverLicenseId)"
+												tabindex="-1">
+											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
 												<path
 													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
@@ -667,18 +507,9 @@
 						<div class="col-md-4">
 							<div class="vehtype_extint">
 								<div>
-									<p
-										[class.ng-invalid]="
-											submittedForm &&
-											f.DriverLicense.errors.required
-										"
-									>
-										Driver / Chauffeur License
-										<span class="optionalTextStyle"
-											>(Front)
-										</span>
-										<span class="asterisk">*</span>
-									</p>
+									<p [class.ng-invalid]="submittedForm && f.DriverLicense.errors.required">Driver /
+										Chauffeur License <span class="optionalTextStyle">(Front) </span> <span
+											class="asterisk">*</span></p>
 									<div class="emptyImage">
 										<img
 											src="../../../../assets/images/empty-image.png"
@@ -687,34 +518,13 @@
 									</div>
 									<ul class="mt-3">
 										<li>
-											<button
-												class="adduploaded"
-												tabindex="1"
-											>
-												<input
-													type="file"
-													(change)="
-														vehicleOfficialImagesChange(
-															$event,
-															'DriverLicense',
-															DriverLicenseId
-														)
-													"
-													tabindex="-1"
-												/>
-												<svg
-													xmlns="http://www.w3.org/2000/svg"
-													viewBox="0 0 24 24"
-												>
-													<path
-														fill="none"
-														d="M0 0h24v24H0V0z"
-													/>
-													<circle
-														cx="12"
-														cy="12"
-														r="3"
-													/>
+											<button class="adduploaded" tabindex="1">
+												<input type="file"
+													(change)="vehicleOfficialImagesChange($event,'DriverLicense',DriverLicenseId)"
+													tabindex="-1">
+												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+													<path fill="none" d="M0 0h24v24H0V0z" />
+													<circle cx="12" cy="12" r="3" />
 													<path
 														d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
 													/>
@@ -759,29 +569,12 @@
 								/>
 								<ul class="mt-3">
 									<li>
-										<button
-											class="changeuploaded"
-											tabindex="1"
-										>
-											<input
-												type="file"
-												(change)="
-													vehicleOfficialImagesChange(
-														$event,
-														'StarRating',
-														StarRatingId
-													)
-												"
-												tabindex="-1"
-											/>
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												viewBox="0 0 24 24"
-											>
-												<path
-													fill="none"
-													d="M0 0h24v24H0V0z"
-												/>
+										<button class="changeuploaded" tabindex="1">
+											<input type="file"
+												(change)="vehicleOfficialImagesChange($event,'StarRating',StarRatingId)"
+												tabindex="-1">
+											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
 												<path
 													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
@@ -790,21 +583,9 @@
 											Change
 										</button>
 									</li>
-									<li>
-										<a
-											class="delete-btn"
-											(click)="
-												deleteImage(
-													StarRatingId,
-													'StarRating'
-												)
-											"
-											tabindex="1"
-										>
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												viewBox="0 0 32 32"
-											>
+									<li><a class="delete-btn" (click)="deleteImage(StarRatingId,'StarRating')"
+											tabindex="1">
+											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 												<path
 													d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z"
 												/>
@@ -832,25 +613,13 @@
 									</div>
 									<ul class="mt-3">
 										<li>
-											<button
-												class="adduploaded"
-												tabindex="1"
-											>
-												<input
-													type="file"
-													(change)="
-														vehicleOfficialImagesChange(
-															$event,
-															'StarRating',
-															StarRatingId
-														)
-													"
-													tabindex="-1"
-												/>
-												<svg
-													xmlns="http://www.w3.org/2000/svg"
-													viewBox="0 0 24 24"
-												>
+											<button class="adduploaded" tabindex="1">
+												<input type="file"
+													(change)="vehicleOfficialImagesChange($event,'StarRating',StarRatingId)"
+													tabindex="-1">
+												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+													<path fill="none" d="M0 0h24v24H0V0z" />
+													<circle cx="12" cy="12" r="3" />
 													<path
 														fill="none"
 														d="M0 0h24v24H0V0z"
@@ -875,12 +644,7 @@
 					<div class="col-md-6 ml-4">
 						<mat-form-field appearance="outline">
 							<mat-label>
-								Star Rating Value
-								<span
-									class="asterisk"
-									*ngIf="affiliateType == 'gig_operator'"
-								>
-									*
+								Star Rating Value <span class="asterisk" *ngIf="affiliateType == 'gig_operator'"> *
 								</span>
 							</mat-label>
 							<mat-select
@@ -898,10 +662,8 @@
 								<mat-option value="5.0">5.0</mat-option>
 							</mat-select>
 						</mat-form-field>
-						<div
-							*ngIf="submittedForm && f.starRatingValue.errors"
-							class="text-danger margin-bottom-thin my-mat-hint text-center mb-4"
-						>
+						<div *ngIf="submittedForm && f.starRatingValue.errors"
+							class="text-danger margin-bottom-thin my-mat-hint text-center mb-4">
 							<div *ngIf="f.starRatingValue.errors.required">
 								The Star Rating Value is required.
 							</div>
@@ -935,20 +697,9 @@
 				</div>
 				<div class="col-12">
 					<div class="custom-control custom-checkbox">
-						<mat-slide-toggle
-							id="veteran"
-							class="example-margin"
-							[color]="color"
-							[checked]="VeteranCheck"
-							(change)="
-								onChildVeteranDoDChange(
-									$event.checked,
-									'Veteran'
-								);
-								globalFunctions.scrollIntoView(veterantarget)
-							"
-							tabindex="1"
-						>
+						<mat-slide-toggle id="veteran" class="example-margin" [color]="color" [checked]="VeteranCheck"
+							(change)="onChildVeteranDoDChange($event.checked,'Veteran'); globalFunctions.scrollIntoView(veterantarget)"
+							tabindex="1">
 						</mat-slide-toggle>
 						<label class="ml-3" for="veteran">Veteran</label>
 					</div>
@@ -962,38 +713,18 @@
 							>
 								<div class="vehtype_extint">
 									<div>
-										<p>
-											Veteran's ID Card
-											<span class="asterisk">*</span>
-										</p>
-										<img
-											src="{{ VeteranIdCard }}"
-											(click)="
-												showImageInModal(VeteranIdCard)
-											"
-											tabindex="-1"
-										/>
+										<p>Veteran's ID Card <span class="asterisk">*</span></p>
+										<img src="{{VeteranIdCard}}" (click)="showImageInModal(VeteranIdCard)"
+											tabindex="-1">
 										<ul class="mt-3">
 											<li>
-												<button
-													class="changeuploaded"
-													tabindex="1"
-												>
-													<input
-														type="file"
-														(change)="
-															vehicleOfficialImagesChange(
-																$event,
-																'VeteranIdCard',
-																VeteranIdCardId
-															)
-														"
-														tabindex="-1"
-													/>
-													<svg
-														xmlns="http://www.w3.org/2000/svg"
-														viewBox="0 0 24 24"
-													>
+												<button class="changeuploaded" tabindex="1">
+													<input type="file"
+														(change)="vehicleOfficialImagesChange($event,'VeteranIdCard',VeteranIdCardId)"
+														tabindex="-1">
+													<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+														<path fill="none" d="M0 0h24v24H0V0z" />
+														<circle cx="12" cy="12" r="3" />
 														<path
 															fill="none"
 															d="M0 0h24v24H0V0z"
@@ -1010,21 +741,9 @@
 													Change
 												</button>
 											</li>
-											<li>
-												<a
-													class="delete-btn"
-													(click)="
-														deleteImage(
-															VeteranIdCardId,
-															'VeteranIdCard'
-														)
-													"
-													tabindex="1"
-												>
-													<svg
-														xmlns="http://www.w3.org/2000/svg"
-														viewBox="0 0 32 32"
-													>
+											<li><a class="delete-btn"
+													(click)="deleteImage(VeteranIdCardId,'VeteranIdCard')" tabindex="1">
+													<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 														<path
 															d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z"
 														/>
@@ -1042,17 +761,8 @@
 										<div>
 											<div *ngIf="f.VeteranIdCard.errors">
 												<p
-													[class.ng-invalid]="
-														submittedForm &&
-														f.VeteranIdCard.errors
-															.required
-													"
-												>
-													Veteran's ID Card
-													<span class="asterisk"
-														>*</span
-													>
-												</p>
+													[class.ng-invalid]="submittedForm && f.VeteranIdCard.errors.required">
+													Veteran's ID Card <span class="asterisk">*</span></p>
 											</div>
 											<div class="emptyImage">
 												<img
@@ -1126,16 +836,9 @@
 
 				<div class="col-12" id="dodimage">
 					<div class="custom-control custom-checkbox">
-						<mat-slide-toggle
-							class="example-margin"
-							[color]="color"
-							[checked]="DoDCheck"
-							(change)="
-								onChildVeteranDoDChange($event.checked, 'DoD');
-								globalFunctions.scrollIntoView(dodtarget)
-							"
-							tabindex="1"
-						>
+						<mat-slide-toggle class="example-margin" [color]="color" [checked]="DoDCheck"
+							(change)="onChildVeteranDoDChange($event.checked,'DoD'); globalFunctions.scrollIntoView(dodtarget)"
+							tabindex="1">
 						</mat-slide-toggle>
 						<label class="ml-3" for="dod">Dod Clearance</label>
 					</div>
@@ -1160,34 +863,13 @@
 										/>
 										<ul class="mt-3">
 											<li>
-												<button
-													class="changeuploaded"
-													tabindex="1"
-												>
-													<input
-														type="file"
-														(change)="
-															vehicleOfficialImagesChange(
-																$event,
-																'DoDImage',
-																DoDImageId
-															)
-														"
-														tabindex="-1"
-													/>
-													<svg
-														xmlns="http://www.w3.org/2000/svg"
-														viewBox="0 0 24 24"
-													>
-														<path
-															fill="none"
-															d="M0 0h24v24H0V0z"
-														/>
-														<circle
-															cx="12"
-															cy="12"
-															r="3"
-														/>
+												<button class="changeuploaded" tabindex="1">
+													<input type="file"
+														(change)="vehicleOfficialImagesChange($event,'DoDImage',DoDImageId)"
+														tabindex="-1">
+													<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+														<path fill="none" d="M0 0h24v24H0V0z" />
+														<circle cx="12" cy="12" r="3" />
 														<path
 															d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
 														/>
@@ -1195,21 +877,9 @@
 													Change
 												</button>
 											</li>
-											<li>
-												<a
-													class="delete-btn"
-													(click)="
-														deleteImage(
-															DoDImageId,
-															'DoDImage'
-														)
-													"
-													tabindex="1"
-												>
-													<svg
-														xmlns="http://www.w3.org/2000/svg"
-														viewBox="0 0 32 32"
-													>
+											<li><a class="delete-btn" (click)="deleteImage(DoDImageId,'DoDImage')"
+													tabindex="1">
+													<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 														<path
 															d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z"
 														/>
@@ -1247,25 +917,13 @@
 											</div>
 											<ul class="mt-3">
 												<li>
-													<button
-														class="adduploaded"
-														tabindex="1"
-													>
-														<input
-															type="file"
-															(change)="
-																vehicleOfficialImagesChange(
-																	$event,
-																	'DoDImage',
-																	DoDImageId
-																)
-															"
-															tabindex="-1"
-														/>
-														<svg
-															xmlns="http://www.w3.org/2000/svg"
-															viewBox="0 0 24 24"
-														>
+													<button class="adduploaded" tabindex="1">
+														<input type="file"
+															(change)="vehicleOfficialImagesChange($event,'DoDImage',DoDImageId)"
+															tabindex="-1">
+														<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+															<path fill="none" d="M0 0h24v24H0V0z" />
+															<circle cx="12" cy="12" r="3" />
 															<path
 																fill="none"
 																d="M0 0h24v24H0V0z"
@@ -1309,16 +967,9 @@
 
 				<div class="col-12">
 					<div class="custom-control custom-checkbox">
-						<mat-slide-toggle
-							class="example-margin"
-							[color]="color"
-							[checked]="FoidCheck"
-							(change)="
-								onChildVeteranDoDChange($event.checked, 'Foid');
-								globalFunctions.scrollIntoView(guntarget)
-							"
-							tabindex="1"
-						>
+						<mat-slide-toggle class="example-margin" [color]="color" [checked]="FoidCheck"
+							(change)="onChildVeteranDoDChange($event.checked,'Foid'); globalFunctions.scrollIntoView(guntarget)"
+							tabindex="1">
 						</mat-slide-toggle>
 						<label class="ml-3" for="foid"
 							>FOID (Gun) Card -
@@ -1337,47 +988,18 @@
 							>
 								<div class="vehtype_extint">
 									<div>
-										<p>
-											FOID (Gun) Card
-											<span class="asterisk">*</span>
-										</p>
-										<img
-											src="{{ FoidCardImage }}"
-											(click)="
-												showImageInModal(FoidCardImage)
-											"
-											tabindex="-1"
-										/>
+										<p>FOID (Gun) Card <span class="asterisk">*</span></p>
+										<img src="{{FoidCardImage}}" (click)="showImageInModal(FoidCardImage)"
+											tabindex="-1">
 										<ul class="mt-3">
 											<li>
-												<button
-													class="changeuploaded"
-													tabindex="1"
-												>
-													<input
-														type="file"
-														(change)="
-															vehicleOfficialImagesChange(
-																$event,
-																'FoidCardImage',
-																FoidCardImageId
-															)
-														"
-														tabindex="-1"
-													/>
-													<svg
-														xmlns="http://www.w3.org/2000/svg"
-														viewBox="0 0 24 24"
-													>
-														<path
-															fill="none"
-															d="M0 0h24v24H0V0z"
-														/>
-														<circle
-															cx="12"
-															cy="12"
-															r="3"
-														/>
+												<button class="changeuploaded" tabindex="1">
+													<input type="file"
+														(change)="vehicleOfficialImagesChange($event,'FoidCardImage',FoidCardImageId)"
+														tabindex="-1">
+													<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+														<path fill="none" d="M0 0h24v24H0V0z" />
+														<circle cx="12" cy="12" r="3" />
 														<path
 															d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
 														/>
@@ -1385,21 +1007,9 @@
 													Change
 												</button>
 											</li>
-											<li>
-												<a
-													class="delete-btn"
-													(click)="
-														deleteImage(
-															FoidCardImageId,
-															'FoidCardImage'
-														)
-													"
-													tabindex="1"
-												>
-													<svg
-														xmlns="http://www.w3.org/2000/svg"
-														viewBox="0 0 32 32"
-													>
+											<li><a class="delete-btn"
+													(click)="deleteImage(FoidCardImageId,'FoidCardImage')" tabindex="1">
+													<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 														<path
 															d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z"
 														/>
@@ -1417,17 +1027,9 @@
 										<div>
 											<div *ngIf="f.FoidCardImage.errors">
 												<p
-													[class.ng-invalid]="
-														submittedForm &&
-														f.FoidCardImage.errors
-															.required
-													"
-												>
-													FOID (Gun) Card
-													<span class="asterisk"
-														>*</span
-													>
-												</p>
+													[class.ng-invalid]="submittedForm && f.FoidCardImage.errors.required">
+													FOID
+													(Gun) Card <span class="asterisk">*</span></p>
 											</div>
 											<div class="emptyImage">
 												<img
@@ -1535,21 +1137,9 @@
 							>
 								<div class="vehtype_extint">
 									<div>
-										<p>
-											Child/School Bus Certified
-											<span class="asterisk">*</span>
-										</p>
-										<img
-											src="{{
-												schoolBusCertificateImage
-											}}"
-											(click)="
-												showImageInModal(
-													schoolBusCertificateImage
-												)
-											"
-											tabindex="-1"
-										/>
+										<p>Child/School Bus Certified <span class="asterisk">*</span></p>
+										<img src="{{schoolBusCertificateImage}}"
+											(click)="showImageInModal(schoolBusCertificateImage)" tabindex="-1">
 										<ul class="mt-3">
 											<li>
 												<button
@@ -1587,21 +1177,10 @@
 													Change
 												</button>
 											</li>
-											<li>
-												<a
-													class="delete-btn"
-													(click)="
-														deleteImage(
-															schoolBusCertificateImageIdId,
-															'schoolBusCertificateImage'
-														)
-													"
-													tabindex="1"
-												>
-													<svg
-														xmlns="http://www.w3.org/2000/svg"
-														viewBox="0 0 32 32"
-													>
+											<li><a class="delete-btn"
+													(click)="deleteImage(schoolBusCertificateImageIdId,'schoolBusCertificateImage')"
+													tabindex="1">
+													<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 														<path
 															d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z"
 														/>
@@ -1617,25 +1196,10 @@
 								<div class="col-md-4">
 									<div class="vehtype_extint">
 										<div>
-											<div
-												*ngIf="
-													f.schoolBusCertificateImage
-														.errors
-												"
-											>
+											<div *ngIf="f.schoolBusCertificateImage.errors">
 												<p
-													[class.ng-invalid]="
-														submittedForm &&
-														f
-															.schoolBusCertificateImage
-															.errors.required
-													"
-												>
-													Child/School Bus Certified
-													<span class="asterisk"
-														>*</span
-													>
-												</p>
+													[class.ng-invalid]="submittedForm && f.schoolBusCertificateImage.errors.required">
+													Child/School Bus Certified <span class="asterisk">*</span></p>
 											</div>
 											<div class="emptyImage">
 												<img
@@ -1746,15 +1310,8 @@
 								<div class="vehtype_extint">
 									<div>
 										<p>Background ID Image</p>
-										<img
-											src="{{ BackgroundCheckerID }}"
-											(click)="
-												showImageInModal(
-													BackgroundCheckerID
-												)
-											"
-											tabindex="-1"
-										/>
+										<img src="{{BackgroundCheckerID}}"
+											(click)="showImageInModal(BackgroundCheckerID)" tabindex="-1">
 										<ul class="mt-3 mb-0">
 											<li>
 												<button
@@ -1792,21 +1349,10 @@
 													Change
 												</button>
 											</li>
-											<li>
-												<a
-													class="delete-btn"
-													(click)="
-														deleteImage(
-															BackgroundCheckerIDId,
-															'BackgroundCheckerID'
-														)
-													"
-													tabindex="1"
-												>
-													<svg
-														xmlns="http://www.w3.org/2000/svg"
-														viewBox="0 0 32 32"
-													>
+											<li><a class="delete-btn"
+													(click)="deleteImage(BackgroundCheckerIDId,'BackgroundCheckerID')"
+													tabindex="1">
+													<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 														<path
 															d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z"
 														/>
@@ -1876,16 +1422,9 @@
 					<div class="row mb-4">
 						<div class="col-md-6">
 							<mat-form-field appearance="outline">
-								<mat-label
-									>Background Comapny Name
-									<span class="asterisk">*</span></mat-label
-								>
-								<input
-									matInput
-									placeholder="Background Comapny Name"
-									formControlName="CheckerID"
-									tabindex="1"
-								/>
+								<mat-label>Background Comapny Name <span class="asterisk">*</span></mat-label>
+								<input matInput placeholder="Background Comapny Name" formControlName="CheckerID"
+									tabindex="1">
 							</mat-form-field>
 							<div
 								*ngIf="
@@ -1900,40 +1439,14 @@
 							</div>
 						</div>
 						<div class="col-md-6">
-							<mat-form-field
-								appearance="outline"
-								class="mat-custom-phone"
-							>
-								<mat-label
-									>Background company Telephone #
-									<span class="asterisk">*</span></mat-label
-								>
-								<input
-									matInput
-									placeholder="Background company Telephone #"
-									formControlName="BackgroundCompanyTelNumber"
-									ng2TelInput
-									[ng2TelInputOptions]="{
-										preferredCountries: [
-											'us',
-											'ca',
-											'mx',
-											'gb'
-										]
-									}"
-									(countryChange)="
-										onCountryChange(
-											$event,
-											'BackgroundCompanyTelNumber'
-										)
-									"
-									(intlTelInputObject)="
-										telInputObjectBackgroundCompanyTelNumber(
-											$event
-										)
-									"
-									tabindex="1"
-								/>
+							<mat-form-field appearance="outline" class="mat-custom-phone">
+								<mat-label>Background company Telephone # <span class="asterisk">*</span></mat-label>
+								<input matInput placeholder="Background company Telephone #"
+									formControlName="BackgroundCompanyTelNumber" ng2TelInput
+									[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
+									(countryChange)="onCountryChange($event,'BackgroundCompanyTelNumber')"
+									(intlTelInputObject)="telInputObjectBackgroundCompanyTelNumber($event)"
+									tabindex="1" />
 							</mat-form-field>
 							<div
 								*ngIf="
@@ -1953,19 +1466,11 @@
 									This field is required
 								</div>
 							</div>
-							<div
-								*ngIf="f.BackgroundCompanyTelNumber.errors"
-								class="text-danger margin-bottom-thin my-mat-hint"
-							>
-								<div
-									*ngIf="
-										f.BackgroundCompanyTelNumber.errors
-											?.invalid_Pattern;
-										else plusError
-									"
-								>
-									Do not add Dashes with numbers
-								</div>
+							<div *ngIf="f.BackgroundCompanyTelNumber.errors"
+								class="text-danger margin-bottom-thin my-mat-hint">
+								<div *ngIf="f.BackgroundCompanyTelNumber.errors?.invalid_Pattern;else plusError">Do not
+									add Dashes
+									with numbers</div>
 								<ng-template #plusError>
 									<div
 										*ngIf="
@@ -2051,15 +1556,8 @@
 								<div class="vehtype_extint">
 									<div>
 										<p>Vaccination Card Image</p>
-										<img
-											src="{{ VaccinationCardImage }}"
-											(click)="
-												showImageInModal(
-													VaccinationCardImage
-												)
-											"
-											tabindex="-1"
-										/>
+										<img src="{{VaccinationCardImage}}"
+											(click)="showImageInModal(VaccinationCardImage)" tabindex="-1">
 										<ul class="mt-3">
 											<li>
 												<button
@@ -2097,21 +1595,10 @@
 													Change
 												</button>
 											</li>
-											<li>
-												<a
-													class="delete-btn"
-													(click)="
-														deleteImage(
-															VaccinationCardImageId,
-															'VaccinationCardImage'
-														)
-													"
-													tabindex="1"
-												>
-													<svg
-														xmlns="http://www.w3.org/2000/svg"
-														viewBox="0 0 32 32"
-													>
+											<li><a class="delete-btn"
+													(click)="deleteImage(VaccinationCardImageId,'VaccinationCardImage')"
+													tabindex="1">
+													<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 														<path
 															d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z"
 														/>
@@ -2200,19 +1687,9 @@
 
 				<div class="col-12">
 					<div class="custom-control custom-checkbox">
-						<mat-slide-toggle
-							class="example-margin"
-							[color]="color"
-							[checked]="ExPoliceCheck"
-							(change)="
-								onChildVeteranDoDChange(
-									$event.checked,
-									'ExPolice'
-								);
-								globalFunctions.scrollIntoView(policetarget)
-							"
-							tabindex="1"
-						>
+						<mat-slide-toggle class="example-margin" [color]="color" [checked]="ExPoliceCheck"
+							(change)="onChildVeteranDoDChange($event.checked,'ExPolice'); globalFunctions.scrollIntoView(policetarget)"
+							tabindex="1">
 						</mat-slide-toggle>
 						<label class="ml-3" for="ExPolice">Ex / Police</label>
 					</div>
@@ -2221,17 +1698,9 @@
 					<div class="row mb-4">
 						<div class="col-md-6">
 							<mat-form-field appearance="outline">
-								<mat-label
-									>Name of Department
-									<span class="asterisk">*</span></mat-label
-								>
-								<input
-									matInput
-									placeholder="Name of Department"
-									formControlName="LastPoliceDepartment"
-									tabindex="1"
-									(focus)="$event.target.select()"
-								/>
+								<mat-label>Name of Department <span class="asterisk">*</span></mat-label>
+								<input matInput placeholder="Name of Department" formControlName="LastPoliceDepartment"
+									tabindex="1" (focus)="$event.target.select()" />
 							</mat-form-field>
 							<div
 								*ngIf="
@@ -2257,47 +1726,18 @@
 								class="mat-custom-phone"
 							>
 								<mat-label>Police Depart. Tel #</mat-label>
-								<input
-									matInput
-									placeholder="Police Depart. Tel #"
-									formControlName="PoliceForceTelephone"
-									ng2TelInput
-									[ng2TelInputOptions]="{
-										preferredCountries: [
-											'us',
-											'ca',
-											'mx',
-											'gb'
-										]
-									}"
-									(countryChange)="
-										onCountryChange(
-											$event,
-											'PoliceForceTelephone'
-										)
-									"
+								<input matInput placeholder="Police Depart. Tel #"
+									formControlName="PoliceForceTelephone" ng2TelInput
+									[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
+									(countryChange)="onCountryChange($event,'PoliceForceTelephone')"
 									(focus)="$event.target.select()"
-									(intlTelInputObject)="
-										telInputObjectPoliceForceTelephone(
-											$event
-										)
-									"
-									tabindex="1"
-								/>
+									(intlTelInputObject)="telInputObjectPoliceForceTelephone($event)" tabindex="1" />
 							</mat-form-field>
-							<div
-								*ngIf="f.PoliceForceTelephone.errors"
-								class="text-danger margin-bottom-thin my-mat-hint"
-							>
-								<div
-									*ngIf="
-										f.PoliceForceTelephone.errors
-											?.invalid_Pattern;
-										else plusError
-									"
-								>
-									Do not add Dashes with numbers
-								</div>
+							<div *ngIf="f.PoliceForceTelephone.errors"
+								class="text-danger margin-bottom-thin my-mat-hint">
+								<div *ngIf="f.PoliceForceTelephone.errors?.invalid_Pattern;else plusError">Do not add
+									Dashes
+									with numbers</div>
 								<ng-template #plusError>
 									<div
 										*ngIf="
@@ -2342,142 +1782,42 @@
 							</div>
 						</div>
 						<div class="col-md-6">
-							<label class="select-country-label"
-								>Country <span class="asterisk">*</span></label
-							>
-							<div class="selectStyle">
-								<select
-									class="selectInputStyle"
-									(click)="selectDropdownCountry()"
-									(selectionChange)="
-										changeCountry($event.value)
-									"
-									formControlName="Country"
-									tabindex="1"
-								>
-									<option value="">Choose Country</option>
-									<option
-										*ngFor="
-											let countryOption of countryOptions
-										"
-										[value]="countryOption.countryShortCode"
-									>
-										{{ countryOption.countryName }}
-									</option>
-								</select>
-								<svg
-									version="1.1"
-									id="Layer_1"
-									xmlns="http://www.w3.org/2000/svg"
-									xmlns:xlink="http://www.w3.org/1999/xlink"
-									x="0px"
-									y="0px"
-									viewBox="0 0 122.88 63.9"
-									style="
-										enable-background: new 0 0 122.88 63.9;
-									"
-									xml:space="preserve"
-								>
-									<style type="text/css">
-										.sty0 {
-											fill-rule: evenodd;
-											clip-rule: evenodd;
-										}
-									</style>
-									<g>
-										<polygon
-											class="sty0"
-											points="61.44,63.9 122.88,0 0,0 61.44,63.9"
-										/>
-									</g>
-								</svg>
-							</div>
-							<div
-								*ngIf="
-									(submittedForm && f.Country.errors) ||
-									(f.Country.touched && f.Country.errors)
-								"
-								class="text-danger margin-bottom-thin my-mat-hint"
-							>
-								<div *ngIf="f.Country.errors.required">
-									This field is required
-								</div>
-							</div>
-						</div>
-						<div class="col-md-6">
-							<label class="select-state-label"
-								>State / Province
-								<span class="asterisk">*</span></label
-							>
-							<div class="selectStyle">
-								<select
-									class="selectInputStyle"
-									(click)="selectDropdownState()"
-									formControlName="State"
-									tabindex="1"
-								>
-									<option value="">
-										Choose State/Province
-									</option>
-									<option
-										*ngFor="let stateOption of stateOptions"
-										[value]="stateOption.shortCode"
-									>
-										{{ stateOption.name }}
-									</option>
-								</select>
-								<svg
-									version="1.1"
-									id="Layer_1"
-									xmlns="http://www.w3.org/2000/svg"
-									xmlns:xlink="http://www.w3.org/1999/xlink"
-									x="0px"
-									y="0px"
-									viewBox="0 0 122.88 63.9"
-									style="
-										enable-background: new 0 0 122.88 63.9;
-									"
-									xml:space="preserve"
-								>
-									<style type="text/css">
-										.sty0 {
-											fill-rule: evenodd;
-											clip-rule: evenodd;
-										}
-									</style>
-									<g>
-										<polygon
-											class="sty0"
-											points="61.44,63.9 122.88,0 0,0 61.44,63.9"
-										/>
-									</g>
-								</svg>
-							</div>
-							<div
-								*ngIf="
-									(submittedForm && f.State.errors) ||
-									(f.State.touched && f.State.errors)
-								"
-								class="text-danger margin-bottom-thin my-mat-hint"
-							>
-								<div *ngIf="f.State.errors.required">
-									This field is required
-								</div>
+							<mat-form-field appearance="outline">
+								<mat-label>Country <span class="asterisk">*</span></mat-label>
+								<mat-select formControlName="Country" (selectionChange)="changeCountry($event.value)"
+									tabindex="1">
+									<mat-option value="">Choose Country</mat-option>
+									<mat-option *ngFor="let countryOption of countryOptions"
+										[value]="countryOption.countryShortCode">
+										{{countryOption.countryName}}
+									</mat-option>
+								</mat-select>
+							</mat-form-field>
+							<div *ngIf="submittedForm && f.Country.errors || f.Country.touched && f.Country.errors"
+								class="text-danger margin-bottom-thin my-mat-hint">
+								<div *ngIf="f.Country.errors.required">This field is required</div>
 							</div>
 						</div>
 						<div class="col-md-6">
 							<mat-form-field appearance="outline">
-								<mat-label
-									>City
-									<span class="asterisk">*</span></mat-label
-								>
-								<input
-									matInput
-									placeholder="City"
-									formControlName="City"
-									tabindex="1"
-									(focus)="$event.target.select()"
-								/>
+								<mat-label>State / Province <span class="asterisk">*</span></mat-label>
+								<mat-select formControlName="State" tabindex="1">
+									<mat-option value="">Choose State/Province</mat-option>
+									<mat-option *ngFor="let stateOption of stateOptions"
+										[value]="stateOption.shortCode">
+										{{stateOption.name}}</mat-option>
+								</mat-select>
+							</mat-form-field>
+							<div *ngIf="submittedForm && f.State.errors || f.State.touched && f.State.errors"
+								class="text-danger margin-bottom-thin my-mat-hint">
+								<div *ngIf="f.State.errors.required">This field is required</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<mat-form-field appearance="outline">
+								<mat-label>City <span class="asterisk">*</span></mat-label>
+								<input matInput placeholder="City" formControlName="City" tabindex="1"
+									(focus)="$event.target.select()" />
 							</mat-form-field>
 							<div
 								*ngIf="
@@ -2493,17 +1833,9 @@
 						</div>
 						<div class="col-md-6">
 							<mat-form-field appearance="outline">
-								<mat-label
-									>Zip Code
-									<span class="asterisk">*</span></mat-label
-								>
-								<input
-									matInput
-									placeholder="Zip Code"
-									(focus)="$event.target.select()"
-									formControlName="ZipCode"
-									tabindex="1"
-								/>
+								<mat-label>Zip Code <span class="asterisk">*</span></mat-label>
+								<input matInput placeholder="Zip Code" (focus)="$event.target.select()"
+									formControlName="ZipCode" tabindex="1" />
 							</mat-form-field>
 							<div
 								*ngIf="
@@ -2550,43 +1882,13 @@
 			</div>
 		</div>
 	</section>
-	<section class="billing_inforamtion">
-		<ul>
-			<li>
-				<button
-					class="custom-btn savebutton"
-					(click)="submitForm()"
-					[disabled]="disableSubmitButton"
-					tabindex="1"
-				>
-					SAVE
-				</button>
-			</li>
-			<li>
-				<button
-					class="custom-btn resetbutton"
-					type="reset"
-					(click)="resetForm()"
-					tabindex="1"
-				>
-					RESET
-				</button>
-			</li>
-			<li>
-				<button
-					class="custom-btn backbutton"
-					type="button"
-					(click)="backButton()"
-					data-toggle="tooltip"
-					data-placement="top"
-					title="Clicking back button deletes all fields."
-					tabindex="1"
-				>
-					BACK
-				</button>
-			</li>
-		</ul>
-	</section>
+	<div class="row justify-content-center my-4">
+		<button class="custom-btn savebutton mx-2" (click)="submitForm()" [disabled]="disableSubmitButton"
+			tabindex="1">SAVE</button>
+		<button class="custom-btn resetbutton mx-2" type="reset" (click)="resetForm()" tabindex="1">RESET</button>
+		<button class="custom-btn backbutton mx-2" type="button" (click)="backButton()" data-toggle="tooltip"
+			data-placement="top" title="Clicking back button deletes all fields." tabindex="1">BACK</button>
+	</div>
 </form>
 
 <!-- Image modal -->

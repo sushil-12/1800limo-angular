@@ -56,25 +56,7 @@ export class HttpConfigInterceptor implements HttpInterceptor
 			catchError((errorData: HttpErrorResponse) =>
 			{
 				this.$spinner.hide()
-				if (errorData.status == 401)
-				{
-					console.log('auth error', errorData.error);
-					this.errors = {
-						errors: {
-							error: "Unauthorized Access"
-						}
-					}
-					this.router.navigate(['/']);
-					this.stateManagementService.removeUser();
-				}
-				// else if (errorData.status == 0) {
-				//   this.errors = {
-				//     errors: {
-				//       error: "Please check your internet connection"
-				//     }
-				//   }
-				// }
-				else if (errorData.status == 500)
+				if (errorData.status == 500)
 				{
 					this.errors = {
 						errors: {

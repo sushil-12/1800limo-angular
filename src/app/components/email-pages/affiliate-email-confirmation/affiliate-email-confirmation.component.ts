@@ -14,9 +14,11 @@ declare var $: any;
 export class AffiliateEmailConfirmationComponent implements OnInit
 {
 
-	public email: string;
-	public hash: string;
-	public outputMessage: string;
+	email: string;
+	hash: string;
+	text_message: string;
+	error: boolean
+	is_dispatch: boolean
 
 	constructor(
 		private websiteService: WebsiteService,
@@ -27,6 +29,7 @@ export class AffiliateEmailConfirmationComponent implements OnInit
 	ngOnInit(): void
 	{
 		$('[data-toggle="tooltip"]').tooltip()
+		this.is_dispatch = this.activatedroute.snapshot.routeConfig.path.includes('dispatch')
 		this.activatedroute.queryParamMap
 			.subscribe((params) =>
 			{
@@ -37,22 +40,28 @@ export class AffiliateEmailConfirmationComponent implements OnInit
 				if (this.email && this.hash)
 				{
 					this.spinner.show();
-					this.websiteService.affiliateEmailVerification(this.email, this.hash)
+					this.websiteService.affiliateEmailVerification(this.email, this.hash, this.is_dispatch)
 						.pipe(
 							catchError(err =>
 							{
 								this.spinner.hide();//hide spinner
 								return throwError(err);
 							})
-						).subscribe(({ message }: any) =>
+						).subscribe(({ message, success }: any) =>
 						{
 							this.spinner.hide();//hide spinner
-							this.outputMessage = message;
+							this.error = false;
+							if (!success)
+							{
+								this.error = true
+							}
+							this.text_message = message;
 						});
 				}
 				else
 				{
-					this.outputMessage = 'Please enter Valid Link.';
+					this.error = true
+					this.text_message = 'Please enter Valid Link.';
 				}
 			});
 	}

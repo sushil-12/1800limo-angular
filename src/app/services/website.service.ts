@@ -17,13 +17,15 @@ export class WebsiteService
 		const result = await this.httpClient.get(this.serverUrl + 'vehicle-types').toPromise();
 		return result;
 	}
-	affiliateEmailVerification(email, hash)
+	affiliateEmailVerification(email: any, hash: any, is_dispatch: boolean)
 	{
-		return this.httpClient.get(this.serverUrl + 'affiliate/email-verification/' + email + '/' + hash);
-	}
-	dispatchEmailVerification(email, hash)
-	{
-		return this.httpClient.get(this.serverUrl + 'affiliate/dispatcher-email-verification/' + email + '/' + hash);
+		if (is_dispatch)
+		{
+			return this.httpClient.get(this.serverUrl + 'affiliate/dispatcher-email-verification/' + email + '/' + hash);
+		} else
+		{
+			return this.httpClient.get(this.serverUrl + 'affiliate/email-verification/' + email + '/' + hash);
+		}
 	}
 	contactFormData(data)
 	{

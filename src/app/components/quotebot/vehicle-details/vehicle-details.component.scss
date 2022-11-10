@@ -73,37 +73,14 @@ hr.blue-line
 	color      : #000;
 }
 
-.fil-itm button.close {
-	float       : left;
-	margin-right: 10px;
-	opacity     : 1;
-}
 
 .btn {
 	border-radius: 100px;
 	margin       : 5px;
 }
 
-.fil-itm button.close span {
-	font-size      : 15px;
-	color          : #fff;
-	background     : #f3933d;
-	border-radius  : 100px;
-	width          : 20px;
-	height         : 20px;
-	display        : flex;
-	align-items    : center;
-	justify-content: center;
-	line-height    : 10px;
-}
 
-.filter-list .accordion .card-header h2 .btn {
-	margin     : 0;
-	padding    : 0;
-	font-weight: bold;
-	font-size  : 18px;
-	color      : #000;
-}
+
 
 .org-Btn {
 	border-radius: 8px;
@@ -167,11 +144,6 @@ hr.blue-line
 
 .bg-light {
 	background-color: rgba(243, 147, 61, 0.2) !important;
-	span
-	{
-		font-weight: bold;
-		font-size  : 20px;
-	}
 }
 
 .text-org {
@@ -234,6 +206,14 @@ button.custom-btn {
 	margin: 0 3px;
 }
 
+section.pre-Details
+{
+	p
+	{
+		margin: 0;
+	}
+}
+
 @media only screen and (max-width: 1100px) and (min-width: 768px) {
 	.img-Block img {
 		max-width: 255px;
@@ -291,6 +271,7 @@ button.custom-btn {
 	width           : 20px;
 	color           : red !important;
 	height          : 20px;
+	opacity: 1;
 	background-color: #fff !important;
 }
 
@@ -315,4 +296,14 @@ p.pv-title, p.pv-title-value
 p.pv-title-value
 {
 	font-weight: 600;
+}
+p.pv-title-value.pv-details
+{
+	font-weight: 600;
+	font-size: 1.3rem;
+}
+p.pv-title.pv-details
+{
+	font-weight: 600;
+	font-size: 1.2rem;
 }
