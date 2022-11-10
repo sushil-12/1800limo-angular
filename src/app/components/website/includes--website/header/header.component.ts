@@ -89,6 +89,7 @@ export class HeaderComponent implements OnInit
 	logout()
 	{
 		this.spinner.show();//show spinner
+		this.stateManagementService.removeUser()
 		this.authService.logout()
 			.pipe(
 				catchError(err =>
@@ -101,7 +102,6 @@ export class HeaderComponent implements OnInit
 				this.spinner.hide();//hide spinner
 				if (success == true)
 				{
-					this.stateManagementService.removeUser();
 					this.router.navigate(['/home']);
 					location.reload()
 					console.log("Logout Successfully");
