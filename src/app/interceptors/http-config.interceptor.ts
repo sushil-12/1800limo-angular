@@ -64,7 +64,6 @@ export class HttpConfigInterceptor implements HttpInterceptor
 							error: 'User Session Expired. Please reload the screen.'
 						}
 					}
-					location.reload()
 				}
 				else if (errorData.status == 500)
 				{
