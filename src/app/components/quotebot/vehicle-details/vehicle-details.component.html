@@ -9,19 +9,15 @@
 					<div class="col-md-6 col-xl-4">
 						<div class="outer m-0 w-auto">
 							<div id="big" class="owl-carousel owl-theme m-0">
-								<div class="item"
-									*ngFor="let item of selected_vehicle.vehicle_images; index as item_index">
-									<img [src]="item" id="V_Image_{{ item_index + 1 }}" class="mx-auto"
-										alt="Vehicle Image {{ item_index + 1 }}">
+								<div class="item" *ngFor="let item of selected_vehicle.vehicle_images; index as item_index">
+									<img [src]="item" id="V_Image_{{ item_index + 1 }}" class="mx-auto" alt="Vehicle Image {{ item_index + 1 }}">
 									<!-- {{item }} -->
 								</div>
 							</div>
 							<div id="thumbs" class="owl-carousel owl-theme m-0 my-3">
-								<div class="item"
-									*ngFor="let item of selected_vehicle.vehicle_images; index as item_index">
+								<div class="item" *ngFor="let item of selected_vehicle.vehicle_images; index as item_index">
 									<!-- {{ item }} -->
-									<img [src]="item" alt="Vehicle Image {{ item_index + 1 }}" class="mx-auto"
-										id="V_Image_{{ item_index + 1 }}">
+									<img [src]="item" alt="Vehicle Image {{ item_index + 1 }}" class="mx-auto" id="V_Image_{{ item_index + 1 }}">
 								</div>
 							</div>
 						</div>
@@ -88,16 +84,13 @@
 
 						<!-- FUNCTIONAL BUTTONS -->
 						<div class="btn-Area d-flex flex-wrap">
-							<button type="button" class="custom-btn" data-toggle="modal"
-								data-target="#detailFareRateModal">
+							<button type="button" class="custom-btn" data-toggle="modal" data-target="#detailFareRateModal">
 								View Subtotals
 							</button>
-							<button type="button" class="custom-btn" data-toggle="modal"
-								data-target="#driverFareRateModal">
+							<button type="button" class="custom-btn" data-toggle="modal" data-target="#driverFareRateModal">
 								Driver Info
 							</button>
-							<button type="button" class="custom-btn" data-toggle="modal"
-								data-target="#amenitiesFareRateModal">
+							<button type="button" class="custom-btn" data-toggle="modal" data-target="#amenitiesFareRateModal">
 								Amenities
 							</button>
 							<!-- <button type="button" class="custom-btn" (click)="bookNow()">
@@ -132,14 +125,14 @@
 <!-- QuoteBot Preview Section -->
 <section class="pre-Details py-5">
 	<div class="container-fluid">
-		<div class="row bg-light">
-			<div class="col-md-5">
-				<span class="px-4 py-2 mb-4">
+		<div class="row bg-light my-3">
+			<div class="col-sm-6 col-md-5">
+				<p class="pv-title pv-details">
 					Quotebot Preview Details
-				</span>
+				</p>
 			</div>
 			<div class="col-auto">
-				<div class="cont-block">
+				<p class="pv-title-value pv-details">
 					{{ quotebot_form.service_type.includes('charter') ? 'Charter/Tour' :
 					formatString(quotebot_form.service_type) | titlecase }}
 					/
@@ -147,13 +140,13 @@
 					to
 					{{ formatString(quotebot_form.dropoff_type) | titlecase }}
 					{{ quotebot_form.service_type.includes('round') ? 'and Return' : '' }}
-				</div>
+				</p>
 			</div>
 		</div>
 
 		<!-- Date -->
-		<div class="row">
-			<div class="col-md-5">
+		<div class="row my-3">
+			<div class="col-6 col-md-5">
 				<p class="pv-title">
 					Date
 				</p>
@@ -166,8 +159,8 @@
 		</div>
 
 		<!-- Time -->
-		<div class="row">
-			<div class="col-md-5">
+		<div class="row my-3">
+			<div class="col-6 col-md-5">
 				<p class="pv-title">
 					Time
 				</p>
@@ -180,8 +173,8 @@
 		</div>
 
 		<!-- Number of Pax -->
-		<div class="row">
-			<div class="col-md-5">
+		<div class="row my-3">
+			<div class="col-6 col-md-5">
 				<p class="pv-title">
 					Number of Pax
 				</p>
@@ -194,8 +187,8 @@
 		</div>
 
 		<!-- Number of Luggage -->
-		<div class="row">
-			<div class="col-md-5">
+		<div class="row my-3">
+			<div class="col-6 col-md-5">
 				<p class="pv-title">
 					Number of Luggage
 				</p>
@@ -239,7 +232,7 @@
 		<hr class="blue-line" />
 
 		<!-- Dropoff Address/Airport -->
-		<div class="row">
+		<div class="row my-3">
 			<div class="col-md-5" *ngIf="quotebot_form.dropoff_type == 'airport'; else dropadd">
 				<p class="pv-title">
 					Dropoff Airport
@@ -266,7 +259,7 @@
 
 
 		<!-- Travel Time/Miles -->
-		<div class="row my-2">
+		<div class="row my-3">
 			<div class="col-md-5">
 				<p class="pv-title">
 					Travel Time / Miles
@@ -288,8 +281,8 @@
 			<h5 class="mt-4 text-org"> Return Details </h5>
 
 			<!-- Date -->
-			<div class="row">
-				<div class="col-md-5">
+			<div class="row my-3">
+				<div class="col-6 col-md-5">
 					<p class="pv-title">
 						Date
 					</p>
@@ -302,8 +295,8 @@
 			</div>
 
 			<!-- Time -->
-			<div class="row">
-				<div class="col-md-5">
+			<div class="row my-3">
+				<div class="col-6 col-md-5">
 					<p class="pv-title">
 						Time
 					</p>
@@ -318,7 +311,7 @@
 			<hr class="blue-line" />
 
 			<!-- Pickup Address/Airport -->
-			<div class="row">
+			<div class="row my-3">
 				<div class="col-md-5" *ngIf="quotebot_form.return_pickup_type == 'airport'; else rpikadd">
 					<p class="pv-title">
 						Pickup Airport
@@ -347,7 +340,7 @@
 			<hr class="blue-line" />
 
 			<!-- Dropoff Address/Airport -->
-			<div class="row">
+			<div class="row my-3">
 				<div class="col-md-5" *ngIf="quotebot_form.return_dropoff_type == 'airport'; else rdropadd">
 					<p class="pv-title">
 						Dropoff Airport
@@ -373,7 +366,7 @@
 			</div>
 
 			<!-- Travel Time/Miles -->
-			<div class="row my-2">
+			<div class="row my-3">
 				<div class="col-md-5">
 					<p class="pv-title">
 						Travel Time/Miles
@@ -413,8 +406,7 @@
 
 
 <!-- Detailed Slip Modal -->
-<div aria-hidden="true" aria-labelledby="detailFareRateModal" class="modal fade" id="detailFareRateModal"
-	tab-index="-1">
+<div aria-hidden="true" aria-labelledby="detailFareRateModal" class="modal fade" id="detailFareRateModal" tab-index="-1">
 	<div class="modal-dialog modal-sm modal-lg">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -433,8 +425,7 @@
 						<th> Amount </th>
 					</thead>
 					<tbody *ngIf="quotebot_form.service_type == 'one_way'">
-						<tr
-							*ngFor="let rate of one_way_rates?.rateArray?.all_inclusive_rates | keyvalue; index as rate_index">
+						<tr *ngFor="let rate of one_way_rates?.rateArray?.all_inclusive_rates | keyvalue; index as rate_index">
 							<td>
 								{{ rate.value.rate_label }}
 							</td>
@@ -474,8 +465,7 @@
 						</tr> -->
 					</tbody>
 					<tbody *ngIf="quotebot_form.service_type == 'round_trip'">
-						<tr
-							*ngFor="let rate of round_trip_rates?.rateArray?.all_inclusive_rates | keyvalue; index as rate_index">
+						<tr *ngFor="let rate of round_trip_rates?.rateArray?.all_inclusive_rates | keyvalue; index as rate_index">
 							<td>
 								{{ rate.value.rate_label }}
 							</td>
@@ -528,8 +518,7 @@
 </div>
 
 
-<div aria-hidden="true" aria-labelledby="driverFareRateModal" class="modal fade" id="driverFareRateModal"
-	tab-index="-1">
+<div aria-hidden="true" aria-labelledby="driverFareRateModal" class="modal fade" id="driverFareRateModal" tab-index="-1">
 	<div class="modal-dialog modal-sm modal-lg">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -551,8 +540,7 @@
 							</div>
 							<div class="col-lg-4" *ngIf="selected_vehicle.driverInformation">
 								<div class="img-Block mb-4 mb-lg-0 text-md-left text-center">
-									<img [src]="selected_vehicle.driverInformation?.imageUrl" class="img-cir"
-										alt="Driver Image" />
+									<img [src]="selected_vehicle.driverInformation?.imageUrl" class="img-cir" alt="Driver Image" />
 								</div>
 							</div>
 							<div class="col-lg-8" *ngIf="selected_vehicle.driverInformation">
@@ -652,8 +640,7 @@
 	</div>
 </div>
 
-<div aria-hidden="true" aria-labelledby="amenitiesFareRateModal" class="modal fade" id="amenitiesFareRateModal"
-	tab-index="-1">
+<div aria-hidden="true" aria-labelledby="amenitiesFareRateModal" class="modal fade" id="amenitiesFareRateModal" tab-index="-1">
 	<div class="modal-dialog modal-sm modal-lg">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -674,14 +661,11 @@
 								</h5>
 							</div>
 							<div class="col-md-12">
-								<ul
-									class="list-unstyled d-flex flex-row flex-wrap justify-content-around align-items-start pl-0 pr-0">
-									<li *ngFor="let category of selected_vehicle.amenities | keyvalue"
-										class="fw-bold text-dark mr-5 flex-grow-1 p-0">
+								<ul class="list-unstyled d-flex flex-row flex-wrap justify-content-around align-items-start pl-0 pr-0">
+									<li *ngFor="let category of selected_vehicle.amenities | keyvalue" class="fw-bold text-dark mr-5 flex-grow-1 p-0">
 										{{ category.key | titlecase }}
 										<ul class="list-unstyled p-0">
-											<li *ngFor="let item of category.value; index as item_index"
-												id="Item_{{ item_index + 1 }}" class="p-0">
+											<li *ngFor="let item of category.value; index as item_index" id="Item_{{ item_index + 1 }}" class="p-0">
 												{{ item.name | titlecase }}
 											</li>
 										</ul>
