@@ -102,7 +102,8 @@ export class HeaderComponent implements OnInit
 				if (success == true)
 				{
 					this.stateManagementService.removeUser();
-					this.router.navigate(['/']);
+					this.router.navigate(['/home']);
+					location.reload()
 					console.log("Logout Successfully");
 				}
 			});
