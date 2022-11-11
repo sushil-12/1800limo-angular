@@ -133,6 +133,7 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 			{
 				if (localStorage.getItem('currentUser') == null)
 				{
+					console.log('Null Error. Interval Cleared. ')
 					clearInterval(interval)
 				}
 				let steps_completed = this.affiliateService.getLocalStepCompletedObject()
@@ -148,7 +149,7 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 						{
 							this.is_email_verified = true
 							this.is_show_verification_icon = false
-							this.stepCompletionTick()
+							this.getStatusData()
 						}
 						else
 						{
@@ -168,7 +169,7 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 						{
 							this.is_bank_verified = true
 							this.is_show_verification_icon = false
-							this.stepCompletionTick()
+							this.getStatusData()
 						}
 						else
 						{
