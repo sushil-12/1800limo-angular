@@ -1,3 +1,51 @@
+input::-webkit-input-placeholder,
+.mat-input-element::-webkit-input-placeholder {
+	font-weight: bold !important;
+}
+
+input::-moz-placeholder,
+.mat-input-element::-moz-placeholder {
+	font-weight: bold !important;
+}
+
+input:-ms-input-placeholder,
+.mat-input-element:-ms-input-placeholder {
+	font-weight: bold !important;
+}
+
+input::-ms-input-placeholder,
+.mat-input-element::-ms-input-placeholder {
+	font-weight: bold !important;
+}
+
+input::placeholder,
+.mat-input-element::placeholder {
+	font-weight: bold !important;
+}
+
+input::-webkit-input-placeholder,
+.mat-input-element::-webkit-input-placeholder {
+	font-weight: bold !important;
+}
+
+input::-ms-input-placeholder,
+.mat-input-element::-ms-input-placeholder {
+	font-weight: bold !important;
+}
+
+input::-moz-input-placeholder,
+.mat-input-element::-moz-input-placeholder {
+	font-weight: bold !important;
+}
+
+mat-label {
+	font-weight: bold !important;
+}
+
+
+
+
+
 body {
 	margin          : 0;
 	padding         : 0;
@@ -4111,22 +4159,17 @@ header .navbar-toggler {
 }
 
 .closeButton span {
-	font-size: 2.5rem;
+	font-size: 2.3rem;
 }
 
 @media only screen and (max-width:767px) {
 	.closeButton {
 		position     : absolute;
-		top          : 0px;
-		right        : 5px;
+		top          : 5px;
+		right        : 10px;
 		border-radius: 20px;
 		width        : 25px;
 	}
-
-	.closeButton span {
-		font-size: 2rem;
-	}
-
 	#showCountriesModal .closeButton {
 		background   : #000 !important;
 		position     : absolute;

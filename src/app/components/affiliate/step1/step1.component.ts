@@ -1,4 +1,5 @@
-import {
+import
+{
 	Component,
 	OnInit,
 	AfterViewInit,
@@ -10,7 +11,8 @@ import {
 import { AuthService } from "../../../services/auth.service";
 import { AffiliateService } from "../../../services/affiliate.service";
 import { StateManagementService } from "../../../services/statemanagement.service";
-import {
+import
+{
 	FormGroup,
 	FormBuilder,
 	Validators,
@@ -20,7 +22,7 @@ import {
 import { Router } from "@angular/router";
 import { NgxSpinnerService } from "ngx-spinner";
 import { catchError } from "rxjs/operators";
-import { throwError, from } from "rxjs";
+import { throwError, from, Subscription } from "rxjs";
 import { CustomvalidationService } from "../../../services/customvalidation.service";
 import { HttpClient } from "@angular/common/http";
 declare var $: any;
@@ -30,7 +32,8 @@ declare var $: any;
 	templateUrl: "./step1.component.html",
 	styleUrls: ["./step1.component.scss"],
 })
-export class Step1Component implements OnInit, AfterViewInit {
+export class Step1Component implements OnInit, AfterViewInit
+{
 	@ViewChild("resetImages")
 	imagesVariable: ElementRef;
 
@@ -88,6 +91,10 @@ export class Step1Component implements OnInit, AfterViewInit {
 	errorMsg2: boolean;
 	public filteredGender: Array<any>;
 
+
+
+	private subs: Subscription
+
 	constructor(
 		private affiliateService: AffiliateService,
 		private stateManagementService: StateManagementService,
@@ -97,10 +104,11 @@ export class Step1Component implements OnInit, AfterViewInit {
 		private spinner: NgxSpinnerService,
 		private formBuilder: FormBuilder,
 		private customValidator: CustomvalidationService
-	) {}
+	) { }
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
 
-	ngAfterViewInit() {
+	ngAfterViewInit()
+	{
 		//set current user country as default in phone number
 		this.CellNumberObject.setCountry(this.currentUser.phoneCountry);
 		this.DispatchObject.setCountry(this.currentUser.phoneCountry);
@@ -108,7 +116,8 @@ export class Step1Component implements OnInit, AfterViewInit {
 		this.CompanyCellNumberObject.setCountry(this.currentUser.phoneCountry);
 	}
 
-	ngOnInit(): void {
+	ngOnInit(): void
+	{
 		this.filterGender = [
 			{
 				label: "Male",
@@ -119,22 +128,14 @@ export class Step1Component implements OnInit, AfterViewInit {
 				value: "Female",
 			},
 		];
-		$("#genderField").focusout(() => {
+		$("#genderField").focusout(() =>
+		{
 			this.errorMsg2 = true;
 		});
 		this.currentUser = this.authService.currentUserValue;
 		// no modal unless uncompleted
-		console.log(
-			this.affiliateService
-				.getLocalStepCompleted()
-				.findIndex((item) => item == "1"),
-			this.affiliateService.getLocalStepCompleted()
-		);
-		if (
-			this.affiliateService
-				.getLocalStepCompleted()
-				.findIndex((item) => item == "1") === -1
-		) {
+		if (this.affiliateService.getLocalStepCompleted().findIndex((item) => item == "1") === -1)
+		{
 			$("#instructionsModal").modal("show");
 		}
 		//add affiliate form validation
@@ -232,17 +233,10 @@ export class Step1Component implements OnInit, AfterViewInit {
 			AssociationsGet: this.formBuilder.array([]),
 		});
 
-		this.addAffiliateAccountForm
-			.get("Email")
-			.valueChanges.subscribe((val) => {
-				this.addAffiliateAccountForm.patchValue({
-					dispatchEmail: val,
-				});
-			});
-
 		this.httpClient
 			.get("assets/json/businessYear.json")
-			.subscribe((data: any) => {
+			.subscribe((data: any) =>
+			{
 				this.startBusinessYears = data;
 			});
 
@@ -251,27 +245,32 @@ export class Step1Component implements OnInit, AfterViewInit {
 		this.affiliateService
 			.getAssicationsLanguages()
 			.pipe(
-				catchError((err) => {
+				catchError((err) =>
+				{
 					this.spinner.hide(); //hide spinner
 					return throwError(err);
 				})
 			)
-			.subscribe(({ data }: any) => {
+			.subscribe(({ data }: any) =>
+			{
 				this.languages = data.languages;
 				this.associations = data.associations;
 				this.affiliateType = this.currentUser.affiliate_type;
 				this.affiliateId = this.currentUser.account_id;
 				const AffiliateType = this.currentUser.affiliate_type;
-				if (this.affiliateId) {
+				if (this.affiliateId)
+				{
 					this.affiliateService
 						.getAffiliateAccount(this.affiliateId)
 						.pipe(
-							catchError((err) => {
+							catchError((err) =>
+							{
 								this.spinner.hide(); //hide spinner
 								return throwError(err);
 							})
 						)
-						.subscribe(({ data }: any) => {
+						.subscribe(({ data }: any) =>
+						{
 							this.addAffiliateAccountForm.patchValue({
 								acc_id: data.id,
 								FirstName: data.FirstName,
@@ -287,10 +286,12 @@ export class Step1Component implements OnInit, AfterViewInit {
 							//Show edit/resend button on affiliate email field
 							this.updatedAffiliateEmail = data.Email;
 							this.affiliateEmailStatus = data.is_email_verified;
-							if (this.affiliateEmailStatus == "yes") {
+							if (this.affiliateEmailStatus == "yes")
+							{
 								this.affiliateEmailButton = "edit";
 								this.affiliateEmailReadonly = true;
-							} else {
+							} else
+							{
 								this.affiliateEmailButton =
 									"resend_verification";
 								this.affiliateEmailReadonly = false;
@@ -300,10 +301,12 @@ export class Step1Component implements OnInit, AfterViewInit {
 							this.updatedDispatchEmail = data.dispatchEmail;
 							this.dispatchEmailStatus =
 								data.dispatch_is_email_verified;
-							if (this.dispatchEmailStatus == "yes") {
+							if (this.dispatchEmailStatus == "yes")
+							{
 								this.dispatchEmailButton = "edit";
 								this.dispatchEmailReadonly = true;
-							} else {
+							} else
+							{
 								this.dispatchEmailButton =
 									"resend_verification";
 								this.dispatchEmailReadonly = false;
@@ -313,7 +316,8 @@ export class Step1Component implements OnInit, AfterViewInit {
 							this.CellNumberObject.setCountry(
 								data.CellNumberCountry
 							);
-							if (data.AffiliateType != "gig_operator") {
+							if (data.AffiliateType != "gig_operator")
+							{
 								//set images and their ID
 								this.BusinessFrontPhoto =
 									data.BusinessFrontPhoto.image;
@@ -362,26 +366,31 @@ export class Step1Component implements OnInit, AfterViewInit {
 							var i;
 							const totalLanguages: any = this.languages;
 							const selectedLanguages = data.LanguagesSpoken;
-							for (i = 0; i < totalLanguages.length; i++) {
+							for (i = 0; i < totalLanguages.length; i++)
+							{
 								// console.log(totalLanguages[i]);
 								var checkedLanguage =
 									selectedLanguages.findIndex(function (
 										post
-									) {
+									)
+									{
 										if (post == totalLanguages[i].id)
 											return true;
 									});
 								// console.log(checkedLanguage);
-								if (checkedLanguage >= 0) {
+								if (checkedLanguage >= 0)
+								{
 									var checkBool = true;
-								} else {
+								} else
+								{
 									var checkBool = false;
 								}
 								languagesGet.push(new FormControl(checkBool));
 							}
 							this.languagesFormControl = languagesGet.controls;
 							var j;
-							for (j = 0; j < selectedLanguages.length; j++) {
+							for (j = 0; j < selectedLanguages.length; j++)
+							{
 								languageSpoken.push(
 									new FormControl(selectedLanguages[j])
 								);
@@ -401,17 +410,21 @@ export class Step1Component implements OnInit, AfterViewInit {
 							var i;
 							const totalAssociations: any = this.associations;
 							const selectedAssociations = data.Associations;
-							for (i = 0; i < totalAssociations.length; i++) {
+							for (i = 0; i < totalAssociations.length; i++)
+							{
 								var checkedAssociation =
 									selectedAssociations.findIndex(function (
 										post
-									) {
+									)
+									{
 										if (post == totalAssociations[i].id)
 											return true;
 									});
-								if (checkedAssociation >= 0) {
+								if (checkedAssociation >= 0)
+								{
 									var checkBool = true;
-								} else {
+								} else
+								{
 									var checkBool = false;
 								}
 								AssociationsGet.push(
@@ -421,7 +434,8 @@ export class Step1Component implements OnInit, AfterViewInit {
 							this.AssociationsFormControl =
 								AssociationsGet.controls;
 							var j;
-							for (j = 0; j < selectedAssociations.length; j++) {
+							for (j = 0; j < selectedAssociations.length; j++)
+							{
 								associations.push(
 									new FormControl(selectedAssociations[j])
 								);
@@ -473,7 +487,8 @@ export class Step1Component implements OnInit, AfterViewInit {
 							],
 						],
 					});
-				} else {
+				} else
+				{
 					this.addAffiliateAccountForm.patchValue({
 						AffiliateType: AffiliateType
 							? AffiliateType
@@ -488,35 +503,49 @@ export class Step1Component implements OnInit, AfterViewInit {
 			});
 	}
 
-	closeButton() {
+
+	SetFormValue(form_control: string, value: any)
+	{
+		this.addAffiliateAccountForm.get(form_control).setValue(value)
+		this.addAffiliateAccountForm.updateValueAndValidity()
+	}
+
+	closeButton()
+	{
 		this.closeTab.emit();
 	}
 
-	showImageInModal(imageUrl) {
+	showImageInModal(imageUrl)
+	{
 		this.modalImage = imageUrl;
 		// console.log("11111",imageUrl)
 		$("#imageModal").addClass("showImage");
 		$("#imageModal").removeClass("d-none");
 		// $("#imageModal").show();
 	}
-	onCountryChange(event, type) {
+	onCountryChange(event, type)
+	{
 		console.log(event);
-		if (type == "CellNumber") {
+		if (type == "CellNumber")
+		{
 			this.addAffiliateAccountForm.patchValue({
 				CellIsd: "+" + event.dialCode,
 				CellNumberCountry: event.iso2,
 			});
-		} else if (type == "CompanyCellNumber") {
+		} else if (type == "CompanyCellNumber")
+		{
 			this.addAffiliateAccountForm.patchValue({
 				CompanyCellIsd: "+" + event.dialCode,
 				CompanyCellNumberCountry: event.iso2,
 			});
-		} else if (type == "Dispatch") {
+		} else if (type == "Dispatch")
+		{
 			this.addAffiliateAccountForm.patchValue({
 				DispatchIsd: "+" + event.dialCode,
 				DispatchCountry: event.iso2,
 			});
-		} else {
+		} else
+		{
 			this.addAffiliateAccountForm.patchValue({
 				FaxIsd: "+" + event.dialCode,
 				FaxCountry: event.iso2,
@@ -524,27 +553,34 @@ export class Step1Component implements OnInit, AfterViewInit {
 		}
 	}
 
-	telInputObjectCell(obj) {
+	telInputObjectCell(obj)
+	{
 		this.CellNumberObject = obj;
 	}
-	telInputObjectCompanyCell(obj) {
+	telInputObjectCompanyCell(obj)
+	{
 		this.CompanyCellNumberObject = obj;
 	}
-	telInputObjectFax(obj) {
+	telInputObjectFax(obj)
+	{
 		this.FaxObject = obj;
 	}
-	telInputObjectDispatch(obj) {
+	telInputObjectDispatch(obj)
+	{
 		this.DispatchObject = obj;
 	}
 
-	onLanguageChange(val, ischecked) {
+	onLanguageChange(val, ischecked)
+	{
 		const languageSpoken: FormArray = this.addAffiliateAccountForm.get(
 			"LanguagesSpoken"
 		) as FormArray;
 
-		if (ischecked) {
+		if (ischecked)
+		{
 			languageSpoken.push(new FormControl(val));
-		} else {
+		} else
+		{
 			const index = languageSpoken.controls.findIndex(
 				(x) => x.value === val
 			);
@@ -552,14 +588,17 @@ export class Step1Component implements OnInit, AfterViewInit {
 		}
 	}
 
-	onAssociationChange(e) {
+	onAssociationChange(e)
+	{
 		const associations: FormArray = this.addAffiliateAccountForm.get(
 			"Associations"
 		) as FormArray;
 
-		if (e.target.checked) {
+		if (e.target.checked)
+		{
 			associations.push(new FormControl(e.target.value));
-		} else {
+		} else
+		{
 			const index = associations.controls.findIndex(
 				(x) => x.value === e.target.value
 			);
@@ -567,8 +606,10 @@ export class Step1Component implements OnInit, AfterViewInit {
 		}
 	}
 
-	affiliateTypeSwitch(affiliateType, onRefresh = null) {
-		switch (affiliateType) {
+	affiliateTypeSwitch(affiliateType, onRefresh = null)
+	{
+		switch (affiliateType)
+		{
 			case "fleet_operator": {
 				this.showCompanyInformation = true;
 				this.selectedAffiliate = "fleet_operator";
@@ -576,18 +617,25 @@ export class Step1Component implements OnInit, AfterViewInit {
 				this.affiliateInstruction =
 					"Fleet Operators must be fully licensed by city and state with a minimum $1,000,000 liability coverage. Fleet Operators may enter unlimited vehicles and drivers.";
 				this.conditionalValidations("fleet_operator");
+				this.subs = this.addAffiliateAccountForm.get('Email').valueChanges.subscribe((value) =>
+				{
+					this.SetFormValue('dispatchEmail', value)
+				})
 				break;
 			}
 			case "black_limo_operator": {
-				if (this.affiliateId) {
-					if (this.currentUser.affiliate_type == "fleet_operator") {
+				if (this.affiliateId)
+				{
+					if (this.currentUser.affiliate_type == "fleet_operator")
+					{
 						this.modalAlertMessage =
 							"Fleet Operator can not change on Black Car / Owner Operators";
 						$("#affiliateAlertMessageModal").modal("show");
 						return false;
 					}
 				}
-				if (!onRefresh) {
+				if (!onRefresh)
+				{
 					$("#affiliateInstructionsModal").modal("show");
 				}
 				this.showCompanyInformation = true;
@@ -597,11 +645,14 @@ export class Step1Component implements OnInit, AfterViewInit {
 				this.affiliateInstruction =
 					"Black Car / Owner Operators need to be fully licensed by city and state with a $500k/$500k minimum insurance policy. Only 2 vehicle maximum with same driver.";
 				this.conditionalValidations("black_limo_operator");
+				this.subs.unsubscribe()
 				break;
 			}
 			case "taxi_operator": {
-				if (this.affiliateId) {
-					switch (this.currentUser.affiliate_type) {
+				if (this.affiliateId)
+				{
+					switch (this.currentUser.affiliate_type)
+					{
 						case "black_limo_operator": {
 							this.modalAlertMessage =
 								"Black Car / Owner Operators can not change on Taxi Operators";
@@ -621,7 +672,8 @@ export class Step1Component implements OnInit, AfterViewInit {
 							return false;
 						}
 					}
-					if (!onRefresh) {
+					if (!onRefresh)
+					{
 						$("#affiliateInstructionsModal").modal("show");
 					}
 				}
@@ -631,18 +683,22 @@ export class Step1Component implements OnInit, AfterViewInit {
 				this.affiliateInstruction =
 					"Taxi Operators need to fully licensed by city and state with a minimum $500k/$500k insurance policy. 1 vehicle operation.";
 				this.conditionalValidations("taxi_operator");
+				this.subs.unsubscribe()
 				break;
 			}
 			case "gig_operator": {
-				if (this.affiliateId) {
-					if (this.currentUser.affiliate_type == "fleet_operator") {
+				if (this.affiliateId)
+				{
+					if (this.currentUser.affiliate_type == "fleet_operator")
+					{
 						this.modalAlertMessage =
 							"Fleet Operator can not change on Gig Operators";
 						$("#affiliateAlertMessageModal").modal("show");
 						return false;
 					}
 				}
-				if (!onRefresh) {
+				if (!onRefresh)
+				{
 					$("#affiliateInstructionsModal").modal("show");
 				}
 				this.showCompanyInformation = false;
@@ -657,24 +713,31 @@ export class Step1Component implements OnInit, AfterViewInit {
 				<li><strong>4.5 Stars</strong> or better</li>
 				</ul>`;
 				this.conditionalValidations("gig_operator");
+				this.subs.unsubscribe()
 				break;
 			}
 		}
-		if (!onRefresh) {
+		if (!onRefresh)
+		{
 			$("#affiliateInstructionsModal").modal("show");
 		}
 	}
 
-	searchGender(keyword) {
+	searchGender(keyword)
+	{
 		this.addAffiliateAccountForm.patchValue({
 			Gender: "",
 		});
-		if (keyword == "") {
+		if (keyword == "")
+		{
 			this.filteredGender = this.filterGender;
-		} else {
+		} else
+		{
 			this.filteredGender = this.filterGender
-				.filter((gender: any) => {
-					if (gender.label.toLowerCase() === keyword.toLowerCase()) {
+				.filter((gender: any) =>
+				{
+					if (gender.label.toLowerCase() === keyword.toLowerCase())
+					{
 						this.addAffiliateAccountForm.patchValue({
 							Gender: gender.value,
 						});
@@ -683,13 +746,16 @@ export class Step1Component implements OnInit, AfterViewInit {
 						.toLowerCase()
 						.includes(keyword.toLowerCase());
 				})
-				.sort((a: any, b: any) => {
+				.sort((a: any, b: any) =>
+				{
 					return this.searchSorting(keyword, a, b);
 				});
 		}
 	}
-	selectGender(val, isSelected) {
-		if (isSelected) {
+	selectGender(val, isSelected)
+	{
+		if (isSelected)
+		{
 			// ignore on deselection of the previous option
 			this.addAffiliateAccountForm.patchValue({
 				Gender: val,
@@ -697,26 +763,32 @@ export class Step1Component implements OnInit, AfterViewInit {
 		}
 	}
 
-	searchSorting(keyword, a, b) {
+	searchSorting(keyword, a, b)
+	{
 		// Sort results by matching name with keyword position in name
 		if (
 			a.label.toLowerCase().indexOf(keyword.toLowerCase()) >
 			b.label.toLowerCase().indexOf(keyword.toLowerCase())
-		) {
+		)
+		{
 			return 1;
 		} else if (
 			a.label.toLowerCase().indexOf(keyword.toLowerCase()) <
 			b.label.toLowerCase().indexOf(keyword.toLowerCase())
-		) {
+		)
+		{
 			return -1;
-		} else {
+		} else
+		{
 			if (a.label > b.label) return 1;
 			else return -1;
 		}
 	}
 
-	conditionalValidations(affiliateType) {
-		if (affiliateType != "gig_operator") {
+	conditionalValidations(affiliateType)
+	{
+		if (affiliateType != "gig_operator")
+		{
 			this.addAffiliateAccountForm.controls["CompanyName"].setValidators([
 				Validators.required,
 			]);
@@ -740,7 +812,8 @@ export class Step1Component implements OnInit, AfterViewInit {
 			this.addAffiliateAccountForm.controls[
 				"BusinessFrontPhoto"
 			].setValidators([Validators.required]);
-		} else {
+		} else
+		{
 			this.addAffiliateAccountForm.controls[
 				"CompanyName"
 			].clearValidators();
@@ -778,20 +851,25 @@ export class Step1Component implements OnInit, AfterViewInit {
 		].updateValueAndValidity();
 	}
 
-	affiliateEmailButtonClick(action) {
-		if (action === "edit") {
+	affiliateEmailButtonClick(action)
+	{
+		if (action === "edit")
+		{
 			$("#emailText").addClass("emailText");
 			this.affiliateEmailReadonly = false;
 			this.affiliateEmailStatus = "in-process";
 			this.affiliateEmailButton = "update";
-		} else if (action == "save") {
+		} else if (action == "save")
+		{
 			if (
 				this.addAffiliateAccountForm.value.Email ===
 				this.updatedAffiliateEmail
-			) {
+			)
+			{
 				this.displayMsg =
 					"New entered Email is similar to previous one.";
-			} else {
+			} else
+			{
 				this.displayMsg = "";
 				this.affiliateEmailButton = "edit";
 				this.affiliateEmailReadonly = true;
@@ -801,19 +879,22 @@ export class Step1Component implements OnInit, AfterViewInit {
 						this.addAffiliateAccountForm.value.Email
 					)
 					.pipe(
-						catchError((err) => {
+						catchError((err) =>
+						{
 							this.affiliateEmailProgressBar = false; //hide progressbar
 							return throwError(err);
 						})
 					)
-					.subscribe(({ data }: any) => {
+					.subscribe(({ data }: any) =>
+					{
 						this.affiliateEmailProgressBar = false; //hide progressbar
 						this.snackbarMsg = "OTP sent Successfully";
 						this.openSnackbar();
 					});
 			}
 			$("#editAffiliateEmailModal").modal("show");
-		} else {
+		} else
+		{
 			this.disableAffiliateEmailResendButton = true;
 			this.stateManagementService.setprogressBar(true);
 			this.affiliateService
@@ -821,13 +902,15 @@ export class Step1Component implements OnInit, AfterViewInit {
 					this.addAffiliateAccountForm.value.Email
 				)
 				.pipe(
-					catchError((err) => {
+					catchError((err) =>
+					{
 						this.disableAffiliateEmailResendButton = false;
 						this.stateManagementService.setprogressBar(false);
 						return throwError(err);
 					})
 				)
-				.subscribe(({ data }: any) => {
+				.subscribe(({ data }: any) =>
+				{
 					this.disableAffiliateEmailResendButton = false;
 					this.stateManagementService.setprogressBar(false);
 					this.snackbarMsg = "Email Verification Sent.";
@@ -835,14 +918,17 @@ export class Step1Component implements OnInit, AfterViewInit {
 				});
 		}
 	}
-	get fAffiliateEmail() {
+	get fAffiliateEmail()
+	{
 		return this.updateAffiliateEmailForm.controls;
 	}
-	updateAffiliateEmail() {
+	updateAffiliateEmail()
+	{
 		console.log(this.updateAffiliateEmailForm);
 		this.submittedAffiliateEmailForm = true;
 		// stop here if form is invalid
-		if (this.updateAffiliateEmailForm.invalid) {
+		if (this.updateAffiliateEmailForm.invalid)
+		{
 			return;
 		}
 		this.affiliateEmailProgressBar = true; //show progressbar
@@ -851,40 +937,49 @@ export class Step1Component implements OnInit, AfterViewInit {
 		this.affiliateService
 			.updateAffiliateEmail(this.updateAffiliateEmailForm.value)
 			.pipe(
-				catchError((err) => {
+				catchError((err) =>
+				{
 					this.affiliateEmailProgressBar = false; //hide progressbar
 					this.disableSubmitAffiliateEmailButton = false; //enable submit button
 					return throwError(err);
 				})
 			)
-			.subscribe(({ message, success }: any) => {
+			.subscribe(({ message, success }: any) =>
+			{
 				this.affiliateEmailProgressBar = false; //hide progressbar
 				this.disableSubmitAffiliateEmailButton = false; //enable submit button
-				if (success == true) {
+				if (success == true)
+				{
 					this.displayMsg = "Email changed successfully.";
 					this.updatedAffiliateEmail =
 						this.addAffiliateAccountForm.value.Email;
 					this.affiliateEmailStatus = "yes";
-				} else {
+				} else
+				{
 					this.emailErrorMsgs = message;
 				}
 			});
 	}
 
-	dispatchEmailButtonClick(action) {
-		if (action === "edit") {
+	dispatchEmailButtonClick(action)
+	{
+		if (action === "edit")
+		{
 			$("#email_Text").addClass("emailText");
 			this.dispatchEmailReadonly = false;
 			this.dispatchEmailStatus = "in-process";
 			this.dispatchEmailButton = "update";
-		} else if (action == "save") {
+		} else if (action == "save")
+		{
 			if (
 				this.addAffiliateAccountForm.value.dispatchEmail ===
 				this.updatedDispatchEmail
-			) {
+			)
+			{
 				this.displayMsg =
 					"New entered Email is similar to previous one.";
-			} else {
+			} else
+			{
 				this.displayMsg = "";
 				this.dispatchEmailButton = "edit";
 				this.dispatchEmailReadonly = true;
@@ -894,19 +989,22 @@ export class Step1Component implements OnInit, AfterViewInit {
 						this.addAffiliateAccountForm.value.dispatchEmail
 					)
 					.pipe(
-						catchError((err) => {
+						catchError((err) =>
+						{
 							this.dispatchEmailProgressBar = false; //hide progressbar
 							return throwError(err);
 						})
 					)
-					.subscribe(({ data }: any) => {
+					.subscribe(({ data }: any) =>
+					{
 						this.dispatchEmailProgressBar = false; //hide progressbar
 						this.snackbarMsg = "OTP sent Successfully";
 						this.openSnackbar();
 					});
 			}
 			$("#editDispatchEmailModal").modal("show");
-		} else {
+		} else
+		{
 			this.disableDispatchEmailResendButton = true;
 			this.stateManagementService.setprogressBar(true);
 			this.affiliateService
@@ -914,13 +1012,15 @@ export class Step1Component implements OnInit, AfterViewInit {
 					this.addAffiliateAccountForm.value.dispatchEmail
 				)
 				.pipe(
-					catchError((err) => {
+					catchError((err) =>
+					{
 						this.disableDispatchEmailResendButton = false;
 						this.stateManagementService.setprogressBar(false);
 						return throwError(err);
 					})
 				)
-				.subscribe(({ data }: any) => {
+				.subscribe(({ data }: any) =>
+				{
 					this.disableDispatchEmailResendButton = false;
 					this.stateManagementService.setprogressBar(false);
 					this.snackbarMsg = "Email Verification Sent.";
@@ -928,14 +1028,17 @@ export class Step1Component implements OnInit, AfterViewInit {
 				});
 		}
 	}
-	get fDispatchEmail() {
+	get fDispatchEmail()
+	{
 		return this.updateDispatchEmailForm.controls;
 	}
-	updateDispatchEmail() {
+	updateDispatchEmail()
+	{
 		console.log(this.updateDispatchEmailForm);
 		this.submittedDispatcheEmailForm = true;
 		// stop here if form is invalid
-		if (this.updateDispatchEmailForm.invalid) {
+		if (this.updateDispatchEmailForm.invalid)
+		{
 			return;
 		}
 		this.dispatchEmailProgressBar = true; //show progressbar
@@ -944,52 +1047,64 @@ export class Step1Component implements OnInit, AfterViewInit {
 		this.affiliateService
 			.updateDispatchEmail(this.updateDispatchEmailForm.value)
 			.pipe(
-				catchError((err) => {
+				catchError((err) =>
+				{
 					this.dispatchEmailProgressBar = false; //hide progressbar
 					this.disableSubmitDispatchEmailButton = false; //enable submit button
 					return throwError(err);
 				})
 			)
-			.subscribe(({ message, success }: any) => {
+			.subscribe(({ message, success }: any) =>
+			{
 				this.dispatchEmailProgressBar = false; //hide progressbar
 				this.disableSubmitDispatchEmailButton = false; //enable submit button
-				if (success == true) {
+				if (success == true)
+				{
 					this.displayMsg = "Email changed successfully.";
 					this.updatedDispatchEmail =
 						this.addAffiliateAccountForm.value.Email;
 					this.dispatchEmailStatus = "yes";
-				} else {
+				} else
+				{
 					this.emailErrorMsgs = message;
 				}
 			});
 	}
 
-	openSnackbar() {
+	openSnackbar()
+	{
 		var x = document.getElementById("snackbar");
 		x.className = "show";
-		setTimeout(function () {
+		setTimeout(function ()
+		{
 			x.className = x.className.replace("show", "");
 		}, 5000);
 	}
 
-	businessCardImageChange(event, imageType, imageId = null) {
+	businessCardImageChange(event, imageType, imageId = null)
+	{
 		this.stateManagementService.setprogressBar(true); //show progressBar
 		const reader = new FileReader();
-		if (event.target.files && event.target.files.length) {
+		if (event.target.files && event.target.files.length)
+		{
 			const [file] = event.target.files;
 			reader.readAsDataURL(file);
-			reader.onload = () => {
+			reader.onload = () =>
+			{
 				this.imageSrc = reader.result as string;
 				this.affiliateService
 					.uploadVehicleImage(this.imageSrc)
 					.pipe(
-						catchError((err) => {
+						catchError((err) =>
+						{
 							this.stateManagementService.setprogressBar(false); // hide progressBar
 							return throwError(err);
 						})
 					)
-					.subscribe(({ data }: any) => {
-						switch (imageType) {
+					.subscribe(({ data }: any) =>
+					{
+						switch (imageType)
+						{
 							case "BusinessFrontPhoto": {
 								this.addAffiliateAccountForm.patchValue({
 									BusinessFrontPhoto: data.id,
@@ -1017,8 +1132,10 @@ export class Step1Component implements OnInit, AfterViewInit {
 		// console.log(this.addInsuranceForm.value);
 	}
 
-	deleteImage(id, imageType) {
-		switch (imageType) {
+	deleteImage(id, imageType)
+	{
+		switch (imageType)
+		{
 			case "BusinessFrontPhoto": {
 				this.addAffiliateAccountForm.patchValue({
 					BusinessFrontPhoto: "",
@@ -1039,19 +1156,23 @@ export class Step1Component implements OnInit, AfterViewInit {
 		}
 	}
 	// Focus on FirstName field
-	FocusField() {
+	FocusField()
+	{
 		$("#FirstName").focus();
 	}
 
-	get f() {
+	get f()
+	{
 		return this.addAffiliateAccountForm.controls;
 	}
 
-	submitForm() {
+	submitForm()
+	{
 		console.log(this.addAffiliateAccountForm);
 		this.submittedForm = true;
 		// stop here if form is invalid
-		if (this.addAffiliateAccountForm.invalid) {
+		if (this.addAffiliateAccountForm.invalid)
+		{
 			return;
 		}
 		this.addAffiliateAccountForm.value.stepCompleted =
@@ -1063,17 +1184,20 @@ export class Step1Component implements OnInit, AfterViewInit {
 		this.affiliateService
 			.addAffiliateAccount(this.addAffiliateAccountForm.value)
 			.pipe(
-				catchError((err) => {
+				catchError((err) =>
+				{
 					this.spinner.hide(); //hide spinner
 					this.disableSubmitButton = false; //enable submit button
 					return throwError(err);
 				})
 			)
-			.subscribe(({ success, data }: any) => {
+			.subscribe(({ success, data }: any) =>
+			{
 				this.spinner.hide(); //hide spinner
 				this.disableSubmitButton = false; //enable submit button
 
-				if (!this.addAffiliateAccountForm.value.id) {
+				if (!this.addAffiliateAccountForm.value.id)
+				{
 					console.log(data, "check data");
 					console.log(
 						"Id not get",
@@ -1083,7 +1207,8 @@ export class Step1Component implements OnInit, AfterViewInit {
 						"currentUser",
 						JSON.stringify(data.user)
 					);
-					if (success == true) {
+					if (success == true)
+					{
 						this.affiliateService.updateStepsLocal("1");
 					}
 
@@ -1091,25 +1216,30 @@ export class Step1Component implements OnInit, AfterViewInit {
 						.navigateByUrl("/RefreshComponent", {
 							skipLocationChange: true,
 						})
-						.then(() => {
+						.then(() =>
+						{
 							this.router.navigate(["/affiliate/step2"]);
 						});
-				} else {
+				} else
+				{
 					console.log("Id get");
 					this.router.navigate(["/affiliate/step1"]);
 				}
 				//save value in session storage to show email sent modal on next step
-				if (!this.addAffiliateAccountForm.value.acc_id) {
+				if (!this.addAffiliateAccountForm.value.acc_id)
+				{
 					sessionStorage.setItem("showEmailVerificationAlert", "yes");
 				}
 			});
 	}
 
-	changeLang(event) {
+	changeLang(event)
+	{
 		console.log(event);
 
 		var $frame = $(".goog-te-menu-frame:first");
-		if (!$frame.size()) {
+		if (!$frame.size())
+		{
 			alert("Error: Could not find Google translate frame.");
 			return false;
 		}
@@ -1121,7 +1251,8 @@ export class Step1Component implements OnInit, AfterViewInit {
 		return false;
 	}
 
-	resetForm() {
+	resetForm()
+	{
 		this.addAffiliateAccountForm.reset();
 		this.BusinessFrontPhoto = "";
 		this.BusinessBackPhoto = "";

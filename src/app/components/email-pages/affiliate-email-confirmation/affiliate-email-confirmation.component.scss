@@ -54,6 +54,13 @@
 		#next-navgtr-button button
 		{
 			text-transform: uppercase;
+			font-weight: 500;
+			font-size: 1.3rem;
+			span
+			{
+				font-weight: 500;
+				font-size: 1rem;
+			}
 		}
 	}
 }
