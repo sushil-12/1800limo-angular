@@ -8,6 +8,8 @@ import { Router } from '@angular/router';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { state } from '@angular/animations';
+import { SharedModule } from 'src/app/components/shared/shared.module';
+
 declare var $: any;
 
 @Component({
@@ -39,8 +41,8 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 	public progressBar: boolean;
 	chevron: boolean = false;
 
-	is_email_verified: boolean = false
-	is_bank_verified: boolean = false
+	is_email_verified: boolean = true
+	is_bank_verified: boolean = true
 	is_show_verification_icon: boolean = false
 
 	constructor(
@@ -50,7 +52,8 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 		private affiliateService: AffiliateService,
 		private stateManagementService: StateManagementService,
 		public errorDialogService: ErrorDialogService,
-		private elementRef: ElementRef
+		private elementRef: ElementRef,
+		private $shared: SharedModule
 	) { }
 
 	ngOnInit(): void
@@ -91,6 +94,8 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 		}
 
 		this.checkApplicationStatus()
+
+		console.info(this.$shared.fetchCookies('lastroute'))
 	}
 
 	/**
@@ -126,6 +131,10 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 		{
 			const interval = setInterval(() =>
 			{
+				if (localStorage.getItem('currentUser') == null)
+				{
+					clearInterval(interval)
+				}
 				let steps_completed = this.affiliateService.getLocalStepCompletedObject()
 				// check for the verification status, api should hit once per interval
 				this.checkVerification(currentUser.account_id).then((data) =>

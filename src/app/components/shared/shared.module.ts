@@ -147,4 +147,38 @@ export class SharedModule
 			console.error('No Element Reference provided. \nConsider giving an element to scroll. ')
 		}
 	}
+
+	/**
+	 * Fetches the cookies
+	 * 
+	 * @params cookie: string [Required] cookie name
+	 * @returns string | Array<string>
+	 */
+	fetchCookies(cookie: string): string | Array<string>
+	{
+		let name = cookie + '='
+		let all_cookies = decodeURIComponent(document.cookie).split(';')
+		if (cookie = 'all')
+		{
+			return all_cookies
+		}
+		if (all_cookies.length > 0)
+		{
+			all_cookies.forEach((item: any) =>
+			{
+				if (item.charAt(0) == ' ')
+				{
+					item = item.substring(1)
+				}
+				// if cookie is found
+				if (item.indexOf(name) !== -1)
+				{
+					// return only the value
+					console.info('Item: ', item)
+					return item.substring(name.length, item.length)
+				}
+			})
+		}
+		return ""
+	}
 }
