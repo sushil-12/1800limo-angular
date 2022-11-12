@@ -1,3 +1,16 @@
+.selectStyle
+{
+	color: #000;
+	select
+	{
+		color: #000;
+		option
+		{
+			color: #000;
+		}
+	}
+}
+
 .vehtype_extint img {
 	height       : 225px;
 	border-radius: 15px;
@@ -178,8 +191,8 @@
 
 .radio-tile-label {
 	text-align    : center;
-	font-size     : 1rem;
-	font-weight   : 500;
+	font-size     : 0.85rem !important;
+	font-weight   : 700 !important;
 	text-transform: uppercase;
 	letter-spacing: 1px;
 	color         : #000;
@@ -276,7 +289,7 @@
 
 	.radio-tile-label {
 		text-align    : center;
-		font-size     : 0.75rem;
+		font-size     : 0.85rem;
 		font-weight   : 500;
 		text-transform: uppercase;
 		letter-spacing: 1px;
@@ -287,7 +300,6 @@
 
 	.blacklimo .radio-tile-label {
 		text-align    : center;
-		font-size     : 0.75rem;
 		font-weight   : 500;
 		text-transform: uppercase;
 		letter-spacing: 1px;
@@ -298,7 +310,6 @@
 
 	.GigOperator .radio-tile-label {
 		text-align    : center;
-		font-size     : 0.75rem;
 		font-weight   : 500;
 		text-transform: uppercase;
 		letter-spacing: 1px;
