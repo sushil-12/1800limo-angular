@@ -645,7 +645,14 @@ export class Step1Component implements OnInit, AfterViewInit
 				this.affiliateInstruction =
 					"Black Car / Owner Operators need to be fully licensed by city and state with a $500k/$500k minimum insurance policy. Only 2 vehicle maximum with same driver.";
 				this.conditionalValidations("black_limo_operator");
-				this.subs.unsubscribe()
+				try
+				{
+					this.subs.unsubscribe()
+				}
+				catch (err)
+				{
+					console.log('Subs is undefined. Returned with Error: ', err)
+				}
 				break;
 			}
 			case "taxi_operator": {
@@ -683,7 +690,14 @@ export class Step1Component implements OnInit, AfterViewInit
 				this.affiliateInstruction =
 					"Taxi Operators need to fully licensed by city and state with a minimum $500k/$500k insurance policy. 1 vehicle operation.";
 				this.conditionalValidations("taxi_operator");
-				this.subs.unsubscribe()
+				try
+				{
+					this.subs.unsubscribe()
+				}
+				catch (err)
+				{
+					console.log('Subs is undefined. Returned with Error: ', err)
+				}
 				break;
 			}
 			case "gig_operator": {
@@ -713,7 +727,14 @@ export class Step1Component implements OnInit, AfterViewInit
 				<li><strong>4.5 Stars</strong> or better</li>
 				</ul>`;
 				this.conditionalValidations("gig_operator");
-				this.subs.unsubscribe()
+				try
+				{
+					this.subs.unsubscribe()
+				}
+				catch (err)
+				{
+					console.log('Subs is undefined. Returned with Error: ', err)
+				}
 				break;
 			}
 		}
