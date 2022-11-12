@@ -380,7 +380,6 @@ export class HomeComponent implements OnInit
 		})
 	}
 
-
 	/**
 	 * generating Quote Bot Form only
 	 */
