@@ -3,6 +3,20 @@
 	border-radius: 15px;
 }
 
+.modal-header 
+{
+	h5
+	{
+		color: var(--orange)
+	}
+	.close
+	{
+		color: #ff0000;
+		font-size: 2rem;
+		font-weight: 600;
+		opacity: 1;
+	}
+	}
 .vehtype_extint .emptyImage {
 	height: 225px;
 }

@@ -1,66 +1,48 @@
-<section
-	class="user_information step_form_wrapper"
-	*ngIf="affiliateId && isStep2Completed"
->
-	<h2
-		class="headinginfo adminbox_shadow"
-		*ngIf="affiliateId && isStep2Completed"
-	>
+<section class="user_information step_form_wrapper" *ngIf="affiliateId && isStep2Completed">
+	<h2 class="headinginfo adminbox_shadow" *ngIf="affiliateId && isStep2Completed">
 		Bank Account Status
 	</h2>
 	<div class="container">
 		<div class="row" *ngIf="response">
-			<div
-				class="col-md-12"
-				*ngIf="response.data.stripeDetail.transfer_status != 'active'"
-			>
+			<div class="col-md-12" *ngIf="response.data.stripeDetail.transfer_status != 'active'">
 				<p class="text-danger margin-bottom-thin my-mat-hint">
 					Stripe Activation can take upto 24 Hours.
 				</p>
 			</div>
 			<div class="col-md-4">
-				<p
-					[className]="
+				<p [className]="
 						'defaultStatus ' +
 						response.data.stripeDetail
 							.additional_doc_verification_status
-					"
-				>
+					">
 					<strong>Stripe Doc Verification Status:</strong>
 					<span class="text-capitalize">
 						{{
-							response.data.stripeDetail
-								.additional_doc_verification_status
-						}}</span
-					>
+						response.data.stripeDetail
+						.additional_doc_verification_status
+						}}</span>
 				</p>
 			</div>
 			<div class="col-md-4">
-				<p
-					[className]="
+				<p [className]="
 						'defaultStatus ' +
 						response.data.stripeDetail.stripe_address_status
-					"
-				>
+					">
 					<strong>Stripe Address Status:</strong>
 					<span class="text-capitalize">
 						{{
-							response.data.stripeDetail.stripe_address_status
-						}}</span
-					>
+						response.data.stripeDetail.stripe_address_status
+						}}</span>
 				</p>
 			</div>
 			<div class="col-md-4">
-				<p
-					[className]="
+				<p [className]="
 						'defaultStatus ' +
 						response.data.stripeDetail.transfer_status
-					"
-				>
+					">
 					<strong>Stripe Transfer Type:</strong>
 					<span class="text-capitalize">
-						{{ response.data.stripeDetail.transfer_status }}</span
-					>
+						{{ response.data.stripeDetail.transfer_status }}</span>
 				</p>
 			</div>
 			<div class="col-md-12" *ngIf="stripeErrors.length > 0">
@@ -73,17 +55,9 @@
 					</li>
 				</ul>
 			</div>
-			<div
-				class="col-12"
-				*ngIf="response.data.bankinfo.stripe_account_type == 'standard'"
-			>
-				<button
-					class="forstep_nextveh"
-					data-toggle="modal"
-					data-target="#verificationDocumentModal"
-					(click)="stripeRefreshAccountLink()"
-					tabindex="-1"
-				>
+			<div class="col-12" *ngIf="response.data.bankinfo.stripe_account_type == 'standard'">
+				<button class="forstep_nextveh" data-toggle="modal" data-target="#verificationDocumentModal"
+					(click)="stripeRefreshAccountLink()" tabindex="-1">
 					<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
 					Edit Bank Information on Stripe
 				</button>
@@ -92,70 +66,44 @@
 	</div>
 </section>
 <!-- Main page content-->
-<form
-	[formGroup]="addBankForm"
-	class="step_form_wrapper"
-	appInvalidControlScroll
->
+<form [formGroup]="addBankForm" class="step_form_wrapper" appInvalidControlScroll>
 	<section class="user_information">
 		<h2 class="headinginfo adminbox_shadow">
 			Company Bank Settings
-			<span class="spanText"
-				>(Per Stripe For Identification & Direct Deposits)</span
-			>
+			<span class="spanText">(Per Stripe For Identification & Direct Deposits)</span>
 		</h2>
 		<div class="mt-1 container">
 			<div class="row">
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
-						<mat-label>Bank Name</mat-label>
-						<input
-							matInput
-							placeholder="Bank Name"
-							(focus)="$event.target.select()"
-							formControlName="BankName"
-							tabindex="1"
-						/>
+						<mat-label>Bank Name <span class="optionalText">(Optional)</span></mat-label>
+						<input matInput placeholder="Bank Name" (focus)="$event.target.select()"
+							formControlName="BankName" tabindex="1" />
 					</mat-form-field>
 				</div>
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
-						<mat-label
-							>Bank Address
+						<mat-label>Bank Address
 							<span class="optionalText">(Optional)</span>
 						</mat-label>
-						<input
-							matInput
-							placeholder="Bank Address (Optional)"
-							(focus)="$event.target.select()"
-							formControlName="BankAddress"
-							tabindex="1"
-						/>
+						<input matInput placeholder="Bank Address (Optional)" (focus)="$event.target.select()"
+							formControlName="BankAddress" tabindex="1" />
 					</mat-form-field>
 				</div>
 				<div class="col-md-4">
 					<mat-form-field appearance="outline">
-						<mat-label
-							>First Name
-							<span class="asterisk">*</span></mat-label
-						>
-						<input
-							matInput
-							placeholder="First Name"
-							(focus)="$event.target.select()"
-							formControlName="AccountHolderFirstName"
-							tabindex="1"
-						/>
+						<mat-label>First Name
+							<span class="asterisk">*</span>
+						</mat-label>
+						<input matInput placeholder="First Name" (focus)="$event.target.select()"
+							formControlName="AccountHolderFirstName" tabindex="1" />
 					</mat-form-field>
-					<div
-						*ngIf="
+					<div *ngIf="
 							(submittedForm &&
 								f.AccountHolderFirstName.errors) ||
 							(f.AccountHolderFirstName.touched &&
 								f.AccountHolderFirstName.errors)
-						"
-						class="text-danger margin-bottom-thin my-mat-hint"
-					>
+						" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.AccountHolderFirstName.errors.required">
 							This field is required
 						</div>
@@ -164,37 +112,23 @@
 				<div class="col-md-4">
 					<mat-form-field appearance="outline">
 						<mat-label>Middle Name</mat-label>
-						<input
-							matInput
-							placeholder="Middle Name"
-							(focus)="$event.target.select()"
-							formControlName="AccountHolderMiddleName"
-							tabindex="1"
-						/>
+						<input matInput placeholder="Middle Name" (focus)="$event.target.select()"
+							formControlName="AccountHolderMiddleName" tabindex="1" />
 					</mat-form-field>
 				</div>
 				<div class="col-md-4">
 					<mat-form-field appearance="outline">
-						<mat-label
-							>Last Name
-							<span class="asterisk">*</span></mat-label
-						>
-						<input
-							matInput
-							placeholder="Last Name"
-							(focus)="$event.target.select()"
-							formControlName="AccountHolderLastName"
-							tabindex="1"
-						/>
+						<mat-label>Last Name
+							<span class="asterisk">*</span>
+						</mat-label>
+						<input matInput placeholder="Last Name" (focus)="$event.target.select()"
+							formControlName="AccountHolderLastName" tabindex="1" />
 					</mat-form-field>
-					<div
-						*ngIf="
+					<div *ngIf="
 							(submittedForm && f.AccountHolderLastName.errors) ||
 							(f.AccountHolderLastName.touched &&
 								f.AccountHolderLastName.errors)
-						"
-						class="text-danger margin-bottom-thin my-mat-hint"
-					>
+						" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.AccountHolderLastName.errors.required">
 							This field is required
 						</div>
@@ -204,46 +138,31 @@
 					<mat-form-field appearance="outline">
 						<mat-label>
 							Bank Account Number
-							<span class="asterisk">*</span></mat-label
-						>
-						<input
-							matInput
-							placeholder="Account Number"
-							(focus)="$event.target.select()"
-							formControlName="AccountNumber"
-							tabindex="1"
-						/>
+							<span class="asterisk">*</span>
+						</mat-label>
+						<input matInput placeholder="Account Number" (focus)="$event.target.select()"
+							formControlName="AccountNumber" tabindex="1" />
 					</mat-form-field>
-					<div
-						*ngIf="
+					<div *ngIf="
 							(submittedForm && f.AccountNumber.errors) ||
 							(f.AccountNumber.touched && f.AccountNumber.errors)
-						"
-						class="text-danger margin-bottom-thin my-mat-hint"
-					>
+						" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.AccountNumber.errors.required">
 							This field is required
 						</div>
 					</div>
-					<div
-						*ngIf="f.AccountNumber.errors"
-						class="text-danger margin-bottom-thin my-mat-hint"
-					>
-						<div
-							*ngIf="
+					<div *ngIf="f.AccountNumber.errors" class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="
 								f.AccountNumber.errors?.invalid_Pattern;
 								else plusError
-							"
-						>
+							">
 							Do not add Dashes with numbers
 						</div>
 						<ng-template #plusError>
-							<div
-								*ngIf="
+							<div *ngIf="
 									f.AccountNumber.errors?.invalidPattern;
 									else allErrors
-								"
-							>
+								">
 								Do not enter + sign
 							</div>
 							<ng-template #allErrors>
@@ -256,55 +175,32 @@
 				</div>
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
-						<mat-label
-							>Check Routing # / Bank Branch #
-							<span class="asterisk">*</span></mat-label
-						>
-						<input
-							matInput
-							placeholder="Check Routing # / Bank Branch #"
-							(focus)="$event.target.select()"
-							formControlName="Routing"
-							tabindex="1"
-						/>
+						<mat-label>Check Routing # / Bank Branch #
+							<span class="asterisk">*</span>
+						</mat-label>
+						<input matInput placeholder="Check Routing # / Bank Branch #" (focus)="$event.target.select()"
+							formControlName="Routing" tabindex="1" />
 					</mat-form-field>
-					<div
-						*ngIf="
+					<div *ngIf="
 							(submittedForm && f.Routing.errors) ||
 							(f.Routing.touched && f.Routing.errors)
-						"
-						class="text-danger margin-bottom-thin my-mat-hint"
-					>
+						" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.Routing.errors.required">
 							This field is required
 						</div>
 					</div>
 				</div>
 				<div class="col-md-6">
-					<label class="select-account-label"
-						>Account Type <span class="asterisk">*</span></label
-					>
+					<label class="select-account-label">Account Type <span class="asterisk">*</span></label>
 					<div class="selectStyle">
-						<select
-							class="selectInputStyle"
-							(click)="selectDropdownAccount()"
-							formControlName="AccountType"
-							tabindex="1"
-						>
+						<select class="selectInputStyle" (click)="selectDropdownAccount()" formControlName="AccountType"
+							tabindex="1">
 							<option value="individual">Personal</option>
 							<option value="company">Business</option>
 						</select>
-						<svg
-							version="1.1"
-							id="Layer_1"
-							xmlns="http://www.w3.org/2000/svg"
-							xmlns:xlink="http://www.w3.org/1999/xlink"
-							x="0px"
-							y="0px"
-							viewBox="0 0 122.88 63.9"
-							style="enable-background: new 0 0 122.88 63.9"
-							xml:space="preserve"
-						>
+						<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
+							style="enable-background: new 0 0 122.88 63.9" xml:space="preserve">
 							<style type="text/css">
 								.sty0 {
 									fill-rule: evenodd;
@@ -312,56 +208,32 @@
 								}
 							</style>
 							<g>
-								<polygon
-									class="sty0"
-									points="61.44,63.9 122.88,0 0,0 61.44,63.9"
-								/>
+								<polygon class="sty0" points="61.44,63.9 122.88,0 0,0 61.44,63.9" />
 							</g>
 						</svg>
 					</div>
-					<div
-						*ngIf="
+					<div *ngIf="
 							(submittedForm && f.AccountType.errors) ||
 							(f.AccountType.touched && f.AccountType.errors)
-						"
-						class="text-danger margin-bottom-thin my-mat-hint"
-					>
+						" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.AccountType.errors.required">
 							This field is required
 						</div>
 					</div>
 				</div>
 				<div class="col-md-2 col-4 birthDay">
-					<label class="select-day-label"
-						>Day of Birth <span class="asterisk">*</span></label
-					>
+					<label class="select-day-label">Day of Birth <span class="asterisk">*</span></label>
 					<div class="selectStyle">
-						<select
-							class="selectInputStyle"
-							(click)="selectDropdownDay()"
-							formControlName="dobDay"
-							tabindex="1"
-							id="selectDropdown"
-						>
+						<select class="selectInputStyle" (click)="selectDropdownDay()" formControlName="dobDay"
+							tabindex="1" id="selectDropdown">
 							<option value="">Day</option>
-							<option
-								*ngFor="let day of dobDay"
-								value="{{ day }}"
-							>
+							<option *ngFor="let day of dobDay" value="{{ day }}">
 								{{ day }}
 							</option>
 						</select>
-						<svg
-							version="1.1"
-							id="Layer_1"
-							xmlns="http://www.w3.org/2000/svg"
-							xmlns:xlink="http://www.w3.org/1999/xlink"
-							x="0px"
-							y="0px"
-							viewBox="0 0 122.88 63.9"
-							style="enable-background: new 0 0 122.88 63.9"
-							xml:space="preserve"
-						>
+						<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
+							style="enable-background: new 0 0 122.88 63.9" xml:space="preserve">
 							<style type="text/css">
 								.sty0 {
 									fill-rule: evenodd;
@@ -369,37 +241,24 @@
 								}
 							</style>
 							<g>
-								<polygon
-									class="sty0"
-									points="61.44,63.9 122.88,0 0,0 61.44,63.9"
-								/>
+								<polygon class="sty0" points="61.44,63.9 122.88,0 0,0 61.44,63.9" />
 							</g>
 						</svg>
 					</div>
-					<div
-						*ngIf="
+					<div *ngIf="
 							(submittedForm && f.dobDay.errors) ||
 							(f.dobDay.touched && f.dobDay.errors)
-						"
-						class="text-danger margin-bottom-thin my-mat-hint"
-					>
+						" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.dobDay.errors.required">
 							This field is required
 						</div>
 					</div>
 				</div>
 				<div class="col-md-2 col-4 birthMonth">
-					<label class="select-month-label"
-						>Month of Birth <span class="asterisk">*</span></label
-					>
+					<label class="select-month-label">Month of Birth <span class="asterisk">*</span></label>
 					<div class="selectStyle">
-						<select
-							class="selectInputStyle"
-							(click)="selectDropdownMonth()"
-							formControlName="dobMonth"
-							tabindex="1"
-							id="selectDropdown"
-						>
+						<select class="selectInputStyle" (click)="selectDropdownMonth()" formControlName="dobMonth"
+							tabindex="1" id="selectDropdown">
 							<option value="">Month</option>
 							<option value="01">01</option>
 							<option value="02">02</option>
@@ -414,17 +273,9 @@
 							<option value="11">11</option>
 							<option value="12">12</option>
 						</select>
-						<svg
-							version="1.1"
-							id="Layer_1"
-							xmlns="http://www.w3.org/2000/svg"
-							xmlns:xlink="http://www.w3.org/1999/xlink"
-							x="0px"
-							y="0px"
-							viewBox="0 0 122.88 63.9"
-							style="enable-background: new 0 0 122.88 63.9"
-							xml:space="preserve"
-						>
+						<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
+							style="enable-background: new 0 0 122.88 63.9" xml:space="preserve">
 							<style type="text/css">
 								.sty0 {
 									fill-rule: evenodd;
@@ -432,56 +283,32 @@
 								}
 							</style>
 							<g>
-								<polygon
-									class="sty0"
-									points="61.44,63.9 122.88,0 0,0 61.44,63.9"
-								/>
+								<polygon class="sty0" points="61.44,63.9 122.88,0 0,0 61.44,63.9" />
 							</g>
 						</svg>
 					</div>
-					<div
-						*ngIf="
+					<div *ngIf="
 							(submittedForm && f.dobMonth.errors) ||
 							(f.dobMonth.touched && f.dobMonth.errors)
-						"
-						class="text-danger margin-bottom-thin my-mat-hint"
-					>
+						" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.dobMonth.errors.required">
 							This field is required
 						</div>
 					</div>
 				</div>
 				<div class="col-md-2 col-4 birthYear">
-					<label class="select-year-label"
-						>Year of Birth <span class="asterisk">*</span></label
-					>
+					<label class="select-year-label">Year of Birth <span class="asterisk">*</span></label>
 					<div class="selectStyle">
-						<select
-							class="selectInputStyle"
-							(click)="selectDropdownYear()"
-							formControlName="dobYear"
-							tabindex="1"
-							id="selectDropdown"
-						>
+						<select class="selectInputStyle" (click)="selectDropdownYear()" formControlName="dobYear"
+							tabindex="1" id="selectDropdown">
 							<option value="">Year</option>
-							<option
-								*ngFor="let year of dobYear"
-								value="{{ year }}"
-							>
+							<option *ngFor="let year of dobYear" value="{{ year }}">
 								{{ year }}
 							</option>
 						</select>
-						<svg
-							version="1.1"
-							id="Layer_1"
-							xmlns="http://www.w3.org/2000/svg"
-							xmlns:xlink="http://www.w3.org/1999/xlink"
-							x="0px"
-							y="0px"
-							viewBox="0 0 122.88 63.9"
-							style="enable-background: new 0 0 122.88 63.9"
-							xml:space="preserve"
-						>
+						<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
+							style="enable-background: new 0 0 122.88 63.9" xml:space="preserve">
 							<style type="text/css">
 								.sty0 {
 									fill-rule: evenodd;
@@ -489,29 +316,21 @@
 								}
 							</style>
 							<g>
-								<polygon
-									class="sty0"
-									points="61.44,63.9 122.88,0 0,0 61.44,63.9"
-								/>
+								<polygon class="sty0" points="61.44,63.9 122.88,0 0,0 61.44,63.9" />
 							</g>
 						</svg>
 					</div>
-					<div
-						*ngIf="
+					<div *ngIf="
 							(submittedForm && f.dobYear.errors) ||
 							(f.dobYear.touched && f.dobYear.errors)
-						"
-						class="text-danger margin-bottom-thin my-mat-hint"
-					>
+						" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.dobYear.errors.required">
 							This field is required
 						</div>
 					</div>
 				</div>
 				<div class="col-md-6">
-					<label class="select-currency-label"
-						>Currency <span class="asterisk">*</span></label
-					>
+					<label class="select-currency-label">Currency <span class="asterisk">*</span></label>
 					<!-- Search and Fill functionality -->
 					<!-- <input type="text" placeholder="Search by Name" matInput
 							(keyup)="searchGlobalValue('currency', $event.target.value)" [matAutocomplete]="autocurrency"
@@ -525,33 +344,23 @@
 
 					<!-- Select Functionality -->
 					<div class="selectStyle">
-						<select
-							class="selectInputStyle"
-							(click)="selectDropdownCurrency()"
-							formControlName="currency"
-							tabindex="1"
-						>
+						<select class="selectInputStyle" (click)="selectDropdownCurrency()" formControlName="currency"
+							tabindex="1">
 							<option value="">Choose Currency</option>
-							<option
-								*ngFor="let currencyOption of currencyOptions"
-								[value]="
+							<option *ngFor="let currencyOption of currencyOptions" [value]="
 									currencyOption.currency +
 									'-' +
 									currencyOption.currencyCountry
-								"
-							>
+								">
 								{{ currencyOption.countryName }} -
 								{{ currencyOption.symbol }}
 							</option>
 						</select>
 					</div>
-					<div
-						*ngIf="
+					<div *ngIf="
 							(submittedForm && f.currency.errors) ||
 							(f.currency.touched && f.currency.errors)
-						"
-						class="text-danger margin-bottom-thin my-mat-hint"
-					>
+						" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.currency.errors.required">
 							This field is required
 						</div>
@@ -559,48 +368,32 @@
 				</div>
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
-						<mat-label
-							>SSN Personal ID # / Business ID #
-							<span class="asterisk">*</span></mat-label
-						>
-						<input
-							matInput
-							placeholder="SSN Personal ID # / Business ID #"
-							(focus)="$event.target.select()"
-							formControlName="ssn"
-							tabindex="1"
-						/>
+						<mat-label>SSN Personal ID # / Business ID #
+							<span class="asterisk">*</span>
+						</mat-label>
+						<input matInput placeholder="SSN Personal ID # / Business ID #" (focus)="$event.target.select()"
+							formControlName="ssn" tabindex="1" />
 					</mat-form-field>
-					<div
-						*ngIf="
+					<div *ngIf="
 							(submittedForm && f.ssn.errors) ||
 							(f.ssn.touched && f.ssn.errors)
-						"
-						class="text-danger margin-bottom-thin my-mat-hint"
-					>
+						" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.ssn.errors.required">
 							This field is required
 						</div>
 					</div>
-					<div
-						*ngIf="f.ssn.errors"
-						class="text-danger margin-bottom-thin my-mat-hint"
-					>
-						<div
-							*ngIf="
+					<div *ngIf="f.ssn.errors" class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="
 								f.ssn.errors?.invalid_Pattern;
 								else plusError
-							"
-						>
+							">
 							Do not add Dashes with numbers
 						</div>
 						<ng-template #plusError>
-							<div
-								*ngIf="
+							<div *ngIf="
 									f.ssn.errors?.invalidPattern;
 									else allErrors
-								"
-							>
+								">
 								Do not enter + sign
 							</div>
 							<ng-template #allErrors>
@@ -614,23 +407,11 @@
 				<div class="col-md-3 pr-0 borderright mobilePadding">
 					<div class="form-group radio-tile-group">
 						<div class="custom-radio input-container" tabIndex="1">
-							<input
-								class="radio-button"
-								type="radio"
-								id="noEin"
-								value="noEin"
-								name="haveEin"
-								checked=""
-								formControlName="haveEin"
-								(click)="haveEin('noEin')"
-								tabIndex="-1"
-							/>
+							<input class="radio-button" type="radio" id="noEin" value="noEin" name="haveEin" checked=""
+								formControlName="haveEin" (click)="haveEin('noEin')" tabIndex="-1" />
 							<div class="radio-tile">
-								<label
-									class="radio-tile-label"
-									for="noEin"
-									[ngClass]="!haveEinNo ? 'radio-active' : ''"
-								>
+								<label class="radio-tile-label" for="noEin"
+									[ngClass]="!haveEinNo ? 'radio-active' : ''">
 									I do not have an EIN / Business ID #
 								</label>
 							</div>
@@ -640,23 +421,11 @@
 				<div class="col-md-3 pl-0 mobilePadding">
 					<div class="form-group radio-tile-group">
 						<div class="custom-radio input-container" tabIndex="1">
-							<input
-								class="radio-button"
-								type="radio"
-								id="yesEin"
-								value="yesEin"
-								name="haveEin"
-								checked=""
-								formControlName="haveEin"
-								(click)="haveEin('yesEin')"
-								tabIndex="-1"
-							/>
+							<input class="radio-button" type="radio" id="yesEin" value="yesEin" name="haveEin"
+								checked="" formControlName="haveEin" (click)="haveEin('yesEin')" tabIndex="-1" />
 							<div class="radio-tile">
-								<label
-									class="radio-tile-label"
-									for="yesEin"
-									[ngClass]="haveEinNo ? 'radio-active' : ''"
-								>
+								<label class="radio-tile-label" for="yesEin"
+									[ngClass]="haveEinNo ? 'radio-active' : ''">
 									I have an EIN / Business ID #
 								</label>
 							</div>
@@ -666,21 +435,13 @@
 				<div class="col-md-6">
 					<mat-form-field appearance="outline" [hidden]="!haveEinNo">
 						<mat-label>EIN / Business ID #</mat-label>
-						<input
-							matInput
-							placeholder="EIN / Business ID #"
-							(focus)="$event.target.select()"
-							formControlName="ein"
-							tabindex="1"
-						/>
+						<input matInput placeholder="EIN / Business ID #" (focus)="$event.target.select()"
+							formControlName="ein" tabindex="1" />
 					</mat-form-field>
-					<div
-						*ngIf="
+					<div *ngIf="
 							(submittedForm && f.ein.errors) ||
 							(f.ein.touched && f.ein.errors)
-						"
-						class="text-danger margin-bottom-thin my-mat-hint"
-					>
+						" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.ein.errors.required">
 							This field is required
 						</div>
@@ -691,91 +452,57 @@
 	</section>
 	<section class="user_information">
 		<h2 class="headinginfo adminbox_shadow">
-			Owner Company Identity Information
+			Owner/Company Identification
 		</h2>
 		<div class="container">
 			<div class="vehtype_extintwrap">
 				<div class="row">
 					<div class="col-md-12 text-center">
-						<button
-							type="button"
-							class="verifyDocButton"
-							data-toggle="modal"
-							data-target="#verificationDocumentModal"
-							tabindex="1"
-						>
+						<button type="button" class="verifyDocButton" data-toggle="modal"
+							data-target="#verificationDocumentModal" tabindex="1">
 							Acceptable Country Owner Verification Document
 						</button>
 					</div>
-					<div
-						class="col-md-5"
-						*ngIf="id_front_image; else no_id_front_image"
-					>
+					<div class="col-md-5" *ngIf="id_front_image; else no_id_front_image">
 						<div class="vehtype_extint">
 							<div>
 								<p>
 									Drivers License or Other ID
-									<span class="optionalTextStyle"
-										>(Front Photo)
+									<span class="optionalTextStyle">(Front Photo)
 									</span>
 									<span class="asterisk">*</span>
 								</p>
-								<img
-									src="{{ id_front_image }}"
-									(click)="showImageInModal(id_front_image)"
-									tabindex="-1"
-								/>
+								<img src="{{ id_front_image }}" (click)="showImageInModal(id_front_image)"
+									tabindex="-1" />
 								<ul *ngIf="canChangeDocument" class="mt-3">
 									<li>
-										<button
-											class="changeuploaded"
-											tabindex="1"
-										>
-											<input
-												type="file"
-												(change)="
+										<button class="changeuploaded" tabindex="1">
+											<input type="file" (change)="
 													idCardImageChange(
 														$event,
 														'id_front_image',
 														id_front_image_id
 													)
-												"
-												tabindex="-1"
-											/>
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												viewBox="0 0 24 24"
-											>
-												<path
-													fill="none"
-													d="M0 0h24v24H0V0z"
-												/>
+												" tabindex="-1" />
+											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
 												<path
-													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
-												/>
+													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
 											</svg>
 											Change
 										</button>
 									</li>
 									<li>
-										<a
-											class="delete-btn"
-											(click)="
+										<a class="delete-btn" (click)="
 												deleteImage(
 													id_front_image_id,
 													'id_front_image'
 												)
-											"
-											tabindex="1"
-										>
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												viewBox="0 0 32 32"
-											>
+											" tabindex="1">
+											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 												<path
-													d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z"
-												/>
+													d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
 											</svg>
 											Delete
 										</a>
@@ -788,71 +515,42 @@
 						<div class="col-md-5">
 							<div class="vehtype_extint">
 								<div>
-									<p
-										[class.ng-invalid]="
+									<p [class.ng-invalid]="
 											submittedForm &&
 											f.id_front_image.errors.required
-										"
-									>
+										">
 										Drivers License or Other ID
-										<span class="optionalTextStyle"
-											>(Front Photo)
+										<span class="optionalTextStyle">(Front Photo)
 										</span>
 										<span class="asterisk">*</span>
 									</p>
 									<div class="emptyImage">
-										<img
-											src="../../../../assets/images/empty-image.png"
-											tabindex="-1"
-										/>
+										<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
 									</div>
 									<ul *ngIf="canChangeDocument" class="mt-3">
 										<li>
-											<button
-												class="adduploaded"
-												tabindex="1"
-											>
-												<input
-													type="file"
-													(change)="
+											<button class="adduploaded" tabindex="1">
+												<input type="file" (change)="
 														idCardImageChange(
 															$event,
 															'id_front_image'
 														)
-													"
-													tabindex="-1"
-												/>
-												<svg
-													xmlns="http://www.w3.org/2000/svg"
-													viewBox="0 0 24 24"
-												>
+													" tabindex="-1" />
+												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+													<path fill="none" d="M0 0h24v24H0V0z" />
+													<circle cx="12" cy="12" r="3" />
 													<path
-														fill="none"
-														d="M0 0h24v24H0V0z"
-													/>
-													<circle
-														cx="12"
-														cy="12"
-														r="3"
-													/>
-													<path
-														d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
-													/>
+														d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
 												</svg>
 												Add
 											</button>
 										</li>
 									</ul>
 								</div>
-								<div
-									*ngIf="
+								<div *ngIf="
 										submittedForm && f.id_front_image.errors
-									"
-									class="text-danger margin-bottom-thin my-mat-hint mb-4"
-								>
-									<div
-										*ngIf="f.id_front_image.errors.required"
-									>
+									" class="text-danger margin-bottom-thin my-mat-hint mb-4">
+									<div *ngIf="f.id_front_image.errors.required">
 										The Drivers License or Other ID (Front
 										Photo) is required.
 									</div>
@@ -861,74 +559,44 @@
 						</div>
 					</ng-template>
 
-					<div
-						class="col-md-5"
-						*ngIf="id_back_image; else no_id_back_image"
-					>
+					<div class="col-md-5" *ngIf="id_back_image; else no_id_back_image">
 						<div class="vehtype_extint">
 							<div>
 								<p>
 									Drivers License or Other ID
-									<span class="optionalTextStyle"
-										>(Back Photo)</span
-									>
+									<span class="optionalTextStyle">(Back Photo)</span>
 								</p>
-								<img
-									src="{{ id_back_image }}"
-									(click)="showImageInModal(id_back_image)"
-									tabindex="-1"
-								/>
+								<img src="{{ id_back_image }}" (click)="showImageInModal(id_back_image)"
+									tabindex="-1" />
 								<ul *ngIf="canChangeDocument" class="mt-3">
 									<li>
-										<button
-											class="changeuploaded"
-											tabindex="1"
-										>
-											<input
-												type="file"
-												(change)="
+										<button class="changeuploaded" tabindex="1">
+											<input type="file" (change)="
 													idCardImageChange(
 														$event,
 														'id_back_image',
 														id_back_image_id
 													)
-												"
-												tabindex="-1"
-											/>
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												viewBox="0 0 24 24"
-											>
-												<path
-													fill="none"
-													d="M0 0h24v24H0V0z"
-												/>
+												" tabindex="-1" />
+											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
 												<path
-													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
-												/>
+													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
 											</svg>
 											Change
 										</button>
 									</li>
 									<li>
-										<a
-											class="delete-btn"
-											(click)="
+										<a class="delete-btn" (click)="
 												deleteImage(
 													id_back_image_id,
 													'id_back_image'
 												)
-											"
-											tabindex="1"
-										>
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												viewBox="0 0 32 32"
-											>
+											" tabindex="1">
+											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 												<path
-													d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z"
-												/>
+													d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
 											</svg>
 											Delete
 										</a>
@@ -943,49 +611,26 @@
 								<div>
 									<p>
 										Drivers License or Other ID
-										<span class="optionalTextStyle"
-											>(Back Photo)</span
-										>
+										<span class="optionalTextStyle">(Back Photo)</span>
 									</p>
 									<div class="emptyImage">
-										<img
-											src="../../../../assets/images/empty-image.png"
-											tabindex="-1"
-										/>
+										<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
 									</div>
 									<ul *ngIf="canChangeDocument" class="mt-3">
 										<li>
-											<button
-												class="adduploaded"
-												tabindex="1"
-											>
-												<input
-													type="file"
-													(change)="
+											<button class="adduploaded" tabindex="1">
+												<input type="file" (change)="
 														idCardImageChange(
 															$event,
 															'id_back_image',
 															id_back_image_id
 														)
-													"
-													tabindex="-1"
-												/>
-												<svg
-													xmlns="http://www.w3.org/2000/svg"
-													viewBox="0 0 24 24"
-												>
+													" tabindex="-1" />
+												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+													<path fill="none" d="M0 0h24v24H0V0z" />
+													<circle cx="12" cy="12" r="3" />
 													<path
-														fill="none"
-														d="M0 0h24v24H0V0z"
-													/>
-													<circle
-														cx="12"
-														cy="12"
-														r="3"
-													/>
-													<path
-														d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
-													/>
+														d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
 												</svg>
 												Add
 											</button>
@@ -1007,63 +652,38 @@
 		<div class="container mt-4">
 			<div class="row">
 				<div class="col-md-12">
-					<h3
-						class="addveh_top d-md-flex justify-content-between align-items-center mb-0"
-					>
-						<label class="alert alert-danger"
-							>Enter Address and Choose From Drop Down.</label
-						>
+					<h3 class="addveh_top d-md-flex justify-content-between align-items-center mb-0">
+						<label class="alert alert-danger">Enter Address and Choose From Drop Down.</label>
 					</h3>
 				</div>
 			</div>
 			<div class="row">
 				<div class="col-md-12 mb-0" *ngIf="!canChangeAddress">
-					<button
-						type="button"
-						class="adressChangeButton"
-						data-toggle="modal"
-						data-target="#requestAddressChangeModal"
-						tabindex="1"
-					>
+					<button type="button" class="adressChangeButton" data-toggle="modal"
+						data-target="#requestAddressChangeModal" tabindex="1">
 						Request Address Change
 					</button>
 				</div>
 				<div class="col-md-6">
-					<mat-form-field
-						appearance="outline"
-						[class.read-only]="!canChangeAddress"
-					>
+					<mat-form-field appearance="outline" [class.read-only]="!canChangeAddress">
 						<mat-label>Enter Business/Base Address</mat-label>
-						<input
-							matInput
-							placeholder="Search Here and Set Location Pin"
-							(focus)="$event.target.select()"
-							[readonly]="!canChangeAddress"
-							formControlName="address"
-							#search1
-							tabindex="1"
-						/>
+						<input matInput placeholder="Search Here and Set Location Pin" (focus)="$event.target.select()"
+							[readonly]="!canChangeAddress" formControlName="address" #search1 tabindex="1" />
 					</mat-form-field>
-					<div
-						*ngIf="
+					<div *ngIf="
 							(submittedForm && f.address.errors) ||
 								(f.address.touched && f.address.errors);
 							else latLongError
-						"
-						class="text-danger margin-bottom-thin my-mat-hint"
-					>
+						" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.address.errors.required">
 							This field is required
 						</div>
 					</div>
 					<ng-template #latLongError>
-						<div
-							*ngIf="
+						<div *ngIf="
 								(submittedForm && f.latitude.errors) ||
 								(f.latitude.touched && f.latitude.errors)
-							"
-							class="text-danger margin-bottom-thin my-mat-hint"
-						>
+							" class="text-danger margin-bottom-thin my-mat-hint">
 							<div *ngIf="f.latitude.errors.required">
 								Please enter valid address.
 							</div>
@@ -1073,47 +693,25 @@
 				<div class="col-md-6 d-md-block d-none"></div>
 				<div class="col-md-12 map-wrapper" *ngIf="latitude">
 					<agm-map [latitude]="latitude" [longitude]="longitude">
-						<agm-marker
-							[latitude]="latitude"
-							[longitude]="longitude"
-							[markerDraggable]="true"
-						>
+						<agm-marker [latitude]="latitude" [longitude]="longitude" [markerDraggable]="true">
 						</agm-marker>
 					</agm-map>
 				</div>
 
 				<div class="col-md-6">
-					<label class="select-country-label"
-						>Country <span class="asterisk">*</span></label
-					>
+					<label class="select-country-label">Country <span class="asterisk">*</span></label>
 					<div class="selectStyle">
-						<select
-							class="selectInputStyle"
-							(click)="selectDropdownCountry()"
-							formControlName="country"
-							(selectionChange)="changeCountry($event.value)"
-							[disabled]="!canChangeAddress"
-							tabindex="1"
-						>
+						<select class="selectInputStyle" (click)="selectDropdownCountry()" formControlName="country"
+							(selectionChange)="changeCountry($event.value)" [disabled]="!canChangeAddress" tabindex="1">
 							<option value="">Choose Country</option>
-							<option
-								*ngFor="let countryOption of countryOptions"
-								[value]="countryOption.countryShortCode"
-							>
+							<option *ngFor="let countryOption of countryOptions"
+								[value]="countryOption.countryShortCode">
 								{{ countryOption.countryName }}
 							</option>
 						</select>
-						<svg
-							version="1.1"
-							id="Layer_1"
-							xmlns="http://www.w3.org/2000/svg"
-							xmlns:xlink="http://www.w3.org/1999/xlink"
-							x="0px"
-							y="0px"
-							viewBox="0 0 122.88 63.9"
-							style="enable-background: new 0 0 122.88 63.9"
-							xml:space="preserve"
-						>
+						<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
+							style="enable-background: new 0 0 122.88 63.9" xml:space="preserve">
 							<style type="text/css">
 								.sty0 {
 									fill-rule: evenodd;
@@ -1121,56 +719,32 @@
 								}
 							</style>
 							<g>
-								<polygon
-									class="sty0"
-									points="61.44,63.9 122.88,0 0,0 61.44,63.9"
-								/>
+								<polygon class="sty0" points="61.44,63.9 122.88,0 0,0 61.44,63.9" />
 							</g>
 						</svg>
 					</div>
-					<div
-						*ngIf="
+					<div *ngIf="
 							(submittedForm && f.country.errors) ||
 							(f.country.touched && f.country.errors)
-						"
-						class="text-danger margin-bottom-thin my-mat-hint"
-					>
+						" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.country.errors.required">
 							This field is required
 						</div>
 					</div>
 				</div>
 				<div class="col-md-6">
-					<label class="select-state-label"
-						>State/Province <span class="asterisk">*</span></label
-					>
+					<label class="select-state-label">State/Province <span class="asterisk">*</span></label>
 					<div class="selectStyle">
-						<select
-							class="selectInputStyle"
-							(click)="selectDropdownState()"
-							formControlName="state"
-							[disabled]="!canChangeAddress"
-							tabindex="1"
-						>
+						<select class="selectInputStyle" (click)="selectDropdownState()" formControlName="state"
+							[disabled]="!canChangeAddress" tabindex="1">
 							<option value="">Choose State/Province</option>
-							<option
-								*ngFor="let stateOption of stateOptions"
-								[value]="stateOption.shortCode"
-							>
+							<option *ngFor="let stateOption of stateOptions" [value]="stateOption.shortCode">
 								{{ stateOption.name }}
 							</option>
 						</select>
-						<svg
-							version="1.1"
-							id="Layer_1"
-							xmlns="http://www.w3.org/2000/svg"
-							xmlns:xlink="http://www.w3.org/1999/xlink"
-							x="0px"
-							y="0px"
-							viewBox="0 0 122.88 63.9"
-							style="enable-background: new 0 0 122.88 63.9"
-							xml:space="preserve"
-						>
+						<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
+							style="enable-background: new 0 0 122.88 63.9" xml:space="preserve">
 							<style type="text/css">
 								.sty0 {
 									fill-rule: evenodd;
@@ -1178,29 +752,21 @@
 								}
 							</style>
 							<g>
-								<polygon
-									class="sty0"
-									points="61.44,63.9 122.88,0 0,0 61.44,63.9"
-								/>
+								<polygon class="sty0" points="61.44,63.9 122.88,0 0,0 61.44,63.9" />
 							</g>
 						</svg>
 					</div>
-					<div
-						*ngIf="
+					<div *ngIf="
 							(submittedForm && f.state.errors) ||
 							(f.state.touched && f.state.errors)
-						"
-						class="text-danger margin-bottom-thin my-mat-hint"
-					>
+						" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.state.errors.required">
 							This field is required
 						</div>
 					</div>
 				</div>
 				<div class="col-md-12 mt-3">
-					<h3
-						class="addveh_top d-md-flex justify-content-between align-items-center mb-0"
-					>
+					<h3 class="addveh_top d-md-flex justify-content-between align-items-center mb-0">
 						<label class="alert alert-danger">
 							Complete and Verify each address field.<br />
 							<br />
@@ -1210,139 +776,76 @@
 					</h3>
 				</div>
 				<div class="col-md-6">
-					<mat-form-field
-						appearance="outline"
-						[class.read-only]="!canChangeAddress"
-					>
-						<mat-label
-							>Street <span class="asterisk">*</span></mat-label
-						>
-						<input
-							matInput
-							placeholder="Street"
-							formControlName="street"
-							[readonly]="!canChangeAddress"
-							disabled
-							(focus)="$event.target.select()"
-							tabindex="1"
-						/>
+					<mat-form-field appearance="outline" [class.read-only]="!canChangeAddress">
+						<mat-label>Street <span class="asterisk">*</span></mat-label>
+						<input matInput placeholder="Street" formControlName="street" [readonly]="!canChangeAddress"
+							disabled (focus)="$event.target.select()" tabindex="1" />
 					</mat-form-field>
-					<div
-						*ngIf="
+					<div *ngIf="
 							(submittedForm && f.street.errors) ||
 							(f.street.touched && f.street.errors)
-						"
-						class="text-danger margin-bottom-thin my-mat-hint"
-					>
+						" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.street.errors.required">
 							This field is required
 						</div>
 					</div>
 				</div>
 				<div class="col-md-6">
-					<mat-form-field
-						appearance="outline"
-						[class.read-only]="!canChangeAddress"
-					>
-						<mat-label
-							>City <span class="asterisk">*</span></mat-label
-						>
-						<input
-							matInput
-							(focus)="$event.target.select()"
-							placeholder="City"
-							formControlName="city"
-							[readonly]="!canChangeAddress"
-							disabled
-							tabindex="1"
-						/>
+					<mat-form-field appearance="outline" [class.read-only]="!canChangeAddress">
+						<mat-label>City <span class="asterisk">*</span></mat-label>
+						<input matInput (focus)="$event.target.select()" placeholder="City" formControlName="city"
+							[readonly]="!canChangeAddress" disabled tabindex="1" />
 					</mat-form-field>
-					<div
-						*ngIf="
+					<div *ngIf="
 							(submittedForm && f.city.errors) ||
 							(f.city.touched && f.city.errors)
-						"
-						class="text-danger margin-bottom-thin my-mat-hint"
-					>
+						" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.city.errors.required">
 							This field is required
 						</div>
 					</div>
 				</div>
 				<div class="col-md-6">
-					<mat-form-field
-						appearance="outline"
-						[class.read-only]="!canChangeAddress"
-					>
+					<mat-form-field appearance="outline" [class.read-only]="!canChangeAddress">
 						<mat-label>Unit#</mat-label>
-						<input
-							matInput
-							placeholder="Unit"
-							(focus)="$event.target.select()"
-							formControlName="unit"
-							[readonly]="!canChangeAddress"
-							tabindex="1"
-						/>
+						<input matInput placeholder="Unit" (focus)="$event.target.select()" formControlName="unit"
+							[readonly]="!canChangeAddress" tabindex="1" />
 					</mat-form-field>
-					<div
-						*ngIf="
+					<div *ngIf="
 							(submittedForm && f.unit.errors) ||
 							(f.unit.touched && f.unit.errors)
-						"
-						class="text-danger margin-bottom-thin my-mat-hint"
-					>
+						" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.unit.errors.required">
 							This field is required
 						</div>
 					</div>
 				</div>
 				<div class="col-md-6">
-					<mat-form-field
-						appearance="outline"
-						[class.read-only]="!canChangeAddress"
-					>
-						<mat-label
-							>Zip Code <span class="asterisk">*</span></mat-label
-						>
-						<input
-							matInput
-							placeholder="Zip Code"
-							(focus)="$event.target.select()"
-							formControlName="zipCode"
-							[readonly]="!canChangeAddress"
-							tabindex="1"
-						/>
+					<mat-form-field appearance="outline" [class.read-only]="!canChangeAddress">
+						<mat-label>Zip Code <span class="asterisk">*</span></mat-label>
+						<input matInput placeholder="Zip Code" (focus)="$event.target.select()"
+							formControlName="zipCode" [readonly]="!canChangeAddress" tabindex="1" />
 					</mat-form-field>
-					<div
-						*ngIf="
+					<div *ngIf="
 							(submittedForm && f.zipCode.errors) ||
 							(f.zipCode.touched && f.zipCode.errors)
-						"
-						class="text-danger margin-bottom-thin my-mat-hint"
-					>
+						" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.zipCode.errors.required">
 							This field is required
 						</div>
 					</div>
-					<div
-						*ngIf="f.zipCode.errors"
-						class="text-danger margin-bottom-thin my-mat-hint"
-					>
-						<div
-							*ngIf="
+					<div *ngIf="f.zipCode.errors" class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="
 								f.zipCode.errors?.invalid_Pattern;
 								else plusError
-							"
-						>
+							">
 							Do not add Dashes with numbers
 						</div>
 						<ng-template #plusError>
-							<div
-								*ngIf="
+							<div *ngIf="
 									f.zipCode.errors?.invalidPattern;
 									else allErrors
-								"
-							>
+								">
 								Do not enter + sign
 							</div>
 							<ng-template #allErrors>
@@ -1356,27 +859,16 @@
 			</div>
 		</div>
 	</section>
-	<section
-		class="user_information"
-		*ngIf="!isStep2Completed; else stepNotCompleted"
-	>
+	<section class="user_information" *ngIf="!isStep2Completed; else stepNotCompleted">
 		<ul class="stripe_list">
 			<li>
-				<button
-					class="custom-btn savebutton"
-					(click)="submitForm()"
-					[disabled]="disableSubmitButton"
-					tabindex="1"
-				>
+				<button class="custom-btn savebutton" (click)="submitForm()" [disabled]="disableSubmitButton"
+					tabindex="1">
 					SAVE
 				</button>
 			</li>
 			<li>
-				<button
-					class="custom-btn resetbutton"
-					(click)="resetForm()"
-					tabindex="1"
-				>
+				<button cla ss="custom-btn resetbutton" (click)="resetForm()" tabindex="1">
 					RESET
 				</button>
 			</li>
@@ -1389,62 +881,28 @@
 				<div class="container py-2">
 					<h3 class="headinginfoH3 mt-3">
 						Credit Card
-						<img
-							class="creditcard_pay"
-							src="assets/admin/images/creditcard_pay.png"
-							tabindex="-1"
-						/>
+						<img class="creditcard_pay" src="assets/admin/images/creditcard_pay.png" tabindex="-1" />
 					</h3>
 					<div class="row">
 						<div class="col-md-3 pr-0 borderright mobilePadding">
 							<div class="form-group radio-tile-group">
-								<div
-									class="custom-radio input-container"
-									tabindex="1"
-								>
-									<input
-										class="radio-button"
-										id="personal"
-										type="radio"
-										name="primaryCardType"
-										checked=""
-										formControlName="primaryCardType"
-										value="personal"
-										tabIndex="-1"
-									/>
+								<div class="custom-radio input-container" tabindex="1">
+									<input class="radio-button" id="personal" type="radio" name="primaryCardType"
+										checked="" formControlName="primaryCardType" value="personal" tabIndex="-1" />
 									<div class="radio-tile">
-										<label
-											class="radio-tile-label"
-											for="personal"
-											>Personal</label
-										>
+										<label class="radio-tile-label" for="personal">Personal</label>
 									</div>
 								</div>
 							</div>
 						</div>
 						<div class="col-md-3 pl-0 mobilePadding">
 							<div class="form-group radio-tile-group">
-								<div
-									class="custom-radio input-container"
-									tabindex="1"
-								>
-									<input
-										class="radio-button"
-										id="business"
-										type="radio"
-										name="primaryCardType"
-										checked=""
-										(focus)="$event.target.select()"
-										formControlName="primaryCardType"
-										value="business"
-										tabIndex="-1"
-									/>
+								<div class="custom-radio input-container" tabindex="1">
+									<input class="radio-button" id="business" type="radio" name="primaryCardType"
+										checked="" (focus)="$event.target.select()" formControlName="primaryCardType"
+										value="business" tabIndex="-1" />
 									<div class="radio-tile">
-										<label
-											class="radio-tile-label"
-											for="business"
-											>Business</label
-										>
+										<label class="radio-tile-label" for="business">Business</label>
 									</div>
 								</div>
 							</div>
@@ -1453,78 +911,54 @@
 					<div class="row">
 						<div class="col-md-6">
 							<mat-form-field appearance="outline">
-								<mat-label
-									>Card Holder First & Last Name</mat-label
-								>
-								<input
-									matInput
-									placeholder="Card Holder First & Last Name"
-									(focus)="$event.target.select()"
-									formControlName="primaryCardHolderName"
-									tabindex="1"
-								/>
+								<mat-label>Card Holder First & Last Name</mat-label>
+								<input matInput placeholder="Card Holder First & Last Name"
+									(focus)="$event.target.select()" formControlName="primaryCardHolderName"
+									tabindex="1" />
 							</mat-form-field>
 						</div>
 						<div class="col-md-6">
 							<mat-form-field appearance="outline">
 								<mat-label>Card No#</mat-label>
-								<input
-									matInput
-									placeholder="Card No#"
-									(focus)="$event.target.select()"
-									formControlName="primaryCardNumber"
-									tabindex="1"
-								/>
+								<input matInput placeholder="Card No#" (focus)="$event.target.select()"
+									formControlName="primaryCardNumber" tabindex="1" />
 							</mat-form-field>
-							<div
-								*ngIf="f.primaryCardNumber.errors"
-								class="text-danger margin-bottom-thin my-mat-hint"
-							>
-								<div
-									*ngIf="
+							<div *ngIf="f.primaryCardNumber.errors" class="text-danger margin-bottom-thin my-mat-hint">
+								<div *ngIf="
 										f.primaryCardNumber.errors
 											?.invalid_Pattern;
 										else plusError
-									"
-								>
+									">
 									Do not add Dashes with numbers
 								</div>
 								<ng-template #plusError>
-									<div
-										*ngIf="
+									<div *ngIf="
 											f.primaryCardNumber.errors
 												?.invalidPattern;
 											else allErrors
-										"
-									>
+										">
 										Do not enter + sign
 									</div>
 									<ng-template #allErrors>
-										<div
-											*ngIf="
+										<div *ngIf="
 												f.primaryCardNumber.errors
 													?.pattern;
 												else numberLength
-											"
-										>
+											">
 											Enter Numbers Without Spaces or
 											Dashes
 										</div>
 										<ng-template #numberLength>
-											<div
-												*ngIf="
+											<div *ngIf="
 													f.primaryCardNumber.errors
 														.minlength
-												"
-											>
+												">
 												Minimum length should be 16
 											</div>
-											<div
-												*ngIf="
+											<div *ngIf="
 													f.primaryCardNumber.errors
 														.maxlength
-												"
-											>
+												">
 												Maximum length should be 16
 											</div>
 										</ng-template>
@@ -1533,16 +967,10 @@
 							</div>
 						</div>
 						<div class="col-md-4">
-							<label class="select-ex-month-label"
-								>Expiry Month</label
-							>
+							<label class="select-ex-month-label">Expiry Month</label>
 							<div class="selectStyle">
-								<select
-									class="selectInputStyle"
-									(click)="selectDropdownExMonth()"
-									formControlName="primaryMM"
-									tabindex="1"
-								>
+								<select class="selectInputStyle" (click)="selectDropdownExMonth()"
+									formControlName="primaryMM" tabindex="1">
 									<option value="">
 										Choose Expiry Month
 									</option>
@@ -1559,19 +987,11 @@
 									<option value="11">11</option>
 									<option value="12">12</option>
 								</select>
-								<svg
-									version="1.1"
-									id="Layer_1"
-									xmlns="http://www.w3.org/2000/svg"
-									xmlns:xlink="http://www.w3.org/1999/xlink"
-									x="0px"
-									y="0px"
-									viewBox="0 0 122.88 63.9"
+								<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+									xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
 									style="
 										enable-background: new 0 0 122.88 63.9;
-									"
-									xml:space="preserve"
-								>
+									" xml:space="preserve">
 									<style type="text/css">
 										.sty0 {
 											fill-rule: evenodd;
@@ -1579,46 +999,26 @@
 										}
 									</style>
 									<g>
-										<polygon
-											class="sty0"
-											points="61.44,63.9 122.88,0 0,0 61.44,63.9"
-										/>
+										<polygon class="sty0" points="61.44,63.9 122.88,0 0,0 61.44,63.9" />
 									</g>
 								</svg>
 							</div>
 						</div>
 						<div class="col-md-4">
-							<label class="select-ex-year-label"
-								>Expiry Year</label
-							>
+							<label class="select-ex-year-label">Expiry Year</label>
 							<div class="selectStyle">
-								<select
-									class="selectInputStyle"
-									(click)="selectDropdownExYear()"
-									formControlName="primaryYY"
-									tabindex="1"
-								>
+								<select class="selectInputStyle" (click)="selectDropdownExYear()"
+									formControlName="primaryYY" tabindex="1">
 									<option value="">Choose Expiry Year</option>
-									<option
-										*ngFor="let yearOption of yearOptions"
-										value="{{ yearOption }}"
-									>
+									<option *ngFor="let yearOption of yearOptions" value="{{ yearOption }}">
 										{{ yearOption }}
 									</option>
 								</select>
-								<svg
-									version="1.1"
-									id="Layer_1"
-									xmlns="http://www.w3.org/2000/svg"
-									xmlns:xlink="http://www.w3.org/1999/xlink"
-									x="0px"
-									y="0px"
-									viewBox="0 0 122.88 63.9"
+								<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+									xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
 									style="
 										enable-background: new 0 0 122.88 63.9;
-									"
-									xml:space="preserve"
-								>
+									" xml:space="preserve">
 									<style type="text/css">
 										.sty0 {
 											fill-rule: evenodd;
@@ -1626,10 +1026,7 @@
 										}
 									</style>
 									<g>
-										<polygon
-											class="sty0"
-											points="61.44,63.9 122.88,0 0,0 61.44,63.9"
-										/>
+										<polygon class="sty0" points="61.44,63.9 122.88,0 0,0 61.44,63.9" />
 									</g>
 								</svg>
 							</div>
@@ -1637,60 +1034,42 @@
 						<div class="col-md-4">
 							<mat-form-field appearance="outline">
 								<mat-label>CVV</mat-label>
-								<input
-									matInput
-									placeholder="CVV"
-									(focus)="$event.target.select()"
-									formControlName="primaryCSC"
-									tabindex="1"
-								/>
+								<input matInput placeholder="CVV" (focus)="$event.target.select()"
+									formControlName="primaryCSC" tabindex="1" />
 							</mat-form-field>
-							<div
-								*ngIf="f.primaryCSC.errors"
-								class="text-danger margin-bottom-thin my-mat-hint"
-							>
-								<div
-									*ngIf="
+							<div *ngIf="f.primaryCSC.errors" class="text-danger margin-bottom-thin my-mat-hint">
+								<div *ngIf="
 										f.primaryCSC.errors?.invalid_Pattern;
 										else plusError
-									"
-								>
+									">
 									Do not add Dashes with numbers
 								</div>
 								<ng-template #plusError>
-									<div
-										*ngIf="
+									<div *ngIf="
 											f.primaryCSC.errors?.invalidPattern;
 											else allErrors
-										"
-									>
+										">
 										Do not enter + sign
 									</div>
 									<ng-template #allErrors>
-										<div
-											*ngIf="
+										<div *ngIf="
 												f.primaryCSC.errors?.pattern;
 												else numberLength
-											"
-										>
+											">
 											Enter Numbers Without Spaces or
 											Dashes
 										</div>
 										<ng-template #numberLength>
-											<div
-												*ngIf="
+											<div *ngIf="
 													f.primaryCSC.errors
 														.minlength
-												"
-											>
+												">
 												Minimum length should be 3
 											</div>
-											<div
-												*ngIf="
+											<div *ngIf="
 													f.primaryCSC.errors
 														.maxlength
-												"
-											>
+												">
 												Maximum length should be 3
 											</div>
 										</ng-template>
@@ -1707,21 +1086,13 @@
 		<section class="user_information driverbooking_top adminbox_shadow">
 			<ul class="stripe_list">
 				<li>
-					<button
-						class="custom-btn savebutton"
-						(click)="submitForm()"
-						[disabled]="disableSubmitButton"
-						tabindex="1"
-					>
+					<button class="custom-btn savebutton" (click)="submitForm()" [disabled]="disableSubmitButton"
+						tabindex="1">
 						SAVE
 					</button>
 				</li>
 				<li>
-					<button
-						class="custom-btn resetbutton"
-						(click)="resetForm()"
-						tabindex="1"
-					>
+					<button class="custom-btn resetbutton" (click)="resetForm()" tabindex="1">
 						RESET
 					</button>
 				</li>
@@ -1732,31 +1103,18 @@
 			<div class="containeredd">
 				<div class="row mt-3">
 					<div class="col-md-12 mb-2">
-						<label class="alert alert-danger"
-							>Add Debit/Credit Card To Pay Farm Out
-							Bookings.</label
-						>
+						<label class="alert alert-danger">Add Debit/Credit Card To Pay Farm Out
+							Bookings.</label>
 					</div>
 				</div>
 				<div class="row">
 					<div class="col-md-12">
-						<button
-							class="custom-btn add-button"
-							(click)="addCardClick(accountId)"
-							tabindex="-1"
-						>
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								fill="currentColor"
-								class="bi bi-plus-circle"
-								viewBox="0 0 16 16"
-							>
+						<button class="custom-btn add-button" (click)="addCardClick(accountId)" tabindex="-1">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-plus-circle"
+								viewBox="0 0 16 16">
+								<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
 								<path
-									d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"
-								/>
-								<path
-									d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"
-								/>
+									d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
 							</svg>
 							Add Debit / Credit card
 						</button>
@@ -1766,16 +1124,9 @@
 			<div class="containeredd driverside_table">
 				<div class="row">
 					<div class="col-md-12 custom_table table-responsive">
-						<table
-							class="table table-striped dataTable dt-responsive"
-							id="dataTable"
-							role="grid"
-							aria-describedby="dataTable_info"
-							style="width: 100%"
-							width="100%"
-							cellspacing="0"
-							tabindex="-1"
-						>
+						<table class="table table-striped dataTable dt-responsive" id="dataTable" role="grid"
+							aria-describedby="dataTable_info" style="width: 100%" width="100%" cellspacing="0"
+							tabindex="-1">
 							<thead>
 								<tr role="row">
 									<th>Card Holder First & Last Name</th>
@@ -1787,46 +1138,34 @@
 							</thead>
 							<tbody>
 								<ng-container *ngIf="response">
-									<ng-container
-										*ngIf="response.data.cardsListing"
-									>
-										<tr
-											role="row"
-											class="odd"
-											*ngFor="
+									<ng-container *ngIf="response.data.cardsListing">
+										<tr role="row" class="odd" *ngFor="
 												let card of response.data
 													.cardsListing
-											"
-										>
+											">
 											<td class="text-capitalize">
 												{{ card.name }}
 											</td>
 											<td>{{ card.last4 }}</td>
 											<td>
 												{{
-													card.exp_month +
-														"/" +
-														card.exp_year
+												card.exp_month +
+												"/" +
+												card.exp_year
 												}}
 											</td>
 											<td class="text-capitalize">
 												{{ card.card_type }}
 											</td>
 											<td>
-												<i
-													class="fa fa-trash"
-													style="
+												<i class="fa fa-trash" style="
 														font-size: x-large;
 														color: #d64646;
-													"
-													(click)="
+													" (click)="
 														enableDisableClicked(
 															card.id
 														)
-													"
-													data-toggle="modal"
-													data-target="#deleteConfirmationModal"
-												></i>
+													" data-toggle="modal" data-target="#deleteConfirmationModal"></i>
 											</td>
 										</tr>
 									</ng-container>
@@ -1846,22 +1185,11 @@
 </form>
 
 <!-- Country wise Document modal -->
-<div
-	class="modal fade"
-	id="verificationDocumentModal"
-	tabindex="-1"
-	role="dialog"
-	aria-labelledby="verificationDocumentModal"
-	aria-hidden="true"
->
+<div class="modal fade" id="verificationDocumentModal" tabindex="-1" role="dialog"
+	aria-labelledby="verificationDocumentModal" aria-hidden="true">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content user_information">
-			<button
-				type="button"
-				class="close closeButton"
-				data-dismiss="modal"
-				aria-label="Close"
-			>
+			<button type="button" class="close closeButton" data-dismiss="modal" aria-label="Close">
 				<span aria-hidden="true">&times;</span>
 			</button>
 			<div class="modal-header">
@@ -1871,12 +1199,8 @@
 			</div>
 			<div class="modal-body">
 				<mat-form-field appearance="outline">
-					<mat-label
-						>Country <span class="asterisk">*</span></mat-label
-					>
-					<mat-select
-						(selectionChange)="changeIdentityCountry($event.value)"
-					>
+					<mat-label>Country <span class="asterisk">*</span></mat-label>
+					<mat-select (selectionChange)="changeIdentityCountry($event.value)">
 						<mat-option value="">Choose Country</mat-option>
 						<mat-option value="AR">Argentina</mat-option>
 						<mat-option value="AU">Australia</mat-option>
@@ -1929,14 +1253,10 @@
 						<mat-option value="ES">Spain</mat-option>
 						<mat-option value="SE">Sweden</mat-option>
 						<mat-option value="CH">Switzerland</mat-option>
-						<mat-option value="TT"
-							>Trinidad &amp; Tobago</mat-option
-						>
+						<mat-option value="TT">Trinidad &amp; Tobago</mat-option>
 						<mat-option value="AE">United Arab Emirates</mat-option>
 						<mat-option value="GB">United Kingdom</mat-option>
-						<mat-option value="US" selected
-							>United States</mat-option
-						>
+						<mat-option value="US" selected>United States</mat-option>
 						<mat-option value="UY">Uruguay</mat-option>
 					</mat-select>
 				</mat-form-field>
@@ -1947,34 +1267,29 @@
 					<li *ngFor="let Document of countryDocumentsArray">
 						<span *ngIf="Document.value.length == 3">
 							{{ Document.value[1].value }} ({{
-								Document.value[0].value
+							Document.value[0].value
 							}})
 							{{
-								Document.value[2].value
-									? "-
+							Document.value[2].value
+							? "-
 							scans of front and back are required"
-									: ""
+							: ""
 							}}
 						</span>
 						<span *ngIf="Document.value.length == 2">
 							{{ Document.value[0].value }}
 							{{
-								Document.value[1].value
-									? "- scans of front and back are
+							Document.value[1].value
+							? "- scans of front and back are
 							required"
-									: ""
+							: ""
 							}}
 						</span>
 					</li>
 				</ul>
 			</div>
 			<div class="modal-footer">
-				<button
-					type="button"
-					class="custom-btn button2"
-					data-dismiss="modal"
-					tabindex="-1"
-				>
+				<button type="button" class="custom-btn button2" data-dismiss="modal" tabindex="-1">
 					OK
 				</button>
 			</div>
@@ -1983,28 +1298,14 @@
 </div>
 
 <!-- Delete confirmation modal -->
-<app-delete-confirmation
-	(deleteRecord)="delete()"
-	[alertMessage]="alertMessage"
-></app-delete-confirmation>
+<app-delete-confirmation (deleteRecord)="delete()" [alertMessage]="alertMessage"></app-delete-confirmation>
 
 <!-- Affiliate Email sent modal -->
-<div
-	class="modal fade"
-	id="showEmailVerificationAlert"
-	tabindex="-1"
-	role="dialog"
-	aria-labelledby="showEmailVerificationAlert"
-	aria-hidden="true"
->
+<div class="modal fade" id="showEmailVerificationAlert" tabindex="-1" role="dialog"
+	aria-labelledby="showEmailVerificationAlert" aria-hidden="true">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
-			<button
-				type="button"
-				class="close closeButton"
-				data-dismiss="modal"
-				aria-label="Close"
-			>
+			<button type="button" class="close closeButton" data-dismiss="modal" aria-label="Close">
 				<span aria-hidden="true">&times;</span>
 			</button>
 			<div class="modal-header">
@@ -2019,12 +1320,7 @@
 				</h5>
 			</div>
 			<div class="modal-footer">
-				<button
-					type="button"
-					class="custom-btn button2"
-					data-dismiss="modal"
-					tabindex="-1"
-				>
+				<button type="button" class="custom-btn button2" data-dismiss="modal" tabindex="-1">
 					OK
 				</button>
 			</div>
@@ -2033,29 +1329,14 @@
 </div>
 
 <!-- Image modal -->
-<app-image-modal
-	(closeTab)="closeButton()"
-	[modalImage]="modalImage"
-></app-image-modal>
+<app-image-modal (closeTab)="closeButton()" [modalImage]="modalImage"></app-image-modal>
 
 <!-- Request Address Change -->
-<div
-	class="modal fade"
-	id="requestAddressChangeModal"
-	tabindex="-1"
-	role="dialog"
-	aria-labelledby="requestAddressChangeModal"
-	aria-hidden="true"
-	style="padding-right: 0 !important"
->
+<div class="modal fade" id="requestAddressChangeModal" tabindex="-1" role="dialog"
+	aria-labelledby="requestAddressChangeModal" aria-hidden="true" style="padding-right: 0 !important">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
-			<button
-				type="button"
-				class="close closeButton"
-				data-dismiss="modal"
-				aria-label="Close"
-			>
+			<button type="button" class="close closeButton" data-dismiss="modal" aria-label="Close">
 				<span aria-hidden="true">&times;</span>
 			</button>
 			<div *ngIf="displayMsg; else displayForm">
@@ -2063,43 +1344,26 @@
 					<h5 class="text-center mb-2 mt-3">{{ displayMsg }}</h5>
 				</div>
 				<div class="modal-footer">
-					<button
-						type="button"
-						class="custom-btn button2"
-						data-dismiss="modal"
-						tabindex="-1"
-					>
+					<button type="button" class="custom-btn button2" data-dismiss="modal" tabindex="-1">
 						OK
 					</button>
 				</div>
 			</div>
 			<ng-template #displayForm>
-				<form
-					[formGroup]="requestAddressChangeForm"
-					*ngIf="requestAddressChangeForm"
-				>
+				<form [formGroup]="requestAddressChangeForm" *ngIf="requestAddressChangeForm">
 					<div class="modal-header py-0">
 						<h3 class="modal-title mb-0">Request Address Change</h3>
 					</div>
 					<!-- progress bar -->
-					<mat-progress-bar
-						mode="indeterminate"
-						*ngIf="showProgressBar"
-					></mat-progress-bar>
+					<mat-progress-bar mode="indeterminate" *ngIf="showProgressBar"></mat-progress-bar>
 					<div class="modal-body pt-0">
 						<div class="row">
 							<div class="col-md-6">
 								<mat-form-field appearance="outline">
 									<mat-label>Address</mat-label>
-									<input
-										matInput
-										placeholder="Address"
-										formControlName="requestAddress"
-										#search2
-									/>
+									<input matInput placeholder="Address" formControlName="requestAddress" #search2 />
 								</mat-form-field>
-								<div
-									*ngIf="
+								<div *ngIf="
 										(submittedRequestAddressChangeForm &&
 											fRequestAddressChange.requestAddress
 												.errors) ||
@@ -2107,67 +1371,42 @@
 											.touched &&
 											fRequestAddressChange.requestAddress
 												.errors)
-									"
-									class="text-danger margin-bottom-thin my-mat-hint"
-								>
-									<div
-										*ngIf="
+									" class="text-danger margin-bottom-thin my-mat-hint">
+									<div *ngIf="
 											fRequestAddressChange.requestAddress
 												.errors.required
-										"
-									>
+										">
 										This field is required
 									</div>
 								</div>
 							</div>
-							<div
-								class="col-md-12 map-wrapper"
-								*ngIf="requestLatitude"
-							>
-								<agm-map
-									[latitude]="requestLatitude"
-									[longitude]="requestLongitude"
-								>
-									<agm-marker
-										[latitude]="requestLatitude"
-										[longitude]="requestLongitude"
-										[markerDraggable]="true"
-									>
+							<div class="col-md-12 map-wrapper" *ngIf="requestLatitude">
+								<agm-map [latitude]="requestLatitude" [longitude]="requestLongitude">
+									<agm-marker [latitude]="requestLatitude" [longitude]="requestLongitude"
+										[markerDraggable]="true">
 									</agm-marker>
 								</agm-map>
 							</div>
 							<div class="col-md-6">
 								<mat-form-field appearance="outline">
-									<mat-label
-										>Country
-										<span class="asterisk"
-											>*</span
-										></mat-label
-									>
-									<mat-select
-										formControlName="requestCountry"
-										(selectionChange)="
+									<mat-label>Country
+										<span class="asterisk">*</span>
+									</mat-label>
+									<mat-select formControlName="requestCountry" (selectionChange)="
 											changeCountryRequestAddresschange(
 												$event.value
 											)
-										"
-									>
-										<mat-option value=""
-											>Choose Country</mat-option
-										>
-										<mat-option
-											*ngFor="
+										">
+										<mat-option value="">Choose Country</mat-option>
+										<mat-option *ngFor="
 												let countryOption of countryOptions
-											"
-											[value]="
+											" [value]="
 												countryOption.countryShortCode
-											"
-											>{{ countryOption.countryName }}
+											">{{ countryOption.countryName }}
 										</mat-option>
 									</mat-select>
 								</mat-form-field>
-								<div
-									*ngIf="
+								<div *ngIf="
 										(submittedRequestAddressChangeForm &&
 											fRequestAddressChange.requestCountry
 												.errors) ||
@@ -2175,42 +1414,28 @@
 											.touched &&
 											fRequestAddressChange.requestCountry
 												.errors)
-									"
-									class="text-danger margin-bottom-thin my-mat-hint"
-								>
-									<div
-										*ngIf="
+									" class="text-danger margin-bottom-thin my-mat-hint">
+									<div *ngIf="
 											fRequestAddressChange.requestCountry
 												.errors.required
-										"
-									>
+										">
 										This field is required
 									</div>
 								</div>
 							</div>
 							<div class="col-md-6">
 								<mat-form-field appearance="outline">
-									<mat-label
-										>State/Province
-										<span class="asterisk"
-											>*</span
-										></mat-label
-									>
+									<mat-label>State/Province
+										<span class="asterisk">*</span>
+									</mat-label>
 									<mat-select formControlName="requestState">
-										<mat-option value=""
-											>Choose State/Province</mat-option
-										>
-										<mat-option
-											*ngFor="
+										<mat-option value="">Choose State/Province</mat-option>
+										<mat-option *ngFor="
 												let stateOption of stateOptionsAddressChange
-											"
-											[value]="stateOption.shortCode"
-											>{{ stateOption.name }}</mat-option
-										>
+											" [value]="stateOption.shortCode">{{ stateOption.name }}</mat-option>
 									</mat-select>
 								</mat-form-field>
-								<div
-									*ngIf="
+								<div *ngIf="
 										(submittedRequestAddressChangeForm &&
 											fRequestAddressChange.requestState
 												.errors) ||
@@ -2218,35 +1443,23 @@
 											.touched &&
 											fRequestAddressChange.requestState
 												.errors)
-									"
-									class="text-danger margin-bottom-thin my-mat-hint"
-								>
-									<div
-										*ngIf="
+									" class="text-danger margin-bottom-thin my-mat-hint">
+									<div *ngIf="
 											fRequestAddressChange.requestState
 												.errors.required
-										"
-									>
+										">
 										This field is required
 									</div>
 								</div>
 							</div>
 							<div class="col-md-6">
 								<mat-form-field appearance="outline">
-									<mat-label
-										>Street
-										<span class="asterisk"
-											>*</span
-										></mat-label
-									>
-									<input
-										matInput
-										placeholder="Street"
-										formControlName="requestStreet"
-									/>
+									<mat-label>Street
+										<span class="asterisk">*</span>
+									</mat-label>
+									<input matInput placeholder="Street" formControlName="requestStreet" />
 								</mat-form-field>
-								<div
-									*ngIf="
+								<div *ngIf="
 										(submittedRequestAddressChangeForm &&
 											fRequestAddressChange.requestStreet
 												.errors) ||
@@ -2254,35 +1467,23 @@
 											.touched &&
 											fRequestAddressChange.requestStreet
 												.errors)
-									"
-									class="text-danger margin-bottom-thin my-mat-hint"
-								>
-									<div
-										*ngIf="
+									" class="text-danger margin-bottom-thin my-mat-hint">
+									<div *ngIf="
 											fRequestAddressChange.requestStreet
 												.errors.required
-										"
-									>
+										">
 										This field is required
 									</div>
 								</div>
 							</div>
 							<div class="col-md-6">
 								<mat-form-field appearance="outline">
-									<mat-label
-										>City
-										<span class="asterisk"
-											>*</span
-										></mat-label
-									>
-									<input
-										matInput
-										placeholder="City"
-										formControlName="requestCity"
-									/>
+									<mat-label>City
+										<span class="asterisk">*</span>
+									</mat-label>
+									<input matInput placeholder="City" formControlName="requestCity" />
 								</mat-form-field>
-								<div
-									*ngIf="
+								<div *ngIf="
 										(submittedRequestAddressChangeForm &&
 											fRequestAddressChange.requestCity
 												.errors) ||
@@ -2290,15 +1491,11 @@
 											.touched &&
 											fRequestAddressChange.requestCity
 												.errors)
-									"
-									class="text-danger margin-bottom-thin my-mat-hint"
-								>
-									<div
-										*ngIf="
+									" class="text-danger margin-bottom-thin my-mat-hint">
+									<div *ngIf="
 											fRequestAddressChange.requestCity
 												.errors.required
-										"
-									>
+										">
 										This field is required
 									</div>
 								</div>
@@ -2306,14 +1503,9 @@
 							<div class="col-md-6">
 								<mat-form-field appearance="outline">
 									<mat-label>Unit#</mat-label>
-									<input
-										matInput
-										placeholder="Unit"
-										formControlName="requestUnit"
-									/>
+									<input matInput placeholder="Unit" formControlName="requestUnit" />
 								</mat-form-field>
-								<div
-									*ngIf="
+								<div *ngIf="
 										(submittedRequestAddressChangeForm &&
 											fRequestAddressChange.requestUnit
 												.errors) ||
@@ -2321,35 +1513,23 @@
 											.touched &&
 											fRequestAddressChange.requestUnit
 												.errors)
-									"
-									class="text-danger margin-bottom-thin my-mat-hint"
-								>
-									<div
-										*ngIf="
+									" class="text-danger margin-bottom-thin my-mat-hint">
+									<div *ngIf="
 											fRequestAddressChange.requestUnit
 												.errors.required
-										"
-									>
+										">
 										This field is required
 									</div>
 								</div>
 							</div>
 							<div class="col-md-6">
 								<mat-form-field appearance="outline">
-									<mat-label
-										>Zip Code
-										<span class="asterisk"
-											>*</span
-										></mat-label
-									>
-									<input
-										matInput
-										placeholder="Zip Code"
-										formControlName="requestZipCode"
-									/>
+									<mat-label>Zip Code
+										<span class="asterisk">*</span>
+									</mat-label>
+									<input matInput placeholder="Zip Code" formControlName="requestZipCode" />
 								</mat-form-field>
-								<div
-									*ngIf="
+								<div *ngIf="
 										(submittedRequestAddressChangeForm &&
 											fRequestAddressChange.requestZipCode
 												.errors) ||
@@ -2357,53 +1537,40 @@
 											.touched &&
 											fRequestAddressChange.requestZipCode
 												.errors)
-									"
-									class="text-danger margin-bottom-thin my-mat-hint"
-								>
-									<div
-										*ngIf="
+									" class="text-danger margin-bottom-thin my-mat-hint">
+									<div *ngIf="
 											fRequestAddressChange.requestZipCode
 												.errors.required
-										"
-									>
+										">
 										This field is required
 									</div>
 								</div>
-								<div
-									*ngIf="
+								<div *ngIf="
 										fRequestAddressChange.requestZipCode
 											.errors
-									"
-									class="text-danger margin-bottom-thin my-mat-hint"
-								>
-									<div
-										*ngIf="
+									" class="text-danger margin-bottom-thin my-mat-hint">
+									<div *ngIf="
 											fRequestAddressChange.requestZipCode
 												.errors?.invalid_Pattern;
 											else plusError
-										"
-									>
+										">
 										Do not add Dashes with numbers
 									</div>
 									<ng-template #plusError>
-										<div
-											*ngIf="
+										<div *ngIf="
 												fRequestAddressChange
 													.requestZipCode.errors
 													?.invalidPattern;
 												else allErrors
-											"
-										>
+											">
 											Do not enter + sign
 										</div>
 										<ng-template #allErrors>
-											<div
-												*ngIf="
+											<div *ngIf="
 													fRequestAddressChange
 														.requestZipCode.errors
 														?.pattern
-												"
-											>
+												">
 												Enter Numbers Without Spaces or
 												Dashes
 											</div>
@@ -2414,13 +1581,8 @@
 						</div>
 					</div>
 					<div class="modal-footer pb-0">
-						<button
-							type="button"
-							class="custom-btn button2"
-							(click)="requestAddressChange()"
-							[disabled]="disableSubmitRequestAddressChangeButton"
-							tabindex="-1"
-						>
+						<button type="button" class="custom-btn button2" (click)="requestAddressChange()"
+							[disabled]="disableSubmitRequestAddressChangeButton" tabindex="-1">
 							Submit
 						</button>
 					</div>

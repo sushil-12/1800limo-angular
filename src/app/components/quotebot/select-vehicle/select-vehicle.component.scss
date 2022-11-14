@@ -190,6 +190,11 @@ section#vehicle-listing-container {
 	box-shadow: none !important;
 }
 
+.custom-control.custom-checkbox:first-child
+{
+	margin-bottom: 10px;
+}
+
 .fil-itm {
 	padding-bottom: 20px;
 }

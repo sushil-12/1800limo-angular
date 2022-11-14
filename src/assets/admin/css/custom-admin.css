@@ -59,7 +59,6 @@ a.dropdown-item.active {
 
 .theme-color {
 	color         : var(--orange-color) !important;
-	text-transform: uppercase !important;
 }
 
 .admin-wrapper {
