@@ -93,7 +93,7 @@ export class Step1Component implements OnInit, AfterViewInit
 
 
 
-	private subs: Subscription
+	private subs: Subscription = new Subscription()
 
 	constructor(
 		private affiliateService: AffiliateService,

@@ -1,11 +1,11 @@
 import
-	{
-		Component,
-		EventEmitter,
-		Input,
-		OnInit,
-		AfterViewInit,
-	} from "@angular/core";
+{
+	Component,
+	EventEmitter,
+	Input,
+	OnInit,
+	AfterViewInit,
+} from "@angular/core";
 import { AffiliateService } from "../../../services/affiliate.service";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
@@ -100,7 +100,7 @@ export class Step3Component implements OnInit, AfterViewInit
 			acc_id: [this.affiliateId, Validators.required],//affiliate account id
 			CompanyName: ['', Validators.required],
 			AgentName: [''],
-			AgentTelephone: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
+			AgentTelephone: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
 			AgentTelephoneIsd: ['+1', Validators.required],
 			AgentTelephoneCountry: ['us', Validators.required],
 			policyNumber: ['', [Validators.required, this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
