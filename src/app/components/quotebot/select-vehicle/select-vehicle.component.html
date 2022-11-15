@@ -307,9 +307,10 @@
 						<!-- VEHICLE PRICE -->
 						<div id="price-area" class="mb-1">
 							<p>
-								{{ formatter(getKeyName()) | titlecase }}: ${{ vehinfo['rate_breakdown_' +
-								getKeyName()].grand_total != undefined ?
-								vehinfo['rate_breakdown_' + getKeyName()].total : '0.00' }}
+								{{ formatter(getKeyName()) | titlecase }}:
+								$
+								{{ vehinfo['rate_breakdown_' + getKeyName()]?.grand_total != undefined ?
+								vehinfo['rate_breakdown_' + getKeyName()]?.grand_total : '0.00' }}
 								<small class="d-block">
 									All-Inclusive Rate <span class="text-danger">*</span>
 								</small>
@@ -358,7 +359,8 @@
 								<span style="color: #e17515; font-weight: 500;">
 									From
 								</span>
-								$ {{ vehicle_obj['rate_breakdown_'+ getKeyName()].total }}
+								${{ vehicle_obj['rate_breakdown_' + getKeyName()]?.grand_total != undefined ?
+								vehicle_obj['rate_breakdown_' + getKeyName()]?.grand_total : '0.00' }}
 							</p>
 							<div id="icons">
 								<img alt="" src="assets/images/select_vehicle/pass.png" class="mx-1"
