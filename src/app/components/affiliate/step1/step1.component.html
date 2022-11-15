@@ -2,193 +2,39 @@
 	<section class="user_information">
 		<h2 class="headinginfo">Owner Information</h2>
 		<div class="container">
-			<div class="row custom-radio-row">
+			<!-- RADIO TILES HEADING -->
+			<div class="row">
 				<div class="col-12">
 					<h3 class="headinginfoH3">
-						Choose one<span class="asterisk"> *</span>
+						Choose one<span class="asterisk">*</span>
 					</h3>
 				</div>
-				<div class="col-md-3 selectedAffiliateType">
-					<div class="form-group radio-tile-group">
-						<div class="custom-radio input-container" tabIndex="1">
-							<input class="radio-button" type="radio" id="black_limo" value="black_limo_operator"
-								name="AffiliateType" checked="" formControlName="AffiliateType" selected (click)="
-									affiliateTypeSwitch('black_limo_operator')
-								" tabIndex="-1" />
-							<div class="radio-tile blacklimo">
-								<div class="check">
-									<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"
-										viewBox="0 0 122.88 122.88">
-										<defs>
-											<style>
-												.checked-1 {
-													fill: var(--orange-color);
-												}
+			</div>
 
-												.checked-1,
-												.cls-2 {
-													fill-rule: evenodd;
-												}
-
-												.cls-2 {
-													fill: #fff;
-												}
-											</style>
-										</defs>
-										<title>confirm</title>
-										<path class="checked-1"
-											d="M61.44,0A61.44,61.44,0,1,1,0,61.44,61.44,61.44,0,0,1,61.44,0Z" />
-										<path class="cls-2"
-											d="M42.37,51.68,53.26,62,79,35.87c2.13-2.16,3.47-3.9,6.1-1.19l8.53,8.74c2.8,2.77,2.66,4.4,0,7L58.14,85.34c-5.58,5.46-4.61,5.79-10.26.19L28,65.77c-1.18-1.28-1.05-2.57.24-3.84l9.9-10.27c1.5-1.58,2.7-1.44,4.22,0Z" />
-									</svg>
-								</div>
-								<label class="radio-tile-label" [ngClass]="
-										selectedAffiliate ==
-										'black_limo_operator'
-											? 'active'
-											: ''
-									" for="black_limo">Black Car/Limo Owner Op.</label>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-3 selectedAffiliateType">
-					<div class="form-group radio-tile-group">
-						<div class="custom-radio input-container" tabIndex="1">
-							<input class="radio-button" type="radio" id="fleet" value="fleet_operator"
-								name="AffiliateType" checked="" formControlName="AffiliateType"
-								(click)="affiliateTypeSwitch('fleet_operator')" tabIndex="-1" />
-							<div class="radio-tile blacklimo">
-								<div class="check">
-									<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"
-										viewBox="0 0 122.88 122.88">
-										<defs>
-											<style>
-												.checked-1 {
-													fill: var(--orange-color);
-												}
-
-												.checked-1,
-												.cls-2 {
-													fill-rule: evenodd;
-												}
-
-												.cls-2 {
-													fill: #fff;
-												}
-											</style>
-										</defs>
-										<title>confirm</title>
-										<path class="checked-1"
-											d="M61.44,0A61.44,61.44,0,1,1,0,61.44,61.44,61.44,0,0,1,61.44,0Z" />
-										<path class="cls-2"
-											d="M42.37,51.68,53.26,62,79,35.87c2.13-2.16,3.47-3.9,6.1-1.19l8.53,8.74c2.8,2.77,2.66,4.4,0,7L58.14,85.34c-5.58,5.46-4.61,5.79-10.26.19L28,65.77c-1.18-1.28-1.05-2.57.24-3.84l9.9-10.27c1.5-1.58,2.7-1.44,4.22,0Z" />
-									</svg>
-								</div>
-								<label class="radio-tile-label" [ngClass]="
-										selectedAffiliate == 'fleet_operator'
-											? 'active'
-											: ''
-									" for="fleet">Fleet Operator Owned</label>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-3 selectedAffiliateType">
-					<div class="form-group radio-tile-group">
-						<div class="custom-radio input-container" tabIndex="1">
-							<input class="radio-button" type="radio" id="taxi" value="taxi_operator"
-								name="AffiliateType" formControlName="AffiliateType"
-								(click)="affiliateTypeSwitch('taxi_operator')" tabIndex="-1" />
-							<div class="radio-tile">
-								<div class="check">
-									<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"
-										viewBox="0 0 122.88 122.88">
-										<defs>
-											<style>
-												.checked-1 {
-													fill: var(--orange-color);
-												}
-
-												.checked-1,
-												.cls-2 {
-													fill-rule: evenodd;
-												}
-
-												.cls-2 {
-													fill: #fff;
-												}
-											</style>
-										</defs>
-										<title>confirm</title>
-										<path class="checked-1"
-											d="M61.44,0A61.44,61.44,0,1,1,0,61.44,61.44,61.44,0,0,1,61.44,0Z" />
-										<path class="cls-2"
-											d="M42.37,51.68,53.26,62,79,35.87c2.13-2.16,3.47-3.9,6.1-1.19l8.53,8.74c2.8,2.77,2.66,4.4,0,7L58.14,85.34c-5.58,5.46-4.61,5.79-10.26.19L28,65.77c-1.18-1.28-1.05-2.57.24-3.84l9.9-10.27c1.5-1.58,2.7-1.44,4.22,0Z" />
-									</svg>
-								</div>
-								<label class="radio-tile-label" [ngClass]="
-										selectedAffiliate == 'taxi_operator'
-											? 'active'
-											: ''
-									" for="taxi">Taxi Operator</label>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-3 selectedAffiliateType">
-					<div class="form-group radio-tile-group">
-						<div class="custom-radio input-container" tabIndex="1">
-							<input class="radio-button" type="radio" id="gig" value="gig_operator" name="AffiliateType"
-								formControlName="AffiliateType" (click)="affiliateTypeSwitch('gig_operator')"
-								tabIndex="-1" />
-							<div class="radio-tile GigOperator">
-								<div class="check">
-									<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"
-										viewBox="0 0 122.88 122.88">
-										<defs>
-											<style>
-												.checked-1 {
-													fill: var(--orange-color);
-												}
-
-												.checked-1,
-												.cls-2 {
-													fill-rule: evenodd;
-												}
-
-												.cls-2 {
-													fill: #fff;
-												}
-											</style>
-										</defs>
-										<title>confirm</title>
-										<path class="checked-1"
-											d="M61.44,0A61.44,61.44,0,1,1,0,61.44,61.44,61.44,0,0,1,61.44,0Z" />
-										<path class="cls-2"
-											d="M42.37,51.68,53.26,62,79,35.87c2.13-2.16,3.47-3.9,6.1-1.19l8.53,8.74c2.8,2.77,2.66,4.4,0,7L58.14,85.34c-5.58,5.46-4.61,5.79-10.26.19L28,65.77c-1.18-1.28-1.05-2.57.24-3.84l9.9-10.27c1.5-1.58,2.7-1.44,4.22,0Z" />
-									</svg>
-								</div>
-								<label class="radio-tile-label" [ngClass]="
-										selectedAffiliate == 'gig_operator'
-											? 'active'
-											: ''
-									" for="gig">Gig Operator</label>
-							</div>
-						</div>
-					</div>
-				</div>
+			<!-- RADIO TILES -->
+			<div class="row">
 				<div class="col-md-12">
-					<div *ngIf="
-							(submittedForm && f.AffiliateType.errors) ||
-							(f.AffiliateType.touched && f.AffiliateType.errors)
-						" class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.AffiliateType.errors.required">
-							Please choose atleast one affiliate.
+					<div id="radio-tiles-container" class="w-auto">
+						<div class="radio-tiles d-flex flex-wrap align-items-center justify-content-around">
+							<div class="tile text-center" id="tile_{{ tile_index }}"
+								*ngFor="let tile of ['black_limo_operator', 'fleet_operator', 'taxi_operator', 'gig_operator']; index as tile_index"
+								(click)="affiliateTypeSwitch(tile_index)"
+								[ngClass]="f.AffiliateType.value == tile ? 'active' : ''">
+								<div id="check-icon" class="w-100">
+									<i class="bi bi-check-lg"></i>
+								</div>
+								<input type="radio" id="radio-button_{{ tile_index }}" class="radio-button" />
+								<div id="tile-name">
+									{{ tile.includes('black') ? 'Black Car/Limo Owner Op.' : tile.includes('fleet') ?
+									'Fleet Operator Owned' : tile.includes('taxi') ? 'Taxi Operator' : 'Gig Operator' }}
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
+			<!-- RADIO TILES ENDS -->
+
 			<div class="row">
 				<div class="col-md-4">
 					<mat-form-field appearance="outline">
@@ -1056,12 +902,21 @@
 			</div>
 		</div>
 	</section>
-	<div class="row justify-content-center my-4">
-		<button class="custom-btn savebutton mx-2" (click)="submitForm()" [disabled]="disableSubmitButton"
-			tabIndex="1">SAVE</button>
-		<button class="custom-btn resetbutton mx-2" (click)="resetForm()" tabIndex="1">RESET</button>
-	</div>
 </form>
+
+<div class="row flex flex-wrap-reverse my-4">
+	<button class="custom-filled-back-button m-2 mx-4" routerLink="/affiliate/step0">
+		BACK
+	</button>
+	<div class="col-md-auto mx-auto">
+		<button class="custom-filled-reset-button m-2" (click)="resetForm()" tabIndex="2">
+			RESET
+		</button>
+		<button class="custom-filled-button m-2" (click)="submitForm()" tabIndex="1">
+			SAVE
+		</button>
+	</div>
+</div>
 
 <!-- Image modal -->
 <app-image-modal (closeTab)="closeButton()" [modalImage]="modalImage"></app-image-modal>

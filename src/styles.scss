@@ -1,6 +1,10 @@
 .mat-form-field-empty.mat-form-field-label {
 	color: #808080;
 }
+*
+{
+	--green: #33c658;
+}
 
 body {
 	-ms-scroll-chaining: none;
@@ -39,15 +43,14 @@ input, input::placeholder {
 }
 
 button.custom-filled-button {
-	padding           : 0.5rem 3.258rem;
+	padding           : 0.475rem 2.358rem;
 	border-radius     : 1rem;
-	border            : 2px solid var(--green-color);
-	background-color  : var(--green-color);
+	border            : 2px solid var(--green);
+	background-color  : var(--green);
 	color             : #202020;
-	letter-spacing    : 0.9px;
+	letter-spacing    : 1px;
 	font-size         : 1.18rem;
 	display           : inline-block;
-	min-width         : 10rem;
 	font-family       : 'Roboto', sans-serif;
 	font-weight       : 700;
 	appearance        : button;
@@ -56,15 +59,14 @@ button.custom-filled-button {
 }
 
 button.custom-filled-back-button {
-	padding           : 0.675rem 3.258rem;
+	padding           : 0.475rem 2.358rem;
 	border-radius     : 1rem;
 	border            : 2px solid #a2a3a2;
 	background-color  : #a2a3a2;
 	color             : #202020;
-	letter-spacing    : 0.9px;
+	letter-spacing    : 1px;
 	font-size         : 1.18rem;
 	display           : inline-block;
-	min-width         : 10rem;
 	font-family       : 'Roboto', sans-serif;
 	font-weight       : 700;
 	appearance        : button;
@@ -72,47 +74,18 @@ button.custom-filled-back-button {
 	-webkit-appearance: button;
 }
 
-@media only screen and (max-width:380px) {
-	button.custom-filled-button {
-		padding           : 15px 0;
-		border-radius     : 1rem;
-		border            : 2px solid var(--green-color);
-		background-color  : var(--green-color);
-		color             : #202020;
-		letter-spacing    : 0.9px;
-		font-size         : 1.18rem;
-		display           : inline-block;
-		min-width         : 8rem;
-		font-family       : 'Roboto', sans-serif;
-		font-weight       : 700;
-		appearance        : button;
-		-moz-appearance   : button;
-		-webkit-appearance: button;
-	}
-
-	button.custom-filled-back-button {
-		padding           : 15px 0;
-		border-radius     : 1rem;
-		border            : 2px solid #a2a3a2;
-		background-color  : #a2a3a2;
-		color             : #202020;
-		letter-spacing    : 0.9px;
-		font-size         : 1.18rem;
-		display           : inline-block;
-		min-width         : 8rem;
-		font-family       : 'Roboto', sans-serif;
-		font-weight       : 700;
-		appearance        : button;
-		-moz-appearance   : button;
-		-webkit-appearance: button;
-	}
-}
-
-button.custom-filled-orange-button {
-	border          : 2px solid var(--orange);
-	border-radius   : 1rem;
-	padding         : 4px 7px;
-	color           : #1d1d1d;
-	background-color: var(--orange);
-	font-size       : 1.1rem;
+button.custom-filled-reset-button {
+	padding: 0.475rem 2.358rem;
+	border-radius: 1rem;
+	border: 2px solid var(--orange-color);
+	background-color: var(--orange-color);
+	color: #202020;
+	letter-spacing: 1px;
+	font-size: 1.18rem;
+	display: inline-block;
+	font-family: 'Roboto', sans-serif;
+	font-weight: 700;
+	appearance: button;
+	-moz-appearance: button;
+	-webkit-appearance: button;
 }

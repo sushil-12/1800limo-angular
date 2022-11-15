@@ -1,54 +1,28 @@
-<form
-	[formGroup]="addVehicleForm"
-	class="step_form_wrapper"
-	appInvalidControlScroll
->
+<form [formGroup]="addVehicleForm" class="step_form_wrapper" appInvalidControlScroll>
 	<!-- Main page content-->
 	<section class="user_information affiliateVehicle">
 		<h2 class="headinginfo">
 			Vehicle Settings
-			<span class="spanText"
-				>(Match Make and Model as close as possible)</span
-			>
+			<span class="spanText">(Match Make and Model as close as possible)</span>
 		</h2>
 		<div class="container mt-1">
 			<div class="row">
 				<div class="col-md-6">
-					<mat-form-field
-						appearance="outline"
-						[ngClass]="
+					<mat-form-field appearance="outline" [ngClass]="
 							(errorMsg && f.vehicleType.errors) ||
 							(submittedForm && f.vehicleType.errors)
 								? 'mat-form-field-invalid ng-invalid'
 								: ''
-						"
-					>
-						<mat-label
-							>Vehicle Type
-							<span class="asterisk">*</span></mat-label
-						>
-						<input
-							type="text"
-							id="vehicleTypeField"
-							placeholder="Choose One"
-							(focus)="$event.target.select()"
-							aria-label="Number"
-							matInput
-							(keyup)="searchVehicleType($event.target.value)"
-							[matAutocomplete]="auto1"
-							tabindex="1"
-						/>
-						<svg
-							version="1.1"
-							id="Layer_2"
-							xmlns="http://www.w3.org/2000/svg"
-							xmlns:xlink="http://www.w3.org/1999/xlink"
-							x="0px"
-							y="0px"
-							viewBox="0 0 122.88 63.9"
-							style="enable-background: new 0 0 122.88 63.9"
-							xml:space="preserve"
-						>
+						">
+						<mat-label>Vehicle Type
+							<span class="asterisk">*</span>
+						</mat-label>
+						<input type="text" id="vehicleTypeField" placeholder="Choose One"
+							(focus)="$event.target.select()" aria-label="Number" matInput
+							(keyup)="searchVehicleType($event.target.value)" [matAutocomplete]="auto1" tabindex="1" />
+						<svg version="1.1" id="Layer_2" xmlns="http://www.w3.org/2000/svg"
+							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
+							style="enable-background: new 0 0 122.88 63.9" xml:space="preserve">
 							<style type="text/css">
 								.sty0 {
 									fill-rule: evenodd;
@@ -56,75 +30,46 @@
 								}
 							</style>
 							<g>
-								<polygon
-									class="sty0"
-									points="61.44,63.9 122.88,0 0,0 61.44,63.9"
-								/>
+								<polygon class="sty0" points="61.44,63.9 122.88,0 0,0 61.44,63.9" />
 							</g>
 						</svg>
 						<mat-autocomplete #auto1="matAutocomplete">
-							<mat-option
-								*ngFor="let vehicleType of filteredVehicleTypes"
-								[value]="vehicleType.name"
+							<mat-option *ngFor="let vehicleType of filteredVehicleTypes" [value]="vehicleType.name"
 								(onSelectionChange)="
 									selectVehicleType(
 										vehicleType.ID,
 										$event.isUserInput
 									)
-								"
-							>
+								">
 								{{ vehicleType.name }}
 							</mat-option>
 						</mat-autocomplete>
 					</mat-form-field>
-					<div
-						*ngIf="
+					<div *ngIf="
 							(errorMsg && f.vehicleType.errors) ||
 							(submittedForm && f.vehicleType.errors)
-						"
-						class="text-danger margin-bottom-thin my-mat-hint"
-					>
+						" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.vehicleType.errors.required">
 							The Vehicle Type is required
 						</div>
 					</div>
 				</div>
 				<div class="col-md-6">
-					<mat-form-field
-						appearance="outline"
-						[ngClass]="
+					<mat-form-field appearance="outline" [ngClass]="
 							(errorMsg1 && f.make.errors) ||
 							(submittedForm && f.make.errors)
 								? 'mat-form-field-invalid ng-invalid'
 								: ''
-						"
-					>
-						<mat-label
-							>Enter Make
-							<span class="asterisk">*</span></mat-label
-						>
-						<input
-							type="search"
-							id="makeField"
-							placeholder="Type First Letters of Make"
-							aria-label="Number"
-							matInput
-							(focus)="$event.target.select()"
-							(keyup)="searchMake($event.target.value)"
-							[matAutocomplete]="auto2"
-							tabindex="1"
-						/>
-						<svg
-							version="1.1"
-							id="Layer_2"
-							xmlns="http://www.w3.org/2000/svg"
-							xmlns:xlink="http://www.w3.org/1999/xlink"
-							x="0px"
-							y="0px"
-							viewBox="0 0 122.88 63.9"
-							style="enable-background: new 0 0 122.88 63.9"
-							xml:space="preserve"
-						>
+						">
+						<mat-label>Enter Make
+							<span class="asterisk">*</span>
+						</mat-label>
+						<input type="search" id="makeField" placeholder="Type First Letters of Make" aria-label="Number"
+							matInput (focus)="$event.target.select()" (keyup)="searchMake($event.target.value)"
+							[matAutocomplete]="auto2" tabindex="1" />
+						<svg version="1.1" id="Layer_2" xmlns="http://www.w3.org/2000/svg"
+							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
+							style="enable-background: new 0 0 122.88 63.9" xml:space="preserve">
 							<style type="text/css">
 								.sty0 {
 									fill-rule: evenodd;
@@ -132,71 +77,40 @@
 								}
 							</style>
 							<g>
-								<polygon
-									class="sty0"
-									points="61.44,63.9 122.88,0 0,0 61.44,63.9"
-								/>
+								<polygon class="sty0" points="61.44,63.9 122.88,0 0,0 61.44,63.9" />
 							</g>
 						</svg>
 						<mat-autocomplete #auto2="matAutocomplete">
-							<mat-option
-								*ngFor="let m of filteredMake"
-								[value]="m.name"
-								(onSelectionChange)="
+							<mat-option *ngFor="let m of filteredMake" [value]="m.name" (onSelectionChange)="
 									selectMake(m.ID, $event.isUserInput)
-								"
-							>
+								">
 								{{ m.name }}
 							</mat-option>
 						</mat-autocomplete>
 					</mat-form-field>
-					<div
-						*ngIf="
+					<div *ngIf="
 							(errorMsg1 && f.make.errors) ||
 							(submittedForm && f.make.errors)
-						"
-						class="text-danger margin-bottom-thin my-mat-hint"
-					>
+						" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.make.errors.required">
 							The Make and Model is required
 						</div>
 					</div>
 				</div>
 				<div class="col-md-6">
-					<mat-form-field
-						appearance="outline"
-						[ngClass]="
+					<mat-form-field appearance="outline" [ngClass]="
 							(errorMsg2 && f.model.errors) ||
 							(submittedForm && f.model.errors)
 								? 'mat-form-field-invalid ng-invalid'
 								: ''
-						"
-					>
-						<mat-label
-							>Model <span class="asterisk">*</span></mat-label
-						>
-						<input
-							type="search"
-							id="modelField"
-							placeholder="Choose One"
-							aria-label="Number"
-							matInput
-							(keyup)="searchModel($event.target.value)"
-							(focus)="$event.target.select()"
-							[matAutocomplete]="auto3"
-							tabindex="1"
-						/>
-						<svg
-							version="1.1"
-							id="Layer_2"
-							xmlns="http://www.w3.org/2000/svg"
-							xmlns:xlink="http://www.w3.org/1999/xlink"
-							x="0px"
-							y="0px"
-							viewBox="0 0 122.88 63.9"
-							style="enable-background: new 0 0 122.88 63.9"
-							xml:space="preserve"
-						>
+						">
+						<mat-label>Model <span class="asterisk">*</span></mat-label>
+						<input type="search" id="modelField" placeholder="Choose One" aria-label="Number" matInput
+							(keyup)="searchModel($event.target.value)" (focus)="$event.target.select()"
+							[matAutocomplete]="auto3" tabindex="1" />
+						<svg version="1.1" id="Layer_2" xmlns="http://www.w3.org/2000/svg"
+							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
+							style="enable-background: new 0 0 122.88 63.9" xml:space="preserve">
 							<style type="text/css">
 								.sty0 {
 									fill-rule: evenodd;
@@ -204,31 +118,21 @@
 								}
 							</style>
 							<g>
-								<polygon
-									class="sty0"
-									points="61.44,63.9 122.88,0 0,0 61.44,63.9"
-								/>
+								<polygon class="sty0" points="61.44,63.9 122.88,0 0,0 61.44,63.9" />
 							</g>
 						</svg>
 						<mat-autocomplete #auto3="matAutocomplete">
-							<mat-option
-								*ngFor="let m of filteredModel"
-								[value]="m.name"
-								(onSelectionChange)="
+							<mat-option *ngFor="let m of filteredModel" [value]="m.name" (onSelectionChange)="
 									selectModel(m.ID, $event.isUserInput)
-								"
-							>
+								">
 								{{ m.name }}
 							</mat-option>
 						</mat-autocomplete>
 					</mat-form-field>
-					<div
-						*ngIf="
+					<div *ngIf="
 							(errorMsg2 && f.model.errors) ||
 							(submittedForm && f.model.errors)
-						"
-						class="text-danger margin-bottom-thin my-mat-hint"
-					>
+						" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.model.errors.required">
 							The Make and Model is required
 						</div>
@@ -239,30 +143,19 @@
 						<mat-label>
 							Number of Vehicles <span class="asterisk">*</span>
 						</mat-label>
-						<input
-							matInput
-							type="number"
-							placeholder="Number of Vehicles"
-							formControlName="numberOfVehicles"
-							tabindex="1"
-						/>
+						<input matInput type="number" placeholder="Number of Vehicles"
+							formControlName="numberOfVehicles" tabindex="1" />
 					</mat-form-field>
-					<div
-						*ngIf="
+					<div *ngIf="
 							(submittedForm && f.numberOfVehicles.errors) ||
 							(f.numberOfVehicles.touched &&
 								f.numberOfVehicles.errors)
-						"
-						class="text-danger margin-bottom-thin my-mat-hint"
-					>
+						" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.numberOfVehicles.errors.required">
 							The Number of Vehicles is required.
 						</div>
 					</div>
-					<div
-						*ngIf="f.numberOfVehicles.errors"
-						class="text-danger margin-bottom-thin my-mat-hint"
-					>
+					<div *ngIf="f.numberOfVehicles.errors" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.numberOfVehicles.errors.pattern">
 							Enter Numbers Only.
 						</div>
@@ -270,12 +163,10 @@
 							Please enter atleast 1 vehicle
 						</div>
 						<div *ngIf="f.numberOfVehicles.errors.max">
-							<div
-								*ngIf="
+							<div *ngIf="
 									f.numberOfVehicles.errors.max.actual >
 									f.numberOfVehicles.errors.max.max
-								"
-							>
+								">
 								You can't enter more than
 								{{ f.numberOfVehicles.errors.max.max }} vehicle
 							</div>
@@ -283,40 +174,19 @@
 					</div>
 				</div>
 				<div class="col-md-6">
-					<mat-form-field
-						appearance="outline"
-						[ngClass]="
+					<mat-form-field appearance="outline" [ngClass]="
 							(errorMsg3 && f.year.errors) ||
 							(submittedForm && f.year.errors)
 								? 'mat-form-field-invalid ng-invalid'
 								: ''
-						"
-					>
-						<mat-label
-							>Year <span class="asterisk">*</span></mat-label
-						>
-						<input
-							type="search"
-							id="yearField"
-							placeholder="Choose One"
-							aria-label="Number"
-							matInput
-							(keyup)="searchYear($event.target.value)"
-							(focus)="$event.target.select()"
-							[matAutocomplete]="auto4"
-							tabindex="1"
-						/>
-						<svg
-							version="1.1"
-							id="Layer_2"
-							xmlns="http://www.w3.org/2000/svg"
-							xmlns:xlink="http://www.w3.org/1999/xlink"
-							x="0px"
-							y="0px"
-							viewBox="0 0 122.88 63.9"
-							style="enable-background: new 0 0 122.88 63.9"
-							xml:space="preserve"
-						>
+						">
+						<mat-label>Year <span class="asterisk">*</span></mat-label>
+						<input type="search" id="yearField" placeholder="Choose One" aria-label="Number" matInput
+							(keyup)="searchYear($event.target.value)" (focus)="$event.target.select()"
+							[matAutocomplete]="auto4" tabindex="1" />
+						<svg version="1.1" id="Layer_2" xmlns="http://www.w3.org/2000/svg"
+							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
+							style="enable-background: new 0 0 122.88 63.9" xml:space="preserve">
 							<style type="text/css">
 								.sty0 {
 									fill-rule: evenodd;
@@ -324,71 +194,40 @@
 								}
 							</style>
 							<g>
-								<polygon
-									class="sty0"
-									points="61.44,63.9 122.88,0 0,0 61.44,63.9"
-								/>
+								<polygon class="sty0" points="61.44,63.9 122.88,0 0,0 61.44,63.9" />
 							</g>
 						</svg>
 						<mat-autocomplete #auto4="matAutocomplete">
-							<mat-option
-								*ngFor="let year of filteredYear"
-								[value]="year.name"
-								(onSelectionChange)="
+							<mat-option *ngFor="let year of filteredYear" [value]="year.name" (onSelectionChange)="
 									selectYear(year.ID, $event.isUserInput)
-								"
-							>
+								">
 								{{ year.name }}
 							</mat-option>
 						</mat-autocomplete>
 					</mat-form-field>
-					<div
-						*ngIf="
+					<div *ngIf="
 							(errorMsg3 && f.year.errors) ||
 							(submittedForm && f.year.errors)
-						"
-						class="text-danger margin-bottom-thin my-mat-hint"
-					>
+						" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.year.errors.required">
 							The Year is required
 						</div>
 					</div>
 				</div>
 				<div class="col-md-6">
-					<mat-form-field
-						appearance="outline"
-						[ngClass]="
+					<mat-form-field appearance="outline" [ngClass]="
 							(errorMsg4 && f.color.errors) ||
 							(submittedForm && f.color.errors)
 								? 'mat-form-field-invalid ng-invalid'
 								: ''
-						"
-					>
-						<mat-label
-							>Color <span class="asterisk">*</span></mat-label
-						>
-						<input
-							type="search"
-							id="colorField"
-							placeholder="Choose One"
-							aria-label="Number"
-							matInput
-							(keyup)="searchColor($event.target.value)"
-							(focus)="$event.target.select()"
-							[matAutocomplete]="auto5"
-							tabindex="1"
-						/>
-						<svg
-							version="1.1"
-							id="Layer_2"
-							xmlns="http://www.w3.org/2000/svg"
-							xmlns:xlink="http://www.w3.org/1999/xlink"
-							x="0px"
-							y="0px"
-							viewBox="0 0 122.88 63.9"
-							style="enable-background: new 0 0 122.88 63.9"
-							xml:space="preserve"
-						>
+						">
+						<mat-label>Color <span class="asterisk">*</span></mat-label>
+						<input type="search" id="colorField" placeholder="Choose One" aria-label="Number" matInput
+							(keyup)="searchColor($event.target.value)" (focus)="$event.target.select()"
+							[matAutocomplete]="auto5" tabindex="1" />
+						<svg version="1.1" id="Layer_2" xmlns="http://www.w3.org/2000/svg"
+							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
+							style="enable-background: new 0 0 122.88 63.9" xml:space="preserve">
 							<style type="text/css">
 								.sty0 {
 									fill-rule: evenodd;
@@ -396,93 +235,43 @@
 								}
 							</style>
 							<g>
-								<polygon
-									class="sty0"
-									points="61.44,63.9 122.88,0 0,0 61.44,63.9"
-								/>
+								<polygon class="sty0" points="61.44,63.9 122.88,0 0,0 61.44,63.9" />
 							</g>
 						</svg>
 						<mat-autocomplete #auto5="matAutocomplete">
-							<mat-option
-								*ngFor="let color of filteredColor"
-								[value]="color.name"
-								(onSelectionChange)="
+							<mat-option *ngFor="let color of filteredColor" [value]="color.name" (onSelectionChange)="
 									selectColor(color.ID, $event.isUserInput)
-								"
-							>
+								">
 								{{ color.name }}
 							</mat-option>
 						</mat-autocomplete>
 					</mat-form-field>
-					<div
-						*ngIf="
+					<div *ngIf="
 							(errorMsg4 && f.color.errors) ||
 							(submittedForm && f.color.errors)
-						"
-						class="text-danger margin-bottom-thin my-mat-hint"
-					>
+						" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.color.errors.required">
 							The Color is required
 						</div>
 					</div>
 				</div>
+
+				<!-- Number of Seats -->
 				<div class="col-md-6">
-					<mat-form-field appearance="outline">
-						<mat-label>
-							License Plate
-							<span
-								*ngIf="
-									affiliateType != 'fleet_operator';
-									else nonFleetOperator
-								"
-								class="asterisk"
-								>*</span
-							>
-							<ng-template #nonFleetOperator>
-								<span class="theme-color">(optional)</span>
-							</ng-template>
-						</mat-label>
-						<input
-							matInput
-							placeholder="License Plate"
-							(focus)="$event.target.select()"
-							formControlName="licensePlate"
-							tabindex="1"
-						/>
-					</mat-form-field>
-				</div>
-				<div class="col-md-6">
-					<label class="select-seat-label"
-						>Number of Pax Seats / Seat Belts
-						<span class="asterisk">*</span></label
-					>
+					<label class="select-seat-label">Number of Pax Seats / Seat Belts
+						<span class="asterisk">*</span></label>
 					<div class="selectStyle">
-						<select
-							class="selectInputStyle"
-							formControlName="seats"
-							tabindex="1"
-						>
+						<select class="selectInputStyle" formControlName="seats" tabindex="1">
 							<option value="">
 								Choose Pax Seats / Seat Belts
 							</option>
-							<option
-								*ngFor="let seatOption of seatOptions"
-								[value]="seatOption"
-							>
+							<option *ngFor="let seatOption of seatOptions" [value]="seatOption">
 								{{ seatOption }}
 							</option>
 						</select>
-						<svg
-							version="1.1"
-							id="Layer_1"
-							xmlns="http://www.w3.org/2000/svg"
-							xmlns:xlink="http://www.w3.org/1999/xlink"
-							x="0px"
-							y="0px"
-							viewBox="0 0 122.88 63.9"
-							style="enable-background: new 0 0 122.88 63.9"
-							xml:space="preserve"
-						>
+						<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
+							style="enable-background: new 0 0 122.88 63.9" xml:space="preserve">
 							<style type="text/css">
 								.sty0 {
 									fill-rule: evenodd;
@@ -490,66 +279,41 @@
 								}
 							</style>
 							<g>
-								<polygon
-									class="sty0"
-									points="61.44,63.9 122.88,0 0,0 61.44,63.9"
-								/>
+								<polygon class="sty0" points="61.44,63.9 122.88,0 0,0 61.44,63.9" />
 							</g>
 						</svg>
 					</div>
-					<div
-						*ngIf="
+					<div *ngIf="
 							(submittedForm && f.seats.errors) ||
 							(f.seats.touched && f.seats.errors)
-						"
-						class="text-danger margin-bottom-thin my-mat-hint"
-					>
+						" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.seats.errors.required">
 							The Pax Seats / Seat Belts is required
 						</div>
 					</div>
-					<div
-						*ngIf="f.seats.errors"
-						class="text-danger margin-bottom-thin my-mat-hint"
-					>
+					<div *ngIf="f.seats.errors" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.seats.errors.pattern">
 							The Pax Seats / Seat Belts should be a number
 						</div>
 					</div>
 				</div>
+
+				<!-- Number of Pax -->
 				<div class="col-md-6">
-					<label class="select-luggage-label"
-						>Number of Luggage
-						<span class="theme-color"
-							>(2 carry on = 1 large suitcase)
+					<label class="select-luggage-label">Number of Luggage
+						<span class="theme-color">(2 carry on = 1 large suitcase)
 						</span>
-						<span class="asterisk">*</span></label
-					>
+						<span class="asterisk">*</span></label>
 					<div class="selectStyle">
-						<select
-							class="selectInputStyle"
-							formControlName="luggage"
-							tabindex="1"
-						>
+						<select class="selectInputStyle" formControlName="luggage" tabindex="1">
 							<option value="">Choose Luggage</option>
-							<option
-								*ngFor="let luggageOption of luggageOptions"
-								[value]="luggageOption"
-							>
+							<option *ngFor="let luggageOption of luggageOptions" [value]="luggageOption">
 								{{ luggageOption }}
 							</option>
 						</select>
-						<svg
-							version="1.1"
-							id="Layer_1"
-							xmlns="http://www.w3.org/2000/svg"
-							xmlns:xlink="http://www.w3.org/1999/xlink"
-							x="0px"
-							y="0px"
-							viewBox="0 0 122.88 63.9"
-							style="enable-background: new 0 0 122.88 63.9"
-							xml:space="preserve"
-						>
+						<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
+							style="enable-background: new 0 0 122.88 63.9" xml:space="preserve">
 							<style type="text/css">
 								.sty0 {
 									fill-rule: evenodd;
@@ -557,67 +321,43 @@
 								}
 							</style>
 							<g>
-								<polygon
-									class="sty0"
-									points="61.44,63.9 122.88,0 0,0 61.44,63.9"
-								/>
+								<polygon class="sty0" points="61.44,63.9 122.88,0 0,0 61.44,63.9" />
 							</g>
 						</svg>
 					</div>
-					<div
-						*ngIf="
+					<div *ngIf="
 							(submittedForm && f.luggage.errors) ||
 							(f.luggage.touched && f.luggage.errors)
-						"
-						class="text-danger margin-bottom-thin my-mat-hint"
-					>
+						" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.luggage.errors.required">
 							The Luggage is required
 						</div>
 					</div>
-					<div
-						*ngIf="f.luggage.errors"
-						class="text-danger margin-bottom-thin my-mat-hint"
-					>
+					<div *ngIf="f.luggage.errors" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.luggage.errors.pattern">
 							The Luggage should be a number
 						</div>
 					</div>
 				</div>
+
+				<!-- Airport/City Cancel Times -->
 				<div class="col-md-6">
-					<label class="select-cancel-label"
-						>Airport / City Cancel Times
-						<span class="asterisk">*</span></label
-					>
+					<label class="select-cancel-label">Airport / City Cancel Times
+						<span class="asterisk">*</span></label>
 					<div class="selectStyle">
-						<select
-							class="selectInputStyle"
-							formControlName="nonCharterCancelPolicy"
-							tabindex="1"
-						>
+						<select class="selectInputStyle" formControlName="nonCharterCancelPolicy" tabindex="1">
 							<option value="">
 								Choose Airport / City Cancel Times
 							</option>
-							<option
-								*ngFor="
+							<option *ngFor="
 									let nonCharterCancelOption of nonCharterCancelOptions
-								"
-								[value]="nonCharterCancelOption.value"
-							>
+								" [value]="nonCharterCancelOption.value">
 								{{ nonCharterCancelOption.label }}
 							</option>
 						</select>
-						<svg
-							version="1.1"
-							id="Layer_1"
-							xmlns="http://www.w3.org/2000/svg"
-							xmlns:xlink="http://www.w3.org/1999/xlink"
-							x="0px"
-							y="0px"
-							viewBox="0 0 122.88 63.9"
-							style="enable-background: new 0 0 122.88 63.9"
-							xml:space="preserve"
-						>
+						<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
+							style="enable-background: new 0 0 122.88 63.9" xml:space="preserve">
 							<style type="text/css">
 								.sty0 {
 									fill-rule: evenodd;
@@ -625,69 +365,45 @@
 								}
 							</style>
 							<g>
-								<polygon
-									class="sty0"
-									points="61.44,63.9 122.88,0 0,0 61.44,63.9"
-								/>
+								<polygon class="sty0" points="61.44,63.9 122.88,0 0,0 61.44,63.9" />
 							</g>
 						</svg>
 					</div>
-					<div
-						*ngIf="
+					<div *ngIf="
 							(submittedForm &&
 								f.nonCharterCancelPolicy.errors) ||
 							(f.nonCharterCancelPolicy.touched &&
 								f.nonCharterCancelPolicy.errors)
-						"
-						class="text-danger margin-bottom-thin my-mat-hint"
-					>
+						" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.nonCharterCancelPolicy.errors.required">
 							The Charter Cancel Times is required
 						</div>
 					</div>
-					<div
-						*ngIf="f.nonCharterCancelPolicy.errors"
-						class="text-danger margin-bottom-thin my-mat-hint"
-					>
+					<div *ngIf="f.nonCharterCancelPolicy.errors" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.nonCharterCancelPolicy.errors.pattern">
 							The Charter Cancel Times should be a number
 						</div>
 					</div>
 				</div>
+
+				<!-- Charter Cancel Times -->
 				<div class="col-md-6">
-					<label class="select-charter-cancel-label"
-						>Charter Cancel Times
-						<span class="asterisk">*</span></label
-					>
+					<label class="select-charter-cancel-label">Charter Cancel Times
+						<span class="asterisk">*</span></label>
 					<div class="selectStyle">
-						<select
-							class="selectInputStyle"
-							formControlName="charterCancelPolicy"
-							tabindex="1"
-						>
+						<select class="selectInputStyle" formControlName="charterCancelPolicy" tabindex="1">
 							<option value="">
 								Choose Charter Cancel Times
 							</option>
-							<option
-								*ngFor="
+							<option *ngFor="
 									let charterCancelOption of charterCancelOptions
-								"
-								[value]="charterCancelOption.value"
-							>
+								" [value]="charterCancelOption.value">
 								{{ charterCancelOption.label }}
 							</option>
 						</select>
-						<svg
-							version="1.1"
-							id="Layer_1"
-							xmlns="http://www.w3.org/2000/svg"
-							xmlns:xlink="http://www.w3.org/1999/xlink"
-							x="0px"
-							y="0px"
-							viewBox="0 0 122.88 63.9"
-							style="enable-background: new 0 0 122.88 63.9"
-							xml:space="preserve"
-						>
+						<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
+							style="enable-background: new 0 0 122.88 63.9" xml:space="preserve">
 							<style type="text/css">
 								.sty0 {
 									fill-rule: evenodd;
@@ -695,101 +411,72 @@
 								}
 							</style>
 							<g>
-								<polygon
-									class="sty0"
-									points="61.44,63.9 122.88,0 0,0 61.44,63.9"
-								/>
+								<polygon class="sty0" points="61.44,63.9 122.88,0 0,0 61.44,63.9" />
 							</g>
 						</svg>
 					</div>
-					<div
-						*ngIf="
+					<div *ngIf="
 							(submittedForm && f.charterCancelPolicy.errors) ||
 							(f.charterCancelPolicy.touched &&
 								f.charterCancelPolicy.errors)
-						"
-						class="text-danger margin-bottom-thin my-mat-hint"
-					>
+						" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.charterCancelPolicy.errors.required">
 							The Charter Cancel Times is required
 						</div>
 					</div>
-					<div
-						*ngIf="f.charterCancelPolicy.errors"
-						class="text-danger margin-bottom-thin my-mat-hint"
-					>
+					<div *ngIf="f.charterCancelPolicy.errors" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.charterCancelPolicy.errors.pattern">
 							The Charter Cancel Times should be a number
 						</div>
 					</div>
 				</div>
-				<!-- <div class="col-md-3 pr-0 borderright mobilePadding">
-					<div class="form-group radio-tile-group">
-						<div class="custom-radio input-container" tabindex="1">
-							<input class="radio-button" type="radio" id="local" value="localService"
-								name="typeOfService" checked="" formControlName="typeOfService"
-								(click)="typeOfService('localService')" tabIndex="-1">
-							<div class="radio-tile">
-								<label class="radio-tile-label" for="local"
-									[ngClass]="serviceType=='localService' ? 'radio-active' : ''">Local Service
-									Only</label>
-							</div>
-						</div>
-					</div>
+
+				<!-- License Plate -->
+				<div class="col-md-6">
+					<mat-form-field appearance="outline">
+						<mat-label>
+							License Plate
+							<span *ngIf="
+									affiliateType != 'fleet_operator';
+									else nonFleetOperator
+								" class="asterisk">*</span>
+							<ng-template #nonFleetOperator>
+								<span class="theme-color">(optional)</span>
+							</ng-template>
+						</mat-label>
+						<input matInput placeholder="License Plate" (focus)="$event.target.select()"
+							formControlName="licensePlate" tabindex="1" />
+					</mat-form-field>
 				</div>
-				<div class="col-md-3 pl-0 mobilePadding">
-					<div class="form-group radio-tile-group">
-						<div class="custom-radio input-container" tabindex="1">
-							<input class="radio-button" type="radio" id="longDistance" value="longDistance"
-								name="typeOfService" checked="" formControlName="typeOfService"
-								(click)="typeOfService('longDistance')" tabIndex="-1">
-							<div class="radio-tile">
-								<label class="radio-tile-label" for="longDistance"
-									[ngClass]="serviceType=='longDistance' ? 'radio-active' : ''">Over the Road – Long
-									Distance</label>
-							</div>
-						</div>
-					</div>
-				</div> -->
 			</div>
+
+
 			<div class="row mt-3">
 				<div class="col-md-4">
 					<div class="input-checkbox">
-						<div
-							class="checkbox"
-							[ngClass]="
+						<div class="checkbox" [ngClass]="
 								service.includes('local') ? 'active' : ''
-							"
-							(click)="onServiceChange('local')"
-						>
+							" (click)="onServiceChange('local')">
 							Local Service Only
 						</div>
 					</div>
 				</div>
 				<div class="col-md-4">
 					<div class="input-checkbox">
-						<div
-							class="checkbox"
-							[ngClass]="
+						<div class="checkbox" [ngClass]="
 								service.includes('over_the_road')
 									? 'active'
 									: ''
-							"
-							(click)="onServiceChange('over_the_road')"
-						>
+							" (click)="onServiceChange('over_the_road')">
 							Over The Road
 						</div>
 					</div>
 				</div>
 				<div class="col-md-4">
 					<div class="input-checkbox">
-						<div
-							class="checkbox"
-							[ngClass]="
+						<div class="checkbox" [ngClass]="
 								service.includes('shuttle') ? 'active' : ''
-							"
-							(click)="onServiceChange('shuttle')"
-						>
+							" (click)="onServiceChange('shuttle')">
 							Shuttle Service
 						</div>
 					</div>
@@ -801,47 +488,26 @@
 	<section class="user_information">
 		<h2 class="headinginfo">
 			Choose Chargable Amenities <span class="asterisk">* </span>
-			<span class="spanText"
-				>(Choose each chargable amenity you supply or provide)</span
-			>
+			<span class="spanText">(Choose each chargable amenity you supply or provide)</span>
 		</h2>
 		<div class="container mt-1">
 			<div class="choose_ameniteslist mt-3">
-				<div
-					class="custom-control custom-checkbox"
-					*ngFor="let chargableAmenity of chargableAmenities"
-				>
+				<div class="custom-control custom-checkbox" *ngFor="let chargableAmenity of chargableAmenities">
 					<!-- {{chargableAmenity.value | json}}<br> -->
-					<input
-						type="checkbox"
-						class="custom-control-input"
-						id="amenity_{{ chargableAmenity.name }}"
-						[value]="chargableAmenity.id"
-						(change)="
+					<input type="checkbox" class="custom-control-input" id="amenity_{{ chargableAmenity.name }}"
+						[value]="chargableAmenity.id" (change)="
 							onAmenitiesCheckboxChange(
 								$event.target.value,
 								$event.target.checked
 							)
-						"
-						tabindex="1"
-					/>
-					<label
-						class="custom-control-label"
-						for="amenity_{{ chargableAmenity.name }}"
-					>
-						<span
-							*ngIf="chargableAmenity.chargeable === 'yes'"
-							class="amenity-dollar"
-							>&nbsp; $</span
-						>
+						" tabindex="1" />
+					<label class="custom-control-label" for="amenity_{{ chargableAmenity.name }}">
+						<span *ngIf="chargableAmenity.chargeable === 'yes'" class="amenity-dollar">&nbsp; $</span>
 						{{ chargableAmenity.name }}
 					</label>
 				</div>
 			</div>
-			<div
-				*ngIf="submittedForm && f.amenities.errors"
-				class="text-danger margin-bottom-thin my-mat-hint"
-			>
+			<div *ngIf="submittedForm && f.amenities.errors" class="text-danger margin-bottom-thin my-mat-hint">
 				<div *ngIf="f.amenities.errors.required">
 					Please select atleast one Chargable Amenity.
 				</div>
@@ -850,55 +516,33 @@
 
 		<h2 class="headinginfo topMargin">
 			Choose Non Chargable Amenities <span class="asterisk">* </span>
-			<span class="spanText"
-				>(Choose each non chargable amenity you supply or provide)</span
-			>
+			<span class="spanText">(Choose each non chargable amenity you supply or provide)</span>
 		</h2>
 		<div class="container mt-1 non-chargable-amenity">
-			<div
-				class="choose_ameniteslist mt-3"
-				*ngFor="
+			<div class="choose_ameniteslist mt-3" *ngFor="
 					let nonChargableAmenityGroup of nonChargableAmenities
 						| keyvalue
-				"
-			>
-				<div
-					class="custom-control custom-checkbox"
-					*ngFor="
+				">
+				<div class="custom-control custom-checkbox" *ngFor="
 						let nonChargableAmenity of nonChargableAmenityGroup.value
 							| keyvalue
-					"
-				>
+					">
 					<!-- {{nonChargableAmenity.value | json}}<br> -->
-					<input
-						type="checkbox"
-						class="custom-control-input"
-						id="amenity_{{ nonChargableAmenity.value.name }}"
-						[value]="nonChargableAmenity.value.id"
+					<input type="checkbox" class="custom-control-input"
+						id="amenity_{{ nonChargableAmenity.value.name }}" [value]="nonChargableAmenity.value.id"
 						(change)="
 							onAmenitiesCheckboxChange(
 								$event.target.value,
 								$event.target.checked
 							)
-						"
-						tabindex="1"
-					/>
-					<label
-						class="custom-control-label"
-						for="amenity_{{ nonChargableAmenity.value.name }}"
-						>{{ nonChargableAmenity.value.name }}</label
-					>
-					<label
-						*ngIf="nonChargableAmenity.value.chargeable === 'yes'"
-						class="amenity-dollar"
-						>&nbsp; $</label
-					>
+						" tabindex="1" />
+					<label class="custom-control-label" for="amenity_{{ nonChargableAmenity.value.name }}">{{
+						nonChargableAmenity.value.name }}</label>
+					<label *ngIf="nonChargableAmenity.value.chargeable === 'yes'" class="amenity-dollar">&nbsp;
+						$</label>
 				</div>
 			</div>
-			<div
-				*ngIf="submittedForm && f.amenities.errors"
-				class="text-danger margin-bottom-thin my-mat-hint"
-			>
+			<div *ngIf="submittedForm && f.amenities.errors" class="text-danger margin-bottom-thin my-mat-hint">
 				<div *ngIf="f.amenities.errors.required">
 					Please select atleast one Non Chargable Amenity.
 				</div>
@@ -909,35 +553,18 @@
 	<section class="user_information">
 		<h2 class="headinginfo">
 			Choose Special Amenities
-			<span class="spanText"
-				>(Choose each special amenity you supply or provide)</span
-			>
+			<span class="spanText">(Choose each special amenity you supply or provide)</span>
 		</h2>
 		<div class="container mt-1">
 			<div class="choose_ameniteslist">
-				<div
-					class="custom-control custom-checkbox"
-					*ngFor="let specialAmenity of specialAmenities"
-				>
-					<input
-						type="checkbox"
-						class="custom-control-input"
-						id="specialAmenity_{{ specialAmenity.name }}"
-						[value]="specialAmenity.id"
-						(change)="onSpecialAmenitiesCheckboxChange($event)"
-						tabindex="1"
-					/>
-					<label
-						class="custom-control-label"
-						for="specialAmenity_{{ specialAmenity.name }}"
-						>{{ specialAmenity.name }}</label
-					>
+				<div class="custom-control custom-checkbox" *ngFor="let specialAmenity of specialAmenities">
+					<input type="checkbox" class="custom-control-input" id="specialAmenity_{{ specialAmenity.name }}"
+						[value]="specialAmenity.id" (change)="onSpecialAmenitiesCheckboxChange($event)" tabindex="1" />
+					<label class="custom-control-label" for="specialAmenity_{{ specialAmenity.name }}">{{
+						specialAmenity.name }}</label>
 				</div>
 			</div>
-			<div
-				*ngIf="submittedForm && f.specialAmenities.errors"
-				class="text-danger margin-bottom-thin my-mat-hint"
-			>
+			<div *ngIf="submittedForm && f.specialAmenities.errors" class="text-danger margin-bottom-thin my-mat-hint">
 				<div *ngIf="f.specialAmenities.errors.required">
 					Please select atleast one Special Amenity.
 				</div>
@@ -958,29 +585,13 @@
 		</p>
 		<div class="container mt-1">
 			<div class="choose_ameniteslist">
-				<div
-					class="custom-control custom-checkbox"
-					*ngFor="let interior of interiors"
-				>
-					<input
-						type="checkbox"
-						class="custom-control-input"
-						id="interior_{{ interior.name }}"
-						[value]="interior.id"
-						(change)="onInteriorsCheckboxChange($event)"
-						tabindex="1"
-					/>
-					<label
-						class="custom-control-label"
-						for="interior_{{ interior.name }}"
-						>{{ interior.name }}</label
-					>
+				<div class="custom-control custom-checkbox" *ngFor="let interior of interiors">
+					<input type="checkbox" class="custom-control-input" id="interior_{{ interior.name }}"
+						[value]="interior.id" (change)="onInteriorsCheckboxChange($event)" tabindex="1" />
+					<label class="custom-control-label" for="interior_{{ interior.name }}">{{ interior.name }}</label>
 				</div>
 			</div>
-			<div
-				*ngIf="submittedForm && f.vehicleInterior.errors"
-				class="text-danger margin-bottom-thin my-mat-hint"
-			>
+			<div *ngIf="submittedForm && f.vehicleInterior.errors" class="text-danger margin-bottom-thin my-mat-hint">
 				<div *ngIf="f.vehicleInterior.errors.required">
 					Please select atleast one Interior.
 				</div>
@@ -994,14 +605,8 @@
 			Exterior and Interior
 			<span class="spanText">
 				(Exterior And Interior – Photo Tip –
-				<svg
-					data-toggle="modal"
-					data-placement="top"
-					class="camera-svg"
-					viewBox="0 0 297.88 216"
-					xml:space="preserve"
-					tabindex="1"
-				>
+				<svg data-toggle="modal" data-placement="top" class="camera-svg" viewBox="0 0 297.88 216"
+					xml:space="preserve" tabindex="1">
 					<style type="text/css">
 						.st0 {
 							fill: #f89b41;
@@ -1009,18 +614,13 @@
 					</style>
 					<g>
 						<path
-							d="M57.73,47.19c0.17-3.23,0.3-5.8,0.47-8.98c6.9,0,13.6,0,20.74,0c0.26,2.87,0.51,5.63,0.79,8.61c4.85,2.05,8.32,0.5,11.68-3.37c5.76-6.65,11.9-12.97,17.97-19.34c4.68-4.91,10.32-7,17.28-6.84c14.99,0.36,30.01,0.46,45-0.03c8.1-0.27,14.34,2.5,19.64,8.19c5.67,6.1,11.07,12.47,17.05,18.25c2.12,2.05,5.54,3.7,8.45,3.82c10.7,0.45,21.43,0.07,32.14,0.22c13.32,0.19,20.64,7.58,20.66,20.97c0.07,35.72,0.09,71.44-0.01,107.16c-0.04,14.4-8.32,22.48-22.68,22.48c-64.53,0.02-129.07,0.02-193.6,0c-16.43,0-25.07-8.65-25.08-25.05c-0.01-33.34,0-66.68,0-100.01c0-18.26,6.49-25,24.58-25.6C54.21,47.63,55.62,47.4,57.73,47.19z M149.37,188.59c32.38,0,64.76,0.02,97.15-0.01c8.93-0.01,13.11-3.63,13.15-12.17c0.14-36.19,0.06-72.38,0.05-108.57c0-6.7-3.73-10.12-10.1-10.5c-5.46-0.33-11.07-0.84-16.4,0.03c-20.18,3.29-35.55-3.2-45.9-21.06c-0.82-1.41-2.26-2.44-3.31-3.74c-3.39-4.21-7.59-5.89-13.11-5.54c-6.88,0.44-13.8,0.11-20.71,0.11c-32.41,0-32.29,0.09-52.92,25.15c-2.17,2.63-6.62,4.55-10.11,4.72c-11.88,0.58-23.8,0.08-35.7,0.27c-9.49,0.15-13.3,4.19-13.3,13.61c-0.02,34.05-0.02,68.1,0,102.15c0.01,11.14,4.38,15.54,15.52,15.55C85.55,188.61,117.46,188.59,149.37,188.59z"
-						/>
+							d="M57.73,47.19c0.17-3.23,0.3-5.8,0.47-8.98c6.9,0,13.6,0,20.74,0c0.26,2.87,0.51,5.63,0.79,8.61c4.85,2.05,8.32,0.5,11.68-3.37c5.76-6.65,11.9-12.97,17.97-19.34c4.68-4.91,10.32-7,17.28-6.84c14.99,0.36,30.01,0.46,45-0.03c8.1-0.27,14.34,2.5,19.64,8.19c5.67,6.1,11.07,12.47,17.05,18.25c2.12,2.05,5.54,3.7,8.45,3.82c10.7,0.45,21.43,0.07,32.14,0.22c13.32,0.19,20.64,7.58,20.66,20.97c0.07,35.72,0.09,71.44-0.01,107.16c-0.04,14.4-8.32,22.48-22.68,22.48c-64.53,0.02-129.07,0.02-193.6,0c-16.43,0-25.07-8.65-25.08-25.05c-0.01-33.34,0-66.68,0-100.01c0-18.26,6.49-25,24.58-25.6C54.21,47.63,55.62,47.4,57.73,47.19z M149.37,188.59c32.38,0,64.76,0.02,97.15-0.01c8.93-0.01,13.11-3.63,13.15-12.17c0.14-36.19,0.06-72.38,0.05-108.57c0-6.7-3.73-10.12-10.1-10.5c-5.46-0.33-11.07-0.84-16.4,0.03c-20.18,3.29-35.55-3.2-45.9-21.06c-0.82-1.41-2.26-2.44-3.31-3.74c-3.39-4.21-7.59-5.89-13.11-5.54c-6.88,0.44-13.8,0.11-20.71,0.11c-32.41,0-32.29,0.09-52.92,25.15c-2.17,2.63-6.62,4.55-10.11,4.72c-11.88,0.58-23.8,0.08-35.7,0.27c-9.49,0.15-13.3,4.19-13.3,13.61c-0.02,34.05-0.02,68.1,0,102.15c0.01,11.14,4.38,15.54,15.52,15.55C85.55,188.61,117.46,188.59,149.37,188.59z" />
 						<path
-							d="M149.05,173.22c-29.81,0.07-53.72-23.67-53.72-53.33c0-29.51,24.04-53.77,53.46-53.95c29.21-0.17,53.59,24.19,53.73,53.69C202.66,149.29,178.84,173.16,149.05,173.22z M148.82,163.33c24.3,0.04,43.7-19.14,43.77-43.27c0.06-24.41-19.75-44.33-43.91-44.15c-23.98,0.18-43.41,19.84-43.41,43.93C105.27,144.05,124.53,163.29,148.82,163.33z"
-						/>
+							d="M149.05,173.22c-29.81,0.07-53.72-23.67-53.72-53.33c0-29.51,24.04-53.77,53.46-53.95c29.21-0.17,53.59,24.19,53.73,53.69C202.66,149.29,178.84,173.16,149.05,173.22z M148.82,163.33c24.3,0.04,43.7-19.14,43.77-43.27c0.06-24.41-19.75-44.33-43.91-44.15c-23.98,0.18-43.41,19.84-43.41,43.93C105.27,144.05,124.53,163.29,148.82,163.33z" />
 						<path
-							d="M219.39,78.12c-3.52,0-6.28,0-9.42,0c0-3.27,0-6.23,0-9.65c3.15,0,6.08,0,9.42,0C219.39,71.66,219.39,74.61,219.39,78.12z"
-						/>
-						<path
-							class="st0"
-							d="M129.22,119.75c-0.02-11.43,8.36-19.82,19.76-19.8c11.39,0.02,19.68,8.43,19.64,19.91c-0.04,11.25-8.79,20.18-19.76,20.14C137.87,139.96,129.24,131.07,129.22,119.75z"
-						/>
+							d="M219.39,78.12c-3.52,0-6.28,0-9.42,0c0-3.27,0-6.23,0-9.65c3.15,0,6.08,0,9.42,0C219.39,71.66,219.39,74.61,219.39,78.12z" />
+						<path class="st0"
+							d="M129.22,119.75c-0.02-11.43,8.36-19.82,19.76-19.8c11.39,0.02,19.68,8.43,19.64,19.91c-0.04,11.25-8.79,20.18-19.76,20.14C137.87,139.96,129.24,131.07,129.22,119.75z" />
 					</g>
 				</svg>
 				Take Interior Pix On Cloudy Days)
@@ -1030,11 +630,11 @@
 			<span class="alert alert-danger row ml-2 mr-2 mt-3 mb-2 d-lg-none">
 				All Photos to be uploaded from Desktop or File.
 			</span>
-			<span class="alert alert-danger row ml-2 mr-2 mt-3 mb-2"
-				>Upload the pictures of Interior and Exterior of the vehicle
+			<span class="alert alert-danger row ml-2 mr-2 mt-3 mb-2">Upload the pictures of Interior and Exterior of the
+				vehicle
 			</span>
-			<span class="alert alert-danger row ml-2 mr-2"
-				>These are sample images as a guide to good picture taking. Sell
+			<span class="alert alert-danger row ml-2 mr-2">These are sample images as a guide to good picture taking.
+				Sell
 				your unique features that travelers and party goers want!
 			</span>
 			<div class="mt-4 vehtype_extintwrap">
@@ -1044,37 +644,22 @@
 							<p>
 								Vehicle Image 1 <span class="asterisk">*</span>
 							</p>
-							<img
-								src="{{ vehicleImage1 }}"
-								(click)="showImageInModal(vehicleImage1)"
-								tabindex="-1"
-							/>
+							<img src="{{ vehicleImage1 }}" (click)="showImageInModal(vehicleImage1)" tabindex="-1" />
 							<ul class="mt-3">
 								<li>
 									<button class="changeuploaded" tabindex="1">
-										<input
-											type="file"
-											(change)="
+										<input type="file" (change)="
 												onFileChange(
 													$event,
 													vehicleImageId1,
 													'1'
 												)
-											"
-											tabindex="-1"
-										/>
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											viewBox="0 0 24 24"
-										>
-											<path
-												fill="none"
-												d="M0 0h24v24H0V0z"
-											/>
+											" tabindex="-1" />
+										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+											<path fill="none" d="M0 0h24v24H0V0z" />
 											<circle cx="12" cy="12" r="3" />
 											<path
-												d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
-											/>
+												d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
 										</svg>
 										Change
 									</button>
@@ -1083,69 +668,42 @@
 						</div>
 					</div>
 
-					<div
-						class="col-md-4"
-						*ngIf="vehicleImage2; else noVehicleImage2"
-					>
+					<div class="col-md-4" *ngIf="vehicleImage2; else noVehicleImage2">
 						<div class="vehtype_extint">
 							<p>Vehicle Image 2</p>
-							<img
-								src="{{ vehicleImage2 }}"
-								(click)="showImageInModal(vehicleImage2)"
-								tabindex="-1"
-							/>
+							<img src="{{ vehicleImage2 }}" (click)="showImageInModal(vehicleImage2)" tabindex="-1" />
 							<ul class="mt-3">
 								<li>
 									<button class="changeuploaded" tabindex="1">
-										<input
-											type="file"
-											(change)="
+										<input type="file" (change)="
 												onFileChange(
 													$event,
 													vehicleImageId2,
 													'2'
 												)
-											"
-											tabindex="-1"
-										/>
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											viewBox="0 0 24 24"
-										>
-											<path
-												fill="none"
-												d="M0 0h24v24H0V0z"
-											/>
+											" tabindex="-1" />
+										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+											<path fill="none" d="M0 0h24v24H0V0z" />
 											<circle cx="12" cy="12" r="3" />
 											<path
-												d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
-											/>
+												d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
 										</svg>
 										Change
 									</button>
 								</li>
 								<li>
-									<a
-										class="delete-btn"
-										(click)="
+									<a class="delete-btn" (click)="
 											deleteImage(
 												vehicleImageId2,
 												'vehicleImage',
 												'2'
 											)
-										"
-										tabindex="1"
-									>
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											viewBox="0 0 32 32"
-										>
+										" tabindex="1">
+										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 											<path
-												d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z"
-											/>
+												d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
 										</svg>
-										Delete</a
-									>
+										Delete</a>
 								</li>
 							</ul>
 						</div>
@@ -1155,40 +713,23 @@
 							<div class="vehtype_extint">
 								<p>Vehicle Image 2</p>
 								<div class="emptyImage">
-									<img
-										src="../../../../assets/images/empty-image.png"
-										tabindex="-1"
-									/>
+									<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
 								</div>
 								<ul class="mt-3">
 									<li>
-										<button
-											class="adduploaded"
-											tabindex="1"
-										>
-											<input
-												type="file"
-												(change)="
+										<button class="adduploaded" tabindex="1">
+											<input type="file" (change)="
 													onFileChange(
 														$event,
 														vehicleImageId2,
 														'2'
 													)
-												"
-												tabindex="-1"
-											/>
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												viewBox="0 0 24 24"
-											>
-												<path
-													fill="none"
-													d="M0 0h24v24H0V0z"
-												/>
+												" tabindex="-1" />
+											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
 												<path
-													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
-												/>
+													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
 											</svg>
 											Add
 										</button>
@@ -1198,69 +739,42 @@
 						</div>
 					</ng-template>
 
-					<div
-						class="col-md-4"
-						*ngIf="vehicleImage3; else noVehicleImage3"
-					>
+					<div class="col-md-4" *ngIf="vehicleImage3; else noVehicleImage3">
 						<div class="vehtype_extint">
 							<p>Vehicle Image 3</p>
-							<img
-								src="{{ vehicleImage3 }}"
-								(click)="showImageInModal(vehicleImage3)"
-								tabindex="-1"
-							/>
+							<img src="{{ vehicleImage3 }}" (click)="showImageInModal(vehicleImage3)" tabindex="-1" />
 							<ul class="mt-3">
 								<li>
 									<button class="changeuploaded" tabindex="1">
-										<input
-											type="file"
-											(change)="
+										<input type="file" (change)="
 												onFileChange(
 													$event,
 													vehicleImageId3,
 													'3'
 												)
-											"
-											tabindex="-1"
-										/>
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											viewBox="0 0 24 24"
-										>
-											<path
-												fill="none"
-												d="M0 0h24v24H0V0z"
-											/>
+											" tabindex="-1" />
+										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+											<path fill="none" d="M0 0h24v24H0V0z" />
 											<circle cx="12" cy="12" r="3" />
 											<path
-												d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
-											/>
+												d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
 										</svg>
 										Change
 									</button>
 								</li>
 								<li>
-									<a
-										class="delete-btn"
-										(click)="
+									<a class="delete-btn" (click)="
 											deleteImage(
 												vehicleImageId3,
 												'vehicleImage',
 												'3'
 											)
-										"
-										tabindex="1"
-									>
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											viewBox="0 0 32 32"
-										>
+										" tabindex="1">
+										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 											<path
-												d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z"
-											/>
+												d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
 										</svg>
-										Delete</a
-									>
+										Delete</a>
 								</li>
 							</ul>
 						</div>
@@ -1270,40 +784,23 @@
 							<div class="vehtype_extint">
 								<p>Vehicle Image 3</p>
 								<div class="emptyImage">
-									<img
-										src="../../../../assets/images/empty-image.png"
-										tabindex="-1"
-									/>
+									<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
 								</div>
 								<ul class="mt-3">
 									<li>
-										<button
-											class="adduploaded"
-											tabindex="1"
-										>
-											<input
-												type="file"
-												(change)="
+										<button class="adduploaded" tabindex="1">
+											<input type="file" (change)="
 													onFileChange(
 														$event,
 														vehicleImageId3,
 														'3'
 													)
-												"
-												tabindex="-1"
-											/>
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												viewBox="0 0 24 24"
-											>
-												<path
-													fill="none"
-													d="M0 0h24v24H0V0z"
-												/>
+												" tabindex="-1" />
+											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
 												<path
-													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
-												/>
+													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
 											</svg>
 											Add
 										</button>
@@ -1313,69 +810,42 @@
 						</div>
 					</ng-template>
 
-					<div
-						class="col-md-4"
-						*ngIf="vehicleImage4; else noVehicleImage4"
-					>
+					<div class="col-md-4" *ngIf="vehicleImage4; else noVehicleImage4">
 						<div class="vehtype_extint">
 							<p>Vehicle Image 4</p>
-							<img
-								src="{{ vehicleImage4 }}"
-								(click)="showImageInModal(vehicleImage4)"
-								tabindex="-1"
-							/>
+							<img src="{{ vehicleImage4 }}" (click)="showImageInModal(vehicleImage4)" tabindex="-1" />
 							<ul class="mt-3">
 								<li>
 									<button class="changeuploaded" tabindex="1">
-										<input
-											type="file"
-											(change)="
+										<input type="file" (change)="
 												onFileChange(
 													$event,
 													vehicleImageId4,
 													'4'
 												)
-											"
-											tabindex="-1"
-										/>
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											viewBox="0 0 24 24"
-										>
-											<path
-												fill="none"
-												d="M0 0h24v24H0V0z"
-											/>
+											" tabindex="-1" />
+										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+											<path fill="none" d="M0 0h24v24H0V0z" />
 											<circle cx="12" cy="12" r="3" />
 											<path
-												d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
-											/>
+												d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
 										</svg>
 										Change
 									</button>
 								</li>
 								<li>
-									<a
-										class="delete-btn"
-										(click)="
+									<a class="delete-btn" (click)="
 											deleteImage(
 												vehicleImageId4,
 												'vehicleImage',
 												'4'
 											)
-										"
-										tabindex="1"
-									>
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											viewBox="0 0 32 32"
-										>
+										" tabindex="1">
+										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 											<path
-												d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z"
-											/>
+												d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
 										</svg>
-										Delete</a
-									>
+										Delete</a>
 								</li>
 							</ul>
 						</div>
@@ -1385,40 +855,23 @@
 							<div class="vehtype_extint">
 								<p>Vehicle Image 4</p>
 								<div class="emptyImage">
-									<img
-										src="../../../../assets/images/empty-image.png"
-										tabindex="-1"
-									/>
+									<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
 								</div>
 								<ul class="mt-3">
 									<li>
-										<button
-											class="adduploaded"
-											tabindex="1"
-										>
-											<input
-												type="file"
-												(change)="
+										<button class="adduploaded" tabindex="1">
+											<input type="file" (change)="
 													onFileChange(
 														$event,
 														vehicleImageId4,
 														'4'
 													)
-												"
-												tabindex="-1"
-											/>
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												viewBox="0 0 24 24"
-											>
-												<path
-													fill="none"
-													d="M0 0h24v24H0V0z"
-												/>
+												" tabindex="-1" />
+											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
 												<path
-													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
-												/>
+													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
 											</svg>
 											Add
 										</button>
@@ -1428,69 +881,42 @@
 						</div>
 					</ng-template>
 
-					<div
-						class="col-md-4"
-						*ngIf="vehicleImage5; else noVehicleImage5"
-					>
+					<div class="col-md-4" *ngIf="vehicleImage5; else noVehicleImage5">
 						<div class="vehtype_extint">
 							<p>Vehicle Image 5</p>
-							<img
-								src="{{ vehicleImage5 }}"
-								(click)="showImageInModal(vehicleImage5)"
-								tabindex="-1"
-							/>
+							<img src="{{ vehicleImage5 }}" (click)="showImageInModal(vehicleImage5)" tabindex="-1" />
 							<ul class="mt-3">
 								<li>
 									<button class="changeuploaded" tabindex="1">
-										<input
-											type="file"
-											(change)="
+										<input type="file" (change)="
 												onFileChange(
 													$event,
 													vehicleImageId5,
 													'5'
 												)
-											"
-											tabindex="-1"
-										/>
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											viewBox="0 0 24 24"
-										>
-											<path
-												fill="none"
-												d="M0 0h24v24H0V0z"
-											/>
+											" tabindex="-1" />
+										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+											<path fill="none" d="M0 0h24v24H0V0z" />
 											<circle cx="12" cy="12" r="3" />
 											<path
-												d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
-											/>
+												d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
 										</svg>
 										Change
 									</button>
 								</li>
 								<li>
-									<a
-										class="delete-btn"
-										(click)="
+									<a class="delete-btn" (click)="
 											deleteImage(
 												vehicleImageId5,
 												'vehicleImage',
 												'5'
 											)
-										"
-										tabindex="1"
-									>
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											viewBox="0 0 32 32"
-										>
+										" tabindex="1">
+										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 											<path
-												d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z"
-											/>
+												d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
 										</svg>
-										Delete</a
-									>
+										Delete</a>
 								</li>
 							</ul>
 						</div>
@@ -1500,40 +926,23 @@
 							<div class="vehtype_extint">
 								<p>Vehicle Image 5</p>
 								<div class="emptyImage">
-									<img
-										src="../../../../assets/images/empty-image.png"
-										tabindex="-1"
-									/>
+									<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
 								</div>
 								<ul class="mt-3">
 									<li>
-										<button
-											class="adduploaded"
-											tabindex="1"
-										>
-											<input
-												type="file"
-												(change)="
+										<button class="adduploaded" tabindex="1">
+											<input type="file" (change)="
 													onFileChange(
 														$event,
 														vehicleImageId5,
 														'5'
 													)
-												"
-												tabindex="-1"
-											/>
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												viewBox="0 0 24 24"
-											>
-												<path
-													fill="none"
-													d="M0 0h24v24H0V0z"
-												/>
+												" tabindex="-1" />
+											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
 												<path
-													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
-												/>
+													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
 											</svg>
 											Add
 										</button>
@@ -1543,69 +952,42 @@
 						</div>
 					</ng-template>
 
-					<div
-						class="col-md-4"
-						*ngIf="vehicleImage6; else noVehicleImage6"
-					>
+					<div class="col-md-4" *ngIf="vehicleImage6; else noVehicleImage6">
 						<div class="vehtype_extint">
 							<p>Vehicle Image 6</p>
-							<img
-								src="{{ vehicleImage6 }}"
-								(click)="showImageInModal(vehicleImage6)"
-								tabindex="-1"
-							/>
+							<img src="{{ vehicleImage6 }}" (click)="showImageInModal(vehicleImage6)" tabindex="-1" />
 							<ul class="mt-3">
 								<li>
 									<button class="changeuploaded" tabindex="1">
-										<input
-											type="file"
-											(change)="
+										<input type="file" (change)="
 												onFileChange(
 													$event,
 													vehicleImageId6,
 													'6'
 												)
-											"
-											tabindex="-1"
-										/>
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											viewBox="0 0 24 24"
-										>
-											<path
-												fill="none"
-												d="M0 0h24v24H0V0z"
-											/>
+											" tabindex="-1" />
+										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+											<path fill="none" d="M0 0h24v24H0V0z" />
 											<circle cx="12" cy="12" r="3" />
 											<path
-												d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
-											/>
+												d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
 										</svg>
 										Change
 									</button>
 								</li>
 								<li>
-									<a
-										class="delete-btn"
-										(click)="
+									<a class="delete-btn" (click)="
 											deleteImage(
 												vehicleImageId6,
 												'vehicleImage',
 												'6'
 											)
-										"
-										tabindex="1"
-									>
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											viewBox="0 0 32 32"
-										>
+										" tabindex="1">
+										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 											<path
-												d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z"
-											/>
+												d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
 										</svg>
-										Delete</a
-									>
+										Delete</a>
 								</li>
 							</ul>
 						</div>
@@ -1615,40 +997,23 @@
 							<div class="vehtype_extint">
 								<p>Vehicle Image 6</p>
 								<div class="emptyImage">
-									<img
-										src="../../../../assets/images/empty-image.png"
-										tabindex="-1"
-									/>
+									<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
 								</div>
 								<ul class="mt-3">
 									<li>
-										<button
-											class="adduploaded"
-											tabindex="1"
-										>
-											<input
-												type="file"
-												(change)="
+										<button class="adduploaded" tabindex="1">
+											<input type="file" (change)="
 													onFileChange(
 														$event,
 														vehicleImageId6,
 														'6'
 													)
-												"
-												tabindex="-1"
-											/>
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												viewBox="0 0 24 24"
-											>
-												<path
-													fill="none"
-													d="M0 0h24v24H0V0z"
-												/>
+												" tabindex="-1" />
+											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
 												<path
-													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
-												/>
+													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
 											</svg>
 											Add
 										</button>
@@ -1658,69 +1023,42 @@
 						</div>
 					</ng-template>
 
-					<div
-						class="col-md-4"
-						*ngIf="vehicleImage7; else noVehicleImage7"
-					>
+					<div class="col-md-4" *ngIf="vehicleImage7; else noVehicleImage7">
 						<div class="vehtype_extint">
 							<p>Vehicle Image 7</p>
-							<img
-								src="{{ vehicleImage7 }}"
-								(click)="showImageInModal(vehicleImage7)"
-								tabindex="-1"
-							/>
+							<img src="{{ vehicleImage7 }}" (click)="showImageInModal(vehicleImage7)" tabindex="-1" />
 							<ul class="mt-3">
 								<li>
 									<button class="changeuploaded" tabindex="1">
-										<input
-											type="file"
-											(change)="
+										<input type="file" (change)="
 												onFileChange(
 													$event,
 													vehicleImageId7,
 													'7'
 												)
-											"
-											tabindex="-1"
-										/>
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											viewBox="0 0 24 24"
-										>
-											<path
-												fill="none"
-												d="M0 0h24v24H0V0z"
-											/>
+											" tabindex="-1" />
+										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+											<path fill="none" d="M0 0h24v24H0V0z" />
 											<circle cx="12" cy="12" r="3" />
 											<path
-												d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
-											/>
+												d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
 										</svg>
 										Change
 									</button>
 								</li>
 								<li>
-									<a
-										class="delete-btn"
-										(click)="
+									<a class="delete-btn" (click)="
 											deleteImage(
 												vehicleImageId7,
 												'vehicleImage',
 												'7'
 											)
-										"
-										tabindex="1"
-									>
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											viewBox="0 0 32 32"
-										>
+										" tabindex="1">
+										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 											<path
-												d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z"
-											/>
+												d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
 										</svg>
-										Delete</a
-									>
+										Delete</a>
 								</li>
 							</ul>
 						</div>
@@ -1730,40 +1068,23 @@
 							<div class="vehtype_extint">
 								<p>Vehicle Image 7</p>
 								<div class="emptyImage">
-									<img
-										src="../../../../assets/images/empty-image.png"
-										tabindex="-1"
-									/>
+									<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
 								</div>
 								<ul class="mt-3">
 									<li>
-										<button
-											class="adduploaded"
-											tabindex="1"
-										>
-											<input
-												type="file"
-												(change)="
+										<button class="adduploaded" tabindex="1">
+											<input type="file" (change)="
 													onFileChange(
 														$event,
 														vehicleImageId7,
 														'7'
 													)
-												"
-												tabindex="-1"
-											/>
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												viewBox="0 0 24 24"
-											>
-												<path
-													fill="none"
-													d="M0 0h24v24H0V0z"
-												/>
+												" tabindex="-1" />
+											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
 												<path
-													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
-												/>
+													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
 											</svg>
 											Add
 										</button>
@@ -1773,69 +1094,42 @@
 						</div>
 					</ng-template>
 
-					<div
-						class="col-md-4"
-						*ngIf="vehicleImage8; else noVehicleImage8"
-					>
+					<div class="col-md-4" *ngIf="vehicleImage8; else noVehicleImage8">
 						<div class="vehtype_extint">
 							<p>Vehicle Image 8</p>
-							<img
-								src="{{ vehicleImage8 }}"
-								(click)="showImageInModal(vehicleImage8)"
-								tabindex="-1"
-							/>
+							<img src="{{ vehicleImage8 }}" (click)="showImageInModal(vehicleImage8)" tabindex="-1" />
 							<ul class="mt-3">
 								<li>
 									<button class="changeuploaded" tabindex="1">
-										<input
-											type="file"
-											(change)="
+										<input type="file" (change)="
 												onFileChange(
 													$event,
 													vehicleImageId8,
 													'8'
 												)
-											"
-											tabindex="-1"
-										/>
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											viewBox="0 0 24 24"
-										>
-											<path
-												fill="none"
-												d="M0 0h24v24H0V0z"
-											/>
+											" tabindex="-1" />
+										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+											<path fill="none" d="M0 0h24v24H0V0z" />
 											<circle cx="12" cy="12" r="3" />
 											<path
-												d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
-											/>
+												d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
 										</svg>
 										Change
 									</button>
 								</li>
 								<li>
-									<a
-										class="delete-btn"
-										(click)="
+									<a class="delete-btn" (click)="
 											deleteImage(
 												vehicleImageId8,
 												'vehicleImage',
 												'8'
 											)
-										"
-										tabindex="1"
-									>
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											viewBox="0 0 32 32"
-										>
+										" tabindex="1">
+										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 											<path
-												d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z"
-											/>
+												d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
 										</svg>
-										Delete</a
-									>
+										Delete</a>
 								</li>
 							</ul>
 						</div>
@@ -1845,40 +1139,23 @@
 							<div class="vehtype_extint">
 								<p>Vehicle Image 8</p>
 								<div class="emptyImage">
-									<img
-										src="../../../../assets/images/empty-image.png"
-										tabindex="-1"
-									/>
+									<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
 								</div>
 								<ul class="mt-3">
 									<li>
-										<button
-											class="adduploaded"
-											tabindex="1"
-										>
-											<input
-												type="file"
-												(change)="
+										<button class="adduploaded" tabindex="1">
+											<input type="file" (change)="
 													onFileChange(
 														$event,
 														vehicleImageId8,
 														'8'
 													)
-												"
-												tabindex="-1"
-											/>
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												viewBox="0 0 24 24"
-											>
-												<path
-													fill="none"
-													d="M0 0h24v24H0V0z"
-												/>
+												" tabindex="-1" />
+											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
 												<path
-													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
-												/>
+													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
 											</svg>
 											Add
 										</button>
@@ -1888,69 +1165,42 @@
 						</div>
 					</ng-template>
 
-					<div
-						class="col-md-4"
-						*ngIf="vehicleImage9; else noVehicleImage9"
-					>
+					<div class="col-md-4" *ngIf="vehicleImage9; else noVehicleImage9">
 						<div class="vehtype_extint">
 							<p>Vehicle Image 9</p>
-							<img
-								src="{{ vehicleImage9 }}"
-								(click)="showImageInModal(vehicleImage9)"
-								tabindex="-1"
-							/>
+							<img src="{{ vehicleImage9 }}" (click)="showImageInModal(vehicleImage9)" tabindex="-1" />
 							<ul class="mt-3">
 								<li>
 									<button class="changeuploaded" tabindex="1">
-										<input
-											type="file"
-											(change)="
+										<input type="file" (change)="
 												onFileChange(
 													$event,
 													vehicleImageId9,
 													'9'
 												)
-											"
-											tabindex="-1"
-										/>
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											viewBox="0 0 24 24"
-										>
-											<path
-												fill="none"
-												d="M0 0h24v24H0V0z"
-											/>
+											" tabindex="-1" />
+										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+											<path fill="none" d="M0 0h24v24H0V0z" />
 											<circle cx="12" cy="12" r="3" />
 											<path
-												d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
-											/>
+												d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
 										</svg>
 										Change
 									</button>
 								</li>
 								<li>
-									<a
-										class="delete-btn"
-										(click)="
+									<a class="delete-btn" (click)="
 											deleteImage(
 												vehicleImageId9,
 												'vehicleImage',
 												'9'
 											)
-										"
-										tabindex="1"
-									>
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											viewBox="0 0 32 32"
-										>
+										" tabindex="1">
+										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 											<path
-												d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z"
-											/>
+												d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
 										</svg>
-										Delete</a
-									>
+										Delete</a>
 								</li>
 							</ul>
 						</div>
@@ -1960,40 +1210,23 @@
 							<div class="vehtype_extint">
 								<p>Vehicle Image 9</p>
 								<div class="emptyImage">
-									<img
-										src="../../../../assets/images/empty-image.png"
-										tabindex="-1"
-									/>
+									<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
 								</div>
 								<ul class="mt-3">
 									<li>
-										<button
-											class="adduploaded"
-											tabindex="1"
-										>
-											<input
-												type="file"
-												(change)="
+										<button class="adduploaded" tabindex="1">
+											<input type="file" (change)="
 													onFileChange(
 														$event,
 														vehicleImageId9,
 														'9'
 													)
-												"
-												tabindex="-1"
-											/>
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												viewBox="0 0 24 24"
-											>
-												<path
-													fill="none"
-													d="M0 0h24v24H0V0z"
-												/>
+												" tabindex="-1" />
+											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
 												<path
-													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
-												/>
+													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
 											</svg>
 											Add
 										</button>
@@ -2007,102 +1240,62 @@
 				<hr />
 
 				<div class="row">
-					<div
-						class="col-md-4"
-						*ngIf="rearPlateImage; else noRearPlateImage"
-					>
+					<div class="col-md-4" *ngIf="rearPlateImage; else noRearPlateImage">
 						<div class="vehtype_extint">
 							<div>
 								<p>
 									Rear Plate
-									<span class="optionalTextStyle"
-										>(w/exp decal)
+									<span class="optionalTextStyle">(w/exp decal)
 									</span>
-									<span
-										*ngIf="
+									<span *ngIf="
 											affiliateType != 'fleet_operator';
 											else nonFleetOperator
-										"
-										class="asterisk"
-										>*</span
-									>
+										" class="asterisk">*</span>
 									<ng-template #nonFleetOperator>
-										<span class="optionalTextStyle"
-											>(optional)</span
-										>
+										<span class="optionalTextStyle">(optional)</span>
 									</ng-template>
 								</p>
-								<img
-									src="{{ rearPlateImage }}"
-									(click)="showImageInModal(rearPlateImage)"
-									tabindex="-1"
-								/>
+								<img src="{{ rearPlateImage }}" (click)="showImageInModal(rearPlateImage)"
+									tabindex="-1" />
 								<ul class="mt-3">
 									<li>
-										<button
-											class="changeuploaded"
-											tabindex="1"
-										>
-											<input
-												type="file"
-												(change)="
+										<button class="changeuploaded" tabindex="1">
+											<input type="file" (change)="
 													vehicleOfficialImagesChange(
 														$event,
 														'rearPlate',
 														rearPlateId
 													)
-												"
-												tabindex="-1"
-											/>
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												viewBox="0 0 24 24"
-											>
-												<path
-													fill="none"
-													d="M0 0h24v24H0V0z"
-												/>
+												" tabindex="-1" />
+											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
 												<path
-													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
-												/>
+													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
 											</svg>
 											Change
 										</button>
 									</li>
-									<li
-										*ngIf="
+									<li *ngIf="
 											affiliateType == 'fleet_operator'
-										"
-									>
-										<a
-											class="delete-btn"
-											(click)="
+										">
+										<a class="delete-btn" (click)="
 												deleteImage(
 													rearPlateId,
 													'rearPlate'
 												)
-											"
-											tabindex="1"
-										>
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												viewBox="0 0 32 32"
-											>
+											" tabindex="1">
+											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 												<path
-													d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z"
-												/>
+													d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
 											</svg>
-											Delete</a
-										>
+											Delete</a>
 									</li>
 								</ul>
 							</div>
 						</div>
-						<div
-							*ngIf="submittedForm && f.rearPlateImage.errors"
-							class="text-danger margin-bottom-thin my-mat-hint"
-						>
+						<div *ngIf="submittedForm && f.rearPlateImage.errors"
+							class="text-danger margin-bottom-thin my-mat-hint">
 							<div *ngIf="f.rearPlateImage.errors.required">
 								The Rear Plate Image is required
 							</div>
@@ -2114,60 +1307,33 @@
 								<div>
 									<p>
 										Rear Plate Image
-										<span
-											*ngIf="
+										<span *ngIf="
 												affiliateType !=
 													'fleet_operator';
 												else nonFleetOperator
-											"
-											class="asterisk"
-											>*</span
-										>
+											" class="asterisk">*</span>
 										<ng-template #nonFleetOperator>
-											<span class="optionalTextStyle"
-												>(optional)</span
-											>
+											<span class="optionalTextStyle">(optional)</span>
 										</ng-template>
 									</p>
 									<div class="emptyImage">
-										<img
-											src="../../../../assets/images/empty-image.png"
-											tabindex="-1"
-										/>
+										<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
 									</div>
 									<ul class="mt-3">
 										<li>
-											<button
-												class="adduploaded"
-												tabindex="1"
-											>
-												<input
-													type="file"
-													(change)="
+											<button class="adduploaded" tabindex="1">
+												<input type="file" (change)="
 														vehicleOfficialImagesChange(
 															$event,
 															'rearPlate',
 															rearPlateId
 														)
-													"
-													tabindex="-1"
-												/>
-												<svg
-													xmlns="http://www.w3.org/2000/svg"
-													viewBox="0 0 24 24"
-												>
+													" tabindex="-1" />
+												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+													<path fill="none" d="M0 0h24v24H0V0z" />
+													<circle cx="12" cy="12" r="3" />
 													<path
-														fill="none"
-														d="M0 0h24v24H0V0z"
-													/>
-													<circle
-														cx="12"
-														cy="12"
-														r="3"
-													/>
-													<path
-														d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
-													/>
+														d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
 												</svg>
 												Add
 											</button>
@@ -2178,89 +1344,53 @@
 						</div>
 					</ng-template>
 
-					<div
-						class="col-md-4"
-						*ngIf="windowPermitImage; else noWindowPermitImage"
-					>
+					<div class="col-md-4" *ngIf="windowPermitImage; else noWindowPermitImage">
 						<div class="vehtype_extint">
 							<div>
 								<p>
 									Window Permit
-									<span
-										*ngIf="
+									<span *ngIf="
 											affiliateType != 'fleet_operator';
 											else nonFleetOperator
-										"
-										class="asterisk"
-										>*</span
-									>
+										" class="asterisk">*</span>
 									<ng-template #nonFleetOperator>
-										<span class="optionalTextStyle"
-											>(Optional)</span
-										>
+										<span class="optionalTextStyle">(Optional)</span>
 									</ng-template>
 								</p>
-								<img
-									src="{{ windowPermitImage }}"
-									(click)="
+								<img src="{{ windowPermitImage }}" (click)="
 										showImageInModal(windowPermitImage)
-									"
-									tabindex="-1"
-								/>
+									" tabindex="-1" />
 								<ul class="mt-3">
 									<li>
-										<button
-											class="changeuploaded"
-											tabindex="1"
-										>
-											<input
-												type="file"
-												(change)="
+										<button class="changeuploaded" tabindex="1">
+											<input type="file" (change)="
 													vehicleOfficialImagesChange(
 														$event,
 														'windowPermit',
 														windowPermitId
 													)
-												"
-												tabindex="-1"
-											/>
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												viewBox="0 0 24 24"
-											>
-												<path
-													fill="none"
-													d="M0 0h24v24H0V0z"
-												/>
+												" tabindex="-1" />
+											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
 												<path
-													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
-												/>
+													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
 											</svg>
 											Change
 										</button>
 									</li>
 									<li>
-										<a
-											class="delete-btn"
-											(click)="
+										<a class="delete-btn" (click)="
 												deleteImage(
 													windowPermitId,
 													'windowPermit'
 												)
-											"
-											tabindex="1"
-										>
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												viewBox="0 0 32 32"
-											>
+											" tabindex="1">
+											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 												<path
-													d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z"
-												/>
+													d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
 											</svg>
-											Delete</a
-										>
+											Delete</a>
 									</li>
 								</ul>
 							</div>
@@ -2272,60 +1402,33 @@
 								<div>
 									<p>
 										Window Permit
-										<span
-											*ngIf="
+										<span *ngIf="
 												affiliateType !=
 													'fleet_operator';
 												else nonFleetOperator
-											"
-											class="asterisk"
-											>*</span
-										>
+											" class="asterisk">*</span>
 										<ng-template #nonFleetOperator>
-											<span class="optionalTextStyle"
-												>(optional)</span
-											>
+											<span class="optionalTextStyle">(optional)</span>
 										</ng-template>
 									</p>
 									<div class="emptyImage">
-										<img
-											src="../../../../assets/images/empty-image.png"
-											tabindex="-1"
-										/>
+										<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
 									</div>
 									<ul class="mt-3">
 										<li>
-											<button
-												class="adduploaded"
-												tabindex="1"
-											>
-												<input
-													type="file"
-													(change)="
+											<button class="adduploaded" tabindex="1">
+												<input type="file" (change)="
 														vehicleOfficialImagesChange(
 															$event,
 															'windowPermit',
 															windowPermitId
 														)
-													"
-													tabindex="-1"
-												/>
-												<svg
-													xmlns="http://www.w3.org/2000/svg"
-													viewBox="0 0 24 24"
-												>
+													" tabindex="-1" />
+												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+													<path fill="none" d="M0 0h24v24H0V0z" />
+													<circle cx="12" cy="12" r="3" />
 													<path
-														fill="none"
-														d="M0 0h24v24H0V0z"
-													/>
-													<circle
-														cx="12"
-														cy="12"
-														r="3"
-													/>
-													<path
-														d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
-													/>
+														d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
 												</svg>
 												Add
 											</button>
@@ -2336,89 +1439,53 @@
 						</div>
 					</ng-template>
 
-					<div
-						class="col-md-4"
-						*ngIf="windowPermit2Image; else noWindowPermit2Image"
-					>
+					<div class="col-md-4" *ngIf="windowPermit2Image; else noWindowPermit2Image">
 						<div class="vehtype_extint">
 							<div>
 								<p>
 									Secretary of State
-									<span
-										*ngIf="
+									<span *ngIf="
 											affiliateType != 'fleet_operator';
 											else nonFleetOperator
-										"
-										class="asterisk"
-										>*</span
-									>
+										" class="asterisk">*</span>
 									<ng-template #nonFleetOperator>
-										<span class="optionalTextStyle"
-											>(optional)</span
-										>
+										<span class="optionalTextStyle">(optional)</span>
 									</ng-template>
 								</p>
-								<img
-									src="{{ windowPermit2Image }}"
-									(click)="
+								<img src="{{ windowPermit2Image }}" (click)="
 										showImageInModal(windowPermit2Image)
-									"
-									tabindex="-1"
-								/>
+									" tabindex="-1" />
 								<ul class="mt-3">
 									<li>
-										<button
-											class="changeuploaded"
-											tabindex="1"
-										>
-											<input
-												type="file"
-												(change)="
+										<button class="changeuploaded" tabindex="1">
+											<input type="file" (change)="
 													vehicleOfficialImagesChange(
 														$event,
 														'windowPermit2',
 														windowPermit2Id
 													)
-												"
-												tabindex="-1"
-											/>
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												viewBox="0 0 24 24"
-											>
-												<path
-													fill="none"
-													d="M0 0h24v24H0V0z"
-												/>
+												" tabindex="-1" />
+											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
 												<path
-													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
-												/>
+													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
 											</svg>
 											Change
 										</button>
 									</li>
 									<li>
-										<a
-											class="delete-btn"
-											(click)="
+										<a class="delete-btn" (click)="
 												deleteImage(
 													windowPermit2Id,
 													'windowPermit2'
 												)
-											"
-											tabindex="1"
-										>
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												viewBox="0 0 32 32"
-											>
+											" tabindex="1">
+											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 												<path
-													d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z"
-												/>
+													d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
 											</svg>
-											Delete</a
-										>
+											Delete</a>
 									</li>
 								</ul>
 							</div>
@@ -2430,60 +1497,33 @@
 								<div>
 									<p>
 										Secretary of State
-										<span
-											*ngIf="
+										<span *ngIf="
 												affiliateType !=
 													'fleet_operator';
 												else nonFleetOperator
-											"
-											class="asterisk"
-											>*</span
-										>
+											" class="asterisk">*</span>
 										<ng-template #nonFleetOperator>
-											<span class="optionalTextStyle"
-												>(optional)</span
-											>
+											<span class="optionalTextStyle">(optional)</span>
 										</ng-template>
 									</p>
 									<div class="emptyImage">
-										<img
-											src="../../../../assets/images/empty-image.png"
-											tabindex="-1"
-										/>
+										<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
 									</div>
 									<ul class="mt-3">
 										<li>
-											<button
-												class="adduploaded"
-												tabindex="1"
-											>
-												<input
-													type="file"
-													(change)="
+											<button class="adduploaded" tabindex="1">
+												<input type="file" (change)="
 														vehicleOfficialImagesChange(
 															$event,
 															'windowPermit2',
 															windowPermit2Id
 														)
-													"
-													tabindex="-1"
-												/>
-												<svg
-													xmlns="http://www.w3.org/2000/svg"
-													viewBox="0 0 24 24"
-												>
+													" tabindex="-1" />
+												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+													<path fill="none" d="M0 0h24v24H0V0z" />
+													<circle cx="12" cy="12" r="3" />
 													<path
-														fill="none"
-														d="M0 0h24v24H0V0z"
-													/>
-													<circle
-														cx="12"
-														cy="12"
-														r="3"
-													/>
-													<path
-														d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
-													/>
+														d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
 												</svg>
 												Add
 											</button>
@@ -2496,87 +1536,52 @@
 				</div>
 
 				<div class="row">
-					<div
-						class="col-md-4"
-						*ngIf="usdotPermitImage; else noUsdotPermitImage"
-					>
+					<div class="col-md-4" *ngIf="usdotPermitImage; else noUsdotPermitImage">
 						<div class="vehtype_extint">
 							<div>
 								<p>
 									USDOT Permit
-									<span
-										*ngIf="
+									<span *ngIf="
 											affiliateType != 'fleet_operator';
 											else nonFleetOperator
-										"
-										class="asterisk"
-										>*</span
-									>
+										" class="asterisk">*</span>
 									<ng-template #nonFleetOperator>
-										<span class="optionalTextStyle"
-											>(optional)</span
-										>
+										<span class="optionalTextStyle">(optional)</span>
 									</ng-template>
 								</p>
-								<img
-									src="{{ usdotPermitImage }}"
-									(click)="showImageInModal(usdotPermitImage)"
-									tabindex="-1"
-								/>
+								<img src="{{ usdotPermitImage }}" (click)="showImageInModal(usdotPermitImage)"
+									tabindex="-1" />
 								<ul class="mt-3">
 									<li>
-										<button
-											class="changeuploaded"
-											tabindex="1"
-										>
-											<input
-												type="file"
-												(change)="
+										<button class="changeuploaded" tabindex="1">
+											<input type="file" (change)="
 													vehicleOfficialImagesChange(
 														$event,
 														'usdotPermit',
 														usdotPermitId
 													)
-												"
-												tabindex="-1"
-											/>
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												viewBox="0 0 24 24"
-											>
-												<path
-													fill="none"
-													d="M0 0h24v24H0V0z"
-												/>
+												" tabindex="-1" />
+											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
 												<path
-													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
-												/>
+													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
 											</svg>
 											Change
 										</button>
 									</li>
 									<li>
-										<a
-											class="delete-btn"
-											(click)="
+										<a class="delete-btn" (click)="
 												deleteImage(
 													usdotPermitId,
 													'usdotPermit'
 												)
-											"
-											tabindex="1"
-										>
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												viewBox="0 0 32 32"
-											>
+											" tabindex="1">
+											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 												<path
-													d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z"
-												/>
+													d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
 											</svg>
-											Delete</a
-										>
+											Delete</a>
 									</li>
 								</ul>
 							</div>
@@ -2588,60 +1593,33 @@
 								<div>
 									<p>
 										USDOT Permit
-										<span
-											*ngIf="
+										<span *ngIf="
 												affiliateType !=
 													'fleet_operator';
 												else nonFleetOperator
-											"
-											class="asterisk"
-											>*</span
-										>
+											" class="asterisk">*</span>
 										<ng-template #nonFleetOperator>
-											<span class="optionalTextStyle"
-												>(optional)</span
-											>
+											<span class="optionalTextStyle">(optional)</span>
 										</ng-template>
 									</p>
 									<div class="emptyImage">
-										<img
-											src="../../../../assets/images/empty-image.png"
-											tabindex="-1"
-										/>
+										<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
 									</div>
 									<ul class="mt-3">
 										<li>
-											<button
-												class="adduploaded"
-												tabindex="1"
-											>
-												<input
-													type="file"
-													(change)="
+											<button class="adduploaded" tabindex="1">
+												<input type="file" (change)="
 														vehicleOfficialImagesChange(
 															$event,
 															'usdotPermit',
 															usdotPermitId
 														)
-													"
-													tabindex="-1"
-												/>
-												<svg
-													xmlns="http://www.w3.org/2000/svg"
-													viewBox="0 0 24 24"
-												>
+													" tabindex="-1" />
+												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+													<path fill="none" d="M0 0h24v24H0V0z" />
+													<circle cx="12" cy="12" r="3" />
 													<path
-														fill="none"
-														d="M0 0h24v24H0V0z"
-													/>
-													<circle
-														cx="12"
-														cy="12"
-														r="3"
-													/>
-													<path
-														d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
-													/>
+														d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
 												</svg>
 												Add
 											</button>
@@ -2657,74 +1635,41 @@
 							<div>
 								<p>
 									Vehicle Inspection Certificate
-									<span
-										*ngIf="
+									<span *ngIf="
 											affiliateType != 'fleet_operator';
 											else nonFleetOperator
-										"
-										class="asterisk"
-										>*</span
-									>
+										" class="asterisk">*</span>
 									<ng-template #nonFleetOperator>
-										<span class="optionalTextStyle"
-											>(optional)</span
-										>
+										<span class="optionalTextStyle">(optional)</span>
 									</ng-template>
 								</p>
-								<img
-									src="{{ mcImage }}"
-									(click)="showImageInModal(mcImage)"
-									tabindex="-1"
-								/>
+								<img src="{{ mcImage }}" (click)="showImageInModal(mcImage)" tabindex="-1" />
 								<ul class="mt-3">
 									<li>
-										<button
-											class="changeuploaded"
-											tabindex="1"
-										>
-											<input
-												type="file"
-												(change)="
+										<button class="changeuploaded" tabindex="1">
+											<input type="file" (change)="
 													vehicleOfficialImagesChange(
 														$event,
 														'mc',
 														mcId
 													)
-												"
-												tabindex="-1"
-											/>
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												viewBox="0 0 24 24"
-											>
-												<path
-													fill="none"
-													d="M0 0h24v24H0V0z"
-												/>
+												" tabindex="-1" />
+											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
 												<path
-													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
-												/>
+													d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
 											</svg>
 											Change
 										</button>
 									</li>
 									<li>
-										<a
-											class="delete-btn"
-											(click)="deleteImage(mcId, 'mc')"
-											tabindex="1"
-										>
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												viewBox="0 0 32 32"
-											>
+										<a class="delete-btn" (click)="deleteImage(mcId, 'mc')" tabindex="1">
+											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 												<path
-													d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z"
-												/>
+													d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
 											</svg>
-											Delete</a
-										>
+											Delete</a>
 									</li>
 								</ul>
 							</div>
@@ -2736,60 +1681,33 @@
 								<div>
 									<p>
 										Vehicle Inspection Certificate
-										<span
-											*ngIf="
+										<span *ngIf="
 												affiliateType !=
 													'fleet_operator';
 												else nonFleetOperator
-											"
-											class="asterisk"
-											>*</span
-										>
+											" class="asterisk">*</span>
 										<ng-template #nonFleetOperator>
-											<span class="optionalTextStyle"
-												>(optional)</span
-											>
+											<span class="optionalTextStyle">(optional)</span>
 										</ng-template>
 									</p>
 									<div class="emptyImage">
-										<img
-											src="../../../../assets/images/empty-image.png"
-											tabindex="-1"
-										/>
+										<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
 									</div>
 									<ul class="mt-3">
 										<li>
-											<button
-												class="adduploaded"
-												tabindex="1"
-											>
-												<input
-													type="file"
-													(change)="
+											<button class="adduploaded" tabindex="1">
+												<input type="file" (change)="
 														vehicleOfficialImagesChange(
 															$event,
 															'mc',
 															mcId
 														)
-													"
-													tabindex="-1"
-												/>
-												<svg
-													xmlns="http://www.w3.org/2000/svg"
-													viewBox="0 0 24 24"
-												>
+													" tabindex="-1" />
+												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+													<path fill="none" d="M0 0h24v24H0V0z" />
+													<circle cx="12" cy="12" r="3" />
 													<path
-														fill="none"
-														d="M0 0h24v24H0V0z"
-													/>
-													<circle
-														cx="12"
-														cy="12"
-														r="3"
-													/>
-													<path
-														d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
-													/>
+														d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
 												</svg>
 												Add
 											</button>
@@ -2803,20 +1721,27 @@
 			</div>
 		</div>
 	</section>
-	<div class="row justify-content-center my-4">
-		<button class="custom-btn savebutton mx-2" (click)="submitForm()" [disabled]="disableSubmitButton"
-			tabindex="1">SAVE</button>
-		<button class="custom-btn resetbutton mx-2" (click)="resetForm()" tabindex="1">RESET</button>
-		<button class="custom-btn backbutton mx-2" type="button" (click)="backButton()" data-toggle="tooltip"
-			data-placement="top" title="Clicking back button deletes all fields." tabindex="1">BACK</button>
-	</div>
 </form>
 
+<div class="row flex flex-wrap-reverse my-4">
+	<button class="custom-filled-back-button m-2 mx-4" routerLink="/affiliate/step5">
+		BACK
+	</button>
+	<div class="col-md-auto mx-auto">
+		<button class="custom-filled-reset-button m-2" (click)="resetForm()" tabIndex="2">
+			RESET
+		</button>
+		<button class="custom-filled-button m-2" (click)="submitForm()" tabIndex="1">
+			SAVE
+		</button>
+	</div>
+</div>
+
+
+
+
 <!-- Image modal -->
-<app-image-modal
-	(closeTab)="closeButton()"
-	[modalImage]="modalImage"
-></app-image-modal>
+<app-image-modal (closeTab)="closeButton()" [modalImage]="modalImage"></app-image-modal>
 
 <!-- Photo Instructions modal -->
 <app-photo-instructions></app-photo-instructions>

@@ -121,20 +121,8 @@
 						<div *ngIf="f.color.errors.required">The Color is required</div>
 					</div>
 				</div>
-				<div class="col-md-6">
-					<mat-form-field appearance="outline">
-						<mat-label>
-							License Plate
-							<span *ngIf="affiliateType!='fleet_operator'; else nonFleetOperator"
-								class="asterisk">*</span>
-							<ng-template #nonFleetOperator>
-								<span class="theme-color">(optional)</span>
-							</ng-template>
-						</mat-label>
-						<input matInput placeholder="License Plate" (focus)="$event.target.select()"
-							formControlName="licensePlate" tabindex="1">
-					</mat-form-field>
-				</div>
+
+				<!-- Number of Pax -->
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
 						<mat-label>Number of Pax Seats / Seat Belts <span class="asterisk">*</span></mat-label>
@@ -152,6 +140,7 @@
 						<div *ngIf="f.seats.errors.pattern">The Pax Seats / Seat Belts should be a number</div>
 					</div>
 				</div>
+				<!-- Number Of Luggage -->
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
 						<mat-label>Number of Luggage <span class="theme-color">(2 carry on = 1 large suitcase) </span>
@@ -171,6 +160,8 @@
 						<div *ngIf="f.luggage.errors.pattern">The Luggage should be a number</div>
 					</div>
 				</div>
+
+				<!-- Airport/City Cancel Times -->
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
 						<mat-label>Airport / City Cancel Times <span class="asterisk">*</span></mat-label>
@@ -190,6 +181,8 @@
 						</div>
 					</div>
 				</div>
+
+				<!-- Charter Cancel Times -->
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
 						<mat-label>Charter Cancel Times <span class="asterisk">*</span></mat-label>
@@ -209,34 +202,22 @@
 						</div>
 					</div>
 				</div>
-				<!-- <div class="col-md-3 pr-0 borderright mobilePadding">
-					<div class="form-group radio-tile-group">
-						<div class="custom-radio input-container" tabindex="1">
-							<input class="radio-button" type="radio" id="local" value="localService"
-								name="typeOfService" checked="" formControlName="typeOfService"
-								(click)="typeOfService('localService')" tabIndex="-1">
-							<div class="radio-tile">
-								<label class="radio-tile-label" for="local"
-									[ngClass]="serviceType=='localService' ? 'radio-active' : ''">Local Service
-									Only</label>
-							</div>
-						</div>
-					</div>
+
+				<!-- License Plate -->
+				<div class="col-md-6">
+					<mat-form-field appearance="outline">
+						<mat-label>
+							License Plate
+							<span *ngIf="affiliateType!='fleet_operator'; else nonFleetOperator"
+								class="asterisk">*</span>
+							<ng-template #nonFleetOperator>
+								<span class="theme-color">(optional)</span>
+							</ng-template>
+						</mat-label>
+						<input matInput placeholder="License Plate" (focus)="$event.target.select()"
+							formControlName="licensePlate" tabindex="1">
+					</mat-form-field>
 				</div>
-				<div class="col-md-3 pl-0 mobilePadding">
-					<div class="form-group radio-tile-group">
-						<div class="custom-radio input-container" tabindex="1">
-							<input class="radio-button" type="radio" id="longDistance" value="longDistance"
-								name="typeOfService" checked="" formControlName="typeOfService"
-								(click)="typeOfService('longDistance')" tabIndex="-1">
-							<div class="radio-tile">
-								<label class="radio-tile-label" for="longDistance"
-									[ngClass]="serviceType=='longDistance' ? 'radio-active' : ''">Over the Road – Long
-									Distance</label>
-							</div>
-						</div>
-					</div>
-				</div> -->
 			</div>
 			<div class="row mt-3">
 				<div class="col-md-4">
@@ -1177,14 +1158,25 @@
 			</div>
 		</div>
 	</section>
-	<div class="row justify-content-center my-4">
-		<button class="custom-btn savebutton mx-2" (click)="submitForm()" [disabled]="disableSubmitButton"
-			tabindex="1">SAVE</button>
-		<button class="custom-btn resetbutton mx-2" (click)="resetForm()" tabindex="1">RESET</button>
-		<button class="custom-btn backbutton mx-2" type="button" (click)="backButton()" data-toggle="tooltip"
-			data-placement="top" title="Clicking back button deletes all fields." tabindex="1">BACK</button>
-	</div>
 </form>
+
+
+<div class="row flex flex-wrap-reverse my-4">
+	<button class="custom-filled-back-button m-2 mx-4" routerLink="/affiliate/step5">
+		BACK
+	</button>
+	<div class="col-md-auto mx-auto">
+		<button class="custom-filled-reset-button m-2" (click)="resetForm()" tabIndex="2">
+			RESET
+		</button>
+		<button class="custom-filled-button m-2" (click)="submitForm()" tabIndex="1">
+			SAVE
+		</button>
+	</div>
+</div>
+
+
+
 <!-- Image modal -->
 <app-image-modal (closeTab)="closeButton()" [modalImage]="modalImage"></app-image-modal>
 

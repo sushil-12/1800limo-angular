@@ -225,16 +225,12 @@ export class OtpComponent implements OnInit, OnDestroy
 							}
 							case 'in-progress': {
 								let nextStep: number;
-								if (this.response.data.affiliateParmas.step_completed.includes('0'))
+								if (this.response.data.affiliateParmas.step_completed.length > 0)
 								{//if step 0 is completed
-									nextStep = 1;
+									nextStep = this.fetchHighestNumber(this.response.data.affiliateParmas.step_completed);
+									this.router.navigateByUrl('/affiliate/step' + nextStep.toString());
+									break;
 								}
-								else
-								{//if no step is completed
-									nextStep = 0;
-								}
-								this.router.navigateByUrl('/affiliate/step' + nextStep);
-								break;
 							}
 							default: {
 								this.router.navigateByUrl('/affiliate');
@@ -257,5 +253,26 @@ export class OtpComponent implements OnInit, OnDestroy
 					}
 				}
 			});
+	}
+
+	fetchHighestNumber(array: Array<number | string>): number
+	{
+		let highest = 0
+		for (let i = 0; i < array.length; i++)
+		{
+			try
+			{
+				if (highest < parseInt((array[i]).toString()))
+				{
+					highest = parseInt((array[i]).toString())
+				}
+			} catch (err)
+			{
+				console.log('Error Fetching Highest Number: ', err)
+				return
+			}
+		}
+		console.log('Highest: ', highest)
+		return highest
 	}
 }

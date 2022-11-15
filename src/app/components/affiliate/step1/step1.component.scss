@@ -1,3 +1,54 @@
+#radio-tiles-container
+{
+	.radio-tiles
+	{
+		.tile
+		{
+			position: relative;
+			width: 12rem;
+			height: auto;
+			margin: 10px;
+			border-radius: 2rem;
+			border: 2px solid var(--green);
+			padding: 1rem;
+			min-height: 7rem;
+			flex-basis: 10rem;
+			transition: box-shadow 0.35s ease-in-out;
+			#check-icon
+			{
+				position: absolute;
+				margin: 0 auto;
+				transform: translate(-15px, -30px);
+				i
+				{
+					padding: 3px;
+					border-radius: 50%;
+					color: #000000;
+					background-color: var(--orange);
+					font-weight: 700;
+					font-size: 1.2rem
+				}
+			}
+			#tile-name
+			{
+				font-size: 1.2rem;
+				text-transform: uppercase;
+				font-weight: 600;
+			}
+		}
+		.tile:hover
+		{
+			box-shadow: 3px 4px 9px 4px rgb(0 0 0 / 40%);
+		}
+		.tile.active
+		{
+			box-shadow: 3px 4px 9px 4px rgb(0 0 0 / 40%);
+			background-color: var(--green)
+		}
+	}
+}
+
+
 .selectStyle
 {
 	color: #000;
@@ -23,24 +74,6 @@
 .vehtype_extint .emptyImage img {
 	height: 220px;
 }
-
-.custom-radio-row {
-	border-bottom : 1px solid #e2e2e2;
-	padding-bottom: 1rem;
-}
-
-.custom-check-row,
-.custom-radio-row {
-	line-height: 2;
-}
-
-.custom-check-row .custom-checkbox {
-	padding-left: 0;
-}
-
-// .custom-radio-row .active {
-//     color: var(--orange-color);
-// }
 
 #instructionsModal .modal-dialog {
 	max-width: 710px;

@@ -79,12 +79,38 @@ export class HttpConfigInterceptor implements HttpInterceptor
 				{
 					this.errors = errorData.error.data;
 				}
-				if (this.errors.error.includes('account not found'))
+
+
+
+
+
+				try
 				{
-					localStorage.clear()
-					sessionStorage.clear()
-					location.reload()
+					if (this.errors.error.includes('account not found'))
+					{
+						localStorage.clear()
+						sessionStorage.clear()
+						location.reload()
+					}
+				} catch (err)
+				{
+					console.log('Error in Interceptor: ', err)
+					try
+					{
+						if (this.errors.includes('account not found'))
+						{
+							localStorage.clear()
+							sessionStorage.clear()
+							location.reload()
+						}
+					} catch (err)
+					{
+						console.log('Error in Interceptor: ', err)
+					}
 				}
+
+
+
 				this.errorDialogService.openDialog(this.errors);
 				return throwError(this.errors);
 			}));

@@ -1,24 +1,8 @@
-import
-{
-	Component,
-	OnInit,
-	AfterViewInit,
-	Input,
-	EventEmitter,
-	ViewChild,
-	ElementRef,
-} from "@angular/core";
+import { Component, OnInit, AfterViewInit, Input, EventEmitter, ViewChild, ElementRef } from "@angular/core";
 import { AuthService } from "../../../services/auth.service";
 import { AffiliateService } from "../../../services/affiliate.service";
 import { StateManagementService } from "../../../services/statemanagement.service";
-import
-{
-	FormGroup,
-	FormBuilder,
-	Validators,
-	FormArray,
-	FormControl,
-} from "@angular/forms";
+import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from "@angular/forms";
 import { Router } from "@angular/router";
 import { NgxSpinnerService } from "ngx-spinner";
 import { catchError } from "rxjs/operators";
@@ -490,9 +474,7 @@ export class Step1Component implements OnInit, AfterViewInit
 				} else
 				{
 					this.addAffiliateAccountForm.patchValue({
-						AffiliateType: AffiliateType
-							? AffiliateType
-							: "black_limo_operator",
+						AffiliateType: AffiliateType ? AffiliateType : "black_limo_operator",
 					});
 					this.stateManagementService.setprogressBar(false);
 					$("#instructionsModal").modal("show");
@@ -606,8 +588,20 @@ export class Step1Component implements OnInit, AfterViewInit
 		}
 	}
 
-	affiliateTypeSwitch(affiliateType, onRefresh = null)
+	affiliateTypeSwitch(affiliateType: number | string, onRefresh = null)
 	{
+		const legend = {
+			0: 'black_limo_operator',
+			1: 'fleet_operator',
+			2: 'taxi_operator',
+			3: 'gig_operator'
+		}
+		if (typeof affiliateType == 'number')
+		{
+			affiliateType = legend[affiliateType]
+		}
+
+
 		switch (affiliateType)
 		{
 			case "fleet_operator": {
@@ -738,6 +732,7 @@ export class Step1Component implements OnInit, AfterViewInit
 				break;
 			}
 		}
+		this.SetFormValue('AffiliateType', affiliateType)
 		if (!onRefresh)
 		{
 			$("#affiliateInstructionsModal").modal("show");

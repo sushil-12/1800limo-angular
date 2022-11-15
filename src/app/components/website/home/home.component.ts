@@ -917,7 +917,7 @@ export class HomeComponent implements OnInit
 
 			console.log(`\n\n\n Receiving Response after filing the quote .....\n ${response} \n\n\n`)
 			localStorage.setItem('quotebot_form', JSON.stringify(this.quoteBotForm.value));
-			this.router.navigateByUrl('quotebot/select-vehicle');
+			this.router.navigate(['quotebot/select-vehicle']);
 			// })
 			// console.log(this.quoteBotForm); return;
 		}, (error) =>
