@@ -1758,20 +1758,21 @@ h2.headinginfo .orangeHeading {
 }
 
 .delete-btn {
-	background-color: #F33C2F;
+	position: sticky;
+	left: 50px;
 	color: #fff;
 	text-transform: uppercase;
-	padding: 9px 0;
+	padding: 0.5rem 0.8rem;
 	border-radius: 10px;
-	font-size: 0.9rem;
+	font-size: 0.855rem;
 	margin: 0 10px;
-	font-weight: 600;
-	width: 5.5rem;
-	display: block;
+	font-weight: 500;
+	display: inline-block;
 	text-align: center;
-	text-decoration: none;
+	border: 0;
+	overflow: hidden;
+	background-color: #F33C2F;
 	cursor: pointer;
-	cursor          : pointer;
 }
 
 @media only screen and (min-width:1199px) {
@@ -1863,12 +1864,11 @@ h2.headinginfo .orangeHeading {
 	left: 50px;
 	color: #fff;
 	text-transform: uppercase;
-	padding: 9px 0;
+	padding: 0.5rem 0.8rem;
 	border-radius: 10px;
-	font-size: 1.1rem;
+	font-size: 0.855rem;
 	margin: 0 10px;
 	font-weight: 500;
-	width: 7rem;
 	display: inline-block;
 	text-align: center;
 	border: 0;
@@ -1906,22 +1906,21 @@ h2.headinginfo .orangeHeading {
 }
 
 .adduploaded {
-	position        : sticky;
-	left            : 50px;
-	color           : #fff;
-	text-transform  : uppercase;
-	padding         : 7px 0;
-	border-radius   : 10px;
-	font-size       : 12px;
-	margin          : 0 10px;
-	font-weight     : 600;
-	width           : 80px;
-	display         : inline-block;
-	text-align      : center;
-	border          : 0;
-	overflow        : hidden;
+	position: sticky;
+	left: 50px;
+	color: #fff;
+	text-transform: uppercase;
+	padding: 0.5rem 0.8rem;
+	border-radius: 10px;
+	font-size: 0.855rem;
+	margin: 0 10px;
+	font-weight: 500;
+	display: inline-block;
+	text-align: center;
+	border: 0;
+	overflow: hidden;
 	background-color: var(--green-color);
-	cursor          : pointer;
+	cursor: pointer;
 }
 
 @media only screen and (min-width:1199px) {

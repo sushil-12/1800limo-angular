@@ -56,21 +56,6 @@ section#vehicle-listing-container {
 	}
 }
 
-@media only screen and (max-width:767px) {
-
-	button.custom-filled-orange-button {
-		border          : 2px solid var(--orange);
-		border-radius   : 1rem;
-		padding         : 4px 7px;
-		color           : #1d1d1d;
-		background-color: var(--orange);
-		font-size       : 14px;
-		font-weight     : 500;
-		position        : absolute;
-		bottom          : 30px;
-	}
-}
-
 @supports (-webkit-touch-callout: none) and (not(translate: none)) {
 	section#vehicle-listing-container {
 		#vehicle-details-card.card {
@@ -842,4 +827,17 @@ img.img-cir {
 	text-align        : center;
 	height            : 40px;
 	font-weight       : 600;
+}
+
+.custom-filled-button
+{
+	background-color: var(--orange);
+	font-size: 0.885rem;
+	border-color: var(--orange);
+	padding: 0.475rem 1rem;
+}
+.custom-filled-back-button
+{
+	font-size: 0.985rem;
+	padding: 0.475rem 1rem;
 }

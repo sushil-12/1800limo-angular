@@ -153,7 +153,8 @@ export class SelectVehicleComponent implements OnInit
 		private $spinner: NgxSpinnerService,
 		private $router: Router,
 		private $errorDialog: ErrorDialogService,
-		private $state: StateManagementService
+		private $state: StateManagementService,
+		private $activatedRoute: ActivatedRoute
 	) { }
 
 	/**
@@ -165,6 +166,20 @@ export class SelectVehicleComponent implements OnInit
 	 */
 	ngOnInit(): void
 	{
+		this.$activatedRoute.queryParams.subscribe((params: any) =>
+		{
+			if (params?.list == 'master')
+			{
+				this.vehicleDetails = []
+			}
+			if (params?.sort == 'plh')
+			{
+				this.Sort.LowToHigh()
+			} else
+			{
+				this.Sort.HighToLow()
+			}
+		})
 		this.$spinner.show()
 		sessionStorage.removeItem('selected_vehicle')
 		// Note: Do not add anything here or before below conditional logic. This should be the first step
@@ -183,7 +198,7 @@ export class SelectVehicleComponent implements OnInit
 			this.quotebot_form = JSON.parse(localStorage.getItem('quotebot_form'))
 		}
 
-		this.fetchMasterVehicles()
+		this.fetchMasterVehicles()	// fetches 16 vehicle categories
 		this.getAllFilters()	// fetch filters from database
 	}
 	// ngOnInit ends
@@ -848,6 +863,7 @@ export class SelectVehicleComponent implements OnInit
 	}
 
 
+
 	Sort = {
 		// fetch the service_type from quotebot 
 		getkey: 'rate_breakdown_' + JSON.parse(localStorage.getItem('quotebot_form'))['service_type'], // modify the key
@@ -912,6 +928,15 @@ export class SelectVehicleComponent implements OnInit
 		}
 	}
 
+	backButton()
+	{
+		for (let i = 0; i < this.filters.selections.length; i++)
+		{
+			let item = this.filters.selections[i]
+			this.filterSelection(false, item.catg_name, item.fil_index)
+		}
+		this.vehicleDetails = []
+	}
 
 
 }

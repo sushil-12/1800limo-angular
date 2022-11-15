@@ -1,24 +1,14 @@
-<form
-	[formGroup]="VehicleRateSettingsForm"
-	class="step_form_wrapper"
-	appInvalidControlScroll
->
+<form [formGroup]="VehicleRateSettingsForm" class="step_form_wrapper" appInvalidControlScroll>
 	<section class="user_information">
 		<h2 class="headinginfo">
 			Edit Vehicle Rates
-			<span class="spanText"
-				>(Enter an all-inclusive rate in each applicable bucket)</span
-			>
+			<span class="spanText">(Enter an all-inclusive rate in each applicable bucket)</span>
 		</h2>
 		<div class="container">
 			<!-- PAGE HEADER -->
 			<div class="row imageSection">
 				<div class="col-lg-3 col-6 vehicleImage">
-					<img
-						*ngIf="vehicle_info?.vehicle_image"
-						[src]="vehicle_info?.vehicle_image"
-						alt="vehicle image"
-					/>
+					<img *ngIf="vehicle_info?.vehicle_image" [src]="vehicle_info?.vehicle_image" alt="vehicle image" />
 				</div>
 				<div class="col-lg-3 col-6">
 					<ul class="vehicleData">
@@ -46,8 +36,7 @@
 						or lower your rates in real-time depending on demand or
 						season.
 					</label>
-					<label class="alert alert-danger mt-2"
-						>We auto add 25% to your rates to cover our commission.
+					<label class="alert alert-danger mt-2">We auto add 25% to your rates to cover our commission.
 						(Except tip, tax, tolls, and per diem)
 					</label>
 				</div>
@@ -85,12 +74,8 @@
 		<div class="row">
 			<!-- RADIO BUTTONS -->
 			<div id="radio-button-type" class="col-md-6">
-				<div
-					id="type-mile"
-					class="text-center"
-					(click)="changeDetection.radioButton('mile', 'km_mile')"
-					[ngClass]="form.km_mile.value == 'mile' ? 'active' : ''"
-				>
+				<div id="type-mile" class="text-center" (click)="changeDetection.radioButton('mile', 'km_mile')"
+					[ngClass]="form.km_mile.value == 'mile' ? 'active' : ''">
 					Mile
 				</div>
 				<div id="type-kilometer" class="text-center"
@@ -113,21 +98,15 @@
 					<input matInput placeholder="Milage Rate" type="number" formControlName="milage_rate" tabindex="1"
 						value="0" (focus)="$event.target.select()" (change)="updateRateRangeObject()" />
 				</mat-form-field>
-				<div
-					*ngIf="
+				<div *ngIf="
 						(is_form_submitted && form.milage_rate.errors) ||
 						(form.milage_rate.touched && form.milage_rate.errors)
-					"
-					class="text-danger margin-bottom-thin my-mat-hint"
-				>
+					" class="text-danger margin-bottom-thin my-mat-hint">
 					<div *ngIf="form.milage_rate.errors.required">
 						This field is required
 					</div>
 				</div>
-				<div
-					*ngIf="form.milage_rate.errors"
-					class="text-danger margin-bottom-thin my-mat-hint"
-				>
+				<div *ngIf="form.milage_rate.errors" class="text-danger margin-bottom-thin my-mat-hint">
 					<div *ngIf="form.milage_rate.errors.pattern">
 						Enter Numbers only
 					</div>
@@ -137,45 +116,31 @@
 			<!-- RATE BUCKET: KILOMETER RATE -->
 			<ng-template #kilometer_rate>
 				<div class="col-md-6">
-					<mat-form-field
-						class="mat-form-field-rates m-0"
-						appearance="outline"
-					>
-						<mat-label
-							>Kilometer Rate
-							<span class="asterisk">*</span></mat-label
-						>
-						<span
-							matPrefix
-							*ngIf="
+					<mat-form-field class="mat-form-field-rates m-0" appearance="outline">
+						<mat-label>Kilometer Rate
+							<span class="asterisk">*</span>
+						</mat-label>
+						<span matPrefix *ngIf="
 								form.kilometer_rate.value == null ||
 									form.kilometer_rate.value == '';
 								else hideZero
-							"
-							>{{ currency_symbol }} 0 &nbsp;</span
-						>
+							">{{ currency_symbol }} 0 &nbsp;</span>
 						<ng-template #hideZero>
 							<span matPrefix>{{ currency_symbol }} &nbsp;</span>
 						</ng-template>
 						<input matInput placeholder="Kilometer Rate" type="number" formControlName="kilometer_rate"
 							tabindex="1" (focus)="$event.target.select()" (change)="updateRateRangeObject()" />
 					</mat-form-field>
-					<div
-						*ngIf="
+					<div *ngIf="
 							(is_form_submitted && form.kilometer_rate.errors) ||
 							(form.kilometer_rate.touched &&
 								form.kilometer_rate.errors)
-						"
-						class="text-danger margin-bottom-thin my-mat-hint"
-					>
+						" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="form.kilometer_rate.errors.required">
 							This field is required
 						</div>
 					</div>
-					<div
-						*ngIf="form.kilometer_rate.errors"
-						class="text-danger margin-bottom-thin my-mat-hint"
-					>
+					<div *ngIf="form.kilometer_rate.errors" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="form.kilometer_rate.errors.pattern">
 							Enter Numbers only
 						</div>
@@ -189,10 +154,7 @@
 		<div class="row">
 			<!-- HOURLY RATE -->
 			<div class="col-md-6">
-				<mat-form-field
-					class="mat-form-field-rates"
-					appearance="outline"
-				>
+				<mat-form-field class="mat-form-field-rates" appearance="outline">
 					<mat-label>
 						Hourly Rate <span class="asterisk">*</span>
 					</mat-label>
@@ -202,31 +164,18 @@
 					<ng-template #hideZero1>
 						<span matPrefix>{{ currency_symbol }} &nbsp;</span>
 					</ng-template>
-					<input
-						type="number"
-						matInput
-						placeholder="Hourly Rate"
-						formControlName="hourly_rate"
-						tabindex="1"
-						(change)="updateRateRangeObject()"
-						(focus)="$event.target.select()"
-					/>
+					<input type="number" matInput placeholder="Hourly Rate" formControlName="hourly_rate" tabindex="1"
+						(change)="updateRateRangeObject()" (focus)="$event.target.select()" />
 				</mat-form-field>
-				<div
-					*ngIf="
+				<div *ngIf="
 						(is_form_submitted && form.hourly_rate.errors) ||
 						(form.hourly_rate.touched && form.hourly_rate.errors)
-					"
-					class="text-danger margin-bottom-thin my-mat-hint"
-				>
+					" class="text-danger margin-bottom-thin my-mat-hint">
 					<div *ngIf="form.hourly_rate.errors.required">
 						This field is required
 					</div>
 				</div>
-				<div
-					*ngIf="form.hourly_rate.errors"
-					class="text-danger margin-bottom-thin my-mat-hint"
-				>
+				<div *ngIf="form.hourly_rate.errors" class="text-danger margin-bottom-thin my-mat-hint">
 					<div *ngIf="form.hourly_rate.errors.pattern">
 						Enter Numbers only
 					</div>
@@ -235,23 +184,15 @@
 
 			<!-- HOURLY RATE AFTER 5 HRS -->
 			<div class="col-md-6">
-				<mat-form-field
-					class="mat-form-field-rates"
-					appearance="outline"
-				>
-					<mat-label
-						>Hourly Rate After 5 Hours
-						<span class="asterisk">*</span></mat-label
-					>
-					<span
-						matPrefix
-						*ngIf="
+				<mat-form-field class="mat-form-field-rates" appearance="outline">
+					<mat-label>Hourly Rate After 5 Hours
+						<span class="asterisk">*</span>
+					</mat-label>
+					<span matPrefix *ngIf="
 							form.hourly_rate_after_five_hours.value == null ||
 								form.hourly_rate_after_five_hours.value == '';
 							else hideZero2
-						"
-						>{{ currency_symbol }} 0 &nbsp;</span
-					>
+						">{{ currency_symbol }} 0 &nbsp;</span>
 					<ng-template #hideZero2>
 						<span matPrefix>{{ currency_symbol }} &nbsp;</span>
 					</ng-template>
@@ -259,20 +200,15 @@
 						formControlName="hourly_rate_after_five_hours" tabindex="1" (change)="updateRateRangeObject()"
 						(focus)="$event.target.select()" />
 				</mat-form-field>
-				<div
-					*ngIf="
+				<div *ngIf="
 						(is_form_submitted &&
 							form.hourly_rate_after_five_hours.errors) ||
 						(form.hourly_rate_after_five_hours.touched &&
 							form.hourly_rate_after_five_hours.errors)
-					"
-					class="text-danger margin-bottom-thin my-mat-hint"
-				>
-					<div
-						*ngIf="
+					" class="text-danger margin-bottom-thin my-mat-hint">
+					<div *ngIf="
 							form.hourly_rate_after_five_hours.errors.required
-						"
-					>
+						">
 						This field is required
 					</div>
 				</div>
@@ -323,13 +259,10 @@
 					<input type="number" matInput placeholder="Day Rate Extension" formControlName="day_rate"
 						tabindex="1" (change)="updateRateRangeObject()" />
 				</mat-form-field>
-				<div
-					*ngIf="
+				<div *ngIf="
 						(is_form_submitted && form.day_rate.errors) ||
 						(form.day_rate.touched && form.day_rate.errors)
-					"
-					class="text-danger margin-bottom-thin my-mat-hint"
-				>
+					" class="text-danger margin-bottom-thin my-mat-hint">
 					<div *ngIf="form.day_rate.errors.pattern">
 						Enter Numbers only
 					</div>
@@ -338,22 +271,15 @@
 
 			<!-- MIN. INTRACITY RATE -->
 			<div class="col-md-6">
-				<mat-form-field
-					class="mat-form-field-rates"
-					appearance="outline"
-				>
+				<mat-form-field class="mat-form-field-rates" appearance="outline">
 					<mat-label>
 						Minimum Intra City Rate <span class="asterisk">*</span>
 					</mat-label>
-					<span
-						matPrefix
-						*ngIf="
+					<span matPrefix *ngIf="
 							form.minimum_city_rate.value == null ||
 								form.minimum_city_rate.value == '';
 							else hideZero5
-						"
-						>{{ currency_symbol }} 0 &nbsp;</span
-					>
+						">{{ currency_symbol }} 0 &nbsp;</span>
 					<ng-template #hideZero5>
 						<span matPrefix>{{ currency_symbol }} &nbsp;</span>
 					</ng-template>
@@ -361,22 +287,16 @@
 						formControlName="minimum_city_rate" tabindex="1" (change)="updateRateRangeObject()"
 						autocomplete="off" (focus)="$event.target.select()" />
 				</mat-form-field>
-				<div
-					*ngIf="
+				<div *ngIf="
 						(is_form_submitted && form.minimum_city_rate.errors) ||
 						(form.minimum_city_rate.touched &&
 							form.minimum_city_rate.errors)
-					"
-					class="text-danger margin-bottom-thin my-mat-hint"
-				>
+					" class="text-danger margin-bottom-thin my-mat-hint">
 					<div *ngIf="form.minimum_city_rate.errors.required">
 						This field is required
 					</div>
 				</div>
-				<div
-					*ngIf="form.minimum_city_rate.errors"
-					class="text-danger margin-bottom-thin my-mat-hint"
-				>
+				<div *ngIf="form.minimum_city_rate.errors" class="text-danger margin-bottom-thin my-mat-hint">
 					<div *ngIf="form.minimum_city_rate.errors.pattern">
 						Enter Numbers only
 					</div>
@@ -389,23 +309,16 @@
 		<div class="row">
 			<!-- MIN. AIRPORT ARRIVAL RATE -->
 			<div class="col-md-3">
-				<mat-form-field
-					class="mat-form-field-rates"
-					appearance="outline"
-				>
+				<mat-form-field class="mat-form-field-rates" appearance="outline">
 					<mat-label>
 						Minimum Airport Rate - Arrival
 						<span class="asterisk">*</span>
 					</mat-label>
-					<span
-						matPrefix
-						*ngIf="
+					<span matPrefix *ngIf="
 							form.minimum_airport_arrival_rate.value == null ||
 								form.minimum_airport_arrival_rate.value == '';
 							else hideZero7
-						"
-						>{{ currency_symbol }} 0 &nbsp;</span
-					>
+						">{{ currency_symbol }} 0 &nbsp;</span>
 					<ng-template #hideZero7>
 						<span matPrefix>{{ currency_symbol }} &nbsp;</span>
 					</ng-template>
@@ -414,35 +327,25 @@
 						(change)="updateRateRangeObject(); cloneValue('minimum_airport_arrival_rate', 'minimum_airport_departure_rate')"
 						tabindex="1">
 				</mat-form-field>
-				<div
-					*ngIf="
+				<div *ngIf="
 						(is_form_submitted &&
 							form.minimum_airport_arrival_rate.errors) ||
 						(form.minimum_airport_arrival_rate.touched &&
 							form.minimum_airport_arrival_rate.errors)
-					"
-					class="text-danger margin-bottom-thin my-mat-hint"
-				>
-					<div
-						*ngIf="
+					" class="text-danger margin-bottom-thin my-mat-hint">
+					<div *ngIf="
 							form.minimum_airport_arrival_rate.errors.required
-						"
-					>
+						">
 						This field is required
 					</div>
 				</div>
-				<div
-					*ngIf="
+				<div *ngIf="
 						(is_form_submitted &&
 							form.minimum_airport_arrival_rate.errors) ||
 						(form.minimum_airport_arrival_rate.touched &&
 							form.minimum_airport_arrival_rate.errors)
-					"
-					class="text-danger margin-bottom-thin my-mat-hint"
-				>
-					<div
-						*ngIf="form.minimum_airport_arrival_rate.errors.pattern"
-					>
+					" class="text-danger margin-bottom-thin my-mat-hint">
+					<div *ngIf="form.minimum_airport_arrival_rate.errors.pattern">
 						Enter Numbers only
 					</div>
 				</div>
@@ -450,25 +353,18 @@
 
 			<!-- MIN. AIRPORT DEPARTURE RATE -->
 			<div class="col-md-3">
-				<mat-form-field
-					class="mat-form-field-rates"
-					appearance="outline"
-				>
+				<mat-form-field class="mat-form-field-rates" appearance="outline">
 					<mat-label>
 						Minimum Airport Rate - Departure
 						<span class="asterisk">*</span>
 					</mat-label>
-					<span
-						matPrefix
-						*ngIf="
+					<span matPrefix *ngIf="
 							form.minimum_airport_departure_rate.value == null ||
 								form.minimum_airport_departure_rate.value == '';
 							else hideZero6
-						"
-					>
+						">
 						{{ currency_symbol }}
-						0 &nbsp;</span
-					>
+						0 &nbsp;</span>
 					<ng-template #hideZero6>
 						<span matPrefix>{{ currency_symbol }} &nbsp;</span>
 					</ng-template>
@@ -476,37 +372,27 @@
 						(focus)="$event.target.select()" formControlName="minimum_airport_departure_rate" tabindex="1"
 						(change)="updateRateRangeObject()" />
 				</mat-form-field>
-				<div
-					*ngIf="
+				<div *ngIf="
 						(is_form_submitted &&
 							form.minimum_airport_departure_rate.errors) ||
 						(form.minimum_airport_departure_rate.touched &&
 							form.minimum_airport_departure_rate.errors)
-					"
-					class="text-danger margin-bottom-thin my-mat-hint"
-				>
-					<div
-						*ngIf="
+					" class="text-danger margin-bottom-thin my-mat-hint">
+					<div *ngIf="
 							form.minimum_airport_departure_rate.errors.required
-						"
-					>
+						">
 						This field is required
 					</div>
 				</div>
-				<div
-					*ngIf="
+				<div *ngIf="
 						(is_form_submitted &&
 							form.minimum_airport_departure_rate.errors) ||
 						(form.minimum_airport_departure_rate.touched &&
 							form.minimum_airport_departure_rate.errors)
-					"
-					class="text-danger margin-bottom-thin my-mat-hint"
-				>
-					<div
-						*ngIf="
+					" class="text-danger margin-bottom-thin my-mat-hint">
+					<div *ngIf="
 							form.minimum_airport_departure_rate.errors.pattern
-						"
-					>
+						">
 						Enter Numbers only
 					</div>
 				</div>
@@ -514,27 +400,20 @@
 
 			<!-- MIN. CRUISE PORT ARRIVAL RATE -->
 			<div class="col-md-3">
-				<mat-form-field
-					class="mat-form-field-rates"
-					appearance="outline"
-				>
+				<mat-form-field class="mat-form-field-rates" appearance="outline">
 					<mat-label>
 						Minimum Cruise Port Rate - Arrival
 						<span class="asterisk">*</span>
 					</mat-label>
-					<span
-						matPrefix
-						*ngIf="
+					<span matPrefix *ngIf="
 							form.minimum_cruise_port_arrival_rate.value ==
 								null ||
 								form.minimum_cruise_port_arrival_rate.value ==
 									'';
 							else hideZero9
-						"
-					>
+						">
 						{{ currency_symbol }}
-						0 &nbsp;</span
-					>
+						0 &nbsp;</span>
 					<ng-template #hideZero9>
 						<span matPrefix> {{ currency_symbol }} &nbsp; </span>
 					</ng-template>
@@ -542,38 +421,28 @@
 						(focus)="$event.target.select()" formControlName="minimum_cruise_port_arrival_rate" tabindex="1"
 						(change)="updateRateRangeObject()" />
 				</mat-form-field>
-				<div
-					*ngIf="
+				<div *ngIf="
 						(is_form_submitted &&
 							form.minimum_cruise_port_arrival_rate.errors) ||
 						(form.minimum_cruise_port_arrival_rate.touched &&
 							form.minimum_cruise_port_arrival_rate.errors)
-					"
-					class="text-danger margin-bottom-thin my-mat-hint"
-				>
-					<div
-						*ngIf="
+					" class="text-danger margin-bottom-thin my-mat-hint">
+					<div *ngIf="
 							form.minimum_cruise_port_arrival_rate.errors
 								.required
-						"
-					>
+						">
 						This field is required
 					</div>
 				</div>
-				<div
-					*ngIf="
+				<div *ngIf="
 						(is_form_submitted &&
 							form.minimum_cruise_port_arrival_rate.errors) ||
 						(form.minimum_cruise_port_arrival_rate.touched &&
 							form.minimum_cruise_port_arrival_rate.errors)
-					"
-					class="text-danger margin-bottom-thin my-mat-hint"
-				>
-					<div
-						*ngIf="
+					" class="text-danger margin-bottom-thin my-mat-hint">
+					<div *ngIf="
 							form.minimum_cruise_port_arrival_rate.errors.pattern
-						"
-					>
+						">
 						Enter Numbers only
 					</div>
 				</div>
@@ -581,25 +450,18 @@
 
 			<!-- MIN. CRUISE PORT DEPARTURE RATE -->
 			<div class="col-md-3">
-				<mat-form-field
-					class="mat-form-field-rates"
-					appearance="outline"
-				>
+				<mat-form-field class="mat-form-field-rates" appearance="outline">
 					<mat-label>
 						Minimum Cruise Port Rate - Departure
 						<span class="asterisk">*</span>
 					</mat-label>
-					<span
-						matPrefix
-						*ngIf="
+					<span matPrefix *ngIf="
 							form.minimum_cruise_port_departure_rate.value ==
 								null ||
 								form.minimum_cruise_port_departure_rate.value ==
 									'';
 							else hideZero9
-						"
-						>{{ currency_symbol }} 0 &nbsp;</span
-					>
+						">{{ currency_symbol }} 0 &nbsp;</span>
 					<ng-template #hideZero9>
 						<span matPrefix>{{ currency_symbol }} &nbsp;</span>
 					</ng-template>
@@ -607,39 +469,29 @@
 						(focus)="$event.target.select()" formControlName="minimum_cruise_port_departure_rate"
 						tabindex="1" (change)="updateRateRangeObject()" />
 				</mat-form-field>
-				<div
-					*ngIf="
+				<div *ngIf="
 						(is_form_submitted &&
 							form.minimum_cruise_port_departure_rate.errors) ||
 						(form.minimum_cruise_port_departure_rate.touched &&
 							form.minimum_cruise_port_departure_rate.errors)
-					"
-					class="text-danger margin-bottom-thin my-mat-hint"
-				>
-					<div
-						*ngIf="
+					" class="text-danger margin-bottom-thin my-mat-hint">
+					<div *ngIf="
 							form.minimum_cruise_port_departure_rate.errors
 								.required
-						"
-					>
+						">
 						This field is required
 					</div>
 				</div>
-				<div
-					*ngIf="
+				<div *ngIf="
 						(is_form_submitted &&
 							form.minimum_cruise_port_departure_rate.errors) ||
 						(form.minimum_cruise_port_departure_rate.touched &&
 							form.minimum_cruise_port_departure_rate.errors)
-					"
-					class="text-danger margin-bottom-thin my-mat-hint"
-				>
-					<div
-						*ngIf="
+					" class="text-danger margin-bottom-thin my-mat-hint">
+					<div *ngIf="
 							form.minimum_cruise_port_departure_rate.errors
 								.pattern
-						"
-					>
+						">
 						Enter Numbers only
 					</div>
 				</div>
@@ -651,23 +503,16 @@
 		<div class="row">
 			<!-- AIRPORT/CRUISE CANCEL RATE -->
 			<div class="col-md-6">
-				<mat-form-field
-					class="mat-form-field-rates"
-					appearance="outline"
-				>
+				<mat-form-field class="mat-form-field-rates" appearance="outline">
 					<mat-label> Airport / Cruise Port Cancel Rate </mat-label>
-					<span
-						matPrefix
-						*ngIf="
+					<span matPrefix *ngIf="
 							form.airport_city_percentage_booking_cancel_charges
 								.value == null ||
 								form
 									.airport_city_percentage_booking_cancel_charges
 									.value == '';
 							else hideZero11
-						"
-						>{{ currency_symbol }} 0 &nbsp;</span
-					>
+						">{{ currency_symbol }} 0 &nbsp;</span>
 					<ng-template #hideZero11>
 						<span matPrefix>{{ currency_symbol }} &nbsp;</span>
 					</ng-template>
@@ -676,8 +521,7 @@
 						formControlName="airport_city_percentage_booking_cancel_charges" tabindex="1"
 						(change)="updateRateRangeObject()" />
 				</mat-form-field>
-				<div
-					*ngIf="
+				<div *ngIf="
 						(is_form_submitted &&
 							form.airport_city_percentage_booking_cancel_charges
 								.errors) ||
@@ -685,15 +529,11 @@
 							.touched &&
 							form.airport_city_percentage_booking_cancel_charges
 								.errors)
-					"
-					class="text-danger margin-bottom-thin my-mat-hint"
-				>
-					<div
-						*ngIf="
+					" class="text-danger margin-bottom-thin my-mat-hint">
+					<div *ngIf="
 							form.airport_city_percentage_booking_cancel_charges
 								.errors.pattern
-						"
-					>
+						">
 						Enter Numbers only
 					</div>
 				</div>
@@ -701,19 +541,13 @@
 
 			<!-- SHARED RIDE RATE -->
 			<div class="col-md-6">
-				<mat-form-field
-					class="mat-form-field-rates"
-					appearance="outline"
-				>
+				<mat-form-field class="mat-form-field-rates" appearance="outline">
 					<mat-label> Shared Ride Rate - Per Person </mat-label>
-					<span
-						matPrefix
-						*ngIf="
+					<span matPrefix *ngIf="
 							form.per_person_group_ride_rate.value == null ||
 								form.per_person_group_ride_rate.value == '';
 							else hideZero12
-						"
-					>
+						">
 						{{ currency_symbol }}
 						0 &nbsp;
 					</span>
@@ -724,15 +558,12 @@
 						formControlName="per_person_group_ride_rate" (focus)="$event.target.select()"
 						(change)="updateRateRangeObject()" tabindex="1" />
 				</mat-form-field>
-				<div
-					*ngIf="
+				<div *ngIf="
 						(is_form_submitted &&
 							form.per_person_group_ride_rate.errors) ||
 						(form.per_person_group_ride_rate.touched &&
 							form.per_person_group_ride_rate.errors)
-					"
-					class="text-danger margin-bottom-thin my-mat-hint"
-				>
+					" class="text-danger margin-bottom-thin my-mat-hint">
 					<div *ngIf="form.per_person_group_ride_rate.errors.pattern">
 						Enter Numbers only
 					</div>
@@ -759,14 +590,11 @@
 					<input type="number" matInput placeholder="Early Am/Late Pm" formControlName="early_late_charges"
 						tabindex="1" (change)="updateRateRangeObject()" (focus)="$event.target.select()" />
 				</mat-form-field>
-				<div
-					*ngIf="
+				<div *ngIf="
 						(is_form_submitted && form.early_late_charges.errors) ||
 						(form.early_late_charges.touched &&
 							form.early_late_charges.errors)
-					"
-					class="text-danger margin-bottom-thin my-mat-hint"
-				>
+					" class="text-danger margin-bottom-thin my-mat-hint">
 					<div *ngIf="form.early_late_charges.errors.pattern">
 						Enter Numbers only
 					</div>
@@ -788,14 +616,11 @@
 					<input type="number" matInput placeholder="Holiday Rate" formControlName="holiday_charges"
 						tabindex="1" (change)="updateRateRangeObject()" (focus)="$event.target.select()" />
 				</mat-form-field>
-				<div
-					*ngIf="
+				<div *ngIf="
 						(is_form_submitted && form.holiday_charges.errors) ||
 						(form.holiday_charges.touched &&
 							form.holiday_charges.errors)
-					"
-					class="text-danger margin-bottom-thin my-mat-hint"
-				>
+					" class="text-danger margin-bottom-thin my-mat-hint">
 					<div *ngIf="form.holiday_charges.errors.pattern">
 						Enter Numbers only
 					</div>
@@ -822,15 +647,12 @@
 						formControlName="friday_saturday_charges" tabindex="1" (focus)="$event.target.select()"
 						(change)="updateRateRangeObject()" />
 				</mat-form-field>
-				<div
-					*ngIf="
+				<div *ngIf="
 						(is_form_submitted &&
 							form.friday_saturday_charges.errors) ||
 						(form.friday_saturday_charges.touched &&
 							form.friday_saturday_charges.errors)
-					"
-					class="text-danger margin-bottom-thin my-mat-hint"
-				>
+					" class="text-danger margin-bottom-thin my-mat-hint">
 					<div *ngIf="form.friday_saturday_charges.errors.pattern">
 						Enter Numbers only
 					</div>
@@ -871,35 +693,23 @@
 				<div id="rate-manager-slider" class="col-md-6 mt-3 p-0">
 					<span id="sign-percent-minus" (click)="changeThumb(1, '-')">
 						-
-						<i
-							class="bi text-orange"
-							[ngClass]="
+						<i class="bi text-orange" [ngClass]="
 								form.rate_range_percent_flat.value == 'percent'
 									? 'bi-percent'
 									: 'bi-currency-dollar'
-							"
-						></i>
+							"></i>
 					</span>
 					<span class="mx-lg-1">
-						<input
-							type="range"
-							[value]="form.rate_range.value"
-							min="-50"
-							max="50"
-							id="slider"
-							(input)="getRateRange($event.target.value)"
-						/>
+						<input type="range" [value]="form.rate_range.value" min="-50" max="50" id="slider"
+							(input)="getRateRange($event.target.value)" />
 					</span>
 					<span id="sign-percent-plus" (click)="changeThumb(1, '+')">
 						+
-						<i
-							class="bi text-orange"
-							[ngClass]="
+						<i class="bi text-orange" [ngClass]="
 								form.rate_range_percent_flat.value == 'percent'
 									? 'bi-percent'
 									: 'bi-currency-dollar'
-							"
-						></i>
+							"></i>
 					</span>
 					<p id="thumb-value" class="text-center m-0 mt-3" (click)="getRateRange(0)">
 						<i class="bi bi-currency-dollar text-orange"
@@ -919,20 +729,14 @@
 				<h3 class="my-3">
 					<label class="alert alert-danger"> Surge Protection </label>
 				</h3>
-				<div
-					class="px-3 custom-control custom-checkbox pl-0 d-flex flex-wrap align-items-center"
-				>
-					<mat-slide-toggle
-						class="example-margin gratuityToggle"
-						[checked]="form.is_gratuity.value == 'yes'"
+				<div class="px-3 custom-control custom-checkbox pl-0 d-flex flex-wrap align-items-center">
+					<mat-slide-toggle class="example-margin gratuityToggle" [checked]="form.is_gratuity.value == 'yes'"
 						(change)="
 							changeDetection.gratuity(
 								$event.checked,
 								'is_gratuity'
 							)
-						"
-						tabindex="1"
-					>
+						" tabindex="1">
 					</mat-slide-toggle>
 					<label class="text-orange ml-2">
 						Turn on 20% surge pricing for high demand events.
@@ -946,10 +750,8 @@
 		<div>
 			<h2 class="headinginfo">
 				Amenity Rates
-				<span class="spanText"
-					>(Enter an all-inclusive rate in each applicable
-					bucket)</span
-				>
+				<span class="spanText">(Enter an all-inclusive rate in each applicable
+					bucket)</span>
 			</h2>
 			<div class="row" [formGroup]="AmenitiesRates">
 				<div class="col-md-3" *ngFor="let  amenity of AmenitiesRates.controls | keyvalue"
@@ -964,21 +766,14 @@
 						<ng-template #hideZero18>
 							<span matPrefix>{{ currency_symbol }} &nbsp;</span>
 						</ng-template>
-						<input
-							type="number"
-							matInput
-							placeholder="{{ amenity.value.value.name }}"
-							formControlName="price"
-							(focus)="$event.target.select()"
-							[id]="amenity.value.value.label"
+						<input type="number" matInput placeholder="{{ amenity.value.value.name }}"
+							formControlName="price" (focus)="$event.target.select()" [id]="amenity.value.value.label"
 							(input)="
 								changeAmenityRate(
 									amenity.key,
 									amenity.value.value
 								)
-							"
-							tabindex="1"
-						/>
+							" tabindex="1" />
 					</mat-form-field>
 				</div>
 			</div>
@@ -992,19 +787,13 @@
 			<div class="row">
 				<!-- AIRPORT ARRIVAL TAX -->
 				<div class="col-md-3">
-					<mat-form-field
-						class="mat-form-field-rates"
-						appearance="outline"
-					>
+					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label> Airport Arrival Tax </mat-label>
-						<span
-							matPrefix
-							*ngIf="
+						<span matPrefix *ngIf="
 								form.airport_arrival_tax_per_us.value == null ||
 									form.airport_arrival_tax_per_us.value == '';
 								else hideZero14
-							"
-						>
+							">
 							{{ currency_symbol }} 0 &nbsp;
 						</span>
 						<ng-template #hideZero14>
@@ -1015,20 +804,15 @@
 						<input type="number" matInput placeholder="Airport Arrival Tax"
 							formControlName="airport_arrival_tax_per_us" tabindex="1" (focus)="$event.target.select()">
 					</mat-form-field>
-					<div
-						*ngIf="
+					<div *ngIf="
 							(is_form_submitted &&
 								form.airport_arrival_tax_per_us.errors) ||
 							(form.airport_arrival_tax_per_us.touched &&
 								form.airport_arrival_tax_per_us.errors)
-						"
-						class="text-danger margin-bottom-thin my-mat-hint"
-					>
-						<div
-							*ngIf="
+						" class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="
 								form.airport_arrival_tax_per_us.errors.pattern
-							"
-						>
+							">
 							Enter Numbers only
 						</div>
 					</div>
@@ -1036,21 +820,15 @@
 
 				<!-- AIRPORT DEPARTURE TAX -->
 				<div class="col-md-3">
-					<mat-form-field
-						class="mat-form-field-rates"
-						appearance="outline"
-					>
+					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label> Airport Departure Tax </mat-label>
-						<span
-							matPrefix
-							*ngIf="
+						<span matPrefix *ngIf="
 								form.airport_departure_tax_per_us.value ==
 									null ||
 									form.airport_departure_tax_per_us.value ==
 										'';
 								else hideZero15
-							"
-						>
+							">
 							{{ currency_symbol }} 0 &nbsp;
 						</span>
 						<ng-template #hideZero15>
@@ -1062,20 +840,15 @@
 							formControlName="airport_departure_tax_per_us" tabindex="1"
 							(focus)="$event.target.select()" />
 					</mat-form-field>
-					<div
-						*ngIf="
+					<div *ngIf="
 							(is_form_submitted &&
 								form.airport_departure_tax_per_us.errors) ||
 							(form.airport_departure_tax_per_us.touched &&
 								form.airport_departure_tax_per_us.errors)
-						"
-						class="text-danger margin-bottom-thin my-mat-hint"
-					>
-						<div
-							*ngIf="
+						" class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="
 								form.airport_departure_tax_per_us.errors.pattern
-							"
-						>
+							">
 							Enter Numbers only
 						</div>
 					</div>
@@ -1096,24 +869,15 @@
 								{{ currency_symbol }} &nbsp;
 							</span>
 						</ng-template>
-						<input
-							type="number"
-							matInput
-							placeholder="Sea Port Tax"
-							(focus)="$event.target.select()"
-							formControlName="sea_port_tax_per_us"
-							tabindex="1"
-						/>
+						<input type="number" matInput placeholder="Sea Port Tax" (focus)="$event.target.select()"
+							formControlName="sea_port_tax_per_us" tabindex="1" />
 					</mat-form-field>
-					<div
-						*ngIf="
+					<div *ngIf="
 							(is_form_submitted &&
 								form.sea_port_tax_per_us.errors) ||
 							(form.sea_port_tax_per_us.touched &&
 								form.sea_port_tax_per_us.errors)
-						"
-						class="text-danger margin-bottom-thin my-mat-hint"
-					>
+						" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="form.sea_port_tax_per_us.errors.pattern">
 							Enter Numbers only
 						</div>
@@ -1122,21 +886,14 @@
 
 				<!-- CITY CONGESSION TAX -->
 				<div class="col-md-3">
-					<mat-form-field
-						class="mat-form-field-rates"
-						appearance="outline"
-					>
+					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label> City Congestion Tax </mat-label>
-						<span
-							matPrefix
-							*ngIf="
+						<span matPrefix *ngIf="
 								form.city_congestion_tax_per_us.value == null ||
 									form.city_congestion_tax_per_us.value == '';
 								else hideZero17
-							"
-						>
-							{{ currency_symbol }} 0 &nbsp;</span
-						>
+							">
+							{{ currency_symbol }} 0 &nbsp;</span>
 						<ng-template #hideZero17>
 							<span matPrefix>
 								{{ currency_symbol }} &nbsp;
@@ -1145,20 +902,15 @@
 						<input type="number" matInput placeholder="City Congestion Tax"
 							formControlName="city_congestion_tax_per_us" tabindex="1" autocomplete="off" />
 					</mat-form-field>
-					<div
-						*ngIf="
+					<div *ngIf="
 							(is_form_submitted &&
 								form.city_congestion_tax_per_us.errors) ||
 							(form.city_congestion_tax_per_us.touched &&
 								form.city_congestion_tax_per_us.errors)
-						"
-						class="text-danger margin-bottom-thin my-mat-hint"
-					>
-						<div
-							*ngIf="
+						" class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="
 								form.city_congestion_tax_per_us.errors.pattern
-							"
-						>
+							">
 							Enter Numbers only
 						</div>
 					</div>
@@ -1171,76 +923,47 @@
 				<!-- CITY TAX -->
 				<div class="col-md-6">
 					<div class="row">
-						<div
-							class="col-md-6 col-lg-3 pr-0 borderright mobilePadding"
-						>
-							<div
-								class="form-group radio-tile-group assment_radio"
-							>
+						<div class="col-md-6 col-lg-3 pr-0 borderright mobilePadding">
+							<div class="form-group radio-tile-group assment_radio">
 								<div class="custom-radio input-container">
 									<input class="radio-button" type="radio" id="test1" name="city_tax_percent_flat"
 										checked="" formControlName="city_tax_percent_flat" value="percent"
 										tabindex="-1">
 									<div class="radio-tile">
-										<label
-											class="radio-tile-label"
-											for="test1"
-										>
-											Percent (<span class="prefix"
-												>%</span
-											>)
+										<label class="radio-tile-label" for="test1">
+											Percent (<span class="prefix">%</span>)
 										</label>
 									</div>
 								</div>
 							</div>
 						</div>
 						<div class="col-md-6 col-lg-3 pl-0 mobilePadding">
-							<div
-								class="form-group radio-tile-group assment_radio"
-							>
+							<div class="form-group radio-tile-group assment_radio">
 								<div class="custom-radio input-container">
-									<input
-										class="radio-button"
-										type="radio"
-										id="test2"
-										name="city_tax_percent_flat"
-										formControlName="city_tax_percent_flat"
-										value="flat"
-										tabindex="-1"
-									/>
+									<input class="radio-button" type="radio" id="test2" name="city_tax_percent_flat"
+										formControlName="city_tax_percent_flat" value="flat" tabindex="-1" />
 									<div class="radio-tile">
-										<label
-											class="radio-tile-label"
-											for="test2"
-										>
+										<label class="radio-tile-label" for="test2">
 											Flat (<span class="prefix">{{
 												currency_symbol
-											}}</span
-											>)
+												}}</span>)
 										</label>
 									</div>
 								</div>
 							</div>
 						</div>
 						<div class="col-md-12 col-lg-6 cityTaxErrorMsg">
-							<mat-form-field
-								class="mat-form-field-rates"
-								appearance="outline"
-								class="cityTax"
-							>
+							<mat-form-field class="mat-form-field-rates" appearance="outline" class="cityTax">
 								<mat-label>City Tax</mat-label>
 								<input type="number" matInput placeholder="City Tax" (focus)="$event.target.select()"
 									formControlName="city_tax" tabindex="1" autocomplete="off" />
 							</mat-form-field>
-							<div
-								*ngIf="
+							<div *ngIf="
 									(is_form_submitted &&
 										form.city_tax.errors) ||
 									(form.city_tax.touched &&
 										form.city_tax.errors)
-								"
-								class="text-danger margin-bottom-thin my-mat-hint"
-							>
+								" class="text-danger margin-bottom-thin my-mat-hint">
 								<div *ngIf="form.city_tax.errors.pattern">
 									Enter Numbers only
 								</div>
@@ -1252,12 +975,8 @@
 				<!-- State Tax -->
 				<div class="col-md-6">
 					<div class="row">
-						<div
-							class="col-md-6 col-lg-3 pr-0 borderright mobilePadding"
-						>
-							<div
-								class="form-group radio-tile-group assment_radio"
-							>
+						<div class="col-md-6 col-lg-3 pr-0 borderright mobilePadding">
+							<div class="form-group radio-tile-group assment_radio">
 								<div class="custom-radio input-container">
 									<input class="radio-button" type="radio" id="test3" name="state_tax_percent_flat"
 										checked="" formControlName="state_tax_percent_flat" value="percent"
@@ -1271,19 +990,10 @@
 							</div>
 						</div>
 						<div class="col-md-6 col-lg-3 pl-0 mobilePadding">
-							<div
-								class="form-group radio-tile-group assment_radio"
-							>
+							<div class="form-group radio-tile-group assment_radio">
 								<div class="custom-radio input-container">
-									<input
-										class="radio-button"
-										type="radio"
-										id="test4"
-										name="state_tax_percent_flat"
-										formControlName="state_tax_percent_flat"
-										value="flat"
-										tabindex="-1"
-									/>
+									<input class="radio-button" type="radio" id="test4" name="state_tax_percent_flat"
+										formControlName="state_tax_percent_flat" value="flat" tabindex="-1" />
 									<div class="radio-tile">
 										<label class="radio-tile-label" for="test4">Flat (<span
 												class="prefix">{{currency_symbol}}</span>) </label>
@@ -1292,24 +1002,17 @@
 							</div>
 						</div>
 						<div class="col-md-12 col-lg-6 cityTaxErrorMsg">
-							<mat-form-field
-								class="mat-form-field-rates"
-								appearance="outline"
-								class="cityTax"
-							>
+							<mat-form-field class="mat-form-field-rates" appearance="outline" class="cityTax">
 								<mat-label>State Tax</mat-label>
 								<input type="number" matInput placeholder="State Tax" formControlName="state_tax"
 									tabindex="1" (focus)="$event.target.select()" />
 							</mat-form-field>
-							<div
-								*ngIf="
+							<div *ngIf="
 									(is_form_submitted &&
 										form.state_tax.errors) ||
 									(form.state_tax.touched &&
 										form.state_tax.errors)
-								"
-								class="text-danger margin-bottom-thin my-mat-hint"
-							>
+								" class="text-danger margin-bottom-thin my-mat-hint">
 								<div *ngIf="form.state_tax.errors.pattern">
 									Enter Numbers only
 								</div>
@@ -1321,12 +1024,8 @@
 				<!-- VAT -->
 				<div class="col-md-6">
 					<div class="row">
-						<div
-							class="col-md-6 col-lg-3 pr-0 borderright mobilePadding"
-						>
-							<div
-								class="form-group radio-tile-group assment_radio"
-							>
+						<div class="col-md-6 col-lg-3 pr-0 borderright mobilePadding">
+							<div class="form-group radio-tile-group assment_radio">
 								<div class="custom-radio input-container">
 									<input class="radio-button" type="radio" id="test5" name="vat_percent_flat"
 										checked="" formControlName="vat_percent_flat" value="percent" tabindex="-1">
@@ -1339,9 +1038,7 @@
 							</div>
 						</div>
 						<div class="col-md-6 col-lg-3 pl-0 mobilePadding">
-							<div
-								class="form-group radio-tile-group assment_radio"
-							>
+							<div class="form-group radio-tile-group assment_radio">
 								<div class="custom-radio input-container">
 									<input class="radio-button" type="radio" id="test6" name="vat_percent_flat"
 										formControlName="vat_percent_flat" value="flat" tabindex="-1">
@@ -1353,22 +1050,15 @@
 							</div>
 						</div>
 						<div class="col-md-12 col-lg-6 cityTaxErrorMsg">
-							<mat-form-field
-								class="mat-form-field-rates"
-								appearance="outline"
-								class="cityTax"
-							>
+							<mat-form-field class="mat-form-field-rates" appearance="outline" class="cityTax">
 								<mat-label>VAT</mat-label>
 								<input type="number" matInput placeholder="VAT" formControlName="vat" tabindex="1"
 									(focus)="$event.target.select()" />
 							</mat-form-field>
-							<div
-								*ngIf="
+							<div *ngIf="
 									(is_form_submitted && form.vat.errors) ||
 									(form.vat.touched && form.vat.errors)
-								"
-								class="text-danger margin-bottom-thin my-mat-hint"
-							>
+								" class="text-danger margin-bottom-thin my-mat-hint">
 								<div *ngIf="form.vat.errors.pattern">
 									Enter Numbers only
 								</div>
@@ -1380,12 +1070,8 @@
 				<!-- WORKMAN'S COMPENSATION-->
 				<div class="col-md-6">
 					<div class="row">
-						<div
-							class="col-md-6 col-lg-3 pr-0 borderright mobilePadding"
-						>
-							<div
-								class="form-group radio-tile-group assment_radio"
-							>
+						<div class="col-md-6 col-lg-3 pr-0 borderright mobilePadding">
+							<div class="form-group radio-tile-group assment_radio">
 								<div class="custom-radio input-container">
 									<input class="radio-button" type="radio" id="test7" name="workman_comp_percent_flat"
 										checked="" formControlName="workman_comp_percent_flat" value="percent"
@@ -1399,19 +1085,10 @@
 							</div>
 						</div>
 						<div class="col-md-6 col-lg-3 pl-0 mobilePadding">
-							<div
-								class="form-group radio-tile-group assment_radio"
-							>
+							<div class="form-group radio-tile-group assment_radio">
 								<div class="custom-radio input-container">
-									<input
-										class="radio-button"
-										type="radio"
-										id="test8"
-										name="workman_comp_percent_flat"
-										formControlName="workman_comp_percent_flat"
-										value="flat"
-										tabindex="-1"
-									/>
+									<input class="radio-button" type="radio" id="test8" name="workman_comp_percent_flat"
+										formControlName="workman_comp_percent_flat" value="flat" tabindex="-1" />
 									<div class="radio-tile">
 										<label class="radio-tile-label" for="test8">Flat (<span
 												class="prefix">{{currency_symbol}}</span>) </label>
@@ -1420,24 +1097,17 @@
 							</div>
 						</div>
 						<div class="col-md-12 col-lg-6 cityTaxErrorMsg">
-							<mat-form-field
-								class="mat-form-field-rates"
-								appearance="outline"
-								class="cityTax"
-							>
+							<mat-form-field class="mat-form-field-rates" appearance="outline" class="cityTax">
 								<mat-label>Workman's Comp</mat-label>
 								<input type="number" matInput placeholder="Workman's Comp"
 									formControlName="workmans_comp" tabindex="1" (focus)="$event.target.select()" />
 							</mat-form-field>
-							<div
-								*ngIf="
+							<div *ngIf="
 									(is_form_submitted &&
 										form.workmans_comp.errors) ||
 									(form.workmans_comp.touched &&
 										form.workmans_comp.errors)
-								"
-								class="text-danger margin-bottom-thin my-mat-hint"
-							>
+								" class="text-danger margin-bottom-thin my-mat-hint">
 								<div *ngIf="form.workmans_comp.errors.pattern">
 									Enter Numbers only
 								</div>
@@ -1449,12 +1119,8 @@
 				<!-- OTHER TRANSPORTATION TAX -->
 				<div class="col-md-6">
 					<div class="row">
-						<div
-							class="col-md-6 col-lg-3 pr-0 borderright mobilePadding"
-						>
-							<div
-								class="form-group radio-tile-group assment_radio"
-							>
+						<div class="col-md-6 col-lg-3 pr-0 borderright mobilePadding">
+							<div class="form-group radio-tile-group assment_radio">
 								<div class="custom-radio input-container">
 									<input class="radio-button" type="radio" id="test9"
 										name="other_transportation_tax_percent_flat" checked=""
@@ -1469,9 +1135,7 @@
 							</div>
 						</div>
 						<div class="col-md-6 col-lg-3 pl-0 mobilePadding">
-							<div
-								class="form-group radio-tile-group assment_radio"
-							>
+							<div class="form-group radio-tile-group assment_radio">
 								<div class="custom-radio input-container">
 									<input class="radio-button" type="radio" id="test10"
 										name="other_transportation_tax_percent_flat"
@@ -1485,31 +1149,22 @@
 							</div>
 						</div>
 						<div class="col-md-12 col-lg-6 cityTaxErrorMsg">
-							<mat-form-field
-								class="mat-form-field-rates"
-								appearance="outline"
-								class="cityTax"
-							>
+							<mat-form-field class="mat-form-field-rates" appearance="outline" class="cityTax">
 								<mat-label>Other Transportation Tax</mat-label>
 								<input type="number" matInput placeholder="Other Transportation Tax"
 									formControlName="other_transportation_tax" (focus)="$event.target.select()"
 									tabindex="1">
 							</mat-form-field>
-							<div
-								*ngIf="
+							<div *ngIf="
 									(is_form_submitted &&
 										form.other_transportation_tax.errors) ||
 									(form.other_transportation_tax.touched &&
 										form.other_transportation_tax.errors)
-								"
-								class="text-danger margin-bottom-thin my-mat-hint"
-							>
-								<div
-									*ngIf="
+								" class="text-danger margin-bottom-thin my-mat-hint">
+								<div *ngIf="
 										form.other_transportation_tax.errors
 											.pattern
-									"
-								>
+									">
 									Enter Numbers only
 								</div>
 							</div>
@@ -1521,9 +1176,21 @@
 		</div>
 		<!-- APPLICABLE TAXES ENDS -->
 	</section>
-	<div class="row justify-content-center my-4">
-		<button class="custom-btn savebutton mx-2" (click)="submitForm()" [disabled]="is_form_submitted"
-			tabindex="1">SAVE</button>
-		<button class="custom-btn resetbutton mx-2" (click)="resetForm()" tabindex="1">RESET</button>
-	</div>
 </form>
+
+
+
+
+<div class="row flex flex-wrap-reverse my-4">
+	<button class="custom-filled-back-button m-2 mx-4" routerLink="/affiliate/step5">
+		BACK
+	</button>
+	<div class="col-md-auto mx-auto">
+		<button class="custom-filled-reset-button m-2" (click)="resetForm()" tabIndex="2">
+			RESET
+		</button>
+		<button class="custom-filled-button m-2" (click)="submitForm()" tabIndex="1">
+			SAVE
+		</button>
+	</div>
+</div>

@@ -61,15 +61,7 @@ export class AffiliateAccountsComponent implements OnInit
 		//   this.setAffiliateType(_operator._affiliateType);
 		// })
 		this.affiliateTypeSwitch('all-operators')
-		sessionStorage.clear();//clear session storage
-
-		// this.tree = this.router.parseUrl(this.router.url);
-		// this.lastPartUrl = this.tree.root.children.primary.segments[1].path;
-		// affiliateType : this.lastPartUrl
-		// if (this.tree.root.children.primary.segments[1]) {
-		//   this.lastPartUrl = this.tree.root.children.primary.segments[1].path;
-		// }
-		// console.log(this.lastPartUrl);      
+		sessionStorage.clear();//clear session storage    
 
 		this.rejectCauseForm = this.formBuilder.group({
 			acc_id: ['', Validators.required],
@@ -194,6 +186,7 @@ export class AffiliateAccountsComponent implements OnInit
 	{
 		this.spinner.show();
 		// this.disableSubmitButton=true; //disable submit button
+		console.log('acc_id', acc_id)
 
 		this.adminService.acceptAffiliate(acc_id)
 			.pipe(
@@ -208,10 +201,7 @@ export class AffiliateAccountsComponent implements OnInit
 				if (success == true)
 				{
 					this.spinner.hide();//hide spinner
-					this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() =>
-					{
-						this.router.navigate(['/admin/' + this.lastPartUrl]);
-					});
+					location.reload()
 				}
 			});
 	}

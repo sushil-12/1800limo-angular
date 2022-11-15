@@ -1404,14 +1404,24 @@
 			</div>
 		</div>
 	</section>
-	<div class="row justify-content-center my-4">
-		<button class="custom-btn savebutton mx-2" (click)="submitForm()" [disabled]="disableSubmitButton"
-			tabindex="1">SAVE</button>
-		<button class="custom-btn resetbutton mx-2" type="reset" (click)="resetForm()" tabindex="1">RESET</button>
-		<button class="custom-btn backbutton mx-2" type="button" (click)="backButton()" data-toggle="tooltip"
-			data-placement="top" title="Clicking back button deletes all fields." tabindex="1">BACK</button>
-	</div>
 </form>
+
+
+<div class="row flex flex-wrap-reverse my-4">
+	<button class="custom-filled-back-button m-2 mx-4" routerLink="/affiliate/step4">
+		BACK
+	</button>
+	<div class="col-md-auto mx-auto">
+		<button class="custom-filled-reset-button m-2" (click)="resetForm()" tabIndex="2">
+			RESET
+		</button>
+		<button class="custom-filled-button m-2" (click)="submitForm()" tabIndex="1">
+			SAVE
+		</button>
+	</div>
+</div>
+
+
 
 <!-- Image modal -->
 <app-image-modal (closeTab)="closeButton()" [modalImage]="modalImage"></app-image-modal>

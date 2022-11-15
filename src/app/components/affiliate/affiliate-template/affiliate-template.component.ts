@@ -135,6 +135,7 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 				{
 					console.log('Null Error. Interval Cleared. ')
 					clearInterval(interval)
+					return
 				}
 				let steps_completed = this.affiliateService.getLocalStepCompletedObject()
 				// check for the verification status, api should hit once per interval
@@ -347,7 +348,7 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 			s.src = "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
 			this.elementRef.nativeElement.appendChild(s);
 		}
-		console.log(this.desktopWidth, "gejehftgfrncfdfninjkgldfuhgli")
+
 		if (this.desktopWidth > '767')
 		{
 			//google translate
