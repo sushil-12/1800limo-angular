@@ -300,8 +300,9 @@ export class VehicleDetailsComponent implements OnInit
 				let user = JSON.parse(localStorage.getItem('currentUser'))['roleName']
 				user = user == 'driver' ? 'affiliate' : user	// roleName of driver has to be directed to affiliate/..
 
+				// navigate to farm in bookings page
 				this._router.navigate([
-					'/' + user + '/'
+					'/' + user + '/my-bookings'
 				])
 			}
 		} else

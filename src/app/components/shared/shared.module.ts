@@ -69,6 +69,7 @@ export class SharedModule
 {
 	/**
 	 * Search a particular object key with the specified value to search
+	 * @params type: String [Required] filter/find
 	 * @params list: Array [Required] the list to search in
 	 * @params value_to_search: string | number [Required] value to search
 	 * @params comparison_key: string [Required] key to match with the object in list

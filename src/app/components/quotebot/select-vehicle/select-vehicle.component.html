@@ -49,9 +49,9 @@
 	<div class="row mb-5">
 		<div class="col-md-12">
 			<div id="back-button">
-				<button type="button" class="custom-filled-back-button" (click)="backButton()">
+				<button type="button" class="custom-filled-button green-button" (click)="backButton()">
 					<i class="bi bi-arrow-left mx-2"></i>
-					View Master Vehicles
+					Back to {{ vehicleDetails.length == 0 ? 'Home' : 'Master Vehicles'}}
 				</button>
 			</div>
 		</div>
@@ -116,12 +116,13 @@
 										[attr.id]="'filter_' + filter_text_index"
 										[ngClass]="filter_text_index == 0 ? 'show' : ''">
 										<!-- IF RP IS A STRING -->
-										<div class="card-body" *ngIf="!isArray(filter_text.rp)">
+										<div class="card-body pt-0" *ngIf="!isArray(filter_text.rp)">
 											<!-- Search Field -->
-											<!-- <div class="filter-field my-2">
-												<input class="form-control"
-													placeholder="Choose Multiple {{ formatter(filter_text.dp) | titlecase }}" />
-											</div> -->
+											<div class="filter-field mb-3">
+												<input class="form-control filter-search-area"
+													(keyup)="searchIn(filter_text.rp, $event.target.value)"
+													placeholder="Search for {{ halfText(formatter(filter_text.dp)) | titlecase }}" />
+											</div>
 											<!-- Search Field Ends -->
 
 											<!-- FILTER CHECKLIST AND FILTER CONTENT AREA -->
@@ -145,20 +146,13 @@
 												<!-- INPUT AND LABEL ENDS -->
 
 												<!-- SHOW MORE BUTTON -->
-												<div class="dropdown" [attr.id]="filter_text.dp"
-													*ngIf="!isArray(filter_text?.rp) && filters?.original[filter_text.rp]?.length > min_length">
-													<!-- <button type="button"
-																class="btn-custom-btn btn btn-secondary dropdown-toggle org-Btn show-More"
-																id="dropdownMenuButton">
-																Show More
-															</button> -->
+												<div [attr.id]="filter_text.dp"
+													*ngIf="filters.vars[filter_text.rp] && (!isArray(filter_text?.rp) && filters?.original[filter_text.rp]?.length > min_length)">
 													<span class="btn-custom-btn btn show-More" style="color:#ff7800"
 														[attr.id]="'showMore_outer_' + filter_text_index"
 														(click)="!is_show_more_button_hidden ? showMore('showMore_outer_' + filter_text_index, filter_text.rp) : showMore('showMore_outer' + filter_text_index, filter_text.rp, false)">
-														{{ filters.vars['showMore_outer_' + filter_text_index] ? 'Show
-														Less' :
-														'Show More (+' +
-														this.min_length + ')' }}
+														{{ filters.vars['showMore_outer_' + filter_text_index] ?
+														'Show Less' : 'Show More (+' + this.min_length + ')' }}
 														<i class="bi font-weight-bolder" [ngClass]="filters.vars['showMore_outer_' +
 																		filter_text_index] ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
 													</span>
@@ -197,12 +191,14 @@
 														[attr.id]="'inner_filter_' + filter_text.dp + '_' + inner_filter_text_index"
 														[ngClass]="inner_filter_text_index == 0 ? 'show' : ''">
 														<!-- IF RP HAS A STRING VALUE -->
-														<div class="card-body" *ngIf="!isArray(inner_filter_text.rp)">
+														<div class="card-body pt-0"
+															*ngIf="!isArray(inner_filter_text.rp)">
 															<!-- Search Field -->
-															<!-- <div class="filter-field my-2">
-																<input class="form-control"
-																	placeholder="Choose Multiple {{ formatter(inner_filter_text.dp) | titlecase }}" />
-															</div> -->
+															<div class="filter-field mb-3">
+																<input class="form-control filter-search-area"
+																	(keyup)="searchIn(inner_filter_text.rp, $event.target.value)"
+																	placeholder="Search for {{ halfText(formatter(inner_filter_text.dp)) | titlecase }}" />
+															</div>
 															<!-- Search Field Ends -->
 
 															<!-- FILTER CHECKLIST AND FILTER CONTENT AREA -->
@@ -229,13 +225,8 @@
 																<!-- INPUT AND LABEL ENDS -->
 
 																<!-- SHOW MORE BUTTON -->
-																<div class="dropdown"
-																	*ngIf="!isArray(inner_filter_text.rp) && filters?.original[inner_filter_text.rp]?.length > min_length">
-																	<!-- <button type="button"
-																				class="btn-custom-btn btn btn-secondary dropdown-toggle org-Btn show-More"
-																				id="dropdownMenuButton">
-																				Show More
-																			</button> -->
+																<div
+																	*ngIf="filters.vars[inner_filter_text.rp] && (!isArray(inner_filter_text.rp) && filters?.original[inner_filter_text.rp]?.length > min_length)">
 																	<span class="btn-custom-btn btn show-More"
 																		style="color:#ff7800"
 																		[attr.id]="'showMore_inner' + inner_filter_text_index"
