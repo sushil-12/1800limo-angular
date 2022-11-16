@@ -13,7 +13,7 @@
 section#vehicle-listing-container {
 	&:last-child
 	{
-		margin-bottom: 2rem;
+		margin-bottom: 4rem;
 	}
 	#vehicle-details-card.card {
 		width        : 23.3rem;
@@ -161,16 +161,31 @@ section#vehicle-listing-container {
 	padding-left : 0;
 	padding-right: 0;
 	color        : #19191d;
+	.checkbox-block
+	{
+		overflow-y: auto;
+		max-height: 24rem;
+	}
 }
 
-.filter-field input.form-control {
-	border       : none !important;
-	padding-left : 0;
-	padding-right: 0px;
-	opacity      : 0.5;
-	box-shadow   : none !important;
+input::placeholder, input::-webkit-input-placeholder
+{
+	font-size: 1rem;
 }
 
+input.form-control.filter-search-area
+{
+	position: relative;
+	border: none;
+	border-bottom: 1px solid var(--orange);
+	padding: 7px;
+	border-radius: 0;
+	&:focus
+	{
+		outline: none;
+		box-shadow: none;
+	}
+}
 .custom-control-input:focus~.custom-control-label::before {
 	box-shadow: none !important;
 }
@@ -236,6 +251,7 @@ section#vehicle-listing-container {
 
 .fil-itm .btn {
 	padding: 5px 10px;
+	font-size: 1.1rem;
 }
 
 .price-Blc h2 {
@@ -836,6 +852,13 @@ img.img-cir {
 	border-color: var(--orange);
 	padding: 0.475rem 1rem;
 }
+
+.green-button
+{
+	background-color: var(--green);
+	border-color: var(--green);
+}
+
 .custom-filled-back-button
 {
 	font-size: 0.985rem;

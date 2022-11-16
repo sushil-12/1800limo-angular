@@ -3,6 +3,22 @@ mat-form-field input {
 	margin-bottom   : 0;
 }
 
+
+#myTab
+{
+	li a
+	{
+		background-color: transparent;
+		color: var(--orange);
+	}
+	li a.active
+	{
+		color: #fff;
+	}
+}
+
+
+
 #search-button-container {
 	height : 100px;
 	width  : 100%;

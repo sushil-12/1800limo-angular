@@ -1667,7 +1667,7 @@ h2.headinginfo .orangeHeading {
 }
 
 .sidenav-menu .nav-item .collapse-inner a {
-	padding: 8px 10px 8px 25px !important;
+	padding: 8px 10px 8px 40px !important;
 }
 
 .affilate-wrapper .sidenav-menu .nav-item .collapse-inner a {
@@ -2965,7 +2965,7 @@ table .dropdown-menu {
 .adminbox_shadow.user_information .custom_table .table thead th {
 	text-align      : left;
 	background-color: #f29439;
-	color           : #fff !important;
+	color           : #fff;
 }
 
 .adminbox_shadow.user_information .custom_table .table.table-dark td,

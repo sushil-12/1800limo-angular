@@ -13,7 +13,7 @@
 			padding: 1rem;
 			min-height: 7rem;
 			flex-basis: 10rem;
-			transition: box-shadow 0.35s ease-in-out;
+			box-shadow: 3px 4px 9px 4px rgb(0 0 0 / 40%);
 			#check-icon
 			{
 				position: absolute;
@@ -36,13 +36,8 @@
 				font-weight: 600;
 			}
 		}
-		.tile:hover
-		{
-			box-shadow: 3px 4px 9px 4px rgb(0 0 0 / 40%);
-		}
 		.tile.active
 		{
-			box-shadow: 3px 4px 9px 4px rgb(0 0 0 / 40%);
 			background-color: var(--green)
 		}
 	}

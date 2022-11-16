@@ -6,6 +6,7 @@ import { catchError, filter } from 'rxjs/operators';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 import { StateManagementService } from 'src/app/services/statemanagement.service';
 import { QuotebotService } from '../../../services/quotebot.service';
+import { SharedModule } from '../../shared/shared.module';
 
 declare let $: any
 
@@ -154,7 +155,8 @@ export class SelectVehicleComponent implements OnInit
 		private $router: Router,
 		private $errorDialog: ErrorDialogService,
 		private $state: StateManagementService,
-		private $activatedRoute: ActivatedRoute
+		private $activatedRoute: ActivatedRoute,
+		private $globals: SharedModule
 	) { }
 
 	/**
@@ -166,20 +168,6 @@ export class SelectVehicleComponent implements OnInit
 	 */
 	ngOnInit(): void
 	{
-		this.$activatedRoute.queryParams.subscribe((params: any) =>
-		{
-			if (params?.list == 'master')
-			{
-				this.vehicleDetails = []
-			}
-			if (params?.sort == 'plh')
-			{
-				this.Sort.LowToHigh()
-			} else
-			{
-				this.Sort.HighToLow()
-			}
-		})
 		this.$spinner.show()
 		sessionStorage.removeItem('selected_vehicle')
 		// Note: Do not add anything here or before below conditional logic. This should be the first step
@@ -197,6 +185,21 @@ export class SelectVehicleComponent implements OnInit
 			// fetch the user's travelling quote
 			this.quotebot_form = JSON.parse(localStorage.getItem('quotebot_form'))
 		}
+
+		this.$activatedRoute.queryParams.subscribe((params: any) =>
+		{
+			if (params?.list == 'master')
+			{
+				this.vehicleDetails = []
+			}
+			if (params?.sort == 'plh')
+			{
+				this.Sort.LowToHigh()
+			} else
+			{
+				this.Sort.HighToLow()
+			}
+		})
 
 		this.fetchMasterVehicles()	// fetches 16 vehicle categories
 		this.getAllFilters()	// fetch filters from database
@@ -292,20 +295,7 @@ export class SelectVehicleComponent implements OnInit
 			// format every filter name from response
 			this.filters.original = JSON.parse(JSON.stringify(response.data)) // create a deep copy of the response object
 
-
-			// showing only till min_length
-			for (let filter in this.filters.original)
-			{
-				if (Array.isArray(this.filters.original[filter]) && this.filters.original[filter].length > this.min_length)
-				{
-					// assign the filter with specified length into a new object
-					this.filters.copy[filter] = this.filters.original[filter].slice(0, this.min_length)
-				} else
-				{
-					// else, assign the filter into the new object
-					this.filters.copy[filter] = this.filters.original[filter]
-				}
-			}
+			this.cutTillMinimum(this.min_length)	// cut the list till min length
 
 
 			this.filters.copy['driver-background'] = [{
@@ -331,6 +321,25 @@ export class SelectVehicleComponent implements OnInit
 	}
 
 
+	cutTillMinimum(min_length: number)
+	{
+		// showing only till min_length
+		for (let filter in this.filters.original)
+		{
+			if (Array.isArray(this.filters.original[filter]) && this.filters.original[filter].length > min_length)
+			{
+				// assign the filter with specified length into a new object
+				this.filters.copy[filter] = this.filters.original[filter].slice(0, min_length)
+			} else
+			{
+				// else, assign the filter into the new object
+				this.filters.copy[filter] = this.filters.original[filter]
+			}
+			this.filters.vars[filter] = true
+		}
+	}
+
+
 	/**
 	 * Replaces any text with hyphen(-) or an underscore(_) with an empty space..
 	 *
@@ -353,6 +362,26 @@ export class SelectVehicleComponent implements OnInit
 			value = value.replace(value.charAt(0), value.charAt(0).toUpperCase())
 		}
 		return value.replace(/[-|_]/g, ' ')
+	}
+
+	halfText(text: string)
+	{
+		return (text.length > 15 && text.substring(0, 15) + '...') || text
+	}
+
+	searchIn(card_header: string, text: string)
+	{
+		console.log(card_header, text)
+		if (text == '')
+		{
+			this.filters.vars[card_header] = true
+			this.filters.copy[card_header] = this.filters.original[card_header].slice(0, this.min_length)
+			return
+		} else
+		{
+			this.filters.vars[card_header] = false
+			this.filters.copy[card_header] = this.$globals.ListSearch('filter', this.filters.original[card_header], text, 'name')
+		}
 	}
 
 
@@ -534,113 +563,6 @@ export class SelectVehicleComponent implements OnInit
 
 
 
-
-
-
-
-	/*
-	selectedFilters(event: any, category: string, filter_obj: Filters)
-	{
-		console.log(`\n\n\nChecked: ${event.target.checked}\nCategory: ${category}\nFilter: `, filter_obj)
-	
-		if (JSON.parse(sessionStorage.getItem('selected_filters')) == null)
-		{
-			this.selected_filters = []
-		} else
-		{
-			this.selected_filters = JSON.parse(sessionStorage.getItem('selected_filters'))
-			this.getVehicleDetails(JSON.parse(sessionStorage.getItem('filters_data')))
-			return
-		}
-	
-	
-		if (filter_obj.name.includes('any or all') && event.target.checked)
-		{
-			// remove all filters from that list apart from 'all' filter
-			this.selected_filters = this.selected_filters.filter((item: any) => item.category != category)
-			return
-		}
-	
-		// ---------------------- APPENDING OPERATION FOR CHECKED FILTERS ----------------------
-		if (event && event.target.checked)
-		{
-			if (category == 'make' && !this.filters_data.hasOwnProperty('make'))
-			{
-				this.filters['model'] = []
-			}
-			if (category == 'make')
-			{
-				this.filters['model'] =
-					this.filters.hasOwnProperty('model') ?
-						this.filters['model'].concat(this.filtersList['model'].filter(item => item.make_id === filter_obj.id)) :
-						this.filtersList['model'].filter(item => item.make_id === filter_obj.id)
-			}
-	
-			// append into the filters data array
-			if (!this.filters_data.hasOwnProperty(category))
-			{
-				let values = []	// every new array for all new categories
-				values.push(filter_obj.slug != undefined ? filter_obj.slug : filter_obj.id)
-	
-				// push into array_2
-				this.filters_data[category] = values
-			} else
-			{
-				// push into array_2
-				this.filters_data[category].push(filter_obj.slug != undefined ? filter_obj.slug : filter_obj.id)	// push into existing category
-			}
-	
-			// push into array_1 always
-			filter_obj.name != 'any' && this.selected_filters.push({
-				category,
-				name: filter_obj.name
-			})
-		}
-		// ------------------ APPENDING OPERATION ENDS	-------------------------
-	
-	
-		// -------------- REMOVING OPERATION FOR UNCHECKED FILTERS -------------------
-		else
-		{
-			if (category == 'make')
-			{
-				this.selected_filters = this.selected_filters.filter(item => item.name !== filter_obj.name || (item.category === category))
-				this.filters['model'] = this.filters['model'].filter(item => item.make_id !== filter_obj.id)
-			}
-			if (category == 'model')
-			{
-				this.selected_filters = this.selected_filters.filter(item => item.name !== filter_obj.name || (item.category === category))
-				this.filters_data['model'] = this.filters_data['model'].filter(item => item.make_id !== filter_obj.make_id)
-			}
-	
-			// filter out others, other than unchecked
-			this.selected_filters = this.selected_filters.filter(item => item.name !== filter_obj.name)
-			this.filters_data[category] = this.filters_data[category].filter(item => item !== (filter_obj.slug == undefined ? filter_obj.id : filter_obj.slug))
-		}
-		// ------------- REMOVING OPERATION ENDS ---------------------
-	
-		// REMOVING EMPTY VALUES FROM FILTERS DATA
-		for (let key in this.filters_data)
-		{
-			if (key.length == 0)
-			{
-				delete this.filters_data[key]
-			}
-		}
-	
-		// this.getVehicleDetails(this.filters_data)	// THE API HIT - FETCH THE VEHICLE DETAILS UPON GENERATED FILTERS DATA
-	
-		if (event.fetch_vehicles)
-		{
-			this.getVehicleDetails(this.filters_data)
-		}
-		// 	console.log('Selected Filters: ', this.selected_filters, '\n')
-		// 	console.log('Filters Data: ', this.filters_data, '\n')
-		// 	console.log('Filters: ', this.filters, '\n')
-	}
-	*/
-
-
 	isFilterAlreadySelected(catg_name: string, fil_index: number): boolean
 	{
 		// return for all 'any or all' filters
@@ -651,30 +573,6 @@ export class SelectVehicleComponent implements OnInit
 
 		return this.filters.selections.findIndex(item => item['catg_name'] == catg_name && item['fil_index'] == fil_index) == -1 ? false : true
 	}
-
-
-	/*
-	includes(filter_list: any, comparison_key: string, filter_obj: any, card_header: string)
-	{
-		let array = filter_list.some(item => item[comparison_key] == filter_obj[comparison_key])
-		if (array)
-		{
-			this.filters[card_header][0]['checked'] = false
-		}
-	
-		// remove any or all filter when any other filter is selected
-		if (this.filters[card_header][0]['checked'] && array)
-		{
-			this.filters[card_header][0]['checked'] = false
-		}
-	
-		if (filter_obj.name.includes('any or all'))
-		{
-			return filter_obj['checked']
-		}
-		return array
-	}
-	*/
 
 	showModal(vehicle_selected: any, selection_button: string)
 	{
@@ -730,112 +628,6 @@ export class SelectVehicleComponent implements OnInit
 				skipLocationChange: true
 			})
 		}
-	}
-
-	showAllImages(vehicle_selected: any, vehicle_selected_index: number)
-	{
-		// // console.log(vehicle_selected)
-		this.vehicleImages = this.vehicleDetails[vehicle_selected_index].vehicle_images
-
-		// Owl Carousel Images Slider
-		$(document).ready(function ()
-		{
-			var bigimage = $("#big");
-			var thumbs = $("#thumbs");
-			//var totalslides = 10;
-			var syncedSecondary = true;
-
-			bigimage
-				.owlCarousel({
-					items: 1,
-					slideSpeed: 10,
-					nav: false,
-					autoplay: true,
-					dots: false,
-					loop: true,
-					responsiveRefreshRate: 200,
-				})
-				.on("changed.owl.carousel", syncPosition);
-
-			thumbs
-				.on("initialized.owl.carousel", function ()
-				{
-					thumbs
-						.find(".owl-item")
-						.eq(0)
-						.addClass("current");
-				})
-				.owlCarousel({
-					items: 8,
-					dots: false,
-					nav: true,
-					smartSpeed: 200,
-					slideSpeed: 500,
-					slideBy: 4,
-					responsiveRefreshRate: 100
-				})
-				.on("changed.owl.carousel", syncPosition2);
-
-			function syncPosition(el)
-			{
-				//if loop is set to false, then you have to uncomment the next line
-				var current = el.item.index;
-
-				//to disable loop, comment this block
-				var count = el.item.count - 1;
-				var current: any = Math.round(el.item.index - el.item.count / 2 - 0.5);
-
-				if (current < 0)
-				{
-					current = count;
-				}
-				if (current > count)
-				{
-					current = 0;
-				}
-				//to this
-				thumbs
-					.find(".owl-item")
-					.removeClass("current")
-					.eq(current)
-					.addClass("current");
-				var onscreen = thumbs.find(".owl-item.active").length - 1;
-				var start = thumbs
-					.find(".owl-item.active")
-					.first()
-					.index();
-				var end = thumbs
-					.find(".owl-item.active")
-					.last()
-					.index();
-
-				if (current > end)
-				{
-					thumbs.data("owl.carousel").to(current, 100, true);
-				}
-				if (current < start)
-				{
-					thumbs.data("owl.carousel").to(current - onscreen, 100, true);
-				}
-			}
-
-			function syncPosition2(el)
-			{
-				if (syncedSecondary)
-				{
-					var number = el.item.index;
-					bigimage.data("owl.carousel").to(number, 100, true);
-				}
-			}
-
-			thumbs.on("click", ".owl-item", function (e)
-			{
-				e.preventDefault();
-				var number = $(this).index();
-				bigimage.data("owl.carousel").to(number, 300, true);
-			});
-		});
-		$('#view_all_images').modal('show')
 	}
 
 	clearFilters(filter_name: { catg_name: string, fil_index: number })
@@ -930,6 +722,12 @@ export class SelectVehicleComponent implements OnInit
 
 	backButton()
 	{
+		// when its time to go back to home page
+		if (this.vehicleDetails.length == 0)
+		{
+			this.$router.navigateByUrl('/home')
+			return
+		}
 		for (let i = 0; i < this.filters.selections.length; i++)
 		{
 			let item = this.filters.selections[i]

@@ -28,10 +28,10 @@ body.bg-fade:before {
 * {
 	--orange: #F3933D;
 }
-input, input::placeholder {
-	font-size: 1.1rem !important;
-	letter-spacing: 1px !important;
-	font-weight: 600 !important;
+input, input::placeholder, input::-webkit-input-placeholder {
+	font-size: 1.1rem;
+	letter-spacing: 1px;
+	font-weight: 600 ;
 }
 
 .text-orange {
