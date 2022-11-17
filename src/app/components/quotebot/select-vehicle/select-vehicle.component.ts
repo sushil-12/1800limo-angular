@@ -201,7 +201,6 @@ export class SelectVehicleComponent implements OnInit
 			}
 		})
 
-		this.$state.set({})
 		this.fetchMasterVehicles()	// fetches 16 vehicle categories
 		this.getAllFilters()	// fetch filters from database
 	}
