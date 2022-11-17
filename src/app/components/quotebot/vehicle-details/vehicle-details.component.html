@@ -287,7 +287,7 @@
 		<div *ngIf="quotebot_form.service_type == 'round_trip'">
 			<h5 class="mt-4 text-org"> Return Details </h5>
 
-			<!-- Date -->
+			<!-- Return Date -->
 			<div class="row my-3">
 				<div class="col-6 col-md-5">
 					<p class="pv-title">
@@ -301,7 +301,7 @@
 				</div>
 			</div>
 
-			<!-- Time -->
+			<!-- Return Time -->
 			<div class="row my-3">
 				<div class="col-6 col-md-5">
 					<p class="pv-title">
@@ -317,7 +317,7 @@
 
 			<hr class="blue-line" />
 
-			<!-- Pickup Address/Airport -->
+			<!-- Return Pickup Address/Airport -->
 			<div class="row my-3">
 				<div class="col-md-5" *ngIf="quotebot_form.return_pickup_type == 'airport'; else rpikadd">
 					<p class="pv-title">
@@ -346,7 +346,7 @@
 
 			<hr class="blue-line" />
 
-			<!-- Dropoff Address/Airport -->
+			<!-- Return Dropoff Address/Airport -->
 			<div class="row my-3">
 				<div class="col-md-5" *ngIf="quotebot_form.return_dropoff_type == 'airport'; else rdropadd">
 					<p class="pv-title">

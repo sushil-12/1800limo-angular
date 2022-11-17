@@ -130,7 +130,22 @@
 	font-size: 12px !important;
 	transition: 0.3s;
 }
-@media only screen and (max-width: 1024px) {
+
+#insurance-limits
+{
+	option span.red-dollar
+	{
+		color: red;
+		font-size: 1.1rem;
+		margin: 0 3px;
+	}
+}
+
+
+
+
+
+@media only screen and (max-width: 1200px) {
 	.select-ex-year-label,
 	.select-ex-day-label,
 	.select-ex-month-label {

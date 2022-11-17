@@ -36,7 +36,7 @@
 
 
 <!-- FILTERS AND VEHICLE LISTING SECTION -->
-<section class="container-fluid pt-2 pb-5">
+<section class="container-fluid pt-2 pb-5" [ngClass]="openfilters ? 'position-fixed' : ''">
 	<div id="page-instruction-text" class="mx-2 mt-4 mb-2">
 		<h5>
 			Select the vehicle that meets your requirements.
@@ -272,7 +272,7 @@
 		<ng-template #vehicleListing>
 			<section id="vehicle-listing-container"
 				class="col-md-auto col-lg-9 d-flex flex-row flex-wrap justify-content-center justify-content-lg-start"
-				style="gap: 50px">
+				style="gap: 50px" [ngStyle]="openfilters ? {'z-index': -1, 'position': 'relative'} : ''">
 				<div id="vehicle-details-card" *ngFor="let vehinfo of vehicleDetails; index as vehinfo_index"
 					class="card">
 					<!-- VEHICLE IMAGE -->
@@ -284,6 +284,16 @@
 						<h4 class="card-title mb-0">
 							{{ vehinfo.name }}
 						</h4>
+
+						<!-- Affiliate Name/Company Name -->
+						<div id="affiliate-info" class="" *ngIf="vehinfo.affliate_name || vehinfo.affliate_company">
+							<p class="text-left">
+								{{ vehinfo.affliate_name || '' }}
+								/
+								{{ vehinfo.affliate_company || '' }}
+							</p>
+						</div>
+
 						<!-- LUGGAGE n PASSENGER -->
 						<div class="d-flex mb-2">
 							<div class="pass-det org-Btn">
@@ -329,7 +339,8 @@
 
 		<!-- MASTER VEHICLE TYPES SECTION -->
 		<ng-template #MasterVehicleListing>
-			<div class="col-md-12 col-lg-9" *ngIf="vehicleDetails.length == 0 || master_vehicles.length == 0">
+			<div class="col-md-12 col-lg-9" [ngStyle]="openfilters ? {'z-index': -1, 'position': 'relative'} : ''"
+				*ngIf="vehicleDetails.length == 0 || master_vehicles.length == 0">
 				<p style="font-size: 1rem; font-weight: 500; color: #e63232"
 					*ngIf="(vehicleDetails.length == 0 && this.filters.selections.length > 0) || master_vehicles.length == 0">
 					{{ no_vehicle_msg }}

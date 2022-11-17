@@ -220,7 +220,7 @@
 												<input matInput [matDatepicker]="picker1" placeholder="Pickup Date"
 													[min]="minDate" formControlName="pickup_date"
 													class="font-weight-bolder"
-													(dateChange)="changeDetection.pickupDate($event)"
+													(dateChange)="changeDetection.pickupDate($event.target.value)"
 													(click)="picker1.open()"
 													[class.errorValid]="submitted && QBForm.pickup_date.errors">
 												<mat-datepicker-toggle matSuffix [for]="picker1">
@@ -455,7 +455,7 @@
 											<mat-form-field appearance="fill">
 												<input matInput [matDatepicker]="picker3" [min]="minDate"
 													placeholder="Return Pickup Date" id="returnPickupDate"
-													(change)="changeDetection.return_pickup_date($event)"
+													(change)="changeDetection.return_pickup_date($event.target.value)"
 													class="font-weight-bolder"
 													[class.errorValid]="submitted && QBForm.return_pickup_date.errors"
 													formControlName="return_pickup_date" (click)="picker3.open()">
@@ -532,7 +532,7 @@
 												<input type="text" placeholder="Return Airport Code / Name"
 													#retairportinput id="return_pickup_airport"
 													class="input-f font-weight-bolder"
-													(keyup)="searchAirport($event.target.value, 'return-pickup_airport')"
+													(keyup)="searchAirport($event.target.value, 'return_pickup_airport')"
 													[value]="fillAirportData(airports_data, 'return_pickup_airport', 'id', 'airport')"
 													[matAutocomplete]="returnpickupairportautocomplete">
 												<mat-autocomplete #returnpickupairportautocomplete="matAutocomplete">

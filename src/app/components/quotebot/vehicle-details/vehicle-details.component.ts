@@ -98,9 +98,9 @@ export class VehicleDetailsComponent implements OnInit
 					items: 1,
 					slideSpeed: 10,
 					nav: false,
-					autoplay: false,
+					autoplay: true,
 					dots: false,
-					loop: false,
+					loop: true,
 					responsiveRefreshRate: 200,
 					responsiveClass: true,
 				})
@@ -341,9 +341,12 @@ export class VehicleDetailsComponent implements OnInit
 					return_pickup_address_lat: this.quotebot_form.dropoff_address_lat,
 					return_pickup_address_long: this.quotebot_form.dropoff_address_long,
 					return_dropoff_address_lat: this.quotebot_form.pickup_address_lat,
-					return_dropoff_address_long: this.quotebot_form.pickup_address_long
+					return_dropoff_address_long: this.quotebot_form.pickup_address_long,
+					other_details: this.quotebot_form.other_details
 				}
-				Object.assign(obj, this.quotebot_form, obj)
+
+				Object.assign(obj, this.quotebot_form, obj) // assign the new object to old quote
+
 				sessionStorage.setItem('quotebot_original_distance_data', JSON.stringify(this.quotebot_form['location_info']))
 				if (obj['location_info'].length == 1)
 				{

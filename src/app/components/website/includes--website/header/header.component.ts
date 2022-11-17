@@ -88,20 +88,20 @@ export class HeaderComponent implements OnInit
 
 	logout()
 	{
-		this.spinner.show();//show spinner
-		this.stateManagementService.removeUser()
+		this.spinner.show()
 		this.authService.logout()
 			.pipe(
 				catchError(err =>
 				{
-					this.spinner.hide();//hide spinner
+					this.spinner.hide()
 					return throwError(err);
 				})
 			).subscribe(({ success }: any) =>
 			{
-				this.spinner.hide();//hide spinner
-				if (success == true)
+				this.spinner.hide()
+				if (success)
 				{
+					this.stateManagementService.removeUser()
 					this.router.navigate(['/home']);
 					location.reload()
 					console.log("Logout Successfully");

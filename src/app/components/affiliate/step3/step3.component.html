@@ -92,7 +92,7 @@
 						<span class="asterisk">*</span></label>
 					<div class="selectStyle">
 						<select class="selectInputStyle" (click)="selectDropdownExMonth()"
-							formControlName="policyExpiredMonth" tabindex="1">
+							formControlName="policyExpiredMonth" tabindex="1" placeholder="Month">
 							<option value="">Month</option>
 							<option value="01">01</option>
 							<option value="02">02</option>
@@ -138,7 +138,7 @@
 						<span class="asterisk">*</span></label>
 					<div class="selectStyle">
 						<select class="selectInputStyle" (click)="selectDropdownExDay()"
-							formControlName="policyExpiredDay" tabindex="1">
+							formControlName="policyExpiredDay" tabindex="1" placeholder="Day">
 							<option value="">Day</option>
 							<option *ngFor="let day of policyExpiredDay" value="{{ day }}">
 								{{ day }}
@@ -173,7 +173,7 @@
 						<span class="asterisk">*</span></label>
 					<div class="selectStyle">
 						<select class="selectInputStyle" (click)="selectDropdownExYear()"
-							formControlName="policyExpiredYear" tabindex="1">
+							formControlName="policyExpiredYear" tabindex="1" placeholder="Year">
 							<option value="">Year</option>
 							<option *ngFor="let year of policyExpiredYear" value="{{ year }}">
 								{{ year }}
@@ -204,16 +204,34 @@
 					</div>
 				</div>
 				<div class="col-md-6">
-					<label class="select-insurance-label">Insurance Limits
+					<label class="select-insurance-label">
+						Insurance Limits
 						<span class="theme-color">(Choose Closest Limit)</span>
-						<span class="asterisk">*</span></label>
+						<span class="asterisk">*</span>
+					</label>
 					<div class="selectStyle">
-						<select class="selectInputStyle" (click)="selectDropdownInsurance()"
+						<select id="insurance-limits" class="selectInputStyle" (click)="selectDropdownInsurance()"
 							formControlName="insuranceLimits" tabindex="1">
-							<option value="500000">500,000</option>
-							<option value="1000000">1,000,000</option>
-							<option value="1500000">1,500,000</option>
-							<option value="5000000">5,000,000</option>
+							<option value="500000">
+								<span class="red-dollar">$</span>
+								500,000
+							</option>
+							<option value="1000000">
+								<span class="red-dollar">$</span>
+								1,000,000
+							</option>
+							<option value="1500000">
+								<span class="red-dollar">$</span>
+								1,500,000
+							</option>
+							<option value="5000000">
+								<span class="red-dollar">$</span>
+								5,000,000
+							</option>
+							<option value="10000000">
+								<span class="red-dollar">$</span>
+								10,000,000
+							</option>
 						</select>
 						<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
 							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
