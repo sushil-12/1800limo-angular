@@ -276,6 +276,15 @@
 				style="gap: 50px" [ngStyle]="openfilters ? {'z-index': -1, 'position': 'relative'} : ''">
 				<div id="vehicle-details-card" *ngFor="let vehinfo of vehicleDetails; index as vehinfo_index"
 					class="card">
+					<!-- Affiliate Name/Company Name -->
+					<div id="affiliate-info" class="" *ngIf="vehinfo.affiliate_name || vehinfo.affiliate_company">
+						<p class="text-left">
+							{{ vehinfo.affiliate_name || '' }}
+							{{ '/ ' + vehinfo.affiliate_company || '' }}
+						</p>
+					</div>
+
+
 					<!-- VEHICLE IMAGE -->
 					<img [src]="vehinfo.vehicle_images[0]" id="V_Image_0" class="card-img-top" alt="Vehicle Image"
 						*ngIf="vehinfo.vehicle_images?.length > 0" />
@@ -285,14 +294,6 @@
 						<h4 class="card-title mb-0">
 							{{ vehinfo.name }}
 						</h4>
-
-						<!-- Affiliate Name/Company Name -->
-						<div id="affiliate-info" class="" *ngIf="vehinfo.affiliate_name || vehinfo.affiliate_company">
-							<p class="text-left">
-								{{ vehinfo.affiliate_name || '' }}
-								{{ '/ ' + vehinfo.affiliate_company || '' }}
-							</p>
-						</div>
 
 						<!-- LUGGAGE n PASSENGER -->
 						<div class="d-flex mb-2">
