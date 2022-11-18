@@ -268,6 +268,7 @@
 		<!-- FILTERS SECTION ENDS -->
 
 		<ng-container *ngIf="vehicleDetails.length > 0; then vehicleListing else MasterVehicleListing"></ng-container>
+
 		<!-- VEHICLE LISTING SECTION -->
 		<ng-template #vehicleListing>
 			<section id="vehicle-listing-container"
@@ -286,11 +287,10 @@
 						</h4>
 
 						<!-- Affiliate Name/Company Name -->
-						<div id="affiliate-info" class="" *ngIf="vehinfo.affliate_name || vehinfo.affliate_company">
+						<div id="affiliate-info" class="" *ngIf="vehinfo.affiliate_name || vehinfo.affiliate_company">
 							<p class="text-left">
-								{{ vehinfo.affliate_name || '' }}
-								/
-								{{ vehinfo.affliate_company || '' }}
+								{{ vehinfo.affiliate_name || '' }}
+								{{ '/ ' + vehinfo.affiliate_company || '' }}
 							</p>
 						</div>
 
@@ -353,12 +353,12 @@
 								[attr.id]="'vehicle_' + vehicle_obj_index" />
 						</div>
 						<div id="vehicle-information" class="m-0">
-							<p id="vehicle-name" class="font-weight-bolder">
+							<p id="vehicle-name">
 								{{ vehicle_obj?.name }}
 							</p>
-							<p id="vehicle-price"
+							<p id="vehicle-price" class="font-weight-bolder" style="font-size: 1.1rem"
 								*ngIf="('rate_breakdown_' + getKeyName()) != undefined || ('rate_breakdown_' + getKeyName()).length <= 0">
-								<span style="color: #e17515; font-weight: 500;">
+								<span style="color: var(--orange);">
 									From
 								</span>
 								${{ vehicle_obj['rate_breakdown_' + getKeyName()]?.grand_total != undefined ?

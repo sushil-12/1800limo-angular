@@ -107,6 +107,7 @@ export class HomeComponent implements OnInit
 
 	ngOnInit()
 	{
+		this.fetchAirportsData()
 		setTimeout(() =>
 		{
 
@@ -327,7 +328,6 @@ export class HomeComponent implements OnInit
 		if (this.generateQBForm())
 		{
 			this.prefillQuotebot()
-			this.fetchAirportsData()
 		}
 	}
 

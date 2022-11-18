@@ -630,12 +630,12 @@
 			<span class="alert alert-danger row ml-2 mr-2 mt-3 mb-2 d-lg-none">
 				All Photos to be uploaded from Desktop or File.
 			</span>
-			<span class="alert alert-danger row ml-2 mr-2 mt-3 mb-2">Upload the pictures of Interior and Exterior of the
-				vehicle
+			<span class="alert alert-danger row ml-2 mr-2 mt-3 mb-2">
+				Upload the pictures of Interior and Exterior of the vehicle. Delete the unchanged sample images.
 			</span>
-			<span class="alert alert-danger row ml-2 mr-2">These are sample images as a guide to good picture taking.
-				Sell
-				your unique features that travelers and party goers want!
+			<span class="alert alert-danger row ml-2 mr-2">
+				These are sample images as a guide to good picture taking. Sell your unique features that travelers and
+				party goers want!
 			</span>
 			<div class="mt-4 vehtype_extintwrap">
 				<div class="row">
@@ -1239,7 +1239,7 @@
 
 				<hr />
 
-				<div class="row">
+				<div class="row" *ngIf="affiliateType != 'fleet_operator'">
 					<div class="col-md-4" *ngIf="rearPlateImage; else noRearPlateImage">
 						<div class="vehtype_extint">
 							<div>
@@ -1535,7 +1535,7 @@
 					</ng-template>
 				</div>
 
-				<div class="row">
+				<div class="row" *ngIf="affiliateType != 'fleet_operator'">
 					<div class="col-md-4" *ngIf="usdotPermitImage; else noUsdotPermitImage">
 						<div class="vehtype_extint">
 							<div>
