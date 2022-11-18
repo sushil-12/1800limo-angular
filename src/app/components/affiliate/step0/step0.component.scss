@@ -241,11 +241,13 @@ div#imageModal {
 	}
 }
 
-// h2.headinginfo {
-// 	font-size  : 2vw;
-// 	font-weight: 600;
-// 	margin     : 0;
-// }
+#photo-capturing-instructions
+{
+	small
+	{
+		font-size: 0.63em;
+	}
+}
 
 .agreeButton {
 	background-color: var(--green-color) !important;

@@ -12,9 +12,9 @@
 				<mat-label>
 					Start Date <span class="asterisk"> * </span>
 				</mat-label>
-				<input matInput [setOutputDateFormat]="OUTPUTDATEFORMAT" [matDatepicker]="picker1" placeholder="Start Date"
-					[max]="end_date" id="id_4" (dateChangeWithFormat)="start_date = $event" (click)="picker1.open()"
-					[value]="start_date" />
+				<input matInput [setOutputDateFormat]="OUTPUTDATEFORMAT" [matDatepicker]="picker1"
+					placeholder="Start Date" [max]="end_date" id="id_4" (dateChangeWithFormat)="start_date = $event"
+					(click)="picker1.open()" [value]="start_date" />
 				<mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
 				<mat-datepicker #picker1></mat-datepicker>
 			</mat-form-field>
@@ -24,9 +24,9 @@
 		<div class="col-md-3">
 			<mat-form-field appearance="outline">
 				<mat-label>End Date<span class="asterisk">*</span></mat-label>
-				<input matInput [setOutputDateFormat]="OUTPUTDATEFORMAT" [matDatepicker]="picker2" placeholder="End Date"
-					[min]="start_date" id="id_5" (dateChangeWithFormat)="end_date = $event" (click)="picker2.open()"
-					[value]="end_date" />
+				<input matInput [setOutputDateFormat]="OUTPUTDATEFORMAT" [matDatepicker]="picker2"
+					placeholder="End Date" [min]="start_date" id="id_5" (dateChangeWithFormat)="end_date = $event"
+					(click)="picker2.open()" [value]="end_date" />
 				<mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
 				<mat-datepicker #picker2></mat-datepicker>
 			</mat-form-field>
@@ -43,7 +43,7 @@
 		<!-- SEARCH BUTTON -->
 		<div class="col-md-2  startdate3">
 			<label></label>
-			<button class="custom-btn btnclass savebutton">SEARCH</button>
+			<button class="custom-btn btnclass">SEARCH</button>
 		</div>
 	</div>
 	<!-- DIVISION: SEARCH PARAMETERS ENDS -->
@@ -52,10 +52,10 @@
 	<div class="row px-4">
 		<div class="col-auto">
 			<div id="create-new-btn" class="my-3">
-				<button id="farmout-btn" class="custom-btn btnclass savebutton m-0" [routerLink]="['/']"
+				<button id="farmout-btn" class="custom-btn btnclass m-0" [routerLink]="['/']"
 					style="gap: 0.45rem; align-items:center; padding: 0 25px !important; font-size: 1.1rem">
 					<i class="bi bi-plus-lg"></i>
-					New Farmout
+					Create New Farmout
 				</button>
 			</div>
 		</div>

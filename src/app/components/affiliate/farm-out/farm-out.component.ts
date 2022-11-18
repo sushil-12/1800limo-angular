@@ -42,7 +42,7 @@ export class FarmOutComponent implements OnInit
 			You cannot create a booking of this vehicle. <br/><br/>
 			<h6>Create a new Farm Out Booking ?</h6>
 			`
-			$('#farmout-modal').modal('show')
+			// $('#farmout-modal').modal('show')
 		}
 		const date = new Date()
 		this.start_date = date.toISOString().split('T')[0]
