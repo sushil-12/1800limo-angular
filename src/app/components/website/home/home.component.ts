@@ -107,6 +107,7 @@ export class HomeComponent implements OnInit
 
 	ngOnInit()
 	{
+		this.fetchAirportsData()
 		setTimeout(() =>
 		{
 
@@ -327,7 +328,6 @@ export class HomeComponent implements OnInit
 		if (this.generateQBForm())
 		{
 			this.prefillQuotebot()
-			this.fetchAirportsData()
 		}
 	}
 
@@ -472,6 +472,7 @@ export class HomeComponent implements OnInit
 				no_of_luggage: previous_quotebot.no_of_luggage,
 				location_info: previous_quotebot.location_info
 			})
+			this.vars = previous_quotebot.other_details
 			console.warn('pickup_time: ', this.QBForm.pickup_time.value)
 			this.quoteBotSwitch(previous_quotebot.service_type)
 
@@ -657,6 +658,10 @@ export class HomeComponent implements OnInit
 	quoteBotSwitch(quoteBotType: string)
 	{
 		this.QBForm.service_type.setValue(quoteBotType)
+		if (quoteBotType == 'round_trip')
+		{
+			this.fillReturnDetails()
+		}
 	}
 
 
@@ -664,9 +669,9 @@ export class HomeComponent implements OnInit
 	 * update values of specific function calls to form
 	 */
 	changeDetection = {
-		pickupDate: (event: any) =>
+		pickupDate: (value: any) =>
 		{
-			this.SetFormValue('pickup_date', new Date(event.value).toISOString().split('T')[0])
+			this.SetFormValue('pickup_date', value)
 		},
 		pickupTime: (event: any = null, form_control: string) => 
 		{
@@ -677,9 +682,9 @@ export class HomeComponent implements OnInit
 			console.log('Pickup Time Event: ', event.target.value)
 			this.SetFormValue(form_control, event.target.value)
 		},
-		return_pickup_date: (event: any) =>
+		return_pickup_date: (value: any) =>
 		{
-			this.SetFormValue('return_pickup_date', event.target.value)
+			this.SetFormValue('return_pickup_date', value)
 		},
 
 		bookingHours: (event: any) =>
@@ -905,21 +910,12 @@ export class HomeComponent implements OnInit
 		(pickup_coordinates.length > 0 || dropoff_coordinates.length > 0) && this.calculateDistance(pickup_coordinates, dropoff_coordinates).then((response: any) =>
 		{
 			//store data in localstorage after succesfully sending request to backend 
-			// this.quotebotService.fileAQuote(this.quoteBotForm.value).pipe( 
-			// 	catchError(err =>
-			// {
-			// 	this.spinner.hide()
-			// 	return throwError(err)
-			// })
-			// ).subscribe( (data: any) =>
-			// {
 			this.quoteBotForm.value['other_details'] = this.vars
 
 			console.log(`\n\n\n Receiving Response after filing the quote .....\n ${response} \n\n\n`)
 			localStorage.setItem('quotebot_form', JSON.stringify(this.quoteBotForm.value));
 			this.router.navigate(['quotebot/select-vehicle']);
-			// })
-			// console.log(this.quoteBotForm); return;
+			return
 		}, (error) =>
 		{
 			console.group('Facing Some Issues while calculating distance .... Error fetched ->\n')
@@ -1094,12 +1090,13 @@ export class HomeComponent implements OnInit
 			).subscribe(({ success }: any) =>
 			{
 				this.spinner.hide();//hide spinner
-				if (success == true)
+				if (success)
 				{
 					this.stateManagementService.removeUser();
+					this.router.navigate(['/home']);
+					location.reload()
 					console.log("Logout Successfully");
 				}
-				this.router.navigate(['/']);
 			});
 	}
 }

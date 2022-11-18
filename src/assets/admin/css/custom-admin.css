@@ -1654,12 +1654,14 @@ h2.headinginfo .orangeHeading {
 
 .dropdwn .bi-chevron-up::before {
 	position: relative;
-	left    : 180px;
+	left    : 90%;
+	font-weight: 800 !important;
 }
 
 .dropdwn .bi-chevron-down::before {
 	position: relative;
-	left    : 180px;
+	left    : 90%;
+	font-weight: 800 !important;
 }
 
 .sidenav-menu .nav-item .collapse-inner {

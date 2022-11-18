@@ -26,16 +26,13 @@
 	{
 		img
 		{
-			max-width: 50px;
-			height: 35px;
+			object-fit: cover;
+			margin: 5px 9px;
+			max-width: 70px;
+			height: 55px;
 			width: 90%;
 		}
 	}
-}
-
-.owl-carousel .owl-stage
-{
-	margin: 0 auto;
 }
 
 
@@ -44,8 +41,8 @@
 {
 	#thumbs .item img
 	{
-		max-width: 35px;
-		height: 27px;
+		max-width: 55px;
+		height: 37px;
 	}
 }
 
@@ -118,18 +115,25 @@ hr.blue-line
 
 
 .price-Blc {
-	small {
-		font-size: 17px;
-	}
-
-	label.custom-control-label {
-		font-size    : 1.3rem;
-		margin-top   : 14px;
-		margin-bottom: 14px;
-		font-weight  : 600;
-
+	.checkbox-block
+	{
 		small {
-			font-size: 1rem;
+			font-size: 17px;
+		}
+
+		label.custom-control-label {
+			font-size    : 1.3rem;
+			margin-top   : 14px;
+			margin-bottom: 14px;
+			font-weight  : 600;
+
+			small {
+				font-size: 1rem;
+			}
+		}
+		#charter-price p
+		{
+			font-size: 1.3rem;
 		}
 	}
 }

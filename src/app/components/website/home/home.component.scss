@@ -30,8 +30,8 @@ mat-form-field input {
 		vertical-align: middle;
 
 		button {
-			font-size: 1rem;
-			padding  : 0.975rem 1.258rem;
+			font-size: 0.87rem;
+			padding  : 0.675rem 0.758rem;
 		}
 	}
 }
@@ -695,9 +695,7 @@ a.user-profile:active::after {
 }
 
 .bannerform_wrapper .quoteform_homewrapper input {
-	border-radius            : 0;
-	border-top-left-radius   : 5px;
-	border-bottom-left-radius: 5px;
+	border-radius            : 5px;
 }
 
 .bannerform_wrapper .quoteform_homewrapper .input-group .input-group-append .input-group-text {

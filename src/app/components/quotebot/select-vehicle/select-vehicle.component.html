@@ -36,12 +36,12 @@
 
 
 <!-- FILTERS AND VEHICLE LISTING SECTION -->
-<section class="container-fluid pt-2 pb-5">
+<section class="container-fluid pt-2 pb-5" [ngClass]="openfilters ? 'position-fixed' : ''">
 	<div id="page-instruction-text" class="mx-2 mt-4 mb-2">
 		<h5>
 			Select the vehicle that meets your requirements.
 		</h5>
-		<span style="font-size: 15px; color: #464646">
+		<span style="font-size: 1.18rem; color: #464646">
 			Use Filter / Sort for more specific choices to match your search for rates.
 		</span>
 	</div>
@@ -268,11 +268,12 @@
 		<!-- FILTERS SECTION ENDS -->
 
 		<ng-container *ngIf="vehicleDetails.length > 0; then vehicleListing else MasterVehicleListing"></ng-container>
+
 		<!-- VEHICLE LISTING SECTION -->
 		<ng-template #vehicleListing>
 			<section id="vehicle-listing-container"
 				class="col-md-auto col-lg-9 d-flex flex-row flex-wrap justify-content-center justify-content-lg-start"
-				style="gap: 50px">
+				style="gap: 50px" [ngStyle]="openfilters ? {'z-index': -1, 'position': 'relative'} : ''">
 				<div id="vehicle-details-card" *ngFor="let vehinfo of vehicleDetails; index as vehinfo_index"
 					class="card">
 					<!-- VEHICLE IMAGE -->
@@ -284,6 +285,15 @@
 						<h4 class="card-title mb-0">
 							{{ vehinfo.name }}
 						</h4>
+
+						<!-- Affiliate Name/Company Name -->
+						<div id="affiliate-info" class="" *ngIf="vehinfo.affiliate_name || vehinfo.affiliate_company">
+							<p class="text-left">
+								{{ vehinfo.affiliate_name || '' }}
+								{{ '/ ' + vehinfo.affiliate_company || '' }}
+							</p>
+						</div>
+
 						<!-- LUGGAGE n PASSENGER -->
 						<div class="d-flex mb-2">
 							<div class="pass-det org-Btn">
@@ -329,7 +339,8 @@
 
 		<!-- MASTER VEHICLE TYPES SECTION -->
 		<ng-template #MasterVehicleListing>
-			<div class="col-md-12 col-lg-9" *ngIf="vehicleDetails.length == 0 || master_vehicles.length == 0">
+			<div class="col-md-12 col-lg-9" [ngStyle]="openfilters ? {'z-index': -1, 'position': 'relative'} : ''"
+				*ngIf="vehicleDetails.length == 0 || master_vehicles.length == 0">
 				<p style="font-size: 1rem; font-weight: 500; color: #e63232"
 					*ngIf="(vehicleDetails.length == 0 && this.filters.selections.length > 0) || master_vehicles.length == 0">
 					{{ no_vehicle_msg }}
@@ -342,12 +353,12 @@
 								[attr.id]="'vehicle_' + vehicle_obj_index" />
 						</div>
 						<div id="vehicle-information" class="m-0">
-							<p id="vehicle-name" class="font-weight-bolder">
+							<p id="vehicle-name">
 								{{ vehicle_obj?.name }}
 							</p>
-							<p id="vehicle-price"
+							<p id="vehicle-price" class="font-weight-bolder" style="font-size: 1.1rem"
 								*ngIf="('rate_breakdown_' + getKeyName()) != undefined || ('rate_breakdown_' + getKeyName()).length <= 0">
-								<span style="color: #e17515; font-weight: 500;">
+								<span style="color: var(--orange);">
 									From
 								</span>
 								${{ vehicle_obj['rate_breakdown_' + getKeyName()]?.grand_total != undefined ?

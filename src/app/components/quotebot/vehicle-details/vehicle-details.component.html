@@ -53,7 +53,8 @@
 							<div class="price-Blc my-3">
 								<div class="checkbox-block d-md-flex" (change)="selectPrice()">
 									<!-- One Way -->
-									<div class="custom-control custom-checkbox custom-control-inline">
+									<div class="custom-control custom-checkbox custom-control-inline"
+										*ngIf="getKeyName() != 'charter_tour'">
 										<input type="checkbox" id="price1" name="price1" class="custom-control-input"
 											(change)="routeSelection('one_way')" value="one_way"
 											[checked]="quotebot_form.service_type == 'one_way'" />
@@ -61,13 +62,13 @@
 											<small>
 												One Way
 											</small>
-											${{ selected_vehicle['rate_breakdown_one_way'].total }}
+											${{ selected_vehicle['rate_breakdown_one_way']?.grand_total }}
 										</label>
 									</div>
 
 									<!-- Round Trip -->
 									<div class="custom-control custom-checkbox custom-control-inline"
-										*ngIf="selected_vehicle['rate_breakdown_round_trip']">
+										*ngIf="getKeyName() != 'charter_tour'">
 										<input type="checkbox" id="price2" name="price2" class="custom-control-input"
 											(change)="routeSelection('round_trip')" value="round_trip"
 											[checked]="quotebot_form.service_type == 'round_trip'" />
@@ -75,8 +76,16 @@
 											<small>
 												Round Trip
 											</small>
-											${{ selected_vehicle['rate_breakdown_round_trip']?.total }}
+											${{ selected_vehicle['rate_breakdown_round_trip']?.grand_total }}
 										</label>
+									</div>
+
+									<!-- Charter Tour -->
+									<div id="charter-price" *ngIf="getKeyName() == 'charter_tour'">
+										<p class="font-weight-bolder">
+											Charter Tour: ${{
+											selected_vehicle['rate_breakdown_charter_tour']?.grand_total }}
+										</p>
 									</div>
 								</div>
 								<small> All Inclusive Rates (Some Taxes, and Tolls are additional) </small>
@@ -211,16 +220,23 @@
 
 		<!-- Pickup Address/Airport -->
 		<div class="row">
-			<div class="col-md-5" *ngIf="quotebot_form.pickup_type == 'airport'; else pikadd">
-				<p class="pv-title">
-					Pickup Airport
-				</p>
-			</div>
-			<div class="col-auto">
-				<p class="pv-title-value">
-					{{ quotebot_form.other_details.pickup_airport_name }}
-				</p>
-			</div>
+
+			<!-- Controller -->
+			<ng-container *ngIf="quotebot_form.pickup_type == 'airport'; then pikair; else pikadd"></ng-container>
+
+			<ng-template #pikair>
+				<div class="col-md-5">
+					<p class="pv-title">
+						Pickup Airport
+					</p>
+				</div>
+				<div class="col-auto">
+					<p class="pv-title-value">
+						{{ quotebot_form.other_details.pickup_airport_name }}
+					</p>
+				</div>
+			</ng-template>
+
 			<ng-template #pikadd>
 				<div class="col-md-5">
 					<p class="pv-title">
@@ -233,23 +249,29 @@
 					</p>
 				</div>
 			</ng-template>
-
 		</div>
 
 		<hr class="blue-line" />
 
 		<!-- Dropoff Address/Airport -->
 		<div class="row my-3">
-			<div class="col-md-5" *ngIf="quotebot_form.dropoff_type == 'airport'; else dropadd">
-				<p class="pv-title">
-					Dropoff Airport
-				</p>
-			</div>
-			<div class="col-auto">
-				<p class="pv-title-value">
-					{{ quotebot_form.other_details.dropoff_airport_name }}
-				</p>
-			</div>
+
+			<!-- Controller -->
+			<ng-container *ngIf="quotebot_form.dropoff_type == 'airport'; then dropair; else dropadd"></ng-container>
+
+			<ng-template #dropair>
+				<div class="col-md-5">
+					<p class="pv-title">
+						Dropoff Airport
+					</p>
+				</div>
+				<div class="col-auto">
+					<p class="pv-title-value">
+						{{ quotebot_form.other_details.dropoff_airport_name }}
+					</p>
+				</div>
+			</ng-template>
+
 			<ng-template #dropadd>
 				<div class="col-md-5">
 					<p class="pv-title">
@@ -287,7 +309,7 @@
 		<div *ngIf="quotebot_form.service_type == 'round_trip'">
 			<h5 class="mt-4 text-org"> Return Details </h5>
 
-			<!-- Date -->
+			<!-- Return Date -->
 			<div class="row my-3">
 				<div class="col-6 col-md-5">
 					<p class="pv-title">
@@ -301,7 +323,7 @@
 				</div>
 			</div>
 
-			<!-- Time -->
+			<!-- Return Time -->
 			<div class="row my-3">
 				<div class="col-6 col-md-5">
 					<p class="pv-title">
@@ -317,18 +339,26 @@
 
 			<hr class="blue-line" />
 
-			<!-- Pickup Address/Airport -->
+			<!-- Return Pickup Address/Airport -->
 			<div class="row my-3">
-				<div class="col-md-5" *ngIf="quotebot_form.return_pickup_type == 'airport'; else rpikadd">
-					<p class="pv-title">
-						Pickup Airport
-					</p>
-				</div>
-				<div class="col-auto">
-					<p class="pv-title-value">
-						{{ quotebot_form.other_details.return_pickup_airport_name }}
-					</p>
-				</div>
+
+				<!-- Controller -->
+				<ng-container *ngIf="quotebot_form.return_pickup_type == 'airport'; then rpikair; else rpikadd">
+				</ng-container>
+
+				<ng-template #rpikair>
+					<div class="col-md-5">
+						<p class="pv-title">
+							Pickup Airport
+						</p>
+					</div>
+					<div class="col-auto">
+						<p class="pv-title-value">
+							{{ quotebot_form.other_details.return_pickup_airport_name }}
+						</p>
+					</div>
+				</ng-template>
+
 				<ng-template #rpikadd>
 					<div class="col-md-5">
 						<p class="pv-title">
@@ -346,18 +376,25 @@
 
 			<hr class="blue-line" />
 
-			<!-- Dropoff Address/Airport -->
+			<!-- Return Dropoff Address/Airport -->
 			<div class="row my-3">
-				<div class="col-md-5" *ngIf="quotebot_form.return_dropoff_type == 'airport'; else rdropadd">
-					<p class="pv-title">
-						Dropoff Airport
-					</p>
-				</div>
-				<div class="col-auto">
-					<p class="pv-title-value">
-						{{ quotebot_form.other_details.return_dropoff_airport_name }}
-					</p>
-				</div>
+
+				<!-- Controller -->
+				<ng-container *ngIf="quotebot_form.return_dropoff_type == 'airport'; then rdropair; else rdropadd">
+				</ng-container>
+
+				<ng-template #rdropair>
+					<div class="col-md-5">
+						<p class="pv-title">
+							Dropoff Airport
+						</p>
+					</div>
+					<div class="col-auto">
+						<p class="pv-title-value">
+							{{ quotebot_form.other_details.return_dropoff_airport_name }}
+						</p>
+					</div>
+				</ng-template>
 				<ng-template #rdropadd>
 					<div class="col-md-5">
 						<p class="pv-title">
@@ -391,6 +428,9 @@
 		<!-- Return Details Ends -->
 	</div>
 	<!-- QuoteBot Preview Section ends -->
+
+
+
 	<div class="btn-Area d-flex mx-4 justify-content-center" style="gap: 1rem">
 		<button type="button" class="custom-filled-back-button" (click)="backButton()">
 			Back

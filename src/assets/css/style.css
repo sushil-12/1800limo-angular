@@ -169,7 +169,6 @@ header a.nav-link.active {
 
 .cell-no {
 	position       : relative;
-	top            : 5px;
 	font-size      : 18px;
 	text-decoration: none;
 	font-weight    : 700;

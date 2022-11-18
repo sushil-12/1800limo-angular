@@ -124,11 +124,13 @@ export class VehicleRateSettingsComponent implements OnInit
 		},
 		currencySymbol: (value: any) =>
 		{
+			console.log(value)
 			for (let key in this.currency_options)
 			{
-				if (key == value.currencyCountry)
+				if (key.toLowerCase() == this.currency_options[value]['currencyCountry'].toLowerCase())
 				{
-					this.currency_symbol = this.currency_options[key]['currency']
+					this.currency_symbol = this.currency_options[key]['symbol']
+					this.SetFormValue('currency', this.currency_options[key]['currencyCountry'])
 				}
 			}
 		},
