@@ -47,6 +47,7 @@ export class SelectVehicleComponent implements OnInit
 	 * 
 	 */
 	innerWidth = window.innerWidth
+	currentUser = JSON.parse(localStorage.getItem('currentUser'))
 
 
 	FILTERS_ORDER = [

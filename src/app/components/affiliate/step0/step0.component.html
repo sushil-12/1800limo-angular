@@ -1,21 +1,21 @@
 <section class="user_information">
 	<div class="agreement_step0">
-		<div class="step0Div">
-			<h2 class="headinginfo pl-0">Fundamental Affiliate Agreement</h2>
+		<div class="step0Div" *ngIf="fetchContentData(1)?.section_status">
+			<h2 class="headinginfo pl-0">
+				{{ fetchContentData(1)?.title }}
+			</h2>
 			<p>
-				1-800-LIMO.COM is an on-line global transportation network operating since 2001. This registration
-				process is for affiliates to upload their data to enable travellers to search for vehicles, drivers, and
-				amenities while simultaneously quoting all-inclusive
-				rates which is unique to our industry. Our digital sales platform operates in a free-market system to
-				support global travellers and affiliate partners alike.
+				{{ fetchContentData(1)?.content }}
 			</p>
 		</div>
 	</div>
 </section>
 <section class="user_information">
 	<div class="agreement_step0">
-		<div class="step0Div">
-			<h2 class="headinginfo pl-0">Minimum Vehicle Requirement</h2>
+		<div class="step0Div" *ngIf="fetchContentData(4)?.section_status">
+			<h2 class="headinginfo pl-0">
+				{{ fetchContentData(4)?.title }}
+			</h2>
 			<div class="row">
 				<div class="col-md-3">
 					<div class="custom-list" *ngFor="let vl1 of vehicleList1">
@@ -33,7 +33,7 @@
 									d="M204.32,107.14c-22.35-23.89-44.27-47.32-66.39-70.96c14.54,0,28.4-0.04,42.25,0.08c1.11,0.01,2.46,0.94,3.29,1.82c21.34,22.97,42.63,46,63.92,69.02c0.2,0.22,0.23,0.59,0.49,1.34c-4.8,5.17-9.74,10.49-14.69,15.82c-16.26,17.5-32.46,35.07-48.89,52.42c-1.67,1.76-4.7,3-7.16,3.11c-11.27,0.5-22.55,0.51-33.84,0.69c-1.58,0.03-3.17,0-6,0C160.09,155.55,182.06,131.5,204.32,107.14z" />
 							</g>
 						</svg>
-						<span>{{vl1}}.</span>
+						<span>{{ vl1 }}</span>
 					</div>
 				</div>
 				<div class="col-md-3">
@@ -65,6 +65,8 @@
 		</div>
 	</div>
 </section>
+
+
 <section class="user_information">
 	<div class="agreement_step0">
 		<div class="step0Div linkSpacing">
@@ -83,10 +85,23 @@
 		</div>
 	</div>
 </section>
+
+
 <section class="user_information">
 	<div class="agreement_step0">
-		<h2 class="headinginfo">Simple, Mandatory Requirements</h2>
+		<h2 class="headinginfo">
+			{{ fetchContentData(3).title }}
+		</h2>
 		<ul class="requirement-list">
+			<li>Agree with our <a data-toggle='modal' data-target='#mission_statement' class="fakeLink"
+					tabindex="1">Mission
+					Statement</a>, Step 6 - Policies and Procedures.
+			</li>
+			<li *ngFor="let item of fetchContentData(3)?.other_listing_arr">
+				{{ item.list }}
+			</li>
+		</ul>
+		<!-- <ul class="requirement-list">
 			<li>Agree with our <a data-toggle='modal' data-target='#mission_statement' class="fakeLink"
 					tabindex="1">Mission
 					Statement</a>, Step 6 - Policies and Procedures.
@@ -131,32 +146,34 @@
 				thank the client at the end of the booking. A standard response would be “I hope you enjoyed the ride
 				and I look forward to the next trip.”
 				Smile and make the client feel important and welcome at all times. </li>
-		</ul>
+		</ul> -->
 	</div>
 </section>
 <section class="user_information">
 	<div class="agreement_step0">
-		<h2 class="headinginfo">Background Verification</h2>
+		<h2 class="headinginfo">
+			{{ fetchContentData(2)?.title }}
+		</h2>
 		<p>
-			At some point you will need to secure a background check through you state on-line FOID card registration
+			{{ fetchContentData(2).content }}
+			<!-- At some point you will need to secure a background check through you state on-line FOID card registration
 			process with a passport type photo and fingerprinted. In Illinois the cost is about $40.00 and 30-60 days to
 			obtain. We do not encourage gun ownership,
 			however; the FOID application is the most comprehensive background check available and some clients are
 			willing to pay more for safety and security. Read the book, “Raving Fans” about providing the best customer
 			service experience by Ken Blanchard
 			and Sheldon Bowles. Some clients respect a quiet ride; but everyone is different. Get to know them and their
-			preferences but most clients like a quiet ride to the airport or office.
+			preferences but most clients like a quiet ride to the airport or office. -->
 		</p>
 	</div>
 </section>
 
 <section id="photo-capturing-instructions" class="user_information">
 	<div class="agreement_step0">
-		<h2 class="headinginfo float-left">
+		<h2 class="headinginfo d-inline-block">
 			Photo Capturing Instructions:
-			<br />
 		</h2>
-		<svg data-toggle="modal" title="Click for Photo Tip" data-target="#photoTipModal" class="camera-svg float-right"
+		<svg data-toggle="modal" title="Click for Photo Tip" data-target="#photoTipModal" class="camera-svg"
 			viewBox="0 0 297.88 216" xml:space="preserve" tabindex="1">
 			<style type="text/css">
 				.st0 {
@@ -188,11 +205,12 @@
 
 <section class="user_information">
 	<div class="agreement_step0">
-		<h2 class="headinginfo">Why
-			<div class="orangeHeading">1-800-LIMO.COM</div>
+		<h2 class="headinginfo">
+			{{ fetchContentData(5)?.title }}
 		</h2>
-		<strong class="link-strong">WE ARE YOUR BEST SALES CHANNEL AND TOGETHER WE CAN COLLABORATE TO REACH MORE
-			DISCERNING TRAVELLERS UNLIKE ANY OTHER PLATFORM</strong>
+		<strong class="link-strong">
+			{{ fetchContentData(5)?.subtitle }}
+		</strong>
 		<div class="row my-3">
 			<div class="col-md-6">
 				<div class="custom-list" *ngFor="let wl1 of why1800limo1">
@@ -239,10 +257,15 @@
 		</div>
 	</div>
 </section>
+
+
 <section class="user_information">
 	<div class="agreement_step0">
-		<h2 class="headinginfo">What You Need To Get Started Now :
-			<div class="orangeHeading">6 Easy Steps</div>
+		<h2 class="headinginfo">
+			{{ fetchContentData(6)?.title }}
+			<div class="orangeHeading">
+				{{ fetchContentData(6)?.subtitle }}
+			</div>
 		</h2>
 		<div class="row my-3">
 			<div class="col-xl-6 col-lg-12">
@@ -252,18 +275,17 @@
 					</div>
 					<div class="row step-points">
 						<div class="col-xl-6 col-lg-6 col-4 mt-2 stepClass">
-							<strong>STEP 1</strong>
+							<strong>
+								{{ fetchContentData(6)?.other_group_listing_arr[0].title }}
+							</strong>
 						</div>
 						<div class="col-xl-6 col-lg-6 col-8 pr-2 previewSvg d-flex justify-content-end">
 							<a href="JavaScript:void(0);" data-toggle='modal' name='modalType'
 								class="previewImageButton" (click)="modalSwitch('step_1')" tabindex="1"
 								data-target='#step0Modal'>Requirements</a>
 						</div>
-						<ul>
-							<li>Owner and Company Info (we can correspond, get rates, and send bookings to our vetted
-								affiliates with step 1 completion).</li>
-							<li>All steps need to be completed to fully advertise your vehicle(s) and rates, receive
-								auto direct bank deposits, new and repeat bookings, and full network benefits.</li>
+						<ul *ngFor="let item of fetchContentData(6)?.other_group_listing_arr[0].multiChoice ">
+							<li>{{item.choice }}</li>
 						</ul>
 					</div>
 				</div>
@@ -275,16 +297,17 @@
 					</div>
 					<div class="row step-points">
 						<div class="col-xl-6 col-lg-6 col-4 mt-2 stepClass">
-							<strong>STEP 2</strong>
+							<strong>
+								{{ fetchContentData(6)?.other_group_listing_arr[1].title }}
+							</strong>
 						</div>
 						<div class="col-xl-6 col-lg-6 col-8 pr-2 previewSvg d-flex justify-content-end">
 							<a href="JavaScript:void(0);" data-toggle='modal' name='modalType'
 								class="previewImageButton" (click)="modalSwitch('step_2')" tabindex="1"
 								data-target='#step0Modal'>Requirements</a>
 						</div>
-						<ul>
-							<li>Bank information, IDs (per Stripe - passport depending on country)</li>
-							<li>Tax Info - (SSN / EIN / Other Country Tax ID)</li>
+						<ul *ngFor="let item of fetchContentData(6)?.other_group_listing_arr[1].multiChoice ">
+							<li>{{ item.choice }}</li>
 						</ul>
 					</div>
 				</div>
