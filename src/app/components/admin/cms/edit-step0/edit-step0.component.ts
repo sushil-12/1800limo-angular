@@ -67,14 +67,14 @@ export class EditStep0Component implements OnInit
 
 		this.editContentForm = this.formBuilder.group(
 			{
-				id: [this.sectionID, Validators.required],
-				section: [this.section, Validators.required],
+				id: [this.sectionID],
+				section: [this.section],
 				title: ['', Validators.required],
-				subtitle: ['', Validators.required],
+				subtitle: [''],
 				content: ['', Validators.required],
-				images: ['', Validators.required],
-				section_status: ['', Validators.required],
-				video_url: ['', Validators.required],
+				images: [''],
+				section_status: [''],
+				video_url: [''],
 				other_listing_arr: this.formBuilder.array([]),
 				other_group_listing_arr: this.formBuilder.array([]),
 			}
@@ -225,14 +225,14 @@ export class EditStep0Component implements OnInit
 		{
 			return this.formBuilder.group({
 				title: [title, Validators.required],
-				imageUrl: [imageUrl.id, Validators.required],
+				imageUrl: [imageUrl.id],
 				multiChoice: this.formBuilder.array([])
 			})
 		} else
 		{
 			return this.formBuilder.group({
 				title: ['', Validators.required],
-				imageUrl: ['', Validators.required],
+				imageUrl: [''],
 				multiChoice: this.formBuilder.array([])
 			})
 		}
@@ -244,7 +244,7 @@ export class EditStep0Component implements OnInit
 		let newChoiceList = { choice: '' };
 		this.other_group_listing_list.push(this.formBuilder.group({
 			title: [null, Validators.required],
-			imageUrl: [null, Validators.required],
+			imageUrl: [null],
 			multiChoice: this.formBuilder.array([this.newChoice(null)])
 		}));
 

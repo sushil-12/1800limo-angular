@@ -13,7 +13,7 @@ declare var $: any;
 })
 export class Step0Component implements OnInit
 {
-
+	content_data: any
 	public agreementValidation: boolean;
 	public agreement: boolean;
 	public disableSubmitButton: boolean = false;
@@ -114,19 +114,32 @@ export class Step0Component implements OnInit
 
 	ngOnInit(): void
 	{
+		this.fetchContentData()
 		const stepCompleted = this.affiliateService.getLocalStepCompleted();
 		if (stepCompleted.includes('0'))
 		{
 			this.agreement = true;
 		}
-		const halfVehicles = Math.ceil(this.vehicleList.length / 2);
-		this.vehicleList1 = this.vehicleList.splice(0, halfVehicles);
-		this.vehicleList2 = this.vehicleList.splice(-halfVehicles);
+	}
 
-		const half = Math.ceil(this.why1800limo.length / 2);
-		this.why1800limo1 = this.why1800limo.splice(0, half);
-		this.why1800limo2 = this.why1800limo.splice(-half);
+	fetchContentData(id?: number | null)
+	{
+		if (id)
+		{
+			return this.content_data.find((item: any) => item.id == id)
+		}
 
+		this.affiliateService.fetchStep0Data().subscribe((data: any) =>
+		{
+			this.content_data = data.data
+			const halfVehicles = Math.ceil(this.fetchContentData(4).other_listing_arr.length / 2);
+			this.vehicleList1 = this.vehicleList.splice(0, halfVehicles);
+			this.vehicleList2 = this.vehicleList.splice(-halfVehicles);
+
+			const half = Math.ceil(this.fetchContentData(5).other_listing_arr.length / 2);
+			this.why1800limo1 = this.why1800limo.splice(0, half);
+			this.why1800limo2 = this.why1800limo.splice(-half);
+		})
 	}
 
 	scroll(el: HTMLElement)

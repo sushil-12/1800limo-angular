@@ -31,6 +31,10 @@ export class AffiliateService
 		return this.big_data_list
 	}
 
+	fetchStep0Data()
+	{
+		return this.httpClient.get(`${this.environmentServerUrl}affiliate/cms/get-step0`)
+	}
 
 	fetchStepData(step_name: string)
 	{
