@@ -17,6 +17,7 @@ section#vehicle-listing-container {
 	
 	.vehicle-listing-card {
 		--card-max-width: 17rem;
+		position: relative;
 		width: 100%;
 		border-radius: 1.3rem;
 		padding: 13.8px;
@@ -27,7 +28,7 @@ section#vehicle-listing-container {
 		{
 			.vehicle-image
 			{
-				width: 40%;
+				width: 37.5%;
 				max-width: var(--card-max-width);
 				img {
 					width: 100%;
@@ -41,6 +42,7 @@ section#vehicle-listing-container {
 			{
 				--font-size: 0.775rem;
 				padding: 0.575rem;
+				width: 61.5%;
 				& > p
 				{
 					margin: 0;
@@ -48,13 +50,13 @@ section#vehicle-listing-container {
 				p.name	
 				{
 					white-space: break-spaces;
-					font-size: calc(var(--font-size) + 26%);
+					font-size: calc(var(--font-size) + 30%);
 					font-weight: 400;
 					color: #000;
 				}
 				p.pax-lugg
 				{
-					font-size: calc(var(--font-size) + 5%);
+					font-size: calc(var(--font-size) + 12%);
 					font-weight: 500;
 					& > span
 					{
@@ -63,7 +65,7 @@ section#vehicle-listing-container {
 				}
 				p.price
 				{
-					font-size: calc(var(--font-size) + 6%);
+					font-size: calc(var(--font-size) + 20%);
 					color: #000000;
 					font-weight: 400;
 					span
@@ -82,16 +84,19 @@ section#vehicle-listing-container {
 	section#vehicle-listing-container
 	{
 		.vehicle-listing-card {
-			width: var(--card-max-width);	
+			width: var(--card-max-width);
+			min-height: 25rem;
+			margin: 10px;
 			.details {
 				.vehicle-image {
 					width: 100%;
 					img {
 						width: 100%;
-						height: auto;
+						height: 7.7rem;
 					}
 				}
 				.vehicle-info {
+					width: 100%;
 					& > p
 					{
 						margin: 0 0 12px;
@@ -106,6 +111,12 @@ section#vehicle-listing-container {
 						font-size: calc(var(--font-size) + 30%);
 					}
 				}
+			}
+			#vehicle-preview-button
+			{
+				position: absolute;
+				right: 0;
+				bottom: 0;
 			}
 		}
 	}

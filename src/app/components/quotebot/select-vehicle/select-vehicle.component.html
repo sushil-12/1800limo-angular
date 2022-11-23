@@ -272,16 +272,16 @@
 		<!-- VEHICLE LISTING SECTION -->
 		<ng-template #vehicleListing>
 			<section id="vehicle-listing-container"
-				class="col-md-auto col-lg-9 d-flex flex-row flex-wrap justify-content-start" style="gap: 15px"
-				[ngStyle]="openfilters ? {'z-index': -1, 'position': 'relative'} : ''">
+				class="col-md-auto col-lg-9 d-flex flex-row flex-wrap justify-content-center justify-content-lg-start"
+				style="gap: 15px" [ngStyle]="openfilters ? {'z-index': -1, 'position': 'relative'} : ''">
 				<div id="vehicle-listing-card_{{ vehinfo_index }}" class="vehicle-listing-card"
 					*ngFor="let vehinfo of vehicleDetails; index as vehinfo_index">
 					<!-- DIV: AFFILIATE INFO -->
 					<div id="affiliate-info"
 						*ngIf="currentUser != null && currentUser.roleName == 'admin' && vehinfo.affiliate_name || vehinfo.affiliate_company ">
 						<p class="text-left text-secondary m-0 my-md-2">
-							{{ vehinfo.affiliate_name || '' }}
-							{{ '/ ' + vehinfo.affiliate_company || '' }}
+							{{ vehinfo.affiliate_company || '' }}
+							{{ '/ ' + vehinfo.affiliate_name || '' }}
 						</p>
 					</div>
 					<!-- AFFILIATE INFO ENDS -->
@@ -291,9 +291,7 @@
 						class="details d-flex flex-row flex-wrap justify-content-left align-items-center">
 						<!-- VEHICLE: IMAGE -->
 						<div id="vehicle-image_{{ vehinfo_index }}" class="vehicle-image m-0">
-							<img id="V_I_{{ vehinfo_index }}"
-								src="https://1800limoapi.infodevbox.com/storage/images/3kZaohMnsAGyfqG9rbczX8hcFvF6AFHiVDv1YQSA.png"
-								class="img-fluid" />
+							<img id="V_I_{{ vehinfo_index }}" [src]="vehinfo.vehicle_images[0]" class="img-fluid" />
 						</div>
 						<!-- IMAGE ENDS -->
 
