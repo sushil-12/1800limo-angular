@@ -47,8 +47,7 @@ import { AffiliateStep4Component } from './affiliate-step4/affiliate-step4.compo
 import { AffiliateStep5Component } from './affiliate-step5/affiliate-step5.component';
 import { AffiliateStep6Component } from './affiliate-step6/affiliate-step6.component';
 import { AddDriverComponent } from './add-driver/add-driver.component';
-import { MeetAndGreetComponent } from './meet-and-greet/meet-and-greet.component'
-import { CreateNewBooking2Component } from './create-new-booking2/create-new-booking2.component';
+import { MeetAndGreetComponent } from './meet-and-greet/meet-and-greet.component';
 import { InvoiceSummaryComponent } from './invoice-summary/invoice-summary.component';
 import { SubAdminComponent } from './sub-admin/sub-admin.component';
 import { AddSubAdminComponent } from './add-sub-admin/add-sub-admin.component';
@@ -71,6 +70,7 @@ import { EditMasterVehicleRatesComponent } from './edit-master-vehicle-rates/edi
 import { AmenitiesSpecialComponent } from './amenities-special/amenities-special.component';
 import { AmenitiesInteriorComponent } from './amenities-interior/amenities-interior.component';
 import { MasterVehicleFareComponent } from './master-vehicle-fare/master-vehicle-fare.component';
+import { BookingDetailsComponent } from './booking-details/booking-details.component';
 
 
 const routes: Routes = [
@@ -189,9 +189,9 @@ const routes: Routes = [
 		component: CreateNewBookingComponent
 	},
 	{
-		path: 'create-new-booking-detail',
+		path: 'booking-details',
 		canActivate: [SubAdminGuard],
-		component: CreateNewBooking2Component
+		component: BookingDetailsComponent
 	},
 	{
 		path: 'quote-admin',

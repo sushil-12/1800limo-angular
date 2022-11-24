@@ -132,11 +132,9 @@ export class AffiliateStep2Component implements OnInit
 		//load list of currencies
 		this.httpClient.get("assets/json/currencyOptions.json").subscribe(data =>
 		{
-			this.currencyOptions = data;
 			for (const key in data)
 			{
 				this.currencyOptions.push(data[key])
-				console.log(this.currencyOptions.push(data[key]))
 				this.currencyOptions_copy.push(data[key])
 			}
 			this.currencyOptions.sort((a: any, b: any) => 

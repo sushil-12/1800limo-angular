@@ -70,13 +70,16 @@
 						</span>
 					</div>
 					<aside class="sidebar">
-						<button type="button" (click)="getVehicleDetails(); openfilters=false"
-							class="btn btn-success mr-3 mb-4">
-							Apply filters
-						</button>
-						<button type="button" (click)="clearFilters(null)" class="btn btn-primary mb-4">
-							Clear filters
-						</button>
+						<div id="filter-buttons" class="mb-4">
+							<button type="button" (click)="clearFilters(null)"
+								class="custom-filled-button orange-button mx-2">
+								Clear filters
+							</button>
+							<button type="button" (click)="getVehicleDetails(); openfilters=false"
+								class="custom-filled-button green-button mx-2">
+								Apply filters
+							</button>
+						</div>
 
 						<!-- THE SELECTED FILTERS LIST -->
 						<div class="fil-itm" *ngIf="filters?.selections?.length > 0">
@@ -252,13 +255,16 @@
 								</div>
 								<!-- OUTER CARD -->
 							</div>
-							<button type="button" (click)="getVehicleDetails(); openfilters=false"
-								class="btn btn-success mr-3 mt-4">
-								Apply filters
-							</button>
-							<button type="button" (click)="clearFilters(null)" class="btn btn-primary mt-4">
-								Clear filters
-							</button>
+							<div id="filter-buttons" class="mt-4">
+								<button type="button" (click)="clearFilters(null)"
+									class="custom-filled-button orange-button mx-2">
+									Clear filters
+								</button>
+								<button type="button" (click)="getVehicleDetails(); openfilters=false"
+									class="custom-filled-button green-button mx-2">
+									Apply filters
+								</button>
+							</div>
 						</div>
 						<!-- FILTER LIST ENDS - ACCORDION-->
 					</aside>

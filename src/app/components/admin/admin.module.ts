@@ -63,7 +63,7 @@ import { AffiliateStep4Component } from './affiliate-step4/affiliate-step4.compo
 import { AffiliateStep5Component } from './affiliate-step5/affiliate-step5.component';
 import { AffiliateStep6Component } from './affiliate-step6/affiliate-step6.component';
 import { AddDriverComponent } from './add-driver/add-driver.component';
-import { CreateNewBooking2Component } from './create-new-booking2/create-new-booking2.component';
+
 import { AgmCoreModule } from '@agm/core';
 import { AgmDirectionModule } from 'agm-direction';
 import { BookingStatusTextReplacePipe } from 'src/app/pipes/booking-status-text-replace.pipe';
@@ -92,6 +92,7 @@ import { MeetAndGreetComponent } from './meet-and-greet/meet-and-greet.component
 import { AmenitiesInteriorComponent } from './amenities-interior/amenities-interior.component';
 import { AmenitiesSpecialComponent } from './amenities-special/amenities-special.component';
 import { MasterVehicleFareComponent } from './master-vehicle-fare/master-vehicle-fare.component';
+import { BookingDetailsComponent } from './booking-details/booking-details.component';
 
 
 @NgModule({
@@ -143,7 +144,6 @@ import { MasterVehicleFareComponent } from './master-vehicle-fare/master-vehicle
 		AffiliateStep5Component,
 		AffiliateStep6Component,
 		AddDriverComponent,
-		CreateNewBooking2Component,
 		BookingStatusTextReplacePipe,
 		InvoiceSummaryComponent,
 		SubAdminComponent,
@@ -165,7 +165,8 @@ import { MasterVehicleFareComponent } from './master-vehicle-fare/master-vehicle
 		MeetAndGreetComponent,
 		AmenitiesInteriorComponent,
 		AmenitiesSpecialComponent,
-		MasterVehicleFareComponent
+		MasterVehicleFareComponent,
+		BookingDetailsComponent
 	],
 	imports: [
 		CommonModule,

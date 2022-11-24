@@ -132,8 +132,8 @@ export class AffiliateStep1Component implements OnInit
 			Associations: this.formBuilder.array([]),
 			AssociationsGet: this.formBuilder.array([]),
 			LanguagesSpoken: this.formBuilder.array([], [Validators.required]),
-			notify_sms: [''],
-			notify_email: [''],
+			notify_sms: [true],
+			notify_email: [true],
 		});
 
 		this.stateManagementService.setprogressBar(true);

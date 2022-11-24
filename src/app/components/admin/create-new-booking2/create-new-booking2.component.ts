@@ -80,6 +80,12 @@ export class CreateNewBooking2Component implements OnInit
 	}
 
 
+	SetFormValue(form_control: string, value: any)
+	{
+		this.chargesForm.get(form_control).setValue(value)
+		this.chargesForm.updateValueAndValidity()
+	}
+
 
 	getBookingData()
 	{
@@ -122,7 +128,7 @@ export class CreateNewBooking2Component implements OnInit
 				else
 				{
 					//set base rate based on minimum rate
-					if (data.priceDetail.all_inclusive_rates.Hourly_Rate.amount >= data.priceDetail.all_inclusive_rates.Minimum_Rate.amount)
+					if (data.priceDetail.all_inclusive_rates.Hourly_Rate && data.priceDetail.all_inclusive_rates.Hourly_Rate.amount >= data.priceDetail.all_inclusive_rates.Minimum_Rate.amount)
 					{
 						// console.log('Hourly_Rate')
 						this.baseRate = data.priceDetail.all_inclusive_rates.Hourly_Rate.amount;
