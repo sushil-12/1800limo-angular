@@ -1653,8 +1653,8 @@ h2.headinginfo .orangeHeading {
 /********DIVER SIDE VEH SETTING**********/
 
 .dropdwn .bi-chevron-up::before {
-	position: relative;
-	left    : 90%;
+	position: absolute;
+	right    : 8%;
 	font-weight: 800 !important;
 }
 
