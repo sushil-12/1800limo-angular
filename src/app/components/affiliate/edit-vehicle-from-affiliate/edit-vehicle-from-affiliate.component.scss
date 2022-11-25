@@ -42,15 +42,17 @@
 		text-align    : center;
 		text-transform: uppercase;
 		font-weight   : 500;
-		border        : 3px solid #52a87a;
 		border-radius : 7px;
 		padding       : 1rem 2rem;
 		color         : var(--orange-color);
+		box-shadow: 0px 5px 10px 1px rgba(0, 0, 0, 0.4);
+		transition: box-shadow 0.25s ease, background-color 0.25s ease;
 	}
 
 	.checkbox.active {
 		background-color: #52a87a;
 		color           : #fff;
+		box-shadow: 0px 5px 10px -1px rgba(0, 0, 0, 0.3);
 	}
 
 }

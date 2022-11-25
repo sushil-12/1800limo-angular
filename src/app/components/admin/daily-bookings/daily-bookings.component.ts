@@ -328,7 +328,7 @@ export class DailyBookingsComponent implements OnInit
 
 	finalizeAction(bookingId)
 	{
-		this.router.navigate(['/admin/create-new-booking-detail'], { queryParams: { bookingId: bookingId } });
+		this.router.navigate(['/admin/booking-details'], { queryParams: { bookingId: bookingId } });
 	}
 
 	returnRepeatAction(actionType, bookingId, serviceType)

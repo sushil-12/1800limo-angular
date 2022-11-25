@@ -1329,7 +1329,7 @@ h2.headinginfo .orangeHeading {
 }
 
 .custom-control-label::before {
-	border: var(--orange-color) 2px solid !important;
+	border: 2px solid var(--orange-color) !important;
 }
 
 .affiliate_steps_border_radius {
@@ -1775,6 +1775,7 @@ h2.headinginfo .orangeHeading {
 	overflow: hidden;
 	background-color: #F33C2F;
 	cursor: pointer;
+	box-shadow: 0px 5px 10px -1px rgba(0, 0, 0, 0.4);
 }
 
 @media only screen and (min-width:1199px) {
@@ -1877,6 +1878,7 @@ h2.headinginfo .orangeHeading {
 	overflow: hidden;
 	background-color: var(--green-color);
 	cursor          : pointer;
+	box-shadow: 0px 5px 10px -1px rgba(0, 0, 0, 0.4);
 }
 
 @media only screen and (min-width:1199px) {
@@ -1923,6 +1925,7 @@ h2.headinginfo .orangeHeading {
 	overflow: hidden;
 	background-color: var(--green-color);
 	cursor: pointer;
+	box-shadow: 0px 5px 10px -1px rgba(0, 0, 0, 0.4);
 }
 
 @media only screen and (min-width:1199px) {
@@ -2583,7 +2586,8 @@ table .dropdown-menu {
 	text-decoration : none;
 	margin          : 20px 0;
 	border-radius   : 15px;
-	padding         : 10px 40px !important;
+	padding         : 10px 20px !important;
+	box-shadow: 0px 5px 10px 1px rgba(0, 0, 0, 0.4);
 }
 
 .add-button svg {

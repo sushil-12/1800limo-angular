@@ -63,14 +63,6 @@ export class CreateNewBookingComponent implements OnInit
 
 	close_image_modal: EventEmitter<any> = new EventEmitter()
 
-	@ViewChild('search1', { static: true }) searchElementRef1: ElementRef
-	@ViewChild('search2', { static: true }) searchElementRef2: ElementRef
-	@ViewChild('search3', { static: true }) searchElementRef3: ElementRef
-	@ViewChild('search4', { static: true }) searchElementRef4: ElementRef
-	@ViewChild('search5', { static: true }) searchElementRef5: ElementRef
-	@ViewChild('search6', { static: true }) searchElementRef6: ElementRef
-	@ViewChild('search7', { static: true }) searchElementRef7: ElementRef
-	@ViewChild('search8', { static: true }) searchElementRef8: ElementRef
 	MobileObject: any;
 	getMobileCountry: any;
 
@@ -110,8 +102,25 @@ export class CreateNewBookingComponent implements OnInit
 
 		})
 
-		this.fetchUserList('individual')
-		this.fetchAffiliatesList('affiliate')
+		this.fetchAccounts('individual').then((data: any) =>
+		{
+			this.user_list = data
+		})
+
+		this.fetchAffiliates('affiliate').then((data: any) =>
+		{
+			this.affiliate_list = data
+
+			// lose all data
+			for (const key in this.Form)
+			{
+				if (this.searchSubstring(key, 'vehicle') || this.searchSubstring(key, 'driver'))
+				{
+					this.bookingForm.get(key).reset()
+				}
+			}
+		})
+
 		for (let i = 1; i <= 70; i++)
 		{
 			this.number_count.push(i)
@@ -442,18 +451,15 @@ export class CreateNewBookingComponent implements OnInit
 		}
 
 		// always filling values
-		this.setFormValue('luggage_count', 0)
+		this.setFormValue('luggage_count', 1)
 		this.setFormValue('account_type', 'individual')
+		this.setFormValue('affiliate_type', 'affiliate')
 		console.log('\n\n\n\n')
 		console.group('Prefilled Form Group: ')
 		console.log(this.bookingForm)
 		console.log('\n\n\n\n')
 		console.groupEnd()
 		this.initMap()
-		if (this.Form.service_type.value == 'round_trip')
-		{
-			this.initReturnMap()
-		}
 	}
 
 
@@ -670,28 +676,6 @@ export class CreateNewBookingComponent implements OnInit
 	{
 		console.log('onAutocompleteSelected: ', result, 'key_name: ', key_name);
 		this.setFormValue(key_name, result.formatted_address)
-		this.initMap()
-		if (this.Form.service_type.value == 'round_trip')
-		{
-			if (key_name == 'pickup') 
-			{
-				key_name = 'dropoff'
-			}
-			else if (key_name == 'dropoff') 
-			{
-				key_name = 'pickup'
-			}
-			else if (key_name == 'stop_1')
-			{
-				key_name = 'stop_2'
-			}
-			else if (key_name == 'stop_2')
-			{
-				key_name = 'stop_1'
-			}
-			this.setFormValue('return_' + key_name, result.formatted_address)
-			this.initReturnMap()
-		}
 	}
 
 	onLocationSelected(location: Location, key_name: string)
@@ -700,7 +684,7 @@ export class CreateNewBookingComponent implements OnInit
 		this.setFormValue(key_name + '_latitude', location['latitude'])
 		this.setFormValue(key_name + '_longitude', location['longitude'])
 		this.initMap()
-		if (this.Form.service_type.value == 'round_trip')
+		if (this.Form.service_type.value == 'round_trip' && !key_name.includes('return_'))
 		{
 			if (key_name == 'pickup') 
 			{
@@ -720,8 +704,8 @@ export class CreateNewBookingComponent implements OnInit
 			}
 			this.setFormValue('return_' + key_name + '_latitude', location['latitude'])
 			this.setFormValue('return_' + key_name + '_longitude', location['longitude'])
-			this.initReturnMap()
 		}
+		this.initReturnMap()
 
 		this.getAffiliatesListFromPickup(location['latitude'], location['longitude'])
 	}
@@ -762,10 +746,7 @@ export class CreateNewBookingComponent implements OnInit
 		{
 			if (this.Form.service_type.value == 'round_trip')
 			{
-				setTimeout(() =>
-				{
-					this.initReturnMap()
-				}, 2000)
+				this.initReturnMap()
 			}
 		},
 		transfer_type: () =>
@@ -852,25 +833,67 @@ export class CreateNewBookingComponent implements OnInit
 
 
 	/**
-	 * fetches user list according to the type of account
+	 * fetches list of user accounts
 	 * @param account_type [Required] type of the account requested
 	 */
-	fetchUserList(account_type: string)
+	fetchAccounts(account_type: string): Promise<any>
 	{
-		account_type = account_type == 'travel_planner' ? 'travel' : account_type
-		this._adminService.getAccountBytype(account_type).subscribe((response: any) =>
+		const legend = {
+			individual: 'individual',
+			corporate: 'corporate',
+			travel_planner: 'travel'
+		}
+		// return a new Promise object with fetched data
+		return new Promise((resolve, reject) =>
 		{
-			this.user_list = response.data
+			this._adminService.getAccountBytype(legend[account_type]).subscribe((response: any) =>
+			{
+				if (response.success)
+				{
+					resolve(response.data)
+				} else
+				{
+					reject(response.message || response.errors.error)
+				}
+			})
 		})
-		// this.MobileObject.setCountry(this.user_list.mobileCountry);
-		// this.WorkObject.setCountry(this.user_list.workCountry);
+	}
+
+	/**
+	 * Fetch Affiliates List 
+	 * 
+	 * @params affiliate_type: String [Required] type of requested affiliate
+	 */
+	fetchAffiliates(affiliate_type: string): Promise<any>
+	{
+		const legend = {
+			affiliate: 'driver',
+			loose_affiliate: 'loose_affiliate'
+		}
+
+		// return a new Promise object with fetched data
+		return new Promise((resolve, reject) =>
+		{
+			this._adminService.getAccountBytype(legend[affiliate_type]).subscribe((response: any) =>
+			{
+				if (response.success)
+				{
+					resolve(response.data)
+				} else
+				{
+					reject(response.message || response.errors.error)
+				}
+			})
+		})
 	}
 
 	userSelection(user_id: number)
 	{
+		this._spinner.show('normalspinner')
 		this.fetched_user = {}
 		this._adminService.chooseUser(user_id, this.Form.account_type.value).subscribe((response: any) =>
 		{
+			this._spinner.hide('normalspinner')
 			this.fetched_user = response.data
 			this.bookingForm.patchValue({
 				passenger_name: `${response.data.first_name} ${response.data.middle_name ?? ''} ${response.data.last_name}`,
@@ -880,26 +903,6 @@ export class CreateNewBookingComponent implements OnInit
 			})
 			this.MobileObject.setCountry(response.data.mobileCountry);
 		})
-	}
-
-	fetchAffiliatesList(affiliate_type: string)
-	{
-		affiliate_type = affiliate_type.replace(/[\s]/g, '_')
-		this.setFormValue('affiliate_type', affiliate_type)
-		if (affiliate_type == 'affiliate')
-		{
-			this._adminService.getAccountBytype('driver').subscribe((response: any) =>
-			{
-				this.affiliate_list = response.data
-			})
-		}
-		for (const key in this.Form)
-		{
-			if (this.searchSubstring(key, 'vehicle') || this.searchSubstring(key, 'driver'))
-			{
-				this.bookingForm.get(key).reset()
-			}
-		}
 	}
 
 
@@ -1105,9 +1108,7 @@ export class CreateNewBookingComponent implements OnInit
 			return
 		}
 		console.log(this.bookingForm.value)
-
-		// this.setFormValue('booking_status', ((this.Form.affiliate_id.value != null || this.Form.affiliate_id.value != '') || (this.Form.loose_affiliate_name != null || this.Form.loose_affiliate_name.value != '')) ? 'pending' : 'draft')
-		// return
+		return
 
 		if (preview)
 		{

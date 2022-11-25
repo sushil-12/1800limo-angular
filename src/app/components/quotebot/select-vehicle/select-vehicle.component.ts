@@ -637,13 +637,14 @@ export class SelectVehicleComponent implements OnInit
 
 		if (filter_name !== null && this.filters.selections.length > 1)
 		{
-			// simply deselecting the filter will remove from selections and request
+			// deselecting the filter will remove from selections and request
 			this.filterSelection(false, filter_name.catg_name, filter_name.fil_index)
 		} else
 		{
 			// empty the whole
 			this.filters.selections = []
 			this.filters.request = {}
+			this.vehicleDetails = []
 			Object.keys(this.filters.copy).forEach((item: string) =>
 			{
 				if (!this.filters.copy[item][0]['checked'])
@@ -651,7 +652,6 @@ export class SelectVehicleComponent implements OnInit
 					this.filters.copy[item][0]['checked'] = true
 				}
 			})
-			this.getVehicleDetails()
 		}
 	}
 

@@ -261,7 +261,7 @@ export class Step2Component implements OnInit
 								AccountType: this.response.data.bankinfo.AccountType,
 								currency: this.response.data.bankinfo.currency,
 								ssn: this.response.data.bankinfo.ssn,
-								haveEin: this.response.data.bankinfo.ein ? 'yesEin' : 'noEin',
+								haveEin: this.response.data.bankinfo.ein,
 								ein: this.response.data.bankinfo.ein,
 								address: this.response.data.bankinfo.address,
 								latitude: this.response.data.bankinfo.latitude,
@@ -279,7 +279,6 @@ export class Step2Component implements OnInit
 								id_back_image: this.response.data.bankinfo.id_back_image.ID,
 							});
 
-							this.haveEin(this.response.data.bankinfo.ein ? 'yesEin' : 'noEin');
 							this.changeCountry(this.response.data.bankinfo.country);//for selected country
 							this.spinner.hide(); //hide spinner
 
@@ -466,21 +465,6 @@ export class Step2Component implements OnInit
 		this.closeTab.emit();
 	}
 
-	haveEin(haveEinNo)
-	{
-		switch (haveEinNo)
-		{
-			case 'noEin': {
-				this.haveEinNo = false;
-				break;
-			}
-			case 'yesEin': {
-				this.haveEinNo = true;
-				break;
-			}
-		}
-	}
-
 	// searchCurrency(keyword) {
 	//   console.log(111)
 	//   this.addBankForm.patchValue({
@@ -542,6 +526,11 @@ export class Step2Component implements OnInit
 		{
 			this.stateOptions = selectedCountryData[0].regions;
 		}
+	}
+
+	changeRadio(form_control: string, value: any)
+	{
+		this.SetFormValue(form_control, value)
 	}
 
 	changeIdentityCountry(selectedCountryCode)

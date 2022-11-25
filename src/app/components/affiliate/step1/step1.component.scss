@@ -8,12 +8,13 @@
 			width: 12rem;
 			height: auto;
 			margin: 10px;
-			border-radius: 2rem;
+			border-radius: 1rem;
 			border: 2px solid var(--green);
 			padding: 1rem;
 			min-height: 7rem;
 			flex-basis: 10rem;
-			box-shadow: 3px 4px 9px 4px rgb(0 0 0 / 40%);
+			box-shadow: 0px 5px 10px 1px rgba(0, 0, 0, 0.4);
+			transition: box-shadow 0.25s ease, background-color 0.25s ease;
 			#check-icon
 			{
 				position: absolute;
@@ -31,14 +32,17 @@
 			}
 			#tile-name
 			{
-				font-size: 1.2rem;
-				text-transform: uppercase;
-				font-weight: 600;
+				p {
+					font-size: 1.2rem;
+					text-transform: uppercase;
+					font-weight: 600;
+				}
 			}
 		}
 		.tile.active
 		{
-			background-color: var(--green)
+			background-color: var(--green);
+			box-shadow: 0px 5px 10px -1px rgb(0 0 0 / 30%);
 		}
 	}
 }
@@ -85,6 +89,7 @@
 	width           : 100%;
 	line-height     : 41px;
 	height          : calc(100% - 25px);
+	box-shadow: 0px 5px 10px 1px rgba(0, 0, 0, 0.4);
 }
 
 .edit-email svg {
