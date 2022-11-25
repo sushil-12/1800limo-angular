@@ -25,8 +25,11 @@
 								</div>
 								<input type="radio" id="radio-button_{{ tile_index }}" class="radio-button" />
 								<div id="tile-name">
-									{{ tile.includes('black') ? 'Black Car/Limo Owner Op.' : tile.includes('fleet') ?
-									'Fleet Operator Owned' : tile.includes('taxi') ? 'Taxi Operator' : 'Gig Operator' }}
+									<p>
+										{{ tile.includes('black') ? 'Black Car/Limo Owner Op.' : tile.includes('fleet')
+										? 'Fleet Operator Owned' : tile.includes('taxi') ? 'Taxi Operator' : 'Gig
+										Operator' }}
+									</p>
 								</div>
 							</div>
 						</div>

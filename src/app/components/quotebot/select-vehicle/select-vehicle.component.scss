@@ -1,13 +1,47 @@
-.container-xl h1 {
-	font-size: 1.3rem
-}
-
-.fs-3 {
-	font-size: 0.6rem !important;
-}
-
 .card {
 	min-width: 250px;
+}
+.imageStyle {
+	width: 40%;
+}
+@media only screen and (min-width: 767px)
+{
+	.imageStyle {
+			width: 85.7%;
+		}
+}
+
+#fixed-section-container {
+	cursor: pointer;
+	#fixed-section-box {
+		#filters-button {
+			transform: translateX(2px);
+			box-shadow: 3px 7px 20px #2d2d2ab8;
+			border-top-left-radius: 100px;
+			border-bottom-left-radius: 100px;
+
+			button {
+				background: #0078f2;
+				border-color: #0078f2;
+				border-top-left-radius: 100px;
+				border-bottom-left-radius: 100px;
+			}
+		}
+
+		#sort-button {
+			transform: translateX(-2px);
+			box-shadow: 3px 7px 20px #2d2d2ab8;
+			border-radius: 100px;
+			position: relative;
+
+			button {
+				background: #0078f2;
+				border-color: #0078f2;
+				border-top-right-radius: 100px;
+				border-bottom-right-radius: 100px;
+			}
+		}
+	}
 }
 
 section#vehicle-listing-container {
@@ -85,7 +119,7 @@ section#vehicle-listing-container {
 	{
 		.vehicle-listing-card {
 			width: var(--card-max-width);
-			min-height: 25rem;
+			min-height: 22rem;
 			margin: 10px;
 			.details {
 				.vehicle-image {
@@ -120,6 +154,23 @@ section#vehicle-listing-container {
 			}
 		}
 	}
+}
+
+@media only screen and (min-width: 991px) {
+	section#vehicle-listing-container
+	{
+		.vehicle-listing-card
+		{
+			min-height: 25rem;
+		}
+	}
+	#sort-button {
+		button {
+			border-left: 2px solid #0078f2;
+			border-radius: 100px;
+		}
+	}
+
 }
 
 .fil-itm .btn {
@@ -238,6 +289,18 @@ input.form-control.filter-search-area {
 	}
 }
 
+.custom-control {
+	min-height: 1.8rem;
+	.custom-control-label {
+		font-size: 1.18rem;
+		&::before
+		{
+			width: 1.1rem;
+			height: 1.1rem;
+		}
+	}
+}
+
 .custom-control-input:focus~.custom-control-label::before {
 	box-shadow: none !important;
 }
@@ -305,12 +368,6 @@ input.form-control.filter-search-area {
 	font-size: 1.1rem;
 }
 
-.price-Blc h2 {
-	font-size: 24px;
-	margin-top: 14px;
-	margin-bottom: 14px;
-}
-
 .b-cus {
 	font-weight: bold;
 	margin: 2.5px;
@@ -346,6 +403,7 @@ aside.sidebar {
 	position: -webkit-sticky;
 	position: sticky;
 	top: 10px;
+	margin: 20px 0;
 }
 
 .filter-list .accordion .card-header h2 .btn:after {
@@ -415,20 +473,6 @@ aside.sidebar {
 	padding: 10px !important;
 }
 
-.price-Blc-n .custom-control-label::before,
-.price-Blc-n .custom-control-label::after {
-	top: 7px;
-}
-
-.price-Blc-n .custom-control:first-child {
-	border-right: 1px solid #000;
-	padding-right: 16px;
-}
-
-.price-Blc .custom-control-input:checked~.custom-control-label::before {
-	border-color: #f3933d;
-	background-color: #f3933d;
-}
 
 .text-org-light {
 	background-color: rgba(243, 147, 61, 0.2) !important;
@@ -596,12 +640,6 @@ img.img-cir {
 		display: block;
 	}
 	
-	.price-Blc h2 {
-		font-size: 16px;
-		margin-top: 6px;
-		margin-bottom: 14px;
-	}
-	
 	.cont-Block h5 {
 		font-weight: bold;
 		font-size: 16px;
@@ -642,16 +680,6 @@ img.img-cir {
 	#driver-info {
 		width: 250px !important;
 		margin: 0 auto
-	}
-}
-
-.imageStyle {
-	width: 50%;
-}
-
-@media only screen and (min-width: 768px) {
-	.imageStyle {
-		width: 80%;
 	}
 }
 
@@ -713,57 +741,11 @@ img.img-cir {
 }
 
 .custom-filled-button {
-	font-size: 0.98rem;
-	padding: 0.375rem 0.4rem;
+	font-size: 0.88rem;
+	padding: 0.395rem 0.5rem;
 }
 
 .custom-filled-back-button {
 	font-size: 0.98rem;
 	padding: 0.475rem 1rem;
-}
-
-
-#fixed-section-container {
-	cursor: pointer;
-	z-index: 9999;
-	
-	#fixed-section-box {
-		#filters-button {
-			transform: translateX(2px);
-			box-shadow: 3px 7px 20px #2d2d2ab8;
-			border-top-left-radius: 100px;
-			border-bottom-left-radius: 100px;
-			
-			button {
-				background: #0078f2;
-				border-color: #0078f2;
-				border-top-left-radius: 100px;
-				border-bottom-left-radius: 100px;
-			}
-		}
-		
-		#sort-button {
-			transform: translateX(-2px);
-			box-shadow: 3px 7px 20px #2d2d2ab8;
-			border-radius: 100px;
-			position: relative;
-			
-			button {
-				background: #0078f2;
-				border-color: #0078f2;
-				border-top-right-radius: 100px;
-				border-bottom-right-radius: 100px;
-			}
-		}
-	}
-}
-
-@media only screen and (min-width: 991px) {
-	#sort-button {
-		button {
-			border-left: 2px solid #0078f2;
-			border-radius: 100px;
-		}
-	}
-	
 }

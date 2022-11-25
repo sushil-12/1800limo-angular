@@ -279,12 +279,13 @@
 		<ng-template #vehicleListing>
 			<section id="vehicle-listing-container"
 				class="col-md-auto col-lg-9 d-flex flex-row flex-wrap justify-content-center justify-content-lg-start"
-				style="gap: 15px" [ngStyle]="openfilters ? {'z-index': -1, 'position': 'relative'} : ''">
+				style="gap: 13px" [ngStyle]="openfilters ? {'z-index': -1, 'position': 'relative'} : ''">
 				<div id="vehicle-listing-card_{{ vehinfo_index }}" class="vehicle-listing-card"
-					*ngFor="let vehinfo of vehicleDetails; index as vehinfo_index">
+					*ngFor="let vehinfo of vehicleDetails; index as vehinfo_index"
+					(click)="innerWidth < 1023 ? viewDetails(vehinfo) : ''">
 					<!-- DIV: AFFILIATE INFO -->
 					<div id="affiliate-info"
-						*ngIf="currentUser != null && currentUser.roleName == 'admin' && vehinfo.affiliate_name || vehinfo.affiliate_company ">
+						*ngIf="currentUser != null && currentUser.roleName == 'admin' && (vehinfo.affiliate_name || vehinfo.affiliate_company)">
 						<p class="text-left text-secondary m-0 my-md-2">
 							{{ vehinfo.affiliate_company || '' }}
 							{{ '/ ' + vehinfo.affiliate_name || '' }}
@@ -339,7 +340,7 @@
 
 					<!-- DIV: PREVIEW BUTTON -->
 					<div id="vehicle-preview-button" class="m-3 d-none d-lg-block">
-						<button class="custom-filled-button" (click)="viewDetails(vehinfo)">
+						<button class="custom-filled-button orange-button" (click)="viewDetails(vehinfo)">
 							Preview Vehicle Details
 						</button>
 					</div>
@@ -357,7 +358,8 @@
 					*ngIf="(vehicleDetails.length == 0 && this.filters.selections.length > 0) || master_vehicles.length == 0">
 					{{ no_vehicle_msg }}
 				</p>
-				<div id="master-vehicle-box-container" class="row">
+				<div id="master-vehicle-box-container" class="row"
+					*ngIf="master_vehicles.length > 0 && this.filters.selections.length == 0">
 					<div id="master-vehicle-box" class="col-md-3 mb-5 d-flex flex-nowrap flex-md-wrap cursor-pointer"
 						style="gap: 10px" *ngFor="let vehicle_obj of master_vehicles; index as vehicle_obj_index">
 						<div id="vehicle-image" class="imageStyle" (click)="selectCategory(vehicle_obj?.name)">
