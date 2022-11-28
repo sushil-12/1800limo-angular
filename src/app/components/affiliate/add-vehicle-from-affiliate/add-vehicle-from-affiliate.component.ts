@@ -279,45 +279,44 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 				this.chargableAmenities = this.chargableAmenitiesRes.group_1;
 				this.nonChargableAmenitiesRes = this.response.data.nonChargableAmenities;
 				this.nonChargableAmenities = this.nonChargableAmenitiesRes;
-				console.log(this.nonChargableAmenities, "check nonChargableAmenities")
 				this.specialAmenities = this.response.data.specialAmenities;
 				this.interiors = this.response.data.vehicleInterior;
 
 				sessionStorage.setItem('models', JSON.stringify(this.model));
 
 				this.vehicleImage1 = this.oldvehicleImage[0] = this.response.data.vehicleImage1.image;
-				this.vehicleImage2 = this.oldvehicleImage[1] = this.response.data.vehicleImage2.image;
-				this.vehicleImage3 = this.oldvehicleImage[2] = this.response.data.vehicleImage3.image;
-				this.vehicleImage4 = this.oldvehicleImage[3] = this.response.data.vehicleImage4.image;
-				this.vehicleImage5 = this.oldvehicleImage[4] = this.response.data.vehicleImage5.image;
-				this.vehicleImage6 = this.oldvehicleImage[5] = this.response.data.vehicleImage6.image;
-				this.vehicleImage7 = this.oldvehicleImage[6] = this.response.data.vehicleImage7.image;
-				this.vehicleImage8 = this.oldvehicleImage[7] = this.response.data.vehicleImage8.image;
-				this.vehicleImage9 = this.oldvehicleImage[8] = this.response.data.vehicleImage9.image;
+				// this.vehicleImage2 = this.oldvehicleImage[1] = this.response.data.vehicleImage2.image;
+				// this.vehicleImage3 = this.oldvehicleImage[2] = this.response.data.vehicleImage3.image;
+				// this.vehicleImage4 = this.oldvehicleImage[3] = this.response.data.vehicleImage4.image;
+				// this.vehicleImage5 = this.oldvehicleImage[4] = this.response.data.vehicleImage5.image;
+				// this.vehicleImage6 = this.oldvehicleImage[5] = this.response.data.vehicleImage6.image;
+				// this.vehicleImage7 = this.oldvehicleImage[6] = this.response.data.vehicleImage7.image;
+				// this.vehicleImage8 = this.oldvehicleImage[7] = this.response.data.vehicleImage8.image;
+				// this.vehicleImage9 = this.oldvehicleImage[8] = this.response.data.vehicleImage9.image;
 
 				this.vehicleImageId1 = this.response.data.vehicleImage1.id;
-				this.vehicleImageId2 = this.response.data.vehicleImage2.id;
-				this.vehicleImageId3 = this.response.data.vehicleImage3.id;
-				this.vehicleImageId4 = this.response.data.vehicleImage4.id;
-				this.vehicleImageId5 = this.response.data.vehicleImage5.id;
-				this.vehicleImageId6 = this.response.data.vehicleImage6.id;
-				this.vehicleImageId7 = this.response.data.vehicleImage7.id;
-				this.vehicleImageId8 = this.response.data.vehicleImage8.id;
-				this.vehicleImageId9 = this.response.data.vehicleImage9.id;
+				// this.vehicleImageId2 = this.response.data.vehicleImage2.id;
+				// this.vehicleImageId3 = this.response.data.vehicleImage3.id;
+				// this.vehicleImageId4 = this.response.data.vehicleImage4.id;
+				// this.vehicleImageId5 = this.response.data.vehicleImage5.id;
+				// this.vehicleImageId6 = this.response.data.vehicleImage6.id;
+				// this.vehicleImageId7 = this.response.data.vehicleImage7.id;
+				// this.vehicleImageId8 = this.response.data.vehicleImage8.id;
+				// this.vehicleImageId9 = this.response.data.vehicleImage9.id;
 
 				if (this.affiliateType != 'fleet_operator')
 				{
 					this.rearPlateImage = this.oldvehicleImage[9] = this.response.data.rear_plate.image;
-					this.windowPermitImage = this.oldvehicleImage[10] = this.response.data.window_permit.image;
-					this.windowPermit2Image = this.oldvehicleImage[11] = this.response.data.window_permit_1.image;
-					this.usdotPermitImage = this.oldvehicleImage[12] = this.response.data.USDOT_permit.image;
-					this.mcImage = this.oldvehicleImage[13] = this.response.data.mc.image;
+					// this.windowPermitImage = this.oldvehicleImage[10] = this.response.data.window_permit.image;
+					// this.windowPermit2Image = this.oldvehicleImage[11] = this.response.data.window_permit_1.image;
+					// this.usdotPermitImage = this.oldvehicleImage[12] = this.response.data.USDOT_permit.image;
+					// this.mcImage = this.oldvehicleImage[13] = this.response.data.mc.image;
 
 					this.rearPlateId = this.response.data.rear_plate.id;
-					this.windowPermitId = this.response.data.window_permit.id;
-					this.windowPermit2Id = this.response.data.window_permit_1.id;
-					this.usdotPermitId = this.response.data.USDOT_permit.id;
-					this.mcId = this.response.data.mc.id;
+					// this.windowPermitId = this.response.data.window_permit.id;
+					// this.windowPermit2Id = this.response.data.window_permit_1.id;
+					// this.usdotPermitId = this.response.data.USDOT_permit.id;
+					// this.mcId = this.response.data.mc.id;
 				}
 
 				//get models as per make
@@ -847,19 +846,19 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 		this.vehicleImage1 = this.oldvehicleImage[0];
 		if (this.affiliateType != 'fleet_operator')
 		{
-			this.vehicleImage2 = this.oldvehicleImage[1];
-			this.vehicleImage3 = this.oldvehicleImage[2];
-			this.vehicleImage4 = this.oldvehicleImage[3];
-			this.vehicleImage5 = this.oldvehicleImage[4];
-			this.vehicleImage6 = this.oldvehicleImage[5];
-			this.vehicleImage7 = this.oldvehicleImage[6];
-			this.vehicleImage8 = this.oldvehicleImage[7];
-			this.vehicleImage9 = this.oldvehicleImage[8];
-			this.rearPlateImage = this.oldvehicleImage[9];
-			this.windowPermitImage = this.oldvehicleImage[10];
-			this.windowPermit2Image = this.oldvehicleImage[11];
-			this.usdotPermitImage = this.oldvehicleImage[12];
-			this.mcImage = this.oldvehicleImage[13];
+			// this.vehicleImage2 = this.oldvehicleImage[1];
+			// this.vehicleImage3 = this.oldvehicleImage[2];
+			// this.vehicleImage4 = this.oldvehicleImage[3];
+			// this.vehicleImage5 = this.oldvehicleImage[4];
+			// this.vehicleImage6 = this.oldvehicleImage[5];
+			// this.vehicleImage7 = this.oldvehicleImage[6];
+			// this.vehicleImage8 = this.oldvehicleImage[7];
+			// this.vehicleImage9 = this.oldvehicleImage[8];
+			// this.rearPlateImage = this.oldvehicleImage[9];
+			// this.windowPermitImage = this.oldvehicleImage[10];
+			// this.windowPermit2Image = this.oldvehicleImage[11];
+			// this.usdotPermitImage = this.oldvehicleImage[12];
+			// this.mcImage = this.oldvehicleImage[13];
 		}
 	}
 

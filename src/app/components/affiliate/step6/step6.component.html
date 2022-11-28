@@ -45,6 +45,13 @@
 			</div>
 		</div>
 
+
+		<signature-pad #signaturepad [options]="signaturepad_options" (drawStart)="drawStart($event)"
+			(drawEnd)="drawComplete($event)"></signature-pad>
+
+
+
+
 		<!-- DIGITAL SIGNATURE -->
 		<div class="row px-4">
 			<div class="col-md-3 pr-0 borderright mobilePadding">
@@ -105,6 +112,14 @@
 					</g>
 				</svg>
 			</div>
+
+
+
+
+
+
+
+
 			<!-- Signature Text -->
 			<div class="col-md-auto">
 				<p class="text-orange" style="font-size: 1.2rem">

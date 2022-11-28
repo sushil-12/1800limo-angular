@@ -8,33 +8,17 @@
                 <h3 class="headinginfoH3 mt-3">Credit Card <img class="creditcard_pay"
                         src="assets/admin/images/creditcard_pay.png" tabindex="-1"></h3>
                 <div class="row">
-                    <div class="col-md-3 pr-0 borderright mobilePadding">
-                        <div class="form-group radio-tile-group">
-                            <div class="custom-radio input-container">
-                                <input class="radio-button" id="personal" type="radio" name="card_type" checked=""
-                                    formControlName="card_type" value="personal" tabindex="-1">
-                                <div class="radio-tile">
-                                    <label class="radio-tile-label" for="personal">Personal</label>
-                                </div>
+                    <div class="col-md-6">
+                        <div id="card-type-container" class="w-100 d-flex flex-nowrap justify-content-center">
+                            <div id="cd-personal" class="card-type"
+                                [ngClass]="f.card_type.value == 'personal' ? 'active' : ''"
+                                (click)="changeRadio('card_type', 'personal')">
+                                <label>Personal</label>
                             </div>
-                            <div *ngIf="submittedForm && f.card_type.errors || f.card_type.touched && f.card_type.errors"
-                                class="text-danger margin-bottom-thin my-mat-hint">
-                                <div *ngIf="f.card_type.errors.required">This field is required</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3 pl-0 mobilePadding">
-                        <div class="form-group radio-tile-group">
-                            <div class="custom-radio input-container">
-                                <input class="radio-button" id="business" type="radio" name="card_type"
-                                    formControlName="card_type" value="business" tabindex="-1">
-                                <div class="radio-tile">
-                                    <label class="radio-tile-label" for="business">Business</label>
-                                </div>
-                                <div *ngIf="submittedForm && f.card_type.errors || f.card_type.touched && f.card_type.errors"
-                                    class="text-danger margin-bottom-thin my-mat-hint">
-                                    <div *ngIf="f.card_type.errors.required">This field is required</div>
-                                </div>
+                            <div id="cd-business" class="card-type"
+                                [ngClass]="f.card_type.value == 'business' ? 'active' : ''"
+                                (click)="changeRadio('card_type', 'business')">
+                                <label>Business</label>
                             </div>
                         </div>
                     </div>
@@ -80,9 +64,11 @@
                     </div>
                     <div class="col-md-4">
                         <mat-form-field appearance="outline">
-                            <mat-label>Expiry Month*</mat-label>
+                            <mat-label>
+                                Expiration Month <sup style="color: #ff0000">*</sup>
+                            </mat-label>
                             <mat-select formControlName="exp_month" tabindex="1">
-                                <mat-option value="">Choose Expiry Month</mat-option>
+                                <mat-option value="">Choose Expiration Month</mat-option>
                                 <mat-option value='01'>Janaury</mat-option>
                                 <mat-option value='02'>February</mat-option>
                                 <mat-option value='03'>March</mat-option>
@@ -104,9 +90,11 @@
                     </div>
                     <div class="col-md-4">
                         <mat-form-field appearance="outline">
-                            <mat-label>Expiry Year*</mat-label>
+                            <mat-label>
+                                Expiration Year<sup style="color: #ff0000">*</sup>
+                            </mat-label>
                             <mat-select formControlName="exp_year" tabindex="1">
-                                <mat-option value="">Choose Expiry Year</mat-option>
+                                <mat-option value="">Choose Expiration Year</mat-option>
                                 <mat-option *ngFor="let yearOption of yearOptions" value="{{yearOption}}">{{yearOption}}
                                 </mat-option>
                             </mat-select>
@@ -118,7 +106,9 @@
                     </div>
                     <div class="col-md-4">
                         <mat-form-field appearance="outline">
-                            <mat-label>CSC*</mat-label>
+                            <mat-label>
+                                CVV <sup style="color: #ff0000;">*</sup>
+                            </mat-label>
                             <input matInput placeholder="CSC" formControlName="cvc" tabindex="1">
                         </mat-form-field>
                         <div *ngIf="submittedForm && f.cvc.errors || f.cvc.touched && f.cvc.errors"
