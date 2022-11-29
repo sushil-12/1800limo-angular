@@ -98,15 +98,14 @@
 						<!-- FUNCTIONAL BUTTONS -->
 						<div class="btn-Area d-flex flex-wrap">
 							<button type="button" class="custom-btn" data-toggle="modal"
-								data-target="#detailFareRateModal">
+								data-target="#ModalVehicleRates">
 								View Subtotals
 							</button>
 							<button type="button" class="custom-btn" data-toggle="modal"
-								data-target="#driverFareRateModal">
+								data-target="#ModalDriverDetails">
 								Driver Info
 							</button>
-							<button type="button" class="custom-btn" data-toggle="modal"
-								data-target="#amenitiesFareRateModal">
+							<button type="button" class="custom-btn" data-toggle="modal" data-target="#ModalAmenities">
 								Amenities
 							</button>
 							<!-- <button type="button" class="custom-btn" (click)="bookNow()">
@@ -303,7 +302,7 @@
 			</div>
 		</div>
 
-		<hr />
+		<hr class="perforated-line" />
 
 		<!-- Return Details -->
 		<div *ngIf="quotebot_form.service_type == 'round_trip'">
@@ -453,9 +452,8 @@
 
 
 <!-- Detailed Slip Modal -->
-<div aria-hidden="true" aria-labelledby="detailFareRateModal" class="modal fade" id="detailFareRateModal"
-	tab-index="-1">
-	<div class="modal-dialog modal-lg">
+<div aria-hidden="true" aria-labelledby="ModalVehicleRates" class="modal fade" id="ModalVehicleRates" tab-index="-1">
+	<div class="modal-dialog modal-md">
 		<div class="modal-content">
 			<div class="modal-header">
 				<h4 class="modal-title">
@@ -487,13 +485,6 @@
 								${{ rate.value.amount }}
 							</td>
 						</tr>
-						<!-- <tr>
-							<td> Gratuity: </td>
-							<td>
-								{{ rates?.rateArray?.others?.Gratuity?.percentage }}%
-							</td>
-							<td> {{ rates?.rateArray?.others?.Gratuity?.amount }} </td>
-						</tr> -->
 						<tr class="total-fields">
 							<td class="font-weight-bolder">
 								Total:
@@ -568,120 +559,56 @@
 </div>
 
 
-<div aria-hidden="true" aria-labelledby="driverFareRateModal" class="modal fade" id="driverFareRateModal"
-	tab-index="-1">
-	<div class="modal-dialog modal-lg">
+<div aria-hidden="true" aria-labelledby="ModalDriverDetails" class="modal fade" id="ModalDriverDetails" tab-index="-1">
+	<div class="modal-dialog modal-md">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h3 class="text-org-light col-md-12 px-4 py-2 mb-4" style="border-radius: 10.8px">
+				<p class="text-org-light font-weight-bolder">
 					Driver Details
-				</h3>
+				</p>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
 			<div class="modal-body">
-				<div class="pre-Details pb-5">
-					<div class="container-xl">
-						<div class="row">
-							<div class="col-auto" *ngIf="!selected_vehicle.driverInformation">
-								<p class="text-danger">
-									No Driver Registered with this vehicle.
+				<div class="row">
+					<div class="col-6 col-md-5">
+						<div id="driver-image-container" class="w-100">
+							<div id="driver-image" class="ml-4 w-auto">
+								<img id="d_image" class="w-100"
+									src="https://1800limoapi.infodevbox.com/storage/images/rEu5OQ7U4fsUhn0qikabAeLbQEonNxYHZiNfKo8S.png" />
+							</div>
+						</div>
+					</div>
+					<div class="col-6 col-md-7">
+						<div id="driver-comp-info-container"
+							class="w-auto h-100 d-flex align-items-center justify-content-center">
+							<div id="driver-company-info" style="width: fit-content">
+								<p id="driver-name" class="text-secondary font-weight-bolder">
+									{{ selected_vehicle.driverInformation.name }}
 								</p>
-							</div>
-							<div class="col-lg-4" *ngIf="selected_vehicle.driverInformation">
-								<div class="img-Block mb-4 mb-lg-0 text-md-left text-center">
-									<img [src]="selected_vehicle.driverInformation?.imageUrl" class="img-cir"
-										alt="Driver Image" />
-								</div>
-							</div>
-							<div class="col-lg-8" *ngIf="selected_vehicle.driverInformation">
-								<div class="px-4">
-									<div class="row flex-md-wrap flex-nowrap">
-										<div class="col-lg-4">
-											<div class="title-block">Driver Name:</div>
-										</div>
-										<div class="col-lg-8">
-											<div class="cont-block">
-												{{ selected_vehicle.driverInformation?.name }}
-											</div>
-										</div>
-									</div>
-									<div class="row flex-md-wrap flex-nowrap">
-										<div class="col-lg-4">
-											<div class="title-block">Gender:</div>
-										</div>
-										<div class="col-lg-8">
-											<div class="cont-block">
-												{{ selected_vehicle.driverInformation?.gender }}
-											</div>
-										</div>
-									</div>
-									<div class="row flex-md-wrap flex-nowrap">
-										<div class="col-lg-4">
-											<div class="title-block">Start Rating:</div>
-										</div>
-										<div class="col-lg-8">
-											<div class="cont-block">
-												{{ selected_vehicle.driverInformation?.starRating }}
-											</div>
-										</div>
-									</div>
-									<div class="row flex-md-wrap flex-nowrap">
-										<div class="col-lg-4">
-											<div class="title-block">Background:</div>
-										</div>
-										<div class="col-lg-8">
-											<div class="cont-block">
-												{{ selected_vehicle.driverInformation?.background }}
-											</div>
-										</div>
-									</div>
-									<div class="row flex-md-wrap flex-nowrap">
-										<div class="col-lg-4">
-											<div class="title-block">Dress:</div>
-										</div>
-										<div class="col-lg-8">
-											<div class="cont-block">
-												{{ selected_vehicle.driverInformation?.dress }}
-											</div>
-										</div>
-									</div>
-									<div class="row flex-md-wrap flex-nowrap">
-										<div class="col-lg-4">
-											<div class="title-block">Languages:</div>
-										</div>
-										<div class="col-lg-8">
-											<div class="cont-block">English</div>
-										</div>
-									</div>
-									<div class="row flex-md-wrap flex-nowrap">
-										<div class="col-lg-4">
-											<div class="title-block">Years of Experience:</div>
-										</div>
-										<div class="col-lg-8">
-											<div class="cont-block">
-												{{ selected_vehicle.driverInformation?.experience }}
-											</div>
-										</div>
-									</div>
-									<div class="row flex-md-wrap flex-nowrap">
-										<div class="col-lg-4">
-											<div class="title-block">Contact:</div>
-										</div>
-										<div class="col-lg-8">
-											<div class="cont-block">
-												{{ selected_vehicle.driverInformation?.phone }}
-											</div>
-										</div>
-									</div>
-								</div>
+								<p id="driver-comp" class="m-0 ml-3 text-secondary w-auto">
+									- {{ selected_vehicle.affiliate_company }}
+								</p>
 							</div>
 						</div>
 					</div>
 				</div>
+				<br />
+				<div class="row" *ngFor="let info of driver_info_display_keys">
+					<div class="col-3 col-md-5">
+						<p class="text-dark">
+							{{ info | titlecase }}
+						</p>
+					</div>
+					<div class="col-9 col-md-7">
+						<p class="font-weight-bolder text-dark">
+							{{ selected_vehicle.driverInformation[info] | titlecase }}
+						</p>
+					</div>
+				</div>
 			</div>
-			<div class="modal-footer flex justify-content-end">
+			<div class="modal-footer justify-content-end">
 				<div class="btn-Area">
 					<button class="btn btn-secondary px-4" data-dismiss="modal" type="button">
 						Close
@@ -692,47 +619,48 @@
 	</div>
 </div>
 
-<div aria-hidden="true" aria-labelledby="amenitiesFareRateModal" class="modal fade" id="amenitiesFareRateModal"
-	tab-index="-1">
-	<div class="modal-dialog modal-lg">
+
+<div aria-hidden="true" aria-labelledby="ModalAmenities" class="modal fade" id="ModalAmenities" tab-index="-1">
+	<div class="modal-dialog modal-md modal-dialog-scrollable">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h4 class="modal-title pl-3">
-					Available Amenities
-				</h4>
+				<p class="text-org-light font-weight-bolder">
+					Vehicle Amenities
+				</p>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
 			<div class="modal-body">
-				<div class="pre-Details pb-5">
-					<div class="container-xl">
-						<div class="row">
-							<div class="col-lg-12">
-								<h5 class="text-org-light px-4 py-2 mb-4">
-									Available Amenities
-								</h5>
-							</div>
-							<div class="col-md-12">
-								<ul
-									class="list-unstyled d-flex flex-row flex-wrap justify-content-around align-items-start pl-0 pr-0">
-									<li *ngFor="let category of selected_vehicle.amenities | keyvalue"
-										class="fw-bold text-dark mr-5 flex-grow-1 p-0">
-										{{ category.key | titlecase }}
-										<ul class="list-unstyled p-0">
-											<li *ngFor="let item of category.value; index as item_index"
-												id="Item_{{ item_index + 1 }}" class="p-0">
-												{{ item.name | titlecase }}
-											</li>
-										</ul>
-									</li>
-								</ul>
-							</div>
-						</div>
+				<div class="row">
+					<div class="col-md-12">
+						<p class="font-weight-bolder">
+							Chargeable Amenities
+						</p>
+						<ul id="chargeable-amenities" style="list-style-type: 'disc'" class="d-flex flex-wrap">
+							<li [attr.id]="'ul-ch-list-item_' + amenity_index"
+								*ngFor="let amenity of selected_vehicle.amenities['chargeable']; index as amenity_index">
+								<span class="text-orange">$</span>
+								{{ amenity.name }}
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<p class="font-weight-bolder">
+							Non-Chargeable Amenities
+						</p>
+						<ul id="chargeable-amenities" style="list-style-type: 'circle'" class="d-flex flex-wrap">
+							<li [attr.id]="'ul-noch-list-item_' + amenity_index"
+								*ngFor="let amenity of selected_vehicle.amenities['non-chargeable']; index as amenity_index">
+								{{ amenity.name }}
+							</li>
+						</ul>
 					</div>
 				</div>
 			</div>
-			<div class="modal-footer flex justify-content-end">
+			<div class="modal-footer justify-content-end">
 				<div class="btn-Area">
 					<button class="btn btn-secondary px-4" data-dismiss="modal" type="button">
 						Close
