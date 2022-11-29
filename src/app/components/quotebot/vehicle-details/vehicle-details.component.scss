@@ -35,33 +35,15 @@
 	}
 }
 
-
-// tablets and above
-@media only screen and (min-width: 767px)
-{
-	#thumbs .item img
-	{
-		max-width: 55px;
-		height: 37px;
-	}
-}
-
-// desktops and above
-@media only screen and (min-width: 1023px)
-{}
-
-
-
-
-
-
-
-
-
 hr
 {
 	margin: 0.5rem 0 0.5rem 0;
 	border-top: 1px solid transparent;
+}
+hr.perforated-line
+{
+	border-top: 2px dashed #424242ad;
+	margin: 2.4rem 0;
 }
 hr.blue-line
 {
@@ -120,13 +102,13 @@ hr.blue-line
 		small {
 			font-size: 17px;
 		}
-
+		
 		label.custom-control-label {
 			font-size    : 1.3rem;
 			margin-top   : 14px;
 			margin-bottom: 14px;
 			font-weight  : 600;
-
+			
 			small {
 				font-size: 1rem;
 			}
@@ -226,67 +208,22 @@ section.pre-Details
 	.img-Block img {
 		max-width: 255px;
 	}
-
+	
 	.car-cap .org-Btn {
 		max-width: 100%;
 	}
-
-	// .car-Details .cont-Block {
-	// 	margin-top: 20px;
-	// }
 }
 
 @media only screen and (max-width: 767px) {
-	.close {
-			position: absolute;
-			top: -20px;
-			right: 15px;
-			border-radius: 45px;
-			width: 20px;
-			color: red !important;
-			height: 20px;
-			background-color: #fff !important;
-		}
-		
 	.img-Block img {
 		max-width: 100%;
 	}
-
 	.car-Details .cont-Block {
 		margin-top: 20px;
 	}
-
-
 	.list-box ul {
 		display: block;
 	}
-
-	#driverFareRateModal .modal-body,
-	#amenitiesFareRateModal .modal-body {
-		padding: 1rem 0rem !important;
-	}
-
-	#driverFareRateModal .col-lg-8 .px-4 {
-		padding: 0 !important;
-	}
-}
-
-.close {
-	position        : absolute;
-	top             : -5px;
-	right           : -15px;
-	border-radius   : 45px;
-	width           : 20px;
-	color           : red !important;
-	height          : 20px;
-	opacity: 1;
-	background-color: #fff !important;
-}
-
-.close span {
-	position: relative;
-	top     : -12px;
-	right   : 6px;
 }
 
 button.custom-filled-button
@@ -314,4 +251,62 @@ p.pv-title.pv-details
 {
 	font-weight: 600;
 	font-size: 1.2rem;
+}
+
+
+.modal
+{
+	.modal-header
+	{
+		p
+		{
+			font-size: 1.6rem;
+		}
+		button.close {
+			color: #ff0000;
+			font-size: 2rem;
+			opacity: 1;
+		}
+	}
+}
+
+.modal#ModalDriverDetails
+{
+	.modal-body
+	{
+		#driver-image img
+		{
+			border-radius: 50%;
+			border: 2px solid #0f0f0f;
+		}
+	}
+}
+
+.modal#ModalAmenities
+{
+	.modal-body
+	{
+		#chargeable-amenities > li
+		{
+			flex: 0 0 60%;
+			max-width: 60%;
+			white-space: break-spaces;
+		}
+	}
+}
+
+// tablets and above
+@media only screen and (min-width: 767px) {
+	#thumbs .item img {
+		max-width: 55px;
+		height: 37px;
+	}
+	.modal#ModalAmenities
+	{
+		.modal-body #chargeable-amenities > li
+		{
+			flex: 0 0 50%;
+			max-width: 50%;
+		}
+	}
 }

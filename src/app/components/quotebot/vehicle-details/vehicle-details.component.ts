@@ -20,6 +20,8 @@ export class VehicleDetailsComponent implements OnInit
 	one_way_rates: any
 	round_trip_rates: any
 
+	driver_info_display_keys: Array<string> = ['gender', 'dress', 'experience', 'phone', 'languages']
+
 	constructor(
 		private _router: Router,
 		private _activatedRoute: ActivatedRoute,
@@ -370,6 +372,7 @@ export class VehicleDetailsComponent implements OnInit
 				break
 		}
 		obj['service_type'] = type
+		this.quotebot_form = obj
 		localStorage.setItem('quotebot_form', JSON.stringify(obj))
 	}
 
