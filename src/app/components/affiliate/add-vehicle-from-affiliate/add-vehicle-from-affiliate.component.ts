@@ -188,7 +188,7 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 			model: ['', Validators.required],
 			year: ['', Validators.required],
 			color: ['', Validators.required],
-			licensePlate: [''],
+			licensePlate: ['', Validators.required],
 			numberOfVehicles: [1],
 			seats: [4, [Validators.required, Validators.pattern("^[0-9]*$")]],
 			luggage: [2, [Validators.required, Validators.pattern("^[0-9]*$")]],
@@ -231,8 +231,6 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 		this.affiliateType = currentUser.affiliate_type;
 		if (this.affiliateType != 'fleet_operator')
 		{
-			this.addVehicleForm.controls['licensePlate'].setValidators([Validators.required]);
-			this.addVehicleForm.controls['licensePlate'].updateValueAndValidity();
 			this.addVehicleForm.controls['rearPlateImage'].setValidators([Validators.required]);
 			this.addVehicleForm.controls['rearPlateImage'].updateValueAndValidity();
 		}

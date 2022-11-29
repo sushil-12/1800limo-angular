@@ -428,20 +428,28 @@
 
 				<!-- License Plate -->
 				<div class="col-md-6">
-					<mat-form-field appearance="outline">
+					<mat-form-field appearance="outline" [ngClass]="
+							(errorMsg2 && f.licensePlate.errors) ||
+							(submittedForm && f.licensePlate.errors)
+								? 'mat-form-field-invalid ng-invalid'
+								: ''
+						">
 						<mat-label>
 							License Plate
-							<span *ngIf="
-									affiliateType != 'fleet_operator';
-									else nonFleetOperator
-								" class="asterisk">*</span>
-							<ng-template #nonFleetOperator>
-								<span class="theme-color">(optional)</span>
-							</ng-template>
+							<span class="asterisk">*</span>
 						</mat-label>
 						<input matInput placeholder="License Plate" (focus)="$event.target.select()"
 							formControlName="licensePlate" tabindex="1" />
 					</mat-form-field>
+					<div *ngIf="
+							(submittedForm && f.licensePlate.errors) ||
+							(f.licensePlate.touched &&
+								f.licensePlate.errors)
+						" class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="f.licensePlate.errors.required">
+							The License Plate is required
+						</div>
+					</div>
 				</div>
 			</div>
 			<div class="row mt-3">

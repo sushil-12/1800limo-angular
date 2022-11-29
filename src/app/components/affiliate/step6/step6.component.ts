@@ -243,7 +243,7 @@ export class Step6Component implements OnInit
 			Accept: true,
 			stepCompleted: stepCompleted
 		};
-
+		/*
 		!this.signatureImage && this.affiliateService.uploadVehicleImage(this.src).subscribe((response: any) =>
 		{
 			this.signatureImg = response.data.image;
@@ -279,10 +279,10 @@ export class Step6Component implements OnInit
 						this.router.navigate(['/affiliate/account-status'])
 					);
 				});
-		})
+		})*/
 
-		obj['signature_id'] = this.signature_id
-		this.signatureImage && this.affiliateService.affiliateTermsAccept(obj)
+		// obj['signature_id'] = this.signature_id
+		this.affiliateService.affiliateTermsAccept(obj)
 			.pipe(
 				catchError(err =>
 				{

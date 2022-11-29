@@ -1,5 +1,5 @@
 <section class="user_information">
-	<div class="agreement_step0" *ngIf="step6Data.length > 0; else noContent">
+	<div class="agreement_step0" *ngIf="step6Data.length > 0">
 		<div *ngFor="let step_data of step6Data; index as i">
 			<div class="step0Div" *ngIf="step_data.id != 25 && step_data.content">
 				<p *ngIf="step_data.id == 24">
@@ -45,14 +45,19 @@
 			</div>
 		</div>
 
+		<div class="row">
+			<div class="col-md-12">
+				<div id="button-container" class="w-100">
+					<button class="custom-filled-button green-button mx-auto d-block" (click)="submitForm()">
+						Accept
+					</button>
+				</div>
+			</div>
+		</div>
 
-		<signature-pad #signaturepad [options]="signaturepad_options" (drawStart)="drawStart($event)"
-			(drawEnd)="drawComplete($event)"></signature-pad>
+		<!--
 
-
-
-
-		<!-- DIGITAL SIGNATURE -->
+		<!- DIGITAL SIGNATURE ->
 		<div class="row px-4">
 			<div class="col-md-3 pr-0 borderright mobilePadding">
 				<div class="form-group radio-tile-group">
@@ -80,19 +85,19 @@
 			</div>
 		</div>
 
-		<!-- DIGITAL SIGNATURE PAD -->
+		<!- DIGITAL SIGNATURE PAD ->
 		<div class="row px-3 align-items-center" [hidden]="signatureImage">
 			<div class="col-md-auto">
-				<!-- <div class="wrapper">
+				<!- <div class="wrapper">
                             <canvas id="signature-pad" class="signature-pad" width=400 height=200></canvas>
-                        </div> -->
-				<!-- <div class="wrapper">
+                        </div> ->
+				<!- <div class="wrapper">
                             <canvas *ngIf="!signatureImg" signature="signature" id="signature-pad" class="signature-pad" [clear]="clearMe" [options]="{color: '#000'}" (imgSrc)="srcChange($event)" #signaturepad>
                                 <div *ngIf="signatureImg">
                                     <img class="signature w-100" src="{{signatureImg}}" />
                                 </div>
                             </canvas>
-                        </div> -->
+                        </div> ->
 
 
 				<canvas *ngIf="!signatureImg" signature="signature" id="responsive-canvas" [clear]="clearMe"
@@ -120,7 +125,7 @@
 
 
 
-			<!-- Signature Text -->
+			<!- Signature Text ->
 			<div class="col-md-auto">
 				<p class="text-orange" style="font-size: 1.2rem">
 					Initial (Signature) required
@@ -188,13 +193,13 @@
 				</div>
 			</ng-template>
 		</div>
-		<!-- <a (click)="save()">Save</a> -->
+		<!- <a (click)="save()">Save</a> ->
 		<div class="row justify-content-center my-4">
 			<button class="forstep_booknow custom-btn savebutton" (click)="submitForm()">Accept</button>
 		</div>
-
 	</div>
-	<ng-template #noContent></ng-template>
+
 </section>
-<!-- Image modal -->
+<!- Image modal ->
 <app-image-modal (closeTab)="closeButton()" [modalImage]="modalImage"></app-image-modal>
+-->
