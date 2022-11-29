@@ -121,3 +121,14 @@ button.custom-filled-reset-button {
 .text-uppercase {
 	text-transform: uppercase
 }
+
+.yellow-alert-boxes{
+	margin: 1rem;
+	ol {
+		font-size: 1.16rem;
+		line-height: 1.8rem;
+		li  {
+			font-weight: 500
+		}
+	}
+}

@@ -193,7 +193,7 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 			model: ['', Validators.required],
 			year: ['', Validators.required],
 			color: ['', Validators.required],
-			licensePlate: [''],
+			licensePlate: ['', Validators.required],
 			numberOfVehicles: [],
 			seats: ['', [Validators.required, Validators.pattern("^[0-9]*$")]],
 			luggage: ['', [Validators.required, Validators.pattern("^[0-9]*$")]],
@@ -224,8 +224,6 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 		this.affiliateType = currentUser.affiliate_type;
 		if (this.affiliateType != 'fleet_operator')
 		{
-			this.addVehicleForm.controls['licensePlate'].setValidators([Validators.required])
-			this.addVehicleForm.controls['licensePlate'].updateValueAndValidity()
 			this.addVehicleForm.controls['rearPlateImage'].setValidators([Validators.required]);
 			this.addVehicleForm.controls['rearPlateImage'].updateValueAndValidity();
 		}

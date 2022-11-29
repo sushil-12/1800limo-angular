@@ -433,20 +433,28 @@
 
 				<!-- License Plate -->
 				<div class="col-md-6">
-					<mat-form-field appearance="outline">
+					<mat-form-field appearance="outline" [ngClass]="
+							(errorMsg2 && f.licensePlate.errors) ||
+							(submittedForm && f.licensePlate.errors)
+								? 'mat-form-field-invalid ng-invalid'
+								: ''
+						">
 						<mat-label>
 							License Plate
-							<span *ngIf="
-									affiliateType != 'fleet_operator';
-									else nonFleetOperator
-								" class="asterisk">*</span>
-							<ng-template #nonFleetOperator>
-								<span class="theme-color">(optional)</span>
-							</ng-template>
+							<span class="asterisk">*</span>
 						</mat-label>
 						<input matInput placeholder="License Plate" (focus)="$event.target.select()"
 							formControlName="licensePlate" tabindex="1" />
 					</mat-form-field>
+					<div *ngIf="
+							(submittedForm && f.licensePlate.errors) ||
+							(f.licensePlate.touched &&
+								f.licensePlate.errors)
+						" class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="f.licensePlate.errors.required">
+							The License Plate is required
+						</div>
+					</div>
 				</div>
 			</div>
 
@@ -626,6 +634,9 @@
 				Take Interior Pix On Cloudy Days)
 			</span>
 		</h2>
+		<h6 class="text-danger m-2 ml-3">
+			(iPhone users only take photos by portrait view.)
+		</h6>
 		<div class="container mt-1">
 			<span class="alert alert-danger row ml-2 mr-2 mt-3 mb-2 d-lg-none">
 				All Photos to be uploaded from Desktop or File.
@@ -645,6 +656,9 @@
 					<div class="col-md-4" *ngIf="vehicleImage1">
 						<div class="vehtype_extint">
 							<p>
+								<span class="text-danger">
+									{{ vehicleImage1.includes('extint1') ? 'Change' : '' }}
+								</span>
 								Vehicle Image 1 <span class="asterisk">*</span>
 							</p>
 							<img src="{{ vehicleImage1 }}" (click)="showImageInModal(vehicleImage1)" tabindex="-1" />
@@ -1352,13 +1366,7 @@
 							<div>
 								<p>
 									Window Permit
-									<span *ngIf="
-											affiliateType != 'fleet_operator';
-											else nonFleetOperator
-										" class="asterisk">*</span>
-									<ng-template #nonFleetOperator>
-										<span class="optionalTextStyle">(Optional)</span>
-									</ng-template>
+									<span *ngIf="affiliateType != 'fleet_operator'" class="asterisk">*</span>
 								</p>
 								<img src="{{ windowPermitImage }}" (click)="
 										showImageInModal(windowPermitImage)
@@ -1405,14 +1413,7 @@
 								<div>
 									<p>
 										Window Permit
-										<span *ngIf="
-												affiliateType !=
-													'fleet_operator';
-												else nonFleetOperator
-											" class="asterisk">*</span>
-										<ng-template #nonFleetOperator>
-											<span class="optionalTextStyle">(optional)</span>
-										</ng-template>
+										<span *ngIf="affiliateType !='fleet_operator'" class="asterisk">*</span>
 									</p>
 									<div class="emptyImage">
 										<img src="../../../../assets/images/empty-image.png" tabindex="-1" />

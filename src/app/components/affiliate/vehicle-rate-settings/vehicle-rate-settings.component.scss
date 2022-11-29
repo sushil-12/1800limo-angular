@@ -1,3 +1,9 @@
+
+.row
+{
+	margin: 0;
+}
+
 .imageSection {
 	margin-top: 30px;
 }
@@ -10,20 +16,6 @@
 
 .input-container {
 	margin-top: 0;
-}
-
-@media only screen and (min-width:768px) {
-	.vehicleData li {
-		margin-bottom: 10px;
-		font-size    : 18px;
-		font-weight  : 600;
-	}
-}
-
-@media only screen and (max-width:767px) {
-	.vehicleData li {
-		margin-top: 10px;
-	}
 }
 
 .cityTax {
@@ -51,63 +43,6 @@
 	margin-top: 0;
 }
 
-@media only screen and (min-width:1199px) {
-	.input-container:focus {
-		outline: none;
-
-		.radio-button:checked+.radio-tile {
-			color    : #000 !important;
-			transform: scale(1, 1);
-
-			.radio-tile-label {
-				color: #000 !important;
-			}
-		}
-
-		.radio-tile-label {
-			color: #000 !important;
-		}
-	}
-}
-
-@media only screen and (max-width:991px) {
-	.vehicleImage img {
-		width : 100%;
-		height: auto;
-	}
-}
-
-@media only screen and (max-width:767px) {
-	.mobilePadding {
-		padding: 0px 15px !important;
-	}
-
-	.cityTax {
-		margin-top   : 10px;
-		margin-bottom: 0px;
-	}
-
-	.flatRange {
-		margin-top: 0px;
-	}
-}
-
-@media only screen and (max-width:575px) {
-	.vehicleData li:first-child {
-		margin-top: 0px;
-	}
-
-	.vehicleData li {
-		margin-top: 0px;
-		font-size : 14px;
-	}
-
-	.vehicleImage img {
-		width : 100%;
-		height: auto;
-	}
-}
-
 .gratuityLabel {
 	font-size   : 24px;
 	position    : absolute;
@@ -119,54 +54,6 @@
 .amenityLabel {
 	font-weight: 600;
 }
-
-
-div.row {
-	padding: 10px 17px;
-
-	div#radio-button-type {
-		display        : flex;
-		flex-direction : row;
-		align-items    : center;
-		justify-content: center;
-		flex-wrap      : nowrap;
-		cursor         : pointer;
-
-		&>div {
-			padding         : 15px;
-			font-size       : 14px;
-			text-transform  : uppercase;
-			background-color: #fff;
-			color           : #000;
-			border          : 2.5px solid var(--green-color);
-			width           : 100%;
-			height          : auto;
-			letter-spacing  : 1.6px
-		}
-
-		&>div:first-child {
-			border-top-left-radius   : 7px;
-			border-bottom-left-radius: 7px;
-		}
-
-		&>div:last-child {
-			border-top-right-radius   : 7px;
-			border-bottom-right-radius: 7px;
-		}
-
-		&>div.active {
-			background-color: var(--green-color);
-			color           : #fff;
-		}
-	}
-
-	@media only screen and (max-width:767px) {
-		div#radio-button-type {
-			margin-bottom: 20px;
-		}
-	}
-}
-
 
 div#rate-manager-slider {
 	width: 100%;
@@ -248,4 +135,96 @@ div#rate-manager-slider {
 	position: absolute;
 	top     : 43px;
 	left    : 25px;
+}
+
+
+
+#card-type-container {
+	.card-type {
+		width: 48%;
+		padding: 1rem;
+		text-align: center;
+		border-radius: 1rem;
+		height: fit-content;
+		line-height: 2.7rem;
+		box-shadow: 0px 5px 10px 1px rgba(0, 0, 0, 0.4);
+		margin: 0 3px;
+		cursor: pointer;
+		transition: box-shadow 0.25s ease, background-color 0.25s ease;
+	}
+
+	.card-type.active {
+		background-color: var(--green-color);
+		box-shadow: 0px 5px 10px -1px rgb(0 0 0 / 30%);
+	}
+}
+
+@media only screen and (min-width:768px) {
+	.vehicleData li {
+		margin-bottom: 10px;
+		font-size: 18px;
+		font-weight: 600;
+	}
+}
+
+
+@media only screen and (min-width:1199px) {
+	.input-container:focus {
+		outline: none;
+
+		.radio-button:checked+.radio-tile {
+			color: #000 !important;
+			transform: scale(1, 1);
+
+			.radio-tile-label {
+				color: #000 !important;
+			}
+		}
+
+		.radio-tile-label {
+			color: #000 !important;
+		}
+	}
+}
+
+@media only screen and (max-width:991px) {
+	.vehicleImage img {
+		width: 100%;
+		height: auto;
+	}
+}
+
+@media only screen and (max-width:767px) {
+	.mobilePadding {
+		padding: 0px 15px !important;
+	}
+
+	.cityTax {
+		margin-top: 10px;
+		margin-bottom: 0px;
+	}
+
+	.flatRange {
+		margin-top: 0px;
+	}
+
+	.vehicleData li {
+		margin-top: 10px;
+	}
+}
+
+@media only screen and (max-width:575px) {
+	.vehicleData li:first-child {
+		margin-top: 0px;
+	}
+
+	.vehicleData li {
+		margin-top: 0px;
+		font-size: 14px;
+	}
+
+	.vehicleImage img {
+		width: 100%;
+		height: auto;
+	}
 }

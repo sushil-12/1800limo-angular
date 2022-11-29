@@ -75,6 +75,12 @@ export class AddCardComponent implements OnInit
 
 	}
 
+	SetFormValue(form_control: string, value: any)
+	{
+		this.addCardForm.get(form_control).setValue(value)
+		this.addCardForm.updateValueAndValidity()
+	}
+
 	onCountryChange(event, type)
 	{
 		if (type == 'mobile')
@@ -133,6 +139,11 @@ export class AddCardComponent implements OnInit
 	backButton()
 	{
 		this.router.navigate(['/affiliate/step2']);
+	}
+
+	changeRadio(form_control: string, value: any)
+	{
+		this.SetFormValue(form_control, value)
 	}
 
 }

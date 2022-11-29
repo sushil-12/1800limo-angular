@@ -72,24 +72,23 @@ export class Step5Component implements OnInit, AfterViewChecked
 		{
 			this.vehiclesRes = result;
 			this.vehicles = this.vehiclesRes.data.vehicleList;
-			this.affiliate_type = this.currentUser.affiliate_type;
-			switch (this.currentUser.affiliate_type)
+			this.affiliate_type = this.currentUser.affiliate_type.toLowerCase()
+
+			if (this.affiliate_type.includes('gig') || this.affiliate_type.includes('taxi'))
 			{
-				case 'gig_operator':
-					this.checkCanAddVehicle(1)
-					break;
-				case 'taxi_operator':
-					this.checkCanAddVehicle(1)
-					break;
-				case 'black_limo_operator':
-					this.instructionBasedOnAffiliate = 'Click <img src="/assets/images/roundedPlus.png" width="20" height="20" alt="Add free icon" title="Add free icon"> Add Vehicle - If Different Year, Make, Model.';
-					this.checkCanAddVehicle(2)
-					break;
-				case 'fleet_operator':
-					this.instructionBasedOnAffiliate = '1. Click <img src="/assets/images/roundedPlus.png" width="20" height="20" alt="Add free icon" title="Add free icon"> Add Vehicle - If Different Year, Make, Model. <br> 2. Duplicate A Vehicle - Click View And Then Click Duplicate If Same Make and Model But Different Year, Color, Rate, etc. <br> 3. Fleet Operators can add unlimited vehicles. ';
-					this.canAddVehicle = true;//can add any number of vehicles
-					break;
+				this.checkCanAddVehicle(1) // only one allowed
 			}
+			else if (this.affiliate_type.includes('black'))
+			{
+				this.instructionBasedOnAffiliate = 'Click <img src="/assets/images/roundedPlus.png" width="20" height="20" alt="Add free icon" title="Add free icon"> Add Vehicle - If Different Year, Make, Model.';
+				this.checkCanAddVehicle(2)	// only two allowed
+			} else
+			{
+				// fleet can add any number of vehicles
+				this.instructionBasedOnAffiliate = '1. Click <img src="/assets/images/roundedPlus.png" width="20" height="20" alt="Add free icon" title="Add free icon"> Add Vehicle - If Different Year, Make, Model. <br> 2. Duplicate A Vehicle - Click View And Then Click Duplicate If Same Make and Model But Different Year, Color, Rate, etc. <br> 3. Fleet Operators can add unlimited vehicles. ';
+				this.canAddVehicle = true;
+			}
+
 			this.spinner.hide(); //hide spinner
 			this.stateManagementService.setNumberOfVehicles(this.vehiclesRes.data.totalNumberOfVehicles);
 			setTimeout(() =>
@@ -107,6 +106,7 @@ export class Step5Component implements OnInit, AfterViewChecked
 		}
 		else
 		{
+			console.log('&&&&&&&&&&&&&&&&&&&', this.canAddVehicle)
 			this.canAddVehicle = true;
 		}
 	}

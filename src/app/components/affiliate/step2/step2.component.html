@@ -70,7 +70,11 @@
 	<section class="user_information">
 		<h2 class="headinginfo adminbox_shadow">
 			Company Bank Settings
-			<span class="spanText">(Per Stripe For Identification & Direct Deposits)</span>
+			<span class="spanText">
+				(Per
+				<a href="https://www.stripe.com/" target="_blank" style="text-decoration: underline">Stripe</a>
+				- For Identification, Verification & Direct Deposits)
+			</span>
 		</h2>
 		<div class="mt-1 container">
 			<div class="row">
@@ -436,18 +440,22 @@
 		</div>
 	</section>
 	<section class="user_information">
-		<h2 class="headinginfo adminbox_shadow">
-			Owner/Company Identification
-		</h2>
 		<div class="container">
 			<div class="vehtype_extintwrap">
-				<div class="row">
-					<div class="col-md-12 text-center">
-						<button type="button" class="verifyDocButton" data-toggle="modal"
-							data-target="#verificationDocumentModal" tabindex="1">
+				<div class="row justify-content-between mb-5">
+					<div class="col-auto">
+						<h2 class="headinginfo adminbox_shadow">
+							Owner/Company Identification
+						</h2>
+					</div>
+					<div class="col-auto text-right">
+						<button id="btn-country-verify-docs" class="custom-filled-button orange-button text-center"
+							data-toggle="modal" data-target="#verificationDocumentModal" tabindex="1">
 							Acceptable Country Owner Verification Document
 						</button>
 					</div>
+				</div>
+				<div class="row">
 					<div class="col-md-5" *ngIf="id_front_image; else no_id_front_image">
 						<div class="vehtype_extint">
 							<div>
@@ -750,18 +758,16 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-md-12 mt-3">
-					<h3 class="addveh_top d-md-flex justify-content-between align-items-center mb-0">
-						<label class="alert alert-danger">
-							Complete and Verify each address field.
-							<br />
-							The address from the drop-down (above) and the address that you enter manually, should
-							match.
-							<br />
-							Enter Credit Card (OPTIONAL) for paying Affiliate
-							Farm Outs and click SAVE.
-						</label>
-					</h3>
+
+				<div class="col-md-12">
+					<div class="alert alert-danger yellow-alert-boxes">
+						<ol type="1">
+							<li>Complete and Verify each address field below.</li>
+							<li>The address from the drop-down (above) and the address that you enter manually(below),
+								should match.</li>
+							<li>Enter Credit Card (OPTIONAL) for paying Affiliate Farm Outs and click SAVE.</li>
+						</ol>
+					</div>
 				</div>
 				<div class="col-md-6">
 					<mat-form-field appearance="outline" [class.read-only]="!canChangeAddress">
@@ -948,12 +954,14 @@
 							</div>
 						</div>
 						<div class="col-md-4">
-							<label class="select-ex-month-label">Expiry Month</label>
+							<label class="select-ex-month-label">
+								Expiration Month
+							</label>
 							<div class="selectStyle">
 								<select class="selectInputStyle" (click)="selectDropdownExMonth()"
 									formControlName="primaryMM" tabindex="1">
 									<option value="">
-										Choose Expiry Month
+										Choose Expiration Month
 									</option>
 									<option value="1">01</option>
 									<option value="2">02</option>
@@ -986,11 +994,13 @@
 							</div>
 						</div>
 						<div class="col-md-4">
-							<label class="select-ex-year-label">Expiry Year</label>
+							<label class="select-ex-year-label">Expiration Year</label>
 							<div class="selectStyle">
 								<select class="selectInputStyle" (click)="selectDropdownExYear()"
 									formControlName="primaryYY" tabindex="1">
-									<option value="">Choose Expiry Year</option>
+									<option value="">
+										Choose Expiration Year
+									</option>
 									<option *ngFor="let yearOption of yearOptions" value="{{ yearOption }}">
 										{{ yearOption }}
 									</option>
@@ -1065,21 +1075,8 @@
 	</section>
 	<ng-template #stepNotCompleted>
 		<section class="user_information driverbooking_top adminbox_shadow">
-			<ul class="stripe_list">
-				<li>
-					<button class="custom-btn savebutton" (click)="submitForm()" [disabled]="disableSubmitButton"
-						tabindex="1">
-						SAVE
-					</button>
-				</li>
-				<li>
-					<button class="custom-btn resetbutton" (click)="resetForm()" tabindex="1">
-						RESET
-					</button>
-				</li>
-			</ul>
 			<h2 class="headinginfo">
-				Form-Out Booking Payment <span>(Optional)</span>
+				Farm-Out Booking Payments <span>(Optional)</span>
 			</h2>
 			<div class="containeredd">
 				<div class="row mt-3">
@@ -1181,7 +1178,7 @@
 			</button>
 			<div class="modal-header">
 				<h3 class="modal-title mb-0" id="exampleModalLabel">
-					Click Here: Acceptable Country Owner Verification Document
+					Acceptable Country Owner Verification Document
 				</h3>
 			</div>
 			<div class="modal-body">

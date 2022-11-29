@@ -118,7 +118,7 @@ export class VehicleRateSettingsComponent implements OnInit
 	 * like saving a form value or assigning a variable
 	 */
 	changeDetection = {
-		radioButton: (value: string, form_control: string) =>
+		radioButton: (form_control: string, value: any) =>
 		{
 			this.SetFormValue(form_control, value)
 		},

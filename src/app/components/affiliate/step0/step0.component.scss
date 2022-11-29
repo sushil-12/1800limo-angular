@@ -126,24 +126,13 @@ p {
 	text-align: center !important;
 }
 
-.previewImageButton {
-	position        : sticky;
-	left            : 50px;
-	color           : #fff;
-	text-transform  : uppercase;
-	padding         : 7px 0;
-	border-radius   : 10px;
-	font-size       : 12px;
-	font-weight     : 600;
-	width           : 130px;
-	display         : inline-block;
-	text-align      : center;
-	border          : 0;
-	overflow        : hidden;
-	background-color: var(--green-color);
-	cursor          : pointer;
-	text-decoration : none;
-	height          : 32px;
+.custom-filled-button.green-button:not(#btn-agree) {
+	padding: 0.275rem 0.775rem;
+	font-size: 0.835rem;
+	border-radius: 0.5rem;
+	font-weight: 500;
+	height: fit-content;
+	box-shadow: 0 2px 8px 1px rgba(66, 66, 66, 0.4);
 }
 
 // pinch zoom css
@@ -154,7 +143,7 @@ div#imageModal {
 	top     : 0;
 	left    : 0;
 	z-index : 9999;
-
+	
 	button.close {
 		background-color: #fff;
 		position        : absolute;
@@ -163,11 +152,11 @@ div#imageModal {
 		top             : 12px;
 		width           : 24px;
 	}
-
+	
 	pinch-zoom {
 		width : 100%;
 		height: 100%;
-
+		
 		img {
 			max-width : 100%;
 			max-height: 100%;
@@ -195,10 +184,6 @@ div#imageModal {
 }
 
 @media only screen and (min-width:1199px) {
-	.previewImageButton:hover {
-		background-color: #28b24b;
-	}
-
 	.previewSvg a:focus {
 		transform       : scale(1.2, 1.2);
 		background-color: #28b24b;
@@ -210,7 +195,7 @@ div#imageModal {
 		left      : -5px;
 		margin-top: 5px;
 	}
-
+	
 	.stepClass {
 		padding: 0;
 	}
@@ -218,16 +203,16 @@ div#imageModal {
 
 .modal-content:not(#photoTipModal .modal-content) {
 	background-color: var(--orange-color);
-
+	
 	.modal-header {
 		justify-content: center;
 		text-transform : uppercase;
-
+		
 		h3 {
 			font-size: 32px;
 		}
 	}
-
+	
 	hr {
 		border          : 2px solid #fff !important;
 		background-color: #fff !important;
@@ -235,7 +220,7 @@ div#imageModal {
 		margin          : 5px auto;
 		display         : block;
 	}
-
+	
 	.modal-title {
 		font-size: 18px;
 	}

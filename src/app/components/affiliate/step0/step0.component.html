@@ -181,10 +181,12 @@
 				}
 
 				svg.camera-svg {
-					width: 3.2rem;
-					padding: 0 0 10px;
-					margin-left: 15px;
+					width: 4.2rem;
+					padding: 5px;
+					margin: 0 15px;
 					cursor: pointer;
+					border-radius: 10px;
+					border: 2px solid #007bff;
 				}
 			</style>
 			<g>
@@ -198,8 +200,8 @@
 					d="M129.22,119.75c-0.02-11.43,8.36-19.82,19.76-19.8c11.39,0.02,19.68,8.43,19.64,19.91c-0.04,11.25-8.79,20.18-19.76,20.14C137.87,139.96,129.24,131.07,129.22,119.75z" />
 			</g>
 		</svg>
-		<h6 class="text-orange d-block">
-			<span class="text-orange">
+		<h6 class="text-danger d-block">
+			<span>
 				(iPhone users only take photos by portrait view.)
 			</span>
 		</h6>
@@ -284,9 +286,11 @@
 							</strong>
 						</div>
 						<div class="col-xl-6 col-lg-6 col-8 pr-2 previewSvg d-flex justify-content-end">
-							<a href="JavaScript:void(0);" data-toggle='modal' name='modalType'
-								class="previewImageButton" (click)="modalSwitch('step_1')" tabindex="1"
-								data-target='#step0Modal'>Requirements</a>
+							<button href="JavaScript:void(0);" data-toggle='modal' name='modalType'
+								class="custom-filled-button green-button" (click)="modalSwitch('step_1')" tabindex="1"
+								data-target='#step0Modal'>
+								Requirements
+							</button>
 						</div>
 						<ul *ngFor="let item of fetchContentData(6)?.other_group_listing_arr[0].multiChoice ">
 							<li>{{item.choice }}</li>
@@ -306,9 +310,11 @@
 							</strong>
 						</div>
 						<div class="col-xl-6 col-lg-6 col-8 pr-2 previewSvg d-flex justify-content-end">
-							<a href="JavaScript:void(0);" data-toggle='modal' name='modalType'
-								class="previewImageButton" (click)="modalSwitch('step_2')" tabindex="1"
-								data-target='#step0Modal'>Requirements</a>
+							<button href="JavaScript:void(0);" data-toggle='modal' name='modalType'
+								class="custom-filled-button green-button" (click)="modalSwitch('step_2')" tabindex="1"
+								data-target='#step0Modal'>
+								Requirements
+							</button>
 						</div>
 						<ul *ngFor="let item of fetchContentData(6)?.other_group_listing_arr[1].multiChoice ">
 							<li>{{ item.choice }}</li>
@@ -326,9 +332,11 @@
 							<strong>STEP 3</strong>
 						</div>
 						<div class="col-xl-6 col-lg-6 col-8 pr-2 previewSvg d-flex justify-content-end">
-							<a href="JavaScript:void(0);" data-toggle='modal' name='modalType' tabindex="1"
-								class="previewImageButton" (click)="modalSwitch('step_3')"
-								data-target='#step0Modal'>Requirements</a>
+							<button href="JavaScript:void(0);" data-toggle='modal' name='modalType' tabindex="1"
+								class="custom-filled-button green-button" (click)="modalSwitch('step_3')"
+								data-target='#step0Modal'>
+								Requirements
+							</button>
 						</div>
 						<ul>
 							<li>Insurance Documents – (add 1-800-LIMO.COM as additionally insured)</li>
@@ -346,9 +354,11 @@
 							<strong>STEP 4</strong>
 						</div>
 						<div class="col-xl-6 col-lg-6 col-8 pr-2 previewSvg d-flex justify-content-end">
-							<a href="JavaScript:void(0);" data-toggle='modal' name='modalType' tabindex="1"
-								class="previewImageButton" (click)="modalSwitch('step_4')"
-								data-target='#step0Modal'>Requirements</a>
+							<button href="JavaScript:void(0);" data-toggle='modal' name='modalType' tabindex="1"
+								class="custom-filled-button green-button" (click)="modalSwitch('step_4')"
+								data-target='#step0Modal'>
+								Requirements
+							</button>
 						</div>
 						<ul>
 							<li>Driver(s) Info and IDs – (license, background check optional – get one if you don’t have
@@ -370,9 +380,11 @@
 							<strong>STEP 5</strong>
 						</div>
 						<div class="col-xl-6 col-lg-6 col-8 pr-2 previewSvg d-flex justify-content-end">
-							<a href="JavaScript:void(0);" data-toggle='modal' name='modalType' tabindex="1"
-								class="previewImageButton" (click)="modalSwitch('step_5')"
-								data-target='#step0Modal'>Requirements</a>
+							<button href="JavaScript:void(0);" data-toggle='modal' name='modalType' tabindex="1"
+								class="custom-filled-button green-button" (click)="modalSwitch('step_5')"
+								data-target='#step0Modal'>
+								Requirements
+							</button>
 						</div>
 						<ul>
 							<li>Pix of Window or Other Permits</li>
@@ -393,9 +405,11 @@
 							<strong>STEP 6</strong>
 						</div>
 						<div class="col-xl-6 col-lg-6 col-8 pr-2 previewSvg d-flex justify-content-end">
-							<a href="JavaScript:void(0);" data-toggle='modal' name='modalType' tabindex="1"
-								class="previewImageButton" (click)="modalSwitch('step_6')"
-								data-target='#step0Modal'>Requirements</a>
+							<button href="JavaScript:void(0);" data-toggle='modal' name='modalType' tabindex="1"
+								class="custom-filled-button green-button" (click)="modalSwitch('step_6')"
+								data-target='#step0Modal'>
+								Requirements
+							</button>
 						</div>
 						<ul>
 							<li>Agree to Terms & Conditions</li>
@@ -421,8 +435,8 @@
 		</div>
 	</div>
 	<div class="row justify-content-center">
-		<button class="custom-btn agreeButton" (click)="submitForm()" [disabled]="disableSubmitButton"
-			tabindex="1">AGREE</button>
+		<button id="btn-agree" class="custom-filled-button green-button" (click)="submitForm()"
+			[disabled]="disableSubmitButton" tabindex="1">AGREE</button>
 	</div>
 </section>
 
@@ -498,7 +512,7 @@
 				</ul>
 			</div>
 			<div class="modal-footer justify-content-end">
-				<button type="button" class="btn btn-primary" data-dismiss="modal">Okay</button>
+				<button type="button" class="custom-filled-button orange-button" data-dismiss="modal">Okay</button>
 			</div>
 		</div>
 	</div>
