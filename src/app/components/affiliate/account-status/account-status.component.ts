@@ -12,7 +12,8 @@ declare var $: any;
   templateUrl: './account-status.component.html',
   styleUrls: ['./account-status.component.scss']
 })
-export class AccountStatusComponent implements OnInit {
+export class AccountStatusComponent implements OnInit
+{
 
   public account_approval: string;
   public recject_cause_message: string;
@@ -21,31 +22,37 @@ export class AccountStatusComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private stateManagementService:StateManagementService,
+    private stateManagementService: StateManagementService,
     private affiliateService: AffiliateService,
   ) { }
 
-  ngOnInit(): void {
+  ngOnInit(): void
+  {
     this.checkAffiliateAccountStatus('refresh');
   }
 
-  checkAffiliateAccountStatus(onRefresh = null) {
+  checkAffiliateAccountStatus(onRefresh = null)
+  {
     this.stateManagementService.setprogressBar(true);
     this.disableAccountStatusButton = true; //disable submit button
     this.affiliateService.checkAffiliateAccountStatus()
       .pipe(
-        catchError(err => {
+        catchError(err =>
+        {
           this.stateManagementService.setprogressBar(false);
-          this.disableAccountStatusButton = false; //enable submit button
+          this.disableAccountStatusButton = false;  //enable submit button
           return throwError(err);
         })
-      ).subscribe(({ data, message }: any) => {
+      ).subscribe(({ data, message }: any) =>
+      {
 
         this.account_approval = data.status;
-        if (!onRefresh) {
+        if (!onRefresh)
+        {
           $('#accountStatusModal').modal('show');
         }
-        switch (data.status) {
+        switch (data.status)
+        {
           case 'accepted': {
             this.stateManagementService.setprogressBar(false);
             this.disableAccountStatusButton = false; //enable submit button
