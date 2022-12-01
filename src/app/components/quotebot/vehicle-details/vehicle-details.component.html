@@ -102,7 +102,7 @@
 								View Subtotals
 							</button>
 							<button type="button" class="custom-btn" data-toggle="modal"
-								data-target="#ModalDriverDetails">
+								data-target="#ModalDriverDetails" *ngIf="selected_vehicle.driverInformation">
 								Driver Info
 							</button>
 							<button type="button" class="custom-btn" data-toggle="modal" data-target="#ModalAmenities">
@@ -559,7 +559,8 @@
 </div>
 
 
-<div aria-hidden="true" aria-labelledby="ModalDriverDetails" class="modal fade" id="ModalDriverDetails" tab-index="-1">
+<div aria-hidden="true" aria-labelledby="ModalDriverDetails" class="modal fade" id="ModalDriverDetails" tab-index="-1"
+	*ngIf="selected_vehicle.driverInformation">
 	<div class="modal-dialog modal-md">
 		<div class="modal-content">
 			<div class="modal-header">
