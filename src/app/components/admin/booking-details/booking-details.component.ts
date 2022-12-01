@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AdminService } from 'src/app/services/admin.service';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+
 
 @Component({
 	selector: 'app-booking-details',
@@ -9,92 +11,57 @@ import { AdminService } from 'src/app/services/admin.service';
 })
 export class BookingDetailsComponent implements OnInit 
 {
+	RatesForm: FormGroup
+
 	booking_id: number = 0
-	booking_details = {
-		booking: [
-			{
-				label: 'Booking Details',
-				data: [
-					'service_type',
-					'transfer_type',
-					'return_transfer_type'
-				]
-			},
-			{
-				label: 'Journey Details',
-				data: [
-					'number_of_hours',
-					'pickup_address',
-					'pickup_airport',
-					'pickup_airline',
-					'pickup_flight',
-					'dropoff_address',
-					'dropoff_airport',
-					'dropoff_airline',
-					'dropoff_flight',
-					'cruise_name',
-					'cruise_port',
-					'cruise_time',
-					'pickup_date',
-					'pickup_time',
-					'meet_greet_choices',
-					'return_pickup_address',
-					'return_pickup_airport',
-					'return_pickup_airline',
-					'return_pickup_flight',
-					'return_dropoff_address',
-					'return_dropoff_airport',
-					'return_dropoff_airline',
-					'return_dropoff_flight',
-					'return_cruise_name',
-					'return_cruise_port',
-					'return_cruise_time',
-					'return_pickup_date',
-					'return_pickup_time',
-					'return_meet_greet_choices',
-					'total_passengers',
-					'luggage_count'
-				]
-			},
-			{
-				label: 'Account Information',
-				data: [
-					'account_type',
-					'name',
-					'affiliate_type',
-					'loose_affiliate_name',
-					'loose_affiliate_email',
-					{
-						'phone': '(' + 'loose_affiliate_phone_isd' + ')' + 'loose_affiliate_phone'
-					},
-					'passenger_name',
-					'passenger_cell',
-					'passenger_email',
-					{
-						'Country Code': 'passenger_cell_isd'
-					},
-				]
-			},
-			{
-				label: 'Vehicle Preferences',
-				data: [
-					'amenities',
-					'vehicle_type_name',
-					{
-						'year': 'vehicle_year',
-						'make / model / color': 'vehicle_make' + '/' + 'vehicle_model' + '/' + 'vehicle_color',
-					}
-				]
-			},
-			{
-				label: 'Driver Preferences',
-				data: [
-					{
-						name: 'driver_name' + '(' + 'driver_phone' + ')',
-					}
-				]
-			}
-		]
+	legend = {
+		"Booking Information": {
+			"Service": "service_type/transfer_type/return_transfer_type"
+		},
+		"Journey Information": [
+			"number_of_hours",
+			"pickup_address",
+			"pickup_airport",
+			"pickup_airline",
+			"pickup_flight",
+			"dropoff_address",
+			"dropoff_airport",
+			"dropoff_airline",
+			"dropoff_flight",
+			"cruise_name",
+			"cruise_port",
+			"cruise_time",
+			"pickup_date",
+			"pickup_time",
+			"meet_greet_choices",
+			"return_pickup_address",
+			"return_pickup_airport",
+			"return_pickup_airline",
+			"return_pickup_flight",
+			"return_dropoff_address",
+			"return_dropoff_airport",
+			"return_dropoff_airline",
+			"return_dropoff_flight",
+			"return_cruise_name",
+			"return_cruise_port",
+			"return_cruise_time",
+			"return_pickup_date",
+			"return_pickup_time",
+			"return_meet_greet_choices",
+			"total_passengers",
+			"luggage_count"
+		],
+		"Vehicle Preferences": {
+			"vehicle": "vehicle_type_name",
+			"make / model / color": "vehicle_make / vehicle_model / vehicle_color",
+			"year": "year",
+			"amenities": "amenities"
+		},
+		"Driver Information": {
+			"Name": "driver_name(driver_gender)",
+			"Phone": "(driver_cell_isd)driver_cell",
+			"Email": "driver_email"
+		}
 	}
 	BookingDetails: any
 
@@ -102,7 +69,8 @@ export class BookingDetailsComponent implements OnInit
 	constructor(
 		private $activateRoute: ActivatedRoute,
 		private $router: Router,
-		private $api: AdminService
+		private $api: AdminService,
+		private $forms: FormBuilder
 	) { }
 
 	ngOnInit(): void
@@ -121,7 +89,17 @@ export class BookingDetailsComponent implements OnInit
 
 		if (this.booking_id != 0)
 		{
-			this.fetchBookingDetails(this.booking_id)
+			this.buildRatesForm()
+			this.fetchBookingDetails(this.booking_id).then((success: boolean) =>
+			{
+				if (success)
+				{
+					for (let [key, value] of Object.entries(this.BookingDetails.priceDetail))
+					{
+						this.addFormControl(key, value)
+					}
+				}
+			})
 		}
 		else
 		{
@@ -132,15 +110,35 @@ export class BookingDetailsComponent implements OnInit
 
 	fetchBookingDetails(booking_id: number)
 	{
-		this.$api.getReservationDetails(booking_id).subscribe((response: any) =>
+		return new Promise((resolve, reject) =>
 		{
-			this.BookingDetails = JSON.parse(JSON.stringify(response.data)) // make a copy
+			this.$api.getReservationDetails(booking_id).subscribe((response: any) =>
+			{
+				if (!response.success)
+				{
+					reject(false)
+					return
+				}
+				this.BookingDetails = JSON.parse(JSON.stringify(response.data)) // make a copy
+				resolve(true)
+			})
 		})
 	}
 
-	isString(value: any)
+	identifyDataType(value: any)
 	{
-		return typeof value === 'string'
+		if (Array.isArray(value))
+		{
+			return 0
+		} else
+		{
+			return 1
+		}
+	}
+
+	formatString(text: string)
+	{
+		return (text.replace(/[\_\-]/gi, ' '))
 	}
 
 
@@ -149,24 +147,98 @@ export class BookingDetailsComponent implements OnInit
 		// possibilites: '/', '()'
 		let temp: any
 
-		if (value.indexOf('/') !== -1)
+		if (this.BookingDetails)
 		{
-			temp = temp.split('/')
-			// replace every item with its value from booking detail
-			temp.forEach((item: any, index: number) =>
+			// if value is customised
+			if (/[\/]/g.test(value))
 			{
-				temp[index] = this.BookingDetails['booking_detail'][item]
-			})
-			return temp.join('/')
+				// for forward slashes
+				temp = value.split('/')
+				temp.forEach((value: string, index: number) =>
+				{
+					// change temp value at every index
+					temp[index] = this.BookingDetails.booking_detail[value] ?? ''
+				})
+				return temp.join(' / ').replace(/\s?\/\s?$/g, ' ').trim()
+			}
+
+			// if value is customised
+			if (/[\(\)]/g.test(value))
+			{
+				let a = /\(([^(]+)\)/g.exec(value.trim())
+				let b = /\)([^\)\(]+)/g.exec(value.trim()) ?? /([^\)\(]+)\(/g.exec(value.trim())
+				let extraction = a[1]
+				let leftout = b[1]
+
+				if (this.BookingDetails.booking_detail[extraction] == null && this.BookingDetails.booking_detail[leftout] == null)
+				{
+					return null
+				}
+
+				let str = value.replace(extraction, this.BookingDetails.booking_detail[extraction]).replace(leftout, this.BookingDetails.booking_detail[leftout])
+				return str
+			}
+
+			// if value is directly a key in data
+			if (/[\_]/g.test(value))
+			{
+				// for underscores
+				return this.BookingDetails.booking_detail[value]
+			}
 		}
-		else if (value.indexOf('(') !== -1 && value.indexOf(')') !== -1)
+	}
+
+	keyvalueSortingOrder()
+	{
+		// return 0 or 1 for no sorting
+		return 0
+	}
+
+
+	buildRatesForm()
+	{
+		this.RatesForm = this.$forms.group({
+			priceDetail: this.$forms.group({
+				all_inclusive_rates: new FormGroup({}),
+				others: new FormGroup({}),
+				direct_taxes: new FormGroup({}),
+				taxes: new FormGroup({}),
+				amenities: new FormGroup({}),
+			}),
+			reservation_id: ['', Validators.required],
+			sub_total: ['', Validators.required],
+			grand_total: ['', Validators.required],
+			payment_method: ['', Validators.required],
+			CreditCardsDetail: this.$forms.group({
+				cardID: [''],
+				cvc: [''],
+			}),
+		})
+		console.info('\n ----- Form Group -----', this.RatesForm)
+	}
+
+	get Form()
+	{
+		return this.RatesForm.controls
+	}
+
+	get priceDetail()
+	{
+		return this.RatesForm.controls.priceDetail as FormGroup
+	}
+
+	getFormControl(form_control: string): FormControl
+	{
+		return this.RatesForm.get(form_control) as FormControl
+	}
+
+	addFormControl(group_name: string, obj: Object)
+	{
+		console.log(group_name, obj)
+		for (let [key, value] of Object.entries(obj))
 		{
-			let extraction = value.substring(value.indexOf('('), value.indexOf(')'))
-			return this.booking_details['booking_detail']['extraction']
-		}
-		else
-		{
-			return this.BookingDetails['booking_detail'][value]
+			console.log(key, value);
+			(<FormGroup>this.priceDetail.get(group_name)).addControl(key, new FormGroup({ ...value }))
 		}
 	}
 

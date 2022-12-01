@@ -575,7 +575,7 @@
 					<div class="col-6 col-md-5">
 						<div id="driver-image-container" class="w-100">
 							<div id="driver-image" class="ml-4 w-auto">
-								<img id="d_image" class="w-100" [src]="selected_vehicle.driverInformation.imageURl" />
+								<img id="d_image" class="w-100" [src]="selected_vehicle.driverInformation.imageUrl" />
 							</div>
 						</div>
 					</div>
@@ -631,7 +631,7 @@
 				</button>
 			</div>
 			<div class="modal-body">
-				<div class="row">
+				<div class="row" *ngIf="selected_vehicle.amenities['chargeable'].length > 0">
 					<div class="col-md-12">
 						<p class="font-weight-bolder">
 							Chargeable Amenities
@@ -645,17 +645,25 @@
 						</ul>
 					</div>
 				</div>
-				<div class="row">
+				<div class="row" *ngIf="selected_vehicle.amenities['non-chargeable'].length > 0">
 					<div class="col-md-12">
 						<p class="font-weight-bolder">
 							Non-Chargeable Amenities
 						</p>
-						<ul id="chargeable-amenities" style="list-style-type: 'circle'" class="d-flex flex-wrap">
+						<ul id="chargeable-amenities" style="list-style-type: 'disc'" class="d-flex flex-wrap">
 							<li [attr.id]="'ul-noch-list-item_' + amenity_index"
 								*ngFor="let amenity of selected_vehicle.amenities['non-chargeable']; index as amenity_index">
 								{{ amenity.name }}
 							</li>
 						</ul>
+					</div>
+				</div>
+				<div class="row"
+					*ngIf="selected_vehicle.amenities['chargeable'].length == 0 && selected_vehicle.amenities['non-chargeable'].length == 0">
+					<div class="col-md-12">
+						<p class="text-danger ml-4">
+							No Amenities found for this vehicle.
+						</p>
 					</div>
 				</div>
 			</div>

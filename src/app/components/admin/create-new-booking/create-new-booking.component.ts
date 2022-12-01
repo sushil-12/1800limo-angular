@@ -1108,7 +1108,7 @@ export class CreateNewBookingComponent implements OnInit
 			return
 		}
 		console.log(this.bookingForm.value)
-		return
+
 
 		if (preview)
 		{
