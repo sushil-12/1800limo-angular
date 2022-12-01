@@ -729,9 +729,9 @@ export class SelectVehicleComponent implements OnInit
 			this.$router.navigateByUrl('/home')
 			return
 		}
-		for (let i = 0; i < this.filters.selections.length; i++)
+		while (this.filters.selections.length > 0)
 		{
-			let item = this.filters.selections[i]
+			let item = this.filters.selections[0]
 			this.filterSelection(false, item.catg_name, item.fil_index)
 		}
 		this.vehicleDetails = []
