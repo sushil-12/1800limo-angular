@@ -107,7 +107,7 @@ export class Step3Component implements OnInit, AfterViewInit
 			policyExpiredDay: ['', Validators.required],
 			policyExpiredMonth: ['', Validators.required],
 			policyExpiredYear: ['', Validators.required],
-			insuranceLimits: ['1000000', Validators.required],
+			insuranceLimits: ['500000', Validators.required],
 			AgentEmail: ['', [Validators.pattern("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")]],
 			insCertificate: ['', Validators.required],
 			insuranceCard: ['', Validators.required],

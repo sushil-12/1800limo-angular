@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { MasterVehicleTypesComponent } from './master-vehicle-types/master-vehicle-types.component';
 import { DailyBookingsComponent } from './daily-bookings/daily-bookings.component';
 import { CreateNewBookingComponent } from './create-new-booking/create-new-booking.component';
+import { CreateNewBooking2Component } from './create-new-booking2/create-new-booking2.component';
 import { QuoteComponent } from './quote/quote.component';
 import { InvoiceComponent } from './invoice/invoice.component';
 import { IndividualComponent } from './individual/individual.component';
@@ -70,7 +71,7 @@ import { EditMasterVehicleRatesComponent } from './edit-master-vehicle-rates/edi
 import { AmenitiesSpecialComponent } from './amenities-special/amenities-special.component';
 import { AmenitiesInteriorComponent } from './amenities-interior/amenities-interior.component';
 import { MasterVehicleFareComponent } from './master-vehicle-fare/master-vehicle-fare.component';
-import { BookingDetailsComponent } from './booking-details/booking-details.component';
+// import { BookingDetailsComponent } from './booking-details/booking-details.component';
 
 
 const routes: Routes = [
@@ -191,7 +192,7 @@ const routes: Routes = [
 	{
 		path: 'booking-details',
 		canActivate: [SubAdminGuard],
-		component: BookingDetailsComponent
+		component: CreateNewBooking2Component
 	},
 	{
 		path: 'quote-admin',

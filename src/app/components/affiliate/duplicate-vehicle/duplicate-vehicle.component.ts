@@ -224,11 +224,6 @@ export class DuplicateVehicleComponent implements OnInit, AfterViewChecked
 		});
 
 		this.affiliateType = currentUser.affiliate_type;
-		if (this.affiliateType != 'fleet_operator')
-		{
-			this.addVehicleForm.controls['rearPlateImage'].setValidators([Validators.required]);
-			this.addVehicleForm.controls['rearPlateImage'].updateValueAndValidity();
-		}
 
 		/** progress bar starts on init */
 		this.stateManagementService.setprogressBar(true);

@@ -46,7 +46,7 @@
 	<!-- Perforated Line -->
 	<hr class="perforated-line" />
 
-	<div id="booking-content">
+	<div id="booking-content" formGroup="RatesForm">
 		<!-- Amenities -->
 		<div id="header" class="para-section">
 			<h2>
@@ -55,20 +55,21 @@
 		</div>
 
 		<!-- PRICE DETAILS -->
-		<div id="section-incl-rates" class="para-section"
-			*ngIf="BookingDetails.priceDetail && BookingDetails.priceDetail.length > 0; else noPriceDetails">
+		<div id="section-incl-rates" class="para-section" *ngIf="BookingDetails.priceDetail; else noPriceDetails">
 			<!-- All Inclusive Rates -->
-			<div id="details_index" class="row align-items-center"
-				*ngFor="let details of BookingDetails.priceDetail.all_inclusive_rates | keyvalue : keyvalueSortingOrder; index as details_index">
+			<div id="details_index" class="row align-items-center">
 				<p class="col-md-5">
-					{{ formatString(details.key) | titlecase }}
+					<!-- {{ formatString(details.key) | titlecase }} -->
+					{{ PriceDetails?.all_incl_rates?.rate_label }}
 				</p>
 				<div class="col-md-7 text-right">
 					<mat-form-field appearance="outline">
 						<mat-label>
-							{{ details.value.rate_label }}
+							{{ PriceDetails?.all_incl_rates?.rate_label }}
 						</mat-label>
-						<input type="number" matInput [attr.id]="'input-' + details.key + '-' + details_index" />
+						<input type="number" matInput [attr.id]="'input_price_' + details_index"
+							[attr.placeholder]="PriceDetails?.all_incl_rates?.rate_amount"
+							(change)="inputChangeCapture($event.value, PriceDetails?.all_incl_rates?.rate_label)" />
 					</mat-form-field>
 				</div>
 			</div>

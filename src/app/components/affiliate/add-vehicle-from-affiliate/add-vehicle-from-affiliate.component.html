@@ -1264,13 +1264,6 @@
 									Rear Plate
 									<span class="optionalTextStyle">(w/exp decal)
 									</span>
-									<span *ngIf="
-											affiliateType != 'fleet_operator';
-											else nonFleetOperator
-										" class="asterisk">*</span>
-									<ng-template #nonFleetOperator>
-										<span class="optionalTextStyle">(optional)</span>
-									</ng-template>
 								</p>
 								<img src="{{ rearPlateImage }}" (click)="showImageInModal(rearPlateImage)"
 									tabindex="-1" />
@@ -1324,14 +1317,6 @@
 								<div>
 									<p>
 										Rear Plate Image
-										<span *ngIf="
-												affiliateType !=
-													'fleet_operator';
-												else nonFleetOperator
-											" class="asterisk">*</span>
-										<ng-template #nonFleetOperator>
-											<span class="optionalTextStyle">(optional)</span>
-										</ng-template>
 									</p>
 									<div class="emptyImage">
 										<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
