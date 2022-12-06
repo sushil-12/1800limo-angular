@@ -39,7 +39,7 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 	public desktopWidth: any;
 	public currentYear: number = new Date().getFullYear();
 	public progressBar: boolean;
-	chevron: boolean = false;
+	chevron_up: boolean = false;
 
 	is_email_verified: boolean = true
 	is_bank_verified: boolean = true
@@ -409,9 +409,10 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 			}
 		}
 	}
-	chevronFunctionality()
+
+
+	toggleChevron()
 	{
-		this.chevron = !this.chevron
-		console.log(this.chevron)
+		this.chevron_up = !this.chevron_up
 	}
 }

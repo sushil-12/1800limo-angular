@@ -23,12 +23,12 @@ export class Step5Component implements OnInit, AfterViewChecked
 	public canAddVehicle: boolean = false;
 	public currentUser: any = {};
 	public vehicleToDelete: number;
-	public instructionBasedOnAffiliate: string;
 	public amenityList: Array<string>;
 	public stepCompleted: any;
 	public alertMessage: string;
 	public showInstructionIfStepNotCompleted: boolean = false;
 	affiliate_type: any;
+	is_account_accepted: boolean = false
 
 	constructor(
 		private affiliateService: AffiliateService,
@@ -66,6 +66,7 @@ export class Step5Component implements OnInit, AfterViewChecked
 		{
 			this.showInstructionIfStepNotCompleted = true;
 		}
+		this.is_account_accepted = localStorage.getItem('account_approval') == 'accepted'
 
 		// Load Our vehicles using API
 		this.affiliateService.affiliateVehicleList().then(result =>
@@ -80,12 +81,9 @@ export class Step5Component implements OnInit, AfterViewChecked
 			}
 			else if (this.affiliate_type.includes('black'))
 			{
-				this.instructionBasedOnAffiliate = 'Click <img src="/assets/images/roundedPlus.png" width="20" height="20" alt="Add free icon" title="Add free icon"> Add Vehicle - If Different Year, Make, Model.';
 				this.checkCanAddVehicle(2)	// only two allowed
 			} else
 			{
-				// fleet can add any number of vehicles
-				this.instructionBasedOnAffiliate = '1. Click <img src="/assets/images/roundedPlus.png" width="20" height="20" alt="Add free icon" title="Add free icon"> Add Vehicle - If Different Year, Make, Model. <br> 2. Duplicate A Vehicle - Click View And Then Click Duplicate If Same Make and Model But Different Year, Color, Rate, etc. <br> 3. Fleet Operators can add unlimited vehicles. ';
 				this.canAddVehicle = true;
 			}
 

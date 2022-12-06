@@ -817,7 +817,7 @@ mat-progress-bar.my-color .mat-progress-bar-fill::after {
 }
 
 #layoutSidenav #layoutSidenav_nav {
-	flex-basis : 20rem;
+	flex-basis : 22rem;
 	flex-shrink: 0;
 	transition : transform 0.15s ease-in-out;
 	z-index    : 1038;
@@ -1364,6 +1364,7 @@ h2.headinginfo .orangeHeading {
 	border-right      : 4px solid;
 	border-left-color : transparent;
 	border-right-color: transparent;
+	white-space: nowrap;
 }
 
 .affilate-wrapper .sidenav-menu .nav-item:nth-child(2) a {
@@ -1659,8 +1660,8 @@ h2.headinginfo .orangeHeading {
 }
 
 .dropdwn .bi-chevron-down::before {
-	position: relative;
-	left    : 90%;
+	position: absolute;
+	right    : 8%;
 	font-weight: 800 !important;
 }
 
@@ -2438,30 +2439,6 @@ mat-dialog-container {
 @media only screen and (max-width: 767px) {
 	.loginwrapper #icon {
 		width: 100%;
-	}
-}
-
-
-/**/
-
-
-/*7-9-2021*/
-
-table #navbarDropdownUserImage {
-	background-color: var(--green-color);
-	color           : #fff;
-	padding         : 8px 15px !important;
-	border-radius   : 3rem !important;
-}
-
-@media only screen and (min-width:1199px) {
-	table #navbarDropdownUserImage:hover {
-		background-color: #28b24b;
-	}
-
-	table #navbarDropdownUserImage:focus {
-		transform       : scale(1.1, 1.1);
-		background-color: #28b24b;
 	}
 }
 

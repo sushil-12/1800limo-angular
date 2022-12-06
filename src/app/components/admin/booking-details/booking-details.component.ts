@@ -281,6 +281,7 @@ export class BookingDetailsComponent implements OnInit
 	}
 
 	inputChangeCapture(value: any, form_control: string)
+	{ }
 
 
 

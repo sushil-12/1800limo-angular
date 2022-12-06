@@ -1,31 +1,23 @@
 <section class="driverbooking_top user_information">
-	<h2 class="headinginfo">Add Vehicle<span *ngIf="affiliate_type == 'black_limo_operator' || affiliate_type == 'fleet_operator'">(s)</span></h2>
+	<h2 class="headinginfo">Add Vehicle</h2>
 	<div class="containeredd">
 		<div class="row mt-3">
 			<div class="col-md-12 mb-2">
-				<label class="alert alert-danger" *ngIf="affiliate_type == 'fleet_operator'; else black_limo_operator">Enter only one vehicle to
-					complete
-					registeration. Enter more vehicles later.</label>
-				<ng-template #black_limo_operator>
-					<label class="alert alert-danger" *ngIf="affiliate_type == 'black_limo_operator'">
-						Add Up To 2 Vehicles Only.
-					</label>
-				</ng-template>
-				<label class="alert alert-danger" *ngIf="affiliate_type == 'gig_operator' || affiliate_type == 'taxi_operator'">
-					Enter only one vehicle to complete registeration.
-				</label>
-			</div>
-			<div class="col-md-12 mb-2" [hidden]="affiliate_type == 'taxi_operator' && affiliate_type == 'gig_operator'">
-				<label class="alert alert-danger" *ngIf="instructionBasedOnAffiliate" [innerHTML]="instructionBasedOnAffiliate"></label>
+				<ol class="alert alert-danger">
+					<li> Enter only one vehicle to complete registration. Enter more vehicles after.</li>
+					<li *ngIf="is_account_accepted"> Click add vehicle - if a different year, make and model. </li>
+					<li *ngIf="is_account_accepted"> Click duplicate vehicle, under Actions, if same make, model but
+						different year, color, rate
+					</li>
+				</ol>
 			</div>
 		</div>
-		<div class="row" *ngIf="canAddVehicle">
+		<div class="row mb-4" *ngIf="canAddVehicle">
 			<div class="col-md-12">
-				<button type="button" class="custom-btn add-button" (click)="addVehicleClick(vehicleTypeId)" tabindex="1">
-					<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
-						<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
-						<path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
-					</svg> Add Vehicle
+				<button type="button" class="custom-filled-button" (click)="addVehicleClick(vehicleTypeId)"
+					tabindex="1">
+					<i class="bi bi-plus-lg" style="font-size: 1.2rem"></i>
+					Add Vehicle
 				</button>
 			</div>
 		</div>
@@ -34,8 +26,8 @@
 		<div class="row">
 			<div class="col-md-12 custom_table">
 				<div class="table-responsive">
-					<table class="table table-striped dataTable dt-responsive" id="dataTable" role="grid" aria-describedby="dataTable_info"
-						style="width: 100%;" width="100%" cellspacing="0">
+					<table class="table table-striped dataTable dt-responsive" id="dataTable" role="grid"
+						aria-describedby="dataTable_info" style="width: 100%;" width="100%" cellspacing="0">
 						<thead>
 							<tr role="row">
 								<th>Image</th>
@@ -63,17 +55,24 @@
 									<td>{{vehicle.make}}</td>
 									<td>{{vehicle.model}}</td>
 									<td>{{vehicle.color}}</td>
-									<td><button (click)="updateAmenityList(vehicle.amenities)" class="button2" tabindex="1">Amenity
-											List</button></td>
+									<td>
+										<button (click)="updateAmenityList(vehicle.amenities)"
+											class="custom-filled-button" tabindex="1">
+											Amenity List
+										</button>
+									</td>
 									<td>{{vehicle.licensePlate}}</td>
 									<td>
-										<i class="fa fa-trash" style="font-size: x-large; color:#d64646" (click)="enableDisableClicked(vehicle.id)"
-											data-toggle="modal" data-target="#deleteConfirmationModal"></i>
+										<i class="fa fa-trash" style="font-size: x-large; color:#d64646"
+											(click)="enableDisableClicked(vehicle.id)" data-toggle="modal"
+											data-target="#deleteConfirmationModal"></i>
 									</td>
 									<td>
-										<a class="user-profileded btn btn-icon btn-transparent-dark dropdown-toggle" data-toggle="dropdown"
-											[ngClass]="!vehicle.isRatesCompleted ? 'notCompleted' : ''" id="navbarDropdownUserImage"
-											href="javascript:void(0);" role="button" aria-haspopup="true" aria-expanded="false" tabindex="1">
+										<a class="user-profileded btn btn-icon btn-transparent-dark dropdown-toggle"
+											data-toggle="dropdown"
+											[ngClass]="!vehicle.isRatesCompleted ? 'notCompleted' : ''"
+											id="navbarDropdownUserImage" href="javascript:void(0);" role="button"
+											aria-haspopup="true" aria-expanded="false" tabindex="1">
 											<span>View</span>
 										</a>
 										<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
@@ -82,12 +81,14 @@
 												<div class="dropdown-item-icon"></div>
 												Edit Vehicle
 											</a>
-											<a class="dropdown-item" [ngClass]="{notCompleted: !vehicle.isRatesCompleted}"
+											<a class="dropdown-item"
+												[ngClass]="{notCompleted: !vehicle.isRatesCompleted}"
 												(click)="clickEditVehicleRates(vehicle.ID)">
 												<div class="dropdown-item-icon"></div>
 												{{ vehicle.isRatesCompleted ? 'Edit' : 'Add'}} Rates
 											</a>
-											<a *ngIf="canAddVehicle" class="dropdown-item" (click)="clickDuplicateVehicle(vehicle.ID)">
+											<a *ngIf="canAddVehicle" class="dropdown-item"
+												(click)="clickDuplicateVehicle(vehicle.ID)">
 												<div class="dropdown-item-icon"></div>
 												Duplicate Vehicle
 											</a>
@@ -110,8 +111,9 @@
 <app-delete-confirmation (deleteRecord)="delete()" [alertMessage]="alertMessage"></app-delete-confirmation>
 
 <!-- Amenity list modal -->
-<div class="modal fade" id="amenityListModal" tabindex="-1" role="dialog" aria-labelledby="amenityListModal" aria-hidden="true">
-	<div class="modal-dialog" role="document">
+<div class="modal fade" id="amenityListModal" tabindex="-1" role="dialog" aria-labelledby="amenityListModal"
+	aria-hidden="true">
+	<div class="modal-dialog modal-md" role="document">
 		<div class="modal-content">
 			<div class="modal-body">
 				<ul class="mb-0">

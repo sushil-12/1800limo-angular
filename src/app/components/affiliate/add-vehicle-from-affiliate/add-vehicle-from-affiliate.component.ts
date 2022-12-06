@@ -223,7 +223,7 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 
 		//Put Black color value by default in Color
 		let vehicleTypeField: any = document.getElementById('vehicleTypeField');
-		vehicleTypeField.value = "Mid-Size Sedan / SUV";
+		vehicleTypeField.value = "Mid-Size Vehicle";
 		this.addVehicleForm.patchValue({
 			vehicleType: 1,
 		});

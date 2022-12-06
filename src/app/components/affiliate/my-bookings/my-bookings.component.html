@@ -3,9 +3,9 @@
 <section class="adminbox_shadow user_information">
 	<h2 class="headinginfo"> My Bookings </h2>
 	<div class="containeredd mt-1 ">
-		<div class="row my-2">
+		<div class="row align-items-center mt-4 mb-3 w-100">
 			<div class="col-md-3">
-				<mat-form-field appearance="outline">
+				<mat-form-field appearance="outline" class="m-0">
 					<mat-label>Start Date<span class="asterisk">*</span></mat-label>
 					<input matInput [setOutputDateFormat]="outputDateFormat" [matDatepicker]="picker1"
 						placeholder="Start Date" id="id_4" (dateChangeWithFormat)="changeDate('startDate',$event)"
@@ -15,7 +15,7 @@
 				</mat-form-field>
 			</div>
 			<div class="col-md-3">
-				<mat-form-field appearance="outline">
+				<mat-form-field appearance="outline" class="m-0">
 					<mat-label>End Date<span class="asterisk">*</span></mat-label>
 					<input matInput [setOutputDateFormat]="outputDateFormat" [matDatepicker]="picker2"
 						placeholder="End Date" id="id_5" (dateChangeWithFormat)="changeDate('endDate',$event)"
@@ -24,15 +24,14 @@
 					<mat-datepicker #picker2></mat-datepicker>
 				</mat-form-field>
 			</div>
-			<div class="col-md-4  startdate2">
-				<mat-form-field appearance="outline">
+			<div class="col-md-4">
+				<mat-form-field appearance="outline" class="m-0">
 					<mat-label>Search</mat-label>
 					<input matInput type="text" placeholder="Search by Date, Name or keyword" id="keyword">
 				</mat-form-field>
 			</div>
-			<div class="col-md-2  startdate3">
-				<label></label>
-				<button class="custom-btn btnclass savebutton" (click)="loadBookings()">SEARCH</button>
+			<div class="col-md-2">
+				<button class="custom-filled-button" (click)="loadBookings()">SEARCH</button>
 			</div>
 		</div>
 	</div>
