@@ -42,6 +42,11 @@ input, input::placeholder, input::-webkit-input-placeholder {
 	cursor: pointer;
 }
 
+hr
+{
+	border-top: 2.5px solid rgba(0, 0, 0, 0.7);
+}
+
 button.custom-filled-button {
 	padding           : 0.475rem 2.358rem;
 	border-radius     : 0.895rem;
@@ -57,7 +62,7 @@ button.custom-filled-button {
 	-moz-appearance   : button;
 	-webkit-appearance: button;
 	transition: box-shadow 0.1s ease-in-out;
-	box-shadow: 0px 5px 10px 1px rgba(0, 0, 0, 0.4);
+	box-shadow: 0px 5px 20px -6px rgb(0, 0, 0, 0.6);
 	&:active
 	{
 		box-shadow: 0px 5px 10px -1px rgb(0 0 0 / 30%);

@@ -64,6 +64,7 @@ export class BookingDetailsComponent implements OnInit
 		}
 	}
 	BookingDetails: any
+	PriceDetails: any = {}
 
 
 	constructor(
@@ -98,6 +99,9 @@ export class BookingDetailsComponent implements OnInit
 					{
 						this.addFormControl(key, value)
 					}
+
+					// check which rates to show and which to hide. validate them by comparing and fill values accordingly
+					this.validateCheckAndShowRates(this.BookingDetails.priceDetail)
 				}
 			})
 		}
@@ -108,7 +112,13 @@ export class BookingDetailsComponent implements OnInit
 		}
 	}
 
-	fetchBookingDetails(booking_id: number)
+	/**
+	 * return new promise object with confirmation of booking details populated.
+	 * 
+	 * @params booking_id: Number [Required] unique booking id
+	 * @returns Promise<boolean>
+	 */
+	fetchBookingDetails(booking_id: number): Promise<boolean>
 	{
 		return new Promise((resolve, reject) =>
 		{
@@ -234,13 +244,44 @@ export class BookingDetailsComponent implements OnInit
 
 	addFormControl(group_name: string, obj: Object)
 	{
-		console.log(group_name, obj)
 		for (let [key, value] of Object.entries(obj))
 		{
-			console.log(key, value);
-			(<FormGroup>this.priceDetail.get(group_name)).addControl(key, new FormGroup({ ...value }))
+			(<FormGroup>this.priceDetail.get(group_name)).addControl(key, new FormControl())
 		}
 	}
+
+
+
+	/**
+	 * Check and Validate Rates to show
+	 */
+	validateCheckAndShowRates(prices?: Object)
+	{
+		if (prices['all_inclusive_rates'])
+		{
+			let rate_label = Object.keys(prices['all_inclusive_rates']).find(ele => ele.match(/(.)+_rate/gi))
+			console.log(rate_label)
+			let rate = prices['all_inclusive_rates'][rate_label]
+
+			this.PriceDetails['all_incl_rates'] = {}
+			this.PriceDetails['all_incl_rates']['rate_label'] = rate.rate_label
+			this.PriceDetails['all_incl_rates']['rate_amount'] = rate.amount
+
+			// if(!rate_label.toLowerCase().includes('minimum') && rate.amount > prices['all_inclusive_rates']['Minimum_Rate'].amount)
+			// {
+			// 	this.PriceDetails['all_incl_rates']['rate_label'] = rate.rate_label
+			// 	this.PriceDetails['all_incl_rates']['rate_amount'] = rate.amount
+			// }
+			// else
+			// {
+			// 	this.PriceDetails['all_incl_rates']['rate_label'] = "Minumum Rate"
+			// 	this.PriceDetails['all_incl_rates']['rate_amount'] = 
+			// }
+		}
+	}
+
+	inputChangeCapture(value: any, form_control: string)
+	{ }
 
 
 

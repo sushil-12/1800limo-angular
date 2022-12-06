@@ -856,11 +856,6 @@
 						<div class="vehtype_extint">
 							<div>
 								<p>Rear Plate <span class="optionalTextStyle">(w/exp decal) </span>
-									<span *ngIf="affiliateType!='fleet_operator'; else nonFleetOperator"
-										class="asterisk">*</span>
-									<ng-template #nonFleetOperator>
-										<span class="optionalTextStyle">(optional)</span>
-									</ng-template>
 								</p>
 								<img src="{{rearPlateImage}}" (click)="showImageInModal(rearPlateImage)" tabindex="-1">
 								<ul class="mt-3">

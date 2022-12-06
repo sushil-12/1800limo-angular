@@ -19,6 +19,7 @@ import { AdminComponent } from './admin.component';
 import { MasterVehicleTypesComponent } from './master-vehicle-types/master-vehicle-types.component';
 import { DailyBookingsComponent } from './daily-bookings/daily-bookings.component';
 import { CreateNewBookingComponent } from './create-new-booking/create-new-booking.component';
+import { CreateNewBooking2Component } from './create-new-booking2/create-new-booking2.component';
 import { QuoteComponent } from './quote/quote.component';
 import { InvoiceComponent } from './invoice/invoice.component';
 import { CreateDebitCcCardComponent } from './create-debit-cc-card/create-debit-cc-card.component';
@@ -100,6 +101,7 @@ import { BookingDetailsComponent } from './booking-details/booking-details.compo
 		MasterVehicleTypesComponent,
 		DailyBookingsComponent,
 		CreateNewBookingComponent,
+		CreateNewBooking2Component,
 		QuoteComponent,
 		InvoiceComponent,
 		CreateDebitCcCardComponent,

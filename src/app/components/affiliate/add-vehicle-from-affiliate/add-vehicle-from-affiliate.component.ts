@@ -223,17 +223,12 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 
 		//Put Black color value by default in Color
 		let vehicleTypeField: any = document.getElementById('vehicleTypeField');
-		vehicleTypeField.value = "Mid-Size Sedan / SUV";
+		vehicleTypeField.value = "Mid-Size Vehicle";
 		this.addVehicleForm.patchValue({
 			vehicleType: 1,
 		});
 
 		this.affiliateType = currentUser.affiliate_type;
-		if (this.affiliateType != 'fleet_operator')
-		{
-			this.addVehicleForm.controls['rearPlateImage'].setValidators([Validators.required]);
-			this.addVehicleForm.controls['rearPlateImage'].updateValueAndValidity();
-		}
 
 		this.stateManagementService.getNumberOfVehicles().subscribe(numberOfVehicles =>
 		{
@@ -304,13 +299,13 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 
 				if (this.affiliateType != 'fleet_operator')
 				{
-					this.rearPlateImage = this.oldvehicleImage[9] = this.response.data.rear_plate.image;
+					// this.rearPlateImage = this.oldvehicleImage[9] = this.response.data.rear_plate.image;
 					// this.windowPermitImage = this.oldvehicleImage[10] = this.response.data.window_permit.image;
 					// this.windowPermit2Image = this.oldvehicleImage[11] = this.response.data.window_permit_1.image;
 					// this.usdotPermitImage = this.oldvehicleImage[12] = this.response.data.USDOT_permit.image;
 					// this.mcImage = this.oldvehicleImage[13] = this.response.data.mc.image;
 
-					this.rearPlateId = this.response.data.rear_plate.id;
+					// this.rearPlateId = this.response.data.rear_plate.id;
 					// this.windowPermitId = this.response.data.window_permit.id;
 					// this.windowPermit2Id = this.response.data.window_permit_1.id;
 					// this.usdotPermitId = this.response.data.USDOT_permit.id;

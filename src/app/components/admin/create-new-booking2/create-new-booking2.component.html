@@ -660,7 +660,7 @@ ickup Latitude/Longitude:
 													<mat-label>Milage Rate</mat-label>
 													<mat-form-field appearance="outline">
 														<input type="number" matInput formControlName="baserate"
-															(input)="calculateRates('all_inclusive_rates',air.key,air.value.value)">
+															(change)="calculateRates('all_inclusive_rates',air.key,air.value.value)">
 													</mat-form-field>
 												</td>
 												<td class="resultwidth">
@@ -707,7 +707,7 @@ ickup Latitude/Longitude:
 														<mat-label>Hourly Rate</mat-label>
 														<mat-form-field appearance="outline">
 															<input type="number" matInput formControlName="baserate"
-																(input)="calculateRates('all_inclusive_rates',air.key,air.value.value)">
+																(change)="calculateRates('all_inclusive_rates',air.key,air.value.value)">
 														</mat-form-field>
 													</td>
 													<td class="resultwidth">
@@ -745,7 +745,7 @@ ickup Latitude/Longitude:
 														<input matInput type="number" id="{{other.key}}"
 															formControlName="percentage"
 															(click)="clickRates($event.target.value)"
-															(input)="calculateRates(other.key,other.key,other.value.value)">
+															(change)="calculateRates(other.key,other.key,other.value.value)">
 													</mat-form-field>
 												</td>
 												<td class="emptywidth"></td>
@@ -830,7 +830,7 @@ ickup Latitude/Longitude:
 													<mat-form-field appearance="outline">
 														<input type="number" matInput id="{{'tax'+tax.key}}"
 															formControlName="percentage"
-															(input)="calculateRates('taxes',tax.key,tax.value.value)">
+															(change)="calculateRates('taxes',tax.key,tax.value.value)">
 													</mat-form-field>
 												</td>
 												<td class="resultwidth">
@@ -859,7 +859,7 @@ ickup Latitude/Longitude:
 														<mat-form-field appearance="outline">
 															<input type="number" matInput id="{{'tax'+tax.key}}"
 																formControlName="flat_baserate"
-																(input)="calculateRates('taxes',tax.key,tax.value.value)">
+																(change)="calculateRates('taxes',tax.key,tax.value.value)">
 														</mat-form-field>
 													</td>
 													<td class="resultwidth">

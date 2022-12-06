@@ -1253,15 +1253,7 @@
 						<div class="vehtype_extint">
 							<div>
 								<p>
-									Rear Plate<span class="optionalTextStyle">(w/exp decal)
-									</span>
-									<span *ngIf="
-											affiliateType != 'fleet_operator';
-											else nonFleetOperator
-										" class="asterisk">*</span>
-									<ng-template #nonFleetOperator>
-										<span class="optionalTextStyle">(optional)</span>
-									</ng-template>
+									Rear Plate
 								</p>
 								<img src="{{ rearPlateImage }}" (click)="showImageInModal(rearPlateImage)"
 									tabindex="-1" />
@@ -1313,7 +1305,7 @@
 						<div class="col-md-4">
 							<div class="vehtype_extint">
 								<div>
-									<p>Window Permit</p>
+									<p>Rear Plate</p>
 									<div class="emptyImage">
 										<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
 									</div>
@@ -1323,8 +1315,8 @@
 												<input type="file" (change)="
 														vehicleOfficialImagesChange(
 															$event,
-															'windowPermit',
-															windowPermitId
+															'rearPlate',
+															rearPlateId
 														)
 													" tabindex="-1" />
 												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
