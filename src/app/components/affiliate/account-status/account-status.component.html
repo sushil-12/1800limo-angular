@@ -1,141 +1,144 @@
-<main>
-	<section class="user_information">
-		<div class="agreement_step0">
-			<button class="custom-btn savebutton btnpadding" (click)="checkAffiliateAccountStatus()"
-				[disabled]="disableAccountStatusButton">Check Account
-				Status
-			</button>
-			<div class="alertBox">
-				<h5>Thank you for fully registering. <br>
-					Admin will notify you with your status change.</h5>
+<div class="user_information">
+	<div id="content-container" class="px-3">
+		<div id="content" class="row justify-content-end">
+			<div id="refresh-button-container" class="m-3">
+				<button id="refresh-button" class="custom-filled-button" (click)="checkAffiliateAccountStatus()">
+					<i class="bi bi-arrow-clockwise mr-2" style="font-size: 1.3rem"></i>
+					Refresh
+				</button>
 			</div>
-			<div class="step0Div pt-4">
-				<div *ngIf="account_approval=='completed'; else rejectionMessage">
-					<ol>
-						<li>Your application has been sent to Admin.</li>
-						<li>Please allow Admin to review and will notify you ASAP.</li>
-						<li>Thank you for taking the time to begin networking with the best affiliates and clients in
-							the world.</li>
-					</ol>
-				</div>
-				<ng-template #rejectionMessage>
-					<p>
-						{{recject_cause_message}}
-					</p>
-				</ng-template>
+		</div>
+
+		<!-- Status Message -->
+		<div class="row">
+			<div class="col-md-12">
+				<p id="account-approval-status-container">
+					Status:
+					<span [ngClass]="status_color">
+						{{ status_title }}
+					</span>
+				</p>
+				<p class="px-3" *ngIf="status_message">
+					{{ status_message }}
+				</p>
+				<p class="px-3" *ngIf="reasons">
+					{{ this.reasons }}
+				</p>
 			</div>
-			<div class="socials iconStyle">
-				<a href=" https://www.facebook.com/1800LIMO">
-					<!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'>
-					<svg enable-background="new 0 0 128 128" height="128px" id="Layer_1" version="1.1"
-						viewBox="0 0 128 128" width="128px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
-						xmlns:xlink="http://www.w3.org/1999/xlink">
-						<g>
-							<circle cx="64" cy="64" fill="#3C579E" r="64" />
-						</g>
-						<path
-							d="M56.256,104V67.854H43.355V54.965h12.903V43.069c0-12,7.084-19.069,17.788-19.069  c5.129,0,9.313,0.548,10.598,0.719v13.478l-8.617-0.004c-5.819,0-6.91,2.887-6.91,6.945v9.828h14.916l-2.106,12.888H69.119V104  H56.256z"
-							fill="#FFFFFF" />
-					</svg>
-				</a>
+		</div>
 
-				<a href="https://twitter.com/1800LIMO">
-					<!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'>
-					<svg enable-background="new 0 0 128 128" height="128px" id="Layer_1" version="1.1"
-						viewBox="0 0 128 128" width="128px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
-						xmlns:xlink="http://www.w3.org/1999/xlink">
-						<g>
-							<circle cx="64" cy="64" fill="#55ACEE" r="64" />
-						</g>
-						<g>
-							<path
-								d="M105,40.189c-2.943,1.306-6.105,2.188-9.428,2.584c3.39-2.031,5.99-5.248,7.217-9.08   c-3.171,1.881-6.684,3.247-10.422,3.983c-2.994-3.19-7.26-5.184-11.979-5.184c-9.065,0-16.414,7.349-16.414,16.412   c0,1.287,0.146,2.539,0.426,3.741C50.758,51.96,38.665,45.426,30.57,35.497c-1.413,2.423-2.223,5.243-2.223,8.251   c0,5.694,2.898,10.718,7.302,13.661c-2.69-0.085-5.222-0.824-7.434-2.054c-0.002,0.069-0.002,0.138-0.002,0.207   c0,7.954,5.657,14.584,13.166,16.093c-1.378,0.375-2.827,0.575-4.324,0.575c-1.058,0-2.086-0.103-3.088-0.295   c2.089,6.521,8.15,11.268,15.332,11.399c-5.617,4.401-12.694,7.024-20.384,7.024c-1.325,0-2.632-0.076-3.915-0.229   c7.263,4.657,15.892,7.374,25.16,7.374c30.188,0,46.697-25.01,46.697-46.698c0-0.711-0.018-1.42-0.049-2.123   C100.018,46.371,102.799,43.48,105,40.189"
-								fill="#FFFFFF" />
-						</g>
-					</svg>
-				</a>
+		<div class="row" *ngIf="account_approval_status == 'completed'">
+			<div class="col-md-12">
+				<ol class="d-block">
+					<li>Your application has been sent to Admin.</li>
+					<li>Please allow Admin to review and will notify you ASAP.</li>
+					<li>Thank you for taking the time to begin networking with the best affiliates and clients in
+						the world.</li>
+				</ol>
+			</div>
+		</div>
 
-				<a href="https://www.linkedin.com/company/1800LIMO">
-					<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-						xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 291.319 291.319"
-						style="enable-background:new 0 0 291.319 291.319;" xml:space="preserve">
-						<g>
-							<path style="fill:#0E76A8;" d="M145.659,0c80.45,0,145.66,65.219,145.66,145.66s-65.21,145.659-145.66,145.659S0,226.1,0,145.66
+		<!-- Alert Box -->
+		<div class="alertBox" *ngIf="account_approval_status == 'completed'">
+			<h5>
+				Thank you for fully registering. <br>
+				Admin will notify you with your status change.
+			</h5>
+		</div>
+	</div>
+
+
+	<!-- Social Media Icons -->
+	<div class="socials iconStyle mt-5">
+		<a href=" https://www.facebook.com/1800LIMO">
+			<!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'>
+			<svg enable-background="new 0 0 128 128" height="128px" id="Layer_1" version="1.1" viewBox="0 0 128 128"
+				width="128px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
+				xmlns:xlink="http://www.w3.org/1999/xlink">
+				<g>
+					<circle cx="64" cy="64" fill="#3C579E" r="64" />
+				</g>
+				<path
+					d="M56.256,104V67.854H43.355V54.965h12.903V43.069c0-12,7.084-19.069,17.788-19.069  c5.129,0,9.313,0.548,10.598,0.719v13.478l-8.617-0.004c-5.819,0-6.91,2.887-6.91,6.945v9.828h14.916l-2.106,12.888H69.119V104  H56.256z"
+					fill="#FFFFFF" />
+			</svg>
+		</a>
+
+		<a href="https://twitter.com/1800LIMO">
+			<!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'>
+			<svg enable-background="new 0 0 128 128" height="128px" id="Layer_1" version="1.1" viewBox="0 0 128 128"
+				width="128px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
+				xmlns:xlink="http://www.w3.org/1999/xlink">
+				<g>
+					<circle cx="64" cy="64" fill="#55ACEE" r="64" />
+				</g>
+				<g>
+					<path
+						d="M105,40.189c-2.943,1.306-6.105,2.188-9.428,2.584c3.39-2.031,5.99-5.248,7.217-9.08   c-3.171,1.881-6.684,3.247-10.422,3.983c-2.994-3.19-7.26-5.184-11.979-5.184c-9.065,0-16.414,7.349-16.414,16.412   c0,1.287,0.146,2.539,0.426,3.741C50.758,51.96,38.665,45.426,30.57,35.497c-1.413,2.423-2.223,5.243-2.223,8.251   c0,5.694,2.898,10.718,7.302,13.661c-2.69-0.085-5.222-0.824-7.434-2.054c-0.002,0.069-0.002,0.138-0.002,0.207   c0,7.954,5.657,14.584,13.166,16.093c-1.378,0.375-2.827,0.575-4.324,0.575c-1.058,0-2.086-0.103-3.088-0.295   c2.089,6.521,8.15,11.268,15.332,11.399c-5.617,4.401-12.694,7.024-20.384,7.024c-1.325,0-2.632-0.076-3.915-0.229   c7.263,4.657,15.892,7.374,25.16,7.374c30.188,0,46.697-25.01,46.697-46.698c0-0.711-0.018-1.42-0.049-2.123   C100.018,46.371,102.799,43.48,105,40.189"
+						fill="#FFFFFF" />
+				</g>
+			</svg>
+		</a>
+
+		<a href="https://www.linkedin.com/company/1800LIMO">
+			<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+				xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 291.319 291.319"
+				style="enable-background:new 0 0 291.319 291.319;" xml:space="preserve">
+				<g>
+					<path style="fill:#0E76A8;" d="M145.659,0c80.45,0,145.66,65.219,145.66,145.66s-65.21,145.659-145.66,145.659S0,226.1,0,145.66
 													S65.21,0,145.659,0z" />
-							<path style="fill:#FFFFFF;"
-								d="M82.079,200.136h27.275v-90.91H82.079V200.136z M188.338,106.077
+					<path style="fill:#FFFFFF;"
+						d="M82.079,200.136h27.275v-90.91H82.079V200.136z M188.338,106.077
 													c-13.237,0-25.081,4.834-33.483,15.504v-12.654H127.48v91.21h27.375v-49.324c0-10.424,9.55-20.593,21.512-20.593
 													s14.912,10.169,14.912,20.338v49.57h27.275v-51.6C218.553,112.686,201.584,106.077,188.338,106.077z M95.589,100.141
 													c7.538,0,13.656-6.118,13.656-13.656S103.127,72.83,95.589,72.83s-13.656,6.118-13.656,13.656S88.051,100.141,95.589,100.141z" />
-						</g>
-					</svg>
-				</a>
+				</g>
+			</svg>
+		</a>
 
-				<a href="/#">
-					<!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'>
-					<svg enable-background="new 0 0 128 128" height="128px" id="Layer_1" version="1.1"
-						viewBox="0 0 128 128" width="128px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
-						xmlns:xlink="http://www.w3.org/1999/xlink">
-						<g>
-							<circle cx="64" cy="64" fill="#CC191E" r="64" />
-						</g>
+		<a href="/#">
+			<!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'>
+			<svg enable-background="new 0 0 128 128" height="128px" id="Layer_1" version="1.1" viewBox="0 0 128 128"
+				width="128px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
+				xmlns:xlink="http://www.w3.org/1999/xlink">
+				<g>
+					<circle cx="64" cy="64" fill="#CC191E" r="64" />
+				</g>
+				<path
+					d="M103.201,48.004c0,0-0.781-5.513-3.18-7.939c-3.043-3.187-6.453-3.203-8.016-3.389  c-11.191-0.81-27.988-0.81-27.988-0.81h-0.036c0,0-16.795,0-27.988,0.81c-1.564,0.186-4.972,0.201-8.015,3.389  c-2.399,2.426-3.18,7.939-3.18,7.939S24,54.478,24,60.953v6.071c0,6.471,0.799,12.947,0.799,12.947s0.781,5.51,3.18,7.938  c3.044,3.189,7.041,3.088,8.82,3.422c6.401,0.615,27.202,0.805,27.202,0.805s16.81-0.025,28.005-0.834  c1.564-0.188,4.975-0.203,8.016-3.391c2.4-2.43,3.182-7.939,3.182-7.939S104,73.496,104,67.023v-6.071  C104,54.478,103.201,48.004,103.201,48.004 M54.729,75.428l-0.003-24.581l23.637,12.332L54.729,75.428z"
+					fill="#FFFFFF" />
+			</svg>
+		</a>
+
+		<a href="https://www.instagram.com/1800LIMO">
+			<!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'>
+			<svg enable-background="new 0 0 128 128" height="128px" id="Layer_1" version="1.1" viewBox="0 0 128 128"
+				width="128px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
+				xmlns:xlink="http://www.w3.org/1999/xlink">
+				<g>
+					<linearGradient gradientTransform="matrix(1 0 0 -1 594 633)" gradientUnits="userSpaceOnUse"
+						id="SVGID_1_" x1="-566.7114" x2="-493.2875" y1="516.5693" y2="621.4296">
+						<stop offset="0" style="stop-color:#FFB900" />
+						<stop offset="1" style="stop-color:#9100EB" />
+					</linearGradient>
+					<circle cx="64" cy="64" fill="url(#SVGID_1_)" r="64" />
+				</g>
+				<g>
+					<g>
 						<path
-							d="M103.201,48.004c0,0-0.781-5.513-3.18-7.939c-3.043-3.187-6.453-3.203-8.016-3.389  c-11.191-0.81-27.988-0.81-27.988-0.81h-0.036c0,0-16.795,0-27.988,0.81c-1.564,0.186-4.972,0.201-8.015,3.389  c-2.399,2.426-3.18,7.939-3.18,7.939S24,54.478,24,60.953v6.071c0,6.471,0.799,12.947,0.799,12.947s0.781,5.51,3.18,7.938  c3.044,3.189,7.041,3.088,8.82,3.422c6.401,0.615,27.202,0.805,27.202,0.805s16.81-0.025,28.005-0.834  c1.564-0.188,4.975-0.203,8.016-3.391c2.4-2.43,3.182-7.939,3.182-7.939S104,73.496,104,67.023v-6.071  C104,54.478,103.201,48.004,103.201,48.004 M54.729,75.428l-0.003-24.581l23.637,12.332L54.729,75.428z"
+							d="M82.333,104H45.667C33.72,104,24,94.281,24,82.333V45.667C24,33.719,33.72,24,45.667,24h36.666    C94.281,24,104,33.719,104,45.667v36.667C104,94.281,94.281,104,82.333,104z M45.667,30.667c-8.271,0-15,6.729-15,15v36.667    c0,8.271,6.729,15,15,15h36.666c8.271,0,15-6.729,15-15V45.667c0-8.271-6.729-15-15-15H45.667z"
 							fill="#FFFFFF" />
-					</svg>
-				</a>
-
-				<a href="https://www.instagram.com/1800LIMO">
-					<!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'>
-					<svg enable-background="new 0 0 128 128" height="128px" id="Layer_1" version="1.1"
-						viewBox="0 0 128 128" width="128px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
-						xmlns:xlink="http://www.w3.org/1999/xlink">
-						<g>
-							<linearGradient gradientTransform="matrix(1 0 0 -1 594 633)" gradientUnits="userSpaceOnUse"
-								id="SVGID_1_" x1="-566.7114" x2="-493.2875" y1="516.5693" y2="621.4296">
-								<stop offset="0" style="stop-color:#FFB900" />
-								<stop offset="1" style="stop-color:#9100EB" />
-							</linearGradient>
-							<circle cx="64" cy="64" fill="url(#SVGID_1_)" r="64" />
-						</g>
-						<g>
-							<g>
-								<path
-									d="M82.333,104H45.667C33.72,104,24,94.281,24,82.333V45.667C24,33.719,33.72,24,45.667,24h36.666    C94.281,24,104,33.719,104,45.667v36.667C104,94.281,94.281,104,82.333,104z M45.667,30.667c-8.271,0-15,6.729-15,15v36.667    c0,8.271,6.729,15,15,15h36.666c8.271,0,15-6.729,15-15V45.667c0-8.271-6.729-15-15-15H45.667z"
-									fill="#FFFFFF" />
-							</g>
-							<g>
-								<path
-									d="M64,84c-11.028,0-20-8.973-20-20c0-11.029,8.972-20,20-20s20,8.971,20,20C84,75.027,75.028,84,64,84z     M64,50.667c-7.352,0-13.333,5.981-13.333,13.333c0,7.353,5.981,13.333,13.333,13.333S77.333,71.353,77.333,64    C77.333,56.648,71.353,50.667,64,50.667z"
-									fill="#FFFFFF" />
-							</g>
-							<g>
-								<circle cx="85.25" cy="42.75" fill="#FFFFFF" r="4.583" />
-							</g>
-						</g>
-					</svg>
-				</a>
-			</div>
-		</div>
-	</section>
-</main>
-<!-- Account Status Modal -->
-<div class="modal fade" id="accountStatusModal" tabindex="-1" role="dialog" aria-labelledby="instructionsModal"
-	aria-hidden="true">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<button type="button" class="close instructionscloseButton" data-dismiss="modal" aria-label="Close">
-				<span aria-hidden="true">&times;</span>
-			</button>
-			<div class="modal-header text-center pb-0">
-				<h3>Account Status</h3>
-			</div>
-			<div class="modal-body mt-3">
-				<p>{{account_status_message}}</p>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="custom-btn button2" data-dismiss="modal">OK</button>
-			</div>
-		</div>
+					</g>
+					<g>
+						<path
+							d="M64,84c-11.028,0-20-8.973-20-20c0-11.029,8.972-20,20-20s20,8.971,20,20C84,75.027,75.028,84,64,84z     M64,50.667c-7.352,0-13.333,5.981-13.333,13.333c0,7.353,5.981,13.333,13.333,13.333S77.333,71.353,77.333,64    C77.333,56.648,71.353,50.667,64,50.667z"
+							fill="#FFFFFF" />
+					</g>
+					<g>
+						<circle cx="85.25" cy="42.75" fill="#FFFFFF" r="4.583" />
+					</g>
+				</g>
+			</svg>
+		</a>
 	</div>
 </div>

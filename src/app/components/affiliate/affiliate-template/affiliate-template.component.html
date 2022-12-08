@@ -151,10 +151,10 @@
 						<li class="hideDesktop">
 							<div id="google_translate_element_mobile"></div>
 						</li>
-						<li class="nav-item" [hidden]="affiliateAccountStatus=='completed'">
-							<a class="nav-link dropdwn" [routerLinkActive]="['active']" data-toggle="collapse"
-								data-target="#collapse5" aria-expanded="true" aria-controls="collapseUtilities"
-								tabindex="-1" (click)="toggleChevron()">
+						<li class="nav-item">
+							<a class="nav-link dropdwn position-relative" [routerLinkActive]="['active']"
+								data-toggle="collapse" data-target="#collapse5" aria-expanded="true"
+								aria-controls="collapseUtilities" tabindex="-1" (click)="toggleChevron()">
 								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 									<path fill="none" d="M0 0h24v24H0V0z" />
 									<path
@@ -165,7 +165,8 @@
 								</span>
 							</a>
 							<div id="collapse5" class="collapse" aria-labelledby="headingUtilities"
-								data-parent="#accordionSidebar">
+								data-parent="#accordionSidebar"
+								[ngClass]="affiliateAccountStatus == 'accepted' ? '' : 'show'">
 								<div class="py-2 collapse-inner rounded">
 									<a class="collapse-item" [className]="step_0_class"
 										(click)="stepClick(0); closeSidebarFunc(false)" tabindex="-1">

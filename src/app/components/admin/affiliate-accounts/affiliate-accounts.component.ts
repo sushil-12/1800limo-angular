@@ -44,6 +44,7 @@ export class AffiliateAccountsComponent implements OnInit
 	public prevPageUrl: string;
 	public nextPageUrl: string;
 	operatorSelect: string;
+	filter_type: string
 	affiliateName: string;
 
 	constructor(
@@ -55,22 +56,18 @@ export class AffiliateAccountsComponent implements OnInit
 
 	ngOnInit(): void
 	{
-		this.operatorSelect = 'all-operators';
-		// this.activatedRoute.params.subscribe(_operator => {
-		//   console.log("hello world", _operator._affiliateType)
-		//   this.setAffiliateType(_operator._affiliateType);
-		// })
-		this.affiliateTypeSwitch('all-operators')
-		sessionStorage.clear();//clear session storage    
+		this.operatorSelect = 'all';
+		this.filter_type = 'all'
+
+		this.affiliateTypeSwitch('all')
+		sessionStorage.clear()
 
 		this.rejectCauseForm = this.formBuilder.group({
 			acc_id: ['', Validators.required],
 			reject_cause: ['', Validators.required],
 		});
 	}
-	// affiliateTypeSwitch(_affiliateType: string) {
-	//   this.router.navigateByUrl('/admin/affiliates/' + _affiliateType);
-	// }
+
 	affiliateTypeSwitch(_affiliateType: string)
 	{
 		switch (_affiliateType)
@@ -80,7 +77,7 @@ export class AffiliateAccountsComponent implements OnInit
 				this.addButton = "Add Black Car / Limo Account";
 				this.affiliateType = 'black_limo_operator';
 				this.affiliateName = "Black Car / Limo";
-				this.loadAffiliateOperators();//load blackCarLimoBus
+				this.loadAffiliateOperators()
 				break;
 			}
 			case 'fleet-operator': {
@@ -88,7 +85,7 @@ export class AffiliateAccountsComponent implements OnInit
 				this.addButton = "Add Fleet Account";
 				this.affiliateType = 'fleet_operator';
 				this.affiliateName = "Fleet";
-				this.loadAffiliateOperators();//load blackCarLimoBus
+				this.loadAffiliateOperators()
 				break;
 			}
 			case 'taxi-operator': {
@@ -96,7 +93,7 @@ export class AffiliateAccountsComponent implements OnInit
 				this.addButton = "Add Taxi Account";
 				this.affiliateType = 'taxi_operator';
 				this.affiliateName = "Taxi";
-				this.loadAffiliateOperators();//load blackCarLimoBus
+				this.loadAffiliateOperators()
 				break;
 			}
 			case 'gig-operator': {
@@ -104,18 +101,25 @@ export class AffiliateAccountsComponent implements OnInit
 				this.addButton = "Add Gig Account";
 				this.affiliateType = 'gig_operator';
 				this.affiliateName = "Gig";
-				this.loadAffiliateOperators();//load blackCarLimoBus
+				this.loadAffiliateOperators()
 				break;
 			}
 			default: {
 				this.heading = "All Accounts";
 				this.addButton = "Add Affiliate Account";
-				this.affiliateType = 'all_operators';
+				this.affiliateType = 'all-operators';
 				this.affiliateName = "Affiliate";
-				this.loadAffiliateOperators();//load blackCarLimoBus
+				this.loadAffiliateOperators()
 				break;
 			}
 		}
+	}
+
+	onChangeFilterType(value: string)
+	{
+		console.log('Changing Filter Type: ', value)
+		this.filter_type = value
+		this.loadAffiliateOperators()
 	}
 
 	loadAffiliateOperators(pageUrl = null)
@@ -126,7 +130,7 @@ export class AffiliateAccountsComponent implements OnInit
 		var keyword = ((document.getElementById("keyword") as HTMLInputElement).value);
 		// console.log(keyword);
 		// Load Our blackCarLimoBus using API
-		this.adminService.blackCarLimoBusAccounts(pageUrl, this.affiliateType, keyword).then(result =>
+		this.adminService.blackCarLimoBusAccounts(pageUrl, this.affiliateType, this.filter_type, keyword).then(result =>
 		{
 			this.blackCarLimoBusRes = result;
 			console.log(this.blackCarLimoBusRes.data.data, "check data")
@@ -166,7 +170,7 @@ export class AffiliateAccountsComponent implements OnInit
 		// this.affiliateService.updateStepsArrayLocal(this.response.data.affiliateParmas.step_completed);
 		// this.affiliateService.updateStepsCompletedObject(this.response.data.affiliateParmas.step_completed_obj);
 		sessionStorage.setItem('affiliateId', blackCarLimoBusId)
-		if (this.affiliateType !== "all_operators")
+		if (this.affiliateType !== "all")
 		{
 			sessionStorage.setItem("affiliateType", this.affiliateType);
 		}
@@ -244,12 +248,9 @@ export class AffiliateAccountsComponent implements OnInit
 			{
 				if (success == true)
 				{
-					this.spinner.hide();//hide spinner
+					this.spinner.hide()
 					$('#rejectCauseModal').modal('hide');
-					this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() =>
-					{
-						this.router.navigate(['/admin/' + this.lastPartUrl]);
-					});
+					location.reload()
 				}
 			});
 	}

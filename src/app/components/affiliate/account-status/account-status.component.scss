@@ -1,3 +1,8 @@
+.user_information
+{
+	font-size: 1.1rem;
+}
+
 .iconStyle a {
 	display: inline-block !important;
 }
@@ -34,28 +39,6 @@
 	transform: scale(1.2, 1.2);
 }
 
-.modal-content {
-	align-items: center;
-}
-
-.modal-header h3 {
-	margin: 0;
-}
-
-.modal-body {
-	padding: 0;
-}
-
-.modal-body p {
-	text-align: center;
-	font-size : 16px;
-	padding   : 0 30px;
-}
-
-.modal-footer {
-	padding: 0;
-}
-
 @media only screen and (max-width:320px) {
 	.socials {
 		text-align: left;
@@ -76,34 +59,6 @@
 	.socials {
 		text-align: center;
 	}
-}
-
-.step0Div li {
-	font-size  : 18px;
-	font-weight: 500;
-}
-
-ol {
-	padding-left: 20px;
-}
-
-button.close {
-	background-color: #fff !important;
-	position        : absolute;
-	z-index         : 999;
-	right           : -30px;
-	top             : -18px;
-	width           : 30px;
-	height          : 30px;
-	border-radius   : 60px;
-	opacity         : 1;
-}
-
-.close span {
-	color      : #ff0000 !important;
-	box-shadow : none;
-	text-shadow: none;
-	font-size  : 30px;
 }
 
 .alertBox {
@@ -130,7 +85,17 @@ button.close {
 	}
 }
 
-.button2 {
-	background-color: var(--orange-color) !important;
-	border          : none !important;
+.custom-filled-button
+{
+	color: #fff;
+	padding: 0.295rem 1.378rem;
+}
+
+p#account-approval-status-container
+{
+	font-size: 1.7rem;
+	span
+	{
+		font-size: 2rem;
+	}
 }

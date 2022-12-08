@@ -93,7 +93,7 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 			this.otherRouteClick();
 		}
 
-		this.checkApplicationStatus()
+		// this.checkApplicationStatus()
 
 		console.info(this.$shared.fetchCookies('lastroute'))
 	}

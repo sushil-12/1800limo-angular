@@ -15,77 +15,49 @@ declare var $: any;
 export class AccountStatusComponent implements OnInit
 {
 
-  public account_approval: string;
-  public recject_cause_message: string;
-  public account_status_message: string;
-  public disableAccountStatusButton: boolean = false;
+  account_approval_status!: string
+  status_message!: string
+  status_title!: string
+  status_color!: string
+  reasons!: string
 
   constructor(
-    private router: Router,
-    private stateManagementService: StateManagementService,
+    private $router: Router,
     private affiliateService: AffiliateService,
-  ) { }
+  )
+  { }
 
   ngOnInit(): void
   {
-    this.checkAffiliateAccountStatus('refresh');
+    this.checkAffiliateAccountStatus()
   }
 
-  checkAffiliateAccountStatus(onRefresh = null)
+  checkAffiliateAccountStatus()
   {
-    this.stateManagementService.setprogressBar(true);
-    this.disableAccountStatusButton = true; //disable submit button
-    this.affiliateService.checkAffiliateAccountStatus()
-      .pipe(
-        catchError(err =>
-        {
-          this.stateManagementService.setprogressBar(false);
-          this.disableAccountStatusButton = false;  //enable submit button
-          return throwError(err);
-        })
-      ).subscribe(({ data, message }: any) =>
-      {
+    this.status_message = ""
+    this.status_title = "loading ..."
+    this.status_color = "text-secondary"
+    this.reasons = ""
 
-        this.account_approval = data.status;
-        if (!onRefresh)
+    this.affiliateService.checkAffiliateAccountStatus().subscribe(({ data, message }: any) =>
+    {
+
+      this.account_approval_status = data.status;
+      this.reasons = data.comment.replace('/\n+/g', 'br/>')
+      if (data.status == 'accepted')
+      {
+        localStorage.setItem('account_approval', 'accepted')
+        this.$router.navigate(['/affiliate/my-bookings'])
+      } else
+      {
+        // do in case of IN-PROGRESS || REJECTED
+        [this.status_color, this.status_title, this.status_message] = (function (status: string)
         {
-          $('#accountStatusModal').modal('show');
-        }
-        switch (data.status)
-        {
-          case 'accepted': {
-            this.stateManagementService.setprogressBar(false);
-            this.disableAccountStatusButton = false; //enable submit button
-            this.router.navigate(['/affiliate/my-bookings']);
-            break;
-          }
-          case 'completed': {
-            this.account_status_message = message;
-            this.stateManagementService.setprogressBar(false);
-            this.disableAccountStatusButton = false; //enable submit button
-            this.router.navigate(['/affiliate/account-status']);
-            break;
-          }
-          case 'rejected': {
-            this.account_status_message = message;
-            this.stateManagementService.setprogressBar(false);
-            this.disableAccountStatusButton = false; //enable submit button
-            this.router.navigate(['/affiliate/account-status']);
-            break;
-          }
-          case 'in-progress': {
-            this.stateManagementService.setprogressBar(false);
-            this.disableAccountStatusButton = false; //enable submit button
-            this.router.navigate(['/affiliate/step1']);
-            break;
-          }
-          default: {
-            this.stateManagementService.setprogressBar(false);
-            this.disableAccountStatusButton = false; //enable submit button
-            this.router.navigate(['/affiliate']);
-            break;
-          }
-        }
-      });
+          return status == 'completed' ?
+            ['text-primary', 'In Review', 'Your application is still under processing ...'] :
+            ['text-danger', 'Rejected', 'Your application has been rejected by the Admin due to the following reasons: ']
+        })(data.status)
+      }
+    });
   }
 }
