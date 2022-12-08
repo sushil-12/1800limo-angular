@@ -1,6 +1,5 @@
 import { Component, AfterViewChecked, OnInit } from '@angular/core';
 import { StateManagementService } from './services/statemanagement.service';
-
 @Component({
 	selector: 'app-root',
 	templateUrl: './app.component.html',
@@ -11,7 +10,8 @@ export class AppComponent implements OnInit
 	title = 'limo1800';
 	errors: any;
 
-	constructor(public stateManagementService: StateManagementService) { }
+	constructor(
+		public stateManagementService: StateManagementService) { }
 
 	ngOnInit(): void
 	{

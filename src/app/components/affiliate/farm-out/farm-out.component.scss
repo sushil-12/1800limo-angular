@@ -9,61 +9,18 @@
 	color: #fff;
 }
 
-.btnclass {
-	margin-top: 20px;
-	height: 60px;
-	width: 100%;
-	color: #000;
-	font-weight: 500;
-	background-color: var(--green-color);
-	border-color: var(--green-color);
-	padding: 15px 40px;
+.custom-filled-button {
+	padding: 0.375rem 0.985rem;
 }
 
-.pending {
-	background-color: #0474fc;
+.table 
+{
+	thead th
+	{
+		background-color: #f29439;
+		border-color: #fff;
+	}
 }
-
-.assigned {
-	background-color: #543424;
-}
-
-.rejected {
-	background-color: #fc6404;
-}
-
-.cancelled {
-	background-color: #dc3545;
-}
-
-.en_route_pu {
-	background-color: #6454ac;
-}
-
-.on_location {
-	background-color: #7289da;
-}
-
-.en_route_do {
-	background-color: #1abc9c;
-}
-
-.ended {
-	background-color: #8cc43c;
-}
-
-.finalized {
-	background-color: #fcac04;
-}
-
-.non_payable {
-	background-color: #ec4c8c;
-}
-
-.comped {
-	background-color: #7c7c84;
-}
-
 
 #farmout-modal {
 	.modal-footer {
@@ -86,8 +43,4 @@
 			color: #ffffff
 		}
 	}
-}
-
-.custom-filled-button {
-	padding: 0.375rem 0.985rem;
 }

@@ -88,7 +88,7 @@
 								<span class="close" aria-hidden="true">
 									&times;
 								</span>
-								{{ filters.original[obj.catg_name][obj.fil_index]['name'] }}
+								{{ obj['name'] }}
 							</div>
 						</div>
 						<!-- THE SELECTED FILTERS LIST ENDS -->
@@ -137,8 +137,8 @@
 													<input type="checkbox" class="custom-control-input"
 														[attr.id]="filter_text.dp + '_' + '_' + filter_index"
 														[attr.name]="filter_text.dp + '_' + '_' + filter_index"
-														(change)="filterSelection($event.target.checked, filter_text.rp, filter_index)"
-														[checked]="isFilterAlreadySelected(filter_text.rp, filter_index)" />
+														(change)="filterSelection($event.target.checked, filter_text.rp, filter)"
+														[checked]="isFilterAlreadySelected(filter_text.rp, filter)" />
 													<label class="custom-control-label"
 														[attr.for]="filter_text.dp + '_' + '_' + filter_index">
 														{{ filter.name | titlecase }}
@@ -153,10 +153,11 @@
 													*ngIf="filters.vars[filter_text.rp] && (!isArray(filter_text?.rp) && filters?.original[filter_text.rp]?.length > min_length)">
 													<span class="btn-custom-btn btn show-More" style="color:#ff7800"
 														[attr.id]="'showMore_outer_' + filter_text_index"
-														(click)="!is_show_more_button_hidden ? showMore('showMore_outer_' + filter_text_index, filter_text.rp) : showMore('showMore_outer' + filter_text_index, filter_text.rp, false)">
-														{{ filters.vars['showMore_outer_' + filter_text_index] ?
+														(click)="filters.vars['showMore_outer_' + filter_text.rp + '_' + filter_text_index] ? showMore('showMore_outer_' + filter_text.rp + '_' + filter_text_index, filter_text.rp, false) : showMore('showMore_outer_' + filter_text.rp + '_' + filter_text_index, filter_text.rp)">
+														{{ filters.vars['showMore_outer_' + filter_text.rp + '_' +
+														filter_text_index] ?
 														'Show Less' : 'Show More (+' + this.min_length + ')' }}
-														<i class="bi font-weight-bolder" [ngClass]="filters.vars['showMore_outer_' +
+														<i class="bi font-weight-bolder" [ngClass]="filters.vars['showMore_outer_' + filter_text.rp + '_' +
 																		filter_text_index] ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
 													</span>
 												</div>
@@ -212,8 +213,8 @@
 																	<input type="checkbox" class="custom-control-input"
 																		[attr.id]="inner_filter_text.dp + '_' + '_' + inner_filter_index"
 																		[attr.name]="inner_filter_text.dp + '_' + '_' + inner_filter_index"
-																		(change)="filterSelection($event.target.checked, inner_filter_text.rp, inner_filter_index)"
-																		[checked]="isFilterAlreadySelected(inner_filter_text.rp, inner_filter_index)" />
+																		(change)="filterSelection($event.target.checked, inner_filter_text.rp, inner_filter)"
+																		[checked]="isFilterAlreadySelected(inner_filter_text.rp, inner_filter)" />
 																	<label class="custom-control-label"
 																		[attr.for]="inner_filter_text.dp + '_' + '_' + inner_filter_index">
 																		<span *ngIf="inner_filter.name != 'LGBTQIA+'">
@@ -233,11 +234,13 @@
 																	<span class="btn-custom-btn btn show-More"
 																		style="color:#ff7800"
 																		[attr.id]="'showMore_inner' + inner_filter_text_index"
-																		(click)="!is_show_more_button_hidden ? showMore('showMore_inner_' + inner_filter_text_index, inner_filter_text.rp) : showMore('showMore_inner_' + inner_filter_text_index, inner_filter_text.rp, false)">
+																		(click)="filters.vars['showMore_inner_' + inner_filter_text.rp + '_' +
+																		inner_filter_text_index] ? showMore('showMore_inner_' + inner_filter_text.rp + '_' + inner_filter_text_index, inner_filter_text.rp, false) : showMore('showMore_inner_' + inner_filter_text.rp + '_' + inner_filter_text_index, inner_filter_text.rp)">
 																		{{ filters.vars['showMore_inner_' +
+																		inner_filter_text.rp + '_' +
 																		inner_filter_text_index] ? 'Show Less' :
 																		'Show More (+' + this.min_length + ')' }}
-																		<i class="bi font-weight-bolder" [ngClass]="filters.vars['showMore_inner_' +
+																		<i class="bi font-weight-bolder" [ngClass]="filters.vars['showMore_inner_' + inner_filter_text.rp + '_' +
 																		inner_filter_text_index] ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
 																	</span>
 																</div>

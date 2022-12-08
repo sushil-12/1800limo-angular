@@ -90,7 +90,7 @@
 <section class="user_information">
 	<div class="agreement_step0">
 		<h2 class="headinginfo">
-			{{ fetchContentData(3).title }}
+			{{ fetchContentData(3)?.title }}
 		</h2>
 		<ul class="requirement-list">
 			<li>Agree with our <a data-toggle='modal' data-target='#mission_statement' class="fakeLink"
@@ -155,7 +155,7 @@
 			{{ fetchContentData(2)?.title }}
 		</h2>
 		<p>
-			{{ fetchContentData(2).content }}
+			{{ fetchContentData(2)?.content }}
 			<!-- At some point you will need to secure a background check through you state on-line FOID card registration
 			process with a passport type photo and fingerprinted. In Illinois the cost is about $40.00 and 30-60 days to
 			obtain. We do not encourage gun ownership,

@@ -604,18 +604,18 @@ export class AdminService
 	}
 
 	//affiliate
-	blackCarLimoBusAccounts(url, affiliateType, keyword)
+	blackCarLimoBusAccounts(url: string, affiliateType: string, filter_type: string, keyword: string)
 	{
-		var path;
+		let path;
 		if (url)
 		{
 			path = url + '&search=' + keyword;
 		}
 		else
 		{
-			path = this.serverUrl + 'affiliate-accounts/' + affiliateType + '?search=' + keyword;
+			path = `${this.serverUrl}affiliate-accounts/${affiliateType}/${filter_type}?search=${keyword}`;
 		}
-		return this.httpClient.get(path).toPromise();;
+		return this.httpClient.get(path).toPromise()
 	}
 	blackCarLimoBusAccountStatus(id, status)
 	{

@@ -5,12 +5,14 @@
 		<h2 class="headinginfo">Affiliate Accounts</h2>
 		<div class="containeredd">
 			<div class="row">
-				<div class="col-md-5">
+				<div class="col-md-3">
 					<mat-form-field appearance="outline">
-						<mat-label>Filter</mat-label>
+						<mat-label>
+							Operator Account
+						</mat-label>
 						<mat-select [(value)]="operatorSelect">
-							<mat-option value="all-operators" name="affiliateType"
-								(click)="affiliateTypeSwitch('all-operators')">All Accounts</mat-option>
+							<mat-option value="all" name="affiliateType" (click)="affiliateTypeSwitch('all')">All
+								Accounts</mat-option>
 							<mat-option value="black-limo-operator" name="affiliateType"
 								(click)="affiliateTypeSwitch('black-limo-operator')">Black Car / Limo Accounts
 							</mat-option>
@@ -23,7 +25,32 @@
 						</mat-select>
 					</mat-form-field>
 				</div>
-				<div class="col-md-5">
+				<div class="col-md-3">
+					<mat-form-field appearance="outline">
+						<mat-label>
+							Filter
+						</mat-label>
+						<mat-select id="filter_type" [(value)]="filter_type"
+							(selectionChange)="onChangeFilterType($event.value)">
+							<mat-option value="all">
+								All
+							</mat-option>
+							<mat-option value="in-progress">
+								Pending
+							</mat-option>
+							<mat-option value="completed">
+								Completed
+							</mat-option>
+							<mat-option value="accepted">
+								Accepted
+							</mat-option>
+							<mat-option value="rejected">
+								Rejected
+							</mat-option>
+						</mat-select>
+					</mat-form-field>
+				</div>
+				<div class="col-md-4">
 					<mat-form-field appearance="outline">
 						<mat-label>Search Filter by Key word</mat-label>
 						<input type="text" matInput placeholder="Search Filter by Key word" id="keyword">

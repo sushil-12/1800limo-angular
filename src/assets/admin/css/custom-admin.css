@@ -821,7 +821,7 @@ mat-progress-bar.my-color .mat-progress-bar-fill::after {
 	flex-shrink: 0;
 	transition : transform 0.15s ease-in-out;
 	z-index    : 1038;
-	transform  : translateX(-20rem);
+	transform  : translateX(-22rem);
 	padding    : 0 1rem;
 }
 
@@ -1656,12 +1656,14 @@ h2.headinginfo .orangeHeading {
 .dropdwn .bi-chevron-up::before {
 	position: absolute;
 	right    : 8%;
+	top: 28%;
 	font-weight: 800 !important;
 }
 
 .dropdwn .bi-chevron-down::before {
 	position: absolute;
 	right    : 8%;
+	top: 28%;
 	font-weight: 800 !important;
 }
 
@@ -2444,6 +2446,24 @@ mat-dialog-container {
 
 table .dropdown-menu {
 	left: 0px !important;
+}
+
+table #navbarDropdownUserImage {
+	background-color: var(--green-color);
+	color: #fff;
+	padding: 8px 15px !important;
+	border-radius: 3rem !important;
+}
+
+@media only screen and (min-width:1199px) {
+	table #navbarDropdownUserImage:hover {
+		background-color: #28b24b;
+	}
+
+	table #navbarDropdownUserImage:focus {
+		transform: scale(1.1, 1.1);
+		background-color: #28b24b;
+	}
 }
 
 .custom-btn {

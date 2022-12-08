@@ -3,12 +3,14 @@
 	<div class="containeredd">
 		<div class="row mt-3">
 			<div class="col-md-12 mb-2">
-				<label class="alert alert-danger" *ngIf="affiliateType=='fleet_operator'; else otherOperator">Note :
-					Fleet Operators can enter unlimited drivers.</label>
-				<ng-template #otherOperator>
-					<label class="alert alert-danger">Note: Black Car / Limo Op / Taxi / Gig Op Can Only Enter 1
-						Driver.</label>
-				</ng-template>
+				<ol class="alert alert-danger">
+					<li>
+						Enter only one driver and vehicle to complete steps 4 and 5. Enter more vehicles later.
+					</li>
+					<li>
+						Only Fleet Operators can add more than two drivers and vehicles.
+					</li>
+				</ol>
 			</div>
 		</div>
 		<div class="row" *ngIf="driverList">
@@ -19,7 +21,8 @@
 						<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
 						<path
 							d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
-					</svg> Add Driver
+					</svg>
+					Add Driver
 				</button>
 			</div>
 		</div>

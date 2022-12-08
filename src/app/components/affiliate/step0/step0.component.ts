@@ -124,7 +124,7 @@ export class Step0Component implements OnInit
 
 	fetchContentData(id?: number | null)
 	{
-		if (id)
+		if (id && this.content_data)
 		{
 			return this.content_data.find((item: any) => item.id == id)
 		}
