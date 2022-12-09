@@ -672,73 +672,6 @@ export class AdminService
 	}
 
 
-
-
-
-
-
-
-	// updateStepsArrayLocal(stepArray: Array<any>)
-	// {
-	// 	// update complete array
-	// 	if (this.getLocalStepCompleted().length > 0 && !this.getLocalStepCompleted().includes(stepArray.toString()))
-	// 	{
-	// 		sessionStorage.setItem('stepCompleted', JSON.stringify(stepArray))
-	// 	}
-	// 	if (this.getLocalStepCompleted() == undefined)
-	// 	{
-	// 		sessionStorage.setItem('stepCompleted', JSON.stringify([stepArray]))
-	// 	}
-	// }
-	// updateStepsLocal(step: number | string)
-	// {
-	// 	step = step.toString()
-	// 	//add one step at a time
-	// 	let stepCompleted = JSON.parse(sessionStorage.getItem('stepCompleted'));
-	// 	if (stepCompleted != null && !stepCompleted.includes(step))
-	// 	{
-	// 		stepCompleted.push(step);
-	// 		sessionStorage.setItem('stepCompleted', JSON.stringify(stepCompleted))
-	// 	}
-	// 	else
-	// 	{
-	// 		stepCompleted = [step];
-	// 		sessionStorage.setItem('stepCompleted', JSON.stringify(stepCompleted))
-	// 	}
-	// }
-	// getLocalStepCompleted()
-	// {
-	// 	//get step completed array
-	// 	return JSON.parse(sessionStorage.getItem('stepCompleted'));
-	// }
-	// getUpdatedStepsLocal(step: number | string)
-	// {
-	// 	step = step.toString()
-	// 	//update step completed array and prepare array to send in backend
-	// 	let stepCompleted: any = JSON.parse(sessionStorage.getItem('stepCompleted'));
-	// 	if (stepCompleted)
-	// 	{
-	// 		if (!stepCompleted.includes(step))
-	// 		{
-	// 			stepCompleted.push(step);
-	// 		}
-	// 	}
-	// 	else
-	// 	{
-	// 		stepCompleted = [step];
-	// 	}
-	// 	sessionStorage.setItem('stepCompleted', JSON.stringify(stepCompleted))
-	// 	return stepCompleted;
-	// }
-
-
-
-
-
-
-
-
-
 	// get/set step completed object
 	updateStepsCompletedObject(stepObject)
 	{
@@ -977,6 +910,11 @@ export class AdminService
 	sendEmail(data)
 	{
 		return this.httpClient.post(this.serverUrl + 'send-reservation-detail-email', data);
+	}
+
+	sendAffiliateMessage(type: 'email' | 'sms', affiliate_id: number, data: Object)
+	{
+		return this.httpClient.post(`${this.serverUrl}admin/notification/send-${type}/${affiliate_id}`, data)
 	}
 
 	//invoices

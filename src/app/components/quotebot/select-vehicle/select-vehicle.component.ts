@@ -514,9 +514,15 @@ export class SelectVehicleComponent implements OnInit
 					this.filters.copy['model'] = this.filters.original['model'].slice(0, this.min_length)
 				} else
 				{
+					this.filters.vars['model'] = false 	// hide the Show More button
+					let make_filters = this.filters.selections.filter((item) => item['catg_name'] == 'make')
+					let array = []
+					make_filters.forEach((item: any) =>
+					{
+						array.push(item.id)
+					})
 					// refill the models
-					this.filters.vars['model'] = false
-					this.filters.copy['model'] = this.filters.original['model'].filter(item => item['make_id'] == this.filters.original[sel_category][sel_index]['id'])
+					this.filters.copy['model'] = this.filters.original['model'].filter(item => array.includes(item['make_id']))
 				}
 			}
 
@@ -538,29 +544,37 @@ export class SelectVehicleComponent implements OnInit
 		// ------------------------ Deselection -----------------------------
 		if (!is_checked)
 		{
+			// removing from selections
+			const index = this.filters.selections.findIndex(item => item['catg_name'] == sel_category && item['sel_index'] == sel_index)
+			this.filters.selections.splice(index, 1)	// remove operation
 
-			if (this.filters.selections.findIndex(item => item['catg_name'] == sel_category) != -1)
-			{
-				// removing from selections
-				const index = this.filters.selections.findIndex(item => item['catg_name'] == sel_category && item['index'] == sel_index)
-				this.filters.selections.splice(index, 1)	// remove operation
+			// removing from request
+			this.filters.request[sel_category] = this.filters.request[sel_category].filter(item => item != selector['id'])
 
-				// removing from request
-				this.filters.request[sel_category] = this.filters.request[sel_category].filter(item => item != selector['id'])
-
-				// remove the key if list is empty
-				this.filters.request[sel_category].length == 0 && delete this.filters.request[sel_category]
-			}
+			// remove the key if list is empty
+			this.filters.request[sel_category].length == 0 && delete this.filters.request[sel_category]
 
 			if (sel_category == 'make')
 			{
 				// populate with all models if no selection of make exists
 				if (this.filters.selections.findIndex(item => item['catg_name'] == sel_category) == -1)
 				{
-					this.filters.vars['model'] = false
+					this.filters.vars['model'] = true		// hide the Show More button
 					// default sliced value
 					this.filters.copy['model'] = this.filters.original['model'].slice(0, this.min_length)
 				}
+				else
+				{
+					this.filters.vars['model'] = false
+					let make_filters = this.filters.selections.filter((item) => item['catg_name'] == 'make')
+					let array = []
+					make_filters.forEach((item: any) =>
+					{
+						array.push(item.id)
+					})
+					this.filters.copy['model'] = this.filters.original['model'].filter((item: any) => array.includes(item['make_id']))
+				}
+
 			}
 		}
 
@@ -657,6 +671,7 @@ export class SelectVehicleComponent implements OnInit
 			this.filterSelection(false, filter['catg_name'], filter)
 		} else
 		{
+			this.$spinner.show()
 			// empty the whole
 			this.filters.selections = []
 			this.filters.request = {}
@@ -668,6 +683,8 @@ export class SelectVehicleComponent implements OnInit
 					this.filters.copy[item][0]['checked'] = true
 				}
 			})
+			this.cutTillMinimum(this.min_length)	// reset the filters area
+			this.$spinner.hide()
 		}
 	}
 

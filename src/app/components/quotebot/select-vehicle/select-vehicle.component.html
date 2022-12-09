@@ -364,8 +364,9 @@
 				<div id="master-vehicle-box-container" class="row"
 					*ngIf="master_vehicles.length > 0 && this.filters.selections.length == 0">
 					<div id="master-vehicle-box" class="col-md-3 mb-5 d-flex flex-nowrap flex-md-wrap cursor-pointer"
-						style="gap: 10px" *ngFor="let vehicle_obj of master_vehicles; index as vehicle_obj_index">
-						<div id="vehicle-image" class="imageStyle" (click)="selectCategory(vehicle_obj?.name)">
+						style="gap: 10px" *ngFor="let vehicle_obj of master_vehicles; index as vehicle_obj_index"
+						(click)="selectCategory(vehicle_obj?.name)">
+						<div id="vehicle-image" class="imageStyle">
 							<img [src]="vehicle_obj.cat_img" class="img-fluid"
 								[attr.id]="'vehicle_' + vehicle_obj_index" />
 						</div>

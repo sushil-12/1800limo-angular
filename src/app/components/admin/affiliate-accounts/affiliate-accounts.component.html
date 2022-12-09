@@ -4,9 +4,9 @@
 	<section class="user_information">
 		<h2 class="headinginfo">Affiliate Accounts</h2>
 		<div class="containeredd">
-			<div class="row">
-				<div class="col-md-3">
-					<mat-form-field appearance="outline">
+			<div class="row align-items-center my-3 p-3">
+				<div class="col-md-3 py-2">
+					<mat-form-field appearance="outline" class="m-0">
 						<mat-label>
 							Operator Account
 						</mat-label>
@@ -25,8 +25,8 @@
 						</mat-select>
 					</mat-form-field>
 				</div>
-				<div class="col-md-3">
-					<mat-form-field appearance="outline">
+				<div class="col-md-3 py-2">
+					<mat-form-field appearance="outline" class="m-0">
 						<mat-label>
 							Filter
 						</mat-label>
@@ -50,14 +50,14 @@
 						</mat-select>
 					</mat-form-field>
 				</div>
-				<div class="col-md-4">
-					<mat-form-field appearance="outline">
+				<div class="col-md-4 py-2">
+					<mat-form-field appearance="outline" class="m-0">
 						<mat-label>Search Filter by Key word</mat-label>
 						<input type="text" matInput placeholder="Search Filter by Key word" id="keyword">
 					</mat-form-field>
 				</div>
-				<div class="col-md-2">
-					<button class="custom-btn button2 btnclass" (click)="loadAffiliateOperators()">SEARCH</button>
+				<div class="col-md-2 py-2">
+					<button class="custom-filled-button m-0" (click)="loadAffiliateOperators()">SEARCH</button>
 				</div>
 			</div>
 			<h3 class="headinginfoH3">{{heading}}</h3>
@@ -106,7 +106,7 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr role="row" class="odd" *ngFor="let blackCarLimoBus of blackCarLimoBuses">
+							<tr role="row" class="odd" *ngFor="let blackCarLimoBus of affiliate_accounts">
 								<td *ngIf="blackCarLimoBus.MiddleName == null;else middleName">
 									{{blackCarLimoBus.FirstName+' '+blackCarLimoBus.LastName}}
 								</td>
@@ -114,8 +114,14 @@
 									<td>{{blackCarLimoBus.FirstName+' '+blackCarLimoBus.MiddleName+'
 										'+blackCarLimoBus.LastName}}</td>
 								</ng-template>
-								<td>{{blackCarLimoBus.Email}}</td>
-								<td>{{blackCarLimoBus.CellIsd+blackCarLimoBus.CellNumber}}</td>
+								<td class="clickable" (click)="sendMessage('email', blackCarLimoBus)"
+									data-messagetype="email">
+									{{blackCarLimoBus.Email}}
+								</td>
+								<td class="clickable" (click)="sendMessage('sms', blackCarLimoBus)"
+									data-messagetype="sms">
+									{{blackCarLimoBus.CellIsd+blackCarLimoBus.CellNumber}}
+								</td>
 								<td>{{blackCarLimoBus.CompanyName}}</td>
 								<td>{{blackCarLimoBus.DBA}}</td>
 								<td>{{blackCarLimoBus.LanguagesSpoken}}</td>
@@ -152,13 +158,11 @@
 									</a>
 									<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
 										aria-labelledby="navbarDropdownUserImage">
-										<a class="dropdown-item"
-											(click)="clickEditAffiliateAccount(blackCarLimoBus.id)">
+										<a class="dropdown-item" (click)="editAffiliateAccount(blackCarLimoBus.id)">
 											<div class="dropdown-item-icon"></div>
 											Edit {{formatter(blackCarLimoBus.AffiliateType) | titlecase }} Account
 										</a>
-										<a class="dropdown-item"
-											(click)="clickBlackCarLimoBusCards(blackCarLimoBus.id)">
+										<a class="dropdown-item" (click)="viewAffiliateCreditCards(blackCarLimoBus.id)">
 											<div class="dropdown-item-icon"></div>
 											View Credit Cards
 										</a>
@@ -231,6 +235,38 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="forstep_booknow" (click)="rejectAffiliate()">Reject</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="modal fade" tabindex="-1" id="messageModal" aria-labelledby="messageModal" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4></h4>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-md-12">
+						<p id="affiliate-details"></p>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<p id="label">
+							Message:
+						</p>
+						<textarea id="message" rows="7" placeholder="Your Message" #message></textarea>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer justify-content-end">
+				<button class="custom-filled-button" data-dismiss="modal"
+					(click)="sendMessage(messagetype?.type, messagetype?.affiliate, message.value)">
+					Send {{ messagetype?.type | titlecase }}
+				</button>
 			</div>
 		</div>
 	</div>
