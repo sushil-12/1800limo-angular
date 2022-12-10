@@ -21,9 +21,7 @@ export class AffiliateAccountsComponent implements OnInit
 	disabled = false;
 
 	public paramResponse: any;
-	public blackCarLimoBusId: string;
-	public blackCarLimoBusRes: any;
-	public blackCarLimoBuses: any;
+	public affiliate_accounts: any;
 	public affiliateType: string;
 	public heading: string;
 	public addButton: string;
@@ -130,46 +128,37 @@ export class AffiliateAccountsComponent implements OnInit
 		var keyword = ((document.getElementById("keyword") as HTMLInputElement).value);
 		// console.log(keyword);
 		// Load Our blackCarLimoBus using API
-		this.adminService.blackCarLimoBusAccounts(pageUrl, this.affiliateType, this.filter_type, keyword).then(result =>
+		this.adminService.blackCarLimoBusAccounts(pageUrl, this.affiliateType, this.filter_type, keyword).then((result: any) =>
 		{
-			this.blackCarLimoBusRes = result;
-			console.log(this.blackCarLimoBusRes.data.data, "check data")
-			this.blackCarLimoBuses = this.blackCarLimoBusRes.data.data;
-			console.log('Black Car Limo Buswe: >>>>>>>>>>>>>>>>>>', this.blackCarLimoBuses)
+			this.affiliate_accounts = result.data.data;
 
 			this.firstPage = 1;
-			this.lastPage = this.blackCarLimoBusRes.data.last_page;
-			this.totalPage = this.blackCarLimoBusRes.data.last_page;
-			this.currentPage = this.blackCarLimoBusRes.data.current_page;
-			this.from = this.blackCarLimoBusRes.data.from;
-			this.to = this.blackCarLimoBusRes.data.to;
-			this.path = this.blackCarLimoBusRes.data.path;
-			this.firstPageUrl = this.blackCarLimoBusRes.data.first_page_url;
-			this.lastPageUrl = this.blackCarLimoBusRes.data.last_page_url;
-			this.prevPageUrl = this.blackCarLimoBusRes.data.prev_page_url;
-			this.nextPageUrl = this.blackCarLimoBusRes.data.next_page_url;
+			this.lastPage = result.data.last_page;
+			this.totalPage = result.data.last_page;
+			this.currentPage = result.data.current_page;
+			this.from = result.data.from;
+			this.to = result.data.to;
+			this.path = result.data.path;
+			this.firstPageUrl = result.data.first_page_url;
+			this.lastPageUrl = result.data.last_page_url;
+			this.prevPageUrl = result.data.prev_page_url;
+			this.nextPageUrl = result.data.next_page_url;
 			// sessionStorage.setItem('blackCarLimoBus',JSON.stringify(this.blackCarLimoBus));
 			this.spinner.hide();//hide spinner
 		})
-			.catch(err =>
-			{
-				this.spinner.hide();//hide spinner
-			});
 	}
 
 	addAffiliateAccountClick() 
 	{
-		// localStorage.setItem("account_approval", this.response.data.affiliateParmas.account_approval);
-		// localStorage.setItem("recject_cause_message", this.response.data.affiliateParmas.recject_cause_message);
 		sessionStorage.setItem("affiliateType", this.affiliateType);
 		this.router.navigate(['/admin/affiliate/step1']);
 	}
 
-	clickEditAffiliateAccount(blackCarLimoBusId)
+	editAffiliateAccount(affiliate_id: number)
 	{
 		// this.affiliateService.updateStepsArrayLocal(this.response.data.affiliateParmas.step_completed);
 		// this.affiliateService.updateStepsCompletedObject(this.response.data.affiliateParmas.step_completed_obj);
-		sessionStorage.setItem('affiliateId', blackCarLimoBusId)
+		sessionStorage.setItem('affiliateId', JSON.stringify(affiliate_id))
 		if (this.affiliateType !== "all")
 		{
 			sessionStorage.setItem("affiliateType", this.affiliateType);
@@ -181,9 +170,9 @@ export class AffiliateAccountsComponent implements OnInit
 
 	}
 
-	clickBlackCarLimoBusCards(blackCarLimoBusId)
+	viewAffiliateCreditCards(affiliate_id: number)
 	{
-		this.router.navigate(['/admin/cards'], { queryParams: { accountType: 'blackCarLimoBus', accountId: blackCarLimoBusId } });
+		this.router.navigate(['/admin/cards'], { queryParams: { accountType: 'blackCarLimoBus', accountId: affiliate_id } });
 	}
 
 	acceptAffiliate(acc_id)
@@ -317,5 +306,25 @@ export class AffiliateAccountsComponent implements OnInit
 	formatter(text: string)
 	{
 		return text.replace(/[_|-]/g, ' ')
+	}
+
+	messagetype: Record<string, any>
+	sendMessage(type: 'email' | 'sms', affiliate: Object, message: string = null)
+	{
+		console.log('Request to send a Message to affiliate id: ', type, affiliate['id'])
+		this.messagetype = { type, affiliate }
+		$('#messageModal').modal('show')
+		$('#messageModal').find('.modal-header').find('h4').text('Contact to Affiliate via ' + type.toUpperCase())
+		$('#messageModal').find('.modal-body').find('p#affiliate-details').html(`Affiliate Name: ${affiliate['FirstName']} ${affiliate['LastName']}<br/>Affiliate Email: ${affiliate['Email']}`)
+		if (message != null)
+		{
+			this.adminService.sendAffiliateMessage(type, affiliate['id'], { sendContent: message }).subscribe((response: any) =>
+			{
+				if (response.success)
+				{
+					console.log('Message Sent Successfully. ')
+				}
+			})
+		}
 	}
 }

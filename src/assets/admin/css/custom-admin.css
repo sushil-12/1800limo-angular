@@ -1551,7 +1551,7 @@ h2.headinginfo .orangeHeading {
 
 .custom_table .table tbody td {
 	vertical-align: top;
-	color         : #000 !important;
+	color         : #000;
 	text-align    : center;
 	vertical-align: text-top !important;
 	vertical-align: middle !important;
@@ -2979,10 +2979,6 @@ table #navbarDropdownUserImage {
 
 .adminbox_shadow.user_information .custom_table .table tbody td {
 	text-align: left;
-}
-
-.adminbox_shadow.user_information .custom_table .table tbody td {
-	white-space: normal !important;
 }
 
 .adminbox_shadow.user_information .custom_table .table.table-dark {

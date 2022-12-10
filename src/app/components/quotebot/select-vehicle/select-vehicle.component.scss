@@ -55,6 +55,8 @@ section#vehicle-listing-container {
 		width: 100%;
 		border-radius: 1.3rem;
 		padding: 13.8px;
+		height: -webkit-fit-content;
+		height: -moz-fit-content;
 		height: fit-content;
 		box-shadow: 3px 3px 14px 0px rgb(0 0 0 / 20%);
 		
@@ -67,7 +69,8 @@ section#vehicle-listing-container {
 				img {
 					width: 100%;
 					height: auto;
-					object-fit: cover;
+					-o-object-fit: cover;
+					   object-fit: cover;
 					margin: 0;
 					border-radius: 7px;
 				}
@@ -269,6 +272,10 @@ section#vehicle-listing-container {
 		overflow-y: auto;
 		max-height: 24rem;
 	}
+}
+
+input::-webkit-input-placeholder {
+	font-size: 1rem;
 }
 
 input::placeholder,
