@@ -250,7 +250,7 @@
 						<div class="col-md-4">
 							<mat-form-field appearance="outline" class="mat-custom-phone">
 								<mat-label>
-									Phone <span class="asterisk"></span>
+									Phone <span class="asterisk">*</span>
 								</mat-label>
 								<input matInput placeholder="Phone" formControlName="phone" ng2TelInput
 									[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
@@ -335,12 +335,21 @@
 							<div class="col-md-4">
 								<mat-form-field appearance="outline">
 									<mat-label>
-										Expiration Month <span class="asterisk"></span>
+										Expiration Month <span class="asterisk">*</span>
 									</mat-label>
 									<mat-select formControlName="exp_month">
-										<mat-option [value]="mnth" *ngFor="let mnth of months">
-											{{ mnth }}
-										</mat-option>
+										<mat-option value='1'>Janaury</mat-option>
+										<mat-option value='2'>February</mat-option>
+										<mat-option value='3'>March</mat-option>
+										<mat-option value='4'>April</mat-option>
+										<mat-option value='5'>May</mat-option>
+										<mat-option value='6'>June</mat-option>
+										<mat-option value='7'>July</mat-option>
+										<mat-option value='8'>August</mat-option>
+										<mat-option value='9'>September</mat-option>
+										<mat-option value='10'>October</mat-option>
+										<mat-option value='11'>November</mat-option>
+										<mat-option value='12'>December</mat-option>
 									</mat-select>
 								</mat-form-field>
 								<!-- <div class="errors"
@@ -355,10 +364,10 @@
 							<div class="col-md-4">
 								<mat-form-field appearance="outline">
 									<mat-label>
-										Expiration Year <span class="asterisk"></span>
+										Expiration Year <span class="asterisk">*</span>
 									</mat-label>
 									<mat-select formControlName="exp_year">
-										<mat-option [value]="number" *ngFor="let number of dates">
+										<mat-option [value]="number" *ngFor="let number of years">
 											{{ number }}
 										</mat-option>
 									</mat-select>

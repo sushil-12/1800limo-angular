@@ -41,7 +41,7 @@ export class CreateNewBookingComponent implements OnInit
 	affiliate_type_radio_buttons: Array<String> = ['affiliate', 'loose_affiliate']
 	selected_vehicle_driver_details: Array<Array<String>> = [['name', 'gender'], ['languages', 'dress'], ['experience', 'phone']]
 	months: Array<string> = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-	dates: Array<number> = []
+	years: Array<number> = []
 
 	booking_id: number = 0					// received in case of editing the booking
 	update_type: string = 'new'				// recieved in case of editing the booking
@@ -95,10 +95,10 @@ export class CreateNewBookingComponent implements OnInit
 				this.update_type = params.updateType ?? ''
 			}
 		})
-
-		for (let i = 1; i < 32; i++)
+		let date = new Date().getFullYear()
+		for (let i = 0; i < 31; i++)
 		{
-			this.dates.push(i)
+			this.years.push(i + date)
 		}
 
 		this.getBigData().then((data) =>
@@ -929,11 +929,11 @@ export class CreateNewBookingComponent implements OnInit
 	{
 		if (this.Form.account_type.value != 'loose_customer')
 		{
-			this._spinner.show('normalspinner')
+			this._spinner.show()
 			this.fetched_user = {}
-			this._adminService.chooseUser(user_id, this.Form.account_type.value).subscribe((response: any) =>
+			this._adminService.getAccountBytype(this.Form.account_type.value).subscribe((response: any) =>
 			{
-				this._spinner.hide('normalspinner')
+				this._spinner.hide()
 				this.fetched_user = response.data
 				this.bookingForm.patchValue({
 					passenger_name: `${response.data.first_name} ${response.data.middle_name ?? ''} ${response.data.last_name}`,
