@@ -118,7 +118,7 @@ export class AddIndividualAccountComponent implements OnInit
 			latitude: [''],
 			longitude: [''],
 			card_type: ['personal', Validators.required],
-			number: ['', [Validators.required, Validators.pattern("^[0-9\\s]*$"), Validators.minLength(19), Validators.maxLength(19), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
+			number: ['', [Validators.required, Validators.pattern("^[0-9\\s]*$"), Validators.minLength(16), Validators.maxLength(16), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
 			cvc: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(3), Validators.maxLength(3), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
 			exp_month: ['', Validators.required],
 			exp_year: ['', Validators.required],
@@ -130,7 +130,8 @@ export class AddIndividualAccountComponent implements OnInit
 		{
 			$(this).val(function (index, value)
 			{
-				return value.replace(/[^a-z0-9]+/gi, '').replace(/(.{4})/g, '$1 ');
+				return value.replace(/[^a-z0-9]+/gi, '')
+				// .replace(/(.{4})/g, '$1 ')
 			});
 		});
 

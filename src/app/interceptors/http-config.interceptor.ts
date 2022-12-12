@@ -47,6 +47,7 @@ export class HttpConfigInterceptor implements HttpInterceptor
 		return next.handle(request).pipe(
 			map((event: HttpEvent<any>) =>
 			{
+				this.$spinner.hide()
 				if (event instanceof HttpResponse)
 				{
 					console.log('\n\nevent--->>>', event, '\n\n');
@@ -74,38 +75,25 @@ export class HttpConfigInterceptor implements HttpInterceptor
 						}
 					}
 				}
+				else if (errorData.status == 404)
+				{
+					this.errors = {
+						errors: {
+							error: 'Server Error. Request Not Found. '
+						}
+					}
+				}
 				else
 				{
 					this.errors = errorData.error.data;
-				}
-				try
-				{
 					if (this.errors.error.includes('account not found'))
 					{
 						localStorage.clear()
 						sessionStorage.clear()
 						location.reload()
 					}
-				} catch (err)
-				{
-					this.$spinner.hide()
-					console.log('Error in Interceptor: ', err)
-					try
-					{
-						if (this.errors.error.includes('account not found'))
-						{
-							localStorage.clear()
-							sessionStorage.clear()
-							location.reload()
-						}
-					} catch (err)
-					{
-						console.log('Error in Interceptor: ', err)
-					}
 				}
-
-
-
+				this.$spinner.hide()
 				this.errorDialogService.openDialog(this.errors);
 				return throwError(this.errors);
 			}));
