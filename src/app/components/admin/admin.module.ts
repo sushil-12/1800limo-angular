@@ -93,8 +93,6 @@ import { MeetAndGreetComponent } from './meet-and-greet/meet-and-greet.component
 import { AmenitiesInteriorComponent } from './amenities-interior/amenities-interior.component';
 import { AmenitiesSpecialComponent } from './amenities-special/amenities-special.component';
 import { MasterVehicleFareComponent } from './master-vehicle-fare/master-vehicle-fare.component';
-import { BookingDetailsComponent } from './booking-details/booking-details.component';
-
 
 @NgModule({
 	declarations: [AdminComponent,
@@ -167,8 +165,7 @@ import { BookingDetailsComponent } from './booking-details/booking-details.compo
 		MeetAndGreetComponent,
 		AmenitiesInteriorComponent,
 		AmenitiesSpecialComponent,
-		MasterVehicleFareComponent,
-		BookingDetailsComponent
+		MasterVehicleFareComponent
 	],
 	imports: [
 		CommonModule,

@@ -1656,14 +1656,12 @@ h2.headinginfo .orangeHeading {
 .dropdwn .bi-chevron-up::before {
 	position: absolute;
 	right    : 8%;
-	top: 28%;
 	font-weight: 800 !important;
 }
 
 .dropdwn .bi-chevron-down::before {
 	position: absolute;
 	right    : 8%;
-	top: 28%;
 	font-weight: 800 !important;
 }
 

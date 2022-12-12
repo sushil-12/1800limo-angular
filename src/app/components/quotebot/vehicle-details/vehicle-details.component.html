@@ -598,7 +598,7 @@
 				<div class="row" *ngFor="let info of driver_info_display_keys">
 					<div class="col-3 col-md-5">
 						<p class="text-dark">
-							{{ info | titlecase }}
+							{{ formatString(info) | titlecase }}
 						</p>
 					</div>
 					<div class="col-9 col-md-7">

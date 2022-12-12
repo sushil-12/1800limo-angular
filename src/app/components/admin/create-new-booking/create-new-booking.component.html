@@ -100,8 +100,9 @@
 		<!-- Account Details | Passenger Information - Start -->
 		<section id="account-details" class="user_information">
 			<h2 class="headinginfo"> Client Accounts </h2>
-			<!-- Account Details -->
+			<!-- Account Details Container -->
 			<div class="container my-5">
+				<!-- Account Type Row -->
 				<div class="row custon-radio-row">
 					<!-- Account Types Radio Buttons -->
 					<div class="col-md-4 col-xl-3"
@@ -110,21 +111,16 @@
 							<div class="custom-control custom-radio">
 								<input class="custom-control-input" id="option_{{ account_index }}" type="radio"
 									name="account_type" formControlName="account_type" [value]="account"
-									(change)="fetchUserList(account)">
+									(change)="userSelection(account)">
 								<label class="custom-control-label" for="option_{{ account_index }}">
 									{{ textFormat(account) | titlecase }}
 								</label>
 							</div>
 						</div>
 					</div>
-					<!-- <div class="text-danger">
-						<div>
-							This field is required
-						</div>
-					</div> -->
 
-
-					<div class="col-md-12">
+					<!-- User Selection Dropdown -->
+					<div class="col-md-12" *ngIf="Form.account_type.value != 'loose_customer'">
 						<mat-form-field appearance="outline">
 							<mat-label>
 								Choose User <span class="asterisk"></span>
@@ -145,7 +141,10 @@
 						</div> -->
 					</div>
 				</div>
-				<div *ngIf="fetched_user" style="padding: 15px 20px">
+				<!-- Account Type Row Ends -->
+
+				<!-- Selected User Details -->
+				<div *ngIf="fetched_user && Form.account_type.value != 'loose_customer'" style="padding: 15px 20px">
 					<h3 class="headinginfoH3">
 						Client Account
 					</h3>
@@ -196,7 +195,203 @@
 
 					</div>
 				</div>
+				<!-- Selected User Details Ends -->
+
+				<!-- Loose Customer Details -->
+				<div id="loose-customer-details" formGroupName="loose_customer"
+					*ngIf="Form.account_type.value == 'loose_customer'">
+					<!-- First/Middle/Last Name -->
+					<div class="row">
+						<!-- First Name -->
+						<div class="col-md-4">
+							<mat-form-field appearance="outline">
+								<mat-label>
+									First Name <span class="asterisk">*</span>
+								</mat-label>
+								<input matInput placeholder="First Name" type="text" formControlName="first_name">
+							</mat-form-field>
+							<!-- <div class="errors" *ngIf="Form.loose_customer['controls'].first_name.errors">
+								<div class="text-danger"
+									*ngIf="Form.loose_customer['controls'].first_name.errors.required">
+									This field is required
+								</div>
+							</div> -->
+						</div>
+
+						<!-- Middle Name -->
+						<div class="col-md-4">
+							<mat-form-field appearance="outline">
+								<mat-label>
+									Middle Name
+								</mat-label>
+								<input matInput placeholder="Middle Name" type="text" formControlName="middle_name">
+							</mat-form-field>
+						</div>
+
+						<!-- Last Name -->
+						<div class="col-md-4">
+							<mat-form-field appearance="outline">
+								<mat-label>
+									Last Name <span class="asterisk">*</span>
+								</mat-label>
+								<input matInput placeholder="Last Name" type="text" formControlName="last_name">
+							</mat-form-field>
+							<!-- <div class="errors" *ngIf="Form.loose_customer['controls'].last_name.errors">
+								<div class="text-danger">
+									This field is required
+								</div>
+							</div> -->
+						</div>
+					</div>
+
+					<!-- Phone | Email | Address -->
+					<div class="row">
+						<!-- Phone -->
+						<div class="col-md-4">
+							<mat-form-field appearance="outline" class="mat-custom-phone">
+								<mat-label>
+									Phone <span class="asterisk"></span>
+								</mat-label>
+								<input matInput placeholder="Phone" formControlName="phone" ng2TelInput
+									[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
+									class="phoneNumberClass" (countryChange)="onCountryChange($event)"
+									(intlTelInputObject)="telInputObjectMobile($event)" tabIndex="1" />
+							</mat-form-field>
+							<!-- <div class="errors" *ngIf="Form.loose_customer['controls'].phone.errors">
+								<div class="text-danger">
+									This field is required
+								</div>
+							</div> -->
+						</div>
+						<!-- Email -->
+						<div class="col-md-4">
+							<mat-form-field appearance="outline">
+								<mat-label>
+									Email <span class="asterisk">*</span>
+								</mat-label>
+								<input matInput placeholder="Email" type="text" formControlName="email">
+							</mat-form-field>
+							<!-- <div class="errors" *ngIf="Form.loose_customer['controls'].email.errors">
+								<div class="text-danger">
+									This field is required
+								</div>
+							</div> -->
+						</div>
+						<!-- Address -->
+						<div class="col-md-4">
+							<mat-form-field appearance="outline">
+								<mat-label>
+									Address
+								</mat-label>
+								<input matInput placeholder="Address" type="text" formControlName="address">
+							</mat-form-field>
+							<!-- <div class="errors" *ngIf="Form.loose_customer['controls'].address.errors">
+								<div class="text-danger">
+									This field is required
+								</div>
+							</div> -->
+						</div>
+					</div>
+
+					<!-- Credit Card Details -->
+					<div id="credit-card-details" formGroupName="card_details">
+						<div class="row">
+							<!-- Card Holder Name -->
+							<div class="col-md-6">
+								<mat-form-field appearance="outline">
+									<mat-label>
+										Card Holder <span class="asterisk">*</span>
+									</mat-label>
+									<input matInput placeholder="Frist & Last Name" type="text" formControlName="name">
+								</mat-form-field>
+								<!-- <div class="errors"
+									*ngIf="Form.loose_customer['controls'].card_details['controls'].name.errors">
+									<div class="text-danger">
+										This field is required
+									</div>
+								</div> -->
+							</div>
+
+							<!-- Card Number -->
+							<div class="col-md-6">
+								<mat-form-field appearance="outline">
+									<mat-label>
+										Card Number <span class="asterisk">*</span>
+									</mat-label>
+									<input matInput placeholder="xxxx xxxx xxxx xxxx" type="text"
+										formControlName="card_number">
+								</mat-form-field>
+								<!-- <div class="errors"
+									*ngIf="Form.loose_customer['controls'].card_details['controls'].card_number.errors">
+									<div class="text-danger">
+										This field is required
+									</div>
+								</div> -->
+							</div>
+						</div>
+						<!-- Expiration Month/Year | CVV -->
+						<div class="row">
+							<!-- Expiration Month -->
+							<div class="col-md-4">
+								<mat-form-field appearance="outline">
+									<mat-label>
+										Expiration Month <span class="asterisk"></span>
+									</mat-label>
+									<mat-select formControlName="exp_month">
+										<mat-option [value]="mnth" *ngFor="let mnth of months">
+											{{ mnth }}
+										</mat-option>
+									</mat-select>
+								</mat-form-field>
+								<!-- <div class="errors"
+									*ngIf="Form.loose_customer['controls'].card_details['controls'].exp_month.errors">
+									<div class="text-danger">
+										This field is required
+									</div>
+								</div> -->
+							</div>
+
+							<!-- Expiration Year -->
+							<div class="col-md-4">
+								<mat-form-field appearance="outline">
+									<mat-label>
+										Expiration Year <span class="asterisk"></span>
+									</mat-label>
+									<mat-select formControlName="exp_year">
+										<mat-option [value]="number" *ngFor="let number of dates">
+											{{ number }}
+										</mat-option>
+									</mat-select>
+								</mat-form-field>
+								<!-- <div class="errors"
+									*ngIf="Form.loose_customer['controls'].card_details['controls'].exp_year.errors">
+									<div class="text-danger">
+										This field is required
+									</div>
+								</div> -->
+							</div>
+
+							<!-- CVV -->
+							<div class="col-md-4">
+								<mat-form-field appearance="outline">
+									<mat-label>
+										CVV <span class="asterisk">*</span>
+									</mat-label>
+									<input matInput placeholder="000" type="text" formControlName="cvv">
+								</mat-form-field>
+								<!-- <div class="errors"
+									*ngIf="Form.loose_customer['controls'].card_details['controls'].cvv.errors">
+									<div class="text-danger">
+										This field is required
+									</div>
+								</div> -->
+							</div>
+						</div>
+					</div>
+					<!-- Credit Card Details Ends -->
+				</div>
 			</div>
+			<!-- Accounts Details Container Ends -->
 
 
 			<!-- Passenger Information -->
@@ -789,24 +984,6 @@
 								</mat-select>
 							</mat-form-field>
 						</div>
-
-						<!-- Vehicle Selection -->
-						<!-- <div class="col-md-6">
-							<mat-form-field appearance="outline">
-								<mat-label>
-									Choose Vehicle <span class="asterisk"></span>
-								</mat-label>
-								<mat-select formControlName="vehicle_id">
-									<mat-option value="">
-										Choose Vehicle
-									</mat-option>
-									<mat-option *ngFor="let vehicle of affiliate_vehicle_list; index as vehicle_index"
-										[value]="vehicle.ID">
-										{{ vehicle.make }} ({{ vehicle.model }})
-									</mat-option>
-								</mat-select>
-							</mat-form-field>
-						</div> -->
 					</div>
 
 					<!-- Make | Model -->
@@ -1122,12 +1299,6 @@
 							</label>
 						</div>
 					</div>
-					<!-- Languages Validation -->
-					<!-- <div *ngIf="is_form_submitted && B_Form.driver_languages.errors" class="text-danger">
-						<div *ngIf="B_Form.driver_languages.errors.required">
-							This field is required
-						</div>
-					</div> -->
 				</div>
 
 				<!-- Dresses Selection -->
@@ -1145,12 +1316,6 @@
 								{{dress.name}}
 							</label>
 						</div>
-						<!-- Dresses Validation -->
-						<!-- <div *ngIf="is_form_submitted && B_Form.driver_dresses.errors" class="text-danger">
-							<div *ngIf="B_Form.driver_dresses.errors.required">
-								This field is required
-							</div>
-						</div> -->
 					</div>
 				</div>
 
@@ -1177,12 +1342,6 @@
 							</label>
 						</div>
 					</div>
-					<!-- Amenities Validation -->
-					<!-- <div *ngIf="is_form_submitted && B_Form.amenities.errors" class="text-danger">
-						<div *ngIf="B_Form.amenities.errors.required">
-							This field is required
-						</div>
-					</div> -->
 				</div>
 
 				<!-- Image Upload -->
