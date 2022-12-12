@@ -20,7 +20,7 @@ export class VehicleDetailsComponent implements OnInit
 	one_way_rates: any
 	round_trip_rates: any
 
-	driver_info_display_keys: Array<string> = ['gender', 'dress', 'experience', 'phone', 'languages']
+	driver_info_display_keys: Array<string> = ['gender', 'dress', 'experience', 'phone', 'languages', 'insurance_limit']
 
 	constructor(
 		private _router: Router,

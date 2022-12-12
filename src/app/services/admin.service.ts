@@ -844,11 +844,11 @@ export class AdminService
 	}
 	createBooking(data)
 	{
-		if (data.reservation_id)//edit affiliate
+		if (data.reservation_id)
 		{
 			return this.httpClient.put(this.serverUrl + 'edit-reservation', data);
 		}
-		else//add affiliate
+		else
 		{
 			return this.httpClient.post(this.serverUrl + 'create-reservation', data);
 		}

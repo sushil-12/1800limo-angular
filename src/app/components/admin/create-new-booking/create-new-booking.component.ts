@@ -37,9 +37,11 @@ export class CreateNewBookingComponent implements OnInit
 	outputDateFormat = 'YYYY-MM-DD';
 	bookingForm: FormGroup
 	constants_data = constant_data
-	account_type_radio_buttons: Array<String> = ['individual', 'corporate', 'travel_planner']
+	account_type_radio_buttons: Array<String> = ['individual', 'corporate', 'travel_planner', 'loose_customer']
 	affiliate_type_radio_buttons: Array<String> = ['affiliate', 'loose_affiliate']
 	selected_vehicle_driver_details: Array<Array<String>> = [['name', 'gender'], ['languages', 'dress'], ['experience', 'phone']]
+	months: Array<string> = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+	dates: Array<number> = []
 
 	booking_id: number = 0					// received in case of editing the booking
 	update_type: string = 'new'				// recieved in case of editing the booking
@@ -93,6 +95,11 @@ export class CreateNewBookingComponent implements OnInit
 				this.update_type = params.updateType ?? ''
 			}
 		})
+
+		for (let i = 1; i < 32; i++)
+		{
+			this.dates.push(i)
+		}
 
 		this.getBigData().then((data) =>
 		{
@@ -242,7 +249,24 @@ export class CreateNewBookingComponent implements OnInit
 			returnJourneyTime: [''],
 			driver_image_id: [''],
 			vehicle_image_id: [''],
-			booking_status: ['']
+			booking_status: [''],
+			loose_customer: this._formBuilder.group({
+				first_name: ['', Validators.required],
+				middle_name: [''],
+				last_name: ['', Validators.required],
+				phone: ['', Validators.required],
+				phone_country: ['us', Validators.required],
+				phone_isd: ['+1', Validators.required],
+				email: ['', Validators.required],
+				address: [''],
+				card_details: this._formBuilder.group({
+					name: ['', Validators.required],
+					card_number: ['', Validators.required],
+					exp_month: ['', Validators.required],
+					exp_year: ['', Validators.required],
+					cvv: ['', Validators.required]
+				})
+			})
 		})
 		return true
 	}
@@ -358,6 +382,7 @@ export class CreateNewBookingComponent implements OnInit
 
 				this.driver_image['image'] = this.Form.driver_image_id.value
 				this.vehicle_image['image'] = this.Form.vehicle_image_id.value
+				this.account_type_radio_buttons.pop()
 
 				// th big data takes time to load so keep the form filling these values until big data is fetched
 				let interval = setInterval(() =>
@@ -741,6 +766,19 @@ export class CreateNewBookingComponent implements OnInit
 		return text.indexOf(search_string, start) != -1
 	}
 
+	telInputObjectMobile(obj)
+	{
+		this.MobileObject = obj
+		console.log(obj)
+	}
+
+	onCountryChange(event)
+	{
+		this.Form.loose_customer.get('phone_country').setValue(event.iso2)
+		this.Form.loose_customer.get('phone_isd').setValue('+' + event.dialCode)
+		this.bookingForm.updateValueAndValidity()
+	}
+
 	changeDetection = {
 		service_type: () =>
 		{
@@ -889,20 +927,23 @@ export class CreateNewBookingComponent implements OnInit
 
 	userSelection(user_id: number)
 	{
-		this._spinner.show('normalspinner')
-		this.fetched_user = {}
-		this._adminService.chooseUser(user_id, this.Form.account_type.value).subscribe((response: any) =>
+		if (this.Form.account_type.value != 'loose_customer')
 		{
-			this._spinner.hide('normalspinner')
-			this.fetched_user = response.data
-			this.bookingForm.patchValue({
-				passenger_name: `${response.data.first_name} ${response.data.middle_name ?? ''} ${response.data.last_name}`,
-				passenger_cell: response.data.mobile,
-				passenger_cell_isd: response.data.mobileIsd,
-				passenger_email: response.data.email
+			this._spinner.show('normalspinner')
+			this.fetched_user = {}
+			this._adminService.chooseUser(user_id, this.Form.account_type.value).subscribe((response: any) =>
+			{
+				this._spinner.hide('normalspinner')
+				this.fetched_user = response.data
+				this.bookingForm.patchValue({
+					passenger_name: `${response.data.first_name} ${response.data.middle_name ?? ''} ${response.data.last_name}`,
+					passenger_cell: response.data.mobile,
+					passenger_cell_isd: response.data.mobileIsd,
+					passenger_email: response.data.email
+				})
+				this.MobileObject.setCountry(response.data.mobileCountry);
 			})
-			this.MobileObject.setCountry(response.data.mobileCountry);
-		})
+		}
 	}
 
 
@@ -1085,11 +1126,6 @@ export class CreateNewBookingComponent implements OnInit
 				}
 		}
 		// console.log(this.bookingForm);
-	}
-
-	telInputObjectMobile(obj)
-	{
-		this.MobileObject = obj;
 	}
 
 	isCheckboxSelected(list: any, comparison_key: string, comparison_obj: any): boolean

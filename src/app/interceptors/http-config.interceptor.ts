@@ -56,7 +56,6 @@ export class HttpConfigInterceptor implements HttpInterceptor
 			catchError((errorData: HttpErrorResponse) =>
 			{
 				this.$spinner.hide()
-				console.log(errorData)
 				if (errorData.status == 401)
 				{
 					this.errors = {
@@ -79,11 +78,6 @@ export class HttpConfigInterceptor implements HttpInterceptor
 				{
 					this.errors = errorData.error.data;
 				}
-
-
-
-
-
 				try
 				{
 					if (this.errors.error.includes('account not found'))
@@ -94,10 +88,11 @@ export class HttpConfigInterceptor implements HttpInterceptor
 					}
 				} catch (err)
 				{
+					this.$spinner.hide()
 					console.log('Error in Interceptor: ', err)
 					try
 					{
-						if (this.errors.includes('account not found'))
+						if (this.errors.error.includes('account not found'))
 						{
 							localStorage.clear()
 							sessionStorage.clear()
