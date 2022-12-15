@@ -824,7 +824,7 @@ export class AdminService
 		return this.httpClient.get(this.serverUrl + 'get-account-by-type/' + accountType);
 	}
 
-	chooseUser(id, accountType)
+	chooseUser(id: number, accountType: string)
 	{
 		switch (accountType)
 		{

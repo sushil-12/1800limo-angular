@@ -27,8 +27,7 @@
 							<mat-label>
 								Service Type <span class="asterisk"></span>
 							</mat-label>
-							<mat-select formControlName="service_type"
-								(selectionChange)="changeDetection.service_type()">
+							<mat-select formControlName="service_type">
 								<mat-option value="one_way">One Way</mat-option>
 								<mat-option value="round_trip">Round Trip</mat-option>
 								<mat-option value="charter_tour">Charter/Tour</mat-option>
@@ -47,8 +46,7 @@
 							<mat-label>
 								Transfer Type <span class="asterisk"></span>
 							</mat-label>
-							<mat-select formControlName="transfer_type"
-								(selectionChange)="changeDetection.transfer_type()">
+							<mat-select formControlName="transfer_type">
 								<mat-option value="airport_to_city">Airport to City</mat-option>
 								<mat-option value="airport_to_cruise">Airport to Cruise Port</mat-option>
 								<mat-option value="airport_to_airport">Airport to Airport</mat-option>
@@ -111,7 +109,7 @@
 							<div class="custom-control custom-radio">
 								<input class="custom-control-input" id="option_{{ account_index }}" type="radio"
 									name="account_type" formControlName="account_type" [value]="account"
-									(change)="userSelection(account)">
+									(change)="fetchAccounts(account)">
 								<label class="custom-control-label" for="option_{{ account_index }}">
 									{{ textFormat(account) | titlecase }}
 								</label>
@@ -125,7 +123,8 @@
 							<mat-label>
 								Choose User <span class="asterisk"></span>
 							</mat-label>
-							<mat-select formControlName="acc_id" (selectionChange)="userSelection($event.value)">
+							<mat-select formControlName="acc_id"
+								(selectionChange)="userSelection($event.value, Form.account_type.value)">
 								<mat-option value="">
 									Choose User
 								</mat-option>
@@ -134,17 +133,13 @@
 								</mat-option>
 							</mat-select>
 						</mat-form-field>
-						<!-- <div class="text-danger">
-							<div>
-								This field is required
-							</div>
-						</div> -->
 					</div>
 				</div>
 				<!-- Account Type Row Ends -->
 
 				<!-- Selected User Details -->
-				<div *ngIf="fetched_user && Form.account_type.value != 'loose_customer'" style="padding: 15px 20px">
+				<div *ngIf="fetched_user != {} && Form.account_type.value != 'loose_customer'"
+					style="padding: 15px 20px">
 					<h3 class="headinginfoH3">
 						Client Account
 					</h3>
@@ -154,13 +149,13 @@
 							Name:
 						</span>
 						<span class="col-sm-4 col-xl-3 font-weight-bolder">
-							{{ fetched_user.first_name | titlecase }} {{ fetched_user.last_name | titlecase }}
+							{{ fetched_user?.first_name | titlecase }} {{ fetched_use?.last_name | titlecase }}
 						</span>
 						<span class="col-sm-2 col-xl-1">
 							Email:
 						</span>
 						<span class="col-sm-4 col-xl-3 font-weight-bolder">
-							{{ fetched_user.email }}
+							{{ fetched_user?.email }}
 						</span>
 					</div>
 					<!-- Work | Mobile -->
@@ -169,13 +164,13 @@
 							Work:
 						</span>
 						<span class="col-sm-4 col-xl-3 font-weight-bolder">
-							{{ fetched_user.work_contact_number }}
+							{{ fetched_user?.work_contact_number }}
 						</span>
 						<span class="col-sm-2 col-xl-1">
 							Mobile:
 						</span>
 						<span class="col-sm-4 col-xl-3 font-weight-bolder">
-							{{ fetched_user.mobile }}
+							{{ fetched_user?.mobile }}
 						</span>
 					</div>
 					<!-- Address | City -->
@@ -184,15 +179,93 @@
 							Address:
 						</span>
 						<span class="col-sm-4 col-xl-3 font-weight-bolder">
-							{{ fetched_user.address | titlecase }}
+							{{ fetched_user?.address | titlecase }}
 						</span>
 						<span class="col-sm-2 col-xl-1">
 							City:
 						</span>
 						<span class="col-sm-4 col-xl-3 font-weight-bolder">
-							{{ fetched_user.city | titlecase }}
+							{{ fetched_user?.city | titlecase }}
 						</span>
 
+					</div>
+
+					<h2 class="headinginfo mt-5 p-0"> Passenger Information </h2>
+					<div class="row">
+						<!-- Passenger Name -->
+						<div class="col-md-12">
+							<mat-form-field appearance="outline">
+								<mat-label>
+									Passenger Name <span class="asterisk"></span>
+								</mat-label>
+								<input matInput placeholder="Passenger Name" type="text"
+									formControlName="passenger_name">
+							</mat-form-field>
+						</div>
+
+						<!-- Passenger Cell -->
+						<div class="col-md-6">
+							<mat-form-field appearance="outline" class="mat-custom-phone">
+								<mat-label>
+									Passenger Cell <span class="asterisk"></span>
+								</mat-label>
+								<input matInput placeholder="Passenger Cell" type="text"
+									formControlName="passenger_cell" class="lastnamefilter"
+									(intlTelInputObject)="intlTelInputObject($event)"
+									[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}" ng2TelInput
+									(countryChange)="changeDetection.countryChange('passenger_cell_isd', $event.dialCode)">
+							</mat-form-field>
+						</div>
+
+						<!-- Passenger Email -->
+						<div class="col-md-6">
+							<mat-form-field appearance="outline">
+								<mat-label>
+									Passenger Email <span class="asterisk"></span>
+								</mat-label>
+								<input matInput placeholder="Passenger Email" type="email"
+									formControlName="passenger_email">
+							</mat-form-field>
+						</div>
+
+						<!-- Passenger Count -->
+						<div class="col-6 col-md-6">
+							<mat-form-field appearance="outline">
+								<mat-label>
+									No. of Passengers <span class="asterisk"></span>
+								</mat-label>
+								<mat-select formControlName="total_passengers">
+									<mat-option *ngFor="let option of number_count" [value]="option">
+										{{ option }}
+									</mat-option>
+								</mat-select>
+							</mat-form-field>
+						</div>
+
+						<!-- Luggage Count -->
+						<div class="col-6 col-md-6">
+							<mat-form-field appearance="outline">
+								<mat-label>
+									Luggage Count <span class="asterisk"></span>
+								</mat-label>
+								<mat-select formControlName="luggage_count">
+									<mat-option value="0"> 0 </mat-option>
+									<mat-option *ngFor="let option of number_count" [value]="option">
+										{{ option }}
+									</mat-option>
+								</mat-select>
+							</mat-form-field>
+						</div>
+
+						<!-- Special Instructions -->
+						<div class="col-md-12">
+							<mat-form-field appearance="outline">
+								<mat-label>
+									Special Instructions
+								</mat-label>
+								<textarea matInput formControlName="booking_instructions" rows="5"></textarea>
+							</mat-form-field>
+						</div>
 					</div>
 				</div>
 				<!-- Selected User Details Ends -->
@@ -254,14 +327,9 @@
 								</mat-label>
 								<input matInput placeholder="Phone" formControlName="phone" ng2TelInput
 									[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
-									class="phoneNumberClass" (countryChange)="onCountryChange($event)"
-									(intlTelInputObject)="telInputObjectMobile($event)" tabIndex="1" />
+									(intlTelInputObject)="intlTelInputObject($event)" class="phoneNumberClass"
+									(countryChange)="onCountryChange($event)" tabIndex="1" />
 							</mat-form-field>
-							<!-- <div class="errors" *ngIf="Form.loose_customer['controls'].phone.errors">
-								<div class="text-danger">
-									This field is required
-								</div>
-							</div> -->
 						</div>
 						<!-- Email -->
 						<div class="col-md-4">
@@ -271,11 +339,6 @@
 								</mat-label>
 								<input matInput placeholder="Email" type="text" formControlName="email">
 							</mat-form-field>
-							<!-- <div class="errors" *ngIf="Form.loose_customer['controls'].email.errors">
-								<div class="text-danger">
-									This field is required
-								</div>
-							</div> -->
 						</div>
 						<!-- Address -->
 						<div class="col-md-4">
@@ -285,11 +348,6 @@
 								</mat-label>
 								<input matInput placeholder="Address" type="text" formControlName="address">
 							</mat-form-field>
-							<!-- <div class="errors" *ngIf="Form.loose_customer['controls'].address.errors">
-								<div class="text-danger">
-									This field is required
-								</div>
-							</div> -->
 						</div>
 					</div>
 
@@ -399,123 +457,9 @@
 					</div>
 					<!-- Credit Card Details Ends -->
 				</div>
+				<!-- Loose Customer Details -->
 			</div>
 			<!-- Accounts Details Container Ends -->
-
-
-			<!-- Passenger Information -->
-			<div class="container mt-1" *ngIf="fetched_user" style="padding: 15px 20px">
-				<h2 class="headinginfo "> Passenger Information </h2>
-				<div class="row">
-					<!-- Passenger Name -->
-					<div class="col-md-12">
-						<mat-form-field appearance="outline">
-							<mat-label>
-								Passenger Name <span class="asterisk"></span>
-							</mat-label>
-							<input matInput placeholder="Passenger Name" type="text" formControlName="passenger_name">
-						</mat-form-field>
-						<!-- <div class="text-danger">
-							<div>
-								This field is required
-							</div>
-						</div> -->
-					</div>
-
-					<!-- Passenger Cell -->
-					<div class="col-md-6">
-						<mat-form-field appearance="outline" class="mat-custom-phone">
-							<mat-label>
-								Passenger Cell <span class="asterisk"></span>
-							</mat-label>
-							<input matInput placeholder="Passenger Cell" type="text" formControlName="passenger_cell"
-								class="lastnamefilter"
-								[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
-								(intlTelInputObject)="telInputObjectMobile($event)" ng2TelInput
-								(countryChange)="changeDetection.countryChange('passenger_cell_isd', $event.dialCode)">
-						</mat-form-field>
-						<!-- <div class="text-danger">
-							<div>
-								This field is required
-							</div>
-							<div>
-								This field should be a number
-							</div>
-							<div>
-								Minimum length should be 10
-							</div>
-							<div>
-								Maximum length should be 10
-							</div>
-						</div> -->
-					</div>
-
-					<!-- Passenger Email -->
-					<div class="col-md-6">
-						<mat-form-field appearance="outline">
-							<mat-label>
-								Passenger Email <span class="asterisk"></span>
-							</mat-label>
-							<input matInput placeholder="Passenger Email" type="email"
-								formControlName="passenger_email">
-						</mat-form-field>
-						<!-- <div class="text-danger">
-							<div>
-								Email format is not valid.
-							</div>
-						</div> -->
-					</div>
-
-					<!-- Passenger Count -->
-					<div class="col-6 col-md-6">
-						<mat-form-field appearance="outline">
-							<mat-label>
-								No. of Passengers <span class="asterisk"></span>
-							</mat-label>
-							<mat-select formControlName="total_passengers">
-								<mat-option *ngFor="let option of number_count" [value]="option">
-									{{ option }}
-								</mat-option>
-							</mat-select>
-						</mat-form-field>
-						<!-- <div class="text-danger">
-							<div>
-								This field is required
-							</div>
-						</div> -->
-					</div>
-
-					<!-- Luggage Count -->
-					<div class="col-6 col-md-6">
-						<mat-form-field appearance="outline">
-							<mat-label>
-								Luggage Count <span class="asterisk"></span>
-							</mat-label>
-							<mat-select formControlName="luggage_count">
-								<mat-option value="0"> 0 </mat-option>
-								<mat-option *ngFor="let option of number_count" [value]="option">
-									{{ option }}
-								</mat-option>
-							</mat-select>
-						</mat-form-field>
-						<!-- <div class="text-danger">
-							<div>
-								This field is required
-							</div>
-						</div> -->
-					</div>
-
-					<!-- Special Instructions -->
-					<div class="col-md-12">
-						<mat-form-field appearance="outline">
-							<mat-label>
-								Special Instructions
-							</mat-label>
-							<textarea matInput formControlName="booking_instructions" rows="5"></textarea>
-						</mat-form-field>
-					</div>
-				</div>
-			</div>
 		</section>
 		<!-- Account Details | Passenger Information - Ends -->
 

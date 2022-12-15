@@ -83,10 +83,10 @@ export class CreateNewBookingComponent implements OnInit
 
 	ngOnInit()
 	{
+		// build the form 
+		this.buildBookingFormGroup()
 		this._activatedRoute.queryParams.subscribe((params: any) =>
 		{
-			// build the form 
-			this.buildBookingFormGroup()
 
 			// check whether the request has been made for editing or duplicate a booking
 			if (params != undefined && Object.keys(params).length > 0)
@@ -105,33 +105,43 @@ export class CreateNewBookingComponent implements OnInit
 		{
 			this.big_data_list = data
 			this.big_data_list_copy = JSON.parse(JSON.stringify(data))
-			this.prefillBookingFormGroup()
+			this.prefillBookingForm(this.booking_id ? 'booking_id' : 'quotebot')
 
 		})
 
-		this.fetchAccounts('individual').then((data: any) =>
-		{
-			this.user_list = data
-		})
+		this.fetchAccounts('individual')
 
-		this.fetchAffiliates('affiliate').then((data: any) =>
-		{
-			this.affiliate_list = data
-
-			// lose all data
-			for (const key in this.Form)
-			{
-				if (this.searchSubstring(key, 'vehicle') || this.searchSubstring(key, 'driver'))
-				{
-					this.bookingForm.get(key).reset()
-				}
-			}
-		})
+		this.fetchAffiliates('affiliate')
 
 		for (let i = 1; i <= 70; i++)
 		{
 			this.number_count.push(i)
 		}
+
+		// register some value changes subscription
+		this.bookingForm.get('service_type').valueChanges.subscribe((value: string) =>
+		{
+			// Initialise Return Map on round trip
+			if (value.includes('round'))
+			{
+				this.initReturnMap()
+				this.bookingForm.get('transfer_type').valueChanges.subscribe((value: string) =>
+				{
+					// fills the form with reversed value
+					function ReverseStringChars(text: string)
+					{
+						const str = text.split('_')
+						return str.reverse().join('_')
+					}
+					this.setFormValue('return_transfer_type', ReverseStringChars(value))
+				})
+			}
+			else
+			{
+				this.fillAllReturnValuesWith('')
+				this.initMap()
+			}
+		})
 	}
 	// ngOnInit ends
 
@@ -277,208 +287,24 @@ export class CreateNewBookingComponent implements OnInit
 	 * or via quotebot 
 	 * or via manually
 	 */
-	prefillBookingFormGroup()
+	prefillBookingForm(via: string)
 	{
-		// filling via Booking Id
-		if (this.booking_id != 0)
+		if (via == 'booking_id')
 		{
-			this._adminService.getBookingDataForEdit(this.booking_id).subscribe((response: any) =>
-			{
-				console.warn('Prefilling via Booking Id')
-				this.editing_data = response.data
-				console.log(this.editing_data, "...get booking data")
-				this.bookingForm.patchValue({
-					updateType: this.update_type,
-					reservation_id: this.booking_id,
-					acc_id: response.data.acc_id,
-					service_type: response.data.service_type == 'oneway' ? 'one_way' : response.data['service_type'] == 'roundtrip' ? 'round_trip' : 'charter_tour',
-					transfer_type: response.data.transfer_type != null ? response.data.transfer_type : '',
-					return_transfer_type: response.data.return_transfer_type != null ? response.data.return_transfer_type : '',
-					pickup_airport: response.data.pickup_airport ?? '',
-					pickup_airport_latitude: response.data.pickup_airport_latitude ?? '',
-					pickup_airport_longitude: response.data.pickup_airport_longitude ?? '',
-					pickup_airline: response.data.pickup_airline != null ? response.data.pickup_airline : '',
-					pickup_flight: response.data.pickup_flight != null ? response.data.pickup_flight : '',
-					origin_airport_city: response.data.origin_airport_city != null ? response.data.origin_airport_city : '',
-					cruise_name: response.data.cruise_name != null ? response.data.cruise_name : '',
-					cruise_port: response.data.cruise_port != null ? response.data.cruise_port : '',
-					cruise_time: response.data.cruise_time != null ? response.data.cruise_time : '',
-					pickup: response.data.pickup != null ? response.data.pickup : '',
-					pickup_latitude: response.data.pickup_latitude != null ? response.data.pickup_latitude : '',
-					pickup_longitude: response.data.pickup_longitude != null ? response.data.pickup_longitude : '',
-					dropoff_airport: response.data.dropoff_airport ?? '',
-					dropoff_airport_latitude: response.data.dropoff_airport_latitude ?? '',
-					dropoff_airport_longitude: response.data.dropoff_airport_longitude ?? '',
-					dropoff_airline: response.data.dropoff_airline != null ? response.data.dropoff_airline : '',
-					dropoff_flight: response.data.dropoff_flight != null ? response.data.dropoff_flight : '',
-					dropoff: response.data.dropoff != null ? response.data.dropoff : '',
-					dropoff_latitude: response.data.dropoff_latitude != null ? response.data.dropoff_latitude : '',
-					dropoff_longitude: response.data.dropoff_longitude != null ? response.data.dropoff_longitude : '',
-					return_cruise_name: response.data.return_cruise_name != null ? response.data.return_cruise_name : '',
-					return_cruise_port: response.data.return_cruise_port != null ? response.data.return_cruise_port : '',
-					return_cruise_time: response.data.return_cruise_time != null ? response.data.return_cruise_time : '',
-					stop_1: response.data.stop_1 != null ? response.data.stop_1 : '',
-					stop_1_latitude: response.data.stop_1_latitude != null ? response.data.stop_1_latitude : '',
-					stop_1_longitude: response.data.stop_1_longitude != null ? response.data.stop_1_longitude : '',
-					stop_2: response.data.stop_2 != null ? response.data.stop_2 : '',
-					stop_2_latitude: response.data.stop_2_latitude != null ? response.data.stop_2_latitude : '',
-					stop_2_longitude: response.data.stop_2_longitude != null ? response.data.stop_2_longitude : '',
-					meet_greet_choices: response.data.meet_greet_choices != null ? response.data.meet_greet_choices : '',
-					pickup_date: response.data.pickup_date != null ? response.data.pickup_date : '',
-					pickup_time: response.data.pickup_time != null ? response.data.pickup_time : '',
-					return_pickup_airport: response.data.return_pickup_airport ?? '',
-					return_pickup_airport_latitude: response.data.return_pickup_airport_latitude ?? '',
-					return_pickup_airport_longitude: response.data.return_pickup_airport_longitude ?? '',
-					return_pickup_airline: response.data.return_pickup_airline != null ? response.data.return_pickup_airline : '',
-					return_pickup_flight: response.data.return_pickup_flight != null ? response.data.return_pickup_flight : '',
-					return_pickup: response.data.return_pickup != null ? response.data.return_pickup : '',
-					return_pickup_latitude: response.data.return_pickup_latitude != null ? response.data.return_pickup_latitude : '',
-					return_pickup_longitude: response.data.return_pickup_longitude != null ? response.data.return_pickup_longitude : '',
-					return_dropoff_airport: response.data.return_dropoff_airport ?? '',
-					return_dropoff_airport_latitude: response.data.return_dropoff_airport_latitude ?? '',
-					return_dropoff_airport_longitude: response.data.return_dropoff_airport_longitude ?? '',
-					return_dropoff_airline: response.data.return_dropoff_airline != null ? response.data.return_dropoff_airline : '',
-					return_dropoff_flight: response.data.return_dropoff_flight != null ? response.data.return_dropoff_flight : '',
-					return_dropoff: response.data.return_dropoff != null ? response.data.return_dropoff : '',
-					return_dropoff_latitude: response.data.return_dropoff_latitude != null ? response.data.return_dropoff_latitude : '',
-					return_dropoff_longitude: response.data.return_dropoff_longitude != null ? response.data.return_dropoff_longitude : '',
-					return_stop_1: response.data.return_stop_1 != null ? response.data.return_stop_1 : '',
-					return_stop_1_latitude: response.data.return_stop_1_latitude != null ? response.data.return_stop_1_latitude : '',
-					return_stop_1_longitude: response.data.return_stop_1_longitude != null ? response.data.return_stop_1_longitude : '',
-					return_stop_2: response.data.return_stop_2 != null ? response.data.return_stop_2 : '',
-					return_stop_2_latitude: response.data.return_stop_2_latitude != null ? response.data.return_stop_2_latitude : '',
-					return_stop_2_longitude: response.data.return_stop_2_longitude != null ? response.data.return_stop_2_longitude : '',
-					return_meet_greet_choices: response.data.return_meet_greet_choices != null ? response.data.return_meet_greet_choices : '',
-					return_pickup_date: response.data.return_pickup_date != null ? response.data.return_pickup_date : '',
-					return_pickup_time: response.data.return_pickup_time != null ? response.data.return_pickup_time : '',
-					account_type: response.data.account_type != null ? response.data.account_type : '',
-					passenger_name: response.data.passenger_name != null ? response.data.passenger_name : '',
-					passenger_cell: response.data.passenger_cell != null ? response.data.passenger_cell : '',
-					passenger_email: response.data.passenger_email != null ? response.data.passenger_email : '',
-					total_passengers: response.data.total_passengers != null ? response.data.total_passengers : '',
-					luggage_count: response.data.luggage_count != null ? response.data.luggage_count : '',
-					booking_instructions: response.data.booking_instructions != null ? response.data.booking_instructions : '',
-					number_of_hours: response.data.number_of_hours != null ? response.data.number_of_hours : '',
-					number_of_vehicles: response.data.number_of_vehicles != null ? (response.data.number_of_vehicles).toString() : 1,
-					affiliate_type: response.data.affiliate_type != null ? response.data.affiliate_type : '',
-					affiliate_id: response.data.affiliate_id != null ? response.data.affiliate_id : '',
-					vehicle_type: response.data.vehicle_type != null && response.data.affiliate_type == 'loose_affiliate' ? response.data.vehicle_type : response.data.vehicle_id,
-					vehicle_id: response.data.vehicle_id != null ? response.data.vehicle_id : '',
-					license_plate: response.data.license_plate != null ? response.data.license_plate : '',
-					number_of_seats: response.data.number_of_seats != null ? response.data.number_of_seats : '',
-					driver_id: response.data.driver_id != null ? response.data.driver_id : '',
-					driver_name: response.data.driver_name != null ? response.data.driver_name : '',
-					driver_gender: response.data.driver_gender != null ? response.data.driver_gender : '',
-					driver_cell: response.data.driver_cell != null ? response.data.driver_cell : '',
-					driver_email: response.data.driver_email != null ? response.data.driver_email : '',
-					driver_phone_type: response.data.driver_phone_type != null ? response.data.driver_phone_type : '',
-					lose_affiliate_name: response.data.lose_affiliate_name != null ? response.data.lose_affiliate_name : '',
-					lose_affiliate_phone: response.data.lose_affiliate_phone != null ? response.data.lose_affiliate_phone : '',
-					lose_affiliate_email: response.data.lose_affiliate_email != null ? response.data.lose_affiliate_email : '',
-					driver_image_id: response.data.driver_image_id != null ? response.data.driver_image_id : '',
-					vehicle_image_id: response.data.vehicle_image_id != null ? response.data.vehicle_image_id : '',
-					booking_status: response.data.booking_status != null ? response.data.booking_status : ''
-				})
-
-				this.driver_image['image'] = this.Form.driver_image_id.value
-				this.vehicle_image['image'] = this.Form.vehicle_image_id.value
-				this.account_type_radio_buttons.pop()
-
-				// th big data takes time to load so keep the form filling these values until big data is fetched
-				let interval = setInterval(() =>
-				{
-					if (this.big_data_list != undefined)
-					{
-						clearInterval(interval)
-						this.bookingForm.patchValue({
-							vehicle_make: response.data.vehicle_make != null ? this.big_data_list['vehicleMakes'].find((item: any) => item.name == response.data['vehicle_make']) : '',
-							vehicle_model: response.data.vehicle_model != null ? this.big_data_list['vehicleModels'].find((item: any) => item.name == response.data['vehicle_model']) : '',
-							vehicle_year: response.data.vehicle_year != null ? this.big_data_list['vehicleYears'].find((item: any) => item.name == response.data['vehicle_year']) : '',
-							vehicle_color: response.data.vehicle_color != null ? this.big_data_list['vehicleColors'].find((item: any) => item.name == response.data['vehicle_color']) : '',
-						})
-					}
-				}, 1000)
-				this.Form.affiliate_id.value != 0 && this.getVehiclesandDriversFromAffiliate(this.Form.affiliate_id.value)
-				this.userSelection(this.Form.acc_id.value)
-			})
-		}
-		// filling via Quotebot
-		else if (localStorage.getItem('quotebot_form') != null)
+			this.prefillViaBookingID(this.booking_id)
+		} else if (via == 'quotebot')
 		{
-			// fetch data from quotebot, if it exists?
-			console.warn('Prefilling via Quotebot')
-			let data = JSON.parse(localStorage.getItem('quotebot_form'))
-
-			// prefill here for quotebot, has different field names
-			this.bookingForm.patchValue({
-				service_type: data['service_type'],
-				transfer_type: data['pickup_type'] + '_to_' + data['dropoff_type'],
-				return_transfer_type: data['dropoff_type'] + '_to_' + data['pickup_type'],
-				// pickup address
-				pickup: data['pickup_address'],
-				pickup_latitude: data['pickup_address_lat'],
-				pickup_longitude: data['pickup_address_long'],
-				// return pickup address
-				return_pickup: data['return_pickup_address'] ?? '',
-				return_pickup_latitude: data['return_pickup_address_lat'] ?? '',
-				return_pickup_longitude: data['return_pickup_address_long'] ?? '',
-				pickup_date: data['pickup_date'],
-				pickup_time: data['pickup_time'],
-				return_pickup_date: data['return_pickup_date'] ?? '',
-				return_pickup_time: data['return_pickup_time'] ?? '',
-				// pickup airport
-				pickup_airport: data['pickup_airport'],
-				pickup_airport_latitude: data['pickup_airport_lat'],
-				pickup_airport_longitude: data['pickup_airport_long'],
-				// return pickup airport
-				return_pickup_airport: data['return_pickup_airport'],
-				return_pickup_airport_latitude: data['return_pickup_airport_lat'],
-				return_pickup_airport_longitude: data['return_pickup_airport_long'],
-				// dropoff address
-				dropoff: data['dropoff_address'],
-				dropoff_latitude: data['dropoff_address_lat'],
-				dropoff_longitude: data['dropoff_address_long'],
-				// return dropoff address
-				return_dropoff: data['return_dropoff_address'] ?? '',
-				return_dropoff_latitude: data['return_dropoff_address_lat'] ?? '',
-				return_dropoff_longitude: data['return_dropoff_address_long'] ?? '',
-				// dropoff airport
-				dropoff_airport: data['dropoff_airport'],
-				dropoff_airport_latitude: data['dropoff_airport_lat'],
-				dropoff_airport_longitude: data['dropoff_airport_long'],
-				// return dropoff airport
-				return_dropoff_airport: data['return_dropoff_airport'],
-				return_dropoff_airport_latitude: data['return_dropoff_airport_lat'],
-				return_dropoff_airport_longitude: data['return_dropoff_airport_long'],
-				total_passengers: data['no_of_passenger'],
-				luggage_count: data['no_of_luggage'],
-				number_of_hours: data['booking_hour'] ?? '',
-				number_of_vehicles: "1",
-				journeyDistance: data['location_info'][0].distance.value,
-				journeyTime: data['location_info'][0].duration.value,
-				returnJourneyDistance: data['location_info'][1] != undefined ? data['location_info'][1].distance.value : '',
-				returnJourneyTime: data['location_info'][1] != undefined ? data['location_info'][1].duration.value : ''
-			})
-		}
-		else
+			this.prefillViaQuotebot(JSON.parse(localStorage.getItem('quotebot_form')))
+		} else
 		{
-			// filling via Manually
-			console.warn('Prefilling via Manually')
-			this.bookingForm.patchValue({
-				service_type: 'one_way',
-				transfer_type: 'city_to_city',
-				pickup_time: '12:00:00',
-				return_transfer_type: 'city_to_city',
-				number_of_vehicles: "1",
-				travel_time: '12:00:00',
-				return_travel_time: '12:30:00',
-			})
+			this.prefillManually()
 		}
 
 		// always filling values
 		this.setFormValue('luggage_count', 1)
 		this.setFormValue('account_type', 'individual')
 		this.setFormValue('affiliate_type', 'affiliate')
+
 		console.log('\n\n\n\n')
 		console.group('Prefilled Form Group: ')
 		console.log(this.bookingForm)
@@ -487,6 +313,130 @@ export class CreateNewBookingComponent implements OnInit
 		this.initMap()
 	}
 
+
+	prefillViaBookingID(booking_id: number)
+	{
+		console.warn('Prefilling via Booking Id')
+		this._adminService.getBookingDataForEdit(booking_id).subscribe((response: any) =>
+		{
+			this.editing_data = response.data
+			for (let item in this.editing_data)
+			{
+				if (this.editing_data[item] != null)
+				{
+					this.setFormValue(item, this.editing_data['item'])
+				} else
+				{
+					this.setFormValue(item, '')
+				}
+			}
+
+			this.bookingForm.patchValue({
+				updateType: this.update_type,
+				reservation_id: this.booking_id,
+				acc_id: response.data.acc_id,
+				service_type: response.data.service_type == 'oneway' ? 'one_way' : response.data['service_type'] == 'roundtrip' ? 'round_trip' : 'charter_tour',
+			})
+
+			this.driver_image['image'] = this.Form.driver_image_id.value
+			this.vehicle_image['image'] = this.Form.vehicle_image_id.value
+			this.account_type_radio_buttons.pop()
+
+			// th big data takes time to load so keep the form filling these values until big data is fetched
+			let prefillinterval = setInterval(() =>
+			{
+				if (this.big_data_list != undefined)
+				{
+					clearInterval(prefillinterval)
+					this.bookingForm.patchValue({
+						vehicle_make: response.data.vehicle_make != null ? this.big_data_list['vehicleMakes'].find((item: any) => item.name == response.data['vehicle_make']) : '',
+						vehicle_model: response.data.vehicle_model != null ? this.big_data_list['vehicleModels'].find((item: any) => item.name == response.data['vehicle_model']) : '',
+						vehicle_year: response.data.vehicle_year != null ? this.big_data_list['vehicleYears'].find((item: any) => item.name == response.data['vehicle_year']) : '',
+						vehicle_color: response.data.vehicle_color != null ? this.big_data_list['vehicleColors'].find((item: any) => item.name == response.data['vehicle_color']) : '',
+					})
+				}
+			}, 1000)
+			this.Form.affiliate_id.value != 0 && this.getVehiclesandDriversFromAffiliate(this.Form.affiliate_id.value)
+			this.userSelection(this.Form.acc_id.value, this.Form.account_type.value)
+		})
+	}
+
+	prefillViaQuotebot(data: any)
+	{
+		if (data == null)
+		{
+			console.log('Could not find Quotebot Data. Filling manually. ')
+			this.prefillManually()
+			return
+		}
+		console.warn('Prefilling via Quotebot. ')
+		// prefill here for quotebot, has different field names
+		this.bookingForm.patchValue({
+			service_type: data['service_type'],
+			transfer_type: data['pickup_type'] + '_to_' + data['dropoff_type'],
+			return_transfer_type: data['dropoff_type'] + '_to_' + data['pickup_type'],
+			// pickup address
+			pickup: data['pickup_address'],
+			pickup_latitude: data['pickup_address_lat'],
+			pickup_longitude: data['pickup_address_long'],
+			// return pickup address
+			return_pickup: data['return_pickup_address'] ?? '',
+			return_pickup_latitude: data['return_pickup_address_lat'] ?? '',
+			return_pickup_longitude: data['return_pickup_address_long'] ?? '',
+			pickup_date: data['pickup_date'],
+			pickup_time: data['pickup_time'],
+			return_pickup_date: data['return_pickup_date'] ?? '',
+			return_pickup_time: data['return_pickup_time'] ?? '',
+			// pickup airport
+			pickup_airport: data['pickup_airport'],
+			pickup_airport_latitude: data['pickup_airport_lat'],
+			pickup_airport_longitude: data['pickup_airport_long'],
+			// return pickup airport
+			return_pickup_airport: data['return_pickup_airport'],
+			return_pickup_airport_latitude: data['return_pickup_airport_lat'],
+			return_pickup_airport_longitude: data['return_pickup_airport_long'],
+			// dropoff address
+			dropoff: data['dropoff_address'],
+			dropoff_latitude: data['dropoff_address_lat'],
+			dropoff_longitude: data['dropoff_address_long'],
+			// return dropoff address
+			return_dropoff: data['return_dropoff_address'] ?? '',
+			return_dropoff_latitude: data['return_dropoff_address_lat'] ?? '',
+			return_dropoff_longitude: data['return_dropoff_address_long'] ?? '',
+			// dropoff airport
+			dropoff_airport: data['dropoff_airport'],
+			dropoff_airport_latitude: data['dropoff_airport_lat'],
+			dropoff_airport_longitude: data['dropoff_airport_long'],
+			// return dropoff airport
+			return_dropoff_airport: data['return_dropoff_airport'],
+			return_dropoff_airport_latitude: data['return_dropoff_airport_lat'],
+			return_dropoff_airport_longitude: data['return_dropoff_airport_long'],
+			total_passengers: data['no_of_passenger'],
+			luggage_count: data['no_of_luggage'],
+			number_of_hours: data['booking_hour'] ?? '',
+			number_of_vehicles: "1",
+			journeyDistance: data['location_info'][0].distance.value,
+			journeyTime: data['location_info'][0].duration.value,
+			returnJourneyDistance: data['location_info'][1] != undefined ? data['location_info'][1].distance.value : '',
+			returnJourneyTime: data['location_info'][1] != undefined ? data['location_info'][1].duration.value : ''
+		})
+	}
+
+
+	prefillManually()
+	{
+		// filling via Manually
+		console.warn('Prefilling via Manually')
+		this.bookingForm.patchValue({
+			service_type: 'one_way',
+			transfer_type: 'city_to_city',
+			pickup_time: '12:00:00',
+			return_transfer_type: 'city_to_city',
+			number_of_vehicles: "1",
+			travel_time: '12:00:00',
+			return_travel_time: '12:30:00',
+		})
+	}
 
 	/**
 	 * Big Data API. Fetching airports and all database data for vehicle and driver
@@ -701,6 +651,10 @@ export class CreateNewBookingComponent implements OnInit
 	{
 		console.log('onAutocompleteSelected: ', result, 'key_name: ', key_name);
 		this.setFormValue(key_name, result.formatted_address)
+		if (this.Form.service_type.value.includes('round') && !key_name.includes('return_'))
+		{
+			this.setFormValue('return_' + key_name, result.formatted_address)
+		}
 	}
 
 	onLocationSelected(location: Location, key_name: string)
@@ -709,7 +663,7 @@ export class CreateNewBookingComponent implements OnInit
 		this.setFormValue(key_name + '_latitude', location['latitude'])
 		this.setFormValue(key_name + '_longitude', location['longitude'])
 		this.initMap()
-		if (this.Form.service_type.value == 'round_trip' && !key_name.includes('return_'))
+		if (this.Form.service_type.value.includes('round') && !key_name.includes('return_'))
 		{
 			if (key_name == 'pickup') 
 			{
@@ -729,12 +683,15 @@ export class CreateNewBookingComponent implements OnInit
 			}
 			this.setFormValue('return_' + key_name + '_latitude', location['latitude'])
 			this.setFormValue('return_' + key_name + '_longitude', location['longitude'])
+			this.initReturnMap()
 		}
-		this.initReturnMap()
 
 		this.getAffiliatesListFromPickup(location['latitude'], location['longitude'])
 	}
 
+	/**
+	 * Feature: Will populate affiliates according to Pickup Coordinates
+	 */
 	getAffiliatesListFromPickup(latitude, longitude)
 	{
 		this.affiliate_list = []
@@ -766,41 +723,24 @@ export class CreateNewBookingComponent implements OnInit
 		return text.indexOf(search_string, start) != -1
 	}
 
-	telInputObjectMobile(obj)
+	intlTelInputObject(event: any)
 	{
-		this.MobileObject = obj
-		console.log(obj)
+		this.MobileObject = event
 	}
-
-	onCountryChange(event)
+	onCountryChange(event: any)
 	{
+		console.log(event)
 		this.Form.loose_customer.get('phone_country').setValue(event.iso2)
 		this.Form.loose_customer.get('phone_isd').setValue('+' + event.dialCode)
 		this.bookingForm.updateValueAndValidity()
 	}
 
 	changeDetection = {
-		service_type: () =>
-		{
-			if (this.Form.service_type.value == 'round_trip')
-			{
-				this.initReturnMap()
-			}
-		},
-		transfer_type: () =>
-		{
-			// fills the form with reversed value
-			function ReverseStringChars(text: string)
-			{
-				const str = text.split('_')
-				return str.reverse().join('_')
-			}
-			this.setFormValue('return_transfer_type', ReverseStringChars(this.Form.transfer_type.value))
-		},
 		checkbox: (event: any, form_key: string, chargeable: boolean) =>
 		{
 			if (event.target.checked)
 			{
+				// ------------------------------ Check Operation -------------------------
 				if (chargeable)
 				{
 					(this.bookingForm.get('chargedAmenities') as FormArray).push(new FormControl(event.target.value))
@@ -812,6 +752,7 @@ export class CreateNewBookingComponent implements OnInit
 			}
 			else
 			{
+				// ---------------------- Uncheck Operation ------------------------
 				if (chargeable)
 				{
 					(this.bookingForm.get('chargedAmenities') as FormArray).removeAt(
@@ -832,11 +773,15 @@ export class CreateNewBookingComponent implements OnInit
 				}
 			}
 		},
+
+
 		countryChange: (form_key: string, value: any) =>
 		{
 			this.bookingForm.get(form_key).setValue(value)
 			this.bookingForm.updateValueAndValidity()
 		},
+
+
 		selectDate: (dateType, value: any) =>
 		{
 			if (dateType == 'pickupDate')
@@ -850,6 +795,7 @@ export class CreateNewBookingComponent implements OnInit
 				this.setFormValue('return_pickup_date', value)
 			}
 		},
+
 		setVehicle: (value: string) =>
 		{
 			this.setFormValue('number_of_vehicles', value)
@@ -874,26 +820,52 @@ export class CreateNewBookingComponent implements OnInit
 	 * fetches list of user accounts
 	 * @param account_type [Required] type of the account requested
 	 */
-	fetchAccounts(account_type: string): Promise<any>
+	fetchAccounts(account_type: string)
 	{
+		if (account_type == 'loose_customer')
+		{
+			let required_fields = ['first_name', 'last_name', 'phone', 'phone_country', 'phone_isd', 'email', 'name', 'exp_month', 'exp_year', 'cvv']
+
+			// set validators for all above required fields
+			Object.keys(this.bookingForm.get('loose_customer')['controls']).forEach((item: string) =>
+			{
+				if (required_fields.includes(item))
+				{
+					(this.bookingForm.get('loose_customer') as FormGroup).get(item).setValidators([Validators.required])
+				}
+			})
+			return
+		}
+		// remove all validators for loose customer
+		Object.keys(this.bookingForm.get('loose_customer')['controls']).forEach((item: string) =>
+		{
+			(<FormGroup>this.bookingForm.get('loose_customer')).get(item).clearValidators()
+		})
+		this._spinner.show('normalspinner')
 		const legend = {
 			individual: 'individual',
 			corporate: 'corporate',
 			travel_planner: 'travel'
 		}
-		// return a new Promise object with fetched data
-		return new Promise((resolve, reject) =>
+		this.user_list = []
+		this.fetched_user = {}
+		this._adminService.getAccountBytype(legend[account_type]).subscribe((response: any) =>
 		{
-			this._adminService.getAccountBytype(legend[account_type]).subscribe((response: any) =>
+			this._spinner.hide('normalspinner')
+			if (response.success)
 			{
-				if (response.success)
+				this.user_list = response.data
+				if (response.data.length == 1)
 				{
-					resolve(response.data)
-				} else
-				{
-					reject(response.message || response.errors.error)
+					this.setFormValue('acc_id', response.data[0].id)
+					this.setFormValue('account_type', account_type)
+					this.userSelection(response.data[0].id, legend[account_type])
 				}
-			})
+			} else
+			{
+				console.log(response)
+				this._stateManager.setError(response.message ?? response.errors.error)
+			}
 		})
 	}
 
@@ -902,48 +874,56 @@ export class CreateNewBookingComponent implements OnInit
 	 * 
 	 * @params affiliate_type: String [Required] type of requested affiliate
 	 */
-	fetchAffiliates(affiliate_type: string): Promise<any>
+	fetchAffiliates(affiliate_type: string)
 	{
 		const legend = {
 			affiliate: 'driver',
 			loose_affiliate: 'loose_affiliate'
 		}
 
-		// return a new Promise object with fetched data
-		return new Promise((resolve, reject) =>
+		this._adminService.getAccountBytype(legend[affiliate_type]).subscribe((response: any) =>
 		{
-			this._adminService.getAccountBytype(legend[affiliate_type]).subscribe((response: any) =>
+			if (response.success)
 			{
-				if (response.success)
+				this.affiliate_list = response.data
+
+				// lose all data
+				for (const key in this.Form)
 				{
-					resolve(response.data)
-				} else
-				{
-					reject(response.message || response.errors.error)
+					if (this.searchSubstring(key, 'vehicle') || this.searchSubstring(key, 'driver'))
+					{
+						this.bookingForm.get(key).reset()
+					}
 				}
-			})
+			} else
+			{
+				console.log(response)
+				this._stateManager.setError(response.message ?? response.errors.error)
+			}
 		})
 	}
 
-	userSelection(user_id: number)
+	userSelection(user_id: number, account_type: string)
 	{
-		if (this.Form.account_type.value != 'loose_customer')
-		{
-			this._spinner.show()
-			this.fetched_user = {}
-			this._adminService.getAccountBytype(this.Form.account_type.value).subscribe((response: any) =>
-			{
-				this._spinner.hide()
-				this.fetched_user = response.data
-				this.bookingForm.patchValue({
-					passenger_name: `${response.data.first_name} ${response.data.middle_name ?? ''} ${response.data.last_name}`,
-					passenger_cell: response.data.mobile,
-					passenger_cell_isd: response.data.mobileIsd,
-					passenger_email: response.data.email
-				})
-				this.MobileObject.setCountry(response.data.mobileCountry);
-			})
+		const legend = {
+			individual: 'individual',
+			corporate: 'corporate',
+			travel_planner: 'travel'
 		}
+		this._spinner.show()
+		this.fetched_user = {}
+		this._adminService.chooseUser(user_id, legend[account_type]).subscribe((response: any) =>
+		{
+			this._spinner.hide()
+			this.fetched_user = response.data
+			this.bookingForm.patchValue({
+				passenger_name: `${response.data.first_name} ${response.data.middle_name ?? ''} ${response.data.last_name}`,
+				passenger_cell: response.data.mobile,
+				passenger_cell_isd: response.data.mobileIsd,
+				passenger_email: response.data.email
+			})
+			this.MobileObject.setCountry(response.data.mobileCountry);
+		})
 	}
 
 
@@ -958,7 +938,6 @@ export class CreateNewBookingComponent implements OnInit
 	{
 		this.affiliate_driver_list = [];
 		this.affiliate_vehicle_list = [];
-		this._stateManager.setprogressBar(true)
 		this._adminService.adminAffiliateVehicleList(affiliate_id).then((response: any) =>
 		{
 			if (response.success && response.data.vehicleList.length > 0)
@@ -970,10 +949,8 @@ export class CreateNewBookingComponent implements OnInit
 				{
 					this.fillVehicleDetails(this.affiliate_vehicle_list.find((item: any) => item.ID == this.Form.vehicle_id.value))
 				}
-				this._stateManager.setprogressBar(false)
 			} else
 			{
-				this._stateManager.setprogressBar(false)
 				console.warn('Could not fetch vehicle list')
 			}
 		})
@@ -990,13 +967,6 @@ export class CreateNewBookingComponent implements OnInit
 		// get vehicle object from chosen vehicle type
 		const vehicle_chosen = this.affiliate_vehicle_list.filter((item: any) => item.ID == vehicle_type_id)
 		this.fillVehicleDetails(vehicle_chosen[0])
-		// if (vehicle_chosen.length == 1)
-		// {
-		// 	this.fillVehicleDetails(vehicle_chosen[0])
-		// } else
-		// {
-		// 	this.affiliate_vehicle_list = vehicle_chosen
-		// }
 	}
 
 	fillVehicleDetails(vehicle_obj: any)
@@ -1180,6 +1150,17 @@ export class CreateNewBookingComponent implements OnInit
 	resetForm()
 	{
 		this.bookingForm.reset()
+	}
+
+	fillAllReturnValuesWith(value: any)
+	{
+		Object.keys(this.bookingForm.controls).forEach((key: string) =>
+		{
+			if (key.includes('return_'))
+			{
+				this.setFormValue(key, value)
+			}
+		})
 	}
 
 
