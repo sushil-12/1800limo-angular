@@ -7,6 +7,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { HttpClient } from "@angular/common/http";
+import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
+
 declare var $: any;
 
 @Component({
@@ -101,7 +103,8 @@ export class AddVehicleComponent implements OnInit
 		private formBuilder: FormBuilder,
 		private spinner: NgxSpinnerService,
 		private activatedroute: ActivatedRoute,
-		private httpClient: HttpClient) { }
+		private httpClient: HttpClient,
+		private errorModal: ErrorDialogService) { }
 
 	ngAfterViewChecked()
 	{
@@ -852,6 +855,57 @@ export class AddVehicleComponent implements OnInit
 				return true;
 			}
 		});
+	}
+
+
+	service: Array<any> = []
+	onServiceChange(value: string)
+	{
+		console.log(value)
+		if (this.service.includes(value))
+		{
+			// a never reaching code line
+			this.service = this.service.filter(val => val != value)
+		} else
+		{
+			this.service = []
+			this.service.push(value)
+		}
+
+		// as per new update from client: he wants to make the whole thing work as a radio button
+		return
+		if (!is_service_valid(value, this.service))
+		{
+			this.errorModal.openDialog({
+				errors: {
+					error: 'Cannot choose Local and Over The Road service at the same time'
+				}
+			})
+			this.service = this.service.filter(val => val != value)
+			return
+		}
+		console.log('Inital Array: ', this.service)
+
+		/**
+		 * The Array Validation Check function
+		 * - make sure the array doesn't containe 'local' and 'over_the_road' values at a time.
+		 * 
+		 * @param value: String [Required] value to check
+		 */
+		function is_service_valid(value: string, service: Array<any>)
+		{
+			if (value == 'local' && service.includes('over_the_road'))
+			{
+				return false
+			} else if (value == 'over_the_road' && service.includes('local'))
+			{
+				return false
+			}
+			else
+			{
+				return true
+			}
+		}
 	}
 
 

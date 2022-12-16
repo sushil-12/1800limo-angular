@@ -206,36 +206,40 @@
 							number</div>
 					</div>
 				</div>
-				<div class="col-md-3 pr-0 borderright mobilePadding">
-					<div class="form-group radio-tile-group">
-						<div class="custom-radio input-container" tabindex="1">
-							<input class="radio-button" type="radio" id="local" value="localService"
-								name="typeOfService" checked="" formControlName="typeOfService"
-								(click)="typeOfService('localService')" tabIndex="-1">
-							<div class="radio-tile">
-								<label class="radio-tile-label" for="local"
-									[ngClass]="serviceType=='localService' ? 'radio-active' : ''">Local Service
-									Only</label>
-							</div>
+			</div>
+
+			<div class="row mt-3">
+				<div class="col-md-4">
+					<div class="input-checkbox">
+						<div class="checkbox" [ngClass]="
+								service.includes('local') ? 'active' : ''
+							" (click)="onServiceChange('local')">
+							Local Service Only
 						</div>
 					</div>
 				</div>
-				<div class="col-md-3 pl-0 mobilePadding">
-					<div class="form-group radio-tile-group">
-						<div class="custom-radio input-container" tabindex="1">
-							<input class="radio-button" type="radio" id="longDistance" value="longDistance"
-								name="typeOfService" checked="" formControlName="typeOfService"
-								(click)="typeOfService('longDistance')" tabIndex="-1">
-							<div class="radio-tile">
-								<label class="radio-tile-label" for="longDistance"
-									[ngClass]="serviceType=='longDistance' ? 'radio-active' : ''">Over the Road –
-									Long
-									Distance</label>
-							</div>
+				<div class="col-md-4">
+					<div class="input-checkbox">
+						<div class="checkbox" [ngClass]="
+								service.includes('over_the_road')
+									? 'active'
+									: ''
+							" (click)="onServiceChange('over_the_road')">
+							Over The Road
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="input-checkbox">
+						<div class="checkbox" [ngClass]="
+								service.includes('shuttle') ? 'active' : ''
+							" (click)="onServiceChange('shuttle')">
+							Shuttle Service
 						</div>
 					</div>
 				</div>
 			</div>
+
 		</div>
 	</section>
 	<section class="user_information">

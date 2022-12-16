@@ -8,6 +8,7 @@ import { DateAdapter, MAT_DATE_LOCALE, ThemePalette } from '@angular/material/co
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 declare var $: any;
+import * as moment from 'moment';
 
 
 @Component({
@@ -487,6 +488,17 @@ export class DailyBookingsComponent implements OnInit
 					});
 				}
 			});
+	}
+
+
+	FormatDate(date: string)
+	{
+		return moment(date).format('ll')
+	}
+
+	FormatTime(time: string)
+	{
+		return moment(time, 'HH:mm:ss').format('hh:mm a')
 	}
 
 

@@ -11,7 +11,7 @@ agm-map {
 }
 
 .vehtype_extint img {
-	height       : 225px;
+	height: 225px;
 	border-radius: 15px;
 }
 
@@ -37,22 +37,22 @@ agm-map {
 
 .verifyDocButton,
 .adressChangeButton {
-	text-transform  : uppercase;
-	text-decoration : none;
-	margin          : 25px 0;
-	border-radius   : 0.5rem;
-	border          : 1px solid var(--orange-color);
+	text-transform: uppercase;
+	text-decoration: none;
+	margin: 25px 0;
+	border-radius: 0.5rem;
+	border: 1px solid var(--orange-color);
 	background-color: var(--orange-color);
-	color           : #fff;
-	width           : 100%;
-	padding         : 10px 40px !important;
+	color: #fff;
+	width: 100%;
+	padding: 10px 40px !important;
 }
 
 .verifyDocButton svg,
 .adressChangeButton svg {
 	margin-bottom: 10px;
-	margin-right : 10px;
-	height       : 30px;
+	margin-right: 10px;
+	height: 30px;
 }
 
 .verifyDocButton svg path,
@@ -62,16 +62,16 @@ agm-map {
 
 .verifyDocButton:hover,
 .adressChangeButton:hover {
-	border          : 1px solid var(--orange-color);
+	border: 1px solid var(--orange-color);
 	background-color: transparent;
-	color           : var(--orange-color);
+	color: var(--orange-color);
 }
 
 .verifyDocButton:focus,
 .adressChangeButton:focus {
-	border          : 1px solid var(--orange-color);
+	border: 1px solid var(--orange-color);
 	background-color: transparent;
-	color           : var(--orange-color);
+	color: var(--orange-color);
 }
 
 .verifyDocButton:hover svg path,
@@ -85,24 +85,23 @@ agm-map {
 }
 
 @media (max-width: 767.98px) {
-
 	.verifyDocButton,
 	.adressChangeButton {
-		padding    : 10px !important;
+		padding: 10px !important;
 		line-height: 1.4;
 	}
 }
 
 @media (min-width: 1200px) {
 	.verifyDocButton {
-		width     : fit-content;
-		float     : right;
+		width: fit-content;
+		float: right;
 		margin-top: -38px;
 	}
 
 	.adressChangeButton {
-		width     : fit-content;
-		float     : right;
+		width: fit-content;
+		float: right;
 		margin-top: -42px;
 	}
 }
@@ -125,16 +124,16 @@ agm-map {
 }
 
 .identityDocuments {
-	margin       : 2rem 0;
+	margin: 2rem 0;
 	border-bottom: 1px solid #c1bcbc;
 }
 
 .identityDocuments p {
 	border-bottom: 2px solid #c1bcbc;
-	display      : inline-block;
+	display: inline-block;
 	margin-bottom: 0;
-	padding      : 5px;
-	font-weight  : 500;
+	padding: 5px;
+	font-weight: 500;
 }
 
 .mat-select-disabled .mat-select-value {
@@ -147,10 +146,10 @@ agm-map {
 
 .defaultStatus {
 	background-color: #f8f87c !important;
-	color           : #fff;
-	padding         : 10px;
-	border-radius   : 10px;
-	margin          : 1rem 0;
+	color: #fff;
+	padding: 10px;
+	border-radius: 10px;
+	margin: 1rem 0;
 }
 
 .valid,
@@ -161,7 +160,7 @@ agm-map {
 
 .text-capitalize {
 	text-transform: capitalize !important;
-	font-weight   : 600;
+	font-weight: 600;
 }
 
 .invalid,
@@ -175,18 +174,18 @@ agm-map {
 }
 
 .adressChangeBtn {
-	float      : right;
-	color      : #000;
-	font-size  : 1rem;
+	float: right;
+	color: #000;
+	font-size: 1rem;
 	line-height: 2;
-	cursor     : pointer;
+	cursor: pointer;
 }
 
 .radio-active {
 	color: var(--orange-color);
 }
 
-@media only screen and (max-width:767px) {
+@media only screen and (max-width: 767px) {
 	.mobilePadding {
 		padding: 0px 15px !important;
 	}
@@ -198,36 +197,59 @@ agm-map {
 
 @media (min-width: 768px) and (max-width: 991px) {
 	#requestAddressChangeModal .modal-dialog {
-		position      : relative;
-		width         : auto;
-		margin        : 0.5rem auto;
-		margin-top    : 2.5rem !important;
+		position: relative;
+		width: auto;
+		margin: 0.5rem auto;
+		margin-top: 2.5rem !important;
 		pointer-events: none;
 	}
 
 	#verificationDocumentModal .modal-dialog {
-		position      : relative;
-		width         : auto;
-		margin        : 2.5rem;
-		margin-top    : 2.5rem !important;
+		position: relative;
+		width: auto;
+		margin: 2.5rem;
+		margin-top: 2.5rem !important;
 		pointer-events: none;
 	}
 
 	#requestAddressChangeModal .modal-dialog {
-		position      : relative;
-		width         : auto;
-		margin        : 0.5rem auto;
-		margin-top    : 2.5rem !important;
+		position: relative;
+		width: auto;
+		margin: 0.5rem auto;
+		margin-top: 2.5rem !important;
 		pointer-events: none;
 	}
 }
+#ein-container,
+#card-type-container {
+	padding: 12px 0 0 0;
 
-@media only screen and (min-width:1199px) {
+	.ein,
+	.card-type {
+		width: 48%;
+		padding: 1rem;
+		text-align: center;
+		border-radius: 1rem;
+		height: fit-content;
+		line-height: 2.7rem;
+		box-shadow: 0px 5px 10px 1px rgba(0, 0, 0, 0.4);
+		margin: 0 3px;
+		cursor: pointer;
+		transition: box-shadow 0.25s ease, background-color 0.25s ease;
+	}
+
+	.ein.active,
+	.card-type.active {
+		background-color: var(--green-color);
+		box-shadow: 0px 5px 10px -1px rgb(0 0 0 / 30%);
+	}
+}
+@media only screen and (min-width: 1199px) {
 	.input-container:focus {
 		outline: none;
 
-		.radio-button:checked+.radio-tile {
-			color    : #000 !important;
+		.radio-button:checked + .radio-tile {
+			color: #000 !important;
 			transform: scale(1, 1);
 
 			.radio-tile-label {

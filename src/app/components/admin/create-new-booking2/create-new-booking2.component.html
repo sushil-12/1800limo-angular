@@ -71,12 +71,6 @@
 					<strong> {{bookingDetail.origin_airport_city}} </strong>
 				</div>
 			</div>
-			<!-- <div class="col-md-6" *ngIf="bookingDetail.pickup_latitude">
-ickup Latitude/Longitude:
-<p>{{bookingDetail.pickup_latitude}}/{{bookingDetail.pickup_longitude}}</p>
-<strong>
-</strong>
-</div> -->
 			<div class="row" *ngIf="bookingDetail.dropoff_address">
 				<div class="col-md-4">
 					<p> Drop-Off Address: </p>
@@ -304,7 +298,7 @@ ickup Latitude/Longitude:
 					</div>
 				</div>
 			</div>
-
+			<!--	
 			<h2 class="headinginfoH2 topmargin pl-0">Account Details</h2>
 			<div class="row topmargin2" *ngIf="bookingDetail.account_type">
 				<div class="col-md-4">
@@ -602,6 +596,7 @@ ickup Latitude/Longitude:
 					<strong> {{bookingDetail.amenities}} </strong>
 				</div>
 			</div>
+			-->
 			<button class="custom-btn button2 mt-4" type="edit" (click)="editBooking()">Edit</button>
 
 		</div>
