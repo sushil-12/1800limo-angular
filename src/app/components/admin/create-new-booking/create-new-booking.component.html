@@ -149,7 +149,7 @@
 							Name:
 						</span>
 						<span class="col-sm-4 col-xl-3 font-weight-bolder">
-							{{ fetched_user?.first_name | titlecase }} {{ fetched_use?.last_name | titlecase }}
+							{{ fetched_user?.first_name | titlecase }} {{ fetched_user?.last_name | titlecase }}
 						</span>
 						<span class="col-sm-2 col-xl-1">
 							Email:
@@ -512,7 +512,7 @@
 						<div class="custom-control custom-radio">
 							<input class="custom-control-input" id="affiliate_{{ type_index }}" type="radio"
 								name="affiliate_type" formControlName="affiliate_type" [value]="type"
-								(change)="fetchAffiliatesList(type)">
+								(change)="fetchAffiliates(type)">
 							<label class="custom-control-label" for="affiliate_{{ type_index }}">
 								{{ textFormat(type) | titlecase }}
 							</label>
@@ -1437,11 +1437,6 @@
 								</mat-option>
 							</mat-select>
 						</mat-form-field>
-						<!-- <div class="text-danger">
-										<div>
-											This field is required
-										</div>
-									</div> -->
 					</div>
 				</div>
 
@@ -1457,21 +1452,15 @@
 									Airport <span class="asterisk"></span>
 								</mat-label>
 								<input type="text" placeholder="Search by Name or Airport Code" matInput
-									(keyup)="searchAirport($event.target.value)" [matAutocomplete]="auto1"
+									(keyup)="searchAirport($event.target.value)" [matAutocomplete]="pckupairportatc"
 									[value]="fillValue(big_data_list?.airportsData, Form.pickup_airport.value, 'id', 'name')">
-								<mat-autocomplete #auto1="matAutocomplete">
+								<mat-autocomplete #pckupairportatc="matAutocomplete">
 									<mat-option *ngFor="let airport of big_data_list?.airportsData"
 										[value]="airport.name"
 										(onSelectionChange)="chooseAirportAirline(airport.id, 'pickup_airport')">
 										{{ airport.name }}
 									</mat-option>
 								</mat-autocomplete>
-								<!-- <mat-select formControlName="pickup_airport"
-												(selectionChange)="chooseAirport($event.value, 'pickup_airport')">
-												<mat-option *ngFor="let airport of big_data_list?.airportsData" [value]="airport.id">
-													{{ airport.name }}
-												</mat-option>
-											</mat-select> -->
 							</mat-form-field>
 						</div>
 
@@ -1482,19 +1471,14 @@
 									Airline Name <span class="asterisk"></span>
 								</mat-label>
 								<input type="text" placeholder="Search by Name" matInput
-									(keyup)="searchAirline($event.target.value)" [matAutocomplete]="auto2">
-								<mat-autocomplete #auto2="matAutocomplete">
+									(keyup)="searchAirline($event.target.value)" [matAutocomplete]="pckupairlineatc">
+								<mat-autocomplete #pckupairlineatc="matAutocomplete">
 									<mat-option *ngFor="let airline of big_data_list?.airlinesData"
 										[value]="airline.name"
 										(onSelectionChange)="chooseAirportAirline(airline.id, 'pickup_airline')">
 										{{ airline.name }}
 									</mat-option>
 								</mat-autocomplete>
-								<!-- <mat-select formControlName="pickup_airline">
-												<mat-option *ngFor="let airline of big_data_list?.airlinesData" [value]="airline.id">
-													{{ airline.name }}
-												</mat-option>
-											</mat-select> -->
 							</mat-form-field>
 						</div>
 					</div>
@@ -1527,6 +1511,7 @@
 				<!-- CUISE DETAILS -->
 				<div *ngIf="searchSubstring(Form.transfer_type.value, 'cruise_')">
 					<div class="row">
+						<!-- Ship Name -->
 						<div class="col-md-4">
 							<mat-form-field appearance="outline">
 								<mat-label>
@@ -1537,6 +1522,7 @@
 							</mat-form-field>
 						</div>
 
+						<!-- Port -->
 						<div class="col-md-4">
 							<mat-form-field appearance="outline">
 								<mat-label>
@@ -1547,6 +1533,7 @@
 							</mat-form-field>
 						</div>
 
+						<!-- Time -->
 						<div class="col-md-4">
 							<mat-form-field appearance="outline">
 								<mat-label>
@@ -1564,6 +1551,7 @@
 				</div>
 				<!-- CRUISE DETAILS ENDS -->
 
+
 				<!-- Pickup Address Fields -->
 				<div class="row" *ngIf="!searchSubstring(Form.transfer_type.value, 'airport_')">
 					<div class="col-md-12">
@@ -1571,24 +1559,18 @@
 							<mat-label>
 								Pickup Address <span class="asterisk"></span>
 							</mat-label>
-							<input matInput matGoogleMapsAutocomplete formControlName="pickup"
+							<input matInput matGoogleMapsAutocomplete
 								(onAutocompleteSelected)="onAutocompleteSelected($event, 'pickup')"
 								(onLocationSelected)="onLocationSelected($event, 'pickup')" [value]="Form.pickup.value">
 						</mat-form-field>
-						<!-- <div class="text-danger">
-								<div>
-									Pickup Address is required
-								</div>
-							</div> -->
 					</div>
 				</div>
 
 
-
-				<!-- EXTRA STOPS -->
 				<h4 class="headinginfoH3">
 					Extra Stops
 				</h4>
+				<!-- EXTRA STOPS -->
 				<div class="row">
 					<!-- Extra Stop 1 -->
 					<div class="col-md-6">
@@ -1596,12 +1578,11 @@
 							<mat-label>
 								Extra Stop 2
 							</mat-label>
-							<input matInput matGoogleMapsAutocomplete formControlName="stop_1"
+							<input matInput matGoogleMapsAutocomplete
 								(onAutocompleteSelected)="onAutocompleteSelected($event, 'stop_1')"
 								(onLocationSelected)="onLocationSelected($event, 'stop_1')">
 						</mat-form-field>
 					</div>
-					<!-- Extra Stop 1 Ends -->
 
 					<!-- Extra Stop 2 -->
 					<div class="col-md-6">
@@ -1609,12 +1590,11 @@
 							<mat-label>
 								Extra Stop 3
 							</mat-label>
-							<input matInput matGoogleMapsAutocomplete formControlName="stop_2"
+							<input matInput matGoogleMapsAutocomplete
 								(onAutocompleteSelected)="onAutocompleteSelected($event, 'stop_2')"
 								(onLocationSelected)="onLocationSelected($event, 'stop_2')">
 						</mat-form-field>
 					</div>
-					<!-- Extra Stop 2 Ends -->
 				</div>
 				<!-- EXTRA STOPS ENDS -->
 
@@ -1631,20 +1611,13 @@
 							</mat-label>
 							<input type="text" placeholder="Search by Name or Airport Code" matInput
 								[value]="fillValue(big_data_list?.airportsData, Form.dropoff_airport.value, 'id', 'name')"
-								(keyup)="searchAirport($event.target.value)" [matAutocomplete]="auto3">
-							<mat-autocomplete #auto3="matAutocomplete">
+								(keyup)="searchAirport($event.target.value)" [matAutocomplete]="drpoffairportatc">
+							<mat-autocomplete #drpoffairportatc="matAutocomplete">
 								<mat-option *ngFor="let airport of big_data_list?.airportsData" [value]="airport.name"
 									(onSelectionChange)="chooseAirportAirline(airport.id, 'dropoff_airport')">
 									{{ airport.name }}
 								</mat-option>
 							</mat-autocomplete>
-							<!-- <input type="text" formControlName="dropoff_airport" list="airport-codes" matInput /> -->
-							<!-- <mat-select formControlName="dropoff_airport"
-											(selectionChange)="chooseAirport($event.value, 'dropoff_airport')">
-											<mat-option *ngFor="let airport of big_data_list?.airportsData" value="{{airport.id}}">
-												{{ airport.name }}
-											</mat-option>
-										</mat-select> -->
 						</mat-form-field>
 					</div>
 
@@ -1655,18 +1628,13 @@
 								Airline Name <span class="asterisk"></span>
 							</mat-label>
 							<input type="text" placeholder="Search by Name" matInput
-								(keyup)="searchAirline($event.target.value)" [matAutocomplete]="auto4">
-							<mat-autocomplete #auto4="matAutocomplete">
+								(keyup)="searchAirline($event.target.value)" [matAutocomplete]="drpoffairlineatc">
+							<mat-autocomplete #drpoffairlineatc="matAutocomplete">
 								<mat-option *ngFor="let airline of big_data_list?.airlinesData" [value]="airline.name"
 									(onSelectionChange)="chooseAirportAirline(airline.id, 'dropoff_airline')">
 									{{ airline.name }}
 								</mat-option>
 							</mat-autocomplete>
-							<!-- <mat-select formControlName="dropoff_airline">
-											<mat-option *ngFor="let airline of big_data_list?.airlinesData" value="{{airline.id}}">
-												{{ airline.name }}
-											</mat-option>
-										</mat-select> -->
 						</mat-form-field>
 					</div>
 
@@ -1683,28 +1651,30 @@
 				<!-- Dropoff Aiport Ends -->
 
 				<!-- CRUISE DETAILS -->
-				<div *ngIf="searchSubstring(Form.return_transfer_type.value, '_cruise')">
+				<div *ngIf="searchSubstring(Form.transfer_type.value, '_cruise')">
 					<div class="row">
+						<!-- Ship Name -->
 						<div class="col-md-4">
 							<mat-form-field appearance="outline">
 								<mat-label>
 									Ship Name <span class="asterisk"></span>
 								</mat-label>
 								<input type="text" placeholder="Cruise Ship Name" matInput
-									(keyup)="searchCruise($event.target.value)" formControlName="cruise_name">
+									formControlName="cruise_name">
 							</mat-form-field>
 						</div>
 
+						<!-- Port -->
 						<div class="col-md-4">
 							<mat-form-field appearance="outline">
 								<mat-label>
 									Port <span class="asterisk"></span>
 								</mat-label>
-								<input type="text" placeholder="Cruise Port" matInput
-									(keyup)="searchCruise($event.target.value)" formControlName="cruise_port">
+								<input type="text" placeholder="Cruise Port" matInput formControlName="cruise_port">
 							</mat-form-field>
 						</div>
 
+						<!-- Time -->
 						<div class="col-md-4">
 							<mat-form-field appearance="outline">
 								<mat-label>
@@ -1729,7 +1699,7 @@
 							<mat-label>
 								Dropoff Address <span class="asterisk"></span>
 							</mat-label>
-							<input matInput matGoogleMapsAutocomplete formControlName="dropoff"
+							<input matInput matGoogleMapsAutocomplete
 								(onAutocompleteSelected)="onAutocompleteSelected($event, 'dropoff')"
 								(onLocationSelected)="onLocationSelected($event, 'dropoff')"
 								[value]="Form.dropoff.value">
@@ -1799,15 +1769,6 @@
 							<mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
 							<mat-datepicker #picker2></mat-datepicker>
 						</mat-form-field>
-						<!-- <mat-form-field appearance="outline">
-									<mat-label>
-										Travel Date <span class="asterisk"></span>
-									</mat-label>
-									<input matInput [matDatepicker]="picker2" placeholder="Travel Date" id="id_5"
-										formControlName="return_pickup_date" (click)="picker2.open()">
-									<mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-									<mat-datepicker #picker2></mat-datepicker>
-								</mat-form-field> -->
 					</div>
 
 					<!--Travel Time -->
@@ -1823,11 +1784,6 @@
 								</mat-option>
 							</mat-select>
 						</mat-form-field>
-						<!-- <div class="text-danger">
-											<div>
-												This field is required
-											</div>
-										</div> -->
 					</div>
 				</div>
 
@@ -1842,20 +1798,14 @@
 								Airport <span class="asterisk"></span>
 							</mat-label>
 							<input type="text" placeholder="Search by Name or Airport Code" matInput
-								(keyup)="searchAirport($event.target.value)" [matAutocomplete]="auto1"
+								(keyup)="searchAirport($event.target.value)" [matAutocomplete]="returnpckupairportatc"
 								[value]="fillValue(big_data_list?.airportsData, Form.return_pickup_airport.value, 'id', 'name')">
-							<mat-autocomplete #auto1="matAutocomplete">
+							<mat-autocomplete #returnpckupairportatc="matAutocomplete">
 								<mat-option *ngFor="let airport of big_data_list?.airportsData" [value]="airport.name"
 									(onSelectionChange)="chooseAirportAirline(airport.id, 'return_pickup_airport')">
 									{{ airport.name }}
 								</mat-option>
 							</mat-autocomplete>
-							<!-- <mat-select formControlName="return_pickup_airport"
-												(selectionChange)="chooseAirport($event.value, 'return_pickup_airport')">
-												<mat-option *ngFor="let airport of big_data_list?.airportsData" value="{{airport.id}}">
-													{{ airport.name }}
-												</mat-option>
-											</mat-select> -->
 						</mat-form-field>
 					</div>
 
@@ -1866,18 +1816,13 @@
 								Airline Name <span class="asterisk"></span>
 							</mat-label>
 							<input type="text" placeholder="Search by Name" matInput
-								(keyup)="searchAirline($event.target.value)" [matAutocomplete]="auto6">
-							<mat-autocomplete #auto1="matAutocomplete">
+								(keyup)="searchAirline($event.target.value)" [matAutocomplete]="returnpckupairlineatc">
+							<mat-autocomplete #returnpckupairlineatc="matAutocomplete">
 								<mat-option *ngFor="let airline of big_data_list?.airlinesData" [value]="airline.name"
 									(onSelectionChange)="chooseAirportAirline(airline.id, 'return_pickup_airline')">
 									{{ airline.name }}
 								</mat-option>
 							</mat-autocomplete>
-							<!-- <mat-select formControlName="return_pickup_airline">
-												<mat-option *ngFor="let airline of big_data_list?.airlinesData" [value]="airline.id">
-													{{ airline.name }}
-												</mat-option>
-											</mat-select> -->
 						</mat-form-field>
 					</div>
 
@@ -1898,26 +1843,29 @@
 				<!-- CRUISE DETAILS -->
 				<div *ngIf="searchSubstring(Form.return_transfer_type.value, 'cruise_')">
 					<div class="row">
+						<!-- Ship Name -->
 						<div class="col-md-4">
 							<mat-form-field appearance="outline">
 								<mat-label>
 									Ship Name <span class="asterisk"></span>
 								</mat-label>
 								<input type="text" placeholder="Cruise Ship Name" matInput
-									(keyup)="searchCruise($event.target.value)" formControlName="return_cruise_name">
+									formControlName="return_cruise_name">
 							</mat-form-field>
 						</div>
 
+						<!-- Port -->
 						<div class="col-md-4">
 							<mat-form-field appearance="outline">
 								<mat-label>
 									Port <span class="asterisk"></span>
 								</mat-label>
 								<input type="text" placeholder="Cruise Port" matInput
-									(keyup)="searchCruise($event.target.value)" formControlName="return_cruise_port">
+									formControlName="return_cruise_port">
 							</mat-form-field>
 						</div>
 
+						<!-- Time -->
 						<div class="col-md-4">
 							<mat-form-field appearance="outline">
 								<mat-label>
@@ -1942,25 +1890,20 @@
 							<mat-label>
 								Pickup Address <span class="asterisk"></span>
 							</mat-label>
-							<input matInput matGoogleMapsAutocomplete formControlName="return_pickup"
+							<input matInput matGoogleMapsAutocomplete
 								(onAutocompleteSelected)="onAutocompleteSelected($event, 'return_pickup')"
 								(onLocationSelected)="onLocationSelected($event, 'return_pickup')"
 								[value]="Form.return_pickup.value">
 						</mat-form-field>
-						<!-- <div class="text-danger">
-											<div>
-												Pickup Address is required
-											</div>
-										</div> -->
 					</div>
 				</div>
 				<!-- Return Pickup Address Field Ends -->
 
 
-				<!-- EXTRA STOPS -->
 				<h4 class="headinginfoH3">
 					Extra Stops
 				</h4>
+				<!-- RETURN EXTRA STOPS -->
 				<div class="row">
 					<!-- Extra Stop 2 -->
 					<div class="col-md-6">
@@ -1968,25 +1911,25 @@
 							<mat-label>
 								Extra Stop 2
 							</mat-label>
-							<input matInput matGoogleMapsAutocomplete formControlName="return_stop_1"
+							<input matInput matGoogleMapsAutocomplete
 								(onAutocompleteSelected)="onAutocompleteSelected($event, 'return_stop_1')"
 								(onLocationSelected)="onLocationSelected($event, 'return_stop_1')">
 						</mat-form-field>
 					</div>
 
-					<!-- Extra Stop 3 -->
+					<!-- Return Extra Stop 3 -->
 					<div class="col-md-6">
 						<mat-form-field appearance="outline">
 							<mat-label>
 								Extra Stop 3
 							</mat-label>
-							<input type="text" matInput matGoogleMapsAutocomplete formControlName="return_stop_2"
+							<input type="text" matInput matGoogleMapsAutocomplete
 								(onAutocompleteSelected)="onAutocompleteSelected($event, 'return_stop_2')"
 								(onLocationSelected)="onLocationSelected($event, 'return_stop_2')">
 						</mat-form-field>
 					</div>
 				</div>
-				<!-- EXTRA STOPS ENDS -->
+				<!-- RETURN EXTRA STOPS ENDS -->
 
 				<h3 class="headinginfoH3"> Drop Off </h3>
 
@@ -1999,20 +1942,14 @@
 								Airport <span class="asterisk"></span>
 							</mat-label>
 							<input type="text" placeholder="Search by Name or Airport Code" matInput
-								(keyup)="searchAirport($event.target.value)" [matAutocomplete]="auto1"
+								(keyup)="searchAirport($event.target.value)" [matAutocomplete]="returndrpoffairportatc"
 								[value]="fillValue(big_data_list?.airportsData, Form.return_dropoff_airport.value, 'id', 'name')">
-							<mat-autocomplete #auto1="matAutocomplete">
+							<mat-autocomplete #returndrpoffairportatc="matAutocomplete">
 								<mat-option *ngFor="let airport of big_data_list?.airportsData" [value]="airport.name"
 									(onSelectionChange)="chooseAirportAirline(airport.id, 'return_dropoff_airport')">
 									{{ airport.name }}
 								</mat-option>
 							</mat-autocomplete>
-							<!-- <mat-select formControlName="return_dropoff_airport"
-												(selectionChange)="chooseAirport($event.value, 'return_dropoff_airport')">
-												<mat-option *ngFor="let airport of big_data_list?.airportsData" [value]="airport.id">
-													{{ airport.name }}
-												</mat-option>
-											</mat-select> -->
 						</mat-form-field>
 					</div>
 
@@ -2023,18 +1960,13 @@
 								Airline Name <span class="asterisk"></span>
 							</mat-label>
 							<input type="text" placeholder="Search by Name" matInput
-								(keyup)="searchAirline($event.target.value)" [matAutocomplete]="auto8">
-							<mat-autocomplete #auto8="matAutocomplete">
+								(keyup)="searchAirline($event.target.value)" [matAutocomplete]="returndrpoffairlineatc">
+							<mat-autocomplete #returndrpoffairlineatc="matAutocomplete">
 								<mat-option *ngFor="let airline of big_data_list?.airlinesData" [value]="airline.name"
 									(onSelectionChange)="chooseAirportAirline(airline.id, 'return_dropoff_airline')">
 									{{ airline.name }}
 								</mat-option>
 							</mat-autocomplete>
-							<!-- <mat-select formControlName="return_dropoff_airline">
-												<mat-option *ngFor="let airline of big_data_list?.airlinesData" [value]="airline.id">
-													{{ airline.name }}
-												</mat-option>
-											</mat-select> -->
 						</mat-form-field>
 					</div>
 
@@ -2098,7 +2030,7 @@
 							<mat-label>
 								Dropoff Address <span class="asterisk"></span>
 							</mat-label>
-							<input matInput matGoogleMapsAutocomplete formControlName="return_dropoff"
+							<input matInput matGoogleMapsAutocomplete
 								(onAutocompleteSelected)="onAutocompleteSelected($event, 'return_dropoff')"
 								(onLocationSelected)="onLocationSelected($event, 'return_dropoff')"
 								[value]="Form.return_dropoff.value">

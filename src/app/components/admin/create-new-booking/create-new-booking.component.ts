@@ -37,9 +37,9 @@ export class CreateNewBookingComponent implements OnInit
 	outputDateFormat = 'YYYY-MM-DD';
 	bookingForm: FormGroup
 	constants_data = constant_data
-	account_type_radio_buttons: Array<String> = ['individual', 'corporate', 'travel_planner', 'loose_customer']
-	affiliate_type_radio_buttons: Array<String> = ['affiliate', 'loose_affiliate']
-	selected_vehicle_driver_details: Array<Array<String>> = [['name', 'gender'], ['languages', 'dress'], ['experience', 'phone']]
+	account_type_radio_buttons: Array<string> = ['individual', 'corporate', 'travel_planner', 'loose_customer']
+	affiliate_type_radio_buttons: Array<string> = ['affiliate', 'loose_affiliate']
+	selected_vehicle_driver_details: Array<Array<string>> = [['name', 'gender'], ['languages', 'dress'], ['experience', 'phone']]
 	months: Array<string> = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 	years: Array<number> = []
 
@@ -118,6 +118,7 @@ export class CreateNewBookingComponent implements OnInit
 			this.number_count.push(i)
 		}
 
+		this.initMap()
 		// register some value changes subscription
 		this.bookingForm.get('service_type').valueChanges.subscribe((value: string) =>
 		{
@@ -125,25 +126,27 @@ export class CreateNewBookingComponent implements OnInit
 			if (value.includes('round'))
 			{
 				this.initReturnMap()
-				this.bookingForm.get('transfer_type').valueChanges.subscribe((value: string) =>
-				{
-					// fills the form with reversed value
-					function ReverseStringChars(text: string)
-					{
-						const str = text.split('_')
-						return str.reverse().join('_')
-					}
-					this.setFormValue('return_transfer_type', ReverseStringChars(value))
-				})
 			}
 			else
 			{
 				this.fillAllReturnValuesWith('')
-				this.initMap()
 			}
+		})
+		this.bookingForm.get('transfer_type').valueChanges.subscribe((value: string) =>
+		{
+			this.setFormValue('return_transfer_type', this.ReverseStringChars(value))
 		})
 	}
 	// ngOnInit ends
+
+	/**
+	 * returns a text with reverse string separating at word separators(-, _, /)
+	 */
+	ReverseStringChars(text: string): string
+	{
+		const str = text.split(/[\-|\_|\/]/g)
+		return str.reverse().join('_')
+	}
 
 	/**
 	 * Build the Form, assign the validations and default values
@@ -259,24 +262,7 @@ export class CreateNewBookingComponent implements OnInit
 			returnJourneyTime: [''],
 			driver_image_id: [''],
 			vehicle_image_id: [''],
-			booking_status: [''],
-			loose_customer: this._formBuilder.group({
-				first_name: ['', Validators.required],
-				middle_name: [''],
-				last_name: ['', Validators.required],
-				phone: ['', Validators.required],
-				phone_country: ['us', Validators.required],
-				phone_isd: ['+1', Validators.required],
-				email: ['', Validators.required],
-				address: [''],
-				card_details: this._formBuilder.group({
-					name: ['', Validators.required],
-					card_number: ['', Validators.required],
-					exp_month: ['', Validators.required],
-					exp_year: ['', Validators.required],
-					cvv: ['', Validators.required]
-				})
-			})
+			booking_status: ['']
 		})
 		return true
 	}
@@ -498,6 +484,7 @@ export class CreateNewBookingComponent implements OnInit
 					stopover: true
 				})
 			}
+
 			if (this.Form.stop_2.value != '')
 			{
 				waypoints.push({
@@ -513,25 +500,22 @@ export class CreateNewBookingComponent implements OnInit
 				travelMode: google.maps.TravelMode.DRIVING
 			}
 
-			if (this.Form.pickup.value != '')
+			if (this.Form.pickup.value && this.Form.pickup.value != '')
 			{
 				request['origin'] = new google.maps.LatLng(this.Form.pickup_latitude.value, this.Form.pickup_longitude.value)
 			}
-			if (this.Form.dropoff.value != '')
+			if (this.Form.dropoff.value && this.Form.dropoff.value != '')
 			{
 				request['destination'] = new google.maps.LatLng(this.Form.dropoff_latitude.value, this.Form.dropoff_longitude.value)
 			}
-			if (this.Form.pickup_airport.value != '')
+			if (this.Form.pickup_airport.value && this.Form.pickup_airport.value != '')
 			{
 				request['origin'] = new google.maps.LatLng(this.Form.pickup_airport_latitude.value, this.Form.pickup_airport_longitude.value)
 			}
-			if (this.Form.dropoff_airport.value != '')
+			if (this.Form.dropoff_airport.value && this.Form.dropoff_airport.value != '')
 			{
 				request['destination'] = new google.maps.LatLng(this.Form.dropoff_airport_latitude.value, this.Form.dropoff_airport_longitude.value)
 			}
-
-			console.log(request)
-			return
 
 			directionsService.route(request, (response: any, status: string) =>
 			{
@@ -561,24 +545,32 @@ export class CreateNewBookingComponent implements OnInit
 		{
 			const directionsRenderer = new google.maps.DirectionsRenderer()
 			const directionsService = new google.maps.DirectionsService()
-			const map = new google.maps.Map(document.getElementById("return_map"), {
-				zoom: 8,
-				center: new google.maps.LatLng(41.850033, -87.6500523),
-				scaleControl: true
-			})
+			let map!: google.maps.Map
+			try
+			{
+				map = new google.maps.Map(document.getElementById("return_map"), {
+					zoom: 8,
+					center: new google.maps.LatLng(41.850033, -87.6500523),
+					scaleControl: true
+				})
+			} catch (err)
+			{
+				// try again after some time
+				setTimeout(() => { this.initReturnMap() }, 1000)
+			}
 			directionsRenderer.setMap(map)
 
 
 			let return_waypoints = []
 
-			if (this.Form.return_stop_1.value != '')
+			if (this.Form.return_stop_1.value && this.Form.return_stop_1.value != '')
 			{
 				return_waypoints.push({
 					location: new google.maps.LatLng(this.Form.return_stop_1_latitude.value, this.Form.return_stop_1_longitude.value),
 					stopover: true,
 				})
 			}
-			if (this.Form.return_stop_2.value != '')
+			if (this.Form.return_stop_2.value && this.Form.return_stop_2.value != '')
 			{
 				return_waypoints.push({
 					location: new google.maps.LatLng(this.Form.return_stop_2_latitude.value, this.Form.return_stop_2_longitude.value),
@@ -587,15 +579,37 @@ export class CreateNewBookingComponent implements OnInit
 			}
 
 			// build request
-			let return_request = {
-				origin: new google.maps.LatLng(this.Form.return_pickup_latitude.value, this.Form.return_pickup_longitude.value),
-				destination: new google.maps.LatLng(this.Form.return_dropoff_latitude.value, this.Form.return_dropoff_longitude.value),
+			let request = {
 				waypoints: return_waypoints,
 				optimizeWaypoints: true,
 				travelMode: google.maps.TravelMode.DRIVING
 			}
 
-			directionsService.route(return_request, (response: any, status: string) =>
+			if (this.Form.return_pickup.value)
+			{
+				console.log('A')
+				request['origin'] = new google.maps.LatLng(this.Form.return_pickup_latitude.value, this.Form.return_pickup_longitude.value)
+			}
+
+			if (this.Form.return_dropoff.value)
+			{
+				request['destination'] = new google.maps.LatLng(this.Form.return_dropoff_latitude.value, this.Form.return_dropoff_longitude.value)
+			}
+
+			if (this.Form.return_pickup_airport.value)
+			{
+				console.log('B')
+				request['origin'] = new google.maps.LatLng(this.Form.return_pickup_airport_latitude.value, this.Form.return_pickup_airport_longitude.value)
+			}
+
+			if (this.Form.return_dropoff_airport.value)
+			{
+				request['destination'] = new google.maps.LatLng(this.Form.return_dropoff_airport_latitude.value, this.Form.return_dropoff_airport_longitude.value)
+			}
+
+			console.log(request)
+
+			directionsService.route(request, (response: any, status: string) =>
 			{
 				if (status == google.maps.DirectionsStatus.OK)
 				{
@@ -826,47 +840,57 @@ export class CreateNewBookingComponent implements OnInit
 		{
 			let required_fields = ['first_name', 'last_name', 'phone', 'phone_country', 'phone_isd', 'email', 'name', 'exp_month', 'exp_year', 'cvv']
 
-			// set validators for all above required fields
-			Object.keys(this.bookingForm.get('loose_customer')['controls']).forEach((item: string) =>
+			// add control for loose customer
+			this.bookingForm.addControl('loose_customer', this._formBuilder.group({
+				first_name: new FormControl('', Validators.required),
+				middle_name: new FormControl(''),
+				last_name: new FormControl('', Validators.required),
+				phone: new FormControl('', Validators.required),
+				phone_isd: new FormControl('+1', Validators.required),
+				phone_country: new FormControl('us', Validators.required),
+				email: new FormControl('', Validators.required),
+				address: new FormControl(['']),
+				card_details: this._formBuilder.group({
+					name: new FormControl('', Validators.required),
+					card_number: new FormControl('', Validators.required),
+					exp_month: new FormControl('', Validators.required),
+					exp_year: new FormControl('', Validators.required),
+					cvv: new FormControl('', Validators.required)
+				})
+			}))
+		}
+		else
+		{
+			// remove control for loose customer
+			console.log('Removing Control for ');
+			this.bookingForm.removeControl('loose_customer')
+
+			this._spinner.show('normalspinner')
+			const legend = {
+				individual: 'individual',
+				corporate: 'corporate',
+				travel_planner: 'travel',
+			}
+			this.user_list = []
+			this.fetched_user = {}
+			this._adminService.getAccountBytype(legend[account_type]).subscribe((response: any) =>
 			{
-				if (required_fields.includes(item))
+				this._spinner.hide('normalspinner')
+				if (response.success)
 				{
-					(this.bookingForm.get('loose_customer') as FormGroup).get(item).setValidators([Validators.required])
+					this.user_list = response.data
+					if (response.data.length == 1)
+					{
+						this.setFormValue('account_type', account_type)
+						this.userSelection(response.data[0].id, legend[account_type])
+					}
+				} else
+				{
+					console.log(response)
+					this._stateManager.setError(response.message ?? response.errors.error)
 				}
 			})
-			return
 		}
-		// remove all validators for loose customer
-		Object.keys(this.bookingForm.get('loose_customer')['controls']).forEach((item: string) =>
-		{
-			(<FormGroup>this.bookingForm.get('loose_customer')).get(item).clearValidators()
-		})
-		this._spinner.show('normalspinner')
-		const legend = {
-			individual: 'individual',
-			corporate: 'corporate',
-			travel_planner: 'travel'
-		}
-		this.user_list = []
-		this.fetched_user = {}
-		this._adminService.getAccountBytype(legend[account_type]).subscribe((response: any) =>
-		{
-			this._spinner.hide('normalspinner')
-			if (response.success)
-			{
-				this.user_list = response.data
-				if (response.data.length == 1)
-				{
-					this.setFormValue('acc_id', response.data[0].id)
-					this.setFormValue('account_type', account_type)
-					this.userSelection(response.data[0].id, legend[account_type])
-				}
-			} else
-			{
-				console.log(response)
-				this._stateManager.setError(response.message ?? response.errors.error)
-			}
-		})
 	}
 
 	/**
@@ -912,6 +936,7 @@ export class CreateNewBookingComponent implements OnInit
 		}
 		this._spinner.show()
 		this.fetched_user = {}
+		this.setFormValue('acc_id', user_id)
 		this._adminService.chooseUser(user_id, legend[account_type]).subscribe((response: any) =>
 		{
 			this._spinner.hide()
@@ -1104,7 +1129,6 @@ export class CreateNewBookingComponent implements OnInit
 	}
 
 
-	is_save_button_disabled: boolean = false
 	submitForm(preview: boolean = false)
 	{
 		if (this.bookingForm.invalid)
@@ -1122,22 +1146,16 @@ export class CreateNewBookingComponent implements OnInit
 			this.bookingForm.value.number_of_vehicles = this.bookingForm.value.number_of_vehicles != null ? parseInt(this.bookingForm.value.number_of_vehicles) : 1
 			this._adminService.createBooking(this.bookingForm.value).subscribe((response: any) =>
 			{
-				if (response)
-				{
-					this._router.navigate(['/admin/daily-bookings-admin'])
-					return
-					// 	, {
-					// 	queryParams: {
-					// 		bookingId: response.data.reservation_id
-					// 	},
-					// 	queryParamsHandling: 'merge'
-					// }
-				}
-				else
-				{
-					this.is_save_button_disabled = false
-					return
-				}
+				this._stateManager.setError({
+					errors: {
+						error: 'Reservation has been created successfully. '
+					}
+				})
+				this._router.navigate(['/admin/booking-details'], {
+					queryParams: {
+						bookingId: response.data.reservation_id
+					},
+				})
 			})
 		}
 		else
@@ -1164,7 +1182,7 @@ export class CreateNewBookingComponent implements OnInit
 	}
 
 
-	textFormat(text: any, list: any = null)
+	textFormat(text: any)
 	{
 		if (typeof text == 'string' && isNaN(parseInt(text)))
 		{

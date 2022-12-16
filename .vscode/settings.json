@@ -1,4 +1,10 @@
 {
 	"editor.formatOnSave": true,
 	"files.autoSave": "off",
+	"editor.fontSize": 15,
+	"editor.fontFamily": "Roboto",
+	"editor.letterSpacing": 2.5,
+	"editor.lineHeight": 2.5,
+	"editor.linkedEditing": true,
+	"angular.enable-strict-mode-prompt": false,
 }

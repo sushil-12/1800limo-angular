@@ -1,12 +1,12 @@
 .adminbox_shadow.user_information,
 .adminbox_shadow.user_information .mat-form-field,
 .mat-calendar {
-	font-family: 'PT Serif', serif !important;
+	font-family: "PT Serif", serif !important;
 }
 
 .booking_status {
 	font-size: medium;
-	color    : #fff;
+	color: #fff;
 }
 
 .pending {
@@ -55,8 +55,8 @@
 
 .btnclass {
 	margin-top: 20px;
-	height    : 60px;
-	width     : 100%;
+	height: 60px;
+	width: 100%;
 }
 
 @media only screen and (min-width: 768px) and (max-width: 1200px) {
@@ -65,7 +65,7 @@
 	}
 
 	.startdate2 {
-		padding-left : 5px;
+		padding-left: 5px;
 		padding-right: 5px;
 	}
 
@@ -84,10 +84,10 @@
 }
 
 .btnStyle {
-	color           : #fff !important;
+	color: #fff !important;
 	background-color: var(--orange-color) !important;
-	border-color    : var(--orange-color) !important;
-	padding         : 10px 40px;
+	border-color: var(--orange-color) !important;
+	padding: 10px 40px;
 }
 
 .modal-header {
@@ -95,23 +95,23 @@
 }
 
 #sendEmailModal .modal-content hr {
-	border             : 2px solid var(--orange-color);
-	width              : 180px;
-	background-color   : var(--orange-color);
+	border: 2px solid var(--orange-color);
+	width: 180px;
+	background-color: var(--orange-color);
 	// margin          : 10px 347px 20px 347px;
-	display            : block;
-	margin-top         : 0;
-	margin-bottom      : 0;
+	display: block;
+	margin-top: 0;
+	margin-bottom: 0;
 }
 
 #Layer_1 {
 	height: 48px;
-	width : 48px;
+	width: 48px;
 }
 
 .mailBoxStyle svg {
-	width     : 60px;
-	height    : 60px;
+	width: 60px;
+	height: 60px;
 	margin-top: -5px;
 }
 
@@ -122,7 +122,7 @@
 
 .iconStyle a {
 	text-decoration: none;
-	color          : #000;
+	color: #000;
 }
 
 .headingStyle {
@@ -130,25 +130,25 @@
 }
 
 .saveButton {
-	color           : #fff !important;
+	color: #fff !important;
 	background-color: #5dbd8a;
-	border-color    : #5dbd8a;
-	padding         : 10px 40px;
-	position        : absolute;
-	bottom          : -60px;
-	left            : 15px;
+	border-color: #5dbd8a;
+	padding: 10px 40px;
+	position: absolute;
+	bottom: -60px;
+	left: 15px;
 }
 
-
-table
-{
+table {
 	width: auto;
 	white-space: nowrap;
 	padding: 10px;
 	min-width: 5rem;
-	thead th
-	{
+	thead th {
 		color: #000000;
 		font-weight: 600;
+	}
+	tbody td > p {
+		margin: 0;
 	}
 }
