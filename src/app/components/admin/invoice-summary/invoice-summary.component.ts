@@ -60,7 +60,7 @@ export class InvoiceSummaryComponent implements OnInit
 	}
 	backButton()
 	{
-		this.router.navigate(['/admin/daily-bookings-admin'], { queryParams: { bookingId: this.bookingId } });
+		this.router.navigate(['/admin/daily-bookings-admin']);
 	}
 
 }
