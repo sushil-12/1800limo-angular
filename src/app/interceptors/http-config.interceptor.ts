@@ -85,8 +85,8 @@ export class HttpConfigInterceptor implements HttpInterceptor
 				}
 				else
 				{
-					this.errors = errorData.error.data;
-					if (this.errors.error.includes('account not found'))
+					this.errors = { errors: { error: Object.values(errorData.error.data.errors).join('\n') } };
+					if (this.errors.errors.error.includes('account not found'))
 					{
 						localStorage.clear()
 						sessionStorage.clear()
