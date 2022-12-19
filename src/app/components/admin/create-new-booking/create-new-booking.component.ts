@@ -310,7 +310,7 @@ export class CreateNewBookingComponent implements OnInit
 			{
 				if (this.editing_data[item] != null)
 				{
-					this.setFormValue(item, this.editing_data['item'])
+					this.setFormValue(item, this.editing_data[item])
 				} else
 				{
 					this.setFormValue(item, '')
@@ -905,7 +905,7 @@ export class CreateNewBookingComponent implements OnInit
 			loose_affiliate: 'loose_affiliate'
 		}
 
-		this._adminService.getAccountBytype(legend[affiliate_type]).subscribe((response: any) =>
+		affiliate_type != 'loose_affiliate' && this._adminService.getAccountBytype(legend[affiliate_type]).subscribe((response: any) =>
 		{
 			if (response.success)
 			{
