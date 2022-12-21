@@ -1,0 +1,484 @@
+<!--
+<div class="container">
+			<h2 class="headinginfo pl-0">Booking Details</h2>
+			<div class="row topmargin2" *ngIf="bookingDetail.service_type">
+				<div class="col-md-4">
+					<p>Service Type: </p>
+				</div>
+				<div class="col-md-8">
+					<strong>{{bookingDetail.service_type |titlecase}}</strong>
+				</div>
+			</div>
+			<div class="row" *ngIf="bookingDetail.transfer_type">
+				<div class="col-md-4">
+					<p>Transfer Type: </p>
+				</div>
+				<div class="col-md-8">
+					<strong>{{bookingDetail.transfer_type |titlecase}}</strong>
+				</div>
+			</div>
+			<div class="row" *ngIf="bookingDetail.return_transfer_type">
+				<div class="col-md-4">
+					<p>Return Transfer Type: </p>
+				</div>
+				<div class="col-md-8">
+					<strong>{{bookingDetail.return_transfer_type |titlecase}}</strong>
+				</div>
+			</div>
+
+			<h2 class="headinginfoH2 topmargin pl-0">Journey Details</h2>
+			<div class="row topmargin2" *ngIf="bookingDetail.pickup_address">
+				<div class="col-md-4">
+					<p> Pickup Address: </p>
+				</div>
+				<div class="col-md-8">
+					<strong> {{bookingDetail.pickup_address}} </strong>
+				</div>
+			</div>
+			<div class="row" *ngIf="bookingDetail.pickup_airport_name">
+				<div class="col-md-4">
+					<p>Pickup Airport: </p>
+				</div>
+				<div class="col-md-8">
+					<strong> {{bookingDetail.pickup_airport_name}} </strong>
+				</div>
+			</div>
+			<div class="row" *ngIf="bookingDetail.pickup_airline_name">
+				<div class="col-md-4">
+					<p>Pickup Airline: </p>
+				</div>
+				<div class="col-md-8">
+					<strong> {{bookingDetail.pickup_airline_name}} </strong>
+				</div>
+			</div>
+			<div class="row" *ngIf="bookingDetail.pickup_flight">
+				<div class="col-md-4">
+					<p> Pickup Flight Number: </p>
+				</div>
+				<div class="col-md-8">
+					<strong> {{bookingDetail.pickup_flight}} </strong>
+				</div>
+			</div>
+			<div class="row" *ngIf="bookingDetail.origin_airport_city">
+				<div class="col-md-4">
+					<p> Pickup Origin Airport / City: </p>
+				</div>
+				<div class="col-md-8">
+					<strong> {{bookingDetail.origin_airport_city}} </strong>
+				</div>
+			</div>
+			<div class="row" *ngIf="bookingDetail.dropoff_address">
+				<div class="col-md-4">
+					<p> Drop-Off Address: </p>
+				</div>
+				<div class="col-md-8">
+					<strong> {{bookingDetail.dropoff_address}} </strong>
+				</div>
+			</div>
+			<div class="row" *ngIf="bookingDetail.dropoff_airport_name">
+				<div class="col-md-4">
+					<p> Drop-Off Airport: </p>
+				</div>
+				<div class="col-md-8">
+					<strong> {{bookingDetail.dropoff_airport_name}} </strong>
+				</div>
+			</div>
+			<div class="row" *ngIf="bookingDetail.dropoff_airline_name">
+				<div class="col-md-4">
+					<p> Drop-Off Airline: </p>
+				</div>
+				<div class="col-md-8">
+					<strong> {{bookingDetail.dropoff_airline_name}} </strong>
+				</div>
+			</div>
+			<div class="row" *ngIf="bookingDetail.dropoff_flight">
+				<div class="col-md-4">
+					<p> Drop-Off Flight Number: </p>
+				</div>
+				<div class="col-md-8">
+					<strong>{{bookingDetail.dropoff_flight}} </strong>
+				</div>
+			</div>
+			<div class="row" *ngIf="bookingDetail.stop_1">
+				<div class="col-md-4">
+					<p> Extra Stops Number 2: </p>
+				</div>
+				<div class="col-md-8">
+					<strong> {{bookingDetail.stop_1}} </strong>
+				</div>
+			</div>
+			<div class="row" *ngIf="bookingDetail.stop_2">
+				<div class="col-md-4">
+					<p> Extra Stops Number 3: </p>
+				</div>
+				<div class="col-md-8">
+					<strong> {{bookingDetail.stop_2}} </strong>
+				</div>
+			</div>
+			<div class="row" *ngIf="bookingDetail.meet_greet_choices">
+				<div class="col-md-4">
+					<p> Meet and Greet Choices: </p>
+				</div>
+				<div class="col-md-8">
+					<strong> {{bookingDetail.meet_greet_choices}} </strong>
+				</div>
+			</div>
+			<div class="row" *ngIf="bookingDetail.pickup_date">
+				<div class="col-md-4">
+					<p> Pickup Travel Date: </p>
+				</div>
+				<div class="col-md-8">
+					<strong> {{bookingDetail.pickup_date}} </strong>
+				</div>
+			</div>
+			<div class="row" *ngIf="bookingDetail.pickup_time">
+				<div class="col-md-4">
+					<p> Pickup Travel Time: </p>
+				</div>
+				<div class="col-md-8">
+					<strong> {{bookingDetail.pickup_time}} </strong>
+				</div>
+			</div>
+			<div class="row" *ngIf="bookingDetail.distance">
+				<div class="col-md-4">
+					<p> Distance: </p>
+				</div>
+				<div class="col-md-8">
+					<strong> {{bookingDetail.distance}} </strong>
+				</div>
+			</div>
+
+			<h2 class="headinginfoH2 topmargin pl-0" *ngIf="bookingDetail.service_type=='roundtrip'">Return Details</h2>
+			<div *ngIf="bookingDetail.service_type=='roundtrip'">
+				<div class="row topmargin2" *ngIf="bookingDetail.return_pickup_address">
+					<div class="col-md-4">
+						<p> Return Pickup Address: </p>
+					</div>
+					<div class="col-md-8">
+						<strong> {{bookingDetail.return_pickup_address}} </strong>
+					</div>
+				</div>
+				<div class="row" *ngIf="bookingDetail.return_pickup_airport_name">
+					<div class="col-md-4">
+						<p> Return Pickup Airport: </p>
+					</div>
+					<div class="col-md-8">
+						<strong> {{bookingDetail.return_pickup_airport_name}} </strong>
+					</div>
+				</div>
+				<div class="row" *ngIf="bookingDetail.return_pickup_airline_name">
+					<div class="col-md-4">
+						<p> Return Pickup Airline: </p>
+					</div>
+					<div class="col-md-8">
+						<strong> {{bookingDetail.return_pickup_airline_name}} </strong>
+					</div>
+				</div>
+				<div class="row" *ngIf="bookingDetail.return_pickup_flight">
+					<div class="col-md-4">
+						<p> Return Pickup Flight Number: </p>
+					</div>
+					<div class="col-md-8">
+						<strong> {{bookingDetail.return_pickup_flight}} </strong>
+					</div>
+				</div>
+				<div class="row" *ngIf="bookingDetail.return_origin_airport_city">
+					<div class="col-md-4">
+						<p> Return Pickup Origin Airport / City: </p>
+					</div>
+					<div class="col-md-8">
+						<strong> {{bookingDetail.return_origin_airport_city}}
+						</strong>
+					</div>
+				</div>
+				<div class="row" *ngIf="bookingDetail.return_pickup_latitude">
+					<div class="col-md-4">
+						<p> Return Pickup Latitude/Longitude: </p>
+					</div>
+					<div class="col-md-8">
+						<strong> {{bookingDetail.return_pickup_latitude}}/{{bookingDetail.return_pickup_longitude}}
+						</strong>
+					</div>
+				</div>
+				<div class="row" *ngIf="bookingDetail.return_dropoff_address">
+					<div class="col-md-4">
+						<p> Return Drop-Off Address: </p>
+					</div>
+					<div class="col-md-8">
+						<strong> {{bookingDetail.return_dropoff_address}} </strong>
+					</div>
+				</div>
+				<div class="row" *ngIf="bookingDetail.return_dropoff_airport_name">
+					<div class="col-md-4">
+						<p> Return Drop-Off Airport: </p>
+					</div>
+					<div class="col-md-8">
+						<strong> {{bookingDetail.return_dropoff_airport_name}} </strong>
+					</div>
+				</div>
+				<div class="row" *ngIf="bookingDetail.return_dropoff_airline_name">
+					<div class="col-md-4">
+						<p>Return Drop-Off Airline: </p>
+					</div>
+					<div class="col-md-8">
+						<strong> {{bookingDetail.return_dropoff_airline_name}} </strong>
+					</div>
+				</div>
+				<div class="row" *ngIf="bookingDetail.return_dropoff_flight">
+					<div class="col-md-4">
+						<p> Return Drop-Off Flight Number: </p>
+					</div>
+					<div class="col-md-8">
+						<strong> {{bookingDetail.return_dropoff_flight}} </strong>
+					</div>
+				</div>
+				<div class="row" *ngIf="bookingDetail.return_dropoff_latitude">
+					<div class="col-md-4">
+						<p> Return Drop-Off Latitude/Longitude: </p>
+					</div>
+					<div class="col-md-8">
+						<strong> {{bookingDetail.return_dropoff_latitude}}/{{bookingDetail.return_dropoff_longitude}}
+						</strong>
+					</div>
+				</div>
+				<div class="row" *ngIf="bookingDetail.return_stop_1">
+					<div class="col-md-4">
+						<p> Return Extra Stops Number 2: </p>
+					</div>
+					<div class="col-md-8">
+						<strong>{{bookingDetail.return_stop_1}} </strong>
+					</div>
+				</div>
+				<div class="row" *ngIf="bookingDetail.return_stop_1_latitude && bookingDetail.return_stop_1_longitude">
+					<div class="col-md-4">
+						<p> Return Extra Stops Number 2 Latitude/Longitude: </p>
+					</div>
+					<div class="col-md-8">
+						<strong> {{bookingDetail.return_stop_1_latitude}}/{{bookingDetail.return_stop_1_longitude}}
+						</strong>
+					</div>
+				</div>
+				<div class="row" *ngIf="bookingDetail.return_stop_2">
+					<div class="col-md-4">
+						<p> Return Extra Stops Number 3: </p>
+					</div>
+					<div class="col-md-8">
+						<strong> {{bookingDetail.return_stop_2}} </strong>
+					</div>
+				</div>
+				<div class="row" *ngIf="bookingDetail.return_stop_2_latitude && bookingDetail.return_stop_2_longitude">
+					<div class="col-md-4">
+						<p> Return Extra Stops Number 3
+							Latitude/Longitude: </p>
+					</div>
+					<div class="col-md-8">
+						<strong>{{bookingDetail.return_stop_2_latitude}}/{{bookingDetail.return_stop_2_longitude}}
+						</strong>
+					</div>
+				</div>
+				<div class="row" *ngIf="bookingDetail.return_meet_greet_choices">
+					<div class="col-md-4">
+						<p> Return Meet and Greet Choices: </p>
+					</div>
+					<div class="col-md-8">
+						<strong> {{bookingDetail.return_meet_greet_choices
+							|titlecase}} </strong>
+					</div>
+				</div>
+				<div class="row" *ngIf="bookingDetail.return_pickup_date">
+					<div class="col-md-4">
+						<p> Return Travel Date: </p>
+					</div>
+					<div class="col-md-8">
+						<strong> {{bookingDetail.return_pickup_date}} </strong>
+					</div>
+				</div>
+				<div class="row" *ngIf="bookingDetail.return_pickup_time">
+					<div class="col-md-4">
+						<p> Return Travel Time: </p>
+					</div>
+					<div class="col-md-8">
+						<strong> {{bookingDetail.return_pickup_time}} </strong>
+					</div>
+				</div>
+			</div>
+			<button class="custom-btn button2 mt-4" type="edit" (click)="editBooking()">Edit</button>
+
+		</div>
+
+-->
+
+
+
+
+
+<section id="section-container" class="container-fluid">
+	<div id="booking-details-container" class="w-full p-4">
+		<!-- Division - Rates -->
+		<div>
+			<h2>
+				Rates
+			</h2>
+			<div id="rates" class="row mt-4 align-items-center justify-content-between"
+				*ngFor="let pricedetail of rates; index as pricedetail_index">
+				<!-- Rate Labels -->
+				<div id="rt-lbl-mltpl" class="col-12 col-md-8 row align-items-center"
+					*ngIf="(pricedetail?.amount && pricedetail?.amount != 0) || (pricedetail?.percentage)">
+					<!-- RATE Input Field -->
+					<div id="rate" class="col-7 col-md-5">
+						<div>
+							<mat-form-field appearance="outline" class="m-0" floatLabel="always">
+								<mat-label>
+									{{ pricedetail?.rate_label}}
+								</mat-label>
+								<span matPrefix>$&nbsp;</span>
+								<input matInput type="number"
+									[value]="pricedetail?.amount ? pricedetail?.amount : pricedetail?.amount" />
+							</mat-form-field>
+						</div>
+					</div>
+
+					<!-- X-Icon -->
+					<div id="x-icon" class="col-auto col-md-1">
+						<div>
+							<i class="bi bi-x-lg" *ngIf="pricedetail?.multiple && pricedetail?.multiple != 0"></i>
+							<i class="bi bi-percent" *ngIf="pricedetail?.percentage"></i>
+						</div>
+					</div>
+
+					<!-- Multiple -->
+					<div id="multiple" class="col-1 col-md-4" *ngIf="pricedetail.multiple">
+						<div>
+							<p class="m-0">
+								{{ pricedetail?.multiple }}
+							</p>
+						</div>
+					</div>
+				</div>
+
+				<!-- Total -->
+				<div id="rate-amount" class="d-none d-md-block col-md-2 text-right mr-5"
+					*ngIf="(pricedetail?.amount && pricedetail?.amount != 0) || (pricedetail?.percentage)">
+					<div>
+						<p class=" m-0">
+							$ {{ pricedetail?.amount }}
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Division - Rates Ends -->
+
+
+		<!-- Division - Direct Taxes -->
+		<div>
+			<h2>
+				Direct Taxes
+			</h2>
+			<div id="direct-taxes" class="row mt-4 align-items-center justify-content-between"
+				*ngFor="let directtax of direct_taxes; index as directtax_index">
+				<div id="tax-lbl" class="col-md-4">
+					<div>
+						<mat-form-field appearance="outline" class="m-0" floatLabel="always">
+							<mat-label>
+								{{ directtax?.rate_label}}
+							</mat-label>
+							<span matPrefix>$&nbsp;</span>
+							<input matInput type="number" [value]="directtax?.amount" />
+						</mat-form-field>
+					</div>
+				</div>
+				<div id="direct-tax-amount" class="d-none d-md-block col-md-2 text-right mr-5">
+					<p class="m-0">
+						$ {{ directtax?.amount }}
+					</p>
+				</div>
+			</div>
+		</div>
+		<!-- Divisio - Direct Taxes Ends -->
+
+
+		<!-- Division - Taxes -->
+		<div>
+			<h2>
+				Taxes
+			</h2>
+			<div id="taxes" class="row mt-4 align-items-center justify-content-between"
+				*ngFor="let tax of taxes; index as tax_index">
+				<div id="tx-lbl-slctn" class="col-12 col-md-8 row align-items-center justify-content-between">
+					<div class="col-6 col-md-5">
+						<mat-form-field appearance="outline" class="m-0" floatLabel="always">
+							<mat-label>
+								{{ tax?.rate_label }}
+							</mat-label>
+							<span matPrefix>$&nbsp;</span>
+							<input matInput type="number"
+								[value]="tax?.type == 'flat' ? tax?.flat_baserate : tax?.percentage" />
+						</mat-form-field>
+
+					</div>
+					<div class="col-auto col-md-5 mt-2">
+						<mat-form-field appearance="outline" class="m-0">
+							<mat-select>
+								<mat-option>($)&nbsp;Flat</mat-option>
+								<mat-option>(%)&nbsp;Percent</mat-option>
+							</mat-select>
+						</mat-form-field>
+					</div>
+				</div>
+				<div id="tax-amount" class="col-md-2 d-none d-md-block text-right mr-5">
+					<p class="m-0">
+						$ {{ tax?.amount }}
+					</p>
+				</div>
+			</div>
+		</div>
+		<!-- Division - Taxes Ends -->
+
+		<hr class="division-line" />
+
+		<div class="row align-items-center justify-content-between">
+			<div class="col-md-10">
+				<h2 class="m-0">
+					Sub Total
+				</h2>
+			</div>
+
+			<div class="col-md-2 text-right">
+				<p class="m-0">
+					$ 0
+				</p>
+			</div>
+		</div>
+
+		<div class="row align-items-center justify-content-between">
+			<div class="col-md-10">
+				<h3 class="m-0">
+					Number Of Vehicles
+				</h3>
+			</div>
+
+			<div class="col-md-2 text-right">
+				<p class="m-0">
+					x 1
+				</p>
+			</div>
+		</div>
+
+		<hr class="division-line" />
+
+		<div class="row align-items-center justify-content-between">
+			<div class="col-md-10">
+				<h2 class="m-0">
+					Total Amount
+				</h2>
+			</div>
+
+			<div class="col-md-2 text-right">
+				<p class="m-0">
+					$ 0
+				</p>
+			</div>
+		</div>
+	</div>
+</section>

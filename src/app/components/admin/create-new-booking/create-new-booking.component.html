@@ -57,11 +57,6 @@
 								<mat-option value="cruise_to_airport">Cruise Port to Airport</mat-option>
 							</mat-select>
 						</mat-form-field>
-						<!-- <div class="text-danger">
-							<div>
-								This field is required
-							</div>
-						</div> -->
 					</div>
 
 					<!-- Return Transfer Type -->
@@ -97,7 +92,9 @@
 
 		<!-- Account Details | Passenger Information - Start -->
 		<section id="account-details" class="user_information">
-			<h2 class="headinginfo"> Client Accounts </h2>
+			<h2 class="headinginfo">
+				Client Accounts
+			</h2>
 			<!-- Account Details Container -->
 			<div class="container my-5">
 				<!-- Account Type Row -->
@@ -138,11 +135,7 @@
 				<!-- Account Type Row Ends -->
 
 				<!-- Selected User Details -->
-				<div *ngIf="fetched_user != {} && Form.account_type.value != 'loose_customer'"
-					style="padding: 15px 20px">
-					<h3 class="headinginfoH3">
-						Client Account
-					</h3>
+				<div *ngIf="fetched_user && Form.account_type.value != 'loose_customer'" style="padding: 15px 20px">
 					<!-- Name | Email -->
 					<div class="row">
 						<span class="col-sm-2 col-xl-1">
@@ -189,84 +182,6 @@
 						</span>
 
 					</div>
-
-					<h2 class="headinginfo mt-5 p-0"> Passenger Information </h2>
-					<div class="row">
-						<!-- Passenger Name -->
-						<div class="col-md-12">
-							<mat-form-field appearance="outline">
-								<mat-label>
-									Passenger Name <span class="asterisk"></span>
-								</mat-label>
-								<input matInput placeholder="Passenger Name" type="text"
-									formControlName="passenger_name">
-							</mat-form-field>
-						</div>
-
-						<!-- Passenger Cell -->
-						<div class="col-md-6">
-							<mat-form-field appearance="outline" class="mat-custom-phone">
-								<mat-label>
-									Passenger Cell <span class="asterisk"></span>
-								</mat-label>
-								<input matInput placeholder="Passenger Cell" type="text"
-									formControlName="passenger_cell" class="lastnamefilter"
-									(intlTelInputObject)="intlTelInputObject($event)"
-									[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}" ng2TelInput
-									(countryChange)="changeDetection.countryChange('passenger_cell_isd', $event.dialCode)">
-							</mat-form-field>
-						</div>
-
-						<!-- Passenger Email -->
-						<div class="col-md-6">
-							<mat-form-field appearance="outline">
-								<mat-label>
-									Passenger Email <span class="asterisk"></span>
-								</mat-label>
-								<input matInput placeholder="Passenger Email" type="email"
-									formControlName="passenger_email">
-							</mat-form-field>
-						</div>
-
-						<!-- Passenger Count -->
-						<div class="col-6 col-md-6">
-							<mat-form-field appearance="outline">
-								<mat-label>
-									No. of Passengers <span class="asterisk"></span>
-								</mat-label>
-								<mat-select formControlName="total_passengers">
-									<mat-option *ngFor="let option of number_count" [value]="option">
-										{{ option }}
-									</mat-option>
-								</mat-select>
-							</mat-form-field>
-						</div>
-
-						<!-- Luggage Count -->
-						<div class="col-6 col-md-6">
-							<mat-form-field appearance="outline">
-								<mat-label>
-									Luggage Count <span class="asterisk"></span>
-								</mat-label>
-								<mat-select formControlName="luggage_count">
-									<mat-option value="0"> 0 </mat-option>
-									<mat-option *ngFor="let option of number_count" [value]="option">
-										{{ option }}
-									</mat-option>
-								</mat-select>
-							</mat-form-field>
-						</div>
-
-						<!-- Special Instructions -->
-						<div class="col-md-12">
-							<mat-form-field appearance="outline">
-								<mat-label>
-									Special Instructions
-								</mat-label>
-								<textarea matInput formControlName="booking_instructions" rows="5"></textarea>
-							</mat-form-field>
-						</div>
-					</div>
 				</div>
 				<!-- Selected User Details Ends -->
 
@@ -281,14 +196,9 @@
 								<mat-label>
 									First Name <span class="asterisk">*</span>
 								</mat-label>
-								<input matInput placeholder="First Name" type="text" formControlName="first_name">
+								<input matInput placeholder="First Name" type="text" formControlName="first_name"
+									tabindex="0" (focus)="$event.target.select()">
 							</mat-form-field>
-							<!-- <div class="errors" *ngIf="Form.loose_customer['controls'].first_name.errors">
-								<div class="text-danger"
-									*ngIf="Form.loose_customer['controls'].first_name.errors.required">
-									This field is required
-								</div>
-							</div> -->
 						</div>
 
 						<!-- Middle Name -->
@@ -297,7 +207,8 @@
 								<mat-label>
 									Middle Name
 								</mat-label>
-								<input matInput placeholder="Middle Name" type="text" formControlName="middle_name">
+								<input matInput placeholder="Middle Name" type="text" formControlName="middle_name"
+									tabindex="0" (focus)="$event.target.select()">
 							</mat-form-field>
 						</div>
 
@@ -307,13 +218,9 @@
 								<mat-label>
 									Last Name <span class="asterisk">*</span>
 								</mat-label>
-								<input matInput placeholder="Last Name" type="text" formControlName="last_name">
+								<input matInput placeholder="Last Name" type="text" formControlName="last_name"
+									(focus)="$event.target.select()" tabindex="0">
 							</mat-form-field>
-							<!-- <div class="errors" *ngIf="Form.loose_customer['controls'].last_name.errors">
-								<div class="text-danger">
-									This field is required
-								</div>
-							</div> -->
 						</div>
 					</div>
 
@@ -328,7 +235,7 @@
 								<input matInput placeholder="Phone" formControlName="phone" ng2TelInput
 									[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
 									(intlTelInputObject)="intlTelInputObject($event)" class="phoneNumberClass"
-									(countryChange)="onCountryChange($event)" tabIndex="1" />
+									(countryChange)="onCountryChange($event)" (focus)="$event.target.select()" />
 							</mat-form-field>
 						</div>
 						<!-- Email -->
@@ -337,7 +244,8 @@
 								<mat-label>
 									Email <span class="asterisk">*</span>
 								</mat-label>
-								<input matInput placeholder="Email" type="text" formControlName="email">
+								<input matInput placeholder="Email" type="text" tabindex="0" formControlName="email"
+									(focus)="$event.target.select()">
 							</mat-form-field>
 						</div>
 						<!-- Address -->
@@ -346,7 +254,8 @@
 								<mat-label>
 									Address
 								</mat-label>
-								<input matInput placeholder="Address" type="text" formControlName="address">
+								<input matInput placeholder="Address" type="text" formControlName="address" tabindex="0"
+									(focus)="$event.target.select()">
 							</mat-form-field>
 						</div>
 					</div>
@@ -360,14 +269,9 @@
 									<mat-label>
 										Card Holder <span class="asterisk">*</span>
 									</mat-label>
-									<input matInput placeholder="Frist & Last Name" type="text" formControlName="name">
+									<input matInput placeholder="Frist & Last Name" type="text" formControlName="name"
+										tabindex="0" (focus)="$event.target.select()">
 								</mat-form-field>
-								<!-- <div class="errors"
-									*ngIf="Form.loose_customer['controls'].card_details['controls'].name.errors">
-									<div class="text-danger">
-										This field is required
-									</div>
-								</div> -->
 							</div>
 
 							<!-- Card Number -->
@@ -377,14 +281,8 @@
 										Card Number <span class="asterisk">*</span>
 									</mat-label>
 									<input matInput placeholder="xxxx xxxx xxxx xxxx" type="text"
-										formControlName="card_number">
+										formControlName="card_number" tabindex="0" (focus)="$event.target.select()">
 								</mat-form-field>
-								<!-- <div class="errors"
-									*ngIf="Form.loose_customer['controls'].card_details['controls'].card_number.errors">
-									<div class="text-danger">
-										This field is required
-									</div>
-								</div> -->
 							</div>
 						</div>
 						<!-- Expiration Month/Year | CVV -->
@@ -395,27 +293,22 @@
 									<mat-label>
 										Expiration Month <span class="asterisk">*</span>
 									</mat-label>
-									<mat-select formControlName="exp_month">
-										<mat-option value='1'>Janaury</mat-option>
-										<mat-option value='2'>February</mat-option>
-										<mat-option value='3'>March</mat-option>
-										<mat-option value='4'>April</mat-option>
-										<mat-option value='5'>May</mat-option>
-										<mat-option value='6'>June</mat-option>
-										<mat-option value='7'>July</mat-option>
-										<mat-option value='8'>August</mat-option>
-										<mat-option value='9'>September</mat-option>
-										<mat-option value='10'>October</mat-option>
-										<mat-option value='11'>November</mat-option>
-										<mat-option value='12'>December</mat-option>
+									<mat-select formControlName="exp_month" tabindex="0"
+										(focus)="$event.target.select()">
+										<mat-option value='1'>01</mat-option>
+										<mat-option value='2'>02</mat-option>
+										<mat-option value='3'>03</mat-option>
+										<mat-option value='4'>04</mat-option>
+										<mat-option value='5'>05</mat-option>
+										<mat-option value='6'>06</mat-option>
+										<mat-option value='7'>07</mat-option>
+										<mat-option value='8'>08</mat-option>
+										<mat-option value='9'>09</mat-option>
+										<mat-option value='10'>10</mat-option>
+										<mat-option value='11'>11</mat-option>
+										<mat-option value='12'>12</mat-option>
 									</mat-select>
 								</mat-form-field>
-								<!-- <div class="errors"
-									*ngIf="Form.loose_customer['controls'].card_details['controls'].exp_month.errors">
-									<div class="text-danger">
-										This field is required
-									</div>
-								</div> -->
 							</div>
 
 							<!-- Expiration Year -->
@@ -424,18 +317,13 @@
 									<mat-label>
 										Expiration Year <span class="asterisk">*</span>
 									</mat-label>
-									<mat-select formControlName="exp_year">
+									<mat-select formControlName="exp_year" tabindex="0"
+										(focus)="$event.target.select()">
 										<mat-option [value]="number" *ngFor="let number of years">
 											{{ number }}
 										</mat-option>
 									</mat-select>
 								</mat-form-field>
-								<!-- <div class="errors"
-									*ngIf="Form.loose_customer['controls'].card_details['controls'].exp_year.errors">
-									<div class="text-danger">
-										This field is required
-									</div>
-								</div> -->
 							</div>
 
 							<!-- CVV -->
@@ -444,20 +332,91 @@
 									<mat-label>
 										CVV <span class="asterisk">*</span>
 									</mat-label>
-									<input matInput placeholder="000" type="text" formControlName="cvv">
+									<input matInput placeholder="000" type="text" tabindex="0"
+										(focus)="$event.target.select()" formControlName="cvv">
 								</mat-form-field>
-								<!-- <div class="errors"
-									*ngIf="Form.loose_customer['controls'].card_details['controls'].cvv.errors">
-									<div class="text-danger">
-										This field is required
-									</div>
-								</div> -->
 							</div>
 						</div>
 					</div>
 					<!-- Credit Card Details Ends -->
 				</div>
 				<!-- Loose Customer Details -->
+
+				<h2 class="headinginfo mt-5 p-0"> Passenger Information </h2>
+				<div class="row">
+					<!-- Passenger Name -->
+					<div class="col-md-12">
+						<mat-form-field appearance="outline">
+							<mat-label>
+								Passenger Name <span class="asterisk"></span>
+							</mat-label>
+							<input matInput placeholder="Passenger Name" type="text" formControlName="passenger_name">
+						</mat-form-field>
+					</div>
+
+					<!-- Passenger Cell -->
+					<div class="col-md-6">
+						<mat-form-field appearance="outline" class="mat-custom-phone">
+							<mat-label>
+								Passenger Cell <span class="asterisk"></span>
+							</mat-label>
+							<input matInput placeholder="Passenger Cell" type="text" formControlName="passenger_cell"
+								class="lastnamefilter" (intlTelInputObject)="intlTelInputObject($event)"
+								[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}" ng2TelInput
+								(countryChange)="changeDetection.countryChange('passenger_cell_isd', $event.dialCode)">
+						</mat-form-field>
+					</div>
+
+					<!-- Passenger Email -->
+					<div class="col-md-6">
+						<mat-form-field appearance="outline">
+							<mat-label>
+								Passenger Email <span class="asterisk"></span>
+							</mat-label>
+							<input matInput placeholder="Passenger Email" type="email"
+								formControlName="passenger_email">
+						</mat-form-field>
+					</div>
+
+					<!-- Passenger Count -->
+					<div class="col-6 col-md-6">
+						<mat-form-field appearance="outline">
+							<mat-label>
+								No. of Passengers <span class="asterisk"></span>
+							</mat-label>
+							<mat-select formControlName="total_passengers">
+								<mat-option *ngFor="let option of number_count" [value]="option">
+									{{ option }}
+								</mat-option>
+							</mat-select>
+						</mat-form-field>
+					</div>
+
+					<!-- Luggage Count -->
+					<div class="col-6 col-md-6">
+						<mat-form-field appearance="outline">
+							<mat-label>
+								Luggage Count <span class="asterisk"></span>
+							</mat-label>
+							<mat-select formControlName="luggage_count">
+								<mat-option value="0"> 0 </mat-option>
+								<mat-option *ngFor="let option of number_count" [value]="option">
+									{{ option }}
+								</mat-option>
+							</mat-select>
+						</mat-form-field>
+					</div>
+
+					<!-- Special Instructions -->
+					<div class="col-md-12">
+						<mat-form-field appearance="outline">
+							<mat-label>
+								Special Instructions
+							</mat-label>
+							<textarea matInput formControlName="booking_instructions" rows="5"></textarea>
+						</mat-form-field>
+					</div>
+				</div>
 			</div>
 			<!-- Accounts Details Container Ends -->
 		</section>
@@ -495,13 +454,13 @@
 							placeholder="Number of Vehicles">
 					</mat-form-field>
 					<!-- <div class="text-danger">
-						<div>
-							This field is required
-						</div>
-						<div>
-							This field should be a number
-						</div>
-					</div> -->
+			<div>
+				This field is required
+			</div>
+			<div>
+				This field should be a number
+			</div>
+		</div> -->
 				</div>
 			</div>
 
@@ -519,12 +478,6 @@
 						</div>
 					</div>
 				</div>
-				<!-- Affiliate Type Radio Buttons Validation -->
-				<!-- <div class="text-danger">
-					<div>
-						This field is required
-					</div>
-				</div> -->
 			</div>
 			<!-- Affiliate Type radio buttons Ends -->
 
@@ -532,7 +485,7 @@
 			<!-- Section to be activated under affiliate radio type -->
 			<section class="mt-3 mx-3" *ngIf="Form.affiliate_type.value == 'affiliate'">
 				<!-- If selected vehicle is chosen from the select vehicle page, then selected vehicle's details will be shown. 
-				If not, vehicle and driver selection fields will be shown -->
+		If not, vehicle and driver selection fields will be shown -->
 
 				<!-- Selected Vehicle Information -->
 				<div id="basic-information-container" *ngIf="selected_vehicle != null">
@@ -802,19 +755,19 @@
 										(countryChange)="changeDetection.countryChange('driver_cell_isd', $event.dialCode)">
 								</mat-form-field>
 								<!-- <div class="text-danger">
-									<div>
-										This field is required
-									</div>
-									<div>
-										This field should be a number
-									</div>
-									<div>
-										Minimum length should be 10
-									</div>
-									<div>
-										Maximum length should be 10
-									</div>
-								</div> -->
+			<div>
+				This field is required
+			</div>
+			<div>
+				This field should be a number
+			</div>
+			<div>
+				Minimum length should be 10
+			</div>
+			<div>
+				Maximum length should be 10
+			</div>
+		</div> -->
 							</div>
 						</div>
 
@@ -830,10 +783,10 @@
 									<input matInput formControlName="driver_email" type="email" placeholder="Email">
 								</mat-form-field>
 								<!-- <div class="text-danger">
-									<div>
-										Email format is not valid.
-									</div>
-								</div> -->
+			<div>
+				Email format is not valid.
+			</div>
+		</div> -->
 							</div>
 
 							<!-- Driver Phone Type  -->
@@ -883,10 +836,10 @@
 							<input matInput formControlName="lose_affiliate_email" type="email" placeholder="Email">
 						</mat-form-field>
 						<!-- <div class="text-danger">
-							<div>
-								Email format is not valid.
-							</div>
-						</div> -->
+				<div>
+					Email format is not valid.
+				</div>
+			</div> -->
 					</div>
 
 					<!-- Phone -->
@@ -899,19 +852,19 @@
 								placeholder="Phone" ng2TelInput>
 						</mat-form-field>
 						<!-- <div class="text-danger">
-							<div>
-								This field is required
-							</div>
-							<div>
-								This field should be a number
-							</div>
-							<div>
-								Minimum length should be 10
-							</div>
-							<div>
-								Maximum length should be 10
-							</div>
-						</div> -->
+				<div>
+					This field is required
+				</div>
+				<div>
+					This field should be a number
+				</div>
+				<div>
+					Minimum length should be 10
+				</div>
+				<div>
+					Maximum length should be 10
+				</div>
+			</div> -->
 					</div>
 				</div>
 				<!-- Basic Information Ends -->
@@ -976,14 +929,14 @@
 									</mat-option>
 								</mat-autocomplete>
 								<!-- <mat-select formControlName="vehicle_model">
-									<mat-option value="">
-										Choose Model
-									</mat-option>
-									<mat-option *ngFor="let model of big_data_list?.vehicleModels; index as model_index"
-										id="model_{{ model_index }}" [value]="model.id">
-										{{ model.name }}
-									</mat-option>
-								</mat-select> -->
+			<mat-option value="">
+				Choose Model
+			</mat-option>
+			<mat-option *ngFor="let model of big_data_list?.vehicleModels; index as model_index"
+			id="model_{{ model_index }}" [value]="model.id">
+			{{ model.name }}
+		</mat-option>
+	</mat-select> -->
 							</mat-form-field>
 						</div>
 					</div>
@@ -1006,14 +959,14 @@
 									</mat-option>
 								</mat-autocomplete>
 								<!-- <mat-select formControlName="vehicle_year">
-									<mat-option value="">
-										Choose Year
-									</mat-option>
-									<mat-option *ngFor="let year of big_data_list?.vehicleYears" id="year_{{ year_index }}"
-										[value]="year.id">
-										{{ year.name }}
-									</mat-option>
-								</mat-select> -->
+			<mat-option value="">
+				Choose Year
+			</mat-option>
+			<mat-option *ngFor="let year of big_data_list?.vehicleYears" id="year_{{ year_index }}"
+			[value]="year.id">
+			{{ year.name }}
+		</mat-option>
+	</mat-select> -->
 							</mat-form-field>
 						</div>
 
@@ -1070,20 +1023,20 @@
 					<div class="row">
 						<!-- Driver Selection -->
 						<!-- <div class="col-md-6">
-							<mat-form-field appearance="outline">
-								<mat-label>
-									Choose Driver
-								</mat-label>
-								<mat-select formControlName="driver_id">
-									<mat-option value="">
-										Choose Driver
-									</mat-option>
-									<mat-option *ngFor="let driver of drivers_list" [value]="driver.id">
-										{{ driver.name }}
-									</mat-option>
-								</mat-select>
-							</mat-form-field>
-						</div> -->
+			<mat-form-field appearance="outline">
+				<mat-label>
+					Choose Driver
+				</mat-label>
+				<mat-select formControlName="driver_id">
+					<mat-option value="">
+						Choose Driver
+					</mat-option>
+					<mat-option *ngFor="let driver of drivers_list" [value]="driver.id">
+						{{ driver.name }}
+					</mat-option>
+				</mat-select>
+			</mat-form-field>
+		</div> -->
 
 						<!-- Driver Name -->
 						<div class="col-md-12">
@@ -1123,19 +1076,19 @@
 									(countryChange)="changeDetection.countryChange('driver_cell_isd', $event.dialCode)">
 							</mat-form-field>
 							<!-- <div class="text-danger">
-								<div>
-									This field is required
-								</div>
-								<div>
-									This field should be a number
-								</div>
-								<div>
-									Minimum length should be 10
-								</div>
-								<div>
-									Maximum length should be 10
-								</div>
-							</div> -->
+				<div>
+					This field is required
+				</div>
+				<div>
+					This field should be a number
+				</div>
+				<div>
+					Minimum length should be 10
+				</div>
+				<div>
+					Maximum length should be 10
+				</div>
+			</div> -->
 						</div>
 					</div>
 
@@ -1151,10 +1104,10 @@
 								<input matInput formControlName="driver_email" type="email" placeholder="Email">
 							</mat-form-field>
 							<!-- <div class="text-danger">
-								<div>
-									Email format is not valid.
-								</div>
-							</div> -->
+				<div>
+					Email format is not valid.
+				</div>
+			</div> -->
 						</div>
 
 						<!-- Driver Phone Type  -->
@@ -1383,7 +1336,7 @@
 		<!-- JOURNEY SECTION-->
 		<section id="journey-details" class="user_information">
 			<!-- Journey Details -->
-			<h2 class="headinginfo "> Journey Details </h2>
+			<h2 class="headinginfo "> Booking Details </h2>
 			<div class="container">
 				<!-- Meet & Greet Choices -->
 				<div id="meet-greet-row" class="row">
@@ -1405,30 +1358,23 @@
 					<!-- Travel Date -->
 					<div class="col-md-6">
 						<mat-form-field appearance="outline">
-							<mat-label>Travel Date<span class="asterisk">*</span></mat-label>
-							<input matInput [setOutputDateFormat]="outputDateFormat" [matDatepicker]="picker1"
-								placeholder="Travel Date" id="id_4"
-								(dateChangeWithFormat)="changeDetection.selectDate('pickupDate',$event)"
+							<mat-label>
+								Arrival Date <span class="asterisk"> * </span>
+							</mat-label>
+							<input matInput setOutputDateFormat="YYYY-MM-DD" [matDatepicker]="picker1"
+								placeholder="Arrival Date"
+								(dateChangeWithFormat)="changeDetection.selectDate('pickup_date',$event)"
 								formControlName="pickup_date" (click)="picker1.open()" />
 							<mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
 							<mat-datepicker #picker1></mat-datepicker>
 						</mat-form-field>
-						<!-- <mat-form-field appearance="outline">
-										<mat-label>
-											Travel Date <span class="asterisk"></span>
-										</mat-label>
-										<input matInput [matDatepicker]="picker1" placeholder="Travel Date" id="id_4"
-											formControlName="pickup_date" (click)="picker1.open()">
-										<mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-										<mat-datepicker #picker1></mat-datepicker>
-									</mat-form-field> -->
 					</div>
 
 					<!-- Travel Time -->
 					<div class="col-md-6">
 						<mat-form-field appearance="outline">
 							<mat-label>
-								Travel Time <span class="asterisk"></span>
+								Arrival Time <span class="asterisk"></span>
 							</mat-label>
 							<mat-select formControlName="pickup_time">
 								<mat-option *ngFor="let time of constants_data.time_values; index as time_index"
@@ -1449,7 +1395,7 @@
 						<div class="col-md-6">
 							<mat-form-field appearance="outline">
 								<mat-label>
-									Airport <span class="asterisk"></span>
+									Airport
 								</mat-label>
 								<input type="text" placeholder="Search by Name or Airport Code" matInput
 									(keyup)="searchAirport($event.target.value)" [matAutocomplete]="pckupairportatc"
@@ -1518,7 +1464,7 @@
 									Ship Name <span class="asterisk"></span>
 								</mat-label>
 								<input type="text" placeholder="Cruise Ship Name" matInput
-									(keyup)="searchCruise($event.target.value)" formControlName="cruise_name">
+									formControlName="cruise_name">
 							</mat-form-field>
 						</div>
 
@@ -1528,8 +1474,7 @@
 								<mat-label>
 									Port <span class="asterisk"></span>
 								</mat-label>
-								<input type="text" placeholder="Cruise Port" matInput
-									(keyup)="searchCruise($event.target.value)" formControlName="cruise_port">
+								<input type="text" placeholder="Cruise Port" matInput formControlName="cruise_port">
 							</mat-form-field>
 						</div>
 
@@ -1557,7 +1502,7 @@
 					<div class="col-md-12">
 						<mat-form-field appearance="outline">
 							<mat-label>
-								Pickup Address <span class="asterisk"></span>
+								Pickup Address
 							</mat-label>
 							<input matInput matGoogleMapsAutocomplete
 								(onAutocompleteSelected)="onAutocompleteSelected($event, 'pickup')"
@@ -1738,7 +1683,7 @@
 
 		<!-- RETURN JOURNEY SECTION -->
 		<section *ngIf="Form.service_type.value == 'round_trip'" class="user_information">
-			<h2 class="headinginfo "> Return Details </h2>
+			<h2 class="headinginfo "> Return Booking </h2>
 			<!-- Return Details -->
 			<div class="container">
 				<div id="return-meet-greet-row" class="row">
@@ -1761,7 +1706,9 @@
 					<!-- Travel Date -->
 					<div class="col-md-6">
 						<mat-form-field appearance="outline">
-							<mat-label>Travel Date<span class="asterisk">*</span></mat-label>
+							<mat-label>
+								Arrival Date <span class="asterisk"> * </span>
+							</mat-label>
 							<input matInput [setOutputDateFormat]="outputDateFormat" [matDatepicker]="picker2"
 								(dateChangeWithFormat)="changeDetection.selectDate('returnPickupDate',$event)"
 								placeholder="Travel Date" id="id_5" formControlName="return_pickup_date"
@@ -1775,7 +1722,7 @@
 					<div class="col-md-6">
 						<mat-form-field appearance="outline">
 							<mat-label>
-								Travel Time <span class="asterisk"></span>
+								Arrival Time
 							</mat-label>
 							<mat-select formControlName="return_pickup_time">
 								<mat-option *ngFor="let time of constants_data.time_values; index as time_index"
@@ -2413,7 +2360,7 @@
 						</div>
 					</div>
 
-					<h2 class="headinginfoH2  pl-0">
+					<h2 class="headinginfoH2 pl-0">
 						Client Accounts
 					</h2>
 					<div class="row" *ngIf="bookingForm.value.account_type != ''">

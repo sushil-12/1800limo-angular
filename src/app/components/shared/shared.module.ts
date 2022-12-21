@@ -24,6 +24,8 @@ import { MatSliderModule } from '@angular/material/slider';
 
 import { MatGoogleMapsAutocompleteModule } from '@angular-material-extensions/google-maps-autocomplete';
 
+
+
 export const DATE_FORMATS = {
 	parse: {
 		dateInput: ['DD/MM/YYYY']

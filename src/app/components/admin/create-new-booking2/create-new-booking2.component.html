@@ -143,6 +143,14 @@
 					<strong> {{bookingDetail.pickup_time}} </strong>
 				</div>
 			</div>
+			<div class="row" *ngIf="bookingDetail.distance">
+				<div class="col-md-4">
+					<p> Distance: </p>
+				</div>
+				<div class="col-md-8">
+					<strong> {{bookingDetail.distance}} </strong>
+				</div>
+			</div>
 
 			<h2 class="headinginfoH2 topmargin pl-0" *ngIf="bookingDetail.service_type=='roundtrip'">Return Details</h2>
 			<div *ngIf="bookingDetail.service_type=='roundtrip'">

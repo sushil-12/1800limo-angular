@@ -1,0 +1,19 @@
+#page-container {
+	background-color: #fff;
+	color: #000;
+	border-radius: 12px;
+	padding: 10px;
+}
+.section-container {
+	width: 100%;
+	margin: 1.2rem auto;
+}
+
+.required-field:after {
+	content: "*";
+	color: #ff0000;
+	font-weight: 400;
+}
+mat-form-field {
+	margin: 0 !important;
+}

@@ -11,7 +11,7 @@ import { MatGoogleMapsAutocompleteModule } from '@angular-material-extensions/go
 import { SharedModule } from 'src/app/components/shared/shared.module'
 
 import { constant_data } from 'src/assets/js/data.js'
-
+import * as moment from 'moment';
 
 
 import { StateManagementService } from 'src/app/services/statemanagement.service';
@@ -34,7 +34,6 @@ declare var $: any
 })
 export class CreateNewBookingComponent implements OnInit
 {
-	outputDateFormat = 'YYYY-MM-DD';
 	bookingForm: FormGroup
 	constants_data = constant_data
 	account_type_radio_buttons: Array<string> = ['individual', 'corporate', 'travel_planner', 'loose_customer']
@@ -47,7 +46,7 @@ export class CreateNewBookingComponent implements OnInit
 	update_type: string = 'new'				// recieved in case of editing the booking
 	modal_image: string
 
-	fetched_user: any
+	fetched_user: any = null
 	editing_data: any
 	selected_vehicle: any = null
 	driver_image = {}
@@ -67,6 +66,8 @@ export class CreateNewBookingComponent implements OnInit
 
 	MobileObject: any;
 	getMobileCountry: any;
+
+	request: Record<string, any> = {}	// temp map request type
 
 
 	constructor(
@@ -101,13 +102,13 @@ export class CreateNewBookingComponent implements OnInit
 			this.years.push(i + date)
 		}
 
-		this.getBigData().then((data) =>
-		{
-			this.big_data_list = data
-			this.big_data_list_copy = JSON.parse(JSON.stringify(data))
-			this.prefillBookingForm(this.booking_id ? 'booking_id' : 'quotebot')
+		// this.getBigData().then((data) =>
+		// {
+		// 	this.big_data_list = data
+		// 	this.big_data_list_copy = JSON.parse(JSON.stringify(data))
+		// 	this.prefillBookingForm(this.booking_id ? 'booking_id' : '')
 
-		})
+		// })
 
 		this.fetchAccounts('individual')
 
@@ -118,7 +119,8 @@ export class CreateNewBookingComponent implements OnInit
 			this.number_count.push(i)
 		}
 
-		this.initMap()
+		this.drawMap()		// draw initialiser map
+
 		// register some value changes subscription
 		this.bookingForm.get('service_type').valueChanges.subscribe((value: string) =>
 		{
@@ -132,10 +134,12 @@ export class CreateNewBookingComponent implements OnInit
 				this.fillAllReturnValuesWith('')
 			}
 		})
+
 		this.bookingForm.get('transfer_type').valueChanges.subscribe((value: string) =>
 		{
 			this.setFormValue('return_transfer_type', this.ReverseStringChars(value))
 		})
+
 	}
 	// ngOnInit ends
 
@@ -222,8 +226,8 @@ export class CreateNewBookingComponent implements OnInit
 			passenger_cell: [''],
 			passenger_cell_isd: [''],
 			passenger_email: [''],
-			total_passengers: [''],
-			luggage_count: [''],
+			total_passengers: ['1'],
+			luggage_count: ['0'],
 			booking_instructions: [''],
 			number_of_hours: [''],
 			number_of_vehicles: [1],
@@ -262,7 +266,8 @@ export class CreateNewBookingComponent implements OnInit
 			returnJourneyTime: [''],
 			driver_image_id: [''],
 			vehicle_image_id: [''],
-			booking_status: ['']
+			booking_status: [''],
+			waypoints: new FormGroup({})
 		})
 		return true
 	}
@@ -296,7 +301,7 @@ export class CreateNewBookingComponent implements OnInit
 		console.log(this.bookingForm)
 		console.log('\n\n\n\n')
 		console.groupEnd()
-		this.initMap()
+		// this.initMap()
 	}
 
 
@@ -411,14 +416,17 @@ export class CreateNewBookingComponent implements OnInit
 
 	prefillManually()
 	{
-		// filling via Manually
 		console.warn('Prefilling via Manually')
+
+		// filling via Manually
 		this.bookingForm.patchValue({
 			service_type: 'one_way',
 			transfer_type: 'city_to_city',
+			pickup_date: moment().format('YYYY-MM-DD'),
 			pickup_time: '12:00:00',
 			return_transfer_type: 'city_to_city',
 			number_of_vehicles: "1",
+			return_pickup_date: moment().format('YYYY-MM-DD'),
 			travel_time: '12:00:00',
 			return_travel_time: '12:30:00',
 		})
@@ -457,67 +465,46 @@ export class CreateNewBookingComponent implements OnInit
 		return promise
 	}
 
+
 	/**
-	 * Initialise the oneway_map
+	 * Add Waypoints to request object
 	 */
-	initMap()
+	addStoptoRoute()
 	{
-		console.log('Initialising OneWay_Map')
+		// waypoints.push({
+		// 			location: new google.maps.LatLng(),
+		// 			stopover: true
+		// 		})
+
+		// 		request = {
+		// 			waypoints: waypoints,
+		// 			optimizeWaypoints: true,
+		// 			travelMode: google.maps.TravelMode.DRIVING
+		// 		}
+
+		let stop: FormGroup = (<FormGroup>this.bookingForm.get('waypoints'))
+		stop.addControl('stop_' + (Object.keys(stop).length + 1).toString(), new FormControl(''))
+	}
+
+	/**
+	 * Locate points and draw Distance on Map
+	 */
+	drawMap(request?: Record<string, any>)
+	{
+
 		this.mapsAPILoader.load().then(() =>
 		{
-			const directionsRenderer = new google.maps.DirectionsRenderer()
-			const directionsService = new google.maps.DirectionsService()
+			const directionsService = new google.maps.DirectionsService;
+			const directionsRenderer = new google.maps.DirectionsRenderer;
+
 			const map = new google.maps.Map(document.getElementById("oneway_map"), {
 				zoom: 7,
 				center: new google.maps.LatLng(41.850033, -87.6500523),
 				scaleControl: true
 			})
-			directionsRenderer.setMap(map)
+			!request && directionsRenderer.setMap(map)
 
-
-			let waypoints = []
-
-			if (this.Form.stop_1.value != '') 
-			{
-				waypoints.push({
-					location: new google.maps.LatLng(this.Form.stop_1_latitude.value, this.Form.stop_1_longitude.value),
-					stopover: true
-				})
-			}
-
-			if (this.Form.stop_2.value != '')
-			{
-				waypoints.push({
-					location: new google.maps.LatLng(this.Form.stop_2_latitude.value, this.Form.stop_2_longitude.value),
-					stopover: true
-				})
-			}
-
-			// build request
-			let request = {
-				waypoints: waypoints,
-				optimizeWaypoints: true,
-				travelMode: google.maps.TravelMode.DRIVING
-			}
-
-			if (this.Form.pickup.value && this.Form.pickup.value != '')
-			{
-				request['origin'] = new google.maps.LatLng(this.Form.pickup_latitude.value, this.Form.pickup_longitude.value)
-			}
-			if (this.Form.dropoff.value && this.Form.dropoff.value != '')
-			{
-				request['destination'] = new google.maps.LatLng(this.Form.dropoff_latitude.value, this.Form.dropoff_longitude.value)
-			}
-			if (this.Form.pickup_airport.value && this.Form.pickup_airport.value != '')
-			{
-				request['origin'] = new google.maps.LatLng(this.Form.pickup_airport_latitude.value, this.Form.pickup_airport_longitude.value)
-			}
-			if (this.Form.dropoff_airport.value && this.Form.dropoff_airport.value != '')
-			{
-				request['destination'] = new google.maps.LatLng(this.Form.dropoff_airport_latitude.value, this.Form.dropoff_airport_longitude.value)
-			}
-
-			directionsService.route(request, (response: any, status: string) =>
+			request && directionsService.route(request, (response: any, status: string) =>
 			{
 				if (status == google.maps.DirectionsStatus.OK)
 				{
@@ -628,11 +615,11 @@ export class CreateNewBookingComponent implements OnInit
 		})
 	}
 
-	fetchDistanceAndTime(data: any)
+	fetchDistanceAndTime(data: any): Promise<{ [key: string]: number }>
 	{
 		let total_distance = 0.0
 		let total_time = 0
-		const promise = new Promise((resolve) =>
+		return new Promise((resolve) =>
 		{
 			data.routes[0].legs.forEach((item: any) =>
 			{
@@ -656,48 +643,51 @@ export class CreateNewBookingComponent implements OnInit
 				time: total_time
 			})
 		})
-
-		return promise
 	}
 
 
-	onAutocompleteSelected(result: PlaceResult, key_name: string)
+	onAutocompleteSelected(result: PlaceResult, form_control: string)
 	{
-		console.log('onAutocompleteSelected: ', result, 'key_name: ', key_name);
-		this.setFormValue(key_name, result.formatted_address)
-		if (this.Form.service_type.value.includes('round') && !key_name.includes('return_'))
+		console.log('onAutocompleteSelected: ', result, 'key_name: ', form_control);
+		this.setFormValue(form_control, result.formatted_address)
+		if (this.Form.service_type.value.includes('round') && !form_control.includes('return_'))
 		{
-			this.setFormValue('return_' + key_name, result.formatted_address)
+			this.setFormValue('return_' + form_control, result.formatted_address)
 		}
 	}
 
-	onLocationSelected(location: Location, key_name: string)
+	onLocationSelected(location: Location, form_control: string)
 	{
-		console.log('onLocationSelected: ', location, 'key_name: ', key_name);
-		this.setFormValue(key_name + '_latitude', location['latitude'])
-		this.setFormValue(key_name + '_longitude', location['longitude'])
-		this.initMap()
-		if (this.Form.service_type.value.includes('round') && !key_name.includes('return_'))
+		console.log('onLocationSelected: ', location, 'key_name: ', form_control);
+		this.setFormValue(form_control + '_latitude', location['latitude'])
+		this.setFormValue(form_control + '_longitude', location['longitude'])
+		// this.initMap()
+		if (this.Form.service_type.value.includes('round') && !form_control.includes('return_'))
 		{
-			if (key_name == 'pickup') 
+			if (form_control == 'pickup') 
 			{
-				key_name = 'dropoff'
+				form_control = 'return_dropoff'
 			}
-			else if (key_name == 'dropoff') 
+			else if (form_control == 'dropoff') 
 			{
-				key_name = 'pickup'
+				form_control = 'return_pickup'
 			}
-			else if (key_name == 'stop_1')
+			else if (form_control == 'stop_1')
 			{
-				key_name = 'stop_2'
+				form_control = 'return_stop_2'
 			}
-			else if (key_name == 'stop_2')
+			else if (form_control == 'stop_2')
 			{
-				key_name = 'stop_1'
+				form_control = 'return_stop_1'
 			}
-			this.setFormValue('return_' + key_name + '_latitude', location['latitude'])
-			this.setFormValue('return_' + key_name + '_longitude', location['longitude'])
+			this.setFormValue(form_control + '_latitude', location['latitude'])
+			this.setFormValue(form_control + '_longitude', location['longitude'])
 			this.initReturnMap()
+		}
+
+		if (form_control.includes('pickup'))
+		{
+			// this.request['origin'] = new google.maps.LatLng()
 		}
 
 		this.getAffiliatesListFromPickup(location['latitude'], location['longitude'])
@@ -796,18 +786,10 @@ export class CreateNewBookingComponent implements OnInit
 		},
 
 
-		selectDate: (dateType, value: any) =>
+		selectDate: (form_control: string, value: any) =>
 		{
-			if (dateType == 'pickupDate')
-			{
-				console.log(value, "check date format...............")
-				this.setFormValue('pickup_date', value)
-			}
-			else
-			{
-				console.log(value, "check date format...............")
-				this.setFormValue('return_pickup_date', value)
-			}
+			console.log(value, "check date format...............")
+			this.setFormValue(form_control, value)
 		},
 
 		setVehicle: (value: string) =>
@@ -849,7 +831,7 @@ export class CreateNewBookingComponent implements OnInit
 				phone_isd: new FormControl('+1', Validators.required),
 				phone_country: new FormControl('us', Validators.required),
 				email: new FormControl('', Validators.required),
-				address: new FormControl(['']),
+				address: new FormControl(''),
 				card_details: this._formBuilder.group({
 					name: new FormControl('', Validators.required),
 					card_number: new FormControl('', Validators.required),
@@ -872,7 +854,7 @@ export class CreateNewBookingComponent implements OnInit
 				travel_planner: 'travel',
 			}
 			this.user_list = []
-			this.fetched_user = {}
+			this.fetched_user = null
 			this._adminService.getAccountBytype(legend[account_type]).subscribe((response: any) =>
 			{
 				this._spinner.hide('normalspinner')
@@ -935,7 +917,7 @@ export class CreateNewBookingComponent implements OnInit
 			travel_planner: 'travel'
 		}
 		this._spinner.show()
-		this.fetched_user = {}
+		this.fetched_user = null
 		this.setFormValue('acc_id', user_id)
 		this._adminService.chooseUser(user_id, legend[account_type]).subscribe((response: any) =>
 		{
