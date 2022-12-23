@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl, FormArray } from '@angular/forms';
 
 import { AdminService } from 'src/app/services/admin.service';
 import { SharedModule } from 'src/app/components/shared/shared.module'
@@ -120,7 +120,7 @@ export class NewBookingComponent implements OnInit
 			passenger_name: [''],
 			passenger_email: [''],
 			passenger_cell: [''],
-			passenger_cell_isd: [''],
+			passenger_cell_isd: ['+1'],
 			total_passengers: [1],
 			luggage_count: [1],
 			booking_instructions: [''],
@@ -149,7 +149,11 @@ export class NewBookingComponent implements OnInit
 			pickup_date: [new Date().toISOString().slice(0, new Date().toISOString().indexOf('T'))],
 			pickup_time: ['12:00:00'],
 			extra_stops: this.$form.group({
-				stop_1: ['']
+				stop_1: this.$form.group({
+					address: [''],
+					latitude: [''],
+					longitude: ['']
+				})
 			}),
 			pickup: [''],
 			pickup_latitude: [''],
@@ -171,8 +175,16 @@ export class NewBookingComponent implements OnInit
 			dropoff_airport_longitude: [''],
 			dropoff_airline: [''],
 			dropoff_flight: [''],
+			return_meet_greet_choices: [''],
 			return_pickup_date: [''],
 			return_pickup_time: [''],
+			return_extra_stops: this.$form.group({
+				stop_1: this.$form.group({
+					address: [''],
+					latitude: [''],
+					longitude: ['']
+				})
+			}),
 			return_pickup: [''],
 			return_pickup_latitude: [''],
 			return_pickup_longitude: [''],
@@ -192,7 +204,7 @@ export class NewBookingComponent implements OnInit
 			return_dropoff_airport_longitude: [''],
 			return_dropoff_airline: [''],
 			return_dropoff_flight: [''],
-			driver_languages: this.$form.array([]),
+			driver_languages: this.$form.array([1]),
 			driver_dresses: this.$form.array([]),
 			amenties: this.$form.array([]),
 			chargedAmenities: this.$form.array([])
@@ -201,6 +213,11 @@ export class NewBookingComponent implements OnInit
 
 	SetFormValue(form_control: string, value: any)
 	{
+		if (!value)
+		{
+			console.log(`No Value to set for ${form_control}. Returning ...`)
+			return
+		}
 		console.log('Setting Form Value for ', form_control, ' : ', value)
 		this.BookingForm.get(form_control).setValue(value)
 		this.BookingForm.updateValueAndValidity()
@@ -211,15 +228,23 @@ export class NewBookingComponent implements OnInit
 		return this.BookingForm.controls;
 	}
 
+	get ExtraStops()
+	{
+		return (this.BookingForm.get('extra_stops') as FormGroup).controls
+	}
+
 
 	fillAddress(form_control: string, address: any)
 	{
 		console.log('Address: ', address)
+		this.SetFormValue(form_control, address.formatted_address)
 	}
 
 	fillLocationPoints(form_control: string, location: any)
 	{
 		console.log('Location Points', location)
+		this.SetFormValue(form_control + '_latitude', location.latitude)
+		this.SetFormValue(form_control + '_longitude', location.longitude)
 	}
 
 
@@ -396,26 +421,54 @@ export class NewBookingComponent implements OnInit
 		return
 	}
 
+	searchValue(list_name: any, search_value: string, search_with: string)
+	{
+		if (search_value === '')
+		{
+			this.BigData[list_name] = this.BigData_COPY[list_name]
+		}
+		this.BigData[list_name] = this.$shared.ListSearch('filter', this.BigData[list_name], search_value, search_with)
+	}
 
-	fillValue(list: Array<Record<string, any> | string>, form_control: string, return_key: string)
+
+	fillValue(list: Array<Record<string, any> | string> | null = null, form_control: string, return_key: string = null)
 	{
 		// fail-safe
 		if (!this.BigData)
 		{
 			return
 		}
+
+		if (list === null && return_key === null)
+		{
+			return this.BookingForm.get(form_control).value ?? ''
+		}
+
 		// fail-safes
 		if (!list || !form_control || !return_key)
 		{
 			console.warn('Invalid Parameters Passed. ')
 			return
 		}
+
 		if (typeof list[0] === 'string')
 		{
 			return list.find((item: string) => item == this.Form[form_control].value)[return_key]
 		}
-		return this.$shared.ListSearch('find', list, this.BookingForm.get(form_control).value, 'id')[return_key]
+		if (!this.BookingForm.get(form_control).value)
+		{
+			// console.log('No Value for ', form_control, 'in Booking Form.')
+			return
+		}
+		let temp = this.$shared.ListSearch('find', list, this.BookingForm.get(form_control).value, 'id')
+		return temp ? temp[return_key] : ''
 
+	}
+
+
+	fillSubGroupValue(form_group_name: string, form_control: string)
+	{
+		return (<FormGroup>this.BookingForm.get(form_group_name)).get(form_control).value
 	}
 
 	autofillData(filling_for: string, data: any)
@@ -465,6 +518,29 @@ export class NewBookingComponent implements OnInit
 	}
 
 
+	select(is_checked: boolean, type: string, form_control: string, value: any)
+	{
+		if (is_checked && !this.BookingForm.get(form_control).value.includes(value))
+		{
+			(this.BookingForm.get(form_control) as FormArray).push(value)
+		} else
+		{
+			let list_index = this.BookingForm.get(form_control).value.findIndex(item => item == value);
+			(this.BookingForm.get(form_control) as FormArray).removeAt(list_index)
+		}
+	}
+
+
+
+
+
+	isChecked(form_control: string, object: any)
+	{
+		let list = (<FormArray>this.BookingForm.get(form_control)).controls
+		return list.includes(object.id)
+	}
+
+
 
 	intlTelInputObject(event: any)
 	{
@@ -491,6 +567,17 @@ export class NewBookingComponent implements OnInit
 
 	Subscriptions()
 	{
+		// Transfer Type
+		this.BookingForm.get('tranfer_type').valueChanges.subscribe((value: string) =>
+		{
+			const reverseStringChars = (text: string) =>
+			{
+				let temp = text.split('_')
+				return temp.reverse().join('_')
+			}
+			this.SetFormValue('return_transfer_type', reverseStringChars(value))
+		})
+
 		// Account Type Subscription
 		this.BookingForm.get('account_type').valueChanges.subscribe((value: string) =>
 		{
@@ -538,7 +625,7 @@ export class NewBookingComponent implements OnInit
 			}
 		})
 
-		// Subscription for Affiliate Type
+		// Affiliate Type
 		this.BookingForm.get('affiliate_type').valueChanges.subscribe((value: string) => 
 		{
 			if (value == 'loose_affiliate')
@@ -551,26 +638,63 @@ export class NewBookingComponent implements OnInit
 			}
 		})
 
-		// Pickup Airport
-		this.BookingForm.get('pickup_airport').valueChanges.subscribe((value: string) =>
+		// Dropoff Airport
+		this.BookingForm.get('dropoff_airport').valueChanges.subscribe((value: string) =>
 		{
 			if (value == '')
 			{
 				this.BigData['airportsData'] = this.BigData_COPY
+				return
 			}
 			this.SetFormValue('return_pickup_airport', value)
 			this.BigData['airportsData'] = this.$shared.ListSearch('filter', this.BigData.airportsData, value, 'name')
 		})
 
-		this.BookingForm.get('pickup').valueChanges.subscribe((value: string) =>
+		// Pickup Airlines
+		this.BookingForm.get('pickup_airline').valueChanges.subscribe((value: string) =>
 		{
-			this.SetFormValue('return_pickup', value)
-		})
-		this.BookingForm.get('dropoff').valueChanges.subscribe((value: string) =>
-		{
-			this.SetFormValue('return_dropoff', value)
+			if (value == '')
+			{
+				this.BigData['airlinesData'] = this.BigData_COPY
+				return
+			}
+			this.SetFormValue('return_pickup_airline', value)
+			this.BigData['airlinesData'] = this.$shared.ListSearch('filter', this.BigData.airlinesData, value, 'name')
 		})
 
+		// Dropoff Airlines
+		this.BookingForm.get('dropoff_airline').valueChanges.subscribe((value: string) =>
+		{
+			if (value == '')
+			{
+				this.BigData['airlinesData'] = this.BigData_COPY
+				return
+			}
+			this.SetFormValue('return_dropoff_airline', value)
+			this.BigData['airlinesData'] = this.$shared.ListSearch('filter', this.BigData.airlinesData, value, 'name')
+		})
+
+		// Pickup Address
+		this.BookingForm.get('pickup').valueChanges.subscribe((value: string) =>
+		{
+			setTimeout(() =>
+			{
+				this.SetFormValue('return_dropoff', value)
+				this.SetFormValue('return_dropoff_latitude', this.Form.pickup_latitude.value)
+				this.SetFormValue('return_dropoff_longitude', this.Form.pickup_longitude.value)
+			}, 1000)
+		})
+
+		// Dropoff Address
+		this.BookingForm.get('dropoff').valueChanges.subscribe((value: string) =>
+		{
+			setTimeout(() =>
+			{
+				this.SetFormValue('return_pickup', value)
+				this.SetFormValue('return_pickup_latitude', this.Form.dropoff_latitude.value)
+				this.SetFormValue('return_pickup_longitude', this.Form.dropoff_longitude.value)
+			}, 1000)
+		})
 	}
 
 }

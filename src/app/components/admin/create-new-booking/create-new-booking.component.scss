@@ -87,7 +87,6 @@
 
 .vehtype_extint .emptyImage img {
     height: 100%;
-    width: auto;
 }
 
 .vehtype_extint p {
@@ -234,6 +233,10 @@
     font-family: "PT Serif", serif !important;
 }
 
+.custom-filled-button {
+    padding: 0.2rem 1rem;
+    width: fit-content;
+}
 // @media only screen and (min-width: 1920px)
 // {
 // 	.vehtype_extint .emptyImage

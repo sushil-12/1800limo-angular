@@ -66,6 +66,8 @@ export class CreateNewBookingComponent implements OnInit
 
 	MobileObject: any;
 	getMobileCountry: any;
+	extra_stops: any
+	return_extra_stops: any
 
 	request: Record<string, any> = {}	// temp map request type
 
@@ -102,13 +104,12 @@ export class CreateNewBookingComponent implements OnInit
 			this.years.push(i + date)
 		}
 
-		// this.getBigData().then((data) =>
-		// {
-		// 	this.big_data_list = data
-		// 	this.big_data_list_copy = JSON.parse(JSON.stringify(data))
-		// 	this.prefillBookingForm(this.booking_id ? 'booking_id' : '')
-
-		// })
+		this.getBigData().then((data) =>
+		{
+			this.big_data_list = data
+			this.big_data_list_copy = JSON.parse(JSON.stringify(data))
+			this.prefillBookingForm(this.booking_id ? 'booking_id' : '')
+		})
 
 		this.fetchAccounts('individual')
 
@@ -119,7 +120,7 @@ export class CreateNewBookingComponent implements OnInit
 			this.number_count.push(i)
 		}
 
-		this.drawMap()		// draw initialiser map
+		this.initMap()		// draw initialiser map
 
 		// register some value changes subscription
 		this.bookingForm.get('service_type').valueChanges.subscribe((value: string) =>
@@ -138,6 +139,15 @@ export class CreateNewBookingComponent implements OnInit
 		this.bookingForm.get('transfer_type').valueChanges.subscribe((value: string) =>
 		{
 			this.setFormValue('return_transfer_type', this.ReverseStringChars(value))
+		})
+
+		this.bookingForm.get('extra_stops').valueChanges.subscribe((value: any) =>
+		{
+			this.extra_stops = value
+		})
+		this.bookingForm.get('return_extra_stops').valueChanges.subscribe((value: any) =>
+		{
+			this.return_extra_stops = value
 		})
 
 	}
@@ -267,7 +277,8 @@ export class CreateNewBookingComponent implements OnInit
 			driver_image_id: [''],
 			vehicle_image_id: [''],
 			booking_status: [''],
-			waypoints: new FormGroup({})
+			extra_stops: new FormGroup({}),
+			return_extra_stops: new FormGroup({})
 		})
 		return true
 	}
@@ -313,7 +324,11 @@ export class CreateNewBookingComponent implements OnInit
 			this.editing_data = response.data
 			for (let item in this.editing_data)
 			{
-				if (this.editing_data[item] != null)
+				if (item.includes('extra_stops'))
+				{
+					return
+				}
+				if (this.editing_data[item])
 				{
 					this.setFormValue(item, this.editing_data[item])
 				} else
@@ -427,8 +442,7 @@ export class CreateNewBookingComponent implements OnInit
 			return_transfer_type: 'city_to_city',
 			number_of_vehicles: "1",
 			return_pickup_date: moment().format('YYYY-MM-DD'),
-			travel_time: '12:00:00',
-			return_travel_time: '12:30:00',
+			return_pickup_time: '12:30:00',
 		})
 	}
 
@@ -467,44 +481,66 @@ export class CreateNewBookingComponent implements OnInit
 
 
 	/**
-	 * Add Waypoints to request object
+	 * Initialise the oneway_map
 	 */
-	addStoptoRoute()
+	initMap()
 	{
-		// waypoints.push({
-		// 			location: new google.maps.LatLng(),
-		// 			stopover: true
-		// 		})
-
-		// 		request = {
-		// 			waypoints: waypoints,
-		// 			optimizeWaypoints: true,
-		// 			travelMode: google.maps.TravelMode.DRIVING
-		// 		}
-
-		let stop: FormGroup = (<FormGroup>this.bookingForm.get('waypoints'))
-		stop.addControl('stop_' + (Object.keys(stop).length + 1).toString(), new FormControl(''))
-	}
-
-	/**
-	 * Locate points and draw Distance on Map
-	 */
-	drawMap(request?: Record<string, any>)
-	{
-
+		console.log('Initialising OneWay_Map')
 		this.mapsAPILoader.load().then(() =>
 		{
-			const directionsService = new google.maps.DirectionsService;
-			const directionsRenderer = new google.maps.DirectionsRenderer;
-
+			const directionsRenderer = new google.maps.DirectionsRenderer()
+			const directionsService = new google.maps.DirectionsService()
 			const map = new google.maps.Map(document.getElementById("oneway_map"), {
 				zoom: 7,
 				center: new google.maps.LatLng(41.850033, -87.6500523),
 				scaleControl: true
 			})
-			!request && directionsRenderer.setMap(map)
+			directionsRenderer.setMap(map)
 
-			request && directionsService.route(request, (response: any, status: string) =>
+
+			let waypoints = []
+
+			if (this.Form.stop_1.value != '') 
+			{
+				waypoints.push({
+					location: new google.maps.LatLng(this.Form.stop_1_latitude.value, this.Form.stop_1_longitude.value),
+					stopover: true
+				})
+			}
+
+			if (this.Form.stop_2.value != '')
+			{
+				waypoints.push({
+					location: new google.maps.LatLng(this.Form.stop_2_latitude.value, this.Form.stop_2_longitude.value),
+					stopover: true
+				})
+			}
+
+			// build request
+			let request = {
+				waypoints: waypoints,
+				optimizeWaypoints: true,
+				travelMode: google.maps.TravelMode.DRIVING
+			}
+
+			if (this.Form.pickup.value && this.Form.pickup.value != '')
+			{
+				request['origin'] = new google.maps.LatLng(this.Form.pickup_latitude.value, this.Form.pickup_longitude.value)
+			}
+			if (this.Form.dropoff.value && this.Form.dropoff.value != '')
+			{
+				request['destination'] = new google.maps.LatLng(this.Form.dropoff_latitude.value, this.Form.dropoff_longitude.value)
+			}
+			if (this.Form.pickup_airport.value && this.Form.pickup_airport.value != '')
+			{
+				request['origin'] = new google.maps.LatLng(this.Form.pickup_airport_latitude.value, this.Form.pickup_airport_longitude.value)
+			}
+			if (this.Form.dropoff_airport.value && this.Form.dropoff_airport.value != '')
+			{
+				request['destination'] = new google.maps.LatLng(this.Form.dropoff_airport_latitude.value, this.Form.dropoff_airport_longitude.value)
+			}
+
+			directionsService.route(request, (response: any, status: string) =>
 			{
 				if (status == google.maps.DirectionsStatus.OK)
 				{
@@ -521,6 +557,7 @@ export class CreateNewBookingComponent implements OnInit
 			})
 		})
 	}
+
 
 	/**
 	 * Initialize the return_map
@@ -649,10 +686,33 @@ export class CreateNewBookingComponent implements OnInit
 	onAutocompleteSelected(result: PlaceResult, form_control: string)
 	{
 		console.log('onAutocompleteSelected: ', result, 'key_name: ', form_control);
+		if (form_control == 'loose_customer')
+		{
+			(this.bookingForm.get('loose_customer') as FormGroup).get('address').setValue(result.formatted_address)
+			return
+		}
 		this.setFormValue(form_control, result.formatted_address)
+		this.initMap()
 		if (this.Form.service_type.value.includes('round') && !form_control.includes('return_'))
 		{
-			this.setFormValue('return_' + form_control, result.formatted_address)
+			if (form_control == 'pickup') 
+			{
+				form_control = 'return_dropoff'
+			}
+			else if (form_control == 'dropoff') 
+			{
+				form_control = 'return_pickup'
+			}
+			else if (form_control == 'stop_1')
+			{
+				form_control = 'return_stop_2'
+			}
+			else if (form_control == 'stop_2')
+			{
+				form_control = 'return_stop_1'
+			}
+			this.setFormValue(form_control, result.formatted_address)
+			this.initReturnMap()
 		}
 	}
 
@@ -806,6 +866,10 @@ export class CreateNewBookingComponent implements OnInit
 	 */
 	setFormValue(key_name: string, value: any)
 	{
+		if (!this.bookingForm.value.hasOwnProperty(key_name))
+		{
+			return
+		}
 		console.log(`\nSetting Value of \"${key_name}\" as \"${value}\"\n`)
 		this.bookingForm.get(key_name).setValue(value)
 		this.bookingForm.updateValueAndValidity()
@@ -937,7 +1001,7 @@ export class CreateNewBookingComponent implements OnInit
 	fillValue(list: any, value: string | number, comparison_key: string, fetch_name: string)
 	{
 		if (value == null || value == '') { return '' }
-		return list.find((item: any) => item[comparison_key] == value)[fetch_name]
+		return list.find((item: any) => item[comparison_key] == value)[fetch_name] ?? ''
 	}
 
 
@@ -1164,8 +1228,12 @@ export class CreateNewBookingComponent implements OnInit
 	}
 
 
-	textFormat(text: any)
+	textFormat(text: any, list: any = null)
 	{
+		if (list)
+		{
+			text = list.find(item => item.id == text)['name']
+		}
 		if (typeof text == 'string' && isNaN(parseInt(text)))
 		{
 			return text.replace(/[_-]/g, ' ')
@@ -1174,8 +1242,18 @@ export class CreateNewBookingComponent implements OnInit
 		{
 			return text
 		}
+		return text
 	}
 
+	formatDate(value: any)
+	{
+		return moment(value, 'YYYY-MM-DD').format('ll')
+	}
+
+	formatTime(value: any)
+	{
+		return moment(value, 'hh:mm:ss').format('hh:mm')
+	}
 
 
 	searchBigDataListValue(type: string, text: string)
@@ -1273,9 +1351,31 @@ export class CreateNewBookingComponent implements OnInit
 		}
 	}
 
-	chooseAirportAirline(value_id: number, type: string)
+	chooseAirportAirline(value_id: number, form_control: string)
 	{
-		this.setFormValue(type, value_id)
+		let new_f = ""
+		this.setFormValue(form_control, value_id)
+		if (this.Form.service_type.value.includes('round') && !form_control.includes('return_'))
+		{
+			if (form_control.includes('pickup')) 
+			{
+				new_f = 'return_dropoff'
+			}
+			else if (form_control.includes('dropoff')) 
+			{
+				new_f = 'return_pickup'
+			}
+
+
+			if (form_control.includes('airport'))			
+			{
+				this.setFormValue(new_f + '_airport', value_id)
+			} else
+			{
+				this.setFormValue(new_f + '_airline', value_id)
+			}
+			this.initReturnMap()
+		}
 	}
 
 	selectAirportAirline(list: any, value: any)
@@ -1331,6 +1431,52 @@ export class CreateNewBookingComponent implements OnInit
 	closeImageModal()
 	{
 		this.close_image_modal.emit()
+	}
+
+	extra_stop_data: any = {}
+	addExtraStop(is_return: boolean = false, data?: any, location?: any)
+	{
+		console.log('Adding Extra Stop')
+		let index = Object.keys(this.Form.extra_stops.value).length
+		if (!data && !location)
+		{
+			!is_return ? (<FormGroup>this.bookingForm.get('extra_stops')).addControl('stop_' + (index + 1).toString(), new FormGroup({})) : (<FormGroup>this.bookingForm.get('return_extra_stops')).addControl('stop_' + (index + 1).toString(), new FormGroup({}))
+		}
+
+		if (data)
+		{
+			this.extra_stop_data['formatted_address'] = data.formatted_address
+		}
+		if (location)
+		{
+			this.extra_stop_data['latitude'] = location.latitude
+			this.extra_stop_data['longitude'] = location.longitude
+			this.pushExtraStop(is_return, 'stop_' + index.toString(), this.extra_stop_data)
+		}
+	}
+
+	pushExtraStop(is_return: boolean = false, stop_name: string, data: any)
+	{
+		if (!is_return)
+		{
+			(<FormGroup>this.bookingForm.get('extra_stops')).get(stop_name).setValue({ ...data })
+		}
+		else
+		{
+			console.log(stop_name);
+			(<FormGroup>this.bookingForm.get('return_extra_stops')).get(stop_name).setValue({ ...data })
+		}
+	}
+
+	deleteExtraStop(is_return: boolean = false, stop_name: string)
+	{
+		if (!is_return)
+		{
+			(this.bookingForm.get('extra_stops') as FormGroup).removeControl(stop_name)
+		} else
+		{
+			(this.bookingForm.get('return_extra_stops') as FormGroup).removeControl(stop_name)
+		}
 	}
 
 
