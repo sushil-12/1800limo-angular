@@ -1,8 +1,7 @@
 .mat-form-field-empty.mat-form-field-label {
 	color: #808080;
 }
-*
-{
+* {
 	--green: #33c658;
 	--blue: #0053b5;
 }
@@ -13,76 +12,83 @@ body {
 }
 
 body.bg-fade:before {
-	position        : fixed;
-	top             : 0;
-	left            : 0;
-	right           : -1px;
-	bottom          : -1px;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: -1px;
+	bottom: -1px;
 	background-color: #000000;
-	content         : '';
-	z-index         : 9;
-	opacity         : 0.5;
-	visibility      : visible;
-	display         : block
+	content: "";
+	z-index: 9;
+	opacity: 0.5;
+	visibility: visible;
+	display: block;
 }
 
 * {
-	--orange: #F3933D;
+	--orange: #f3933d;
 }
-input, input::placeholder, input::-webkit-input-placeholder {
+input,
+input::placeholder,
+input::-webkit-input-placeholder {
 	font-size: 1.1rem;
 	letter-spacing: 1px;
-	font-weight: 600 ;
+	font-weight: 600;
 }
 
 .text-orange {
-	color: var(--orange) !important
+	color: var(--orange) !important;
 }
 
 .cursor-pointer {
 	cursor: pointer;
 }
 
-hr
-{
+hr {
 	border-top: 2.5px solid rgba(0, 0, 0, 0.7);
 }
 
+.timepicker-input {
+	padding: 1rem !important;
+	border-radius: 5px !important;
+	border: 1px solid rgba(0, 0, 0, 0.12) !important;
+	width: 100% !important;
+}
+
 button.custom-filled-button {
-	padding           : 0.475rem 2.358rem;
-	border-radius     : 0.895rem;
-	border            : 2px solid var(--green);
-	background-color  : var(--green);
-	color             : #202020;
-	letter-spacing    : 1px;
-	font-size         : 1.18rem;
-	display           : inline-block;
-	font-family       : 'Roboto', sans-serif;
-	font-weight       : 700;
-	appearance        : button;
-	-moz-appearance   : button;
+	padding: 0.475rem 2.358rem;
+	border-radius: 0.895rem;
+	border: 2px solid var(--green);
+	background-color: var(--green);
+	color: #202020;
+	letter-spacing: 1px;
+	font-size: 1.18rem;
+	display: inline-block;
+	font-family: "Roboto", sans-serif;
+	font-weight: 700;
+	appearance: button;
+	-moz-appearance: button;
 	-webkit-appearance: button;
 	transition: box-shadow 0.1s ease-in-out;
 	box-shadow: 0px 5px 20px -6px rgb(0, 0, 0, 0.6);
-	&:active
-	{
+	&:active {
 		box-shadow: 0px 5px 10px -1px rgb(0 0 0 / 30%);
 	}
 }
 
 button.custom-filled-back-button {
-	padding           : 0.475rem 2.358rem;
-	border-radius     : 0.895rem;
-	border            : 2px solid #a2a3a2;
-	background-color  : #a2a3a2;
-	color             : #202020;
-	letter-spacing    : 1px;
-	font-size         : 1.18rem;
-	display           : inline-block;
-	font-family       : 'Roboto', sans-serif;
-	font-weight       : 700;
-	appearance        : button;
-	-moz-appearance   : button;
+	padding: 0.475rem 2.358rem;
+	border-radius: 0.895rem;
+	border: 2px solid #a2a3a2;
+	background-color: #a2a3a2;
+	color: #202020;
+	letter-spacing: 1px;
+	font-size: 1.18rem;
+	display: inline-block;
+	font-family: "Roboto", sans-serif;
+	font-weight: 700;
+	appearance: button;
+	-moz-appearance: button;
 	-webkit-appearance: button;
 	transition: box-shadow 0.1s ease-in-out;
 	box-shadow: 0px 5px 10px 1px rgba(0, 0, 0, 0.4);
@@ -100,7 +106,7 @@ button.custom-filled-reset-button {
 	letter-spacing: 1.3px;
 	font-size: 1.18rem;
 	display: inline-block;
-	font-family: 'Roboto', sans-serif;
+	font-family: "Roboto", sans-serif;
 	font-weight: 700;
 	appearance: button;
 	-moz-appearance: button;
@@ -112,29 +118,27 @@ button.custom-filled-reset-button {
 	}
 }
 
-.custom-filled-button.green-button
-{
+.custom-filled-button.green-button {
 	border-color: var(--green);
 	background-color: var(--green);
 }
 
-.custom-filled-button.orange-button
-{
+.custom-filled-button.orange-button {
 	background-color: var(--orange);
 	border-color: var(--orange);
 }
 
 .text-uppercase {
-	text-transform: uppercase
+	text-transform: uppercase;
 }
 
-.yellow-alert-boxes{
+.yellow-alert-boxes {
 	margin: 1rem;
 	ol {
 		font-size: 1.16rem;
 		line-height: 1.8rem;
-		li  {
-			font-weight: 500
+		li {
+			font-weight: 500;
 		}
 	}
 }

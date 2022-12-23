@@ -11,6 +11,7 @@ import { NgxPrintModule } from 'ngx-print';// to print psf
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { MatRadioModule } from '@angular/material/radio';
 
 //
 
@@ -93,6 +94,8 @@ import { MeetAndGreetComponent } from './meet-and-greet/meet-and-greet.component
 import { AmenitiesInteriorComponent } from './amenities-interior/amenities-interior.component';
 import { AmenitiesSpecialComponent } from './amenities-special/amenities-special.component';
 import { MasterVehicleFareComponent } from './master-vehicle-fare/master-vehicle-fare.component';
+import { BookingDetailsComponent } from './booking-details/booking-details.component';
+import { NewBookingComponent } from './new-booking/new-booking.component';
 
 @NgModule({
 	declarations: [AdminComponent,
@@ -165,7 +168,9 @@ import { MasterVehicleFareComponent } from './master-vehicle-fare/master-vehicle
 		MeetAndGreetComponent,
 		AmenitiesInteriorComponent,
 		AmenitiesSpecialComponent,
-		MasterVehicleFareComponent
+		MasterVehicleFareComponent,
+		BookingDetailsComponent,
+		NewBookingComponent
 	],
 	imports: [
 		CommonModule,
@@ -183,7 +188,8 @@ import { MasterVehicleFareComponent } from './master-vehicle-fare/master-vehicle
 		MatFormFieldModule,
 		MatInputModule,
 		MatSelectModule,
-		SharedModule
+		SharedModule,
+		MatRadioModule
 
 	],
 	exports: [BookingStatusTextReplacePipe]
