@@ -2268,7 +2268,7 @@
 								</p>
 							</div>
 							<div class="col-md-8 font-weight-bolder">
-								{{ textFormat(bookingForm.value.return_pickup_date) }}
+								{{ formatDate(textFormat(bookingForm.value.return_pickup_date)) }}
 							</div>
 						</div>
 						<div class="row" *ngIf="bookingForm.value.return_pickup_time != ''">
@@ -2278,7 +2278,7 @@
 								</p>
 							</div>
 							<div class="col-md-8 font-weight-bolder">
-								{{ textFormat(bookingForm.value.return_pickup_time) }}
+								{{ formatTime(textFormat(bookingForm.value.return_pickup_time)) }}
 							</div>
 						</div>
 					</div>
