@@ -2,12 +2,23 @@
     border-radius: 20px;
     margin: 1.5rem 0;
     box-shadow: 0 5px 30px rgba(0, 0, 0, 0.4);
-    input
-    {
+    input {
         font-size: 1.1rem;
     }
 }
-
+.select {
+    position: relative;
+    width: 100%;
+    background-color: transparent;
+    border: 0;
+    appearance: none;
+    font-size: 13px;
+    height: 30px;
+    color: #000;
+    z-index: 2;
+    cursor: pointer;
+    padding: 0px 10px;
+}
 .pad {
     margin-top: 50px;
     margin-bottom: 25px;
@@ -23,7 +34,7 @@
 }
 
 .choose_ameniteslist {
-    margin-top: 0px
+    margin-top: 0px;
 }
 
 .notemargin {
@@ -47,10 +58,11 @@
 .map {
     width: 100%;
     height: 100%;
-    border-radius: 17px
+    border-radius: 17px;
 }
 
-.topLabelClass.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
+.topLabelClass.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float
+    .mat-form-field-label {
     padding-left: 0px;
     background-color: #fff;
     max-width: 250px;
@@ -59,7 +71,7 @@
 }
 
 .asterisk {
-    content: ''
+    content: "";
 }
 
 .vehtype_extint img {
@@ -75,7 +87,6 @@
 
 .vehtype_extint .emptyImage img {
     height: 100%;
-    width: auto;
 }
 
 .vehtype_extint p {
@@ -219,9 +230,13 @@
 }
 
 .project-modal .modal .modal-body .row .col-6:nth-child(2) {
-    font-family: 'PT Serif', serif !important;
+    font-family: "PT Serif", serif !important;
 }
 
+.custom-filled-button {
+    padding: 0.2rem 1rem;
+    width: fit-content;
+}
 // @media only screen and (min-width: 1920px)
 // {
 // 	.vehtype_extint .emptyImage

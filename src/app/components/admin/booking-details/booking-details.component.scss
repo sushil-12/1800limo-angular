@@ -1,0 +1,27 @@
+#booking-details-container {
+	background-color: #ffffff;
+	color: #000000;
+	border-radius: 20px;
+	font-size: calc(1.1rem + 16%);
+	& > div {
+		width: 100%;
+		margin: 0 auto;
+	}
+	& > div:not(:first-child) {
+		margin-top: 2.5rem;
+	}
+}
+@media only screen and (min-width: 1024px) {
+	#booking-details-container {
+		& > div {
+			width: 80%;
+		}
+	}
+}
+@media only screen and (min-width: 2560px) {
+	#booking-details-container {
+		& > div {
+			width: 50%;
+		}
+	}
+}

@@ -23,6 +23,8 @@ import { DateFormatDirective } from '../../directives/date-format.directive';
 import { MatSliderModule } from '@angular/material/slider';
 
 import { MatGoogleMapsAutocompleteModule } from '@angular-material-extensions/google-maps-autocomplete';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+
 
 export const DATE_FORMATS = {
 	parse: {
@@ -52,13 +54,18 @@ export const DATE_FORMATS = {
 		ImageModalComponent,
 		DeleteConfirmationComponent,
 		PhotoInstructionsComponent,
-		MatAutocompleteModule, MatDatepickerModule,
+		MatAutocompleteModule,
+		MatDatepickerModule,
 		MatNativeDateModule,
 		MatMomentDateModule,
-		MatInputModule, DragDropModule,
+		MatInputModule,
+		DragDropModule,
 		DateFormatDirective,
-		SignatureDirectiveDirective, NgxMaterialTimepickerModule,
-		MatGoogleMapsAutocompleteModule, MatSliderModule
+		SignatureDirectiveDirective,
+		NgxMaterialTimepickerModule,
+		MatGoogleMapsAutocompleteModule,
+		MatSliderModule,
+		MatCheckboxModule
 	],
 	providers: [
 		{ provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS] },
