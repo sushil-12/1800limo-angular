@@ -1,242 +1,235 @@
 .agreement_step0 p,
 .custom-list span,
 li {
-	color    : #000;
-	font-size: 15px;
+    color: #000;
+    font-size: 15px;
 }
 
 .custom-list {
-	position: relative;
+    position: relative;
 }
 
 .custom-list svg {
-	position: absolute;
-	top     : 5px;
+    position: absolute;
+    top: 5px;
 }
 
 .custom-list span {
-	padding-left: 20px;
-	width       : 100%;
-	display     : inline-block;
+    padding-left: 20px;
+    width: 100%;
+    display: inline-block;
 }
 
 .link-strong {
-	color: #000;
+    color: #000;
 }
 
 .requirement-list {
-	padding-left: 1.5rem;
+    padding-left: 1.5rem;
 }
 
 .requirement-list li {
-	margin-bottom: 16px;
+    margin-bottom: 16px;
 }
 
 .requirement-list a {
-	font-size      : 18px;
-	text-decoration: none;
+    font-size: 18px;
+    text-decoration: none;
 }
 
 .requirement-list a:focus {
-	text-decoration: underline;
+    text-decoration: underline;
 }
 
 .step0Div a {
-	font-size      : 18px;
-	text-decoration: none;
+    font-size: 18px;
+    text-decoration: none;
 }
 
 .step0Div a:focus {
-	text-decoration: underline;
+    text-decoration: underline;
 }
 
 p {
-	margin-bottom: 1rem;
+    margin-bottom: 1rem;
 }
 
 .step-list {
-	display       : flex;
-	padding-bottom: 15px;
+    display: flex;
+    padding-bottom: 15px;
 }
 
 .step-points {
-	margin-left: 15px;
-	margin-top : 15px;
-	width      : 100%
+    margin-left: 15px;
+    margin-top: 15px;
+    width: 100%
 }
 
 .step-points svg {
-	height    : 20px;
-	margin-top: -1px;
+    height: 20px;
+    margin-top: -1px;
 }
 
 .step-points li {
-	padding-right: 20px;
+    padding-right: 20px;
 }
 
 .img-wrapper {
-	position  : relative;
-	background: #e9e9e9;
-	min-width : 100px;
+    position: relative;
+    background: #e9e9e9;
+    min-width: 100px;
 }
 
 .step-list img {
-	position : absolute;
-	width    : 80px;
-	top      : 50%;
-	left     : 50%;
-	transform: translate(-50%, -50%);
+    position: absolute;
+    width: 80px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .step-list ul {
-	margin : 0;
-	padding: 5px 0 10px 20px;
+    margin: 0;
+    padding: 5px 0 10px 20px;
 }
 
 .custom-checkbox {
-	padding-left: 3rem;
+    padding-left: 3rem;
 }
 
 .custom-control-label {
-	font-size: 18px;
-	cursor   : pointer;
+    font-size: 18px;
+    cursor: pointer;
 }
 
 .thankyou {
-	font-size: 18px;
+    font-size: 18px;
 }
 
 .custom-control-label::before {
-	width : 2rem;
-	height: 2rem;
-	left  : -3rem;
+    width: 2rem;
+    height: 2rem;
+    left: -3rem;
 }
 
 .custom-control-label::after {
-	width : 2rem;
-	height: 2rem;
-	left  : -3rem;
+    width: 2rem;
+    height: 2rem;
+    left: -3rem;
 }
 
 .step-list {
-	height: 100%;
+    height: 100%;
 }
 
 .modal-body:not(#photoTipModal .modal-body) {
-	text-align: center !important;
+    text-align: center !important;
 }
 
 .custom-filled-button.green-button:not(#btn-agree) {
-	padding: 0.275rem 0.775rem;
-	font-size: 0.835rem;
-	border-radius: 0.5rem;
-	font-weight: 500;
-	height: fit-content;
-	box-shadow: 0 2px 8px 1px rgba(66, 66, 66, 0.4);
+    padding: 0.275rem 0.5rem;
+    font-size: 0.835rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    height: fit-content;
+    box-shadow: 0 2px 8px 1px rgba(66, 66, 66, 0.4);
 }
 
 // pinch zoom css
 div#imageModal {
-	position: fixed;
-	width   : 100%;
-	height  : 100%;
-	top     : 0;
-	left    : 0;
-	z-index : 9999;
-	
-	button.close {
-		background-color: #fff;
-		position        : absolute;
-		z-index         : 999;
-		right           : 15px;
-		top             : 12px;
-		width           : 24px;
-	}
-	
-	pinch-zoom {
-		width : 100%;
-		height: 100%;
-		
-		img {
-			max-width : 100%;
-			max-height: 100%;
-			object-fit: contain;
-			height    : 100%;
-			width     : 100%;
-			position  : absolute;
-			top       : 0;
-		}
-	}
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    button.close {
+        background-color: #fff;
+        position: absolute;
+        z-index: 999;
+        right: 15px;
+        top: 12px;
+        width: 24px;
+    }
+    pinch-zoom {
+        width: 100%;
+        height: 100%;
+        img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            top: 0;
+        }
+    }
 }
 
 .fakeLink {
-	cursor: pointer;
-	color : #007bff;
+    cursor: pointer;
+    color: #007bff;
 }
 
 .contact-us a {
-	font-size      : 18px;
-	text-decoration: none;
+    font-size: 18px;
+    text-decoration: none;
 }
 
 .contact-us a:focus {
-	text-decoration: underline;
+    text-decoration: underline;
 }
 
 @media only screen and (min-width:1199px) {
-	.previewSvg a:focus {
-		transform       : scale(1.2, 1.2);
-		background-color: #28b24b;
-	}
+    .previewSvg a:focus {
+        transform: scale(1.2, 1.2);
+        background-color: #28b24b;
+    }
 }
 
 @media only screen and (max-width:767px) {
-	.previewSvg {
-		left      : -5px;
-		margin-top: 5px;
-	}
-	
-	.stepClass {
-		padding: 0;
-	}
+    .previewSvg {
+        left: 6px;
+        margin-top: 5px;
+    }
+    .stepClass {
+        padding: 0;
+    }
+    .step-points {
+        margin-left: 12px;
+    }
 }
 
 .modal-content:not(#photoTipModal .modal-content) {
-	background-color: var(--orange-color);
-	
-	.modal-header {
-		justify-content: center;
-		text-transform : uppercase;
-		
-		h3 {
-			font-size: 32px;
-		}
-	}
-	
-	hr {
-		border          : 2px solid #fff !important;
-		background-color: #fff !important;
-		width           : 100px;
-		margin          : 5px auto;
-		display         : block;
-	}
-	
-	.modal-title {
-		font-size: 18px;
-	}
+    background-color: var(--orange-color);
+    .modal-header {
+        justify-content: center;
+        text-transform: uppercase;
+        h3 {
+            font-size: 32px;
+        }
+    }
+    hr {
+        border: 2px solid #fff !important;
+        background-color: #fff !important;
+        width: 100px;
+        margin: 5px auto;
+        display: block;
+    }
+    .modal-title {
+        font-size: 18px;
+    }
 }
 
-#photo-capturing-instructions
-{
-	small
-	{
-		font-size: 0.63em;
-	}
+#photo-capturing-instructions {
+    small {
+        font-size: 0.63em;
+    }
 }
 
 .agreeButton {
-	background-color: var(--green-color) !important;
-	color           : #fff;
-	border-color    : var(--green-color);
-	padding         : 15px 40px;
+    background-color: var(--green-color) !important;
+    color: #fff;
+    border-color: var(--green-color);
+    padding: 15px 40px;
 }
