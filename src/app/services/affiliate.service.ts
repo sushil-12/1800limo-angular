@@ -183,6 +183,10 @@ export class AffiliateService
 	{
 		return this.httpClient.post(this.serverUrl + 'stripe-refresh-account-link', { 'accountID': accountID });
 	}
+	stripeUpdateUrl(accountID)
+	{
+		return this.httpClient.get(this.serverUrl + 'get-stripe-update-url/' + accountID);
+	}
 	requestAddressChange(data)
 	{
 		return this.httpClient.post(this.serverUrl + 'request-stripe-address-change', data);
