@@ -57,6 +57,7 @@ export class Step2Component implements OnInit
 	public haveEinNo: boolean = true;
 
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
+	selectedCountryName: any;
 	constructor(
 		private affiliateService: AffiliateService,
 		private router: Router,
@@ -754,6 +755,23 @@ export class Step2Component implements OnInit
 	{
 		return this.addBankForm.controls;
 	}
+	updateStripeURL()
+	{
+		this.spinner.show();
+		this.affiliateService.stripeUpdateUrl(this.affiliateId)
+			.pipe(
+				catchError(err =>
+				{
+					console.log(err);
+					return throwError(err);
+				})
+			)
+			.subscribe(({ data }: any) =>
+			{
+				window.location.href = data.url;
+				this.spinner.hide();
+			})
+	}
 	submitForm()
 	{
 		console.log(this.addBankForm);
@@ -872,6 +890,7 @@ export class Step2Component implements OnInit
 			const current_user = localStorage.getItem('currentUser') ? JSON.parse(localStorage.getItem('currentUser')) : { phoneCountry: 'US' }
 			object = this.globalFunctions.ListSearch('find', this.currencyOptions, current_user.phoneCountry, 'currencyCountry')
 			console.log(object)
+			this.selectedCountryName = object.currencyCountry
 		}
 		else
 		{
