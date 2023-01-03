@@ -464,18 +464,20 @@
 							</mat-label>
 							<input type="text" placeholder="Search for Vehicle Type" aria-label="Vehicle Type" matInput
 								(focus)="$event.target.select()"
+								(keyup)="searchValue('vehicleCategories', $event.target.value, 'name')"
 								[value]="fillValue(BigData?.vehicleCategories, 'vehicle_type', 'name')"
 								[matAutocomplete]="vehicletypeautoc">
 							<mat-autocomplete autoActiveFirstOption #vehicletypeautoc="matAutocomplete">
-								<mat-option *ngFor="let option of BigData?.vehicleCategories">
-									{{ option.vehicleType }}
+								<mat-option *ngFor="let option of BigData?.vehicleCategories"
+									(click)="SetFormValue('vehicle_type', option.id)">
+									{{ option.name }}
 								</mat-option>
 							</mat-autocomplete>
 						</mat-form-field>
 					</div>
 
 					<!-- Make-Model -->
-					<div id="make-model" class="col-md-3 m-2">
+					<div id="make-model" class="col-md-3 m-2" *ngIf="Form.affiliate_type.value !== 'loose_affiliate'">
 						<mat-form-field appearance="outline">
 							<mat-label>
 								Vehicle
@@ -499,10 +501,12 @@
 							</mat-label>
 							<input type="text" placeholder="Search for Vehicle Make" aria-label="Make" matInput
 								(focus)="$event.target.select()"
+								(keyup)="searchValue('vehicleMakes', $event.target.value, 'name')"
 								[value]="fillValue(BigData?.vehicleMakes, 'vehicle_make', 'name')"
 								[matAutocomplete]="vehiclemakeautoc">
 							<mat-autocomplete autoActiveFirstOption #vehiclemakeautoc="matAutocomplete">
-								<mat-option *ngFor="let option of BigData?.vehicleMakes" [value]="option.id">
+								<mat-option *ngFor="let option of BigData?.vehicleMakes"
+									(click)="SetFormValue('vehicle_make', option.id)">
 									{{ option.name }}
 								</mat-option>
 							</mat-autocomplete>
@@ -517,10 +521,12 @@
 							</mat-label>
 							<input type="text" placeholder="Search for Vehicle Model" aria-label="Model" matInput
 								(focus)="$event.target.select()"
+								(keyup)="searchValue('vehicleModels', $event.target.value, 'name')"
 								[value]="fillValue(BigData?.vehicleModels, 'vehicle_model', 'name')"
 								[matAutocomplete]="vehiclemodelautoc">
 							<mat-autocomplete autoActiveFirstOption #vehiclemodelautoc="matAutocomplete">
-								<mat-option *ngFor="let option of BigData?.vehicleModels" [value]="option.id">
+								<mat-option *ngFor="let option of BigData?.vehicleModels"
+									(click)="SetFormValue('vehicle_model', option.id)">
 									{{ option.name }}
 								</mat-option>
 							</mat-autocomplete>
@@ -535,10 +541,12 @@
 							</mat-label>
 							<input type="text" placeholder="Search for Vehicle Year" aria-label="Year" matInput
 								(focus)="$event.target.select()"
+								(keyup)="searchValue('vehicleYears', $event.target.value, 'name')"
 								[value]="fillValue(BigData.vehicleYears, 'vehicle_year', 'name')"
 								[matAutocomplete]="vehicleyearautoc">
 							<mat-autocomplete autoActiveFirstOption #vehicleyearautoc="matAutocomplete">
-								<mat-option *ngFor="let option of BigData?.vehicleYears" [value]="option.id">
+								<mat-option *ngFor="let option of BigData?.vehicleYears"
+									(click)="SetFormValue('vehicle_year', option.id)">
 									{{ option.name }}
 								</mat-option>
 							</mat-autocomplete>
@@ -553,10 +561,12 @@
 							</mat-label>
 							<input type="text" placeholder="Search for Vehicle Color" aria-label="Color" matInput
 								(focus)="$event.target.select()"
+								(keyup)="searchValue('vehicleColors', $event.target.value, 'name')"
 								[value]="fillValue(BigData?.vehicleColors, 'vehicle_color', 'name')"
 								[matAutocomplete]="vehiclecolorautoc">
 							<mat-autocomplete autoActiveFirstOption #vehiclecolorautoc="matAutocomplete">
-								<mat-option *ngFor="let option of BigData?.vehicleColors" [value]="option.id">
+								<mat-option *ngFor="let option of BigData?.vehicleColors"
+									(click)="SetFormValue('vehicle_color', option.id)">
 									{{ option.name }}
 								</mat-option>
 							</mat-autocomplete>
@@ -863,27 +873,28 @@
 
 
 			<!-- Extra Stops -->
-			<div class="row my-3 justify-items-end">
-				<div class="col-md-10">
-					<h4>
+			<div class="row mt-3">
+				<div class="col-md-12 d-flex justify-content-between align-items-center">
+					<h4 class="m-0">
 						Extra Stops
 					</h4>
-				</div>
-				<div class="col-md-2 text-right">
-					<button class="custom-filled-button" (click)="addExtraStop()">
-						Add Stop
-					</button>
+					<div class="text-right">
+						<button class="custom-filled-button" (click)="addExtraStop(false)">
+							Add Stop
+						</button>
+					</div>
 				</div>
 			</div>
 			<!-- Extra Stop Address Field -->
-			<div class="row my-2" formGroupName="extra_stops">
-				<div class="col-md-12" *ngFor="let extra_stop of ExtraStops; index as stop_index">
+			<div class="row mt-2 mb-4">
+				<div class="extra-stop-field col-md-12"
+					*ngFor="let extra_stop of ExtraStops | keyvalue; index as stop_index">
 					<mat-form-field appearance="outline">
 						<mat-label> Extra Stop Address {{ stop_index + 1 }} </mat-label>
 						<input type="text" matInput placeholder="Type your address" matGoogleMapsAutocomplete
-							(onAutocompleteSelected)="fillStopAddress($event)" (focus)="$event.target.select()"
-							[value]="fillSubGroupValue('extra_stops', 'stop_' + stop_index + 1)"
-							(onLocationSelected)="fillStopLocationPoints($event)" />
+							(onAutocompleteSelected)="fillExtraStop(false, stop_index + 1, $event, null)"
+							(focus)="$event.target.select()" [value]="fetchStopValue('extra_stops', stop_index + 1)"
+							(onLocationSelected)="fillExtraStop(false, stop_index + 1, null, $event)" />
 					</mat-form-field>
 				</div>
 			</div>
@@ -894,13 +905,13 @@
 
 
 
-			<h4 class="pl-2">
+			<h4 class="pl-2 mt-3">
 				Pickup
 			</h4>
 
 			<!-- Pickup - Address Field -->
 			<div *ngIf="searchSubstring(Form.transfer_type.value, 'city_')">
-				<div class="row mt-3">
+				<div class="row">
 					<div class="col-md-12">
 						<mat-form-field appearance="outline">
 							<mat-label> Pickup Address </mat-label>
@@ -925,6 +936,7 @@
 							</mat-label>
 							<input type="text" matInput placeholder="Search For Airport"
 								(focus)="$event.target.select()" aria-label="Airport" [matAutocomplete]="onwy_airport"
+								(keyup)="searchValue('airportsData', $event.target.value, 'name')"
 								[value]="fillValue(BigData?.airportsData, 'pickup_airport', 'name')"
 								(change)="searchValue('airportsData', $event.value, 'name')" />
 							<mat-autocomplete #onwy_airport="matAutocomplete">
@@ -944,6 +956,7 @@
 							</mat-label>
 							<input type="text" matInput placeholder="Search For Airport" aria-label="Airport"
 								[value]="fillValue(BigData?.airlinesData, 'pickup_airline', 'name')"
+								(keyup)="searchValue('airlinesData', $event.target.value, 'name')"
 								(focus)="$event.target.select()" [matAutocomplete]="onwy_airline">
 							<mat-autocomplete #onwy_airline="matAutocomplete">
 								<mat-option *ngFor="let option of BigData?.airlinesData"
@@ -981,7 +994,7 @@
 
 			<!-- Pickup - Cruise Details -->
 			<div *ngIf="searchSubstring(Form.transfer_type.value, 'cruise_')">
-				<div class="row mt-3">
+				<div class="row">
 					<!-- Cruise Port -->
 					<div class="col-md-4">
 						<mat-form-field appearance="outline">
@@ -1015,13 +1028,13 @@
 
 
 
-			<h4 class="pl-2">
+			<h4 class="pl-2 mt-3">
 				Dropoff
 			</h4>
 
 			<!-- Dropoff - Address Field -->
 			<div *ngIf="searchSubstring(Form.transfer_type.value, '_city')">
-				<div class="row mt-3">
+				<div class="row">
 					<div class="col-md-12">
 						<mat-form-field appearance="outline">
 							<mat-label> Dropoff Address </mat-label>
@@ -1046,9 +1059,11 @@
 							</mat-label>
 							<input type="text" matInput placeholder="Search For Airport" aria-label="Airport"
 								[value]="fillValue(BigData?.airportsData, 'dropoff_airport', 'name')"
+								(keyup)="searchValue('airportsData', $event.target.value, 'name')"
 								[matAutocomplete]="onwy_drop_airport" (focus)="$event.target.select()" />
 							<mat-autocomplete #onwy_drop_airport="matAutocomplete">
-								<mat-option *ngFor="let option of BigData?.airportsData" [value]="option.id">
+								<mat-option *ngFor="let option of BigData?.airportsData"
+									(click)="SetFormValue('dropoff_airport', option.id)">
 									{{ option.name }}
 								</mat-option>
 							</mat-autocomplete>
@@ -1063,9 +1078,11 @@
 							</mat-label>
 							<input type="text" matInput placeholder="Search For Airline" aria-label="Airport"
 								[value]="fillValue(BigData?.airlinesData, 'dropoff_airline', 'name')"
+								(keyup)="searchValue('airlinesData', $event.target.value, 'name')"
 								[matAutocomplete]="onwy_drop_airline" (focus)="$event.target.select()" />
 							<mat-autocomplete #onwy_drop_airline="matAutocomplete">
-								<mat-option *ngFor="let option of BigData?.airlinesData" [value]="option.id">
+								<mat-option *ngFor="let option of BigData?.airlinesData"
+									(click)="SetFormValue('dropoff_airline', option.id)">
 									{{ option.name }}
 								</mat-option>
 							</mat-autocomplete>
@@ -1088,7 +1105,7 @@
 
 			<!-- Dropoff - Cruise Details -->
 			<div *ngIf="searchSubstring(Form.transfer_type.value, '_cruise')">
-				<div class="row mt-3">
+				<div class="row">
 					<!-- Cruise Port -->
 					<div class="col-md-4">
 						<mat-form-field appearance="outline">
@@ -1119,6 +1136,24 @@
 					</div>
 				</div>
 			</div>
+
+
+			<!-- AGM Map -->
+			<div class="row">
+				<!-- AGM Map -->
+				<div class="col-md-12">
+					<div class="map-block">
+						<div class="google_map">
+							<div id="map" class="map"></div>
+						</div>
+						<h6>
+							Total Distance: {{ mToMi(distance) }} Miles / {{ mToKm(distance) }} Km
+						</h6>
+					</div>
+				</div>
+				<!-- AGM Map Ends -->
+			</div>
+			<!-- AGM Map -->
 		</div>
 		<!-- Section - Journey Details Ends -->
 
@@ -1177,21 +1212,22 @@
 					</h4>
 				</div>
 				<div class="col-md-2 text-right">
-					<button class="custom-filled-button" (click)="addExtraStop()">
+					<button class="custom-filled-button" (click)="addExtraStop(true)">
 						Add Stop
 					</button>
 				</div>
 			</div>
 			<!-- Extra Stop Address Field -->
 			<div class="row my-2" formGroupName="return_extra_stops">
-				<div class="col-md-12" *ngFor="let extra_stop of ExtraStops; index as stop_index">
+				<div class="extra-stop-field col-md-12"
+					*ngFor="let extra_stop of ReturnExtraStops | keyvalue; index as stop_index">
 					<mat-form-field appearance="outline">
-						<mat-label> Extra Stop Address </mat-label>
+						<mat-label> Return Extra Stop Address {{ stop_index + 1 }} </mat-label>
 						<input type="text" matInput placeholder="Type your address" matGoogleMapsAutocomplete
-							(onAutocompleteSelected)="fillStopAddress('stop_' + stop_index + 1, $event)"
+							(onAutocompleteSelected)="fillExtraStop(true, stop_index + 1, $event, null)"
 							(focus)="$event.target.select()"
-							[value]="fillSubGroupValue('return_extra_stops', 'stop_' + stop_index + 1)"
-							(onLocationSelected)="fillStopLocationPoints('stop_' + stop_index + 1, $event)" />
+							[value]="fetchStopValue('return_extra_stops', stop_index + 1)"
+							(onLocationSelected)="fillExtraStop(true, stop_index + 1, null, $event)" />
 					</mat-form-field>
 				</div>
 			</div>
@@ -1233,9 +1269,11 @@
 							</mat-label>
 							<input type="text" matInput placeholder="Search For Airport" aria-label="Airport"
 								[value]="fillValue(BigData?.airportsData, 'return_pickup_airport', 'name')"
+								(keyup)="searchValue('airportsData', $event.target.value, 'name')"
 								[matAutocomplete]="onwy_airport" (focus)="$event.target.select()" />
 							<mat-autocomplete #onwy_airport="matAutocomplete">
-								<mat-option *ngFor="let option of BigData?.airportsData" [value]="option.id">
+								<mat-option *ngFor="let option of BigData?.airportsData"
+									(click)="SetFormValue('return_pickup_airport', option.id)">
 									{{ option.name }}
 								</mat-option>
 							</mat-autocomplete>
@@ -1250,9 +1288,11 @@
 							</mat-label>
 							<input type="text" matInput placeholder="Search For Airport" aria-label="Airport"
 								[value]="fillValue(BigData?.airlinesData, 'return_pickup_airline', 'name')"
+								(keyup)="searchValue('airlinesData', $event.target.value, 'name')"
 								[matAutocomplete]="onwy_airline" (focus)="$event.target.select()" />
 							<mat-autocomplete #onwy_airline="matAutocomplete">
-								<mat-option *ngFor="let option of BigData?.airlinesData" [value]="option.id">
+								<mat-option *ngFor="let option of BigData?.airlinesData"
+									(click)="SetFormValue('return_pickup_airline', option.id)">
 									{{ option.name }}
 								</mat-option>
 							</mat-autocomplete>
@@ -1340,10 +1380,12 @@
 							</mat-label>
 							<input type="text" matInput placeholder="Search For Airport" aria-label="Airport"
 								[value]="fillValue(BigData?.airportsData, 'return_dropoff_airport', 'name')"
+								(keyup)="searchValue('airportsData', $event.target.value, 'name')"
 								[matAutocomplete]="onwy_drop_airport" (focus)="$event.target.select()" />
 							<mat-autocomplete #onwy_drop_airport="matAutocomplete">
-								<mat-option *ngFor="let option of BigData?.airportsData" [value]="option.id">
-									{{ option }}
+								<mat-option *ngFor="let option of BigData?.airportsData"
+									(click)="SetFormValue('return_dropoff_airport', option.id)">
+									{{ option.name }}
 								</mat-option>
 							</mat-autocomplete>
 						</mat-form-field>
@@ -1357,10 +1399,12 @@
 							</mat-label>
 							<input type="text" matInput placeholder="Search For Airline" aria-label="Airport"
 								[value]="fillValue(BigData?.airlinesData, 'return_dropoff_airline', 'name')"
+								keyup)="searchValue('airlinesData', $event.target.value, 'name')"
 								[matAutocomplete]="onwy_drop_airline" (focus)="$event.target.select()" />
 							<mat-autocomplete #onwy_drop_airline="matAutocomplete">
-								<mat-option *ngFor="let option of BigData?.airlinesData" [value]="option.id">
-									{{ option }}
+								<mat-option *ngFor="let option of BigData?.airlinesData"
+									(click)="SetFormValue('return_dropoff_airline', option.id)">
+									{{ option.name }}
 								</mat-option>
 							</mat-autocomplete>
 						</mat-form-field>
@@ -1413,6 +1457,24 @@
 					</div>
 				</div>
 			</div>
+
+
+			<!-- AGM Map -->
+			<div class="row">
+				<!-- AGM Map -->
+				<div class="col-md-12">
+					<div class="map-block">
+						<div class="google_map">
+							<div id="return_map" class="map"></div>
+						</div>
+						<h6>
+							Total Distance: {{ mToMi(return_distance) }} Miles / {{ mToKm(return_distance) }} Km
+						</h6>
+					</div>
+				</div>
+				<!-- AGM Map Ends -->
+			</div>
+			<!-- AGM Map -->
 		</div>
 		<!-- Section - Return Journey Details Ends -->
 
