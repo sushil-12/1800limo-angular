@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
 import { AffiliateService } from '../../../services/affiliate.service';
@@ -34,7 +34,8 @@ export class OtpComponent implements OnInit, OnDestroy
 		private router: Router,
 		private authService: AuthService,
 		private affiliateService: AffiliateService,
-		private stateManagementService: StateManagementService
+		private stateManagementService: StateManagementService,
+		private $route: ActivatedRoute,
 	)
 	{
 		if (this.authService.currentUserValue)
@@ -108,6 +109,20 @@ export class OtpComponent implements OnInit, OnDestroy
 
 		this.subscription = interval(1000)
 			.subscribe(x => { this.countdownTimer(); });
+
+		console.log(this.$route.url)
+		this.$route.queryParams.subscribe((params: any) =>
+		{
+			if (params.otp)
+			{
+				setTimeout(() => 
+				{
+					this.otpForm.get('otp').setValue(params.otp)
+					this.otpForm.updateValueAndValidity()
+					this.otpCheck()
+				}, 2000)
+			}
+		})
 	}
 
 	countdownTimer()

@@ -218,13 +218,19 @@ export class LoginComponent implements OnInit, AfterViewInit
 					return throwError(err);
 				})
 			)
-			.subscribe(result =>
+			.subscribe((result: any) =>
 			{
 				this.response = result;
 				var userId = this.response.data.id;
 				sessionStorage.setItem('userId', '' + userId);
 
-				this.router.navigateByUrl('/otp');
+				if (!window.location.hostname.includes('1800limo'))
+				{
+					this.router.navigateByUrl('/otp' + `?otp=${result.data.otp}`);
+				} else
+				{
+					this.router.navigateByUrl('/otp');
+				}
 			});
 	}
 }

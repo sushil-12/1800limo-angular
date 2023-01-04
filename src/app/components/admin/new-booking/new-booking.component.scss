@@ -1,12 +1,3 @@
-@import "@angular/material/theming";
-@include mat-core();
-$my-app-primary: #f3933d;
-$my-app-warn: #f3933d;
-$my-app-accent: #f3933d;
-$my-app-theme: mat-light-theme($may-app-primart, $my-app-accent, $my-app-warn);
-@include angular-material-theme($my-app-theme);
-
-
 .mat-checkbox-checked.mat-accent .mat-checkbox-background {
 	background-color: var(--orange);
 }
@@ -32,8 +23,7 @@ $my-app-theme: mat-light-theme($may-app-primart, $my-app-accent, $my-app-warn);
 mat-form-field {
 	margin: 0 !important;
 }
-.extra-stop-field:not(.extra-stop-field:first-child)
-{
+.extra-stop-field:not(.extra-stop-field:first-child) {
 	margin-top: 1.5rem;
 }
 
@@ -57,3 +47,21 @@ ul {
 	}
 }
 
+.section-dropdown {
+	overflow: hidden;
+	cursor: pointer;
+	height: 3.5rem;
+	transition: height 0.17s ease-in-out;
+	&.active#languages {
+		height: 26rem;
+	}
+	&.active#dresses {
+		height: 10rem;
+	}
+	&.active#amenities {
+		height: 43rem;
+	}
+	&.active#images {
+		height: 42rem;
+	}
+}

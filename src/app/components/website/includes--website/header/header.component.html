@@ -5,55 +5,60 @@
 		<a class="navbar-brand" href="">
 			<img src="assets/images/HomepageLogo.png">
 		</a>
-		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample05"
-			aria-controls="navbarsExample05" aria-expanded="false" aria-label="Toggle navigation">
-			<span class="navbar-toggler-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" width="30"
-					height="30" focusable="false">
+		<button class="navbar-toggler" type="button" data-toggle="collapse"
+			data-target="#navbarsExample05" aria-controls="navbarsExample05" aria-expanded="false"
+			aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"><svg xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 30 30" width="30" height="30" focusable="false">
 					<title>Menu</title>
-					<path stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-miterlimit="10"
-						d="M4 7h22M4 15h22M4 23h22"></path>
+					<path stroke="#ffffff" stroke-width="2" stroke-linecap="round"
+						stroke-miterlimit="10" d="M4 7h22M4 15h22M4 23h22"></path>
 				</svg></span>
 			<span class="cancel"><i class="cross-btn"></i></span>
 		</button>
 		<div class="collapse navbar-collapse align-items-center" id="navbarsExample05">
-			<div class="nav_top d-lg-block d-none text-center" style="flex-basis: auto; flex-grow: 1;">
+			<div class="nav_top d-lg-block d-none text-center"
+				style="flex-basis: auto; flex-grow: 1;">
 				<a href="tel:+18005466266" class="cell-no">
 					<i class="fas fa-phone-alt" aria-hidden="true"></i>
 					+1-800-5466.266
 				</a>
 			</div>
 			<ul class="navbar-nav ml-auto">
-				<li class="nav-item"> <a class="nav-link" [routerLinkActive]="['active']" routerLink="/home">Home </a>
+				<li class="nav-item"> <a class="nav-link" [routerLinkActive]="['active']"
+						routerLink="/home">Home </a>
 				</li>
-				<li class="nav-item"> <a class="nav-link" [routerLinkActive]="['active']" routerLink="about-us">ABOUT
+				<li class="nav-item"> <a class="nav-link" [routerLinkActive]="['active']"
+						routerLink="about-us">ABOUT
 						US / HISTORY</a>
 				</li>
-				<li class="nav-item"> <a class="nav-link" [routerLinkActive]="['active']" routerLink="fleet">FLEET</a>
+				<li class="nav-item"> <a class="nav-link" [routerLinkActive]="['active']"
+						routerLink="fleet">FLEET</a>
 				</li>
 				<li class="nav-item"> <a class="nav-link" [routerLink]="['services']">SERVICES</a>
 				</li>
-				<li class="nav-item"> <a class="nav-link" [routerLinkActive]="['active']" routerLink="safety">Safety</a>
+				<li class="nav-item"> <a class="nav-link" [routerLinkActive]="['active']"
+						routerLink="safety">Safety</a>
 				</li>
 			</ul>
 			<div class="nav-item dropdown button-signin" *ngIf="!currentUser; else loggedInUser">
-				<a class="nav-link dropdown-toggle" href="#" id="dropdown05" data-toggle="dropdown" aria-haspopup="true"
-					aria-expanded="false">LOGIN /
-					CREATE</a>
+				<a class="nav-link dropdown-toggle" href="#" id="dropdown05" data-toggle="dropdown"
+					aria-haspopup="true" aria-expanded="false">
+					LOGIN / CREATE
+				</a>
 				<div class="dropdown-menu" aria-labelledby="dropdown05">
-					<a class="dropdown-item text-secondary" style="cursor: default; "
-						(click)="loginButtons('individual')">
+					<a class="dropdown-item" disabled (click)="loginButtons('individual')">
 						Individual
 					</a>
-					<a class="dropdown-item text-secondary" style="cursor: default; "
-						(click)="loginButtons('corporate')">
+					<a class="dropdown-item" disabled (click)="loginButtons('corporate')">
 						Corporate
 					</a>
-					<a class="dropdown-item text-secondary" style="cursor: default; "
-						(click)="loginButtons('travel_agent')">
+					<a class="dropdown-item" disabled (click)="loginButtons('travel_agent')">
 						Travel Agent
 					</a>
 					<hr>
-					<a class="dropdown-item" (click)="loginButtons('driver')">Driver / Chauffeur / Fleet - To
+					<a class="dropdown-item" (click)="loginButtons('driver')">Driver / Chauffeur /
+						Fleet - To
 						Drive</a>
 				</div>
 			</div>
@@ -61,25 +66,30 @@
 				<ul class="navbar-nav">
 					<li class="nav-item dropdown no-caret mr-2 dropdown-user">
 						<a class="user-profile btn btn-icon btn-transparent-dark dropdown-toggle"
-							id="navbarDropdownUserImage" href="javascript:void(0);" role="button" data-toggle="dropdown"
-							aria-haspopup="true" aria-expanded="false">
-							{{currentUser?.affiliateCompanyName ? currentUser?.affiliateCompanyName : currentUser?.name
+							id="navbarDropdownUserImage" href="javascript:void(0);" role="button"
+							data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							{{currentUser?.affiliateCompanyName ? currentUser?.affiliateCompanyName
+							: currentUser?.name
 							?
-							currentUser?.name : currentUser?.FirstName + currentUser?.LastName?.charAt(0)}}
+							currentUser?.name : currentUser?.FirstName +
+							currentUser?.LastName?.charAt(0)}}
 						</a>
 						<div class="logInDropdown dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
 							aria-labelledby="navbarDropdownUserImage">
 							<h6 class="dropdown-header d-flex align-items-center">
-								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+								<svg xmlns="http://www.w3.org/2000/svg" fill="none"
+									viewBox="0 0 24 24">
 									<path fill="#000" fill-rule="evenodd"
 										d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22ZM15 10C15 11.6569 13.6569 13 12 13C10.3431 13 9 11.6569 9 10C9 8.34315 10.3431 7 12 7C13.6569 7 15 8.34315 15 10ZM5.99927 17C7.36758 15.1783 9.54609 14 11.9998 14C14.4535 14 16.6321 15.1783 18.0004 17C16.6321 18.8217 14.4535 20 11.9998 20C9.54609 20 7.36758 18.8217 5.99927 17Z"
 										clip-rule="evenodd" />
 								</svg>
 								<div class="dropdown-user-details">
 									<div class="dropdown-user-details-name">
-										{{currentUser?.affiliateCompanyName ? currentUser?.affiliateCompanyName :
+										{{currentUser?.affiliateCompanyName ?
+										currentUser?.affiliateCompanyName :
 										currentUser?.name ?
-										currentUser?.name : currentUser?.FirstName + currentUser?.LastName.charAt(0)}}
+										currentUser?.name : currentUser?.FirstName +
+										currentUser?.LastName.charAt(0)}}
 									</div>
 								</div>
 							</h6>
@@ -87,8 +97,9 @@
 							<div *ngIf="currentUser.roleName=='driver' && accountStatus; else adminRole"
 								class="dropdown-item" (click)="dashboard('affiliate')">
 								<div class="dropdown-item-icon settingsvg">
-									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-										fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+										viewBox="0 0 24 24" fill="none" stroke="currentColor"
+										stroke-width="2" stroke-linecap="round"
 										stroke-linejoin="round" class="feather feather-settings">
 										<circle cx="12" cy="12" r="3"></circle>
 										<path
@@ -101,8 +112,9 @@
 								<div *ngIf="currentUser.roleName=='admin'" class="dropdown-item"
 									(click)="dashboard('admin')">
 									<div class="dropdown-item-icon settingsvg">
-										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-											viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+										<svg xmlns="http://www.w3.org/2000/svg" width="24"
+											height="24" viewBox="0 0 24 24" fill="none"
+											stroke="currentColor" stroke-width="2"
 											stroke-linecap="round" stroke-linejoin="round"
 											class="feather feather-settings">
 											<circle cx="12" cy="12" r="3"></circle>
@@ -115,8 +127,9 @@
 							</ng-template>
 							<div class="dropdown-item" (click)="logout()">
 								<div class="dropdown-item-icon">
-									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-										fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+										viewBox="0 0 24 24" fill="none" stroke="currentColor"
+										stroke-width="2" stroke-linecap="round"
 										stroke-linejoin="round" class="feather feather-log-out">
 										<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
 										<polyline points="16 17 21 12 16 7"></polyline>
