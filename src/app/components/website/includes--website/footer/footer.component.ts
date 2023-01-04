@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../../services/auth.service';
 import { StateManagementService } from '../../../../services/statemanagement.service';
+import { ErrorDialogService } from '../../../../services/error-dialog/errordialog.service';
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { NgxSpinnerService } from "ngx-spinner";
@@ -26,7 +27,8 @@ export class FooterComponent implements OnInit
 		private authService: AuthService,
 		private spinner: NgxSpinnerService,
 		private stateManagementService: StateManagementService,
-		private router: Router
+		private router: Router,
+		private errorDialogService: ErrorDialogService
 	) { }
 
 	ngOnInit()
@@ -64,6 +66,11 @@ export class FooterComponent implements OnInit
 	{
 		if (role != 'driver')
 		{
+			this.errorDialogService.openDialog({
+				errors: {
+					error: 'Currently only Drivers are allowed to Sign In. User accounts coming soon! Recruiting quality vetted drivers, and chauffeurs, only at this time. Refer a trusted driver/ chauffeur to 1-800 - LIMO.COM now! You deserve the best.'
+				}
+			})
 			return
 		}
 		//navigate to login screen

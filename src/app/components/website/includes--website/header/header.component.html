@@ -47,19 +47,19 @@
 					LOGIN / CREATE
 				</a>
 				<div class="dropdown-menu" aria-labelledby="dropdown05">
-					<a class="dropdown-item" disabled (click)="loginButtons('individual')">
+					<a class="dropdown-item nav-disabled" (click)="loginButtons('individual')">
 						Individual
 					</a>
-					<a class="dropdown-item" disabled (click)="loginButtons('corporate')">
+					<a class="dropdown-item nav-disabled" (click)="loginButtons('corporate')">
 						Corporate
 					</a>
-					<a class="dropdown-item" disabled (click)="loginButtons('travel_agent')">
+					<a class="dropdown-item nav-disabled" (click)="loginButtons('travel_agent')">
 						Travel Agent
 					</a>
 					<hr>
-					<a class="dropdown-item" (click)="loginButtons('driver')">Driver / Chauffeur /
-						Fleet - To
-						Drive</a>
+					<a class="dropdown-item" (click)="loginButtons('driver')">
+						Driver / Chauffeur / Fleet - To Drive
+					</a>
 				</div>
 			</div>
 			<ng-template #loggedInUser>

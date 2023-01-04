@@ -106,89 +106,99 @@
 			<ng-template #LooseCustomerSection>
 				<div formGroupName="loose_customer">
 					<!-- Personal Information -->
-					<div class="row px-4">
-						<!-- First Name -->
-						<div class="col-md-3 col-lg-4 m-2">
-							<mat-form-field appearance="outline">
-								<mat-label class="">
-									First Name
-								</mat-label>
-								<input matInput placeholder="First Name" type="text"
-									formControlName="first_name" tabindex="0"
-									(focus)="$event.target.select()">
-							</mat-form-field>
+					<div class="px-4">
+						<h6>
+							Personal Information
+						</h6>
+						<div class="row px-4">
+							<!-- First Name -->
+							<div class="col-md-4 my-2">
+								<mat-form-field appearance="outline">
+									<mat-label class="">
+										First Name
+									</mat-label>
+									<input matInput placeholder="First Name" type="text"
+										formControlName="first_name" tabindex="0"
+										(focus)="$event.target.select()">
+								</mat-form-field>
+							</div>
+
+							<!-- Middle Name -->
+							<div class="col-md-4 my-2">
+								<mat-form-field appearance="outline">
+									<mat-label>
+										Middle Name
+									</mat-label>
+									<input matInput placeholder="Middle Name" type="text"
+										formControlName="middle_name" tabindex="0"
+										(focus)="$event.target.select()">
+								</mat-form-field>
+							</div>
+
+							<!-- Last Name -->
+							<div class="col-md-4 my-2">
+								<mat-form-field appearance="outline">
+									<mat-label class="">
+										Last Name
+									</mat-label>
+									<input matInput placeholder="Last Name" type="text"
+										formControlName="last_name" (focus)="$event.target.select()"
+										tabindex="0">
+								</mat-form-field>
+							</div>
 						</div>
 
-						<!-- Middle Name -->
-						<div class="col-md-3 m-2">
-							<mat-form-field appearance="outline">
-								<mat-label>
-									Middle Name
-								</mat-label>
-								<input matInput placeholder="Middle Name" type="text"
-									formControlName="middle_name" tabindex="0"
-									(focus)="$event.target.select()">
-							</mat-form-field>
-						</div>
+						<div class="row px-4">
+							<!-- Email -->
+							<div class="col-md-4 my-2">
+								<mat-form-field appearance="outline">
+									<mat-label class="">
+										Email
+									</mat-label>
+									<input matInput placeholder="Email" type="text" tabindex="0"
+										formControlName="email" (focus)="$event.target.select()">
+								</mat-form-field>
+							</div>
 
-						<!-- Last Name -->
-						<div class="col-md-3 col-lg-4 m-2">
-							<mat-form-field appearance="outline">
-								<mat-label class="">
-									Last Name
-								</mat-label>
-								<input matInput placeholder="Last Name" type="text"
-									formControlName="last_name" (focus)="$event.target.select()"
-									tabindex="0">
-							</mat-form-field>
-						</div>
+							<!-- Phone -->
+							<div class="col-md-4 my-2">
+								<mat-form-field appearance="outline" class="mat-custom-phone">
+									<mat-label class="">
+										Phone
+									</mat-label>
+									<input matInput placeholder="Phone" formControlName="phone"
+										ng2TelInput
+										[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
+										(intlTelInputObject)="intlTelInputObject($event)"
+										class="phoneNumberClass"
+										(countryChange)="onCountryChange($event)"
+										(focus)="$event.target.select()" />
+								</mat-form-field>
+							</div>
 
-						<!-- Phone -->
-						<div class="col-md-3 col-lg-4 m-2">
-							<mat-form-field appearance="outline" class="mat-custom-phone">
-								<mat-label class="">
-									Phone
-								</mat-label>
-								<input matInput placeholder="Phone" formControlName="phone"
-									ng2TelInput
-									[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
-									(intlTelInputObject)="intlTelInputObject($event)"
-									class="phoneNumberClass"
-									(countryChange)="onCountryChange($event)"
-									(focus)="$event.target.select()" />
-							</mat-form-field>
-						</div>
-
-						<!-- Email -->
-						<div class="flex-grow-1 m-2">
-							<mat-form-field appearance="outline">
-								<mat-label class="">
-									Email
-								</mat-label>
-								<input matInput placeholder="Email" type="text" tabindex="0"
-									formControlName="email" (focus)="$event.target.select()">
-							</mat-form-field>
-						</div>
-
-						<!-- Address -->
-						<div class="col-md-3 col-lg-4 m-2">
-							<mat-form-field appearance="outline">
-								<mat-label>
-									Address
-								</mat-label>
-								<input matInput placeholder="Address" type="text"
-									formControlName="address" tabindex="0"
-									(focus)="$event.target.select()">
-							</mat-form-field>
+							<!-- Address -->
+							<div class="col-md-4 my-2">
+								<mat-form-field appearance="outline">
+									<mat-label>
+										Address
+									</mat-label>
+									<input matInput placeholder="Address" type="text"
+										formControlName="address" tabindex="0"
+										(focus)="$event.target.select()">
+								</mat-form-field>
+							</div>
 						</div>
 					</div>
 					<!-- Personal Information Ends -->
 
 					<!-- Credit Card Details -->
 					<div id="credit-card-details" class="mt-4 px-4" formGroupName="card_details">
+						<h6>
+							Card Details
+						</h6>
 						<div class="row">
 							<!-- Card Holder Name -->
-							<div class="col-md-6 col-lg-5 m-2">
+							<div class="col-md-6 my-2">
 								<mat-form-field appearance="outline">
 									<mat-label class="">
 										Card Holder
@@ -199,7 +209,7 @@
 								</mat-form-field>
 							</div>
 							<!-- Card Number -->
-							<div class="col-md-6 col-lg-5 m-2">
+							<div class="col-md-6 my-2">
 								<mat-form-field appearance="outline">
 									<mat-label class="">
 										Card Number
@@ -211,7 +221,7 @@
 							</div>
 
 							<!-- Expiration Month -->
-							<div class="col-md-3 col-lg-4 m-2">
+							<div class="col-md-4 my-2">
 								<mat-form-field appearance="outline">
 									<mat-label class="">
 										Expiration Month
@@ -234,7 +244,7 @@
 							</div>
 
 							<!-- Expiration Year -->
-							<div class="col-md-3 col-lg-4 m-2">
+							<div class="col-md-4 my-2">
 								<mat-form-field appearance="outline">
 									<mat-label class="">
 										Expiration Year
@@ -249,7 +259,7 @@
 							</div>
 
 							<!-- CVV -->
-							<div class="col-md-3 col-lg-4 m-2">
+							<div class="col-md-4 my-2">
 								<mat-form-field appearance="outline">
 									<mat-label class="">
 										CVV
@@ -283,10 +293,11 @@
 					</div>
 				</div>
 
+				<!-- Chosen User Information -->
 				<div id="info-container" class="w-100 my-3" *ngIf="chosen_user">
 					<div id="info-display-box" class="row w-75 mx-auto">
 						<div id="info" class="row col-md-6"
-							*ngFor="let item of ['name', 'mobile', 'email', 'country', 'address', 'zip']">
+							*ngFor="let item of ['name', 'mobile', 'email', 'country', 'zip', 'address']">
 							<p class="col-4 p-0 m-0">
 								{{ item | titlecase }}:
 							</p>
@@ -306,7 +317,7 @@
 				</h4>
 				<div class="row">
 					<!-- Passenger Name -->
-					<div class="col-md-5 m-2">
+					<div class="col-md-4 my-2">
 						<mat-form-field appearance="outline">
 							<mat-label>
 								Passenger Name <span class="asterisk"></span>
@@ -317,7 +328,7 @@
 					</div>
 
 					<!-- Passenger Email -->
-					<div class="col-md-5 m-2">
+					<div class="col-md-4 my-2">
 						<mat-form-field appearance="outline">
 							<mat-label>
 								Passenger Email <span class="asterisk"></span>
@@ -329,7 +340,7 @@
 					</div>
 
 					<!-- Passenger Cell -->
-					<div class="col-md-4 m-2">
+					<div class="col-md-4 my-2">
 						<mat-form-field appearance="outline" class="mat-custom-phone">
 							<mat-label>
 								Passenger Cell <span class="asterisk"></span>
@@ -345,7 +356,7 @@
 					</div>
 
 					<!-- Passenger Count -->
-					<div class="col-md-3 m-2">
+					<div class="col-md-3 my-2">
 						<mat-form-field appearance="outline">
 							<mat-label>
 								No. of Passengers <span class="asterisk"></span>
@@ -360,7 +371,7 @@
 					</div>
 
 					<!-- Luggage Count -->
-					<div class="col-md-3 m-2">
+					<div class="col-md-3 my-2">
 						<mat-form-field appearance="outline">
 							<mat-label>
 								Luggage Count <span class="asterisk"></span>
@@ -375,7 +386,7 @@
 					</div>
 
 					<!-- Special Instructions -->
-					<div class="col-md-12 m-2">
+					<div class="col-md-12 my-2">
 						<mat-form-field appearance="outline">
 							<mat-label>
 								Special Instructions
@@ -1115,7 +1126,7 @@
 			<div *ngIf="searchSubstring(Form.transfer_type.value, 'cruise_')">
 				<div class="row">
 					<!-- Cruise Port -->
-					<div class="col-md-4">
+					<div class="col-md-4 my-2">
 						<mat-form-field appearance="outline">
 							<mat-label>
 								Cruise Port
@@ -1126,7 +1137,7 @@
 					</div>
 
 					<!-- Cruise Name -->
-					<div class="col-md-4">
+					<div class="col-md-4 my-2">
 						<mat-form-field appearance="outline">
 							<mat-label>
 								Cruise Name
@@ -1137,10 +1148,16 @@
 					</div>
 
 					<!-- Time -->
-					<div class="col-md-4">
-						<input [ngxTimepicker]="onwy_tm" class="timepicker-input"
-							formControlTime="cruise_time" (focus)="$event.target.select()" />
-						<ngx-material-timepicker #onwy_tm></ngx-material-timepicker>
+					<div class="col-md-4 my-2">
+						<mat-form-field appearance="outline">
+							<mat-label>
+								Cruise Time
+							</mat-label>
+							<input [ngxTimepicker]="crse_tm" [value]="Form.cruise_time.value"
+								matInput (change)="SetFormValue('cruise_time', $event)" />
+						</mat-form-field>
+						<ngx-material-timepicker #crse_tm
+							[defaultTime]="Form.cruise_time.value"></ngx-material-timepicker>
 					</div>
 				</div>
 			</div>
@@ -1254,10 +1271,16 @@
 					</div>
 
 					<!-- Time -->
-					<div class="col-md-4">
-						<input [ngxTimepicker]="onwy_tm" class="timepicker-input"
-							formControlTime="cruise_time" (focus)="$event.target.select()" />
-						<ngx-material-timepicker #onwy_tm></ngx-material-timepicker>
+					<div class="col-md-4 my-2">
+						<mat-form-field appearance="outline">
+							<mat-label>
+								Cruise Time
+							</mat-label>
+							<input [ngxTimepicker]="crse_tm" [value]="Form.cruise_time.value"
+								matInput (change)="SetFormValue('cruise_time', $event)" />
+						</mat-form-field>
+						<ngx-material-timepicker #crse_tm
+							[defaultTime]="Form.cruise_time.value"></ngx-material-timepicker>
 					</div>
 				</div>
 			</div>
@@ -1480,10 +1503,16 @@
 					</div>
 
 					<!-- Time -->
-					<div class="col-md-4">
-						<input [ngxTimepicker]="onwy_tm" class="timepicker-input"
-							formControlTime="return_cruise_time" (focus)="$event.target.select()" />
-						<ngx-material-timepicker #onwy_tm></ngx-material-timepicker>
+					<div class="col-md-4 my-2">
+						<mat-form-field appearance="outline">
+							<mat-label>
+								Cruise Time
+							</mat-label>
+							<input [ngxTimepicker]="crse_tm" [value]="Form.cruise_time.value"
+								matInput (change)="SetFormValue('cruise_time', $event)" />
+						</mat-form-field>
+						<ngx-material-timepicker #crse_tm
+							[defaultTime]="Form.cruise_time.value"></ngx-material-timepicker>
 					</div>
 				</div>
 			</div>
@@ -1599,10 +1628,16 @@
 					</div>
 
 					<!-- Time -->
-					<div class="col-md-4">
-						<input [ngxTimepicker]="onwy_tm" class="timepicker-input"
-							formControlTime="return_cruise_time" (focus)="$event.target.select()" />
-						<ngx-material-timepicker #onwy_tm></ngx-material-timepicker>
+					<div class="col-md-4 my-2">
+						<mat-form-field appearance="outline">
+							<mat-label>
+								Cruise Time
+							</mat-label>
+							<input [ngxTimepicker]="crse_tm" [value]="Form.cruise_time.value"
+								matInput (change)="SetFormValue('cruise_time', $event)" />
+						</mat-form-field>
+						<ngx-material-timepicker #crse_tm
+							[defaultTime]="Form.cruise_time.value"></ngx-material-timepicker>
 					</div>
 				</div>
 			</div>
@@ -1661,16 +1696,16 @@
 	<div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title">
+				<h3 class="modal-title">
 					Preview Booking
-				</h5>
+				</h3>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
-			<div class="modal-body">
+			<div class="modal-body" style="font-family: 'PT Serif', serif;">
 				<!-- Booking Type -->
-				<h3 class="mt-4">
+				<h3 class="m-0">
 					Booking Type
 				</h3>
 				<div class="row">
@@ -1694,8 +1729,9 @@
 				<h3 class="mt-4">
 					Travel Information
 				</h3>
-				<div *ngFor="let item of booking_params?.preview_screen?.travel_info | keyvalue">
-					<div class="row my-3" *ngIf="item.value">
+				<div class="px-4"
+					*ngFor="let item of booking_params?.preview_screen?.travel_info | keyvalue: returnZero">
+					<div class="row my-3" *ngIf="item.value && item.key !== '---'">
 						<div class="col-3">
 							<p class="m-0">
 								{{ textFormatter(item.key) | titlecase }}
@@ -1712,13 +1748,53 @@
 							</h5>
 						</div>
 					</div>
+					<div class="row m-0 p-0" *ngIf="item.key === '---'">
+						<div class="col-md-12">
+							<hr
+								style="width: 50%; margin: 1.1rem auto; border: 1.2px solid #000;" />
+						</div>
+					</div>
+				</div>
+				<!-- Return Information -->
+				<div *ngIf="booking_params.preview_screen?.return">
+					<hr style="width: 50%; margin: 1.1rem auto; border: 1.2px solid #000;" />
+					<h5>
+						Return Information
+					</h5>
+					<div class="px-4"
+						*ngFor="let item of booking_params?.preview_screen?.return | keyvalue: returnZero">
+						<div class="row my-3" *ngIf="item.value && item.key !== '---'">
+							<div class="col-3">
+								<p class="m-0">
+									{{ textFormatter(item.key) | titlecase }}
+								</p>
+							</div>
+							<div class="col-9">
+								<h5 class="m-0"
+									*ngIf="item.key != 'travel date' || item.key != 'travel time'">
+									{{ textFormatter(item.value) }}
+									{{ item.key == 'travel date' ? '| ' + dateFormat(item.value)
+									:
+									item.key == 'travel time' ? '| ' + timeFormat(item.value) :
+									'' }}
+								</h5>
+							</div>
+						</div>
+						<div class="row m-0 p-0" *ngIf="item.key === '---'">
+							<div class="col-md-12">
+								<hr
+									style="width: 50%; margin: 1.1rem auto; border: 1.2px solid #000;" />
+							</div>
+						</div>
+					</div>
 				</div>
 
 				<!-- Passenger Information -->
 				<h3 class="mt-4">
 					Passenger Information
 				</h3>
-				<div *ngFor="let item of booking_params?.preview_screen?.passenger_info | keyvalue">
+				<div
+					*ngFor="let item of booking_params?.preview_screen?.passenger_info | keyvalue: returnZero">
 					<div class="row my-3" *ngIf="item.value">
 						<div class="col-3">
 							<p class="m-0">
@@ -1737,7 +1813,8 @@
 				<h3 class="mt-4">
 					Driver Information
 				</h3>
-				<div *ngFor="let item of booking_params?.preview_screen?.driver_info | keyvalue">
+				<div
+					*ngFor="let item of booking_params?.preview_screen?.driver_info | keyvalue: returnZero">
 					<div class="row my-3" *ngIf="item.value">
 						<div class="col-3">
 							<p class="m-0">

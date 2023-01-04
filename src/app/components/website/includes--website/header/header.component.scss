@@ -23,20 +23,22 @@
 		margin: 5px 10px 5px 10px;
 		background: #646464;
 	}
-	.dropdown-item:disabled {
+	.dropdown-item.nav-disabled {
 		opacity: 0.6;
-		pointer-events: none;
 		cursor: default;
 	}
 	.dropdown-item {
 		display: block;
 		border-radius: 8px;
-		background-color: var(--orange);
+		background-color: var(--orange-color);
 		margin: 14px 15px;
 		width: auto;
 		padding: 8px 15px;
+		&:hover:not(.dropdown-item.nav-disabled) {
+			background-color: #be691d;
+		}
 	}
-	.dropdown-item:not(.dropdown-itemdown-item:disabled) {
+	.dropdown-item:not(.dropdown-item.nav-disabled) {
 		box-shadow: 0 3px 10px -6px rgba(0, 0, 0, 0.6);
 	}
 	.dropdown-item:active {

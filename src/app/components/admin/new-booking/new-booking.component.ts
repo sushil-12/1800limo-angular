@@ -19,7 +19,7 @@ declare var $: any
 export class NewBookingComponent implements OnInit
 {
 	booking_params: any = {
-		transfer_types: ['airport_to_city', 'city_to_airport', 'city_to_city'],
+		transfer_types: ['city_to_city', 'airport_to_city', 'city_to_airport', 'city_to_cruise', 'cruise_to_city', 'cruise_to_airport', 'airport_to_cruise'],
 		client_account_types: ['individual', 'corporate', 'travel_planner', 'loose_customer'],
 		affiliate_accounts: ['affiliate', 'loose_affiliate'],
 		numbers: (() =>
@@ -932,22 +932,15 @@ export class NewBookingComponent implements OnInit
 				'travel_info': {
 					"travel date": data.pickup_date,
 					"travel time": data.pickup_time,
-					"pickup": data.pickup ?? `${data.pickup_airport} | ${data.pickup_airline}`,
+					"pickup": data.pickup,	// default is address, override for airport
+					"flight": data.pickup_airline,
+					"flight number": data.pickup_flight,
 					"port": data.cruise_port,
-					"pickup flight": data.pickup_flight,
-					"destination": data.dropoff ?? `${data.dropoff_airport} | ${data.dropoff_airline}`,
-					"drop off flight": data.dropoff_flight,
+					"destination": data.dropoff,
+					"$flight": data.dropoff_airline,
+					"$flight number": data.dropoff_flight,
 					"total distance": (data.journeyDistance / 1609).toFixed(2) + ' miles',
 					"total time": data.journeyTime + ' mins',
-				},
-				"return": {
-					"travel date": data.return_pickup_date,
-					"travel time": data.return_pickup_time,
-					"pickup": data.return_pickup ?? `${data.return_pickup_airport} | ${data.return_pickup_airline}`,
-					"port": data.return_cruise_port,
-					"pickup flight": data.return_pickup_flight,
-					"destination": data.return_dropoff ?? `${data.return_dropoff_airport} | ${data.return_dropoff_airline}`,
-					"drop off flight": data.return_dropoff_flight,
 				},
 				"passenger_info": {
 					"Name": data.passenger_name,
@@ -960,8 +953,60 @@ export class NewBookingComponent implements OnInit
 					"email": data.driver_email,
 					"phone": `(${data.driver_cell_isd}) ${data.driver_cell}`
 				},
-
 			}
+
+			if (this.Form.service_type.value == 'round_trip')
+			{
+				this.booking_params['preview_screen']['return'] = {
+					"travel date": data.return_pickup_date,
+					"travel time": data.return_pickup_time,
+					"pickup": data.return_pickup,
+					"flight": data.return_pickup_airline,
+					"flight number": data.return_pickup_flight,
+					"port": data.return_cruise_port,
+					"destination": data.return_dropoff,
+					"$flight": data.return_dropoff_airline,
+					"$flight_number": data.return_dropoff_flight,
+					"total distance": (data.returnJourneyDistance / 1609).toFixed(2) + ' miles',
+					"total time": data.returnJourneyTime + ' mins',
+				}
+
+				// overrides for Return Source - Airport
+				if (this.Form.return_transfer_type.value.includes('airport_'))
+				{
+					let pickup_airport = this.BigData.airportsData.find(item => item.id === data.return_pickup_airport)['name']
+					let pickup_airline = this.BigData.airlinesData.find(item => item.id === data.return_pickup_airline)['name']
+					this.booking_params.preview_screen['return']['pickup'] = pickup_airport
+					this.booking_params.preview_screen['return']['flight'] = pickup_airline
+				}
+				// override for Target - Airport
+				if (this.Form.return_transfer_type.value.includes('_airport'))
+				{
+					let dropoff_airport = this.BigData.airportsData.find(item => item.id === data.return_dropoff_airport)['name']
+					let dropoff_airline = this.BigData.airlinesData.find(item => item.id === data.return_dropoff_airline)['name']
+					this.booking_params.preview_screen['return']['destination'] = dropoff_airport
+					this.booking_params.preview_screen['return']['$flight'] = dropoff_airline
+				}
+			}
+
+			// override for Source - Airport
+			if (this.Form.transfer_type.value.includes('airport_'))
+			{
+				let pickup_airport = this.BigData.airportsData.find(item => item.id === data.pickup_airport)['name']
+				let pickup_airline = this.BigData.airlinesData.find(item => item.id === data.pickup_airline)['name']
+				this.booking_params.preview_screen['travel_info']['pickup'] = pickup_airport
+				this.booking_params.preview_screen['travel_info']['flight'] = pickup_airline
+			}
+			// override for Target - Airport
+			if (this.Form.transfer_type.value.includes('_airport'))
+			{
+				let dropoff_airport = this.BigData.airportsData.find(item => item.id === data.dropoff_airport)['name']
+				let dropoff_airline = this.BigData.airlinesData.find(item => item.id === data.dropoff_airline)['name']
+				this.booking_params.preview_screen['travel_info']['destination'] = dropoff_airport
+				this.booking_params.preview_screen['travel_info']['$flight'] = dropoff_airline
+			}
+
+
 			$('#previewBooking').modal('handleUpdate').modal('show')
 		}
 	}

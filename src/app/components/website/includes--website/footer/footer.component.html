@@ -17,7 +17,8 @@
 				</div>
 				<div class="col-6 block">
 					<ul>
-						<li><a routerLink="group-travel-planner">Group Travel Planner / Statistics / FAQs</a></li>
+						<li><a routerLink="group-travel-planner">Group Travel Planner / Statistics /
+								FAQs</a></li>
 						<li><a routerLink="cancellation-policy">Cancellation Policy</a></li>
 						<li><a routerLink="investors">Investors</a></li>
 						<li><a routerLink="suggestions-complaints">Suggestions / Complaints</a></li>
@@ -41,7 +42,8 @@
 					<ul>
 						<li><a routerLink="customer-faq">Customer FAQs</a> </li>
 						<li><a routerLink="driver-faq">Driver FAQs</a> </li>
-						<li><a routerLink="group-travel-planner">Group Travel Planner / Statistics / FAQs</a></li>
+						<li><a routerLink="group-travel-planner">Group Travel Planner / Statistics /
+								FAQs</a></li>
 
 					</ul>
 				</div>
@@ -61,14 +63,19 @@
 			<div class="row clearfix">
 				<div class="col-md-12 block login_btn text-center">
 					<div class="dropdown" *ngIf="!currentUser; else loggedInUser">
-						<button class="dropdown-toggle custom-filled-button" href="#" id="dropdownFooter" data-toggle="dropdown"
-							aria-haspopup="true" aria-expanded="false">LOGIN / CREATE</button>
+						<button class="dropdown-toggle custom-filled-button" href="#"
+							id="dropdownFooter" data-toggle="dropdown" aria-haspopup="true"
+							aria-expanded="false">LOGIN / CREATE</button>
 						<div class="dropdown-menu" aria-labelledby="dropdownFooter">
-							<a class="dropdown-item text-secondary" (click)="loginButtons('individual')">Individual</a>
-							<a class="dropdown-item text-secondary" (click)="loginButtons('corporate')">Corporate</a>
-							<a class="dropdown-item text-secondary" (click)="loginButtons('travel_agent')">Travel Agent</a>
+							<a class="dropdown-item nav-disabled"
+								(click)="loginButtons('individual')">Individual</a>
+							<a class="dropdown-item nav-disabled"
+								(click)="loginButtons('corporate')">Corporate</a>
+							<a class="dropdown-item nav-disabled"
+								(click)="loginButtons('travel_agent')">Travel Agent</a>
 							<hr>
-							<a class="dropdown-item" (click)="loginButtons('driver')">Driver / Chauffeur / Fleet - To
+							<a class="dropdown-item" (click)="loginButtons('driver')">Driver /
+								Chauffeur / Fleet - To
 								Drive</a>
 						</div>
 					</div>
@@ -77,24 +84,30 @@
 							<li class="nav-item dropdown no-caret dropdown-user">
 								<button
 									class="user-profile btn btn-icon btn-transparent-dark dropdown-toggle custom-filled-button"
-									style="padding: 0.875rem 2.258rem;" id="navbarDropdownUserImage" href="javascript:void(0);"
-									role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									{{currentUser.affiliateCompanyName ? currentUser.affiliateCompanyName : currentUser.name ?
-									currentUser.name : currentUser.FirstName + currentUser.LastName.charAt(0)}}
+									style="padding: 0.875rem 2.258rem;" id="navbarDropdownUserImage"
+									href="javascript:void(0);" role="button" data-toggle="dropdown"
+									aria-haspopup="true" aria-expanded="false">
+									{{currentUser.affiliateCompanyName ?
+									currentUser.affiliateCompanyName : currentUser.name ?
+									currentUser.name : currentUser.FirstName +
+									currentUser.LastName.charAt(0)}}
 								</button>
 								<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
 									aria-labelledby="navbarDropdownUserImage">
 									<h6 class="dropdown-header d-flex align-items-center">
-										<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+										<svg xmlns="http://www.w3.org/2000/svg" fill="none"
+											viewBox="0 0 24 24">
 											<path fill="#000" fill-rule="evenodd"
 												d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22ZM15 10C15 11.6569 13.6569 13 12 13C10.3431 13 9 11.6569 9 10C9 8.34315 10.3431 7 12 7C13.6569 7 15 8.34315 15 10ZM5.99927 17C7.36758 15.1783 9.54609 14 11.9998 14C14.4535 14 16.6321 15.1783 18.0004 17C16.6321 18.8217 14.4535 20 11.9998 20C9.54609 20 7.36758 18.8217 5.99927 17Z"
 												clip-rule="evenodd" />
 										</svg>
 										<div class="dropdown-user-details">
 											<div class="dropdown-user-details-name">
-												{{currentUser.affiliateCompanyName ? currentUser.affiliateCompanyName :
+												{{currentUser.affiliateCompanyName ?
+												currentUser.affiliateCompanyName :
 												currentUser.name ?
-												currentUser.name : currentUser.FirstName + currentUser.LastName.charAt(0)}}
+												currentUser.name : currentUser.FirstName +
+												currentUser.LastName.charAt(0)}}
 											</div>
 										</div>
 									</h6>
@@ -102,9 +115,11 @@
 									<div *ngIf="currentUser.roleName=='driver' && accountStatus; else adminRole"
 										class="dropdown-item" (click)="dashboard('affiliate')">
 										<div class="dropdown-item-icon settingsvg">
-											<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-												fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-												stroke-linejoin="round" class="feather feather-settings">
+											<svg xmlns="http://www.w3.org/2000/svg" width="24"
+												height="24" viewBox="0 0 24 24" fill="none"
+												stroke="currentColor" stroke-width="2"
+												stroke-linecap="round" stroke-linejoin="round"
+												class="feather feather-settings">
 												<circle cx="12" cy="12" r="3"></circle>
 												<path
 													d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
@@ -113,12 +128,14 @@
 										</div>{{ Value }}
 									</div>
 									<ng-template #adminRole>
-										<div *ngIf="currentUser.roleName=='admin'" class="dropdown-item"
-											(click)="dashboard('admin')">
+										<div *ngIf="currentUser.roleName=='admin'"
+											class="dropdown-item" (click)="dashboard('admin')">
 											<div class="dropdown-item-icon settingsvg">
-												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-													fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-													stroke-linejoin="round" class="feather feather-settings">
+												<svg xmlns="http://www.w3.org/2000/svg" width="24"
+													height="24" viewBox="0 0 24 24" fill="none"
+													stroke="currentColor" stroke-width="2"
+													stroke-linecap="round" stroke-linejoin="round"
+													class="feather feather-settings">
 													<circle cx="12" cy="12" r="3"></circle>
 													<path
 														d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
@@ -129,10 +146,13 @@
 									</ng-template>
 									<div class="dropdown-item" (click)="logout()">
 										<div class="dropdown-item-icon">
-											<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-												fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-												stroke-linejoin="round" class="feather feather-log-out">
-												<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+											<svg xmlns="http://www.w3.org/2000/svg" width="24"
+												height="24" viewBox="0 0 24 24" fill="none"
+												stroke="currentColor" stroke-width="2"
+												stroke-linecap="round" stroke-linejoin="round"
+												class="feather feather-log-out">
+												<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4">
+												</path>
 												<polyline points="16 17 21 12 16 7"></polyline>
 												<line x1="21" y1="12" x2="9" y2="12"></line>
 											</svg>
@@ -143,7 +163,8 @@
 							</li>
 						</ul>
 					</ng-template>
-					<p>Follow us on social media! We’ll provide you with only the most important information and
+					<p>Follow us on social media! We’ll provide you with only the most important
+						information and
 						updates.
 					</p>
 				</div>
@@ -152,9 +173,11 @@
 				<div class="col-md-12 col-12 block text-center">
 					<div class="socials">
 						<a href=" https://www.facebook.com/1800LIMO" target="_blank">
-							<!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'><svg
-								enable-background="new 0 0 128 128" height="128px" id="Layer_1" version="1.1"
-								viewBox="0 0 128 128" width="128px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
+							<!DOCTYPE svg
+								PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'>
+							<svg enable-background="new 0 0 128 128" height="128px" id="Layer_1"
+								version="1.1" viewBox="0 0 128 128" width="128px"
+								xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
 								xmlns:xlink="http://www.w3.org/1999/xlink">
 								<g>
 									<circle cx="64" cy="64" fill="#3C579E" r="64" />
@@ -166,9 +189,11 @@
 						</a>
 
 						<a href="https://twitter.com/1800LIMO" target="_blank">
-							<!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'><svg
-								enable-background="new 0 0 128 128" height="128px" id="Layer_1" version="1.1"
-								viewBox="0 0 128 128" width="128px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
+							<!DOCTYPE svg
+								PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'>
+							<svg enable-background="new 0 0 128 128" height="128px" id="Layer_1"
+								version="1.1" viewBox="0 0 128 128" width="128px"
+								xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
 								xmlns:xlink="http://www.w3.org/1999/xlink">
 								<g>
 									<circle cx="64" cy="64" fill="#55ACEE" r="64" />
@@ -183,8 +208,10 @@
 
 						<a href="https://www.linkedin.com/company/1800LIMO" target="_blank">
 							<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-								xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 291.319 291.319"
-								style="enable-background:new 0 0 291.319 291.319;" xml:space="preserve">
+								xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+								viewBox="0 0 291.319 291.319"
+								style="enable-background:new 0 0 291.319 291.319;"
+								xml:space="preserve">
 								<g>
 									<path style="fill:#0E76A8;" d="M145.659,0c80.45,0,145.66,65.219,145.66,145.66s-65.21,145.659-145.66,145.659S0,226.1,0,145.66
 									S65.21,0,145.659,0z" />
@@ -198,9 +225,11 @@
 						</a>
 
 						<a href="/#" target="_blank">
-							<!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'><svg
-								enable-background="new 0 0 128 128" height="128px" id="Layer_1" version="1.1"
-								viewBox="0 0 128 128" width="128px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
+							<!DOCTYPE svg
+								PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'>
+							<svg enable-background="new 0 0 128 128" height="128px" id="Layer_1"
+								version="1.1" viewBox="0 0 128 128" width="128px"
+								xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
 								xmlns:xlink="http://www.w3.org/1999/xlink">
 								<g>
 									<circle cx="64" cy="64" fill="#CC191E" r="64" />
@@ -212,13 +241,16 @@
 						</a>
 
 						<a href="https://www.instagram.com/1800LIMO" target="_blank">
-							<!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'><svg
-								enable-background="new 0 0 128 128" height="128px" id="Layer_1" version="1.1"
-								viewBox="0 0 128 128" width="128px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
+							<!DOCTYPE svg
+								PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'>
+							<svg enable-background="new 0 0 128 128" height="128px" id="Layer_1"
+								version="1.1" viewBox="0 0 128 128" width="128px"
+								xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
 								xmlns:xlink="http://www.w3.org/1999/xlink">
 								<g>
-									<linearGradient gradientTransform="matrix(1 0 0 -1 594 633)" gradientUnits="userSpaceOnUse"
-										id="SVGID_1_" x1="-566.7114" x2="-493.2875" y1="516.5693" y2="621.4296">
+									<linearGradient gradientTransform="matrix(1 0 0 -1 594 633)"
+										gradientUnits="userSpaceOnUse" id="SVGID_1_" x1="-566.7114"
+										x2="-493.2875" y1="516.5693" y2="621.4296">
 										<stop offset="0" style="stop-color:#FFB900" />
 										<stop offset="1" style="stop-color:#9100EB" />
 									</linearGradient>
@@ -279,11 +311,14 @@
 
 				<div class="col-md-6 footer-left">
 					<a routerLink="privacy-policy">Privacy Policy</a> &nbsp; | &nbsp;
-					<a routerLink="delivery-membership-terms-condition">Membership Program Terms &amp;
-						Conditions</a> &nbsp; | &nbsp;<a routerLink="client-terms-condition">Policies,
+					<a routerLink="delivery-membership-terms-condition">Membership Program Terms
+						&amp;
+						Conditions</a> &nbsp; | &nbsp;<a
+						routerLink="client-terms-condition">Policies,
 						Terms and Conditions</a>
 				</div>
-				<div class="col-md-6 footer-right">Copyright © 2001 - 2021 1-800-LIMO.COM. All rights reserved.
+				<div class="col-md-6 footer-right">Copyright © 2001 - 2021 1-800-LIMO.COM. All
+					rights reserved.
 				</div>
 
 			</div>

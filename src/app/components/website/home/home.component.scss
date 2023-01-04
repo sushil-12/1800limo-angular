@@ -1,37 +1,31 @@
 mat-form-field input {
 	background-color: #fff;
-	margin-bottom   : 0;
+	margin-bottom: 0;
 }
 
-
-#myTab
-{
-	li a
-	{
+#myTab {
+	li a {
 		background-color: transparent;
 		color: var(--orange);
 	}
-	li a.active
-	{
+	li a.active {
 		color: #fff;
 	}
 }
 
-
-
 #search-button-container {
-	height : 100px;
-	width  : 100%;
+	height: 100px;
+	width: 100%;
 	display: table;
 
 	#search-button-box {
-		display       : table-cell;
-		text-align    : center;
+		display: table-cell;
+		text-align: center;
 		vertical-align: middle;
 
 		button {
 			font-size: 1.08rem;
-			padding  : 0.675rem 0.758rem;
+			padding: 0.675rem 0.758rem;
 		}
 	}
 }
@@ -43,15 +37,14 @@ mat-form-field input {
 // .container:not(.checkourveh_wrapper) {
 // 		max-width: 900px;
 //  	}
-@media(min-width:1200px) {
+@media (min-width: 1200px) {
 	.checkourveh_wrapper .container {
 		max-width: 1140px;
 	}
 }
 
-
 .dropdown-menu hr {
-	margin    : 5px 10px 5px 10px;
+	margin: 5px 10px 5px 10px;
 	background: #646464;
 }
 
@@ -69,10 +62,10 @@ mat-form-field input {
 }
 
 .btnStyle {
-	color           : #000 !important;
+	color: #000 !important;
 	background-color: #f69a40 !important;
-	border-color    : #f69a40 !important;
-	padding         : 10px 40px;
+	border-color: #f69a40 !important;
+	padding: 10px 40px;
 }
 
 #showCountriesModal .modal-content {
@@ -80,46 +73,46 @@ mat-form-field input {
 }
 
 #showCountriesModal .modal-content hr {
-	border          : 2px solid #000;
-	width           : 100px;
+	border: 2px solid #000;
+	width: 100px;
 	background-color: #000;
-	margin          : 10px 347px 20px 347px;
-	display         : block;
-	margin-top      : 0;
+	margin: 10px 347px 20px 347px;
+	display: block;
+	margin-top: 0;
 }
 
 .modal-content {
 	border-radius: 1rem;
-	padding      : 1rem 0;
+	padding: 1rem 0;
 }
 
 .modal-dialog {
 	max-width: 800px;
 }
 
-@media only screen and (max-width:1024px) {
+@media only screen and (max-width: 1024px) {
 	.text_desktop br {
-		display: none
+		display: none;
 	}
 
 	.viewVehicleCarousel .owl-nav button.owl-prev,
 	.viewVehicleCarousel .owl-nav button.owl-next {
-		display: none
+		display: none;
 	}
 }
 
-@media only screen and (max-width:767px) {
+@media only screen and (max-width: 767px) {
 	#showCountriesModal .modal-content hr {
-		border    : 2px solid #000;
-		width     : 150px;
-		margin    : 10px 29px 20px 15px;
-		display   : block;
+		border: 2px solid #000;
+		width: 150px;
+		margin: 10px 29px 20px 15px;
+		display: block;
 		margin-top: 0;
 	}
 
 	#showCountriesModal .modal-content {
 		background-color: #fff;
-		border-radius   : 0 !important;
+		border-radius: 0 !important;
 	}
 
 	#myModal .modal-content {
@@ -132,51 +125,50 @@ mat-form-field input {
 	}
 
 	.close {
-		height     : 40px;
-		width      : 40px;
-		color      : #ff0000;
-		box-shadow : none;
+		height: 40px;
+		width: 40px;
+		color: #ff0000;
+		box-shadow: none;
 		text-shadow: none;
-		font-size  : 40px;
+		font-size: 40px;
 	}
-
 }
 
 @media only screen and (max-width: 767px) and (orientation: landscape) {
 	#showCountriesModal .modal-content hr {
-		border    : 2px solid #000;
-		width     : 150px;
-		margin    : 10px 30px 20px 15px;
-		display   : block;
+		border: 2px solid #000;
+		width: 150px;
+		margin: 10px 30px 20px 15px;
+		display: block;
 		margin-top: 0;
 	}
 
 	.modal-dialog {
-		margin   : 0rem;
+		margin: 0rem;
 		max-width: 100%;
 	}
 }
 
 @media (min-width: 768px) and (max-width: 991px) {
 	#showCountriesModal .modal-content hr {
-		border    : 2px solid #000;
-		width     : 100px;
-		margin    : 10px 200px 20px 200px;
-		display   : block;
+		border: 2px solid #000;
+		width: 100px;
+		margin: 10px 200px 20px 200px;
+		display: block;
 		margin-top: 0;
 	}
 
 	#myModal .modal-content hr {
-		border    : 2px solid #fff;
-		width     : 100px;
-		margin    : 10px 200px 20px 200px;
-		display   : block;
+		border: 2px solid #fff;
+		width: 100px;
+		margin: 10px 200px 20px 200px;
+		display: block;
 		margin-top: 0;
 	}
 
 	.modal-dialog {
-		margin   : 1.5rem auto;
-		top      : 20px;
+		margin: 1.5rem auto;
+		top: 20px;
 		max-width: 500px;
 	}
 }
@@ -186,13 +178,13 @@ mat-form-field input {
 }
 
 .modal-header h3 {
-	color     : #f69a40;
+	color: #f69a40;
 	text-align: center;
 }
 
-@media only screen and (max-width:767px) {
+@media only screen and (max-width: 767px) {
 	.modal-header h3 {
-		color     : #f69a40;
+		color: #f69a40;
 		text-align: left;
 	}
 }
@@ -202,30 +194,30 @@ mat-form-field input {
 }
 
 .modal-body p {
-	color     : #fff !important;
+	color: #fff !important;
 	text-align: left !important;
 }
 
 .modal-content hr {
-	border          : 2px solid #fff;
-	width           : 100px;
+	border: 2px solid #fff;
+	width: 100px;
 	background-color: #fff;
-	margin          : 10px 347px 20px 347px;
-	display         : block;
+	margin: 10px 347px 20px 347px;
+	display: block;
 }
 
 @media only screen and (max-width: 767px) {
 	.modal-content hr {
-		border : 2px solid #fff;
-		width  : 100px;
-		margin : 10px 145px 20px 145px;
+		border: 2px solid #fff;
+		width: 100px;
+		margin: 10px 145px 20px 145px;
 		display: block;
 	}
 
 	#myModal .modal-content hr {
-		border : 2px solid #fff;
-		width  : 180px;
-		margin : 10px 15px 20px 20px;
+		border: 2px solid #fff;
+		width: 180px;
+		margin: 10px 15px 20px 20px;
 		display: block;
 	}
 }
@@ -236,43 +228,43 @@ mat-form-field input {
 
 @media only screen and (max-width: 767px) and (orientation: landscape) {
 	.modal-content hr {
-		border : 2px solid #fff;
-		width  : 100px;
-		margin : 10px 200px 20px 200px;
+		border: 2px solid #fff;
+		width: 100px;
+		margin: 10px 200px 20px 200px;
 		display: block;
 	}
 }
 
 .rightPart span {
-	display     : inline-block;
+	display: inline-block;
 	padding-left: 10px;
 }
 
 @media only screen and (max-width: 1199px) {
 	.rightPart span {
 		padding-right: 0 !important;
-		padding-left : 25px;
-		margin-top   : -25px;
-		display      : block;
+		padding-left: 25px;
+		margin-top: -25px;
+		display: block;
 	}
 }
 
 .logbutton {
 	// border            : 1px solid #5dbd8a !important;
-	width             : 35% !important;
-	height            : 50px !important;
-	margin            : 20px auto;
-	margin-top        : 0%;
-	padding-top       : 13px !important;
-	background-color  : #5dbd8a !important;
+	width: 35% !important;
+	height: 50px !important;
+	margin: 20px auto;
+	margin-top: 0%;
+	padding-top: 13px !important;
+	background-color: #5dbd8a !important;
 	-webkit-appearance: none;
-	appearance        : none;
-	height            : 40px;
-	border-radius     : 15px !important;
-	padding           : 0px 10px;
-	color             : #fff !important;
-	transition        : 0.6s;
-	display           : block;
+	appearance: none;
+	height: 40px;
+	border-radius: 15px !important;
+	padding: 0px 10px;
+	color: #fff !important;
+	transition: 0.6s;
+	display: block;
 }
 
 .text_mobile .dropdown-item {
@@ -307,16 +299,16 @@ a.user-profile:active::after {
 }
 
 .bannertext .dropdown-menu {
-	max-width       : 80%;
-	right           : 0;
-	margin          : auto;
-	color           : #fff !important;
+	max-width: 80%;
+	right: 0;
+	margin: auto;
+	color: #fff !important;
 	background-color: #fff !important;
-	border          : 1px solid #5dbd8a;
-	top             : -2px !important;
-	transform       : none !important;
-	left            : 0px !important;
-	top             : 50px !important;
+	border: 1px solid #5dbd8a;
+	top: -2px !important;
+	transform: none !important;
+	left: 0px !important;
+	top: 50px !important;
 }
 
 .dropdown-item:active {
@@ -334,7 +326,6 @@ a.user-profile:active::after {
 @media only screen and (max-width: 360px) {
 	.bannertext .dropdown-menu {
 		max-width: 100%;
-
 	}
 
 	//right: 0;
@@ -351,26 +342,26 @@ a.user-profile:active::after {
 	}
 
 	.logbutton {
-		border            : 1px solid #5dbd8a !important;
-		width             : 100% !important;
-		height            : 50px !important;
-		margin            : 20px auto;
-		margin-top        : 0%;
-		padding-top       : 13px !important;
-		background-color  : #5dbd8a !important;
+		border: 1px solid #5dbd8a !important;
+		width: 100% !important;
+		height: 50px !important;
+		margin: 20px auto;
+		margin-top: 0%;
+		padding-top: 13px !important;
+		background-color: #5dbd8a !important;
 		-webkit-appearance: none;
-		-moz-appearance   : none;
-		appearance        : none;
-		height            : 40px;
-		border-radius     : 5px;
-		padding           : 0px 10px;
-		color             : #fff;
-		transition        : 0.6s;
-		display           : block;
+		-moz-appearance: none;
+		appearance: none;
+		height: 40px;
+		border-radius: 5px;
+		padding: 0px 10px;
+		color: #fff;
+		transition: 0.6s;
+		display: block;
 	}
 
 	.bannerform_wrapper .nav-item .dropdown-menu a {
-		text-align: left
+		text-align: left;
 	}
 }
 
@@ -389,21 +380,21 @@ a.user-profile:active::after {
 
 	.logbutton {
 		// border            : 1px solid #5dbd8a !important;
-		width             : 90% !important;
-		height            : 50px !important;
-		margin            : 20px auto;
-		margin-top        : 0%;
-		padding-top       : 13px !important;
-		background-color  : #5dbd8a !important;
+		width: 90% !important;
+		height: 50px !important;
+		margin: 20px auto;
+		margin-top: 0%;
+		padding-top: 13px !important;
+		background-color: #5dbd8a !important;
 		-webkit-appearance: none;
-		-moz-appearance   : none;
-		appearance        : none;
-		height            : 40px;
-		border-radius     : 15px !important;
-		padding           : 0px 10px;
-		color             : #fff;
-		transition        : 0.6s;
-		display           : block;
+		-moz-appearance: none;
+		appearance: none;
+		height: 40px;
+		border-radius: 15px !important;
+		padding: 0px 10px;
+		color: #fff;
+		transition: 0.6s;
+		display: block;
 	}
 }
 
@@ -421,22 +412,22 @@ a.user-profile:active::after {
 	// }
 
 	.logbutton {
-		border            : 1px solid #5dbd8a !important;
-		width             : 90% !important;
-		height            : 50px !important;
-		margin            : 20px auto;
-		margin-top        : 0%;
-		padding-top       : 13px !important;
-		background-color  : #5dbd8a !important;
+		border: 1px solid #5dbd8a !important;
+		width: 90% !important;
+		height: 50px !important;
+		margin: 20px auto;
+		margin-top: 0%;
+		padding-top: 13px !important;
+		background-color: #5dbd8a !important;
 		-webkit-appearance: none;
-		-moz-appearance   : none;
-		appearance        : none;
-		height            : 40px;
-		border-radius     : 5px;
-		padding           : 0px 10px;
-		color             : #fff;
-		transition        : 0.6s;
-		display           : block;
+		-moz-appearance: none;
+		appearance: none;
+		height: 40px;
+		border-radius: 5px;
+		padding: 0px 10px;
+		color: #fff;
+		transition: 0.6s;
+		display: block;
 	}
 }
 
@@ -454,22 +445,22 @@ a.user-profile:active::after {
 	// }
 
 	.logbutton {
-		border            : 1px solid #5dbd8a !important;
-		width             : 90% !important;
-		height            : 50px !important;
-		margin            : 20px auto;
-		margin-top        : 0%;
-		padding-top       : 13px !important;
-		background-color  : #5dbd8a !important;
+		border: 1px solid #5dbd8a !important;
+		width: 90% !important;
+		height: 50px !important;
+		margin: 20px auto;
+		margin-top: 0%;
+		padding-top: 13px !important;
+		background-color: #5dbd8a !important;
 		-webkit-appearance: none;
-		-moz-appearance   : none;
-		appearance        : none;
-		height            : 40px;
-		border-radius     : 5px;
-		padding           : 0px 10px;
-		color             : #fff;
-		transition        : 0.6s;
-		display           : block;
+		-moz-appearance: none;
+		appearance: none;
+		height: 40px;
+		border-radius: 5px;
+		padding: 0px 10px;
+		color: #fff;
+		transition: 0.6s;
+		display: block;
 	}
 }
 
@@ -482,7 +473,7 @@ a.user-profile:active::after {
 }
 
 .errorValid {
-	border       : 2px solid red !important;
+	border: 2px solid red !important;
 	margin-bottom: 0 !important;
 	border-radius: 7px;
 }
@@ -492,7 +483,7 @@ a.user-profile:active::after {
 }
 
 .input-contain {
-	width           : 100%;
+	width: 100%;
 	// margin-bottom: 10px !important;
 }
 
@@ -502,11 +493,11 @@ a.user-profile:active::after {
 
 .cross-svg {
 	background-color: white;
-	border-radius   : 0 5px 5px 0;
-	align-self      : center;
-	margin-left     : -4px;
-	height          : 30px;
-	cursor          : pointer;
+	border-radius: 0 5px 5px 0;
+	align-self: center;
+	margin-left: -4px;
+	height: 30px;
+	cursor: pointer;
 }
 
 .input-box {
@@ -517,10 +508,8 @@ a.user-profile:active::after {
 	margin: 0 !important;
 }
 
-
 /* ------------- TIME PICKER ------------------------ */
-@at-root
-/*-------------------------------time picker---------------------------------------*/
+@at-root /*-------------------------------time picker---------------------------------------*/
 
 .input-group-addon {
 	cursor: pointer;
@@ -531,9 +520,9 @@ a.user-profile:active::after {
 }
 
 .form-control {
-	border    : 1px solid #ccc;
+	border: 1px solid #ccc;
 	box-shadow: none;
-	color     : #000;
+	color: #000;
 }
 
 .form-control:hover,
@@ -553,15 +542,15 @@ a.user-profile:active::after {
 //     padding: 30px 30px 20px;
 // }
 .bootstrap-datetimepicker-widget.dropdown-menu {
-	border       : 1px solid #34495e;
+	border: 1px solid #34495e;
 	border-radius: 0;
-	box-shadow   : none;
-	margin       : 10px 0 0 0;
-	padding      : 0;
-	min-width    : 329px;
-	max-width    : 100%;
-	width        : auto;
-	color        : #000;
+	box-shadow: none;
+	margin: 10px 0 0 0;
+	padding: 0;
+	min-width: 329px;
+	max-width: 100%;
+	width: auto;
+	color: #000;
 }
 
 .bootstrap-datetimepicker-widget.dropdown-menu.bottom:before,
@@ -587,7 +576,7 @@ a.user-profile:active::after {
 .bootstrap-datetimepicker-widget.dropdown-menu table td.active:hover,
 .bootstrap-datetimepicker-widget.dropdown-menu table td span.active {
 	background-color: #0095ff;
-	text-shadow     : none;
+	text-shadow: none;
 }
 
 .bootstrap-datetimepicker-widget.dropdown-menu table td.active.today:before,
@@ -597,9 +586,9 @@ a.user-profile:active::after {
 }
 
 .bootstrap-datetimepicker-widget.dropdown-menu table th {
-	height : 40px;
+	height: 40px;
 	padding: 0;
-	width  : 40px;
+	width: 40px;
 }
 
 .bootstrap-datetimepicker-widget.dropdown-menu table th.picker-switch {
@@ -611,25 +600,25 @@ a.user-profile:active::after {
 }
 
 .bootstrap-datetimepicker-widget.dropdown-menu table td.day {
-	height     : 32px;
+	height: 32px;
 	line-height: 32px;
-	padding    : 0;
-	width      : auto;
+	padding: 0;
+	width: auto;
 }
 
 .bootstrap-datetimepicker-widget.dropdown-menu table td span {
 	border-radius: 0;
-	height       : 27px;
-	line-height  : 27px;
-	margin       : 0;
-	width        : 25%;
-	color        : #000;
+	height: 27px;
+	line-height: 27px;
+	margin: 0;
+	width: 25%;
+	color: #000;
 }
 
 .bootstrap-datetimepicker-widget.dropdown-menu .timepicker-picker table td {
-	padding    : 0;
-	width      : 30%;
-	height     : 20px;
+	padding: 0;
+	width: 30%;
+	height: 20px;
 	line-height: 20px;
 }
 
@@ -640,25 +629,25 @@ a.user-profile:active::after {
 .bootstrap-datetimepicker-widget.dropdown-menu .timepicker-picker table td a,
 .bootstrap-datetimepicker-widget.dropdown-menu .timepicker-picker table td span,
 .bootstrap-datetimepicker-widget.dropdown-menu .timepicker-picker table td button {
-	border       : none;
+	border: none;
 	border-radius: 0;
-	height       : 26px;
-	line-height  : 26px;
-	padding      : 0;
-	width        : 100%;
-	color        : #000 !important;
+	height: 26px;
+	line-height: 26px;
+	padding: 0;
+	width: 100%;
+	color: #000 !important;
 }
 
 .bootstrap-datetimepicker-widget.dropdown-menu .timepicker-picker table td span {
-	color     : #333 !important;
+	color: #333 !important;
 	margin-top: -1px;
 }
 
 .bootstrap-datetimepicker-widget.dropdown-menu .timepicker-picker table td button {
 	background-color: #fff;
-	color           : #333;
-	font-weight     : bold;
-	font-size       : 1.2em;
+	color: #333;
+	font-weight: bold;
+	font-size: 1.2em;
 }
 
 .bootstrap-datetimepicker-widget.dropdown-menu .timepicker-picker table td button:hover {
@@ -675,12 +664,12 @@ a.user-profile:active::after {
 
 .bootstrap-datetimepicker-widget.dropdown-menu .picker-switch table td a,
 .bootstrap-datetimepicker-widget.dropdown-menu .picker-switch table td span {
-	display    : block;
-	height     : 40px;
+	display: block;
+	height: 40px;
 	line-height: 40px;
-	padding    : 0;
-	width      : 100%;
-	color      : #000;
+	padding: 0;
+	width: 100%;
+	color: #000;
 }
 
 // .bannerform_wrapper .quoteform_homewrapper .input-group input {
@@ -691,56 +680,56 @@ a.user-profile:active::after {
 // }
 
 .bannerform_wrapper .quoteform_homewrapper .input-group .input-group-append {
-	border: none
+	border: none;
 }
 
 .bannerform_wrapper .quoteform_homewrapper input {
-	border-radius            : 5px;
+	border-radius: 5px;
 }
 
 .bannerform_wrapper .quoteform_homewrapper .input-group .input-group-append .input-group-text {
-	height          : 30px !important;
+	height: 30px !important;
 	background-color: var(--orange-color);
-	color           : #fff !important;
-	border          : none;
-	width           : 30px;
-	border-radius   : 0px 5px 5px 0px;
-	position        : relative
+	color: #fff !important;
+	border: none;
+	width: 30px;
+	border-radius: 0px 5px 5px 0px;
+	position: relative;
 }
 
 .bannerform_wrapper .quoteform_homewrapper #timepicker2.input-group .input-group-append .input-group-text {
-	height          : 30px !important;
+	height: 30px !important;
 	background-color: var(--orange-color);
-	color           : #fff !important;
-	border          : none;
-	width           : 30px;
-	border-radius   : 5px 0px 0px 5px;
-	position        : absolute;
-	left            : 0;
+	color: #fff !important;
+	border: none;
+	width: 30px;
+	border-radius: 5px 0px 0px 5px;
+	position: absolute;
+	left: 0;
 }
 
 .bannerform_wrapper .quoteform_homewrapper .input-group .input-group-append .input-group-text:after {
-	position     : absolute;
-	content      : "";
-	background   : url(/assets/images/clock.svg) 97% 50% no-repeat !important;
-	right        : 6px;
-	width        : 20px;
-	height       : 20px;
+	position: absolute;
+	content: "";
+	background: url(/assets/images/clock.svg) 97% 50% no-repeat !important;
+	right: 6px;
+	width: 20px;
+	height: 20px;
 	// z-index   : 99;
 }
 
 .bannerform_wrapper .quoteform_homewrapper .form-group .input-group {
-	align-items    : center;
+	align-items: center;
 	justify-content: left;
-	flex-wrap      : nowrap;
+	flex-wrap: nowrap;
 }
 
 .bannerform_wrapper .quoteform_homewrapper .form-group .input-group .input-group-append {
-	height: 40px
+	height: 40px;
 }
 
 [type="time"] {
-	position   : relative;
+	position: relative;
 	// z-index : 9
 }
 
@@ -772,9 +761,9 @@ a.user-profile:active::after {
 }
 
 #timepicker2 input {
-	padding-left : 40px;
+	padding-left: 40px;
 	border-radius: 5px;
-	z-index      : 0;
+	z-index: 0;
 }
 
 // .bannerform_wrapper .quoteform_homewrapper .input-group .input-group-addon {
@@ -785,19 +774,52 @@ a.user-profile:active::after {
 //     bottom: auto;
 // }
 .dropdown-toggle::after {
-	border-top   : 0.5em solid;
-	border-right : 0.5em solid transparent;
+	border-top: 0.5em solid;
+	border-right: 0.5em solid transparent;
 	border-bottom: 0;
-	border-left  : 0.5em solid transparent;
+	border-left: 0.5em solid transparent;
+}
+
+.dropdown-menu {
+	hr {
+		margin: 5px 10px 5px 10px;
+		background: #646464;
+	}
+
+	.dropdown-item.nav-disabled {
+		opacity: 0.6;
+		cursor: default;
+	}
+
+	.dropdown-item {
+		display: block;
+		border-radius: 8px;
+		background-color: var(--orange-color);
+		margin: 14px 15px;
+		width: auto;
+		padding: 8px 15px;
+
+		&:hover:not(.dropdown-item.nav-disabled) {
+			background-color: #be691d;
+		}
+	}
+
+	.dropdown-item:not(.dropdown-item.nav-disabled) {
+		box-shadow: 0 3px 10px -6px rgba(0, 0, 0, 0.6);
+	}
+
+	.dropdown-item:active {
+		box-shadow: none;
+	}
 }
 
 .whychoose_no a {
-	color        : #000 !important;
-	background   : var(--orange);
-	font-size    : 17px;
-	border       : 1px solid var(--orange);
-	line-height  : 17px;
-	padding      : 5px 15px;
-	transition   : 0.2s;
+	color: #000 !important;
+	background: var(--orange);
+	font-size: 17px;
+	border: 1px solid var(--orange);
+	line-height: 17px;
+	padding: 5px 15px;
+	transition: 0.2s;
 	border-radius: 10px;
 }
