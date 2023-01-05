@@ -9,6 +9,7 @@ import { SharedModule } from 'src/app/components/shared/shared.module'
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 import * as moment from 'moment';
+import { RatesFormComponent } from '../rates-form/rates-form.component';
 
 declare var $: any
 @Component({
@@ -49,6 +50,7 @@ export class NewBookingComponent implements OnInit
 	}
 
 	BookingForm: FormGroup
+	RatesForm: FormGroup
 
 
 	driver_image: any
@@ -65,6 +67,9 @@ export class NewBookingComponent implements OnInit
 
 	distance: number = 0
 	return_distance: number = 0
+	distance_for_rates: string = '4323.32'
+
+	init_rates: boolean = false
 
 
 
@@ -88,13 +93,13 @@ export class NewBookingComponent implements OnInit
 		// build the form first 
 		this.buildBookingForm()
 		// fetch the big data
-		this.fetchAirportsAndBigData().then((data: any) =>
-		{
-			this.BigData = data
-			this.BigData_COPY = JSON.parse(JSON.stringify(data))
-			this.MapController()
-			this.Form.reservation_id.value ? this.prefillViaBookingID(this.Form.reservation_id.value) : ''
-		})
+		// this.fetchAirportsAndBigData().then((data: any) =>
+		// {
+		// 	this.BigData = data
+		// 	this.BigData_COPY = JSON.parse(JSON.stringify(data))
+		// 	this.MapController()
+		// 	this.Form.reservation_id.value ? this.prefillViaBookingID(this.Form.reservation_id.value) : ''
+		// })
 
 		this.$routeurl.queryParams.subscribe((params: any) =>
 		{
@@ -1184,9 +1189,19 @@ export class NewBookingComponent implements OnInit
 			if (value == 'loose_affiliate')
 			{
 				this.toggleDropdown(null)
+				this.distance_for_rates = ((): string =>
+				{
+					if (this.return_distance != this.distance)
+					{
+						return (this.distance + this.return_distance).toFixed(2)
+					}
+					return this.distance.toFixed(2)
+				})()
+				this.init_rates = true
 			}
 			else
 			{
+				this.init_rates = false
 				this.fetchAffiliates('affiliate')
 			}
 		})
@@ -1313,4 +1328,8 @@ export class NewBookingComponent implements OnInit
 		})
 	}
 
+	RateFormValue(data: any)
+	{
+		console.log(data)
+	}
 }

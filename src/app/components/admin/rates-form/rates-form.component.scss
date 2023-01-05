@@ -1,0 +1,16 @@
+	.rates-row {
+		transition: all 0.27s ease-in-out;
+		width: 100%;
+		gap: 15px;
+	}
+
+	@media only screen and (min-width: 1024px) {
+		.section-container .rates-row {
+			width: 80%;
+		}
+	}
+
+	.errors {
+		height: 2rem;
+		padding: 1rem;
+	}

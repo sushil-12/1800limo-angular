@@ -1664,6 +1664,20 @@
 		<!-- Section - Return Journey Details Ends -->
 
 
+		<div class="section-container mt-5" *ngIf="Form.affiliate_type.value == 'loose_affiliate'">
+			<app-rates-form [initRates]="init_rates" [affiliate_type]="Form.affiliate_type.value"
+				(formvalue)="RateFormValue($event)"
+				[distance]="distance_for_rates"></app-rates-form>
+		</div>
+
+
+
+
+
+
+
+
+
 
 
 		<div class="row">

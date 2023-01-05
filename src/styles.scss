@@ -4,7 +4,6 @@
 * {
 	--green: #33c658;
 	--blue: #0053b5;
-	transition: all 0.25s ease-in-out;
 }
 
 body {
@@ -132,7 +131,18 @@ button.custom-filled-reset-button {
 .text-uppercase {
 	text-transform: uppercase;
 }
-
+.text-lg {
+	font-size: 1rem;
+}
+.text-xl {
+	font-size: 1.16rem;
+}
+.text-2xl {
+	font-size: 1.35rem;
+}
+.text-3xl {
+	font-size: 1.5rem;
+}
 .yellow-alert-boxes {
 	margin: 1rem;
 	ol {
