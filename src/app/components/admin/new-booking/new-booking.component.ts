@@ -50,7 +50,7 @@ export class NewBookingComponent implements OnInit
 	}
 
 	BookingForm: FormGroup
-	RatesForm: FormGroup
+	RatesForm: any
 
 
 	driver_image: any
@@ -93,13 +93,13 @@ export class NewBookingComponent implements OnInit
 		// build the form first 
 		this.buildBookingForm()
 		// fetch the big data
-		// this.fetchAirportsAndBigData().then((data: any) =>
-		// {
-		// 	this.BigData = data
-		// 	this.BigData_COPY = JSON.parse(JSON.stringify(data))
-		// 	this.MapController()
-		// 	this.Form.reservation_id.value ? this.prefillViaBookingID(this.Form.reservation_id.value) : ''
-		// })
+		this.fetchAirportsAndBigData().then((data: any) =>
+		{
+			this.BigData = data
+			this.BigData_COPY = JSON.parse(JSON.stringify(data))
+			this.MapController()
+			this.Form.reservation_id.value ? this.prefillViaBookingID(this.Form.reservation_id.value) : ''
+		})
 
 		this.$routeurl.queryParams.subscribe((params: any) =>
 		{
@@ -485,6 +485,10 @@ export class NewBookingComponent implements OnInit
 								journeyTime: response.time
 							})
 						}
+						this.distance_for_rates = ((): string =>
+						{
+							return this.mToKm(this.distance)
+						})()
 					})
 				}
 			})
@@ -709,6 +713,11 @@ export class NewBookingComponent implements OnInit
 		{
 			return
 		}
+
+		if (list_name === 'vehicleModels')
+		{
+			this.BigData[list_name] = this.BigData[list_name].filter((item: any) => item.name.toLowerCase().startsWith(search_value.toLowerCase()))
+		}
 		this.BigData[list_name] = this.$shared.ListSearch('filter', this.BigData[list_name], search_value, search_with)
 	}
 
@@ -740,7 +749,7 @@ export class NewBookingComponent implements OnInit
 
 		if (!this.BookingForm.get(form_control).value)
 		{
-			return ''
+			return null
 		}
 		let temp = list.find(item => item['id'] == this.BookingForm.get(form_control).value)
 		return temp ? temp[return_key] : ''
@@ -915,7 +924,13 @@ export class NewBookingComponent implements OnInit
 		if (preview)
 		{
 			this.$spinner.show()
-			this.$api.createBooking(this.BookingForm.value).subscribe((response: any) =>
+			let value = this.BookingForm.value
+			value['rateArray'] = this.RatesForm
+			value['grand_total'] = JSON.parse(JSON.stringify(this.RatesForm['grand_total']))
+			value['sub_total'] = value['grand_total']
+			delete this.RatesForm['grand_total']
+
+			this.$api.createBooking(value).subscribe((response: any) =>
 			{
 				this.$spinner.hide()
 				this.$errors.openDialog({
@@ -923,11 +938,7 @@ export class NewBookingComponent implements OnInit
 						error: 'Reservation has been created successfully. '
 					}
 				})
-				this.$router.navigate(['/admin/booking-details'], {
-					queryParams: {
-						bookingId: response.data.reservation_id
-					},
-				})
+				this.$router.navigate(['/admin/daily-bookings-admin'])
 			})
 		}
 		else
@@ -956,7 +967,7 @@ export class NewBookingComponent implements OnInit
 				"driver_info": {
 					"name": data.driver_name,
 					"email": data.driver_email,
-					"phone": `(${data.driver_cell_isd}) ${data.driver_cell}`
+					"phone": `${data.driver_cell}`
 				},
 			}
 
@@ -1155,7 +1166,10 @@ export class NewBookingComponent implements OnInit
 							loose_customer.get(item).get(key).setValidators(Validators.required)
 						}
 					}
-					loose_customer.get(item).setValidators(Validators.required)
+					if (item != 'middle_name')
+					{
+						loose_customer.get(item).setValidators(Validators.required)
+					}
 				}
 			}
 			else
@@ -1189,14 +1203,6 @@ export class NewBookingComponent implements OnInit
 			if (value == 'loose_affiliate')
 			{
 				this.toggleDropdown(null)
-				this.distance_for_rates = ((): string =>
-				{
-					if (this.return_distance != this.distance)
-					{
-						return (this.distance + this.return_distance).toFixed(2)
-					}
-					return this.distance.toFixed(2)
-				})()
 				this.init_rates = true
 			}
 			else
@@ -1331,5 +1337,6 @@ export class NewBookingComponent implements OnInit
 	RateFormValue(data: any)
 	{
 		console.log(data)
+		this.RatesForm = data
 	}
 }

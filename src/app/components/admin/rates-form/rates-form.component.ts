@@ -2,6 +2,19 @@ import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChil
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { AdminService } from 'src/app/services/admin.service';
 
+
+import { combineLatest } from 'rxjs';
+
+
+interface Rates
+{
+	kmrate: number,
+	minimum: number,
+	direct_taxes: number,
+	gratuity: number,
+	taxes: Record<string, any>,
+	amenities: number
+}
 @Component({
 	selector: 'app-rates-form',
 	templateUrl: './rates-form.component.html',
@@ -17,6 +30,10 @@ export class RatesFormComponent implements OnInit, OnChanges
 
 	RatesForm: FormGroup
 
+	minimum_rate: Record<string, any>
+
+	grand_total: number = 0
+
 	interval: any
 
 	trigger_error: boolean = false
@@ -27,16 +44,15 @@ export class RatesFormComponent implements OnInit, OnChanges
 	) { }
 
 	ngOnInit(): void
-	{
-	}
+	{ }
 	ngOnChanges(changes: SimpleChanges)
 	{
 		console.log(changes)
 		if (changes.init_rates && !changes.init_rates.firstChange)
 		{
 			changes.init_rates.currentValue && this.initRates(changes.affiliate_type.currentValue)
-			this.distance = changes.distance.currentValue
 		}
+		this.calculateAmount('all_inclusive_rates', 'Milage_Rate')
 	}
 	ngOnDestroy()
 	{
@@ -73,131 +89,10 @@ export class RatesFormComponent implements OnInit, OnChanges
 		})
 
 		// fetch the data from backend
-		// this.fetchRates(affiliate_type).then((data: any) =>
-		// {
-		// 	this.buildRatesForm(data)
-		// })
-		let data = {
-			"all_inclusive_rates": {
-				"Kilometer_Rate": {
-					"rate_label": "Kilometer Rate",
-					"baserate": 0,
-					"multiple": 0,
-					"percentage": null,
-					"amount": 0
-				},
-				"Minimum_Rate": {
-					"rate_label": "Minimum Rate",
-					"baserate": 0,
-					"multiple": null,
-					"percentage": null,
-					"amount": 0
-				}
-			},
-			"others": {
-				"Gratuity": {
-					"rate_label": "Gratuity",
-					"baserate": 0,
-					"multiple": null,
-					"percentage": 20,
-					"amount": 0
-				}
-			},
-			"amenities": {
-				"Baby_Seat": {
-					"rate_label": "Baby Seat",
-					"baserate": 0,
-					"multiple": null,
-					"percentage": null,
-					"amount": 0
-				},
-				"Per_Diem": {
-					"rate_label": "Per Diem",
-					"baserate": 0,
-					"multiple": null,
-					"percentage": null,
-					"amount": 0
-				}
-			},
-			"direct_taxes": {
-				"Airport_Arrival_Tax": {
-					"rate_label": "Airport Arrival Tax",
-					"baserate": 0,
-					"multiple": null,
-					"percentage": null,
-					"amount": 0
-				},
-				"Airport_Departure_Tax": {
-					"rate_label": "Airport Departure Tax",
-					"baserate": 0,
-					"multiple": null,
-					"percentage": null,
-					"amount": 0
-				},
-				"Sea_Port_Tax": {
-					"rate_label": "Sea Port Tax",
-					"baserate": 0,
-					"multiple": null,
-					"percentage": null,
-					"amount": 0
-				},
-				"City_Congestion_Tax": {
-					"rate_label": "City Congestion Tax",
-					"baserate": 0,
-					"multiple": null,
-					"percentage": null,
-					"amount": 0
-				}
-			},
-			"taxes": {
-				"City_Tax": {
-					"rate_label": "City Tax",
-					"baserate": 0,
-					"multiple": null,
-					"percentage": null,
-					"amount": 0,
-					"type": "flat",
-					"flat_baserate": 0
-				},
-				"State_Tax": {
-					"rate_label": "State Tax",
-					"baserate": 0,
-					"multiple": null,
-					"percentage": null,
-					"amount": 0,
-					"type": "flat",
-					"flat_baserate": 0
-				},
-				"VAT_Tax": {
-					"rate_label": "VAT Tax",
-					"baserate": 0,
-					"multiple": null,
-					"percentage": null,
-					"amount": 0,
-					"type": "flat",
-					"flat_baserate": 0
-				},
-				"Workman_Comp_Tax": {
-					"rate_label": "Workman Comp Tax",
-					"baserate": 0,
-					"multiple": null,
-					"percentage": null,
-					"amount": 0,
-					"type": "flat",
-					"flat_baserate": 0
-				},
-				"Other_Transportation_Tax": {
-					"rate_label": "Other Transportation Tax",
-					"baserate": 0,
-					"multiple": null,
-					"percentage": null,
-					"amount": 0,
-					"type": "flat",
-					"flat_baserate": 0
-				}
-			}
-		}
-		this.buildRatesForm(data)
+		this.fetchRates().then((data: any) =>
+		{
+			this.buildRatesForm(data)
+		})
 	}
 
 	get RateForm(): Record<string, any>
@@ -209,11 +104,11 @@ export class RatesFormComponent implements OnInit, OnChanges
 	{
 		return new Promise((resolve, reject) =>
 		{
-			this.$api.fetchAdminNewBookingRates(this.affiliate_type).subscribe((response: any) =>
+			this.$api.fetchAdminNewBookingRates('').subscribe((response: any) =>
 			{
 				if (response.success)
 				{
-					resolve(response.data)
+					resolve(response.data.rateArray)
 				} else
 				{
 					reject(response.error)
@@ -251,15 +146,80 @@ export class RatesFormComponent implements OnInit, OnChanges
 			}
 		}
 		console.log(this.RatesForm)
+
 		this.RatesForm.valueChanges.subscribe((value: any) =>
 		{
 			// Minimum Rate should always be the lowest of all inlcusive rates
-			if ((value.all_inclusive_rates.Kilometer_Rate.baserate < value.all_inclusive_rates.Minimum_Rate.baserate) || (value.all_inclusive_rates.Milage_Rate.baserate < value.all_inclusive_rates.Minimum_Rate.baserate))
+			if ((value?.all_inclusive_rates?.Kilometer_Rate?.baserate < value?.all_inclusive_rates?.Minimum_Rate?.baserate) || (value.all_inclusive_rates?.Milage_Rate?.baserate < value?.all_inclusive_rates?.Minimum_Rate?.baserate))
 			{
 				this.trigger_error = true
 			}
 
-			// this.data.emit(value)
+			value['grand_total'] = this.grand_total
+
+			this.data.emit(value)
 		})
 	}
+
+
+	calculateAmount(formgroup: string, subform: string)
+	{
+		let baserate = (<FormGroup>(<FormGroup>this.RatesForm.get(formgroup)).get(subform)).get('baserate').value;
+
+		if (['direct_taxes', 'amenities', 'taxes'].includes(formgroup))
+		{
+			// Flat Values
+			this.RateForm[formgroup].controls[subform].controls.amount.setValue(baserate);
+			// initially run for taxes also because default value will be flat
+		}
+
+		if (formgroup == 'all_inclusive_rates')
+		{
+			// Milage Rate
+			let amount = Number(Number(Number(this.distance) * baserate).toFixed(2));
+			(<FormGroup>(<FormGroup>this.RatesForm.get(formgroup)).get(subform)).get('amount').setValue(amount);
+		}
+
+		if (formgroup == 'others')
+		{
+			// Gratuity
+			let kmrate = (<FormGroup>(<FormGroup>this.RatesForm.get('all_inclusive_rates')).get('Milage_Rate')).get('amount').value;
+			let gratuity = (<FormGroup>(<FormGroup>this.RatesForm.get(formgroup)).get(subform)).get('baserate').value;
+
+			let amount = Number(Number((gratuity / 100) * kmrate).toFixed(2));
+
+			(<FormGroup>(<FormGroup>this.RatesForm.get(formgroup)).get(subform)).get('amount').setValue(amount);
+			// set value of percentage same as gratuity
+			(<FormGroup>(<FormGroup>this.RatesForm.get(formgroup)).get(subform)).get('percentage').setValue(gratuity);
+		}
+
+		if (formgroup == 'taxes')
+		{
+			if ((<FormGroup>(<FormGroup>this.RatesForm.get(formgroup)).get(subform)).get('type').value == 'flat')
+			{
+				(<FormGroup>(<FormGroup>this.RatesForm.get(formgroup)).get(subform)).get('amount').setValue(baserate);
+			}
+			else
+			{
+				let kmrate = (<FormGroup>(<FormGroup>this.RatesForm.get('all_inclusive_rates')).get('Milage_Rate')).get('amount').value;
+				let taxvalue = (<FormGroup>(<FormGroup>this.RatesForm.get('taxes')).get(subform)).get('baserate').value;
+
+				let amount = Number(Number((taxvalue / 100) * kmrate).toFixed(2));
+
+				(<FormGroup>(<FormGroup>this.RatesForm.get(formgroup)).get(subform)).get('amount').setValue(amount);
+			}
+			// Flat | Percentage - Taxes
+			(<FormGroup>(<FormGroup>this.RatesForm.get('taxes')).get(subform)).get('type').valueChanges.subscribe((value: any) =>
+			{
+				if (value === 'percent')
+				{
+					this.calculateAmount(formgroup, subform)
+				}
+			})
+		}
+		this.grand_total = Number(this.grand_total.toFixed(2)) + Number(Number((<FormGroup>(<FormGroup>this.RatesForm.get(formgroup)).get(subform)).get('amount').value).toFixed(2))
+		this.RatesForm.updateValueAndValidity()
+	}
+
+
 }

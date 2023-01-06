@@ -3,7 +3,7 @@
 	<h2>
 		Taxes and Rates
 	</h2>
-	<div [attr.id]="'RateFormItem-' + item_index" class="px-5" [formGroupName]="item.key"
+	<div [attr.id]="'RateFormItem-' + item_index" class="my-4 px-5" [formGroupName]="item.key"
 		*ngFor="let item of RateForm | keyvalue: returnZero; index as item_index">
 		<h5>
 			{{ textFormatter(item.key) | titlecase }}
@@ -11,7 +11,8 @@
 		<div [attr.id]="'RateFormSubItem-' + sub_item_index"
 			class="row rates-row align-items-center justify-content-between mx-auto"
 			*ngFor="let sub_item of item?.value?.controls | keyvalue: returnZero; index as sub_item_index">
-			<div class="col-5 col-xl-3" style="min-width: 230px" [formGroupName]="sub_item.key">
+			<div class="col-5 col-xl-3" style="min-width: 230px" [formGroupName]="sub_item.key"
+				*ngIf="sub_item.key !== 'Minimum_Rate'">
 				<div class="rate-label">
 					<mat-form-field appearance="outline">
 						<mat-label>
@@ -19,7 +20,9 @@
 							titlecase }}
 						</mat-label>
 						<input type="number" matInput placeholder="0" formControlName="baserate"
-							class="font-weight-bolder rate-input-field text-right" />
+							class="font-weight-bolder rate-input-field text-right"
+							(focus)="$event.target.select()"
+							(change)="calculateAmount(item.key, sub_item.key)" />
 					</mat-form-field>
 					<div class="errors" *ngIf="sub_item.key === 'Kilometer_Rate' && trigger_error">
 						<div class="error-field">
@@ -30,9 +33,9 @@
 					</div>
 				</div>
 			</div>
-			<!-- Kilometers Value -->
+			<!-- Distance Value -->
 			<div class="col-auto"
-				*ngIf="item.key === 'Kilometer_Rate' || item.key === 'Milage_Rate'">
+				*ngIf="sub_item.key === 'Kilometer_Rate' || sub_item.key === 'Milage_Rate'">
 				<div style="min-width: 230px; max-width: 250px;">
 					<mat-form-field appearance="outline">
 						<mat-label>
@@ -58,14 +61,28 @@
 					</mat-form-field>
 				</div>
 			</div>
-			<div class="col-3 col-md-2">
+			<div id="rate-amount" class="col-auto" *ngIf="sub_item.key !== 'Minimum_Rate'">
 				<div class="rate-amount text-2xl font-weight-bolder text-right">
 					<p class="m-0 m-lg-3">
-						<i class="bi bi-currency-dollar text-danger text-xl"></i>
+						<i class="bi bi-currency-dollar text-danger"></i>
 						{{ sub_item?.value?.controls?.amount.value }}
 					</p>
 				</div>
 			</div>
+		</div>
+	</div>
+
+	<hr style="border-top: 2.5px solid #000000; " />
+
+	<div class="row px-5 justify-content-between align-items-center">
+		<div class="col-md-9">
+			<p class="font-weight-bolder text-uppercase" style="font-size: 2rem;">
+				Total
+			</p>
+		</div>
+		<div class="col-auto text-3xl">
+			<i class="bi bi-currency-dollar text-danger"></i>
+			{{ grand_total }}
 		</div>
 	</div>
 </div>

@@ -1,16 +1,22 @@
-	.rates-row {
-		transition: all 0.27s ease-in-out;
-		width: 100%;
-		gap: 15px;
+.rates-row {
+	transition: all 0.27s ease-in-out;
+	width: 100%;
+	gap: 15px;
+	#rate-amount {
+		display: none;
 	}
+}
 
-	@media only screen and (min-width: 1024px) {
-		.section-container .rates-row {
-			width: 80%;
+@media only screen and (min-width: 1024px) {
+	.rates-row {
+		width: 80%;
+		#rate-amount {
+			display: block;
 		}
 	}
+}
 
-	.errors {
-		height: 2rem;
-		padding: 1rem;
-	}
+.errors {
+	height: 2rem;
+	padding: 1rem;
+}
