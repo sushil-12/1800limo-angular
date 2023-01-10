@@ -129,7 +129,7 @@ export class NewBookingComponent implements OnInit
 
 	timeFormat(value: any)
 	{
-		return moment(value, 'hh:mm:ss').format('hh:mm a')
+		return value
 	}
 
 	textFormatter(text: string)
@@ -936,17 +936,20 @@ export class NewBookingComponent implements OnInit
 		{
 			this.$spinner.show()
 			let value = this.BookingForm.value
-			value['rateArray'] = this.RatesForm
-			value['grand_total'] = value['rateArray']['grand_total']
-			value['sub_total'] = value['grand_total']
-			delete value['rateArray']['grand_total']
-			// Return Rates Form
-			if (this.Form.service_type.value == 'round_trip')
+			if (this.RatesForm)
 			{
-				value['returnRateArray'] = this.ReturnRatesForm
-				value['return_grand_total'] = value['returnRateArray']['grand_total']
-				value['return_sub_total'] = value['return_grand_total']
-				delete value['returnRateArray']['r_grand_total']
+				value['rateArray'] = this.RatesForm
+				value['grand_total'] = value['rateArray']['grand_total']
+				value['sub_total'] = value['grand_total']
+				delete value['rateArray']['grand_total']
+				// Return Rates Form
+				if (this.Form.service_type.value == 'round_trip' && this.ReturnRatesForm)
+				{
+					value['returnRateArray'] = this.ReturnRatesForm
+					value['return_grand_total'] = value['returnRateArray']['grand_total']
+					value['return_sub_total'] = value['return_grand_total']
+					delete value['returnRateArray']['r_grand_total']
+				}
 			}
 
 			this.$api.createBooking(value).subscribe((response: any) =>
@@ -1049,6 +1052,10 @@ export class NewBookingComponent implements OnInit
 	returnZero()
 	{
 		return 0	// for keeping the order
+	}
+	time(event: any)
+	{
+		console.log(event)
 	}
 
 	/**
