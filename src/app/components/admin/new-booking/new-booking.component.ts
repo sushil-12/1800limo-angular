@@ -46,11 +46,13 @@ export class NewBookingComponent implements OnInit
 			dresses: false,
 			amenities: false,
 			images: false,
+			taxnrates: false,
 		}
 	}
 
 	BookingForm: FormGroup
 	RatesForm: any
+	ReturnRatesForm: any
 
 
 	driver_image: any
@@ -67,9 +69,11 @@ export class NewBookingComponent implements OnInit
 
 	distance: number = 0
 	return_distance: number = 0
-	distance_for_rates: string = '4323.32'
+	distance_for_rates: string = ''
+	amenities: Array<string> = []
 
 	init_rates: boolean = false
+	init_return_rates: boolean = false
 
 
 
@@ -140,12 +144,12 @@ export class NewBookingComponent implements OnInit
 		}
 	}
 
-	mToMi(distance: number)
+	mToMi(distance: number): string
 	{
 		return (distance / 1609).toFixed(2)
 	}
 
-	mToKm(distance: number)
+	mToKm(distance: number): string
 	{
 		return (distance / 1000).toFixed(2)
 	}
@@ -485,10 +489,10 @@ export class NewBookingComponent implements OnInit
 								journeyTime: response.time
 							})
 						}
-						this.distance_for_rates = ((): string =>
-						{
-							return this.mToKm(this.distance)
-						})()
+						// this.distance_for_rates = ((): string =>
+						// {
+						// 	return (this.mToKm(this.distance))
+						// })()
 					})
 				}
 			})
@@ -718,7 +722,7 @@ export class NewBookingComponent implements OnInit
 		{
 			this.BigData[list_name] = this.BigData[list_name].filter((item: any) => item.name.toLowerCase().startsWith(search_value.toLowerCase()))
 		}
-		this.BigData[list_name] = this.$shared.ListSearch('filter', this.BigData[list_name], search_value, search_with)
+		this.BigData[list_name] = this.BigData[list_name].filter(item => item[search_with].toLowerCase().startsWith(search_value.toLowerCase()))
 	}
 
 
@@ -873,12 +877,19 @@ export class NewBookingComponent implements OnInit
 
 	select(is_checked: boolean, form_control: string, value: any)
 	{
+		let amenity_name: string = ''
+		if (this.BigData)
+		{
+			amenity_name = this.BigData.amenity.find(item => item.id == value)['name']
+		}
 		if (is_checked && !this.BookingForm.get(form_control).value.includes(value))
 		{
+			this.amenities.push(amenity_name);
 			(<FormArray>this.BookingForm.get(form_control)).push(new FormControl(value))
 		} else
 		{
 			let list_index = this.BookingForm.get(form_control).value.findIndex((item: number) => item == value);
+			this.amenities = this.amenities.filter((item: any) => item != amenity_name);
 			(<FormArray>this.BookingForm.get(form_control)).removeAt(list_index)
 		}
 	}
@@ -926,9 +937,17 @@ export class NewBookingComponent implements OnInit
 			this.$spinner.show()
 			let value = this.BookingForm.value
 			value['rateArray'] = this.RatesForm
-			value['grand_total'] = JSON.parse(JSON.stringify(this.RatesForm['grand_total']))
+			value['grand_total'] = value['rateArray']['grand_total']
 			value['sub_total'] = value['grand_total']
-			delete this.RatesForm['grand_total']
+			delete value['rateArray']['grand_total']
+			// Return Rates Form
+			if (this.Form.service_type.value == 'round_trip')
+			{
+				value['returnRateArray'] = this.ReturnRatesForm
+				value['return_grand_total'] = value['returnRateArray']['grand_total']
+				value['return_sub_total'] = value['return_grand_total']
+				delete value['returnRateArray']['r_grand_total']
+			}
 
 			this.$api.createBooking(value).subscribe((response: any) =>
 			{
@@ -1127,8 +1146,12 @@ export class NewBookingComponent implements OnInit
 		// Service Type
 		this.BookingForm.get('service_type').valueChanges.subscribe((value: string) =>
 		{
+			this.init_return_rates = false;
+			this.amenities = [];
+			this.distance_for_rates = '0';
 			if (value == 'round_trip')
 			{
+				this.init_return_rates = true;
 				setTimeout(() =>
 				{
 					this.MapController(true)
@@ -1200,14 +1223,21 @@ export class NewBookingComponent implements OnInit
 		// Affiliate Type
 		this.BookingForm.get('affiliate_type').valueChanges.subscribe((value: string) => 
 		{
+			this.distance_for_rates = '0'
+			this.amenities = [];
 			if (value == 'loose_affiliate')
 			{
 				this.toggleDropdown(null)
-				this.init_rates = true
+				this.init_rates = true;
+				if (this.Form.service_type.value === 'round_trip')
+				{
+					this.init_return_rates = true;
+				}
 			}
 			else
 			{
-				this.init_rates = false
+				this.init_rates = false;
+				this.init_return_rates = false;
 				this.fetchAffiliates('affiliate')
 			}
 		})
@@ -1336,7 +1366,12 @@ export class NewBookingComponent implements OnInit
 
 	RateFormValue(data: any)
 	{
-		console.log(data)
+		console.log('Rates Form: ', data)
 		this.RatesForm = data
+	}
+	ReturnRateFormValue(data: any)
+	{
+		console.log('Return Rates Form: ', data)
+		this.ReturnRatesForm = data
 	}
 }

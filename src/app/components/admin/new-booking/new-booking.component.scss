@@ -53,17 +53,22 @@ ul {
 	cursor: pointer;
 	height: 3.5rem;
 	transition: height 0.17s ease-in-out;
-	&.active#languages {
-		height: 26rem;
+	.section-dropdown-header {
+		color: var(--orange);
 	}
-	&.active#dresses {
-		height: 10rem;
+	&.active {
+		height: fit-content;
 	}
-	&.active#amenities {
-		height: 43rem;
-	}
-	&.active#images {
-		height: 42rem;
-	}
+	// &.active#languages {
+	// 	height: 26rem;
+	// }
+	// &.active#dresses {
+	// 	height: 10rem;
+	// }
+	// &.active#amenities {
+	// 	height: 43rem;
+	// }
+	// &.active#images {
+	// 	height: 42rem;
+	// }
 }
-
