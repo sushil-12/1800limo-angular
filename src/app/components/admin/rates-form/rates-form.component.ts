@@ -122,16 +122,15 @@ export class RatesFormComponent implements OnInit, OnChanges
 		this.fetchRates(affiliate_type, bookingId).then((data: any) =>
 		{
 			this.buildRatesForm('RatesForm', data)
-			this.calculateAmount('RatesForm', 'all_inclusive_rates', 'Base_Rate', data.all_inclusive_rates?.Base_Rate?.baserate ?? 0)
 		})
 
-		this.RatesForm.valueChanges.subscribe((value: any) =>
-		{
-			this.calculateGrandTotal('RatesForm')
-			value['grand_total'] = this.grand_total
+		// this.RatesForm.valueChanges.subscribe((value: any) =>
+		// {
+		// 	this.calculateGrandTotal('RatesForm')
+		// 	value['grand_total'] = this.grand_total
 
-			this.formvalue.emit(value)
-		})
+		// 	this.formvalue.emit(value)
+		// })
 	}
 
 	initReturnRates(affiliate_type: string)
@@ -148,7 +147,6 @@ export class RatesFormComponent implements OnInit, OnChanges
 				amenities: this.$form.group({})
 			})
 			this.buildRatesForm('ReturnRatesForm', data)
-			this.calculateAmount('ReturnRatesForm', 'all_inclusive_rates', 'Base_Rate', 0)
 			this.ReturnRatesForm.valueChanges.subscribe((value: any) =>
 			{
 				this.calculateGrandTotal('ReturnRatesForm')
@@ -230,7 +228,7 @@ export class RatesFormComponent implements OnInit, OnChanges
 						(<FormGroup>this.RatesForm.get(key)).addControl(item, this.buildRatesForm(form, data[key][item]));
 						(<FormGroup>(<FormGroup>this.RatesForm.get(key)).get(item)).get('baserate').valueChanges.subscribe((value: number) =>
 						{
-							this.calculateAmount('RatesForm', key, item, value)
+							this.calculateAmount('RatesForm', key, item)
 						})
 					}
 					if (form === 'ReturnRatesForm')
@@ -250,11 +248,10 @@ export class RatesFormComponent implements OnInit, OnChanges
 	 * @param formgroup name of the parent form
 	 * @param subform name of the child form
 	 */
-	calculateAmount(form: string, formgroup: string, subform: string, value: any)
+	calculateAmount(form: string, formgroup: string, subform: string)
 	{
 		if (form === 'RatesForm')
 		{
-			(<FormGroup>(<FormGroup>this.RatesForm.get(formgroup)).get(subform)).get('baserate').setValue(value);
 			let baserate = (<FormGroup>(<FormGroup>this.RatesForm.get(formgroup)).get(subform)).get('baserate').value;
 
 			if (['direct_taxes', 'amenities', 'taxes'].includes(formgroup))
@@ -304,7 +301,7 @@ export class RatesFormComponent implements OnInit, OnChanges
 				// On Change of Flat | Percentage - Taxes
 				(<FormGroup>(<FormGroup>this.RatesForm.get('taxes')).get(subform)).get('type').valueChanges.subscribe((value: any) =>
 				{
-					this.calculateAmount('RatesForm', formgroup, subform, baserate);
+					this.calculateAmount('RatesForm', formgroup, subform);
 				})
 			}
 			let amount = (<FormGroup>(<FormGroup>this.RatesForm.get(formgroup)).get(subform)).get('amount').value

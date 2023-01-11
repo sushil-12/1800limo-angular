@@ -1067,11 +1067,11 @@ export class AdminService
 	{
 		if (bookingId != 0)
 		{
-			return this.httpClient.get(`${this.serverUrl}admin/booking-rates/${bookingId}`)
+			return this.httpClient.get(`${this.serverUrl}admin/reservation-rates/${bookingId}`)
 		}
 		else
 		{
-			return this.httpClient.get(`${this.serverUrl}/admin/booking-rates`)
+			return this.httpClient.get(`${this.serverUrl}admin/booking-rates`)
 		}
 	}
 
