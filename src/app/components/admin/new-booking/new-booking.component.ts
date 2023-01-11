@@ -96,6 +96,16 @@ export class NewBookingComponent implements OnInit
 	{
 		// build the form first 
 		this.buildBookingForm()
+
+		this.$routeurl.queryParams.subscribe((params: any) =>
+		{
+			if (params && params.bookingId)
+			{
+				this.SetFormValue('reservation_id', params.bookingId)
+				params.updateType ? this.SetFormValue('updateType', params.updateType) : this.SetFormValue('updateType', 'edit')
+			}
+		})
+
 		// fetch the big data
 		this.fetchAirportsAndBigData().then((data: any) =>
 		{
@@ -103,16 +113,6 @@ export class NewBookingComponent implements OnInit
 			this.BigData_COPY = JSON.parse(JSON.stringify(data))
 			this.MapController()
 			this.Form.reservation_id.value ? this.prefillViaBookingID(this.Form.reservation_id.value) : ''
-		})
-
-		this.$routeurl.queryParams.subscribe((params: any) =>
-		{
-			if (params && params.bookingId)
-			{
-				console.log(params)
-				this.SetFormValue('reservation_id', params.bookingId)
-				params.updateType ? this.SetFormValue('updateType', params.updateType) : this.SetFormValue('updateType', 'edit')
-			}
 		})
 
 		// Subscriptions
@@ -215,7 +215,7 @@ export class NewBookingComponent implements OnInit
 			vehicle_year: [''],
 			vehicle_color: [''],
 			license_plate: [''],
-			number_of_seats: [''],
+			number_of_seats: ['4'],
 			driver_id: [''],
 			driver_name: [''],
 			driver_gender: [''],
@@ -228,8 +228,8 @@ export class NewBookingComponent implements OnInit
 			meet_greet_choices: [''],
 			number_of_vehicles: ['1'],
 			pickup_date: [''],
-			pickup_time: ['12:00'],
-			extra_stops: this.$form.group({}),
+			pickup_time: ['12:00 am'],
+			extra_stops: this.$form.array([]),
 			pickup: [''],
 			pickup_latitude: [''],
 			pickup_longitude: [''],
@@ -252,8 +252,8 @@ export class NewBookingComponent implements OnInit
 			dropoff_flight: [''],
 			return_meet_greet_choices: [''],
 			return_pickup_date: [''],
-			return_pickup_time: ['12:00'],
-			return_extra_stops: this.$form.group({}),
+			return_pickup_time: ['12:00 pm'],
+			return_extra_stops: this.$form.array([]),
 			return_pickup: [''],
 			return_pickup_latitude: [''],
 			return_pickup_longitude: [''],
@@ -306,7 +306,7 @@ export class NewBookingComponent implements OnInit
 			{
 				if (item.includes('extra_stops'))
 				{
-					return
+					console.log('Skipping in the case of Extra Stops. ')
 				}
 				if (editing_data[item])
 				{
@@ -318,11 +318,12 @@ export class NewBookingComponent implements OnInit
 				service_type: response.data.service_type == 'oneway' ? 'one_way' : response.data['service_type'] == 'roundtrip' ? 'round_trip' : 'charter_tour',
 			})
 
-			this.driver_image['image'] = this.Form.driver_image_id.value
-			this.vehicle_image['image'] = this.Form.vehicle_image_id.value
 			this.booking_params.client_account_types.pop()
+			this.driver_image['image'] = this.Form.driver_image_id.value ?? ''
+			this.vehicle_image['image'] = this.Form.vehicle_image_id.value ?? '	'
 			this.Form.affiliate_id.value != 0 ? this.chooseAffiliate() : ''
 			this.chooseUser(this.Form.acc_id.value)
+
 		})
 	}
 
@@ -341,7 +342,7 @@ export class NewBookingComponent implements OnInit
 		}
 		catch (err)
 		{
-			console.error('No Form Control Error: ')
+			console.error('NFC Error: ')
 			return
 		}
 	}
@@ -355,99 +356,101 @@ export class NewBookingComponent implements OnInit
 		let destination: google.maps.LatLng
 		let map: google.maps.Map
 
-		if (is_return)
+		this.$mapsapi.load().then(() =>
 		{
-			console.log('Return Map has been initialised. ')
-			// map
-			map = new google.maps.Map(document.getElementById('return_map'), {
-				zoom: 7,
-				center: new google.maps.LatLng(41.850033, -87.6500523),
-				scaleControl: true
-			})
-
-			// waypoints
-			if (Object.keys(this.ReturnExtraStops).length > 0)
+			if (is_return)
 			{
-				for (let key in this.ReturnExtraStops)
+				console.log('Return Map has been initialised. ')
+				// map
+				map = new google.maps.Map(document.getElementById('return_map'), {
+					zoom: 7,
+					center: new google.maps.LatLng(41.850033, -87.6500523),
+					scaleControl: true
+				})
+
+				// waypoints
+				if (this.ReturnExtraStops.length > 0)
 				{
-					let stop = (<FormGroup>(<FormGroup>this.BookingForm.get('return_extra_stops')).get(key))
-					waypoints.push({
-						location: new google.maps.LatLng(stop.get('latitude').value, stop.get('longitude').value),
-						stopover: true
-					})
+					for (let i = 0; i < this.ReturnExtraStops.length; i++)
+					{
+						let stop = (<FormGroup>(<FormArray>this.BookingForm.get('return_extra_stops')).at(i))
+						waypoints.push({
+							location: new google.maps.LatLng(stop.get('latitude').value, stop.get('longitude').value),
+							stopover: true
+						})
+					}
+				}
+
+				// defaults for Source/Target - City
+				origin = new google.maps.LatLng(this.Form.return_pickup_latitude.value, this.Form.return_pickup_longitude.value)
+				destination = new google.maps.LatLng(this.Form.return_dropoff_latitude.value, this.Form.return_dropoff_longitude.value)
+
+				// Overrides
+				if (this.Form.return_transfer_type.value.includes('airport_'))
+				{
+					// override for Source - Airport
+					console.log('Return Override for Source Airport')
+					origin = new google.maps.LatLng(this.Form.return_pickup_airport_latitude.value, this.Form.return_pickup_airport_longitude.value)
+				}
+				if (this.Form.return_transfer_type.value.includes('_airport'))
+				{
+					// override for Target - Airport
+					console.log('Return Override for Target Airport')
+					destination = new google.maps.LatLng(this.Form.return_dropoff_airport_latitude.value, this.Form.return_dropoff_airport_longitude.value)
 				}
 			}
-
-			// defaults for Source/Target - City
-			origin = new google.maps.LatLng(this.Form.return_pickup_latitude.value, this.Form.return_pickup_longitude.value)
-			destination = new google.maps.LatLng(this.Form.return_dropoff_latitude.value, this.Form.return_dropoff_longitude.value)
-
-			// Overrides
-			if (this.Form.return_transfer_type.value.includes('airport_'))
+			else
 			{
-				// override for Source - Airport
-				console.log('Return Override for Source Airport')
-				origin = new google.maps.LatLng(this.Form.return_pickup_airport_latitude.value, this.Form.return_pickup_airport_longitude.value)
-			}
-			if (this.Form.return_transfer_type.value.includes('_airport'))
-			{
-				// override for Target - Airport
-				console.log('Return Override for Target Airport')
-				destination = new google.maps.LatLng(this.Form.return_dropoff_airport_latitude.value, this.Form.return_dropoff_airport_longitude.value)
-			}
-		}
-		else
-		{
-			map = new google.maps.Map(document.getElementById("map"), {
-				zoom: 7,
-				center: new google.maps.LatLng(41.850033, -87.6500523),
-				scaleControl: true
-			})
+				map = new google.maps.Map(document.getElementById("map"), {
+					zoom: 7,
+					center: new google.maps.LatLng(41.850033, -87.6500523),
+					scaleControl: true
+				})
 
-			// waypoints
-			if (Object.keys(this.ExtraStops).length > 0)
-			{
-				for (let key in this.ExtraStops)
+				// waypoints
+				if (this.ExtraStops.length > 0)
 				{
-					let stop = (<FormGroup>(<FormGroup>this.BookingForm.get('extra_stops')).get(key))
-					waypoints.push({
-						location: new google.maps.LatLng(stop.get('latitude').value, stop.get('longitude').value),
-						stopover: true
-					})
+					for (let i = 0; i < this.ExtraStops.length; i++)
+					{
+						let stop = (<FormGroup>(<FormArray>this.BookingForm.get('extra_stops')).at(i))
+						waypoints.push({
+							location: new google.maps.LatLng(stop.get('latitude').value, stop.get('longitude').value),
+							stopover: true
+						})
+					}
 				}
+
+				//defaults for Source/Target - City
+				origin = new google.maps.LatLng(this.Form.pickup_latitude.value, this.Form.pickup_longitude.value)
+				destination = new google.maps.LatLng(this.Form.dropoff_latitude.value, this.Form.dropoff_longitude.value)
+
+				// Overrides
+				if (this.Form.transfer_type.value.includes('airport_'))
+				{
+					// override for Source - Airport
+					console.log('Override for Source Airport')
+					origin = new google.maps.LatLng(this.Form.pickup_airport_latitude.value, this.Form.pickup_airport_longitude.value)
+				}
+				if (this.Form.transfer_type.value.includes('_airport'))
+				{
+					// override for Target - Airport
+					console.log('Override for Target Airport')
+					destination = new google.maps.LatLng(this.Form.dropoff_airport_latitude.value, this.Form.dropoff_airport_longitude.value)
+				}
+
 			}
-
-			//defaults for Source/Target - City
-			origin = new google.maps.LatLng(this.Form.pickup_latitude.value, this.Form.pickup_longitude.value)
-			destination = new google.maps.LatLng(this.Form.dropoff_latitude.value, this.Form.dropoff_longitude.value)
-
-			// Overrides
-			if (this.Form.transfer_type.value.includes('airport_'))
-			{
-				// override for Source - Airport
-				console.log('Override for Source Airport')
-				origin = new google.maps.LatLng(this.Form.pickup_airport_latitude.value, this.Form.pickup_airport_longitude.value)
-			}
-			if (this.Form.transfer_type.value.includes('_airport'))
-			{
-				// override for Target - Airport
-				console.log('Override for Target Airport')
-				destination = new google.maps.LatLng(this.Form.dropoff_airport_latitude.value, this.Form.dropoff_airport_longitude.value)
-			}
-
-		}
-
-		console.log(is_return)
-		console.log(origin)
-		console.log(destination)
-		console.log(waypoints)
-		this.drawMap(map, {
-			origin,
-			destination,
-			waypoints,
-			optimizeWaypoints: true,
-			travelMode: google.maps.TravelMode.DRIVING
-		}, is_return)
+			console.log(is_return)
+			console.log(origin)
+			console.log(destination)
+			console.log(waypoints)
+			this.drawMap(map, {
+				origin,
+				destination,
+				waypoints,
+				optimizeWaypoints: true,
+				travelMode: google.maps.TravelMode.DRIVING
+			}, is_return)
+		})
 	}
 
 
@@ -505,14 +508,14 @@ export class NewBookingComponent implements OnInit
 		return this.BookingForm.controls;
 	}
 
-	get ExtraStops()
+	get ExtraStops(): FormArray
 	{
-		return (this.BookingForm.get('extra_stops') as FormGroup).controls
+		return (<FormArray>this.BookingForm.get('extra_stops'));
 	}
 
 	get ReturnExtraStops()
 	{
-		return (this.BookingForm.get('return_extra_stops') as FormGroup).controls
+		return (<FormArray>this.BookingForm.get('return_extra_stops'));
 	}
 
 
@@ -765,7 +768,7 @@ export class NewBookingComponent implements OnInit
 	{
 		try
 		{
-			return (<FormGroup>(<FormGroup>this.BookingForm.get(form_group_name)).get('stop_' + index)).get('address').value
+			return (<FormArray>this.BookingForm.get(form_group_name)).at(index).get('address').value
 		}
 		catch
 		{
@@ -820,7 +823,7 @@ export class NewBookingComponent implements OnInit
 		if (is_return)
 		{
 			let index = Object.keys(this.ReturnExtraStops).length + 1;
-			(<FormGroup>this.BookingForm.get('return_extra_stops')).addControl('stop_' + index.toString(), new FormGroup({
+			(<FormArray>this.BookingForm.get('return_extra_stops')).push(new FormGroup({
 				address: new FormControl(''),
 				latitude: new FormControl(''),
 				longitude: new FormControl('')
@@ -829,7 +832,7 @@ export class NewBookingComponent implements OnInit
 		else
 		{
 			let index = Object.keys(this.ExtraStops).length + 1;
-			(<FormGroup>this.BookingForm.get('extra_stops')).addControl('stop_' + index.toString(), new FormGroup({
+			(<FormArray>this.BookingForm.get('extra_stops')).push(new FormGroup({
 				address: new FormControl(''),
 				latitude: new FormControl(''),
 				longitude: new FormControl('')
@@ -837,19 +840,35 @@ export class NewBookingComponent implements OnInit
 		}
 	}
 
+	deleteExtraStop(is_return: boolean, stop_index: number)
+	{
+		if (is_return)
+		{
+			(<FormArray>this.BookingForm.get('return_extra_stops')).removeAt(stop_index)
+			this.MapController(true)
+		}
+		else
+		{
+			(<FormArray>this.BookingForm.get('extra_stops')).removeAt(stop_index)
+			this.MapController()
+		}
+	}
+
+
+
 	fillExtraStop(is_return: boolean, index: number, address: any, location: any)
 	{
 		if (is_return)
 		{
 			if (address && !location)
 			{
-				(<FormGroup>(<FormGroup>this.BookingForm.get('return_extra_stops')).get('stop_' + index.toString())).patchValue({
+				(<FormArray>this.BookingForm.get('return_extra_stops')).at(index).patchValue({
 					address: address.formatted_address
 				})
 			}
 			if (!address && location)
 			{
-				(<FormGroup>(<FormGroup>this.BookingForm.get('return_extra_stops')).get('stop_' + index.toString())).patchValue({
+				(<FormArray>this.BookingForm.get('return_extra_stops')).at(index).patchValue({
 					latitude: location.latitude,
 					longitude: location.longitude
 				})
@@ -859,13 +878,13 @@ export class NewBookingComponent implements OnInit
 		{
 			if (address && !location)
 			{
-				(<FormGroup>(<FormGroup>this.BookingForm.get('extra_stops')).get('stop_' + index.toString())).patchValue({
+				(<FormArray>this.BookingForm.get('extra_stops')).at(index).patchValue({
 					address: address.formatted_address
 				})
 			}
 			if (!address && location)
 			{
-				(<FormGroup>(<FormGroup>this.BookingForm.get('extra_stops')).get('stop_' + index.toString())).patchValue({
+				(<FormArray>this.BookingForm.get('extra_stops')).at(index).patchValue({
 					latitude: location.latitude,
 					longitude: location.longitude
 				})
@@ -946,7 +965,7 @@ export class NewBookingComponent implements OnInit
 				if (this.Form.service_type.value == 'round_trip' && this.ReturnRatesForm)
 				{
 					value['returnRateArray'] = this.ReturnRatesForm
-					value['return_grand_total'] = value['returnRateArray']['grand_total']
+					value['return_grand_total'] = value['returnRateArray']['r_grand_total']
 					value['return_sub_total'] = value['return_grand_total']
 					delete value['returnRateArray']['r_grand_total']
 				}
@@ -977,6 +996,7 @@ export class NewBookingComponent implements OnInit
 					"destination": data.dropoff,
 					"$flight": data.dropoff_airline,
 					"$flight number": data.dropoff_flight,
+					"extra stops": data.extra_stops,
 					"total distance": (data.journeyDistance / 1609).toFixed(2) + ' miles',
 					"total time": data.journeyTime + ' mins',
 				},
@@ -1005,6 +1025,7 @@ export class NewBookingComponent implements OnInit
 					"destination": data.return_dropoff,
 					"$flight": data.return_dropoff_airline,
 					"$flight_number": data.return_dropoff_flight,
+					"extra stops": data.return_extra_stops,
 					"total distance": (data.returnJourneyDistance / 1609).toFixed(2) + ' miles',
 					"total time": data.returnJourneyTime + ' mins',
 				}
@@ -1030,20 +1051,19 @@ export class NewBookingComponent implements OnInit
 			// override for Source - Airport
 			if (this.Form.transfer_type.value.includes('airport_'))
 			{
-				let pickup_airport = this.BigData.airportsData.find(item => item.id === data.pickup_airport)['name']
-				let pickup_airline = this.BigData.airlinesData.find(item => item.id === data.pickup_airline)['name']
+				let pickup_airport = this.BigData.airportsData.find(item => item.id === Number(data.pickup_airport))['name']
+				let pickup_airline = this.BigData.airlinesData.find(item => item.id === Number(data.pickup_airline))['name']
 				this.booking_params.preview_screen['travel_info']['pickup'] = pickup_airport
 				this.booking_params.preview_screen['travel_info']['flight'] = pickup_airline
 			}
 			// override for Target - Airport
 			if (this.Form.transfer_type.value.includes('_airport'))
 			{
-				let dropoff_airport = this.BigData.airportsData.find(item => item.id === data.dropoff_airport)['name']
-				let dropoff_airline = this.BigData.airlinesData.find(item => item.id === data.dropoff_airline)['name']
+				let dropoff_airport = this.BigData.airportsData.find(item => item.id === Number(data.dropoff_airport))['name']
+				let dropoff_airline = this.BigData.airlinesData.find(item => item.id === Number(data.dropoff_airline))['name']
 				this.booking_params.preview_screen['travel_info']['destination'] = dropoff_airport
 				this.booking_params.preview_screen['travel_info']['$flight'] = dropoff_airline
 			}
-
 
 			$('#previewBooking').modal('handleUpdate').modal('show')
 		}
@@ -1382,3 +1402,4 @@ export class NewBookingComponent implements OnInit
 		this.ReturnRatesForm = data
 	}
 }
+

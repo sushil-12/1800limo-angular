@@ -1063,9 +1063,16 @@ export class AdminService
 		return this.httpClient.get('assets/json/charterOptions.json')
 	}
 
-	fetchAdminNewBookingRates(affiliate_type: string)
+	fetchAdminNewBookingRates(affiliate_type: string, bookingId: number)
 	{
-		return this.httpClient.get(`${this.serverUrl}admin/booking-rates`)
+		if (bookingId != 0)
+		{
+			return this.httpClient.get(`${this.serverUrl}admin/booking-rates/${bookingId}`)
+		}
+		else
+		{
+			return this.httpClient.get(`${this.serverUrl}/admin/booking-rates`)
+		}
 	}
 
 

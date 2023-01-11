@@ -19,6 +19,7 @@ export class RatesFormComponent implements OnInit, OnChanges
 	@Input('initReturnRates') init_r_rates: boolean = false
 	@Input('affiliate_type') affiliate_type: string = ''
 	@Input('distance') distance: string = ''
+	@Input('reservation_id') bookingId: number = 0
 	@Input('amenities') amenities: Array<string> = []
 
 	// Throw Events.
@@ -79,6 +80,11 @@ export class RatesFormComponent implements OnInit, OnChanges
 		{
 			this.initReturnRates(changes.affiliate_type?.currentValue)
 		}
+
+		// if (changes.bookingId.currentValue !== 0)
+		// {
+		// 	this.initRates('', changes.bookingId.currentValue)
+		// }
 	}
 
 	returnZero()
@@ -99,7 +105,7 @@ export class RatesFormComponent implements OnInit, OnChanges
 		}
 	}
 
-	initRates(affiliate_type: string)
+	initRates(affiliate_type: string, bookingId: number = 0)
 	{
 		console.log('Init Rates')
 		// build form
@@ -113,10 +119,10 @@ export class RatesFormComponent implements OnInit, OnChanges
 
 
 		// fetch the data from backend
-		this.fetchRates(affiliate_type).then((data: any) =>
+		this.fetchRates(affiliate_type, bookingId).then((data: any) =>
 		{
 			this.buildRatesForm('RatesForm', data)
-			this.calculateAmount('RatesForm', 'all_inclusive_rates', 'Base_Rate', 0)
+			this.calculateAmount('RatesForm', 'all_inclusive_rates', 'Base_Rate', data.all_inclusive_rates?.Base_Rate?.baserate ?? 0)
 		})
 
 		this.RatesForm.valueChanges.subscribe((value: any) =>
@@ -178,11 +184,11 @@ export class RatesFormComponent implements OnInit, OnChanges
 		}
 	}
 
-	fetchRates(affiliate: string): Promise<Record<string, any> | string>
+	fetchRates(affiliate: string, bookingId: number = 0): Promise<Record<string, any> | string>
 	{
 		return new Promise((resolve, reject) =>
 		{
-			this.$api.fetchAdminNewBookingRates(affiliate).subscribe((response: any) =>
+			this.$api.fetchAdminNewBookingRates(affiliate, bookingId).subscribe((response: any) =>
 			{
 				if (response.success)
 				{
@@ -222,6 +228,10 @@ export class RatesFormComponent implements OnInit, OnChanges
 					if (form === 'RatesForm')
 					{
 						(<FormGroup>this.RatesForm.get(key)).addControl(item, this.buildRatesForm(form, data[key][item]));
+						(<FormGroup>(<FormGroup>this.RatesForm.get(key)).get(item)).get('baserate').valueChanges.subscribe((value: number) =>
+						{
+							this.calculateAmount('RatesForm', key, item, value)
+						})
 					}
 					if (form === 'ReturnRatesForm')
 					{

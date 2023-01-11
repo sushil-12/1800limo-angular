@@ -203,7 +203,7 @@ const routes: Routes = [
 		component: CreateNewBooking2Component
 	},
 	{
-		path: 'bookingdetails',
+		path: 'booking-preview',
 		canActivate: [SubAdminGuard],
 		component: BookingDetailsComponent
 	},

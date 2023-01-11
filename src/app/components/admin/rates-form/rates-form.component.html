@@ -156,8 +156,7 @@
 							</mat-label>
 							<input type="number" matInput placeholder="0"
 								class="font-weight-bolder rate-input-field text-right"
-								(focus)="$event.target.select()"
-								(change)="calculateAmount('ReturnRatesForm', item.key, sub_item.key, $event.target.value)" />
+								(focus)="$event.target.select()" formControlName="baserate" />
 						</mat-form-field>
 						<div class="errors"
 							*ngIf="sub_item.key === 'Kilometer_Rate' && trigger_error">

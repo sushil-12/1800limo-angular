@@ -170,7 +170,6 @@ export class DailyBookingsComponent implements OnInit
 
 	loadBookings(pageUrl = null)
 	{
-		console.log(pageUrl);
 		/** spinner starts on init */
 		this.spinner.show();
 		this.router.navigate([], {
@@ -185,12 +184,9 @@ export class DailyBookingsComponent implements OnInit
 		// Load Our bookings using API
 		this.adminService.loadBookings(pageUrl, keyword, this.startDate, this.endDate).then(result =>
 		{
-			console.log(pageUrl, keyword, this.startDate, this.endDate, "?????????????")
 			this.bookingsRes = result;
 			this.bookings = this.bookingsRes.data.data;
 			this.totalRecords = this.bookingsRes.data.total;
-			console.log(this.bookings);
-
 			this.firstPage = 1;
 			this.lastPage = this.bookingsRes.data.last_page;
 			this.totalPage = this.bookingsRes.data.last_page;
@@ -200,19 +196,8 @@ export class DailyBookingsComponent implements OnInit
 			this.path = this.bookingsRes.data.path;
 			this.firstPageUrl = this.bookingsRes.data.first_page_url;
 			this.lastPageUrl = this.bookingsRes.data.last_page_url;
-			console.log(this.lastPageUrl, "////////////////////////////////////")
 			this.prevPageUrl = this.bookingsRes.data.prev_page_url;
-			console.log(this.prevPageUrl, "//////////////////////////////////////////////////////")
 			this.nextPageUrl = this.bookingsRes.data.next_page_url;
-			console.log(this.nextPageUrl, "//////////////////////////////////////////////////////////////////////////")
-			// sessionStorage.setItem('bookings',JSON.stringify(this.bookings));
-			// this.bookings.forEach((item: any) =>
-			// {
-			// 	this.getAddress(item.pickup_address).then((data: any) =>
-			// 	{
-			// 		console.log(data)
-			// 	})
-			// })
 			this.spinner.hide();//hide spinner
 		})
 			.catch(err =>
@@ -315,87 +300,6 @@ export class DailyBookingsComponent implements OnInit
 			});
 	}
 
-	editAction(bookingId, updateType)
-	{
-		if (updateType == 'change')
-		{
-			this.router.navigate(['/admin/create-new-booking'], { queryParams: { bookingId: bookingId, updateType: updateType } });
-		}
-		else
-		{
-			this.router.navigate(['/admin/create-new-booking'], { queryParams: { bookingId: bookingId } });
-		}
-	}
-
-	finalizeAction(bookingId)
-	{
-		this.router.navigate(['/admin/booking-details'], { queryParams: { bookingId: bookingId } });
-	}
-
-	returnRepeatAction(actionType, bookingId, serviceType)
-	{
-		console.log(actionType, bookingId, serviceType);
-		// this.returnRepeatForm.patchValue({
-		//   action_type:actionType,
-		//   reservation_id:bookingId
-		// });
-
-		if (actionType == 'return')
-		{
-			// this.isRepeat=false;
-			this.router.navigate(['/admin/create-new-booking'], { queryParams: { bookingId: bookingId, bookingType: 'return' } });
-		}
-		else
-		{
-			// this.isRepeat=true;
-			// if(serviceType=='roundtrip')
-			// {
-			this.router.navigate(['/admin/create-new-booking'], { queryParams: { bookingId: bookingId, bookingType: 'repeat' } });
-			// this.isRepeatRoundTrip=true;
-			// }
-			// else{
-			//   this.isRepeatRoundTrip=false;
-			// }
-
-		}
-	}
-
-	// get f(){
-	//   return this.returnRepeatForm.controls;
-	// }
-
-	// returnRepeatBookingForm()
-	// {
-	//   this.submitted = true;
-	//   console.log(this.returnRepeatForm);
-	//   // stop here if form is invalid
-	//   if (this.returnRepeatForm.invalid) {
-	//       return;
-	//   }
-
-	//   this.spinner.show();
-	//   // this.disableSubmitButton=true; //disable submit button
-
-	//   this.adminService.returnRepeatBooking(this.returnRepeatForm.value)
-	//   .pipe(
-	//       catchError(err => {
-	//         this.spinner.hide();//hide spinner
-	//         $('#return_repeat_booking_Modal').modal('hide');
-	//         return throwError(err);
-	//       })
-	//   )
-	//   .subscribe(({ data, success, message }: any) => {
-	//     if(success==true)
-	//     {
-	//       this.spinner.hide();//hide spinner
-	//       $('#return_repeat_booking_Modal').modal('hide');
-	//       this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
-	//         this.router.navigate(['/admin/daily-bookings-admin']);
-	//       }); 
-	//     }
-	//   });
-	// }
-
 	get changeStatusF()
 	{
 		return this.changeStatusForm.controls;
@@ -447,7 +351,6 @@ export class DailyBookingsComponent implements OnInit
 
 	sendEmailClicked(bookingId, emailTarget)
 	{
-		// console.log(bookingId,emailTarget)
 		this.sendEmailForm.patchValue({
 			reservation_id: bookingId,
 			emailTarget: emailTarget
@@ -498,7 +401,7 @@ export class DailyBookingsComponent implements OnInit
 
 	FormatTime(time: string)
 	{
-		return moment(time, 'HH:mm:ss').format('hh:mm a')
+		return moment(time, 'HH:mm:ss').format('LT')
 	}
 
 
