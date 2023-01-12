@@ -103,14 +103,46 @@
 		<hr style="border-top: 2.5px solid #000000; " />
 
 		<div class="row px-5 justify-content-between align-items-center">
-			<div class="col-md-9">
+			<div class="col-9">
 				<p class="font-weight-bolder text-uppercase m-0" style="font-size: 2rem;">
 					Total
 				</p>
 			</div>
-			<div class="col-auto text-3xl">
+			<div class="col-3 text-3xl">
 				<i class="bi bi-currency-dollar text-danger"></i>
-				{{ grand_total }}
+				{{ subtotal }}
+			</div>
+		</div>
+
+		<hr style="width: 95%; margin: auto; border: 1.3px solid #000000;" />
+
+		<!-- Number of Vehicles/Hours -->
+		<div class="row px-5 justify-content-between align-items-center"
+			*ngIf="hours !== 0 || vehicles !== 0">
+			<div class="col-9">
+				<p class="font-weight-bolder text-uppercase m-0" style="font-size: 2rem;">
+					Number of {{ hours ? 'Hours' : 'Vehicles' }}
+				</p>
+			</div>
+			<div class="col-3 text-3xl">
+				<i class="bi bi-x text-dark font-weight-bolder"></i>
+				{{ hours ? hours : 0 }} {{ vehicles ? vehicles : '' }}
+			</div>
+		</div>
+
+		<hr style="width: 95%; margin: auto; border: 1.3px solid #000000;"
+			*ngIf="hours !== 0 || vehicles !== 0" />
+
+		<!-- Total -->
+		<div class="row px-5 justify-content-between align-items-center">
+			<div class="col-9">
+				<p class="font-weight-bolder text-uppercase m-0" style="font-size: 2rem;">
+					Grand Total
+				</p>
+			</div>
+			<div class="col-3 text-3xl">
+				<i class="bi bi-currency-dollar text-danger"></i>
+				{{ grandtotal }}
 			</div>
 		</div>
 	</div>

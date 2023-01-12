@@ -15,12 +15,14 @@ import { combineLatest } from 'rxjs';
 export class RatesFormComponent implements OnInit, OnChanges
 {
 	// Capture Events.
-	@Input('initRates') init_rates: boolean = false
-	@Input('initReturnRates') init_r_rates: boolean = false
-	@Input('affiliate_type') affiliate_type: string = ''
-	@Input('distance') distance: string = ''
-	@Input('reservation_id') bookingId: number = 0
-	@Input('amenities') amenities: Array<string> = []
+	@Input('initRates') init_rates: boolean = false;
+	@Input('initReturnRates') init_r_rates: boolean = false;
+	@Input('affiliate_type') affiliate_type: string = '';
+	@Input('distance') distance: string = '';
+	@Input('reservation_id') bookingId: number = 0;
+	@Input('amenities') amenities: Array<string> = [];
+	@Input('vehicles') vehs: number = 0;
+	@Input('hours') nums: number = 0;
 
 	// Throw Events.
 	@Output('formvalue') formvalue = new EventEmitter<Record<string, any>>()
@@ -52,10 +54,14 @@ export class RatesFormComponent implements OnInit, OnChanges
 
 	total: Record<string, any> = {}
 	r_total: Record<string, any> = {}
-	grand_total: number = 0
-	r_grand_total: number = 0
 
-	trigger_error: boolean = false
+	subtotal: number = 0
+	r_subtotal: number = 0
+	grandtotal: number = 0
+	r_grandtotal: number = 0
+
+	vehicles: number = 0
+	hours: number = 0
 
 	constructor(
 		private $form: FormBuilder,
@@ -80,6 +86,9 @@ export class RatesFormComponent implements OnInit, OnChanges
 		{
 			this.initReturnRates(changes.affiliate_type?.currentValue)
 		}
+
+		this.hours = changes.nums ? changes.nums?.currentValue : 0
+		this.vehicles = changes.vehs ? changes.vehs?.currentValue : 0
 
 		if (changes.bookingId && changes.bookingId.currentValue !== 0)
 		{
@@ -138,10 +147,12 @@ export class RatesFormComponent implements OnInit, OnChanges
 
 		this.RatesForm.valueChanges.subscribe((value: any) =>
 		{
-			this.calculateGrandTotal('RatesForm')
-			value['grand_total'] = this.grand_total
+			this.calculateTotal('RatesForm');
+			this.calculateGrandTotal('RatesForm');
+			value['grand_total'] = this.grandtotal;
+			value['sub_total'] = this.subtotal;
 
-			this.formvalue.emit(value)
+			this.formvalue.emit(value);
 		})
 	}
 
@@ -161,10 +172,12 @@ export class RatesFormComponent implements OnInit, OnChanges
 			this.buildRatesForm('ReturnRatesForm', data)
 			this.ReturnRatesForm.valueChanges.subscribe((value: any) =>
 			{
-				this.calculateGrandTotal('ReturnRatesForm')
-				value['r_grand_total'] = this.r_grand_total
+				this.calculateTotal('ReturnRatesForm');
+				this.calculateGrandTotal('ReturnRatesForm');
+				value['r_grand_total'] = this.r_grandtotal;
+				value['r_sub_total'] = this.r_subtotal;
 
-				this.returnformvalue.emit(value)
+				this.returnformvalue.emit(value);
 			})
 		})
 	}
@@ -384,23 +397,51 @@ export class RatesFormComponent implements OnInit, OnChanges
 	}
 
 
-	calculateGrandTotal(form: string)
+	calculateTotal(form: 'RatesForm' | 'ReturnRatesForm')
 	{
 		if (form === 'RatesForm')
 		{
-			this.grand_total = 0
+			this.subtotal = 0
 			for (let item in this.total)
 			{
-				this.grand_total = Number(this.grand_total) + Number(this.total[item])
+				this.subtotal = Number(this.subtotal) + Number(this.total[item])
 			}
 		}
 
 		if (form === 'ReturnRatesForm')
 		{
-			this.r_grand_total = 0
+			this.r_subtotal = 0
 			for (let item in this.r_total)
 			{
-				this.r_grand_total = Number(this.r_grand_total) + Number(this.r_total[item])
+				this.r_subtotal = Number(this.r_subtotal) + Number(this.r_total[item])
+			}
+		}
+	}
+
+	calculateGrandTotal(form: 'RatesForm' | 'ReturnRatesForm')
+	{
+		if (form === 'RatesForm')
+		{
+			if (this.hours !== 0)
+			{
+				this.grandtotal = this.subtotal * this.hours
+			}
+
+			if (this.vehicles !== 0)
+			{
+				this.grandtotal = this.subtotal * this.vehicles
+			}
+		}
+		else
+		{
+			if (this.hours !== 0)
+			{
+				this.r_grandtotal = this.r_subtotal * this.hours
+			}
+
+			if (this.vehicles !== 0)
+			{
+				this.r_grandtotal = this.r_subtotal * this.vehicles
 			}
 		}
 	}

@@ -954,7 +954,7 @@
 						<mat-label>
 							Number of Vehicles
 						</mat-label>
-						<input type="text" matInput placholder="Number of Vehicles"
+						<input type="text" matInput placholder="Number of Vehicles" value="1"
 							formControlName="number_of_vehicles" (focus)="$event.target.select()" />
 					</mat-form-field>
 				</div>
@@ -1666,6 +1666,7 @@
 		<app-rates-form [initRates]="init_rates" [affiliate_type]="Form.affiliate_type.value"
 			[distance]="distance_for_rates" [amenities]="amenities" [reservation_id]="booking_id"
 			[initReturnRates]="init_return_rates" (formvalue)="RateFormValue($event)"
+			[hours]="Form.number_of_hours?.value" [vehicles]="Form.number_of_vehicles?.value"
 			(returnformvalue)="ReturnRateFormValue($event)"></app-rates-form>
 
 

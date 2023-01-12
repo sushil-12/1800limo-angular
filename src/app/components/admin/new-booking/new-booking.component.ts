@@ -296,7 +296,7 @@ export class NewBookingComponent implements OnInit
 		})
 
 		let month = new Date().getMonth() + 1
-		let date: string | number = new Date().getDate()
+		let date: string | number = new Date().getDate() + 1
 		let year = new Date().getFullYear()
 
 		let full_date = new Date(`${year}-${month}-${date}`).toISOString()
@@ -304,6 +304,7 @@ export class NewBookingComponent implements OnInit
 		let future_full_date = new Date(`${year}-${month}-${date + 10}`).toISOString()
 		this.SetFormValue('pickup_date', full_date.slice(0, full_date.indexOf('T')))
 		this.SetFormValue('return_pickup_date', future_full_date.slice(0, future_full_date.indexOf('T')))
+		// this.BookingForm.controls['n_vehicles'].setValue('1')
 	}
 
 	prefillViaBookingID(booking_id: number)
@@ -992,15 +993,17 @@ export class NewBookingComponent implements OnInit
 			{
 				value['rateArray'] = this.RatesForm
 				value['grand_total'] = value['rateArray']['grand_total']
-				value['sub_total'] = value['grand_total']
+				value['sub_total'] = value['rateArray']['sub_total']
 				delete value['rateArray']['grand_total']
+				delete value['rateArray']['sub_total']
 				// Return Rates Form
 				if (this.Form.service_type.value == 'round_trip' && this.ReturnRatesForm)
 				{
 					value['returnRateArray'] = this.ReturnRatesForm
 					value['return_grand_total'] = value['returnRateArray']['r_grand_total']
-					value['return_sub_total'] = value['return_grand_total']
+					value['return_sub_total'] = value['returnRateArray']['r_sub_total']
 					delete value['returnRateArray']['r_grand_total']
+					delete value['returnRateArray']['r_sub_total']
 				}
 			}
 
