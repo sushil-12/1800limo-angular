@@ -1065,7 +1065,7 @@ export class AdminService
 
 	fetchAdminNewBookingRates(affiliate_type: string, bookingId: number)
 	{
-		if (bookingId != 0)
+		if (bookingId !== 0)
 		{
 			return this.httpClient.get(`${this.serverUrl}admin/reservation-rates/${bookingId}`)
 		}

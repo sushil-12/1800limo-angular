@@ -68,7 +68,7 @@ export class RatesFormComponent implements OnInit, OnChanges
 
 	ngOnChanges(changes: SimpleChanges)
 	{
-		console.log(changes)
+		console.warn('Change has been detected: ', changes)
 
 		// if asked to initialise the rates
 		if (changes.init_rates?.currentValue)
@@ -81,10 +81,21 @@ export class RatesFormComponent implements OnInit, OnChanges
 			this.initReturnRates(changes.affiliate_type?.currentValue)
 		}
 
-		// if (changes.bookingId.currentValue !== 0)
-		// {
-		// 	this.initRates('', changes.bookingId.currentValue)
-		// }
+		if (changes.bookingId && changes.bookingId.currentValue !== 0)
+		{
+			this.fetchRates('', changes.bookingId?.currentValue).then((data: any) =>
+			{
+				for (let item in this.RateForm)
+				{
+					for (let key in (<FormGroup>this.RatesForm.get(item)).controls)
+					{
+						console.log(item, key)
+						let value = data[item][key]['baserate'];
+						(<FormGroup>(<FormGroup>this.RatesForm.get(item)).get(key)).get('baserate').setValue(value)
+					}
+				}
+			})
+		}
 	}
 
 	returnZero()
@@ -108,6 +119,7 @@ export class RatesFormComponent implements OnInit, OnChanges
 	initRates(affiliate_type: string, bookingId: number = 0)
 	{
 		console.log('Init Rates')
+		this.RatesForm = this.$form.group({})
 		// build form
 		this.RatesForm = this.$form.group({
 			all_inclusive_rates: this.$form.group({}),
@@ -124,13 +136,13 @@ export class RatesFormComponent implements OnInit, OnChanges
 			this.buildRatesForm('RatesForm', data)
 		})
 
-		// this.RatesForm.valueChanges.subscribe((value: any) =>
-		// {
-		// 	this.calculateGrandTotal('RatesForm')
-		// 	value['grand_total'] = this.grand_total
+		this.RatesForm.valueChanges.subscribe((value: any) =>
+		{
+			this.calculateGrandTotal('RatesForm')
+			value['grand_total'] = this.grand_total
 
-		// 	this.formvalue.emit(value)
-		// })
+			this.formvalue.emit(value)
+		})
 	}
 
 	initReturnRates(affiliate_type: string)
@@ -204,13 +216,11 @@ export class RatesFormComponent implements OnInit, OnChanges
 		// Base Value for foundation of the whole algorithm
 		if (data.hasOwnProperty('rate_label'))
 		{
-			console.log('Returning data', data)
 			return this.$form.group({ ...data })
 		}
 
 		for (let key in data)
 		{
-			console.log('For Key: ', key)
 			if (Array.isArray(data[key]))
 			{
 				// TODO do thing for array type
@@ -222,7 +232,6 @@ export class RatesFormComponent implements OnInit, OnChanges
 			{
 				for (let item in data[key])
 				{
-					console.log('Item: ', item);
 					if (form === 'RatesForm')
 					{
 						(<FormGroup>this.RatesForm.get(key)).addControl(item, this.buildRatesForm(form, data[key][item]));
@@ -242,8 +251,6 @@ export class RatesFormComponent implements OnInit, OnChanges
 				}
 			}
 		}
-		console.log(this.RatesForm);
-		console.log(this.ReturnRatesForm);
 	}
 
 	/**

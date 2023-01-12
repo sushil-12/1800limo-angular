@@ -742,7 +742,7 @@
 						*ngFor="let language of BigData?.driverLanguage; index as language_index">
 						<mat-checkbox
 							(change)="select($event.checked, 'driver_languages', language.id)"
-							[checked]="isChecked('driver_languages', language)">
+							[checked]="isChecked('driver_languages', language.id)">
 							{{ language.name }}
 						</mat-checkbox>
 					</div>
@@ -772,7 +772,9 @@
 			<div *ngIf="booking_params.chevrons.dresses">
 				<div class="row align-items-center m-0 p-4">
 					<div class="col-md-4" *ngFor="let dresses of BigData?.driverDresses">
-						<mat-checkbox>
+						<mat-checkbox
+							(change)="select($event.checked, 'driver_dresses', dresses.id)"
+							[checked]="isChecked('driver_dresses', dresses.id)">
 							{{ dresses.name }}
 						</mat-checkbox>
 					</div>
@@ -808,7 +810,9 @@
 				<div class="row align-items-center m-0 p-4">
 					<div class="col-md-4"
 						*ngFor="let amenity of BigData?.amenity; index as amenity_index">
-						<mat-checkbox>
+						<mat-checkbox
+							(change)="amenity['chargeable'] == 'yes' ? select($event.checked, 'chargedAmenities', amenity.id) : select($event.checked, 'amenities', amenity.id)"
+							[checked]="amenity['chargeable'] == 'yes' ? isChecked('chargedAmenities', amenity.id) : isChecked('amenities', amenity.id)">
 							{{ amenity.name }}
 							<span class="text-danger" *ngIf="amenity.chargeable == 'yes'">
 								(<i class="bi bi-currency-dollar"></i>)
@@ -1660,9 +1664,8 @@
 
 
 		<app-rates-form [initRates]="init_rates" [affiliate_type]="Form.affiliate_type.value"
-			[distance]="distance_for_rates" [amenities]="amenities"
-			[reservation_id]="Form.reservation_id?.value" [initReturnRates]="init_return_rates"
-			(formvalue)="RateFormValue($event)"
+			[distance]="distance_for_rates" [amenities]="amenities" [reservation_id]="booking_id"
+			[initReturnRates]="init_return_rates" (formvalue)="RateFormValue($event)"
 			(returnformvalue)="ReturnRateFormValue($event)"></app-rates-form>
 
 
