@@ -99,8 +99,13 @@ export class RatesFormComponent implements OnInit, OnChanges
 					for (let key in (<FormGroup>this.RatesForm.get(item)).controls)
 					{
 						console.log(item, key)
-						let value = data[item][key]['baserate'];
-						(<FormGroup>(<FormGroup>this.RatesForm.get(item)).get(key)).get('baserate').setValue(value)
+						let baserate = data[item][key]['baserate'];
+						let type = data[item][key]['type'] ?? 'flat';
+						(<FormGroup>(<FormGroup>this.RatesForm.get(item)).get(key)).get('baserate').setValue(baserate);
+						if ((<FormGroup>(<FormGroup>this.RatesForm.get(item)).get(key)).get('type'))
+						{
+							(<FormGroup>(<FormGroup>this.RatesForm.get(item)).get(key)).get('type').setValue(type);
+						}
 					}
 				}
 			})
