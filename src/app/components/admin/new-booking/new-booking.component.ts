@@ -103,6 +103,14 @@ export class NewBookingComponent implements OnInit
 			{
 				this.SetFormValue('reservation_id', params.bookingId)
 				params.updateType ? this.SetFormValue('updateType', params.updateType) : this.SetFormValue('updateType', 'edit')
+				if (this.BigData)
+				{
+					this.prefillViaBookingID(params.bookingId)
+				}
+			}
+			else
+			{
+				this.buildBookingForm()
 			}
 		})
 
@@ -324,6 +332,7 @@ export class NewBookingComponent implements OnInit
 			this.Form.affiliate_id.value != 0 ? this.chooseAffiliate() : ''
 			this.chooseUser(this.Form.acc_id.value)
 
+			this.$spinner.hide()
 		})
 	}
 
