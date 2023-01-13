@@ -1,26 +1,25 @@
 <section class="user_information">
-	<div class="agreement_step0">
-		<div class="step0Div" *ngIf="fetchContentData(1)?.section_status">
-			<h2 class="headinginfo pl-0">
-				{{ fetchContentData(1)?.title }}
-			</h2>
-			<p>
-				{{ fetchContentData(1)?.content }}
-			</p>
-		</div>
-	</div>
+    <div class="agreement_step0">
+        <div class="step0Div" *ngIf="fetchContentData(1)?.section_status">
+            <h2 class="headinginfo pl-0">
+                {{ fetchContentData(1)?.title }}
+            </h2>
+            <p>
+                {{ fetchContentData(1)?.content }}
+            </p>
+        </div>
+    </div>
 </section>
 <section class="user_information">
-	<div class="agreement_step0">
-		<div class="step0Div" *ngIf="fetchContentData(4)?.section_status">
-			<h2 class="headinginfo pl-0">
-				{{ fetchContentData(4)?.title }}
-			</h2>
-			<div class="row">
-				<div class="col-md-3">
-					<div class="custom-list" *ngFor="let vl1 of vehicleList1">
-						<svg viewBox="0 0 297.88 216" style="enable-background:new 0 0 297.88 216;" width="15px"
-							style="margin-bottom:3px" xml:space="preserve">
+    <div class="agreement_step0">
+        <div class="step0Div" *ngIf="fetchContentData(4)?.section_status">
+            <h2 class="headinginfo pl-0">
+                {{ fetchContentData(4)?.title }}
+            </h2>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="custom-list" *ngFor="let vl1 of vehicleList1">
+                        <svg viewBox="0 0 297.88 216" style="enable-background:new 0 0 297.88 216;" width="15px" style="margin-bottom:3px" xml:space="preserve">
 							<style type="text/css">
 								.st0 {
 									fill: #ff6e40;
@@ -33,13 +32,12 @@
 									d="M204.32,107.14c-22.35-23.89-44.27-47.32-66.39-70.96c14.54,0,28.4-0.04,42.25,0.08c1.11,0.01,2.46,0.94,3.29,1.82c21.34,22.97,42.63,46,63.92,69.02c0.2,0.22,0.23,0.59,0.49,1.34c-4.8,5.17-9.74,10.49-14.69,15.82c-16.26,17.5-32.46,35.07-48.89,52.42c-1.67,1.76-4.7,3-7.16,3.11c-11.27,0.5-22.55,0.51-33.84,0.69c-1.58,0.03-3.17,0-6,0C160.09,155.55,182.06,131.5,204.32,107.14z" />
 							</g>
 						</svg>
-						<span>{{ vl1 }}</span>
-					</div>
-				</div>
-				<div class="col-md-3">
-					<div class="custom-list" *ngFor="let vl2 of vehicleList2">
-						<svg viewBox="0 0 297.88 216" style="enable-background:new 0 0 297.88 216;" width="15px"
-							style="margin-bottom:3px" xml:space="preserve">
+                        <span>{{ vl1 }}</span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="custom-list" *ngFor="let vl2 of vehicleList2">
+                        <svg viewBox="0 0 297.88 216" style="enable-background:new 0 0 297.88 216;" width="15px" style="margin-bottom:3px" xml:space="preserve">
 							<style type="text/css">
 								.st0 {
 									fill: #ff6e40;
@@ -52,56 +50,53 @@
 									d="M204.32,107.14c-22.35-23.89-44.27-47.32-66.39-70.96c14.54,0,28.4-0.04,42.25,0.08c1.11,0.01,2.46,0.94,3.29,1.82c21.34,22.97,42.63,46,63.92,69.02c0.2,0.22,0.23,0.59,0.49,1.34c-4.8,5.17-9.74,10.49-14.69,15.82c-16.26,17.5-32.46,35.07-48.89,52.42c-1.67,1.76-4.7,3-7.16,3.11c-11.27,0.5-22.55,0.51-33.84,0.69c-1.58,0.03-3.17,0-6,0C160.09,155.55,182.06,131.5,204.32,107.14z" />
 							</g>
 						</svg>
-						<span>{{vl2}}.</span>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="step0Div mt-4">
-			<p class="mb-0"><strong class="link-strong">Any Luxury Mid-Size SUV</strong></p>
-			<p class="mb-0"><strong class="link-strong">Any Mini-Van</strong></p>
-			<p><a href="https://carbuzz.com/cars/suvs" target="_blank" tabindex="1">https://carbuzz.com/cars/suvs</a>
-			</p>
-		</div>
-	</div>
+                        <span>{{vl2}}.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="step0Div mt-4">
+            <p class="mb-0"><strong class="link-strong">Any Luxury Mid-Size SUV</strong></p>
+            <p class="mb-0"><strong class="link-strong">Any Mini-Van</strong></p>
+            <p><a href="https://carbuzz.com/cars/suvs" target="_blank" tabindex="1">https://carbuzz.com/cars/suvs</a>
+            </p>
+        </div>
+    </div>
 </section>
 
 
 <section class="user_information">
-	<div class="agreement_step0">
-		<div class="step0Div linkSpacing">
-			<h2 class="headinginfo">It doesn't matter which luxury model / vehicle you drive. </h2>
-			<p class="mb-0">You only have to deliver 50% of a RR chauffeur’s training, and I guarantee you repeat
-				bookings and at your rates!</p>
-			<p><a href="https://www.youtube.com/watch?v=b2NeuXS0JPc" tabindex="1"
-					target="_blank">https://www.youtube.com/watch?v=b2NeuXS0JPc</a>
-			</p>
-			<ul class="requirement-list">
-				<li>Responsible Communication</li>
-				<li>Be on time</li>
-				<li>Client Assistance and Attention when needed</li>
-				<li>Safety </li>
-			</ul>
-		</div>
-	</div>
+    <div class="agreement_step0">
+        <div class="step0Div linkSpacing">
+            <h2 class="headinginfo">It doesn't matter which luxury model / vehicle you drive. </h2>
+            <p class="mb-0">You only have to deliver 50% of a RR chauffeur’s training, and I guarantee you repeat bookings and at your rates!</p>
+            <p><a href="https://www.youtube.com/watch?v=b2NeuXS0JPc" tabindex="1" target="_blank">https://www.youtube.com/watch?v=b2NeuXS0JPc</a>
+            </p>
+            <ul class="requirement-list">
+                <li>Responsible Communication</li>
+                <li>Be on time</li>
+                <li>Client Assistance and Attention when needed</li>
+                <li>Safety </li>
+            </ul>
+        </div>
+    </div>
 </section>
 
 
 <section class="user_information">
-	<div class="agreement_step0">
-		<h2 class="headinginfo">
-			{{ fetchContentData(3)?.title }}
-		</h2>
-		<ul class="requirement-list">
-			<li>Agree with our <a data-toggle='modal' data-target='#mission_statement' class="fakeLink"
-					tabindex="1">Mission
+    <div class="agreement_step0">
+        <h2 class="headinginfo">
+            {{ fetchContentData(3)?.title }}
+        </h2>
+        <ul class="requirement-list">
+            <li>Agree with our <a data-toggle='modal' data-target='#mission_statement' class="fakeLink" tabindex="1">Mission
 					Statement</a>, Step 6 - Policies and Procedures.
-			</li>
-			<li *ngFor="let item of fetchContentData(3)?.other_listing_arr">
-				{{ item.list }}
-			</li>
-		</ul>
-		<!-- <ul class="requirement-list">
+            </li>
+            <li *ngFor="let item of fetchContentData(3)?.other_listing_arr">
+                {{ item.list }}
+            </li>
+        </ul>
+        <!-- <ul class="requirement-list">
 			<li>Agree with our <a data-toggle='modal' data-target='#mission_statement' class="fakeLink"
 					tabindex="1">Mission
 					Statement</a>, Step 6 - Policies and Procedures.
@@ -147,16 +142,16 @@
 				and I look forward to the next trip.”
 				Smile and make the client feel important and welcome at all times. </li>
 		</ul> -->
-	</div>
+    </div>
 </section>
 <section class="user_information">
-	<div class="agreement_step0">
-		<h2 class="headinginfo">
-			{{ fetchContentData(2)?.title }}
-		</h2>
-		<p>
-			{{ fetchContentData(2)?.content }}
-			<!-- At some point you will need to secure a background check through you state on-line FOID card registration
+    <div class="agreement_step0">
+        <h2 class="headinginfo">
+            {{ fetchContentData(2)?.title }}
+        </h2>
+        <p>
+            {{ fetchContentData(2)?.content }}
+            <!-- At some point you will need to secure a background check through you state on-line FOID card registration
 			process with a passport type photo and fingerprinted. In Illinois the cost is about $40.00 and 30-60 days to
 			obtain. We do not encourage gun ownership,
 			however; the FOID application is the most comprehensive background check available and some clients are
@@ -164,17 +159,16 @@
 			service experience by Ken Blanchard
 			and Sheldon Bowles. Some clients respect a quiet ride; but everyone is different. Get to know them and their
 			preferences but most clients like a quiet ride to the airport or office. -->
-		</p>
-	</div>
+        </p>
+    </div>
 </section>
 
 <section id="photo-capturing-instructions" class="user_information">
-	<div class="agreement_step0">
-		<h2 class="headinginfo d-inline-block">
-			Photo Capturing Instructions:
-		</h2>
-		<svg data-toggle="modal" title="Click for Photo Tip" data-target="#photoTipModal" class="camera-svg"
-			viewBox="0 0 297.88 216" xml:space="preserve" tabindex="1">
+    <div class="agreement_step0">
+        <h2 class="headinginfo d-inline-block">
+            Photo Capturing Instructions:
+        </h2>
+        <svg data-toggle="modal" title="Click for Photo Tip" data-target="#photoTipModal" class="camera-svg" viewBox="0 0 297.88 216" xml:space="preserve" tabindex="1">
 			<style type="text/css">
 				.st0 {
 					fill: #F89B41;
@@ -200,28 +194,27 @@
 					d="M129.22,119.75c-0.02-11.43,8.36-19.82,19.76-19.8c11.39,0.02,19.68,8.43,19.64,19.91c-0.04,11.25-8.79,20.18-19.76,20.14C137.87,139.96,129.24,131.07,129.22,119.75z" />
 			</g>
 		</svg>
-		<h6 class="text-danger d-block">
-			<span>
+        <h6 class="text-danger d-block">
+            <span>
 				(iPhone users only take photos by portrait view.)
 			</span>
-		</h6>
+        </h6>
 
-	</div>
+    </div>
 </section>
 
 <section class="user_information">
-	<div class="agreement_step0">
-		<h2 class="headinginfo">
-			{{ fetchContentData(5)?.title }}
-		</h2>
-		<strong class="link-strong">
+    <div class="agreement_step0">
+        <h2 class="headinginfo">
+            {{ fetchContentData(5)?.title }}
+        </h2>
+        <strong class="link-strong">
 			{{ fetchContentData(5)?.subtitle }}
 		</strong>
-		<div class="row my-3">
-			<div class="col-md-6">
-				<div class="custom-list" *ngFor="let wl1 of why1800limo1">
-					<svg viewBox="0 0 297.88 216" style="enable-background:new 0 0 297.88 216;" width="15px"
-						style="margin-bottom:3px" xml:space="preserve">
+        <div class="row my-3">
+            <div class="col-md-6">
+                <div class="custom-list" *ngFor="let wl1 of why1800limo1">
+                    <svg viewBox="0 0 297.88 216" style="enable-background:new 0 0 297.88 216;" width="15px" style="margin-bottom:3px" xml:space="preserve">
 						<style type="text/css">
 							.st0 {
 								fill: #ff6e40;
@@ -234,13 +227,12 @@
 								d="M204.32,107.14c-22.35-23.89-44.27-47.32-66.39-70.96c14.54,0,28.4-0.04,42.25,0.08c1.11,0.01,2.46,0.94,3.29,1.82c21.34,22.97,42.63,46,63.92,69.02c0.2,0.22,0.23,0.59,0.49,1.34c-4.8,5.17-9.74,10.49-14.69,15.82c-16.26,17.5-32.46,35.07-48.89,52.42c-1.67,1.76-4.7,3-7.16,3.11c-11.27,0.5-22.55,0.51-33.84,0.69c-1.58,0.03-3.17,0-6,0C160.09,155.55,182.06,131.5,204.32,107.14z" />
 						</g>
 					</svg>
-					<span>{{wl1}}.</span>
-				</div>
-			</div>
-			<div class="col-md-6">
-				<div class="custom-list" *ngFor="let wl2 of why1800limo2">
-					<svg viewBox="0 0 297.88 216" style="enable-background:new 0 0 297.88 216;" width="15px"
-						style="margin-bottom:3px" xml:space="preserve">
+                    <span>{{wl1}}.</span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="custom-list" *ngFor="let wl2 of why1800limo2">
+                    <svg viewBox="0 0 297.88 216" style="enable-background:new 0 0 297.88 216;" width="15px" style="margin-bottom:3px" xml:space="preserve">
 						<style type="text/css">
 							.st0 {
 								fill: #ff6e40;
@@ -253,269 +245,243 @@
 								d="M204.32,107.14c-22.35-23.89-44.27-47.32-66.39-70.96c14.54,0,28.4-0.04,42.25,0.08c1.11,0.01,2.46,0.94,3.29,1.82c21.34,22.97,42.63,46,63.92,69.02c0.2,0.22,0.23,0.59,0.49,1.34c-4.8,5.17-9.74,10.49-14.69,15.82c-16.26,17.5-32.46,35.07-48.89,52.42c-1.67,1.76-4.7,3-7.16,3.11c-11.27,0.5-22.55,0.51-33.84,0.69c-1.58,0.03-3.17,0-6,0C160.09,155.55,182.06,131.5,204.32,107.14z" />
 						</g>
 					</svg>
-					<span>{{wl2}}.</span>
-				</div>
-			</div>
-			<div class="col-md-12 text-center mt-3 contact-us">
-				<a [routerLink]="['/contact-us']" target="_blank" tabindex="1">Collaborate with us and share ideas and
+                    <span>{{wl2}}.</span>
+                </div>
+            </div>
+            <div class="col-md-12 text-center mt-md-5 mt-3 contact-us">
+                <a [routerLink]="['/contact-us']" target="_blank" tabindex="1">Collaborate with us and share ideas and
 					improvements</a>
-			</div>
-		</div>
-	</div>
+            </div>
+        </div>
+    </div>
 </section>
 
 
 <section class="user_information">
-	<div class="agreement_step0">
-		<h2 class="headinginfo">
-			{{ fetchContentData(6)?.title }}
-			<div class="orangeHeading">
-				{{ fetchContentData(6)?.subtitle }}
-			</div>
-		</h2>
-		<div class="row my-3">
-			<div class="col-xl-6 col-lg-12">
-				<div class="step-list">
-					<div class="img-wrapper">
-						<img src="../../../../assets/images/AffiliateIcons/1.svg" alt="">
-					</div>
-					<div class="row step-points">
-						<div class="col-xl-6 col-lg-6 col-4 mt-2 stepClass">
-							<strong>
+    <div class="agreement_step0">
+        <h2 class="headinginfo">
+            {{ fetchContentData(6)?.title }}
+            <div class="orangeHeading">
+                {{ fetchContentData(6)?.subtitle }}
+            </div>
+        </h2>
+        <div class="row my-3">
+            <div class="col-xl-6 col-lg-12">
+                <div class="step-list">
+                    <div class="img-wrapper">
+                        <img src="../../../../assets/images/AffiliateIcons/1.svg" alt="">
+                    </div>
+                    <div class="row step-points">
+                        <div class="col-xl-6 col-lg-6 col-4 mt-2 stepClass">
+                            <strong>
 								{{ fetchContentData(6)?.other_group_listing_arr[0].title }}
 							</strong>
-						</div>
-						<div class="col-xl-6 col-lg-6 col-8 pr-2 previewSvg d-flex justify-content-end">
-							<button href="JavaScript:void(0);" data-toggle='modal' name='modalType'
-								class="custom-filled-button green-button" (click)="modalSwitch('step_1')" tabindex="1"
-								data-target='#step0Modal'>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-8 pr-2 previewSvg d-flex justify-content-end">
+                            <button href="JavaScript:void(0);" data-toggle='modal' name='modalType' class="custom-filled-button green-button" (click)="modalSwitch('step_1')" tabindex="1" data-target='#step0Modal'>
 								Requirements
 							</button>
-						</div>
-						<ul *ngFor="let item of fetchContentData(6)?.other_group_listing_arr[0].multiChoice ">
-							<li>{{item.choice }}</li>
-						</ul>
-					</div>
-				</div>
-			</div>
-			<div class="col-xl-6 col-lg-12">
-				<div class="step-list">
-					<div class="img-wrapper">
-						<img src="../../../../assets/images/AffiliateIcons/2.svg" alt="">
-					</div>
-					<div class="row step-points">
-						<div class="col-xl-6 col-lg-6 col-4 mt-2 stepClass">
-							<strong>
+                        </div>
+                        <ul *ngFor="let item of fetchContentData(6)?.other_group_listing_arr[0].multiChoice ">
+                            <li>{{item.choice }}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-6 col-lg-12">
+                <div class="step-list">
+                    <div class="img-wrapper">
+                        <img src="../../../../assets/images/AffiliateIcons/2.svg" alt="">
+                    </div>
+                    <div class="row step-points">
+                        <div class="col-xl-6 col-lg-6 col-4 mt-2 stepClass">
+                            <strong>
 								{{ fetchContentData(6)?.other_group_listing_arr[1].title }}
 							</strong>
-						</div>
-						<div class="col-xl-6 col-lg-6 col-8 pr-2 previewSvg d-flex justify-content-end">
-							<button href="JavaScript:void(0);" data-toggle='modal' name='modalType'
-								class="custom-filled-button green-button" (click)="modalSwitch('step_2')" tabindex="1"
-								data-target='#step0Modal'>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-8 pr-2 previewSvg d-flex justify-content-end">
+                            <button href="JavaScript:void(0);" data-toggle='modal' name='modalType' class="custom-filled-button green-button" (click)="modalSwitch('step_2')" tabindex="1" data-target='#step0Modal'>
 								Requirements
 							</button>
-						</div>
-						<ul *ngFor="let item of fetchContentData(6)?.other_group_listing_arr[1].multiChoice ">
-							<li>{{ item.choice }}</li>
-						</ul>
-					</div>
-				</div>
-			</div>
-			<div class="col-xl-6 col-lg-12">
-				<div class="step-list">
-					<div class="img-wrapper">
-						<img src="../../../../assets/images/AffiliateIcons/3.svg" alt="">
-					</div>
-					<div class="row step-points">
-						<div class="col-xl-6 col-lg-6 col-4 mt-2 stepClass">
-							<strong>STEP 3</strong>
-						</div>
-						<div class="col-xl-6 col-lg-6 col-8 pr-2 previewSvg d-flex justify-content-end">
-							<button href="JavaScript:void(0);" data-toggle='modal' name='modalType' tabindex="1"
-								class="custom-filled-button green-button" (click)="modalSwitch('step_3')"
-								data-target='#step0Modal'>
+                        </div>
+                        <ul *ngFor="let item of fetchContentData(6)?.other_group_listing_arr[1].multiChoice ">
+                            <li>{{ item.choice }}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-6 col-lg-12">
+                <div class="step-list">
+                    <div class="img-wrapper">
+                        <img src="../../../../assets/images/AffiliateIcons/3.svg" alt="">
+                    </div>
+                    <div class="row step-points">
+                        <div class="col-xl-6 col-lg-6 col-4 mt-2 stepClass">
+                            <strong>STEP 3</strong>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-8 pr-2 previewSvg d-flex justify-content-end">
+                            <button href="JavaScript:void(0);" data-toggle='modal' name='modalType' tabindex="1" class="custom-filled-button green-button" (click)="modalSwitch('step_3')" data-target='#step0Modal'>
 								Requirements
 							</button>
-						</div>
-						<ul>
-							<li>Insurance Documents – (add 1-800-LIMO.COM as additionally insured)</li>
-						</ul>
-					</div>
-				</div>
-			</div>
-			<div class="col-xl-6 col-lg-12">
-				<div class="step-list">
-					<div class="img-wrapper">
-						<img src="../../../../assets/images/AffiliateIcons/4.svg" alt="">
-					</div>
-					<div class="row step-points">
-						<div class="col-xl-6 col-lg-6 col-4 mt-2 stepClass">
-							<strong>STEP 4</strong>
-						</div>
-						<div class="col-xl-6 col-lg-6 col-8 pr-2 previewSvg d-flex justify-content-end">
-							<button href="JavaScript:void(0);" data-toggle='modal' name='modalType' tabindex="1"
-								class="custom-filled-button green-button" (click)="modalSwitch('step_4')"
-								data-target='#step0Modal'>
+                        </div>
+                        <ul>
+                            <li>Insurance Documents – (add 1-800-LIMO.COM as additionally insured)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-6 col-lg-12">
+                <div class="step-list">
+                    <div class="img-wrapper">
+                        <img src="../../../../assets/images/AffiliateIcons/4.svg" alt="">
+                    </div>
+                    <div class="row step-points">
+                        <div class="col-xl-6 col-lg-6 col-4 mt-2 stepClass">
+                            <strong>STEP 4</strong>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-8 pr-2 previewSvg d-flex justify-content-end">
+                            <button href="JavaScript:void(0);" data-toggle='modal' name='modalType' tabindex="1" class="custom-filled-button green-button" (click)="modalSwitch('step_4')" data-target='#step0Modal'>
 								Requirements
 							</button>
-						</div>
-						<ul>
-							<li>Driver(s) Info and IDs – (license, background check optional – get one if you don’t have
-								one)</li>
-							<li>Head and Shoulder Driver Pix – (smile and wear your everyday attire – Dress for
-								Success!)
-							</li>
-						</ul>
-					</div>
-				</div>
-			</div>
-			<div class="col-xl-6 col-lg-12">
-				<div class="step-list">
-					<div class="img-wrapper">
-						<img src="../../../../assets/images/AffiliateIcons/5.svg" alt="">
-					</div>
-					<div class="row step-points">
-						<div class="col-xl-6 col-lg-6 col-4 mt-2 stepClass">
-							<strong>STEP 5</strong>
-						</div>
-						<div class="col-xl-6 col-lg-6 col-8 pr-2 previewSvg d-flex justify-content-end">
-							<button href="JavaScript:void(0);" data-toggle='modal' name='modalType' tabindex="1"
-								class="custom-filled-button green-button" (click)="modalSwitch('step_5')"
-								data-target='#step0Modal'>
+                        </div>
+                        <ul>
+                            <li>Driver(s) Info and IDs – (license, background check optional – get one if you don’t have one)
+                            </li>
+                            <li>Head and Shoulder Driver Pix – (smile and wear your everyday attire – Dress for Success!)
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-6 col-lg-12">
+                <div class="step-list">
+                    <div class="img-wrapper">
+                        <img src="../../../../assets/images/AffiliateIcons/5.svg" alt="">
+                    </div>
+                    <div class="row step-points">
+                        <div class="col-xl-6 col-lg-6 col-4 mt-2 stepClass">
+                            <strong>STEP 5</strong>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-8 pr-2 previewSvg d-flex justify-content-end">
+                            <button href="JavaScript:void(0);" data-toggle='modal' name='modalType' tabindex="1" class="custom-filled-button green-button" (click)="modalSwitch('step_5')" data-target='#step0Modal'>
 								Requirements
 							</button>
-						</div>
-						<ul>
-							<li>Pix of Window or Other Permits</li>
-							<li>Pix of vehicle interior and exterior</li>
-							<li>Choose Amenities</li>
-							<li>Enter rates</li>
-						</ul>
-					</div>
-				</div>
-			</div>
-			<div class="col-xl-6 col-lg-12">
-				<div class="step-list">
-					<div class="img-wrapper">
-						<img src="../../../../assets/images/AffiliateIcons/6.svg" alt="">
-					</div>
-					<div class="row step-points">
-						<div class="col-xl-6 col-lg-6 col-4 mt-2 stepClass">
-							<strong>STEP 6</strong>
-						</div>
-						<div class="col-xl-6 col-lg-6 col-8 pr-2 previewSvg d-flex justify-content-end">
-							<button href="JavaScript:void(0);" data-toggle='modal' name='modalType' tabindex="1"
-								class="custom-filled-button green-button" (click)="modalSwitch('step_6')"
-								data-target='#step0Modal'>
+                        </div>
+                        <ul>
+                            <li>Pix of Window or Other Permits</li>
+                            <li>Pix of vehicle interior and exterior</li>
+                            <li>Choose Amenities</li>
+                            <li>Enter rates</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-6 col-lg-12">
+                <div class="step-list">
+                    <div class="img-wrapper">
+                        <img src="../../../../assets/images/AffiliateIcons/6.svg" alt="">
+                    </div>
+                    <div class="row step-points">
+                        <div class="col-xl-6 col-lg-6 col-4 mt-2 stepClass">
+                            <strong>STEP 6</strong>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-8 pr-2 previewSvg d-flex justify-content-end">
+                            <button href="JavaScript:void(0);" data-toggle='modal' name='modalType' tabindex="1" class="custom-filled-button green-button" (click)="modalSwitch('step_6')" data-target='#step0Modal'>
 								Requirements
 							</button>
-						</div>
-						<ul>
-							<li>Agree to Terms & Conditions</li>
-						</ul>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="custom-control custom-checkbox mt-4">
-			<input type="checkbox" class="custom-control-input" id="agreement" [checked]="agreement"
-				(change)="onCheckboxChange($event)" tabindex="1">
-			<label class="custom-control-label" for="agreement">I AGREE (clicking AGREE allows you to begin the
+                        </div>
+                        <ul>
+                            <li>Agree to Terms & Conditions</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="custom-control custom-checkbox mt-4">
+            <input type="checkbox" class="custom-control-input" id="agreement" [checked]="agreement" (change)="onCheckboxChange($event)" tabindex="1">
+            <label class="custom-control-label" for="agreement">I AGREE (clicking AGREE allows you to begin the
 				registering process.) Please follow the simple 7 step process and enter Company Profile, Document
 				Images and One Drive Profile, Vehicle Profile and Rate/Taxes for Network Approval</label>
-			<span *ngIf="agreementValidation" class="text-danger">
+            <span *ngIf="agreementValidation" class="text-danger">
 				Please agree to Affiliate Agreement.
 			</span>
-		</div>
-		<div class="mt-3 mb-4">
-			<strong class="thankyou">
+        </div>
+        <div class="mt-3 mb-4">
+            <strong class="thankyou">
 				THANK YOU FOR ADHERING TO OUR HIGH STANDARDS AND WANTING TO WORK WITH THE BEST.
 			</strong>
-		</div>
-	</div>
-	<div class="row justify-content-center">
-		<button id="btn-agree" class="custom-filled-button green-button" (click)="submitForm()"
-			[disabled]="disableSubmitButton" tabindex="1">AGREE</button>
-	</div>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <button id="btn-agree" class="custom-filled-button green-button" (click)="submitForm()" [disabled]="disableSubmitButton" tabindex="1">AGREE</button>
+    </div>
 </section>
 
 
 <!-- mission statement modal -->
-<div class="modal fade" id="mission_statement" tabindex="-1" role="dialog" aria-labelledby="missionstatement"
-	aria-hidden="true">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<button type="button" class="close closeButton" data-dismiss="modal" aria-label="Close">
+<div class="modal fade" id="mission_statement" tabindex="-1" role="dialog" aria-labelledby="missionstatement" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <button type="button" class="close closeButton" data-dismiss="modal" aria-label="Close">
 				<span aria-hidden="true">&times;</span>
 			</button>
-			<div class="modal-header pb-0">
-				<h3 class="modal-title mb-0">Our Mission</h3>
-			</div>
-			<hr>
-			<div class="modal-body">
-				<p class="modal-title text-center mb-0">
-					1-800-LIMO.COM is a web-based
-					digital sales platform that matches budget and quality minded luxury travelers with friendly and
-					attentive drivers with safe, reliable, on-time ground transportation
-					anywhere around the world; in clean, comfortable, and well maintained non-autonomous vehicles, at
-					the lowest available rates.
-				</p>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="custom-btn button2" data-dismiss="modal">Agree</button>
-			</div>
-		</div>
-	</div>
+            <div class="modal-header pb-0">
+                <h3 class="modal-title mb-0">Our Mission</h3>
+            </div>
+            <hr>
+            <div class="modal-body">
+                <p class="modal-title text-center mb-0">
+                    1-800-LIMO.COM is a web-based digital sales platform that matches budget and quality minded luxury travelers with friendly and attentive drivers with safe, reliable, on-time ground transportation anywhere around the world; in clean, comfortable, and well
+                    maintained non-autonomous vehicles, at the lowest available rates.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="custom-btn button2" data-dismiss="modal">Agree</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- PHOTO TIP MODAL -->
 <div class="modal fade" id="photoTipModal" tabindex="-1" aria-labelledby="photoTipModalLabel" aria-hidden="true">
-	<div class="modal-dialog modal-lg">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id="staticBackdropLabel" style="flex-basis: 100%;">
-					Photo Tip Instructions:
-					<br />
-					<span class="text-orange">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel" style="flex-basis: 100%;">
+                    Photo Tip Instructions:
+                    <br />
+                    <span class="text-orange">
 						(iPhone users only take photos by portrait view.)
 					</span>
-				</h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
-			</div>
-			<div class="modal-body">
-				<ul>
-					<li style="font-size: 17px">
-						Take all photos first on your phone; head and shoulder, cards, permits, documents, exterior and
-						interior
-						vehicle pix, and keep as a file/image.
-					</li>
-					<li style="font-size: 17px">
-						Do not use your phone camera to directly upload images. our software doesn’t recognize portrait
-						and
-						landscape
-						and pix can be turned.
-					</li>
-					<li style="font-size: 17px">
-						Our future, on demand, mobile app will correct this portrait / landscape issue.
-					</li>
-					<li style="font-size: 17px">
-						Go back to each step and upload each image off the phone, or transfer to your PC desktop by
-						email or other
-						transfer.
-					</li>
-					<li style="font-size: 17px">
-						Details keep amateur operators from advertising on the Global Platform.
-					</li>
-				</ul>
-			</div>
-			<div class="modal-footer justify-content-end">
-				<button type="button" class="custom-filled-button orange-button" data-dismiss="modal">Okay</button>
-			</div>
-		</div>
-	</div>
+            </div>
+            <div class="modal-body">
+                <ul>
+                    <li style="font-size: 17px">
+                        Take all photos first on your phone; head and shoulder, cards, permits, documents, exterior and interior vehicle pix, and keep as a file/image.
+                    </li>
+                    <li style="font-size: 17px">
+                        Do not use your phone camera to directly upload images. our software doesn’t recognize portrait and landscape and pix can be turned.
+                    </li>
+                    <li style="font-size: 17px">
+                        Our future, on demand, mobile app will correct this portrait / landscape issue.
+                    </li>
+                    <li style="font-size: 17px">
+                        Go back to each step and upload each image off the phone, or transfer to your PC desktop by email or other transfer.
+                    </li>
+                    <li style="font-size: 17px">
+                        Details keep amateur operators from advertising on the Global Platform.
+                    </li>
+                </ul>
+            </div>
+            <div class="modal-footer justify-content-end">
+                <button type="button" class="custom-filled-button orange-button" data-dismiss="modal">Okay</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 
