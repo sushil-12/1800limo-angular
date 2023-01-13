@@ -61,11 +61,25 @@ export class HttpConfigInterceptor implements HttpInterceptor
 				{
 					this.errors = {
 						errors: {
-							error: 'User Session Expired. Please reload the screen.'
+							error: 'Session Expired. Please reload the screen.'
 						}
 					}
 					localStorage.clear()
 					sessionStorage.clear()
+				}
+				else if (errorData.status == 440)
+				{
+					this.errors = {
+						errors: {
+							'error': 'Session Expired. Please re-login to continue. You will be navigated to homepage after 1 second.'
+						}
+					};
+					localStorage.clear();
+					sessionStorage.clear();
+					setTimeout(() =>
+					{
+						location.reload()
+					}, 2800)
 				}
 				else if (errorData.status == 500)
 				{

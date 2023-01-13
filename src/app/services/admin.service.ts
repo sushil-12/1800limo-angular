@@ -6,6 +6,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 @Injectable({
 	providedIn: 'root'
 })
+
+
 export class AdminService
 {
 	big_data_list: any
@@ -1059,6 +1061,18 @@ export class AdminService
 	get charterOptions()
 	{
 		return this.httpClient.get('assets/json/charterOptions.json')
+	}
+
+	fetchAdminNewBookingRates(affiliate_type: string, bookingId: number)
+	{
+		if (bookingId !== 0)
+		{
+			return this.httpClient.get(`${this.serverUrl}admin/reservation-rates/${bookingId}`)
+		}
+		else
+		{
+			return this.httpClient.get(`${this.serverUrl}admin/booking-rates`)
+		}
 	}
 
 

@@ -72,6 +72,9 @@ export class AddIndividualAccountComponent implements OnInit
 						return;
 					}
 					console.log(place);
+					this.addIndividualAccountForm.patchValue({
+						address: place.formatted_address
+					})
 					//Fill one way form pickup address fields
 					this.addIndividualAccountForm.patchValue({
 						latitude: place.geometry.location.lat(),

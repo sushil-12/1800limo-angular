@@ -1,0 +1,44 @@
+.section-container {
+	background-color: #fff;
+	color: #000;
+	border-radius: 12px;
+	padding: 12px;
+	width: 100%;
+	font-size: 1rem;
+	margin: 1.2rem auto;
+	box-shadow: 3px 3px 20px -6px rgba(40, 40, 40, 0.5);
+}
+
+.rates-row {
+	transition: all 0.27s ease-in-out;
+	width: 100%;
+}
+
+@media only screen and (min-width: 1024px) {
+	.rates-row {
+	}
+}
+
+.errors {
+	height: 2rem;
+	padding: 1rem;
+}
+.section-dropdown {
+	overflow: hidden;
+	cursor: pointer;
+	height: 3.5rem;
+	transition: height 0.17s ease-in-out;
+	.section-dropdown-header {
+		color: var(--orange);
+	}
+	&.active {
+		height: fit-content;
+	}
+}
+
+
+@media only screen and (min-width: 1024px) {
+	.section-dropdown {
+		width: 47.5%;
+	}
+}

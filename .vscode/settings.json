@@ -1,11 +1,12 @@
-// {
-// 	"editor.formatOnSave": true,
-// 	"files.autoSave": "off",
-// 	"editor.fontSize": 14,
-// 	// "editor.fontFamily": "'Droid Sans Mono', 'monospace', monospace",
-// 	"editor.fontFamily": "Roboto",
-// 	"editor.letterSpacing": 2.7,
-// 	"editor.lineHeight": 2.5,
-// 	"editor.linkedEditing": false,
-// 	"angular.enable-strict-mode-prompt": false,
-// }
+{
+	"editor.formatOnSave": true,
+	"files.autoSave": "onWindowChange",
+	"editor.fontSize": 13.9,
+	// "editor.fontFamily": "'Droid Sans Mono', 'monospace', monospace",
+	"editor.fontFamily": "Hack",
+	"editor.letterSpacing": 1,
+	"editor.lineHeight": 2.5,
+	"editor.linkedEditing": false,
+	"angular.enable-strict-mode-prompt": false,
+	"window.zoomLevel": -0.5,
+}

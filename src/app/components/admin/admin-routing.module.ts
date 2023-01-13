@@ -188,10 +188,13 @@ const routes: Routes = [
 	{
 		path: 'create-new-booking',
 		canActivate: [SubAdminGuard],
-		component: CreateNewBookingComponent
+		redirectTo: 'new-booking',
+		pathMatch: 'full',
+		// component: CreateNewBookingComponent
 	},
 	{
 		path: 'new-booking',
+		canActivate: [SubAdminGuard],
 		component: NewBookingComponent
 	},
 	{
@@ -200,7 +203,7 @@ const routes: Routes = [
 		component: CreateNewBooking2Component
 	},
 	{
-		path: 'bookingdetails',
+		path: 'booking-preview',
 		canActivate: [SubAdminGuard],
 		component: BookingDetailsComponent
 	},

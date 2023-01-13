@@ -96,6 +96,7 @@ import { AmenitiesSpecialComponent } from './amenities-special/amenities-special
 import { MasterVehicleFareComponent } from './master-vehicle-fare/master-vehicle-fare.component';
 import { BookingDetailsComponent } from './booking-details/booking-details.component';
 import { NewBookingComponent } from './new-booking/new-booking.component';
+import { RatesFormComponent } from './rates-form/rates-form.component';
 
 @NgModule({
 	declarations: [AdminComponent,
@@ -170,7 +171,8 @@ import { NewBookingComponent } from './new-booking/new-booking.component';
 		AmenitiesSpecialComponent,
 		MasterVehicleFareComponent,
 		BookingDetailsComponent,
-		NewBookingComponent
+		NewBookingComponent,
+		RatesFormComponent
 	],
 	imports: [
 		CommonModule,

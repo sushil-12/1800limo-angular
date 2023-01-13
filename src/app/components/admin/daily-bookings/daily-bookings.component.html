@@ -8,8 +8,9 @@
 				<div class="col-md-3">
 					<mat-form-field appearance="outline">
 						<mat-label>Start Date<span class="asterisk">*</span></mat-label>
-						<input matInput [setOutputDateFormat]="outputDateFormat" [matDatepicker]="picker1"
-							placeholder="Start Date" id="id_4" (dateChangeWithFormat)="changeDate('startDate',$event)"
+						<input matInput [setOutputDateFormat]="outputDateFormat"
+							[matDatepicker]="picker1" placeholder="Start Date" id="id_4"
+							(dateChangeWithFormat)="changeDate('startDate',$event)"
 							(click)="picker1.open()" [value]="startDate" [max]="endDate" />
 						<mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
 						<mat-datepicker #picker1></mat-datepicker>
@@ -18,8 +19,9 @@
 				<div class="col-md-3">
 					<mat-form-field appearance="outline">
 						<mat-label>End Date<span class="asterisk">*</span></mat-label>
-						<input matInput [setOutputDateFormat]="outputDateFormat" [matDatepicker]="picker2"
-							placeholder="End Date" id="id_5" (dateChangeWithFormat)="changeDate('endDate',$event)"
+						<input matInput [setOutputDateFormat]="outputDateFormat"
+							[matDatepicker]="picker2" placeholder="End Date" id="id_5"
+							(dateChangeWithFormat)="changeDate('endDate',$event)"
 							(click)="picker2.open()" [value]="endDate" [min]="startDate" />
 						<mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
 						<mat-datepicker #picker2></mat-datepicker>
@@ -28,12 +30,14 @@
 				<div class="col-md-4  startdate2">
 					<mat-form-field appearance="outline">
 						<mat-label>Search</mat-label>
-						<input matInput type="text" placeholder="Search by Date, Name or keyword" id="keyword">
+						<input matInput type="text" placeholder="Search by Date, Name or keyword"
+							id="keyword">
 					</mat-form-field>
 				</div>
 				<div class="col-md-2  startdate3">
 					<label></label>
-					<button class="custom-btn btnclass savebutton" (click)="loadBookings()">SEARCH</button>
+					<button class="custom-btn btnclass savebutton"
+						(click)="loadBookings()">SEARCH</button>
 				</div>
 			</div>
 		</div>
@@ -41,8 +45,10 @@
 			<div class="row">
 				<div class="col-md-12 custom_table">
 					<div class="table-responsive">
-						<table class="table table-dark table-striped table-bordered dataTable dt-responsive"
-							id="dataTable" role="grid" aria-describedby="dataTable_info" cellspacing="0">
+						<table
+							class="table table-dark table-striped table-bordered dataTable dt-responsive"
+							id="dataTable" role="grid" aria-describedby="dataTable_info"
+							cellspacing="0">
 							<thead>
 								<tr role="row">
 									<th>Date</th>
@@ -81,13 +87,15 @@
 											<p data-target="#sendEmailModal" data-toggle="modal"
 												(click)="openModal(booking, 'Affiliate')"
 												*ngIf="booking.affiliate_type != 'gig_operator'; else gigOperator">
-												{{booking.driver_first_name}} {{booking.driver_last_name}} |
+												{{booking.driver_first_name}}
+												{{booking.driver_last_name}} |
 												{{booking.affiliate_dispatch_isd}}{{booking.affiliate_dispatch_number}}
 											</p>
 											<ng-template #gigOperator>
 												<p data-target="#sendEmailModal" data-toggle="modal"
 													(click)="openModal(booking, 'Affiliate')">
-													{{booking.driver_first_name}} {{booking.driver_last_name}} |
+													{{booking.driver_first_name}}
+													{{booking.driver_last_name}} |
 													{{booking.gig_cell_isd}}{{booking.gig_cell_mobile}}
 												</p>
 											</ng-template>
@@ -96,8 +104,10 @@
 									</td>
 									<td>{{booking.vehicle_cat_name}}</td>
 									<td>
-										<div [className]="'badge badge-pill booking_status ' + booking.booking_status">
-											{{booking.booking_status | bookingStatusTextReplace : '_' : ' ' |titlecase}}
+										<div
+											[className]="'badge badge-pill booking_status ' + booking.booking_status">
+											{{booking.booking_status | bookingStatusTextReplace :
+											'_' : ' ' |titlecase}}
 										</div>
 									</td>
 									<td>
@@ -108,43 +118,50 @@
 									</td>
 									<td>
 										<a class="user-profileded btn btn-icon btn-transparent-dark dropdown-toggle"
-											id="navbarDropdownUserImage" href="javascript:void(0);" role="button"
-											data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+											id="navbarDropdownUserImage" href="javascript:void(0);"
+											role="button" data-toggle="dropdown"
+											aria-haspopup="true" aria-expanded="false">
 											<span>View</span>
 										</a>
 										<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
 											aria-labelledby="navbarDropdownUserImage">
-											<a class="dropdown-item" (click)="editAction(booking.booking_id,'edit')">
+											<a class="dropdown-item"
+												[routerLink]="['/admin/new-booking']"
+												[queryParams]="{bookingId: booking.booking_id, updateType: 'edit'}">
 												<div class="dropdown-item-icon"></div>
 												Edit
 											</a>
 											<a class="dropdown-item" data-toggle="modal"
 												data-target="#return_repeat_booking_Modal"
-												(click)="returnRepeatAction('repeat',booking.booking_id,booking.service_type)">
+												[routerLink]="['/admin/new-booking']"
+												[queryParams]="{bookingId: booking.booking_id, updateType: 'repeat'}">
 												<div class="dropdown-item-icon"></div>
 												Repeat
 											</a>
-											<a *ngIf="booking.service_type=='oneway'" class="dropdown-item"
-												data-toggle="modal" data-target="#return_repeat_booking_Modal"
-												(click)="returnRepeatAction('return',booking.booking_id,booking.service_type)">
+											<a *ngIf="booking.service_type=='oneway'"
+												class="dropdown-item" data-toggle="modal"
+												data-target="#return_repeat_booking_Modal"
+												[routerLink]="['/admin/new-booking']"
+												[queryParams]="{bookingId: booking.booking_id, updateType: 'return'}">
 												<div class="dropdown-item-icon"></div>
 												Return
 											</a>
-											<a class="dropdown-item">
-												<div class="dropdown-item-icon"></div>
-												Cancel
-											</a>
-											<a class="dropdown-item" (click)="finalizeAction(booking.booking_id)">
+											<a class="dropdown-item"
+												[routerLink]="['/admin/booking-preview']"
+												[queryParams]="{bookingId: booking.booking_id}">
 												<div class="dropdown-item-icon"></div>
 												Finalize
 											</a>
-											<a class="dropdown-item" routerLink="/admin/invoice-summary"
+											<a class="dropdown-item"
+												[routerLink]="['/admin/invoice-summary']"
 												[queryParams]="{bookingId: booking.booking_id}">
 												<div class="dropdown-item-icon"></div>
 												Invoice
 											</a>
-											<a class="dropdown-item" (click)="changeBookingStatus(booking.booking_id)"
-												data-toggle="modal" data-target="#change_status_booking_Modal">
+											<a class="dropdown-item"
+												(click)="changeBookingStatus(booking.booking_id)"
+												data-toggle="modal"
+												data-target="#change_status_booking_Modal">
 												<div class="dropdown-item-icon"></div>
 												Change Status
 											</a>
@@ -171,9 +188,10 @@
 				<!----BACK BTN---->
 				<nav aria-label="Page navigation example" *ngIf="totalRecords > 15">
 					<ul class="pagination pagination-circle pg-blue">
-						<li *ngIf="currentPage!=1" class="page-item disabled" (click)="loadBookings(firstPageUrl)"><a
-								class="page-link">First</a></li>
-						<li *ngIf="currentPage!=1" class="page-item disabled" (click)="loadBookings(prevPageUrl)">
+						<li *ngIf="currentPage!=1" class="page-item disabled"
+							(click)="loadBookings(firstPageUrl)"><a class="page-link">First</a></li>
+						<li *ngIf="currentPage!=1" class="page-item disabled"
+							(click)="loadBookings(prevPageUrl)">
 							<a class="page-link" aria-label="Previous">
 								<span aria-hidden="true">&laquo;</span>
 								<span class="sr-only">Previous</span>
@@ -181,17 +199,19 @@
 						</li>
 						<li *ngFor="let in of counter() ;let i = index"
 							[ngClass]="(in==currentPage)?'page-item active':'page-item'"
-							(click)="loadBookings(path+'?page='+in)" [disabled]="(in==currentPage)?true:false">
+							(click)="loadBookings(path+'?page='+in)"
+							[disabled]="(in==currentPage)?true:false">
 							<a class="page-link">{{in}}</a>
 						</li>
-						<li *ngIf="currentPage!=lastPage" class="page-item" (click)="loadBookings(nextPageUrl)">
+						<li *ngIf="currentPage!=lastPage" class="page-item"
+							(click)="loadBookings(nextPageUrl)">
 							<a class="page-link" aria-label="Next">
 								<span aria-hidden="true">&raquo;</span>
 								<span class="sr-only">Next</span>
 							</a>
 						</li>
-						<li *ngIf="currentPage!=lastPage" class="page-item" (click)="loadBookings(lastPageUrl)"><a
-								class="page-link">Last</a></li>
+						<li *ngIf="currentPage!=lastPage" class="page-item"
+							(click)="loadBookings(lastPageUrl)"><a class="page-link">Last</a></li>
 					</ul>
 				</nav>
 			</div>
@@ -200,8 +220,8 @@
 </main>
 
 <!-- repeat/return booking type modal -->
-<div class="modal fade" id="change_status_booking_Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-	aria-hidden="true">
+<div class="modal fade" id="change_status_booking_Modal" tabindex="-1" role="dialog"
+	aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content user_inforamtion">
 			<div class="modal-header pb-0">
@@ -235,7 +255,8 @@
 				</form>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="custom-btn button2" (click)="submitChangeStatusForm()">Change
+				<button type="button" class="custom-btn button2"
+					(click)="submitChangeStatusForm()">Change
 					Status</button>
 			</div>
 		</div>
@@ -243,7 +264,8 @@
 </div>
 
 <!-- send email modal -->
-<div class="modal fade" id="emailModal" tabindex="-1" role="dialog" aria-labelledby="emailModal" aria-hidden="true">
+<div class="modal fade" id="emailModal" tabindex="-1" role="dialog" aria-labelledby="emailModal"
+	aria-hidden="true">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header pb-0">
@@ -256,19 +278,22 @@
 				<p>Are you sure, You want to send email?</p>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="custom-btn savebutton" (click)="emailForm()">Send Email</button>
-				<button type="button" class="custom-btn resetbutton" data-dismiss="modal">Close</button>
+				<button type="button" class="custom-btn savebutton" (click)="emailForm()">Send
+					Email</button>
+				<button type="button" class="custom-btn resetbutton"
+					data-dismiss="modal">Close</button>
 			</div>
 		</div>
 	</div>
 </div>
 <!-- send email and call modal -->
-<div class="modal fade" id="sendEmailModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-	aria-hidden="true" data-backdrop="static" data-keyboard="false">
+<div class="modal fade" id="sendEmailModal" tabindex="-1" role="dialog"
+	aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static"
+	data-keyboard="false">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
-			<button type="button" (click)="show=false" class="close closeButton" data-dismiss="modal"
-				aria-label="Close">
+			<button type="button" (click)="show=false" class="close closeButton"
+				data-dismiss="modal" aria-label="Close">
 				<span aria-hidden="true">&times;</span>
 			</button>
 			<div class="modal-header pb-0">
@@ -281,17 +306,20 @@
 				<div class="row">
 					<div class="col-md-12">
 						<h5 class="mb-5" *ngIf="passengerDetails?.selection_button == 'Affiliate'">
-							Connect with {{ passengerDetails?.driver_first_name }} {{ passengerDetails?.driver_last_name
+							Connect with {{ passengerDetails?.driver_first_name }} {{
+							passengerDetails?.driver_last_name
 							}} Via</h5>
 						<h5 class="mb-5" *ngIf="passengerDetails?.selection_button == 'Passenger'">
 							Connect with {{ passengerDetails?.passenger_name }} Via</h5>
-						<h5 class="mb-5" *ngIf="passengerDetails?.selection_button == 'Loose_Affiliate'">
+						<h5 class="mb-5"
+							*ngIf="passengerDetails?.selection_button == 'Loose_Affiliate'">
 							Connect with {{ passengerDetails?.loose_affiliate_name }} Via</h5>
 					</div>
 					<div class="col-md-4" (click)="messageField('Phone')">
 
 						<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 122.88"
+							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+							viewBox="0 0 122.88 122.88"
 							style="enable-background:new 0 0 122.88 122.88" xml:space="preserve">
 							<style type="text/css">
 								.step0 {
@@ -381,9 +409,10 @@
 						</a>
 					</div>
 					<div class="col-md-4 mailBoxStyle" (click)="messageField('Email')">
-						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48px" height="48px">
-							<linearGradient id="NvW_RwTAona1rlOp72mkqa" x1="24" x2="24" y1="42" y2="6.207"
-								gradientUnits="userSpaceOnUse">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48px"
+							height="48px">
+							<linearGradient id="NvW_RwTAona1rlOp72mkqa" x1="24" x2="24" y1="42"
+								y2="6.207" gradientUnits="userSpaceOnUse">
 								<stop offset="0" stop-color="#1ac8fc" />
 								<stop offset=".258" stop-color="#1bb6fa" />
 								<stop offset=".775" stop-color="#1c86f5" />
@@ -409,15 +438,18 @@
 							<mat-label>
 								{{ sendMessageField ? 'Send SMS' : 'Send Email' }}
 							</mat-label>
-							<textarea matInput placeholder="Write a Message...." id="clearField" #inputmsg></textarea>
+							<textarea matInput placeholder="Write a Message...." id="clearField"
+								#inputmsg></textarea>
 						</mat-form-field>
-						<button class="btn saveButton" (click)="submit(inputmsg.value, sendMessageField)"
+						<button class="btn saveButton"
+							(click)="submit(inputmsg.value, sendMessageField)"
 							data-dismiss="modal">Send</button>
 					</div>
 				</div>
 			</div>
 			<div class="modal-footer pt-0">
-				<button type="button" data-dismiss="modal" (click)="show=false" class="btn btnStyle">Close</button>
+				<button type="button" data-dismiss="modal" (click)="show=false"
+					class="btn btnStyle">Close</button>
 			</div>
 		</div>
 		<!-- <div class="text-center">
@@ -428,12 +460,12 @@
 </div>
 
 <!-- Notification Modal -->
-<div class="modal fade" id="notificationModal" tabindex="-1" role="dialog" aria-labelledby="notificationModal"
-	aria-hidden="true">
+<div class="modal fade" id="notificationModal" tabindex="-1" role="dialog"
+	aria-labelledby="notificationModal" aria-hidden="true">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
-			<button type="button" class="close closeButton" data-dismiss="notificationModal" aria-label="Close"
-				id="closeModal">
+			<button type="button" class="close closeButton" data-dismiss="notificationModal"
+				aria-label="Close" id="closeModal">
 				<span aria-hidden="true">&times;</span>
 			</button>
 			<div class="modal-body">
