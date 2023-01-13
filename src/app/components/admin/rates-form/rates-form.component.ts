@@ -31,6 +31,11 @@ export class RatesFormComponent implements OnInit, OnChanges
 	RatesForm: FormGroup
 	ReturnRatesForm: FormGroup
 
+	ratesdata: any
+
+	ratesform: boolean = false;
+	returnratesform: boolean = false;
+
 	rate_params: any = {
 		chevrons: {
 			section: false,
@@ -69,26 +74,44 @@ export class RatesFormComponent implements OnInit, OnChanges
 	) { }
 
 	ngOnInit(): void
-	{ }
+	{
+		this.fetchRates('').then((data: any) =>
+		{
+			this.ratesdata = data
+		})
+	}
 
 
 	ngOnChanges(changes: SimpleChanges)
 	{
 		console.warn('Change has been detected: ', changes)
 
+		this.ratesform = changes.init_rates?.currentValue ?? this.ratesform;
+		this.returnratesform = changes.init_r_rates?.currentValue ?? this.returnratesform;
+
 		// if asked to initialise the rates
 		if (changes.init_rates?.currentValue)
 		{
-			this.initRates(changes.affiliate_type?.currentValue)
+			this.initRates(changes.affiliate_type?.currentValue);
 		}
 
-		if (changes.init_r_rates?.currentValue)
+		if (changes.init_r_rates?.currentValue || this.returnratesform)
 		{
-			this.initReturnRates(changes.affiliate_type?.currentValue)
+			setTimeout(() =>
+			{
+				this.initReturnRates(changes.affiliate_type?.currentValue);
+			}, 3000)
 		}
 
-		this.hours = changes.nums ? changes.nums?.currentValue : 0
-		this.vehicles = changes.vehs ? changes.vehs?.currentValue : 0
+		if (!changes.nums?.firstChange)
+		{
+			this.hours = changes.nums ? changes.nums?.currentValue : this.hours
+			this.vehicles = changes.vehs ? changes.vehs?.currentValue : this.vehicles
+		} else
+		{
+			this.hours = 0
+			this.vehicles = 1
+		}
 
 		if (changes.bookingId && changes.bookingId.currentValue !== 0)
 		{
@@ -145,10 +168,10 @@ export class RatesFormComponent implements OnInit, OnChanges
 
 
 		// fetch the data from backend
-		this.fetchRates(affiliate_type, bookingId).then((data: any) =>
+		if (this.ratesdata)
 		{
-			this.buildRatesForm('RatesForm', data)
-		})
+			this.buildRatesForm('RatesForm', this.ratesdata)
+		}
 
 		this.RatesForm.valueChanges.subscribe((value: any) =>
 		{
@@ -163,9 +186,9 @@ export class RatesFormComponent implements OnInit, OnChanges
 
 	initReturnRates(affiliate_type: string)
 	{
-		console.log('Init Return Rates')
+		console.log('Init Return Rates');
 
-		this.fetchRates(affiliate_type).then((data: any) =>
+		if (this.ratesdata)
 		{
 			this.ReturnRatesForm = this.$form.group({
 				all_inclusive_rates: this.$form.group({}),
@@ -173,18 +196,21 @@ export class RatesFormComponent implements OnInit, OnChanges
 				direct_taxes: this.$form.group({}),
 				taxes: this.$form.group({}),
 				amenities: this.$form.group({})
-			})
-			this.buildRatesForm('ReturnRatesForm', data)
+			});
+
+
+			this.buildRatesForm('ReturnRatesForm', this.ratesdata);
+
+
 			this.ReturnRatesForm.valueChanges.subscribe((value: any) =>
 			{
 				this.calculateTotal('ReturnRatesForm');
-				this.calculateGrandTotal('ReturnRatesForm');
-				value['r_grand_total'] = this.r_grandtotal;
+				value['r_grand_total'] = this.r_subtotal;
 				value['r_sub_total'] = this.r_subtotal;
 
 				this.returnformvalue.emit(value);
-			})
-		})
+			});
+		}
 	}
 
 
@@ -292,9 +318,16 @@ export class RatesFormComponent implements OnInit, OnChanges
 
 			if (formgroup == 'all_inclusive_rates')
 			{
-				// Milage Rate
-				// let amount = Number(Number(Number(this.distance) * baserate).toFixed(2));
-				(<FormGroup>(<FormGroup>this.RatesForm.get(formgroup)).get(subform)).get('amount').setValue(baserate);
+				let amount = 0
+				// Hourly Rate - only in case of hours
+				if (this.hours !== 0)
+				{
+					amount = Number(Number(Number(this.hours) * baserate).toFixed(2));
+				} else
+				{
+					amount = baserate
+				}
+				(<FormGroup>(<FormGroup>this.RatesForm.get(formgroup)).get(subform)).get('amount').setValue(amount);
 			}
 
 			if (formgroup == 'others')
@@ -435,18 +468,6 @@ export class RatesFormComponent implements OnInit, OnChanges
 			if (this.vehicles !== 0)
 			{
 				this.grandtotal = this.subtotal * this.vehicles
-			}
-		}
-		else
-		{
-			if (this.hours !== 0)
-			{
-				this.r_grandtotal = this.r_subtotal * this.hours
-			}
-
-			if (this.vehicles !== 0)
-			{
-				this.r_grandtotal = this.r_subtotal * this.vehicles
 			}
 		}
 	}

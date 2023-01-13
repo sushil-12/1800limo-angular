@@ -56,8 +56,8 @@ export class NewBookingComponent implements OnInit
 
 	booking_id: number = 0
 
-	driver_image: any
-	vehicle_image: any
+	driver_image: Record<string, any> = {}
+	vehicle_image: Record<string, any> = {}
 
 	BigData: any
 	BigData_COPY: any
@@ -236,7 +236,7 @@ export class NewBookingComponent implements OnInit
 			driver_image_id: [''],
 			vehicle_image_id: [''],
 			meet_greet_choices: [''],
-			number_of_vehicles: ['1'],
+			number_of_vehicles: [''],
 			pickup_date: [''],
 			pickup_time: ['12:00 am'],
 			extra_stops: this.$form.array([]),
@@ -304,7 +304,7 @@ export class NewBookingComponent implements OnInit
 		let future_full_date = new Date(`${year}-${month}-${date + 10}`).toISOString()
 		this.SetFormValue('pickup_date', full_date.slice(0, full_date.indexOf('T')))
 		this.SetFormValue('return_pickup_date', future_full_date.slice(0, future_full_date.indexOf('T')))
-		// this.BookingForm.controls['n_vehicles'].setValue('1')
+		this.SetFormValue('number_of_vehicles', 1)
 	}
 
 	prefillViaBookingID(booking_id: number)
@@ -324,6 +324,11 @@ export class NewBookingComponent implements OnInit
 					this.SetFormValue(item, editing_data[item])
 				}
 			}
+
+			this.SetFormValue('driver_image_id', editing_data.driver_image.id);
+			this.SetFormValue('vehicle_image_id', editing_data.vehicle_image.id);
+			this.driver_image['image'] = editing_data.driver_image['image'] ?? '';
+			this.vehicle_image['image'] = editing_data.vehicle_image['image'] ?? '';
 
 			['driver_languages', 'driver_dresses', 'amenities', 'chargedAmenities'].forEach((item: string) =>
 			{
@@ -346,8 +351,6 @@ export class NewBookingComponent implements OnInit
 			this.booking_id = this.Form.reservation_id.value;
 			this.Form.affiliate_id.value != 0 ? this.chooseAffiliate() : ''
 			this.chooseUser(this.Form.acc_id.value)
-			// this.driver_image['image'] = this.Form.driver_image_id.value ?? ''
-			// this.vehicle_image['image'] = this.Form.vehicle_image_id.value ?? '	'
 
 			this.$spinner.hide()
 		})
@@ -465,10 +468,6 @@ export class NewBookingComponent implements OnInit
 				}
 
 			}
-			console.log(is_return)
-			console.log(origin)
-			console.log(destination)
-			console.log(waypoints)
 			this.drawMap(map, {
 				origin,
 				destination,
@@ -784,6 +783,7 @@ export class NewBookingComponent implements OnInit
 		{
 			return null
 		}
+
 		let temp = list.find(item => item['id'] == this.BookingForm.get(form_control).value)
 		return temp ? temp[return_key] : ''
 
