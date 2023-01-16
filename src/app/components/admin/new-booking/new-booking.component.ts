@@ -20,7 +20,7 @@ declare var $: any
 export class NewBookingComponent implements OnInit
 {
 	booking_params: any = {
-		transfer_types: ['city_to_city', 'airport_to_city', 'city_to_airport', 'city_to_cruise', 'cruise_to_city', 'cruise_to_airport', 'airport_to_cruise'],
+		transfer_types: ["airport_to_city", "airport_to_airport", "airport_to_cruise", "city_to_city", "city_to_airport", "city_to_cruise", "cruise_to_airport", "cruise_to_city"],
 		client_account_types: ['individual', 'corporate', 'travel_planner', 'loose_customer'],
 		affiliate_accounts: ['affiliate', 'loose_affiliate'],
 		numbers: (() =>
@@ -746,11 +746,31 @@ export class NewBookingComponent implements OnInit
 			return
 		}
 
-		if (list_name === 'vehicleModels')
+		if (list_name === 'airportsData' || list_name === 'airlinesData')
 		{
-			this.BigData[list_name] = this.BigData[list_name].filter((item: any) => item.name.toLowerCase().startsWith(search_value.toLowerCase()))
+			console.log(list_name, search_value)
+			// match with code
+			this.BigData[list_name] = this.BigData[list_name].filter((item: any) => item['code'].toLowerCase().startsWith(search_value.toLowerCase()))
+			// match with name 
+			if (this.BigData[list_name].length == 0)
+			{
+				console.log('name')
+				this.BigData[list_name] = this.BigData_COPY[list_name]
+				this.BigData[list_name] = this.BigData[list_name].filter((item: any) => item['name'].toLowerCase().startsWith(search_value.toLowerCase()))
+			}
+
+			// match with country
+			if (this.BigData[list_name].length == 0)
+			{
+				console.log('country')
+				this.BigData[list_name] = this.BigData_COPY[list_name]
+				this.BigData[list_name] = this.BigData[list_name].filter((item: any) => item['country'].toLowerCase().startsWith(search_value.toLowerCase()))
+			}
+			return	// for only airport/airlines data
 		}
-		this.BigData[list_name] = this.BigData[list_name].filter(item => item[search_with].toLowerCase().startsWith(search_value.toLowerCase()))
+
+		// for other cases
+		this.BigData[list_name] = this.BigData[list_name].filter((item: any) => item[search_with].toLowerCase().startsWith(search_value.toLowerCase()))
 	}
 
 
