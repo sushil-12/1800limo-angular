@@ -1,6 +1,6 @@
 <!-- Rates and Taxes -->
 <div class="row px-3">
-	<div *ngIf="RatesForm" [formGroup]="RatesForm" class="section-container section-dropdown mt-5"
+	<div *ngIf="ratesform" [formGroup]="RatesForm" class="section-container section-dropdown mt-5"
 		[ngClass]="{'active': rate_params.chevrons.section, 'col-md-12': ratesform && !returnratesform, 'col-md-6': ratesform && returnratesform}"
 		[ngStyle]="affiliate_type == 'affiliate' ? {'height': '0', 'padding': '0'} : ''">
 		<div class="row cursor-pointer" (click)="toggleDropdown('section')">
@@ -130,7 +130,7 @@
 
 
 
-	<div *ngIf="ReturnRatesForm" [formGroup]="ReturnRatesForm"
+	<div *ngIf="returnratesform" [formGroup]="ReturnRatesForm"
 		class="section-container section-dropdown mt-5"
 		[ngClass]="{'active': rate_params.chevrons.r_section, 'col-md-6': returnratesform}"
 		[ngStyle]="affiliate_type == 'affiliate' ? {'height': '0', 'padding': '0'} : ''">
@@ -248,7 +248,7 @@
 </div>
 
 
-<div class="container section-container">
+<div class="container-fluid section-container" *ngIf="ratesform">
 	<!-- Number of Vehicles/Hours -->
 	<div class="row px-2 justify-content-between align-items-center" *ngIf="vehicles !== 0">
 		<div class="col-9 col-xl-7">

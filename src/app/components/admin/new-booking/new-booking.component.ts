@@ -774,7 +774,7 @@ export class NewBookingComponent implements OnInit
 	}
 
 
-	fillValue(list: Array<Record<string, any> | string> | null = null, form_control: string, return_key: string = null): string | number
+	fillValue(list: Array<Record<string, any> | string> | null = null, form_control: string, return_key: string = null, sep?: string): string | number
 	{
 		// fail-safe
 		if (!this.BigData)
@@ -805,6 +805,16 @@ export class NewBookingComponent implements OnInit
 		}
 
 		let temp = list.find(item => item['id'] == this.BookingForm.get(form_control).value)
+		if (return_key.includes('+') && temp)
+		{
+			let keys = return_key.split('+')
+			let ret_str = ""
+			for (let i = 0; i < keys.length; i++)
+			{
+				ret_str = ret_str + temp[keys[i].trim()] + sep
+			}
+			return ret_str.replace(/(\,)$/g, '').trim()
+		}
 		return temp ? temp[return_key] : ''
 
 	}
@@ -1230,6 +1240,7 @@ export class NewBookingComponent implements OnInit
 		this.BookingForm.get('service_type').valueChanges.subscribe((value: string) =>
 		{
 			this.init_return_rates = false;
+			this.SetFormValue('number_of_hours', 0)
 			if (value == 'round_trip')
 			{
 				this.init_return_rates = true;

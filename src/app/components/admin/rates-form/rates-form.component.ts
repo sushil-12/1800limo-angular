@@ -97,6 +97,7 @@ export class RatesFormComponent implements OnInit, OnChanges
 
 		if (changes.init_r_rates?.currentValue || this.returnratesform)
 		{
+			this.hours = 0
 			setTimeout(() =>
 			{
 				this.initReturnRates(changes.affiliate_type?.currentValue);
@@ -107,6 +108,10 @@ export class RatesFormComponent implements OnInit, OnChanges
 		{
 			this.hours = changes.nums ? changes.nums?.currentValue : this.hours
 			this.vehicles = changes.vehs ? changes.vehs?.currentValue : this.vehicles
+			if (!this.vehicles)
+			{
+				this.vehicles = 1
+			}
 		} else
 		{
 			this.hours = 0
