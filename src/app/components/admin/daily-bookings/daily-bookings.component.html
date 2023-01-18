@@ -4,10 +4,13 @@
 	<section class="adminbox_shadow user_information">
 		<h2 class="headinginfo"> My Bookings </h2>
 		<div class="containeredd mt-1 ">
-			<div class="row my-2">
-				<div class="col-md-3">
-					<mat-form-field appearance="outline">
-						<mat-label>Start Date<span class="asterisk">*</span></mat-label>
+			<div class="row my-2 align-items-center justify-content-around">
+				<!-- Start-Date -->
+				<div class="col-sm-4 col-md-3 my-2">
+					<mat-form-field appearance="outline" class="m-0">
+						<mat-label>
+							Start Date <span class="asterisk"> * </span>
+						</mat-label>
 						<input matInput [setOutputDateFormat]="outputDateFormat"
 							[matDatepicker]="picker1" placeholder="Start Date" id="id_4"
 							(dateChangeWithFormat)="changeDate('startDate',$event)"
@@ -16,9 +19,13 @@
 						<mat-datepicker #picker1></mat-datepicker>
 					</mat-form-field>
 				</div>
-				<div class="col-md-3">
-					<mat-form-field appearance="outline">
-						<mat-label>End Date<span class="asterisk">*</span></mat-label>
+
+				<!-- End-Date -->
+				<div class="col-sm-4 col-md-3 my-2">
+					<mat-form-field appearance="outline" class="m-0">
+						<mat-label>
+							End Date <span class="asterisk"> * </span>
+						</mat-label>
 						<input matInput [setOutputDateFormat]="outputDateFormat"
 							[matDatepicker]="picker2" placeholder="End Date" id="id_5"
 							(dateChangeWithFormat)="changeDate('endDate',$event)"
@@ -27,17 +34,21 @@
 						<mat-datepicker #picker2></mat-datepicker>
 					</mat-form-field>
 				</div>
-				<div class="col-md-4  startdate2">
-					<mat-form-field appearance="outline">
-						<mat-label>Search</mat-label>
+
+				<!-- Search Input -->
+				<div class="col-sm-2 col-md-3 my-2">
+					<mat-form-field appearance="outline" class="m-0">
+						<mat-label> Search </mat-label>
 						<input matInput type="text" placeholder="Search by Date, Name or keyword"
 							id="keyword">
 					</mat-form-field>
 				</div>
-				<div class="col-md-2  startdate3">
-					<label></label>
-					<button class="custom-btn btnclass savebutton"
-						(click)="loadBookings()">SEARCH</button>
+
+				<!-- Search Button -->
+				<div class="col-sm-1 col-md-3 text-right text-lg-left">
+					<button class="custom-filled-button orange-button" (click)="loadBookings()">
+						Search
+					</button>
 				</div>
 			</div>
 		</div>
@@ -51,8 +62,8 @@
 							cellspacing="0">
 							<thead>
 								<tr role="row">
+									<th>Booking #</th>
 									<th>Date</th>
-									<th>Book #</th>
 									<th>Pax Info</th>
 									<th>Driver Info</th>
 									<th>Vehicle Type</th>
@@ -63,11 +74,11 @@
 							</thead>
 							<tbody>
 								<tr role="row" class="odd" *ngFor="let booking of bookings">
+									<td>{{ booking.booking_id }}</td>
 									<td class="sorting_1">
 										<p>{{ FormatDate(booking.pickup_date) }}</p>
 										<p>{{ FormatTime(booking.pickup_time) }}</p>
 									</td>
-									<td>{{ booking.booking_id }}</td>
 									<td>
 										<p data-target="#sendEmailModal" data-toggle="modal"
 											(click)="openModal(booking, 'Passenger')">

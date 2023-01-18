@@ -568,7 +568,7 @@
 					</div>
 
 					<!-- Year -->
-					<div id="year" class="col-md-4 col-xl-3 my-2">
+					<div id="year" class="col-md-3  my-2">
 						<mat-form-field appearance="outline">
 							<mat-label>
 								Year
@@ -589,7 +589,7 @@
 					</div>
 
 					<!-- Color -->
-					<div id="color" class="col-md-4 col-xl-3 my-2">
+					<div id="color" class="col-md-3 my-2">
 						<mat-form-field appearance="outline">
 							<mat-label>
 								Color
@@ -1020,7 +1020,7 @@
 							<mat-label>
 								Airport
 							</mat-label>
-							<input type="text" matInput placeholder="Search For Airport"
+							<input type="search" matInput placeholder="Search For Airport"
 								(focus)="$event.target.select()" aria-label="Airport"
 								[matAutocomplete]="onwy_airport"
 								(keyup)="searchValue('airportsData', $event.target.value, 'name')"
@@ -1668,8 +1668,9 @@
 		<!-- Section - Return Journey Details Ends -->
 
 
-		<app-rates-form [initRates]="init_rates" [affiliate_type]="Form.affiliate_type.value"
-			[distance]="distance_for_rates" [amenities]="amenities" [reservation_id]="booking_id"
+		<app-rates-form class="d-flex flex-wrap" [initRates]="init_rates"
+			[affiliate_type]="Form.affiliate_type.value" [distance]="distance_for_rates"
+			[amenities]="amenities" [reservation_id]="booking_id"
 			[initReturnRates]="init_return_rates" (formvalue)="RateFormValue($event)"
 			[hours]="Form.number_of_hours?.value" [vehicles]="Form.number_of_vehicles?.value"
 			(returnformvalue)="ReturnRateFormValue($event)"></app-rates-form>

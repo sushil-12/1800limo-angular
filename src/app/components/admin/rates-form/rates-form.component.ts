@@ -193,17 +193,16 @@ export class RatesFormComponent implements OnInit, OnChanges
 	{
 		console.log('Init Return Rates');
 
+		this.ReturnRatesForm = this.$form.group({
+			all_inclusive_rates: this.$form.group({}),
+			others: this.$form.group({}),
+			direct_taxes: this.$form.group({}),
+			taxes: this.$form.group({}),
+			amenities: this.$form.group({})
+		});
+
 		if (this.ratesdata)
 		{
-			this.ReturnRatesForm = this.$form.group({
-				all_inclusive_rates: this.$form.group({}),
-				others: this.$form.group({}),
-				direct_taxes: this.$form.group({}),
-				taxes: this.$form.group({}),
-				amenities: this.$form.group({})
-			});
-
-
 			this.buildRatesForm('ReturnRatesForm', this.ratesdata);
 
 
@@ -221,11 +220,19 @@ export class RatesFormComponent implements OnInit, OnChanges
 
 	get RateForm(): Record<string, any>
 	{
+		if (!this.RatesForm)
+		{
+			return
+		}
 		return this.RatesForm.controls
 	}
 
 	get ReturnRateForm(): Record<string, any>
 	{
+		if (!this.ReturnRatesForm)
+		{
+			return
+		}
 		return this.ReturnRatesForm.controls
 	}
 

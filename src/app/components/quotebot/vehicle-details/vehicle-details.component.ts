@@ -20,7 +20,7 @@ export class VehicleDetailsComponent implements OnInit
 	one_way_rates: any
 	round_trip_rates: any
 
-	driver_info_display_keys: Array<string> = ['gender', 'dress', 'experience', 'phone', 'languages', 'insurance_limit']
+	driver_info_display_keys: Array<string> = ['gender', 'dress', 'experience', 'languages', 'insurance_limit']
 
 	constructor(
 		private _router: Router,
@@ -56,6 +56,12 @@ export class VehicleDetailsComponent implements OnInit
 		{
 			// fetch the values and perform the operation
 			this.selected_vehicle = JSON.parse(sessionStorage.getItem('selected_vehicle'))
+			if (this.selected_vehicle.hasOwnProperty('driverInformation'))
+			{
+				let name = this.selected_vehicle.driverInformation.name.split(' ')
+				name[name.length - 1] = name[name.length - 1].charAt(0).toUpperCase()
+				this.selected_vehicle['name_initials'] = name.join(' ')
+			}
 			this.quotebot_form = JSON.parse(localStorage.getItem('quotebot_form'))
 
 

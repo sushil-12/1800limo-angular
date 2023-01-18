@@ -125,9 +125,6 @@ const routes: Routes = [
 			},
 			{
 				path: 'email',
-				data: {
-					title: 'Emails'
-				},
 				children: [
 					{
 						path: 'affiliate-email-confirmation',
