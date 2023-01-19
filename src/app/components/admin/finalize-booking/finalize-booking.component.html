@@ -1,0 +1,19 @@
+<div class="container p-3">
+	<h3 class="font-weight-bolder m-3 text-center">
+		Finalize Booking
+	</h3>
+
+	<div class="row">
+		<div class="col-md-12">
+			<div id="booking-paradigms" class="d-flex flex-wrap align-items-center"
+				*ngFor="let paradigm of BookingDetail | keyvalue; index as paradigm_index">
+				<label [attr.id]="'paradigm_' + paradigm_index" class="m-1">
+					{{ paradigm.key | titlecase }}
+				</label>
+				<label [attr.id]="'paradigmValue_' + paradigm_index" class="m-0 text-uppercase">
+					{{ paradigm.value | titlecase }}
+				</label>
+			</div>
+		</div>
+	</div>
+</div>

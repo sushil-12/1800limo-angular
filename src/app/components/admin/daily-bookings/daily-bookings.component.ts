@@ -63,31 +63,30 @@ export class DailyBookingsComponent implements OnInit
 
 	ngOnInit(): void
 	{
-		this.date = new Date();
-		this.startDate = this.date.toISOString().substring(0, 10);
-		this.date.setDate(this.date.getDate() + 10);
-		this.endDate = this.date.toISOString().substring(0, 10);
-
 		this.activatedRoute.queryParams.subscribe((params: any) =>
 		{
 			if (Object.keys(params).length != 0)
 			{
 				this.startDate = params.startDate
 				this.endDate = params.endDate
+			} else
+			{
+				this.date = new Date();
+				this.startDate = this.date.toISOString().substring(0, 10);
+				this.date.setDate(this.date.getDate() + 7);
+				this.endDate = this.date.toISOString().substring(0, 10);
+
+				this.router.navigate([], {
+					queryParams: {
+						startDate: this.startDate,
+						endDate: this.endDate
+					},
+					queryParamsHandling: 'merge'
+				})
 			}
 		})
 
 		this.loadBookings();
-
-		//repeat return booking form validation
-		// this.returnRepeatForm = this.formBuilder.group({
-		//   reservation_id: ['', Validators.required],
-		//   action_type: ['', Validators.required],
-		//   pickup_date: ['', Validators.required],
-		//   pickup_time: ['12:00 PM', Validators.required],
-		//   return_pickup_date: [''],
-		//   return_pickup_time: ['12:00 PM']
-		// });
 
 		//change status booking form validation
 		this.changeStatusForm = this.formBuilder.group({
@@ -172,13 +171,6 @@ export class DailyBookingsComponent implements OnInit
 	{
 		/** spinner starts on init */
 		this.spinner.show();
-		this.router.navigate([], {
-			queryParams: {
-				startDate: this.startDate,
-				endDate: this.endDate
-			},
-			queryParamsHandling: 'merge'
-		})
 
 		var keyword = ((document.getElementById("keyword") as HTMLInputElement).value);
 		// Load Our bookings using API
@@ -212,20 +204,6 @@ export class DailyBookingsComponent implements OnInit
 		this.passengerDetails = booking;
 		this.passengerDetails['selection_button'] = selection_button
 	}
-
-	// getAddress(address: string)
-	// {
-	// 	console.log("getAddress api hit by google")
-	// 	if (address)
-	// 	{
-	// 		console.log("11111111111111111111111")
-	// 		return new Promise((resolve) =>
-	// 		{
-	// 			console.log("22222222222222222")
-	// 			resolve(this.http.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=AIzaSyCxj_Txh7lMTSVjCaeFZ76krKaWH_-XpPQ`))
-	// 		})
-	// 	}
-	// }
 
 	//for pagination
 	counter()

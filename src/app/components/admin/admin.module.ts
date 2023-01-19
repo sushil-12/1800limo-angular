@@ -97,6 +97,7 @@ import { MasterVehicleFareComponent } from './master-vehicle-fare/master-vehicle
 import { BookingDetailsComponent } from './booking-details/booking-details.component';
 import { NewBookingComponent } from './new-booking/new-booking.component';
 import { RatesFormComponent } from './rates-form/rates-form.component';
+import { FinalizeBookingComponent } from './finalize-booking/finalize-booking.component';
 
 @NgModule({
 	declarations: [AdminComponent,
@@ -172,7 +173,8 @@ import { RatesFormComponent } from './rates-form/rates-form.component';
 		MasterVehicleFareComponent,
 		BookingDetailsComponent,
 		NewBookingComponent,
-		RatesFormComponent
+		RatesFormComponent,
+		FinalizeBookingComponent
 	],
 	imports: [
 		CommonModule,

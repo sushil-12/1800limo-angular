@@ -71,8 +71,8 @@ import { EditMasterVehicleRatesComponent } from './edit-master-vehicle-rates/edi
 import { AmenitiesSpecialComponent } from './amenities-special/amenities-special.component';
 import { AmenitiesInteriorComponent } from './amenities-interior/amenities-interior.component';
 import { MasterVehicleFareComponent } from './master-vehicle-fare/master-vehicle-fare.component';
-import { BookingDetailsComponent } from './booking-details/booking-details.component';
 import { NewBookingComponent } from './new-booking/new-booking.component';
+import { FinalizeBookingComponent } from './finalize-booking/finalize-booking.component';
 
 
 const routes: Routes = [
@@ -203,9 +203,9 @@ const routes: Routes = [
 		component: CreateNewBooking2Component
 	},
 	{
-		path: 'booking-preview',
+		path: 'finalize-booking',
 		canActivate: [SubAdminGuard],
-		component: BookingDetailsComponent
+		component: FinalizeBookingComponent
 	},
 	{
 		path: 'quote-admin',

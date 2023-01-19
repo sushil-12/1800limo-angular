@@ -294,18 +294,53 @@
 				</div>
 
 				<!-- Chosen User Information -->
-				<div id="info-container" class="w-100 my-3" *ngIf="chosen_user">
-					<div id="info-display-box" class="row w-75 mx-auto" style="gap: 10px">
-						<div id="info" class="flex flex-wrap col-md-6"
-							*ngFor="let item of ['name', 'mobile', 'email', 'country', 'zip', 'address']">
-							<p class="w-25 p-0 m-0">
-								{{ item | titlecase }}:
-							</p>
-							<p class="w-50 font-weight-bolder p-0 m-0">
-								{{ chosen_user[item] | titlecase }}
-							</p>
+				<div id="user-info" *ngIf="chosen_user">
+					<div id="info-container" class="mx-auto">
+						<div id="info-display-box"
+							class="d-flex flex-wrap justify-content-center justify-content-md-start"
+							style="gap: 15px; padding: 0 15px;">
+							<div id="info" class="info mx-2"
+								*ngFor="let item of ['name', 'mobile', 'email', 'country', 'zip', 'address']">
+								<label class="text-lg m-0 mx-2">
+									{{ item | titlecase }}:
+								</label>
+								<label class="text-lg m-0 font-weight-bolder">
+									{{ chosen_user[item] | titlecase }}
+								</label>
+							</div>
 						</div>
 					</div>
+					<style>
+						#info-container {
+							width: 100%;
+						}
+
+						#info-container .info {
+							width: 100%;
+						}
+
+						@media only screen and (min-width: 767px) {
+							#info-container {
+								width: 75%;
+							}
+
+							#info-container .info {
+								width: 43%;
+							}
+						}
+
+						@media only screen and (min-width: 1200px) {
+							#info-container {
+								width: 85%;
+							}
+						}
+
+						@media only screen and (min-width: 1500px) {
+							#info-container .info {
+								width: 35%;
+							}
+						}
+					</style>
 				</div>
 			</ng-template>
 
@@ -568,7 +603,7 @@
 					</div>
 
 					<!-- Year -->
-					<div id="year" class="col-md-4 col-xl-3 my-2">
+					<div id="year" class="col-md-3  my-2">
 						<mat-form-field appearance="outline">
 							<mat-label>
 								Year
@@ -589,7 +624,7 @@
 					</div>
 
 					<!-- Color -->
-					<div id="color" class="col-md-4 col-xl-3 my-2">
+					<div id="color" class="col-md-3 my-2">
 						<mat-form-field appearance="outline">
 							<mat-label>
 								Color
@@ -955,7 +990,8 @@
 							Number of Vehicles
 						</mat-label>
 						<input type="text" matInput placholder="Number of Vehicles" [value]="1"
-							formControlName="number_of_vehicles" (focus)="$event.target.select()" />
+							(focus)="$event.target.select()"
+							(change)="SetFormValue('number_of_vehicles', $event.target.value)" />
 					</mat-form-field>
 				</div>
 
@@ -1019,11 +1055,11 @@
 							<mat-label>
 								Airport
 							</mat-label>
-							<input type="text" matInput placeholder="Search For Airport"
+							<input type="search" matInput placeholder="Search For Airport"
 								(focus)="$event.target.select()" aria-label="Airport"
 								[matAutocomplete]="onwy_airport"
 								(keyup)="searchValue('airportsData', $event.target.value, 'name')"
-								[value]="fillValue(BigData?.airportsData, 'pickup_airport', 'name')" />
+								[value]="fillValue(BigData?.airportsData, 'pickup_airport', 'code + name + country', ', ')" />
 							<mat-autocomplete #onwy_airport="matAutocomplete">
 								<mat-option *ngFor="let option of BigData?.airportsData"
 									(click)="SetFormValue('pickup_airport', option.id)">
@@ -1042,7 +1078,7 @@
 							</mat-label>
 							<input type="text" matInput placeholder="Search For Airport"
 								aria-label="Airport"
-								[value]="fillValue(BigData?.airlinesData, 'pickup_airline', 'name')"
+								[value]="fillValue(BigData?.airlinesData, 'pickup_airline', 'code + name + country', ', ')"
 								(keyup)="searchValue('airlinesData', $event.target.value, 'name')"
 								(focus)="$event.target.select()" [matAutocomplete]="onwy_airline">
 							<mat-autocomplete #onwy_airline="matAutocomplete">
@@ -1155,14 +1191,15 @@
 							</mat-label>
 							<input type="text" matInput placeholder="Search For Airport"
 								aria-label="Airport"
-								[value]="fillValue(BigData?.airportsData, 'dropoff_airport', 'name')"
+								[value]="fillValue(BigData?.airportsData, 'dropoff_airport', 'code + name + country', ', ')"
 								(keyup)="searchValue('airportsData', $event.target.value, 'name')"
 								[matAutocomplete]="onwy_drop_airport"
 								(focus)="$event.target.select()" />
 							<mat-autocomplete #onwy_drop_airport="matAutocomplete">
 								<mat-option *ngFor="let option of BigData?.airportsData"
 									(click)="SetFormValue('dropoff_airport', option.id)">
-									{{ option.name }}
+									{{ option.code }} - {{ option.name }}, {{option.city }}, {{
+									option.country }}
 								</mat-option>
 							</mat-autocomplete>
 						</mat-form-field>
@@ -1176,14 +1213,14 @@
 							</mat-label>
 							<input type="text" matInput placeholder="Search For Airline"
 								aria-label="Airport"
-								[value]="fillValue(BigData?.airlinesData, 'dropoff_airline', 'name')"
+								[value]="fillValue(BigData?.airlinesData, 'dropoff_airline', 'code + name + country', ', ')"
 								(keyup)="searchValue('airlinesData', $event.target.value, 'name')"
 								[matAutocomplete]="onwy_drop_airline"
 								(focus)="$event.target.select()" />
 							<mat-autocomplete #onwy_drop_airline="matAutocomplete">
 								<mat-option *ngFor="let option of BigData?.airlinesData"
 									(click)="SetFormValue('dropoff_airline', option.id)">
-									{{ option.name }}
+									{{ option.code }} - {{ option.name }}, {{ option.country }}
 								</mat-option>
 							</mat-autocomplete>
 						</mat-form-field>
@@ -1390,13 +1427,14 @@
 							</mat-label>
 							<input type="text" matInput placeholder="Search For Airport"
 								aria-label="Airport"
-								[value]="fillValue(BigData?.airportsData, 'return_pickup_airport', 'name')"
+								[value]="fillValue(BigData?.airportsData, 'return_pickup_airport', 'code + name + country', ', ')"
 								(keyup)="searchValue('airportsData', $event.target.value, 'name')"
 								[matAutocomplete]="onwy_airport" (focus)="$event.target.select()" />
 							<mat-autocomplete #onwy_airport="matAutocomplete">
 								<mat-option *ngFor="let option of BigData?.airportsData"
 									(click)="SetFormValue('return_pickup_airport', option.id)">
-									{{ option.name }}
+									{{ option.code }} - {{ option.name }}, {{option.city }}, {{
+									option.country }}
 								</mat-option>
 							</mat-autocomplete>
 						</mat-form-field>
@@ -1410,13 +1448,13 @@
 							</mat-label>
 							<input type="text" matInput placeholder="Search For Airport"
 								aria-label="Airport"
-								[value]="fillValue(BigData?.airlinesData, 'return_pickup_airline', 'name')"
+								[value]="fillValue(BigData?.airlinesData, 'return_pickup_airline', 'code + name + country', ', ')"
 								(keyup)="searchValue('airlinesData', $event.target.value, 'name')"
 								[matAutocomplete]="onwy_airline" (focus)="$event.target.select()" />
 							<mat-autocomplete #onwy_airline="matAutocomplete">
 								<mat-option *ngFor="let option of BigData?.airlinesData"
 									(click)="SetFormValue('return_pickup_airline', option.id)">
-									{{ option.name }}
+									{{ option.code }} - {{ option.name }}, {{ option.country }}
 								</mat-option>
 							</mat-autocomplete>
 						</mat-form-field>
@@ -1513,14 +1551,15 @@
 							</mat-label>
 							<input type="text" matInput placeholder="Search For Airport"
 								aria-label="Airport"
-								[value]="fillValue(BigData?.airportsData, 'return_dropoff_airport', 'name')"
+								[value]="fillValue(BigData?.airportsData, 'return_dropoff_airport', 'code + name + country', ', ')"
 								(keyup)="searchValue('airportsData', $event.target.value, 'name')"
 								[matAutocomplete]="onwy_drop_airport"
 								(focus)="$event.target.select()" />
 							<mat-autocomplete #onwy_drop_airport="matAutocomplete">
 								<mat-option *ngFor="let option of BigData?.airportsData"
 									(click)="SetFormValue('return_dropoff_airport', option.id)">
-									{{ option.name }}
+									{{ option.code }} - {{ option.name }}, {{option.city }}, {{
+									option.country }}
 								</mat-option>
 							</mat-autocomplete>
 						</mat-form-field>
@@ -1541,7 +1580,7 @@
 							<mat-autocomplete #onwy_drop_airline="matAutocomplete">
 								<mat-option *ngFor="let option of BigData?.airlinesData"
 									(click)="SetFormValue('return_dropoff_airline', option.id)">
-									{{ option.name }}
+									{{ option.code }} - {{ option.name }}, {{ option.country }}
 								</mat-option>
 							</mat-autocomplete>
 						</mat-form-field>
@@ -1664,8 +1703,9 @@
 		<!-- Section - Return Journey Details Ends -->
 
 
-		<app-rates-form [initRates]="init_rates" [affiliate_type]="Form.affiliate_type.value"
-			[distance]="distance_for_rates" [amenities]="amenities" [reservation_id]="booking_id"
+		<app-rates-form class="d-flex flex-wrap" [initRates]="init_rates"
+			[affiliate_type]="Form.affiliate_type.value" [distance]="distance_for_rates"
+			[amenities]="amenities" [reservation_id]="booking_id"
 			[initReturnRates]="init_return_rates" (formvalue)="RateFormValue($event)"
 			[hours]="Form.number_of_hours?.value" [vehicles]="Form.number_of_vehicles?.value"
 			(returnformvalue)="ReturnRateFormValue($event)"></app-rates-form>

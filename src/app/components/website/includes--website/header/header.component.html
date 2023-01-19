@@ -68,7 +68,7 @@
 						<a class="user-profile btn btn-icon btn-transparent-dark dropdown-toggle"
 							id="navbarDropdownUserImage" href="javascript:void(0);" role="button"
 							data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							{{currentUser?.affiliateCompanyName ? currentUser?.affiliateCompanyName
+							{{ currentUser?.affiliate_company ? currentUser?.affiliate_company
 							: currentUser?.name
 							?
 							currentUser?.name : currentUser?.FirstName +
@@ -85,8 +85,8 @@
 								</svg>
 								<div class="dropdown-user-details">
 									<div class="dropdown-user-details-name">
-										{{currentUser?.affiliateCompanyName ?
-										currentUser?.affiliateCompanyName :
+										{{currentUser?.affiliate_company ?
+										currentUser?.affiliate_company :
 										currentUser?.name ?
 										currentUser?.name : currentUser?.FirstName +
 										currentUser?.LastName.charAt(0)}}

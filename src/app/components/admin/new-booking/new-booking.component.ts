@@ -97,39 +97,41 @@ export class NewBookingComponent implements OnInit
 	{
 		// build the form first 
 		this.buildBookingForm()
-
-		this.$routeurl.queryParams.subscribe((params: any) =>
+		setTimeout(() =>
 		{
-			if (params && params.bookingId)
+			this.$routeurl.queryParams.subscribe((params: any) =>
 			{
-				this.is_booking_edit_case = true
-				this.SetFormValue('reservation_id', params.bookingId)
-				params.updateType ? this.SetFormValue('updateType', params.updateType) : this.SetFormValue('updateType', 'edit')
-				if (this.BigData)
+				if (params && params.bookingId)
 				{
-					this.prefillViaBookingID(params.bookingId)
+					this.is_booking_edit_case = true
+					this.SetFormValue('reservation_id', params.bookingId)
+					params.updateType ? this.SetFormValue('updateType', params.updateType) : this.SetFormValue('updateType', 'edit')
+					if (this.BigData)
+					{
+						this.prefillViaBookingID(params.bookingId)
+					}
 				}
-			}
-			else
+				else
+				{
+					this.buildBookingForm()
+				}
+			})
+
+			// fetch the big data
+			this.fetchAirportsAndBigData().then((data: any) =>
 			{
-				this.buildBookingForm()
-			}
-		})
+				this.BigData = data
+				this.BigData_COPY = JSON.parse(JSON.stringify(data))
+				this.MapController()
+				this.Form.reservation_id.value ? this.prefillViaBookingID(this.Form.reservation_id.value) : ''
+			})
 
-		// fetch the big data
-		this.fetchAirportsAndBigData().then((data: any) =>
-		{
-			this.BigData = data
-			this.BigData_COPY = JSON.parse(JSON.stringify(data))
-			this.MapController()
-			this.Form.reservation_id.value ? this.prefillViaBookingID(this.Form.reservation_id.value) : ''
-		})
-
-		// Subscriptions
-		this.Subscriptions()
-		this.fetchClientAccounts('individual')
-		this.fetchAffiliates('affiliate')
-		this.select(true, 'driver_languages', 1)
+			// Subscriptions
+			this.Subscriptions()
+			this.fetchClientAccounts('individual')
+			this.fetchAffiliates('affiliate')
+			this.select(true, 'driver_languages', 1)
+		}, 2000)
 	}
 
 	dateFormat(value: any)
@@ -295,16 +297,17 @@ export class NewBookingComponent implements OnInit
 			updateType: [''],
 		})
 
-		let month = new Date().getMonth() + 1
+		let month = new Date().getMonth()
 		let date: string | number = new Date().getDate() + 1
 		let year = new Date().getFullYear()
 
-		let full_date = new Date(`${year}-${month}-${date}`).toISOString()
+		let full_date = new Date(year, month, date).toISOString()
 		// 10 days later
-		let future_full_date = new Date(`${year}-${month}-${date + 10}`).toISOString()
+		let future_full_date = new Date(year, month, date + 10).toISOString()
 		this.SetFormValue('pickup_date', full_date.slice(0, full_date.indexOf('T')))
 		this.SetFormValue('return_pickup_date', future_full_date.slice(0, future_full_date.indexOf('T')))
 		this.SetFormValue('number_of_vehicles', 1)
+		this.SetFormValue('booking_instructions', 'Text client day before each booking to confirm driver name and cell #');
 	}
 
 	prefillViaBookingID(booking_id: number)
@@ -774,7 +777,7 @@ export class NewBookingComponent implements OnInit
 	}
 
 
-	fillValue(list: Array<Record<string, any> | string> | null = null, form_control: string, return_key: string = null): string | number
+	fillValue(list: Array<Record<string, any> | string> | null = null, form_control: string, return_key: string = null, sep?: string): string | number
 	{
 		// fail-safe
 		if (!this.BigData)
@@ -805,6 +808,16 @@ export class NewBookingComponent implements OnInit
 		}
 
 		let temp = list.find(item => item['id'] == this.BookingForm.get(form_control).value)
+		if (return_key.includes('+') && temp)
+		{
+			let keys = return_key.split('+')
+			let ret_str = ""
+			for (let i = 0; i < keys.length; i++)
+			{
+				ret_str = ret_str + temp[keys[i].trim()] + sep
+			}
+			return ret_str.replace(/(\,)$/g, '').trim()
+		}
 		return temp ? temp[return_key] : ''
 
 	}
@@ -1230,6 +1243,7 @@ export class NewBookingComponent implements OnInit
 		this.BookingForm.get('service_type').valueChanges.subscribe((value: string) =>
 		{
 			this.init_return_rates = false;
+			this.SetFormValue('number_of_hours', 0)
 			if (value == 'round_trip')
 			{
 				this.init_return_rates = true;
