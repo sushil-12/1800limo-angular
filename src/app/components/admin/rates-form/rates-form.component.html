@@ -6,7 +6,7 @@
 	<div class="row cursor-pointer" (click)="toggleDropdown('section')">
 		<div class="col-9 col-md-10">
 			<h4 class="section-dropdown-header m-0">
-				Taxes/Rates
+				Rates/Taxes
 			</h4>
 		</div>
 		<div class="col-3 col-md-2 text-right">
@@ -115,13 +115,43 @@
 
 	<div class="row px-5 justify-content-between align-items-center">
 		<div class="col-9">
-			<p class="font-weight-bolder text-uppercase m-0" style="font-size: 2rem;">
+			<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.7rem;">
 				Total
 			</p>
 		</div>
-		<div class="col-3 text-3xl">
+		<div class="col-3 text-3xl text-right">
 			<i class="bi bi-currency-dollar text-danger"></i>
 			{{ subtotal }}
+		</div>
+	</div>
+
+	<hr />
+
+	<!-- Number of Vehicles/Hours -->
+	<div class="row px-5 justify-content-between align-items-center" *ngIf="vehicles !== 0">
+		<div class="col-9">
+			<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.7rem;">
+				Number of Vehicles
+			</p>
+		</div>
+		<div class="col-3 text-3xl text-right">
+			<i class="bi bi-x text-dark font-weight-bolder"></i>
+			{{ vehicles }}
+		</div>
+	</div>
+
+	<hr />
+
+	<!-- Grand Total -->
+	<div class="row px-5 justify-content-between align-items-center">
+		<div class="col-9">
+			<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.7rem;">
+				Grand Total
+			</p>
+		</div>
+		<div class="col-3 text-3xl text-right">
+			<i class="bi bi-currency-dollar text-danger"></i>
+			{{ grandtotal }}
 		</div>
 	</div>
 </div>
@@ -238,10 +268,6 @@
 			{{ r_subtotal }}
 		</div>
 	</div>
-</div>
-
-
-<div class="container-fluid section-container" *ngIf="ratesform">
 	<!-- Number of Vehicles/Hours -->
 	<div class="row px-2 justify-content-between align-items-center" *ngIf="vehicles !== 0">
 		<div class="col-9 col-xl-7">

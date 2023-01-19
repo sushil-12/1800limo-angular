@@ -22,25 +22,25 @@ export class BookingDetailsComponent implements OnInit
 
 	ngOnInit(): void
 	{
-		// this.$route.queryParams.subscribe((params: any) =>
-		// {
-		// 	if (params.bookingId)
-		// 	{
-		// 		this.getReservationDetails(params.bookingId)
-		// 	} else
-		// 	{
-		// 		this.$router.navigate(['/admin/daily-bookings-admin'])
-		// 	}
-		// })
+		this.$route.queryParams.subscribe((params: any) =>
+		{
+			if (params.bookingId)
+			{
+				this.getReservationDetails(params.bookingId)
+			} else
+			{
+				this.$router.navigate(['/admin/daily-bookings-admin'])
+			}
+		})
 	}
 
 
 	getReservationDetails(booking_id: number)
 	{
-		// this.$api.getReservationDetails(booking_id).subscribe((response: any) =>
-		// {
-
-		// })
+		this.$api.getReservationDetails(booking_id).subscribe((response: any) =>
+		{
+			console.log(response)
+		})
 	}
 
 }

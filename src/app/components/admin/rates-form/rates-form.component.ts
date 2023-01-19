@@ -168,7 +168,8 @@ export class RatesFormComponent implements OnInit, OnChanges
 			others: this.$form.group({}),
 			direct_taxes: this.$form.group({}),
 			taxes: this.$form.group({}),
-			amenities: this.$form.group({})
+			amenities: this.$form.group({}),
+			misc: this.$form.group({})
 		})
 
 
@@ -198,7 +199,8 @@ export class RatesFormComponent implements OnInit, OnChanges
 			others: this.$form.group({}),
 			direct_taxes: this.$form.group({}),
 			taxes: this.$form.group({}),
-			amenities: this.$form.group({})
+			amenities: this.$form.group({}),
+			misc: this.$form.group({})
 		});
 
 		if (this.ratesdata)
@@ -321,7 +323,7 @@ export class RatesFormComponent implements OnInit, OnChanges
 		{
 			let baserate = (<FormGroup>(<FormGroup>this.RatesForm.get(formgroup)).get(subform)).get('baserate').value;
 
-			if (['direct_taxes', 'amenities', 'taxes'].includes(formgroup))
+			if (['direct_taxes', 'amenities', 'taxes', 'misc'].includes(formgroup))
 			{
 				// Flat Values
 				this.RateForm[formgroup].controls[subform].controls.amount.setValue(baserate);
@@ -344,15 +346,14 @@ export class RatesFormComponent implements OnInit, OnChanges
 
 			if (formgroup == 'others')
 			{
-				// Gratuity
 				let kmrate = (<FormGroup>(<FormGroup>this.RatesForm.get('all_inclusive_rates')).get('Base_Rate')).get('amount').value;
-				let gratuity = (<FormGroup>(<FormGroup>this.RatesForm.get(formgroup)).get(subform)).get('baserate').value;
+				let basevalue = (<FormGroup>(<FormGroup>this.RatesForm.get(formgroup)).get(subform)).get('baserate').value;
 
-				let amount = Number(Number((gratuity / 100) * kmrate).toFixed(2));
+				let amount = Number(Number((basevalue / 100) * kmrate).toFixed(2));
 
 				(<FormGroup>(<FormGroup>this.RatesForm.get(formgroup)).get(subform)).get('amount').setValue(amount);
 				// set value of percentage same as gratuity
-				(<FormGroup>(<FormGroup>this.RatesForm.get(formgroup)).get(subform)).get('percentage').setValue(gratuity);
+				(<FormGroup>(<FormGroup>this.RatesForm.get(formgroup)).get(subform)).get('percentage').setValue(basevalue);
 			}
 
 			if (formgroup == 'taxes')
@@ -378,6 +379,7 @@ export class RatesFormComponent implements OnInit, OnChanges
 					this.calculateAmount('RatesForm', formgroup, subform);
 				})
 			}
+
 			let amount = (<FormGroup>(<FormGroup>this.RatesForm.get(formgroup)).get(subform)).get('amount').value
 			this.total[subform] = Number(Number(amount).toFixed(2))
 			this.RatesForm.updateValueAndValidity()
@@ -388,7 +390,7 @@ export class RatesFormComponent implements OnInit, OnChanges
 		{
 			let baserate = (<FormGroup>(<FormGroup>this.ReturnRatesForm.get(formgroup)).get(subform)).get('baserate').value;
 
-			if (['direct_taxes', 'amenities', 'taxes'].includes(formgroup))
+			if (['direct_taxes', 'amenities', 'taxes', 'misc'].includes(formgroup))
 			{
 				// Flat Values
 				this.ReturnRateForm[formgroup].controls[subform].controls.amount.setValue(baserate);
@@ -406,13 +408,13 @@ export class RatesFormComponent implements OnInit, OnChanges
 			{
 				// Gratuity
 				let kmrate = (<FormGroup>(<FormGroup>this.ReturnRatesForm.get('all_inclusive_rates')).get('Base_Rate')).get('amount').value;
-				let gratuity = (<FormGroup>(<FormGroup>this.ReturnRatesForm.get(formgroup)).get(subform)).get('baserate').value;
+				let basevalue = (<FormGroup>(<FormGroup>this.ReturnRatesForm.get(formgroup)).get(subform)).get('baserate').value;
 
-				let amount = Number(Number((gratuity / 100) * kmrate).toFixed(2));
+				let amount = Number(Number((basevalue / 100) * kmrate).toFixed(2));
 
 				(<FormGroup>(<FormGroup>this.ReturnRatesForm.get(formgroup)).get(subform)).get('amount').setValue(amount);
 				// set value of percentage same as gratuity
-				(<FormGroup>(<FormGroup>this.ReturnRatesForm.get(formgroup)).get(subform)).get('percentage').setValue(gratuity);
+				(<FormGroup>(<FormGroup>this.ReturnRatesForm.get(formgroup)).get(subform)).get('percentage').setValue(basevalue);
 			}
 
 			if (formgroup == 'taxes')
@@ -439,6 +441,7 @@ export class RatesFormComponent implements OnInit, OnChanges
 					this.calculateAmount('ReturnRatesForm', formgroup, subform);
 				})
 			}
+
 			let amount = (<FormGroup>(<FormGroup>this.ReturnRatesForm.get(formgroup)).get(subform)).get('amount').value
 			this.r_total[subform] = Number(Number(amount).toFixed(2))
 			this.ReturnRatesForm.updateValueAndValidity()

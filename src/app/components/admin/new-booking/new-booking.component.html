@@ -294,18 +294,53 @@
 				</div>
 
 				<!-- Chosen User Information -->
-				<div id="info-container" class="w-100 my-3" *ngIf="chosen_user">
-					<div id="info-display-box" class="row w-75 mx-auto" style="gap: 10px">
-						<div id="info" class="flex flex-wrap col-md-6"
-							*ngFor="let item of ['name', 'mobile', 'email', 'country', 'zip', 'address']">
-							<p class="w-25 p-0 m-0">
-								{{ item | titlecase }}:
-							</p>
-							<p class="w-50 font-weight-bolder p-0 m-0">
-								{{ chosen_user[item] | titlecase }}
-							</p>
+				<div id="user-info" *ngIf="chosen_user">
+					<div id="info-container" class="mx-auto">
+						<div id="info-display-box"
+							class="d-flex flex-wrap justify-content-center justify-content-md-start"
+							style="gap: 15px; padding: 0 15px;">
+							<div id="info" class="info mx-2"
+								*ngFor="let item of ['name', 'mobile', 'email', 'country', 'zip', 'address']">
+								<label class="text-lg m-0 mx-2">
+									{{ item | titlecase }}:
+								</label>
+								<label class="text-lg m-0 font-weight-bolder">
+									{{ chosen_user[item] | titlecase }}
+								</label>
+							</div>
 						</div>
 					</div>
+					<style>
+						#info-container {
+							width: 100%;
+						}
+
+						#info-container .info {
+							width: 100%;
+						}
+
+						@media only screen and (min-width: 767px) {
+							#info-container {
+								width: 75%;
+							}
+
+							#info-container .info {
+								width: 43%;
+							}
+						}
+
+						@media only screen and (min-width: 1200px) {
+							#info-container {
+								width: 85%;
+							}
+						}
+
+						@media only screen and (min-width: 1500px) {
+							#info-container .info {
+								width: 35%;
+							}
+						}
+					</style>
 				</div>
 			</ng-template>
 
