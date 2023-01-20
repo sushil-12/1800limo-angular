@@ -4,11 +4,10 @@
 	"scripts": {
 		"ng": "ng",
 		"start": "ng serve",
-		"build": "ng build",
 		"test": "ng test",
 		"lint": "ng lint",
 		"e2e": "ng e2e",
-		"buildserver": "rm -r dist && ng build --prod && cp ./.htaccess -d dist/limo1800/."
+		"build": "ng build --configuration=staging"
 	},
 	"private": true,
 	"dependencies": {

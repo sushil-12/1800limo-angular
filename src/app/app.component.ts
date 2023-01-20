@@ -1,5 +1,6 @@
 import { Component, AfterViewChecked, OnInit } from '@angular/core';
 import { StateManagementService } from './services/statemanagement.service';
+import { environment } from 'src/environments/environment';
 @Component({
 	selector: 'app-root',
 	templateUrl: './app.component.html',
@@ -15,6 +16,15 @@ export class AppComponent implements OnInit
 
 	ngOnInit(): void
 	{
+		try
+		{
+			console.info("Environment: ", environment['environmentName']);
+			console.info('ServerURL: ', environment['serverUrl']);
+		} catch
+		{
+			console.error('Error while parsing Environments file. Current Env file is ...');
+			console.error(environment);
+		}
 		this.stateManagementService.getError().subscribe(data =>
 		{
 			this.errors = data;
