@@ -12,8 +12,7 @@ import { throwError } from 'rxjs';
 	templateUrl: './create-new-booking2.component.html',
 	styleUrls: ['./create-new-booking2.component.scss']
 })
-export class CreateNewBooking2Component implements OnInit
-{
+export class CreateNewBooking2Component implements OnInit {
 
 	public response: any;
 	public bookingDetail: any;
@@ -34,23 +33,18 @@ export class CreateNewBooking2Component implements OnInit
 		private router: Router,
 		private spinner: NgxSpinnerService,
 		private fb: FormBuilder,
-		private activatedroute: ActivatedRoute)
-	{ }
+		private activatedroute: ActivatedRoute) { }
 
-	ngOnInit(): void
-	{
+	ngOnInit(): void {
 		this.activatedroute.queryParams
-			.subscribe((params) =>
-			{
+			.subscribe((params) => {
 				this.bookingId = params.bookingId
 				console.log(this.bookingId, "booking id")
 
-				if (!this.bookingId)
-				{
+				if (!this.bookingId) {
 					this.router.navigate(['/admin/daily-bookings-admin']);
 				}
-				else
-				{
+				else {
 					this.buildChargesFormGroup()
 					this.chargesForm.get('reservation_id').setValue(this.bookingId)
 					this.getBookingData()
@@ -58,8 +52,7 @@ export class CreateNewBooking2Component implements OnInit
 			});
 	}
 
-	buildChargesFormGroup()
-	{
+	buildChargesFormGroup() {
 		this.chargesForm = this.fb.group({
 			reservation_id: ['', Validators.required],
 			sub_total: ['', Validators.required],
@@ -80,24 +73,20 @@ export class CreateNewBooking2Component implements OnInit
 	}
 
 
-	SetFormValue(form_control: string, value: any)
-	{
+	SetFormValue(form_control: string, value: any) {
 		this.chargesForm.get(form_control).setValue(value)
 		this.chargesForm.updateValueAndValidity()
 	}
 
 
-	getBookingData()
-	{
+	getBookingData() {
 		this.adminService.getReservationDetails(this.bookingId)
 			.pipe(
-				catchError(err =>
-				{
+				catchError(err => {
 					this.spinner.hide();//hide spinner
 					return throwError(err);
 				})
-			).subscribe(({ data }: any) =>
-			{
+			).subscribe(({ data }: any) => {
 				console.log("array response", data)
 				this.bookingDetail = data.booking_detail;
 				this.CreditCardsDetail = data.CreditCardsDetail;
@@ -110,32 +99,26 @@ export class CreateNewBooking2Component implements OnInit
 				});
 
 				//set base rate based on hourly/milage rate
-				if (data.priceDetail.all_inclusive_rates.Milage_Rate)
-				{
-					if (data.priceDetail.all_inclusive_rates.Milage_Rate.amount >= data.priceDetail.all_inclusive_rates.Minimum_Rate.amount)
-					{
+				if (data.priceDetail.all_inclusive_rates.Milage_Rate) {
+					if (data.priceDetail.all_inclusive_rates.Milage_Rate.amount >= data.priceDetail.all_inclusive_rates.Minimum_Rate.amount) {
 						// console.log('Milage_Rate')
 						this.baseRate = data.priceDetail.all_inclusive_rates.Milage_Rate.amount;
 						this.showMinimumRate = false;
 					}
-					else
-					{
+					else {
 						// console.log('milage minimum rate')
 						this.baseRate = data.priceDetail.all_inclusive_rates.Minimum_Rate.amount;
 						this.showMinimumRate = true;
 					}
 				}
-				else
-				{
+				else {
 					//set base rate based on minimum rate
-					if (data.priceDetail.all_inclusive_rates.Hourly_Rate && data.priceDetail.all_inclusive_rates.Hourly_Rate.amount >= data.priceDetail.all_inclusive_rates.Minimum_Rate.amount)
-					{
+					if (data.priceDetail.all_inclusive_rates.Hourly_Rate && data.priceDetail.all_inclusive_rates.Hourly_Rate.amount >= data.priceDetail.all_inclusive_rates.Minimum_Rate.amount) {
 						// console.log('Hourly_Rate')
 						this.baseRate = data.priceDetail.all_inclusive_rates.Hourly_Rate.amount;
 						this.showMinimumRate = false;
 					}
-					else
-					{
+					else {
 						// console.log('hourly minimum rate')
 						this.baseRate = data.priceDetail.all_inclusive_rates.Minimum_Rate.amount;
 						this.showMinimumRate = true;
@@ -144,19 +127,16 @@ export class CreateNewBooking2Component implements OnInit
 
 
 				Object.entries(data.priceDetail.all_inclusive_rates).forEach(
-					([key, value]) =>
-					{
+					([key, value]) => {
 						// console.log(value)
 						this.all_inclusive_rates.addControl(key, this.createItem(value))
 					}
 				);
 				// console.log(this.all_inclusive_rates.controls)
 
-				if (data.priceDetail.amenities)
-				{
+				if (data.priceDetail.amenities) {
 					Object.entries(data.priceDetail.amenities).forEach(
-						([key, value]) =>
-						{
+						([key, value]) => {
 							this.amenities.addControl(key, this.createItem(value))
 						}
 					);
@@ -164,24 +144,21 @@ export class CreateNewBooking2Component implements OnInit
 				// console.log(this.amenities.controls)
 
 				Object.entries(data.priceDetail.others).forEach(
-					([key, value]) =>
-					{
+					([key, value]) => {
 						this.others.addControl(key, this.createItem(value))
 					}
 				);
 				// console.log(this.others.controls)
 
 				Object.entries(data.priceDetail.direct_taxes).forEach(
-					([key, value]) =>
-					{
+					([key, value]) => {
 						this.direct_taxes.addControl(key, this.createItem(value))
 					}
 				);
 				// console.log(this.direct_taxes.controls)
 
 				Object.entries(data.priceDetail.taxes).forEach(
-					([key, value]) =>
-					{
+					([key, value]) => {
 
 						this.taxes.addControl(key, this.createItem(value))
 					}
@@ -193,53 +170,43 @@ export class CreateNewBooking2Component implements OnInit
 			});
 	}
 
-	get all_inclusive_rates(): FormGroup
-	{
+	get all_inclusive_rates(): FormGroup {
 		return this.chargesForm.get("priceDetail").get("all_inclusive_rates") as FormGroup;
 	}
 
-	get amenities(): FormGroup
-	{
+	get amenities(): FormGroup {
 		return this.chargesForm.get("priceDetail").get("amenities") as FormGroup;
 	}
 
-	get others(): FormGroup
-	{
+	get others(): FormGroup {
 		return this.chargesForm.get("priceDetail").get("others") as FormGroup;
 	}
 
-	get direct_taxes(): FormGroup
-	{
+	get direct_taxes(): FormGroup {
 		return this.chargesForm.get("priceDetail").get("direct_taxes") as FormGroup;
 	}
 
-	get taxes(): FormGroup
-	{
+	get taxes(): FormGroup {
 		return this.chargesForm.get("priceDetail").get("taxes") as FormGroup;
 	}
 
-	editBooking()
-	{
-		this.router.navigate(['/admin/create-new-booking'], {
+	editBooking() {
+		this.router.navigate(['/admin/new-booking'], {
 			queryParams: {
 				bookingId: this.bookingId
 			}
 		});
 	}
 
-	createItem(e): FormGroup
-	{
+	createItem(e): FormGroup {
 		return this.fb.group({ ...e });
 	}
 
-	clickRates(value)
-	{
+	clickRates(value) {
 		this.recentlyStoredValue = Number(value);
 	}
-	calculateRates(calculationType, key = null, obj = null)
-	{
-		switch (calculationType)
-		{
+	calculateRates(calculationType, key = null, obj = null) {
+		switch (calculationType) {
 			case 'all_inclusive_rates':
 				{
 					var res = obj.baserate * obj.multiple;
@@ -249,14 +216,12 @@ export class CreateNewBooking2Component implements OnInit
 					// console.log(this.all_inclusive_rates.value.Minimum_Rate.amount);
 
 					//set base rate based on minimum rate
-					if (res >= this.all_inclusive_rates.value.Minimum_Rate.amount)
-					{
+					if (res >= this.all_inclusive_rates.value.Minimum_Rate.amount) {
 						// console.log('Milage_Rate')
 						this.baseRate = res;
 						this.showMinimumRate = false;
 					}
-					else
-					{
+					else {
 						// console.log('milage minimum rate')
 						this.baseRate = this.all_inclusive_rates.value.Minimum_Rate.amount;
 						this.showMinimumRate = true;
@@ -267,8 +232,7 @@ export class CreateNewBooking2Component implements OnInit
 				}
 			case 'Gratuity':
 				{
-					if (obj.percentage > 20)
-					{
+					if (obj.percentage > 20) {
 						alert("Gratuity Percentage can't be more than 20");
 						this.others.setControl(key, this.fb.group({ ...obj, percentage: this.recentlyStoredValue || 0 }));
 						return false;
@@ -282,14 +246,12 @@ export class CreateNewBooking2Component implements OnInit
 			case 'taxes':
 				{
 					console.log(calculationType, key, obj);
-					if (obj.type == 'percent')
-					{
+					if (obj.type == 'percent') {
 						var res = (this.baseRate * obj.percentage) / 100;
 						res = Math.round(res * 100) / 100;// round of to 2 digits
 						this.taxes.setControl(key, this.fb.group({ ...obj, percentage: obj.percentage || 0, amount: res || 0 }));
 					}
-					else if (obj.type == 'flat')
-					{
+					else if (obj.type == 'flat') {
 						this.taxes.setControl(key, this.fb.group({ ...obj, flat_baserate: obj.flat_baserate || 0, amount: obj.flat_baserate || 0 }));
 					}
 					this.calculate();
@@ -299,29 +261,24 @@ export class CreateNewBooking2Component implements OnInit
 				{
 					// console.log(this.taxes.value);
 					Object.entries(this.taxes.value).forEach(
-						([key, value]) =>
-						{
+						([key, value]) => {
 							// console.log(key,value);
 							var data: any = value;
-							if (data.type == 'percent')
-							{
+							if (data.type == 'percent') {
 								var res = (this.baseRate * data.percentage) / 100;
 								res = Math.round(res * 100) / 100;// round of to 2 digits
 								this.taxes.setControl(key, this.fb.group({ ...data, percentage: data.percentage || 0, amount: res || 0 }));
 							}
-							else if (data.type == 'flat')
-							{
+							else if (data.type == 'flat') {
 								this.taxes.setControl(key, this.fb.group({ ...data, flat_baserate: data.flat_baserate || 0, amount: data.flat_baserate || 0 }));
 							}
 						}
 					);
 					Object.entries(this.others.value).forEach(
-						([key, value]) =>
-						{
+						([key, value]) => {
 							// console.log(key,value);
 							var data: any = value;
-							if (data.percentage > 20)
-							{
+							if (data.percentage > 20) {
 								alert("Gratuity Percentage can't be more than 20");
 								this.others.setControl(key, this.fb.group({ ...data, percentage: this.recentlyStoredValue || 0 }));
 								return false;
@@ -337,31 +294,25 @@ export class CreateNewBooking2Component implements OnInit
 				}
 		}
 	}
-	calculate()
-	{
+	calculate() {
 		// console.log('calculate',this.chargesForm);return false;
 		this.sub_total = 0;
 
 		Object.entries(this.chargesForm.value.priceDetail.all_inclusive_rates).forEach(
-			([key, value]) =>
-			{
+			([key, value]) => {
 				var data: any = value;
 
 				//checking minimum rate case
-				if (key == 'Minimum_Rate')
-				{
+				if (key == 'Minimum_Rate') {
 					//add minimum rate in case of minimum rate is higher than milage/hourly rate
-					if (this.showMinimumRate)
-					{
+					if (this.showMinimumRate) {
 						// console.log('11')
 						this.sub_total += (+data.amount);
 					}
 				}
-				else
-				{
+				else {
 					//set base rate based on minimum rate
-					if (!this.showMinimumRate)
-					{
+					if (!this.showMinimumRate) {
 						// console.log('22')
 						this.sub_total += (+data.amount);
 					}
@@ -370,26 +321,22 @@ export class CreateNewBooking2Component implements OnInit
 			});
 
 		Object.entries(this.chargesForm.value.priceDetail.others).forEach(
-			([key, value]) =>
-			{
+			([key, value]) => {
 				var data: any = value;
 				this.sub_total += (+data.amount);
 			});
 		Object.entries(this.chargesForm.value.priceDetail.amenities).forEach(
-			([key, value]) =>
-			{
+			([key, value]) => {
 				var data: any = value;
 				this.sub_total += (+data.amount);
 			});
 		Object.entries(this.chargesForm.value.priceDetail.direct_taxes).forEach(
-			([key, value]) =>
-			{
+			([key, value]) => {
 				var data: any = value;
 				this.sub_total += (+data.amount);
 			});
 		Object.entries(this.chargesForm.value.priceDetail.taxes).forEach(
-			([key, value]) =>
-			{
+			([key, value]) => {
 				var data: any = value;
 				this.sub_total += (+data.amount);
 			});
@@ -406,31 +353,25 @@ export class CreateNewBooking2Component implements OnInit
 
 	}
 
-	ChangePaymentMethod(paymentMethod)
-	{
-		if (paymentMethod == 'credit_card')
-		{
+	ChangePaymentMethod(paymentMethod) {
+		if (paymentMethod == 'credit_card') {
 			this.showCards = true;
 		}
-		else
-		{
+		else {
 			this.showCards = false;
 		}
 	}
 
-	ChangeCard(selectedCardId)
-	{
+	ChangeCard(selectedCardId) {
 		console.log(selectedCardId, "LLLLLLLLLLLLLLLLLLLLLLLLLLLLL")
 		this.selectedCardId = selectedCardId;
 	}
 
-	submitForm()
-	{
+	submitForm() {
 		console.log(this.chargesForm);
 		// return false;
 		// stop here if form is invalid
-		if (this.chargesForm.invalid)
-		{
+		if (this.chargesForm.invalid) {
 			return;
 		}
 
@@ -439,14 +380,12 @@ export class CreateNewBooking2Component implements OnInit
 
 		this.adminService.paymentProcessing(this.chargesForm.value)
 			.pipe(
-				catchError(err =>
-				{
+				catchError(err => {
 					this.spinner.hide();//hide spinner
 					return throwError(err);
 				})
 			)
-			.subscribe(result =>
-			{
+			.subscribe(result => {
 				this.response = result;
 				this.spinner.hide();//hide spinner
 
