@@ -3,8 +3,9 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-    production: false,
-    serverUrl: "https://1800limoapi.infodevbox.com/api/"
+	production: false,
+	environmentName: 'Development',
+	serverUrl: "https://1800limoapi.infodevbox.com/api/"
 };
 
 /*
