@@ -1,26 +1,29 @@
-import { Component, OnInit } from '@angular/core';
-import { AdminService } from '../../../services/admin.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit } from "@angular/core";
+import { AdminService } from "../../../services/admin.service";
+import { ActivatedRoute, Router } from "@angular/router";
 import { NgxSpinnerService } from "ngx-spinner";
-import { catchError } from 'rxjs/operators';
-import { throwError } from 'rxjs';
-import { DateAdapter, MAT_DATE_LOCALE, ThemePalette } from '@angular/material/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
+import { catchError } from "rxjs/operators";
+import { throwError } from "rxjs";
+import
+	{
+		DateAdapter,
+		MAT_DATE_LOCALE,
+		ThemePalette,
+	} from "@angular/material/core";
+import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+import { HttpClient } from "@angular/common/http";
 declare var $: any;
-import * as moment from 'moment';
-
+import * as moment from "moment";
 
 @Component({
-	selector: 'app-daily-bookings',
-	templateUrl: './daily-bookings.component.html',
-	styleUrls: ['./daily-bookings.component.scss'],
+	selector: "app-daily-bookings",
+	templateUrl: "./daily-bookings.component.html",
+	styleUrls: ["./daily-bookings.component.scss"],
 })
 export class DailyBookingsComponent implements OnInit
 {
-
-	outputDateFormat = 'YYYY-MM-DD';
-	color: ThemePalette = 'primary';
+	outputDateFormat = "YYYY-MM-DD";
+	color: ThemePalette = "primary";
 	public firstPage: Number;
 	public lastPage: Number;
 	public totalPage: Number;
@@ -47,7 +50,7 @@ export class DailyBookingsComponent implements OnInit
 	// public isRepeat: boolean=false;
 	// public isRepeatRoundTrip: boolean=false;
 
-	passengerDetails: any
+	passengerDetails: any;
 	senderValue: string;
 	sendInformation: any;
 	reciptentName: any;
@@ -59,7 +62,8 @@ export class DailyBookingsComponent implements OnInit
 		private spinner: NgxSpinnerService,
 		private formBuilder: FormBuilder,
 		private activatedRoute: ActivatedRoute,
-		private http: HttpClient) { }
+		private http: HttpClient
+	) { }
 
 	ngOnInit(): void
 	{
@@ -67,8 +71,8 @@ export class DailyBookingsComponent implements OnInit
 		{
 			if (Object.keys(params).length != 0)
 			{
-				this.startDate = params.startDate
-				this.endDate = params.endDate
+				this.startDate = params.startDate;
+				this.endDate = params.endDate;
 			} else
 			{
 				this.date = new Date();
@@ -79,25 +83,25 @@ export class DailyBookingsComponent implements OnInit
 				this.router.navigate([], {
 					queryParams: {
 						startDate: this.startDate,
-						endDate: this.endDate
+						endDate: this.endDate,
 					},
-					queryParamsHandling: 'merge'
-				})
+					queryParamsHandling: "merge",
+				});
 			}
-		})
+		});
 
 		this.loadBookings();
 
 		//change status booking form validation
 		this.changeStatusForm = this.formBuilder.group({
-			reservation_id: ['', Validators.required],
-			booking_status: ['', Validators.required]
+			reservation_id: ["", Validators.required],
+			booking_status: ["", Validators.required],
 		});
 
 		//send email booking form validation
 		this.sendEmailForm = this.formBuilder.group({
-			reservation_id: ['', Validators.required],
-			emailTarget: ['', Validators.required]
+			reservation_id: ["", Validators.required],
+			emailTarget: ["", Validators.required],
 		});
 	}
 
@@ -106,11 +110,11 @@ export class DailyBookingsComponent implements OnInit
 		this.show = true;
 		switch (format)
 		{
-			case 'Phone': {
+			case "Phone": {
 				this.sendMessageField = true;
 				break;
 			}
-			case 'Email': {
+			case "Email": {
 				this.sendMessageField = false;
 				break;
 			}
@@ -120,32 +124,43 @@ export class DailyBookingsComponent implements OnInit
 	submit(message, format)
 	{
 		this.show = false;
-		if (this.passengerDetails.selection_button == 'Passenger')
+		if (this.passengerDetails.selection_button == "Passenger")
 		{
-			this.sendInformation = format ? this.passengerDetails.passenger_cell_isd + this.passengerDetails.passenger_cell : this.passengerDetails.passenger_email;
-			this.reciptentName = this.passengerDetails.passenger_name
-		}
-		else if (this.passengerDetails.selection_button == 'Affiliate')
+			this.sendInformation = format
+				? this.passengerDetails.passenger_cell_isd +
+				this.passengerDetails.passenger_cell
+				: this.passengerDetails.passenger_email;
+			this.reciptentName = this.passengerDetails.passenger_name;
+		} else if (this.passengerDetails.selection_button == "Affiliate")
 		{
-			this.sendInformation = format ? this.passengerDetails.affiliate_dispatch_isd + this.passengerDetails.affiliate_dispatch_number : this.passengerDetails.dispatchEmail;
-			this.reciptentName = this.passengerDetails.driver_first_name + this.passengerDetails.driver_last_name
+			this.sendInformation = format
+				? this.passengerDetails.affiliate_dispatch_isd +
+				this.passengerDetails.affiliate_dispatch_number
+				: this.passengerDetails.dispatchEmail;
+			this.reciptentName =
+				this.passengerDetails.driver_first_name +
+				this.passengerDetails.driver_last_name;
 		} else
 		{
-			this.sendInformation = format ? this.passengerDetails.loose_affiliate_phone_isd + this.passengerDetails.loose_affiliate_phone : this.passengerDetails.loose_affiliate_email;
-			this.reciptentName = this.passengerDetails.loose_affiliate_name
+			this.sendInformation = format
+				? this.passengerDetails.loose_affiliate_phone_isd +
+				this.passengerDetails.loose_affiliate_phone
+				: this.passengerDetails.loose_affiliate_email;
+			this.reciptentName = this.passengerDetails.loose_affiliate_name;
 		}
 
 		let obj = {
 			bookingId: this.passengerDetails.booking_id,
 			reciptentName: this.reciptentName,
 			sendTo: this.passengerDetails.selection_button,
-			sendThrough: format ? 'Phone' : 'Email',
+			sendThrough: format ? "Phone" : "Email",
 			sendValue: this.sendInformation,
-			sendContent: message
-		}
-		this.adminService.adminNotification(obj)
+			sendContent: message,
+		};
+		this.adminService
+			.adminNotification(obj)
 			.pipe(
-				catchError(err =>
+				catchError((err) =>
 				{
 					return throwError(err);
 				})
@@ -153,18 +168,18 @@ export class DailyBookingsComponent implements OnInit
 			.subscribe(({ message }: any) =>
 			{
 				this.notification_msg = message;
-				$('#notificationModal').modal('show');
-				console.log(message)
-				$('textarea').val('');
+				$("#notificationModal").modal("show");
+				console.log(message);
+				$("textarea").val("");
 			});
-		$('#closeModal').click(() =>
+		$("#closeModal").click(() =>
 		{
-			$('#notificationModal').modal('hide');
-		})
-		$('#closeModal1').click(() =>
+			$("#notificationModal").modal("hide");
+		});
+		$("#closeModal1").click(() =>
 		{
-			$('#notificationModal').modal('hide');
-		})
+			$("#notificationModal").modal("hide");
+		});
 	}
 
 	loadBookings(pageUrl = null)
@@ -172,37 +187,40 @@ export class DailyBookingsComponent implements OnInit
 		/** spinner starts on init */
 		this.spinner.show();
 
-		var keyword = ((document.getElementById("keyword") as HTMLInputElement).value);
+		var keyword = (document.getElementById("keyword") as HTMLInputElement)
+			.value;
 		// Load Our bookings using API
-		this.adminService.loadBookings(pageUrl, keyword, this.startDate, this.endDate).then(result =>
-		{
-			this.bookingsRes = result;
-			this.bookings = this.bookingsRes.data.data;
-			this.totalRecords = this.bookingsRes.data.total;
-			this.firstPage = 1;
-			this.lastPage = this.bookingsRes.data.last_page;
-			this.totalPage = this.bookingsRes.data.last_page;
-			this.currentPage = this.bookingsRes.data.current_page;
-			this.from = this.bookingsRes.data.from;
-			this.to = this.bookingsRes.data.to;
-			this.path = this.bookingsRes.data.path;
-			this.firstPageUrl = this.bookingsRes.data.first_page_url;
-			this.lastPageUrl = this.bookingsRes.data.last_page_url;
-			this.prevPageUrl = this.bookingsRes.data.prev_page_url;
-			this.nextPageUrl = this.bookingsRes.data.next_page_url;
-			this.spinner.hide();//hide spinner
-		})
-			.catch(err =>
+		this.adminService
+			.loadBookings(pageUrl, keyword, this.startDate, this.endDate)
+			.then((result) =>
 			{
-				this.spinner.hide();//hide spinner
+				this.bookingsRes = result;
+				this.bookings = this.bookingsRes.data.data;
+				this.totalRecords = this.bookingsRes.data.total;
+				this.firstPage = 1;
+				this.lastPage = this.bookingsRes.data.last_page;
+				this.totalPage = this.bookingsRes.data.last_page;
+				this.currentPage = this.bookingsRes.data.current_page;
+				this.from = this.bookingsRes.data.from;
+				this.to = this.bookingsRes.data.to;
+				this.path = this.bookingsRes.data.path;
+				this.firstPageUrl = this.bookingsRes.data.first_page_url;
+				this.lastPageUrl = this.bookingsRes.data.last_page_url;
+				this.prevPageUrl = this.bookingsRes.data.prev_page_url;
+				this.nextPageUrl = this.bookingsRes.data.next_page_url;
+				this.spinner.hide(); //hide spinner
+			})
+			.catch((err) =>
+			{
+				this.spinner.hide(); //hide spinner
 			});
 	}
 
-	show = false
+	show = false;
 	openModal(booking: any, selection_button: string)
 	{
 		this.passengerDetails = booking;
-		this.passengerDetails['selection_button'] = selection_button
+		this.passengerDetails["selection_button"] = selection_button;
 	}
 
 	//for pagination
@@ -216,14 +234,12 @@ export class DailyBookingsComponent implements OnInit
 		{
 			startFrom = 0;
 			endTo = this.totalPage;
-		}
-		else if (this.currentPage < this.totalPage)
+		} else if (this.currentPage < this.totalPage)
 		{
-			currentPage = this.currentPage
+			currentPage = this.currentPage;
 			endTo = currentPage + 1;
 			startFrom = endTo - 5;
-		}
-		else
+		} else
 		{
 			endTo = this.totalPage;
 			startFrom = endTo - 5;
@@ -240,13 +256,11 @@ export class DailyBookingsComponent implements OnInit
 
 	changeDate(dateType, date)
 	{
-
-		if (dateType == 'startDate')
+		if (dateType == "startDate")
 		{
-			console.log(date, "check date format...............")
+			console.log(date, "check date format...............");
 			this.startDate = date;
-		}
-		else
+		} else
 		{
 			this.endDate = date;
 		}
@@ -254,27 +268,27 @@ export class DailyBookingsComponent implements OnInit
 
 	enableDisableClicked(event, id)
 	{
-		this.spinner.show();//show spinner
+		this.spinner.show(); //show spinner
 		console.log(event.checked);
 		if (event.checked)
 		{
-			var status = 'enable';
-		}
-		else
+			var status = "enable";
+		} else
 		{
-			var status = 'disable';
+			var status = "disable";
 		}
-		this.adminService.reservationStatus(id, status)
+		this.adminService
+			.reservationStatus(id, status)
 			.pipe(
-				catchError(err =>
+				catchError((err) =>
 				{
-					this.spinner.hide();//hide spinner
+					this.spinner.hide(); //hide spinner
 					return throwError(err);
 				})
-			).subscribe(result =>
+			)
+			.subscribe((result) =>
 			{
-
-				this.spinner.hide();//hide spinner
+				this.spinner.hide(); //hide spinner
 			});
 	}
 
@@ -286,7 +300,7 @@ export class DailyBookingsComponent implements OnInit
 	changeBookingStatus(bookingId)
 	{
 		this.changeStatusForm.patchValue({
-			reservation_id: bookingId
+			reservation_id: bookingId,
 		});
 	}
 
@@ -303,12 +317,13 @@ export class DailyBookingsComponent implements OnInit
 		this.spinner.show();
 		// this.disableSubmitButton=true; //disable submit button
 
-		this.adminService.changeStatusBooking(this.changeStatusForm.value)
+		this.adminService
+			.changeStatusBooking(this.changeStatusForm.value)
 			.pipe(
-				catchError(err =>
+				catchError((err) =>
 				{
-					this.spinner.hide();//hide spinner
-					$('#change_status_booking_Modal').modal('hide');
+					this.spinner.hide(); //hide spinner
+					$("#change_status_booking_Modal").modal("hide");
 					return throwError(err);
 				})
 			)
@@ -316,22 +331,27 @@ export class DailyBookingsComponent implements OnInit
 			{
 				if (success == true)
 				{
-					this.spinner.hide();//hide spinner
-					$('#change_status_booking_Modal').modal('hide');
-					this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() =>
-					{
-						this.router.navigate(['/admin/daily-bookings-admin']);
-					});
+					this.spinner.hide(); //hide spinner
+					$("#change_status_booking_Modal").modal("hide");
+					this.router
+						.navigateByUrl("/RefreshComponent", {
+							skipLocationChange: true,
+						})
+						.then(() =>
+						{
+							this.router.navigate([
+								"/admin/daily-bookings-admin",
+							]);
+						});
 				}
 			});
 	}
-
 
 	sendEmailClicked(bookingId, emailTarget)
 	{
 		this.sendEmailForm.patchValue({
 			reservation_id: bookingId,
-			emailTarget: emailTarget
+			emailTarget: emailTarget,
 		});
 	}
 
@@ -348,12 +368,13 @@ export class DailyBookingsComponent implements OnInit
 		this.spinner.show();
 		// this.disableSubmitButton=true; //disable submit button
 
-		this.adminService.sendEmail(this.sendEmailForm.value)
+		this.adminService
+			.sendEmail(this.sendEmailForm.value)
 			.pipe(
-				catchError(err =>
+				catchError((err) =>
 				{
-					this.spinner.hide();//hide spinner
-					$('#emailModal').modal('hide');
+					this.spinner.hide(); //hide spinner
+					$("#emailModal").modal("hide");
 					return throwError(err);
 				})
 			)
@@ -361,26 +382,29 @@ export class DailyBookingsComponent implements OnInit
 			{
 				if (success == true)
 				{
-					this.spinner.hide();//hide spinner
-					$('#emailModal').modal('hide');
-					this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() =>
-					{
-						this.router.navigate(['/admin/daily-bookings-admin']);
-					});
+					this.spinner.hide(); //hide spinner
+					$("#emailModal").modal("hide");
+					this.router
+						.navigateByUrl("/RefreshComponent", {
+							skipLocationChange: true,
+						})
+						.then(() =>
+						{
+							this.router.navigate([
+								"/admin/daily-bookings-admin",
+							]);
+						});
 				}
 			});
 	}
 
-
 	FormatDate(date: string)
 	{
-		return moment(date).format('ll')
+		return moment(date).format("ll");
 	}
 
 	FormatTime(time: string)
 	{
-		return moment(time, 'HH:mm:ss').format('LT')
+		return moment(time, "HH:mm:ss").format("LT");
 	}
-
-
 }

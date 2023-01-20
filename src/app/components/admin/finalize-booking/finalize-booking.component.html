@@ -1,17 +1,34 @@
 <div class="container p-3">
-	<h3 class="font-weight-bolder m-3 text-center">
-		Finalize Booking
-	</h3>
+	<h3 class="font-weight-bolder m-3 text-center">Finalize Booking</h3>
 
+	<!-- Booking -->
 	<div class="row">
 		<div class="col-md-12">
-			<div id="booking-paradigms" class="d-flex flex-wrap align-items-center"
-				*ngFor="let paradigm of BookingDetail | keyvalue; index as paradigm_index">
-				<label [attr.id]="'paradigm_' + paradigm_index" class="m-1">
-					{{ paradigm.key | titlecase }}
+			<div id="booking-paradigms" class="d-flex flex-wrap align-items-center">
+				<label class="m-1"> Booking: </label>
+				<label class="m-0 text-uppercase">
+					{{ formatText(BookingDetail.service_type) }} /
+					{{ formatText(BookingDetail.transfer_type) }}
+					{{
+					BookingDetail.service_type === "roundtrip"
+					? " / " +
+					formatText(BookingDetail.return_transfer_type)
+					: ""
+					}}
 				</label>
-				<label [attr.id]="'paradigmValue_' + paradigm_index" class="m-0 text-uppercase">
-					{{ paradigm.value | titlecase }}
+			</div>
+		</div>
+	</div>
+
+	<hr style="width: 50%; margin: 1.2rem auto; border: 1.3px solid #000" />
+
+	<!-- Booking -->
+	<div class="row">
+		<div class="col-md-12">
+			<div id="booking-paradigms" class="d-flex flex-wrap align-items-center">
+				<label class="m-1"> Pickup Type: </label>
+				<label class="m-0 text-uppercase">
+					{{ BookingDetail.transfer_type }}
 				</label>
 			</div>
 		</div>
