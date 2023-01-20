@@ -156,7 +156,7 @@
 	</div>
 </div>
 
-<div *ngIf="returnratesform" [formGroup]="ReturnRatesForm"
+<div *ngIf="ratesform && returnratesform" [formGroup]="ReturnRatesForm"
 	class="section-container section-dropdown mt-5"
 	[ngClass]="{'active': rate_params.chevrons.r_section, 'w-50': returnratesform}"
 	[ngStyle]="affiliate_type == 'affiliate' ? {'height': '0', 'padding': '0'} : ''">
