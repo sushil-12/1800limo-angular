@@ -1078,8 +1078,8 @@
 							<input type="search" matInput placeholder="Search For Airport"
 								(focus)="$event.target.select()" aria-label="Airport"
 								[matAutocomplete]="onwy_airport"
-								(keyup)="searchValue('airportsData', $event.target.value, 'name', 'pickup_airport')"
-								[value]="fillValue(BigData?.airportsData, 'pickup_airport', 'code + name + country', ', ')" />
+								(keyup)="searchValue('airportsData', $event.target.value, 'name')"
+								formControlName="pickup_airport_name" />
 							<mat-autocomplete #onwy_airport="matAutocomplete">
 								<mat-option *ngFor="let option of BigData?.airportsData"
 									(click)="SetFormValue('pickup_airport', option.id)">
@@ -1097,9 +1097,8 @@
 								Airline
 							</mat-label>
 							<input type="text" matInput placeholder="Search For Airport"
-								aria-label="Airport"
-								[value]="fillValue(BigData?.airlinesData, 'pickup_airline', 'code + name + country', ', ')"
-								(keyup)="searchValue('airlinesData', $event.target.value, 'name', 'pickup_airline')"
+								aria-label="Airport" formControlName="pickup_airline_name"
+								(keyup)="searchValue('airlinesData', $event.target.value, 'name')"
 								(focus)="$event.target.select()" [matAutocomplete]="onwy_airline">
 							<mat-autocomplete #onwy_airline="matAutocomplete">
 								<mat-option *ngFor="let option of BigData?.airlinesData"
@@ -1210,9 +1209,8 @@
 								Airport
 							</mat-label>
 							<input type="text" matInput placeholder="Search For Airport"
-								aria-label="Airport"
-								[value]="fillValue(BigData?.airportsData, 'dropoff_airport', 'code + name + country', ', ')"
-								(keyup)="searchValue('airportsData', $event.target.value, 'name', 'dropoff_airport')"
+								aria-label="Airport" formControlName="dropoff_airport_name"
+								(keyup)="searchValue('airportsData', $event.target.value, 'name')"
 								[matAutocomplete]="onwy_drop_airport"
 								(focus)="$event.target.select()" />
 							<mat-autocomplete #onwy_drop_airport="matAutocomplete">
@@ -1232,9 +1230,8 @@
 								Airline
 							</mat-label>
 							<input type="text" matInput placeholder="Search For Airline"
-								aria-label="Airport"
-								[value]="fillValue(BigData?.airlinesData, 'dropoff_airline', 'code + name + country', ', ')"
-								(keyup)="searchValue('airlinesData', $event.target.value, 'name', 'dropoff_airline')"
+								aria-label="Airport" formControlName="dropoff_airline_name"
+								(keyup)="searchValue('airlinesData', $event.target.value, 'name')"
 								[matAutocomplete]="onwy_drop_airline"
 								(focus)="$event.target.select()" />
 							<mat-autocomplete #onwy_drop_airline="matAutocomplete">
@@ -1446,9 +1443,8 @@
 								Airport
 							</mat-label>
 							<input type="text" matInput placeholder="Search For Airport"
-								aria-label="Airport"
-								[value]="fillValue(BigData?.airportsData, 'return_pickup_airport', 'code + name + country', ', ')"
-								(keyup)="searchValue('airportsData', $event.target.value, 'name', 'return_pickup_airport')"
+								aria-label="Airport" formControlName="return_pickup_airport_name"
+								(keyup)="searchValue('airportsData', $event.target.value, 'name')"
 								[matAutocomplete]="onwy_airport" (focus)="$event.target.select()" />
 							<mat-autocomplete #onwy_airport="matAutocomplete">
 								<mat-option *ngFor="let option of BigData?.airportsData"
@@ -1467,9 +1463,8 @@
 								Airline
 							</mat-label>
 							<input type="text" matInput placeholder="Search For Airport"
-								aria-label="Airport"
-								[value]="fillValue(BigData?.airlinesData, 'return_pickup_airline', 'code + name + country', ', ')"
-								(keyup)="searchValue('airlinesData', $event.target.value, 'name', 'return_pickup_airline')"
+								aria-label="Airport" formControlName="return_pickup_airline_name"
+								(keyup)="searchValue('airlinesData', $event.target.value, 'name')"
 								[matAutocomplete]="onwy_airline" (focus)="$event.target.select()" />
 							<mat-autocomplete #onwy_airline="matAutocomplete">
 								<mat-option *ngFor="let option of BigData?.airlinesData"
@@ -1570,9 +1565,8 @@
 								Airport
 							</mat-label>
 							<input type="text" matInput placeholder="Search For Airport"
-								aria-label="Airport"
-								[value]="fillValue(BigData?.airportsData, 'return_dropoff_airport', 'code + name + country', ', ')"
-								(keyup)="searchValue('airportsData', $event.target.value, 'name', 'return_dropoff_airport')"
+								aria-label="Airport" formControlName="return_dropoff_airport_name"
+								(keyup)="searchValue('airportsData', $event.target.value, 'name')"
 								[matAutocomplete]="onwy_drop_airport"
 								(focus)="$event.target.select()" />
 							<mat-autocomplete #onwy_drop_airport="matAutocomplete">
@@ -1592,9 +1586,8 @@
 								Airline
 							</mat-label>
 							<input type="text" matInput placeholder="Search For Airline"
-								aria-label="Airport"
-								[value]="fillValue(BigData?.airlinesData, 'return_dropoff_airline', 'name')"
-								(keyup)="searchValue('airlinesData', $event.target.value, 'name', 'return_dropoff_airline')"
+								aria-label="Airport" formControlName="return_dropoff_airline_name"
+								(keyup)="searchValue('airlinesData', $event.target.value, 'name')"
 								[matAutocomplete]="onwy_drop_airline"
 								(focus)="$event.target.select()" />
 							<mat-autocomplete #onwy_drop_airline="matAutocomplete">
