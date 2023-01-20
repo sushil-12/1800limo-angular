@@ -12,8 +12,7 @@ declare let $: any
 	templateUrl: './vehicle-details.component.html',
 	styleUrls: ['./vehicle-details.component.scss']
 })
-export class VehicleDetailsComponent implements OnInit
-{
+export class VehicleDetailsComponent implements OnInit {
 
 	selected_vehicle: any	// selected vehicle details from previous page
 	quotebot_form: any	// quotebot details from previous page
@@ -29,35 +28,30 @@ export class VehicleDetailsComponent implements OnInit
 		private mapsApiLoader: MapsAPILoader
 	) { }
 
-	ngOnInit(): void
-	{
+	ngOnInit(): void {
 		/**
 		 * check for Quotebot form values in local storage
 		 * parse the values and show them upfront
 		 * else, show error and navigate back to homepage to file a quote
 		 */
-		if (localStorage.getItem('quotebot_form') === null)
-		{
+		if (localStorage.getItem('quotebot_form') === null) {
 			this._errorDialogService.openDialog({
 				errors: {
 					error: 'Please file a quote first, before selecting vehicles.'
 				}
 			})
 			this._router.navigate(['/home'])
-		} else if (sessionStorage.getItem('selected_vehicle') === null)
-		{
+		} else if (sessionStorage.getItem('selected_vehicle') === null) {
 			this._errorDialogService.openDialog({
 				errors: {
 					error: 'Please select a vehicle first.'
 				}
 			})
 			this._router.navigateByUrl('/quotebot/select-vehicle')
-		} else
-		{
+		} else {
 			// fetch the values and perform the operation
 			this.selected_vehicle = JSON.parse(sessionStorage.getItem('selected_vehicle'))
-			if (this.selected_vehicle.hasOwnProperty('driverInformation'))
-			{
+			if (this.selected_vehicle.hasOwnProperty('driverInformation')) {
 				let name = this.selected_vehicle.driverInformation.name.split(' ')
 				name[name.length - 1] = name[name.length - 1].charAt(0).toUpperCase()
 				this.selected_vehicle['name_initials'] = name.join(' ')
@@ -94,8 +88,7 @@ export class VehicleDetailsComponent implements OnInit
 		}
 
 		// Owl Carousel Images Slider
-		$(document).ready(function ()
-		{
+		$(document).ready(function () {
 			var bigimage = $("#big");
 			var thumbs = $("#thumbs");
 			//var totalslides = 10;
@@ -115,8 +108,7 @@ export class VehicleDetailsComponent implements OnInit
 				.on("changed.owl.carousel", syncPosition);
 
 			thumbs
-				.on("initialized.owl.carousel", function ()
-				{
+				.on("initialized.owl.carousel", function () {
 					thumbs
 						.find(".owl-item")
 						.eq(0)
@@ -125,8 +117,7 @@ export class VehicleDetailsComponent implements OnInit
 				.owlCarousel(config)
 				.on("changed.owl.carousel", syncPosition2);
 
-			function syncPosition(el)
-			{
+			function syncPosition(el) {
 				//if loop is set to false, then you have to uncomment the next line
 				var current = el.item.index;
 
@@ -134,12 +125,10 @@ export class VehicleDetailsComponent implements OnInit
 				var count = el.item.count - 1;
 				var current: any = Math.round(el.item.index - el.item.count / 2 - 0.5);
 
-				if (current < 0)
-				{
+				if (current < 0) {
 					current = count;
 				}
-				if (current > count)
-				{
+				if (current > count) {
 					current = 0;
 				}
 				//to this
@@ -158,27 +147,22 @@ export class VehicleDetailsComponent implements OnInit
 					.last()
 					.index();
 
-				if (current > end)
-				{
+				if (current > end) {
 					thumbs.data("owl.carousel").to(current, 100, true);
 				}
-				if (current < start)
-				{
+				if (current < start) {
 					thumbs.data("owl.carousel").to(current - onscreen, 100, true);
 				}
 			}
 
-			function syncPosition2(el)
-			{
-				if (syncedSecondary)
-				{
+			function syncPosition2(el) {
+				if (syncedSecondary) {
 					var number = el.item.index;
 					bigimage.data("owl.carousel").to(number, 100, true);
 				}
 			}
 
-			thumbs.on("click", ".owl-item", function (e)
-			{
+			thumbs.on("click", ".owl-item", function (e) {
 				e.preventDefault();
 				var number = $(this).index();
 				bigimage.data("owl.carousel").to(number, 300, true);
@@ -187,10 +171,8 @@ export class VehicleDetailsComponent implements OnInit
 	}
 	//ngOnInit ends
 
-	initMap(): any
-	{
-		this.mapsApiLoader.load().then(() =>
-		{
+	initMap(): any {
+		this.mapsApiLoader.load().then(() => {
 			const directionsService = new google.maps.DirectionsService()
 			const directionsRenderer = new google.maps.DirectionsRenderer()
 			const map = new google.maps.Map(document.getElementById('map'), {
@@ -202,8 +184,7 @@ export class VehicleDetailsComponent implements OnInit
 			directionsRenderer.setMap(map)
 
 			let obj = {}
-			switch (this.quotebot_form.pickup_type)
-			{
+			switch (this.quotebot_form.pickup_type) {
 				case 'airport':
 					obj['origin'] = {
 						lat: this.quotebot_form.pickup_airport_lat,
@@ -219,8 +200,7 @@ export class VehicleDetailsComponent implements OnInit
 					}
 					break
 			}
-			switch (this.quotebot_form.dropoff_type)
-			{
+			switch (this.quotebot_form.dropoff_type) {
 				case 'airport':
 					obj['destination'] = {
 						lat: this.quotebot_form.dropoff_airport_lat,
@@ -239,8 +219,7 @@ export class VehicleDetailsComponent implements OnInit
 
 			obj['travelMode'] = google.maps.TravelMode.DRIVING
 
-			directionsService.route(obj, (response, error) =>
-			{
+			directionsService.route(obj, (response, error) => {
 				console.log('Directions Service Response: ', response)
 				directionsRenderer.setDirections(response)
 			})
@@ -248,13 +227,11 @@ export class VehicleDetailsComponent implements OnInit
 	}
 
 
-	getKeyName(): string
-	{
+	getKeyName(): string {
 		return JSON.parse(localStorage.getItem('quotebot_form')).service_type
 	}
 
-	textFormat(text: string)
-	{
+	textFormat(text: string) {
 		return text.replace(/[_|-]/g, ' ')
 	}
 
@@ -264,8 +241,7 @@ export class VehicleDetailsComponent implements OnInit
 	 * 
 	 * @returns boolean
 	 */
-	isArray(obj: any)
-	{
+	isArray(obj: any) {
 		return Array.isArray(obj)
 	}
 
@@ -275,15 +251,12 @@ export class VehicleDetailsComponent implements OnInit
 	 * 
 	 * @returns String
 	 */
-	formatString(text: string)
-	{
+	formatString(text: string) {
 		return text.replace(/(_|-)/g, ' ')
 	}
 
-	selectPrice()
-	{
-		$('input[type="checkbox"].custom-control-input').on('change', function ()
-		{
+	selectPrice() {
+		$('input[type="checkbox"].custom-control-input').on('change', function () {
 			$('input[type="checkbox"].custom-control-input').not(this).prop('checked', false)
 		})
 	}
@@ -295,16 +268,12 @@ export class VehicleDetailsComponent implements OnInit
 	 * 
 	 * @returns void
 	 */
-	bookNow()
-	{
+	bookNow() {
 		console.log('Will navigate to Book Now Page ...')
-		if (localStorage.getItem('currentUser') != null)
-		{
-			if (JSON.parse(localStorage.getItem('currentUser'))['roleName'] == 'admin')
-			{
-				this._router.navigate(['/admin/create-new-booking'])
-			} else
-			{
+		if (localStorage.getItem('currentUser') != null) {
+			if (JSON.parse(localStorage.getItem('currentUser'))['roleName'] == 'admin') {
+				this._router.navigate(['/admin/new-booking'])
+			} else {
 				let user = JSON.parse(localStorage.getItem('currentUser'))['roleName']
 				user = user == 'driver' ? 'affiliate' : user	// roleName of driver has to be directed to affiliate/..
 
@@ -313,8 +282,7 @@ export class VehicleDetailsComponent implements OnInit
 					'/' + user + '/my-bookings'
 				])
 			}
-		} else
-		{
+		} else {
 			// this._errorDialogService.openDialog({
 			// 	errors: {
 			// 		error: 'Please open an account or login to proceed.'
@@ -326,12 +294,10 @@ export class VehicleDetailsComponent implements OnInit
 		}
 	}
 
-	routeSelection(type: string)
-	{
+	routeSelection(type: string) {
 		let obj = {}
 		this.quotebot_form.service_type = type
-		switch (type)
-		{
+		switch (type) {
 			case 'round_trip':
 				obj = {
 					return_pickup_date: this.quotebot_form.pickup_date,
@@ -356,22 +322,18 @@ export class VehicleDetailsComponent implements OnInit
 				Object.assign(obj, this.quotebot_form, obj) // assign the new object to old quote
 
 				sessionStorage.setItem('quotebot_original_distance_data', JSON.stringify(this.quotebot_form['location_info']))
-				if (obj['location_info'].length == 1)
-				{
+				if (obj['location_info'].length == 1) {
 					obj['location_info'].push(obj['location_info'][0])
 				}
 				break
 			case 'one_way':
 			case 'charter_tour':
 				obj = { ...this.quotebot_form }
-				if (this.quotebot_form.location_info.length > 1)
-				{
+				if (this.quotebot_form.location_info.length > 1) {
 					obj['location_info'].pop()
 				}
-				for (let item in obj)
-				{
-					if (/^return_/g.test(item))
-					{
+				for (let item in obj) {
+					if (/^return_/g.test(item)) {
 						delete obj[item]
 					}
 				}
@@ -387,13 +349,11 @@ export class VehicleDetailsComponent implements OnInit
 	 * @param value :String [Required] date value
 	 * @returns String of format('LL') i.e. November 7, 2022
 	 */
-	formatDate(value: string): string
-	{
+	formatDate(value: string): string {
 		return moment(value).format('LL')
 	}
 
-	formatTime(value: string): string
-	{
+	formatTime(value: string): string {
 		return moment(value, 'HH:mm:ss').format('hh:mm a')
 	}
 
@@ -401,8 +361,7 @@ export class VehicleDetailsComponent implements OnInit
 
 
 
-	backButton()
-	{
+	backButton() {
 		// navigate to select vehicle page and delete the prev vehicle selected from localStorage
 		sessionStorage.removeItem('selected_vehicle')
 		this._router.navigate(['../select-vehicle'], {
