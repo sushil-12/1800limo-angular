@@ -1379,11 +1379,10 @@ export class NewBookingComponent implements OnInit
 		this.BookingForm.get('pickup_airport').valueChanges.subscribe((value: number) =>
 		{
 			let airport_selected = this.BigData?.airportsData.find(item => item.id == value)
-			this.SetFormValue('pickup_airport_name', airport_selected.name);
+			this.SetFormValue('pickup_airport_name', `${airport_selected.code} - ${airport_selected.name}, ${airport_selected.city}, ${airport_selected.country}`);
 			this.SetFormValue('pickup_airport_latitude', airport_selected.lat);
 			this.SetFormValue('pickup_airport_longitude', airport_selected.long);
 			this.SetFormValue('return_dropoff_airport', value);
-			this.SetFormValue('return_dropoff_airport_name', airport_selected.name);
 			this.SetFormValue('return_dropoff_airport_latitude', airport_selected.lat);
 			this.SetFormValue('return_dropoff_airport_longitude', airport_selected.long);
 			this.MapController();
@@ -1400,7 +1399,7 @@ export class NewBookingComponent implements OnInit
 		this.BookingForm.get('return_pickup_airport').valueChanges.subscribe((value: string) =>
 		{
 			let airport_selected = this.BigData?.airportsData.find(item => item.id == value)
-			this.SetFormValue('return_pickup_airport_name', airport_selected.name)
+			this.SetFormValue('return_pickup_airport_name', `${airport_selected.code} - ${airport_selected.name}, ${airport_selected.city}, ${airport_selected.country}`)
 			setTimeout(() => this.MapController(), 2000)
 			if (this.Form.service_type.value == 'round_trip')
 			{
@@ -1415,7 +1414,7 @@ export class NewBookingComponent implements OnInit
 		this.BookingForm.get('return_dropoff_airport').valueChanges.subscribe((value: string) =>
 		{
 			let airport_selected = this.BigData?.airportsData.find(item => item.id == value);
-			this.SetFormValue('return_dropoff_airport_name', airport_selected.name);
+			this.SetFormValue('return_dropoff_airport_name', `${airport_selected.code} - ${airport_selected.name}, ${airport_selected.city}, ${airport_selected.country}`);
 			setTimeout(() => this.MapController(), 2000)
 			if (this.Form.service_type.value == 'round_trip')
 			{
@@ -1431,7 +1430,7 @@ export class NewBookingComponent implements OnInit
 		this.BookingForm.get('dropoff_airport').valueChanges.subscribe((value: string) =>
 		{
 			let airport_selected = this.BigData?.airportsData.find(item => item.id == value)
-			this.SetFormValue('dropoff_airport_name', airport_selected.name);
+			this.SetFormValue('dropoff_airport_name', `${airport_selected.code} - ${airport_selected.name}, ${airport_selected.city}, ${airport_selected.country}`);
 			this.SetFormValue('dropoff_airport_latitude', airport_selected.lat)
 			this.SetFormValue('dropoff_airport_longitude', airport_selected.long)
 			this.SetFormValue('return_pickup_airport', value)
@@ -1451,18 +1450,16 @@ export class NewBookingComponent implements OnInit
 		this.BookingForm.get('pickup_airline').valueChanges.subscribe((value: string) =>
 		{
 			let airline_selected = this.BigData?.airlinesData.find(item => item.id == value)
-			this.SetFormValue('pickup_airline_name', airline_selected.name);
+			this.SetFormValue('pickup_airline_name', `${airline_selected.code} - ${airline_selected.name}, ${airline_selected.country}`);
 			this.SetFormValue('return_dropoff_airline', value)
-			this.SetFormValue('return_dropoff_airline_name', airline_selected.name);
 		})
 
 		// Dropoff Airlines
 		this.BookingForm.get('dropoff_airline').valueChanges.subscribe((value: string) =>
 		{
 			let airline_selected = this.BigData?.airlinesData.find(item => item.id == value)
-			this.SetFormValue('dropoff_airline_name', airline_selected.name);
+			this.SetFormValue('dropoff_airline_name', `${airline_selected.code} - ${airline_selected.name}, ${airline_selected.country}`);
 			this.SetFormValue('return_pickup_airline', value);
-			this.SetFormValue('return_pickup_airline_name', airline_selected.name);
 		})
 
 		// Return Pickup Airlines
