@@ -646,8 +646,11 @@ export class NewBookingComponent implements OnInit
 	chooseUser(account_id: number)
 	{
 		this.$spinner.show()
+		this.chosen_user = {}
+		this.SetFormValue('acc_id', account_id);
 		this.$api.chooseUser(account_id, this.Form.account_type.value).subscribe((response: any) =>
 		{
+			this.$spinner.hide();
 			if (response.success && Object.keys(response.data).length > 0)
 			{
 				this.chosen_user = response.data

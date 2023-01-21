@@ -285,12 +285,12 @@
 								(focus)="$event.target.select()" matInput
 								(keyup)="searchAccountType($event.target.value)"
 								[value]="fillValue(filteredAccountTypes, 'acc_id', 'name')"
-								[matAutocomplete]="auto1" tabindex="1" />
-							<mat-autocomplete #auto1="matAutocomplete">
+								[matAutocomplete]="chooseuseratcmplt" />
+							<mat-autocomplete #chooseuseratcmplt="matAutocomplete">
 								<div>
 									<mat-option *ngFor="let user of filteredAccountTypes"
 										[value]="user.name"
-										(onSelectionChange)="chooseUser(user.id)">
+										(click)="chooseUser(user.id)">
 										{{ user.name }}
 									</mat-option>
 								</div>
