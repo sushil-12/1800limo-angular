@@ -1133,7 +1133,7 @@ export class NewBookingComponent implements OnInit
 				if (this.Form.return_transfer_type.value.includes('airport_'))
 				{
 					let pickup_airport = this.BigData.airportsData.find(item => item.id === data.return_pickup_airport)['name']
-					let pickup_airline = this.BigData.airlinesData.find(item => item.id === data.return_pickup_airline)['name']
+					let pickup_airline = this.BigData.airlinesData.find(item => item.id === data.return_pickup_airline) ? this.BigData.airlinesData.find(item => item.id === data.return_pickup_airline)['name'] : ''
 					this.booking_params.preview_screen['return']['pickup'] = pickup_airport
 					this.booking_params.preview_screen['return']['flight'] = pickup_airline
 				}
@@ -1141,7 +1141,7 @@ export class NewBookingComponent implements OnInit
 				if (this.Form.return_transfer_type.value.includes('_airport'))
 				{
 					let dropoff_airport = this.BigData.airportsData.find(item => item.id === data.return_dropoff_airport)['name']
-					let dropoff_airline = this.BigData.airlinesData.find(item => item.id === data.return_dropoff_airline)['name']
+					let dropoff_airline = this.BigData.airlinesData.find(item => item.id === data.return_dropoff_airline) ? this.BigData.airlinesData.find(item => item.id === data.return_dropoff_airline)['name'] : ''
 					this.booking_params.preview_screen['return']['destination'] = dropoff_airport
 					this.booking_params.preview_screen['return']['$flight'] = dropoff_airline
 				}
@@ -1151,7 +1151,7 @@ export class NewBookingComponent implements OnInit
 			if (this.Form.transfer_type.value.includes('airport_'))
 			{
 				let pickup_airport = this.BigData.airportsData.find(item => item.id === Number(data.pickup_airport))['name']
-				let pickup_airline = this.BigData.airlinesData.find(item => item.id === Number(data.pickup_airline))['name']
+				let pickup_airline = this.BigData.airlinesData.find(item => item.id === Number(data.pickup_airline)) ? this.BigData.airlinesData.find(item => item.id === Number(data.pickup_airline))['name'] : ''
 				this.booking_params.preview_screen['travel_info']['pickup'] = pickup_airport
 				this.booking_params.preview_screen['travel_info']['flight'] = pickup_airline
 			}
@@ -1159,7 +1159,7 @@ export class NewBookingComponent implements OnInit
 			if (this.Form.transfer_type.value.includes('_airport'))
 			{
 				let dropoff_airport = this.BigData.airportsData.find(item => item.id === Number(data.dropoff_airport))['name']
-				let dropoff_airline = this.BigData.airlinesData.find(item => item.id === Number(data.dropoff_airline))['name']
+				let dropoff_airline = this.BigData.airlinesData.find(item => item.id === Number(data.dropoff_airline)) ? this.BigData.airlinesData.find(item => item.id === Number(data.dropoff_airline))['name'] : ''
 				this.booking_params.preview_screen['travel_info']['destination'] = dropoff_airport
 				this.booking_params.preview_screen['travel_info']['$flight'] = dropoff_airline
 			}
