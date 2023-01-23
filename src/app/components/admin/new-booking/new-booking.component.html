@@ -113,14 +113,23 @@
 						<div class="row px-4">
 							<!-- First Name -->
 							<div class="col-md-4 my-2">
-								<mat-form-field appearance="outline">
-									<mat-label class="">
+								<mat-form-field appearance="outline" class="m-0">
+									<mat-label class="required-field">
 										First Name
 									</mat-label>
 									<input matInput placeholder="First Name" type="text"
 										formControlName="first_name" tabindex="0"
 										(focus)="$event.target.select()">
 								</mat-form-field>
+								<div class="error-box">
+									<div class="error-message"
+										*ngIf="LooseCustomer.first_name.invalid && (LooseCustomer.first_name.touched || LooseCustomer.first_name.dirty)">
+										<p class="text-danger text-lg m-0"
+											*ngIf="LooseCustomer.first_name.errors.required">
+											This field is required
+										</p>
+									</div>
+								</div>
 							</div>
 
 							<!-- Middle Name -->
@@ -138,13 +147,22 @@
 							<!-- Last Name -->
 							<div class="col-md-4 my-2">
 								<mat-form-field appearance="outline">
-									<mat-label class="">
+									<mat-label class="required-field">
 										Last Name
 									</mat-label>
 									<input matInput placeholder="Last Name" type="text"
 										formControlName="last_name" (focus)="$event.target.select()"
 										tabindex="0">
 								</mat-form-field>
+								<div class="error-box">
+									<div class="error-message"
+										*ngIf="LooseCustomer.last_name.invalid && (LooseCustomer.last_name.touched || LooseCustomer.last_name.dirty)">
+										<p class="text-danger text-lg m-0"
+											*ngIf="LooseCustomer.last_name.errors.required">
+											This field is required
+										</p>
+									</div>
+								</div>
 							</div>
 						</div>
 
@@ -158,6 +176,19 @@
 									<input matInput placeholder="Email" type="text" tabindex="0"
 										formControlName="email" (focus)="$event.target.select()">
 								</mat-form-field>
+								<div class="error-box">
+									<div class="error-message"
+										*ngIf="LooseCustomer.email.invalid && (LooseCustomer.email.touched || LooseCustomer.email.dirty)">
+										<p class="text-danger text-lg m-0"
+											*ngIf="LooseCustomer.email.errors?.required">
+											This field is required
+										</p>
+										<p class="text-danger text-lg m-0"
+											*ngIf="LooseCustomer.email.errors?.pattern">
+											Please enter a valid Email Id
+										</p>
+									</div>
+								</div>
 							</div>
 
 							<!-- Phone -->
@@ -167,13 +198,27 @@
 										Phone
 									</mat-label>
 									<input matInput placeholder="Phone" formControlName="phone"
-										ng2TelInput
+										ng2TelInput (keyup)="checkUniqueness()"
 										[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
 										(intlTelInputObject)="intlTelInputObject($event)"
 										class="phoneNumberClass"
 										(countryChange)="onCountryChange($event)"
 										(focus)="$event.target.select()" />
 								</mat-form-field>
+								<div class="error-box">
+									<div class="error-message"
+										*ngIf="is_loose_customer_unique || (LooseCustomer.phone.invalid && (LooseCustomer.phone.touched || LooseCustomer.phone.dirty))">
+										<p class="text-danger text-lg m-0"
+											*ngIf="LooseCustomer.phone.errors?.required">
+											This field is required
+										</p>
+										<p class="text-danger text-lg m-0"
+											*ngIf="is_loose_customer_unique">
+											This Phone Number is already registered. Please enter
+											any other.
+										</p>
+									</div>
+								</div>
 							</div>
 
 							<!-- Address -->
@@ -186,6 +231,13 @@
 										formControlName="address" tabindex="0"
 										(focus)="$event.target.select()">
 								</mat-form-field>
+								<div class="error-message"
+									*ngIf="LooseCustomer.address.invalid && (LooseCustomer.address.touched || LooseCustomer.address.dirty)">
+									<p class="text-danger text-lg m-0"
+										*ngIf="LooseCustomer.address.errors?.required">
+										This field is required
+									</p>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -200,30 +252,44 @@
 							<!-- Card Holder Name -->
 							<div class="col-md-6 my-2">
 								<mat-form-field appearance="outline">
-									<mat-label class="">
+									<mat-label class="required-field">
 										Card Holder
 									</mat-label>
-									<input matInput placeholder="Frist & Last Name" type="text"
+									<input matInput placeholder="First & Last Name" type="text"
 										formControlName="name" tabindex="0"
 										(focus)="$event.target.select()">
 								</mat-form-field>
+								<div class="error-message"
+									*ngIf="LooseCustomer.card_details.controls.name.invalid && (LooseCustomer.card_details.controls.name.touched || LooseCustomer.card_details.controls.name.dirty)">
+									<p class="text-danger text-lg m-0"
+										*ngIf="LooseCustomer.card_details.controls.name.errors?.required">
+										This field is required
+									</p>
+								</div>
 							</div>
 							<!-- Card Number -->
 							<div class="col-md-6 my-2">
 								<mat-form-field appearance="outline">
-									<mat-label class="">
+									<mat-label class="required-field">
 										Card Number
 									</mat-label>
 									<input matInput placeholder="xxxx xxxx xxxx xxxx" type="text"
 										formControlName="card_number" tabindex="0"
 										(focus)="$event.target.select()">
 								</mat-form-field>
+								<div class="error-message"
+									*ngIf="LooseCustomer.card_details.controls.card_number.invalid && (LooseCustomer.card_details.controls.card_number.touched || LooseCustomer.card_details.controls.card_number.dirty)">
+									<p class="text-danger text-lg m-0"
+										*ngIf="LooseCustomer.card_details.controls.card_number.errors?.required">
+										This field is required
+									</p>
+								</div>
 							</div>
 
 							<!-- Expiration Month -->
 							<div class="col-md-4 my-2">
 								<mat-form-field appearance="outline">
-									<mat-label class="">
+									<mat-label class="required-field">
 										Expiration Month
 									</mat-label>
 									<mat-select formControlName="exp_month" tabindex="0">
@@ -241,12 +307,19 @@
 										<mat-option value='12'>12</mat-option>
 									</mat-select>
 								</mat-form-field>
+								<div class="error-message"
+									*ngIf="LooseCustomer.card_details.controls.exp_month.invalid && (LooseCustomer.card_details.controls.exp_month.touched || LooseCustomer.card_details.controls.exp_month.dirty)">
+									<p class="text-danger text-lg m-0"
+										*ngIf="LooseCustomer.card_details.controls.exp_month.errors?.required">
+										This field is required
+									</p>
+								</div>
 							</div>
 
 							<!-- Expiration Year -->
 							<div class="col-md-4 my-2">
 								<mat-form-field appearance="outline">
-									<mat-label class="">
+									<mat-label class="required-field">
 										Expiration Year
 									</mat-label>
 									<mat-select formControlName="exp_year" tabindex="0">
@@ -256,17 +329,31 @@
 										</mat-option>
 									</mat-select>
 								</mat-form-field>
+								<div class="error-message"
+									*ngIf="LooseCustomer.card_details.controls.exp_year.invalid && (LooseCustomer.card_details.controls.exp_year.touched || LooseCustomer.card_details.controls.exp_year.dirty)">
+									<p class="text-danger text-lg m-0"
+										*ngIf="LooseCustomer.card_details.controls.exp_year.errors?.required">
+										This field is required
+									</p>
+								</div>
 							</div>
 
 							<!-- CVV -->
 							<div class="col-md-4 my-2">
 								<mat-form-field appearance="outline">
-									<mat-label class="">
+									<mat-label class="required-field">
 										CVV
 									</mat-label>
 									<input matInput placeholder="0000" type="text" tabindex="0"
 										(focus)="$event.target.select()" formControlName="cvv">
 								</mat-form-field>
+								<div class="error-message"
+									*ngIf="LooseCustomer.card_details.controls.cvv.invalid && (LooseCustomer.card_details.controls.cvv.touched || LooseCustomer.card_details.controls.cvv.dirty)">
+									<p class="text-danger text-lg m-0"
+										*ngIf="LooseCustomer.card_details.controls.cvv.errors?.required">
+										This field is required
+									</p>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -289,8 +376,7 @@
 							<mat-autocomplete #chooseuseratcmplt="matAutocomplete">
 								<div>
 									<mat-option *ngFor="let user of filteredAccountTypes"
-										[value]="user.name"
-										(click)="chooseUser(user.id)">
+										[value]="user.name" (click)="chooseUser(user.id)">
 										{{ user.name }}
 									</mat-option>
 								</div>

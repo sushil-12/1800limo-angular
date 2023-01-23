@@ -1,7 +1,7 @@
 import { Component, EventEmitter, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormControl, FormArray } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl, FormArray, ValidationErrors, ValidatorFn, AbstractControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-
+import { pluck } from 'rxjs/operators';
 
 import { MapsAPILoader } from '@agm/core';
 import { AdminService } from 'src/app/services/admin.service';
@@ -75,7 +75,7 @@ export class NewBookingComponent implements OnInit
 
 	init_rates: boolean = false
 	init_return_rates: boolean = false
-
+	is_loose_customer_unique: boolean = false
 
 
 
@@ -543,6 +543,11 @@ export class NewBookingComponent implements OnInit
 	get Form()
 	{
 		return this.BookingForm.controls;
+	}
+
+	get LooseCustomer()
+	{
+		return (<FormGroup>this.BookingForm.get('loose_customer')).controls;
 	}
 
 	get ExtraStops(): FormArray
@@ -1314,14 +1319,19 @@ export class NewBookingComponent implements OnInit
 						for (let key in (loose_customer.get(item) as FormGroup).controls)
 						{
 							// set validators in card_details
-							loose_customer.get(item).get(key).setValidators(Validators.required)
+							(<FormGroup>loose_customer.get(item)).get(key).setValidators([Validators.required]);
+							(<FormGroup>loose_customer.get(item)).get(key).updateValueAndValidity();
+
 						}
 					}
+
 					if (item != 'middle_name')
 					{
-						loose_customer.get(item).setValidators(Validators.required)
+						loose_customer.get(item).setValidators([Validators.required]);
 					}
 				}
+				loose_customer.get('email').setValidators([Validators.required, Validators.pattern("[a-zA-Z0-9\$\#\.\/\%\~\\-\\&\+\_]+@[a-z0-9.]+(\.[a-z]+){1,3}")])
+				loose_customer.get('phone').setValidators([Validators.required, Validators.pattern("^[0-9]{10,12}$")])
 			}
 			else
 			{
@@ -1527,6 +1537,22 @@ export class NewBookingComponent implements OnInit
 	{
 		console.log('Return Rates Form: ', data)
 		this.ReturnRatesForm = data
+	}
+
+	checkUniqueness()
+	{
+		this.$api.checkUniquePhoneNumberForLooseCustomer({
+			phoneISD: this.LooseCustomer.phone_isd.value,
+			phoneNumber: this.LooseCustomer.phone.value
+		}).pipe(
+			pluck('data'),
+			pluck('is_exist')
+		).subscribe((is_exist: boolean) =>
+		{
+			console.log(is_exist)
+			this.is_loose_customer_unique = is_exist;
+			return
+		})
 	}
 }
 

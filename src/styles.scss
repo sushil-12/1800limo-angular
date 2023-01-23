@@ -149,3 +149,14 @@ button.custom-filled-reset-button {
         }
     }
 }
+
+.required-field:after {
+    content: "*";
+    color: #ff0000;
+    font-weight: 400;
+}
+
+.error-box {
+	height: 1.5rem;
+	padding: 3px;
+}

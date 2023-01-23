@@ -16,13 +16,12 @@
 	box-shadow: 3px 3px 20px -6px rgba(40, 40, 40, 0.5);
 }
 
-.required-field:after {
-	content: "*";
-	color: #ff0000;
-	font-weight: 400;
-}
 mat-form-field {
 	margin: 1rem 0 !important;
+}
+.mat-form-field.m-0
+{
+	margin: 1rem 0 0 0 !important;
 }
 .extra-stop-field:not(.extra-stop-field:first-child) {
 	margin-top: 1.5rem;
