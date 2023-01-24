@@ -624,7 +624,7 @@
 			<!-- Visible in Affiliate as well as Loose Affiliate Section -->
 			<!-- Affiliate Vehicle Information -->
 			<div class="px-4 mt-4"
-				*ngIf="Form.affiliate_type.value == 'loose_affiliate' || Form.affiliate_id.value != ''">
+				*ngIf="Form.affiliate_type.value == 'loose_affiliate' || Form.affiliate_id.value">
 				<h4>
 					Vehicle Preferences
 				</h4>
@@ -778,7 +778,7 @@
 			<!-- Visible in Affiliate as well as Loose Affiliate Section -->
 			<!-- Affiliate Driver Information -->
 			<div class="px-4 mt-4"
-				*ngIf="Form.affiliate_type.value == 'loose_affiliate' || Form.affiliate_id.value != ''">
+				*ngIf="Form.affiliate_type.value == 'loose_affiliate' || Form.affiliate_id.value">
 				<h4>
 					Driver Preferences
 				</h4>
@@ -1972,7 +1972,7 @@
 				</h3>
 				<div
 					*ngFor="let item of booking_params?.preview_screen?.driver_info | keyvalue: returnZero">
-					<div class="row my-3" *ngIf="item.value">
+					<div class="row my-3" *ngIf="item.value && item.value !== null">
 						<div class="col-3">
 							<p class="m-0">
 								{{ textFormatter(item.key) | titlecase }}

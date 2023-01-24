@@ -233,7 +233,7 @@ export class NewBookingComponent implements OnInit
 			driver_name: [''],
 			driver_gender: [''],
 			driver_cell: [''],
-			driver_cell_isd: [''],
+			driver_cell_isd: ['+1'],
 			driver_email: [''],
 			driver_phone_type: [''],
 			driver_image_id: [''],
@@ -1114,9 +1114,9 @@ export class NewBookingComponent implements OnInit
 					"total passengers": data.total_passengers
 				},
 				"driver_info": {
-					"name": data.driver_name,
-					"email": data.driver_email,
-					"phone": `${data.driver_cell}`
+					"name": data.driver_name ?? '',
+					"email": data.driver_email ?? '',
+					"phone": `(${data.driver_cell_isd ?? ''})-${data.driver_cell ?? ''}`
 				},
 			}
 
@@ -1361,6 +1361,13 @@ export class NewBookingComponent implements OnInit
 		// Affiliate Type
 		this.BookingForm.get('affiliate_type').valueChanges.subscribe((value: string) =>
 		{
+			['vehicle_type', 'vehicle_id', 'vehicle_make', 'vehicle_model', 'vehicle_color', 'vehicle_year', 'driver_name', 'driver_email', 'driver_gender', 'driver_cell', 'license_plate', 'affiliate_id'].forEach((item: any) =>
+			{
+				this.BookingForm.get(item).reset();
+				this.BookingForm.updateValueAndValidity();
+			})
+			this.SetFormValue('driver_cell_isd', '+1');
+
 			if (value == 'loose_affiliate')
 			{
 				console.log('init')

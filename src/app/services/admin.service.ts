@@ -1075,5 +1075,10 @@ export class AdminService
 		}
 	}
 
+	checkUniquePhoneNumberForLooseCustomer(customer_data: Record<string, any>)
+	{
+		return this.httpClient.post(`${this.serverUrl}admin/check-unique-user`, customer_data)
+	}
+
 
 }
