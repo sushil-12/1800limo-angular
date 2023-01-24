@@ -15,8 +15,7 @@ declare var $: any;
 	templateUrl: './affiliate-step3.component.html',
 	styleUrls: ['./affiliate-step3.component.scss']
 })
-export class AffiliateStep3Component implements OnInit
-{
+export class AffiliateStep3Component implements OnInit {
 
 	public imageSrc: string;
 	public addInsuranceForm: FormGroup;
@@ -37,6 +36,7 @@ export class AffiliateStep3Component implements OnInit
 	public policyExpiredYear: Array<number> = [];
 
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
+	stepsObj: any;
 	constructor(
 		private adminService: AdminService,
 		private router: Router,
@@ -45,17 +45,21 @@ export class AffiliateStep3Component implements OnInit
 		private formBuilder: FormBuilder,
 		private customValidator: CustomvalidationService) { }
 
-	ngAfterViewInit()
-	{
+	ngAfterViewInit() {
 		//set current user country as default in phone number
 		this.AgentTelephoneObject.setCountry(this.currentUser.CellNumberCountry);
 	}
-	ngOnInit(): void
-	{
+	ngOnInit(): void {
+		this.stepsObj = JSON.parse(sessionStorage.getItem('step_completed_obj'));
+		for (let [key, value] of Object.entries(this.stepsObj)) {
+			if (key == 'step2' && value == 'uncompleted') {
+
+				$('#errorModal').modal('show')
+			}
+		}
 		//show "stripe can take upto 24 hours" modal on first time completing step 2
 		const showStripe24HourAlert = sessionStorage.getItem("showStripe24HourAlert");
-		if (showStripe24HourAlert == 'yes')
-		{
+		if (showStripe24HourAlert == 'yes') {
 			$('#showStripe24HourAlert').modal('show');
 			sessionStorage.removeItem("showStripe24HourAlert");
 		}
@@ -69,8 +73,7 @@ export class AffiliateStep3Component implements OnInit
 
 		let currentYear: number = (new Date()).getFullYear();
 		//days
-		for (let i = 1; i <= 31; i++)
-		{
+		for (let i = 1; i <= 31; i++) {
 			this.policyExpiredDay.push(i);
 		}
 		//year
@@ -103,21 +106,17 @@ export class AffiliateStep3Component implements OnInit
 		}, { validator: this.customValidationFunction });
 
 
-		if (this.affiliateId)
-		{
-			if (stepCompleted.includes('3'))
-			{
+		if (this.affiliateId) {
+			if (stepCompleted.includes('3')) {
 				// get data for editing using API
 				this.stateManagementService.setprogressBar(true);
 				this.adminService.getInsuranceDetail(this.affiliateId)
 					.pipe(
-						catchError(err =>
-						{
+						catchError(err => {
 							this.stateManagementService.setprogressBar(false);
 							return throwError(err);
 						})
-					).subscribe(({ data }: any) =>
-					{
+					).subscribe(({ data }: any) => {
 						this.stateManagementService.setprogressBar(false);
 						this.insCertificateImage = data.insCertificate.image;
 						this.insuranceCardImage = data.insuranceCard.image;
@@ -143,8 +142,7 @@ export class AffiliateStep3Component implements OnInit
 						this.AgentTelephoneObject.setCountry(data.AgentTelephoneCountry);
 					});
 			}
-			else
-			{
+			else {
 				var dateobj = new Date();
 				var month = dateobj.getMonth() + 1;
 				var day = dateobj.getDate();
@@ -159,72 +157,58 @@ export class AffiliateStep3Component implements OnInit
 		}
 	}
 
-	closeButton()
-	{
+	closeButton() {
 		this.closeTab.emit();
 	}
 
-	customValidationFunction(group): any
-	{
-		if (group)
-		{
+	customValidationFunction(group): any {
+		if (group) {
 			var currentDate = formatDate(new Date(), 'yyyy-MM-dd', 'en');
 			console.log(currentDate)
 			if (!group.controls['policyExpiredDay'].value ||
 				!group.controls['policyExpiredMonth'].value ||
-				!group.controls['policyExpiredYear'].value)
-			{
+				!group.controls['policyExpiredYear'].value) {
 				return null;
 			}
 			const enteredDate = group.controls['policyExpiredYear'].value + '-' + group.controls['policyExpiredMonth'].value + '-' + group.controls['policyExpiredDay'].value;
 			console.log(currentDate, enteredDate)
-			if (new Date(enteredDate).getTime() >= new Date(currentDate).getTime())
-			{
+			if (new Date(enteredDate).getTime() >= new Date(currentDate).getTime()) {
 				return null;
 			}
 		}
 		return { 'policyError': true };
 	}
 
-	onCountryChange(event, type)
-	{
-		if (type == 'AgentTelephone')
-		{
+	onCountryChange(event, type) {
+		if (type == 'AgentTelephone') {
 			this.addInsuranceForm.patchValue({
 				AgentTelephoneIsd: '+' + event.dialCode,
 				AgentTelephoneCountry: event.iso2
 			});
 		}
 	}
-	telInputObjectAgentTelephone(obj)
-	{
+	telInputObjectAgentTelephone(obj) {
 		this.AgentTelephoneObject = obj;
 	}
 
-	vehicleOfficialImagesChange(event, imageType, imageId)
-	{
+	vehicleOfficialImagesChange(event, imageType, imageId) {
 		this.stateManagementService.setprogressBar(true);
 		const reader = new FileReader();
-		if (event.target.files && event.target.files.length)
-		{
+		if (event.target.files && event.target.files.length) {
 			const [file] = event.target.files;
 			reader.readAsDataURL(file);
-			reader.onload = () =>
-			{
+			reader.onload = () => {
 				this.imageSrc = reader.result as string;
 				this.adminService.uploadVehicleImage(this.imageSrc)
 					.pipe(
-						catchError(err =>
-						{
+						catchError(err => {
 							this.stateManagementService.setprogressBar(false);
 							return throwError(err);
 						})
 					)
-					.subscribe(({ data }: any) =>
-					{
+					.subscribe(({ data }: any) => {
 
-						switch (imageType)
-						{
+						switch (imageType) {
 							case 'insCertificate': {
 								this.addInsuranceForm.patchValue({
 									insCertificate: data.id,
@@ -251,10 +235,8 @@ export class AffiliateStep3Component implements OnInit
 		}
 	}
 
-	deleteImage(id, imageType)
-	{
-		switch (imageType)
-		{
+	deleteImage(id, imageType) {
+		switch (imageType) {
 			case 'insCertificate': {
 				this.addInsuranceForm.patchValue({
 					insCertificate: '',
@@ -275,26 +257,21 @@ export class AffiliateStep3Component implements OnInit
 		}
 	}
 
-	showImageInModal(imageUrl)
-	{
+	showImageInModal(imageUrl) {
 		this.modalImage = imageUrl;
 		$("#imageModal").addClass("showImage");
 		$("#imageModal").removeClass("d-none");
 	}
 
-	get f()
-	{
+	get f() {
 		return this.addInsuranceForm.controls;
 	}
 
-	submitForm()
-	{
-		if (this.affiliate_type != 'fleet_operator')
-		{
+	submitForm() {
+		if (this.affiliate_type != 'fleet_operator') {
 			console.log("set validation on field")
 			this.addInsuranceForm.get('insuranceCard').setValidators([Validators.required]);
-		} else
-		{
+		} else {
 			console.log("enter in conditions")
 			this.addInsuranceForm.get('insuranceCard').clearValidators();
 			this.addInsuranceForm.get('insuranceCard').updateValueAndValidity();
@@ -302,8 +279,7 @@ export class AffiliateStep3Component implements OnInit
 		console.log(this.addInsuranceForm);
 		this.submittedForm = true;
 		// stop here if form is invalid
-		if (this.addInsuranceForm.invalid)
-		{
+		if (this.addInsuranceForm.invalid) {
 			return;
 		}
 		this.adminService.setSessionStepsCompleted(3)
@@ -313,24 +289,20 @@ export class AffiliateStep3Component implements OnInit
 
 		this.adminService.addInsuranceDetail(this.addInsuranceForm.value)
 			.pipe(
-				catchError(err =>
-				{
+				catchError(err => {
 					this.spinner.hide();//hide spinner
 					this.disableSubmitButton = false; //enable submit button
 					return throwError(err);
 				})
 			)
-			.subscribe((success: any) =>
-			{
+			.subscribe((success: any) => {
 				this.spinner.hide();//hide spinner
 				this.disableSubmitButton = false; //enable submit button
 
-				if (success.success == true)
-				{
+				if (success.success == true) {
 					this.adminService.setSessionStepsCompleted('3');
 				}
-				if (success.errors || success.error)
-				{
+				if (success.errors || success.error) {
 					this.adminService.unsetSessionStepsCompleted(3)
 				}
 
@@ -341,8 +313,7 @@ export class AffiliateStep3Component implements OnInit
 			});
 	}
 
-	resetForm()
-	{
+	resetForm() {
 		this.addInsuranceForm.reset();
 		this.insCertificateImage = "";
 		this.insuranceCardImage = "";

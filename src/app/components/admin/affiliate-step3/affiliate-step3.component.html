@@ -343,3 +343,20 @@
 </div>
 <!-- Image modal -->
 <app-image-modal (closeTab)="closeButton()" [modalImage]="modalImage"></app-image-modal>
+
+<!-- validation modal -->
+<div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="affiliateInstructionsModal"
+	aria-hidden="true" style="padding-left: 0;">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-body text-center">
+				<p class="text-danger">
+					Please Complete Previous Step First!!
+				</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="custom-btn button2" data-dismiss="modal">OK</button>
+			</div>
+		</div>
+	</div>
+</div>

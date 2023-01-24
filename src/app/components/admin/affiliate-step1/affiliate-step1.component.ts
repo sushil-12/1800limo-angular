@@ -18,8 +18,7 @@ declare var $: any;
 	styleUrls: ['./affiliate-step1.component.scss']
 })
 
-export class AffiliateStep1Component implements OnInit
-{
+export class AffiliateStep1Component implements OnInit {
 
 	public addAffiliateAccountForm: FormGroup;
 	public submittedForm: boolean;
@@ -84,8 +83,7 @@ export class AffiliateStep1Component implements OnInit
 	@ViewChild('search1')
 	public searchElementRef: ElementRef;
 
-	ngAfterViewInit()
-	{
+	ngAfterViewInit() {
 		//set current user country as default in phone number
 		this.CellNumberObject.setCountry(this.currentUser.phoneCountry);
 		this.DispatchObject.setCountry(this.currentUser.phoneCountry);
@@ -93,8 +91,7 @@ export class AffiliateStep1Component implements OnInit
 		this.CompanyCellNumberObject.setCountry(this.currentUser.phoneCountry);
 	}
 
-	ngOnInit(): void
-	{
+	ngOnInit(): void {
 
 		this.currentUser = this.authService.currentUserValue;
 		//add amenity form validation
@@ -140,13 +137,11 @@ export class AffiliateStep1Component implements OnInit
 		// Load Our languages using API
 		this.adminService.getAssicationsLanguages()
 			.pipe(
-				catchError(err =>
-				{
+				catchError(err => {
 					this.stateManagementService.setprogressBar(false);
 					return throwError(err);
 				})
-			).subscribe(result =>
-			{
+			).subscribe(result => {
 				this.response = result;
 				this.languages = this.response.data.languages;
 				this.associations = this.response.data.associations;
@@ -156,17 +151,14 @@ export class AffiliateStep1Component implements OnInit
 				this.addAffiliateAccountForm.patchValue({
 					AffiliateType: this.affiliateType
 				});
-				if (this.affiliateId)
-				{
+				if (this.affiliateId) {
 					this.adminService.getAffiliateAccount(this.affiliateId)
 						.pipe(
-							catchError(err =>
-							{
+							catchError(err => {
 								this.stateManagementService.setprogressBar(false);
 								return throwError(err);
 							})
-						).subscribe(result2 =>
-						{
+						).subscribe(result2 => {
 							this.response2 = result2;
 							this.addAffiliateAccountForm.patchValue({
 								id: this.response2.data.id,
@@ -183,22 +175,12 @@ export class AffiliateStep1Component implements OnInit
 
 							sessionStorage.setItem("affiliateUserData", JSON.stringify(this.response2.data));
 							sessionStorage.setItem("affiliateType", this.response2.data.AffiliateType)
-							if (this.response2.data.step_completed && Array.isArray(this.response2.data.step_completed))
-							{
-								this.response2.data.step_completed.forEach((item: any) =>
-								{
-									this.adminService.setSessionStepsCompleted(item)
-								})
-							} else
-							{
-								this.adminService.setSessionStepsCompleted(this.response2.data.step_completed)
-							}
+
 							console.log(this.response2.data.CellNumberCountry, "cellnumbercountry")
 							//set country flag in phone number fields
 							this.CellNumberObject.setCountry(this.response2.data.CellNumberCountry);
 							console.log(this.response2.data.AffiliateType, "response not cominng")
-							if (this.response2.data.AffiliateType != 'gig_operator')
-							{
+							if (this.response2.data.AffiliateType != 'gig_operator') {
 								//set images and their ID
 								this.BusinessFrontPhoto = this.response2.data.BusinessFrontPhoto.image;
 								this.BusinessBackPhoto = this.response2.data.BusinessBackPhoto.image;
@@ -226,29 +208,24 @@ export class AffiliateStep1Component implements OnInit
 							var i;
 							const totalLanguages: any = this.languages;
 							const selectedLanguages = this.response2.data.LanguagesSpoken;
-							for (i = 0; i < totalLanguages.length; i++)
-							{
+							for (i = 0; i < totalLanguages.length; i++) {
 								// console.log(totalLanguages[i]);
-								var checkedLanguage = selectedLanguages.findIndex(function (post)
-								{
+								var checkedLanguage = selectedLanguages.findIndex(function (post) {
 									if (post == totalLanguages[i].id)
 										return true;
 								});
 								// console.log(checkedLanguage);
-								if (checkedLanguage >= 0)
-								{
+								if (checkedLanguage >= 0) {
 									var checkBool = true;
 								}
-								else
-								{
+								else {
 									var checkBool = false;
 								}
 								languagesGet.push(new FormControl(checkBool));
 							}
 							this.languagesFormControl = languagesGet.controls;
 							var j;
-							for (j = 0; j < selectedLanguages.length; j++)
-							{
+							for (j = 0; j < selectedLanguages.length; j++) {
 								languageSpoken.push(new FormControl(selectedLanguages[j]));
 							}
 							// console.log(languageSpoken);
@@ -260,35 +237,29 @@ export class AffiliateStep1Component implements OnInit
 							var i;
 							const totalAssociations: any = this.associations;
 							const selectedAssociations = this.response2.data.Associations;
-							for (i = 0; i < totalAssociations.length; i++)
-							{
-								var checkedAssociation = selectedAssociations.findIndex(function (post)
-								{
+							for (i = 0; i < totalAssociations.length; i++) {
+								var checkedAssociation = selectedAssociations.findIndex(function (post) {
 									if (post == totalAssociations[i].id)
 										return true;
 								});
-								if (checkedAssociation >= 0)
-								{
+								if (checkedAssociation >= 0) {
 									var checkBool = true;
 								}
-								else
-								{
+								else {
 									var checkBool = false;
 								}
 								AssociationsGet.push(new FormControl(checkBool));
 							}
 							this.AssociationsFormControl = AssociationsGet.controls;
 							var j;
-							for (j = 0; j < selectedAssociations.length; j++)
-							{
+							for (j = 0; j < selectedAssociations.length; j++) {
 								associations.push(new FormControl(selectedAssociations[j]));
 							}
 							console.log('associations');
 							//
 							this.stateManagementService.setprogressBar(false);
 						});
-				} else
-				{
+				} else {
 					this.addAffiliateAccountForm.patchValue({
 						AffiliateType: (this.affiliateType ? this.affiliateType : 'black_limo_operator')
 					});
@@ -299,27 +270,22 @@ export class AffiliateStep1Component implements OnInit
 				this.stateManagementService.setprogressBar(false);
 			});
 
-		if (sessionStorage.getItem("affiliateType") != "all_operators")
-		{
+		if (sessionStorage.getItem("affiliateType") != "all_operators") {
 			this.affiliateTypeSwitch(sessionStorage.getItem("affiliateType"))
 		}
 	}
 
-	affiliateTypeSwitch(affiliateType)
-	{
+	affiliateTypeSwitch(affiliateType) {
 		$('#FirstName').focus();
-		switch (affiliateType)
-		{
+		switch (affiliateType) {
 			case 'fleet_operator': {
 				this.showCompanyInformation = true;
 				this.conditionalValidations('fleet_operator');
 				break;
 			}
 			case 'black_limo_operator': {
-				if (this.affiliateId)
-				{
-					if (this.f.AffiliateType.value == 'fleet_operator')
-					{
+				if (this.affiliateId) {
+					if (this.f.AffiliateType.value == 'fleet_operator') {
 						this.modalAlertMessage = "Fleet Operator can not change on Black Car / Owner Operators";
 						$('#affiliateAlertMessageModal').modal('show');
 						return false;
@@ -330,10 +296,8 @@ export class AffiliateStep1Component implements OnInit
 				break;
 			}
 			case 'taxi_operator': {
-				if (this.affiliateId)
-				{
-					switch (this.f.AffiliateType.value)
-					{
+				if (this.affiliateId) {
+					switch (this.f.AffiliateType.value) {
 						case 'black_limo_operator': {
 							this.modalAlertMessage = "Black Car / Owner Operators can not change on Taxi Operators";
 							$('#affiliateAlertMessageModal').modal('show');
@@ -356,10 +320,8 @@ export class AffiliateStep1Component implements OnInit
 				break;
 			}
 			case 'gig_operator': {
-				if (this.affiliateId)
-				{
-					if (this.f.AffiliateType.value == 'fleet_operator')
-					{
+				if (this.affiliateId) {
+					if (this.f.AffiliateType.value == 'fleet_operator') {
 						this.modalAlertMessage = "Fleet Operator can not change on Gig Operators";
 						$('#affiliateAlertMessageModal').modal('show');
 						return false;
@@ -374,29 +336,23 @@ export class AffiliateStep1Component implements OnInit
 
 
 
-	businessCardImageChange(event, imageType, imageId = null)
-	{
+	businessCardImageChange(event, imageType, imageId = null) {
 		this.stateManagementService.setprogressBar(true); //show progressBar
 		const reader = new FileReader();
-		if (event.target.files && event.target.files.length)
-		{
+		if (event.target.files && event.target.files.length) {
 			const [file] = event.target.files;
 			reader.readAsDataURL(file);
-			reader.onload = () =>
-			{
+			reader.onload = () => {
 				this.imageSrc = reader.result as string;
 				this.adminService.uploadVehicleImage(this.imageSrc)
 					.pipe(
-						catchError(err =>
-						{
+						catchError(err => {
 							this.stateManagementService.setprogressBar(false); // hide progressBar
 							return throwError(err);
 						})
 					)
-					.subscribe(({ data }: any) =>
-					{
-						switch (imageType)
-						{
+					.subscribe(({ data }: any) => {
+						switch (imageType) {
 							case 'BusinessFrontPhoto': {
 								this.addAffiliateAccountForm.patchValue({
 									BusinessFrontPhoto: data.id,
@@ -424,10 +380,8 @@ export class AffiliateStep1Component implements OnInit
 		// console.log(this.addInsuranceForm.value);
 	}
 
-	deleteImage(id, imageType)
-	{
-		switch (imageType)
-		{
+	deleteImage(id, imageType) {
+		switch (imageType) {
 			case 'BusinessFrontPhoto': {
 				this.addAffiliateAccountForm.patchValue({
 					BusinessFrontPhoto: '',
@@ -448,13 +402,11 @@ export class AffiliateStep1Component implements OnInit
 		}
 	}
 
-	closeButton()
-	{
+	closeButton() {
 		this.closeTab.emit();
 	}
 
-	showImageInModal(imageUrl)
-	{
+	showImageInModal(imageUrl) {
 		this.modalImage = imageUrl;
 		// console.log("11111",imageUrl)
 		$("#imageModal").addClass("showImage");
@@ -462,10 +414,8 @@ export class AffiliateStep1Component implements OnInit
 		// $("#imageModal").show();
 	}
 
-	conditionalValidations(affiliateType)
-	{
-		if (affiliateType != 'gig_operator')
-		{
+	conditionalValidations(affiliateType) {
+		if (affiliateType != 'gig_operator') {
 			this.addAffiliateAccountForm.controls['CompanyName'].setValidators([Validators.required]);
 			this.addAffiliateAccountForm.controls['dispatchEmail'].setValidators([Validators.required]);
 			this.addAffiliateAccountForm.controls['Dispatch'].setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15), this.customValidator.dashValidator(), this.customValidator.plusValidator()]);
@@ -473,8 +423,7 @@ export class AffiliateStep1Component implements OnInit
 			this.addAffiliateAccountForm.controls['DispatchCountry'].setValidators([Validators.required]);
 			this.addAffiliateAccountForm.controls['BusinessFrontPhoto'].setValidators([Validators.required]);
 		}
-		else
-		{
+		else {
 			this.addAffiliateAccountForm.controls['CompanyName'].clearValidators();
 			this.addAffiliateAccountForm.controls['dispatchEmail'].clearValidators();
 			this.addAffiliateAccountForm.controls['Dispatch'].clearValidators();
@@ -490,32 +439,27 @@ export class AffiliateStep1Component implements OnInit
 		this.addAffiliateAccountForm.controls['BusinessFrontPhoto'].updateValueAndValidity();
 	}
 
-	onCountryChange(event, type)
-	{
+	onCountryChange(event, type) {
 		console.log(event)
-		if (type == 'CellNumber')
-		{
+		if (type == 'CellNumber') {
 			this.addAffiliateAccountForm.patchValue({
 				CellIsd: '+' + event.dialCode,
 				CellNumberCountry: event.iso2
 			});
 		}
-		else if (type == 'CompanyCellNumber')
-		{
+		else if (type == 'CompanyCellNumber') {
 			this.addAffiliateAccountForm.patchValue({
 				CompanyCellIsd: '+' + event.dialCode,
 				CompanyCellNumberCountry: event.iso2
 			});
 		}
-		else if (type == 'Dispatch')
-		{
+		else if (type == 'Dispatch') {
 			this.addAffiliateAccountForm.patchValue({
 				DispatchIsd: '+' + event.dialCode,
 				DispatchCountry: event.iso2
 			});
 		}
-		else
-		{
+		else {
 			this.addAffiliateAccountForm.patchValue({
 				FaxIsd: '+' + event.dialCode,
 				FaxCountry: event.iso2
@@ -523,83 +467,67 @@ export class AffiliateStep1Component implements OnInit
 		}
 	}
 
-	telInputObjectCell(obj)
-	{
+	telInputObjectCell(obj) {
 		this.CellNumberObject = obj;
 	}
-	telInputObjectCompanyCell(obj)
-	{
+	telInputObjectCompanyCell(obj) {
 		this.CompanyCellNumberObject = obj;
 	}
-	telInputObjectFax(obj)
-	{
+	telInputObjectFax(obj) {
 		this.FaxObject = obj;
 	}
-	telInputObjectDispatch(obj)
-	{
+	telInputObjectDispatch(obj) {
 		this.DispatchObject = obj;
 	}
 
-	onLanguageChange(val, ischecked)
-	{
+	onLanguageChange(val, ischecked) {
 		const languageSpoken: FormArray = this.addAffiliateAccountForm.get('LanguagesSpoken') as FormArray;
 
-		if (ischecked)
-		{
+		if (ischecked) {
 			languageSpoken.push(new FormControl(val));
-		} else
-		{
+		} else {
 			const index = languageSpoken.controls.findIndex(x => x.value === val);
 			languageSpoken.removeAt(index);
 		}
 	}
 
-	onAssociationChange(e)
-	{
+	onAssociationChange(e) {
 		const associations: FormArray = this.addAffiliateAccountForm.get('Associations') as FormArray;
 
-		if (e.target.checked)
-		{
+		if (e.target.checked) {
 			associations.push(new FormControl(e.target.value));
-		} else
-		{
+		} else {
 			const index = associations.controls.findIndex(x => x.value === e.target.value);
 			associations.removeAt(index);
 		}
 	}
 
-	onAffiliateTypeChange(e)
-	{
+	onAffiliateTypeChange(e) {
 		const AffiliateType: FormArray = this.addAffiliateAccountForm.get('AffiliateType') as FormArray;
 
-		if (e.target.checked)
-		{
+		if (e.target.checked) {
 			AffiliateType.push(new FormControl(e.target.value));
-		} else
-		{
+		} else {
 			const index = AffiliateType.controls.findIndex(x => x.value === e.target.value);
 			AffiliateType.removeAt(index);
 		}
 	}
 
-	get f()
-	{
+	get f() {
 		return this.addAffiliateAccountForm.controls;
 	}
 
 
-	submitForm()
-	{
+	submitForm() {
 		console.log(this.addAffiliateAccountForm);
 		// console.log(JSON.stringify(this.addVehicleRatesForm.value));
 		this.submittedForm = true;
 		// stop here if form is invalid
-		if (this.addAffiliateAccountForm.invalid)
-		{
+		if (this.addAffiliateAccountForm.invalid) {
 			return;
 		}
 
-		this.addAffiliateAccountForm.value.stepCompleted = ['0', '1'];
+		this.addAffiliateAccountForm.value.stepCompleted = this.adminService.getUpdatedStepsLocal("1");;
 		this.addAffiliateAccountForm.get('acc_id')
 		// console.log(this.addAffiliateAccountForm.value);
 		// console.log(JSON.stringify(this.addVehicleRatesForm.value));
@@ -608,41 +536,30 @@ export class AffiliateStep1Component implements OnInit
 
 		this.adminService.addAffiliateAccount(this.addAffiliateAccountForm.value)
 			.pipe(
-				catchError(err =>
-				{
+				catchError(err => {
 					this.spinner.hide();//hide spinner
 					this.disableSubmitButton = false; //enable submit button
 					return throwError(err);
 				})
 			)
-			.subscribe(result =>
-			{
+			.subscribe(result => {
 				this.response = result;
 				this.spinner.hide();//hide spinner
 				this.disableSubmitButton = false; //enable submit button
 				sessionStorage.setItem("affiliateUserData", JSON.stringify(this.addAffiliateAccountForm.value));
 				console.log("valueset", this.addAffiliateAccountForm.value.id)
-				if (!this.addAffiliateAccountForm.value.id)
-				{
+				if (!this.addAffiliateAccountForm.value.id) {
 					sessionStorage.setItem("affiliateId", this.response.data.acc_id);
 					sessionStorage.setItem("affiliateType", this.addAffiliateAccountForm.value.AffiliateType);
 					console.log("valueset", this.response.data.acc_id)
-					if (this.response.success == true)
-					{
-						this.adminService.setSessionStepsCompleted('0');
-						this.adminService.setSessionStepsCompleted('1');
-					}
-					if (this.response.errors || this.response.error)
-					{
-						this.adminService.unsetSessionStepsCompleted(0)
-						this.adminService.unsetSessionStepsCompleted(1)
+					if (this.response.success == true) {
+						this.adminService.updateStepsLocal("1");
 					}
 					this.router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
 						this.router.navigate(['/admin/affiliate/step2'])
 					);
 				}
-				else
-				{
+				else {
 					// this.router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
 					// 	this.router.navigate(['/admin/affiliate/step1'])
 					// );
@@ -653,8 +570,7 @@ export class AffiliateStep1Component implements OnInit
 
 
 
-	resetForm()
-	{
+	resetForm() {
 		this.addAffiliateAccountForm.reset();
 		this.BusinessFrontPhoto = "";
 		this.BusinessBackPhoto = "";

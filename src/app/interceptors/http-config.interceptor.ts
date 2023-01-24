@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import
-{
+import {
 	HttpInterceptor,
 	HttpRequest,
 	HttpResponse,
@@ -17,48 +16,37 @@ import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 
 @Injectable()
-export class HttpConfigInterceptor implements HttpInterceptor
-{
+export class HttpConfigInterceptor implements HttpInterceptor {
 	public errors: any;
 	constructor(
 		public errorDialogService: ErrorDialogService,
 		private authService: AuthService,
 		private router: Router,
-		private $spinner: NgxSpinnerService,
 		private stateManagementService: StateManagementService
 	) { }
 
-	intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>>
-	{
+	intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 		const token: string = localStorage.getItem('token');
 
-		if (token)
-		{
+		if (token) {
 			request = request.clone({ headers: request.headers.set('Authorization', 'Bearer ' + token) });
 		}
 
-		if (!request.headers.has('Content-Type'))
-		{
+		if (!request.headers.has('Content-Type')) {
 			request = request.clone({ headers: request.headers.set('Content-Type', 'application/json') });
 		}
 
 		request = request.clone({ headers: request.headers.set('Accept', 'application/json') });
 
 		return next.handle(request).pipe(
-			map((event: HttpEvent<any>) =>
-			{
-				this.$spinner.hide()
-				if (event instanceof HttpResponse)
-				{
+			map((event: HttpEvent<any>) => {
+				if (event instanceof HttpResponse) {
 					console.log('\n\nevent--->>>', event, '\n\n');
 				}
 				return event;
 			}),
-			catchError((errorData: HttpErrorResponse) =>
-			{
-				this.$spinner.hide()
-				if (errorData.status == 401)
-				{
+			catchError((errorData: HttpErrorResponse) => {
+				if (errorData.status == 401) {
 					this.errors = {
 						errors: {
 							error: 'Session Expired. Please reload the screen.'
@@ -67,8 +55,7 @@ export class HttpConfigInterceptor implements HttpInterceptor
 					localStorage.clear()
 					sessionStorage.clear()
 				}
-				else if (errorData.status == 440)
-				{
+				else if (errorData.status == 440) {
 					this.errors = {
 						errors: {
 							'error': 'Session Expired. Please re-login to continue. You will be navigated to homepage after 1 second.'
@@ -76,38 +63,32 @@ export class HttpConfigInterceptor implements HttpInterceptor
 					};
 					localStorage.clear();
 					sessionStorage.clear();
-					setTimeout(() =>
-					{
+					setTimeout(() => {
 						location.reload()
 					}, 2800)
 				}
-				else if (errorData.status == 500)
-				{
+				else if (errorData.status == 500) {
 					this.errors = {
 						errors: {
 							error: "Server Error"
 						}
 					}
 				}
-				else if (errorData.status == 404)
-				{
+				else if (errorData.status == 404) {
 					this.errors = {
 						errors: {
 							error: 'Server Error. Request Not Found. '
 						}
 					}
 				}
-				else
-				{
+				else {
 					this.errors = { errors: { error: Object.values(errorData.error.data.errors).join('\n') } };
-					if (this.errors.errors.error.includes('account not found'))
-					{
+					if (this.errors.errors.error.includes('account not found')) {
 						localStorage.clear()
 						sessionStorage.clear()
 						location.reload()
 					}
 				}
-				this.$spinner.hide()
 				this.errorDialogService.openDialog(this.errors);
 				return throwError(this.errors);
 			}));

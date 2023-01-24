@@ -17,8 +17,7 @@ declare var $: any;
 	templateUrl: './affiliate-step2.component.html',
 	styleUrls: ['./affiliate-step2.component.scss']
 })
-export class AffiliateStep2Component implements OnInit
-{
+export class AffiliateStep2Component implements OnInit {
 
 	public addBankForm: FormGroup;
 	public requestAddressChangeForm: FormGroup;
@@ -55,6 +54,7 @@ export class AffiliateStep2Component implements OnInit
 	public haveEinNo: boolean = true;
 
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
+	stepsObj: any;
 
 	constructor(
 		private adminService: AdminService,
@@ -71,14 +71,19 @@ export class AffiliateStep2Component implements OnInit
 		private globalFunctions: SharedModule
 	) { }
 
-	ngOnInit(): void
-	{
+	ngOnInit(): void {
+		this.stepsObj = JSON.parse(sessionStorage.getItem('step_completed_obj'));
+		for (let [key, value] of Object.entries(this.stepsObj)) {
+			if (key == 'step1' && value == 'uncompleted') {
+
+				$('#errorModal').modal('show')
+			}
+		}
 		//code related to autocomplete and map
 		this.mapFunction();
 		const currentYear = (new Date()).getFullYear();
 		//prepare list of days for DOB
-		for (let i = 1; i <= 31; i++)
-		{
+		for (let i = 1; i <= 31; i++) {
 			this.dobDay.push(i);
 		}
 		//prepare list of year for DOB
@@ -130,25 +135,19 @@ export class AffiliateStep2Component implements OnInit
 			primaryCardHolderName: ['']
 		});
 		//load list of currencies
-		this.httpClient.get("assets/json/currencyOptions.json").subscribe(data =>
-		{
-			for (const key in data)
-			{
+		this.httpClient.get("assets/json/currencyOptions.json").subscribe(data => {
+			for (const key in data) {
 				this.currencyOptions.push(data[key])
 				this.currencyOptions_copy.push(data[key])
 			}
-			this.currencyOptions.sort((a: any, b: any) => 
-			{
-				if (a.countryName.toLowerCase() > b.countryName.toLowerCase())
-				{
+			this.currencyOptions.sort((a: any, b: any) => {
+				if (a.countryName.toLowerCase() > b.countryName.toLowerCase()) {
 					return 1
 				}
-				else if (a.countryName.toLowerCase() < b.countryName.toLowerCase())
-				{
+				else if (a.countryName.toLowerCase() < b.countryName.toLowerCase()) {
 					return -1
 				}
-				else 
-				{
+				else {
 					return 0
 				}
 
@@ -157,29 +156,23 @@ export class AffiliateStep2Component implements OnInit
 			this.fillGlobalValue('', 'currency', true)
 		})
 
-		this.httpClient.get("assets/json/countryStateList.json").subscribe(data =>
-		{
+		this.httpClient.get("assets/json/countryStateList.json").subscribe(data => {
 			this.countryOptions = data;
-			if (this.affiliateId)
-			{
-				if (this.adminService.getSessionStepsCompleted().includes('2'))
-				{
+			if (this.affiliateId) {
+				if (this.adminService.getLocalStepsCompleted().includes('2')) {
 					this.isStep2Completed = true;
 					this.stateManagementService.setprogressBar(true);
 
 					this.adminService.getBankOfAffiliate(this.affiliateId)
 						.pipe(
-							catchError(err =>
-							{
+							catchError(err => {
 								this.stateManagementService.setprogressBar(false);
 								return throwError(err);
 							})
-						).subscribe(result =>
-						{
+						).subscribe(result => {
 							this.response = result;
 							//to show stripe errors at the top
-							if (this.response.data.stripeDetail.stripe_errors)
-							{
+							if (this.response.data.stripeDetail.stripe_errors) {
 								this.stripeErrors = this.response.data.stripeDetail.stripe_errors;
 							}
 							//set images and their ID
@@ -188,12 +181,10 @@ export class AffiliateStep2Component implements OnInit
 							this.id_front_image_id = this.response.data.bankinfo.id_front_image.ID;
 							this.id_back_image_id = this.response.data.bankinfo.id_back_image.ID;
 							//Documents changable or not.
-							if (this.response.data.stripeDetail.additional_doc_verification_status == 'unverified')
-							{
+							if (this.response.data.stripeDetail.additional_doc_verification_status == 'unverified') {
 								this.canChangeDocument = true;
 							}
-							else
-							{
+							else {
 								this.canChangeDocument = false;
 							}
 
@@ -231,8 +222,7 @@ export class AffiliateStep2Component implements OnInit
 							this.stateManagementService.setprogressBar(false);
 						});
 				}
-				else
-				{
+				else {
 					this.canChangeDocument = true;//can add or change documents
 
 					//for selected country
@@ -242,8 +232,7 @@ export class AffiliateStep2Component implements OnInit
 					});
 				}
 			}
-			else
-			{
+			else {
 				//for selected country
 				this.changeCountry(currentUser.CellNumberCountry.toUpperCase());
 				this.addBankForm.patchValue({
@@ -259,57 +248,45 @@ export class AffiliateStep2Component implements OnInit
 	@ViewChild('search1')
 	public searchElementRef: ElementRef;
 
-	mapFunction()
-	{
-		this.mapsAPILoader.load().then(() =>
-		{
+	mapFunction() {
+		this.mapsAPILoader.load().then(() => {
 			//For Address field
 			console.log(this.searchElementRef.nativeElement.value)
 			let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement);
-			autocomplete.addListener("place_changed", () =>
-			{
-				this.ngZone.run(() =>
-				{
+			autocomplete.addListener("place_changed", () => {
+				this.ngZone.run(() => {
 					//get the place result
 					let place: google.maps.places.PlaceResult = autocomplete.getPlace();
 
 					//verify result
-					if (place.geometry === undefined || place.geometry === null)
-					{
+					if (place.geometry === undefined || place.geometry === null) {
 						return;
 					}
 					console.log(place)
-					for (var i = 0; i < place.address_components.length; i++)
-					{
-						for (var j = 0; j < place.address_components[i].types.length; j++)
-						{
-							if (place.address_components[i].types[j] == "country")
-							{
+					for (var i = 0; i < place.address_components.length; i++) {
+						for (var j = 0; j < place.address_components[i].types.length; j++) {
+							if (place.address_components[i].types[j] == "country") {
 								this.addBankForm.patchValue({
 									country: place.address_components[i].short_name
 								});
 								this.changeCountry(place.address_components[i].short_name)
 							}
-							else if (place.address_components[i].types[j] == "administrative_area_level_1")
-							{
+							else if (place.address_components[i].types[j] == "administrative_area_level_1") {
 								this.addBankForm.patchValue({
 									state: place.address_components[i].short_name
 								});
 							}
-							else if (place.address_components[i].types[j] == "administrative_area_level_2")
-							{
+							else if (place.address_components[i].types[j] == "administrative_area_level_2") {
 								this.addBankForm.patchValue({
 									city: place.address_components[i].long_name
 								});
 							}
-							else if (place.address_components[i].types[j] == "postal_code")
-							{
+							else if (place.address_components[i].types[j] == "postal_code") {
 								this.addBankForm.patchValue({
 									zipCode: place.address_components[i].long_name
 								});
 							}
-							else if (place.address_components[i].types[j] == "street_number")
-							{
+							else if (place.address_components[i].types[j] == "street_number") {
 								this.addBankForm.patchValue({
 									street: place.address_components[i].long_name
 								});
@@ -329,14 +306,11 @@ export class AffiliateStep2Component implements OnInit
 		});
 	}
 
-	get f()
-	{
+	get f() {
 		return this.addBankForm.controls;
 	}
-	haveEin(haveEinNo)
-	{
-		switch (haveEinNo)
-		{
+	haveEin(haveEinNo) {
+		switch (haveEinNo) {
 			case 'noEin': {
 				this.haveEinNo = false;
 				break;
@@ -347,33 +321,26 @@ export class AffiliateStep2Component implements OnInit
 			}
 		}
 	}
-	changeCountry(selectedCountryCode)
-	{
+	changeCountry(selectedCountryCode) {
 		let selectedCountryData: any;
 
-		selectedCountryData = this.countryOptions.filter(function (countryOption)
-		{
+		selectedCountryData = this.countryOptions.filter(function (countryOption) {
 			return countryOption.countryShortCode == selectedCountryCode;
 		});
-		if (selectedCountryData)
-		{
+		if (selectedCountryData) {
 			this.stateOptions = selectedCountryData[0].regions;
 		}
 	}
-	changeIdentityCountry(selectedCountryCode)
-	{
-		this.httpClient.get("assets/json/stripeDocumentData.json").subscribe((stripeDocumentData: any) =>
-		{
-			const selectedCountryData = stripeDocumentData.filter(function (eachCountryObj)
-			{
+	changeIdentityCountry(selectedCountryCode) {
+		this.httpClient.get("assets/json/stripeDocumentData.json").subscribe((stripeDocumentData: any) => {
+			const selectedCountryData = stripeDocumentData.filter(function (eachCountryObj) {
 				return eachCountryObj.value[0].value === selectedCountryCode;
 			});
 			this.countryDocumentsArray = selectedCountryData[0].value[1].value.value;
 		})
 	}
 
-	idCardImageChange(event, imageType, imageId = null)
-	{
+	idCardImageChange(event, imageType, imageId = null) {
 		this.stateManagementService.setprogressBar(true);
 		const reader = new FileReader();
 		if (event.target.files && event.target.files.length)
@@ -381,22 +348,18 @@ export class AffiliateStep2Component implements OnInit
 		{
 			const [file] = event.target.files;
 			reader.readAsDataURL(file);
-			reader.onload = () =>
-			{
+			reader.onload = () => {
 				this.imageSrc = reader.result as string;
 				this.adminService.uploadVehicleImage(this.imageSrc)
 					.pipe(
-						catchError(err =>
-						{
+						catchError(err => {
 							this.stateManagementService.setprogressBar(false);
 							return throwError(err);
 						})
 					)
-					.subscribe(({ data }: any) =>
-					{
+					.subscribe(({ data }: any) => {
 
-						switch (imageType)
-						{
+						switch (imageType) {
 							case 'id_front_image': {
 								this.addBankForm.patchValue({
 									id_front_image: data.id,
@@ -427,31 +390,25 @@ export class AffiliateStep2Component implements OnInit
 	// {
 	// 	this.router.navigate(['/admin/add-card'], { queryParams: { accountType: 'blackCarLimoBus', accountId: this.affiliateId } })
 	// }
-	delete()
-	{
+	delete() {
 		this.stateManagementService.setprogressBar(true);
 		$('#deleteConfirmationModal').modal('hide');
 		this.adminService.deleteCard(this.cardToDelete, this.affiliateId)
 			.pipe(
-				catchError(err =>
-				{
+				catchError(err => {
 					this.stateManagementService.setprogressBar(false);
 					return throwError(err);
 				})
-			).subscribe(result =>
-			{
-				this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() =>
-				{
+			).subscribe(result => {
+				this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
 					this.router.navigate(['/admin /affiliate/step2']);
 				});
 				this.stateManagementService.setprogressBar(false);
 			});
 	}
 
-	deleteImage(id, imageType)
-	{
-		switch (imageType)
-		{
+	deleteImage(id, imageType) {
+		switch (imageType) {
 			case 'id_front_image': {
 				this.addBankForm.patchValue({
 					id_front_image: '',
@@ -471,15 +428,13 @@ export class AffiliateStep2Component implements OnInit
 			}
 		}
 	}
-	private scrollToErrorFormControlName(formControlName)
-	{
+	private scrollToErrorFormControlName(formControlName) {
 		console.log(formControlName)
 		let firstInvalidControl: HTMLElement;
 		firstInvalidControl = this.el.nativeElement.querySelector(
 			"input[formControlName='" + formControlName + "']"
 		);
-		if (!firstInvalidControl)
-		{
+		if (!firstInvalidControl) {
 			firstInvalidControl = this.el.nativeElement.querySelector(
 				"mat-select[formControlName='" + formControlName + "']"
 			);
@@ -491,80 +446,65 @@ export class AffiliateStep2Component implements OnInit
 			behavior: "smooth"
 		});
 	}
-	private getTopOffset(controlEl: HTMLElement): number
-	{
+	private getTopOffset(controlEl: HTMLElement): number {
 		console.log(controlEl.getBoundingClientRect());
 		const labelOffset = 110;
 		return controlEl.getBoundingClientRect().top + window.scrollY - labelOffset;
 	}
-	submitForm()
-	{
+	submitForm() {
 		console.log(this.addBankForm);
 		// console.log(JSON.stringify(this.addVehicleRatesForm.value));
 		this.submittedForm = true;
 		// stop here if form is invalid
-		if (this.addBankForm.invalid)
-		{
+		if (this.addBankForm.invalid) {
 			return;
 		}
-		this.adminService.setSessionStepsCompleted(2)
-		this.addBankForm.value.stepCompleted = this.adminService.getSessionStepsCompleted();
+		this.addBankForm.value.stepCompleted = this.adminService.getUpdatedStepsLocal('2');
 		console.log(this.addBankForm.value);
 		// console.log(JSON.stringify(this.addVehicleRatesForm.value));
 		this.disableSubmitButton = true; //disable submit button
 		this.spinner.show();
 		this.adminService.addBankOfAffiliate(this.addBankForm.value)
 			.pipe(
-				catchError(err =>
-				{
+				catchError(err => {
 					this.spinner.hide();//hide spinner
 					this.disableSubmitButton = false; //enable submit button
 					return throwError(err);
 				})
 			)
-			.subscribe(result =>
-			{
+			.subscribe(result => {
 				this.response = result;
 				this.spinner.hide();//hide spinner
 				this.disableSubmitButton = false; //enable submit button
-				if (this.response.errors || this.response.error)
-				{
-					this.adminService.unsetSessionStepsCompleted(2)
-				}
+
 
 				this.router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
 					this.router.navigate(['/admin/affiliate/step3'])
 				);
 			});
 	}
-	closeButton()
-	{
+	closeButton() {
 		this.closeTab.emit();
 	}
-	resetForm()
-	{
+	resetForm() {
 		this.addBankForm.reset();
 		this.id_front_image = "";
 		this.id_back_image = "";
 	}
-	showImageInModal(imageUrl)
-	{
+	showImageInModal(imageUrl) {
 		this.modalImage = imageUrl;
 		$("#imageModal").addClass("showImage");
 		$("#imageModal").removeClass("d-none");
 	}
-	fillGlobalValue(type: string = '', form_control: string, autofill: boolean = false)
-	{
+	fillGlobalValue(type: string = '', form_control: string, autofill: boolean = false) {
 		let object: any;
-		if (autofill)
-		{
+		if (autofill) {
 			// fetch the phone country in current user logged in from local storage. Default is 'US'
 			const current_user = localStorage.getItem('currentUser') ? JSON.parse(localStorage.getItem('currentUser')) : { phoneCountry: 'US' }
 			object = this.globalFunctions.ListSearch('find', this.currencyOptions, current_user.phoneCountry, 'currencyCountry')
 			console.log(object)
 		}
-		else
-		{
+		else {
 			object = this.globalFunctions.ListSearch('filter', this.currencyOptions, this.f.currency.value, 'currency')
 			object = this.globalFunctions.ListSearch('find', this.currencyOptions, 'us', 'currencyCountry')
 		}
@@ -572,53 +512,42 @@ export class AffiliateStep2Component implements OnInit
 		this.SetFormValue(form_control, object['currency'] + '-' + object['currencyCountry'])
 
 		// assign the object value
-		if (object)
-		{
+		if (object) {
 			return `${object['countryName']} - ${object['symbol']}`
 		}
-		else
-		{
+		else {
 			return ''
 		}
 	}
-	searchGlobalValue(type: string = '', text: string)
-	{
-		if (text == '')
-		{
+	searchGlobalValue(type: string = '', text: string) {
+		if (text == '') {
 			this.currencyOptions = this.currencyOptions_copy
 		}
-		else
-		{
+		else {
 			// fetch the values matching the text
 			let object_arr = this.globalFunctions.ListSearch('filter', this.currencyOptions, text, 'countryName')
-			if (object_arr.length <= 0)
-			{
+			if (object_arr.length <= 0) {
 				object_arr = this.globalFunctions.ListSearch('filter', this.currencyOptions, text, 'currency')
 			}
 
 			// assign the array
-			if (object_arr.length > 0)
-			{
+			if (object_arr.length > 0) {
 				this.currencyOptions = object_arr
-			} else
-			{
+			} else {
 				console.error('Could not find the specified value, ', text)
 			}
 		}
 	}
-	SetFormValue(form_control: string, value: any)
-	{
+	SetFormValue(form_control: string, value: any) {
 		this.addBankForm.get(form_control).setValue(value)
 		this.addBankForm.updateValueAndValidity()
 	}
 
 
-	selectGlobalValue(type: string, selected_value: any, form_control: string, autofill: boolean = false)
-	{
+	selectGlobalValue(type: string, selected_value: any, form_control: string, autofill: boolean = false) {
 		const object = this.globalFunctions.ListSearch('find', this.currencyOptions, selected_value, 'currency')
 
-		if (object)
-		{
+		if (object) {
 			this.SetFormValue(form_control, object['currency'])
 		}
 	}

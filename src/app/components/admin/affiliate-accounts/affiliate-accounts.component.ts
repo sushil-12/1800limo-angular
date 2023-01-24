@@ -13,8 +13,7 @@ declare var $: any;
 	templateUrl: './affiliate-accounts.component.html',
 	styleUrls: ['./affiliate-accounts.component.scss']
 })
-export class AffiliateAccountsComponent implements OnInit
-{
+export class AffiliateAccountsComponent implements OnInit {
 
 	color: ThemePalette = 'primary';
 	checked = false;
@@ -44,6 +43,17 @@ export class AffiliateAccountsComponent implements OnInit
 	operatorSelect: string;
 	filter_type: string
 	affiliateName: string;
+	stepCompleted: string = '';
+	stepCompletedObj: any = <Object>{
+		step0: "uncompleted",
+		step1: "uncompleted",
+		step2: "uncompleted",
+		step3: "uncompleted",
+		step4: "uncompleted",
+		step5: "uncompleted",
+		step6: "uncompleted"
+	}
+	affiliateId: string = '';
 
 	constructor(
 		private adminService: AdminService,
@@ -52,8 +62,7 @@ export class AffiliateAccountsComponent implements OnInit
 		private formBuilder: FormBuilder,
 		private activatedRoute: ActivatedRoute) { }
 
-	ngOnInit(): void
-	{
+	ngOnInit(): void {
 		this.operatorSelect = 'all';
 		this.filter_type = 'all'
 
@@ -66,10 +75,8 @@ export class AffiliateAccountsComponent implements OnInit
 		});
 	}
 
-	affiliateTypeSwitch(_affiliateType: string)
-	{
-		switch (_affiliateType)
-		{
+	affiliateTypeSwitch(_affiliateType: string) {
+		switch (_affiliateType) {
 			case 'black-limo-operator': {
 				this.heading = "Black Car / Limo Accounts";
 				this.addButton = "Add Black Car / Limo Account";
@@ -113,23 +120,20 @@ export class AffiliateAccountsComponent implements OnInit
 		}
 	}
 
-	onChangeFilterType(value: string)
-	{
+	onChangeFilterType(value: string) {
 		console.log('Changing Filter Type: ', value)
 		this.filter_type = value
 		this.loadAffiliateOperators()
 	}
 
-	loadAffiliateOperators(pageUrl = null)
-	{
+	loadAffiliateOperators(pageUrl = null) {
 		/** spinner starts on init */
 		this.spinner.show();
 
 		var keyword = ((document.getElementById("keyword") as HTMLInputElement).value);
 		// console.log(keyword);
 		// Load Our blackCarLimoBus using API
-		this.adminService.blackCarLimoBusAccounts(pageUrl, this.affiliateType, this.filter_type, keyword).then((result: any) =>
-		{
+		this.adminService.blackCarLimoBusAccounts(pageUrl, this.affiliateType, this.filter_type, keyword).then((result: any) => {
 			this.affiliate_accounts = result.data.data;
 
 			this.firstPage = 1;
@@ -148,76 +152,66 @@ export class AffiliateAccountsComponent implements OnInit
 		})
 	}
 
-	addAffiliateAccountClick() 
-	{
+	addAffiliateAccountClick() {
 		sessionStorage.setItem("affiliateType", this.affiliateType);
-		this.router.navigate(['/admin/affiliate/step1']);
+		sessionStorage.setItem("stepCompleted", this.stepCompleted);
+		sessionStorage.setItem("step_completed_obj", JSON.stringify(this.stepCompletedObj));
+		sessionStorage.setItem("affiliateId", this.affiliateId);
+		this.router.navigate(['/admin/affiliate/step0']);
 	}
 
-	editAffiliateAccount(affiliate_id: number)
-	{
+	editAffiliateAccount(affiliate_id: number) {
 		// this.affiliateService.updateStepsArrayLocal(this.response.data.affiliateParmas.step_completed);
 		// this.affiliateService.updateStepsCompletedObject(this.response.data.affiliateParmas.step_completed_obj);
 		sessionStorage.setItem('affiliateId', JSON.stringify(affiliate_id))
-		if (this.affiliateType !== "all")
-		{
+		if (this.affiliateType !== "all") {
 			sessionStorage.setItem("affiliateType", this.affiliateType);
 		}
-		this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() =>
-		{
-			this.router.navigate(['/admin/affiliate/step1']);
+		this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
+			this.router.navigate(['/admin/affiliate/step0']);
 		});
 
 	}
 
-	viewAffiliateCreditCards(affiliate_id: number)
-	{
+	viewAffiliateCreditCards(affiliate_id: number) {
 		this.router.navigate(['/admin/cards'], { queryParams: { accountType: 'blackCarLimoBus', accountId: affiliate_id } });
 	}
 
-	acceptAffiliate(acc_id)
-	{
+	acceptAffiliate(acc_id) {
 		this.spinner.show();
 		// this.disableSubmitButton=true; //disable submit button
 		console.log('acc_id', acc_id)
 
 		this.adminService.acceptAffiliate(acc_id)
 			.pipe(
-				catchError(err =>
-				{
+				catchError(err => {
 					this.spinner.hide();//hide spinner
 					return throwError(err);
 				})
 			)
-			.subscribe(({ data, success, message }: any) =>
-			{
-				if (success == true)
-				{
+			.subscribe(({ data, success, message }: any) => {
+				if (success == true) {
 					this.spinner.hide();//hide spinner
 					location.reload()
 				}
 			});
 	}
 
-	get rejectCauseF()
-	{
+	get rejectCauseF() {
 		return this.rejectCauseForm.controls;
 	}
 
-	rejectAffiliateClick(acc_id)
-	{
+	rejectAffiliateClick(acc_id) {
 		this.rejectCauseForm.patchValue({
 			acc_id: acc_id
 		});
 	}
 
-	rejectAffiliate()
-	{
+	rejectAffiliate() {
 		this.submitted = true;
 		console.log(this.rejectCauseForm);
 		// stop here if form is invalid
-		if (this.rejectCauseForm.invalid)
-		{
+		if (this.rejectCauseForm.invalid) {
 			return;
 		}
 
@@ -226,17 +220,14 @@ export class AffiliateAccountsComponent implements OnInit
 
 		this.adminService.rejectAffiliate(this.rejectCauseForm.value)
 			.pipe(
-				catchError(err =>
-				{
+				catchError(err => {
 					this.spinner.hide();//hide spinner
 					$('#rejectCauseModal').modal('hide');
 					return throwError(err);
 				})
 			)
-			.subscribe(({ data, success, message }: any) =>
-			{
-				if (success == true)
-				{
+			.subscribe(({ data, success, message }: any) => {
+				if (success == true) {
 					this.spinner.hide()
 					$('#rejectCauseModal').modal('hide');
 					location.reload()
@@ -244,84 +235,69 @@ export class AffiliateAccountsComponent implements OnInit
 			});
 	}
 
-	enableDisableClicked(event, id)
-	{
+	enableDisableClicked(event, id) {
 		this.spinner.show();//show spinner
 		console.log(event.checked);
-		if (event.checked)
-		{
+		if (event.checked) {
 			var status = 'enable';
 		}
-		else
-		{
+		else {
 			var status = 'disable';
 		}
 		this.adminService.blackCarLimoBusAccountStatus(id, status)
 			.pipe(
-				catchError(err =>
-				{
+				catchError(err => {
 					this.spinner.hide();//hide spinner
 					return throwError(err);
 				})
-			).subscribe(result =>
-			{
+			).subscribe(result => {
 
 				this.spinner.hide();//hide spinner
 			});
 	}
 
 	//for pagination
-	counter()
-	{
+	counter() {
 		var currentPage;
 		var startFrom;
 		var endTo;
 
-		if (this.currentPage < 5)
-		{
+		if (this.currentPage < 5) {
 			startFrom = 0;
 			endTo = this.totalPage;
 		}
-		else if (this.currentPage < this.totalPage)
-		{
+		else if (this.currentPage < this.totalPage) {
 			currentPage = this.currentPage
 			endTo = currentPage + 1;
 			startFrom = endTo - 5;
 		}
-		else
-		{
+		else {
 			endTo = this.totalPage;
 			startFrom = endTo - 5;
 		}
 
 		var i;
 		var udpArr = new Array();
-		for (i = startFrom; i < endTo; i++)
-		{
+		for (i = startFrom; i < endTo; i++) {
 			udpArr.push(i + 1);
 		}
 		return udpArr;
 	}
 
-	formatter(text: string)
-	{
+	formatter(text: string) {
 		return text.replace(/[_|-]/g, ' ')
 	}
 
 	messagetype: Record<string, any>
-	sendMessage(type: 'email' | 'sms', affiliate: Object, message: string = null)
-	{
+	sendMessage(type: 'email' | 'sms', affiliate: Object, message: string = null) {
 		console.log('Request to send a Message to affiliate id: ', type, affiliate['id'])
 		this.messagetype = { type, affiliate }
 		$('#messageModal').modal('show')
 		$('#messageModal').find('.modal-header').find('h4').text('Contact to Affiliate via ' + type.toUpperCase())
 		$('#messageModal').find('.modal-body').find('p#affiliate-details').html(`Affiliate Name: ${affiliate['FirstName']} ${affiliate['LastName']}<br/>Affiliate Email: ${affiliate['Email']}`)
-		if (message != null)
-		{
-			this.adminService.sendAffiliateMessage(type, affiliate['id'], { sendContent: message }).subscribe((response: any) =>
-			{
-				if (response.success)
-				{
+		if (message != null) {
+			this.adminService.sendAffiliateMessage(type, affiliate['id'], { sendContent: message }).subscribe((response: any) => {
+				if (response.success) {
 					console.log('Message Sent Successfully. ')
 				}
 			})
