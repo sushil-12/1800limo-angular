@@ -107,26 +107,17 @@ export class NewBookingComponent implements OnInit
 				this.is_booking_edit_case = true
 				this.SetFormValue('reservation_id', params.bookingId)
 				params.updateType ? this.SetFormValue('updateType', params.updateType) : this.SetFormValue('updateType', 'edit')
-				if (this.BigData)
-				{
-					this.prefillViaBookingID(params.bookingId)
-				}
 			}
 			else
 			{
 				this.chosen_user = null
 				this.buildBookingForm()
+				this.MapController()
 			}
 		})
 
 		// fetch the big data
-		this.fetchAirportsAndBigData().then((data: any) =>
-		{
-			this.BigData = data
-			this.BigData_COPY = JSON.parse(JSON.stringify(data))
-			this.MapController()
-			this.Form.reservation_id.value ? this.prefillViaBookingID(this.Form.reservation_id.value) : ''
-		})
+		this.fetchAirportsAndBigData()
 
 		// Subscriptions
 		this.Subscriptions()
@@ -142,7 +133,15 @@ export class NewBookingComponent implements OnInit
 
 	timeFormat(value: any)
 	{
-		return value
+		if (value == '12:00 AM')
+		{
+			return '0000 hrs'
+		}
+		if (moment(value.toLowerCase(), 'hh:mm a').minutes().toString() == '0')
+		{
+			return moment(value.toLowerCase(), 'hh:mm a').hours().toString() + moment(value.toLowerCase(), 'hh:mm a').minutes().toString() + '0 hrs';
+		}
+		return moment(value.toLowerCase(), 'hh:mm a').hours().toString() + moment(value.toLowerCase(), 'hh:mm a').minutes().toString() + ' hrs';
 	}
 
 	textFormatter(text: string)
@@ -321,26 +320,32 @@ export class NewBookingComponent implements OnInit
 
 	prefillViaBookingID(booking_id: number)
 	{
-		console.warn('Prefilling via Booking Id')
-		this.$api.getBookingDataForEdit(booking_id).subscribe((response: any) =>
+		// console.warn('Prefilling via Booking Id')
+		this.$spinner.show('normalspinner');
+		this.$api.getBookingDataForEdit(booking_id, this.Form.updateType.value).subscribe((response: any) =>
 		{
 			let editing_data = response.data
 			for (let item in editing_data)
 			{
 				if (item.includes('extra_stops') || item.includes('languages') || item.includes('dresses'), item.toLowerCase().includes('amenities'))
 				{
-					console.log('Skipping in the case of Extra Stops. ')
+					// console.log('Skipping in the case of Extra Stops. ')
 				}
 				if (editing_data[item])
 				{
 					this.SetFormValue(item, editing_data[item])
 				}
 			}
-
-			this.SetFormValue('driver_image_id', editing_data.driver_image.id);
-			this.SetFormValue('vehicle_image_id', editing_data.vehicle_image.id);
-			this.driver_image['image'] = editing_data.driver_image['image'] ?? '';
-			this.vehicle_image['image'] = editing_data.vehicle_image['image'] ?? '';
+			if (editing_data.driver_image)
+			{
+				this.SetFormValue('driver_image_id', editing_data.driver_image.id);
+				this.driver_image['image'] = editing_data.driver_image.image;
+			}
+			if (editing_data.vehicle_image)
+			{
+				this.SetFormValue('vehicle_image_id', editing_data.vehicle_image.id);
+				this.vehicle_image['image'] = editing_data.vehicle_image.image;
+			}
 
 			['driver_languages', 'driver_dresses', 'amenities', 'chargedAmenities'].forEach((item: string) =>
 			{
@@ -364,7 +369,7 @@ export class NewBookingComponent implements OnInit
 			this.Form.affiliate_id.value != 0 ? this.chooseAffiliate() : ''
 			this.chooseUser(this.Form.acc_id.value)
 
-			this.$spinner.hide()
+			this.$spinner.hide('normalspinner')
 		})
 	}
 
@@ -372,10 +377,10 @@ export class NewBookingComponent implements OnInit
 	{
 		if (!value || !form_control)
 		{
-			console.log(`No Value to set for ${form_control}. Returning ...`)
+			// console.log(`No Value to set for ${form_control}. Returning ...`)
 			return
 		}
-		console.log('Setting Form Value for ', form_control, ' : ', value)
+		// console.log('Setting Form Value for ', form_control, ' : ', value);
 		try
 		{
 			this.BookingForm.get(form_control).setValue(value)
@@ -383,7 +388,7 @@ export class NewBookingComponent implements OnInit
 		}
 		catch (err)
 		{
-			console.error('NFC Error: ')
+			// console.error('NFC Error: ')
 			return
 		}
 	}
@@ -391,7 +396,7 @@ export class NewBookingComponent implements OnInit
 
 	MapController(is_return: boolean = false)
 	{
-		console.log('Map has been initialised.')
+		// console.log('Map has been initialised.')
 		let waypoints = []
 		let origin: google.maps.LatLng
 		let destination: google.maps.LatLng
@@ -401,7 +406,7 @@ export class NewBookingComponent implements OnInit
 		{
 			if (is_return)
 			{
-				console.log('Return Map has been initialised. ')
+				// console.log('Return Map has been initialised. ')
 				// map
 				map = new google.maps.Map(document.getElementById('return_map'), {
 					zoom: 7,
@@ -430,13 +435,13 @@ export class NewBookingComponent implements OnInit
 				if (this.Form.return_transfer_type.value.includes('airport_'))
 				{
 					// override for Source - Airport
-					console.log('Return Override for Source Airport')
+					// console.log('Return Override for Source Airport')
 					origin = new google.maps.LatLng(this.Form.return_pickup_airport_latitude.value, this.Form.return_pickup_airport_longitude.value)
 				}
 				if (this.Form.return_transfer_type.value.includes('_airport'))
 				{
 					// override for Target - Airport
-					console.log('Return Override for Target Airport')
+					// console.log('Return Override for Target Airport')
 					destination = new google.maps.LatLng(this.Form.return_dropoff_airport_latitude.value, this.Form.return_dropoff_airport_longitude.value)
 				}
 			}
@@ -469,13 +474,13 @@ export class NewBookingComponent implements OnInit
 				if (this.Form.transfer_type.value.includes('airport_'))
 				{
 					// override for Source - Airport
-					console.log('Override for Source Airport')
+					// console.log('Override for Source Airport')
 					origin = new google.maps.LatLng(this.Form.pickup_airport_latitude.value, this.Form.pickup_airport_longitude.value)
 				}
 				if (this.Form.transfer_type.value.includes('_airport'))
 				{
 					// override for Target - Airport
-					console.log('Override for Target Airport')
+					// console.log('Override for Target Airport')
 					destination = new google.maps.LatLng(this.Form.dropoff_airport_latitude.value, this.Form.dropoff_airport_longitude.value)
 				}
 
@@ -509,7 +514,7 @@ export class NewBookingComponent implements OnInit
 			{
 				if (status == google.maps.DirectionsStatus.OK)
 				{
-					console.log('Directions Service Response: ', response)
+					// console.log('Directions Service Response: ', response)
 					directionsRenderer.setDirections(response)
 					// TODO fetch distance and time
 					this.fetchDistanceAndTime(response).then((response: { distance: number, time: number }) =>
@@ -563,42 +568,35 @@ export class NewBookingComponent implements OnInit
 
 	fillAddress(form_control: string, address: any)
 	{
-		console.log('Address: ', address)
+		// console.log('Address: ', address)
 		this.SetFormValue(form_control, address.formatted_address)
 	}
 
 	fillLocationPoints(form_control: string, location: any)
 	{
-		console.log('Location Points', location)
+		// console.log('Location Points', location)
 		this.SetFormValue(form_control + '_latitude', location.latitude)
 		this.SetFormValue(form_control + '_longitude', location.longitude)
 		this.MapController()
+		if (this.Form.service_type.value == 'round_trip')
+		{
+			this.MapController(true)
+		}
 	}
 
 
-	fetchAirportsAndBigData(): Promise<Record<string, any> | boolean | string>
+	fetchAirportsAndBigData(): void
 	{
-		return new Promise((resolve) =>
+		this.$spinner.show('fetchspinner');
+		this.$api.createBookingGetData().subscribe((response: any) =>
 		{
-			if (this.$api.getBookingData() != undefined)
+			if (response.success)
 			{
-				resolve(this.$api.getBookingData())
-			}
-			else
-			{
-				const interval = setInterval(() =>
-				{
-					if (this.$api.getBookingData() === undefined)
-					{
-						this.$spinner.show('fetchspinner')
-					}
-					else
-					{
-						this.$spinner.hide('fetchspinner')
-						clearInterval(interval)
-						resolve(this.$api.getBookingData())
-					}
-				}, 1500)
+				this.BigData = response.data;
+				this.BigData_COPY = JSON.parse(JSON.stringify(response.data));
+				this.MapController()
+				this.$spinner.hide('fetchspinner');
+				this.Form.reservation_id.value ? this.prefillViaBookingID(this.Form.reservation_id.value) : ''
 			}
 		})
 	}
@@ -615,7 +613,7 @@ export class NewBookingComponent implements OnInit
 		// fail-safe
 		if (!legend.hasOwnProperty(account_type))
 		{
-			console.error('Invalid Account type: ', account_type)
+			// console.error('Invalid Account type: ', account_type)
 			return
 		}
 		else
@@ -623,12 +621,12 @@ export class NewBookingComponent implements OnInit
 			this.$spinner.show()
 			this.$api.getAccountBytype(legend[account_type]).subscribe((response: any) =>
 			{
-				this.$spinner.hide()
 				if (response.success && response.data.length > 0)
 				{
 					this.ClientAccounts = response.data;
 					this.filteredAccountTypes = this.ClientAccounts
 				}
+				this.$spinner.hide()
 			})
 		}
 	}
@@ -655,13 +653,13 @@ export class NewBookingComponent implements OnInit
 		this.SetFormValue('acc_id', account_id);
 		this.$api.chooseUser(account_id, this.Form.account_type.value).subscribe((response: any) =>
 		{
-			this.$spinner.hide();
 			if (response.success && Object.keys(response.data).length > 0)
 			{
 				this.chosen_user = response.data
 				this.chosen_user['name'] = `${response.data.first_name} ${response.data.middle_name ?? ''} ${response.data.last_name}`
 				this.autofillData('passenger', this.chosen_user)
 			}
+			this.$spinner.hide();
 		})
 	}
 
@@ -677,7 +675,6 @@ export class NewBookingComponent implements OnInit
 			this.$spinner.show()
 			this.$api.getAccountBytype('driver').subscribe((response: any) =>
 			{
-				this.$spinner.hide()
 				if (response.success && response.data.length > 0)
 				{
 					this.AffiliateAccounts = response.data
@@ -691,15 +688,16 @@ export class NewBookingComponent implements OnInit
 						}
 					}
 				}
+				this.$spinner.hide()
 			})
 		}
 	}
 
 	chooseAffiliate()
 	{
-		console.warn('Fetching Affiliate vehicles and drivers')
-		this.fetchAffiliateVehicles(this.Form.affiliate_id.value)
-		this.fetchAffiliateDrivers(this.Form.affiliate_id.value)
+		// console.warn('Fetching Affiliate vehicles and drivers')
+		this.fetchAffiliateVehicles(this.BookingForm.get('affiliate_id').value)
+		this.fetchAffiliateDrivers(this.BookingForm.get('affiliate_id').value)
 	}
 
 
@@ -707,13 +705,12 @@ export class NewBookingComponent implements OnInit
 	{
 		if (!affiliate_id)
 		{
-			console.log('Invalid Paramater affiliate_data', affiliate_id)
+			// console.log('Invalid Paramater affiliate_data', affiliate_id)
 			return
 		}
 		this.$spinner.show()
 		this.$api.adminAffiliateVehicleList(affiliate_id).then((response: any) =>
 		{
-			this.$spinner.hide()
 			if (response.success && response.data.vehicleList.length > 0)
 			{
 				this.VehicleList = response.data.vehicleList
@@ -726,6 +723,7 @@ export class NewBookingComponent implements OnInit
 					this.autofillData('vehicle', this.VehicleList[0])
 				}
 			}
+			this.$spinner.hide()
 		})
 	}
 
@@ -733,7 +731,7 @@ export class NewBookingComponent implements OnInit
 	{
 		if (!affiliate_id)
 		{
-			console.log('Invalid Paramater affiliate_data', affiliate_id)
+			// console.log('Invalid Paramater affiliate_data', affiliate_id)
 			return
 		}
 		this.$spinner.show()
@@ -750,6 +748,7 @@ export class NewBookingComponent implements OnInit
 					this.autofillData('driver', this.DriverList[0])
 				}
 			}
+			this.$spinner.hide();
 		})
 	}
 
@@ -789,13 +788,11 @@ export class NewBookingComponent implements OnInit
 
 		if (list_name === 'airportsData' || list_name === 'airlinesData')
 		{
-			console.log(list_name, search_value)
 			// match with code
 			this.BigData[list_name] = this.BigData[list_name].filter((item: any) => item['code'].toLowerCase().startsWith(search_value.toLowerCase()))
 			// match with name 
 			if (this.BigData[list_name].length == 0)
 			{
-				console.log('name')
 				this.BigData[list_name] = this.BigData_COPY[list_name]
 				this.BigData[list_name] = this.BigData[list_name].filter((item: any) => item['name'].toLowerCase().startsWith(search_value.toLowerCase()))
 			}
@@ -803,7 +800,6 @@ export class NewBookingComponent implements OnInit
 			// match with country
 			if (this.BigData[list_name].length == 0)
 			{
-				console.log('country')
 				this.BigData[list_name] = this.BigData_COPY[list_name]
 				this.BigData[list_name] = this.BigData[list_name].filter((item: any) => item['country'].toLowerCase().startsWith(search_value.toLowerCase()))
 			}
@@ -831,7 +827,7 @@ export class NewBookingComponent implements OnInit
 		// fail-safes
 		if (!list && !form_control && !return_key)
 		{
-			console.trace('Invalid Parameters Passed. ')
+			// console.trace('Invalid Parameters Passed. ')
 			return ''
 		}
 
@@ -875,8 +871,6 @@ export class NewBookingComponent implements OnInit
 
 	autofillData(filling_for: string, data: any)
 	{
-		console.log('Yet To make .... ', filling_for, data)
-
 		if (filling_for === 'passenger')
 		{
 			this.SetFormValue('passenger_name', `${data.first_name} ${data.middle_name ?? ''} ${data.last_name}`)
@@ -895,7 +889,7 @@ export class NewBookingComponent implements OnInit
 			let legend = ['make', 'model', 'year', 'color']
 			for (let item of ['vehicleMakes', 'vehicleModels', 'vehicleYears', 'vehicleColors'])
 			{
-				let id = this.$shared.ListSearch('find', this.BigData[item], data[legend[i]], 'name')['id']
+				let id = this.BigData[item].find(item => item.name == data[legend[i]])['id']
 				this.SetFormValue('vehicle_' + legend[i], id)
 				i++;
 			}
@@ -916,7 +910,7 @@ export class NewBookingComponent implements OnInit
 
 	addExtraStop(is_return: boolean = false)
 	{
-		console.log('Adding Extra Stop ...')
+		// console.log('Adding Extra Stop ...')
 		if (is_return)
 		{
 			let index = Object.keys(this.ReturnExtraStops).length + 1;
@@ -1030,17 +1024,9 @@ export class NewBookingComponent implements OnInit
 
 
 
-	intlTelInputObject(event: any)
-	{
-		// this.MobileObject = event
-	}
-	telephoneCountryChange(form_control: string, value: any)
-	{
-		this.SetFormValue(form_control, value)
-	}
 	onCountryChange(event: any)
 	{
-		console.log(event)
+		// console.log(event)
 		this.Form.loose_customer.get('phone_country').setValue(event.iso2)
 		this.Form.loose_customer.get('phone_isd').setValue('+' + event.dialCode)
 		this.BookingForm.updateValueAndValidity()
@@ -1048,17 +1034,16 @@ export class NewBookingComponent implements OnInit
 
 	submitForm(preview: boolean)
 	{
-		console.log('\n\n Submitting Form \n\n')
-		console.log(this.BookingForm)
+		console.log('\n\n Submitting Form');
+		console.log(this.BookingForm);
 
 		if (this.BookingForm.invalid)
 		{
-			return
+			return;
 		}
 
 		if (preview)
 		{
-			this.$spinner.show()
 			let value = this.BookingForm.value
 			if (this.RatesForm)
 			{
@@ -1078,15 +1063,16 @@ export class NewBookingComponent implements OnInit
 				}
 			}
 
-			this.$api.createBooking(value).subscribe((response: any) =>
+			this.$spinner.show()
+			this.$api.createBooking(value, this.Form.updateType.value).subscribe((response: any) =>
 			{
-				this.$spinner.hide()
 				this.$errors.openDialog({
 					errors: {
 						error: 'Reservation has been created successfully. '
 					}
 				})
 				this.$router.navigate(['/admin/daily-bookings-admin'])
+				this.$spinner.hide()
 			})
 		}
 		else
@@ -1110,13 +1096,13 @@ export class NewBookingComponent implements OnInit
 				"passenger_info": {
 					"Name": data.passenger_name,
 					"Email": data.passenger_email,
-					"Phone": `(${data.passenger_cell_isd}) ${data.passenger_cell}`,
+					"Phone": data.passenger_cell ? `(${data.passenger_cell_isd}) ${data.passenger_cell}` : '',
 					"total passengers": data.total_passengers
 				},
 				"driver_info": {
 					"name": data.driver_name ?? '',
 					"email": data.driver_email ?? '',
-					"phone": `(${data.driver_cell_isd ?? ''})-${data.driver_cell ?? ''}`
+					"phone": data.driver_cell ? `(${data.driver_cell_isd ?? ''})-${data.driver_cell ?? ''}` : ''
 				},
 			}
 
@@ -1180,10 +1166,6 @@ export class NewBookingComponent implements OnInit
 	{
 		return 0	// for keeping the order
 	}
-	time(event: any)
-	{
-		console.log(event)
-	}
 
 	/**
 		 * upload image with the specified name and set form value with its id.
@@ -1202,10 +1184,12 @@ export class NewBookingComponent implements OnInit
 			reader.onload = () =>
 			{
 				image = reader.result as string
+				this.$spinner.show();
 				this.$api.uploadVehicleImage(image).subscribe((response: any) =>
 				{
 					this[image_type] = { image: response.data.image, id: response.data.ID }
 					this.SetFormValue(image_type + '_id', this[image_type]['id'])
+					this.$spinner.hide();
 				})
 			}
 		}
@@ -1271,7 +1255,7 @@ export class NewBookingComponent implements OnInit
 
 	toggleDropdown(type: string)
 	{
-		console.log('Toggle Dropdown ', type)
+		// console.log('Toggle Dropdown ', type)
 		this.booking_params['chevrons'][type] = !this.booking_params['chevrons'][type]
 	}
 
@@ -1361,16 +1345,14 @@ export class NewBookingComponent implements OnInit
 		// Affiliate Type
 		this.BookingForm.get('affiliate_type').valueChanges.subscribe((value: string) =>
 		{
-			['vehicle_type', 'vehicle_id', 'vehicle_make', 'vehicle_model', 'vehicle_color', 'vehicle_year', 'driver_name', 'driver_email', 'driver_gender', 'driver_cell', 'license_plate', 'affiliate_id'].forEach((item: any) =>
-			{
-				this.BookingForm.get(item).reset();
-				this.BookingForm.updateValueAndValidity();
-			})
-			this.SetFormValue('driver_cell_isd', '+1');
-
 			if (value == 'loose_affiliate')
 			{
-				console.log('init')
+				['vehicle_type', 'vehicle_id', 'vehicle_make', 'vehicle_model', 'vehicle_color', 'vehicle_year', 'driver_name', 'driver_email', 'driver_gender', 'driver_cell', 'license_plate'].forEach((item: any) =>
+				{
+					this.BookingForm.get(item).reset();
+					this.BookingForm.updateValueAndValidity();
+				})
+				this.SetFormValue('driver_cell_isd', '+1')
 				this.toggleDropdown(null)
 				this.init_rates = true
 				if (this.Form.service_type.value === 'round_trip')
@@ -1383,6 +1365,7 @@ export class NewBookingComponent implements OnInit
 				this.init_rates = false;
 				this.init_return_rates = false;
 				this.fetchAffiliates('affiliate')
+				this.chooseAffiliate()
 			}
 		})
 
@@ -1420,6 +1403,8 @@ export class NewBookingComponent implements OnInit
 		{
 			let airport_selected = this.BigData?.airportsData.find(item => item.id == value)
 			this.SetFormValue('return_pickup_airport_name', `${airport_selected.code} - ${airport_selected.name}, ${airport_selected.city}, ${airport_selected.country}`)
+			this.SetFormValue('return_pickup_airport_latitude', airport_selected.lat);
+			this.SetFormValue('return_pickup_airport_longitude', airport_selected.long);
 			setTimeout(() => this.MapController(), 2000)
 			if (this.Form.service_type.value == 'round_trip')
 			{
@@ -1435,12 +1420,13 @@ export class NewBookingComponent implements OnInit
 		{
 			let airport_selected = this.BigData?.airportsData.find(item => item.id == value);
 			this.SetFormValue('return_dropoff_airport_name', `${airport_selected.code} - ${airport_selected.name}, ${airport_selected.city}, ${airport_selected.country}`);
+			this.SetFormValue('return_dropoff_airport_latitude', airport_selected.lat);
+			this.SetFormValue('return_dropoff_airport_longitude', airport_selected.long);
 			setTimeout(() => this.MapController(), 2000)
 			if (this.Form.service_type.value == 'round_trip')
 			{
 				setTimeout(() =>
 				{
-					this.MapController()
 					this.MapController(true)
 				}, 2000)
 			}
@@ -1537,12 +1523,12 @@ export class NewBookingComponent implements OnInit
 
 	RateFormValue(data: any)
 	{
-		console.log('Rates Form: ', data)
+		// console.log('Rates Form: ', data)
 		this.RatesForm = data
 	}
 	ReturnRateFormValue(data: any)
 	{
-		console.log('Return Rates Form: ', data)
+		// console.log('Return Rates Form: ', data)
 		this.ReturnRatesForm = data
 	}
 
@@ -1556,7 +1542,7 @@ export class NewBookingComponent implements OnInit
 			pluck('is_exist')
 		).subscribe((is_exist: boolean) =>
 		{
-			console.log(is_exist)
+			// console.log(is_exist)
 			this.is_loose_customer_unique = is_exist;
 			return
 		})

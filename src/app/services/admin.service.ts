@@ -14,21 +14,8 @@ export class AdminService
 
 
 	private serverUrl = environment.serverUrl;
-	constructor(private httpClient: HttpClient) 
-	{
-		if (this.big_data_list == undefined)
-		{
-			this.createBookingGetData().subscribe((response: any) =>
-			{
-				this.big_data_list = response.data
-			})
-		}
-	}
-
-	getBookingData()
-	{
-		return this.big_data_list
-	}
+	constructor(private httpClient: HttpClient)
+	{ }
 
 	changeSortOrder(data: any)
 	{
@@ -844,8 +831,12 @@ export class AdminService
 			}
 		}
 	}
-	createBooking(data)
+	createBooking(data: any, update_type: string)
 	{
+		if (update_type == 'return')
+		{
+			return this.httpClient.post(`${this.serverUrl}duplicate-reservation`, data)
+		}
 		if (data.reservation_id)
 		{
 			return this.httpClient.put(this.serverUrl + 'edit-reservation', data);
@@ -855,16 +846,16 @@ export class AdminService
 			return this.httpClient.post(this.serverUrl + 'create-reservation', data);
 		}
 	}
-	getReservationDetails(reservation_id: number | StringConstructor)
+	getReservationDetails(reservation_id: number)
 	{
 
-		return this.httpClient.get(this.serverUrl + 'get-reservation-detail/' + reservation_id);
+		return this.httpClient.get(`${this.serverUrl}get-reservation-detail/${reservation_id}`);
 
 	}
 
-	getBookingDataForEdit(id)
+	getBookingDataForEdit(reservation_id: number, updateType: string)
 	{
-		return this.httpClient.get(this.serverUrl + 'get-reservation/' + id);
+		return this.httpClient.get(`${this.serverUrl}get-reservation/${reservation_id}/${updateType}`);
 	}
 
 	adminNotification(data)

@@ -200,7 +200,6 @@
 									<input matInput placeholder="Phone" formControlName="phone"
 										ng2TelInput (keyup)="checkUniqueness()"
 										[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
-										(intlTelInputObject)="intlTelInputObject($event)"
 										class="phoneNumberClass"
 										(countryChange)="onCountryChange($event)"
 										(focus)="$event.target.select()" />
@@ -454,7 +453,7 @@
 			<!-- Passenger Information -->
 			<div id="passenger-information" class="px-4 mt-4">
 				<h4>
-					Passenger Information 1
+					Passenger Information
 				</h4>
 				<div class="row">
 					<!-- Passenger Name -->
@@ -489,10 +488,9 @@
 							<input matInput placeholder="Passenger Cell" type="text"
 								formControlName="passenger_cell" (focus)="$event.target.select()"
 								class="lastnamefilter"
-								(intlTelInputObject)="intlTelInputObject($event)"
 								[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
 								ng2TelInput
-								(countryChange)="telephoneCountryChange('passenger_cell_isd', $event.dialCode)" />
+								(countryChange)="SetFormValue('passenger_cell_isd', '+' + $event.dialCode)" />
 						</mat-form-field>
 					</div>
 
@@ -828,12 +826,14 @@
 					<div id="driver-cell" class="col-md-3 my-2">
 						<mat-form-field appearance="outline" class="mat-custom-phone">
 							<mat-label>
-								Cell <span class="asterisk"></span>
+								Cell
 							</mat-label>
-							<input matInput formControlName="driver_cell" type="number"
-								placeholder="Driver Name" (focus)="$event.target.select()"
-								ng2TelInput placeholder="Cell"
-								(countryChange)="telephoneCountryChange('driver_cell_isd', $event.dialCode)">
+							<input matInput placeholder="Driver Cell" type="text"
+								formControlName="driver_cell" (focus)="$event.target.select()"
+								class="lastnamefilter"
+								[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb'], initialCountry: 'us'}"
+								ng2TelInput
+								(countryChange)="SetFormValue('driver_cell_isd', '+' + $event.dialCode)" />
 						</mat-form-field>
 					</div>
 
@@ -1972,13 +1972,13 @@
 				</h3>
 				<div
 					*ngFor="let item of booking_params?.preview_screen?.driver_info | keyvalue: returnZero">
-					<div class="row my-3" *ngIf="item.value && item.value !== null">
+					<div class="row my-3">
 						<div class="col-3">
 							<p class="m-0">
 								{{ textFormatter(item.key) | titlecase }}
 							</p>
 						</div>
-						<div class="col-9">
+						<div class="col-9" *ngIf="item.value">
 							<h5 class="m-0">
 								{{ textFormatter(item.value) }}
 							</h5>
