@@ -198,7 +198,7 @@
 										Phone
 									</mat-label>
 									<input matInput placeholder="Phone" formControlName="phone"
-										ng2TelInput (keyup)="checkUniqueness()"
+										ng2TelInput
 										[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
 										class="phoneNumberClass"
 										(countryChange)="onCountryChange($event)"
@@ -551,6 +551,7 @@
 				<div class="col-md-12 col-lg-10">
 					<mat-radio-group aria-label="Select an option" formControlName="affiliate_type">
 						<mat-radio-button [value]="aa" class="my-2 ml-4 mr-5 mx-md-4"
+							(click)="resetDriverAndVehicle(aa)"
 							*ngFor="let aa of booking_params.affiliate_accounts">
 							{{ textFormatter(aa) | titlecase }}
 						</mat-radio-button>
@@ -1928,12 +1929,18 @@
 								</p>
 							</div>
 							<div class="col-9">
-								<h5 class="m-0" *ngIf="item.key != 'extra_stops'">
+								<h5 class="m-0" *ngIf="item.key !== 'extra stops'">
 									{{ textFormatter(item.value) }}
 									{{ item.key == 'travel date' ? '| ' + dateFormat(item.value)
 									:
 									item.key == 'travel time' ? '| ' + timeFormat(item.value) :
 									'' }}
+								</h5>
+								<h5 class="m-0" *ngIf="item.key === 'extra stops'">
+									<p class="m-0 font-weight-bolder"
+										*ngFor="let stop of item.value; index as stop_index">
+										{{ stop.address }}
+									</p>
 								</h5>
 							</div>
 						</div>

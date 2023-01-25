@@ -113,6 +113,10 @@ export class NewBookingComponent implements OnInit
 				this.chosen_user = null
 				this.buildBookingForm()
 				this.MapController()
+				if (!this.booking_params['client_account_types'].includes('loose_customer'))
+				{
+					this.booking_params['client_account_types'].push('loose_customer')
+				}
 			}
 		})
 
@@ -380,7 +384,7 @@ export class NewBookingComponent implements OnInit
 			// console.log(`No Value to set for ${form_control}. Returning ...`)
 			return
 		}
-		// console.log('Setting Form Value for ', form_control, ' : ', value);
+		console.log('Setting Form Value for ', form_control, ' : ', value);
 		try
 		{
 			this.BookingForm.get(form_control).setValue(value)
@@ -1077,6 +1081,7 @@ export class NewBookingComponent implements OnInit
 		}
 		else
 		{
+			this.BigData = this.BigData_COPY
 			let data = this.BookingForm.value
 			this.booking_params['preview_screen'] = {
 				'travel_info': {
@@ -1347,12 +1352,6 @@ export class NewBookingComponent implements OnInit
 		{
 			if (value == 'loose_affiliate')
 			{
-				['vehicle_type', 'vehicle_id', 'vehicle_make', 'vehicle_model', 'vehicle_color', 'vehicle_year', 'driver_name', 'driver_email', 'driver_gender', 'driver_cell', 'license_plate'].forEach((item: any) =>
-				{
-					this.BookingForm.get(item).reset();
-					this.BookingForm.updateValueAndValidity();
-				})
-				this.SetFormValue('driver_cell_isd', '+1')
 				this.toggleDropdown(null)
 				this.init_rates = true
 				if (this.Form.service_type.value === 'round_trip')
@@ -1519,6 +1518,19 @@ export class NewBookingComponent implements OnInit
 				}, 2000)
 			}
 		})
+	}
+
+	resetDriverAndVehicle(affiliate_type: string)
+	{
+		if (affiliate_type == 'loose_affiliate')
+		{
+			['vehicle_type', 'vehicle_id', 'vehicle_make', 'vehicle_model', 'vehicle_color', 'vehicle_year', 'driver_name', 'driver_email', 'driver_gender', 'driver_cell', 'license_plate'].forEach((item: any) =>
+			{
+				this.BookingForm.get(item).reset();
+				this.BookingForm.updateValueAndValidity();
+			})
+			this.SetFormValue('driver_cell_isd', '+1')
+		}
 	}
 
 	RateFormValue(data: any)
