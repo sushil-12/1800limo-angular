@@ -49,70 +49,66 @@ export class HttpConfigInterceptor implements HttpInterceptor
 			{
 				if (event instanceof HttpResponse)
 				{
-					if (event.status == 401)
-					{
-						this.errors = {
-							errors: {
-								error: 'Unauthorized. Please login again to continue.'
-							}
+					console.log('\n\nevent--->>>', event, '\n\n');
+				}
+				return event;
+			}),
+			catchError((errorData: HttpErrorResponse) =>
+			{
+				this.spinner.hide()
+				if (errorData.status == 401)
+				{
+					this.errors = {
+						errors: {
+							error: 'Session Expired. Please reload the screen.'
 						}
+					}
+					localStorage.clear()
+					sessionStorage.clear()
+				}
+				else if (errorData.status == 440)
+				{
+					this.errors = {
+						errors: {
+							'error': 'Session Expired. Please re-login to continue. You will be navigated to homepage after 1 second.'
+						}
+					};
+					localStorage.clear();
+					sessionStorage.clear();
+					setTimeout(() =>
+					{
+						location.reload()
+					}, 2800)
+				}
+				else if (errorData.status == 500)
+				{
+					this.errors = {
+						errors: {
+							error: "Server Error"
+						}
+					}
+				}
+				else if (errorData.status == 404)
+				{
+					this.errors = {
+						errors: {
+							error: 'Server Error. Request Not Found. '
+						}
+					}
+				}
+				else
+				{
+					this.errors = { errors: { error: Object.values(errorData.error.data.errors).join('\n') } };
+					if (this.errors.errors.error.includes('account not found'))
+					{
 						localStorage.clear()
 						sessionStorage.clear()
+						location.reload()
 					}
-					else if (event.status == 440)
-					{
-						this.errors = {
-							errors: {
-								'error': 'Session Expired. Please re-login to continue. You will be navigated to homepage after 1 second.'
-							}
-						};
-						localStorage.clear();
-						sessionStorage.clear();
-						setTimeout(() =>
-						{
-							location.reload()
-						}, 2800)
-					}
-					else if (event.status == 500)
-					{
-						this.errors = {
-							errors: {
-								error: "Server Error"
-							}
-						}
-					}
-					else if (event.status == 404)
-					{
-						this.errors = {
-							errors: {
-								error: 'Server Error. Request Not Found. '
-							}
-						}
-					}
-					else if (event.status != 200)
-					{
-						this.errors = {
-							errors: {
-								error: Object.values(event['data']['errors']).join('\n')
-							}
-						};
-						if (this.errors.errors.error.includes('account not found'))
-						{
-							localStorage.clear()
-							sessionStorage.clear()
-							location.reload()
-						}
-						this.spinner.hide()
-					}
-					else
-					{
-						isDevMode() && console.log('\n\nevent--->>>', event, '\n\n');
-						return event;
-					}
-					this.errorDialogService.openDialog(this.errors);
-
 				}
-			})
-		)
+				this.spinner.hide()
+				this.errorDialogService.openDialog(this.errors);
+				return throwError(this.errors);
+			}));
 	}
 }
