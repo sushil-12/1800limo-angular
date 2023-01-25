@@ -19,7 +19,7 @@ import { AdminRoutingModule } from './admin-routing.module';
 import { AdminComponent } from './admin.component';
 import { MasterVehicleTypesComponent } from './master-vehicle-types/master-vehicle-types.component';
 import { DailyBookingsComponent } from './daily-bookings/daily-bookings.component';
-import { CreateNewBookingComponent } from './create-new-booking-old/create-new-booking.component';
+// import { CreateNewBookingComponent } from './create-new-booking-old/create-new-booking.component';
 import { CreateNewBooking2Component } from './create-new-booking2/create-new-booking2.component';
 import { QuoteComponent } from './quote/quote.component';
 import { InvoiceComponent } from './invoice/invoice.component';
@@ -103,7 +103,7 @@ import { FinalizeBookingComponent } from './finalize-booking/finalize-booking.co
 	declarations: [AdminComponent,
 		MasterVehicleTypesComponent,
 		DailyBookingsComponent,
-		CreateNewBookingComponent,
+		// CreateNewBookingComponent,
 		CreateNewBooking2Component,
 		QuoteComponent,
 		InvoiceComponent,
