@@ -1,14 +1,14 @@
 import
-	{
-		Component,
-		EventEmitter,
-		Input,
-		OnInit,
-		Output,
-		SimpleChanges,
-		ViewChild,
-		OnChanges,
-	} from "@angular/core";
+{
+	Component,
+	EventEmitter,
+	Input,
+	OnInit,
+	Output,
+	SimpleChanges,
+	ViewChild,
+	OnChanges,
+} from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { AdminService } from "src/app/services/admin.service";
 
@@ -89,7 +89,7 @@ export class RatesFormComponent implements OnInit, OnChanges
 
 	ngOnChanges(changes: SimpleChanges)
 	{
-		console.warn("Change has been detected: ", changes);
+		// console.warn("Change has been detected: ", changes);
 
 		this.ratesform = changes.init_rates?.currentValue ?? this.ratesform;
 		this.returnratesform =
