@@ -1562,5 +1562,12 @@ export class NewBookingComponent implements OnInit
 			return
 		})
 	}
+
+	fillLooseCustomerAddress(value: string)
+	{
+		(<FormGroup>this.BookingForm.get('loose_customer')).get('address').setValue(value);
+		(<FormGroup>this.BookingForm.get('loose_customer')).updateValueAndValidity();
+		this.BookingForm.updateValueAndValidity();
+	}
 }
 
