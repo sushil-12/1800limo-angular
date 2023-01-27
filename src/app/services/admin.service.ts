@@ -720,7 +720,10 @@ export class AdminService {
 			}
 		}
 	}
-	createBooking(data) {
+	createBooking(data: any, update_type: string) {
+		if (update_type == 'return') {
+			return this.httpClient.post(`${this.serverUrl}duplicate-reservation`, data)
+		}
 		if (data.reservation_id) {
 			return this.httpClient.put(this.serverUrl + 'edit-reservation', data);
 		}
@@ -734,8 +737,8 @@ export class AdminService {
 
 	}
 
-	getBookingDataForEdit(id) {
-		return this.httpClient.get(this.serverUrl + 'get-reservation/' + id);
+	getBookingDataForEdit(reservation_id: number, updateType: string) {
+		return this.httpClient.get(`${this.serverUrl}get-reservation/${reservation_id}/${updateType}`);
 	}
 
 	adminNotification(data) {
