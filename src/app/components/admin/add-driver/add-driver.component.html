@@ -1080,16 +1080,8 @@
 								<div *ngIf="f.ZipCode.errors.required">This field is required</div>
 							</div>
 							<div *ngIf="f.ZipCode.errors" class="text-danger margin-bottom-thin my-mat-hint">
-								<div *ngIf="f.ZipCode.errors?.invalid_Pattern;else plusError">Do not add Dashes
-									with numbers</div>
-								<ng-template #plusError>
-									<div *ngIf="f.ZipCode.errors?.invalidPattern;else allErrors">Do not enter +
-										sign</div>
-									<ng-template #allErrors>
-										<div *ngIf="f.ZipCode.errors?.pattern">Enter Numbers Only
-										</div>
-									</ng-template>
-								</ng-template>
+								<div *ngIf="f.ZipCode.errors?.pattern">Enter Numbers Only
+								</div>
 							</div>
 						</div>
 					</div>

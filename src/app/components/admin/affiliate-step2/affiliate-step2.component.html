@@ -481,16 +481,8 @@
 						<div *ngIf="f.zipCode.errors.required">This field is required</div>
 					</div>
 					<div *ngIf="f.zipCode.errors" class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.zipCode.errors?.invalid_Pattern;else plusError">Do not add Dashes
-							with numbers</div>
-						<ng-template #plusError>
-							<div *ngIf="f.zipCode.errors?.invalidPattern;else allErrors">Do not enter +
-								sign</div>
-							<ng-template #allErrors>
-								<div *ngIf="f.zipCode.errors?.pattern">Enter Numbers Only
-								</div>
-							</ng-template>
-						</ng-template>
+						<div *ngIf="f.zipCode.errors?.pattern">Enter Numbers Only
+						</div>
 					</div>
 				</div>
 			</div>
@@ -625,6 +617,3 @@
 
 <!-- Image modal -->
 <app-image-modal (closeTab)="closeButton()" [modalImage]="modalImage"></app-image-modal>
-
-<!-- Delete confirmation modal -->
-<!-- <app-delete-confirmation (deleteRecord)="delete()" [alertMessage]="alertMessage"></app-delete-confirmation> -->
