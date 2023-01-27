@@ -646,7 +646,7 @@ export class RatesFormComponent implements OnInit, OnChanges
 			this.subtotal = 0;
 			for (let item in this.total)
 			{
-				this.subtotal = Number(this.subtotal) + Number(this.total[item]);
+				this.subtotal = Number(this.subtotal.toFixed(2)) + Number(this.total[item].toFixed(2));
 			}
 		}
 
@@ -656,7 +656,7 @@ export class RatesFormComponent implements OnInit, OnChanges
 			for (let item in this.r_total)
 			{
 				this.r_subtotal =
-					Number(this.r_subtotal) + Number(this.r_total[item]);
+					Number(this.r_subtotal.toFixed(2)) + Number(this.r_total[item].toFixed(2));
 			}
 		}
 	}
@@ -667,14 +667,14 @@ export class RatesFormComponent implements OnInit, OnChanges
 		{
 			if (this.vehicles !== 0)
 			{
-				this.grandtotal = this.subtotal * this.vehicles;
+				this.grandtotal = Number(this.subtotal.toFixed(2)) * this.vehicles;
 			}
 		}
 		if (form == 'ReturnRatesForm')
 		{
 			if (this.vehicles !== 0)
 			{
-				this.r_grandtotal = this.r_subtotal * this.vehicles;
+				this.r_grandtotal = Number(this.r_subtotal.toFixed(2)) * this.vehicles;
 			}
 		}
 	}
