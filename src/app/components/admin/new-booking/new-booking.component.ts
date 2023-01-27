@@ -139,9 +139,17 @@ export class NewBookingComponent implements OnInit
 	{
 		if (value.toUpperCase() == '12:00 AM')
 		{
-			return '0000h'
+			return '0000 h'
 		}
-		return value.replace(':', '').substring(0, 5) + 'h';
+		let hours = moment(moment(value, 'hh:mm a').format('HH'), 'HH').hours();
+		let mins = moment(value, 'hh:mm a').minutes().toString();
+		if (Number(mins) == 0 || Number(mins) < 10)
+		{
+			mins = '0' + mins.toString();
+		}
+
+		return hours < 10 ? '0' + hours.toString() + mins.toString() + ' h' : hours.toString() + mins.toString() + ' h'
+		//return value.replace(':', '').substring(0, 5) + 'h';
 	}
 
 	textFormatter(text: string)
@@ -309,6 +317,7 @@ export class NewBookingComponent implements OnInit
 		let date: string | number = new Date().getDate() + 1
 		let year = new Date().getFullYear()
 
+
 		let full_date = new Date(year, month, date).toISOString()
 		// 10 days later
 		let future_full_date = new Date(year, month, date + 10).toISOString()
@@ -383,6 +392,7 @@ export class NewBookingComponent implements OnInit
 		console.log('Setting Form Value for ', form_control, ' : ', value);
 		try
 		{
+
 			this.BookingForm.get(form_control).setValue(value)
 			this.BookingForm.updateValueAndValidity()
 		}
