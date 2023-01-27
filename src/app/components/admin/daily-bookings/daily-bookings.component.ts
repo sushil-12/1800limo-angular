@@ -5,11 +5,11 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { catchError } from "rxjs/operators";
 import { throwError } from "rxjs";
 import
-	{
-		DateAdapter,
-		MAT_DATE_LOCALE,
-		ThemePalette,
-	} from "@angular/material/core";
+{
+	DateAdapter,
+	MAT_DATE_LOCALE,
+	ThemePalette,
+} from "@angular/material/core";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { HttpClient } from "@angular/common/http";
 declare var $: any;
@@ -331,18 +331,18 @@ export class DailyBookingsComponent implements OnInit
 			{
 				if (success == true)
 				{
-					this.spinner.hide(); //hide spinner
 					$("#change_status_booking_Modal").modal("hide");
-					this.router
-						.navigateByUrl("/RefreshComponent", {
-							skipLocationChange: true,
-						})
-						.then(() =>
-						{
-							this.router.navigate([
-								"/admin/daily-bookings-admin",
-							]);
-						});
+					this.loadBookings()
+					// this.router
+					// 	.navigateByUrl("/RefreshComponent", {
+					// 		skipLocationChange: true,
+					// 	})
+					// 	.then(() =>
+					// 	{
+					// 		this.router.navigate([
+					// 			"/admin/daily-bookings-admin",
+					// 		]);
+					// 	});
 				}
 			});
 	}

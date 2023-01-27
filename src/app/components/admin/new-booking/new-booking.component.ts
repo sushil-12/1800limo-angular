@@ -137,15 +137,11 @@ export class NewBookingComponent implements OnInit
 
 	timeFormat(value: any)
 	{
-		if (value == '12:00 AM')
+		if (value.toUpperCase() == '12:00 AM')
 		{
-			return '0000 hrs'
+			return '0000h'
 		}
-		if (moment(value.toLowerCase(), 'hh:mm a').minutes().toString() == '0')
-		{
-			return moment(value.toLowerCase(), 'hh:mm a').hours().toString() + moment(value.toLowerCase(), 'hh:mm a').minutes().toString() + '0 hrs';
-		}
-		return moment(value.toLowerCase(), 'hh:mm a').hours().toString() + moment(value.toLowerCase(), 'hh:mm a').minutes().toString() + ' hrs';
+		return value.replace(':', '').substring(0, 5) + 'h';
 	}
 
 	textFormatter(text: string)
@@ -783,8 +779,13 @@ export class NewBookingComponent implements OnInit
 		{
 			return
 		}
-
-		this.BigData[list_name] = this.BigData_COPY[list_name]
+		if (list_name == 'vehicleModels')
+		{
+			this.BigData['vehicleModels'] = this.BigData_COPY['vehicleModels'].filter((item: any) => item.make_id == this.Form.vehicle_make.value)
+		} else
+		{
+			this.BigData[list_name] = this.BigData_COPY[list_name]
+		}
 		if (search_value == '')
 		{
 			return
@@ -1302,8 +1303,9 @@ export class NewBookingComponent implements OnInit
 				for (let item in loose_customer.controls)
 				{
 					// if 'item' in loose_customer is a formgroup, like card_details
-					if (loose_customer[item] instanceof FormGroup)
+					if ((<FormGroup>this.BookingForm.get('loose_customer')).get(item) instanceof FormGroup)
 					{
+						console.log(item)
 						// for every 'key' in card_details formgroup
 						for (let key in (loose_customer.get(item) as FormGroup).controls)
 						{
@@ -1314,11 +1316,12 @@ export class NewBookingComponent implements OnInit
 						}
 					}
 
-					if (item != 'middle_name')
+					if (item != 'middle_name' && item != 'address')
 					{
 						loose_customer.get(item).setValidators([Validators.required]);
 					}
 				}
+				(<FormGroup>loose_customer.get('card_details')).get('card_number').setValidators([Validators.required, Validators.pattern("[0-9]{12,20}")]);
 				loose_customer.get('email').setValidators([Validators.required, Validators.pattern("[a-zA-Z0-9\$\#\.\/\%\~\\-\\&\+\_]+@[a-z0-9.]+(\.[a-z]+){1,3}")])
 				loose_customer.get('phone').setValidators([Validators.required, Validators.pattern("^[0-9]{10,12}$")])
 			}
@@ -1374,7 +1377,7 @@ export class NewBookingComponent implements OnInit
 			{
 				return
 			}
-			this.BigData_COPY['vehicleModels'] = this.$shared.ListSearch('filter', this.BigData?.vehicleModels, this.Form.vehicle_make.value, 'make_id')
+			this.BigData['vehicleModels'] = this.$shared.ListSearch('filter', this.BigData_COPY?.vehicleModels, this.Form.vehicle_make.value, 'make_id')
 		})
 
 		// Pickup Airport

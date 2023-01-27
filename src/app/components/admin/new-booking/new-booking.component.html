@@ -12,7 +12,7 @@
 
 
 
-<div class="container-fluid" [formGroup]="BookingForm">
+<form class="container-fluid" [formGroup]="BookingForm" appInvalidControlScroll>
 	<div id="page-container">
 		<!-- Section - Booking Type -->
 		<div class="section-container mt-5">
@@ -41,7 +41,7 @@
 								Transfer Type
 							</mat-label>
 							<mat-select formControlName="transfer_type">
-								<mat-option [value]="tf_type"
+								<mat-option [value]="tf_type" class="font-weight-bolder"
 									*ngFor="let tf_type of booking_params.transfer_types">
 									{{ textFormatter(tf_type) | titlecase }}
 								</mat-option>
@@ -56,7 +56,7 @@
 								Return Transfer Type
 							</mat-label>
 							<mat-select formControlName="return_transfer_type">
-								<mat-option [value]="tf_type"
+								<mat-option [value]="tf_type" class="font-weight-bolder"
 									*ngFor="let tf_type of booking_params.transfer_types">
 									{{ textFormatter(tf_type) | titlecase }}
 								</mat-option>
@@ -226,9 +226,9 @@
 									<mat-label>
 										Address
 									</mat-label>
-									<input matInput placeholder="Address" type="text"
-										formControlName="address" tabindex="0"
-										(focus)="$event.target.select()">
+									<input type="text" matInput placeholder="Type your address"
+										matGoogleMapsAutocomplete formControlName="address"
+										(focus)="$event.target.select()" />
 								</mat-form-field>
 								<div class="error-message"
 									*ngIf="LooseCustomer.address.invalid && (LooseCustomer.address.touched || LooseCustomer.address.dirty)">
@@ -629,7 +629,8 @@
 				</h4>
 				<div class="row">
 					<!-- Vehicle Type -->
-					<div id="vehicle-type" class="col-md-4 col-xl-3 my-2">
+					<div id="vehicle-type" class="my-2"
+						[ngClass]="Form.vehicle_type.value && !Form.vehicle_make.value ? 'col-md-6 col-xl-4' : Form.vehicle_make.value ? 'col-md-4 col-xl-3' : 'col-md-12'">
 						<mat-form-field appearance="outline">
 							<mat-label>
 								Vehicle Type
@@ -666,7 +667,8 @@
 					</div>
 
 					<!-- Make -->
-					<div id="make" class="col-md-4 col-xl-3 my-2">
+					<div id="make" class="my-2" *ngIf="Form.vehicle_type.value"
+						[ngClass]="Form.vehicle_make.value ? 'col-md-4 col-xl-3' : 'col-md-6 col-xl-4'">
 						<mat-form-field appearance="outline">
 							<mat-label>
 								Make
@@ -687,7 +689,7 @@
 					</div>
 
 					<!-- Model -->
-					<div id="model" class="col-md-4 col-xl-3 my-2">
+					<div id="model" class="col-md-4 col-xl-3 my-2" *ngIf="Form.vehicle_make.value">
 						<mat-form-field appearance="outline">
 							<mat-label>
 								Model
@@ -1829,7 +1831,7 @@
 			</div>
 		</div>
 	</div>
-</div>
+</form>
 
 
 

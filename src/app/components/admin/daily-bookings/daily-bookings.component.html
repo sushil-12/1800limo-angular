@@ -68,13 +68,15 @@
 									<th>Driver Info</th>
 									<th>Vehicle Type</th>
 									<th>Booking Status</th>
-									<th>Status</th>
+									<!-- <th>Status</th> -->
 									<th>Actions</th>
 								</tr>
 							</thead>
 							<tbody>
 								<tr role="row" class="odd" *ngFor="let booking of bookings">
-									<td>{{ booking.booking_id }}</td>
+									<td class="text-center font-weight-bolder">
+										{{ booking.booking_id }}
+									</td>
 									<td class="sorting_1">
 										<p>{{ FormatDate(booking.pickup_date) }}</p>
 										<p>{{ FormatTime(booking.pickup_time) }}</p>
@@ -115,18 +117,20 @@
 									</td>
 									<td>{{booking.vehicle_cat_name}}</td>
 									<td>
-										<div
-											[className]="'badge badge-pill booking_status ' + booking.booking_status">
+										<div data-toggle="modal"
+											(click)="changeBookingStatus(booking.booking_id)"
+											data-target="#change_status_booking_Modal"
+											[className]="'badge badge-pill booking_status cursor-pointer ' + booking.booking_status">
 											{{booking.booking_status | bookingStatusTextReplace :
 											'_' : ' ' |titlecase}}
 										</div>
 									</td>
-									<td>
+									<!-- <td>
 										<mat-slide-toggle class="example-margin" [color]="color"
 											[checked]="booking.status" [disabled]="disabled"
 											(change)="enableDisableClicked($event,booking.booking_id)">
 										</mat-slide-toggle>
-									</td>
+									</td> -->
 									<td>
 										<a class="user-profileded btn btn-icon btn-transparent-dark dropdown-toggle"
 											id="navbarDropdownUserImage" href="javascript:void(0);"
