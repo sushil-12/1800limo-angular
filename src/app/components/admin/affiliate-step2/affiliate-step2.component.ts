@@ -72,13 +72,7 @@ export class AffiliateStep2Component implements OnInit {
 	) { }
 
 	ngOnInit(): void {
-		this.stepsObj = JSON.parse(sessionStorage.getItem('step_completed_obj'));
-		for (let [key, value] of Object.entries(this.stepsObj)) {
-			if (key == 'step1' && value == 'uncompleted') {
 
-				$('#errorModal').modal('show')
-			}
-		}
 		//code related to autocomplete and map
 		this.mapFunction();
 		const currentYear = (new Date()).getFullYear();
@@ -125,7 +119,7 @@ export class AffiliateStep2Component implements OnInit {
 			city: ['', Validators.required],
 			state: ['', Validators.required],
 			country: ['', Validators.required],
-			zipCode: ['', [Validators.required, Validators.pattern("^[0-9]*$"), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
+			zipCode: ['', [Validators.required, Validators.pattern("^[0-9]*$")]],
 			unit: [''],
 			primaryCardType: ['personal'],
 			primaryCardNumber: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(16), Validators.maxLength(16), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],

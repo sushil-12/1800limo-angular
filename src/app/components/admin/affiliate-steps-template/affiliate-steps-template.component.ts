@@ -71,9 +71,10 @@ export class AffiliateStepsTemplateComponent implements OnInit {
 			}
 		}
 
-		// const tree = this.router.parseUrl(this.router.url);
-		// this.secondPartUrl = tree.root.children.primary.segments[2].path;
-		// const step = this.secondPartUrl.charAt(this.secondPartUrl.length - 1);
+		const tree = this.router.parseUrl(this.router.url);
+		this.secondPartUrl = tree.root.children.primary.segments[2].path;
+		const step = this.secondPartUrl.charAt(this.secondPartUrl.length - 1);
+		console.log(step, ";;;;;;;;;;;;;;;;;")
 
 	}
 	stepCompletionTick() {
@@ -83,5 +84,31 @@ export class AffiliateStepsTemplateComponent implements OnInit {
 			this[stepNumber] = 'md-step ' + value + (this.currentStep == stepNumber ? ' active' : '');
 
 		}
+	}
+
+	stepClicked(step) {
+		let steps_completed = sessionStorage.getItem('stepCompleted')
+
+		if (step == 0) {
+			this.router.navigate(['/admin/affiliate/step0']);
+			return
+		}
+
+		console.log('Inside block')
+
+
+		if (step >= 1 && steps_completed != null && steps_completed.includes((step - 1) + '')) {
+			this.router.navigate(['/admin/affiliate/step' + step]);
+
+		} else {
+			console.log('Inside else')
+			this.errordialog.openDialog({
+				errors: {
+					error: `Please complete previous steps first.`
+				}
+			})
+			this.router.navigate(['/admin/affiliate/step' + (steps_completed.length)])
+		}
+
 	}
 }
