@@ -221,6 +221,21 @@
 							</div>
 
 							<!-- Address -->
+
+							<!-- <div *ngIf="!searchSubstring(Form.transfer_type.value, 'airport_')">
+								<div class="row">
+									<div class="col-md-12">
+										<mat-form-field appearance="outline">
+											<mat-label> Pickup Address </mat-label>
+											<input type="text" matInput placeholder="Type your address"
+												matGoogleMapsAutocomplete [value]="fillValue(null, 'pickup', null)"
+												(focus)="$event.target.select()"
+												(onAutocompleteSelected)="fillAddress('pickup', $event)"
+												(onLocationSelected)="fillLocationPoints('pickup', $event)" />
+										</mat-form-field>
+									</div>
+								</div>
+							</div> -->
 							<div class="col-md-4 my-2">
 								<mat-form-field appearance="outline">
 									<mat-label>
@@ -228,7 +243,7 @@
 									</mat-label>
 									<input type="text" matInput placeholder="Type your address"
 										matGoogleMapsAutocomplete
-										(change)="fillLooseCustomerAddress($event.formatted_address)"
+										(onAutocompleteSelected)="fillLooseCustomerAddress($event.formatted_address)"
 										(focus)="$event.target.select()" />
 								</mat-form-field>
 								<div class="error-message"
@@ -661,7 +676,7 @@
 							<mat-select formControlName="vehicle_id">
 								<mat-option [value]="fillValue(VehicleList, 'vehicle_id', 'make')"
 									*ngFor="let option of VehicleList">
-									{{ option.make }} ({{ option.model }})
+									{{ option.make}} ({{ option.model }})
 								</mat-option>
 							</mat-select>
 						</mat-form-field>

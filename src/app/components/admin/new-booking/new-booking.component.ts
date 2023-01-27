@@ -603,6 +603,7 @@ export class NewBookingComponent implements OnInit
 			if (response.success)
 			{
 				this.BigData = response.data;
+				console.log(this.BigData, "check big data")
 				this.BigData_COPY = JSON.parse(JSON.stringify(response.data));
 				this.MapController()
 				this.$spinner.hide('fetchspinner');
@@ -724,6 +725,7 @@ export class NewBookingComponent implements OnInit
 			if (response.success && response.data.vehicleList.length > 0)
 			{
 				this.VehicleList = response.data.vehicleList
+				console.log(this.VehicleList, "check data")
 
 				// autofill data
 				if (this.VehicleList.length == 1)
@@ -1083,7 +1085,7 @@ export class NewBookingComponent implements OnInit
 			{
 				this.$errors.openDialog({
 					errors: {
-						error: 'Reservation has been created successfully. '
+						error: response.message
 					}
 				})
 				this.$router.navigate(['/admin/daily-bookings-admin'])
@@ -1573,8 +1575,9 @@ export class NewBookingComponent implements OnInit
 		})
 	}
 
-	fillLooseCustomerAddress(value: string)
+	fillLooseCustomerAddress(value: any)
 	{
+		console.log(value, "sjakfsdgfh");
 		(<FormGroup>this.BookingForm.get('loose_customer')).get('address').setValue(value);
 		(<FormGroup>this.BookingForm.get('loose_customer')).updateValueAndValidity();
 		this.BookingForm.updateValueAndValidity();
