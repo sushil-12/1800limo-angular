@@ -233,6 +233,7 @@ export class RatesFormComponent implements OnInit, OnChanges
 			this.ReturnRatesForm.valueChanges.subscribe((value: any) =>
 			{
 				this.calculateTotal("ReturnRatesForm");
+				this.calculateGrandTotal('ReturnRatesForm');
 				value["r_grand_total"] = this.r_subtotal;
 				value["r_sub_total"] = this.r_subtotal;
 
@@ -645,8 +646,7 @@ export class RatesFormComponent implements OnInit, OnChanges
 			this.subtotal = 0;
 			for (let item in this.total)
 			{
-				this.subtotal =
-					Number(this.subtotal) + Number(this.total[item]);
+				this.subtotal = Number(this.subtotal) + Number(this.total[item]);
 			}
 		}
 
@@ -668,6 +668,13 @@ export class RatesFormComponent implements OnInit, OnChanges
 			if (this.vehicles !== 0)
 			{
 				this.grandtotal = this.subtotal * this.vehicles;
+			}
+		}
+		if (form == 'ReturnRatesForm')
+		{
+			if (this.vehicles !== 0)
+			{
+				this.r_grandtotal = this.r_subtotal * this.vehicles;
 			}
 		}
 	}

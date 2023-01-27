@@ -189,8 +189,8 @@
 									<mat-label class="">
 										Phone
 									</mat-label>
-									<input matInput placeholder="Phone" formControlName="phone" ng2TelInput
-										(keyup)="checkUniqueness()"
+									<input matInput placeholder="Phone" formControlName="phone"
+										ng2TelInput
 										[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
 										class="phoneNumberClass" (countryChange)="onCountryChange($event)"
 										(focus)="$event.target.select()" />
@@ -529,6 +529,7 @@
 				<div class="col-md-12 col-lg-10">
 					<mat-radio-group aria-label="Select an option" formControlName="affiliate_type">
 						<mat-radio-button [value]="aa" class="my-2 ml-4 mr-5 mx-md-4"
+							(click)="resetDriverAndVehicle(aa)"
 							*ngFor="let aa of booking_params.affiliate_accounts">
 							{{ textFormatter(aa) | titlecase }}
 						</mat-radio-button>
@@ -1092,7 +1093,7 @@
 			</h4>
 
 			<!-- Pickup - Address Field -->
-			<div *ngIf="searchSubstring(Form.transfer_type.value, 'city_')">
+			<div *ngIf="!searchSubstring(Form.transfer_type.value, 'airport_')">
 				<div class="row">
 					<div class="col-md-12">
 						<mat-form-field appearance="outline">
@@ -1221,7 +1222,7 @@
 			</h4>
 
 			<!-- Dropoff - Address Field -->
-			<div *ngIf="searchSubstring(Form.transfer_type.value, '_city')">
+			<div *ngIf="!searchSubstring(Form.transfer_type.value, '_airport')">
 				<div class="row">
 					<div class="col-md-12">
 						<mat-form-field appearance="outline">
@@ -1445,7 +1446,7 @@
 			</h4>
 
 			<!-- Return Pickup - Address Field -->
-			<div *ngIf="searchSubstring(Form.return_transfer_type.value, 'city_')">
+			<div *ngIf="!searchSubstring(Form.return_transfer_type.value, 'airport_')">
 				<div class="row mt-3">
 					<div class="col-md-12">
 						<mat-form-field appearance="outline">
@@ -1563,7 +1564,7 @@
 			</h4>
 
 			<!-- Return Dropoff - Address Field -->
-			<div *ngIf="searchSubstring(Form.return_transfer_type.value, '_city')">
+			<div *ngIf="!searchSubstring(Form.return_transfer_type.value, '_airport')">
 				<div class="row mt-3">
 					<div class="col-md-12">
 						<mat-form-field appearance="outline">
@@ -1855,12 +1856,18 @@
 								</p>
 							</div>
 							<div class="col-9">
-								<h5 class="m-0" *ngIf="item.key != 'extra_stops'">
+								<h5 class="m-0" *ngIf="item.key !== 'extra stops'">
 									{{ textFormatter(item.value) }}
 									{{ item.key == 'travel date' ? '| ' + dateFormat(item.value)
 									:
 									item.key == 'travel time' ? '| ' + timeFormat(item.value) :
 									'' }}
+								</h5>
+								<h5 class="m-0" *ngIf="item.key === 'extra stops'">
+									<p class="m-0 font-weight-bolder"
+										*ngFor="let stop of item.value; index as stop_index">
+										{{ stop.address }}
+									</p>
 								</h5>
 							</div>
 						</div>
