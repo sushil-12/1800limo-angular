@@ -730,7 +730,7 @@ export class AdminService {
 	}
 	getReservationDetails(reservation_id: number | StringConstructor) {
 
-		return this.httpClient.get(this.serverUrl + 'get-reservation-detail/' + reservation_id);
+		return this.httpClient.get(`${this.serverUrl}get-reservation-detail/${reservation_id}`);
 
 	}
 
