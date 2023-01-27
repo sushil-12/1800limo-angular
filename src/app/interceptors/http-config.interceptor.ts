@@ -1,6 +1,5 @@
-import { Injectable, isDevMode } from '@angular/core';
-import
-{
+import { Injectable } from '@angular/core';
+import {
 	HttpInterceptor,
 	HttpRequest,
 	HttpResponse,
@@ -17,8 +16,7 @@ import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 
 @Injectable()
-export class HttpConfigInterceptor implements HttpInterceptor
-{
+export class HttpConfigInterceptor implements HttpInterceptor {
 	public errors: any;
 	constructor(
 		public errorDialogService: ErrorDialogService,
@@ -28,17 +26,14 @@ export class HttpConfigInterceptor implements HttpInterceptor
 		private stateManagementService: StateManagementService
 	) { }
 
-	intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>>
-	{
+	intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 		const token: string = localStorage.getItem('token');
 
-		if (token)
-		{
+		if (token) {
 			request = request.clone({ headers: request.headers.set('Authorization', 'Bearer ' + token) });
 		}
 
-		if (!request.headers.has('Content-Type'))
-		{
+		if (!request.headers.has('Content-Type')) {
 			request = request.clone({ headers: request.headers.set('Content-Type', 'application/json') });
 		}
 
