@@ -1900,8 +1900,10 @@
 						<!-- Field Value -->
 						<div class="col-9">
 							<h5 class="m-0" *ngIf="item.key !== 'extra stops'">
-								{{ textFormatter(item.value) }}
-								{{ item.key == 'travel date' ? '| ' + dateFormat(item.value)
+								{{ item.key != 'travel date' || item.key != 'travel time' ?
+								textFormatter(item.value) : '' }}
+								{{ item.key == 'travel date' ? dateFormat2(item.value) + ' | ' +
+								dateFormat(item.value)
 								:
 								item.key == 'travel time' ? '| ' + timeFormat(item.value) :
 								'' }}
