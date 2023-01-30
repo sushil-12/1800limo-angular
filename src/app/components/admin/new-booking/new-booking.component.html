@@ -26,7 +26,9 @@
 							<mat-label class="">
 								Service Type
 							</mat-label>
-							<mat-select formControlName="service_type">
+							<mat-select formControlName="service_type"
+								[ngStyle]="{'cursor': Form.updateType.value == 'edit' ? 'not-allowed' : 'default'}"
+								[disabled]="Form.updateType.value == 'edit'">
 								<mat-option value="one_way">One Way</mat-option>
 								<mat-option value="round_trip">Round Trip</mat-option>
 								<mat-option value="charter_tour">Charter/Tour</mat-option>
@@ -199,9 +201,10 @@
 									</mat-label>
 									<input matInput placeholder="Phone" formControlName="phone"
 										ng2TelInput
-										[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
+										[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb'], initialCountry: 'us'}"
 										class="phoneNumberClass"
-										(countryChange)="onCountryChange($event)"
+										(intlTelInputObject)="LCTelInputObject($event)"
+										(countryChange)="SetFormValue('loose_customer>phone_isd', $event.dialCode); SetFormValue('loose_customer>phone_country', $event.iso2)"
 										(focus)="$event.target.select()" />
 								</mat-form-field>
 								<div class="error-box">
@@ -221,21 +224,6 @@
 							</div>
 
 							<!-- Address -->
-
-							<!-- <div *ngIf="!searchSubstring(Form.transfer_type.value, 'airport_')">
-								<div class="row">
-									<div class="col-md-12">
-										<mat-form-field appearance="outline">
-											<mat-label> Pickup Address </mat-label>
-											<input type="text" matInput placeholder="Type your address"
-												matGoogleMapsAutocomplete [value]="fillValue(null, 'pickup', null)"
-												(focus)="$event.target.select()"
-												(onAutocompleteSelected)="fillAddress('pickup', $event)"
-												(onLocationSelected)="fillLocationPoints('pickup', $event)" />
-										</mat-form-field>
-									</div>
-								</div>
-							</div> -->
 							<div class="col-md-4 my-2">
 								<mat-form-field appearance="outline">
 									<mat-label>
@@ -499,15 +487,15 @@
 					<div class="col-md-4 my-2">
 						<mat-form-field appearance="outline" class="mat-custom-phone">
 							<mat-label>
-								Passenger Cell <span class="asterisk"></span>
+								Passenger Cell
 							</mat-label>
 							<input matInput placeholder="Passenger Cell" type="text"
 								formControlName="passenger_cell" (focus)="$event.target.select()"
-								class="lastnamefilter"
-								[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
-								ng2TelInput
-								(countryChange)="SetFormValue('passenger_cell_isd', '+' + $event.dialCode)" />
+								[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb'], initialCountry: 'us'}"
+								ng2TelInput (intlTelInputObject)="PaxTelInputObject($event)"
+								(countryChange)="SetFormValue('passenger_cell_isd', '+' + $event.dialCode); SetFormValue('passenger_cell_country', $event.iso2)" />
 						</mat-form-field>
+						<!-- TEMP -->
 					</div>
 
 					<!-- Passenger Count -->
@@ -610,13 +598,15 @@
 				</div>
 				<!-- Phone -->
 				<div class="col-md-4 col-lg-3 m-2">
-					<mat-form-field appearance="outline">
+					<mat-form-field appearance="outline" class="mat-custom-phone">
 						<mat-label>
 							Phone
 						</mat-label>
-						<input type="text" matInput placeholder="Phone"
-							(focus)="$event.target.select()"
-							formControlName="lose_affiliate_phone" />
+						<input matInput placeholder="Phone Number" type="text"
+							formControlName="lose_affiliate_phone" (focus)="$event.target.select()"
+							[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb'], initialCountry: 'us'}"
+							ng2TelInput (intlTelInputObject)="LATelInputObject($event)"
+							(countryChange)="SetFormValue('lose_affiliate_phone_isd', '+' + $event.dialCode); SetFormValue('lose_affiliate_phone_country', $event.iso2)" />
 					</mat-form-field>
 				</div>
 				<!-- Email -->
@@ -845,14 +835,13 @@
 					<div id="driver-cell" class="col-md-3 my-2">
 						<mat-form-field appearance="outline" class="mat-custom-phone">
 							<mat-label>
-								Cell
+								Phone
 							</mat-label>
-							<input matInput placeholder="Driver Cell" type="text"
+							<input matInput placeholder="Phone Number" type="text"
 								formControlName="driver_cell" (focus)="$event.target.select()"
-								class="lastnamefilter"
 								[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb'], initialCountry: 'us'}"
-								ng2TelInput
-								(countryChange)="SetFormValue('driver_cell_isd', '+' + $event.dialCode)" />
+								ng2TelInput (intlTelInputObject)="DrvTelInputObject($event)"
+								(countryChange)="SetFormValue('driver_cell_isd', '+' + $event.dialCode); SetFormValue('driver_cell_country', $event.iso2)" />
 						</mat-form-field>
 					</div>
 
@@ -1911,8 +1900,10 @@
 						<!-- Field Value -->
 						<div class="col-9">
 							<h5 class="m-0" *ngIf="item.key !== 'extra stops'">
-								{{ textFormatter(item.value) }}
-								{{ item.key == 'travel date' ? '| ' + dateFormat(item.value)
+								{{ item.key != 'travel date' || item.key != 'travel time' ?
+								textFormatter(item.value) : '' }}
+								{{ item.key == 'travel date' ? dateFormat2(item.value) + ' | ' +
+								dateFormat(item.value)
 								:
 								item.key == 'travel time' ? '| ' + timeFormat(item.value) :
 								'' }}
