@@ -50,6 +50,11 @@ export class NewBookingComponent implements OnInit
 		}
 	}
 
+	LCTelObject: any
+	PaxTelObject: any
+	DrvTelObject: any
+	LATelObject: any
+
 	BookingForm: FormGroup
 	RatesForm: any
 	ReturnRatesForm: any
@@ -220,6 +225,7 @@ export class NewBookingComponent implements OnInit
 			passenger_email: [''],
 			passenger_cell: [''],
 			passenger_cell_isd: ['+1'],
+			passenger_cell_country: ['us'],
 			total_passengers: [1],
 			luggage_count: [1],
 			booking_instructions: [''],
@@ -227,6 +233,8 @@ export class NewBookingComponent implements OnInit
 			affiliate_id: [''],
 			lose_affiliate_name: [''],
 			lose_affiliate_phone: [''],
+			lose_affiliate_phone_isd: [''],
+			lose_affiliate_phone_country: ['us'],
 			lose_affiliate_email: [''],
 			vehicle_type: [''],
 			vehicle_id: [''],
@@ -241,6 +249,7 @@ export class NewBookingComponent implements OnInit
 			driver_gender: [''],
 			driver_cell: [''],
 			driver_cell_isd: ['+1'],
+			driver_cell_country: ['us'],
 			driver_email: [''],
 			driver_phone_type: [''],
 			driver_image_id: [''],
@@ -377,6 +386,21 @@ export class NewBookingComponent implements OnInit
 			this.booking_id = this.Form.reservation_id.value;
 			this.Form.affiliate_id.value != 0 ? this.chooseAffiliate() : ''
 			this.chooseUser(this.Form.acc_id.value)
+			try
+			{
+				this.PaxTelObject.setCountry(this.BookingForm.get('passenger_cell_country').value);
+			} catch
+			{
+				console.error('Set Country Value is null.')
+			}
+			if (this.Form.affiliate_type.value == 'loose_affiliate')
+			{
+				setTimeout(() =>
+				{
+					this.LATelObject.setCountry(this.BookingForm.get('lose_affiliate_phone_country').value);
+					this.DrvTelObject.setCountry(this.BookingForm.get('driver_cell_country').value);
+				}, 2000)
+			}
 
 			this.$spinner.hide('normalspinner')
 		})
@@ -386,7 +410,7 @@ export class NewBookingComponent implements OnInit
 	{
 		if (!value || !form_control)
 		{
-			// console.log(`No Value to set for ${form_control}. Returning ...`)
+			console.info(`No Value to set for ${form_control}. Returning ...`)
 			return
 		}
 		console.log('Setting Form Value for ', form_control, ' : ', value);
@@ -398,7 +422,7 @@ export class NewBookingComponent implements OnInit
 		}
 		catch (err)
 		{
-			// console.error('NFC Error: ')
+			console.error('NFC Error: ')
 			return
 		}
 	}
@@ -668,7 +692,10 @@ export class NewBookingComponent implements OnInit
 			{
 				this.chosen_user = response.data
 				this.chosen_user['name'] = `${response.data.first_name} ${response.data.middle_name ?? ''} ${response.data.last_name}`
-				this.autofillData('passenger', this.chosen_user)
+				if (!this.Form.reservation_id.value)
+				{
+					this.autofillData('passenger', this.chosen_user);
+				}
 			}
 			this.$spinner.hide();
 		})
@@ -725,7 +752,6 @@ export class NewBookingComponent implements OnInit
 			if (response.success && response.data.vehicleList.length > 0)
 			{
 				this.VehicleList = response.data.vehicleList
-				console.log(this.VehicleList, "check data")
 
 				// autofill data
 				if (this.VehicleList.length == 1)
@@ -894,6 +920,7 @@ export class NewBookingComponent implements OnInit
 			this.SetFormValue('passenger_email', data.email)
 			this.SetFormValue('passenger_cell', data.mobile)
 			this.SetFormValue('passenger_cell_isd', data.mobileIsd)
+			this.SetFormValue('passenger_cell_country', data.mobileCountry)
 		}
 
 		if (filling_for == 'vehicle')
@@ -918,6 +945,7 @@ export class NewBookingComponent implements OnInit
 			this.SetFormValue('driver_gender', data.Gender)
 			this.SetFormValue('driver_cell', data.CellNumber)
 			this.SetFormValue('driver_cell_isd', data.CellIsd)
+			this.SetFormValue('driver_cell_country', data.CellNumberCountry)
 			this.SetFormValue('driver_email', data.Email)
 			this.SetFormValue('driver_phone_type', data.PhoneType ?? '')
 		}
@@ -1021,12 +1049,6 @@ export class NewBookingComponent implements OnInit
 			this.amenities = this.amenities.filter((item: any) => item != amenity_name);
 			(<FormArray>this.BookingForm.get(form_control)).removeAt(list_index)
 		}
-
-
-		if (!is_checked)
-		{
-
-		}
 	}
 
 
@@ -1041,13 +1063,6 @@ export class NewBookingComponent implements OnInit
 
 
 
-	onCountryChange(event: any)
-	{
-		// console.log(event)
-		this.Form.loose_customer.get('phone_country').setValue(event.iso2)
-		this.Form.loose_customer.get('phone_isd').setValue('+' + event.dialCode)
-		this.BookingForm.updateValueAndValidity()
-	}
 
 	submitForm(preview: boolean)
 	{
@@ -1120,7 +1135,7 @@ export class NewBookingComponent implements OnInit
 				"driver_info": {
 					"name": data.driver_name ?? '',
 					"email": data.driver_email ?? '',
-					"phone": data.driver_cell ? `(${data.driver_cell_isd ?? ''})-${data.driver_cell ?? ''}` : ''
+					"phone": data.driver_cell ? `(${data.driver_cell_isd ?? ''})${data.driver_cell ?? ''}` : ''
 				},
 			}
 
@@ -1544,7 +1559,8 @@ export class NewBookingComponent implements OnInit
 				this.BookingForm.get(item).reset();
 				this.BookingForm.updateValueAndValidity();
 			})
-			this.SetFormValue('driver_cell_isd', '+1')
+			this.SetFormValue('driver_cell_isd', '+1');
+			this.SetFormValue('driver_cell_country', 'us');
 		}
 	}
 
@@ -1577,10 +1593,38 @@ export class NewBookingComponent implements OnInit
 
 	fillLooseCustomerAddress(value: any)
 	{
-		console.log(value, "sjakfsdgfh");
 		(<FormGroup>this.BookingForm.get('loose_customer')).get('address').setValue(value);
 		(<FormGroup>this.BookingForm.get('loose_customer')).updateValueAndValidity();
 		this.BookingForm.updateValueAndValidity();
+	}
+
+
+
+	onLCTeleCountryChange(event: any)
+	{
+		(<FormGroup>this.BookingForm.get('loose_customer')).get('phone_country').setValue(event.iso2);
+		(<FormGroup>this.BookingForm.get('loose_customer')).get('phone_isd').setValue('+' + event.dialCode);
+		this.BookingForm.updateValueAndValidity()
+	}
+
+	LCTelInputObject(event: any)
+	{
+		this.LCTelObject = event;
+	}
+
+	PaxTelInputObject(event: any)
+	{
+		this.PaxTelObject = event;
+	}
+
+	LATelInputObject(event: any)
+	{
+		this.LATelObject = event;
+	}
+
+	DrvTelInputObject(event: any)
+	{
+		this.DrvTelObject = event;
 	}
 }
 
