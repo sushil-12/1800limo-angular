@@ -1970,25 +1970,7 @@
 					<h5 class="p-2 m-0 text-xl">
 						Pickup Details
 					</h5>
-					<!-- Return > Pickup > Time -->
-					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Time
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder">
-									{{ timeFormat2(Form.pickup_time.value) }}
-									|
-									{{ timeFormat(Form.pickup_time.value) }}
-								</span>
-							</div>
-						</div>
-					</div>
-
-					<!-- Return > Pickup > Date -->
+					<!-- Pickup > Date -->
 					<div class="mx-2">
 						<div class="row m-0">
 							<div class="col-md-4 key">
@@ -2001,6 +1983,24 @@
 									{{ dateFormat2(Form.pickup_date.value) }}
 									|
 									{{ dateFormat(Form.pickup_date.value) }}
+								</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Pickup > Time -->
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Time
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ timeFormat2(Form.pickup_time.value) }}
+									|
+									{{ timeFormat(Form.pickup_time.value) }}
 								</span>
 							</div>
 						</div>
@@ -2240,24 +2240,6 @@
 							Pickup Details
 						</h5>
 
-						<!-- Return > Pickup > Time -->
-						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key">
-									<span>
-										Time
-									</span>
-								</div>
-								<div class="col-md-8 value">
-									<span class="font-weight-bolder">
-										{{ timeFormat2(Form.return_pickup_time.value) }}
-										|
-										{{ timeFormat(Form.return_pickup_time.value) }}
-									</span>
-								</div>
-							</div>
-						</div>
-
 						<!-- Return > Pickup > Date -->
 						<div class="mx-2">
 							<div class="row m-0">
@@ -2271,6 +2253,24 @@
 										{{ dateFormat2(Form.return_pickup_date.value) }}
 										|
 										{{ dateFormat(Form.return_pickup_date.value) }}
+									</span>
+								</div>
+							</div>
+						</div>
+
+						<!-- Return > Pickup > Time -->
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key">
+									<span>
+										Time
+									</span>
+								</div>
+								<div class="col-md-8 value">
+									<span class="font-weight-bolder">
+										{{ timeFormat2(Form.return_pickup_time.value) }}
+										|
+										{{ timeFormat(Form.return_pickup_time.value) }}
 									</span>
 								</div>
 							</div>
