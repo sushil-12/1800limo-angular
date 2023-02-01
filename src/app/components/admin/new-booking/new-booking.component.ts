@@ -162,6 +162,11 @@ export class NewBookingComponent implements OnInit
 		//return value.replace(':', '').substring(0, 5) + 'h';
 	}
 
+	timeFormat2(value: string)
+	{
+		return moment(value, 'HH:mm a').format('h:mm a');
+	}
+
 	textFormatter(text: string)
 	{
 		try
@@ -1114,88 +1119,6 @@ export class NewBookingComponent implements OnInit
 		}
 		else
 		{
-			this.BigData = this.BigData_COPY
-			let data = this.BookingForm.value
-			this.booking_params['preview_screen'] = {
-				'travel_info': {
-					"travel date": data.pickup_date,
-					"travel time": data.pickup_time,
-					"pickup": data.pickup,	// default is address, override for airport
-					"flight": data.pickup_airline,
-					"flight number": data.pickup_flight,
-					"port": data.cruise_port,
-					"destination": data.dropoff,
-					"$flight": data.dropoff_airline,
-					"$flight number": data.dropoff_flight,
-					"extra stops": data.extra_stops,
-					"total distance": (data.journeyDistance / 1609).toFixed(2) + ' miles',
-					"total time": data.journeyTime + ' mins',
-				},
-				"passenger_info": {
-					"Name": data.passenger_name,
-					"Email": data.passenger_email,
-					"Phone": data.passenger_cell ? `(${data.passenger_cell_isd}) ${data.passenger_cell}` : '',
-					"total passengers": data.total_passengers
-				},
-				"driver_info": {
-					"name": data.driver_name ?? '',
-					"email": data.driver_email ?? '',
-					"phone": data.driver_cell ? `(${data.driver_cell_isd ?? ''})${data.driver_cell ?? ''}` : ''
-				},
-			}
-
-			if (this.Form.service_type.value == 'round_trip')
-			{
-				this.booking_params['preview_screen']['return'] = {
-					"travel date": data.return_pickup_date,
-					"travel time": data.return_pickup_time,
-					"pickup": data.return_pickup,
-					"flight": data.return_pickup_airline,
-					"flight number": data.return_pickup_flight,
-					"port": data.return_cruise_port,
-					"destination": data.return_dropoff,
-					"$flight": data.return_dropoff_airline,
-					"$flight_number": data.return_dropoff_flight,
-					"extra stops": data.return_extra_stops,
-					"total distance": (data.returnJourneyDistance / 1609).toFixed(2) + ' miles',
-					"total time": data.returnJourneyTime + ' mins',
-				}
-
-				// overrides for Return Source - Airport
-				if (this.Form.return_transfer_type.value.includes('airport_'))
-				{
-					let pickup_airport = this.BigData.airportsData.find(item => item.id === data.return_pickup_airport)['name']
-					let pickup_airline = this.BigData.airlinesData.find(item => item.id === data.return_pickup_airline) ? this.BigData.airlinesData.find(item => item.id === data.return_pickup_airline)['name'] : ''
-					this.booking_params.preview_screen['return']['pickup'] = pickup_airport
-					this.booking_params.preview_screen['return']['flight'] = pickup_airline
-				}
-				// override for Target - Airport
-				if (this.Form.return_transfer_type.value.includes('_airport'))
-				{
-					let dropoff_airport = this.BigData.airportsData.find(item => item.id === data.return_dropoff_airport)['name']
-					let dropoff_airline = this.BigData.airlinesData.find(item => item.id === data.return_dropoff_airline) ? this.BigData.airlinesData.find(item => item.id === data.return_dropoff_airline)['name'] : ''
-					this.booking_params.preview_screen['return']['destination'] = dropoff_airport
-					this.booking_params.preview_screen['return']['$flight'] = dropoff_airline
-				}
-			}
-
-			// override for Source - Airport
-			if (this.Form.transfer_type.value.includes('airport_'))
-			{
-				let pickup_airport = this.BigData.airportsData.find(item => item.id === Number(data.pickup_airport))['name']
-				let pickup_airline = this.BigData.airlinesData.find(item => item.id === Number(data.pickup_airline)) ? this.BigData.airlinesData.find(item => item.id === Number(data.pickup_airline))['name'] : ''
-				this.booking_params.preview_screen['travel_info']['pickup'] = pickup_airport
-				this.booking_params.preview_screen['travel_info']['flight'] = pickup_airline
-			}
-			// override for Target - Airport
-			if (this.Form.transfer_type.value.includes('_airport'))
-			{
-				let dropoff_airport = this.BigData.airportsData.find(item => item.id === Number(data.dropoff_airport))['name']
-				let dropoff_airline = this.BigData.airlinesData.find(item => item.id === Number(data.dropoff_airline)) ? this.BigData.airlinesData.find(item => item.id === Number(data.dropoff_airline))['name'] : ''
-				this.booking_params.preview_screen['travel_info']['destination'] = dropoff_airport
-				this.booking_params.preview_screen['travel_info']['$flight'] = dropoff_airline
-			}
-
 			$('#previewBooking').modal('handleUpdate').modal('show')
 		}
 	}

@@ -201,7 +201,7 @@
 									</mat-label>
 									<input matInput placeholder="Phone" formControlName="phone"
 										ng2TelInput
-										[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb'], initialCountry: 'us'}"
+										[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
 										class="phoneNumberClass"
 										(intlTelInputObject)="LCTelInputObject($event)"
 										(countryChange)="SetFormValue('loose_customer>phone_isd', $event.dialCode); SetFormValue('loose_customer>phone_country', $event.iso2)"
@@ -604,7 +604,7 @@
 						</mat-label>
 						<input matInput placeholder="Phone Number" type="text"
 							formControlName="lose_affiliate_phone" (focus)="$event.target.select()"
-							[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb'], initialCountry: 'us'}"
+							[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
 							ng2TelInput (intlTelInputObject)="LATelInputObject($event)"
 							(countryChange)="SetFormValue('lose_affiliate_phone_isd', '+' + $event.dialCode); SetFormValue('lose_affiliate_phone_country', $event.iso2)" />
 					</mat-form-field>
@@ -839,7 +839,7 @@
 							</mat-label>
 							<input matInput placeholder="Phone Number" type="text"
 								formControlName="driver_cell" (focus)="$event.target.select()"
-								[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb'], initialCountry: 'us'}"
+								[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
 								ng2TelInput (intlTelInputObject)="DrvTelInputObject($event)"
 								(countryChange)="SetFormValue('driver_cell_isd', '+' + $event.dialCode); SetFormValue('driver_cell_country', $event.iso2)" />
 						</mat-form-field>
@@ -1862,146 +1862,636 @@
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
+
+
 			<div class="modal-body" style="font-family: 'PT Serif', serif;">
-				<!-- Booking Type -->
-				<h3 class="m-0">
-					Booking Type
-				</h3>
-				<div class="row">
-					<div class="col-3">
-						<p class="m-0">
-							Booking Type
-						</p>
+				<div class="container text-lg">
+					<!-- Booking Type -->
+					<h4 class="font-weight-bolder m-0">
+						Booking Type
+					</h4>
+					<!-- Travel Info. -->
+					<div class="row p-2">
+						<div class="col-md-4 key">
+							<span>
+								Booking Information
+							</span>
+						</div>
+						<div class="col-md-8 value">
+							<span class="font-weight-bolder">
+								{{ textFormatter(Form.service_type.value) | titlecase }}
+								/
+								{{ textFormatter(Form.transfer_type.value) | titlecase }}
+								<span class="font-weight-bolder"
+									*ngIf="Form.service_type.value == 'round_trip'">
+									/ {{ textFormatter(Form.return_transfer_type.value) | titlecase
+									}}
+								</span>
+							</span>
+						</div>
 					</div>
-					<div class="col-9">
-						<h5 class="m-0">
-							{{ textFormatter(Form.service_type.value) | titlecase }} /
-							{{ textFormatter(Form.transfer_type.value) | titlecase }}
-							{{ Form.service_type.value == 'round_trip' ? '/ ' +
-							textFormatter(Form.return_transfer_type.value) : '' | titlecase
-							}}
-						</h5>
-					</div>
-				</div>
 
-				<!-- Travel Information -->
-				<h3 class="mt-4">
-					Travel Information
-				</h3>
-				<div class="px-4"
-					*ngFor="let item of booking_params?.preview_screen?.travel_info | keyvalue: returnZero">
-					<div class="row my-3" *ngIf="item.value && item.key !== '---'">
-						<!-- Field Label -->
-						<div class="col-3">
-							<p class="m-0">
-								{{ textFormatter(item.key) | titlecase }}
-							</p>
-						</div>
-						<!-- Field Value -->
-						<div class="col-9">
-							<h5 class="m-0" *ngIf="item.key !== 'extra stops'">
-								{{ item.key != 'travel date' || item.key != 'travel time' ?
-								textFormatter(item.value) : '' }}
-								{{ item.key == 'travel date' ? dateFormat2(item.value) + ' | ' +
-								dateFormat(item.value)
-								:
-								item.key == 'travel time' ? '| ' + timeFormat(item.value) :
-								'' }}
-							</h5>
-							<h5 class="m-0" *ngIf="item.key === 'extra stops'">
-								<p class="m-0 font-weight-bolder"
-									*ngFor="let stop of item.value; index as stop_index">
-									{{ stop.address }}
-								</p>
-							</h5>
+					<!-- TODO: add information of Customer here -->
+					<h4 class="font-weight-bolder m-0 mt-3">
+						Passenger Information
+					</h4>
+
+					<!-- Passenger > Name -->
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Name
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ textFormatter(Form.passenger_name.value) }}
+								</span>
+							</div>
 						</div>
 					</div>
-					<div class="row m-0 p-0" *ngIf="item.key === '---'">
-						<div class="col-md-12">
-							<hr
-								style="width: 50%; margin: 1.1rem auto; border: 1.2px solid #000;" />
+
+					<!-- Passenger > Email -->
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Email
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ textFormatter(Form.passenger_email.value) }}
+								</span>
+							</div>
 						</div>
 					</div>
-				</div>
-				<!-- Return Information -->
-				<div *ngIf="booking_params.preview_screen?.return">
-					<hr style="width: 50%; margin: 1.1rem auto; border: 1.2px solid #000;" />
-					<h5>
-						Return Information
+
+					<!-- Passenger > Phone -->
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Phone
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									({{ Form.passenger_cell_isd.value }})
+									{{ textFormatter(Form.passenger_cell.value) }}
+								</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Travel Information -->
+					<h4 class="font-weight-bolder m-0 mt-3">
+						Travel Information
+					</h4>
+
+					<!-- Number of Hours -->
+					<div class="mx-2" *ngIf="Form.service_type.value == 'charter_tour'">
+						<div class="row">
+							<div class="col-md-4 key">
+								<span>
+									Booking Hours
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ Form.number_of_hours.value }}
+								</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- ################ Pickup ################### -->
+					<h5 class="p-2 m-0 text-xl">
+						Pickup Details
 					</h5>
-					<div class="px-4"
-						*ngFor="let item of booking_params?.preview_screen?.return | keyvalue: returnZero">
-						<div class="row my-3" *ngIf="item.value && item.key !== '---'">
-							<div class="col-3">
-								<p class="m-0">
-									{{ textFormatter(item.key) | titlecase }}
-								</p>
+					<!-- Pickup > City Details -->
+					<div class="mx-2"
+						*ngIf="Form.transfer_type.value.includes('city_') || Form.transfer_type.value.includes('cruise_')">
+						<div class="row m-0">
+							<div class="col-md-4">
+								<span>
+									Address
+								</span>
 							</div>
-							<div class="col-9">
-								<h5 class="m-0" *ngIf="item.key !== 'extra stops'">
-									{{ textFormatter(item.value) }}
-									{{ item.key == 'travel date' ? '| ' + dateFormat(item.value)
-									:
-									item.key == 'travel time' ? '| ' + timeFormat(item.value) :
-									'' }}
-								</h5>
-								<h5 class="m-0" *ngIf="item.key === 'extra stops'">
-									<p class="m-0 font-weight-bolder"
-										*ngFor="let stop of item.value; index as stop_index">
-										{{ stop.address }}
-									</p>
-								</h5>
-							</div>
-						</div>
-						<div class="row m-0 p-0" *ngIf="item.key === '---'">
-							<div class="col-md-12">
-								<hr
-									style="width: 50%; margin: 1.1rem auto; border: 1.2px solid #000;" />
+							<div class="col-md-8">
+								<span class="font-weight-bolder">
+									{{ textFormatter(Form.pickup.value) }}
+								</span>
 							</div>
 						</div>
 					</div>
-				</div>
 
-				<!-- Passenger Information -->
-				<h3 class="mt-4">
-					Passenger Information
-				</h3>
-				<div
-					*ngFor="let item of booking_params?.preview_screen?.passenger_info | keyvalue: returnZero">
-					<div class="row my-3" *ngIf="item.value">
-						<div class="col-3">
-							<p class="m-0">
-								{{ textFormatter(item.key) | titlecase }}
-							</p>
+					<!-- Pickup > Airline Details -->
+					<div class="mx-2" *ngIf="Form.transfer_type.value.includes('airport_')">
+						<!-- Airport -->
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Airport
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ textFormatter(Form.pickup_airport_name.value) }}
+								</span>
+							</div>
 						</div>
-						<div class="col-9">
-							<h5 class="m-0">
-								{{ textFormatter(item.value) }}
-							</h5>
+						<!-- Airport -->
+						<!-- Airline -->
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Airline
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ textFormatter(Form.pickup_airline_name.value) }}
+								</span>
+							</div>
+						</div>
+						<!-- Airline -->
+						<!-- Flight Number -->
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Flight Number
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ textFormatter(Form.pickup_flight.value) }}
+								</span>
+							</div>
+						</div>
+						<!-- Flight Number -->
+					</div>
+
+					<!-- Pickup > Cruise Details -->
+					<div class="mx-2" *ngIf="Form.transfer_type.value.includes('cruise_')">
+						<!-- Cruise Port -->
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Cruise Port
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ textFormatter(Form.cruise_port.value) | titlecase }}
+								</span>
+							</div>
+						</div>
+						<!-- Cruise Port -->
+						<!-- Cruise Name -->
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Cruise Name
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ textFormatter(Form.cruise_name.value) | titlecase }}
+								</span>
+							</div>
+						</div>
+						<!-- Cruise Name -->
+						<!-- Cruise Time -->
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Cruise Time
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ textFormatter(Form.cruise_time.value) | titlecase }}
+								</span>
+							</div>
+						</div>
+						<!-- Cruise Time -->
+					</div>
+
+					<!-- Extra Stops -->
+					<div *ngIf="Form.extra_stops.value.length > 0">
+						<br />
+						<!-- TODO: Add extra stops -->
+						<h5 class="px-2 m-1 text-xl">
+							Extra Stops
+						</h5>
+						<br />
+					</div>
+
+					<hr style="width: 50%; margin: 1rem auto; border: 1.3px solid #aeaeae;"
+						*ngIf="Form.extra_stops.value.length == 0" />
+
+					<!-- ############# Dropoff ################# -->
+					<h5 class="px-2 m-1 text-xl">
+						Drop Off Details
+					</h5>
+					<!-- Dropoff > City Details -->
+					<div class="mx-2"
+						*ngIf="Form.transfer_type.value.includes('_city') || Form.transfer_type.value.includes('_cruise')">
+						<div class="row p-2">
+							<div class="col-md-4 key">
+								<span>
+									Address
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ textFormatter(Form.dropoff.value) }}
+								</span>
+							</div>
 						</div>
 					</div>
-				</div>
 
-				<!-- Driver Information -->
-				<h3 class="mt-4">
-					Driver Information
-				</h3>
-				<div
-					*ngFor="let item of booking_params?.preview_screen?.driver_info | keyvalue: returnZero">
-					<div class="row my-3" *ngIf="item.value">
-						<div class="col-3">
-							<p class="m-0">
-								{{ textFormatter(item.key) | titlecase }}
-							</p>
+					<!-- Dropoff > Airline Details -->
+					<div class="mx-2" *ngIf="Form.transfer_type.value.includes('_airport')">
+						<!-- Airport -->
+						<div class="row p-2">
+							<div class="col-md-4 key">
+								<span>
+									Airport
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ textFormatter(Form.dropoff_airport_name.value ) }}
+								</span>
+							</div>
 						</div>
-						<div class="col-9" *ngIf="item.value">
-							<h5 class="m-0">
-								{{ textFormatter(item.value) }}
+						<!-- Airport -->
+						<!-- Airline -->
+						<div class="row p-2">
+							<div class="col-md-4 key">
+								<span>
+									Airline
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ textFormatter(Form.dropoff_airline_name.value) }}
+								</span>
+							</div>
+						</div>
+						<!-- Airline -->
+						<!-- Flight Number -->
+						<div class="row p-2">
+							<div class="col-md-4 key">
+								<span>
+									Flight Number
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ textFormatter(Form.dropoff_flight.value) }}
+								</span>
+							</div>
+						</div>
+						<!-- Flight Number -->
+					</div>
+
+					<!-- Dropoff > Cruise Details -->
+					<div class="mx-2" *ngIf="Form.transfer_type.value.includes('_cruise')">
+						<!-- Cruise Port -->
+						<div class="row p-2">
+							<div class="col-md-4 key">
+								<span>
+									Cruise Port
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ textFormatter(Form.cruise_port.value) | titlecase }}
+								</span>
+							</div>
+						</div>
+						<!-- Cruise Port -->
+						<!-- Cruise Name -->
+						<div class="row p-2">
+							<div class="col-md-4 key">
+								<span>
+									Cruise Name
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ textFormatter(Form.cruise_name.value) | titlecase }}
+								</span>
+							</div>
+						</div>
+						<!-- Cruise Name -->
+						<!-- Cruise Time -->
+						<div class="row p-2">
+							<div class="col-md-4 key">
+								<span>
+									Cruise Time
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ textFormatter(Form.cruise_time.value) }}
+								</span>
+							</div>
+						</div>
+						<!-- Cruise Time -->
+					</div>
+
+
+					<!-- Return Information -->
+					<div *ngIf="Form.service_type.value == 'round_trip'">
+						<hr style="width: 75%; margin: 1.6rem auto; border: 1.2px solid #000;" />
+						<h4 class="font-weight-bolder">
+							Return Trip
+						</h4>
+						<h5 class="px-2 m-1 text-xl">
+							Pickup Details
+						</h5>
+						<!-- Return > Pickup > City Details -->
+						<div class="mx-2"
+							*ngIf="Form.return_transfer_type.value.includes('city_') || Form.return_transfer_type.value.includes('cruise_')">
+							<div class="row p-2">
+								<div class="col-md-4 key">
+									<span>
+										Address
+									</span>
+								</div>
+								<div class="col-md-8 value">
+									<span class="font-weight-bolder">
+										{{ textFormatter(Form.return_pickup.value) | titlecase }}
+									</span>
+								</div>
+							</div>
+						</div>
+
+						<!-- Return > Pickup > Airline Details -->
+						<div class="mx-2"
+							*ngIf="Form.return_transfer_type.value.includes('airport_')">
+							<!-- Airport -->
+							<div class="row p-2">
+								<div class="col-md-4 key">
+									<span>
+										Airport
+									</span>
+								</div>
+								<div class="col-md-8 value">
+									<span class="font-weight-bolder">
+										{{ textFormatter(Form.return_pickup_airport_name.value) }}
+									</span>
+								</div>
+							</div>
+							<!-- Airline -->
+							<div class="row p-2">
+								<div class="col-md-4 key">
+									<span>
+										Airline
+									</span>
+								</div>
+								<div class="col-md-8 value">
+									<span class="font-weight-bolder">
+										{{ textFormatter(Form.pickup_airline_name.value) }}
+									</span>
+								</div>
+							</div>
+
+							<!-- Flight Number -->
+							<div class="row p-2">
+								<div class="col-md-4 key">
+									<span>
+										Flight Number
+									</span>
+								</div>
+								<div class="col-md-8 value">
+									<span class="font-weight-bolder">
+										{{ textFormatter(Form.return_pickup_flight.value) }}
+									</span>
+								</div>
+							</div>
+						</div>
+
+						<!-- Return > Pickup > Cruise Details -->
+						<div class="mx-2"
+							*ngIf="Form.return_transfer_type.value.includes('cruise_')">
+							<div class="row p-2">
+								<div class="col-md-4 key">
+									<span>
+										Cruise Port
+									</span>
+								</div>
+								<div class="col-md-8 value">
+									<span class="font-weight-bolder">
+										{{ textFormatter(Form.return_cruise_port.value ) | titlecase
+										}}
+									</span>
+								</div>
+							</div>
+							<!-- Cruise Name -->
+							<div class="row p-2">
+								<div class="col-md-4 key">
+									<span>
+										Cruise Name
+									</span>
+								</div>
+								<div class="col-md-8 value">
+									<span class="font-weight-bolder">
+										{{ textFormatter(Form.return_cruise_name.value) | titlecase
+										}}
+									</span>
+								</div>
+							</div>
+
+							<!-- Cruise Time -->
+							<div class="row p-2">
+								<div class="col-md-4 key">
+									<span>
+										Cruise Time
+									</span>
+								</div>
+								<div class="col-md-8 value">
+									<span class="font-weight-bolder">
+										{{ textFormatter(Form.return_cruise_time.value) | titlecase
+										}}
+									</span>
+								</div>
+							</div>
+						</div>
+
+						<!-- Return > Pickup > Time -->
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key">
+									<span>
+										Time
+									</span>
+								</div>
+								<div class="col-md-8 value">
+									<span class="font-weight-bolder">
+										{{ timeFormat2(Form.return_pickup_time.value) }}
+										|
+										{{ timeFormat(Form.return_pickup_time.value) }}
+									</span>
+								</div>
+							</div>
+						</div>
+
+						<!-- Return > Pickup > Date -->
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key">
+									<span>
+										Date
+									</span>
+								</div>
+								<div class="col-md-8 value">
+									<span class="font-weight-bolder">
+										{{ dateFormat2(Form.return_pickup_date.value) }}
+										|
+										{{ dateFormat(Form.return_pickup_date.value) }}
+									</span>
+								</div>
+							</div>
+						</div>
+
+						<div *ngIf="Form.return_extra_stops.value.length > 0">
+							<br />
+							<!-- TODO: Add Return Extra Stops -->
+							<h5 class="px-2 m-1 text-xl">
+								Extra Stops
 							</h5>
+							<br />
+						</div>
+
+						<hr style="width: 50%; margin: 1.6rem auto; border: 1.2px solid #aeaeae;"
+							*ngIf="Form.return_extra_stops.value.length == 0" />
+
+						<!-- ############## Dropoff #################### -->
+						<h5 class="px-2 m-1 text-xl">
+							Dropoff Details
+						</h5>
+						<!-- Return > Dropoff > City Details  -->
+						<div class="mx-2" *ngIf="Form.return_transfer_type.value.includes('_city')">
+							<div class="row p-2">
+								<div class="col-md-4 key">
+									<span>
+										Address
+									</span>
+								</div>
+								<div class="col-md-8 value">
+									<span class="font-weight-bolder">
+										{{ textFormatter(Form.return_dropoff.value) | titlecase }}
+									</span>
+								</div>
+							</div>
+						</div>
+
+						<!-- Return > Dropoff > Airline Details -->
+						<div class="mx-2"
+							*ngIf="Form.return_transfer_type.value.includes('_airport')">
+							<!-- Airport -->
+							<div class="row p-2">
+								<div class="col-md-4 key">
+									<span>
+										Airport
+									</span>
+								</div>
+								<div class="col-md-8 value">
+									<span class="font-weight-bolder">
+										{{ textFormatter(Form.return_dropoff_airport_name.value) }}
+									</span>
+								</div>
+							</div>
+
+							<!-- Airline -->
+							<div class="row p-2">
+								<div class="col-md-4 key">
+									<span>
+										Airline
+									</span>
+								</div>
+								<div class="col-md-8 value">
+									<span class="font-weight-bolder">
+										{{ textFormatter(Form.return_dropoff_airline_name.value) }}
+									</span>
+								</div>
+							</div>
+
+							<!-- Flight Number -->
+							<div class="row p-2">
+								<div class="col-md-4 key">
+									<span>
+										Flight Number
+									</span>
+								</div>
+								<div class="col-md-8 value">
+									<span class="font-weight-bolder">
+										{{ textFormatter(Form.return_dropoff_flight.value) }}
+									</span>
+								</div>
+							</div>
+						</div>
+
+						<!-- Return > Dropoff > Cruise Details -->
+						<div class="mx-2"
+							*ngIf="Form.return_transfer_type.value.includes('_cruise')">
+							<!-- Cruise Port -->
+							<div class="row p-2">
+								<div class="col-md-4 key">
+									<span>
+										Cruise Port
+									</span>
+								</div>
+								<div class="col-md-8 value">
+									<span class="font-weight-bolder">
+										{{ textFormatter(Form.return_cruise_port.value) | titlecase
+										}}
+									</span>
+								</div>
+							</div>
+
+							<!-- Cruise Name -->
+							<div class="row p-2">
+								<div class="col-md-4 key">
+									<span>
+										Cruise Name
+									</span>
+								</div>
+								<div class="col-md-8 value">
+									<span class="font-weight-bolder">
+										{{ textFormatter(Form.return_cruise_name.value) | titlecase
+										}}
+									</span>
+								</div>
+							</div>
+
+							<!-- Cruise Time -->
+							<div class="row p-2">
+								<div class="col-md-4 key">
+									<span>
+										Cruise Time
+									</span>
+								</div>
+								<div class="col-md-8 value">
+									<span class="font-weight-bolder">
+										{{ textFormatter(Form.return_cruise_time.value) | titlecase
+										}}
+									</span>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
+
+
+
 			<div class="modal-footer justify-content-end">
 				<button type="button" class="custom-filled-back-button" data-dismiss="modal">
 					Close
