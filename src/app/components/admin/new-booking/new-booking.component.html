@@ -839,7 +839,7 @@
 							</mat-label>
 							<input matInput placeholder="Phone Number" type="text"
 								formControlName="driver_cell" (focus)="$event.target.select()"
-								[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
+								[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb'], initialCountry: 'us'}"
 								ng2TelInput (intlTelInputObject)="DrvTelInputObject($event)"
 								(countryChange)="SetFormValue('driver_cell_isd', '+' + $event.dialCode); SetFormValue('driver_cell_country', $event.iso2)" />
 						</mat-form-field>
