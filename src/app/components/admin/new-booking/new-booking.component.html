@@ -2144,7 +2144,7 @@
 						</div>
 						<!-- Airline -->
 						<!-- Flight Number -->
-						<div class="row p-2">
+						<!-- <div class="row p-2">
 							<div class="col-md-4 key">
 								<span>
 									Flight Number
@@ -2155,7 +2155,7 @@
 									{{ textFormatter(Form.dropoff_flight.value) }}
 								</span>
 							</div>
-						</div>
+						</div> -->
 						<!-- Flight Number -->
 					</div>
 
@@ -2484,6 +2484,39 @@
 										}}
 									</span>
 								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- Rates/Taxes -->
+					<h4 class="font-weight-bolder m-0 mt-3" *ngIf="RatesForm">
+						Rates/Taxes
+					</h4>
+					<div class="mx-2" *ngIf="RatesForm">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Grand Total
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									${{ RatesForm.grand_total }}
+								</span>
+							</div>
+						</div>
+					</div>
+					<div class="mx-2" *ngIf="ReturnRatesForm">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Return Grand Total
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									${{ ReturnRatesForm.grand_total }}
+								</span>
 							</div>
 						</div>
 					</div>

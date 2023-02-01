@@ -437,6 +437,27 @@ export class NewBookingComponent implements OnInit
 		}
 	}
 
+	SetLCFormValue(form_control: string, value: any)
+	{
+		if (!value || !form_control)
+		{
+			console.info(`No Value to set for ${form_control}. Returning ...`)
+			return
+		}
+		console.log('Setting Form Value for ', form_control, ' : ', value);
+		try
+		{
+
+			(this.BookingForm.get('loose_customer')).get(form_control).setValue(value)
+			this.BookingForm.updateValueAndValidity()
+		}
+		catch (err)
+		{
+			console.error('NFC Error: ')
+			return
+		}
+	}
+
 
 	MapController(is_return: boolean = false)
 	{
@@ -631,19 +652,23 @@ export class NewBookingComponent implements OnInit
 
 	fetchAirportsAndBigData(): void
 	{
-		this.$spinner.show('fetchspinner');
-		this.$api.createBookingGetData().subscribe((response: any) =>
+		let s = setInterval(() =>
 		{
-			if (response.success)
+			if (this.$api.getAirportsAndBigData())
 			{
-				this.BigData = response.data;
-				console.log(this.BigData, "check big data")
-				this.BigData_COPY = JSON.parse(JSON.stringify(response.data));
-				this.MapController()
 				this.$spinner.hide('fetchspinner');
-				this.Form.reservation_id.value ? this.prefillViaBookingID(this.Form.reservation_id.value) : ''
+				this.BigData = this.$api.getAirportsAndBigData();
+				this.BigData_COPY = JSON.parse(JSON.stringify(this.BigData));
+				this.MapController();
+				this.$spinner.hide('fetchspinner');
+				this.Form.reservation_id.value ? this.prefillViaBookingID(this.Form.reservation_id.value) : '';
+				clearInterval(s);
 			}
-		})
+			else
+			{
+				this.$spinner.show('fetchspinner');
+			}
+		}, 2000);
 	}
 
 

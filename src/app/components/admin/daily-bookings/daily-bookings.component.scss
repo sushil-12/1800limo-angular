@@ -17,15 +17,15 @@ button {
 }
 
 .assigned {
-	background-color: #543424;
+	background-color: var(--green-color);
 }
 
 .rejected {
-	background-color: #fc6404;
+	background-color: #dc3545;
 }
 
 .cancelled {
-	background-color: #dc3545;
+	background-color: #45200d;
 }
 
 .en_route_pu {

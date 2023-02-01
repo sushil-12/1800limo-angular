@@ -10,7 +10,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 export class AdminService
 {
-	big_data_list: any
+	big_data_list: any = undefined;
 
 
 	private serverUrl = environment.serverUrl;
@@ -25,9 +25,16 @@ export class AdminService
 		}
 	}
 
-	getBookingData()
+	getAirportsAndBigData()
 	{
-		return this.big_data_list
+		if (this.big_data_list)
+		{
+			return this.big_data_list;
+		}
+		else
+		{
+			return undefined;
+		}
 	}
 
 	changeSortOrder(data: any)

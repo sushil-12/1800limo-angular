@@ -69,25 +69,25 @@ export class DailyBookingsComponent implements OnInit
 	{
 		this.activatedRoute.queryParams.subscribe((params: any) =>
 		{
-			if (Object.keys(params).length != 0)
-			{
-				this.startDate = params.startDate;
-				this.endDate = params.endDate;
-			} else
-			{
-				this.date = new Date();
-				this.startDate = this.date.toISOString().substring(0, 10);
-				this.date.setDate(this.date.getDate() + 7);
-				this.endDate = this.date.toISOString().substring(0, 10);
+			// if (Object.keys(params).length != 0)
+			// {
+			// 	this.startDate = params.startDate;
+			// 	this.endDate = params.endDate;
+			// } else
+			// {
+			this.date = new Date();
+			this.startDate = this.date.toISOString().substring(0, 10);
+			this.date.setDate(this.date.getDate() + 7);
+			this.endDate = this.date.toISOString().substring(0, 10);
 
-				this.router.navigate([], {
-					queryParams: {
-						startDate: this.startDate,
-						endDate: this.endDate,
-					},
-					queryParamsHandling: "merge",
-				});
-			}
+			// this.router.navigate([], {
+			// 	queryParams: {
+			// 		startDate: this.startDate,
+			// 		endDate: this.endDate,
+			// 	},
+			// 	queryParamsHandling: "merge",
+			// });
+			// }
 		});
 
 		this.loadBookings();
