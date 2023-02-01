@@ -1970,6 +1970,42 @@
 					<h5 class="p-2 m-0 text-xl">
 						Pickup Details
 					</h5>
+					<!-- Pickup > Date -->
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Date
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ dateFormat2(Form.pickup_date.value) }}
+									|
+									{{ dateFormat(Form.pickup_date.value) }}
+								</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Pickup > Time -->
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Time
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ timeFormat2(Form.pickup_time.value) }}
+									|
+									{{ timeFormat(Form.pickup_time.value) }}
+								</span>
+							</div>
+						</div>
+					</div>
+
 					<!-- Pickup > City Details -->
 					<div class="mx-2"
 						*ngIf="Form.transfer_type.value.includes('city_') || Form.transfer_type.value.includes('cruise_')">
@@ -2076,21 +2112,9 @@
 								</span>
 							</div>
 						</div>
-						<!-- Cruise Time -->
 					</div>
 
-					<!-- Extra Stops -->
-					<div *ngIf="Form.extra_stops.value.length > 0">
-						<br />
-						<!-- TODO: Add extra stops -->
-						<h5 class="px-2 m-1 text-xl">
-							Extra Stops
-						</h5>
-						<br />
-					</div>
-
-					<hr style="width: 50%; margin: 1rem auto; border: 1.3px solid #aeaeae;"
-						*ngIf="Form.extra_stops.value.length == 0" />
+					<hr style="width: 50%; margin: 1rem auto; border: 1.3px solid #aeaeae;" />
 
 					<!-- ############# Dropoff ################# -->
 					<h5 class="px-2 m-1 text-xl">
@@ -2215,6 +2239,43 @@
 						<h5 class="px-2 m-1 text-xl">
 							Pickup Details
 						</h5>
+
+						<!-- Return > Pickup > Date -->
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key">
+									<span>
+										Date
+									</span>
+								</div>
+								<div class="col-md-8 value">
+									<span class="font-weight-bolder">
+										{{ dateFormat2(Form.return_pickup_date.value) }}
+										|
+										{{ dateFormat(Form.return_pickup_date.value) }}
+									</span>
+								</div>
+							</div>
+						</div>
+
+						<!-- Return > Pickup > Time -->
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key">
+									<span>
+										Time
+									</span>
+								</div>
+								<div class="col-md-8 value">
+									<span class="font-weight-bolder">
+										{{ timeFormat2(Form.return_pickup_time.value) }}
+										|
+										{{ timeFormat(Form.return_pickup_time.value) }}
+									</span>
+								</div>
+							</div>
+						</div>
+
 						<!-- Return > Pickup > City Details -->
 						<div class="mx-2"
 							*ngIf="Form.return_transfer_type.value.includes('city_') || Form.return_transfer_type.value.includes('cruise_')">
@@ -2324,53 +2385,7 @@
 							</div>
 						</div>
 
-						<!-- Return > Pickup > Time -->
-						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key">
-									<span>
-										Time
-									</span>
-								</div>
-								<div class="col-md-8 value">
-									<span class="font-weight-bolder">
-										{{ timeFormat2(Form.return_pickup_time.value) }}
-										|
-										{{ timeFormat(Form.return_pickup_time.value) }}
-									</span>
-								</div>
-							</div>
-						</div>
-
-						<!-- Return > Pickup > Date -->
-						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key">
-									<span>
-										Date
-									</span>
-								</div>
-								<div class="col-md-8 value">
-									<span class="font-weight-bolder">
-										{{ dateFormat2(Form.return_pickup_date.value) }}
-										|
-										{{ dateFormat(Form.return_pickup_date.value) }}
-									</span>
-								</div>
-							</div>
-						</div>
-
-						<div *ngIf="Form.return_extra_stops.value.length > 0">
-							<br />
-							<!-- TODO: Add Return Extra Stops -->
-							<h5 class="px-2 m-1 text-xl">
-								Extra Stops
-							</h5>
-							<br />
-						</div>
-
-						<hr style="width: 50%; margin: 1.6rem auto; border: 1.2px solid #aeaeae;"
-							*ngIf="Form.return_extra_stops.value.length == 0" />
+						<hr style="width: 50%; margin: 1.6rem auto; border: 1.2px solid #aeaeae;" />
 
 						<!-- ############## Dropoff #################### -->
 						<h5 class="px-2 m-1 text-xl">
