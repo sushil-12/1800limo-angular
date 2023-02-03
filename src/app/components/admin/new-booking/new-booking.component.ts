@@ -117,24 +117,19 @@ export class NewBookingComponent implements OnInit
 			}
 			else
 			{
-				this.chosen_user = null
-				this.buildBookingForm()
-				this.MapController()
-				if (!this.booking_params['client_account_types'].includes('loose_customer'))
-				{
-					this.booking_params['client_account_types'].push('loose_customer')
-				}
+				this.resetFields()
 			}
+			// place in query params to reinitialise things when modes of new and edit are toggled
+			// Subscriptions
+			this.Subscriptions()
+			this.fetchClientAccounts('individual')
+			this.fetchAffiliates('affiliate')
+			this.select(true, 'driver_languages', 1)
 		})
 
 		// fetch the big data
 		this.fetchAirportsAndBigData()
 
-		// Subscriptions
-		this.Subscriptions()
-		this.fetchClientAccounts('individual')
-		this.fetchAffiliates('affiliate')
-		this.select(true, 'driver_languages', 1)
 	}
 
 	dateFormat(value: any)
@@ -1051,13 +1046,13 @@ export class NewBookingComponent implements OnInit
 		console.log(is_return, index, address, location);
 		if (is_return)
 		{
-			if (address && !location)
+			if (address)
 			{
 				(<FormArray>this.BookingForm.get('return_extra_stops')).at(index).patchValue({
 					address: address.formatted_address
 				})
 			}
-			if (!address && location)
+			if (location)
 			{
 				(<FormArray>this.BookingForm.get('return_extra_stops')).at(index).patchValue({
 					latitude: location.latitude,
@@ -1069,19 +1064,21 @@ export class NewBookingComponent implements OnInit
 		}
 		else
 		{
-			if (address && !location)
+			if (address)
 			{
 				(<FormArray>this.BookingForm.get('extra_stops')).at(index).patchValue({
 					address: address.formatted_address
-				})
+				});
 			}
-			if (!address && location)
+
+			if (location)
 			{
 				(<FormArray>this.BookingForm.get('extra_stops')).at(index).patchValue({
 					latitude: location.latitude,
 					longitude: location.longitude
 				})
 			}
+
 			this.BookingForm.updateValueAndValidity();
 			this.MapController()
 		}
@@ -1168,6 +1165,23 @@ export class NewBookingComponent implements OnInit
 		else
 		{
 			$('#previewBooking').modal('handleUpdate').modal('show')
+		}
+	}
+
+	resetFields()
+	{
+		this.chosen_user = null
+		this.buildBookingForm()
+		this.MapController()
+		if (!this.booking_params['client_account_types'].includes('loose_customer'))
+		{
+			this.booking_params['client_account_types'].push('loose_customer')
+		}
+
+		// if directly navigated to create new booking mode from edit booking mode
+		if (this.BigData_COPY)
+		{
+			this.BigData = this.BigData_COPY
 		}
 	}
 
