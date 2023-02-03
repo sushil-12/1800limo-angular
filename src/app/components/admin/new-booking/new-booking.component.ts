@@ -19,6 +19,8 @@ declare var $: any
 })
 export class NewBookingComponent implements OnInit
 {
+	todays_date: string = moment().format('YYYY-MM-DD');
+
 	booking_params: any = {
 		transfer_types: ["airport_to_city", "airport_to_airport", "airport_to_cruise", "city_to_city", "city_to_airport", "city_to_cruise", "cruise_to_airport", "cruise_to_city"],
 		client_account_types: ['individual', 'corporate', 'travel_planner', 'loose_customer'],
@@ -115,24 +117,19 @@ export class NewBookingComponent implements OnInit
 			}
 			else
 			{
-				this.chosen_user = null
-				this.buildBookingForm()
-				this.MapController()
-				if (!this.booking_params['client_account_types'].includes('loose_customer'))
-				{
-					this.booking_params['client_account_types'].push('loose_customer')
-				}
+				this.resetFields()
 			}
+			// place in query params to reinitialise things when modes of new and edit are toggled
+			// Subscriptions
+			this.Subscriptions()
+			this.fetchClientAccounts('individual')
+			this.fetchAffiliates('affiliate')
+			this.select(true, 'driver_languages', 1)
 		})
 
 		// fetch the big data
 		this.fetchAirportsAndBigData()
 
-		// Subscriptions
-		this.Subscriptions()
-		this.fetchClientAccounts('individual')
-		this.fetchAffiliates('affiliate')
-		this.select(true, 'driver_languages', 1)
 	}
 
 	dateFormat(value: any)
@@ -385,9 +382,27 @@ export class NewBookingComponent implements OnInit
 					})
 				}
 			})
+
+			if (editing_data.extra_stops && editing_data.extra_stops.length > 0)
+			{
+				editing_data.extra_stops.forEach((item: any, index: number) =>
+				{
+					if (item.hasOwnProperty('address'))
+					{
+						item['formatted_address'] = item.address;
+						this.addExtraStop();
+						this.fillExtraStop(false, index, item, item);
+						console.log(this.BookingForm);
+					}
+				})
+			}
+			else
+			{
+				console.error('No Extra Stops found.')
+			}
 			this.BookingForm.updateValueAndValidity()
 
-
+			// override specific value
 			this.BookingForm.patchValue({
 				service_type: response.data.service_type == 'oneway' ? 'one_way' : response.data['service_type'] == 'roundtrip' ? 'round_trip' : 'charter_tour',
 			})
@@ -660,7 +675,6 @@ export class NewBookingComponent implements OnInit
 				this.BigData = this.$api.getAirportsAndBigData();
 				this.BigData_COPY = JSON.parse(JSON.stringify(this.BigData));
 				this.MapController();
-				this.$spinner.hide('fetchspinner');
 				this.Form.reservation_id.value ? this.prefillViaBookingID(this.Form.reservation_id.value) : '';
 				clearInterval(s);
 			}
@@ -1029,37 +1043,43 @@ export class NewBookingComponent implements OnInit
 
 	fillExtraStop(is_return: boolean, index: number, address: any, location: any)
 	{
+		console.log(is_return, index, address, location);
 		if (is_return)
 		{
-			if (address && !location)
+			if (address)
 			{
 				(<FormArray>this.BookingForm.get('return_extra_stops')).at(index).patchValue({
 					address: address.formatted_address
 				})
 			}
-			if (!address && location)
+			if (location)
 			{
 				(<FormArray>this.BookingForm.get('return_extra_stops')).at(index).patchValue({
 					latitude: location.latitude,
 					longitude: location.longitude
 				})
 			}
+			this.BookingForm.updateValueAndValidity();
 			this.MapController(true)
-		} else
+		}
+		else
 		{
-			if (address && !location)
+			if (address)
 			{
 				(<FormArray>this.BookingForm.get('extra_stops')).at(index).patchValue({
 					address: address.formatted_address
-				})
+				});
 			}
-			if (!address && location)
+
+			if (location)
 			{
 				(<FormArray>this.BookingForm.get('extra_stops')).at(index).patchValue({
 					latitude: location.latitude,
 					longitude: location.longitude
 				})
 			}
+
+			this.BookingForm.updateValueAndValidity();
 			this.MapController()
 		}
 	}
@@ -1145,6 +1165,23 @@ export class NewBookingComponent implements OnInit
 		else
 		{
 			$('#previewBooking').modal('handleUpdate').modal('show')
+		}
+	}
+
+	resetFields()
+	{
+		this.chosen_user = null
+		this.buildBookingForm()
+		this.MapController()
+		if (!this.booking_params['client_account_types'].includes('loose_customer'))
+		{
+			this.booking_params['client_account_types'].push('loose_customer')
+		}
+
+		// if directly navigated to create new booking mode from edit booking mode
+		if (this.BigData_COPY)
+		{
+			this.BigData = this.BigData_COPY
 		}
 	}
 
