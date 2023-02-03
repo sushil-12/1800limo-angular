@@ -42,7 +42,7 @@
 							<mat-label class="">
 								Transfer Type
 							</mat-label>
-							<mat-select formControlName="transfer_type">
+							<mat-select formControlName="transfer_type" class="font-weight-bolder">
 								<mat-option [value]="tf_type" class="font-weight-bolder"
 									*ngFor="let tf_type of booking_params.transfer_types">
 									{{ textFormatter(tf_type) | titlecase }}
@@ -839,7 +839,7 @@
 							</mat-label>
 							<input matInput placeholder="Phone Number" type="text"
 								formControlName="driver_cell" (focus)="$event.target.select()"
-								[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb'], initialCountry: 'us'}"
+								[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
 								ng2TelInput (intlTelInputObject)="DrvTelInputObject($event)"
 								(countryChange)="SetFormValue('driver_cell_isd', '+' + $event.dialCode); SetFormValue('driver_cell_country', $event.iso2)" />
 						</mat-form-field>
@@ -852,7 +852,6 @@
 								Gender
 							</mat-label>
 							<mat-select formControlName="driver_gender">
-								<mat-option value="" selected> Select Gender </mat-option>
 								<mat-option value="male"> Male </mat-option>
 								<mat-option value="female"> Female </mat-option>
 							</mat-select>
@@ -1007,7 +1006,7 @@
 
 							<ul class="mt-3 d-flex justify-content-center p-0">
 								<li>
-									<button class="changeuploaded" tabindex="1">
+									<button type="button" class="changeuploaded" tabindex="1">
 										<input type="file" accept="image/jpeg,.jpeg,.jpg,.png"
 											(change)="uploadImage($event, 'driver_image')"
 											tabindex="-1">
@@ -1045,7 +1044,7 @@
 
 							<ul class="mt-3 d-flex justify-content-center p-0">
 								<li>
-									<button class="changeuploaded" tabindex="1">
+									<button type="button" class="changeuploaded" tabindex="1">
 										<input type="file" accept="image/jpeg,.jpeg,.jpg,.png"
 											(change)="uploadImage($event, 'vehicle_image')"
 											tabindex="-1">
@@ -1113,12 +1112,12 @@
 				<div class="col-md-5 m-2">
 					<mat-form-field appearance="outline">
 						<mat-label>
-							Arrival Date
+							Travel Date
 						</mat-label>
 						<input matInput setOutputDateFormat="YYYY-MM-DD" [matDatepicker]="onwy_dt"
-							placeholder="Arrival Date"
+							placeholder="Travel Date"
 							(dateChangeWithFormat)="SetFormValue('pickup_date', $event)"
-							formControlName="pickup_date" (click)="onwy_dt.open()" />
+							formControlName="pickup_date" (click)="onwy_dt.open()" readonly />
 						<mat-datepicker-toggle matSuffix [for]="onwy_dt"></mat-datepicker-toggle>
 						<mat-datepicker #onwy_dt></mat-datepicker>
 					</mat-form-field>
@@ -1130,11 +1129,12 @@
 						<mat-label>
 							Travel Time
 						</mat-label>
-						<input [ngxTimepicker]="onwy_tm" [value]="Form.pickup_time.value"
-							matInput />
+						<input [ngxTimepicker]="onwy_tm" [value]="Form.pickup_time.value" matInput
+							readonly />
 					</mat-form-field>
-					<ngx-material-timepicker #onwy_tm [defaultTime]="Form.pickup_time.value"
-						(timeChanged)="SetFormValue('pickup_time', $event)"></ngx-material-timepicker>
+					<ngx-material-timepicker #onwy_tm
+						(timeChanged)="SetFormValue('pickup_time', $event)"
+						[defaultTime]="Form.pickup_time.value"></ngx-material-timepicker>
 				</div>
 			</div>
 
@@ -1262,7 +1262,7 @@
 								Cruise Time
 							</mat-label>
 							<input [ngxTimepicker]="crse_tm" [value]="Form.cruise_time.value"
-								matInput (change)="SetFormValue('cruise_time', $event)" />
+								matInput (change)="SetFormValue('cruise_time', $event)" readonly />
 						</mat-form-field>
 						<ngx-material-timepicker #crse_tm
 							[defaultTime]="Form.cruise_time.value"></ngx-material-timepicker>
@@ -1384,7 +1384,7 @@
 								Cruise Time
 							</mat-label>
 							<input [ngxTimepicker]="crse_tm" [value]="Form.cruise_time.value"
-								matInput (change)="SetFormValue('cruise_time', $event)" />
+								matInput (change)="SetFormValue('cruise_time', $event)" readonly />
 						</mat-form-field>
 						<ngx-material-timepicker #crse_tm
 							[defaultTime]="Form.cruise_time.value"></ngx-material-timepicker>
@@ -1400,7 +1400,8 @@
 						Extra Stops
 					</h4>
 					<div class="mx-4">
-						<button class="custom-filled-button" (click)="addExtraStop(false)">
+						<button type="button" class="custom-filled-button" tabindex="0"
+							(click)="addExtraStop(false)">
 							Add Stop
 						</button>
 					</div>
@@ -1491,7 +1492,7 @@
 				<div class="col-md-5 m-2">
 					<mat-form-field appearance="outline">
 						<mat-label>
-							Travel Time
+							Arrival Time
 						</mat-label>
 						<input [ngxTimepicker]="rt_onwy_tm" matInput
 							[value]="Form.return_pickup_time.value"
@@ -1617,7 +1618,7 @@
 								Cruise Time
 							</mat-label>
 							<input [ngxTimepicker]="crse_tm" [value]="Form.cruise_time.value"
-								matInput (change)="SetFormValue('cruise_time', $event)" />
+								matInput (change)="SetFormValue('cruise_time', $event)" readonly />
 						</mat-form-field>
 						<ngx-material-timepicker #crse_tm
 							[defaultTime]="Form.cruise_time.value"></ngx-material-timepicker>
@@ -1741,7 +1742,7 @@
 								Cruise Time
 							</mat-label>
 							<input [ngxTimepicker]="crse_tm" [value]="Form.cruise_time.value"
-								matInput (change)="SetFormValue('cruise_time', $event)" />
+								matInput (change)="SetFormValue('cruise_time', $event)" readonly />
 						</mat-form-field>
 						<ngx-material-timepicker #crse_tm
 							[defaultTime]="Form.cruise_time.value"></ngx-material-timepicker>
@@ -1757,7 +1758,8 @@
 						Extra Stops
 					</h4>
 					<div class="mx-4">
-						<button class="custom-filled-button" (click)="addExtraStop(true)">
+						<button type="button" class="custom-filled-button"
+							(click)="addExtraStop(true)">
 							Add Stop
 						</button>
 					</div>
@@ -1827,10 +1829,11 @@
 
 		<div class="row">
 			<div class="col-md-12">
-				<button class="custom-filled-reset-button m-3">
+				<button type="button" class="custom-filled-reset-button m-3"
+					(click)="resetFields()">
 					Reset
 				</button>
-				<button class="custom-filled-button m-3" (click)="submitForm(false)">
+				<button type="button" class="custom-filled-button m-3" (click)="submitForm(false)">
 					Save
 				</button>
 			</div>
@@ -2114,7 +2117,30 @@
 						</div>
 					</div>
 
-					<hr style="width: 50%; margin: 1rem auto; border: 1.3px solid #aeaeae;" />
+					<!-- Extra Stops -->
+					<div *ngIf="Form.extra_stops.value.length > 0">
+						<h5 class="p-2 m-0 text-xl">
+							Extra Stops
+						</h5>
+						<div class="mx-2"
+							*ngFor="let stop of Form.extra_stops.value; index as stop_index">
+							<div class="row m-0 mx-2">
+								<div class="col-md-4 key">
+									<span>
+										Stop {{ stop_index + 1 }}
+									</span>
+								</div>
+								<div class="col-md-8 value">
+									<span class="font-weight-bolder">
+										{{ stop.address }}
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<hr style="width: 50%; margin: 1rem auto; border: 1.3px solid #aeaeae;"
+						*ngIf="Form.extra_stops.value.length == 0" />
 
 					<!-- ############# Dropoff ################# -->
 					<h5 class="px-2 m-1 text-xl">
