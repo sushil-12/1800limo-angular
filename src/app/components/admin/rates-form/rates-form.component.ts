@@ -33,9 +33,7 @@ export class RatesFormComponent implements OnInit, OnChanges
 
 	// Throw Events.
 	@Output("formvalue") formvalue = new EventEmitter<Record<string, any>>();
-	@Output("returnformvalue") returnformvalue = new EventEmitter<
-		Record<string, any>
-	>();
+	@Output("returnformvalue") returnformvalue = new EventEmitter<Record<string, any>>();
 
 	RatesForm: FormGroup;
 	ReturnRatesForm: FormGroup;
@@ -128,42 +126,23 @@ export class RatesFormComponent implements OnInit, OnChanges
 
 		if (changes.bookingId && changes.bookingId.currentValue !== 0)
 		{
-			this.fetchRates("", changes.bookingId?.currentValue).then(
-				(data: any) =>
+			this.fetchRates("", changes.bookingId?.currentValue).then((data: any) =>
+			{
+				for (let item in this.RateForm)
 				{
-					for (let item in this.RateForm)
+					for (let key in (<FormGroup>this.RatesForm.get(item)).controls)
 					{
-						for (let key in (<FormGroup>this.RatesForm.get(item))
-							.controls)
+						console.log(item, key);
+						let baserate = data[item][key]["baserate"];
+						let type = data[item][key]["type"] ?? "flat";
+						(<FormGroup>((<FormGroup>this.RatesForm.get(item)).get(key))).get("baserate").setValue(baserate);
+						if ((<FormGroup>((<FormGroup>this.RatesForm.get(item)).get(key))).get("type"))
 						{
-							console.log(item, key);
-							let baserate = data[item][key]["baserate"];
-							let type = data[item][key]["type"] ?? "flat";
-							(<FormGroup>(
-								(<FormGroup>this.RatesForm.get(item)).get(key)
-							))
-								.get("baserate")
-								.setValue(baserate);
-							if (
-								(<FormGroup>(
-									(<FormGroup>this.RatesForm.get(item)).get(
-										key
-									)
-								)).get("type")
-							)
-							{
-								(<FormGroup>(
-									(<FormGroup>this.RatesForm.get(item)).get(
-										key
-									)
-								))
-									.get("type")
-									.setValue(type);
-							}
+							(<FormGroup>((<FormGroup>this.RatesForm.get(item)).get(key))).get("type").setValue(type);
 						}
 					}
 				}
-			);
+			});
 		}
 	}
 
@@ -270,41 +249,30 @@ export class RatesFormComponent implements OnInit, OnChanges
 	{
 		if (form === "RatesForm")
 		{
-			(<FormGroup>(<FormGroup>this.RatesForm.get(formgroup)).get(subform))
-				.get(formcontrol)
-				.setValue(value);
+			(<FormGroup>(<FormGroup>this.RatesForm.get(formgroup)).get(subform)).get(formcontrol).setValue(value);
 			this.RatesForm.updateValueAndValidity();
 		}
 		if (form === "ReturnRatesForm")
 		{
-			(<FormGroup>(
-				(<FormGroup>this.ReturnRatesForm.get(formgroup)).get(subform)
-			))
-				.get(formcontrol)
-				.setValue(value);
+			(<FormGroup>((<FormGroup>this.ReturnRatesForm.get(formgroup)).get(subform))).get(formcontrol).setValue(value);
 			this.ReturnRatesForm.updateValueAndValidity();
 		}
 	}
 
-	fetchRates(
-		affiliate: string,
-		bookingId: number = 0
-	): Promise<Record<string, any> | string>
+	fetchRates(affiliate: string, bookingId: number = 0): Promise<Record<string, any> | string>
 	{
 		return new Promise((resolve, reject) =>
 		{
-			this.$api
-				.fetchAdminNewBookingRates(affiliate, bookingId)
-				.subscribe((response: any) =>
+			this.$api.fetchAdminNewBookingRates(affiliate, bookingId).subscribe((response: any) =>
+			{
+				if (response.success)
 				{
-					if (response.success)
-					{
-						resolve(response.data.rateArray);
-					} else
-					{
-						reject(response.error);
-					}
-				});
+					resolve(response.data.rateArray);
+				} else
+				{
+					reject(response.error);
+				}
+			});
 		});
 	}
 
@@ -331,18 +299,12 @@ export class RatesFormComponent implements OnInit, OnChanges
 				{
 					if (form === "RatesForm")
 					{
-						(<FormGroup>this.RatesForm.get(key)).addControl(
-							item,
-							this.buildRatesForm(form, data[key][item])
-						);
-						(<FormGroup>(
-							(<FormGroup>this.RatesForm.get(key)).get(item)
-						))
-							.get("baserate")
-							.valueChanges.subscribe((value: number) =>
-							{
-								this.calculateAmount("RatesForm", key, item);
-							});
+						console.log(key, item);
+						(<FormGroup>this.RatesForm.get(key)).addControl(item, this.buildRatesForm(form, data[key][item]));
+						(<FormGroup>((<FormGroup>this.RatesForm.get(key)).get(item))).get("baserate").valueChanges.subscribe((value: number) =>
+						{
+							this.calculateAmount("RatesForm", key, item);
+						});
 					}
 					if (form === "ReturnRatesForm")
 					{
@@ -369,18 +331,18 @@ export class RatesFormComponent implements OnInit, OnChanges
 	}
 
 	/**
-	 * calculates amount based on the baserate. [WORKS FOR BOTH TYPES OF FORM]
-	 * @param form type of Form
-	 * @param formgroup name of the parent form
-	 * @param subform name of the child formaserate": 0,
-	  "multiple": null,
-	  "percentage": null,
-…      "percentage": null,
-	  "amount": 0
-	}
-  }
+	* calculates amount based on the baserate. [WORKS FOR BOTH TYPES OF FORM]
+	* @param form type of Form
+	* @param formgroup name of the parent form
+	* @param subform name of the child formaserate": 0,
+	"multiple": null,
+	"percentage": null,
+	…      "percentage": null,
+	"amount": 0
 }
-	 */
+}
+}
+*/
 	calculateAmount(form: string, formgroup: string, subform: string)
 	{
 		if (form === "RatesForm")
@@ -457,48 +419,26 @@ export class RatesFormComponent implements OnInit, OnChanges
 				)).get("type").value;
 				if (type === "flat")
 				{
-					(<FormGroup>(
-						(<FormGroup>this.RatesForm.get(formgroup)).get(subform)
-					))
-						.get("amount")
-						.setValue(baserate);
+					(<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("amount").setValue(baserate);
 				}
 
 				if (type === "percent")
 				{
-					let kmrate = (<FormGroup>(
-						(<FormGroup>(
-							this.RatesForm.get("all_inclusive_rates")
-						)).get("Base_Rate")
-					)).get("amount").value;
-					let taxvalue = (<FormGroup>(
-						(<FormGroup>this.RatesForm.get("taxes")).get(subform)
-					)).get("baserate").value;
+					let kmrate = (<FormGroup>((<FormGroup>(this.RatesForm.get("all_inclusive_rates"))).get("Base_Rate"))).get("amount").value;
+					let taxvalue = (<FormGroup>((<FormGroup>this.RatesForm.get("taxes")).get(subform))).get("baserate").value;
 
-					let amount = Number(
-						Number((taxvalue / 100) * kmrate).toFixed(2)
-					);
+					let amount = Number(Number((taxvalue / 100) * kmrate).toFixed(2));
 
-					(<FormGroup>(
-						(<FormGroup>this.RatesForm.get(formgroup)).get(subform)
-					))
-						.get("amount")
-						.setValue(amount);
+					(<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("amount").setValue(amount);
 				}
 				// On Change of Flat | Percentage - Taxes
-				(<FormGroup>(
-					(<FormGroup>this.RatesForm.get("taxes")).get(subform)
-				))
-					.get("type")
-					.valueChanges.subscribe((value: any) =>
-					{
-						this.calculateAmount("RatesForm", formgroup, subform);
-					});
+				(<FormGroup>((<FormGroup>this.RatesForm.get("taxes")).get(subform))).get("type").valueChanges.subscribe((value: any) =>
+				{
+					this.calculateAmount("RatesForm", formgroup, subform);
+				});
 			}
 
-			let amount = (<FormGroup>(
-				(<FormGroup>this.RatesForm.get(formgroup)).get(subform)
-			)).get("amount").value;
+			let amount = (<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("amount").value;
 			this.total[subform] = Number(Number(amount).toFixed(2));
 			this.RatesForm.updateValueAndValidity();
 		}
@@ -506,20 +446,12 @@ export class RatesFormComponent implements OnInit, OnChanges
 		// --------------------- RETURN RATES FORM ------------------------
 		if (form === "ReturnRatesForm")
 		{
-			let baserate = (<FormGroup>(
-				(<FormGroup>this.ReturnRatesForm.get(formgroup)).get(subform)
-			)).get("baserate").value;
+			let baserate = (<FormGroup>((<FormGroup>this.ReturnRatesForm.get(formgroup)).get(subform))).get("baserate").value;
 
-			if (
-				["direct_taxes", "amenities", "taxes", "misc"].includes(
-					formgroup
-				)
-			)
+			if (["direct_taxes", "amenities", "taxes", "misc"].includes(formgroup))
 			{
 				// Flat Values
-				this.ReturnRateForm[formgroup].controls[
-					subform
-				].controls.amount.setValue(baserate);
+				this.ReturnRateForm[formgroup].controls[subform].controls.amount.setValue(baserate);
 				// initially run for taxes also because default value will be flat
 			}
 
@@ -527,112 +459,49 @@ export class RatesFormComponent implements OnInit, OnChanges
 			{
 				// Milage Rate
 				// let amount = Number(Number(Number(this.distance) * baserate).toFixed(2));
-				(<FormGroup>(
-					(<FormGroup>this.ReturnRatesForm.get(formgroup)).get(
-						subform
-					)
-				))
-					.get("amount")
-					.setValue(baserate);
+				(<FormGroup>((<FormGroup>this.ReturnRatesForm.get(formgroup)).get(subform))).get("amount").setValue(baserate);
 			}
 
 			if (formgroup == "others")
 			{
 				// Gratuity
-				let kmrate = (<FormGroup>(
-					(<FormGroup>(
-						this.ReturnRatesForm.get("all_inclusive_rates")
-					)).get("Base_Rate")
-				)).get("amount").value;
-				let basevalue = (<FormGroup>(
-					(<FormGroup>this.ReturnRatesForm.get(formgroup)).get(
-						subform
-					)
-				)).get("baserate").value;
+				let kmrate = (<FormGroup>((<FormGroup>(this.ReturnRatesForm.get("all_inclusive_rates"))).get("Base_Rate"))).get("amount").value;
+				let basevalue = (<FormGroup>((<FormGroup>this.ReturnRatesForm.get(formgroup)).get(subform))).get("baserate").value;
 
-				let amount = Number(
-					Number((basevalue / 100) * kmrate).toFixed(2)
+				let amount = Number(Number((basevalue / 100) * kmrate).toFixed(2)
 				);
 
-				(<FormGroup>(
-					(<FormGroup>this.ReturnRatesForm.get(formgroup)).get(
-						subform
-					)
-				))
-					.get("amount")
-					.setValue(amount);
+				(<FormGroup>((<FormGroup>this.ReturnRatesForm.get(formgroup)).get(subform))).get("amount").setValue(amount);
 				// set value of percentage same as gratuity
-				(<FormGroup>(
-					(<FormGroup>this.ReturnRatesForm.get(formgroup)).get(
-						subform
-					)
-				))
-					.get("percentage")
-					.setValue(basevalue);
+				(<FormGroup>((<FormGroup>this.ReturnRatesForm.get(formgroup)).get(subform))).get("percentage").setValue(basevalue);
 			}
 
 			if (formgroup == "taxes")
 			{
-				let type = (<FormGroup>(
-					(<FormGroup>this.ReturnRatesForm.get(formgroup)).get(
-						subform
-					)
-				)).get("type").value;
+				let type = (<FormGroup>((<FormGroup>this.ReturnRatesForm.get(formgroup)).get(subform))).get("type").value;
 				if (type === "flat")
 				{
-					(<FormGroup>(
-						(<FormGroup>this.ReturnRatesForm.get(formgroup)).get(
-							subform
-						)
-					))
-						.get("amount")
-						.setValue(baserate);
+					(<FormGroup>((<FormGroup>this.ReturnRatesForm.get(formgroup)).get(subform))).get("amount").setValue(baserate);
 				}
 
 				if (type === "percent")
 				{
-					let kmrate = (<FormGroup>(
-						(<FormGroup>(
-							this.ReturnRatesForm.get("all_inclusive_rates")
-						)).get("Base_Rate")
-					)).get("amount").value;
-					let taxvalue = (<FormGroup>(
-						(<FormGroup>this.ReturnRatesForm.get("taxes")).get(
-							subform
-						)
-					)).get("baserate").value;
+					let kmrate = (<FormGroup>((<FormGroup>(this.ReturnRatesForm.get("all_inclusive_rates"))).get("Base_Rate"))).get("amount").value;
+					let taxvalue = (<FormGroup>((<FormGroup>this.ReturnRatesForm.get("taxes")).get(subform))).get("baserate").value;
 
-					let amount = Number(
-						Number((taxvalue / 100) * kmrate).toFixed(2)
-					);
+					let amount = Number(Number((taxvalue / 100) * kmrate).toFixed(2));
 
-					(<FormGroup>(
-						(<FormGroup>this.ReturnRatesForm.get(formgroup)).get(
-							subform
-						)
-					))
-						.get("amount")
-						.setValue(amount);
+					(<FormGroup>((<FormGroup>this.ReturnRatesForm.get(formgroup)).get(subform))).get("amount").setValue(amount);
 				}
 
 				// Flat | Percentage - Taxes
-				(<FormGroup>(
-					(<FormGroup>this.ReturnRatesForm.get("taxes")).get(subform)
-				))
-					.get("type")
-					.valueChanges.subscribe((value: any) =>
-					{
-						this.calculateAmount(
-							"ReturnRatesForm",
-							formgroup,
-							subform
-						);
-					});
+				(<FormGroup>((<FormGroup>this.ReturnRatesForm.get("taxes")).get(subform))).get("type").valueChanges.subscribe((value: any) =>
+				{
+					this.calculateAmount("ReturnRatesForm", formgroup, subform);
+				});
 			}
 
-			let amount = (<FormGroup>(
-				(<FormGroup>this.ReturnRatesForm.get(formgroup)).get(subform)
-			)).get("amount").value;
+			let amount = (<FormGroup>((<FormGroup>this.ReturnRatesForm.get(formgroup)).get(subform))).get("amount").value;
 			this.r_total[subform] = Number(Number(amount).toFixed(2));
 			this.ReturnRatesForm.updateValueAndValidity();
 		}
@@ -655,8 +524,7 @@ export class RatesFormComponent implements OnInit, OnChanges
 			this.r_subtotal = 0;
 			for (let item in this.r_total)
 			{
-				this.r_subtotal =
-					Number(this.r_subtotal.toFixed(2)) + Number(this.r_total[item].toFixed(2));
+				this.r_subtotal = Number(this.r_subtotal.toFixed(2)) + Number(this.r_total[item].toFixed(2));
 			}
 		}
 	}
@@ -681,7 +549,6 @@ export class RatesFormComponent implements OnInit, OnChanges
 
 	toggleDropdown(section: string)
 	{
-		this.rate_params["chevrons"][section] =
-			!this.rate_params["chevrons"][section];
+		this.rate_params["chevrons"][section] = !this.rate_params["chevrons"][section];
 	}
 }

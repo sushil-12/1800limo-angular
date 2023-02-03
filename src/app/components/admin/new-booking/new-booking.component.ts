@@ -19,6 +19,8 @@ declare var $: any
 })
 export class NewBookingComponent implements OnInit
 {
+	todays_date: string = moment().format('YYYY-MM-DD');
+
 	booking_params: any = {
 		transfer_types: ["airport_to_city", "airport_to_airport", "airport_to_cruise", "city_to_city", "city_to_airport", "city_to_cruise", "cruise_to_airport", "cruise_to_city"],
 		client_account_types: ['individual', 'corporate', 'travel_planner', 'loose_customer'],
@@ -385,9 +387,27 @@ export class NewBookingComponent implements OnInit
 					})
 				}
 			})
+
+			if (editing_data.extra_stops && editing_data.extra_stops.length > 0)
+			{
+				editing_data.extra_stops.forEach((item: any, index: number) =>
+				{
+					if (item.hasOwnProperty('address'))
+					{
+						item['formatted_address'] = item.address;
+						this.addExtraStop();
+						this.fillExtraStop(false, index, item, item);
+						console.log(this.BookingForm);
+					}
+				})
+			}
+			else
+			{
+				console.error('No Extra Stops found.')
+			}
 			this.BookingForm.updateValueAndValidity()
 
-
+			// override specific value
 			this.BookingForm.patchValue({
 				service_type: response.data.service_type == 'oneway' ? 'one_way' : response.data['service_type'] == 'roundtrip' ? 'round_trip' : 'charter_tour',
 			})
@@ -660,7 +680,6 @@ export class NewBookingComponent implements OnInit
 				this.BigData = this.$api.getAirportsAndBigData();
 				this.BigData_COPY = JSON.parse(JSON.stringify(this.BigData));
 				this.MapController();
-				this.$spinner.hide('fetchspinner');
 				this.Form.reservation_id.value ? this.prefillViaBookingID(this.Form.reservation_id.value) : '';
 				clearInterval(s);
 			}
@@ -1029,6 +1048,7 @@ export class NewBookingComponent implements OnInit
 
 	fillExtraStop(is_return: boolean, index: number, address: any, location: any)
 	{
+		console.log(is_return, index, address, location);
 		if (is_return)
 		{
 			if (address && !location)
@@ -1044,8 +1064,10 @@ export class NewBookingComponent implements OnInit
 					longitude: location.longitude
 				})
 			}
+			this.BookingForm.updateValueAndValidity();
 			this.MapController(true)
-		} else
+		}
+		else
 		{
 			if (address && !location)
 			{
@@ -1060,6 +1082,7 @@ export class NewBookingComponent implements OnInit
 					longitude: location.longitude
 				})
 			}
+			this.BookingForm.updateValueAndValidity();
 			this.MapController()
 		}
 	}

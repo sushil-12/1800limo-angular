@@ -2,18 +2,18 @@
 <main>
 	<!-- Main page content-->
 	<section class="adminbox_shadow user_information">
-		<h2 class="headinginfo"> My Bookings </h2>
+		<h2 class="headinginfo"> Daily Bookings </h2>
 		<div class="containeredd mt-1 ">
 			<div class="row my-2 align-items-center justify-content-around">
 				<!-- Start-Date -->
 				<div class="col-sm-4 col-md-3 my-2">
-					<mat-form-field appearance="outline" class="m-0">
+					<mat-form-field appearance="outline" class="m-0 text-xl">
 						<mat-label>
 							Start Date <span class="asterisk"> * </span>
 						</mat-label>
 						<input matInput [setOutputDateFormat]="outputDateFormat"
 							[matDatepicker]="picker1" placeholder="Start Date" id="id_4"
-							(dateChangeWithFormat)="changeDate('startDate',$event)"
+							(dateChangeWithFormat)="changeDate('startDate', $event)"
 							(click)="picker1.open()" [value]="startDate" [max]="endDate" />
 						<mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
 						<mat-datepicker #picker1></mat-datepicker>

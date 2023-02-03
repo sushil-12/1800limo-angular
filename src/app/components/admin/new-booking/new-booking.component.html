@@ -42,7 +42,7 @@
 							<mat-label class="">
 								Transfer Type
 							</mat-label>
-							<mat-select formControlName="transfer_type">
+							<mat-select formControlName="transfer_type" class="font-weight-bolder">
 								<mat-option [value]="tf_type" class="font-weight-bolder"
 									*ngFor="let tf_type of booking_params.transfer_types">
 									{{ textFormatter(tf_type) | titlecase }}
@@ -839,7 +839,7 @@
 							</mat-label>
 							<input matInput placeholder="Phone Number" type="text"
 								formControlName="driver_cell" (focus)="$event.target.select()"
-								[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb'], initialCountry: 'us'}"
+								[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
 								ng2TelInput (intlTelInputObject)="DrvTelInputObject($event)"
 								(countryChange)="SetFormValue('driver_cell_isd', '+' + $event.dialCode); SetFormValue('driver_cell_country', $event.iso2)" />
 						</mat-form-field>
@@ -1113,10 +1113,10 @@
 				<div class="col-md-5 m-2">
 					<mat-form-field appearance="outline">
 						<mat-label>
-							Arrival Date
+							Travel Date
 						</mat-label>
 						<input matInput setOutputDateFormat="YYYY-MM-DD" [matDatepicker]="onwy_dt"
-							placeholder="Arrival Date"
+							placeholder="Arrival Date" [min]="todays_date"
 							(dateChangeWithFormat)="SetFormValue('pickup_date', $event)"
 							formControlName="pickup_date" (click)="onwy_dt.open()" />
 						<mat-datepicker-toggle matSuffix [for]="onwy_dt"></mat-datepicker-toggle>
@@ -1491,7 +1491,7 @@
 				<div class="col-md-5 m-2">
 					<mat-form-field appearance="outline">
 						<mat-label>
-							Travel Time
+							Arrival Time
 						</mat-label>
 						<input [ngxTimepicker]="rt_onwy_tm" matInput
 							[value]="Form.return_pickup_time.value"
@@ -2114,7 +2114,30 @@
 						</div>
 					</div>
 
-					<hr style="width: 50%; margin: 1rem auto; border: 1.3px solid #aeaeae;" />
+					<!-- Extra Stops -->
+					<div *ngIf="Form.extra_stops.value.length > 0">
+						<h5 class="p-2 m-0 text-xl">
+							Extra Stops
+						</h5>
+						<div class="mx-2"
+							*ngFor="let stop of Form.extra_stops.value; index as stop_index">
+							<div class="row m-0 mx-2">
+								<div class="col-md-4 key">
+									<span>
+										Stop {{ stop_index + 1 }}
+									</span>
+								</div>
+								<div class="col-md-8 value">
+									<span class="font-weight-bolder">
+										{{ stop.address }}
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<hr style="width: 50%; margin: 1rem auto; border: 1.3px solid #aeaeae;"
+						*ngIf="Form.extra_stops.value.length == 0" />
 
 					<!-- ############# Dropoff ################# -->
 					<h5 class="px-2 m-1 text-xl">
