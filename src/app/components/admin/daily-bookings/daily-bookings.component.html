@@ -4,7 +4,7 @@
 	<section class="adminbox_shadow user_information">
 		<h2 class="headinginfo"> Daily Bookings </h2>
 		<div class="containeredd mt-1 ">
-			<div class="row my-2 align-items-center justify-content-around">
+			<div class="row my-2 align-items-center">
 				<!-- Start-Date -->
 				<div class="col-sm-4 col-md-3 my-2">
 					<mat-form-field appearance="outline" class="m-0 text-xl">
@@ -35,20 +35,23 @@
 					</mat-form-field>
 				</div>
 
-				<!-- Search Input -->
-				<div class="col-sm-2 col-md-3 my-2">
-					<mat-form-field appearance="outline" class="m-0">
-						<mat-label> Search </mat-label>
-						<input matInput type="text" placeholder="Search by Date, Name or keyword"
-							id="keyword">
-					</mat-form-field>
-				</div>
-
 				<!-- Search Button -->
-				<div class="col-sm-1 col-md-3 text-right text-lg-left">
+				<div class="col-sm-3">
 					<button class="custom-filled-button orange-button" (click)="loadBookings()">
 						Search
 					</button>
+				</div>
+			</div>
+			<div class="row my-2 mb-3">
+				<div class="col-md-12">
+					<div id="search-field">
+						<mat-form-field appearance="outline" class="m-0">
+							<input matInput type="text"
+								(keyup)="loadBookings(null, $event.target.value)"
+								placeholder="Search by Booking Id, Pax Name, Pickup, Dropoff, Phone, Status, Vehicle Type"
+								id="keyword">
+						</mat-form-field>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -241,17 +244,14 @@
 		<div class="modal-content user_inforamtion">
 			<div class="modal-header pb-0">
 				<h3 class="mb-0" id="exampleModalLabel">Change Booking Status</h3>
-				<!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-<span aria-hidden="true">&times;</span>
-</button> -->
 			</div>
 			<div class="modal-body">
-				<form [formGroup]="changeStatusForm">
+				<form>
 					<div class="form-group">
 						<div class="col-md-12">
 							<mat-form-field appearance="outline">
 								<mat-label>Change Status</mat-label>
-								<mat-select formControlName="booking_status">
+								<mat-select>
 									<mat-option value="pending">Pending</mat-option>
 									<mat-option value="assigned">Assigned</mat-option>
 									<mat-option value="rejected">Rejected</mat-option>
@@ -285,9 +285,6 @@
 		<div class="modal-content">
 			<div class="modal-header pb-0">
 				<h3 class="mb-0">Email</h3>
-				<!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-<span aria-hidden="true">&times;</span>
-</button> -->
 			</div>
 			<div class="modal-body text-center">
 				<p>Are you sure, You want to send email?</p>

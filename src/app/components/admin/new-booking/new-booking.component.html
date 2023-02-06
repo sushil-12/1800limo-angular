@@ -186,7 +186,7 @@
 											This field is required
 										</p>
 										<p class="text-danger text-lg m-0"
-											*ngIf="LooseCustomer.email.errors?.pattern">
+											*ngIf="LooseCustomer.email.errors?.pattern || LooseCustomer.email.errors?.domain">
 											Please enter a valid Email Id
 										</p>
 									</div>
@@ -196,7 +196,7 @@
 							<!-- Phone -->
 							<div class="col-md-4 my-2">
 								<mat-form-field appearance="outline" class="mat-custom-phone">
-									<mat-label class="">
+									<mat-label class="required-field">
 										Phone
 									</mat-label>
 									<input matInput placeholder="Phone" formControlName="phone"
@@ -371,8 +371,9 @@
 					<div class="col-md-12">
 						<mat-form-field appearance="outline">
 							<mat-label>Choose User</mat-label>
-							<input type="text" id="userField" placeholder="Choose User"
+							<input #searchInput type="text" id="userField" placeholder="Choose User"
 								(focus)="$event.target.select()" matInput
+								(click)="openAutoCompletePanel()"
 								(keyup)="searchAccountType($event.target.value)"
 								[value]="fillValue(filteredAccountTypes, 'acc_id', 'name')"
 								[matAutocomplete]="chooseuseratcmplt" />
@@ -641,9 +642,10 @@
 							<mat-label>
 								Vehicle Type
 							</mat-label>
-							<input type="text" placeholder="Search for Vehicle Type"
+							<input #searchInput type="text" placeholder="Search for Vehicle Type"
 								aria-label="Vehicle Type" matInput (focus)="$event.target.select()"
 								(keyup)="searchValue('vehicleCategories', $event.target.value, 'name', 'vehicle_type')"
+								(click)="openAutoCompletePanel()"
 								[value]="fillValue(BigData?.vehicleCategories, 'vehicle_type', 'name')"
 								[matAutocomplete]="vehicletypeautoc">
 							<mat-autocomplete autoActiveFirstOption
@@ -679,8 +681,9 @@
 							<mat-label>
 								Make
 							</mat-label>
-							<input type="text" placeholder="Search for Vehicle Make"
+							<input #searchInput type="text" placeholder="Search for Vehicle Make"
 								aria-label="Make" matInput (focus)="$event.target.select()"
+								(click)="openAutoCompletePanel()"
 								(keyup)="searchValue('vehicleMakes', $event.target.value, 'name', 'vehicle_make')"
 								[value]="fillValue(BigData?.vehicleMakes, 'vehicle_make', 'name')"
 								[matAutocomplete]="vehiclemakeautoc">
@@ -700,8 +703,9 @@
 							<mat-label>
 								Model
 							</mat-label>
-							<input type="text" placeholder="Search for Vehicle Model"
+							<input #searchInput type="text" placeholder="Search for Vehicle Model"
 								aria-label="Model" matInput (focus)="$event.target.select()"
+								(click)="openAutoCompletePanel()"
 								(keyup)="searchValue('vehicleModels', $event.target.value, 'name', 'vehicle_model')"
 								[value]="fillValue(BigData?.vehicleModels, 'vehicle_model', 'name')"
 								[matAutocomplete]="vehiclemodelautoc">
@@ -721,8 +725,9 @@
 							<mat-label>
 								Year
 							</mat-label>
-							<input type="text" placeholder="Search for Vehicle Year"
+							<input #searchInput type="text" placeholder="Search for Vehicle Year"
 								aria-label="Year" matInput (focus)="$event.target.select()"
+								(click)="openAutoCompletePanel()"
 								(keyup)="searchValue('vehicleYears', $event.target.value, 'name', 'vehicle_year')"
 								[value]="fillValue(BigData?.vehicleYears, 'vehicle_year', 'name')"
 								[matAutocomplete]="vehicleyearautoc">
@@ -742,8 +747,9 @@
 							<mat-label>
 								Color
 							</mat-label>
-							<input type="text" placeholder="Search for Vehicle Color"
+							<input #searchInput type="text" placeholder="Search for Vehicle Color"
 								aria-label="Color" matInput (focus)="$event.target.select()"
+								(click)="openAutoCompletePanel()"
 								(keyup)="searchValue('vehicleColors', $event.target.value, 'name', 'vehicle_color')"
 								[value]="fillValue(BigData?.vehicleColors, 'vehicle_color', 'name')"
 								[matAutocomplete]="vehiclecolorautoc">
@@ -1169,9 +1175,10 @@
 							<mat-label>
 								Airport
 							</mat-label>
-							<input type="search" matInput placeholder="Search For Airport"
-								(focus)="$event.target.select()" aria-label="Airport"
-								[matAutocomplete]="onwy_airport"
+							<input #searchInput type="search" matInput
+								placeholder="Search For Airport" (focus)="$event.target.select()"
+								aria-label="Airport" [matAutocomplete]="onwy_airport"
+								(click)="openAutoCompletePanel()"
 								(keyup)="searchValue('airportsData', $event.target.value, 'name')"
 								formControlName="pickup_airport_name" />
 							<mat-autocomplete #onwy_airport="matAutocomplete">
@@ -1190,8 +1197,10 @@
 							<mat-label>
 								Airline
 							</mat-label>
-							<input type="text" matInput placeholder="Search For Airport"
-								aria-label="Airport" formControlName="pickup_airline_name"
+							<input #searchInput type="text" matInput
+								placeholder="Search For Airport" aria-label="Airport"
+								formControlName="pickup_airline_name"
+								(click)="openAutoCompletePanel()"
 								(keyup)="searchValue('airlinesData', $event.target.value, 'name')"
 								(focus)="$event.target.select()" [matAutocomplete]="onwy_airline">
 							<mat-autocomplete #onwy_airline="matAutocomplete">
@@ -1302,8 +1311,10 @@
 							<mat-label>
 								Airport
 							</mat-label>
-							<input type="text" matInput placeholder="Search For Airport"
-								aria-label="Airport" formControlName="dropoff_airport_name"
+							<input #searchInput type="text" matInput
+								placeholder="Search For Airport" aria-label="Airport"
+								formControlName="dropoff_airport_name"
+								(click)="openAutoCompletePanel()"
 								(keyup)="searchValue('airportsData', $event.target.value, 'name')"
 								[matAutocomplete]="onwy_drop_airport"
 								(focus)="$event.target.select()" />
@@ -1323,8 +1334,10 @@
 							<mat-label>
 								Airline
 							</mat-label>
-							<input type="text" matInput placeholder="Search For Airline"
-								aria-label="Airport" formControlName="dropoff_airline_name"
+							<input #searchInput type="text" matInput
+								placeholder="Search For Airline" aria-label="Airport"
+								formControlName="dropoff_airline_name"
+								(click)="openAutoCompletePanel()"
 								(keyup)="searchValue('airlinesData', $event.target.value, 'name')"
 								[matAutocomplete]="onwy_drop_airline"
 								(focus)="$event.target.select()" />
@@ -1537,8 +1550,10 @@
 							<mat-label>
 								Airport
 							</mat-label>
-							<input type="text" matInput placeholder="Search For Airport"
-								aria-label="Airport" formControlName="return_pickup_airport_name"
+							<input #searchInput type="text" matInput
+								placeholder="Search For Airport" aria-label="Airport"
+								formControlName="return_pickup_airport_name"
+								(click)="openAutoCompletePanel()"
 								(keyup)="searchValue('airportsData', $event.target.value, 'name')"
 								[matAutocomplete]="onwy_airport" (focus)="$event.target.select()" />
 							<mat-autocomplete #onwy_airport="matAutocomplete">
@@ -1557,8 +1572,10 @@
 							<mat-label>
 								Airline
 							</mat-label>
-							<input type="text" matInput placeholder="Search For Airport"
-								aria-label="Airport" formControlName="return_pickup_airline_name"
+							<input #searchInput type="text" matInput
+								placeholder="Search For Airport" aria-label="Airport"
+								formControlName="return_pickup_airline_name"
+								(click)="openAutoCompletePanel()"
 								(keyup)="searchValue('airlinesData', $event.target.value, 'name')"
 								[matAutocomplete]="onwy_airline" (focus)="$event.target.select()" />
 							<mat-autocomplete #onwy_airline="matAutocomplete">
@@ -1659,10 +1676,12 @@
 							<mat-label>
 								Airport
 							</mat-label>
-							<input type="text" matInput placeholder="Search For Airport"
-								aria-label="Airport" formControlName="return_dropoff_airport_name"
+							<input #searchInput type="text" matInput
+								placeholder="Search For Airport" aria-label="Airport"
+								formControlName="return_dropoff_airport_name"
 								(keyup)="searchValue('airportsData', $event.target.value, 'name')"
 								[matAutocomplete]="onwy_drop_airport"
+								(click)="openAutoCompletePanel()"
 								(focus)="$event.target.select()" />
 							<mat-autocomplete #onwy_drop_airport="matAutocomplete">
 								<mat-option *ngFor="let option of BigData?.airportsData"
@@ -1680,8 +1699,10 @@
 							<mat-label>
 								Airline
 							</mat-label>
-							<input type="text" matInput placeholder="Search For Airline"
-								aria-label="Airport" formControlName="return_dropoff_airline_name"
+							<input #searchInput type="text" matInput
+								placeholder="Search For Airline" aria-label="Airport"
+								formControlName="return_dropoff_airline_name"
+								(click)="openAutoCompletePanel()"
 								(keyup)="searchValue('airlinesData', $event.target.value, 'name')"
 								[matAutocomplete]="onwy_drop_airline"
 								(focus)="$event.target.select()" />

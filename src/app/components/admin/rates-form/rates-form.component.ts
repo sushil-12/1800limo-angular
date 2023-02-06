@@ -1,14 +1,5 @@
 import
-{
-	Component,
-	EventEmitter,
-	Input,
-	OnInit,
-	Output,
-	SimpleChanges,
-	ViewChild,
-	OnChanges,
-} from "@angular/core";
+{ Component, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild, OnChanges } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { AdminService } from "src/app/services/admin.service";
 
@@ -347,20 +338,19 @@ export class RatesFormComponent implements OnInit, OnChanges
 	{
 		if (form === "RatesForm")
 		{
-			let baserate = (<FormGroup>(
-				(<FormGroup>this.RatesForm.get(formgroup)).get(subform)
-			)).get("baserate").value;
+			let baserate = (<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("baserate").value;
 
-			if (
-				["direct_taxes", "amenities", "taxes", "misc"].includes(
-					formgroup
-				)
-			)
+			if (!baserate)
+			{
+				baserate = 0;
+				(<FormGroup>(<FormGroup>this.RatesForm.get(formgroup)).get(subform)).get('baserate').setValue(baserate);
+				this.RatesForm.updateValueAndValidity();
+			}
+
+			if (["direct_taxes", "amenities", "taxes", "misc"].includes(formgroup))
 			{
 				// Flat Values
-				this.RateForm[formgroup].controls[
-					subform
-				].controls.amount.setValue(baserate);
+				this.RateForm[formgroup].controls[subform].controls.amount.setValue(baserate);
 				// initially run for taxes also because default value will be flat
 			}
 
@@ -370,53 +360,31 @@ export class RatesFormComponent implements OnInit, OnChanges
 				// Hourly Rate - only in case of hours
 				if (this.hours !== 0)
 				{
-					amount = Number(
-						Number(Number(this.hours) * baserate).toFixed(2)
-					);
+					amount = Number(Number(Number(this.hours) * baserate).toFixed(2));
 				} else
 				{
 					amount = baserate;
 				}
-				(<FormGroup>(
-					(<FormGroup>this.RatesForm.get(formgroup)).get(subform)
-				))
-					.get("amount")
-					.setValue(amount);
+
+				(<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("amount").setValue(amount);
 			}
 
 			if (formgroup == "others")
 			{
 				let kmrate = (<FormGroup>(
-					(<FormGroup>this.RatesForm.get("all_inclusive_rates")).get(
-						"Base_Rate"
-					)
-				)).get("amount").value;
-				let basevalue = (<FormGroup>(
-					(<FormGroup>this.RatesForm.get(formgroup)).get(subform)
-				)).get("baserate").value;
+					(<FormGroup>this.RatesForm.get("all_inclusive_rates")).get("Base_Rate"))).get("amount").value;
+				let basevalue = (<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("baserate").value;
 
-				let amount = Number(
-					Number((basevalue / 100) * kmrate).toFixed(2)
-				);
+				let amount = Number(Number((basevalue / 100) * kmrate).toFixed(2));
 
-				(<FormGroup>(
-					(<FormGroup>this.RatesForm.get(formgroup)).get(subform)
-				))
-					.get("amount")
-					.setValue(amount);
+				(<FormGroup>(<FormGroup>this.RatesForm.get(formgroup)).get(subform)).get("amount").setValue(amount);
 				// set value of percentage same as gratuity
-				(<FormGroup>(
-					(<FormGroup>this.RatesForm.get(formgroup)).get(subform)
-				))
-					.get("percentage")
-					.setValue(basevalue);
+				(<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("percentage").setValue(basevalue);
 			}
 
 			if (formgroup == "taxes")
 			{
-				let type = (<FormGroup>(
-					(<FormGroup>this.RatesForm.get(formgroup)).get(subform)
-				)).get("type").value;
+				let type = (<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("type").value;
 				if (type === "flat")
 				{
 					(<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("amount").setValue(baserate);

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl, FormArray, ValidationErrors, ValidatorFn, AbstractControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { pluck } from 'rxjs/operators';
@@ -10,6 +10,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 import * as moment from 'moment';
 import { RatesFormComponent } from '../rates-form/rates-form.component';
+import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 
 declare var $: any
 @Component({
@@ -19,6 +20,9 @@ declare var $: any
 })
 export class NewBookingComponent implements OnInit
 {
+
+	@ViewChild('searchInput', { read: MatAutocompleteTrigger }) triggerAutoCompleteInput: MatAutocompleteTrigger
+
 	todays_date: string = moment().format('YYYY-MM-DD');
 
 	booking_params: any = {
@@ -37,9 +41,12 @@ export class NewBookingComponent implements OnInit
 		years: (() =>
 		{
 			let arr = []
-			for (let i = 1; i < 20; i++)
+			let i = 0;
+			let year = new Date().getFullYear();
+			while (i < 15)
 			{
-				arr.push(new Date().getFullYear() + i)
+				arr.push(year - i);
+				i++;
 			}
 			return arr
 		})(),
@@ -102,6 +109,10 @@ export class NewBookingComponent implements OnInit
 		private $routeurl: ActivatedRoute
 	) { }
 
+	openAutoCompletePanel()
+	{
+		this.triggerAutoCompleteInput.openPanel();
+	}
 	ngOnInit(): void
 	{
 
@@ -1338,8 +1349,9 @@ export class NewBookingComponent implements OnInit
 						loose_customer.get(item).setValidators([Validators.required]);
 					}
 				}
+
 				(<FormGroup>loose_customer.get('card_details')).get('card_number').setValidators([Validators.required, Validators.pattern("[0-9]{12,20}")]);
-				loose_customer.get('email').setValidators([Validators.required, Validators.pattern("[a-zA-Z0-9\$\#\.\/\%\~\\-\\&\+\_]+@[a-z0-9.]+(\.[a-z]+){1,3}")])
+				loose_customer.get('email').setValidators([Validators.required, Validators.pattern("[a-zA-Z0-9\$\#\.\/\%\~\\-\\&\+\_]+@[a-z0-9]+(\.[a-z\-]+){1,2}"), this.EmailDomainValidator()])
 				loose_customer.get('phone').setValidators([Validators.required, Validators.pattern("^[0-9]{10,12}$")])
 			}
 			else
@@ -1615,6 +1627,36 @@ export class NewBookingComponent implements OnInit
 	DrvTelInputObject(event: any)
 	{
 		this.DrvTelObject = event;
+	}
+
+	EmailDomainValidator(): ValidatorFn
+	{
+		return (control: AbstractControl): ValidationErrors | null =>
+		{
+			let value = control.value;
+			console.log(value)
+			if (!value)
+			{
+				return null
+			}
+			value = value.split('@')[1]
+			let domain = value?.substring(value.indexOf('.') + 1)
+			console.log(domain)
+			const domains = ['com', 'net', 'in', 'co', 'uk', 'br', 'us']
+			if (domains.includes(domain))
+			{
+				return null
+			}
+			else if (domain?.includes('.'))
+			{
+				console.log(domain)
+				return domain.split('.').every(item => domains.includes(item)) ? null : { domain: true }
+			}
+			else
+			{
+				return { domain: true }
+			}
+		}
 	}
 }
 
