@@ -182,34 +182,29 @@ export class DailyBookingsComponent implements OnInit
 		});
 	}
 
-	loadBookings(pageUrl = null)
+	loadBookings(pageUrl = null, keyword: string = '')
 	{
 		/** spinner starts on init */
-		this.spinner.show();
-
-		var keyword = (document.getElementById("keyword") as HTMLInputElement)
-			.value;
+		keyword == '' && this.bookings?.length && this.spinner.show();
 		// Load Our bookings using API
-		this.adminService
-			.loadBookings(pageUrl, keyword, this.startDate, this.endDate)
-			.then((result) =>
-			{
-				this.bookingsRes = result;
-				this.bookings = this.bookingsRes.data.data;
-				this.totalRecords = this.bookingsRes.data.total;
-				this.firstPage = 1;
-				this.lastPage = this.bookingsRes.data.last_page;
-				this.totalPage = this.bookingsRes.data.last_page;
-				this.currentPage = this.bookingsRes.data.current_page;
-				this.from = this.bookingsRes.data.from;
-				this.to = this.bookingsRes.data.to;
-				this.path = this.bookingsRes.data.path;
-				this.firstPageUrl = this.bookingsRes.data.first_page_url;
-				this.lastPageUrl = this.bookingsRes.data.last_page_url;
-				this.prevPageUrl = this.bookingsRes.data.prev_page_url;
-				this.nextPageUrl = this.bookingsRes.data.next_page_url;
-				this.spinner.hide(); //hide spinner
-			})
+		this.adminService.loadBookings(pageUrl, this.startDate, this.endDate, keyword).then((result) =>
+		{
+			this.bookingsRes = result;
+			this.bookings = this.bookingsRes.data.data;
+			this.totalRecords = this.bookingsRes.data.total;
+			this.firstPage = 1;
+			this.lastPage = this.bookingsRes.data.last_page;
+			this.totalPage = this.bookingsRes.data.last_page;
+			this.currentPage = this.bookingsRes.data.current_page;
+			this.from = this.bookingsRes.data.from;
+			this.to = this.bookingsRes.data.to;
+			this.path = this.bookingsRes.data.path;
+			this.firstPageUrl = this.bookingsRes.data.first_page_url;
+			this.lastPageUrl = this.bookingsRes.data.last_page_url;
+			this.prevPageUrl = this.bookingsRes.data.prev_page_url;
+			this.nextPageUrl = this.bookingsRes.data.next_page_url;
+			this.spinner.hide(); //hide spinner
+		})
 			.catch((err) =>
 			{
 				this.spinner.hide(); //hide spinner
