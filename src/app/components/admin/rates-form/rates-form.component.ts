@@ -103,10 +103,7 @@ export class RatesFormComponent implements OnInit, OnChanges
 
 		if (changes.nums)
 		{
-			this.hours = changes.nums ? changes.nums?.currentValue : this.hours;
-		} else
-		{
-			this.hours = 0;
+			this.hours = changes.nums.currentValue
 		}
 
 		if (changes.vehs)
