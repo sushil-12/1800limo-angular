@@ -358,6 +358,7 @@ export class RatesFormComponent implements OnInit, OnChanges
 		{
 			let baserate = (<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("baserate").value;
 
+
 			if (!baserate)
 			{
 				baserate = 0;
@@ -373,8 +374,9 @@ export class RatesFormComponent implements OnInit, OnChanges
 			if (formgroup == "all_inclusive_rates")
 			{
 				let amount = 0;
+
 				// Hourly Rate - only in case of hours
-				if (this.hours !== 0)
+				if (this.hours != 0 && subform == 'Base_Rate')
 				{
 					amount = Number(Number(Number(this.hours) * baserate).toFixed(2));
 				} else
