@@ -90,10 +90,11 @@ export class NewBookingComponent implements OnInit
 	init_rates: boolean = false
 	init_return_rates: boolean = false
 	is_loose_customer_unique: boolean = false
-
-
-
 	is_booking_edit_case: boolean = false
+	reset_button: boolean = false
+
+
+
 
 	public filteredAccountTypes: Array<object>;
 
@@ -220,7 +221,7 @@ export class NewBookingComponent implements OnInit
 			transfer_type: ['city_to_city', Validators.required],
 			return_transfer_type: ['city_to_city', Validators.required],
 			number_of_hours: ['0'],
-			acc_id: [''],
+			acc_id: ['', Validators.required],
 			account_type: ['individual', Validators.required],
 			loose_customer: this.$form.group({
 				first_name: [''],
@@ -239,9 +240,9 @@ export class NewBookingComponent implements OnInit
 					cvv: ['']
 				})
 			}),
-			passenger_name: [''],
-			passenger_email: [''],
-			passenger_cell: [''],
+			passenger_name: ['', Validators.required],
+			passenger_email: ['', Validators.required],
+			passenger_cell: ['', Validators.required],
 			passenger_cell_isd: ['+1'],
 			passenger_cell_country: ['us'],
 			total_passengers: [1],
@@ -277,7 +278,7 @@ export class NewBookingComponent implements OnInit
 			pickup_date: [''],
 			pickup_time: ['12:00 am'],
 			extra_stops: this.$form.array([]),
-			pickup: [''],
+			pickup: ['', Validators.required],
 			pickup_latitude: [''],
 			pickup_longitude: [''],
 			pickup_airport: [''],
@@ -291,7 +292,7 @@ export class NewBookingComponent implements OnInit
 			cruise_port: [''],
 			cruise_name: [''],
 			cruise_time: [''],
-			dropoff: [''],
+			dropoff: ['', Validators.required],
 			dropoff_latitude: [''],
 			dropoff_longitude: [''],
 			dropoff_airport: [''],
@@ -305,7 +306,7 @@ export class NewBookingComponent implements OnInit
 			return_pickup_date: [''],
 			return_pickup_time: ['12:00 pm'],
 			return_extra_stops: this.$form.array([]),
-			return_pickup: [''],
+			return_pickup: ['', Validators.required],
 			return_pickup_latitude: [''],
 			return_pickup_longitude: [''],
 			return_pickup_airport: [''],
@@ -318,7 +319,7 @@ export class NewBookingComponent implements OnInit
 			return_cruise_port: [''],
 			return_cruise_name: [''],
 			return_cruise_time: [''],
-			return_dropoff: [''],
+			return_dropoff: ['', Validators.required],
 			return_dropoff_latitude: [''],
 			return_dropoff_longitude: [''],
 			return_dropoff_airport: [''],
@@ -1184,6 +1185,9 @@ export class NewBookingComponent implements OnInit
 		this.chosen_user = null
 		this.buildBookingForm()
 		this.MapController()
+		this.driver_image = {}
+		this.vehicle_image = {}
+
 		if (!this.booking_params['client_account_types'].includes('loose_customer'))
 		{
 			this.booking_params['client_account_types'].push('loose_customer')
@@ -1194,6 +1198,7 @@ export class NewBookingComponent implements OnInit
 		{
 			this.BigData = this.BigData_COPY
 		}
+		this.reset_button = true
 	}
 
 	returnZero()
