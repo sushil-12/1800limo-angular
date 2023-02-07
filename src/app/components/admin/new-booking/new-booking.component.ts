@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl, FormArray, ValidationErrors, ValidatorFn, AbstractControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { pluck } from 'rxjs/operators';
@@ -10,6 +10,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 import * as moment from 'moment';
 import { RatesFormComponent } from '../rates-form/rates-form.component';
+import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 
 declare var $: any
 @Component({
@@ -19,6 +20,9 @@ declare var $: any
 })
 export class NewBookingComponent implements OnInit
 {
+
+	@ViewChild('searchInput', { read: MatAutocompleteTrigger }) triggerAutoCompleteInput: MatAutocompleteTrigger
+
 	todays_date: string = moment().format('YYYY-MM-DD');
 
 	booking_params: any = {
@@ -37,9 +41,12 @@ export class NewBookingComponent implements OnInit
 		years: (() =>
 		{
 			let arr = []
-			for (let i = 1; i < 20; i++)
+			let i = 0;
+			let year = new Date().getFullYear();
+			while (i < 15)
 			{
-				arr.push(new Date().getFullYear() + i)
+				arr.push(year - i);
+				i++;
 			}
 			return arr
 		})(),
@@ -83,10 +90,11 @@ export class NewBookingComponent implements OnInit
 	init_rates: boolean = false
 	init_return_rates: boolean = false
 	is_loose_customer_unique: boolean = false
-
-
-
 	is_booking_edit_case: boolean = false
+	reset_button: boolean = false
+
+
+
 
 	public filteredAccountTypes: Array<object>;
 
@@ -102,6 +110,10 @@ export class NewBookingComponent implements OnInit
 		private $routeurl: ActivatedRoute
 	) { }
 
+	openAutoCompletePanel()
+	{
+		this.triggerAutoCompleteInput.openPanel();
+	}
 	ngOnInit(): void
 	{
 
@@ -209,7 +221,7 @@ export class NewBookingComponent implements OnInit
 			transfer_type: ['city_to_city', Validators.required],
 			return_transfer_type: ['city_to_city', Validators.required],
 			number_of_hours: ['0'],
-			acc_id: [''],
+			acc_id: ['', Validators.required],
 			account_type: ['individual', Validators.required],
 			loose_customer: this.$form.group({
 				first_name: [''],
@@ -228,9 +240,9 @@ export class NewBookingComponent implements OnInit
 					cvv: ['']
 				})
 			}),
-			passenger_name: [''],
-			passenger_email: [''],
-			passenger_cell: [''],
+			passenger_name: ['', Validators.required],
+			passenger_email: ['', Validators.required],
+			passenger_cell: ['', Validators.required],
 			passenger_cell_isd: ['+1'],
 			passenger_cell_country: ['us'],
 			total_passengers: [1],
@@ -266,7 +278,7 @@ export class NewBookingComponent implements OnInit
 			pickup_date: [''],
 			pickup_time: ['12:00 am'],
 			extra_stops: this.$form.array([]),
-			pickup: [''],
+			pickup: ['', Validators.required],
 			pickup_latitude: [''],
 			pickup_longitude: [''],
 			pickup_airport: [''],
@@ -280,7 +292,7 @@ export class NewBookingComponent implements OnInit
 			cruise_port: [''],
 			cruise_name: [''],
 			cruise_time: [''],
-			dropoff: [''],
+			dropoff: ['', Validators.required],
 			dropoff_latitude: [''],
 			dropoff_longitude: [''],
 			dropoff_airport: [''],
@@ -294,7 +306,7 @@ export class NewBookingComponent implements OnInit
 			return_pickup_date: [''],
 			return_pickup_time: ['12:00 pm'],
 			return_extra_stops: this.$form.array([]),
-			return_pickup: [''],
+			return_pickup: ['', Validators.required],
 			return_pickup_latitude: [''],
 			return_pickup_longitude: [''],
 			return_pickup_airport: [''],
@@ -307,7 +319,7 @@ export class NewBookingComponent implements OnInit
 			return_cruise_port: [''],
 			return_cruise_name: [''],
 			return_cruise_time: [''],
-			return_dropoff: [''],
+			return_dropoff: ['', Validators.required],
 			return_dropoff_latitude: [''],
 			return_dropoff_longitude: [''],
 			return_dropoff_airport: [''],
@@ -1173,6 +1185,9 @@ export class NewBookingComponent implements OnInit
 		this.chosen_user = null
 		this.buildBookingForm()
 		this.MapController()
+		this.driver_image = {}
+		this.vehicle_image = {}
+
 		if (!this.booking_params['client_account_types'].includes('loose_customer'))
 		{
 			this.booking_params['client_account_types'].push('loose_customer')
@@ -1183,6 +1198,7 @@ export class NewBookingComponent implements OnInit
 		{
 			this.BigData = this.BigData_COPY
 		}
+		this.reset_button = true
 	}
 
 	returnZero()
@@ -1338,8 +1354,9 @@ export class NewBookingComponent implements OnInit
 						loose_customer.get(item).setValidators([Validators.required]);
 					}
 				}
+
 				(<FormGroup>loose_customer.get('card_details')).get('card_number').setValidators([Validators.required, Validators.pattern("[0-9]{12,20}")]);
-				loose_customer.get('email').setValidators([Validators.required, Validators.pattern("[a-zA-Z0-9\$\#\.\/\%\~\\-\\&\+\_]+@[a-z0-9.]+(\.[a-z]+){1,3}")])
+				loose_customer.get('email').setValidators([Validators.required, Validators.pattern("[a-zA-Z0-9\$\#\.\/\%\~\\-\\&\+\_]+@[a-z0-9]+(\.[a-z\-]+){1,2}"), this.EmailDomainValidator()])
 				loose_customer.get('phone').setValidators([Validators.required, Validators.pattern("^[0-9]{10,12}$")])
 			}
 			else
@@ -1615,6 +1632,36 @@ export class NewBookingComponent implements OnInit
 	DrvTelInputObject(event: any)
 	{
 		this.DrvTelObject = event;
+	}
+
+	EmailDomainValidator(): ValidatorFn
+	{
+		return (control: AbstractControl): ValidationErrors | null =>
+		{
+			let value = control.value;
+			console.log(value)
+			if (!value)
+			{
+				return null
+			}
+			value = value.split('@')[1]
+			let domain = value?.substring(value.indexOf('.') + 1)
+			console.log(domain)
+			const domains = ['com', 'net', 'in', 'co', 'uk', 'br', 'us']
+			if (domains.includes(domain))
+			{
+				return null
+			}
+			else if (domain?.includes('.'))
+			{
+				console.log(domain)
+				return domain.split('.').every(item => domains.includes(item)) ? null : { domain: true }
+			}
+			else
+			{
+				return { domain: true }
+			}
+		}
 	}
 }
 

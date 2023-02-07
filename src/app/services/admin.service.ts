@@ -931,7 +931,7 @@ export class AdminService
 		return this.httpClient.post(this.serverUrl + 'admin-notification-daily-booking', data);
 	}
 
-	loadBookings(url, keyword, startDate, endDate)
+	loadBookings(url, startDate, endDate, keyword = '')
 	{
 		var path;
 		if (url)
