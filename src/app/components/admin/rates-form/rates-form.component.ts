@@ -147,7 +147,7 @@ export class RatesFormComponent implements OnInit, OnChanges
 			});
 		}
 
-		if (changes.reset && changes.reset.currentValue)
+		if (changes.reset)
 		{
 			this.RatesForm = null
 			this.ReturnRatesForm = null
@@ -412,7 +412,7 @@ export class RatesFormComponent implements OnInit, OnChanges
 				if (type === "percent")
 				{
 					// let kmrate = (<FormGroup>((<FormGroup>(this.RatesForm.get("all_inclusive_rates"))).get("Base_Rate"))).get("amount").value;
-					let kmrate = this.temp;
+					let kmrate = await this.calculateBaseRate();
 					let taxvalue = (<FormGroup>((<FormGroup>this.RatesForm.get("taxes")).get(subform))).get("baserate").value;
 
 					let amount = Number(Number((taxvalue / 100) * kmrate).toFixed(2));
@@ -453,7 +453,8 @@ export class RatesFormComponent implements OnInit, OnChanges
 			if (formgroup == "others")
 			{
 				// Gratuity
-				let kmrate = (<FormGroup>((<FormGroup>(this.ReturnRatesForm.get("all_inclusive_rates"))).get("Base_Rate"))).get("amount").value;
+				// let kmrate = (<FormGroup>((<FormGroup>(this.ReturnRatesForm.get("all_inclusive_rates"))).get("Base_Rate"))).get("amount").value;
+				let kmrate = await this.calculateBaseRate();
 				let basevalue = (<FormGroup>((<FormGroup>this.ReturnRatesForm.get(formgroup)).get(subform))).get("baserate").value;
 
 				let amount = Number(Number((basevalue / 100) * kmrate).toFixed(2)
@@ -474,7 +475,8 @@ export class RatesFormComponent implements OnInit, OnChanges
 
 				if (type === "percent")
 				{
-					let kmrate = (<FormGroup>((<FormGroup>(this.ReturnRatesForm.get("all_inclusive_rates"))).get("Base_Rate"))).get("amount").value;
+					// let kmrate = (<FormGroup>((<FormGroup>(this.ReturnRatesForm.get("all_inclusive_rates"))).get("Base_Rate"))).get("amount").value;
+					let kmrate = await this.calculateBaseRate();
 					let taxvalue = (<FormGroup>((<FormGroup>this.ReturnRatesForm.get("taxes")).get(subform))).get("baserate").value;
 
 					let amount = Number(Number((taxvalue / 100) * kmrate).toFixed(2));
@@ -491,8 +493,6 @@ export class RatesFormComponent implements OnInit, OnChanges
 
 			let amount = (<FormGroup>((<FormGroup>this.ReturnRatesForm.get(formgroup)).get(subform))).get("amount").value;
 			this.r_total[subform] = Number(Number(amount).toFixed(2));
-			this.temp = this.temp ? this.temp : 0; // fail-safe for when in case of undefined
-			this.temp += amount;
 			this.ReturnRatesForm.updateValueAndValidity();
 		}
 		console.log(this.total, this.r_total);
