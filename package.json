@@ -8,6 +8,7 @@
 		"lint": "ng lint",
 		"e2e": "ng e2e",
 		"build": "ng build --configuration=staging",
+		"build-testing": "ng build --configuration=testing",
 		"build-aws": "rm -rf dist && ng build --configuration=production"
 	},
 	"private": true,

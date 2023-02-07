@@ -1198,7 +1198,7 @@ export class NewBookingComponent implements OnInit
 		{
 			this.BigData = this.BigData_COPY
 		}
-		this.reset_button = true
+		this.reset_button = !this.reset_button
 	}
 
 	returnZero()
