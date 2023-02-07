@@ -358,6 +358,7 @@ export class RatesFormComponent implements OnInit, OnChanges
 		{
 			let baserate = (<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("baserate").value;
 
+
 			if (!baserate)
 			{
 				baserate = 0;
@@ -373,8 +374,9 @@ export class RatesFormComponent implements OnInit, OnChanges
 			if (formgroup == "all_inclusive_rates")
 			{
 				let amount = 0;
+
 				// Hourly Rate - only in case of hours
-				if (this.hours !== 0)
+				if (this.hours != 0 && subform == 'Base_Rate')
 				{
 					amount = Number(Number(Number(this.hours) * baserate).toFixed(2));
 				} else
@@ -388,7 +390,7 @@ export class RatesFormComponent implements OnInit, OnChanges
 			if (formgroup == "others")
 			{
 				// let kmrate = (<FormGroup>((<FormGroup>this.RatesForm.get("all_inclusive_rates")).get("Base_Rate"))).get("amount").value;
-				let kmrate = await this.calculateBaseRate();
+				let kmrate = await this.calculateBaseRate('RatesForm');
 				let basevalue = (<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("baserate").value;
 
 				let amount = Number(Number((basevalue / 100) * kmrate).toFixed(2));
@@ -409,7 +411,7 @@ export class RatesFormComponent implements OnInit, OnChanges
 				if (type === "percent")
 				{
 					// let kmrate = (<FormGroup>((<FormGroup>(this.RatesForm.get("all_inclusive_rates"))).get("Base_Rate"))).get("amount").value;
-					let kmrate = await this.calculateBaseRate();
+					let kmrate = await this.calculateBaseRate('RatesForm');
 					let taxvalue = (<FormGroup>((<FormGroup>this.RatesForm.get("taxes")).get(subform))).get("baserate").value;
 
 					let amount = Number(Number((taxvalue / 100) * kmrate).toFixed(2));
@@ -451,7 +453,7 @@ export class RatesFormComponent implements OnInit, OnChanges
 			{
 				// Gratuity
 				// let kmrate = (<FormGroup>((<FormGroup>(this.ReturnRatesForm.get("all_inclusive_rates"))).get("Base_Rate"))).get("amount").value;
-				let kmrate = await this.calculateBaseRate();
+				let kmrate = await this.calculateBaseRate('ReturnRatesForm');
 				let basevalue = (<FormGroup>((<FormGroup>this.ReturnRatesForm.get(formgroup)).get(subform))).get("baserate").value;
 
 				let amount = Number(Number((basevalue / 100) * kmrate).toFixed(2)
@@ -473,7 +475,7 @@ export class RatesFormComponent implements OnInit, OnChanges
 				if (type === "percent")
 				{
 					// let kmrate = (<FormGroup>((<FormGroup>(this.ReturnRatesForm.get("all_inclusive_rates"))).get("Base_Rate"))).get("amount").value;
-					let kmrate = await this.calculateBaseRate();
+					let kmrate = await this.calculateBaseRate('ReturnRatesForm');
 					let taxvalue = (<FormGroup>((<FormGroup>this.ReturnRatesForm.get("taxes")).get(subform))).get("baserate").value;
 
 					let amount = Number(Number((taxvalue / 100) * kmrate).toFixed(2));
@@ -516,15 +518,28 @@ export class RatesFormComponent implements OnInit, OnChanges
 		}
 	}
 
-	calculateBaseRate(): number
+	calculateBaseRate(form: string): number
 	{
-		let temp = 0
-		for (let subform in this.RateForm.all_inclusive_rates.controls)
+		if (form === 'RatesForm')
 		{
-			let amount = (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates')).get(subform))).get("amount").value
-			temp += amount
+			let temp = 0
+			for (let subform in this.RateForm.all_inclusive_rates.controls)
+			{
+				let amount = (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates')).get(subform))).get("amount").value
+				temp += amount
+			}
+			return temp
 		}
-		return temp
+		if (form === 'ReturnRatesForm')
+		{
+			let temp = 0
+			for (let subform in this.ReturnRateForm.all_inclusive_rates.controls)
+			{
+				let amount = (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates')).get(subform))).get("amount").value
+				temp += amount
+			}
+			return temp
+		}
 	}
 
 	calculateGrandTotal(form: "RatesForm" | "ReturnRatesForm")
