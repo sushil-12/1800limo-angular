@@ -1271,9 +1271,10 @@
 								Cruise Time
 							</mat-label>
 							<input [ngxTimepicker]="crse_tm" [value]="Form.cruise_time.value"
-								matInput (change)="SetFormValue('cruise_time', $event)" readonly />
+								matInput readonly />
 						</mat-form-field>
 						<ngx-material-timepicker #crse_tm
+							(timeChanged)="SetFormValue('cruise_time', $event)"
 							[defaultTime]="Form.cruise_time.value"></ngx-material-timepicker>
 					</div>
 				</div>
@@ -1397,9 +1398,10 @@
 								Cruise Time
 							</mat-label>
 							<input [ngxTimepicker]="crse_tm" [value]="Form.cruise_time.value"
-								matInput (change)="SetFormValue('cruise_time', $event)" readonly />
+								matInput readonly />
 						</mat-form-field>
 						<ngx-material-timepicker #crse_tm
+							(timeChanged)="SetFormValue('cruise_time', $event)"
 							[defaultTime]="Form.cruise_time.value"></ngx-material-timepicker>
 					</div>
 				</div>
@@ -1635,9 +1637,10 @@
 								Cruise Time
 							</mat-label>
 							<input [ngxTimepicker]="crse_tm" [value]="Form.cruise_time.value"
-								matInput (change)="SetFormValue('cruise_time', $event)" readonly />
+								matInput readonly />
 						</mat-form-field>
 						<ngx-material-timepicker #crse_tm
+							(timeChanged)="SetFormValue('cruise_time', $event)"
 							[defaultTime]="Form.cruise_time.value"></ngx-material-timepicker>
 					</div>
 				</div>
@@ -1763,9 +1766,10 @@
 								Cruise Time
 							</mat-label>
 							<input [ngxTimepicker]="crse_tm" [value]="Form.cruise_time.value"
-								matInput (change)="SetFormValue('cruise_time', $event)" readonly />
+								matInput readonly />
 						</mat-form-field>
 						<ngx-material-timepicker #crse_tm
+							(timeChanged)="SetFormValue('cruise_time', $event)"
 							[defaultTime]="Form.cruise_time.value"></ngx-material-timepicker>
 					</div>
 				</div>
