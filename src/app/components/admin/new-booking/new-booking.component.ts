@@ -43,7 +43,7 @@ export class NewBookingComponent implements OnInit
 			let arr = []
 			let i = 0;
 			let year = new Date().getFullYear();
-			while (i < 15)
+			while (i <= 15)
 			{
 				arr.push(year - i);
 				i++;
@@ -1146,7 +1146,7 @@ export class NewBookingComponent implements OnInit
 			let value = this.BookingForm.value
 			if (this.RatesForm)
 			{
-				value['rateArray'] = this.RatesForm
+				value['rateArray'] = JSON.parse(JSON.stringify(this.RatesForm))
 				value['grand_total'] = value['rateArray']['grand_total']
 				value['sub_total'] = value['rateArray']['sub_total']
 				delete value['rateArray']['grand_total']
@@ -1154,11 +1154,11 @@ export class NewBookingComponent implements OnInit
 				// Return Rates Form
 				if (this.Form.service_type.value == 'round_trip' && this.ReturnRatesForm)
 				{
-					value['returnRateArray'] = this.ReturnRatesForm
-					value['return_grand_total'] = value['returnRateArray']['r_grand_total']
-					value['return_sub_total'] = value['returnRateArray']['r_sub_total']
-					delete value['returnRateArray']['r_grand_total']
-					delete value['returnRateArray']['r_sub_total']
+					value['returnRateArray'] = JSON.parse(JSON.stringify(this.ReturnRatesForm))
+					value['return_grand_total'] = value['returnRateArray']['r_grandtotal']
+					value['return_sub_total'] = value['returnRateArray']['r_subtotal']
+					delete value['returnRateArray']['r_grandtotal']
+					delete value['returnRateArray']['r_subtotal']
 				}
 			}
 
@@ -1241,8 +1241,8 @@ export class NewBookingComponent implements OnInit
 	 */
 	deleteImage(image_type: string)
 	{
-		this[image_type] = {}
-		this.SetFormValue(image_type + '_id', '')
+		this[image_type] = {};
+		this.SetFormValue(image_type + '_id', 0);
 	}
 
 
@@ -1508,14 +1508,14 @@ export class NewBookingComponent implements OnInit
 		this.BookingForm.get('return_pickup_airline').valueChanges.subscribe((value: string) =>
 		{
 			let airline_selected = this.BigData?.airlinesData.find(item => item.id == value)
-			this.SetFormValue('return_pickup_airline_name', airline_selected.name);
+			this.SetFormValue('return_pickup_airline_name', `${airline_selected.code} - ${airline_selected.name}, ${airline_selected.country}`);
 		})
 
 		// Return Dropoff Airlines
 		this.BookingForm.get('return_dropoff_airline').valueChanges.subscribe((value: string) =>
 		{
 			let airline_selected = this.BigData?.airlinesData.find(item => item.id == value)
-			this.SetFormValue('return_dropoff_airline_name', airline_selected.name);
+			this.SetFormValue('return_dropoff_airline_name', `${airline_selected.code} - ${airline_selected.name}, ${airline_selected.country}`);
 		})
 
 		// Pickup Address
