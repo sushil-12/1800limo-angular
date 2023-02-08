@@ -1573,12 +1573,12 @@ export class NewBookingComponent implements OnInit
 
 	RateFormValue(data: any)
 	{
-		// console.log('Rates Form: ', data)
+		console.log('Rates Form: ', data)
 		this.RatesForm = data
 	}
 	ReturnRateFormValue(data: any)
 	{
-		// console.log('Return Rates Form: ', data)
+		console.log('Return Rates Form: ', data)
 		this.ReturnRatesForm = data
 	}
 
