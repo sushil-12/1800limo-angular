@@ -2556,10 +2556,11 @@
 					</div>
 
 					<!-- Rates/Taxes -->
-					<h4 class="font-weight-bolder m-0 mt-3" *ngIf="RatesForm">
+					<h4 class="font-weight-bolder m-0 mt-3"
+						*ngIf="Form.affiliate_type.value == 'loose_affiliate'">
 						Rates/Taxes
 					</h4>
-					<div class="mx-2" *ngIf="RatesForm">
+					<div class="mx-2" *ngIf="init_rates && RatesForm">
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
@@ -2573,7 +2574,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="mx-2" *ngIf="ReturnRatesForm">
+					<div class="mx-2" *ngIf="ReturnRatesForm && init_return_rates">
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
