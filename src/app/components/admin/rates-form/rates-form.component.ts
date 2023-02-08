@@ -64,6 +64,8 @@ export class RatesFormComponent implements OnInit, OnChanges
 	r_subtotal: number = 0;
 	grandtotal: number = 0;
 	r_grandtotal: number = 0;
+	admin_share: number = 25;
+	calc_admin_share: number = 0;
 
 	vehicles: number = 0;
 	hours: number = 0;
@@ -103,7 +105,8 @@ export class RatesFormComponent implements OnInit, OnChanges
 
 		if (changes.nums)
 		{
-			this.hours = changes.nums.currentValue
+			this.hours = Number(changes.nums.currentValue)
+			this.hours > 0 && this.calculateAmount('RatesForm', 'all_inclusive_rates', 'Base_Rate');
 		}
 
 		if (changes.vehs)
@@ -197,6 +200,7 @@ export class RatesFormComponent implements OnInit, OnChanges
 			this.buildRatesForm("RatesForm", this.ratesdata);
 		}
 
+		// will send the rates form value to the booking component on any change in the whole form
 		this.RatesForm.valueChanges.subscribe((value: any) =>
 		{
 			this.calculateTotal("RatesForm");
@@ -206,6 +210,20 @@ export class RatesFormComponent implements OnInit, OnChanges
 
 			this.formvalue.emit(value);
 		});
+
+		(<FormGroup>this.RatesForm.get('all_inclusive_rates')).valueChanges.subscribe((value: any) =>
+		{
+			for (let formgroup in this.RateForm)
+			{
+				for (let subform in this.RateForm[formgroup].controls)
+				{
+					if (formgroup != 'all_inclusive_rates')
+					{
+						this.calculateAmount('RatesForm', formgroup, subform)
+					}
+				}
+			}
+		})
 	}
 
 	initReturnRates()
@@ -255,13 +273,7 @@ export class RatesFormComponent implements OnInit, OnChanges
 		return this.ReturnRatesForm.controls;
 	}
 
-	changeValue(
-		form: string,
-		formgroup: string,
-		subform: string,
-		formcontrol: string,
-		value: any
-	)
+	changeValue(form: string, formgroup: string, subform: string, formcontrol: string, value: any)
 	{
 		if (form === "RatesForm")
 		{
@@ -346,12 +358,76 @@ export class RatesFormComponent implements OnInit, OnChanges
 		}
 	}
 
-	/**
-	* calculates amount based on the baserate. [WORKS FOR BOTH TYPES OF FORM]
-	* @param form type of Form
-	* @param formgroup name of the parent form
-	* @param subform name of the child formaserate": 0,
-*/
+
+	calculateTotal(form: "RatesForm" | "ReturnRatesForm")
+	{
+		if (form === "RatesForm")
+		{
+			this.subtotal = 0;
+			for (let item in this.total)
+			{
+				this.subtotal = Number(this.subtotal.toFixed(2)) + Number(this.total[item].toFixed(2));
+			}
+		}
+
+		if (form === "ReturnRatesForm")
+		{
+			this.r_subtotal = 0;
+			for (let item in this.r_total)
+			{
+				this.r_subtotal = Number(this.r_subtotal.toFixed(2)) + Number(this.r_total[item].toFixed(2));
+			}
+		}
+	}
+
+	calculateBaseRate(form: string): number
+	{
+		if (form === 'RatesForm')
+		{
+			let temp = 0
+			for (let subform in this.RateForm.all_inclusive_rates.controls)
+			{
+				let amount = (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates')).get(subform))).get("amount").value
+				temp += amount
+			}
+			return temp
+		}
+		if (form === 'ReturnRatesForm')
+		{
+			let temp = 0
+			for (let subform in this.ReturnRateForm.all_inclusive_rates.controls)
+			{
+				let amount = (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates')).get(subform))).get("amount").value
+				temp += amount
+			}
+			return temp
+		}
+	}
+
+	calculateGrandTotal(form: "RatesForm" | "ReturnRatesForm")
+	{
+		if (form === "RatesForm")
+		{
+			if (this.vehicles !== 0)
+			{
+				this.grandtotal = Number(this.subtotal.toFixed(2)) * this.vehicles;
+			}
+		}
+		if (form == 'ReturnRatesForm')
+		{
+			if (this.vehicles !== 0)
+			{
+				this.r_grandtotal = Number(this.r_subtotal.toFixed(2)) * this.vehicles;
+			}
+		}
+	}
+
+	toggleDropdown(section: string)
+	{
+		this.rate_params["chevrons"][section] = !this.rate_params["chevrons"][section];
+	}
+
+
 	async calculateAmount(form: string, formgroup: string, subform: string)
 	{
 		if (form === "RatesForm")
@@ -382,6 +458,11 @@ export class RatesFormComponent implements OnInit, OnChanges
 				} else
 				{
 					amount = baserate;
+					if (subform == 'Base_Rate')
+					{
+						this.calc_admin_share = (baserate * this.admin_share) / 100;
+						amount = baserate + this.calc_admin_share;
+					}
 				};
 
 				(<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("amount").setValue(amount);
@@ -494,74 +575,6 @@ export class RatesFormComponent implements OnInit, OnChanges
 			this.r_total[subform] = Number(Number(amount).toFixed(2));
 			this.ReturnRatesForm.updateValueAndValidity();
 		}
-		console.log(this.total, this.r_total);
-	}
-
-	calculateTotal(form: "RatesForm" | "ReturnRatesForm")
-	{
-		if (form === "RatesForm")
-		{
-			this.subtotal = 0;
-			for (let item in this.total)
-			{
-				this.subtotal = Number(this.subtotal.toFixed(2)) + Number(this.total[item].toFixed(2));
-			}
-		}
-
-		if (form === "ReturnRatesForm")
-		{
-			this.r_subtotal = 0;
-			for (let item in this.r_total)
-			{
-				this.r_subtotal = Number(this.r_subtotal.toFixed(2)) + Number(this.r_total[item].toFixed(2));
-			}
-		}
-	}
-
-	calculateBaseRate(form: string): number
-	{
-		if (form === 'RatesForm')
-		{
-			let temp = 0
-			for (let subform in this.RateForm.all_inclusive_rates.controls)
-			{
-				let amount = (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates')).get(subform))).get("amount").value
-				temp += amount
-			}
-			return temp
-		}
-		if (form === 'ReturnRatesForm')
-		{
-			let temp = 0
-			for (let subform in this.ReturnRateForm.all_inclusive_rates.controls)
-			{
-				let amount = (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates')).get(subform))).get("amount").value
-				temp += amount
-			}
-			return temp
-		}
-	}
-
-	calculateGrandTotal(form: "RatesForm" | "ReturnRatesForm")
-	{
-		if (form === "RatesForm")
-		{
-			if (this.vehicles !== 0)
-			{
-				this.grandtotal = Number(this.subtotal.toFixed(2)) * this.vehicles;
-			}
-		}
-		if (form == 'ReturnRatesForm')
-		{
-			if (this.vehicles !== 0)
-			{
-				this.r_grandtotal = Number(this.r_subtotal.toFixed(2)) * this.vehicles;
-			}
-		}
-	}
-
-	toggleDropdown(section: string)
-	{
-		this.rate_params["chevrons"][section] = !this.rate_params["chevrons"][section];
+		// console.log(this.total, this.r_total);
 	}
 }

@@ -74,6 +74,18 @@
 					</mat-form-field>
 				</div>
 			</div>
+			<div class="col-3" *ngIf="sub_item.key === 'Base_Rate'">
+				<div>
+					<mat-form-field appearance="outline" class="m-0">
+						<mat-label>
+							Admin Share {{ admin_share }} %
+						</mat-label>
+						<input type="number" matInput placeholder="0" [value]="calc_admin_share"
+							style="cursor: not-allowed"
+							class="font-weight-bolder rate-input-field text-right" readonly />
+					</mat-form-field>
+				</div>
+			</div>
 			<div class="col-auto" *ngIf="item.key === 'taxes'">
 				<!-- Matslide Toggle -->
 				<div class="d-block d-md-none d-lg-block">
