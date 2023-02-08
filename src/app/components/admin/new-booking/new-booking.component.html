@@ -1107,7 +1107,8 @@
 						<mat-label>
 							Number of Vehicles
 						</mat-label>
-						<input type="text" matInput placholder="Number of Vehicles" [value]="1"
+						<input type="text" matInput placholder="Number of Vehicles"
+							[value]="Form.number_of_vehicles.value ? Form.number_of_vehicles.value : 1"
 							(focus)="$event.target.select()"
 							(change)="SetFormValue('number_of_vehicles', $event.target.value)" />
 					</mat-form-field>
@@ -2577,7 +2578,7 @@
 							</div>
 							<div class="col-md-8 value">
 								<span class="font-weight-bolder">
-									${{ ReturnRatesForm.r_grand_total }}
+									${{ ReturnRatesForm.r_grandtotal }}
 								</span>
 							</div>
 						</div>
