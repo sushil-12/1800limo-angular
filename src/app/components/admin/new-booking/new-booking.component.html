@@ -1107,7 +1107,8 @@
 						<mat-label>
 							Number of Vehicles
 						</mat-label>
-						<input type="text" matInput placholder="Number of Vehicles" [value]="1"
+						<input type="text" matInput placholder="Number of Vehicles"
+							[value]="Form.number_of_vehicles.value ? Form.number_of_vehicles.value : 1"
 							(focus)="$event.target.select()"
 							(change)="SetFormValue('number_of_vehicles', $event.target.value)" />
 					</mat-form-field>
@@ -1170,7 +1171,7 @@
 				<div class="row">
 					<!-- Airport -->
 					<div class="col-md-6 col-lg-3">
-						<mat-form-field appearance="outline">
+						<!-- <mat-form-field appearance="outline">
 							<mat-label>
 								Airport
 							</mat-label>
@@ -1187,7 +1188,17 @@
 									option.country }}
 								</mat-option>
 							</mat-autocomplete>
-						</mat-form-field>
+						</mat-form-field> -->
+
+						<!-- Ng-Select -->
+						<ng-select formControlName="pickup_airport"
+							(focus)="$event.target.select()">
+							<ng-option *ngFor="let option of BigData?.airportsData"
+								[value]="option.id">
+								{{ option.code }} - {{ option.name }}, {{option.city }}, {{
+								option.country }}
+							</ng-option>
+						</ng-select>
 					</div>
 
 					<!-- Airline -->
@@ -1270,9 +1281,10 @@
 								Cruise Time
 							</mat-label>
 							<input [ngxTimepicker]="crse_tm" [value]="Form.cruise_time.value"
-								matInput (change)="SetFormValue('cruise_time', $event)" readonly />
+								matInput readonly />
 						</mat-form-field>
 						<ngx-material-timepicker #crse_tm
+							(timeChanged)="SetFormValue('cruise_time', $event)"
 							[defaultTime]="Form.cruise_time.value"></ngx-material-timepicker>
 					</div>
 				</div>
@@ -1306,7 +1318,7 @@
 				<div class="row">
 					<!-- Airport -->
 					<div class="col-md-5 col-lg-3">
-						<mat-form-field appearance="outline">
+						<!-- <mat-form-field appearance="outline">
 							<mat-label>
 								Airport
 							</mat-label>
@@ -1324,7 +1336,17 @@
 									option.country }}
 								</mat-option>
 							</mat-autocomplete>
-						</mat-form-field>
+						</mat-form-field> -->
+
+						<!-- Ng-Select -->
+						<ng-select formControlName="dropoff_airport"
+							(focus)="$event.target.select()">
+							<ng-option *ngFor="let option of BigData?.airportsData"
+								[value]="option.id">
+								{{ option.code }} - {{ option.name }}, {{option.city }}, {{
+								option.country }}
+							</ng-option>
+						</ng-select>
 					</div>
 
 					<!-- Airline -->
@@ -1396,9 +1418,10 @@
 								Cruise Time
 							</mat-label>
 							<input [ngxTimepicker]="crse_tm" [value]="Form.cruise_time.value"
-								matInput (change)="SetFormValue('cruise_time', $event)" readonly />
+								matInput readonly />
 						</mat-form-field>
 						<ngx-material-timepicker #crse_tm
+							(timeChanged)="SetFormValue('cruise_time', $event)"
 							[defaultTime]="Form.cruise_time.value"></ngx-material-timepicker>
 					</div>
 				</div>
@@ -1545,7 +1568,7 @@
 				<div class="row">
 					<!-- Airport -->
 					<div class="col-md-6 col-lg-3">
-						<mat-form-field appearance="outline">
+						<!-- <mat-form-field appearance="outline">
 							<mat-label>
 								Airport
 							</mat-label>
@@ -1562,7 +1585,17 @@
 									option.country }}
 								</mat-option>
 							</mat-autocomplete>
-						</mat-form-field>
+						</mat-form-field> -->
+
+						<!-- Ng-Select -->
+						<ng-select formControlName="return_pickup_airport"
+							(focus)="$event.target.select()">
+							<ng-option *ngFor="let option of BigData?.airportsData"
+								[value]="option.id">
+								{{ option.code }} - {{ option.name }}, {{option.city }}, {{
+								option.country }}
+							</ng-option>
+						</ng-select>
 					</div>
 
 					<!-- Airline -->
@@ -1634,9 +1667,10 @@
 								Cruise Time
 							</mat-label>
 							<input [ngxTimepicker]="crse_tm" [value]="Form.cruise_time.value"
-								matInput (change)="SetFormValue('cruise_time', $event)" readonly />
+								matInput readonly />
 						</mat-form-field>
 						<ngx-material-timepicker #crse_tm
+							(timeChanged)="SetFormValue('cruise_time', $event)"
 							[defaultTime]="Form.cruise_time.value"></ngx-material-timepicker>
 					</div>
 				</div>
@@ -1671,7 +1705,7 @@
 				<div class="row">
 					<!-- Airport -->
 					<div class="col-md-5 col-lg-3">
-						<mat-form-field appearance="outline">
+						<!-- <mat-form-field appearance="outline">
 							<mat-label>
 								Airport
 							</mat-label>
@@ -1689,7 +1723,17 @@
 									option.country }}
 								</mat-option>
 							</mat-autocomplete>
-						</mat-form-field>
+						</mat-form-field> -->
+
+						<!-- Ng-Select -->
+						<ng-select formControlName="return_dropoff_airport"
+							(focus)="$event.target.select()">
+							<ng-option *ngFor="let option of BigData?.airportsData"
+								[value]="option.id">
+								{{ option.code }} - {{ option.name }}, {{option.city }}, {{
+								option.country }}
+							</ng-option>
+						</ng-select>
 					</div>
 
 					<!-- Airline -->
@@ -1762,9 +1806,10 @@
 								Cruise Time
 							</mat-label>
 							<input [ngxTimepicker]="crse_tm" [value]="Form.cruise_time.value"
-								matInput (change)="SetFormValue('cruise_time', $event)" readonly />
+								matInput readonly />
 						</mat-form-field>
 						<ngx-material-timepicker #crse_tm
+							(timeChanged)="SetFormValue('cruise_time', $event)"
 							[defaultTime]="Form.cruise_time.value"></ngx-material-timepicker>
 					</div>
 				</div>
@@ -2551,10 +2596,11 @@
 					</div>
 
 					<!-- Rates/Taxes -->
-					<h4 class="font-weight-bolder m-0 mt-3" *ngIf="RatesForm">
+					<h4 class="font-weight-bolder m-0 mt-3"
+						*ngIf="Form.affiliate_type.value == 'loose_affiliate'">
 						Rates/Taxes
 					</h4>
-					<div class="mx-2" *ngIf="RatesForm">
+					<div class="mx-2" *ngIf="init_rates && RatesForm">
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
@@ -2568,7 +2614,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="mx-2" *ngIf="ReturnRatesForm">
+					<div class="mx-2" *ngIf="ReturnRatesForm && init_return_rates">
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
@@ -2577,7 +2623,7 @@
 							</div>
 							<div class="col-md-8 value">
 								<span class="font-weight-bolder">
-									${{ ReturnRatesForm.r_grand_total }}
+									${{ ReturnRatesForm.r_grandtotal }}
 								</span>
 							</div>
 						</div>

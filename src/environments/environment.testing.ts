@@ -1,5 +1,5 @@
 export const environment = {
-	production: false,
+	production: true,
 	environmentName: 'Testing',
 	serverUrl: "https://1800limoapi.infodevbox.com/api/"
 };

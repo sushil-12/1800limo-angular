@@ -348,7 +348,7 @@ export class NewBookingComponent implements OnInit
 
 		let full_date = new Date(year, month, date).toISOString()
 		// 10 days later
-		let future_full_date = new Date(year, month, date + 10).toISOString()
+		let future_full_date = new Date(year, month, date).toISOString()
 		this.SetFormValue('pickup_date', full_date.slice(0, full_date.indexOf('T')))
 		this.SetFormValue('return_pickup_date', future_full_date.slice(0, future_full_date.indexOf('T')))
 		this.SetFormValue('number_of_vehicles', 1)
@@ -1573,12 +1573,12 @@ export class NewBookingComponent implements OnInit
 
 	RateFormValue(data: any)
 	{
-		// console.log('Rates Form: ', data)
+		console.log('Rates Form: ', data)
 		this.RatesForm = data
 	}
 	ReturnRateFormValue(data: any)
 	{
-		// console.log('Return Rates Form: ', data)
+		console.log('Return Rates Form: ', data)
 		this.ReturnRatesForm = data
 	}
 
