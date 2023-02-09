@@ -822,7 +822,6 @@ export class NewBookingComponent implements OnInit
 				{
 					this.SetFormValue('vehicle_type', this.VehicleList[0].ID)
 					this.SetFormValue('vehicle_id', this.VehicleList[0].ID)
-					this.autofillData('vehicle', this.VehicleList[0])
 				}
 			}
 			this.$spinner.hide()
@@ -1429,7 +1428,7 @@ export class NewBookingComponent implements OnInit
 		{
 			if (value)
 			{
-				this.BigData['vehicleModels'] = this.$shared.ListSearch('filter', this.BigData_COPY?.vehicleModels, this.Form.vehicle_make.value, 'make_id')
+				this.BigData['vehicleModels'] = this.BigData_COPY?.vehicleModels.filter((item: any) => item.make_id == value)
 			}
 		})
 
