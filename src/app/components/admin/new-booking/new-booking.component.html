@@ -1171,7 +1171,7 @@
 				<div class="row">
 					<!-- Airport -->
 					<div class="col-md-6 col-lg-3">
-						<mat-form-field appearance="outline">
+						<!-- <mat-form-field appearance="outline">
 							<mat-label>
 								Airport
 							</mat-label>
@@ -1188,7 +1188,17 @@
 									option.country }}
 								</mat-option>
 							</mat-autocomplete>
-						</mat-form-field>
+						</mat-form-field> -->
+
+						<!-- Ng-Select -->
+						<ng-select formControlName="pickup_airport"
+							(focus)="$event.target.select()">
+							<ng-option *ngFor="let option of BigData?.airportsData"
+								[value]="option.id">
+								{{ option.code }} - {{ option.name }}, {{option.city }}, {{
+								option.country }}
+							</ng-option>
+						</ng-select>
 					</div>
 
 					<!-- Airline -->
@@ -1308,7 +1318,7 @@
 				<div class="row">
 					<!-- Airport -->
 					<div class="col-md-5 col-lg-3">
-						<mat-form-field appearance="outline">
+						<!-- <mat-form-field appearance="outline">
 							<mat-label>
 								Airport
 							</mat-label>
@@ -1326,7 +1336,17 @@
 									option.country }}
 								</mat-option>
 							</mat-autocomplete>
-						</mat-form-field>
+						</mat-form-field> -->
+
+						<!-- Ng-Select -->
+						<ng-select formControlName="dropoff_airport"
+							(focus)="$event.target.select()">
+							<ng-option *ngFor="let option of BigData?.airportsData"
+								[value]="option.id">
+								{{ option.code }} - {{ option.name }}, {{option.city }}, {{
+								option.country }}
+							</ng-option>
+						</ng-select>
 					</div>
 
 					<!-- Airline -->
@@ -1548,7 +1568,7 @@
 				<div class="row">
 					<!-- Airport -->
 					<div class="col-md-6 col-lg-3">
-						<mat-form-field appearance="outline">
+						<!-- <mat-form-field appearance="outline">
 							<mat-label>
 								Airport
 							</mat-label>
@@ -1565,7 +1585,17 @@
 									option.country }}
 								</mat-option>
 							</mat-autocomplete>
-						</mat-form-field>
+						</mat-form-field> -->
+
+						<!-- Ng-Select -->
+						<ng-select formControlName="return_pickup_airport"
+							(focus)="$event.target.select()">
+							<ng-option *ngFor="let option of BigData?.airportsData"
+								[value]="option.id">
+								{{ option.code }} - {{ option.name }}, {{option.city }}, {{
+								option.country }}
+							</ng-option>
+						</ng-select>
 					</div>
 
 					<!-- Airline -->
@@ -1675,7 +1705,7 @@
 				<div class="row">
 					<!-- Airport -->
 					<div class="col-md-5 col-lg-3">
-						<mat-form-field appearance="outline">
+						<!-- <mat-form-field appearance="outline">
 							<mat-label>
 								Airport
 							</mat-label>
@@ -1693,7 +1723,17 @@
 									option.country }}
 								</mat-option>
 							</mat-autocomplete>
-						</mat-form-field>
+						</mat-form-field> -->
+
+						<!-- Ng-Select -->
+						<ng-select formControlName="return_dropoff_airport"
+							(focus)="$event.target.select()">
+							<ng-option *ngFor="let option of BigData?.airportsData"
+								[value]="option.id">
+								{{ option.code }} - {{ option.name }}, {{option.city }}, {{
+								option.country }}
+							</ng-option>
+						</ng-select>
 					</div>
 
 					<!-- Airline -->

@@ -25,6 +25,7 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatGoogleMapsAutocompleteModule } from '@angular-material-extensions/google-maps-autocomplete';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { FormsModule } from '@angular/forms';
 
 
 export const DATE_FORMATS = {
@@ -68,6 +69,7 @@ export const DATE_FORMATS = {
 		MatSliderModule,
 		MatCheckboxModule,
 		MatSlideToggleModule,
+		FormsModule
 	],
 	providers: [
 		{ provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS] },
