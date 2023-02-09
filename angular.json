@@ -30,7 +30,8 @@
                         "styles": [
                             "src/styles.scss",
                             "node_modules/intl-tel-input/build/css/intlTelInput.css",
-                            "node_modules/bootstrap/dist/css/bootstrap.min.css"
+                            "node_modules/bootstrap/dist/css/bootstrap.min.css",
+                            "node_modules/@ng-select/ng-select/themes/material.theme.css"
                         ],
                         "scripts": [
                             "node_modules/intl-tel-input/build/js/intlTelInput.min.js",
