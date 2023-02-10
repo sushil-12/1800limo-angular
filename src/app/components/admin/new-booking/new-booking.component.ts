@@ -375,7 +375,13 @@ export class NewBookingComponent implements OnInit
 				}
 				if (editing_data[item])
 				{
-					this.SetFormValue(item, editing_data[item])
+					if (isNaN(Number(editing_data[item])))
+					{
+						this.SetFormValue(item, editing_data[item]);
+					} else
+					{
+						this.SetFormValue(item, Number(editing_data[item]));
+					}
 				}
 			}
 
@@ -437,7 +443,6 @@ export class NewBookingComponent implements OnInit
 			this.booking_params.client_account_types.pop()
 			this.booking_id = this.Form.reservation_id.value;
 			this.Form.affiliate_id.value != 0 ? this.chooseAffiliate() : ''
-			this.chooseUser(this.Form.acc_id.value)
 			try
 			{
 				this.PaxTelObject.setCountry(this.BookingForm.get('passenger_cell_country').value);
@@ -691,7 +696,6 @@ export class NewBookingComponent implements OnInit
 		}
 	}
 
-	airportsData$: Observable<any[]>
 	fetchAirportsAndBigData(): void
 	{
 		let s = setInterval(() =>
@@ -706,8 +710,6 @@ export class NewBookingComponent implements OnInit
 				this.BigData.airlinesData.map((item: any) => item['formatted_name'] = `${item.code} - ${item.name}, ${item.country}`);
 				this.BigData_COPY.airportsData.map((item: any) => item['formatted_name'] = `${item.code} - ${item.name}, ${item.city}, ${item.country}`);
 				this.BigData_COPY.airlinesData.map((item: any) => item['formatted_name'] = `${item.code} - ${item.name}, ${item.country}`);
-
-				this.airportsData$ = of(this.BigData.airportsData);
 
 				this.MapController();
 				this.Form.reservation_id.value ? this.prefillViaBookingID(this.Form.reservation_id.value) : '';
