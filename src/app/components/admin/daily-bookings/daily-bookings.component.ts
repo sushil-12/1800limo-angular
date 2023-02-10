@@ -76,6 +76,7 @@ export class DailyBookingsComponent implements OnInit
 			// } else
 			// {
 			this.date = new Date();
+			this.date.setDate(this.date.getDate() - 7);
 			this.startDate = this.date.toISOString().substring(0, 10);
 			this.date.setDate(this.date.getDate() + 7);
 			this.endDate = this.date.toISOString().substring(0, 10);
@@ -401,5 +402,61 @@ export class DailyBookingsComponent implements OnInit
 	FormatTime(time: string)
 	{
 		return moment(time, "HH:mm:ss").format("LT");
+	}
+
+
+	dateFormat(value: any)
+	{
+		return moment(value, 'YYYY-MM-DD').format('ll')
+	}
+
+	dateFormat2(value: any)
+	{
+		return moment(value, 'YYYY-MM-DD').format('L')
+	}
+
+	timeFormat(value: any)
+	{
+		if (value.toUpperCase() == '12:00 AM')
+		{
+			return '0000 h'
+		}
+		let hours = moment(moment(value, 'hh:mm a').format('HH'), 'HH').hours();
+		let mins = moment(value, 'hh:mm a').minutes().toString();
+		if (Number(mins) == 0 || Number(mins) < 10)
+		{
+			mins = '0' + mins.toString();
+		}
+
+		return hours < 10 ? '0' + hours.toString() + mins.toString() + ' h' : hours.toString() + mins.toString() + ' h'
+		//return value.replace(':', '').substring(0, 5) + 'h';
+	}
+
+	timeFormat2(value: string)
+	{
+		return moment(value, 'HH:mm a').format('h:mm a');
+	}
+
+	textFormatter(text: string)
+	{
+		try
+		{
+			return text.replace(/[\\\_$]+/g, ' ')
+		}
+		catch
+		{
+			return text
+		}
+	}
+
+	bookingPreview: any
+	showBookingPreviewModal(booking_id: number)
+	{
+		this.spinner.show();
+		this.adminService.getBookingPreview(booking_id).subscribe((response: any) =>
+		{
+			this.spinner.hide();
+			this.bookingPreview = response.data;
+		})
 	}
 }

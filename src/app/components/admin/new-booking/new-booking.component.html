@@ -2020,52 +2020,54 @@
 						</div>
 					</div>
 
-					<!-- Affiliate Information -->
+					<!-- Driver Information -->
 					<h4 class="font-weight-bolder m-0 mt-3">
-						Affiliate Information
+						Driver Information
 					</h4>
-					<!-- Affiliate > Name -->
+					<!-- Driver Name -->
 					<div class="mx-2">
-						<div class="row">
+						<div class="row m-0">
 							<div class="col-md-4 key">
-								Name
+								<span>
+									Name
+								</span>
 							</div>
 							<div class="col-md-8 value">
 								<span class="font-weight-bolder">
-									{{ AffiliateInformation.FirstName }} {{
-									AffiliateInformation.MiddleName ?
-									AffiliateInformation.MiddleName : '' }} {{
-									AffiliateInformation.LastName }}
-									({{ AffiliateInformation.AffiliateType }})
+									{{ textFormatter(Form.driver_name.value) | titlecase }}
 								</span>
 							</div>
 						</div>
 					</div>
 
-					<!-- Affiliate > Phone -->
+					<!-- Driver Email -->
 					<div class="mx-2">
-						<div class="row">
+						<div class="row m-0">
 							<div class="col-md-4 key">
-								Phone
+								<span>
+									Email
+								</span>
 							</div>
 							<div class="col-md-8 value">
 								<span class="font-weight-bolder">
-									({{ AffiliateInformation.cellIsd }}) {{
-									AffiliateInformation.CellNumber }}
+									{{ textFormatter(Form.driver_email.value) }}
 								</span>
 							</div>
 						</div>
 					</div>
 
-					<!-- Affiliate > Email -->
+					<!-- Driver Cell -->
 					<div class="mx-2">
-						<div class="row">
+						<div class="row m-0">
 							<div class="col-md-4 key">
-								Email
+								<span>
+									Phone
+								</span>
 							</div>
 							<div class="col-md-8 value">
 								<span class="font-weight-bolder">
-									{{ AffiliateInformation.Email }}
+									({{ Form.driver_cell_isd.value }}) {{
+									Form.driver_cell.value }}
 								</span>
 							</div>
 						</div>
