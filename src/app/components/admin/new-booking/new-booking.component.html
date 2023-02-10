@@ -20,6 +20,7 @@
 				Booking Type
 			</h2>
 			<div class="row px-4">
+				<!-- Service Type -->
 				<div class="flex-grow-1 m-2">
 					<div>
 						<mat-form-field appearance="outline">
@@ -36,6 +37,8 @@
 						</mat-form-field>
 					</div>
 				</div>
+
+				<!-- Transfer Type -->
 				<div class="flex-grow-1 m-2">
 					<div>
 						<mat-form-field appearance="outline">
@@ -51,6 +54,8 @@
 						</mat-form-field>
 					</div>
 				</div>
+
+				<!-- Return Transfer Type -->
 				<div class="flex-grow-1 m-2" *ngIf="Form.service_type.value == 'round_trip'">
 					<div>
 						<mat-form-field appearance="outline">
@@ -66,6 +71,8 @@
 						</mat-form-field>
 					</div>
 				</div>
+
+				<!-- Hours -->
 				<div class="flex-grow-1 m-2" *ngIf="Form.service_type.value == 'charter_tour'">
 					<div>
 						<mat-form-field appearance="outline">
@@ -88,6 +95,7 @@
 			<h2>
 				Client Accounts
 			</h2>
+
 			<!-- Account Type -->
 			<div class="row">
 				<div class="col-md-12 col-lg-10">
@@ -388,8 +396,8 @@
 						</mat-form-field> -->
 
 						<!-- Ng-Select -->
-						<ng-select appearance="outline" placeholder="Choose User"
-							[items]="filteredAccountTypes" bindLabel="name" bindValue="id"
+						<ng-select appearance="outline" [items]="ClientAccounts" bindLabel="name"
+							bindValue="id" placeholder="Select Client Account"
 							formControlName="acc_id">
 						</ng-select>
 					</div>
@@ -561,7 +569,7 @@
 			<!-- Only Visible in affiliate section -->
 			<div class="row px-4" *ngIf="Form.affiliate_type.value == 'affiliate'">
 				<div class="col-md-12">
-					<mat-form-field appearance="outline">
+					<!-- <mat-form-field appearance="outline">
 						<mat-label class="">
 							Choose Affiliate
 						</mat-label>
@@ -571,7 +579,13 @@
 								{{ user.name }}
 							</mat-option>
 						</mat-select>
-					</mat-form-field>
+					</mat-form-field> -->
+
+					<!-- Ng-Select -->
+					<ng-select appearance="outline" [items]="AffiliateAccounts" bindLabel="name"
+						bindValue="id" placeholder="Select Affiliate"
+						formControlName="affiliate_id">
+					</ng-select>
 				</div>
 			</div>
 
@@ -650,8 +664,8 @@
 						</mat-form-field> -->
 
 						<!-- Ng-Select -->
-						<ng-select appearance="outline" placeholder="Choose Vehicle Category"
-							[items]="BigData?.vehicleCategories" bindLabel="name" bindValue="id"
+						<ng-select appearance="outline" [items]="BigData?.vehicleCategories"
+							bindLabel="name" bindValue="id" placeholder="Select Vehicle Category"
 							formControlName="vehicle_type">
 						</ng-select>
 					</div>
@@ -670,9 +684,9 @@
 							</mat-select>
 						</mat-form-field> -->
 
-						<!-- Ng-Select -->
-						<ng-select appearance="outline" placeholder="Choose Vehicle"
-							[items]="VehicleList" bindLabel="name" bindValue="ID"
+						<!-- Ng-Select - Vehicle ID -->
+						<ng-select appearance="outline" [items]="VehicleList"
+							bindLabel="formatted_name" bindValue="id" placeholder="Select Vehicle"
 							formControlName="vehicle_id">
 						</ng-select>
 					</div>
@@ -699,9 +713,9 @@
 							</mat-autocomplete>
 						</mat-form-field> -->
 
-						<!-- Ng-Select -->
-						<ng-select appearance="outline" placeholder="Choose Make"
-							[items]="BigData?.vehicleMakes" bindLabel="name" bindValue="id"
+						<!-- Make - Ng-Select -->
+						<ng-select appearance="outline" [items]="BigData?.vehicleMakes"
+							bindLabel="name" bindValue="id" placeholder="Select Make"
 							formControlName="vehicle_make">
 						</ng-select>
 					</div>
@@ -728,8 +742,8 @@
 						</mat-form-field> -->
 
 						<!-- Ng-Select -->
-						<ng-select appearance="outline" placeholder="Choose Model"
-							[items]="BigData?.vehicleModels" bindLabel="name" bindValue="id"
+						<ng-select appearance="outline" [items]="BigData?.vehicleModels"
+							bindLabel="name" bindValue="id" placeholder="Select Model"
 							formControlName="vehicle_model">
 						</ng-select>
 					</div>
@@ -756,8 +770,8 @@
 						</mat-form-field> -->
 
 						<!-- Ng-Select -->
-						<ng-select appearance="outline" placeholder="Choose Year"
-							[items]="BigData?.vehicleYears" bindLabel="name" bindValue="id"
+						<ng-select appearance="outline" [items]="BigData?.vehicleYears"
+							bindLabel="name" bindValue="id" placeholder="Select Year"
 							formControlName="vehicle_year">
 						</ng-select>
 					</div>
@@ -784,8 +798,8 @@
 						</mat-form-field> -->
 
 						<!-- Ng-Select -->
-						<ng-select appearance="outline" placeholder="Choose Color"
-							[items]="BigData?.vehicleColors" bindLabel="name" bindValue="id"
+						<ng-select appearance="outline" [items]="BigData?.vehicleColors"
+							bindLabel="name" bindValue="id" placeholder="Select Color"
 							formControlName="vehicle_color">
 						</ng-select>
 					</div>
@@ -1218,15 +1232,18 @@
 							</mat-autocomplete>
 						</mat-form-field> -->
 
-						<!-- Ng-Select -->
-						<ng-select appearance="outline" placeholder="Choose Airport"
-							[items]="BigData?.airportsData" bindLabel="formatted_name"
-							bindValue="id" formControlName="pickup_airport">
+						<!-- Ng-Select - Pickup > Airport -->
+						<ng-select appearance="outline" [items]="BigData?.airportsData"
+							[searchable]="true" (change)="change($event, 'pickup_airport')"
+							placeholder="Select Airport" bindLabel="formatted_name"
+							formControlName="pickup_airport_option">
 						</ng-select>
+
+
 					</div>
 
 					<!-- Airline -->
-					<div class="col-md-6 col-lg-3">
+					<div class=" col-md-6 col-lg-3">
 						<!-- <mat-form-field appearance="outline">
 							<mat-label>
 								Airline
@@ -1245,10 +1262,11 @@
 							</mat-autocomplete>
 						</mat-form-field> -->
 
-						<!-- Ng-Select -->
-						<ng-select appearance="outline" placeholder="Choose Airline"
-							[items]="BigData?.airlinesData" bindLabel="formatted_name"
-							bindValue="id" formControlName="pickup_airline">
+						<!-- Ng-Select > Airline -->
+						<ng-select appearance="outline" [items]="BigData?.airlinesData"
+							[searchable]="true" (change)="change($event, 'pickup_airline')"
+							placeholder="Select Airline" bindLabel="formatted_name"
+							formControlName="pickup_airline_option">
 						</ng-select>
 					</div>
 
@@ -1368,10 +1386,11 @@
 							</mat-autocomplete>
 						</mat-form-field> -->
 
-						<!-- Ng-Select -->
-						<ng-select appearance="outline" placeholder="Choose Airport"
-							[items]="BigData?.airportsData" bindLabel="formatted_name"
-							bindValue="id" formControlName="dropoff_airport">
+						<!-- Ng-Select > Dropoff > Airport -->
+						<ng-select appearance="outline" [items]="BigData?.airportsData"
+							[searchable]="true" (change)="change($event, 'dropoff_airport')"
+							placeholder="Select Airport" bindLabel="formatted_name"
+							formControlName="dropoff_airport_option">
 						</ng-select>
 					</div>
 
@@ -1396,10 +1415,11 @@
 							</mat-autocomplete>
 						</mat-form-field> -->
 
-						<!-- Ng-Select -->
-						<ng-select appearance="outline" placeholder="Choose Airline"
-							[items]="BigData?.airlinesData" bindLabel="formatted_name"
-							bindValue="id" formControlName="dropoff_airline">
+						<!-- Ng-Select > Dropoff > Airline -->
+						<ng-select appearance="outline" [items]="BigData?.airlinesData"
+							[searchable]="true" (change)="change($event, 'dropoff_airline')"
+							placeholder="Select Airline" bindLabel="formatted_name"
+							formControlName="dropoff_airline_option">
 						</ng-select>
 					</div>
 
@@ -1619,10 +1639,11 @@
 							</mat-autocomplete>
 						</mat-form-field> -->
 
-						<!-- Ng-Select -->
-						<ng-select appearance="outline" placeholder="Choose Airport"
-							[items]="BigData?.airportsData" bindLabel="formatted_name"
-							bindValue="id" formControlName="return_pickup_airport">
+						<!-- Ng-Select > Return > Pickup > Airport -->
+						<ng-select appearance="outline" [items]="BigData?.airportsData"
+							[searchable]="true" (change)="change($event, 'return_pickup_airport')"
+							bindLabel="formatted_name" placeholder="Select Airport"
+							formControlName="return_pickup_airport_option">
 						</ng-select>
 					</div>
 
@@ -1646,10 +1667,11 @@
 							</mat-autocomplete>
 						</mat-form-field> -->
 
-						<!-- Ng-Select -->
-						<ng-select appearance="outline" placeholder="Choose Airline"
-							[items]="BigData?.airlinesData" bindLabel="formatted_name"
-							bindValue="id" formControlName="return_pickup_airline">
+						<!-- Ng-Select > Return > Pickup > Airline -->
+						<ng-select appearance="outline" [items]="BigData?.airlinesData"
+							[searchable]="true" (change)="change($event, 'return_pickup_airline')"
+							bindLabel="formatted_name" placeholder="Select Airline"
+							formControlName="return_pickup_airline_option">
 						</ng-select>
 					</div>
 
@@ -1759,10 +1781,11 @@
 							</mat-autocomplete>
 						</mat-form-field> -->
 
-						<!-- Ng-Select -->
-						<ng-select appearance="outline" placeholder="Choose Airport"
-							[items]="BigData?.airportsData" bindLabel="formatted_name"
-							bindValue="id" formControlName="return_dropoff_airport">
+						<!-- Ng-Select > Return > Dropoff > Airport -->
+						<ng-select appearance="outline" [items]="BigData?.airportsData"
+							[searchable]="true" (change)="change($event, 'return_dropoff_airport')"
+							bindLabel="formatted_name" placeholder="Select Airport"
+							formControlName="return_dropoff_airport_option">
 						</ng-select>
 					</div>
 
@@ -1787,10 +1810,11 @@
 							</mat-autocomplete>
 						</mat-form-field> -->
 
-						<!-- Ng-Select -->
-						<ng-select appearance="outline" placeholder="Choose Airline"
-							[items]="BigData?.airlinesData" bindLabel="formatted_name"
-							bindValue="id" formControlName="return_dropoff_airline">
+						<!-- Ng-Select > Return > Dropoff > Airline -->
+						<ng-select appearance="outline" [items]="BigData?.airlinesData"
+							[searchable]="true" (change)="change($event, 'return_dropoff_airline')"
+							bindLabel="formatted_name" placeholder="Select Airline"
+							formControlName="return_dropoff_airline_option">
 						</ng-select>
 					</div>
 
@@ -1996,7 +2020,58 @@
 						</div>
 					</div>
 
-					<!-- TODO: add information of Customer here -->
+					<!-- Affiliate Information -->
+					<h4 class="font-weight-bolder m-0 mt-3">
+						Affiliate Information
+					</h4>
+					<!-- Affiliate > Name -->
+					<div class="mx-2">
+						<div class="row">
+							<div class="col-md-4 key">
+								Name
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ AffiliateInformation.FirstName }} {{
+									AffiliateInformation.MiddleName ?
+									AffiliateInformation.MiddleName : '' }} {{
+									AffiliateInformation.LastName }}
+									({{ AffiliateInformation.AffiliateType }})
+								</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Affiliate > Phone -->
+					<div class="mx-2">
+						<div class="row">
+							<div class="col-md-4 key">
+								Phone
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									({{ AffiliateInformation.cellIsd }}) {{
+									AffiliateInformation.CellNumber }}
+								</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Affiliate > Email -->
+					<div class="mx-2">
+						<div class="row">
+							<div class="col-md-4 key">
+								Email
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ AffiliateInformation.Email }}
+								</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Passenger Information -->
 					<h4 class="font-weight-bolder m-0 mt-3">
 						Passenger Information
 					</h4>
@@ -2509,6 +2584,29 @@
 										{{ textFormatter(Form.return_cruise_time.value) | titlecase
 										}}
 									</span>
+								</div>
+							</div>
+						</div>
+
+
+						<!-- Return > Extra Stops -->
+						<div *ngIf="Form.return_extra_stops.value.length > 0">
+							<h5 class="p-2 m-0 text-xl">
+								Extra Stops
+							</h5>
+							<div class="mx-2"
+								*ngFor="let stop of Form.return_extra_stops.value; index as stop_index">
+								<div class="row m-0 mx-2">
+									<div class="col-md-4 key">
+										<span>
+											Stop {{ stop_index + 1 }}
+										</span>
+									</div>
+									<div class="col-md-8 value">
+										<span class="font-weight-bolder">
+											{{ stop.address }}
+										</span>
+									</div>
 								</div>
 							</div>
 						</div>

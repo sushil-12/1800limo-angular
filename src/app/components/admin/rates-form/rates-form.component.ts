@@ -208,7 +208,7 @@ export class RatesFormComponent implements OnInit, OnChanges
 			this.calculateGrandTotal("RatesForm");
 		});
 
-		(<FormGroup>this.RatesForm.get('all_inclusive_rates')).valueChanges.subscribe((value: any) =>
+		(<FormGroup>this.RatesForm.get('all_inclusive_rates')).valueChanges.subscribe(() =>
 		{
 			for (let formgroup in this.RateForm)
 			{

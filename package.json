@@ -29,7 +29,7 @@
 		"@angular/platform-browser-dynamic": "~10.0.2",
 		"@angular/router": "~10.0.2",
 		"@ng-maps/places": "^3.0.0",
-		"@ng-select/ng-select": "^5.0.0",
+		"@ng-select/ng-select" : "^5.0.0",
 		"agm-direction": "^0.8.10",
 		"bootstrap": "^4.6.1",
 		"intl-tel-input": "^17.0.3",
@@ -67,3 +67,4 @@
 		"typescript": "^3.9.10"
 	}
 }
+
