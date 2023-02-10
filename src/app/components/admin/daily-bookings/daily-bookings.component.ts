@@ -78,7 +78,7 @@ export class DailyBookingsComponent implements OnInit
 			this.date = new Date();
 			this.date.setDate(this.date.getDate() - 7);
 			this.startDate = this.date.toISOString().substring(0, 10);
-			this.date.setDate(this.date.getDate() + 7);
+			this.date.setDate(this.date.getDate() + 14);
 			this.endDate = this.date.toISOString().substring(0, 10);
 
 			// this.router.navigate([], {
