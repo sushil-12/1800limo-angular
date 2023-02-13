@@ -966,7 +966,7 @@ export class AdminService
 
 	getBookingPreview(reservation_id: number)
 	{
-		return this.httpClient.get(`${this.serverUrl}admin/getBookingPreview/${reservation_id}`);
+		return this.httpClient.get(`${this.serverUrl}admin/get-booking-preview/${reservation_id}`);
 	}
 
 	adminNotification(data)

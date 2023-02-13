@@ -190,6 +190,7 @@ export class DailyBookingsComponent implements OnInit
 
 	loadBookings(pageUrl = null, start_date: string, end_date: string, search_value: string = '')
 	{
+		// search_value != '' && this.spinner.show();
 		// Load Our bookings using API
 		this.adminService.loadBookings(pageUrl, start_date, end_date, search_value ?? '').then((result) =>
 		{
@@ -458,9 +459,8 @@ export class DailyBookingsComponent implements OnInit
 		clearTimeout(this.timer);
 		this.timer = setTimeout(() =>
 		{
-			this.spinner.show()
 			this.loadBookings(null, this.startDate, this.endDate, search_value)
-		}, 100)
+		}, 800)
 	}
 
 	handleKeypressEvents()
