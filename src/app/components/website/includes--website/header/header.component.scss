@@ -69,3 +69,17 @@ ul {
 		background-color: transparent;
 	}
 }
+
+@media only screen and (max-width:991px) {
+	.navbar-dark .navbar-nav .nav-link {
+		color: var(--orange-color) !important;
+	}
+
+	.dropdown.button-signin a {
+		color: var(--orange-color) !important;
+	}
+
+	.allinner_wrapper header nav .navbar-nav li a {
+		color: var(--orange-color) !important;
+	}
+}
