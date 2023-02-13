@@ -590,6 +590,30 @@
 				</div>
 			</div>
 
+			<!-- Vehicle ID -->
+			<div class="row" *ngIf="false">
+				<div id="vehicle_id" class="col-md-12 my-2"
+					*ngIf="Form.affiliate_type.value !== 'loose_affiliate'">
+					<!-- <mat-form-field appearance="outline">
+											<mat-label>
+												Vehicle
+											</mat-label>
+											<mat-select formControlName="vehicle_id">
+												<mat-option [value]="option.id" *ngFor="let option of VehicleList">
+													{{ option.make}} ({{ option.model }})
+												</mat-option>
+											</mat-select>
+										</mat-form-field> -->
+
+					<!-- Ng-Select - Vehicle ID -->
+					<ng-select appearance="outline" [items]="VehicleList"
+						*ngIf="VehicleList.length > 1" dropdownPosition="bottom" [markFirst]="true"
+						[virtualScroll]="true" bindLabel="formatted_name" bindValue="ID"
+						placeholder="Select Vehicle" formControlName="vehicle_id">
+					</ng-select>
+				</div>
+			</div>
+
 
 			<!-- Visible in only Loose Affiliate Section -->
 			<!-- Loose Affiliate Section -->
@@ -669,28 +693,6 @@
 							bindLabel="name" bindValue="id" placeholder="Select Vehicle Category"
 							dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
 							formControlName="vehicle_type">
-						</ng-select>
-					</div>
-
-					<!-- Make-Model -->
-					<div id="make-model" class="col-md-4 col-xl-3 my-2"
-						*ngIf="Form.affiliate_type.value !== 'loose_affiliate'">
-						<!-- <mat-form-field appearance="outline">
-							<mat-label>
-								Vehicle
-							</mat-label>
-							<mat-select formControlName="vehicle_id">
-								<mat-option [value]="option.id" *ngFor="let option of VehicleList">
-									{{ option.make}} ({{ option.model }})
-								</mat-option>
-							</mat-select>
-						</mat-form-field> -->
-
-						<!-- Ng-Select - Vehicle ID -->
-						<ng-select appearance="outline" [items]="VehicleList"
-							dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
-							bindLabel="formatted_name" bindValue="id" placeholder="Select Vehicle"
-							formControlName="vehicle_id">
 						</ng-select>
 					</div>
 

@@ -834,12 +834,13 @@ export class NewBookingComponent implements OnInit
 			{
 				this.VehicleList = response.data.vehicleList
 				// add a key with formatted name to every value
-				this.VehicleList.map((item: any) => item['formatted_name'] = `${item.make} (${item.model})`);
+				this.VehicleList.map((item: any) => item['formatted_name'] = `${item.vehicleType} - ${item.make} (${item.model})`);
 
 				// autofill data
 				if (this.VehicleList.length == 1)
 				{
-					this.SetFormValue('vehicle_type', this.VehicleList[0].ID);
+					let vehicle_type_id = this.BigData['vehicleCategories'].find(item => item.name == this.VehicleList[0].vehicleType)['id']
+					this.SetFormValue('vehicle_type', vehicle_type_id)
 					this.SetFormValue('vehicle_id', this.VehicleList[0].ID);
 					this.autofillData('vehicle', this.VehicleList[0]);
 				}
