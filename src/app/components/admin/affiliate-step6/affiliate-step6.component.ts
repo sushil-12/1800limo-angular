@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AdminService } from '../../../services/admin.service';
-import {Router} from '@angular/router';
+import { Router } from '@angular/router';
 import { NgxSpinnerService } from "ngx-spinner";
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
@@ -12,59 +12,55 @@ import { throwError } from 'rxjs';
 })
 export class AffiliateStep6Component implements OnInit {
 
-  public affiliateId:string;
-  public affiliateType:string;
-  public stepCompleted:string;
-  public submittedForm:boolean;
-  public response:any;
+  public affiliateId: string;
+  public stepCompleted: string;
+  public submittedForm: boolean;
+  public response: any;
+
 
   constructor(
-    private adminService:AdminService,
+    private adminService: AdminService,
     private router: Router,
     private spinner: NgxSpinnerService
-    ) { }
+  ) { }
 
   ngOnInit(): void {
   }
 
-  submitForm()
-  {
+  submitForm() {
     this.spinner.show();
-    this.affiliateId=sessionStorage.getItem("affiliateId");
-    this.affiliateType=sessionStorage.getItem("affiliateType");
-    this.stepCompleted=sessionStorage.getItem("stepCompleted");
+    const affiliateId = sessionStorage.getItem("affiliateId");
+    this.affiliateId = affiliateId;
 
-    const data:Object={
-      acc_id:this.affiliateId,
-      Accept:true
+    let stepCompleted = this.adminService.getUpdatedStepsLocal('6');
+    const data: Object = {
+      acc_id: this.affiliateId,
+      Accept: true,
+      stepCompleted: stepCompleted
     };
 
     this.adminService.affiliateTermsAccept(data)
-    .pipe(
+      .pipe(
         catchError(err => {
           this.spinner.hide();//hide spinner
+          if (err.otherParams.step) {
+            this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
+              this.router.navigate(['/admin/affiliate/step1']);
+            });
+          }
           return throwError(err);
         })
-    )
-    .subscribe(result=>{
-      this.response=result;
-      this.spinner.hide();//hide spinner
-      
-      switch(this.affiliateType)
-      {
-        case 'fleet_operator':{
-          this.router.navigate(['/admin/black-car-limo-bus-admin']);
-          break; 
+      )
+      .subscribe(({ success }: any) => {
+        this.spinner.hide();//hide spinner
+
+        if (success == true) {
+          this.adminService.updateStepsLocal('6');
         }
-        case 'taxi_operator':{
-          this.router.navigate(['/admin/taxi-admin']);
-          break; 
-        }
-        case 'gig_operator':{
-          this.router.navigate(['/admin/gig-admin']);
-          break; 
-        }
-      }
-    });
+        this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() =>
+          this.router.navigate(['/admin/affiliates/all-operators'])
+        );
+      });
   }
 }
+

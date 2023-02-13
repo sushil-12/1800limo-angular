@@ -1,21 +1,19 @@
-import
-	{
-		AfterViewInit,
-		AfterViewChecked,
-		Component,
-		EventEmitter,
-		Input,
-		OnInit,
-	} from "@angular/core";
+import {
+AfterViewInit,
+AfterViewChecked,
+Component,
+EventEmitter,
+Input,
+OnInit,
+} from "@angular/core";
 import { AffiliateService } from "../../../services/affiliate.service";
-import
-	{
-		FormGroup,
-		FormBuilder,
-		Validators,
-		FormArray,
-		FormControl,
-	} from "@angular/forms";
+import {
+FormGroup,
+FormBuilder,
+Validators,
+FormArray,
+FormControl,
+} from "@angular/forms";
 import { Router, ActivatedRoute } from "@angular/router";
 import { NgxSpinnerService } from "ngx-spinner";
 import { StateManagementService } from "../../../services/statemanagement.service";
@@ -34,8 +32,7 @@ declare var $: any;
 	styleUrls: ["./add-driver-from-affiliate.component.scss"],
 })
 export class AddDriverFromAffiliateComponent
-	implements OnInit, AfterViewInit, AfterViewChecked
-{
+	implements OnInit, AfterViewInit, AfterViewChecked {
 	globalFunctions = this.globals;
 
 	color: ThemePalette = "primary";
@@ -105,8 +102,7 @@ export class AddDriverFromAffiliateComponent
 		private globals: SharedModule
 	) { }
 
-	ngAfterViewInit()
-	{
+	ngAfterViewInit() {
 		//set current user country as default in phone number
 		this.CellNumberObject.setCountry(this.currentUser.phoneCountry);
 		this.BackgroundCompanyTelNumberObject.setCountry(
@@ -123,35 +119,29 @@ export class AddDriverFromAffiliateComponent
 		// 	this.proDriverYears = data;
 		// });
 	}
-	ngAfterViewChecked()
-	{
+	ngAfterViewChecked() {
 		$(".backbutton").tooltip({
 			trigger: "hover",
 		});
-		$(".backbutton").on("mouseleave", function ()
-		{
+		$(".backbutton").on("mouseleave", function () {
 			$(this).tooltip("dispose");
 		});
-		$(".backbutton").on("click", function ()
-		{
+		$(".backbutton").on("click", function () {
 			$(this).tooltip("dispose");
 		});
 	}
 
-	ngOnInit(): void
-	{
+	ngOnInit(): void {
 		this.httpClient
 			.get("assets/json/proDriverYears.json")
-			.subscribe((data: any) =>
-			{
+			.subscribe((data: any) => {
 				this.proDriverYears = data;
 			});
 		$("#firstName").focus();
 		this.currentDate = formatDate(new Date(), "yyyy-MM-dd", "en");
 
 		//pick driver id from query params
-		this.activatedroute.queryParamMap.subscribe((params) =>
-		{
+		this.activatedroute.queryParamMap.subscribe((params) => {
 			this.paramResponse = { ...params.keys, ...params };
 			this.driverId = this.paramResponse.params.driverId;
 		});
@@ -232,8 +222,7 @@ export class AddDriverFromAffiliateComponent
 		});
 
 		const affiliateType = this.currentUser.affiliate_type;
-		if (affiliateType != "fleet_operator")
-		{
+		if (affiliateType != "fleet_operator") {
 			this.addDriverForm.controls["Email"].setValidators([
 				Validators.required,
 			]);
@@ -246,34 +235,28 @@ export class AddDriverFromAffiliateComponent
 		this.affiliateService
 			.driverDressLanguage()
 			.pipe(
-				catchError((err) =>
-				{
+				catchError((err) => {
 					this.spinner.hide(); //hide spinner
 					return throwError(err);
 				})
 			)
-			.subscribe(({ data }: any) =>
-			{
+			.subscribe(({ data }: any) => {
 				this.languages = data.languages;
 				this.dresses = data.dresses;
 
-				if (this.affiliateId)
-				{
-					if (this.driverId)
-					{
+				if (this.affiliateId) {
+					if (this.driverId) {
 						this.driverAdded = true;
 						// get data for editing using API
 						this.affiliateService
 							.getDriver(this.driverId)
 							.pipe(
-								catchError((err) =>
-								{
+								catchError((err) => {
 									this.spinner.hide(); //hide spinner
 									return throwError(err);
 								})
 							)
-							.subscribe(({ data }: any) =>
-							{
+							.subscribe(({ data }: any) => {
 								console.log(
 									data,
 									"check data ///////////////////"
@@ -283,8 +266,7 @@ export class AddDriverFromAffiliateComponent
 									data.CellNumberCountry
 								);
 								//if background certified is checked
-								if (data.BackgroundCertified == "yes")
-								{
+								if (data.BackgroundCertified == "yes") {
 									this.onChildVeteranDoDChange(
 										true,
 										"BackgroundCertificate"
@@ -300,8 +282,7 @@ export class AddDriverFromAffiliateComponent
 										CheckerID: data.CheckerID,
 									});
 								}
-								if (data.ExPolice == "yes")
-								{
+								if (data.ExPolice == "yes") {
 									this.onChildVeteranDoDChange(
 										true,
 										"ExPolice"
@@ -323,16 +304,14 @@ export class AddDriverFromAffiliateComponent
 								}
 
 								//show images in case of edit
-								if (data.DriverImage)
-								{
+								if (data.DriverImage) {
 									this.addDriverForm.patchValue({
 										DriverImage: data.DriverImage.ID,
 									});
 									this.DriverImage = data.DriverImage.image;
 									this.DriverImageId = data.DriverImage.ID;
 								}
-								if (data.DriverLicense)
-								{
+								if (data.DriverLicense) {
 									this.addDriverForm.patchValue({
 										DriverLicense: data.DriverLicense.ID,
 									});
@@ -341,16 +320,14 @@ export class AddDriverFromAffiliateComponent
 									this.DriverLicenseId =
 										data.DriverLicense.ID;
 								}
-								if (data.StarRating)
-								{
+								if (data.StarRating) {
 									this.addDriverForm.patchValue({
 										StarRating: data.StarRating.ID,
 									});
 									this.StarRating = data.StarRating.image;
 									this.StarRatingId = data.StarRating.ID;
 								}
-								if (data.VeteranIdCard)
-								{
+								if (data.VeteranIdCard) {
 									this.addDriverForm.patchValue({
 										VeteranIdCard: data.VeteranIdCard.ID,
 									});
@@ -359,8 +336,7 @@ export class AddDriverFromAffiliateComponent
 									this.VeteranIdCardId =
 										data.VeteranIdCard.ID;
 								}
-								if (data.schoolBusCertificateImage)
-								{
+								if (data.schoolBusCertificateImage) {
 									this.addDriverForm.patchValue({
 										schoolBusCertificateImage:
 											data.schoolBusCertificateImage.ID,
@@ -370,8 +346,7 @@ export class AddDriverFromAffiliateComponent
 									this.schoolBusCertificateImageId =
 										data.schoolBusCertificateImage.ID;
 								}
-								if (data.FoidCardImage)
-								{
+								if (data.FoidCardImage) {
 									this.addDriverForm.patchValue({
 										FoidCardImage: data.FoidCardImage.ID,
 									});
@@ -380,8 +355,7 @@ export class AddDriverFromAffiliateComponent
 									this.FoidCardImageId =
 										data.FoidCardImage.ID;
 								}
-								if (data.BackgroundCheckerID)
-								{
+								if (data.BackgroundCheckerID) {
 									this.addDriverForm.patchValue({
 										BackgroundCheckerID:
 											data.BackgroundCheckerID.ID,
@@ -391,8 +365,7 @@ export class AddDriverFromAffiliateComponent
 									this.BackgroundCheckerIDId =
 										data.BackgroundCheckerID.ID;
 								}
-								if (data.VaccinationCardImage)
-								{
+								if (data.VaccinationCardImage) {
 									this.addDriverForm.patchValue({
 										VaccinationCardImage:
 											data.VaccinationCardImage.ID,
@@ -402,8 +375,7 @@ export class AddDriverFromAffiliateComponent
 									this.VaccinationCardImageId =
 										data.VaccinationCardImage.ID;
 								}
-								if (data.DoDImage)
-								{
+								if (data.DoDImage) {
 									this.addDriverForm.patchValue({
 										DoDImage: data.DoDImage.ID,
 									});
@@ -423,8 +395,7 @@ export class AddDriverFromAffiliateComponent
 									this.SchoolBusCertifiedCheck = true;
 								if (data.BackgroundCertified == "yes")
 									this.BackgroundCertificateCheck = true;
-								if (data.ExPolice == "yes")
-								{
+								if (data.ExPolice == "yes") {
 									this.ExPoliceCheck = true;
 									this.changeCountry(data.Country); //for selected country
 								}
@@ -469,21 +440,17 @@ export class AddDriverFromAffiliateComponent
 								var i;
 								const totalLanguages: any = this.languages;
 								const selectedLanguages = data.FluentLanguages;
-								for (i = 0; i < totalLanguages.length; i++)
-								{
+								for (i = 0; i < totalLanguages.length; i++) {
 									var checkedLanguage =
 										selectedLanguages.findIndex(function (
 											post
-										)
-										{
+										) {
 											if (post == totalLanguages[i].id)
 												return true;
 										});
-									if (checkedLanguage >= 0)
-									{
+									if (checkedLanguage >= 0) {
 										var checkBool = true;
-									} else
-									{
+									} else {
 										var checkBool = false;
 									}
 									languagesGet.push(
@@ -493,33 +460,28 @@ export class AddDriverFromAffiliateComponent
 								this.languagesFormControl =
 									languagesGet.controls;
 								var j;
-								for (j = 0; j < selectedLanguages.length; j++)
-								{
+								for (j = 0; j < selectedLanguages.length; j++) {
 									FluentLanguages.push(
 										new FormControl(selectedLanguages[j])
 									);
 								}
 							});
-					} else
-					{
+					} else {
 						// this.DriverLicense = localStorage.getItem("driverFrontLicense")
 						this.onLanguageChange("1", true); //set english as default language
 						if (
 							this.currentUser.affiliate_type != "fleet_operator"
-						)
-						{
+						) {
 							// get data from logged in affiliate and set in driver fields
 							this.affiliateService
 								.getAffiliateAccount(this.affiliateId)
 								.pipe(
-									catchError((err) =>
-									{
+									catchError((err) => {
 										this.spinner.hide(); //hide spinner
 										return throwError(err);
 									})
 								)
-								.subscribe(({ data }: any) =>
-								{
+								.subscribe(({ data }: any) => {
 									this.addDriverForm.patchValue({
 										FirstName: data.FirstName,
 										MiddleName: data.MiddleName,
@@ -553,107 +515,87 @@ export class AddDriverFromAffiliateComponent
 			});
 		this.spinner.hide(); //hide spinner
 
-		if (this.affiliateType == "gig_operator")
-		{
+		if (this.affiliateType == "gig_operator") {
 			this.f.starRatingValue.setValidators([Validators.required]);
 			this.addDriverForm.updateValueAndValidity();
 		}
 	}
 
-	SetFormValue(form_control: string, value: any)
-	{
+	SetFormValue(form_control: string, value: any) {
 		this.addDriverForm.get(form_control).setValue(value);
 		this.addDriverForm.updateValueAndValidity();
 	}
 
-	closeButton()
-	{
+	closeButton() {
 		this.closeTab.emit();
 	}
 
-	onCountryChange(event, type)
-	{
-		if (type == "CellNumber")
-		{
+	onCountryChange(event, type) {
+		if (type == "CellNumber") {
 			this.addDriverForm.patchValue({
 				CellIsd: "+" + event.dialCode,
 				CellNumberCountry: event.iso2,
 			});
-		} else if (type == "PoliceForceTelephone")
-		{
+		} else if (type == "PoliceForceTelephone") {
 			this.addDriverForm.patchValue({
 				PoliceForceIsd: "+" + event.dialCode,
 				PoliceForceTelephoneCountry: event.iso2,
 			});
-		} else
-		{
+		} else {
 			this.addDriverForm.patchValue({
 				BackgroundCompanyTelIsd: "+" + event.dialCode,
 				BackgroundCompanyTelNumberCountry: event.iso2,
 			});
 		}
 	}
-	telInputObjectCell(obj)
-	{
+	telInputObjectCell(obj) {
 		this.CellNumberObject = obj;
 	}
-	telInputObjectBackgroundCompanyTelNumber(obj)
-	{
+	telInputObjectBackgroundCompanyTelNumber(obj) {
 		this.BackgroundCompanyTelNumberObject = obj;
 	}
-	telInputObjectPoliceForceTelephone(obj)
-	{
+	telInputObjectPoliceForceTelephone(obj) {
 		this.PoliceForceTelephoneObject = obj;
 	}
 
-	changeCountry(selectedCountryCode)
-	{
+	changeCountry(selectedCountryCode) {
 		let selectedCountryData: any;
 
 		this.httpClient
 			.get("assets/json/countryStateList.json")
-			.subscribe((data) =>
-			{
+			.subscribe((data) => {
 				this.countryOptions = data;
 				selectedCountryData = this.countryOptions.filter(function (
 					countryOption
-				)
-				{
+				) {
 					return (
 						countryOption.countryShortCode == selectedCountryCode
 					);
 				});
-				if (selectedCountryData)
-				{
+				if (selectedCountryData) {
 					this.stateOptions = selectedCountryData[0].regions;
 				}
 			});
 	}
 
-	vehicleOfficialImagesChange(event, imageType, imageId)
-	{
+	vehicleOfficialImagesChange(event, imageType, imageId) {
 		this.stateManagementService.setprogressBar(true);
 		const reader = new FileReader();
-		if (event.target.files && event.target.files.length)
-		{
+		if (event.target.files && event.target.files.length) {
 			const [file] = event.target.files;
 			reader.readAsDataURL(file);
-			reader.onload = () =>
-			{
+			reader.onload = () => {
 				this.imageSrc = reader.result as string;
 				this.affiliateService
 					.uploadVehicleImage(this.imageSrc)
 					.pipe(
-						catchError((err) =>
-						{
+						catchError((err) => {
 							this.stateManagementService.setprogressBar(false);
 							return throwError(err);
 						})
 					)
-					.subscribe(({ data }: any) =>
-					{
-						switch (imageType)
-						{
+					.subscribe(({ data }: any) => {
+						switch (imageType) {
 							case "DriverImage": {
 								this.addDriverForm.patchValue({
 									DriverImage: data.id,
@@ -728,10 +670,8 @@ export class AddDriverFromAffiliateComponent
 		}
 	}
 
-	deleteImage(id, imageType, imageNumber = null)
-	{
-		switch (imageType)
-		{
+	deleteImage(id, imageType, imageNumber = null) {
+		switch (imageType) {
 			case "DriverImage": {
 				this.addDriverForm.patchValue({
 					DriverImage: "",
@@ -801,12 +741,9 @@ export class AddDriverFromAffiliateComponent
 		}
 	}
 
-	onChildVeteranDoDChange(isChecked, type)
-	{
-		if (type == "Veteran")
-		{
-			if (isChecked)
-			{
+	onChildVeteranDoDChange(isChecked, type) {
+		if (type == "Veteran") {
+			if (isChecked) {
 				this.addDriverForm.patchValue({
 					Veteran: "yes",
 				});
@@ -815,8 +752,7 @@ export class AddDriverFromAffiliateComponent
 					Validators.required,
 				]);
 				// $('html, body').animate({ scrollTop: $(document).height() }, 'slow');
-			} else
-			{
+			} else {
 				this.addDriverForm.patchValue({
 					Veteran: "no",
 				});
@@ -826,10 +762,8 @@ export class AddDriverFromAffiliateComponent
 			this.addDriverForm.controls[
 				"VeteranIdCard"
 			].updateValueAndValidity();
-		} else if (type == "SchoolBusCertified")
-		{
-			if (isChecked)
-			{
+		} else if (type == "SchoolBusCertified") {
+			if (isChecked) {
 				this.addDriverForm.patchValue({
 					SchoolBusCertified: "yes",
 				});
@@ -837,8 +771,7 @@ export class AddDriverFromAffiliateComponent
 				this.addDriverForm.controls[
 					"schoolBusCertificateImage"
 				].setValidators([Validators.required]);
-			} else
-			{
+			} else {
 				this.addDriverForm.patchValue({
 					SchoolBusCertified: "no",
 				});
@@ -850,10 +783,8 @@ export class AddDriverFromAffiliateComponent
 			this.addDriverForm.controls[
 				"schoolBusCertificateImage"
 			].updateValueAndValidity();
-		} else if (type == "DoD")
-		{
-			if (isChecked)
-			{
+		} else if (type == "DoD") {
+			if (isChecked) {
 				this.addDriverForm.patchValue({
 					DoD: "yes",
 				});
@@ -861,8 +792,7 @@ export class AddDriverFromAffiliateComponent
 				this.addDriverForm.controls["DoDImage"].setValidators([
 					Validators.required,
 				]);
-			} else
-			{
+			} else {
 				this.addDriverForm.patchValue({
 					DoD: "no",
 				});
@@ -870,10 +800,8 @@ export class AddDriverFromAffiliateComponent
 				this.addDriverForm.controls["DoDImage"].clearValidators();
 			}
 			this.addDriverForm.controls["DoDImage"].updateValueAndValidity();
-		} else if (type == "Foid")
-		{
-			if (isChecked)
-			{
+		} else if (type == "Foid") {
+			if (isChecked) {
 				this.addDriverForm.patchValue({
 					FoidCard: "yes",
 				});
@@ -881,8 +809,7 @@ export class AddDriverFromAffiliateComponent
 				this.addDriverForm.controls["FoidCardImage"].setValidators([
 					Validators.required,
 				]);
-			} else
-			{
+			} else {
 				this.addDriverForm.patchValue({
 					FoidCard: "no",
 				});
@@ -892,10 +819,8 @@ export class AddDriverFromAffiliateComponent
 			this.addDriverForm.controls[
 				"FoidCardImage"
 			].updateValueAndValidity();
-		} else if (type == "BackgroundCertificate")
-		{
-			if (isChecked)
-			{
+		} else if (type == "BackgroundCertificate") {
+			if (isChecked) {
 				this.addDriverForm.patchValue({
 					BackgroundCertified: "yes",
 				});
@@ -919,8 +844,7 @@ export class AddDriverFromAffiliateComponent
 				this.addDriverForm.controls["CheckerID"].setValidators([
 					Validators.required,
 				]);
-			} else
-			{
+			} else {
 				this.addDriverForm.patchValue({
 					BackgroundCertified: "no",
 				});
@@ -946,10 +870,8 @@ export class AddDriverFromAffiliateComponent
 				"BackgroundCompanyTelIsd"
 			].updateValueAndValidity();
 			this.addDriverForm.controls["CheckerID"].updateValueAndValidity();
-		} else if (type == "ExPolice")
-		{
-			if (isChecked)
-			{
+		} else if (type == "ExPolice") {
+			if (isChecked) {
 				this.addDriverForm.patchValue({
 					ExPolice: "yes",
 				});
@@ -972,8 +894,7 @@ export class AddDriverFromAffiliateComponent
 					this.customValidator.dashValidator(),
 					this.customValidator.plusValidator(),
 				]);
-			} else
-			{
+			} else {
 				this.addDriverForm.patchValue({
 					ExPolice: "no",
 				});
@@ -993,16 +914,13 @@ export class AddDriverFromAffiliateComponent
 			this.addDriverForm.controls["State"].updateValueAndValidity();
 			this.addDriverForm.controls["City"].updateValueAndValidity();
 			this.addDriverForm.controls["ZipCode"].updateValueAndValidity();
-		} else
-		{
-			if (isChecked)
-			{
+		} else {
+			if (isChecked) {
 				this.addDriverForm.patchValue({
 					Covid19Vaccination: "yes",
 				});
 				this.Covid19VaccinationCheck = true;
-			} else
-			{
+			} else {
 				this.addDriverForm.patchValue({
 					Covid19Vaccination: "no",
 				});
@@ -1011,17 +929,14 @@ export class AddDriverFromAffiliateComponent
 		}
 	}
 
-	onLanguageChange(val, ischecked)
-	{
+	onLanguageChange(val, ischecked) {
 		const FluentLanguages: FormArray = this.addDriverForm.get(
 			"FluentLanguages"
 		) as FormArray;
 
-		if (ischecked)
-		{
+		if (ischecked) {
 			FluentLanguages.push(new FormControl(val));
-		} else
-		{
+		} else {
 			const index = FluentLanguages.controls.findIndex(
 				(x) => x.value === val
 			);
@@ -1029,25 +944,21 @@ export class AddDriverFromAffiliateComponent
 		}
 	}
 
-	showImageInModal(imageUrl)
-	{
+	showImageInModal(imageUrl) {
 		this.modalImage = imageUrl;
 		$("#imageModal").addClass("showImage");
 		$("#imageModal").removeClass("d-none");
 	}
 
-	get f()
-	{
+	get f() {
 		return this.addDriverForm.controls;
 	}
 
-	submitForm()
-	{
+	submitForm() {
 		console.log(this.addDriverForm);
 		this.submittedForm = true;
 		// stop here if form is invalid
-		if (this.addDriverForm.invalid)
-		{
+		if (this.addDriverForm.invalid) {
 			return;
 		}
 		this.addDriverForm.value.stepCompleted =
@@ -1058,20 +969,17 @@ export class AddDriverFromAffiliateComponent
 		this.affiliateService
 			.addDriver(this.addDriverForm.value)
 			.pipe(
-				catchError((err) =>
-				{
+				catchError((err) => {
 					this.spinner.hide(); // hide spinner
 					this.disableSubmitButton = false; //enable submit button
 					return throwError(err);
 				})
 			)
-			.subscribe(({ success, data }: any) =>
-			{
+			.subscribe(({ success, data }: any) => {
 				this.spinner.hide(); // hide spinner
 				this.disableSubmitButton = true; //enable submit button
 
-				if (success == true)
-				{
+				if (success == true) {
 					this.affiliateService.updateStepsLocal("4");
 				}
 				this.router
@@ -1080,8 +988,7 @@ export class AddDriverFromAffiliateComponent
 			});
 	}
 
-	resetForm()
-	{
+	resetForm() {
 		this.addDriverForm.reset();
 		this.DriverImage = "";
 		this.DriverLicense = "";
@@ -1093,36 +1000,30 @@ export class AddDriverFromAffiliateComponent
 		this.VaccinationCardImage = "";
 		this.DoDImage = "";
 	}
-	backButton()
-	{
+	backButton() {
 		this.router.navigate(["/affiliate/step4"]);
 	}
-	selectDropdownGender()
-	{
+	selectDropdownGender() {
 		$(".selectGenderLabel")
 			.removeClass("selectGenderLabel ")
 			.addClass("select-gender-label");
 	}
-	selectDropdownDress()
-	{
+	selectDropdownDress() {
 		$(".selectDressLabel")
 			.removeClass("selectDressLabel ")
 			.addClass("select-dress-label");
 	}
-	selectDropdownYearBusiness()
-	{
+	selectDropdownYearBusiness() {
 		$(".selectYearBusinessLabel")
 			.removeClass("selectYearBusinessLabel ")
 			.addClass("select-year-business-label");
 	}
-	selectDropdownState()
-	{
+	selectDropdownState() {
 		$(".selectStateLabel")
 			.removeClass("selectStateLabel ")
 			.addClass("select-state-label");
 	}
-	selectDropdownCountry()
-	{
+	selectDropdownCountry() {
 		$(".selectCountryLabel")
 			.removeClass("selectCountryLabel ")
 			.addClass("select-country-label");

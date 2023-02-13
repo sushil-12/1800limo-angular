@@ -14,8 +14,7 @@ declare var $: any;
 	templateUrl: './edit-vehicle-rates.component.html',
 	styleUrls: ['./edit-vehicle-rates.component.scss']
 })
-export class EditVehicleRatesComponent implements OnInit
-{
+export class EditVehicleRatesComponent implements OnInit {
 
 	public tree: any;
 	public affiliateId: string;
@@ -49,8 +48,7 @@ export class EditVehicleRatesComponent implements OnInit
 		private activatedroute: ActivatedRoute,
 		private httpClient: HttpClient) { }
 
-	ngOnInit(): void
-	{
+	ngOnInit(): void {
 		//add amenity form validation
 		this.addVehicleRatesForm = this.formBuilder.group({
 			id: [''],
@@ -95,65 +93,54 @@ export class EditVehicleRatesComponent implements OnInit
 		});
 		//autopopulate values of departure in arrival
 		this.addVehicleRatesForm.get('minimum_airport_departure_rate').valueChanges.subscribe(
-			value =>
-			{
+			value => {
 				this.addVehicleRatesForm.patchValue({ minimum_airport_arrival_rate: value });
 			}
 		);
 		this.addVehicleRatesForm.get('hourly_rate').valueChanges.subscribe(
-			value =>
-			{
+			value => {
 				this.addVehicleRatesForm.patchValue({ hourly_rate_after_five_hours: value });
 			}
 		);
 
 		//calculate day rate based upon below mentioned changes
 		this.addVehicleRatesForm.get('hourly_rate').valueChanges.subscribe(
-			value =>
-			{
+			value => {
 				this.dayRateCalculations();
 			}
 		);
 		this.addVehicleRatesForm.get('hourly_rate_after_five_hours').valueChanges.subscribe(
-			value =>
-			{
+			value => {
 				this.dayRateCalculations();
 			}
 		);
 		this.addVehicleRatesForm.get('hours_day_rate').valueChanges.subscribe(
-			value =>
-			{
+			value => {
 				this.dayRateCalculations();
 			}
 		);
 		/** spinner starts on init */
-		this.stateManagementService.setprogressBar(true);
+		// this.stateManagementService.setprogressBar(true);
 		//pick vehicle id from query params
 		this.activatedroute.queryParamMap
-			.subscribe((params) =>
-			{
+			.subscribe((params) => {
 				this.paramResponse = { ...params.keys, ...params };
 				this.vehicleId = this.paramResponse.params.vehicleId;
 			}
 			);
 		const currentUser = JSON.parse(sessionStorage.getItem("affiliateUserData"));
 		this.affiliateId = sessionStorage.getItem("affiliateId");
-		this.stepCompleted = this.adminService.getSessionStepsCompleted()
 		//get selected amenities to show fields
 		this.adminService.getVehicleInfo(this.vehicleId)
 			.pipe(
-				catchError(err =>
-				{
-					this.stateManagementService.setprogressBar(false);
+				catchError(err => {
+					// this.stateManagementService.setprogressBar(false);
 					return throwError(err);
 				})
-			).subscribe(({ data }: any) =>
-			{
-				if (data.amenities)
-				{
+			).subscribe(({ data }: any) => {
+				if (data.amenities) {
 					Object.entries(data.amenities).forEach(
-						([key, value]) =>
-						{
+						([key, value]) => {
 							console.log(key, value)
 							this.amenites_rates.addControl(key, this.createItem(value))
 						}
@@ -170,24 +157,18 @@ export class EditVehicleRatesComponent implements OnInit
 				//get vehicle rates
 				this.adminService.getVehicleRates(this.vehicleId)
 					.pipe(
-						catchError(err =>
-						{
-							this.stateManagementService.setprogressBar(false);
+						catchError(err => {
+							// this.stateManagementService.setprogressBar(false);
 							return throwError(err);
 						})
-					).subscribe(result =>
-					{
+					).subscribe(result => {
 						this.response = result;
-						if (this.response.data == null)
-						{
+						if (this.response.data == null) {
 							//load list of currencies
-							this.httpClient.get("assets/json/currencyOptions.json").subscribe(data =>
-							{
+							this.httpClient.get("assets/json/currencyOptions.json").subscribe(data => {
 								this.currencyOptions = data;
-								for (const key of Object.keys(this.currencyOptions))
-								{
-									if (key.toLowerCase() == currentUser.CellNumberCountry.toLowerCase())
-									{
+								for (const key of Object.keys(this.currencyOptions)) {
+									if (key.toLowerCase() == currentUser.CellNumberCountry.toLowerCase()) {
 										this.addVehicleRatesForm.patchValue({
 											currency: key
 										});
@@ -195,19 +176,16 @@ export class EditVehicleRatesComponent implements OnInit
 									}
 								}
 							})
-							this.stateManagementService.setprogressBar(false);
+							// this.stateManagementService.setprogressBar(false);
 							return false;
 						}
 
 						//load list of currencies and show selected currency
-						this.httpClient.get("assets/json/currencyOptions.json").subscribe(data =>
-						{
+						this.httpClient.get("assets/json/currencyOptions.json").subscribe(data => {
 							this.currencyOptions = data;
 							//show selected currency symbol on all fields 
-							for (const key of Object.keys(this.currencyOptions))
-							{
-								if (key == this.response.data.currency)
-								{
+							for (const key of Object.keys(this.currencyOptions)) {
+								if (key == this.response.data.currency) {
 									this.changeCurrency(this.currencyOptions[key].symbol);
 								}
 							}
@@ -265,55 +243,44 @@ export class EditVehicleRatesComponent implements OnInit
 							per_diem: this.response.data.per_diem
 						});
 						this.km_mile_switch(this.response.data.km_mile);//show selected input field 
-						this.stateManagementService.setprogressBar(false);
+						// this.stateManagementService.setprogressBar(false);
 					});
 			});
 	}
-	changeGraruity(e)
-	{
-		if (e.checked)
-		{
+	changeGraruity(e) {
+		if (e.checked) {
 			this.addVehicleRatesForm.patchValue({
 				is_gratuity: 'yes'
 			});
-		} else
-		{
+		} else {
 			this.addVehicleRatesForm.patchValue({
 				is_gratuity: 'no'
 			});
 		}
 	}
 
-	changeAmenityRate(babySeatKey, babySeatValue)
-	{
+	changeAmenityRate(babySeatKey, babySeatValue) {
 		//changes in amenity rates formGroup
-		if (babySeatValue.label == 'Baby_Seat')
-		{
+		if (babySeatValue.label == 'Baby_Seat') {
 			Object.entries(this.addVehicleRatesForm.value.amenites_rates).forEach(
-				([key, value]: any) =>
-				{
-					if (value.label == 'Booster_Seat' || value.label == 'Baggage_Meet_Dom_' || value.label == 'Baggage_Meet_Int_')
-					{
+				([key, value]: any) => {
+					if (value.label == 'Booster_Seat' || value.label == 'Baggage_Meet_Dom_' || value.label == 'Baggage_Meet_Int_') {
 						(this.amenites_rates.get(key) as FormGroup).setValue({ ...value, price: babySeatValue.price });
 					}
 				});
 		}
 	}
-	get amenites_rates()
-	{
+	get amenites_rates() {
 		const amenites_rates = this.addVehicleRatesForm.get("amenites_rates") as FormGroup;
 		return amenites_rates;
 	}
 
-	createItem(e): FormGroup
-	{
+	createItem(e): FormGroup {
 		return this.formBuilder.group({ ...e });
 	}
 
-	km_mile_switch(km_mile)
-	{
-		switch (km_mile)
-		{
+	km_mile_switch(km_mile) {
+		switch (km_mile) {
 			case 'kilometer': {
 				this.milage_rate_selected = false;
 				this.addVehicleRatesForm.controls['kilometer_rate'].setValidators([Validators.required, Validators.pattern("^[0-9]*(\.[0-9]+)?$")]);
@@ -331,50 +298,39 @@ export class EditVehicleRatesComponent implements OnInit
 		this.addVehicleRatesForm.controls['kilometer_rate'].updateValueAndValidity();
 	}
 
-	dayRateCalculations()
-	{
+	dayRateCalculations() {
 		let dayRateValue = (this.addVehicleRatesForm.get('hourly_rate').value * 5) + (this.addVehicleRatesForm.get('hourly_rate_after_five_hours').value * (this.addVehicleRatesForm.get('hours_day_rate').value - 5));
 		this.addVehicleRatesForm.patchValue({
 			day_rate: dayRateValue
 		});
 	}
 
-	changeCurrencySymbol(selectedCountryCode)
-	{
-		for (const key of Object.keys(this.currencyOptions))
-		{
-			if (key == selectedCountryCode)
-			{
+	changeCurrencySymbol(selectedCountryCode) {
+		for (const key of Object.keys(this.currencyOptions)) {
+			if (key == selectedCountryCode) {
 				this.changeCurrency(this.currencyOptions[key].symbol);
 			}
 		}
 	}
-	changeCurrency(selectedCountrySymbol)
-	{
+	changeCurrency(selectedCountrySymbol) {
 		this.currencySymbol = selectedCountrySymbol;
 	}
 
-	get f()
-	{
+	get f() {
 		return this.addVehicleRatesForm.controls;
 	}
 
-	submitForm()
-	{
+	submitForm() {
 		console.log(this.addVehicleRatesForm.value);
 		this.addVehicleRatesForm.patchValue({
 			vehicle_id: this.vehicleId
 		});
 		this.tree = this.router.parseUrl(this.router.url);
-		if (this.tree.root.children.primary.segments[2])
-		{
+		if (this.tree.root.children.primary.segments[2]) {
 			var lastPartUrl = this.tree.root.children.primary.segments[2].path;
-			if (lastPartUrl == 'step5')
-			{
-				if (this.affiliateId) 
-				{
-					if (parseInt(this.stepCompleted) >= 4)
-					{
+			if (lastPartUrl == 'step5') {
+				if (this.affiliateId) {
+					if (parseInt(this.stepCompleted) >= 4) {
 						this.addVehicleRatesForm.patchValue({
 							acc_id: this.affiliateId
 						});
@@ -384,58 +340,43 @@ export class EditVehicleRatesComponent implements OnInit
 		}
 
 		this.submittedForm = true;
-		if (!this.addVehicleRatesForm.value.vehicleId)
-		{
+		if (!this.addVehicleRatesForm.value.vehicleId) {
 			this.addVehicleRatesForm.patchValue({
 				vehicleId: this.vehicleId
 			});
 		}
 		// stop here if form is invalid
-		if (this.addVehicleRatesForm.invalid)
-		{
+		if (this.addVehicleRatesForm.invalid) {
 			return;
 		}
 		this.addVehicleRatesForm.value.affiliate_type = sessionStorage.getItem('affiliateType');
 		this.addVehicleRatesForm.value.acc_id = sessionStorage.getItem('affiliateId');
-		this.adminService.setSessionStepsCompleted(5)
-		this.adminService.setSessionStepsCompleted(6)
-		this.addVehicleRatesForm.value.stepCompleted = this.adminService.getSessionStepsCompleted();
 		console.log(this.addVehicleRatesForm);;
 		this.spinner.show();
 		this.disableSubmitButton = true; //disable submit button
 
 		this.adminService.editVehicleRates(this.addVehicleRatesForm.value)
 			.pipe(
-				catchError(err =>
-				{
+				catchError(err => {
 					this.spinner.hide();//hide spinner
 					this.disableSubmitButton = false; //disable submit button
 					return throwError(err);
 				})
 			)
-			.subscribe(result =>
-			{
+			.subscribe(result => {
 				this.response = result;
 				this.spinner.hide();//hide spinner
 				this.disableSubmitButton = true; //disable submit button
-				if (this.response.data.msg)
-				{
+				if (this.response.data.msg) {
 					sessionStorage.setItem('msg', this.response.data.msg)
 				}
-				if (this.response.errors || this.response.error)
-				{
-					this.adminService.unsetSessionStepsCompleted(5)
-					this.adminService.unsetSessionStepsCompleted(6)
-				}
-
 				this.router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
 					this.router.navigate(['/admin/affiliate/step5'])
 				);
 			});
 	}
 
-	resetForm()
-	{
+	resetForm() {
 		this.addVehicleRatesForm.reset();
 	}
 

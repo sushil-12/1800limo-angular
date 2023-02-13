@@ -105,7 +105,7 @@ export class AffiliateStep1Component implements OnInit {
 			Gender: ['male', Validators.required],
 			CellNumber: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
 			CellIsd: ['+1', Validators.required],
-			Email: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+(\.[a-z]{2,4})(\.[a-zA-Z]{2,4})?$")]],
+			Email: ['', [Validators.required, Validators.pattern("[a-zA-Z0-9\$\#\.\/\%\~\\-\\&\+\_]+@[a-z0-9]+(\.[a-z\-]+){1,2}")]],
 			latitude: [''],
 			longitude: [''],
 			FirstYearBusiness: ['', Validators.required],
@@ -133,12 +133,12 @@ export class AffiliateStep1Component implements OnInit {
 			notify_email: [true],
 		});
 
-		this.stateManagementService.setprogressBar(true);
+		// this.stateManagementService.setprogressBar(true);
 		// Load Our languages using API
 		this.adminService.getAssicationsLanguages()
 			.pipe(
 				catchError(err => {
-					this.stateManagementService.setprogressBar(false);
+					// this.stateManagementService.setprogressBar(false);
 					return throwError(err);
 				})
 			).subscribe(result => {
@@ -155,7 +155,7 @@ export class AffiliateStep1Component implements OnInit {
 					this.adminService.getAffiliateAccount(this.affiliateId)
 						.pipe(
 							catchError(err => {
-								this.stateManagementService.setprogressBar(false);
+								// this.stateManagementService.setprogressBar(false);
 								return throwError(err);
 							})
 						).subscribe(result2 => {
@@ -257,17 +257,17 @@ export class AffiliateStep1Component implements OnInit {
 							}
 							console.log('associations');
 							//
-							this.stateManagementService.setprogressBar(false);
+							// this.stateManagementService.setprogressBar(false);
 						});
 				} else {
 					this.addAffiliateAccountForm.patchValue({
 						AffiliateType: (this.affiliateType ? this.affiliateType : 'black_limo_operator')
 					});
-					this.stateManagementService.setprogressBar(false);
+					// this.stateManagementService.setprogressBar(false);
 
 					this.onLanguageChange('1', true);//set english as default language
 				}
-				this.stateManagementService.setprogressBar(false);
+				// this.stateManagementService.setprogressBar(false);
 			});
 
 		if (sessionStorage.getItem("affiliateType") != "all_operators") {
@@ -337,7 +337,7 @@ export class AffiliateStep1Component implements OnInit {
 
 
 	businessCardImageChange(event, imageType, imageId = null) {
-		this.stateManagementService.setprogressBar(true); //show progressBar
+		// this.stateManagementService.setprogressBar(true); //show progressBar
 		const reader = new FileReader();
 		if (event.target.files && event.target.files.length) {
 			const [file] = event.target.files;
@@ -347,7 +347,7 @@ export class AffiliateStep1Component implements OnInit {
 				this.adminService.uploadVehicleImage(this.imageSrc)
 					.pipe(
 						catchError(err => {
-							this.stateManagementService.setprogressBar(false); // hide progressBar
+							// this.stateManagementService.setprogressBar(false); // hide progressBar
 							return throwError(err);
 						})
 					)
@@ -373,7 +373,7 @@ export class AffiliateStep1Component implements OnInit {
 								break;
 							}
 						}
-						this.stateManagementService.setprogressBar(false); // hide progressBar
+						// this.stateManagementService.setprogressBar(false); // hide progressBar
 					});
 			};
 		}

@@ -91,7 +91,7 @@ export class AffiliateStep2Component implements OnInit {
 		}
 		const currentUser = JSON.parse(sessionStorage.getItem("affiliateUserData"));
 		this.affiliateId = sessionStorage.getItem("affiliateId");
-
+		this.stepCompleted = this.adminService.getLocalStepsCompleted();
 		//add amenity form validation
 		this.addBankForm = this.formBuilder.group({
 			id: [''],//bank id for edit purpose
@@ -153,14 +153,14 @@ export class AffiliateStep2Component implements OnInit {
 		this.httpClient.get("assets/json/countryStateList.json").subscribe(data => {
 			this.countryOptions = data;
 			if (this.affiliateId) {
-				if (this.adminService.getLocalStepsCompleted().includes('2')) {
+				if (this.stepCompleted.includes('2')) {
 					this.isStep2Completed = true;
-					this.stateManagementService.setprogressBar(true);
+					// this.stateManagementService.setprogressBar(true);
 
 					this.adminService.getBankOfAffiliate(this.affiliateId)
 						.pipe(
 							catchError(err => {
-								this.stateManagementService.setprogressBar(false);
+								// this.stateManagementService.setprogressBar(false);
 								return throwError(err);
 							})
 						).subscribe(result => {
@@ -213,7 +213,7 @@ export class AffiliateStep2Component implements OnInit {
 
 							this.haveEin(this.response.data.bankinfo.ein ? 'yesEin' : 'noEin');
 							this.changeCountry(this.response.data.bankinfo.country);//for selected country
-							this.stateManagementService.setprogressBar(false);
+							// this.stateManagementService.setprogressBar(false);
 						});
 				}
 				else {
@@ -335,7 +335,7 @@ export class AffiliateStep2Component implements OnInit {
 	}
 
 	idCardImageChange(event, imageType, imageId = null) {
-		this.stateManagementService.setprogressBar(true);
+		// this.stateManagementService.setprogressBar(true);
 		const reader = new FileReader();
 		if (event.target.files && event.target.files.length)
 			console.log(event.target.files, ">>>>>>>>>>>><<<<<<<<<<", event.target.files.length)
@@ -347,7 +347,7 @@ export class AffiliateStep2Component implements OnInit {
 				this.adminService.uploadVehicleImage(this.imageSrc)
 					.pipe(
 						catchError(err => {
-							this.stateManagementService.setprogressBar(false);
+							// this.stateManagementService.setprogressBar(false);
 							return throwError(err);
 						})
 					)
@@ -374,7 +374,7 @@ export class AffiliateStep2Component implements OnInit {
 								break;
 							}
 						}
-						this.stateManagementService.setprogressBar(false);
+						// this.stateManagementService.setprogressBar(false);
 					});
 			};
 		}
@@ -385,19 +385,19 @@ export class AffiliateStep2Component implements OnInit {
 	// 	this.router.navigate(['/admin/add-card'], { queryParams: { accountType: 'blackCarLimoBus', accountId: this.affiliateId } })
 	// }
 	delete() {
-		this.stateManagementService.setprogressBar(true);
+		// this.stateManagementService.setprogressBar(true);
 		$('#deleteConfirmationModal').modal('hide');
 		this.adminService.deleteCard(this.cardToDelete, this.affiliateId)
 			.pipe(
 				catchError(err => {
-					this.stateManagementService.setprogressBar(false);
+					// this.stateManagementService.setprogressBar(false);
 					return throwError(err);
 				})
 			).subscribe(result => {
 				this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
 					this.router.navigate(['/admin /affiliate/step2']);
 				});
-				this.stateManagementService.setprogressBar(false);
+				// this.stateManagementService.setprogressBar(false);
 			});
 	}
 
