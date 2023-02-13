@@ -69,7 +69,7 @@ export class AffiliateStep3Component implements OnInit {
 		this.currentUser = JSON.parse(sessionStorage.getItem("affiliateUserData"));
 		this.affiliate_type = this.currentUser.AffiliateType;
 		this.affiliateId = sessionStorage.getItem('affiliateId');
-		const stepCompleted = this.adminService.getSessionStepsCompleted();
+		const stepCompleted = this.adminService.getLocalStepsCompleted();
 
 		let currentYear: number = (new Date()).getFullYear();
 		//days
@@ -109,15 +109,15 @@ export class AffiliateStep3Component implements OnInit {
 		if (this.affiliateId) {
 			if (stepCompleted.includes('3')) {
 				// get data for editing using API
-				this.stateManagementService.setprogressBar(true);
+				// this.stateManagementService.setprogressBar(true);
 				this.adminService.getInsuranceDetail(this.affiliateId)
 					.pipe(
 						catchError(err => {
-							this.stateManagementService.setprogressBar(false);
+							// this.stateManagementService.setprogressBar(false);
 							return throwError(err);
 						})
 					).subscribe(({ data }: any) => {
-						this.stateManagementService.setprogressBar(false);
+						// this.stateManagementService.setprogressBar(false);
 						this.insCertificateImage = data.insCertificate.image;
 						this.insuranceCardImage = data.insuranceCard.image;
 
@@ -192,7 +192,7 @@ export class AffiliateStep3Component implements OnInit {
 	}
 
 	vehicleOfficialImagesChange(event, imageType, imageId) {
-		this.stateManagementService.setprogressBar(true);
+		// this.stateManagementService.setprogressBar(true);
 		const reader = new FileReader();
 		if (event.target.files && event.target.files.length) {
 			const [file] = event.target.files;
@@ -202,7 +202,7 @@ export class AffiliateStep3Component implements OnInit {
 				this.adminService.uploadVehicleImage(this.imageSrc)
 					.pipe(
 						catchError(err => {
-							this.stateManagementService.setprogressBar(false);
+							// this.stateManagementService.setprogressBar(false);
 							return throwError(err);
 						})
 					)
@@ -229,7 +229,7 @@ export class AffiliateStep3Component implements OnInit {
 								break;
 							}
 						}
-						this.stateManagementService.setprogressBar(false);
+						// this.stateManagementService.setprogressBar(false);
 					});
 			};
 		}
@@ -282,8 +282,8 @@ export class AffiliateStep3Component implements OnInit {
 		if (this.addInsuranceForm.invalid) {
 			return;
 		}
-		this.adminService.setSessionStepsCompleted(3)
-		this.addInsuranceForm.value.stepCompleted = this.adminService.getSessionStepsCompleted();
+		this.addInsuranceForm.value.stepCompleted =
+			this.adminService.getUpdatedStepsLocal("3");
 		this.spinner.show();
 		this.disableSubmitButton = true; //disable submit button
 
@@ -300,10 +300,7 @@ export class AffiliateStep3Component implements OnInit {
 				this.disableSubmitButton = false; //enable submit button
 
 				if (success.success == true) {
-					this.adminService.setSessionStepsCompleted('3');
-				}
-				if (success.errors || success.error) {
-					this.adminService.unsetSessionStepsCompleted(3)
+					this.adminService.updateStepsLocal("3");
 				}
 
 

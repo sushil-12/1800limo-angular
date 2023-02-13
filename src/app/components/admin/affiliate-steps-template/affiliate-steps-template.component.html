@@ -1,7 +1,7 @@
 <main>
 	<ngx-spinner></ngx-spinner>
 	<div class="md-stepper-horizontal orange" tabindex="-1">
-		<a class="md-step" [ngClass]="affiliateId=='' ? 'md-step' : 'md-step'" [className]="step0"
+		<a class="md-step step0" [ngClass]="affiliateId=='' ? 'md-step' : 'md-step'" [className]="step0"
 			[routerLinkActive]="['active']" (click)="stepClicked(0)" routerLink="/admin/affiliate/step0">
 			<div class="md-step-circle"><span>0</span></div>
 			<div class="md-step-title">Step 0</div>
