@@ -103,8 +103,6 @@
 					</mat-slide-toggle>
 				</div>
 			</div>
-
-
 			<!-- Rate Amount -->
 			<div id="rate-amount" class="col-auto" *ngIf="sub_item.key !== 'Minimum_Rate'">
 				<div class="rate-amount text-2xl font-weight-bolder text-right">
@@ -254,27 +252,13 @@
 			</div>
 			<div class="col-auto" *ngIf="item.key === 'taxes'" [formGroupName]="sub_item.key">
 				<!-- Matslide Toggle -->
-				<div class="d-block d-md-none d-lg-block">
+				<div class="d-block">
 					<mat-slide-toggle
 						[checked]="sub_item?.value?.controls?.type?.value == 'percent'"
 						(change)="changeValue('ReturnRatesForm', item.key, sub_item.key, 'type', $event.checked ? 'percent' : 'flat')">
 						<i class="bi mx-1"
 							[ngClass]="sub_item?.value?.controls?.type?.value === 'flat' ? 'bi-currency-dollar' : 'bi-percent'"></i>
 					</mat-slide-toggle>
-				</div>
-				<!-- Flat | Percent -->
-				<div class="d-none d-md-block d-lg-none">
-					<div>
-						<mat-form-field appearance="outline" class="m-0">
-							<mat-label>
-								Rate Type
-							</mat-label>
-							<mat-select formControlName="type">
-								<mat-option value="flat"> Flat </mat-option>
-								<mat-option value="percent"> Percentage </mat-option>
-							</mat-select>
-						</mat-form-field>
-					</div>
 				</div>
 			</div>
 			<!-- Rate Amount -->

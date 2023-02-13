@@ -42,7 +42,6 @@ export class DailyBookingsComponent implements OnInit
 	public bookingStatusColor: string;
 	public startDate: string;
 	public endDate: string;
-	public date: Date;
 	// public returnRepeatForm: FormGroup;
 	public changeStatusForm: FormGroup;
 	public sendEmailForm: FormGroup;
@@ -67,31 +66,22 @@ export class DailyBookingsComponent implements OnInit
 
 	ngOnInit(): void
 	{
-		this.activatedRoute.queryParams.subscribe((params: any) =>
+		this.resetDates()
+
+		// Override Start Date
+		if (this.adminService.checkCookie('startDate'))
 		{
-			// if (Object.keys(params).length != 0)
-			// {
-			// 	this.startDate = params.startDate;
-			// 	this.endDate = params.endDate;
-			// } else
-			// {
-			this.date = new Date();
-			this.date.setDate(this.date.getDate() - 7);
-			this.startDate = this.date.toISOString().substring(0, 10);
-			this.date.setDate(this.date.getDate() + 14);
-			this.endDate = this.date.toISOString().substring(0, 10);
+			this.startDate = this.adminService.getCookie('startDate');
+		}
 
-			// this.router.navigate([], {
-			// 	queryParams: {
-			// 		startDate: this.startDate,
-			// 		endDate: this.endDate,
-			// 	},
-			// 	queryParamsHandling: "merge",
-			// });
-			// }
-		});
+		// Override End Date
+		if (this.adminService.checkCookie('endDate'))
+		{
+			this.endDate = this.adminService.getCookie('endDate');
+		}
 
-		this.loadBookings();
+
+		this.loadBookings(null, this.startDate, this.endDate, null);
 
 		//change status booking form validation
 		this.changeStatusForm = this.formBuilder.group({
@@ -104,6 +94,21 @@ export class DailyBookingsComponent implements OnInit
 			reservation_id: ["", Validators.required],
 			emailTarget: ["", Validators.required],
 		});
+	}
+
+	/**
+	 * Configure date as per todays date and the future +7 days
+	 */
+	resetDates()
+	{
+		let date = new Date();
+
+		date.setDate(date.getDate() - 7);
+		this.startDate = date.toISOString().substring(0, 10);
+		date.setDate(date.getDate() + 14);
+		this.endDate = date.toISOString().substring(0, 10);
+
+		console.log('Dates reset Successfully. ');
 	}
 
 	messageField(format)
@@ -183,12 +188,11 @@ export class DailyBookingsComponent implements OnInit
 		});
 	}
 
-	loadBookings(pageUrl = null, keyword: string = '')
+	loadBookings(pageUrl = null, start_date: string, end_date: string, search_value: string = '')
 	{
-		/** spinner starts on init */
-		keyword == '' && this.bookings?.length && this.spinner.show();
+		// search_value != '' && this.spinner.show();
 		// Load Our bookings using API
-		this.adminService.loadBookings(pageUrl, this.startDate, this.endDate, keyword).then((result) =>
+		this.adminService.loadBookings(pageUrl, start_date, end_date, search_value ?? '').then((result) =>
 		{
 			this.bookingsRes = result;
 			this.bookings = this.bookingsRes.data.data;
@@ -204,12 +208,8 @@ export class DailyBookingsComponent implements OnInit
 			this.lastPageUrl = this.bookingsRes.data.last_page_url;
 			this.prevPageUrl = this.bookingsRes.data.prev_page_url;
 			this.nextPageUrl = this.bookingsRes.data.next_page_url;
-			this.spinner.hide(); //hide spinner
+			this.spinner.hide();
 		})
-			.catch((err) =>
-			{
-				this.spinner.hide(); //hide spinner
-			});
 	}
 
 	show = false;
@@ -252,14 +252,7 @@ export class DailyBookingsComponent implements OnInit
 
 	changeDate(dateType, date)
 	{
-		if (dateType == "startDate")
-		{
-			console.log(date, "check date format...............");
-			this.startDate = date;
-		} else
-		{
-			this.endDate = date;
-		}
+		this[dateType] = date
 	}
 
 	enableDisableClicked(event, id)
@@ -313,8 +306,7 @@ export class DailyBookingsComponent implements OnInit
 		this.spinner.show();
 		// this.disableSubmitButton=true; //disable submit button
 
-		this.adminService
-			.changeStatusBooking(this.changeStatusForm.value)
+		this.adminService.changeStatusBooking(this.changeStatusForm.value)
 			.pipe(
 				catchError((err) =>
 				{
@@ -328,7 +320,7 @@ export class DailyBookingsComponent implements OnInit
 				if (success == true)
 				{
 					$("#change_status_booking_Modal").modal("hide");
-					this.loadBookings()
+					this.loadBookings(null, this.startDate, this.endDate)
 					// this.router
 					// 	.navigateByUrl("/RefreshComponent", {
 					// 		skipLocationChange: true,
@@ -458,5 +450,26 @@ export class DailyBookingsComponent implements OnInit
 			this.spinner.hide();
 			this.bookingPreview = response.data;
 		})
+	}
+
+
+	timer: any
+	searchInBookings(search_value: string)
+	{
+		clearTimeout(this.timer);
+		this.timer = setTimeout(() =>
+		{
+			this.loadBookings(null, this.startDate, this.endDate, search_value)
+		}, 800)
+	}
+
+	handleKeypressEvents()
+	{
+		clearTimeout(this.timer)
+	}
+
+	saveCookie(key: string, value: string)
+	{
+		this.adminService.setCookie(key, value, 30);
 	}
 }

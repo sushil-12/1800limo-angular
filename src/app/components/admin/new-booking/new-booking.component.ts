@@ -46,7 +46,7 @@ export class NewBookingComponent implements OnInit
 			let year = new Date().getFullYear();
 			while (i <= 15)
 			{
-				arr.push(year - i);
+				arr.push(year + i);
 				i++;
 			}
 			return arr
@@ -834,12 +834,13 @@ export class NewBookingComponent implements OnInit
 			{
 				this.VehicleList = response.data.vehicleList
 				// add a key with formatted name to every value
-				this.VehicleList.map((item: any) => item['formatted_name'] = `${item.make} (${item.model})`);
+				this.VehicleList.map((item: any) => item['formatted_name'] = `${item.vehicleType} - ${item.make} (${item.model})`);
 
 				// autofill data
 				if (this.VehicleList.length == 1)
 				{
-					this.SetFormValue('vehicle_type', this.VehicleList[0].ID);
+					let vehicle_type_id = this.BigData['vehicleCategories'].find(item => item.name == this.VehicleList[0].vehicleType)['id']
+					this.SetFormValue('vehicle_type', vehicle_type_id)
 					this.SetFormValue('vehicle_id', this.VehicleList[0].ID);
 					this.autofillData('vehicle', this.VehicleList[0]);
 				}
@@ -1239,6 +1240,7 @@ export class NewBookingComponent implements OnInit
 	uploadImage(event: any, image_type: string)
 	{
 		let image: any
+		console.log(event.target.files)
 		if (event.target.files && event.target.files.length > 0)
 		{
 			const reader = new FileReader()
