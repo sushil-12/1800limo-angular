@@ -7,7 +7,6 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { Ng2TelInputModule } from 'ng2-tel-input';//for country code list
-import { NgxPrintModule } from 'ngx-print';// to print psf
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -98,9 +97,11 @@ import { BookingDetailsComponent } from './booking-details/booking-details.compo
 import { NewBookingComponent } from './new-booking/new-booking.component';
 import { RatesFormComponent } from './rates-form/rates-form.component';
 import { FinalizeBookingComponent } from './finalize-booking/finalize-booking.component';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
-	declarations: [AdminComponent,
+	declarations: [
+		AdminComponent,
 		MasterVehicleTypesComponent,
 		DailyBookingsComponent,
 		// CreateNewBookingComponent,
@@ -188,13 +189,12 @@ import { FinalizeBookingComponent } from './finalize-booking/finalize-booking.co
 		Ng2TelInputModule,
 		AgmCoreModule,
 		AgmDirectionModule,
-		NgxPrintModule,
 		MatFormFieldModule,
 		MatInputModule,
 		MatSelectModule,
 		SharedModule,
-		MatRadioModule
-
+		MatRadioModule,
+		NgSelectModule
 	],
 	exports: [BookingStatusTextReplacePipe]
 })

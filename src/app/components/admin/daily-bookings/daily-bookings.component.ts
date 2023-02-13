@@ -76,8 +76,9 @@ export class DailyBookingsComponent implements OnInit
 			// } else
 			// {
 			this.date = new Date();
+			this.date.setDate(this.date.getDate() - 7);
 			this.startDate = this.date.toISOString().substring(0, 10);
-			this.date.setDate(this.date.getDate() + 7);
+			this.date.setDate(this.date.getDate() + 14);
 			this.endDate = this.date.toISOString().substring(0, 10);
 
 			// this.router.navigate([], {
@@ -182,34 +183,29 @@ export class DailyBookingsComponent implements OnInit
 		});
 	}
 
-	loadBookings(pageUrl = null)
+	loadBookings(pageUrl = null, keyword: string = '')
 	{
 		/** spinner starts on init */
-		this.spinner.show();
-
-		var keyword = (document.getElementById("keyword") as HTMLInputElement)
-			.value;
+		keyword == '' && this.bookings?.length && this.spinner.show();
 		// Load Our bookings using API
-		this.adminService
-			.loadBookings(pageUrl, keyword, this.startDate, this.endDate)
-			.then((result) =>
-			{
-				this.bookingsRes = result;
-				this.bookings = this.bookingsRes.data.data;
-				this.totalRecords = this.bookingsRes.data.total;
-				this.firstPage = 1;
-				this.lastPage = this.bookingsRes.data.last_page;
-				this.totalPage = this.bookingsRes.data.last_page;
-				this.currentPage = this.bookingsRes.data.current_page;
-				this.from = this.bookingsRes.data.from;
-				this.to = this.bookingsRes.data.to;
-				this.path = this.bookingsRes.data.path;
-				this.firstPageUrl = this.bookingsRes.data.first_page_url;
-				this.lastPageUrl = this.bookingsRes.data.last_page_url;
-				this.prevPageUrl = this.bookingsRes.data.prev_page_url;
-				this.nextPageUrl = this.bookingsRes.data.next_page_url;
-				this.spinner.hide(); //hide spinner
-			})
+		this.adminService.loadBookings(pageUrl, this.startDate, this.endDate, keyword).then((result) =>
+		{
+			this.bookingsRes = result;
+			this.bookings = this.bookingsRes.data.data;
+			this.totalRecords = this.bookingsRes.data.total;
+			this.firstPage = 1;
+			this.lastPage = this.bookingsRes.data.last_page;
+			this.totalPage = this.bookingsRes.data.last_page;
+			this.currentPage = this.bookingsRes.data.current_page;
+			this.from = this.bookingsRes.data.from;
+			this.to = this.bookingsRes.data.to;
+			this.path = this.bookingsRes.data.path;
+			this.firstPageUrl = this.bookingsRes.data.first_page_url;
+			this.lastPageUrl = this.bookingsRes.data.last_page_url;
+			this.prevPageUrl = this.bookingsRes.data.prev_page_url;
+			this.nextPageUrl = this.bookingsRes.data.next_page_url;
+			this.spinner.hide(); //hide spinner
+		})
 			.catch((err) =>
 			{
 				this.spinner.hide(); //hide spinner
@@ -406,5 +402,61 @@ export class DailyBookingsComponent implements OnInit
 	FormatTime(time: string)
 	{
 		return moment(time, "HH:mm:ss").format("LT");
+	}
+
+
+	dateFormat(value: any)
+	{
+		return moment(value, 'YYYY-MM-DD').format('ll')
+	}
+
+	dateFormat2(value: any)
+	{
+		return moment(value, 'YYYY-MM-DD').format('L')
+	}
+
+	timeFormat(value: any)
+	{
+		if (value.toUpperCase() == '12:00 AM')
+		{
+			return '0000 h'
+		}
+		let hours = moment(moment(value, 'hh:mm a').format('HH'), 'HH').hours();
+		let mins = moment(value, 'hh:mm a').minutes().toString();
+		if (Number(mins) == 0 || Number(mins) < 10)
+		{
+			mins = '0' + mins.toString();
+		}
+
+		return hours < 10 ? '0' + hours.toString() + mins.toString() + ' h' : hours.toString() + mins.toString() + ' h'
+		//return value.replace(':', '').substring(0, 5) + 'h';
+	}
+
+	timeFormat2(value: string)
+	{
+		return moment(value, 'HH:mm a').format('h:mm a');
+	}
+
+	textFormatter(text: string)
+	{
+		try
+		{
+			return text.replace(/[\\\_$]+/g, ' ')
+		}
+		catch
+		{
+			return text
+		}
+	}
+
+	bookingPreview: any
+	showBookingPreviewModal(booking_id: number)
+	{
+		this.spinner.show();
+		this.adminService.getBookingPreview(booking_id).subscribe((response: any) =>
+		{
+			this.spinner.hide();
+			this.bookingPreview = response.data;
+		})
 	}
 }

@@ -926,12 +926,17 @@ export class AdminService
 		return this.httpClient.get(`${this.serverUrl}get-reservation/${reservation_id}/${updateType}`);
 	}
 
+	getBookingPreview(reservation_id: number)
+	{
+		return this.httpClient.get(`${this.serverUrl}admin/getBookingPreview/${reservation_id}`);
+	}
+
 	adminNotification(data)
 	{
 		return this.httpClient.post(this.serverUrl + 'admin-notification-daily-booking', data);
 	}
 
-	loadBookings(url, keyword, startDate, endDate)
+	loadBookings(url, startDate, endDate, keyword = '')
 	{
 		var path;
 		if (url)

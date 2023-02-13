@@ -7,6 +7,8 @@ import { throwError } from 'rxjs';
 import { CustomvalidationService } from 'src/app/services/customvalidation.service';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 
+import { environment } from 'src/environments/environment';
+
 @Component({
 	selector: 'app-login',
 	templateUrl: './login.component.html',
@@ -224,7 +226,7 @@ export class LoginComponent implements OnInit, AfterViewInit
 				var userId = this.response.data.id;
 				sessionStorage.setItem('userId', '' + userId);
 
-				if (!window.location.hostname.includes('1800limo'))
+				if (environment['environmentName'] !== 'Production')
 				{
 					this.router.navigateByUrl('/otp' + `?otp=${result.data.otp}`);
 				} else

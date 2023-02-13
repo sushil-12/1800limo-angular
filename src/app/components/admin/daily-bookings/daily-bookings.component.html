@@ -2,18 +2,18 @@
 <main>
 	<!-- Main page content-->
 	<section class="adminbox_shadow user_information">
-		<h2 class="headinginfo"> My Bookings </h2>
+		<h2 class="headinginfo"> Daily Bookings </h2>
 		<div class="containeredd mt-1 ">
-			<div class="row my-2 align-items-center justify-content-around">
+			<div class="row my-2 align-items-center">
 				<!-- Start-Date -->
 				<div class="col-sm-4 col-md-3 my-2">
-					<mat-form-field appearance="outline" class="m-0">
+					<mat-form-field appearance="outline" class="m-0 text-xl">
 						<mat-label>
 							Start Date <span class="asterisk"> * </span>
 						</mat-label>
 						<input matInput [setOutputDateFormat]="outputDateFormat"
 							[matDatepicker]="picker1" placeholder="Start Date" id="id_4"
-							(dateChangeWithFormat)="changeDate('startDate',$event)"
+							(dateChangeWithFormat)="changeDate('startDate', $event)"
 							(click)="picker1.open()" [value]="startDate" [max]="endDate" />
 						<mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
 						<mat-datepicker #picker1></mat-datepicker>
@@ -35,20 +35,23 @@
 					</mat-form-field>
 				</div>
 
-				<!-- Search Input -->
-				<div class="col-sm-2 col-md-3 my-2">
-					<mat-form-field appearance="outline" class="m-0">
-						<mat-label> Search </mat-label>
-						<input matInput type="text" placeholder="Search by Date, Name or keyword"
-							id="keyword">
-					</mat-form-field>
-				</div>
-
 				<!-- Search Button -->
-				<div class="col-sm-1 col-md-3 text-right text-lg-left">
+				<div class="col-sm-3">
 					<button class="custom-filled-button orange-button" (click)="loadBookings()">
 						Search
 					</button>
+				</div>
+			</div>
+			<div class="row my-2 mb-3">
+				<div class="col-md-12">
+					<div id="search-field">
+						<mat-form-field appearance="outline" class="m-0">
+							<input matInput type="text"
+								(keyup)="loadBookings(null, $event.target.value)"
+								placeholder="Search by Booking Id, Pax Name, Pickup, Dropoff, Phone, Status, Vehicle Type"
+								id="keyword">
+						</mat-form-field>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -74,7 +77,9 @@
 							</thead>
 							<tbody>
 								<tr role="row" class="odd" *ngFor="let booking of bookings">
-									<td class="text-center font-weight-bolder">
+									<td class="text-center font-weight-bolder cursor-pointer text-underline"
+										data-toggle="modal" data-target="#previewBookingOnID"
+										(click)="showBookingPreviewModal(booking.booking_id)">
 										{{ booking.booking_id }}
 									</td>
 									<td class="sorting_1">
@@ -241,9 +246,6 @@
 		<div class="modal-content user_inforamtion">
 			<div class="modal-header pb-0">
 				<h3 class="mb-0" id="exampleModalLabel">Change Booking Status</h3>
-				<!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-<span aria-hidden="true">&times;</span>
-</button> -->
 			</div>
 			<div class="modal-body">
 				<form [formGroup]="changeStatusForm">
@@ -285,9 +287,6 @@
 		<div class="modal-content">
 			<div class="modal-header pb-0">
 				<h3 class="mb-0">Email</h3>
-				<!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-<span aria-hidden="true">&times;</span>
-</button> -->
 			</div>
 			<div class="modal-body text-center">
 				<p>Are you sure, You want to send email?</p>
@@ -489,6 +488,490 @@
 			<div class="modal-footer py-0">
 				<button type="button" class="custom-btn button2" data-dismiss="notificationModal"
 					id="closeModal1">OK</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- booking periview -->
+<div class="modal fade" id="previewBookingOnID" tabindex="-1" aria-labelledby="previewBookingLabel"
+	aria-hidden="true">
+	<div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h3 class="modal-title">
+					Preview Booking
+				</h3>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+
+
+			<div class="modal-body" style="font-family: 'PT Serif', serif;">
+				<div class="container text-lg" *ngIf="bookingPreview">
+					<!-- Booking Type -->
+					<h4 class="font-weight-bolder m-0">
+						Booking Type
+					</h4>
+					<!-- Travel Info. -->
+					<div class="row p-2">
+						<div class="col-md-4 key">
+							<span>
+								Booking Information
+							</span>
+						</div>
+						<div class="col-md-8 value">
+							<span class="font-weight-bolder">
+								{{ textFormatter(bookingPreview.service_type) | titlecase }}
+								/
+								{{ textFormatter(bookingPreview.transfer_type) | titlecase }}
+								<span class="font-weight-bolder"
+									*ngIf="bookingPreview.service_type == 'round_trip'">
+									/ {{ textFormatter(bookingPreview.return_transfer_type) |
+									titlecase
+									}}
+								</span>
+							</span>
+						</div>
+					</div>
+
+					<!-- Driver Information -->
+					<h4 class="font-weight-bolder m-0 mt-3">
+						Driver Information
+					</h4>
+					<!-- Driver Name -->
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Name
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ textFormatter(bookingPreview.driver_name) | titlecase }}
+								</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Driver Email -->
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Email
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ textFormatter(bookingPreview.driver_email) }}
+								</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Driver Cell -->
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Phone
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									({{ bookingPreview.driver_cell_isd }}) {{
+									bookingPreview.driver_cell }}
+								</span>
+							</div>
+						</div>
+					</div>
+
+
+					<!-- Passenger Information -->
+					<h4 class="font-weight-bolder m-0 mt-3">
+						Passenger Information
+					</h4>
+
+					<!-- Passenger > Name -->
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Name
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ textFormatter(bookingPreview.passenger_name) }}
+								</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Passenger > Email -->
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Email
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ textFormatter(bookingPreview.passenger_email) }}
+								</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Passenger > Phone -->
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Phone
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									({{ bookingPreview.passenger_cell_isd }})
+									{{ textFormatter(bookingPreview.passenger_cell) }}
+								</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Travel Information -->
+					<h4 class="font-weight-bolder m-0 mt-3">
+						Travel Information
+					</h4>
+
+					<!-- Number of Hours -->
+					<div class="mx-2" *ngIf="bookingPreview.service_type == 'charter_tour'">
+						<div class="row">
+							<div class="col-md-4 key">
+								<span>
+									Booking Hours
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ bookingPreview.number_of_hours }}
+								</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- ################ Pickup ################### -->
+					<h5 class="p-2 m-0 text-xl">
+						Pickup Details
+					</h5>
+					<!-- Pickup > Date -->
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Date
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ dateFormat2(bookingPreview.pickup_date) }}
+									|
+									{{ dateFormat(bookingPreview.pickup_date) }}
+								</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Pickup > Time -->
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Time
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ timeFormat2(bookingPreview.pickup_time) }}
+									|
+									{{ timeFormat(bookingPreview.pickup_time) }}
+								</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Pickup > City Details -->
+					<div class="mx-2"
+						*ngIf="bookingPreview.transfer_type.includes('city_') || bookingPreview.transfer_type.includes('cruise_')">
+						<div class="row m-0">
+							<div class="col-md-4">
+								<span>
+									Address
+								</span>
+							</div>
+							<div class="col-md-8">
+								<span class="font-weight-bolder">
+									{{ textFormatter(bookingPreview.pickup) }}
+								</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Pickup > Airline Details -->
+					<div class="mx-2" *ngIf="bookingPreview.transfer_type.includes('airport_')">
+						<!-- Airport -->
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Airport
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ textFormatter(bookingPreview.pickup_airport_name) }}
+								</span>
+							</div>
+						</div>
+						<!-- Airport -->
+						<!-- Airline -->
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Airline
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ textFormatter(bookingPreview.pickup_airline_name) }}
+								</span>
+							</div>
+						</div>
+						<!-- Airline -->
+						<!-- Flight Number -->
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Flight Number
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ textFormatter(bookingPreview.pickup_flight) }}
+								</span>
+							</div>
+						</div>
+						<!-- Flight Number -->
+					</div>
+
+					<!-- Pickup > Cruise Details -->
+					<div class="mx-2" *ngIf="bookingPreview.transfer_type.includes('cruise_')">
+						<!-- Cruise Port -->
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Cruise Port
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ textFormatter(bookingPreview.cruise_port) | titlecase }}
+								</span>
+							</div>
+						</div>
+						<!-- Cruise Port -->
+						<!-- Cruise Name -->
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Cruise Name
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ textFormatter(bookingPreview.cruise_name) | titlecase }}
+								</span>
+							</div>
+						</div>
+						<!-- Cruise Name -->
+						<!-- Cruise Time -->
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Cruise Time
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ textFormatter(bookingPreview.cruise_time) | titlecase }}
+								</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Extra Stops -->
+					<div
+						*ngIf="bookingPreview.extra_stops && bookingPreview.extra_stops.length > 0">
+						<h5 class="p-2 m-0 text-xl">
+							Extra Stops
+						</h5>
+						<div class="mx-2"
+							*ngFor="let stop of bookingPreview.extra_stops; index as stop_index">
+							<div class="row m-0 mx-2">
+								<div class="col-md-4 key">
+									<span>
+										Stop {{ stop_index + 1 }}
+									</span>
+								</div>
+								<div class="col-md-8 value">
+									<span class="font-weight-bolder">
+										{{ stop.address }}
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<hr style="width: 50%; margin: 1rem auto; border: 1.3px solid #aeaeae;"
+						*ngIf="bookingPreview.extra_stops && bookingPreview.extra_stops.length == 0" />
+
+					<!-- ############# Dropoff ################# -->
+					<h5 class="px-2 m-1 text-xl">
+						Drop Off Details
+					</h5>
+					<!-- Dropoff > City Details -->
+					<div class="mx-2"
+						*ngIf="bookingPreview.transfer_type.includes('_city') || bookingPreview.transfer_type.includes('_cruise')">
+						<div class="row p-2">
+							<div class="col-md-4 key">
+								<span>
+									Address
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ textFormatter(bookingPreview.dropoff) }}
+								</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Dropoff > Airline Details -->
+					<div class="mx-2" *ngIf="bookingPreview.transfer_type.includes('_airport')">
+						<!-- Airport -->
+						<div class="row p-2">
+							<div class="col-md-4 key">
+								<span>
+									Airport
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ textFormatter(bookingPreview.dropoff_airport_name ) }}
+								</span>
+							</div>
+						</div>
+						<!-- Airport -->
+						<!-- Airline -->
+						<div class="row p-2">
+							<div class="col-md-4 key">
+								<span>
+									Airline
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ textFormatter(bookingPreview.dropoff_airline_name) }}
+								</span>
+							</div>
+						</div>
+						<!-- Airline -->
+						<!-- Flight Number -->
+						<div class="row p-2">
+							<div class="col-md-4 key">
+								<span>
+									Flight Number
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ textFormatter(bookingPreview.dropoff_flight) }}
+								</span>
+							</div>
+						</div>
+						<!-- Flight Number -->
+					</div>
+
+					<!-- Dropoff > Cruise Details -->
+					<div class="mx-2" *ngIf="bookingPreview.transfer_type.includes('_cruise')">
+						<!-- Cruise Port -->
+						<div class="row p-2">
+							<div class="col-md-4 key">
+								<span>
+									Cruise Port
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ textFormatter(bookingPreview.cruise_port) | titlecase }}
+								</span>
+							</div>
+						</div>
+						<!-- Cruise Port -->
+						<!-- Cruise Name -->
+						<div class="row p-2">
+							<div class="col-md-4 key">
+								<span>
+									Cruise Name
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ textFormatter(bookingPreview.cruise_name) | titlecase }}
+								</span>
+							</div>
+						</div>
+						<!-- Cruise Name -->
+						<!-- Cruise Time -->
+						<div class="row p-2">
+							<div class="col-md-4 key">
+								<span>
+									Cruise Time
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ textFormatter(bookingPreview.cruise_time) }}
+								</span>
+							</div>
+						</div>
+						<!-- Cruise Time -->
+					</div>
+				</div>
+			</div>
+
+
+
+			<div class="modal-footer justify-content-end">
+				<button type="button" class="custom-filled-back-button" data-dismiss="modal">
+					Close
+				</button>
+
 			</div>
 		</div>
 	</div>

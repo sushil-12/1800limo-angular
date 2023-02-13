@@ -47,6 +47,7 @@
 					</div>
 				</div>
 			</div>
+
 			<!-- Distance Value -->
 			<div class="col-auto"
 				*ngIf="sub_item.key === 'Kilometer_Rate' || sub_item.key === 'Milage_Rate'">
@@ -61,8 +62,9 @@
 					</mat-form-field>
 				</div>
 			</div>
+
 			<!-- Hours -->
-			<div class="col-auto" *ngIf="hours != 0 && item.key === 'all_inclusive_rates'">
+			<div class="col-auto" *ngIf="hours != 0 && sub_item.key === 'Base_Rate'">
 				<div>
 					<mat-form-field appearance="outline" class="m-0">
 						<mat-label>
@@ -74,9 +76,25 @@
 					</mat-form-field>
 				</div>
 			</div>
-			<div class="col-auto" *ngIf="item.key === 'taxes'">
+
+			<!-- Admin Share -->
+			<div class="col-3" *ngIf="sub_item.key === 'Base_Rate'">
+				<div>
+					<mat-form-field appearance="outline" class="m-0">
+						<mat-label>
+							Admin Share {{ admin_share }} %
+						</mat-label>
+						<input type="number" matInput placeholder="0" [value]="calc_admin_share"
+							style="cursor: not-allowed"
+							class="font-weight-bolder rate-input-field text-right" readonly />
+					</mat-form-field>
+				</div>
+			</div>
+
+			<!-- Flat | Percent -->
+			<div class="col-2" *ngIf="item.key === 'taxes'">
 				<!-- Matslide Toggle -->
-				<div class="d-block d-md-none d-lg-block">
+				<div class="d-block">
 					<mat-slide-toggle
 						[checked]="sub_item?.value?.controls?.type?.value == 'percent'"
 						(change)="changeValue('RatesForm', item.key, sub_item.key, 'type', $event.checked ? 'percent' : 'flat')">
@@ -84,21 +102,9 @@
 							[ngClass]="sub_item?.value?.controls?.type?.value === 'flat' ? 'bi-currency-dollar' : 'bi-percent'"></i>
 					</mat-slide-toggle>
 				</div>
-				<!-- Flat | Percent -->
-				<div class="d-none d-md-block d-lg-none">
-					<div [formGroupName]="sub_item.key">
-						<mat-form-field appearance="outline" class="m-0">
-							<mat-label>
-								Rate Type
-							</mat-label>
-							<mat-select formControlName="type">
-								<mat-option value="flat"> Flat </mat-option>
-								<mat-option value="percent"> Percentage </mat-option>
-							</mat-select>
-						</mat-form-field>
-					</div>
-				</div>
 			</div>
+
+
 			<!-- Rate Amount -->
 			<div id="rate-amount" class="col-auto" *ngIf="sub_item.key !== 'Minimum_Rate'">
 				<div class="rate-amount text-2xl font-weight-bolder text-right">
@@ -217,6 +223,21 @@
 					</div>
 				</div>
 			</div>
+
+			<!-- Admin Share -->
+			<div class="col-3" *ngIf="sub_item.key === 'Base_Rate'">
+				<div>
+					<mat-form-field appearance="outline" class="m-0">
+						<mat-label>
+							Admin Share {{ admin_share }} %
+						</mat-label>
+						<input type="number" matInput placeholder="0" [value]="r_calc_admin_share"
+							style="cursor: not-allowed"
+							class="font-weight-bolder rate-input-field text-right" readonly />
+					</mat-form-field>
+				</div>
+			</div>
+
 			<!-- Distance Value -->
 			<div class="col-auto"
 				*ngIf="sub_item.key === 'Kilometer_Rate' || sub_item.key === 'Milage_Rate'">

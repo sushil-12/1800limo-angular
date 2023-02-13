@@ -20,6 +20,7 @@
 				Booking Type
 			</h2>
 			<div class="row px-4">
+				<!-- Service Type -->
 				<div class="flex-grow-1 m-2">
 					<div>
 						<mat-form-field appearance="outline">
@@ -36,13 +37,15 @@
 						</mat-form-field>
 					</div>
 				</div>
+
+				<!-- Transfer Type -->
 				<div class="flex-grow-1 m-2">
 					<div>
 						<mat-form-field appearance="outline">
 							<mat-label class="">
 								Transfer Type
 							</mat-label>
-							<mat-select formControlName="transfer_type">
+							<mat-select formControlName="transfer_type" class="font-weight-bolder">
 								<mat-option [value]="tf_type" class="font-weight-bolder"
 									*ngFor="let tf_type of booking_params.transfer_types">
 									{{ textFormatter(tf_type) | titlecase }}
@@ -51,6 +54,8 @@
 						</mat-form-field>
 					</div>
 				</div>
+
+				<!-- Return Transfer Type -->
 				<div class="flex-grow-1 m-2" *ngIf="Form.service_type.value == 'round_trip'">
 					<div>
 						<mat-form-field appearance="outline">
@@ -66,6 +71,8 @@
 						</mat-form-field>
 					</div>
 				</div>
+
+				<!-- Hours -->
 				<div class="flex-grow-1 m-2" *ngIf="Form.service_type.value == 'charter_tour'">
 					<div>
 						<mat-form-field appearance="outline">
@@ -88,6 +95,7 @@
 			<h2>
 				Client Accounts
 			</h2>
+
 			<!-- Account Type -->
 			<div class="row">
 				<div class="col-md-12 col-lg-10">
@@ -186,7 +194,7 @@
 											This field is required
 										</p>
 										<p class="text-danger text-lg m-0"
-											*ngIf="LooseCustomer.email.errors?.pattern">
+											*ngIf="LooseCustomer.email.errors?.pattern || LooseCustomer.email.errors?.domain">
 											Please enter a valid Email Id
 										</p>
 									</div>
@@ -196,7 +204,7 @@
 							<!-- Phone -->
 							<div class="col-md-4 my-2">
 								<mat-form-field appearance="outline" class="mat-custom-phone">
-									<mat-label class="">
+									<mat-label class="required-field">
 										Phone
 									</mat-label>
 									<input matInput placeholder="Phone" formControlName="phone"
@@ -369,10 +377,11 @@
 			<ng-template #OtherAccountsSection>
 				<div class="row px-4">
 					<div class="col-md-12">
-						<mat-form-field appearance="outline">
+						<!-- <mat-form-field appearance="outline">
 							<mat-label>Choose User</mat-label>
-							<input type="text" id="userField" placeholder="Choose User"
+							<input #searchInput type="text" id="userField" placeholder="Choose User"
 								(focus)="$event.target.select()" matInput
+								(click)="openAutoCompletePanel()"
 								(keyup)="searchAccountType($event.target.value)"
 								[value]="fillValue(filteredAccountTypes, 'acc_id', 'name')"
 								[matAutocomplete]="chooseuseratcmplt" />
@@ -384,22 +393,14 @@
 									</mat-option>
 								</div>
 							</mat-autocomplete>
-						</mat-form-field>
-					</div>
+						</mat-form-field> -->
 
-					<!-- <div class="col-md-12">
-						<mat-form-field appearance="outline">
-							<mat-label class="">
-								Choose User
-							</mat-label>
-							<mat-select formControlName="acc_id" placeholder="Choose User"
-								(selectionChange)="chooseUser($event.value)">
-								<mat-option *ngFor="let user of ClientAccounts" [value]="user.id">
-									{{ user.name }}
-								</mat-option>
-							</mat-select>
-						</mat-form-field>
-					</div> -->
+						<!-- Ng-Select -->
+						<ng-select appearance="outline" [items]="ClientAccounts" bindLabel="name"
+							bindValue="id" placeholder="Select Client Account"
+							formControlName="acc_id">
+						</ng-select>
+					</div>
 				</div>
 
 				<!-- Chosen User Information -->
@@ -568,7 +569,7 @@
 			<!-- Only Visible in affiliate section -->
 			<div class="row px-4" *ngIf="Form.affiliate_type.value == 'affiliate'">
 				<div class="col-md-12">
-					<mat-form-field appearance="outline">
+					<!-- <mat-form-field appearance="outline">
 						<mat-label class="">
 							Choose Affiliate
 						</mat-label>
@@ -578,7 +579,13 @@
 								{{ user.name }}
 							</mat-option>
 						</mat-select>
-					</mat-form-field>
+					</mat-form-field> -->
+
+					<!-- Ng-Select -->
+					<ng-select appearance="outline" [items]="AffiliateAccounts" bindLabel="name"
+						bindValue="id" placeholder="Select Affiliate"
+						formControlName="affiliate_id">
+					</ng-select>
 				</div>
 			</div>
 
@@ -637,13 +644,14 @@
 					<!-- Vehicle Type -->
 					<div id="vehicle-type" class="my-2"
 						[ngClass]="Form.vehicle_type.value && !Form.vehicle_make.value ? 'col-md-6 col-xl-4' : Form.vehicle_make.value ? 'col-md-4 col-xl-3' : 'col-md-12'">
-						<mat-form-field appearance="outline">
+						<!-- <mat-form-field appearance="outline">
 							<mat-label>
 								Vehicle Type
 							</mat-label>
-							<input type="text" placeholder="Search for Vehicle Type"
+							<input #searchInput type="text" placeholder="Search for Vehicle Type"
 								aria-label="Vehicle Type" matInput (focus)="$event.target.select()"
 								(keyup)="searchValue('vehicleCategories', $event.target.value, 'name', 'vehicle_type')"
+								(click)="openAutoCompletePanel()"
 								[value]="fillValue(BigData?.vehicleCategories, 'vehicle_type', 'name')"
 								[matAutocomplete]="vehicletypeautoc">
 							<mat-autocomplete autoActiveFirstOption
@@ -653,34 +661,46 @@
 									{{ option.name }}
 								</mat-option>
 							</mat-autocomplete>
-						</mat-form-field>
+						</mat-form-field> -->
+
+						<!-- Ng-Select -->
+						<ng-select appearance="outline" [items]="BigData?.vehicleCategories"
+							bindLabel="name" bindValue="id" placeholder="Select Vehicle Category"
+							formControlName="vehicle_type">
+						</ng-select>
 					</div>
 
 					<!-- Make-Model -->
 					<div id="make-model" class="col-md-4 col-xl-3 my-2"
 						*ngIf="Form.affiliate_type.value !== 'loose_affiliate'">
-						<mat-form-field appearance="outline">
+						<!-- <mat-form-field appearance="outline">
 							<mat-label>
 								Vehicle
 							</mat-label>
 							<mat-select formControlName="vehicle_id">
-								<mat-option [value]="fillValue(VehicleList, 'vehicle_id', 'make')"
-									*ngFor="let option of VehicleList">
+								<mat-option [value]="option.id" *ngFor="let option of VehicleList">
 									{{ option.make}} ({{ option.model }})
 								</mat-option>
 							</mat-select>
-						</mat-form-field>
+						</mat-form-field> -->
+
+						<!-- Ng-Select - Vehicle ID -->
+						<ng-select appearance="outline" [items]="VehicleList"
+							bindLabel="formatted_name" bindValue="id" placeholder="Select Vehicle"
+							formControlName="vehicle_id">
+						</ng-select>
 					</div>
 
 					<!-- Make -->
 					<div id="make" class="my-2" *ngIf="Form.vehicle_type.value"
 						[ngClass]="Form.vehicle_make.value ? 'col-md-4 col-xl-3' : 'col-md-6 col-xl-4'">
-						<mat-form-field appearance="outline">
+						<!-- <mat-form-field appearance="outline">
 							<mat-label>
 								Make
 							</mat-label>
-							<input type="text" placeholder="Search for Vehicle Make"
+							<input #searchInput type="text" placeholder="Search for Vehicle Make"
 								aria-label="Make" matInput (focus)="$event.target.select()"
+								(click)="openAutoCompletePanel()"
 								(keyup)="searchValue('vehicleMakes', $event.target.value, 'name', 'vehicle_make')"
 								[value]="fillValue(BigData?.vehicleMakes, 'vehicle_make', 'name')"
 								[matAutocomplete]="vehiclemakeautoc">
@@ -691,17 +711,24 @@
 									{{ option.name }}
 								</mat-option>
 							</mat-autocomplete>
-						</mat-form-field>
+						</mat-form-field> -->
+
+						<!-- Make - Ng-Select -->
+						<ng-select appearance="outline" [items]="BigData?.vehicleMakes"
+							bindLabel="name" bindValue="id" placeholder="Select Make"
+							formControlName="vehicle_make">
+						</ng-select>
 					</div>
 
 					<!-- Model -->
 					<div id="model" class="col-md-4 col-xl-3 my-2" *ngIf="Form.vehicle_make.value">
-						<mat-form-field appearance="outline">
+						<!-- <mat-form-field appearance="outline">
 							<mat-label>
 								Model
 							</mat-label>
-							<input type="text" placeholder="Search for Vehicle Model"
+							<input #searchInput type="text" placeholder="Search for Vehicle Model"
 								aria-label="Model" matInput (focus)="$event.target.select()"
+								(click)="openAutoCompletePanel()"
 								(keyup)="searchValue('vehicleModels', $event.target.value, 'name', 'vehicle_model')"
 								[value]="fillValue(BigData?.vehicleModels, 'vehicle_model', 'name')"
 								[matAutocomplete]="vehiclemodelautoc">
@@ -712,17 +739,24 @@
 									{{ option.name }}
 								</mat-option>
 							</mat-autocomplete>
-						</mat-form-field>
+						</mat-form-field> -->
+
+						<!-- Ng-Select -->
+						<ng-select appearance="outline" [items]="BigData?.vehicleModels"
+							bindLabel="name" bindValue="id" placeholder="Select Model"
+							formControlName="vehicle_model">
+						</ng-select>
 					</div>
 
 					<!-- Year -->
 					<div id="year" class="col-md-3  my-2">
-						<mat-form-field appearance="outline">
+						<!-- <mat-form-field appearance="outline">
 							<mat-label>
 								Year
 							</mat-label>
-							<input type="text" placeholder="Search for Vehicle Year"
+							<input #searchInput type="text" placeholder="Search for Vehicle Year"
 								aria-label="Year" matInput (focus)="$event.target.select()"
+								(click)="openAutoCompletePanel()"
 								(keyup)="searchValue('vehicleYears', $event.target.value, 'name', 'vehicle_year')"
 								[value]="fillValue(BigData?.vehicleYears, 'vehicle_year', 'name')"
 								[matAutocomplete]="vehicleyearautoc">
@@ -733,17 +767,24 @@
 									{{ option.name }}
 								</mat-option>
 							</mat-autocomplete>
-						</mat-form-field>
+						</mat-form-field> -->
+
+						<!-- Ng-Select -->
+						<ng-select appearance="outline" [items]="BigData?.vehicleYears"
+							bindLabel="name" bindValue="id" placeholder="Select Year"
+							formControlName="vehicle_year">
+						</ng-select>
 					</div>
 
 					<!-- Color -->
 					<div id="color" class="col-md-3 my-2">
-						<mat-form-field appearance="outline">
+						<!-- <mat-form-field appearance="outline">
 							<mat-label>
 								Color
 							</mat-label>
-							<input type="text" placeholder="Search for Vehicle Color"
+							<input #searchInput type="text" placeholder="Search for Vehicle Color"
 								aria-label="Color" matInput (focus)="$event.target.select()"
+								(click)="openAutoCompletePanel()"
 								(keyup)="searchValue('vehicleColors', $event.target.value, 'name', 'vehicle_color')"
 								[value]="fillValue(BigData?.vehicleColors, 'vehicle_color', 'name')"
 								[matAutocomplete]="vehiclecolorautoc">
@@ -754,7 +795,13 @@
 									{{ option.name }}
 								</mat-option>
 							</mat-autocomplete>
-						</mat-form-field>
+						</mat-form-field> -->
+
+						<!-- Ng-Select -->
+						<ng-select appearance="outline" [items]="BigData?.vehicleColors"
+							bindLabel="name" bindValue="id" placeholder="Select Color"
+							formControlName="vehicle_color">
+						</ng-select>
 					</div>
 
 					<!-- License Plate -->
@@ -839,7 +886,7 @@
 							</mat-label>
 							<input matInput placeholder="Phone Number" type="text"
 								formControlName="driver_cell" (focus)="$event.target.select()"
-								[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb'], initialCountry: 'us'}"
+								[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
 								ng2TelInput (intlTelInputObject)="DrvTelInputObject($event)"
 								(countryChange)="SetFormValue('driver_cell_isd', '+' + $event.dialCode); SetFormValue('driver_cell_country', $event.iso2)" />
 						</mat-form-field>
@@ -852,7 +899,6 @@
 								Gender
 							</mat-label>
 							<mat-select formControlName="driver_gender">
-								<mat-option value="" selected> Select Gender </mat-option>
 								<mat-option value="male"> Male </mat-option>
 								<mat-option value="female"> Female </mat-option>
 							</mat-select>
@@ -1007,7 +1053,7 @@
 
 							<ul class="mt-3 d-flex justify-content-center p-0">
 								<li>
-									<button class="changeuploaded" tabindex="1">
+									<button type="button" class="changeuploaded" tabindex="1">
 										<input type="file" accept="image/jpeg,.jpeg,.jpg,.png"
 											(change)="uploadImage($event, 'driver_image')"
 											tabindex="-1">
@@ -1045,7 +1091,7 @@
 
 							<ul class="mt-3 d-flex justify-content-center p-0">
 								<li>
-									<button class="changeuploaded" tabindex="1">
+									<button type="button" class="changeuploaded" tabindex="1">
 										<input type="file" accept="image/jpeg,.jpeg,.jpg,.png"
 											(change)="uploadImage($event, 'vehicle_image')"
 											tabindex="-1">
@@ -1103,7 +1149,8 @@
 						<mat-label>
 							Number of Vehicles
 						</mat-label>
-						<input type="text" matInput placholder="Number of Vehicles" [value]="1"
+						<input type="text" matInput placholder="Number of Vehicles"
+							[value]="Form.number_of_vehicles.value ? Form.number_of_vehicles.value : 1"
 							(focus)="$event.target.select()"
 							(change)="SetFormValue('number_of_vehicles', $event.target.value)" />
 					</mat-form-field>
@@ -1113,12 +1160,12 @@
 				<div class="col-md-5 m-2">
 					<mat-form-field appearance="outline">
 						<mat-label>
-							Arrival Date
+							Travel Date
 						</mat-label>
 						<input matInput setOutputDateFormat="YYYY-MM-DD" [matDatepicker]="onwy_dt"
-							placeholder="Arrival Date"
+							placeholder="Travel Date"
 							(dateChangeWithFormat)="SetFormValue('pickup_date', $event)"
-							formControlName="pickup_date" (click)="onwy_dt.open()" />
+							formControlName="pickup_date" (click)="onwy_dt.open()" readonly />
 						<mat-datepicker-toggle matSuffix [for]="onwy_dt"></mat-datepicker-toggle>
 						<mat-datepicker #onwy_dt></mat-datepicker>
 					</mat-form-field>
@@ -1130,11 +1177,12 @@
 						<mat-label>
 							Travel Time
 						</mat-label>
-						<input [ngxTimepicker]="onwy_tm" [value]="Form.pickup_time.value"
-							matInput />
+						<input [ngxTimepicker]="onwy_tm" [value]="Form.pickup_time.value" matInput
+							readonly />
 					</mat-form-field>
-					<ngx-material-timepicker #onwy_tm [defaultTime]="Form.pickup_time.value"
-						(timeChanged)="SetFormValue('pickup_time', $event)"></ngx-material-timepicker>
+					<ngx-material-timepicker #onwy_tm
+						(timeChanged)="SetFormValue('pickup_time', $event)"
+						[defaultTime]="Form.pickup_time.value"></ngx-material-timepicker>
 				</div>
 			</div>
 
@@ -1165,13 +1213,14 @@
 				<div class="row">
 					<!-- Airport -->
 					<div class="col-md-6 col-lg-3">
-						<mat-form-field appearance="outline">
+						<!-- <mat-form-field appearance="outline">
 							<mat-label>
 								Airport
 							</mat-label>
-							<input type="search" matInput placeholder="Search For Airport"
-								(focus)="$event.target.select()" aria-label="Airport"
-								[matAutocomplete]="onwy_airport"
+							<input #searchInput type="search" matInput
+								placeholder="Search For Airport" (focus)="$event.target.select()"
+								aria-label="Airport" [matAutocomplete]="onwy_airport"
+								(click)="openAutoCompletePanel()"
 								(keyup)="searchValue('airportsData', $event.target.value, 'name')"
 								formControlName="pickup_airport_name" />
 							<mat-autocomplete #onwy_airport="matAutocomplete">
@@ -1181,17 +1230,28 @@
 									option.country }}
 								</mat-option>
 							</mat-autocomplete>
-						</mat-form-field>
+						</mat-form-field> -->
+
+						<!-- Ng-Select - Pickup > Airport -->
+						<ng-select appearance="outline" [items]="BigData?.airportsData"
+							[searchable]="true" (change)="change($event, 'pickup_airport')"
+							placeholder="Select Airport" bindLabel="formatted_name"
+							formControlName="pickup_airport_option">
+						</ng-select>
+
+
 					</div>
 
 					<!-- Airline -->
-					<div class="col-md-6 col-lg-3">
-						<mat-form-field appearance="outline">
+					<div class=" col-md-6 col-lg-3">
+						<!-- <mat-form-field appearance="outline">
 							<mat-label>
 								Airline
 							</mat-label>
-							<input type="text" matInput placeholder="Search For Airport"
-								aria-label="Airport" formControlName="pickup_airline_name"
+							<input #searchInput type="text" matInput
+								placeholder="Search For Airport" aria-label="Airport"
+								formControlName="pickup_airline_name"
+								(click)="openAutoCompletePanel()"
 								(keyup)="searchValue('airlinesData', $event.target.value, 'name')"
 								(focus)="$event.target.select()" [matAutocomplete]="onwy_airline">
 							<mat-autocomplete #onwy_airline="matAutocomplete">
@@ -1200,7 +1260,14 @@
 									{{ option.code }} - {{ option.name }}, {{ option.country }}
 								</mat-option>
 							</mat-autocomplete>
-						</mat-form-field>
+						</mat-form-field> -->
+
+						<!-- Ng-Select > Airline -->
+						<ng-select appearance="outline" [items]="BigData?.airlinesData"
+							[searchable]="true" (change)="change($event, 'pickup_airline')"
+							placeholder="Select Airline" bindLabel="formatted_name"
+							formControlName="pickup_airline_option">
+						</ng-select>
 					</div>
 
 					<!-- Flight Number -->
@@ -1262,9 +1329,10 @@
 								Cruise Time
 							</mat-label>
 							<input [ngxTimepicker]="crse_tm" [value]="Form.cruise_time.value"
-								matInput (change)="SetFormValue('cruise_time', $event)" />
+								matInput readonly />
 						</mat-form-field>
 						<ngx-material-timepicker #crse_tm
+							(timeChanged)="SetFormValue('cruise_time', $event)"
 							[defaultTime]="Form.cruise_time.value"></ngx-material-timepicker>
 					</div>
 				</div>
@@ -1298,12 +1366,14 @@
 				<div class="row">
 					<!-- Airport -->
 					<div class="col-md-5 col-lg-3">
-						<mat-form-field appearance="outline">
+						<!-- <mat-form-field appearance="outline">
 							<mat-label>
 								Airport
 							</mat-label>
-							<input type="text" matInput placeholder="Search For Airport"
-								aria-label="Airport" formControlName="dropoff_airport_name"
+							<input #searchInput type="text" matInput
+								placeholder="Search For Airport" aria-label="Airport"
+								formControlName="dropoff_airport_name"
+								(click)="openAutoCompletePanel()"
 								(keyup)="searchValue('airportsData', $event.target.value, 'name')"
 								[matAutocomplete]="onwy_drop_airport"
 								(focus)="$event.target.select()" />
@@ -1314,17 +1384,26 @@
 									option.country }}
 								</mat-option>
 							</mat-autocomplete>
-						</mat-form-field>
+						</mat-form-field> -->
+
+						<!-- Ng-Select > Dropoff > Airport -->
+						<ng-select appearance="outline" [items]="BigData?.airportsData"
+							[searchable]="true" (change)="change($event, 'dropoff_airport')"
+							placeholder="Select Airport" bindLabel="formatted_name"
+							formControlName="dropoff_airport_option">
+						</ng-select>
 					</div>
 
 					<!-- Airline -->
 					<div class="col-md-5 col-lg-3">
-						<mat-form-field appearance="outline">
+						<!-- <mat-form-field appearance="outline">
 							<mat-label>
 								Airline
 							</mat-label>
-							<input type="text" matInput placeholder="Search For Airline"
-								aria-label="Airport" formControlName="dropoff_airline_name"
+							<input #searchInput type="text" matInput
+								placeholder="Search For Airline" aria-label="Airport"
+								formControlName="dropoff_airline_name"
+								(click)="openAutoCompletePanel()"
 								(keyup)="searchValue('airlinesData', $event.target.value, 'name')"
 								[matAutocomplete]="onwy_drop_airline"
 								(focus)="$event.target.select()" />
@@ -1334,7 +1413,14 @@
 									{{ option.code }} - {{ option.name }}, {{ option.country }}
 								</mat-option>
 							</mat-autocomplete>
-						</mat-form-field>
+						</mat-form-field> -->
+
+						<!-- Ng-Select > Dropoff > Airline -->
+						<ng-select appearance="outline" [items]="BigData?.airlinesData"
+							[searchable]="true" (change)="change($event, 'dropoff_airline')"
+							placeholder="Select Airline" bindLabel="formatted_name"
+							formControlName="dropoff_airline_option">
+						</ng-select>
 					</div>
 
 					<!-- Flight Number -->
@@ -1384,9 +1470,10 @@
 								Cruise Time
 							</mat-label>
 							<input [ngxTimepicker]="crse_tm" [value]="Form.cruise_time.value"
-								matInput (change)="SetFormValue('cruise_time', $event)" />
+								matInput readonly />
 						</mat-form-field>
 						<ngx-material-timepicker #crse_tm
+							(timeChanged)="SetFormValue('cruise_time', $event)"
 							[defaultTime]="Form.cruise_time.value"></ngx-material-timepicker>
 					</div>
 				</div>
@@ -1400,7 +1487,8 @@
 						Extra Stops
 					</h4>
 					<div class="mx-4">
-						<button class="custom-filled-button" (click)="addExtraStop(false)">
+						<button type="button" class="custom-filled-button" tabindex="0"
+							(click)="addExtraStop(false)">
 							Add Stop
 						</button>
 					</div>
@@ -1491,7 +1579,7 @@
 				<div class="col-md-5 m-2">
 					<mat-form-field appearance="outline">
 						<mat-label>
-							Travel Time
+							Arrival Time
 						</mat-label>
 						<input [ngxTimepicker]="rt_onwy_tm" matInput
 							[value]="Form.return_pickup_time.value"
@@ -1532,12 +1620,14 @@
 				<div class="row">
 					<!-- Airport -->
 					<div class="col-md-6 col-lg-3">
-						<mat-form-field appearance="outline">
+						<!-- <mat-form-field appearance="outline">
 							<mat-label>
 								Airport
 							</mat-label>
-							<input type="text" matInput placeholder="Search For Airport"
-								aria-label="Airport" formControlName="return_pickup_airport_name"
+							<input #searchInput type="text" matInput
+								placeholder="Search For Airport" aria-label="Airport"
+								formControlName="return_pickup_airport_name"
+								(click)="openAutoCompletePanel()"
 								(keyup)="searchValue('airportsData', $event.target.value, 'name')"
 								[matAutocomplete]="onwy_airport" (focus)="$event.target.select()" />
 							<mat-autocomplete #onwy_airport="matAutocomplete">
@@ -1547,17 +1637,26 @@
 									option.country }}
 								</mat-option>
 							</mat-autocomplete>
-						</mat-form-field>
+						</mat-form-field> -->
+
+						<!-- Ng-Select > Return > Pickup > Airport -->
+						<ng-select appearance="outline" [items]="BigData?.airportsData"
+							[searchable]="true" (change)="change($event, 'return_pickup_airport')"
+							bindLabel="formatted_name" placeholder="Select Airport"
+							formControlName="return_pickup_airport_option">
+						</ng-select>
 					</div>
 
 					<!-- Airline -->
 					<div class="col-md-6 col-lg-3">
-						<mat-form-field appearance="outline">
+						<!-- <mat-form-field appearance="outline">
 							<mat-label>
 								Airline
 							</mat-label>
-							<input type="text" matInput placeholder="Search For Airport"
-								aria-label="Airport" formControlName="return_pickup_airline_name"
+							<input #searchInput type="text" matInput
+								placeholder="Search For Airport" aria-label="Airport"
+								formControlName="return_pickup_airline_name"
+								(click)="openAutoCompletePanel()"
 								(keyup)="searchValue('airlinesData', $event.target.value, 'name')"
 								[matAutocomplete]="onwy_airline" (focus)="$event.target.select()" />
 							<mat-autocomplete #onwy_airline="matAutocomplete">
@@ -1566,7 +1665,14 @@
 									{{ option.code }} - {{ option.name }}, {{ option.country }}
 								</mat-option>
 							</mat-autocomplete>
-						</mat-form-field>
+						</mat-form-field> -->
+
+						<!-- Ng-Select > Return > Pickup > Airline -->
+						<ng-select appearance="outline" [items]="BigData?.airlinesData"
+							[searchable]="true" (change)="change($event, 'return_pickup_airline')"
+							bindLabel="formatted_name" placeholder="Select Airline"
+							formControlName="return_pickup_airline_option">
+						</ng-select>
 					</div>
 
 					<!-- Flight Number -->
@@ -1617,9 +1723,10 @@
 								Cruise Time
 							</mat-label>
 							<input [ngxTimepicker]="crse_tm" [value]="Form.cruise_time.value"
-								matInput (change)="SetFormValue('cruise_time', $event)" />
+								matInput readonly />
 						</mat-form-field>
 						<ngx-material-timepicker #crse_tm
+							(timeChanged)="SetFormValue('cruise_time', $event)"
 							[defaultTime]="Form.cruise_time.value"></ngx-material-timepicker>
 					</div>
 				</div>
@@ -1654,14 +1761,16 @@
 				<div class="row">
 					<!-- Airport -->
 					<div class="col-md-5 col-lg-3">
-						<mat-form-field appearance="outline">
+						<!-- <mat-form-field appearance="outline">
 							<mat-label>
 								Airport
 							</mat-label>
-							<input type="text" matInput placeholder="Search For Airport"
-								aria-label="Airport" formControlName="return_dropoff_airport_name"
+							<input #searchInput type="text" matInput
+								placeholder="Search For Airport" aria-label="Airport"
+								formControlName="return_dropoff_airport_name"
 								(keyup)="searchValue('airportsData', $event.target.value, 'name')"
 								[matAutocomplete]="onwy_drop_airport"
+								(click)="openAutoCompletePanel()"
 								(focus)="$event.target.select()" />
 							<mat-autocomplete #onwy_drop_airport="matAutocomplete">
 								<mat-option *ngFor="let option of BigData?.airportsData"
@@ -1670,17 +1779,26 @@
 									option.country }}
 								</mat-option>
 							</mat-autocomplete>
-						</mat-form-field>
+						</mat-form-field> -->
+
+						<!-- Ng-Select > Return > Dropoff > Airport -->
+						<ng-select appearance="outline" [items]="BigData?.airportsData"
+							[searchable]="true" (change)="change($event, 'return_dropoff_airport')"
+							bindLabel="formatted_name" placeholder="Select Airport"
+							formControlName="return_dropoff_airport_option">
+						</ng-select>
 					</div>
 
 					<!-- Airline -->
 					<div class="col-md-5 col-lg-3">
-						<mat-form-field appearance="outline">
+						<!-- <mat-form-field appearance="outline">
 							<mat-label>
 								Airline
 							</mat-label>
-							<input type="text" matInput placeholder="Search For Airline"
-								aria-label="Airport" formControlName="return_dropoff_airline_name"
+							<input #searchInput type="text" matInput
+								placeholder="Search For Airline" aria-label="Airport"
+								formControlName="return_dropoff_airline_name"
+								(click)="openAutoCompletePanel()"
 								(keyup)="searchValue('airlinesData', $event.target.value, 'name')"
 								[matAutocomplete]="onwy_drop_airline"
 								(focus)="$event.target.select()" />
@@ -1690,7 +1808,14 @@
 									{{ option.code }} - {{ option.name }}, {{ option.country }}
 								</mat-option>
 							</mat-autocomplete>
-						</mat-form-field>
+						</mat-form-field> -->
+
+						<!-- Ng-Select > Return > Dropoff > Airline -->
+						<ng-select appearance="outline" [items]="BigData?.airlinesData"
+							[searchable]="true" (change)="change($event, 'return_dropoff_airline')"
+							bindLabel="formatted_name" placeholder="Select Airline"
+							formControlName="return_dropoff_airline_option">
+						</ng-select>
 					</div>
 
 					<!-- Flight Number -->
@@ -1741,9 +1866,10 @@
 								Cruise Time
 							</mat-label>
 							<input [ngxTimepicker]="crse_tm" [value]="Form.cruise_time.value"
-								matInput (change)="SetFormValue('cruise_time', $event)" />
+								matInput readonly />
 						</mat-form-field>
 						<ngx-material-timepicker #crse_tm
+							(timeChanged)="SetFormValue('cruise_time', $event)"
 							[defaultTime]="Form.cruise_time.value"></ngx-material-timepicker>
 					</div>
 				</div>
@@ -1757,7 +1883,8 @@
 						Extra Stops
 					</h4>
 					<div class="mx-4">
-						<button class="custom-filled-button" (click)="addExtraStop(true)">
+						<button type="button" class="custom-filled-button"
+							(click)="addExtraStop(true)">
 							Add Stop
 						</button>
 					</div>
@@ -1812,9 +1939,10 @@
 
 		<app-rates-form class="d-flex flex-wrap" [initRates]="init_rates"
 			[affiliate_type]="Form.affiliate_type.value" [distance]="distance_for_rates"
-			[amenities]="amenities" [reservation_id]="booking_id"
-			[initReturnRates]="init_return_rates" (formvalue)="RateFormValue($event)"
-			[hours]="Form.number_of_hours?.value" [vehicles]="Form.number_of_vehicles?.value"
+			[amenities]="amenities" [reservation_id]="booking_id" [reset]="reset_button"
+			[reset]="reset_button" [initReturnRates]="init_return_rates"
+			(formvalue)="RateFormValue($event)" [hours]="Form.number_of_hours?.value"
+			[vehicles]="Form.number_of_vehicles?.value"
 			(returnformvalue)="ReturnRateFormValue($event)"></app-rates-form>
 
 
@@ -1827,10 +1955,11 @@
 
 		<div class="row">
 			<div class="col-md-12">
-				<button class="custom-filled-reset-button m-3">
+				<button type="button" class="custom-filled-reset-button m-3"
+					(click)="resetFields()">
 					Reset
 				</button>
-				<button class="custom-filled-button m-3" (click)="submitForm(false)">
+				<button type="button" class="custom-filled-button m-3" (click)="submitForm(false)">
 					Save
 				</button>
 			</div>
@@ -1891,7 +2020,60 @@
 						</div>
 					</div>
 
-					<!-- TODO: add information of Customer here -->
+					<!-- Driver Information -->
+					<h4 class="font-weight-bolder m-0 mt-3">
+						Driver Information
+					</h4>
+					<!-- Driver Name -->
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Name
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ textFormatter(Form.driver_name.value) | titlecase }}
+								</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Driver Email -->
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Email
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ textFormatter(Form.driver_email.value) }}
+								</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Driver Cell -->
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Phone
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									({{ Form.driver_cell_isd.value }}) {{
+									Form.driver_cell.value }}
+								</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Passenger Information -->
 					<h4 class="font-weight-bolder m-0 mt-3">
 						Passenger Information
 					</h4>
@@ -2114,7 +2296,30 @@
 						</div>
 					</div>
 
-					<hr style="width: 50%; margin: 1rem auto; border: 1.3px solid #aeaeae;" />
+					<!-- Extra Stops -->
+					<div *ngIf="Form.extra_stops.value.length > 0">
+						<h5 class="p-2 m-0 text-xl">
+							Extra Stops
+						</h5>
+						<div class="mx-2"
+							*ngFor="let stop of Form.extra_stops.value; index as stop_index">
+							<div class="row m-0 mx-2">
+								<div class="col-md-4 key">
+									<span>
+										Stop {{ stop_index + 1 }}
+									</span>
+								</div>
+								<div class="col-md-8 value">
+									<span class="font-weight-bolder">
+										{{ stop.address }}
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<hr style="width: 50%; margin: 1rem auto; border: 1.3px solid #aeaeae;"
+						*ngIf="Form.extra_stops.value.length == 0" />
 
 					<!-- ############# Dropoff ################# -->
 					<h5 class="px-2 m-1 text-xl">
@@ -2318,7 +2523,7 @@
 								</div>
 								<div class="col-md-8 value">
 									<span class="font-weight-bolder">
-										{{ textFormatter(Form.pickup_airline_name.value) }}
+										{{ textFormatter(Form.return_pickup_airline_name.value) }}
 									</span>
 								</div>
 							</div>
@@ -2381,6 +2586,29 @@
 										{{ textFormatter(Form.return_cruise_time.value) | titlecase
 										}}
 									</span>
+								</div>
+							</div>
+						</div>
+
+
+						<!-- Return > Extra Stops -->
+						<div *ngIf="Form.return_extra_stops.value.length > 0">
+							<h5 class="p-2 m-0 text-xl">
+								Extra Stops
+							</h5>
+							<div class="mx-2"
+								*ngFor="let stop of Form.return_extra_stops.value; index as stop_index">
+								<div class="row m-0 mx-2">
+									<div class="col-md-4 key">
+										<span>
+											Stop {{ stop_index + 1 }}
+										</span>
+									</div>
+									<div class="col-md-8 value">
+										<span class="font-weight-bolder">
+											{{ stop.address }}
+										</span>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -2504,10 +2732,11 @@
 					</div>
 
 					<!-- Rates/Taxes -->
-					<h4 class="font-weight-bolder m-0 mt-3" *ngIf="RatesForm">
+					<h4 class="font-weight-bolder m-0 mt-3"
+						*ngIf="Form.affiliate_type.value == 'loose_affiliate'">
 						Rates/Taxes
 					</h4>
-					<div class="mx-2" *ngIf="RatesForm">
+					<div class="mx-2" *ngIf="init_rates && RatesForm">
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
@@ -2521,16 +2750,16 @@
 							</div>
 						</div>
 					</div>
-					<div class="mx-2" *ngIf="ReturnRatesForm">
+					<div class="mx-2" *ngIf="ReturnRatesForm && init_return_rates">
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
-									Return Grand Total
+									Return Trip Grand Total
 								</span>
 							</div>
 							<div class="col-md-8 value">
 								<span class="font-weight-bolder">
-									${{ ReturnRatesForm.grand_total }}
+									${{ ReturnRatesForm.r_grandtotal }}
 								</span>
 							</div>
 						</div>
