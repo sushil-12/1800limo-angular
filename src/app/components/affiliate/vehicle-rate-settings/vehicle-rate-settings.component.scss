@@ -1,6 +1,4 @@
-
-.row
-{
+.row {
 	margin: 0;
 }
 
@@ -141,29 +139,29 @@ div#rate-manager-slider {
 
 #card-type-container {
 	.card-type {
-		width: 48%;
-		padding: 1rem;
-		text-align: center;
+		width        : 48%;
+		padding      : 1rem;
+		text-align   : center;
 		border-radius: 1rem;
-		height: fit-content;
-		line-height: 2.7rem;
-		box-shadow: 0px 5px 10px 1px rgba(0, 0, 0, 0.4);
-		margin: 0 3px;
-		cursor: pointer;
-		transition: box-shadow 0.25s ease, background-color 0.25s ease;
+		height       : fit-content;
+		line-height  : 2.7rem;
+		box-shadow   : 0px 5px 10px 1px rgba(0, 0, 0, 0.4);
+		margin       : 0 3px;
+		cursor       : pointer;
+		transition   : box-shadow 0.25s ease, background-color 0.25s ease;
 	}
 
 	.card-type.active {
 		background-color: var(--green-color);
-		box-shadow: 0px 5px 10px -1px rgb(0 0 0 / 30%);
+		box-shadow      : 0px 5px 10px -1px rgb(0 0 0 / 30%);
 	}
 }
 
 @media only screen and (min-width:768px) {
 	.vehicleData li {
 		margin-bottom: 10px;
-		font-size: 18px;
-		font-weight: 600;
+		font-size    : 18px;
+		font-weight  : 600;
 	}
 }
 
@@ -173,7 +171,7 @@ div#rate-manager-slider {
 		outline: none;
 
 		.radio-button:checked+.radio-tile {
-			color: #000 !important;
+			color    : #000 !important;
 			transform: scale(1, 1);
 
 			.radio-tile-label {
@@ -189,7 +187,7 @@ div#rate-manager-slider {
 
 @media only screen and (max-width:991px) {
 	.vehicleImage img {
-		width: 100%;
+		width : 100%;
 		height: auto;
 	}
 }
@@ -200,7 +198,7 @@ div#rate-manager-slider {
 	}
 
 	.cityTax {
-		margin-top: 10px;
+		margin-top   : 10px;
 		margin-bottom: 0px;
 	}
 
@@ -211,6 +209,10 @@ div#rate-manager-slider {
 	.vehicleData li {
 		margin-top: 10px;
 	}
+
+	.card-type {
+		padding: 0 !important;
+	}
 }
 
 @media only screen and (max-width:575px) {
@@ -220,11 +222,11 @@ div#rate-manager-slider {
 
 	.vehicleData li {
 		margin-top: 0px;
-		font-size: 14px;
+		font-size : 14px;
 	}
 
 	.vehicleImage img {
-		width: 100%;
+		width : 100%;
 		height: auto;
 	}
 }
