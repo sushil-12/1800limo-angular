@@ -44,7 +44,7 @@
 				</div>
 				<div class="col-sm-2 my-2">
 					<button class="custom-filled-button orange-button"
-						(click)="loadBookings(null, startDate, endDate); saveCookie('startDate', startDate); saveCookie('endDate', endDate)">
+						(click)="resetDates(); loadBookings(null, startDate, endDate)">
 						Reset Date Range
 					</button>
 				</div>
