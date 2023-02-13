@@ -398,6 +398,7 @@
 						<!-- Ng-Select -->
 						<ng-select appearance="outline" [items]="ClientAccounts" bindLabel="name"
 							bindValue="id" placeholder="Select Client Account"
+							dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
 							formControlName="acc_id">
 						</ng-select>
 					</div>
@@ -583,8 +584,8 @@
 
 					<!-- Ng-Select -->
 					<ng-select appearance="outline" [items]="AffiliateAccounts" bindLabel="name"
-						bindValue="id" placeholder="Select Affiliate"
-						formControlName="affiliate_id">
+						bindValue="id" placeholder="Select Affiliate" dropdownPosition="bottom"
+						[markFirst]="true" [virtualScroll]="true" formControlName="affiliate_id">
 					</ng-select>
 				</div>
 			</div>
@@ -666,6 +667,7 @@
 						<!-- Ng-Select -->
 						<ng-select appearance="outline" [items]="BigData?.vehicleCategories"
 							bindLabel="name" bindValue="id" placeholder="Select Vehicle Category"
+							dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
 							formControlName="vehicle_type">
 						</ng-select>
 					</div>
@@ -686,6 +688,7 @@
 
 						<!-- Ng-Select - Vehicle ID -->
 						<ng-select appearance="outline" [items]="VehicleList"
+							dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
 							bindLabel="formatted_name" bindValue="id" placeholder="Select Vehicle"
 							formControlName="vehicle_id">
 						</ng-select>
@@ -715,6 +718,7 @@
 
 						<!-- Make - Ng-Select -->
 						<ng-select appearance="outline" [items]="BigData?.vehicleMakes"
+							dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
 							bindLabel="name" bindValue="id" placeholder="Select Make"
 							formControlName="vehicle_make">
 						</ng-select>
@@ -744,6 +748,7 @@
 						<!-- Ng-Select -->
 						<ng-select appearance="outline" [items]="BigData?.vehicleModels"
 							bindLabel="name" bindValue="id" placeholder="Select Model"
+							dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
 							formControlName="vehicle_model">
 						</ng-select>
 					</div>
@@ -772,6 +777,7 @@
 						<!-- Ng-Select -->
 						<ng-select appearance="outline" [items]="BigData?.vehicleYears"
 							bindLabel="name" bindValue="id" placeholder="Select Year"
+							dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
 							formControlName="vehicle_year">
 						</ng-select>
 					</div>
@@ -800,6 +806,7 @@
 						<!-- Ng-Select -->
 						<ng-select appearance="outline" [items]="BigData?.vehicleColors"
 							bindLabel="name" bindValue="id" placeholder="Select Color"
+							dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
 							formControlName="vehicle_color">
 						</ng-select>
 					</div>
@@ -1236,6 +1243,7 @@
 						<ng-select appearance="outline" [items]="BigData?.airportsData"
 							[searchable]="true" (change)="change($event, 'pickup_airport')"
 							placeholder="Select Airport" bindLabel="formatted_name"
+							dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
 							formControlName="pickup_airport_option">
 						</ng-select>
 
@@ -1266,6 +1274,7 @@
 						<ng-select appearance="outline" [items]="BigData?.airlinesData"
 							[searchable]="true" (change)="change($event, 'pickup_airline')"
 							placeholder="Select Airline" bindLabel="formatted_name"
+							dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
 							formControlName="pickup_airline_option">
 						</ng-select>
 					</div>
@@ -1390,6 +1399,7 @@
 						<ng-select appearance="outline" [items]="BigData?.airportsData"
 							[searchable]="true" (change)="change($event, 'dropoff_airport')"
 							placeholder="Select Airport" bindLabel="formatted_name"
+							dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
 							formControlName="dropoff_airport_option">
 						</ng-select>
 					</div>
@@ -1419,6 +1429,7 @@
 						<ng-select appearance="outline" [items]="BigData?.airlinesData"
 							[searchable]="true" (change)="change($event, 'dropoff_airline')"
 							placeholder="Select Airline" bindLabel="formatted_name"
+							dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
 							formControlName="dropoff_airline_option">
 						</ng-select>
 					</div>
@@ -1643,6 +1654,7 @@
 						<ng-select appearance="outline" [items]="BigData?.airportsData"
 							[searchable]="true" (change)="change($event, 'return_pickup_airport')"
 							bindLabel="formatted_name" placeholder="Select Airport"
+							dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
 							formControlName="return_pickup_airport_option">
 						</ng-select>
 					</div>
@@ -1671,6 +1683,7 @@
 						<ng-select appearance="outline" [items]="BigData?.airlinesData"
 							[searchable]="true" (change)="change($event, 'return_pickup_airline')"
 							bindLabel="formatted_name" placeholder="Select Airline"
+							dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
 							formControlName="return_pickup_airline_option">
 						</ng-select>
 					</div>
@@ -1785,6 +1798,7 @@
 						<ng-select appearance="outline" [items]="BigData?.airportsData"
 							[searchable]="true" (change)="change($event, 'return_dropoff_airport')"
 							bindLabel="formatted_name" placeholder="Select Airport"
+							dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
 							formControlName="return_dropoff_airport_option">
 						</ng-select>
 					</div>
@@ -1814,6 +1828,7 @@
 						<ng-select appearance="outline" [items]="BigData?.airlinesData"
 							[searchable]="true" (change)="change($event, 'return_dropoff_airline')"
 							bindLabel="formatted_name" placeholder="Select Airline"
+							dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
 							formControlName="return_dropoff_airline_option">
 						</ng-select>
 					</div>

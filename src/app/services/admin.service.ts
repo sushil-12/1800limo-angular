@@ -37,6 +37,44 @@ export class AdminService
 		}
 	}
 
+	getCookie(keyword: string): null | string
+	{
+		let ca = document.cookie.split(';');
+		for (let i = 0; i < ca.length; i++)
+		{
+			if (ca[i].trim().indexOf(keyword) == 0)
+			{
+				return ca[i].substring(ca[i].indexOf('=') + 1, ca[i].length)
+			}
+		}
+		return null
+	}
+
+	checkCookie(keyword: string): boolean
+	{
+		let required_cookie = this.getCookie(keyword)
+		if (required_cookie && required_cookie != '')
+		{
+			return true
+		}
+		return false
+	}
+
+	setCookie(key: string, value: string, exdays: number): boolean
+	{
+		const date = new Date()
+
+		date.setTime(date.getTime() + (exdays * 24 * 60 * 60 * 1000));
+		document.cookie = `${key}=${value};expires=${date.toUTCString()};`;
+
+		// check if the cookies is successfully set
+		if (this.checkCookie(key))
+		{
+			return true
+		}
+		return false
+	}
+
 	changeSortOrder(data: any)
 	{
 		return this.httpClient.put(this.serverUrl + 'vehicle-types-sorting', data);

@@ -1170,7 +1170,7 @@ a.user-profile:active::after {
 .user_information input {
     border: 0;
     width: 100%;
-    font-size: 1.18rem;
+    font-size: 1.08rem;
 }
 
 .user_information textarea {

@@ -4,7 +4,7 @@
 	<section class="adminbox_shadow user_information">
 		<h2 class="headinginfo"> Daily Bookings </h2>
 		<div class="containeredd mt-1 ">
-			<div class="row my-2 align-items-center">
+			<div class="row my-2 align-items-center justify-content-between">
 				<!-- Start-Date -->
 				<div class="col-sm-4 col-md-3 my-2">
 					<mat-form-field appearance="outline" class="m-0 text-xl">
@@ -36,9 +36,16 @@
 				</div>
 
 				<!-- Search Button -->
-				<div class="col-sm-3">
-					<button class="custom-filled-button orange-button" (click)="loadBookings()">
+				<div class="col-sm-2 my-2">
+					<button class="custom-filled-button orange-button"
+						(click)="loadBookings(null, startDate, endDate); saveCookie('startDate', startDate); saveCookie('endDate', endDate)">
 						Search
+					</button>
+				</div>
+				<div class="col-sm-2 my-2">
+					<button class="custom-filled-button orange-button"
+						(click)="loadBookings(null, startDate, endDate); saveCookie('startDate', startDate); saveCookie('endDate', endDate)">
+						Reset Date Range
 					</button>
 				</div>
 			</div>
@@ -46,8 +53,8 @@
 				<div class="col-md-12">
 					<div id="search-field">
 						<mat-form-field appearance="outline" class="m-0">
-							<input matInput type="text"
-								(keyup)="loadBookings(null, $event.target.value)"
+							<input matInput type="text" (keypress)="handleKeypressEvents()"
+								(keyup)="searchInBookings($event.target.value)"
 								placeholder="Search by Booking Id, Pax Name, Pickup, Dropoff, Phone, Status, Vehicle Type"
 								id="keyword">
 						</mat-form-field>
