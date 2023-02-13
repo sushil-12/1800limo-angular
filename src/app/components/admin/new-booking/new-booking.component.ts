@@ -1240,6 +1240,7 @@ export class NewBookingComponent implements OnInit
 	uploadImage(event: any, image_type: string)
 	{
 		let image: any
+		console.log(event.target.files)
 		if (event.target.files && event.target.files.length > 0)
 		{
 			const reader = new FileReader()

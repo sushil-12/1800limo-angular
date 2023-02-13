@@ -4,7 +4,7 @@
 	<section class="adminbox_shadow user_information">
 		<h2 class="headinginfo"> Daily Bookings </h2>
 		<div class="containeredd mt-1 ">
-			<div class="row my-2 align-items-center justify-content-between">
+			<div class="row my-2 align-items-center">
 				<!-- Start-Date -->
 				<div class="col-sm-4 col-md-3 my-2">
 					<mat-form-field appearance="outline" class="m-0 text-xl">
@@ -45,7 +45,7 @@
 				<div class="col-sm-2 my-2">
 					<button class="custom-filled-button orange-button"
 						(click)="resetDates(); loadBookings(null, startDate, endDate)">
-						Reset Date Range
+						Reset Dates
 					</button>
 				</div>
 			</div>
@@ -940,6 +940,7 @@
 							</div>
 						</div>
 						<!-- Cruise Port -->
+
 						<!-- Cruise Name -->
 						<div class="row p-2">
 							<div class="col-md-4 key">
@@ -954,6 +955,7 @@
 							</div>
 						</div>
 						<!-- Cruise Name -->
+
 						<!-- Cruise Time -->
 						<div class="row p-2">
 							<div class="col-md-4 key">
@@ -969,6 +971,25 @@
 						</div>
 						<!-- Cruise Time -->
 					</div>
+					<!-- Dropoff > Cruise Details - Ends -->
+
+					<!-- Grand Total -->
+					<h4 class="font-weight-bolder m-0 mt-3">
+						Rates / Taxes
+					</h4>
+					<div class="row p-2">
+						<div class="col-md-4 key">
+							<span>
+								Grand Total
+							</span>
+						</div>
+						<div class="col-md-8 value">
+							<span class="font-weight-bolder">
+								$ {{ textFormatter(bookingPreview.grand_total) }}
+							</span>
+						</div>
+					</div>
+					<!-- Grand Total -->
 				</div>
 			</div>
 
