@@ -770,9 +770,10 @@ export class AdminService {
 			return this.httpClient.post(this.serverUrl + 'create-reservation', data);
 		}
 	}
-	getReservationDetails(reservation_id: number | StringConstructor) {
+	getReservationDetails(reservation_id: number) {
 
-		return this.httpClient.get(`${this.serverUrl}get-reservation-detail/${reservation_id}`);
+		return this.getBookingDataForEdit(reservation_id, 'detail');
+		// return this.httpClient.get(`${this.serverUrl}get-reservation-detail/${reservation_id}`);
 
 	}
 

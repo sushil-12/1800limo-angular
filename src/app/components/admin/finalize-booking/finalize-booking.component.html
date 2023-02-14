@@ -1,36 +1,99 @@
-<div class="container p-3">
-	<h3 class="font-weight-bolder m-3 text-center">Finalize Booking</h3>
+<section class="user_information">
 
-	<!-- Booking -->
-	<div class="row">
-		<div class="col-md-12">
-			<div id="booking-paradigms" class="d-flex flex-wrap align-items-center">
-				<label class="m-1"> Booking: </label>
-				<label class="m-0 text-uppercase">
-					{{ formatText(BookingDetail.service_type) }} /
-					{{ formatText(BookingDetail.transfer_type) }}
-					{{
-					BookingDetail.service_type === "roundtrip"
-					? " / " +
-					formatText(BookingDetail.return_transfer_type)
-					: ""
-					}}
-				</label>
+	<div class="container" id="print-section">
+		<h3 class="font-weight-bolder mb-1 text-center">Finalize Booking</h3>
+		<hr>
+		<div class="invoicesum_header">
+			<h3 class="text-lg text-center pl-0">Booking # {{BookingDetail?.reservation_id}}</h3>
+			<div class="row my-3">
+				<div class="col-md-4">
+					<p>Booking Type <strong>{{BookingDetail?.transfer_type}}</strong>
+					</p>
+				</div>
+				<div class="col-md-4">
+					<p>Quote Amount <strong>{{BookingDetail?.quote_amount}}</strong></p>
+				</div>
+				<div class="col-md-4">
+					<p>Status <strong>{{BookingDetail?.booking_status}}</strong></p>
+				</div>
+			</div>
+		</div>
+		<div class="invoicesum_dtl">
+			<div class="row">
+				<div class="col-md-4 field">
+					<p>Driver Name </p>
+					<strong>{{BookingDetail?.driver_name}}</strong>
+				</div>
+				<div class="col-md-4 field">
+					<p>Driver Email</p>
+					<strong>{{BookingDetail?.driver_email}}</strong>
+				</div>
+
+				<div class="col-md-4 field">
+					<p>Driver Phone</p>
+					<strong>{{BookingDetail?.driver_cell_isd}}{{BookingDetail?.driver_cell}}</strong>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-4 field">
+					<p>Passenger Name </p>
+					<strong>{{BookingDetail?.passenger_name}}</strong>
+				</div>
+				<div class="col-md-4 field">
+					<p>Passenger Email</p>
+					<strong>{{BookingDetail?.passenger_email}}</strong>
+				</div>
+
+				<div class="col-md-4 field">
+					<p>Passenger Phone</p>
+					<strong>{{BookingDetail?.passenger_cell_isd}}{{BookingDetail?.passenger_cell}}</strong>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-4 field">
+					<p>Pickup Date </p>
+					<strong>{{(BookingDetail?.pickup_date)}}</strong>
+				</div>
+				<div class="col-md-4 field">
+					<p>Pickup Time</p>
+					<strong>{{BookingDetail?.pickup_time}}</strong>
+				</div>
+
+				<div class="col-md-4 field">
+					<p>Pickup Address</p>
+					<strong>{{BookingDetail?.pickup_address}}</strong>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-4 field">
+					<p>Pickup Airport </p>
+					<strong>{{BookingDetail?.pickup_airport}}</strong>
+				</div>
+				<div class="col-md-4 field">
+					<p>Pickup Airline</p>
+					<strong>{{BookingDetail?.pickup_airline}}</strong>
+				</div>
+
+				<div class="col-md-4 field">
+					<p>Pickup Flight</p>
+					<strong>{{BookingDetail?.pickup_flight}}</strong>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-4 field">
+					<p>Pickup Airport </p>
+					<strong>{{BookingDetail?.pickup_airport}}</strong>
+				</div>
+				<div class="col-md-4 field">
+					<p>Pickup Airline</p>
+					<strong>{{BookingDetail?.pickup_airline}}</strong>
+				</div>
+
+				<div class="col-md-4 field">
+					<p>Pickup Flight</p>
+					<strong>{{BookingDetail?.pickup_flight}}</strong>
+				</div>
 			</div>
 		</div>
 	</div>
-
-	<hr style="width: 50%; margin: 1.2rem auto; border: 1.3px solid #000" />
-
-	<!-- Booking -->
-	<div class="row">
-		<div class="col-md-12">
-			<div id="booking-paradigms" class="d-flex flex-wrap align-items-center">
-				<label class="m-1"> Pickup Type: </label>
-				<label class="m-0 text-uppercase">
-					{{ BookingDetail.transfer_type }}
-				</label>
-			</div>
-		</div>
-	</div>
-</div>
+</section>

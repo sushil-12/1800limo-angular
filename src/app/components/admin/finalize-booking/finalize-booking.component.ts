@@ -1,5 +1,6 @@
 import { Component, OnInit, isDevMode } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
+import * as moment from "moment";
 import { NgxSpinnerService } from "ngx-spinner";
 import { AdminService } from "src/app/services/admin.service";
 
@@ -8,8 +9,7 @@ import { AdminService } from "src/app/services/admin.service";
 	templateUrl: "./finalize-booking.component.html",
 	styleUrls: ["./finalize-booking.component.scss"],
 })
-export class FinalizeBookingComponent implements OnInit
-{
+export class FinalizeBookingComponent implements OnInit {
 	bookingId: number = 0;
 
 	BookingDetail: any;
@@ -17,6 +17,7 @@ export class FinalizeBookingComponent implements OnInit
 	CardsInformation: any;
 
 	booking_details_list: Record<string, any> = {};
+	transferType: any;
 
 	constructor(
 		private $api: AdminService,
@@ -25,58 +26,77 @@ export class FinalizeBookingComponent implements OnInit
 		private $spinner: NgxSpinnerService
 	) { }
 
-	ngOnInit(): void
-	{
-		this.$route.queryParams.subscribe((params: any) =>
-		{
+	ngOnInit(): void {
+		this.$route.queryParams.subscribe((params: any) => {
 			isDevMode && console.log("Params Found: ", params);
-			if (params.bookingId)
-			{
+			if (params.bookingId) {
 				this.bookingId = params.bookingId;
 
 				this.getReservationDetails(this.bookingId);
-			} else
-			{
+			} else {
 				// navigate back to dashboard in case of no booking Id specified.
 				this.$router.navigate(["/admin/daily-bookings-admin"]);
 			}
 		});
 	}
 
-	formatText(text: string)
-	{
-		return text.replace(/[\_\-]+/g, " ").trim();
-	}
+	// formatText(text: string)
+	// {
+	// 	return text.replace(/[\_\-]+/g, " ").trim();
+	// }
 
-	getReservationDetails(booking_id: number = 0)
-	{
+	getReservationDetails(booking_id: number = 0) {
 		this.$spinner.show();
 		this.$api
 			.getReservationDetails(booking_id)
 			.pipe()
-			.subscribe((response: any) =>
-			{
+			.subscribe((response: any) => {
 				this.$spinner.hide();
-				console.log(response);
-
-				this.BookingDetail = {
-					Booking: `${response.data.booking_detail.service_type}/${response.data.booking_detail.transfer_type}`,
-					"---": "---",
-					"Travel Details": {
-						"Pickup Type":
-							response.data.booking_detail.transfer_type.split(
-								"_"
-							)[0],
-					},
-				};
-
-				this.RatesList = response.data.priceDetail;
-				this.CardsInformation = response.data.CreditCardsDetail;
+				console.log(response.data, "check response");
+				this.BookingDetail = response.data
+				this.transferType = this.BookingDetail.transfer_type
 			});
 	}
+	dateFormat(value: any) {
+		return moment(value, 'YYYY-MM-DD').format('ll')
+	}
 
-	returnZero()
-	{
-		return 0;
+	dateFormat2(value: any) {
+		return moment(value, 'YYYY-MM-DD').format('L')
+	}
+
+	timeFormat(value: any) {
+		if (value.toUpperCase() == '12:00 AM') {
+			return '0000 h'
+		}
+		let hours = moment(moment(value, 'hh:mm a').format('HH'), 'HH').hours();
+		let mins = moment(value, 'hh:mm a').minutes().toString();
+		if (Number(mins) == 0 || Number(mins) < 10) {
+			mins = '0' + mins.toString();
+		}
+
+		return hours < 10 ? '0' + hours.toString() + mins.toString() + ' h' : hours.toString() + mins.toString() + ' h'
+		//return value.replace(':', '').substring(0, 5) + 'h';
+	}
+
+	timeFormat2(value: string) {
+		return moment(value, 'HH:mm a').format('h:mm a');
+	}
+
+	textFormatter(text: string) {
+		try {
+			return text.replace(/[\\\_$]+/g, ' ')
+		}
+		catch
+		{
+			return text
+		}
+	}
+	mToMi(distance: number): string {
+		return (distance / 1609).toFixed(2)
+	}
+
+	mToKm(distance: number): string {
+		return (distance / 1000).toFixed(2)
 	}
 }
