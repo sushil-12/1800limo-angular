@@ -55,7 +55,6 @@ export class AffiliateStepsTemplateComponent implements OnInit {
 						return throwError(err);
 					})
 				).subscribe(({ data }: any) => {
-					console.log(data, "check data ")
 					if (data) {
 						const stepCompleted = data.step_completed;
 						const stepCompletedObj = data.step_completed_obj;

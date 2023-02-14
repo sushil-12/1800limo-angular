@@ -109,10 +109,7 @@ export class AffiliateStep0Component implements OnInit {
 
 
 	ngOnInit(): void {
-		const stepCompleted = this.adminService.getLocalStepsCompleted();
-		if (stepCompleted.includes('0')) {
-			this.agreement = true;
-		}
+
 		this.spinner.show(); //spinner show 
 
 		this.adminService.fetchStep0Data().subscribe((data: any) => {
@@ -128,6 +125,13 @@ export class AffiliateStep0Component implements OnInit {
 			this.why1800limo2 = this.why1800limo.splice(-half);
 		})
 
+		let s = setInterval(() => {
+			const stepCompleted = this.adminService.getLocalStepsCompleted();
+			if (stepCompleted && stepCompleted.includes('0')) {
+				clearInterval(s);
+				this.agreement = true;
+			}
+		}, 3000)
 	}
 	fetchContentData(id?: number | null) {
 		if (id && this.content_data) {

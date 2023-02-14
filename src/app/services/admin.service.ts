@@ -30,50 +30,38 @@ export class AdminService {
 		}
 	}
 
-<<<<<<< src/app/services/admin.service.ts
-	changeSortOrder(data: any) {
-=======
-	getCookie(keyword: string): null | string
-	{
+	getCookie(keyword: string): null | string {
 		let ca = document.cookie.split(';');
-		for (let i = 0; i < ca.length; i++)
-		{
-			if (ca[i].trim().indexOf(keyword) == 0)
-			{
+		for (let i = 0; i < ca.length; i++) {
+			if (ca[i].trim().indexOf(keyword) == 0) {
 				return ca[i].substring(ca[i].indexOf('=') + 1, ca[i].length)
 			}
 		}
 		return null
 	}
 
-	checkCookie(keyword: string): boolean
-	{
+	checkCookie(keyword: string): boolean {
 		let required_cookie = this.getCookie(keyword)
-		if (required_cookie && required_cookie != '')
-		{
+		if (required_cookie && required_cookie != '') {
 			return true
 		}
 		return false
 	}
 
-	setCookie(key: string, value: string, exdays: number): boolean
-	{
+	setCookie(key: string, value: string, exdays: number): boolean {
 		const date = new Date()
 
 		date.setTime(date.getTime() + (exdays * 24 * 60 * 60 * 1000));
 		document.cookie = `${key}=${value};expires=${date.toUTCString()};`;
 
 		// check if the cookies is successfully set
-		if (this.checkCookie(key))
-		{
+		if (this.checkCookie(key)) {
 			return true
 		}
 		return false
 	}
 
-	changeSortOrder(data: any)
-	{
->>>>>>> src/app/services/admin.service.ts
+	changeSortOrder(data: any) {
 		return this.httpClient.put(this.serverUrl + 'vehicle-types-sorting', data);
 	}
 
@@ -792,14 +780,8 @@ export class AdminService {
 		return this.httpClient.get(`${this.serverUrl}get-reservation/${reservation_id}/${updateType}`);
 	}
 
-<<<<<<< src/app/services/admin.service.ts
 	getBookingPreview(reservation_id: number) {
-		return this.httpClient.get(`${this.serverUrl}admin/getBookingPreview/${reservation_id}`);
-=======
-	getBookingPreview(reservation_id: number)
-	{
 		return this.httpClient.get(`${this.serverUrl}admin/get-booking-preview/${reservation_id}`);
->>>>>>> src/app/services/admin.service.ts
 	}
 
 	adminNotification(data) {
