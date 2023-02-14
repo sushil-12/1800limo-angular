@@ -102,10 +102,8 @@ export class DailyBookingsComponent implements OnInit
 	resetDates()
 	{
 		let date = new Date();
-
-		date.setDate(date.getDate() - 7);
 		this.startDate = date.toISOString().substring(0, 10);
-		date.setDate(date.getDate() + 14);
+		date.setDate(date.getDate() + 7);
 		this.endDate = date.toISOString().substring(0, 10);
 
 		console.log('Dates reset Successfully. ');
@@ -190,7 +188,7 @@ export class DailyBookingsComponent implements OnInit
 
 	loadBookings(pageUrl = null, start_date: string, end_date: string, search_value: string = '')
 	{
-		// search_value != '' && this.spinner.show();
+		search_value == '' && this.spinner.show();
 		// Load Our bookings using API
 		this.adminService.loadBookings(pageUrl, start_date, end_date, search_value ?? '').then((result) =>
 		{
