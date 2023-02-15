@@ -60,29 +60,27 @@
 					<strong>{{BookingDetail?.passenger_cell_isd}}{{BookingDetail?.passenger_cell}}</strong>
 				</div>
 			</div>
-			<div class="row">
+			<div class="row" *ngIf="transferType?.includes('city_') || transferType?.includes('cruise_')">
 				<div class="col-md-4 field">
 					<p>Pickup Address</p>
 					<strong>{{BookingDetail?.pickup_address}}</strong>
 				</div>
 			</div>
-			<div class="row" *ngIf="transferType == 'airport_to_city'">
+			<div class="row" *ngIf="transferType?.includes('airport_')">
 				<div class="col-md-4 field">
 					<p>Pickup Airport </p>
-					<strong>{{BookingDetail?.pickup_airport | titlecase}}</strong>
+					<strong>{{BookingDetail?.pickup_airport_name | titlecase}}</strong>
 				</div>
 				<div class="col-md-4 field">
 					<p>Pickup Airline</p>
-					<strong>{{BookingDetail?.pickup_airline | titlecase}}</strong>
+					<strong>{{BookingDetail?.pickup_airline_name | titlecase}}</strong>
 				</div>
-
 				<div class="col-md-4 field">
 					<p>Pickup Flight</p>
 					<strong>{{BookingDetail?.pickup_flight}}</strong>
 				</div>
 			</div>
-			<div class="row"
-				*ngIf="transferType == 'city_to_airport' || transferType == 'airport_to_airport' || transferType == 'cruise_to_airport'">
+			<div class="row" *ngIf="transferType?.includes('_airport')">
 				<div class="col-md-4 field">
 					<p>DropOff Airport </p>
 					<strong>{{BookingDetail?.dropoff_airport_name | titlecase}}</strong>
@@ -98,9 +96,7 @@
 					<strong>{{BookingDetail?.dropoff_flight | titlecase}}</strong>
 				</div>
 			</div>
-			<div class="row"
-				*ngIf="transferType == 'city_to_city' || transferType == 'airport_to_city' || transferType == 'cruise_to_city'">
-				-
+			<div class="row" *ngIf="transferType?.includes('_city') || transferType?.includes('_cruise')">
 				<div class="col-md-4 field">
 					<p>DropOff Address </p>
 					<strong>{{BookingDetail?.dropoff_address}}</strong>
@@ -126,8 +122,8 @@
 			<mat-form-field appearance="outline">
 				<mat-label>Payment Method</mat-label>
 				<mat-select tabindex="1">
-					<mat-option value='card'>Card</mat-option>
-					<mat-option value='cash'>Cash</mat-option>
+					<mat-option value='card'>Payment with Card</mat-option>
+					<mat-option value='cash'>Payment with Cash</mat-option>
 				</mat-select>
 			</mat-form-field>
 		</div>
@@ -169,33 +165,33 @@
 						</tr>
 					</thead>
 					<!-- <tbody>
-<ng-container *ngIf="cards">
-<ng-container *ngIf="cards">
-<tr role="row" class="odd" *ngFor="let card of cards">
-<td class="text-capitalize">{{card.name}}</td>
-<td>{{card.last4}}</td>
-<td *ngIf="card.exp_month >= 10; else showZero">
-{{card.exp_month+'/'+card.exp_year}}</td>
-<ng-template #showZero>
-<td>0{{card.exp_month+'/'+card.exp_year}}</td>
-</ng-template>
-<td class="text-capitalize">{{card.card_type}}</td>
-<td>
-<i class="fa fa-trash" style="font-size: x-large; color:#d64646"
-(click)="enableDisableClicked(card.ID)" data-toggle="modal"
-data-target="#deleteConfirmationModal"></i>
-</td>
-</tr>
+						<ng-container *ngIf="cards">
+							<ng-container *ngIf="cards">
+								<tr role="row" class="odd" *ngFor="let card of cards">
+									<td class="text-capitalize">{{card.name}}</td>
+									<td>{{card.last4}}</td>
+									<td *ngIf="card.exp_month >= 10; else showZero">
+										{{card.exp_month+'/'+card.exp_year}}</td>
+									<ng-template #showZero>
+										<td>0{{card.exp_month+'/'+card.exp_year}}</td>
+									</ng-template>
+									<td class="text-capitalize">{{card.card_type}}</td>
+									<td>
+										<i class="fa fa-trash" style="font-size: x-large; color:#d64646"
+											(click)="enableDisableClicked(card.ID)" data-toggle="modal"
+											data-target="#deleteConfirmationModal"></i>
+									</td>
+								</tr>
 
-</ng-container>
+							</ng-container>
 
-</ng-container>
-<ng-container *ngIf="!cards">
-<tr>
-<td colspan="6">No Card found!</td>
-</tr>
-</ng-container>
-</tbody> -->
+						</ng-container>
+						<ng-container *ngIf="!cards">
+							<tr>
+								<td colspan="6">No Card found!</td>
+							</tr>
+						</ng-container>
+					</tbody> -->
 				</table>
 			</div>
 			<section class="billing_inforamtion">
