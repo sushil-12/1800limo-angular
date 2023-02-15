@@ -18,6 +18,16 @@ export class FinalizeBookingComponent implements OnInit {
 
 	booking_details_list: Record<string, any> = {};
 	transferType: any;
+	edit_rates_value: any;
+	return_edit_rates_value: any;
+
+	finalize_params = {
+		distance: 0,
+		number_of_hours: 0,
+		number_of_vehicles: 0,
+		booking_id: 0
+
+	}
 
 	constructor(
 		private $api: AdminService,
@@ -37,6 +47,7 @@ export class FinalizeBookingComponent implements OnInit {
 				// navigate back to dashboard in case of no booking Id specified.
 				this.$router.navigate(["/admin/daily-bookings-admin"]);
 			}
+
 		});
 	}
 
@@ -45,28 +56,42 @@ export class FinalizeBookingComponent implements OnInit {
 	// 	return text.replace(/[\_\-]+/g, " ").trim();
 	// }
 
+	init_rates: boolean = false;
+	init_return_rates: boolean = false;
 	getReservationDetails(booking_id: number = 0) {
 		this.$spinner.show();
 		this.$api
-			.getReservationDetails(booking_id)
+			.getBookingPreview(booking_id)
 			.pipe()
 			.subscribe((response: any) => {
 				this.$spinner.hide();
 				console.log(response.data, "check response");
 				this.BookingDetail = response.data
 				this.transferType = this.BookingDetail.transfer_type
+				this.init_rates = true;
+				this.finalize_params['distance'] = this.BookingDetail.distance
+				this.finalize_params['number_of_hours'] = this.BookingDetail.number_of_hours
+				this.finalize_params['number_of_vehicles'] = this.BookingDetail.number_of_vehicles
+				this.finalize_params['booking_id'] = this.BookingDetail.reservation_id
+				if (this.BookingDetail?.service_type == 'roundtrip') {
+					this.init_return_rates = true;
+				}
 			});
 	}
 	dateFormat(value: any) {
-		return moment(value, 'YYYY-MM-DD').format('ll')
+		if (value) {
+			return moment(value, 'YYYY-MM-DD').format('ll')
+		}
 	}
 
 	dateFormat2(value: any) {
-		return moment(value, 'YYYY-MM-DD').format('L')
+		if (value) {
+			return moment(value, 'YYYY-MM-DD').format('L')
+		}
 	}
 
 	timeFormat(value: any) {
-		if (value.toUpperCase() == '12:00 AM') {
+		if (value?.toUpperCase() == '12:00 AM') {
 			return '0000 h'
 		}
 		let hours = moment(moment(value, 'hh:mm a').format('HH'), 'HH').hours();
@@ -80,12 +105,14 @@ export class FinalizeBookingComponent implements OnInit {
 	}
 
 	timeFormat2(value: string) {
-		return moment(value, 'HH:mm a').format('h:mm a');
+		if (value) {
+			return moment(value, 'HH:mm a').format('h:mm a');
+		}
 	}
 
 	textFormatter(text: string) {
 		try {
-			return text.replace(/[\\\_$]+/g, ' ')
+			return text?.replace(/[\\\_$]+/g, ' ')
 		}
 		catch
 		{
@@ -98,5 +125,15 @@ export class FinalizeBookingComponent implements OnInit {
 
 	mToKm(distance: number): string {
 		return (distance / 1000).toFixed(2)
+	}
+
+	editRates() {
+
+	}
+	RateFormValue(form: any) {
+		this.edit_rates_value = form
+	}
+	ReturnRateFormValue(form: any) {
+		this.return_edit_rates_value = form
 	}
 }
