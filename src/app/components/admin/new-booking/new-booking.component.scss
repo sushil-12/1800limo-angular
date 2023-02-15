@@ -85,4 +85,13 @@ ul {
 			padding: 0.3rem 0 !important;
 		}
 	}
+	.value
+	{
+		font-size: 18px;
+	}
+}
+
+.ng-select.ng-select-single .ng-select-container .ng-value-container .ng-input
+{ 
+	padding:6px;
 }

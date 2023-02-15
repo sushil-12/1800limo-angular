@@ -11,17 +11,22 @@
 							Operator Account
 						</mat-label>
 						<mat-select [(value)]="operatorSelect">
-							<mat-option value="all" name="affiliateType" (click)="affiliateTypeSwitch('all')">All
+							<mat-option value="all" name="affiliateType"
+								(click)="affiliateTypeSwitch('all')">All
 								Accounts</mat-option>
 							<mat-option value="black-limo-operator" name="affiliateType"
-								(click)="affiliateTypeSwitch('black-limo-operator')">Black Car / Limo Accounts
+								(click)="affiliateTypeSwitch('black-limo-operator')">Black Car /
+								Limo Accounts
 							</mat-option>
 							<mat-option value="fleet-operator" name="affiliateType"
-								(click)="affiliateTypeSwitch('fleet-operator')">Fleet Accounts</mat-option>
+								(click)="affiliateTypeSwitch('fleet-operator')">Fleet
+								Accounts</mat-option>
 							<mat-option value="taxi-operator" name="affiliateType"
-								(click)="affiliateTypeSwitch('taxi-operator')">Taxi Accounts</mat-option>
+								(click)="affiliateTypeSwitch('taxi-operator')">Taxi
+								Accounts</mat-option>
 							<mat-option value="gig-operator" name="affiliateType"
-								(click)="affiliateTypeSwitch('gig-operator')">Gig Accounts</mat-option>
+								(click)="affiliateTypeSwitch('gig-operator')">Gig
+								Accounts</mat-option>
 						</mat-select>
 					</mat-form-field>
 				</div>
@@ -53,21 +58,24 @@
 				<div class="col-md-4 py-2">
 					<mat-form-field appearance="outline" class="m-0">
 						<mat-label>Search Filter by Key word</mat-label>
-						<input type="text" matInput placeholder="Search Filter by Key word" id="keyword">
+						<input type="text" matInput placeholder="Search Filter by Key word"
+							id="keyword">
 					</mat-form-field>
 				</div>
 				<div class="col-md-2 py-2">
-					<button class="custom-filled-button m-0" (click)="loadAffiliateOperators()">SEARCH</button>
+					<button class="custom-filled-button m-0"
+						(click)="loadAffiliateOperators()">SEARCH</button>
 				</div>
 			</div>
 			<h3 class="headinginfoH3">{{heading}}</h3>
 			<div class="row">
 				<div class="col-md-12">
-					<button class="custom-btn add-button" data-toggle="modal" data-target="#addDriverDressModal"
-						(click)="addAffiliateAccountClick()">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-plus-circle"
-							viewBox="0 0 16 16">
-							<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+					<button class="custom-btn add-button" data-toggle="modal"
+						data-target="#addDriverDressModal" (click)="addAffiliateAccountClick()">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+							class="bi bi-plus-circle" viewBox="0 0 16 16">
+							<path
+								d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
 							<path
 								d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
 						</svg> {{addButton}}
@@ -76,7 +84,8 @@
 			</div>
 			<div class="row">
 				<div class="col-md-12">
-					<label class="alert alert-danger">Note: Add each different {{affiliateName}} first. Enter rates and
+					<label class="alert alert-danger">Note: Add each different {{affiliateName}}
+						first. Enter rates and
 						taxes for each {{affiliateName}}.</label>
 				</div>
 			</div>
@@ -85,8 +94,9 @@
 		<div class="containeredd driverside_table">
 			<div class="row">
 				<div class="col-md-12 custom_table table-responsive">
-					<table class="table table-striped dataTable dt-responsive" id="dataTable" role="grid"
-						aria-describedby="dataTable_info" style="width: 100%;" width="100%" cellspacing="0">
+					<table class="table table-striped dataTable dt-responsive" id="dataTable"
+						role="grid" aria-describedby="dataTable_info" style="width: 100%;"
+						width="100%" cellspacing="0">
 						<thead>
 							<tr role="row">
 								<th>Name</th>
@@ -106,15 +116,16 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr role="row" class="odd" *ngFor="let blackCarLimoBus of affiliate_accounts">
-								<td *ngIf="blackCarLimoBus.MiddleName == null;else middleName">
-									{{blackCarLimoBus.FirstName+' '+blackCarLimoBus.LastName}}
+							<tr role="row" class="odd"
+								*ngFor="let blackCarLimoBus of affiliate_accounts">
+								<td>
+									{{ blackCarLimoBus.FirstName }}
+									{{ blackCarLimoBus.MiddleName ? blackCarLimoBus.MiddleName : ''
+									}}
+									{{ blackCarLimoBus.LastName }}
 								</td>
-								<ng-template #middleName>
-									<td>{{blackCarLimoBus.FirstName+' '+blackCarLimoBus.MiddleName+'
-										'+blackCarLimoBus.LastName}}</td>
-								</ng-template>
-								<td class="clickable" (click)="sendMessage('email', blackCarLimoBus)"
+								<td class="clickable"
+									(click)="sendMessage('email', blackCarLimoBus)"
 									data-messagetype="email">
 									{{blackCarLimoBus.Email}}
 								</td>
@@ -131,16 +142,20 @@
 								<!-- <td>{{blackCarLimoBus.State}}</td>
 								<td>{{blackCarLimoBus.Country}}</td> -->
 								<td>
-									<div *ngIf="blackCarLimoBus.account_approval=='completed'; else notCompleted">
+									<div
+										*ngIf="blackCarLimoBus.account_approval=='completed'; else notCompleted">
 										<button class="acceptButton"
 											(click)="acceptAffiliate(blackCarLimoBus.id)">Accept</button>
-										<button class="rejectButton" (click)="rejectAffiliateClick(blackCarLimoBus.id)"
-											data-toggle="modal" data-target="#rejectCauseModal">Reject</button>
+										<button class="rejectButton"
+											(click)="rejectAffiliateClick(blackCarLimoBus.id)"
+											data-toggle="modal"
+											data-target="#rejectCauseModal">Reject</button>
 									</div>
 									<ng-template #notCompleted>
 										<div
 											[className]="'badge badge-pill approval_status ' + blackCarLimoBus.account_approval">
-											{{blackCarLimoBus.account_approval | bookingStatusTextReplace : '_' : ' '
+											{{blackCarLimoBus.account_approval |
+											bookingStatusTextReplace : '_' : ' '
 											|titlecase}}</div>
 									</ng-template>
 								</td>
@@ -152,17 +167,21 @@
 								</td>
 								<td>
 									<a class="user-profileded btn btn-icon btn-transparent-dark dropdown-toggle"
-										id="navbarDropdownUserImage" href="javascript:void(0);" role="button"
-										data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+										id="navbarDropdownUserImage" href="javascript:void(0);"
+										role="button" data-toggle="dropdown" aria-haspopup="true"
+										aria-expanded="false">
 										<span>View</span>
 									</a>
 									<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
 										aria-labelledby="navbarDropdownUserImage">
-										<a class="dropdown-item" (click)="editAffiliateAccount(blackCarLimoBus.id)">
+										<a class="dropdown-item"
+											(click)="editAffiliateAccount(blackCarLimoBus.id)">
 											<div class="dropdown-item-icon"></div>
-											Edit {{formatter(blackCarLimoBus.AffiliateType) | titlecase }} Account
+											Edit {{formatter(blackCarLimoBus.AffiliateType) |
+											titlecase }} Account
 										</a>
-										<a class="dropdown-item" (click)="viewAffiliateCreditCards(blackCarLimoBus.id)">
+										<a class="dropdown-item"
+											(click)="viewAffiliateCreditCards(blackCarLimoBus.id)">
 											<div class="dropdown-item-icon"></div>
 											View Credit Cards
 										</a>
@@ -177,7 +196,8 @@
 				<nav aria-label="Page navigation example">
 					<ul class="pagination pagination-circle pg-blue">
 						<li *ngIf="currentPage!=1" class="page-item disabled"
-							(click)="loadAffiliateOperators(firstPageUrl)"><a class="page-link">First</a></li>
+							(click)="loadAffiliateOperators(firstPageUrl)"><a
+								class="page-link">First</a></li>
 						<li *ngIf="currentPage!=1" class="page-item disabled"
 							(click)="loadAffiliateOperators(prevPageUrl)">
 							<a class="page-link" aria-label="Previous">
@@ -210,12 +230,13 @@
 </main>
 
 <!-- repeat/return booking type modal -->
-<div class="modal fade" id="rejectCauseModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-	aria-hidden="true">
+<div class="modal fade" id="rejectCauseModal" tabindex="-1" role="dialog"
+	aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content user_inforamtion">
 			<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLabel">Please enter the cause of Rejection.</h5>
+				<h5 class="modal-title" id="exampleModalLabel">Please enter the cause of Rejection.
+				</h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
@@ -226,22 +247,26 @@
 						<div class="col-md-12">
 							<label>Rejection Cause</label>
 							<textarea formControlName="reject_cause"></textarea>
-							<div *ngIf="submitted && rejectCauseF.reject_cause.errors" class="text-danger">
-								<div *ngIf="rejectCauseF.reject_cause.errors.required">This field is required</div>
+							<div *ngIf="submitted && rejectCauseF.reject_cause.errors"
+								class="text-danger">
+								<div *ngIf="rejectCauseF.reject_cause.errors.required">This field is
+									required</div>
 							</div>
 						</div>
 					</div>
 				</form>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="forstep_booknow" (click)="rejectAffiliate()">Reject</button>
+				<button type="button" class="forstep_booknow"
+					(click)="rejectAffiliate()">Reject</button>
 			</div>
 		</div>
 	</div>
 </div>
 
 
-<div class="modal fade" tabindex="-1" id="messageModal" aria-labelledby="messageModal" aria-hidden="true">
+<div class="modal fade" tabindex="-1" id="messageModal" aria-labelledby="messageModal"
+	aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -258,7 +283,8 @@
 						<p id="label">
 							Message:
 						</p>
-						<textarea id="message" rows="7" placeholder="Your Message" #message></textarea>
+						<textarea id="message" rows="7" placeholder="Your Message"
+							#message></textarea>
 					</div>
 				</div>
 			</div>
