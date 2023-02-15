@@ -1,36 +1,219 @@
-<div class="container p-3">
-	<h3 class="font-weight-bolder m-3 text-center">Finalize Booking</h3>
+<section class="section-container">
+	<div class="container" id="print-section">
+		<h3 class="font-weight-bolder mb-1 text-center">Finalize Booking</h3>
+		<hr>
+		<div class="invoicesum_header">
+			<h3 class="text-lg text-center pl-0">Booking # {{BookingDetail?.reservation_id}}</h3>
+			<div class="row my-3">
+				<div class="col-md-4">
+					<p>Booking Type <strong>{{ textFormatter(BookingDetail?.transfer_type) | titlecase }}</strong>
+					</p>
+				</div>
+				<div class="col-md-4">
+					<p>Quote Amount <strong>{{BookingDetail?.quote_amount}}</strong></p>
+				</div>
+				<div class="col-md-4">
+					<p>Booking Status <strong>{{BookingDetail?.booking_status | titlecase}}</strong></p>
+				</div>
+			</div>
+		</div>
+		<div class="invoicesum_dtl">
+			<div class="row">
+				<div class="col-md-4 field">
+					<p>Pickup Date </p>
+					<strong>{{ dateFormat2(BookingDetail?.pickup_date)}} | {{dateFormat(BookingDetail?.pickup_date)
+						}}</strong>
+				</div>
+				<div class="col-md-4 field">
+					<p>Pickup Time</p>
+					<strong>{{timeFormat2(BookingDetail?.pickup_time)}} |
+						{{timeFormat(BookingDetail?.pickup_time)}}</strong>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-4 field">
+					<p>Driver Name </p>
+					<strong>{{BookingDetail?.driver_name | titlecase}}</strong>
+				</div>
+				<div class="col-md-4 field">
+					<p>Driver Email</p>
+					<strong>{{BookingDetail?.driver_email}}</strong>
+				</div>
 
-	<!-- Booking -->
-	<div class="row">
-		<div class="col-md-12">
-			<div id="booking-paradigms" class="d-flex flex-wrap align-items-center">
-				<label class="m-1"> Booking: </label>
-				<label class="m-0 text-uppercase">
-					{{ formatText(BookingDetail.service_type) }} /
-					{{ formatText(BookingDetail.transfer_type) }}
-					{{
-					BookingDetail.service_type === "roundtrip"
-					? " / " +
-					formatText(BookingDetail.return_transfer_type)
-					: ""
-					}}
-				</label>
+				<div class="col-md-4 field">
+					<p>Driver Phone</p>
+					<strong>{{BookingDetail?.driver_cell_isd}}{{BookingDetail?.driver_cell}}</strong>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-4 field">
+					<p>Passenger Name </p>
+					<strong>{{BookingDetail?.passenger_name | titlecase}}</strong>
+				</div>
+				<div class="col-md-4 field">
+					<p>Passenger Email</p>
+					<strong>{{BookingDetail?.passenger_email}}</strong>
+				</div>
+
+				<div class="col-md-4 field">
+					<p>Passenger Phone</p>
+					<strong>{{BookingDetail?.passenger_cell_isd}}{{BookingDetail?.passenger_cell}}</strong>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-4 field">
+					<p>Pickup Address</p>
+					<strong>{{BookingDetail?.pickup_address}}</strong>
+				</div>
+			</div>
+			<div class="row" *ngIf="transferType == 'airport_to_city'">
+				<div class="col-md-4 field">
+					<p>Pickup Airport </p>
+					<strong>{{BookingDetail?.pickup_airport | titlecase}}</strong>
+				</div>
+				<div class="col-md-4 field">
+					<p>Pickup Airline</p>
+					<strong>{{BookingDetail?.pickup_airline | titlecase}}</strong>
+				</div>
+
+				<div class="col-md-4 field">
+					<p>Pickup Flight</p>
+					<strong>{{BookingDetail?.pickup_flight}}</strong>
+				</div>
+			</div>
+			<div class="row"
+				*ngIf="transferType == 'city_to_airport' || transferType == 'airport_to_airport' || transferType == 'cruise_to_airport'">
+				<div class="col-md-4 field">
+					<p>DropOff Airport </p>
+					<strong>{{BookingDetail?.dropoff_airport_name | titlecase}}</strong>
+				</div>
+				<div class="col-md-4 field">
+					<p>DropOff Airline</p>
+					<strong>{{BookingDetail?.dropoff_airline_name
+						| titlecase}}</strong>
+				</div>
+
+				<div class="col-md-4 field">
+					<p>DropOff Flight</p>
+					<strong>{{BookingDetail?.dropoff_flight | titlecase}}</strong>
+				</div>
+			</div>
+			<div class="row"
+				*ngIf="transferType == 'city_to_city' || transferType == 'airport_to_city' || transferType == 'cruise_to_city'">
+				-
+				<div class="col-md-4 field">
+					<p>DropOff Address </p>
+					<strong>{{BookingDetail?.dropoff_address}}</strong>
+				</div>
 			</div>
 		</div>
 	</div>
+</section>
 
-	<hr style="width: 50%; margin: 1.2rem auto; border: 1.3px solid #000" />
+<app-rates-form class="d-flex flex-wrap" [initRates]="init_rates" [affiliate_type]="'loose_affiliate'"
+	(formvalue)="RateFormValue($event)" [distance]="finalize_params.distance"
+	[reservation_id]="finalize_params.booking_id" [reset]="false" [initReturnRates]="init_return_rates"
+	[hours]="finalize_params.number_of_hours" [vehicles]="finalize_params.number_of_vehicles"
+	(returnformvalue)="ReturnRateFormValue($event)">
+</app-rates-form>
 
-	<!-- Booking -->
+<section class="section-container">
+	<h4 class="section-dropdown-header">
+		Payments
+	</h4>
 	<div class="row">
-		<div class="col-md-12">
-			<div id="booking-paradigms" class="d-flex flex-wrap align-items-center">
-				<label class="m-1"> Pickup Type: </label>
-				<label class="m-0 text-uppercase">
-					{{ BookingDetail.transfer_type }}
-				</label>
+		<div class="col-md-4">
+			<mat-form-field appearance="outline">
+				<mat-label>Payment Method</mat-label>
+				<mat-select tabindex="1">
+					<mat-option value='card'>Card</mat-option>
+					<mat-option value='cash'>Cash</mat-option>
+				</mat-select>
+			</mat-form-field>
+		</div>
+	</div>
+	<div class="containeredd">
+		<div class="row mt-3">
+			<div class="col-md-12">
+				<label class="alert alert-danger">Note: Add Debit/Credit card first.</label>
 			</div>
 		</div>
+
+		<div class="row">
+			<div class="col-md-12">
+				<button class="custom-btn add-button">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-plus-circle"
+						viewBox="0 0 16 16">
+						<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+						<path
+							d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+					</svg> Add Debit / Credit card
+				</button>
+			</div>
+		</div>
+
+	</div>
+
+	<div class="containeredd driverside_table">
+		<div class="row">
+			<div class="col-md-12 custom_table table-responsive">
+				<table class="table table-striped dataTable dt-responsive" id="dataTable" role="grid"
+					aria-describedby="dataTable_info" style="width: 100%;" width="100%" cellspacing="0" tabindex="-1">
+					<thead>
+						<tr role="row">
+							<th>Card Holder First & Last Name</th>
+							<th>Card No.</th>
+							<th>MM/YYYY</th>
+							<th>Card Type</th>
+							<th>Delete</th>
+						</tr>
+					</thead>
+					<!-- <tbody>
+<ng-container *ngIf="cards">
+<ng-container *ngIf="cards">
+<tr role="row" class="odd" *ngFor="let card of cards">
+<td class="text-capitalize">{{card.name}}</td>
+<td>{{card.last4}}</td>
+<td *ngIf="card.exp_month >= 10; else showZero">
+{{card.exp_month+'/'+card.exp_year}}</td>
+<ng-template #showZero>
+<td>0{{card.exp_month+'/'+card.exp_year}}</td>
+</ng-template>
+<td class="text-capitalize">{{card.card_type}}</td>
+<td>
+<i class="fa fa-trash" style="font-size: x-large; color:#d64646"
+(click)="enableDisableClicked(card.ID)" data-toggle="modal"
+data-target="#deleteConfirmationModal"></i>
+</td>
+</tr>
+
+</ng-container>
+
+</ng-container>
+<ng-container *ngIf="!cards">
+<tr>
+<td colspan="6">No Card found!</td>
+</tr>
+</ng-container>
+</tbody> -->
+				</table>
+			</div>
+			<section class="billing_inforamtion">
+				<ul>
+					<li><button class="custom-btn backbutton" tabindex="-1">BACK</button> </li>
+				</ul>
+			</section>
+		</div>
+	</div>
+</section>
+
+<div class="row">
+	<div class="col-md-12 text-right">
+		<button type="button" class="custom-filled-back-button m-3" [routerLink]="['/admin/daily-bookings-admin']">
+			Back
+		</button>
+		<button type="button" class="custom-filled-button m-3" (click)="editRates()">
+			Save
+		</button>
 	</div>
 </div>
