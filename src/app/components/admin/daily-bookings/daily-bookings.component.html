@@ -43,7 +43,7 @@
 					</button>
 				</div>
 				<div class="col-sm-2 my-2">
-					<button class="custom-filled-button orange-button"
+					<button class="custom-filled-back-button" style="white-space: nowrap"
 						(click)="resetDates(); loadBookings(null, startDate, endDate)">
 						Reset Dates
 					</button>
@@ -99,7 +99,11 @@
 											{{booking.passenger_name}} |
 											{{booking.passenger_cell_isd}}{{booking.passenger_cell}}
 										</p>
-										{{booking.pickup_address}}
+										<a target="_blank"
+											[ngClass]="{'text-underline cursor-pointer': booking.pickup_latitude && booking.pickup_longitude, 'text-dark': !pickup_latitude || !pickup_longitude}"
+											(click)="showLocationPointOnMap(booking.pickup_latitude, booking.pickup_longitude)">
+											{{ booking.pickup_address }}
+										</a>
 									</td>
 									<td>
 										<p data-target="#sendEmailModal" data-toggle="modal"
@@ -125,7 +129,11 @@
 												</p>
 											</ng-template>
 										</ng-template>
-										{{booking.dropoff_address}}
+										<a target="_blank"
+											[ngClass]="{'text-underline cursor-pointer': booking.pickup_latitude && booking.pickup_longitude, 'text-dark': !booking.pickup_latitude || !booking.pickup_longitude}"
+											(click)="showLocationPointOnMap(booking.dropoff_latitude, booking.dropoff_longitude)">
+											{{ booking.dropoff_address }}
+										</a>
 									</td>
 									<td>{{booking.vehicle_cat_name}}</td>
 									<td>
@@ -516,7 +524,7 @@
 	aria-hidden="true">
 	<div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
 		<div class="modal-content">
-			<div class="modal-header">
+			<div class="modal-header py-0">
 				<h3 class="modal-title">
 					Preview Booking
 				</h3>
@@ -524,15 +532,13 @@
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
-
-
 			<div class="modal-body" style="font-family: 'PT Serif', serif;">
 				<div class="container text-lg" *ngIf="bookingPreview">
 					<!-- Booking Type -->
 					<h4 class="font-weight-bolder m-0">
 						Booking Type
 					</h4>
-					<!-- Travel Info. -->
+					<!-- Booking Information -->
 					<div class="row p-2">
 						<div class="col-md-4 key">
 							<span>
@@ -553,6 +559,25 @@
 							</span>
 						</div>
 					</div>
+					<!-- Booking Information - Ends -->
+
+					<!-- Grand Total -->
+					<h4 class="font-weight-bolder m-0 mt-3">
+						Rates / Taxes
+					</h4>
+					<div class="row p-2">
+						<div class="col-md-4 key">
+							<span>
+								Grand Total
+							</span>
+						</div>
+						<div class="col-md-8 value">
+							<span class="font-weight-bolder">
+								$ {{ textFormatter(bookingPreview.grand_total) }}
+							</span>
+						</div>
+					</div>
+					<!-- Grand Total -->
 
 					<!-- Driver Information -->
 					<h4 class="font-weight-bolder m-0 mt-3">
@@ -972,24 +997,6 @@
 						<!-- Cruise Time -->
 					</div>
 					<!-- Dropoff > Cruise Details - Ends -->
-
-					<!-- Grand Total -->
-					<h4 class="font-weight-bolder m-0 mt-3">
-						Rates / Taxes
-					</h4>
-					<div class="row p-2">
-						<div class="col-md-4 key">
-							<span>
-								Grand Total
-							</span>
-						</div>
-						<div class="col-md-8 value">
-							<span class="font-weight-bolder">
-								$ {{ textFormatter(bookingPreview.grand_total) }}
-							</span>
-						</div>
-					</div>
-					<!-- Grand Total -->
 				</div>
 			</div>
 

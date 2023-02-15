@@ -28,8 +28,7 @@
 								Service Type
 							</mat-label>
 							<mat-select formControlName="service_type"
-								[ngStyle]="{'cursor': Form.updateType.value == 'edit' ? 'not-allowed' : 'default'}"
-								[disabled]="Form.updateType.value == 'edit'">
+								[ngStyle]="{'cursor': Form.updateType.value == 'edit' ? 'not-allowed' : 'default'}">
 								<mat-option value="one_way">One Way</mat-option>
 								<mat-option value="round_trip">Round Trip</mat-option>
 								<mat-option value="charter_tour">Charter/Tour</mat-option>
@@ -690,7 +689,7 @@
 
 						<!-- Ng-Select -->
 						<ng-select appearance="outline" [items]="BigData?.vehicleCategories"
-							bindLabel="name" bindValue="id" placeholder="Select Vehicle Category"
+							bindLabel="name" bindValue="id" placeholder="Select Vehicle Type"
 							dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
 							formControlName="vehicle_type">
 						</ng-select>

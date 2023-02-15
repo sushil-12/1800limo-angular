@@ -470,4 +470,14 @@ export class DailyBookingsComponent implements OnInit
 	{
 		this.adminService.setCookie(key, value, 30);
 	}
+
+	showLocationPointOnMap(lat: number, lng: number)
+	{
+		if (!lat && !lng)
+		{
+			console.error('Error: Location Points not specified. ');
+			return
+		}
+		this.router.navigate([`/locate-map/${lat}/${lng}`])
+	}
 }
