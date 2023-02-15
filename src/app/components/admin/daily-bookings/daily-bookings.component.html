@@ -99,11 +99,10 @@
 											{{booking.passenger_name}} |
 											{{booking.passenger_cell_isd}}{{booking.passenger_cell}}
 										</p>
-										<a target="_blank"
-											[ngClass]="{'text-underline cursor-pointer': booking.pickup_latitude && booking.pickup_longitude, 'text-dark': !pickup_latitude || !pickup_longitude}"
-											(click)="showLocationPointOnMap(booking.pickup_latitude, booking.pickup_longitude)">
+										<span class="text-underline cursor-pointer"
+											(click)="showLocationPointOnMap(booking.booking_id, 'pickup')">
 											{{ booking.pickup_address }}
-										</a>
+										</span>
 									</td>
 									<td>
 										<p data-target="#sendEmailModal" data-toggle="modal"
@@ -129,11 +128,10 @@
 												</p>
 											</ng-template>
 										</ng-template>
-										<a target="_blank"
-											[ngClass]="{'text-underline cursor-pointer': booking.pickup_latitude && booking.pickup_longitude, 'text-dark': !booking.pickup_latitude || !booking.pickup_longitude}"
-											(click)="showLocationPointOnMap(booking.dropoff_latitude, booking.dropoff_longitude)">
+										<span class="text-underline cursor-pointer"
+											(click)="showLocationPointOnMap(booking.booking_id, 'dropoff')">
 											{{ booking.dropoff_address }}
-										</a>
+										</span>
 									</td>
 									<td>{{booking.vehicle_cat_name}}</td>
 									<td>
