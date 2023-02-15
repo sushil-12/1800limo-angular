@@ -8,190 +8,239 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 })
 
 
-export class AdminService {
+export class AdminService
+{
 	big_data_list: any = undefined;
 
 
 	private serverUrl = environment.serverUrl;
-	constructor(private httpClient: HttpClient) {
-		if (this.big_data_list == undefined) {
-			this.createBookingGetData().subscribe((response: any) => {
+	constructor(private httpClient: HttpClient)
+	{
+		if (this.big_data_list == undefined)
+		{
+			this.createBookingGetData().subscribe((response: any) =>
+			{
 				this.big_data_list = response.data
 			})
 		}
 	}
 
-	getAirportsAndBigData() {
-		if (this.big_data_list) {
+	getAirportsAndBigData()
+	{
+		if (this.big_data_list)
+		{
 			return this.big_data_list;
 		}
-		else {
+		else
+		{
 			return undefined;
 		}
 	}
 
-	getCookie(keyword: string): null | string {
+	getCookie(keyword: string): null | string
+	{
 		let ca = document.cookie.split(';');
-		for (let i = 0; i < ca.length; i++) {
-			if (ca[i].trim().indexOf(keyword) == 0) {
+		for (let i = 0; i < ca.length; i++)
+		{
+			if (ca[i].trim().indexOf(keyword) == 0)
+			{
 				return ca[i].substring(ca[i].indexOf('=') + 1, ca[i].length)
 			}
 		}
 		return null
 	}
 
-	checkCookie(keyword: string): boolean {
+	checkCookie(keyword: string): boolean
+	{
 		let required_cookie = this.getCookie(keyword)
-		if (required_cookie && required_cookie != '') {
+		if (required_cookie && required_cookie != '')
+		{
 			return true
 		}
 		return false
 	}
 
-	setCookie(key: string, value: string, exdays: number): boolean {
+	setCookie(key: string, value: string, exdays: number): boolean
+	{
 		const date = new Date()
 
 		date.setTime(date.getTime() + (exdays * 24 * 60 * 60 * 1000));
 		document.cookie = `${key}=${value};expires=${date.toUTCString()};`;
 
 		// check if the cookies is successfully set
-		if (this.checkCookie(key)) {
+		if (this.checkCookie(key))
+		{
 			return true
 		}
 		return false
 	}
 
-	changeSortOrder(data: any) {
+	changeSortOrder(data: any)
+	{
 		return this.httpClient.put(this.serverUrl + 'vehicle-types-sorting', data);
 	}
 
-	changeSortingOrder(data: any) {
+	changeSortingOrder(data: any)
+	{
 		return this.httpClient.put(this.serverUrl + 'admin/setting/meet-greet-sorting', data);
 	}
-	changeAmenitySortingOrder(data: any) {
+	changeAmenitySortingOrder(data: any)
+	{
 		return this.httpClient.put(this.serverUrl + 'admin/setting/amenity-sorting', data);
 	}
-	changeSpecialAmenitySortingOrder(data: any) {
+	changeSpecialAmenitySortingOrder(data: any)
+	{
 		return this.httpClient.put(this.serverUrl + 'admin/setting/special-amenities-sorting', data);
 	}
-	changeInteriorAmenitySortingOrder(data: any) {
+	changeInteriorAmenitySortingOrder(data: any)
+	{
 		return this.httpClient.put(this.serverUrl + 'admin/setting/vehicle-interior-sorting', data);
 	}
 
-	logout() {
+	logout()
+	{
 		return this.httpClient.post(this.serverUrl + 'logout', {});
 	}
 
-	async getOurVehicles() {
+	async getOurVehicles()
+	{
 		const result = await this.httpClient.get(this.serverUrl + 'vehicle-types-listing').toPromise();
 		return result;
 	}
 
-	addVehicleType(data) {
+	addVehicleType(data)
+	{
 		return this.httpClient.post(this.serverUrl + 'add-vehicle-types', data);
 	}
 
-	getVehicleType(id) {
+	getVehicleType(id)
+	{
 		return this.httpClient.get(this.serverUrl + 'get-vehicle-types/' + id);
 	}
 
-	updateVehicleType(data) {
+	updateVehicleType(data)
+	{
 		return this.httpClient.post(this.serverUrl + 'edit-vehicle-types', data);
 	}
 
 	//amenities
-	async getAmenities() {
+	async getAmenities()
+	{
 		const result = await this.httpClient.get(this.serverUrl + 'amenities').toPromise();
 		return result;
 	}
-	addAmenity(data) {
+	addAmenity(data)
+	{
 		return this.httpClient.post(this.serverUrl + 'add-amenity', data);
 	}
-	getAmenity(id) {
+	getAmenity(id)
+	{
 		return this.httpClient.get(this.serverUrl + 'get-amenity/' + id);
 	}
-	updateAmenity(data) {
+	updateAmenity(data)
+	{
 		return this.httpClient.put(this.serverUrl + 'edit-amenities', data);
 	}
-	amenityStatus(id, status) {
+	amenityStatus(id, status)
+	{
 		return this.httpClient.put(this.serverUrl + 'amenity-status', { 'id': id, 'status': status });
 	}
 
 	// special Amenity
-	async getSpecialAmenities() {
+	async getSpecialAmenities()
+	{
 		const result = await this.httpClient.get(this.serverUrl + 'admin/special-amenities').toPromise();
 		return result;
 	}
-	addSpecialAmenity(data) {
+	addSpecialAmenity(data)
+	{
 		return this.httpClient.post(this.serverUrl + 'admin/setting/add-special-amenities', data);
 	}
-	getSpecialAmenity(id) {
+	getSpecialAmenity(id)
+	{
 		return this.httpClient.get(this.serverUrl + 'admin/setting/get-special-amenities/' + id);
 	}
-	updateSpecialAmenity(data) {
+	updateSpecialAmenity(data)
+	{
 		return this.httpClient.put(this.serverUrl + 'admin/setting/edit-special-amenities', data);
 	}
-	specialAmenityStatus(id, status) {
+	specialAmenityStatus(id, status)
+	{
 		return this.httpClient.put(this.serverUrl + 'admin/setting/special-amenities-status', { 'id': id, 'status': status });
 	}
 
 	// Interior Amenity
-	async getInteriorAmenities() {
+	async getInteriorAmenities()
+	{
 		const result = await this.httpClient.get(this.serverUrl + 'admin/vehicle-interior').toPromise();
 		return result;
 	}
-	addInteriorAmenity(data) {
+	addInteriorAmenity(data)
+	{
 		return this.httpClient.post(this.serverUrl + 'admin/setting/add-vehicle-interior', data);
 	}
-	getInteriorAmenity(id) {
+	getInteriorAmenity(id)
+	{
 		return this.httpClient.get(this.serverUrl + 'admin/setting/get-vehicle-interior/' + id);
 	}
-	updateInteriorAmenity(data) {
+	updateInteriorAmenity(data)
+	{
 		return this.httpClient.put(this.serverUrl + 'admin/setting/edit-vehicle-interior', data);
 	}
-	interiorAmenityStatus(id, status) {
+	interiorAmenityStatus(id, status)
+	{
 		return this.httpClient.put(this.serverUrl + 'admin/setting/vehicle-interior-status', { 'id': id, 'status': status });
 	}
 
 	//
 	// add / edit / update vehicle for admin-affiliate-step 5
 	// Add / Edit / Get vehicle data for admin affliliate step 5
-	async adminAffiliateVehicleList(id) {
+	async adminAffiliateVehicleList(id)
+	{
 		const result = await this.httpClient.get(this.serverUrl + 'admin/get-affiliate-all-vehicles/' + id).toPromise();
 		return result;
 	}
-	getLooseAffiliateVehicles(vehicle_type_id: number) {
+	getLooseAffiliateVehicles(vehicle_type_id: number)
+	{
 		let data = {}
 		data['filters'] = {}
 		data['filters']['vehicle-type'] = [vehicle_type_id]
 		return this.httpClient.post(`${this.serverUrl}quote/vehicle-listing`, data)
 	}
-	adminAffiliateSubmitVehicle(data) {
+	adminAffiliateSubmitVehicle(data)
+	{
 		return this.httpClient.post(this.serverUrl + 'admin/add-vehicle-for-affiliate', data);
 	}
-	adminAffiliateGetVehicleData(id) {
+	adminAffiliateGetVehicleData(id)
+	{
 		return this.httpClient.get(this.serverUrl + 'admin/get-affiliate-vehicle-detail/' + id);
 	}
-	adminAffiliateEditVehicle(data) {
+	adminAffiliateEditVehicle(data)
+	{
 		return this.httpClient.put(this.serverUrl + 'admin/edit-vehicle-for-affiliate', data);
 	}
-	adminAffiliateGetFieldsData() {
+	adminAffiliateGetFieldsData()
+	{
 		return this.httpClient.get(this.serverUrl + 'admin/vehicle-data');
 	}
 	// end
 
 	//vehicle
 	//vehicle rates 
-	getMasterVehicleInfo(vehicleId) {
+	getMasterVehicleInfo(vehicleId)
+	{
 		return this.httpClient.get(this.serverUrl + 'get-master-vehicle-info/' + vehicleId);
 	}
-	addMasterVehicleRates(data) {
+	addMasterVehicleRates(data)
+	{
 		return this.httpClient.post(this.serverUrl + 'add-vehicle-fare', data);
 	}
-	getMasterVehicleRates(id) {
+	getMasterVehicleRates(id)
+	{
 		return this.httpClient.get(this.serverUrl + 'get-vehicle-fare/' + id);
 	}
-	editMasterVehicleRates(data) {
+	editMasterVehicleRates(data)
+	{
 		return this.httpClient.post(this.serverUrl + 'update-master-vehicle-fare', data);
 		// if (data.id)//edit vehicle rate
 		// {
@@ -203,42 +252,54 @@ export class AdminService {
 		// }
 	}
 	//
-	vehicles(id) {
+	vehicles(id)
+	{
 		return this.httpClient.get(this.serverUrl + 'get-vehicle-type-vehicles/' + id).toPromise();
 	}
-	getFieldsData() {
+	getFieldsData()
+	{
 		return this.httpClient.get(this.serverUrl + 'fields-data');
 	}
-	uploadVehicleImage(image) {
+	uploadVehicleImage(image)
+	{
 		return this.httpClient.post(this.serverUrl + 'add-single-image', { 'image': image });
 	}
-	deleteImage(id) {
+	deleteImage(id)
+	{
 		return this.httpClient.delete(this.serverUrl + 'delete-image/' + id);
 	}
-	submitVehicle(data) {
+	submitVehicle(data)
+	{
 		return this.httpClient.post(this.serverUrl + 'add-vehicle', data);
 	}
-	getVehicleData(id) {
+	getVehicleData(id)
+	{
 		return this.httpClient.get(this.serverUrl + 'get-vehicle/' + id);
 	}
-	editVehicle(data) {
+	editVehicle(data)
+	{
 		return this.httpClient.put(this.serverUrl + 'edit-vehicle', data);
 	}
-	vehicleStatus(id, status) {
+	vehicleStatus(id, status)
+	{
 		return this.httpClient.put(this.serverUrl + 'vehicle-status', { 'id': id, 'status': status });
 	}
 	//
 	//vehicle rates 
-	getVehicleInfo(vehicleId) {
+	getVehicleInfo(vehicleId)
+	{
 		return this.httpClient.get(this.serverUrl + 'admin/get-affililate-vehicle-info/' + vehicleId);
 	}
-	addVehicleRates(data) {
+	addVehicleRates(data)
+	{
 		return this.httpClient.post(this.serverUrl + 'admin/add-affiliate-vehicle-fare', data);
 	}
-	getVehicleRates(id) {
+	getVehicleRates(id)
+	{
 		return this.httpClient.get(this.serverUrl + 'admin/get-affiliate-vehicle-fare-by-affiilate/' + id);
 	}
-	editVehicleRates(data) {
+	editVehicleRates(data)
+	{
 		if (data.id)//edit vehicle rate
 		{
 			return this.httpClient.put(this.serverUrl + 'admin/edit-affiliate-vehicle-fare', data);
@@ -252,316 +313,402 @@ export class AdminService {
 
 
 	//vehicle year API's
-	async getYears() {
+	async getYears()
+	{
 		const result = await this.httpClient.get(this.serverUrl + 'years').toPromise();
 		return result;
 	}
-	addYear(data) {
+	addYear(data)
+	{
 		return this.httpClient.post(this.serverUrl + 'add-year', data);
 	}
-	getYear(id) {
+	getYear(id)
+	{
 		return this.httpClient.get(this.serverUrl + 'get-year/' + id);
 	}
-	updateYear(data) {
+	updateYear(data)
+	{
 		return this.httpClient.put(this.serverUrl + 'edit-year', data);
 	}
-	yearStatus(id, status) {
+	yearStatus(id, status)
+	{
 		return this.httpClient.put(this.serverUrl + 'vehicles-year-status', { 'id': id, 'status': status });
 	}
 	//
 
 	//vehicle Color API's
-	async getColors() {
+	async getColors()
+	{
 		const result = await this.httpClient.get(this.serverUrl + 'vehicle-colors').toPromise();
 		return result;
 	}
-	addColor(data) {
+	addColor(data)
+	{
 		return this.httpClient.post(this.serverUrl + 'add-vehicle-color', data);
 	}
-	getColor(id) {
+	getColor(id)
+	{
 		return this.httpClient.get(this.serverUrl + 'get-vehicle-color/' + id);
 	}
-	updateColor(data) {
+	updateColor(data)
+	{
 		return this.httpClient.put(this.serverUrl + 'edit-vehicle-color', data);
 	}
-	colorStatus(id, status) {
+	colorStatus(id, status)
+	{
 		return this.httpClient.put(this.serverUrl + 'vehicle-color-status', { 'id': id, 'status': status });
 	}
 	//
 
 	//vehicle make API's
-	async getMakeList() {
+	async getMakeList()
+	{
 		const result = await this.httpClient.get(this.serverUrl + 'vehicle-makes').toPromise();
 		return result;
 	}
-	addMake(data) {
+	addMake(data)
+	{
 		return this.httpClient.post(this.serverUrl + 'add-vehicle-make', data);
 	}
-	getMake(id) {
+	getMake(id)
+	{
 		return this.httpClient.get(this.serverUrl + 'get-vehicle-make/' + id);
 	}
-	updateMake(data) {
+	updateMake(data)
+	{
 		return this.httpClient.put(this.serverUrl + 'edit-vehicle-make', data);
 	}
-	makeStatus(id, status) {
+	makeStatus(id, status)
+	{
 		return this.httpClient.put(this.serverUrl + 'vehicle-make-status', { 'id': id, 'status': status });
 	}
 	//
 
 	//vehicle model API's
-	async getModelList() {
+	async getModelList()
+	{
 		const result = await this.httpClient.get(this.serverUrl + 'vehicle-models').toPromise();
 		return result;
 	}
-	addModel(data) {
+	addModel(data)
+	{
 		return this.httpClient.post(this.serverUrl + 'add-vehicle-model', data);
 	}
-	getModel(id) {
+	getModel(id)
+	{
 		return this.httpClient.get(this.serverUrl + 'get-vehicle-model/' + id);
 	}
-	updateModel(data) {
+	updateModel(data)
+	{
 		return this.httpClient.put(this.serverUrl + 'edit-vehicle-model', data);
 	}
-	modelStatus(id, status) {
+	modelStatus(id, status)
+	{
 		return this.httpClient.put(this.serverUrl + 'vehicle-model-status', { 'id': id, 'status': status });
 	}
 	//
 	//vehicle model API's
-	async getAffilatePreferenceList() {
+	async getAffilatePreferenceList()
+	{
 		const result = await this.httpClient.get(this.serverUrl + 'affiliate-preferences').toPromise();
 		return result;
 	}
-	addAffilatePreference(data) {
+	addAffilatePreference(data)
+	{
 		return this.httpClient.post(this.serverUrl + 'add-affiliate-preference', data);
 	}
-	getAffilatePreference(id) {
+	getAffilatePreference(id)
+	{
 		return this.httpClient.get(this.serverUrl + 'get-affiliate-preference/' + id);
 	}
-	updateAffilatePreference(data) {
+	updateAffilatePreference(data)
+	{
 		return this.httpClient.put(this.serverUrl + 'edit-affiliate-preference', data);
 	}
-	affilatePreferenceStatus(id, status) {
+	affilatePreferenceStatus(id, status)
+	{
 		return this.httpClient.put(this.serverUrl + 'affiliate-preference-status', { 'id': id, 'status': status });
 	}
 	//
 
 	//vehicle model API's
-	async getDriverLanguageList() {
+	async getDriverLanguageList()
+	{
 		const result = await this.httpClient.get(this.serverUrl + 'driver-languages').toPromise();
 		return result;
 	}
-	addDriverLanguage(data) {
+	addDriverLanguage(data)
+	{
 		return this.httpClient.post(this.serverUrl + 'add-driver-language', data);
 	}
-	getDriverLanguage(id) {
+	getDriverLanguage(id)
+	{
 		return this.httpClient.get(this.serverUrl + 'get-driver-language/' + id);
 	}
-	updateDriverLanguage(data) {
+	updateDriverLanguage(data)
+	{
 		return this.httpClient.put(this.serverUrl + 'edit-driver-language', data);
 	}
-	driverLanguageStatus(id, status) {
+	driverLanguageStatus(id, status)
+	{
 		return this.httpClient.put(this.serverUrl + 'driver-language-status', { 'id': id, 'status': status });
 	}
 	//
 
 	//vehicle model API's
-	async getDriverDressList() {
+	async getDriverDressList()
+	{
 		const result = await this.httpClient.get(this.serverUrl + 'driver-dresses').toPromise();
 		return result;
 	}
-	addDriverDress(data) {
+	addDriverDress(data)
+	{
 		return this.httpClient.post(this.serverUrl + 'add-driver-dress', data);
 	}
-	getDriverDress(id) {
+	getDriverDress(id)
+	{
 		return this.httpClient.get(this.serverUrl + 'get-driver-dress/' + id);
 	}
-	updateDriverDress(data) {
+	updateDriverDress(data)
+	{
 		return this.httpClient.put(this.serverUrl + 'edit-driver-dress', data);
 	}
-	driverDressStatus(id, status) {
+	driverDressStatus(id, status)
+	{
 		return this.httpClient.put(this.serverUrl + 'driver-dress-status', { 'id': id, 'status': status });
 	}
 	//
 	//meet and greet model API's
-	async getMeetAndGreetList() {
+	async getMeetAndGreetList()
+	{
 		const result = await this.httpClient.get(this.serverUrl + 'admin/setting/meet-greet').toPromise();
 		return result;
 	}
-	addMeetAndGreet(data) {
+	addMeetAndGreet(data)
+	{
 		return this.httpClient.post(this.serverUrl + 'admin/setting/add-meet-greet', data);
 	}
-	getMeetAndGreet(id) {
+	getMeetAndGreet(id)
+	{
 		return this.httpClient.get(this.serverUrl + 'admin/setting/get-meet-greet/' + id);
 	}
-	updateMeetAndGreet(data) {
+	updateMeetAndGreet(data)
+	{
 		return this.httpClient.put(this.serverUrl + 'admin/setting/edit-meet-greet', data);
 	}
-	MeetAndGreetStatus(id, status) {
+	MeetAndGreetStatus(id, status)
+	{
 		return this.httpClient.put(this.serverUrl + 'admin/setting/meet-greet-status', { 'id': id, 'status': status });
 	}
 	//
 
 	//individual api
-	addAccount(data) {
+	addAccount(data)
+	{
 		return this.httpClient.post(this.serverUrl + 'add-account', data);
 	}
-	individualAccounts(url, keyword) {
+	individualAccounts(url, keyword)
+	{
 		var path;
-		if (url) {
+		if (url)
+		{
 			path = url + '&search=' + keyword;
 		}
-		else {
+		else
+		{
 			path = this.serverUrl + 'accounts' + '?search=' + keyword;
 		}
 		return this.httpClient.get(path).toPromise();;
 	}
-	getIndividualAccount(id) {
+	getIndividualAccount(id)
+	{
 		return this.httpClient.get(this.serverUrl + 'get-an-account/' + id);
 	}
-	updateIndividualAccount(data) {
+	updateIndividualAccount(data)
+	{
 		return this.httpClient.put(this.serverUrl + 'edit-account', data);
 	}
-	individualAccountStatus(id, status) {
+	individualAccountStatus(id, status)
+	{
 		return this.httpClient.put(this.serverUrl + 'account-status', { 'id': id, 'status': status });
 	}
 
 	//corporate api
-	addCorporateAccount(data) {
+	addCorporateAccount(data)
+	{
 		return this.httpClient.post(this.serverUrl + 'add-corporate-account', data);
 	}
-	corporateAccounts(url, keyword) {
+	corporateAccounts(url, keyword)
+	{
 		var path;
-		if (url) {
+		if (url)
+		{
 			path = url + '&search=' + keyword;
 		}
-		else {
+		else
+		{
 			path = this.serverUrl + 'corporate-accounts' + '?search=' + keyword;
 		}
 		return this.httpClient.get(path).toPromise();;
 	}
-	getCorporateAccount(id) {
+	getCorporateAccount(id)
+	{
 		return this.httpClient.get(this.serverUrl + 'get-corporate-account/' + id);
 	}
-	updateCorporateAccount(data) {
+	updateCorporateAccount(data)
+	{
 		return this.httpClient.put(this.serverUrl + 'edit-corporate-account', data);
 	}
-	corporateAccountStatus(id, status) {
+	corporateAccountStatus(id, status)
+	{
 		return this.httpClient.put(this.serverUrl + 'corporate-account-status', { 'id': id, 'status': status });
 	}
 
 	//corporate api
-	addTravelPlannerAccount(data) {
+	addTravelPlannerAccount(data)
+	{
 		return this.httpClient.post(this.serverUrl + 'add-travel-planner-account', data);
 	}
-	travelPlannerAccounts(url, keyword) {
+	travelPlannerAccounts(url, keyword)
+	{
 		var path;
-		if (url) {
+		if (url)
+		{
 			path = url + '&search=' + keyword;
 		}
-		else {
+		else
+		{
 			path = this.serverUrl + 'travel-planner' + '?search=' + keyword;
 		}
 		return this.httpClient.get(path).toPromise();;
 	}
-	getTravelPlannerAccount(id) {
+	getTravelPlannerAccount(id)
+	{
 		return this.httpClient.get(this.serverUrl + 'get-travel-planner-account/' + id);
 	}
-	updateTravelPlannerAccount(data) {
+	updateTravelPlannerAccount(data)
+	{
 		return this.httpClient.put(this.serverUrl + 'edit-travel-planner-account', data);
 	}
-	travelPlannerAccountStatus(id, status) {
+	travelPlannerAccountStatus(id, status)
+	{
 		return this.httpClient.put(this.serverUrl + 'travel-planner-status', { 'id': id, 'status': status });
 	}
 
 	//cards
-	async cardsList(id) {
+	async cardsList(id)
+	{
 		const result = await this.httpClient.get(this.serverUrl + 'credit-cards/' + id).toPromise();
 		return result;
 	}
-	addCard(data) {
+	addCard(data)
+	{
 		return this.httpClient.post(this.serverUrl + 'add-credit-card', data);
 	}
-	getCard(id) {
+	getCard(id)
+	{
 		return this.httpClient.get(this.serverUrl + 'credit-card/' + id);
 	}
-	editCard(data) {
+	editCard(data)
+	{
 		return this.httpClient.put(this.serverUrl + 'edit-credit-card', data);
 	}
-	cardStatus(id, status) {
+	cardStatus(id, status)
+	{
 		return this.httpClient.put(this.serverUrl + 'credit-card-status', { 'id': id, 'status': status });
 	}
-	deleteCard(id, acc_id) {
+	deleteCard(id, acc_id)
+	{
 		return this.httpClient.delete(this.serverUrl + 'delete-credit-card/' + acc_id + '/' + id);
 	}
 
 
 	//staff
-	async staffList(id) {
+	async staffList(id)
+	{
 		const result = await this.httpClient.get(this.serverUrl + 'staff/' + id).toPromise();
 		return result;
 	}
-	addStaff(data) {
+	addStaff(data)
+	{
 		return this.httpClient.post(this.serverUrl + 'add-staff', data);
 	}
-	staffLanguages() {
+	staffLanguages()
+	{
 		return this.httpClient.get(this.serverUrl + 'staff-languages');
 	}
-	getStaff(id) {
+	getStaff(id)
+	{
 		return this.httpClient.get(this.serverUrl + 'get-staff/' + id);
 	}
-	editStaff(data) {
+	editStaff(data)
+	{
 		return this.httpClient.put(this.serverUrl + 'edit-staff', data);
 	}
-	staffStatus(id, status) {
+	staffStatus(id, status)
+	{
 		return this.httpClient.put(this.serverUrl + 'staff-status', { 'id': id, 'status': status });
 	}
 
 	//affiliate
-	blackCarLimoBusAccounts(url: string, affiliateType: string, filter_type: string, keyword: string) {
+	blackCarLimoBusAccounts(url: string, affiliateType: string, filter_type: string, keyword: string)
+	{
 		let path;
-		if (url) {
+		if (url)
+		{
 			path = url + '&search=' + keyword;
 		}
-		else {
+		else
+		{
 			path = `${this.serverUrl}affiliate-accounts/${affiliateType}/${filter_type}?search=${keyword}`;
 		}
 		return this.httpClient.get(path).toPromise()
 	}
-	blackCarLimoBusAccountStatus(id, status) {
+	blackCarLimoBusAccountStatus(id, status)
+	{
 		return this.httpClient.put(this.serverUrl + 'affiliate-account-status', { 'id': id, 'status': status });
 	}
-	acceptAffiliate(acc_id) {
+	acceptAffiliate(acc_id)
+	{
 		return this.httpClient.put(this.serverUrl + 'affiliate-account-approval', { 'acc_id': acc_id });
 	}
-	rejectAffiliate(data) {
+	rejectAffiliate(data)
+	{
 		return this.httpClient.put(this.serverUrl + 'reject-affiliate-account', data);
 	}
 
 	// steps Code
-	getSessionStepsCompleted() {
+	getSessionStepsCompleted()
+	{
 		return JSON.parse(sessionStorage.getItem('steps-completed'))
 	}
 
-	setSessionStepsCompleted(step: number | string) {
+	setSessionStepsCompleted(step: number | string)
+	{
 		step = step.toString()
 		let temp_arr = this.getSessionStepsCompleted()
-		if (temp_arr != null && temp_arr.length > 0) {
-			if (!temp_arr.includes(step)) {
+		if (temp_arr != null && temp_arr.length > 0)
+		{
+			if (!temp_arr.includes(step))
+			{
 				temp_arr.push(step)
 			}
-		} else {
+		} else
+		{
 			temp_arr = [step]
 		}
 		sessionStorage.setItem('steps-completed', JSON.stringify(temp_arr))
 	}
 
-	unsetSessionStepsCompleted(step: number | string) {
+	unsetSessionStepsCompleted(step: number | string)
+	{
 
 		let temp_arr = this.getSessionStepsCompleted()
 
 
 
-		if (temp_arr.length > 0 && temp_arr.includes(step.toString())) {
+		if (temp_arr.length > 0 && temp_arr.includes(step.toString()))
+		{
 
 			temp_arr.splice(temp_arr.indexOf(step) != -1 ? temp_arr.indexOf(step) : 0)
 
@@ -571,64 +718,81 @@ export class AdminService {
 
 	}
 
-	getStepsCompleted(id) {
+	getStepsCompleted(id)
+	{
 		return this.httpClient.get(this.serverUrl + 'admin/get-affiliate-step-completed/' + id);
 	}
 
-	updateStepsCompleted(stepArray) {
+	updateStepsCompleted(stepArray)
+	{
 		sessionStorage.setItem('stepCompleted', stepArray.toString())
 	}
-	updateStepsCompletedObj(stepObject) {
+	updateStepsCompletedObj(stepObject)
+	{
 		sessionStorage.setItem('step_completed_obj', JSON.stringify(stepObject))
 	}
-	getLocalStepsCompleted() {
+	getLocalStepsCompleted()
+	{
 		return sessionStorage.getItem('stepCompleted').split(',');
 	}
-	getLocalStepsCompletedObj() {
+	getLocalStepsCompletedObj()
+	{
 		return JSON.parse(sessionStorage.getItem('step_completed_obj'));
 	}
 
-	getUpdatedStepsLocal(step) {
+	getUpdatedStepsLocal(step)
+	{
 		let stepCompleted: any = sessionStorage.getItem('stepCompleted');
-		if (stepCompleted) {
+		if (stepCompleted)
+		{
 			stepCompleted = stepCompleted.split(',');
-			if (!stepCompleted.includes(step)) {
+			if (!stepCompleted.includes(step))
+			{
 				stepCompleted.push(step);
 			}
 		}
-		else {
+		else
+		{
 			stepCompleted = [step];
 		}
 		return stepCompleted;
 	}
 
-	updateStepsArrayLocal(stepArray) {
+	updateStepsArrayLocal(stepArray)
+	{
 		sessionStorage.setItem('stepCompleted', stepArray.toString())
 	}
-	updateStepsLocal(step) {
+	updateStepsLocal(step)
+	{
 		let stepCompleted: any = sessionStorage.getItem('stepCompleted');
-		if (stepCompleted) {
+		if (stepCompleted)
+		{
 			stepCompleted = stepCompleted.split(',');
-			if (!stepCompleted.includes(step)) {
+			if (!stepCompleted.includes(step))
+			{
 				stepCompleted.push(step);
 				sessionStorage.setItem('stepCompleted', stepCompleted.toString())
 			}
 		}
-		else {
+		else
+		{
 			stepCompleted = [step];
 			sessionStorage.setItem('stepCompleted', stepCompleted.toString())
 		}
 	}
 
 	// End Steps Code
-	fetchStep0Data() {
+	fetchStep0Data()
+	{
 		return this.httpClient.get(this.serverUrl + 'admin/cms/step0')
 	}
 
-	getAssicationsLanguages() {
+	getAssicationsLanguages()
+	{
 		return this.httpClient.get(this.serverUrl + 'get-associations-languages');
 	}
-	addAffiliateAccount(data) {
+	addAffiliateAccount(data)
+	{
 		if (data.id)//edit affiliate
 		{
 			return this.httpClient.put(this.serverUrl + 'edit-affiliate-account', data);
@@ -638,15 +802,18 @@ export class AdminService {
 			return this.httpClient.post(this.serverUrl + 'add-affiliate-account', data);
 		}
 	}
-	getAffiliateAccount(id) {
+	getAffiliateAccount(id)
+	{
 		return this.httpClient.get(this.serverUrl + 'get-affiliate-account/' + id);
 	}
 
 
-	getAffiliatesListFromCoords(lat: number, lng: number) {
+	getAffiliatesListFromCoords(lat: number, lng: number)
+	{
 		return this.httpClient.get(`${this.serverUrl}get-affiliates/${lat}/${lng}`).toPromise()
 	}
-	addBankOfAffiliate(data) {
+	addBankOfAffiliate(data)
+	{
 		if (data.id)//edit affiliate
 		{
 			return this.httpClient.put(this.serverUrl + 'edit-a-bank', data);
@@ -656,11 +823,13 @@ export class AdminService {
 			return this.httpClient.post(this.serverUrl + 'add-a-bank', data);
 		}
 	}
-	getBankOfAffiliate(id) {
+	getBankOfAffiliate(id)
+	{
 		return this.httpClient.get(this.serverUrl + 'get-a-bank/' + id);
 	}
 
-	addInsuranceDetail(data) {
+	addInsuranceDetail(data)
+	{
 		if (data.id)//edit affiliate
 		{
 			return this.httpClient.put(this.serverUrl + 'edit-insurance-detail', data);
@@ -670,16 +839,19 @@ export class AdminService {
 			return this.httpClient.post(this.serverUrl + 'add-insurance-detail', data);
 		}
 	}
-	getInsuranceDetail(id) {
+	getInsuranceDetail(id)
+	{
 		return this.httpClient.get(this.serverUrl + 'insurance-detail/' + id);
 	}
 
 	//Driver
-	async driverList(id) {
+	async driverList(id)
+	{
 		const result = await this.httpClient.get(this.serverUrl + 'affiliate-drivers/' + id).toPromise();
 		return result;
 	}
-	addDriver(data) {
+	addDriver(data)
+	{
 		if (data.id)//edit affiliate
 		{
 			return this.httpClient.put(this.serverUrl + 'edit-driver', data);
@@ -689,21 +861,26 @@ export class AdminService {
 			return this.httpClient.post(this.serverUrl + 'add-driver', data);
 		}
 	}
-	getDriver(id) {
+	getDriver(id)
+	{
 		return this.httpClient.get(this.serverUrl + 'affiliate-driver/' + id);
 	}
-	editDriver(data) {
+	editDriver(data)
+	{
 		return this.httpClient.put(this.serverUrl + 'edit-driver', data);
 	}
-	driverStatus(id, status) {
+	driverStatus(id, status)
+	{
 		return this.httpClient.put(this.serverUrl + 'affiliate-driver-status', { 'id': id, 'status': status });
 	}
-	driverDressLanguage() {
+	driverDressLanguage()
+	{
 		return this.httpClient.get(this.serverUrl + 'affiliate-driver-dresses-languages');
 	}
 
 	//Vehicles 
-	affiliateVehicleList(affiliate_id: number | string) {
+	affiliateVehicleList(affiliate_id: number | string)
+	{
 		return this.httpClient.get(this.serverUrl + 'get-vehicles/' + affiliate_id).toPromise();
 	}
 
@@ -730,21 +907,26 @@ export class AdminService {
 	// {
 	//   return this.httpClient.put(this.serverUrl + 'affiliate-driver-status',{'id':id,'status':status});
 	// }
-	affiliateTermsAccept(data) {
+	affiliateTermsAccept(data)
+	{
 		return this.httpClient.put(this.serverUrl + 'affiliate-step-completion', data);
 	}
 
 	//Create booking
-	createBookingGetData() {
+	createBookingGetData()
+	{
 		return this.httpClient.get(this.serverUrl + 'amenities-languages-dresses');
 	}
 
-	getAccountBytype(accountType) {
+	getAccountBytype(accountType)
+	{
 		return this.httpClient.get(this.serverUrl + 'get-account-by-type/' + accountType);
 	}
 
-	chooseUser(id: number, accountType: string) {
-		switch (accountType) {
+	chooseUser(id: number, accountType: string)
+	{
+		switch (accountType)
+		{
 			case 'individual': {
 				return this.httpClient.get(this.serverUrl + 'get-an-account/' + id);
 			}
@@ -759,201 +941,263 @@ export class AdminService {
 			}
 		}
 	}
-	createBooking(data: any, update_type: string) {
-		if (update_type == 'return' || update_type == 'repeat') {
+	createBooking(data: any, update_type: string)
+	{
+		if (update_type == 'return' || update_type == 'repeat')
+		{
 			return this.httpClient.post(`${this.serverUrl}duplicate-reservation`, data)
 		}
-		if (data.reservation_id) {
+		if (data.reservation_id)
+		{
 			return this.httpClient.put(this.serverUrl + 'edit-reservation', data);
 		}
-		else {
+		else
+		{
 			return this.httpClient.post(this.serverUrl + 'create-reservation', data);
 		}
 	}
+<<<<<<< src/app/services/admin.service.ts
+	getReservationDetails(reservation_id: number | StringConstructor)
+	{
+=======
 	getReservationDetails(reservation_id: number) {
+>>>>>>> src/app/services/admin.service.ts
 
 		return this.getBookingDataForEdit(reservation_id, 'detail');
 		// return this.httpClient.get(`${this.serverUrl}get-reservation-detail/${reservation_id}`);
 
 	}
 
-	getBookingDataForEdit(reservation_id: number, updateType: string) {
+	getBookingDataForEdit(reservation_id: number, updateType: string)
+	{
 		return this.httpClient.get(`${this.serverUrl}get-reservation/${reservation_id}/${updateType}`);
 	}
 
-	getBookingPreview(reservation_id: number) {
+	getBookingPreview(reservation_id: number)
+	{
 		return this.httpClient.get(`${this.serverUrl}admin/get-booking-preview/${reservation_id}`);
 	}
 
-	adminNotification(data) {
+	adminNotification(data)
+	{
 		return this.httpClient.post(this.serverUrl + 'admin-notification-daily-booking', data);
 	}
 
-	loadBookings(url, startDate, endDate, keyword = '') {
+	loadBookings(url, startDate, endDate, keyword = '')
+	{
 		var path;
-		if (url) {
+		if (url)
+		{
 			path = url + '&from=' + startDate + '&to=' + endDate + '&search=' + keyword;
 		}
-		else {
+		else
+		{
 			path = this.serverUrl + 'reservations' + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword;
 		}
 		return this.httpClient.get(path).toPromise();
 	}
-	reservationStatus(id, status) {
+	reservationStatus(id, status)
+	{
 		return this.httpClient.put(this.serverUrl + 'reservation-status', { 'id': id, 'status': status });
 	}
-	getChargeRates(id) {
+	getChargeRates(id)
+	{
 		return this.httpClient.get(`${this.serverUrl}get-rates/${id}`);
 	}
-	paymentProcessing(data) {
+	paymentProcessing(data)
+	{
 		return this.httpClient.post(this.serverUrl + 'payment-processing', data);
 	}
 
 	//booking actions
-	returnRepeatBooking(data) {
+	returnRepeatBooking(data)
+	{
 		return this.httpClient.post(this.serverUrl + 'repeat-return-reservation', data);
 	}
 	//change booking status such as accept/reject
-	changeStatusBooking(data) {
+	changeStatusBooking(data)
+	{
 		return this.httpClient.put(this.serverUrl + 'change-booking-status', data);
 	}
 	//send email to affiliate, customer etc
-	sendEmail(data) {
+	sendEmail(data)
+	{
 		return this.httpClient.post(this.serverUrl + 'send-reservation-detail-email', data);
 	}
 
-	sendAffiliateMessage(type: 'email' | 'sms', affiliate_id: number, data: Object) {
+	sendAffiliateMessage(type: 'email' | 'sms', affiliate_id: number, data: Object)
+	{
 		return this.httpClient.post(`${this.serverUrl}admin/notification/send-${type}/${affiliate_id}`, data)
 	}
 
 	//invoices
-	getInvoiceData(id) {
+	getInvoiceData(id)
+	{
 		return this.httpClient.get(this.serverUrl + 'invoice-summary/' + id);
 	}
-	invoiceList(url, keyword) {
+	invoiceList(url, keyword)
+	{
 		var path;
-		if (url) {
+		if (url)
+		{
 			path = url + '&search=' + keyword;
 		}
-		else {
+		else
+		{
 			path = this.serverUrl + 'invoices' + '?search=' + keyword;
 		}
 		return this.httpClient.get(path).toPromise();
 	}
 
 	//sub Admin API
-	addSubAdmin(data) {
+	addSubAdmin(data)
+	{
 		if (data.id)//edit affiliate
 		{
 			return this.httpClient.put(this.serverUrl + 'edit-sub-admin', data);
 		}
-		else {
+		else
+		{
 			return this.httpClient.post(this.serverUrl + 'add-sub-admin', data);
 		}
 	}
-	subAdminAccounts(url, keyword) {
+	subAdminAccounts(url, keyword)
+	{
 		var path;
-		if (url) {
+		if (url)
+		{
 			path = url + '&search=' + keyword;
 		}
-		else {
+		else
+		{
 			path = this.serverUrl + 'get-sub-admins' + '?search=' + keyword;
 		}
 		return this.httpClient.get(path).toPromise();
 	}
-	getSubAdminAccount(id) {
+	getSubAdminAccount(id)
+	{
 		return this.httpClient.get(this.serverUrl + 'get-sub-admin-user/' + id);
 	}
-	subAdminAccountStatus(id, status) {
+	subAdminAccountStatus(id, status)
+	{
 		return this.httpClient.put(this.serverUrl + 'sub-admin-status', { 'id': id, 'status': status });
 	}
 
 	//payment by email API
-	getPaymentData(accId, bookingId) {
+	getPaymentData(accId, bookingId)
+	{
 		return this.httpClient.get(this.serverUrl + 'payment-processing-by-email-page/' + accId + '/' + bookingId);
 	}
-	paymentProcessingByEmail(data) {
+	paymentProcessingByEmail(data)
+	{
 		return this.httpClient.post(this.serverUrl + 'payment-processing-by-email', data);
 	}
 	//
 
 	//create debit cc card
-	paymentProcessingCcDebit(data) {
+	paymentProcessingCcDebit(data)
+	{
 		return this.httpClient.post(this.serverUrl + 'payment-processing-cc-debit', data);
 	}
 	//
 
 	//admin cms pages
-	getHomePagesSectionContent() {
+	getHomePagesSectionContent()
+	{
 		return this.httpClient.get(this.serverUrl + 'admin/cms/homepage-content');
 	}
-	getSingleSectionHomePage(ID) {
+	getSingleSectionHomePage(ID)
+	{
 		return this.httpClient.get(this.serverUrl + 'admin/cms/homepage-content/section/' + ID);
 	}
 
-	saveDataHomePageSection(data) {
+	saveDataHomePageSection(data)
+	{
 		console.log(data);
 		return this.httpClient.put(this.serverUrl + 'admin/cms/homepage-content/section/update', data)
 	}
-	changeStauts(id, event) {
+	changeStauts(id, event)
+	{
 		return this.httpClient.put(this.serverUrl + 'admin/cms/homepage-content/section/status/update', { 'id': id, 'data': event })
 	}
-	changeStepOSectionStauts(id, event) {
+	changeStepOSectionStauts(id, event)
+	{
 		return this.httpClient.put(this.serverUrl + 'admin/cms/step0/section/status/update', { 'id': id, 'data': event })
 	}
-	changeStep6SectionStatus(id, event) {
+	changeStep6SectionStatus(id, event)
+	{
 		return this.httpClient.put(`${this.serverUrl}admin/cms/step6/section/status/update`, { id: id, data: event })
 	}
-	getStepContentData(page: string) {
+	getStepContentData(page: string)
+	{
 		return this.httpClient.get(`${this.serverUrl}admin/cms/${page}`)
 	}
-	getPageSectionData(section_id: number | string, page: string) {
+	getPageSectionData(section_id: number | string, page: string)
+	{
 		return this.httpClient.get(`${this.serverUrl}admin/cms/${page}/section/${section_id}`);
 	}
 
-	saveStepSectionData(page: string, data: any) {
+	saveStepSectionData(page: string, data: any)
+	{
 		return this.httpClient.put(`${this.serverUrl}admin/cms/${page}/section/update`, data);
 	}
-	uploadAnlImage(image) {
+	uploadAnlImage(image)
+	{
 		return this.httpClient.post(this.serverUrl + 'admin/cms/add-image', { 'image': image }).toPromise();
 	}
 
 	//aboutUs page
-	getAboutUsPageContent() {
+	getAboutUsPageContent()
+	{
 		return this.httpClient.get(this.serverUrl + 'admin/cms/about-us');
 	}
-	getAboutUsSectionDataByID(id) {
+	getAboutUsSectionDataByID(id)
+	{
 		return this.httpClient.get(this.serverUrl + 'admin/cms/about-us/section/' + id);
 	}
-	saveDataAboutUsSection(data) {
+	saveDataAboutUsSection(data)
+	{
 		return this.httpClient.put(this.serverUrl + 'admin/cms/about-us/section/update', data);
 	}
-	changeAboutUSSectionStauts(id, event) {
+	changeAboutUSSectionStauts(id, event)
+	{
 		return this.httpClient.put(this.serverUrl + 'admin/cms/about-us/section/status/update', { 'id': id, 'data': event })
 	}
 
-	getCurrencies() {
+	getCurrencies()
+	{
 		return this.httpClient.get('assets/json/currencyOptions.json')
 	}
 
-	get charterOptions() {
+	get charterOptions()
+	{
 		return this.httpClient.get('assets/json/charterOptions.json')
 	}
 
-	fetchAdminNewBookingRates(affiliate_type: string, bookingId: number) {
-		if (bookingId !== 0) {
+	fetchAdminNewBookingRates(affiliate_type: string, bookingId: number)
+	{
+		if (bookingId !== 0)
+		{
 			return this.httpClient.get(`${this.serverUrl}admin/reservation-rates/${bookingId}`)
 		}
-		else {
+		else
+		{
 			return this.httpClient.get(`${this.serverUrl}admin/booking-rates`)
 		}
 	}
-	checkUniquePhoneNumberForLooseCustomer(customer_data: Record<string, any>) {
+	checkUniquePhoneNumberForLooseCustomer(customer_data: Record<string, any>)
+	{
 		return this.httpClient.post(`${this.serverUrl}admin/check-unique-user`, customer_data)
 	}
 
-	fetchStepData(step_name: string) {
+	fetchStepData(step_name: string)
+	{
 		return this.httpClient.get(this.serverUrl + 'admin/cms/' + step_name)
+	}
+
+	getLocationPoints(booking_id: number, type: string)
+	{
+		return this.httpClient.get(`${this.serverUrl}admin/booking-location/${booking_id}/${type}`)
 	}
 
 }

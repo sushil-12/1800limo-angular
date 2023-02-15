@@ -8,7 +8,8 @@ import { AdminService } from 'src/app/services/admin.service';
 	templateUrl: './affiliate-step0.component.html',
 	styleUrls: ['./affiliate-step0.component.scss']
 })
-export class AffiliateStep0Component implements OnInit {
+export class AffiliateStep0Component implements OnInit
+{
 
 	content_data: any
 	public agreementValidation: boolean;
@@ -56,10 +57,12 @@ export class AffiliateStep0Component implements OnInit {
 	public why1800limo1: Array<String>;
 	public why1800limo2: Array<String>;
 
-	modalSwitch(modalType) {
+	modalSwitch(modalType)
+	{
 		$("#imageModal").addClass("showImage");
 		$("#imageModal").removeClass("d-none");
-		switch (modalType) {
+		switch (modalType)
+		{
 			case 'step_1': {
 				this.Step0Information = true;
 				this.selectedStep = 'step_1';
@@ -108,11 +111,13 @@ export class AffiliateStep0Component implements OnInit {
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
 
 
-	ngOnInit(): void {
+	ngOnInit(): void
+	{
 
 		this.spinner.show(); //spinner show 
 
-		this.adminService.fetchStep0Data().subscribe((data: any) => {
+		this.adminService.fetchStep0Data().subscribe((data: any) =>
+		{
 			this.spinner.hide(); //spinner hide
 			this.content_data = data.data
 			this.fetchContentData();
@@ -125,40 +130,59 @@ export class AffiliateStep0Component implements OnInit {
 			this.why1800limo2 = this.why1800limo.splice(-half);
 		})
 
-		let s = setInterval(() => {
+		this.adminService.getAffiliateAccount(JSON.parse(sessionStorage.getItem('affiliateId'))).subscribe((response: any) =>
+		{
+			sessionStorage.setItem("affiliateUserData", JSON.stringify(response.data));
+		})
+
+
+
+
+		let s = setInterval(() =>
+		{
 			const stepCompleted = this.adminService.getLocalStepsCompleted();
-			if (stepCompleted && stepCompleted.includes('0')) {
+			if (stepCompleted && stepCompleted.includes('0'))
+			{
 				clearInterval(s);
 				this.agreement = true;
 			}
 		}, 3000)
 	}
-	fetchContentData(id?: number | null) {
-		if (id && this.content_data) {
+	fetchContentData(id?: number | null)
+	{
+		if (id && this.content_data)
+		{
 			return this.content_data.find((item: any) => item.id == id)
 		}
 	}
-	scroll(el: HTMLElement) {
+	scroll(el: HTMLElement)
+	{
 		el.scrollIntoView();
 	}
 
-	closeButton() {
+	closeButton()
+	{
 		this.closeTab.emit();
 	}
 
-	onCheckboxChange(e) {
+	onCheckboxChange(e)
+	{
 		this.agreement = e.target.checked;
 	}
 
-	submitForm() {
-		if (!this.agreement) {
+	submitForm()
+	{
+		if (!this.agreement)
+		{
 			this.agreementValidation = true;
 		}
-		else {
+		else
+		{
 			this.agreementValidation = false;
 			this.stepCompleted = this.adminService.getLocalStepsCompleted();
 
-			if (!this.stepCompleted.includes('0')) {
+			if (!this.stepCompleted.includes('0'))
+			{
 				this.adminService.getUpdatedStepsLocal('0')
 				this.adminService.updateStepsLocal('0');
 
@@ -171,7 +195,8 @@ export class AffiliateStep0Component implements OnInit {
 					this.router.navigate(['/admin/affiliate/step1'])
 				);
 			}
-			else {
+			else
+			{
 				this.router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
 					this.router.navigate(['/admin/affiliate/step1'])
 				);

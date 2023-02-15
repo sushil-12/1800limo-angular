@@ -102,10 +102,8 @@ export class DailyBookingsComponent implements OnInit
 	resetDates()
 	{
 		let date = new Date();
-
-		date.setDate(date.getDate() - 7);
 		this.startDate = date.toISOString().substring(0, 10);
-		date.setDate(date.getDate() + 14);
+		date.setDate(date.getDate() + 7);
 		this.endDate = date.toISOString().substring(0, 10);
 
 		console.log('Dates reset Successfully. ');
@@ -190,7 +188,7 @@ export class DailyBookingsComponent implements OnInit
 
 	loadBookings(pageUrl = null, start_date: string, end_date: string, search_value: string = '')
 	{
-		// search_value != '' && this.spinner.show();
+		search_value == '' && this.spinner.show();
 		// Load Our bookings using API
 		this.adminService.loadBookings(pageUrl, start_date, end_date, search_value ?? '').then((result) =>
 		{
@@ -471,5 +469,22 @@ export class DailyBookingsComponent implements OnInit
 	saveCookie(key: string, value: string)
 	{
 		this.adminService.setCookie(key, value, 30);
+	}
+
+	showLocationPointOnMap(booking_id: number, type: string)
+	{
+		this.spinner.show()
+		this.adminService.getLocationPoints(booking_id, type).subscribe((response: any) =>
+		{
+			this.spinner.hide();
+			if (response?.data?.lat && response?.data?.long)
+			{
+				sessionStorage.setItem('location', JSON.stringify(response?.data?.address));
+				this.router.navigate([`/locate-map/${response?.data.lat}/${response?.data.long}`]);
+			} else
+			{
+				throw new Error('Error: No Location Points Specified. ')
+			}
+		})
 	}
 }
