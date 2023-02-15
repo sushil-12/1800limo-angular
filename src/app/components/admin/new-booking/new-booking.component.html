@@ -28,8 +28,7 @@
 								Service Type
 							</mat-label>
 							<mat-select formControlName="service_type"
-								[ngStyle]="{'cursor': Form.updateType.value == 'edit' ? 'not-allowed' : 'default'}"
-								[disabled]="Form.updateType.value == 'edit'">
+								[ngStyle]="{'cursor': Form.updateType.value == 'edit' ? 'not-allowed' : 'default'}">
 								<mat-option value="one_way">One Way</mat-option>
 								<mat-option value="round_trip">Round Trip</mat-option>
 								<mat-option value="charter_tour">Charter/Tour</mat-option>
@@ -690,7 +689,7 @@
 
 						<!-- Ng-Select -->
 						<ng-select appearance="outline" [items]="BigData?.vehicleCategories"
-							bindLabel="name" bindValue="id" placeholder="Select Vehicle Category"
+							bindLabel="name" bindValue="id" placeholder="Select Vehicle Type"
 							dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
 							formControlName="vehicle_type">
 						</ng-select>
@@ -1956,10 +1955,9 @@
 
 		<app-rates-form class="d-flex flex-wrap" [initRates]="init_rates"
 			[affiliate_type]="Form.affiliate_type.value" [distance]="distance_for_rates"
-			[amenities]="amenities" [reservation_id]="booking_id" [reset]="reset_button"
-			[reset]="reset_button" [initReturnRates]="init_return_rates"
-			(formvalue)="RateFormValue($event)" [hours]="Form.number_of_hours?.value"
-			[vehicles]="Form.number_of_vehicles?.value"
+			[reservation_id]="booking_id" [reset]="reset_button" [reset]="reset_button"
+			[initReturnRates]="init_return_rates" (formvalue)="RateFormValue($event)"
+			[hours]="Form.number_of_hours?.value" [vehicles]="Form.number_of_vehicles?.value"
 			(returnformvalue)="ReturnRateFormValue($event)"></app-rates-form>
 
 

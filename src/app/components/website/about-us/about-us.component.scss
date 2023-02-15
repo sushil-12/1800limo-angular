@@ -1,5 +1,5 @@
 $primary-color: var(--orange-color);
-.radio-button:checked+.aboutnw_slideriner {
+.radio-button+.aboutnw_slideriner {
     border: 2px solid $primary-color;
     border-radius: 10px;
 }

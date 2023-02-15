@@ -62,6 +62,7 @@ import { DispatchEmailConfirmationComponent } from './components/email-pages/dis
 import { ScrollToSectionDirective } from './directives/scroll-to-section.directive';
 import { PageUnderConstructionComponent } from './components/page-under-construction/page-under-construction.component';
 import { HtmlToTextPipe } from './pipes/html-to-text.pipe';
+import { LocateMapComponent } from './components/locate-map/locate-map.component';
 @NgModule({
 	declarations: [
 		AppComponent,
@@ -94,6 +95,7 @@ import { HtmlToTextPipe } from './pipes/html-to-text.pipe';
 		ScrollToSectionDirective,
 		PageUnderConstructionComponent,
 		HtmlToTextPipe,
+		LocateMapComponent,
 	],
 	imports: [
 		BrowserModule,

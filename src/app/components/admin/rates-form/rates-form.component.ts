@@ -38,14 +38,14 @@ export class RatesFormComponent implements OnInit, OnChanges
 
 	rate_params: any = {
 		chevrons: {
-			section: false,
+			section: true,
 			sub_section_0: false,
 			sub_section_1: false,
 			sub_section_2: false,
 			sub_section_3: false,
 			sub_section_4: false,
 			sub_section_5: false,
-			r_section: false,
+			r_section: true,
 			r_sub_section_0: false,
 			r_sub_section_1: false,
 			r_sub_section_2: false,
@@ -71,7 +71,10 @@ export class RatesFormComponent implements OnInit, OnChanges
 	vehicles: number = 0;
 	hours: number = 0;
 
-	constructor(private $form: FormBuilder, private $api: AdminService) { }
+	constructor(
+		private $form: FormBuilder,
+		private $api: AdminService
+	) { }
 
 	ngOnInit(): void
 	{
