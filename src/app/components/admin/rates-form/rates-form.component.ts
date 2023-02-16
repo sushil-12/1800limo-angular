@@ -182,6 +182,7 @@ export class RatesFormComponent implements OnInit, OnChanges
 	initRates()
 	{
 		console.log("Init Rates");
+		this.fetchRates('')
 		this.RatesForm = this.$form.group({});
 		// build form
 		this.RatesForm = this.$form.group({
