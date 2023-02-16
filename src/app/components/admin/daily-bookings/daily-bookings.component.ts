@@ -14,6 +14,7 @@ import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { HttpClient } from "@angular/common/http";
 declare var $: any;
 import * as moment from "moment";
+import { ErrorDialogService } from "src/app/services/error-dialog/errordialog.service";
 
 @Component({
 	selector: "app-daily-bookings",
@@ -60,8 +61,7 @@ export class DailyBookingsComponent implements OnInit
 		private router: Router,
 		private spinner: NgxSpinnerService,
 		private formBuilder: FormBuilder,
-		private activatedRoute: ActivatedRoute,
-		private http: HttpClient
+		private $errorDialog: ErrorDialogService,
 	) { }
 
 	ngOnInit(): void
@@ -484,6 +484,15 @@ export class DailyBookingsComponent implements OnInit
 			} else
 			{
 				throw new Error('Error: No Location Points Specified. ')
+			}
+		})
+	}
+
+	underConstruction()
+	{
+		this.$errorDialog.openDialog({
+			errors: {
+				error: 'Link under Construction. Will be available soon.'
 			}
 		})
 	}
