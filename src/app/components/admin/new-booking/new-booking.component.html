@@ -1204,6 +1204,9 @@
 							[searchFn]="airportSearchFunction" (change)="change($event, 'pickup_airport')"
 							placeholder="Select Airport" bindLabel="formatted_name" dropdownPosition="bottom"
 							[markFirst]="true" [virtualScroll]="true" formControlName="pickup_airport_option">
+							<ng-template ng-option-tmp let-item="item">
+								<div [title]="item.formatted_name">{{item.formatted_name}}</div>
+							</ng-template>
 						</ng-select>
 
 
@@ -1234,6 +1237,9 @@
 							[searchFn]="airlineSearchFunction" (change)="change($event, 'pickup_airline')"
 							placeholder="Select Airline" bindLabel="formatted_name" dropdownPosition="bottom"
 							[markFirst]="true" [virtualScroll]="true" formControlName="pickup_airline_option">
+							<ng-template ng-option-tmp let-item="item">
+								<div [title]="item.formatted_name">{{item.formatted_name}}</div>
+							</ng-template>
 						</ng-select>
 					</div>
 
@@ -1353,6 +1359,9 @@
 							[searchFn]="airportSearchFunction" (change)="change($event, 'dropoff_airport')"
 							placeholder="Select Airport" bindLabel="formatted_name" dropdownPosition="bottom"
 							[markFirst]="true" [virtualScroll]="true" formControlName="dropoff_airport_option">
+							<ng-template ng-option-tmp let-item="item">
+								<div [title]="item.formatted_name">{{item.formatted_name}}</div>
+							</ng-template>
 						</ng-select>
 					</div>
 
@@ -1382,6 +1391,9 @@
 							[searchFn]="airlineSearchFunction" (change)="change($event, 'dropoff_airline')"
 							placeholder="Select Airline" bindLabel="formatted_name" dropdownPosition="bottom"
 							[markFirst]="true" [virtualScroll]="true" formControlName="dropoff_airline_option">
+							<ng-template ng-option-tmp let-item="item">
+								<div [title]="item.formatted_name">{{item.formatted_name}}</div>
+							</ng-template>
 						</ng-select>
 					</div>
 
@@ -1595,6 +1607,9 @@
 							[searchFn]="airportSearchFunction" (change)="change($event, 'return_pickup_airport')"
 							bindLabel="formatted_name" placeholder="Select Airport" dropdownPosition="bottom"
 							[markFirst]="true" [virtualScroll]="true" formControlName="return_pickup_airport_option">
+							<ng-template ng-option-tmp let-item="item">
+								<div [title]="item.formatted_name">{{item.formatted_name}}</div>
+							</ng-template>
 						</ng-select>
 					</div>
 
@@ -1623,6 +1638,9 @@
 							[searchFn]="airlineSearchFunction" (change)="change($event, 'return_pickup_airline')"
 							bindLabel="formatted_name" placeholder="Select Airline" dropdownPosition="bottom"
 							[markFirst]="true" [virtualScroll]="true" formControlName="return_pickup_airline_option">
+							<ng-template ng-option-tmp let-item="item">
+								<div [title]="item.formatted_name">{{item.formatted_name}}</div>
+							</ng-template>
 						</ng-select>
 					</div>
 
@@ -1731,6 +1749,9 @@
 							[searchFn]="airportSearchFunction" (change)="change($event, 'return_dropoff_airport')"
 							bindLabel="formatted_name" placeholder="Select Airport" dropdownPosition="bottom"
 							[markFirst]="true" [virtualScroll]="true" formControlName="return_dropoff_airport_option">
+							<ng-template ng-option-tmp let-item="item">
+								<div [title]="item.formatted_name">{{item.formatted_name}}</div>
+							</ng-template>
 						</ng-select>
 					</div>
 
@@ -1760,6 +1781,9 @@
 							[searchFn]="airlineSearchFunction" (change)="change($event, 'return_dropoff_airline')"
 							bindLabel="formatted_name" placeholder="Select Airline" dropdownPosition="bottom"
 							[markFirst]="true" [virtualScroll]="true" formControlName="return_dropoff_airline_option">
+							<ng-template ng-option-tmp let-item="item">
+								<div [title]="item.formatted_name">{{item.formatted_name}}</div>
+							</ng-template>
 						</ng-select>
 					</div>
 
