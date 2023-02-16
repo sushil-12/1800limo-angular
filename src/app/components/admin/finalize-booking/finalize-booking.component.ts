@@ -57,7 +57,6 @@ export class FinalizeBookingComponent implements OnInit {
 	// }
 
 	init_rates: boolean = false;
-	init_return_rates: boolean = false;
 	getReservationDetails(booking_id: number = 0) {
 		this.$spinner.show();
 		this.$api
@@ -73,9 +72,6 @@ export class FinalizeBookingComponent implements OnInit {
 				this.finalize_params['number_of_hours'] = this.BookingDetail.number_of_hours
 				this.finalize_params['number_of_vehicles'] = this.BookingDetail.number_of_vehicles
 				this.finalize_params['booking_id'] = this.BookingDetail.reservation_id
-				if (this.BookingDetail?.service_type == 'roundtrip') {
-					this.init_return_rates = true;
-				}
 			});
 	}
 	dateFormat(value: any) {
