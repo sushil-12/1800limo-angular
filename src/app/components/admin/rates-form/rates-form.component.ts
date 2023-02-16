@@ -66,7 +66,7 @@ export class RatesFormComponent implements OnInit, OnChanges
 	calc_admin_share: number = 0;
 	r_calc_admin_share: number = 0;
 
-	vehicles: number = 0;
+	vehicles: number = 1;
 	hours: number = 0;
 
 	constructor(
@@ -75,7 +75,9 @@ export class RatesFormComponent implements OnInit, OnChanges
 	) { }
 
 	ngOnInit(): void
-	{ }
+	{
+		this.fetchRates('');
+	}
 
 	ngOnChanges(changes: SimpleChanges)
 	{
@@ -103,13 +105,9 @@ export class RatesFormComponent implements OnInit, OnChanges
 			this.hours > 0 && this.RatesForm && this.calculateAmount('RatesForm', 'all_inclusive_rates', 'Base_Rate');
 		}
 
-		if (changes.vehs)
+		this.vehicles = changes.vehs ? changes.vehs.currentValue : this.vehicles;
+		if (this.vehicles)
 		{
-			this.vehicles = changes.vehs ? changes.vehs.currentValue : this.vehicles;
-			if (!this.vehicles)
-			{
-				this.vehicles = 1;
-			}
 			this.calculateGrandTotal('RatesForm');
 			if (this.ReturnRatesForm)
 			{
@@ -117,7 +115,8 @@ export class RatesFormComponent implements OnInit, OnChanges
 			}
 		} else
 		{
-			this.vehicles = 1
+			console.log('Resetting Number of Vehicles ');
+			this.vehicles = 1;
 		}
 
 		if (changes.bookingId && changes.bookingId.currentValue !== 0)
@@ -182,7 +181,7 @@ export class RatesFormComponent implements OnInit, OnChanges
 	initRates()
 	{
 		console.log("Init Rates");
-		this.fetchRates('')
+
 		this.RatesForm = this.$form.group({});
 		// build form
 		this.RatesForm = this.$form.group({

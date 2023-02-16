@@ -179,9 +179,7 @@
 												<div class="dropdown-item-icon"></div>
 												Return
 											</a>
-											<a class="dropdown-item"
-												[routerLink]="['/admin/finalize-booking']"
-												[queryParams]="{bookingId: booking.booking_id}">
+											<a class="dropdown-item" (click)="underConstruction()">
 												<div class="dropdown-item-icon"></div>
 												Finalize
 											</a>
