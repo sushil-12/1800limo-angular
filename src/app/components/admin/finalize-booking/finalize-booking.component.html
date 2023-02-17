@@ -3,14 +3,15 @@
 		<h3 class="font-weight-bolder mb-1 text-center">Finalize Booking</h3>
 		<hr>
 		<div class="invoicesum_header">
-			<h3 class="text-lg text-center pl-0">Booking # {{ BookingDetail?.reservation_id }}</h3>
+			<h3 class="text-lg pl-0">Booking # {{ BookingDetail?.reservation_id }}</h3>
 			<div class="row my-3">
 				<div class="col-md-4">
-					<p>Booking Type <strong>{{ textFormatter(BookingDetail?.transfer_type) | titlecase }}</strong>
+					<p>Service Type <strong>{{ textFormatter(BookingDetail?.service_type) | titlecase }}</strong>
 					</p>
 				</div>
 				<div class="col-md-4">
-					<p>Quote Amount <strong>{{ BookingDetail?.quote_amount }}</strong></p>
+					<p>Booking Type <strong>{{ textFormatter(BookingDetail?.transfer_type) | titlecase }}</strong>
+					</p>
 				</div>
 				<div class="col-md-4">
 					<p>Booking Status <strong>{{ BookingDetail?.booking_status | titlecase }}</strong></p>
@@ -22,6 +23,10 @@
 			<!-- Pickup Date and Time -->
 			<div class="row">
 				<div class="col-md-4 field">
+					<p>Quote Amount </p>
+					<strong>$ {{ BookingDetail?.grand_total }}</strong>
+				</div>
+				<div class="col-md-4 field">
 					<p>Pickup Date </p>
 					<strong>{{ dateFormat2(BookingDetail?.pickup_date) }} | {{ dateFormat(BookingDetail?.pickup_date)
 						}}</strong>
@@ -31,9 +36,7 @@
 					<strong>{{ timeFormat2(BookingDetail?.pickup_time) }} |
 						{{ timeFormat(BookingDetail?.pickup_time) }}</strong>
 				</div>
-			</div>
-			<!-- Driver Details -->
-			<div class="row">
+				<!-- Driver Details -->
 				<div class="col-md-4 field">
 					<p>Driver Name </p>
 					<strong>{{ BookingDetail?.driver_name | titlecase }}</strong>
@@ -47,9 +50,7 @@
 					<p>Driver Phone</p>
 					<strong>{{ BookingDetail?.driver_cell_isd }}{{ BookingDetail?.driver_cell }}</strong>
 				</div>
-			</div>
-			<!-- Passenger Details -->
-			<div class="row">
+				<!-- Passenger Details -->
 				<div class="col-md-4 field">
 					<p>Passenger Name </p>
 					<strong>{{ BookingDetail?.passenger_name | titlecase }}</strong>
@@ -63,78 +64,68 @@
 					<p>Passenger Phone</p>
 					<strong>{{ BookingDetail?.passenger_cell_isd }}{{ BookingDetail?.passenger_cell }}</strong>
 				</div>
-			</div>
-			<!-- Pickup Details One Way -->
-			<div class="row" *ngIf="transferType?.includes('city_') || transferType?.includes('cruise_')">
-				<div class="col-md-4 field">
+				<!-- Pickup Details One Way -->
+				<div class="col-md-4 field"
+					*ngIf="transferType?.includes('city_') || transferType?.includes('cruise_')">
 					<p>Pickup Address</p>
 					<strong>{{ BookingDetail?.pickup_address }}</strong>
 				</div>
-			</div>
-			<!-- Pickup Details Airport -->
-			<div class="row" *ngIf="transferType?.includes('airport_')">
-				<div class="col-md-4 field">
+				<!-- Pickup Details Airport -->
+				<div class="col-md-4 field" *ngIf="transferType?.includes('airport_')">
 					<p>Pickup Airport </p>
 					<strong>{{ BookingDetail?.pickup_airport_name | titlecase }}</strong>
 				</div>
-				<div class="col-md-4 field">
+				<div class="col-md-4 field" *ngIf="transferType?.includes('airport_')">
 					<p>Pickup Airline</p>
 					<strong>{{ BookingDetail?.pickup_airline_name | titlecase }}</strong>
 				</div>
-				<div class="col-md-4 field">
+				<div class="col-md-4 field" *ngIf="transferType?.includes('airport_')">
 					<p>Pickup Flight</p>
 					<strong>{{ BookingDetail?.pickup_flight }}</strong>
 				</div>
-			</div>
-			<!-- Pickup Details Cruise Port -->
-			<div class="row" *ngIf="transferType?.includes('cruise_')">
-				<div class="col-md-4 field">
+				<!-- Pickup Details Cruise Port -->
+				<div class="col-md-4 field" *ngIf="transferType?.includes('cruise_')">
 					<p>Cruise Port </p>
 					<strong>{{ BookingDetail?.cruise_port | titlecase }}</strong>
 				</div>
-				<div class="col-md-4 field">
+				<div class="col-md-4 field" *ngIf="transferType?.includes('cruise_')">
 					<p>Cruise Name</p>
 					<strong>{{ BookingDetail?.cruise_name | titlecase }}</strong>
 				</div>
-				<div class="col-md-4 field">
+				<div class="col-md-4 field" *ngIf="transferType?.includes('cruise_')">
 					<p>Cruise Time</p>
 					<strong>{{ timeFormat2(BookingDetail?.cruise_time) }} |
 						{{ timeFormat(BookingDetail?.cruise_time) }}</strong>
 				</div>
-			</div>
-			<!-- Dropoff Details One Way -->
-			<div class="row" *ngIf="transferType?.includes('_city') || transferType?.includes('_cruise')">
-				<div class="col-md-4 field">
+				<!-- Dropoff Details One Way -->
+				<div class="col-md-4 field"
+					*ngIf="transferType?.includes('_city') || transferType?.includes('_cruise')">
 					<p>DropOff Address </p>
 					<strong>{{ BookingDetail?.dropoff_address }}</strong>
 				</div>
-			</div>
-			<!-- Dropoff Details Airport -->
-			<div class="row" *ngIf="transferType?.includes('_airport')">
-				<div class="col-md-4 field">
+				<!-- Dropoff Details Airport -->
+				<div class="col-md-4 field" *ngIf="transferType?.includes('_airport')">
 					<p>DropOff Airport </p>
 					<strong>{{ BookingDetail?.dropoff_airport_name | titlecase }}</strong>
 				</div>
-				<div class="col-md-4 field">
+				<div class="col-md-4 field" *ngIf="transferType?.includes('_airport')">
 					<p>DropOff Airline</p>
 					<strong>{{ BookingDetail?.dropoff_airline_name | titlecase }}</strong>
 				</div>
-				<div class="col-md-4 field">
+				<div class="col-md-4 field" *ngIf="transferType?.includes('_airport')">
 					<p>DropOff Flight</p>
 					<strong>{{ BookingDetail?.dropoff_flight | titlecase }}</strong>
 				</div>
-			</div>
-			<!-- Dropoff Details Cruise Port -->
-			<div class="row" *ngIf="transferType?.includes('_cruise')">
-				<div class="col-md-4 field">
+				<!-- Dropoff Details Cruise Port -->
+				<div class="col-md-4 field" *ngIf="transferType?.includes('_cruise')">
 					<p>Dropoff Cruise Port </p>
 					<strong>{{ BookingDetail?.cruise_port | titlecase }}</strong>
 				</div>
-				<div class="col-md-4 field">
+				<div class="col-md-4 field" *ngIf="transferType?.includes('_cruise')">
 					<p>Dropoff Cruise Name</p>
 					<strong>{{ BookingDetail?.cruise_name | titlecase }}</strong>
 				</div>
-				<div class="col-md-4 field">
+				<div class="col-md-4 field" *ngIf="transferType?.includes('_cruise')">
 					<p>Dropoff Cruise Time</p>
 					<strong>{{ timeFormat2(BookingDetail?.cruise_time) }} |
 						{{ timeFormat(BookingDetail?.cruise_time) }}</strong>

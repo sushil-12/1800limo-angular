@@ -4,8 +4,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { NgxSpinnerService } from "ngx-spinner";
 import { catchError } from "rxjs/operators";
 import { throwError } from "rxjs";
-import
-{
+import {
 	DateAdapter,
 	MAT_DATE_LOCALE,
 	ThemePalette,
@@ -21,8 +20,7 @@ import { ErrorDialogService } from "src/app/services/error-dialog/errordialog.se
 	templateUrl: "./daily-bookings.component.html",
 	styleUrls: ["./daily-bookings.component.scss"],
 })
-export class DailyBookingsComponent implements OnInit
-{
+export class DailyBookingsComponent implements OnInit {
 	outputDateFormat = "YYYY-MM-DD";
 	color: ThemePalette = "primary";
 	public firstPage: Number;
@@ -55,6 +53,7 @@ export class DailyBookingsComponent implements OnInit
 	sendInformation: any;
 	reciptentName: any;
 	notification_msg: any;
+	searchText: string = "";
 
 	constructor(
 		private adminService: AdminService,
@@ -64,24 +63,32 @@ export class DailyBookingsComponent implements OnInit
 		private $errorDialog: ErrorDialogService,
 	) { }
 
-	ngOnInit(): void
-	{
-		this.resetDates()
+	ngOnInit(): void {
+		let date = new Date();
+		this.startDate = date.toISOString().substring(0, 10);
+		date.setDate(date.getDate() + 7);
+		this.endDate = date.toISOString().substring(0, 10);
 
 		// Override Start Date
-		if (this.adminService.checkCookie('startDate'))
-		{
+		if (this.adminService.checkCookie('startDate')) {
 			this.startDate = this.adminService.getCookie('startDate');
 		}
 
 		// Override End Date
-		if (this.adminService.checkCookie('endDate'))
-		{
+		if (this.adminService.checkCookie('endDate')) {
 			this.endDate = this.adminService.getCookie('endDate');
 		}
 
+		// Override  Search text
+		if (this.adminService.checkCookie('search')) {
+			this.searchText = this.adminService.getCookie('search');
+		} else {
+			this.searchText = null;
+		}
 
-		this.loadBookings(null, this.startDate, this.endDate, null);
+
+
+		this.loadBookings(null, this.startDate, this.endDate, this.searchText);
 
 		//change status booking form validation
 		this.changeStatusForm = this.formBuilder.group({
@@ -96,24 +103,26 @@ export class DailyBookingsComponent implements OnInit
 		});
 	}
 
+
+
+
 	/**
 	 * Configure date as per todays date and the future +7 days
 	 */
-	resetDates()
-	{
+	resetDates() {
 		let date = new Date();
 		this.startDate = date.toISOString().substring(0, 10);
 		date.setDate(date.getDate() + 7);
 		this.endDate = date.toISOString().substring(0, 10);
-
-		console.log('Dates reset Successfully. ');
+		this.searchText = ''
+		this.adminService.deleteCookie("search");
+		this.adminService.deleteCookie("startDate");
+		this.adminService.deleteCookie("endDate");
 	}
 
-	messageField(format)
-	{
+	messageField(format) {
 		this.show = true;
-		switch (format)
-		{
+		switch (format) {
 			case "Phone": {
 				this.sendMessageField = true;
 				break;
@@ -125,18 +134,15 @@ export class DailyBookingsComponent implements OnInit
 		}
 	}
 
-	submit(message, format)
-	{
+	submit(message, format) {
 		this.show = false;
-		if (this.passengerDetails.selection_button == "Passenger")
-		{
+		if (this.passengerDetails.selection_button == "Passenger") {
 			this.sendInformation = format
 				? this.passengerDetails.passenger_cell_isd +
 				this.passengerDetails.passenger_cell
 				: this.passengerDetails.passenger_email;
 			this.reciptentName = this.passengerDetails.passenger_name;
-		} else if (this.passengerDetails.selection_button == "Affiliate")
-		{
+		} else if (this.passengerDetails.selection_button == "Affiliate") {
 			this.sendInformation = format
 				? this.passengerDetails.affiliate_dispatch_isd +
 				this.passengerDetails.affiliate_dispatch_number
@@ -144,8 +150,7 @@ export class DailyBookingsComponent implements OnInit
 			this.reciptentName =
 				this.passengerDetails.driver_first_name +
 				this.passengerDetails.driver_last_name;
-		} else
-		{
+		} else {
 			this.sendInformation = format
 				? this.passengerDetails.loose_affiliate_phone_isd +
 				this.passengerDetails.loose_affiliate_phone
@@ -164,34 +169,28 @@ export class DailyBookingsComponent implements OnInit
 		this.adminService
 			.adminNotification(obj)
 			.pipe(
-				catchError((err) =>
-				{
+				catchError((err) => {
 					return throwError(err);
 				})
 			)
-			.subscribe(({ message }: any) =>
-			{
+			.subscribe(({ message }: any) => {
 				this.notification_msg = message;
 				$("#notificationModal").modal("show");
 				console.log(message);
 				$("textarea").val("");
 			});
-		$("#closeModal").click(() =>
-		{
+		$("#closeModal").click(() => {
 			$("#notificationModal").modal("hide");
 		});
-		$("#closeModal1").click(() =>
-		{
+		$("#closeModal1").click(() => {
 			$("#notificationModal").modal("hide");
 		});
 	}
 
-	loadBookings(pageUrl = null, start_date: string, end_date: string, search_value: string = '')
-	{
+	loadBookings(pageUrl = null, start_date: string, end_date: string, search_value: string = '') {
 		search_value == '' && this.spinner.show();
 		// Load Our bookings using API
-		this.adminService.loadBookings(pageUrl, start_date, end_date, search_value ?? '').then((result) =>
-		{
+		this.adminService.loadBookings(pageUrl, start_date, end_date, search_value ?? '').then((result) => {
 			this.bookingsRes = result;
 			this.bookings = this.bookingsRes.data.data;
 			this.totalRecords = this.bookingsRes.data.total;
@@ -211,93 +210,77 @@ export class DailyBookingsComponent implements OnInit
 	}
 
 	show = false;
-	openModal(booking: any, selection_button: string)
-	{
+	openModal(booking: any, selection_button: string) {
 		this.passengerDetails = booking;
 		this.passengerDetails["selection_button"] = selection_button;
 	}
 
 	//for pagination
-	counter()
-	{
+	counter() {
 		var currentPage;
 		var startFrom;
 		var endTo;
 
-		if (this.currentPage < 5)
-		{
+		if (this.currentPage < 5) {
 			startFrom = 0;
 			endTo = this.totalPage;
-		} else if (this.currentPage < this.totalPage)
-		{
+		} else if (this.currentPage < this.totalPage) {
 			currentPage = this.currentPage;
 			endTo = currentPage + 1;
 			startFrom = endTo - 5;
-		} else
-		{
+		} else {
 			endTo = this.totalPage;
 			startFrom = endTo - 5;
 		}
 
 		var i;
 		var udpArr = new Array();
-		for (i = startFrom; i < endTo; i++)
-		{
+		for (i = startFrom; i < endTo; i++) {
 			udpArr.push(i + 1);
 		}
 		return udpArr;
 	}
 
-	changeDate(dateType, date)
-	{
+	changeDate(dateType, date) {
 		this[dateType] = date
 	}
 
-	enableDisableClicked(event, id)
-	{
+	enableDisableClicked(event, id) {
 		this.spinner.show(); //show spinner
 		console.log(event.checked);
-		if (event.checked)
-		{
+		if (event.checked) {
 			var status = "enable";
-		} else
-		{
+		} else {
 			var status = "disable";
 		}
 		this.adminService
 			.reservationStatus(id, status)
 			.pipe(
-				catchError((err) =>
-				{
+				catchError((err) => {
 					this.spinner.hide(); //hide spinner
 					return throwError(err);
 				})
 			)
-			.subscribe((result) =>
-			{
+			.subscribe((result) => {
 				this.spinner.hide(); //hide spinner
 			});
 	}
 
-	get changeStatusF()
-	{
+	get changeStatusF() {
 		return this.changeStatusForm.controls;
 	}
 
-	changeBookingStatus(bookingId)
-	{
+	changeBookingStatus(bookingId) {
 		this.changeStatusForm.patchValue({
 			reservation_id: bookingId,
 		});
 	}
 
-	submitChangeStatusForm()
-	{
+	submitChangeStatusForm() {
 		this.submitted = true;
 		console.log(this.changeStatusForm);
 		// stop here if form is invalid
-		if (this.changeStatusForm.invalid)
-		{
+		if (this.changeStatusForm.invalid) {
 			return;
 		}
 
@@ -306,17 +289,14 @@ export class DailyBookingsComponent implements OnInit
 
 		this.adminService.changeStatusBooking(this.changeStatusForm.value)
 			.pipe(
-				catchError((err) =>
-				{
+				catchError((err) => {
 					this.spinner.hide(); //hide spinner
 					$("#change_status_booking_Modal").modal("hide");
 					return throwError(err);
 				})
 			)
-			.subscribe(({ data, success, message }: any) =>
-			{
-				if (success == true)
-				{
+			.subscribe(({ data, success, message }: any) => {
+				if (success == true) {
 					$("#change_status_booking_Modal").modal("hide");
 					this.loadBookings(null, this.startDate, this.endDate)
 					// this.router
@@ -333,21 +313,18 @@ export class DailyBookingsComponent implements OnInit
 			});
 	}
 
-	sendEmailClicked(bookingId, emailTarget)
-	{
+	sendEmailClicked(bookingId, emailTarget) {
 		this.sendEmailForm.patchValue({
 			reservation_id: bookingId,
 			emailTarget: emailTarget,
 		});
 	}
 
-	emailForm()
-	{
+	emailForm() {
 		this.submitted = true;
 		console.log(this.sendEmailForm);
 		// stop here if form is invalid
-		if (this.sendEmailForm.invalid)
-		{
+		if (this.sendEmailForm.invalid) {
 			return;
 		}
 
@@ -357,25 +334,21 @@ export class DailyBookingsComponent implements OnInit
 		this.adminService
 			.sendEmail(this.sendEmailForm.value)
 			.pipe(
-				catchError((err) =>
-				{
+				catchError((err) => {
 					this.spinner.hide(); //hide spinner
 					$("#emailModal").modal("hide");
 					return throwError(err);
 				})
 			)
-			.subscribe(({ data, success, message }: any) =>
-			{
-				if (success == true)
-				{
+			.subscribe(({ data, success, message }: any) => {
+				if (success == true) {
 					this.spinner.hide(); //hide spinner
 					$("#emailModal").modal("hide");
 					this.router
 						.navigateByUrl("/RefreshComponent", {
 							skipLocationChange: true,
 						})
-						.then(() =>
-						{
+						.then(() => {
 							this.router.navigate([
 								"/admin/daily-bookings-admin",
 							]);
@@ -384,37 +357,30 @@ export class DailyBookingsComponent implements OnInit
 			});
 	}
 
-	FormatDate(date: string)
-	{
+	FormatDate(date: string) {
 		return moment(date).format("ll");
 	}
 
-	FormatTime(time: string)
-	{
+	FormatTime(time: string) {
 		return moment(time, "HH:mm:ss").format("LT");
 	}
 
 
-	dateFormat(value: any)
-	{
+	dateFormat(value: any) {
 		return moment(value, 'YYYY-MM-DD').format('ll')
 	}
 
-	dateFormat2(value: any)
-	{
+	dateFormat2(value: any) {
 		return moment(value, 'YYYY-MM-DD').format('L')
 	}
 
-	timeFormat(value: any)
-	{
-		if (value.toUpperCase() == '12:00 AM')
-		{
+	timeFormat(value: any) {
+		if (value.toUpperCase() == '12:00 AM') {
 			return '0000 h'
 		}
 		let hours = moment(moment(value, 'hh:mm a').format('HH'), 'HH').hours();
 		let mins = moment(value, 'hh:mm a').minutes().toString();
-		if (Number(mins) == 0 || Number(mins) < 10)
-		{
+		if (Number(mins) == 0 || Number(mins) < 10) {
 			mins = '0' + mins.toString();
 		}
 
@@ -422,15 +388,12 @@ export class DailyBookingsComponent implements OnInit
 		//return value.replace(':', '').substring(0, 5) + 'h';
 	}
 
-	timeFormat2(value: string)
-	{
+	timeFormat2(value: string) {
 		return moment(value, 'HH:mm a').format('h:mm a');
 	}
 
-	textFormatter(text: string)
-	{
-		try
-		{
+	textFormatter(text: string) {
+		try {
 			return text.replace(/[\\\_$]+/g, ' ')
 		}
 		catch
@@ -440,11 +403,9 @@ export class DailyBookingsComponent implements OnInit
 	}
 
 	bookingPreview: any
-	showBookingPreviewModal(booking_id: number)
-	{
+	showBookingPreviewModal(booking_id: number) {
 		this.spinner.show();
-		this.adminService.getBookingPreview(booking_id).subscribe((response: any) =>
-		{
+		this.adminService.getBookingPreview(booking_id).subscribe((response: any) => {
 			this.spinner.hide();
 			this.bookingPreview = response.data;
 		})
@@ -452,37 +413,30 @@ export class DailyBookingsComponent implements OnInit
 
 
 	timer: any
-	searchInBookings(search_value: string)
-	{
+	searchInBookings(search_value: string) {
+		this.adminService.setCookie("search", search_value, 30)
 		clearTimeout(this.timer);
-		this.timer = setTimeout(() =>
-		{
+		this.timer = setTimeout(() => {
 			this.loadBookings(null, this.startDate, this.endDate, search_value)
 		}, 800)
 	}
 
-	handleKeypressEvents()
-	{
+	handleKeypressEvents() {
 		clearTimeout(this.timer)
 	}
 
-	saveCookie(key: string, value: string)
-	{
+	saveCookie(key: string, value: string) {
 		this.adminService.setCookie(key, value, 30);
 	}
 
-	showLocationPointOnMap(booking_id: number, type: string)
-	{
+	showLocationPointOnMap(booking_id: number, type: string) {
 		this.spinner.show()
-		this.adminService.getLocationPoints(booking_id, type).subscribe((response: any) =>
-		{
+		this.adminService.getLocationPoints(booking_id, type).subscribe((response: any) => {
 			this.spinner.hide();
-			if (response?.data?.lat && response?.data?.long)
-			{
+			if (response?.data?.lat && response?.data?.long) {
 				sessionStorage.setItem('location', JSON.stringify(response?.data?.address));
 				this.router.navigate([`/locate-map/${response?.data.lat}/${response?.data.long}`]);
-			} else
-			{
+			} else {
 				throw new Error('Error: No Location Points Specified. ')
 			}
 		})

@@ -61,6 +61,10 @@ export class AdminService {
 		return false
 	}
 
+	deleteCookie(key: string) {
+		document.cookie = `${key}=' ';expires=Thu, 01 Jan 1970 00:00:00 UTC;`;
+	}
+
 	changeSortOrder(data: any) {
 		return this.httpClient.put(this.serverUrl + 'vehicle-types-sorting', data);
 	}
