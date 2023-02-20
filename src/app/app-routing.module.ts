@@ -243,7 +243,7 @@ const routes: Routes = [
 		]
 	},
 	{
-		path: 'locate-map/:lat/:lng',
+		path: 'locate-map',
 		component: LocateMapComponent
 	},
 	{

@@ -1,13 +1,13 @@
 <ngx-spinner></ngx-spinner>
 <router-outlet></router-outlet>
 
-<div class="modal fade" id="globalErrorModal" tabindex="-1" role="dialog" aria-labelledby="affiliateInstructionsModal"
-	aria-hidden="true" style="padding-left: 0;">
+<div class="modal fade" id="globalErrorModal" tabindex="-1" role="dialog"
+	aria-labelledby="affiliateInstructionsModal" aria-hidden="true" style="padding-left: 0;">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-body text-center">
-				<p *ngFor="let error of errors | keyvalue" class="text-danger">
-					{{error.value | htmlToText}}
+				<p *ngFor="let error of errors | keyvalue" class="text-danger"
+					[innerHtml]="error.value">
 				</p>
 			</div>
 			<div class="modal-footer">

@@ -1195,7 +1195,7 @@ export class NewBookingComponent implements OnInit
 			{
 				this.$errors.openDialog({
 					errors: {
-						error: response.message
+						error: `<span class='text-success'>${response.message}</span>`
 					}
 				})
 				this.$router.navigate(['/admin/daily-bookings-admin'])
