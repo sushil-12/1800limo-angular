@@ -75,8 +75,16 @@ export class AdminService
 		return false
 	}
 
+<<<<<<< src/app/services/admin.service.ts
 	changeSortOrder(data: any)
 	{
+=======
+	deleteCookie(key: string) {
+		document.cookie = `${key}=' ';expires=Thu, 01 Jan 1970 00:00:00 UTC;`;
+	}
+
+	changeSortOrder(data: any) {
+>>>>>>> src/app/services/admin.service.ts
 		return this.httpClient.put(this.serverUrl + 'vehicle-types-sorting', data);
 	}
 
