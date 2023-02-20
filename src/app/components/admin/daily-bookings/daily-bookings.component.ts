@@ -431,13 +431,25 @@ export class DailyBookingsComponent implements OnInit {
 
 	showLocationPointOnMap(booking_id: number, type: string) {
 		this.spinner.show()
-		this.adminService.getLocationPoints(booking_id, type).subscribe((response: any) => {
+		this.adminService.getLocationPoints(booking_id).subscribe((response: any) =>
+		{
 			this.spinner.hide();
-			if (response?.data?.lat && response?.data?.long) {
-				sessionStorage.setItem('location', JSON.stringify(response?.data?.address));
-				this.router.navigate([`/locate-map/${response?.data.lat}/${response?.data.long}`]);
-			} else {
-				throw new Error('Error: No Location Points Specified. ')
+			if ("lat" in response?.data?.pickupDetail && "long" in response?.data?.pickupDetail && "lat" in response?.data?.dropoffDetail && "long" in response?.data?.dropoffDetail)
+			{
+				sessionStorage.setItem('pickup', JSON.stringify(response?.data?.pickupDetail.address));
+				sessionStorage.setItem('dropoff', JSON.stringify(response?.data?.dropoffDetail.address));
+				this.router.navigate(['/locate-map'], {
+					queryParams: {
+						plat: response?.data?.pickupDetail?.lat.toString(),
+						plng: response?.data?.pickupDetail?.long.toString(),
+						dlat: response?.data?.dropoffDetail?.lat.toString(),
+						dlng: response.data?.dropoffDetail?.long.toString(),
+					},
+					queryParamsHandling: 'merge'
+				});
+			} else
+			{
+				throw new Error('Error: Location Points Not Specified Properly. ');
 			}
 		})
 	}
