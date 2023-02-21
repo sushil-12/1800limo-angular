@@ -454,8 +454,9 @@ export class DailyBookingsComponent implements OnInit
 
 
 	timer: any
-	searchInBookings(search_value: string)
-	{
+	searchInBookings(search_value: string) {
+		this.searchText = search_value
+		this.adminService.setCookie("search", search_value, 30)
 		clearTimeout(this.timer);
 		this.timer = setTimeout(() =>
 		{
