@@ -52,12 +52,12 @@
 			<div class="row my-2 mb-3">
 				<div class="col-md-3">
 					<div id="filter-type">
-						<mat-form-field appearance="outline" class="m-0"
-							(change)="changeFilterType($event.value)">
+						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>
 								Filter Type
 							</mat-label>
-							<mat-select [value]="filtertype">
+							<mat-select [value]="filtertype"
+								(selectionChange)="changeFilterType($event.value)">
 								<mat-option value="bookingid"> Booking Id </mat-option>
 								<mat-option value="paxname"> Pax Name </mat-option>
 								<mat-option value="paxphone"> Pax Phone </mat-option>
@@ -73,7 +73,7 @@
 					<div id="search-field">
 						<mat-form-field appearance="outline" class="m-0">
 							<input matInput type="text" (keypress)="handleKeypressEvents()"
-								(keyup)="searchInBookings($event.target.value)"
+								(keyup)="searchInBookings($event.target.value)" [value]="searchText"
 								placeholder="Search by Booking Id, Pax Name, Pickup, Dropoff, Phone, Status, Vehicle Type"
 								id="keyword">
 						</mat-form-field>
@@ -84,7 +84,7 @@
 		<div class="containeredd driverside_table">
 			<div class="row">
 				<div class="col-md-12 custom_table">
-					<div class="table-responsive" style="min-height: 350px">
+					<div class="table-responsive" style="min-height: 350px" *ngIf="!noError">
 						<table
 							class="table table-dark table-striped table-bordered dataTable dt-responsive"
 							id="dataTable" role="grid" aria-describedby="dataTable_info"
@@ -236,6 +236,9 @@
 							</tbody>
 						</table>
 					</div>
+					<p class="text-danger text-lg" *ngIf="noError">
+						No Results for specified query.
+					</p>
 				</div>
 				<!----PAGINATION---->
 				<!----BACK BTN---->

@@ -202,12 +202,18 @@ export class DailyBookingsComponent implements OnInit
 		});
 	}
 
+	noError: boolean = false
 	loadBookings(pageUrl = null, start_date: string, end_date: string, search_value: string = '', filter_type: string)
 	{
 		search_value == '' && this.spinner.show();
+		this.noError = false
 		// Load Our bookings using API
-		this.adminService.loadBookings(pageUrl, start_date, end_date, search_value ?? '', filter_type).then((result) =>
+		this.adminService.loadBookings(pageUrl, start_date, end_date, search_value ?? '', filter_type).then((result: any) =>
 		{
+			if (result?.data?.data == 0)
+			{
+				this.noError = true
+			}
 			this.bookingsRes = result;
 			this.bookings = this.bookingsRes.data.data;
 			this.totalRecords = this.bookingsRes.data.total;
@@ -491,7 +497,9 @@ export class DailyBookingsComponent implements OnInit
 
 	changeFilterType(value: string)
 	{
+		console.log(value)
 		this.filtertype = value
+		this.loadBookings(null, this.startDate, this.endDate, this.searchText, this.filtertype);
 	}
 
 	showLocationPointOnMap(booking_id: number, type: string)
