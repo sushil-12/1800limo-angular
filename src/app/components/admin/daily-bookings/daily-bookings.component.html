@@ -38,7 +38,7 @@
 				<!-- Search Button -->
 				<div class="col-sm-2 my-2">
 					<button class="custom-filled-button orange-button"
-						(click)="loadBookings(null, startDate, endDate); saveCookie('startDate', startDate); saveCookie('endDate', endDate)">
+						(click)="loadBookings(null, startDate, endDate, searchText, filtertype.value); saveCookie('startDate', startDate); saveCookie('endDate', endDate)">
 						Search
 					</button>
 				</div>
@@ -50,7 +50,20 @@
 				</div>
 			</div>
 			<div class="row my-2 mb-3">
-				<div class="col-md-12">
+				<div class="col-md-3">
+					<div id="filter-type">
+						<mat-select appearance="outline" #filtertype>
+							<mat-option value="booking_id"> Booking Id </mat-option>
+							<mat-option value="pax_name"> Pax Name </mat-option>
+							<mat-option value="pax_phone"> Pax Phone </mat-option>
+							<mat-option value="driver_name"> Driver Name </mat-option>
+							<mat-option value="driver_phone"> Driver Phone </mat-option>
+							<mat-option value="pickup"> Pickup </mat-option>
+							<mat-option value="dropoff"> Dropoff </mat-option>
+						</mat-select>
+					</div>
+				</div>
+				<div class="col-md-9">
 					<div id="search-field">
 						<mat-form-field appearance="outline" class="m-0">
 							<input matInput type="text" (keypress)="handleKeypressEvents()"
@@ -179,7 +192,9 @@
 												<div class="dropdown-item-icon"></div>
 												Return
 											</a>
-											<a class="dropdown-item" (click)="underConstruction()">
+											<a class="dropdown-item"
+												[routerLink]="['/admin/finalize-booking']"
+												[queryParams]="{bookingId: booking.booking_id}">
 												<div class="dropdown-item-icon"></div>
 												Finalize
 											</a>
@@ -220,9 +235,10 @@
 				<nav aria-label="Page navigation example" *ngIf="totalRecords > 15">
 					<ul class="pagination pagination-circle pg-blue">
 						<li *ngIf="currentPage!=1" class="page-item disabled"
-							(click)="loadBookings(firstPageUrl)"><a class="page-link">First</a></li>
+							(click)="loadBookings(firstPageUrl, startDate, endDate, searchText)"><a
+								class="page-link">First</a></li>
 						<li *ngIf="currentPage!=1" class="page-item disabled"
-							(click)="loadBookings(prevPageUrl)">
+							(click)="loadBookings(prevPageUrl, startDate, endDate, searchText)">
 							<a class="page-link" aria-label="Previous">
 								<span aria-hidden="true">&laquo;</span>
 								<span class="sr-only">Previous</span>
@@ -230,19 +246,20 @@
 						</li>
 						<li *ngFor="let in of counter() ;let i = index"
 							[ngClass]="(in==currentPage)?'page-item active':'page-item'"
-							(click)="loadBookings(path+'?page='+in)"
+							(click)="loadBookings(path+'?page='+in, startDate, endDate, searchText)"
 							[disabled]="(in==currentPage)?true:false">
 							<a class="page-link">{{in}}</a>
 						</li>
 						<li *ngIf="currentPage!=lastPage" class="page-item"
-							(click)="loadBookings(nextPageUrl)">
+							(click)="loadBookings(nextPageUrl, startDate, endDate, searchText)">
 							<a class="page-link" aria-label="Next">
 								<span aria-hidden="true">&raquo;</span>
 								<span class="sr-only">Next</span>
 							</a>
 						</li>
 						<li *ngIf="currentPage!=lastPage" class="page-item"
-							(click)="loadBookings(lastPageUrl)"><a class="page-link">Last</a></li>
+							(click)="loadBookings(lastPageUrl, startDate, endDate, searchText)"><a
+								class="page-link">Last</a></li>
 					</ul>
 				</nav>
 			</div>

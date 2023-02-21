@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { AdminService } from "../../../services/admin.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NgxSpinnerService } from "ngx-spinner";
@@ -48,6 +48,8 @@ export class DailyBookingsComponent implements OnInit
 	public sendEmailForm: FormGroup;
 	public submitted: boolean = false;
 	// public isRepeat: boolean=false;
+
+	@ViewChild('filtertype') filtertype!: ElementRef
 	// public isRepeatRoundTrip: boolean=false;
 
 	passengerDetails: any;
@@ -186,11 +188,11 @@ export class DailyBookingsComponent implements OnInit
 		});
 	}
 
-	loadBookings(pageUrl = null, start_date: string, end_date: string, search_value: string = '')
+	loadBookings(pageUrl = null, start_date: string, end_date: string, search_value: string = '', filter_type: string)
 	{
 		search_value == '' && this.spinner.show();
 		// Load Our bookings using API
-		this.adminService.loadBookings(pageUrl, start_date, end_date, search_value ?? '').then((result) =>
+		this.adminService.loadBookings(pageUrl, start_date, end_date, search_value ?? '', filter_type).then((result) =>
 		{
 			this.bookingsRes = result;
 			this.bookings = this.bookingsRes.data.data;
@@ -457,7 +459,7 @@ export class DailyBookingsComponent implements OnInit
 		clearTimeout(this.timer);
 		this.timer = setTimeout(() =>
 		{
-			this.loadBookings(null, this.startDate, this.endDate, search_value)
+			this.loadBookings(null, this.startDate, this.endDate, search_value, this.filtertype.nativeElement.value)
 		}, 800)
 	}
 
@@ -493,15 +495,6 @@ export class DailyBookingsComponent implements OnInit
 			} else
 			{
 				throw new Error('Error: Location Points Not Specified Properly. ');
-			}
-		})
-	}
-
-	underConstruction()
-	{
-		this.$errorDialog.openDialog({
-			errors: {
-				error: 'Link under Construction. Will be available soon.'
 			}
 		})
 	}
