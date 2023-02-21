@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import * as moment from "moment";
 import { NgxSpinnerService } from "ngx-spinner";
 import { AdminService } from "src/app/services/admin.service";
+import { FormBuilder, FormGroup, Validators, FormControl, FormArray, ValidationErrors, ValidatorFn, AbstractControl } from '@angular/forms';
 
 @Component({
 	selector: "app-finalize-booking",
@@ -26,10 +27,25 @@ export class FinalizeBookingComponent implements OnInit {
 		number_of_hours: 0,
 		number_of_vehicles: 0,
 		booking_id: 0
-
 	}
 
+	cardForm: FormGroup
+	paymentMethod:string='cash';
+	isCardFormOpen:boolean=false
+	card_params = {
+		years: (() => {
+			let arr = []
+			let i = 0;
+			let year = new Date().getFullYear();
+			while (i <= 15) {
+				arr.push(year + i);
+				i++;
+			}
+			return arr
+		})(),
+	}
 	constructor(
+		private $form: FormBuilder,
 		private $api: AdminService,
 		private $route: ActivatedRoute,
 		private $router: Router,
@@ -37,6 +53,7 @@ export class FinalizeBookingComponent implements OnInit {
 	) { }
 
 	ngOnInit(): void {
+		this.buildingCardForm()
 		this.$route.queryParams.subscribe((params: any) => {
 			isDevMode && console.log("Params Found: ", params);
 			if (params.bookingId) {
@@ -51,6 +68,41 @@ export class FinalizeBookingComponent implements OnInit {
 		});
 	}
 
+
+	/**
+	 * Change Detection Functions with minimum functionality 
+	 * like saving a form value or assigning a variable
+	 */
+
+	changeDetection(method:string){
+		this.paymentMethod = method
+	}
+
+
+	handleCardForm(){
+		console.log(this.isCardFormOpen)
+		this.isCardFormOpen=!this.isCardFormOpen
+	}
+
+	/**
+	 *  Reset all fields of the card form
+	 */
+	resetCardForm(){
+		this.cardForm.reset()
+	}
+	
+
+
+
+	buildingCardForm() {
+		this.cardForm = this.$form.group({
+			name: ['',Validators.required],
+			card_number: ['',Validators.required],
+			exp_month: ['',Validators.required],
+			exp_year: ['',Validators.required],
+			cvv: ['',Validators.required]
+		})
+	}
 	// formatText(text: string)
 	// {
 	// 	return text.replace(/[\_\-]+/g, " ").trim();
