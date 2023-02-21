@@ -75,11 +75,21 @@ export class AdminService
 		return false
 	}
 
+<<<<<<< src/app/services/admin.service.ts
+	deleteCookie(key: string)
+	{
+		document.cookie = `${key}=' ';expires=Thu, 01 Jan 1970 00:00:00 UTC;`;
+	}
+
+	changeSortOrder(data: any)
+	{
+=======
 	deleteCookie(key: string) {
 		document.cookie = `${key}=' ';expires=Thu, 01 Jan 1970 00:00:00 UTC;`;
 	}
 
 	changeSortOrder(data: any) {
+>>>>>>> src/app/services/admin.service.ts
 		return this.httpClient.put(this.serverUrl + 'vehicle-types-sorting', data);
 	}
 
@@ -982,16 +992,16 @@ export class AdminService
 		return this.httpClient.post(this.serverUrl + 'admin-notification-daily-booking', data);
 	}
 
-	loadBookings(url, startDate, endDate, keyword = '')
+	loadBookings(url, startDate, endDate, keyword = '', filter_type: string)
 	{
 		var path;
 		if (url)
 		{
-			path = url + '&from=' + startDate + '&to=' + endDate + '&search=' + keyword;
+			path = url + '&from=' + startDate + '&to=' + endDate + '&search=' + keyword + '&filtertype=' + filter_type;
 		}
 		else
 		{
-			path = this.serverUrl + 'reservations' + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword;
+			path = this.serverUrl + 'reservations' + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword + '&filtertype=' + filter_type;
 		}
 		return this.httpClient.get(path).toPromise();
 	}
