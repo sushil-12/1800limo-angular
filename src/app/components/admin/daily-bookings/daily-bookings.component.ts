@@ -499,6 +499,7 @@ export class DailyBookingsComponent implements OnInit
 	{
 		console.log(value)
 		this.filtertype = value
+		this.saveCookie('filtertype', this.filtertype);
 		this.loadBookings(null, this.startDate, this.endDate, this.searchText, this.filtertype);
 	}
 
