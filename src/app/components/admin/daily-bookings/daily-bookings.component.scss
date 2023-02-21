@@ -161,3 +161,8 @@ a:hover
 	text-decoration: none;
 	color: unset !important;
 }
+
+input, input::placeholder, input::-webkit-input-placeholder
+{
+	padding: 0 !important	;
+}
