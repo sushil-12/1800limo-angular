@@ -90,5 +90,9 @@ ul {
 		font-size: 18px;
 	}
 }
-
+input,
+input::placeholder,
+input::-webkit-input-placeholder {
+	padding-left: 10px !important;
+}
 

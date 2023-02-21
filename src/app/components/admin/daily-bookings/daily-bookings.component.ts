@@ -47,10 +47,8 @@ export class DailyBookingsComponent implements OnInit
 	public changeStatusForm: FormGroup;
 	public sendEmailForm: FormGroup;
 	public submitted: boolean = false;
-	// public isRepeat: boolean=false;
-
-	@ViewChild('filtertype') filtertype!: ElementRef
-	// public isRepeatRoundTrip: boolean=false;
+	searchText: string = "";
+	filtertype: string = "";
 
 	passengerDetails: any;
 	senderValue: string;
@@ -68,7 +66,7 @@ export class DailyBookingsComponent implements OnInit
 
 	ngOnInit(): void
 	{
-		this.resetDates()
+		this.reset()
 
 		// Override Start Date
 		if (this.adminService.checkCookie('startDate'))
@@ -82,8 +80,21 @@ export class DailyBookingsComponent implements OnInit
 			this.endDate = this.adminService.getCookie('endDate');
 		}
 
+		// Override Search Text
+		if (this.adminService.checkCookie('search'))
+		{
+			this.searchText = this.adminService.getCookie('search');
+		}
 
-		this.loadBookings(null, this.startDate, this.endDate, null);
+		// Override Filter Type
+		if (this.adminService.checkCookie('filtertype'))
+		{
+			this.filtertype = this.adminService.getCookie('filtertype');
+		}
+
+
+		this.loadBookings(null, this.startDate, this.endDate, this.searchText, this.filtertype);
+
 
 		//change status booking form validation
 		this.changeStatusForm = this.formBuilder.group({
@@ -101,14 +112,17 @@ export class DailyBookingsComponent implements OnInit
 	/**
 	 * Configure date as per todays date and the future +7 days
 	 */
-	resetDates()
+	reset()
 	{
 		let date = new Date();
 		this.startDate = date.toISOString().substring(0, 10);
 		date.setDate(date.getDate() + 7);
 		this.endDate = date.toISOString().substring(0, 10);
 
-		console.log('Dates reset Successfully. ');
+		this.searchText = "";
+		this.changeFilterType('bookingid')
+
+		console.log('Reset Successfully. ');
 	}
 
 	messageField(format)
@@ -320,7 +334,7 @@ export class DailyBookingsComponent implements OnInit
 				if (success == true)
 				{
 					$("#change_status_booking_Modal").modal("hide");
-					this.loadBookings(null, this.startDate, this.endDate)
+					this.loadBookings(null, this.startDate, this.endDate, this.searchText, this.filtertype)
 					// this.router
 					// 	.navigateByUrl("/RefreshComponent", {
 					// 		skipLocationChange: true,
@@ -454,14 +468,15 @@ export class DailyBookingsComponent implements OnInit
 
 
 	timer: any
-	searchInBookings(search_value: string) {
+	searchInBookings(search_value: string)
+	{
 		this.searchText = search_value
-		this.adminService.setCookie("search", search_value, 30)
 		clearTimeout(this.timer);
 		this.timer = setTimeout(() =>
 		{
-			this.loadBookings(null, this.startDate, this.endDate, search_value, this.filtertype.nativeElement.value)
-		}, 800)
+			this.saveCookie("search", this.searchText);
+			this.loadBookings(null, this.startDate, this.endDate, search_value, this.filtertype)
+		}, 700)
 	}
 
 	handleKeypressEvents()
@@ -472,6 +487,11 @@ export class DailyBookingsComponent implements OnInit
 	saveCookie(key: string, value: string)
 	{
 		this.adminService.setCookie(key, value, 30);
+	}
+
+	changeFilterType(value: string)
+	{
+		this.filtertype = value
 	}
 
 	showLocationPointOnMap(booking_id: number, type: string)

@@ -75,7 +75,6 @@ export class AdminService
 		return false
 	}
 
-<<<<<<< src/app/services/admin.service.ts
 	deleteCookie(key: string)
 	{
 		document.cookie = `${key}=' ';expires=Thu, 01 Jan 1970 00:00:00 UTC;`;
@@ -83,13 +82,6 @@ export class AdminService
 
 	changeSortOrder(data: any)
 	{
-=======
-	deleteCookie(key: string) {
-		document.cookie = `${key}=' ';expires=Thu, 01 Jan 1970 00:00:00 UTC;`;
-	}
-
-	changeSortOrder(data: any) {
->>>>>>> src/app/services/admin.service.ts
 		return this.httpClient.put(this.serverUrl + 'vehicle-types-sorting', data);
 	}
 
@@ -997,11 +989,11 @@ export class AdminService
 		var path;
 		if (url)
 		{
-			path = url + '&from=' + startDate + '&to=' + endDate + '&search=' + keyword + '&filtertype=' + filter_type;
+			path = url + '&from=' + startDate + '&to=' + endDate + '&search=' + keyword + '&type=' + filter_type;
 		}
 		else
 		{
-			path = this.serverUrl + 'reservations' + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword + '&filtertype=' + filter_type;
+			path = this.serverUrl + 'reservations' + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword + '&type=' + filter_type;
 		}
 		return this.httpClient.get(path).toPromise();
 	}
