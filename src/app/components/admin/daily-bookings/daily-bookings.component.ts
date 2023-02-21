@@ -120,7 +120,7 @@ export class DailyBookingsComponent implements OnInit
 		this.endDate = date.toISOString().substring(0, 10);
 
 		this.searchText = "";
-		this.changeFilterType('bookingid')
+		this.filtertype = 'bookingid';
 
 		console.log('Reset Successfully. ');
 	}
