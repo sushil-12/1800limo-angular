@@ -118,7 +118,8 @@ export class DailyBookingsComponent implements OnInit
 		this.startDate = date.toISOString().substring(0, 10);
 		date.setDate(date.getDate() + 7);
 		this.endDate = date.toISOString().substring(0, 10);
-
+		this.adminService.setCookie('startDate' , '' , 0)
+		this.adminService.setCookie('endDate' , '' , 0)
 		this.searchText = "";
 		this.filtertype = 'bookingid';
 
@@ -272,6 +273,7 @@ export class DailyBookingsComponent implements OnInit
 
 	changeDate(dateType, date)
 	{
+		console.log('---------__>>>>>>' , dateType , date)
 		this[dateType] = date
 	}
 
@@ -477,6 +479,7 @@ export class DailyBookingsComponent implements OnInit
 	searchInBookings(search_value: string)
 	{
 		this.searchText = search_value
+		console.log('--->>>>>' , search_value)
 		clearTimeout(this.timer);
 		this.timer = setTimeout(() =>
 		{
