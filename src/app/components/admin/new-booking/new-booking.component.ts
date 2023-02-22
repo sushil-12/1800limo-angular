@@ -1087,7 +1087,7 @@ export class NewBookingComponent implements OnInit {
 			this.$api.createBooking(value, this.Form.updateType.value).subscribe((response: any) => {
 				this.$errors.openDialog({
 					errors: {
-						error: response.message
+						error: `<span class='text-success'>${response.message}</span>`
 					}
 				})
 				this.$router.navigate(['/admin/daily-bookings-admin'])
