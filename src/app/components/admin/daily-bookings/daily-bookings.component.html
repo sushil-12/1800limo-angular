@@ -14,7 +14,7 @@
 						<input matInput [setOutputDateFormat]="outputDateFormat"
 							[matDatepicker]="picker1" placeholder="Start Date" id="id_4"
 							(dateChangeWithFormat)="changeDate('startDate', $event)"
-							(click)="picker1.open()" [value]="startDate" [max]="endDate" />
+							(click)="picker1.open()" [value]="startDate" [max]="endDate" readonly/>
 						<mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
 						<mat-datepicker #picker1></mat-datepicker>
 					</mat-form-field>
@@ -29,7 +29,7 @@
 						<input matInput [setOutputDateFormat]="outputDateFormat"
 							[matDatepicker]="picker2" placeholder="End Date" id="id_5"
 							(dateChangeWithFormat)="changeDate('endDate',$event)"
-							(click)="picker2.open()" [value]="endDate" [min]="startDate" />
+							(click)="picker2.open()" [value]="endDate" [min]="startDate" readonly/>
 						<mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
 						<mat-datepicker #picker2></mat-datepicker>
 					</mat-form-field>
@@ -114,7 +114,7 @@
 									</td>
 									<td>
 										<p data-target="#sendEmailModal" data-toggle="modal"
-											(click)="openModal(booking, 'Passenger')">
+											(click)="openModal(booking, 'Passenger')" >
 											{{ booking.passenger_name }} |
 											{{ booking.passenger_cell_isd }}{{
 											booking.passenger_cell }}
