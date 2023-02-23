@@ -31,7 +31,7 @@ export class NewBookingComponent implements OnInit {
 		affiliate_accounts: ['affiliate', 'loose_affiliate'],
 		numbers: (() => {
 			let arr = []
-			for (let i = 1; i < 20; i++) {
+			for (let i = 0; i < 20; i++) {
 				arr.push(i)
 			}
 			return arr
@@ -221,7 +221,7 @@ export class NewBookingComponent implements OnInit {
 			passenger_cell_isd: ['+1'],
 			passenger_cell_country: ['us'],
 			total_passengers: [1],
-			luggage_count: [1],
+			luggage_count: [0],
 			booking_instructions: [''],
 			affiliate_type: ['affiliate'],
 			affiliate_id: [''],

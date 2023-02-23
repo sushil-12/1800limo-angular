@@ -57,7 +57,10 @@
 						</thead>
 						<tbody>
 							<tr role="row" class="odd" *ngFor="let individual of individuals">
-								<td>{{individual.first_name+' '+individual.middle_name+' '+individual.last_name}}</td>
+								<td *ngIf="individual.middle_name == null;else middleName">{{individual.first_name+' '+individual.last_name}}</td>
+								<ng-template #middleName>
+									<td>{{individual.first_name+' '+individual.middle_name+' '+individual.last_name}}</td>
+								</ng-template>
 								<td>{{individual.email}}</td>
 								<td>{{individual.mobileIsd+individual.mobile}}</td>
 								<td>{{individual.workIsd+individual.work_contact_number}}</td>
