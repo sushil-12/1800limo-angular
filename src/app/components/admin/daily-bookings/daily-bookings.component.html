@@ -6,7 +6,7 @@
 		<div class="containeredd mt-1 ">
 			<div class="row my-2 align-items-center">
 				<!-- Start-Date -->
-				<div class="col-sm-4 col-md-3 my-2">
+				<div class="col-sm-4 col-md-4 my-2">
 					<mat-form-field appearance="outline" class="m-0 text-xl">
 						<mat-label>
 							Start Date <span class="asterisk"> * </span>
@@ -20,7 +20,7 @@
 				</div>
 
 				<!-- End-Date -->
-				<div class="col-sm-4 col-md-3 my-2">
+				<div class="col-sm-4 col-md-4 my-2">
 					<mat-form-field appearance="outline" class="m-0">
 						<mat-label>
 							End Date <span class="asterisk"> * </span>
@@ -36,19 +36,19 @@
 				<!-- Search Button -->
 				<div class="col-sm-2 my-2">
 					<button class="custom-filled-button orange-button"
-						(click)="loadBookings(null, startDate, endDate, searchText, filtertype); saveCookie('startDate', startDate); saveCookie('endDate', endDate)">
+						(click)="loadBookings(null, startDate, endDate, searchText); saveCookie('startDate', startDate); saveCookie('endDate', endDate)">
 						Search
 					</button>
 				</div>
 				<div class="col-sm-2 my-2">
 					<button class="custom-filled-back-button" style="white-space: nowrap"
-						(click)="reset(); loadBookings(null, startDate, endDate, searchText, filtertype)">
+						(click)="reset(); loadBookings(null, startDate, endDate, searchText)">
 						Reset
 					</button>
 				</div>
 			</div>
 			<div class="row my-2 mb-3">
-				<div class="col-md-3">
+				<!-- <div class="col-md-3">
 					<div id="filter-type">
 						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>
@@ -65,8 +65,8 @@
 							</mat-select>
 						</mat-form-field>
 					</div>
-				</div>
-				<div class="col-md-9">
+				</div> -->
+				<div class="col-md-12">
 					<div id="search-field">
 						<mat-form-field appearance="outline" class="m-0">
 							<input matInput type="text" (keypress)="handleKeypressEvents()"
@@ -87,11 +87,11 @@
 							<thead>
 								<tr role="row">
 									<th>Booking #</th>
+									<th>Booking Status</th>
 									<th>Date</th>
 									<th>Pax Info</th>
 									<th>Driver Info</th>
 									<th>Vehicle Type</th>
-									<th>Booking Status</th>
 									<!-- <th>Status</th> -->
 									<th>Actions</th>
 								</tr>
@@ -102,6 +102,14 @@
 										data-toggle="modal" data-target="#previewBookingOnID"
 										(click)="showBookingPreviewModal(booking.booking_id)">
 										{{ booking.booking_id }}
+									</td>
+									<td>
+										<div data-toggle="modal" (click)="changeBookingStatus(booking.booking_id)"
+											data-target="#change_status_booking_Modal"
+											[className]="'badge badge-pill booking_status cursor-pointer ' + booking.booking_status">
+											{{booking.booking_status | bookingStatusTextReplace :
+											'_' : ' ' |titlecase}}
+										</div>
 									</td>
 									<td class="sorting_1">
 										<p>{{ FormatDate(booking.pickup_date) }}</p>
@@ -149,14 +157,6 @@
 										</span>
 									</td>
 									<td>{{booking.vehicle_cat_name}}</td>
-									<td>
-										<div data-toggle="modal" (click)="changeBookingStatus(booking.booking_id)"
-											data-target="#change_status_booking_Modal"
-											[className]="'badge badge-pill booking_status cursor-pointer ' + booking.booking_status">
-											{{booking.booking_status | bookingStatusTextReplace :
-											'_' : ' ' |titlecase}}
-										</div>
-									</td>
 									<!-- <td>
 										<mat-slide-toggle class="example-margin" [color]="color"
 											[checked]="booking.status" [disabled]="disabled"

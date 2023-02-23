@@ -133,6 +133,8 @@ export class FinalizeBookingComponent implements OnInit {
 				this.finalize_params['number_of_vehicles'] = this.BookingDetail.number_of_vehicles
 				this.finalize_params['booking_id'] = this.BookingDetail.reservation_id
 			});
+			// api for card detailss
+			// getFinalizeDetails 
 	}
 	dateFormat(value: any) {
 		if (value) {

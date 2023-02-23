@@ -978,22 +978,26 @@ export class AdminService
 	{
 		return this.httpClient.get(`${this.serverUrl}admin/get-booking-preview/${reservation_id}`);
 	}
+	getFinalizeDetails(reservation_id: number)
+	{
+		return this.httpClient.get(`${this.serverUrl}admin/finalize-booking-detail/${reservation_id}`);
+	}
 
 	adminNotification(data)
 	{
 		return this.httpClient.post(this.serverUrl + 'admin-notification-daily-booking', data);
 	}
 
-	loadBookings(url, startDate, endDate, keyword = '', filter_type: string)
+	loadBookings(url, startDate, endDate, keyword = '')
 	{
 		var path;
 		if (url)
 		{
-			path = url + '&from=' + startDate + '&to=' + endDate + '&search=' + keyword + '&type=' + filter_type;
+			path = url + '&from=' + startDate + '&to=' + endDate + '&search=' + keyword  ;
 		}
 		else
 		{
-			path = this.serverUrl + 'reservations' + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword + '&type=' + filter_type;
+			path = this.serverUrl + 'reservations' + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword ;
 		}
 		return this.httpClient.get(path).toPromise();
 	}

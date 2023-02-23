@@ -46,7 +46,7 @@ export class DailyBookingsComponent implements OnInit {
 	public sendEmailForm: FormGroup;
 	public submitted: boolean = false;
 	searchText: string = "";
-	filtertype: string = "";
+	// filtertype: string = "";
 
 	passengerDetails: any;
 	senderValue: string;
@@ -80,9 +80,9 @@ export class DailyBookingsComponent implements OnInit {
 			this.adminService.getCookie('search')
 			: "";
 
-		this.filtertype = this.adminService.checkCookie('filtertype') ?
-			this.adminService.getCookie('filtertype') :
-			"bookingid";
+		// this.filtertype = this.adminService.checkCookie('filtertype') ?
+		// 	this.adminService.getCookie('filtertype') :
+		// 	"bookingid";
 
 		// if (this.adminService.checkCookie('startDate'))
 		// {
@@ -108,7 +108,7 @@ export class DailyBookingsComponent implements OnInit {
 		// }
 
 
-		this.loadBookings(null, this.startDate, this.endDate, this.searchText, this.filtertype);
+		this.loadBookings(null, this.startDate, this.endDate, this.searchText);
 
 
 		//change status booking form validation
@@ -135,9 +135,9 @@ export class DailyBookingsComponent implements OnInit {
 		this.adminService.deleteCookie('startDate')
 		this.adminService.deleteCookie('endDate')
 		this.adminService.deleteCookie('search')
-		this.adminService.deleteCookie('filtertype')
+		// this.adminService.deleteCookie('filtertype')
 		this.searchText = "";
-		this.filtertype = 'bookingid';
+		// this.filtertype = 'bookingid';
 
 		console.log('Reset Successfully. ');
 	}
@@ -210,11 +210,11 @@ export class DailyBookingsComponent implements OnInit {
 	}
 
 	noError: boolean = false
-	loadBookings(pageUrl = null, start_date: string, end_date: string, search_value: string = '', filter_type: string) {
+	loadBookings(pageUrl = null, start_date: string, end_date: string, search_value: string = '') {
 		search_value == '' && this.spinner.show();
 		this.noError = false
 		// Load Our bookings using API
-		this.adminService.loadBookings(pageUrl, start_date, end_date, search_value ?? '', filter_type).then((result: any) => {
+		this.adminService.loadBookings(pageUrl, start_date, end_date, search_value ?? '').then((result: any) => {
 			if (result?.data?.data == 0) {
 				this.noError = true
 			}
@@ -326,7 +326,7 @@ export class DailyBookingsComponent implements OnInit {
 			.subscribe(({ data, success, message }: any) => {
 				if (success == true) {
 					$("#change_status_booking_Modal").modal("hide");
-					this.loadBookings(null, this.startDate, this.endDate, this.searchText, this.filtertype)
+					this.loadBookings(null, this.startDate, this.endDate, this.searchText)
 					// this.router
 					// 	.navigateByUrl("/RefreshComponent", {
 					// 		skipLocationChange: true,
@@ -447,7 +447,7 @@ export class DailyBookingsComponent implements OnInit {
 		clearTimeout(this.timer);
 		this.timer = setTimeout(() => {
 			this.saveCookie("search", this.searchText);
-			this.loadBookings(null, this.startDate, this.endDate, search_value, this.filtertype)
+			this.loadBookings(null, this.startDate, this.endDate, search_value)
 		}, 700)
 	}
 
@@ -459,12 +459,12 @@ export class DailyBookingsComponent implements OnInit {
 		this.adminService.setCookie(key, value, 30);
 	}
 
-	changeFilterType(value: string) {
-		console.log(value)
-		this.filtertype = value
-		this.saveCookie('filtertype', this.filtertype);
-		this.loadBookings(null, this.startDate, this.endDate, this.searchText, this.filtertype);
-	}
+	// changeFilterType(value: string) {
+	// 	console.log(value)
+	// 	this.filtertype = value
+	// 	this.saveCookie('filtertype', this.filtertype);
+	// 	this.loadBookings(null, this.startDate, this.endDate, this.searchText, this.filtertype);
+	// }
 
 	showLocationPointOnMap(booking_id: number, type: string) {
 		this.spinner.show()
