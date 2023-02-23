@@ -176,20 +176,20 @@ export class NewBookingComponent implements OnInit {
 	}
 
 	/**
-	 * Returns true/false depending on the existence of search_string in text.
-	 * @param text [Required] text where to search ?
-	 * @param search_string [Required] text what to search ?
-	 * @param start [Optional] search starting point. Default 0
-	 * @returns boolean
-	 */
+	* Returns true/false depending on the existence of search_string in text.
+	* @param text [Required] text where to search ?
+	* @param search_string [Required] text what to search ?
+	* @param start [Optional] search starting point. Default 0
+	* @returns boolean
+	*/
 	searchSubstring(text: string, search_string: string, start: number = 0): boolean {
 		return text.indexOf(search_string, start) != -1
 	}
 
 
 	/**
-	 * Booking Form
-	 */
+	* Booking Form
+	*/
 	buildBookingForm() {
 		this.BookingForm = this.$form.group({
 			service_type: ['one_way', Validators.required],
@@ -923,7 +923,8 @@ export class NewBookingComponent implements OnInit {
 
 	autofillData(filling_for: string, data: any) {
 		if (filling_for === 'passenger') {
-			this.SetFormValue('passenger_name', `${data.first_name} ${data.middle_name ?? ''} ${data.last_name}`)
+			data.middle_name ?
+				this.SetFormValue('passenger_name', `${data?.first_name} ${data?.middle_name} ${data?.last_name}`) : this.SetFormValue('passenger_name', `${data?.first_name} ${data?.last_name}`)
 			this.SetFormValue('passenger_email', data.email)
 			this.SetFormValue('passenger_cell', data.mobile)
 			this.SetFormValue('passenger_cell_isd', data.mobileIsd)
@@ -1122,11 +1123,11 @@ export class NewBookingComponent implements OnInit {
 	}
 
 	/**
-		 * upload image with the specified name and set form value with its id.
-		 * @param event input event
-		 * @param image_type String [Required] type of the image being uploaded
-		 * @param image_id [Optional] id of the image to be edited
-		 */
+	* upload image with the specified name and set form value with its id.
+	* @param event input event
+	* @param image_type String [Required] type of the image being uploaded
+	* @param image_id [Optional] id of the image to be edited
+	*/
 	uploadImage(event: any, image_type: string) {
 		let image: any
 		console.log(event.target.files)
@@ -1148,9 +1149,9 @@ export class NewBookingComponent implements OnInit {
 
 
 	/**
-	 * Delete the image from the form. Basically sets the form value, empty.
-	 * @param image_type String [Required] type of the image to delete
-	 */
+	* Delete the image from the form. Basically sets the form value, empty.
+	* @param image_type String [Required] type of the image to delete
+	*/
 	deleteImage(image_type: string) {
 		this[image_type] = {};
 		this.SetFormValue(image_type + '_id', 0);

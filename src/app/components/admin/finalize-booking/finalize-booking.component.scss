@@ -432,7 +432,6 @@ button.backbar {
 #card-type-container {
     .card-type {
         width        : 48%;
-        padding      : 1rem;
         text-align   : center;
         border-radius: 1rem;
         height       : fit-content;
@@ -454,3 +453,71 @@ button.backbar {
     margin-bottom: 20px;
 }
 
+html {
+    height: 100%;
+}
+
+body {
+    font            : 'Roboto'normal 1em/1.5;
+    background-color: #fff;
+    display         : flex;
+    color           : #000;
+    min-height      : 100%;
+    align-items     : center;
+    justify-content : center;
+}
+
+.InputGroup {
+    display: flex;
+    height : 80px;
+    width  : 400px;
+}
+
+.cardSection {
+    border       : 1px solid #000;
+    border-radius: 15px;
+    padding      : 15px;
+    max-width    : 95%;
+    margin       : 30px 20px 0px 20px;
+}
+
+input[type=radio] {
+    margin: 0 10px 0 0;
+}
+
+.methodCard {
+    padding: 15px;
+}
+
+tbody {
+    border          : 1px solid var(--orange);
+    background-color: rgb(243, 147, 61, 0.1);
+    border-radius   : 15px;
+}
+
+.addCardClass {
+    cursor         : pointer;
+    text-decoration: none;
+
+    #plus {
+        height : 18px;
+        padding: 0 10px 0px 0px;
+    }
+}
+
+.bi {
+    float     : right;
+    font-size : 25px;
+    margin-top: -35px;
+    cursor    : pointer;
+}
+
+.section-container h4 {
+    cursor: pointer;
+}
+
+.ratesButton {
+    position: absolute;
+    right   : 10px;
+    top     : -110px;
+}

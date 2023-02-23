@@ -16,6 +16,9 @@ export class FinalizeBookingComponent implements OnInit {
 	BookingDetail: any;
 	RatesList: any;
 	CardsInformation: any;
+	paymentSection: boolean = false;
+	chevron: boolean = true
+
 
 	booking_details_list: Record<string, any> = {};
 	transferType: any;
@@ -30,8 +33,9 @@ export class FinalizeBookingComponent implements OnInit {
 	}
 
 	cardForm: FormGroup
-	paymentMethod:string='cash';
-	isCardFormOpen:boolean=false
+	paymentMethod: string = 'cash';
+	isCardFormOpen: boolean = false
+	visibility: boolean = true
 	card_params = {
 		years: (() => {
 			let arr = []
@@ -74,33 +78,37 @@ export class FinalizeBookingComponent implements OnInit {
 	 * like saving a form value or assigning a variable
 	 */
 
-	changeDetection(method:string){
+	changeDetection(method: string) {
 		this.paymentMethod = method
 	}
 
 
-	handleCardForm(){
+	handleCardForm() {
 		console.log(this.isCardFormOpen)
-		this.isCardFormOpen=!this.isCardFormOpen
+		this.isCardFormOpen = !this.isCardFormOpen
+	}
+	handlePaymentSection() {
+		this.chevron = !this.chevron
+		this.paymentSection = !this.paymentSection
 	}
 
 	/**
 	 *  Reset all fields of the card form
 	 */
-	resetCardForm(){
+	resetCardForm() {
 		this.cardForm.reset()
 	}
-	
+
 
 
 
 	buildingCardForm() {
 		this.cardForm = this.$form.group({
-			name: ['',Validators.required],
-			card_number: ['',Validators.required],
-			exp_month: ['',Validators.required],
-			exp_year: ['',Validators.required],
-			cvv: ['',Validators.required]
+			name: ['', Validators.required],
+			card_number: ['', Validators.required],
+			exp_month: ['', Validators.required],
+			exp_year: ['', Validators.required],
+			cvv: ['', Validators.required]
 		})
 	}
 	// formatText(text: string)
@@ -183,5 +191,8 @@ export class FinalizeBookingComponent implements OnInit {
 	}
 	ReturnRateFormValue(form: any) {
 		this.return_edit_rates_value = form
+	}
+	showSaveButton(visibility: boolean) {
+		this.visibility = !this.visibility
 	}
 }
