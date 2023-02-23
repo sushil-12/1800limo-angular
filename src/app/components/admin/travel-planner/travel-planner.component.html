@@ -59,8 +59,10 @@
 						</thead>
 						<tbody>
 							<tr role="row" class="odd" *ngFor="let travelPlanner of travelPlanners">
-								<td>{{travelPlanner.first_name+' '+travelPlanner.middle_name+'
-									'+travelPlanner.last_name}}</td>
+								<td *ngIf="travelPlanner.middle_name == null;else middleName">{{travelPlanner.first_name+' '+travelPlanner.last_name}}</td>
+								<ng-template #middleName>
+									<td>{{travelPlanner.first_name+' '+travelPlanner.middle_name+' '+travelPlanner.last_name}}</td>
+								</ng-template>
 								<td>{{travelPlanner.email}}</td>
 								<td>{{travelPlanner.mobileIsd+travelPlanner.mobile}}</td>
 								<td>{{travelPlanner.agency_name}}</td>

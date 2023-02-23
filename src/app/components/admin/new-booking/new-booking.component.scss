@@ -95,8 +95,17 @@ ul {
 	}
 }
 
-// input,
-// input::placeholder,
-// input::-webkit-input-placeholder {
-// 	padding-left: 10px !important;
-// }
+.vehtype_extint img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    cursor: zoom-in;
+	height: 220px !important;
+	border-radius: 15px !important;
+}
+.emptyImage {
+    position: relative;
+    border: 1px solid #717171;
+    border-radius: 15px;
+	height: 220px !important;
+}

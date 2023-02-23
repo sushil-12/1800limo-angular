@@ -774,7 +774,7 @@ mat-progress-bar.my-color .mat-progress-bar-fill::after {
 }
 
 #layoutSidenav #layoutSidenav_nav {
-    flex-basis: 22rem;
+    flex-basis: 20rem;
     flex-shrink: 0;
     transition: transform 0.15s ease-in-out;
     z-index: 1038;
