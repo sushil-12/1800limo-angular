@@ -35,7 +35,7 @@ input::placeholder,
 input::-webkit-input-placeholder {
     font-size     : 1.1rem;
     letter-spacing: 1px;
-    font-weight: 600;
+    font-weight   : 600;
 }
 
 .text-orange {
@@ -184,4 +184,14 @@ button.custom-filled-reset-button {
     outline   : none;
     padding   : 10px !important;
     width     : 70% !important;
+}
+
+.finalize-rates .section-container {
+    padding-bottom: 12px !important;
+    margin-top    : 20px !important;
+}
+
+.finalize-rates .section-container.active {
+    padding-bottom: 110px !important;
+    margin-top    : 20px !important;
 }
