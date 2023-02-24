@@ -6,19 +6,15 @@
 	align-items: center;
 }
 
-.ng-select {
-	padding: 0.65em;
-}
-
 .section-container {
 	background-color: #fff;
-	color           : #000;
-	border-radius   : 12px;
-	padding         : 12px;
-	width           : 100%;
-	font-size       : 1rem;
-	margin          : 1.2rem auto;
-	box-shadow      : 3px 3px 20px -6px rgba(40, 40, 40, 0.5);
+	color: #000;
+	border-radius: 12px;
+	padding: 12px;
+	width: 100%;
+	font-size: 1rem;
+	margin: 1.2rem auto;
+	box-shadow: 3px 3px 20px -6px rgba(40, 40, 40, 0.5);
 }
 
 mat-form-field {
@@ -39,25 +35,25 @@ ul {
 
 .map-block {
 	padding: 0 10px;
-	margin : 4rem 0 2rem 0;
+	margin: 4rem 0 2rem 0;
 
 	.google_map {
-		width     : auto;
+		width: auto;
 		max-height: 300px;
-		height    : 300px;
+		height: 300px;
 
 		.map {
-			width        : 100%;
-			height       : 100%;
+			width: 100%;
+			height: 100%;
 			border-radius: 17px;
 		}
 	}
 }
 
 .section-dropdown {
-	overflow  : hidden;
-	cursor    : pointer;
-	height    : 3.5rem;
+	overflow: hidden;
+	cursor: pointer;
+	height: 3.5rem;
 	transition: height 0.17s ease-in-out;
 
 	.section-dropdown-header {
@@ -96,16 +92,17 @@ ul {
 }
 
 .vehtype_extint img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    cursor: zoom-in;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	cursor: zoom-in;
 	height: 220px !important;
 	border-radius: 15px !important;
 }
+
 .emptyImage {
-    position: relative;
-    border: 1px solid #717171;
-    border-radius: 15px;
+	position: relative;
+	border: 1px solid #717171;
+	border-radius: 15px;
 	height: 220px !important;
 }
