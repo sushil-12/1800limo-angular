@@ -15,7 +15,7 @@ export class FinalizeBookingComponent implements OnInit {
 
 	BookingDetail: any;
 	RatesList: any;
-	CardsInformation: any;
+	CardsInformation: any=[];
 	paymentSection: boolean = false;
 	chevron: boolean = true
 
@@ -79,7 +79,13 @@ export class FinalizeBookingComponent implements OnInit {
 	 */
 
 	changeDetection(method: string) {
-		this.paymentMethod = method
+		if(method == 'new_card'){
+			this.isCardFormOpen = true
+			this.paymentMethod = 'card'
+		}else{
+			this.paymentMethod = method
+			this.isCardFormOpen = false
+		}
 	}
 
 
@@ -120,7 +126,7 @@ export class FinalizeBookingComponent implements OnInit {
 	getReservationDetails(booking_id: number = 0) {
 		this.$spinner.show();
 		this.$api
-			.getBookingPreview(booking_id)
+			.getFinalizeDetails(booking_id)
 			.pipe()
 			.subscribe((response: any) => {
 				this.$spinner.hide();
@@ -128,6 +134,7 @@ export class FinalizeBookingComponent implements OnInit {
 				this.BookingDetail = response.data
 				this.transferType = this.BookingDetail.transfer_type
 				this.init_rates = true;
+				this.CardsInformation = response.data.cards
 				this.finalize_params['distance'] = this.BookingDetail.distance
 				this.finalize_params['number_of_hours'] = this.BookingDetail.number_of_hours
 				this.finalize_params['number_of_vehicles'] = this.BookingDetail.number_of_vehicles
@@ -186,6 +193,7 @@ export class FinalizeBookingComponent implements OnInit {
 	}
 
 	editRates() {
+		console.log('form submit-------->>>>>>' ,this.edit_rates_value  )
 
 	}
 	RateFormValue(form: any) {

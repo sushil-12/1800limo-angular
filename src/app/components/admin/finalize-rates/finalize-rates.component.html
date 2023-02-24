@@ -1,0 +1,310 @@
+
+<!-- Rates and Taxes -->
+
+<div *ngIf="ratesform" [formGroup]="RatesForm" class="section-container section-dropdown mt-5"
+	[ngClass]="{'active': rate_params.chevrons.section, 'w-100': ratesform && !returnratesform, 'w-50': ratesform && returnratesform}"
+	[ngStyle]="affiliate_type == 'affiliate' ? {'height': '0', 'padding': '0'} : ''">
+	<div class="row cursor-pointer" (click)="toggleDropdown('section')">
+		<div class="col-9 col-md-10">
+			<h4 class="section-dropdown-header m-0">
+				Rates/Taxes
+			</h4>
+		</div>
+		<div class="col-3 col-md-2 text-right">
+			<h4 class="m-0">
+				<i class="bi"
+					[ngClass]="{true: 'bi-chevron-up', false: 'bi-chevron-down'}[rate_params.chevrons.section]"></i>
+			</h4>
+		</div>
+	</div>
+
+	<div [attr.id]="'RateFormItem-' + item_index" class="my-4 px-md-3" [formGroupName]="item.key" (click)="toggleDropdown('item_' + item.key + '_' + item_index)"
+		*ngFor="let item of RateForm | keyvalue: returnZero; index as item_index">
+		<h5>
+			{{ textFormatter(item.key) | titlecase }}
+		</h5>
+		<div [attr.id]="'RateFormSubItem-' + sub_item_index"
+			class="row rates-row align-items-center justify-content-between mx-auto"
+			*ngFor="let sub_item of item?.value?.controls | keyvalue: returnZero; index as sub_item_index">
+			<!-- Base Rate -->
+			<div class="col-6 col-sm-4 col-md-5 my-3" [formGroupName]="sub_item.key"
+				*ngIf="sub_item.key !== 'Minimum_Rate'">
+				<div class="rate-label">
+					<mat-form-field appearance="outline" class="m-0">
+						<mat-label>
+							{{ textFormatter(sub_item?.value?.controls?.rate_label?.value) |
+							titlecase }}
+						</mat-label>
+						<input type="number" matInput placeholder="0" formControlName="baserate"
+							class="font-weight-bolder rate-input-field text-right"
+							(focus)="$event.target.select()" />
+					</mat-form-field>
+					<div class="errors" *ngIf="sub_item.key === 'Kilometer_Rate' && trigger_error">
+						<div class="error-field">
+							<p class="text-danger">
+								Rate cannot be less than Minimum Rate
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Distance Value -->
+			<div class="col-auto"
+				*ngIf="sub_item.key === 'Kilometer_Rate' || sub_item.key === 'Milage_Rate'">
+				<div>
+					<mat-form-field appearance="outline" class="m-0">
+						<mat-label>
+							Distance
+						</mat-label>
+						<input type="number" matInput placeholder="0" [value]="distance"
+							style="cursor: not-allowed"
+							class="font-weight-bolder rate-input-field text-right" readonly />
+					</mat-form-field>
+				</div>
+			</div>
+
+			<!-- Hours -->
+			<div class="col-auto" *ngIf="hours != 0 && sub_item.key === 'Base_Rate'">
+				<div>
+					<mat-form-field appearance="outline" class="m-0">
+						<mat-label>
+							Number of Hours
+						</mat-label>
+						<input type="number" matInput placeholder="0" [value]="hours"
+							style="cursor: not-allowed"
+							class="font-weight-bolder rate-input-field text-right" readonly />
+					</mat-form-field>
+				</div>
+			</div>
+
+			<!-- Admin Share -->
+			<div class="col-3" *ngIf="sub_item.key == 'Base_Rate' ">
+				<div>
+					<mat-form-field appearance="outline" class="m-0">
+						<mat-label>
+							Admin Share {{ admin_share }} %
+						</mat-label>
+						<input type="number" matInput placeholder="0" [value]="calc_admin_share"
+							style="cursor: not-allowed"
+							class="font-weight-bolder rate-input-field text-right" readonly />
+					</mat-form-field>
+				</div>
+			</div>
+
+			<!-- Flat | Percent -->
+			<div class="col-2" *ngIf="item.key === 'taxes'">
+				<!-- Matslide Toggle -->
+				<div class="d-block">
+					<mat-slide-toggle
+						[checked]="sub_item?.value?.controls?.type?.value == 'percent'"
+						(change)="changeValue('RatesForm', item.key, sub_item.key, 'type', $event.checked ? 'percent' : 'flat')">
+						<i class="bi mx-1"
+							[ngClass]="sub_item?.value?.controls?.type?.value === 'flat' ? 'bi-currency-dollar' : 'bi-percent'"></i>
+					</mat-slide-toggle>
+				</div>
+			</div>
+			<!-- Rate Amount -->
+			<div id="rate-amount" class="col-auto" *ngIf="sub_item.key !== 'Minimum_Rate'">
+				<div class="rate-amount text-2xl font-weight-bolder text-right">
+					<p class="m-0 m-lg-3">
+						<i class="bi bi-currency-dollar text-danger"></i>
+						{{ sub_item?.value?.controls?.amount.value }}
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<hr style="border-top: 2.5px solid #000000; " />
+
+	<div class="row px-2 justify-content-between align-items-center">
+		<div class="col-md-6">
+			<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
+				Total
+			</p>
+		</div>
+		<div class="col-md-4 text-3xl text-right">
+			<i class="bi bi-currency-dollar text-danger"></i>
+			{{ subtotal }}
+		</div>
+	</div>
+	<!-- Number of Vehicles/Hours -->
+	<div class="row px-2 justify-content-between align-items-center" *ngIf="vehicles !== 0">
+		<div class="col-md-6 col-xl-7">
+			<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
+				Number of Vehicles
+			</p>
+		</div>
+		<div class="col-md-4 col-xl-5 text-3xl text-right">
+			<i class="bi bi-x text-dark font-weight-bolder"></i>
+			{{ vehicles }}
+		</div>
+	</div>
+
+	<!-- Total -->
+	<div class="row px-2 justify-content-between align-items-center">
+		<div class="col-md-6 col-xl-7">
+			<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
+				Grand Total
+			</p>
+		</div>
+		<div class="col-md-4 col-xl-5 text-3xl text-right">
+			<i class="bi bi-currency-dollar text-danger"></i>
+			{{ grandtotal }}
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div *ngIf="ratesform && returnratesform" [formGroup]="ReturnRatesForm"
+	class="section-container section-dropdown mt-5"
+	[ngClass]="{'active': rate_params.chevrons.r_section, 'w-50': returnratesform}"
+	[ngStyle]="affiliate_type == 'affiliate' ? {'height': '0', 'padding': '0'} : ''">
+	<div class="row cursor-pointer" (click)="toggleDropdown('r_section')">
+		<div class="col-9 col-md-10">
+			<h4 class="section-dropdown-header m-0">
+				Return Taxes/Rates
+			</h4>
+		</div>
+		<div class="col-3 col-md-2 text-right">
+			<h4 class="m-0">
+				<i class="bi"
+					[ngClass]="{true: 'bi-chevron-up', false: 'bi-chevron-down'}[rate_params.chevrons.r_section]"></i>
+			</h4>
+		</div>
+	</div>
+
+	<div [attr.id]="'RateFormItem-' + item_index" class="my-4 px-md-3" [formGroupName]="item.key"
+		*ngFor="let item of ReturnRateForm | keyvalue: returnZero; index as item_index">
+		<h5>
+			{{ textFormatter(item.key) | titlecase }}
+		</h5>
+		<div [attr.id]="'RateFormSubItem-' + sub_item_index"
+			class="row rates-row align-items-center justify-content-between mx-auto"
+			*ngFor="let sub_item of item?.value?.controls | keyvalue: returnZero; index as sub_item_index">
+			<!-- Base Rate -->
+			<div class="col-6 col-sm-4 col-md-5 my-3" [formGroupName]="sub_item.key"
+				*ngIf="sub_item.key !== 'Minimum_Rate'">
+				<div class="rate-label">
+					<mat-form-field appearance="outline" class="m-0">
+						<mat-label>
+							{{ textFormatter(sub_item?.value?.controls?.rate_label?.value) |
+							titlecase }}
+						</mat-label>
+						<input type="number" matInput placeholder="0"
+							class="font-weight-bolder rate-input-field text-right"
+							(focus)="$event.target.select()" formControlName="baserate" />
+					</mat-form-field>
+					<div class="errors" *ngIf="sub_item.key === 'Kilometer_Rate' && trigger_error">
+						<div class="error-field">
+							<p class="text-danger">
+								Rate cannot be less than Minimum Rate
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Admin Share -->
+			<div class="col-3" *ngIf="sub_item.key === 'Base_Rate'">
+				<div>
+					<mat-form-field appearance="outline" class="m-0">
+						<mat-label>
+							Admin Share {{ admin_share }} %
+						</mat-label>
+						<input type="number" matInput placeholder="0" [value]="r_calc_admin_share"
+							style="cursor: not-allowed"
+							class="font-weight-bolder rate-input-field text-right" readonly />
+					</mat-form-field>
+				</div>
+			</div>
+
+			<!-- Distance Value -->
+			<div class="col-auto"
+				*ngIf="sub_item.key === 'Kilometer_Rate' || sub_item.key === 'Milage_Rate'">
+				<div>
+					<mat-form-field appearance="outline" class="m-0">
+						<mat-label>
+							Distance
+						</mat-label>
+						<input type="number" matInput placeholder="0" [value]="distance"
+							style="cursor: not-allowed"
+							class="font-weight-bolder rate-input-field text-right" readonly />
+					</mat-form-field>
+				</div>
+			</div>
+			<div class="col-auto" *ngIf="item.key === 'taxes'" [formGroupName]="sub_item.key">
+				<!-- Matslide Toggle -->
+				<div class="d-block">
+					<mat-slide-toggle
+						[checked]="sub_item?.value?.controls?.type?.value == 'percent'"
+						(change)="changeValue('ReturnRatesForm', item.key, sub_item.key, 'type', $event.checked ? 'percent' : 'flat')">
+						<i class="bi mx-1"
+							[ngClass]="sub_item?.value?.controls?.type?.value === 'flat' ? 'bi-currency-dollar' : 'bi-percent'"></i>
+					</mat-slide-toggle>
+				</div>
+			</div>
+			<!-- Rate Amount -->
+			<div id="rate-amount" class="col-auto" *ngIf="sub_item.key !== 'Minimum_Rate'">
+				<div class="rate-amount text-2xl font-weight-bolder text-right">
+					<p class="m-0 m-lg-3">
+						<i class="bi bi-currency-dollar text-danger"></i>
+						{{ sub_item?.value?.controls?.amount.value }}
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<hr style="border-top: 2.5px solid #000000; " />
+
+	<div class="row px-2 justify-content-between align-items-center">
+		<div class="col-md-6">
+			<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
+				Total
+			</p>
+		</div>
+		<div class="col-md-4 text-3xl text-right">
+			<i class="bi bi-currency-dollar text-danger"></i>
+			{{ r_subtotal }}
+		</div>
+	</div>
+	<!-- Number of Vehicles/Hours -->
+	<div class="row px-2 justify-content-between align-items-center" *ngIf="vehicles !== 0">
+		<div class="col-md-6 col-xl-7">
+			<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
+				Number of Vehicles
+			</p>
+		</div>
+		<div class="col-md-4 col-xl-5 text-3xl text-right">
+			<i class="bi bi-x text-dark font-weight-bolder"></i>
+			{{ vehicles }}
+		</div>
+	</div>
+
+	<!-- Total -->
+	<div class="row px-2 justify-content-between align-items-center">
+		<div class="col-md-6 col-xl-7">
+			<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
+				Grand Total
+			</p>
+		</div>
+		<div class="col-md-4 col-xl-5 text-3xl text-right">
+			<i class="bi bi-currency-dollar text-danger"></i>
+			{{ r_grandtotal }}
+		</div>
+	</div>
+</div>

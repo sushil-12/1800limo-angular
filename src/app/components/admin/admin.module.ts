@@ -98,6 +98,7 @@ import { NewBookingComponent } from './new-booking/new-booking.component';
 import { RatesFormComponent } from './rates-form/rates-form.component';
 import { FinalizeBookingComponent } from './finalize-booking/finalize-booking.component';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { FinalizeRatesComponent } from './finalize-rates/finalize-rates.component';
 
 @NgModule({
 	declarations: [
@@ -175,7 +176,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
 		BookingDetailsComponent,
 		NewBookingComponent,
 		RatesFormComponent,
-		FinalizeBookingComponent
+		FinalizeBookingComponent,
+		FinalizeRatesComponent
 	],
 	imports: [
 		CommonModule,

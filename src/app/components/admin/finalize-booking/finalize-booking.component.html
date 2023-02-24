@@ -1,5 +1,5 @@
-<section>
-	<div class="container section-container" id="print-section">
+<section class="section-container">
+	<div class="container" id="print-section">
 		<h3 class="font-weight-bolder mb-1 text-center">Finalize Booking</h3>
 		<hr>
 		<div class="invoicesum_header">
@@ -133,21 +133,21 @@
 			</div>
 		</div>
 	</div>
+</section>
 	<!-- Rates Section -->
-	<app-rates-form class="d-flex flex-wrap finalize-rates" [initRates]="init_rates"
+	<app-finalize-rates class="d-flex flex-wrap finalize-rates" [initRates]="init_rates"
 		[affiliate_type]="'loose_affiliate'" (formvalue)="RateFormValue($event)" [distance]="finalize_params.distance"
-		(click)="showSaveButton(visibility)" [reservation_id]="finalize_params.booking_id" [reset]="false"
+		[reservation_id]="finalize_params.booking_id" [reset]="false"
 		[hours]="finalize_params.number_of_hours" [vehicles]="finalize_params.number_of_vehicles"
-		(returnformvalue)="ReturnRateFormValue($event)">
-	</app-rates-form>
-	<div class="row mb-3" *ngIf="visibility">
-		<div class="col-md-12 text-right">
+		(returnformvalue)="ReturnRateFormValue($event)" (isSectionOpen)="showSaveButton($event)">
+	</app-finalize-rates>
+	<div class="row mb-3">
+		<div class="col-md-12 text-right" *ngIf="visibility">
 			<button type="button" class="custom-filled-button ratesButton m-3" (click)="editRates()">
 				Save
 			</button>
 		</div>
 	</div>
-</section>
 
 
 <!-- Rates Section End -->
@@ -178,27 +178,25 @@
 							<th scope="col">Expires on</th>
 						</tr>
 					</thead>
-					<tbody>
-						<tr>
+					<tbody *ngIf="CardsInformation.length > 0; else noData">
+						<tr *ngFor="let item of CardsInformation">
 							<td>
-								<input id="selectCard" name="selectCard" type="radio" checked>
+								<input id="selectCard" name="selectCard" type="radio" (click)="changeDetection('card')" [checked]="item.cc_prority=='Primary' && !isCardFormOpen">
 							</td>
-							<td>Mark</td>
-							<td>xxxx xxxx xxxx xxxx</td>
-							<td>MM/YYYY</td>
-						</tr>
-						<tr>
-							<td>
-								<input id="selectCard" name="selectCard" type="radio" checked>
-							</td>
-							<td>Mark</td>
-							<td>xxxx xxxx xxxx xxxx</td>
-							<td>MM/YYYY</td>
+							<td>{{item.name}}</td>
+							<td>{{item.last4}}</td>
+							<td>{{item.exp_month}}/{{item.exp_year}}</td>
 						</tr>
 					</tbody>
+					<ng-template #noData>
+						<tbody>
+							<p class="text-danger text-lg">No
+								Card Found !</p>
+						</tbody>
+					</ng-template>
 				</table>
-				<a class="addCardClass" (click)="handleCardForm()">
-					<img id="plus" src="../../../../assets/images/plus.png" alt="">
+				<a class="addCardClass" (click)="changeDetection('new_card')">
+					<input id="card" name="AddCard" type="radio"  [checked]="isCardFormOpen">
 					<img src="../../../../assets/images/credit-card.png" alt="">
 					Add a credit or debit card</a>
 			</div>
