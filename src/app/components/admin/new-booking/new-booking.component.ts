@@ -1206,12 +1206,17 @@ export class NewBookingComponent implements OnInit {
 		// Service Type
 		this.BookingForm.get('service_type').valueChanges.subscribe((value: string) => {
 			this.init_return_rates = false;
-			this.SetFormValue('number_of_hours', 0)
 			if (value == 'round_trip') {
 				this.init_return_rates = true;
 				setTimeout(() => {
 					this.MapController(true)
 				}, 2000)
+			}
+			if(value != 'charter_tour')
+			{
+				this.BookingForm.get('number_of_hours').setValue(0)
+				this.BookingForm.updateValueAndValidity()
+				console.log(this.BookingForm.get('number_of_hours').value);
 			}
 		})
 
