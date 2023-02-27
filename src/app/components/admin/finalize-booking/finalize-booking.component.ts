@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import * as moment from "moment";
 import { NgxSpinnerService } from "ngx-spinner";
 import { AdminService } from "src/app/services/admin.service";
+import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 import { FormBuilder, FormGroup, Validators, FormControl, FormArray, ValidationErrors, ValidatorFn, AbstractControl } from '@angular/forms';
 
 @Component({
@@ -24,6 +25,7 @@ export class FinalizeBookingComponent implements OnInit {
 	transferType: any;
 	edit_rates_value: any;
 	return_edit_rates_value: any;
+	affiliate_type:string;
 
 	finalize_params = {
 		distance: 0,
@@ -53,6 +55,7 @@ export class FinalizeBookingComponent implements OnInit {
 		private $api: AdminService,
 		private $route: ActivatedRoute,
 		private $router: Router,
+		private $errors: ErrorDialogService,
 		private $spinner: NgxSpinnerService
 	) { }
 
@@ -139,6 +142,7 @@ export class FinalizeBookingComponent implements OnInit {
 				this.finalize_params['number_of_hours'] = this.BookingDetail.number_of_hours
 				this.finalize_params['number_of_vehicles'] = this.BookingDetail.number_of_vehicles
 				this.finalize_params['booking_id'] = this.BookingDetail.reservation_id
+				this.affiliate_type = response.data.affiliate_type
 			});
 			// api for card detailss
 			// getFinalizeDetails 
@@ -192,10 +196,40 @@ export class FinalizeBookingComponent implements OnInit {
 		return (distance / 1000).toFixed(2)
 	}
 
-	editRates() {
-		console.log('form submit-------->>>>>>' ,this.edit_rates_value  )
 
+	submitForm() {
+		// console.log(this.BookingForm);
+		let rateArray = JSON.parse(JSON.stringify(this.edit_rates_value))
+		delete rateArray.sub_total
+		delete rateArray.grand_total
+		let body  = {
+			reservation_id : this.bookingId,
+			rateArray : rateArray,
+			sub_total : this.edit_rates_value.sub_total,
+			grand_total : this.edit_rates_value.grand_total,
+			affiliate_type : this.affiliate_type
+		}
+		console.log('\n\n Submitting Form' , body);
+			this.$spinner.show()
+			this.$api.updateFinalizeRates(body).subscribe((response: any) => {
+				this.$errors.openDialog({
+					errors: {
+						error: `<span class='text-success'>${response.message}</span>`
+					}
+				})
+				// this.$router.navigate(['/admin/daily-bookings-admin'])
+				console.log('response-->>' , response)
+				this.$spinner.hide()
+			})
+
+		// else {
+		// 	$('#previewBooking').modal('handleUpdate').modal('show')
+		// }
 	}
+
+	// editRates() {
+	// 	console.log('submit  form-------->>>>>>' ,this.edit_rates_value  )
+	// }
 	RateFormValue(form: any) {
 		this.edit_rates_value = form
 	}

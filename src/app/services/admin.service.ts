@@ -982,6 +982,9 @@ export class AdminService
 	{
 		return this.httpClient.get(`${this.serverUrl}admin/finalize-booking-detail/${reservation_id}`);
 	}
+	updateFinalizeRates(data){
+		return this.httpClient.post(`${this.serverUrl}admin/finalize-rate-edit` ,data)
+	}
 
 	adminNotification(data)
 	{
