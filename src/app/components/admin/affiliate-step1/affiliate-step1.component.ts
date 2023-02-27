@@ -122,7 +122,7 @@ export class AffiliateStep1Component implements OnInit {
 			CompanyCellIsd: ['+1', Validators.required],
 			CompanyCellNumberCountry: ['us'],
 			FaxCountry: ['us'],
-			Fax: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(10), Validators.maxLength(10)]],
+			Fax: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
 			cpcn_tpc: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
 			FaxIsd: ['+1', Validators.required],
 			LanguagesGet: this.formBuilder.array([]),

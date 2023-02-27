@@ -205,7 +205,7 @@ export class NewBookingComponent implements OnInit {
 				phone: [''],
 				phone_isd: ['+1'],
 				phone_country: ['us'],
-				email: [''],
+				email: ['', Validators.email],
 				address: [''],
 				card_details: this.$form.group({
 					name: [''],
@@ -216,7 +216,7 @@ export class NewBookingComponent implements OnInit {
 				})
 			}),
 			passenger_name: [''],
-			passenger_email: [''],
+			passenger_email: ['', Validators.email],
 			passenger_cell: [''],
 			passenger_cell_isd: ['+1'],
 			passenger_cell_country: ['us'],
@@ -229,22 +229,22 @@ export class NewBookingComponent implements OnInit {
 			lose_affiliate_phone: [''],
 			lose_affiliate_phone_isd: [''],
 			lose_affiliate_phone_country: ['us'],
-			lose_affiliate_email: [''],
+			lose_affiliate_email: ['', Validators.email],
 			vehicle_type: [''],
 			vehicle_id: [''],
 			vehicle_make: [''],
 			vehicle_model: [''],
 			vehicle_year: [''],
 			vehicle_color: [''],
-			license_plate: [''],
-			number_of_seats: ['4'],
+			vehicle_license_plate: [''],
+			vehicle_seats: ['4'],
 			driver_id: [''],
 			driver_name: [''],
 			driver_gender: [''],
 			driver_cell: [''],
 			driver_cell_isd: ['+1'],
 			driver_cell_country: ['us'],
-			driver_email: [''],
+			driver_email: ['', Validators.email],
 			driver_phone_type: [''],
 			driver_image_id: [''],
 			vehicle_image_id: [''],
@@ -343,6 +343,7 @@ export class NewBookingComponent implements OnInit {
 		this.$spinner.show('normalspinner');
 		this.$api.getBookingDataForEdit(booking_id, this.Form.updateType.value).subscribe((response: any) => {
 			let editing_data = response.data
+			console.log(editing_data, "check big data")
 			for (let item in editing_data) {
 				if (item.includes('extra_stops') || item.includes('languages') || item.includes('dresses'), item.toLowerCase().includes('amenities')) {
 					// console.log('Skipping in the case of Extra Stops. ')
@@ -932,8 +933,8 @@ export class NewBookingComponent implements OnInit {
 		}
 
 		if (filling_for == 'vehicle') {
-			this.SetFormValue('license_plate', data.licensePlate)
-			this.SetFormValue('number_of_seats', data.seats)
+			this.SetFormValue('vehicle_license_plate', data.licensePlate)
+			this.SetFormValue('vehicle_seats', data.seats)
 
 			// fill values of make/model/year/color
 			let i = 0
@@ -1212,8 +1213,7 @@ export class NewBookingComponent implements OnInit {
 					this.MapController(true)
 				}, 2000)
 			}
-			if(value != 'charter_tour')
-			{
+			if (value != 'charter_tour') {
 				this.BookingForm.get('number_of_hours').setValue(0)
 				this.BookingForm.updateValueAndValidity()
 				console.log(this.BookingForm.get('number_of_hours').value);
@@ -1253,7 +1253,7 @@ export class NewBookingComponent implements OnInit {
 				}
 
 				(<FormGroup>loose_customer.get('card_details')).get('card_number').setValidators([Validators.required, Validators.pattern("[0-9]{12,20}")]);
-				loose_customer.get('email').setValidators([Validators.required, Validators.pattern("[a-zA-Z0-9\$\#\.\/\%\~\\-\\&\+\_]+@[a-z0-9]+(\.[a-z\-]+){1,2}"), this.EmailDomainValidator()])
+				loose_customer.get('email').setValidators([Validators.required, Validators.email])
 				loose_customer.get('phone').setValidators([Validators.required, Validators.pattern("^[0-9]{10,12}$")])
 			}
 			else {
@@ -1457,7 +1457,7 @@ export class NewBookingComponent implements OnInit {
 
 	resetDriverAndVehicle(affiliate_type: string) {
 		if (affiliate_type == 'loose_affiliate') {
-			['vehicle_type', 'vehicle_id', 'vehicle_make', 'vehicle_model', 'vehicle_color', 'vehicle_year', 'driver_name', 'driver_email', 'driver_gender', 'driver_cell', 'license_plate'].forEach((item: any) => {
+			['vehicle_type', 'vehicle_id', 'vehicle_make', 'vehicle_model', 'vehicle_color', 'vehicle_year', 'driver_name', 'driver_email', 'driver_gender', 'driver_cell', 'vehicle_license_plate'].forEach((item: any) => {
 				this.BookingForm.get(item).reset();
 				this.BookingForm.updateValueAndValidity();
 			})
