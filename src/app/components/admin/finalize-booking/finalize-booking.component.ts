@@ -5,6 +5,7 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { AdminService } from "src/app/services/admin.service";
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 import { FormBuilder, FormGroup, Validators, FormControl, FormArray, ValidationErrors, ValidatorFn, AbstractControl } from '@angular/forms';
+import { CustomvalidationService } from "src/app/services/customvalidation.service";
 
 @Component({
 	selector: "app-finalize-booking",
@@ -38,6 +39,7 @@ export class FinalizeBookingComponent implements OnInit {
 	paymentMethod: string = 'cash';
 	isCardFormOpen: boolean = false
 	visibility: boolean = true
+	selectedCard:any;
 	card_params = {
 		years: (() => {
 			let arr = []
@@ -56,11 +58,12 @@ export class FinalizeBookingComponent implements OnInit {
 		private $route: ActivatedRoute,
 		private $router: Router,
 		private $errors: ErrorDialogService,
-		private $spinner: NgxSpinnerService
+		private $spinner: NgxSpinnerService,
+		private customValidator: CustomvalidationService
 	) { }
 
 	ngOnInit(): void {
-		this.buildingCardForm()
+		this.buildingCardForm();
 		this.$route.queryParams.subscribe((params: any) => {
 			isDevMode && console.log("Params Found: ", params);
 			if (params.bookingId) {
@@ -113,18 +116,19 @@ export class FinalizeBookingComponent implements OnInit {
 
 	buildingCardForm() {
 		this.cardForm = this.$form.group({
-			name: ['', Validators.required],
-			card_number: ['', Validators.required],
+			name: ['', [Validators.required , Validators.pattern("^[a-zA-Z]*$")]],
+			card_number: ['', [Validators.required ,Validators.pattern("^[0-9]*$"), Validators.minLength(12) , Validators.maxLength(20)]],
 			exp_month: ['', Validators.required],
 			exp_year: ['', Validators.required],
-			cvv: ['', Validators.required]
+			cvv: ['', [Validators.required , Validators.pattern("^[0-9]*$") , Validators.maxLength(4) , Validators.minLength(2)]],
+			save_card_detail :[false]
 		})
 	}
 	// formatText(text: string)
 	// {
 	// 	return text.replace(/[\_\-]+/g, " ").trim();
 	// }
-
+	
 	init_rates: boolean = false;
 	getReservationDetails(booking_id: number = 0) {
 		this.$spinner.show();
@@ -138,11 +142,13 @@ export class FinalizeBookingComponent implements OnInit {
 				this.transferType = this.BookingDetail.transfer_type
 				this.init_rates = true;
 				this.CardsInformation = response.data.cards
+				this.selectedCard = this.CardsInformation.filter(i=> i.cc_prority == 'Primary')[0]
 				this.finalize_params['distance'] = this.BookingDetail.distance
 				this.finalize_params['number_of_hours'] = this.BookingDetail.number_of_hours
 				this.finalize_params['number_of_vehicles'] = this.BookingDetail.number_of_vehicles
 				this.finalize_params['booking_id'] = this.BookingDetail.reservation_id
 				this.affiliate_type = response.data.affiliate_type
+				this.visibility = response.data.payment_status=='paid' ? false : true 
 			});
 			// api for card detailss
 			// getFinalizeDetails 
@@ -226,10 +232,78 @@ export class FinalizeBookingComponent implements OnInit {
 		// 	$('#previewBooking').modal('handleUpdate').modal('show')
 		// }
 	}
+	handleChangeCard(card:any){
+		this.selectedCard = card
+	}
 
-	// editRates() {
-	// 	console.log('submit  form-------->>>>>>' ,this.edit_rates_value  )
-	// }
+	makePayment(){
+
+		console.log('<<<<-----handle valid---->>>>> ' , this.cardForm.valid)
+		console.log('-----=====?>>>>>',this.isCardFormOpen ? this.cardForm.valid : (this.CardsInformation.length>0))
+		let dataToSend :any
+		if(this.isCardFormOpen ? this.cardForm.valid : (this.CardsInformation.length>0) ){
+		if(this.paymentMethod=='cash'){
+			console.log('<<<<<----payment through cash-->>>>')
+			dataToSend = {
+				reservation_id : this.bookingId,
+				grand_total : this.edit_rates_value.grand_total,
+				paymentMethod : 'cash'
+			}
+		}
+		else{
+			if(this.isCardFormOpen){
+				dataToSend = {
+					CreditCardsDetail : {...this.cardForm.value},
+					isExistingCard : false,
+					paymentMethod : 'credit_card',
+					reservation_id : this.bookingId,
+					grand_total : this.edit_rates_value.grand_total
+				}
+				console.log('<<<<--card form detail-->>>')
+			}
+			else{
+				dataToSend = {
+					isExistingCard :true,
+					paymentMethod : 'credit_card',
+					CreditCardsDetail:{
+						cardID:	this.selectedCard.ID
+					},
+					reservation_id : this.bookingId,
+					grand_total : this.edit_rates_value.grand_total
+				}
+				console.log('selected card-->>>')
+			}
+		}
+		this.$spinner.show()
+			this.$api.paymentProcessing(dataToSend).subscribe((response: any) => {
+				this.$errors.openDialog({
+					errors: {
+						error: `<span class='text-success'>${response.message}</span>`
+					}
+				})
+				this.$router.navigate(['/admin/daily-bookings-admin'])
+				console.log('response---------------------->>' , response)
+				this.$spinner.hide()
+			})
+	}
+	else{
+		console.log('<<<<-----handle valid---->>>>> ' , this.cardForm.valid)
+		if(!this.CardsInformation.length && !this.isCardFormOpen){
+			this.$errors.openDialog({
+				errors: {
+					error: `<span class='text-danger'> No card selected</span>`
+				}
+			})
+		}
+		else{
+			this.$errors.openDialog({
+			errors: {
+				error: `<span class='text-danger'>Please Enter correct card details</span>`
+			}
+		})
+		}
+	}
+	}
 	RateFormValue(form: any) {
 		this.edit_rates_value = form
 	}
@@ -238,5 +312,9 @@ export class FinalizeBookingComponent implements OnInit {
 	}
 	showSaveButton(visibility: boolean) {
 		this.visibility = !this.visibility
+		console.log(this.BookingDetail.payment_status)
+		if(this.BookingDetail.payment_status=='paid'){
+			this.visibility = false
+		}
 	}
 }
