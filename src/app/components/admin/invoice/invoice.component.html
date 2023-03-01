@@ -1,85 +1,124 @@
 <ngx-spinner></ngx-spinner>
 <main>
-    <!-- Main page content-->
-    <section class="user_information">
-      <h2 class="headinginfo">Invoices</h2>
-       <div class="containeredd mt-1 ">
-          <div class="row ">
-            <div class="col-md-10 mt-3 mb-3">
-               <mat-form-field appearance="outline">
-               <mat-label>Search Filter by Key word</mat-label>
-                <input type="text" matInput placeholder="Search Filter by Key word" id="keyword">
-              </mat-form-field>
-             </div>
-             <div class="col-md-2 mt-3 mb-3">
-               <button class="custom-btn button2 btnclass" (click)="loadInvoice()">SEARCH</button>
-             </div>
-          </div>
-       </div>
-       <div class="containeredd driverside_table">
-       <div class="row">
-       <div class="col-md-12 custom_table table-responsive">
-       <table class="table table-striped dataTable dt-responsive" id="dataTable" role="grid" aria-describedby="dataTable_info" style="width: 100%;" width="100%" cellspacing="0">
-          <thead>
-             <tr role="row">
-                <th>Date</th>
-                <th>Invoice #</th>
-                <th>PAX Name/Cell/Pickup Address</th>
-                <th>Driver Name/Company/Tel#/Drop-Off Address</th>
-                <th>Vehicle Type</th>
-                <th>Actions</th>
-             </tr>
-          </thead>
-          <tbody>
-            <tr role="row" class="odd" *ngFor="let invoice of invoices">
-                <td>{{invoice.date}}</td>
-                <td>{{invoice.invoice_number}}</td>
-                <td>
-                    <p>{{invoice.passenger_name}}</p>{{invoice.passenger_phone+' | '+invoice.pickup_address}}
-                </td>
-                <td>
-                    <p>{{invoice.driver_name+' - '+invoice.driver_company}}</p>
-                    <p>{{invoice.driver_phone+' | '+invoice.dropoff_address}}</p>
-                </td>
-                <td>{{invoice.aff_vehicle_type}}</td>
-                <td>
-                   <a class="user-profileded btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownUserImage" href="javascript:void(0);" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">	<span>View</span>
-                   </a>
-                   <div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up" aria-labelledby="navbarDropdownUserImage">
+  <!-- Main page content-->
+  <section class="user_information">
+    <h2 class="headinginfo">Invoices</h2>
+    <div class="containeredd mt-1 ">
+      <div class="row ">
+        <div class="col-md-10 mt-3 mb-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Search Filter by Key word</mat-label>
+            <input type="text" matInput placeholder="Search Filter by Key word" id="keyword">
+          </mat-form-field>
+        </div>
+        <div class="col-md-2 mt-3 mb-3">
+          <button class="custom-btn button2 btnclass" (click)="loadInvoice()">SEARCH</button>
+        </div>
+      </div>
+    </div>
+
+    <section class="adminbox_shadow user_information">
+      <div class="containeredd driverside_table">
+        <div class="row">
+          <div class="col-md-12 custom_table">
+            <div class="table-responsive" style="min-height: 350px">
+              <table class="table table-dark table-striped table-bordered dataTable dt-responsive" id="dataTable"
+                role="grid" aria-describedby="dataTable_info" cellspacing="0">
+                <thead>
+                  <tr role="row">
+                    <th>Booking #</th>
+                    <th>Invoice #</th>
+                    <th>Date</th>
+                    <th>Pax Info</th>
+                    <th>Driver Info</th>
+                    <th>Vehicle Type</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody *ngFor="let invoice of invoices">
+                  <tr role="row" class="odd">
+                    <td class="text-center font-weight-bolder cursor-pointer text-underline">
+                      {{ invoice.booking_id }}
+                    </td>
+                    <td class="text-center font-weight-bolder cursor-pointer text-underline">
+                      {{ invoice.invoice_number }}
+                    </td>
+                    <td class="sorting_1">
+                      <p>{{ invoice.date }}</p>
+                    </td>
+                    <td>
+                      <p data-target="#sendEmailModal" style="white-space: pre" data-toggle="modal">
+                        {{ invoice.passenger_name }} |
+                        {{ invoice.passenger_phone }}
+                      </p>
+                      <span class="text-underline cursor-pointer">
+                        {{ invoice.pickup_address }}
+                      </span>
+                    </td>
+                    <td>
+                      <p data-target="#sendEmailModal" style="white-space: pre" data-toggle="modal">
+                        {{ invoice.driver_name }} |
+                        {{ invoice.driver_phone }}
+                      </p>
+                      <span class="text-underline cursor-pointer">
+                        {{ invoice.dropoff_address }}
+                      </span>
+                    </td>
+                    <td>{{invoice.aff_vehicle_type}}</td>
+                    <td>
+                      <a class="user-profileded btn btn-icon btn-transparent-dark dropdown-toggle"
+                        id="navbarDropdownUserImage" href="javascript:void(0);" role="button" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        <span>View</span>
+                      </a>
+                      <div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
+                      aria-labelledby="navbarDropdownUserImage">
                       <a class="dropdown-item" (click)="clicViewInvoice(invoice.booking_id)">
-                         <div class="dropdown-item-icon"></div>
-                         View Invoice Summary
+                        <div class="dropdown-item-icon"></div>
+                        View Invoice Summary
                       </a>
                     </div>
-                </td>
-            </tr>
-             
-          </tbody>
-       </table>
-       </div>
-       <!----BACK BTN---->
-       <nav aria-label="Page navigation example">
-        <ul class="pagination pagination-circle pg-blue">
-          <li *ngIf="currentPage!=1" class="page-item disabled" (click)="loadInvoice(firstPageUrl)"><a class="page-link">First</a></li>
-          <li *ngIf="currentPage!=1" class="page-item disabled" (click)="loadInvoice(prevPageUrl)">
-            <a class="page-link" aria-label="Previous">
-              <span aria-hidden="true">&laquo;</span>
-              <span class="sr-only">Previous</span>
-            </a>
-          </li>
-          <li *ngFor="let in of counter() ;let i = index" [ngClass]="(in==currentPage)?'page-item active':'page-item'" (click)="loadInvoice(path+'?page='+in)" [disabled]="(in==currentPage)?true:false">
-              <a class="page-link">{{in}}</a>
-          </li>
-          <li *ngIf="currentPage!=lastPage" class="page-item" (click)="loadInvoice(nextPageUrl)">
-            <a class="page-link" aria-label="Next">
-              <span aria-hidden="true">&raquo;</span>
-              <span class="sr-only">Next</span>
-            </a>
-          </li>
-          <li *ngIf="currentPage!=lastPage" class="page-item" (click)="loadInvoice(lastPageUrl)"><a class="page-link">Last</a></li>
-        </ul>
-      </nav>
-       </div>
-       </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="text-danger text-lg" *ngIf="invoices.length==0" >
+              No Results Found.
+            </p>
+          </div>
+        </div>
+      </div>
     </section>
- </main>
+
+    <div class="containeredd driverside_table">
+      <div class="row">
+        <!----BACK BTN---->
+        <nav aria-label="Page navigation example">
+          <ul class="pagination pagination-circle pg-blue">
+            <li *ngIf="currentPage!=1" class="page-item disabled" (click)="loadInvoice(firstPageUrl)"><a
+                class="page-link">First</a></li>
+            <li *ngIf="currentPage!=1" class="page-item disabled" (click)="loadInvoice(prevPageUrl)">
+              <a class="page-link" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+                <span class="sr-only">Previous</span>
+              </a>
+            </li>
+            <li *ngFor="let in of counter() ;let i = index" [ngClass]="(in==currentPage)?'page-item active':'page-item'"
+              (click)="loadInvoice(path+'?page='+in)" [disabled]="(in==currentPage)?true:false">
+              <a class="page-link">{{in}}</a>
+            </li>
+            <li *ngIf="currentPage!=lastPage" class="page-item" (click)="loadInvoice(nextPageUrl)">
+              <a class="page-link" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+                <span class="sr-only">Next</span>
+              </a>
+            </li>
+            <li *ngIf="currentPage!=lastPage" class="page-item" (click)="loadInvoice(lastPageUrl)"><a
+                class="page-link">Last</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </section>
+</main>

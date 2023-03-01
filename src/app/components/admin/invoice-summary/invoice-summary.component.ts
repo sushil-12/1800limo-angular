@@ -52,7 +52,7 @@ export class InvoiceSummaryComponent implements OnInit
 							console.log("array response", data)
 							this.invoiceData = data;
 							this.audit_Trail = this.invoiceData.audit_trail;
-							console.log(this.audit_Trail, "/////\\\\\\")
+							console.log(this.audit_Trail)
 							this.spinner.hide();//hide spinner
 						});
 				}

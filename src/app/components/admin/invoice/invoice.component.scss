@@ -4,3 +4,173 @@
     height: 60px;
     width: 100%;
 }
+
+
+.adminbox_shadow.user_information,
+.adminbox_shadow.user_information .mat-form-field,
+.mat-calendar {
+	font-family: "PT Serif", serif !important;
+}
+button {
+	font-family: "PT Serif", serif !important;
+}
+
+.booking_status {
+	font-size: medium;
+	color: #fff;
+}
+
+.pending {
+	background-color: #0474fc;
+}
+
+.assigned {
+	background-color: var(--green-color);
+}
+
+.rejected {
+	background-color: #dc3545;
+}
+
+.cancelled {
+	background-color: #45200d;
+}
+
+.en_route_pu {
+	background-color: #6454ac;
+}
+
+.on_location {
+	background-color: #7289da;
+}
+
+.en_route_do {
+	background-color: #1abc9c;
+}
+
+.ended {
+	background-color: #8cc43c;
+}
+
+.finalized {
+	background-color: #fcac04;
+}
+
+.non_payable {
+	background-color: #ec4c8c;
+}
+
+.comped {
+	background-color: #7c7c84;
+}
+
+.btnclass {
+	margin-top: 20px;
+	height: 60px;
+	width: 100%;
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1200px) {
+	.startdate {
+		padding-right: 5px;
+	}
+
+	.startdate2 {
+		padding-left: 5px;
+		padding-right: 5px;
+	}
+
+	.startdate3 {
+		padding-left: 5px;
+	}
+
+	.btnclass {
+		// padding-right: 5px;
+		width: 100%;
+	}
+}
+
+.odd p {
+	cursor: pointer;
+}
+
+.btnStyle {
+	color: #fff !important;
+	background-color: var(--orange-color) !important;
+	border-color: var(--orange-color) !important;
+	padding: 10px 40px;
+}
+
+.modal-header {
+	justify-content: center;
+}
+
+#sendEmailModal .modal-content hr {
+	border: 2px solid var(--orange-color);
+	width: 180px;
+	background-color: var(--orange-color);
+	// margin          : 10px 347px 20px 347px;
+	display: block;
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+#Layer_1 {
+	height: 48px;
+	width: 48px;
+}
+
+.mailBoxStyle svg {
+	width: 60px;
+	height: 60px;
+	margin-top: -5px;
+}
+
+.iconStyle {
+	margin: 20px 20px 10px 20px;
+	cursor: pointer;
+}
+
+.iconStyle a {
+	text-decoration: none;
+	color: #000;
+}
+
+.headingStyle {
+	margin-top: 7px;
+}
+
+.saveButton {
+	color: #fff !important;
+	background-color: #5dbd8a;
+	border-color: #5dbd8a;
+	padding: 10px 40px;
+	position: absolute;
+	bottom: -60px;
+	left: 15px;
+}
+
+table {
+	width: auto;
+	white-space: nowrap;
+	padding: 10px;
+	min-width: 5rem;
+	thead th {
+		color: #000000;
+		font-weight: 600;
+	}
+	tbody td > p {
+		margin: 0;
+	}
+}
+
+a:hover
+{
+	text-decoration: none;
+	color: unset !important;
+}
+
+input, input::placeholder, input::-webkit-input-placeholder
+{
+	padding: 0 !important	;
+}

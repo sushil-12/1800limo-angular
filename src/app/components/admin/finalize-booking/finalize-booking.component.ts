@@ -60,21 +60,21 @@ export class FinalizeBookingComponent implements OnInit {
 		private $errors: ErrorDialogService,
 		private $spinner: NgxSpinnerService,
 		private customValidator: CustomvalidationService
-	) { }
+	) { 
+	}
 
 	ngOnInit(): void {
+		this.$spinner.show()
 		this.buildingCardForm();
 		this.$route.queryParams.subscribe((params: any) => {
 			isDevMode && console.log("Params Found: ", params);
 			if (params.bookingId) {
 				this.bookingId = params.bookingId;
-
 				this.getReservationDetails(this.bookingId);
 			} else {
 				// navigate back to dashboard in case of no booking Id specified.
 				this.$router.navigate(["/admin/daily-bookings-admin"]);
 			}
-
 		});
 	}
 
@@ -241,7 +241,6 @@ export class FinalizeBookingComponent implements OnInit {
 		console.log('<<<<-----handle valid---->>>>> ' , this.cardForm.valid)
 		console.log('-----=====?>>>>>',this.isCardFormOpen ? this.cardForm.valid : (this.CardsInformation.length>0))
 		let dataToSend :any
-		if(this.isCardFormOpen ? this.cardForm.valid : (this.CardsInformation.length>0) ){
 		if(this.paymentMethod=='cash'){
 			console.log('<<<<<----payment through cash-->>>>')
 			dataToSend = {
@@ -249,60 +248,83 @@ export class FinalizeBookingComponent implements OnInit {
 				grand_total : this.edit_rates_value.grand_total,
 				paymentMethod : 'cash'
 			}
+			this.$spinner.show()
+					this.$api.paymentProcessing(dataToSend).subscribe((response: any) => {
+						this.$errors.openDialog({
+							errors: {
+								error: `<span class='text-success'>${response.message}</span>`
+							}
+						})
+						this.$router.navigate(['/admin/daily-bookings-admin'])
+						console.log('response---------------------->>' , response)
+						this.$spinner.hide()
+					})
 		}
 		else{
-			if(this.isCardFormOpen){
-				dataToSend = {
-					CreditCardsDetail : {...this.cardForm.value},
-					isExistingCard : false,
-					paymentMethod : 'credit_card',
-					reservation_id : this.bookingId,
-					grand_total : this.edit_rates_value.grand_total
+			if(this.isCardFormOpen ? this.cardForm.valid : (this.CardsInformation.length>0) ){
+				if(this.paymentMethod=='cash'){
+					console.log('<<<<<----payment through cash-->>>>')
+					dataToSend = {
+						reservation_id : this.bookingId,
+						grand_total : this.edit_rates_value.grand_total,
+						paymentMethod : 'cash'
+					}
 				}
-				console.log('<<<<--card form detail-->>>')
+				else{
+					if(this.isCardFormOpen){
+						dataToSend = {
+							CreditCardsDetail : {...this.cardForm.value},
+							isExistingCard : false,
+							paymentMethod : 'credit_card',
+							reservation_id : this.bookingId,
+							grand_total : this.edit_rates_value.grand_total
+						}
+						console.log('<<<<--card form detail-->>>')
+					}
+					else{
+						dataToSend = {
+							isExistingCard :true,
+							paymentMethod : 'credit_card',
+							CreditCardsDetail:{
+								cardID:	this.selectedCard.ID
+							},
+							reservation_id : this.bookingId,
+							grand_total : this.edit_rates_value.grand_total
+						}
+						console.log('selected card-->>>')
+					}
+				}
+				this.$spinner.show()
+					this.$api.paymentProcessing(dataToSend).subscribe((response: any) => {
+						this.$errors.openDialog({
+							errors: {
+								error: `<span class='text-success'>${response.message}</span>`
+							}
+						})
+						this.$router.navigate(['/admin/daily-bookings-admin'])
+						console.log('response---------------------->>' , response)
+						this.$spinner.hide()
+					})
 			}
 			else{
-				dataToSend = {
-					isExistingCard :true,
-					paymentMethod : 'credit_card',
-					CreditCardsDetail:{
-						cardID:	this.selectedCard.ID
-					},
-					reservation_id : this.bookingId,
-					grand_total : this.edit_rates_value.grand_total
+				console.log('<<<<-----handle valid---->>>>> ' , this.cardForm.valid)
+				if(!this.CardsInformation.length && !this.isCardFormOpen){
+					this.$errors.openDialog({
+						errors: {
+							error: `<span class='text-danger'> No card selected</span>`
+						}
+					})
 				}
-				console.log('selected card-->>>')
-			}
-		}
-		this.$spinner.show()
-			this.$api.paymentProcessing(dataToSend).subscribe((response: any) => {
-				this.$errors.openDialog({
+				else{
+					this.$errors.openDialog({
 					errors: {
-						error: `<span class='text-success'>${response.message}</span>`
+						error: `<span class='text-danger'>Please Enter correct card details</span>`
 					}
 				})
-				this.$router.navigate(['/admin/daily-bookings-admin'])
-				console.log('response---------------------->>' , response)
-				this.$spinner.hide()
-			})
-	}
-	else{
-		console.log('<<<<-----handle valid---->>>>> ' , this.cardForm.valid)
-		if(!this.CardsInformation.length && !this.isCardFormOpen){
-			this.$errors.openDialog({
-				errors: {
-					error: `<span class='text-danger'> No card selected</span>`
 				}
-			})
-		}
-		else{
-			this.$errors.openDialog({
-			errors: {
-				error: `<span class='text-danger'>Please Enter correct card details</span>`
 			}
-		})
 		}
-	}
+		
 	}
 	RateFormValue(form: any) {
 		this.edit_rates_value = form

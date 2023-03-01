@@ -99,6 +99,7 @@ import { RatesFormComponent } from './rates-form/rates-form.component';
 import { FinalizeBookingComponent } from './finalize-booking/finalize-booking.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { FinalizeRatesComponent } from './finalize-rates/finalize-rates.component';
+import { NgxPrintModule } from 'ngx-print';
 
 @NgModule({
 	declarations: [
@@ -196,7 +197,8 @@ import { FinalizeRatesComponent } from './finalize-rates/finalize-rates.componen
 		MatSelectModule,
 		SharedModule,
 		MatRadioModule,
-		NgSelectModule
+		NgSelectModule,
+		NgxPrintModule
 	],
 	exports: [BookingStatusTextReplacePipe]
 })
