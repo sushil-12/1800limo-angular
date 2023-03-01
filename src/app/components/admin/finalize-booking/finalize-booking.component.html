@@ -1,3 +1,4 @@
+<ngx-spinner></ngx-spinner>
 <section class="section-container">
 	<div class="container" id="print-section">
 		<h3 class="font-weight-bolder mb-1 text-center">Finalize Booking</h3>
@@ -8,7 +9,7 @@
 					<h3 class="text-lg pl-0">Booking # {{ BookingDetail?.reservation_id }}</h3>
 				</div>
 				<div class="col-md-6 text-right">
-					<h3 class="text-lg pl-0">Payment Status # {{ BookingDetail?.payment_status }}</h3>
+					<h3 class="text-lg pl-0">Payment Status # {{ BookingDetail?.payment_status | titlecase}}</h3>
 				</div>
 			</div>
 			<div class="row my-3">

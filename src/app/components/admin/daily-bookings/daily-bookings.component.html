@@ -172,7 +172,7 @@
 										<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
 											aria-labelledby="navbarDropdownUserImage">
 											<a class="dropdown-item" [routerLink]="['/admin/new-booking']"
-												[queryParams]="{bookingId: booking.booking_id, updateType: 'edit'}">
+												[queryParams]="{bookingId: booking.booking_id, updateType: 'edit'}" *ngIf="booking.payment_status!='paid'">
 												<div class="dropdown-item-icon"></div>
 												Edit
 											</a>
@@ -196,7 +196,7 @@
 												Finalize
 											</a>
 											<a class="dropdown-item" [routerLink]="['/admin/invoice-summary']"
-												[queryParams]="{bookingId: booking.booking_id}">
+												[queryParams]="{bookingId: booking.booking_id}" *ngIf="booking.payment_status=='paid'">
 												<div class="dropdown-item-icon"></div>
 												Invoice
 											</a>

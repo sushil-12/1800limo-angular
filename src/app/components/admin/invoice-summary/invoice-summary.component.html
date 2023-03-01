@@ -2,7 +2,8 @@
 <main *ngIf="invoiceData">
 	<section class="user_information">
 		<div class="containeredd mt-1 ">
-			<button class="custom-btn button2" [useExistingCss]="true" printSectionId="print-section" ngxPrint>
+			<button class="custom-btn button2" [useExistingCss]="true" printTitle="Invoice"
+				printSectionId="print-section" ngxPrint>
 				<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"
 					style="height: 20px; margin-right:10px; fill:white;" viewBox="0 0 108.36 122.88">
 					<title>printing</title>
@@ -161,8 +162,8 @@
 					<div class="row">
 						<div class="col-md-6">
 							<p> Payment Method Type</p>
-							<strong>{{invoiceData.billing_detail.payment_method ?
-								invoiceData.billing_detail.payment_method : ' - '}}</strong>
+							<strong>{{invoiceData.billing_detail.payment_method == 'credit_card' ?
+								'Credit Card' : 'Cash' }}</strong>
 						</div>
 						<div class="col-md-6">
 							<p> Name on Credit Card</p>
@@ -392,11 +393,11 @@
 	aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg" role="document">
 		<div class="modal-content user_information">
+			<button type="button" class="close closeButton" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
 			<div class="modal-header pb-0">
-				<h3 class="mb-0" id="exampleModalLabel">Audit Trail</h3>
-				<button type="button" class="close closeButton" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
+				<h3 class="modal-title mb-0">Audit Trial</h3>
 			</div>
 			<div class="modal-body">
 				<!-- {{invoiceData.audit_trail | json}} -->

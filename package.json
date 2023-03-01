@@ -38,7 +38,7 @@
 		"ng2-tel-input": "^2.3.0",
 		"ngx-material-timepicker": "^5.5.3",
 		"ngx-pinch-zoom": "^2.6.2",
-		"ngx-print": "^1.2.0-beta.5",
+		"ngx-print": "^1.2.1",
 		"ngx-spinner": "^10.0.1",
 		"rxjs": "~6.5.5",
 		"screenfull": "^3.3.0",
