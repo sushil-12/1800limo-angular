@@ -179,7 +179,7 @@
 										Email
 									</mat-label>
 									<input matInput placeholder="Email" type="text" tabindex="0" formControlName="email"
-										(focus)="$event.target.select()">
+										[email]="true" (focus)="$event.target.select()">
 								</mat-form-field>
 								<div class="error-box">
 									<div class="error-message"
@@ -1412,14 +1412,14 @@
 							<mat-label>
 								Cruise Time
 							</mat-label>
-							<input [ngxTimepicker]="crse_tm" [value]="Form.cruise_time.value" matInput readonly />
+							<input [ngxTimepicker]="crse_tm" matInput formControlName="cruise_time"
+								(focus)="$event.target.select()" readonly />
 						</mat-form-field>
-						<ngx-material-timepicker #crse_tm (timeChanged)="SetFormValue('cruise_time', $event)"
+						<ngx-material-timepicker #crse_tm
 							[defaultTime]="Form.cruise_time.value"></ngx-material-timepicker>
 					</div>
 				</div>
 			</div>
-
 
 
 			<h4 class="pl-2 mt-3">
@@ -1555,9 +1555,10 @@
 							<mat-label>
 								Cruise Time
 							</mat-label>
-							<input [ngxTimepicker]="crse_tm" [value]="Form.cruise_time.value" matInput readonly />
+							<input [ngxTimepicker]="crse_tm" matInput formControlName="cruise_time"
+								(focus)="$event.target.select()" readonly />
 						</mat-form-field>
-						<ngx-material-timepicker #crse_tm (timeChanged)="SetFormValue('cruise_time', $event)"
+						<ngx-material-timepicker #crse_tm
 							[defaultTime]="Form.cruise_time.value"></ngx-material-timepicker>
 					</div>
 				</div>
@@ -1797,15 +1798,16 @@
 					</div>
 
 					<!-- Time -->
-					<div class="col-md-4 my-2">
+					<div class="col-md-4">
 						<mat-form-field appearance="outline">
 							<mat-label>
 								Cruise Time
 							</mat-label>
-							<input [ngxTimepicker]="crse_tm" [value]="Form.cruise_time.value" matInput readonly />
+							<input [ngxTimepicker]="re_crse_tm" matInput formControlName="return_cruise_time"
+								(focus)="$event.target.select()" readonly />
 						</mat-form-field>
-						<ngx-material-timepicker #crse_tm (timeChanged)="SetFormValue('cruise_time', $event)"
-							[defaultTime]="Form.cruise_time.value"></ngx-material-timepicker>
+						<ngx-material-timepicker #re_crse_tm
+							[defaultTime]="Form.return_cruise_time.value"></ngx-material-timepicker>
 					</div>
 				</div>
 			</div>
@@ -1945,9 +1947,10 @@
 							<mat-label>
 								Cruise Time
 							</mat-label>
-							<input [ngxTimepicker]="crse_tm" [value]="Form.cruise_time.value" matInput readonly />
+							<input [ngxTimepicker]="re_crse_tm" matInput formControlName="return_cruise_time"
+								(focus)="$event.target.select()" readonly />
 						</mat-form-field>
-						<ngx-material-timepicker #crse_tm (timeChanged)="SetFormValue('cruise_time', $event)"
+						<ngx-material-timepicker #re_crse_tm
 							[defaultTime]="Form.cruise_time.value"></ngx-material-timepicker>
 					</div>
 				</div>
@@ -2558,7 +2561,9 @@
 							</div>
 							<div class="col-md-8 value">
 								<span class="font-weight-bolder">
-									{{ textFormatter(Form.cruise_time.value) | titlecase }}
+									{{ timeFormat2(Form.cruise_time.value) }}
+									|
+									{{ timeFormat(Form.cruise_time.value) }}
 								</span>
 							</div>
 						</div>
@@ -2694,7 +2699,9 @@
 							</div>
 							<div class="col-md-8 value">
 								<span class="font-weight-bolder">
-									{{ textFormatter(Form.cruise_time.value) }}
+									{{ timeFormat2(Form.cruise_time.value) }}
+									|
+									{{ timeFormat(Form.cruise_time.value) }}
 								</span>
 							</div>
 						</div>
@@ -2848,8 +2855,9 @@
 								</div>
 								<div class="col-md-8 value">
 									<span class="font-weight-bolder">
-										{{ textFormatter(Form.return_cruise_time.value) | titlecase
-										}}
+										{{ timeFormat2(Form.return_cruise_time.value) }}
+										|
+										{{ timeFormat(Form.return_cruise_time.value) }}
 									</span>
 								</div>
 							</div>
@@ -2985,8 +2993,9 @@
 								</div>
 								<div class="col-md-8 value">
 									<span class="font-weight-bolder">
-										{{ textFormatter(Form.return_cruise_time.value) | titlecase
-										}}
+										{{ timeFormat2(Form.return_cruise_time.value) }}
+										|
+										{{ timeFormat(Form.return_cruise_time.value) }}
 									</span>
 								</div>
 							</div>
