@@ -216,7 +216,7 @@ export class NewBookingComponent implements OnInit {
 				})
 			}),
 			passenger_name: [''],
-			passenger_email: ['', Validators.pattern("^[\a-z0-9A-Z-\.]+@([\A-Za-z-]+\.)+[\a-zA-Z-]{2,4}$")],
+			passenger_email: ['', Validators.pattern("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")],
 			passenger_cell: [''],
 			passenger_cell_isd: ['+1'],
 			passenger_cell_country: ['us'],
@@ -229,7 +229,7 @@ export class NewBookingComponent implements OnInit {
 			lose_affiliate_phone: [''],
 			lose_affiliate_phone_isd: ['+1'],
 			lose_affiliate_phone_country: ['us'],
-			lose_affiliate_email: ['', Validators.pattern("^[\a-z0-9A-Z-\.]+@([\A-Za-z-]+\.)+[\a-zA-Z-]{2,4}$")],
+			lose_affiliate_email: ['', Validators.pattern("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")],
 			vehicle_type: [''],
 			vehicle_id: [''],
 			vehicle_make: [''],
@@ -244,7 +244,7 @@ export class NewBookingComponent implements OnInit {
 			driver_cell: [''],
 			driver_cell_isd: ['+1'],
 			driver_cell_country: ['us'],
-			driver_email: ['', Validators.pattern("^[\a-z0-9A-Z-\.]+@([\A-Za-z-]+\.)+[\a-zA-Z-]{2,4}$")],
+			driver_email: ['', Validators.pattern("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")],
 			driver_phone_type: [''],
 			driver_image_id: [''],
 			vehicle_image_id: [''],
@@ -343,6 +343,7 @@ export class NewBookingComponent implements OnInit {
 		this.$spinner.show('normalspinner');
 		this.$api.getBookingDataForEdit(booking_id, this.Form.updateType.value).subscribe((response: any) => {
 			let editing_data = response.data
+			this.autofillData('cruise', editing_data);
 			console.log(editing_data, "check big data")
 			for (let item in editing_data) {
 				if (item.includes('extra_stops') || item.includes('languages') || item.includes('dresses'), item.toLowerCase().includes('amenities')) {
@@ -356,7 +357,6 @@ export class NewBookingComponent implements OnInit {
 					}
 				}
 			}
-
 			this.SetFormValue('pickup_airport_option', this.BigData.airportsData.find((item: any) => item.id == this.Form.pickup_airport.value));
 			this.SetFormValue('pickup_airline_option', this.BigData.airlinesData.find((item: any) => item.id == this.Form.pickup_airline.value));
 			this.SetFormValue('dropoff_airport_option', this.BigData.airportsData.find((item: any) => item.id == this.Form.dropoff_airport.value));
@@ -930,6 +930,27 @@ export class NewBookingComponent implements OnInit {
 			this.SetFormValue('passenger_cell', data.mobile)
 			this.SetFormValue('passenger_cell_isd', data.mobileIsd)
 			this.SetFormValue('passenger_cell_country', data.mobileCountry)
+			this.SetFormValue('origin_airport_city', data.origin_airport_city)
+			this.SetFormValue('pickup_flight', data.pickup_flight)
+			this.SetFormValue('dropoff_flight', data.dropoff_flight)
+		}
+
+		if (filling_for === 'cruise') {
+			if (data?.cruise_port == null) {
+				this.SetFormValue('cruise_port', data?.return_cruise_port);
+			} else {
+				this.SetFormValue('cruise_port', data?.cruise_port)
+			}
+			if (data?.cruise_name == null) {
+				this.SetFormValue('cruise_name', data?.return_cruise_name)
+			} else {
+				this.SetFormValue('cruise_name', data?.cruise_name)
+			}
+			if (data?.cruise_time == null) {
+				this.SetFormValue('cruise_time', data?.return_cruise_time)
+			} else {
+				this.SetFormValue('cruise_time', data?.cruise_time)
+			}
 		}
 
 		if (filling_for == 'vehicle') {
@@ -1253,7 +1274,7 @@ export class NewBookingComponent implements OnInit {
 				}
 
 				(<FormGroup>loose_customer.get('card_details')).get('card_number').setValidators([Validators.required, Validators.pattern("[0-9]{12,20}")]);
-				loose_customer.get('email').setValidators([Validators.required, Validators.pattern("^[\a-z0-9A-Z-\.]+@([\A-Za-z-]+\.)+[\a-zA-Z-]{2,4}$")])
+				loose_customer.get('email').setValidators([Validators.required, Validators.pattern("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")])
 				loose_customer.get('phone').setValidators([Validators.required, Validators.pattern("^[0-9]{10,12}$")])
 			}
 			else {
