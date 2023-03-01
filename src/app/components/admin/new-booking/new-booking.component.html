@@ -187,7 +187,7 @@
 										<p class="text-danger text-lg m-0" *ngIf="LooseCustomer.email.errors?.required">
 											This field is required
 										</p>
-										<p class="text-danger text-lg m-0" *ngIf="LooseCustomer.email.errors?.email">
+										<p class="text-danger text-lg m-0" *ngIf="LooseCustomer.email.errors?.pattern">
 											Please enter a valid Email Id
 										</p>
 									</div>
@@ -473,7 +473,7 @@
 						<div class="error-box">
 							<div class="error-message"
 								*ngIf="Form.passenger_email.invalid && (Form.passenger_email.touched || Form.passenger_email.dirty)">
-								<p class="text-danger text-lg m-0" *ngIf="Form.passenger_email.errors?.email">
+								<p class="text-danger text-lg m-0" *ngIf="Form.passenger_email.errors?.pattern">
 									Please enter a valid Email Id
 								</p>
 							</div>
@@ -642,7 +642,7 @@
 					<div class="error-box">
 						<div class="error-message"
 							*ngIf="Form.lose_affiliate_email.invalid && (Form.lose_affiliate_email.touched || Form.lose_affiliate_email.dirty)">
-							<p class="text-danger text-lg m-0" *ngIf="Form.lose_affiliate_email.errors?.email">
+							<p class="text-danger text-lg m-0" *ngIf="Form.lose_affiliate_email.errors?.pattern">
 								Please enter a valid Email Id
 							</p>
 						</div>
@@ -875,7 +875,7 @@
 						<div class="error-box">
 							<div class="error-message"
 								*ngIf="Form.driver_email.invalid && (Form.driver_email.touched || Form.driver_email.dirty)">
-								<p class="text-danger text-lg m-0" *ngIf="Form.driver_email.errors?.email">
+								<p class="text-danger text-lg m-0" *ngIf="Form.driver_email.errors?.pattern">
 									Please enter a valid Email Id
 								</p>
 							</div>
@@ -894,7 +894,7 @@
 						<div class="error-box">
 							<div class="error-message"
 								*ngIf="Form.driver_email.invalid && (Form.driver_email.touched || Form.driver_email.dirty)">
-								<p class="text-danger text-lg m-0" *ngIf="Form.driver_email.errors?.email">
+								<p class="text-danger text-lg m-0" *ngIf="Form.driver_email.errors?.pattern">
 									Please enter a valid Email Id
 								</p>
 							</div>
@@ -2097,6 +2097,135 @@
 						</div>
 					</div>
 
+					<!-- Affiliate Information -->
+					<ng-container *ngIf="Form.affiliate_type.value == 'affiliate' then affiliateUser">
+					</ng-container>
+
+					<!-- Affiliate -->
+					<ng-template #affiliateUser>
+						<h4 class="font-weight-bolder m-0 mt-3">
+							Affiliate Information
+						</h4>
+
+						<!-- Affiliate > Name -->
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key">
+									<span>
+										Name
+									</span>
+								</div>
+								<div class="col-md-8 value">
+									<span class="font-weight-bolder"
+										*ngIf="AffiliateInformation.MiddleName == null;else affiliateMiddleName">
+										{{ textFormatter(AffiliateInformation.FirstName) }} {{
+										textFormatter(AffiliateInformation.LastName) }}
+									</span>
+									<ng-template #affiliateMiddleName>
+										<span class="font-weight-bolder">
+											{{ textFormatter(AffiliateInformation.FirstName) }} {{
+											textFormatter(AffiliateInformation.MiddleName) }} {{
+											textFormatter(AffiliateInformation.LastName) }}
+										</span>
+									</ng-template>
+								</div>
+							</div>
+						</div>
+
+						<!-- Affiliate > Email -->
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key">
+									<span>
+										Email
+									</span>
+								</div>
+								<div class="col-md-8 value">
+									<span class="font-weight-bolder">
+										{{ textFormatter(AffiliateInformation.Email) }}
+									</span>
+								</div>
+							</div>
+						</div>
+
+						<!-- Affiliate > Phone -->
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key">
+									<span>
+										Phone
+									</span>
+								</div>
+								<div class="col-md-8 value">
+									<span class="font-weight-bolder">
+										({{ AffiliateInformation.CellIsd }})
+										{{ textFormatter(AffiliateInformation.CellNumber) }}
+									</span>
+								</div>
+							</div>
+						</div>
+					</ng-template>
+
+					<!-- Loose Affiliate Information -->
+					<ng-container *ngIf="Form.affiliate_type.value == 'loose_affiliate' then looseAffiliate">
+					</ng-container>
+
+					<!-- Loose Affiliate -->
+					<ng-template #looseAffiliate>
+						<h4 class="font-weight-bolder m-0 mt-3">
+							Loose Affiliate Information
+						</h4>
+
+						<!-- Loose Affiliate > Name -->
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key">
+									<span>
+										Name
+									</span>
+								</div>
+								<div class="col-md-8 value">
+									<span class="font-weight-bolder">
+										{{ textFormatter(Form.lose_affiliate_name.value) }}
+									</span>
+								</div>
+							</div>
+						</div>
+
+						<!-- Loose Affiliate > Email -->
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key">
+									<span>
+										Email
+									</span>
+								</div>
+								<div class="col-md-8 value">
+									<span class="font-weight-bolder">
+										{{ textFormatter(Form.lose_affiliate_email.value) }}
+									</span>
+								</div>
+							</div>
+						</div>
+
+						<!-- Loose Affiliate > Phone -->
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key">
+									<span>
+										Phone
+									</span>
+								</div>
+								<div class="col-md-8 value">
+									<span class="font-weight-bolder">
+										({{ Form.lose_affiliate_phone_isd.value }})
+										{{ textFormatter(Form.lose_affiliate_phone.value) }}
+									</span>
+								</div>
+							</div>
+						</div>
+					</ng-template>
+
 					<!-- Driver Information -->
 					<h4 class="font-weight-bolder m-0 mt-3">
 						Driver Information
@@ -2149,6 +2278,68 @@
 							</div>
 						</div>
 					</div>
+
+					<!-- Loose Customer Information -->
+					<ng-container *ngIf="Form['account_type'].value == 'loose_customer' then LooseCustomerSec">
+					</ng-container>
+
+					<!-- Loose Customer -->
+					<ng-template #LooseCustomerSec>
+						<h4 class="font-weight-bolder m-0 mt-3">
+							Loose Customer Information
+						</h4>
+
+						<!-- Loose Customer > Name -->
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key">
+									<span>
+										Name
+									</span>
+								</div>
+								<div class="col-md-8 value">
+									<span class="font-weight-bolder">
+										{{ textFormatter(LooseCustomer.first_name.value) }} {{
+										textFormatter(LooseCustomer.middle_name.value) }} {{
+										textFormatter(LooseCustomer.last_name.value) }}
+									</span>
+								</div>
+							</div>
+						</div>
+
+						<!-- Loose Customer > Email -->
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key">
+									<span>
+										Email
+									</span>
+								</div>
+								<div class="col-md-8 value">
+									<span class="font-weight-bolder">
+										{{ textFormatter(LooseCustomer.email.value) }}
+									</span>
+								</div>
+							</div>
+						</div>
+
+						<!-- Loose Customer > Phone -->
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key">
+									<span>
+										Phone
+									</span>
+								</div>
+								<div class="col-md-8 value">
+									<span class="font-weight-bolder">
+										({{ LooseCustomer.phone_isd.value }})
+										{{ textFormatter(LooseCustomer.phone.value) }}
+									</span>
+								</div>
+							</div>
+						</div>
+					</ng-template>
 
 					<!-- Passenger Information -->
 					<h4 class="font-weight-bolder m-0 mt-3">
