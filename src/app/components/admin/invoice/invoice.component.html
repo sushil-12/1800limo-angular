@@ -26,17 +26,31 @@
                 role="grid" aria-describedby="dataTable_info" cellspacing="0">
                 <thead>
                   <tr role="row">
+                    <th>Actions</th>
                     <th>Booking #</th>
                     <th>Invoice #</th>
                     <th>Date</th>
                     <th>Pax Info</th>
                     <th>Driver Info</th>
                     <th>Vehicle Type</th>
-                    <th>Actions</th>
                   </tr>
                 </thead>
-                <tbody *ngFor="let invoice of invoices">
+                <tbody class="invoiceTbody" *ngFor="let invoice of invoices">
                   <tr role="row" class="odd">
+                    <td>
+                      <a class="user-profileded btn btn-icon btn-transparent-dark dropdown-toggle"
+                        id="navbarDropdownUserImage" href="javascript:void(0);" role="button" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        <span>View</span>
+                      </a>
+                      <div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
+                      aria-labelledby="navbarDropdownUserImage">
+                      <a class="dropdown-item" (click)="clicViewInvoice(invoice.booking_id)">
+                        <div class="dropdown-item-icon"></div>
+                        View Invoice Summary
+                      </a>
+                    </div>
+                    </td>
                     <td class="text-center font-weight-bolder cursor-pointer text-underline">
                       {{ invoice.booking_id }}
                     </td>
@@ -65,20 +79,6 @@
                       </span>
                     </td>
                     <td>{{invoice.aff_vehicle_type}}</td>
-                    <td>
-                      <a class="user-profileded btn btn-icon btn-transparent-dark dropdown-toggle"
-                        id="navbarDropdownUserImage" href="javascript:void(0);" role="button" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">
-                        <span>View</span>
-                      </a>
-                      <div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
-                      aria-labelledby="navbarDropdownUserImage">
-                      <a class="dropdown-item" (click)="clicViewInvoice(invoice.booking_id)">
-                        <div class="dropdown-item-icon"></div>
-                        View Invoice Summary
-                      </a>
-                    </div>
-                    </td>
                   </tr>
                 </tbody>
               </table>
