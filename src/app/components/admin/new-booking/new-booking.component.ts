@@ -205,7 +205,7 @@ export class NewBookingComponent implements OnInit {
 				phone: [''],
 				phone_isd: ['+1'],
 				phone_country: ['us'],
-				email: ['', Validators.email],
+				email: [''],
 				address: [''],
 				card_details: this.$form.group({
 					name: [''],
@@ -216,7 +216,7 @@ export class NewBookingComponent implements OnInit {
 				})
 			}),
 			passenger_name: [''],
-			passenger_email: ['', Validators.email],
+			passenger_email: ['', Validators.pattern("^[\a-z0-9A-Z-\.]+@([\A-Za-z-]+\.)+[\a-zA-Z-]{2,4}$")],
 			passenger_cell: [''],
 			passenger_cell_isd: ['+1'],
 			passenger_cell_country: ['us'],
@@ -227,9 +227,9 @@ export class NewBookingComponent implements OnInit {
 			affiliate_id: [''],
 			lose_affiliate_name: [''],
 			lose_affiliate_phone: [''],
-			lose_affiliate_phone_isd: [''],
+			lose_affiliate_phone_isd: ['+1'],
 			lose_affiliate_phone_country: ['us'],
-			lose_affiliate_email: ['', Validators.email],
+			lose_affiliate_email: ['', Validators.pattern("^[\a-z0-9A-Z-\.]+@([\A-Za-z-]+\.)+[\a-zA-Z-]{2,4}$")],
 			vehicle_type: [''],
 			vehicle_id: [''],
 			vehicle_make: [''],
@@ -244,7 +244,7 @@ export class NewBookingComponent implements OnInit {
 			driver_cell: [''],
 			driver_cell_isd: ['+1'],
 			driver_cell_country: ['us'],
-			driver_email: ['', Validators.email],
+			driver_email: ['', Validators.pattern("^[\a-z0-9A-Z-\.]+@([\A-Za-z-]+\.)+[\a-zA-Z-]{2,4}$")],
 			driver_phone_type: [''],
 			driver_image_id: [''],
 			vehicle_image_id: [''],
@@ -1253,7 +1253,7 @@ export class NewBookingComponent implements OnInit {
 				}
 
 				(<FormGroup>loose_customer.get('card_details')).get('card_number').setValidators([Validators.required, Validators.pattern("[0-9]{12,20}")]);
-				loose_customer.get('email').setValidators([Validators.required, Validators.email])
+				loose_customer.get('email').setValidators([Validators.required, Validators.pattern("^[\a-z0-9A-Z-\.]+@([\A-Za-z-]+\.)+[\a-zA-Z-]{2,4}$")])
 				loose_customer.get('phone').setValidators([Validators.required, Validators.pattern("^[0-9]{10,12}$")])
 			}
 			else {
