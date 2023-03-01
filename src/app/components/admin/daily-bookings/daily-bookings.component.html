@@ -86,6 +86,7 @@
 							id="dataTable" role="grid" aria-describedby="dataTable_info" cellspacing="0">
 							<thead>
 								<tr role="row">
+									<th>Actions</th>
 									<th>Booking #</th>
 									<th>Booking Status</th>
 									<th>Date</th>
@@ -93,11 +94,67 @@
 									<th>Driver Info</th>
 									<th>Vehicle Type</th>
 									<!-- <th>Status</th> -->
-									<th>Actions</th>
 								</tr>
 							</thead>
 							<tbody>
 								<tr role="row" class="odd" *ngFor="let booking of bookings">
+									<td>
+										<a class="user-profileded btn btn-icon btn-transparent-dark dropdown-toggle"
+											id="navbarDropdownUserImage" href="javascript:void(0);" role="button"
+											data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+											<span>View</span>
+										</a>
+										<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
+											aria-labelledby="navbarDropdownUserImage">
+											<a class="dropdown-item" [routerLink]="['/admin/new-booking']"
+												[queryParams]="{bookingId: booking.booking_id, updateType: 'edit'}" *ngIf="booking.payment_status!='paid'">
+												<div class="dropdown-item-icon"></div>
+												Edit
+											</a>
+											<a class="dropdown-item" data-toggle="modal"
+												data-target="#return_repeat_booking_Modal"
+												[routerLink]="['/admin/new-booking']"
+												[queryParams]="{bookingId: booking.booking_id, updateType: 'repeat'}">
+												<div class="dropdown-item-icon" * ></div>
+												Repeat
+											</a>
+											<a *ngIf="booking.service_type=='oneway'" class="dropdown-item"
+												data-toggle="modal" data-target="#return_repeat_booking_Modal"
+												[routerLink]="['/admin/new-booking']"
+												[queryParams]="{bookingId: booking.booking_id, updateType: 'return'}">
+												<div class="dropdown-item-icon"></div>
+												Return
+											</a>
+											<a class="dropdown-item" [routerLink]="['/admin/finalize-booking']"
+												[queryParams]="{bookingId: booking.booking_id}" *ngIf="booking.payment_status!='paid'">
+												<div class="dropdown-item-icon"></div>
+												Finalize
+											</a>
+											<a class="dropdown-item" [routerLink]="['/admin/invoice-summary']"
+												[queryParams]="{bookingId: booking.booking_id}" *ngIf="booking.payment_status=='paid'">
+												<div class="dropdown-item-icon"></div>
+												Invoice
+											</a>
+											<a class="dropdown-item" (click)="changeBookingStatus(booking.booking_id)"
+												data-toggle="modal" data-target="#change_status_booking_Modal"  *ngIf="booking.payment_status!='paid'">
+												<div class="dropdown-item-icon"></div>
+												Change Status
+											</a>
+											<a class="dropdown-item"
+												(click)="sendEmailClicked(booking.booking_id,'customer')"
+												data-toggle="modal" data-target="#emailModal" *ngIf="booking.payment_status!='paid'">
+												<div class="dropdown-item-icon"></div>
+												Email Customer
+											</a>
+											<a class="dropdown-item"
+												(click)="sendEmailClicked(booking.booking_id,'affiliate')"
+												data-toggle="modal" data-target="#emailModal" *ngIf="booking.payment_status!='paid'">
+												<div class="dropdown-item-icon" ></div>
+												Email Affiliate
+											</a>
+										</div>
+									</td>
+									
 									<td class="text-center font-weight-bolder cursor-pointer text-underline"
 										data-toggle="modal" data-target="#previewBookingOnID"
 										(click)="showBookingPreviewModal(booking.booking_id)">
@@ -163,62 +220,7 @@
 											(change)="enableDisableClicked($event,booking.booking_id)">
 										</mat-slide-toggle>
 									</td> -->
-									<td>
-										<a class="user-profileded btn btn-icon btn-transparent-dark dropdown-toggle"
-											id="navbarDropdownUserImage" href="javascript:void(0);" role="button"
-											data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-											<span>View</span>
-										</a>
-										<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
-											aria-labelledby="navbarDropdownUserImage">
-											<a class="dropdown-item" [routerLink]="['/admin/new-booking']"
-												[queryParams]="{bookingId: booking.booking_id, updateType: 'edit'}" *ngIf="booking.payment_status!='paid'">
-												<div class="dropdown-item-icon"></div>
-												Edit
-											</a>
-											<a class="dropdown-item" data-toggle="modal"
-												data-target="#return_repeat_booking_Modal"
-												[routerLink]="['/admin/new-booking']"
-												[queryParams]="{bookingId: booking.booking_id, updateType: 'repeat'}">
-												<div class="dropdown-item-icon"></div>
-												Repeat
-											</a>
-											<a *ngIf="booking.service_type=='oneway'" class="dropdown-item"
-												data-toggle="modal" data-target="#return_repeat_booking_Modal"
-												[routerLink]="['/admin/new-booking']"
-												[queryParams]="{bookingId: booking.booking_id, updateType: 'return'}">
-												<div class="dropdown-item-icon"></div>
-												Return
-											</a>
-											<a class="dropdown-item" [routerLink]="['/admin/finalize-booking']"
-												[queryParams]="{bookingId: booking.booking_id}">
-												<div class="dropdown-item-icon"></div>
-												Finalize
-											</a>
-											<a class="dropdown-item" [routerLink]="['/admin/invoice-summary']"
-												[queryParams]="{bookingId: booking.booking_id}" *ngIf="booking.payment_status=='paid'">
-												<div class="dropdown-item-icon"></div>
-												Invoice
-											</a>
-											<a class="dropdown-item" (click)="changeBookingStatus(booking.booking_id)"
-												data-toggle="modal" data-target="#change_status_booking_Modal">
-												<div class="dropdown-item-icon"></div>
-												Change Status
-											</a>
-											<a class="dropdown-item"
-												(click)="sendEmailClicked(booking.booking_id,'customer')"
-												data-toggle="modal" data-target="#emailModal">
-												<div class="dropdown-item-icon"></div>
-												Email Customer
-											</a>
-											<a class="dropdown-item"
-												(click)="sendEmailClicked(booking.booking_id,'affiliate')"
-												data-toggle="modal" data-target="#emailModal">
-												<div class="dropdown-item-icon"></div>
-												Email Affiliate
-											</a>
-										</div>
-									</td>
+									
 								</tr>
 							</tbody>
 						</table>

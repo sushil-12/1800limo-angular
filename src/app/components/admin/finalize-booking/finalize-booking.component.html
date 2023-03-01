@@ -152,7 +152,7 @@
 <div class="row mb-3">
 	<div class="col-md-12 text-right" *ngIf="visibility">
 		<button type="button" class="custom-filled-button ratesButton m-3" (click)="submitForm()">
-			Save
+			Finalized
 		</button>
 	</div>
 </div>
@@ -338,7 +338,7 @@
 								</p>
 							</div>
 						</div>
-						<div class="col-md-12">
+						<div class="col-md-12" hidden="true">
 							<mat-checkbox [color]="primary" formControlName="save_card_detail">Save
 								details</mat-checkbox>
 						</div>
