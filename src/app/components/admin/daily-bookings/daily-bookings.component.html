@@ -107,7 +107,8 @@
 										<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
 											aria-labelledby="navbarDropdownUserImage">
 											<a class="dropdown-item" [routerLink]="['/admin/new-booking']"
-												[queryParams]="{bookingId: booking.booking_id, updateType: 'edit'}" *ngIf="booking.payment_status!='paid'">
+												[queryParams]="{bookingId: booking.booking_id, updateType: 'edit'}"
+												*ngIf="booking.payment_status!='paid'">
 												<div class="dropdown-item-icon"></div>
 												Edit
 											</a>
@@ -115,7 +116,7 @@
 												data-target="#return_repeat_booking_Modal"
 												[routerLink]="['/admin/new-booking']"
 												[queryParams]="{bookingId: booking.booking_id, updateType: 'repeat'}">
-												<div class="dropdown-item-icon" * ></div>
+												<div class="dropdown-item-icon" *></div>
 												Repeat
 											</a>
 											<a *ngIf="booking.service_type=='oneway'" class="dropdown-item"
@@ -126,35 +127,40 @@
 												Return
 											</a>
 											<a class="dropdown-item" [routerLink]="['/admin/finalize-booking']"
-												[queryParams]="{bookingId: booking.booking_id}" *ngIf="booking.payment_status!='paid'">
+												[queryParams]="{bookingId: booking.booking_id}"
+												*ngIf="booking.payment_status!='paid'">
 												<div class="dropdown-item-icon"></div>
 												Finalize
 											</a>
 											<a class="dropdown-item" [routerLink]="['/admin/invoice-summary']"
-												[queryParams]="{bookingId: booking.booking_id}" *ngIf="booking.payment_status=='paid'">
+												[queryParams]="{bookingId: booking.booking_id}"
+												*ngIf="booking.payment_status=='paid'">
 												<div class="dropdown-item-icon"></div>
 												Invoice
 											</a>
 											<a class="dropdown-item" (click)="changeBookingStatus(booking.booking_id)"
-												data-toggle="modal" data-target="#change_status_booking_Modal"  *ngIf="booking.payment_status!='paid'">
+												data-toggle="modal" data-target="#change_status_booking_Modal"
+												*ngIf="booking.payment_status!='paid'">
 												<div class="dropdown-item-icon"></div>
 												Change Status
 											</a>
 											<a class="dropdown-item"
 												(click)="sendEmailClicked(booking.booking_id,'customer')"
-												data-toggle="modal" data-target="#emailModal" *ngIf="booking.payment_status!='paid'">
+												data-toggle="modal" data-target="#emailModal"
+												*ngIf="booking.payment_status!='paid'">
 												<div class="dropdown-item-icon"></div>
 												Email Customer
 											</a>
 											<a class="dropdown-item"
 												(click)="sendEmailClicked(booking.booking_id,'affiliate')"
-												data-toggle="modal" data-target="#emailModal" *ngIf="booking.payment_status!='paid'">
-												<div class="dropdown-item-icon" ></div>
+												data-toggle="modal" data-target="#emailModal"
+												*ngIf="booking.payment_status!='paid'">
+												<div class="dropdown-item-icon"></div>
 												Email Affiliate
 											</a>
 										</div>
 									</td>
-									
+
 									<td class="text-center font-weight-bolder cursor-pointer text-underline"
 										data-toggle="modal" data-target="#previewBookingOnID"
 										(click)="showBookingPreviewModal(booking.booking_id)">
@@ -220,7 +226,7 @@
 											(change)="enableDisableClicked($event,booking.booking_id)">
 										</mat-slide-toggle>
 									</td> -->
-									
+
 								</tr>
 							</tbody>
 						</table>
@@ -284,6 +290,7 @@
 								<mat-label>Change Status</mat-label>
 								<mat-select formControlName="booking_status">
 									<mat-option value="pending">Pending</mat-option>
+									<mat-option value="paid">Paid</mat-option>
 									<mat-option value="assigned">Assigned</mat-option>
 									<mat-option value="rejected">Rejected</mat-option>
 									<mat-option value="cancelled">Cancelled</mat-option>

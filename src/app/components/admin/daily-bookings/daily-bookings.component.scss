@@ -3,6 +3,7 @@
 .mat-calendar {
 	font-family: "PT Serif", serif !important;
 }
+
 button {
 	font-family: "PT Serif", serif !important;
 }
@@ -14,6 +15,10 @@ button {
 
 .pending {
 	background-color: #0474fc;
+}
+
+.paid {
+	background-color: var(--green-color);
 }
 
 .assigned {
@@ -147,22 +152,24 @@ table {
 	white-space: nowrap;
 	padding: 10px;
 	min-width: 5rem;
+
 	thead th {
 		color: #000000;
 		font-weight: 600;
 	}
-	tbody td > p {
+
+	tbody td>p {
 		margin: 0;
 	}
 }
 
-a:hover
-{
+a:hover {
 	text-decoration: none;
 	color: unset !important;
 }
 
-input, input::placeholder, input::-webkit-input-placeholder
-{
-	padding: 0 !important	;
+input,
+input::placeholder,
+input::-webkit-input-placeholder {
+	padding: 0 !important;
 }
