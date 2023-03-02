@@ -101,8 +101,7 @@
 					</div>
 					<div class="col-md-6" *ngIf="invoiceData.driverDetail.first_name">
 						<p>Driver Name</p>
-						<strong>{{invoiceData.driverDetail.first_name+' '+invoiceData.driverDetail.middle_name+'
-							'+invoiceData.driverDetail.last_name}}</strong>
+						<strong>{{invoiceData.driverDetail.first_name+' '+invoiceData.driverDetail.last_name}}</strong>
 					</div>
 					<div class="col-md-6" *ngIf="invoiceData.driverDetail.cell_number">
 						<p>Driver Phone</p>
@@ -148,12 +147,12 @@
 						<p>Special Instructions</p>
 						<strong>{{invoiceData.special_instruction}}</strong>
 					</div>
-					<div class="col-md-6" >
+					<!-- <div class="col-md-6">
 						<button class="custom-btn button2 mt-2 mb-5" data-toggle="modal" data-target="#AuditTrailModal">
-							<a >Audit Trail</a>
+							<a>Audit Trail</a>
 						</button>
 
-					</div>
+					</div> -->
 				</div>
 
 			</div>
