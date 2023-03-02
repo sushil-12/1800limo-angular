@@ -96,7 +96,9 @@ export class RatesFormComponent implements OnInit, OnChanges {
 
 		if (changes.init_r_rates?.currentValue || this.returnratesform) {
 			this.hours = 0;
-			this.initReturnRates();
+			if(!changes.vehs){
+				this.initReturnRates();
+			}
 		}
 
 		if (changes.nums) {
