@@ -12,6 +12,7 @@ import * as moment from 'moment';
 import { RatesFormComponent } from '../rates-form/rates-form.component';
 import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { Observable, of } from 'rxjs';
+import { CustomvalidationService } from 'src/app/services/customvalidation.service';
 
 declare var $: any
 @Component({
@@ -99,7 +100,8 @@ export class NewBookingComponent implements OnInit {
 		private $mapsapi: MapsAPILoader,
 		private $errors: ErrorDialogService,
 		private $router: Router,
-		private $routeurl: ActivatedRoute
+		private $routeurl: ActivatedRoute,
+		private customValidator: CustomvalidationService
 	) { }
 
 	openAutoCompletePanel() {
@@ -215,7 +217,7 @@ export class NewBookingComponent implements OnInit {
 					cvv: ['']
 				})
 			}),
-			passenger_name: [''],
+			passenger_name: ['', this.customValidator.whitespace()],
 			passenger_email: ['', Validators.pattern("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")],
 			passenger_cell: [''],
 			passenger_cell_isd: ['+1'],
@@ -1273,9 +1275,16 @@ export class NewBookingComponent implements OnInit {
 					}
 				}
 
-				(<FormGroup>loose_customer.get('card_details')).get('card_number').setValidators([Validators.required, Validators.pattern("[0-9]{12,20}")]);
+				(<FormGroup>loose_customer.get('card_details')).get('card_number').setValidators([Validators.required, Validators.pattern("[0-9]{16,16}"), this.customValidator.whitespace()]);
+				(<FormGroup>loose_customer.get('card_details')).get('name').setValidators(this.customValidator.whitespace());
+				(<FormGroup>loose_customer.get('card_details')).get('cvv').setValidators(this.customValidator.whitespace());
 				loose_customer.get('email').setValidators([Validators.required, Validators.pattern("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")])
-				loose_customer.get('phone').setValidators([Validators.required, Validators.pattern("^[0-9]{10,12}$")])
+				loose_customer.get('phone').setValidators([Validators.required, Validators.pattern("^[0-9]{4,15}$"), this.customValidator.whitespace()])
+				loose_customer.get('first_name').setValidators(this.customValidator.whitespace())
+				loose_customer.get('middle_name').setValidators(this.customValidator.whitespace())
+				loose_customer.get('last_name').setValidators(this.customValidator.whitespace())
+				loose_customer.get('address').setValidators(this.customValidator.whitespace())
+
 			}
 			else {
 				const loose_customer = (this.BookingForm.get('loose_customer') as FormGroup)
