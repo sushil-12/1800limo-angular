@@ -106,3 +106,10 @@ ul {
 	border-radius: 15px;
 	height: 220px !important;
 }
+
+@media (min-width:767px) and (max-width:991px) {
+	.text-danger {
+		color: #dc3545 !important;
+		font-size: 14px !important;
+	}
+}

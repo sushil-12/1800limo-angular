@@ -132,8 +132,12 @@
 									<div class="error-message"
 										*ngIf="LooseCustomer.first_name.invalid && (LooseCustomer.first_name.touched || LooseCustomer.first_name.dirty)">
 										<p class="text-danger text-lg m-0"
-											*ngIf="LooseCustomer.first_name.errors.required">
+											*ngIf="LooseCustomer.first_name.errors?.required">
 											This field is required
+										</p>
+										<p class="text-danger text-lg m-0"
+											*ngIf="LooseCustomer.first_name.errors?.whitespace">
+											White Space are not Allowed
 										</p>
 									</div>
 								</div>
@@ -148,6 +152,15 @@
 									<input matInput placeholder="Middle Name" type="text" formControlName="middle_name"
 										tabindex="0" (focus)="$event.target.select()">
 								</mat-form-field>
+								<div class="error-box">
+									<div class="error-message"
+										*ngIf="LooseCustomer.middle_name.invalid && (LooseCustomer.middle_name.touched || LooseCustomer.middle_name.dirty)">
+										<p class="text-danger text-lg m-0"
+											*ngIf="LooseCustomer.middle_name.errors?.whitespace">
+											White Space are not Allowed
+										</p>
+									</div>
+								</div>
 							</div>
 
 							<!-- Last Name -->
@@ -163,8 +176,12 @@
 									<div class="error-message"
 										*ngIf="LooseCustomer.last_name.invalid && (LooseCustomer.last_name.touched || LooseCustomer.last_name.dirty)">
 										<p class="text-danger text-lg m-0"
-											*ngIf="LooseCustomer.last_name.errors.required">
+											*ngIf="LooseCustomer.last_name.errors?.required">
 											This field is required
+										</p>
+										<p class="text-danger text-lg m-0"
+											*ngIf="LooseCustomer.last_name.errors?.whitespace">
+											White Space are not Allowed
 										</p>
 									</div>
 								</div>
@@ -212,6 +229,10 @@
 										<p class="text-danger text-lg m-0" *ngIf="LooseCustomer.phone.errors?.required">
 											This field is required
 										</p>
+										<p class="text-danger text-lg m-0"
+											*ngIf="LooseCustomer.phone.errors?.whitespace">
+											White Space are not Allowed
+										</p>
 										<p class="text-danger text-lg m-0" *ngIf="is_loose_customer_unique">
 											This Phone Number is already registered. Please enter
 											any other.
@@ -231,6 +252,15 @@
 										(onAutocompleteSelected)="fillLooseCustomerAddress($event.formatted_address)"
 										(focus)="$event.target.select()" />
 								</mat-form-field>
+								<div class="error-box">
+									<div class="error-message"
+										*ngIf="LooseCustomer.address.invalid && (LooseCustomer.address.touched || LooseCustomer.address.dirty)">
+										<p class="text-danger text-lg m-0"
+											*ngIf="LooseCustomer.address.errors?.whitespace">
+											White Space are not Allowed
+										</p>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -258,6 +288,10 @@
 											*ngIf="LooseCustomer.card_details.controls.name.errors?.required">
 											This field is required
 										</p>
+										<p class="text-danger text-lg m-0"
+											*ngIf="LooseCustomer.card_details.controls.name.errors?.whitespace">
+											White Space are not Allowed
+										</p>
 									</div>
 								</div>
 							</div>
@@ -276,6 +310,10 @@
 										<p class="text-danger text-lg m-0"
 											*ngIf="LooseCustomer.card_details.controls.card_number.errors?.required">
 											This field is required
+										</p>
+										<p class="text-danger text-lg m-0"
+											*ngIf="LooseCustomer.card_details.controls.card_number.errors?.whitespace">
+											White Space are not Allowed
 										</p>
 									</div>
 								</div>
@@ -351,6 +389,10 @@
 										<p class="text-danger text-lg m-0"
 											*ngIf="LooseCustomer.card_details.controls.cvv.errors?.required">
 											This field is required
+										</p>
+										<p class="text-danger text-lg m-0"
+											*ngIf="LooseCustomer.card_details.controls.cvv.errors?.whitespace">
+											White Space are not Allowed
 										</p>
 									</div>
 								</div>
@@ -459,6 +501,14 @@
 							<input matInput placeholder="Passenger Name" type="text" formControlName="passenger_name"
 								(focus)="$event.target.select()" />
 						</mat-form-field>
+						<div class="error-box">
+							<div class="error-message"
+								*ngIf="Form.passenger_name.invalid && (Form.passenger_name.touched || Form.passenger_name.dirty)">
+								<p class="text-danger text-lg m-0" *ngIf="Form.passenger_name.errors?.whitespace">
+									White Space are not Allowed
+								</p>
+							</div>
+						</div>
 					</div>
 
 					<!-- Passenger Email -->
@@ -524,7 +574,7 @@
 					</div>
 
 					<!-- Special Instructions -->
-					<div class="col-md-12">
+					<div class="col-md-12 my-2">
 						<mat-form-field appearance="outline">
 							<mat-label>
 								Special Instructions
@@ -609,7 +659,7 @@
 			<!-- Loose Affiliate Section -->
 			<div class="row px-4" *ngIf="Form.affiliate_type.value == 'loose_affiliate'">
 				<div class="col-md-4 col-lg-4">
-					<mat-form-field appearance="outline">
+					<mat-form-field appearance="outline" class="m-0">
 						<mat-label>
 							Name
 						</mat-label>
@@ -619,7 +669,7 @@
 				</div>
 				<!-- Phone -->
 				<div class="col-md-4 col-lg-4">
-					<mat-form-field appearance="outline" class="mat-custom-phone">
+					<mat-form-field appearance="outline" class="mat-custom-phone m-0">
 						<mat-label>
 							Phone
 						</mat-label>
@@ -632,7 +682,7 @@
 				</div>
 				<!-- Email -->
 				<div class="col-md-4 col-lg-4">
-					<mat-form-field appearance="outline">
+					<mat-form-field appearance="outline" class="m-0">
 						<mat-label>
 							Email
 						</mat-label>
@@ -830,14 +880,14 @@
 
 			<!-- Visible in Affiliate as well as Loose Affiliate Section -->
 			<!-- Affiliate Driver Information -->
-			<div class="px-4 mt-4" *ngIf="Form.affiliate_type.value == 'loose_affiliate' || Form.affiliate_id.value">
+			<div class="px-4 my-4" *ngIf="Form.affiliate_type.value == 'loose_affiliate' || Form.affiliate_id.value">
 				<h4>
 					Driver Preferences
 				</h4>
 				<div class="row">
 					<!-- Affiliate Driver Name -->
-					<div id="driver" class="col-md-3 my-2" *ngIf="Form.affiliate_type.value != 'loose_affiliate'">
-						<mat-form-field appearance="outline">
+					<div id="driver" class="col-md-3" *ngIf="Form.affiliate_type.value != 'loose_affiliate'">
+						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>
 								Choose Driver
 							</mat-label>
@@ -853,8 +903,8 @@
 					</div>
 
 					<!-- Loose Affiliate Driver Name -->
-					<div id="driver-name" class="col-md-3 my-2" *ngIf="Form.affiliate_type.value == 'loose_affiliate'">
-						<mat-form-field appearance="outline">
+					<div id="driver-name" class="col-md-3" *ngIf="Form.affiliate_type.value == 'loose_affiliate'">
+						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>
 								Driver Name
 							</mat-label>
@@ -864,8 +914,8 @@
 					</div>
 
 					<!-- Affiliate Driver Email -->
-					<div id="driver-email" class="col-md-3 my-2" *ngIf="Form.affiliate_type.value != 'loose_affiliate'">
-						<mat-form-field appearance="outline">
+					<div id="driver-email" class="col-md-3" *ngIf="Form.affiliate_type.value != 'loose_affiliate'">
+						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>
 								Email
 							</mat-label>
@@ -883,8 +933,8 @@
 					</div>
 
 					<!--  Loose Affiliate Driver Email -->
-					<div id="driver-email" class="col-md-3 my-2" *ngIf="Form.affiliate_type.value == 'loose_affiliate'">
-						<mat-form-field appearance="outline">
+					<div id="driver-email" class="col-md-3" *ngIf="Form.affiliate_type.value == 'loose_affiliate'">
+						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>
 								Email
 							</mat-label>
@@ -902,8 +952,8 @@
 					</div>
 
 					<!-- Affiliate Driver Cell -->
-					<div id="driver-cell" class="col-md-3 my-2" *ngIf="Form.affiliate_type.value != 'loose_affiliate'">
-						<mat-form-field appearance="outline" class="mat-custom-phone">
+					<div id="driver-cell" class="col-md-3" *ngIf="Form.affiliate_type.value != 'loose_affiliate'">
+						<mat-form-field appearance="outline" class="mat-custom-phone m-0">
 							<mat-label>
 								Phone
 							</mat-label>
@@ -916,8 +966,8 @@
 					</div>
 
 					<!-- Loose Affiliate Driver Cell -->
-					<div id="driver-cell" class="col-md-3 my-2" *ngIf="Form.affiliate_type.value == 'loose_affiliate'">
-						<mat-form-field appearance="outline" class="mat-custom-phone">
+					<div id="driver-cell" class="col-md-3" *ngIf="Form.affiliate_type.value == 'loose_affiliate'">
+						<mat-form-field appearance="outline" class="mat-custom-phone m-0">
 							<mat-label>
 								Phone
 							</mat-label>
@@ -930,9 +980,8 @@
 					</div>
 
 					<!-- Affiliate Diver Gender -->
-					<div id="driver-gender" class="col-md-3 my-2"
-						*ngIf="Form.affiliate_type.value != 'loose_affiliate'">
-						<mat-form-field appearance="outline">
+					<div id="driver-gender" class="col-md-3" *ngIf="Form.affiliate_type.value != 'loose_affiliate'">
+						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>
 								Gender
 							</mat-label>
@@ -945,9 +994,8 @@
 					</div>
 
 					<!-- Loose Affiliate Diver Gender -->
-					<div id="driver-gender" class="col-md-3 my-2"
-						*ngIf="Form.affiliate_type.value == 'loose_affiliate'">
-						<mat-form-field appearance="outline">
+					<div id="driver-gender" class="col-md-3" *ngIf="Form.affiliate_type.value == 'loose_affiliate'">
+						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>
 								Gender
 							</mat-label>
@@ -1237,7 +1285,7 @@
 						<input type="text" matInput placholder="Number of Vehicles"
 							[value]="Form.number_of_vehicles.value ? Form.number_of_vehicles.value : 1"
 							(focus)="$event.target.select()"
-							(change)="SetFormValue('number_of_vehicles', $event.target.value)" />
+							(keyup)="SetFormValue('number_of_vehicles', $event.target.value)" />
 					</mat-form-field>
 				</div>
 
