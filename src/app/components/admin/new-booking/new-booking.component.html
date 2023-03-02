@@ -3063,12 +3063,12 @@
 							</div>
 							<div class="col-md-8 value">
 								<span class="font-weight-bolder">
-									${{ RatesForm.grand_total }}
+									${{ RatesForm.grand_total.toFixed(2) }}
 								</span>
 							</div>
 						</div>
 					</div>
-					<div class="mx-2" *ngIf="ReturnRatesForm && init_return_rates">
+					<div class="mx-2" *ngIf="ReturnRatesForm && init_return_rates && Form.affiliate_type.value!='affiliate'">
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
@@ -3077,7 +3077,7 @@
 							</div>
 							<div class="col-md-8 value">
 								<span class="font-weight-bolder">
-									${{ ReturnRatesForm.r_grandtotal }}
+									${{ ReturnRatesForm.r_grandtotal.toFixed(2) }}
 								</span>
 							</div>
 						</div>
