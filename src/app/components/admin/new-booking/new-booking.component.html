@@ -120,7 +120,7 @@
 						</h4>
 						<div class="row">
 							<!-- First Name -->
-							<div class="col-md-4">
+							<div class="col-md-4 looseError">
 								<mat-form-field appearance="outline" class="m-0">
 									<mat-label class="required-field">
 										First Name
@@ -136,15 +136,15 @@
 											This field is required
 										</p>
 										<p class="text-danger text-lg m-0"
-											*ngIf="LooseCustomer.first_name.errors?.whitespace">
-											White Space are not Allowed
+											*ngIf="LooseCustomer.first_name.errors?.pattern">
+											Extra White Space are not Allowed
 										</p>
 									</div>
 								</div>
 							</div>
 
 							<!-- Middle Name -->
-							<div class="col-md-4">
+							<div class="col-md-4 looseError">
 								<mat-form-field appearance="outline" class="m-0">
 									<mat-label>
 										Middle Name
@@ -156,15 +156,15 @@
 									<div class="error-message"
 										*ngIf="LooseCustomer.middle_name.invalid && (LooseCustomer.middle_name.touched || LooseCustomer.middle_name.dirty)">
 										<p class="text-danger text-lg m-0"
-											*ngIf="LooseCustomer.middle_name.errors?.whitespace">
-											White Space are not Allowed
+											*ngIf="LooseCustomer.middle_name.errors?.pattern">
+											Extra White Space are not Allowed
 										</p>
 									</div>
 								</div>
 							</div>
 
 							<!-- Last Name -->
-							<div class="col-md-4">
+							<div class="col-md-4 looseError">
 								<mat-form-field appearance="outline" class="m-0">
 									<mat-label class="required-field">
 										Last Name
@@ -180,8 +180,8 @@
 											This field is required
 										</p>
 										<p class="text-danger text-lg m-0"
-											*ngIf="LooseCustomer.last_name.errors?.whitespace">
-											White Space are not Allowed
+											*ngIf="LooseCustomer.last_name.errors?.pattern">
+											Extra White Space are not Allowed
 										</p>
 									</div>
 								</div>
@@ -190,7 +190,7 @@
 
 						<div class="row">
 							<!-- Email -->
-							<div class="col-md-4">
+							<div class="col-md-4 looseError">
 								<mat-form-field appearance="outline" class="m-0">
 									<mat-label class="required-field">
 										Email
@@ -212,16 +212,16 @@
 							</div>
 
 							<!-- Phone -->
-							<div class="col-md-4">
-								<mat-form-field appearance="outline" class="mat-custom-phone m-0">
-									<mat-label class="required-field">
-										Phone
-									</mat-label>
-									<input matInput placeholder="Phone" formControlName="phone" ng2TelInput
-										[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
-										class="phoneNumberClass" (intlTelInputObject)="LCTelInputObject($event)"
+							<div class="col-md-4 looseError">
+								<mat-form-field appearance="outline" class="mat-custom-phone m-0 cellLabelClass">
+									<label
+										class="mat-form-field-label required-field mat-empty mat-form-field-empty labelClass">Phone
+									</label>
+									<input matInput formControlName="phone" ng2TelInput [ng2TelInputOptions]="{
+											preferredCountries: ['us', 'ca', 'mx', 'gb']
+										}" placeholder="1234567890" class="phoneNumberClass" (intlTelInputObject)="LCTelInputObject($event)"
 										(countryChange)="SetFormValue('loose_customer>phone_isd', $event.dialCode); SetFormValue('loose_customer>phone_country', $event.iso2)"
-										(focus)="$event.target.select()" />
+										(focus)="$event.target.select()" tabIndex="1" />
 								</mat-form-field>
 								<div class="error-box">
 									<div class="error-message"
@@ -230,9 +230,19 @@
 											This field is required
 										</p>
 										<p class="text-danger text-lg m-0"
-											*ngIf="LooseCustomer.phone.errors?.whitespace">
-											White Space are not Allowed
+											*ngIf="LooseCustomer.phone.errors?.pattern;else otherError">
+											Only Numbers are Allowed
 										</p>
+										<ng-template #otherError>
+											<p class="text-danger text-lg m-0"
+												*ngIf="LooseCustomer.phone.errors?.minlength">
+												Minimum length should be 4
+											</p>
+											<p class="text-danger text-lg m-0"
+												*ngIf="LooseCustomer.phone.errors?.maxlength">
+												Maximum length should be 15
+											</p>
+										</ng-template>
 										<p class="text-danger text-lg m-0" *ngIf="is_loose_customer_unique">
 											This Phone Number is already registered. Please enter
 											any other.
@@ -242,7 +252,7 @@
 							</div>
 
 							<!-- Address -->
-							<div class="col-md-4">
+							<div class="col-md-4 looseError">
 								<mat-form-field appearance="outline" class="m-0">
 									<mat-label>
 										Address
@@ -252,15 +262,6 @@
 										(onAutocompleteSelected)="fillLooseCustomerAddress($event.formatted_address)"
 										(focus)="$event.target.select()" />
 								</mat-form-field>
-								<div class="error-box">
-									<div class="error-message"
-										*ngIf="LooseCustomer.address.invalid && (LooseCustomer.address.touched || LooseCustomer.address.dirty)">
-										<p class="text-danger text-lg m-0"
-											*ngIf="LooseCustomer.address.errors?.whitespace">
-											White Space are not Allowed
-										</p>
-									</div>
-								</div>
 							</div>
 						</div>
 					</div>
@@ -289,8 +290,8 @@
 											This field is required
 										</p>
 										<p class="text-danger text-lg m-0"
-											*ngIf="LooseCustomer.card_details.controls.name.errors?.whitespace">
-											White Space are not Allowed
+											*ngIf="LooseCustomer.card_details.controls.name.errors?.pattern">
+											Extra White Space are not Allowed
 										</p>
 									</div>
 								</div>
@@ -312,9 +313,19 @@
 											This field is required
 										</p>
 										<p class="text-danger text-lg m-0"
-											*ngIf="LooseCustomer.card_details.controls.card_number.errors?.whitespace">
-											White Space are not Allowed
+											*ngIf="LooseCustomer.card_details.controls.card_number.errors?.pattern;else cardLength">
+											Only Numbers are Allowed
 										</p>
+										<ng-template #cardLength>
+											<p class="text-danger text-lg m-0"
+												*ngIf="LooseCustomer.card_details.controls.card_number.errors?.minlength">
+												Minimum length should be 16
+											</p>
+											<p class="text-danger text-lg m-0"
+												*ngIf="LooseCustomer.card_details.controls.card_number.errors?.maxlength">
+												Maximum length should be 16
+											</p>
+										</ng-template>
 									</div>
 								</div>
 							</div>
@@ -391,9 +402,19 @@
 											This field is required
 										</p>
 										<p class="text-danger text-lg m-0"
-											*ngIf="LooseCustomer.card_details.controls.cvv.errors?.whitespace">
-											White Space are not Allowed
+											*ngIf="LooseCustomer.card_details.controls.cvv.errors?.pattern;else cvvLength">
+											Only Numbers are Allowed
 										</p>
+										<ng-template #cvvLength>
+											<p class="text-danger text-lg m-0"
+												*ngIf="LooseCustomer.card_details.controls.cvv.errors?.minlength">
+												Minimum length should be 3
+											</p>
+											<p class="text-danger text-lg m-0"
+												*ngIf="LooseCustomer.card_details.controls.cvv.errors?.maxlength">
+												Maximum length should be 3
+											</p>
+										</ng-template>
 									</div>
 								</div>
 							</div>
@@ -504,8 +525,8 @@
 						<div class="error-box">
 							<div class="error-message"
 								*ngIf="Form.passenger_name.invalid && (Form.passenger_name.touched || Form.passenger_name.dirty)">
-								<p class="text-danger text-lg m-0" *ngIf="Form.passenger_name.errors?.whitespace">
-									White Space are not Allowed
+								<p class="text-danger text-lg m-0" *ngIf="Form.passenger_name.errors?.pattern">
+									Extra White Space are not Allowed
 								</p>
 							</div>
 						</div>
@@ -515,9 +536,9 @@
 					<div class="col-md-4">
 						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>
-								Passenger Email <span class="asterisk"></span>
+								Passenger Email
 							</mat-label>
-							<input matInput placeholder="Passenger Email" type="email" formControlName="passenger_email"
+							<input matInput placeholder="Passenger Email" type="text" formControlName="passenger_email"
 								(focus)="$event.target.select()" />
 						</mat-form-field>
 						<div class="error-box">
@@ -532,21 +553,37 @@
 
 					<!-- Passenger Cell -->
 					<div class="col-md-4">
-						<mat-form-field appearance="outline" class="mat-custom-phone m-0">
-							<mat-label>
-								Passenger Cell
-							</mat-label>
-							<input matInput placeholder="Passenger Cell" type="text" formControlName="passenger_cell"
-								(focus)="$event.target.select()"
-								[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb'], initialCountry: 'us'}"
-								ng2TelInput (intlTelInputObject)="PaxTelInputObject($event)"
-								(countryChange)="SetFormValue('passenger_cell_isd', '+' + $event.dialCode); SetFormValue('passenger_cell_country', $event.iso2)" />
+						<mat-form-field appearance="outline" class="mat-custom-phone m-0 pcellLabelClass">
+							<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Passenger
+								Cell
+							</label>
+							<input matInput formControlName="passenger_cell" ng2TelInput [ng2TelInputOptions]="{
+									preferredCountries: ['us', 'ca', 'mx', 'gb']
+								}" placeholder="1234567890" class="phoneNumberClass" (intlTelInputObject)="PaxTelInputObject($event)"
+								(countryChange)="SetFormValue('passenger_cell_isd', $event.dialCode); SetFormValue('passenger_cell_country', $event.iso2)"
+								(focus)="$event.target.select()" tabIndex="1" />
 						</mat-form-field>
-						<!-- TEMP -->
+						<div class="error-box">
+							<div class="error-message"
+								*ngIf="Form.passenger_cell.invalid && (Form.passenger_cell.touched || Form.passenger_cell.dirty)">
+								<p class="text-danger text-lg m-0"
+									*ngIf="Form.passenger_cell.errors?.pattern;else otherError">
+									Only Numbers are Allowed
+								</p>
+								<ng-template #otherError>
+									<p class="text-danger text-lg m-0" *ngIf="Form.passenger_cell.errors?.minlength">
+										Minimum length should be 4
+									</p>
+									<p class="text-danger text-lg m-0" *ngIf="Form.passenger_cell.errors?.maxlength">
+										Maximum length should be 15
+									</p>
+								</ng-template>
+							</div>
+						</div>
 					</div>
 
 					<!-- Passenger Count -->
-					<div class="col-md-3">
+					<div class="col-md-3 looseError">
 						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>
 								No. of Passengers <span class="asterisk"></span>
@@ -560,7 +597,7 @@
 					</div>
 
 					<!-- Luggage Count -->
-					<div class="col-md-3">
+					<div class="col-md-3 looseError">
 						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>
 								Luggage Count <span class="asterisk"></span>
@@ -666,20 +703,45 @@
 						<input type="text" matInput placeholder="Full Name" (focus)="$event.target.select()"
 							formControlName="lose_affiliate_name" />
 					</mat-form-field>
+					<div class="error-box">
+						<div class="error-message"
+							*ngIf="Form.lose_affiliate_name.invalid && (Form.lose_affiliate_name.touched || Form.lose_affiliate_name.dirty)">
+							<p class="text-danger text-lg m-0" *ngIf="Form.lose_affiliate_name.errors?.pattern">
+								Extra White Space are not Allowed
+							</p>
+						</div>
+					</div>
 				</div>
 				<!-- Phone -->
-				<div class="col-md-4 col-lg-4">
-					<mat-form-field appearance="outline" class="mat-custom-phone m-0">
-						<mat-label>
-							Phone
-						</mat-label>
-						<input matInput placeholder="Phone Number" type="text" formControlName="lose_affiliate_phone"
-							(focus)="$event.target.select()"
-							[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}" ng2TelInput
-							(intlTelInputObject)="LATelInputObject($event)"
-							(countryChange)="SetFormValue('lose_affiliate_phone_isd', '+' + $event.dialCode); SetFormValue('lose_affiliate_phone_country', $event.iso2)" />
+				<div class="col-md-4">
+					<mat-form-field appearance="outline" class="mat-custom-phone m-0 cellLabelClass">
+						<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Phone
+						</label>
+						<input matInput formControlName="lose_affiliate_phone" ng2TelInput [ng2TelInputOptions]="{
+								preferredCountries: ['us', 'ca', 'mx', 'gb']
+							}" placeholder="1234567890" class="phoneNumberClass" (intlTelInputObject)="LATelInputObject($event)"
+							(countryChange)="SetFormValue('lose_affiliate_phone_isd', '+' + $event.dialCode); SetFormValue('lose_affiliate_phone_country', $event.iso2)"
+							(focus)="$event.target.select()" tabIndex="1" />
 					</mat-form-field>
+					<div class="error-box">
+						<div class="error-message"
+							*ngIf="Form.lose_affiliate_phone.invalid && (Form.lose_affiliate_phone.touched || Form.lose_affiliate_phone.dirty)">
+							<p class="text-danger text-lg m-0"
+								*ngIf="Form.lose_affiliate_phone.errors?.pattern;else looseAffError">
+								Only Numbers are Allowed
+							</p>
+							<ng-template #looseAffError>
+								<p class="text-danger text-lg m-0" *ngIf="Form.lose_affiliate_phone.errors?.minlength">
+									Minimum length should be 4
+								</p>
+								<p class="text-danger text-lg m-0" *ngIf="Form.lose_affiliate_phone.errors?.maxlength">
+									Maximum length should be 15
+								</p>
+							</ng-template>
+						</div>
+					</div>
 				</div>
+
 				<!-- Email -->
 				<div class="col-md-4 col-lg-4">
 					<mat-form-field appearance="outline" class="m-0">
@@ -862,17 +924,33 @@
 							<input type="text" matInput (focus)="$event.target.select()"
 								formControlName="vehicle_license_plate" placeholder="License Plate">
 						</mat-form-field>
+						<div class="error-box">
+							<div class="error-message"
+								*ngIf="Form.vehicle_license_plate.invalid && (Form.vehicle_license_plate.touched || Form.vehicle_license_plate.dirty)">
+								<p class="text-danger text-lg m-0" *ngIf="Form.vehicle_license_plate.errors?.pattern">
+									Extra White Space are not Allowed
+								</p>
+							</div>
+						</div>
 					</div>
 
 					<!-- Number of Seats -->
 					<div class="col-md-3">
-						<mat-form-field appearance="outline" class="vehicleLable mt-0">
+						<mat-form-field appearance="outline" class="vehicleLable m-0">
 							<mat-label>
 								Number of Seats
 							</mat-label>
 							<input type="text" matInput formControlName="vehicle_seats" placeholder="Number of Seats"
 								(focus)="$event.target.select()" />
 						</mat-form-field>
+						<div class="error-box">
+							<div class="error-message"
+								*ngIf="Form.vehicle_seats.invalid && (Form.vehicle_seats.touched || Form.vehicle_seats.dirty)">
+								<p class="text-danger text-lg m-0" *ngIf="Form.vehicle_seats.errors?.pattern">
+									Only Numbers are Allowed
+								</p>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -911,6 +989,14 @@
 							<input matInput formControlName="driver_name" type="text" placeholder="Driver Name"
 								(focus)="$event.target.select()" />
 						</mat-form-field>
+						<div class="error-box">
+							<div class="error-message"
+								*ngIf="Form.driver_name.invalid && (Form.driver_name.touched || Form.driver_name.dirty)">
+								<p class="text-danger text-lg m-0" *ngIf="Form.driver_name.errors?.pattern">
+									Extra White Space are not Allowed
+								</p>
+							</div>
+						</div>
 					</div>
 
 					<!-- Affiliate Driver Email -->
@@ -919,7 +1005,7 @@
 							<mat-label>
 								Email
 							</mat-label>
-							<input matInput formControlName="driver_email" type="email" readonly
+							<input matInput formControlName="driver_email" type="text" readonly
 								(focus)="$event.target.select()" placeholder="Email">
 						</mat-form-field>
 						<div class="error-box">
@@ -938,7 +1024,7 @@
 							<mat-label>
 								Email
 							</mat-label>
-							<input matInput formControlName="driver_email" type="email" (focus)="$event.target.select()"
+							<input matInput formControlName="driver_email" type="text" (focus)="$event.target.select()"
 								placeholder="Email">
 						</mat-form-field>
 						<div class="error-box">
@@ -967,16 +1053,32 @@
 
 					<!-- Loose Affiliate Driver Cell -->
 					<div id="driver-cell" class="col-md-3" *ngIf="Form.affiliate_type.value == 'loose_affiliate'">
-						<mat-form-field appearance="outline" class="mat-custom-phone m-0">
-							<mat-label>
-								Phone
-							</mat-label>
-							<input matInput placeholder="Phone Number" type="text" formControlName="driver_cell"
-								(focus)="$event.target.select()"
-								[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}" ng2TelInput
-								(intlTelInputObject)="DrvTelInputObject($event)"
-								(countryChange)="SetFormValue('driver_cell_isd', '+' + $event.dialCode); SetFormValue('driver_cell_country', $event.iso2)" />
+						<mat-form-field appearance="outline" class="mat-custom-phone m-0 cellLabelClass">
+							<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Phone
+							</label>
+							<input matInput formControlName="driver_cell" ng2TelInput [ng2TelInputOptions]="{
+									preferredCountries: ['us', 'ca', 'mx', 'gb']
+								}" placeholder="1234567890" class="phoneNumberClass" (intlTelInputObject)="DrvTelInputObject($event)"
+								(countryChange)="SetFormValue('driver_cell_isd', '+' + $event.dialCode); SetFormValue('driver_cell_country', $event.iso2)"
+								(focus)="$event.target.select()" tabIndex="1" />
 						</mat-form-field>
+						<div class="error-box">
+							<div class="error-message"
+								*ngIf="Form.driver_cell.invalid && (Form.driver_cell.touched || Form.driver_cell.dirty)">
+								<p class="text-danger text-lg m-0"
+									*ngIf="Form.driver_cell.errors?.pattern;else looseAffError">
+									Only Numbers are Allowed
+								</p>
+								<ng-template #looseAffError>
+									<p class="text-danger text-lg m-0" *ngIf="Form.driver_cell.errors?.minlength">
+										Minimum length should be 4
+									</p>
+									<p class="text-danger text-lg m-0" *ngIf="Form.driver_cell.errors?.maxlength">
+										Maximum length should be 15
+									</p>
+								</ng-template>
+							</div>
+						</div>
 					</div>
 
 					<!-- Affiliate Diver Gender -->
