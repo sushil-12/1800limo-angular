@@ -141,7 +141,7 @@ export class AddDriverComponent implements OnInit {
 			Veteran: ['no'],
 			DoD: ['no'],
 			FoidCard: ['no'],
-			SchoolBusCertified: ['no', Validators.required],
+			SchoolBusCertified: ['no'],
 			Covid19Vaccination: ['no'],
 			BackgroundCertified: ['no'],
 			ExPolice: ['no'],
@@ -155,18 +155,18 @@ export class AddDriverComponent implements OnInit {
 			BackgroundCheckerID: [''],
 			CheckerID: [''],
 			BackgroundCompanyTelNumber: [''],
-			BackgroundCompanyTelIsd: ['+1', Validators.required],
-			BackgroundCompanyTelNumberCountry: ['us', Validators.required],
+			BackgroundCompanyTelIsd: ['+1'],
+			BackgroundCompanyTelNumberCountry: ['us'],
 			VaccinationCardImage: [''],
 			schoolBusCertificateImage: [''],
 			PoliceForceTelephone: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
-			PoliceForceTelephoneIsd: ['+1', Validators.required],
-			PoliceForceTelephoneCountry: ['us', Validators.required],
+			PoliceForceTelephoneIsd: ['+1'],
+			PoliceForceTelephoneCountry: ['us'],
 			LastPoliceDepartment: [''],
 			Country: [''],
 			State: [''],
 			City: [''],
-			ZipCode: ['', [Validators.required, Validators.pattern("^[0-9]*$")]],
+			ZipCode: ['', [Validators.pattern("^[0-9]*$")]],
 		});
 
 		if (this.affiliateType != 'fleet_operator') {
@@ -769,8 +769,8 @@ export class AddDriverComponent implements OnInit {
 		if (this.addDriverForm.invalid) {
 			return;
 		}
-		this.adminService.getUpdatedStepsLocal("4");
-		this.addDriverForm.value.stepCompleted = this.adminService.getSessionStepsCompleted();
+
+		this.addDriverForm.value.stepCompleted = this.adminService.getUpdatedStepsLocal("4");
 		this.spinner.show();// show spinner
 		this.disableSubmitButton = true; //disable submit button
 

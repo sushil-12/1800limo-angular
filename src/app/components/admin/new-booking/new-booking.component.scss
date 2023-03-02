@@ -112,4 +112,32 @@ ul {
 		color: #dc3545 !important;
 		font-size: 14px !important;
 	}
+
+	.looseError {
+		padding: 10px 15px !important;
+	}
+}
+
+.cellLabelClass.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
+	padding-left: 0px;
+	background-color: #fff;
+	max-width: 60px;
+	text-align: center;
+	left: -5px;
+	top: 30px;
+	font-weight: 700;
+}
+
+.pcellLabelClass.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
+	padding-left: 0px;
+	background-color: #fff;
+	max-width: 130px;
+	text-align: center;
+	left: -5px;
+	top: 30px;
+	font-weight: 700;
+}
+
+.labelClass {
+	font-weight: 700;
 }
