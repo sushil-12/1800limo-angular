@@ -1282,7 +1282,7 @@ export class NewBookingComponent implements OnInit {
 					}
 				}
 
-				(<FormGroup>loose_customer.get('card_details')).get('card_number').setValidators([Validators.required, Validators.pattern("^[0-9]*$"), , Validators.minLength(16), Validators.maxLength(16),]);
+				(<FormGroup>loose_customer.get('card_details')).get('card_number').setValidators([Validators.required, Validators.pattern("^[0-9]*$"), , Validators.minLength(12), Validators.maxLength(19),]);
 				(<FormGroup>loose_customer.get('card_details')).get('name').setValidators([Validators.required, this.customValidator.whitespace()]);
 				(<FormGroup>loose_customer.get('card_details')).get('cvv').setValidators([Validators.required, Validators.pattern("^[0-9]*$"), , Validators.minLength(3), Validators.maxLength(3),]);
 				loose_customer.get('email').setValidators([Validators.required, Validators.pattern("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")])

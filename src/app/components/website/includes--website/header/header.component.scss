@@ -2,6 +2,13 @@
 	color: var(--orange-color) !important;
 }
 
+.logout-background{
+	background: #8080805c;
+}
+
+.nav-item-bt-1{
+	background-color: var(--orange-color);
+}
 .nav-item {
 	padding-right: 0 !important;
 }
@@ -32,7 +39,6 @@
 	.dropdown-item {
 		display         : block;
 		border-radius   : 8px;
-		background-color: var(--orange-color);
 		margin          : 14px 15px;
 		width           : auto;
 		padding         : 8px 15px;

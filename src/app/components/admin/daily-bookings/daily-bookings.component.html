@@ -571,7 +571,7 @@
 					<!-- Booking Information - Ends -->
 
 					<!-- affiliate details -->
-					<ng-container *ngIf="bookingPreview?.affiliate_type.value == 'affiliate' then affiliateUser">
+					<ng-container *ngIf="bookingPreview?.affiliate_type == 'affiliate' then affiliateUser">
 					</ng-container>
 
 					<!-- Affiliate -->
@@ -591,16 +591,8 @@
 								<div class="col-md-8 value">
 									<span class="font-weight-bolder preview-output-feild"
 										*ngIf="bookingPreview?.MiddleName == null;else affiliateMiddleName">
-										{{ textFormatter(bookingPreview?.FirstName) }} {{
-										textFormatter(bookingPreview?.LastName) }}
+										{{ textFormatter(bookingPreview?.affiliate_name) }} 
 									</span>
-									<ng-template #affiliateMiddleName>
-										<span class="font-weight-bolder preview-output-feild">
-											{{ textFormatter(bookingPreview?.FirstName) }} {{
-											textFormatter(bookingPreview?.MiddleName) }} {{
-											textFormatter(bookingPreview?.LastName) }}
-										</span>
-									</ng-template>
 								</div>
 							</div>
 						</div>
@@ -615,7 +607,7 @@
 								</div>
 								<div class="col-md-8 value">
 									<span class="font-weight-bolder preview-output-feild">
-										{{ textFormatter(bookingPreview?.Email) }}
+										{{ textFormatter(bookingPreview?.affiliate_email) }}
 									</span>
 								</div>
 							</div>
@@ -631,8 +623,8 @@
 								</div>
 								<div class="col-md-8 value">
 									<span class="font-weight-bolder preview-output-feild">
-										({{ bookingPreview?.CellIsd }})
-										{{ textFormatter(bookingPreview?.CellNumber) }}
+										({{ bookingPreview?.affiliate_phone_isd }})
+										{{ textFormatter(bookingPreview?.affiliate_phone) }}
 									</span>
 								</div>
 							</div>
