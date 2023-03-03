@@ -156,7 +156,7 @@
 									<div class="error-message"
 										*ngIf="LooseCustomer.middle_name.invalid && (LooseCustomer.middle_name.touched || LooseCustomer.middle_name.dirty)">
 										<p class="text-danger text-lg m-0"
-											*ngIf="LooseCustomer.middle_name.errors?.pattern">
+											*ngIf="LooseCustomer.middle_name.errors?.whitespace">
 											Extra White Space are not Allowed
 										</p>
 									</div>
@@ -180,7 +180,7 @@
 											This field is required
 										</p>
 										<p class="text-danger text-lg m-0"
-											*ngIf="LooseCustomer.last_name.errors?.pattern">
+											*ngIf="LooseCustomer.last_name.errors?.whitespace">
 											Extra White Space are not Allowed
 										</p>
 									</div>
@@ -290,7 +290,7 @@
 											This field is required
 										</p>
 										<p class="text-danger text-lg m-0"
-											*ngIf="LooseCustomer.card_details.controls.name.errors?.pattern">
+											*ngIf="LooseCustomer.card_details.controls.name.errors?.whitespace">
 											Extra White Space are not Allowed
 										</p>
 									</div>
@@ -525,7 +525,7 @@
 						<div class="error-box">
 							<div class="error-message"
 								*ngIf="Form.passenger_name.invalid && (Form.passenger_name.touched || Form.passenger_name.dirty)">
-								<p class="text-danger text-lg m-0" *ngIf="Form.passenger_name.errors?.pattern">
+								<p class="text-danger text-lg m-0" *ngIf="Form.passenger_name.errors?.whitespace">
 									Extra White Space are not Allowed
 								</p>
 							</div>
@@ -706,7 +706,7 @@
 					<div class="error-box">
 						<div class="error-message"
 							*ngIf="Form.lose_affiliate_name.invalid && (Form.lose_affiliate_name.touched || Form.lose_affiliate_name.dirty)">
-							<p class="text-danger text-lg m-0" *ngIf="Form.lose_affiliate_name.errors?.pattern">
+							<p class="text-danger text-lg m-0" *ngIf="Form.lose_affiliate_name.errors?.whitespace">
 								Extra White Space are not Allowed
 							</p>
 						</div>
@@ -927,7 +927,8 @@
 						<div class="error-box">
 							<div class="error-message"
 								*ngIf="Form.vehicle_license_plate.invalid && (Form.vehicle_license_plate.touched || Form.vehicle_license_plate.dirty)">
-								<p class="text-danger text-lg m-0" *ngIf="Form.vehicle_license_plate.errors?.pattern">
+								<p class="text-danger text-lg m-0"
+									*ngIf="Form.vehicle_license_plate.errors?.whitespace">
 									Extra White Space are not Allowed
 								</p>
 							</div>
@@ -992,7 +993,7 @@
 						<div class="error-box">
 							<div class="error-message"
 								*ngIf="Form.driver_name.invalid && (Form.driver_name.touched || Form.driver_name.dirty)">
-								<p class="text-danger text-lg m-0" *ngIf="Form.driver_name.errors?.pattern">
+								<p class="text-danger text-lg m-0" *ngIf="Form.driver_name.errors?.whitespace">
 									Extra White Space are not Allowed
 								</p>
 							</div>
@@ -3170,7 +3171,8 @@
 							</div>
 						</div>
 					</div>
-					<div class="mx-2" *ngIf="ReturnRatesForm && init_return_rates && Form.affiliate_type.value!='affiliate'">
+					<div class="mx-2"
+						*ngIf="ReturnRatesForm && init_return_rates && Form.affiliate_type.value!='affiliate'">
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
