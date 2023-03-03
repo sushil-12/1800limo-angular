@@ -85,6 +85,9 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 		});
 
 	}
+	ngAfterViewInit(){
+		this.scroll('grandTotal')
+	}
 
 	ngOnChanges(changes: SimpleChanges) {
 		console.warn("Change has been detected: ", changes);
@@ -168,6 +171,11 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 		}
 	}
 
+	scroll(id) {
+		let el = document.getElementById(id);
+		console.log(`scrolling to ${id}` , el);
+		el.scrollIntoView();
+	  }
 	returnZero() {
 		return 0;
 	}
@@ -285,9 +293,8 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 	}
 
 	fetchRates(affiliate: string, bookingId: number = 0) {
-		this.$spinner.show()
+		// this.$spinner.show()
 		this.$api.fetchAdminNewBookingRates(affiliate, bookingId).subscribe((response: any) => {
-			this.$spinner.hide()
 			if (response?.success && response?.data?.rateArray) {
 				this.ratesdata.next(response.data.rateArray);
 			}

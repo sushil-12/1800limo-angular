@@ -99,6 +99,7 @@
 						width="100%" cellspacing="0">
 						<thead>
 							<tr role="row">
+								<th>Actions</th>
 								<th>Name</th>
 								<th>Email</th>
 								<th>Cell</th>
@@ -112,12 +113,33 @@
 								<th>Country</th> -->
 								<th>Approval Status</th>
 								<th>Status</th>
-								<th>Actions</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr role="row" class="odd"
 								*ngFor="let blackCarLimoBus of affiliate_accounts">
+								<td>
+									<a class="user-profileded btn btn-icon btn-transparent-dark dropdown-toggle"
+										id="navbarDropdownUserImage" href="javascript:void(0);"
+										role="button" data-toggle="dropdown" aria-haspopup="true"
+										aria-expanded="false">
+										<span>View</span>
+									</a>
+									<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
+										aria-labelledby="navbarDropdownUserImage">
+										<a class="dropdown-item"
+											(click)="editAffiliateAccount(blackCarLimoBus.id)">
+											<div class="dropdown-item-icon"></div>
+											Edit {{formatter(blackCarLimoBus.AffiliateType) |
+											titlecase }} Account
+										</a>
+										<a class="dropdown-item"
+											(click)="viewAffiliateCreditCards(blackCarLimoBus.id)">
+											<div class="dropdown-item-icon"></div>
+											View Credit Cards
+										</a>
+									</div>
+								</td>
 								<td>
 									{{ blackCarLimoBus.FirstName }}
 									{{ blackCarLimoBus.MiddleName ? blackCarLimoBus.MiddleName : ''
@@ -164,28 +186,6 @@
 										[checked]="blackCarLimoBus.status" [disabled]="disabled"
 										(change)="enableDisableClicked($event,blackCarLimoBus.id)">
 									</mat-slide-toggle>
-								</td>
-								<td>
-									<a class="user-profileded btn btn-icon btn-transparent-dark dropdown-toggle"
-										id="navbarDropdownUserImage" href="javascript:void(0);"
-										role="button" data-toggle="dropdown" aria-haspopup="true"
-										aria-expanded="false">
-										<span>View</span>
-									</a>
-									<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
-										aria-labelledby="navbarDropdownUserImage">
-										<a class="dropdown-item"
-											(click)="editAffiliateAccount(blackCarLimoBus.id)">
-											<div class="dropdown-item-icon"></div>
-											Edit {{formatter(blackCarLimoBus.AffiliateType) |
-											titlecase }} Account
-										</a>
-										<a class="dropdown-item"
-											(click)="viewAffiliateCreditCards(blackCarLimoBus.id)">
-											<div class="dropdown-item-icon"></div>
-											View Credit Cards
-										</a>
-									</div>
 								</td>
 							</tr>
 

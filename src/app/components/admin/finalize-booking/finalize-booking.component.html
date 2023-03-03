@@ -149,7 +149,7 @@
 	[vehicles]="finalize_params.number_of_vehicles" (returnformvalue)="ReturnRateFormValue($event)">
 </app-finalize-rates>
 <div class="row mb-3">
-	<div class="col-md-12 text-right">
+	<div class="col-md-12 text-right" id="submitForm" >
 		<button type="button" class="custom-filled-button ratesButton m-3" (click)="submitForm()">
 			Finalized
 		</button>
@@ -160,7 +160,7 @@
 <!-- Rates Section End -->
 
 <!-- Payment Section -->
-<section class="section-container" *ngIf="BookingDetail.payment_status=='unpaid'">
+<section class="section-container" *ngIf="BookingDetail?.payment_status=='unpaid'" id="paymentSection1">
 	<div class="col-md-12 p-0" (click)="handlePaymentSection()">
 		<h4 class="section-dropdown-header mb-0">
 			Payment
@@ -172,7 +172,7 @@
 		<!-- RADIO BUTTONS -->
 		<div class="col-md-12 cardSection">
 			<div class="radio">
-				<input id="card" name="paymentMethod" type="radio" (click)="changeDetection('card')">
+				<input id="card" name="paymentMethod" type="radio" checked (click)="changeDetection('card')">
 				<label for="card" class="radio-label">Payment with Card</label>
 			</div>
 			<div class="methodCard" *ngIf="paymentMethod=='card'">
@@ -348,7 +348,7 @@
 		</div>
 		<div class="col-md-12 my-3 cardSection">
 			<div class="radio">
-				<input id="cash" name="paymentMethod" type="radio" checked (click)="changeDetection('cash')">
+				<input id="cash" name="paymentMethod" type="radio"  (click)="changeDetection('cash')">
 				<label for="cash" class="radio-label">Payment with Cash</label>
 			</div>
 		</div>

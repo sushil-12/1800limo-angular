@@ -18,7 +18,7 @@ button {
 }
 
 .paid {
-	background-color: var(--green-color);
+	background-color: #808080;
 }
 
 .assigned {
@@ -59,6 +59,10 @@ button {
 
 .comped {
 	background-color: #7c7c84;
+}
+
+.refund{
+	background-color:#A020F0;
 }
 
 .btnclass {
@@ -172,4 +176,13 @@ input,
 input::placeholder,
 input::-webkit-input-placeholder {
 	padding: 0 !important;
+}
+
+
+.booking-id-font{
+	font-size: large;
+}
+
+.preview-output-feild{
+	font-size: x-large;
 }
