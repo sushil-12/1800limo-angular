@@ -217,7 +217,7 @@ export class NewBookingComponent implements OnInit {
 					cvv: ['']
 				})
 			}),
-			passenger_name: ['', Validators.pattern("^[A-Za-z0-9]*( [A-Za-z0-9]+)*$")],
+			passenger_name: ['', this.customValidator.whitespace()],
 			passenger_email: ['', Validators.pattern("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")],
 			passenger_cell: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
 			passenger_cell_isd: ['+1'],
@@ -227,7 +227,7 @@ export class NewBookingComponent implements OnInit {
 			booking_instructions: [''],
 			affiliate_type: ['affiliate'],
 			affiliate_id: [''],
-			lose_affiliate_name: ['', Validators.pattern("^[A-Za-z0-9]*( [A-Za-z0-9]+)*$")],
+			lose_affiliate_name: ['', this.customValidator.whitespace()],
 			lose_affiliate_phone: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
 			lose_affiliate_phone_isd: ['+1'],
 			lose_affiliate_phone_country: ['us'],
@@ -238,10 +238,10 @@ export class NewBookingComponent implements OnInit {
 			vehicle_model: [''],
 			vehicle_year: [''],
 			vehicle_color: [''],
-			vehicle_license_plate: ['', Validators.pattern("^[A-Za-z0-9]*( [A-Za-z0-9]+)*$")],
+			vehicle_license_plate: ['', this.customValidator.whitespace()],
 			vehicle_seats: ['4', Validators.pattern("^[0-9]*$")],
 			driver_id: [''],
-			driver_name: ['', Validators.pattern("^[A-Za-z0-9]*( [A-Za-z0-9]+)*$")],
+			driver_name: ['', this.customValidator.whitespace()],
 			driver_gender: [''],
 			driver_cell: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
 			driver_cell_isd: ['+1'],
@@ -1276,14 +1276,14 @@ export class NewBookingComponent implements OnInit {
 				}
 
 				(<FormGroup>loose_customer.get('card_details')).get('card_number').setValidators([Validators.required, Validators.pattern("^[0-9]*$"), , Validators.minLength(16), Validators.maxLength(16),]);
-				(<FormGroup>loose_customer.get('card_details')).get('name').setValidators(Validators.pattern("^[A-Za-z0-9]*( [A-Za-z0-9]+)*$"));
+				(<FormGroup>loose_customer.get('card_details')).get('name').setValidators(this.customValidator.whitespace());
 				(<FormGroup>loose_customer.get('card_details')).get('cvv').setValidators([Validators.required, Validators.pattern("^[0-9]*$"), , Validators.minLength(3), Validators.maxLength(3),]);
 				loose_customer.get('email').setValidators([Validators.required, Validators.pattern("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")])
 				loose_customer.get('phone').setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)])
-				loose_customer.get('first_name').setValidators(Validators.pattern("^[A-Za-z0-9]*( [A-Za-z0-9]+)*$"))
-				loose_customer.get('middle_name').setValidators(Validators.pattern("^[A-Za-z0-9]*( [A-Za-z0-9]+)*$"))
-				loose_customer.get('last_name').setValidators(Validators.pattern("^[A-Za-z0-9]*( [A-Za-z0-9]+)*$"))
-				loose_customer.get('address').setValidators(Validators.pattern("^[A-Za-z0-9]*( [A-Za-z0-9]+)*$"))
+				loose_customer.get('first_name').setValidators(this.customValidator.whitespace())
+				loose_customer.get('middle_name').setValidators(this.customValidator.whitespace())
+				loose_customer.get('last_name').setValidators(this.customValidator.whitespace())
+				loose_customer.get('address').setValidators(this.customValidator.whitespace())
 
 			}
 			else {
