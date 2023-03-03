@@ -130,13 +130,13 @@
 								</mat-form-field>
 								<div class="error-box">
 									<div class="error-message"
-										*ngIf="LooseCustomer.first_name.invalid && (LooseCustomer.first_name.touched || LooseCustomer.first_name.dirty)">
+										*ngIf="(submitBookingForm && LooseCustomer.first_name.invalid) || (LooseCustomer.first_name.touched && LooseCustomer.first_name.dirty)">
 										<p class="text-danger text-lg m-0"
 											*ngIf="LooseCustomer.first_name.errors?.required">
 											This field is required
 										</p>
 										<p class="text-danger text-lg m-0"
-											*ngIf="LooseCustomer.first_name.errors?.pattern">
+											*ngIf="LooseCustomer.first_name.errors?.whitespace">
 											Extra White Space are not Allowed
 										</p>
 									</div>
@@ -174,7 +174,7 @@
 								</mat-form-field>
 								<div class="error-box">
 									<div class="error-message"
-										*ngIf="LooseCustomer.last_name.invalid && (LooseCustomer.last_name.touched || LooseCustomer.last_name.dirty)">
+										*ngIf="(submitBookingForm && LooseCustomer.last_name.invalid) || (LooseCustomer.last_name.touched && LooseCustomer.last_name.dirty)">
 										<p class="text-danger text-lg m-0"
 											*ngIf="LooseCustomer.last_name.errors?.required">
 											This field is required
@@ -200,7 +200,7 @@
 								</mat-form-field>
 								<div class="error-box">
 									<div class="error-message"
-										*ngIf="LooseCustomer.email.invalid && (LooseCustomer.email.touched || LooseCustomer.email.dirty)">
+										*ngIf="( submitBookingForm && LooseCustomer.email.invalid) || (LooseCustomer.email.touched && LooseCustomer.email.dirty)">
 										<p class="text-danger text-lg m-0" *ngIf="LooseCustomer.email.errors?.required">
 											This field is required
 										</p>
@@ -225,7 +225,7 @@
 								</mat-form-field>
 								<div class="error-box">
 									<div class="error-message"
-										*ngIf="is_loose_customer_unique || (LooseCustomer.phone.invalid && (LooseCustomer.phone.touched || LooseCustomer.phone.dirty))">
+										*ngIf="( submitBookingForm && (is_loose_customer_unique || LooseCustomer.phone.invalid)) || (LooseCustomer.phone.touched && LooseCustomer.phone.dirty)">
 										<p class="text-danger text-lg m-0" *ngIf="LooseCustomer.phone.errors?.required">
 											This field is required
 										</p>
@@ -284,7 +284,7 @@
 								</mat-form-field>
 								<div class="error-box">
 									<div class="error-message"
-										*ngIf="LooseCustomer.card_details.controls.name.invalid && (LooseCustomer.card_details.controls.name.touched || LooseCustomer.card_details.controls.name.dirty)">
+										*ngIf="( submitBookingForm && LooseCustomer.card_details.controls.name.invalid) || (LooseCustomer.card_details.controls.name.touched && LooseCustomer.card_details.controls.name.dirty)">
 										<p class="text-danger text-lg m-0"
 											*ngIf="LooseCustomer.card_details.controls.name.errors?.required">
 											This field is required
@@ -307,7 +307,7 @@
 								</mat-form-field>
 								<div class="error-box">
 									<div class="error-message"
-										*ngIf="LooseCustomer.card_details.controls.card_number.invalid && (LooseCustomer.card_details.controls.card_number.touched || LooseCustomer.card_details.controls.card_number.dirty)">
+										*ngIf="( submitBookingForm && LooseCustomer.card_details.controls.card_number.invalid) || (LooseCustomer.card_details.controls.card_number.touched && LooseCustomer.card_details.controls.card_number.dirty)">
 										<p class="text-danger text-lg m-0"
 											*ngIf="LooseCustomer.card_details.controls.card_number.errors?.required">
 											This field is required
@@ -353,7 +353,7 @@
 								</mat-form-field>
 								<div class="error-box">
 									<div class="error-message"
-										*ngIf="LooseCustomer.card_details.controls.exp_month.invalid && (LooseCustomer.card_details.controls.exp_month.touched || LooseCustomer.card_details.controls.exp_month.dirty)">
+										*ngIf="( submitBookingForm && LooseCustomer.card_details.controls.exp_month.invalid) || (LooseCustomer.card_details.controls.exp_month.touched && LooseCustomer.card_details.controls.exp_month.dirty)">
 										<p class="text-danger text-lg m-0"
 											*ngIf="LooseCustomer.card_details.controls.exp_month.errors?.required">
 											This field is required
@@ -376,7 +376,7 @@
 								</mat-form-field>
 								<div class="error-box">
 									<div class="error-message"
-										*ngIf="LooseCustomer.card_details.controls.exp_year.invalid && (LooseCustomer.card_details.controls.exp_year.touched || LooseCustomer.card_details.controls.exp_year.dirty)">
+										*ngIf="( submitBookingForm && LooseCustomer.card_details.controls.exp_year.invalid) || (LooseCustomer.card_details.controls.exp_year.touched && LooseCustomer.card_details.controls.exp_year.dirty)">
 										<p class="text-danger text-lg m-0"
 											*ngIf="LooseCustomer.card_details.controls.exp_year.errors?.required">
 											This field is required
@@ -396,7 +396,7 @@
 								</mat-form-field>
 								<div class="error-box">
 									<div class="error-message"
-										*ngIf="LooseCustomer.card_details.controls.cvv.invalid && (LooseCustomer.card_details.controls.cvv.touched || LooseCustomer.card_details.controls.cvv.dirty)">
+										*ngIf="( submitBookingForm && LooseCustomer.card_details.controls.cvv.invalid) || (LooseCustomer.card_details.controls.cvv.touched && LooseCustomer.card_details.controls.cvv.dirty)">
 										<p class="text-danger text-lg m-0"
 											*ngIf="LooseCustomer.card_details.controls.cvv.errors?.required">
 											This field is required
@@ -2186,7 +2186,7 @@
 				<!-- <button type="button" class="custom-filled-reset-button m-3" (click)="resetFields()">
 					Reset
 				</button> -->
-				<button type="button" class="custom-filled-button m-3" (click)="submitForm(false)">
+				<button type="submit" class="custom-filled-button m-3" (click)="submitForm(false)">
 					Save
 				</button>
 			</div>
@@ -3195,7 +3195,7 @@
 				<button type="button" class="custom-filled-back-button" data-dismiss="modal">
 					Close
 				</button>
-				<button type="button" class="custom-filled-button" data-dismiss="modal" (click)="submitForm(true)">
+				<button type="submit" class="custom-filled-button" data-dismiss="modal" (click)="submitForm(true)">
 					Save
 				</button>
 			</div>

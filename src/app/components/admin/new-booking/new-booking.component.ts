@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, ViewChild, isDevMode } from '@angular/core';
+import { Component, EventEmitter, OnInit, ViewChild, isDevMode, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl, FormArray, ValidationErrors, ValidatorFn, AbstractControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { pluck } from 'rxjs/operators';
@@ -90,6 +90,7 @@ export class NewBookingComponent implements OnInit {
 	is_loose_customer_unique: boolean = false
 	is_booking_edit_case: boolean = false
 	reset_button: boolean = false
+	submitBookingForm: boolean;
 
 
 	constructor(
@@ -101,7 +102,8 @@ export class NewBookingComponent implements OnInit {
 		private $errors: ErrorDialogService,
 		private $router: Router,
 		private $routeurl: ActivatedRoute,
-		private customValidator: CustomvalidationService
+		private customValidator: CustomvalidationService,
+		private el: ElementRef
 	) { }
 
 	openAutoCompletePanel() {
@@ -1079,12 +1081,17 @@ export class NewBookingComponent implements OnInit {
 		return list.includes(object)
 	}
 
-
+	getTopOffset(controlEl: HTMLElement): number {
+		// console.log(controlEl.getBoundingClientRect());
+		const labelOffset = 90;
+		return controlEl.getBoundingClientRect().top + window.scrollY - labelOffset;
+	}
 
 
 	submitForm(preview: boolean) {
-		console.log('\n\n Submitting Form');
+		this.submitBookingForm = true
 		console.log(this.BookingForm);
+		console.log(this.BookingForm.status);
 
 		if (this.BookingForm.invalid) {
 			return;
@@ -1276,13 +1283,13 @@ export class NewBookingComponent implements OnInit {
 				}
 
 				(<FormGroup>loose_customer.get('card_details')).get('card_number').setValidators([Validators.required, Validators.pattern("^[0-9]*$"), , Validators.minLength(16), Validators.maxLength(16),]);
-				(<FormGroup>loose_customer.get('card_details')).get('name').setValidators(this.customValidator.whitespace());
+				(<FormGroup>loose_customer.get('card_details')).get('name').setValidators([Validators.required, this.customValidator.whitespace()]);
 				(<FormGroup>loose_customer.get('card_details')).get('cvv').setValidators([Validators.required, Validators.pattern("^[0-9]*$"), , Validators.minLength(3), Validators.maxLength(3),]);
 				loose_customer.get('email').setValidators([Validators.required, Validators.pattern("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")])
 				loose_customer.get('phone').setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)])
-				loose_customer.get('first_name').setValidators(this.customValidator.whitespace())
+				loose_customer.get('first_name').setValidators([Validators.required, this.customValidator.whitespace()])
 				loose_customer.get('middle_name').setValidators(this.customValidator.whitespace())
-				loose_customer.get('last_name').setValidators(this.customValidator.whitespace())
+				loose_customer.get('last_name').setValidators([Validators.required, this.customValidator.whitespace()])
 				loose_customer.get('address').setValidators(this.customValidator.whitespace())
 
 			}
