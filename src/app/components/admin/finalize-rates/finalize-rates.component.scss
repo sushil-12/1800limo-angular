@@ -14,26 +14,26 @@
 	width: 100%;
 }
 
-@media only screen and (min-width: 1024px) {
-	.rates-row {
-	}
-}
+// @media only screen and (min-width: 1024px) {
+// 	.rates-row {}
+// }
 
 .errors {
 	height: 2rem;
 	padding: 1rem;
 }
+
 .section-dropdown {
 	overflow: hidden;
 	cursor: pointer;
-	height: 3.5rem;
+	height: fit-content;
 	transition: height 0.17s ease-in-out;
+
 	.section-dropdown-header {
 		color: var(--orange);
 	}
-	&.active {
-		height: fit-content;
-	}
+
+
 }
 
 
@@ -41,4 +41,231 @@
 	.section-dropdown {
 		width: 47.5%;
 	}
+}
+
+#RateFormItem-0 {
+	overflow: hidden;
+	cursor: pointer;
+	height: 3rem;
+	transition: height 0.17s ease-in-out;
+
+	&.active {
+		height: fit-content;
+	}
+
+	.subHead-bi {
+		position: absolute;
+		top: -5px;
+		right: 0;
+		font-size: 24px;
+	}
+}
+
+#RateFormItem-1 {
+	overflow: hidden;
+	cursor: pointer;
+	height: 3rem;
+	transition: height 0.17s ease-in-out;
+
+	&.active {
+		height: fit-content;
+	}
+
+	.subHead-bi {
+		position: absolute;
+		top: -5px;
+		right: 0;
+		font-size: 24px;
+	}
+}
+
+#RateFormItem-2 {
+	overflow: hidden;
+	cursor: pointer;
+	height: 3rem;
+	transition: height 0.17s ease-in-out;
+
+	&.active {
+		height: fit-content;
+	}
+
+	.subHead-bi {
+		position: absolute;
+		top: -5px;
+		right: 0;
+		font-size: 24px;
+	}
+}
+
+#RateFormItem-3 {
+	overflow: hidden;
+	cursor: pointer;
+	height: 3rem;
+	transition: height 0.17s ease-in-out;
+
+	&.active {
+		height: fit-content;
+	}
+
+	.subHead-bi {
+		position: absolute;
+		top: -5px;
+		right: 0;
+		font-size: 24px;
+	}
+}
+
+#RateFormItem-4 {
+	overflow: hidden;
+	cursor: pointer;
+	height: 3rem;
+	transition: height 0.17s ease-in-out;
+
+	&.active {
+		height: fit-content;
+	}
+
+	.subHead-bi {
+		position: absolute;
+		top: -5px;
+		right: 0;
+		font-size: 24px;
+	}
+}
+
+#RateFormItem-5 {
+	overflow: hidden;
+	cursor: pointer;
+	height: 3rem;
+	transition: height 0.17s ease-in-out;
+
+	&.active {
+		height: fit-content;
+	}
+
+	.subHead-bi {
+		position: absolute;
+		top: -5px;
+		right: 0;
+		font-size: 24px;
+	}
+}
+
+#ReturnRateFormItem-0 {
+	overflow: hidden;
+	cursor: pointer;
+	height: 3rem;
+	transition: height 0.17s ease-in-out;
+
+	&.active {
+		height: fit-content;
+	}
+
+	.subHead-bi {
+		position: absolute;
+		top: -5px;
+		right: 0;
+		font-size: 24px;
+	}
+}
+
+#ReturnRateFormItem-1 {
+	overflow: hidden;
+	cursor: pointer;
+	height: 3rem;
+	transition: height 0.17s ease-in-out;
+
+	&.active {
+		height: fit-content;
+	}
+
+	.subHead-bi {
+		position: absolute;
+		top: -5px;
+		right: 0;
+		font-size: 24px;
+	}
+}
+
+#ReturnRateFormItem-2 {
+	overflow: hidden;
+	cursor: pointer;
+	height: 3rem;
+	transition: height 0.17s ease-in-out;
+
+	&.active {
+		height: fit-content;
+	}
+
+	.subHead-bi {
+		position: absolute;
+		top: -5px;
+		right: 0;
+		font-size: 24px;
+	}
+}
+
+#ReturnRateFormItem-3 {
+	overflow: hidden;
+	cursor: pointer;
+	height: 3rem;
+	transition: height 0.17s ease-in-out;
+
+	&.active {
+		height: fit-content;
+	}
+
+	.subHead-bi {
+		position: absolute;
+		top: -5px;
+		right: 0;
+		font-size: 24px;
+	}
+}
+
+#ReturnRateFormItem-4 {
+	overflow: hidden;
+	cursor: pointer;
+	height: 3rem;
+	transition: height 0.17s ease-in-out;
+
+	&.active {
+		height: fit-content;
+	}
+
+	.subHead-bi {
+		position: absolute;
+		top: -5px;
+		right: 0;
+		font-size: 24px;
+	}
+}
+
+#ReturnRateFormItem-5 {
+	overflow: hidden;
+	cursor: pointer;
+	height: 3rem;
+	transition: height 0.17s ease-in-out;
+
+	&.active {
+		height: fit-content;
+	}
+
+	.subHead-bi {
+		position: absolute;
+		top: -5px;
+		right: 0;
+		font-size: 24px;
+	}
+}
+
+.rateSubSection {
+	border: 2px solid #e2e2e2;
+	border-radius: 15px;
+	padding: 10px;
+	box-shadow: 3px 3px 20px -6px rgb(40 40 40 / 50%);
+}
+
+.finalizeRates {
+	padding-bottom: 100px !important;
 }

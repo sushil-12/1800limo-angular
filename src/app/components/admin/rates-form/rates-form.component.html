@@ -5,17 +5,17 @@
 	[ngStyle]="affiliate_type == 'affiliate' ? {'height': '0', 'padding': '0'} : ''">
 	<div class="row cursor-pointer" (click)="toggleDropdown('section')">
 		<div class="col-12 col-md-12">
-			<h4 class="section-dropdown-header m-0">
+			<h4 class="m-0">
 				Rates/Taxes
 			</h4>
 		</div>
 	</div>
 
-	<div [attr.id]="'RateFormItem-' + item_index" class="my-4 px-md-3" [formGroupName]="item.key"
+	<div [attr.id]="'RateFormItem-' + item_index" class="my-4 px-md-3 rateSubSection" [formGroupName]="item.key"
 		[ngClass]="{'active': rate_params.chevrons[item.key]}"
 		*ngFor="let item of RateForm | keyvalue: returnZero; index as item_index">
 		<div class="col-12 col-md-12" (click)="handleSubHeading(item.key)">
-			<h5>
+			<h5 class="section-dropdown-header">
 				{{ textFormatter(item.key) | titlecase }}
 			</h5>
 			<p class="subHead-bi"
@@ -173,7 +173,7 @@
 		</div>
 	</div>
 
-	<div [attr.id]="'ReturnRateFormItem-' + item_index" class="my-4 px-md-3" [formGroupName]="item.key"
+	<div [attr.id]="'ReturnRateFormItem-' + item_index" class="my-4 px-md-3 rateSubSection" [formGroupName]="item.key"
 		[ngClass]="{'active': rate_params.chevrons['r_'+item.key]}"
 		*ngFor="let item of ReturnRateForm | keyvalue: returnZero; index as item_index">
 		<div class="col-12 col-md-12" (click)="handleSubHeading('r_'+item.key)">

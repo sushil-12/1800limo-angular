@@ -27,7 +27,6 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 	// Throw Events.
 	@Output("formvalue") formvalue = new EventEmitter<Record<string, any>>();
 	@Output("returnformvalue") returnformvalue = new EventEmitter<Record<string, any>>();
-	@Output('isSectionOpen') isSectionOpen = new EventEmitter<Record<string, any>>();
 
 	RatesForm: FormGroup;
 	ReturnRatesForm: FormGroup;
@@ -41,19 +40,19 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 	rate_params: any = {
 		chevrons: {
 			section: true,
-			item_all_inclusive_rates_0: false,
-			sub_section_1: false,
-			sub_section_2: false,
-			sub_section_3: false,
-			sub_section_4: false,
-			sub_section_5: false,
+			all_inclusive_rates: true,
+			others: false,
+			direct_taxes: false,
+			taxes: false,
+			amenities: false,
+			misc: false,
 			r_section: true,
-			r_sub_section_0: false,
-			r_sub_section_1: false,
-			r_sub_section_2: false,
-			r_sub_section_3: false,
-			r_sub_section_4: false,
-			r_sub_section_5: false,
+			r_all_inclusive_rates: true,
+			r_others: false,
+			r_direct_taxes: false,
+			r_taxes: false,
+			r_amenities: false,
+			r_misc: false,
 		},
 	};
 
@@ -81,9 +80,9 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 	) { }
 
 	ngOnInit(): void {
-		this.$route.queryParams.subscribe((params: any) => { 
-			(params.bookingId) ? this.fetchRates('', params.bookingId) : "" 
-			});
+		this.$route.queryParams.subscribe((params: any) => {
+			(params.bookingId) ? this.fetchRates('', params.bookingId) : ""
+		});
 
 	}
 
@@ -404,10 +403,12 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 	}
 
 	toggleDropdown(section: string) {
-		console.log('open <><><> close tab', section)
 		this.rate_params["chevrons"][section] = !this.rate_params["chevrons"][section];
-		if (section == 'section')
-			this.isSectionOpen.emit(this.rate_params["chevrons"][section])
+	}
+
+	handleSubHeading(items: string) {
+		console.log(items, "check items")
+		this.rate_params["chevrons"][items] = !this.rate_params["chevrons"][items];
 	}
 
 

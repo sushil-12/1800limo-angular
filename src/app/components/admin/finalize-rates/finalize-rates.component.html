@@ -1,28 +1,26 @@
-
 <!-- Rates and Taxes -->
 <ngx-spinner></ngx-spinner>
-<div *ngIf="ratesform" [formGroup]="RatesForm" class="section-container section-dropdown mt-5"
-	[ngClass]="{'active': rate_params.chevrons.section, 'w-100': ratesform && !returnratesform, 'w-50': ratesform && returnratesform}"
+<div *ngIf="ratesform" [formGroup]="RatesForm" class="section-container section-dropdown finalizeRates mt-5"
+	[ngClass]="{'w-100': ratesform && !returnratesform, 'w-50': ratesform && returnratesform}"
 	[ngStyle]="affiliate_type == 'affiliate' ? {'height': '0', 'padding': '0'} : ''">
 	<div class="row cursor-pointer" (click)="toggleDropdown('section')">
-		<div class="col-9 col-md-10">
-			<h4 class="section-dropdown-header m-0">
-				Rates/Taxes
-			</h4>
-		</div>
-		<div class="col-3 col-md-2 text-right">
+		<div class="col-12 col-md-12">
 			<h4 class="m-0">
-				<i class="bi"
-					[ngClass]="{true: 'bi-chevron-up', false: 'bi-chevron-down'}[rate_params.chevrons.section]"></i>
+				Rates/Taxes
 			</h4>
 		</div>
 	</div>
 
-	<div [attr.id]="'RateFormItem-' + item_index" class="my-4 px-md-3" [formGroupName]="item.key" (click)="toggleDropdown('item_' + item.key + '_' + item_index)"
+	<div [attr.id]="'RateFormItem-' + item_index" class="my-4 px-md-3 rateSubSection" [formGroupName]="item.key"
+		[ngClass]="{'active': rate_params.chevrons[item.key]}"
 		*ngFor="let item of RateForm | keyvalue: returnZero; index as item_index">
-		<h5>
-			{{ textFormatter(item.key) | titlecase }}
-		</h5>
+		<div class="col-12 col-md-12" (click)="handleSubHeading(item.key)">
+			<h5 class="section-dropdown-header">
+				{{ textFormatter(item.key) | titlecase }}
+			</h5>
+			<p class="subHead-bi"
+				[ngClass]="rate_params.chevrons[item.key] ? 'bi bi-chevron-up' : 'bi bi-chevron-down'"></p>
+		</div>
 		<div [attr.id]="'RateFormSubItem-' + sub_item_index"
 			class="row rates-row align-items-center justify-content-between mx-auto"
 			*ngFor="let sub_item of item?.value?.controls | keyvalue: returnZero; index as sub_item_index">
@@ -36,8 +34,7 @@
 							titlecase }}
 						</mat-label>
 						<input type="number" matInput placeholder="0" formControlName="baserate"
-							class="font-weight-bolder rate-input-field text-right"
-							(focus)="$event.target.select()" />
+							class="font-weight-bolder rate-input-field text-right" (focus)="$event.target.select()" />
 					</mat-form-field>
 					<div class="errors" *ngIf="sub_item.key === 'Kilometer_Rate' && trigger_error">
 						<div class="error-field">
@@ -50,15 +47,13 @@
 			</div>
 
 			<!-- Distance Value -->
-			<div class="col-auto"
-				*ngIf="sub_item.key === 'Kilometer_Rate' || sub_item.key === 'Milage_Rate'">
+			<div class="col-auto" *ngIf="sub_item.key === 'Kilometer_Rate' || sub_item.key === 'Milage_Rate'">
 				<div>
 					<mat-form-field appearance="outline" class="m-0">
 						<mat-label>
 							Distance
 						</mat-label>
-						<input type="number" matInput placeholder="0" [value]="distance"
-							style="cursor: not-allowed"
+						<input type="number" matInput placeholder="0" [value]="distance" style="cursor: not-allowed"
 							class="font-weight-bolder rate-input-field text-right" readonly />
 					</mat-form-field>
 				</div>
@@ -71,8 +66,7 @@
 						<mat-label>
 							Number of Hours
 						</mat-label>
-						<input type="number" matInput placeholder="0" [value]="hours"
-							style="cursor: not-allowed"
+						<input type="number" matInput placeholder="0" [value]="hours" style="cursor: not-allowed"
 							class="font-weight-bolder rate-input-field text-right" readonly />
 					</mat-form-field>
 				</div>
@@ -86,8 +80,8 @@
 							Admin Share {{ admin_share }} %
 						</mat-label>
 						<input type="number" matInput placeholder="0" [value]="calc_admin_share"
-							style="cursor: not-allowed"
-							class="font-weight-bolder rate-input-field text-right" readonly />
+							style="cursor: not-allowed" class="font-weight-bolder rate-input-field text-right"
+							readonly />
 					</mat-form-field>
 				</div>
 			</div>
@@ -96,8 +90,7 @@
 			<div class="col-2" *ngIf="item.key === 'taxes'">
 				<!-- Matslide Toggle -->
 				<div class="d-block">
-					<mat-slide-toggle
-						[checked]="sub_item?.value?.controls?.type?.value == 'percent'"
+					<mat-slide-toggle [checked]="sub_item?.value?.controls?.type?.value == 'percent'"
 						(change)="changeValue('RatesForm', item.key, sub_item.key, 'type', $event.checked ? 'percent' : 'flat')">
 						<i class="bi mx-1"
 							[ngClass]="sub_item?.value?.controls?.type?.value === 'flat' ? 'bi-currency-dollar' : 'bi-percent'"></i>
@@ -169,29 +162,27 @@
 
 
 
-<div *ngIf="ratesform && returnratesform" [formGroup]="ReturnRatesForm"
-	class="section-container section-dropdown mt-5"
-	[ngClass]="{'active': rate_params.chevrons.r_section, 'w-50': returnratesform}"
+<div *ngIf="ratesform && returnratesform" [formGroup]="ReturnRatesForm" class="section-container section-dropdown mt-5"
+	[ngClass]="{'w-50': returnratesform}"
 	[ngStyle]="affiliate_type == 'affiliate' ? {'height': '0', 'padding': '0'} : ''">
 	<div class="row cursor-pointer" (click)="toggleDropdown('r_section')">
-		<div class="col-9 col-md-10">
+		<div class="col-12 col-md-12">
 			<h4 class="section-dropdown-header m-0">
-				Return Taxes/Rates
-			</h4>
-		</div>
-		<div class="col-3 col-md-2 text-right">
-			<h4 class="m-0">
-				<i class="bi"
-					[ngClass]="{true: 'bi-chevron-up', false: 'bi-chevron-down'}[rate_params.chevrons.r_section]"></i>
+				Return Rates/Taxes
 			</h4>
 		</div>
 	</div>
 
-	<div [attr.id]="'RateFormItem-' + item_index" class="my-4 px-md-3" [formGroupName]="item.key"
+	<div [attr.id]="'ReturnRateFormItem-' + item_index" class="my-4 px-md-3 rateSubSection" [formGroupName]="item.key"
+		[ngClass]="{'active': rate_params.chevrons['r_'+item.key]}"
 		*ngFor="let item of ReturnRateForm | keyvalue: returnZero; index as item_index">
-		<h5>
-			{{ textFormatter(item.key) | titlecase }}
-		</h5>
+		<div class="col-12 col-md-12" (click)="handleSubHeading('r_'+item.key)">
+			<h5>
+				{{ textFormatter(item.key) | titlecase }}
+			</h5>
+			<p class="subHead-bi"
+				[ngClass]="rate_params.chevrons['r_'+item.key] ? 'bi bi-chevron-up' : 'bi bi-chevron-down'"></p>
+		</div>
 		<div [attr.id]="'RateFormSubItem-' + sub_item_index"
 			class="row rates-row align-items-center justify-content-between mx-auto"
 			*ngFor="let sub_item of item?.value?.controls | keyvalue: returnZero; index as sub_item_index">
@@ -205,8 +196,8 @@
 							titlecase }}
 						</mat-label>
 						<input type="number" matInput placeholder="0"
-							class="font-weight-bolder rate-input-field text-right"
-							(focus)="$event.target.select()" formControlName="baserate" />
+							class="font-weight-bolder rate-input-field text-right" (focus)="$event.target.select()"
+							formControlName="baserate" />
 					</mat-form-field>
 					<div class="errors" *ngIf="sub_item.key === 'Kilometer_Rate' && trigger_error">
 						<div class="error-field">
@@ -226,22 +217,20 @@
 							Admin Share {{ admin_share }} %
 						</mat-label>
 						<input type="number" matInput placeholder="0" [value]="r_calc_admin_share"
-							style="cursor: not-allowed"
-							class="font-weight-bolder rate-input-field text-right" readonly />
+							style="cursor: not-allowed" class="font-weight-bolder rate-input-field text-right"
+							readonly />
 					</mat-form-field>
 				</div>
 			</div>
 
 			<!-- Distance Value -->
-			<div class="col-auto"
-				*ngIf="sub_item.key === 'Kilometer_Rate' || sub_item.key === 'Milage_Rate'">
+			<div class="col-auto" *ngIf="sub_item.key === 'Kilometer_Rate' || sub_item.key === 'Milage_Rate'">
 				<div>
 					<mat-form-field appearance="outline" class="m-0">
 						<mat-label>
 							Distance
 						</mat-label>
-						<input type="number" matInput placeholder="0" [value]="distance"
-							style="cursor: not-allowed"
+						<input type="number" matInput placeholder="0" [value]="distance" style="cursor: not-allowed"
 							class="font-weight-bolder rate-input-field text-right" readonly />
 					</mat-form-field>
 				</div>
@@ -249,8 +238,7 @@
 			<div class="col-auto" *ngIf="item.key === 'taxes'" [formGroupName]="sub_item.key">
 				<!-- Matslide Toggle -->
 				<div class="d-block">
-					<mat-slide-toggle
-						[checked]="sub_item?.value?.controls?.type?.value == 'percent'"
+					<mat-slide-toggle [checked]="sub_item?.value?.controls?.type?.value == 'percent'"
 						(change)="changeValue('ReturnRatesForm', item.key, sub_item.key, 'type', $event.checked ? 'percent' : 'flat')">
 						<i class="bi mx-1"
 							[ngClass]="sub_item?.value?.controls?.type?.value === 'flat' ? 'bi-currency-dollar' : 'bi-percent'"></i>
