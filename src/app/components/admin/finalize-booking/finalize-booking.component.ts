@@ -18,7 +18,7 @@ export class FinalizeBookingComponent implements OnInit {
 	BookingDetail: any;
 	RatesList: any;
 	CardsInformation: any=[];
-	paymentSection: boolean = false;
+	paymentSection: boolean = true;
 	chevron: boolean = true
 
 
@@ -36,7 +36,7 @@ export class FinalizeBookingComponent implements OnInit {
 	}
 
 	cardForm: FormGroup
-	paymentMethod: string = 'cash';
+	paymentMethod: string = 'card';
 	isCardFormOpen: boolean = false
 	visibility: boolean = true
 	selectedCard:any;
@@ -64,7 +64,7 @@ export class FinalizeBookingComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
-		this.$spinner.show()
+		this.$spinner.show();
 		this.buildingCardForm();
 		this.$route.queryParams.subscribe((params: any) => {
 			isDevMode && console.log("Params Found: ", params);
@@ -94,7 +94,11 @@ export class FinalizeBookingComponent implements OnInit {
 		}
 	}
 
-
+	scroll(id) {
+		let el = document.getElementById(id);
+		console.log(`scrolling to ${id}` , el);
+		el.scrollIntoView();
+	  }
 	handleCardForm() {
 		console.log(this.isCardFormOpen)
 		this.isCardFormOpen = !this.isCardFormOpen
@@ -136,7 +140,6 @@ export class FinalizeBookingComponent implements OnInit {
 			.getFinalizeDetails(booking_id)
 			.pipe()
 			.subscribe((response: any) => {
-				this.$spinner.hide();
 				console.log(response.data, "check response");
 				this.BookingDetail = response.data
 				this.transferType = this.BookingDetail.transfer_type
@@ -149,6 +152,10 @@ export class FinalizeBookingComponent implements OnInit {
 				this.finalize_params['booking_id'] = this.BookingDetail.reservation_id
 				this.affiliate_type = response.data.affiliate_type
 				this.visibility = response.data.payment_status=='paid' ? false : true 
+				this.$spinner.hide();
+				setTimeout(()=>{
+					this.scroll('submitForm')
+				},600)
 			});
 			// api for card detailss
 			// getFinalizeDetails 
