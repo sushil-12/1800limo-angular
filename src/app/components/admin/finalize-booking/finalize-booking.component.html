@@ -146,11 +146,10 @@
 <app-finalize-rates class="d-flex flex-wrap finalize-rates" [initRates]="init_rates"
 	[affiliate_type]="'loose_affiliate'" (formvalue)="RateFormValue($event)" [distance]="finalize_params.distance"
 	[reservation_id]="finalize_params.booking_id" [reset]="false" [hours]="finalize_params.number_of_hours"
-	[vehicles]="finalize_params.number_of_vehicles" (returnformvalue)="ReturnRateFormValue($event)"
-	(isSectionOpen)="showSaveButton($event)">
+	[vehicles]="finalize_params.number_of_vehicles" (returnformvalue)="ReturnRateFormValue($event)">
 </app-finalize-rates>
 <div class="row mb-3">
-	<div class="col-md-12 text-right" *ngIf="visibility">
+	<div class="col-md-12 text-right">
 		<button type="button" class="custom-filled-button ratesButton m-3" (click)="submitForm()">
 			Finalized
 		</button>
