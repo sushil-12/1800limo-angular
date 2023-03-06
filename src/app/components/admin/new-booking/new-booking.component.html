@@ -44,7 +44,8 @@
 							<mat-label class="">
 								Transfer Type
 							</mat-label>
-							<mat-select formControlName="transfer_type" class="font-weight-bolder">
+							<mat-select formControlName="transfer_type" class="font-weight-bolder"
+								(selectionChange)="changeTransferType($event.value)">
 								<mat-option [value]="tf_type" class="font-weight-bolder"
 									*ngFor="let tf_type of booking_params.transfer_types">
 									{{ textFormatter(tf_type) | titlecase }}

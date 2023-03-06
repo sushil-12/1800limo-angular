@@ -164,7 +164,8 @@
 									<td class="text-center font-weight-bolder cursor-pointer text-underline"
 										data-toggle="modal" data-target="#previewBookingOnID"
 										(click)="showBookingPreviewModal(booking.booking_id)">
-										<p class="booking-id-font font-weight-bolder cursor-pointer text-underline">{{ booking.booking_id }}</p>
+										<p class="booking-id-font font-weight-bolder cursor-pointer text-underline">{{
+											booking.booking_id }}</p>
 									</td>
 									<td>
 										<div data-toggle="modal" (click)="changeBookingStatus(booking.booking_id)"
@@ -279,6 +280,9 @@
 	aria-hidden="true">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content user_inforamtion">
+			<button type="button" class="close closeButton" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
 			<div class="modal-header pb-0">
 				<h3 class="mb-0" id="exampleModalLabel">Change Booking Status</h3>
 			</div>
@@ -289,18 +293,8 @@
 							<mat-form-field appearance="outline">
 								<mat-label>Change Status</mat-label>
 								<mat-select formControlName="booking_status">
-									<mat-option value="pending">Pending</mat-option>
-									<mat-option value="paid">Paid</mat-option>
-									<mat-option value="assigned">Assigned</mat-option>
-									<mat-option value="rejected">Rejected</mat-option>
-									<mat-option value="cancelled">Cancelled</mat-option>
-									<mat-option value="en_route_pu">En Route Pu</mat-option>
-									<mat-option value="on_location">On Location</mat-option>
-									<mat-option value="en_route_do">En Route Do</mat-option>
-									<mat-option value="ended">Ended</mat-option>
-									<mat-option value="finalized">Finalized</mat-option>
-									<mat-option value="non_payable">Non Payable</mat-option>
-									<mat-option value="comped">Comped</mat-option>
+									<mat-option *ngFor="let item of status_list"
+										[value]="item.value">{{item.status}}</mat-option>
 								</mat-select>
 							</mat-form-field>
 						</div>
@@ -591,7 +585,7 @@
 								<div class="col-md-8 value">
 									<span class="font-weight-bolder preview-output-feild"
 										*ngIf="bookingPreview?.MiddleName == null;else affiliateMiddleName">
-										{{ textFormatter(bookingPreview?.affiliate_name) }} 
+										{{ textFormatter(bookingPreview?.affiliate_name) }}
 									</span>
 								</div>
 							</div>
@@ -623,7 +617,8 @@
 								</div>
 								<div class="col-md-8 value">
 									<span class="font-weight-bolder preview-output-feild">
-										{{ bookingPreview?.affiliate_phone_isd }}{{ textFormatter(bookingPreview?.affiliate_phone) }}
+										{{ bookingPreview?.affiliate_phone_isd }}{{
+										textFormatter(bookingPreview?.affiliate_phone) }}
 									</span>
 								</div>
 							</div>
@@ -683,7 +678,8 @@
 								</div>
 								<div class="col-md-8 value">
 									<span class="font-weight-bolder preview-output-feild">
-										{{ bookingPreview?.lose_affiliate_phone_isd }}{{ textFormatter(bookingPreview?.lose_affiliate_phone) }}
+										{{ bookingPreview?.lose_affiliate_phone_isd }}{{
+										textFormatter(bookingPreview?.lose_affiliate_phone) }}
 									</span>
 								</div>
 							</div>
