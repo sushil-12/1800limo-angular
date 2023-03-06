@@ -252,7 +252,7 @@ export class NewBookingComponent implements OnInit {
 			driver_phone_type: [''],
 			driver_image_id: [''],
 			vehicle_image_id: [''],
-			meet_greet_choices: [''],
+			meet_greet_choices: [2],
 			number_of_vehicles: [''],
 			pickup_date: [''],
 			pickup_time: ['12:00 am'],
@@ -285,7 +285,7 @@ export class NewBookingComponent implements OnInit {
 			dropoff_airline: [''],
 			dropoff_airline_name: [''],
 			dropoff_flight: [''],
-			return_meet_greet_choices: [''],
+			return_meet_greet_choices: [2],
 			return_pickup_date: [''],
 			return_pickup_time: ['12:00 pm'],
 			return_extra_stops: this.$form.array([]),
@@ -340,6 +340,32 @@ export class NewBookingComponent implements OnInit {
 		this.SetFormValue('return_pickup_date', future_full_date.slice(0, future_full_date.indexOf('T')))
 		this.SetFormValue('number_of_vehicles', 1)
 		this.SetFormValue('booking_instructions', 'Text client day before each booking to confirm driver name and cell #');
+
+
+		if (this.BookingForm.value.transfer_type.includes('city_')) {
+			this.SetFormValue('meet_greet_choices', 1)
+		} else {
+			this.SetFormValue('meet_greet_choices', 2)
+		}
+
+		if (this.BookingForm.value.transfer_type.includes('_city')) {
+			this.SetFormValue('return_meet_greet_choices', 1)
+		} else {
+			this.SetFormValue('return_meet_greet_choices', 2)
+		}
+	}
+	changeTransferType(type: string) {
+		if (type.includes('city_')) {
+			this.SetFormValue('meet_greet_choices', 1)
+		} else {
+			this.SetFormValue('meet_greet_choices', 2)
+		}
+
+		if (type.includes('_city')) {
+			this.SetFormValue('return_meet_greet_choices', 1)
+		} else {
+			this.SetFormValue('return_meet_greet_choices', 2)
+		}
 	}
 
 	prefillViaBookingID(booking_id: number) {

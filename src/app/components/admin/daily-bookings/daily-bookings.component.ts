@@ -53,6 +53,7 @@ export class DailyBookingsComponent implements OnInit {
 	sendInformation: any;
 	reciptentName: any;
 	notification_msg: any;
+	status_list: any = [];
 
 	constructor(
 		private adminService: AdminService,
@@ -79,6 +80,17 @@ export class DailyBookingsComponent implements OnInit {
 		this.searchText = this.adminService.checkCookie('search') ?
 			this.adminService.getCookie('search')
 			: "";
+
+		this.adminService.getStatusList()
+			.pipe(
+				catchError((err) => {
+					this.spinner.hide(); //hide spinner	
+					return throwError(err);
+				})
+			)
+			.subscribe(({ data }: any) => {
+				this.status_list = data;
+			})
 
 		// this.filtertype = this.adminService.checkCookie('filtertype') ?
 		// 	this.adminService.getCookie('filtertype') :
