@@ -66,8 +66,9 @@
 						<mat-label>
 							Number of Hours
 						</mat-label>
-						<input type="number" matInput placeholder="0" [value]="hours" style="cursor: not-allowed"
-							class="font-weight-bolder rate-input-field text-right" readonly />
+						<input type="number" matInput placeholder="0" [value]="hours"
+							class="font-weight-bolder rate-input-field text-right"
+							(change)="handleHourChange($event)" />
 					</mat-form-field>
 				</div>
 			</div>

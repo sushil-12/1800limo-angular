@@ -23,7 +23,8 @@ export class RatesFormComponent implements OnInit, OnChanges {
 	// Throw Events.
 	@Output("formvalue") formvalue = new EventEmitter<Record<string, any>>();
 	@Output("returnformvalue") returnformvalue = new EventEmitter<Record<string, any>>();
-
+	@Output("returnNumberOfHr") returnNumberOfHr = new EventEmitter<Record<string, any>>();
+	
 	RatesForm: FormGroup;
 	ReturnRatesForm: FormGroup;
 
@@ -279,6 +280,14 @@ export class RatesFormComponent implements OnInit, OnChanges {
 
 	getRatesData() {
 		return this.ratesdata.asObservable();
+	}
+	handleHourChange(event:any){
+		console.log('------->>>>>>>',event.target.value)
+		if(event.target.value == ''){
+			let n_hr:any = 1
+			this.returnNumberOfHr.emit(n_hr)
+		}
+		this.returnNumberOfHr.emit(event.target.value)
 	}
 
 	buildRatesForm(form: string, data: Record<string, any>): FormGroup {

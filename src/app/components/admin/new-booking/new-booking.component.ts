@@ -1537,6 +1537,10 @@ export class NewBookingComponent implements OnInit {
 		// console.log('Return Rates Form: ', data)
 		this.ReturnRatesForm = data
 	}
+	HandleReturnNumberOfHr(data : any){
+		console.log('____<><><><><><><><>' , data)
+		this.BookingForm.get('number_of_hours').setValue(data)
+	}
 
 	checkUniqueness() {
 		this.$api.checkUniquePhoneNumberForLooseCustomer({
