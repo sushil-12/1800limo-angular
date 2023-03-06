@@ -2171,7 +2171,7 @@
 			[distance]="distance_for_rates" [reservation_id]="booking_id" [reset]="reset_button" [reset]="reset_button"
 			[initReturnRates]="init_return_rates" (formvalue)="RateFormValue($event)"
 			[hours]="Form.number_of_hours?.value" [vehicles]="Form.number_of_vehicles?.value"
-			(returnformvalue)="ReturnRateFormValue($event)">
+			(returnformvalue)="ReturnRateFormValue($event)" (returnNumberOfHr)="HandleReturnNumberOfHr($event)">
 		</app-rates-form>
 
 
