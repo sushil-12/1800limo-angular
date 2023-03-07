@@ -205,7 +205,7 @@
 										<p class="text-danger text-lg m-0" *ngIf="LooseCustomer.email.errors?.required">
 											This field is required
 										</p>
-										<p class="text-danger text-lg m-0" *ngIf="LooseCustomer.email.errors?.pattern">
+										<p class="text-danger text-lg m-0" *ngIf="LooseCustomer.email.errors?.email">
 											Please enter a valid Email Id
 										</p>
 									</div>
@@ -545,7 +545,7 @@
 						<div class="error-box">
 							<div class="error-message"
 								*ngIf="Form.passenger_email.invalid && (Form.passenger_email.touched || Form.passenger_email.dirty)">
-								<p class="text-danger text-lg m-0" *ngIf="Form.passenger_email.errors?.pattern">
+								<p class="text-danger text-lg m-0" *ngIf="Form.passenger_email.errors?.email">
 									Please enter a valid Email Id
 								</p>
 							</div>
@@ -755,7 +755,7 @@
 					<div class="error-box">
 						<div class="error-message"
 							*ngIf="Form.lose_affiliate_email.invalid && (Form.lose_affiliate_email.touched || Form.lose_affiliate_email.dirty)">
-							<p class="text-danger text-lg m-0" *ngIf="Form.lose_affiliate_email.errors?.pattern">
+							<p class="text-danger text-lg m-0" *ngIf="Form.lose_affiliate_email.errors?.email">
 								Please enter a valid Email Id
 							</p>
 						</div>
@@ -1013,7 +1013,7 @@
 						<div class="error-box">
 							<div class="error-message"
 								*ngIf="Form.driver_email.invalid && (Form.driver_email.touched || Form.driver_email.dirty)">
-								<p class="text-danger text-lg m-0" *ngIf="Form.driver_email.errors?.pattern">
+								<p class="text-danger text-lg m-0" *ngIf="Form.driver_email.errors?.email">
 									Please enter a valid Email Id
 								</p>
 							</div>
@@ -1032,7 +1032,7 @@
 						<div class="error-box">
 							<div class="error-message"
 								*ngIf="Form.driver_email.invalid && (Form.driver_email.touched || Form.driver_email.dirty)">
-								<p class="text-danger text-lg m-0" *ngIf="Form.driver_email.errors?.pattern">
+								<p class="text-danger text-lg m-0" *ngIf="Form.driver_email.errors?.email">
 									Please enter a valid Email Id
 								</p>
 							</div>

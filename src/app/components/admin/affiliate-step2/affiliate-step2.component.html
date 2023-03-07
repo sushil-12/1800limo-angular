@@ -81,7 +81,7 @@
 				</div>
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
-						<input matInput placeholder="Account Number" formControlName="AccountNumber">
+						<input matInput placeholder="Account Number*" formControlName="AccountNumber">
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.AccountNumber.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -91,7 +91,7 @@
 				</div>
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
-						<input matInput placeholder="Checking Routing Number" formControlName="Routing">
+						<input matInput placeholder="Checking Routing Number*" formControlName="Routing">
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.Routing.errors" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.Routing.errors.required">This field is required</div>
@@ -196,26 +196,31 @@
 						</ng-template>
 					</div>
 				</div>
-				<div class="col-md-6 mt-3">
+				<div class="col-md-6 mt-3 radioLabel">
 					<div id="ein-container" class="w-100 d-flex flex-nowrap justify-content-center">
 						<div id="ein-no" class="ein" [ngClass]="!f.haveEin.value ? 'active' : ''"
-							(click)="haveEin('haveEin')">
+							(click)="changeRadio('haveEin', false)">
 							<label>I don't have EIN / Business ID #</label>
 						</div>
 						<div id="ein-yes" class="ein" [ngClass]="f.haveEin.value ? 'active' : ''"
-							(click)="haveEin('haveEin')">
+							(click)="changeRadio('haveEin', true)">
 							<label>I have an EIN / Business ID #</label>
 						</div>
 					</div>
 				</div>
-				<div class="col-md-6" [hidden]="!haveEinNo">
+				<div class="col-md-6 mt-3" *ngIf="f.haveEin.value">
 					<mat-form-field appearance="outline">
 						<mat-label>EIN / Business ID #</mat-label>
-						<input matInput placeholder="EIN / Business ID #" formControlName="ein" tabindex="1">
+						<input matInput placeholder="EIN / Business ID #" (focus)="$event.target.select()"
+							formControlName="ein" tabindex="1" />
 					</mat-form-field>
-					<div *ngIf="submittedForm && f.ein.errors || f.ein.touched && f.ein.errors"
-						class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.ein.errors.required">This field is required</div>
+					<div *ngIf="
+							(submittedForm && f.ein.errors) ||
+							(f.ein.touched && f.ein.errors)
+						" class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="f.ein.errors.required">
+							This field is required
+						</div>
 					</div>
 				</div>
 			</div>
