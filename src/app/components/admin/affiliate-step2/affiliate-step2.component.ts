@@ -315,6 +315,11 @@ export class AffiliateStep2Component implements OnInit {
 			}
 		}
 	}
+
+	changeRadio(form_control: string, value: any) {
+		this.SetFormValue(form_control, value)
+	}
+
 	changeCountry(selectedCountryCode) {
 		let selectedCountryData: any;
 
