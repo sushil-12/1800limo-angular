@@ -167,6 +167,14 @@ export class DailyBookingsComponent implements OnInit {
 			}
 		}
 	}
+	highlighText(args : string){
+		if (!this.searchText) {return args;}
+		if(args){
+			args = args.toString()
+			var re = new RegExp(this.searchText, 'gi'); //'gi' for case insensitive and can use 'g' if you want the search to be case sensitive.
+			return args.replace(re, '<mark class="font-weight-bold">$&</mark>');
+		}
+	}
 
 	submit(message, format) {
 		this.show = false;
@@ -246,6 +254,17 @@ export class DailyBookingsComponent implements OnInit {
 			this.nextPageUrl = this.bookingsRes.data.next_page_url;
 			this.spinner.hide();
 		})
+
+		// const $box = document.getElementById('box')
+		// const search_text = this.searchText;
+		// const regex = new RegExp(search_text, 'gi');
+
+		// let text = $box.innerHTML;
+		// text = text.replace(/(<mark class="highlight">|<\/mark>)/gim, '');
+
+		// const newText = text.replace(regex, '<mark class="font-weight-bold">$&</mark>');
+		// $box.innerHTML = newText;
+
 	}
 
 	show = false;
@@ -461,6 +480,7 @@ export class DailyBookingsComponent implements OnInit {
 			this.saveCookie("search", this.searchText);
 			this.loadBookings(null, this.startDate, this.endDate, search_value)
 		}, 700)
+
 	}
 
 	handleKeypressEvents() {

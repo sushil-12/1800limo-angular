@@ -154,7 +154,7 @@ export class FinalizeBookingComponent implements OnInit {
 				this.visibility = response.data.payment_status=='paid' ? false : true 
 				this.$spinner.hide();
 				setTimeout(()=>{
-					this.scroll('submitForm')
+					this.scroll('NumVehicles')
 				},600)
 			});
 			// api for card detailss

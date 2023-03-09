@@ -296,7 +296,12 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 		// this.$spinner.show()
 		this.$api.fetchAdminNewBookingRates(affiliate, bookingId).subscribe((response: any) => {
 			if (response?.success && response?.data?.rateArray) {
-				this.ratesdata.next(response.data.rateArray);
+				if(Object.keys(response.data.rateArray).length){
+					this.ratesdata.next(response.data.rateArray);
+				}
+				else{
+					this.fetchRates(affiliate , null)
+				}
 			}
 		});
 	}

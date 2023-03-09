@@ -148,8 +148,8 @@
 	[reservation_id]="finalize_params.booking_id" [reset]="false" [hours]="finalize_params.number_of_hours"
 	[vehicles]="finalize_params.number_of_vehicles" (returnformvalue)="ReturnRateFormValue($event)">
 </app-finalize-rates>
-<div class="row mb-3">
-	<div class="col-md-12 text-right" id="submitForm" >
+<div class="row mb-3" id="submitForm">
+	<div class="col-md-12 text-right"  >
 		<button type="button" class="custom-filled-button ratesButton m-3" (click)="submitForm()">
 			Finalized
 		</button>
@@ -160,7 +160,7 @@
 <!-- Rates Section End -->
 
 <!-- Payment Section -->
-<section class="section-container" *ngIf="BookingDetail?.payment_status=='unpaid'" id="paymentSection1">
+<section class="section-container" *ngIf="BookingDetail?.payment_status=='unpaid'">
 	<div class="col-md-12 p-0" (click)="handlePaymentSection()">
 		<h4 class="section-dropdown-header mb-0">
 			Payment
