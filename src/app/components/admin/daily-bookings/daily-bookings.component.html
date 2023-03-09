@@ -96,7 +96,7 @@
 									<!-- <th>Status</th> -->
 								</tr>
 							</thead>
-							<tbody>
+							<tbody >
 								<tr role="row" class="odd" *ngFor="let booking of bookings">
 									<td>
 										<a class="user-profileded view-button btn-transparent-dark dropdown-toggle"
@@ -164,8 +164,7 @@
 									<td class="text-center font-weight-bolder cursor-pointer text-underline"
 										data-toggle="modal" data-target="#previewBookingOnID"
 										(click)="showBookingPreviewModal(booking.booking_id)">
-										<p class="booking-id-font font-weight-bolder cursor-pointer text-underline">{{
-											booking.booking_id }}</p>
+										<p class="booking-id-font font-weight-bolder cursor-pointer text-underline"><span [innerHTML]="highlighText(booking.booking_id )"></span></p>
 									</td>
 									<td>
 										<div data-toggle="modal" (click)="changeBookingStatus(booking.booking_id)"
@@ -181,43 +180,46 @@
 									</td>
 									<td>
 										<p data-target="#sendEmailModal" style="white-space: pre" data-toggle="modal"
-											(click)="openModal(booking, 'Passenger')">
-											{{ booking.passenger_name }} |
-											{{ booking.passenger_cell_isd }}{{
-											booking.passenger_cell }}
+											(click)="openModal(booking, 'Passenger')" id="box">
+											<span [innerHTML]="highlighText(booking.passenger_name)"></span> |
+											<span [innerHTML]="highlighText( booking.passenger_cell_isd)"></span>
+											<span [innerHTML]="highlighText( booking.passenger_cell)"></span>
 										</p>
 										<span class="text-underline cursor-pointer"
 											(click)="showLocationPointOnMap(booking.booking_id, 'pickup')">
-											{{ booking.pickup_address }}
+											<span [innerHTML]="highlighText(booking.pickup_address)"></span>
 										</span>
 									</td>
 									<td>
 										<p data-target="#sendEmailModal" data-toggle="modal"
 											(click)="openModal(booking, 'Loose_Affiliate')"
 											*ngIf="booking.affiliate_type == null; else otherAffiliate">
-											{{booking.loose_affiliate_name}} |
-											{{booking.loose_affiliate_phone_isd}}{{booking.loose_affiliate_phone}}
+											<span [innerHTML]="highlighText(booking.loose_affiliate_name)"></span>|
+											<span [innerHTML]="highlighText(booking.loose_affiliate_phone_isd)"></span>
+											<span [innerHTML]="highlighText(booking.loose_affiliate_phone)"></span>
 										</p>
 										<ng-template #otherAffiliate>
 											<p data-target="#sendEmailModal" data-toggle="modal"
 												(click)="openModal(booking, 'Affiliate')"
 												*ngIf="booking.affiliate_type != 'gig_operator'; else gigOperator">
-												{{booking.driver_first_name}}
-												{{booking.driver_last_name}} |
-												{{booking.affiliate_dispatch_isd}}{{booking.affiliate_dispatch_number}}
+												<span [innerHTML]="highlighText(booking.driver_first_name)"></span>
+												<span [innerHTML]="highlighText(booking.driver_last_name)"></span> |
+												<span [innerHTML]="highlighText(booking.affiliate_dispatch_isd)"></span>
+												<span [innerHTML]="highlighText(booking.affiliate_dispatch_number)"></span>
 											</p>
 											<ng-template #gigOperator>
 												<p data-target="#sendEmailModal" data-toggle="modal"
 													(click)="openModal(booking, 'Affiliate')">
-													{{booking.driver_first_name}}
-													{{booking.driver_last_name}} |
-													{{booking.gig_cell_isd}}{{booking.gig_cell_mobile}}
+													<span [innerHTML]="highlighText(booking.driver_first_name)"></span>
+													<span [innerHTML]="highlighText(booking.driver_last_name)"></span>|
+													<span [innerHTML]="highlighText(booking.gig_cell_isd)"></span>
+													<span [innerHTML]="highlighText(booking.gig_cell_mobile)"></span>
 												</p>
 											</ng-template>
 										</ng-template>
 										<span class="text-underline cursor-pointer"
 											(click)="showLocationPointOnMap(booking.booking_id, 'dropoff')">
-											{{ booking.dropoff_address }}
+											<span [innerHTML]="highlighText(booking.dropoff_address)"></span>
 										</span>
 									</td>
 									<td>{{booking.vehicle_cat_name}}</td>
