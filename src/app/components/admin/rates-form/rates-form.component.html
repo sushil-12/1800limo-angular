@@ -33,7 +33,7 @@
 							{{ textFormatter(sub_item?.value?.controls?.rate_label?.value) |
 							titlecase }}
 						</mat-label>
-						<input type="number" matInput placeholder="0" formControlName="baserate"
+						<input type="number" matInput placeholder="0" formControlName="baserate" tabindex="1"
 							class="font-weight-bolder rate-input-field text-right" (focus)="$event.target.select()" />
 					</mat-form-field>
 					<div class="errors" *ngIf="sub_item.key === 'Kilometer_Rate' && trigger_error">

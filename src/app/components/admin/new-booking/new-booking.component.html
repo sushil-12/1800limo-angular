@@ -80,7 +80,7 @@
 								Number of Hours
 							</mat-label>
 							<input type="number" matInput placeholder="Enter Hours" formControlName="number_of_hours"
-								(focus)="$event.target.select()" />
+								tabindex="1" (focus)="$event.target.select()" />
 							<span matSuffix>Hrs.</span>
 						</mat-form-field>
 					</div>
@@ -127,7 +127,7 @@
 										First Name
 									</mat-label>
 									<input matInput placeholder="First Name" type="text" formControlName="first_name"
-										tabindex="0" (focus)="$event.target.select()">
+										tabindex="1" (focus)="$event.target.select()">
 								</mat-form-field>
 								<div class="error-box">
 									<div class="error-message"
@@ -151,7 +151,7 @@
 										Middle Name
 									</mat-label>
 									<input matInput placeholder="Middle Name" type="text" formControlName="middle_name"
-										tabindex="0" (focus)="$event.target.select()">
+										tabindex="1" (focus)="$event.target.select()">
 								</mat-form-field>
 								<div class="error-box">
 									<div class="error-message"
@@ -171,7 +171,7 @@
 										Last Name
 									</mat-label>
 									<input matInput placeholder="Last Name" type="text" formControlName="last_name"
-										(focus)="$event.target.select()" tabindex="0">
+										(focus)="$event.target.select()">
 								</mat-form-field>
 								<div class="error-box">
 									<div class="error-message"
@@ -196,7 +196,7 @@
 									<mat-label class="required-field">
 										Email
 									</mat-label>
-									<input matInput placeholder="Email" type="text" tabindex="0" formControlName="email"
+									<input matInput placeholder="Email" type="text" formControlName="email"
 										[email]="true" (focus)="$event.target.select()">
 								</mat-form-field>
 								<div class="error-box">
@@ -222,7 +222,7 @@
 											preferredCountries: ['us', 'ca', 'mx', 'gb']
 										}" placeholder="1234567890" class="phoneNumberClass" (intlTelInputObject)="LCTelInputObject($event)"
 										(countryChange)="SetFormValue('loose_customer>phone_isd', $event.dialCode); SetFormValue('loose_customer>phone_country', $event.iso2)"
-										(focus)="$event.target.select()" tabIndex="1" />
+										(focus)="$event.target.select()" />
 								</mat-form-field>
 								<div class="error-box">
 									<div class="error-message"
@@ -304,7 +304,7 @@
 										Card Number
 									</mat-label>
 									<input matInput placeholder="xxxx xxxx xxxx xxxx" type="text"
-										formControlName="card_number" tabindex="0" (focus)="$event.target.select()">
+										formControlName="card_number" (focus)="$event.target.select()">
 								</mat-form-field>
 								<div class="error-box">
 									<div class="error-message"
@@ -337,7 +337,7 @@
 									<mat-label class="required-field">
 										Expiration Month
 									</mat-label>
-									<mat-select formControlName="exp_month" tabindex="0">
+									<mat-select formControlName="exp_month">
 										<mat-option value='1'>01</mat-option>
 										<mat-option value='2'>02</mat-option>
 										<mat-option value='3'>03</mat-option>
@@ -369,7 +369,7 @@
 									<mat-label class="required-field">
 										Expiration Year
 									</mat-label>
-									<mat-select formControlName="exp_year" tabindex="0">
+									<mat-select formControlName="exp_year">
 										<mat-option [value]="number" *ngFor="let number of booking_params.years">
 											{{ number }}
 										</mat-option>
@@ -392,8 +392,8 @@
 									<mat-label class="required-field">
 										CVV
 									</mat-label>
-									<input matInput placeholder="0000" type="text" tabindex="0"
-										(focus)="$event.target.select()" formControlName="cvv">
+									<input matInput placeholder="0000" type="text" (focus)="$event.target.select()"
+										formControlName="cvv">
 								</mat-form-field>
 								<div class="error-box">
 									<div class="error-message"
@@ -562,7 +562,7 @@
 									preferredCountries: ['us', 'ca', 'mx', 'gb']
 								}" placeholder="1234567890" class="phoneNumberClass" (intlTelInputObject)="PaxTelInputObject($event)"
 								(countryChange)="SetFormValue('passenger_cell_isd', $event.dialCode); SetFormValue('passenger_cell_country', $event.iso2)"
-								(focus)="$event.target.select()" tabIndex="1" />
+								(focus)="$event.target.select()" />
 						</mat-form-field>
 						<div class="error-box">
 							<div class="error-message"
@@ -722,7 +722,7 @@
 								preferredCountries: ['us', 'ca', 'mx', 'gb']
 							}" placeholder="1234567890" class="phoneNumberClass" (intlTelInputObject)="LATelInputObject($event)"
 							(countryChange)="SetFormValue('lose_affiliate_phone_isd', '+' + $event.dialCode); SetFormValue('lose_affiliate_phone_country', $event.iso2)"
-							(focus)="$event.target.select()" tabIndex="1" />
+							(focus)="$event.target.select()" />
 					</mat-form-field>
 					<div class="error-box">
 						<div class="error-message"
@@ -1062,7 +1062,7 @@
 									preferredCountries: ['us', 'ca', 'mx', 'gb']
 								}" placeholder="1234567890" class="phoneNumberClass" (intlTelInputObject)="DrvTelInputObject($event)"
 								(countryChange)="SetFormValue('driver_cell_isd', '+' + $event.dialCode); SetFormValue('driver_cell_country', $event.iso2)"
-								(focus)="$event.target.select()" tabIndex="1" />
+								(focus)="$event.target.select()" />
 						</mat-form-field>
 						<div class="error-box">
 							<div class="error-message"
@@ -1253,15 +1253,15 @@
 						</div>
 						<ng-template #emptyImg>
 							<div class="vehtype_extint emptyImage">
-								<img src="../../../../assets/images/empty-image.png" tabindex="-1">
+								<img src="../../../../assets/images/empty-image.png">
 							</div>
 						</ng-template>
 
 						<ul class="mt-3 d-flex justify-content-center p-0" *ngIf="driver_image?.image;else addImage">
 							<li>
-								<button type="button" class="changeuploaded" tabindex="1">
+								<button type="button" class="changeuploaded">
 									<input type="file" accept="image/jpeg,.jpeg,.jpg,.png"
-										(change)="uploadImage($event, 'driver_image')" tabindex="-1">
+										(change)="uploadImage($event, 'driver_image')">
 									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 										<path fill="none" d="M0 0h24v24H0V0z" />
 										<circle cx="12" cy="12" r="3" />
@@ -1272,7 +1272,7 @@
 								</button>
 							</li>
 							<li>
-								<a class="delete-btn" (click)="deleteImage('driver_image')" tabindex="1">
+								<a class="delete-btn" (click)="deleteImage('driver_image')">
 									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 										<path
 											d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
@@ -1283,9 +1283,9 @@
 						<ng-template #addImage>
 							<ul class="mt-3 d-flex justify-content-center p-0">
 								<li>
-									<button type="button" class="changeuploaded" tabindex="1">
+									<button type="button" class="changeuploaded">
 										<input type="file" accept="image/jpeg,.jpeg,.jpg,.png"
-											(change)="uploadImage($event, 'driver_image')" tabindex="-1">
+											(change)="uploadImage($event, 'driver_image')">
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 											<path fill="none" d="M0 0h24v24H0V0z" />
 											<circle cx="12" cy="12" r="3" />
@@ -1308,16 +1308,16 @@
 						</div>
 						<ng-template #emptyImg>
 							<div class="vehtype_extint emptyImage">
-								<img src="../../../../assets/images/empty-image.png" tabindex="-1">
+								<img src="../../../../assets/images/empty-image.png">
 							</div>
 						</ng-template>
 
 						<ul class="mt-3 d-flex justify-content-center p-0"
 							*ngIf="vehicle_image?.image;else addVehicleImage">
 							<li>
-								<button type="button" class="changeuploaded" tabindex="1">
+								<button type="button" class="changeuploaded">
 									<input type="file" accept="image/jpeg,.jpeg,.jpg,.png"
-										(change)="uploadImage($event, 'vehicle_image')" tabindex="-1">
+										(change)="uploadImage($event, 'vehicle_image')">
 									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 										<path fill="none" d="M0 0h24v24H0V0z" />
 										<circle cx="12" cy="12" r="3" />
@@ -1328,7 +1328,7 @@
 								</button>
 							</li>
 							<li>
-								<a class="delete-btn" (click)="deleteImage('vehicle_image')" tabindex="1">
+								<a class="delete-btn" (click)="deleteImage('vehicle_image')">
 									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 										<path
 											d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
@@ -1339,9 +1339,9 @@
 						<ng-template #addVehicleImage>
 							<ul class="mt-3 d-flex justify-content-center p-0">
 								<li>
-									<button type="button" class="changeuploaded" tabindex="1">
+									<button type="button" class="changeuploaded">
 										<input type="file" accept="image/jpeg,.jpeg,.jpg,.png"
-											(change)="uploadImage($event, 'vehicle_image')" tabindex="-1">
+											(change)="uploadImage($event, 'vehicle_image')">
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 											<path fill="none" d="M0 0h24v24H0V0z" />
 											<circle cx="12" cy="12" r="3" />
@@ -1724,7 +1724,7 @@
 						Extra Stops
 					</h4>
 					<div class="mx-4">
-						<button type="button" class="custom-filled-button" tabindex="0" (click)="addExtraStop(false)">
+						<button type="button" class="custom-filled-button" (click)="addExtraStop(false)">
 							Add Stop
 						</button>
 					</div>
@@ -2213,7 +2213,7 @@
 
 
 
-<div class="modal fade" id="previewBooking" tabindex="-1" aria-labelledby="previewBookingLabel" aria-hidden="true">
+<div class="modal fade" id="previewBooking" aria-labelledby="previewBookingLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
 		<div class="modal-content">
 			<div class="modal-header">
