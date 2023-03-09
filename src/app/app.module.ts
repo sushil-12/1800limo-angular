@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { ErrorHandler, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -52,6 +52,7 @@ import { ReservationCancellationComponent } from './components/email_templates/r
 import { LoginComponent } from './components/website/login/login.component';
 import { OtpComponent } from './components/website/otp/otp.component';
 import { ErrorDialogService } from './services/error-dialog/errordialog.service';
+import { GloabalErrorHandlerService } from './services/gloabal-error-handler.service'
 //
 
 //admin
@@ -122,7 +123,8 @@ import { LocateMapComponent } from './components/locate-map/locate-map.component
 	providers: [
 		{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
 		{ provide: HTTP_INTERCEPTORS, useClass: HttpConfigInterceptor, multi: true },
-		ErrorDialogService
+		ErrorDialogService,
+		{ provide: ErrorHandler, useClass: GloabalErrorHandlerService }
 	],
 	bootstrap: [AppComponent]
 })
