@@ -342,9 +342,13 @@
 					<!-- VEHICLE DETAILS ENDS -->
 
 					<!-- DIV: PREVIEW BUTTON -->
-					<div id="vehicle-preview-button" class="m-3">
-						<button class="custom-filled-button orange-button" (click)="viewDetails(vehinfo)">
-							Preview Vehicle Details
+					<!-- class="m-3" -->
+					<div id="vehicle-preview-button" >
+						<button class="custom-filled-button orange-button mx-2" (click)="viewDetails(vehinfo)">
+							Vehicle Details
+						</button>
+						<button class="custom-filled-button" (click)="bookNow(vehinfo)">
+							Book Now
 						</button>
 					</div>
 					<!-- PREVIEW BUTTON ENDS -->

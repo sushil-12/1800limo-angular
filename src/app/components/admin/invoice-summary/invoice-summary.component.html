@@ -31,8 +31,12 @@
 			</div>
 			<div class="invoicesum_dtl">
 				<!-- <h3>Date of Service   </h3>
-            <strong>3/20/2020   10am - 1000</strong> -->
-				<div class="row">
+					<strong>3/20/2020   10am - 1000</strong> -->
+					<div class="row">
+					<div class="col-md-6" *ngIf="invoiceData.service_type">
+						<p>Service Type</p>
+						<strong>{{invoiceData.service_type}}</strong>
+					</div>
 					<div class="col-md-6" *ngIf="invoiceData.date_of_service">
 						<p>Date of Service</p>
 						<strong>{{invoiceData.date_of_service}}</strong>
@@ -122,10 +126,6 @@
 					<div class="col-md-6" *ngIf="invoiceData.vehicle_type.vehicle_cat_name">
 						<p>Vehicle Type</p>
 						<strong>{{invoiceData.vehicle_type.vehicle_cat_name}}</strong>
-					</div>
-					<div class="col-md-6" *ngIf="invoiceData.service_type">
-						<p>Service Type</p>
-						<strong>{{invoiceData.service_type}}</strong>
 					</div>
 					<div class="col-md-6" *ngIf="invoiceData.transfer_type">
 						<p>Transfer Type</p>

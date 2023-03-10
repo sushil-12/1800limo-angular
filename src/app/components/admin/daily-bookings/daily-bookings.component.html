@@ -158,13 +158,29 @@
 												<div class="dropdown-item-icon"></div>
 												Email Affiliate
 											</a>
+											<!-- (click)="emailPassenger(booking.booking_id)" -->
+											<a class="dropdown-item"
+											(click)="sendEmailClicked(booking.booking_id,'emailPassenger')"
+												data-toggle="modal" data-target="#emailPassenger"
+												*ngIf="booking.payment_status!='paid'">
+												<div class="dropdown-item-icon"></div>
+												Email Passenger
+											</a>
+											<a class="dropdown-item"
+												(click)="auditTrail(booking.booking_id)"
+												data-toggle="modal" data-target="#AuditTrailModal"
+												*ngIf="booking.payment_status!='paid'">
+												<div class="dropdown-item-icon"></div>
+												Audit Trial
+											</a>
 										</div>
 									</td>
 
 									<td class="text-center font-weight-bolder cursor-pointer text-underline"
 										data-toggle="modal" data-target="#previewBookingOnID"
 										(click)="showBookingPreviewModal(booking.booking_id)">
-										<p class="booking-id-font font-weight-bolder cursor-pointer text-underline"><span [innerHTML]="highlighText(booking.booking_id )"></span></p>
+										<p class="booking-id-font font-weight-bolder cursor-pointer text-underline">
+											<span [innerHTML]="highlighText(booking.booking_id )"></span></p>
 									</td>
 									<td>
 										<div data-toggle="modal" (click)="changeBookingStatus(booking.booking_id)"
@@ -205,7 +221,8 @@
 												<span [innerHTML]="highlighText(booking.driver_first_name)"></span>
 												<span [innerHTML]="highlighText(booking.driver_last_name)"></span> |
 												<span [innerHTML]="highlighText(booking.affiliate_dispatch_isd)"></span>
-												<span [innerHTML]="highlighText(booking.affiliate_dispatch_number)"></span>
+												<span
+													[innerHTML]="highlighText(booking.affiliate_dispatch_number)"></span>
 											</p>
 											<ng-template #gigOperator>
 												<p data-target="#sendEmailModal" data-toggle="modal"
@@ -329,6 +346,72 @@
 		</div>
 	</div>
 </div>
+
+<div class="modal fade" id="emailPassenger" tabindex="-1" role="dialog" aria-labelledby="emailPassenger" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header pb-0">
+				<h3 class="mb-0">Email</h3>
+			</div>
+			<div class="modal-body text-center">
+				<p>Are you sure, You want to send email?</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="custom-btn savebutton" (click)="emailPassenger()">Send
+					Email</button>
+				<button type="button" class="custom-btn resetbutton" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Audit trail Modal -->
+<div class="modal fade bd-example-modal-lg" id="AuditTrailModal" tabindex="-1" role="dialog"
+	aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content user_information">
+			<button type="button" class="close closeButton" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+			<div class="modal-header pb-0">
+				<h3 class="modal-title mb-0">Audit Trial</h3>
+			</div>
+			<div class="modal-body">
+				<!-- {{invoiceData.audit_trail | json}} -->
+				<table id="audittrail" class="table table-striped">
+					<thead style="background-color: white;">
+						<tr>
+							<th scope="col">#</th>
+							<th scope="col">Description</th>
+							<th scope="col" id="date">Created Date</th>
+						</tr>
+					</thead>
+					<tbody>
+						
+						<!-- <ng-container *ngIf="audit_Trail; else not_found"> -->
+							<tr *ngFor="let record of audit_Trail; let i=index">
+								<th scope="row">{{i+1}}</th>
+								<td style="word-wrap: break-word;">{{record.message}}</td>
+								<td>{{record.created_at}}</td>
+							</tr>
+							
+						<!-- </ng-container> -->
+						<!-- <ng-template #not_found>
+							<tr>
+								<td colspan = "3">No Record Found!</td>
+							</tr>	
+						</ng-template> -->
+						
+
+					</tbody>
+				</table>
+			</div>
+			<div class="modal-footer">
+			</div>
+		</div>
+	</div>
+</div>
+
 <!-- send email and call modal -->
 <div class="modal fade" id="sendEmailModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
 	aria-hidden="true" data-backdrop="static" data-keyboard="false">

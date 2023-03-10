@@ -100,6 +100,8 @@
 						<thead>
 							<tr role="row">
 								<th>Actions</th>
+								<th>Approval Status</th>
+								<th>Status</th>
 								<th>Name</th>
 								<th>Email</th>
 								<th>Cell</th>
@@ -111,8 +113,6 @@
 								<th>City</th>
 								<!-- <th>State</th>
 								<th>Country</th> -->
-								<th>Approval Status</th>
-								<th>Status</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -141,29 +141,6 @@
 									</div>
 								</td>
 								<td>
-									{{ blackCarLimoBus.FirstName }}
-									{{ blackCarLimoBus.MiddleName ? blackCarLimoBus.MiddleName : ''
-									}}
-									{{ blackCarLimoBus.LastName }}
-								</td>
-								<td class="clickable"
-									(click)="sendMessage('email', blackCarLimoBus)"
-									data-messagetype="email">
-									{{blackCarLimoBus.Email}}
-								</td>
-								<td class="clickable" (click)="sendMessage('sms', blackCarLimoBus)"
-									data-messagetype="sms">
-									{{blackCarLimoBus.CellIsd+blackCarLimoBus.CellNumber}}
-								</td>
-								<td>{{blackCarLimoBus.CompanyName}}</td>
-								<td>{{blackCarLimoBus.DBA}}</td>
-								<td>{{blackCarLimoBus.LanguagesSpoken}}</td>
-								<td>{{blackCarLimoBus.Associations}}</td>
-								<td>{{blackCarLimoBus.Address}}</td>
-								<td>{{blackCarLimoBus.City}}</td>
-								<!-- <td>{{blackCarLimoBus.State}}</td>
-								<td>{{blackCarLimoBus.Country}}</td> -->
-								<td>
 									<div
 										*ngIf="blackCarLimoBus.account_approval=='completed'; else notCompleted">
 										<button class="acceptButton"
@@ -187,6 +164,29 @@
 										(change)="enableDisableClicked($event,blackCarLimoBus.id)">
 									</mat-slide-toggle>
 								</td>
+								<td>
+									{{ blackCarLimoBus.FirstName }}
+									{{ blackCarLimoBus.MiddleName ? blackCarLimoBus.MiddleName : ''
+									}}
+									{{ blackCarLimoBus.LastName }}
+								</td>
+								<td class="clickable"
+									(click)="sendMessage('email', blackCarLimoBus)"
+									data-messagetype="email">
+									{{blackCarLimoBus.Email}}
+								</td>
+								<td class="clickable" (click)="sendMessage('sms', blackCarLimoBus)"
+									data-messagetype="sms">
+									{{blackCarLimoBus.CellIsd+blackCarLimoBus.CellNumber}}
+								</td>
+								<td>{{blackCarLimoBus.CompanyName}}</td>
+								<td>{{blackCarLimoBus.DBA}}</td>
+								<td>{{blackCarLimoBus.LanguagesSpoken}}</td>
+								<td>{{blackCarLimoBus.Associations}}</td>
+								<td>{{blackCarLimoBus.Address}}</td>
+								<td>{{blackCarLimoBus.City}}</td>
+								<!-- <td>{{blackCarLimoBus.State}}</td>
+								<td>{{blackCarLimoBus.Country}}</td> -->
 							</tr>
 
 						</tbody>

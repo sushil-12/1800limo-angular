@@ -15,7 +15,10 @@
 		[ngClass]="{'active': rate_params.chevrons[item.key]}"
 		*ngFor="let item of RateForm | keyvalue: returnZero; index as item_index">
 		<div class="col-12 col-md-12" (click)="handleSubHeading(item.key)">
-			<h5 class="section-dropdown-header">
+			<h5 class="section-dropdown-header" *ngIf="item.key == 'others'">
+				Gratuity
+			</h5>
+			<h5 class="section-dropdown-header" *ngIf="item.key != 'others'"> 
 				{{ textFormatter(item.key) | titlecase }}
 			</h5>
 			<p class="subHead-bi"

@@ -798,6 +798,12 @@ export class AdminService {
 	adminNotification(data) {
 		return this.httpClient.post(this.serverUrl + 'admin-notification-daily-booking', data);
 	}
+	passengerBooking(data){
+		return this.httpClient.post(this.serverUrl + 'passenger-booking-confirmation-email' ,data)
+	}
+	auditTrailInfo(bookingId){
+		return this.httpClient.get(this.serverUrl+`admin/booking-audit-records/${bookingId}`)
+	}
 
 	loadBookings(url, startDate, endDate, keyword = '') {
 		var path;
