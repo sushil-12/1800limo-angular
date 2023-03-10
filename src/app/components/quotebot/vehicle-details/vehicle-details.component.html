@@ -11,8 +11,8 @@
 							<div id="big" class="owl-carousel owl-theme m-0">
 								<div class="item"
 									*ngFor="let item of selected_vehicle.vehicle_images; index as item_index">
-									<img [src]="item" id="V_Image_{{ item_index + 1 }}"
-										class="mx-auto" alt="Vehicle Image {{ item_index + 1 }}">
+									<img [src]="item" id="V_Image_{{ item_index + 1 }}" class="mx-auto"
+										alt="Vehicle Image {{ item_index + 1 }}">
 									<!-- {{item }} -->
 								</div>
 							</div>
@@ -20,8 +20,8 @@
 								<div class="item"
 									*ngFor="let item of selected_vehicle.vehicle_images; index as item_index">
 									<!-- {{ item }} -->
-									<img [src]="item" alt="Vehicle Image {{ item_index + 1 }}"
-										class="mx-auto" id="V_Image_{{ item_index + 1 }}">
+									<img [src]="item" alt="Vehicle Image {{ item_index + 1 }}" class="mx-auto"
+										id="V_Image_{{ item_index + 1 }}">
 								</div>
 							</div>
 						</div>
@@ -37,13 +37,11 @@
 							</h5>
 							<div class="car-cap d-flex">
 								<div class="pass-det mx-2">
-									<img alt="" class="img-fluid mr-2"
-										src="assets/images/select_vehicle/pass.png" /> {{
+									<img alt="" class="img-fluid mr-2" src="assets/images/select_vehicle/pass.png" /> {{
 									selected_vehicle.passenger }}
 								</div>
 								<div class="pass-det mx-2">
-									<img alt="" class="img-fluid mr-2"
-										src="assets/images/select_vehicle/lug.png" /> {{
+									<img alt="" class="img-fluid mr-2" src="assets/images/select_vehicle/lug.png" /> {{
 									selected_vehicle.luggage }}
 								</div>
 							</div>
@@ -57,8 +55,7 @@
 									<!-- One Way -->
 									<div class="custom-control custom-checkbox custom-control-inline"
 										*ngIf="getKeyName() != 'charter_tour'">
-										<input type="checkbox" id="price1" name="price1"
-											class="custom-control-input"
+										<input type="checkbox" id="price1" name="price1" class="custom-control-input"
 											(change)="routeSelection('one_way')" value="one_way"
 											[checked]="quotebot_form.service_type == 'one_way'" />
 										<label class="custom-control-label" for="price1">
@@ -74,10 +71,8 @@
 									<!-- Round Trip -->
 									<div class="custom-control custom-checkbox custom-control-inline"
 										*ngIf="getKeyName() != 'charter_tour'">
-										<input type="checkbox" id="price2" name="price2"
-											class="custom-control-input"
-											(change)="routeSelection('round_trip')"
-											value="round_trip"
+										<input type="checkbox" id="price2" name="price2" class="custom-control-input"
+											(change)="routeSelection('round_trip')" value="round_trip"
 											[checked]="quotebot_form.service_type == 'round_trip'" />
 										<label class="custom-control-label" for="price2">
 											<small>
@@ -113,17 +108,15 @@
 								View Subtotals
 							</button>
 							<button type="button" class="custom-btn" data-toggle="modal"
-								data-target="#ModalDriverDetails"
-								*ngIf="selected_vehicle.driverInformation">
+								data-target="#ModalDriverDetails" *ngIf="selected_vehicle.driverInformation">
 								Driver Info
 							</button>
-							<button type="button" class="custom-btn" data-toggle="modal"
-								data-target="#ModalAmenities">
+							<button type="button" class="custom-btn" data-toggle="modal" data-target="#ModalAmenities">
 								Amenities
 							</button>
-							<!-- <button type="button" class="custom-btn" (click)="bookNow()">
-																							Book Now
-																						</button> -->
+							<button type="button" class="custom-filled-button" (click)="bookNow()">
+								Book Now
+							</button>
 						</div>
 					</div>
 					<!-- ṾEHICLE INFORAMATION BLOCK ENDS -->
@@ -234,8 +227,7 @@
 		<div class="row">
 
 			<!-- Controller -->
-			<ng-container
-				*ngIf="quotebot_form.pickup_type == 'airport'; then pikair; else pikadd"></ng-container>
+			<ng-container *ngIf="quotebot_form.pickup_type == 'airport'; then pikair; else pikadd"></ng-container>
 
 			<ng-template #pikair>
 				<div class="col-md-5">
@@ -270,8 +262,7 @@
 		<div class="row my-3">
 
 			<!-- Controller -->
-			<ng-container
-				*ngIf="quotebot_form.dropoff_type == 'airport'; then dropair; else dropadd"></ng-container>
+			<ng-container *ngIf="quotebot_form.dropoff_type == 'airport'; then dropair; else dropadd"></ng-container>
 
 			<ng-template #dropair>
 				<div class="col-md-5">
@@ -357,8 +348,7 @@
 			<div class="row my-3">
 
 				<!-- Controller -->
-				<ng-container
-					*ngIf="quotebot_form.return_pickup_type == 'airport'; then rpikair; else rpikadd">
+				<ng-container *ngIf="quotebot_form.return_pickup_type == 'airport'; then rpikair; else rpikadd">
 				</ng-container>
 
 				<ng-template #rpikair>
@@ -395,8 +385,7 @@
 			<div class="row my-3">
 
 				<!-- Controller -->
-				<ng-container
-					*ngIf="quotebot_form.return_dropoff_type == 'airport'; then rdropair; else rdropadd">
+				<ng-container *ngIf="quotebot_form.return_dropoff_type == 'airport'; then rdropair; else rdropadd">
 				</ng-container>
 
 				<ng-template #rdropair>
@@ -470,8 +459,7 @@
 
 
 <!-- Detailed Slip Modal -->
-<div aria-hidden="true" aria-labelledby="ModalVehicleRates" class="modal fade"
-	id="ModalVehicleRates" tab-index="-1">
+<div aria-hidden="true" aria-labelledby="ModalVehicleRates" class="modal fade" id="ModalVehicleRates" tab-index="-1">
 	<div class="modal-dialog modal-md">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -582,8 +570,8 @@
 </div>
 
 
-<div aria-hidden="true" aria-labelledby="ModalDriverDetails" class="modal fade"
-	id="ModalDriverDetails" tab-index="-1" *ngIf="selected_vehicle.driverInformation">
+<div aria-hidden="true" aria-labelledby="ModalDriverDetails" class="modal fade" id="ModalDriverDetails" tab-index="-1"
+	*ngIf="selected_vehicle.driverInformation">
 	<div class="modal-dialog modal-md">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -599,8 +587,7 @@
 					<div class="col-6 col-md-5">
 						<div id="driver-image-container" class="w-100">
 							<div id="driver-image" class="ml-4 w-auto">
-								<img id="d_image" class="w-100"
-									[src]="selected_vehicle.driverInformation.imageUrl" />
+								<img id="d_image" class="w-100" [src]="selected_vehicle.driverInformation.imageUrl" />
 							</div>
 						</div>
 					</div>
@@ -642,8 +629,7 @@
 </div>
 
 
-<div aria-hidden="true" aria-labelledby="ModalAmenities" class="modal fade" id="ModalAmenities"
-	tab-index="-1">
+<div aria-hidden="true" aria-labelledby="ModalAmenities" class="modal fade" id="ModalAmenities" tab-index="-1">
 	<div class="modal-dialog modal-md modal-dialog-scrollable">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -660,8 +646,7 @@
 						<p class="font-weight-bolder">
 							Chargeable Amenities
 						</p>
-						<ul id="chargeable-amenities" style="list-style-type: 'disc'"
-							class="d-flex flex-wrap">
+						<ul id="chargeable-amenities" style="list-style-type: 'disc'" class="d-flex flex-wrap">
 							<li [attr.id]="'ul-ch-list-item_' + amenity_index"
 								*ngFor="let amenity of selected_vehicle.amenities['chargeable']; index as amenity_index">
 								<span class="text-orange">$</span>
@@ -675,8 +660,7 @@
 						<p class="font-weight-bolder">
 							Non-Chargeable Amenities
 						</p>
-						<ul id="chargeable-amenities" style="list-style-type: 'disc'"
-							class="d-flex flex-wrap">
+						<ul id="chargeable-amenities" style="list-style-type: 'disc'" class="d-flex flex-wrap">
 							<li [attr.id]="'ul-noch-list-item_' + amenity_index"
 								*ngFor="let amenity of selected_vehicle.amenities['non-chargeable']; index as amenity_index">
 								{{ amenity.name }}

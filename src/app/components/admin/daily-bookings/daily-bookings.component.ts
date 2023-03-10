@@ -54,6 +54,7 @@ export class DailyBookingsComponent implements OnInit {
 	reciptentName: any;
 	notification_msg: any;
 	status_list: any = [];
+	audit_Trail : any = [];
 
 	constructor(
 		private adminService: AdminService,
@@ -176,6 +177,41 @@ export class DailyBookingsComponent implements OnInit {
 		}
 	}
 
+	emailPassenger(){
+		console.log('In function email passenger' , this.sendEmailForm.value.reservation_id)
+		let data= {
+			reservation_id: this.sendEmailForm.value.reservation_id
+		}
+		this.spinner.show()
+		this.adminService.passengerBooking(data)
+			.pipe(
+				catchError((err) => {
+					return throwError(err);
+				})
+			)
+			.subscribe((response :any) => {
+				console.log('response--------->>>>>>>>' , response)
+				this.spinner.hide()
+				$("#emailPassenger").modal("hide");
+			});
+	}
+	auditTrail(bookingId:any){
+		console.log('In function audit trail', bookingId)
+		this.spinner.show()
+		this.adminService.auditTrailInfo(bookingId)
+			.pipe(
+				catchError((err) => {
+					return throwError(err);
+				})
+			)
+			.subscribe((response :any) => {
+				this.spinner.hide()
+				console.log('audit trail --->>>>>>>>',response)
+				this.audit_Trail = response.data
+				// $("#AuditTrailModal").modal("hide");
+			});
+	}
+
 	submit(message, format) {
 		this.show = false;
 		if (this.passengerDetails.selection_button == "Passenger") {
@@ -254,17 +290,6 @@ export class DailyBookingsComponent implements OnInit {
 			this.nextPageUrl = this.bookingsRes.data.next_page_url;
 			this.spinner.hide();
 		})
-
-		// const $box = document.getElementById('box')
-		// const search_text = this.searchText;
-		// const regex = new RegExp(search_text, 'gi');
-
-		// let text = $box.innerHTML;
-		// text = text.replace(/(<mark class="highlight">|<\/mark>)/gim, '');
-
-		// const newText = text.replace(regex, '<mark class="font-weight-bold">$&</mark>');
-		// $box.innerHTML = newText;
-
 	}
 
 	show = false;
@@ -480,7 +505,6 @@ export class DailyBookingsComponent implements OnInit {
 			this.saveCookie("search", this.searchText);
 			this.loadBookings(null, this.startDate, this.endDate, search_value)
 		}, 700)
-
 	}
 
 	handleKeypressEvents() {

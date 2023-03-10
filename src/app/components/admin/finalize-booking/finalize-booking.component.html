@@ -213,14 +213,11 @@
 
 			<form class="container-fluid" [formGroup]="cardForm" appInvalidControlScroll>
 
-				<div id="credit-card-details" class="mt-4 px-4" *ngIf="paymentMethod=='card' && isCardFormOpen">
-					<h6>
-						Card Details
-					</h6>
+				<div id="credit-card-details" class="px-4" *ngIf="paymentMethod=='card' && isCardFormOpen">
 					<div class="row">
 						<!-- Card Holder Name -->
 						<div class="col-md-4 my-2">
-							<mat-form-field appearance="outline">
+							<mat-form-field appearance="outline" class="m-0">
 								<mat-label class="required-field">
 									Card Holder
 								</mat-label>
@@ -239,7 +236,7 @@
 						</div>
 						<!-- Card Number -->
 						<div class="col-md-4 my-2">
-							<mat-form-field appearance="outline">
+							<mat-form-field appearance="outline" class="m-0">
 								<mat-label class="required-field">
 									Card Number
 								</mat-label>
@@ -268,7 +265,7 @@
 
 						<!-- Expiration Month -->
 						<div class="col-md-4 my-2">
-							<mat-form-field appearance="outline">
+							<mat-form-field appearance="outline" class="m-0">
 								<mat-label class="required-field">
 									Expiration Month
 								</mat-label>
@@ -297,7 +294,7 @@
 
 						<!-- Expiration Year -->
 						<div class="col-md-4 my-2">
-							<mat-form-field appearance="outline">
+							<mat-form-field appearance="outline" class="m-0">
 								<mat-label class="required-field">
 									Expiration Year
 								</mat-label>
@@ -317,7 +314,7 @@
 
 						<!-- CVV -->
 						<div class="col-md-4 my-2">
-							<mat-form-field appearance="outline">
+							<mat-form-field appearance="outline" class="m-0">
 								<mat-label class="required-field">
 									CVV
 								</mat-label>
