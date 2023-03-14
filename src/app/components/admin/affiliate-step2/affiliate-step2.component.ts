@@ -74,6 +74,7 @@ export class AffiliateStep2Component implements OnInit {
 	ngOnInit(): void {
 
 		//code related to autocomplete and map
+		this.spinner.show()
 		this.mapFunction();
 		const currentYear = (new Date()).getFullYear();
 		//prepare list of days for DOB
@@ -297,6 +298,7 @@ export class AffiliateStep2Component implements OnInit {
 				});
 			});
 			// }  
+		this.spinner.hide()
 		});
 	}
 

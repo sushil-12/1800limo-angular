@@ -267,7 +267,7 @@
 							</div>
 						</li>
 						<!--8th -->
-						<li class="nav-item" *ngIf="role=='admin'">
+						<!-- <li class="nav-item" *ngIf="role=='admin'">
 							<a class="nav-link collapsed" [routerLinkActive]="['active']"
 								(click)="closeSidebarFunc(false)" routerLink="/admin/master-vehicle-types"
 								tabIndex="-1">
@@ -287,7 +287,7 @@
 									</g>
 								</svg><span>Master Vehicle Types</span>
 							</a>
-						</li>
+						</li> -->
 
 						<!--9th -->
 						<li class="nav-item" *ngIf="role=='admin'">
@@ -309,6 +309,11 @@
 							<div id="collapse10" class="collapse" aria-labelledby="headingUtilities"
 								data-parent="#accordionSidebar" tabIndex="-1">
 								<div class="py-2 collapse-inner rounded">
+									<a class="collapse-item" [routerLinkActive]="['active']"
+										(click)="closeSidebarFunc(false)"
+										routerLink="/admin/master-vehicle-types">
+										Master Vehicle Types
+										</a>
 									<a class="collapse-item" [routerLinkActive]="['active']"
 										(click)="closeSidebarFunc(false)"
 										routerLink="/admin/affiliate-preference">Affilate

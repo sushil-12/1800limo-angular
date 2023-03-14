@@ -34,17 +34,19 @@
 				</div>
 
 				<!-- Search Button -->
-				<div class="col-sm-2 my-2">
-					<button class="custom-filled-button orange-button"
-						(click)="loadBookings(null, startDate, endDate, searchText); saveCookie('startDate', startDate); saveCookie('endDate', endDate)">
-						Search
-					</button>
-				</div>
-				<div class="col-sm-2 my-2">
-					<button class="custom-filled-back-button" style="white-space: nowrap"
-						(click)="reset(); loadBookings(null, startDate, endDate, searchText)">
-						Reset
-					</button>
+				<div class="align-btn d-flex justify-content-around">
+					<div class="col-sm-2 ml-n5">
+						<button class="custom-filled-button orange-button"
+							(click)="loadBookings(null, startDate, endDate, searchText); saveCookie('startDate', startDate); saveCookie('endDate', endDate)">
+							Search
+						</button>
+					</div>
+					<div class="col-sm-2">
+						<button class="custom-filled-back-button" style="white-space: nowrap"
+							(click)="reset(); loadBookings(null, startDate, endDate, searchText)">
+							Reset
+						</button>
+					</div>
 				</div>
 			</div>
 			<div class="row my-2 mb-3">
@@ -369,9 +371,9 @@
 <div class="modal fade bd-example-modal-lg" id="AuditTrailModal" tabindex="-1" role="dialog"
 	aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg" role="document">
-		<div class="modal-content user_information">
-			<button type="button" class="close closeButton" data-dismiss="modal" aria-label="Close">
-				<span aria-hidden="true">&times;</span>
+		<div class="modal-content user_information bottom-container">
+			<button type="button" class="close closeButton mx-3 my-2"  data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true" class="bi bi-x-circle"></span>
 			</button>
 			<div class="modal-header pb-0">
 				<h3 class="modal-title mb-0">Audit Trial</h3>
@@ -406,7 +408,11 @@
 					</tbody>
 				</table>
 			</div>
-			<div class="modal-footer">
+			<div class="modal-footer justify-content-end">
+				<button type="button" class="custom-filled-back-button" data-dismiss="modal">
+					Close
+				</button>
+
 			</div>
 		</div>
 	</div>
