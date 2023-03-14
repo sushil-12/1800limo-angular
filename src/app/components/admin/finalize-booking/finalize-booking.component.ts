@@ -120,11 +120,11 @@ export class FinalizeBookingComponent implements OnInit {
 
 	buildingCardForm() {
 		this.cardForm = this.$form.group({
-			name: ['', [Validators.required , Validators.pattern("^[a-zA-Z]*$")]],
+			name: ['', [Validators.required ]],
 			card_number: ['', [Validators.required ,Validators.pattern("^[0-9]*$"), Validators.minLength(12) , Validators.maxLength(20)]],
 			exp_month: ['', Validators.required],
 			exp_year: ['', Validators.required],
-			cvv: ['', [Validators.required , Validators.pattern("^[0-9]*$") , Validators.maxLength(4) , Validators.minLength(2)]],
+			cvv: ['', [Validators.required , Validators.pattern("^[0-9]*$")]],
 			save_card_detail :[false]
 		})
 	}

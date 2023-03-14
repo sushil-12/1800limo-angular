@@ -109,7 +109,7 @@ export class AddIndividualAccountComponent implements OnInit
 			mobile: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
 			mobileIsd: ['+1', Validators.required],
 			mobileCountry: ['us'],
-			work: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
+			work: ['', [ Validators.pattern("^[0-9]*$")]],
 			workIsd: ['+1', Validators.required],
 			workCountry: ['us'],
 			email: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],

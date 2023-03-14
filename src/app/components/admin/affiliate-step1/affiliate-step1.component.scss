@@ -226,3 +226,72 @@ $primary-color: #5dbd8a;
   left            : -5px;
   top             : 30px;
 }
+
+
+
+
+// email css
+
+.edit-email {
+	text-transform  : uppercase;
+	text-decoration : none;
+	margin-top      : 25px;
+	border-radius   : 0.5rem;
+	border          : 1px solid var(--orange-color);
+	background-color: var(--orange-color);
+	color           : #fff;
+	width           : 100%;
+	line-height     : 41px;
+	height          : calc(100% - 25px);
+	box-shadow: 0px 5px 10px 1px rgba(0, 0, 0, 0.4);
+}
+
+.edit-email svg {
+	margin-bottom: 10px;
+	margin-right : 10px;
+	height       : 30px;
+}
+
+.edit-email svg path {
+	fill: #fff;
+}
+
+.edit-email:hover {
+	border          : 1px solid var(--orange-color);
+	background-color: transparent;
+	color           : var(--orange-color);
+}
+
+.edit-email:focus {
+	border          : 1px solid var(--orange-color);
+	background-color: transparent;
+	color           : var(--orange-color);
+}
+
+.edit-email:hover svg path {
+	fill: var(--orange-color);
+}
+
+.edit-email:focus svg path {
+	fill: var(--orange-color);
+}
+
+.email-verified {
+	height  : 35px;
+	fill    : #05b171;
+	position: absolute;
+	right   : 5px;
+	bottom  : 12px;
+}
+
+.emailText {
+	color: red;
+}
+
+.email-not-verified {
+	height  : 35px;
+	position: absolute;
+	right   : 5px;
+	bottom  : 12px;
+	fill    : #ea4444;
+}

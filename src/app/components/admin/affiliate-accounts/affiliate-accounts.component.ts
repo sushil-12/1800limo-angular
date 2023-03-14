@@ -130,7 +130,7 @@ export class AffiliateAccountsComponent implements OnInit {
 		/** spinner starts on init */
 		this.spinner.show();
 
-		var keyword = ((document.getElementById("keyword") as HTMLInputElement).value);
+		var keyword = ((document.getElementById("keyword1") as HTMLInputElement).value);
 		// console.log(keyword);
 		// Load Our blackCarLimoBus using API
 		this.adminService.blackCarLimoBusAccounts(pageUrl, this.affiliateType, this.filter_type, keyword).then((result: any) => {

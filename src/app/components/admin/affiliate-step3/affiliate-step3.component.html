@@ -87,6 +87,8 @@
 					</div>
 					<span [hidden]="!addInsuranceForm.hasError('policyError')"
 						class="text-danger margin-bottom-thin my-mat-hint">Please enter future date.</span>
+						<span [hidden]="!addInsuranceForm.hasError('InvalidDate')"
+						class="text-danger margin-bottom-thin my-mat-hint">Invalid Date</span>
 				</div>
 				<div class="col-md-2 col-4 policyDay">
 					<mat-form-field appearance="outline">

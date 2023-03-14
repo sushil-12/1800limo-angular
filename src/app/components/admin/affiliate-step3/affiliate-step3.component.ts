@@ -172,9 +172,13 @@ export class AffiliateStep3Component implements OnInit {
 			}
 			const enteredDate = group.controls['policyExpiredYear'].value + '-' + group.controls['policyExpiredMonth'].value + '-' + group.controls['policyExpiredDay'].value;
 			console.log(currentDate, enteredDate)
+			if(!new Date(enteredDate).getTime()){
+				return { 'InvalidDate':true};
+			}
 			if (new Date(enteredDate).getTime() >= new Date(currentDate).getTime()) {
 				return null;
 			}
+			
 		}
 		return { 'policyError': true };
 	}

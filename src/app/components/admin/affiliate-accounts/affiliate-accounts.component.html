@@ -59,7 +59,7 @@
 					<mat-form-field appearance="outline" class="m-0">
 						<mat-label>Search Filter by Key word</mat-label>
 						<input type="text" matInput placeholder="Search Filter by Key word"
-							id="keyword">
+							id="keyword1">
 					</mat-form-field>
 				</div>
 				<div class="col-md-2 py-2">
@@ -102,6 +102,7 @@
 								<th>Actions</th>
 								<th>Approval Status</th>
 								<th>Status</th>
+								<th>Affiliate Type</th>
 								<th>Name</th>
 								<th>Email</th>
 								<th>Cell</th>
@@ -163,6 +164,9 @@
 										[checked]="blackCarLimoBus.status" [disabled]="disabled"
 										(change)="enableDisableClicked($event,blackCarLimoBus.id)">
 									</mat-slide-toggle>
+								</td>
+								<td>
+									{{blackCarLimoBus.AffiliateTypeName}}
 								</td>
 								<td>
 									{{ blackCarLimoBus.FirstName }}

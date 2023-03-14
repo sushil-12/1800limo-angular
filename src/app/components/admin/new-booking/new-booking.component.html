@@ -521,7 +521,7 @@
 								Passenger Name <span class="asterisk"></span>
 							</mat-label>
 							<input matInput placeholder="Passenger Name" type="text" formControlName="passenger_name"
-								(focus)="$event.target.select()" />
+								(focus)="$event.target.select()"/>
 						</mat-form-field>
 						<div class="error-box">
 							<div class="error-message"
@@ -1715,8 +1715,12 @@
 					</div>
 				</div>
 			</div>
-
-
+			<div class="row m-2">
+				<p class="text-danger text-lg">
+					NOTE : Enter pickup and drop off locations first, then enter extra stops.
+				</p>
+			</div>
+			
 			<!-- Extra Stops -->
 			<div class="row mt-3">
 				<div class="col-md-12 px-4 d-flex justify-content-start align-items-center">

@@ -1,4 +1,7 @@
-.adminbox_shadow.user_information,
+.adminbox_shadow.user_information{
+	font-family: "PT Serif", serif !important;
+	background-color: #f5f4fe;
+}
 .adminbox_shadow.user_information .mat-form-field,
 .mat-calendar {
 	font-family: "PT Serif", serif !important;
@@ -212,4 +215,23 @@ input::-webkit-input-placeholder {
 			}
 		}
 	}
+	.align-btn{
+		flex-direction: row-reverse;
+		align-items:end;
+		width: 100%;
+		margin: 1rem;
+	}
+	// .bottom-container{
+	// 	border:1px solid green !important;
+
+	// }
+
+	// .bottom-container > button{
+	// 	position: relative;
+	// 	border:1px solid pink;
+	// 	bottom: 10px
+	// }
 }
+
+
+

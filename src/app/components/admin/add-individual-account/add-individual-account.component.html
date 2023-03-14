@@ -93,7 +93,8 @@
 						</div>
 						<div *ngIf="f.work.errors"
 							class="text-danger margin-bottom-thin my-mat-hint">
-							<div *ngIf="f.work.errors?.invalid_Pattern;else plusError">Do not add
+							<div *ngIf="f.work.errors?.pattern">Enter only numbers</div>
+							<!-- <div *ngIf="f.work.errors?.invalid_Pattern;else plusError">Do not add
 								Dashes
 								with numbers</div>
 							<ng-template #plusError>
@@ -112,7 +113,7 @@
 											be 15</div>
 									</ng-template>
 								</ng-template>
-							</ng-template>
+							</ng-template> -->
 						</div>
 					</div>
 					<div class="col-md-4">

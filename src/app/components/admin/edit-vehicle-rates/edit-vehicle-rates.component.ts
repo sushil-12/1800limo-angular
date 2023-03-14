@@ -1,7 +1,7 @@
 import { Component, OnInit, AfterViewChecked } from '@angular/core';
 import { AdminService } from '../../../services/admin.service';
 import { HttpClient } from "@angular/common/http";
-import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormArray, FormControl, AbstractControl, ValidatorFn, ValidationErrors } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from "ngx-spinner";
 import { StateManagementService } from '../../../services/statemanagement.service';
@@ -32,7 +32,6 @@ export class EditVehicleRatesComponent implements OnInit {
 	public vehicleYear: string;
 	public vehicle_image: string;
 	public is_gratuity: string = 'yes';
-
 	public addVehicleRatesForm: FormGroup;
 	public submittedForm: boolean;
 	public disableSubmitButton: boolean = false;
@@ -61,7 +60,7 @@ export class EditVehicleRatesComponent implements OnInit {
 			hours_day_rate: [8, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			day_rate: ['', [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			km_mile: ['mile', Validators.required],
-			milage_rate: ['', [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
+			milage_rate: ['', [Validators.pattern("[1-9]")]],
 			kilometer_rate: ['', [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			minimum_airport_departure_rate: ['', [Validators.required, Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			minimum_airport_arrival_rate: ['', [Validators.required, Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
@@ -247,6 +246,19 @@ export class EditVehicleRatesComponent implements OnInit {
 					});
 			});
 	}
+
+	IsZeroValidator(value: any, form_control: string)
+	{
+		if(value == 0)
+		{
+			this.addVehicleRatesForm.get(form_control).setValue(null);
+			this.addVehicleRatesForm.updateValueAndValidity();
+			return true;
+		}
+		return false;
+	}
+
+
 	changeGraruity(e) {
 		if (e.checked) {
 			this.addVehicleRatesForm.patchValue({

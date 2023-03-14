@@ -13,8 +13,7 @@ declare var $: any;
 	templateUrl: './affiliate-steps-template.component.html',
 	styleUrls: ['./affiliate-steps-template.component.scss']
 })
-export class AffiliateStepsTemplateComponent implements OnInit
-{
+export class AffiliateStepsTemplateComponent implements OnInit {
 
 	public currentUser: any;
 	public stepCompleted: Array<any>;
@@ -42,27 +41,21 @@ export class AffiliateStepsTemplateComponent implements OnInit
 		private activatedRoute: ActivatedRoute,
 	) { }
 
-	ngOnInit()
-	{
+	ngOnInit() {
 		this.currentStep = this.router.url.substring(this.router.url.indexOf('step'));
 		this.affiliateId = sessionStorage.getItem('affiliateId');
-		if (this.affiliateId)
-		{
+		if (this.affiliateId) {
 			this.adminService.getStepsCompleted(this.affiliateId)
 				.pipe(
-					catchError(err =>
-					{
+					catchError(err => {
 						return throwError(err);
 					})
-				).subscribe(({ data }: any) =>
-				{
-					if (data)
-					{
+				).subscribe(({ data }: any) => {
+					if (data) {
 						const stepCompleted = data.step_completed;
 						const stepCompletedObj = data.step_completed_obj;
 						this.affiliateAccountStatus = data.account_approval;
-						if (stepCompleted)
-						{
+						if (stepCompleted) {
 							this.stepCompleted = stepCompleted;
 							this.stepCompletedObj = stepCompletedObj;
 							this.adminService.updateStepsArrayLocal(stepCompleted);
@@ -72,33 +65,33 @@ export class AffiliateStepsTemplateComponent implements OnInit
 					}
 				});
 		}
-		if (!this.affiliateId)
-		{
+		if (!this.affiliateId) {
 			this.stepsObj = JSON.parse(sessionStorage.getItem('step_completed_obj'));
-			for (let [key, value] of Object.entries(this.stepsObj))
-			{
-				if (key == 'step0' && value == 'completed')
-				{
+			for (let [key, value] of Object.entries(this.stepsObj)) {
+				if (key == 'step0' && value == 'completed') {
 					this['step0'] = 'md-step ' + 'completed'
 				}
 			}
 		}
 	}
 
-	stepCompletionTick()
-	{
-		for (let [key, value] of Object.entries(this.stepCompletedObj))
-		{
+	stepCompletionTick() {
+		for (let [key, value] of Object.entries(this.stepCompletedObj)) {
 			let stepNumber = key;
 			this[stepNumber] = 'md-step ' + value + (this.currentStep == stepNumber ? ' active' : '');
 		}
 	}
 
-	stepClicked(step)
-	{
+	stepClicked(step) {
 		let steps_completed = sessionStorage.getItem('stepCompleted')
-		if (step == 0)
-		{
+		let steps_completed_obj = JSON.parse(sessionStorage.getItem('step_completed_obj'))
+		let first_incomplete_step = Object.keys(steps_completed_obj)[Object.values(steps_completed_obj).indexOf('uncompleted')]
+		let first_step_error = Object.keys(steps_completed_obj)[Object.values(steps_completed_obj).indexOf('error')] || first_incomplete_step
+		console.log(Object.values(steps_completed_obj).indexOf('error'),Object.values(steps_completed_obj).indexOf('uncompleted'))
+		let nav_step = (Object.values(steps_completed_obj).indexOf('error') < Object.values(steps_completed_obj).indexOf('uncompleted'))
+			? first_step_error :
+			first_incomplete_step;
+		if (step == 0) {
 			this.router.navigate(['/admin/affiliate/step0']);
 			return
 		}
@@ -106,19 +99,18 @@ export class AffiliateStepsTemplateComponent implements OnInit
 		console.log('Inside block')
 
 
-		if (step >= 1 && steps_completed != null && steps_completed.includes((step - 1) + ''))
-		{
+		if (step >= 1 && steps_completed != null && steps_completed.includes((step - 1) + '')) {
 			this.router.navigate(['/admin/affiliate/step' + step]);
 
-		} else
-		{
+		} else {
 			console.log('Inside else')
 			this.errordialog.openDialog({
 				errors: {
 					error: `Please complete previous steps first.`
 				}
 			})
-			this.router.navigate(['/admin/affiliate/step' + (steps_completed.length)])
+			console.log('nav------step' , nav_step)
+			this.router.navigate(['/admin/affiliate/' + (nav_step)])
 		}
 
 	}
