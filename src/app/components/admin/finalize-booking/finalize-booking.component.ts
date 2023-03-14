@@ -27,6 +27,7 @@ export class FinalizeBookingComponent implements OnInit {
 	edit_rates_value: any;
 	return_edit_rates_value: any;
 	affiliate_type:string;
+	finalize_btn : string = "Finalize"
 
 	finalize_params = {
 		distance: 0,
@@ -211,6 +212,7 @@ export class FinalizeBookingComponent implements OnInit {
 
 
 	submitForm() {
+		this.finalize_btn = "Finalized"
 		// console.log(this.BookingForm);
 		let rateArray = JSON.parse(JSON.stringify(this.edit_rates_value))
 		delete rateArray.sub_total
