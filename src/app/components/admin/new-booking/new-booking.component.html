@@ -80,7 +80,7 @@
 								Number of Hours
 							</mat-label>
 							<input type="number" matInput placeholder="Enter Hours" formControlName="number_of_hours"
-								tabindex="1" (focus)="$event.target.select()" />
+								 (focus)="$event.target.select()" />
 							<span matSuffix>Hrs.</span>
 						</mat-form-field>
 					</div>
@@ -127,7 +127,7 @@
 										First Name
 									</mat-label>
 									<input matInput placeholder="First Name" type="text" formControlName="first_name"
-										tabindex="1" (focus)="$event.target.select()">
+										 (focus)="$event.target.select()">
 								</mat-form-field>
 								<div class="error-box">
 									<div class="error-message"
@@ -151,7 +151,7 @@
 										Middle Name
 									</mat-label>
 									<input matInput placeholder="Middle Name" type="text" formControlName="middle_name"
-										tabindex="1" (focus)="$event.target.select()">
+										 (focus)="$event.target.select()">
 								</mat-form-field>
 								<div class="error-box">
 									<div class="error-message"
@@ -281,7 +281,7 @@
 										Name of Card Holder
 									</mat-label>
 									<input matInput placeholder="First & Last Name" type="text" formControlName="name"
-										tabindex="0" (focus)="$event.target.select()">
+										 (focus)="$event.target.select()">
 								</mat-form-field>
 								<div class="error-box">
 									<div class="error-message"
@@ -1249,7 +1249,7 @@
 						<p class="text-center"> Driver Image </p>
 						<div class="vehtype_extint" *ngIf="driver_image?.image; else emptyImg">
 							<img [src]="driver_image?.image" (click)="showImageModal(driver_image?.image)"
-								tabindex="-1">
+								>
 						</div>
 						<ng-template #emptyImg>
 							<div class="vehtype_extint emptyImage">
@@ -1304,7 +1304,7 @@
 						<p class="text-center"> Vehicle Image </p>
 						<div class="vehtype_extint" *ngIf="vehicle_image?.image; else emptyImg">
 							<img [src]="vehicle_image?.image" (click)="showImageModal(vehicle_image?.image)"
-								tabindex="-1">
+								>
 						</div>
 						<ng-template #emptyImg>
 							<div class="vehtype_extint emptyImage">
