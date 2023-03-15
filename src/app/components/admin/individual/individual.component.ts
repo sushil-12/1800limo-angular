@@ -48,7 +48,7 @@ export class IndividualComponent implements OnInit
 	loadIndividuals(pageUrl = null)
 	{
 		/** spinner starts on init */
-		this.spinner.show();
+		// this.spinner.show();
 
 		var keyword = ((document.getElementById("keyword") as HTMLInputElement).value);
 		// console.log(keyword);
@@ -70,11 +70,11 @@ export class IndividualComponent implements OnInit
 			this.prevPageUrl = this.individualsRes.data.prev_page_url;
 			this.nextPageUrl = this.individualsRes.data.next_page_url;
 			// sessionStorage.setItem('individuals',JSON.stringify(this.individuals));
-			this.spinner.hide();//hide spinner
+			// this.spinner.hide();//hide spinner
 		})
 			.catch(err =>
 			{
-				this.spinner.hide();//hide spinner
+				// this.spinner.hide();//hide spinner
 			});
 	}
 

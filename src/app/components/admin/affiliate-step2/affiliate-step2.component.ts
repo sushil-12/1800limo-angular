@@ -102,7 +102,7 @@ export class AffiliateStep2Component implements OnInit {
 			AccountHolderFirstName: ['', Validators.required],
 			AccountHolderLastName: ['', Validators.required],
 			AccountNumber: ['', [Validators.required, Validators.pattern("^[0-9]*$"), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
-			Routing: ['', Validators.required],
+			Routing: ['', [Validators.required , Validators.pattern("^[0-9]*$")]],
 			AccountType: ['company', Validators.required],
 			ssn: ['', [Validators.required, Validators.pattern("^[0-9]*$"), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
 			haveEin: ['yesEin'],

@@ -51,17 +51,21 @@
 		<div class="mt-1 container">
 			<div class="row">
 				<div class="col-md-6">
+					<!-- <mat-label>Bank Name <span class="asterisk">*</span></mat-label> -->
 					<mat-form-field appearance="outline">
+						<mat-label>Bank Name </mat-label>
 						<input matInput placeholder="Bank Name" id="BankName" formControlName="BankName">
 					</mat-form-field>
 				</div>
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
+						<mat-label>Bank Address </mat-label>
 						<input matInput placeholder="Bank Address" formControlName="BankAddress">
 					</mat-form-field>
 				</div>
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
+						<mat-label>Account Holder First Name<span class="asterisk">*</span></mat-label>
 						<input matInput placeholder="Account Holder First Name*"
 							formControlName="AccountHolderFirstName">
 					</mat-form-field>
@@ -72,6 +76,7 @@
 				</div>
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
+						<mat-label>Account Holder Last Name<span class="asterisk">*</span></mat-label>
 						<input matInput placeholder="Account Holder Last Name*" formControlName="AccountHolderLastName">
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.AccountHolderLastName.errors"
@@ -81,9 +86,10 @@
 				</div>
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
+						<mat-label>Account Number<span class="asterisk">*</span></mat-label>
 						<input matInput placeholder="Account Number*" formControlName="AccountNumber">
 					</mat-form-field>
-					<div *ngIf="submittedForm && f.AccountNumber.errors"
+					<div *ngIf="f.AccountNumber.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.AccountNumber.errors.required">This field is required</div>
 						<div *ngIf="f.AccountNumber.errors.pattern">This field should be a number</div>
@@ -91,10 +97,12 @@
 				</div>
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
+						<mat-label>Checking Routing Number<span class="asterisk">*</span></mat-label>
 						<input matInput placeholder="Checking Routing Number*" formControlName="Routing">
 					</mat-form-field>
-					<div *ngIf="submittedForm && f.Routing.errors" class="text-danger margin-bottom-thin my-mat-hint">
+					<div *ngIf="f.Routing.errors" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.Routing.errors.required">This field is required</div>
+						<div *ngIf="f.Routing.errors.pattern">This field should be a number</div>
 					</div>
 				</div>
 				<div class="col-md-6">
