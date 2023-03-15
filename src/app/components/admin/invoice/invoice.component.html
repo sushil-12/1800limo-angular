@@ -8,7 +8,9 @@
         <div class="col-md-10 mt-3 mb-3">
           <mat-form-field appearance="outline">
             <mat-label>Search Filter by Key word</mat-label>
-            <input type="text" matInput placeholder="Search Filter by Key word" id="keyword">
+            <input type="text" matInput placeholder="Search Filter by Key word" 
+            (keyup)="loadInvoice()"
+            id="keyword">
           </mat-form-field>
         </div>
         <div class="col-md-2 mt-3 mb-3">

@@ -46,7 +46,7 @@ export class InvoiceComponent implements OnInit {
   loadInvoice(pageUrl=null)
   {
       /** spinner starts on init */
-      this.spinner.show();
+      // this.spinner.show();
 
       var keyword = ((document.getElementById("keyword") as HTMLInputElement).value);
       // console.log(keyword);
@@ -67,10 +67,10 @@ export class InvoiceComponent implements OnInit {
         this.prevPageUrl=this.invoiceRes.data.prev_page_url;
         this.nextPageUrl=this.invoiceRes.data.next_page_url;
         // sessionStorage.setItem('invoice',JSON.stringify(this.invoice));
-        this.spinner.hide();//hide spinner
+        // this.spinner.hide();//hide spinner
       })
       .catch(err=>{
-        this.spinner.hide();//hide spinner
+        // this.spinner.hide();//hide spinner
       });
   }
 

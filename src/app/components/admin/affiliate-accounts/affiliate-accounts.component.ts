@@ -160,13 +160,11 @@ export class AffiliateAccountsComponent implements OnInit {
 		this.router.navigate(['/admin/affiliate/step0']);
 	}
 
-	editAffiliateAccount(affiliate_id: number) {
+	editAffiliateAccount(affiliate_id: number, affiliate_type: string) {
 		// this.affiliateService.updateStepsArrayLocal(this.response.data.affiliateParmas.step_completed);
 		// this.affiliateService.updateStepsCompletedObject(this.response.data.affiliateParmas.step_completed_obj);
 		sessionStorage.setItem('affiliateId', JSON.stringify(affiliate_id))
-		if (this.affiliateType !== "all") {
-			sessionStorage.setItem("affiliateType", this.affiliateType);
-		}
+		sessionStorage.setItem("affiliateType", affiliate_type);
 		this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
 			this.router.navigate(['/admin/affiliate/step0']);
 		});

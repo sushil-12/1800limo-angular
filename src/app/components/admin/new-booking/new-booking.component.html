@@ -2228,10 +2228,41 @@
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
-
-
 			<div class="modal-body" style="font-family: 'PT Serif', serif;">
 				<div class="container text-lg">
+					<!-- Rates/Taxes -->
+			<h4 class="font-weight-bolder m-0 mt-3" *ngIf="Form.affiliate_type.value == 'loose_affiliate'">
+				Rates/Taxes
+			</h4>
+			<div class="mx-2" *ngIf="init_rates && RatesForm">
+				<div class="row m-0">
+					<div class="col-md-4 key">
+						<span>
+							Grand Total
+						</span>
+					</div>
+					<div class="col-md-8 value">
+						<span class="font-weight-bolder">
+							${{ RatesForm.grand_total.toFixed(2) }}
+						</span>
+					</div>
+				</div>
+			</div>
+			<div class="mx-2"
+				*ngIf="ReturnRatesForm && init_return_rates && Form.affiliate_type.value!='affiliate'">
+				<div class="row m-0">
+					<div class="col-md-4 key">
+						<span>
+							Return Trip Grand Total
+						</span>
+					</div>
+					<div class="col-md-8 value">
+						<span class="font-weight-bolder">
+							${{ ReturnRatesForm.r_grandtotal.toFixed(2) }}
+						</span>
+					</div>
+				</div>
+			</div>
 					<!-- Booking Type -->
 					<h4 class="font-weight-bolder m-0">
 						Booking Type
@@ -3154,40 +3185,6 @@
 										{{ timeFormat(Form.return_cruise_time.value) }}
 									</span>
 								</div>
-							</div>
-						</div>
-					</div>
-
-					<!-- Rates/Taxes -->
-					<h4 class="font-weight-bolder m-0 mt-3" *ngIf="Form.affiliate_type.value == 'loose_affiliate'">
-						Rates/Taxes
-					</h4>
-					<div class="mx-2" *ngIf="init_rates && RatesForm">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Grand Total
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder">
-									${{ RatesForm.grand_total.toFixed(2) }}
-								</span>
-							</div>
-						</div>
-					</div>
-					<div class="mx-2"
-						*ngIf="ReturnRatesForm && init_return_rates && Form.affiliate_type.value!='affiliate'">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Return Trip Grand Total
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder">
-									${{ ReturnRatesForm.r_grandtotal.toFixed(2) }}
-								</span>
 							</div>
 						</div>
 					</div>
