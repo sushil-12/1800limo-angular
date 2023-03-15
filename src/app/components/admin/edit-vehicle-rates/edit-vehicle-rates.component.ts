@@ -60,7 +60,7 @@ export class EditVehicleRatesComponent implements OnInit {
 			hours_day_rate: [8, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			day_rate: ['', [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			km_mile: ['mile', Validators.required],
-			milage_rate: ['', [Validators.pattern("[1-9]")]],
+			milage_rate: ['', [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			kilometer_rate: ['', [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			minimum_airport_departure_rate: ['', [Validators.required, Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			minimum_airport_arrival_rate: ['', [Validators.required, Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
