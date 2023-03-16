@@ -403,10 +403,10 @@
 											This field is required
 										</p>
 										<p class="text-danger text-lg m-0"
-											*ngIf="LooseCustomer.card_details.controls.cvv.errors?.pattern;else cvvLength">
+											*ngIf="LooseCustomer.card_details.controls.cvv.errors?.pattern">
 											Only Numbers are Allowed
 										</p>
-										<ng-template #cvvLength>
+										<!-- <ng-template #cvvLength>
 											<p class="text-danger text-lg m-0"
 												*ngIf="LooseCustomer.card_details.controls.cvv.errors?.minlength">
 												Minimum length should be 3
@@ -415,7 +415,7 @@
 												*ngIf="LooseCustomer.card_details.controls.cvv.errors?.maxlength">
 												Maximum length should be 3
 											</p>
-										</ng-template>
+										</ng-template> -->
 									</div>
 								</div>
 							</div>

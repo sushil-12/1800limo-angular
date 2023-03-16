@@ -4,3 +4,24 @@
     height: 60px;
     width: 100%;
 }
+
+table {
+	width: 100;
+	white-space: break-spaces;
+	padding: 10px;
+	min-width: 5rem;
+
+	thead th {
+		color: #000000;
+		font-weight: 600;
+	}
+
+	tbody td>p {
+		margin: 0;
+	}
+}
+
+a:hover {
+	text-decoration: none;
+	color: unset !important;
+}

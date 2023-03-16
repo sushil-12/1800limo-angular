@@ -1310,7 +1310,7 @@ export class NewBookingComponent implements OnInit {
 
 				(<FormGroup>loose_customer.get('card_details')).get('card_number').setValidators([Validators.required, Validators.pattern("^[0-9]*$"), , Validators.minLength(12), Validators.maxLength(19),]);
 				(<FormGroup>loose_customer.get('card_details')).get('name').setValidators([Validators.required, this.customValidator.whitespace()]);
-				(<FormGroup>loose_customer.get('card_details')).get('cvv').setValidators([Validators.required, Validators.pattern("^[0-9]*$"), , Validators.minLength(3), Validators.maxLength(3),]);
+				(<FormGroup>loose_customer.get('card_details')).get('cvv').setValidators([Validators.required, Validators.pattern("^[0-9]*$")]);
 				loose_customer.get('email').setValidators([Validators.required, Validators.email])
 				loose_customer.get('phone').setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)])
 				loose_customer.get('first_name').setValidators([Validators.required, this.customValidator.whitespace()])
