@@ -49,7 +49,7 @@
 						<mat-form-field appearance="outline">
 							<mat-label>Card Holder First & Last Name*</mat-label>
 							<input matInput placeholder="Card Holder First & Last Name"
-								formControlName="name" tabindex="1">
+								formControlName="name" >
 						</mat-form-field>
 						<div *ngIf="submittedForm && f.name.errors || f.name.touched && f.name.errors"
 							class="text-danger margin-bottom-thin my-mat-hint">
@@ -60,7 +60,7 @@
 						<mat-form-field appearance="outline">
 							<mat-label>Card No# *</mat-label>
 							<input matInput placeholder="Card No#" formControlName="number"
-								tabindex="1" id="card-number">
+								id="card-number">
 						</mat-form-field>
 						<div *ngIf="submittedForm && f.number.errors || f.number.touched && f.number.errors"
 							class="text-danger margin-bottom-thin my-mat-hint">
@@ -92,7 +92,7 @@
 					<div class="col-md-4">
 						<mat-form-field appearance="outline">
 							<mat-label>Expiry Month*</mat-label>
-							<mat-select formControlName="exp_month" tabindex="1">
+							<mat-select formControlName="exp_month" >
 								<mat-option value="">Choose Expiry Month</mat-option>
 								<mat-option value='01'>01</mat-option>
 								<mat-option value='02'>02</mat-option>
@@ -116,7 +116,7 @@
 					<div class="col-md-4">
 						<mat-form-field appearance="outline">
 							<mat-label>Expiry Year*</mat-label>
-							<mat-select formControlName="exp_year" tabindex="1">
+							<mat-select formControlName="exp_year" >
 								<mat-option value="">Choose Expiry Year</mat-option>
 								<mat-option *ngFor="let yearOption of yearOptions"
 									value="{{yearOption}}">{{yearOption}}
@@ -131,7 +131,7 @@
 					<div class="col-md-4">
 						<mat-form-field appearance="outline">
 							<mat-label>CVV*</mat-label>
-							<input matInput placeholder="CVV" formControlName="cvc" tabindex="1">
+							<input matInput placeholder="CVV" formControlName="cvc" >
 						</mat-form-field>
 						<div *ngIf="submittedForm && f.cvc.errors || f.cvc.touched && f.cvc.errors"
 							class="text-danger margin-bottom-thin my-mat-hint">
@@ -166,11 +166,11 @@
 		<section class="billing_inforamtion">
 			<ul>
 				<li><button class="custom-btn savebutton" (click)="submitForm()"
-						[disabled]="disableSubmitButton" tabindex="-1">SAVE</button> </li>
+						[disabled]="disableSubmitButton" >SAVE</button> </li>
 				<li><button class="custom-btn resetbutton" (click)="resetForm()"
-						tabindex="-1">RESET</button> </li>
+						>RESET</button> </li>
 				<li><button class="custom-btn backbutton" (click)="backButton()"
-						tabindex="-1">BACK</button> </li>
+						>BACK</button> </li>
 			</ul>
 		</section>
 	</form>
