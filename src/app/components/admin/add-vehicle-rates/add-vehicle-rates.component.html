@@ -81,13 +81,12 @@
 				<div class="col-md-6" *ngIf="milage_rate_selected; else kilometer_rate">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label>Mileage Rate <span class="asterisk">*</span></mat-label>
-						<span matPrefix
-							*ngIf="f.milage_rate.value == null || f.milage_rate.value == ''; else hideZero">{{currencySymbol}}
-							0 &nbsp;</span>
-						<ng-template #hideZero>
+						<!-- <span matPrefix
+							*ngIf="f.milage_rate.value == null || f.milage_rate.value == ''; else hideZero">{{currencySymbol}}&nbsp;</span> -->
+						<!-- <ng-template #hideZero> -->
 							<span matPrefix>{{currencySymbol}} &nbsp;</span>
-						</ng-template>
-						<input matInput placeholder="Mileage Rate" formControlName="milage_rate" tabindex="1">
+						<!-- </ng-template> -->
+						<input matInput placeholder="Mileage Rate" formControlName="milage_rate" tabindex="1" value="0">
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.milage_rate.errors || f.milage_rate.touched && f.milage_rate.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -96,18 +95,21 @@
 					<div *ngIf="f.milage_rate.errors" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.milage_rate.errors.pattern">Enter Numbers only</div>
 					</div>
+					<div *ngIf="IsZeroValidator(f.milage_rate.value, 'milage_rate')" class="text-danger margin-bottom-thin my-mat-hint">
+						<div >Any value required</div>
+					</div>
 				</div>
 				<ng-template #kilometer_rate>
 					<div class="col-md-6">
 						<mat-form-field class="mat-form-field-rates" appearance="outline">
 							<mat-label>Kilometer Rate <span class="asterisk">*</span></mat-label>
-							<span matPrefix
+							<!-- <span matPrefix
 								*ngIf="f.kilometer_rate.value == null || f.kilometer_rate.value == ''; else hideZero">{{currencySymbol}}
 								0 &nbsp;</span>
-							<ng-template #hideZero>
+							<ng-template #hideZero> -->
 								<span matPrefix>{{currencySymbol}} &nbsp;</span>
-							</ng-template>
-							<input matInput placeholder="Kilometer Rate" formControlName="kilometer_rate" tabindex="1">
+							<!-- </ng-template> -->
+							<input matInput type="number" placeholder="Kilometer Rate" formControlName="kilometer_rate" tabindex="1">
 						</mat-form-field>
 						<div *ngIf="submittedForm && f.kilometer_rate.errors || f.kilometer_rate.touched && f.kilometer_rate.errors"
 							class="text-danger margin-bottom-thin my-mat-hint">
@@ -116,18 +118,21 @@
 						<div *ngIf="f.kilometer_rate.errors" class="text-danger margin-bottom-thin my-mat-hint">
 							<div *ngIf="f.kilometer_rate.errors.pattern">Enter Numbers only</div>
 						</div>
+						<div *ngIf="IsZeroValidator(f.kilometer_rate.value, 'kilometer_rate')" class="text-danger margin-bottom-thin my-mat-hint">
+							<div >Any value required</div>
+						</div>
 					</div>
 				</ng-template>
 				<div class="col-md-6">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label>Hourly Rate <span class="asterisk">*</span></mat-label>
-						<span matPrefix
+						<!-- <span matPrefix
 							*ngIf="f.hourly_rate.value == null || f.hourly_rate.value == ''; else hideZero1">{{currencySymbol}}
 							0 &nbsp;</span>
-						<ng-template #hideZero1>
+						<ng-template #hideZero1> -->
 							<span matPrefix>{{currencySymbol}} &nbsp;</span>
-						</ng-template>
-						<input matInput placeholder="Hourly Rate" formControlName="hourly_rate" tabindex="1">
+						<!-- </ng-template> -->
+						<input matInput type="number" placeholder="Hourly Rate" formControlName="hourly_rate" tabindex="1">
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.hourly_rate.errors || f.hourly_rate.touched && f.hourly_rate.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -136,17 +141,20 @@
 					<div *ngIf="f.hourly_rate.errors" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.hourly_rate.errors.pattern">Enter Numbers only</div>
 					</div>
+					<div *ngIf="IsZeroValidator(f.hourly_rate.value, 'hourly_rate')" class="text-danger margin-bottom-thin my-mat-hint">
+						<div >Any value required</div>
+					</div>
 				</div>
 				<div class="col-md-6">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label>Hourly Rate After 5 Hours <span class="asterisk">*</span></mat-label>
-						<span matPrefix
+						<!-- <span matPrefix
 							*ngIf="f.hourly_rate_after_five_hours.value == null || f.hourly_rate_after_five_hours.value == ''; else hideZero2">{{currencySymbol}}
 							0 &nbsp;</span>
-						<ng-template #hideZero2>
+						<ng-template #hideZero2> -->
 							<span matPrefix>{{currencySymbol}} &nbsp;</span>
-						</ng-template>
-						<input matInput placeholder="Hourly Rate After 5 Hours"
+						<!-- </ng-template> -->
+						<input matInput type="number" placeholder="Hourly Rate After 5 Hours"
 							formControlName="hourly_rate_after_five_hours" tabindex="1">
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.hourly_rate_after_five_hours.errors || f.hourly_rate_after_five_hours.touched && f.hourly_rate_after_five_hours.errors"
@@ -156,6 +164,9 @@
 					<div *ngIf="f.hourly_rate_after_five_hours.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.hourly_rate_after_five_hours.errors.pattern">Enter Numbers only</div>
+					</div>
+					<div *ngIf="IsZeroValidator(f.hourly_rate_after_five_hours.value, 'hourly_rate_after_five_hours')" class="text-danger margin-bottom-thin my-mat-hint">
+						<div >Any value required</div>
 					</div>
 				</div>
 				<div class="col-md-3">
@@ -177,29 +188,32 @@
 				<div class="col-md-3">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label>Day Rate Extension</mat-label>
-						<span matPrefix
+						<!-- <span matPrefix
 							*ngIf="f.day_rate.value == null || f.day_rate.value == ''; else hideZero4">{{currencySymbol}}
 							0 &nbsp;</span>
-						<ng-template #hideZero4>
+						<ng-template #hideZero4> -->
 							<span matPrefix>{{currencySymbol}} &nbsp;</span>
-						</ng-template>
-						<input matInput placeholder="Day Rate Extension" formControlName="day_rate" tabindex="1">
+						<!-- </ng-template> -->
+						<input matInput type="number" placeholder="Day Rate Extension" formControlName="day_rate" tabindex="1">
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.day_rate.errors || f.day_rate.touched && f.day_rate.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.day_rate.errors.pattern">Enter Numbers only</div>
 					</div>
+					<div *ngIf="IsZeroValidator(f.day_rate.value, 'day_rate')" class="text-danger margin-bottom-thin my-mat-hint">
+						<div >Any value required</div>
+					</div>
 				</div>
 				<div class="col-md-6">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label>Minimum Intra City Rate <span class="asterisk">*</span></mat-label>
-						<span matPrefix
+						<!-- <span matPrefix
 							*ngIf="f.minimum_city_rate.value == null || f.minimum_city_rate.value == ''; else hideZero5">{{currencySymbol}}
-							0 &nbsp;</span>
+							0 &nbsp;</span> -->
 						<ng-template #hideZero5>
 							<span matPrefix>{{currencySymbol}} &nbsp;</span>
 						</ng-template>
-						<input matInput placeholder="Minimum Intra City Rate" formControlName="minimum_city_rate"
+						<input matInput type="number" placeholder="Minimum Intra City Rate" formControlName="minimum_city_rate"
 							tabindex="1">
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.minimum_city_rate.errors || f.minimum_city_rate.touched && f.minimum_city_rate.errors"
@@ -209,16 +223,19 @@
 					<div *ngIf="f.minimum_city_rate.errors" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.minimum_city_rate.errors.pattern">Enter Numbers only</div>
 					</div>
+					<div *ngIf="IsZeroValidator(f.minimum_city_rate.value, 'minimum_city_rate')" class="text-danger margin-bottom-thin my-mat-hint">
+						<div >Any value required</div>
+					</div>
 				</div>
 				<div class="col-md-3">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label>Minimum Airport Rate - Departure <span class="asterisk">*</span></mat-label>
-						<span matPrefix
+						<!-- <span matPrefix
 							*ngIf="f.minimum_airport_departure_rate.value == null || f.minimum_airport_departure_rate.value == ''; else hideZero6">{{currencySymbol}}
 							0 &nbsp;</span>
-						<ng-template #hideZero6>
+						<ng-template #hideZero6> -->
 							<span matPrefix>{{currencySymbol}} &nbsp;</span>
-						</ng-template>
+						<!-- </ng-template> -->
 						<input matInput placeholder="Minimum Airport Departure Rate"
 							formControlName="minimum_airport_departure_rate" tabindex="1">
 					</mat-form-field>
@@ -230,17 +247,20 @@
 						class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.minimum_airport_departure_rate.errors.pattern">Enter Numbers only</div>
 					</div>
+					<div *ngIf="IsZeroValidator(f.minimum_city_rate.value, 'minimum_city_rate')" class="text-danger margin-bottom-thin my-mat-hint">
+						<div >Any value required</div>
+					</div>
 				</div>
 				<div class="col-md-3">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label>Minimum Airport Rate - Arrival <span class="asterisk">*</span></mat-label>
-						<span matPrefix
+						<!-- <span matPrefix
 							*ngIf="f.minimum_airport_arrival_rate.value == null || f.minimum_airport_arrival_rate.value == ''; else hideZero7">{{currencySymbol}}
 							0 &nbsp;</span>
-						<ng-template #hideZero7>
+						<ng-template #hideZero7> -->
 							<span matPrefix>{{currencySymbol}} &nbsp;</span>
-						</ng-template>
-						<input matInput placeholder="Minimum Airport Arrival Rate"
+						<!-- </ng-template> -->
+						<input matInput type="number" placeholder="Minimum Airport Arrival Rate"
 							formControlName="minimum_airport_arrival_rate" tabindex="1">
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.minimum_airport_arrival_rate.errors || f.minimum_airport_arrival_rate.touched && f.minimum_airport_arrival_rate.errors"
@@ -251,17 +271,21 @@
 						class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.minimum_airport_arrival_rate.errors.pattern">Enter Numbers only</div>
 					</div>
+					<div *ngIf="IsZeroValidator(f.minimum_airport_arrival_rate.value, 'minimum_airport_arrival_rate')" class="text-danger margin-bottom-thin my-mat-hint">
+						<div >Any value required</div>
+					</div>
+					
 				</div>
 				<div class="col-md-6">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label>Minimum Cruise Port Rate -Arrival <span class="asterisk">*</span></mat-label>
-						<span matPrefix
+						<!-- <span matPrefix
 							*ngIf="f.minimum_cruise_port_arrival_rate.value == null || f.minimum_cruise_port_arrival_rate.value == ''; else hideZero9">{{currencySymbol}}
 							0 &nbsp;</span>
-						<ng-template #hideZero9>
+						<ng-template #hideZero9> -->
 							<span matPrefix>{{currencySymbol}} &nbsp;</span>
-						</ng-template>
-						<input matInput placeholder="Minimum Cruise Port Arrival Rate"
+						<!-- </ng-template> -->
+						<input matInput type="number" placeholder="Minimum Cruise Port Arrival Rate"
 							formControlName="minimum_cruise_port_arrival_rate" tabindex="1">
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.minimum_cruise_port_arrival_rate.errors || f.minimum_cruise_port_arrival_rate.touched && f.minimum_cruise_port_arrival_rate.errors"
@@ -272,17 +296,20 @@
 						class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.minimum_cruise_port_arrival_rate.errors.pattern">Enter Numbers only</div>
 					</div>
+					<div *ngIf="IsZeroValidator(f.minimum_cruise_port_arrival_rate.value, 'minimum_cruise_port_arrival_rate')" class="text-danger margin-bottom-thin my-mat-hint">
+						<div >Any value required</div>
+					</div>
 				</div>
 				<div class="col-md-6">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label>Airport / Cruise Port Cancel Rate</mat-label>
-						<span matPrefix
+						<!-- <span matPrefix
 							*ngIf="f.airport_city_percentage_booking_cancel_charges.value == null || f.airport_city_percentage_booking_cancel_charges.value == ''; else hideZero11">{{currencySymbol}}
 							0 &nbsp;</span>
-						<ng-template #hideZero11>
+						<ng-template #hideZero11> -->
 							<span matPrefix>{{currencySymbol}} &nbsp;</span>
-						</ng-template>
-						<input matInput placeholder="Airport / Cruise Port Cancel Rate"
+						<!-- </ng-template> -->
+						<input matInput type="number" placeholder="Airport / Cruise Port Cancel Rate"
 							formControlName="airport_city_percentage_booking_cancel_charges" tabindex="1">
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.airport_city_percentage_booking_cancel_charges.errors || f.airport_city_percentage_booking_cancel_charges.touched && f.airport_city_percentage_booking_cancel_charges.errors"
@@ -290,22 +317,28 @@
 						<div *ngIf="f.airport_city_percentage_booking_cancel_charges.errors.pattern">Enter Numbers only
 						</div>
 					</div>
+					<div *ngIf="IsZeroValidator(f.airport_city_percentage_booking_cancel_charges.value, 'airport_city_percentage_booking_cancel_charges')" class="text-danger margin-bottom-thin my-mat-hint">
+						<div >Any value required</div>
+					</div>
 				</div>
 				<div class="col-md-6">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label>Shared Ride Rate - Per Person</mat-label>
-						<span matPrefix
+						<!-- <span matPrefix
 							*ngIf="f.per_person_group_ride_rate.value == null || f.per_person_group_ride_rate.value == ''; else hideZero16">{{currencySymbol}}
 							0 &nbsp;</span>
-						<ng-template #hideZero16>
+						<ng-template #hideZero16> -->
 							<span matPrefix>{{currencySymbol}} &nbsp;</span>
-						</ng-template>
-						<input matInput placeholder="Shared Ride Rate - Per Person"
+						<!-- </ng-template> -->
+						<input matInput type="number" placeholder="Shared Ride Rate - Per Person"
 							formControlName="per_person_group_ride_rate" tabindex="1">
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.per_person_group_ride_rate.errors || f.per_person_group_ride_rate.touched && f.per_person_group_ride_rate.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.per_person_group_ride_rate.errors.pattern">Enter Numbers only</div>
+					</div>
+					<div *ngIf="IsZeroValidator(f.per_person_group_ride_rate.value, 'per_person_group_ride_rate')" class="text-danger margin-bottom-thin my-mat-hint">
+						<div >Any value required</div>
 					</div>
 				</div>
 				<div class="col-md-12">
@@ -390,12 +423,12 @@
 				<div class="col-md-3">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label>Airport Arrival Tax</mat-label>
-						<span matPrefix
+						<!-- <span matPrefix
 							*ngIf="f.airport_arrival_tax_per_us.value == null || f.airport_arrival_tax_per_us.value == ''; else hideZero12">{{currencySymbol}}
 							0 &nbsp;</span>
-						<ng-template #hideZero12>
+						<ng-template #hideZero12> -->
 							<span matPrefix>{{currencySymbol}} &nbsp;</span>
-						</ng-template>
+						<!-- </ng-template> -->
 						<input matInput placeholder="Airport Arrival Tax" formControlName="airport_arrival_tax_per_us"
 							tabindex="1">
 					</mat-form-field>
@@ -407,12 +440,12 @@
 				<div class="col-md-3">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label>Airport Departure Tax</mat-label>
-						<span matPrefix
+						<!-- <span matPrefix
 							*ngIf="f.airport_departure_tax_per_us.value == null || f.airport_departure_tax_per_us.value == ''; else hideZero13">{{currencySymbol}}
 							0 &nbsp;</span>
-						<ng-template #hideZero13>
+						<ng-template #hideZero13> -->
 							<span matPrefix>{{currencySymbol}} &nbsp;</span>
-						</ng-template>
+						<!-- </ng-template> -->
 						<input matInput placeholder="Airport Departure Tax"
 							formControlName="airport_departure_tax_per_us" tabindex="1">
 					</mat-form-field>
@@ -424,12 +457,12 @@
 				<div class="col-md-3">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label>Sea Port Tax</mat-label>
-						<span matPrefix
+						<!-- <span matPrefix
 							*ngIf="f.sea_port_tax_per_us.value == null || f.sea_port_tax_per_us.value == ''; else hideZero14">{{currencySymbol}}
 							0 &nbsp;</span>
-						<ng-template #hideZero14>
+						<ng-template #hideZero14> -->
 							<span matPrefix>{{currencySymbol}} &nbsp;</span>
-						</ng-template>
+						<!-- </ng-template> -->
 						<input matInput placeholder="Sea Port Tax" formControlName="sea_port_tax_per_us" tabindex="1">
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.sea_port_tax_per_us.errors || f.sea_port_tax_per_us.touched && f.sea_port_tax_per_us.errors"
@@ -440,12 +473,12 @@
 				<div class="col-md-3">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label>City Congestion Tax</mat-label>
-						<span matPrefix
+						<!-- <span matPrefix
 							*ngIf="f.city_congestion_tax_per_us.value == null || f.city_congestion_tax_per_us.value == ''; else hideZero15">{{currencySymbol}}
 							0 &nbsp;</span>
-						<ng-template #hideZero15>
+						<ng-template #hideZero15> -->
 							<span matPrefix>{{currencySymbol}} &nbsp;</span>
-						</ng-template>
+						<!-- </ng-template> -->
 						<input matInput placeholder="City Congestion Tax" formControlName="city_congestion_tax_per_us"
 							tabindex="1">
 					</mat-form-field>

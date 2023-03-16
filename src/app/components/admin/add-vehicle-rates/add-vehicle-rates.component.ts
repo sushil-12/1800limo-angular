@@ -240,6 +240,17 @@ export class AddVehicleRatesComponent implements OnInit {
 		return this.addVehicleRatesForm.controls;
 	}
 
+	IsZeroValidator(value: any, form_control: string)
+	{
+		if(value == 0)
+		{
+			this.addVehicleRatesForm.get(form_control).setValue(null);
+			this.addVehicleRatesForm.updateValueAndValidity();
+			return true;
+		}
+		return false;
+	}
+
 	submitForm() {
 		this.submittedForm = true;
 		this.addVehicleRatesForm.patchValue({

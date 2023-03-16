@@ -45,7 +45,7 @@
 								[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
 								placeholder="1234567890" class="phoneNumberClass"
 								(countryChange)="onCountryChange($event,'mobile')"
-								(intlTelInputObject)="telInputObjectMobile($event)" tabIndex="1" />
+								(intlTelInputObject)="telInputObjectMobile($event)" />
 						</mat-form-field>
 						<div *ngIf="submittedForm && f.mobile.errors || f.mobile.touched && f.mobile.errors"
 							class="text-danger margin-bottom-thin my-mat-hint">
@@ -85,7 +85,7 @@
 								[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
 								placeholder="1234567890" class="phoneNumberClass"
 								(countryChange)="onCountryChange($event,'work')"
-								(intlTelInputObject)="telInputObjectWork($event)" tabIndex="1" />
+								(intlTelInputObject)="telInputObjectWork($event)" />
 						</mat-form-field>
 						<div *ngIf="submittedForm && f.work.errors || f.work.touched && f.work.errors"
 							class="text-danger margin-bottom-thin my-mat-hint">
@@ -260,10 +260,10 @@
 										Numbers Only
 									</div>
 									<ng-template #numberLength>
-										<div *ngIf="f.number.errors.minlength">Minimum length should
-											be 16</div>
+										<!-- <div *ngIf="f.number.errors.minlength">Minimum length should
+											be 16</div> -->
 										<div *ngIf="f.number.errors.maxlength">Maximum length should
-											be 16</div>
+											be 20</div>
 									</ng-template>
 								</ng-template>
 							</ng-template>
@@ -334,7 +334,7 @@
 										<div *ngIf="f.cvc.errors.minlength">Minimum length should be
 											3</div>
 										<div *ngIf="f.cvc.errors.maxlength">Maximum length should be
-											3</div>
+											5</div>
 									</ng-template>
 								</ng-template>
 							</ng-template>

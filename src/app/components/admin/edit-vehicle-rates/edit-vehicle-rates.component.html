@@ -80,14 +80,14 @@
 				</div>
 				<div class="col-md-6" *ngIf="milage_rate_selected; else kilometer_rate">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
-						<mat-label>Milage Rate <span class="asterisk">*</span></mat-label>
+						<mat-label>Mileage Rate <span class="asterisk">*</span></mat-label>
 						<span matPrefix
 							*ngIf="f.milage_rate.value == null || f.milage_rate.value == ''; else hideZero">{{currencySymbol}}
 							 &nbsp;</span>
 						<ng-template #hideZero>
 							<span matPrefix>{{currencySymbol}} &nbsp;</span>
 						</ng-template>
-						<input type="number" matInput placeholder="Milage Rate" formControlName="milage_rate" tabindex="1" value="0">
+						<input matInput placeholder="Mileage Rate" formControlName="milage_rate" tabindex="1" value="0">
 					</mat-form-field>
 					<div *ngIf="(submittedForm && f.milage_rate.errors) || (f.milage_rate.touched && f.milage_rate.errors)"
 						class="text-danger margin-bottom-thin my-mat-hint">
