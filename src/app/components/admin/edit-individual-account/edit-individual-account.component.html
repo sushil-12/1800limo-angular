@@ -45,8 +45,8 @@
 								ng2TelInput
 								[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
 								placeholder="1234567890" class="phoneNumberClass"
-								(countryChange)="onCountryChange($event,'mobile')" readonly
-								(intlTelInputObject)="telInputObjectMobile($event)" tabIndex="1" />
+								(countryChange)="onCountryChange($event,'mobile')"
+								(intlTelInputObject)="telInputObjectMobile($event)"  />
 						</mat-form-field>
 						<div *ngIf="submittedForm && f.mobile.errors || f.mobile.touched && f.mobile.errors"
 							class="text-danger margin-bottom-thin my-mat-hint">
@@ -81,12 +81,12 @@
 							<label
 								class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Work<span
 									class="asterisk">
-									*</span></label>
-							<input matInput placeholder="Work" formControlName="work" ng2TelInput
+									</span></label>
+							<input matInput  formControlName="work" ng2TelInput
 								[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
 								placeholder="1234567890" class="phoneNumberClass"
 								(countryChange)="onCountryChange($event,'work')"
-								(intlTelInputObject)="telInputObjectWork($event)" tabIndex="1" />
+								(intlTelInputObject)="telInputObjectWork($event)" />
 						</mat-form-field>
 						<div *ngIf="submittedForm && f.work.errors || f.work.touched && f.work.errors"
 							class="text-danger margin-bottom-thin my-mat-hint">
@@ -122,7 +122,7 @@
 							<input formControlName="email" type="email" matInput
 								placeholder="E-mail">
 						</mat-form-field>
-						<div *ngIf="submittedForm && f.email.errors" class="text-danger">
+						<div *ngIf="(f.email.errors && (f.email.touched || f.email.dirty)) " class="text-danger" >
 							<div *ngIf="f.email.errors.required">This field is required</div>
 							<div *ngIf="f.email.errors.pattern">Email format should be valid</div>
 						</div>
