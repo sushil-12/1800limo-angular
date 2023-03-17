@@ -69,7 +69,7 @@
 						<input matInput placeholder="Account Holder First Name*"
 							formControlName="AccountHolderFirstName">
 					</mat-form-field>
-					<div *ngIf="submittedForm && f.AccountHolderFirstName.errors"
+					<div *ngIf="f.AccountHolderFirstName.errors && (f.AccountHolderFirstName.touched || f.AccountHolderFirstName.dirty )"
 						class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.AccountHolderFirstName.errors.required">This field is required</div>
 					</div>
@@ -79,7 +79,7 @@
 						<mat-label>Account Holder Last Name<span class="asterisk">*</span></mat-label>
 						<input matInput placeholder="Account Holder Last Name*" formControlName="AccountHolderLastName">
 					</mat-form-field>
-					<div *ngIf="submittedForm && f.AccountHolderLastName.errors"
+					<div *ngIf="f.AccountHolderLastName.errors && (f.AccountHolderLastName.touched || f.AccountHolderLastName.dirty )"
 						class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.AccountHolderLastName.errors.required">This field is required</div>
 					</div>
@@ -89,7 +89,7 @@
 						<mat-label>Account Number<span class="asterisk">*</span></mat-label>
 						<input matInput placeholder="Account Number*" formControlName="AccountNumber">
 					</mat-form-field>
-					<div *ngIf="f.AccountNumber.errors"
+					<div *ngIf="f.AccountNumber.errors && (f.AccountNumber.touched || f.AccountNumber.dirty )"
 						class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.AccountNumber.errors.required">This field is required</div>
 						<div *ngIf="f.AccountNumber.errors.pattern">This field should be a number</div>
@@ -100,7 +100,7 @@
 						<mat-label>Checking Routing Number<span class="asterisk">*</span></mat-label>
 						<input matInput placeholder="Checking Routing Number*" formControlName="Routing">
 					</mat-form-field>
-					<div *ngIf="f.Routing.errors" class="text-danger margin-bottom-thin my-mat-hint">
+					<div *ngIf="f.Routing.errors && (f.Routing.touched || f.Routing.dirty )" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.Routing.errors.required">This field is required</div>
 						<div *ngIf="f.Routing.errors.pattern">This field should be a number</div>
 					</div>
