@@ -125,7 +125,7 @@
 									<ng-template #adminRole>
 										<div *ngIf="currentUser.roleName=='admin'" class="dropdown-item"
 											(click)="dashboard('admin')">
-											<div class="dropdown-item-icon settingsvg">
+											<div class="dropdown-item-icon gear-bg settingsvg font-weight-bolder">
 												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
 													viewBox="0 0 24 24" fill="none" stroke="currentColor"
 													stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -138,7 +138,7 @@
 											</div>Admin Dashboard
 										</div>
 									</ng-template>
-									<div class="dropdown-item" (click)="logout()">
+									<div class="dropdown-item logout-background font-weight-bolder" (click)="logout()">
 										<div class="dropdown-item-icon">
 											<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
 												viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"

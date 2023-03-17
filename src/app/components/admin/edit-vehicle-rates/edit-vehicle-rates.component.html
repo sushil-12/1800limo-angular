@@ -89,7 +89,7 @@
 						</ng-template>
 						<input matInput placeholder="Mileage Rate" formControlName="milage_rate" tabindex="1" value="0">
 					</mat-form-field>
-					<div *ngIf="(submittedForm && f.milage_rate.errors) || (f.milage_rate.touched && f.milage_rate.errors)"
+					<div *ngIf="f.milage_rate.errors && (f.milage_rate.touched || f.milage_rate.errors)"
 						class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.milage_rate.errors.required">This field is required</div>
 					</div>

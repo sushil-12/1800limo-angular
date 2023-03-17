@@ -264,6 +264,11 @@
 							</g>
 						</svg>
 					</mat-form-field>
+					<!-- <div *ngIf="affiliateEmailStatus == 'no'"class="text-danger margin-bottom-thin my-mat-hint">
+						<div>
+							Please verify email
+						</div>
+					</div> -->
 					<div *ngIf="
 							(submittedForm && f.Email.errors) ||
 							(f.Email.touched && f.Email.errors)
