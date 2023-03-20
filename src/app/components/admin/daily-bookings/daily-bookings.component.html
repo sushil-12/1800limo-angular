@@ -138,8 +138,8 @@
 											</a>
 											<a class="dropdown-item" [routerLink]="['/admin/invoice-summary']"
 												[queryParams]="{bookingId: booking.booking_id}"
+												*ngIf="booking.payment_status=='paid'"
 												>
-												<!-- *ngIf="booking.payment_status=='paid'" -->
 												<div class="dropdown-item-icon"></div>
 												Invoice
 											</a>
