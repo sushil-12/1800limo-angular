@@ -574,7 +574,13 @@
 							<mat-label>
 								{{ sendMessageField ? 'Send SMS' : 'Send Email' }}
 							</mat-label>
-							<textarea matInput placeholder="Write a Message...." id="clearField" #inputmsg></textarea>
+							<textarea 
+								matInput
+								placeholder="Write a Message...."
+								id="clearField"
+								cdkTextareaAutosize
+								#autosize="cdkTextareaAutosize"
+								#inputmsg></textarea>
 						</mat-form-field>
 						<button class="btn saveButton" (click)="submit(inputmsg.value, sendMessageField)"
 							data-dismiss="modal">Send</button>
