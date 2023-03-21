@@ -72,7 +72,7 @@
 					<aside class="sidebar">
 						<div id="filter-buttons" class="mb-4">
 							<button type="button" (click)="clearFilters(null)"
-								class="custom-filled-button orange-button mx-2">
+								class="custom-filled-button orange-button my-2 mx-2">
 								Clear filters
 							</button>
 							<button type="button" (click)="getVehicleDetails(); openfilters=false"
@@ -257,6 +257,11 @@
 									</div>
 								</div>
 								<!-- OUTER CARD -->
+								<div class="my-2" *ngIf="role==2">
+									<div class="font-weight-bold display-5" style="font-size: 18px;">
+										Affiliate Vehicles
+									</div> 
+								</div>
 							</div>
 							<div id="filter-buttons" class="mt-4">
 								<button type="button" (click)="clearFilters(null)"
@@ -264,7 +269,7 @@
 									Clear filters
 								</button>
 								<button type="button" (click)="getVehicleDetails(); openfilters=false"
-									class="custom-filled-button green-button mx-2">
+									class="custom-filled-button green-button my-2 mx-2">
 									Apply filters
 								</button>
 							</div>

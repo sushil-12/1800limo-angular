@@ -979,6 +979,14 @@ export class AdminService {
 		return this.httpClient.get(this.serverUrl + 'admin/booking-status-list');
 	}
 
+	sendInvoiveToCustomer(bookingId:any){
+		return this.httpClient.get(`${this.serverUrl}admin/send-invoice/${bookingId}`)
+	}
+
+	refund(body:any){
+		return this.httpClient.post(`${this.serverUrl}admin/refund-request`,body)
+	}
+
 
 
 }

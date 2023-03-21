@@ -40,7 +40,7 @@
 								class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Mobile<span
 									class="asterisk">
 									*</span></label>
-							<input matInput placeholder="Mobile" formControlName="mobile"
+							<input matInput type="number" placeholder="Mobile" formControlName="mobile"
 								ng2TelInput
 								[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
 								placeholder="1234567890" class="phoneNumberClass"
@@ -81,7 +81,7 @@
 								class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Work<span
 									class="asterisk">
 									</span></label>
-							<input matInput placeholder="Work" formControlName="work" ng2TelInput
+							<input matInput type="number" placeholder="Work" formControlName="work" ng2TelInput
 								[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
 								placeholder="1234567890" class="phoneNumberClass"
 								(countryChange)="onCountryChange($event,'work')"
