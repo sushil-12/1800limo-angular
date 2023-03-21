@@ -4,6 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from "ngx-spinner";
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
+import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 
 @Component({
 	selector: 'app-invoice-summary',
@@ -22,6 +23,8 @@ export class InvoiceSummaryComponent implements OnInit
 		private adminService: AdminService,
 		private router: Router,
 		private spinner: NgxSpinnerService,
+		private $spinner: NgxSpinnerService,
+		private $errors: ErrorDialogService,
 		private activatedroute: ActivatedRoute) { }
 
 	ngOnInit(): void
@@ -61,6 +64,38 @@ export class InvoiceSummaryComponent implements OnInit
 	backButton()
 	{
 		this.router.navigate(['/admin/daily-bookings-admin']);
+	}
+
+	sendInvoiceToCustomer(){
+		this.$spinner.show()
+		this.adminService.sendInvoiveToCustomer(this.bookingId).subscribe((response: any) => {
+			this.$errors.openDialog({
+				errors: {
+					error: `<span class='text-success'>${response.message}</span>`
+				}
+			})
+			// this.$router.navigate(['/admin/daily-bookings-admin'])
+			console.log('response-->>' , response)
+			this.$spinner.hide()
+		})
+	}
+
+	refund(){
+		this.$spinner.show()
+		let body = {
+			reservation_id : this.invoiceData.reservation_id,
+			amount : this.invoiceData.grand_total * 100,
+			invoice_id: this.invoiceData.invoice_number
+		}
+		this.adminService.refund(body).subscribe((response: any) => {
+			this.$errors.openDialog({
+				errors: {
+					error: `<span class='text-success'>${response.message}</span>`
+				}
+			})
+			// this.$router.navigate(['/admin/daily-bookings-admin'])
+			this.$spinner.hide()
+		})
 	}
 
 }
