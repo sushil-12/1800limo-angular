@@ -249,7 +249,9 @@
 											<span [innerHTML]="highlighText(booking.dropoff_address)"></span>
 										</span>
 									</td>
-									<td>{{booking.vehicle_cat_name}}</td>
+									<td>
+										<span [innerHTML]="highlighText(booking.vehicle_cat_name)"></span>
+									</td>
 									<!-- <td>
 										<mat-slide-toggle class="example-margin" [color]="color"
 											[checked]="booking.status" [disabled]="disabled"
