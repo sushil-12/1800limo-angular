@@ -433,7 +433,7 @@
 	aria-hidden="true" data-backdrop="static" data-keyboard="false">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
-			<button type="button" (click)="show=false" class="close closeButton" data-dismiss="modal"
+			<button type="button" (click)="closeModal()" class="close closeButton" data-dismiss="modal"
 				aria-label="Close">
 				<span aria-hidden="true">&times;</span>
 			</button>
@@ -581,8 +581,10 @@
 								placeholder="Write a Message...."
 								id="clearField"
 								cdkTextareaAutosize
+								cdkAutosizeMaxRows="10"
 								#autosize="cdkTextareaAutosize"
-								#inputmsg></textarea>
+								#inputmsg 
+								(focus)="$event.target.select()"></textarea>
 						</mat-form-field>
 						<button class="btn saveButton" (click)="submit(inputmsg.value, sendMessageField)"
 							data-dismiss="modal">Send</button>
@@ -590,7 +592,7 @@
 				</div>
 			</div>
 			<div class="modal-footer pt-0">
-				<button type="button" data-dismiss="modal" (click)="show=false" class="btn btnStyle">Close</button>
+				<button type="button" data-dismiss="modal" (click)="closeModal()" class="btn btnStyle">Close</button>
 			</div>
 		</div>
 		<!-- <div class="text-center">
