@@ -6,6 +6,7 @@ import { AdminService } from "src/app/services/admin.service";
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 import { FormBuilder, FormGroup, Validators, FormControl, FormArray, ValidationErrors, ValidatorFn, AbstractControl } from '@angular/forms';
 import { CustomvalidationService } from "src/app/services/customvalidation.service";
+declare var $: any;
 
 @Component({
 	selector: "app-finalize-booking",
@@ -13,6 +14,8 @@ import { CustomvalidationService } from "src/app/services/customvalidation.servi
 	styleUrls: ["./finalize-booking.component.scss"],
 })
 export class FinalizeBookingComponent implements OnInit {
+
+	public deleteCardForm: FormGroup;
 	bookingId: number = 0;
 
 	BookingDetail: any;
@@ -76,6 +79,10 @@ export class FinalizeBookingComponent implements OnInit {
 				// navigate back to dashboard in case of no booking Id specified.
 				this.$router.navigate(["/admin/daily-bookings-admin"]);
 			}
+		});
+		this.deleteCardForm = this.$form.group({
+			cardId: ["", Validators.required],
+			accId: ["", Validators.required],
 		});
 	}
 
@@ -238,11 +245,32 @@ export class FinalizeBookingComponent implements OnInit {
 			})
 
 		// else {
-		// 	$('#previewBooking').modal('handleUpdate').modal('show')
+			// $('#previewBooking').modal('handleUpdate').modal('show')
 		// }
 	}
 	handleChangeCard(card:any){
 		this.selectedCard = card
+	}
+	deleteCardClicked(item:any) {
+		this.deleteCardForm.patchValue({
+			cardId: item.ID,
+			accId: this.BookingDetail.acc_id,
+		});
+	}
+
+	deleteCard(){
+		this.$spinner.show()
+		this.$api.deleteCardFinalize(this.deleteCardForm.value.cardId,this.deleteCardForm.value.accId).subscribe((response: any) => {
+			this.$errors.openDialog({
+				errors: {
+					error: `<span class='text-success'>${response.message}</span>`
+				}
+			})
+			// this.$router.navigate(['/admin/daily-bookings-admin'])
+			this.$spinner.hide()
+			this.getReservationDetails(this.bookingId)
+		})
+		$('#warnDeleteCard').modal('hide')		
 	}
 
 	makePayment(){
