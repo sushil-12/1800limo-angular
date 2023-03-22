@@ -794,7 +794,9 @@ export class AdminService {
 	updateFinalizeRates(data) {
 		return this.httpClient.post(`${this.serverUrl}admin/finalize-rate-edit`, data)
 	}
-
+	deleteCardFinalize(cardId , acc_id){
+		return this.httpClient.delete(`${this.serverUrl}admin/remove-card/${acc_id}/${cardId}`)
+	}
 	adminNotification(data) {
 		return this.httpClient.post(this.serverUrl + 'admin-notification-daily-booking', data);
 	}
