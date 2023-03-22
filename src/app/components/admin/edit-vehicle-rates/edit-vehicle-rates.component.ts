@@ -390,7 +390,15 @@ export class EditVehicleRatesComponent implements OnInit {
 
 	resetForm() {
 		this.addVehicleRatesForm.reset();
+
+		// this.SetFormValue("km_mile", "mile")
 	}
+
+
+	// SetFormValue(form_control: string, value: any) {
+	// 	this.addVehicleRatesForm.get(form_control).setValue(value)
+	// 	this.addVehicleRatesForm.updateValueAndValidity()
+	// }
 
 
 }

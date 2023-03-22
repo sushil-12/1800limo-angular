@@ -43,21 +43,7 @@ export class InvoiceSummaryComponent implements OnInit
 				}
 				else
 				{
-					this.adminService.getInvoiceData(this.bookingId)
-						.pipe(
-							catchError(err =>
-							{
-								this.spinner.hide();//hide spinner
-								return throwError(err);
-							})
-						).subscribe(({ data, sucess, message }: any) =>
-						{
-							console.log("array response", data)
-							this.invoiceData = data;
-							this.audit_Trail = this.invoiceData.audit_trail;
-							console.log(this.audit_Trail)
-							this.spinner.hide();//hide spinner
-						});
+					this.getInvoiceData()
 				}
 			});
 	}
@@ -66,6 +52,24 @@ export class InvoiceSummaryComponent implements OnInit
 		this.router.navigate(['/admin/daily-bookings-admin']);
 	}
 
+	getInvoiceData(){
+
+		this.adminService.getInvoiceData(this.bookingId)
+		.pipe(
+			catchError(err =>
+			{
+				this.spinner.hide();//hide spinner
+				return throwError(err);
+			})
+		).subscribe(({ data, sucess, message }: any) =>
+		{
+			console.log("array response", data)
+			this.invoiceData = data;
+			this.audit_Trail = this.invoiceData.audit_trail;
+			console.log(this.audit_Trail)
+			this.spinner.hide();//hide spinner
+		});
+	}
 	sendInvoiceToCustomer(){
 		this.$spinner.show()
 		this.adminService.sendInvoiveToCustomer(this.bookingId).subscribe((response: any) => {
@@ -94,7 +98,8 @@ export class InvoiceSummaryComponent implements OnInit
 				}
 			})
 			// this.$router.navigate(['/admin/daily-bookings-admin'])
-			this.$spinner.hide()
+			this.getInvoiceData()
+			// this.$spinner.hide()
 		})
 	}
 
