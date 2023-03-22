@@ -245,7 +245,6 @@ export class DailyBookingsComponent implements OnInit {
 			sendValue: this.sendInformation,
 			sendContent: message,
 		};
-
 		this.adminService
 			.adminNotification(obj)
 			.pipe(
