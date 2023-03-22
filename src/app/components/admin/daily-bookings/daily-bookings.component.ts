@@ -21,6 +21,7 @@ import { ErrorDialogService } from "src/app/services/error-dialog/errordialog.se
 	styleUrls: ["./daily-bookings.component.scss"],
 })
 export class DailyBookingsComponent implements OnInit {
+	@ViewChild('inputmsg', { static: false }) message: ElementRef;
 	outputDateFormat = "YYYY-MM-DD";
 	color: ThemePalette = "primary";
 	public firstPage: Number;
@@ -213,7 +214,7 @@ export class DailyBookingsComponent implements OnInit {
 	}
 
 	submit(message, format) {
-		this.show = false;
+		
 		if (this.passengerDetails.selection_button == "Passenger") {
 			this.sendInformation = format
 				? this.passengerDetails.passenger_cell_isd +
@@ -244,6 +245,7 @@ export class DailyBookingsComponent implements OnInit {
 			sendValue: this.sendInformation,
 			sendContent: message,
 		};
+
 		this.adminService
 			.adminNotification(obj)
 			.pipe(
@@ -263,6 +265,13 @@ export class DailyBookingsComponent implements OnInit {
 		$("#closeModal1").click(() => {
 			$("#notificationModal").modal("hide");
 		});
+		this.message.nativeElement.value = ""
+		this.show = false
+	}
+
+	closeModal() {
+		this.message.nativeElement.value = ""
+		this.show = false
 	}
 
 	noError: boolean = false
