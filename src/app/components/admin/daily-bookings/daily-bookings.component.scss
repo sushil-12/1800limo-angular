@@ -172,7 +172,7 @@ table {
 
 a:hover {
 	text-decoration: none;
-	color: unset !important;
+	// color: unset !important;
 }
 
 input,
@@ -191,10 +191,16 @@ input::-webkit-input-placeholder {
 }
 
 .view-button{
-	background-color: var(--orange-color);
-	color: #000;
+	background-color: #5373aa !important;
+	color: #fff !important;
 	padding: 5px 8px !important;
 	border-radius: 3rem !important;
+}
+
+
+.rotate-btn{
+    transform: rotate(180deg); 
+    transform-origin: left top
 }
 
 

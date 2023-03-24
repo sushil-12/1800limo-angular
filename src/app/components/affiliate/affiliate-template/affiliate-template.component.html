@@ -69,7 +69,7 @@
 					</h6>
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item" [routerLinkActive]="['active']"
-						routerLink="/affiliate/profile" tabindex="-1">
+						routerLink="/affiliate/profile" tabindex="-1" *ngIf="affiliateAccountStatus!='in-progress' && affiliateAccountStatus.length">
 						<div class="dropdown-item-icon">
 							<svg width="24" height="24" viewBox="0 0 24 24" class=" profileSvg">
 								<g fill="none" fill-rule="evenodd" stroke="#5dbd8a"

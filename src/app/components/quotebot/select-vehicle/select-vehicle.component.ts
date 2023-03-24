@@ -151,6 +151,7 @@ export class SelectVehicleComponent implements OnInit
 	quotebot_form: any
 	role:number = JSON.parse(localStorage.getItem("currentUser")).role 
 	openfilters: boolean = false
+	changeText:boolean = false
 
 
 	constructor(
@@ -210,7 +211,7 @@ export class SelectVehicleComponent implements OnInit
 		this.getAllFilters()	// fetch filters from database
 	}
 	// ngOnInit ends
-
+	// documentgetElementById('affiliate-info')
 	isArray(value: any): boolean
 	{
 		return Array.isArray(value)
