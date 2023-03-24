@@ -101,8 +101,8 @@
 							<tbody >
 								<tr role="row" class="odd" *ngFor="let booking of bookings">
 									<td>
-										<a class="user-profileded view-button btn-transparent-dark dropdown-toggle"
-											id="navbarDropdownUserImage" href="javascript:void(0);" role="button"
+										<a class="user-profileded view-button btn-transparent-dark dropdown-toggle font-weight-bold"
+											href="javascript:void(0);" role="button"
 											data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 											<span>View</span>
 										</a>
@@ -207,7 +207,7 @@
 									<td>
 										<p data-target="#sendEmailModal" style="white-space: pre" data-toggle="modal"
 											(click)="openModal(booking, 'Passenger')" id="box">
-											<span [innerHTML]="highlighText(booking.passenger_name)"></span> |
+											<span class="font-weight-bolder" [innerHTML]="highlighText(booking.passenger_name)"></span> |
 											<span [innerHTML]="highlighText( booking.passenger_cell_isd)"></span>
 											<span [innerHTML]="highlighText( booking.passenger_cell)"></span>
 										</p>
@@ -220,7 +220,7 @@
 										<p data-target="#sendEmailModal" data-toggle="modal"
 											(click)="openModal(booking, 'Loose_Affiliate')"
 											*ngIf="booking.affiliate_type == null; else otherAffiliate">
-											<span [innerHTML]="highlighText(booking.loose_affiliate_name)"></span>|
+											<span class="font-weight-bolder" [innerHTML]="highlighText(booking.loose_affiliate_name)"></span>|
 											<span [innerHTML]="highlighText(booking.loose_affiliate_phone_isd)"></span>
 											<span [innerHTML]="highlighText(booking.loose_affiliate_phone)"></span>
 										</p>
@@ -228,8 +228,8 @@
 											<p data-target="#sendEmailModal" data-toggle="modal"
 												(click)="openModal(booking, 'Affiliate')"
 												*ngIf="booking.affiliate_type != 'gig_operator'; else gigOperator">
-												<span [innerHTML]="highlighText(booking.driver_first_name)"></span>
-												<span [innerHTML]="highlighText(booking.driver_last_name)"></span> |
+												<span class="font-weight-bolder" [innerHTML]="highlighText(booking.driver_first_name)"></span>
+												<span class="font-weight-bolder" [innerHTML]="highlighText(booking.driver_last_name)"></span> |
 												<span [innerHTML]="highlighText(booking.affiliate_dispatch_isd)"></span>
 												<span
 													[innerHTML]="highlighText(booking.affiliate_dispatch_number)"></span>

@@ -273,6 +273,17 @@ export class DailyBookingsComponent implements OnInit {
 		this.show = false
 	}
 
+
+
+
+	// scrollDown(){
+	// 	(function smoothscroll()
+	// 	{
+	// 		window.scrollTo(0,document.body.scrollHeight);
+	// 	})();
+	// }
+
+
 	noError: boolean = false
 	loadBookings(pageUrl = null, start_date: string, end_date: string, search_value: string = '') {
 		search_value == '' && this.spinner.show();

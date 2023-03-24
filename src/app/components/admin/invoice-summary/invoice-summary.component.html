@@ -18,7 +18,7 @@
 				Refund</button>
 		</div>
 		<div>
-			<button class="custom-btn button2 mx-2" style="height: 40px;width: 200px; font-size: 14px;
+			<button class="custom-btn button2 mx-2 my-2" style="height: 40px;width: 200px; font-size: 14px;
 			padding: 10px;" (click)="sendInvoiceToCustomer()">
 				Send Invoice to customer</button>
 		</div>
@@ -38,19 +38,19 @@
 							</p>
 						</div>
 					</div>
-					<div class="d-flex bd-highlight mb-3   px-3">
-						<div class="mr-auto  bd-highlight">
+					<div class="d-flex bd-highlight flex-row-reverse mb-3 px-3">
+						<!-- <div class="mr-auto  bd-highlight">
 							<p class="m-0 invoice-p">
 								Status
 							</p>
 							<p class="invoice-text--color">
 								<strong>{{invoiceData.invoice_status |titlecase}}</strong>
 							</p>
-						</div>
+						</div> -->
 						<div class="bd-highlight invoice-p">
-							Quote Amount
-							<p class="invoice-dollar--color">
-								<strong>${{invoiceData.grand_total}}</strong>
+							Paid Amount
+							<p class="invoice-dollar--color display-4">
+								<strong style="font-size: xx-large;">${{invoiceData.grand_total}}</strong>
 							</p>
 						</div>
 					</div>
@@ -60,15 +60,15 @@
 			<div class="row">
 				<div class="col-md-12" *ngIf="invoiceData.service_type">
 					<div class="invoice-passenger mx-3">
-						<div class="d-flex bd-highlight invoice-subhead px-3">
-							<div class="mr-auto p-2 bd-highlight" *ngIf="invoiceData.service_type">
-								<p class="m-0 invoice-p text-white">
-									Service Type: <span class="invoice-text-bold">{{invoiceData.service_type}}</span>
+						<div class="d-flex bd-highlight invoice-subhead p-4 mr-2">
+							<div class="mr-auto p-2 bd-highlight invoice-status-bar" *ngIf="invoiceData.service_type">
+								<p class="m-0 invoice-p text-white invoice-status-bar">
+									Service Type: <span class="invoice-text-bold invoice-status-bar">{{invoiceData.service_type}}</span>
 								</p>
 							</div>
-							<div class="p-2 bd-highlight" *ngIf="invoiceData.date_of_service">
-								<p class="m-0 invoice-p text-white">
-									Date of Service:<span class="invoice-text-bold">
+							<div class="p-2 bd-highlight " *ngIf="invoiceData.date_of_service">
+								<p class="m-0 invoice-p text-white invoice-status-bar">
+									Date of Service:<span class="invoice-text-bold invoice-status-bar">
 										{{invoiceData.date_of_service}}</span>
 								</p>
 							</div>
@@ -85,7 +85,7 @@
 								<dt class="invoice-p" *ngIf="invoiceData.passenger_email">
 									Passenger Email
 								</dt>
-								<dd class="invoice-text-b">{{invoiceData.passenger_email}}</dd>
+								<dd class="invoice-text-b text-wrap">{{invoiceData.passenger_email}}</dd>
 							</dl>
 						</div>
 						<div class="div border-top">
@@ -135,14 +135,14 @@
 							</dl>
 						</div>
 					</div>
-					<div class="row" *ngIf="invoiceData.special_instruction">
+					<!-- <div class="row" *ngIf="invoiceData.special_instruction">
 						<div class="col-md-12">
 							<p class="mt-3 ml-4 invoice-p">
 								<span class="invoice-text--red">Special Instruction -</span>
 								{{invoiceData.special_instruction}}
 							</p>
 						</div>
-					</div>
+					</div> -->
 					<div class="row">
 						<div class="col-md-12">
 							<div class="div-payment">

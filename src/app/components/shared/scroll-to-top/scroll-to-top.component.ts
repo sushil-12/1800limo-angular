@@ -14,10 +14,24 @@ export class ScrollToTopComponent implements OnInit
 		(function smoothscroll()
 		{
 			var currentScroll = document.documentElement.scrollTop || document.body.scrollTop;
+			console.log(currentScroll);
 			if (currentScroll > 0)
 			{
 				window.requestAnimationFrame(smoothscroll);
 				window.scrollTo(0, currentScroll - (currentScroll / 8));
+			}
+		})();
+	}
+
+
+	scrollDown(){
+		(function smoothDownScroll()
+		{
+			var currentScroll = document.documentElement.scrollTop || document.body.scrollTop;
+			if (currentScroll < (document.documentElement.scrollHeight-800))
+			{
+				window.requestAnimationFrame(smoothDownScroll);
+				window.scrollTo(0, currentScroll + ((currentScroll + 50) / 8));
 			}
 		})();
 	}
@@ -37,6 +51,20 @@ export class ScrollToTopComponent implements OnInit
 			{
 				$('.scrollTopButton').css('opacity', '0');
 				$('.scrollTopButton').css('z-index', '-1');
+			};
+		});
+		$(window).scroll(function (){
+			var vH = $(window).height(),
+				bodyHeight = ($(document).height() - (vH * 2)),
+				scrolledPX = $(window).scrollTop();
+			if (scrolledPX < bodyHeight)
+			{
+				$('.scrollDownButton').css('opacity', '1');
+				$('.scrollDownButton').css('z-index', '0');
+			} else
+			{
+				$('.scrollDownButton').css('opacity', '0');
+				$('.scrollDownButton').css('z-index', '-1');
 			};
 		});
 	}

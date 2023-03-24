@@ -72,11 +72,11 @@
 					<aside class="sidebar">
 						<div id="filter-buttons" class="mb-4">
 							<button type="button" (click)="clearFilters(null)"
-								class="custom-filled-button orange-button my-2 mx-2">
+								class="custom-filled-button orange-button my-2 mx-1">
 								Clear filters
 							</button>
 							<button type="button" (click)="getVehicleDetails(); openfilters=false"
-								class="custom-filled-button green-button mx-2">
+								class="custom-filled-button green-button ml-1">
 								Apply filters
 							</button>
 						</div>
@@ -265,11 +265,11 @@
 							</div>
 							<div id="filter-buttons" class="mt-4">
 								<button type="button" (click)="clearFilters(null)"
-									class="custom-filled-button orange-button mx-2">
+									class="custom-filled-button orange-button my-2 mx-1">
 									Clear filters
 								</button>
 								<button type="button" (click)="getVehicleDetails(); openfilters=false"
-									class="custom-filled-button green-button my-2 mx-2">
+									class="custom-filled-button green-button ml-1">
 									Apply filters
 								</button>
 							</div>
@@ -295,8 +295,8 @@
 					<div id="affiliate-info"
 						*ngIf="currentUser != null && currentUser.roleName == 'admin' && (vehinfo.affiliate_name || vehinfo.affiliate_company)">
 						<p class="text-left text-secondary m-0 my-md-2">
-							{{ vehinfo.affiliate_company || '' }}
-							{{ '/ ' + vehinfo.affiliate_name || '' }}
+							{{ vehinfo.affiliate_company.length > 30 ? vehinfo.affiliate_company.slice(0,30)+"..." : vehinfo.affiliate_company }}
+							{{vehinfo.affiliate_name.length > 30 ?  '/ '+vehinfo.affiliate_name.slice(0,30)+'...' : '/ '+vehinfo.affiliate_name  }}
 						</p>
 					</div>
 					<!-- AFFILIATE INFO ENDS -->
