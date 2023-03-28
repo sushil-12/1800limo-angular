@@ -537,15 +537,17 @@ export class DailyBookingsComponent implements OnInit {
 			if ("lat" in response?.data?.pickupDetail && "long" in response?.data?.pickupDetail && "lat" in response?.data?.dropoffDetail && "long" in response?.data?.dropoffDetail) {
 				sessionStorage.setItem('pickup', JSON.stringify(response?.data?.pickupDetail.address));
 				sessionStorage.setItem('dropoff', JSON.stringify(response?.data?.dropoffDetail.address));
-				this.router.navigate(['/locate-map'], {
-					queryParams: {
-						plat: response?.data?.pickupDetail?.lat.toString(),
-						plng: response?.data?.pickupDetail?.long.toString(),
-						dlat: response?.data?.dropoffDetail?.lat.toString(),
-						dlng: response.data?.dropoffDetail?.long.toString(),
-					},
-					queryParamsHandling: 'merge'
-				});
+				const googleDirectionUrl = 'https://www.google.com/maps/dir/'+encodeURIComponent(response?.data?.pickupDetail.address)+'/'+encodeURIComponent(response?.data?.dropoffDetail.address)
+				// this.router.navigate(['/locate-map'], {
+				// 	queryParams: {
+				// 		plat: response?.data?.pickupDetail?.lat.toString(),
+				// 		plng: response?.data?.pickupDetail?.long.toString(),
+				// 		dlat: response?.data?.dropoffDetail?.lat.toString(),
+				// 		dlng: response.data?.dropoffDetail?.long.toString(),
+				// 	},
+				// 	queryParamsHandling: 'merge'
+				// });
+				window.open(googleDirectionUrl, '_blank');
 			} else {
 				throw new Error('Error: Location Points Not Specified Properly. ');
 			}
