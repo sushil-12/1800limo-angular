@@ -319,8 +319,8 @@ dd {
 		font-family: 'Inter', sans-serif;
 		font-style: normal;
 		font-weight: 600;
-		font-size: 28px;
-		line-height: 32px;
+		font-size: 24px;
+		line-height: 24px;
 		text-align: right;
 		letter-spacing: 0.05em;
 		color: #1E191A;
@@ -340,6 +340,28 @@ dd {
 .invoice-status-bar{
 	font-size: large !important;
 }
+
+
+.print-btn{
+	color: #fff !important;
+    background-color: var(--orange-color);
+    border-color: var(--orange-color);
+}
+
+
+.refund-btn{
+	color: #fff !important;
+    background-color: #db4949;
+    border-color: #db4949;
+}
+
+.edit-btn{
+	color: #fff !important;
+    background-color: #3351c6;
+    border-color: #3351c6;
+}
+
+
 
 
 @media only screen and (max-width: 350px) {

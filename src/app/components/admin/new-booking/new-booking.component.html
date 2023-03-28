@@ -80,7 +80,7 @@
 								Number of Hours
 							</mat-label>
 							<input type="number" matInput placeholder="Enter Hours" formControlName="number_of_hours"
-								 (focus)="$event.target.select()" />
+								(focus)="$event.target.select()" />
 							<span matSuffix>Hrs.</span>
 						</mat-form-field>
 					</div>
@@ -127,7 +127,7 @@
 										First Name
 									</mat-label>
 									<input matInput placeholder="First Name" type="text" formControlName="first_name"
-										 (focus)="$event.target.select()">
+										(focus)="$event.target.select()">
 								</mat-form-field>
 								<div class="error-box">
 									<div class="error-message"
@@ -151,7 +151,7 @@
 										Middle Name
 									</mat-label>
 									<input matInput placeholder="Middle Name" type="text" formControlName="middle_name"
-										 (focus)="$event.target.select()">
+										(focus)="$event.target.select()">
 								</mat-form-field>
 								<div class="error-box">
 									<div class="error-message"
@@ -281,7 +281,7 @@
 										Name of Card Holder
 									</mat-label>
 									<input matInput placeholder="First & Last Name" type="text" formControlName="name"
-										 (focus)="$event.target.select()">
+										(focus)="$event.target.select()">
 								</mat-form-field>
 								<div class="error-box">
 									<div class="error-message"
@@ -334,6 +334,25 @@
 							<!-- Expiration Month -->
 							<div class="col-md-4">
 								<mat-form-field appearance="outline" class="m-0">
+									<mat-label class="required-field">Expiration Month</mat-label>
+									<input type="number" matInput formControlName="exp_month" [matAutocomplete]="auto"
+										(keyup)="handleChangeMonth($event.target.value)">
+									<mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+										<mat-option *ngFor="let m of monthOptions" [value]="m.value">
+											{{m.value}}
+										</mat-option>
+									</mat-autocomplete>
+								</mat-form-field>
+								<div class="error-box">
+									<div class="error-message"
+										*ngIf="( submitBookingForm && LooseCustomer.card_details.controls.exp_month.invalid) || (LooseCustomer.card_details.controls.exp_month.touched && LooseCustomer.card_details.controls.exp_month.dirty)">
+										<p class="text-danger text-lg m-0"
+											*ngIf="LooseCustomer.card_details.controls.exp_month.errors?.required">
+											This field is required
+										</p>
+									</div>
+								</div>
+								<!-- <mat-form-field appearance="outline" class="m-0">
 									<mat-label class="required-field">
 										Expiration Month
 									</mat-label>
@@ -351,16 +370,7 @@
 										<mat-option value='11'>11</mat-option>
 										<mat-option value='12'>12</mat-option>
 									</mat-select>
-								</mat-form-field>
-								<div class="error-box">
-									<div class="error-message"
-										*ngIf="( submitBookingForm && LooseCustomer.card_details.controls.exp_month.invalid) || (LooseCustomer.card_details.controls.exp_month.touched && LooseCustomer.card_details.controls.exp_month.dirty)">
-										<p class="text-danger text-lg m-0"
-											*ngIf="LooseCustomer.card_details.controls.exp_month.errors?.required">
-											This field is required
-										</p>
-									</div>
-								</div>
+								</mat-form-field> -->
 							</div>
 
 							<!-- Expiration Year -->
@@ -521,7 +531,7 @@
 								Passenger Name <span class="asterisk"></span>
 							</mat-label>
 							<input matInput placeholder="Passenger Name" type="text" formControlName="passenger_name"
-								(focus)="$event.target.select()"/>
+								(focus)="$event.target.select()" />
 						</mat-form-field>
 						<div class="error-box">
 							<div class="error-message"
@@ -1248,8 +1258,7 @@
 					<div class="col-md-4">
 						<p class="text-center"> Driver Image </p>
 						<div class="vehtype_extint" *ngIf="driver_image?.image; else emptyImg">
-							<img [src]="driver_image?.image" (click)="showImageModal(driver_image?.image)"
-								>
+							<img [src]="driver_image?.image" (click)="showImageModal(driver_image?.image)">
 						</div>
 						<ng-template #emptyImg>
 							<div class="vehtype_extint emptyImage">
@@ -1303,8 +1312,7 @@
 					<div class="col-md-4">
 						<p class="text-center"> Vehicle Image </p>
 						<div class="vehtype_extint" *ngIf="vehicle_image?.image; else emptyImg">
-							<img [src]="vehicle_image?.image" (click)="showImageModal(vehicle_image?.image)"
-								>
+							<img [src]="vehicle_image?.image" (click)="showImageModal(vehicle_image?.image)">
 						</div>
 						<ng-template #emptyImg>
 							<div class="vehtype_extint emptyImage">
@@ -1720,7 +1728,7 @@
 					NOTE : Enter pickup and drop off locations first, then enter extra stops.
 				</p>
 			</div>
-			
+
 			<!-- Extra Stops -->
 			<div class="row mt-3">
 				<div class="col-md-12 px-4 d-flex justify-content-start align-items-center">
@@ -2231,38 +2239,39 @@
 			<div class="modal-body" style="font-family: 'PT Serif', serif;">
 				<div class="container text-lg">
 					<!-- Rates/Taxes -->
-			<h4 class="font-weight-bolder m-0 mt-3" *ngIf="Form.affiliate_type.value == 'loose_affiliate'">
-				Rates/Taxes
-			</h4>
-			<div class="mx-2" *ngIf="init_rates && RatesForm">
-				<div class="row m-0">
-					<div class="col-md-4 key">
-						<span>
-							Grand Total
-						</span>
+					<h4 class="font-weight-bolder m-0 mt-3" *ngIf="Form.affiliate_type.value == 'loose_affiliate'">
+						Rates/Taxes
+					</h4>
+					<div class="mx-2" *ngIf="init_rates && RatesForm">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Grand Total
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									${{ RatesForm.grand_total.toFixed(2) }}
+								</span>
+							</div>
+						</div>
 					</div>
-					<div class="col-md-8 value">
-						<span class="font-weight-bolder">
-							${{ RatesForm.grand_total.toFixed(2) }}
-						</span>
+					<div class="mx-2"
+						*ngIf="ReturnRatesForm && init_return_rates && Form.affiliate_type.value!='affiliate'">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Return Trip Grand Total
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									${{ ReturnRatesForm.r_grandtotal.toFixed(2) }}
+								</span>
+							</div>
+						</div>
+						<hr>
 					</div>
-				</div>
-			</div>
-			<div class="mx-2"
-				*ngIf="ReturnRatesForm && init_return_rates && Form.affiliate_type.value!='affiliate'">
-				<div class="row m-0">
-					<div class="col-md-4 key">
-						<span>
-							Return Trip Grand Total
-						</span>
-					</div>
-					<div class="col-md-8 value">
-						<span class="font-weight-bolder">
-							${{ ReturnRatesForm.r_grandtotal.toFixed(2) }}
-						</span>
-					</div>
-				</div>
-			</div>
 					<!-- Booking Type -->
 					<h4 class="font-weight-bolder m-0">
 						Booking Type
@@ -2286,7 +2295,7 @@
 							</span>
 						</div>
 					</div>
-
+					<hr>
 					<!-- Affiliate Information -->
 					<ng-container *ngIf="Form.affiliate_type.value == 'affiliate' then affiliateUser">
 					</ng-container>
@@ -2415,7 +2424,7 @@
 							</div>
 						</div>
 					</ng-template>
-
+					<hr>
 					<!-- Driver Information -->
 					<h4 class="font-weight-bolder m-0 mt-3">
 						Driver Information
@@ -2468,6 +2477,7 @@
 							</div>
 						</div>
 					</div>
+					<hr>
 
 					<!-- Loose Customer Information -->
 					<ng-container *ngIf="Form['account_type'].value == 'loose_customer' then LooseCustomerSec">
@@ -2530,7 +2540,7 @@
 							</div>
 						</div>
 					</ng-template>
-
+					<hr>
 					<!-- Passenger Information -->
 					<h4 class="font-weight-bolder m-0 mt-3">
 						Passenger Information
@@ -2584,7 +2594,7 @@
 							</div>
 						</div>
 					</div>
-
+					<hr>
 					<!-- Travel Information -->
 					<h4 class="font-weight-bolder m-0 mt-3">
 						Travel Information

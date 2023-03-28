@@ -406,7 +406,7 @@
 										<div class="input-contain d-flex align-items-center">
 											<div class="input-box">
 												<input type="text"
-													[attr.placeholder]="QBForm.dropoff_type.value == 'city' ? 'City - Pickup Address' : 'Cruise Port Name / Address'"
+													[attr.placeholder]="QBForm.dropoff_type.value == 'city' ? 'City - Dropoff Address' : 'Cruise Port Name / Address'"
 													id="dropoff_address" #dropaddressinput
 													[value]="QBForm.dropoff_address.value"
 													formControlName="dropoff_address" (focus)="$event.target.select()"

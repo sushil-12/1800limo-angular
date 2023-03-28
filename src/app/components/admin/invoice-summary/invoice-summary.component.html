@@ -2,8 +2,8 @@
 <main *ngIf="invoiceData" style="background: #f5f4fe;">
 	<div class="row m-2 d-flex justify-content-between" style="padding: 20px 0 0 0;">
 		<div>
-			<button class="custom-btn button2" style="height: 40px;width: 130px;font-size: 14px;" [useExistingCss]="true"
-				printTitle="Invoice" printSectionId="print-section" ngxPrint>
+			<button class="custom-btn print-btn my-1" style="height: 40px;width: 130px;font-size: 14px;"
+				[useExistingCss]="true" printTitle="Invoice" printSectionId="print-section" ngxPrint>
 				<!-- <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"
 					style="height: 20px; margin-right:10px; fill:white;" viewBox="0 0 108.36 122.88">
 					<title>printing</title>
@@ -13,15 +13,20 @@
 				Print Invoice</button>
 		</div>
 		<div *ngIf="invoiceData.billing_detail.payment_method =='credit_card' && invoiceData.invoice_status!='refund'">
-			<button class="custom-btn button2 mx-2" style="height: 40px;width: 130px; font-size: 14px;
+			<button class="custom-btn refund-btn" style="height: 40px;width: 130px; font-size: 14px;
 				padding: 10px;" (click)="refund()">
 				Refund</button>
 		</div>
 		<div>
-			<button class="custom-btn button2 mx-2 my-2" style="height: 40px;width: 200px; font-size: 14px;
+			<button class="custom-btn button2 my-1" style="height: 40px;width: 200px; font-size: 14px;
 			padding: 10px;" (click)="sendInvoiceToCustomer()">
 				Send Invoice to customer</button>
 		</div>
+		<!-- <div>
+			<button class="custom-btn edit-btn my-1" style="height: 40px;width: 130px; font-size: 14px;
+			padding: 10px;">
+				Edit</button>
+		</div> -->
 	</div>
 	<section class="invoice" id="print-section">
 		<div class="container p-0">
@@ -32,7 +37,7 @@
 							<img src="assets/admin/images/new_logo.png" class="logo" alt="">
 						</div>
 						<div class="p-2 bd-highlight" style="margin: auto 0;">
-							<p class="m-0 invoice-head--text">Invoice {{invoiceData.invoice_number}}</p>
+							<p class="my-1 invoice-head--text">Invoice {{invoiceData.invoice_number}}</p>
 							<p class="m-0 invoice-text--booking">
 								Booking # {{invoiceData.reservation_id}}
 							</p>
@@ -63,7 +68,8 @@
 						<div class="d-flex bd-highlight invoice-subhead p-4 mr-2">
 							<div class="mr-auto p-2 bd-highlight invoice-status-bar" *ngIf="invoiceData.service_type">
 								<p class="m-0 invoice-p text-white invoice-status-bar">
-									Service Type: <span class="invoice-text-bold invoice-status-bar">{{invoiceData.service_type}}</span>
+									Service Type: <span
+										class="invoice-text-bold invoice-status-bar">{{invoiceData.service_type}}</span>
 								</p>
 							</div>
 							<div class="p-2 bd-highlight " *ngIf="invoiceData.date_of_service">
@@ -85,7 +91,7 @@
 								<dt class="invoice-p" *ngIf="invoiceData.passenger_email">
 									Passenger Email
 								</dt>
-								<dd class="invoice-text-b text-wrap">{{invoiceData.passenger_email}}</dd>
+								<dd class="invoice-text-b text-break">{{invoiceData.passenger_email}}</dd>
 							</dl>
 						</div>
 						<div class="div border-top">
@@ -212,21 +218,13 @@
 								</div>
 							</div>
 							<div class="invoice-subhead px-3">
-								<div class="col-md-12 row">
-									<div class="col-md-7">
-									</div>
-									<div class="col-md-3">
-										<div class="mr-auto p-2 bd-highlight">
-											<p class="m-0 text-charges">
-												Total-Amount
-											</p>
-										</div>
-									</div>
-									<div class="col-2 p-0 d-flex justify-content-end">
-										<p class="m-0 py-2 mr-3 text-charges-textdollar font-weight-bold">
+								<div class="row d-flex justify-content-between">
+									<p class="m-0 p-1 my-2 text-charges"
+										style="font-size:large;">
+										Total-Amount</p>
+										<p class="m-0 p-1 my-2 text-charges font-weight-bold" style="font-size:large;">
 											${{invoiceData.grand_total}}
 										</p>
-									</div>
 								</div>
 							</div>
 						</div>

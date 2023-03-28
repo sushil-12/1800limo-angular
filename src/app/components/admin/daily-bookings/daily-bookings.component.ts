@@ -174,7 +174,7 @@ export class DailyBookingsComponent implements OnInit {
 		if(args){
 			args = args.toString()
 			var re = new RegExp(this.searchText, 'gi'); //'gi' for case insensitive and can use 'g' if you want the search to be case sensitive.
-			return args.replace(re, '<mark class="font-weight-bold">$&</mark>');
+			return args.replace(re, '<mark class="font-weight-bold">$&</mark> &nbsp');
 		}
 	}
 
@@ -272,17 +272,6 @@ export class DailyBookingsComponent implements OnInit {
 		this.message.nativeElement.value = ""
 		this.show = false
 	}
-
-
-
-
-	// scrollDown(){
-	// 	(function smoothscroll()
-	// 	{
-	// 		window.scrollTo(0,document.body.scrollHeight);
-	// 	})();
-	// }
-
 
 	noError: boolean = false
 	loadBookings(pageUrl = null, start_date: string, end_date: string, search_value: string = '') {
