@@ -56,6 +56,10 @@ export class NewBookingComponent implements OnInit {
 		}
 	}
 
+	months:any = [{value:'01'},{value:'02'},{value:'03'},{value:'04'},{value:'05'},{value:'06'},{value:'07'},{value:'08'},{value:'09'},{value:'10'},{value:'11'},{value:'12'}]
+	monthOptions:any = [...this.months] 
+	//[{value:'01'},{value:'02'},{value:'03'},{value:'04'},{value:'05'},{value:'06'},{value:'07'},{value:'08'},{value:'09'},{value:'10'},{value:'11'},{value:'12'}]
+
 	LCTelObject: any
 	PaxTelObject: any
 	DrvTelObject: any
@@ -366,6 +370,11 @@ export class NewBookingComponent implements OnInit {
 		} else {
 			this.SetFormValue('return_meet_greet_choices', 2)
 		}
+	}
+
+	handleChangeMonth(value:any){
+		console.log('value', value)
+		this.monthOptions = this.months.filter(i=> i.value.includes(value))
 	}
 
 	prefillViaBookingID(booking_id: number) {

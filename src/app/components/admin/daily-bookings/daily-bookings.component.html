@@ -73,8 +73,7 @@
 						<mat-form-field appearance="outline" class="m-0">
 							<input matInput type="text" (keypress)="handleKeypressEvents()"
 								(keyup)="searchInBookings($event.target.value)" [value]="searchText"
-								placeholder="Search"
-								id="keyword">
+								placeholder="Search" id="keyword">
 						</mat-form-field>
 					</div>
 				</div>
@@ -89,28 +88,27 @@
 							<thead>
 								<tr role="row">
 									<th>Actions</th>
-									<th>Booking #</th>
-									<th>Booking Status</th>
+									<th>Booking</th>
+									<th>Status</th>
 									<th>Date</th>
-									<th>Pax Info</th>
-									<th>Driver Info</th>
-									<th>Vehicle Type</th>
+									<th>Pax</th>
+									<th>Driver</th>
+									<th>Vehicle</th>
 									<!-- <th>Status</th> -->
 								</tr>
 							</thead>
-							<tbody >
+							<tbody>
 								<tr role="row" class="odd" *ngFor="let booking of bookings">
 									<td>
 										<a class="user-profileded view-button btn-transparent-dark dropdown-toggle font-weight-bold"
-											href="javascript:void(0);" role="button"
-											data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+											href="javascript:void(0);" role="button" data-toggle="dropdown"
+											aria-haspopup="true" aria-expanded="false">
 											<span>View</span>
 										</a>
 										<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
 											aria-labelledby="navbarDropdownUserImage">
 											<a class="dropdown-item" [routerLink]="['/admin/new-booking']"
-												[queryParams]="{bookingId: booking.booking_id, updateType: 'edit'}"
-												>
+												[queryParams]="{bookingId: booking.booking_id, updateType: 'edit'}">
 												<!-- *ngIf="booking.payment_status!='paid'" -->
 												<div class="dropdown-item-icon"></div>
 												Edit
@@ -130,55 +128,47 @@
 												Return
 											</a>
 											<a class="dropdown-item" [routerLink]="['/admin/finalize-booking']"
-												[queryParams]="{bookingId: booking.booking_id}"
-												>
+												[queryParams]="{bookingId: booking.booking_id}">
 												<!-- *ngIf="booking.payment_status!='paid'" -->
 												<div class="dropdown-item-icon"></div>
 												Finalize
 											</a>
 											<a class="dropdown-item" [routerLink]="['/admin/invoice-summary']"
 												[queryParams]="{bookingId: booking.booking_id}"
-												*ngIf="booking.payment_status=='paid'"
-												>
+												*ngIf="booking.payment_status=='paid'">
 												<div class="dropdown-item-icon"></div>
 												Invoice
 											</a>
 											<a class="dropdown-item" (click)="changeBookingStatus(booking.booking_id)"
-												data-toggle="modal" data-target="#change_status_booking_Modal"
-												>
+												data-toggle="modal" data-target="#change_status_booking_Modal">
 												<!-- *ngIf="booking.payment_status!='paid'" -->
 												<div class="dropdown-item-icon"></div>
 												Change Status
 											</a>
 											<a class="dropdown-item"
 												(click)="sendEmailClicked(booking.booking_id,'customer')"
-												data-toggle="modal" data-target="#emailModal"
-												>
+												data-toggle="modal" data-target="#emailModal">
 												<!-- *ngIf="booking.payment_status!='paid'" -->
 												<div class="dropdown-item-icon"></div>
 												Email Customer
 											</a>
 											<a class="dropdown-item"
 												(click)="sendEmailClicked(booking.booking_id,'affiliate')"
-												data-toggle="modal" data-target="#emailModal"
-												>
+												data-toggle="modal" data-target="#emailModal">
 												<!-- *ngIf="booking.payment_status!='paid'" -->
 												<div class="dropdown-item-icon"></div>
 												Email Affiliate
 											</a>
 											<!-- (click)="emailPassenger(booking.booking_id)" -->
 											<a class="dropdown-item"
-											(click)="sendEmailClicked(booking.booking_id,'emailPassenger')"
-												data-toggle="modal" data-target="#emailPassenger"
-												>
+												(click)="sendEmailClicked(booking.booking_id,'emailPassenger')"
+												data-toggle="modal" data-target="#emailPassenger">
 												<!-- *ngIf="booking.payment_status!='paid'" -->
 												<div class="dropdown-item-icon"></div>
 												Email Passenger
 											</a>
-											<a class="dropdown-item"
-												(click)="auditTrail(booking.booking_id)"
-												data-toggle="modal" data-target="#AuditTrailModal"
-												>
+											<a class="dropdown-item" (click)="auditTrail(booking.booking_id)"
+												data-toggle="modal" data-target="#AuditTrailModal">
 												<!-- *ngIf="booking.payment_status!='paid'" -->
 												<div class="dropdown-item-icon"></div>
 												Audit Trial
@@ -190,7 +180,8 @@
 										data-toggle="modal" data-target="#previewBookingOnID"
 										(click)="showBookingPreviewModal(booking.booking_id)">
 										<p class="booking-id-font font-weight-bolder cursor-pointer text-underline">
-											<span [innerHTML]="highlighText(booking.booking_id )"></span></p>
+											<span [innerHTML]="highlighText(booking.booking_id )"></span>
+										</p>
 									</td>
 									<td>
 										<div data-toggle="modal" (click)="changeBookingStatus(booking.booking_id)"
@@ -207,7 +198,8 @@
 									<td>
 										<p data-target="#sendEmailModal" style="white-space: pre" data-toggle="modal"
 											(click)="openModal(booking, 'Passenger')" id="box">
-											<span class="font-weight-bolder" [innerHTML]="highlighText(booking.passenger_name)"></span> |
+											<span class="font-weight-bolder"
+												[innerHTML]="highlighText(booking.passenger_name)"></span> |
 											<span [innerHTML]="highlighText( booking.passenger_cell_isd)"></span>
 											<span [innerHTML]="highlighText( booking.passenger_cell)"></span>
 										</p>
@@ -220,7 +212,8 @@
 										<p data-target="#sendEmailModal" data-toggle="modal"
 											(click)="openModal(booking, 'Loose_Affiliate')"
 											*ngIf="booking.affiliate_type == null; else otherAffiliate">
-											<span class="font-weight-bolder" [innerHTML]="highlighText(booking.loose_affiliate_name)"></span>|
+											<span class="font-weight-bolder"
+												[innerHTML]="highlighText(booking.loose_affiliate_name)"></span>|
 											<span [innerHTML]="highlighText(booking.loose_affiliate_phone_isd)"></span>
 											<span [innerHTML]="highlighText(booking.loose_affiliate_phone)"></span>
 										</p>
@@ -228,8 +221,10 @@
 											<p data-target="#sendEmailModal" data-toggle="modal"
 												(click)="openModal(booking, 'Affiliate')"
 												*ngIf="booking.affiliate_type != 'gig_operator'; else gigOperator">
-												<span class="font-weight-bolder" [innerHTML]="highlighText(booking.driver_first_name)"></span>
-												<span class="font-weight-bolder" [innerHTML]="highlighText(booking.driver_last_name)"></span> |
+												<span class="font-weight-bolder"
+													[innerHTML]="highlighText(booking.driver_first_name)"></span>&nbsp;
+												<span class="font-weight-bolder"
+													[innerHTML]="highlighText(booking.driver_last_name)"></span> |
 												<span [innerHTML]="highlighText(booking.affiliate_dispatch_isd)"></span>
 												<span
 													[innerHTML]="highlighText(booking.affiliate_dispatch_number)"></span>
@@ -311,8 +306,8 @@
 	aria-hidden="true">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content user_inforamtion">
-			<button type="button" class="close closeButton" data-dismiss="modal" aria-label="Close">
-				<span aria-hidden="true">&times;</span>
+			<button type="button" class="close closeButton x-circle-btn" data-dismiss="modal" aria-label="Close">
+				<i class="bi bi-x-circle"></i>
 			</button>
 			<div class="modal-header pb-0">
 				<h3 class="mb-0" id="exampleModalLabel">Change Booking Status</h3>
@@ -359,7 +354,8 @@
 	</div>
 </div>
 
-<div class="modal fade" id="emailPassenger" tabindex="-1" role="dialog" aria-labelledby="emailPassenger" aria-hidden="true">
+<div class="modal fade" id="emailPassenger" tabindex="-1" role="dialog" aria-labelledby="emailPassenger"
+	aria-hidden="true">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header pb-0">
@@ -382,7 +378,7 @@
 	aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg" role="document">
 		<div class="modal-content user_information bottom-container">
-			<button type="button" class="close closeButton mx-3 my-2"  data-dismiss="modal" aria-label="Close">
+			<button type="button" class="close closeButton mx-3 my-2" data-dismiss="modal" aria-label="Close">
 				<span aria-hidden="true" class="bi bi-x-circle"></span>
 			</button>
 			<div class="modal-header pb-0">
@@ -399,21 +395,21 @@
 						</tr>
 					</thead>
 					<tbody>
-						
+
 						<!-- <ng-container *ngIf="audit_Trail; else not_found"> -->
-							<tr *ngFor="let record of audit_Trail; let i=index">
-								<th scope="row">{{i+1}}</th>
-								<td style="word-wrap: break-word;">{{record.message}}</td>
-								<td>{{record.created_at}}</td>
-							</tr>
-							
+						<tr *ngFor="let record of audit_Trail; let i=index">
+							<th scope="row">{{i+1}}</th>
+							<td style="word-wrap: break-word;">{{record.message}}</td>
+							<td>{{record.created_at}}</td>
+						</tr>
+
 						<!-- </ng-container> -->
 						<!-- <ng-template #not_found>
 							<tr>
 								<td colspan = "3">No Record Found!</td>
 							</tr>	
 						</ng-template> -->
-						
+
 
 					</tbody>
 				</table>
@@ -432,10 +428,10 @@
 <div class="modal fade" id="sendEmailModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
 	aria-hidden="true" data-backdrop="static" data-keyboard="false">
 	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<button type="button" (click)="closeModal()" class="close closeButton" data-dismiss="modal"
+		<div class="modal-content" style="background: #f5f4fe;">
+			<button type="button" (click)="closeModal()" class="close closeButton x-circle-btn" data-dismiss="modal"
 				aria-label="Close">
-				<span aria-hidden="true">&times;</span>
+				<i class="bi bi-x-circle"></i>
 			</button>
 			<div class="modal-header pb-0">
 				<h3 class="modal-title mb-0">
@@ -576,14 +572,8 @@
 							<mat-label>
 								{{ sendMessageField ? 'Send SMS' : 'Send Email' }}
 							</mat-label>
-							<textarea 
-								matInput
-								placeholder="Write a Message...."
-								id="clearField"
-								cdkTextareaAutosize
-								cdkAutosizeMaxRows="10"
-								#autosize="cdkTextareaAutosize"
-								#inputmsg 
+							<textarea matInput placeholder="Write a Message...." id="clearField" cdkTextareaAutosize
+								cdkAutosizeMaxRows="10" #autosize="cdkTextareaAutosize" #inputmsg
 								(focus)="$event.target.select()"></textarea>
 						</mat-form-field>
 						<button class="btn saveButton" (click)="submit(inputmsg.value, sendMessageField)"
@@ -636,13 +626,13 @@
 <!-- booking periview -->
 <div class="modal fade" id="previewBookingOnID" tabindex="-1" aria-labelledby="previewBookingLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-		<div class="modal-content">
+		<div class="modal-content" style="background: #f5f4fe;">
 			<div class="modal-header py-0">
 				<h3 class="modal-title">
 					Preview Booking
 				</h3>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
+				<button type="button" class="close x-circle-btn" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true" class="bi bi-x-circle"></span>
 				</button>
 			</div>
 			<div class="modal-body" style="font-family: 'PT Serif', serif;">
@@ -652,7 +642,7 @@
 						Booking Type
 					</h4>
 					<!-- Booking Information -->
-					<div class="row p-2">
+					<div class="row">
 						<div class="col-md-4 key">
 							<span>
 								Booking Information
@@ -671,6 +661,7 @@
 							</span>
 						</div>
 					</div>
+					<hr>
 					<!-- Booking Information - Ends -->
 
 					<!-- affiliate details -->
@@ -732,8 +723,9 @@
 								</div>
 							</div>
 						</div>
+						<hr>
 					</ng-template>
-
+					
 
 
 					<!-- loose affiliate details -->
@@ -793,12 +785,13 @@
 								</div>
 							</div>
 						</div>
+						<hr>
 					</ng-template>
 					<!-- Grand Total -->
 					<h4 class="font-weight m-0 mt-3">
 						Rates / Taxes
 					</h4>
-					<div class="row p-2">
+					<div class="row">
 						<div class="col-md-4 key">
 							<span>
 								Grand Total
@@ -810,6 +803,7 @@
 							</span>
 						</div>
 					</div>
+					<hr>
 					<!-- Grand Total -->
 
 					<!-- Driver Information -->
@@ -864,7 +858,7 @@
 							</div>
 						</div>
 					</div>
-
+					<hr>
 
 					<!-- Passenger Information -->
 					<h4 class="font-weight m-0 mt-3">
@@ -919,7 +913,7 @@
 							</div>
 						</div>
 					</div>
-
+					<hr>
 					<!-- Travel Information -->
 					<h4 class="font-weight m-0 mt-3">
 						Travel Information
@@ -942,7 +936,7 @@
 					</div>
 
 					<!-- ################ Pickup ################### -->
-					<h5 class="p-2 m-0 text-xl">
+					<h5 class="m-0 my-2 text-xl">
 						Pickup Details
 					</h5>
 					<!-- Pickup > Date -->
@@ -1091,7 +1085,7 @@
 
 					<!-- Extra Stops -->
 					<div *ngIf="bookingPreview.extra_stops && bookingPreview.extra_stops.length > 0">
-						<h5 class="p-2 m-0 text-xl">
+						<h5 class="m-0 text-xl">
 							Extra Stops
 						</h5>
 						<div class="mx-2" *ngFor="let stop of bookingPreview.extra_stops; index as stop_index">
@@ -1112,15 +1106,15 @@
 
 					<hr style="width: 50%; margin: 1rem auto; border: 1.3px solid #aeaeae;"
 						*ngIf="bookingPreview.extra_stops && bookingPreview.extra_stops.length == 0" />
-
+						<hr>
 					<!-- ############# Dropoff ################# -->
-					<h5 class="px-2 m-1 text-xl">
+					<h5 class="px-2 m-0 my-3 text-xl">
 						Drop Off Details
 					</h5>
 					<!-- Dropoff > City Details -->
 					<div class="mx-2"
 						*ngIf="bookingPreview.transfer_type.includes('_city') || bookingPreview.transfer_type.includes('_cruise')">
-						<div class="row p-2">
+						<div class="row">
 							<div class="col-md-4 key">
 								<span>
 									Address
@@ -1137,7 +1131,7 @@
 					<!-- Dropoff > Airline Details -->
 					<div class="mx-2" *ngIf="bookingPreview.transfer_type.includes('_airport')">
 						<!-- Airport -->
-						<div class="row p-2">
+						<div class="row">
 							<div class="col-md-4 key">
 								<span>
 									Airport
@@ -1151,7 +1145,7 @@
 						</div>
 						<!-- Airport -->
 						<!-- Airline -->
-						<div class="row p-2">
+						<div class="row">
 							<div class="col-md-4 key">
 								<span>
 									Airline
@@ -1165,7 +1159,7 @@
 						</div>
 						<!-- Airline -->
 						<!-- Flight Number -->
-						<div class="row p-2">
+						<div class="row">
 							<div class="col-md-4 key">
 								<span>
 									Flight Number
@@ -1183,7 +1177,7 @@
 					<!-- Dropoff > Cruise Details -->
 					<div class="mx-2" *ngIf="bookingPreview.transfer_type.includes('_cruise')">
 						<!-- Cruise Port -->
-						<div class="row p-2">
+						<div class="row">
 							<div class="col-md-4 key">
 								<span>
 									Cruise Port
@@ -1198,7 +1192,7 @@
 						<!-- Cruise Port -->
 
 						<!-- Cruise Name -->
-						<div class="row p-2">
+						<div class="row">
 							<div class="col-md-4 key">
 								<span>
 									Cruise Name
@@ -1213,7 +1207,7 @@
 						<!-- Cruise Name -->
 
 						<!-- Cruise Time -->
-						<div class="row p-2">
+						<div class="row">
 							<div class="col-md-4 key">
 								<span>
 									Cruise Time

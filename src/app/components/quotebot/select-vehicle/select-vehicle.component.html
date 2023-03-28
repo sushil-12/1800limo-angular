@@ -6,7 +6,7 @@
 		<div id="fixed-section-box" class="d-flex justify-content-center align-items-center">
 			<div id="filters-button" class="d-block d-lg-none">
 				<button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
-					class="btn btn-secondary dropdown-toggle pl-4" (click)="openfilters = true" type="button">
+					class="filter-btn btn-secondary dropdown-toggle pl-4" (click)="openfilters = true" type="button">
 					Filters
 					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
 						class="bi bi-filter" viewBox="0 0 16 16">
@@ -16,7 +16,7 @@
 				</button>
 			</div>
 			<div id="sort-button">
-				<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+				<button class="filter-btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
 					data-toggle="dropdown" aria-controls="dropdownMenu" aria-label="Toggle Navigation"
 					aria-expanded="false">
 					<span class="mr-2"> Sort By </span>
@@ -295,9 +295,20 @@
 					<div id="affiliate-info"
 						*ngIf="currentUser != null && currentUser.roleName == 'admin' && (vehinfo.affiliate_name || vehinfo.affiliate_company)">
 						<p class="text-left text-secondary m-0 my-md-2">
-							{{ vehinfo.affiliate_company.length > 30 ? vehinfo.affiliate_company.slice(0,30)+"..." : vehinfo.affiliate_company }}
-							{{vehinfo.affiliate_name.length > 30 ?  '/ '+vehinfo.affiliate_name.slice(0,30)+'...' : '/ '+vehinfo.affiliate_name  }}
+								{{vehinfo.affiliate_company }}
+								{{'/ '+vehinfo.affiliate_name  }}
 						</p>
+						<!-- <ng-template #readMoreTemp>
+							<p class="text-left text-secondary m-0 my-md-2" [class.show]="!show" >
+								{{ vehinfo.affiliate_company.length > 10 ? vehinfo.affiliate_company.slice(0,5)+"..." : vehinfo.affiliate_company }}
+								{{vehinfo.affiliate_name.length > 10 ?  '/ '+vehinfo.affiliate_name.slice(0,5)+'...' : '/ '+vehinfo.affiliate_name  }}
+							</p>
+							<p class="text-left text-secondary m-0 my-md-2" [class.show]="show">
+								{{ vehinfo.affiliate_company }}
+								{{'/ '+vehinfo.affiliate_name}}
+							</p>
+							<button (click)="show+index = !show+index">{{ show ? 'Show less': 'Show More' }}</button>
+						</ng-template> -->
 					</div>
 					<!-- AFFILIATE INFO ENDS -->
 
