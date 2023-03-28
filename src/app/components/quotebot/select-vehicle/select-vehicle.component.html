@@ -294,10 +294,12 @@
 					<!-- DIV: AFFILIATE INFO -->
 					<div id="affiliate-info"
 						*ngIf="currentUser != null && currentUser.roleName == 'admin' && (vehinfo.affiliate_name || vehinfo.affiliate_company)">
-						<p class="text-left text-secondary m-0 my-md-2">
+						<button class="link" (click)="editAffiliateAccount(vehinfo)">
+							<p class="text-left text-secondary m-0 my-md-2" style="color: #007fee !important;">
 								{{vehinfo.affiliate_company }}
 								{{'/ '+vehinfo.affiliate_name  }}
 						</p>
+						</button>
 						<!-- <ng-template #readMoreTemp>
 							<p class="text-left text-secondary m-0 my-md-2" [class.show]="!show" >
 								{{ vehinfo.affiliate_company.length > 10 ? vehinfo.affiliate_company.slice(0,5)+"..." : vehinfo.affiliate_company }}

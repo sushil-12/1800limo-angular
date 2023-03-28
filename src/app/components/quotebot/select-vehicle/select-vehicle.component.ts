@@ -248,6 +248,26 @@ export class SelectVehicleComponent implements OnInit
 	}
 
 
+
+	editAffiliateAccount(vehInfo:any) {
+		console.log('valueee--->>>>' , vehInfo)
+		// this.affiliateService.updateStepsArrayLocal(this.response.data.affiliateParmas.step_completed);
+		// this.affiliateService.updateStepsCompletedObject(this.response.data.affiliateParmas.step_completed_obj);
+		sessionStorage.setItem('affiliateId', JSON.stringify(vehInfo.affiliate_id))
+		sessionStorage.setItem("affiliateType", vehInfo.affiliate_type);
+		// this.$router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
+		// 	this.$router.navigate(['/admin/affiliate/step0']);
+		// });
+		const url = this.$router.serializeUrl(
+			this.$router.createUrlTree(['/admin/affiliate/step0'])
+		  );
+		
+		  window.open(url, '_blank');
+		// affiliate_id: number, affiliate_type: string
+
+	}
+
+
 	fetchMasterVehicles(): Promise<Array<any> | string>
 	{
 		return new Promise((resolve, reject) =>
