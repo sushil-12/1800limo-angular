@@ -529,8 +529,23 @@ export class DailyBookingsComponent implements OnInit {
 	// 	this.saveCookie('filtertype', this.filtertype);
 	// 	this.loadBookings(null, this.startDate, this.endDate, this.searchText, this.filtertype);
 	// }
+	iOS() {
+		return [
+		  'iPad Simulator',
+		  'iPhone Simulator',
+		  'iPod Simulator',
+		  'iPad',
+		  'iPhone',
+		  'iPod'
+		].includes(navigator.platform)
+		// iPad on iOS 13 detection
+		|| (navigator.userAgent.includes("Mac") && "ontouchend" in document)
+	  }
 
-	showLocationPointOnMap(booking_id: number, type: string) {
+	  showLocationPointOnMap(booking_id: number, type: string) {
+
+		let isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+		console.log('isSafari' , isSafari)
 		this.spinner.show()
 		this.adminService.getLocationPoints(booking_id).subscribe((response: any) => {
 			this.spinner.hide();
@@ -549,7 +564,17 @@ export class DailyBookingsComponent implements OnInit {
 				// 	},
 				// 	queryParamsHandling: 'merge'
 				// });
-				window.open(googleDirectionUrl, '_blank');
+				const iosDirectionUrl='http://maps.apple.com/?daddr='+
+				encodeURIComponent(response?.data?.dropoffDetail.address)+"&saddr="+
+				encodeURIComponent(response?.data?.pickupDetail.address)
+				if(this.iOS()){
+					setTimeout(() => {
+						window.location.href= iosDirectionUrl;
+					})
+				}
+				else{
+					window.open(googleDirectionUrl, '_blank');
+				}
 			} else {
 				throw new Error('Error: Location Points Not Specified Properly. ');
 			}
