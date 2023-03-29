@@ -576,12 +576,16 @@
 								cdkAutosizeMaxRows="10" #autosize="cdkTextareaAutosize" #inputmsg
 								(focus)="$event.target.select()"></textarea>
 						</mat-form-field>
-						<button class="btn saveButton" (click)="submit(inputmsg.value, sendMessageField)"
-							data-dismiss="modal">Send</button>
+						<div class="d-flex justify-content-between mt-2">
+							<button type="button" data-dismiss="modal" (click)="closeModal()"
+								class="btn btnStyle">Close</button>
+							<button class="btn saveButtonModal" (click)="submit(inputmsg.value, sendMessageField)"
+								data-dismiss="modal">Send</button>
+						</div>
 					</div>
 				</div>
 			</div>
-			<div class="modal-footer pt-0">
+			<div class="modal-footer pt-0" [ngClass]="show ? 'none-display' : ''">
 				<button type="button" data-dismiss="modal" (click)="closeModal()" class="btn btnStyle">Close</button>
 			</div>
 		</div>
@@ -725,7 +729,7 @@
 						</div>
 						<hr>
 					</ng-template>
-					
+
 
 
 					<!-- loose affiliate details -->
@@ -1106,7 +1110,7 @@
 
 					<hr style="width: 50%; margin: 1rem auto; border: 1.3px solid #aeaeae;"
 						*ngIf="bookingPreview.extra_stops && bookingPreview.extra_stops.length == 0" />
-						<hr>
+					<hr>
 					<!-- ############# Dropoff ################# -->
 					<h5 class="px-2 m-0 my-3 text-xl">
 						Drop Off Details

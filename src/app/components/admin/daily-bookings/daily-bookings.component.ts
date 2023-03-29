@@ -174,7 +174,7 @@ export class DailyBookingsComponent implements OnInit {
 		if(args){
 			args = args.toString()
 			var re = new RegExp(this.searchText, 'gi'); //'gi' for case insensitive and can use 'g' if you want the search to be case sensitive.
-			return args.replace(re, '<mark class="font-weight-bold">$&</mark> &nbsp');
+			return args.replace(re, '<mark class="font-weight-bold">$&</mark>');
 		}
 	}
 
