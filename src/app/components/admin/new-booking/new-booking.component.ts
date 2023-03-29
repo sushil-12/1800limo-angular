@@ -374,7 +374,9 @@ export class NewBookingComponent implements OnInit {
 
 	handleChangeMonth(value:any){
 		console.log('value', value)
-		this.monthOptions = this.months.filter(i=> i.value.includes(value))
+		if(value){
+			this.monthOptions = this.months.filter(i=> i.value.includes(value))
+		}
 	}
 
 	prefillViaBookingID(booking_id: number) {
