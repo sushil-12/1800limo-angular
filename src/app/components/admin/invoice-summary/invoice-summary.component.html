@@ -160,25 +160,25 @@
 										'credit_card' ?
 										'Credit Card' : 'Cash' }}
 									</dd>
-									<dt class="invoice-text--name">Name on Credit Card </dt>
-									<dd class="invoice-text--entry"> {{invoiceData.billing_detail.name_on_credit_card ?
-										invoiceData.billing_detail.name_on_credit_card : ' - '}}</dd>
-									<dt class="invoice-text--name">
-										Credit Card Number
-									</dt>
-									<dd class="invoice-text--entry">{{invoiceData.billing_detail.credit_card_number ?
-										invoiceData.billing_detail.credit_card_number : ' - '}} </dd>
-									<dt class="invoice-text--name">
-										Expiry Date
-									</dt>
-									<dd class="invoice-text--entry">{{invoiceData.billing_detail.credit_card_expiry_date
-										?
-										invoiceData.billing_detail.credit_card_expiry_date : ' - '}}</dd>
-									<!-- <dt class="invoice-text--name">
-										Billing Address
-									</dt>
-									<dd class="invoice-text--entry"> {{invoiceData.billing_detail.billing_address ?
-										invoiceData.billing_detail.billing_address : ' - '}}</dd> -->
+										<dt class="invoice-text--name" *ngIf="invoiceData.billing_detail.payment_method=='credit_card'">Name on Credit Card </dt>
+										<dd class="invoice-text--entry" *ngIf="invoiceData.billing_detail.payment_method=='credit_card'"> {{invoiceData.billing_detail.name_on_credit_card ?
+											invoiceData.billing_detail.name_on_credit_card : ' - '}}</dd>
+										<dt class="invoice-text--name" *ngIf="invoiceData.billing_detail.payment_method=='credit_card'">
+											Credit Card Number
+										</dt>
+										<dd class="invoice-text--entry" *ngIf="invoiceData.billing_detail.payment_method=='credit_card'">{{invoiceData.billing_detail.credit_card_number ?
+											invoiceData.billing_detail.credit_card_number : ' - '}} </dd>
+										<dt class="invoice-text--name" *ngIf="invoiceData.billing_detail.payment_method=='credit_card'">
+											Expiry Date
+										</dt>
+										<dd class="invoice-text--entry" *ngIf="invoiceData.billing_detail.payment_method=='credit_card'">{{invoiceData.billing_detail.credit_card_expiry_date
+											?
+											invoiceData.billing_detail.credit_card_expiry_date : ' - '}}</dd>
+										<dt class="invoice-text--name" *ngIf="invoiceData.billing_detail.payment_method=='credit_card'">
+											Billing Address
+										</dt>
+										<dd class="invoice-text--entry" *ngIf="invoiceData.billing_detail.payment_method=='credit_card'"> {{invoiceData.billing_detail.billing_address ?
+											invoiceData.billing_detail.billing_address : ' - '}}</dd>
 								</dl>
 							</div>
 						</div>
