@@ -10,6 +10,9 @@
 button {
 	font-family: "PT Serif", serif !important;
 }
+.none-display{
+	display: none;
+}
 
 .booking_status {
 	font-size: medium;
@@ -106,7 +109,9 @@ button {
 	color: #fff !important;
 	background-color: var(--orange-color) !important;
 	border-color: var(--orange-color) !important;
-	padding: 10px 40px;
+	padding: 10px 40px;	
+	transition: box-shadow 0.1s ease-in-out;
+    box-shadow: 0px 5px 10px 1px rgb(0 0 0 / 40%);
 }
 
 .modal-header {
@@ -156,7 +161,21 @@ button {
 	position: absolute;
 	bottom: -60px;
 	left: 15px;
+	transition: box-shadow 0.1s ease-in-out;
+    box-shadow: 0px 5px 10px 1px rgb(0 0 0 / 40%);
 }
+
+.saveButtonModal {
+	color: #fff !important;
+	background-color: #5dbd8a;
+	border-color: #5dbd8a;
+	padding: 10px 40px;
+	bottom: -60px;
+	left: 15px;
+	transition: box-shadow 0.1s ease-in-out;
+    box-shadow: 0px 5px 10px 1px rgb(0 0 0 / 40%);
+}
+
 
 table {
 	width: 100;
