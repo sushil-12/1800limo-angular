@@ -166,6 +166,15 @@ export class RatesFormComponent implements OnInit, OnChanges {
 		}
 	}
 
+	handleSubHeadingScroll(items: string , id:any) {
+		this.rate_params["chevrons"][items] = !this.rate_params["chevrons"][items];
+		let el = document.getElementById(id);
+		console.log(`scrolling to ${id}` , el);
+		setTimeout(()=>{
+			el.scrollIntoView();
+		},600)
+	}
+
 	initRates() {
 		console.log("Init Rates");
 

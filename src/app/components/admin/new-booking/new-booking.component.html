@@ -1124,252 +1124,8 @@
 				</div>
 			</div>
 			<!-- Affiliate Driver Information Ends -->
-		</div>
-		<!-- Section - Affiliate/Loose Details Ends -->
 
-
-		<!-- Driver Languages -->
-		<div id="languages" class="section-container section-dropdown"
-			[ngClass]="booking_params.chevrons.languages ? 'active' : ''"
-			*ngIf="Form.affiliate_type.value === 'loose_affiliate'">
-			<!-- Languages -->
-			<div class="row align-items-center m-0" (click)="toggleDropdown('languages')">
-				<div class="col-10 col-md-11">
-					<h4 class="section-dropdown-header m-0">
-						Languages
-					</h4>
-				</div>
-				<div class="col-2 col-md-1">
-					<h4 class="m-0">
-						<i class="bi"
-							[ngClass]="{true: 'bi-chevron-up', false: 'bi-chevron-down'}[booking_params.chevrons.languages]"></i>
-					</h4>
-				</div>
-			</div>
-			<!-- Ṣelections -->
-			<div *ngIf="booking_params.chevrons.languages">
-				<div class="row align-items-center m-0 p-4">
-					<div class="col-md-4 col-lg-3"
-						*ngFor="let language of BigData?.driverLanguage; index as language_index">
-						<mat-checkbox (change)="select($event.checked, 'driver_languages', language.id)"
-							[checked]="isChecked('driver_languages', language.id)">
-							{{ language.name }}
-						</mat-checkbox>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<!-- Driver Dresses -->
-		<div id="dresses" class="section-container section-dropdown"
-			[ngClass]="booking_params.chevrons.dresses ? 'active' : ''"
-			*ngIf="Form.affiliate_type.value === 'loose_affiliate'">
-			<!-- Dresses -->
-			<div class="row align-items-center m-0" (click)="toggleDropdown('dresses')">
-				<div class="col-10 col-md-11">
-					<h4 class="section-dropdown-header m-0">
-						Driver Dresses
-					</h4>
-				</div>
-				<div class="col-2 col-md-1">
-					<h4 class="m-0">
-						<i class="bi"
-							[ngClass]="{true: 'bi-chevron-up', false: 'bi-chevron-down'}[booking_params.chevrons.dresses]"></i>
-					</h4>
-				</div>
-			</div>
-			<!-- Selections -->
-			<div *ngIf="booking_params.chevrons.dresses">
-				<div class="row align-items-center m-0 p-4">
-					<div class="col-md-4" *ngFor="let dresses of BigData?.driverDresses">
-						<mat-checkbox (change)="select($event.checked, 'driver_dresses', dresses.id)"
-							[checked]="isChecked('driver_dresses', dresses.id)">
-							{{ dresses.name }}
-						</mat-checkbox>
-					</div>
-				</div>
-			</div>
-		</div>
-
-
-		<!-- Amenities -->
-		<div id="amenities" class="section-container section-dropdown"
-			[ngClass]="booking_params.chevrons.amenities ? 'active' : ''"
-			*ngIf="Form.affiliate_type.value === 'loose_affiliate'">
-			<!-- Amenities -->
-			<div class="row align-items-center m-0" (click)="toggleDropdown('amenities')">
-				<div class="col-10 col-md-11">
-					<h4 class="section-dropdown-header m-0">
-						Amenities
-					</h4>
-				</div>
-				<div class="col-2 col-md-1">
-					<h4 class="m-0">
-						<i class="bi"
-							[ngClass]="{true: 'bi-chevron-up', false: 'bi-chevron-down'}[booking_params.chevrons.amenities]"></i>
-					</h4>
-				</div>
-			</div>
-			<!-- Selections -->
-			<div *ngIf="booking_params.chevrons.amenities">
-				<div class="m-3 alert alert-danger">
-					$ Sign Denotes The Amenity Is Tied To A Bucket On The Rate Settings
-					Page. The Rate Is Default At 0$
-				</div>
-				<div class="row align-items-center m-0 p-4">
-					<div class="col-md-4" *ngFor="let amenity of BigData?.amenity; index as amenity_index">
-						<mat-checkbox
-							(change)="amenity['chargeable'] == 'yes' ? select($event.checked, 'chargedAmenities', amenity.id) : select($event.checked, 'amenities', amenity.id)"
-							[checked]="amenity['chargeable'] == 'yes' ? isChecked('chargedAmenities', amenity.id) : isChecked('amenities', amenity.id)">
-							{{ amenity.name }}
-							<span class="text-danger" *ngIf="amenity.chargeable == 'yes'">
-								(<i class="bi bi-currency-dollar"></i>)
-							</span>
-						</mat-checkbox>
-					</div>
-				</div>
-			</div>
-		</div>
-
-
-
-		<!-- Driver/Vehicle Image Uploads -->
-		<div id="images" class="section-container section-dropdown"
-			[ngClass]="booking_params.chevrons.images ? 'active' : ''"
-			*ngIf="Form.affiliate_type.value === 'loose_affiliate'">
-			<div class="row align-items-center m-0" (click)="toggleDropdown('images')">
-				<div class="col-10 col-md-11">
-					<h4 class=" section-dropdown-header m-0">
-						Upload Images
-					</h4>
-				</div>
-				<div class="col-2 col-md-1">
-					<h4 class="m-0">
-						<i class="bi"
-							[ngClass]="{true: 'bi-chevron-up', false: 'bi-chevron-down'}[booking_params.chevrons.images]"></i>
-					</h4>
-				</div>
-			</div>
-			<!-- Uploads -->
-			<div *ngIf="booking_params.chevrons.images">
-				<!-- Image Upload -->
-				<div class="row mt-5 mx-2 justify-content-around">
-					<!-- Driver Image -->
-					<div class="col-md-4">
-						<p class="text-center"> Driver Image </p>
-						<div class="vehtype_extint" *ngIf="driver_image?.image; else emptyImg">
-							<img [src]="driver_image?.image" (click)="showImageModal(driver_image?.image)">
-						</div>
-						<ng-template #emptyImg>
-							<div class="vehtype_extint emptyImage">
-								<img src="../../../../assets/images/empty-image.png">
-							</div>
-						</ng-template>
-
-						<ul class="mt-3 d-flex justify-content-center p-0" *ngIf="driver_image?.image;else addImage">
-							<li>
-								<button type="button" class="changeuploaded">
-									<input type="file" accept="image/jpeg,.jpeg,.jpg,.png"
-										(change)="uploadImage($event, 'driver_image')">
-									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-										<path fill="none" d="M0 0h24v24H0V0z" />
-										<circle cx="12" cy="12" r="3" />
-										<path
-											d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
-									</svg>
-									Change
-								</button>
-							</li>
-							<li>
-								<a class="delete-btn" (click)="deleteImage('driver_image')">
-									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-										<path
-											d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
-									</svg> Delete
-								</a>
-							</li>
-						</ul>
-						<ng-template #addImage>
-							<ul class="mt-3 d-flex justify-content-center p-0">
-								<li>
-									<button type="button" class="changeuploaded">
-										<input type="file" accept="image/jpeg,.jpeg,.jpg,.png"
-											(change)="uploadImage($event, 'driver_image')">
-										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-											<path fill="none" d="M0 0h24v24H0V0z" />
-											<circle cx="12" cy="12" r="3" />
-											<path
-												d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
-										</svg>
-										Add
-									</button>
-								</li>
-							</ul>
-						</ng-template>
-					</div>
-
-					<!-- Vehicle Image -->
-					<div class="col-md-4">
-						<p class="text-center"> Vehicle Image </p>
-						<div class="vehtype_extint" *ngIf="vehicle_image?.image; else emptyImg">
-							<img [src]="vehicle_image?.image" (click)="showImageModal(vehicle_image?.image)">
-						</div>
-						<ng-template #emptyImg>
-							<div class="vehtype_extint emptyImage">
-								<img src="../../../../assets/images/empty-image.png">
-							</div>
-						</ng-template>
-
-						<ul class="mt-3 d-flex justify-content-center p-0"
-							*ngIf="vehicle_image?.image;else addVehicleImage">
-							<li>
-								<button type="button" class="changeuploaded">
-									<input type="file" accept="image/jpeg,.jpeg,.jpg,.png"
-										(change)="uploadImage($event, 'vehicle_image')">
-									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-										<path fill="none" d="M0 0h24v24H0V0z" />
-										<circle cx="12" cy="12" r="3" />
-										<path
-											d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
-									</svg>
-									Change
-								</button>
-							</li>
-							<li>
-								<a class="delete-btn" (click)="deleteImage('vehicle_image')">
-									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-										<path
-											d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
-									</svg> Delete
-								</a>
-							</li>
-						</ul>
-						<ng-template #addVehicleImage>
-							<ul class="mt-3 d-flex justify-content-center p-0">
-								<li>
-									<button type="button" class="changeuploaded">
-										<input type="file" accept="image/jpeg,.jpeg,.jpg,.png"
-											(change)="uploadImage($event, 'vehicle_image')">
-										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-											<path fill="none" d="M0 0h24v24H0V0z" />
-											<circle cx="12" cy="12" r="3" />
-											<path
-												d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
-										</svg>
-										Add
-									</button>
-								</li>
-							</ul>
-						</ng-template>
-					</div>
-				</div>
-				<!-- Image Upload Ends -->
-			</div>
-		</div>
-
-
-		<!-- Section - Booking Details -->
-		<div class="section-container mt-5">
+			<!-- Section Booking details start -->
 			<h2>
 				Booking Details
 			</h2>
@@ -1780,8 +1536,252 @@
 				</div>
 				<!-- AGM Map Ends -->
 			</div>
-			<!-- AGM Map -->
 		</div>
+		<!-- Section - Affiliate/Loose Details Ends -->
+
+
+		<!-- Driver Languages -->
+		<div id="languages" class="section-container section-dropdown"
+			[ngClass]="booking_params.chevrons.languages ? 'active' : ''"
+			*ngIf="Form.affiliate_type.value === 'loose_affiliate'">
+			<!-- Languages -->
+			<div class="row align-items-center m-0" (click)="toggleDropdown('languages')">
+				<div class="col-10 col-md-11">
+					<h4 class="section-dropdown-header m-0">
+						Languages
+					</h4>
+				</div>
+				<div class="col-2 col-md-1">
+					<h4 class="m-0">
+						<i class="bi"
+							[ngClass]="{true: 'bi-chevron-up', false: 'bi-chevron-down'}[booking_params.chevrons.languages]"></i>
+					</h4>
+				</div>
+			</div>
+			<!-- Ṣelections -->
+			<div *ngIf="booking_params.chevrons.languages">
+				<div class="row align-items-center m-0 p-4">
+					<div class="col-md-4 col-lg-3"
+						*ngFor="let language of BigData?.driverLanguage; index as language_index">
+						<mat-checkbox (change)="select($event.checked, 'driver_languages', language.id)"
+							[checked]="isChecked('driver_languages', language.id)">
+							{{ language.name }}
+						</mat-checkbox>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Driver Dresses -->
+		<div id="dresses" class="section-container section-dropdown"
+			[ngClass]="booking_params.chevrons.dresses ? 'active' : ''"
+			*ngIf="Form.affiliate_type.value === 'loose_affiliate'">
+			<!-- Dresses -->
+			<div class="row align-items-center m-0" (click)="toggleDropdown('dresses')">
+				<div class="col-10 col-md-11">
+					<h4 class="section-dropdown-header m-0">
+						Driver Dresses
+					</h4>
+				</div>
+				<div class="col-2 col-md-1">
+					<h4 class="m-0">
+						<i class="bi"
+							[ngClass]="{true: 'bi-chevron-up', false: 'bi-chevron-down'}[booking_params.chevrons.dresses]"></i>
+					</h4>
+				</div>
+			</div>
+			<!-- Selections -->
+			<div *ngIf="booking_params.chevrons.dresses">
+				<div class="row align-items-center m-0 p-4">
+					<div class="col-md-4" *ngFor="let dresses of BigData?.driverDresses">
+						<mat-checkbox (change)="select($event.checked, 'driver_dresses', dresses.id)"
+							[checked]="isChecked('driver_dresses', dresses.id)">
+							{{ dresses.name }}
+						</mat-checkbox>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+		<!-- Amenities -->
+		<div id="amenities" class="section-container section-dropdown"
+			[ngClass]="booking_params.chevrons.amenities ? 'active' : ''"
+			*ngIf="Form.affiliate_type.value === 'loose_affiliate'">
+			<!-- Amenities -->
+			<div class="row align-items-center m-0" (click)="toggleDropdown('amenities')">
+				<div class="col-10 col-md-11">
+					<h4 class="section-dropdown-header m-0">
+						Amenities
+					</h4>
+				</div>
+				<div class="col-2 col-md-1">
+					<h4 class="m-0">
+						<i class="bi"
+							[ngClass]="{true: 'bi-chevron-up', false: 'bi-chevron-down'}[booking_params.chevrons.amenities]"></i>
+					</h4>
+				</div>
+			</div>
+			<!-- Selections -->
+			<div *ngIf="booking_params.chevrons.amenities">
+				<div class="m-3 alert alert-danger">
+					$ Sign Denotes The Amenity Is Tied To A Bucket On The Rate Settings
+					Page. The Rate Is Default At 0$
+				</div>
+				<div class="row align-items-center m-0 p-4">
+					<div class="col-md-4" *ngFor="let amenity of BigData?.amenity; index as amenity_index">
+						<mat-checkbox
+							(change)="amenity['chargeable'] == 'yes' ? select($event.checked, 'chargedAmenities', amenity.id) : select($event.checked, 'amenities', amenity.id)"
+							[checked]="amenity['chargeable'] == 'yes' ? isChecked('chargedAmenities', amenity.id) : isChecked('amenities', amenity.id)">
+							{{ amenity.name }}
+							<span class="text-danger" *ngIf="amenity.chargeable == 'yes'">
+								(<i class="bi bi-currency-dollar"></i>)
+							</span>
+						</mat-checkbox>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+
+		<!-- Driver/Vehicle Image Uploads -->
+		<div id="images" class="section-container section-dropdown"
+			[ngClass]="booking_params.chevrons.images ? 'active' : ''"
+			*ngIf="Form.affiliate_type.value === 'loose_affiliate'">
+			<div class="row align-items-center m-0" (click)="toggleDropdown('images')">
+				<div class="col-10 col-md-11">
+					<h4 class=" section-dropdown-header m-0">
+						Upload Images
+					</h4>
+				</div>
+				<div class="col-2 col-md-1">
+					<h4 class="m-0">
+						<i class="bi"
+							[ngClass]="{true: 'bi-chevron-up', false: 'bi-chevron-down'}[booking_params.chevrons.images]"></i>
+					</h4>
+				</div>
+			</div>
+			<!-- Uploads -->
+			<div *ngIf="booking_params.chevrons.images">
+				<!-- Image Upload -->
+				<div class="row mt-5 mx-2 justify-content-around">
+					<!-- Driver Image -->
+					<div class="col-md-4">
+						<p class="text-center"> Driver Image </p>
+						<div class="vehtype_extint" *ngIf="driver_image?.image; else emptyImg">
+							<img [src]="driver_image?.image" (click)="showImageModal(driver_image?.image)">
+						</div>
+						<ng-template #emptyImg>
+							<div class="vehtype_extint emptyImage">
+								<img src="../../../../assets/images/empty-image.png">
+							</div>
+						</ng-template>
+
+						<ul class="mt-3 d-flex justify-content-center p-0" *ngIf="driver_image?.image;else addImage">
+							<li>
+								<button type="button" class="changeuploaded">
+									<input type="file" accept="image/jpeg,.jpeg,.jpg,.png"
+										(change)="uploadImage($event, 'driver_image')">
+									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+										<path fill="none" d="M0 0h24v24H0V0z" />
+										<circle cx="12" cy="12" r="3" />
+										<path
+											d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+									</svg>
+									Change
+								</button>
+							</li>
+							<li>
+								<a class="delete-btn" (click)="deleteImage('driver_image')">
+									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+										<path
+											d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
+									</svg> Delete
+								</a>
+							</li>
+						</ul>
+						<ng-template #addImage>
+							<ul class="mt-3 d-flex justify-content-center p-0">
+								<li>
+									<button type="button" class="changeuploaded">
+										<input type="file" accept="image/jpeg,.jpeg,.jpg,.png"
+											(change)="uploadImage($event, 'driver_image')">
+										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+											<path fill="none" d="M0 0h24v24H0V0z" />
+											<circle cx="12" cy="12" r="3" />
+											<path
+												d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+										</svg>
+										Add
+									</button>
+								</li>
+							</ul>
+						</ng-template>
+					</div>
+
+					<!-- Vehicle Image -->
+					<div class="col-md-4">
+						<p class="text-center"> Vehicle Image </p>
+						<div class="vehtype_extint" *ngIf="vehicle_image?.image; else emptyImg">
+							<img [src]="vehicle_image?.image" (click)="showImageModal(vehicle_image?.image)">
+						</div>
+						<ng-template #emptyImg>
+							<div class="vehtype_extint emptyImage">
+								<img src="../../../../assets/images/empty-image.png">
+							</div>
+						</ng-template>
+
+						<ul class="mt-3 d-flex justify-content-center p-0"
+							*ngIf="vehicle_image?.image;else addVehicleImage">
+							<li>
+								<button type="button" class="changeuploaded">
+									<input type="file" accept="image/jpeg,.jpeg,.jpg,.png"
+										(change)="uploadImage($event, 'vehicle_image')">
+									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+										<path fill="none" d="M0 0h24v24H0V0z" />
+										<circle cx="12" cy="12" r="3" />
+										<path
+											d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+									</svg>
+									Change
+								</button>
+							</li>
+							<li>
+								<a class="delete-btn" (click)="deleteImage('vehicle_image')">
+									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+										<path
+											d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
+									</svg> Delete
+								</a>
+							</li>
+						</ul>
+						<ng-template #addVehicleImage>
+							<ul class="mt-3 d-flex justify-content-center p-0">
+								<li>
+									<button type="button" class="changeuploaded">
+										<input type="file" accept="image/jpeg,.jpeg,.jpg,.png"
+											(change)="uploadImage($event, 'vehicle_image')">
+										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+											<path fill="none" d="M0 0h24v24H0V0z" />
+											<circle cx="12" cy="12" r="3" />
+											<path
+												d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+										</svg>
+										Add
+									</button>
+								</li>
+							</ul>
+						</ng-template>
+					</div>
+				</div>
+				<!-- Image Upload Ends -->
+			</div>
+		</div>
+
+
+		<!-- Section - Booking Details -->
+	
 		<!-- Section - Booking Details Ends -->
 
 
