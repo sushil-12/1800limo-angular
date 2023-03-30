@@ -110,6 +110,10 @@
 				</div>
 			</div>
 		</div>
+		<div class="row d-flex justify-content-end m-2">
+			<i class="bi bi-x fa-2x" 
+			(click)="handleSubHeadingScroll(item.key,'RateFormItem-' + item_index)"></i>
+		</div>
 	</div>
 
 	<hr style="border-top: 2.5px solid #000000; " />
@@ -117,7 +121,7 @@
 	<div class="row px-2 justify-content-between align-items-center">
 		<div class="col-md-6">
 			<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
-				Total
+				Sub Total
 			</p>
 		</div>
 		<div class="col-md-4 text-3xl text-right">
@@ -265,7 +269,7 @@
 	<div class="row px-2 justify-content-between align-items-center">
 		<div class="col-md-6">
 			<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
-				Total
+			Sub	Total
 			</p>
 		</div>
 		<div class="col-md-4 text-3xl text-right">

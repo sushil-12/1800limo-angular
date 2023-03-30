@@ -423,6 +423,15 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 		this.rate_params["chevrons"][items] = !this.rate_params["chevrons"][items];
 	}
 
+	handleSubHeadingScroll(items: string , id:any) {
+		this.rate_params["chevrons"][items] = !this.rate_params["chevrons"][items];
+		let el = document.getElementById(id);
+		console.log(`scrolling to ${id}` , el);
+		setTimeout(()=>{
+			el.scrollIntoView();
+		},600)
+	}
+
 
 	async calculateAmount(form: string, formgroup: string, subform: string) {
 		if (form === "RatesForm") {

@@ -370,10 +370,24 @@ dd {
 	.invoice .pr-5 {
 		padding: 0 20px !important;
 	}
+	
+	
 }
 
 
 
+@media only screen and (max-width: 764px) {
+
+	// .invoice .justify-content-end {
+	// 	justify-content: left !important;
+	// }
+	
+	.invoice .invoice-subhead{
+		padding: 19.0px !important;
+		line-height: 10px;
+	}
+	
+}
 
 
 
