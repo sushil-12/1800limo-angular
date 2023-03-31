@@ -149,7 +149,7 @@ export class SelectVehicleComponent implements OnInit
 	category_selected: any
 	vehicle_selected: any
 	quotebot_form: any
-	role:number = JSON.parse(localStorage.getItem("currentUser")).role 
+	role:number = JSON.parse(localStorage.getItem("currentUser"))?.role 
 	openfilters: boolean = false
 	changeText:boolean = false
 
