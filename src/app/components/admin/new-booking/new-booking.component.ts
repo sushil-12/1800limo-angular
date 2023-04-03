@@ -32,7 +32,7 @@ export class NewBookingComponent implements OnInit {
 		affiliate_accounts: ['affiliate', 'loose_affiliate'],
 		numbers: (() => {
 			let arr = []
-			for (let i = 0; i < 20; i++) {
+			for (let i = 0; i <= 1000; i++) {
 				arr.push(i)
 			}
 			return arr

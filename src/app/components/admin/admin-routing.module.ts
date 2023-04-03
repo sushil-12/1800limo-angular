@@ -73,6 +73,7 @@ import { AmenitiesInteriorComponent } from './amenities-interior/amenities-inter
 import { MasterVehicleFareComponent } from './master-vehicle-fare/master-vehicle-fare.component';
 import { NewBookingComponent } from './new-booking/new-booking.component';
 import { FinalizeBookingComponent } from './finalize-booking/finalize-booking.component';
+import { BadgeCitiesComponent } from './badge-cities/badge-cities.component';
 
 
 const routes: Routes = [
@@ -280,6 +281,11 @@ const routes: Routes = [
 		path: 'vehicle-years',
 		canActivate: [AdminGuardGuard],
 		component: VehicleYearsComponent
+	},
+	{
+		path: 'badge-cities',
+		canActivate: [AdminGuardGuard],
+		component: BadgeCitiesComponent
 	},
 	{
 		path: 'vehicle-colors',

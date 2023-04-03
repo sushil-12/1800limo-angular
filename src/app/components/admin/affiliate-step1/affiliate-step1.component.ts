@@ -92,7 +92,6 @@ export class AffiliateStep1Component implements OnInit {
 	}
 
 	ngOnInit(): void {
-
 		this.currentUser = this.authService.currentUserValue;
 		//add amenity form validation
 		this.addAffiliateAccountForm = this.formBuilder.group({
@@ -615,7 +614,7 @@ export class AffiliateStep1Component implements OnInit {
 
 
 	submitForm() {
-		console.log(this.addAffiliateAccountForm);
+		console.log('submit button hited',this.addAffiliateAccountForm);
 		// console.log(JSON.stringify(this.addVehicleRatesForm.value));
 		this.submittedForm = true;
 		// stop here if form is invalid
@@ -639,6 +638,7 @@ export class AffiliateStep1Component implements OnInit {
 				})
 			)
 			.subscribe(result => {
+				console.log('response__>>>')
 				this.response = result;
 				this.spinner.hide();//hide spinner
 				this.disableSubmitButton = false; //enable submit button
@@ -651,6 +651,7 @@ export class AffiliateStep1Component implements OnInit {
 					if (this.response.success == true) {
 						this.adminService.updateStepsLocal("1");
 					}
+					console.log('routing to step 2 _-->>')
 					this.router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
 						this.router.navigate(['/admin/affiliate/step2'])
 					);
@@ -659,6 +660,7 @@ export class AffiliateStep1Component implements OnInit {
 					// this.router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
 					// 	this.router.navigate(['/admin/affiliate/step1'])
 					// );
+					console.log('in else--->>>')
 					this.router.navigate(['/admin/affiliate/step1'])
 				}
 			});

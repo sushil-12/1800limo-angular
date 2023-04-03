@@ -1,8 +1,8 @@
-* {
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
-}
+// * {
+// 	margin: 0;
+// 	padding: 0;
+// 	box-sizing: border-box;
+// }
 
 .invoice{
 	background-color: #fff;
@@ -289,6 +289,25 @@ dd {
 	border-radius: 15px;
   }
 
+  .btnStyle {
+	color: #fff !important;
+	background-color: var(--orange-color) !important;
+	border-color: var(--orange-color) !important;
+	padding: 10px 40px;	
+	transition: box-shadow 0.1s ease-in-out;
+    box-shadow: 0px 5px 10px 1px rgb(0 0 0 / 40%);
+}
+.saveButtonModal {
+	color: #fff !important;
+	background-color: #5dbd8a;
+	border-color: #5dbd8a;
+	padding: 10px 40px;
+	bottom: -60px;
+	left: 15px;
+	transition: box-shadow 0.1s ease-in-out;
+    box-shadow: 0px 5px 10px 1px rgb(0 0 0 / 40%);
+}
+
 
 
 
@@ -360,6 +379,21 @@ dd {
     background-color: #3351c6;
     border-color: #3351c6;
 }
+
+
+.modal-header {
+	justify-content: center;
+}
+
+#refundModal .modal-content hr {
+	border: 2px solid var(--orange-color);
+	width: 180px;
+	background-color: var(--orange-color);
+	display: block;
+	// margin-top: 0;
+	// margin-bottom: 0;
+}
+
 
 
 
