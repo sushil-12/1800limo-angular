@@ -14,7 +14,7 @@
 		</div>
 		<div *ngIf="invoiceData.billing_detail.payment_method =='credit_card' && invoiceData.invoice_status!='refund'">
 			<button class="custom-btn refund-btn" style="height: 40px;width: 130px; font-size: 14px;
-				padding: 10px;" (click)="refund()">
+				padding: 10px;" data-toggle="modal" data-target="#refundModal" (click)="show=!show">
 				Refund</button>
 		</div>
 		<div>
@@ -72,7 +72,8 @@
 				<div class="col-md-12" *ngIf="invoiceData.service_type">
 					<div class="invoice-passenger mx-3">
 						<div class="d-flex bd-highlight invoice-subhead p-4 col-12 mr-2">
-							<div class="mr-auto  col-6 p-2 bd-highlight invoice-status-bar" *ngIf="invoiceData.service_type">
+							<div class="mr-auto  col-6 p-2 bd-highlight invoice-status-bar"
+								*ngIf="invoiceData.service_type">
 								<p class="m-0 invoice-p text-white invoice-status-bar">
 									Service Type: <span
 										class="invoice-text-bold invoice-status-bar">{{invoiceData.service_type}}</span>
@@ -166,25 +167,38 @@
 										'credit_card' ?
 										'Credit Card' : 'Cash' }}
 									</dd>
-										<dt class="invoice-text--name" *ngIf="invoiceData.billing_detail.payment_method=='credit_card'">Name on Credit Card </dt>
-										<dd class="invoice-text--entry" *ngIf="invoiceData.billing_detail.payment_method=='credit_card'"> {{invoiceData.billing_detail.name_on_credit_card ?
-											invoiceData.billing_detail.name_on_credit_card : ' - '}}</dd>
-										<dt class="invoice-text--name" *ngIf="invoiceData.billing_detail.payment_method=='credit_card'">
-											Credit Card Number
-										</dt>
-										<dd class="invoice-text--entry" *ngIf="invoiceData.billing_detail.payment_method=='credit_card'">{{invoiceData.billing_detail.credit_card_number ?
-											invoiceData.billing_detail.credit_card_number : ' - '}} </dd>
-										<dt class="invoice-text--name" *ngIf="invoiceData.billing_detail.payment_method=='credit_card'">
-											Expiry Date
-										</dt>
-										<dd class="invoice-text--entry" *ngIf="invoiceData.billing_detail.payment_method=='credit_card'">{{invoiceData.billing_detail.credit_card_expiry_date
-											?
-											invoiceData.billing_detail.credit_card_expiry_date : ' - '}}</dd>
-										<dt class="invoice-text--name" *ngIf="invoiceData.billing_detail.payment_method=='credit_card'">
-											Billing Address
-										</dt>
-										<dd class="invoice-text--entry" *ngIf="invoiceData.billing_detail.payment_method=='credit_card'"> {{invoiceData.billing_detail.billing_address ?
-											invoiceData.billing_detail.billing_address : ' - '}}</dd>
+									<dt class="invoice-text--name"
+										*ngIf="invoiceData.billing_detail.payment_method=='credit_card'">Name on Credit
+										Card </dt>
+									<dd class="invoice-text--entry"
+										*ngIf="invoiceData.billing_detail.payment_method=='credit_card'">
+										{{invoiceData.billing_detail.name_on_credit_card ?
+										invoiceData.billing_detail.name_on_credit_card : ' - '}}</dd>
+									<dt class="invoice-text--name"
+										*ngIf="invoiceData.billing_detail.payment_method=='credit_card'">
+										Credit Card Number
+									</dt>
+									<dd class="invoice-text--entry"
+										*ngIf="invoiceData.billing_detail.payment_method=='credit_card'">
+										{{invoiceData.billing_detail.credit_card_number ?
+										invoiceData.billing_detail.credit_card_number : ' - '}} </dd>
+									<dt class="invoice-text--name"
+										*ngIf="invoiceData.billing_detail.payment_method=='credit_card'">
+										Expiry Date
+									</dt>
+									<dd class="invoice-text--entry"
+										*ngIf="invoiceData.billing_detail.payment_method=='credit_card'">
+										{{invoiceData.billing_detail.credit_card_expiry_date
+										?
+										invoiceData.billing_detail.credit_card_expiry_date : ' - '}}</dd>
+									<dt class="invoice-text--name"
+										*ngIf="invoiceData.billing_detail.payment_method=='credit_card'">
+										Billing Address
+									</dt>
+									<dd class="invoice-text--entry"
+										*ngIf="invoiceData.billing_detail.payment_method=='credit_card'">
+										{{invoiceData.billing_detail.billing_address ?
+										invoiceData.billing_detail.billing_address : ' - '}}</dd>
 								</dl>
 							</div>
 						</div>
@@ -225,12 +239,11 @@
 							</div>
 							<div class="invoice-subhead px-3">
 								<div class="row d-flex justify-content-between">
-									<p class="m-0 p-1 my-2 text-charges"
-										style="font-size:large;">
+									<p class="m-0 p-1 my-2 text-charges" style="font-size:large;">
 										Total-Amount</p>
-										<p class="m-0 p-1 my-2 text-charges font-weight-bold" style="font-size:large;">
-											${{invoiceData.grand_total}}
-										</p>
+									<p class="m-0 p-1 my-2 text-charges font-weight-bold" style="font-size:large;">
+										${{invoiceData.grand_total}}
+									</p>
 								</div>
 							</div>
 						</div>
@@ -254,6 +267,52 @@
 	</section>
 </main>
 
+
+<!-- refund modal starts -->
+<div class="modal fade" id="refundModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+	aria-hidden="true" data-backdrop="static" data-keyboard="false" *ngIf="show">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content user_inforamtion">
+			<button type="button" (click)="closeModal()" class="close closeButton x-circle-btn" data-dismiss="modal"
+				aria-label="Close">
+				<i class="bi bi-x-circle"></i>
+			</button>
+			<div class="modal-header pb-0">
+				<h3 class="mb-0" id="exampleModalLabel">Refund</h3>
+			</div>
+			<div class="modal-body">
+				<form [formGroup]="refundAmountForm" appInvalidControlScroll>
+					<div class="form-group">
+						<div class="col-md-12">
+							<mat-form-field appearance="outline">
+								<mat-label>Amount</mat-label>
+								<span matPrefix>$ &nbsp;</span>
+								<input matInput type="number" formControlName="refundAmount"
+									value="invoiceData.grand_total" required>
+							</mat-form-field>
+							<div class="error-box">
+								<div class="error-message"
+									*ngIf="Form.refundAmount.invalid && (Form.refundAmount.touched || Form.refundAmount.dirty)">
+									<p class="text-danger text-lg m-0" *ngIf="Form.refundAmount.errors?.required">
+										Amount is required
+									</p>
+									<p class="text-danger text-lg m-0" *ngIf="Form.refundAmount.errors?.max">
+										Maximum amount exceeded
+									</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer d-flex justify-content-between">
+				<button type="button" (click)="closeModal()" class="btn btnStyle">Close</button>
+				<button class="btn saveButtonModal" type="submit" (click)="refund()" >Submit</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- refund modal ends -->
 
 
 

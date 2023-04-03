@@ -100,6 +100,7 @@ import { FinalizeBookingComponent } from './finalize-booking/finalize-booking.co
 import { NgSelectModule } from '@ng-select/ng-select';
 import { FinalizeRatesComponent } from './finalize-rates/finalize-rates.component';
 import { NgxPrintModule } from 'ngx-print';
+import { BadgeCitiesComponent } from './badge-cities/badge-cities.component';
 
 @NgModule({
 	declarations: [
@@ -178,7 +179,8 @@ import { NgxPrintModule } from 'ngx-print';
 		NewBookingComponent,
 		RatesFormComponent,
 		FinalizeBookingComponent,
-		FinalizeRatesComponent
+		FinalizeRatesComponent,
+		BadgeCitiesComponent
 	],
 	imports: [
 		CommonModule,
