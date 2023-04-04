@@ -36,13 +36,15 @@
 				<!-- Search Button -->
 				<div class="align-btn d-flex justify-content-around">
 					<div class="col-sm-2 ml-n5">
-						<button class="custom-filled-button orange-button" style="color:#fff;padding: 5px 12px !important;"
+						<button class="custom-filled-button orange-button"
+							style="color:#fff;padding: 5px 12px !important;"
 							(click)="loadBookings(null, startDate, endDate, searchText); saveCookie('startDate', startDate); saveCookie('endDate', endDate)">
 							Search
 						</button>
 					</div>
 					<div class="col-sm-2">
-						<button class="custom-filled-back-button" style="white-space: nowrap;color:#fff;padding: 5px 12px !important;"
+						<button class="custom-filled-back-button"
+							style="white-space: nowrap;color:#fff;padding: 5px 12px !important;"
 							(click)="reset(); loadBookings(null, startDate, endDate, searchText)">
 							Reset
 						</button>
@@ -306,9 +308,9 @@
 	aria-hidden="true">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content user_inforamtion">
-			<button type="button" class="close closeButton x-circle-btn" data-dismiss="modal" aria-label="Close">
+			<!-- <button type="button" class="close closeButton x-circle-btn" data-dismiss="modal" aria-label="Close">
 				<i class="bi bi-x-circle"></i>
-			</button>
+			</button> -->
 			<div class="modal-header pb-0">
 				<h3 class="mb-0" id="exampleModalLabel">Change Booking Status</h3>
 			</div>
@@ -327,9 +329,16 @@
 					</div>
 				</form>
 			</div>
-			<div class="modal-footer">
+			<div>
+				<div class="d-flex justify-content-center">
 				<button type="button" class="custom-btn button2" (click)="submitChangeStatusForm()">Change
-					Status</button>
+					Status</button></div>
+				<div class="d-flex justify-content-end mx-2">
+					<button type="button" class="x-close-btn x-circle-btn" data-dismiss="modal"
+						aria-label="Close" style="background: none;">
+						<i class="bi bi-x-circle"></i>
+					</button>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -378,9 +387,6 @@
 	aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg" role="document">
 		<div class="modal-content user_information bottom-container">
-			<button type="button" class="close closeButton mx-3 my-2" data-dismiss="modal" aria-label="Close">
-				<span aria-hidden="true" class="bi bi-x-circle"></span>
-			</button>
 			<div class="modal-header pb-0">
 				<h3 class="modal-title mb-0">Audit Trial</h3>
 			</div>
@@ -415,8 +421,8 @@
 				</table>
 			</div>
 			<div class="modal-footer justify-content-end">
-				<button type="button" class="custom-filled-back-button" data-dismiss="modal">
-					Close
+				<button type="button" class="x-close-btn x-cross-btn mx-3" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true" class="bi bi-x-circle"></span>
 				</button>
 
 			</div>
@@ -631,13 +637,13 @@
 <div class="modal fade" id="previewBookingOnID" tabindex="-1" aria-labelledby="previewBookingLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
 		<div class="modal-content" style="background: #f5f4fe;">
-			<div class="modal-header py-0">
+			<div class="modal-header d-flex justify-content-start py-0">
 				<h3 class="modal-title">
 					Preview Booking
 				</h3>
-				<button type="button" class="close x-circle-btn" data-dismiss="modal" aria-label="Close">
+				<!-- <button type="button" class="close x-circle-btn" data-dismiss="modal" aria-label="Close" >
 					<span aria-hidden="true" class="bi bi-x-circle"></span>
-				</button>
+				</button> -->
 			</div>
 			<div class="modal-body" style="font-family: 'PT Serif', serif;">
 				<div class="container text-lg" *ngIf="bookingPreview">
@@ -1232,8 +1238,8 @@
 
 
 			<div class="modal-footer justify-content-end">
-				<button type="button" class="custom-filled-back-button" data-dismiss="modal">
-					Close
+				<button type="button" class="close x-circle-btn" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true" class="bi bi-x-circle"></span>
 				</button>
 
 			</div>

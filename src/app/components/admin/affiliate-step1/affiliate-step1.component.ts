@@ -302,6 +302,7 @@ export class AffiliateStep1Component implements OnInit {
 		if (sessionStorage.getItem("affiliateType") != "all_operators") {
 			this.affiliateTypeSwitch(sessionStorage.getItem("affiliateType"))
 		}
+		window.scrollTo(0,0);
 	}
 
 	affiliateTypeSwitch(affiliateType) {
@@ -644,24 +645,21 @@ export class AffiliateStep1Component implements OnInit {
 				this.disableSubmitButton = false; //enable submit button
 				sessionStorage.setItem("affiliateUserData", JSON.stringify(this.addAffiliateAccountForm.value));
 				console.log("valueset", this.addAffiliateAccountForm.value.id)
-				if (!this.addAffiliateAccountForm.value.id) {
-					sessionStorage.setItem("affiliateId", this.response.data.acc_id);
-					sessionStorage.setItem("affiliateType", this.addAffiliateAccountForm.value.AffiliateType);
-					console.log("valueset", this.response.data.acc_id)
-					if (this.response.success == true) {
-						this.adminService.updateStepsLocal("1");
+				if (this.response.success == true) {
+					this.adminService.updateStepsLocal("1");
+					if (!this.addAffiliateAccountForm.value.id) {
+						sessionStorage.setItem("affiliateId", this.response.data.acc_id);
+						sessionStorage.setItem("affiliateType", this.addAffiliateAccountForm.value.AffiliateType);
+						console.log("valueset", this.response.data.acc_id)
+						
+						console.log('routing to step 2 _-->>')
+						
 					}
-					console.log('routing to step 2 _-->>')
+					
+					// done by Ishpreet
 					this.router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
-						this.router.navigate(['/admin/affiliate/step2'])
-					);
-				}
-				else {
-					// this.router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
-					// 	this.router.navigate(['/admin/affiliate/step1'])
-					// );
-					console.log('in else--->>>')
-					this.router.navigate(['/admin/affiliate/step1'])
+							this.router.navigate(['/admin/affiliate/step2'])
+						);
 				}
 			});
 	}

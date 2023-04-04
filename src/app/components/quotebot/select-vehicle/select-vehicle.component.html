@@ -260,7 +260,7 @@
 								<div class="my-2" *ngIf="role==2">
 									<div class="font-weight-bold display-5" style="font-size: 18px;">
 										Affiliate Vehicles
-									</div> 
+									</div>
 								</div>
 							</div>
 							<div id="filter-buttons" class="mt-4">
@@ -294,12 +294,25 @@
 					<!-- DIV: AFFILIATE INFO -->
 					<div id="affiliate-info"
 						*ngIf="currentUser != null && currentUser.roleName == 'admin' && (vehinfo.affiliate_name || vehinfo.affiliate_company)">
-						<button class="link" (click)="editAffiliateAccount(vehinfo)">
+						<button class="link" *ngIf="vehinfo.readMore">
 							<p class="text-left text-secondary m-0 my-md-2" style="color: #007fee !important;">
-								{{vehinfo.affiliate_company }}
-								{{'/ '+vehinfo.affiliate_name  }}
-						</p>
+								<span (click)="editAffiliateAccount(vehinfo)">
+									{{vehinfo?.affiliate_company.slice(0,7) }}
+								{{'/ '+vehinfo?.affiliate_name.slice(0,7) }}
+								</span>
+								<span (click)="handleReadMore(vehinfo , false)" style="color: black;">...more</span>
+							</p>
 						</button>
+						<button class="link"  *ngIf="!vehinfo.readMore">
+							<p class="text-left text-secondary m-0 my-md-2" style="color: #007fee !important;">
+								<span (click)="editAffiliateAccount(vehinfo)">
+									{{vehinfo?.affiliate_company }}
+								{{'/ '+vehinfo?.affiliate_name }}
+								</span>
+								<span (click)="handleReadMore(vehinfo , true)" style="color: black;">...less</span>
+							</p>
+						</button>
+
 						<!-- <ng-template #readMoreTemp>
 							<p class="text-left text-secondary m-0 my-md-2" [class.show]="!show" >
 								{{ vehinfo.affiliate_company.length > 10 ? vehinfo.affiliate_company.slice(0,5)+"..." : vehinfo.affiliate_company }}
@@ -361,7 +374,7 @@
 
 					<!-- DIV: PREVIEW BUTTON -->
 					<!-- class="m-3" -->
-					<div id="vehicle-preview-button" >
+					<div id="vehicle-preview-button">
 						<button class="custom-filled-button orange-button mx-2" (click)="viewDetails(vehinfo)">
 							Vehicle Details
 						</button>
@@ -383,8 +396,7 @@
 					*ngIf="(vehicleDetails.length == 0 && this.filters.selections.length > 0) || master_vehicles.length == 0">
 					{{ no_vehicle_msg }}
 				</p>
-				<div id="master-vehicle-box-container" class="row"
-					*ngIf="master_vehicles.length > 0">
+				<div id="master-vehicle-box-container" class="row" *ngIf="master_vehicles.length > 0">
 					<div id="master-vehicle-box" class="col-md-3 mb-5 d-flex flex-nowrap flex-md-wrap cursor-pointer"
 						style="gap: 10px" *ngFor="let vehicle_obj of master_vehicles; index as vehicle_obj_index"
 						(click)="selectCategory(vehicle_obj?.name)">

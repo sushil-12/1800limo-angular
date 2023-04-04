@@ -479,7 +479,11 @@ export class SelectVehicleComponent implements OnInit
 			{
 				this.no_vehicle_msg = 'No Vehicle found with the applied filter.'
 			}
-			this.vehicleDetails = response.data
+			this.vehicleDetails = response.data.map(i=> {
+				i['readMore']=(i?.affiliate_company.length || i?.affiliate_name.length) > 8 ? true : false 
+				return i
+			})
+			console.log('vehicle details-->>>' , this.vehicleDetails)
 			this.Sort.LowToHigh() // default sort to Low-High
 			this.$spinner.hide()
 		})
@@ -796,6 +800,15 @@ export class SelectVehicleComponent implements OnInit
 			this.filterSelection(false, item['catg_name'], item)
 		}
 		this.vehicleDetails = []
+	}
+
+	handleReadMore(vehinfo : any,check:boolean){
+		this.vehicleDetails = this.vehicleDetails.map(i=> {
+			if(i.id== vehinfo.id){
+				i['readMore'] = check
+			}
+			return i;
+		})
 	}
 
 
