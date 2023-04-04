@@ -80,25 +80,6 @@ button {
 	width: 100%;
 }
 
-@media only screen and (min-width: 768px) and (max-width: 1200px) {
-	.startdate {
-		padding-right: 5px;
-	}
-
-	.startdate2 {
-		padding-left: 5px;
-		padding-right: 5px;
-	}
-
-	.startdate3 {
-		padding-left: 5px;
-	}
-
-	.btnclass {
-		// padding-right: 5px;
-		width: 100%;
-	}
-}
 
 .odd p {
 	cursor: pointer;
@@ -219,7 +200,44 @@ input::-webkit-input-placeholder {
 	border-radius: 3rem !important;
 }
 
+.x-cross-btn{
+	background: #fff !important;
+    color: #ff0000 !important;
+    /* position: absolute; */
+    top: 5px;
+    right: 15px;
+    border-radius: 20px;
+    width: 25px;
+    opacity: 1 !important;
+}
 
+.x-close-btn{
+	float: right;
+    font-size: 1.8rem;
+    font-weight: 700;
+    line-height: 1;
+	border: none;
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1200px) {
+	.startdate {
+		padding-right: 5px;
+	}
+
+	.startdate2 {
+		padding-left: 5px;
+		padding-right: 5px;
+	}
+
+	.startdate3 {
+		padding-left: 5px;
+	}
+
+	.btnclass {
+		// padding-right: 5px;
+		width: 100%;
+	}
+}
 
 @media only screen and (max-width: 475px)
 {
