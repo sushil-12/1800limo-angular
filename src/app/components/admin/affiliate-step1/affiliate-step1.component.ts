@@ -79,6 +79,8 @@ export class AffiliateStep1Component implements OnInit {
 	longitude: number;
 	zoom: number;
 	address: string;
+	badgeCities : any = ['mohali' , 'chandigarh' , 'amritsar' , 'patiala' , 'mansa' , 'Barnala']
+	badgeOptions :any = [...this.badgeCities]
 	private geoCoder;
 	@ViewChild('search1')
 	public searchElementRef: ElementRef;
@@ -105,6 +107,7 @@ export class AffiliateStep1Component implements OnInit {
 			CellNumber: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
 			CellIsd: ['+1', Validators.required],
 			Email: ['', [Validators.required,Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.]+\.[a-zA-Z]{2,}$/i)]],
+			badge_city :[''],
 			latitude: [''],
 			longitude: [''],
 			FirstYearBusiness: ['', [Validators.required ,Validators.pattern("^[0-9]*$")]],
@@ -131,7 +134,7 @@ export class AffiliateStep1Component implements OnInit {
 			notify_sms: [true],
 			notify_email: [true],
 		});
-
+		this.addAffiliateAccountForm.patchValue({AffiliateType:'black_limo_operator'})
 		this.affiliateTypeSwitch("black_limo_operator");
 
 		this.spinner.show()
@@ -670,6 +673,16 @@ export class AffiliateStep1Component implements OnInit {
 		this.addAffiliateAccountForm.reset();
 		this.BusinessFrontPhoto = "";
 		this.BusinessBackPhoto = "";
+	}
+
+	handleBadgeCity(value:any){
+		if(value){
+			this.badgeOptions = this.badgeCities.filter(i=> i.toLowerCase().includes(value.toLowerCase()))
+		}
+		else{
+			this.badgeOptions = [...this.badgeCities]
+		}
+
 	}
 
 }

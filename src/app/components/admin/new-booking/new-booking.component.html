@@ -2295,6 +2295,19 @@
 							</span>
 						</div>
 					</div>
+					<div class="row p-2">
+						<div class="col-md-4 key">
+							<span>
+								Vehicle Type
+							</span>
+						</div>
+						<div class="col-md-8 value">
+							<span class="font-weight-bolder">
+								{{ Form.vehicle_type.value}}
+								</span>
+						</div>
+					</div>
+					
 					<hr>
 					<!-- Affiliate Information -->
 					<ng-container *ngIf="Form.affiliate_type.value == 'affiliate' then affiliateUser">
@@ -2539,8 +2552,8 @@
 								</div>
 							</div>
 						</div>
+						<hr>
 					</ng-template>
-					<hr>
 					<!-- Passenger Information -->
 					<h4 class="font-weight-bolder m-0 mt-3">
 						Passenger Information
@@ -2595,6 +2608,20 @@
 						</div>
 					</div>
 					<hr>
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Special Instruction
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{Form?.booking_instructions.value}}
+								</span>
+							</div>
+						</div>
+					</div>
 					<!-- Travel Information -->
 					<h4 class="font-weight-bolder m-0 mt-3">
 						Travel Information

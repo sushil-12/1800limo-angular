@@ -603,7 +603,7 @@
 </div>
 
 <!-- Notification Modal -->
-<div class="modal fade" id="notificationModal" tabindex="-1" role="dialog" aria-labelledby="notificationModal"
+<div class="modal fade center" id="notificationModal" tabindex="-1" role="dialog" aria-labelledby="notificationModal"
 	aria-hidden="true">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
@@ -919,6 +919,34 @@
 								<span class="font-weight-bolder preview-output-feild">
 									({{ bookingPreview.passenger_cell_isd }})
 									{{ textFormatter(bookingPreview.passenger_cell) }}
+								</span>
+							</div>
+						</div>
+					</div>
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									No. of passenger
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder preview-output-feild">
+									{{ bookingPreview.total_passengers }}
+								</span>
+							</div>
+						</div>
+					</div>
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Luggage count
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder preview-output-feild">
+									{{ bookingPreview.luggage_count }}
 								</span>
 							</div>
 						</div>
