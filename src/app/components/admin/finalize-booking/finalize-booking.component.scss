@@ -476,7 +476,7 @@ body {
 .cardSection {
     border       : 1px solid #000;
     border-radius: 15px;
-    padding      : 15px;
+    padding      : 10px;
     max-width    : 95%;
     margin       : 30px 20px 0px 20px;
 }
@@ -485,9 +485,9 @@ input[type=radio] {
     margin: 0 10px 0 0;
 }
 
-.methodCard {
-    padding: 15px;
-}
+// .methodCard {
+//     padding: 15px;
+// }
 
 tbody {
     border          : 1px solid var(--orange);

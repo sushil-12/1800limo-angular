@@ -62,6 +62,7 @@ export class AddIndividualAccountComponent implements OnInit
 			let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement);
 			autocomplete.addListener("place_changed", () =>
 			{
+				console.log('auto fill address-->>>')
 				this.ngZone.run(() =>
 				{
 					//get the place result
@@ -80,22 +81,22 @@ export class AddIndividualAccountComponent implements OnInit
 						latitude: place.geometry.location.lat(),
 						longitude: place.geometry.location.lng()
 					});
-					if (place.address_components[1])
-						this.addIndividualAccountForm.patchValue({
-							city: place.address_components[1].long_name
-						});
-					if (place.address_components[2])
-						this.addIndividualAccountForm.patchValue({
-							state: place.address_components[2].long_name
-						});
-					if (place.address_components[3])
-						this.addIndividualAccountForm.patchValue({
-							country: place.address_components[3].long_name
-						});
-					if (place.address_components[4])
-						this.addIndividualAccountForm.patchValue({
-							zipCode: place.address_components[place.address_components.length - 1].long_name
-						});
+					// if (place.address_components[1])
+					// 	this.addIndividualAccountForm.patchValue({
+					// 		city: place.address_components[1].long_name
+					// 	});
+					// if (place.address_components[2])
+					// 	this.addIndividualAccountForm.patchValue({
+					// 		state: place.address_components[2].long_name
+					// 	});
+					// if (place.address_components[3])
+					// 	this.addIndividualAccountForm.patchValue({
+					// 		country: place.address_components[3].long_name
+					// 	});
+					// if (place.address_components[4])
+					// 	this.addIndividualAccountForm.patchValue({
+					// 		zipCode: place.address_components[place.address_components.length - 1].long_name
+					// 	});
 				});
 			});
 		});

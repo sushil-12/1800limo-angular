@@ -64,6 +64,7 @@ import { ScrollToSectionDirective } from './directives/scroll-to-section.directi
 import { PageUnderConstructionComponent } from './components/page-under-construction/page-under-construction.component';
 import { HtmlToTextPipe } from './pipes/html-to-text.pipe';
 import { LocateMapComponent } from './components/locate-map/locate-map.component';
+import { BookingStatusVerificationComponent } from './components/email-pages/booking-status-verification/booking-status-verification.component';
 @NgModule({
 	declarations: [
 		AppComponent,
@@ -97,6 +98,7 @@ import { LocateMapComponent } from './components/locate-map/locate-map.component
 		PageUnderConstructionComponent,
 		HtmlToTextPipe,
 		LocateMapComponent,
+		BookingStatusVerificationComponent,
 	],
 	imports: [
 		BrowserModule,
