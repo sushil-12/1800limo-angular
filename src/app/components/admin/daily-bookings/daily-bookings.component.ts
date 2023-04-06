@@ -55,7 +55,7 @@ export class DailyBookingsComponent implements OnInit {
 	reciptentName: any;
 	notification_msg: any;
 	status_list: any = [];
-	audit_Trail : any = [];
+	audit_Trail: any = [];
 
 	constructor(
 		private adminService: AdminService,
@@ -169,18 +169,18 @@ export class DailyBookingsComponent implements OnInit {
 			}
 		}
 	}
-	highlighText(args : string){
-		if (!this.searchText) {return args;}
-		if(args){
+	highlighText(args: string) {
+		if (!this.searchText) { return args; }
+		if (args) {
 			args = args.toString()
 			var re = new RegExp(this.searchText, 'gi'); //'gi' for case insensitive and can use 'g' if you want the search to be case sensitive.
 			return args.replace(re, '<mark class="font-weight-bold">$&</mark>');
 		}
 	}
 
-	emailPassenger(){
-		console.log('In function email passenger' , this.sendEmailForm.value.reservation_id)
-		let data= {
+	emailPassenger() {
+		console.log('In function email passenger', this.sendEmailForm.value.reservation_id)
+		let data = {
 			reservation_id: this.sendEmailForm.value.reservation_id
 		}
 		this.spinner.show()
@@ -190,13 +190,13 @@ export class DailyBookingsComponent implements OnInit {
 					return throwError(err);
 				})
 			)
-			.subscribe((response :any) => {
-				console.log('response--------->>>>>>>>' , response)
+			.subscribe((response: any) => {
+				console.log('response--------->>>>>>>>', response)
 				this.spinner.hide()
 				$("#emailPassenger").modal("hide");
 			});
 	}
-	auditTrail(bookingId:any){
+	auditTrail(bookingId: any) {
 		console.log('In function audit trail', bookingId)
 		this.spinner.show()
 		this.adminService.auditTrailInfo(bookingId)
@@ -205,16 +205,16 @@ export class DailyBookingsComponent implements OnInit {
 					return throwError(err);
 				})
 			)
-			.subscribe((response :any) => {
+			.subscribe((response: any) => {
 				this.spinner.hide()
-				console.log('audit trail --->>>>>>>>',response)
+				console.log('audit trail --->>>>>>>>', response)
 				this.audit_Trail = response.data
 				// $("#AuditTrailModal").modal("hide");
 			});
 	}
 
 	submit(message, format) {
-		
+
 		if (this.passengerDetails.selection_button == "Passenger") {
 			this.sendInformation = format
 				? this.passengerDetails.passenger_cell_isd +
@@ -531,53 +531,77 @@ export class DailyBookingsComponent implements OnInit {
 	// }
 	iOS() {
 		return [
-		  'iPad Simulator',
-		  'iPhone Simulator',
-		  'iPod Simulator',
-		  'iPad',
-		  'iPhone',
-		  'iPod'
+			'iPad Simulator',
+			'iPhone Simulator',
+			'iPod Simulator',
+			'iPad',
+			'iPhone',
+			'iPod'
 		].includes(navigator.platform)
-		// iPad on iOS 13 detection
-		|| (navigator.userAgent.includes("Mac") && "ontouchend" in document)
-	  }
-
-	  showLocationPointOnMap(booking_id: number, type: string) {
-
-		let isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-		console.log('isSafari' , isSafari)
-		this.spinner.show()
-		this.adminService.getLocationPoints(booking_id).subscribe((response: any) => {
-			this.spinner.hide();
-			if ("lat" in response?.data?.pickupDetail && "long" in response?.data?.pickupDetail && "lat" in response?.data?.dropoffDetail && "long" in response?.data?.dropoffDetail) {
-				sessionStorage.setItem('pickup', JSON.stringify(response?.data?.pickupDetail.address));
-				sessionStorage.setItem('dropoff', JSON.stringify(response?.data?.dropoffDetail.address));
-				const googleDirectionUrl = 'https://www.google.com/maps/dir/?api=1&origin='+
-				encodeURIComponent(response?.data?.pickupDetail.address)+'&destination='+
-				encodeURIComponent(response?.data?.dropoffDetail.address)+'&travelmode=driving'
-				// this.router.navigate(['/locate-map'], {
-				// 	queryParams: {
-				// 		plat: response?.data?.pickupDetail?.lat.toString(),
-				// 		plng: response?.data?.pickupDetail?.long.toString(),
-				// 		dlat: response?.data?.dropoffDetail?.lat.toString(),
-				// 		dlng: response.data?.dropoffDetail?.long.toString(),
-				// 	},
-				// 	queryParamsHandling: 'merge'
-				// });
-				const iosDirectionUrl='http://maps.apple.com/?daddr='+
-				encodeURIComponent(response?.data?.dropoffDetail.address)+"&saddr="+
-				encodeURIComponent(response?.data?.pickupDetail.address)
-				if(this.iOS()){
-					setTimeout(() => {
-						window.location.href= iosDirectionUrl;
-					})
-				}
-				else{
-					window.open(googleDirectionUrl, '_blank');
-				}
-			} else {
-				throw new Error('Error: Location Points Not Specified Properly. ');
-			}
-		})
+			// iPad on iOS 13 detection
+			|| (navigator.userAgent.includes("Mac") && "ontouchend" in document)
 	}
+
+	async showLocationPointOnMap(booking_id: number, type: string) {
+		const options = {
+			enableHighAccuracy: true,
+			timeout: 5000,
+			maximumAge: 0,
+		};
+		function success(pos) {
+			const crd = pos.coords;
+			console.log("Your current position is:");
+			console.log(`Latitude : ${crd.latitude}`);
+			console.log(`Longitude: ${crd.longitude}`);
+			console.log(`More or less ${crd.accuracy} meters.`);
+			let isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+			console.log('isSafari', isSafari)
+			this.spinner.show()
+			this.adminService.getLocationPoints(booking_id).subscribe((response: any) => {
+				this.spinner.hide();
+				if ("lat" in response?.data?.pickupDetail && "long" in response?.data?.pickupDetail && "lat" in response?.data?.dropoffDetail && "long" in response?.data?.dropoffDetail) {
+					sessionStorage.setItem('pickup', JSON.stringify(response?.data?.pickupDetail.address));
+					sessionStorage.setItem('dropoff', JSON.stringify(response?.data?.dropoffDetail.address));
+					const googleDirectionUrl = 'https://www.google.com/maps/dir/?api=1&origin=' + crd.latitude + "," +crd.longitude + '&destination=' +
+						encodeURIComponent(response?.data?.pickupDetail.address) + '&travelmode=driving'
+					// this.router.navigate(['/locate-map'], {
+					// 	queryParams: {
+					// 		plat: response?.data?.pickupDetail?.lat.toString(),
+					// 		plng: response?.data?.pickupDetail?.long.toString(),
+					// 		dlat: response?.data?.dropoffDetail?.lat.toString(),
+					// 		dlng: response.data?.dropoffDetail?.long.toString(),
+					// 	},
+					// 	queryParamsHandling: 'merge'
+					// });
+					const iosDirectionUrl = 'http://maps.apple.com/?daddr=' +
+						encodeURIComponent(response?.data?.pickupDetail.address) + "&saddr=" +
+						crd.latitude + "," + crd.longitude
+					if (this.iOS()) {
+						setTimeout(() => {
+							window.location.href = iosDirectionUrl;
+						})
+					}
+					else {
+						window.open(googleDirectionUrl, '_blank');
+					}
+				} else {
+					throw new Error('Error: Location Points Not Specified Properly. ');
+				}
+			})
+		}
+		
+		function error(err) {
+			console.warn(`ERROR(${err.code}): ${err.message}`);
+		}
+		
+		await navigator.geolocation.getCurrentPosition(success, error, options)
+		
+		// if (navigator.geolocation) {
+			// 	navigator.geolocation.getCurrentPosition(function (position) {
+				// 		var currentLocation =	CURRENT_LAT +","+CURRENT_LONG;
+				// 	})
+				// 	}
+				
+			}
+			
 }
