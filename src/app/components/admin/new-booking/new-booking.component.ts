@@ -239,11 +239,16 @@ export class NewBookingComponent implements OnInit {
 			lose_affiliate_phone_country: ['us'],
 			lose_affiliate_email: ['', Validators.email],
 			vehicle_type: [''],
+			vehicle_type_name: [''],
 			vehicle_id: [''],
 			vehicle_make: [''],
+			vehicle_make_name: [''],
 			vehicle_model: [''],
+			vehicle_model_name: [''],
 			vehicle_year: [''],
+			vehicle_year_name: [''],
 			vehicle_color: [''],
+			vehicle_color_name: [''],
 			vehicle_license_plate: ['', this.customValidator.whitespace()],
 			vehicle_seats: ['4', Validators.pattern("^[0-9]*$")],
 			driver_id: [''],
@@ -1002,8 +1007,10 @@ export class NewBookingComponent implements OnInit {
 			let i = 0
 			let legend = ['make', 'model', 'year', 'color']
 			for (let item of ['vehicleMakes', 'vehicleModels', 'vehicleYears', 'vehicleColors']) {
-				let id = this.BigData[item].find(item => item.name == data[legend[i]])['id']
-				this.SetFormValue('vehicle_' + legend[i], id)
+				let obj = this.BigData[item].find(item => item.name == data[legend[i]])
+				this.SetFormValue('vehicle_' + legend[i], obj['id'])
+				let name = obj['name']; // name
+				this.SetFormValue("vehicle_" + legend[i] + "_name", name);
 				i++;
 			}
 		}
@@ -1390,12 +1397,52 @@ export class NewBookingComponent implements OnInit {
 		// 	}
 		// })
 
-		this.BookingForm.get('vehicle_make').valueChanges.subscribe((value: any) => {
-			if (value) {
-				this.BigData['vehicleModels'] = this.BigData_COPY?.vehicleModels.filter(item => item.make_id == value)
+		this.BookingForm.get('vehicle_type').valueChanges.subscribe((value: string) =>
+		{
+			if(value && this.BigData)
+			{
+				let name = this.BigData['vehicleCategories'].find(item => item.id == value)['name']
+				this.SetFormValue('vehicle_type_name', name);
 			}
 		})
 
+		this.BookingForm.get('vehicle_make').valueChanges.subscribe((value: string) =>
+		{
+			if(value && this.BigData)
+			{
+				this.BigData['vehicleModels'] = this.BigData_COPY?.vehicleModels.filter(item => item.make_id == value)
+				let name = this.BigData['vehicleMakes'].find(item => item.id == value)['name']
+				this.SetFormValue('vehicle_model', this.BigData?.vehicleModels[0]['id'])
+				this.SetFormValue('vehicle_make_name', name)
+			}
+		})
+
+		this.BookingForm.get('vehicle_model').valueChanges.subscribe((value: string) =>
+		{
+			if(value && this.BigData)
+			{
+				
+				let name = this.BigData['vehicleModels'].find(item => item.id == value)['name']
+				this.SetFormValue('vehicle_model_name', name)
+			}
+		})
+
+		this.BookingForm.get('vehicle_year').valueChanges.subscribe((value: string) =>
+		{
+			if(value && this.BigData)
+			{
+				let name = this.BigData['vehicleYears'].find(item => item.id == value)['name']
+				this.SetFormValue('vehicle_year_name', name)
+			}
+		})
+		this.BookingForm.get('vehicle_color').valueChanges.subscribe((value: string) =>
+		{
+			if(value && this.BigData)
+			{
+				let name = this.BigData['vehicleColors'].find(item => item.id == value)['name']
+				this.SetFormValue('vehicle_color_name', name)
+			}
+		})
 		// Pickup Airport
 		this.BookingForm.get('pickup_airport').valueChanges.subscribe((value: number) => {
 			if (value) {
@@ -1596,6 +1643,12 @@ export class NewBookingComponent implements OnInit {
 	DrvTelInputObject(event: any) {
 		this.DrvTelObject = event;
 	}
+	// addLineBreak(){
+	// 	console.log('add line break __>>' , this.BookingForm.get('booking_instructions').value)
+	// 	// this.BookingForm.patchValue({
+	// 	// 	booking_instructions: this.BookingForm.get('booking_instructions').value +'\n'
+	// 	// })
+	// }
 
 	EmailDomainValidator(): ValidatorFn {
 		return (control: AbstractControl): ValidationErrors | null => {

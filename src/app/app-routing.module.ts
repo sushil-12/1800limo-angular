@@ -33,6 +33,7 @@ import { AffiliateTemplateComponent } from './components/affiliate/affiliate-tem
 import { AffiliateEmailConfirmationComponent } from './components/email-pages/affiliate-email-confirmation/affiliate-email-confirmation.component';
 import { DispatchEmailConfirmationComponent } from './components/email-pages/dispatch-email-confirmation/dispatch-email-confirmation.component';
 import { LocateMapComponent } from './components/locate-map/locate-map.component';
+import { BookingStatusVerificationComponent } from './components/email-pages/booking-status-verification/booking-status-verification.component';
 
 
 const routes: Routes = [
@@ -134,6 +135,10 @@ const routes: Routes = [
 					{
 						path: 'dispatcher-email-confirmation',
 						component: AffiliateEmailConfirmationComponent
+					},
+					{
+						path: 'booking-email-confirmation',
+						component: BookingStatusVerificationComponent
 					}
 				]
 			}

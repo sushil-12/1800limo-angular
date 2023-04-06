@@ -627,7 +627,7 @@
 							<mat-label>
 								Special Instructions
 							</mat-label>
-							<textarea matInput formControlName="booking_instructions" (focus)="$event.target.select()"
+							<textarea matInput style="white-space: pre-wrap;" formControlName="booking_instructions" (focus)="$event.target.select()"
 								rows="5"></textarea>
 						</mat-form-field>
 					</div>
@@ -2295,6 +2295,10 @@
 							</span>
 						</div>
 					</div>
+					<hr>
+					<h4 class="font-weight-bolder m-0">
+						Vehicle Preferences
+					</h4>
 					<div class="row p-2">
 						<div class="col-md-4 key">
 							<span>
@@ -2303,7 +2307,79 @@
 						</div>
 						<div class="col-md-8 value">
 							<span class="font-weight-bolder">
-								{{ Form.vehicle_type.value}}
+								{{ Form.vehicle_type_name.value}}
+								</span>
+						</div>
+					</div>
+					<div class="row p-2">
+						<div class="col-md-4 key">
+							<span>
+								Vehicle Make
+							</span>
+						</div>
+						<div class="col-md-8 value">
+							<span class="font-weight-bolder">
+								{{ Form.vehicle_make_name.value}}
+								</span>
+						</div>
+					</div>
+					<div class="row p-2">
+						<div class="col-md-4 key">
+							<span>
+								Vehicle Model
+							</span>
+						</div>
+						<div class="col-md-8 value">
+							<span class="font-weight-bolder">
+								{{ Form.vehicle_model_name.value}}
+								</span>
+						</div>
+					</div>
+					<div class="row p-2">
+						<div class="col-md-4 key">
+							<span>
+								Vehicle Year
+							</span>
+						</div>
+						<div class="col-md-8 value">
+							<span class="font-weight-bolder">
+								{{ Form.vehicle_year_name.value}}
+								</span>
+						</div>
+					</div>
+					<div class="row p-2">
+						<div class="col-md-4 key">
+							<span>
+								Vehicle Color
+							</span>
+						</div>
+						<div class="col-md-8 value">
+							<span class="font-weight-bolder">
+								{{ Form.vehicle_color_name.value}}
+								</span>
+						</div>
+					</div>
+					<div class="row p-2">
+						<div class="col-md-4 key">
+							<span>
+								Licence plate
+							</span>
+						</div>
+						<div class="col-md-8 value">
+							<span class="font-weight-bolder">
+								{{ Form.vehicle_license_plate.value}}
+								</span>
+						</div>
+					</div>
+					<div class="row p-2">
+						<div class="col-md-4 key">
+							<span>
+								No. of seats
+							</span>
+						</div>
+						<div class="col-md-8 value">
+							<span class="font-weight-bolder">
+								{{ Form.vehicle_seats.value}}
 								</span>
 						</div>
 					</div>
@@ -2616,12 +2692,13 @@
 								</span>
 							</div>
 							<div class="col-md-8 value">
-								<span class="font-weight-bolder">
+								<span class="font-weight-bolder" style="white-space: pre-wrap;"> 
 									{{Form?.booking_instructions.value}}
 								</span>
 							</div>
 						</div>
 					</div>
+					<hr>
 					<!-- Travel Information -->
 					<h4 class="font-weight-bolder m-0 mt-3">
 						Travel Information

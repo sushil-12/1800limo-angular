@@ -189,40 +189,43 @@ export class Step2Component implements OnInit {
 			requestZipCode: ['', [Validators.required, Validators.pattern("^[0-9]*$"), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
 			requestUnit: [''],
 		});
+		this.spinner.show(); //show spinner
 		this.httpClient.get("assets/json/countryStateList.json").subscribe(data => {
 			this.countryOptions = data;
+			this.spinner.hide();
 			if (this.affiliateId) {
 				if (this.stepCompleted.includes('2')) {
 					this.isStep2Completed = true;
-					this.spinner.show(); //show spinner
-
+					
 					this.affiliateService.getBankOfAffiliate(this.affiliateId)
 						.pipe(
 							catchError(err => {
 								this.spinner.hide(); //hide spinner
 								return throwError(err);
 							})
-						).subscribe(result => {
-							this.response = result;
-							this.getCountryName = this.response.data.bankinfo.countryName;
+							).subscribe(result => {
+								console.log('response--->>>>' , result)
+								this.response = result;
+								this.spinner.hide(); //hide spinner
+							this.getCountryName = this.response?.data?.bankinfo?.countryName;
 							//to show stripe errors at the top
-							if (this.response.data.stripeDetail.stripe_errors) {
-								this.stripeErrors = this.response.data.stripeDetail.stripe_errors;
+							if (this.response.data?.stripeDetail?.stripe_errors) {
+								this.stripeErrors = this.response.data?.stripeDetail?.stripe_errors;
 							}
 							//set images and their ID
-							this.id_front_image = this.response.data.bankinfo.id_front_image.image;
-							this.id_back_image = this.response.data.bankinfo.id_back_image.image;
-							this.id_front_image_id = this.response.data.bankinfo.id_front_image.ID;
-							this.id_back_image_id = this.response.data.bankinfo.id_back_image.ID;
+							this.id_front_image = this.response.data?.bankinfo?.id_front_image?.image;
+							this.id_back_image = this.response.data?.bankinfo?.id_back_image?.image;
+							this.id_front_image_id = this.response.data.bankinfo?.id_front_image?.ID;
+							this.id_back_image_id = this.response.data?.bankinfo?.id_back_image?.ID;
 							//Documents changable or not.
-							if (this.response.data.stripeDetail.additional_doc_verification_status == 'unverified') {
+							if (this.response.data?.stripeDetail?.additional_doc_verification_status == 'unverified') {
 								this.canChangeDocument = true;
 							}
 							else {
 								this.canChangeDocument = false;
 							}
 							//Documents changable or not
-							if (this.response.data.stripeDetail.stripe_address_status == 'invalid') {
+							if (this.response.data?.stripeDetail?.stripe_address_status == 'invalid') {
 								this.canChangeAddress = true;
 							}
 							else {
@@ -230,37 +233,35 @@ export class Step2Component implements OnInit {
 							}
 
 							this.addBankForm.patchValue({
-								id: this.response.data.bankinfo.id,
-								BankName: this.response.data.bankinfo.BankName,
-								BankAddress: this.response.data.bankinfo.BankAddress,
-								AccountHolderFirstName: this.response.data.bankinfo.AccountHolderFirstName,
-								AccountHolderMiddleName: this.response.data.bankinfo.AccountHolderMiddleName,
-								AccountHolderLastName: this.response.data.bankinfo.AccountHolderLastName,
-								AccountNumber: this.response.data.bankinfo.AccountNumber,
-								Routing: this.response.data.bankinfo.Routing,
-								AccountType: this.response.data.bankinfo.AccountType,
-								currency: this.response.data.bankinfo.currency,
-								ssn: this.response.data.bankinfo.ssn,
-								haveEin: this.response.data.bankinfo.ein,
-								ein: this.response.data.bankinfo.ein,
-								address: this.response.data.bankinfo.address,
-								latitude: this.response.data.bankinfo.latitude,
-								longitude: this.response.data.bankinfo.longitude,
-								street: this.response.data.bankinfo.street,
-								unit: this.response.data.bankinfo.unit,
-								city: this.response.data.bankinfo.city,
-								state: this.response.data.bankinfo.state,
-								country: this.response.data.bankinfo.country,
-								zipCode: this.response.data.bankinfo.zipCode,
-								dobDay: this.response.data.bankinfo.dobDay,
-								dobMonth: this.response.data.bankinfo.dobMonth,
-								dobYear: this.response.data.bankinfo.dobYear,
-								id_front_image: this.response.data.bankinfo.id_front_image.ID,
-								id_back_image: this.response.data.bankinfo.id_back_image.ID,
+								id: this.response.data?.bankinfo?.id,
+								BankName: this.response.data?.bankinfo?.BankName,
+								BankAddress: this.response.data?.bankinfo?.BankAddress,
+								AccountHolderFirstName: this.response.data?.bankinfo?.AccountHolderFirstName,
+								AccountHolderMiddleName: this.response.data?.bankinfo?.AccountHolderMiddleName,
+								AccountHolderLastName: this.response.data?.bankinfo?.AccountHolderLastName,
+								AccountNumber: this.response.data?.bankinfo?.AccountNumber,
+								Routing: this.response.data?.bankinfo?.Routing,
+								AccountType: this.response.data?.bankinfo?.AccountType,
+								currency: this.response.data?.bankinfo?.currency,
+								ssn: this.response.data?.bankinfo?.ssn,
+								haveEin: this.response.data?.bankinfo?.ein,
+								ein: this.response.data?.bankinfo?.ein,
+								address: this.response.data?.bankinfo?.address,
+								latitude: this.response.data?.bankinfo?.latitude,
+								longitude: this.response.data?.bankinfo?.longitude,
+								street: this.response.data?.bankinfo?.street,
+								unit: this.response.data?.bankinfo?.unit,
+								city: this.response.data?.bankinfo?.city,
+								state: this.response.data?.bankinfo?.state,
+								country: this.response.data?.bankinfo?.country,
+								zipCode: this.response.data?.bankinfo?.zipCode,
+								dobDay: this.response.data?.bankinfo?.dobDay,
+								dobMonth: this.response.data?.bankinfo?.dobMonth,
+								dobYear: this.response.data?.bankinfo?.dobYear,
+								id_front_image: this.response.data?.bankinfo?.id_front_image?.ID,
+								id_back_image: this.response.data?.bankinfo?.id_back_image?.ID,
 							});
-
-							this.changeCountry(this.response.data.bankinfo.country);//for selected country
-							this.spinner.hide(); //hide spinner
+							this.changeCountry(this.response.data?.bankinfo?.country);//for selected country
 
 							// if (this.postCountryName == this.getCountryName)
 							// {
@@ -268,26 +269,29 @@ export class Step2Component implements OnInit {
 							// 	console.log(this.addBankForm.value.currency, "jhjhjgufytfhguhgjgfjjvj")
 							// }
 						});
+						this.spinner.hide(); //hide spinner
+
 				}
 				else {
 					this.canChangeDocument = true;//can add or change documents
 					this.canChangeAddress = true;//can add or change address
 
 					//for selected country
-					this.changeCountry(currentUser.phoneCountry.toUpperCase());
+					this.changeCountry(currentUser?.phoneCountry.toUpperCase());
 					this.addBankForm.patchValue({
-						country: currentUser.phoneCountry.toUpperCase(),
-						AccountHolderFirstName: currentUser.FirstName,
-						AccountHolderMiddleName: currentUser.MiddleName,
-						AccountHolderLastName: currentUser.LastName
+						country: currentUser?.phoneCountry.toUpperCase(),
+						AccountHolderFirstName: currentUser?.FirstName,
+						AccountHolderMiddleName: currentUser?.MiddleName,
+						AccountHolderLastName: currentUser?.LastName
 					});
 				}
 			}
 			else {
 				//for selected country
-				this.changeCountry(currentUser.phoneCountry.toUpperCase());
+			this.spinner.hide();
+			this.changeCountry(currentUser?.phoneCountry.toUpperCase());
 				this.addBankForm.patchValue({
-					country: currentUser.phoneCountry.toUpperCase()
+					country: currentUser?.phoneCountry.toUpperCase()
 				});
 			}
 		})
@@ -322,29 +326,29 @@ export class Step2Component implements OnInit {
 					}
 					console.log(place)
 					for (var i = 0; i < place.address_components.length; i++) {
-						for (var j = 0; j < place.address_components[i].types.length; j++) {
-							if (place.address_components[i].types[j] == "country") {
+						for (let j = 0; j < place.address_components[i].types.length; j++) {
+							if (place.address_components[i]?.types[j] == "country") {
 								this.addBankForm.patchValue({
 									country: place.address_components[i].short_name
 								});
 								this.changeCountry(place.address_components[i].short_name)
 							}
-							else if (place.address_components[i].types[j] == "administrative_area_level_1") {
+							else if (place.address_components[i]?.types[j] == "administrative_area_level_1") {
 								this.addBankForm.patchValue({
 									state: place.address_components[i].short_name
 								});
 							}
-							else if (place.address_components[i].types[j] == "administrative_area_level_2") {
+							else if (place.address_components[i]?.types[j] == "administrative_area_level_2") {
 								this.addBankForm.patchValue({
 									city: place.address_components[i].long_name
 								});
 							}
-							else if (place.address_components[i].types[j] == "postal_code") {
+							else if (place.address_components[i]?.types[j] == "postal_code") {
 								this.addBankForm.patchValue({
 									zipCode: place.address_components[i].long_name
 								});
 							}
-							else if (place.address_components[i].types[j] == "street_number") {
+							else if (place.address_components[i]?.types[j] == "street_number") {
 								this.addBankForm.patchValue({
 									street: place.address_components[i].long_name
 								});
@@ -375,29 +379,29 @@ export class Step2Component implements OnInit {
 					}
 					console.log(place)
 					for (var i = 0; i < place.address_components.length; i++) {
-						for (var j = 0; j < place.address_components[i].types.length; j++) {
-							if (place.address_components[i].types[j] == "country") {
+						for (let j = 0; j < place.address_components[i].types.length; j++) {
+							if (place.address_components[i]?.types[j] == "country") {
 								this.requestAddressChangeForm.patchValue({
 									requestCountry: place.address_components[i].short_name
 								});
 								this.changeCountryRequestAddresschange(place.address_components[i].short_name)
 							}
-							else if (place.address_components[i].types[j] == "administrative_area_level_1") {
+							else if (place.address_components[i]?.types[j] == "administrative_area_level_1") {
 								this.requestAddressChangeForm.patchValue({
 									requestState: place.address_components[i].short_name
 								});
 							}
-							else if (place.address_components[i].types[j] == "administrative_area_level_2") {
+							else if (place.address_components[i]?.types[j] == "administrative_area_level_2") {
 								this.requestAddressChangeForm.patchValue({
 									requestCity: place.address_components[i].long_name
 								});
 							}
-							else if (place.address_components[i].types[j] == "postal_code") {
+							else if (place.address_components[i]?.types[j] == "postal_code") {
 								this.requestAddressChangeForm.patchValue({
 									requestZipCode: place.address_components[i].long_name
 								});
 							}
-							else if (place.address_components[i].types[j] == "street_number") {
+							else if (place.address_components[i]?.types[j] == "street_number") {
 								this.requestAddressChangeForm.patchValue({
 									requestStreet: place.address_components[i].long_name
 								});
@@ -472,7 +476,7 @@ export class Step2Component implements OnInit {
 			return countryOption.countryShortCode == selectedCountryCode;
 		});
 		if (selectedCountryData) {
-			this.stateOptions = selectedCountryData[0].regions;
+			this.stateOptions = selectedCountryData[0]?.regions;
 		}
 	}
 
