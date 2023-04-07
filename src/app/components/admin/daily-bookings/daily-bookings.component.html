@@ -194,7 +194,7 @@
 										</div>
 									</td>
 									<td class="sorting_1">
-										<p>{{ FormatDate(booking.pickup_date) }}</p>
+										<p style="font-weight: 600 !important;">{{ FormatDate(booking.pickup_date) }}</p>
 										<p>{{ FormatTime(booking.pickup_time) }}</p>
 									</td>
 									<td>
@@ -234,8 +234,8 @@
 											<ng-template #gigOperator>
 												<p data-target="#sendEmailModal" data-toggle="modal"
 													(click)="openModal(booking, 'Affiliate')">
-													<span [innerHTML]="highlighText(booking.driver_first_name)"></span>
-													<span [innerHTML]="highlighText(booking.driver_last_name)"></span>|
+													<span  class="font-weight-bolder" [innerHTML]="highlighText(booking.driver_first_name)"></span>&nbsp;
+													<span class="font-weight-bolder" [innerHTML]="highlighText(booking.driver_last_name)"></span>|
 													<span [innerHTML]="highlighText(booking.gig_cell_isd)"></span>
 													<span [innerHTML]="highlighText(booking.gig_cell_mobile)"></span>
 												</p>
@@ -953,9 +953,9 @@
 					</div>
 					<hr>
 					<!-- Travel Information -->
-					<h4 class="font-weight m-0 mt-3">
+					<!-- <h4 class="font-weight m-0 mt-3">
 						Travel Information
-					</h4>
+					</h4> -->
 
 					<!-- Number of Hours -->
 					<div class="mx-2" *ngIf="bookingPreview.service_type == 'charter_tour'">

@@ -142,7 +142,7 @@
 								<dd class="invoice-text-b"> {{invoiceData.transfer_type}}
 								</dd>
 								<dt class="invoice-p" *ngIf="invoiceData.created_at">
-									Created Date
+									Booking Create Date
 								</dt>
 								<dd class="invoice-text-b"> {{invoiceData.created_at}}</dd>
 							</dl>
@@ -239,9 +239,9 @@
 							</div>
 							<div class="invoice-subhead px-3">
 								<div class="row d-flex justify-content-between">
-									<p class="m-0 p-1 my-2 text-charges" style="font-size:large;">
+									<p class="m-0 p-1 my-2 text-charges" >
 										Total-Amount</p>
-									<p class="m-0 p-1 my-2 text-charges font-weight-bold" style="font-size:large;">
+									<p class="m-0 p-1 my-2 text-charges font-weight-bold">
 										${{invoiceData.grand_total}}
 									</p>
 								</div>

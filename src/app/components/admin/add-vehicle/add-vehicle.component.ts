@@ -757,8 +757,6 @@ export class AddVehicleComponent implements OnInit {
 			}
 		});
 	}
-
-
 	service: Array<any> = []
 	onServiceChange(value: string) {
 		console.log(value)

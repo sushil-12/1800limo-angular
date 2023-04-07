@@ -6,7 +6,7 @@
 	<div class="row cursor-pointer" (click)="toggleDropdown('section')">
 		<div class="col-12 col-md-12">
 			<h4 class="section-dropdown-header m-0">
-				Rates/Taxes
+				Rates
 			</h4>
 		</div>
 	</div>
@@ -15,12 +15,27 @@
 		[ngClass]="{'active': rate_params.chevrons[item.key]}"
 		*ngFor="let item of RateForm | keyvalue: returnZero; index as item_index">
 		<div class="col-12 col-md-12" (click)="handleSubHeading(item.key)">
+			<h5 class="section-dropdown-header" *ngIf="item.key == 'all_inclusive_rates'">
+				Vehicle Base Rates
+			</h5>
 			<h5 class="section-dropdown-header" *ngIf="item.key == 'others'">
-				Extra gratuity
+				Special Event Surge Pricing
 			</h5>
-			<h5 class="section-dropdown-header" *ngIf="item.key != 'others'"> 
+			<h5 class="section-dropdown-header" *ngIf="item.key == 'misc'">
+				Additional Misc. Charges
+			</h5>
+			<h5 class="section-dropdown-header" *ngIf="item.key == 'amenities'">
+				Extra Charge Amenities
+			</h5>
+			<h5 class="section-dropdown-header" *ngIf="item.key == 'direct_taxes'">
+				Direct Taxes
+			</h5>
+			<h5 class="section-dropdown-header" *ngIf="item.key == 'taxes'">
+				Taxes
+			</h5>
+			<!-- <h5 class="section-dropdown-header" *ngIf="item.key != 'others'"> 
 				{{ textFormatter(item.key) | titlecase }}
-			</h5>
+			</h5> -->
 			<p class="subHead-bi"
 				[ngClass]="rate_params.chevrons[item.key] ? 'bi bi-chevron-up' : 'bi bi-chevron-down'"></p>
 		</div>
@@ -176,7 +191,7 @@
 	<div class="row cursor-pointer" (click)="toggleDropdown('r_section')">
 		<div class="col-12 col-md-12">
 			<h4 class="section-dropdown-header m-0">
-				Return Rates/Taxes
+				Return Rates
 			</h4>
 		</div>
 	</div>
@@ -185,12 +200,27 @@
 		[ngClass]="{'active': rate_params.chevrons['r_'+item.key]}"
 		*ngFor="let item of ReturnRateForm | keyvalue: returnZero; index as item_index">
 		<div class="col-12 col-md-12" (click)="handleSubHeading('r_'+item.key)">
+			<h5 class="section-dropdown-header" *ngIf="item.key == 'all_inclusive_rates'">
+				Vehicle Base Rates
+			</h5>
 			<h5 class="section-dropdown-header" *ngIf="item.key == 'others'">
-				Gratuity
+				Special Event Surge Pricing
 			</h5>
-			<h5 class="section-dropdown-header" *ngIf="item.key != 'others'"> 
+			<h5 class="section-dropdown-header" *ngIf="item.key == 'misc'">
+				Additional Misc. Charges
+			</h5>
+			<h5 class="section-dropdown-header" *ngIf="item.key == 'amenities'">
+				Extra Charge Amenities
+			</h5>
+			<h5 class="section-dropdown-header" *ngIf="item.key == 'direct_taxes'">
+				Direct Taxes
+			</h5>
+			<h5 class="section-dropdown-header" *ngIf="item.key == 'taxes'">
+				Taxes
+			</h5>
+			<!-- <h5 class="section-dropdown-header" *ngIf="item.key != 'others'"> 
 				{{ textFormatter(item.key) | titlecase }}
-			</h5>
+			</h5> -->
 			<p class="subHead-bi"
 				[ngClass]="rate_params.chevrons['r_'+item.key] ? 'bi bi-chevron-up' : 'bi bi-chevron-down'"></p>
 		</div>
