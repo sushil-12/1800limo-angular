@@ -47,6 +47,7 @@ export class AddVehicleComponent implements OnInit {
 	public nonChargableAmenities: object;
 	public specialAmenities: object;
 	public interiors: object;
+	public allModels = JSON.parse(sessionStorage.getItem('models'));
 
 	public vehicleImage1: string;
 	public vehicleImage2: string;
@@ -315,6 +316,8 @@ export class AddVehicleComponent implements OnInit {
 				});
 				this.spinner.hide();
 			});
+		this.Subscriptions()
+
 	}
 	closeButton() {
 		this.closeTab.emit();
@@ -387,25 +390,46 @@ export class AddVehicleComponent implements OnInit {
 		}
 	}
 	selectMake(val, isSelected) {
+		console.log('make select is clicked-->>>', val)
 		if (isSelected)// ignore on deselection of the previous option
 		{
 			this.addVehicleForm.patchValue({
 				make: val,
 			});
-			this.changeMake(val);
 			let modelField: any = document.getElementById('modelField');
 			modelField.value = '';
+			// setTimeout(() => {
+			// 	this.changeMake(val);
+			// }, 200)
 		}
+	}
+	Subscriptions() {
+		this.addVehicleForm.get('make')?.valueChanges.subscribe((value: string) => {
+			console.log('change value is--->>', value)
+			let models = this.allModels
+			this.filteredModel = this.model = models.filter(function (model) {
+				if (model.make_id == value) {
+					return true;
+				}
+			});
+		})
+		
+		// this.addVehicleForm.get('make').valueChanges.subscribe((value: string) => {
+		// 	console.log('in function change make-->',value )
+		// 	// let models = this.allModels
+		// 	// this.filteredModel = this.model = models.filter(function (model) {
+		// 	// 	if (model.make_id == value) {
+		// 	// 		return true;
+		// 	// 	}
+		// 	// });
+		// })
 	}
 
 	searchModel(keyword) {
 		this.addVehicleForm.patchValue({
 			model: '',
 		});
-		if (keyword == '') {
-			this.filteredModel = this.model;
-		}
-		else {
+		if (keyword.length) {
 			this.filteredModel = this.model.filter((mdl: any) => {
 				if (mdl.name.toLowerCase() === keyword.toLowerCase()) {
 					this.addVehicleForm.patchValue({
@@ -417,6 +441,9 @@ export class AddVehicleComponent implements OnInit {
 				.sort((a: any, b: any) => {
 					return this.searchSorting(keyword, a, b)
 				});
+		}
+		else {
+			this.filteredModel = this.model;
 		}
 	}
 	selectModel(val, isSelected) {
@@ -750,12 +777,15 @@ export class AddVehicleComponent implements OnInit {
 	}
 
 	changeMake(selectedMake) {
-		let models = JSON.parse(sessionStorage.getItem('models'));
+		this.spinner.show()
+		console.log('in function change make-->', selectedMake)
+		let models = this.allModels
 		this.filteredModel = this.model = models.filter(function (model) {
 			if (model.make_id == selectedMake) {
 				return true;
 			}
 		});
+		this.spinner.hide()
 	}
 	service: Array<any> = []
 	onServiceChange(value: string) {
