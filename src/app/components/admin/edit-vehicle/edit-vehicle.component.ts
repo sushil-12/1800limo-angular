@@ -48,6 +48,7 @@ export class EditVehicleComponent implements OnInit {
 	public specialAmenitiesFormControl: any;
 	public interiors: any;
 	public interiorsFormControl: any;
+	public allModels = JSON.parse(sessionStorage.getItem('models'));
 
 	public vehicleImage1: string;
 	public vehicleImage2: string;
@@ -127,6 +128,7 @@ export class EditVehicleComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
+		this.spinner.show();
 		$('#vehicleTypeField').focusout(() => {
 			this.errorMsg = true;
 		})
@@ -390,7 +392,7 @@ export class EditVehicleComponent implements OnInit {
 							windowPermit2Image: this.windowPermit2Id,
 							usdotPermitImage: this.usdotPermitId,
 							mcImage: this.mcId,
-							vehicleType: this.response2.data.vehicle_type,
+							vehicleType: parseInt(this.response2.data.vehicle_type),
 							make: this.response2.data.make,
 							year: this.response2.data.year,
 							color: this.response2.data.color,
@@ -434,9 +436,11 @@ export class EditVehicleComponent implements OnInit {
 							}
 							this.addVehicleForm.controls['numberOfVehicles'].updateValueAndValidity();
 						});
+						this.spinner.hide()
 					});
 				// this.stateManagementService.setprogressBar(false);
 			});
+			this.Subscriptions();
 	}
 
 	closeButton() {
@@ -455,6 +459,17 @@ export class EditVehicleComponent implements OnInit {
 			else
 				return -1;
 		}
+	}
+	Subscriptions() {
+		this.addVehicleForm.get('make')?.valueChanges.subscribe((value: string) => {
+			console.log('change value is--->>', value)
+			let models = this.allModels
+			this.filteredModel = this.model = models.filter(function (model) {
+				if (model.make_id == value) {
+					return true;
+				}
+			});
+		})
 	}
 	searchVehicleType(keyword) {
 		this.addVehicleForm.patchValue({
