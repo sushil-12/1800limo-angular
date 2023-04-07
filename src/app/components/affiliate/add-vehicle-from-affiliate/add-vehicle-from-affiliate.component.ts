@@ -129,6 +129,7 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 		{
 			$(this).tooltip('dispose');
 		});
+		this.Subscriptions()
 	}
 
 	ngOnInit(): void
@@ -449,6 +450,14 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 			let modelField: any = document.getElementById('modelField');
 			modelField.value = '';
 		}
+	}
+	Subscriptions() {
+		this.addVehicleForm.get('make')?.valueChanges.subscribe((value: string) => {
+			this.changeMake(value);
+			let modelField: any = document.getElementById('modelField');
+			modelField.value = '';
+		})
+	
 	}
 
 	searchModel(keyword)

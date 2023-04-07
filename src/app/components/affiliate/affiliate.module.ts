@@ -14,7 +14,7 @@ import { MatSelectModule } from '@angular/material/select';
 // import { InvalidControlScrollDirective } from '../../directives/scroll-to-invalid.directive';
 // import { PinchZoomModule } from 'ngx-pinch-zoom';
 import { SharedModule } from '../shared/shared.module';
-
+import { NgSelectModule } from '@ng-select/ng-select';
 import { AffiliateRoutingModule } from './affiliate-routing.module';
 import { AffiliateComponent } from './affiliate.component';
 import { AffiliateTemplateComponent } from './affiliate-template/affiliate-template.component';
@@ -90,6 +90,7 @@ import { VehicleRateSettingsComponent } from './vehicle-rate-settings/vehicle-ra
 		MatMomentDateModule,
 		MatInputModule,
 		MatSelectModule,
+		NgSelectModule,
 		// PinchZoomModule,
 		SharedModule
 	]

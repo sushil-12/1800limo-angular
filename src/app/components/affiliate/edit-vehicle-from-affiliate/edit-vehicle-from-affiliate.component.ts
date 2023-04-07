@@ -426,7 +426,7 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 							windowPermit2Image: this.windowPermit2Id,
 							usdotPermitImage: this.usdotPermitId,
 							mcImage: this.mcId,
-							vehicleType: this.response2.data.vehicle_type,
+							vehicleType: parseInt(this.response2.data.vehicle_type),
 							make: this.response2.data.make,
 							year: this.response2.data.year,
 							color: this.response2.data.color,
@@ -482,6 +482,7 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 
 
 		this.typeOfService // assign the global variable - service.
+		this.Subscriptions();
 	}
 
 	closeButton()
@@ -584,6 +585,15 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 			let modelField: any = document.getElementById('modelField');
 			modelField.value = '';
 		}
+	}
+
+	Subscriptions() {
+		this.addVehicleForm.get('make')?.valueChanges.subscribe((value: string) => {
+			this.changeMake(value);
+			let modelField: any = document.getElementById('modelField');
+			modelField.value = '';
+		})
+	
 	}
 
 	searchModel(keyword)
