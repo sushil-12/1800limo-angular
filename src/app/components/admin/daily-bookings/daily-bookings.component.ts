@@ -542,66 +542,66 @@ export class DailyBookingsComponent implements OnInit {
 			|| (navigator.userAgent.includes("Mac") && "ontouchend" in document)
 	}
 
-	async showLocationPointOnMap(booking_id: number, type: string) {
-		const options = {
-			enableHighAccuracy: true,
-			timeout: 5000,
-			maximumAge: 0,
-		};
-		function success(pos) {
-			const crd = pos.coords;
-			console.log("Your current position is:");
-			console.log(`Latitude : ${crd.latitude}`);
-			console.log(`Longitude: ${crd.longitude}`);
-			console.log(`More or less ${crd.accuracy} meters.`);
-			let isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-			console.log('isSafari', isSafari)
-			this.spinner.show()
-			this.adminService.getLocationPoints(booking_id).subscribe((response: any) => {
-				this.spinner.hide();
-				if ("lat" in response?.data?.pickupDetail && "long" in response?.data?.pickupDetail && "lat" in response?.data?.dropoffDetail && "long" in response?.data?.dropoffDetail) {
-					sessionStorage.setItem('pickup', JSON.stringify(response?.data?.pickupDetail.address));
-					sessionStorage.setItem('dropoff', JSON.stringify(response?.data?.dropoffDetail.address));
-					const googleDirectionUrl = 'https://www.google.com/maps/dir/?api=1&origin=' + crd.latitude + "," +crd.longitude + '&destination=' +
-						encodeURIComponent(response?.data?.pickupDetail.address) + '&travelmode=driving'
-					// this.router.navigate(['/locate-map'], {
-					// 	queryParams: {
-					// 		plat: response?.data?.pickupDetail?.lat.toString(),
-					// 		plng: response?.data?.pickupDetail?.long.toString(),
-					// 		dlat: response?.data?.dropoffDetail?.lat.toString(),
-					// 		dlng: response.data?.dropoffDetail?.long.toString(),
-					// 	},
-					// 	queryParamsHandling: 'merge'
-					// });
-					const iosDirectionUrl = 'http://maps.apple.com/?daddr=' +
-						encodeURIComponent(response?.data?.pickupDetail.address) + "&saddr=" +
-						crd.latitude + "," + crd.longitude
-					if (this.iOS()) {
-						setTimeout(() => {
-							window.location.href = iosDirectionUrl;
-						})
-					}
-					else {
-						window.open(googleDirectionUrl, '_blank');
-					}
-				} else {
-					throw new Error('Error: Location Points Not Specified Properly. ');
-				}
-			})
-		}
-		
-		function error(err) {
-			console.warn(`ERROR(${err.code}): ${err.message}`);
-		}
-		
-		await navigator.geolocation.getCurrentPosition(success, error, options)
-		
+	 showLocationPointOnMap(booking_id: number, type: string) {
+		// const options = {
+		// 	enableHighAccuracy: true,
+		// 	timeout: 5000,
+		// 	maximumAge: 0,
+		// };
+		// let q: any
+		// function success(pos) {
+		// 	const crd = pos.coords;
+		// 	q = crd
+		// 	console.log("Your current position is:");
+		// 	console.log(`Latitude : ${crd.latitude}`);
+		// 	console.log(`Longitude: ${crd.longitude}`);
+		// 	console.log(`More or less ${crd.accuracy} meters.`);
+		// }
+
+		// function error(err) {
+		// 	console.warn(`ERROR(${err.code}): ${err.message}`);
+		// }
+
+		// await navigator.geolocation.getCurrentPosition(success, error, options)
+
 		// if (navigator.geolocation) {
-			// 	navigator.geolocation.getCurrentPosition(function (position) {
-				// 		var currentLocation =	CURRENT_LAT +","+CURRENT_LONG;
-				// 	})
-				// 	}
-				
+		// 	navigator.geolocation.getCurrentPosition(function (position) {
+		// 		var currentLocation =	CURRENT_LAT +","+CURRENT_LONG;
+		// 	})
+		// 	}
+
+				let isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+				console.log('isSafari', isSafari)
+				this.spinner.show()
+				this.adminService.getLocationPoints(booking_id).subscribe((response: any) => {
+					this.spinner.hide();
+					if ("lat" in response?.data?.pickupDetail && "long" in response?.data?.pickupDetail && "lat" in response?.data?.dropoffDetail && "long" in response?.data?.dropoffDetail) {
+						sessionStorage.setItem('pickup', JSON.stringify(response?.data?.pickupDetail.address));
+						sessionStorage.setItem('dropoff', JSON.stringify(response?.data?.dropoffDetail.address));
+						const googleDirectionUrl = 'https://www.google.com/maps/dir/?api=1'+'&destination=' +
+							encodeURIComponent(response?.data?.pickupDetail.address) + '&travelmode=driving'
+						// this.router.navigate(['/locate-map'], {
+						// 	queryParams: {
+						// 		plat: response?.data?.pickupDetail?.lat.toString(),
+						// 		plng: response?.data?.pickupDetail?.long.toString(),
+						// 		dlat: response?.data?.dropoffDetail?.lat.toString(),
+						// 		dlng: response.data?.dropoffDetail?.long.toString(),
+						// 	},
+						// 	queryParamsHandling: 'merge'
+						// });
+						const iosDirectionUrl = 'http://maps.apple.com/?daddr=' +
+							encodeURIComponent(response?.data?.pickupDetail.address)
+						if (this.iOS()) {
+							setTimeout(() => {
+								window.location.href = iosDirectionUrl;
+							})
+						}
+						else {
+							window.open(googleDirectionUrl, '_blank');
+						}
+					} else {
+						throw new Error('Error: Location Points Not Specified Properly. ');
+					}
+				})
 			}
-			
 }
