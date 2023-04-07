@@ -279,6 +279,9 @@ export class AdminService {
 		const result = await this.httpClient.get(this.serverUrl + 'vehicle-colors').toPromise();
 		return result;
 	}
+	getBadgeCities() {
+		return this.httpClient.get(this.serverUrl + 'all-badge-cities');
+	}
 	addColor(data) {
 		return this.httpClient.post(this.serverUrl + 'add-vehicle-color', data);
 	}

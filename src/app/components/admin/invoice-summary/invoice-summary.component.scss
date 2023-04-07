@@ -149,10 +149,10 @@ img{
 .invoice .text-charges {
 	font-style: normal;
 	font-weight: 600;
-	font-size: 18px;
+	font-size: 24px;
 	line-height: 22px;
 
-	color: #F2933C;
+	color: #fff;
 }
 
 .invoice .invoice-border--top {
@@ -186,6 +186,7 @@ dd {
 .invoice-subhead {
 	background: #393939;
 	color: white;
+	padding: 10px;
 }
 
 .invoice .invoice-passenger {

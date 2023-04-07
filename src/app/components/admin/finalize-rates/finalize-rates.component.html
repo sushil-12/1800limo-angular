@@ -6,7 +6,7 @@
 	<div class="row cursor-pointer" (click)="toggleDropdown('section')">
 		<div class="col-12 col-md-12">
 			<h4 class="m-0">
-				Rates/Taxes
+				Rates
 			</h4>
 		</div>
 	</div>
@@ -15,12 +15,28 @@
 		[ngClass]="{'active': rate_params.chevrons[item.key]}"
 		*ngFor="let item of RateForm | keyvalue: returnZero; index as item_index">
 		<div class="col-12 col-md-12" (click)="handleSubHeading(item.key)">
+			<h5 class="section-dropdown-header" *ngIf="item.key == 'all_inclusive_rates'">
+				Vehicle Base Rates
+			</h5>
 			<h5 class="section-dropdown-header" *ngIf="item.key == 'others'">
-				Extra gratuity
+				Special Event Surge Pricing
 			</h5>
-			<h5 class="section-dropdown-header" *ngIf="item.key != 'others'"> 
+			<h5 class="section-dropdown-header" *ngIf="item.key == 'misc'">
+				Additional Misc. Charges
+			</h5>
+			<h5 class="section-dropdown-header" *ngIf="item.key == 'amenities'">
+				Extra Charge Amenities
+			</h5>
+			<h5 class="section-dropdown-header" *ngIf="item.key == 'direct_taxes'">
+				Direct Taxes
+			</h5>
+			<h5 class="section-dropdown-header" *ngIf="item.key == 'taxes'">
+				Taxes
+			</h5>
+			
+			<!-- <h5 class="section-dropdown-header" *ngIf="item.key != 'others'"> 
 				{{ textFormatter(item.key) | titlecase }}
-			</h5>
+			</h5> -->
 			<p class="subHead-bi"
 				[ngClass]="rate_params.chevrons[item.key] ? 'bi bi-chevron-up' : 'bi bi-chevron-down'"></p>
 		</div>
@@ -28,7 +44,7 @@
 			class="row rates-row align-items-center justify-content-between mx-auto"
 			*ngFor="let sub_item of item?.value?.controls | keyvalue: returnZero; index as sub_item_index">
 			<!-- Base Rate -->
-			<div class="col-6 col-sm-4 col-md-5 my-3" [formGroupName]="sub_item.key"
+			<div class="col-6 col-sm-3 col-md-5 my-3" [formGroupName]="sub_item.key"
 				*ngIf="sub_item.key !== 'Minimum_Rate'">
 				<div class="rate-label">
 					<mat-form-field appearance="outline" class="m-0">
@@ -76,7 +92,7 @@
 			</div>
 
 			<!-- Admin Share -->
-			<div class="col-3" *ngIf="sub_item.key == 'Base_Rate' ">
+			<div class="col-5 col-sm-5 col-md-5" *ngIf="sub_item.key == 'Base_Rate' ">
 				<div>
 					<mat-form-field appearance="outline" class="m-0">
 						<mat-label>

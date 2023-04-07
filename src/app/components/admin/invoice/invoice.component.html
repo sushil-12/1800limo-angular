@@ -35,6 +35,7 @@
                     <th>Pax Info</th>
                     <th>Driver Info</th>
                     <th>Vehicle Type</th>
+                    <th>Account Info</th>
                   </tr>
                 </thead>
                 <tbody class="invoiceTbody" *ngFor="let invoice of invoices">
@@ -81,6 +82,15 @@
                       </span>
                     </td>
                     <td>{{invoice.aff_vehicle_type}}</td>
+                    <td>
+                      <p style="white-space: pre" >
+                        {{ invoice?.account_first_name }} |
+                        {{ invoice?.account_last_name }}
+                      </p>
+                      <span class="text-underline cursor-pointer">
+                        {{ invoice?.account_email }}
+                      </span>
+                    </td>
                   </tr>
                 </tbody>
               </table>
