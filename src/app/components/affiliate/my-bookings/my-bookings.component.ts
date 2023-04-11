@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AffiliateService } from '../../../services/affiliate.service';
 import { Router } from '@angular/router';
 import { NgxSpinnerService } from "ngx-spinner";
@@ -6,6 +6,7 @@ import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { ThemePalette } from '@angular/material/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import * as moment from 'moment';
 declare var $: any;
 
 @Component({
@@ -15,7 +16,7 @@ declare var $: any;
 })
 export class MyBookingsComponent implements OnInit
 {
-
+	@ViewChild('inputmsg', { static: false }) message: ElementRef;
 	color: ThemePalette = 'primary';
 	outputDateFormat = 'YYYY-MM-DD';
 	public totalRecords: Number;
@@ -44,6 +45,9 @@ export class MyBookingsComponent implements OnInit
 	sendInformation: any;
 	reciptentName: any;
 	notification_msg: any;
+	bookingPreview:any;
+	noError:boolean = false;
+	searchText: string = "";
 
 	constructor(
 		private affiliateService: AffiliateService,
@@ -82,21 +86,22 @@ export class MyBookingsComponent implements OnInit
 		// Load Our bookings using API
 		this.affiliateService.loadBookings(pageUrl, keyword, this.startDate, this.endDate).then(result =>
 		{
+			console.log('result---->>>' , result)
 			this.bookingsRes = result;
-			this.bookings = this.bookingsRes.data.data;
-			this.totalRecords = this.bookingsRes.data.total;
+			this.bookings = this.bookingsRes?.data?.data;
+			this.totalRecords = this.bookingsRes?.data?.total;
 
 			this.firstPage = 1;
-			this.lastPage = this.bookingsRes.data.last_page;
-			this.totalPage = this.bookingsRes.data.last_page;
-			this.currentPage = this.bookingsRes.data.current_page;
-			this.from = this.bookingsRes.data.from;
-			this.to = this.bookingsRes.data.to;
-			this.path = this.bookingsRes.data.path;
-			this.firstPageUrl = this.bookingsRes.data.first_page_url;
-			this.lastPageUrl = this.bookingsRes.data.last_page_url;
-			this.prevPageUrl = this.bookingsRes.data.prev_page_url;
-			this.nextPageUrl = this.bookingsRes.data.next_page_url;
+			this.lastPage = this.bookingsRes?.data?.last_page;
+			this.totalPage = this.bookingsRes?.data?.last_page;
+			this.currentPage = this.bookingsRes?.data?.current_page;
+			this.from = this.bookingsRes?.data?.from;
+			this.to = this.bookingsRes?.data.to;
+			this.path = this.bookingsRes?.data?.path;
+			this.firstPageUrl = this.bookingsRes?.data?.first_page_url;
+			this.lastPageUrl = this.bookingsRes?.data?.last_page_url;
+			this.prevPageUrl = this.bookingsRes?.data?.prev_page_url;
+			this.nextPageUrl = this.bookingsRes?.data?.next_page_url;
 			this.spinner.hide();//hide spinner
 		})
 			.catch(err =>
@@ -104,6 +109,128 @@ export class MyBookingsComponent implements OnInit
 				this.spinner.hide();//hide spinner
 			});
 	}
+
+	FormatDate(date: string) {
+		return moment(date).format("ll");
+	}
+	searchInBookings(search_value: string) {
+		// this.searchText = search_value
+		// console.log('--->>>>>', search_value)
+		// clearTimeout(this.timer);
+		// this.timer = setTimeout(() => {
+		// 	this.loadBookings(null, this.startDate, this.endDate, search_value)
+		// }, 700)
+	}
+	highlighText(args: string) {
+		if (!this.searchText) { return args; }
+		if (args) {
+			args = args.toString()
+			var re = new RegExp(this.searchText, 'gi'); //'gi' for case insensitive and can use 'g' if you want the search to be case sensitive.
+			return args.replace(re, '<mark class="font-weight-bold">$&</mark>');
+		}
+	}
+
+
+	handleKeypressEvents() {
+		// clearTimeout(this.timer)
+	}
+
+
+	showLocationPointOnMap(booking_id: number, type: string) {
+		// const options = {
+		// 	enableHighAccuracy: true,
+		// 	timeout: 5000,
+		// 	maximumAge: 0,
+		// };
+		// let q: any
+		// function success(pos) {
+		// 	const crd = pos.coords;
+		// 	q = crd
+		// 	console.log("Your current position is:");
+		// 	console.log(`Latitude : ${crd.latitude}`);
+		// 	console.log(`Longitude: ${crd.longitude}`);
+		// 	console.log(`More or less ${crd.accuracy} meters.`);
+		// }
+
+		// function error(err) {
+		// 	console.warn(`ERROR(${err.code}): ${err.message}`);
+		// }
+
+		// await navigator.geolocation.getCurrentPosition(success, error, options)
+
+		// if (navigator.geolocation) {
+		// 	navigator.geolocation.getCurrentPosition(function (position) {
+		// 		var currentLocation =	CURRENT_LAT +","+CURRENT_LONG;
+		// 	})
+		// 	}
+
+				// let isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+				// console.log('isSafari', isSafari)
+				// this.spinner.show()
+				// this.adminService.getLocationPoints(booking_id).subscribe((response: any) => {
+				// 	this.spinner.hide();
+				// 	if ("lat" in response?.data?.pickupDetail && "long" in response?.data?.pickupDetail && "lat" in response?.data?.dropoffDetail && "long" in response?.data?.dropoffDetail) {
+				// 		sessionStorage.setItem('pickup', JSON.stringify(response?.data?.pickupDetail.address));
+				// 		sessionStorage.setItem('dropoff', JSON.stringify(response?.data?.dropoffDetail.address));
+				// 		const googleDirectionUrl = 'https://www.google.com/maps/dir/?api=1'+'&destination=' +
+				// 			encodeURIComponent(response?.data?.pickupDetail.address) + '&travelmode=driving'
+				// 		// this.router.navigate(['/locate-map'], {
+				// 		// 	queryParams: {
+				// 		// 		plat: response?.data?.pickupDetail?.lat.toString(),
+				// 		// 		plng: response?.data?.pickupDetail?.long.toString(),
+				// 		// 		dlat: response?.data?.dropoffDetail?.lat.toString(),
+				// 		// 		dlng: response.data?.dropoffDetail?.long.toString(),
+				// 		// 	},
+				// 		// 	queryParamsHandling: 'merge'
+				// 		// });
+				// 		const iosDirectionUrl = 'http://maps.apple.com/?daddr=' +
+				// 			encodeURIComponent(response?.data?.pickupDetail.address)
+				// 		if (this.iOS()) {
+				// 			setTimeout(() => {
+				// 				window.location.href = iosDirectionUrl;
+				// 			})
+				// 		}
+				// 		else {
+				// 			window.open(googleDirectionUrl, '_blank');
+				// 		}
+				// 	} else {
+				// 		throw new Error('Error: Location Points Not Specified Properly. ');
+				// 	}
+				// })
+			}
+
+			closeModal() {
+				this.message.nativeElement.value = ""
+				this.show = false
+			}
+			messageField(format) {
+				this.show = true;
+				switch (format) {
+					case "Phone": {
+						this.sendMessageField = true;
+						break;
+					}
+					case "Email": {
+						this.sendMessageField = false;
+						break;
+					}
+				}
+			}
+
+
+
+			submit(message, format) {
+
+				$("#closeModal").click(() => {
+					$("#notificationModal").modal("hide");
+				});
+				$("#closeModal1").click(() => {
+					$("#notificationModal").modal("hide");
+				});
+				this.message.nativeElement.value = ""
+				this.show = false
+			}
+		
 
 	//for pagination
 	counter()
