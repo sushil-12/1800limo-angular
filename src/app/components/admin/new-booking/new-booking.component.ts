@@ -388,6 +388,8 @@ export class NewBookingComponent implements OnInit {
 		// console.warn('Prefilling via Booking Id')
 		this.$spinner.show('normalspinner');
 		this.$api.getBookingDataForEdit(booking_id, this.Form.updateType.value).subscribe((response: any) => {
+			response.data.booking_instructions =  response.data.booking_instructions.replaceAll('<br />' , '')
+			console.log('response <><><><><' , response.data)
 			let editing_data = response.data
 			this.autofillData('cruise', editing_data);
 			console.log(editing_data, "check big data")

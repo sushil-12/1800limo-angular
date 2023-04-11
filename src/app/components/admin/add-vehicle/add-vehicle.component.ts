@@ -252,7 +252,8 @@ export class AddVehicleComponent implements OnInit {
 				this.nonChargableAmenities = this.response.data.nonChargableAmenities;
 				this.specialAmenities = this.response.data.specialAmenities;
 				this.interiors = this.response.data.vehicleInterior;
-
+				const vehicleInterior: FormArray = this.addVehicleForm.get('vehicleInterior') as FormArray;
+				vehicleInterior.push(new FormControl('1'));
 				sessionStorage.setItem('models', JSON.stringify(this.model));
 				console.log("<><><><><><><><><><><><><><><><><><>", this.response.data)
 
@@ -539,6 +540,7 @@ export class AddVehicleComponent implements OnInit {
 	}
 	onInteriorsCheckboxChange(e) {
 		const vehicleInterior: FormArray = this.addVehicleForm.get('vehicleInterior') as FormArray;
+		console.log('------>>>>>>' , vehicleInterior)
 		if (e.target.checked) {
 			vehicleInterior.push(new FormControl(e.target.value));
 		} else {

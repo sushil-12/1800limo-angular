@@ -246,7 +246,7 @@
 					<input type="checkbox" class="custom-control-input" id="amenity_{{chargableAmenity.value.name}}"
 						[value]="chargableAmenity.value.id" [checked]="chargableAmenity.value.isSelected"
 						(change)="onAmenitiesCheckboxChange($event.target.value,$event.target.checked)" tabindex="1">
-					<label class="custom-control-label"
+					<label class="custom-control-label text-wrap" style="width: 100px;"
 						for="amenity_{{chargableAmenity.value.name}}">{{chargableAmenity.value.name}}</label>
 					<label *ngIf="chargableAmenity.value.chargeable==='yes'" class="amenity-dollar">&nbsp; $</label>
 				</div>
