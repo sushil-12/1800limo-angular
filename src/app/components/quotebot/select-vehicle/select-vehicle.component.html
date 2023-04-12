@@ -293,8 +293,8 @@
 					(click)="innerWidth < 1023 ? viewDetails(vehinfo) : ''">
 					<!-- DIV: AFFILIATE INFO -->
 					<div id="affiliate-info"
-						*ngIf="currentUser != null && currentUser.roleName == 'admin' && (vehinfo.affiliate_name || vehinfo.affiliate_company)">
-						<button class="link" *ngIf="vehinfo.readMore">
+						*ngIf="currentUser != null && currentUser?.roleName == 'admin' && (vehinfo?.affiliate_name || vehinfo?.affiliate_company)">
+						<button class="link" *ngIf="vehinfo?.readMore">
 							<p class="text-left text-secondary m-0 my-md-2" style="color: #007fee !important;">
 								<span (click)="editAffiliateAccount(vehinfo)">
 									{{vehinfo?.affiliate_company.slice(0,7) }}
@@ -303,7 +303,7 @@
 								<span (click)="handleReadMore(vehinfo , false)" style="color: black;">...more</span>
 							</p>
 						</button>
-						<button class="link"  *ngIf="!vehinfo.readMore">
+						<button class="link"  *ngIf="!vehinfo?.readMore">
 							<p class="text-left text-secondary m-0 my-md-2" style="color: #007fee !important;">
 								<span (click)="editAffiliateAccount(vehinfo)">
 									{{vehinfo?.affiliate_company }}
