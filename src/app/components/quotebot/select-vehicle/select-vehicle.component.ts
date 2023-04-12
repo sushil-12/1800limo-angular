@@ -479,8 +479,14 @@ export class SelectVehicleComponent implements OnInit
 			{
 				this.no_vehicle_msg = 'No Vehicle found with the applied filter.'
 			}
-			this.vehicleDetails = response.data.map(i=> {
-				i['readMore']=(i?.affiliate_company.length || i?.affiliate_name.length) > 8 ? true : false 
+			this.vehicleDetails = [...response.data]
+			this.vehicleDetails = this.vehicleDetails.map(i=> {
+				if(i?.affiliate_company && i?.affiliate_name){
+					i['readMore']=(i?.affiliate_company?.length || i?.affiliate_name?.length) > 8 ? true : false 
+				}
+				else{
+					i['readMore'] = false
+				}
 				return i
 			})
 			console.log('vehicle details-->>>' , this.vehicleDetails)
