@@ -189,7 +189,7 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 			model: ['', Validators.required],
 			year: ['', Validators.required],
 			color: ['', Validators.required],
-			licensePlate: ['', Validators.required],
+			licensePlate: [''],
 			numberOfVehicles: [1],
 			seats: [4, [Validators.required, Validators.pattern("^[0-9]*$")]],
 			luggage: [2, [Validators.required, Validators.pattern("^[0-9]*$")]],

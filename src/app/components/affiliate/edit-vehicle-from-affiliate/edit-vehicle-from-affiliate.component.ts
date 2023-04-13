@@ -201,7 +201,7 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 			charterCancelPolicy: ['2', Validators.required],
 			nonCharterCancelPolicy: ['2', Validators.required],
 			typeOfService: this.formBuilder.array([], [Validators.required]),
-			amenities: this.formBuilder.array([], []),
+			amenities: this.formBuilder.array([], [Validators.required]),
 			specialAmenitiesGet: this.formBuilder.array([]),
 			specialAmenities: this.formBuilder.array([]),
 			vehicleInteriorGet: this.formBuilder.array([], []),
