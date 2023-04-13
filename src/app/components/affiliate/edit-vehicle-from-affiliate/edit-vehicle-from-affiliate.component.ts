@@ -407,9 +407,9 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 						//get models as per make
 						let models = JSON.parse(sessionStorage.getItem('models'));
 						let selectedMake = this.response2?.data?.make;
-						let resmodels = models.filter(function (model)
+						let resmodels = models?.filter(function (model)
 						{
-							if (model.make_id == selectedMake)
+							if (model?.make_id == selectedMake)
 							{
 								return true;
 							}
@@ -440,19 +440,7 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 							nonCharterCancelPolicy: this.response2?.data?.nonCharterCancelPolicy,
 						});
 
-						this.pushValuesTypeOfService(this.response2?.data?.typeOfService) // push into form
-
-						//Set values in autocomplete fields
-						let vehicleTypeField: any = document.getElementById('vehicleTypeField');
-						vehicleTypeField.value = this.response2?.data?.vehicle_typeName;
-						let makeField: any = document.getElementById('makeField');
-						makeField.value = this.response2?.data?.makeName;
-						let modelField: any = document.getElementById('modelField');
-						modelField.value = this.response2?.data?.modelName;
-						let yearField: any = document.getElementById('yearField');
-						yearField.value = this.response2?.data?.yearName;
-						let colorField: any = document.getElementById('colorField');
-						colorField.value = this.response2?.data?.colorName;
+						
 						//
 						console.log('onfirstLoad call change make')
 						this.changeMake(this.response2?.data?.make, 'onFirstLoad');//to show selected model
@@ -480,6 +468,19 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 							}
 							this.addVehicleForm.controls['numberOfVehicles'].updateValueAndValidity();
 						});
+						this.pushValuesTypeOfService(this.response2?.data?.typeOfService) // push into form
+
+						//Set values in autocomplete fields
+						let vehicleTypeField: any = document.getElementById('vehicleTypeField');
+						vehicleTypeField.value = this.response2?.data?.vehicle_typeName;
+						let makeField: any = document.getElementById('makeField');
+						makeField.value = this.response2?.data?.makeName;
+						let modelField: any = document.getElementById('modelField');
+						modelField.value = this.response2?.data?.modelName;
+						let yearField: any = document.getElementById('yearField');
+						yearField.value = this.response2?.data?.yearName;
+						let colorField: any = document.getElementById('colorField');
+						colorField.value = this.response2?.data?.colorName;
 					});
 				this.spinner.hide();
 			});
@@ -726,7 +727,7 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 		{
 			chargableAmenities[key].forEach(chargableAmenity =>
 			{
-				if (chargableAmenity.isSelected)
+				if (chargableAmenity?.isSelected)
 				{
 					this.onAmenitiesCheckboxChange(chargableAmenity?.id, true);
 				}
@@ -739,9 +740,10 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 			console.log(key, nonChargableAmenities[key]);
 			nonChargableAmenities[key].forEach(nonChargableAmenity =>
 			{
-				if (nonChargableAmenity.isSelected)
+				console.log('nonChargableAmenity-->>>>>>>>',nonChargableAmenity?.isSelected)
+				if (nonChargableAmenity?.isSelected)
 				{
-					this.onAmenitiesCheckboxChange(nonChargableAmenity.id, true);
+					this.onAmenitiesCheckboxChange(nonChargableAmenity?.id, true);
 				}
 			});
 		}
