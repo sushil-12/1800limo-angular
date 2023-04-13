@@ -54,10 +54,10 @@ export class Step5Component implements OnInit, AfterViewChecked {
 		this.spinner.show(); //show spinner
 
 		this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
-		this.affiliateId = this.currentUser.account_id;
+		this.affiliateId = this.currentUser?.account_id;
 
-		this.stepCompleted = this.affiliateService.getLocalStepCompleted();
-		if (!this.stepCompleted.includes('5') && this.currentUser.affiliate_type == 'fleet_operator') {
+		this.stepCompleted = this.affiliateService?.getLocalStepCompleted();
+		if (!this.stepCompleted.includes('5') && this.currentUser?.affiliate_type == 'fleet_operator') {
 			this.showInstructionIfStepNotCompleted = true;
 		}
 		this.is_account_accepted = localStorage.getItem('account_approval') == 'accepted'
@@ -65,8 +65,8 @@ export class Step5Component implements OnInit, AfterViewChecked {
 		// Load Our vehicles using API
 		this.affiliateService.affiliateVehicleList().then(result => {
 			this.vehiclesRes = result;
-			this.vehicles = this.vehiclesRes.data.vehicleList;
-			this.affiliate_type = this.currentUser.affiliate_type.toLowerCase()
+			this.vehicles = this.vehiclesRes?.data?.vehicleList;
+			this.affiliate_type = this.currentUser?.affiliate_type.toLowerCase()
 
 			if (this.affiliate_type.includes('gig') || this.affiliate_type.includes('taxi')) {
 				this.checkCanAddVehicle(1) // only one allowed
@@ -78,7 +78,7 @@ export class Step5Component implements OnInit, AfterViewChecked {
 			}
 
 			this.spinner.hide(); //hide spinner
-			this.stateManagementService.setNumberOfVehicles(this.vehiclesRes.data.totalNumberOfVehicles);
+			this.stateManagementService?.setNumberOfVehicles(this.vehiclesRes?.data?.totalNumberOfVehicles);
 			setTimeout(() => {
 				$('[data-toggle="dropdown"]').tooltip();//Bootstrap tooltip
 			}, 500);
@@ -86,7 +86,7 @@ export class Step5Component implements OnInit, AfterViewChecked {
 	}
 
 	checkCanAddVehicle(numOfVehicles) {
-		if (this.vehiclesRes.data.totalNumberOfVehicles >= numOfVehicles) {
+		if (this.vehiclesRes?.data?.totalNumberOfVehicles >= numOfVehicles) {
 			this.canAddVehicle = false;
 		}
 		else {

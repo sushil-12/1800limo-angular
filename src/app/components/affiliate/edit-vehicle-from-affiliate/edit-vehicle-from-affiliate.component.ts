@@ -456,6 +456,7 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 						//
 						console.log('onfirstLoad call change make')
 						this.changeMake(this.response2?.data?.make, 'onFirstLoad');//to show selected model
+						// this.handleInteriorsCheckbox(this.response2?.data?.vehicleInterior)
 						this.setAmenities();//show selected amenities
 						this.setSpecialAmenities();//show selected special amenities
 						this.setInteriors();//show selected interiors
@@ -845,6 +846,11 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 			vehicleInterior.removeAt(index);
 		}
 	}
+	// handleInteriorsCheckbox(vehicleInteriorList:any){
+	// 	console.log('in function handleInteriorsCheckbox-->>' , vehicleInteriorList)
+	// 	const vehicleInterior: FormArray = this.addVehicleForm.get('vehicleInterior') as FormArray;
+	// 	vehicleInteriorList.map(i=> vehicleInterior.push(new FormControl(parseInt(i))))
+	// }
 
 	onFileChange(event, imageId, imageNumber)
 	{
@@ -1099,7 +1105,7 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 		});
 		if (onFirstLoad == 'onFirstLoad' || this.onFirstLoad==1)
 		{
-			console.log('bhai sabh-->>' , this.onFirstLoad)
+			console.log('->>' , this.onFirstLoad)
 			this.onFirstLoad = 2
 			this.addVehicleForm.patchValue({
 				model: parseInt(this.response2?.data?.model)

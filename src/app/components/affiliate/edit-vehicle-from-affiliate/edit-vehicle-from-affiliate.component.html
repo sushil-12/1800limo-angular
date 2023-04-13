@@ -214,7 +214,7 @@
 					</mat-form-field> -->
 					<ng-select appearance="outline" [items]="filteredYear" dropdownPosition="bottom"
 							[markFirst]="true" [virtualScroll]="true" bindLabel="name" bindValue="ID"
-							placeholder="Year" formControlName="year" id="modelField">
+							placeholder="Year" formControlName="year" id="yearField">
 						</ng-select>
 					<div *ngIf="
 							(errorMsg3 && f?.year?.errors) ||
@@ -259,7 +259,7 @@
 					</mat-form-field> -->
 					<ng-select appearance="outline" [items]="filteredColor" dropdownPosition="bottom"
 							[markFirst]="true" [virtualScroll]="true" bindLabel="name" bindValue="ID"
-							placeholder="Color" formControlName="color" id="modelField">
+							placeholder="Color" formControlName="color" id="colorField">
 						</ng-select>
 					<div *ngIf="
 							(errorMsg4 && f?.color?.errors) ||
@@ -602,7 +602,22 @@
 					Please select atleast one Special Amenity.
 				</div>
 			</div>
-		</div>
+		</div>	
+		<!-- <div class="container mt-1">
+			<div class="choose_ameniteslist">
+				<div class="custom-control custom-checkbox" *ngFor="let specialAmenity of specialAmenities">
+					<input type="checkbox" class="custom-control-input" id="specialAmenity_{{ specialAmenity.name }}"
+						[value]="specialAmenity.id" (change)="onSpecialAmenitiesCheckboxChange($event)" tabindex="1" />
+					<label class="custom-control-label" for="specialAmenity_{{ specialAmenity.name }}">{{
+						specialAmenity.name }}</label>
+				</div>
+			</div>
+			<div *ngIf="submittedForm && f.specialAmenities.errors" class="text-danger margin-bottom-thin my-mat-hint">
+				<div *ngIf="f.specialAmenities.errors.required">
+					Please select atleast one Special Amenity.
+				</div>
+			</div>
+		</div> -->
 	</section>
 	<section class="user_information">
 		<h2 class="headinginfo">
@@ -629,6 +644,21 @@
 				</div>
 			</div>
 		</div>
+		<!-- <div class="container mt-1">
+			<div class="choose_ameniteslist">
+				<div class="custom-control custom-checkbox" *ngFor="let interior of interiors">
+					<input type="checkbox" class="custom-control-input" id="interior_{{ interior.name }}"
+						[value]="interior.id" (change)="onInteriorsCheckboxChange($event)" tabindex="1"
+						/>
+					<label class="custom-control-label" for="interior_{{ interior.name }}">{{ interior.name }}</label>
+				</div>
+			</div>
+			<div *ngIf="submittedForm && f.vehicleInterior.errors" class="text-danger margin-bottom-thin my-mat-hint">
+				<div *ngIf="f.vehicleInterior.errors.required">
+					Please select atleast one Interior.
+				</div>
+			</div>
+		</div> -->
 	</section>
 
 	<!-- Main page content-->

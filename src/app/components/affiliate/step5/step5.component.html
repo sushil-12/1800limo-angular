@@ -47,48 +47,48 @@
 						<tbody>
 							<ng-container *ngIf="vehicles">
 								<tr role="row" class="odd" *ngFor="let vehicle of vehicles">
-									<td><img src="{{vehicle.vehicleImage}}"></td>
-									<td>{{vehicle.vehicleType}}</td>
-									<td>{{vehicle.numberOfVehicles}}</td>
-									<td>{{vehicle.seats}}</td>
-									<td>{{vehicle.year}}</td>
-									<td>{{vehicle.make}}</td>
-									<td>{{vehicle.model}}</td>
-									<td>{{vehicle.color}}</td>
+									<td><img src="{{vehicle?.vehicleImage}}"></td>
+									<td>{{vehicle?.vehicleType}}</td>
+									<td>{{vehicle?.numberOfVehicles}}</td>
+									<td>{{vehicle?.seats}}</td>
+									<td>{{vehicle?.year}}</td>
+									<td>{{vehicle?.make}}</td>
+									<td>{{vehicle?.model}}</td>
+									<td>{{vehicle?.color}}</td>
 									<td>
-										<button (click)="updateAmenityList(vehicle.amenities)"
+										<button (click)="updateAmenityList(vehicle?.amenities)"
 											class="custom-filled-button" tabindex="1">
 											Amenity List
 										</button>
 									</td>
-									<td>{{vehicle.licensePlate}}</td>
+									<td>{{vehicle?.licensePlate}}</td>
 									<td>
 										<i class="fa fa-trash" style="font-size: x-large; color:#d64646"
-											(click)="enableDisableClicked(vehicle.id)" data-toggle="modal"
+											(click)="enableDisableClicked(vehicle?.id)" data-toggle="modal"
 											data-target="#deleteConfirmationModal"></i>
 									</td>
 									<td>
 										<a class="user-profileded btn btn-icon btn-transparent-dark dropdown-toggle"
 											data-toggle="dropdown"
-											[ngClass]="!vehicle.isRatesCompleted ? 'notCompleted' : ''"
+											[ngClass]="!vehicle?.isRatesCompleted ? 'notCompleted' : ''"
 											id="navbarDropdownUserImage" href="javascript:void(0);" role="button"
 											aria-haspopup="true" aria-expanded="false" tabindex="1">
 											<span>View</span>
 										</a>
 										<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
 											aria-labelledby="navbarDropdownUserImage">
-											<a class="dropdown-item" (click)="clickEditVehicle(vehicle.ID)">
+											<a class="dropdown-item" (click)="clickEditVehicle(vehicle?.ID)">
 												<div class="dropdown-item-icon"></div>
 												Edit Vehicle
 											</a>
 											<a class="dropdown-item"
-												[ngClass]="{notCompleted: !vehicle.isRatesCompleted}"
-												(click)="clickEditVehicleRates(vehicle.ID)">
+												[ngClass]="{notCompleted: !vehicle?.isRatesCompleted}"
+												(click)="clickEditVehicleRates(vehicle?.ID)">
 												<div class="dropdown-item-icon"></div>
-												{{ vehicle.isRatesCompleted ? 'Edit' : 'Add'}} Rates
+												{{ vehicle?.isRatesCompleted ? 'Edit' : 'Add'}} Rates
 											</a>
 											<a *ngIf="canAddVehicle" class="dropdown-item"
-												(click)="clickDuplicateVehicle(vehicle.ID)">
+												(click)="clickDuplicateVehicle(vehicle?.ID)">
 												<div class="dropdown-item-icon"></div>
 												Duplicate Vehicle
 											</a>
@@ -118,8 +118,8 @@
 			<div class="modal-body">
 				<ul class="mb-0">
 					<li *ngFor="let amenity of amenityList">
-						<i class="bi bi-currency-dollar text-orange" *ngIf="amenity.name.chargeable == 'yes'"></i>
-						{{amenity.name.name}}
+						<i class="bi bi-currency-dollar text-orange" *ngIf="amenity?.name?.chargeable == 'yes'"></i>
+						{{amenity?.name?.name}}
 					</li>
 				</ul>
 			</div>
