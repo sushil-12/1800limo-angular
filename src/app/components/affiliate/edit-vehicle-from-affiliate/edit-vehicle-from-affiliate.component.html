@@ -480,7 +480,7 @@
 				<div class="col-md-4">
 					<div class="input-checkbox">
 						<div class="checkbox" [ngClass]="
-								service.includes('local') || response2?.data.typeOfService.includes('local') ? 'active' : ''
+								service.includes('local')
 							" (click)="onServiceChange('local')">
 							Local Service
 						</div>
