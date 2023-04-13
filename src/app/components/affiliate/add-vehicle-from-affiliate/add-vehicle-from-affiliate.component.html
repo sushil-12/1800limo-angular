@@ -3,7 +3,7 @@
 	<section class="user_information affiliateVehicle">
 		<h2 class="headinginfo">
 			Vehicle Settings
-			<span class="text-danger">(Choose Correct Vehicle Type)</span>
+			<span style="color: red;">(Choose Correct Vehicle Type)</span>
 		</h2>
 		<div class="container mt-1">
 			<div class="row">
@@ -1275,7 +1275,7 @@
 						<div class="vehtype_extint">
 							<div>
 								<p>
-									Rear Plate
+									Rear Plate <span class="asterisk">* </span>
 									<span class="optionalTextStyle">(w/exp decal)
 									</span>
 								</p>
@@ -1724,21 +1724,22 @@
 			</div>
 		</div>
 	</section>
+	<div class="row flex flex-wrap-reverse my-4">
+		<button class="custom-filled-back-button m-2 mx-4" routerLink="/affiliate/step5">
+			BACK
+		</button>
+		<div class="col-md-auto mx-auto">
+			<button class="custom-filled-reset-button m-2" (click)="resetForm()" tabIndex="2">
+				RESET
+			</button>
+			<button type="submit" class="custom-filled-button m-2" (click)="submitForm()" tabIndex="1">
+				SAVE
+			</button>
+		</div>
+	</div>
 </form>
 
-<div class="row flex flex-wrap-reverse my-4">
-	<button class="custom-filled-back-button m-2 mx-4" routerLink="/affiliate/step5">
-		BACK
-	</button>
-	<div class="col-md-auto mx-auto">
-		<button class="custom-filled-reset-button m-2" (click)="resetForm()" tabIndex="2">
-			RESET
-		</button>
-		<button class="custom-filled-button m-2" (click)="submitForm()" tabIndex="1">
-			SAVE
-		</button>
-	</div>
-</div>
+
 
 
 
