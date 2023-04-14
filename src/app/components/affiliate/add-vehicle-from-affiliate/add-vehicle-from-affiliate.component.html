@@ -94,7 +94,7 @@
 					</mat-form-field> -->
 					<ng-select appearance="outline" [items]="filteredMake" dropdownPosition="bottom"
 							[markFirst]="true" [virtualScroll]="true" bindLabel="name" bindValue="ID"
-							placeholder="Make" formControlName="make" id="makeField">
+							placeholder="Make" formControlName="make" id="makeField" (change)="handleSelectMake()">
 						</ng-select>
 					<div *ngIf="
 							(errorMsg1 && f.make.errors) ||

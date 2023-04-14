@@ -204,8 +204,8 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 			amenities: this.formBuilder.array([], [Validators.required]),
 			specialAmenitiesGet: this.formBuilder.array([]),
 			specialAmenities: this.formBuilder.array([]),
-			vehicleInteriorGet: this.formBuilder.array([], []),
-			vehicleInterior: this.formBuilder.array([], []),
+			vehicleInteriorGet: this.formBuilder.array([], [Validators.required]),
+			vehicleInterior: this.formBuilder.array([], [Validators.required]),
 			vehicle_image_1: ['', Validators.required],
 			vehicle_image_2: [''],
 			vehicle_image_3: [''],
@@ -222,7 +222,7 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 			mcImage: [''],
 		});
 
-		this.affiliateType = currentUser.affiliate_type;
+		this.affiliateType = currentUser?.affiliate_type;
 
 		/** progress bar starts on init */
 		this.spinner.show()
