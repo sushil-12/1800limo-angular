@@ -3,7 +3,7 @@
 		display: none;
 	}
 }
-
+#google_translate_element_desktop.goog-te-gadget-simple .VIpgJd-ZVi9od-xl07Ob-lTBxed{pointer-events: none!important;}
 .scrollButton {
 	margin-left: 45px;
 	position   : absolute;
@@ -83,6 +83,7 @@ mat-progress-bar {
 	right   : 115px;
 	z-index : -1;
 }
+
 
 @media only screen and (max-width:767px) {
 	.hideMobile {
