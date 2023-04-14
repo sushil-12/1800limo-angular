@@ -27,6 +27,7 @@ import { Step6Component } from './step6/step6.component';
 import { InvoiceSummaryComponent } from './invoice-summary/invoice-summary.component';
 import { FarmOutComponent } from './farm-out/farm-out.component';
 import { VehicleRateSettingsComponent } from './vehicle-rate-settings/vehicle-rate-settings.component';
+import { AffiliateFinalizeComponent } from './affiliate-finalize/affiliate-finalize.component';
 
 const routes: Routes = [
 	{
@@ -141,6 +142,11 @@ const routes: Routes = [
 		path: 'account-status',
 		canActivate: [AffiliateOtherRouteGuard],
 		component: AccountStatusComponent
+	},
+	{
+		path: 'finalize-booking',
+		canActivate: [AffiliateOtherRouteGuard],
+		component: AffiliateFinalizeComponent
 	},
 ];
 
