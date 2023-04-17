@@ -45,9 +45,11 @@ export class MyBookingsComponent implements OnInit
 	sendInformation: any;
 	reciptentName: any;
 	notification_msg: any;
-	bookingPreview:any;
 	noError:boolean = false;
 	searchText: string = "";
+	timer: any
+	isAffiliate:boolean=false
+	isLooseAffiliate: boolean=false;
 
 	constructor(
 		private affiliateService: AffiliateService,
@@ -57,10 +59,21 @@ export class MyBookingsComponent implements OnInit
 
 	ngOnInit(): void
 	{
-		this.date = new Date();
-		this.startDate = this.date.toISOString().substring(0, 10);
-		this.date.setDate(this.date.getDate() + 10);
-		this.endDate = this.date.toISOString().substring(0, 10);
+		
+		let date = new Date();
+		// Set Search Filters According to cookies or the intial state
+		this.startDate = this.affiliateService.checkCookie('affiliate_startDate') ?
+			this.affiliateService.getCookie('affiliate_startDate') :
+			date.toISOString().substring(0, 10);
+
+		date.setDate(date.getDate() + 7);
+		this.endDate = this.affiliateService.checkCookie('affiliate_endDate') ?
+			this.affiliateService.getCookie('affiliate_endDate') :
+			date.toISOString().substring(0, 10);
+
+		this.searchText = this.affiliateService.checkCookie('affiliate_search') ?
+			this.affiliateService.getCookie('affiliate_search')
+			: "";
 
 		this.loadBookings();
 
@@ -82,9 +95,9 @@ export class MyBookingsComponent implements OnInit
 		/** spinner starts on init */
 		this.spinner.show();
 
-		var keyword = ((document.getElementById("keyword") as HTMLInputElement).value);
+		// var keyword = ((document.getElementById("keyword") as HTMLInputElement).value);
 		// Load Our bookings using API
-		this.affiliateService.loadBookings(pageUrl, keyword, this.startDate, this.endDate).then(result =>
+		this.affiliateService.loadBookings(pageUrl, this.searchText, this.startDate, this.endDate).then(result =>
 		{
 			console.log('result---->>>' , result)
 			this.bookingsRes = result;
@@ -114,13 +127,14 @@ export class MyBookingsComponent implements OnInit
 		return moment(date).format("ll");
 	}
 	searchInBookings(search_value: string) {
-		// this.searchText = search_value
-		// console.log('--->>>>>', search_value)
-		// clearTimeout(this.timer);
-		// this.timer = setTimeout(() => {
-		// 	this.loadBookings(null, this.startDate, this.endDate, search_value)
-		// }, 700)
+		this.searchText = search_value
+		console.log('--->>>>>', search_value)
+		clearTimeout(this.timer);
+		this.timer = setTimeout(() => {
+			this.loadBookings(null)
+		}, 700)
 	}
+	
 	highlighText(args: string) {
 		if (!this.searchText) { return args; }
 		if (args) {
@@ -129,75 +143,60 @@ export class MyBookingsComponent implements OnInit
 			return args.replace(re, '<mark class="font-weight-bold">$&</mark>');
 		}
 	}
+	saveCookie(key: string, value: string) {
+		this.affiliateService.setCookie(key, value, 30);
+	}
 
+	reset() {
+		let date = new Date();
+		this.startDate = date.toISOString().substring(0, 10);
+		date.setDate(date.getDate() + 7);
+		this.endDate = date.toISOString().substring(0, 10);
+		this.affiliateService.deleteCookie('affiliate_startDate')
+		this.affiliateService.deleteCookie('affiliate_endDate')
+		this.affiliateService.deleteCookie('affiliate_search')
+		// this.affiliateService.deleteCookie('filtertype')
+		this.searchText = "";
+		// this.filtertype = 'bookingid';
 
-	handleKeypressEvents() {
-		// clearTimeout(this.timer)
+		console.log('Reset Successfully. ');
+	}
+	textFormatter(text: string) {
+		try {
+			return text.replace(/[\\\_$]+/g, ' ')
+		}
+		catch
+		{
+			return text
+		}
+	}
+
+	bookingPreview:any;
+	showBookingPreviewModal(booking_id: number) {
+		console.log("hii im here")
+		this.spinner.show()
+		this.affiliateService.getBookingPreview(booking_id)
+		.pipe(
+			catchError((err) => {
+				this.spinner.hide(); //hide spinner
+				return throwError(err);
+			})
+		).subscribe((response: any) => {
+			console.log("respinse",response.data)
+			this.bookingPreview = response.data;
+			this.isAffiliate = this.bookingPreview.affiliate_type == "affiliate" ? true : false; 
+			this.isLooseAffiliate = this.bookingPreview.affiliate_type == "loose_affiliate" ? true : false; 
+			console.log('get preview data-->>>' , this.bookingPreview.affiliate_type ,this.isAffiliate)
+			$('#previewBookingOnID').modal('show');
+		})
+		this.spinner.hide();
 	}
 
 
-	showLocationPointOnMap(booking_id: number, type: string) {
-		// const options = {
-		// 	enableHighAccuracy: true,
-		// 	timeout: 5000,
-		// 	maximumAge: 0,
-		// };
-		// let q: any
-		// function success(pos) {
-		// 	const crd = pos.coords;
-		// 	q = crd
-		// 	console.log("Your current position is:");
-		// 	console.log(`Latitude : ${crd.latitude}`);
-		// 	console.log(`Longitude: ${crd.longitude}`);
-		// 	console.log(`More or less ${crd.accuracy} meters.`);
-		// }
+	handleKeypressEvents() {
+		clearTimeout(this.timer)
+	}
 
-		// function error(err) {
-		// 	console.warn(`ERROR(${err.code}): ${err.message}`);
-		// }
-
-		// await navigator.geolocation.getCurrentPosition(success, error, options)
-
-		// if (navigator.geolocation) {
-		// 	navigator.geolocation.getCurrentPosition(function (position) {
-		// 		var currentLocation =	CURRENT_LAT +","+CURRENT_LONG;
-		// 	})
-		// 	}
-
-				// let isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-				// console.log('isSafari', isSafari)
-				// this.spinner.show()
-				// this.adminService.getLocationPoints(booking_id).subscribe((response: any) => {
-				// 	this.spinner.hide();
-				// 	if ("lat" in response?.data?.pickupDetail && "long" in response?.data?.pickupDetail && "lat" in response?.data?.dropoffDetail && "long" in response?.data?.dropoffDetail) {
-				// 		sessionStorage.setItem('pickup', JSON.stringify(response?.data?.pickupDetail.address));
-				// 		sessionStorage.setItem('dropoff', JSON.stringify(response?.data?.dropoffDetail.address));
-				// 		const googleDirectionUrl = 'https://www.google.com/maps/dir/?api=1'+'&destination=' +
-				// 			encodeURIComponent(response?.data?.pickupDetail.address) + '&travelmode=driving'
-				// 		// this.router.navigate(['/locate-map'], {
-				// 		// 	queryParams: {
-				// 		// 		plat: response?.data?.pickupDetail?.lat.toString(),
-				// 		// 		plng: response?.data?.pickupDetail?.long.toString(),
-				// 		// 		dlat: response?.data?.dropoffDetail?.lat.toString(),
-				// 		// 		dlng: response.data?.dropoffDetail?.long.toString(),
-				// 		// 	},
-				// 		// 	queryParamsHandling: 'merge'
-				// 		// });
-				// 		const iosDirectionUrl = 'http://maps.apple.com/?daddr=' +
-				// 			encodeURIComponent(response?.data?.pickupDetail.address)
-				// 		if (this.iOS()) {
-				// 			setTimeout(() => {
-				// 				window.location.href = iosDirectionUrl;
-				// 			})
-				// 		}
-				// 		else {
-				// 			window.open(googleDirectionUrl, '_blank');
-				// 		}
-				// 	} else {
-				// 		throw new Error('Error: Location Points Not Specified Properly. ');
-				// 	}
-				// })
-			}
 
 			closeModal() {
 				this.message.nativeElement.value = ""
@@ -220,7 +219,49 @@ export class MyBookingsComponent implements OnInit
 
 
 			submit(message, format) {
-
+				if (this.passengerDetails.selection_button == "Passenger") {
+					this.sendInformation = format
+						? this.passengerDetails.passenger_cell_isd +
+						this.passengerDetails.passenger_cell
+						: this.passengerDetails.passenger_email;
+					this.reciptentName = this.passengerDetails.passenger_name;
+				} else if (this.passengerDetails.selection_button == "Affiliate") {
+					this.sendInformation = format
+						? this.passengerDetails.affiliate_dispatch_isd +
+						this.passengerDetails.affiliate_dispatch_number
+						: this.passengerDetails.dispatchEmail;
+					this.reciptentName =
+						this.passengerDetails.driver_first_name +
+						this.passengerDetails.driver_last_name;
+				} else {
+					this.sendInformation = format
+						? this.passengerDetails.loose_affiliate_phone_isd +
+						this.passengerDetails.loose_affiliate_phone
+						: this.passengerDetails.loose_affiliate_email;
+					this.reciptentName = this.passengerDetails.loose_affiliate_name;
+				}
+				let obj = {
+					bookingId: this.passengerDetails.booking_id,
+					reciptentName: this.reciptentName,
+					sendTo: this.passengerDetails.selection_button,
+					sendThrough: format ? "Phone" : "Email",
+					sendValue: this.sendInformation,
+					sendContent: message,
+				};
+				console.log('submit modal values---->>' , obj)
+				this.affiliateService
+					.affiliateNotification(obj)
+					.pipe(
+						catchError((err) => {
+							return throwError(err);
+						})
+					)
+					.subscribe(({ message }: any) => {
+						this.notification_msg = message;
+						$("#notificationModal").modal("show");
+						console.log(message);
+						$("textarea").val("");
+					});
 				$("#closeModal").click(() => {
 					$("#notificationModal").modal("hide");
 				});
@@ -276,6 +317,31 @@ export class MyBookingsComponent implements OnInit
 			this.endDate = date;
 		}
 	}
+	dateFormat(value: any) {
+		return moment(value, 'YYYY-MM-DD').format('ll')
+	}
+
+	dateFormat2(value: any) {
+		return moment(value, 'YYYY-MM-DD').format('L')
+	}
+
+	timeFormat(value: any) {
+		if (value.toUpperCase() == '12:00 AM') {
+			return '0000 h'
+		}
+		let hours = moment(moment(value, 'hh:mm a').format('HH'), 'HH').hours();
+		let mins = moment(value, 'hh:mm a').minutes().toString();
+		if (Number(mins) == 0 || Number(mins) < 10) {
+			mins = '0' + mins.toString();
+		}
+
+		return hours < 10 ? '0' + hours.toString() + mins.toString() + ' h' : hours.toString() + mins.toString() + ' h'
+		//return value.replace(':', '').substring(0, 5) + 'h';
+	}
+
+	timeFormat2(value: string) {
+		return moment(value, 'HH:mm a').format('h:mm a');
+	}
 
 	show = false
 	openModal(booking: any, selection_button: string)
@@ -301,56 +367,6 @@ export class MyBookingsComponent implements OnInit
 	// }
 
 
-	// submit(message, format)
-	// {
-	// 	this.show = false;
-	// 	if (this.passengerDetails.selection_button == 'Passenger')
-	// 	{
-	// 		this.sendInformation = format ? this.passengerDetails.passenger_cell_isd + this.passengerDetails.passenger_cell : this.passengerDetails.passenger_email;
-	// 		this.reciptentName = this.passengerDetails.passenger_name
-	// 	}
-	// 	else if (this.passengerDetails.selection_button == 'Affiliate')
-	// 	{
-	// 		this.sendInformation = format ? this.passengerDetails.affiliate_dispatch_isd + this.passengerDetails.affiliate_dispatch_number : this.passengerDetails.dispatchEmail;
-	// 		this.reciptentName = this.passengerDetails.driver_first_name + this.passengerDetails.driver_last_name
-	// 	} else
-	// 	{
-	// 		this.sendInformation = format ? this.passengerDetails.loose_affiliate_phone_isd + this.passengerDetails.loose_affiliate_phone : this.passengerDetails.loose_affiliate_email;
-	// 		this.reciptentName = this.passengerDetails.loose_affiliate_name
-	// 	}
-
-	// 	let obj = {
-	// 		bookingId: this.passengerDetails.booking_id,
-	// 		reciptentName: this.reciptentName,
-	// 		sendTo: this.passengerDetails.selection_button,
-	// 		sendThrough: format ? 'Phone' : 'Email',
-	// 		sendValue: this.sendInformation,
-	// 		sendContent: message
-	// 	}
-	// 	this.affiliateService.adminNotification(obj)
-	// 		.pipe(
-	// 			catchError(err =>
-	// 			{
-	// 				return throwError(err);
-	// 			})
-	// 		)
-	// 		.subscribe(({ message }: any) =>
-	// 		{
-	// 			this.notification_msg = message;
-	// 			$('#notificationModal').modal('show');
-	// 			console.log(message)
-	// 			$('textarea').val('');
-	// 		});
-	// 	$('#closeModal').click(() =>
-	// 	{
-	// 		$('#notificationModal').modal('hide');
-	// 	})
-	// 	$('#closeModal1').click(() =>
-	// 	{
-	// 		$('#notificationModal').modal('hide');
-	// 	})
-	// }
-
 
 	editAction(bookingId, updateType)
 	{
@@ -366,7 +382,7 @@ export class MyBookingsComponent implements OnInit
 
 	finalizeAction(bookingId)
 	{
-		this.router.navigate(['/affiliate/create-new-booking-detail'], { queryParams: { bookingId: bookingId } });
+		this.router.navigate(['/affiliate/finalize-booking'], { queryParams: { bookingId: bookingId } });
 	}
 
 	returnRepeatAction(actionType, bookingId, serviceType)
@@ -388,12 +404,12 @@ export class MyBookingsComponent implements OnInit
 		return this.changeStatusForm.controls;
 	}
 
-	changeBookingStatus(bookingId)
-	{
-		this.changeStatusForm.patchValue({
-			reservation_id: bookingId
-		});
-	}
+	// changeBookingStatus(bookingId)
+	// {
+	// 	this.changeStatusForm.patchValue({
+	// 		reservation_id: bookingId
+	// 	});
+	// }
 
 	submitChangeStatusForm()
 	{
@@ -473,4 +489,46 @@ export class MyBookingsComponent implements OnInit
 				}
 			});
 	}
+
+
+	iOS() {
+		return [
+			'iPad Simulator',
+			'iPhone Simulator',
+			'iPod Simulator',
+			'iPad',
+			'iPhone',
+			'iPod'
+		].includes(navigator.platform)
+			// iPad on iOS 13 detection
+			|| (navigator.userAgent.includes("Mac") && "ontouchend" in document)
+	}
+
+	 showLocationPointOnMap(booking_id: number, type: string) {
+	
+				let isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+				console.log('isSafari', isSafari)
+				// this.spinner.show()
+				this.affiliateService.getLocationPoints(booking_id).subscribe((response: any) => {
+					this.spinner.hide();
+					if ("lat" in response?.data?.pickupDetail && "long" in response?.data?.pickupDetail && "lat" in response?.data?.dropoffDetail && "long" in response?.data?.dropoffDetail) {
+						sessionStorage.setItem('pickup', JSON.stringify(response?.data?.pickupDetail.address));
+						sessionStorage.setItem('dropoff', JSON.stringify(response?.data?.dropoffDetail.address));
+						const googleDirectionUrl = 'https://www.google.com/maps/dir/?api=1'+'&destination=' +
+							encodeURIComponent(response?.data?.pickupDetail.address) + '&travelmode=driving'
+						const iosDirectionUrl = 'http://maps.apple.com/?daddr=' +
+							encodeURIComponent(response?.data?.pickupDetail.address)
+						if (this.iOS()) {
+							setTimeout(() => {
+								window.location.href = iosDirectionUrl;
+							})
+						}
+						else {
+							window.open(googleDirectionUrl, '_blank');
+						}
+					} else {
+						throw new Error('Error: Location Points Not Specified Properly. ');
+					}
+				})
+			}
 }

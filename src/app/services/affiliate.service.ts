@@ -21,15 +21,53 @@ export class AffiliateService
 		{
 			this.createBookingGetData().subscribe((response: any) =>
 			{
-				this.big_data_list = response.data
+				this.big_data_list = response?.data
 			})
 		}
 	}
+
+
+	getCookie(keyword: string): null | string {
+		let ca = document.cookie.split(';');
+		for (let i = 0; i < ca.length; i++) {
+			if (ca[i].trim().indexOf(keyword) == 0) {
+				return ca[i].substring(ca[i].indexOf('=') + 1, ca[i].length)
+			}
+		}
+		return null
+	}
+
+	checkCookie(keyword: string): boolean {
+		let required_cookie = this.getCookie(keyword)
+		if (required_cookie && required_cookie != '') {
+			return true
+		}
+		return false
+	}
+
+	setCookie(key: string, value: string, exdays: number): boolean {
+		const date = new Date()
+
+		date.setTime(date.getTime() + (exdays * 24 * 60 * 60 * 1000));
+		document.cookie = `${key}=${value};expires=${date.toUTCString()};`;
+
+		// check if the cookies is successfully set
+		if (this.checkCookie(key)) {
+			return true
+		}
+		return false
+	}
+
+	deleteCookie(key: string) {
+		document.cookie = `${key}=' ';expires=Thu, 01 Jan 1970 00:00:00 UTC;`;
+	}
+
 
 	getBigData()
 	{
 		return this.big_data_list
 	}
+
 
 	fetchStep0Data()
 	{
@@ -336,7 +374,15 @@ export class AffiliateService
 	{
 		return this.httpClient.get(this.serverUrl + 'get-affiliate-approval-status');
 	}
-
+	getLocationPoints(booking_id: number) {
+		return this.httpClient.get(`${this.serverUrl}booking-location/${booking_id}`)
+	}
+	getBookingPreview(reservation_id: number) {
+		return this.httpClient.get(`${this.serverUrl}get-booking-preview/${reservation_id}`);
+	}
+	affiliateNotification(data) {
+		return this.httpClient.post(this.serverUrl + 'notification-daily-booking', data);
+	}
 
 	//Booking
 	loadBookings(url, keyword, startDate, endDate)

@@ -152,6 +152,7 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 
 
 	initRates() {
+		this.spinner.show()
 		console.log("Init Rates");
 		this.RatesForm = this.$form.group({
 			all_inclusive_rates: this.$form.group({}),
@@ -181,6 +182,7 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 			}
 		})
 		this.getRatesData().subscribe((data: any) => {
+			this.spinner.hide()
 			this.buildRatesForm("RatesForm", data);
 			console.info('rates form 1--->>>>>',this.RatesForm)
 			
