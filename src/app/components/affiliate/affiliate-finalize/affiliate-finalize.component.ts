@@ -28,6 +28,7 @@ export class AffiliateFinalizeComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+		// this.spinner.show()
     this.activatedroute.queryParams
 			.subscribe((params) =>
 			{
