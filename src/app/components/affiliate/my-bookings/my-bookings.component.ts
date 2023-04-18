@@ -349,10 +349,10 @@ export class MyBookingsComponent implements OnInit {
 
 	editAction(bookingId, updateType) {
 		if (updateType == 'change') {
-			this.router.navigate(['/affiliate/create-new-booking'], { queryParams: { bookingId: bookingId, updateType: updateType } });
+			this.router.navigate(['/affiliate/new-booking'], { queryParams: { bookingId: bookingId, updateType: updateType } });
 		}
 		else {
-			this.router.navigate(['/affiliate/create-new-booking'], { queryParams: { bookingId: bookingId } });
+			this.router.navigate(['/affiliate/new-booking'], { queryParams: { bookingId: bookingId } });
 		}
 	}
 

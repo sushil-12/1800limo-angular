@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 //material
 import { NgxSpinnerModule } from "ngx-spinner";
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatRadioModule } from '@angular/material/radio';
+
 //
 import { AgmCoreModule } from '@agm/core';
 import { AgmDirectionModule } from 'agm-direction';
@@ -47,6 +49,7 @@ import { FarmOutComponent } from './farm-out/farm-out.component';
 import { VehicleRateSettingsComponent } from './vehicle-rate-settings/vehicle-rate-settings.component';
 import { AffiliateFinalizeComponent } from './affiliate-finalize/affiliate-finalize.component';
 import { AffiliateFinalizeRatesComponent } from './affiliate-finalize-rates/affiliate-finalize-rates.component';
+import { NewBookingComponent } from './new-booking/new-booking.component';
 
 @NgModule({
 	declarations: [
@@ -76,7 +79,8 @@ import { AffiliateFinalizeRatesComponent } from './affiliate-finalize-rates/affi
 		FarmOutComponent,
 		VehicleRateSettingsComponent,
 		AffiliateFinalizeComponent,
-		AffiliateFinalizeRatesComponent
+		AffiliateFinalizeRatesComponent,
+		NewBookingComponent
 	],
 	imports: [
 		CommonModule,
@@ -95,6 +99,7 @@ import { AffiliateFinalizeRatesComponent } from './affiliate-finalize-rates/affi
 		MatInputModule,
 		MatSelectModule,
 		NgSelectModule,
+		MatRadioModule,
 		// PinchZoomModule,
 		SharedModule
 	]
