@@ -130,7 +130,7 @@
 												Finalize
 											</a>
 											<a class="dropdown-item" routerLink="/affiliate/invoice-summary"
-												[queryParams]="{bookingId: booking?.booking_id}">
+												[queryParams]="{bookingId: booking?.booking_id}" *ngIf="booking?.payment_status=='paid'">
 												<div class="dropdown-item-icon"></div>
 												Invoice
 											</a>
@@ -565,7 +565,7 @@
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<button type="button" class="close closeButton" data-dismiss="notificationModal" aria-label="Close"
-				id="closeModal">
+				id="closeModal" style="z-index: 10;">
 				<span aria-hidden="true">&times;</span>
 			</button>
 			<div class="modal-body">

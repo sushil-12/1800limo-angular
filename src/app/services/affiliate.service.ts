@@ -383,6 +383,9 @@ export class AffiliateService
 	affiliateNotification(data) {
 		return this.httpClient.post(this.serverUrl + 'notification-daily-booking', data);
 	}
+	updateFinalizeRates(data) {
+		return this.httpClient.post(`${this.serverUrl}finalize-rate-edit`, data)
+	}
 
 	//Booking
 	loadBookings(url, keyword, startDate, endDate)

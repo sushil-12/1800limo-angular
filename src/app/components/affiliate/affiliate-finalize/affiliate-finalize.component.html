@@ -357,7 +357,8 @@
 
 </section>
 <section class="section-container mt-2">
-	<app-affiliate-finalize-rates class="d-flex flex-wrap finalize-rates" [reservation_id]="bookingId">
+	<app-affiliate-finalize-rates class="d-flex flex-wrap finalize-rates" [reservation_id]="bookingId"
+	(formvalue)="RateFormValue($event)">
 	</app-affiliate-finalize-rates>
 	<div class="row mb-3" id="submitForm">
 		<div class="col-md-12 text-right">

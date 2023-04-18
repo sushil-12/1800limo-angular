@@ -176,13 +176,13 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 				this.subtotal = data.sub_total
 				console.log('subtotal-->>' , this.subtotal)
 				this.ratesdata.next(data.priceDetail);
+				this.spinner.hide();
 			}
 			else {
 				console.error('Could not fetch Rates Data. ')
 			}
 		})
 		this.getRatesData().subscribe((data: any) => {
-			this.spinner.hide()
 			this.buildRatesForm("RatesForm", data);
 			console.info('rates form 1--->>>>>',this.RatesForm)
 			

@@ -7,6 +7,7 @@ import { throwError } from 'rxjs';
 import { ThemePalette } from '@angular/material/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import * as moment from 'moment';
+import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 declare var $: any;
 
 @Component({
@@ -14,8 +15,7 @@ declare var $: any;
 	templateUrl: './my-bookings.component.html',
 	styleUrls: ['./my-bookings.component.scss']
 })
-export class MyBookingsComponent implements OnInit
-{
+export class MyBookingsComponent implements OnInit {
 	@ViewChild('inputmsg', { static: false }) message: ElementRef;
 	color: ThemePalette = 'primary';
 	outputDateFormat = 'YYYY-MM-DD';
@@ -45,21 +45,21 @@ export class MyBookingsComponent implements OnInit
 	sendInformation: any;
 	reciptentName: any;
 	notification_msg: any;
-	noError:boolean = false;
+	noError: boolean = false;
 	searchText: string = "";
 	timer: any
-	isAffiliate:boolean=false
-	isLooseAffiliate: boolean=false;
+	isAffiliate: boolean = false
+	isLooseAffiliate: boolean = false;
 
 	constructor(
 		private affiliateService: AffiliateService,
 		private router: Router,
 		private spinner: NgxSpinnerService,
+		private $errors: ErrorDialogService,
 		private formBuilder: FormBuilder) { }
 
-	ngOnInit(): void
-	{
-		
+	ngOnInit(): void {
+
 		let date = new Date();
 		// Set Search Filters According to cookies or the intial state
 		this.startDate = this.affiliateService.checkCookie('affiliate_startDate') ?
@@ -90,16 +90,14 @@ export class MyBookingsComponent implements OnInit
 	}
 
 
-	loadBookings(pageUrl = null)
-	{
+	loadBookings(pageUrl = null) {
 		/** spinner starts on init */
 		this.spinner.show();
 
 		// var keyword = ((document.getElementById("keyword") as HTMLInputElement).value);
 		// Load Our bookings using API
-		this.affiliateService.loadBookings(pageUrl, this.searchText, this.startDate, this.endDate).then(result =>
-		{
-			console.log('result---->>>' , result)
+		this.affiliateService.loadBookings(pageUrl, this.searchText, this.startDate, this.endDate).then(result => {
+			console.log('result---->>>', result)
 			this.bookingsRes = result;
 			this.bookings = this.bookingsRes?.data?.data;
 			this.totalRecords = this.bookingsRes?.data?.total;
@@ -117,8 +115,7 @@ export class MyBookingsComponent implements OnInit
 			this.nextPageUrl = this.bookingsRes?.data?.next_page_url;
 			this.spinner.hide();//hide spinner
 		})
-			.catch(err =>
-			{
+			.catch(err => {
 				this.spinner.hide();//hide spinner
 			});
 	}
@@ -134,7 +131,7 @@ export class MyBookingsComponent implements OnInit
 			this.loadBookings(null)
 		}, 700)
 	}
-	
+
 	highlighText(args: string) {
 		if (!this.searchText) { return args; }
 		if (args) {
@@ -171,24 +168,24 @@ export class MyBookingsComponent implements OnInit
 		}
 	}
 
-	bookingPreview:any;
+	bookingPreview: any;
 	showBookingPreviewModal(booking_id: number) {
 		console.log("hii im here")
 		this.spinner.show()
 		this.affiliateService.getBookingPreview(booking_id)
-		.pipe(
-			catchError((err) => {
-				this.spinner.hide(); //hide spinner
-				return throwError(err);
+			.pipe(
+				catchError((err) => {
+					this.spinner.hide(); //hide spinner
+					return throwError(err);
+				})
+			).subscribe((response: any) => {
+				console.log("respinse", response.data)
+				this.bookingPreview = response.data;
+				this.isAffiliate = this.bookingPreview.affiliate_type == "affiliate" ? true : false;
+				this.isLooseAffiliate = this.bookingPreview.affiliate_type == "loose_affiliate" ? true : false;
+				console.log('get preview data-->>>', this.bookingPreview.affiliate_type, this.isAffiliate)
+				$('#previewBookingOnID').modal('show');
 			})
-		).subscribe((response: any) => {
-			console.log("respinse",response.data)
-			this.bookingPreview = response.data;
-			this.isAffiliate = this.bookingPreview.affiliate_type == "affiliate" ? true : false; 
-			this.isLooseAffiliate = this.bookingPreview.affiliate_type == "loose_affiliate" ? true : false; 
-			console.log('get preview data-->>>' , this.bookingPreview.affiliate_type ,this.isAffiliate)
-			$('#previewBookingOnID').modal('show');
-		})
 		this.spinner.hide();
 	}
 
@@ -198,122 +195,104 @@ export class MyBookingsComponent implements OnInit
 	}
 
 
-			closeModal() {
-				this.message.nativeElement.value = ""
-				this.show = false
+	closeModal() {
+		this.message.nativeElement.value = ""
+		this.show = false
+	}
+	messageField(format) {
+		this.show = true;
+		switch (format) {
+			case "Phone": {
+				this.sendMessageField = true;
+				break;
 			}
-			messageField(format) {
-				this.show = true;
-				switch (format) {
-					case "Phone": {
-						this.sendMessageField = true;
-						break;
-					}
-					case "Email": {
-						this.sendMessageField = false;
-						break;
-					}
-				}
+			case "Email": {
+				this.sendMessageField = false;
+				break;
 			}
+		}
+	}
 
 
 
-			submit(message, format) {
-				if (this.passengerDetails.selection_button == "Passenger") {
-					this.sendInformation = format
-						? this.passengerDetails.passenger_cell_isd +
-						this.passengerDetails.passenger_cell
-						: this.passengerDetails.passenger_email;
-					this.reciptentName = this.passengerDetails.passenger_name;
-				} else if (this.passengerDetails.selection_button == "Affiliate") {
-					this.sendInformation = format
-						? this.passengerDetails.affiliate_dispatch_isd +
-						this.passengerDetails.affiliate_dispatch_number
-						: this.passengerDetails.dispatchEmail;
-					this.reciptentName =
-						this.passengerDetails.driver_first_name +
-						this.passengerDetails.driver_last_name;
-				} else {
-					this.sendInformation = format
-						? this.passengerDetails.loose_affiliate_phone_isd +
-						this.passengerDetails.loose_affiliate_phone
-						: this.passengerDetails.loose_affiliate_email;
-					this.reciptentName = this.passengerDetails.loose_affiliate_name;
-				}
-				let obj = {
-					bookingId: this.passengerDetails.booking_id,
-					reciptentName: this.reciptentName,
-					sendTo: this.passengerDetails.selection_button,
-					sendThrough: format ? "Phone" : "Email",
-					sendValue: this.sendInformation,
-					sendContent: message,
-				};
-				console.log('submit modal values---->>' , obj)
-				this.affiliateService
-					.affiliateNotification(obj)
-					.pipe(
-						catchError((err) => {
-							return throwError(err);
-						})
-					)
-					.subscribe(({ message }: any) => {
-						this.notification_msg = message;
-						$("#notificationModal").modal("show");
-						console.log(message);
-						$("textarea").val("");
-					});
-				$("#closeModal").click(() => {
-					$("#notificationModal").modal("hide");
-				});
-				$("#closeModal1").click(() => {
-					$("#notificationModal").modal("hide");
-				});
-				this.message.nativeElement.value = ""
-				this.show = false
-			}
-		
+	submit(message, format) {
+		console.log('format', this.passengerDetails)
+		if (this.passengerDetails.selection_button == "Passenger") {
+			this.sendInformation = format
+				? this.passengerDetails.pax_tel
+				: this.passengerDetails.passenger_email;
+			this.reciptentName = this.passengerDetails.passenger_name;
+		} else {
+			this.sendInformation = format
+				? this.passengerDetails.loose_affiliate_phone_isd +
+				this.passengerDetails.loose_affiliate_phone
+				: this.passengerDetails.loose_affiliate_email;
+			this.reciptentName = this.passengerDetails.loose_affiliate_name;
+		}
+		let obj = {
+			bookingId: this.passengerDetails.booking_id,
+			reciptentName: this.reciptentName,
+			sendTo: this.passengerDetails.selection_button,
+			sendThrough: format ? "Phone" : "Email",
+			sendValue: this.sendInformation,
+			sendContent: message,
+		};
+		console.log('submit modal values---->>', obj)
+		this.affiliateService.affiliateNotification(obj)
+			.pipe(
+				catchError((err: any) => {
+					console.log('err------->>>>>>>', err)
+					return throwError(err)
+				})
+			).subscribe(({ message }: any) => {
+				this.notification_msg = message;
+				$("#notificationModal").modal("show");
+				$("textarea").val("");
+			})
+			$("#closeModal").click(() => {
+				$("#notificationModal").modal("hide");
+			});
+			$("#closeModal1").click(() => {
+				$("#notificationModal").modal("hide");
+			});
+		this.message.nativeElement.value = ""
+		this.show = false
+	}
+
 
 	//for pagination
-	counter()
-	{
+	counter() {
 		var currentPage;
 		var startFrom;
 		var endTo;
 
-		if (this.currentPage < 5)
-		{
+		if (this.currentPage < 5) {
 			startFrom = 0;
 			endTo = this.totalPage;
 		}
-		else if (this.currentPage < this.totalPage)
-		{
+		else if (this.currentPage < this.totalPage) {
 			currentPage = this.currentPage
 			endTo = currentPage + 1;
 			startFrom = endTo - 5;
 		}
-		else
-		{
+		else {
 			endTo = this.totalPage;
 			startFrom = endTo - 5;
 		}
 
 		var i;
 		var udpArr = new Array();
-		for (i = startFrom; i < endTo; i++)
-		{
+		for (i = startFrom; i < endTo; i++) {
 			udpArr.push(i + 1);
 		}
 		return udpArr;
 	}
 
-	changeDate(dateType, date)
-	{
-		if (dateType == 'startDate')
-		{
+	changeDate(dateType, date) {
+		if (dateType == 'startDate') {
 			this.startDate = date;
 		}
-		else
-		{
+		else {
 			this.endDate = date;
 		}
 	}
@@ -344,8 +323,8 @@ export class MyBookingsComponent implements OnInit
 	}
 
 	show = false
-	openModal(booking: any, selection_button: string)
-	{
+	openModal(booking: any, selection_button: string) {
+		console.log('open modal-->>>>>>>', selection_button)
 		this.passengerDetails = booking;
 		this.passengerDetails['selection_button'] = selection_button
 	}
@@ -368,39 +347,31 @@ export class MyBookingsComponent implements OnInit
 
 
 
-	editAction(bookingId, updateType)
-	{
-		if (updateType == 'change')
-		{
+	editAction(bookingId, updateType) {
+		if (updateType == 'change') {
 			this.router.navigate(['/affiliate/create-new-booking'], { queryParams: { bookingId: bookingId, updateType: updateType } });
 		}
-		else
-		{
+		else {
 			this.router.navigate(['/affiliate/create-new-booking'], { queryParams: { bookingId: bookingId } });
 		}
 	}
 
-	finalizeAction(bookingId)
-	{
+	finalizeAction(bookingId) {
 		this.router.navigate(['/affiliate/finalize-booking'], { queryParams: { bookingId: bookingId } });
 	}
 
-	returnRepeatAction(actionType, bookingId, serviceType)
-	{
+	returnRepeatAction(actionType, bookingId, serviceType) {
 		console.log(actionType, bookingId, serviceType);
 
-		if (actionType == 'return')
-		{
+		if (actionType == 'return') {
 			this.router.navigate(['/affiliate/create-new-booking'], { queryParams: { bookingId: bookingId, bookingType: 'return' } });
 		}
-		else
-		{
+		else {
 			this.router.navigate(['/affiliate/create-new-booking'], { queryParams: { bookingId: bookingId, bookingType: 'repeat' } });
 		}
 	}
 
-	get changeStatusF()
-	{
+	get changeStatusF() {
 		return this.changeStatusForm.controls;
 	}
 
@@ -411,13 +382,11 @@ export class MyBookingsComponent implements OnInit
 	// 	});
 	// }
 
-	submitChangeStatusForm()
-	{
+	submitChangeStatusForm() {
 		this.submitted = true;
 		console.log(this.changeStatusForm);
 		// stop here if form is invalid
-		if (this.changeStatusForm.invalid)
-		{
+		if (this.changeStatusForm.invalid) {
 			return;
 		}
 
@@ -425,21 +394,17 @@ export class MyBookingsComponent implements OnInit
 
 		this.affiliateService.changeStatusBooking(this.changeStatusForm.value)
 			.pipe(
-				catchError(err =>
-				{
+				catchError(err => {
 					this.spinner.hide();//hide spinner
 					$('#change_status_booking_Modal').modal('hide');
 					return throwError(err);
 				})
 			)
-			.subscribe(({ data, success, message }: any) =>
-			{
-				if (success == true)
-				{
+			.subscribe(({ data, success, message }: any) => {
+				if (success == true) {
 					this.spinner.hide();//hide spinner
 					$('#change_status_booking_Modal').modal('hide');
-					this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() =>
-					{
+					this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
 						this.router.navigate(['/affiliate/my-bookings']);
 					});
 				}
@@ -447,21 +412,18 @@ export class MyBookingsComponent implements OnInit
 	}
 
 
-	sendEmailClicked(bookingId, emailTarget)
-	{
+	sendEmailClicked(bookingId, emailTarget) {
 		this.sendEmailForm.patchValue({
 			reservation_id: bookingId,
 			emailTarget: emailTarget
 		});
 	}
 
-	emailForm()
-	{
+	emailForm() {
 		this.submitted = true;
 		console.log(this.sendEmailForm);
 		// stop here if form is invalid
-		if (this.sendEmailForm.invalid)
-		{
+		if (this.sendEmailForm.invalid) {
 			return;
 		}
 
@@ -469,21 +431,17 @@ export class MyBookingsComponent implements OnInit
 
 		this.affiliateService.sendEmail(this.sendEmailForm.value)
 			.pipe(
-				catchError(err =>
-				{
+				catchError(err => {
 					this.spinner.hide();//hide spinner
 					$('#emailModal').modal('hide');
 					return throwError(err);
 				})
 			)
-			.subscribe(({ data, success, message }: any) =>
-			{
-				if (success == true)
-				{
+			.subscribe(({ data, success, message }: any) => {
+				if (success == true) {
 					this.spinner.hide();//hide spinner
 					$('#emailModal').modal('hide');
-					this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() =>
-					{
+					this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
 						this.router.navigate(['/affiliate/my-bookings']);
 					});
 				}
@@ -504,31 +462,31 @@ export class MyBookingsComponent implements OnInit
 			|| (navigator.userAgent.includes("Mac") && "ontouchend" in document)
 	}
 
-	 showLocationPointOnMap(booking_id: number, type: string) {
-	
-				let isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-				console.log('isSafari', isSafari)
-				// this.spinner.show()
-				this.affiliateService.getLocationPoints(booking_id).subscribe((response: any) => {
-					this.spinner.hide();
-					if ("lat" in response?.data?.pickupDetail && "long" in response?.data?.pickupDetail && "lat" in response?.data?.dropoffDetail && "long" in response?.data?.dropoffDetail) {
-						sessionStorage.setItem('pickup', JSON.stringify(response?.data?.pickupDetail.address));
-						sessionStorage.setItem('dropoff', JSON.stringify(response?.data?.dropoffDetail.address));
-						const googleDirectionUrl = 'https://www.google.com/maps/dir/?api=1'+'&destination=' +
-							encodeURIComponent(response?.data?.pickupDetail.address) + '&travelmode=driving'
-						const iosDirectionUrl = 'http://maps.apple.com/?daddr=' +
-							encodeURIComponent(response?.data?.pickupDetail.address)
-						if (this.iOS()) {
-							setTimeout(() => {
-								window.location.href = iosDirectionUrl;
-							})
-						}
-						else {
-							window.open(googleDirectionUrl, '_blank');
-						}
-					} else {
-						throw new Error('Error: Location Points Not Specified Properly. ');
-					}
-				})
+	showLocationPointOnMap(booking_id: number, type: string) {
+
+		let isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+		console.log('isSafari', isSafari)
+		// this.spinner.show()
+		this.affiliateService.getLocationPoints(booking_id).subscribe((response: any) => {
+			this.spinner.hide();
+			if ("lat" in response?.data?.pickupDetail && "long" in response?.data?.pickupDetail && "lat" in response?.data?.dropoffDetail && "long" in response?.data?.dropoffDetail) {
+				sessionStorage.setItem('pickup', JSON.stringify(response?.data?.pickupDetail.address));
+				sessionStorage.setItem('dropoff', JSON.stringify(response?.data?.dropoffDetail.address));
+				const googleDirectionUrl = 'https://www.google.com/maps/dir/?api=1' + '&destination=' +
+					encodeURIComponent(response?.data?.pickupDetail.address) + '&travelmode=driving'
+				const iosDirectionUrl = 'http://maps.apple.com/?daddr=' +
+					encodeURIComponent(response?.data?.pickupDetail.address)
+				if (this.iOS()) {
+					setTimeout(() => {
+						window.location.href = iosDirectionUrl;
+					})
+				}
+				else {
+					window.open(googleDirectionUrl, '_blank');
+				}
+			} else {
+				throw new Error('Error: Location Points Not Specified Properly. ');
 			}
+		})
+	}
 }
