@@ -28,6 +28,7 @@ import { InvoiceSummaryComponent } from './invoice-summary/invoice-summary.compo
 import { FarmOutComponent } from './farm-out/farm-out.component';
 import { VehicleRateSettingsComponent } from './vehicle-rate-settings/vehicle-rate-settings.component';
 import { AffiliateFinalizeComponent } from './affiliate-finalize/affiliate-finalize.component';
+import { NewBookingComponent } from './new-booking/new-booking.component';
 
 const routes: Routes = [
 	{
@@ -127,6 +128,11 @@ const routes: Routes = [
 		path: 'create-new-booking',
 		canActivate: [AffiliateOtherRouteGuard],
 		component: CreateNewBookingComponent
+	},
+	{
+		path: 'new-booking',
+		canActivate: [AffiliateOtherRouteGuard],
+		component: NewBookingComponent
 	},
 	{
 		path: 'create-new-booking-detail',
