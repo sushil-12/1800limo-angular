@@ -4,6 +4,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from "ngx-spinner";
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
+declare var $: any;
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
 	selector: 'app-invoice-summary',
@@ -18,10 +20,13 @@ export class InvoiceSummaryComponent implements OnInit
 	public paramResponse: any;
 	public bookingId: any;
 	audit_Trail: Array<any>;
+	refundAmountForm:FormGroup
+	show:boolean = false
 	constructor(
 		private affiliateService: AffiliateService,
 		private router: Router,
 		private spinner: NgxSpinnerService,
+		private $form: FormBuilder,
 		private activatedroute: ActivatedRoute) { }
 
 	ngOnInit(): void
@@ -58,9 +63,19 @@ export class InvoiceSummaryComponent implements OnInit
 				}
 			});
 	}
+	buildRefundForm(){
+		this.refundAmountForm = this.$form.group({
+			refundAmount:['',[Validators.required]]
+		})
+	}
 	backButton()
 	{
 		this.router.navigate(['/affiliate/my-bookings'], { queryParams: { bookingId: this.bookingId } });
+	}
+	closeModal() {
+		this.refundAmountForm.patchValue({refundAmount:this.invoiceData.grand_total})
+		this.show = false
+		$("#refundModal").modal("hide");
 	}
 
 }

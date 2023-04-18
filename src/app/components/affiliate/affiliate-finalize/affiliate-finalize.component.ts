@@ -6,6 +6,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { AffiliateService } from 'src/app/services/affiliate.service';
+import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 
 @Component({
   selector: 'app-affiliate-finalize',
@@ -18,11 +19,13 @@ export class AffiliateFinalizeComponent implements OnInit {
   public BookingDetail:any;
   public transferType:any;
   init_rates: boolean;
+	edit_rates_value: any;
   finalize_btn : any = 'Finalize'
   constructor(
     private affiliateService: AffiliateService,
 		private router: Router,
 		private spinner: NgxSpinnerService,
+		private $errors: ErrorDialogService,
 		private fb: FormBuilder,
 		private activatedroute: ActivatedRoute
   ) { }
@@ -109,9 +112,35 @@ timeFormat2(value: string) {
     return moment(value, 'HH:mm a').format('h:mm a');
   }
 }
+RateFormValue(form: any) {
+  console.log('rate form value ------>>>>' , form)
+  this.edit_rates_value = form
+}
+
 
 submitForm(){
   this.finalize_btn = 'Finalized'
+		let rateArray = JSON.parse(JSON.stringify(this.edit_rates_value))
+		delete rateArray.sub_total
+		delete rateArray.grand_total
+		let body  = {
+			reservation_id : this.bookingId,
+			rateArray : rateArray,
+			sub_total : this.edit_rates_value.sub_total,
+			grand_total : this.edit_rates_value.grand_total
+		}
+    console.log('final obj -------------->>>>>>>',body)
+		console.log('\n\n Submitting Form' , body);
+			this.affiliateService.updateFinalizeRates(body).subscribe((response: any) => {
+				this.$errors.openDialog({
+					errors: {
+						error: `<span class='text-success'>${response.message}</span>`
+					}
+				})
+				// this.$router.navigate(['/admin/daily-bookings-admin'])
+				console.log('response-->>' , response)
+			})
+
 }
 
 
