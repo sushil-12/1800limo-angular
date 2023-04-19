@@ -681,8 +681,9 @@ export class SelectVehicleComponent implements OnInit
 				user = user == 'driver' ? 'affiliate' : user	// roleName of driver has to be directed to affiliate/..
 
 				this.$router.navigate([
-					'/' + user + '/'
-				])
+					'/' + user + '/create-new-booking'
+				],
+				{ queryParams: {affiliate_id:vehicle_selected.affiliate_id, vehicle_id:vehicle_selected.id,new : true } })
 			}
 		} else
 		{

@@ -278,7 +278,7 @@ export class AffiliateService
 	//Driver
 	async driverList()
 	{
-		const result = await this.httpClient.get(this.serverUrl + 'get-affiliate-driver-list').toPromise();
+		const result = await this.httpClient.get(this.serverUrl + 'get-affiliate-drivers').toPromise();
 		return result;
 	}
 	addDriver(data)
@@ -385,6 +385,10 @@ export class AffiliateService
 	}
 	updateFinalizeRates(data) {
 		return this.httpClient.post(`${this.serverUrl}finalize-rate-edit`, data)
+	}
+	async affiliateGetVehicleData() {
+		const result = await this.httpClient.get(this.serverUrl + 'get-all-vehicles').toPromise();
+		return result;
 	}
 
 	//Booking
