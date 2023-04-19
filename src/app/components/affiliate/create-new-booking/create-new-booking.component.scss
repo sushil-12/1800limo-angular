@@ -1,242 +1,146 @@
-.user_information {
-	border-radius: 20px;
-	margin       : 1.5rem 0;
-	box-shadow   : 0 5px 30px rgba(0, 0, 0, 0.4);
+.mat-checkbox-checked.mat-accent .mat-checkbox-background {
+	background-color: var(--orange);
 }
 
-.pad {
-	margin-top   : 50px;
-	margin-bottom: 25px;
+.mat-form-field-flex {
+	align-items: center;
+}
+hr{
+	border-top: 1px solid black
 }
 
-.topmargin {
-	margin-top: 32px;
+.section-container {
+	background-color: #fff;
+	color: #000;
+	border-radius: 12px;
+	padding: 12px;
+	width: 100%;
+	font-size: 1rem;
+	margin: 1.2rem auto;
+	box-shadow: 3px 3px 20px -6px rgba(40, 40, 40, 0.5);
 }
 
-.togglemargin {
-	margin-top : 25px;
-	line-height: 2;
+mat-form-field {
+	margin: 1rem 0 !important;
 }
 
-.choose_ameniteslist {
-	margin-top: 0px
+.mat-form-field.m-0 {
+	margin: 1rem 0 0 0 !important;
 }
 
-.notemargin {
-	margin-top: 32px;
+.extra-stop-field:not(.extra-stop-field:first-child) {
+	margin-top: 1.5rem;
 }
 
-.fs-4 {
-	font-size: 1.3rem;
+ul {
+	list-style: none;
 }
 
 .map-block {
 	padding: 0 10px;
-	margin : 4rem 0 2rem 0;
+	margin: 4rem 0 2rem 0;
 
 	.google_map {
-		width     : auto;
+		width: auto;
 		max-height: 300px;
-		height    : 300px;
+		height: 300px;
+
+		.map {
+			width: 100%;
+			height: 100%;
+			border-radius: 17px;
+		}
 	}
 }
 
-.map {
-	width        : 100%;
-	height       : 100%;
-	border-radius: 17px
+.section-dropdown {
+	overflow: hidden;
+	cursor: pointer;
+	height: 3.5rem;
+	transition: height 0.17s ease-in-out;
+
+	.section-dropdown-header {
+		color: var(--orange);
+	}
+
+	&.active {
+		height: fit-content;
+	}
+
+	// &.active#languages {
+	// 	height: 26rem;
+	// }
+	// &.active#dresses {
+	// 	height: 10rem;
+	// }
+	// &.active#amenities {
+	// 	height: 43rem;
+	// }
+	// &.active#images {
+	// 	height: 42rem;
+	// }
 }
 
-.topLabelClass.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
-	padding-left    : 0px;
-	background-color: #fff;
-	max-width       : 250px;
-	text-align      : center;
-	left            : -6px;
-}
 
-.asterisk {
-	content: ''
+#previewBooking {
+	.modal-body {
+		.row.m-0 {
+			padding: 0.3rem 0 !important;
+		}
+	}
+
+	.value {
+		font-size: 18px;
+	}
 }
 
 .vehtype_extint img {
-	height       : 200px;
-	width        : 100%;
-	border-radius: 15px;
-}
-
-.vehtype_extint .emptyImage {
-	height: 180px;
-	width : 100%;
-}
-
-.vehtype_extint .emptyImage img {
+	width: 100%;
 	height: 100%;
-	width : auto;
+	object-fit: cover;
+	cursor: zoom-in;
+	height: 220px !important;
+	border-radius: 15px !important;
 }
 
-.vehtype_extint p {
-	margin-bottom: 0 !important;
-}
-
-.vehtype_extint ul {
-	list-style: none;
-}
-
-.project-modal .modal-header {
-	padding       : 0rem 1rem;
-	flex-direction: column;
-}
-
-.project-modal .modal-header .modal-title {
-	width        : 100%;
-	color        : #f29439;
-	padding      : 0rem 1rem;
+.emptyImage {
+	position: relative;
+	border: 1px solid #717171;
 	border-radius: 15px;
-	line-height  : 50px;
-	margin-bottom: 5px;
+	height: 220px !important;
 }
 
-.project-modal .modal-header .close {
-	position        : absolute;
-	right           : 12px;
+@media (min-width:767px) and (max-width:991px) {
+	.text-danger {
+		color: #dc3545 !important;
+		font-size: 14px !important;
+	}
+
+	.looseError {
+		padding: 10px 15px !important;
+	}
+}
+
+.cellLabelClass.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
+	padding-left: 0px;
 	background-color: #fff;
-	opacity         : 1;
-	margin          : -0.9rem -0.6rem -0.6rem -1rem;
-	border-radius   : 15px;
-	height          : 48px;
-	line-height     : 16px;
+	max-width: 60px;
+	text-align: center;
+	left: -5px;
+	top: 30px;
+	font-weight: 700;
 }
 
-@media only screen and (min-width: 991px) {
-	.project-modal .modal-lg {
-		max-width: 650px;
-		position : relative;
-	}
-
-	.project-modal .modal-lg:before {
-		position      : absolute;
-		content       : "1-800-limo.com";
-		right         : -75px;
-		left          : auto;
-		top           : 50%;
-		bottom        : 0;
-		color         : #5c5c5c;
-		z-index       : 9;
-		font-size     : 65px;
-		text-transform: uppercase;
-		font-weight   : 700;
-		transform     : translatey(-50%) rotate(90deg);
-		opacity       : 0.2;
-	}
+.pcellLabelClass.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
+	padding-left: 0px;
+	background-color: #fff;
+	max-width: 130px;
+	text-align: center;
+	left: -5px;
+	top: 30px;
+	font-weight: 700;
 }
 
-#previewModal hr {
-	border          : 2px solid #000;
-	width           : 100px;
-	background-color: #000;
-	display         : block;
-	margin-top      : 0;
-}
-
-@media only screen and (min-width: 576px) {
-	.project-modal .modal-header .close {
-		position        : absolute;
-		width           : 42px;
-		height          : 42px;
-		border-radius   : 40px;
-		opacity         : 1;
-		background-color: #fff;
-		line-height     : 8px;
-		top             : 0px;
-		right           : -5px;
-		padding         : 1rem 0rem;
-		border          : 1px solid rgba(0, 0, 0, 0.7);
-	}
-
-	.project-modal .modal-dialog-scrollable .modal-content {
-		overflow: visible;
-	}
-}
-
-@media only screen and (max-width: 576px) {
-	.project-modal .modal-header .close {
-		background-color: #000;
-		margin          : 0rem -0.4rem 0rem 0rem;
-		border-radius   : 50px;
-		line-height     : 13px;
-		height          : 45px;
-	}
-
-	.project-modal .modal-header .close span {
-		color  : #fff;
-		opacity: 1;
-	}
-
-	.project-modal .modal-header .modal-title {
-		padding: 0rem;
-	}
-
-	#previewModal hr {
-		margin: 0;
-	}
-}
-
-.project-modal .headinginfoH2 {
-	border-bottom : 1px solid rgba(0, 0, 0, 0.2);
-	padding-bottom: 6px;
-	margin-bottom : 10px;
-	margin-top    : 10px;
-	font-size     : 1.3rem;
-	width         : 500px;
-	max-width     : 100%;
-}
-
-.project-modal .savebutton {
-	color           : #fff !important;
-	background-color: var(--green-color);
-	border-color    : var(--green-color);
-	padding         : 15px 40px;
-}
-
-.project-modal .savebutton:hover {
-	background-color: #28b24b;
-	border-color    : #28b24b;
-}
-
-.project-modal .headinginfoH2 a {
-	background-color: #e2e2e2;
-	color           : #000;
-	display         : inline-block;
-	width           : 29px;
-	border-radius   : 5px;
-	text-align      : center;
-	margin-left     : 10px;
-}
-
-.project-modal .headinginfoH2 a i {
-	position : relative;
-	top      : -1px;
-	font-size: 16px;
-}
-
-.project-modal .modal .modal-body .row .col-6:nth-child(2) {
-	font-family: 'PT Serif', serif !important;
-}
-
-// @media only screen and (min-width: 1920px)
-// {
-// 	.vehtype_extint .emptyImage
-// 	{
-// 		width: auto
-// 	}
-// }
-
-
-.small-btn {
-	padding         : 7px 14px;
-	border-radius   : 13px;
-	margin          : auto 13px;
-	border          : 1px solid #00abe8;
-	background-color: #00abe8;
+.labelClass {
+	font-weight: 700;
 }
