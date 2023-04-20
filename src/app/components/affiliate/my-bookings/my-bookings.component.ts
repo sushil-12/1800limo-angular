@@ -50,6 +50,7 @@ export class MyBookingsComponent implements OnInit {
 	timer: any
 	isAffiliate: boolean = false
 	isLooseAffiliate: boolean = false;
+	audit_Trail:any;
 
 	constructor(
 		private affiliateService: AffiliateService,
@@ -166,6 +167,22 @@ export class MyBookingsComponent implements OnInit {
 		{
 			return text
 		}
+	}
+	auditTrail(bookingId: any) {
+		console.log('In function audit trail', bookingId)
+		this.spinner.show()
+		this.affiliateService.auditTrailInfo(bookingId)
+			.pipe(
+				catchError((err) => {
+					return throwError(err);
+				})
+			)
+			.subscribe((response: any) => {
+				this.spinner.hide()
+				console.log('audit trail --->>>>>>>>', response)
+				this.audit_Trail = response.data
+				// $("#AuditTrailModal").modal("hide");
+			});
 	}
 
 	bookingPreview: any;

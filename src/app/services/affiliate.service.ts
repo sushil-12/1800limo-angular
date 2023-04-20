@@ -380,6 +380,9 @@ export class AffiliateService
 	getBookingPreview(reservation_id: number) {
 		return this.httpClient.get(`${this.serverUrl}get-booking-preview/${reservation_id}`);
 	}
+	auditTrailInfo(bookingId){
+		return this.httpClient.get(this.serverUrl+`booking-audit-records/${bookingId}`)
+	}
 	affiliateNotification(data) {
 		return this.httpClient.post(this.serverUrl + 'notification-daily-booking', data);
 	}
