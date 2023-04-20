@@ -192,9 +192,7 @@
 											(click)="openModal(booking, 'Affiliate')"
 											*ngIf="booking?.affiliate_type != 'gig_operator'; else gigOperator">
 											<span class="font-weight-bolder"
-												[innerHTML]="highlighText(booking?.driver_first_name)"></span>&nbsp;
-											<span class="font-weight-bolder"
-												[innerHTML]="highlighText(booking?.driver_last_name)"></span> |
+												[innerHTML]="highlighText(booking?.driver_name)"></span>&nbsp;|
 											<span
 												[innerHTML]="highlighText(booking?.driver_tel)"></span>
 										
