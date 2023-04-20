@@ -5,7 +5,7 @@
 	<div class="invoicesum_header">
 		<div class="row">
 			<div class="col-md-6">
-				<h3 class="text-lg pl-0">Booking # {{ BookingDetail?.reservation_id }}</h3>
+				<h3 class="text-lg pl-0">Booking # {{ this.bookingId }}</h3>
 			</div>
 			<div class="col-md-6 text-right">
 				<h3 class="text-lg pl-0">Payment Status # {{ BookingDetail?.payment_status | titlecase}}</h3>
@@ -41,51 +41,51 @@
 
 	<div class="col-md-4 field" *ngIf="BookingDetail?.pickup_address">
 		<p>Pickup Address: </p>
-		<strong>$ {{ BookingDetail?.pickup_address }}</strong>
+		<strong> {{ BookingDetail?.pickup_address }}</strong>
 	</div>
 	<div class="col-md-4 field" *ngIf="BookingDetail?.pickup_airport_name">
 		<p>Pickup Airport: </p>
-		<strong>$ {{ BookingDetail?.pickup_airport_name }}</strong>
+		<strong>{{ BookingDetail?.pickup_airport_name }}</strong>
 	</div>
 	<div class="col-md-4 field" *ngIf="BookingDetail?.pickup_airline_name">
 		<p>Pickup Airline: </p>
-		<strong>$ {{ BookingDetail?.pickup_airline_name }}</strong>
+		<strong> {{ BookingDetail?.pickup_airline_name }}</strong>
 	</div>
 	<div class="col-md-4 field" *ngIf="BookingDetail?.pickup_flight">
 		<p>Pickup Flight Number: </p>
-		<strong>$ {{ BookingDetail?.pickup_flight }}</strong>
+		<strong>{{ BookingDetail?.pickup_flight }}</strong>
 	</div>
 	<div class="col-md-4 field" *ngIf="BookingDetail?.origin_airport_city">
 		<p>Pickup Origin Airport / City: </p>
-		<strong>$ {{ BookingDetail?.origin_airport_city }}</strong>
+		<strong>{{ BookingDetail?.origin_airport_city }}</strong>
 	</div>
 	<div class="col-md-4 field" *ngIf="BookingDetail?.dropoff_address">
 		<p>Drop-Off Address: </p>
-		<strong>$ {{ BookingDetail?.dropoff_address }}</strong>
+		<strong>{{ BookingDetail?.dropoff_address }}</strong>
 	</div>
 	<div class="col-md-4 field" *ngIf="BookingDetail?.dropoff_airport_name">
 		<p>Drop-Off Airport: </p>
-		<strong>$ {{ BookingDetail?.dropoff_airport_name }}</strong>
+		<strong>{{ BookingDetail?.dropoff_airport_name }}</strong>
 	</div>
 	<div class="col-md-4 field" *ngIf="BookingDetail?.dropoff_airline_name">
 		<p>Drop-Off Airline: </p>
-		<strong>$ {{ BookingDetail?.dropoff_airline_name }}</strong>
+		<strong>{{ BookingDetail?.dropoff_airline_name }}</strong>
 	</div>
 	<div class="col-md-4 field" *ngIf="BookingDetail?.dropoff_flight">
 		<p> Drop-Off Flight Number: </p>
-		<strong>$ {{ BookingDetail?.dropoff_flight }}</strong>
+		<strong>{{ BookingDetail?.dropoff_flight }}</strong>
 	</div>
 	<div class="col-md-4 field" *ngIf="BookingDetail?.stop_1">
 		<p> Extra Stops Number 2: </p>
-		<strong>$ {{ BookingDetail?.stop_1 }}</strong>
+		<strong>{{ BookingDetail?.stop_1 }}</strong>
 	</div>
 	<div class="col-md-4 field" *ngIf="BookingDetail?.stop_2">
 		<p> Extra Stops Number 3: </p>
-		<strong>$ {{ BookingDetail?.stop_2 }}</strong>
+		<strong>{{ BookingDetail?.stop_2 }}</strong>
 	</div>
 	<div class="col-md-4 field" *ngIf="BookingDetail?.meet_greet_choices">
 		<p> Meet and Greet Choices: </p>
-		<strong>$ {{ BookingDetail?.meet_greet_choices }}</strong>
+		<strong>{{ BookingDetail?.meet_greet_choices }}</strong>
 	</div>
 	<div class="col-md-4 field">
 		<p>Pickup Date </p>
@@ -369,214 +369,12 @@
 	</div>
 </section>
 
-<section class="section-container" *ngIf="BookingDetail?.payment_status=='unpaid'">
-	<div class="col-md-12 p-0" (click)="handlePaymentSection()">
-		<h4 class="section-dropdown-header mb-0">
-			Payment
-		</h4>
-		<p [ngClass]="chevron ? 'bi bi-chevron-down' : 'bi bi-chevron-up'"></p>
-	</div>
-	<div class="row" *ngIf="paymentSection">
-
-		<!-- RADIO BUTTONS -->
-		<div class="col-md-12 cardSection">
-			<div class="radio">
-				<input id="card" name="paymentMethod" type="radio" checked (click)="changeDetection('card')">
-				<label for="card" class="radio-label">Payment with Card</label>
-			</div>
-			<div class="methodCard" *ngIf="paymentMethod=='card'">
-				<table class="table table-borderless">
-					<thead class="bg-transparent">
-						<tr>
-							<th scope="col"></th>
-							<th scope="col">Name on Card</th>
-							<th scope="col">Card Number</th>
-							<th scope="col">Expires on</th>
-							<th scope="col"></th>
-						</tr>
-					</thead>
-					<tbody *ngIf="CardsInformation.length > 0; else noData">
-						<tr *ngFor="let item of CardsInformation">
-							<td>
-								<input id="selectCard" name="selectCard" type="radio"
-									(click)="changeDetection('card'); handleChangeCard(item)"
-									[checked]="item.cc_prority=='Primary' && !isCardFormOpen">
-							</td>
-							<td>{{item.name}}</td>
-							<td>{{item.last4}}</td>
-							<td>{{item.exp_month}}/{{item.exp_year}}</td>
-							<td (click)="deleteCardClicked(item)" 
-							data-toggle="modal" data-target="#warnDeleteCard"><i class="bi bi-trash3-fill m-0"></i></td>
-						</tr>
-					</tbody>
-					<ng-template #noData>
-						<tbody>
-							<p class="text-danger text-lg">No
-								Card Found !</p>
-						</tbody>
-					</ng-template>
-				</table>
-				<a class="addCardClass" (click)="changeDetection('new_card')">
-					<input id="card" name="AddCard" type="radio" [checked]="isCardFormOpen">
-					<img src="../../../../assets/images/credit-card.png" alt="">
-					Add a credit or debit card</a>
-			</div>
-			<!-- Credit Card Details -->
-
-			<form class="container-fluid" [formGroup]="cardForm" appInvalidControlScroll>
-
-				<div id="credit-card-details" class="px-4" *ngIf="paymentMethod=='card' && isCardFormOpen">
-					<div class="row">
-						<!-- Card Holder Name -->
-						<div class="col-md-4 my-2">
-							<mat-form-field appearance="outline" class="m-0">
-								<mat-label class="required-field">
-									Card Holder
-								</mat-label>
-								<input matInput placeholder="First & Last Name" type="text" formControlName="name"
-									tabindex="0" (focus)="$event.target.select()">
-							</mat-form-field>
-							<div class="error-message"
-								*ngIf="cardForm.controls.name.invalid && (cardForm.controls.name.touched || cardForm.controls.name.dirty)">
-								<p class="text-danger text-lg m-0" *ngIf="cardForm.controls.name.errors?.required">
-									This field is required
-								</p>
-								<div class="text-danger text-lg m-0" *ngIf="cardForm.controls.name.errors?.pattern">
-									Only character allowed
-								</div>
-							</div>
-						</div>
-						<!-- Card Number -->
-						<div class="col-md-4 my-2">
-							<mat-form-field appearance="outline" class="m-0">
-								<mat-label class="required-field">
-									Card Number
-								</mat-label>
-								<input matInput placeholder="xxxx xxxx xxxx xxxx" type="text"
-									formControlName="card_number" tabindex="0" (focus)="$event.target.select()">
-							</mat-form-field>
-							<div class="error-message"
-								*ngIf="cardForm.controls.card_number.invalid && (cardForm.controls.card_number.touched || cardForm.controls.card_number.dirty)">
-								<p class="text-danger text-lg m-0"
-									*ngIf="cardForm.controls.card_number.errors?.required">
-									This field is required
-								</p>
-								<div class="text-danger text-lg m-0"
-									*ngIf="cardForm.controls.card_number.errors.minlength;">Required min 12 no.
-								</div>
-								<div class="text-danger text-lg m-0"
-									*ngIf="cardForm.controls.card_number.errors.maxlength">Exceeded max limit
-								</div>
-								<!-- <ng-template #invalidPattern > -->
-								<div class="text-danger text-lg m-0"
-									*ngIf="cardForm.controls.card_number.errors.pattern;">Invalid card number
-								</div>
-								<!-- </ng-template> -->
-							</div>
-						</div>
-
-						<!-- Expiration Month -->
-						<div class="col-md-4 my-2">
-							<mat-form-field appearance="outline" class="m-0">
-								<mat-label class="required-field">
-									Expiration Month
-								</mat-label>
-								<mat-select formControlName="exp_month" tabindex="0">
-									<mat-option value='01'>01</mat-option>
-									<mat-option value='02'>02</mat-option>
-									<mat-option value='03'>03</mat-option>
-									<mat-option value='04'>04</mat-option>
-									<mat-option value='05'>05</mat-option>
-									<mat-option value='06'>06</mat-option>
-									<mat-option value='07'>07</mat-option>
-									<mat-option value='08'>08</mat-option>
-									<mat-option value='09'>09</mat-option>
-									<mat-option value='10'>10</mat-option>
-									<mat-option value='11'>11</mat-option>
-									<mat-option value='12'>12</mat-option>
-								</mat-select>
-							</mat-form-field>
-							<div class="error-message"
-								*ngIf="cardForm.controls.exp_month.invalid && (cardForm.controls.exp_month.touched || cardForm.controls.exp_month.dirty)">
-								<p class="text-danger text-lg m-0" *ngIf="cardForm.controls.exp_month.errors?.required">
-									This field is required
-								</p>
-							</div>
-						</div>
-
-						<!-- Expiration Year -->
-						<div class="col-md-4 my-2">
-							<mat-form-field appearance="outline" class="m-0">
-								<mat-label class="required-field">
-									Expiration Year
-								</mat-label>
-								<mat-select formControlName="exp_year" tabindex="0">
-									<mat-option [value]="number" *ngFor="let number of card_params.years">
-										{{ number }}
-									</mat-option>
-								</mat-select>
-							</mat-form-field>
-							<div class="error-message"
-								*ngIf="cardForm.controls.exp_year.invalid && (cardForm.controls.exp_year.touched || cardForm.controls.exp_year.dirty)">
-								<p class="text-danger text-lg m-0" *ngIf="cardForm.controls.exp_year.errors?.required">
-									This field is required
-								</p>
-							</div>
-						</div>
-
-						<!-- CVV -->
-						<div class="col-md-4 my-2">
-							<mat-form-field appearance="outline" class="m-0">
-								<mat-label class="required-field">
-									CVV
-								</mat-label>
-								<input matInput placeholder="0000" type="text" tabindex="0"
-									(focus)="$event.target.select()" formControlName="cvv">
-							</mat-form-field>
-							<div class="error-message"
-								*ngIf="cardForm.controls.cvv.invalid && (cardForm.controls.cvv.touched || cardForm.controls.cvv.dirty)">
-								<p class="text-danger text-lg m-0" *ngIf="cardForm.controls.cvv.errors?.required">
-									This field is required
-								</p>
-								<p class="text-danger text-lg m-0" *ngIf="cardForm.controls.cvv.errors?.pattern">
-									Contains only numbers
-								</p>
-								<p class="text-danger text-lg m-0" *ngIf="cardForm.controls.cvv.errors?.maxlength">
-									Contains atmost 4 digit
-								</p>
-							</div>
-						</div>
-						<div class="col-md-12" hidden="true">
-							<mat-checkbox [color]="primary" formControlName="save_card_detail">Save
-								details</mat-checkbox>
-						</div>
-					</div>
-				</div>
-			</form>
-
-		</div>
-		<div class="col-md-12 my-3 cardSection">
-			<div class="radio">
-				<input id="cash" name="paymentMethod" type="radio"  (click)="changeDetection('cash')">
-				<label for="cash" class="radio-label">Payment with Cash</label>
-			</div>
-		</div>
-
-		<div class="col-md-12 text-right mr-4">
-			<button type="button" class="custom-filled-button m-3 mr-4" (click)="makePayment()">
-				Pay
-			</button>
-		</div>
-	</div>
-</section>
-<!-- Payment Section End -->
-
 
 
 
 <!-- modal -->
 
-
+<!-- 
 <div class="modal fade" id="warnDeleteCard" tabindex="-1" role="dialog" aria-labelledby="warnDeleteCard" aria-hidden="true">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
@@ -592,4 +390,4 @@
 			</div>
 		</div>
 	</div>
-</div>
+</div> -->
