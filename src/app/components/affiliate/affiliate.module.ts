@@ -50,6 +50,7 @@ import { VehicleRateSettingsComponent } from './vehicle-rate-settings/vehicle-ra
 import { AffiliateFinalizeComponent } from './affiliate-finalize/affiliate-finalize.component';
 import { AffiliateFinalizeRatesComponent } from './affiliate-finalize-rates/affiliate-finalize-rates.component';
 import { NewBookingComponent } from './new-booking/new-booking.component';
+import { NgxPrintModule } from 'ngx-print';
 
 @NgModule({
 	declarations: [
@@ -101,7 +102,8 @@ import { NewBookingComponent } from './new-booking/new-booking.component';
 		NgSelectModule,
 		MatRadioModule,
 		// PinchZoomModule,
-		SharedModule
+		SharedModule,
+		NgxPrintModule
 	]
 })
 export class AffiliateModule { }
