@@ -172,8 +172,9 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 		).subscribe(({ data }: any) => {
 			if (Object.keys(data.priceDetail).length) {
 				this.response = data
-				this.grandtotal = data.grand_total
-				this.subtotal = data.sub_total
+				this.grandtotal = data?.grand_total
+				this.subtotal = data?.sub_total
+				this.vehicles= data?.booking_detail?.number_of_vehicles
 				console.log('subtotal-->>' , this.subtotal)
 				this.ratesdata.next(data.priceDetail);
 				this.spinner.hide();

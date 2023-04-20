@@ -1684,6 +1684,17 @@ export class NewBookingComponent implements OnInit {
 		console.log(event, form_control)
 		event && this.SetFormValue(form_control, event.id);
 	}
+	tConvert (time) {
+		// Check correct time format and split into components
+		time = time.toString ().match (/^([01]\d|2[0-3])(:)([0-5]\d)(:[0-5]\d)?$/) || [time];
+	  
+		if (time.length > 1) { // If time format correct
+		  time = time.slice (1);  // Remove full string match value
+		  time[5] = +time[0] < 12 ? ' am' : ' pm'; // Set AM/PM
+		  time[0] = +time[0] % 12 || 12; // Adjust hours
+		}
+		return time.join (''); // return adjusted time or original string
+	  }
 
   setValueByBookNow(){
     let QB :any = JSON.parse(localStorage.getItem('quotebot_form')) 
@@ -1701,7 +1712,6 @@ export class NewBookingComponent implements OnInit {
     this.SetFormValue('number_of_hours',QB?.booking_hour)
     //pickup
     this.SetFormValue('pickup_date',QB?.pickup_date)
-    this.SetFormValue('pickup_time',QB?.pickup_time)
     this.SetFormValue('pickup' ,QB?.pickup_address)
     this.SetFormValue('pickup_latitude' ,QB?.pickup_address_lat)
     this.SetFormValue('pickup_longitude' ,QB?.pickup_address_long)
@@ -1710,7 +1720,7 @@ export class NewBookingComponent implements OnInit {
     this.SetFormValue('pickup_airport' ,QB?.pickup_airport)
     this.SetFormValue('pickup_airport_latitude' ,QB?.pickup_airport_lat)
     this.SetFormValue('pickup_airport_longitude' ,QB?.pickup_airport_long)
-
+	
     //dropOFF
     this.SetFormValue('dropoff' ,QB?.dropoff_address)
     this.SetFormValue('dropoff_latitude' ,QB?.dropoff_address_lat)
@@ -1718,11 +1728,10 @@ export class NewBookingComponent implements OnInit {
     this.SetFormValue('dropoff_airport' ,QB?.dropoff_airport  )
     this.SetFormValue('dropoff_airport_latitude' ,QB?.dropoff_airport_lat)
     this.SetFormValue('dropoff_airport_longitude' ,QB?.dropoff_address_long)
-
+	
     
     //return pickup
     this.SetFormValue('return_pickup_date',QB?.return_pickup_date)
-    this.SetFormValue('return_pickup_time',QB?.return_pickup_time)
     this.SetFormValue('return_pickup' ,QB?.return_dropoff_address)
     this.SetFormValue('return_pickup_latitude' ,QB?.return_dropoff_address_lat)
     this.SetFormValue('return_pickup_longitude' ,QB?.return_dropoff_address_long)
@@ -1738,6 +1747,8 @@ export class NewBookingComponent implements OnInit {
     this.SetFormValue('return_dropoff_airport_latitude' ,QB?.return_dropoff_airport_lat)
     this.SetFormValue('return_dropoff_airport_longitude' ,QB?.return_dropoff_airport_long)
     
+	this.SetFormValue('pickup_time',this.tConvert(QB?.pickup_time))
+    this.SetFormValue('return_pickup_time',this.tConvert(QB?.return_pickup_time))
     // this.MapController()
     // this.MapController(true)
   }

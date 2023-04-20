@@ -50,7 +50,7 @@ export class MyBookingsComponent implements OnInit {
 	timer: any
 	isAffiliate: boolean = false
 	isLooseAffiliate: boolean = false;
-	audit_Trail:any;
+	audit_Trail: any;
 
 	constructor(
 		private affiliateService: AffiliateService,
@@ -266,12 +266,12 @@ export class MyBookingsComponent implements OnInit {
 				$("#notificationModal").modal("show");
 				$("textarea").val("");
 			})
-			$("#closeModal").click(() => {
-				$("#notificationModal").modal("hide");
-			});
-			$("#closeModal1").click(() => {
-				$("#notificationModal").modal("hide");
-			});
+		$("#closeModal").click(() => {
+			$("#notificationModal").modal("hide");
+		});
+		$("#closeModal1").click(() => {
+			$("#notificationModal").modal("hide");
+		});
 		this.message.nativeElement.value = ""
 		this.show = false
 	}
@@ -491,18 +491,35 @@ export class MyBookingsComponent implements OnInit {
 			if ("lat" in response?.data?.pickupDetail && "long" in response?.data?.pickupDetail && "lat" in response?.data?.dropoffDetail && "long" in response?.data?.dropoffDetail) {
 				sessionStorage.setItem('pickup', JSON.stringify(response?.data?.pickupDetail.address));
 				sessionStorage.setItem('dropoff', JSON.stringify(response?.data?.dropoffDetail.address));
-				const googleDirectionUrl = 'https://www.google.com/maps/dir/?api=1' + '&destination=' +
-					encodeURIComponent(response?.data?.pickupDetail.address) + '&travelmode=driving'
-				const iosDirectionUrl = 'http://maps.apple.com/?daddr=' +
-					encodeURIComponent(response?.data?.pickupDetail.address)
-				if (this.iOS()) {
-					setTimeout(() => {
-						window.location.href = iosDirectionUrl;
-					})
+				if (type == 'pickup') {
+					const googleDirectionUrl = 'https://www.google.com/maps/dir/?api=1' + '&destination=' +
+						encodeURIComponent(response?.data?.pickupDetail.address) + '&travelmode=driving'
+					const iosDirectionUrl = 'http://maps.apple.com/?daddr=' +
+						encodeURIComponent(response?.data?.pickupDetail.address)
+					if (this.iOS()) {
+						setTimeout(() => {
+							window.location.href = iosDirectionUrl;
+						})
+					}
+					else {
+						window.open(googleDirectionUrl, '_blank');
+					}
 				}
-				else {
-					window.open(googleDirectionUrl, '_blank');
+				else if (type == 'dropoff') {
+					const googleDirectionUrl = 'https://www.google.com/maps/dir/?api=1' + '&destination=' +
+						encodeURIComponent(response?.data?.dropoffDetail.address) + '&travelmode=driving'
+					const iosDirectionUrl = 'http://maps.apple.com/?daddr=' +
+						encodeURIComponent(response?.data?.dropoffDetail.address)
+					if (this.iOS()) {
+						setTimeout(() => {
+							window.location.href = iosDirectionUrl;
+						})
+					}
+					else {
+						window.open(googleDirectionUrl, '_blank');
+					}
 				}
+
 			} else {
 				throw new Error('Error: Location Points Not Specified Properly. ');
 			}
