@@ -145,6 +145,12 @@
 												<div class="dropdown-item-icon"></div>
 												Email Customer
 											</a>
+											<a class="dropdown-item" (click)="auditTrail(booking.booking_id)"
+												data-toggle="modal" data-target="#AuditTrailModal">
+												<!-- *ngIf="booking.payment_status!='paid'" -->
+												<div class="dropdown-item-icon"></div>
+												Audit Trial
+											</a>
 											<a class="dropdown-item">
 												<div class="dropdown-item-icon"></div>
 												Cancel
@@ -356,7 +362,7 @@
 </div> -->
 
 <!-- Audit trail Modal -->
-<!-- <div class="modal fade bd-example-modal-lg" id="AuditTrailModal" tabindex="-1" role="dialog"
+<div class="modal fade bd-example-modal-lg" id="AuditTrailModal" tabindex="-1" role="dialog"
 	aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg" role="document">
 		<div class="modal-content user_information bottom-container">
@@ -389,7 +395,7 @@
 			</div>
 		</div>
 	</div>
-</div> -->
+</div>
 
 <!-- send email and call modal -->
 <div class="modal fade" id="sendEmailModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
