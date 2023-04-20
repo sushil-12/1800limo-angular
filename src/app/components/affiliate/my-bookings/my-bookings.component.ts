@@ -320,7 +320,9 @@ export class MyBookingsComponent implements OnInit {
 	dateFormat2(value: any) {
 		return moment(value, 'YYYY-MM-DD').format('L')
 	}
-
+	FormatTime(time: string) {
+		return moment(time, "HH:mm:ss").format("LT");
+	}
 	timeFormat(value: any) {
 		if (value.toUpperCase() == '12:00 AM') {
 			return '0000 h'

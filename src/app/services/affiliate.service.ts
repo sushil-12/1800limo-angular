@@ -393,6 +393,12 @@ export class AffiliateService
 		const result = await this.httpClient.get(this.serverUrl + 'get-all-vehicles').toPromise();
 		return result;
 	}
+	sendInvoiveToCustomer(bookingId:any){
+		return this.httpClient.get(`${this.serverUrl}send-invoice/${bookingId}`)
+	}
+	refund(body:any){
+		return this.httpClient.post(`${this.serverUrl}refund-request`,body)
+	}
 
 	//Booking
 	loadBookings(url, keyword, startDate, endDate)
@@ -405,6 +411,19 @@ export class AffiliateService
 		else
 		{
 			path = this.serverUrl + 'get-bookings' + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword;
+		}
+		return this.httpClient.get(path).toPromise();
+	}
+	loadFarmoutBookings(url, keyword, startDate, endDate)
+	{
+		var path;
+		if (url)
+		{
+			path = url + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword;
+		}
+		else
+		{
+			path = this.serverUrl + 'get-farm-out-bookings' + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword;
 		}
 		return this.httpClient.get(path).toPromise();
 	}

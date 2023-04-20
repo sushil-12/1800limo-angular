@@ -101,6 +101,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { FinalizeRatesComponent } from './finalize-rates/finalize-rates.component';
 import { NgxPrintModule } from 'ngx-print';
 import { BadgeCitiesComponent } from './badge-cities/badge-cities.component';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @NgModule({
 	declarations: [
@@ -194,6 +195,7 @@ import { BadgeCitiesComponent } from './badge-cities/badge-cities.component';
 		Ng2TelInputModule,
 		AgmCoreModule,
 		AgmDirectionModule,
+		MatNativeDateModule,
 		MatFormFieldModule,
 		MatInputModule,
 		MatSelectModule,
