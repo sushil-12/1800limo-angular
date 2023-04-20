@@ -23,7 +23,7 @@ export class MyBookingsComponent implements OnInit {
 	public firstPage: Number;
 	public lastPage: Number;
 	public totalPage: Number;
-	public currentPage: Number;
+	public currentPage: any;
 	public from: Number;
 	public to: Number;
 	public path: string;
@@ -98,7 +98,7 @@ export class MyBookingsComponent implements OnInit {
 		// var keyword = ((document.getElementById("keyword") as HTMLInputElement).value);
 		// Load Our bookings using API
 		this.affiliateService.loadBookings(pageUrl, this.searchText, this.startDate, this.endDate).then(result => {
-			console.log('result---->>>', result)
+			console.log('result------------------------->>>', result)
 			this.bookingsRes = result;
 			this.bookings = this.bookingsRes?.data?.data;
 			this.totalRecords = this.bookingsRes?.data?.total;
