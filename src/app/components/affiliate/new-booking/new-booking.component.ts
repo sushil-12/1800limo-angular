@@ -407,6 +407,9 @@ export class NewBookingComponent implements OnInit {
 					}
 				}
 			}
+			this.SetFormValue('pickup_time',this.FormatTime(response?.data?.pickup_time))
+			this.SetFormValue('cruise_time',this.FormatTime(response?.data?.cruise_time)) 
+			this.SetFormValue('return_pickup_time',this.FormatTime(response?.data?.return_pickup_time))
 			this.SetFormValue('pickup_airport_option', this.BigData?.airportsData?.find((item: any) => item?.id == this.Form?.pickup_airport?.value));
 			this.SetFormValue('pickup_airline_option', this.BigData?.airlinesData?.find((item: any) => item?.id == this.Form?.pickup_airline?.value));
 			this.SetFormValue('dropoff_airport_option', this.BigData?.airportsData?.find((item: any) => item?.id == this.Form?.dropoff_airport?.value));
@@ -1695,6 +1698,9 @@ export class NewBookingComponent implements OnInit {
 		}
 		return time.join (''); // return adjusted time or original string
 	  }
+	  FormatTime(time: string) {
+		return moment(time, "HH:mm:ss").format("LT");
+	}
 
   setValueByBookNow(){
     let QB :any = JSON.parse(localStorage.getItem('quotebot_form')) 
@@ -1747,7 +1753,7 @@ export class NewBookingComponent implements OnInit {
     this.SetFormValue('return_dropoff_airport_latitude' ,QB?.return_dropoff_airport_lat)
     this.SetFormValue('return_dropoff_airport_longitude' ,QB?.return_dropoff_airport_long)
     
-	this.SetFormValue('pickup_time',this.tConvert(QB?.pickup_time))
+	// this.SetFormValue('pickup_time','12:00 am')
     this.SetFormValue('return_pickup_time',this.tConvert(QB?.return_pickup_time))
     // this.MapController()
     // this.MapController(true)
