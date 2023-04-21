@@ -1,6 +1,6 @@
 <!-- Rates and Taxes -->
 <ngx-spinner></ngx-spinner>
-<div *ngIf="ratesform" [formGroup]="RatesForm" class="section-dropdown finalizeRates mt-5"
+<div *ngIf="ratesform" [formGroup]="RatesForm" class="section-dropdown finalizeRates mt-2"
 	[ngClass]="{'w-100': ratesform && !returnratesform, 'w-50': ratesform && returnratesform}"
 	[ngStyle]="affiliate_type == 'affiliate' ? {'height': '0', 'padding': '0'} : ''">
 	<div class="row cursor-pointer" (click)="toggleDropdown('section')">
@@ -44,7 +44,7 @@
 			class="row rates-row align-items-center justify-content-between mx-auto"
 			*ngFor="let sub_item of item?.value?.controls | keyvalue: returnZero; index as sub_item_index">
 			<!-- Base Rate -->
-			<div class="col-6 col-sm-3 col-md-5 my-3" [formGroupName]="sub_item.key"
+			<div class="col-6 col-sm-3 col-md-4 my-3" [formGroupName]="sub_item.key"
 				*ngIf="sub_item.key !== 'Minimum_Rate'">
 				<div class="rate-label">
 					<mat-form-field appearance="outline" class="m-0">
@@ -92,7 +92,7 @@
 			</div>
 
 			<!-- Admin Share -->
-			<div class="col-5 col-sm-5 col-md-5" *ngIf="sub_item.key == 'Base_Rate' ">
+			<div class="col-5 col-sm-5 col-md-4" *ngIf="sub_item.key == 'Base_Rate' ">
 				<div>
 					<mat-form-field appearance="outline" class="m-0">
 						<mat-label>

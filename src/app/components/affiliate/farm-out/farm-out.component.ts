@@ -82,14 +82,22 @@ export class FarmOutComponent implements OnInit
 			`
 			// $('#farmout-modal').modal('show')
 		}
+
 		let date = new Date();
 		// Set Search Filters According to cookies or the intial state
-		this.startDate = date.toISOString().substring(0, 10);
+		this.startDate = this.$affiliateService.checkCookie('farmout_startDate') ?
+			this.$affiliateService.getCookie('farmout_startDate') :
+			date.toISOString().substring(0, 10);
 
 		date.setDate(date.getDate() + 7);
-		this.endDate = date.toISOString().substring(0, 10);
+		this.endDate = this.$affiliateService.checkCookie('farmout_endDate') ?
+			this.$affiliateService.getCookie('farmout_endDate') :
+			date.toISOString().substring(0, 10);
 
-		this.searchText =  "";
+		this.searchText = this.$affiliateService.checkCookie('farmout_search') ?
+			this.$affiliateService.getCookie('farmout_search')
+			: "";
+
 		this.changeStatusForm = this.formBuilder.group({
 			reservation_id: ['', Validators.required],
 			booking_status: ['', Validators.required]
@@ -146,9 +154,28 @@ export class FarmOutComponent implements OnInit
 		this.searchText = search_value
 		console.log('--->>>>>', search_value)
 		clearTimeout(this.timer);
+		this.saveCookie('farmout_search',search_value)
 		this.timer = setTimeout(() => {
 			this.loadBookings(null)
 		}, 700)
+	}
+	saveCookie(key: string, value: string) {
+		console.log('in function set cookies for',key,value)
+		this.$affiliateService.setCookie(key, value, 30);
+	}
+	reset() {
+		let date = new Date();
+		this.startDate = date.toISOString().substring(0, 10);
+		date.setDate(date.getDate() + 7);
+		this.endDate = date.toISOString().substring(0, 10);
+		this.$affiliateService.deleteCookie('farmout_startDate')
+		this.$affiliateService.deleteCookie('farmout_endDate')
+		this.$affiliateService.deleteCookie('farmout_search')
+		// this.affiliateService.deleteCookie('filtertype')
+		this.searchText = "";
+		// this.filtertype = 'bookingid';
+
+		console.log('Reset Successfully. ');
 	}
 
 	dateFormat(value: any) {
@@ -301,27 +328,43 @@ export class FarmOutComponent implements OnInit
 		let isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 		console.log('isSafari', isSafari)
 		// // this.spinner.show()
-		// this.affiliateService.getLocationPoints(booking_id).subscribe((response: any) => {
-		// 	this.spinner.hide();
-		// 	if ("lat" in response?.data?.pickupDetail && "long" in response?.data?.pickupDetail && "lat" in response?.data?.dropoffDetail && "long" in response?.data?.dropoffDetail) {
-		// 		sessionStorage.setItem('pickup', JSON.stringify(response?.data?.pickupDetail.address));
-		// 		sessionStorage.setItem('dropoff', JSON.stringify(response?.data?.dropoffDetail.address));
-		// 		const googleDirectionUrl = 'https://www.google.com/maps/dir/?api=1' + '&destination=' +
-		// 			encodeURIComponent(response?.data?.pickupDetail.address) + '&travelmode=driving'
-		// 		const iosDirectionUrl = 'http://maps.apple.com/?daddr=' +
-		// 			encodeURIComponent(response?.data?.pickupDetail.address)
-		// 		if (this.iOS()) {
-		// 			setTimeout(() => {
-		// 				window.location.href = iosDirectionUrl;
-		// 			})
-		// 		}
-		// 		else {
-		// 			window.open(googleDirectionUrl, '_blank');
-		// 		}
-		// 	} else {
-		// 		throw new Error('Error: Location Points Not Specified Properly. ');
-		// 	}
-		// })
+		this.$affiliateService.getLocationPoints(booking_id).subscribe((response: any) => {
+			this.$spinner.hide();
+			if ("lat" in response?.data?.pickupDetail && "long" in response?.data?.pickupDetail && "lat" in response?.data?.dropoffDetail && "long" in response?.data?.dropoffDetail) {
+				sessionStorage.setItem('pickup', JSON.stringify(response?.data?.pickupDetail.address));
+				sessionStorage.setItem('dropoff', JSON.stringify(response?.data?.dropoffDetail.address));
+				if (type == 'pickup') {
+					const googleDirectionUrl = 'https://www.google.com/maps/dir/?api=1' + '&destination=' +
+						encodeURIComponent(response?.data?.pickupDetail.address) + '&travelmode=driving'
+					const iosDirectionUrl = 'http://maps.apple.com/?daddr=' +
+						encodeURIComponent(response?.data?.pickupDetail.address)
+					if (this.iOS()) {
+						setTimeout(() => {
+							window.location.href = iosDirectionUrl;
+						})
+					}
+					else {
+						window.open(googleDirectionUrl, '_blank');
+					}
+				}
+				else if (type == 'dropoff') {
+					const googleDirectionUrl = 'https://www.google.com/maps/dir/?api=1' + '&destination=' +
+						encodeURIComponent(response?.data?.dropoffDetail.address) + '&travelmode=driving'
+					const iosDirectionUrl = 'http://maps.apple.com/?daddr=' +
+						encodeURIComponent(response?.data?.dropoffDetail.address)
+					if (this.iOS()) {
+						setTimeout(() => {
+							window.location.href = iosDirectionUrl;
+						})
+					}
+					else {
+						window.open(googleDirectionUrl, '_blank');
+					}
+				}
+			} else {
+				throw new Error('Error: Location Points Not Specified Properly. ');
+			}
+		})
 	}
 
 	submit(message, format) {

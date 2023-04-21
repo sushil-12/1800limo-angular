@@ -1112,9 +1112,9 @@ a.user-profile:active::after {
     color: var(--orange-color) !important;
 }
 
-#layoutSidenav_content main {
+/* #layoutSidenav_content main {
     padding: 0 20px;
-}
+} */
 
 .affilate_admin {
     padding: 20px 0px;

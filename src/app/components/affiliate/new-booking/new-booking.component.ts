@@ -1753,8 +1753,10 @@ export class NewBookingComponent implements OnInit {
     this.SetFormValue('return_dropoff_airport_latitude' ,QB?.return_dropoff_airport_lat)
     this.SetFormValue('return_dropoff_airport_longitude' ,QB?.return_dropoff_airport_long)
     
-	// this.SetFormValue('pickup_time','12:00 am')
-    this.SetFormValue('return_pickup_time',this.tConvert(QB?.return_pickup_time))
+	this.SetFormValue('pickup_time',this.FormatTime(QB?.pickup_time))
+    this.SetFormValue('return_pickup_time',this.FormatTime(QB?.return_pickup_time))
+	this.SetFormValue('cruise_time',this.FormatTime(QB?.pickup_time))
+	this.SetFormValue('return_cruise_time',this.FormatTime(QB?.return_pickup_time))
     // this.MapController()
     // this.MapController(true)
   }
