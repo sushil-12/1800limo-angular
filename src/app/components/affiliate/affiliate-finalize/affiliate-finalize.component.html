@@ -357,8 +357,10 @@
 
 </section>
 <section class="section-container mt-2">
-	<app-affiliate-finalize-rates class="d-flex flex-wrap finalize-rates" [reservation_id]="bookingId"
-	(formvalue)="RateFormValue($event)">
+	<app-affiliate-finalize-rates *ngIf="init_rates" class="d-flex flex-wrap finalize-rates" [initRates]="init_rates"
+	[affiliate_type]="'loose_affiliate'" (formvalue)="RateFormValue($event)" [distance]="finalize_params.distance"
+	[reservation_id]="finalize_params.booking_id" [reset]="false" [hours]="finalize_params.number_of_hours"
+	[vehicles]="finalize_params.number_of_vehicles">
 	</app-affiliate-finalize-rates>
 	<div class="row mb-3" id="submitForm">
 		<div class="col-md-12 text-right">
