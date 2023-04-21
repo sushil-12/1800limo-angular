@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { BehaviorSubject, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -12,6 +13,7 @@ import { AffiliateService } from 'src/app/services/affiliate.service';
 })
 export class AffiliateFinalizeRatesComponent implements OnInit {
 	@Input("initRates") init_rates: boolean = false;
+	@Input("initReturnRates") init_r_rates: boolean = false;
 	@Input("affiliate_type") affiliate_type: string = "";
 	@Input("distance") distance: string = "";
 	@Input("reservation_id") bookingId: number = 0;
@@ -19,15 +21,18 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 	@Input("hours") nums: number = 0;
 	@Input('reset') reset: boolean = false;
 
-
-
+	// Throw Events.
 	@Output("formvalue") formvalue = new EventEmitter<Record<string, any>>();
+	@Output("returnformvalue") returnformvalue = new EventEmitter<Record<string, any>>();
 
-	ratesform: boolean = true;
-	ratesdata = new BehaviorSubject<any>({});
 	RatesForm: FormGroup;
-	response:any;
+	ReturnRatesForm: FormGroup;
 
+	ratesdata = new BehaviorSubject<any>({});
+	temp: any;
+
+	ratesform: boolean = false;
+	returnratesform: boolean = false;
 
 	rate_params: any = {
 		chevrons: {
@@ -38,79 +43,137 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 			taxes: false,
 			amenities: false,
 			misc: false,
+			r_section: true,
+			r_all_inclusive_rates: true,
+			r_others: false,
+			r_direct_taxes: false,
+			r_taxes: false,
+			r_amenities: false,
+			r_misc: false,
 		},
 	};
-
 
 	minimum_rate: Record<string, any>;
 
 	total: Record<string, any> = {};
+	r_total: Record<string, any> = {};
 
 	subtotal: number = 0;
+	r_subtotal: number = 0;
 	grandtotal: number = 0;
+	r_grandtotal: number = 0;
 	admin_share: number = 25;
 	calc_admin_share: number = 0;
+	r_calc_admin_share: number = 0;
 
 	vehicles: number = 1;
 	hours: number = 0;
 
 	constructor(
 		private $form: FormBuilder,
+		// private $api: AdminService,
 		private affiliateService: AffiliateService,
-		private spinner: NgxSpinnerService
+		private $spinner: NgxSpinnerService,
+		private $route: ActivatedRoute,
 	) { }
 
 	ngOnInit(): void {
-		
+		this.$route.queryParams.subscribe((params: any) => {
+			(params.bookingId) ? this.fetchRates('', params.bookingId) : ""
+		});
+
+	}
+	ngAfterViewInit(){
+		this.scroll('grandTotal')
 	}
 
 	ngOnChanges(changes: SimpleChanges) {
 		console.warn("Change has been detected: ", changes);
 
-		if (changes?.bookingId && changes?.bookingId?.currentValue != 0) {
+
+
+		this.ratesform = changes.init_rates?.currentValue ?? this.ratesform;
+		this.returnratesform =
+			changes.init_r_rates?.currentValue ?? this.returnratesform;
+
+		// if asked to initialise the rates
+		if (changes.init_rates?.currentValue) {
 			this.initRates();
+		}
+
+
+		if (changes.nums) {
+			this.hours = Number(changes.nums.currentValue)
+			if (this.RateForm.all_inclusive_rates.controls.Base_Rate) {
+				this.hours > 0 && this.RatesForm && this.calculateAmount('RatesForm', 'all_inclusive_rates', 'Base_Rate');
+			}
+			else {
+				if (this.RateForm.all_inclusive_rates.controls.Milage_Rate) {
+					this.hours > 0 && this.RatesForm && this.calculateAmount('RatesForm', 'all_inclusive_rates', 'Milage_Rate');
+				}
+				if (this.RateForm.all_inclusive_rates.controls.Kilometer_Rate) {
+					this.hours > 0 && this.RatesForm && this.calculateAmount('RatesForm', 'all_inclusive_rates', 'Kilometer_Rate');
+				}
+
+			}
+		}
+
+		this.vehicles = changes.vehs ? changes.vehs.currentValue : this.vehicles;
+		if (this.vehicles) {
+			this.calculateGrandTotal('RatesForm');
+			if (this.ReturnRatesForm) {
+				this.calculateGrandTotal('ReturnRatesForm');
+			}
+		} else {
+			console.log('Resetting Number of Vehicles ');
+			this.vehicles = 1;
+		}
+
+		if (changes.bookingId && changes.bookingId.currentValue !== 0) {
+			this.fetchRates("", changes.bookingId?.currentValue)
+
+			this.getRatesData().subscribe((response: any) => {
+				if (response && Object.keys(response).length > 0) {
+					for (let item in this.RateForm) {
+						for (let key in (<FormGroup>this.RatesForm.get(item)).controls) {
+							console.log(item, key);
+							let baserate = response[item][key]["baserate"];
+							let type = response[item][key]["type"] ?? "flat";
+							(<FormGroup>((<FormGroup>this.RatesForm.get(item)).get(key))).get("baserate").setValue(baserate);
+							if ((<FormGroup>((<FormGroup>this.RatesForm.get(item)).get(key))).get("type")) {
+								(<FormGroup>((<FormGroup>this.RatesForm.get(item)).get(key))).get("type").setValue(type);
+							}
+						}
+					}
+				}
+			})
+		}
+
+		if (changes.reset && changes.reset.currentValue) {
+			this.RatesForm = null
+			this.ReturnRatesForm = null
+			this.total = {}
+			this.r_total = {}
+			this.initRates()
+			this.calculateTotal('RatesForm')
+			this.calculateGrandTotal('RatesForm')
+			if (this.ReturnRatesForm) {
+				this.initReturnRates()
+				this.calculateTotal('ReturnRatesForm')
+				this.calculateGrandTotal('ReturnRatesForm')
+			}
 		}
 	}
 
-
-
-
-
-	// fetchRates() {
-	// 	this.affiliateService.getBookingData(this.bookingId)
-	// 		.pipe(
-	// 			catchError(err => {
-	// 				this.spinner.hide();//hide spinner
-	// 				return throwError(err);
-	// 			})
-	// 		).subscribe(({ data }: any) => {
-	// 			if (Object.keys(data.priceDetail).length) {
-	// 				this.ratesdata.next(data.priceDetail);
-	// 			}
-	// 			else {
-	// 				console.error('Could not fetch Rates Data. ')
-	// 			}
-	// 		})
-	// }
-
-
-
-	getRatesData() {
-		return this.ratesdata.asObservable();
-	}
-
-	toggleDropdown(section: string) {
-		this.rate_params["chevrons"][section] = !this.rate_params["chevrons"][section];
-	}
-
-	handleSubHeadingScroll(items: string, id: any) {
-		this.rate_params["chevrons"][items] = !this.rate_params["chevrons"][items];
+	scroll(id) {
 		let el = document.getElementById(id);
-		console.log(`scrolling to ${id}`, el);
-		setTimeout(() => {
-			el.scrollIntoView();
-		}, 600)
+		console.log(`scrolling to ${id}` , el);
+		el.scrollIntoView();
+	  }
+	returnZero() {
+		return 0;
 	}
+
 	textFormatter(text: string) {
 		try {
 			return text.replace(/[\\\_$]+/g, " ");
@@ -119,41 +182,11 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 		}
 	}
 
-
-
-	buildRatesForm(form: string, data: Record<string, any>): FormGroup {
-		// Base Value for foundation of the whole algorithm
-		if (data.hasOwnProperty("rate_label")) {
-			return this.$form.group({ ...data });
-		}
-
-		for (let key in data) {
-			if (Array.isArray(data[key])) {
-				// TODO do thing for array type
-				console.log("Data contains array.");
-				return;
-			}
-			// if inner values contains object, ONLY
-			else Object.values(data[key]).length > 0;
-			{
-				for (let item in data[key]) {
-					if (form === "RatesForm") {
-						console.log('field created--->>>', key, item);
-						(<FormGroup>this.RatesForm.get(key)).addControl(item, this.buildRatesForm(form, data[key][item]));
-						(<FormGroup>((<FormGroup>this.RatesForm.get(key)).get(item))).get("baserate").valueChanges.subscribe((value: number) => {
-							this.calculateAmount("RatesForm", key, item);
-						});
-					}
-				}
-			}
-		}
-	}
-
-
-
 	initRates() {
-		this.spinner.show()
 		console.log("Init Rates");
+
+		this.RatesForm = this.$form.group({});
+		// build form
 		this.RatesForm = this.$form.group({
 			all_inclusive_rates: this.$form.group({}),
 			others: this.$form.group({}),
@@ -162,33 +195,13 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 			amenities: this.$form.group({}),
 			misc: this.$form.group({}),
 		});
-		console.log('Rates form init()')
-		this.affiliateService.getBookingData(this.bookingId)
-		.pipe(
-			catchError(err => {
-				this.spinner.hide();//hide spinner
-				return throwError(err);
-			})
-		).subscribe(({ data }: any) => {
-			if (Object.keys(data.priceDetail).length) {
-				this.response = data
-				this.grandtotal = data?.grand_total
-				this.subtotal = data?.sub_total
-				this.vehicles= data?.booking_detail?.number_of_vehicles
-				console.log('subtotal-->>' , this.subtotal)
-				this.ratesdata.next(data.priceDetail);
-				this.spinner.hide();
-			}
-			else {
-				console.error('Could not fetch Rates Data. ')
-			}
-		})
-		this.getRatesData().subscribe((data: any) => {
-			this.buildRatesForm("RatesForm", data);
-			console.info('rates form 1--->>>>>',this.RatesForm)
-			
-		})
 
+		// fetch the data from backend
+		this.getRatesData().subscribe((response) => {
+			if (response && Object.keys(response).length > 0) {
+				this.buildRatesForm('RatesForm', response);
+			}
+		})
 
 		// will send the rates form value to the booking component on any change in the whole form
 		this.RatesForm.valueChanges.subscribe((value: any) => {
@@ -207,8 +220,46 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 		});
 	}
 
+	async initReturnRates() {
+		console.log("Init Return Rates");
 
+		this.ReturnRatesForm = this.$form.group({
+			all_inclusive_rates: this.$form.group({}),
+			others: this.$form.group({}),
+			direct_taxes: this.$form.group({}),
+			taxes: this.$form.group({}),
+			amenities: this.$form.group({}),
+			misc: this.$form.group({}),
+		});
 
+		this.getRatesData().subscribe((response: any) => {
+			if (response && Object.keys(response).length > 0) {
+				this.buildRatesForm('ReturnRatesForm', response);
+				if (this.bookingId) {
+					for (let formgroup in this.ReturnRateForm) {
+						for (let subform in this.ReturnRateForm[formgroup].controls) {
+							this.calculateAmount('ReturnRatesForm', formgroup, subform)
+						}
+					}
+				}
+			}
+		});
+
+		this.ReturnRatesForm.valueChanges.subscribe((value: any) => {
+			this.calculateTotal("ReturnRatesForm");
+			this.calculateGrandTotal('ReturnRatesForm');
+		});
+
+		(<FormGroup>this.ReturnRatesForm.get('all_inclusive_rates')).valueChanges.subscribe(() => {
+			for (let formgroup in this.ReturnRateForm) {
+				for (let subform in this.ReturnRateForm[formgroup].controls) {
+					if (formgroup != 'all_inclusive_rates') {
+						this.calculateAmount('ReturnRatesForm', formgroup, subform)
+					}
+				}
+			}
+		})
+	}
 
 	get RateForm(): Record<string, any> {
 		if (!this.RatesForm) {
@@ -217,29 +268,86 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 		return this.RatesForm.controls;
 	}
 
-	calculateGrandTotal(form: "RatesForm") {
-		console.log('in function calculate grand total' ,this.grandtotal,this.response.grand_total )
-		this.grandtotal = this.grandtotal || this.response.grand_total 
-		this.subtotal  = this.subtotal  || this.response.sub_total
-		if (form === "RatesForm" && this.RatesForm) {
-			if (this.vehicles !== 0) {
-				this.grandtotal = Number(this.subtotal.toFixed(2)) * this.vehicles;
-			}
-			let value = this.RatesForm.value;
-			value["grand_total"] = this.grandtotal || this.response.grand_total ;
-			value["sub_total"] = this.subtotal || this.response.sub_total;
+	get ReturnRateForm(): Record<string, any> {
+		if (!this.ReturnRatesForm) {
+			return;
+		}
+		return this.ReturnRatesForm.controls;
+	}
 
-			this.formvalue.emit(value);
+	changeValue(form: string, formgroup: string, subform: string, formcontrol: string, value: any) {
+		if (form === "RatesForm") {
+			(<FormGroup>(<FormGroup>this.RatesForm.get(formgroup)).get(subform)).get(formcontrol).setValue(value);
+			this.RatesForm.updateValueAndValidity();
+		}
+		if (form === "ReturnRatesForm") {
+			(<FormGroup>((<FormGroup>this.ReturnRatesForm.get(formgroup)).get(subform))).get(formcontrol).setValue(value);
+			this.ReturnRatesForm.updateValueAndValidity();
+		}
+	}
+
+	fetchRates(affiliate: string, bookingId: number = 0) {
+		this.$spinner.show()
+		this.affiliateService.getBookingData(bookingId).subscribe((response: any) => {
+			this.$spinner.hide()
+			if (response?.success && response?.data?.priceDetail) {
+				if(Object.keys(response.data.priceDetail).length){
+					this.ratesdata.next(response.data.priceDetail);
+				}
+				else{
+					this.fetchRates(affiliate , null)
+				}
+			}
+		});
+	}
+
+	getRatesData() {
+		return this.ratesdata.asObservable();
+	}
+
+	buildRatesForm(form: string, data: Record<string, any>): FormGroup {
+		// Base Value for foundation of the whole algorithm
+		if (data.hasOwnProperty("rate_label")) {
+			return this.$form.group({ ...data });
+		}
+
+		for (let key in data) {
+			if (Array.isArray(data[key])) {
+				// TODO do thing for array type
+				console.log("Data contains array.");
+				return;
+			}
+			// if inner values contains object, ONLY
+			else Object.values(data[key]).length > 0;
+			{
+				for (let item in data[key]) {
+					if (form === "RatesForm") {
+						console.log(key, item);
+						(<FormGroup>this.RatesForm.get(key)).addControl(item, this.buildRatesForm(form, data[key][item]));
+						(<FormGroup>((<FormGroup>this.RatesForm.get(key)).get(item))).get("baserate").valueChanges.subscribe((value: number) => {
+							this.calculateAmount("RatesForm", key, item);
+						});
+						this.calculateAmount("RatesForm", key, item);
+					}
+					
+				}
+			}
 		}
 	}
 
 
-	calculateTotal(form: "RatesForm") {
-		console.log('in function calculate total')
+	calculateTotal(form: "RatesForm" | "ReturnRatesForm") {
 		if (form === "RatesForm") {
 			this.subtotal = 0;
 			for (let item in this.total) {
 				this.subtotal = Number(this.subtotal.toFixed(2)) + Number(this.total[item].toFixed(2));
+			}
+		}
+
+		if (form === "ReturnRatesForm") {
+			this.r_subtotal = 0;
+			for (let item in this.r_total) {
+				this.r_subtotal = Number(this.r_subtotal.toFixed(2)) + Number(this.r_total[item].toFixed(2));
 			}
 		}
 	}
@@ -253,12 +361,60 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 			}
 			return temp
 		}
+		if (form === 'ReturnRatesForm') {
+			let temp = 0
+			for (let subform in this.ReturnRateForm.all_inclusive_rates.controls) {
+				let amount = (<FormGroup>((<FormGroup>this.ReturnRatesForm.get('all_inclusive_rates')).get(subform))).get("amount").value
+				temp += amount
+			}
+			return temp
+		}
+	}
+
+	calculateGrandTotal(form: "RatesForm" | "ReturnRatesForm") {
+		if (form === "RatesForm" && this.RatesForm) {
+			if (this.vehicles !== 0) {
+				this.grandtotal = Number(this.subtotal.toFixed(2)) * this.vehicles;
+			}
+			let value = this.RatesForm.value;
+			value["grand_total"] = this.grandtotal;
+			value["sub_total"] = this.subtotal;
+
+			this.formvalue.emit(value);
+		}
+		if (form == 'ReturnRatesForm' && this.ReturnRatesForm) {
+			if (this.vehicles !== 0) {
+				this.r_grandtotal = Number(this.r_subtotal.toFixed(2)) * this.vehicles;
+			}
+			let value = this.ReturnRatesForm.value;
+			value["r_grandtotal"] = this.r_grandtotal;
+			value["r_subtotal"] = this.r_subtotal;
+
+			this.returnformvalue.emit(value);
+		}
+	}
+
+	toggleDropdown(section: string) {
+		this.rate_params["chevrons"][section] = !this.rate_params["chevrons"][section];
+	}
+
+	handleSubHeading(items: string) {
+		console.log(items, "check items")
+		this.rate_params["chevrons"][items] = !this.rate_params["chevrons"][items];
+	}
+
+	handleSubHeadingScroll(items: string , id:any) {
+		this.rate_params["chevrons"][items] = !this.rate_params["chevrons"][items];
+		let el = document.getElementById(id);
+		console.log(`scrolling to ${id}` , el);
+		setTimeout(()=>{
+			el.scrollIntoView();
+		},600)
 	}
 
 
-
 	async calculateAmount(form: string, formgroup: string, subform: string) {
-		console.log('in function calculate Ammount')
+		console.log('in function calculate amount')
 		if (form === "RatesForm") {
 			let baserate = (<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("baserate").value;
 
@@ -328,8 +484,10 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 			let amount = (<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("amount").value;
 			this.total[subform] = Number(Number(amount).toFixed(2));
 			this.RatesForm.updateValueAndValidity();
+			console.log('in function calculate amount end__________',this.total)
 		}
 
+		// console.log(this.total, this.r_total);
 	}
 
 }

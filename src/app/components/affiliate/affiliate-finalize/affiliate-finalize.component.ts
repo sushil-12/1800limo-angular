@@ -20,7 +20,7 @@ export class AffiliateFinalizeComponent implements OnInit {
 	public transferType: any;
 	public deleteCardForm: FormGroup;
 	cardForm: FormGroup
-	init_rates: boolean;
+	init_rates: boolean=false;
 	edit_rates_value: any;
 	finalize_btn: any = 'Finalize'
 	isCardFormOpen: boolean = false
@@ -30,6 +30,12 @@ export class AffiliateFinalizeComponent implements OnInit {
 	paymentSection: boolean = true;
 	chevron: boolean = true
 
+	finalize_params = {
+		distance: 0,
+		number_of_hours: 0,
+		number_of_vehicles: 0,
+		booking_id: 0
+	}
 	constructor(
 		private affiliateService: AffiliateService,
 		private $form: FormBuilder,
@@ -75,9 +81,10 @@ export class AffiliateFinalizeComponent implements OnInit {
 				console.log('response getBookingData Affiliate--->>>>', data)
 				this.BookingDetail = data?.booking_detail
 				this.transferType = this.BookingDetail?.transfer_type
+				this.finalize_params.number_of_vehicles = data?.booking_detail?.number_of_vehicles
 				this.init_rates = true;
-				this.CardsInformation = data.cards
-				this.selectedCard = this.CardsInformation.filter(i=> i.cc_prority == 'Primary')[0]
+				// this.selectedCard = this.CardsInformation.filter(i=> i.cc_prority == 'Primary')[0]
+				// this.CardsInformation = data.cards
 			})
 	}
 
