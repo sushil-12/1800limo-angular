@@ -531,6 +531,8 @@ export class HomeComponent implements OnInit
 			})
 		}
 
+		console.log('airport data-------->>>>>>>>>',this.airports_data)
+
 		// assign the value to form control if airport code is entered, as the code will give zero results for airport.
 		if (this.airports_data.length == 0)
 		{

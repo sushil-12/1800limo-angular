@@ -52,24 +52,6 @@
 				</div>
 			</div>
 			<div class="row my-2 mb-3">
-				<!-- <div class="col-md-3">
-					<div id="filter-type">
-						<mat-form-field appearance="outline" class="m-0">
-							<mat-label>
-								Filter Type
-							</mat-label>
-							<mat-select [value]="filtertype" (selectionChange)="changeFilterType($event.value)">
-								<mat-option value="bookingid"> Booking Id </mat-option>
-								<mat-option value="paxname"> Pax Name </mat-option>
-								<mat-option value="paxphone"> Pax Phone </mat-option>
-								<mat-option value="drivername"> Driver Name </mat-option>
-								<mat-option value="driverphone"> Driver Phone </mat-option>
-								<mat-option value="pickup"> Pickup </mat-option>
-								<mat-option value="dropoff"> Dropoff </mat-option>
-							</mat-select>
-						</mat-form-field>
-					</div>
-				</div> -->
 				<div class="col-md-12">
 					<div id="search-field">
 						<mat-form-field appearance="outline" class="m-0">
@@ -130,7 +112,8 @@
 												Finalize
 											</a>
 											<a class="dropdown-item" routerLink="/affiliate/invoice-summary"
-												[queryParams]="{bookingId: booking?.booking_id}" *ngIf="booking?.payment_status=='paid'">
+												[queryParams]="{bookingId: booking?.booking_id}"
+												*ngIf="booking?.payment_status=='paid'">
 												<div class="dropdown-item-icon"></div>
 												Invoice
 											</a>
@@ -189,17 +172,15 @@
 										</span>
 									</td>
 									<td>
-										
-											<p data-target="#sendEmailModal" data-toggle="modal"
-												(click)="openModal(booking, 'Affiliate')"
-												>
-												<span class="font-weight-bolder"
-													[innerHTML]="highlighText(booking?.driver_name)"></span>&nbsp;
-												|
-												<span
-													[innerHTML]="highlighText(booking?.driver_tel)"></span>
-											</p>
-											
+
+										<p data-target="#sendEmailModal" data-toggle="modal"
+											(click)="openModal(booking, 'Affiliate')">
+											<span class="font-weight-bolder"
+												[innerHTML]="highlighText(booking?.driver_name)"></span>&nbsp;
+											|
+											<span [innerHTML]="highlighText(booking?.driver_tel)"></span>
+										</p>
+
 										<span class="text-underline cursor-pointer"
 											(click)="showLocationPointOnMap(booking?.booking_id, 'dropoff')">
 											<span [innerHTML]="highlighText(booking?.dropoff_address)"></span>
@@ -222,41 +203,41 @@
 					<p class="text-danger text-lg" *ngIf="noError">
 						No Results Found?.
 					</p>
+					<!----PAGINATION---->
+					<!----BACK BTN---->
+					<nav aria-label="Page navigation example" *ngIf="totalRecords > 15">
+						<ul class="pagination pagination-circle pg-blue">
+							<li *ngIf="currentPage!=1" class="page-item disabled"
+								(click)="loadBookings(firstPageUrl, startDate, endDate, searchText, filtertype)">
+								<a class="page-link">First</a>
+							</li>
+							<li *ngIf="currentPage!=1" class="page-item disabled"
+								(click)="loadBookings(prevPageUrl, startDate, endDate, searchText, filtertype)">
+								<a class="page-link" aria-label="Previous">
+									<span aria-hidden="true">&laquo;</span>
+									<span class="sr-only">Previous</span>
+								</a>
+							</li>
+							<li *ngFor="let in of counter() ;let i = index"
+								[ngClass]="(in==currentPage)?'page-item active':'page-item'"
+								(click)="loadBookings(path+'?page='+in, startDate, endDate, searchText, filtertype)"
+								[disabled]="(in==currentPage)?true:false">
+								<a class="page-link">{{in}}</a>
+							</li>
+							<li *ngIf="currentPage!=lastPage" class="page-item"
+								(click)="loadBookings(nextPageUrl, startDate, endDate, searchText, filtertype)">
+								<a class="page-link" aria-label="Next">
+									<span aria-hidden="true">&raquo;</span>
+									<span class="sr-only">Next</span>
+								</a>
+							</li>
+							<li *ngIf="currentPage!=lastPage" class="page-item"
+								(click)="loadBookings(lastPageUrl, startDate, endDate, searchText, filtertype)">
+								<a class="page-link">Last</a>
+							</li>
+						</ul>
+					</nav>
 				</div>
-				<!----PAGINATION---->
-				<!----BACK BTN---->
-				<!-- <nav aria-label="Page navigation example" *ngIf="totalRecords > 15">
-					<ul class="pagination pagination-circle pg-blue">
-						<li *ngIf="currentPage!=1" class="page-item disabled"
-							(click)="loadBookings(firstPageUrl, startDate, endDate, searchText, filtertype)">
-							<a class="page-link">First</a>
-						</li>
-						<li *ngIf="currentPage!=1" class="page-item disabled"
-							(click)="loadBookings(prevPageUrl, startDate, endDate, searchText, filtertype)">
-							<a class="page-link" aria-label="Previous">
-								<span aria-hidden="true">&laquo;</span>
-								<span class="sr-only">Previous</span>
-							</a>
-						</li>
-						<li *ngFor="let in of counter() ;let i = index"
-							[ngClass]="(in==currentPage)?'page-item active':'page-item'"
-							(click)="loadBookings(path+'?page='+in, startDate, endDate, searchText, filtertype)"
-							[disabled]="(in==currentPage)?true:false">
-							<a class="page-link">{{in}}</a>
-						</li>
-						<li *ngIf="currentPage!=lastPage" class="page-item"
-							(click)="loadBookings(nextPageUrl, startDate, endDate, searchText, filtertype)">
-							<a class="page-link" aria-label="Next">
-								<span aria-hidden="true">&raquo;</span>
-								<span class="sr-only">Next</span>
-							</a>
-						</li>
-						<li *ngIf="currentPage!=lastPage" class="page-item"
-							(click)="loadBookings(lastPageUrl, startDate, endDate, searchText, filtertype)">
-							<a class="page-link">Last</a>
-						</li>
-					</ul>
-				</nav> -->
 			</div>
 		</div>
 	</section>
@@ -619,7 +600,7 @@
 					</div> -->
 
 					<!-- Affiliate -->
-					<div >
+					<div>
 						<h4 class="font-weight m-0 mt-3">
 							{{bookingPreview?.affiliate_type == 'affiliate' ? 'Affiliate Information' : 'LOose'}}
 						</h4>
@@ -634,7 +615,8 @@
 								</div>
 								<div class="col-md-8 value">
 									<span class="font-weight-bolder preview-output-feild">
-										{{isAffiliate ? bookingPreview?.affiliate_name : bookingPreview?.lose_affiliate_name }}
+										{{isAffiliate ? bookingPreview?.affiliate_name :
+										bookingPreview?.lose_affiliate_name }}
 									</span>
 								</div>
 							</div>
@@ -650,7 +632,8 @@
 								</div>
 								<div class="col-md-8 value">
 									<span class="font-weight-bolder preview-output-feild">
-										{{isAffiliate ? bookingPreview?.affiliate_email : bookingPreview?.lose_affiliate_email }}
+										{{isAffiliate ? bookingPreview?.affiliate_email :
+										bookingPreview?.lose_affiliate_email }}
 									</span>
 								</div>
 							</div>
@@ -666,8 +649,9 @@
 								</div>
 								<div class="col-md-8 value">
 									<span class="font-weight-bolder preview-output-feild">
-										{{isAffiliate ? bookingPreview?.affiliate_phone : bookingPreview?.lose_affiliate_phone }}
-										
+										{{isAffiliate ? bookingPreview?.affiliate_phone :
+										bookingPreview?.lose_affiliate_phone }}
+
 									</span>
 								</div>
 							</div>

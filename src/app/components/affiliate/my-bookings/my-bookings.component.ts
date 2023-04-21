@@ -127,6 +127,7 @@ export class MyBookingsComponent implements OnInit {
 	searchInBookings(search_value: string) {
 		this.searchText = search_value
 		console.log('--->>>>>', search_value)
+		this.saveCookie('affiliate_search',search_value)
 		clearTimeout(this.timer);
 		this.timer = setTimeout(() => {
 			this.loadBookings(null)
@@ -142,6 +143,7 @@ export class MyBookingsComponent implements OnInit {
 		}
 	}
 	saveCookie(key: string, value: string) {
+		console.log('in function set cookies for',key,value)
 		this.affiliateService.setCookie(key, value, 30);
 	}
 

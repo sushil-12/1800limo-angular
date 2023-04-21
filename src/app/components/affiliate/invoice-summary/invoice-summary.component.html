@@ -12,11 +12,11 @@
 				</svg> -->
 				Print Invoice</button>
 		</div>
-		<div *ngIf="invoiceData.billing_detail.payment_method =='credit_card' && invoiceData.invoice_status!='refund'">
+		<!-- <div *ngIf="invoiceData.billing_detail.payment_method =='credit_card' && invoiceData.invoice_status!='refund'">
 			<button class="custom-btn refund-btn" style="height: 40px;width: 130px; font-size: 14px;
 				padding: 10px;" data-toggle="modal" data-target="#refundModal" (click)="show=!show">
 				Refund</button>
-		</div>
+		</div> -->
 		<div>
 			<button class="custom-btn button2 my-1" style="height: 40px;width: 200px; font-size: 14px;
 			padding: 10px;" (click)="sendInvoiceToCustomer()">

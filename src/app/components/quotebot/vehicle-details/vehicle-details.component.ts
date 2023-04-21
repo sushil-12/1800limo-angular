@@ -275,12 +275,16 @@ export class VehicleDetailsComponent implements OnInit {
 				this._router.navigate(['/admin/new-booking'])
 			} else {
 				let user = JSON.parse(localStorage.getItem('currentUser'))['roleName']
+				let vehicle_selected:any = JSON.parse(sessionStorage.getItem('selected_vehicle'))
+				console.log('vehicle_selected---->>>>>',vehicle_selected)
 				user = user == 'driver' ? 'affiliate' : user	// roleName of driver has to be directed to affiliate/..
 
 				// navigate to farm in bookings page
 				this._router.navigate([
-					'/' + user + '/my-bookings'
-				])
+					'/' + user + '/create-new-booking'
+				],
+				{ queryParams: {affiliate_id:vehicle_selected.affiliate_id, vehicle_id:vehicle_selected.id,new : true } }
+				)
 			}
 		} else {
 			// this._errorDialogService.openDialog({
