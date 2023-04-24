@@ -491,6 +491,10 @@ export class AffiliateService
 	{
 		return this.httpClient.post(this.serverUrl + 'affiliate-payment-processing', data);
 	}
+	finalizePayment(data)
+	{
+		return this.httpClient.post(this.serverUrl + 'finalize-rate-edit', data);
+	}
 	//invoices
 	getInvoiceData(id)
 	{

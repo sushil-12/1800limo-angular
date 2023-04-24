@@ -26,9 +26,22 @@ export class AffiliateFinalizeComponent implements OnInit {
 	isCardFormOpen: boolean = false
 	paymentMethod: string = 'card';
 	CardsInformation: any=[];
+	primaryCards:any= []
 	selectedCard:any;
 	paymentSection: boolean = true;
 	chevron: boolean = true
+	card_params = {
+		years: (() => {
+			let arr = []
+			let i = 0;
+			let year = new Date().getFullYear();
+			while (i <= 15) {
+				arr.push(year + i);
+				i++;
+			}
+			return arr
+		})(),
+	}
 
 	finalize_params = {
 		distance: 0,
@@ -83,8 +96,11 @@ export class AffiliateFinalizeComponent implements OnInit {
 				this.transferType = this.BookingDetail?.transfer_type
 				this.finalize_params.number_of_vehicles = data?.booking_detail?.number_of_vehicles
 				this.init_rates = true;
-				// this.selectedCard = this.CardsInformation.filter(i=> i.cc_prority == 'Primary')[0]
-				// this.CardsInformation = data.cards
+				this.CardsInformation = data?.CreditCardsDetail
+				this.primaryCards = this.CardsInformation.filter(i=> i.cc_prority == 'Primary')
+				console.log('primary cards--->>>>' , this.primaryCards , this.primaryCards.length)
+				this.selectedCard = this.primaryCards[this.primaryCards.length-1]
+				console.log('selected cards ----->>>' , this.selectedCard)
 			})
 	}
 
@@ -137,6 +153,7 @@ export class AffiliateFinalizeComponent implements OnInit {
 
 
 	submitForm() {
+		this.spinner.show();
 		this.finalize_btn = 'Finalized'
 		let rateArray = JSON.parse(JSON.stringify(this.edit_rates_value))
 		delete rateArray.sub_total
@@ -150,6 +167,7 @@ export class AffiliateFinalizeComponent implements OnInit {
 		console.log('final obj -------------->>>>>>>', body)
 		console.log('\n\n Submitting Form', body);
 		this.affiliateService.updateFinalizeRates(body).subscribe((response: any) => {
+			this.spinner.hide()
 			this.$errors.openDialog({
 				errors: {
 					error: `<span class='text-success'>${response.message}</span>`
@@ -198,97 +216,101 @@ export class AffiliateFinalizeComponent implements OnInit {
 	makePayment() {
 
 		console.log('In function make payment')
-		// console.log('<<<<-----handle valid---->>>>> ' , this.cardForm.valid)
-		// console.log('-----=====?>>>>>',this.isCardFormOpen ? this.cardForm.valid : (this.CardsInformation.length>0))
-		// let dataToSend :any
-		// if(this.paymentMethod=='cash'){
-		// 	console.log('<<<<<----payment through cash-->>>>')
-		// 	dataToSend = {
-		// 		reservation_id : this.bookingId,
-		// 		grand_total : this.edit_rates_value.grand_total,
-		// 		paymentMethod : 'cash'
-		// 	}
-		// 	this.$spinner.show()
-		// 			this.$api.paymentProcessing(dataToSend).subscribe((response: any) => {
-		// 				this.$errors.openDialog({
-		// 					errors: {
-		// 						error: `<span class='text-success'>${response.message}</span>`
-		// 					}
-		// 				})
-		// 				this.$router.navigate(['/admin/invoice-summary'] ,{ queryParams: { bookingId: this.bookingId } })
-		// 				console.log('response---------------------->>' , response)
-		// 				this.$spinner.hide()
-		// 			})
-		// }
-		// else{
-		// 	if(this.isCardFormOpen ? this.cardForm.valid : (this.CardsInformation.length>0) ){
-		// 		if(this.paymentMethod=='cash'){
-		// 			console.log('<<<<<----payment through cash-->>>>')
-		// 			dataToSend = {
-		// 				reservation_id : this.bookingId,
-		// 				grand_total : this.edit_rates_value.grand_total,
-		// 				paymentMethod : 'cash'
-		// 			}
-		// 		}
-		// 		else{
-		// 			if(this.isCardFormOpen){
-		// 				dataToSend = {
-		// 					CreditCardsDetail : {...this.cardForm.value},
-		// 					isExistingCard : false,
-		// 					paymentMethod : 'credit_card',
-		// 					reservation_id : this.bookingId,
-		// 					grand_total : this.edit_rates_value.grand_total
-		// 				}
-		// 				console.log('<<<<--card form detail-->>>')
-		// 			}
-		// 			else{
-		// 				dataToSend = {
-		// 					isExistingCard :true,
-		// 					paymentMethod : 'credit_card',
-		// 					CreditCardsDetail:{
-		// 						cardID:	this.selectedCard.ID
-		// 					},
-		// 					reservation_id : this.bookingId,
-		// 					grand_total : this.edit_rates_value.grand_total
-		// 				}
-		// 				console.log('selected card-->>>')
-		// 			}
-		// 		}
-		// 		this.$spinner.show()
-		// 			this.$api.paymentProcessing(dataToSend).subscribe((response: any) => {
-		// 				this.$errors.openDialog({
-		// 					errors: {
-		// 						error: `<span class='text-success'>${response.message}</span>`
-		// 					}
-		// 				})
-		// 				this.$router.navigate(['/admin/invoice-summary'] ,{ queryParams: { bookingId: this.bookingId } })
-		// 				console.log('response---------------------->>' , response)
-		// 				this.$spinner.hide()
-		// 			})
-		// 	}
-		// 	else{
-		// 		console.log('<<<<-----handle valid---->>>>> ' , this.cardForm.valid)
-		// 		if(!this.CardsInformation.length && !this.isCardFormOpen){
-		// 			this.$errors.openDialog({
-		// 				errors: {
-		// 					error: `<span class='text-danger'> No card selected</span>`
-		// 				}
-		// 			})
-		// 		}
-		// 		else{
-		// 			this.$errors.openDialog({
-		// 			errors: {
-		// 				error: `<span class='text-danger'>Please Enter correct card details</span>`
-		// 			}
-		// 		})
-		// 		}
-		// 	}
-		// }
+		// /affiliate/finalize-rate-edit'
+		console.log('<<<<-----handle valid---->>>>> ' , this.cardForm.valid, 'is card form open--->>>>',this.isCardFormOpen )
+		console.log('-----=====?>>>>>',this.isCardFormOpen ? this.cardForm.valid : (this.CardsInformation.length>0))
+		let dataToSend :any
+		if(this.paymentMethod=='cash'){
+			console.log('<<<<<----payment through cash-->>>>')
+			dataToSend = {
+				reservation_id : this.bookingId,
+				grand_total : this.edit_rates_value?.grand_total,
+				payment_method : 'cash'
+			}
+			this.spinner.show()
+					this.affiliateService.paymentProcessing(dataToSend).subscribe((response: any) => {
+						this.$errors.openDialog({
+							errors: {
+								error: `<span class='text-success'>${response.message}</span>`
+							}
+						})
+						this.router.navigate(['/admin/invoice-summary'] ,{ queryParams: { bookingId: this.bookingId } })
+						console.log('response---------------------->>' , response)
+						this.spinner.hide()
+					})
+		}
+		else{
+			console.log('in else----->>>>>>>>..')
+			if(this.isCardFormOpen ? this.cardForm.valid : (this.CardsInformation.length>0) ){
+				console.log('validation clear-_>>>>>>>>>>')
+				if(this.paymentMethod=='cash'){
+					console.log('<<<<<----payment through cash-->>>>')
+					dataToSend = {
+						reservation_id : this.bookingId,
+						grand_total : this.edit_rates_value.grand_total,
+						payment_method : 'cash'
+					}
+				}
+				else{
+					if(this.isCardFormOpen){
+						dataToSend = {
+							CreditCardsDetail : {...this.cardForm.value},
+							isExistingCard : false,
+							payment_method : 'credit_card',
+							reservation_id : this.bookingId,
+							grand_total : this.edit_rates_value.grand_total
+						}
+						console.log('<<<<--card form detail-->>>')
+					}
+					else{
+						dataToSend = {
+							isExistingCard :true,
+							payment_method : 'credit_card',
+							CreditCardsDetail:{
+								cardID:	this.selectedCard?.ID
+							},
+							reservation_id : this.bookingId,
+							grand_total : this.edit_rates_value.grand_total
+						}
+						console.log('selected card-->>>',this.selectedCard)
+					}
+				}
+				console.log('<<<<<<<<---- data to send --->>>>>',dataToSend)
+				this.spinner.show()
+					this.affiliateService.paymentProcessing(dataToSend).subscribe((response: any) => {
+						this.$errors.openDialog({
+							errors: {
+								error: `<span class='text-success'>${response.message}</span>`
+							}
+						})
+						this.router.navigate(['/affiliate/invoice-summary'] ,{ queryParams: { bookingId: this.bookingId } })
+						console.log('response---------------------->>' , response)
+						this.spinner.hide()
+					})
+			}
+			else{
+				console.log('<<<<-----handle valid---->>>>> ' , this.cardForm.valid)
+				if(!this.CardsInformation.length && !this.isCardFormOpen){
+					this.$errors.openDialog({
+						errors: {
+							error: `<span class='text-danger'> No card selected</span>`
+						}
+					})
+				}
+				else{
+					this.$errors.openDialog({
+					errors: {
+						error: `<span class='text-danger'>Please Enter correct card details</span>`
+					}
+				})
+				}
+			}
+		}
 
 	}
 
 	deleteCard() {
-		this.spinner.show()
+		// this.spinner.show()
 		// this.api.deleteCardFinalize(this.deleteCardForm.value.cardId,this.deleteCardForm.value.accId).subscribe((response: any) => {
 		// 	this.$errors.openDialog({
 		// 		errors: {
