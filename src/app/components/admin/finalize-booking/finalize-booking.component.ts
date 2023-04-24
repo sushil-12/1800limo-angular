@@ -21,6 +21,7 @@ export class FinalizeBookingComponent implements OnInit {
 	BookingDetail: any;
 	RatesList: any;
 	CardsInformation: any=[];
+	primaryCards:any = [];
 	paymentSection: boolean = true;
 	chevron: boolean = true
 
@@ -153,7 +154,8 @@ export class FinalizeBookingComponent implements OnInit {
 				this.transferType = this.BookingDetail.transfer_type
 				this.init_rates = true;
 				this.CardsInformation = response.data.cards
-				this.selectedCard = this.CardsInformation.filter(i=> i.cc_prority == 'Primary')[0]
+				this.primaryCards = this.CardsInformation.filter(i=> i.cc_prority == 'Primary')
+				this.selectedCard = this.primaryCards[this.primaryCards.length -1]
 				this.finalize_params['distance'] = this.BookingDetail.distance
 				this.finalize_params['number_of_hours'] = this.BookingDetail.number_of_hours
 				this.finalize_params['number_of_vehicles'] = this.BookingDetail.number_of_vehicles
