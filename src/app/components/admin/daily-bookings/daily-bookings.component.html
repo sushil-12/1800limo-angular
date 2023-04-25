@@ -731,7 +731,7 @@
 								</div>
 								<div class="col-md-8 value">
 									<span class="font-weight-bolder preview-output-feild">
-										{{ bookingPreview?.affiliate_phone_isd }}{{
+										({{ bookingPreview?.affiliate_phone_isd }}){{
 										textFormatter(bookingPreview?.affiliate_phone) }}
 									</span>
 								</div>
@@ -793,7 +793,7 @@
 								</div>
 								<div class="col-md-8 value">
 									<span class="font-weight-bolder preview-output-feild">
-										{{ bookingPreview?.lose_affiliate_phone_isd }}{{
+										({{ bookingPreview?.lose_affiliate_phone_isd }}){{
 										textFormatter(bookingPreview?.lose_affiliate_phone) }}
 									</span>
 								</div>
@@ -907,6 +907,49 @@
 					</div>
 					<hr>
 					<!-- Grand Total -->
+					<div class="mx-2" *ngIf="bookingPreview?.meet_greet_choice_name">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Meet and Greet
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder preview-output-feild">
+									{{ textFormatter(bookingPreview?.meet_greet_choice_name)| titlecase }}
+								</span>
+							</div>
+						</div>
+					</div>
+					<div class="mx-2">
+						<div class="row m-0" *ngIf="bookingPreview?.return_meet_greet_choice_name"> 
+							<div class="col-md-4 key">
+								<span>
+									Return Meet and Greet
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder preview-output-feild">
+									{{ textFormatter(bookingPreview?.return_meet_greet_choice_name)| titlecase }}
+								</span>
+							</div>
+						</div>
+					</div>
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Special Instruction
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder preview-output-feild">
+									{{ textFormatter(bookingPreview?.booking_instructions)| titlecase }}
+								</span>
+							</div>
+						</div>
+					</div>
+					
 
 					<!-- Driver Information -->
 					<h4 class="font-weight m-0 mt-3">

@@ -262,6 +262,7 @@ export class NewBookingComponent implements OnInit {
 			driver_image_id: [''],
 			vehicle_image_id: [''],
 			meet_greet_choices: [2],
+			meet_greet_choices_name:['Driver -  Airport - Text/call after plane lands with curbside meet location'],
 			number_of_vehicles: [''],
 			pickup_date: [''],
 			pickup_time: ['12:00 am'],
@@ -295,6 +296,7 @@ export class NewBookingComponent implements OnInit {
 			dropoff_airline_name: [''],
 			dropoff_flight: [''],
 			return_meet_greet_choices: [2],
+			return_meet_greet_choices_name:['Driver -  Airport - Text/call after plane lands with curbside meet location'],
 			return_pickup_date: [''],
 			return_pickup_time: ['12:00 pm'],
 			return_extra_stops: this.$form.array([]),
@@ -353,27 +355,35 @@ export class NewBookingComponent implements OnInit {
 
 		if (this.BookingForm.value.transfer_type.includes('city_')) {
 			this.SetFormValue('meet_greet_choices', 1)
+			this.SetFormValue('meet_greet_choices_name',"Driver - Text/call when on location")
 		} else {
 			this.SetFormValue('meet_greet_choices', 2)
+			this.SetFormValue('meet_greet_choices_name',"Driver -  Airport - Text/call after plane lands with curbside meet location")
 		}
 
 		if (this.BookingForm.value.transfer_type.includes('_city')) {
 			this.SetFormValue('return_meet_greet_choices', 1)
+			this.SetFormValue('return_meet_greet_choices_name',"Driver - Text/call when on location")
 		} else {
 			this.SetFormValue('return_meet_greet_choices', 2)
+			this.SetFormValue('return_meet_greet_choices_name',"Driver -  Airport - Text/call after plane lands with curbside meet location")
 		}
 	}
 	changeTransferType(type: string) {
 		if (type.includes('city_')) {
 			this.SetFormValue('meet_greet_choices', 1)
+			this.SetFormValue('meet_greet_choices_name',"Driver - Text/call when on location")
 		} else {
 			this.SetFormValue('meet_greet_choices', 2)
+			this.SetFormValue('meet_greet_choices_name',"Driver -  Airport - Text/call after plane lands with curbside meet location")
 		}
 
 		if (type.includes('_city')) {
 			this.SetFormValue('return_meet_greet_choices', 1)
+			this.SetFormValue('return_meet_greet_choices_name',"Driver - Text/call when on location")
 		} else {
 			this.SetFormValue('return_meet_greet_choices', 2)
+			this.SetFormValue('return_meet_greet_choices_name',"Driver -  Airport - Text/call after plane lands with curbside meet location")
 		}
 	}
 
@@ -383,7 +393,19 @@ export class NewBookingComponent implements OnInit {
 			this.monthOptions = this.months.filter(i=> i.value.includes(value))
 		}
 	}
-
+	handleChangeMeetAndGreet(event:any , type:string){
+		console.log('in function meet and greet-->>>' , event.source.triggerValue , type )
+		if(type=='return'){
+			this.BookingForm.patchValue({
+				return_meet_greet_choices_name:event.source.triggerValue
+			})
+		}
+		else{
+			this.BookingForm.patchValue({
+				meet_greet_choices_name : event.source.triggerValue
+			})
+		}
+	}
 	prefillViaBookingID(booking_id: number) {
 		// console.warn('Prefilling via Booking Id')
 		this.$spinner.show('normalspinner');
