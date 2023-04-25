@@ -866,6 +866,13 @@ export class NewBookingComponent implements OnInit {
 					this.SetFormValue('vehicle_id', this.VehicleList[0].ID);
 					this.autofillData('vehicle', this.VehicleList[0]);
 				}
+				else if(this.VehicleList.length){
+					// need to re-code this condition #just a patch
+					let vehicle_type_id = this.BigData['vehicleCategories'].find(item => item.name == this.VehicleList[0].vehicleType)['id']
+					this.SetFormValue('vehicle_type', vehicle_type_id)
+					this.SetFormValue('vehicle_id', this.VehicleList[0].ID);
+					this.autofillData('vehicle', this.VehicleList[0]);
+				}
 			}
 			this.$spinner.hide()
 		})

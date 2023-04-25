@@ -291,6 +291,22 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 			this.ReturnRatesForm.updateValueAndValidity();
 		}
 	}
+	changeInHours(hours:any){
+		console.log('in function change in hours-->>>',hours)
+		this.hours = Number(hours)
+			if (this.RateForm.all_inclusive_rates.controls.Base_Rate) {
+				this.hours > 0 && this.RatesForm && this.calculateAmount('RatesForm', 'all_inclusive_rates', 'Base_Rate');
+			}
+			else {
+				if (this.RateForm.all_inclusive_rates.controls.Milage_Rate) {
+					this.hours > 0 && this.RatesForm && this.calculateAmount('RatesForm', 'all_inclusive_rates', 'Milage_Rate');
+				}
+				if (this.RateForm.all_inclusive_rates.controls.Kilometer_Rate) {
+					this.hours > 0 && this.RatesForm && this.calculateAmount('RatesForm', 'all_inclusive_rates', 'Kilometer_Rate');
+				}
+
+			}
+	}
 
 	fetchRates(affiliate: string, bookingId: number = 0) {
 		// this.$spinner.show()
