@@ -823,22 +823,7 @@
 				<!-- CITY TAX -->
 				<div class="col-md-6">
 					<div class="row">
-						<div class="col-md-6">
-							<div id="card-type-container" class="w-100 d-flex flex-nowrap justify-content-center">
-								<div id="cd-percent" class="card-type"
-									[ngClass]="form.city_tax_percent_flat.value == 'percent' ? 'active' : ''"
-									(click)="changeDetection.radioButton('city_tax_percent_flat', 'percent')">
-									<label>Percent</label>
-								</div>
-								<div id="cd-flat" class="card-type"
-									[ngClass]="form.city_tax_percent_flat.value == 'flat' ? 'active' : ''"
-									(click)="changeDetection.radioButton('city_tax_percent_flat', 'flat')">
-									<label>
-										Flat({{ currency_symbol }})
-									</label>
-								</div>
-							</div>
-						</div>
+						
 						<div class="col-md-12 col-lg-6 cityTaxErrorMsg">
 							<mat-form-field class="mat-form-field-rates" appearance="outline" class="cityTax">
 								<mat-label>City Tax</mat-label>
@@ -856,28 +841,29 @@
 								</div>
 							</div>
 						</div>
-					</div>
-				</div>
-
-				<!-- State Tax -->
-				<div class="col-md-6">
-					<div class="row">
 						<div class="col-md-6">
 							<div id="card-type-container" class="w-100 d-flex flex-nowrap justify-content-center">
 								<div id="cd-percent" class="card-type"
-									[ngClass]="form.state_tax_percent_flat.value == 'percent' ? 'active' : ''"
-									(click)="changeDetection.radioButton('state_tax_percent_flat', 'percent')">
+									[ngClass]="form.city_tax_percent_flat.value == 'percent' ? 'active' : ''"
+									(click)="changeDetection.radioButton('city_tax_percent_flat', 'percent')">
 									<label>Percent</label>
 								</div>
 								<div id="cd-flat" class="card-type"
-									[ngClass]="form.state_tax_percent_flat.value == 'flat' ? 'active' : ''"
-									(click)="changeDetection.radioButton('state_tax_percent_flat', 'flat')">
+									[ngClass]="form.city_tax_percent_flat.value == 'flat' ? 'active' : ''"
+									(click)="changeDetection.radioButton('city_tax_percent_flat', 'flat')">
 									<label>
 										Flat({{ currency_symbol }})
 									</label>
 								</div>
 							</div>
 						</div>
+					</div>
+				</div>
+
+				<!-- State Tax -->
+				<div class="col-md-6">
+					<div class="row">
+						
 						<div class="col-md-12 col-lg-6 cityTaxErrorMsg">
 							<mat-form-field class="mat-form-field-rates" appearance="outline" class="cityTax">
 								<mat-label>State Tax</mat-label>
@@ -895,12 +881,44 @@
 								</div>
 							</div>
 						</div>
+						<div class="col-md-6">
+							<div id="card-type-container" class="w-100 d-flex flex-nowrap justify-content-center">
+								<div id="cd-percent" class="card-type"
+									[ngClass]="form.state_tax_percent_flat.value == 'percent' ? 'active' : ''"
+									(click)="changeDetection.radioButton('state_tax_percent_flat', 'percent')">
+									<label>Percent</label>
+								</div>
+								<div id="cd-flat" class="card-type"
+									[ngClass]="form.state_tax_percent_flat.value == 'flat' ? 'active' : ''"
+									(click)="changeDetection.radioButton('state_tax_percent_flat', 'flat')">
+									<label>
+										Flat({{ currency_symbol }})
+									</label>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 
 				<!-- VAT -->
 				<div class="col-md-6">
 					<div class="row">
+						
+						<div class="col-md-12 col-lg-6 cityTaxErrorMsg">
+							<mat-form-field class="mat-form-field-rates" appearance="outline" class="cityTax">
+								<mat-label>VAT</mat-label>
+								<input type="number" matInput placeholder="VAT" formControlName="vat" tabindex="1"
+									(focus)="$event.target.select()" />
+							</mat-form-field>
+							<div *ngIf="
+									(is_form_submitted && form.vat.errors) ||
+									(form.vat.touched && form.vat.errors)
+								" class="text-danger margin-bottom-thin my-mat-hint">
+								<div *ngIf="form.vat.errors.pattern">
+									Enter Numbers only
+								</div>
+							</div>
+						</div>
 						<div class="col-md-6">
 							<div id="card-type-container" class="w-100 d-flex flex-nowrap justify-content-center">
 								<div id="cd-percent" class="card-type"
@@ -917,43 +935,13 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-md-12 col-lg-6 cityTaxErrorMsg">
-							<mat-form-field class="mat-form-field-rates" appearance="outline" class="cityTax">
-								<mat-label>VAT</mat-label>
-								<input type="number" matInput placeholder="VAT" formControlName="vat" tabindex="1"
-									(focus)="$event.target.select()" />
-							</mat-form-field>
-							<div *ngIf="
-									(is_form_submitted && form.vat.errors) ||
-									(form.vat.touched && form.vat.errors)
-								" class="text-danger margin-bottom-thin my-mat-hint">
-								<div *ngIf="form.vat.errors.pattern">
-									Enter Numbers only
-								</div>
-							</div>
-						</div>
 					</div>
 				</div>
 
 				<!-- WORKMAN'S COMPENSATION-->
 				<div class="col-md-6">
 					<div class="row">
-						<div class="col-md-6">
-							<div id="card-type-container" class="w-100 d-flex flex-nowrap justify-content-center">
-								<div id="cd-percent" class="card-type"
-									[ngClass]="form.workman_comp_percent_flat.value == 'percent' ? 'active' : ''"
-									(click)="changeDetection.radioButton('workman_comp_percent_flat', 'percent')">
-									<label>Percent</label>
-								</div>
-								<div id="cd-flat" class="card-type"
-									[ngClass]="form.workman_comp_percent_flat.value == 'flat' ? 'active' : ''"
-									(click)="changeDetection.radioButton('workman_comp_percent_flat', 'flat')">
-									<label>
-										Flat({{ currency_symbol }})
-									</label>
-								</div>
-							</div>
-						</div>
+						
 						<div class="col-md-12 col-lg-6 cityTaxErrorMsg">
 							<mat-form-field class="mat-form-field-rates" appearance="outline" class="cityTax">
 								<mat-label>Workman's Comp</mat-label>
@@ -971,28 +959,29 @@
 								</div>
 							</div>
 						</div>
-					</div>
-				</div>
-
-				<!-- OTHER TRANSPORTATION TAX -->
-				<div class="col-md-6">
-					<div class="row">
 						<div class="col-md-6">
 							<div id="card-type-container" class="w-100 d-flex flex-nowrap justify-content-center">
 								<div id="cd-percent" class="card-type"
-									[ngClass]="form.other_transportation_tax_percent_flat.value == 'percent' ? 'active' : ''"
-									(click)="changeDetection.radioButton('other_transportation_tax_percent_flat', 'percent')">
+									[ngClass]="form.workman_comp_percent_flat.value == 'percent' ? 'active' : ''"
+									(click)="changeDetection.radioButton('workman_comp_percent_flat', 'percent')">
 									<label>Percent</label>
 								</div>
 								<div id="cd-flat" class="card-type"
-									[ngClass]="form.other_transportation_tax_percent_flat.value == 'flat' ? 'active' : ''"
-									(click)="changeDetection.radioButton('other_transportation_tax_percent_flat', 'flat')">
+									[ngClass]="form.workman_comp_percent_flat.value == 'flat' ? 'active' : ''"
+									(click)="changeDetection.radioButton('workman_comp_percent_flat', 'flat')">
 									<label>
 										Flat({{ currency_symbol }})
 									</label>
 								</div>
 							</div>
 						</div>
+					</div>
+				</div>
+
+				<!-- OTHER TRANSPORTATION TAX -->
+				<div class="col-md-6">
+					<div class="row">
+						
 						<div class="col-md-12 col-lg-6 cityTaxErrorMsg">
 							<mat-form-field class="mat-form-field-rates" appearance="outline" class="cityTax">
 								<mat-label>Other Transportation Tax</mat-label>
@@ -1011,6 +1000,22 @@
 											.pattern
 									">
 									Enter Numbers only
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div id="card-type-container" class="w-100 d-flex flex-nowrap justify-content-center">
+								<div id="cd-percent" class="card-type"
+									[ngClass]="form.other_transportation_tax_percent_flat.value == 'percent' ? 'active' : ''"
+									(click)="changeDetection.radioButton('other_transportation_tax_percent_flat', 'percent')">
+									<label>Percent</label>
+								</div>
+								<div id="cd-flat" class="card-type"
+									[ngClass]="form.other_transportation_tax_percent_flat.value == 'flat' ? 'active' : ''"
+									(click)="changeDetection.radioButton('other_transportation_tax_percent_flat', 'flat')">
+									<label>
+										Flat({{ currency_symbol }})
+									</label>
 								</div>
 							</div>
 						</div>

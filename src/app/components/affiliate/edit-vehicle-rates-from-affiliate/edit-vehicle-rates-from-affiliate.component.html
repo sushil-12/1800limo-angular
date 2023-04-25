@@ -606,6 +606,17 @@
 				<br><br><br><br><br>
 				<div class="col-md-6">
 					<div class="row">
+					
+						<div class="col-md-12 col-lg-6 cityTaxErrorMsg ">
+							<mat-form-field class="mat-form-field-rates" appearance="outline" class="cityTax">
+								<mat-label>City Tax</mat-label>
+								<input matInput placeholder="City Tax" formControlName="city_tax" tabindex="1">
+							</mat-form-field>
+							<div *ngIf="submittedForm && form.city_tax.errors || form.city_tax.touched && form.city_tax.errors"
+								class="text-danger margin-bottom-thin my-mat-hint">
+								<div *ngIf="form.city_tax.errors.pattern">Enter Numbers only</div>
+							</div>
+						</div>
 						<div class="col-md-6 col-lg-3 pr-0 borderright mobilePadding">
 							<div class="form-group radio-tile-group assment_radio">
 								<div class="custom-radio input-container">
@@ -632,20 +643,21 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-md-12 col-lg-6 cityTaxErrorMsg ">
-							<mat-form-field class="mat-form-field-rates" appearance="outline" class="cityTax">
-								<mat-label>City Tax</mat-label>
-								<input matInput placeholder="City Tax" formControlName="city_tax" tabindex="1">
-							</mat-form-field>
-							<div *ngIf="submittedForm && form.city_tax.errors || form.city_tax.touched && form.city_tax.errors"
-								class="text-danger margin-bottom-thin my-mat-hint">
-								<div *ngIf="form.city_tax.errors.pattern">Enter Numbers only</div>
-							</div>
-						</div>
 					</div>
 				</div>
 				<div class="col-md-6">
 					<div class="row">
+					
+						<div class="col-md-12 col-lg-6 cityTaxErrorMsg">
+							<mat-form-field class="mat-form-field-rates" appearance="outline" class="cityTax">
+								<mat-label>State Tax</mat-label>
+								<input matInput placeholder="State Tax" formControlName="state_tax" tabindex="1">
+							</mat-form-field>
+							<div *ngIf="submittedForm && form.state_tax.errors || form.state_tax.touched && form.state_tax.errors"
+								class="text-danger margin-bottom-thin my-mat-hint">
+								<div *ngIf="form.state_tax.errors.pattern">Enter Numbers only</div>
+							</div>
+						</div>
 						<div class="col-md-6 col-lg-3 pr-0 borderright mobilePadding">
 							<div class="form-group radio-tile-group assment_radio">
 								<div class="custom-radio input-container">
@@ -672,20 +684,21 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-md-12 col-lg-6 cityTaxErrorMsg">
-							<mat-form-field class="mat-form-field-rates" appearance="outline" class="cityTax">
-								<mat-label>State Tax</mat-label>
-								<input matInput placeholder="State Tax" formControlName="state_tax" tabindex="1">
-							</mat-form-field>
-							<div *ngIf="submittedForm && form.state_tax.errors || form.state_tax.touched && form.state_tax.errors"
-								class="text-danger margin-bottom-thin my-mat-hint">
-								<div *ngIf="form.state_tax.errors.pattern">Enter Numbers only</div>
-							</div>
-						</div>
 					</div>
 				</div>
 				<div class="col-md-6">
 					<div class="row">
+						
+						<div class="col-md-12 col-lg-6 cityTaxErrorMsg">
+							<mat-form-field class="mat-form-field-rates" appearance="outline" class="cityTax">
+								<mat-label>VAT</mat-label>
+								<input matInput placeholder="VAT" formControlName="vat" tabindex="1">
+							</mat-form-field>
+							<div *ngIf="submittedForm && form.vat.errors || form.vat.touched && form.vat.errors"
+								class="text-danger margin-bottom-thin my-mat-hint">
+								<div *ngIf="form.vat.errors.pattern">Enter Numbers only</div>
+							</div>
+						</div>
 						<div class="col-md-6 col-lg-3 pr-0 borderright mobilePadding">
 							<div class="form-group radio-tile-group assment_radio">
 								<div class="custom-radio input-container">
@@ -711,20 +724,22 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-md-12 col-lg-6 cityTaxErrorMsg">
-							<mat-form-field class="mat-form-field-rates" appearance="outline" class="cityTax">
-								<mat-label>VAT</mat-label>
-								<input matInput placeholder="VAT" formControlName="vat" tabindex="1">
-							</mat-form-field>
-							<div *ngIf="submittedForm && form.vat.errors || form.vat.touched && form.vat.errors"
-								class="text-danger margin-bottom-thin my-mat-hint">
-								<div *ngIf="form.vat.errors.pattern">Enter Numbers only</div>
-							</div>
-						</div>
 					</div>
 				</div>
 				<div class="col-md-6">
 					<div class="row">
+						
+						<div class="col-md-12 col-lg-6 cityTaxErrorMsg">
+							<mat-form-field class="mat-form-field-rates" appearance="outline" class="cityTax">
+								<mat-label>Workman's Comp</mat-label>
+								<input matInput placeholder="Workman's Comp" formControlName="workmans_comp"
+									tabindex="1">
+							</mat-form-field>
+							<div *ngIf="submittedForm && form.workmans_comp.errors || form.workmans_comp.touched && form.workmans_comp.errors"
+								class="text-danger margin-bottom-thin my-mat-hint">
+								<div *ngIf="form.workmans_comp.errors.pattern">Enter Numbers only</div>
+							</div>
+						</div>
 						<div class="col-md-6 col-lg-3 pr-0 borderright mobilePadding">
 							<div class="form-group radio-tile-group assment_radio">
 								<div class="custom-radio input-container">
@@ -751,21 +766,22 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-md-12 col-lg-6 cityTaxErrorMsg">
-							<mat-form-field class="mat-form-field-rates" appearance="outline" class="cityTax">
-								<mat-label>Workman's Comp</mat-label>
-								<input matInput placeholder="Workman's Comp" formControlName="workmans_comp"
-									tabindex="1">
-							</mat-form-field>
-							<div *ngIf="submittedForm && form.workmans_comp.errors || form.workmans_comp.touched && form.workmans_comp.errors"
-								class="text-danger margin-bottom-thin my-mat-hint">
-								<div *ngIf="form.workmans_comp.errors.pattern">Enter Numbers only</div>
-							</div>
-						</div>
 					</div>
 				</div>
 				<div class="col-md-6">
 					<div class="row">
+					
+						<div class="col-md-12 col-lg-6 cityTaxErrorMsg">
+							<mat-form-field class="mat-form-field-rates" appearance="outline" class="cityTax">
+								<mat-label>Other Transportation Tax</mat-label>
+								<input matInput placeholder="Other Transportation Tax"
+									formControlName="other_transportation_tax" tabindex="1">
+							</mat-form-field>
+							<div *ngIf="submittedForm && form.other_transportation_tax.errors || form.other_transportation_tax.touched && form.other_transportation_tax.errors"
+								class="text-danger margin-bottom-thin my-mat-hint">
+								<div *ngIf="form.other_transportation_tax.errors.pattern">Enter Numbers only</div>
+							</div>
+						</div>
 						<div class="col-md-6 col-lg-3 pr-0 borderright mobilePadding">
 							<div class="form-group radio-tile-group assment_radio">
 								<div class="custom-radio input-container">
@@ -793,17 +809,6 @@
 												class="prefix">{{currencySymbol}}</span>) </label>
 									</div>
 								</div>
-							</div>
-						</div>
-						<div class="col-md-12 col-lg-6 cityTaxErrorMsg">
-							<mat-form-field class="mat-form-field-rates" appearance="outline" class="cityTax">
-								<mat-label>Other Transportation Tax</mat-label>
-								<input matInput placeholder="Other Transportation Tax"
-									formControlName="other_transportation_tax" tabindex="1">
-							</mat-form-field>
-							<div *ngIf="submittedForm && form.other_transportation_tax.errors || form.other_transportation_tax.touched && form.other_transportation_tax.errors"
-								class="text-danger margin-bottom-thin my-mat-hint">
-								<div *ngIf="form.other_transportation_tax.errors.pattern">Enter Numbers only</div>
 							</div>
 						</div>
 					</div>
