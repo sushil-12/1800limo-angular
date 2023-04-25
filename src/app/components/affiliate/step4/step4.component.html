@@ -34,18 +34,25 @@
 					aria-describedby="dataTable_info" style="width: 100%;" width="100%" cellspacing="0">
 					<thead>
 						<tr role="row">
+							<th class="tableWidth">Actions</th>
 							<th>Driver Image</th>
 							<th>Name</th>
 							<th>Cell</th>
 							<th>Email</th>
 							<th>Delete</th>
 							<th [hidden]="affiliateType!='fleet_operator'">Account Status</th>
-							<th class="tableWidth">Actions</th>
 						</tr>
 					</thead>
 					<tbody>
 						<ng-container *ngIf="driverList">
 							<tr role="row" class="odd" *ngFor="let driver of driverList">
+
+								<td class="tableWidth">
+									<button class="custom-filled-button" id="navbarDropdownUserImage"
+										(click)="clickEditDriver(driver.id)">
+										Edit Driver
+									</button>
+								</td>
 								<td><img class="rounded-circle" src="{{driver.DriverImage.image}}"></td>
 								<td>{{driver.FirstName+' '+driver.MiddleName+' '+driver.LastName}}</td>
 								<td class="pointer"><a href="tel:{{driver.CellIsd+' '+driver.CellNumber}}"
@@ -71,12 +78,6 @@
 												(click)="driverAccountStatus(driver.id, 'suspend')">Suspend</label>
 										</div>
 									</div>
-								</td>
-								<td class="tableWidth">
-									<button class="custom-filled-button" id="navbarDropdownUserImage"
-										(click)="clickEditDriver(driver.id)">
-										Edit Driver
-									</button>
 								</td>
 							</tr>
 							<tr *ngIf="!driverList?.length">

@@ -49,6 +49,7 @@ export class AffiliateFinalizeComponent implements OnInit {
 		number_of_vehicles: 0,
 		booking_id: 0
 	}
+	quoteAmount: any;
 	constructor(
 		private affiliateService: AffiliateService,
 		private $form: FormBuilder,
@@ -96,6 +97,7 @@ export class AffiliateFinalizeComponent implements OnInit {
 				this.transferType = this.BookingDetail?.transfer_type
 				this.finalize_params.number_of_vehicles = data?.booking_detail?.number_of_vehicles
 				this.init_rates = true;
+				this.quoteAmount = data?.grand_total
 				this.CardsInformation = data?.CreditCardsDetail
 				this.primaryCards = this.CardsInformation.filter(i=> i.cc_prority == 'Primary')
 				console.log('primary cards--->>>>' , this.primaryCards , this.primaryCards.length)
