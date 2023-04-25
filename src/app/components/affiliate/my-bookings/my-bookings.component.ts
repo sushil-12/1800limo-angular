@@ -102,7 +102,7 @@ export class MyBookingsComponent implements OnInit {
 			this.bookingsRes = result;
 			this.bookings = this.bookingsRes?.data?.data;
 			this.totalRecords = this.bookingsRes?.data?.total;
-
+			this.noError = false
 			this.firstPage = 1;
 			this.lastPage = this.bookingsRes?.data?.last_page;
 			this.totalPage = this.bookingsRes?.data?.last_page;

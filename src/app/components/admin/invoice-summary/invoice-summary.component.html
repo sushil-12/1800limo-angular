@@ -239,9 +239,26 @@
 							</div>
 							<div class="invoice-subhead px-3">
 								<div class="row d-flex justify-content-between">
-									<p class="m-0 p-1 my-2 text-charges" >
+									<p class="m-0 p-1 text-charges">
+										Sub Total
+									</p>
+									<p class="m-0 p-1 text-charges">
+										${{invoiceData?.sub_total}}
+									</p>
+								</div>
+								<div class="row d-flex justify-content-between">
+									<p class="m-0 p-1 text-charges">
+										Number of vehicles
+									</p>
+									<p class="m-0 p-1 text-charges">
+										<i class="bi bi-x font-weight-bolder"></i>
+										{{invoiceData?.number_of_vehicles}}
+									</p>
+								</div>
+								<div class="row d-flex justify-content-between">
+									<p class="m-0 p-1 text-charges" >
 										Total-Amount</p>
-									<p class="m-0 p-1 my-2 text-charges font-weight-bold">
+									<p class="m-0 p-1 text-charges font-weight-bold">
 										${{invoiceData.grand_total}}
 									</p>
 								</div>
