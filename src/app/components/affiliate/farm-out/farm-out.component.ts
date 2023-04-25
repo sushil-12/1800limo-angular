@@ -114,11 +114,12 @@ export class FarmOutComponent implements OnInit
 
 	loadBookings(pageUrl = null) {
 		/** spinner starts on init */
-		this.$spinner.show();
+		// this.$spinner.show();
 
 		// var keyword = ((document.getElementById("keyword") as HTMLInputElement).value);
 		// Load Our bookings using API
 		this.$affiliateService.loadFarmoutBookings(pageUrl, this.searchText, this.startDate, this.endDate).then(result => {
+			this.$spinner.hide();//hide spinner
 			console.log('result---->>>', result)
 			this.bookingsRes = result;
 			this.bookings = this.bookingsRes?.data?.data;
@@ -135,7 +136,6 @@ export class FarmOutComponent implements OnInit
 			this.lastPageUrl = this.bookingsRes?.data?.last_page_url;
 			this.prevPageUrl = this.bookingsRes?.data?.prev_page_url;
 			this.nextPageUrl = this.bookingsRes?.data?.next_page_url;
-			this.$spinner.hide();//hide spinner
 			if(this.bookingsRes?.data?.data.length == 0){
 				this.noError = true
 			}
@@ -279,6 +279,7 @@ export class FarmOutComponent implements OnInit
 		this.$affiliateService.auditTrailInfo(bookingId)
 			.pipe(
 				catchError((err) => {
+					this.$spinner.hide()
 					return throwError(err);
 				})
 			)
