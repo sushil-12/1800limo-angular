@@ -651,7 +651,7 @@
 						<mat-label>
 							Meet and Greet Choices <span class="asterisk"></span>
 						</mat-label>
-						<mat-select formControlName="meet_greet_choices">
+						<mat-select formControlName="meet_greet_choices" (selectionChange)="handleChangeMeetAndGreet($event ,'')">
 							<mat-option *ngFor="let meetGreet of BigData?.meetGreets" [value]="meetGreet.id">
 								{{ meetGreet.message }}
 							</mat-option>
@@ -1312,7 +1312,7 @@
 						<mat-label>
 							Meet and Greet Choices <span class="asterisk"></span>
 						</mat-label>
-						<mat-select formControlName="return_meet_greet_choices">
+						<mat-select formControlName="return_meet_greet_choices" (selectionChange)="handleChangeMeetAndGreet($event ,'return')">
 							<mat-option *ngFor="let meetGreet of BigData?.meetGreets" [value]="meetGreet.id">
 								{{ meetGreet.message }}
 							</mat-option>
@@ -1957,6 +1957,34 @@
 						</div>
 					</div>
 					<hr>
+					<div class="mx-2" *ngIf="Form?.meet_greet_choices_name.value">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Meet and Greet
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder" style="white-space: pre-wrap;"> 
+									{{Form?.meet_greet_choices_name.value}}
+								</span>
+							</div>
+						</div>
+					</div>
+					<div class="mx-2" *ngIf="Form.service_type.value == 'round_trip'">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Return Meet and Greet
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder" style="white-space: pre-wrap;"> 
+									{{Form?.return_meet_greet_choices_name.value}}
+								</span>
+							</div>
+						</div>
+					</div>
 					<div class="mx-2">
 						<div class="row m-0">
 							<div class="col-md-4 key">

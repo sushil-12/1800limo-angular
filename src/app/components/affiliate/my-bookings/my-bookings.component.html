@@ -164,7 +164,7 @@
 											(click)="openModal(booking, 'Passenger')" id="box">
 											<span class="font-weight-bolder"
 												[innerHTML]="highlighText(booking?.passenger_name)"></span> |
-											<span [innerHTML]="highlighText( booking?.pax_tel)"></span>
+											<span [innerHTML]="highlighText( formatPhoneNumber(booking?.pax_tel))"></span>
 										</p>
 										<span class="text-underline cursor-pointer"
 											(click)="showLocationPointOnMap(booking?.booking_id, 'pickup')">
@@ -649,9 +649,10 @@
 								</div>
 								<div class="col-md-8 value">
 									<span class="font-weight-bolder preview-output-feild">
+										({{isAffiliate ? bookingPreview?.affiliate_phone_isd :
+										bookingPreview?.lose_affiliate_phone_isd}})
 										{{isAffiliate ? bookingPreview?.affiliate_phone :
 										bookingPreview?.lose_affiliate_phone }}
-
 									</span>
 								</div>
 							</div>
@@ -659,7 +660,7 @@
 						<hr>
 					</div>
 					<!-- Grand Total -->
-					<h4 class="font-weight-bolder m-0">
+					<h4 class="m-0">
 						Vehicle Preferences
 					</h4>
 					<div class="row p-2">
@@ -764,6 +765,48 @@
 					</div>
 					<hr>
 					<!-- Grand Total -->
+					<div class="mx-2" *ngIf="bookingPreview?.meet_greet_choice_name">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Meet and Greet
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder preview-output-feild">
+									{{ textFormatter(bookingPreview?.meet_greet_choice_name)| titlecase }}
+								</span>
+							</div>
+						</div>
+					</div>
+					<div class="mx-2">
+						<div class="row m-0" *ngIf="bookingPreview?.return_meet_greet_choice_name"> 
+							<div class="col-md-4 key">
+								<span>
+									Return Meet and Greet
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder preview-output-feild">
+									{{ textFormatter(bookingPreview?.return_meet_greet_choice_name)| titlecase }}
+								</span>
+							</div>
+						</div>
+					</div>
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Special Instruction
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder preview-output-feild">
+									{{ textFormatter(bookingPreview?.booking_instructions)| titlecase }}
+								</span>
+							</div>
+						</div>
+					</div>
 
 					<!-- Driver Information -->
 					<h4 class="font-weight m-0 mt-3">
@@ -896,6 +939,22 @@
 							<div class="col-md-8 value">
 								<span class="font-weight-bolder preview-output-feild">
 									{{ bookingPreview?.luggage_count }}
+								</span>
+							</div>
+						</div>
+					</div>
+					<hr>
+					
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Special Instruction
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder preview-output-feild" style="white-space: pre-wrap;"> 
+									{{bookingPreview?.booking_instructions}}
 								</span>
 							</div>
 						</div>

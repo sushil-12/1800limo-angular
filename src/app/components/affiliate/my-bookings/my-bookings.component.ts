@@ -146,6 +146,13 @@ export class MyBookingsComponent implements OnInit {
 		console.log('in function set cookies for',key,value)
 		this.affiliateService.setCookie(key, value, 30);
 	}
+	formatPhoneNumber(ph:any){
+		if(!ph.includes('+')){
+			return '+'+ph
+		}
+		return ph;
+
+	}
 
 	reset() {
 		let date = new Date();
@@ -202,6 +209,7 @@ export class MyBookingsComponent implements OnInit {
 				this.bookingPreview = response.data;
 				this.isAffiliate = this.bookingPreview.affiliate_type == "affiliate" ? true : false;
 				this.isLooseAffiliate = this.bookingPreview.affiliate_type == "loose_affiliate" ? true : false;
+				this.bookingPreview['booking_instructions'] = this.bookingPreview?.booking_instructions.replaceAll('<br />' , '')
 				console.log('get preview data-->>>', this.bookingPreview.affiliate_type, this.isAffiliate)
 				$('#previewBookingOnID').modal('show');
 			})

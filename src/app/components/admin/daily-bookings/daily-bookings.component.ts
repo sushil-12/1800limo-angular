@@ -28,7 +28,7 @@ export class DailyBookingsComponent implements OnInit {
 	public lastPage: Number;
 	public totalPage: Number;
 	public totalRecords: Number;
-	public currentPage: Number;
+	public currentPage: any;
 	public from: Number;
 	public to: Number;
 	public path: string;
@@ -492,6 +492,13 @@ export class DailyBookingsComponent implements OnInit {
 		{
 			return text
 		}
+	}
+	formatPhoneNumber(ph:any){
+		if(!ph.includes('+')){
+			return '+'+ph
+		}
+		return ph;
+
 	}
 
 	bookingPreview: any
