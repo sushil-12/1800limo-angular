@@ -87,11 +87,11 @@
 									<td>{{vehicle.make}}</td>
 									<td>{{vehicle.model}}</td>
 									<td>{{vehicle.color}}</td>
-									<td><button (click)="updateAmenityList(vehicle.amenities)" class="button2"
+									<td><button (click)="updateAmenityList(vehicle.amenities)" class="button2 box-shadow"
 											tabindex="1">Amenities</button></td>
 									<td>{{vehicle.licensePlate}}</td>
 									<td>
-										<i class="fa fa-trash" style="font-size: x-large; color:#d64646"
+										<i class="fa fa-trash box-shadow" style="font-size: x-large; color:#d64646"
 											(click)="enableDisableClicked(vehicle.id)" data-toggle="modal"
 											data-target="#deleteConfirmationModal"></i>
 									</td>

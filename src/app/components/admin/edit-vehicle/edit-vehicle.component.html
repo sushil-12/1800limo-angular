@@ -209,7 +209,7 @@
 							<input class="radio-button" type="radio" id="local" value="localService"
 								name="typeOfService" checked="" formControlName="typeOfService"
 								(click)="typeOfService('localService')" tabIndex="-1">
-							<div class="radio-tile">
+							<div class="radio-tile" [ngClass]="serviceType=='localService' ? 'box-shadow': ''">
 								<label class="radio-tile-label" for="local"
 									[ngClass]="serviceType=='localService' ? 'radio-active' : ''">Local Service
 									Only</label>
@@ -223,7 +223,7 @@
 							<input class="radio-button" type="radio" id="longDistance" value="longDistance"
 								name="typeOfService" checked="" formControlName="typeOfService"
 								(click)="typeOfService('longDistance')" tabIndex="-1">
-							<div class="radio-tile">
+							<div class="radio-tile" [ngClass]="serviceType=='longDistance' ? 'box-shadow' : ''">
 								<label class="radio-tile-label" for="longDistance"
 									[ngClass]="serviceType=='longDistance' ? 'radio-active' : ''">Over the Road – Long
 									Distance</label>
@@ -1133,10 +1133,10 @@
 	</section>
 	<section class="billing_inforamtion">
 		<ul>
-			<li><button class="custom-btn savebutton" (click)="submitForm()" [disabled]="disableSubmitButton"
+			<li><button class="custom-btn savebutton box-shadow" (click)="submitForm()" [disabled]="disableSubmitButton"
 					tabindex="1">SAVE</button> </li>
-			<li><button class="custom-btn resetbutton" (click)="resetForm()" tabindex="1">RESET</button> </li>
-			<li><button class="custom-btn backbutton" type="button" (click)="backButton()" data-toggle="tooltip"
+			<li><button class="custom-btn resetbutton box-shadow" (click)="resetForm()" tabindex="1">RESET</button> </li>
+			<li><button class="custom-btn backbutton box-shadow" type="button" (click)="backButton()" data-toggle="tooltip"
 					data-placement="top" title="Clicking back button deletes all fields." tabindex="1">BACK</button>
 			</li>
 		</ul>

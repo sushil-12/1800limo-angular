@@ -2,7 +2,7 @@
 <main *ngIf="invoiceData" style="background: #f5f4fe;">
 	<div class="row m-2 d-flex justify-content-between" style="padding: 20px 0 0 0;">
 		<div>
-			<button class="custom-btn print-btn my-1" style="height: 40px;width: 130px;font-size: 14px;"
+			<button class="custom-btn print-btn box-shadow my-1" style="height: 40px;width: 130px;font-size: 14px;"
 				[useExistingCss]="true" printTitle="Invoice" printSectionId="print-section" ngxPrint>
 				<!-- <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"
 					style="height: 20px; margin-right:10px; fill:white;" viewBox="0 0 108.36 122.88">
@@ -13,12 +13,12 @@
 				Print Invoice</button>
 		</div>
 		<div *ngIf="invoiceData.billing_detail.payment_method =='credit_card' && invoiceData.invoice_status!='refund'">
-			<button class="custom-btn refund-btn" style="height: 40px;width: 130px; font-size: 14px;
+			<button class="custom-btn refund-btn box-shadow" style="height: 40px;width: 130px; font-size: 14px;
 				padding: 10px;" data-toggle="modal" data-target="#refundModal" (click)="show=!show">
 				Refund</button>
 		</div>
 		<div>
-			<button class="custom-btn button2 my-1" style="height: 40px;width: 200px; font-size: 14px;
+			<button class="custom-btn button2 box-shadow my-1" style="height: 40px;width: 200px; font-size: 14px;
 			padding: 10px;" (click)="sendInvoiceToCustomer()">
 				Send Invoice to customer</button>
 		</div>
@@ -243,7 +243,7 @@
 										Sub Total
 									</p>
 									<p class="m-0 p-1 text-charges">
-										${{invoiceData?.sub_total}}
+										${{invoiceData?.sub_total.toFixed(2)}}
 									</p>
 								</div>
 								<div class="row d-flex justify-content-between">
@@ -259,7 +259,7 @@
 									<p class="m-0 p-1 text-charges" >
 										Total-Amount</p>
 									<p class="m-0 p-1 text-charges font-weight-bold">
-										${{invoiceData.grand_total}}
+										${{invoiceData.grand_total.toFixed(2)}}
 									</p>
 								</div>
 							</div>
@@ -278,7 +278,7 @@
 	</section>
 	<section class="billing_inforamtion">
 		<ul>
-			<li><button class="ok-btn custom-ok-btn" type="button" (click)="backButton()" tabindex="1">OK</button>
+			<li><button class="ok-btn custom-ok-btn box-shadow" type="button" (click)="backButton()" tabindex="1">OK</button>
 			</li>
 		</ul>
 	</section>
