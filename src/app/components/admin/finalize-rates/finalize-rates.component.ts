@@ -33,6 +33,7 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 
 	ratesdata = new BehaviorSubject<any>({});
 	temp: any;
+	is_readonly_min_rate:boolean = false;
 
 	ratesform: boolean = false;
 	returnratesform: boolean = false;
@@ -85,7 +86,7 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 		});
 
 	}
-	ngAfterViewInit(){
+	ngAfterViewInit() {
 		this.scroll('grandTotal')
 	}
 
@@ -173,9 +174,9 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 
 	scroll(id) {
 		let el = document.getElementById(id);
-		console.log(`scrolling to ${id}` , el);
+		console.log(`scrolling to ${id}`, el);
 		el.scrollIntoView();
-	  }
+	}
 	returnZero() {
 		return 0;
 	}
@@ -291,32 +292,35 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 			this.ReturnRatesForm.updateValueAndValidity();
 		}
 	}
-	changeInHours(hours:any){
-		console.log('in function change in hours-->>>',hours)
+	changeInHours(hours: any) {
+		console.log('in function change in hours-->>>', hours)
+		if (!Number(hours)) {
+			return
+		}
 		this.hours = Number(hours)
-			if (this.RateForm.all_inclusive_rates.controls.Base_Rate) {
-				this.hours > 0 && this.RatesForm && this.calculateAmount('RatesForm', 'all_inclusive_rates', 'Base_Rate');
+		if (this.RateForm.all_inclusive_rates.controls.Base_Rate) {
+			this.hours > 0 && this.RatesForm && this.calculateAmount('RatesForm', 'all_inclusive_rates', 'Base_Rate');
+		}
+		else {
+			if (this.RateForm.all_inclusive_rates.controls.Milage_Rate) {
+				this.hours > 0 && this.RatesForm && this.calculateAmount('RatesForm', 'all_inclusive_rates', 'Milage_Rate');
 			}
-			else {
-				if (this.RateForm.all_inclusive_rates.controls.Milage_Rate) {
-					this.hours > 0 && this.RatesForm && this.calculateAmount('RatesForm', 'all_inclusive_rates', 'Milage_Rate');
-				}
-				if (this.RateForm.all_inclusive_rates.controls.Kilometer_Rate) {
-					this.hours > 0 && this.RatesForm && this.calculateAmount('RatesForm', 'all_inclusive_rates', 'Kilometer_Rate');
-				}
+			if (this.RateForm.all_inclusive_rates.controls.Kilometer_Rate) {
+				this.hours > 0 && this.RatesForm && this.calculateAmount('RatesForm', 'all_inclusive_rates', 'Kilometer_Rate');
+			}
 
-			}
+		}
 	}
 
 	fetchRates(affiliate: string, bookingId: number = 0) {
 		// this.$spinner.show()
 		this.$api.fetchAdminNewBookingRates(affiliate, bookingId).subscribe((response: any) => {
 			if (response?.success && response?.data?.rateArray) {
-				if(Object.keys(response.data.rateArray).length){
+				if (Object.keys(response.data.rateArray).length) {
 					this.ratesdata.next(response.data.rateArray);
 				}
-				else{
-					this.fetchRates(affiliate , null)
+				else {
+					this.fetchRates(affiliate, null)
 				}
 			}
 		});
@@ -345,6 +349,7 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 					if (form === "RatesForm") {
 						console.log(key, item);
 						(<FormGroup>this.RatesForm.get(key)).addControl(item, this.buildRatesForm(form, data[key][item]));
+
 						(<FormGroup>((<FormGroup>this.RatesForm.get(key)).get(item))).get("baserate").valueChanges.subscribe((value: number) => {
 							this.calculateAmount("RatesForm", key, item);
 						});
@@ -439,17 +444,18 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 		this.rate_params["chevrons"][items] = !this.rate_params["chevrons"][items];
 	}
 
-	handleSubHeadingScroll(items: string , id:any) {
+	handleSubHeadingScroll(items: string, id: any) {
 		this.rate_params["chevrons"][items] = !this.rate_params["chevrons"][items];
 		let el = document.getElementById(id);
-		console.log(`scrolling to ${id}` , el);
-		setTimeout(()=>{
+		console.log(`scrolling to ${id}`, el);
+		setTimeout(() => {
 			el.scrollIntoView();
-		},600)
+		}, 600)
 	}
 
 
 	async calculateAmount(form: string, formgroup: string, subform: string) {
+
 		if (form === "RatesForm") {
 			let baserate = (<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("baserate").value;
 
@@ -474,9 +480,16 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 					amount = baserate;
 				}
 
+				let label = (<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("rate_label").value;
 				// Admin Share Calculation
-				if (subform == 'Base_Rate') {
+				if (subform == 'Base_Rate' && label!='Minimum Rate') {
 					this.calc_admin_share = (amount * this.admin_share) / 100;
+					amount = amount + this.calc_admin_share;
+				}
+				if (label == "Minimum Rate" ) {
+					this.is_readonly_min_rate = true
+					let min_rate = (<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("baserate").value;
+					this.calc_admin_share = (min_rate * this.admin_share) / 100
 					amount = amount + this.calc_admin_share;
 				}
 

@@ -141,12 +141,11 @@
 												<div class="dropdown-item-icon"></div>
 												Invoice
 											</a>
-											<a class="dropdown-item" (click)="changeBookingStatus(booking.booking_id)"
+											<!-- <a class="dropdown-item" (click)="changeBookingStatus(booking.booking_id)"
 												data-toggle="modal" data-target="#change_status_booking_Modal">
-												<!-- *ngIf="booking.payment_status!='paid'" -->
 												<div class="dropdown-item-icon"></div>
 												Change Status
-											</a>
+											</a> -->
 											<a class="dropdown-item"
 												(click)="sendEmailClicked(booking.booking_id,'customer')"
 												data-toggle="modal" data-target="#emailModal">

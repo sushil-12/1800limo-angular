@@ -8,6 +8,9 @@
 	margin: 1.2rem auto;
 	box-shadow: 3px 3px 20px -6px rgba(40, 40, 40, 0.5);
 }
+.block-cursor{
+	cursor: not-allowed
+}
 
 .rates-row {
 	transition: all 0.27s ease-in-out;
@@ -17,6 +20,11 @@
 // @media only screen and (min-width: 1024px) {
 // 	.rates-row {}
 // }
+.num-hours{position: relative;}
+.num-hours span{position: absolute;background-color: #000000;color: #ffffff;bottom: 100%;
+	top:auto;left:50%;transform: translateX(-50%);padding: 8px 12px;font-size: 14px;display:none;margin-bottom: 10px;-webkit-transition: all 0.5s ease 0s;-moz-transition: all 0.5s ease 0s;-ms-transition: all 0.5s ease 0s;transition: all 0.5s ease 0s}
+	.num-hours span:before{position: absolute;content: '';top:100%;left:50%;transform:translateX(-50%);border-top:5px solid #000;border-left:8px solid transparent;border-right:8px solid transparent;}
+	.num-hours:hover span{display: block;}
 
 .errors {
 	height: 2rem;

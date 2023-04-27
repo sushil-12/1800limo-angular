@@ -79,16 +79,17 @@
 			</div>
 
 			<!-- Hours -->
-			<div class="col-auto" *ngIf="hours != 0 && sub_item.key === 'Base_Rate'">
+			<div class="num-hours col-auto" *ngIf="hours != 0 && sub_item.key === 'Base_Rate'">
 				<div>
 					<mat-form-field appearance="outline" class="m-0">
 						<mat-label>
 							Number of Hours
 						</mat-label>
 						<!-- style="cursor: not-allowed" -->
-						<input type="number" matInput placeholder="0" [value]="hours" 
-							class="font-weight-bolder rate-input-field text-right" (change)="changeInHours($event.target.value)" />
+						<input type="number" matInput placeholder="0" [value]="hours" [ngClass]="is_readonly_min_rate ? 'block-cursor' : ''"
+							class="font-weight-bolder rate-input-field text-right" (change)="changeInHours($event.target.value)" [readonly]="is_readonly_min_rate" />
 					</mat-form-field>
+					<span>Cannot edit hours bcz of min rate</span>
 				</div>
 			</div>
 
