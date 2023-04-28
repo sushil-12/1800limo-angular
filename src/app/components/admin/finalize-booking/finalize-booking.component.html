@@ -149,7 +149,7 @@
 	[vehicles]="finalize_params.number_of_vehicles" (returnformvalue)="ReturnRateFormValue($event)" 
 	(returnNumberOfHr)="HandleReturnNumberOfHr($event)">
 </app-finalize-rates>
-<div class="row mb-3" id="submitForm">
+<div class="row mb-3" id="submitForm" *ngIf="BookingDetail?.payment_status=='unpaid'">
 	<div class="col-md-12 text-right"  >
 		<button type="button" class="custom-filled-button ratesButton m-3" (click)="submitForm()">
 			{{finalize_btn}}

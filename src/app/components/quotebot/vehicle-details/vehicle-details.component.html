@@ -432,6 +432,52 @@
 			</div>
 		</div>
 		<!-- Return Details Ends -->
+		<div>
+			
+		</div>
+		<div class="row my-3" *ngIf="selected_vehicle?.vehicle_details.year">
+			<div class="col-sm-6 col-md-5" >
+				<p class="pv-title pv-details text-orange">
+					Vehicle Details
+				</p>
+			</div>
+		</div>
+		<div class="row my-3" *ngIf="selected_vehicle?.vehicle_details.year">
+			<div class="col-md-5 ml-4">
+				<p class="pv-title">
+					<i class="bi bi-calendar-check text-orange"></i> Year
+				</p>
+			</div>
+			<div class="col-auto">
+				<p class="pv-title-value">
+					{{selected_vehicle?.vehicle_details.year}}
+				</p>
+			</div>
+		</div>
+		<div class="row my-3" *ngIf="selected_vehicle?.vehicle_details.make">
+			<div class="col-md-5 ml-4">
+				<p class="pv-title">
+					<i class="bi bi-wrench-adjustable text-orange"></i> Make
+				</p>
+			</div>
+			<div class="col-auto">
+				<p class="pv-title-value">
+					{{selected_vehicle?.vehicle_details.make}}
+				</p>
+			</div>
+		</div>
+		<div class="row my-3" *ngIf="selected_vehicle?.vehicle_details.model">
+			<div class="col-md-5 ml-4">
+				<p class="pv-title">
+					<i class="bi bi-boxes  text-orange"></i>  Model
+				</p>
+			</div>
+			<div class="col-auto">
+				<p class="pv-title-value">
+					{{selected_vehicle?.vehicle_details.model}}
+				</p>
+			</div>
+		</div>
 	</div>
 	<!-- QuoteBot Preview Section ends -->
 

@@ -315,6 +315,10 @@ export class AffiliateService
 		const result = await this.httpClient.get(this.serverUrl + 'get-affiliate-vehicles').toPromise();
 		return result;
 	}
+	async getVehicleDataByAffiliateId(affiliate_id){
+		const result = await this.httpClient.get(this.serverUrl + 'get-affiliate-vehicles/'+affiliate_id).toPromise();
+		return result;
+	}
 	getFieldsData()
 	{
 		return this.httpClient.get(this.serverUrl + 'vehicle-data');

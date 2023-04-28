@@ -367,16 +367,17 @@
 							<span class="text-secondary">
 								All Inclusive Rate<sup>*</sup>
 							</span>
-							<div class="d-flex mt-2 m-2">
+							
+							<div class="d-flex mt-2 m-2" *ngIf="vehinfo?.vehicle_details.year">
 								<span class="text-secondary"><i class="bi bi-calendar-check text-orange"></i> Year</span>
 								<span class="ml-5 font-weight-bold"> {{vehinfo?.vehicle_details.year}}</span>
 
 							</div>
-							<div class="d-flex m-2">
+							<div class="d-flex m-2" *ngIf="vehinfo?.vehicle_details.make">
 								<span class="text-secondary"><i class="bi bi-wrench-adjustable text-orange"></i> Make</span>
 								<span class="ml-5 font-weight-bold"> {{vehinfo?.vehicle_details.make}}</span>
 							</div>
-							<div class="d-flex m-2">
+							<div class="d-flex m-2" *ngIf="vehinfo?.vehicle_details.model">
 								<span class="text-secondary"><i class="bi bi-boxes  text-orange"></i> Model</span>
 								<span class="ml-5 font-weight-bold"> {{vehinfo?.vehicle_details.model}}</span>
 							</div>
