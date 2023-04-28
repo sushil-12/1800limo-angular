@@ -25,7 +25,7 @@ export class InvoiceComponent implements OnInit {
   public firstPage:Number;
   public lastPage:Number;
   public totalPage:Number;
-  public currentPage:Number;
+  public currentPage:any;
   public from:Number;
   public to:Number;
   public path:string;

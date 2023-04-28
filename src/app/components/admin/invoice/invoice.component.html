@@ -30,6 +30,7 @@
                   <tr role="row">
                     <th>Actions</th>
                     <th>Booking #</th>
+                    <th>Status</th>
                     <th>Invoice #</th>
                     <th>Date</th>
                     <th>Pax Info</th>
@@ -56,6 +57,11 @@
                     </td>
                     <td class="text-center font-weight-bolder cursor-pointer text-underline">
                       {{ invoice.booking_id }}
+                    </td>
+                    <td>
+                      <div [className]="'badge badge-pill booking_status cursor-pointer ' + invoice?.status">
+                        {{invoice?.status |titlecase}}
+                      </div>
                     </td>
                     <td class="text-center font-weight-bolder cursor-pointer text-underline">
                       {{ invoice.invoice_number }}
