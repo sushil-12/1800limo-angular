@@ -29,6 +29,7 @@ export class Step6Component implements OnInit {
 	// show/hide content variables
 	main_content: string
 	section_content: string
+	account_approval:string = localStorage.getItem('account_approval') || ''
 
 
 	// array variables

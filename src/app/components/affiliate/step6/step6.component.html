@@ -45,7 +45,7 @@
 			</div>
 		</div>
 
-		<div class="row">
+		<div class="row" *ngIf="account_approval!='accepted'">
 			<div class="col-md-12">
 				<div id="button-container" class="w-100">
 					<button class="custom-filled-button green-button mx-auto d-block" (click)="submitForm()">
