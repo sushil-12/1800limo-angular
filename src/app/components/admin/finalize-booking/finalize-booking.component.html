@@ -146,7 +146,8 @@
 <app-finalize-rates class="d-flex flex-wrap finalize-rates" [initRates]="init_rates"
 	[affiliate_type]="'loose_affiliate'" (formvalue)="RateFormValue($event)" [distance]="finalize_params.distance"
 	[reservation_id]="finalize_params.booking_id" [reset]="false" [hours]="finalize_params.number_of_hours"
-	[vehicles]="finalize_params.number_of_vehicles" (returnformvalue)="ReturnRateFormValue($event)">
+	[vehicles]="finalize_params.number_of_vehicles" (returnformvalue)="ReturnRateFormValue($event)" 
+	(returnNumberOfHr)="HandleReturnNumberOfHr($event)">
 </app-finalize-rates>
 <div class="row mb-3" id="submitForm">
 	<div class="col-md-12 text-right"  >

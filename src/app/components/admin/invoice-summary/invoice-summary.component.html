@@ -19,6 +19,11 @@
 		</div>
 		<div>
 			<button class="custom-btn button2 box-shadow my-1" style="height: 40px;width: 200px; font-size: 14px;
+			padding: 10px;" data-toggle="modal" data-target="#sendInvoiceToAny" (click)="show_sendInvoiceToAny=!show_sendInvoiceToAny">
+				Send Invoice</button>
+		</div>
+		<div>
+			<button class="custom-btn button2 box-shadow my-1" style="height: 40px;width: 200px; font-size: 14px;
 			padding: 10px;" (click)="sendInvoiceToCustomer()">
 				Send Invoice to customer</button>
 		</div>
@@ -331,6 +336,53 @@
 </div>
 <!-- refund modal ends -->
 
+<!-- send Invoice to Any -->
+<div class="modal fade" id="sendInvoiceToAny" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+	aria-hidden="true" data-backdrop="static" data-keyboard="false" *ngIf="show_sendInvoiceToAny">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content user_inforamtion">
+			<button type="button" class="close closeButton x-circle-btn" data-dismiss="modal"
+				aria-label="Close" (click)="closeModal_send_in_to_any()">
+				<i class="bi bi-x-circle"></i>
+			</button>
+			<div class="modal-header pb-0">
+				<h3 class="mb-0" id="exampleModalLabel">Send Invoice</h3>
+			</div>
+			<div class="modal-body">
+					<div class="form-group">
+						<div class="col-md-12">
+							<!-- <mat-form-field appearance="outline">
+								<mat-label>Enter email</mat-label>
+								<input matInput 
+								placeholder="eg : xyz@gmail.com, abc@gmail.com" [value]="str_email" (keyup)="handleInputEmail($event)" type="text" required>
+							</mat-form-field> -->
+
+							<mat-form-field class="example-chip-list" appearance="outline">
+								<mat-chip-list #chipList aria-label="Email selection">
+								  <mat-chip *ngFor="let email of emails" [selectable]="selectable"
+										   [removable]="removable" (removed)="remove(email)">
+									{{email.value}}
+									<i class="bi bi-x ml-1" *ngIf="removable" (click)="remove(email)"></i>
+								  </mat-chip>
+								  <input matInput
+								  		 placeholder="Enter email"
+										 [matChipInputFor]="chipList"
+										 [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+										 [matChipInputAddOnBlur]="addOnBlur"
+										 (matChipInputTokenEnd)="add($event)">
+								</mat-chip-list>
+							  </mat-form-field>
+
+						</div>
+					</div>
+			</div>
+			<div class="modal-footer d-flex justify-content-between">
+				<button type="button"  (click)="closeModal_send_in_to_any()" class="btn btnStyle">Close</button>
+				<button class="btn saveButtonModal" type="submit" (click)="sendInvoiceToAny()" [disabled]="(this.emails.length==0)" >Submit</button>
+			</div>
+		</div>
+	</div>
+</div>
 
 
 <!-- old Invoice design here -->

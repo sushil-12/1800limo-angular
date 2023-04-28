@@ -231,7 +231,8 @@ export class FinalizeBookingComponent implements OnInit {
 			rateArray : rateArray,
 			sub_total : this.edit_rates_value.sub_total,
 			grand_total : this.edit_rates_value.grand_total,
-			affiliate_type : this.affiliate_type
+			affiliate_type : this.affiliate_type,
+			number_of_hours :this.finalize_params['number_of_hours']
 		}
 		console.log('\n\n Submitting Form' , body);
 			this.$spinner.show()
@@ -370,6 +371,11 @@ export class FinalizeBookingComponent implements OnInit {
 	}
 	ReturnRateFormValue(form: any) {
 		this.return_edit_rates_value = form
+	}
+	HandleReturnNumberOfHr(data: any) {
+		console.log('____<><><><><><><><>', data)
+		this.finalize_params['number_of_hours']  = data
+		
 	}
 	showSaveButton(visibility: boolean) {
 		this.visibility = !this.visibility

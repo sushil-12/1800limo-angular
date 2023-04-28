@@ -7,12 +7,18 @@ import { throwError } from 'rxjs';
 declare var $: any;
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {MatChipEvent, MatChipInputEvent} from '@angular/material/chips';
+import {COMMA, ENTER} from '@angular/cdk/keycodes';
 
+export interface Email {
+	value: string;
+  }
 @Component({
 	selector: 'app-invoice-summary',
 	templateUrl: './invoice-summary.component.html',
 	styleUrls: ['./invoice-summary.component.scss']
 })
+
 export class InvoiceSummaryComponent implements OnInit
 {
 
@@ -21,8 +27,10 @@ export class InvoiceSummaryComponent implements OnInit
 	public paramResponse: any;
 	public bookingId: any;
 	show:boolean = false
+	show_sendInvoiceToAny:boolean = false
 	refundAmountForm:FormGroup
 	audit_Trail: Array<any>;
+	str_email:any = ''
 
 	constructor(
 		private adminService: AdminService,
@@ -32,6 +40,7 @@ export class InvoiceSummaryComponent implements OnInit
 		private $spinner: NgxSpinnerService,
 		private $errors: ErrorDialogService,
 		private activatedroute: ActivatedRoute) { }
+		
 
 	ngOnInit(): void
 	{
@@ -54,6 +63,40 @@ export class InvoiceSummaryComponent implements OnInit
 				}
 			});
 	}
+
+	visible = true;
+  selectable = true;
+  removable = true;
+  addOnBlur = true;
+  readonly separatorKeysCodes: number[] = [ENTER, COMMA];
+  emails: Email[] = [];
+
+  add(event: MatChipInputEvent): void {
+    const input = event.input;
+    const value = event.value;
+
+    // Add our email
+    if ((value || '').trim()) {
+      this.emails.push({value: value.trim()});
+    }
+
+    // Reset the input value
+    if (input) {
+      input.value = '';
+    }
+	console.log('emails-->>>' , this.emails)
+  }
+
+  remove(email: Email): void {
+	console.log('in function remove-->>' , email)
+    const index = this.emails.indexOf(email);
+
+    if (index >= 0) {
+      this.emails.splice(index, 1);
+    }
+  }
+
+
 	backButton()
 	{
 		this.router.navigate(['/admin/daily-bookings-admin']);
@@ -97,9 +140,32 @@ export class InvoiceSummaryComponent implements OnInit
 			this.$spinner.hide()
 		})
 	}
+	sendInvoiceToAny(){
+		
+		let data = { 
+			email_addresses: this.emails
+			}
+
+		
+		this.$spinner.show()
+		this.adminService.sendInvoiveToAny(this.bookingId , data).subscribe((response: any) => {
+			this.$errors.openDialog({
+				errors: {
+					error: `<span class='text-success'>${response.message}</span>`
+				}
+			})
+			// this.$router.navigate(['/admin/daily-bookings-admin'])
+			console.log('response-->>' , response)
+			this.$spinner.hide()
+		})
+		this.show_sendInvoiceToAny = false
+		this.str_email =  ''
+		$("#sendInvoiceToAny").modal("hide");
+	}
 	get Form() {
 		return this.refundAmountForm.controls;
 	}
+
 
 	refund(){
 		console.log('--------->>>>>>>>>>>>>>',this.refundAmountForm.get('refundAmount').value , this.refundAmountForm.valid)
@@ -123,11 +189,25 @@ export class InvoiceSummaryComponent implements OnInit
 			})
 		}
 	}
+	
 
 	closeModal() {
 		this.refundAmountForm.patchValue({refundAmount:this.invoiceData.grand_total})
 		this.show = false
 		$("#refundModal").modal("hide");
+	}
+	closeModal_send_in_to_any(){
+		// this.refundAmountForm.patchValue({refundAmount:this.invoiceData.grand_total})
+		this.show_sendInvoiceToAny = false
+		this.str_email =  ''
+		$("#sendInvoiceToAny").modal("hide");
+	}
+
+	handleInputEmail(event:any){
+		console.log('in function handle input email', event.target.value)
+		if(event.target.value){
+			this.str_email =  event.target.value
+		}
 	}
 
 }

@@ -24,6 +24,7 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 	// Throw Events.
 	@Output("formvalue") formvalue = new EventEmitter<Record<string, any>>();
 	@Output("returnformvalue") returnformvalue = new EventEmitter<Record<string, any>>();
+	@Output("returnNumberOfHr") returnNumberOfHr = new EventEmitter<Record<string, any>>();
 
 	RatesForm: FormGroup;
 	ReturnRatesForm: FormGroup;
@@ -68,6 +69,7 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 
 	vehicles: number = 1;
 	hours: number = 0;
+	is_readonly_min_rate: boolean = false;
 
 	constructor(
 		private $form: FormBuilder,
@@ -300,14 +302,16 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 				}
 
 			}
+
+		this.returnNumberOfHr.emit(hours)
 	}
 	fetchRates(affiliate: string, bookingId: number = 0) {
 		this.$spinner.show()
-		this.affiliateService.getBookingData(bookingId).subscribe((response: any) => {
+		this.affiliateService.finalizeRates(bookingId).subscribe((response: any) => {
 			this.$spinner.hide()
-			if (response?.success && response?.data?.priceDetail) {
-				if(Object.keys(response.data.priceDetail).length){
-					this.ratesdata.next(response.data.priceDetail);
+			if (response?.success && response?.data?.rateArray) {
+				if(Object.keys(response.data.rateArray).length){
+					this.ratesdata.next(response.data.rateArray);
 				}
 				else{
 					this.fetchRates(affiliate , null)
@@ -453,10 +457,17 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 				} else {
 					amount = baserate;
 				}
+				let label = (<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("rate_label").value;
 
 				// Admin Share Calculation
 				if (subform == 'Base_Rate') {
 					this.calc_admin_share = (amount * this.admin_share) / 100;
+					amount = amount + this.calc_admin_share;
+				}
+				if (label == "Minimum Rate" ) {
+					this.is_readonly_min_rate = true
+					let min_rate = (<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("baserate").value;
+					this.calc_admin_share = (min_rate * this.admin_share) / 100
 					amount = amount + this.calc_admin_share;
 				}
 

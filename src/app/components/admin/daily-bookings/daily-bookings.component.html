@@ -168,16 +168,20 @@
 												<div class="dropdown-item-icon"></div>
 												Email Passenger
 											</a>
+											<a class="dropdown-item"
+												(click)="sendEmailClicked(booking.booking_id,'emailAll')"
+												data-toggle="modal" data-target="#emailAll">
+												<!-- *ngIf="booking.payment_status!='paid'" -->
+												<div class="dropdown-item-icon"></div>
+												Email All
+											</a>
 											<a class="dropdown-item" (click)="auditTrail(booking.booking_id)"
 												data-toggle="modal" data-target="#AuditTrailModal">
 												<!-- *ngIf="booking.payment_status!='paid'" -->
 												<div class="dropdown-item-icon"></div>
 												Audit Trial
 											</a>
-											<a class="dropdown-item">
-												<div class="dropdown-item-icon"></div>
-												Cancel
-											</a>
+											
 										</div>
 									</td>
 
@@ -378,6 +382,24 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="custom-btn savebutton" (click)="emailPassenger()">Send
+					Email</button>
+				<button type="button" class="custom-btn resetbutton" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="emailAll" tabindex="-1" role="dialog" aria-labelledby="emailAll"
+	aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header pb-0">
+				<h3 class="mb-0">Email</h3>
+			</div>
+			<div class="modal-body text-center">
+				<p>Are you sure, You want to send email?</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="custom-btn savebutton" (click)="emailAll()">Send
 					Email</button>
 				<button type="button" class="custom-btn resetbutton" data-dismiss="modal">Close</button>
 			</div>

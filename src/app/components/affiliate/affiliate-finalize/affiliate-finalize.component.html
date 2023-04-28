@@ -16,7 +16,7 @@
 				<p>Service Type <strong>{{ textFormatter(BookingDetail?.service_type) | titlecase }}</strong>
 				</p>
 			</div>
-			<div class="col-md-4">
+			<!-- <div class="col-md-4">
 				<p>Transfer Type: <strong>{{ textFormatter(BookingDetail?.transfer_type) | titlecase }}</strong>
 				</p>
 			</div>
@@ -24,7 +24,7 @@
 				<p>Return Transfer Type: <strong>{{ textFormatter(BookingDetail?.return_transfer_type) | titlecase
 						}}</strong>
 				</p>
-			</div>
+			</div> -->
 			<div class="col-md-4">
 				<p>Booking Type <strong>{{ textFormatter(BookingDetail?.transfer_type) | titlecase }}</strong>
 				</p>
@@ -366,9 +366,9 @@
 
 <section class="section-container mt-2">
 	<app-affiliate-finalize-rates *ngIf="init_rates" class="d-flex flex-wrap finalize-rates" [initRates]="init_rates"
-	[affiliate_type]="'loose_affiliate'" (formvalue)="RateFormValue($event)" [distance]="finalize_params.distance"
-	[reservation_id]="finalize_params.booking_id" [reset]="false" [hours]="finalize_params.number_of_hours"
-	[vehicles]="finalize_params.number_of_vehicles">
+	(formvalue)="RateFormValue($event)" [distance]="finalize_params.distance"
+	[reservation_id]="finalize_params.booking_id" [reset]="false" [hours]="hours"
+	[vehicles]="finalize_params.number_of_vehicles" (returnNumberOfHr)="HandleReturnNumberOfHr($event)">
 	</app-affiliate-finalize-rates>
 	<div class="row mb-3" id="submitForm">
 		<div class="col-md-12 text-right">

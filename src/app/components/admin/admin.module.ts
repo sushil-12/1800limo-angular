@@ -102,6 +102,8 @@ import { FinalizeRatesComponent } from './finalize-rates/finalize-rates.componen
 import { NgxPrintModule } from 'ngx-print';
 import { BadgeCitiesComponent } from './badge-cities/badge-cities.component';
 import { MatNativeDateModule } from '@angular/material/core';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
 	declarations: [
@@ -202,7 +204,8 @@ import { MatNativeDateModule } from '@angular/material/core';
 		SharedModule,
 		MatRadioModule,
 		NgSelectModule,
-		NgxPrintModule
+		NgxPrintModule,
+		MatChipsModule
 	],
 	exports: [BookingStatusTextReplacePipe]
 })

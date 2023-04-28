@@ -50,6 +50,7 @@ export class AffiliateFinalizeComponent implements OnInit {
 		booking_id: 0
 	}
 	quoteAmount: any;
+	hours: any;
 	constructor(
 		private affiliateService: AffiliateService,
 		private $form: FormBuilder,
@@ -97,6 +98,7 @@ export class AffiliateFinalizeComponent implements OnInit {
 				this.transferType = this.BookingDetail?.transfer_type
 				this.finalize_params.number_of_vehicles = data?.booking_detail?.number_of_vehicles
 				this.init_rates = true;
+				this.hours =  data?.booking_detail?.number_of_hours
 				this.quoteAmount = data?.grand_total
 				this.CardsInformation = data?.CreditCardsDetail
 				this.primaryCards = this.CardsInformation.filter(i=> i.cc_prority == 'Primary')
@@ -117,6 +119,10 @@ export class AffiliateFinalizeComponent implements OnInit {
 		}
 	}
 
+	HandleReturnNumberOfHr(data: any) {
+		console.log('____<><><><><><><><>', data)
+		this.finalize_params['number_of_hours']  = data
+	}
 	dateFormat(value: any) {
 		if (value) {
 			return moment(value, 'YYYY-MM-DD').format('ll')
@@ -164,7 +170,8 @@ export class AffiliateFinalizeComponent implements OnInit {
 			reservation_id: this.bookingId,
 			rateArray: rateArray,
 			sub_total: this.edit_rates_value.sub_total,
-			grand_total: this.edit_rates_value.grand_total
+			grand_total: this.edit_rates_value.grand_total,
+			number_of_hours :this.finalize_params['number_of_hours']
 		}
 		console.log('final obj -------------->>>>>>>', body)
 		console.log('\n\n Submitting Form', body);
