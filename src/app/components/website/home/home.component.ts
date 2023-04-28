@@ -491,7 +491,7 @@ export class HomeComponent implements OnInit
 				service_type: 'one_way',
 				booking_hour: '2',
 				pickup_type: 'city',
-				dropoff_type: 'city',
+				dropoff_type: 'airport',
 				pickup_date: new Date().toISOString().split('T')[0],
 				pickup_time: '12:00:00',
 				return_pickup_date: new Date().toISOString().split('T')[0],

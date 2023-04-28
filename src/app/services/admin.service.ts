@@ -806,6 +806,9 @@ export class AdminService {
 	passengerBooking(data){
 		return this.httpClient.post(this.serverUrl + 'passenger-booking-confirmation-email' ,data)
 	}
+	bookingEmailAll(data){
+		return this.httpClient.post(this.serverUrl + 'send-reservation-detail-email-to-all' ,data)
+	}
 	auditTrailInfo(bookingId){
 		return this.httpClient.get(this.serverUrl+`admin/booking-audit-records/${bookingId}`)
 	}
@@ -987,6 +990,10 @@ export class AdminService {
 	sendInvoiveToCustomer(bookingId:any){
 		return this.httpClient.get(`${this.serverUrl}admin/send-invoice/${bookingId}`)
 	}
+	sendInvoiveToAny(bookingId:any,data:any){
+		return this.httpClient.post(`${this.serverUrl}admin/send-invoice-to-anyone/${bookingId}`,data)
+	}
+
 
 	refund(body:any){
 		return this.httpClient.post(`${this.serverUrl}admin/refund-request`,body)

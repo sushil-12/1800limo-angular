@@ -27,7 +27,7 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 	// Throw Events.
 	@Output("formvalue") formvalue = new EventEmitter<Record<string, any>>();
 	@Output("returnformvalue") returnformvalue = new EventEmitter<Record<string, any>>();
-
+	@Output("returnNumberOfHr") returnNumberOfHr = new EventEmitter<Record<string, any>>();
 	RatesForm: FormGroup;
 	ReturnRatesForm: FormGroup;
 
@@ -308,8 +308,8 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 			if (this.RateForm.all_inclusive_rates.controls.Kilometer_Rate) {
 				this.hours > 0 && this.RatesForm && this.calculateAmount('RatesForm', 'all_inclusive_rates', 'Kilometer_Rate');
 			}
-
 		}
+		this.returnNumberOfHr.emit(hours)
 	}
 
 	fetchRates(affiliate: string, bookingId: number = 0) {

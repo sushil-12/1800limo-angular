@@ -177,6 +177,24 @@ export class DailyBookingsComponent implements OnInit {
 			return args.replace(re, '<mark class="font-weight-bold">$&</mark>');
 		}
 	}
+	emailAll() {
+		console.log('In function email all', this.sendEmailForm.value.reservation_id ,this.sendEmailForm.value.emailTarget )
+		let data = {
+			reservation_id: this.sendEmailForm.value.reservation_id
+		}
+		this.spinner.show()
+		this.adminService.bookingEmailAll(data)
+			.pipe(
+				catchError((err) => {
+					return throwError(err);
+				})
+			)
+			.subscribe((response: any) => {
+				console.log('response--------->>>>>>>>', response)
+				this.spinner.hide()
+				$("#emailAll").modal("hide");
+			});
+	}
 
 	emailPassenger() {
 		console.log('In function email passenger', this.sendEmailForm.value.reservation_id)
@@ -411,6 +429,7 @@ export class DailyBookingsComponent implements OnInit {
 			emailTarget: emailTarget,
 		});
 	}
+
 
 	emailForm() {
 		this.submitted = true;
