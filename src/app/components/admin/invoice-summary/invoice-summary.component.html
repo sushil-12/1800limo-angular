@@ -50,7 +50,7 @@
 						<div class="bd-highlight invoice-p m-3">
 							Paid Amount
 							<p class="invoice-dollar--color display-4">
-								<strong style="font-size: xx-large;">${{invoiceData.grand_total}}</strong>
+								<strong style="font-size: xx-large;"><span>{{currencySymbol}}</span>{{(amount).toFixed(2)}}</strong>
 							</p>
 						</div>
 					</div>
@@ -218,7 +218,7 @@
 						</div>
 						<div class="div" *ngIf="invoiceData.priceDetail">
 							<div class="col-md-12 p-3 row" *ngFor="let priceObj of invoiceData.priceDetail | keyvalue">
-								<div class="col-4">
+								<div class="col-3">
 									<p class="invoice-text-charges">{{priceObj.key | bookingStatusTextReplace:'_':' '}}
 									</p>
 								</div>
@@ -233,27 +233,31 @@
 										</li>
 									</ul>
 								</div>
-								<div class="col-2 d-flex justify-content-end">
+								<div class="col-3 d-flex justify-content-end">
 									<ul style="list-style: none;margin:0;color: #1c1a1a;font-size:15px">
 										<li style="margin-bottom: 8px; " class="invoice-charges-textb "
 											*ngFor="let price of priceObj.value">
-											<span class="font-weight-bold" *ngIf="price.amount">${{price.amount}}</span>
+											<span class="font-weight-bold" *ngIf="price.amount">
+											{{currencySymbol+price.amount}}</span>
 										</li>
 									</ul>
 								</div>
 							</div>
+							<!-- to show refund ammount -->
+
 							<div class="invoice-subhead px-3">
 								<div class="row d-flex justify-content-between">
 									<p class="m-0 p-1 text-charges">
 										Sub Total
 									</p>
 									<p class="m-0 p-1 text-charges">
-										${{invoiceData?.sub_total.toFixed(2)}}
+										<span >{{currencySymbol}}</span>
+										{{invoiceData?.sub_total.toFixed(2)}}
 									</p>
 								</div>
 								<div class="row d-flex justify-content-between">
 									<p class="m-0 p-1 text-charges">
-										Number of vehicles
+										No. of vehicles
 									</p>
 									<p class="m-0 p-1 text-charges">
 										<i class="bi bi-x font-weight-bolder"></i>
@@ -261,10 +265,19 @@
 									</p>
 								</div>
 								<div class="row d-flex justify-content-between">
+									<p class="m-0 p-1 text-charges">
+										Refund
+										<i class="bi bi-info-circle-fill" data-toggle="modal" data-target="#refundInfo"></i>
+									</p>
+									<p class="m-0 p-1 text-charges">
+										- &nbsp;<span >{{currencySymbol}}</span>{{partial_refund_amount}}
+									</p>
+								</div>
+								<div class="row d-flex justify-content-between">
 									<p class="m-0 p-1 text-charges" >
 										Total-Amount</p>
 									<p class="m-0 p-1 text-charges font-weight-bold">
-										${{invoiceData.grand_total.toFixed(2)}}
+										<span >{{currencySymbol}}</span>{{amount.toFixed(2)}}
 									</p>
 								</div>
 							</div>
@@ -308,9 +321,9 @@
 						<div class="col-md-12">
 							<mat-form-field appearance="outline">
 								<mat-label>Amount</mat-label>
-								<span matPrefix>$ &nbsp;</span>
+								<span class="currencySymbol" matPrefix>{{currencySymbol}}</span> &nbsp;
 								<input matInput type="number" formControlName="refundAmount"
-									value="invoiceData.grand_total" required readonly>
+									value="invoiceData.grand_total" required>
 							</mat-form-field>
 							<div class="error-box">
 								<div class="error-message"
@@ -384,6 +397,46 @@
 	</div>
 </div>
 
+<!-- Refund Information modal -->
+<!-- Audit trail Modal -->
+<div class="modal fade bd-example-modal-lg" id="refundInfo" tabindex="-1" role="dialog"
+	aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content user_information bottom-container">
+			<div class="modal-header pb-0">
+				<h3 class="modal-title mb-0">Refund transaction</h3>
+			</div>
+			<div class="modal-body">
+				<!-- {{invoiceData.audit_trail | json}} -->
+				<table id="audittrail" class="table table-striped">
+					<thead style="background-color: white;">
+						<tr>
+							<th scope="col">#</th>
+							<th scope="col">Transaction ID</th>
+							<th scope="col">Refund Amount</th>
+							<th scope="col" id="date">Created Date</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr *ngFor="let record of refundHistory; let i=index">
+							<th scope="row">{{i+1}}</th>
+							<td style="word-wrap: break-word;">{{record?.balance_transaction}}</td>
+							<td><span class="currencySymbol">{{currencySymbol}}</span>
+								{{(record?.amount/100).toFixed(2)}}</td>
+							<td>{{TimestampToDate(record?.created)}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="modal-footer justify-content-end">
+				<button type="button" class="x-close-btn x-cross-btn mx-3" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true" class="bi bi-x-circle"></span>
+				</button>
+
+			</div>
+		</div>
+	</div>
+</div>
 
 <!-- old Invoice design here -->
 
