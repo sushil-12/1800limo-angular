@@ -9,6 +9,8 @@ import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.se
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {MatChipEvent, MatChipInputEvent} from '@angular/material/chips';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
+import * as moment from 'moment';
+import { HttpClient } from '@angular/common/http';
 
 export interface Email {
 	value: string;
@@ -31,7 +33,12 @@ export class InvoiceSummaryComponent implements OnInit
 	refundAmountForm:FormGroup
 	audit_Trail: Array<any>;
 	str_email:any = ''
-
+	partial_refund_amount : number = 0;
+    // amount is grandTotal - refunded ammount 
+	amount:number = 0
+	refundHistory: any;
+	currencyOptions: any;
+	currencySymbol :any;
 	constructor(
 		private adminService: AdminService,
 		private router: Router,
@@ -39,7 +46,8 @@ export class InvoiceSummaryComponent implements OnInit
 		private spinner: NgxSpinnerService,
 		private $spinner: NgxSpinnerService,
 		private $errors: ErrorDialogService,
-		private activatedroute: ActivatedRoute) { }
+		private activatedroute: ActivatedRoute,
+		private httpClient: HttpClient) { }
 		
 
 	ngOnInit(): void
@@ -47,6 +55,7 @@ export class InvoiceSummaryComponent implements OnInit
 
 		this.spinner.show();
 		this.buildRefundForm()
+		this.getCurrencyData();
 		this.activatedroute.queryParamMap
 			.subscribe((params) =>
 			{
@@ -106,7 +115,13 @@ export class InvoiceSummaryComponent implements OnInit
 			refundAmount:['',[Validators.required]]
 		})
 	}
-
+	getCurrencyData(){
+		console.log('in function get currency data')
+		this.httpClient.get("assets/json/currencyOptions1.json").subscribe(data => { 
+			console.log('data ' ,data)
+			this.currencyOptions = data;
+		})
+	}
 	getInvoiceData(){
 
 		this.adminService.getInvoiceData(this.bookingId)
@@ -120,12 +135,28 @@ export class InvoiceSummaryComponent implements OnInit
 		{
 			console.log("array response", data)
 			this.invoiceData = data;
-			this.audit_Trail = this.invoiceData.audit_trail;
-			this.refundAmountForm.patchValue({refundAmount:this.invoiceData.grand_total})
-			this.refundAmountForm.controls['refundAmount'].setValidators([Validators.required,Validators.max(this.invoiceData.grand_total)])
+			this.audit_Trail = this.invoiceData?.audit_trail;
+			// amount refunded is in penny ,for convert to dollar divide by 100
+			this.partial_refund_amount = this.invoiceData?.billing_detail?.amount_refunded / 100
+			this.amount  = this.invoiceData?.grand_total - this.partial_refund_amount
+			this.refundAmountForm.patchValue({refundAmount:this.amount})
+			this.refundAmountForm.controls['refundAmount'].setValidators([Validators.required,Validators.max(this.amount)])
 			this.refundAmountForm.controls['refundAmount'].updateValueAndValidity();
 			this.spinner.hide();//hide spinner
+			this.currencySymbol = this.getCurrencySymbol(this.invoiceData.currency)
 		});
+		this.adminService.getInvoiceRefundHistory(this.bookingId)
+		.pipe(
+			catchError(err =>
+			{
+				this.spinner.hide();//hide spinner
+				return throwError(err);
+			})
+		).subscribe(({ data, sucess, message }: any) =>
+		{
+			this.refundHistory = data?.id?.data
+		});
+		
 	}
 	sendInvoiceToCustomer(){
 		this.$spinner.show()
@@ -165,6 +196,23 @@ export class InvoiceSummaryComponent implements OnInit
 	get Form() {
 		return this.refundAmountForm.controls;
 	}
+	TimestampToDate(timestamp:any){
+		if(timestamp){
+			return moment(timestamp*1000).format('MMMM Do YYYY, h:mm:ss a')
+		}
+	}
+	
+	
+	getCurrencySymbol(currency:any){
+		let symbol ;
+		for(let i=0; i<this.currencyOptions.length;i++){
+			if(this.currencyOptions[i].code == currency.toUpperCase()){
+				symbol =  this.currencyOptions[i].symbol
+				break;
+			}
+		}
+		return symbol
+	}
 
 
 	refund(){
@@ -174,7 +222,7 @@ export class InvoiceSummaryComponent implements OnInit
 			this.$spinner.show()
 			let body = {
 				reservation_id : this.invoiceData.reservation_id,
-				amount : this.refundAmountForm.get('refundAmount').value  * 100,
+				amount : this.refundAmountForm.get('refundAmount').value,
 				invoice_id: this.invoiceData.invoice_number
 			}
 			this.adminService.refund(body).subscribe((response: any) => {
