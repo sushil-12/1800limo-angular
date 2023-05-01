@@ -370,7 +370,7 @@
 	[reservation_id]="finalize_params.booking_id" [reset]="false" [hours]="hours"
 	[vehicles]="finalize_params.number_of_vehicles" (returnNumberOfHr)="HandleReturnNumberOfHr($event)">
 	</app-affiliate-finalize-rates>
-	<div class="row mb-3" id="submitForm">
+	<div class="row mb-3" id="submitForm" *ngIf="BookingDetail?.payment_status=='unpaid'">
 		<div class="col-md-12 text-right">
 			<button type="button" class="custom-filled-button ratesButton m-3" (click)="submitForm()">
 				{{finalize_btn}}

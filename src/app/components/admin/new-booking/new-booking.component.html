@@ -1516,6 +1516,14 @@
 							(click)="deleteExtraStop(false, stop_index)"></i>
 					</div>
 				</div>
+				<div class="col-11">
+					<mat-form-field appearance="outline">
+						<mat-label> Extra Stop Instruction {{ stop_index + 1 }} </mat-label>
+						<input type="text" matInput placeholder="Special Instruction" 
+						(focus)="$event.target.select()" [value]="fetchSpecialInstruction('extra_stops', stop_index)"
+						(keyup)="fillExtraStopInstruction(false, stop_index,$event)"/>
+					</mat-form-field>
+				</div>
 			</div>
 			<!-- Extra Stop Address Field Ends -->
 

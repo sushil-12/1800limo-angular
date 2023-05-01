@@ -858,16 +858,23 @@ export class CreateNewBookingComponent implements OnInit {
 			return
 		}
 		this.$spinner.show()
-		this.affiliateService.affiliateGetVehicleData().then((response: any) => {
+		this.affiliateService.getVehicleDataByAffiliateId(affiliate_id).then((response: any) => {
 			console.log('get vehicle data response------------------->>>>>>>>>>>>>>>', response.success && response.data.length > 0, response.data)
-			if (response.success && response.data.length > 0) {
-				this.VehicleList = response.data
+			if (response.success && response.data?.vehicleList.length > 0) {
+				this.VehicleList = response.data?.vehicleList
 				console.log('in else vehicle list ---->>>>>>', this.VehicleList)
 				// add a key with formatted name to every value
 				this.VehicleList.map((item: any) => item['formatted_name'] = `${item.vehicleType} - ${item.make} (${item.model})`);
 
 				// autofill data
 				if (this.VehicleList.length == 1) {
+					let vehicle_type_id = this.BigData['vehicleCategories'].find(item => item.name == this.VehicleList[0].vehicleType)['id']
+					this.SetFormValue('vehicle_type', vehicle_type_id)
+					this.SetFormValue('vehicle_id', this.VehicleList[0].ID);
+					this.autofillData('vehicle', this.VehicleList[0]);
+				}
+				else{
+					//need to re-work
 					let vehicle_type_id = this.BigData['vehicleCategories'].find(item => item.name == this.VehicleList[0].vehicleType)['id']
 					this.SetFormValue('vehicle_type', vehicle_type_id)
 					this.SetFormValue('vehicle_id', this.VehicleList[0].ID);
@@ -1720,11 +1727,12 @@ export class CreateNewBookingComponent implements OnInit {
 
 	setValueByBookNow() {
 		let QB: any = JSON.parse(localStorage.getItem('quotebot_form'))
-		
+		let selected_vehicle :any = JSON.parse(sessionStorage.getItem('selected_vehicle'))
 		// for (const key in QB) {
 		//   console.log(`QB______${key}: ${QB[key]}`);
 		//   this.SetFormValue(key ,QB[key])
 		// }    
+		this.affiliate_id = selected_vehicle?.affiliate_id
 
 
 		//dropOFF
@@ -1789,8 +1797,8 @@ export class CreateNewBookingComponent implements OnInit {
 		this.MapController(true)
 		setTimeout(() => {
 			console.log('settimeout finction---------------------------------------------------------------')
-			this.fetchAffiliateVehicles(this.affiliate_id)
-			this.fetchAffiliateDrivers(this.affiliate_id)
+			this.fetchAffiliateVehicles(selected_vehicle?.affiliate_id)
+			// this.fetchAffiliateDrivers(this.affiliate_id)
 		}, 500)
 	}
 }
