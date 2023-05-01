@@ -489,7 +489,8 @@ export class AffiliateService
 	}
 	getBookingData(id)
 	{
-		return this.httpClient.get(this.serverUrl + 'get-reservation-detail/' + id);
+		if(id)
+			return this.httpClient.get(this.serverUrl + 'get-reservation-detail/' + id);
 	}
 	finalizeRates(id){
 		return this.httpClient.get(this.serverUrl + 'reservation-rates/' + id);

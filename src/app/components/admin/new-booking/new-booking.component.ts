@@ -998,6 +998,15 @@ export class NewBookingComponent implements OnInit {
 			return ''
 		}
 	}
+	fetchSpecialInstruction(form_group_name: string, index: number) {
+		try {
+			return (<FormArray>this.BookingForm.get(form_group_name)).at(index).get('booking_instructions').value
+		}
+		catch
+		{
+			return ''
+		}
+	}
 
 	autofillData(filling_for: string, data: any) {
 		if (filling_for === 'passenger') {
@@ -1067,7 +1076,8 @@ export class NewBookingComponent implements OnInit {
 			(<FormArray>this.BookingForm.get('return_extra_stops')).push(new FormGroup({
 				address: new FormControl(''),
 				latitude: new FormControl(''),
-				longitude: new FormControl('')
+				longitude: new FormControl(''),
+				booking_instructions: new FormControl('')
 			}))
 		}
 		else {
@@ -1075,7 +1085,8 @@ export class NewBookingComponent implements OnInit {
 			(<FormArray>this.BookingForm.get('extra_stops')).push(new FormGroup({
 				address: new FormControl(''),
 				latitude: new FormControl(''),
-				longitude: new FormControl('')
+				longitude: new FormControl(''),
+				booking_instructions: new FormControl('')
 			}))
 		}
 	}
@@ -1129,6 +1140,20 @@ export class NewBookingComponent implements OnInit {
 		}
 	}
 
+
+	fillExtraStopInstruction(is_return: boolean, index: number,event:any) {
+		console.log(is_return, index, event.target.value);
+		if (is_return) {
+				(<FormArray>this.BookingForm.get('return_extra_stops')).at(index).patchValue({
+					booking_instructions : event.target.value
+				})
+		}
+		else {
+				(<FormArray>this.BookingForm.get('extra_stops')).at(index).patchValue({
+					booking_instructions: event.target.value
+				});
+		}
+	}
 
 	select(is_checked: boolean, form_control: string, value: any) {
 		let amenity_name: string = ''
