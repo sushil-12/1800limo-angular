@@ -857,6 +857,9 @@ export class AdminService {
 	getInvoiceRefundHistory(id){
 		return this.httpClient.get(this.serverUrl + 'admin/get-refund-list/' + id);
 	}
+	getInvoiceRefundHistoryCommon(id){
+		return this.httpClient.get(this.serverUrl + 'get-refund-list/' + id);
+	}
 	invoiceList(url, keyword) {
 		var path;
 		if (url) {

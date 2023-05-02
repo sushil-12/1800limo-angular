@@ -245,6 +245,7 @@ export class FinalizeBookingComponent implements OnInit {
 				// this.$router.navigate(['/admin/daily-bookings-admin'])
 				console.log('response-->>' , response)
 				this.$spinner.hide()
+				this.getReservationDetails(this.bookingId);
 			})
 
 		// else {

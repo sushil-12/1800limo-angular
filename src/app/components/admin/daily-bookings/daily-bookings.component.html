@@ -926,6 +926,18 @@
 							</span>
 						</div>
 					</div>
+					<div class="row" *ngIf="bookingPreview.total_amount_refunded>0">
+						<div class="col-md-4 key">
+							<span>
+								Refund amount
+							</span>
+						</div>
+						<div class="col-md-8 value"  >
+							<span class="font-weight-bolder preview-output-feild">
+								 - $ {{ bookingPreview.total_amount_refunded.toFixed(2) }}
+							</span>
+						</div>
+					</div>
 					<hr>
 					<!-- Grand Total -->
 					<div class="mx-2" *ngIf="bookingPreview?.meet_greet_choice_name">
