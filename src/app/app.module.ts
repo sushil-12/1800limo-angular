@@ -65,6 +65,7 @@ import { PageUnderConstructionComponent } from './components/page-under-construc
 import { HtmlToTextPipe } from './pipes/html-to-text.pipe';
 import { LocateMapComponent } from './components/locate-map/locate-map.component';
 import { BookingStatusVerificationComponent } from './components/email-pages/booking-status-verification/booking-status-verification.component';
+import { TransactionHistoryComponent } from './components/website/transaction-history/transaction-history.component';
 @NgModule({
 	declarations: [
 		AppComponent,
@@ -99,6 +100,7 @@ import { BookingStatusVerificationComponent } from './components/email-pages/boo
 		HtmlToTextPipe,
 		LocateMapComponent,
 		BookingStatusVerificationComponent,
+		TransactionHistoryComponent,
 	],
 	imports: [
 		BrowserModule,

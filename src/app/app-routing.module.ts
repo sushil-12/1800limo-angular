@@ -34,6 +34,7 @@ import { AffiliateEmailConfirmationComponent } from './components/email-pages/af
 import { DispatchEmailConfirmationComponent } from './components/email-pages/dispatch-email-confirmation/dispatch-email-confirmation.component';
 import { LocateMapComponent } from './components/locate-map/locate-map.component';
 import { BookingStatusVerificationComponent } from './components/email-pages/booking-status-verification/booking-status-verification.component';
+import { TransactionHistoryComponent } from './components/website/transaction-history/transaction-history.component';
 
 
 const routes: Routes = [
@@ -125,6 +126,11 @@ const routes: Routes = [
 				path: 'client-terms-condition',
 				component: ClientTCComponent
 			},
+			{
+				path: 'transaction-history',
+				component: TransactionHistoryComponent
+			},
+			
 			{
 				path: 'email',
 				children: [
