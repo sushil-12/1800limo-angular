@@ -47,7 +47,7 @@ export class TransactionHistoryComponent implements OnInit {
     });
   }
   getData(){
-    this.adminService.getInvoiceRefundHistory(this.bookingId)
+    this.adminService.getInvoiceRefundHistoryCommon(this.bookingId)
 		.pipe(
 			catchError(err =>
 			{
