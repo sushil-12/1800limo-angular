@@ -866,20 +866,29 @@ export class CreateNewBookingComponent implements OnInit {
 				// add a key with formatted name to every value
 				this.VehicleList.map((item: any) => item['formatted_name'] = `${item.vehicleType} - ${item.make} (${item.model})`);
 
-				// autofill data
-				if (this.VehicleList.length == 1) {
-					let vehicle_type_id = this.BigData['vehicleCategories'].find(item => item.name == this.VehicleList[0].vehicleType)['id']
-					this.SetFormValue('vehicle_type', vehicle_type_id)
-					this.SetFormValue('vehicle_id', this.VehicleList[0].ID);
-					this.autofillData('vehicle', this.VehicleList[0]);
+				// autofill data if isRatesCompleted:true
+				for(let i=0;i<this.VehicleList.length;i++){
+					if(this.VehicleList[i].isRatesCompleted){
+						let vehicle_type_id = this.BigData['vehicleCategories'].find(item => item.name == this.VehicleList[i].vehicleType)['id']
+						this.SetFormValue('vehicle_type', vehicle_type_id)
+						this.SetFormValue('vehicle_id', this.VehicleList[i].ID);
+						this.autofillData('vehicle', this.VehicleList[i]);
+						break;
+					}
 				}
-				else{
-					//need to re-work
-					let vehicle_type_id = this.BigData['vehicleCategories'].find(item => item.name == this.VehicleList[0].vehicleType)['id']
-					this.SetFormValue('vehicle_type', vehicle_type_id)
-					this.SetFormValue('vehicle_id', this.VehicleList[0].ID);
-					this.autofillData('vehicle', this.VehicleList[0]);
-				}
+				// if (this.VehicleList.length == 1) {
+				// 	let vehicle_type_id = this.BigData['vehicleCategories'].find(item => item.name == this.VehicleList[0].vehicleType)['id']
+				// 	this.SetFormValue('vehicle_type', vehicle_type_id)
+				// 	this.SetFormValue('vehicle_id', this.VehicleList[0].ID);
+				// 	this.autofillData('vehicle', this.VehicleList[0]);
+				// }
+				// else{
+				// 	//need to re-work
+				// 	let vehicle_type_id = this.BigData['vehicleCategories'].find(item => item.name == this.VehicleList[0].vehicleType)['id']
+				// 	this.SetFormValue('vehicle_type', vehicle_type_id)
+				// 	this.SetFormValue('vehicle_id', this.VehicleList[0].ID);
+				// 	this.autofillData('vehicle', this.VehicleList[0]);
+				// }
 
 
 			}
@@ -1062,10 +1071,13 @@ export class CreateNewBookingComponent implements OnInit {
 			let i = 0
 			let legend = ['make', 'model', 'year', 'color']
 			for (let item of ['vehicleMakes', 'vehicleModels', 'vehicleYears', 'vehicleColors']) {
-				let obj = this.BigData[item].find(item => item.name == data[legend[i]])
-				this.SetFormValue('vehicle_' + legend[i], obj['id'])
-				let name = obj['name']; // name
-				this.SetFormValue("vehicle_" + legend[i] + "_name", name);
+				let obj = this.BigData[item].find(j => j.name == data[legend[i]])
+				console.log('loop for -->>' , legend[i] , item , obj)
+				if(obj){
+					this.SetFormValue('vehicle_' + legend[i], obj?.id)
+					let name = obj['name']; // name
+					this.SetFormValue("vehicle_" + legend[i] + "_name", name);
+				}
 				i++;
 			}
 		}
@@ -1737,13 +1749,15 @@ export class CreateNewBookingComponent implements OnInit {
 
 		//dropOFF
 		this.SetFormValue('service_type', QB?.service_type)
+		if(QB?.service_type == 'charter_tour'){
+			this.SetFormValue('number_of_hours', QB?.booking_hour)
+		}
 		let transfer_type_value = QB?.pickup_type + '_to_' + QB?.dropoff_type
 		let return_transfer_type_value = QB?.dropoff_type + '_to_' + QB?.pickup_type
 		this.SetFormValue('transfer_type', transfer_type_value)
 		this.SetFormValue('return_transfer_type', return_transfer_type_value)
 		this.SetFormValue('total_passengers', QB?.no_of_luggage)
 		this.SetFormValue('luggage_count', QB?.no_of_passenger)
-		this.SetFormValue('number_of_hours', QB?.booking_hour)
 		this.SetFormValue('affiliate_type', 'affiliate')
 		this.SetFormValue('affiliate_id', this.affiliate_id)
 		//pickup
