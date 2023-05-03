@@ -52,7 +52,7 @@ export class Step4Component implements OnInit
 
 	ngOnInit(): void
 	{
-
+		$('.HeadingH1').css({display: "block"})
 		const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 		this.affiliateId = currentUser.account_id;
 		this.affiliateType = currentUser.affiliate_type;

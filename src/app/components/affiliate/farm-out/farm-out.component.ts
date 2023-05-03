@@ -82,6 +82,7 @@ export class FarmOutComponent implements OnInit
 			`
 			// $('#farmout-modal').modal('show')
 		}
+		$('.HeadingH1').css({display: "none"})
 
 		let date = new Date();
 		// Set Search Filters According to cookies or the intial state

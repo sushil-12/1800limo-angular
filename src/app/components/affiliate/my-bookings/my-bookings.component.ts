@@ -92,6 +92,7 @@ export class MyBookingsComponent implements OnInit {
 
 
 	loadBookings(pageUrl = null) {
+		$('.HeadingH1').css({display: "none"})
 		/** spinner starts on init */
 		this.spinner.show();
 

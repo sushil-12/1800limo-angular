@@ -1724,13 +1724,16 @@ export class NewBookingComponent implements OnInit {
     //   this.SetFormValue(key ,QB[key])
     // }    
     this.SetFormValue('service_type', QB?.service_type)
+	if(QB?.service_type == "charter_tour"){
+		console.log('setttttttttttttttttttt' , QB?.service_type)
+		this.SetFormValue('number_of_hours',QB?.booking_hour)
+	}
     let transfer_type_value = QB?.pickup_type + '_to_' + QB?.dropoff_type
     let return_transfer_type_value = QB?.dropoff_type + '_to_' + QB?.pickup_type
     this.SetFormValue('transfer_type' ,transfer_type_value )
     this.SetFormValue('return_transfer_type' , return_transfer_type_value)
     this.SetFormValue('total_passengers',QB?.no_of_luggage)
     this.SetFormValue('luggage_count',QB?.no_of_passenger)
-    this.SetFormValue('number_of_hours',QB?.booking_hour)
     //pickup
     this.SetFormValue('pickup_date',QB?.pickup_date)
     this.SetFormValue('pickup' ,QB?.pickup_address)

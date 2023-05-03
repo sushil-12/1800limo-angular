@@ -73,6 +73,7 @@ export class Step2Component implements OnInit {
 	) { }
 
 	ngOnInit(): void {
+		$('.HeadingH1').css({display: "block"})
 		//code related to autocomplete and map
 		this.mapFunction();
 

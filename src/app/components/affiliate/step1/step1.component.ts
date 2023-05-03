@@ -102,6 +102,7 @@ export class Step1Component implements OnInit, AfterViewInit
 
 	ngOnInit(): void
 	{
+		$('.HeadingH1').css({display: "block"})
 		this.filterGender = [
 			{
 				label: "Male",
