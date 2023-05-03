@@ -436,6 +436,7 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 		console.log('in function calculate amount')
 		if (form === "RatesForm") {
 			let baserate = (<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("baserate").value;
+			let label = (<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("rate_label").value;
 
 
 			if (!baserate) {
@@ -452,15 +453,14 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 				let amount = 0;
 
 				// Hourly Rate - only in case of hours
-				if (this.hours != 0 && subform == 'Base_Rate') {
+				if ((this.hours != 0 && subform == 'Base_Rate') && label!='Minimum Rate') {
 					amount = Number(Number(Number(this.hours) * baserate).toFixed(2));
 				} else {
 					amount = baserate;
 				}
-				let label = (<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("rate_label").value;
 
 				// Admin Share Calculation
-				if (subform == 'Base_Rate') {
+				if (subform == 'Base_Rate' && label!='Minimum Rate') {
 					this.calc_admin_share = (amount * this.admin_share) / 100;
 					amount = amount + this.calc_admin_share;
 				}
