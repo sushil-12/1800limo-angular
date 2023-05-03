@@ -43,6 +43,7 @@ export class Step6Component implements OnInit {
 	) { }
 
 	ngOnInit(): void {
+		$('.HeadingH1').css({display: "block"})
 		this.fetchStep6Data();
 
 		this.affiliateService.getSignatureImage().subscribe((response: any) => {

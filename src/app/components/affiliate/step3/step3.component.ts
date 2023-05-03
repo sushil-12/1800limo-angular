@@ -60,6 +60,7 @@ export class Step3Component implements OnInit, AfterViewInit
 	}
 	ngOnInit(): void
 	{
+		$('.HeadingH1').css({display: "block"})
 		//show "stripe can take upto 24 hours" modal on first time completing step 2
 		const showStripe24HourAlert = sessionStorage.getItem(
 			"showStripe24HourAlert"

@@ -50,7 +50,7 @@ export class Step5Component implements OnInit, AfterViewChecked {
 	}
 
 	ngOnInit(): void {
-
+		$('.HeadingH1').css({display: "block"})
 		this.spinner.show(); //show spinner
 
 		this.currentUser = JSON.parse(localStorage.getItem("currentUser"));

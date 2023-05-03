@@ -110,6 +110,7 @@ export class Step0Component implements OnInit {
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
 
 	ngOnInit(): void {
+		$('.HeadingH1').css({display: "block"})
 		const stepCompleted = this.affiliateService.getLocalStepCompleted();
 		if (stepCompleted.includes('0')) {
 			this.agreement = true;

@@ -224,6 +224,9 @@ export class FinalizeBookingComponent implements OnInit {
 		this.finalize_btn = "Finalized"
 		// console.log(this.BookingForm);
 		let rateArray = JSON.parse(JSON.stringify(this.edit_rates_value))
+		if(rateArray.all_inclusive_rates.Base_Rate.rate_label == "Minimum Rate"){
+			rateArray.all_inclusive_rates.Base_Rate.rate_label = "Base Rate"
+		}
 		delete rateArray.sub_total
 		delete rateArray.grand_total
 		let body  = {
