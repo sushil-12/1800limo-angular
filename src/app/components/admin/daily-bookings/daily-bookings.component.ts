@@ -526,6 +526,7 @@ export class DailyBookingsComponent implements OnInit {
 		this.adminService.getBookingPreview(booking_id).subscribe((response: any) => {
 			this.spinner.hide();
 			this.bookingPreview = response.data;
+			this.bookingPreview['booking_instructions'] = this.bookingPreview?.booking_instructions.replaceAll('<br />' , ' ')
 		})
 	}
 

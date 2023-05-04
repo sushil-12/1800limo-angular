@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as moment from 'moment';
@@ -16,6 +17,8 @@ export class TransactionHistoryComponent implements OnInit {
   refundHistory: any;
   paramResponse: any;
   bookingId: any;
+  currencyOptions: any;
+  currencySymbol:any;
 
   constructor(
     private adminService: AdminService,
@@ -23,9 +26,11 @@ export class TransactionHistoryComponent implements OnInit {
 		private spinner: NgxSpinnerService,
 		private $errors: ErrorDialogService,
 		private activatedroute: ActivatedRoute,
+    private httpClient: HttpClient
   ) { }
 
   ngOnInit(): void {
+    this.getCurrencyData()
     this.activatedroute.queryParamMap
     .subscribe((params) =>
     {
@@ -46,6 +51,7 @@ export class TransactionHistoryComponent implements OnInit {
       }
     });
   }
+  
   getData(){
     this.adminService.getInvoiceRefundHistoryCommon(this.bookingId)
 		.pipe(
@@ -57,9 +63,27 @@ export class TransactionHistoryComponent implements OnInit {
 		).subscribe(({ data, sucess, message }: any) =>
 		{
 			this.refundHistory = data?.id?.data
+      //api response need to add field of currency
+			this.currencySymbol = this.getCurrencySymbol('usd')
 		});
   }
-
+  getCurrencyData(){
+    console.log('in function get currency data')
+		this.httpClient.get("assets/json/currencyOptions1.json").subscribe(data => { 
+      console.log('data ' ,data)
+			this.currencyOptions = data;
+		})
+	}
+	getCurrencySymbol(currency:any){
+    let symbol ;
+		for(let i=0; i<this.currencyOptions.length;i++){
+      if(this.currencyOptions[i].code == currency.toUpperCase()){
+        symbol =  this.currencyOptions[i].symbol
+				break;
+			}
+		}
+		return symbol
+	} 
   TimestampToDate(timestamp:any){
 		if(timestamp){
 			return moment(timestamp*1000).format('MMMM Do YYYY, h:mm:ss a')

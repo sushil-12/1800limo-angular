@@ -306,6 +306,7 @@ export class FarmOutComponent implements OnInit
 				this.bookingPreview = response.data;
 				this.isAffiliate = this.bookingPreview.affiliate_type == "affiliate" ? true : false;
 				this.isLooseAffiliate = this.bookingPreview.affiliate_type == "loose_affiliate" ? true : false;
+				this.bookingPreview.booking_instructions = this.bookingPreview?.booking_instructions.replaceAll('<br />' , '')
 				console.log('get preview data-->>>', this.bookingPreview.affiliate_type, this.isAffiliate)
 				$('#previewBookingOnID').modal('show');
 			})
