@@ -112,9 +112,15 @@ export class HeaderComponent implements OnInit
 	{
 		if (role == 'affiliate')
 		{
+			let isAffiliate_approved = localStorage.getItem('account_approval')
 			this.spinner.show();//show spinner
-			this.router.navigateByUrl('/affiliate');
-			console.log("step 0  dashboard")
+			if(isAffiliate_approved == "accepted"){
+				this.router.navigateByUrl('/affiliate/my-bookings');
+			}
+			else{
+				this.router.navigateByUrl('/affiliate');
+				console.log("step 0  dashboard")
+			}
 		}
 		else if (role == 'admin')
 		{

@@ -115,13 +115,7 @@ export class InvoiceSummaryComponent implements OnInit
 			refundAmount:['',[Validators.required]]
 		})
 	}
-	getCurrencyData(){
-		console.log('in function get currency data')
-		this.httpClient.get("assets/json/currencyOptions1.json").subscribe(data => { 
-			console.log('data ' ,data)
-			this.currencyOptions = data;
-		})
-	}
+	
 	getInvoiceData(){
 
 		this.adminService.getInvoiceData(this.bookingId)
@@ -202,7 +196,13 @@ export class InvoiceSummaryComponent implements OnInit
 		}
 	}
 	
-	
+	getCurrencyData(){
+		console.log('in function get currency data')
+		this.httpClient.get("assets/json/currencyOptions1.json").subscribe(data => { 
+			console.log('data ' ,data)
+			this.currencyOptions = data;
+		})
+	}
 	getCurrencySymbol(currency:any){
 		let symbol ;
 		for(let i=0; i<this.currencyOptions.length;i++){
