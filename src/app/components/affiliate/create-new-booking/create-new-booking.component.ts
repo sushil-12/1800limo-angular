@@ -107,6 +107,7 @@ export class CreateNewBookingComponent implements OnInit {
 	reset_button: boolean = false
 	submitBookingForm: boolean;
 	newBooking: boolean = false;
+	QB_vehicle_id: any = null;
 
 
 	constructor(
@@ -869,11 +870,13 @@ export class CreateNewBookingComponent implements OnInit {
 				// autofill data if isRatesCompleted:true
 				for(let i=0;i<this.VehicleList.length;i++){
 					if(this.VehicleList[i].isRatesCompleted){
-						let vehicle_type_id = this.BigData['vehicleCategories'].find(item => item.name == this.VehicleList[i].vehicleType)['id']
-						this.SetFormValue('vehicle_type', vehicle_type_id)
-						this.SetFormValue('vehicle_id', this.VehicleList[i].ID);
-						this.autofillData('vehicle', this.VehicleList[i]);
-						break;
+						if(this.VehicleList[i].ID == this.QB_vehicle_id ){
+							let vehicle_type_id = this.BigData['vehicleCategories'].find(item => item.name == this.VehicleList[i].vehicleType)['id']
+							this.SetFormValue('vehicle_type', vehicle_type_id)
+							this.SetFormValue('vehicle_id', this.VehicleList[i].ID);
+							this.autofillData('vehicle', this.VehicleList[i]);
+							break;
+						}
 					}
 				}
 				// if (this.VehicleList.length == 1) {
@@ -1760,6 +1763,8 @@ export class CreateNewBookingComponent implements OnInit {
 		this.SetFormValue('luggage_count', QB?.no_of_passenger)
 		this.SetFormValue('affiliate_type', 'affiliate')
 		this.SetFormValue('affiliate_id', this.affiliate_id)
+		//vehicle id when chossing vehicle from Quote bot screen
+		this.QB_vehicle_id = selected_vehicle?.id
 		//pickup
 		this.SetFormValue('pickup_date', QB?.pickup_date)
 		this.SetFormValue('pickup', QB?.pickup_address)
