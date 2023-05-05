@@ -137,7 +137,7 @@
 											</a>
 											<a class="dropdown-item" [routerLink]="['/admin/invoice-summary']"
 												[queryParams]="{bookingId: booking.booking_id}"
-												*ngIf="booking.payment_status=='paid' || booking.payment_status=='refund' ||  booking.payment_status=='partial_refund'" >
+												*ngIf="booking.payment_status=='paid' || booking.payment_status=='refund' ||  booking.payment_status=='partial_paid'" >
 												<div class="dropdown-item-icon"></div>
 												Invoice
 											</a>
