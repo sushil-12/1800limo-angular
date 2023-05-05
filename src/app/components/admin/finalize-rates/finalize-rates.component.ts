@@ -452,6 +452,18 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 			el.scrollIntoView();
 		}, 600)
 	}
+	closeAllChevrons(){
+		this.rate_params["chevrons"]['section']=false
+		this.rate_params["chevrons"]['all_inclusive_rates']=false
+		this.rate_params["chevrons"]['others']=false
+		this.rate_params["chevrons"]['direct_taxes']=false
+		this.rate_params["chevrons"]['taxes']=false
+		this.rate_params["chevrons"]['amenities']=false
+		this.rate_params["chevrons"]['misc']=false
+		setTimeout(()=>{
+			this.scroll('closeAll-btn')
+		},300)
+	}
 
 
 	async calculateAmount(form: string, formgroup: string, subform: string) {
