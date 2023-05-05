@@ -8,17 +8,19 @@
                     <thead>
                         <tr role="row">
                             <th scope="col">#</th>
+							<th scope="col">Type</th>
 							<th scope="col">Transaction ID</th>
 							<th scope="col">Refund Amount</th>
 							<th scope="col" id="date">Created Date</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let record of refundHistory; let i=index">
+                        <tr *ngFor="let record of paymentJson; let i=index">
 							<th style="color: black;">{{i+1}}</th>
+							<th scope="row" style="color:black">{{record.type}}</th>
 							<td style="word-wrap: break-word;">{{record?.balance_transaction}}</td>
 							<td><span class="currencySymbol">{{currencySymbol}}</span>
-								{{(record?.amount/100).toFixed(2)}}</td>
+								{{(record?.amount).toFixed(2)}}</td>
 							<td>{{TimestampToDate(record?.created)}}</td>
 						</tr>
                     </tbody>
@@ -49,14 +51,16 @@
 					<thead style="background-color: white;">
 						<tr>
 							<th scope="col">#</th>
+							<th scope="col">Type</th>
 							<th scope="col">Transaction ID</th>
 							<th scope="col">Refund Amount</th>
 							<th scope="col" id="date">Created Date</th>
 						</tr>
 					</thead>
 					<tbody>
-						<tr *ngFor="let record of refundHistory; let i=index">
+						<tr *ngFor="let record of paymentJson; let i=index">
 							<th scope="row">{{i+1}}</th>
+							<th scope="row">{{record.type}}</th>
 							<td style="word-wrap: break-word;">{{record?.balance_transaction}}</td>
 							<td><span class="currencySymbol">{{currencySymbol}}</span>
 								{{(record?.amount/100).toFixed(2)}}</td>
