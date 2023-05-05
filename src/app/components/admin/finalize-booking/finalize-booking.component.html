@@ -36,7 +36,7 @@
 				</div>
 				<div class="col-md-4 field" *ngIf="BookingDetail?.total_amount_refunded>0">
 					<p>Refunded Amount </p>
-					<strong>-$ {{ BookingDetail?.total_amount_refunded }}</strong>
+					<strong>$ {{ BookingDetail?.total_amount_refunded }}</strong>
 				</div>
 				
 				<div class="col-md-4 field">
@@ -155,7 +155,7 @@
 	(returnNumberOfHr)="HandleReturnNumberOfHr($event)">
 </app-finalize-rates>
 <div class="row mb-3" id="submitForm">
-	<div class="col-md-12 text-right" *ngIf="BookingDetail?.payment_status=='unpaid'" >
+	<div class="col-md-12 text-right" >
 		<button type="button" class="custom-filled-button ratesButton m-3" (click)="submitForm()">
 			{{finalize_btn}}
 		</button>
@@ -166,7 +166,7 @@
 <!-- Rates Section End -->
 
 <!-- Payment Section -->
-<section class="section-container" *ngIf="BookingDetail?.payment_status=='unpaid'">
+<section class="section-container" *ngIf="BookingDetail?.payment_status=='unpaid' || BookingDetail?.payable_amount > 0">
 	<div class="col-md-12 p-0" (click)="handlePaymentSection()">
 		<h4 class="section-dropdown-header mb-0">
 			Payment
@@ -360,7 +360,8 @@
 		</div>
 
 		<div class="col-md-12 text-right mr-4">
-			<button type="button" class="custom-filled-button m-3 mr-4" (click)="makePayment()">
+			<button type="button" class="custom-filled-button m-3 mr-4"
+			        data-toggle="modal" data-target="#paymentModal">
 				Pay
 			</button>
 		</div>
@@ -386,6 +387,29 @@
 			<div class="modal-footer">
 				<button type="button" class="custom-btn savebutton" (click)="deleteCard()">Delete</button>
 				<button type="button" class="custom-btn resetbutton" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+<!-- confirm payment modal -->
+
+<div class="modal fade" id="paymentModal" tabindex="-1" role="dialog" aria-labelledby="paymentModal" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header pb-0 d-flex justify-content-center">
+				<h3 class="mb-0 ">Payment</h3>
+			</div>
+			<div class="modal-body text-center">
+				<p>Payable amount is <span class="font-weight-bold">${{payableAmount.toFixed(2)}}</span></p>
+				<span *ngIf="payableAmount<= 0" class="text-danger">Amount has been overcharger earlier</span>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="custom-btn resetbutton" data-dismiss="modal">Close</button>
+				<button type="button" class="custom-btn savebutton" (click)="makePayment()" [hidden]="payableAmount <= 0">
+					Pay</button>
 			</div>
 		</div>
 	</div>

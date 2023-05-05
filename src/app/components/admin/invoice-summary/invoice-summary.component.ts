@@ -36,7 +36,7 @@ export class InvoiceSummaryComponent implements OnInit
 	partial_refund_amount : number = 0;
     // amount is grandTotal - refunded ammount 
 	amount:number = 0
-	refundHistory: any;
+	paymentHistory: any;
 	currencyOptions: any;
 	currencySymbol :any;
 	constructor(
@@ -139,7 +139,7 @@ export class InvoiceSummaryComponent implements OnInit
 			this.spinner.hide();//hide spinner
 			this.currencySymbol = this.getCurrencySymbol(this.invoiceData.currency)
 		});
-		this.adminService.getInvoiceRefundHistory(this.bookingId)
+		this.adminService.getPaymentLogs(this.bookingId)
 		.pipe(
 			catchError(err =>
 			{
@@ -148,7 +148,8 @@ export class InvoiceSummaryComponent implements OnInit
 			})
 		).subscribe(({ data, sucess, message }: any) =>
 		{
-			this.refundHistory = data?.id?.data
+			console.log("array response", data)
+			this.paymentHistory = data?.logs
 		});
 		
 	}

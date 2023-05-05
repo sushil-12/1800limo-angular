@@ -45,6 +45,13 @@ export class FinalizeBookingComponent implements OnInit {
 	isCardFormOpen: boolean = false
 	visibility: boolean = true
 	selectedCard:any;
+	//Total_amount is booking total amount
+	totalAmount:number =0
+	//payableAmount is an amount to be paid
+	payableAmount:number =0
+	// paidAmount is an amount that is already paid
+	paidAmount:number = 0
+
 	card_params = {
 		years: (() => {
 			let arr = []
@@ -162,6 +169,7 @@ export class FinalizeBookingComponent implements OnInit {
 				this.finalize_params['booking_id'] = this.BookingDetail.reservation_id
 				this.affiliate_type = response.data.affiliate_type
 				this.visibility = response.data.payment_status=='paid' ? false : true 
+				this.paidAmount = response.data?.paid_amount ? parseFloat(response.data?.paid_amount) : 0
 				this.$spinner.hide();
 				setTimeout(()=>{
 					this.scroll('NumVehicles')
@@ -221,7 +229,6 @@ export class FinalizeBookingComponent implements OnInit {
 
 
 	submitForm() {
-		this.finalize_btn = "Finalized"
 		// console.log(this.BookingForm);
 		let rateArray = JSON.parse(JSON.stringify(this.edit_rates_value))
 		if(rateArray.all_inclusive_rates.Base_Rate.rate_label == "Minimum Rate"){
@@ -238,18 +245,19 @@ export class FinalizeBookingComponent implements OnInit {
 			number_of_hours :this.finalize_params['number_of_hours']
 		}
 		console.log('\n\n Submitting Form' , body);
-			this.$spinner.show()
-			this.$api.updateFinalizeRates(body).subscribe((response: any) => {
-				this.$errors.openDialog({
-					errors: {
-						error: `<span class='text-success'>${response.message}</span>`
-					}
-				})
-				// this.$router.navigate(['/admin/daily-bookings-admin'])
-				console.log('response-->>' , response)
-				this.$spinner.hide()
-				this.getReservationDetails(this.bookingId);
+		this.$spinner.show()
+		this.$api.updateFinalizeRates(body).subscribe((response: any) => {
+			this.$errors.openDialog({
+				errors: {
+					error: `<span class='text-success'>${response.message}</span>`
+				}
 			})
+			// this.$router.navigate(['/admin/daily-bookings-admin'])
+			console.log('response-->>' , response)
+			this.$spinner.hide()
+			this.finalize_btn = "Finalized"
+			this.getReservationDetails(this.bookingId);
+		})
 
 		// else {
 			// $('#previewBooking').modal('handleUpdate').modal('show')
@@ -281,7 +289,7 @@ export class FinalizeBookingComponent implements OnInit {
 	}
 
 	makePayment(){
-
+		$('#paymentModal').modal('hide')
 		console.log('<<<<-----handle valid---->>>>> ' , this.cardForm.valid)
 		console.log('-----=====?>>>>>',this.isCardFormOpen ? this.cardForm.valid : (this.CardsInformation.length>0))
 		let dataToSend :any
@@ -289,11 +297,12 @@ export class FinalizeBookingComponent implements OnInit {
 			console.log('<<<<<----payment through cash-->>>>')
 			dataToSend = {
 				reservation_id : this.bookingId,
-				grand_total : this.edit_rates_value.grand_total,
+				grand_total : this.payableAmount,
 				paymentMethod : 'cash'
 			}
 			this.$spinner.show()
 					this.$api.paymentProcessing(dataToSend).subscribe((response: any) => {
+						console.log(response)
 						this.$errors.openDialog({
 							errors: {
 								error: `<span class='text-success'>${response.message}</span>`
@@ -310,7 +319,7 @@ export class FinalizeBookingComponent implements OnInit {
 					console.log('<<<<<----payment through cash-->>>>')
 					dataToSend = {
 						reservation_id : this.bookingId,
-						grand_total : this.edit_rates_value.grand_total,
+						grand_total : this.payableAmount,
 						paymentMethod : 'cash'
 					}
 				}
@@ -321,7 +330,7 @@ export class FinalizeBookingComponent implements OnInit {
 							isExistingCard : false,
 							paymentMethod : 'credit_card',
 							reservation_id : this.bookingId,
-							grand_total : this.edit_rates_value.grand_total
+							grand_total : this.payableAmount
 						}
 						console.log('<<<<--card form detail-->>>')
 					}
@@ -333,7 +342,7 @@ export class FinalizeBookingComponent implements OnInit {
 								cardID:	this.selectedCard.ID
 							},
 							reservation_id : this.bookingId,
-							grand_total : this.edit_rates_value.grand_total
+							grand_total : this.payableAmount
 						}
 						console.log('selected card-->>>')
 					}
@@ -372,6 +381,8 @@ export class FinalizeBookingComponent implements OnInit {
 	}
 	RateFormValue(form: any) {
 		this.edit_rates_value = form
+		this.payableAmount = this.edit_rates_value.grand_total - this.paidAmount
+
 	}
 	ReturnRateFormValue(form: any) {
 		this.return_edit_rates_value = form
