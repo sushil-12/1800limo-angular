@@ -14,11 +14,12 @@ import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.se
   styleUrls: ['./transaction-history.component.scss']
 })
 export class TransactionHistoryComponent implements OnInit {
-  refundHistory: any;
+  paymentHistory: any;
   paramResponse: any;
   bookingId: any;
   currencyOptions: any;
   currencySymbol:any;
+  paymentJson: any[];
 
   constructor(
     private adminService: AdminService,
@@ -53,7 +54,7 @@ export class TransactionHistoryComponent implements OnInit {
   }
   
   getData(){
-    this.adminService.getInvoiceRefundHistoryCommon(this.bookingId)
+    this.adminService.getPaymentLogs(this.bookingId)
 		.pipe(
 			catchError(err =>
 			{
@@ -62,7 +63,26 @@ export class TransactionHistoryComponent implements OnInit {
 			})
 		).subscribe(({ data, sucess, message }: any) =>
 		{
-			this.refundHistory = data?.id?.data
+      this.paymentHistory = data?.logs
+				this.paymentJson = []
+				for (let prop in this.paymentHistory) {
+					let itemObj = {
+						balance_transaction: prop,
+						amount: this.paymentHistory[prop]?.amount_captured,
+						type: 'Payment',
+						created: this.paymentHistory[prop]?.created_at
+					}
+					this.paymentJson.push(itemObj)
+					this.paymentHistory[prop].refunds.map(i => {
+						let obj1 = {
+							balance_transaction: i?.balance_transaction,
+							amount: i?.amount / 100,
+							created: i?.created,
+							type: 'Refund'
+						}
+						this.paymentJson.push(obj1)
+					})
+				}
       //api response need to add field of currency
 			this.currencySymbol = this.getCurrencySymbol('usd')
 		});
