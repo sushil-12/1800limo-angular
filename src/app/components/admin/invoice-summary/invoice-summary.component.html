@@ -415,74 +415,27 @@
 			</div>
 			<div class="modal-body">
 				<!-- {{invoiceData.audit_trail | json}} -->
-				<!-- <table id="audittrail" class="table table-striped">
+				<table id="audittrail" class="table table-striped">
 					<thead style="background-color: white;">
 						<tr>
 							<th scope="col">#</th>
+							<th scope="col">Type</th>
 							<th scope="col">Transaction ID</th>
-							<th scope="col">Refund Amount</th>
+							<th scope="col">Amount</th>
 							<th scope="col" id="date">Created Date</th>
 						</tr>
 					</thead>
 					<tbody>
-						<tr *ngFor="let record of paymentHistory; let i=index">
+						<tr *ngFor="let record of paymentJson; let i=index">
 							<th scope="row">{{i+1}}</th>
+							<th scope="row">{{record.type}}</th>
 							<td style="word-wrap: break-word;">{{record?.balance_transaction}}</td>
 							<td><span class="currencySymbol">{{currencySymbol}}</span>
-								{{(record?.amount/100).toFixed(2)}}</td>
+								{{(record?.amount).toFixed(2)}}</td>
 							<td>{{TimestampToDate(record?.created)}}</td>
 						</tr>
 					</tbody>
-				</table> -->
-				<div class="accordion" id="accordionExample">
-					<div class="card" *ngFor="let item of paymentHistory | keyvalue">
-					  <div class="card-header" >
-						<h2 class="mb-0">
-						  <button class="btn btn-link" type="button" >
-						   {{item.key}}
-						  </button>
-						</h2>
-					  </div>
-				  
-					  <div *ngFor="let subItem of item; let i=index">
-						<div class="card-body">
-						  <table id="audittrail" class="table table-striped">
-					<thead style="background-color: white;">
-						<tr>
-							<th scope="col">#</th>
-							<th scope="col">Transaction ID</th>
-							<th scope="col">Refund Amount</th>
-							<th scope="col" id="date">Created Date</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr >
-							<th scope="row">{{i+1}}</th>
-							<!-- <td style="word-wrap: break-word;">{{subItem?.balance_transaction}}</td>
-							<td><span class="currencySymbol">{{currencySymbol}}</span>
-								{{(subItem?.amount/100).toFixed(2)}}</td>
-							<td>{{TimestampToDate(subItem?.created)}}</td> -->
-						</tr>
-					</tbody>
 				</table>
-						</div>
-					  </div>
-					</div>
-					<!-- <div class="card">
-					  <div class="card-header" id="headingTwo">
-						<h2 class="mb-0">
-						  <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-							Head 2
-						  </button>
-						</h2>
-					  </div>
-					  <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
-						<div class="card-body">
-						  contant 2
-						</div>
-					  </div>
-					</div> -->
-				  </div>
 			</div>
 			<div class="modal-footer justify-content-end">
 				<button type="button" class="x-close-btn x-cross-btn mx-3" data-dismiss="modal" aria-label="Close">
