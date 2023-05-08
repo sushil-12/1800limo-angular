@@ -198,7 +198,7 @@
 
 	<div [attr.id]="'ReturnRateFormItem-' + item_index" class="my-4 px-md-3 rateSubSection" [formGroupName]="item.key"
 		[ngClass]="{'active': rate_params.chevrons['r_'+item.key]}"
-		*ngFor="let item of ReturnRateForm | keyvalue: returnZero; index as item_index">
+		*ngFor="let item of ReturnRateForm | keyvalue: returnZero; index as item_index" [ngStyle]="item.key == 'direct_taxes' ? {'display':'none'}: ''">
 		<div class="col-12 col-md-12" (click)="handleSubHeading('r_'+item.key)">
 			<h5 class="section-dropdown-header" *ngIf="item.key == 'all_inclusive_rates'">
 				Vehicle Base Rates
