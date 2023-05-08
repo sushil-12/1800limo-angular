@@ -298,12 +298,12 @@
 													#airportinput class="input-f font-weight-bolder"
 													(focus)="$event.target.select()"
 													(keyup)="searchAirport($event.target.value, 'pickup_airport')"
-													[value]="fillAirportData(airports_data, 'pickup_airport', 'id', 'airport')"
+													[value]="fillAirportData(airports_data_pickup, 'pickup_airport', 'id', 'airport')"
 													[matAutocomplete]="airportautocomplete">
 												<mat-autocomplete #airportautocomplete="matAutocomplete">
 													<mat-option
-														*ngFor="let airport_obj of airports_data; index as airport_obj_index"
-														(onSelectionChange)="selectedAirport(airports_data, airport_obj, 'pickup_airport')">
+														*ngFor="let airport_obj of airports_data_pickup; index as airport_obj_index"
+														(onSelectionChange)="selectedAirport(airports_data_pickup, airport_obj, 'pickup_airport')">
 														{{ airport_obj.airport }}
 													</mat-option>
 												</mat-autocomplete>
@@ -375,12 +375,12 @@
 													id="dropoff_airport" #dropairportinput
 													class="input-f font-weight-bolder" (focus)="$event.target.select()"
 													(keyup)="searchAirport($event.target.value, 'dropoff_airport')"
-													[value]="fillAirportData(airports_data, 'dropoff_airport', 'id', 'airport')"
+													[value]="fillAirportData(airports_data_dropoff, 'dropoff_airport', 'id', 'airport')"
 													[matAutocomplete]="dropoffairportautocomplete">
 												<mat-autocomplete #dropoffairportautocomplete="matAutocomplete">
 													<mat-option
-														*ngFor="let airport_obj of airports_data; index as airport_obj_index"
-														(onSelectionChange)="selectedAirport(airports_data, airport_obj, 'dropoff_airport')">
+														*ngFor="let airport_obj of airports_data_dropoff; index as airport_obj_index"
+														(onSelectionChange)="selectedAirport(airports_data_dropoff, airport_obj, 'dropoff_airport')">
 														{{ airport_obj.airport }}
 													</mat-option>
 												</mat-autocomplete>
@@ -533,12 +533,12 @@
 													#retairportinput id="return_pickup_airport"
 													class="input-f font-weight-bolder"
 													(keyup)="searchAirport($event.target.value, 'return_pickup_airport')"
-													[value]="fillAirportData(airports_data, 'return_pickup_airport', 'id', 'airport')"
+													[value]="fillAirportData(airports_data_r_pickup, 'return_pickup_airport', 'id', 'airport')"
 													[matAutocomplete]="returnpickupairportautocomplete">
 												<mat-autocomplete #returnpickupairportautocomplete="matAutocomplete">
 													<mat-option
-														*ngFor="let airport_obj of airports_data; index as airport_obj_index"
-														(onSelectionChange)="selectedAirport(airports_data, airport_obj, 'return_pickup_airport')">
+														*ngFor="let airport_obj of airports_data_r_pickup; index as airport_obj_index"
+														(onSelectionChange)="selectedAirport(airports_data_r_pickup, airport_obj, 'return_pickup_airport')">
 														{{ airport_obj.airport }}
 													</mat-option>
 												</mat-autocomplete>
@@ -609,12 +609,12 @@
 													#retdropairportinput id="return_dropoff_airport"
 													class="input-f font-weight-bolder"
 													(keyup)="searchAirport($event.target.value, 'return_dropoff_airport')"
-													[value]="fillAirportData(airports_data, 'return_dropoff_airport', 'id', 'airport')"
+													[value]="fillAirportData(airports_data_r_dropoff, 'return_dropoff_airport', 'id', 'airport')"
 													[matAutocomplete]="returndropoffairportautocomplete">
 												<mat-autocomplete #returndropoffairportautocomplete="matAutocomplete">
 													<mat-option
-														*ngFor="let airport_obj of airports_data; index as airport_obj_index"
-														(onSelectionChange)="selectedAirport(airports_data, airport_obj, 'return_dropoff_airport')">
+														*ngFor="let airport_obj of airports_data_r_dropoff; index as airport_obj_index"
+														(onSelectionChange)="selectedAirport(airports_data_r_dropoff, airport_obj, 'return_dropoff_airport')">
 														{{ airport_obj.airport }}
 													</mat-option>
 												</mat-autocomplete>
