@@ -674,7 +674,8 @@ export class SelectVehicleComponent implements OnInit
 		{
 			if (JSON.parse(localStorage.getItem('currentUser'))['roleName'] == 'admin')
 			{
-				this.$router.navigate(['/admin/new-booking'])
+				this.$router.navigate(['/admin/new-booking'],
+				{ queryParams: {affiliate_id:vehicle_selected.affiliate_id, vehicle_id:vehicle_selected.id,new : true }})
 			} else
 			{
 				let user = JSON.parse(localStorage.getItem('currentUser'))['roleName']

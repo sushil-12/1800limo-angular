@@ -95,6 +95,9 @@ export class NewBookingComponent implements OnInit {
 	is_booking_edit_case: boolean = false
 	reset_button: boolean = false
 	submitBookingForm: boolean;
+	affiliate_id: any;
+	newBooking: boolean = false;
+	QB_vehicle_id: any = null;
 
 
 	constructor(
@@ -122,6 +125,10 @@ export class NewBookingComponent implements OnInit {
 				this.is_booking_edit_case = true
 				this.SetFormValue('reservation_id', params.bookingId)
 				params.updateType ? this.SetFormValue('updateType', params.updateType) : this.SetFormValue('updateType', 'edit')
+			}
+			else if(params && params.new == 'true'){
+				this.newBooking = params.new == 'true'
+				this.affiliate_id = parseInt(params.affiliate_id)
 			}
 			else {
 				this.resetFields()
@@ -707,6 +714,7 @@ export class NewBookingComponent implements OnInit {
 
 				this.MapController();
 				this.Form.reservation_id.value ? this.prefillViaBookingID(this.Form.reservation_id.value) : '';
+				this.newBooking ? this.setValueByBookNow() : "";
 				clearInterval(s);
 			}
 			else {
@@ -863,11 +871,27 @@ export class NewBookingComponent implements OnInit {
 				// autofill data if isRatesCompleted:true
 				for(let i=0;i<this.VehicleList.length;i++){
 					if(this.VehicleList[i].isRatesCompleted){
-						let vehicle_type_id = this.BigData['vehicleCategories'].find(item => item.name == this.VehicleList[i].vehicleType)['id']
-						this.SetFormValue('vehicle_type', vehicle_type_id)
-						this.SetFormValue('vehicle_id', this.VehicleList[i].ID);
-						this.autofillData('vehicle', this.VehicleList[i]);
-						break;
+						if(this.QB_vehicle_id){
+							if(this.VehicleList[i].ID == this.QB_vehicle_id ){
+								let vehicle_type_id = this.BigData['vehicleCategories'].find(item => item.name == this.VehicleList[i].vehicleType)['id']
+								this.SetFormValue('vehicle_type', vehicle_type_id)
+								this.SetFormValue('vehicle_id', this.VehicleList[i].ID);
+								this.autofillData('vehicle', this.VehicleList[i]);
+								break;
+							}
+							else{
+								continue;
+							}
+						}
+						else{
+							let vehicle_type_id = this.BigData['vehicleCategories'].find(item => item.name == this.VehicleList[i].vehicleType)['id']
+								this.SetFormValue('vehicle_type', vehicle_type_id)
+								this.SetFormValue('vehicle_id', this.VehicleList[i].ID);
+								this.autofillData('vehicle', this.VehicleList[i]);
+								break;
+						}
+						
+						
 					}
 				}
 				// if (this.VehicleList.length == 1) {
@@ -898,12 +922,17 @@ export class NewBookingComponent implements OnInit {
 		this.$api.driverList(affiliate_id).then((response: any) => {
 			if (response.success && response.data?.data.length > 0) {
 				this.DriverList = response.data.data
+				for(let i=0 ; i<this.DriverList.length;i++ ){
+					this.SetFormValue('driver_id', this.DriverList[i].id)
+					this.autofillData('driver', this.DriverList[i])
+					break;
+				}
 
 				// autofill data
-				if (this.DriverList.length == 1) {
-					this.SetFormValue('driver_id', this.DriverList[0].id)
-					this.autofillData('driver', this.DriverList[0])
-				}
+				// if (this.DriverList.length == 1) {
+				// 	this.SetFormValue('driver_id', this.DriverList[0].id)
+				// 	this.autofillData('driver', this.DriverList[0])
+				// }
 			}
 			this.$spinner.hide();
 		})
@@ -1749,6 +1778,90 @@ export class NewBookingComponent implements OnInit {
 	change(event: any, form_control: string) {
 		console.log(event, form_control)
 		event && this.SetFormValue(form_control, event.id);
+	}
+	FormatTime(time: string) {
+		return moment(time, "HH:mm:ss").format("LT");
+	}
+
+	setValueByBookNow() {
+		let QB: any = JSON.parse(localStorage.getItem('quotebot_form'))
+		let selected_vehicle :any = JSON.parse(sessionStorage.getItem('selected_vehicle'))
+		// for (const key in QB) {
+		//   console.log(`QB______${key}: ${QB[key]}`);
+		//   this.SetFormValue(key ,QB[key])
+		// }    
+		this.affiliate_id = selected_vehicle?.affiliate_id
+
+
+		//dropOFF
+		this.SetFormValue('service_type', QB?.service_type)
+		if(QB?.service_type == 'charter_tour'){
+			this.SetFormValue('number_of_hours', QB?.booking_hour)
+		}
+		let transfer_type_value = QB?.pickup_type + '_to_' + QB?.dropoff_type
+		let return_transfer_type_value = QB?.dropoff_type + '_to_' + QB?.pickup_type
+		this.SetFormValue('transfer_type', transfer_type_value)
+		this.SetFormValue('return_transfer_type', return_transfer_type_value)
+		this.SetFormValue('total_passengers', QB?.no_of_luggage)
+		this.SetFormValue('luggage_count', QB?.no_of_passenger)
+		this.SetFormValue('affiliate_type', 'affiliate')
+		this.SetFormValue('affiliate_id', this.affiliate_id)
+		//vehicle id when chossing vehicle from Quote bot screen
+		this.QB_vehicle_id = selected_vehicle?.id
+		//pickup
+		this.SetFormValue('pickup_date', QB?.pickup_date)
+		this.SetFormValue('pickup', QB?.pickup_address)
+		this.SetFormValue('pickup_latitude', QB?.pickup_address_lat)
+		this.SetFormValue('pickup_longitude', QB?.pickup_address_long)
+		this.SetFormValue('pickup_airport', QB?.pickup_airport)
+		this.SetFormValue('pickup_airport_option', QB?.other_details?.pickup_airport_name)
+		this.SetFormValue('pickup_airport_latitude', QB?.pickup_airport_lat)
+		this.SetFormValue('pickup_airport_longitude', QB?.pickup_airport_long)
+		this.SetFormValue('dropoff', QB?.dropoff_address)
+		this.SetFormValue('dropoff_latitude', QB?.dropoff_address_lat)
+		this.SetFormValue('dropoff_longitude', QB?.dropoff_address_long)
+		this.SetFormValue('dropoff_airport', QB?.dropoff_airport)
+		this.SetFormValue('dropoff_airport_option', QB?.other_details?.dropoff_airport_name)
+		this.SetFormValue('dropoff_airport_latitude', QB?.dropoff_airport_lat)
+		this.SetFormValue('dropoff_airport_longitude', QB?.dropoff_address_long)
+
+
+		//return pickup
+		this.SetFormValue('return_pickup_date', QB?.return_pickup_date)
+		this.SetFormValue('return_pickup', QB?.return_dropoff_address)
+		this.SetFormValue('return_pickup_latitude', QB?.return_dropoff_address_lat)
+		this.SetFormValue('return_pickup_longitude', QB?.return_dropoff_address_long)
+		this.SetFormValue('return_pickup_airport', QB?.return_pickup_airport)
+		this.SetFormValue('return_pickup_airport_option', QB?.other_details?.return_pickup_airport_name)
+		this.SetFormValue('return_pickup_airport_latitude', QB?.return_pickup_airport_lat)
+		this.SetFormValue('return_pickup_airport_longitude', QB?.return_pickup_airport_long)
+
+		//return dropOff
+		this.SetFormValue('return_dropoff', QB?.return_dropoff_address)
+		this.SetFormValue('return_dropoff_latitude', QB?.return_dropoff_address_lat)
+		this.SetFormValue('return_dropoff_longitude', QB?.return_dropoff_address_long)
+		this.SetFormValue('return_dropoff_airport', QB?.return_dropoff_airport)
+		this.SetFormValue('return_dropoff_airport_option', QB?.other_details?.return_dropoff_airport_name)
+		this.SetFormValue('return_dropoff_airport_latitude', QB?.return_dropoff_airport_lat)
+		this.SetFormValue('return_dropoff_airport_longitude', QB?.return_dropoff_airport_long)
+		this.SetFormValue('pickup_time', this.FormatTime(QB?.pickup_time))
+		this.SetFormValue('return_pickup_time', this.FormatTime(QB?.return_pickup_time))
+		this.SetFormValue('cruise_time', this.FormatTime(QB?.pickup_time))
+		this.SetFormValue('return_cruise_time', this.FormatTime(QB?.return_pickup_time))
+		if (QB?.pickup_type == 'airport') {
+			let location = {
+				latitude : QB?.pickup_airport_lat,
+				longitude : QB?.pickup_airport_long
+			}
+			this.fillLocationPoints('airport',location)
+		}
+		this.MapController()
+		this.MapController(true)
+		setTimeout(() => {
+			console.log('settimeout finction---------------------------------------------------------------')
+			this.fetchAffiliateVehicles(selected_vehicle?.affiliate_id)
+			// this.fetchAffiliateDrivers(this.affiliate_id)
+		}, 500)
 	}
 }
 
