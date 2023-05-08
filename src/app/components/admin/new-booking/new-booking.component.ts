@@ -1444,8 +1444,10 @@ export class NewBookingComponent implements OnInit {
 				}
 			}
 			else {
-				this.init_rates = false;
-				this.init_return_rates = false;
+				this.init_rates = true;
+				if (this.Form.service_type.value === 'round_trip') {
+					this.init_return_rates = true;
+				}
 				this.fetchAffiliates('affiliate')
 				this.chooseAffiliate()
 			}
