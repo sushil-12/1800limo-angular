@@ -870,15 +870,18 @@ export class CreateNewBookingComponent implements OnInit {
 				// autofill data if isRatesCompleted:true
 				for(let i=0;i<this.VehicleList.length;i++){
 					if(this.VehicleList[i].isRatesCompleted){
-						if(this.VehicleList[i].ID == this.QB_vehicle_id ){
-							let vehicle_type_id = this.BigData['vehicleCategories'].find(item => item.name == this.VehicleList[i].vehicleType)['id']
-							this.SetFormValue('vehicle_type', vehicle_type_id)
-							this.SetFormValue('vehicle_id', this.VehicleList[i].ID);
-							this.autofillData('vehicle', this.VehicleList[i]);
-							break;
+								let vehicle_type_id = this.BigData['vehicleCategories'].find(item => item.name == this.VehicleList[i].vehicleType)['id']
+								this.SetFormValue('vehicle_type', vehicle_type_id)
+								this.SetFormValue('vehicle_id', this.VehicleList[i].ID);
+								this.autofillData('vehicle', this.VehicleList[i]);
+								this.QB_vehicle_id= null
+								break;
+							}
+							else{
+								continue;
+							}
 						}
-					}
-				}
+
 				// if (this.VehicleList.length == 1) {
 				// 	let vehicle_type_id = this.BigData['vehicleCategories'].find(item => item.name == this.VehicleList[0].vehicleType)['id']
 				// 	this.SetFormValue('vehicle_type', vehicle_type_id)
@@ -913,6 +916,38 @@ export class CreateNewBookingComponent implements OnInit {
 		})
 	}
 
+	fetchQBAffiliateVehicles(affiliate_id: number) {
+		if (!affiliate_id) {
+			console.error('Invalid Paramater affiliate_data', affiliate_id)
+			return
+		}
+		this.$spinner.show()
+		this.$api.adminAffiliateVehicleList(affiliate_id).then((response: any) => {
+			console.log('get affiliate vehicle data----->>>>>>>>>' , response.data)
+			if (response.success && response.data.vehicleList.length > 0) {
+				this.VehicleList = response.data.vehicleList
+				// add a key with formatted name to every value
+				this.VehicleList.map((item: any) => item['formatted_name'] = `${item.vehicleType} - ${item.make} (${item.model})`);
+
+				// autofill data if isRatesCompleted:true
+				for(let i=0;i<this.VehicleList.length;i++){
+					if(this.VehicleList[i].isRatesCompleted){
+						if(this.QB_vehicle_id){
+							if(this.VehicleList[i].ID == this.QB_vehicle_id ){
+								let vehicle_type_id = this.BigData['vehicleCategories'].find(item => item.name == this.VehicleList[i].vehicleType)['id']
+								this.SetFormValue('vehicle_type', vehicle_type_id)
+								this.SetFormValue('vehicle_id', this.VehicleList[i].ID);
+								this.autofillData('vehicle', this.VehicleList[i]);
+								break;
+							}
+						}
+					}
+					}
+			}
+			this.$spinner.hide()
+		})
+	}
+
 	fetchAffiliateDrivers(affiliate_id: number) {
 		if (!affiliate_id) {
 			console.error('Invalid Paramater affiliate_data', affiliate_id)
@@ -924,12 +959,16 @@ export class CreateNewBookingComponent implements OnInit {
 		this.affiliateService.driverList().then((response: any) => {
 			if (response.success && response.data?.data.length > 0) {
 				this.DriverList = response.data.data
-
-				// autofill data
-				if (this.DriverList.length == 1) {
-					this.SetFormValue('driver_id', this.DriverList[0].id)
-					this.autofillData('driver', this.DriverList[0])
+				for(let i =0;i<this.DriverList.length;i++){
+					this.SetFormValue('driver_id', this.DriverList[i].id)
+					this.autofillData('driver', this.DriverList[i])
+					break;
 				}
+				// autofill data
+				// if (this.DriverList.length == 1) {
+				// 	this.SetFormValue('driver_id', this.DriverList[0].id)
+				// 	this.autofillData('driver', this.DriverList[0])
+				// }
 			}
 			this.$spinner.hide();
 		})
@@ -1816,7 +1855,7 @@ export class CreateNewBookingComponent implements OnInit {
 		this.MapController(true)
 		setTimeout(() => {
 			console.log('settimeout finction---------------------------------------------------------------')
-			this.fetchAffiliateVehicles(selected_vehicle?.affiliate_id)
+			this.fetchQBAffiliateVehicles(selected_vehicle?.affiliate_id)
 			// this.fetchAffiliateDrivers(this.affiliate_id)
 		}, 500)
 	}
