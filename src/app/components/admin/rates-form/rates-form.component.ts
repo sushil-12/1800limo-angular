@@ -86,7 +86,8 @@ export class RatesFormComponent implements OnInit, OnChanges {
 	ngOnChanges(changes: SimpleChanges) {
 		console.warn("Change has been detected: ", changes);
 
-		this.ratesform = changes.init_rates?.currentValue ?? this.ratesform;
+		this.ratesform = true;
+		// changes.init_rates?.currentValue ?? this.ratesform
 		this.returnratesform =
 			changes.init_r_rates?.currentValue ?? this.returnratesform;
 
