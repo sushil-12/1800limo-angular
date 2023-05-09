@@ -131,7 +131,9 @@
 			(click)="handleSubHeadingScroll(item.key,'RateFormItem-' + item_index)"></i>
 		</div>
 	</div>
-
+	<div class="row d-flex justify-content-end mx-2">
+		<button class="closeAll-btn" id="closeAll-btn" (click)="closeAllChevrons()">Close all</button>
+	</div>
 	<hr style="border-top: 2.5px solid #000000; " />
 
 	<div class="row px-2 justify-content-between align-items-center">
@@ -300,6 +302,9 @@
 			<i class="bi bi-x fa-2x" 
 			(click)="handleSubHeadingScroll('r_'+item.key,'ReturnRateFormItem-' + item_index)"></i>
 		</div>
+	</div>
+	<div class="row d-flex justify-content-end mx-2">
+		<button class="closeAll-btn" id="closeAll-btn_r" (click)="closeReturnAllChevrons()">Close all</button>
 	</div>
 
 	<hr style="border-top: 2.5px solid #000000; " />
