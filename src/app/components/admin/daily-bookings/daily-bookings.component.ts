@@ -68,16 +68,22 @@ export class DailyBookingsComponent implements OnInit {
 	ngOnInit(): void {
 
 		let date = new Date();
-
+	    const options:any = {
+			year: 'numeric',
+			month: '2-digit',
+			day: '2-digit',
+		};
+	const localeDateString = date.toLocaleDateString(undefined, options).
+	replace(/(\d+)\/(\d+)\/(\d+)/,'$3-$1-$2');
 		// Set Search Filters According to cookies or the intial state
 		this.startDate = this.adminService.checkCookie('startDate') ?
 			this.adminService.getCookie('startDate') :
-			date.toISOString().substring(0, 10);
+			date.toLocaleDateString(undefined, options).replace(/(\d+)\/(\d+)\/(\d+)/,'$3-$2-$1');
 
 		date.setDate(date.getDate() + 7);
 		this.endDate = this.adminService.checkCookie('endDate') ?
 			this.adminService.getCookie('endDate') :
-			date.toISOString().substring(0, 10);
+			date.toLocaleDateString(undefined, options).replace(/(\d+)\/(\d+)\/(\d+)/,'$3-$2-$1');
 
 		this.searchText = this.adminService.checkCookie('search') ?
 			this.adminService.getCookie('search')
@@ -143,9 +149,14 @@ export class DailyBookingsComponent implements OnInit {
 	 */
 	reset() {
 		let date = new Date();
-		this.startDate = date.toISOString().substring(0, 10);
+		const options:any = {
+			year: 'numeric',
+			month: '2-digit',
+			day: '2-digit',
+		};
+		this.startDate = date.toLocaleDateString(undefined, options).replace(/(\d+)\/(\d+)\/(\d+)/,'$3-$2-$1');;
 		date.setDate(date.getDate() + 7);
-		this.endDate = date.toISOString().substring(0, 10);
+		this.endDate = date.toLocaleDateString(undefined, options).replace(/(\d+)\/(\d+)\/(\d+)/,'$3-$2-$1');;
 		this.adminService.deleteCookie('startDate')
 		this.adminService.deleteCookie('endDate')
 		this.adminService.deleteCookie('search')

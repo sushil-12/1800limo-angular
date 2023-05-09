@@ -175,7 +175,35 @@ export class RatesFormComponent implements OnInit, OnChanges {
 			el.scrollIntoView();
 		},600)
 	}
-
+	scroll(id) {
+		let el = document.getElementById(id);
+		console.log(`scrolling to ${id}`, el);
+		el.scrollIntoView();
+	}
+	closeAllChevrons(){
+		this.rate_params["chevrons"]['section']=false
+		this.rate_params["chevrons"]['all_inclusive_rates']=false
+		this.rate_params["chevrons"]['others']=false
+		this.rate_params["chevrons"]['direct_taxes']=false
+		this.rate_params["chevrons"]['taxes']=false
+		this.rate_params["chevrons"]['amenities']=false
+		this.rate_params["chevrons"]['misc']=false
+		setTimeout(()=>{
+			this.scroll('closeAll-btn')
+		},300)
+	}
+	closeReturnAllChevrons(){
+		this.rate_params["chevrons"]['r_section']=false
+		this.rate_params["chevrons"]['r_all_inclusive_rates']=false
+		this.rate_params["chevrons"]['r_others']=false
+		this.rate_params["chevrons"]['r_direct_taxes']=false
+		this.rate_params["chevrons"]['r_taxes']=false
+		this.rate_params["chevrons"]['r_amenities']=false
+		this.rate_params["chevrons"]['r_misc']=false
+		setTimeout(()=>{
+			this.scroll('closeAll-btn_r')
+		},300)
+	}
 	initRates() {
 		console.log("Init Rates");
 
@@ -410,6 +438,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 
 
 	async calculateAmount(form: string, formgroup: string, subform: string) {
+		
 		if (form === "RatesForm") {
 			let baserate = (<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("baserate").value;
 
@@ -477,7 +506,9 @@ export class RatesFormComponent implements OnInit, OnChanges {
 			}
 
 			let amount = (<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("amount").value;
+			console.log('amount -->>' , amount)
 			this.total[subform] = Number(Number(amount).toFixed(2));
+			console.log('total___>>>' , this.total)
 			this.RatesForm.updateValueAndValidity();
 		}
 
