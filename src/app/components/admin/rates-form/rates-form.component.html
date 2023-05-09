@@ -1,8 +1,8 @@
 <!-- Rates and Taxes -->
 
 <div *ngIf="ratesform" [formGroup]="RatesForm" class="section-container section-dropdown mt-5"
-	[ngClass]="{'w-100': ratesform && !returnratesform, 'w-50': ratesform && returnratesform}"
-	[ngStyle]="affiliate_type == 'affiliate' ? {'height': '0', 'padding': '0'} : ''">
+	[ngClass]="{'w-100': ratesform && !returnratesform, 'w-50': ratesform && returnratesform}">
+	<!-- [ngStyle]="affiliate_type == 'affiliate' ? {'height': '0', 'padding': '0'} : ''" -->
 	<div class="row cursor-pointer" (click)="toggleDropdown('section')">
 		<div class="col-12 col-md-12">
 			<h4 class="section-dropdown-header m-0">
@@ -186,8 +186,8 @@
 
 
 <div *ngIf="ratesform && returnratesform" [formGroup]="ReturnRatesForm" class="section-container section-dropdown mt-5"
-	[ngClass]="{'w-50': returnratesform}"
-	[ngStyle]="affiliate_type == 'affiliate' ? {'height': '0', 'padding': '0'} : ''">
+	[ngClass]="{'w-50': returnratesform}">
+	<!-- [ngStyle]="affiliate_type == 'affiliate' ? {'height': '0', 'padding': '0'} : ''" -->
 	<div class="row cursor-pointer" (click)="toggleDropdown('r_section')">
 		<div class="col-12 col-md-12">
 			<h4 class="section-dropdown-header m-0">
