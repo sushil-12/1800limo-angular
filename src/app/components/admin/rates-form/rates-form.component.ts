@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from "@angular/forms";
 import { AdminService } from "src/app/services/admin.service";
 
 import { BehaviorSubject, combineLatest, Observable, Subject, Subscription } from "rxjs";
+import { ActivatedRoute } from "@angular/router";
 
 @Component({
 	selector: "app-rates-form",
@@ -18,13 +19,14 @@ export class RatesFormComponent implements OnInit, OnChanges {
 	@Input("reservation_id") bookingId: number = 0;
 	@Input("vehicles") vehs: number = 0;
 	@Input("hours") nums: number = 0;
+	@Input("vehicle_id") QB_vehicle_id: any = 0;
 	@Input('reset') reset: boolean = false;
 
 	// Throw Events.
 	@Output("formvalue") formvalue = new EventEmitter<Record<string, any>>();
 	@Output("returnformvalue") returnformvalue = new EventEmitter<Record<string, any>>();
 	@Output("returnNumberOfHr") returnNumberOfHr = new EventEmitter<Record<string, any>>();
-	
+
 	RatesForm: FormGroup;
 	ReturnRatesForm: FormGroup;
 
@@ -71,11 +73,17 @@ export class RatesFormComponent implements OnInit, OnChanges {
 
 	constructor(
 		private $form: FormBuilder,
-		private $api: AdminService
+		private $api: AdminService,
+		private $routeurl: ActivatedRoute,
+
 	) { }
 
 	ngOnInit(): void {
-		this.fetchRates('');
+		this.$routeurl.queryParams.subscribe((params: any) => {
+			if (!params?.vehicle_id ) {
+				this.fetchRates('');
+			}
+		})
 	}
 
 	handleSubHeading(items: string) {
@@ -91,14 +99,22 @@ export class RatesFormComponent implements OnInit, OnChanges {
 		this.returnratesform =
 			changes.init_r_rates?.currentValue ?? this.returnratesform;
 
+		if (changes?.QB_vehicle_id?.currentValue) {
+				console.log('got QB_vehicle_id------->>>>>>>>>', changes.QB_vehicle_id)
+				this.QB_vehicle_id = changes?.QB_vehicle_id?.currentValue
+				this.fetchRatesArrayByAffiliateVehicle(this.QB_vehicle_id)
+		}
 		// if asked to initialise the rates
 		if (changes.init_rates?.currentValue) {
-			this.initRates();
+			if(!this.QB_vehicle_id){
+				this.initRates();
+			}
 		}
+	
 
 		if (changes.init_r_rates?.currentValue || this.returnratesform) {
 			this.hours = 0;
-			if(!changes.vehs){
+			if (!changes.vehs) {
 				this.initReturnRates();
 			}
 		}
@@ -167,42 +183,42 @@ export class RatesFormComponent implements OnInit, OnChanges {
 		}
 	}
 
-	handleSubHeadingScroll(items: string , id:any) {
+	handleSubHeadingScroll(items: string, id: any) {
 		this.rate_params["chevrons"][items] = !this.rate_params["chevrons"][items];
 		let el = document.getElementById(id);
-		console.log(`scrolling to ${id}` , el);
-		setTimeout(()=>{
+		console.log(`scrolling to ${id}`, el);
+		setTimeout(() => {
 			el.scrollIntoView();
-		},600)
+		}, 600)
 	}
 	scroll(id) {
 		let el = document.getElementById(id);
 		console.log(`scrolling to ${id}`, el);
 		el.scrollIntoView();
 	}
-	closeAllChevrons(){
-		this.rate_params["chevrons"]['section']=false
-		this.rate_params["chevrons"]['all_inclusive_rates']=false
-		this.rate_params["chevrons"]['others']=false
-		this.rate_params["chevrons"]['direct_taxes']=false
-		this.rate_params["chevrons"]['taxes']=false
-		this.rate_params["chevrons"]['amenities']=false
-		this.rate_params["chevrons"]['misc']=false
-		setTimeout(()=>{
+	closeAllChevrons() {
+		this.rate_params["chevrons"]['section'] = false
+		this.rate_params["chevrons"]['all_inclusive_rates'] = false
+		this.rate_params["chevrons"]['others'] = false
+		this.rate_params["chevrons"]['direct_taxes'] = false
+		this.rate_params["chevrons"]['taxes'] = false
+		this.rate_params["chevrons"]['amenities'] = false
+		this.rate_params["chevrons"]['misc'] = false
+		setTimeout(() => {
 			this.scroll('closeAll-btn')
-		},300)
+		}, 300)
 	}
-	closeReturnAllChevrons(){
-		this.rate_params["chevrons"]['r_section']=false
-		this.rate_params["chevrons"]['r_all_inclusive_rates']=false
-		this.rate_params["chevrons"]['r_others']=false
-		this.rate_params["chevrons"]['r_direct_taxes']=false
-		this.rate_params["chevrons"]['r_taxes']=false
-		this.rate_params["chevrons"]['r_amenities']=false
-		this.rate_params["chevrons"]['r_misc']=false
-		setTimeout(()=>{
+	closeReturnAllChevrons() {
+		this.rate_params["chevrons"]['r_section'] = false
+		this.rate_params["chevrons"]['r_all_inclusive_rates'] = false
+		this.rate_params["chevrons"]['r_others'] = false
+		this.rate_params["chevrons"]['r_direct_taxes'] = false
+		this.rate_params["chevrons"]['r_taxes'] = false
+		this.rate_params["chevrons"]['r_amenities'] = false
+		this.rate_params["chevrons"]['r_misc'] = false
+		setTimeout(() => {
 			this.scroll('closeAll-btn_r')
-		},300)
+		}, 300)
 	}
 	initRates() {
 		console.log("Init Rates");
@@ -221,16 +237,28 @@ export class RatesFormComponent implements OnInit, OnChanges {
 		// fetch the data from backend
 		this.getRatesData().subscribe((response) => {
 			if (response && Object.keys(response).length > 0) {
+				console.log('get rates data resposne-->>', response)
 				this.buildRatesForm('RatesForm', response);
 			}
 		})
 
+		//calculating totals of rates form if data auto fill by quote bot 
+		if(this.QB_vehicle_id){
+			console.log('calculating total for QB ')
+			for (let formgroup in this.RateForm) {
+				for (let subform in this.RateForm[formgroup].controls) {
+						this.calculateAmount('RatesForm', formgroup, subform)
+						if(this.init_r_rates){
+						this.calculateAmount('ReturnRatesForm', formgroup, subform)
+						}
+				}
+			}
+		}
 		// will send the rates form value to the booking component on any change in the whole form
 		this.RatesForm.valueChanges.subscribe((value: any) => {
 			this.calculateTotal("RatesForm");
 			this.calculateGrandTotal("RatesForm");
 		});
-
 		(<FormGroup>this.RatesForm.get('all_inclusive_rates')).valueChanges.subscribe(() => {
 			for (let formgroup in this.RateForm) {
 				for (let subform in this.RateForm[formgroup].controls) {
@@ -315,14 +343,42 @@ export class RatesFormComponent implements OnInit, OnChanges {
 			}
 		});
 	}
+	fetchRatesArrayByAffiliateVehicle(vehicle_id) {
+		this.ratesdata.next({})
+		console.log('<<<<<<<<<<<________ data to send fetchRatesArrayByAffiliateVehicle---------------->>>>>>>>>>>>>>',
+			vehicle_id)
+		let QB: any = JSON.parse(localStorage.getItem('quotebot_form'))
+		let no_of_hours = null
+		if (QB?.service_type == 'charter_tour') {
+			no_of_hours = QB?.booking_hour
+		}
+		let location_info = QB?.location_info[0]
+		// let return_location_info = QB?.location_info[1]
+		// need to handle create return rate form
+		// if(QB?.service_type == "round_trip"){
+		// }
+		let transfer_type_value = QB?.pickup_type + '_to_' + QB?.dropoff_type
+		let return_transfer_type_value = QB?.dropoff_type + '_to_' + QB?.pickup_type
+		let data = {
+			service_type: QB?.service_type,
+			transfer_type: transfer_type_value,
+			numberOfVehicles: 1,
+			no_of_hours: no_of_hours,
+			distance: location_info.distance.value
+		}
+		this.$api.fetchRatesByAffiliateVeh(vehicle_id, data).subscribe((response: any) => {
+			this.ratesdata.next(response?.data?.rateArray)
+			this.initRates();
+		});
+	}
 
 	getRatesData() {
 		return this.ratesdata.asObservable();
 	}
-	handleHourChange(event:any){
-		console.log('------->>>>>>>',event.target.value)
-		if(event.target.value == ''){
-			let n_hr:any = 1
+	handleHourChange(event: any) {
+		console.log('------->>>>>>>', event.target.value)
+		if (event.target.value == '') {
+			let n_hr: any = 1
 			this.returnNumberOfHr.emit(n_hr)
 		}
 		this.returnNumberOfHr.emit(event.target.value)
@@ -438,7 +494,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 
 
 	async calculateAmount(form: string, formgroup: string, subform: string) {
-		
+
 		if (form === "RatesForm") {
 			let baserate = (<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("baserate").value;
 
@@ -466,6 +522,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 				// Admin Share Calculation
 				if (subform == 'Base_Rate') {
 					this.calc_admin_share = (amount * this.admin_share) / 100;
+					console.log('calc_admin_share--->>', amount, this.calc_admin_share)
 					amount = amount + this.calc_admin_share;
 				}
 
@@ -506,9 +563,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 			}
 
 			let amount = (<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("amount").value;
-			console.log('amount -->>' , amount)
 			this.total[subform] = Number(Number(amount).toFixed(2));
-			console.log('total___>>>' , this.total)
 			this.RatesForm.updateValueAndValidity();
 		}
 

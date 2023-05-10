@@ -1823,7 +1823,7 @@ export class NewBookingComponent implements OnInit {
 		this.SetFormValue('affiliate_type', 'affiliate')
 		this.SetFormValue('affiliate_id', this.affiliate_id)
 		//vehicle id when chossing vehicle from Quote bot screen
-		this.QB_vehicle_id = selected_vehicle?.id
+		this.QB_vehicle_id = selected_vehicle?.id || null
 		//pickup
 		this.SetFormValue('pickup_date', QB?.pickup_date)
 		this.SetFormValue('pickup', QB?.pickup_address)
