@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
 
 @Injectable({
@@ -797,20 +797,20 @@ export class AdminService {
 	updateFinalizeRates(data) {
 		return this.httpClient.post(`${this.serverUrl}admin/finalize-rate-edit`, data)
 	}
-	deleteCardFinalize(cardId , acc_id){
+	deleteCardFinalize(cardId, acc_id) {
 		return this.httpClient.delete(`${this.serverUrl}admin/remove-card/${acc_id}/${cardId}`)
 	}
 	adminNotification(data) {
 		return this.httpClient.post(this.serverUrl + 'admin-notification-daily-booking', data);
 	}
-	passengerBooking(data){
-		return this.httpClient.post(this.serverUrl + 'passenger-booking-confirmation-email' ,data)
+	passengerBooking(data) {
+		return this.httpClient.post(this.serverUrl + 'passenger-booking-confirmation-email', data)
 	}
-	bookingEmailAll(data){
-		return this.httpClient.post(this.serverUrl + 'send-reservation-detail-email-to-all' ,data)
+	bookingEmailAll(data) {
+		return this.httpClient.post(this.serverUrl + 'send-reservation-detail-email-to-all', data)
 	}
-	auditTrailInfo(bookingId){
-		return this.httpClient.get(this.serverUrl+`admin/booking-audit-records/${bookingId}`)
+	auditTrailInfo(bookingId) {
+		return this.httpClient.get(this.serverUrl + `admin/booking-audit-records/${bookingId}`)
 	}
 
 	loadBookings(url, startDate, endDate, keyword = '') {
@@ -854,13 +854,13 @@ export class AdminService {
 	getInvoiceData(id) {
 		return this.httpClient.get(this.serverUrl + 'invoice-summary/' + id);
 	}
-	getInvoiceRefundHistory(id){
+	getInvoiceRefundHistory(id) {
 		return this.httpClient.get(this.serverUrl + 'admin/get-refund-list/' + id);
 	}
-	getPaymentLogs(id){
+	getPaymentLogs(id) {
 		return this.httpClient.get(this.serverUrl + 'get-payment-list/' + id);
 	}
-	getInvoiceRefundHistoryCommon(id){
+	getInvoiceRefundHistoryCommon(id) {
 		return this.httpClient.get(this.serverUrl + 'get-refund-list/' + id);
 	}
 	invoiceList(url, keyword) {
@@ -981,6 +981,16 @@ export class AdminService {
 			return this.httpClient.get(`${this.serverUrl}admin/booking-rates`)
 		}
 	}
+	fetchRatesByAffiliateVeh(vehicle_id, data) {
+		const params = new HttpParams()
+			.set('vehicle_id', vehicle_id)
+			.set('transfer_type', data?.transfer_type)
+			.set('service_type', data?.service_type)
+			.set('numberOfVehicles', data?.numberOfVehicles)
+			.set('distance', data?.distance)
+			.set('no_of_hours', data?.no_of_hours);
+		return this.httpClient.get(`${this.serverUrl}admin/booking-rates-vehicle`, { params })
+	}
 	checkUniquePhoneNumberForLooseCustomer(customer_data: Record<string, any>) {
 		return this.httpClient.post(`${this.serverUrl}admin/check-unique-user`, customer_data)
 	}
@@ -996,16 +1006,16 @@ export class AdminService {
 		return this.httpClient.get(this.serverUrl + 'admin/booking-status-list');
 	}
 
-	sendInvoiveToCustomer(bookingId:any){
+	sendInvoiveToCustomer(bookingId: any) {
 		return this.httpClient.get(`${this.serverUrl}admin/send-invoice/${bookingId}`)
 	}
-	sendInvoiveToAny(bookingId:any,data:any){
-		return this.httpClient.post(`${this.serverUrl}admin/send-invoice-to-anyone/${bookingId}`,data)
+	sendInvoiveToAny(bookingId: any, data: any) {
+		return this.httpClient.post(`${this.serverUrl}admin/send-invoice-to-anyone/${bookingId}`, data)
 	}
 
 
-	refund(body:any){
-		return this.httpClient.post(`${this.serverUrl}admin/refund-request`,body)
+	refund(body: any) {
+		return this.httpClient.post(`${this.serverUrl}admin/refund-request`, body)
 	}
 
 
