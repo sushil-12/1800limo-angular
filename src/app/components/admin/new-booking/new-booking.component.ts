@@ -1825,7 +1825,7 @@ export class NewBookingComponent implements OnInit {
 		//vehicle id when chossing vehicle from Quote bot screen
 		this.QB_vehicle_id = selected_vehicle?.id || null
 		//pickup
-		this.SetFormValue('pickup_date', QB?.pickup_date)
+		this.SetFormValue('pickup_date', moment(QB?.pickup_date).format('YYYY-MM-DD'))
 		this.SetFormValue('pickup', QB?.pickup_address)
 		this.SetFormValue('pickup_latitude', QB?.pickup_address_lat)
 		this.SetFormValue('pickup_longitude', QB?.pickup_address_long)
@@ -1843,7 +1843,7 @@ export class NewBookingComponent implements OnInit {
 
 
 		//return pickup
-		this.SetFormValue('return_pickup_date', QB?.return_pickup_date)
+		this.SetFormValue('return_pickup_date', moment(QB?.return_pickup_date).format('YYYY-MM-DD'))
 		this.SetFormValue('return_pickup', QB?.return_dropoff_address)
 		this.SetFormValue('return_pickup_latitude', QB?.return_dropoff_address_lat)
 		this.SetFormValue('return_pickup_longitude', QB?.return_dropoff_address_long)
