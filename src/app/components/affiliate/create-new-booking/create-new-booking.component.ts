@@ -130,6 +130,7 @@ export class CreateNewBookingComponent implements OnInit {
 	ngOnInit(): void {
 
 		// build the form first 
+		localStorage.removeItem('QB_redirectUrl')
 		this.buildBookingForm()
 		this.$routeurl.queryParams.subscribe((params: any) => {
 			if (params && params.bookingId && !this.booking_id) {

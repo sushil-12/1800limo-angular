@@ -693,6 +693,7 @@ export class SelectVehicleComponent implements OnInit
 			// 		error: 'Please open an account or login to proceed.'
 			// 	}
 			// })
+			localStorage.setItem('QB_redirectUrl','true')
 			this.$router.navigate(['/login/driver'], {
 				skipLocationChange: true
 			})

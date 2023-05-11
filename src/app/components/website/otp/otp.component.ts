@@ -7,6 +7,7 @@ import { StateManagementService } from '../../../services/statemanagement.servic
 import { catchError } from 'rxjs/operators';
 import { throwError, Subscription, interval } from 'rxjs';
 import { ValueConverter } from '@angular/compiler/src/render3/view/template';
+import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 declare var $: any;
 
 @Component({
@@ -35,6 +36,7 @@ export class OtpComponent implements OnInit, OnDestroy
 		private authService: AuthService,
 		private affiliateService: AffiliateService,
 		private stateManagementService: StateManagementService,
+		private $errors: ErrorDialogService,
 		private $route: ActivatedRoute,
 	)
 	{
@@ -204,6 +206,8 @@ export class OtpComponent implements OnInit, OnDestroy
 				localStorage.setItem('userData', JSON.stringify(loginUserDetail))
 				localStorage.setItem('currentUser', JSON.stringify(this.response.data.user));
 				localStorage.setItem('access_token', this.response.data.access_token);
+				let QB_redirectUrl = localStorage.getItem('QB_redirectUrl') || ''
+				let vehicle_selected = JSON.parse(sessionStorage.getItem('selected_vehicle'))
 
 				switch (this.response.data.user.roleName)
 				{
@@ -227,11 +231,26 @@ export class OtpComponent implements OnInit, OnDestroy
 						switch (this.response.data.affiliateParmas.account_approval)
 						{
 							case 'accepted': {
-								this.router.navigateByUrl('/affiliate/my-bookings');
+								if(QB_redirectUrl.length){
+									this.router.navigate([
+											'/affiliate/create-new-booking'
+										],
+										{ queryParams: {affiliate_id:vehicle_selected.affiliate_id, vehicle_id:vehicle_selected.id,new : true } })
+								}
+								else{
+									this.router.navigateByUrl('/affiliate/my-bookings');
+								}
 								break;
 							}
 							case 'completed': {
 								this.router.navigateByUrl('/affiliate/account-status');
+								if(QB_redirectUrl.length){
+									this.$errors.openDialog({
+										errors: {
+											error: `<span class='text-danger'>Not able to create booking</span>`
+										}
+									})
+								}
 								break;
 							}
 							case 'rejected': {
@@ -243,6 +262,13 @@ export class OtpComponent implements OnInit, OnDestroy
 								if (this.response.data.affiliateParmas.step_completed.length > 0)
 								{//if step 0 is completed
 									nextStep = this.fetchHighestNumber(this.response.data.affiliateParmas.step_completed);
+									if(QB_redirectUrl.length){
+										this.$errors.openDialog({
+											errors: {
+												error: `<span class='text-danger'>You need to complete registration steps</span>`
+											}
+										})
+									}
 									this.router.navigateByUrl('/affiliate/step' + nextStep.toString());
 									break;
 								}
