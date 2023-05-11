@@ -270,9 +270,13 @@ export class VehicleDetailsComponent implements OnInit {
 	 */
 	bookNow() {
 		console.log('Will navigate to Book Now Page ...')
+		let vehicle_selected = JSON.parse(sessionStorage.getItem('selected_vehicle')) 
 		if (localStorage.getItem('currentUser') != null) {
 			if (JSON.parse(localStorage.getItem('currentUser'))['roleName'] == 'admin') {
-				this._router.navigate(['/admin/new-booking'])
+				// this._router.navigate(['/admin/new-booking'])
+				console.log('navigate to new booking----')
+				this._router.navigate(['/admin/new-booking'],
+				{ queryParams: {affiliate_id:vehicle_selected.affiliate_id, vehicle_id:vehicle_selected.id,new : true }})
 			} else {
 				let user = JSON.parse(localStorage.getItem('currentUser'))['roleName']
 				let vehicle_selected:any = JSON.parse(sessionStorage.getItem('selected_vehicle'))
