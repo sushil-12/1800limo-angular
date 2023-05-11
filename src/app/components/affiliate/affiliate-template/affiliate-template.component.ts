@@ -58,6 +58,15 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 
 	ngOnInit(): void
 	{
+		// document.addEventListener("click", 
+		// (()=>{
+		// 	if(document.body.classList.contains('sidenav-toggled')){
+		// 		$("body").removeClass("sidenav-toggled");
+		// 		console.log("im here")
+		// 		this.showSidebar = false;
+		// 	}
+		// }));
+
 		$(".collapsed").click(function ()
 		{
 
@@ -96,6 +105,10 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 		// this.checkApplicationStatus()
 
 		console.info(this.$shared.fetchCookies('lastroute'))
+	}
+
+	myFunction(){
+
 	}
 
 	/**
