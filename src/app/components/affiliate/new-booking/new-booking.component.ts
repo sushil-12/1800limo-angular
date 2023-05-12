@@ -756,30 +756,30 @@ export class NewBookingComponent implements OnInit {
 		})
 	}
 
-	// fetchAffiliates(affiliate_type: 'affiliate' | 'loose_affiliate') {
-	// 	if (affiliate_type == 'loose_affiliate') {
-	// 		return
-	// 	}
-	// 	else {
-	// 		this.AffiliateAccounts = []
-	// 		this.$spinner.show()
-	// 		// this.$api.getAccountBytype('driver').subscribe((response: any) => {
-	// 		// 	if (response.success && response.data.length > 0) {
-	// 		// 		this.AffiliateAccounts = response.data
+	fetchAffiliates(affiliate_type: 'affiliate' | 'loose_affiliate') {
+		if (affiliate_type == 'loose_affiliate') {
+			return
+		}
+		else {
+			this.AffiliateAccounts = []
+			this.$spinner.show()
+			this.$api.getAccountBytype('driver').subscribe((response: any) => {
+				if (response.success && response.data.length > 0) {
+					this.AffiliateAccounts = response.data
 
-	// 		// 		//lose all affiliate vehicle and driver data on change of affiliate type
-	// 		// 		// for (let key in this.Form)
-	// 		// 		// {
-	// 		// 		// 	if (this.BookingForm.get(key) instanceof FormControl && (this.searchSubstring(key, 'vehicle') || this.searchSubstring(key, 'driver')))
-	// 		// 		// 	{
-	// 		// 		// 		this.BookingForm.get(key).reset()
-	// 		// 		// 	}
-	// 		// 		// }
-	// 		// 	}
-	// 		// 	this.$spinner.hide()
-	// 		// })
-	// 	}
-	// }
+					//lose all affiliate vehicle and driver data on change of affiliate type
+					// for (let key in this.Form)
+					// {
+					// 	if (this.BookingForm.get(key) instanceof FormControl && (this.searchSubstring(key, 'vehicle') || this.searchSubstring(key, 'driver')))
+					// 	{
+					// 		this.BookingForm.get(key).reset()
+					// 	}
+					// }
+				}
+				this.$spinner.hide()
+			})
+		}
+	}
 	// custom search function
 	airportSearchFunction(term: string, item: any) {
 		term = term.toLowerCase();
@@ -1382,91 +1382,91 @@ export class NewBookingComponent implements OnInit {
 			}
 		})
 
-		// this.BookingForm.get('acc_id').valueChanges.subscribe((value: number) => {
-		// 	if (value) {
-		// 		this.chooseUser(value)
-		// 	}
-		// })
+		this.BookingForm.get('acc_id').valueChanges.subscribe((value: number) => {
+			if (value) {
+				this.chooseUser(value)
+			}
+		})
 
 		// Affiliate Type
-		// this.BookingForm.get('affiliate_type').valueChanges.subscribe((value: string) => {
-		// 	if (value == 'loose_affiliate') {
-		// 		this.toggleDropdown(null)
-		// 		this.init_rates = true
-		// 		if (this.Form.service_type.value === 'round_trip') {
-		// 			this.init_return_rates = true;
-		// 		}
-		// 	}
-		// 	else {
-		// 		this.init_rates = false;
-		// 		this.init_return_rates = false;
-		// 		// this.fetchAffiliates('affiliate')
-		// 		// this.chooseAffiliate()
-		// 	}
-		// })
+		this.BookingForm.get('affiliate_type').valueChanges.subscribe((value: string) => {
+			if (value == 'loose_affiliate') {
+				this.toggleDropdown(null)
+				this.init_rates = true
+				if (this.Form.service_type.value === 'round_trip') {
+					this.init_return_rates = true;
+				}
+			}
+			else {
+				this.init_rates = true;
+				this.init_return_rates = false;
+				this.fetchAffiliates('affiliate')
+				// this.chooseAffiliate()
+			}
+		})
 
-		// this.BookingForm.get('affiliate_id').valueChanges.subscribe((value: number) => {
-		// 	if (value) {
-		// 		// this.chooseAffiliate()
-		// 		this.fetchAffiliateInformation(value)
-		// 	}
-		// })
+		this.BookingForm.get('affiliate_id').valueChanges.subscribe((value: number) => {
+			if (value) {
+				// this.chooseAffiliate()
+				this.fetchAffiliateInformation(value)
+			}
+		})
 
-		// this.BookingForm.get('vehicle_id').valueChanges.subscribe((value: any) =>
-		// {
-		// 	if (value && this.VehicleList)
-		// 	{
-		// 		let v = this.VehicleList.find(item => item.ID == value)
-		// 		this.autofillData('vehicle', v);
-		// 	}
-		// })
+		this.BookingForm.get('vehicle_id').valueChanges.subscribe((value: any) =>
+		{
+			if (value && this.VehicleList)
+			{
+				let v = this.VehicleList.find(item => item.ID == value)
+				this.autofillData('vehicle', v);
+			}
+		})
 
-		// this.BookingForm.get('vehicle_type').valueChanges.subscribe((value: string) =>
-		// {
-		// 	if(value && this.BigData)
-		// 	{
-		// 		let name = this.BigData['vehicleCategories'].find(item => item.id == value)['name']
-		// 		this.SetFormValue('vehicle_type_name', name);
-		// 	}
-		// })
+		this.BookingForm.get('vehicle_type').valueChanges.subscribe((value: string) =>
+		{
+			if(value && this.BigData)
+			{
+				let name = this.BigData['vehicleCategories'].find(item => item.id == value)['name']
+				this.SetFormValue('vehicle_type_name', name);
+			}
+		})
 
-		// this.BookingForm.get('vehicle_make').valueChanges.subscribe((value: string) =>
-		// {
-		// 	if(value && this.BigData)
-		// 	{
-		// 		this.BigData['vehicleModels'] = this.BigData_COPY?.vehicleModels.filter(item => item.make_id == value)
-		// 		let name = this.BigData['vehicleMakes'].find(item => item.id == value)['name']
-		// 		this.SetFormValue('vehicle_model', this.BigData?.vehicleModels[0]['id'])
-		// 		this.SetFormValue('vehicle_make_name', name)
-		// 	}
-		// })
+		this.BookingForm.get('vehicle_make').valueChanges.subscribe((value: string) =>
+		{
+			if(value && this.BigData)
+			{
+				this.BigData['vehicleModels'] = this.BigData_COPY?.vehicleModels.filter(item => item.make_id == value)
+				let name = this.BigData['vehicleMakes'].find(item => item.id == value)['name']
+				this.SetFormValue('vehicle_model', this.BigData?.vehicleModels[0]['id'])
+				this.SetFormValue('vehicle_make_name', name)
+			}
+		})
 
-		// this.BookingForm.get('vehicle_model').valueChanges.subscribe((value: string) =>
-		// {
-		// 	if(value && this.BigData)
-		// 	{
+		this.BookingForm.get('vehicle_model').valueChanges.subscribe((value: string) =>
+		{
+			if(value && this.BigData)
+			{
 				
-		// 		let name = this.BigData['vehicleModels'].find(item => item.id == value)['name']
-		// 		this.SetFormValue('vehicle_model_name', name)
-		// 	}
-		// })
+				let name = this.BigData['vehicleModels'].find(item => item.id == value)['name']
+				this.SetFormValue('vehicle_model_name', name)
+			}
+		})
 
-		// this.BookingForm.get('vehicle_year').valueChanges.subscribe((value: string) =>
-		// {
-		// 	if(value && this.BigData)
-		// 	{
-		// 		let name = this.BigData['vehicleYears'].find(item => item.id == value)['name']
-		// 		this.SetFormValue('vehicle_year_name', name)
-		// 	}
-		// })
-		// this.BookingForm.get('vehicle_color').valueChanges.subscribe((value: string) =>
-		// {
-		// 	if(value && this.BigData)
-		// 	{
-		// 		let name = this.BigData['vehicleColors'].find(item => item.id == value)['name']
-		// 		this.SetFormValue('vehicle_color_name', name)
-		// 	}
-		// })
+		this.BookingForm.get('vehicle_year').valueChanges.subscribe((value: string) =>
+		{
+			if(value && this.BigData)
+			{
+				let name = this.BigData['vehicleYears'].find(item => item.id == value)['name']
+				this.SetFormValue('vehicle_year_name', name)
+			}
+		})
+		this.BookingForm.get('vehicle_color').valueChanges.subscribe((value: string) =>
+		{
+			if(value && this.BigData)
+			{
+				let name = this.BigData['vehicleColors'].find(item => item.id == value)['name']
+				this.SetFormValue('vehicle_color_name', name)
+			}
+		})
 		// Pickup Airport
 		this.BookingForm.get('pickup_airport').valueChanges.subscribe((value: number) => {
 			if (value) {

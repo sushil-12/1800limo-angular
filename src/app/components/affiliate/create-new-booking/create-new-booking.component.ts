@@ -108,6 +108,7 @@ export class CreateNewBookingComponent implements OnInit {
 	submitBookingForm: boolean;
 	newBooking: boolean = false;
 	QB_vehicle_id: any = null;
+	params_QB_vehicle_id :any = null
 
 
 	constructor(
@@ -1805,6 +1806,7 @@ export class CreateNewBookingComponent implements OnInit {
 		this.SetFormValue('affiliate_id', this.affiliate_id)
 		//vehicle id when chossing vehicle from Quote bot screen
 		this.QB_vehicle_id = selected_vehicle?.id
+		this.params_QB_vehicle_id = selected_vehicle?.id || null
 		//pickup
 		this.SetFormValue('pickup_date', QB?.pickup_date)
 		this.SetFormValue('pickup', QB?.pickup_address)
