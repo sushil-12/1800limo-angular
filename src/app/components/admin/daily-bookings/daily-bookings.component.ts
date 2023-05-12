@@ -369,7 +369,20 @@ export class DailyBookingsComponent implements OnInit {
 		console.log('---------__>>>>>>', dateType, date)
 		this[dateType] = date
 	}
-
+	fomatAffiliateType(type:any){
+		if(type=='taxi_operator'){
+			return "T"
+		}
+		else if(type == 'fleet_operator'){
+			return "F"
+		}
+		else if(type == 'black_limo_operator'){
+			return "I/O"
+		}
+		else if(type=='gig_operator'){
+			return "G"
+		}
+	}
 	enableDisableClicked(event, id) {
 		this.spinner.show(); //show spinner
 		console.log(event.checked);
