@@ -233,7 +233,8 @@
 												<span class="font-weight-bolder"
 													[innerHTML]="highlighText(booking.driver_first_name)"></span>&nbsp;
 												<span class="font-weight-bolder"
-													[innerHTML]="highlighText(booking.driver_last_name)"></span> |
+													[innerHTML]="highlighText(booking.driver_last_name)"></span>&nbsp;
+													<span class="font-weight-bolder">({{fomatAffiliateType(booking.affiliate_type)}})</span> |
 												<span [innerHTML]="highlighText(booking.affiliate_dispatch_isd)"></span>
 												<span
 													[innerHTML]="highlighText(booking.affiliate_dispatch_number)"></span>
@@ -242,7 +243,8 @@
 												<p data-target="#sendEmailModal" data-toggle="modal"
 													(click)="openModal(booking, 'Affiliate')">
 													<span  class="font-weight-bolder" [innerHTML]="highlighText(booking.driver_first_name)"></span>&nbsp;
-													<span class="font-weight-bolder" [innerHTML]="highlighText(booking.driver_last_name)"></span>|
+													<span class="font-weight-bolder" [innerHTML]="highlighText(booking.driver_last_name)"></span>&nbsp;
+													<span class="font-weight-bolder">({{fomatAffiliateType(booking.affiliate_type)}})</span>|
 													<span [innerHTML]="highlighText(booking.gig_cell_isd)"></span>
 													<span [innerHTML]="highlighText(booking.gig_cell_mobile)"></span>
 												</p>
