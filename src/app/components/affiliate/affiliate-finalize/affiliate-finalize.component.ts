@@ -99,6 +99,7 @@ export class AffiliateFinalizeComponent implements OnInit {
 				this.finalize_params.number_of_vehicles = data?.booking_detail?.number_of_vehicles
 				this.init_rates = true;
 				this.hours =  data?.booking_detail?.number_of_hours
+				this.finalize_params['number_of_hours'] = this.BookingDetail.number_of_hours
 				this.quoteAmount = data?.grand_total
 				this.CardsInformation = data?.CreditCardsDetail
 				this.primaryCards = this.CardsInformation.filter(i=> i.cc_prority == 'Primary')
