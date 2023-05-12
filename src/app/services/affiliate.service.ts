@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
 @Injectable({
 	providedIn: 'root'
@@ -491,6 +491,9 @@ export class AffiliateService
 	{
 		if(id)
 			return this.httpClient.get(this.serverUrl + 'get-reservation-detail/' + id);
+	}
+	fetchBookingRates(id){
+		return this.httpClient.get(this.serverUrl + 'reservation-rates/' + id);
 	}
 	finalizeRates(id){
 		return this.httpClient.get(this.serverUrl + 'reservation-rates/' + id);

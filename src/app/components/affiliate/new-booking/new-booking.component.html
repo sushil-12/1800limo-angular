@@ -1,6 +1,6 @@
 <ngx-spinner name="fetchspinner">
 	<p style="color: white; font-size: 0.95rem; width: max-content">
-		Searching our large database 
+		Searching our large database
 	</p>
 </ngx-spinner>
 <ngx-spinner name="savespinner">
@@ -627,8 +627,8 @@
 							<mat-label>
 								Special Instructions
 							</mat-label>
-							<textarea matInput style="white-space: pre-wrap;" formControlName="booking_instructions" (focus)="$event.target.select()"
-								rows="5"></textarea>
+							<textarea matInput style="white-space: pre-wrap;" formControlName="booking_instructions"
+								(focus)="$event.target.select()" rows="5"></textarea>
 						</mat-form-field>
 					</div>
 				</div>
@@ -637,9 +637,9 @@
 		</div>
 		<!-- Client Accounts Section Ends -->
 
-			
-			<!-- Affiliate Driver Information Ends -->
-            <div class="section-container mt-5">
+
+		<!-- Affiliate Driver Information Ends -->
+		<div class="section-container mt-5">
 			<!-- Section Booking details start -->
 			<h2>
 				Booking Details
@@ -651,7 +651,8 @@
 						<mat-label>
 							Meet and Greet Choices <span class="asterisk"></span>
 						</mat-label>
-						<mat-select formControlName="meet_greet_choices" (selectionChange)="handleChangeMeetAndGreet($event ,'')">
+						<mat-select formControlName="meet_greet_choices"
+							(selectionChange)="handleChangeMeetAndGreet($event ,'')">
 							<mat-option *ngFor="let meetGreet of BigData?.meetGreets" [value]="meetGreet.id">
 								{{ meetGreet.message }}
 							</mat-option>
@@ -1296,7 +1297,7 @@
 
 
 		<!-- Section - Booking Details -->
-	
+
 		<!-- Section - Booking Details Ends -->
 
 
@@ -1312,7 +1313,8 @@
 						<mat-label>
 							Meet and Greet Choices <span class="asterisk"></span>
 						</mat-label>
-						<mat-select formControlName="return_meet_greet_choices" (selectionChange)="handleChangeMeetAndGreet($event ,'return')">
+						<mat-select formControlName="return_meet_greet_choices"
+							(selectionChange)="handleChangeMeetAndGreet($event ,'return')">
 							<mat-option *ngFor="let meetGreet of BigData?.meetGreets" [value]="meetGreet.id">
 								{{ meetGreet.message }}
 							</mat-option>
@@ -1690,24 +1692,23 @@
 				<!-- AGM Map Ends -->
 			</div>
 			<!-- AGM Map -->
-		<!-- Section - Return Journey Details Ends -->
+			<!-- Section - Return Journey Details Ends -->
 
 
-		<!-- <app-rates-form class="d-flex flex-wrap" [initRates]="init_rates" [affiliate_type]="Form.affiliate_type.value"
+			<!-- <app-rates-form class="d-flex flex-wrap" [initRates]="init_rates" [affiliate_type]="Form.affiliate_type.value"
 			[distance]="distance_for_rates" [reservation_id]="booking_id" [reset]="reset_button" [reset]="reset_button"
 			[initReturnRates]="init_return_rates" (formvalue)="RateFormValue($event)"
 			[hours]="Form.number_of_hours?.value" [vehicles]="Form.number_of_vehicles?.value"
 			(returnformvalue)="ReturnRateFormValue($event)" (returnNumberOfHr)="HandleReturnNumberOfHr($event)">
 		</app-rates-form> -->
 
+		</div>
 
-
-
-
-
-
-
-    </div>
+		<app-rates-forms [initRates]="true" [affiliate_type]="Form.affiliate_type.value" [distance]="distance_for_rates"
+			[reservation_id]="booking_id" [reset]="reset_button" (formvalue)="RateFormValue($event)"
+			[hours]="Form.number_of_hours?.value" [vehicles]="Form.number_of_vehicles?.value"
+			(returnNumberOfHr)="HandleReturnNumberOfHr($event)">
+		</app-rates-forms>
 		<div class="row">
 			<div class="col-md-12">
 				<!-- <button type="button" class="custom-filled-reset-button m-3" (click)="resetFields()">
@@ -1718,8 +1719,8 @@
 				</button>
 			</div>
 		</div>
-	
-    </div>
+
+	</div>
 </form>
 
 <style>
@@ -1811,7 +1812,7 @@
 						</div>
 					</div>
 					<hr>
-					
+
 
 					<!-- Loose Customer Information -->
 					<ng-container *ngIf="Form['account_type'].value == 'loose_customer' then LooseCustomerSec">
@@ -1965,7 +1966,7 @@
 								</span>
 							</div>
 							<div class="col-md-8 value">
-								<span class="font-weight-bolder" style="white-space: pre-wrap;"> 
+								<span class="font-weight-bolder" style="white-space: pre-wrap;">
 									{{Form?.meet_greet_choices_name.value}}
 								</span>
 							</div>
@@ -1979,7 +1980,7 @@
 								</span>
 							</div>
 							<div class="col-md-8 value">
-								<span class="font-weight-bolder" style="white-space: pre-wrap;"> 
+								<span class="font-weight-bolder" style="white-space: pre-wrap;">
 									{{Form?.return_meet_greet_choices_name.value}}
 								</span>
 							</div>
@@ -1993,7 +1994,7 @@
 								</span>
 							</div>
 							<div class="col-md-8 value">
-								<span class="font-weight-bolder" style="white-space: pre-wrap;"> 
+								<span class="font-weight-bolder" style="white-space: pre-wrap;">
 									{{Form?.booking_instructions.value}}
 								</span>
 							</div>
@@ -2486,7 +2487,7 @@
 							</div>
 						</div>
 
-						<hr  />
+						<hr />
 
 						<!-- ############## Dropoff #################### -->
 						<h5 class="px-2 m-1 text-xl">
@@ -2604,7 +2605,6 @@
 					</div>
 				</div>
 			</div>
-
 
 
 			<div class="modal-footer justify-content-end">

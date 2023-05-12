@@ -627,8 +627,8 @@
 							<mat-label>
 								Special Instructions
 							</mat-label>
-							<textarea matInput style="white-space: pre-wrap;" formControlName="booking_instructions" (focus)="$event.target.select()"
-								rows="5"></textarea>
+							<textarea matInput style="white-space: pre-wrap;" formControlName="booking_instructions"
+								(focus)="$event.target.select()" rows="5"></textarea>
 						</mat-form-field>
 					</div>
 				</div>
@@ -1781,7 +1781,7 @@
 
 
 		<!-- Section - Booking Details -->
-	
+
 		<!-- Section - Booking Details Ends -->
 
 
@@ -2179,7 +2179,12 @@
 		<!-- Section - Return Journey Details Ends -->
 
 
-
+		<app-rates-forms class="d-flex flex-wrap" [initRates]="init_rates" [affiliate_type]="Form.affiliate_type.value"
+			[distance]="distance_for_rates" [reservation_id]="booking_id" [reset]="reset_button" [reset]="reset_button"
+			[initReturnRates]="init_return_rates" (formvalue)="RateFormValue($event)" [vehicle_id]="params_QB_vehicle_id"
+			[hours]="Form.number_of_hours?.value" [vehicles]="Form.number_of_vehicles?.value"
+			(returnformvalue)="ReturnRateFormValue($event)" (returnNumberOfHr)="HandleReturnNumberOfHr($event)">
+		</app-rates-forms>
 
 
 
@@ -2300,7 +2305,7 @@
 						<div class="col-md-8 value">
 							<span class="font-weight-bolder">
 								{{ Form.vehicle_type_name.value}}
-								</span>
+							</span>
 						</div>
 					</div>
 					<div class="row p-2">
@@ -2312,7 +2317,7 @@
 						<div class="col-md-8 value">
 							<span class="font-weight-bolder">
 								{{ Form.vehicle_make_name.value}}
-								</span>
+							</span>
 						</div>
 					</div>
 					<div class="row p-2">
@@ -2324,7 +2329,7 @@
 						<div class="col-md-8 value">
 							<span class="font-weight-bolder">
 								{{ Form.vehicle_model_name.value}}
-								</span>
+							</span>
 						</div>
 					</div>
 					<div class="row p-2">
@@ -2336,7 +2341,7 @@
 						<div class="col-md-8 value">
 							<span class="font-weight-bolder">
 								{{ Form.vehicle_year_name.value}}
-								</span>
+							</span>
 						</div>
 					</div>
 					<div class="row p-2">
@@ -2348,7 +2353,7 @@
 						<div class="col-md-8 value">
 							<span class="font-weight-bolder">
 								{{ Form.vehicle_color_name.value}}
-								</span>
+							</span>
 						</div>
 					</div>
 					<div class="row p-2">
@@ -2360,7 +2365,7 @@
 						<div class="col-md-8 value">
 							<span class="font-weight-bolder">
 								{{ Form.vehicle_license_plate.value}}
-								</span>
+							</span>
 						</div>
 					</div>
 					<div class="row p-2">
@@ -2372,10 +2377,10 @@
 						<div class="col-md-8 value">
 							<span class="font-weight-bolder">
 								{{ Form.vehicle_seats.value}}
-								</span>
+							</span>
 						</div>
 					</div>
-					
+
 					<hr>
 					<!-- Affiliate Information -->
 					<ng-container *ngIf="Form.affiliate_type.value == 'affiliate' then affiliateUser">
@@ -2684,7 +2689,7 @@
 								</span>
 							</div>
 							<div class="col-md-8 value">
-								<span class="font-weight-bolder" style="white-space: pre-wrap;"> 
+								<span class="font-weight-bolder" style="white-space: pre-wrap;">
 									{{Form?.booking_instructions.value}}
 								</span>
 							</div>
