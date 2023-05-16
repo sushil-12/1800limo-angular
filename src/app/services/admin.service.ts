@@ -94,6 +94,13 @@ export class AdminService {
 	addVehicleType(data) {
 		return this.httpClient.post(this.serverUrl + 'add-vehicle-types', data);
 	}
+	chargeByCard(data) {
+		return this.httpClient.post(this.serverUrl + 'charge-credit-card', data);
+	}
+	paymentLogs(id){
+		return this.httpClient.get(this.serverUrl + 'get-account-logs/' + id);
+	}
+
 
 	getVehicleType(id) {
 		return this.httpClient.get(this.serverUrl + 'get-vehicle-types/' + id);

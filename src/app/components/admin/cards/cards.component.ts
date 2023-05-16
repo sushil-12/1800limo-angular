@@ -6,6 +6,9 @@ import { catchError } from 'rxjs/operators';
 import { StateManagementService } from '../../../services/statemanagement.service';
 import { throwError } from 'rxjs';
 import { ThemePalette } from '@angular/material/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
+import * as moment from 'moment';
 declare var $: any;
 
 @Component({
@@ -28,28 +31,35 @@ export class CardsComponent implements OnInit
 	public cardId: string;
 	public cardsRes: any;
 	public cards: any;
+	public ID:any
 
 	public firstPage: Number;
 	public lastPage: Number;
 	public totalPage: Number;
-	public currentPage: Number;
+	public currentPage: any;
 	public from: Number;
 	public to: Number;
 	public path: string;
 	public firstPageUrl: string;
 	public lastPageUrl: string;
 	public prevPageUrl: string;
+	paymentForm: FormGroup
 	public nextPageUrl: string;
+	show: boolean;
+	paymentJson: any;
 
 	constructor(
 		private adminService: AdminService,
 		private router: Router,
 		private spinner: NgxSpinnerService,
+		private $errors: ErrorDialogService,
+		private $form: FormBuilder,
 		private stateManagementService: StateManagementService,
 		private activatedroute: ActivatedRoute) { }
 
 	ngOnInit(): void
 	{
+		this.buildPaymentForm()
 
 		/** spinner starts on init */
 		this.stateManagementService.setprogressBar(true);
@@ -183,5 +193,57 @@ export class CardsComponent implements OnInit
 			udpArr.push(i + 1);
 		}
 		return udpArr;
+	}
+	get Form() {
+		return this.paymentForm.controls;
+	}
+	buildPaymentForm() {
+		this.paymentForm = this.$form.group({
+			amount: ['', [Validators.required]]
+		})
+	}
+	formatDate(date:any){
+		return moment(date).format('YYYY-MM-DD')
+	}
+	paymentLogs(){
+		this.spinner.show()
+		this.adminService.paymentLogs(this.accountId).subscribe((response: any) => {
+			// this.$errors.openDialog({
+			// 	errors: {
+			// 		error: `<span class='text-success'>${response.message}</span>`
+			// 	}
+			// })
+			this.paymentJson = response.data
+			this.spinner.hide()
+			// this.spinner.hide()
+		})
+	}
+
+	payment(){
+		this.spinner.show()
+		let body = {
+			customerId : this.accountId,
+			cardId : this.ID, 
+			amount : this.Form.amount.value,
+			description : " "
+		}
+		console.log('in function payment',body)
+		this.adminService.chargeByCard(body).subscribe((response: any) => {
+			this.$errors.openDialog({
+				errors: {
+					error: `<span class='text-success'>${response.message}</span>`
+				}
+			})
+			this.spinner.hide()
+		})
+		this.ID = ""
+		this.show = false
+		$("#paymentModal").modal("hide");
+	}
+
+	closeModal() {
+		this.paymentForm.patchValue({ amount: 0 })
+		this.show = false
+		$("#paymentModal").modal("hide");
 	}
 }
