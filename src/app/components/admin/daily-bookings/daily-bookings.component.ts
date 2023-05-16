@@ -633,8 +633,20 @@ export class DailyBookingsComponent implements OnInit {
 					if ("lat" in response?.data?.pickupDetail && "long" in response?.data?.pickupDetail && "lat" in response?.data?.dropoffDetail && "long" in response?.data?.dropoffDetail) {
 						sessionStorage.setItem('pickup', JSON.stringify(response?.data?.pickupDetail.address));
 						sessionStorage.setItem('dropoff', JSON.stringify(response?.data?.dropoffDetail.address));
-						const googleDirectionUrl = 'https://www.google.com/maps/dir/?api=1'+'&destination=' +
-							encodeURIComponent(response?.data?.pickupDetail.address) + '&travelmode=driving'
+						let googleDirectionUrl; 
+						let iosDirectionUrl;
+						if(type=='pickup'){
+							googleDirectionUrl = 'https://www.google.com/maps/dir/?api=1'+'&destination=' +
+								encodeURIComponent(response?.data?.pickupDetail.address) + '&travelmode=driving'
+							iosDirectionUrl = 'http://maps.apple.com/?daddr=' +
+									encodeURIComponent(response?.data?.pickupDetail.address)
+						}
+						else{
+							googleDirectionUrl = 'https://www.google.com/maps/dir/?api=1'+'&destination=' +
+							encodeURIComponent(response?.data?.dropoffDetail.address) + '&travelmode=driving'
+							iosDirectionUrl = 'http://maps.apple.com/?daddr=' +
+									encodeURIComponent(response?.data?.dropoffDetail.address)
+						}
 						// this.router.navigate(['/locate-map'], {
 						// 	queryParams: {
 						// 		plat: response?.data?.pickupDetail?.lat.toString(),
@@ -644,8 +656,6 @@ export class DailyBookingsComponent implements OnInit {
 						// 	},
 						// 	queryParamsHandling: 'merge'
 						// });
-						const iosDirectionUrl = 'http://maps.apple.com/?daddr=' +
-							encodeURIComponent(response?.data?.pickupDetail.address)
 						if (this.iOS()) {
 							setTimeout(() => {
 								window.location.href = iosDirectionUrl;
