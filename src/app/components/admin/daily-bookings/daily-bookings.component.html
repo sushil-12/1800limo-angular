@@ -924,7 +924,7 @@
 						</div>
 						<div class="col-md-8 value">
 							<span class="font-weight-bolder preview-output-feild">
-								$ {{ textFormatter(bookingPreview.grand_total) }}
+								$ {{ bookingPreview.grand_total }}
 							</span>
 						</div>
 					</div>
@@ -936,7 +936,19 @@
 						</div>
 						<div class="col-md-8 value"  >
 							<span class="font-weight-bolder preview-output-feild">
-								 - $ {{ bookingPreview.total_amount_refunded.toFixed(2) }}
+								 $ {{-(bookingPreview?.total_amount_refunded).toFixed(2) }}
+							</span>
+						</div>
+					</div>
+					<div class="row" *ngIf="bookingPreview.total_amount_refunded>0">
+						<div class="col-md-4 key">
+							<span>
+								New total
+							</span>
+						</div>
+						<div class="col-md-8 value"  >
+							<span class="font-weight-bolder preview-output-feild">
+								 $ {{(bookingPreview?.grand_total- bookingPreview?.total_amount_refunded).toFixed(2) }}
 							</span>
 						</div>
 					</div>
