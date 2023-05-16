@@ -4,8 +4,8 @@ import { StateManagementService } from '../../../services/statemanagement.servic
 import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from "ngx-spinner";
-import { catchError } from 'rxjs/operators';
-import { throwError, from } from 'rxjs';
+import { catchError, map, startWith } from 'rxjs/operators';
+import { throwError, from, Observable } from 'rxjs';
 import { CustomvalidationService } from '../../../services/customvalidation.service';
 import { MapsAPILoader } from '@agm/core';
 import { data } from 'jquery';
@@ -57,6 +57,8 @@ export class AffiliateStep1Component implements OnInit {
 	public modalImage: string;
 	public notify_sms: boolean;
 	public notify_email: boolean;
+	badgeOptions: string[] = [];
+    filteredOptions: any;
 	// stateManagementService: any;
 
 	constructor(
@@ -79,8 +81,6 @@ export class AffiliateStep1Component implements OnInit {
 	longitude: number;
 	zoom: number;
 	address: string;
-	badgeCities : any = ['mohali' , 'chandigarh' , 'amritsar' , 'patiala' , 'mansa' , 'Barnala']
-	badgeOptions :any = [...this.badgeCities]
 	private geoCoder;
 	@ViewChild('search1')
 	public searchElementRef: ElementRef;
@@ -108,6 +108,7 @@ export class AffiliateStep1Component implements OnInit {
 			CellIsd: ['+1', Validators.required],
 			Email: ['', [Validators.required,Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.]+\.[a-zA-Z]{2,}$/i)]],
 			badge_city :[''],
+			badge_city_name:[''],
 			latitude: [''],
 			longitude: [''],
 			FirstYearBusiness: ['', [Validators.required ,Validators.pattern("^[0-9]*$")]],
@@ -134,12 +135,21 @@ export class AffiliateStep1Component implements OnInit {
 			notify_sms: [true],
 			notify_email: [true],
 		});
+	
 		this.addAffiliateAccountForm.patchValue({AffiliateType:'black_limo_operator'})
 		this.affiliateTypeSwitch("black_limo_operator");
 
 		this.spinner.show()
 		// this.stateManagementService.setprogressBar(true);
 		// Load Our languages using API
+		this.adminService.getAllBadgeCities().pipe(
+			catchError(err => {
+				return throwError(err)
+			})
+		).subscribe((res:any)=> {
+			this.badgeOptions = res?.data
+			this.filteredOptions = res?.data
+		})
 		this.adminService.getAssicationsLanguages()
 			.pipe(
 				catchError(err => {
@@ -165,7 +175,14 @@ export class AffiliateStep1Component implements OnInit {
 							})
 						).subscribe(result2 => {
 							this.response2 = result2;
-
+							this.badgeOptions.map((i:any)=>{
+								if(i.id==this.response2.data.badge_city){
+									this.addAffiliateAccountForm.patchValue({
+										badge_city:i.id,
+										badge_city_name:i.name
+									})
+								}
+							})
 							this.addAffiliateAccountForm.patchValue({
 								id: this.response2.data.id,
 								FirstName: this.response2.data.FirstName,
@@ -434,6 +451,20 @@ export class AffiliateStep1Component implements OnInit {
 	// 			});
 	// 	}
 	// }
+	handleBadgeCity(value:any){
+		console.log(value , this.filteredOptions)
+		this.filteredOptions = this.badgeOptions.filter((i:any)=> i.name.toLowerCase().includes(value.toLowerCase()))
+	}
+	selectBadgeCity(option:any,isUserInput){
+		console.log('in function selectBadgeCity-->>>' ,isUserInput)
+		if(isUserInput){
+			this.addAffiliateAccountForm.patchValue({
+				badge_city:option.id
+			})
+			// this.addAffiliateAccountForm.updateValueAndValidity()
+		}
+
+	}
 
 	businessCardImageChange(event, imageType, imageId = null) {
 		// this.stateManagementService.setprogressBar(true); //show progressBar
@@ -673,16 +704,6 @@ export class AffiliateStep1Component implements OnInit {
 		this.addAffiliateAccountForm.reset();
 		this.BusinessFrontPhoto = "";
 		this.BusinessBackPhoto = "";
-	}
-
-	handleBadgeCity(value:any){
-		if(value){
-			this.badgeOptions = this.badgeCities.filter(i=> i.toLowerCase().includes(value.toLowerCase()))
-		}
-		else{
-			this.badgeOptions = [...this.badgeCities]
-		}
-
 	}
 
 }
