@@ -342,18 +342,25 @@
 						</ng-template>
 					</div>
 				</div>
-				<!-- <div class="col-md-6 my-3">
-					<mat-form-field appearance="outline" class="m-0">
-						<mat-label class="required-field">Badge City</mat-label>
-						<input type="text" matInput formControlName="badge_city" [matAutocomplete]="auto"
-							(keyup)="handleBadgeCity($event.target.value)">
+				<div class="col-md-6 my-3">
+					<mat-form-field appearance="outline" class="example-full-width">
+						<mat-label>Badge City
+						</mat-label>
+						<input type="text"
+							   placeholder="Pick one"
+							   aria-label="Number"
+							   matInput
+							   formControlName="badge_city_name"
+							   [matAutocomplete]="auto" 
+							   (keyup)="handleBadgeCity($event.target.value)">
 						<mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-							<mat-option *ngFor="let city of badgeOptions" [value]="city">
-								{{city}}
-							</mat-option>
+						  <mat-option *ngFor="let option of filteredOptions" 
+						  (onSelectionChange)="selectBadgeCity(option,$event.isUserInput)" [value]="option.name">
+							{{option.name}}
+						  </mat-option>
 						</mat-autocomplete>
-					</mat-form-field>
-				</div> -->
+					  </mat-form-field>
+				</div>
 			</div>
 		</div>
 	</section>

@@ -6,7 +6,7 @@
 		<div class="containeredd">
 			<div class="row">
 				<div class="col-md-12">
-					<button class="custom-btn add-button" data-toggle="modal" data-target="#addYearModal">
+					<button class="custom-btn add-button" data-toggle="modal" data-target="#addCityModal">
 						<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-plus-circle"
 							viewBox="0 0 16 16">
 							<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
@@ -46,22 +46,22 @@
 							</tr>
 						</thead>
 						<tbody>
-							<!-- <tr *ngFor="let city of Cities" role="row" class="odd">
+							<tr *ngFor="let city of Cities" role="row" class="odd">
 								<td>
-									<p>{{year.name}}</p>
+									<p>{{city.name}}</p>
 								</td>
 								<td>
-									<mat-slide-toggle class="example-margin" [color]="color" [checked]="year.status"
-										[disabled]="disabled" (change)="enableDisableClicked($event,year.id)">
+									<mat-slide-toggle class="example-margin" [color]="color" [checked]="city.status=='enable' ? true : false"
+										[disabled]="disabled" (change)="enableDisableClicked($event,city.id)">
 									</mat-slide-toggle>
 								</td>
 								<td>
 									<a class="user-profileded btn btn-icon btn-transparent-dark"
-										id="navbarDropdownUserImage" (click)="editCity(year.id)" role="button"
+										id="navbarDropdownUserImage" (click)="editCity(city)" role="button"
 										tabindex="1"> <span>Edit</span>
 									</a>
 								</td>
-							</tr> -->
+							</tr>
 						</tbody>
 					</table>
 				</div>
@@ -72,72 +72,60 @@
 
 
 <!-- Add year type modal -->
-<!-- <div class="modal fade" id="addYearModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+<div class="modal fade" id="addCityModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
 	aria-hidden="true">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header pb-0">
-				<h3 class="text-center mb-0">Add Year</h3>
+				<h3 class="text-center mb-0">Add City</h3>
 			</div>
 
 			<div class="modal-body pt-0">
-				<form [formGroup]="addYearsForm">
+				<form [formGroup]="addCityForm">
 					<div class="form-group">
 						<mat-form-field appearance="outline">
-							<mat-label>Year</mat-label>
-							<input type="text" matInput formControlName="name" placeholder="Year">
+							<mat-label>City</mat-label>
+							<input type="text" matInput formControlName="name" placeholder="City">
 						</mat-form-field>
-						<div *ngIf="submitted && f.name.errors" class="text-danger">
-							<div *ngIf="f.name.errors.required">The Year is required</div>
-							<div *ngIf="f.name.errors.pattern; else YearError">The Year is not valid</div>
-							<ng-template #YearError>
-								<div *ngIf="f.name.errors.minlength">Year should contain at least 4 characters</div>
-								<div *ngIf="f.name.errors.maxlength">Year should contain maximum of 4 characters</div>
-							</ng-template>
+						<div *ngIf="addForm.name.errors" class="text-danger">
+							<div *ngIf="addForm.name.errors.required">The City is required</div>
 						</div>
 					</div>
 				</form>
 			</div>
 			<div class="modal-footer p-0">
-				<button type="button" class="custom-btn button2" (click)="submitForm()"
-					[disabled]="disableAddButton">Save</button>
+				<button type="button" class="custom-btn button2" (click)="submitForm()">Save</button>
 			</div>
 		</div>
 	</div>
-</div> -->
+</div>
 
 <!-- Edit year type modal-->
 
-<!-- <div class="modal fade" id="editYearModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+<div class="modal fade" id="editCityModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
 	aria-hidden="true">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header pb-0">
-				<h3 class="text-center mb-0">Edit Year</h3>
+				<h3 class="text-center mb-0">Edit City</h3>
 			</div>
 
 			<div class="modal-body pt-0">
-				<form [formGroup]="editYearsForm">
+				<form [formGroup]="editCityForm">
 					<div class="form-group">
 						<mat-form-field appearance="outline">
-							<mat-label>Year</mat-label>
-							<input type="text" matInput formControlName="name" placeholder="Year">
+							<mat-label>City</mat-label>
+							<input type="text" matInput formControlName="name" placeholder="city">
 						</mat-form-field>
-						<div *ngIf="submitted && f.name.errors" class="text-danger">
-							<div *ngIf="f.name.errors.required">The Year is required</div>
-							<div *ngIf="f.name.errors.pattern; else YearError">The Year is not valid</div>
-							<ng-template #YearError>
-								<div *ngIf="f.name.errors.minlength">Year should contain at least 4 characters</div>
-								<div *ngIf="f.name.errors.maxlength">Year should contain maximum of 4 characters</div>
-							</ng-template>
+						<div *ngIf="f.name.errors" class="text-danger">
+							<div *ngIf="f.name.errors.required">The City is required</div>
 						</div>
 					</div>
 				</form>
 			</div>
 			<div class="modal-footer p-0">
-				<button type="button" class="custom-btn button2" (click)="updateYearForm()"
-					[disabled]="disableAddButton">Update</button>
+				<button type="button" class="custom-btn button2" (click)="updateCityForm()">Update</button>
 			</div>
 		</div>
 	</div>
-</div> -->
+</div>

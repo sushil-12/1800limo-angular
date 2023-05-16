@@ -286,9 +286,19 @@ export class AdminService {
 		const result = await this.httpClient.get(this.serverUrl + 'vehicle-colors').toPromise();
 		return result;
 	}
-	getBadgeCities() {
-		return this.httpClient.get(this.serverUrl + 'all-badge-cities');
+	getAllBadgeCities() {
+		return this.httpClient.get(this.serverUrl + 'admin/all-badge-cities');
 	}
+	updateBadgeCity(body) {
+		return this.httpClient.put(this.serverUrl + 'admin/edit-badge-city',body);
+	}
+	addBadgeCity(body) {
+		return this.httpClient.post(this.serverUrl + 'admin/add-badge-city',body);
+	}
+	updateBadgeCityStatus(body){
+		return this.httpClient.put(this.serverUrl + 'admin/update-badge-city-status',body);
+	}
+	
 	addColor(data) {
 		return this.httpClient.post(this.serverUrl + 'add-vehicle-color', data);
 	}
