@@ -160,6 +160,7 @@ export class CustomInvoiceComponent implements OnInit {
     })
     this.show_sendInvoiceToAny = false
     this.str_email = ''
+    this.emails = []
     $("#sendInvoiceToAny").modal("hide");
   }
   get Form() {
@@ -169,6 +170,10 @@ export class CustomInvoiceComponent implements OnInit {
     if (timestamp) {
       return moment(timestamp * 1000).format('MMMM Do YYYY, h:mm:ss a')
     }
+  }
+
+  formatDate(date:any){
+    return moment(date).format('lll')
   }
 
   getCurrencyData() {
@@ -223,6 +228,7 @@ export class CustomInvoiceComponent implements OnInit {
     // this.refundAmountForm.patchValue({refundAmount:this.invoiceData.grand_total})
     this.show_sendInvoiceToAny = false
     this.str_email = ''
+    this.emails = []
     $("#sendInvoiceToAny").modal("hide");
   }
 
