@@ -132,6 +132,15 @@
 								</div>
 							</div>
 						</div>
+						<div class="col-md-12 my-2">
+							<mat-form-field appearance="outline">
+								<mat-label>
+									Payment Description
+								</mat-label>
+								<textarea matInput style="white-space: pre-wrap;" formControlName="payment_description" (focus)="$event.target.select()"
+									rows="5"></textarea>
+							</mat-form-field>
+						</div>
 					</div>
 				</form>
 			</div>
@@ -155,15 +164,16 @@
 			<div class="modal-header pb-0">
 				<h3 class="modal-title mb-0">Payment logs</h3>
 			</div>
-			<div class="modal-body">
+			<div class="modal-body table-responsive">
 				<!-- {{invoiceData.audit_trail | json}} -->
 				<table id="audittrail" class="table table-striped">
 					<thead style="background-color: white;">
 						<tr>
 							<th scope="col">#</th>
 							<th scope="col">Transaction ID</th>
+							<th scope="col">Description</th>
 							<th scope="col">Amount</th>
-							<th scope="col" id="date">Created Date</th>
+							<th scope="col">Invoice</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -173,9 +183,15 @@
 								<a href="{{record.receipt_url}}" target="_blank">
 								{{record?.balance_transaction}}</a> 
 							</td>
-							<td><span class="currencySymbol">$</span>
+							<td scope="row" style="word-wrap: break-word;">{{record.description}}</td>
+							<td scope="row" style="width: 100px;"><span class="currencySymbol">$</span>
 								{{record?.amount}}</td>
-							<td>{{formatDate(record?.created_at)}}</td>
+							<td scope="row"><button class="custom-filled-button orange-button"
+								style="color:#fff;padding: 5px 12px !important;"
+								data-toggle="modal" data-target="#paymentModal"
+								(click)="navigate(record)" >
+								View
+							</button></td>
 						</tr>
 					</tbody>
 				</table>

@@ -74,6 +74,7 @@ import { MasterVehicleFareComponent } from './master-vehicle-fare/master-vehicle
 import { NewBookingComponent } from './new-booking/new-booking.component';
 import { FinalizeBookingComponent } from './finalize-booking/finalize-booking.component';
 import { BadgeCitiesComponent } from './badge-cities/badge-cities.component';
+import { CustomInvoiceComponent } from './custom-invoice/custom-invoice.component';
 
 
 const routes: Routes = [
@@ -386,6 +387,11 @@ const routes: Routes = [
 		path: 'invoice-summary',
 		canActivate: [SubAdminGuard],
 		component: InvoiceSummaryComponent
+	},
+	{
+		path: 'custom-invoice-summary',
+		canActivate: [SubAdminGuard],
+		component: CustomInvoiceComponent
 	},
 	{
 		path: 'sub-admins',
