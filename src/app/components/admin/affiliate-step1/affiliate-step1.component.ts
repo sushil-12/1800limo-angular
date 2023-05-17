@@ -142,7 +142,7 @@ export class AffiliateStep1Component implements OnInit {
 		this.spinner.show()
 		// this.stateManagementService.setprogressBar(true);
 		// Load Our languages using API
-		this.adminService.getAllBadgeCities().pipe(
+		this.adminService.getAllEnableBadgeCities().pipe(
 			catchError(err => {
 				return throwError(err)
 			})

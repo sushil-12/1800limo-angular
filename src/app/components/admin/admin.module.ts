@@ -104,6 +104,7 @@ import { BadgeCitiesComponent } from './badge-cities/badge-cities.component';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
+import { CustomInvoiceComponent } from './custom-invoice/custom-invoice.component';
 
 @NgModule({
 	declarations: [
@@ -183,7 +184,8 @@ import { MatIconModule } from '@angular/material/icon';
 		RatesFormComponent,
 		FinalizeBookingComponent,
 		FinalizeRatesComponent,
-		BadgeCitiesComponent
+		BadgeCitiesComponent,
+		CustomInvoiceComponent
 	],
 	imports: [
 		CommonModule,

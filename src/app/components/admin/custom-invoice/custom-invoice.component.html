@@ -1,0 +1,299 @@
+<ngx-spinner></ngx-spinner>
+<main *ngIf="invoiceData" style="background: #f5f4fe;">
+    <div class="row m-2 d-flex justify-content-between" style="padding: 20px 0 0 0;">
+        <div>
+            <button class="custom-btn print-btn box-shadow my-1" style="height: 40px;width: 130px;font-size: 14px;"
+                [useExistingCss]="true" printTitle="Invoice" printSectionId="print-section" ngxPrint>
+                <!-- <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"
+					style="height: 20px; margin-right:10px; fill:white;" viewBox="0 0 108.36 122.88">
+					<title>printing</title>
+					<path
+						d="M62.64,64.67a3.57,3.57,0,1,1-3.58,3.57,3.57,3.57,0,0,1,3.58-3.57ZM17.32,0H91.05A7.17,7.17,0,0,1,98.2,7.15v9.74h3.26a6.87,6.87,0,0,1,4.87,2h0a6.86,6.86,0,0,1,2,4.86v39.6a6.9,6.9,0,0,1-6.9,6.9H92.09v48.49a4.1,4.1,0,0,1-1.2,2.9,3.27,3.27,0,0,1-.35.3,4.08,4.08,0,0,1-2.55.9H20.37a4.07,4.07,0,0,1-2.89-1.2,3.27,3.27,0,0,1-.3-.35,4,4,0,0,1-.91-2.55V70.29H6.9a6.86,6.86,0,0,1-4.87-2L1.82,68A6.85,6.85,0,0,1,0,63.39V23.79a6.93,6.93,0,0,1,2-4.88l.23-.2A6.85,6.85,0,0,1,6.9,16.89h3.27V7.15a7.13,7.13,0,0,1,2.1-5.05h0A7.09,7.09,0,0,1,17.32,0ZM92.7,16.89V7.15A1.67,1.67,0,0,0,91.05,5.5H17.32A1.64,1.64,0,0,0,16.16,6h0a1.6,1.6,0,0,0-.48,1.16v9.74ZM31.24,99.18a2.13,2.13,0,1,1,0-4.25H75.62a2.13,2.13,0,1,1,0,4.25Zm0,10.84a2.13,2.13,0,0,1,0-4.26H55.37a2.13,2.13,0,0,1,0,4.26Zm44.9-20.79H32.22A3,3,0,0,1,29.3,86.3V59.66a2.92,2.92,0,0,1,2.92-2.92H76.14a3,3,0,0,1,2.93,2.92V86.3a3,3,0,0,1-2.93,2.93Zm-43-3.88h6l8.63-14.09a1.65,1.65,0,0,1,2.8,0l8.82,14.09h1.3L57.4,79.93l2.93-4.7a1.42,1.42,0,0,1,2.4,0l6.34,10.12h6.12V60.62h-42V85.35ZM6.23,44.5h95.9V23.79a.65.65,0,0,0-.19-.47.68.68,0,0,0-.48-.2H6.9a.68.68,0,0,0-.41.14l-.06.06a.67.67,0,0,0-.2.47V44.5Zm95.9,6.24h-10V64.06h9.37a.68.68,0,0,0,.67-.67V50.74Zm-85.84,0H6.23V63.39a.64.64,0,0,0,.14.41l.06.06a.67.67,0,0,0,.47.2h9.37l0-13.32Zm70.31,0H21.76v65.91H86.6V50.74Z" />
+				</svg> -->
+                Print Invoice</button>
+        </div>
+        <div>
+            <button class="custom-btn button2 box-shadow my-1" style="height: 40px;width: 200px; font-size: 14px;
+			padding: 10px;" data-toggle="modal" data-target="#sendInvoiceToAny"
+                (click)="show_sendInvoiceToAny=!show_sendInvoiceToAny">
+                Send Invoice</button>
+        </div>
+        <div>
+            <button class="custom-btn button2 box-shadow my-1" style="height: 40px;width: 200px; font-size: 14px;
+			padding: 10px;" (click)="sendInvoiceToCustomer()">
+                Send Invoice to customer</button>
+        </div>
+        <!-- <div>
+			<button class="custom-btn edit-btn my-1" style="height: 40px;width: 130px; font-size: 14px;
+			padding: 10px;">
+				Edit</button>
+		</div> -->
+    </div>
+    <section class="invoice" id="print-section">
+        <div class="container p-0">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="d-flex justify-content-between bd-highlight mb-3 invoice-header  p-4">
+                        <!-- <div class="mr-auto p-2 bd-highlight">
+							<img src="assets/admin/images/new_logo.png" class="logo" alt="">
+						</div> -->
+                        <div class="p-2 bd-highlight ml-2" style="margin: auto 0;">
+                            <p class="my-1 invoice-head--text">Invoice {{invoiceData?.id}}</p>
+                            <p class="m-0 invoice-text--booking">
+                                <a href="{{invoiceData?.receipt_url}}" target="_blank">View stripe Reciept</a>
+                            </p>
+                        </div>
+                        <div class="bd-highlight invoice-p m-3">
+                            Paid Amount
+                            <p class="invoice-dollar--color display-4">
+                                <strong
+                                    style="font-size: xx-large;"><span>{{currencySymbol}}</span>{{invoiceData?.amount}}</strong>
+                            </p>
+                        </div>
+                    </div>
+                    <!-- <div class="d-flex bd-highlight flex-row-reverse mb-3 px-3">
+						<div class="mr-auto  bd-highlight">
+							<p class="m-0 invoice-p">
+								Status
+							</p>
+							<p class="invoice-text--color">
+								<strong>{{invoiceData.invoice_status |titlecase}}</strong>
+							</p>
+						</div>
+						<div class="bd-highlight invoice-p">
+							Paid Amount
+							<p class="invoice-dollar--color display-4">
+								<strong style="font-size: xx-large;">${{invoiceData.grand_total}}</strong>
+							</p>
+						</div>
+					</div> -->
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12" >
+                    <div class="invoice-passenger mx-3">
+                        <div class="d-flex bd-highlight invoice-subhead p-4 col-12 mr-2">
+                            <div class="mr-auto  col-6 p-2 bd-highlight invoice-status-bar"
+                                >
+                                <p class="m-0 invoice-p text-white invoice-status-bar">
+                                    Payment Date: <span
+                                        class="invoice-text-bold invoice-status-bar">{{invoiceData?.created_at}}</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="div">
+                            <dl class="m-0">
+                                <dt class="invoice-p" *ngIf="invoiceData?.full_name">Account Name </dt>
+                                <dd class="invoice-text-b">{{invoiceData?.full_name}}
+                                </dd>
+                                <dt class="invoice-p" *ngIf="invoiceData?.mobile_with_isd">Account Phone</dt>
+                                <dd class="invoice-text-b"> {{invoiceData?.mobile_with_isd}}</dd>
+                                <dt class="invoice-p" *ngIf="invoiceData?.email">
+                                    Account Email
+                                </dt>
+                                <dd class="invoice-text-b text-break">{{invoiceData?.email}}</dd>
+                            </dl>
+                        </div>
+
+
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="div-payment">
+                                <dl class="ml-3 dl-payment mb-0">
+                                    <p class="payment-text ">Payment Details</p>
+                                    <dt class="invoice-text--name">Payment Method Type </dt>
+                                    <dd class="invoice-text--entry">Credit Card</dd>
+                                    <dt class="invoice-text--name">Name on Credit
+                                        Card </dt>
+                                    <dd class="invoice-text--entry">
+                                        {{invoiceData?.billing_detail?.name_on_credit_card ?
+                                        invoiceData?.billing_detail?.name_on_credit_card : ' - '}}</dd>
+                                    <dt class="invoice-text--name">
+                                        Credit Card Number
+                                    </dt>
+                                    <dd class="invoice-text--entry">
+                                        {{invoiceData?.card_number ?
+                                        invoiceData?.card_number : ' - '}} </dd>
+                                    <dt class="invoice-text--name">
+                                        Expiry Date
+                                    </dt>
+                                    <dd class="invoice-text--entry">
+                                        {{invoiceData?.card_expiry
+                                        ?
+                                        invoiceData?.card_expiry : ' - '}}</dd>
+                                    <dt class="invoice-text--name">
+                                        Billing Address
+                                    </dt>
+                                    <dd class="invoice-text--entry">
+                                        {{invoiceData?.billing_address_detail ?
+                                        invoiceData?.billing_address_detail : ' - '}}</dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="invoice-passenger mx-3">
+                        <div class="div m-3 pt-3 pl-3">
+                            <p class="payment-text ">Payment Description</p>
+                            <p>{{this.invoiceData?.description}} </p>
+                        </div>
+                        <div class="invoice-subhead px-3">
+                            <div class="row d-flex justify-content-between">
+                                <p class="m-0 p-1 text-charges">
+                                    Total-Amount</p>
+                                <p class="m-0 p-1 text-charges font-weight-bold">
+                                    <span>{{currencySymbol}}</span>{{this?.invoiceData?.amount}}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="col-md-12 row d-flex justify-content-center">
+				<p><a href="mailto:info@1800limo.com" target="_blank" class="contactMail">info@1800limo.com</a></p>
+			</div> -->
+            <!-- <div class="col-md-12 row mx-2" style="
+		height: 10px;
+		background: #F2933C;">
+			</div> -->
+        </div>
+    </section>
+    <section class="billing_inforamtion">
+        <div class="row m-2">
+            <button class="ok-btn custom-ok-btn box-shadow ml-3" style="height: 40px;width: 100px; font-size: 14px;"
+                type="button" (click)="backButton()" tabindex="1">OK</button>
+        </div>
+    </section>
+</main>
+
+
+<!-- refund modal starts -->
+<!-- <div class="modal fade" id="refundModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+	aria-hidden="true" data-backdrop="static" data-keyboard="false" *ngIf="show">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content user_inforamtion">
+			<button type="button" (click)="closeModal()" class="close closeButton x-circle-btn" data-dismiss="modal"
+				aria-label="Close">
+				<i class="bi bi-x-circle"></i>
+			</button>
+			<div class="modal-header pb-0">
+				<h3 class="mb-0" id="exampleModalLabel">Refund</h3>
+			</div>
+			<div class="modal-body">
+				<form [formGroup]="refundAmountForm" appInvalidControlScroll>
+					<div class="form-group">
+						<div class="col-md-12">
+							<mat-form-field appearance="outline">
+								<mat-label>Amount</mat-label>
+								<span class="currencySymbol" matPrefix>{{currencySymbol}}</span>
+								<input matInput type="number" formControlName="refundAmount"
+									value="invoiceData.grand_total" required>
+							</mat-form-field>
+							<div class="error-box">
+								<div class="error-message"
+									*ngIf="Form.refundAmount.invalid && (Form.refundAmount.touched || Form.refundAmount.dirty)">
+									<p class="text-danger text-lg m-0" *ngIf="Form.refundAmount.errors?.required">
+										Amount is required
+									</p>
+									<p class="text-danger text-lg m-0" *ngIf="Form.refundAmount.errors?.max">
+										Maximum amount exceeded
+									</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer d-flex justify-content-between">
+				<button type="button" (click)="closeModal()" class="btn btnStyle">Close</button>
+				<button class="btn saveButtonModal" type="submit" (click)="refund()" >Submit</button>
+			</div>
+		</div>
+	</div>
+</div> -->
+<!-- refund modal ends -->
+
+<!-- send Invoice to Any -->
+<div class="modal fade" id="sendInvoiceToAny" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+	aria-hidden="true" data-backdrop="static" data-keyboard="false" *ngIf="show_sendInvoiceToAny">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content user_inforamtion">
+			<button type="button" class="close closeButton x-circle-btn" data-dismiss="modal"
+				aria-label="Close" (click)="closeModal_send_in_to_any()">
+				<i class="bi bi-x-circle"></i>
+			</button>
+			<div class="modal-header pb-0">
+				<h3 class="mb-0" id="exampleModalLabel">Send Invoice</h3>
+			</div>
+			<div class="modal-body">
+					<div class="form-group">
+						<div class="col-md-12">
+							<mat-form-field class="example-chip-list" appearance="outline">
+								<mat-chip-list #chipList aria-label="Email selection">
+								  <mat-chip *ngFor="let email of emails" [selectable]="selectable"
+										   [removable]="removable" (removed)="remove(email)">
+									{{email.value}}
+									<i class="bi bi-x ml-1" *ngIf="removable" (click)="remove(email)"></i>
+								  </mat-chip>
+								  <input matInput
+								  		 placeholder="Enter email"
+										 [matChipInputFor]="chipList"
+										 [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+										 [matChipInputAddOnBlur]="addOnBlur"
+										 (matChipInputTokenEnd)="add($event)">
+								</mat-chip-list>
+							  </mat-form-field>
+
+						</div>
+					</div>
+			</div>
+			<div class="modal-footer d-flex justify-content-between">
+				<button type="button"  (click)="closeModal_send_in_to_any()" class="btn btnStyle">Close</button>
+				<button class="btn saveButtonModal" type="submit" (click)="sendInvoiceToAny()" [disabled]="(this.emails.length==0)" >Submit</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Refund Information modal -->
+<!-- <div class="modal fade bd-example-modal-lg" id="paymentLogs" tabindex="-1" role="dialog"
+	aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content user_information bottom-container">
+			<div class="modal-header pb-0">
+				<h3 class="modal-title mb-0">Payment logs</h3>
+			</div>
+			<div class="modal-body">
+				<table id="audittrail" class="table table-striped">
+					<thead style="background-color: white;">
+						<tr>
+							<th scope="col">#</th>
+							<th scope="col">Type</th>
+							<th scope="col">Transaction ID</th>
+							<th scope="col">Amount</th>
+							<th scope="col" id="date">Created Date</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr *ngFor="let record of paymentJson; let i=index">
+							<th scope="row">{{i+1}}</th>
+							<th scope="row">{{record.type}}</th>
+							<td style="word-wrap: break-word;">{{record?.balance_transaction}}</td>
+							<td><span class="currencySymbol">{{currencySymbol}}</span>
+								{{(record?.amount).toFixed(2)}}</td>
+							<td>{{TimestampToDate(record?.created)}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="modal-footer justify-content-end">
+				<button type="button" class="x-close-btn x-cross-btn mx-3" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true" class="bi bi-x-circle"></span>
+				</button>
+
+			</div>
+		</div>
+	</div>
+</div> -->

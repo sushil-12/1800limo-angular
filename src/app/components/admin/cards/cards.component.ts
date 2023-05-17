@@ -199,7 +199,8 @@ export class CardsComponent implements OnInit
 	}
 	buildPaymentForm() {
 		this.paymentForm = this.$form.group({
-			amount: ['', [Validators.required]]
+			amount: ['', [Validators.required]],
+			payment_description:['']
 		})
 	}
 	formatDate(date:any){
@@ -225,7 +226,7 @@ export class CardsComponent implements OnInit
 			customerId : this.accountId,
 			cardId : this.ID, 
 			amount : this.Form.amount.value,
-			description : " "
+			description :  this.Form.payment_description.value
 		}
 		console.log('in function payment',body)
 		this.adminService.chargeByCard(body).subscribe((response: any) => {
@@ -239,6 +240,11 @@ export class CardsComponent implements OnInit
 		this.ID = ""
 		this.show = false
 		$("#paymentModal").modal("hide");
+	}
+	navigate(record:any){
+		$("#paymentLogs").modal("hide");
+		console.log('Navigate to invoice--->>',record)
+		this.router.navigate(['/admin/custom-invoice-summary'],{ queryParams: { invoiceId: record.id} });
 	}
 
 	closeModal() {

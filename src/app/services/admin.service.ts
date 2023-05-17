@@ -286,6 +286,9 @@ export class AdminService {
 		const result = await this.httpClient.get(this.serverUrl + 'vehicle-colors').toPromise();
 		return result;
 	}
+	getAllEnableBadgeCities() {
+		return this.httpClient.get(this.serverUrl + 'admin/all-enabled-badge-cities');
+	}
 	getAllBadgeCities() {
 		return this.httpClient.get(this.serverUrl + 'admin/all-badge-cities');
 	}
@@ -871,6 +874,9 @@ export class AdminService {
 	getInvoiceData(id) {
 		return this.httpClient.get(this.serverUrl + 'invoice-summary/' + id);
 	}
+	getCustomInvoiceData(id){
+		return this.httpClient.get(this.serverUrl + 'get-invoice-data/' + id);
+	}
 	getInvoiceRefundHistory(id) {
 		return this.httpClient.get(this.serverUrl + 'admin/get-refund-list/' + id);
 	}
@@ -1026,10 +1032,16 @@ export class AdminService {
 	sendInvoiveToCustomer(bookingId: any) {
 		return this.httpClient.get(`${this.serverUrl}admin/send-invoice/${bookingId}`)
 	}
+	sendCustomInvoiveToCustomer(id){
+		return this.httpClient.get(`${this.serverUrl}send-invoice-data-to-customer/${id}`)
+	}
+	
 	sendInvoiveToAny(bookingId: any, data: any) {
 		return this.httpClient.post(`${this.serverUrl}admin/send-invoice-to-anyone/${bookingId}`, data)
 	}
-
+	sendCustomInvoiceToAny(id,data){
+		return this.httpClient.post(`${this.serverUrl}send-invoice-data-to-anyone/${id}`, data)
+	}
 
 	refund(body: any) {
 		return this.httpClient.post(`${this.serverUrl}admin/refund-request`, body)
