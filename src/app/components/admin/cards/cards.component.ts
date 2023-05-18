@@ -239,6 +239,9 @@ export class CardsComponent implements OnInit
 		})
 		this.ID = ""
 		this.show = false
+		this.paymentForm.patchValue({
+			amount: 0,
+			payment_description:'' })
 		$("#paymentModal").modal("hide");
 	}
 	navigate(record:any){
@@ -248,7 +251,9 @@ export class CardsComponent implements OnInit
 	}
 
 	closeModal() {
-		this.paymentForm.patchValue({ amount: 0 })
+		this.paymentForm.patchValue({
+			amount: 0,
+			payment_description:'' })
 		this.show = false
 		$("#paymentModal").modal("hide");
 	}
