@@ -66,6 +66,7 @@ import { HtmlToTextPipe } from './pipes/html-to-text.pipe';
 import { LocateMapComponent } from './components/locate-map/locate-map.component';
 import { BookingStatusVerificationComponent } from './components/email-pages/booking-status-verification/booking-status-verification.component';
 import { TransactionHistoryComponent } from './components/website/transaction-history/transaction-history.component';
+import { NgOtpInputModule } from  'ng-otp-input';
 @NgModule({
 	declarations: [
 		AppComponent,
@@ -122,7 +123,8 @@ import { TransactionHistoryComponent } from './components/website/transaction-hi
 		MatFormFieldModule,
 		MatSelectModule,
 		NgxSpinnerModule,
-		SharedModule
+		SharedModule,
+		NgOtpInputModule
 	],
 	providers: [
 		{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
