@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
@@ -8,6 +8,7 @@ import { catchError } from 'rxjs/operators';
 import { throwError, Subscription, interval } from 'rxjs';
 import { ValueConverter } from '@angular/compiler/src/render3/view/template';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
+import { NgOtpInputComponent } from 'ng-otp-input';
 declare var $: any;
 
 @Component({
@@ -29,7 +30,7 @@ export class OtpComponent implements OnInit, OnDestroy
 	public dDay = new Date().getTime() + 16 * 1000;
 	public timeDifference;
 	public secondsToDday;
-
+	@ViewChild(NgOtpInputComponent, { static: false}) ngOtpInput:NgOtpInputComponent;
 	constructor(
 		private formBuilder: FormBuilder,
 		private router: Router,
@@ -119,8 +120,8 @@ export class OtpComponent implements OnInit, OnDestroy
 			{
 				setTimeout(() => 
 				{
-					this.otpForm.get('otp').setValue(params.otp)
-					this.otpForm.updateValueAndValidity()
+					this.ngOtpInput.setValue(params.otp);
+					this.onOtpChange(params.otp)
 					this.otpCheck()
 				}, 2000)
 			}
@@ -136,6 +137,10 @@ export class OtpComponent implements OnInit, OnDestroy
 			this.subscription.unsubscribe();
 			this.resendOtpVisible = true;
 		}
+	}
+	onOtpChange(value){
+		this.otpForm.get('otp').setValue(value)
+		this.otpForm.updateValueAndValidity()
 	}
 
 	resendOtp()
