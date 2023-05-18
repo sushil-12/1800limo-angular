@@ -121,7 +121,8 @@ export class OtpComponent implements OnInit, OnDestroy
 				setTimeout(() => 
 				{
 					this.ngOtpInput.setValue(params.otp);
-					this.onOtpChange(params.otp)
+					this.otpForm.get('otp').setValue(params.otp)
+					this.otpForm.updateValueAndValidity()
 					this.otpCheck()
 				}, 2000)
 			}
@@ -201,6 +202,7 @@ export class OtpComponent implements OnInit, OnDestroy
 			{
 				this.response = result;
 				// set login user value in localStorage
+				console.log('logged in success', result)
 				let loginUserDetail = {
 					Phone: this.response.data.user.phone,
 					RoleName: this.response.data.user.roleName,
@@ -236,7 +238,7 @@ export class OtpComponent implements OnInit, OnDestroy
 						switch (this.response.data.affiliateParmas.account_approval)
 						{
 							case 'accepted': {
-								if(QB_redirectUrl.length){
+								if(QB_redirectUrl.length && vehicle_selected){
 									this.router.navigate([
 											'/affiliate/create-new-booking'
 										],
