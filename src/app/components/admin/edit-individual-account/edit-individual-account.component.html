@@ -46,7 +46,7 @@
 								[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
 								placeholder="1234567890" class="phoneNumberClass"
 								(countryChange)="onCountryChange($event,'mobile')"
-								(intlTelInputObject)="telInputObjectMobile($event)"  />
+								(intlTelInputObject)="telInputObjectMobile($event)"  readonly />
 						</mat-form-field>
 						<div *ngIf="submittedForm && f.mobile.errors || f.mobile.touched && f.mobile.errors"
 							class="text-danger margin-bottom-thin my-mat-hint">
@@ -184,11 +184,11 @@
 		</section>
 		<section class="billing_inforamtion">
 			<ul>
-				<li><button class="custom-btn savebutton" (click)="submitForm()"
+				<li><button class="custom-btn savebutton btn-shadow" (click)="submitForm()"
 						[disabled]="disableSubmitButton" >SAVE</button> </li>
-				<li><button class="custom-btn resetbutton" (click)="resetForm()"
+				<li><button class="custom-btn resetbutton btn-shadow" (click)="resetForm()"
 						>RESET</button> </li>
-				<li><button class="custom-btn backbutton" (click)="backButton()"
+				<li><button class="custom-btn backbutton btn-shadow" (click)="backButton()"
 						>BACK</button> </li>
 			</ul>
 		</section>

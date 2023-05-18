@@ -50,7 +50,7 @@ export class EditIndividualAccountComponent implements OnInit
 	{
 		this.currentUser = JSON.parse(sessionStorage.getItem("currentUserData"))
 		this.spinner.show();//hide spinner
-
+		this.buildAddIndividualForm()
 		//pick vehicle type id from query params
 		this.activatedroute.queryParamMap
 			.subscribe((params) =>
@@ -140,6 +140,11 @@ export class EditIndividualAccountComponent implements OnInit
 			});
 		});
 
+		
+	}
+
+
+	buildAddIndividualForm(){
 		//add amenity form validation
 		this.addIndividualAccountForm = this.formBuilder.group({
 			id: ['5', Validators.required],
@@ -233,7 +238,12 @@ export class EditIndividualAccountComponent implements OnInit
 
 	resetForm()
 	{
-		this.addIndividualAccountForm.reset();
+		this.buildAddIndividualForm()
+		this.addIndividualAccountForm.patchValue({
+			id: this.individualId,
+			mobile: this.response.data.mobile,
+			mobileIsd: '+44'
+		});
 	}
 	backButton()
 	{

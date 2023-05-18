@@ -49,6 +49,7 @@ export class AddIndividualAccountComponent implements OnInit
 
 	ngOnInit(): void
 	{
+		this.buildAddIndividualForm();
 		const currentYear = (new Date()).getFullYear();
 		for (let i = 0; i < 40; i++)
 		{
@@ -81,27 +82,49 @@ export class AddIndividualAccountComponent implements OnInit
 						latitude: place.geometry.location.lat(),
 						longitude: place.geometry.location.lng()
 					});
-					// if (place.address_components[1])
-					// 	this.addIndividualAccountForm.patchValue({
-					// 		city: place.address_components[1].long_name
-					// 	});
-					// if (place.address_components[2])
-					// 	this.addIndividualAccountForm.patchValue({
-					// 		state: place.address_components[2].long_name
-					// 	});
-					// if (place.address_components[3])
-					// 	this.addIndividualAccountForm.patchValue({
-					// 		country: place.address_components[3].long_name
-					// 	});
-					// if (place.address_components[4])
-					// 	this.addIndividualAccountForm.patchValue({
-					// 		zipCode: place.address_components[place.address_components.length - 1].long_name
-					// 	});
+					if (place.address_components[1])
+						this.addIndividualAccountForm.patchValue({
+							city: place.address_components[1].long_name
+						});
+					if (place.address_components[2])
+						this.addIndividualAccountForm.patchValue({
+							state: place.address_components[2].long_name
+						});
+					if (place.address_components[3])
+						this.addIndividualAccountForm.patchValue({
+							country: place.address_components[3].long_name
+						});
+					if (place.address_components[4])
+						this.addIndividualAccountForm.patchValue({
+							zipCode: place.address_components[place.address_components.length - 1].long_name
+						});
 				});
 			});
 		});
 
 		//add amenity form validation
+		
+		/* Card Number Spacing */
+
+		$('#card-number').on('keypress change blur', function ()
+		{
+			$(this).val(function (index, value)
+			{
+				return value.replace(/[^a-z0-9]+/gi, '')
+				// .replace(/(.{4})/g, '$1 ')
+			});
+		});
+
+		$('#card-number').on('copy cut paste', function ()
+		{
+			setTimeout(function ()
+			{
+				$('#card-number').trigger("change");
+			});
+		});
+	}
+
+	buildAddIndividualForm(){
 		this.addIndividualAccountForm = this.formBuilder.group({
 			role: ['5', [Validators.required, Validators.pattern("^[0-9].*$")]],//individual
 			firstName: ['', Validators.required],
@@ -127,24 +150,6 @@ export class AddIndividualAccountComponent implements OnInit
 			exp_month: ['', Validators.required],
 			exp_year: ['', Validators.required],
 			name: ['', Validators.required],
-		});
-		/* Card Number Spacing */
-
-		$('#card-number').on('keypress change blur', function ()
-		{
-			$(this).val(function (index, value)
-			{
-				return value.replace(/[^a-z0-9]+/gi, '')
-				// .replace(/(.{4})/g, '$1 ')
-			});
-		});
-
-		$('#card-number').on('copy cut paste', function ()
-		{
-			setTimeout(function ()
-			{
-				$('#card-number').trigger("change");
-			});
 		});
 	}
 
@@ -217,7 +222,7 @@ export class AddIndividualAccountComponent implements OnInit
 
 	resetForm()
 	{
-		this.addIndividualAccountForm.reset();
+		this.buildAddIndividualForm()
 	}
 	backButton()
 	{
