@@ -127,8 +127,8 @@
 										Billing Address
 									</dt>
 									<dd class="invoice-text--entry">
-										{{invoiceData?.billing_address_detail ?
-										invoiceData?.billing_address_detail : ' - '}}</dd>
+										{{invoiceData?.account?.address ? invoiceData?.account?.address:
+										invoiceData?.billing_address_detail }}</dd>
 								</dl>
 							</div>
 						</div>

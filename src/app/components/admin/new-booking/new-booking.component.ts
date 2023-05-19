@@ -86,6 +86,7 @@ export class NewBookingComponent implements OnInit {
 	vehicleModal_arr: any;
 	vehicleYear_arr: any;
 	vehicleColor_arr: any;
+	firstLoadVehicleId:any;
 
 	chosen_user: Record<string, any>
 
@@ -103,6 +104,8 @@ export class NewBookingComponent implements OnInit {
 	affiliate_id: any;
 	newBooking: boolean = false;
 	QB_vehicle_id: any = null;
+	unique_key: any;
+	firstLoadAffiliateId: void;
 
 
 	constructor(
@@ -425,6 +428,8 @@ export class NewBookingComponent implements OnInit {
 			response.data.booking_instructions = response.data.booking_instructions.replaceAll('<br />', '')
 			console.log('response <><><><><', response.data)
 			let editing_data = response.data
+			this.firstLoadVehicleId = response.data.vehicle_id
+			this.firstLoadAffiliateId =  response.data.affiliate_id
 			this.autofillData('cruise', editing_data);
 			console.log(editing_data, "check big data")
 			for (let item in editing_data) {
@@ -862,6 +867,8 @@ export class NewBookingComponent implements OnInit {
 	}
 	handleSelectVehicleType(selectedVehicle: any) {
 		console.log('selectweed vehicle-->>>>' , selectedVehicle,selectedVehicle.licensePlate === null)
+		this.SetFormValue('vehicle_id', selectedVehicle.ID);
+		this.SetFormValue('vehicle_type_name', selectedVehicle.formatted_name)
 		this.SetFormValue('vehicle_make', selectedVehicle.make_id);
 		this.SetFormValue('vehicle_make_name', selectedVehicle.make);
 		this.SetFormValue('vehicle_model', selectedVehicle.model_id);
@@ -874,7 +881,7 @@ export class NewBookingComponent implements OnInit {
 		this.SetFormValue('vehicle_seats', selectedVehicle.seats)
 	}
 
-	fetchAffiliateVehicles(affiliate_id: number) {
+	fetchAffiliateVehicles(affiliate_id: any) {
 		if (!affiliate_id) {
 			console.error('Invalid Paramater affiliate_data', affiliate_id)
 			return
@@ -891,14 +898,28 @@ export class NewBookingComponent implements OnInit {
 				for (let i = 0; i < this.VehicleList.length; i++) {
 					if (this.VehicleList[i].isRatesCompleted) {
 						// let vehicle_type_id = this.BigData['vehicleCategories'].find(item => item.name == this.VehicleList[i].vehicleType)['id']
-						this.SetFormValue('vehicle_id', this.VehicleList[i].ID);
-						this.SetFormValue('vehicle_type', this.VehicleList[i].vehicleType_id)
-						this.SetFormValue('vehicle_type_name', this.VehicleList[i].formatted_name)
-
-						this.handleSelectVehicleType(this.VehicleList[i])
-
-						// this.autofillData('vehicle', this.VehicleList[i]);
-						break;
+						if(affiliate_id == this.firstLoadAffiliateId){
+							if(this.VehicleList[i].ID  == this.firstLoadVehicleId){
+								console.log('selected vehicle on first load---------------------------------->>>>>', this.VehicleList[i])
+									this.SetFormValue('vehicle_id', this.VehicleList[i].ID);
+									this.SetFormValue('vehicle_type', this.VehicleList[i].vehicleType_id)
+									this.SetFormValue('vehicle_type_name', this.VehicleList[i].formatted_name)
+									this.unique_key = this.VehicleList[i].unique_key
+									this.handleSelectVehicleType(this.VehicleList[i])
+									// this.autofillData('vehicle', this.VehicleList[i]);
+									break;
+							}
+						}
+						else{
+							console.log('new affiliate seleted')
+							this.SetFormValue('vehicle_id', this.VehicleList[i].ID);
+								this.SetFormValue('vehicle_type', this.VehicleList[i].vehicleType_id)
+								this.SetFormValue('vehicle_type_name', this.VehicleList[i].formatted_name)
+								this.unique_key = this.VehicleList[i].unique_key
+								this.handleSelectVehicleType(this.VehicleList[i])
+								// this.autofillData('vehicle', this.VehicleList[i]);
+								break;
+						}
 
 					}
 				}
@@ -1545,7 +1566,7 @@ export class NewBookingComponent implements OnInit {
 		this.BookingForm.get('vehicle_type').valueChanges.subscribe((value: string) => {
 			if (this.Form.affiliate_type.value == 'affiliate') {
 				console.log('in function change value for affilliate',value)
-				// this.Form.vehicle_type.value  hit an api here and change using vehicleType_id
+				this.VehicleList.map(i=> (i.unique_key == this.unique_key)? this.handleSelectVehicleType(i):'')
 			} else {
 				if (value && this.BigData) {
 					let name = this.BigData['vehicleCategories'].find(item => item.id == value)['name']
