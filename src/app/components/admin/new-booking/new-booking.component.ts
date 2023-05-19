@@ -868,7 +868,7 @@ export class NewBookingComponent implements OnInit {
 	handleSelectVehicleType(selectedVehicle: any) {
 		console.log('selectweed vehicle-->>>>' , selectedVehicle,selectedVehicle.licensePlate === null)
 		this.SetFormValue('vehicle_id', selectedVehicle.ID);
-		this.SetFormValue('vehicle_type_name', selectedVehicle.formatted_name)
+		this.SetFormValue('vehicle_type_name', selectedVehicle.vehicleType)
 		this.SetFormValue('vehicle_make', selectedVehicle.make_id);
 		this.SetFormValue('vehicle_make_name', selectedVehicle.make);
 		this.SetFormValue('vehicle_model', selectedVehicle.model_id);
@@ -903,7 +903,7 @@ export class NewBookingComponent implements OnInit {
 								console.log('selected vehicle on first load---------------------------------->>>>>', this.VehicleList[i])
 									this.SetFormValue('vehicle_id', this.VehicleList[i].ID);
 									this.SetFormValue('vehicle_type', this.VehicleList[i].vehicleType_id)
-									this.SetFormValue('vehicle_type_name', this.VehicleList[i].formatted_name)
+									this.SetFormValue('vehicle_type_name', this.VehicleList[i].vehicleType)
 									this.unique_key = this.VehicleList[i].unique_key
 									this.handleSelectVehicleType(this.VehicleList[i])
 									// this.autofillData('vehicle', this.VehicleList[i]);
@@ -914,7 +914,7 @@ export class NewBookingComponent implements OnInit {
 							console.log('new affiliate seleted')
 							this.SetFormValue('vehicle_id', this.VehicleList[i].ID);
 								this.SetFormValue('vehicle_type', this.VehicleList[i].vehicleType_id)
-								this.SetFormValue('vehicle_type_name', this.VehicleList[i].formatted_name)
+								this.SetFormValue('vehicle_type_name', this.VehicleList[i].vehicleType)
 								this.unique_key = this.VehicleList[i].unique_key
 								this.handleSelectVehicleType(this.VehicleList[i])
 								// this.autofillData('vehicle', this.VehicleList[i]);
