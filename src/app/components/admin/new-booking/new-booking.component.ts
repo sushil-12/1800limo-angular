@@ -430,6 +430,7 @@ export class NewBookingComponent implements OnInit {
 			let editing_data = response.data
 			this.firstLoadVehicleId = response.data.vehicle_id
 			this.firstLoadAffiliateId = response.data.affiliate_id
+			this.SetFormValue('affiliate_type',response.data.affiliate_type)
 			this.autofillData('cruise', editing_data);
 			console.log(editing_data, "check big data")
 			for (let item in editing_data) {
