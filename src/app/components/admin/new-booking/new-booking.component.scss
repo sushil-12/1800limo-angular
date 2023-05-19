@@ -31,7 +31,10 @@ mat-form-field {
 .extra-stop-field:not(.extra-stop-field:first-child) {
 	margin-top: 1.5rem;
 }
-
+.block-cursor{
+	cursor: pointer;
+    pointer-events: none;
+}
 ul {
 	list-style: none;
 }

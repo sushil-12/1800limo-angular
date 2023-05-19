@@ -56,8 +56,8 @@ export class NewBookingComponent implements OnInit {
 		}
 	}
 
-	months:any = [{value:'01'},{value:'02'},{value:'03'},{value:'04'},{value:'05'},{value:'06'},{value:'07'},{value:'08'},{value:'09'},{value:'10'},{value:'11'},{value:'12'}]
-	monthOptions:any = [...this.months] 
+	months: any = [{ value: '01' }, { value: '02' }, { value: '03' }, { value: '04' }, { value: '05' }, { value: '06' }, { value: '07' }, { value: '08' }, { value: '09' }, { value: '10' }, { value: '11' }, { value: '12' }]
+	monthOptions: any = [...this.months]
 	//[{value:'01'},{value:'02'},{value:'03'},{value:'04'},{value:'05'},{value:'06'},{value:'07'},{value:'08'},{value:'09'},{value:'10'},{value:'11'},{value:'12'}]
 
 	LCTelObject: any
@@ -81,6 +81,11 @@ export class NewBookingComponent implements OnInit {
 	AffiliateAccounts: Array<Record<string, any>> = []
 	VehicleList: Array<Record<string, any>> = []
 	DriverList: Array<Record<string, any>> = []
+	vehicleType_arr: any;
+	vehicleMake_arr: any;
+	vehicleModal_arr: any;
+	vehicleYear_arr: any;
+	vehicleColor_arr: any;
 
 	chosen_user: Record<string, any>
 
@@ -126,7 +131,7 @@ export class NewBookingComponent implements OnInit {
 				this.SetFormValue('reservation_id', params.bookingId)
 				params.updateType ? this.SetFormValue('updateType', params.updateType) : this.SetFormValue('updateType', 'edit')
 			}
-			else if(params && params.new == 'true'){
+			else if (params && params.new == 'true') {
 				this.newBooking = params.new == 'true'
 				this.affiliate_id = parseInt(params.affiliate_id)
 			}
@@ -269,7 +274,7 @@ export class NewBookingComponent implements OnInit {
 			driver_image_id: [''],
 			vehicle_image_id: [''],
 			meet_greet_choices: [2],
-			meet_greet_choices_name:['Driver -  Airport - Text/call after plane lands with curbside meet location'],
+			meet_greet_choices_name: ['Driver -  Airport - Text/call after plane lands with curbside meet location'],
 			number_of_vehicles: [''],
 			pickup_date: [''],
 			pickup_time: ['12:00 am'],
@@ -303,7 +308,7 @@ export class NewBookingComponent implements OnInit {
 			dropoff_airline_name: [''],
 			dropoff_flight: [''],
 			return_meet_greet_choices: [2],
-			return_meet_greet_choices_name:['Driver -  Airport - Text/call after plane lands with curbside meet location'],
+			return_meet_greet_choices_name: ['Driver -  Airport - Text/call after plane lands with curbside meet location'],
 			return_pickup_date: [''],
 			return_pickup_time: ['12:00 pm'],
 			return_extra_stops: this.$form.array([]),
@@ -362,54 +367,54 @@ export class NewBookingComponent implements OnInit {
 
 		if (this.BookingForm.value.transfer_type.includes('city_')) {
 			this.SetFormValue('meet_greet_choices', 1)
-			this.SetFormValue('meet_greet_choices_name',"Driver - Text/call when on location")
+			this.SetFormValue('meet_greet_choices_name', "Driver - Text/call when on location")
 		} else {
 			this.SetFormValue('meet_greet_choices', 2)
-			this.SetFormValue('meet_greet_choices_name',"Driver -  Airport - Text/call after plane lands with curbside meet location")
+			this.SetFormValue('meet_greet_choices_name', "Driver -  Airport - Text/call after plane lands with curbside meet location")
 		}
 
 		if (this.BookingForm.value.transfer_type.includes('_city')) {
 			this.SetFormValue('return_meet_greet_choices', 1)
-			this.SetFormValue('return_meet_greet_choices_name',"Driver - Text/call when on location")
+			this.SetFormValue('return_meet_greet_choices_name', "Driver - Text/call when on location")
 		} else {
 			this.SetFormValue('return_meet_greet_choices', 2)
-			this.SetFormValue('return_meet_greet_choices_name',"Driver -  Airport - Text/call after plane lands with curbside meet location")
+			this.SetFormValue('return_meet_greet_choices_name', "Driver -  Airport - Text/call after plane lands with curbside meet location")
 		}
 	}
 	changeTransferType(type: string) {
 		if (type.includes('city_')) {
 			this.SetFormValue('meet_greet_choices', 1)
-			this.SetFormValue('meet_greet_choices_name',"Driver - Text/call when on location")
+			this.SetFormValue('meet_greet_choices_name', "Driver - Text/call when on location")
 		} else {
 			this.SetFormValue('meet_greet_choices', 2)
-			this.SetFormValue('meet_greet_choices_name',"Driver -  Airport - Text/call after plane lands with curbside meet location")
+			this.SetFormValue('meet_greet_choices_name', "Driver -  Airport - Text/call after plane lands with curbside meet location")
 		}
 
 		if (type.includes('_city')) {
 			this.SetFormValue('return_meet_greet_choices', 1)
-			this.SetFormValue('return_meet_greet_choices_name',"Driver - Text/call when on location")
+			this.SetFormValue('return_meet_greet_choices_name', "Driver - Text/call when on location")
 		} else {
 			this.SetFormValue('return_meet_greet_choices', 2)
-			this.SetFormValue('return_meet_greet_choices_name',"Driver -  Airport - Text/call after plane lands with curbside meet location")
+			this.SetFormValue('return_meet_greet_choices_name', "Driver -  Airport - Text/call after plane lands with curbside meet location")
 		}
 	}
 
-	handleChangeMonth(value:any){
+	handleChangeMonth(value: any) {
 		console.log('value', value)
-		if(value){
-			this.monthOptions = this.months.filter(i=> i.value.includes(value))
+		if (value) {
+			this.monthOptions = this.months.filter(i => i.value.includes(value))
 		}
 	}
-	handleChangeMeetAndGreet(event:any , type:string){
-		console.log('in function meet and greet-->>>' , event.source.triggerValue , type )
-		if(type=='return'){
+	handleChangeMeetAndGreet(event: any, type: string) {
+		console.log('in function meet and greet-->>>', event.source.triggerValue, type)
+		if (type == 'return') {
 			this.BookingForm.patchValue({
-				return_meet_greet_choices_name:event.source.triggerValue
+				return_meet_greet_choices_name: event.source.triggerValue
 			})
 		}
-		else{
+		else {
 			this.BookingForm.patchValue({
-				meet_greet_choices_name : event.source.triggerValue
+				meet_greet_choices_name: event.source.triggerValue
 			})
 		}
 	}
@@ -417,8 +422,8 @@ export class NewBookingComponent implements OnInit {
 		// console.warn('Prefilling via Booking Id')
 		this.$spinner.show('normalspinner');
 		this.$api.getBookingDataForEdit(booking_id, this.Form.updateType.value).subscribe((response: any) => {
-			response.data.booking_instructions =  response.data.booking_instructions.replaceAll('<br />' , '')
-			console.log('response <><><><><' , response.data)
+			response.data.booking_instructions = response.data.booking_instructions.replaceAll('<br />', '')
+			console.log('response <><><><><', response.data)
 			let editing_data = response.data
 			this.autofillData('cruise', editing_data);
 			console.log(editing_data, "check big data")
@@ -702,6 +707,7 @@ export class NewBookingComponent implements OnInit {
 
 	fetchAirportsAndBigData(): void {
 		let s = setInterval(() => {
+
 			if (this.$api.getAirportsAndBigData()) {
 				this.$spinner.hide('fetchspinner');
 				this.BigData = JSON.parse(JSON.stringify(this.$api.getAirportsAndBigData()));
@@ -854,6 +860,19 @@ export class NewBookingComponent implements OnInit {
 			this.$spinner.hide('normalspinner');
 		})
 	}
+	handleSelectVehicleType(selectedVehicle: any) {
+		console.log('selectweed vehicle-->>>>' , selectedVehicle,selectedVehicle.licensePlate === null)
+		this.SetFormValue('vehicle_make', selectedVehicle.make_id);
+		this.SetFormValue('vehicle_make_name', selectedVehicle.make);
+		this.SetFormValue('vehicle_model', selectedVehicle.model_id);
+		this.SetFormValue('vehicle_model_name', selectedVehicle.model);
+		this.SetFormValue('vehicle_year', selectedVehicle.year_id);
+		this.SetFormValue('vehicle_year_name', selectedVehicle.year);
+		this.SetFormValue('vehicle_color', selectedVehicle.color_id);
+		this.SetFormValue('vehicle_color_name', selectedVehicle.color);
+		selectedVehicle.licensePlate === null ? this.BookingForm.get('vehicle_license_plate').setValue(''):this.SetFormValue('vehicle_license_plate',selectedVehicle.licensePlate)
+		this.SetFormValue('vehicle_seats', selectedVehicle.seats)
+	}
 
 	fetchAffiliateVehicles(affiliate_id: number) {
 		if (!affiliate_id) {
@@ -862,23 +881,27 @@ export class NewBookingComponent implements OnInit {
 		}
 		this.$spinner.show()
 		this.$api.adminAffiliateVehicleList(affiliate_id).then((response: any) => {
-			console.log('get affiliate vehicle data----->>>>>>>>>' , response.data)
+			console.log('get affiliate vehicle data----->>>>>>>>>', response.data)
 			if (response.success && response.data.vehicleList.length > 0) {
 				this.VehicleList = response.data.vehicleList
 				// add a key with formatted name to every value
 				this.VehicleList.map((item: any) => item['formatted_name'] = `${item.vehicleType} - ${item.make} (${item.model})`);
-
 				// autofill data if isRatesCompleted:true
-				for(let i=0;i<this.VehicleList.length;i++){
-					if(this.VehicleList[i].isRatesCompleted){
-								let vehicle_type_id = this.BigData['vehicleCategories'].find(item => item.name == this.VehicleList[i].vehicleType)['id']
-								this.SetFormValue('vehicle_type', vehicle_type_id)
-								this.SetFormValue('vehicle_id', this.VehicleList[i].ID);
-								this.autofillData('vehicle', this.VehicleList[i]);
-								break;
-								
-							}
+				this.vehicleType_arr = this.VehicleList = this.vehicleMake_arr = this.VehicleList = this.vehicleModal_arr = this.VehicleList = this.vehicleYear_arr = this.VehicleList = this.vehicleColor_arr = this.VehicleList
+				for (let i = 0; i < this.VehicleList.length; i++) {
+					if (this.VehicleList[i].isRatesCompleted) {
+						// let vehicle_type_id = this.BigData['vehicleCategories'].find(item => item.name == this.VehicleList[i].vehicleType)['id']
+						this.SetFormValue('vehicle_id', this.VehicleList[i].ID);
+						this.SetFormValue('vehicle_type', this.VehicleList[i].vehicleType_id)
+						this.SetFormValue('vehicle_type_name', this.VehicleList[i].formatted_name)
+
+						this.handleSelectVehicleType(this.VehicleList[i])
+
+						// this.autofillData('vehicle', this.VehicleList[i]);
+						break;
+
 					}
+				}
 				// if (this.VehicleList.length == 1) {
 				// 	let vehicle_type_id = this.BigData['vehicleCategories'].find(item => item.name == this.VehicleList[0].vehicleType)['id']
 				// 	this.SetFormValue('vehicle_type', vehicle_type_id)
@@ -904,17 +927,17 @@ export class NewBookingComponent implements OnInit {
 		}
 		this.$spinner.show()
 		this.$api.adminAffiliateVehicleList(affiliate_id).then((response: any) => {
-			console.log('get affiliate vehicle data----->>>>>>>>>' , response.data)
+			console.log('get affiliate vehicle data----->>>>>>>>>', response.data)
 			if (response.success && response.data.vehicleList.length > 0) {
 				this.VehicleList = response.data.vehicleList
 				// add a key with formatted name to every value
 				this.VehicleList.map((item: any) => item['formatted_name'] = `${item.vehicleType} - ${item.make} (${item.model})`);
 
 				// autofill data if isRatesCompleted:true
-				for(let i=0;i<this.VehicleList.length;i++){
-					if(this.VehicleList[i].isRatesCompleted){
-						if(this.QB_vehicle_id){
-							if(this.VehicleList[i].ID == this.QB_vehicle_id ){
+				for (let i = 0; i < this.VehicleList.length; i++) {
+					if (this.VehicleList[i].isRatesCompleted) {
+						if (this.QB_vehicle_id) {
+							if (this.VehicleList[i].ID == this.QB_vehicle_id) {
 								let vehicle_type_id = this.BigData['vehicleCategories'].find(item => item.name == this.VehicleList[i].vehicleType)['id']
 								this.SetFormValue('vehicle_type', vehicle_type_id)
 								this.SetFormValue('vehicle_id', this.VehicleList[i].ID);
@@ -923,7 +946,7 @@ export class NewBookingComponent implements OnInit {
 							}
 						}
 					}
-					}
+				}
 			}
 			this.$spinner.hide()
 		})
@@ -938,7 +961,7 @@ export class NewBookingComponent implements OnInit {
 		this.$api.driverList(affiliate_id).then((response: any) => {
 			if (response.success && response.data?.data.length > 0) {
 				this.DriverList = response.data.data
-				for(let i=0 ; i<this.DriverList.length;i++ ){
+				for (let i = 0; i < this.DriverList.length; i++) {
 					this.SetFormValue('driver_id', this.DriverList[i].id)
 					this.autofillData('driver', this.DriverList[i])
 					break;
@@ -1094,25 +1117,25 @@ export class NewBookingComponent implements OnInit {
 			}
 		}
 
-		if (filling_for == 'vehicle') {
-			console.log('auto fill vehicle data is---->>>' , data)
-			this.SetFormValue('vehicle_license_plate', data.licensePlate)
-			this.SetFormValue('vehicle_seats', data.seats)
+		// if (filling_for == 'vehicle') {
+		// 	console.log('auto fill vehicle data is---->>>' , data)
+		// 	this.SetFormValue('vehicle_license_plate', data.licensePlate)
+		// 	this.SetFormValue('vehicle_seats', data.seats)
 
-			// fill values of make/model/year/color
-			let i = 0
-			let legend = ['make', 'model', 'year', 'color']
-			for (let item of ['vehicleMakes', 'vehicleModels', 'vehicleYears', 'vehicleColors']) {
-				let obj = this.BigData[item].find(j => j.name == data[legend[i]])
-				console.log('loop for -->>' , legend[i] , item , obj)
-				if(obj){
-					this.SetFormValue('vehicle_' + legend[i], obj?.id)
-					let name = obj['name']; // name
-					this.SetFormValue("vehicle_" + legend[i] + "_name", name);
-				}
-				i++;
-			}
-		}
+		// 	// fill values of make/model/year/color
+		// 	let i = 0
+		// 	let legend = ['make', 'model', 'year', 'color']
+		// 	for (let item of ['vehicleMakes', 'vehicleModels', 'vehicleYears', 'vehicleColors']) {
+		// 		let obj = this.BigData[item].find(j => j.name == data[legend[i]])
+		// 		console.log('loop for -->>' , legend[i] , item , obj)
+		// 		if(obj){
+		// 			this.SetFormValue('vehicle_' + legend[i], obj?.id)
+		// 			let name = obj['name']; // name
+		// 			this.SetFormValue("vehicle_" + legend[i] + "_name", name);
+		// 		}
+		// 		i++;
+		// 	}
+		// }
 
 		if (filling_for == 'driver') {
 			this.SetFormValue('driver_name', `${data.FirstName} ${data.MiddleName ?? ''} ${data.LastName}`)
@@ -1200,17 +1223,17 @@ export class NewBookingComponent implements OnInit {
 	}
 
 
-	fillExtraStopInstruction(is_return: boolean, index: number,event:any) {
+	fillExtraStopInstruction(is_return: boolean, index: number, event: any) {
 		console.log(is_return, index, event.target.value);
 		if (is_return) {
-				(<FormArray>this.BookingForm.get('return_extra_stops')).at(index).patchValue({
-					booking_instructions : event.target.value
-				})
+			(<FormArray>this.BookingForm.get('return_extra_stops')).at(index).patchValue({
+				booking_instructions: event.target.value
+			})
 		}
 		else {
-				(<FormArray>this.BookingForm.get('extra_stops')).at(index).patchValue({
-					booking_instructions: event.target.value
-				});
+			(<FormArray>this.BookingForm.get('extra_stops')).at(index).patchValue({
+				booking_instructions: event.target.value
+			});
 		}
 	}
 
@@ -1391,6 +1414,11 @@ export class NewBookingComponent implements OnInit {
 		// console.log('Toggle Dropdown ', type)
 		this.booking_params['chevrons'][type] = !this.booking_params['chevrons'][type]
 	}
+	handleChangeVehicleType(event){
+		console.log('in function handle change vehicle type' , event.unique_key)
+		this.VehicleList.map(i=> (i.unique_key == event.unique_key)? this.handleSelectVehicleType(i):'')
+		
+	}
 
 	Subscriptions() {
 		// Service Type
@@ -1514,50 +1542,63 @@ export class NewBookingComponent implements OnInit {
 		// 	}
 		// })
 
-		this.BookingForm.get('vehicle_type').valueChanges.subscribe((value: string) =>
-		{
-			if(value && this.BigData)
-			{
-				let name = this.BigData['vehicleCategories'].find(item => item.id == value)['name']
-				this.SetFormValue('vehicle_type_name', name);
+		this.BookingForm.get('vehicle_type').valueChanges.subscribe((value: string) => {
+			if (this.Form.affiliate_type.value == 'affiliate') {
+				console.log('in function change value for affilliate',value)
+				// this.Form.vehicle_type.value  hit an api here and change using vehicleType_id
+			} else {
+				if (value && this.BigData) {
+					let name = this.BigData['vehicleCategories'].find(item => item.id == value)['name']
+					this.SetFormValue('vehicle_type_name', name);
+				}
 			}
 		})
 
-		this.BookingForm.get('vehicle_make').valueChanges.subscribe((value: string) =>
-		{
-			if(value && this.BigData)
-			{
-				this.BigData['vehicleModels'] = this.BigData_COPY?.vehicleModels.filter(item => item.make_id == value)
-				let name = this.BigData['vehicleMakes'].find(item => item.id == value)['name']
-				this.SetFormValue('vehicle_model', this.BigData?.vehicleModels[0]['id'])
-				this.SetFormValue('vehicle_make_name', name)
+		this.BookingForm.get('vehicle_make').valueChanges.subscribe((value: string) => {
+			if (this.Form.affiliate_type.value == 'affiliate') {
+				console.log('in function change value for affilliate')
+			} else {
+				if (value && this.BigData) {
+					this.BigData['vehicleModels'] = this.BigData_COPY?.vehicleModels.filter(item => item.make_id == value)
+					let name = this.BigData['vehicleMakes'].find(item => item.id == value)['name']
+					this.SetFormValue('vehicle_model', this.BigData?.vehicleModels[0]['id'])
+					this.SetFormValue('vehicle_make_name', name)
+				}
 			}
 		})
 
-		this.BookingForm.get('vehicle_model').valueChanges.subscribe((value: string) =>
-		{
-			if(value && this.BigData)
-			{
-				
-				let name = this.BigData['vehicleModels'].find(item => item.id == value)['name']
-				this.SetFormValue('vehicle_model_name', name)
+		this.BookingForm.get('vehicle_model').valueChanges.subscribe((value: string) => {
+			if (this.Form.affiliate_type.value == 'affiliate') {
+				console.log('in function change value for affilliate')
+
+			} else {
+				if (value && this.BigData) {
+
+					let name = this.BigData['vehicleModels'].find(item => item.id == value)['name']
+					this.SetFormValue('vehicle_model_name', name)
+				}
 			}
 		})
 
-		this.BookingForm.get('vehicle_year').valueChanges.subscribe((value: string) =>
-		{
-			if(value && this.BigData)
-			{
-				let name = this.BigData['vehicleYears'].find(item => item.id == value)['name']
-				this.SetFormValue('vehicle_year_name', name)
+		this.BookingForm.get('vehicle_year').valueChanges.subscribe((value: string) => {
+			if (this.Form.affiliate_type.value == 'affiliate') {
+				console.log('in function change value for affilliate')
+			} else {
+				if (value && this.BigData) {
+					let name = this.BigData['vehicleYears'].find(item => item.id == value)['name']
+					this.SetFormValue('vehicle_year_name', name)
+				}
 			}
 		})
-		this.BookingForm.get('vehicle_color').valueChanges.subscribe((value: string) =>
-		{
-			if(value && this.BigData)
-			{
-				let name = this.BigData['vehicleColors'].find(item => item.id == value)['name']
-				this.SetFormValue('vehicle_color_name', name)
+		this.BookingForm.get('vehicle_color').valueChanges.subscribe((value: string) => {
+			if (this.Form.affiliate_type.value == 'affiliate') {
+				console.log('in function change value for affilliate')
+
+			} else {
+				if (value && this.BigData) {
+					let name = this.BigData['vehicleColors'].find(item => item.id == value)['name']
+					this.SetFormValue('vehicle_color_name', name)
+				}
 			}
 		})
 		// Pickup Airport
@@ -1801,7 +1842,7 @@ export class NewBookingComponent implements OnInit {
 
 	setValueByBookNow() {
 		let QB: any = JSON.parse(localStorage.getItem('quotebot_form'))
-		let selected_vehicle :any = JSON.parse(sessionStorage.getItem('selected_vehicle'))
+		let selected_vehicle: any = JSON.parse(sessionStorage.getItem('selected_vehicle'))
 		// for (const key in QB) {
 		//   console.log(`QB______${key}: ${QB[key]}`);
 		//   this.SetFormValue(key ,QB[key])
@@ -1811,7 +1852,7 @@ export class NewBookingComponent implements OnInit {
 
 		//dropOFF
 		this.SetFormValue('service_type', QB?.service_type)
-		if(QB?.service_type == 'charter_tour'){
+		if (QB?.service_type == 'charter_tour') {
 			this.SetFormValue('number_of_hours', QB?.booking_hour)
 		}
 		let transfer_type_value = QB?.pickup_type + '_to_' + QB?.dropoff_type
@@ -1866,10 +1907,10 @@ export class NewBookingComponent implements OnInit {
 		this.SetFormValue('return_cruise_time', this.FormatTime(QB?.return_pickup_time))
 		if (QB?.pickup_type == 'airport') {
 			let location = {
-				latitude : QB?.pickup_airport_lat,
-				longitude : QB?.pickup_airport_long
+				latitude: QB?.pickup_airport_lat,
+				longitude: QB?.pickup_airport_long
 			}
-			this.fillLocationPoints('airport',location)
+			this.fillLocationPoints('airport', location)
 		}
 		this.MapController()
 		this.MapController(true)
