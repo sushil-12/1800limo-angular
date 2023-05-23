@@ -34,7 +34,7 @@ button {
 }
 
 .paid {
-	background-color: #808080;
+	background-color: #D1B000;
 }
 
 .assigned {
@@ -234,6 +234,15 @@ input::-webkit-input-placeholder {
 	transform: translate(-50%, -50%);
   }
 
+  .preview-pickup-color{
+	color: #007500;
+  }
+  .preview-dropoff-color{
+	color:  #FF0000 ;
+  }
+  .preview-airport-color{
+	color:  #00008B ;
+  }
 @media only screen and (min-width: 768px) and (max-width: 1200px) {
 	.startdate {
 		padding-right: 5px;

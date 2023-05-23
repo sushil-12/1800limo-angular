@@ -1008,11 +1008,11 @@
 					<hr>
 
 					<!-- ################ Pickup ################### -->
-					<h5 class="m-0 my-2 text-xl">
+					<h5 class="m-0 my-2 text-xl preview-pickup-color">
 						Pickup Details
 					</h5>
 					<!-- Pickup > Date -->
-					<div class="mx-2">
+					<div class="mx-2 preview-pickup-color">
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
@@ -1030,7 +1030,7 @@
 					</div>
 
 					<!-- Pickup > Time -->
-					<div class="mx-2">
+					<div class="mx-2 preview-pickup-color">
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
@@ -1048,7 +1048,7 @@
 					</div>
 
 					<!-- Pickup > City Details -->
-					<div class="mx-2"
+					<div class="mx-2 preview-pickup-color"
 						*ngIf="bookingPreview?.transfer_type.includes('city_') || bookingPreview?.transfer_type.includes('cruise_')">
 						<div class="row m-0">
 							<div class="col-md-4">
@@ -1065,7 +1065,7 @@
 					</div>
 
 					<!-- Pickup > Airline Details -->
-					<div class="mx-2" *ngIf="bookingPreview?.transfer_type.includes('airport_')">
+					<div class="mx-2 preview-pickup-color" *ngIf="bookingPreview?.transfer_type.includes('airport_')">
 						<!-- Airport -->
 						<div class="row m-0">
 							<div class="col-md-4 key">
@@ -1073,7 +1073,7 @@
 									Airport
 								</span>
 							</div>
-							<div class="col-md-8 value">
+							<div class="col-md-8 value preview-airport-color">
 								<span class="font-weight-bolder preview-output-feild">
 									{{ textFormatter(bookingPreview?.pickup_airport_name) }}
 								</span>
@@ -1081,7 +1081,7 @@
 						</div>
 						<!-- Airport -->
 						<!-- Airline -->
-						<div class="row m-0">
+						<div class="row m-0 preview-pickup-color">
 							<div class="col-md-4 key">
 								<span>
 									Airline
@@ -1095,7 +1095,7 @@
 						</div>
 						<!-- Airline -->
 						<!-- Flight Number -->
-						<div class="row m-0">
+						<div class="row m-0 preview-pickup-color">
 							<div class="col-md-4 key">
 								<span>
 									Flight Number
@@ -1111,7 +1111,7 @@
 					</div>
 
 					<!-- Pickup > Cruise Details -->
-					<div class="mx-2" *ngIf="bookingPreview?.transfer_type.includes('cruise_')">
+					<div class="mx-2 preview-pickup-color" *ngIf="bookingPreview?.transfer_type.includes('cruise_')">
 						<!-- Cruise Port -->
 						<div class="row m-0">
 							<div class="col-md-4 key">
@@ -1156,7 +1156,7 @@
 					</div>
 
 					<!-- Extra Stops -->
-					<div *ngIf="bookingPreview?.extra_stops && bookingPreview?.extra_stops?.length > 0">
+					<div class="preview-pickup-color" *ngIf="bookingPreview?.extra_stops && bookingPreview?.extra_stops?.length > 0">
 						<h5 class="m-0 text-xl">
 							Extra Stops
 						</h5>
@@ -1179,11 +1179,11 @@
 					<hr *ngIf="bookingPreview?.extra_stops && bookingPreview?.extra_stops?.length == 0" />
 					<hr>
 					<!-- ############# Dropoff ################# -->
-					<h5 class="px-2 m-0 my-3 text-xl">
+					<h5 class="px-2 m-0 my-3 text-xl preview-dropoff-color">
 						Drop Off Details
 					</h5>
 					<!-- Dropoff > City Details -->
-					<div class="mx-2"
+					<div class="mx-2 preview-dropoff-color"
 						*ngIf="bookingPreview?.transfer_type.includes('_city') || bookingPreview?.transfer_type.includes('_cruise')">
 						<div class="row">
 							<div class="col-md-4 key">
@@ -1200,7 +1200,7 @@
 					</div>
 
 					<!-- Dropoff > Airline Details -->
-					<div class="mx-2" *ngIf="bookingPreview?.transfer_type.includes('_airport')">
+					<div class="mx-2 preview-dropoff-color" *ngIf="bookingPreview?.transfer_type.includes('_airport')">
 						<!-- Airport -->
 						<div class="row">
 							<div class="col-md-4 key">
@@ -1208,7 +1208,7 @@
 									Airport
 								</span>
 							</div>
-							<div class="col-md-8 value">
+							<div class="col-md-8 value preview-airport-color">
 								<span class="font-weight-bolder preview-output-feild">
 									{{ textFormatter(bookingPreview?.dropoff_airport_name ) }}
 								</span>
@@ -1216,7 +1216,7 @@
 						</div>
 						<!-- Airport -->
 						<!-- Airline -->
-						<div class="row">
+						<div class="row preview-dropoff-color">
 							<div class="col-md-4 key">
 								<span>
 									Airline
@@ -1230,7 +1230,7 @@
 						</div>
 						<!-- Airline -->
 						<!-- Flight Number -->
-						<div class="row">
+						<div class="row preview-dropoff-color">
 							<div class="col-md-4 key">
 								<span>
 									Flight Number
@@ -1246,7 +1246,7 @@
 					</div>
 
 					<!-- Dropoff > Cruise Details -->
-					<div class="mx-2" *ngIf="bookingPreview?.transfer_type.includes('_cruise')">
+					<div class="mx-2 preview-dropoff-color" *ngIf="bookingPreview?.transfer_type.includes('_cruise')">
 						<!-- Cruise Port -->
 						<div class="row">
 							<div class="col-md-4 key">
