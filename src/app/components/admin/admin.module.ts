@@ -105,6 +105,8 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { CustomInvoiceComponent } from './custom-invoice/custom-invoice.component';
+import { StaffPermissionsComponent } from './staff-permissions/staff-permissions.component';
+import {MatTabsModule} from '@angular/material/tabs';
 
 @NgModule({
 	declarations: [
@@ -185,7 +187,8 @@ import { CustomInvoiceComponent } from './custom-invoice/custom-invoice.componen
 		FinalizeBookingComponent,
 		FinalizeRatesComponent,
 		BadgeCitiesComponent,
-		CustomInvoiceComponent
+		CustomInvoiceComponent,
+		StaffPermissionsComponent
 	],
 	imports: [
 		CommonModule,
@@ -207,7 +210,8 @@ import { CustomInvoiceComponent } from './custom-invoice/custom-invoice.componen
 		MatRadioModule,
 		NgSelectModule,
 		NgxPrintModule,
-		MatChipsModule
+		MatChipsModule,
+		MatTabsModule
 	],
 	exports: [BookingStatusTextReplacePipe]
 })
