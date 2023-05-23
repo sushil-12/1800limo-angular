@@ -1046,7 +1046,9 @@ export class AdminService {
 	refund(body: any) {
 		return this.httpClient.post(`${this.serverUrl}admin/refund-request`, body)
 	}
-
+	getPermission(){
+		return this.httpClient.get(`${this.serverUrl}admin/permissions`)
+	}
 
 
 }

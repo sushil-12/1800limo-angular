@@ -1,8 +1,28 @@
 <div class="col-12">
-    <p>staff-permissions works!</p>
-    <mat-tab-group mat-align-tabs="center" animationDuration="400ms" vertical>
-        <mat-tab label="First">Content 1 Lorem, ipsum dolor sit amet consectetur adipisicing elit. Tempora veritatis nisi odio explicabo consectetur minus eum vero ex. Eum debitis in consectetur temporibus expedita facere velit rem dolore ab numquam!</mat-tab>
-        <mat-tab label="Second">Content 2</mat-tab>
-        <mat-tab label="Third">Content 3</mat-tab>
+    <mat-tab-group mat-align-tabs="center" animationDuration="200ms" vertical>
+        <mat-tab label="{{group_name.key}}" *ngFor="let group_name of group_data | keyvalue: returnZero; index as group_name_index">
+            <main>
+                <div class="table-responsive" style="min-height: 350px">
+                    <table class="table table-dark table-striped dataTable dt-responsive" id="dataTable"
+                        role="grid" aria-describedby="dataTable_info" cellspacing="0">
+                        <thead>
+                            <tr role="row">
+                                <th>Actions</th>
+                                <th>Slug</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                            <tr role="row" class="odd" *ngFor="let item of group_name.value; let i = index">
+                                <td class="col-md-8">{{item.description}}</td>
+                                <td class="col-md-4"><mat-slide-toggle class="example-margin">
+                                    </mat-slide-toggle></td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </main>
+        </mat-tab>
     </mat-tab-group>
 </div>

@@ -76,6 +76,7 @@ import { FinalizeBookingComponent } from './finalize-booking/finalize-booking.co
 import { BadgeCitiesComponent } from './badge-cities/badge-cities.component';
 import { CustomInvoiceComponent } from './custom-invoice/custom-invoice.component';
 import { StaffPermissionsComponent } from './staff-permissions/staff-permissions.component';
+import { StaffRolesListComponent } from './staff-roles-list/staff-roles-list.component';
 
 
 const routes: Routes = [
@@ -409,6 +410,12 @@ const routes: Routes = [
 		canActivate: [AdminGuardGuard],
 		component: AddSubAdminComponent
 	},
+	{
+		path: 'staff-roles-list',
+		canActivate: [AdminGuardGuard],
+		component: StaffRolesListComponent
+	},
+	
 	{
 		path: 'staff-permissions',
 		canActivate: [AdminGuardGuard],
