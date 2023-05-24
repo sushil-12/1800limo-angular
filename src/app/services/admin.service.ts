@@ -1046,9 +1046,19 @@ export class AdminService {
 	refund(body: any) {
 		return this.httpClient.post(`${this.serverUrl}admin/refund-request`, body)
 	}
-	getPermission(){
-		return this.httpClient.get(`${this.serverUrl}admin/permissions`)
+	getPermission(id:any){
+		return this.httpClient.get(`${this.serverUrl}admin/permissions/${id}`)
 	}
+	getRoles(){
+		return this.httpClient.get(`${this.serverUrl}admin/roles`)
+	}
+	updartePermission(id,data){
+		return this.httpClient.post(`${this.serverUrl}admin/assign-permissions/${id}`,data)
+	}
+	addRole(data){
+		return this.httpClient.post(`${this.serverUrl}admin/create-role`,data)
+	}
+
 
 
 }

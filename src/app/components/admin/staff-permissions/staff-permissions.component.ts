@@ -11,6 +11,8 @@ declare var $: any
 })
 export class StaffPermissionsComponent implements OnInit {
   group_data: any;
+  role_id: any;
+  checkAllBoxs:{};
 
   constructor(
     private $api: AdminService,
@@ -21,14 +23,58 @@ export class StaffPermissionsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.$api.getPermission().subscribe((response: any) => {
-			console.log('response-->>' , response)
-      this.group_data = response?.data
-			this.$spinner.hide()
+
+    this.$route.queryParams.subscribe((params: any) => {
+			if (params.role ) {
+        this.role_id = params.role 
+			}
 		})
+    this.getPermissions();
+   
   }
   returnZero() {
 		return 0;
 	}
+  getPermissions(){
+    this.$api.getPermission(this.role_id).subscribe((response: any) => {
+			console.log('response-->>' , response)
+      this.group_data = response?.data
+      let keys = Object.keys(this.group_data)
+      keys.map(i=>{
+        this.checkAllBoxs ={i:false}
+      })
+			this.$spinner.hide()
+		})
+  }
+
+  formatText(text:any){
+    return text.replaceAll(/_/g,' ');
+  }
+
+  handleChangeToggle(event:any,id:any){
+    // this.$spinner.show()
+    console.log('handleChangeToggle-->>',event.checked,id)
+    let data = {
+      role_id:this.role_id,
+      permission_id:id,
+      status:event.checked
+    }
+    this.$api.updartePermission(this.role_id,data).subscribe((response: any) => {
+			console.log('response-->>' , response)
+      // this.$errors.openDialog({
+      //   errors: {
+      //     error: `<span class='text-success'>${response.message}</span>`
+      //   }
+      // })
+      // this.getPermissions();
+			this.$spinner.hide()
+		})
+  }
+  setAll(checked:any,group_name){
+    console.log('in set all function-->>', checked,group_name)
+    this.checkAllBoxs[group_name.key] = checked
+    let temp = group_name.value.map(i=> i.is_permitted = checked)
+    this.group_data[group_name.name] = temp
+  }
 
 }

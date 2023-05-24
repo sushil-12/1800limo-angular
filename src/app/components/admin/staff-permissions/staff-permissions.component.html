@@ -1,21 +1,24 @@
 <div class="col-12">
     <mat-tab-group mat-align-tabs="center" animationDuration="200ms" vertical>
-        <mat-tab label="{{group_name.key}}" *ngFor="let group_name of group_data | keyvalue: returnZero; index as group_name_index">
+        <mat-tab label="{{formatText(group_name.key)}}"
+            *ngFor="let group_name of group_data | keyvalue: returnZero; index as group_name_index">
             <main>
                 <div class="table-responsive" style="min-height: 350px">
-                    <table class="table table-dark table-striped dataTable dt-responsive" id="dataTable"
-                        role="grid" aria-describedby="dataTable_info" cellspacing="0">
+                    <table class="table table-dark table-striped dataTable dt-responsive" id="dataTable" role="grid"
+                        aria-describedby="dataTable_info" cellspacing="0">
                         <thead>
                             <tr role="row">
-                                <th>Actions</th>
-                                <th>Slug</th>
+                                <th>Description</th>
+                                <th>Action</th>
                             </tr>
+                            <!-- <div class="row d-flex justify-content-end"> <mat-checkbox [color]="'primary'"
+                                    (change)="setAll($event.checked , group_name)" [checked]="checkAllBoxs[group_name.key]">Check All</mat-checkbox></div> -->
                         </thead>
                         <tbody>
-                            
                             <tr role="row" class="odd" *ngFor="let item of group_name.value; let i = index">
                                 <td class="col-md-8">{{item.description}}</td>
-                                <td class="col-md-4"><mat-slide-toggle class="example-margin">
+                                <td class="col-md-4"><mat-slide-toggle class="example-margin"
+                                        [checked]="item?.is_permitted" (change)="handleChangeToggle($event,item?.id)">
                                     </mat-slide-toggle></td>
 
                             </tr>

@@ -83,7 +83,7 @@
 				<div class="sidenav-menu">
 					<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 						<!---1st--->
-						<li class="nav-item">
+						<li class="nav-item" *ngIf="role=='admin' || modules.includes('Booking')">
 							<a class="nav-link collapsed" [routerLinkActive]="['active']"
 								routerLink="/admin/daily-bookings-admin" (click)="closeSidebarFunc(false)"
 								tabIndex="-1">
@@ -104,7 +104,7 @@
 							</a>
 						</li>
 						<!--2nd -->
-						<li class="nav-item">
+						<li class="nav-item" *ngIf="role=='admin' || modules.includes('Booking')">
 							<a class="nav-link collapsed" [routerLinkActive]="['active']"
 								routerLink="/admin/new-booking" (click)="closeSidebarFunc(false)" tabIndex="-1">
 								<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
@@ -130,7 +130,7 @@
 							</a>
 						</li>
 						<!--3th -->
-						<li class="nav-item" [hidden]="affiliateAccountStatus=='completed'">
+						<li class="nav-item" [hidden]="affiliateAccountStatus=='completed'" *ngIf="role=='admin' || modules.includes('Invoices')">
 							<a class="nav-link collapsed dropdwn" [routerLinkActive]="['active']" data-toggle="collapse"
 								data-target="#collapse5" aria-expanded="true" aria-controls="collapseUtilities"
 								tabIndex="-1" (click)="invoiceFunc(false)">
@@ -159,7 +159,7 @@
 							</div>
 						</li>
 						<!--4th -->
-						<li class="nav-item">
+						<li class="nav-item" *ngIf="role=='admin' || modules.includes('user_accounts')">
 							<a class="nav-link collapsed dropdwn" [routerLinkActive]="['active']" data-toggle="collapse"
 								data-target="#collapse6" aria-expanded="true" aria-controls="collapseUtilities"
 								tabIndex="-1" (click)="userAccountFunc(false)">
@@ -198,7 +198,7 @@
 							</div>
 						</li>
 						<!--5th -->
-						<li class="nav-item">
+						<li class="nav-item" *ngIf="role=='admin' || modules.includes('affiliates')">
 							<a class="nav-link" [routerLinkActive]="['active']"
 								routerLink="/admin/affiliates/all-operators" tabIndex="-1"
 								(click)="closeSidebarFunc(false)">
@@ -235,7 +235,7 @@
 							</a>
 						</li>
 						<!--7th -->
-						<li class="nav-item">
+						<li class="nav-item" *ngIf="role=='admin' || modules.includes('Booking')">
 							<a class="nav-link collapsed dropdwn" [routerLinkActive]="['active']" data-toggle="collapse"
 								data-target="#collapse8" aria-expanded="true" aria-controls="collapseUtilities"
 								tabIndex="-1" (click)="reportFunc(false)">

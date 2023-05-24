@@ -2,7 +2,7 @@
 <main>
     <!-- Main page content-->
     <section class="adminbox_shadow user_information">
-        <div class="row mx-2">
+        <div class="row mx-2" data-toggle="modal" data-target="#addRoleModal">
             <button class="custom-btn add-button"><svg xmlns="http://www.w3.org/2000/svg" fill="currentColor"
                     viewBox="0 0 16 16" class="bi bi-plus-circle">
                     <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
@@ -20,23 +20,24 @@
                             id="dataTable" role="grid" aria-describedby="dataTable_info" cellspacing="0">
                             <thead>
                                 <tr role="row">
-                                    <th >Actions</th>
+                                    <th>Actions</th>
                                     <th>Roles Name</th>
                                     <th>Slug</th>
+                                    <!-- <th>Updated At</th> -->
                                 </tr>
                             </thead>
                             <tbody>
-                                <!-- *ngFor="let item of rolesList" -->
-                                <tr role="row" class="odd">
-                                    <td class="col-md-3"> 
-                                        <button class=" user-profileded view-button btn-transparent-dark font-weight-bold"
-                                                [routerLink]="['/admin/staff-permissions']"
-												[queryParams]="{role: '123'}">
+                                <tr role="row" class="odd" *ngFor="let item of rolesList">
+                                    <td class="col-md-2">
+                                        <button
+                                            class=" user-profileded view-button btn-transparent-dark font-weight-bold"
+                                            [routerLink]="['/admin/staff-permissions']"
+                                            [queryParams]="{role: item?.id}">
                                             Permissions</button>
                                     </td>
-                                    <td class="col-md-5">Sub Admin</td>
-                                    <td class="col-md-4">SUB_ADMIN</td>
-
+                                    <td class="col-md-5">{{item?.name}}</td>
+                                    <td class="col-md-3">{{item?.slug}}</td>
+                                    <!-- <td class="col-md-2">{{formatDate(item?.updated_at) }}</td> -->
                                 </tr>
                             </tbody>
                         </table>
@@ -47,3 +48,45 @@
         </div>
     </section>
 </main>
+
+
+
+<!-- ADD ROLE MODAL -->
+
+<div class="modal fade" id="addRoleModal" tabindex="-1" role="dialog" aria-labelledby="addRoleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content user_inforamtion">
+            <button type="button" class="close closeButton x-circle-btn" data-dismiss="modal" aria-label="Close">
+                <i class="bi bi-x-circle"></i>
+            </button>
+            <div class="modal-header pb-0 d-flex justify-content-center">
+                <h3 class="mb-0" id="exampleModalLabel">Add Role</h3>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="addRoleForm" appInvalidControlScroll>
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Name</mat-label>
+                                <input matInput type="text" formControlName="name" required>
+                            </mat-form-field>
+                            <div class="error-box">
+                                <div class="error-message"
+                                    *ngIf="Form?.name.invalid && (Form?.name.touched || Form?.name.dirty)">
+                                    <p class="text-danger text-lg m-0" *ngIf="Form?.name.errors?.required">
+                                        Name is required
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer d-flex justify-content-between">
+                <button type="button" class="btn btnStyle" data-dismiss="modal" aria-label="Close">Close</button>
+                <button class="btn saveButtonModal" (click)="handleSubmitAddRole()"  type="submit">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>

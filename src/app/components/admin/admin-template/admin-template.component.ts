@@ -27,6 +27,8 @@ export class AdminTemplateComponent implements OnInit
 	chevron2: boolean = false;
 	chevron3: boolean = false;
 	chevron4: boolean = false;
+
+	modules:any = localStorage.getItem('modules') || ''
 	constructor(private router: Router, private authService: AuthService,
 		private stateManagementService: StateManagementService,
 		private spinner: NgxSpinnerService,) { }

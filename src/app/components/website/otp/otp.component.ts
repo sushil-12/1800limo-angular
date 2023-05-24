@@ -16,8 +16,7 @@ declare var $: any;
 	templateUrl: './otp.component.html',
 	styleUrls: ['./otp.component.scss']
 })
-export class OtpComponent implements OnInit, OnDestroy
-{
+export class OtpComponent implements OnInit, OnDestroy {
 
 	public otpForm: FormGroup;
 	public submitted = false;
@@ -30,7 +29,7 @@ export class OtpComponent implements OnInit, OnDestroy
 	public dDay = new Date().getTime() + 16 * 1000;
 	public timeDifference;
 	public secondsToDday;
-	@ViewChild(NgOtpInputComponent, { static: false}) ngOtpInput:NgOtpInputComponent;
+	@ViewChild(NgOtpInputComponent, { static: false }) ngOtpInput: NgOtpInputComponent;
 	constructor(
 		private formBuilder: FormBuilder,
 		private router: Router,
@@ -39,12 +38,9 @@ export class OtpComponent implements OnInit, OnDestroy
 		private stateManagementService: StateManagementService,
 		private $errors: ErrorDialogService,
 		private $route: ActivatedRoute,
-	)
-	{
-		if (this.authService.currentUserValue)
-		{
-			switch (this.authService.currentUserValue.roleName)
-			{
+	) {
+		if (this.authService.currentUserValue) {
+			switch (this.authService.currentUserValue.roleName) {
 				case 'admin': {
 					this.router.navigateByUrl('/admin');
 					break;
@@ -58,8 +54,7 @@ export class OtpComponent implements OnInit, OnDestroy
 					break;
 				}
 				case 'driver': {
-					switch (localStorage.getItem("account_approval"))
-					{
+					switch (localStorage.getItem("account_approval")) {
 						case 'accepted': {
 							this.router.navigateByUrl('/affiliate/my-bookings');
 							break;
@@ -99,13 +94,11 @@ export class OtpComponent implements OnInit, OnDestroy
 		}
 	}
 
-	ngOnDestroy()
-	{
+	ngOnDestroy() {
 		this.subscription.unsubscribe();
 	}
 
-	ngOnInit(): void
-	{
+	ngOnInit(): void {
 		this.otpForm = this.formBuilder.group({
 			otp: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(6), Validators.pattern("^[0-9]*$")]],
 		});
@@ -114,12 +107,9 @@ export class OtpComponent implements OnInit, OnDestroy
 			.subscribe(x => { this.countdownTimer(); });
 
 		console.log(this.$route.url)
-		this.$route.queryParams.subscribe((params: any) =>
-		{
-			if (params.otp)
-			{
-				setTimeout(() => 
-				{
+		this.$route.queryParams.subscribe((params: any) => {
+			if (params.otp) {
+				setTimeout(() => {
 					this.ngOtpInput.setValue(params.otp);
 					this.otpForm.get('otp').setValue(params.otp)
 					this.otpForm.updateValueAndValidity()
@@ -129,38 +119,33 @@ export class OtpComponent implements OnInit, OnDestroy
 		})
 	}
 
-	countdownTimer()
-	{
+	countdownTimer() {
 		this.timeDifference = this.dDay - new Date().getTime();
 		this.secondsToDday = Math.floor((this.timeDifference % (1000 * 60)) / 1000);
-		if (this.secondsToDday <= 0)
-		{
+		if (this.secondsToDday <= 0) {
 			this.subscription.unsubscribe();
 			this.resendOtpVisible = true;
 		}
 	}
-	onOtpChange(value){
+	onOtpChange(value) {
 		this.otpForm.get('otp').setValue(value)
 		this.otpForm.updateValueAndValidity()
 	}
 
-	resendOtp()
-	{
+	resendOtp() {
 		this.disableSubmit = true; //disable submit button
 		this.showProgressBar = true; //show progressbar
 
 		let userId = sessionStorage.getItem('userId');
 		this.authService.resendOtp({ "userId": userId })
 			.pipe(
-				catchError(err =>
-				{
+				catchError(err => {
 					this.disableSubmit = false; //enable submit button
 					this.showProgressBar = false; //hide progressbar
 					return throwError(err);
 				})
 			)
-			.subscribe(result =>
-			{
+			.subscribe(result => {
 				this.disableSubmit = false; //enable submit button
 				this.showProgressBar = false; //hide progressbar
 
@@ -174,12 +159,10 @@ export class OtpComponent implements OnInit, OnDestroy
 	}
 
 	get f() { return this.otpForm.controls; }
-	otpCheck()
-	{
+	otpCheck() {
 		this.submitted = true;
 		// stop here if form is invalid
-		if (this.otpForm.invalid)
-		{
+		if (this.otpForm.invalid) {
 			return;
 		}
 
@@ -191,15 +174,13 @@ export class OtpComponent implements OnInit, OnDestroy
 
 		this.authService.verifyOtp(this.otpForm.value)
 			.pipe(
-				catchError(err =>
-				{
+				catchError(err => {
 					this.disableSubmit = false; //enable submit button
 					this.showProgressBar = false; //hide progressbar
 					return throwError(err);
 				})
 			)
-			.subscribe(result =>
-			{
+			.subscribe(result => {
 				this.response = result;
 				// set login user value in localStorage
 				console.log('logged in success', result)
@@ -213,17 +194,19 @@ export class OtpComponent implements OnInit, OnDestroy
 				localStorage.setItem('userData', JSON.stringify(loginUserDetail))
 				localStorage.setItem('currentUser', JSON.stringify(this.response.data.user));
 				localStorage.setItem('access_token', this.response.data.access_token);
+
 				let QB_redirectUrl = localStorage.getItem('QB_redirectUrl') || ''
 				let vehicle_selected = JSON.parse(sessionStorage.getItem('selected_vehicle'))
 
-				switch (this.response.data.user.roleName)
-				{
+				switch (this.response.data.user.roleName) {
 					case 'admin': {
 						this.router.navigateByUrl('/admin');
 						break;
 					}
 					case 'sub_admin': {
 						this.router.navigateByUrl('/admin');
+						localStorage.setItem('modules', this.response.data?.modules);
+						localStorage.setItem('sub_modules', this.response.data?.sub_modules)
 						break;
 					}
 					case 'individual': {
@@ -235,23 +218,22 @@ export class OtpComponent implements OnInit, OnDestroy
 						localStorage.setItem("recject_cause_message", this.response.data.affiliateParmas.recject_cause_message);
 						this.affiliateService.updateStepsArrayLocal(this.response.data.affiliateParmas.step_completed);
 						this.affiliateService.updateStepsCompletedObject(this.response.data.affiliateParmas.step_completed_obj);
-						switch (this.response.data.affiliateParmas.account_approval)
-						{
+						switch (this.response.data.affiliateParmas.account_approval) {
 							case 'accepted': {
-								if(QB_redirectUrl.length && vehicle_selected){
+								if (QB_redirectUrl.length && vehicle_selected) {
 									this.router.navigate([
-											'/affiliate/create-new-booking'
-										],
-										{ queryParams: {affiliate_id:vehicle_selected.affiliate_id, vehicle_id:vehicle_selected.id,new : true } })
+										'/affiliate/create-new-booking'
+									],
+										{ queryParams: { affiliate_id: vehicle_selected.affiliate_id, vehicle_id: vehicle_selected.id, new: true } })
 								}
-								else{
+								else {
 									this.router.navigateByUrl('/affiliate/my-bookings');
 								}
 								break;
 							}
 							case 'completed': {
 								this.router.navigateByUrl('/affiliate/account-status');
-								if(QB_redirectUrl.length){
+								if (QB_redirectUrl.length) {
 									this.$errors.openDialog({
 										errors: {
 											error: `<span class='text-danger'>Not able to create booking</span>`
@@ -266,10 +248,9 @@ export class OtpComponent implements OnInit, OnDestroy
 							}
 							case 'in-progress': {
 								let nextStep: number;
-								if (this.response.data.affiliateParmas.step_completed.length > 0)
-								{//if step 0 is completed
+								if (this.response.data.affiliateParmas.step_completed.length > 0) {//if step 0 is completed
 									nextStep = this.fetchHighestNumber(this.response.data.affiliateParmas.step_completed);
-									if(QB_redirectUrl.length){
+									if (QB_redirectUrl.length) {
 										this.$errors.openDialog({
 											errors: {
 												error: `<span class='text-danger'>You need to complete registration steps</span>`
@@ -303,19 +284,14 @@ export class OtpComponent implements OnInit, OnDestroy
 			});
 	}
 
-	fetchHighestNumber(array: Array<number | string>): number
-	{
+	fetchHighestNumber(array: Array<number | string>): number {
 		let highest = 0
-		for (let i = 0; i < array.length; i++)
-		{
-			try
-			{
-				if (highest < parseInt((array[i]).toString()))
-				{
+		for (let i = 0; i < array.length; i++) {
+			try {
+				if (highest < parseInt((array[i]).toString())) {
 					highest = parseInt((array[i]).toString())
 				}
-			} catch (err)
-			{
+			} catch (err) {
 				console.log('Error Fetching Highest Number: ', err)
 				return
 			}
