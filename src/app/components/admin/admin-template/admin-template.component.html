@@ -104,7 +104,7 @@
 							</a>
 						</li>
 						<!--2nd -->
-						<li class="nav-item" *ngIf="role=='admin' || modules.includes('Booking')">
+						<li class="nav-item" *ngIf="role=='admin' || subModules.includes('create_booking')">
 							<a class="nav-link collapsed" [routerLinkActive]="['active']"
 								routerLink="/admin/new-booking" (click)="closeSidebarFunc(false)" tabIndex="-1">
 								<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
@@ -159,7 +159,7 @@
 							</div>
 						</li>
 						<!--4th -->
-						<li class="nav-item" *ngIf="role=='admin' || modules.includes('user_accounts')">
+						<li class="nav-item" *ngIf="role=='admin' || modules.includes('individual_account') || modules.includes('corporate_account') || modules.includes('travel_planner_account') || modules.includes('tour_guide_account') ">
 							<a class="nav-link collapsed dropdwn" [routerLinkActive]="['active']" data-toggle="collapse"
 								data-target="#collapse6" aria-expanded="true" aria-controls="collapseUtilities"
 								tabIndex="-1" (click)="userAccountFunc(false)">
@@ -183,22 +183,22 @@
 								data-parent="#accordionSidebar" tabIndex="-1">
 								<div class="py-2 collapse-inner rounded">
 									<a class="collapse-item" [routerLinkActive]="['active']"
-										routerLink="/admin/individual-account-admin"
+										routerLink="/admin/individual-account-admin" *ngIf="modules.includes('individual_account')"
 										(click)="closeSidebarFunc(false)">Individual</a>
 									<a class="collapse-item" [routerLinkActive]="['active']"
-										routerLink="/admin/corporate-account-admin"
+										routerLink="/admin/corporate-account-admin" *ngIf="modules.includes('corporate_account')"
 										(click)="closeSidebarFunc(false)">Corporate</a>
 									<a class="collapse-item" [routerLinkActive]="['active']"
-										routerLink="/admin/travel-planner-account-admin"
+										routerLink="/admin/travel-planner-account-admin" *ngIf="modules.includes('travel_planner_account')"
 										(click)="closeSidebarFunc(false)">Travel Planner</a>
 									<a class="collapse-item" [routerLinkActive]="['active']"
-										routerLink="/admin/tour-guide-account-admin"
+										routerLink="/admin/tour-guide-account-admin" *ngIf="modules.includes('tour_guide_account')"
 										(click)="closeSidebarFunc(false)">Tour Guide</a>
 								</div>
 							</div>
 						</li>
 						<!--5th -->
-						<li class="nav-item" *ngIf="role=='admin' || modules.includes('affiliates')">
+						<li class="nav-item" *ngIf="role=='admin' || modules.includes('affiliate_account')">
 							<a class="nav-link" [routerLinkActive]="['active']"
 								routerLink="/admin/affiliates/all-operators" tabIndex="-1"
 								(click)="closeSidebarFunc(false)">
@@ -235,7 +235,7 @@
 							</a>
 						</li>
 						<!--7th -->
-						<li class="nav-item" *ngIf="role=='admin' || modules.includes('Booking')">
+						<li class="nav-item" *ngIf="role=='admin'">
 							<a class="nav-link collapsed dropdwn" [routerLinkActive]="['active']" data-toggle="collapse"
 								data-target="#collapse8" aria-expanded="true" aria-controls="collapseUtilities"
 								tabIndex="-1" (click)="reportFunc(false)">
@@ -300,7 +300,7 @@
 						</li> -->
 
 						<!--9th -->
-						<li class="nav-item" *ngIf="role=='admin'">
+						<li class="nav-item" *ngIf="role=='admin' || role=='sub_admin'">
 							<a class="nav-link collapsed dropdwn" [routerLinkActive]="['active']" data-toggle="collapse"
 								data-target="#collapse10" aria-expanded="true" aria-controls="collapseUtilities"
 								tabIndex="-1" (click)="settingFunc(false)">
@@ -325,43 +325,54 @@
 										Master Vehicle Types
 										</a>
 									<a class="collapse-item" [routerLinkActive]="['active']"
-										(click)="closeSidebarFunc(false)"
+										(click)="closeSidebarFunc(false)" *ngIf="role=='admin' || modules.includes('Affiliate Preference')"
 										routerLink="/admin/affiliate-preference">Affilate
 										Preference</a>
 									<a class="collapse-item" [routerLinkActive]="['active']"
-										(click)="closeSidebarFunc(false)" routerLink="/admin/amenities">Amenities</a>
+										(click)="closeSidebarFunc(false)" *ngIf="role=='admin' || modules.includes('Amenities')"
+										 routerLink="/admin/amenities">Amenities</a>
 									<a class="collapse-item" [routerLinkActive]="['active']"
-										(click)="closeSidebarFunc(false)" routerLink="/admin/interiorAmenity">Interior
+										(click)="closeSidebarFunc(false)" *ngIf="role=='admin' || modules.includes('Interior Amenities')"
+										routerLink="/admin/interiorAmenity">Interior
 										Amenities</a>
 									<a class="collapse-item" [routerLinkActive]="['active']"
-										(click)="closeSidebarFunc(false)" routerLink="/admin/specialAmenity">Special
+										(click)="closeSidebarFunc(false)" *ngIf="role=='admin' || modules.includes('Special Amenities')"
+										 routerLink="/admin/specialAmenity">Special
 										Amenities</a>
 									<a class="collapse-item" [routerLinkActive]="['active']"
-										(click)="closeSidebarFunc(false)" routerLink="/admin/vehicle-colors">Colors</a>
+										(click)="closeSidebarFunc(false)" *ngIf="role=='admin' || modules.includes('Colors')"
+										 routerLink="/admin/vehicle-colors">Colors</a>
 									<a class="collapse-item" [routerLinkActive]="['active']"
-										(click)="closeSidebarFunc(false)" routerLink="/admin/driver-language">Driver
+										(click)="closeSidebarFunc(false)" *ngIf="role=='admin' || modules.includes('Driver Language')"
+										 routerLink="/admin/driver-language">Driver
 										language</a>
 									<a class="collapse-item" [routerLinkActive]="['active']"
-										(click)="closeSidebarFunc(false)" routerLink="/admin/driver-dress">Driver
+										(click)="closeSidebarFunc(false)" *ngIf="role=='admin' || modules.includes('Driver Dress')"
+										 routerLink="/admin/driver-dress">Driver
 										Dress</a>
 									<a class="collapse-item" [routerLinkActive]="['active']"
-										(click)="closeSidebarFunc(false)" routerLink="/admin/vehicle-make">Make</a>
+										(click)="closeSidebarFunc(false)" *ngIf="role=='admin' || modules.includes('Make')"
+										 routerLink="/admin/vehicle-make">Make</a>
 									<a class="collapse-item" [routerLinkActive]="['active']"
-										(click)="closeSidebarFunc(false)" routerLink="/admin/meet-and-greet">Meet and
+										(click)="closeSidebarFunc(false)" *ngIf="role=='admin' || modules.includes('Meet and Greet')"
+										 routerLink="/admin/meet-and-greet">Meet and
 										Greet</a>
 									<a class="collapse-item" [routerLinkActive]="['active']"
-										(click)="closeSidebarFunc(false)" routerLink="/admin/vehicle-model">Model</a>
+										(click)="closeSidebarFunc(false)" *ngIf="role=='admin' || modules.includes('Model')"
+										 routerLink="/admin/vehicle-model">Model</a>
 									<a class="collapse-item" [routerLinkActive]="['active']"
-										(click)="closeSidebarFunc(false)" routerLink="/admin/vehicle-years">Years</a>
+										(click)="closeSidebarFunc(false)" *ngIf="role=='admin' || modules.includes('Years')"
+										 routerLink="/admin/vehicle-years">Years</a>
 									<a class="collapse-item" [routerLinkActive]="['active']"
-										(click)="closeSidebarFunc(false)" routerLink="/admin/badge-cities">Badge Cities</a>
+										(click)="closeSidebarFunc(false)" *ngIf="role=='admin' || modules.includes('Badge Cities')"
+										 routerLink="/admin/badge-cities">Badge Cities</a>
 
 								</div>
 							</div>
 						</li>
 
 						<!--10th-->
-						<li class="nav-item" *ngIf="role=='admin'">
+						<li class="nav-item" *ngIf="role=='admin' || modules.includes('cms_pages')">
 							<a class="nav-link collapsed dropdwn" [routerLinkActive]="['active']" data-toggle="collapse"
 								data-target="#collapse11" aria-expanded="true" aria-controls="collapseUtilities"
 								tabIndex="-1" (click)="webPageCMSFunc(false)">

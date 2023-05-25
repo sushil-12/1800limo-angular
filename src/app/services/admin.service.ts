@@ -64,6 +64,9 @@ export class AdminService {
 	deleteCookie(key: string) {
 		document.cookie = `${key}=' ';expires=Thu, 01 Jan 1970 00:00:00 UTC;`;
 	}
+	getMyPermissions(){
+		return this.httpClient.get(this.serverUrl + 'my-permissions');
+	}
 
 	changeSortOrder(data: any) {
 		return this.httpClient.put(this.serverUrl + 'vehicle-types-sorting', data);
