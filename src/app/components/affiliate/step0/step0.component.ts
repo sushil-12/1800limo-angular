@@ -11,8 +11,7 @@ declare var $: any;
 	templateUrl: './step0.component.html',
 	styleUrls: ['./step0.component.scss']
 })
-export class Step0Component implements OnInit
-{
+export class Step0Component implements OnInit {
 	content_data: any
 	public agreementValidation: boolean;
 	public agreement: boolean;
@@ -59,12 +58,10 @@ export class Step0Component implements OnInit
 	public why1800limo1: Array<String>;
 	public why1800limo2: Array<String>;
 
-	modalSwitch(modalType)
-	{
+	modalSwitch(modalType) {
 		$("#imageModal").addClass("showImage");
 		$("#imageModal").removeClass("d-none");
-		switch (modalType)
-		{
+		switch (modalType) {
 			case 'step_1': {
 				this.Step0Information = true;
 				this.selectedStep = 'step_1';
@@ -112,84 +109,72 @@ export class Step0Component implements OnInit
 
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
 
-	ngOnInit(): void
-	{
+	ngOnInit(): void {
+		$('.HeadingH1').css({display: "block"})
 		const stepCompleted = this.affiliateService.getLocalStepCompleted();
-		if (stepCompleted.includes('0'))
-		{
+		if (stepCompleted.includes('0')) {
 			this.agreement = true;
 		}
+		this.spinner.show(); //spinner show 
 
-		this.affiliateService.fetchStep0Data().subscribe((data: any) =>
-		{
+		this.affiliateService.fetchStep0Data().subscribe((data: any) => {
+			this.spinner.hide(); //spinner hide
 			this.content_data = data.data
-			this.fetchContentData()
+			this.fetchContentData();
+			const halfVehicles = Math.ceil(this.fetchContentData(4).other_listing_arr.length / 2);
+			this.vehicleList1 = this.vehicleList.splice(0, halfVehicles);
+			this.vehicleList2 = this.vehicleList.splice(-halfVehicles);
+
+			const half = Math.ceil(this.fetchContentData(5).other_listing_arr.length / 2);
+			this.why1800limo1 = this.why1800limo.splice(0, half);
+			this.why1800limo2 = this.why1800limo.splice(-half);
 		})
 	}
 
-	fetchContentData(id?: number | null)
-	{
-		if (id && this.content_data)
-		{
+	fetchContentData(id?: number | null) {
+		if (id && this.content_data) {
 			return this.content_data.find((item: any) => item.id == id)
 		}
-
-		const halfVehicles = Math.ceil(this.fetchContentData(4).other_listing_arr.length / 2);
-		this.vehicleList1 = this.vehicleList.splice(0, halfVehicles);
-		this.vehicleList2 = this.vehicleList.splice(-halfVehicles);
-
-		const half = Math.ceil(this.fetchContentData(5).other_listing_arr.length / 2);
-		this.why1800limo1 = this.why1800limo.splice(0, half);
-		this.why1800limo2 = this.why1800limo.splice(-half);
 	}
 
-	scroll(el: HTMLElement)
-	{
+
+	scroll(el: HTMLElement) {
 		el.scrollIntoView();
 	}
 
-	closeButton()
-	{
+	closeButton() {
 		this.closeTab.emit();
 	}
 
-	onCheckboxChange(e)
-	{
+	onCheckboxChange(e) {
 		this.agreement = e.target.checked;
 	}
 
-	submitForm()
-	{
-		if (!this.agreement)
-		{
+	submitForm() {
+		if (!this.agreement) {
 			this.agreementValidation = true;
 		}
-		else
-		{
+		else {
 			this.spinner.show();//show spinner
 			this.agreementValidation = false;
 			this.stepCompleted = this.affiliateService.getLocalStepCompleted();
 
-			if (!this.stepCompleted.includes('0'))
-			{
+			if (!this.stepCompleted.includes('0')) {
 				const data = {
 					stepCompleted: this.affiliateService.getUpdatedStepsLocal('0')
 				}
 				this.affiliateService.agreementAcceptance(data)
 					.pipe(
-						catchError(err =>
-						{
+						catchError(err => {
 							this.spinner.hide();//hide spinner
 							this.disableSubmitButton = false; //enable submit button
 							return throwError(err);
 						})
 					)
-					.subscribe(({ success, data }: any) =>
-					{
+					.subscribe(({ success, data }: any) => {
 						this.spinner.hide();//hide spinner
 						this.disableSubmitButton = false; //enable submit button
-						if (success == true)
-						{
+						if (success == true) {
 							this.affiliateService.updateStepsLocal('0');
 
 							//update step completed obj to change color of step icon
@@ -203,8 +188,7 @@ export class Step0Component implements OnInit
 						}
 					});
 			}
-			else
-			{
+			else {
 				this.router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
 					this.router.navigate(['/affiliate/step1'])
 				);

@@ -51,39 +51,45 @@
 		<div class="mt-1 container">
 			<div class="row">
 				<div class="col-md-6">
+					<!-- <mat-label>Bank Name <span class="asterisk">*</span></mat-label> -->
 					<mat-form-field appearance="outline">
+						<mat-label>Bank Name </mat-label>
 						<input matInput placeholder="Bank Name" id="BankName" formControlName="BankName">
 					</mat-form-field>
 				</div>
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
+						<mat-label>Bank Address </mat-label>
 						<input matInput placeholder="Bank Address" formControlName="BankAddress">
 					</mat-form-field>
 				</div>
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
+						<mat-label>Account Holder First Name<span class="asterisk">*</span></mat-label>
 						<input matInput placeholder="Account Holder First Name*"
 							formControlName="AccountHolderFirstName">
 					</mat-form-field>
-					<div *ngIf="submittedForm && f.AccountHolderFirstName.errors"
+					<div *ngIf="f.AccountHolderFirstName.errors && (f.AccountHolderFirstName.touched || f.AccountHolderFirstName.dirty )"
 						class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.AccountHolderFirstName.errors.required">This field is required</div>
 					</div>
 				</div>
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
+						<mat-label>Account Holder Last Name<span class="asterisk">*</span></mat-label>
 						<input matInput placeholder="Account Holder Last Name*" formControlName="AccountHolderLastName">
 					</mat-form-field>
-					<div *ngIf="submittedForm && f.AccountHolderLastName.errors"
+					<div *ngIf="f.AccountHolderLastName.errors && (f.AccountHolderLastName.touched || f.AccountHolderLastName.dirty )"
 						class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.AccountHolderLastName.errors.required">This field is required</div>
 					</div>
 				</div>
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
-						<input matInput placeholder="Account Number" formControlName="AccountNumber">
+						<mat-label>Account Number<span class="asterisk">*</span></mat-label>
+						<input matInput placeholder="Account Number*" formControlName="AccountNumber">
 					</mat-form-field>
-					<div *ngIf="submittedForm && f.AccountNumber.errors"
+					<div *ngIf="f.AccountNumber.errors && (f.AccountNumber.touched || f.AccountNumber.dirty )"
 						class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.AccountNumber.errors.required">This field is required</div>
 						<div *ngIf="f.AccountNumber.errors.pattern">This field should be a number</div>
@@ -91,10 +97,12 @@
 				</div>
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
-						<input matInput placeholder="Checking Routing Number" formControlName="Routing">
+						<mat-label>Checking Routing Number<span class="asterisk">*</span></mat-label>
+						<input matInput placeholder="Checking Routing Number*" formControlName="Routing">
 					</mat-form-field>
-					<div *ngIf="submittedForm && f.Routing.errors" class="text-danger margin-bottom-thin my-mat-hint">
+					<div *ngIf="f.Routing.errors && (f.Routing.touched || f.Routing.dirty )" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.Routing.errors.required">This field is required</div>
+						<div *ngIf="f.Routing.errors.pattern">This field should be a number</div>
 					</div>
 				</div>
 				<div class="col-md-6">
@@ -196,26 +204,31 @@
 						</ng-template>
 					</div>
 				</div>
-				<div class="col-md-6 mt-3">
+				<div class="col-md-6 mt-3 radioLabel">
 					<div id="ein-container" class="w-100 d-flex flex-nowrap justify-content-center">
 						<div id="ein-no" class="ein" [ngClass]="!f.haveEin.value ? 'active' : ''"
-							(click)="haveEin('haveEin')">
+							(click)="changeRadio('haveEin', false)">
 							<label>I don't have EIN / Business ID #</label>
 						</div>
 						<div id="ein-yes" class="ein" [ngClass]="f.haveEin.value ? 'active' : ''"
-							(click)="haveEin('haveEin')">
+							(click)="changeRadio('haveEin', true)">
 							<label>I have an EIN / Business ID #</label>
 						</div>
 					</div>
 				</div>
-				<div class="col-md-6" [hidden]="!haveEinNo">
+				<div class="col-md-6 mt-3" *ngIf="f.haveEin.value">
 					<mat-form-field appearance="outline">
 						<mat-label>EIN / Business ID #</mat-label>
-						<input matInput placeholder="EIN / Business ID #" formControlName="ein" tabindex="1">
+						<input matInput placeholder="EIN / Business ID #" (focus)="$event.target.select()"
+							formControlName="ein" tabindex="1" />
 					</mat-form-field>
-					<div *ngIf="submittedForm && f.ein.errors || f.ein.touched && f.ein.errors"
-						class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.ein.errors.required">This field is required</div>
+					<div *ngIf="
+							(submittedForm && f.ein.errors) ||
+							(f.ein.touched && f.ein.errors)
+						" class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="f.ein.errors.required">
+							This field is required
+						</div>
 					</div>
 				</div>
 			</div>
@@ -228,7 +241,7 @@
 			<div class="vehtype_extintwrap">
 				<div class="row">
 					<div class="col-md-12 text-center">
-						<button type="button" class="verifyDocButton" data-toggle="modal"
+						<button type="button" class="verifyDocButton box-shadow" data-toggle="modal"
 							data-target="#verificationDocumentModal" tabindex="1">Acceptable Country Owner
 							Verification Document</button>
 					</div>

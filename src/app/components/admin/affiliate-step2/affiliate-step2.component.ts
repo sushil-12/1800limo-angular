@@ -74,6 +74,7 @@ export class AffiliateStep2Component implements OnInit {
 	ngOnInit(): void {
 
 		//code related to autocomplete and map
+		this.spinner.show()
 		this.mapFunction();
 		const currentYear = (new Date()).getFullYear();
 		//prepare list of days for DOB
@@ -91,7 +92,7 @@ export class AffiliateStep2Component implements OnInit {
 		}
 		const currentUser = JSON.parse(sessionStorage.getItem("affiliateUserData"));
 		this.affiliateId = sessionStorage.getItem("affiliateId");
-
+		this.stepCompleted = this.adminService.getLocalStepsCompleted();
 		//add amenity form validation
 		this.addBankForm = this.formBuilder.group({
 			id: [''],//bank id for edit purpose
@@ -101,7 +102,7 @@ export class AffiliateStep2Component implements OnInit {
 			AccountHolderFirstName: ['', Validators.required],
 			AccountHolderLastName: ['', Validators.required],
 			AccountNumber: ['', [Validators.required, Validators.pattern("^[0-9]*$"), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
-			Routing: ['', Validators.required],
+			Routing: ['', [Validators.required , Validators.pattern("^[0-9]*$")]],
 			AccountType: ['company', Validators.required],
 			ssn: ['', [Validators.required, Validators.pattern("^[0-9]*$"), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
 			haveEin: ['yesEin'],
@@ -153,14 +154,14 @@ export class AffiliateStep2Component implements OnInit {
 		this.httpClient.get("assets/json/countryStateList.json").subscribe(data => {
 			this.countryOptions = data;
 			if (this.affiliateId) {
-				if (this.adminService.getLocalStepsCompleted().includes('2')) {
+				if (this.stepCompleted.includes('2')) {
 					this.isStep2Completed = true;
-					this.stateManagementService.setprogressBar(true);
+					// this.stateManagementService.setprogressBar(true);
 
 					this.adminService.getBankOfAffiliate(this.affiliateId)
 						.pipe(
 							catchError(err => {
-								this.stateManagementService.setprogressBar(false);
+								// this.stateManagementService.setprogressBar(false);
 								return throwError(err);
 							})
 						).subscribe(result => {
@@ -213,7 +214,7 @@ export class AffiliateStep2Component implements OnInit {
 
 							this.haveEin(this.response.data.bankinfo.ein ? 'yesEin' : 'noEin');
 							this.changeCountry(this.response.data.bankinfo.country);//for selected country
-							this.stateManagementService.setprogressBar(false);
+							// this.stateManagementService.setprogressBar(false);
 						});
 				}
 				else {
@@ -245,7 +246,7 @@ export class AffiliateStep2Component implements OnInit {
 	mapFunction() {
 		this.mapsAPILoader.load().then(() => {
 			//For Address field
-			console.log(this.searchElementRef.nativeElement.value)
+			console.log('---search ref element-->>>>>>',this.searchElementRef.nativeElement.value)
 			let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement);
 			autocomplete.addListener("place_changed", () => {
 				this.ngZone.run(() => {
@@ -256,37 +257,37 @@ export class AffiliateStep2Component implements OnInit {
 					if (place.geometry === undefined || place.geometry === null) {
 						return;
 					}
-					console.log(place)
-					for (var i = 0; i < place.address_components.length; i++) {
-						for (var j = 0; j < place.address_components[i].types.length; j++) {
-							if (place.address_components[i].types[j] == "country") {
-								this.addBankForm.patchValue({
-									country: place.address_components[i].short_name
-								});
-								this.changeCountry(place.address_components[i].short_name)
-							}
-							else if (place.address_components[i].types[j] == "administrative_area_level_1") {
-								this.addBankForm.patchValue({
-									state: place.address_components[i].short_name
-								});
-							}
-							else if (place.address_components[i].types[j] == "administrative_area_level_2") {
-								this.addBankForm.patchValue({
-									city: place.address_components[i].long_name
-								});
-							}
-							else if (place.address_components[i].types[j] == "postal_code") {
-								this.addBankForm.patchValue({
-									zipCode: place.address_components[i].long_name
-								});
-							}
-							else if (place.address_components[i].types[j] == "street_number") {
-								this.addBankForm.patchValue({
-									street: place.address_components[i].long_name
-								});
-							}
-						}
-					}
+					console.log('---->> place',place)
+					// for (var i = 0; i < place.address_components.length; i++) {
+					// 	for (var j = 0; j < place.address_components[i].types.length; j++) {
+					// 		if (place.address_components[i].types[j] == "country") {
+					// 			this.addBankForm.patchValue({
+					// 				country: place.address_components[i].short_name
+					// 			});
+					// 			this.changeCountry(place.address_components[i].short_name)
+					// 		}
+					// 		else if (place.address_components[i].types[j] == "administrative_area_level_1") {
+					// 			this.addBankForm.patchValue({
+					// 				state: place.address_components[i].short_name
+					// 			});
+					// 		}
+					// 		else if (place.address_components[i].types[j] == "administrative_area_level_2") {
+					// 			this.addBankForm.patchValue({
+					// 				city: place.address_components[i].long_name
+					// 			});
+					// 		}
+					// 		else if (place.address_components[i].types[j] == "postal_code") {
+					// 			this.addBankForm.patchValue({
+					// 				zipCode: place.address_components[i].long_name
+					// 			});
+					// 		}
+					// 		else if (place.address_components[i].types[j] == "street_number") {
+					// 			this.addBankForm.patchValue({
+					// 				street: place.address_components[i].long_name
+					// 			});
+					// 		}
+					// 	}
+					// }
 					this.addBankForm.patchValue({
 						address: place.formatted_address,
 						latitude: place.geometry.location.lat(),
@@ -297,6 +298,7 @@ export class AffiliateStep2Component implements OnInit {
 				});
 			});
 			// }  
+		this.spinner.hide()
 		});
 	}
 
@@ -315,6 +317,11 @@ export class AffiliateStep2Component implements OnInit {
 			}
 		}
 	}
+
+	changeRadio(form_control: string, value: any) {
+		this.SetFormValue(form_control, value)
+	}
+
 	changeCountry(selectedCountryCode) {
 		let selectedCountryData: any;
 
@@ -335,7 +342,7 @@ export class AffiliateStep2Component implements OnInit {
 	}
 
 	idCardImageChange(event, imageType, imageId = null) {
-		this.stateManagementService.setprogressBar(true);
+		// this.stateManagementService.setprogressBar(true);
 		const reader = new FileReader();
 		if (event.target.files && event.target.files.length)
 			console.log(event.target.files, ">>>>>>>>>>>><<<<<<<<<<", event.target.files.length)
@@ -347,7 +354,7 @@ export class AffiliateStep2Component implements OnInit {
 				this.adminService.uploadVehicleImage(this.imageSrc)
 					.pipe(
 						catchError(err => {
-							this.stateManagementService.setprogressBar(false);
+							// this.stateManagementService.setprogressBar(false);
 							return throwError(err);
 						})
 					)
@@ -374,7 +381,7 @@ export class AffiliateStep2Component implements OnInit {
 								break;
 							}
 						}
-						this.stateManagementService.setprogressBar(false);
+						// this.stateManagementService.setprogressBar(false);
 					});
 			};
 		}
@@ -385,19 +392,19 @@ export class AffiliateStep2Component implements OnInit {
 	// 	this.router.navigate(['/admin/add-card'], { queryParams: { accountType: 'blackCarLimoBus', accountId: this.affiliateId } })
 	// }
 	delete() {
-		this.stateManagementService.setprogressBar(true);
+		// this.stateManagementService.setprogressBar(true);
 		$('#deleteConfirmationModal').modal('hide');
 		this.adminService.deleteCard(this.cardToDelete, this.affiliateId)
 			.pipe(
 				catchError(err => {
-					this.stateManagementService.setprogressBar(false);
+					// this.stateManagementService.setprogressBar(false);
 					return throwError(err);
 				})
 			).subscribe(result => {
 				this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
 					this.router.navigate(['/admin /affiliate/step2']);
 				});
-				this.stateManagementService.setprogressBar(false);
+				// this.stateManagementService.setprogressBar(false);
 			});
 	}
 

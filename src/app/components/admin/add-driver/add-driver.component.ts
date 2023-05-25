@@ -141,7 +141,7 @@ export class AddDriverComponent implements OnInit {
 			Veteran: ['no'],
 			DoD: ['no'],
 			FoidCard: ['no'],
-			SchoolBusCertified: ['no', Validators.required],
+			SchoolBusCertified: ['no'],
 			Covid19Vaccination: ['no'],
 			BackgroundCertified: ['no'],
 			ExPolice: ['no'],
@@ -155,18 +155,18 @@ export class AddDriverComponent implements OnInit {
 			BackgroundCheckerID: [''],
 			CheckerID: [''],
 			BackgroundCompanyTelNumber: [''],
-			BackgroundCompanyTelIsd: ['+1', Validators.required],
-			BackgroundCompanyTelNumberCountry: ['us', Validators.required],
+			BackgroundCompanyTelIsd: ['+1'],
+			BackgroundCompanyTelNumberCountry: ['us'],
 			VaccinationCardImage: [''],
 			schoolBusCertificateImage: [''],
 			PoliceForceTelephone: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
-			PoliceForceTelephoneIsd: ['+1', Validators.required],
-			PoliceForceTelephoneCountry: ['us', Validators.required],
+			PoliceForceTelephoneIsd: ['+1'],
+			PoliceForceTelephoneCountry: ['us'],
 			LastPoliceDepartment: [''],
 			Country: [''],
 			State: [''],
 			City: [''],
-			ZipCode: ['', [Validators.required, Validators.pattern("^[0-9]*$")]],
+			ZipCode: ['', [Validators.pattern("^[0-9]*$")]],
 		});
 
 		if (this.affiliateType != 'fleet_operator') {
@@ -175,12 +175,12 @@ export class AddDriverComponent implements OnInit {
 		}
 
 		/** progress bar starts on init */
-		this.stateManagementService.setprogressBar(true);
+		// this.stateManagementService.setprogressBar(true);
 		// Load Our languages using API
 		this.adminService.driverDressLanguage()
 			.pipe(
 				catchError(err => {
-					this.stateManagementService.setprogressBar(false);
+					// this.stateManagementService.setprogressBar(false);
 					return throwError(err);
 				})
 			).subscribe(({ data }: any) => {
@@ -194,7 +194,7 @@ export class AddDriverComponent implements OnInit {
 						this.adminService.getDriver(this.driverId)
 							.pipe(
 								catchError(err => {
-									this.stateManagementService.setprogressBar(false);
+									// this.stateManagementService.setprogressBar(false);
 									return throwError(err);
 								})
 							).subscribe(({ data }: any) => {
@@ -367,7 +367,7 @@ export class AddDriverComponent implements OnInit {
 								.pipe(
 									catchError(err => {
 										this.spinner.hide()
-										this.stateManagementService.setprogressBar(false);
+										// this.stateManagementService.setprogressBar(false);
 										return throwError(err);
 									})
 								).subscribe(({ data }: any) => {
@@ -394,7 +394,7 @@ export class AddDriverComponent implements OnInit {
 					}
 				}
 			});
-		this.stateManagementService.setprogressBar(false);
+		// this.stateManagementService.setprogressBar(false);
 	}
 
 	closeButton() {
@@ -446,7 +446,7 @@ export class AddDriverComponent implements OnInit {
 	}
 
 	vehicleOfficialImagesChange(event, imageType, imageId) {
-		this.stateManagementService.setprogressBar(true);
+		// this.stateManagementService.setprogressBar(true);
 		const reader = new FileReader();
 		if (event.target.files && event.target.files.length) {
 			const [file] = event.target.files;
@@ -456,7 +456,7 @@ export class AddDriverComponent implements OnInit {
 				this.adminService.uploadVehicleImage(this.imageSrc)
 					.pipe(
 						catchError(err => {
-							this.stateManagementService.setprogressBar(false);
+							// this.stateManagementService.setprogressBar(false);
 							return throwError(err);
 						})
 					)
@@ -530,7 +530,7 @@ export class AddDriverComponent implements OnInit {
 								break;
 							}
 						}
-						this.stateManagementService.setprogressBar(false);
+						// this.stateManagementService.setprogressBar(false);
 					});
 			};
 		}
@@ -769,8 +769,8 @@ export class AddDriverComponent implements OnInit {
 		if (this.addDriverForm.invalid) {
 			return;
 		}
-		this.adminService.setSessionStepsCompleted(4)
-		this.addDriverForm.value.stepCompleted = this.adminService.getSessionStepsCompleted();
+
+		this.addDriverForm.value.stepCompleted = this.adminService.getUpdatedStepsLocal("4");
 		this.spinner.show();// show spinner
 		this.disableSubmitButton = true; //disable submit button
 
@@ -787,12 +787,8 @@ export class AddDriverComponent implements OnInit {
 				this.disableSubmitButton = true; //enable submit button
 
 				if (success == true) {
-					this.adminService.setSessionStepsCompleted('4');
+					this.adminService.updateStepsLocal("4");
 				}
-				if (success.errors || success.error) {
-					this.adminService.unsetSessionStepsCompleted(4)
-				}
-
 				this.router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
 					this.router.navigate(['/admin/affiliate/step4'])
 				);

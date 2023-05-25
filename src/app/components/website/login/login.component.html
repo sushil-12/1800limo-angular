@@ -14,7 +14,7 @@
 			</div>
 			<div class="row" *ngIf="Role != 'admin' && Role !='sub_admin'">
 				<div class="col-md-12 mt-3">
-					<div class="radio-group role">
+					<div class="radio-group role" style="box-shadow: 0 5px 10px -6px rgb(0 0 0);">
 						<input type="radio" id="individual" name="role" checked="" value="individual" disabled
 							formControlName="role" (click)="loginButtons('individual')">
 						<label for="individual" class="text-center text-secondary" style="cursor: default">Individual</label>

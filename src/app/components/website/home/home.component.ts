@@ -29,8 +29,7 @@ declare var SpinnerPicker: any
 	templateUrl: './home.component.html',
 	styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent implements OnInit
-{
+export class HomeComponent implements OnInit {
 	vehicles: any;
 	vehiclesRes: any;
 	minDate = new Date();
@@ -66,6 +65,10 @@ export class HomeComponent implements OnInit
 
 	airports_data: Array<any>
 	airports_data_copy: Array<any>
+	airports_data_pickup: Array<any>
+	airports_data_dropoff: Array<any>
+	airports_data_r_pickup: Array<any>
+	airports_data_r_dropoff: Array<any>
 
 	//For reactive form
 	quoteBotForm: FormGroup;
@@ -105,11 +108,9 @@ export class HomeComponent implements OnInit
 	zoom: number;
 	address: string;
 
-	ngOnInit()
-	{
+	ngOnInit() {
 		this.fetchAirportsData()
-		setTimeout(() =>
-		{
+		setTimeout(() => {
 
 			$('[data-toggle="modal"]').tooltip();//Bootstrap tooltip
 
@@ -118,8 +119,7 @@ export class HomeComponent implements OnInit
 
 		$('#countriestooltip').tooltip();//Bootstrap tooltip
 		// // hide tooltip in Mobile View
-		$(".showCountries").click(function ()
-		{
+		$(".showCountries").click(function () {
 			$(this).tooltip('hide');
 		});
 
@@ -128,12 +128,10 @@ export class HomeComponent implements OnInit
 		this.steps = localStorage.getItem("stepCompleted");
 		this.accountStatus = localStorage.getItem("account_approval");
 
-		if (this.accountStatus == "completed")
-		{
+		if (this.accountStatus == "completed") {
 			this.value = "Manage / Daily Bookings";
 		}
-		else
-		{
+		else {
 			this.value = "Continue Affiliate Set-Up";
 		}
 
@@ -143,8 +141,7 @@ export class HomeComponent implements OnInit
 		this.PersonalilzedList2 = this.PersonalilzedList.splice(-halfPersonalized);
 
 		// Display CountryList
-		if (this.innerWidth >= 767)
-		{
+		if (this.innerWidth >= 767) {
 			console.log(this.innerWidth, 'fall in above 767')
 			// countriesList for desktop    
 			const oneThirdCountries = Math.ceil(this.countriesList.length / 3);
@@ -152,8 +149,7 @@ export class HomeComponent implements OnInit
 			this.countriesList2 = this.countriesList.splice(-oneThirdCountries);
 			this.countriesList1 = this.countriesList;
 		}
-		else
-		{
+		else {
 			console.log(this.innerWidth, 'fall in below 767')
 			// countriesList for mobile 
 			const halfCountries = Math.ceil(this.countriesList.length / 2);
@@ -173,15 +169,13 @@ export class HomeComponent implements OnInit
 		});
 
 		// Load Our vehicles using API
-		this.websiteService.getOurVehicles().then(result =>
-		{
+		this.websiteService.getOurVehicles().then(result => {
 			this.vehiclesRes = result;
 			this.vehicles = this.vehiclesRes.data;
 			// console.log(result);
 			// console.log(this.vehicles);
 			// console.log(JSON.stringify(this.vehicles));
-			$(document).ready(function ()
-			{
+			$(document).ready(function () {
 				$('.chk_vehicles').owlCarousel({
 					loop: true,
 					margin: 10,
@@ -219,16 +213,11 @@ export class HomeComponent implements OnInit
 	// ngOnInit() ends
 
 
-	fetchPageData(section: string)
-	{
-		if (section != undefined && this.homePageData != undefined)
-		{
-			if (this.homePageData)
-			{
-				for (let item in this.homePageData)
-				{
-					if (this.homePageData[item].hasOwnProperty('title') && this.homePageData[item]['title'].toLowerCase() == section.toLowerCase())
-					{
+	fetchPageData(section: string) {
+		if (section != undefined && this.homePageData != undefined) {
+			if (this.homePageData) {
+				for (let item in this.homePageData) {
+					if (this.homePageData[item].hasOwnProperty('title') && this.homePageData[item]['title'].toLowerCase() == section.toLowerCase()) {
 						return this.homePageData[item]
 					}
 				}
@@ -236,25 +225,21 @@ export class HomeComponent implements OnInit
 		}
 	}
 
-	fetchHomePageData()
-	{
+	fetchHomePageData() {
 		this.spinner.show()
 
 		this.websiteService.fetchHomePageData()
 			.pipe(
-				catchError(err =>
-				{
+				catchError(err => {
 					this.spinner.hide()
 					return throwError(err)
 				})
-			).subscribe(({ data }: any) =>
-			{
+			).subscribe(({ data }: any) => {
 				this.spinner.hide()
 				console.log(data, "gsducgjsdgcfugsdu")
 				this.homePageData = data
 
-				$(document).ready(function ()
-				{
+				$(document).ready(function () {
 					$('.owl-carousel').owlCarousel({
 						loop: true,
 						autoplay: true,
@@ -287,8 +272,7 @@ export class HomeComponent implements OnInit
 				})
 
 
-				$(document).ready(function ()
-				{
+				$(document).ready(function () {
 					$('.client_logo').owlCarousel({
 						loop: true,
 						margin: 10,
@@ -323,10 +307,8 @@ export class HomeComponent implements OnInit
 	/**
 	 * after generating Form, prefills and fetches airport data
 	 */
-	initialiseQuotebot()
-	{
-		if (this.generateQBForm())
-		{
+	initialiseQuotebot() {
+		if (this.generateQBForm()) {
 			this.prefillQuotebot()
 		}
 	}
@@ -337,8 +319,7 @@ export class HomeComponent implements OnInit
 	 * @param event [any] Required. input event
 	 * @param field_name [string] Required. input field and key of the form
 	 */
-	onAutocompleteSelected(location: any, field_name: string)
-	{
+	onAutocompleteSelected(location: any, field_name: string) {
 		this.SetFormValue(field_name, location.formatted_address)
 
 		// fill return address and airport for round trip
@@ -350,8 +331,7 @@ export class HomeComponent implements OnInit
 	 * @param event [any] Required. input event
 	 * @param field_name [string] Required. input field and key of the form
 	 */
-	onLocationSelected(coordinates: any, field_name: string)
-	{
+	onLocationSelected(coordinates: any, field_name: string) {
 		this.SetFormValue(field_name + '_lat', coordinates['latitude'])
 		this.SetFormValue(field_name + '_long', coordinates['longitude'])
 
@@ -362,8 +342,7 @@ export class HomeComponent implements OnInit
 	/**
 	 * Fill Return Details for the form
 	 */
-	fillReturnDetails()
-	{
+	fillReturnDetails() {
 		this.quoteBotForm.patchValue({
 			return_pickup_address: this.QBForm.dropoff_address.value,
 			return_pickup_address_lat: this.QBForm.dropoff_address_lat.value,
@@ -383,8 +362,7 @@ export class HomeComponent implements OnInit
 	/**
 	 * generating Quote Bot Form only
 	 */
-	generateQBForm()
-	{
+	generateQBForm() {
 		this.quoteBotForm = this.formBuilder.group({
 			service_type: ['', Validators.required],		// form type
 			booking_hour: ['', Validators.required],	// charte tour
@@ -423,16 +401,13 @@ export class HomeComponent implements OnInit
 			location_info: this.formBuilder.array([], Validators.required),
 		});
 
-		if (this.quoteBotForm)
-		{
+		if (this.quoteBotForm) {
 			return true
 		}
 	}
 
-	prefillQuotebot()
-	{
-		if (localStorage.getItem('quotebot_form'))
-		{
+	prefillQuotebot() {
+		if (localStorage.getItem('quotebot_form')) {
 			let previous_quotebot = JSON.parse(localStorage.getItem('quotebot_form'))
 			// fill previous values if localStorage has item
 			this.quoteBotForm.patchValue({
@@ -476,22 +451,20 @@ export class HomeComponent implements OnInit
 			console.warn('pickup_time: ', this.QBForm.pickup_time.value)
 			this.quoteBotSwitch(previous_quotebot.service_type)
 
-			if (new Date(this.QBForm.pickup_date.value).getDate() < new Date().getDate() || new Date(this.QBForm.pickup_date.value).getMonth() + 1 < new Date().getMonth() + 1)
-			{
+			if (new Date(this.QBForm.pickup_date.value).getDate() < new Date().getDate() || new Date(this.QBForm.pickup_date.value).getMonth() + 1 < new Date().getMonth() + 1) {
 				this.SetFormValue('pickup_date', new Date().toISOString().split('T')[0])
 			}
 
 			// set values for data receiving from data.js
 			// $('pickupTime option:selected').attr('selected', null)
 			// $(`#pickupTime option[value=\"${previous_quotebot.pickup_time}\"]`).attr('selected', 'selected')
-		} else
-		{
+		} else {
 			// fill default values
 			this.quoteBotForm.patchValue({
 				service_type: 'one_way',
 				booking_hour: '2',
 				pickup_type: 'city',
-				dropoff_type: 'city',
+				dropoff_type: 'airport',
 				pickup_date: new Date().toISOString().split('T')[0],
 				pickup_time: '12:00:00',
 				return_pickup_date: new Date().toISOString().split('T')[0],
@@ -507,60 +480,69 @@ export class HomeComponent implements OnInit
 	/**
 	 * Fetches only Airports Data
 	 */
-	fetchAirportsData()
-	{
-		this.quotebotService.getAirportsData().subscribe((response: any) =>
-		{
+	fetchAirportsData() {
+		this.quotebotService.getAirportsData().subscribe((response: any) => {
 			this.airports_data = response.success ? response.data : []
 			this.airports_data_copy = JSON.parse(JSON.stringify(this.airports_data))
+			this.airports_data_pickup = JSON.parse(JSON.stringify(this.airports_data))
+			this.airports_data_dropoff =  JSON.parse(JSON.stringify(this.airports_data))
+			this.airports_data_r_pickup =  JSON.parse(JSON.stringify(this.airports_data))
+			this.airports_data_r_dropoff =  JSON.parse(JSON.stringify(this.airports_data))
 		})
 	}
+	returnSearchAirport(searchText: any) {
+		console.log('search text is->', searchText)
 
+		return JSON.parse(JSON.stringify(this.airports_data_copy.filter((item: any) => {
+			return item.airport.split('-')[0].toLowerCase().includes(searchText.toLowerCase())
+		})))
+	}
 
-	searchAirport(letter: string, form_control: string)
-	{
-		if (letter == '')
-		{
-			this.airports_data = this.airports_data_copy
+	searchAirport(letter: string, form_control: string) {
+		if (form_control == 'pickup_airport') {
+
+			this.airports_data_pickup = (letter == '') ? JSON.parse(JSON.stringify(this.airports_data_copy)) : this.returnSearchAirport(letter)
 		}
-		else
-		{
-			this.airports_data = this.airports_data_copy.filter((item: any) => 
-			{
-				return item.airport.split('-')[0].toLowerCase().includes(letter.toLowerCase())
-			})
+		if (form_control == 'dropoff_airport') {
+
+			this.airports_data_dropoff = (letter == '') ? JSON.parse(JSON.stringify(this.airports_data_copy)) : this.returnSearchAirport(letter)
 		}
+		if (form_control == 'return_pickup_airport') {
+
+			this.airports_data_r_pickup = (letter == '') ? JSON.parse(JSON.stringify(this.airports_data_copy)) : this.returnSearchAirport(letter)
+		}
+		if (form_control == 'return_dropoff_airport') {
+
+			this.airports_data_r_dropoff = (letter == '') ? JSON.parse(JSON.stringify(this.airports_data_copy)) : this.returnSearchAirport(letter)
+		}
+
+		console.log('airport data-------->>>>>>>>>', this.airports_data)
 
 		// assign the value to form control if airport code is entered, as the code will give zero results for airport.
-		if (this.airports_data.length == 0)
-		{
+		if (this.airports_data.length == 0) {
 			this.SetFormValue(form_control, letter)
 		}
 	}
 
 
-	fillAirportData(list: any, form_control: string, comparitive_key: string, returning_key: string): string
-	{
+	fillAirportData(list: any, form_control: string, comparitive_key: string, returning_key: string): string {
 		// fetch form value
 		let form_value = this.quoteBotForm.get(form_control).value
 
 		// validation check for form value to not be empty
-		if (form_value == null || form_value == '' || this.airports_data == undefined)
-		{
+		if (form_value == null || form_value == '' || this.airports_data == undefined) {
 			return ''
 		}
 
 		// return the returning name
 		const object = list.find((item: any) => item[comparitive_key] == form_value)
-		if (object)
-		{
+		if (object) {
 			return object[returning_key]
 		}
 		return ''
 	}
 
-	selectedAirport(list: any, value: any, field_name: string): void
-	{
+	selectedAirport(list: any, value: any, field_name: string): void {
 		this.SetFormValue(field_name, value.id)
 		this.SetFormValue(field_name + '_lat', value.lat)
 		this.SetFormValue(field_name + '_long', value.lon)
@@ -570,22 +552,19 @@ export class HomeComponent implements OnInit
 		this.fillReturnDetails()
 	}
 
-	SetFormValue(field_name: string, value: string | number)
-	{
+	SetFormValue(field_name: string, value: string | number) {
 		console.log(`Filling ${value} into ${field_name}`)
 		this.quoteBotForm.get(field_name).setValue(value)
 		this.quoteBotForm.updateValueAndValidity()
 	}
 
-	SetFormValidator(field_name: string, validators: Array<any>): void
-	{
+	SetFormValidator(field_name: string, validators: Array<any>): void {
 		this.quoteBotForm.get(field_name).setValidators(validators)
 		this.quoteBotForm.updateValueAndValidity()
 	}
 
 
-	get QBForm()
-	{
+	get QBForm() {
 		return this.quoteBotForm.controls;
 	}
 
@@ -593,10 +572,8 @@ export class HomeComponent implements OnInit
 	// $(".classChange").removeClass("col-12 col-md-12").addClass("col-6 col-md-6");
 	// $(".returnClassChange").removeClass("col-12 col-md-12").addClass("col-6 col-md-6");
 	// reset the input fields on click of cross svg
-	reset(field_name: string)
-	{
-		switch (field_name)
-		{
+	reset(field_name: string) {
+		switch (field_name) {
 			case 'pickup_address':
 				this.QBForm.pickup_address.reset()
 				this.QBForm.pickup_address_lat.reset()
@@ -655,11 +632,9 @@ export class HomeComponent implements OnInit
 	 * 
 	 * @param quoteBotType type to change to
 	 */
-	quoteBotSwitch(quoteBotType: string)
-	{
+	quoteBotSwitch(quoteBotType: string) {
 		this.QBForm.service_type.setValue(quoteBotType)
-		if (quoteBotType == 'round_trip')
-		{
+		if (quoteBotType == 'round_trip') {
 			this.fillReturnDetails()
 		}
 	}
@@ -669,32 +644,26 @@ export class HomeComponent implements OnInit
 	 * update values of specific function calls to form
 	 */
 	changeDetection = {
-		pickupDate: (value: any) =>
-		{
+		pickupDate: (value: any) => {
 			this.SetFormValue('pickup_date', value)
 		},
-		pickupTime: (event: any = null, form_control: string) => 
-		{
-			if (event == null)
-			{
+		pickupTime: (event: any = null, form_control: string) => {
+			if (event == null) {
 				return ''
 			}
 			console.log('Pickup Time Event: ', event.target.value)
 			this.SetFormValue(form_control, event.target.value)
 		},
-		return_pickup_date: (value: any) =>
-		{
+		return_pickup_date: (value: any) => {
 			this.SetFormValue('return_pickup_date', value)
 		},
 
-		bookingHours: (event: any) =>
-		{
+		bookingHours: (event: any) => {
 			this.SetFormValue('booking_hours', event.target.value)
 		}
 	}
 
-	locationInfo(rows: Array<any>, index: number)
-	{
+	locationInfo(rows: Array<any>, index: number) {
 		let group = this.formBuilder.group({
 			distance: [rows[index].elements[index].distance.value, Validators.required],
 			duration: [rows[index].elements[index].duration.value, Validators.required]
@@ -703,13 +672,10 @@ export class HomeComponent implements OnInit
 		return group
 	}
 
-	calculateDistance(pickup_coordinates: string | any[], dropoff_coordinates: string | any[])
-	{
+	calculateDistance(pickup_coordinates: string | any[], dropoff_coordinates: string | any[]) {
 		console.group(`\n\nCalculating Distance between\n\n`, pickup_coordinates, dropoff_coordinates)
-		const newPromise = new Promise((resolve, reject) =>
-		{
-			this.mapsAPILoader.load().then(() =>
-			{
+		const newPromise = new Promise((resolve, reject) => {
+			this.mapsAPILoader.load().then(() => {
 				const distanceMatrixService = new google.maps.DistanceMatrixService()
 
 				// generate request for distance matrix service
@@ -722,22 +688,17 @@ export class HomeComponent implements OnInit
 					avoidTolls: false
 				}
 
-				if (pickup_coordinates.length > 1 || dropoff_coordinates.length > 1)
-				{
+				if (pickup_coordinates.length > 1 || dropoff_coordinates.length > 1) {
 					request.origins = [pickup_coordinates[0], pickup_coordinates[1]]
 					request.destinations = [dropoff_coordinates[0], dropoff_coordinates[1]]
 				}
 
 				// get distance matrix of that route
-				distanceMatrixService.getDistanceMatrix(request, (response) =>
-				{
+				distanceMatrixService.getDistanceMatrix(request, (response) => {
 					console.log(response)
-					if (response)
-					{
-						try
-						{
-							if ((response.rows[0].elements[0].status == 'ZERO_RESULTS') || (pickup_coordinates.length > 1 && response.rows[1].elements[1].status == 'ZERO_RESULTS'))
-							{
+					if (response) {
+						try {
+							if ((response.rows[0].elements[0].status == 'ZERO_RESULTS') || (pickup_coordinates.length > 1 && response.rows[1].elements[1].status == 'ZERO_RESULTS')) {
 								reject('InvalidLocationPoints')
 								return
 							}
@@ -746,8 +707,7 @@ export class HomeComponent implements OnInit
 								distance: [response.rows[0].elements[0].distance, Validators.required],
 								duration: [response.rows[0].elements[0].duration, Validators.required]
 							}));
-							if (response.rows.length > 1)
-							{
+							if (response.rows.length > 1) {
 								(<FormArray>this.QBForm.location_info).push(this.formBuilder.group({
 									distance: [response.rows[1].elements[1].distance, Validators.required],
 									duration: [response.rows[1].elements[1].duration, Validators.required]
@@ -755,15 +715,13 @@ export class HomeComponent implements OnInit
 							}
 							resolve(true)
 							return
-						} catch (err)
-						{
+						} catch (err) {
 							reject(err)
 							return
 						}
 					}
 				})
-			}, (error) =>
-			{
+			}, (error) => {
 				console.log('Error while calculating distance. \n', error)
 			})
 			return
@@ -772,16 +730,12 @@ export class HomeComponent implements OnInit
 		return newPromise
 	}
 
-	ValidateForm(form: FormGroup)
-	{
+	ValidateForm(form: FormGroup) {
 		// remove return keys for other than round_trip
-		if (form.get('service_type').value == "one_way" || form.get('service_type').value == 'charter_tour')
-		{
+		if (form.get('service_type').value == "one_way" || form.get('service_type').value == 'charter_tour') {
 			console.log('Removing Controls ...')
-			for (const key in form.controls)
-			{
-				if (key.includes('return_'))
-				{
+			for (const key in form.controls) {
+				if (key.includes('return_')) {
 					// clear all validators 
 					this.quoteBotForm.removeControl(key)
 					this.quoteBotForm.updateValueAndValidity()
@@ -789,44 +743,36 @@ export class HomeComponent implements OnInit
 			}
 
 
-			if (form.get('pickup_type').value == 'airport')
-			{
+			if (form.get('pickup_type').value == 'airport') {
 				this.clearValidatorsAndReset(['pickup_address', 'pickup_address_lat', 'pickup_address_long'])
 			}
-			else if (this.QBForm.dropoff_type.value == 'airport')
-			{
+			else if (this.QBForm.dropoff_type.value == 'airport') {
 				this.clearValidatorsAndReset(['dropoff_address', 'dropoff_address_lat', 'dropoff_address_long'])
 			}
-			else if (this.QBForm.pickup_type.value != 'airport')
-			{
+			else if (this.QBForm.pickup_type.value != 'airport') {
 				this.clearValidatorsAndReset(['pickup_airport', 'pickup_airport_lat', 'pickup_airport_long'])
 			}
-			else 
-			{
+			else {
 				this.clearValidatorsAndReset(['dropoff_airport', 'dropoff_airport_lat', 'dropoff_airport_long'])
 			}
 			this.quoteBotForm.updateValueAndValidity()
 		}
 	}
-	clearValidatorsAndReset(arr: Array<string>)
-	{
-		arr.forEach((item: string) =>
-		{
+	clearValidatorsAndReset(arr: Array<string>) {
+		arr.forEach((item: string) => {
 			this.quoteBotForm.get(item).clearValidators()
 			this.quoteBotForm.get(item).reset()
 		})
 	}
 
-	async fileTheQuote()
-	{
+	async fileTheQuote() {
 		this.submitted = true
 		this.ValidateForm(this.quoteBotForm)
 
 		console.log(this.quoteBotForm);
 
 		// enter only if values excluding location_info presents invalid status
-		if (this.quoteBotForm.invalid && this.QBForm.location_info.valid)
-		{
+		if (this.quoteBotForm.invalid && this.QBForm.location_info.valid) {
 			console.log(this.quoteBotForm)
 			return
 		}
@@ -841,14 +787,12 @@ export class HomeComponent implements OnInit
 			b = this.QBForm.dropoff_type.value
 
 		// -------------------- if airport ?? ------------------
-		if (a == 'airport')
-		{
+		if (a == 'airport') {
 			pickup_coordinates.push({
 				lat: this.QBForm.pickup_airport_lat.value,
 				lng: this.QBForm.pickup_airport_long.value
 			})
-		} else
-		{
+		} else {
 			// push for address
 			pickup_coordinates.push({
 				lat: this.QBForm.pickup_address_lat.value,
@@ -856,14 +800,12 @@ export class HomeComponent implements OnInit
 			})
 		}
 
-		if (b == 'airport')
-		{
+		if (b == 'airport') {
 			dropoff_coordinates.push({
 				lat: this.QBForm.dropoff_airport_lat.value,
 				lng: this.QBForm.dropoff_airport_long.value
 			})
-		} else
-		{
+		} else {
 			//  push for address
 			dropoff_coordinates.push({
 				lat: this.QBForm.dropoff_address_lat.value,
@@ -871,29 +813,24 @@ export class HomeComponent implements OnInit
 			})
 		}
 
-		if (this.QBForm.service_type.value == 'round_trip')
-		{
-			if (a == 'airport')
-			{
+		if (this.QBForm.service_type.value == 'round_trip') {
+			if (a == 'airport') {
 				dropoff_coordinates.push({
 					lat: this.QBForm.return_dropoff_airport_lat.value,
 					lng: this.QBForm.return_dropoff_airport_long.value
 				})
-			} else
-			{
+			} else {
 				dropoff_coordinates.push({
 					lat: this.QBForm.return_dropoff_address_lat.value,
 					lng: this.QBForm.return_dropoff_address_long.value
 				})
 			}
-			if (b == 'airport')
-			{
+			if (b == 'airport') {
 				pickup_coordinates.push({
 					lat: this.QBForm.return_pickup_airport_lat.value,
 					lng: this.QBForm.return_pickup_airport_long.value
 				})
-			} else
-			{
+			} else {
 				pickup_coordinates.push({
 					lat: this.QBForm.return_pickup_address_lat.value,
 					lng: this.QBForm.return_pickup_address_long.value
@@ -907,8 +844,7 @@ export class HomeComponent implements OnInit
 
 		this.spinner.show();
 		// finally calculate the distance between the coordinates and proceed after success only else show error
-		(pickup_coordinates.length > 0 || dropoff_coordinates.length > 0) && this.calculateDistance(pickup_coordinates, dropoff_coordinates).then((response: any) =>
-		{
+		(pickup_coordinates.length > 0 || dropoff_coordinates.length > 0) && this.calculateDistance(pickup_coordinates, dropoff_coordinates).then((response: any) => {
 			//store data in localstorage after succesfully sending request to backend 
 			this.quoteBotForm.value['other_details'] = this.vars
 
@@ -916,8 +852,7 @@ export class HomeComponent implements OnInit
 			localStorage.setItem('quotebot_form', JSON.stringify(this.quoteBotForm.value));
 			this.router.navigate(['quotebot/select-vehicle']);
 			return
-		}, (error) =>
-		{
+		}, (error) => {
 			console.group('Facing Some Issues while calculating distance .... Error fetched ->\n')
 			console.warn(error)
 			console.log('\n ------ Quote Bot Form ------- \n', this.quoteBotForm.value)
@@ -950,10 +885,8 @@ export class HomeComponent implements OnInit
 
 
 	//modal values
-	modalSwitch(modalType, onRefresh = null)
-	{
-		switch (modalType)
-		{
+	modalSwitch(modalType, onRefresh = null) {
+		switch (modalType) {
 			case 'modal_1': {
 				this.modalInformation = true;
 				this.selectedModal = 'modal_1';
@@ -983,40 +916,31 @@ export class HomeComponent implements OnInit
 				break;
 			}
 		}
-		if (!onRefresh)
-		{
+		if (!onRefresh) {
 			$('#myModal').modal('show');
 		}
 	}
 
 	// fragment
-	scroll(el: HTMLElement)
-	{
+	scroll(el: HTMLElement) {
 		el.scrollIntoView();
 	}
 
 	//increment/decrement in ONE WAY form
-	change(changeType: 'i' | 'd', fieldName: 'l' | 'p')
-	{
+	change(changeType: 'i' | 'd', fieldName: 'l' | 'p') {
 		let max_length = 75
-		if (fieldName == 'p')
-		{
+		if (fieldName == 'p') {
 			// for passenger
-			if (changeType == 'i' && this.quoteBotForm.value.no_of_passenger < max_length)
-			{
+			if (changeType == 'i' && this.quoteBotForm.value.no_of_passenger < max_length) {
 				this.QBForm.no_of_passenger.setValue(this.quoteBotForm.value.no_of_passenger + 1)
-			} else if (changeType == 'd' && this.quoteBotForm.value.no_of_passenger > 1)
-			{
+			} else if (changeType == 'd' && this.quoteBotForm.value.no_of_passenger > 1) {
 				this.QBForm.no_of_passenger.setValue(this.quoteBotForm.value.no_of_passenger - 1)
 			}
-		} else
-		{
+		} else {
 			// for luggage
-			if (changeType == 'i' && this.quoteBotForm.value.no_of_luggage < max_length)
-			{
+			if (changeType == 'i' && this.quoteBotForm.value.no_of_luggage < max_length) {
 				this.QBForm.no_of_luggage.setValue(this.quoteBotForm.value.no_of_luggage + 1)
-			} else if (changeType == 'd' && this.quoteBotForm.value.no_of_luggage >= 1)
-			{
+			} else if (changeType == 'd' && this.quoteBotForm.value.no_of_luggage >= 1) {
 				this.QBForm.no_of_luggage.setValue(this.quoteBotForm.value.no_of_luggage - 1)
 			}
 		}
@@ -1024,10 +948,8 @@ export class HomeComponent implements OnInit
 
 
 	// loginbuttons
-	loginButtons(role: string)
-	{
-		if (role != 'driver')
-		{
+	loginButtons(role: string) {
+		if (role != 'driver') {
 			this.errorDialogService.openDialog({
 				errors: {
 					error: 'Currently only Drivers are allowed to Sign In. User accounts coming soon! Recruiting quality vetted drivers, and chauffeurs, only at this time. Refer a trusted driver/ chauffeur to 1-800 - LIMO.COM now! You deserve the best.'
@@ -1040,36 +962,30 @@ export class HomeComponent implements OnInit
 	}
 
 	get fGetInTouch() { return this.getInTouchForm.controls; }
-	onSubmitGetInTouch()
-	{
+	onSubmitGetInTouch() {
 		console.log(this.getInTouchForm);
 		this.submitted = true;
 	}
 
-	clearField()
-	{
+	clearField() {
 		$('#clearInput').value = '';
 		console.log("clear 1415155")
 	}
 
 
 	// UNUSABLE
-	onReset()
-	{
+	onReset() {
 		this.submitted = false;
 		this.quoteBotForm.reset();
 	}
 
-	dashboard(role)
-	{
-		if (role == 'affiliate')
-		{
+	dashboard(role) {
+		if (role == 'affiliate') {
 			this.spinner.show();//show spinner
 			this.router.navigateByUrl('/affiliate');
 			console.log("step 0  dashboard")
 		}
-		else if (role == 'admin')
-		{
+		else if (role == 'admin') {
 			this.spinner.show();//show spinner
 			this.router.navigateByUrl('/admin/daily-bookings-admin');
 			console.log("step 0  dashboard");
@@ -1077,21 +993,17 @@ export class HomeComponent implements OnInit
 		}
 	}
 
-	logout()
-	{
+	logout() {
 		this.spinner.show();//show spinner
 		this.authService.logout()
 			.pipe(
-				catchError(err =>
-				{
+				catchError(err => {
 					this.spinner.hide();//hide spinner
 					return throwError(err);
 				})
-			).subscribe(({ success }: any) =>
-			{
+			).subscribe(({ success }: any) => {
 				this.spinner.hide();//hide spinner
-				if (success)
-				{
+				if (success) {
 					this.stateManagementService.removeUser();
 					this.router.navigate(['/home']);
 					location.reload()

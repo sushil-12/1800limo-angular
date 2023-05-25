@@ -6,7 +6,7 @@
 		<div id="fixed-section-box" class="d-flex justify-content-center align-items-center">
 			<div id="filters-button" class="d-block d-lg-none">
 				<button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
-					class="btn btn-secondary dropdown-toggle pl-4" (click)="openfilters = true" type="button">
+					class="filter-btn btn-secondary dropdown-toggle pl-4" (click)="openfilters = true" type="button">
 					Filters
 					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
 						class="bi bi-filter" viewBox="0 0 16 16">
@@ -16,7 +16,7 @@
 				</button>
 			</div>
 			<div id="sort-button">
-				<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+				<button class="filter-btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
 					data-toggle="dropdown" aria-controls="dropdownMenu" aria-label="Toggle Navigation"
 					aria-expanded="false">
 					<span class="mr-2"> Sort By </span>
@@ -72,11 +72,11 @@
 					<aside class="sidebar">
 						<div id="filter-buttons" class="mb-4">
 							<button type="button" (click)="clearFilters(null)"
-								class="custom-filled-button orange-button mx-2">
+								class="custom-filled-button orange-button my-2 mx-1">
 								Clear filters
 							</button>
 							<button type="button" (click)="getVehicleDetails(); openfilters=false"
-								class="custom-filled-button green-button mx-2">
+								class="custom-filled-button green-button ml-1">
 								Apply filters
 							</button>
 						</div>
@@ -257,14 +257,19 @@
 									</div>
 								</div>
 								<!-- OUTER CARD -->
+								<div class="my-2" *ngIf="role==2">
+									<div class="font-weight-bold display-5" style="font-size: 18px;">
+										Affiliate Vehicles
+									</div>
+								</div>
 							</div>
 							<div id="filter-buttons" class="mt-4">
 								<button type="button" (click)="clearFilters(null)"
-									class="custom-filled-button orange-button mx-2">
+									class="custom-filled-button orange-button my-2 mx-1">
 									Clear filters
 								</button>
 								<button type="button" (click)="getVehicleDetails(); openfilters=false"
-									class="custom-filled-button green-button mx-2">
+									class="custom-filled-button green-button ml-1">
 									Apply filters
 								</button>
 							</div>
@@ -288,11 +293,37 @@
 					(click)="innerWidth < 1023 ? viewDetails(vehinfo) : ''">
 					<!-- DIV: AFFILIATE INFO -->
 					<div id="affiliate-info"
-						*ngIf="currentUser != null && currentUser.roleName == 'admin' && (vehinfo.affiliate_name || vehinfo.affiliate_company)">
-						<p class="text-left text-secondary m-0 my-md-2">
-							{{ vehinfo.affiliate_company || '' }}
-							{{ '/ ' + vehinfo.affiliate_name || '' }}
-						</p>
+						*ngIf="currentUser != null && currentUser?.roleName == 'admin' && (vehinfo?.affiliate_name || vehinfo?.affiliate_company)">
+						<button class="link" *ngIf="vehinfo?.readMore">
+							<p class="text-left text-secondary m-0 my-md-2" style="color: #007fee !important;">
+								<span (click)="editAffiliateAccount(vehinfo)">
+									{{vehinfo?.affiliate_company.slice(0,7) }}
+								{{'/ '+vehinfo?.affiliate_name.slice(0,7) }}
+								</span>
+								<span (click)="handleReadMore(vehinfo , false)" style="color: black;">...more</span>
+							</p>
+						</button>
+						<button class="link"  *ngIf="!vehinfo?.readMore">
+							<p class="text-left text-secondary m-0 my-md-2" style="color: #007fee !important;">
+								<span (click)="editAffiliateAccount(vehinfo)">
+									{{vehinfo?.affiliate_company }}
+								{{'/ '+vehinfo?.affiliate_name }}
+								</span>
+								<span (click)="handleReadMore(vehinfo , true)" style="color: black;">...less</span>
+							</p>
+						</button>
+
+						<!-- <ng-template #readMoreTemp>
+							<p class="text-left text-secondary m-0 my-md-2" [class.show]="!show" >
+								{{ vehinfo.affiliate_company.length > 10 ? vehinfo.affiliate_company.slice(0,5)+"..." : vehinfo.affiliate_company }}
+								{{vehinfo.affiliate_name.length > 10 ?  '/ '+vehinfo.affiliate_name.slice(0,5)+'...' : '/ '+vehinfo.affiliate_name  }}
+							</p>
+							<p class="text-left text-secondary m-0 my-md-2" [class.show]="show">
+								{{ vehinfo.affiliate_company }}
+								{{'/ '+vehinfo.affiliate_name}}
+							</p>
+							<button (click)="show+index = !show+index">{{ show ? 'Show less': 'Show More' }}</button>
+						</ng-template> -->
 					</div>
 					<!-- AFFILIATE INFO ENDS -->
 
@@ -336,15 +367,33 @@
 							<span class="text-secondary">
 								All Inclusive Rate<sup>*</sup>
 							</span>
+							
+							<div class="d-flex mt-2 m-2" *ngIf="vehinfo?.vehicle_details.year">
+								<span class="text-secondary"><i class="bi bi-calendar-check text-orange"></i> Year</span>
+								<span class="ml-5 font-weight-bold"> {{vehinfo?.vehicle_details.year}}</span>
+
+							</div>
+							<div class="d-flex m-2" *ngIf="vehinfo?.vehicle_details.make">
+								<span class="text-secondary"><i class="bi bi-wrench-adjustable text-orange"></i> Make</span>
+								<span class="ml-5 font-weight-bold"> {{vehinfo?.vehicle_details.make}}</span>
+							</div>
+							<div class="d-flex m-2" *ngIf="vehinfo?.vehicle_details.model">
+								<span class="text-secondary"><i class="bi bi-boxes  text-orange"></i> Model</span>
+								<span class="ml-5 font-weight-bold"> {{vehinfo?.vehicle_details.model}}</span>
+							</div>
 						</div>
 						<!-- INFORMATION ENDS -->
 					</div>
 					<!-- VEHICLE DETAILS ENDS -->
 
 					<!-- DIV: PREVIEW BUTTON -->
-					<div id="vehicle-preview-button" class="m-3 d-none d-lg-block">
-						<button class="custom-filled-button orange-button" (click)="viewDetails(vehinfo)">
-							Preview Vehicle Details
+					<!-- class="m-3" -->
+					<div id="vehicle-preview-button">
+						<button class="custom-filled-button orange-button mx-2" (click)="viewDetails(vehinfo)">
+							Vehicle Details
+						</button>
+						<button class="custom-filled-button" (click)="bookNow(vehinfo)">
+							Book Now
 						</button>
 					</div>
 					<!-- PREVIEW BUTTON ENDS -->
@@ -361,8 +410,7 @@
 					*ngIf="(vehicleDetails.length == 0 && this.filters.selections.length > 0) || master_vehicles.length == 0">
 					{{ no_vehicle_msg }}
 				</p>
-				<div id="master-vehicle-box-container" class="row"
-					*ngIf="master_vehicles.length > 0 && this.filters.selections.length == 0">
+				<div id="master-vehicle-box-container" class="row" *ngIf="master_vehicles.length > 0">
 					<div id="master-vehicle-box" class="col-md-3 mb-5 d-flex flex-nowrap flex-md-wrap cursor-pointer"
 						style="gap: 10px" *ngFor="let vehicle_obj of master_vehicles; index as vehicle_obj_index"
 						(click)="selectCategory(vehicle_obj?.name)">

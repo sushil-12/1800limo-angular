@@ -774,7 +774,7 @@ mat-progress-bar.my-color .mat-progress-bar-fill::after {
 }
 
 #layoutSidenav #layoutSidenav_nav {
-    flex-basis: 22rem;
+    flex-basis: 20rem;
     flex-shrink: 0;
     transition: transform 0.15s ease-in-out;
     z-index: 1038;
@@ -1112,9 +1112,9 @@ a.user-profile:active::after {
     color: var(--orange-color) !important;
 }
 
-#layoutSidenav_content main {
+/* #layoutSidenav_content main {
     padding: 0 20px;
-}
+} */
 
 .affilate_admin {
     padding: 20px 0px;
@@ -1170,7 +1170,7 @@ a.user-profile:active::after {
 .user_information input {
     border: 0;
     width: 100%;
-    font-size: 1.18rem;
+    font-size: 1.08rem;
 }
 
 .user_information textarea {
@@ -1337,7 +1337,9 @@ h2.headinginfo .orangeHeading {
 .affilate-wrapper .sidenav-menu .nav-item:nth-child(2) a {
     padding-left: 22px !important;
 }
-
+.box-shadow{
+    box-shadow: 0px 5px 20px -6px rgb(0 0 0 / 60%);
+}
 
 /* .affilate-wrapper #sidenavAccordion.navbar button {
 	background-color: transparent;
@@ -2169,6 +2171,7 @@ button:focus {
 .mat-form-field-wrapper {
     margin: 0 !important;
     padding: 0 !important;
+    background-color: #fff;
 }
 
 .my-mat-hint {

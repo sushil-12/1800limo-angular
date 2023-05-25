@@ -129,6 +129,7 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 		{
 			$(this).tooltip('dispose');
 		});
+		// this.Subscriptions()
 	}
 
 	ngOnInit(): void
@@ -188,7 +189,7 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 			model: ['', Validators.required],
 			year: ['', Validators.required],
 			color: ['', Validators.required],
-			licensePlate: ['', Validators.required],
+			licensePlate: [''],
 			numberOfVehicles: [1],
 			seats: [4, [Validators.required, Validators.pattern("^[0-9]*$")]],
 			luggage: [2, [Validators.required, Validators.pattern("^[0-9]*$")]],
@@ -449,6 +450,22 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 			let modelField: any = document.getElementById('modelField');
 			modelField.value = '';
 		}
+	}
+	// Subscriptions() {
+	// 	this.addVehicleForm.get('make')?.valueChanges.subscribe((value: string) => {
+	// 		setTimeout(()=>{
+	// 			this.changeMake(value);
+	// 		},200)
+	// 		let modelField: any = document.getElementById('modelField');
+	// 		modelField.value = '';
+	// 	})
+	
+	// }
+	handleSelectMake(){
+		console.log('in function handle select make->>' , this.addVehicleForm.controls['make'].value)
+		this.changeMake(this.addVehicleForm.controls['make'].value);
+		let modelField: any = document.getElementById('modelField');
+			modelField.value = '';
 	}
 
 	searchModel(keyword)
@@ -862,6 +879,8 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 
 	changeMake(selectedMake)
 	{
+		console.log('spinner show in function change make')
+		this.spinner.show()
 		let models = JSON.parse(sessionStorage.getItem('models'));
 		this.filteredModel = this.model = models.filter(function (model)
 		{
@@ -870,6 +889,8 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 				return true;
 			}
 		});
+		console.log('spinner hide in function change make')
+		this.spinner.hide()
 	}
 
 	get typeOfService(): FormArray

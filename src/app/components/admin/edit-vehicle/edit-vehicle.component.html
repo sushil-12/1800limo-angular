@@ -5,7 +5,7 @@
 		<div class="container mt-1 ">
 			<div class="row ">
 				<div class="col-md-6">
-					<mat-form-field appearance="outline"
+					<!-- <mat-form-field appearance="outline"
 						[ngClass]="(errorMsg && f.vehicleType.errors) || (submittedForm && f.vehicleType.errors) ? 'mat-form-field-invalid ng-invalid' : ''">
 						<mat-label>Vehicle Type <span class="asterisk">*</span></mat-label>
 						<input type="text" id="vehicleTypeField" placeholder="Pick one" aria-label="Number" matInput
@@ -16,14 +16,18 @@
 								{{vehicleType.name}}
 							</mat-option>
 						</mat-autocomplete>
-					</mat-form-field>
+					</mat-form-field> -->
+					<ng-select appearance="outline" [items]="filteredVehicleTypes" dropdownPosition="bottom"
+							[markFirst]="true" [virtualScroll]="true" bindLabel="name" bindValue="ID"
+							placeholder="Vehicle Type" formControlName="vehicleType" id="vehicleTypeField">
+						</ng-select>
 					<div *ngIf="(errorMsg && f.vehicleType.errors) || (submittedForm && f.vehicleType.errors)"
 						class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.vehicleType.errors.required">The Vehicle Type is required</div>
 					</div>
 				</div>
 				<div class="col-md-6">
-					<mat-form-field appearance="outline"
+					<!-- <mat-form-field appearance="outline"
 						[ngClass]="(errorMsg1 && f.make.errors) || (submittedForm && f.make.errors) ? 'mat-form-field-invalid ng-invalid' : ''">
 						<mat-label>Make <span class="asterisk">*</span></mat-label>
 						<input type="search" id="makeField" placeholder="Pick one" aria-label="Number" matInput
@@ -34,14 +38,18 @@
 								{{m.name}}
 							</mat-option>
 						</mat-autocomplete>
-					</mat-form-field>
+					</mat-form-field> -->
+					<ng-select appearance="outline" [items]="filteredMake" dropdownPosition="bottom"
+							[markFirst]="true" [virtualScroll]="true" bindLabel="name" bindValue="ID"
+							placeholder="Make" formControlName="make" id="makeField">
+						</ng-select>
 					<div *ngIf="(errorMsg1 && f.make.errors) || (submittedForm && f.make.errors)"
 						class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.make.errors.required">The Make and Model is required</div>
 					</div>
 				</div>
 				<div class="col-md-6">
-					<mat-form-field appearance="outline"
+					<!-- <mat-form-field appearance="outline"
 						[ngClass]="(errorMsg2 && f.model.errors) || (submittedForm && f.model.errors) ? 'mat-form-field-invalid ng-invalid' : ''">
 						<mat-label>Model <span class="asterisk">*</span></mat-label>
 						<input type="search" id="modelField" placeholder="Pick one" aria-label="Number" matInput
@@ -52,7 +60,11 @@
 								{{m.name}}
 							</mat-option>
 						</mat-autocomplete>
-					</mat-form-field>
+					</mat-form-field> -->
+					<ng-select appearance="outline" [items]="filteredModel" dropdownPosition="bottom"
+							[markFirst]="true" [virtualScroll]="true" bindLabel="name" bindValue="ID"
+							placeholder="Model" formControlName="model" id="modelField">
+						</ng-select>
 					<div *ngIf="(errorMsg2 && f.model.errors) || (submittedForm && f.model.errors)"
 						class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.model.errors.required">The Make and Model is required</div>
@@ -197,7 +209,7 @@
 							<input class="radio-button" type="radio" id="local" value="localService"
 								name="typeOfService" checked="" formControlName="typeOfService"
 								(click)="typeOfService('localService')" tabIndex="-1">
-							<div class="radio-tile">
+							<div class="radio-tile" [ngClass]="serviceType=='localService' ? 'box-shadow': ''">
 								<label class="radio-tile-label" for="local"
 									[ngClass]="serviceType=='localService' ? 'radio-active' : ''">Local Service
 									Only</label>
@@ -211,7 +223,7 @@
 							<input class="radio-button" type="radio" id="longDistance" value="longDistance"
 								name="typeOfService" checked="" formControlName="typeOfService"
 								(click)="typeOfService('longDistance')" tabIndex="-1">
-							<div class="radio-tile">
+							<div class="radio-tile" [ngClass]="serviceType=='longDistance' ? 'box-shadow' : ''">
 								<label class="radio-tile-label" for="longDistance"
 									[ngClass]="serviceType=='longDistance' ? 'radio-active' : ''">Over the Road – Long
 									Distance</label>
@@ -234,7 +246,7 @@
 					<input type="checkbox" class="custom-control-input" id="amenity_{{chargableAmenity.value.name}}"
 						[value]="chargableAmenity.value.id" [checked]="chargableAmenity.value.isSelected"
 						(change)="onAmenitiesCheckboxChange($event.target.value,$event.target.checked)" tabindex="1">
-					<label class="custom-control-label"
+					<label class="custom-control-label text-wrap" style="width: 100px;"
 						for="amenity_{{chargableAmenity.value.name}}">{{chargableAmenity.value.name}}</label>
 					<label *ngIf="chargableAmenity.value.chargeable==='yes'" class="amenity-dollar">&nbsp; $</label>
 				</div>
@@ -1121,10 +1133,10 @@
 	</section>
 	<section class="billing_inforamtion">
 		<ul>
-			<li><button class="custom-btn savebutton" (click)="submitForm()" [disabled]="disableSubmitButton"
+			<li><button class="custom-btn savebutton box-shadow" (click)="submitForm()" [disabled]="disableSubmitButton"
 					tabindex="1">SAVE</button> </li>
-			<li><button class="custom-btn resetbutton" (click)="resetForm()" tabindex="1">RESET</button> </li>
-			<li><button class="custom-btn backbutton" type="button" (click)="backButton()" data-toggle="tooltip"
+			<li><button class="custom-btn resetbutton box-shadow" (click)="resetForm()" tabindex="1">RESET</button> </li>
+			<li><button class="custom-btn backbutton box-shadow" type="button" (click)="backButton()" data-toggle="tooltip"
 					data-placement="top" title="Clicking back button deletes all fields." tabindex="1">BACK</button>
 			</li>
 		</ul>

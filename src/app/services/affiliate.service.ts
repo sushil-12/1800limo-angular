@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
 @Injectable({
 	providedIn: 'root'
@@ -21,15 +21,53 @@ export class AffiliateService
 		{
 			this.createBookingGetData().subscribe((response: any) =>
 			{
-				this.big_data_list = response.data
+				this.big_data_list = response?.data
 			})
 		}
 	}
+
+
+	getCookie(keyword: string): null | string {
+		let ca = document.cookie.split(';');
+		for (let i = 0; i < ca.length; i++) {
+			if (ca[i].trim().indexOf(keyword) == 0) {
+				return ca[i].substring(ca[i].indexOf('=') + 1, ca[i].length)
+			}
+		}
+		return null
+	}
+
+	checkCookie(keyword: string): boolean {
+		let required_cookie = this.getCookie(keyword)
+		if (required_cookie && required_cookie != '') {
+			return true
+		}
+		return false
+	}
+
+	setCookie(key: string, value: string, exdays: number): boolean {
+		const date = new Date()
+
+		date.setTime(date.getTime() + (exdays * 24 * 60 * 60 * 1000));
+		document.cookie = `${key}=${value};expires=${date.toUTCString()};`;
+
+		// check if the cookies is successfully set
+		if (this.checkCookie(key)) {
+			return true
+		}
+		return false
+	}
+
+	deleteCookie(key: string) {
+		document.cookie = `${key}=' ';expires=Thu, 01 Jan 1970 00:00:00 UTC;`;
+	}
+
 
 	getBigData()
 	{
 		return this.big_data_list
 	}
+
 
 	fetchStep0Data()
 	{
@@ -240,7 +278,7 @@ export class AffiliateService
 	//Driver
 	async driverList()
 	{
-		const result = await this.httpClient.get(this.serverUrl + 'get-affiliate-driver-list').toPromise();
+		const result = await this.httpClient.get(this.serverUrl + 'get-affiliate-drivers').toPromise();
 		return result;
 	}
 	addDriver(data)
@@ -275,6 +313,10 @@ export class AffiliateService
 	async affiliateVehicleList()
 	{
 		const result = await this.httpClient.get(this.serverUrl + 'get-affiliate-vehicles').toPromise();
+		return result;
+	}
+	async getVehicleDataByAffiliateId(affiliate_id){
+		const result = await this.httpClient.get(this.serverUrl + 'get-affiliate-vehicles/'+affiliate_id).toPromise();
 		return result;
 	}
 	getFieldsData()
@@ -336,7 +378,31 @@ export class AffiliateService
 	{
 		return this.httpClient.get(this.serverUrl + 'get-affiliate-approval-status');
 	}
-
+	getLocationPoints(booking_id: number) {
+		return this.httpClient.get(`${this.serverUrl}booking-location/${booking_id}`)
+	}
+	getBookingPreview(reservation_id: number) {
+		return this.httpClient.get(`${this.serverUrl}get-booking-preview/${reservation_id}`);
+	}
+	auditTrailInfo(bookingId){
+		return this.httpClient.get(this.serverUrl+`booking-audit-records/${bookingId}`)
+	}
+	affiliateNotification(data) {
+		return this.httpClient.post(this.serverUrl + 'notification-daily-booking', data);
+	}
+	updateFinalizeRates(data) {
+		return this.httpClient.post(`${this.serverUrl}finalize-rate-edit`, data)
+	}
+	async affiliateGetVehicleData() {
+		const result = await this.httpClient.get(this.serverUrl + 'get-all-vehicles').toPromise();
+		return result;
+	}
+	sendInvoiveToCustomer(bookingId:any){
+		return this.httpClient.get(`${this.serverUrl}send-invoice/${bookingId}`)
+	}
+	refund(body:any){
+		return this.httpClient.post(`${this.serverUrl}refund-request`,body)
+	}
 
 	//Booking
 	loadBookings(url, keyword, startDate, endDate)
@@ -349,6 +415,19 @@ export class AffiliateService
 		else
 		{
 			path = this.serverUrl + 'get-bookings' + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword;
+		}
+		return this.httpClient.get(path).toPromise();
+	}
+	loadFarmoutBookings(url, keyword, startDate, endDate)
+	{
+		var path;
+		if (url)
+		{
+			path = url + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword;
+		}
+		else
+		{
+			path = this.serverUrl + 'get-farm-out-bookings' + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword;
 		}
 		return this.httpClient.get(path).toPromise();
 	}
@@ -410,11 +489,22 @@ export class AffiliateService
 	}
 	getBookingData(id)
 	{
-		return this.httpClient.get(this.serverUrl + 'get-reservation-detail/' + id);
+		if(id)
+			return this.httpClient.get(this.serverUrl + 'get-reservation-detail/' + id);
+	}
+	fetchBookingRates(id){
+		return this.httpClient.get(this.serverUrl + 'reservation-rates/' + id);
+	}
+	finalizeRates(id){
+		return this.httpClient.get(this.serverUrl + 'reservation-rates/' + id);
 	}
 	paymentProcessing(data)
 	{
 		return this.httpClient.post(this.serverUrl + 'affiliate-payment-processing', data);
+	}
+	finalizePayment(data)
+	{
+		return this.httpClient.post(this.serverUrl + 'finalize-rate-edit', data);
 	}
 	//invoices
 	getInvoiceData(id)

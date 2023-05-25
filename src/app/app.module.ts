@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { ErrorHandler, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -52,6 +52,7 @@ import { ReservationCancellationComponent } from './components/email_templates/r
 import { LoginComponent } from './components/website/login/login.component';
 import { OtpComponent } from './components/website/otp/otp.component';
 import { ErrorDialogService } from './services/error-dialog/errordialog.service';
+import { GloabalErrorHandlerService } from './services/gloabal-error-handler.service'
 //
 
 //admin
@@ -62,6 +63,10 @@ import { DispatchEmailConfirmationComponent } from './components/email-pages/dis
 import { ScrollToSectionDirective } from './directives/scroll-to-section.directive';
 import { PageUnderConstructionComponent } from './components/page-under-construction/page-under-construction.component';
 import { HtmlToTextPipe } from './pipes/html-to-text.pipe';
+import { LocateMapComponent } from './components/locate-map/locate-map.component';
+import { BookingStatusVerificationComponent } from './components/email-pages/booking-status-verification/booking-status-verification.component';
+import { TransactionHistoryComponent } from './components/website/transaction-history/transaction-history.component';
+import { NgOtpInputModule } from  'ng-otp-input';
 @NgModule({
 	declarations: [
 		AppComponent,
@@ -94,6 +99,9 @@ import { HtmlToTextPipe } from './pipes/html-to-text.pipe';
 		ScrollToSectionDirective,
 		PageUnderConstructionComponent,
 		HtmlToTextPipe,
+		LocateMapComponent,
+		BookingStatusVerificationComponent,
+		TransactionHistoryComponent,
 	],
 	imports: [
 		BrowserModule,
@@ -115,12 +123,14 @@ import { HtmlToTextPipe } from './pipes/html-to-text.pipe';
 		MatFormFieldModule,
 		MatSelectModule,
 		NgxSpinnerModule,
-		SharedModule
+		SharedModule,
+		NgOtpInputModule
 	],
 	providers: [
 		{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
 		{ provide: HTTP_INTERCEPTORS, useClass: HttpConfigInterceptor, multi: true },
-		ErrorDialogService
+		ErrorDialogService,
+		{ provide: ErrorHandler, useClass: GloabalErrorHandlerService }
 	],
 	bootstrap: [AppComponent]
 })

@@ -73,6 +73,10 @@ import { AmenitiesInteriorComponent } from './amenities-interior/amenities-inter
 import { MasterVehicleFareComponent } from './master-vehicle-fare/master-vehicle-fare.component';
 import { NewBookingComponent } from './new-booking/new-booking.component';
 import { FinalizeBookingComponent } from './finalize-booking/finalize-booking.component';
+import { BadgeCitiesComponent } from './badge-cities/badge-cities.component';
+import { CustomInvoiceComponent } from './custom-invoice/custom-invoice.component';
+import { StaffPermissionsComponent } from './staff-permissions/staff-permissions.component';
+import { StaffRolesListComponent } from './staff-roles-list/staff-roles-list.component';
 
 
 const routes: Routes = [
@@ -282,6 +286,11 @@ const routes: Routes = [
 		component: VehicleYearsComponent
 	},
 	{
+		path: 'badge-cities',
+		canActivate: [AdminGuardGuard],
+		component: BadgeCitiesComponent
+	},
+	{
 		path: 'vehicle-colors',
 		canActivate: [AdminGuardGuard],
 		component: VehicleColorComponent
@@ -382,6 +391,11 @@ const routes: Routes = [
 		component: InvoiceSummaryComponent
 	},
 	{
+		path: 'custom-invoice-summary',
+		canActivate: [SubAdminGuard],
+		component: CustomInvoiceComponent
+	},
+	{
 		path: 'sub-admins',
 		canActivate: [AdminGuardGuard],
 		component: SubAdminComponent
@@ -396,6 +410,18 @@ const routes: Routes = [
 		canActivate: [AdminGuardGuard],
 		component: AddSubAdminComponent
 	},
+	{
+		path: 'staff-roles-list',
+		canActivate: [AdminGuardGuard],
+		component: StaffRolesListComponent
+	},
+	
+	{
+		path: 'staff-permissions',
+		canActivate: [AdminGuardGuard],
+		component: StaffPermissionsComponent
+	},
+	
 	{
 		path: 'affiliate',
 		canActivate: [SubAdminGuard],

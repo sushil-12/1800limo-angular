@@ -83,7 +83,7 @@
 				<div class="sidenav-menu">
 					<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 						<!---1st--->
-						<li class="nav-item">
+						<li class="nav-item" *ngIf="role=='admin' || modules.includes('Booking')">
 							<a class="nav-link collapsed" [routerLinkActive]="['active']"
 								routerLink="/admin/daily-bookings-admin" (click)="closeSidebarFunc(false)"
 								tabIndex="-1">
@@ -104,7 +104,7 @@
 							</a>
 						</li>
 						<!--2nd -->
-						<li class="nav-item">
+						<li class="nav-item" *ngIf="role=='admin' || modules.includes('Booking')">
 							<a class="nav-link collapsed" [routerLinkActive]="['active']"
 								routerLink="/admin/new-booking" (click)="closeSidebarFunc(false)" tabIndex="-1">
 								<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
@@ -130,7 +130,7 @@
 							</a>
 						</li>
 						<!--3th -->
-						<li class="nav-item" [hidden]="affiliateAccountStatus=='completed'">
+						<li class="nav-item" [hidden]="affiliateAccountStatus=='completed'" *ngIf="role=='admin' || modules.includes('Invoices')">
 							<a class="nav-link collapsed dropdwn" [routerLinkActive]="['active']" data-toggle="collapse"
 								data-target="#collapse5" aria-expanded="true" aria-controls="collapseUtilities"
 								tabIndex="-1" (click)="invoiceFunc(false)">
@@ -159,7 +159,7 @@
 							</div>
 						</li>
 						<!--4th -->
-						<li class="nav-item">
+						<li class="nav-item" *ngIf="role=='admin' || modules.includes('user_accounts')">
 							<a class="nav-link collapsed dropdwn" [routerLinkActive]="['active']" data-toggle="collapse"
 								data-target="#collapse6" aria-expanded="true" aria-controls="collapseUtilities"
 								tabIndex="-1" (click)="userAccountFunc(false)">
@@ -198,7 +198,7 @@
 							</div>
 						</li>
 						<!--5th -->
-						<li class="nav-item">
+						<li class="nav-item" *ngIf="role=='admin' || modules.includes('affiliates')">
 							<a class="nav-link" [routerLinkActive]="['active']"
 								routerLink="/admin/affiliates/all-operators" tabIndex="-1"
 								(click)="closeSidebarFunc(false)">
@@ -224,8 +224,18 @@
 								</svg><span>Sub Admins</span>
 							</a>
 						</li>
+
+						<!--6th(I)  staff admin permissions -->
+						<li class="nav-item" *ngIf="role=='admin'">
+							<a class="nav-link collapsed" [routerLinkActive]="['active']" routerLink="/admin/staff-roles-list"
+								(click)="closeSidebarFunc(false)" tabIndex="-1">
+								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-toggles" viewBox="0 0 16 16">
+									<path d="M4.5 9a3.5 3.5 0 1 0 0 7h7a3.5 3.5 0 1 0 0-7h-7zm7 6a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5zm-7-14a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zm2.45 0A3.49 3.49 0 0 1 8 3.5 3.49 3.49 0 0 1 6.95 6h4.55a2.5 2.5 0 0 0 0-5H6.95zM4.5 0h7a3.5 3.5 0 1 1 0 7h-7a3.5 3.5 0 1 1 0-7z"/>
+								  </svg><span>Roles and Permissions</span>
+							</a>
+						</li>
 						<!--7th -->
-						<li class="nav-item">
+						<li class="nav-item" *ngIf="role=='admin' || modules.includes('Booking')">
 							<a class="nav-link collapsed dropdwn" [routerLinkActive]="['active']" data-toggle="collapse"
 								data-target="#collapse8" aria-expanded="true" aria-controls="collapseUtilities"
 								tabIndex="-1" (click)="reportFunc(false)">
@@ -267,7 +277,7 @@
 							</div>
 						</li>
 						<!--8th -->
-						<li class="nav-item" *ngIf="role=='admin'">
+						<!-- <li class="nav-item" *ngIf="role=='admin'">
 							<a class="nav-link collapsed" [routerLinkActive]="['active']"
 								(click)="closeSidebarFunc(false)" routerLink="/admin/master-vehicle-types"
 								tabIndex="-1">
@@ -287,7 +297,7 @@
 									</g>
 								</svg><span>Master Vehicle Types</span>
 							</a>
-						</li>
+						</li> -->
 
 						<!--9th -->
 						<li class="nav-item" *ngIf="role=='admin'">
@@ -309,6 +319,11 @@
 							<div id="collapse10" class="collapse" aria-labelledby="headingUtilities"
 								data-parent="#accordionSidebar" tabIndex="-1">
 								<div class="py-2 collapse-inner rounded">
+									<a class="collapse-item" [routerLinkActive]="['active']"
+										(click)="closeSidebarFunc(false)"
+										routerLink="/admin/master-vehicle-types">
+										Master Vehicle Types
+										</a>
 									<a class="collapse-item" [routerLinkActive]="['active']"
 										(click)="closeSidebarFunc(false)"
 										routerLink="/admin/affiliate-preference">Affilate
@@ -338,6 +353,9 @@
 										(click)="closeSidebarFunc(false)" routerLink="/admin/vehicle-model">Model</a>
 									<a class="collapse-item" [routerLinkActive]="['active']"
 										(click)="closeSidebarFunc(false)" routerLink="/admin/vehicle-years">Years</a>
+									<a class="collapse-item" [routerLinkActive]="['active']"
+										(click)="closeSidebarFunc(false)" routerLink="/admin/badge-cities">Badge Cities</a>
+
 								</div>
 							</div>
 						</li>
@@ -370,7 +388,6 @@
 										(click)="closeSidebarFunc(false)" routerLink="/admin/cms/step0">Step 0</a>
 									<a class="collapse-item" [routerLinkActive]="['active']"
 										(click)="closeSidebarFunc(false)" routerLink="/admin/cms/step6">Step 6</a>
-
 								</div>
 							</div>
 						</li>

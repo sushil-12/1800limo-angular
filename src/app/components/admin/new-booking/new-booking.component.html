@@ -20,6 +20,7 @@
 				Booking Type
 			</h2>
 			<div class="row px-4">
+				<!-- Service Type -->
 				<div class="flex-grow-1 m-2">
 					<div>
 						<mat-form-field appearance="outline">
@@ -27,8 +28,7 @@
 								Service Type
 							</mat-label>
 							<mat-select formControlName="service_type"
-								[ngStyle]="{'cursor': Form.updateType.value == 'edit' ? 'not-allowed' : 'default'}"
-								[disabled]="Form.updateType.value == 'edit'">
+								[ngStyle]="{'cursor': Form.updateType.value == 'edit' ? 'not-allowed' : 'default'}">
 								<mat-option value="one_way">One Way</mat-option>
 								<mat-option value="round_trip">Round Trip</mat-option>
 								<mat-option value="charter_tour">Charter/Tour</mat-option>
@@ -36,13 +36,16 @@
 						</mat-form-field>
 					</div>
 				</div>
+
+				<!-- Transfer Type -->
 				<div class="flex-grow-1 m-2">
 					<div>
 						<mat-form-field appearance="outline">
 							<mat-label class="">
 								Transfer Type
 							</mat-label>
-							<mat-select formControlName="transfer_type" class="font-weight-bolder">
+							<mat-select formControlName="transfer_type" class="font-weight-bolder"
+								(selectionChange)="changeTransferType($event.value)">
 								<mat-option [value]="tf_type" class="font-weight-bolder"
 									*ngFor="let tf_type of booking_params.transfer_types">
 									{{ textFormatter(tf_type) | titlecase }}
@@ -51,6 +54,8 @@
 						</mat-form-field>
 					</div>
 				</div>
+
+				<!-- Return Transfer Type -->
 				<div class="flex-grow-1 m-2" *ngIf="Form.service_type.value == 'round_trip'">
 					<div>
 						<mat-form-field appearance="outline">
@@ -66,14 +71,15 @@
 						</mat-form-field>
 					</div>
 				</div>
+
+				<!-- Hours -->
 				<div class="flex-grow-1 m-2" *ngIf="Form.service_type.value == 'charter_tour'">
 					<div>
 						<mat-form-field appearance="outline">
 							<mat-label>
 								Number of Hours
 							</mat-label>
-							<input type="number" matInput placeholder="Enter Hours"
-								formControlName="number_of_hours"
+							<input type="number" matInput placeholder="Enter Hours" formControlName="number_of_hours"
 								(focus)="$event.target.select()" />
 							<span matSuffix>Hrs.</span>
 						</mat-form-field>
@@ -85,9 +91,10 @@
 
 		<!-- Client Accounts Section -->
 		<div class="section-container mt-5">
-			<h2>
+			<h4>
 				Client Accounts
-			</h2>
+			</h4>
+
 			<!-- Account Type -->
 			<div class="row">
 				<div class="col-md-12 col-lg-10">
@@ -109,84 +116,96 @@
 				<div formGroupName="loose_customer">
 					<!-- Personal Information -->
 					<div class="px-4">
-						<h6>
+						<h4>
 							Personal Information
-						</h6>
-						<div class="row px-4">
+						</h4>
+						<div class="row">
 							<!-- First Name -->
-							<div class="col-md-4 my-2">
+							<div class="col-md-4 looseError">
 								<mat-form-field appearance="outline" class="m-0">
 									<mat-label class="required-field">
 										First Name
 									</mat-label>
-									<input matInput placeholder="First Name" type="text"
-										formControlName="first_name" tabindex="0"
+									<input matInput placeholder="First Name" type="text" formControlName="first_name"
 										(focus)="$event.target.select()">
 								</mat-form-field>
 								<div class="error-box">
 									<div class="error-message"
-										*ngIf="LooseCustomer.first_name.invalid && (LooseCustomer.first_name.touched || LooseCustomer.first_name.dirty)">
+										*ngIf="(submitBookingForm && LooseCustomer.first_name.invalid) || (LooseCustomer.first_name.touched && LooseCustomer.first_name.dirty)">
 										<p class="text-danger text-lg m-0"
-											*ngIf="LooseCustomer.first_name.errors.required">
+											*ngIf="LooseCustomer.first_name.errors?.required">
 											This field is required
+										</p>
+										<p class="text-danger text-lg m-0"
+											*ngIf="LooseCustomer.first_name.errors?.whitespace">
+											Extra White Space are not Allowed
 										</p>
 									</div>
 								</div>
 							</div>
 
 							<!-- Middle Name -->
-							<div class="col-md-4 my-2">
-								<mat-form-field appearance="outline">
+							<div class="col-md-4 looseError">
+								<mat-form-field appearance="outline" class="m-0">
 									<mat-label>
 										Middle Name
 									</mat-label>
-									<input matInput placeholder="Middle Name" type="text"
-										formControlName="middle_name" tabindex="0"
+									<input matInput placeholder="Middle Name" type="text" formControlName="middle_name"
 										(focus)="$event.target.select()">
-								</mat-form-field>
-							</div>
-
-							<!-- Last Name -->
-							<div class="col-md-4 my-2">
-								<mat-form-field appearance="outline">
-									<mat-label class="required-field">
-										Last Name
-									</mat-label>
-									<input matInput placeholder="Last Name" type="text"
-										formControlName="last_name" (focus)="$event.target.select()"
-										tabindex="0">
 								</mat-form-field>
 								<div class="error-box">
 									<div class="error-message"
-										*ngIf="LooseCustomer.last_name.invalid && (LooseCustomer.last_name.touched || LooseCustomer.last_name.dirty)">
+										*ngIf="LooseCustomer.middle_name.invalid && (LooseCustomer.middle_name.touched || LooseCustomer.middle_name.dirty)">
 										<p class="text-danger text-lg m-0"
-											*ngIf="LooseCustomer.last_name.errors.required">
+											*ngIf="LooseCustomer.middle_name.errors?.whitespace">
+											Extra White Space are not Allowed
+										</p>
+									</div>
+								</div>
+							</div>
+
+							<!-- Last Name -->
+							<div class="col-md-4 looseError">
+								<mat-form-field appearance="outline" class="m-0">
+									<mat-label class="required-field">
+										Last Name
+									</mat-label>
+									<input matInput placeholder="Last Name" type="text" formControlName="last_name"
+										(focus)="$event.target.select()">
+								</mat-form-field>
+								<div class="error-box">
+									<div class="error-message"
+										*ngIf="(submitBookingForm && LooseCustomer.last_name.invalid) || (LooseCustomer.last_name.touched && LooseCustomer.last_name.dirty)">
+										<p class="text-danger text-lg m-0"
+											*ngIf="LooseCustomer.last_name.errors?.required">
 											This field is required
+										</p>
+										<p class="text-danger text-lg m-0"
+											*ngIf="LooseCustomer.last_name.errors?.whitespace">
+											Extra White Space are not Allowed
 										</p>
 									</div>
 								</div>
 							</div>
 						</div>
 
-						<div class="row px-4">
+						<div class="row">
 							<!-- Email -->
-							<div class="col-md-4 my-2">
-								<mat-form-field appearance="outline">
-									<mat-label class="">
+							<div class="col-md-4 looseError">
+								<mat-form-field appearance="outline" class="m-0">
+									<mat-label class="required-field">
 										Email
 									</mat-label>
-									<input matInput placeholder="Email" type="text" tabindex="0"
-										formControlName="email" (focus)="$event.target.select()">
+									<input matInput placeholder="Email" type="text" formControlName="email"
+										[email]="true" (focus)="$event.target.select()">
 								</mat-form-field>
 								<div class="error-box">
 									<div class="error-message"
 										*ngIf="LooseCustomer.email.invalid && (LooseCustomer.email.touched || LooseCustomer.email.dirty)">
-										<p class="text-danger text-lg m-0"
-											*ngIf="LooseCustomer.email.errors?.required">
+										<p class="text-danger text-lg m-0" *ngIf="LooseCustomer.email.errors?.required">
 											This field is required
 										</p>
-										<p class="text-danger text-lg m-0"
-											*ngIf="LooseCustomer.email.errors?.pattern || LooseCustomer.email.errors?.domain">
+										<p class="text-danger text-lg m-0" *ngIf="LooseCustomer.email.errors?.pattern">
 											Please enter a valid Email Id
 										</p>
 									</div>
@@ -194,28 +213,38 @@
 							</div>
 
 							<!-- Phone -->
-							<div class="col-md-4 my-2">
-								<mat-form-field appearance="outline" class="mat-custom-phone">
-									<mat-label class="required-field">
-										Phone
-									</mat-label>
-									<input matInput placeholder="Phone" formControlName="phone"
-										ng2TelInput
-										[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
-										class="phoneNumberClass"
-										(intlTelInputObject)="LCTelInputObject($event)"
+							<div class="col-md-4 looseError">
+								<mat-form-field appearance="outline" class="mat-custom-phone m-0 cellLabelClass">
+									<label
+										class="mat-form-field-label required-field mat-empty mat-form-field-empty labelClass">Phone
+									</label>
+									<input matInput formControlName="phone" ng2TelInput [ng2TelInputOptions]="{
+											preferredCountries: ['us', 'ca', 'mx', 'gb']
+										}" placeholder="1234567890" class="phoneNumberClass" (intlTelInputObject)="LCTelInputObject($event)"
 										(countryChange)="SetFormValue('loose_customer>phone_isd', $event.dialCode); SetFormValue('loose_customer>phone_country', $event.iso2)"
 										(focus)="$event.target.select()" />
 								</mat-form-field>
 								<div class="error-box">
 									<div class="error-message"
-										*ngIf="is_loose_customer_unique || (LooseCustomer.phone.invalid && (LooseCustomer.phone.touched || LooseCustomer.phone.dirty))">
-										<p class="text-danger text-lg m-0"
-											*ngIf="LooseCustomer.phone.errors?.required">
+										*ngIf="( submitBookingForm && (is_loose_customer_unique || LooseCustomer.phone.invalid)) || (LooseCustomer.phone.touched && LooseCustomer.phone.dirty)">
+										<p class="text-danger text-lg m-0" *ngIf="LooseCustomer.phone.errors?.required">
 											This field is required
 										</p>
 										<p class="text-danger text-lg m-0"
-											*ngIf="is_loose_customer_unique">
+											*ngIf="LooseCustomer.phone.errors?.pattern;else otherError">
+											Only Numbers are Allowed
+										</p>
+										<ng-template #otherError>
+											<p class="text-danger text-lg m-0"
+												*ngIf="LooseCustomer.phone.errors?.minlength">
+												Minimum length should be 4
+											</p>
+											<p class="text-danger text-lg m-0"
+												*ngIf="LooseCustomer.phone.errors?.maxlength">
+												Maximum length should be 15
+											</p>
+										</ng-template>
+										<p class="text-danger text-lg m-0" *ngIf="is_loose_customer_unique">
 											This Phone Number is already registered. Please enter
 											any other.
 										</p>
@@ -224,8 +253,8 @@
 							</div>
 
 							<!-- Address -->
-							<div class="col-md-4 my-2">
-								<mat-form-field appearance="outline">
+							<div class="col-md-4 looseError">
+								<mat-form-field appearance="outline" class="m-0">
 									<mat-label>
 										Address
 									</mat-label>
@@ -234,13 +263,6 @@
 										(onAutocompleteSelected)="fillLooseCustomerAddress($event.formatted_address)"
 										(focus)="$event.target.select()" />
 								</mat-form-field>
-								<div class="error-message"
-									*ngIf="LooseCustomer.address.invalid && (LooseCustomer.address.touched || LooseCustomer.address.dirty)">
-									<p class="text-danger text-lg m-0"
-										*ngIf="LooseCustomer.address.errors?.required">
-										This field is required
-									</p>
-								</div>
 							</div>
 						</div>
 					</div>
@@ -248,54 +270,93 @@
 
 					<!-- Credit Card Details -->
 					<div id="credit-card-details" class="mt-4 px-4" formGroupName="card_details">
-						<h6>
+						<h4>
 							Card Details
-						</h6>
+						</h4>
 						<div class="row">
 							<!-- Card Holder Name -->
-							<div class="col-md-6 my-2">
-								<mat-form-field appearance="outline">
+							<div class="col-md-6">
+								<mat-form-field appearance="outline" class="m-0">
 									<mat-label class="required-field">
-										Card Holder
+										Name of Card Holder
 									</mat-label>
-									<input matInput placeholder="First & Last Name" type="text"
-										formControlName="name" tabindex="0"
+									<input matInput placeholder="First & Last Name" type="text" formControlName="name"
 										(focus)="$event.target.select()">
 								</mat-form-field>
-								<div class="error-message"
-									*ngIf="LooseCustomer.card_details.controls.name.invalid && (LooseCustomer.card_details.controls.name.touched || LooseCustomer.card_details.controls.name.dirty)">
-									<p class="text-danger text-lg m-0"
-										*ngIf="LooseCustomer.card_details.controls.name.errors?.required">
-										This field is required
-									</p>
+								<div class="error-box">
+									<div class="error-message"
+										*ngIf="( submitBookingForm && LooseCustomer.card_details.controls.name.invalid) || (LooseCustomer.card_details.controls.name.touched && LooseCustomer.card_details.controls.name.dirty)">
+										<p class="text-danger text-lg m-0"
+											*ngIf="LooseCustomer.card_details.controls.name.errors?.required">
+											This field is required
+										</p>
+										<p class="text-danger text-lg m-0"
+											*ngIf="LooseCustomer.card_details.controls.name.errors?.whitespace">
+											Extra White Space are not Allowed
+										</p>
+									</div>
 								</div>
 							</div>
 							<!-- Card Number -->
-							<div class="col-md-6 my-2">
-								<mat-form-field appearance="outline">
+							<div class="col-md-6">
+								<mat-form-field appearance="outline" class="m-0">
 									<mat-label class="required-field">
 										Card Number
 									</mat-label>
 									<input matInput placeholder="xxxx xxxx xxxx xxxx" type="text"
-										formControlName="card_number" tabindex="0"
-										(focus)="$event.target.select()">
+										formControlName="card_number" (focus)="$event.target.select()">
 								</mat-form-field>
-								<div class="error-message"
-									*ngIf="LooseCustomer.card_details.controls.card_number.invalid && (LooseCustomer.card_details.controls.card_number.touched || LooseCustomer.card_details.controls.card_number.dirty)">
-									<p class="text-danger text-lg m-0"
-										*ngIf="LooseCustomer.card_details.controls.card_number.errors?.required">
-										This field is required
-									</p>
+								<div class="error-box">
+									<div class="error-message"
+										*ngIf="( submitBookingForm && LooseCustomer.card_details.controls.card_number.invalid) || (LooseCustomer.card_details.controls.card_number.touched && LooseCustomer.card_details.controls.card_number.dirty)">
+										<p class="text-danger text-lg m-0"
+											*ngIf="LooseCustomer.card_details.controls.card_number.errors?.required">
+											This field is required
+										</p>
+										<p class="text-danger text-lg m-0"
+											*ngIf="LooseCustomer.card_details.controls.card_number.errors?.pattern;else cardLength">
+											Only Numbers are Allowed
+										</p>
+										<ng-template #cardLength>
+											<p class="text-danger text-lg m-0"
+												*ngIf="LooseCustomer.card_details.controls.card_number.errors?.minlength">
+												Minimum length should be 12
+											</p>
+											<p class="text-danger text-lg m-0"
+												*ngIf="LooseCustomer.card_details.controls.card_number.errors?.maxlength">
+												Maximum length should be 20
+											</p>
+										</ng-template>
+									</div>
 								</div>
 							</div>
 
 							<!-- Expiration Month -->
-							<div class="col-md-4 my-2">
-								<mat-form-field appearance="outline">
+							<div class="col-md-4">
+								<mat-form-field appearance="outline" class="m-0">
+									<mat-label class="required-field">Expiration Month</mat-label>
+									<input type="number" matInput formControlName="exp_month" [matAutocomplete]="auto"
+										(keyup)="handleChangeMonth($event.target.value)">
+									<mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+										<mat-option *ngFor="let m of monthOptions" [value]="m.value">
+											{{m.value}}
+										</mat-option>
+									</mat-autocomplete>
+								</mat-form-field>
+								<div class="error-box">
+									<div class="error-message"
+										*ngIf="( submitBookingForm && LooseCustomer.card_details.controls.exp_month.invalid) || (LooseCustomer.card_details.controls.exp_month.touched && LooseCustomer.card_details.controls.exp_month.dirty)">
+										<p class="text-danger text-lg m-0"
+											*ngIf="LooseCustomer.card_details.controls.exp_month.errors?.required">
+											This field is required
+										</p>
+									</div>
+								</div>
+								<!-- <mat-form-field appearance="outline" class="m-0">
 									<mat-label class="required-field">
 										Expiration Month
 									</mat-label>
-									<mat-select formControlName="exp_month" tabindex="0">
+									<mat-select formControlName="exp_month">
 										<mat-option value='1'>01</mat-option>
 										<mat-option value='2'>02</mat-option>
 										<mat-option value='3'>03</mat-option>
@@ -309,53 +370,63 @@
 										<mat-option value='11'>11</mat-option>
 										<mat-option value='12'>12</mat-option>
 									</mat-select>
-								</mat-form-field>
-								<div class="error-message"
-									*ngIf="LooseCustomer.card_details.controls.exp_month.invalid && (LooseCustomer.card_details.controls.exp_month.touched || LooseCustomer.card_details.controls.exp_month.dirty)">
-									<p class="text-danger text-lg m-0"
-										*ngIf="LooseCustomer.card_details.controls.exp_month.errors?.required">
-										This field is required
-									</p>
-								</div>
+								</mat-form-field> -->
 							</div>
 
 							<!-- Expiration Year -->
-							<div class="col-md-4 my-2">
-								<mat-form-field appearance="outline">
+							<div class="col-md-4">
+								<mat-form-field appearance="outline" class="m-0">
 									<mat-label class="required-field">
 										Expiration Year
 									</mat-label>
-									<mat-select formControlName="exp_year" tabindex="0">
-										<mat-option [value]="number"
-											*ngFor="let number of booking_params.years">
+									<mat-select formControlName="exp_year">
+										<mat-option [value]="number" *ngFor="let number of booking_params.years">
 											{{ number }}
 										</mat-option>
 									</mat-select>
 								</mat-form-field>
-								<div class="error-message"
-									*ngIf="LooseCustomer.card_details.controls.exp_year.invalid && (LooseCustomer.card_details.controls.exp_year.touched || LooseCustomer.card_details.controls.exp_year.dirty)">
-									<p class="text-danger text-lg m-0"
-										*ngIf="LooseCustomer.card_details.controls.exp_year.errors?.required">
-										This field is required
-									</p>
+								<div class="error-box">
+									<div class="error-message"
+										*ngIf="( submitBookingForm && LooseCustomer.card_details.controls.exp_year.invalid) || (LooseCustomer.card_details.controls.exp_year.touched && LooseCustomer.card_details.controls.exp_year.dirty)">
+										<p class="text-danger text-lg m-0"
+											*ngIf="LooseCustomer.card_details.controls.exp_year.errors?.required">
+											This field is required
+										</p>
+									</div>
 								</div>
 							</div>
 
 							<!-- CVV -->
-							<div class="col-md-4 my-2">
-								<mat-form-field appearance="outline">
+							<div class="col-md-4">
+								<mat-form-field appearance="outline" class="m-0">
 									<mat-label class="required-field">
 										CVV
 									</mat-label>
-									<input matInput placeholder="0000" type="text" tabindex="0"
-										(focus)="$event.target.select()" formControlName="cvv">
+									<input matInput placeholder="0000" type="text" (focus)="$event.target.select()"
+										formControlName="cvv">
 								</mat-form-field>
-								<div class="error-message"
-									*ngIf="LooseCustomer.card_details.controls.cvv.invalid && (LooseCustomer.card_details.controls.cvv.touched || LooseCustomer.card_details.controls.cvv.dirty)">
-									<p class="text-danger text-lg m-0"
-										*ngIf="LooseCustomer.card_details.controls.cvv.errors?.required">
-										This field is required
-									</p>
+								<div class="error-box">
+									<div class="error-message"
+										*ngIf="( submitBookingForm && LooseCustomer.card_details.controls.cvv.invalid) || (LooseCustomer.card_details.controls.cvv.touched && LooseCustomer.card_details.controls.cvv.dirty)">
+										<p class="text-danger text-lg m-0"
+											*ngIf="LooseCustomer.card_details.controls.cvv.errors?.required">
+											This field is required
+										</p>
+										<p class="text-danger text-lg m-0"
+											*ngIf="LooseCustomer.card_details.controls.cvv.errors?.pattern">
+											Only Numbers are Allowed
+										</p>
+										<!-- <ng-template #cvvLength>
+											<p class="text-danger text-lg m-0"
+												*ngIf="LooseCustomer.card_details.controls.cvv.errors?.minlength">
+												Minimum length should be 3
+											</p>
+											<p class="text-danger text-lg m-0"
+												*ngIf="LooseCustomer.card_details.controls.cvv.errors?.maxlength">
+												Maximum length should be 3
+											</p>
+										</ng-template> -->
+									</div>
 								</div>
 							</div>
 						</div>
@@ -369,7 +440,7 @@
 			<ng-template #OtherAccountsSection>
 				<div class="row px-4">
 					<div class="col-md-12">
-						<mat-form-field appearance="outline">
+						<!-- <mat-form-field appearance="outline">
 							<mat-label>Choose User</mat-label>
 							<input #searchInput type="text" id="userField" placeholder="Choose User"
 								(focus)="$event.target.select()" matInput
@@ -385,22 +456,14 @@
 									</mat-option>
 								</div>
 							</mat-autocomplete>
-						</mat-form-field>
-					</div>
+						</mat-form-field> -->
 
-					<!-- <div class="col-md-12">
-						<mat-form-field appearance="outline">
-							<mat-label class="">
-								Choose User
-							</mat-label>
-							<mat-select formControlName="acc_id" placeholder="Choose User"
-								(selectionChange)="chooseUser($event.value)">
-								<mat-option *ngFor="let user of ClientAccounts" [value]="user.id">
-									{{ user.name }}
-								</mat-option>
-							</mat-select>
-						</mat-form-field>
-					</div> -->
+						<!-- Ng-Select -->
+						<ng-select appearance="outline" [items]="ClientAccounts" bindLabel="name" bindValue="id"
+							placeholder="Select Client Account" dropdownPosition="bottom" [markFirst]="true"
+							[virtualScroll]="true" formControlName="acc_id">
+						</ng-select>
+					</div>
 				</div>
 
 				<!-- Chosen User Information -->
@@ -457,57 +520,87 @@
 
 			<!-- Passenger Information -->
 			<div id="passenger-information" class="px-4 mt-4">
-				<h4>
+				<h2>
 					Passenger Information
-				</h4>
+				</h2>
 				<div class="row">
 					<!-- Passenger Name -->
-					<div class="col-md-4 my-2">
-						<mat-form-field appearance="outline">
+					<div class="col-md-4">
+						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>
 								Passenger Name <span class="asterisk"></span>
 							</mat-label>
-							<input matInput placeholder="Passenger Name" type="text"
-								formControlName="passenger_name" (focus)="$event.target.select()" />
+							<input matInput placeholder="Passenger Name" type="text" formControlName="passenger_name"
+								(focus)="$event.target.select()" />
 						</mat-form-field>
+						<div class="error-box">
+							<div class="error-message"
+								*ngIf="Form.passenger_name.invalid && (Form.passenger_name.touched || Form.passenger_name.dirty)">
+								<p class="text-danger text-lg m-0" *ngIf="Form.passenger_name.errors?.whitespace">
+									Extra White Space are not Allowed
+								</p>
+							</div>
+						</div>
 					</div>
 
 					<!-- Passenger Email -->
-					<div class="col-md-4 my-2">
-						<mat-form-field appearance="outline">
+					<div class="col-md-4">
+						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>
-								Passenger Email <span class="asterisk"></span>
+								Passenger Email
 							</mat-label>
-							<input matInput placeholder="Passenger Email" type="email"
-								formControlName="passenger_email"
+							<input matInput placeholder="Passenger Email" type="text" formControlName="passenger_email"
 								(focus)="$event.target.select()" />
 						</mat-form-field>
+						<div class="error-box">
+							<div class="error-message"
+								*ngIf="Form.passenger_email.invalid && (Form.passenger_email.touched || Form.passenger_email.dirty)">
+								<p class="text-danger text-lg m-0" *ngIf="Form.passenger_email.errors?.email">
+									Please enter a valid Email Id
+								</p>
+							</div>
+						</div>
 					</div>
 
 					<!-- Passenger Cell -->
-					<div class="col-md-4 my-2">
-						<mat-form-field appearance="outline" class="mat-custom-phone">
-							<mat-label>
-								Passenger Cell
-							</mat-label>
-							<input matInput placeholder="Passenger Cell" type="text"
-								formControlName="passenger_cell" (focus)="$event.target.select()"
-								[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb'], initialCountry: 'us'}"
-								ng2TelInput (intlTelInputObject)="PaxTelInputObject($event)"
-								(countryChange)="SetFormValue('passenger_cell_isd', '+' + $event.dialCode); SetFormValue('passenger_cell_country', $event.iso2)" />
+					<div class="col-md-4">
+						<mat-form-field appearance="outline" class="mat-custom-phone m-0 pcellLabelClass">
+							<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Passenger
+								Cell
+							</label>
+							<input matInput formControlName="passenger_cell" ng2TelInput [ng2TelInputOptions]="{
+									preferredCountries: ['us', 'ca', 'mx', 'gb']
+								}" placeholder="1234567890" class="phoneNumberClass" (intlTelInputObject)="PaxTelInputObject($event)"
+								(countryChange)="SetFormValue('passenger_cell_isd', $event.dialCode); SetFormValue('passenger_cell_country', $event.iso2)"
+								(focus)="$event.target.select()" />
 						</mat-form-field>
-						<!-- TEMP -->
+						<div class="error-box">
+							<div class="error-message"
+								*ngIf="Form.passenger_cell.invalid && (Form.passenger_cell.touched || Form.passenger_cell.dirty)">
+								<p class="text-danger text-lg m-0"
+									*ngIf="Form.passenger_cell.errors?.pattern;else otherError">
+									Only Numbers are Allowed
+								</p>
+								<ng-template #otherError>
+									<p class="text-danger text-lg m-0" *ngIf="Form.passenger_cell.errors?.minlength">
+										Minimum length should be 4
+									</p>
+									<p class="text-danger text-lg m-0" *ngIf="Form.passenger_cell.errors?.maxlength">
+										Maximum length should be 15
+									</p>
+								</ng-template>
+							</div>
+						</div>
 					</div>
 
 					<!-- Passenger Count -->
-					<div class="col-md-3 my-2">
-						<mat-form-field appearance="outline">
+					<div class="col-md-3 looseError">
+						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>
 								No. of Passengers <span class="asterisk"></span>
 							</mat-label>
 							<mat-select formControlName="total_passengers">
-								<mat-option *ngFor="let option of booking_params.numbers"
-									[value]="option">
+								<mat-option *ngFor="let option of booking_params.numbers" [value]="option">
 									{{ option }}
 								</mat-option>
 							</mat-select>
@@ -515,14 +608,13 @@
 					</div>
 
 					<!-- Luggage Count -->
-					<div class="col-md-3 my-2">
-						<mat-form-field appearance="outline">
+					<div class="col-md-3 looseError">
+						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>
 								Luggage Count <span class="asterisk"></span>
 							</mat-label>
 							<mat-select formControlName="luggage_count">
-								<mat-option *ngFor="let option of booking_params.numbers"
-									[value]="option">
+								<mat-option *ngFor="let option of booking_params.numbers" [value]="option">
 									{{ option }}
 								</mat-option>
 							</mat-select>
@@ -535,8 +627,8 @@
 							<mat-label>
 								Special Instructions
 							</mat-label>
-							<textarea matInput formControlName="booking_instructions"
-								(focus)="$event.target.select()" rows="5"></textarea>
+							<textarea matInput style="white-space: pre-wrap;" formControlName="booking_instructions" (focus)="$event.target.select()"
+								rows="5"></textarea>
 						</mat-form-field>
 					</div>
 				</div>
@@ -556,8 +648,7 @@
 				<div class="col-md-12 col-lg-10">
 					<mat-radio-group aria-label="Select an option" formControlName="affiliate_type">
 						<mat-radio-button [value]="aa" class="my-2 ml-4 mr-5 mx-md-4"
-							(click)="resetDriverAndVehicle(aa)"
-							*ngFor="let aa of booking_params.affiliate_accounts">
+							(click)="resetDriverAndVehicle(aa)" *ngFor="let aa of booking_params.affiliate_accounts">
 							{{ textFormatter(aa) | titlecase }}
 						</mat-radio-button>
 					</mat-radio-group>
@@ -569,7 +660,7 @@
 			<!-- Only Visible in affiliate section -->
 			<div class="row px-4" *ngIf="Form.affiliate_type.value == 'affiliate'">
 				<div class="col-md-12">
-					<mat-form-field appearance="outline">
+					<!-- <mat-form-field appearance="outline">
 						<mat-label class="">
 							Choose Affiliate
 						</mat-label>
@@ -579,7 +670,35 @@
 								{{ user.name }}
 							</mat-option>
 						</mat-select>
-					</mat-form-field>
+					</mat-form-field> -->
+
+					<!-- Ng-Select -->
+					<ng-select appearance="outline" [items]="AffiliateAccounts" bindLabel="name" bindValue="id"
+						placeholder="Select Affiliate" dropdownPosition="bottom" [markFirst]="true"
+						[virtualScroll]="true" formControlName="affiliate_id">
+					</ng-select>
+				</div>
+			</div>
+
+			<!-- Vehicle ID -->
+			<div class="row" *ngIf="false">
+				<div id="vehicle_id" class="col-md-12" *ngIf="Form.affiliate_type.value !== 'loose_affiliate'">
+					<!-- <mat-form-field appearance="outline">
+											<mat-label>
+												Vehicle
+											</mat-label>
+											<mat-select formControlName="vehicle_id">
+												<mat-option [value]="option.id" *ngFor="let option of VehicleList">
+													{{ option.make}} ({{ option.model }})
+												</mat-option>
+											</mat-select>
+										</mat-form-field> -->
+
+					<!-- Ng-Select - Vehicle ID -->
+					<ng-select appearance="outline" [items]="VehicleList" *ngIf="VehicleList.length > 1"
+						dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true" bindLabel="formatted_name"
+						bindValue="ID" placeholder="Select Vehicle" formControlName="vehicle_id">
+					</ng-select>
 				</div>
 			</div>
 
@@ -587,39 +706,70 @@
 			<!-- Visible in only Loose Affiliate Section -->
 			<!-- Loose Affiliate Section -->
 			<div class="row px-4" *ngIf="Form.affiliate_type.value == 'loose_affiliate'">
-				<div class="col-md-4 col-lg-3 m-2">
-					<mat-form-field appearance="outline">
+				<div class="col-md-4 col-lg-4">
+					<mat-form-field appearance="outline" class="m-0">
 						<mat-label>
 							Name
 						</mat-label>
-						<input type="text" matInput placeholder="Full Name"
-							(focus)="$event.target.select()"
+						<input type="text" matInput placeholder="Full Name" (focus)="$event.target.select()"
 							formControlName="lose_affiliate_name" />
 					</mat-form-field>
+					<div class="error-box">
+						<div class="error-message"
+							*ngIf="Form.lose_affiliate_name.invalid && (Form.lose_affiliate_name.touched || Form.lose_affiliate_name.dirty)">
+							<p class="text-danger text-lg m-0" *ngIf="Form.lose_affiliate_name.errors?.whitespace">
+								Extra White Space are not Allowed
+							</p>
+						</div>
+					</div>
 				</div>
 				<!-- Phone -->
-				<div class="col-md-4 col-lg-3 m-2">
-					<mat-form-field appearance="outline" class="mat-custom-phone">
-						<mat-label>
-							Phone
-						</mat-label>
-						<input matInput placeholder="Phone Number" type="text"
-							formControlName="lose_affiliate_phone" (focus)="$event.target.select()"
-							[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
-							ng2TelInput (intlTelInputObject)="LATelInputObject($event)"
-							(countryChange)="SetFormValue('lose_affiliate_phone_isd', '+' + $event.dialCode); SetFormValue('lose_affiliate_phone_country', $event.iso2)" />
+				<div class="col-md-4">
+					<mat-form-field appearance="outline" class="mat-custom-phone m-0 cellLabelClass">
+						<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Phone
+						</label>
+						<input matInput formControlName="lose_affiliate_phone" ng2TelInput [ng2TelInputOptions]="{
+								preferredCountries: ['us', 'ca', 'mx', 'gb']
+							}" placeholder="1234567890" class="phoneNumberClass" (intlTelInputObject)="LATelInputObject($event)"
+							(countryChange)="SetFormValue('lose_affiliate_phone_isd', '+' + $event.dialCode); SetFormValue('lose_affiliate_phone_country', $event.iso2)"
+							(focus)="$event.target.select()" />
 					</mat-form-field>
+					<div class="error-box">
+						<div class="error-message"
+							*ngIf="Form.lose_affiliate_phone.invalid && (Form.lose_affiliate_phone.touched || Form.lose_affiliate_phone.dirty)">
+							<p class="text-danger text-lg m-0"
+								*ngIf="Form.lose_affiliate_phone.errors?.pattern;else looseAffError">
+								Only Numbers are Allowed
+							</p>
+							<ng-template #looseAffError>
+								<p class="text-danger text-lg m-0" *ngIf="Form.lose_affiliate_phone.errors?.minlength">
+									Minimum length should be 4
+								</p>
+								<p class="text-danger text-lg m-0" *ngIf="Form.lose_affiliate_phone.errors?.maxlength">
+									Maximum length should be 15
+								</p>
+							</ng-template>
+						</div>
+					</div>
 				</div>
+
 				<!-- Email -->
-				<div class="col-md-4 col-lg-3 m-2">
-					<mat-form-field appearance="outline">
+				<div class="col-md-4 col-lg-4">
+					<mat-form-field appearance="outline" class="m-0">
 						<mat-label>
 							Email
 						</mat-label>
-						<input type="text" matInput placeholder="Email"
-							(focus)="$event.target.select()"
+						<input type="text" matInput placeholder="Email" (focus)="$event.target.select()"
 							formControlName="lose_affiliate_email" />
 					</mat-form-field>
+					<div class="error-box">
+						<div class="error-message"
+							*ngIf="Form.lose_affiliate_email.invalid && (Form.lose_affiliate_email.touched || Form.lose_affiliate_email.dirty)">
+							<p class="text-danger text-lg m-0" *ngIf="Form.lose_affiliate_email.errors?.email">
+								Please enter a valid Email Id
+							</p>
+						</div>
+					</div>
 				</div>
 			</div>
 			<!-- Loose Affiliate Section Ends -->
@@ -629,16 +779,106 @@
 
 			<!-- Visible in Affiliate as well as Loose Affiliate Section -->
 			<!-- Affiliate Vehicle Information -->
-			<div class="px-4 mt-4"
-				*ngIf="Form.affiliate_type.value == 'loose_affiliate' || Form.affiliate_id.value">
+			<div class="px-4 mt-4" *ngIf="Form.affiliate_type.value == 'affiliate'">
 				<h4>
 					Vehicle Preferences
 				</h4>
 				<div class="row">
 					<!-- Vehicle Type -->
-					<div id="vehicle-type" class="my-2"
+					<div id="vehicle-type"
 						[ngClass]="Form.vehicle_type.value && !Form.vehicle_make.value ? 'col-md-6 col-xl-4' : Form.vehicle_make.value ? 'col-md-4 col-xl-3' : 'col-md-12'">
-						<mat-form-field appearance="outline">
+						<ng-select appearance="outline" [items]="vehicleType_arr" bindLabel="formatted_name"
+							bindValue="vehicleType_id" placeholder="Select Vehicle Type" dropdownPosition="bottom"
+							[markFirst]="true" [virtualScroll]="true" formControlName="vehicle_type" (change)="handleChangeVehicleType($event)">
+						</ng-select>
+					</div>
+
+					<!-- Make -->
+					<div id="make" *ngIf="Form.vehicle_type.value" class="block-cursor"
+						[ngClass]="Form.vehicle_make.value ? 'col-md-4 col-xl-3' : 'col-md-6 col-xl-4'">
+						<ng-select appearance="outline" [items]="vehicleMake_arr" dropdownPosition="bottom"
+							[markFirst]="true" [virtualScroll]="true" bindLabel="make" bindValue="make_id"
+							placeholder="Select Make" formControlName="vehicle_make">
+						</ng-select>
+					</div>
+
+					<!-- Model -->
+					<div id="model" class="col-md-4 col-xl-3 block-cursor" *ngIf="Form.vehicle_make.value">
+						<ng-select appearance="outline" [items]="vehicleModal_arr" bindLabel="model" bindValue="model_id"
+							placeholder="Select Model" dropdownPosition="bottom" [markFirst]="true"
+							[virtualScroll]="true" formControlName="vehicle_model">
+						</ng-select>
+					</div>
+
+					<!-- Year -->
+					<div id="year" class="col-md-3 block-cursor">
+						<ng-select appearance="outline" [items]="vehicleYear_arr" bindLabel="year" bindValue="year_id"
+							placeholder="Select Year" dropdownPosition="bottom" [markFirst]="true"
+							[virtualScroll]="true" formControlName="vehicle_year">
+						</ng-select>
+					</div>
+
+					<!-- Color -->
+					<div id="color" class="col-md-3 block-cursor">
+						<ng-select appearance="outline" [items]="vehicleColor_arr" bindLabel="color" bindValue="color_id"
+							placeholder="Select Color" dropdownPosition="bottom" [markFirst]="true"
+							[virtualScroll]="true" formControlName="vehicle_color">
+						</ng-select>
+					</div>
+
+					<!-- License Plate -->
+					<div class="col-md-3">
+						<mat-form-field appearance="outline" class="vehicleLable mt-0">
+							<mat-label>
+								License Plate
+							</mat-label>
+							<input type="text" matInput (focus)="$event.target.select()"
+								formControlName="vehicle_license_plate" placeholder="License Plate">
+						</mat-form-field>
+						<div class="error-box">
+							<div class="error-message"
+								*ngIf="Form.vehicle_license_plate.invalid && (Form.vehicle_license_plate.touched || Form.vehicle_license_plate.dirty)">
+								<p class="text-danger text-lg m-0"
+									*ngIf="Form.vehicle_license_plate.errors?.whitespace">
+									Extra White Space are not Allowed
+								</p>
+							</div>
+						</div>
+					</div>
+
+					<!-- Number of Seats -->
+					<div class="col-md-3">
+						<mat-form-field appearance="outline" class="vehicleLable m-0">
+							<mat-label>
+								Number of Seats
+							</mat-label>
+							<input type="text" matInput formControlName="vehicle_seats" placeholder="Number of Seats"
+								(focus)="$event.target.select()" />
+						</mat-form-field>
+						<div class="error-box">
+							<div class="error-message"
+								*ngIf="Form.vehicle_seats.invalid && (Form.vehicle_seats.touched || Form.vehicle_seats.dirty)">
+								<p class="text-danger text-lg m-0" *ngIf="Form.vehicle_seats.errors?.pattern">
+									Only Numbers are Allowed
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+			
+			<!-- Loose affiliate vehicle information -->
+			<div class="px-4 mt-4" *ngIf="Form.affiliate_type.value == 'loose_affiliate'">
+				<h4>
+					Vehicle Preferences
+				</h4>
+				<div class="row">
+					<!-- Vehicle Type -->
+					<div id="vehicle-type"
+						[ngClass]="Form.vehicle_type.value && !Form.vehicle_make.value ? 'col-md-6 col-xl-4' : Form.vehicle_make.value ? 'col-md-4 col-xl-3' : 'col-md-12'">
+						<!-- <mat-form-field appearance="outline">
 							<mat-label>
 								Vehicle Type
 							</mat-label>
@@ -655,28 +895,19 @@
 									{{ option.name }}
 								</mat-option>
 							</mat-autocomplete>
-						</mat-form-field>
-					</div>
+						</mat-form-field> -->
 
-					<!-- Make-Model -->
-					<div id="make-model" class="col-md-4 col-xl-3 my-2"
-						*ngIf="Form.affiliate_type.value !== 'loose_affiliate'">
-						<mat-form-field appearance="outline">
-							<mat-label>
-								Vehicle
-							</mat-label>
-							<mat-select formControlName="vehicle_id">
-								<mat-option [value]="option.id" *ngFor="let option of VehicleList">
-									{{ option.make}} ({{ option.model }})
-								</mat-option>
-							</mat-select>
-						</mat-form-field>
+						<!-- Ng-Select -->
+						<ng-select appearance="outline" [items]="BigData?.vehicleCategories" bindLabel="name"
+							bindValue="id" placeholder="Select Vehicle Type" dropdownPosition="bottom"
+							[markFirst]="true" [virtualScroll]="true" formControlName="vehicle_type">
+						</ng-select>
 					</div>
 
 					<!-- Make -->
-					<div id="make" class="my-2" *ngIf="Form.vehicle_type.value"
+					<div id="make" *ngIf="Form.vehicle_type.value"
 						[ngClass]="Form.vehicle_make.value ? 'col-md-4 col-xl-3' : 'col-md-6 col-xl-4'">
-						<mat-form-field appearance="outline">
+						<!-- <mat-form-field appearance="outline">
 							<mat-label>
 								Make
 							</mat-label>
@@ -693,12 +924,18 @@
 									{{ option.name }}
 								</mat-option>
 							</mat-autocomplete>
-						</mat-form-field>
+						</mat-form-field> -->
+
+						<!-- Make - Ng-Select -->
+						<ng-select appearance="outline" [items]="BigData?.vehicleMakes" dropdownPosition="bottom"
+							[markFirst]="true" [virtualScroll]="true" bindLabel="name" bindValue="id"
+							placeholder="Select Make" formControlName="vehicle_make">
+						</ng-select>
 					</div>
 
 					<!-- Model -->
-					<div id="model" class="col-md-4 col-xl-3 my-2" *ngIf="Form.vehicle_make.value">
-						<mat-form-field appearance="outline">
+					<div id="model" class="col-md-4 col-xl-3" *ngIf="Form.vehicle_make.value">
+						<!-- <mat-form-field appearance="outline">
 							<mat-label>
 								Model
 							</mat-label>
@@ -715,12 +952,18 @@
 									{{ option.name }}
 								</mat-option>
 							</mat-autocomplete>
-						</mat-form-field>
+						</mat-form-field> -->
+
+						<!-- Ng-Select -->
+						<ng-select appearance="outline" [items]="BigData?.vehicleModels" bindLabel="name" bindValue="id"
+							placeholder="Select Model" dropdownPosition="bottom" [markFirst]="true"
+							[virtualScroll]="true" formControlName="vehicle_model">
+						</ng-select>
 					</div>
 
 					<!-- Year -->
-					<div id="year" class="col-md-3  my-2">
-						<mat-form-field appearance="outline">
+					<div id="year" class="col-md-3">
+						<!-- <mat-form-field appearance="outline">
 							<mat-label>
 								Year
 							</mat-label>
@@ -737,12 +980,18 @@
 									{{ option.name }}
 								</mat-option>
 							</mat-autocomplete>
-						</mat-form-field>
+						</mat-form-field> -->
+
+						<!-- Ng-Select -->
+						<ng-select appearance="outline" [items]="BigData?.vehicleYears" bindLabel="name" bindValue="id"
+							placeholder="Select Year" dropdownPosition="bottom" [markFirst]="true"
+							[virtualScroll]="true" formControlName="vehicle_year">
+						</ng-select>
 					</div>
 
 					<!-- Color -->
-					<div id="color" class="col-md-3 my-2">
-						<mat-form-field appearance="outline">
+					<div id="color" class="col-md-3">
+						<!-- <mat-form-field appearance="outline">
 							<mat-label>
 								Color
 							</mat-label>
@@ -759,29 +1008,52 @@
 									{{ option.name }}
 								</mat-option>
 							</mat-autocomplete>
-						</mat-form-field>
+						</mat-form-field> -->
+
+						<!-- Ng-Select -->
+						<ng-select appearance="outline" [items]="BigData?.vehicleColors" bindLabel="name" bindValue="id"
+							placeholder="Select Color" dropdownPosition="bottom" [markFirst]="true"
+							[virtualScroll]="true" formControlName="vehicle_color">
+						</ng-select>
 					</div>
 
 					<!-- License Plate -->
-					<div class="col-md-3 my-2">
-						<mat-form-field appearance="outline">
+					<div class="col-md-3">
+						<mat-form-field appearance="outline" class="vehicleLable mt-0">
 							<mat-label>
 								License Plate
 							</mat-label>
 							<input type="text" matInput (focus)="$event.target.select()"
-								formControlName="license_plate" placeholder="License Plate">
+								formControlName="vehicle_license_plate" placeholder="License Plate">
 						</mat-form-field>
+						<div class="error-box">
+							<div class="error-message"
+								*ngIf="Form.vehicle_license_plate.invalid && (Form.vehicle_license_plate.touched || Form.vehicle_license_plate.dirty)">
+								<p class="text-danger text-lg m-0"
+									*ngIf="Form.vehicle_license_plate.errors?.whitespace">
+									Extra White Space are not Allowed
+								</p>
+							</div>
+						</div>
 					</div>
 
 					<!-- Number of Seats -->
-					<div class="col-md-3 my-2">
-						<mat-form-field appearance="outline">
+					<div class="col-md-3">
+						<mat-form-field appearance="outline" class="vehicleLable m-0">
 							<mat-label>
-								Number Of Seats
+								Number of Seats
 							</mat-label>
-							<input type="text" matInput formControlName="number_of_seats"
-								placeholder="Seats" (focus)="$event.target.select()" />
+							<input type="text" matInput formControlName="vehicle_seats" placeholder="Number of Seats"
+								(focus)="$event.target.select()" />
 						</mat-form-field>
+						<div class="error-box">
+							<div class="error-message"
+								*ngIf="Form.vehicle_seats.invalid && (Form.vehicle_seats.touched || Form.vehicle_seats.dirty)">
+								<p class="text-danger text-lg m-0" *ngIf="Form.vehicle_seats.errors?.pattern">
+									Only Numbers are Allowed
+								</p>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -789,16 +1061,14 @@
 
 			<!-- Visible in Affiliate as well as Loose Affiliate Section -->
 			<!-- Affiliate Driver Information -->
-			<div class="px-4 mt-4"
-				*ngIf="Form.affiliate_type.value == 'loose_affiliate' || Form.affiliate_id.value">
+			<div class="px-4 my-4" *ngIf="Form.affiliate_type.value == 'loose_affiliate' || Form.affiliate_id.value">
 				<h4>
 					Driver Preferences
 				</h4>
 				<div class="row">
-					<!-- Driver -->
-					<div id="driver" class="col-md-3 my-2"
-						*ngIf="Form.affiliate_type.value != 'loose_affiliate'">
-						<mat-form-field appearance="outline">
+					<!-- Affiliate Driver Name -->
+					<div id="driver" class="col-md-3" *ngIf="Form.affiliate_type.value != 'loose_affiliate'">
+						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>
 								Choose Driver
 							</mat-label>
@@ -813,52 +1083,131 @@
 						</mat-form-field>
 					</div>
 
-					<!-- Driver Name -->
-					<div id="driver-name" class="col-md-3 my-2"
-						*ngIf="Form.affiliate_type.value == 'loose_affiliate'">
-						<mat-form-field appearance="outline">
+					<!-- Loose Affiliate Driver Name -->
+					<div id="driver-name" class="col-md-3" *ngIf="Form.affiliate_type.value == 'loose_affiliate'">
+						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>
 								Driver Name
 							</mat-label>
-							<input matInput formControlName="driver_name" type="text"
-								placeholder="Driver Name" (focus)="$event.target.select()" />
+							<input matInput formControlName="driver_name" type="text" placeholder="Driver Name"
+								(focus)="$event.target.select()" />
 						</mat-form-field>
+						<div class="error-box">
+							<div class="error-message"
+								*ngIf="Form.driver_name.invalid && (Form.driver_name.touched || Form.driver_name.dirty)">
+								<p class="text-danger text-lg m-0" *ngIf="Form.driver_name.errors?.whitespace">
+									Extra White Space are not Allowed
+								</p>
+							</div>
+						</div>
 					</div>
 
-					<!-- Driver Email -->
-					<div id="driver-email" class="col-md-3 my-2">
-						<mat-form-field appearance="outline">
+					<!-- Affiliate Driver Email -->
+					<div id="driver-email" class="col-md-3" *ngIf="Form.affiliate_type.value != 'loose_affiliate'">
+						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>
 								Email
 							</mat-label>
-							<input matInput formControlName="driver_email" type="email"
+							<input matInput formControlName="driver_email" type="text" readonly
 								(focus)="$event.target.select()" placeholder="Email">
 						</mat-form-field>
+						<div class="error-box">
+							<div class="error-message"
+								*ngIf="Form.driver_email.invalid && (Form.driver_email.touched || Form.driver_email.dirty)">
+								<p class="text-danger text-lg m-0" *ngIf="Form.driver_email.errors?.email">
+									Please enter a valid Email Id
+								</p>
+							</div>
+						</div>
 					</div>
 
-					<!-- Driver Cell -->
-					<div id="driver-cell" class="col-md-3 my-2">
-						<mat-form-field appearance="outline" class="mat-custom-phone">
+					<!--  Loose Affiliate Driver Email -->
+					<div id="driver-email" class="col-md-3" *ngIf="Form.affiliate_type.value == 'loose_affiliate'">
+						<mat-form-field appearance="outline" class="m-0">
+							<mat-label>
+								Email
+							</mat-label>
+							<input matInput formControlName="driver_email" type="text" (focus)="$event.target.select()"
+								placeholder="Email">
+						</mat-form-field>
+						<div class="error-box">
+							<div class="error-message"
+								*ngIf="Form.driver_email.invalid && (Form.driver_email.touched || Form.driver_email.dirty)">
+								<p class="text-danger text-lg m-0" *ngIf="Form.driver_email.errors?.email">
+									Please enter a valid Email Id
+								</p>
+							</div>
+						</div>
+					</div>
+
+					<!-- Affiliate Driver Cell -->
+					<div id="driver-cell" class="col-md-3" *ngIf="Form.affiliate_type.value != 'loose_affiliate'">
+						<mat-form-field appearance="outline" class="mat-custom-phone m-0">
 							<mat-label>
 								Phone
 							</mat-label>
-							<input matInput placeholder="Phone Number" type="text"
+							<input matInput placeholder="Phone Number" type="text" readonly
 								formControlName="driver_cell" (focus)="$event.target.select()"
-								[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
-								ng2TelInput (intlTelInputObject)="DrvTelInputObject($event)"
+								[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}" ng2TelInput
+								(intlTelInputObject)="DrvTelInputObject($event)"
 								(countryChange)="SetFormValue('driver_cell_isd', '+' + $event.dialCode); SetFormValue('driver_cell_country', $event.iso2)" />
 						</mat-form-field>
 					</div>
 
-					<!-- Diver Gender -->
-					<div id="driver-gender" class="col-md-3 my-2">
-						<mat-form-field appearance="outline">
+					<!-- Loose Affiliate Driver Cell -->
+					<div id="driver-cell" class="col-md-3" *ngIf="Form.affiliate_type.value == 'loose_affiliate'">
+						<mat-form-field appearance="outline" class="mat-custom-phone m-0 cellLabelClass">
+							<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Phone
+							</label>
+							<input matInput formControlName="driver_cell" ng2TelInput [ng2TelInputOptions]="{
+									preferredCountries: ['us', 'ca', 'mx', 'gb']
+								}" placeholder="1234567890" class="phoneNumberClass" (intlTelInputObject)="DrvTelInputObject($event)"
+								(countryChange)="SetFormValue('driver_cell_isd', '+' + $event.dialCode); SetFormValue('driver_cell_country', $event.iso2)"
+								(focus)="$event.target.select()" />
+						</mat-form-field>
+						<div class="error-box">
+							<div class="error-message"
+								*ngIf="Form.driver_cell.invalid && (Form.driver_cell.touched || Form.driver_cell.dirty)">
+								<p class="text-danger text-lg m-0"
+									*ngIf="Form.driver_cell.errors?.pattern;else looseAffError">
+									Only Numbers are Allowed
+								</p>
+								<ng-template #looseAffError>
+									<p class="text-danger text-lg m-0" *ngIf="Form.driver_cell.errors?.minlength">
+										Minimum length should be 4
+									</p>
+									<p class="text-danger text-lg m-0" *ngIf="Form.driver_cell.errors?.maxlength">
+										Maximum length should be 15
+									</p>
+								</ng-template>
+							</div>
+						</div>
+					</div>
+
+					<!-- Affiliate Diver Gender -->
+					<div id="driver-gender" class="col-md-3" *ngIf="Form.affiliate_type.value != 'loose_affiliate'">
+						<mat-form-field appearance="outline" class="m-0">
+							<mat-label>
+								Gender
+							</mat-label>
+							<mat-select formControlName="driver_gender" [disabled]="true">
+								<mat-option value="male"> Male </mat-option>
+								<mat-option value="female"> Female </mat-option>
+								<mat-option value="lgbtq+">X (LGBTQAI+)</mat-option>
+							</mat-select>
+						</mat-form-field>
+					</div>
+
+					<!-- Loose Affiliate Diver Gender -->
+					<div id="driver-gender" class="col-md-3" *ngIf="Form.affiliate_type.value == 'loose_affiliate'">
+						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>
 								Gender
 							</mat-label>
 							<mat-select formControlName="driver_gender">
 								<mat-option value="male"> Male </mat-option>
 								<mat-option value="female"> Female </mat-option>
+								<mat-option value="lgbtq+">X (LGBTQAI+)</mat-option>
 							</mat-select>
 						</mat-form-field>
 					</div>
@@ -866,6 +1215,426 @@
 				</div>
 			</div>
 			<!-- Affiliate Driver Information Ends -->
+
+			<!-- Section Booking details start -->
+			<h2>
+				Booking Details
+			</h2>
+			<div class="row">
+				<!-- Meet Greet Choices -->
+				<div class="col-md-5 m-2">
+					<mat-form-field appearance="outline">
+						<mat-label>
+							Meet and Greet Choices <span class="asterisk"></span>
+						</mat-label>
+						<mat-select formControlName="meet_greet_choices" (selectionChange)="handleChangeMeetAndGreet($event ,'')">
+							<mat-option *ngFor="let meetGreet of BigData?.meetGreets" [value]="meetGreet.id" >
+								{{ meetGreet.message }}
+							</mat-option>
+						</mat-select>
+					</mat-form-field>
+				</div>
+
+				<!-- Number Of Vehicles -->
+				<div class="col-md-5 m-2">
+					<mat-form-field appearance="outline">
+						<mat-label>
+							Number of Vehicles
+						</mat-label>
+						<input type="text" matInput placholder="Number of Vehicles"
+							[value]="Form.number_of_vehicles.value ? Form.number_of_vehicles.value : 1"
+							(focus)="$event.target.select()"
+							(keyup)="SetFormValue('number_of_vehicles', $event.target.value)" />
+					</mat-form-field>
+				</div>
+
+				<!-- Travel Date -->
+				<div class="col-md-5 m-2">
+					<mat-form-field appearance="outline">
+						<mat-label>
+							Travel Date
+						</mat-label>
+						<input matInput setOutputDateFormat="YYYY-MM-DD" [matDatepicker]="onwy_dt"
+							placeholder="Travel Date" (dateChangeWithFormat)="SetFormValue('pickup_date', $event)"
+							formControlName="pickup_date" (click)="onwy_dt.open()" readonly />
+						<mat-datepicker-toggle matSuffix [for]="onwy_dt"></mat-datepicker-toggle>
+						<mat-datepicker #onwy_dt></mat-datepicker>
+					</mat-form-field>
+				</div>
+
+				<!-- Travel Time -->
+				<div class="col-md-5 m-2">
+					<mat-form-field appearance="outline">
+						<mat-label>
+							Travel Time
+						</mat-label>
+						<input [ngxTimepicker]="onwy_tm" formControlName="pickup_time" matInput readonly />
+					</mat-form-field>
+					<ngx-material-timepicker #onwy_tm [defaultTime]="Form.pickup_time.value"></ngx-material-timepicker>
+				</div>
+			</div>
+
+
+			<h4 class="pl-2 mt-3">
+				Pickup
+			</h4>
+
+			<!-- Pickup - Address Field -->
+			<div *ngIf="!searchSubstring(Form.transfer_type.value, 'airport_')">
+				<div class="row px-2">
+					<div class="col-md-12">
+						<mat-form-field appearance="outline">
+							<mat-label> Pickup Address </mat-label>
+							<input type="text" matInput placeholder="Type your address" matGoogleMapsAutocomplete
+								[value]="fillValue(null, 'pickup', null)" (focus)="$event.target.select()"
+								(onAutocompleteSelected)="fillAddress('pickup', $event)"
+								(onLocationSelected)="fillLocationPoints('pickup', $event)" />
+						</mat-form-field>
+					</div>
+				</div>
+			</div>
+
+
+			<!-- Pickup - Airport Fields -->
+			<div *ngIf="searchSubstring(Form.transfer_type.value, 'airport_')">
+				<div class="row px-2">
+					<!-- Airport -->
+					<div class="col-md-6 col-lg-3">
+						<!-- <mat-form-field appearance="outline">
+							<mat-label>
+								Airport
+							</mat-label>
+							<input #searchInput type="search" matInput
+								placeholder="Search For Airport" (focus)="$event.target.select()"
+								aria-label="Airport" [matAutocomplete]="onwy_airport"
+								(click)="openAutoCompletePanel()"
+								(keyup)="searchValue('airportsData', $event.target.value, 'name')"
+								formControlName="pickup_airport_name" />
+							<mat-autocomplete #onwy_airport="matAutocomplete">
+								<mat-option *ngFor="let option of BigData?.airportsData"
+									(click)="SetFormValue('pickup_airport', option.id)">
+									{{ option.code }} - {{ option.name }}, {{option.city }}, {{
+									option.country }}
+								</mat-option>
+							</mat-autocomplete>
+						</mat-form-field> -->
+
+						<!-- Ng-Select - Pickup > Airport -->
+						<ng-select appearance="outline" [items]="BigData?.airportsData"
+							[searchFn]="airportSearchFunction" (change)="change($event, 'pickup_airport')"
+							placeholder="Select Airport" bindLabel="formatted_name" dropdownPosition="bottom"
+							[markFirst]="true" [virtualScroll]="true" formControlName="pickup_airport_option">
+							<ng-template ng-option-tmp let-item="item">
+								<div [title]="item.formatted_name">{{item.formatted_name}}</div>
+							</ng-template>
+						</ng-select>
+
+
+					</div>
+
+					<!-- Airline -->
+					<div class=" col-md-6 col-lg-3">
+						<!-- <mat-form-field appearance="outline">
+							<mat-label>
+								Airline
+							</mat-label>
+							<input #searchInput type="text" matInput
+								placeholder="Search For Airport" aria-label="Airport"
+								formControlName="pickup_airline_name"
+								(click)="openAutoCompletePanel()"
+								(keyup)="searchValue('airlinesData', $event.target.value, 'name')"
+								(focus)="$event.target.select()" [matAutocomplete]="onwy_airline">
+							<mat-autocomplete #onwy_airline="matAutocomplete">
+								<mat-option *ngFor="let option of BigData?.airlinesData"
+									(click)="SetFormValue('pickup_airline', option.id)">
+									{{ option.code }} - {{ option.name }}, {{ option.country }}
+								</mat-option>
+							</mat-autocomplete>
+						</mat-form-field> -->
+
+						<!-- Ng-Select > Airline -->
+						<ng-select appearance="outline" [items]="BigData?.airlinesData"
+							[searchFn]="airlineSearchFunction" (change)="change($event, 'pickup_airline')"
+							placeholder="Select Airline" bindLabel="formatted_name" dropdownPosition="bottom"
+							[markFirst]="true" [virtualScroll]="true" formControlName="pickup_airline_option">
+							<ng-template ng-option-tmp let-item="item">
+								<div [title]="item.formatted_name">{{item.formatted_name}}</div>
+							</ng-template>
+						</ng-select>
+					</div>
+
+					<!-- Flight Number -->
+					<div class="col-md-6 col-lg-3">
+						<mat-form-field appearance="outline" class="vehicleLable mt-0">
+							<mat-label>
+								Flight Number
+							</mat-label>
+							<input type="text" matInput placeholder="Flight Number" aria-label="Flight"
+								formControlName="pickup_flight" (focus)="$event.target.select()" />
+						</mat-form-field>
+					</div>
+
+					<!-- Origin Airport / City -->
+					<div class="col-md-6 col-lg-3">
+						<mat-form-field appearance="outline" class="vehicleLable mt-0">
+							<mat-label>
+								Origin Airport / City
+							</mat-label>
+							<input formControlName="origin_airport_city" type="text" matInput
+								placeholder="Origin Airport / City" (focus)="$event.target.select()" />
+						</mat-form-field>
+					</div>
+				</div>
+			</div>
+
+
+			<!-- Pickup - Cruise Details -->
+			<div *ngIf="searchSubstring(Form.transfer_type.value, 'cruise_')">
+				<div class="row px-2">
+					<!-- Cruise Port -->
+					<div class="col-md-4">
+						<mat-form-field appearance="outline">
+							<mat-label>
+								Cruise Port
+							</mat-label>
+							<input type="text" matInput placeholder="Cruise Port" formControlName="cruise_port"
+								(focus)="$event.target.select()" />
+						</mat-form-field>
+					</div>
+
+					<!-- Cruise Name -->
+					<div class="col-md-4">
+						<mat-form-field appearance="outline">
+							<mat-label>
+								Cruise Name
+							</mat-label>
+							<input formControlName="cruise_name" type="text" matInput placeholder="Cruise Name"
+								(focus)="$event.target.select()" />
+						</mat-form-field>
+					</div>
+
+					<!-- Time -->
+					<div class="col-md-4">
+						<mat-form-field appearance="outline">
+							<mat-label>
+								Cruise Time
+							</mat-label>
+							<input [ngxTimepicker]="crse_tm" matInput formControlName="cruise_time"
+								(focus)="$event.target.select()" readonly />
+						</mat-form-field>
+						<ngx-material-timepicker #crse_tm
+							[defaultTime]="Form.cruise_time.value"></ngx-material-timepicker>
+					</div>
+				</div>
+			</div>
+
+
+			<h4 class="pl-2 mt-3">
+				Dropoff
+			</h4>
+
+			<!-- Dropoff - Address Field -->
+			<div *ngIf="!searchSubstring(Form.transfer_type.value, '_airport')">
+				<div class="row px-2">
+					<div class="col-md-12">
+						<mat-form-field appearance="outline">
+							<mat-label> Dropoff Address </mat-label>
+							<input type="text" matInput placeholder="Type your address" matGoogleMapsAutocomplete
+								[value]="fillValue(null, 'dropoff', null)" (focus)="$event.target.select()"
+								(onAutocompleteSelected)="fillAddress('dropoff', $event)"
+								(onLocationSelected)="fillLocationPoints('dropoff', $event)" />
+						</mat-form-field>
+					</div>
+				</div>
+			</div>
+
+
+			<!-- Dropoff - Airport Field -->
+			<div *ngIf="searchSubstring(Form.transfer_type.value, '_airport')">
+				<div class="row px-2">
+					<!-- Airport -->
+					<div class="col-md-5 col-lg-3">
+						<!-- <mat-form-field appearance="outline">
+							<mat-label>
+								Airport
+							</mat-label>
+							<input #searchInput type="text" matInput
+								placeholder="Search For Airport" aria-label="Airport"
+								formControlName="dropoff_airport_name"
+								(click)="openAutoCompletePanel()"
+								(keyup)="searchValue('airportsData', $event.target.value, 'name')"
+								[matAutocomplete]="onwy_drop_airport"
+								(focus)="$event.target.select()" />
+							<mat-autocomplete #onwy_drop_airport="matAutocomplete">
+								<mat-option *ngFor="let option of BigData?.airportsData"
+									(click)="SetFormValue('dropoff_airport', option.id)">
+									{{ option.code }} - {{ option.name }}, {{option.city }}, {{
+									option.country }}
+								</mat-option>
+							</mat-autocomplete>
+						</mat-form-field> -->
+
+						<!-- Ng-Select > Dropoff > Airport -->
+						<ng-select appearance="outline" [items]="BigData?.airportsData"
+							[searchFn]="airportSearchFunction" (change)="change($event, 'dropoff_airport')"
+							placeholder="Select Airport" bindLabel="formatted_name" dropdownPosition="bottom"
+							[markFirst]="true" [virtualScroll]="true" formControlName="dropoff_airport_option">
+							<ng-template ng-option-tmp let-item="item">
+								<div [title]="item.formatted_name">{{item.formatted_name}}</div>
+							</ng-template>
+						</ng-select>
+					</div>
+
+					<!-- Airline -->
+					<div class="col-md-5 col-lg-3">
+						<!-- <mat-form-field appearance="outline">
+							<mat-label>
+								Airline
+							</mat-label>
+							<input #searchInput type="text" matInput
+								placeholder="Search For Airline" aria-label="Airport"
+								formControlName="dropoff_airline_name"
+								(click)="openAutoCompletePanel()"
+								(keyup)="searchValue('airlinesData', $event.target.value, 'name')"
+								[matAutocomplete]="onwy_drop_airline"
+								(focus)="$event.target.select()" />
+							<mat-autocomplete #onwy_drop_airline="matAutocomplete">
+								<mat-option *ngFor="let option of BigData?.airlinesData"
+									(click)="SetFormValue('dropoff_airline', option.id)">
+									{{ option.code }} - {{ option.name }}, {{ option.country }}
+								</mat-option>
+							</mat-autocomplete>
+						</mat-form-field> -->
+
+						<!-- Ng-Select > Dropoff > Airline -->
+						<ng-select appearance="outline" [items]="BigData?.airlinesData"
+							[searchFn]="airlineSearchFunction" (change)="change($event, 'dropoff_airline')"
+							placeholder="Select Airline" bindLabel="formatted_name" dropdownPosition="bottom"
+							[markFirst]="true" [virtualScroll]="true" formControlName="dropoff_airline_option">
+							<ng-template ng-option-tmp let-item="item">
+								<div [title]="item.formatted_name">{{item.formatted_name}}</div>
+							</ng-template>
+						</ng-select>
+					</div>
+
+					<!-- Flight Number -->
+					<div class="col-md-5 col-lg-3">
+						<mat-form-field appearance="outline" class="vehicleLable mt-0">
+							<mat-label>
+								Flight Number
+							</mat-label>
+							<input type="text" matInput placeholder="Flight Number" aria-label="Flight"
+								formControlName="dropoff_flight" (focus)="$event.target.select()" />
+						</mat-form-field>
+					</div>
+				</div>
+			</div>
+
+
+			<!-- Dropoff - Cruise Details -->
+			<div *ngIf="searchSubstring(Form.transfer_type.value, '_cruise')">
+				<div class="row px-2">
+					<!-- Cruise Port -->
+					<div class="col-md-4">
+						<mat-form-field appearance="outline">
+							<mat-label>
+								Cruise Port
+							</mat-label>
+							<input type="text" matInput placeholder="Cruise Port" formControlName="cruise_port"
+								(focus)="$event.target.select()" />
+						</mat-form-field>
+					</div>
+
+					<!-- Cruise Name -->
+					<div class="col-md-4">
+						<mat-form-field appearance="outline">
+							<mat-label>
+								Cruise Name
+							</mat-label>
+							<input formControlName="cruise_name" type="text" matInput placeholder="Cruise Name"
+								(focus)="$event.target.select()" />
+						</mat-form-field>
+					</div>
+
+					<!-- Time -->
+					<div class="col-md-4">
+						<mat-form-field appearance="outline">
+							<mat-label>
+								Cruise Time
+							</mat-label>
+							<input [ngxTimepicker]="crse_tm" matInput formControlName="cruise_time"
+								(focus)="$event.target.select()" readonly />
+						</mat-form-field>
+						<ngx-material-timepicker #crse_tm
+							[defaultTime]="Form.cruise_time.value"></ngx-material-timepicker>
+					</div>
+				</div>
+			</div>
+			<div class="row m-2">
+				<p class="text-danger text-lg">
+					NOTE : Enter pickup and drop off locations first, then enter extra stops.
+				</p>
+			</div>
+
+			<!-- Extra Stops -->
+			<div class="row mt-3">
+				<div class="col-md-12 px-4 d-flex justify-content-start align-items-center">
+					<h4 class="m-0">
+						Extra Stops
+					</h4>
+					<div class="mx-4">
+						<button type="button" class="custom-filled-button" (click)="addExtraStop(false)">
+							Add Stop
+						</button>
+					</div>
+				</div>
+			</div>
+			<!-- Extra Stop Address Field -->
+			<div class="row mt-2 mb-4 align-items-center m-0"
+				*ngFor="let extra_stop of ExtraStops.controls; index as stop_index">
+				<div class="extra-stop-field col-11">
+					<mat-form-field appearance="outline">
+						<mat-label> Extra Stop Address {{ stop_index + 1 }} </mat-label>
+						<input type="text" matInput placeholder="Type your address" matGoogleMapsAutocomplete
+							(onAutocompleteSelected)="fillExtraStop(false, stop_index, $event, null)"
+							(focus)="$event.target.select()" [value]="fetchStopValue('extra_stops', stop_index)"
+							(onLocationSelected)="fillExtraStop(false, stop_index, null, $event)" />
+					</mat-form-field>
+				</div>
+				<div class="col-1 p-0 p-md-3">
+					<div class="delete-icon">
+						<i class="bi bi-trash text-2xl text-danger font-weight-bolder"
+							(click)="deleteExtraStop(false, stop_index)"></i>
+					</div>
+				</div>
+				<!-- <div class="col-11">
+					<mat-form-field appearance="outline">
+						<mat-label> Extra Stop Instruction {{ stop_index + 1 }} </mat-label>
+						<input type="text" matInput placeholder="Special Instruction" 
+						(focus)="$event.target.select()" [value]="fetchSpecialInstruction('extra_stops', stop_index)"
+						(keyup)="fillExtraStopInstruction(false, stop_index,$event)"/>
+					</mat-form-field>
+				</div> -->
+			</div>
+			<!-- Extra Stop Address Field Ends -->
+
+
+			<!-- AGM Map -->
+			<div class="row">
+				<!-- AGM Map -->
+				<div class="col-md-12">
+					<div class="map-block">
+						<div class="google_map">
+							<div id="map" class="map"></div>
+						</div>
+						<h6>
+							Total Distance: {{ mToMi(distance) }} Miles / {{ mToKm(distance)
+							}} Km
+						</h6>
+					</div>
+				</div>
+				<!-- AGM Map Ends -->
+			</div>
 		</div>
 		<!-- Section - Affiliate/Loose Details Ends -->
 
@@ -893,8 +1662,7 @@
 				<div class="row align-items-center m-0 p-4">
 					<div class="col-md-4 col-lg-3"
 						*ngFor="let language of BigData?.driverLanguage; index as language_index">
-						<mat-checkbox
-							(change)="select($event.checked, 'driver_languages', language.id)"
+						<mat-checkbox (change)="select($event.checked, 'driver_languages', language.id)"
 							[checked]="isChecked('driver_languages', language.id)">
 							{{ language.name }}
 						</mat-checkbox>
@@ -925,8 +1693,7 @@
 			<div *ngIf="booking_params.chevrons.dresses">
 				<div class="row align-items-center m-0 p-4">
 					<div class="col-md-4" *ngFor="let dresses of BigData?.driverDresses">
-						<mat-checkbox
-							(change)="select($event.checked, 'driver_dresses', dresses.id)"
+						<mat-checkbox (change)="select($event.checked, 'driver_dresses', dresses.id)"
 							[checked]="isChecked('driver_dresses', dresses.id)">
 							{{ dresses.name }}
 						</mat-checkbox>
@@ -961,8 +1728,7 @@
 					Page. The Rate Is Default At 0$
 				</div>
 				<div class="row align-items-center m-0 p-4">
-					<div class="col-md-4"
-						*ngFor="let amenity of BigData?.amenity; index as amenity_index">
+					<div class="col-md-4" *ngFor="let amenity of BigData?.amenity; index as amenity_index">
 						<mat-checkbox
 							(change)="amenity['chargeable'] == 'yes' ? select($event.checked, 'chargedAmenities', amenity.id) : select($event.checked, 'amenities', amenity.id)"
 							[checked]="amenity['chargeable'] == 'yes' ? isChecked('chargedAmenities', amenity.id) : isChecked('amenities', amenity.id)">
@@ -1001,78 +1767,111 @@
 				<div class="row mt-5 mx-2 justify-content-around">
 					<!-- Driver Image -->
 					<div class="col-md-4">
-						<div class="vehtype_extint">
-							<p> Driver Image </p>
-							<img [src]="driver_image?.image" *ngIf="driver_image?.image"
-								(click)="showImageModal(driver_image?.image)" tabindex="-1">
-							<div class="emptyImage" *ngIf="!driver_image?.image">
-								<img src="../../../../assets/images/empty-image.png" tabindex="-1">
+						<p class="text-center"> Driver Image </p>
+						<div class="vehtype_extint" *ngIf="driver_image?.image; else emptyImg">
+							<img [src]="driver_image?.image" (click)="showImageModal(driver_image?.image)">
+						</div>
+						<ng-template #emptyImg>
+							<div class="vehtype_extint emptyImage">
+								<img src="../../../../assets/images/empty-image.png">
 							</div>
+						</ng-template>
 
+						<ul class="mt-3 d-flex justify-content-center p-0" *ngIf="driver_image?.image;else addImage">
+							<li>
+								<button type="button" class="changeuploaded">
+									<input type="file" accept="image/jpeg,.jpeg,.jpg,.png"
+										(change)="uploadImage($event, 'driver_image')">
+									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+										<path fill="none" d="M0 0h24v24H0V0z" />
+										<circle cx="12" cy="12" r="3" />
+										<path
+											d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+									</svg>
+									Change
+								</button>
+							</li>
+							<li>
+								<a class="delete-btn" (click)="deleteImage('driver_image')">
+									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+										<path
+											d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
+									</svg> Delete
+								</a>
+							</li>
+						</ul>
+						<ng-template #addImage>
 							<ul class="mt-3 d-flex justify-content-center p-0">
 								<li>
-									<button type="button" class="changeuploaded" tabindex="1">
+									<button type="button" class="changeuploaded">
 										<input type="file" accept="image/jpeg,.jpeg,.jpg,.png"
-											(change)="uploadImage($event, 'driver_image')"
-											tabindex="-1">
+											(change)="uploadImage($event, 'driver_image')">
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 											<path fill="none" d="M0 0h24v24H0V0z" />
 											<circle cx="12" cy="12" r="3" />
 											<path
 												d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
 										</svg>
-										{{ driver_image?.image ? 'Change' : 'Add' }}
+										Add
 									</button>
 								</li>
-								<li>
-									<a class="delete-btn" *ngIf="driver_image?.image"
-										(click)="deleteImage('driver_image')" tabindex="1">
-										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-											<path
-												d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
-										</svg> Delete
-									</a>
-								</li>
 							</ul>
-						</div>
+						</ng-template>
 					</div>
 
 					<!-- Vehicle Image -->
 					<div class="col-md-4">
-						<div class="vehtype_extint">
-							<p> Vehicle Image </p>
-							<img [src]="vehicle_image?.image" *ngIf="vehicle_image?.image"
-								(click)="showImageModal(vehicle_image)" tabindex="-1">
-							<div class="emptyImage" *ngIf="!vehicle_image?.image">
-								<img src="../../../../assets/images/empty-image.png" tabindex="-1">
+						<p class="text-center"> Vehicle Image </p>
+						<div class="vehtype_extint" *ngIf="vehicle_image?.image; else emptyImg">
+							<img [src]="vehicle_image?.image" (click)="showImageModal(vehicle_image?.image)">
+						</div>
+						<ng-template #emptyImg>
+							<div class="vehtype_extint emptyImage">
+								<img src="../../../../assets/images/empty-image.png">
 							</div>
+						</ng-template>
 
+						<ul class="mt-3 d-flex justify-content-center p-0"
+							*ngIf="vehicle_image?.image;else addVehicleImage">
+							<li>
+								<button type="button" class="changeuploaded">
+									<input type="file" accept="image/jpeg,.jpeg,.jpg,.png"
+										(change)="uploadImage($event, 'vehicle_image')">
+									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+										<path fill="none" d="M0 0h24v24H0V0z" />
+										<circle cx="12" cy="12" r="3" />
+										<path
+											d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+									</svg>
+									Change
+								</button>
+							</li>
+							<li>
+								<a class="delete-btn" (click)="deleteImage('vehicle_image')">
+									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+										<path
+											d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
+									</svg> Delete
+								</a>
+							</li>
+						</ul>
+						<ng-template #addVehicleImage>
 							<ul class="mt-3 d-flex justify-content-center p-0">
 								<li>
-									<button type="button" class="changeuploaded" tabindex="1">
+									<button type="button" class="changeuploaded">
 										<input type="file" accept="image/jpeg,.jpeg,.jpg,.png"
-											(change)="uploadImage($event, 'vehicle_image')"
-											tabindex="-1">
+											(change)="uploadImage($event, 'vehicle_image')">
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 											<path fill="none" d="M0 0h24v24H0V0z" />
 											<circle cx="12" cy="12" r="3" />
 											<path
 												d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
 										</svg>
-										{{ vehicle_image?.image ? 'Change' : 'Add' }}
+										Add
 									</button>
 								</li>
-								<li>
-									<a class="delete-btn" *ngIf="vehicle_image?.image"
-										(click)="deleteImage('vehicle_image')" tabindex="1">
-										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-											<path
-												d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
-										</svg> Delete
-									</a>
-								</li>
 							</ul>
-						</div>
+						</ng-template>
 					</div>
 				</div>
 				<!-- Image Upload Ends -->
@@ -1081,409 +1880,7 @@
 
 
 		<!-- Section - Booking Details -->
-		<div class="section-container mt-5">
-			<h2>
-				Booking Details
-			</h2>
-			<div class="row">
-				<!-- Meet Greet Choices -->
-				<div class="col-md-5 m-2">
-					<mat-form-field appearance="outline">
-						<mat-label>
-							Meet and Greet Choices <span class="asterisk"></span>
-						</mat-label>
-						<mat-select formControlName="meet_greet_choices">
-							<mat-option *ngFor="let meetGreet of BigData?.meetGreets"
-								[value]="meetGreet.id">
-								{{ meetGreet.message }}
-							</mat-option>
-						</mat-select>
-					</mat-form-field>
-				</div>
-
-				<!-- Number Of Vehicles -->
-				<div class="col-md-5 m-2">
-					<mat-form-field appearance="outline">
-						<mat-label>
-							Number of Vehicles
-						</mat-label>
-						<input type="text" matInput placholder="Number of Vehicles"
-							[value]="Form.number_of_vehicles.value ? Form.number_of_vehicles.value : 1"
-							(focus)="$event.target.select()"
-							(change)="SetFormValue('number_of_vehicles', $event.target.value)" />
-					</mat-form-field>
-				</div>
-
-				<!-- Travel Date -->
-				<div class="col-md-5 m-2">
-					<mat-form-field appearance="outline">
-						<mat-label>
-							Travel Date
-						</mat-label>
-						<input matInput setOutputDateFormat="YYYY-MM-DD" [matDatepicker]="onwy_dt"
-							placeholder="Travel Date"
-							(dateChangeWithFormat)="SetFormValue('pickup_date', $event)"
-							formControlName="pickup_date" (click)="onwy_dt.open()" readonly />
-						<mat-datepicker-toggle matSuffix [for]="onwy_dt"></mat-datepicker-toggle>
-						<mat-datepicker #onwy_dt></mat-datepicker>
-					</mat-form-field>
-				</div>
-
-				<!-- Travel Time -->
-				<div class="col-md-5 m-2">
-					<mat-form-field appearance="outline">
-						<mat-label>
-							Travel Time
-						</mat-label>
-						<input [ngxTimepicker]="onwy_tm" [value]="Form.pickup_time.value" matInput
-							readonly />
-					</mat-form-field>
-					<ngx-material-timepicker #onwy_tm
-						(timeChanged)="SetFormValue('pickup_time', $event)"
-						[defaultTime]="Form.pickup_time.value"></ngx-material-timepicker>
-				</div>
-			</div>
-
-
-			<h4 class="pl-2 mt-3">
-				Pickup
-			</h4>
-
-			<!-- Pickup - Address Field -->
-			<div *ngIf="!searchSubstring(Form.transfer_type.value, 'airport_')">
-				<div class="row">
-					<div class="col-md-12">
-						<mat-form-field appearance="outline">
-							<mat-label> Pickup Address </mat-label>
-							<input type="text" matInput placeholder="Type your address"
-								matGoogleMapsAutocomplete [value]="fillValue(null, 'pickup', null)"
-								(focus)="$event.target.select()"
-								(onAutocompleteSelected)="fillAddress('pickup', $event)"
-								(onLocationSelected)="fillLocationPoints('pickup', $event)" />
-						</mat-form-field>
-					</div>
-				</div>
-			</div>
-
-
-			<!-- Pickup - Airport Fields -->
-			<div *ngIf="searchSubstring(Form.transfer_type.value, 'airport_')">
-				<div class="row">
-					<!-- Airport -->
-					<div class="col-md-6 col-lg-3">
-						<!-- <mat-form-field appearance="outline">
-							<mat-label>
-								Airport
-							</mat-label>
-							<input #searchInput type="search" matInput
-								placeholder="Search For Airport" (focus)="$event.target.select()"
-								aria-label="Airport" [matAutocomplete]="onwy_airport"
-								(click)="openAutoCompletePanel()"
-								(keyup)="searchValue('airportsData', $event.target.value, 'name')"
-								formControlName="pickup_airport_name" />
-							<mat-autocomplete #onwy_airport="matAutocomplete">
-								<mat-option *ngFor="let option of BigData?.airportsData"
-									(click)="SetFormValue('pickup_airport', option.id)">
-									{{ option.code }} - {{ option.name }}, {{option.city }}, {{
-									option.country }}
-								</mat-option>
-							</mat-autocomplete>
-						</mat-form-field> -->
-
-						<!-- Ng-Select -->
-						<ng-select formControlName="pickup_airport"
-							(focus)="$event.target.select()">
-							<ng-option *ngFor="let option of BigData?.airportsData"
-								[value]="option.id">
-								{{ option.code }} - {{ option.name }}, {{option.city }}, {{
-								option.country }}
-							</ng-option>
-						</ng-select>
-					</div>
-
-					<!-- Airline -->
-					<div class="col-md-6 col-lg-3">
-						<mat-form-field appearance="outline">
-							<mat-label>
-								Airline
-							</mat-label>
-							<input #searchInput type="text" matInput
-								placeholder="Search For Airport" aria-label="Airport"
-								formControlName="pickup_airline_name"
-								(click)="openAutoCompletePanel()"
-								(keyup)="searchValue('airlinesData', $event.target.value, 'name')"
-								(focus)="$event.target.select()" [matAutocomplete]="onwy_airline">
-							<mat-autocomplete #onwy_airline="matAutocomplete">
-								<mat-option *ngFor="let option of BigData?.airlinesData"
-									(click)="SetFormValue('pickup_airline', option.id)">
-									{{ option.code }} - {{ option.name }}, {{ option.country }}
-								</mat-option>
-							</mat-autocomplete>
-						</mat-form-field>
-					</div>
-
-					<!-- Flight Number -->
-					<div class="col-md-6 col-lg-3">
-						<mat-form-field appearance="outline">
-							<mat-label>
-								Flight Number
-							</mat-label>
-							<input type="text" matInput placeholder="Flight Number"
-								aria-label="Flight" formControlName="pickup_flight"
-								(focus)="$event.target.select()" />
-						</mat-form-field>
-					</div>
-
-					<!-- Origin Airport / City -->
-					<div class="col-md-6 col-lg-3">
-						<mat-form-field appearance="outline">
-							<mat-label>
-								Origin Airport / City
-							</mat-label>
-							<input formControlName="origin_airport_city" type="text" matInput
-								placeholder="Origin Airport / City"
-								(focus)="$event.target.select()" />
-						</mat-form-field>
-					</div>
-				</div>
-			</div>
-
-
-			<!-- Pickup - Cruise Details -->
-			<div *ngIf="searchSubstring(Form.transfer_type.value, 'cruise_')">
-				<div class="row">
-					<!-- Cruise Port -->
-					<div class="col-md-4 my-2">
-						<mat-form-field appearance="outline">
-							<mat-label>
-								Cruise Port
-							</mat-label>
-							<input type="text" matInput placeholder="Cruise Port"
-								formControlName="cruise_port" (focus)="$event.target.select()" />
-						</mat-form-field>
-					</div>
-
-					<!-- Cruise Name -->
-					<div class="col-md-4 my-2">
-						<mat-form-field appearance="outline">
-							<mat-label>
-								Cruise Name
-							</mat-label>
-							<input formControlName="cruise_name" type="text" matInput
-								placeholder="Cruise Name" (focus)="$event.target.select()" />
-						</mat-form-field>
-					</div>
-
-					<!-- Time -->
-					<div class="col-md-4 my-2">
-						<mat-form-field appearance="outline">
-							<mat-label>
-								Cruise Time
-							</mat-label>
-							<input [ngxTimepicker]="crse_tm" [value]="Form.cruise_time.value"
-								matInput readonly />
-						</mat-form-field>
-						<ngx-material-timepicker #crse_tm
-							(timeChanged)="SetFormValue('cruise_time', $event)"
-							[defaultTime]="Form.cruise_time.value"></ngx-material-timepicker>
-					</div>
-				</div>
-			</div>
-
-
-
-			<h4 class="pl-2 mt-3">
-				Dropoff
-			</h4>
-
-			<!-- Dropoff - Address Field -->
-			<div *ngIf="!searchSubstring(Form.transfer_type.value, '_airport')">
-				<div class="row">
-					<div class="col-md-12">
-						<mat-form-field appearance="outline">
-							<mat-label> Dropoff Address </mat-label>
-							<input type="text" matInput placeholder="Type your address"
-								matGoogleMapsAutocomplete [value]="fillValue(null, 'dropoff', null)"
-								(focus)="$event.target.select()"
-								(onAutocompleteSelected)="fillAddress('dropoff', $event)"
-								(onLocationSelected)="fillLocationPoints('dropoff', $event)" />
-						</mat-form-field>
-					</div>
-				</div>
-			</div>
-
-
-			<!-- Dropoff - Airport Field -->
-			<div *ngIf="searchSubstring(Form.transfer_type.value, '_airport')">
-				<div class="row">
-					<!-- Airport -->
-					<div class="col-md-5 col-lg-3">
-						<!-- <mat-form-field appearance="outline">
-							<mat-label>
-								Airport
-							</mat-label>
-							<input #searchInput type="text" matInput
-								placeholder="Search For Airport" aria-label="Airport"
-								formControlName="dropoff_airport_name"
-								(click)="openAutoCompletePanel()"
-								(keyup)="searchValue('airportsData', $event.target.value, 'name')"
-								[matAutocomplete]="onwy_drop_airport"
-								(focus)="$event.target.select()" />
-							<mat-autocomplete #onwy_drop_airport="matAutocomplete">
-								<mat-option *ngFor="let option of BigData?.airportsData"
-									(click)="SetFormValue('dropoff_airport', option.id)">
-									{{ option.code }} - {{ option.name }}, {{option.city }}, {{
-									option.country }}
-								</mat-option>
-							</mat-autocomplete>
-						</mat-form-field> -->
-
-						<!-- Ng-Select -->
-						<ng-select formControlName="dropoff_airport"
-							(focus)="$event.target.select()">
-							<ng-option *ngFor="let option of BigData?.airportsData"
-								[value]="option.id">
-								{{ option.code }} - {{ option.name }}, {{option.city }}, {{
-								option.country }}
-							</ng-option>
-						</ng-select>
-					</div>
-
-					<!-- Airline -->
-					<div class="col-md-5 col-lg-3">
-						<mat-form-field appearance="outline">
-							<mat-label>
-								Airline
-							</mat-label>
-							<input #searchInput type="text" matInput
-								placeholder="Search For Airline" aria-label="Airport"
-								formControlName="dropoff_airline_name"
-								(click)="openAutoCompletePanel()"
-								(keyup)="searchValue('airlinesData', $event.target.value, 'name')"
-								[matAutocomplete]="onwy_drop_airline"
-								(focus)="$event.target.select()" />
-							<mat-autocomplete #onwy_drop_airline="matAutocomplete">
-								<mat-option *ngFor="let option of BigData?.airlinesData"
-									(click)="SetFormValue('dropoff_airline', option.id)">
-									{{ option.code }} - {{ option.name }}, {{ option.country }}
-								</mat-option>
-							</mat-autocomplete>
-						</mat-form-field>
-					</div>
-
-					<!-- Flight Number -->
-					<div class="col-md-5 col-lg-3">
-						<mat-form-field appearance="outline">
-							<mat-label>
-								Flight Number
-							</mat-label>
-							<input type="text" matInput placeholder="Flight Number"
-								aria-label="Flight" formControlName="dropoff_flight"
-								(focus)="$event.target.select()" />
-						</mat-form-field>
-					</div>
-				</div>
-			</div>
-
-
-			<!-- Dropoff - Cruise Details -->
-			<div *ngIf="searchSubstring(Form.transfer_type.value, '_cruise')">
-				<div class="row">
-					<!-- Cruise Port -->
-					<div class="col-md-4">
-						<mat-form-field appearance="outline">
-							<mat-label>
-								Cruise Port
-							</mat-label>
-							<input type="text" matInput placeholder="Cruise Port"
-								formControlName="cruise_port" (focus)="$event.target.select()" />
-						</mat-form-field>
-					</div>
-
-					<!-- Cruise Name -->
-					<div class="col-md-4">
-						<mat-form-field appearance="outline">
-							<mat-label>
-								Cruise Name
-							</mat-label>
-							<input formControlName="cruise_name" type="text" matInput
-								placeholder="Cruise Name" (focus)="$event.target.select()" />
-						</mat-form-field>
-					</div>
-
-					<!-- Time -->
-					<div class="col-md-4 my-2">
-						<mat-form-field appearance="outline">
-							<mat-label>
-								Cruise Time
-							</mat-label>
-							<input [ngxTimepicker]="crse_tm" [value]="Form.cruise_time.value"
-								matInput readonly />
-						</mat-form-field>
-						<ngx-material-timepicker #crse_tm
-							(timeChanged)="SetFormValue('cruise_time', $event)"
-							[defaultTime]="Form.cruise_time.value"></ngx-material-timepicker>
-					</div>
-				</div>
-			</div>
-
-
-			<!-- Extra Stops -->
-			<div class="row mt-3">
-				<div class="col-md-12 d-flex justify-content-start align-items-center">
-					<h4 class="m-0">
-						Extra Stops
-					</h4>
-					<div class="mx-4">
-						<button type="button" class="custom-filled-button" tabindex="0"
-							(click)="addExtraStop(false)">
-							Add Stop
-						</button>
-					</div>
-				</div>
-			</div>
-			<!-- Extra Stop Address Field -->
-			<div class="row mt-2 mb-4 align-items-center m-0"
-				*ngFor="let extra_stop of ExtraStops.controls; index as stop_index">
-				<div class="extra-stop-field col-11">
-					<mat-form-field appearance="outline">
-						<mat-label> Extra Stop Address {{ stop_index + 1 }} </mat-label>
-						<input type="text" matInput placeholder="Type your address"
-							matGoogleMapsAutocomplete
-							(onAutocompleteSelected)="fillExtraStop(false, stop_index, $event, null)"
-							(focus)="$event.target.select()"
-							[value]="fetchStopValue('extra_stops', stop_index)"
-							(onLocationSelected)="fillExtraStop(false, stop_index, null, $event)" />
-					</mat-form-field>
-				</div>
-				<div class="col-1 p-0 p-md-3">
-					<div class="delete-icon">
-						<i class="bi bi-trash text-2xl text-danger font-weight-bolder"
-							(click)="deleteExtraStop(false, stop_index)"></i>
-					</div>
-				</div>
-			</div>
-			<!-- Extra Stop Address Field Ends -->
-
-
-			<!-- AGM Map -->
-			<div class="row">
-				<!-- AGM Map -->
-				<div class="col-md-12">
-					<div class="map-block">
-						<div class="google_map">
-							<div id="map" class="map"></div>
-						</div>
-						<h6>
-							Total Distance: {{ mToMi(distance) }} Miles / {{ mToKm(distance)
-							}} Km
-						</h6>
-					</div>
-				</div>
-				<!-- AGM Map Ends -->
-			</div>
-			<!-- AGM Map -->
-		</div>
+	
 		<!-- Section - Booking Details Ends -->
 
 
@@ -1499,9 +1896,8 @@
 						<mat-label>
 							Meet and Greet Choices <span class="asterisk"></span>
 						</mat-label>
-						<mat-select formControlName="return_meet_greet_choices">
-							<mat-option *ngFor="let meetGreet of BigData?.meetGreets"
-								[value]="meetGreet.id">
+						<mat-select formControlName="return_meet_greet_choices" (selectionChange)="handleChangeMeetAndGreet($event ,'return')">
+							<mat-option *ngFor="let meetGreet of BigData?.meetGreets" [value]="meetGreet.id">
 								{{ meetGreet.message }}
 							</mat-option>
 						</mat-select>
@@ -1529,13 +1925,11 @@
 						<mat-label>
 							Arrival Time
 						</mat-label>
-						<input [ngxTimepicker]="rt_onwy_tm" matInput
-							[value]="Form.return_pickup_time.value"
+						<input [ngxTimepicker]="rt_onwy_tm" matInput formControlName="return_pickup_time"
 							(focus)="$event.target.select()" />
 					</mat-form-field>
 					<ngx-material-timepicker #rt_onwy_tm
-						[defaultTime]="Form.return_pickup_time.value"
-						(timeChanged)="SetFormValue('return_pickup_time', $event)"></ngx-material-timepicker>
+						[defaultTime]="Form.return_pickup_time.value"></ngx-material-timepicker>
 				</div>
 			</div>
 
@@ -1547,14 +1941,12 @@
 
 			<!-- Return Pickup - Address Field -->
 			<div *ngIf="!searchSubstring(Form.return_transfer_type.value, 'airport_')">
-				<div class="row mt-3">
+				<div class="row px-2">
 					<div class="col-md-12">
 						<mat-form-field appearance="outline">
 							<mat-label> Pickup Address </mat-label>
-							<input type="text" matInput placeholder="Type your address"
-								matGoogleMapsAutocomplete
-								[value]="fillValue(null, 'return_pickup', null)"
-								(focus)="$event.target.select()"
+							<input type="text" matInput placeholder="Type your address" matGoogleMapsAutocomplete
+								[value]="fillValue(null, 'return_pickup', null)" (focus)="$event.target.select()"
 								(onAutocompleteSelected)="fillAddress('return_pickup', $event)"
 								(onLocationSelected)="fillLocationPoints('return_pickup', $event)" />
 						</mat-form-field>
@@ -1565,7 +1957,7 @@
 
 			<!-- Return Pickup - Airport Fields -->
 			<div *ngIf="searchSubstring(Form.return_transfer_type.value, 'airport_')">
-				<div class="row">
+				<div class="row px-2">
 					<!-- Airport -->
 					<div class="col-md-6 col-lg-3">
 						<!-- <mat-form-field appearance="outline">
@@ -1587,20 +1979,20 @@
 							</mat-autocomplete>
 						</mat-form-field> -->
 
-						<!-- Ng-Select -->
-						<ng-select formControlName="return_pickup_airport"
-							(focus)="$event.target.select()">
-							<ng-option *ngFor="let option of BigData?.airportsData"
-								[value]="option.id">
-								{{ option.code }} - {{ option.name }}, {{option.city }}, {{
-								option.country }}
-							</ng-option>
+						<!-- Ng-Select > Return > Pickup > Airport -->
+						<ng-select appearance="outline" [items]="BigData?.airportsData"
+							[searchFn]="airportSearchFunction" (change)="change($event, 'return_pickup_airport')"
+							bindLabel="formatted_name" placeholder="Select Airport" dropdownPosition="bottom"
+							[markFirst]="true" [virtualScroll]="true" formControlName="return_pickup_airport_option">
+							<ng-template ng-option-tmp let-item="item">
+								<div [title]="item.formatted_name">{{item.formatted_name}}</div>
+							</ng-template>
 						</ng-select>
 					</div>
 
 					<!-- Airline -->
 					<div class="col-md-6 col-lg-3">
-						<mat-form-field appearance="outline">
+						<!-- <mat-form-field appearance="outline">
 							<mat-label>
 								Airline
 							</mat-label>
@@ -1616,18 +2008,27 @@
 									{{ option.code }} - {{ option.name }}, {{ option.country }}
 								</mat-option>
 							</mat-autocomplete>
-						</mat-form-field>
+						</mat-form-field> -->
+
+						<!-- Ng-Select > Return > Pickup > Airline -->
+						<ng-select appearance="outline" [items]="BigData?.airlinesData"
+							[searchFn]="airlineSearchFunction" (change)="change($event, 'return_pickup_airline')"
+							bindLabel="formatted_name" placeholder="Select Airline" dropdownPosition="bottom"
+							[markFirst]="true" [virtualScroll]="true" formControlName="return_pickup_airline_option">
+							<ng-template ng-option-tmp let-item="item">
+								<div [title]="item.formatted_name">{{item.formatted_name}}</div>
+							</ng-template>
+						</ng-select>
 					</div>
 
 					<!-- Flight Number -->
 					<div class="col-md-6 col-lg-3">
-						<mat-form-field appearance="outline">
+						<mat-form-field appearance="outline" class="vehicleLable mt-0">
 							<mat-label>
 								Flight Number
 							</mat-label>
-							<input type="text" matInput placeholder="Flight Number"
-								aria-label="Flight" formControlName="return_pickup_flight"
-								(focus)="$event.target.select()" />
+							<input type="text" matInput placeholder="Flight Number" aria-label="Flight"
+								formControlName="return_pickup_flight" (focus)="$event.target.select()" />
 						</mat-form-field>
 					</div>
 				</div>
@@ -1636,15 +2037,14 @@
 
 			<!-- Return Pickup - Cruise Details -->
 			<div *ngIf="searchSubstring(Form.return_transfer_type.value, 'cruise_')">
-				<div class="row mt-3">
+				<div class="row px-2">
 					<!-- Cruise Port -->
 					<div class="col-md-4">
 						<mat-form-field appearance="outline">
 							<mat-label>
 								Cruise Port
 							</mat-label>
-							<input type="text" matInput placeholder="Cruise Port"
-								formControlName="return_cruise_port"
+							<input type="text" matInput placeholder="Cruise Port" formControlName="return_cruise_port"
 								(focus)="$event.target.select()" />
 						</mat-form-field>
 					</div>
@@ -1655,23 +2055,22 @@
 							<mat-label>
 								Cruise Name
 							</mat-label>
-							<input formControlName="return_cruise_name" type="text" matInput
-								placeholder="Cruise Name" (focus)="$event.target.select()" />
+							<input formControlName="return_cruise_name" type="text" matInput placeholder="Cruise Name"
+								(focus)="$event.target.select()" />
 						</mat-form-field>
 					</div>
 
 					<!-- Time -->
-					<div class="col-md-4 my-2">
+					<div class="col-md-4">
 						<mat-form-field appearance="outline">
 							<mat-label>
 								Cruise Time
 							</mat-label>
-							<input [ngxTimepicker]="crse_tm" [value]="Form.cruise_time.value"
-								matInput readonly />
+							<input [ngxTimepicker]="re_crse_tm" matInput formControlName="return_cruise_time"
+								(focus)="$event.target.select()" readonly />
 						</mat-form-field>
-						<ngx-material-timepicker #crse_tm
-							(timeChanged)="SetFormValue('cruise_time', $event)"
-							[defaultTime]="Form.cruise_time.value"></ngx-material-timepicker>
+						<ngx-material-timepicker #re_crse_tm
+							[defaultTime]="Form.return_cruise_time.value"></ngx-material-timepicker>
 					</div>
 				</div>
 			</div>
@@ -1684,14 +2083,12 @@
 
 			<!-- Return Dropoff - Address Field -->
 			<div *ngIf="!searchSubstring(Form.return_transfer_type.value, '_airport')">
-				<div class="row mt-3">
+				<div class="row px-2">
 					<div class="col-md-12">
 						<mat-form-field appearance="outline">
 							<mat-label> Dropoff Address </mat-label>
-							<input type="text" matInput placeholder="Type your address"
-								matGoogleMapsAutocomplete
-								[value]="fillValue(null, 'return_dropoff', null)"
-								(focus)="$event.target.select()"
+							<input type="text" matInput placeholder="Type your address" matGoogleMapsAutocomplete
+								[value]="fillValue(null, 'return_dropoff', null)" (focus)="$event.target.select()"
 								(onAutocompleteSelected)="fillAddress('return_dropoff', $event)"
 								(onLocationSelected)="fillLocationPoints('return_dropoff', $event)" />
 						</mat-form-field>
@@ -1702,7 +2099,7 @@
 
 			<!-- Return Dropoff - Airport Field -->
 			<div *ngIf="searchSubstring(Form.return_transfer_type.value, '_airport')">
-				<div class="row">
+				<div class="row px-2">
 					<!-- Airport -->
 					<div class="col-md-5 col-lg-3">
 						<!-- <mat-form-field appearance="outline">
@@ -1725,20 +2122,20 @@
 							</mat-autocomplete>
 						</mat-form-field> -->
 
-						<!-- Ng-Select -->
-						<ng-select formControlName="return_dropoff_airport"
-							(focus)="$event.target.select()">
-							<ng-option *ngFor="let option of BigData?.airportsData"
-								[value]="option.id">
-								{{ option.code }} - {{ option.name }}, {{option.city }}, {{
-								option.country }}
-							</ng-option>
+						<!-- Ng-Select > Return > Dropoff > Airport -->
+						<ng-select appearance="outline" [items]="BigData?.airportsData"
+							[searchFn]="airportSearchFunction" (change)="change($event, 'return_dropoff_airport')"
+							bindLabel="formatted_name" placeholder="Select Airport" dropdownPosition="bottom"
+							[markFirst]="true" [virtualScroll]="true" formControlName="return_dropoff_airport_option">
+							<ng-template ng-option-tmp let-item="item">
+								<div [title]="item.formatted_name">{{item.formatted_name}}</div>
+							</ng-template>
 						</ng-select>
 					</div>
 
 					<!-- Airline -->
 					<div class="col-md-5 col-lg-3">
-						<mat-form-field appearance="outline">
+						<!-- <mat-form-field appearance="outline">
 							<mat-label>
 								Airline
 							</mat-label>
@@ -1755,18 +2152,27 @@
 									{{ option.code }} - {{ option.name }}, {{ option.country }}
 								</mat-option>
 							</mat-autocomplete>
-						</mat-form-field>
+						</mat-form-field> -->
+
+						<!-- Ng-Select > Return > Dropoff > Airline -->
+						<ng-select appearance="outline" [items]="BigData?.airlinesData"
+							[searchFn]="airlineSearchFunction" (change)="change($event, 'return_dropoff_airline')"
+							bindLabel="formatted_name" placeholder="Select Airline" dropdownPosition="bottom"
+							[markFirst]="true" [virtualScroll]="true" formControlName="return_dropoff_airline_option">
+							<ng-template ng-option-tmp let-item="item">
+								<div [title]="item.formatted_name">{{item.formatted_name}}</div>
+							</ng-template>
+						</ng-select>
 					</div>
 
 					<!-- Flight Number -->
 					<div class="col-md-5 col-lg-3">
-						<mat-form-field appearance="outline">
+						<mat-form-field appearance="outline" class="vehicleLable mt-0">
 							<mat-label>
 								Flight Number
 							</mat-label>
-							<input type="text" matInput placeholder="Flight Number"
-								aria-label="Flight" formControlName="return_dropoff_flight"
-								(focus)="$event.target.select()" />
+							<input type="text" matInput placeholder="Flight Number" aria-label="Flight"
+								formControlName="return_dropoff_flight" (focus)="$event.target.select()" />
 						</mat-form-field>
 					</div>
 				</div>
@@ -1775,15 +2181,14 @@
 
 			<!-- Return Dropoff - Cruise Details -->
 			<div *ngIf="searchSubstring(Form.return_transfer_type.value, '_cruise')">
-				<div class="row mt-3">
+				<div class="row px-2">
 					<!-- Cruise Port -->
 					<div class="col-md-4">
 						<mat-form-field appearance="outline">
 							<mat-label>
 								Cruise Port
 							</mat-label>
-							<input type="text" matInput placeholder="Cruise Port"
-								formControlName="return_cruise_port"
+							<input type="text" matInput placeholder="Cruise Port" formControlName="return_cruise_port"
 								(focus)="$event.target.select()" />
 						</mat-form-field>
 					</div>
@@ -1794,22 +2199,21 @@
 							<mat-label>
 								Cruise Name
 							</mat-label>
-							<input formControlName="return_cruise_name" type="text" matInput
-								placeholder="Cruise Name" (focus)="$event.target.select()" />
+							<input formControlName="return_cruise_name" type="text" matInput placeholder="Cruise Name"
+								(focus)="$event.target.select()" />
 						</mat-form-field>
 					</div>
 
 					<!-- Time -->
-					<div class="col-md-4 my-2">
+					<div class="col-md-4">
 						<mat-form-field appearance="outline">
 							<mat-label>
 								Cruise Time
 							</mat-label>
-							<input [ngxTimepicker]="crse_tm" [value]="Form.cruise_time.value"
-								matInput readonly />
+							<input [ngxTimepicker]="re_crse_tm" matInput formControlName="return_cruise_time"
+								(focus)="$event.target.select()" readonly />
 						</mat-form-field>
-						<ngx-material-timepicker #crse_tm
-							(timeChanged)="SetFormValue('cruise_time', $event)"
+						<ngx-material-timepicker #re_crse_tm
 							[defaultTime]="Form.cruise_time.value"></ngx-material-timepicker>
 					</div>
 				</div>
@@ -1818,13 +2222,12 @@
 
 			<!-- Extra Stops -->
 			<div class="row my-3 justify-items-end">
-				<div class="col-md-12 d-flex justify-content-start align-items-center">
+				<div class="col-md-12 px-4 d-flex justify-content-start align-items-center">
 					<h4 class="m-0">
 						Extra Stops
 					</h4>
 					<div class="mx-4">
-						<button type="button" class="custom-filled-button"
-							(click)="addExtraStop(true)">
+						<button type="button" class="custom-filled-button" (click)="addExtraStop(true)">
 							Add Stop
 						</button>
 					</div>
@@ -1838,11 +2241,9 @@
 						<mat-label>
 							Return Extra Stop Address {{ stop_index + 1 }}
 						</mat-label>
-						<input type="text" matInput placeholder="Type your address"
-							matGoogleMapsAutocomplete
+						<input type="text" matInput placeholder="Type your address" matGoogleMapsAutocomplete
 							(onAutocompleteSelected)="fillExtraStop(true, stop_index, $event, null)"
-							(focus)="$event.target.select()"
-							[value]="fetchStopValue('return_extra_stops', stop_index)"
+							(focus)="$event.target.select()" [value]="fetchStopValue('return_extra_stops', stop_index)"
 							(onLocationSelected)="fillExtraStop(true, stop_index, null, $event)" />
 					</mat-form-field>
 				</div>
@@ -1877,13 +2278,12 @@
 		<!-- Section - Return Journey Details Ends -->
 
 
-		<app-rates-form class="d-flex flex-wrap" [initRates]="init_rates"
-			[affiliate_type]="Form.affiliate_type.value" [distance]="distance_for_rates"
-			[amenities]="amenities" [reservation_id]="booking_id" [reset]="reset_button"
-			[reset]="reset_button" [initReturnRates]="init_return_rates"
-			(formvalue)="RateFormValue($event)" [hours]="Form.number_of_hours?.value"
-			[vehicles]="Form.number_of_vehicles?.value"
-			(returnformvalue)="ReturnRateFormValue($event)"></app-rates-form>
+		<app-rates-form class="d-flex flex-wrap" [initRates]="init_rates" [affiliate_type]="Form.affiliate_type.value"
+			[distance]="distance_for_rates" [reservation_id]="booking_id" [reset]="reset_button" [reset]="reset_button"
+			[initReturnRates]="init_return_rates" (formvalue)="RateFormValue($event)" [vehicle_id]="QB_vehicle_id"
+			[hours]="Form.number_of_hours?.value" [vehicles]="Form.number_of_vehicles?.value"
+			(returnformvalue)="ReturnRateFormValue($event)" (returnNumberOfHr)="HandleReturnNumberOfHr($event)">
+		</app-rates-form>
 
 
 
@@ -1895,11 +2295,10 @@
 
 		<div class="row">
 			<div class="col-md-12">
-				<button type="button" class="custom-filled-reset-button m-3"
-					(click)="resetFields()">
+				<!-- <button type="button" class="custom-filled-reset-button m-3" (click)="resetFields()">
 					Reset
-				</button>
-				<button type="button" class="custom-filled-button m-3" (click)="submitForm(false)">
+				</button> -->
+				<button type="submit" class="custom-filled-button m-3" (click)="submitForm(false)">
 					Save
 				</button>
 			</div>
@@ -1907,6 +2306,11 @@
 	</div>
 </form>
 
+<style>
+	.ng-select.ng-select-single .ng-select-container .ng-value-container .ng-input {
+		padding-left: 10px !important;
+	}
+</style>
 
 
 
@@ -1919,8 +2323,8 @@
 
 
 
-<div class="modal fade" id="previewBooking" tabindex="-1" aria-labelledby="previewBookingLabel"
-	aria-hidden="true">
+
+<div class="modal fade" id="previewBooking" aria-labelledby="previewBookingLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -1931,10 +2335,42 @@
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
-
-
 			<div class="modal-body" style="font-family: 'PT Serif', serif;">
 				<div class="container text-lg">
+					<!-- Rates/Taxes -->
+					<h4 class="font-weight-bolder m-0 mt-3" *ngIf="Form.affiliate_type.value == 'loose_affiliate'">
+						Rates/Taxes
+					</h4>
+					<div class="mx-2" *ngIf="init_rates && RatesForm">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Grand Total
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									${{ RatesForm.grand_total.toFixed(2) }}
+								</span>
+							</div>
+						</div>
+					</div>
+					<div class="mx-2"
+						*ngIf="ReturnRatesForm && init_return_rates && Form.affiliate_type.value!='affiliate'">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Return Trip Grand Total
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									${{ ReturnRatesForm.r_grandtotal.toFixed(2) }}
+								</span>
+							</div>
+						</div>
+						<hr>
+					</div>
 					<!-- Booking Type -->
 					<h4 class="font-weight-bolder m-0">
 						Booking Type
@@ -1951,16 +2387,349 @@
 								{{ textFormatter(Form.service_type.value) | titlecase }}
 								/
 								{{ textFormatter(Form.transfer_type.value) | titlecase }}
-								<span class="font-weight-bolder"
-									*ngIf="Form.service_type.value == 'round_trip'">
+								<span class="font-weight-bolder" *ngIf="Form.service_type.value == 'round_trip'">
 									/ {{ textFormatter(Form.return_transfer_type.value) | titlecase
 									}}
 								</span>
 							</span>
 						</div>
 					</div>
+					<hr>
+					<h4 class="font-weight-bolder m-0">
+						Vehicle Preferences
+					</h4>
+					<div class="row p-2">
+						<div class="col-md-4 key">
+							<span>
+								Vehicle Type
+							</span>
+						</div>
+						<div class="col-md-8 value">
+							<span class="font-weight-bolder">
+								{{ Form.vehicle_type_name.value}}
+								</span>
+						</div>
+					</div>
+					<div class="row p-2">
+						<div class="col-md-4 key">
+							<span>
+								Vehicle Make
+							</span>
+						</div>
+						<div class="col-md-8 value">
+							<span class="font-weight-bolder">
+								{{ Form.vehicle_make_name.value}}
+								</span>
+						</div>
+					</div>
+					<div class="row p-2">
+						<div class="col-md-4 key">
+							<span>
+								Vehicle Model
+							</span>
+						</div>
+						<div class="col-md-8 value">
+							<span class="font-weight-bolder">
+								{{ Form.vehicle_model_name.value}}
+								</span>
+						</div>
+					</div>
+					<div class="row p-2">
+						<div class="col-md-4 key">
+							<span>
+								Vehicle Year
+							</span>
+						</div>
+						<div class="col-md-8 value">
+							<span class="font-weight-bolder">
+								{{ Form.vehicle_year_name.value}}
+								</span>
+						</div>
+					</div>
+					<div class="row p-2">
+						<div class="col-md-4 key">
+							<span>
+								Vehicle Color
+							</span>
+						</div>
+						<div class="col-md-8 value">
+							<span class="font-weight-bolder">
+								{{ Form.vehicle_color_name.value}}
+								</span>
+						</div>
+					</div>
+					<div class="row p-2">
+						<div class="col-md-4 key">
+							<span>
+								Licence plate
+							</span>
+						</div>
+						<div class="col-md-8 value">
+							<span class="font-weight-bolder">
+								{{ Form.vehicle_license_plate.value}}
+								</span>
+						</div>
+					</div>
+					<div class="row p-2">
+						<div class="col-md-4 key">
+							<span>
+								No. of seats
+							</span>
+						</div>
+						<div class="col-md-8 value">
+							<span class="font-weight-bolder">
+								{{ Form.vehicle_seats.value}}
+								</span>
+						</div>
+					</div>
+					
+					<hr>
+					<!-- Affiliate Information -->
+					<ng-container *ngIf="Form.affiliate_type.value == 'affiliate' then affiliateUser">
+					</ng-container>
 
-					<!-- TODO: add information of Customer here -->
+					<!-- Affiliate -->
+					<ng-template #affiliateUser>
+						<h4 class="font-weight-bolder m-0 mt-3">
+							Affiliate Information
+						</h4>
+
+						<!-- Affiliate > Name -->
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key">
+									<span>
+										Name
+									</span>
+								</div>
+								<div class="col-md-8 value">
+									<span class="font-weight-bolder"
+										*ngIf="AffiliateInformation.MiddleName == null;else affiliateMiddleName">
+										{{ textFormatter(AffiliateInformation.FirstName) }} {{
+										textFormatter(AffiliateInformation.LastName) }}
+									</span>
+									<ng-template #affiliateMiddleName>
+										<span class="font-weight-bolder">
+											{{ textFormatter(AffiliateInformation.FirstName) }} {{
+											textFormatter(AffiliateInformation.MiddleName) }} {{
+											textFormatter(AffiliateInformation.LastName) }}
+										</span>
+									</ng-template>
+								</div>
+							</div>
+						</div>
+
+						<!-- Affiliate > Email -->
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key">
+									<span>
+										Email
+									</span>
+								</div>
+								<div class="col-md-8 value">
+									<span class="font-weight-bolder">
+										{{ textFormatter(AffiliateInformation.Email) }}
+									</span>
+								</div>
+							</div>
+						</div>
+
+						<!-- Affiliate > Phone -->
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key">
+									<span>
+										Phone
+									</span>
+								</div>
+								<div class="col-md-8 value">
+									<span class="font-weight-bolder">
+										({{ AffiliateInformation.CellIsd }})
+										{{ textFormatter(AffiliateInformation.CellNumber) }}
+									</span>
+								</div>
+							</div>
+						</div>
+					</ng-template>
+
+					<!-- Loose Affiliate Information -->
+					<ng-container *ngIf="Form.affiliate_type.value == 'loose_affiliate' then looseAffiliate">
+					</ng-container>
+
+					<!-- Loose Affiliate -->
+					<ng-template #looseAffiliate>
+						<h4 class="font-weight-bolder m-0 mt-3">
+							Loose Affiliate Information
+						</h4>
+
+						<!-- Loose Affiliate > Name -->
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key">
+									<span>
+										Name
+									</span>
+								</div>
+								<div class="col-md-8 value">
+									<span class="font-weight-bolder">
+										{{ textFormatter(Form.lose_affiliate_name.value) }}
+									</span>
+								</div>
+							</div>
+						</div>
+
+						<!-- Loose Affiliate > Email -->
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key">
+									<span>
+										Email
+									</span>
+								</div>
+								<div class="col-md-8 value">
+									<span class="font-weight-bolder">
+										{{ textFormatter(Form.lose_affiliate_email.value) }}
+									</span>
+								</div>
+							</div>
+						</div>
+
+						<!-- Loose Affiliate > Phone -->
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key">
+									<span>
+										Phone
+									</span>
+								</div>
+								<div class="col-md-8 value">
+									<span class="font-weight-bolder">
+										({{ Form.lose_affiliate_phone_isd.value }})
+										{{ textFormatter(Form.lose_affiliate_phone.value) }}
+									</span>
+								</div>
+							</div>
+						</div>
+					</ng-template>
+					<hr>
+					<!-- Driver Information -->
+					<h4 class="font-weight-bolder m-0 mt-3">
+						Driver Information
+					</h4>
+					<!-- Driver Name -->
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Name
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ textFormatter(Form.driver_name.value) | titlecase }}
+								</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Driver Email -->
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Email
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ textFormatter(Form.driver_email.value) }}
+								</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Driver Cell -->
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Phone
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									({{ Form.driver_cell_isd.value }}) {{
+									Form.driver_cell.value }}
+								</span>
+							</div>
+						</div>
+					</div>
+					<hr>
+
+					<!-- Loose Customer Information -->
+					<ng-container *ngIf="Form['account_type'].value == 'loose_customer' then LooseCustomerSec">
+					</ng-container>
+
+					<!-- Loose Customer -->
+					<ng-template #LooseCustomerSec>
+						<h4 class="font-weight-bolder m-0 mt-3">
+							Loose Customer Information
+						</h4>
+
+						<!-- Loose Customer > Name -->
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key">
+									<span>
+										Name
+									</span>
+								</div>
+								<div class="col-md-8 value">
+									<span class="font-weight-bolder">
+										{{ textFormatter(LooseCustomer.first_name.value) }} {{
+										textFormatter(LooseCustomer.middle_name.value) }} {{
+										textFormatter(LooseCustomer.last_name.value) }}
+									</span>
+								</div>
+							</div>
+						</div>
+
+						<!-- Loose Customer > Email -->
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key">
+									<span>
+										Email
+									</span>
+								</div>
+								<div class="col-md-8 value">
+									<span class="font-weight-bolder">
+										{{ textFormatter(LooseCustomer.email.value) }}
+									</span>
+								</div>
+							</div>
+						</div>
+
+						<!-- Loose Customer > Phone -->
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key">
+									<span>
+										Phone
+									</span>
+								</div>
+								<div class="col-md-8 value">
+									<span class="font-weight-bolder">
+										({{ LooseCustomer.phone_isd.value }})
+										{{ textFormatter(LooseCustomer.phone.value) }}
+									</span>
+								</div>
+							</div>
+						</div>
+						<hr>
+					</ng-template>
+					<!-- Passenger Information -->
 					<h4 class="font-weight-bolder m-0 mt-3">
 						Passenger Information
 					</h4>
@@ -2013,7 +2782,78 @@
 							</div>
 						</div>
 					</div>
-
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									No. of passenger
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ Form.total_passengers.value }}
+								</span>
+							</div>
+						</div>
+					</div>
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Luggage count
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ Form.luggage_count.value }}
+								</span>
+							</div>
+						</div>
+					</div>
+					<hr>
+					<div class="mx-2" *ngIf="Form?.meet_greet_choices_name.value">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Meet and Greet
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder" style="white-space: pre-wrap;"> 
+									{{Form?.meet_greet_choices_name.value}}
+								</span>
+							</div>
+						</div>
+					</div>
+					<div class="mx-2" *ngIf="Form.service_type.value == 'round_trip'">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Return Meet and Greet
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder" style="white-space: pre-wrap;"> 
+									{{Form?.return_meet_greet_choices_name.value}}
+								</span>
+							</div>
+						</div>
+					</div>
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Special Instruction
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder" style="white-space: pre-wrap;"> 
+									{{Form?.booking_instructions.value}}
+								</span>
+							</div>
+						</div>
+					</div>
+					<hr>
 					<!-- Travel Information -->
 					<h4 class="font-weight-bolder m-0 mt-3">
 						Travel Information
@@ -2036,11 +2876,11 @@
 					</div>
 
 					<!-- ################ Pickup ################### -->
-					<h5 class="p-2 m-0 text-xl">
+					<h5 class="p-2 m-0 text-xl preview-pickup-color">
 						Pickup Details
 					</h5>
 					<!-- Pickup > Date -->
-					<div class="mx-2">
+					<div class="mx-2 preview-pickup-color">
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
@@ -2058,7 +2898,7 @@
 					</div>
 
 					<!-- Pickup > Time -->
-					<div class="mx-2">
+					<div class="mx-2 preview-pickup-color">
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
@@ -2076,7 +2916,7 @@
 					</div>
 
 					<!-- Pickup > City Details -->
-					<div class="mx-2"
+					<div class="mx-2 preview-pickup-color"
 						*ngIf="Form.transfer_type.value.includes('city_') || Form.transfer_type.value.includes('cruise_')">
 						<div class="row m-0">
 							<div class="col-md-4">
@@ -2093,7 +2933,7 @@
 					</div>
 
 					<!-- Pickup > Airline Details -->
-					<div class="mx-2" *ngIf="Form.transfer_type.value.includes('airport_')">
+					<div class="mx-2 preview-pickup-color" *ngIf="Form.transfer_type.value.includes('airport_')">
 						<!-- Airport -->
 						<div class="row m-0">
 							<div class="col-md-4 key">
@@ -2102,7 +2942,7 @@
 								</span>
 							</div>
 							<div class="col-md-8 value">
-								<span class="font-weight-bolder">
+								<span class="font-weight-bolder preview-airport-color">
 									{{ textFormatter(Form.pickup_airport_name.value) }}
 								</span>
 							</div>
@@ -2139,7 +2979,7 @@
 					</div>
 
 					<!-- Pickup > Cruise Details -->
-					<div class="mx-2" *ngIf="Form.transfer_type.value.includes('cruise_')">
+					<div class="mx-2 preview-pickup-color" *ngIf="Form.transfer_type.value.includes('cruise_')">
 						<!-- Cruise Port -->
 						<div class="row m-0">
 							<div class="col-md-4 key">
@@ -2177,19 +3017,20 @@
 							</div>
 							<div class="col-md-8 value">
 								<span class="font-weight-bolder">
-									{{ textFormatter(Form.cruise_time.value) | titlecase }}
+									{{ timeFormat2(Form.cruise_time.value) }}
+									|
+									{{ timeFormat(Form.cruise_time.value) }}
 								</span>
 							</div>
 						</div>
 					</div>
 
 					<!-- Extra Stops -->
-					<div *ngIf="Form.extra_stops.value.length > 0">
+					<div *ngIf="Form.extra_stops.value.length > 0" class="preview-pickup-color">
 						<h5 class="p-2 m-0 text-xl">
 							Extra Stops
 						</h5>
-						<div class="mx-2"
-							*ngFor="let stop of Form.extra_stops.value; index as stop_index">
+						<div class="mx-2" *ngFor="let stop of Form.extra_stops.value; index as stop_index">
 							<div class="row m-0 mx-2">
 								<div class="col-md-4 key">
 									<span>
@@ -2205,15 +3046,14 @@
 						</div>
 					</div>
 
-					<hr style="width: 50%; margin: 1rem auto; border: 1.3px solid #aeaeae;"
-						*ngIf="Form.extra_stops.value.length == 0" />
+					<hr *ngIf="Form.extra_stops.value.length == 0" />
 
 					<!-- ############# Dropoff ################# -->
-					<h5 class="px-2 m-1 text-xl">
+					<h5 class="px-2 m-1 text-xl preview-dropoff-color">
 						Drop Off Details
 					</h5>
 					<!-- Dropoff > City Details -->
-					<div class="mx-2"
+					<div class="mx-2 preview-dropoff-color"
 						*ngIf="Form.transfer_type.value.includes('_city') || Form.transfer_type.value.includes('_cruise')">
 						<div class="row p-2">
 							<div class="col-md-4 key">
@@ -2230,15 +3070,15 @@
 					</div>
 
 					<!-- Dropoff > Airline Details -->
-					<div class="mx-2" *ngIf="Form.transfer_type.value.includes('_airport')">
+					<div class="mx-2 preview-dropoff-color" *ngIf="Form.transfer_type.value.includes('_airport')">
 						<!-- Airport -->
 						<div class="row p-2">
-							<div class="col-md-4 key">
+							<div class="col-md-4 key ">
 								<span>
 									Airport
 								</span>
 							</div>
-							<div class="col-md-8 value">
+							<div class="col-md-8 value preview-airport-color">
 								<span class="font-weight-bolder">
 									{{ textFormatter(Form.dropoff_airport_name.value ) }}
 								</span>
@@ -2276,7 +3116,7 @@
 					</div>
 
 					<!-- Dropoff > Cruise Details -->
-					<div class="mx-2" *ngIf="Form.transfer_type.value.includes('_cruise')">
+					<div class="mx-2 preview-dropoff-color" *ngIf="Form.transfer_type.value.includes('_cruise')">
 						<!-- Cruise Port -->
 						<div class="row p-2">
 							<div class="col-md-4 key">
@@ -2314,7 +3154,9 @@
 							</div>
 							<div class="col-md-8 value">
 								<span class="font-weight-bolder">
-									{{ textFormatter(Form.cruise_time.value) }}
+									{{ timeFormat2(Form.cruise_time.value) }}
+									|
+									{{ timeFormat(Form.cruise_time.value) }}
 								</span>
 							</div>
 						</div>
@@ -2386,8 +3228,7 @@
 						</div>
 
 						<!-- Return > Pickup > Airline Details -->
-						<div class="mx-2"
-							*ngIf="Form.return_transfer_type.value.includes('airport_')">
+						<div class="mx-2" *ngIf="Form.return_transfer_type.value.includes('airport_')">
 							<!-- Airport -->
 							<div class="row p-2">
 								<div class="col-md-4 key">
@@ -2431,8 +3272,7 @@
 						</div>
 
 						<!-- Return > Pickup > Cruise Details -->
-						<div class="mx-2"
-							*ngIf="Form.return_transfer_type.value.includes('cruise_')">
+						<div class="mx-2" *ngIf="Form.return_transfer_type.value.includes('cruise_')">
 							<div class="row p-2">
 								<div class="col-md-4 key">
 									<span>
@@ -2470,9 +3310,32 @@
 								</div>
 								<div class="col-md-8 value">
 									<span class="font-weight-bolder">
-										{{ textFormatter(Form.return_cruise_time.value) | titlecase
-										}}
+										{{ timeFormat2(Form.return_cruise_time.value) }}
+										|
+										{{ timeFormat(Form.return_cruise_time.value) }}
 									</span>
+								</div>
+							</div>
+						</div>
+
+
+						<!-- Return > Extra Stops -->
+						<div *ngIf="Form.return_extra_stops.value.length > 0">
+							<h5 class="p-2 m-0 text-xl">
+								Extra Stops
+							</h5>
+							<div class="mx-2" *ngFor="let stop of Form.return_extra_stops.value; index as stop_index">
+								<div class="row m-0 mx-2">
+									<div class="col-md-4 key">
+										<span>
+											Stop {{ stop_index + 1 }}
+										</span>
+									</div>
+									<div class="col-md-8 value">
+										<span class="font-weight-bolder">
+											{{ stop.address }}
+										</span>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -2500,8 +3363,7 @@
 						</div>
 
 						<!-- Return > Dropoff > Airline Details -->
-						<div class="mx-2"
-							*ngIf="Form.return_transfer_type.value.includes('_airport')">
+						<div class="mx-2" *ngIf="Form.return_transfer_type.value.includes('_airport')">
 							<!-- Airport -->
 							<div class="row p-2">
 								<div class="col-md-4 key">
@@ -2546,8 +3408,7 @@
 						</div>
 
 						<!-- Return > Dropoff > Cruise Details -->
-						<div class="mx-2"
-							*ngIf="Form.return_transfer_type.value.includes('_cruise')">
+						<div class="mx-2" *ngIf="Form.return_transfer_type.value.includes('_cruise')">
 							<!-- Cruise Port -->
 							<div class="row p-2">
 								<div class="col-md-4 key">
@@ -2587,44 +3448,11 @@
 								</div>
 								<div class="col-md-8 value">
 									<span class="font-weight-bolder">
-										{{ textFormatter(Form.return_cruise_time.value) | titlecase
-										}}
+										{{ timeFormat2(Form.return_cruise_time.value) }}
+										|
+										{{ timeFormat(Form.return_cruise_time.value) }}
 									</span>
 								</div>
-							</div>
-						</div>
-					</div>
-
-					<!-- Rates/Taxes -->
-					<h4 class="font-weight-bolder m-0 mt-3"
-						*ngIf="Form.affiliate_type.value == 'loose_affiliate'">
-						Rates/Taxes
-					</h4>
-					<div class="mx-2" *ngIf="init_rates && RatesForm">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Grand Total
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder">
-									${{ RatesForm.grand_total }}
-								</span>
-							</div>
-						</div>
-					</div>
-					<div class="mx-2" *ngIf="ReturnRatesForm && init_return_rates">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Return Trip Grand Total
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder">
-									${{ ReturnRatesForm.r_grandtotal }}
-								</span>
 							</div>
 						</div>
 					</div>
@@ -2637,8 +3465,7 @@
 				<button type="button" class="custom-filled-back-button" data-dismiss="modal">
 					Close
 				</button>
-				<button type="button" class="custom-filled-button" data-dismiss="modal"
-					(click)="submitForm(true)">
+				<button type="submit" class="custom-filled-button" data-dismiss="modal" (click)="submitForm(true)">
 					Save
 				</button>
 			</div>

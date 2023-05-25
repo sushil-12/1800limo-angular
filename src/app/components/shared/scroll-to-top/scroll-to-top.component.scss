@@ -7,7 +7,28 @@
     // z-index: 99999;
 }
 
+.scrollDownButton {
+    position: fixed;
+    bottom: 65px;
+    right: 3px;
+    opacity: 0;
+    transition: all .2s ease-in-out;
+    // z-index: 99999;
+}
+
+.show-scrollDown
+{
+    opacity: 1;
+    transition: all .2s ease-in-out;
+}
+
 .show-scrollTop {
     opacity: 1;
     transition: all .2s ease-in-out;
+}
+
+
+
+.rotate-btn{
+    transform: rotate(180deg);
 }

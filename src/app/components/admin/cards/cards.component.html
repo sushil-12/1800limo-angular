@@ -10,8 +10,8 @@
 				</div>
 			</div>
 
-			<div class="row">
-				<div class="col-md-12">
+			<div class="row d-flex justify-content-between">
+				<div class="col-md-10">
 					<button class="custom-btn add-button" data-toggle="modal" (click)="addCardClick(accountId)">
 						<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-plus-circle"
 							viewBox="0 0 16 16">
@@ -20,6 +20,10 @@
 								d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
 						</svg> Add Debit / Credit card
 					</button>
+				</div> 
+				<div class="col-md-2">
+				<button class="custom-btn add-button" data-toggle="modal" data-target="#paymentLogs"
+				*ngIf="cards.length>0" (click)="paymentLogs()">Payment logs</button>
 				</div>
 			</div>
 
@@ -37,6 +41,7 @@
 								<th>Card No.</th>
 								<th>MM/YYYY</th>
 								<th>Card Type</th>
+								<th>Payment</th>
 								<th>Delete</th>
 							</tr>
 						</thead>
@@ -52,6 +57,13 @@
 											<td>0{{card.exp_month+'/'+card.exp_year}}</td>
 										</ng-template>
 										<td class="text-capitalize">{{card.card_type}}</td>
+										<td>
+											<button class="custom-filled-button orange-button"
+												style="color:#fff;padding: 5px 12px !important;"
+												data-toggle="modal" data-target="#paymentModal"
+												(click)="show=!show;ID=card.ID">
+												charge
+											</button></td>
 										<td>
 											<i class="fa fa-trash" style="font-size: x-large; color:#d64646"
 												(click)="enableDisableClicked(card.ID)" data-toggle="modal"
@@ -72,7 +84,7 @@
 				</div>
 				<section class="billing_inforamtion">
 					<ul>
-						<li><button class="custom-btn backbutton" (click)="backButtonClick()"
+						<li><button class="custom-btn backbutton btn-shadow" (click)="backButtonClick()"
 								tabindex="-1">BACK</button> </li>
 					</ul>
 				</section>
@@ -83,3 +95,113 @@
 
 <!-- Delete confirmation modal -->
 <app-delete-confirmation (deleteRecord)="delete()" [alertMessage]="alertMessage"></app-delete-confirmation>
+
+
+
+
+<div class="modal fade" id="paymentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+	aria-hidden="true" data-backdrop="static" data-keyboard="false" *ngIf="show">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content user_inforamtion">
+			<button type="button" (click)="closeModal()" class="close closeButton x-circle-btn" data-dismiss="modal"
+				aria-label="Close">
+				<i class="bi bi-x-circle"></i>
+			</button>
+			<div class="modal-header pb-0 d-flex justify-content-center">
+				<h3 class="mb-0" id="exampleModalLabel">Payment</h3>
+			</div>
+			<div class="modal-body">
+				<form [formGroup]="paymentForm" appInvalidControlScroll>
+					<div class="form-group">
+						<div class="col-md-12">
+							<mat-form-field appearance="outline">
+								<mat-label>Amount</mat-label>
+								<span class="currencySymbol" matPrefix>$</span>
+								<input matInput type="number" formControlName="amount"
+									value="invoiceData.grand_total" required>
+							</mat-form-field>
+							<div class="error-box">
+								<div class="error-message"
+									*ngIf="Form.amount?.invalid && (Form.amount.touched || Form.amount.dirty)">
+									<p class="text-danger text-lg m-0" *ngIf="Form.amount.errors?.required">
+										Amount is required
+									</p>
+									<p class="text-danger text-lg m-0" *ngIf="Form.amount.errors?.max">
+										Maximum amount exceeded
+									</p>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-12">
+							<mat-form-field appearance="outline">
+								<mat-label>
+									Payment Description
+								</mat-label>
+								<textarea matInput style="white-space: pre-wrap;" formControlName="payment_description" (focus)="$event.target.select()"
+									rows="5"></textarea>
+							</mat-form-field>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer d-flex justify-content-between">
+				<button type="button" (click)="closeModal()" class="btn btnStyle">Close</button>
+				<button class="btn saveButtonModal" type="submit" (click)="payment() "
+				 [disabled]="Form.amount?.invalid && (Form.amount.touched || Form.amount.dirty)">Submit</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!-- payment logs modal -->
+
+
+<div class="modal fade bd-example-modal-lg" id="paymentLogs" tabindex="-1" role="dialog"
+	aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content user_information bottom-container">
+			<div class="modal-header pb-0">
+				<h3 class="modal-title mb-0">Payment logs</h3>
+			</div>
+			<div class="modal-body table-responsive">
+				<!-- {{invoiceData.audit_trail | json}} -->
+				<table id="audittrail" class="table table-striped">
+					<thead style="background-color: white;">
+						<tr>
+							<th scope="col">#</th>
+							<th scope="col">Transaction ID</th>
+							<th scope="col">Description</th>
+							<th scope="col">Amount</th>
+							<th scope="col">Invoice</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr *ngFor="let record of paymentJson; let i=index">
+							<th scope="row">{{i+1}}</th>
+							<td style="word-wrap: break-word;">
+								<a href="{{record.receipt_url}}" target="_blank">
+								{{record?.balance_transaction}}</a> 
+							</td>
+							<td scope="row" style="word-wrap: break-word;">{{record.description}}</td>
+							<td scope="row" style="width: 100px;"><span class="currencySymbol">$</span>
+								{{record?.amount}}</td>
+							<td scope="row"><button class="custom-filled-button orange-button"
+								style="color:#fff;padding: 5px 12px !important;"
+								data-toggle="modal" data-target="#paymentModal"
+								(click)="navigate(record)" >
+								View
+							</button></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="modal-footer justify-content-end">
+				<button type="button" class="x-close-btn x-cross-btn mx-3" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true" class="bi bi-x-circle"></span>
+				</button>
+
+			</div>
+		</div>
+	</div>
+</div>

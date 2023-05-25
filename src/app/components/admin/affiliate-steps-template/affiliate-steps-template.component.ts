@@ -1,9 +1,10 @@
 import { Component, OnInit, AfterViewInit, ElementRef } from '@angular/core';
 import { AdminService } from '../../../services/admin.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 declare var $: any;
 
 
@@ -36,10 +37,12 @@ export class AffiliateStepsTemplateComponent implements OnInit {
 	constructor(
 		private router: Router,
 		private adminService: AdminService,
-		private errordialog: ErrorDialogService
+		private errordialog: ErrorDialogService,
+		private activatedRoute: ActivatedRoute,
 	) { }
 
-	ngOnInit(): void {
+	ngOnInit() {
+		this.currentStep = this.router.url.substring(this.router.url.indexOf('step'));
 		this.affiliateId = sessionStorage.getItem('affiliateId');
 		if (this.affiliateId) {
 			this.adminService.getStepsCompleted(this.affiliateId)
@@ -70,25 +73,24 @@ export class AffiliateStepsTemplateComponent implements OnInit {
 				}
 			}
 		}
-
-		const tree = this.router.parseUrl(this.router.url);
-		this.secondPartUrl = tree.root.children.primary.segments[2].path;
-		const step = this.secondPartUrl.charAt(this.secondPartUrl.length - 1);
-		console.log(step, ";;;;;;;;;;;;;;;;;")
-
 	}
+
 	stepCompletionTick() {
 		for (let [key, value] of Object.entries(this.stepCompletedObj)) {
-			console.log(key)
 			let stepNumber = key;
 			this[stepNumber] = 'md-step ' + value + (this.currentStep == stepNumber ? ' active' : '');
-
 		}
 	}
 
 	stepClicked(step) {
 		let steps_completed = sessionStorage.getItem('stepCompleted')
-
+		let steps_completed_obj = JSON.parse(sessionStorage.getItem('step_completed_obj'))
+		let first_incomplete_step = Object.keys(steps_completed_obj)[Object.values(steps_completed_obj).indexOf('uncompleted')]
+		let first_step_error = Object.keys(steps_completed_obj)[Object.values(steps_completed_obj).indexOf('error')] || first_incomplete_step
+		console.log(Object.values(steps_completed_obj).indexOf('error'),Object.values(steps_completed_obj).indexOf('uncompleted'))
+		let nav_step = (Object.values(steps_completed_obj).indexOf('error') < Object.values(steps_completed_obj).indexOf('uncompleted'))
+			? first_step_error :
+			first_incomplete_step;
 		if (step == 0) {
 			this.router.navigate(['/admin/affiliate/step0']);
 			return
@@ -107,7 +109,8 @@ export class AffiliateStepsTemplateComponent implements OnInit {
 					error: `Please complete previous steps first.`
 				}
 			})
-			this.router.navigate(['/admin/affiliate/step' + (steps_completed.length)])
+			console.log('nav------step' , nav_step)
+			this.router.navigate(['/admin/affiliate/' + (nav_step)])
 		}
 
 	}

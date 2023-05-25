@@ -32,5 +32,15 @@ export class CustomvalidationService {
     };
   }
 
+  whitespace(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } => {
+      if (!control.value) {
+        return null;
+      }
+      const isValid = !control.value || (!control.value.startsWith(' ') && !control.value.endsWith(' '));
+      return isValid ? null : { 'whitespace': true };
+    };
+  }
+
   constructor() { }
 }

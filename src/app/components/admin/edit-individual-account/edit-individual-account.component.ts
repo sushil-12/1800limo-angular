@@ -50,7 +50,7 @@ export class EditIndividualAccountComponent implements OnInit
 	{
 		this.currentUser = JSON.parse(sessionStorage.getItem("currentUserData"))
 		this.spinner.show();//hide spinner
-
+		this.buildAddIndividualForm()
 		//pick vehicle type id from query params
 		this.activatedroute.queryParamMap
 			.subscribe((params) =>
@@ -140,6 +140,11 @@ export class EditIndividualAccountComponent implements OnInit
 			});
 		});
 
+		
+	}
+
+
+	buildAddIndividualForm(){
 		//add amenity form validation
 		this.addIndividualAccountForm = this.formBuilder.group({
 			id: ['5', Validators.required],
@@ -147,13 +152,13 @@ export class EditIndividualAccountComponent implements OnInit
 			firstName: ['', Validators.required],
 			middleName: [''],
 			lastName: ['', Validators.required],
-			mobile: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(10), Validators.maxLength(10)]],
+			mobile: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
 			mobileIsd: ['+1', Validators.required],
 			mobileCountry: ['us'],
-			work: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(10), Validators.maxLength(10)]],
+			work: [''],
 			workIsd: ['+1', Validators.required],
 			workCountry: ['us'],
-			email: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
+			email: ['', [Validators.required ,Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.]+\.[a-zA-Z]{2,}$/i)]],
 			address: ['', Validators.required],
 			city: ['', Validators.required],
 			state: ['', Validators.required],
@@ -233,7 +238,12 @@ export class EditIndividualAccountComponent implements OnInit
 
 	resetForm()
 	{
-		this.addIndividualAccountForm.reset();
+		this.buildAddIndividualForm()
+		this.addIndividualAccountForm.patchValue({
+			id: this.individualId,
+			mobile: this.response.data.mobile,
+			mobileIsd: '+44'
+		});
 	}
 	backButton()
 	{

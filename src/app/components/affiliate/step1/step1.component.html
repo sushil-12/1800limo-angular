@@ -349,8 +349,8 @@
 				</div>
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
-						<mat-label>DBA</mat-label>
-						<input matInput placeholder="DBA" formControlName="DBA" tabIndex="1" />
+						<mat-label>Doing Business As</mat-label>
+						<input matInput placeholder="Doing Business As" formControlName="DBA" tabIndex="1" />
 					</mat-form-field>
 					<div *ngIf="
 							(submittedForm && f.DBA.errors) ||
@@ -905,21 +905,22 @@
 			</div>
 		</div>
 	</section>
-</form>
 
-<div class="row flex flex-wrap-reverse my-4">
-	<button class="custom-filled-back-button m-2 mx-4" routerLink="/affiliate/step0">
-		BACK
-	</button>
-	<div class="col-md-auto mx-auto">
-		<button class="custom-filled-reset-button m-2" (click)="resetForm()" tabIndex="2">
-			RESET
+
+	<div class="row flex flex-wrap-reverse my-4">
+		<button class="custom-filled-back-button m-2 mx-4" routerLink="/affiliate/step0">
+			BACK
 		</button>
-		<button class="custom-filled-button m-2" (click)="submitForm()" tabIndex="1">
-			SAVE
-		</button>
+		<div class="col-md-auto mx-auto">
+			<button class="custom-filled-reset-button m-2" (click)="resetForm()" tabIndex="2">
+				RESET
+			</button>
+			<button type="submit" class="custom-filled-button m-2" (click)="submitForm()" tabIndex="1">
+				SAVE
+			</button>
+		</div>
 	</div>
-</div>
+</form>
 
 <!-- Image modal -->
 <app-image-modal (closeTab)="closeButton()" [modalImage]="modalImage"></app-image-modal>

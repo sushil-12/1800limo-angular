@@ -4,8 +4,8 @@ import { StateManagementService } from '../../../services/statemanagement.servic
 import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from "ngx-spinner";
-import { catchError } from 'rxjs/operators';
-import { throwError, from } from 'rxjs';
+import { catchError, map, startWith } from 'rxjs/operators';
+import { throwError, from, Observable } from 'rxjs';
 import { CustomvalidationService } from '../../../services/customvalidation.service';
 import { MapsAPILoader } from '@agm/core';
 import { data } from 'jquery';
@@ -57,6 +57,8 @@ export class AffiliateStep1Component implements OnInit {
 	public modalImage: string;
 	public notify_sms: boolean;
 	public notify_email: boolean;
+	badgeOptions: string[] = [];
+    filteredOptions: any;
 	// stateManagementService: any;
 
 	constructor(
@@ -92,7 +94,6 @@ export class AffiliateStep1Component implements OnInit {
 	}
 
 	ngOnInit(): void {
-
 		this.currentUser = this.authService.currentUserValue;
 		//add amenity form validation
 		this.addAffiliateAccountForm = this.formBuilder.group({
@@ -105,14 +106,16 @@ export class AffiliateStep1Component implements OnInit {
 			Gender: ['male', Validators.required],
 			CellNumber: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
 			CellIsd: ['+1', Validators.required],
-			Email: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+(\.[a-z]{2,4})(\.[a-zA-Z]{2,4})?$")]],
+			Email: ['', [Validators.required,Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.]+\.[a-zA-Z]{2,}$/i)]],
+			badge_city :[''],
+			badge_city_name:[''],
 			latitude: [''],
 			longitude: [''],
-			FirstYearBusiness: ['', Validators.required],
+			FirstYearBusiness: ['', [Validators.required ,Validators.pattern("^[0-9]*$")]],
 			CellNumberCountry: ['us', Validators.required],
 			CompanyName: ['', Validators.required],
 			DBA: [''],
-			dispatchEmail: ['', [Validators.pattern("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+(\.[A-Za-z]{2,4})(\.[a-zA-Z]{2,4})?$")]],
+			dispatchEmail: ['', [Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.]+\.[a-zA-Z]{2,}$/i)]],
 			Dispatch: [''],
 			DispatchIsd: ['+1'],
 			DispatchCountry: ['us'],
@@ -122,7 +125,7 @@ export class AffiliateStep1Component implements OnInit {
 			CompanyCellIsd: ['+1', Validators.required],
 			CompanyCellNumberCountry: ['us'],
 			FaxCountry: ['us'],
-			Fax: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(10), Validators.maxLength(10)]],
+			Fax: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
 			cpcn_tpc: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
 			FaxIsd: ['+1', Validators.required],
 			LanguagesGet: this.formBuilder.array([]),
@@ -132,13 +135,25 @@ export class AffiliateStep1Component implements OnInit {
 			notify_sms: [true],
 			notify_email: [true],
 		});
+	
+		this.addAffiliateAccountForm.patchValue({AffiliateType:'black_limo_operator'})
+		this.affiliateTypeSwitch("black_limo_operator");
 
-		this.stateManagementService.setprogressBar(true);
+		this.spinner.show()
+		// this.stateManagementService.setprogressBar(true);
 		// Load Our languages using API
+		this.adminService.getAllEnableBadgeCities().pipe(
+			catchError(err => {
+				return throwError(err)
+			})
+		).subscribe((res:any)=> {
+			this.badgeOptions = res?.data
+			this.filteredOptions = res?.data
+		})
 		this.adminService.getAssicationsLanguages()
 			.pipe(
 				catchError(err => {
-					this.stateManagementService.setprogressBar(false);
+					// this.stateManagementService.setprogressBar(false);
 					return throwError(err);
 				})
 			).subscribe(result => {
@@ -155,11 +170,19 @@ export class AffiliateStep1Component implements OnInit {
 					this.adminService.getAffiliateAccount(this.affiliateId)
 						.pipe(
 							catchError(err => {
-								this.stateManagementService.setprogressBar(false);
+								// this.stateManagementService.setprogressBar(false);
 								return throwError(err);
 							})
 						).subscribe(result2 => {
 							this.response2 = result2;
+							this.badgeOptions.map((i:any)=>{
+								if(i.id==this.response2.data.badge_city){
+									this.addAffiliateAccountForm.patchValue({
+										badge_city:i.id,
+										badge_city_name:i.name
+									})
+								}
+							})
 							this.addAffiliateAccountForm.patchValue({
 								id: this.response2.data.id,
 								FirstName: this.response2.data.FirstName,
@@ -172,6 +195,30 @@ export class AffiliateStep1Component implements OnInit {
 								FirstYearBusiness: this.response2.data.FirstYearBusiness,
 							});
 							this.affiliateTypeSwitch(this.response2.data.AffiliateType)
+
+							this.affiliateEmailStatus = this.response2.data.is_email_verified;
+							if (this.affiliateEmailStatus == "yes")
+							{
+								this.affiliateEmailButton = "edit";
+								this.affiliateEmailReadonly = true;
+							} else
+							{
+								this.affiliateEmailButton =
+									"resend_verification";
+								this.affiliateEmailReadonly = false;
+							}
+
+							this.dispatchEmailStatus = this.response2.data.dispatch_is_email_verified;
+							if (this.dispatchEmailStatus == "yes")
+							{
+								this.dispatchEmailButton = "edit";
+								this.dispatchEmailReadonly = true;
+							} else
+							{
+								this.dispatchEmailButton =
+									"resend_verification";
+								this.dispatchEmailReadonly = false;
+							}
 
 							sessionStorage.setItem("affiliateUserData", JSON.stringify(this.response2.data));
 							sessionStorage.setItem("affiliateType", this.response2.data.AffiliateType)
@@ -257,22 +304,25 @@ export class AffiliateStep1Component implements OnInit {
 							}
 							console.log('associations');
 							//
-							this.stateManagementService.setprogressBar(false);
+							// this.stateManagementService.setprogressBar(false);
 						});
 				} else {
 					this.addAffiliateAccountForm.patchValue({
 						AffiliateType: (this.affiliateType ? this.affiliateType : 'black_limo_operator')
 					});
-					this.stateManagementService.setprogressBar(false);
+					// this.stateManagementService.setprogressBar(false);
 
 					this.onLanguageChange('1', true);//set english as default language
 				}
-				this.stateManagementService.setprogressBar(false);
+
+		this.spinner.hide()
+				// this.stateManagementService.setprogressBar(false);
 			});
 
 		if (sessionStorage.getItem("affiliateType") != "all_operators") {
 			this.affiliateTypeSwitch(sessionStorage.getItem("affiliateType"))
 		}
+		window.scrollTo(0,0);
 	}
 
 	affiliateTypeSwitch(affiliateType) {
@@ -334,10 +384,90 @@ export class AffiliateStep1Component implements OnInit {
 		}
 	}
 
+	// affiliateEmailButtonClick(action)
+	// {
+	// 	if (action === "edit")
+	// 	{
+	// 		$("#emailText").addClass("emailText");
+	// 		this.affiliateEmailReadonly = false;
+	// 		this.affiliateEmailStatus = "in-process";
+	// 		this.affiliateEmailButton = "update";
+	// 	} else if (action == "save")
+	// 	{
+	// 		if (
+	// 			this.addAffiliateAccountForm.value.Email ===
+	// 			this.updatedAffiliateEmail
+	// 		)
+	// 		{
+	// 			this.displayMsg =
+	// 				"New entered Email is similar to previous one.";
+	// 		} else
+	// 		{
+	// 			this.displayMsg = "";
+	// 			this.affiliateEmailButton = "edit";
+	// 			this.affiliateEmailReadonly = true;
+	// 			this.affiliateEmailProgressBar = true; //show progressbar
+	// 			this.affiliateService
+	// 				.editAffiliateEmail(
+	// 					this.addAffiliateAccountForm.value.Email
+	// 				)
+	// 				.pipe(
+	// 					catchError((err) =>
+	// 					{
+	// 						this.affiliateEmailProgressBar = false; //hide progressbar
+	// 						return throwError(err);
+	// 					})
+	// 				)
+	// 				.subscribe(({ data }: any) =>
+	// 				{
+	// 					this.affiliateEmailProgressBar = false; //hide progressbar
+	// 					this.snackbarMsg = "OTP sent Successfully";
+	// 					this.openSnackbar();
+	// 				});
+	// 		}
+	// 		$("#editAffiliateEmailModal").modal("show");
+	// 	} else
+	// 	{
+	// 		this.disableAffiliateEmailResendButton = true;
+	// 		this.stateManagementService.setprogressBar(true);
+	// 		this.affiliateService
+	// 			.resendAffiliateEmailVerification(
+	// 				this.addAffiliateAccountForm.value.Email
+	// 			)
+	// 			.pipe(
+	// 				catchError((err) =>
+	// 				{
+	// 					this.disableAffiliateEmailResendButton = false;
+	// 					this.stateManagementService.setprogressBar(false);
+	// 					return throwError(err);
+	// 				})
+	// 			)
+	// 			.subscribe(({ data }: any) =>
+	// 			{
+	// 				this.disableAffiliateEmailResendButton = false;
+	// 				this.stateManagementService.setprogressBar(false);
+	// 				this.snackbarMsg = "Email Verification Sent.";
+	// 				this.openSnackbar();
+	// 			});
+	// 	}
+	// }
+	handleBadgeCity(value:any){
+		console.log(value , this.filteredOptions)
+		this.filteredOptions = this.badgeOptions.filter((i:any)=> i.name.toLowerCase().includes(value.toLowerCase()))
+	}
+	selectBadgeCity(option:any,isUserInput){
+		console.log('in function selectBadgeCity-->>>' ,isUserInput)
+		if(isUserInput){
+			this.addAffiliateAccountForm.patchValue({
+				badge_city:option.id
+			})
+			// this.addAffiliateAccountForm.updateValueAndValidity()
+		}
 
+	}
 
 	businessCardImageChange(event, imageType, imageId = null) {
-		this.stateManagementService.setprogressBar(true); //show progressBar
+		// this.stateManagementService.setprogressBar(true); //show progressBar
 		const reader = new FileReader();
 		if (event.target.files && event.target.files.length) {
 			const [file] = event.target.files;
@@ -347,7 +477,7 @@ export class AffiliateStep1Component implements OnInit {
 				this.adminService.uploadVehicleImage(this.imageSrc)
 					.pipe(
 						catchError(err => {
-							this.stateManagementService.setprogressBar(false); // hide progressBar
+							// this.stateManagementService.setprogressBar(false); // hide progressBar
 							return throwError(err);
 						})
 					)
@@ -373,7 +503,7 @@ export class AffiliateStep1Component implements OnInit {
 								break;
 							}
 						}
-						this.stateManagementService.setprogressBar(false); // hide progressBar
+						// this.stateManagementService.setprogressBar(false); // hide progressBar
 					});
 			};
 		}
@@ -417,7 +547,7 @@ export class AffiliateStep1Component implements OnInit {
 	conditionalValidations(affiliateType) {
 		if (affiliateType != 'gig_operator') {
 			this.addAffiliateAccountForm.controls['CompanyName'].setValidators([Validators.required]);
-			this.addAffiliateAccountForm.controls['dispatchEmail'].setValidators([Validators.required]);
+			this.addAffiliateAccountForm.controls['dispatchEmail'].setValidators([Validators.required ,Validators.pattern("^[a-zA-Z0-9.]+@[a-z0-9.-]+\\.[a-z]{2,4}$") ]);
 			this.addAffiliateAccountForm.controls['Dispatch'].setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15), this.customValidator.dashValidator(), this.customValidator.plusValidator()]);
 			this.addAffiliateAccountForm.controls['DispatchIsd'].setValidators([Validators.required]);
 			this.addAffiliateAccountForm.controls['DispatchCountry'].setValidators([Validators.required]);
@@ -425,7 +555,7 @@ export class AffiliateStep1Component implements OnInit {
 		}
 		else {
 			this.addAffiliateAccountForm.controls['CompanyName'].clearValidators();
-			this.addAffiliateAccountForm.controls['dispatchEmail'].clearValidators();
+			this.addAffiliateAccountForm.controls['dispatchEmail'].setValidators([Validators.pattern("^[a-zA-Z0-9.]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]);
 			this.addAffiliateAccountForm.controls['Dispatch'].clearValidators();
 			this.addAffiliateAccountForm.controls['DispatchIsd'].clearValidators();
 			this.addAffiliateAccountForm.controls['DispatchCountry'].clearValidators();
@@ -519,7 +649,7 @@ export class AffiliateStep1Component implements OnInit {
 
 
 	submitForm() {
-		console.log(this.addAffiliateAccountForm);
+		console.log('submit button hited',this.addAffiliateAccountForm);
 		// console.log(JSON.stringify(this.addVehicleRatesForm.value));
 		this.submittedForm = true;
 		// stop here if form is invalid
@@ -543,27 +673,27 @@ export class AffiliateStep1Component implements OnInit {
 				})
 			)
 			.subscribe(result => {
+				console.log('response__>>>')
 				this.response = result;
 				this.spinner.hide();//hide spinner
 				this.disableSubmitButton = false; //enable submit button
 				sessionStorage.setItem("affiliateUserData", JSON.stringify(this.addAffiliateAccountForm.value));
 				console.log("valueset", this.addAffiliateAccountForm.value.id)
-				if (!this.addAffiliateAccountForm.value.id) {
-					sessionStorage.setItem("affiliateId", this.response.data.acc_id);
-					sessionStorage.setItem("affiliateType", this.addAffiliateAccountForm.value.AffiliateType);
-					console.log("valueset", this.response.data.acc_id)
-					if (this.response.success == true) {
-						this.adminService.updateStepsLocal("1");
+				if (this.response.success == true) {
+					this.adminService.updateStepsLocal("1");
+					if (!this.addAffiliateAccountForm.value.id) {
+						sessionStorage.setItem("affiliateId", this.response.data.acc_id);
+						sessionStorage.setItem("affiliateType", this.addAffiliateAccountForm.value.AffiliateType);
+						console.log("valueset", this.response.data.acc_id)
+						
+						console.log('routing to step 2 _-->>')
+						
 					}
+					
+					// done by Ishpreet
 					this.router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
-						this.router.navigate(['/admin/affiliate/step2'])
-					);
-				}
-				else {
-					// this.router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
-					// 	this.router.navigate(['/admin/affiliate/step1'])
-					// );
-					this.router.navigate(['/admin/affiliate/step1'])
+							this.router.navigate(['/admin/affiliate/step2'])
+						);
 				}
 			});
 	}

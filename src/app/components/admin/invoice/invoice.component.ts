@@ -25,7 +25,7 @@ export class InvoiceComponent implements OnInit {
   public firstPage:Number;
   public lastPage:Number;
   public totalPage:Number;
-  public currentPage:Number;
+  public currentPage:any;
   public from:Number;
   public to:Number;
   public path:string;
@@ -48,7 +48,7 @@ export class InvoiceComponent implements OnInit {
       /** spinner starts on init */
       this.spinner.show();
 
-      var keyword = ((document.getElementById("keyword") as HTMLInputElement).value);
+      var keyword = ((document.getElementById("keyword2") as HTMLInputElement).value);
       // console.log(keyword);
       // Load Our invoices using API
       this.adminService.invoiceList(pageUrl,keyword).then(result=>{

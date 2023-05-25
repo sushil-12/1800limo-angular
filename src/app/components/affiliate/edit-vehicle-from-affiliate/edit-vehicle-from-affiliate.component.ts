@@ -26,7 +26,7 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 	public vehicleId: string;
 	public imageSrc: string;
 	public vehicleImageArray: Array<object> = [];
-
+	public onFirstLoad :number=1;
 	public addVehicleForm: FormGroup;
 	public submittedForm: boolean;
 	public disableSubmitButton: boolean = false;
@@ -91,6 +91,7 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 	public charterCancelOptions: Array<Object>;
 	public nonCharterCancelOptions: Array<Object>;
 	public serviceType: string;
+	service: Array<any> = []
 
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
 	errorMsg: boolean;
@@ -173,7 +174,7 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 			this.charterCancelOptions = data;
 		});
 		const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-		this.affiliateId = currentUser.account_id;
+		this.affiliateId = currentUser?.account_id;
 
 		//data for dropdown of seats and luggage
 		for (let i = 2; i <= 75; i++)
@@ -193,7 +194,7 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 			model: ['', Validators.required],
 			year: ['', Validators.required],
 			color: ['', Validators.required],
-			licensePlate: ['', Validators.required],
+			licensePlate: ['', ],
 			numberOfVehicles: [],
 			seats: ['', [Validators.required, Validators.pattern("^[0-9]*$")]],
 			luggage: ['', [Validators.required, Validators.pattern("^[0-9]*$")]],
@@ -221,7 +222,7 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 			mcImage: [''],
 		});
 
-		this.affiliateType = currentUser.affiliate_type;
+		this.affiliateType = currentUser?.affiliate_type;
 
 		/** progress bar starts on init */
 		this.spinner.show()
@@ -236,28 +237,28 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 			).subscribe(result =>
 			{
 				this.response = result;
-				this.filteredYear = this.year = this.response.data.years;
-				this.filteredMake = this.make = this.response.data.make;
-				this.filteredModel = this.model = this.response.data.model;
-				this.filteredVehicleTypes = this.vehicleTypes = this.response.data.vehicle_types;
-				this.filteredColor = this.color = this.response.data.color;
-				this.specialAmenities = this.response.data.specialAmenities;
-				this.interiors = this.response.data.vehicleInterior;
-				this.oldvehicleImage[0] = this.response.data.vehicleImage1.image;
-				this.oldvehicleImage[1] = this.response.data.vehicleImage2.image;
-				this.oldvehicleImage[2] = this.response.data.vehicleImage3.image;
-				this.oldvehicleImage[3] = this.response.data.vehicleImage4.image;
-				this.oldvehicleImage[4] = this.response.data.vehicleImage5.image;
-				this.oldvehicleImage[5] = this.response.data.vehicleImage6.image;
-				this.oldvehicleImage[6] = this.response.data.vehicleImage7.image;
-				this.oldvehicleImage[7] = this.response.data.vehicleImage8.image;
-				this.oldvehicleImage[8] = this.response.data.vehicleImage9.image;
+				this.filteredYear = this.year = this.response?.data?.years;
+				this.filteredMake = this.make = this.response?.data?.make;
+				this.filteredModel = this.model = this.response?.data?.model;
+				this.filteredVehicleTypes = this.vehicleTypes = this.response?.data?.vehicle_types;
+				this.filteredColor = this.color = this.response?.data?.color;
+				this.specialAmenities = this.response?.data?.specialAmenities;
+				this.interiors = this.response?.data?.vehicleInterior;
+				this.oldvehicleImage[0] = this.response?.data?.vehicleImage1?.image;
+				this.oldvehicleImage[1] = this.response?.data?.vehicleImage2?.image;
+				this.oldvehicleImage[2] = this.response?.data?.vehicleImage3?.image;
+				this.oldvehicleImage[3] = this.response?.data?.vehicleImage4?.image;
+				this.oldvehicleImage[4] = this.response?.data?.vehicleImage5?.image;
+				this.oldvehicleImage[5] = this.response?.data?.vehicleImage6?.image;
+				this.oldvehicleImage[6] = this.response?.data?.vehicleImage7?.image;
+				this.oldvehicleImage[7] = this.response?.data?.vehicleImage8?.image;
+				this.oldvehicleImage[8] = this.response?.data?.vehicleImage9?.image;
 
-				this.oldvehicleImage[9] = this.response.data.rear_plate.image;
-				this.oldvehicleImage[10] = this.response.data.window_permit.image;
-				this.oldvehicleImage[11] = this.response.data.window_permit_1.image;
-				this.oldvehicleImage[12] = this.response.data.USDOT_permit.image;
-				this.oldvehicleImage[13] = this.response.data.mc.image;
+				this.oldvehicleImage[9] = this.response?.data?.rear_plate?.image;
+				this.oldvehicleImage[10] = this.response?.data?.window_permit?.image;
+				this.oldvehicleImage[11] = this.response?.data?.window_permit_1?.image;
+				this.oldvehicleImage[12] = this.response?.data?.USDOT_permit?.image;
+				this.oldvehicleImage[13] = this.response?.data?.mc?.image;
 
 
 				sessionStorage.setItem('models', JSON.stringify(this.model));
@@ -271,11 +272,12 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 						})
 					).subscribe(result2 =>
 					{
+						console.log('response2-------_>>>>>>>>>>>>>>>>>>')
 						this.response2 = result2;
-						if (this.response2.data.vehicle_image_1)
+						if (this.response2?.data?.vehicle_image_1)
 						{
-							this.vehicleImage1 = this.response2.data.vehicle_image_1.image;
-							this.vehicleImageId1 = this.response2.data.vehicle_image_1.ID;
+							this.vehicleImage1 = this.response2?.data?.vehicle_image_1?.image;
+							this.vehicleImageId1 = this.response2?.data?.vehicle_image_1?.ID;
 							this.addVehicleForm.patchValue({
 								vehicle_image_1: this.vehicleImageId1
 							});
@@ -285,10 +287,10 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 							this.vehicleImage1 = '';
 							this.vehicleImageId1 = '';
 						}
-						if (this.response2.data.vehicle_image_2)
+						if (this.response2?.data?.vehicle_image_2)
 						{
-							this.vehicleImage2 = this.response2.data.vehicle_image_2.image;
-							this.vehicleImageId2 = this.response2.data.vehicle_image_2.ID;
+							this.vehicleImage2 = this.response2?.data?.vehicle_image_2?.image;
+							this.vehicleImageId2 = this.response2?.data?.vehicle_image_2?.ID;
 							this.addVehicleForm.patchValue({
 								vehicle_image_2: this.vehicleImageId2
 							});
@@ -298,10 +300,10 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 							this.vehicleImage2 = '';
 							this.vehicleImageId2 = '';
 						}
-						if (this.response2.data.vehicle_image_3)
+						if (this.response2?.data?.vehicle_image_3)
 						{
-							this.vehicleImage3 = this.response2.data.vehicle_image_3.image;
-							this.vehicleImageId3 = this.response2.data.vehicle_image_3.ID;
+							this.vehicleImage3 = this.response2?.data?.vehicle_image_3?.image;
+							this.vehicleImageId3 = this.response2?.data?.vehicle_image_3?.ID;
 							this.addVehicleForm.patchValue({
 								vehicle_image_3: this.vehicleImageId3
 							});
@@ -311,10 +313,10 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 							this.vehicleImage3 = '';
 							this.vehicleImageId3 = '';
 						}
-						if (this.response2.data.vehicle_image_4)
+						if (this.response2?.data?.vehicle_image_4)
 						{
-							this.vehicleImage4 = this.response2.data.vehicle_image_4.image;
-							this.vehicleImageId4 = this.response2.data.vehicle_image_4.ID;
+							this.vehicleImage4 = this.response2?.data?.vehicle_image_4?.image;
+							this.vehicleImageId4 = this.response2?.data?.vehicle_image_4?.ID;
 							this.addVehicleForm.patchValue({
 								vehicle_image_4: this.vehicleImageId4
 							});
@@ -324,10 +326,10 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 							this.vehicleImage4 = '';
 							this.vehicleImageId4 = '';
 						}
-						if (this.response2.data.vehicle_image_5)
+						if (this.response2?.data?.vehicle_image_5)
 						{
-							this.vehicleImage5 = this.response2.data.vehicle_image_5.image;
-							this.vehicleImageId5 = this.response2.data.vehicle_image_5.ID;
+							this.vehicleImage5 = this.response2?.data?.vehicle_image_5?.image;
+							this.vehicleImageId5 = this.response2?.data?.vehicle_image_5?.ID;
 							this.addVehicleForm.patchValue({
 								vehicle_image_5: this.vehicleImageId5
 							});
@@ -337,10 +339,10 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 							this.vehicleImage5 = '';
 							this.vehicleImageId5 = '';
 						}
-						if (this.response2.data.vehicle_image_6)
+						if (this.response2?.data?.vehicle_image_6)
 						{
-							this.vehicleImage6 = this.response2.data.vehicle_image_6.image;
-							this.vehicleImageId6 = this.response2.data.vehicle_image_6.ID;
+							this.vehicleImage6 = this.response2?.data?.vehicle_image_6?.image;
+							this.vehicleImageId6 = this.response2?.data?.vehicle_image_6?.ID;
 							this.addVehicleForm.patchValue({
 								vehicle_image_6: this.vehicleImageId6
 							});
@@ -350,10 +352,10 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 							this.vehicleImage6 = '';
 							this.vehicleImageId6 = '';
 						}
-						if (this.response2.data.vehicle_image_7)
+						if (this.response2?.data?.vehicle_image_7)
 						{
-							this.vehicleImage7 = this.response2.data.vehicle_image_7.image;
-							this.vehicleImageId7 = this.response2.data.vehicle_image_7.ID;
+							this.vehicleImage7 = this.response2?.data?.vehicle_image_7?.image;
+							this.vehicleImageId7 = this.response2?.data?.vehicle_image_7?.ID;
 							this.addVehicleForm.patchValue({
 								vehicle_image_7: this.vehicleImageId7
 							});
@@ -363,10 +365,10 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 							this.vehicleImage7 = '';
 							this.vehicleImageId7 = '';
 						}
-						if (this.response2.data.vehicle_image_8)
+						if (this.response2?.data?.vehicle_image_8)
 						{
-							this.vehicleImage8 = this.response2.data.vehicle_image_8.image;
-							this.vehicleImageId8 = this.response2.data.vehicle_image_8.ID;
+							this.vehicleImage8 = this.response2?.data?.vehicle_image_8?.image;
+							this.vehicleImageId8 = this.response2?.data?.vehicle_image_8?.ID;
 							this.addVehicleForm.patchValue({
 								vehicle_image_8: this.vehicleImageId8
 							});
@@ -376,10 +378,10 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 							this.vehicleImage8 = '';
 							this.vehicleImageId8 = '';
 						}
-						if (this.response2.data.vehicle_image_9)
+						if (this.response2?.data?.vehicle_image_9)
 						{
-							this.vehicleImage9 = this.response2.data.vehicle_image_9.image;
-							this.vehicleImageId9 = this.response2.data.vehicle_image_9.ID;
+							this.vehicleImage9 = this.response2?.data?.vehicle_image_9?.image;
+							this.vehicleImageId9 = this.response2?.data?.vehicle_image_9?.ID;
 							this.addVehicleForm.patchValue({
 								vehicle_image_9: this.vehicleImageId9
 							});
@@ -390,24 +392,24 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 							this.vehicleImageId9 = '';
 						}
 
-						this.rearPlateImage = this.response2.data.rear_plate_image.image;
-						this.windowPermitImage = this.response2.data.window_permitImage.image;
-						this.windowPermit2Image = this.response2.data.window_permitImage2.image;
-						this.usdotPermitImage = this.response2.data.usdot_permitImage.image;
-						this.mcImage = this.response2.data.mc_image.image;
+						this.rearPlateImage = this.response2.data?.rear_plate_image?.image;
+						this.windowPermitImage = this.response2?.data?.window_permitImage?.image;
+						this.windowPermit2Image = this.response2.data?.window_permitImage2?.image;
+						this.usdotPermitImage = this.response2?.data?.usdot_permitImage?.image;
+						this.mcImage = this.response2?.data?.mc_image?.image;
 
-						this.rearPlateId = this.response2.data.rear_plate_image.ID;
-						this.windowPermitId = this.response2.data.window_permitImage.ID;
-						this.windowPermit2Id = this.response2.data.window_permitImage2.ID;
-						this.usdotPermitId = this.response2.data.usdot_permitImage.ID;
-						this.mcId = this.response2.data.mc_image.ID;
+						this.rearPlateId = this.response2?.data?.rear_plate_image?.ID;
+						this.windowPermitId = this.response2?.data?.window_permitImage?.ID;
+						this.windowPermit2Id = this.response2?.data?.window_permitImage2?.ID;
+						this.usdotPermitId = this.response2?.data?.usdot_permitImage?.ID;
+						this.mcId = this.response2?.data?.mc_image?.ID;
 
 						//get models as per make
 						let models = JSON.parse(sessionStorage.getItem('models'));
-						let selectedMake = this.response2.data.make;
-						let resmodels = models.filter(function (model)
+						let selectedMake = this.response2?.data?.make;
+						let resmodels = models?.filter(function (model)
 						{
-							if (model.make_id == selectedMake)
+							if (model?.make_id == selectedMake)
 							{
 								return true;
 							}
@@ -416,8 +418,8 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 						//
 
 						//show selected chargable and non chargable amenities.
-						this.chargableAmenities = this.response2.data.chargableAmenities;
-						this.nonChargableAmenities = this.response2.data.nonChargableAmenities;
+						this.chargableAmenities = this.response2?.data?.chargableAmenities;
+						this.nonChargableAmenities = this.response2?.data?.nonChargableAmenities;
 						//patch form values
 						this.addVehicleForm.patchValue({
 							id: this.vehicleId,
@@ -426,33 +428,23 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 							windowPermit2Image: this.windowPermit2Id,
 							usdotPermitImage: this.usdotPermitId,
 							mcImage: this.mcId,
-							vehicleType: this.response2.data.vehicle_type,
-							make: this.response2.data.make,
-							year: this.response2.data.year,
-							color: this.response2.data.color,
-							numberOfVehicles: this.response2.data.numberOfVehicles,
-							licensePlate: this.response2.data.license_plate,
-							seats: this.response2.data.seats,
-							luggage: this.response2.data.luggage,
-							charterCancelPolicy: this.response2.data.charterCancelPolicy,
-							nonCharterCancelPolicy: this.response2.data.nonCharterCancelPolicy,
+							vehicleType: parseInt(this.response2?.data?.vehicle_type),
+							make: parseInt(this.response2?.data?.make),
+							year: parseInt(this.response2?.data?.year),
+							color: parseInt(this.response2?.data?.color),
+							numberOfVehicles: this.response2?.data?.numberOfVehicles,
+							licensePlate: this.response2?.data?.license_plate,
+							seats: this.response2?.data?.seats,
+							luggage: this.response2?.data?.luggage,
+							charterCancelPolicy: this.response2?.data?.charterCancelPolicy,
+							nonCharterCancelPolicy: this.response2?.data?.nonCharterCancelPolicy,
 						});
 
-						this.pushValuesTypeOfService(this.response2.data.typeOfService) // push into form
-
-						//Set values in autocomplete fields
-						let vehicleTypeField: any = document.getElementById('vehicleTypeField');
-						vehicleTypeField.value = this.response2.data.vehicle_typeName;
-						let makeField: any = document.getElementById('makeField');
-						makeField.value = this.response2.data.makeName;
-						let modelField: any = document.getElementById('modelField');
-						modelField.value = this.response2.data.modelName;
-						let yearField: any = document.getElementById('yearField');
-						yearField.value = this.response2.data.yearName;
-						let colorField: any = document.getElementById('colorField');
-						colorField.value = this.response2.data.colorName;
+						
 						//
-						this.changeMake(this.response2.data.make, 'onFirstLoad');//to show selected model
+						console.log('onfirstLoad call change make')
+						this.changeMake(this.response2?.data?.make, 'onFirstLoad');//to show selected model
+						// this.handleInteriorsCheckbox(this.response2?.data?.vehicleInterior)
 						this.setAmenities();//show selected amenities
 						this.setSpecialAmenities();//show selected special amenities
 						this.setInteriors();//show selected interiors
@@ -466,22 +458,36 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 							}
 							else if (this.affiliateType == 'black_limo_operator')
 							{
-								numberOfVehiclesCanBeAdded = 2 - (numberOfVehicles - this.response2.data.numberOfVehicles);
+								numberOfVehiclesCanBeAdded = 2 - (numberOfVehicles - this.response2?.data?.numberOfVehicles);
 								this.addVehicleForm.controls['numberOfVehicles'].setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.min(1), Validators.max(numberOfVehiclesCanBeAdded)]);
 							}
 							else
 							{
-								numberOfVehiclesCanBeAdded = 1 - (numberOfVehicles - this.response2.data.numberOfVehicles);
+								numberOfVehiclesCanBeAdded = 1 - (numberOfVehicles - this.response2?.data?.numberOfVehicles);
 								this.addVehicleForm.controls['numberOfVehicles'].setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.min(1), Validators.max(numberOfVehiclesCanBeAdded)]);
 							}
 							this.addVehicleForm.controls['numberOfVehicles'].updateValueAndValidity();
 						});
+						this.pushValuesTypeOfService(this.response2?.data?.typeOfService) // push into form
+
+						//Set values in autocomplete fields
+						let vehicleTypeField: any = document.getElementById('vehicleTypeField');
+						vehicleTypeField.value = this.response2?.data?.vehicle_typeName;
+						let makeField: any = document.getElementById('makeField');
+						makeField.value = this.response2?.data?.makeName;
+						let modelField: any = document.getElementById('modelField');
+						modelField.value = this.response2?.data?.modelName;
+						let yearField: any = document.getElementById('yearField');
+						yearField.value = this.response2?.data?.yearName;
+						let colorField: any = document.getElementById('colorField');
+						colorField.value = this.response2?.data?.colorName;
 					});
 				this.spinner.hide();
 			});
 
 
 		this.typeOfService // assign the global variable - service.
+		this.Subscriptions();
 	}
 
 	closeButton()
@@ -586,6 +592,15 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 		}
 	}
 
+	Subscriptions() {
+		this.addVehicleForm.get('make')?.valueChanges.subscribe((value: string) => {
+			this.changeMake(value);
+			let modelField: any = document.getElementById('modelField');
+			modelField.value = '';
+		})
+	
+	}
+
 	searchModel(keyword)
 	{
 		this.addVehicleForm.patchValue({
@@ -680,9 +695,9 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 				if (cl.name.toLowerCase() === keyword.toLowerCase())
 				{
 					this.addVehicleForm.patchValue({
-						color: cl.ID,
+						color: cl?.ID,
 					});
-					console.log(1, cl.ID)
+					console.log(1, cl?.ID)
 				}
 				return cl.name.toLowerCase().includes(keyword.toLowerCase());
 			})
@@ -712,9 +727,9 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 		{
 			chargableAmenities[key].forEach(chargableAmenity =>
 			{
-				if (chargableAmenity.isSelected)
+				if (chargableAmenity?.isSelected)
 				{
-					this.onAmenitiesCheckboxChange(chargableAmenity.id, true);
+					this.onAmenitiesCheckboxChange(chargableAmenity?.id, true);
 				}
 			});
 		}
@@ -725,9 +740,10 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 			console.log(key, nonChargableAmenities[key]);
 			nonChargableAmenities[key].forEach(nonChargableAmenity =>
 			{
-				if (nonChargableAmenity.isSelected)
+				console.log('nonChargableAmenity-->>>>>>>>',nonChargableAmenity?.isSelected)
+				if (nonChargableAmenity?.isSelected)
 				{
-					this.onAmenitiesCheckboxChange(nonChargableAmenity.id, true);
+					this.onAmenitiesCheckboxChange(nonChargableAmenity?.id, true);
 				}
 			});
 		}
@@ -739,7 +755,7 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 		const specialAmenities: FormArray = this.addVehicleForm.get('specialAmenities') as FormArray;
 		var i;
 		const totalSpecialAmenities = this.specialAmenities;
-		const selectedSpecialAmenities = this.response2.data.specialAmenities;
+		const selectedSpecialAmenities = this.response2?.data?.specialAmenities;
 		for (i = 0; i < totalSpecialAmenities.length; i++)
 		{
 			var checkedSpecialAmenity = selectedSpecialAmenities.findIndex(function (post)
@@ -770,7 +786,7 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 		const interiors: FormArray = this.addVehicleForm.get('vehicleInterior') as FormArray;
 		var i;
 		const totalInterior = this.interiors;
-		const selectedInterior = this.response2.data.vehicleInterior;
+		const selectedInterior = this.response2?.data?.vehicleInterior;
 		for (i = 0; i < totalInterior.length; i++)
 		{
 			var checkedInterior = selectedInterior.findIndex(function (post)
@@ -832,6 +848,11 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 			vehicleInterior.removeAt(index);
 		}
 	}
+	// handleInteriorsCheckbox(vehicleInteriorList:any){
+	// 	console.log('in function handleInteriorsCheckbox-->>' , vehicleInteriorList)
+	// 	const vehicleInterior: FormArray = this.addVehicleForm.get('vehicleInterior') as FormArray;
+	// 	vehicleInteriorList.map(i=> vehicleInterior.push(new FormControl(parseInt(i))))
+	// }
 
 	onFileChange(event, imageId, imageNumber)
 	{
@@ -856,9 +877,9 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 					{
 						this.response = result;
 						this.addVehicleForm.patchValue({
-							["vehicle_image_" + imageNumber]: this.response.data.id,
+							["vehicle_image_" + imageNumber]: this.response?.data?.id,
 						});
-						this["vehicleImage" + imageNumber] = this.response.data.image;
+						this["vehicleImage" + imageNumber] = this.response?.data?.image;
 
 						this.stateManagementService.setprogressBar(false);
 					});
@@ -893,37 +914,37 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 						{
 							case 'rearPlate': {
 								this.addVehicleForm.patchValue({
-									rearPlateImage: this.response.data.id,
+									rearPlateImage: this.response?.data?.id,
 								});
-								this.rearPlateImage = this.response.data.image;
+								this.rearPlateImage = this.response?.data?.image;
 								break;
 							}
 							case 'windowPermit': {
 								this.addVehicleForm.patchValue({
-									windowPermitImage: this.response.data.id,
+									windowPermitImage: this.response?.data?.id,
 								});
-								this.windowPermitImage = this.response.data.image;
+								this.windowPermitImage = this.response?.data?.image;
 								break;
 							}
 							case 'windowPermit2': {
 								this.addVehicleForm.patchValue({
-									windowPermit2Image: this.response.data.id,
+									windowPermit2Image: this.response?.data?.id,
 								});
-								this.windowPermit2Image = this.response.data.image;
+								this.windowPermit2Image = this.response?.data?.image;
 								break;
 							}
 							case 'usdotPermit': {
 								this.addVehicleForm.patchValue({
-									usdotPermitImage: this.response.data.id,
+									usdotPermitImage: this.response?.data?.id,
 								});
-								this.usdotPermitImage = this.response.data.image;
+								this.usdotPermitImage = this.response?.data?.image;
 								break;
 							}
 							case 'mc': {
 								this.addVehicleForm.patchValue({
-									mcImage: this.response.data.id,
+									mcImage: this.response?.data?.id,
 								});
-								this.mcImage = this.response.data.image;
+								this.mcImage = this.response?.data?.image;
 								break;
 							}
 							default: {
@@ -1075,6 +1096,7 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 
 	changeMake(selectedMake, onFirstLoad = null)
 	{
+		console.log('------>>>>' , onFirstLoad)
 		let models = JSON.parse(sessionStorage.getItem('models'));
 		this.filteredModel = models.filter(function (model)
 		{
@@ -1083,10 +1105,12 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 				return true;
 			}
 		});
-		if (onFirstLoad == 'onFirstLoad')
+		if (onFirstLoad == 'onFirstLoad' || this.onFirstLoad==1)
 		{
+			console.log('->>' , this.onFirstLoad)
+			this.onFirstLoad = 2
 			this.addVehicleForm.patchValue({
-				model: this.response2.data.model
+				model: parseInt(this.response2?.data?.model)
 			});
 		}
 	}
@@ -1114,7 +1138,7 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 		})
 	}
 
-	service: Array<any> = []
+	
 	onServiceChange(value: string)
 	{
 		console.log(value)

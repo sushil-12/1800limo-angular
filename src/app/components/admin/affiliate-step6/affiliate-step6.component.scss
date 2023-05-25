@@ -1,0 +1,114 @@
+.agreement_step0 p,
+.custom-list span,
+li {
+    color    : #000;
+    font-size: 15px;
+}
+
+.custom-list {
+    position: relative;
+}
+
+.custom-list svg {
+    position: absolute;
+    top     : 5px;
+}
+
+.custom-list span {
+    padding-left: 20px;
+    width       : 100%;
+    display     : inline-block;
+}
+
+.link-strong {
+    color: #000;
+}
+
+.requirement-list {
+    padding-left: 1.5rem;
+}
+
+.requirement-list li {
+    margin-bottom: 16px;
+}
+
+p {
+    margin-bottom: 1rem;
+}
+
+.step-list {
+    display      : flex;
+    margin-bottom: 15px;
+}
+
+.step-points {
+    margin-left: 15px;
+    margin-top : 15px;
+}
+
+.img-wrapper {
+    position  : relative;
+    background: #f7f7f7;
+    min-width : 100px;
+}
+
+.step-list img {
+    position : absolute;
+    width    : 80px;
+    top      : 50%;
+    left     : 50%;
+    transform: translate(-50%, -50%);
+}
+
+.step-list ul {
+    margin : 0;
+    padding: 5px 0 0 20px;
+}
+
+.custom-checkbox {
+    padding-left: 3rem;
+}
+
+.custom-control-label {
+    font-size: 18px;
+}
+
+.thankyou {
+    font-size: 18px;
+}
+
+.custom-control-label::before {
+    width : 2rem;
+    height: 2rem;
+    left  : -3rem;
+}
+
+.custom-control-label::after {
+    width : 2rem;
+    height: 2rem;
+    left  : -3rem;
+}
+
+@media only screen and (max-width: 767px) {
+    .user_information div p {
+        word-wrap: break-word;
+    }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+    .step-list {
+        height: 320px;
+    }
+}
+
+@media only screen and (min-width: 992px) and (max-width: 1199px) {
+    .step-list {
+        height: 410px;
+    }
+}
+
+@media only screen and (min-width: 1200px) {
+    .step-list {
+        height: 220px;
+    }
+}

@@ -58,6 +58,15 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 
 	ngOnInit(): void
 	{
+		// document.addEventListener("click", 
+		// (()=>{
+		// 	if(document.body.classList.contains('sidenav-toggled')){
+		// 		$("body").removeClass("sidenav-toggled");
+		// 		console.log("im here")
+		// 		this.showSidebar = false;
+		// 	}
+		// }));
+
 		$(".collapsed").click(function ()
 		{
 
@@ -96,6 +105,10 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 		// this.checkApplicationStatus()
 
 		console.info(this.$shared.fetchCookies('lastroute'))
+	}
+
+	myFunction(){
+
 	}
 
 	/**
@@ -347,11 +360,13 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 			s.type = "text/javascript";
 			s.src = "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
 			this.elementRef.nativeElement.appendChild(s);
+			
 		}
 
 		if (this.desktopWidth > '767')
 		{
 			//google translate
+			console.log('<<<<<<<-------select language------>>>>>>>>')
 			var v = document.createElement("script");
 			v.type = "text/javascript";
 			v.innerHTML = "function googleTranslateElementInit() { new google.translate.TranslateElement({ pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.SIMPLE }, 'google_translate_element_desktop'); } ";
@@ -360,8 +375,16 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 			s.type = "text/javascript";
 			s.src = "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
 			this.elementRef.nativeElement.appendChild(s);
-		}
 
+			setTimeout(()=>{
+				$('body').find(".VIpgJd-ZVi9od-xl07Ob-lTBxed").attr('href', 'javascript:void(0)'); 
+				$('.goog-te-gadget-simple').css({height :'auto'}); 
+			},1000)
+		}
+		setTimeout(()=>{
+			$('body').find(".VIpgJd-ZVi9od-xl07Ob-lTBxed").attr('href', 'javascript:void(0)'); 
+		},1000)
+		//a.addEventListener("click",function(e){e.preventDefault(); alert("preform action");});
 		//translator 
 
 		// if (this.screenWidth <= '991')

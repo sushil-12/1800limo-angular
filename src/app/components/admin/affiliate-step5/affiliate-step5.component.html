@@ -33,6 +33,7 @@
 						aria-describedby="dataTable_info" style="width: 100%;" width="100%" cellspacing="0">
 						<thead>
 							<tr role="row">
+								<th>Actions</th>
 								<th>Image</th>
 								<th>Vehicle Type</th>
 								<th># of Vehicles</th>
@@ -44,29 +45,11 @@
 								<th>Amenities</th>
 								<th>Plate #</th>
 								<th>Delete</th>
-								<th>Actions</th>
 							</tr>
 						</thead>
 						<tbody>
 							<ng-container *ngIf="vehicles">
 								<tr role="row" class="odd" *ngFor="let vehicle of vehicles">
-									<td><img src="{{vehicle.vehicleImage}}"></td>
-									<td>{{vehicle.vehicleType}}</td>
-									<td>{{vehicle.numberOfVehicles}}</td>
-									<td>{{vehicle.seats}}</td>
-									<td>{{vehicle.year}}</td>
-									<td>{{vehicle.make}}</td>
-									<td>{{vehicle.model}}</td>
-									<td>{{vehicle.color}}</td>
-									<td><button (click)="updateAmenityList(vehicle.amenities)" class="button2"
-											tabindex="1">Amenity
-											List</button></td>
-									<td>{{vehicle.licensePlate}}</td>
-									<td>
-										<i class="fa fa-trash" style="font-size: x-large; color:#d64646"
-											(click)="enableDisableClicked(vehicle.id)" data-toggle="modal"
-											data-target="#deleteConfirmationModal"></i>
-									</td>
 									<td>
 										<a *ngIf="vehicle.isRatesCompleted; else pendingRates"
 											class="user-profileded btn btn-icon btn-transparent-dark dropdown-toggle"
@@ -95,6 +78,22 @@
 												Edit Rates
 											</a>
 										</div>
+									</td>
+									<td><img src="{{vehicle.vehicleImage}}"></td>
+									<td>{{vehicle.vehicleType}}</td>
+									<td>{{vehicle.numberOfVehicles}}</td>
+									<td>{{vehicle.seats}}</td>
+									<td>{{vehicle.year}}</td>
+									<td>{{vehicle.make}}</td>
+									<td>{{vehicle.model}}</td>
+									<td>{{vehicle.color}}</td>
+									<td><button (click)="updateAmenityList(vehicle.amenities)" class="button2 box-shadow"
+											tabindex="1">Amenities</button></td>
+									<td>{{vehicle.licensePlate}}</td>
+									<td>
+										<i class="fa fa-trash box-shadow" style="font-size: x-large; color:#d64646"
+											(click)="enableDisableClicked(vehicle.id)" data-toggle="modal"
+											data-target="#deleteConfirmationModal"></i>
 									</td>
 								</tr>
 								<tr *ngIf="!vehicles?.length">

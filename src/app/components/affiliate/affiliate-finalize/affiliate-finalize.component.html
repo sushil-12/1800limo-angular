@@ -1,0 +1,604 @@
+<ngx-spinner></ngx-spinner>
+<section class="section-container">
+	<h3 class="font-weight-bolder mb-1 text-center">Finalize Booking</h3>
+	<hr>
+	<div class="invoicesum_header">
+		<div class="row">
+			<div class="col-md-6">
+				<h3 class="text-lg pl-0">Booking # {{ this.bookingId }}</h3>
+			</div>
+			<div class="col-md-6 text-right">
+				<h3 class="text-lg pl-0">Payment Status # {{ BookingDetail?.payment_status | titlecase}}</h3>
+			</div>
+		</div>
+		<div class="row my-3">
+			<div class="col-md-4">
+				<p>Service Type <strong>{{ textFormatter(BookingDetail?.service_type) | titlecase }}</strong>
+				</p>
+			</div>
+			<!-- <div class="col-md-4">
+				<p>Transfer Type: <strong>{{ textFormatter(BookingDetail?.transfer_type) | titlecase }}</strong>
+				</p>
+			</div>
+			<div class="col-md-4" *ngIf="BookingDetail?.return_transfer_type">
+				<p>Return Transfer Type: <strong>{{ textFormatter(BookingDetail?.return_transfer_type) | titlecase
+						}}</strong>
+				</p>
+			</div> -->
+			<div class="col-md-4">
+				<p>Booking Type <strong>{{ textFormatter(BookingDetail?.transfer_type) | titlecase }}</strong>
+				</p>
+			</div>
+			<div class="col-md-4">
+				<p>Booking Status <strong>{{ BookingDetail?.booking_status | titlecase }}</strong></p>
+			</div>
+			<div class="col-md-4">
+				<p>Quote Amount <strong>${{ quoteAmount }}</strong></p>
+			</div>
+			
+		</div>
+	</div>
+
+
+	<h4 class="m-2">Journey Details</h4>
+	<div class="row ml-2">
+
+	<div class="col-md-4 field" *ngIf="BookingDetail?.pickup_address">
+		<p>Pickup Address: </p>
+		<strong> {{ BookingDetail?.pickup_address }}</strong>
+	</div>
+	<div class="col-md-4 field" *ngIf="BookingDetail?.pickup_airport_name">
+		<p>Pickup Airport: </p>
+		<strong>{{ BookingDetail?.pickup_airport_name }}</strong>
+	</div>
+	<div class="col-md-4 field" *ngIf="BookingDetail?.pickup_airline_name">
+		<p>Pickup Airline: </p>
+		<strong> {{ BookingDetail?.pickup_airline_name }}</strong>
+	</div>
+	<div class="col-md-4 field" *ngIf="BookingDetail?.pickup_flight">
+		<p>Pickup Flight Number: </p>
+		<strong>{{ BookingDetail?.pickup_flight }}</strong>
+	</div>
+	<div class="col-md-4 field" *ngIf="BookingDetail?.origin_airport_city">
+		<p>Pickup Origin Airport / City: </p>
+		<strong>{{ BookingDetail?.origin_airport_city }}</strong>
+	</div>
+	<div class="col-md-4 field" *ngIf="BookingDetail?.dropoff_address">
+		<p>Drop-Off Address: </p>
+		<strong>{{ BookingDetail?.dropoff_address }}</strong>
+	</div>
+	<div class="col-md-4 field" *ngIf="BookingDetail?.dropoff_airport_name">
+		<p>Drop-Off Airport: </p>
+		<strong>{{ BookingDetail?.dropoff_airport_name }}</strong>
+	</div>
+	<div class="col-md-4 field" *ngIf="BookingDetail?.dropoff_airline_name">
+		<p>Drop-Off Airline: </p>
+		<strong>{{ BookingDetail?.dropoff_airline_name }}</strong>
+	</div>
+	<div class="col-md-4 field" *ngIf="BookingDetail?.dropoff_flight">
+		<p> Drop-Off Flight Number: </p>
+		<strong>{{ BookingDetail?.dropoff_flight }}</strong>
+	</div>
+	<div class="col-md-4 field" *ngIf="BookingDetail?.stop_1">
+		<p> Extra Stops Number 2: </p>
+		<strong>{{ BookingDetail?.stop_1 }}</strong>
+	</div>
+	<div class="col-md-4 field" *ngIf="BookingDetail?.stop_2">
+		<p> Extra Stops Number 3: </p>
+		<strong>{{ BookingDetail?.stop_2 }}</strong>
+	</div>
+	<div class="col-md-4 field" *ngIf="BookingDetail?.meet_greet_choices">
+		<p> Meet and Greet Choices: </p>
+		<strong>{{ BookingDetail?.meet_greet_choices }}</strong>
+	</div>
+	<div class="col-md-4 field">
+		<p>Pickup Date </p>
+		<strong>{{ dateFormat2(BookingDetail?.pickup_date) }} | {{ dateFormat(BookingDetail?.pickup_date)
+			}}</strong>
+	</div>
+	<div class="col-md-4 field">
+		<p>Pickup Time</p>
+		<strong>{{ timeFormat2(BookingDetail?.pickup_time) }} |
+			{{ timeFormat(BookingDetail?.pickup_time) }}</strong>
+	</div>
+
+
+
+
+	<div *ngIf="BookingDetail.service_type=='roundtrip'">
+		<div class="col-md-4 field" *ngIf="BookingDetail.return_pickup_address">
+			<p> Return Pickup Address: </p>
+			<strong> {{BookingDetail.return_pickup_address}} </strong>
+		</div>
+		<div class="col-md-4" *ngIf="BookingDetail.return_pickup_airport_name">
+			<p> Return Pickup Airport: </p>
+			<strong> {{BookingDetail.return_pickup_airport_name}} </strong>
+		</div>
+		<div class="col-md-4" *ngIf="BookingDetail.return_pickup_airline_name">
+			<p> Return Pickup Airline: </p>
+			<strong> {{BookingDetail.return_pickup_airline_name}} </strong>
+		</div>
+		<div class="col-md-4" *ngIf="BookingDetail.return_pickup_flight">
+			<p> Return Pickup Flight Number: </p>
+			<strong> {{BookingDetail.return_pickup_flight}} </strong>
+		</div>
+		<div class="col-md-4" *ngIf="BookingDetail.return_origin_airport_city">
+			<p> Return Pickup Origin Airport / City: </p>
+			<strong> {{BookingDetail.return_origin_airport_city}}
+			</strong>
+		</div>
+		<div class="col-md-4" *ngIf="BookingDetail.return_pickup_latitude">
+			<p> Return Pickup Latitude/Longitude: </p>
+			<strong> {{BookingDetail.return_pickup_latitude}}/{{BookingDetail.return_pickup_longitude}}
+			</strong>
+		</div>
+		<div class="col-md-4" *ngIf="BookingDetail.return_dropoff_address">
+			<p> Return Drop-Off Address: </p>
+			<strong> {{BookingDetail.return_dropoff_address}} </strong>
+		</div>
+		<div class="col-md-4" *ngIf="BookingDetail.return_dropoff_airport_name">
+			<p> Return Drop-Off Airport: </p>
+			<strong> {{BookingDetail.return_dropoff_airport_name}} </strong>
+		</div>
+		<div class="col-md-4" *ngIf="BookingDetail.return_dropoff_airline_name">
+			<p>Return Drop-Off Airline: </p>
+			<strong> {{BookingDetail.return_dropoff_airline_name}} </strong>
+		</div>
+		<div class="col-md-4" *ngIf="BookingDetail.return_dropoff_flight">
+			<p> Return Drop-Off Flight Number: </p>
+			<strong> {{BookingDetail.return_dropoff_flight}} </strong>
+		</div>
+		<div class="col-md-4" *ngIf="BookingDetail.return_dropoff_latitude">
+			<p> Return Drop-Off Latitude/Longitude: </p>
+			<strong> {{BookingDetail.return_dropoff_latitude}}/{{BookingDetail.return_dropoff_longitude}}
+			</strong>
+		</div>
+		<div class="col-md-4" *ngIf="BookingDetail.return_stop_1">
+			<p> Return Extra Stops Number 2: </p>
+			<strong>{{BookingDetail.return_stop_1}} </strong>
+		</div>
+		<div class="col-md-4" *ngIf="BookingDetail.return_stop_1_latitude && BookingDetail.return_stop_1_longitude">
+			<p> Return Extra Stops Number 2 Latitude/Longitude: </p>
+			<strong> {{BookingDetail.return_stop_1_latitude}}/{{BookingDetail.return_stop_1_longitude}}
+			</strong>
+		</div>
+		<div class="col-md-4" *ngIf="BookingDetail.return_stop_2">
+			<p> Return Extra Stops Number 3: </p>
+			<strong> {{BookingDetail.return_stop_2}} </strong>
+		</div>
+		<div class="col-md-4" *ngIf="BookingDetail.return_stop_2_latitude && BookingDetail.return_stop_2_longitude">
+			<p> Return Extra Stops Number 3
+				Latitude/Longitude: </p>
+			<strong>{{BookingDetail.return_stop_2_latitude}}/{{BookingDetail.return_stop_2_longitude}}
+			</strong>
+		</div>
+		<div class="col-md-4" *ngIf="BookingDetail.return_meet_greet_choices">
+			<p> Return Meet and Greet Choices: </p>
+			<strong> {{BookingDetail.return_meet_greet_choices
+				|titlecase}} </strong>
+		</div>
+		<div class="col-md-4" *ngIf="BookingDetail.return_pickup_date">
+			<p> Return Travel Date: </p>
+			<strong> {{BookingDetail.return_pickup_date}} </strong>
+		</div>
+		<div class="col-md-4" *ngIf="BookingDetail.return_pickup_time">
+			<p> Return Travel Time: </p>
+			<strong> {{BookingDetail.return_pickup_time}} </strong>
+		</div>
+	</div>
+	</div>
+	<hr>
+
+
+	<h4 class="m-2">Account Details</h4>
+	<div class="row ml-2">
+		<div class="col-md-4" *ngIf="BookingDetail.account_type">
+			<p> Account Type: </p>
+			<strong> {{BookingDetail.account_type |titlecase}}</strong>
+		</div>
+		<div class="col-md-4" *ngIf="BookingDetail.account_first_name">
+			<p> Account Name: </p>
+			<strong> {{BookingDetail.account_first_name+'
+				'+BookingDetail.account_last_name}} </strong>
+		</div>
+	</div>
+	<hr>
+
+	<h4 class="m-2">Passenger Information</h4>
+	<div class="row ml-2" >
+		<div class="col-md-4" *ngIf="BookingDetail.passenger_name">
+			<p> Passenger Name: </p>
+			<strong> {{BookingDetail.passenger_name}} </strong>
+		</div>
+		<div class="col-md-4" *ngIf="BookingDetail.passenger_email">
+			<p> Passenger Email: </p>
+			<strong> {{BookingDetail.passenger_email}} </strong>
+		</div>
+		<div class="col-md-4" *ngIf="BookingDetail.passenger_cell">
+			<p> Passenger Cell: </p>
+			<strong> {{BookingDetail.passenger_cell_isd+BookingDetail.passenger_cell}}
+			</strong>
+		</div>
+		<div class="col-md-4" *ngIf="BookingDetail.total_passengers">
+			<p> No of Passengers: </p>
+			<strong> {{BookingDetail.total_passengers}} </strong>
+		</div>
+		<div class="col-md-4" *ngIf="BookingDetail.luggage_count">
+			<p> Luggage Count: </p>
+			<strong>{{BookingDetail.luggage_count}} </strong>
+		</div>
+		<div class="col-md-12" *ngIf="BookingDetail.booking_instructions">
+			<p> Special Instructions: </p>
+			<strong> {{BookingDetail.booking_instructions}} </strong>
+		</div>
+	</div>
+	<hr>
+
+	<h4 class="m-2">Rate / Affiliate / Accounts</h4>
+	<div class="row ml-2">
+		<div class="col-md-4" *ngIf="BookingDetail.number_of_hours">
+			<p> Booking Hours: </p>
+			<strong>{{BookingDetail.number_of_hours}} </strong>
+		</div>
+		<div class="col-md-4" *ngIf="BookingDetail.hourly_rate">
+			<p> Hourly Rate: </p>
+			<strong> {{BookingDetail.hourly_rate}} </strong>
+		</div>
+		<div class="col-md-4" *ngIf="BookingDetail.number_of_vehicles">
+			<p> Number of Vehicles: </p>
+			<strong> {{BookingDetail.number_of_vehicles}} </strong>
+		</div>
+		<div class="col-md-4" *ngIf="BookingDetail.quote_amount">
+			<p> Quote Amount: </p>
+			<strong> {{BookingDetail.quote_amount}} </strong>
+		</div>
+		<div class="col-md-4" *ngIf="BookingDetail.affiliate_type">
+			<p> Affiliate Type: </p>
+			<strong> {{BookingDetail.affiliate_type}} </strong>
+		</div>
+		<div class="col-md-4" *ngIf="BookingDetail.affiliate_first_name">
+			<p> Affiliate Name: </p>
+			<strong> {{BookingDetail.affiliate_first_name+'
+				'+BookingDetail.affiliate_last_name}} </strong>
+		</div>
+		<div class="col-md-4" *ngIf="BookingDetail.referral_affiliate_first_name">
+			<p> Referral Affiliate Name: </p>
+			<strong> {{BookingDetail.referral_affiliate_first_name+'
+				'+BookingDetail.referral_affiliate_last_name}} </strong>
+		</div>
+		<div class="col-md-4" *ngIf="BookingDetail.vehicle">
+			<p> Vehicle: </p>
+			<strong> {{BookingDetail.vehicle}} </strong>
+		</div>
+		<div class="col-md-4" *ngIf="BookingDetail.lose_affiliate_name">
+			<p> Loose Affiliate Name: </p>
+			<strong> {{BookingDetail.lose_affiliate_name}} </strong>
+		</div>
+		<div class="col-md-4" *ngIf="BookingDetail.lose_affiliate_phone_isd">
+			<p> Loose Affiliate Phone: </p>
+			<strong> {{BookingDetail.lose_affiliate_phone_isd+BookingDetail.lose_affiliate_phone}}
+			</strong>
+		</div>
+		<div class="col-md-4" *ngIf="BookingDetail.lose_affiliate_email">
+			<p> Loose Affiliate Email: </p>
+			<strong>{{BookingDetail.lose_affiliate_email}} </strong>
+		</div>
+		<div class="col-md-4" *ngIf="BookingDetail.vehicle_type_name">
+			<p> Vehicle Type: </p>
+			<strong> {{BookingDetail.vehicle_type_name}} </strong>
+		</div>
+		<div class="col-md-4" *ngIf="BookingDetail.vehicle_year">
+			<p> Vehicle Year: </p>
+			<strong> {{BookingDetail.vehicle_year}} </strong>
+		</div>
+		<div class="col-md-4" *ngIf="BookingDetail.vehicle_make">
+			<p> Vehicle Make: </p>
+			<strong> {{BookingDetail.vehicle_make}} </strong>
+		</div>
+		<div class="col-md-4" *ngIf="BookingDetail.vehicle_model">
+			<p> Vehicle Model: </p>
+			<strong>{{BookingDetail.vehicle_model}} </strong>
+		</div>
+		<div class="col-md-4" *ngIf="BookingDetail.vehicle_color">
+			<p> Vehicle Color: </p>
+			<strong> {{BookingDetail.vehicle_color}} </strong>
+		</div>
+		<div class="col-md-4" *ngIf="BookingDetail.vehicle_license_plate">
+			<p> License Plate:</p>
+			<strong> {{BookingDetail.vehicle_license_plate}} </strong>
+		</div>
+		<div class="col-md-4" *ngIf="BookingDetail.vehicle_seats">
+			<p> Seats: </p>
+			<strong> {{BookingDetail.vehicle_seats}} </strong>
+		</div>
+	</div>
+	<hr>
+
+	<h4 class="m-2">Driver Preferences</h4>
+	<div class="row ml-2">
+		<div class="col-md-4" *ngIf="BookingDetail.affiliate_driver_first_name">
+			<p> Driver: </p>
+			<strong> {{BookingDetail.affiliate_driver_first_name+'
+				'+BookingDetail.affiliate_driver_last_name+'
+				('+BookingDetail.affiliate_driver_cell_isd+BookingDetail.affiliate_driver_cell_number+')'}}
+			</strong>
+		</div>
+		<div class="col-md-4" *ngIf="BookingDetail.driver_name">
+			<p> Driver: </p>
+			<strong> {{BookingDetail.driver_name}} </strong>
+		</div>
+		<div class="col-md-4" *ngIf="BookingDetail.driver_gender">
+			<p> Driver Gender: </p>
+			<strong> {{BookingDetail.driver_gender |titlecase}} </strong>
+		</div>
+		<div class="col-md-4" *ngIf="BookingDetail.driver_cell">
+			<p> Driver Cell: </p>
+			<strong> {{BookingDetail.driver_cell_isd+BookingDetail.driver_cell}} </strong>
+		</div>
+		<div class="col-md-4" *ngIf="BookingDetail.driver_email">
+			<p> Driver Email: </p>
+			<strong> {{BookingDetail.driver_email}} </strong>
+		</div>
+		<div class="col-md-4" *ngIf="BookingDetail.driver_phone_type">
+			<p> Driver Phone Type: </p>
+			<strong> {{BookingDetail.driver_phone_type}} </strong>
+		</div>
+		<div class="col-md-4" *ngIf="BookingDetail.driver_languages">
+			<p> Driver language: </p>
+			<strong> {{BookingDetail.driver_languages}} </strong>
+		</div>
+		<div class="col-md-4" *ngIf="BookingDetail.driver_dresses">
+			<p> Driver Dress: </p>
+			<strong> {{BookingDetail.driver_dresses}} </strong>
+		</div>
+		<div class="col-md-4" *ngIf="BookingDetail.amenities">
+			<p> Amenities: </p>
+			<strong> {{BookingDetail.amenities}} </strong>
+		</div>
+
+	</div>
+	
+
+</section>
+
+
+
+
+<section class="section-container mt-2">
+	<app-affiliate-finalize-rates *ngIf="init_rates" class="d-flex flex-wrap finalize-rates" [initRates]="init_rates"
+	(formvalue)="RateFormValue($event)" [distance]="finalize_params.distance"
+	[reservation_id]="finalize_params.booking_id" [reset]="false" [hours]="hours"
+	[vehicles]="finalize_params.number_of_vehicles" (returnNumberOfHr)="HandleReturnNumberOfHr($event)">
+	</app-affiliate-finalize-rates>
+	<div class="row mb-3" id="submitForm" *ngIf="BookingDetail?.payment_status=='unpaid'">
+		<div class="col-md-12 text-right">
+			<button type="button" class="custom-filled-button ratesButton m-3" (click)="submitForm()">
+				{{finalize_btn}}
+			</button>
+		</div>
+	</div>
+</section>
+
+
+
+<!-- payment section -->
+<section class="section-container mt-2" *ngIf="BookingDetail?.payment_status=='unpaid'">
+	<div class="col-md-12 p-0" (click)="handlePaymentSection()">
+		<h4 class="section-dropdown-header mb-0">
+			Payment
+		</h4>
+		<p [ngClass]="chevron ? 'bi bi-chevron-down' : 'bi bi-chevron-up'"></p>
+	</div>
+	<div class="row" *ngIf="paymentSection">
+
+		<!-- RADIO BUTTONS -->
+		<div class="col-md-12 cardSection">
+			<div class="radio">
+				<input id="card" name="paymentMethod" type="radio" checked (click)="changeDetection('card')">
+				<label for="card" class="radio-label">Payment with Card</label>
+			</div>
+			<div class="methodCard" *ngIf="paymentMethod=='card'">
+				<table class="table table-borderless">
+					<thead class="bg-transparent">
+						<tr>
+							<th scope="col"></th>
+							<th scope="col">Name on Card</th>
+							<th scope="col">Card Number</th>
+							<th scope="col">Expires on</th>
+							<th scope="col"></th>
+						</tr>
+					</thead>
+					<tbody *ngIf="CardsInformation?.length > 0; else noData">
+						<tr *ngFor="let item of CardsInformation">
+							<td>
+								<input id="selectCard" name="selectCard" type="radio"
+									(click)="changeDetection('card'); handleChangeCard(item)"
+									[checked]="item?.cc_prority=='Primary' && !isCardFormOpen">
+							</td>
+							<td>{{item?.name}}</td>
+							<td>{{item?.last4}}</td>
+							<td>{{item?.exp_month}}/{{item?.exp_year}}</td>
+							<!-- <td (click)="deleteCardClicked(item)" 
+							data-toggle="modal" data-target="#warnDeleteCard"><i class="bi bi-trash3-fill m-0"></i></td> -->
+						</tr>
+					</tbody>
+					<ng-template #noData>
+						<tbody>
+							<p class="text-danger text-lg">No
+								Card Found !</p>
+						</tbody>
+					</ng-template>
+				</table>
+				<a class="addCardClass" (click)="changeDetection('new_card')">
+					<input id="card" name="AddCard" type="radio" [checked]="isCardFormOpen">
+					<img src="../../../../assets/images/credit-card.png" alt="">
+					Add a credit or debit card</a>
+			</div>
+			<!-- Credit Card Details -->
+
+			<form class="container-fluid" [formGroup]="cardForm" appInvalidControlScroll>
+
+				<div id="credit-card-details" class="px-4" *ngIf="paymentMethod=='card' && isCardFormOpen">
+					<div class="row">
+						<!-- Card Holder Name -->
+						<div class="col-md-4 my-2">
+							<mat-form-field appearance="outline" class="m-0">
+								<mat-label class="required-field">
+									Card Holder
+								</mat-label>
+								<input matInput placeholder="First & Last Name" type="text" formControlName="name"
+									tabindex="0" (focus)="$event.target.select()">
+							</mat-form-field>
+							<div class="error-message"
+								*ngIf="cardForm?.controls?.name?.invalid && (cardForm?.controls?.name?.touched || cardForm?.controls?.name?.dirty)">
+								<p class="text-danger text-lg m-0" *ngIf="cardForm?.controls?.name?.errors?.required">
+									This field is required
+								</p>
+								<div class="text-danger text-lg m-0" *ngIf="cardForm?.controls?.name?.errors?.pattern">
+									Only character allowed
+								</div>
+							</div>
+						</div>
+						<!-- Card Number -->
+						<div class="col-md-4 my-2">
+							<mat-form-field appearance="outline" class="m-0">
+								<mat-label class="required-field">
+									Card Number
+								</mat-label>
+								<input matInput placeholder="xxxx xxxx xxxx xxxx" type="text"
+									formControlName="card_number" tabindex="0" (focus)="$event.target.select()">
+							</mat-form-field>
+							<div class="error-message"
+								*ngIf="cardForm.controls.card_number.invalid && (cardForm.controls.card_number.touched || cardForm.controls.card_number.dirty)">
+								<p class="text-danger text-lg m-0"
+									*ngIf="cardForm.controls.card_number.errors?.required">
+									This field is required
+								</p>
+								<div class="text-danger text-lg m-0"
+									*ngIf="cardForm.controls.card_number.errors?.minlength;">Required min 12 no.
+								</div>
+								<div class="text-danger text-lg m-0"
+									*ngIf="cardForm.controls.card_number?.errors?.maxlength">Exceeded max limit
+								</div>
+								<!-- <ng-template #invalidPattern > -->
+								<div class="text-danger text-lg m-0"
+									*ngIf="cardForm.controls.card_number?.errors?.pattern;">Invalid card number
+								</div>
+								<!-- </ng-template> -->
+							</div>
+						</div>
+
+						<!-- Expiration Month -->
+						<div class="col-md-4 my-2">
+							<mat-form-field appearance="outline" class="m-0">
+								<mat-label class="required-field">
+									Expiration Month
+								</mat-label>
+								<mat-select formControlName="exp_month" tabindex="0">
+									<mat-option value='01'>01</mat-option>
+									<mat-option value='02'>02</mat-option>
+									<mat-option value='03'>03</mat-option>
+									<mat-option value='04'>04</mat-option>
+									<mat-option value='05'>05</mat-option>
+									<mat-option value='06'>06</mat-option>
+									<mat-option value='07'>07</mat-option>
+									<mat-option value='08'>08</mat-option>
+									<mat-option value='09'>09</mat-option>
+									<mat-option value='10'>10</mat-option>
+									<mat-option value='11'>11</mat-option>
+									<mat-option value='12'>12</mat-option>
+								</mat-select>
+							</mat-form-field>
+							<div class="error-message"
+								*ngIf="cardForm.controls.exp_month.invalid && (cardForm.controls.exp_month.touched || cardForm.controls.exp_month.dirty)">
+								<p class="text-danger text-lg m-0" *ngIf="cardForm.controls.exp_month.errors?.required">
+									This field is required
+								</p>
+							</div>
+						</div>
+
+						<!-- Expiration Year -->
+						<div class="col-md-4 my-2">
+							<mat-form-field appearance="outline" class="m-0">
+								<mat-label class="required-field">
+									Expiration Year
+								</mat-label>
+								<mat-select formControlName="exp_year" tabindex="0">
+									<mat-option [value]="number" *ngFor="let number of card_params?.years">
+										{{ number }}
+									</mat-option>
+								</mat-select>
+							</mat-form-field>
+							<div class="error-message"
+								*ngIf="cardForm.controls.exp_year.invalid && (cardForm.controls.exp_year.touched || cardForm.controls.exp_year.dirty)">
+								<p class="text-danger text-lg m-0" *ngIf="cardForm.controls.exp_year.errors?.required">
+									This field is required
+								</p>
+							</div>
+						</div>
+
+						<!-- CVV -->
+						<div class="col-md-4 my-2">
+							<mat-form-field appearance="outline" class="m-0">
+								<mat-label class="required-field">
+									CVV
+								</mat-label>
+								<input matInput placeholder="0000" type="text" tabindex="0"
+									(focus)="$event.target.select()" formControlName="cvv">
+							</mat-form-field>
+							<div class="error-message"
+								*ngIf="cardForm.controls.cvv.invalid && (cardForm.controls.cvv.touched || cardForm.controls.cvv.dirty)">
+								<p class="text-danger text-lg m-0" *ngIf="cardForm.controls.cvv.errors?.required">
+									This field is required
+								</p>
+								<p class="text-danger text-lg m-0" *ngIf="cardForm.controls.cvv.errors?.pattern">
+									Contains only numbers
+								</p>
+								<p class="text-danger text-lg m-0" *ngIf="cardForm.controls.cvv.errors?.maxlength">
+									Contains atmost 4 digit
+								</p>
+							</div>
+						</div>
+						<div class="col-md-12" hidden="true">
+							<mat-checkbox [color]="primary" formControlName="save_card_detail">Save
+								details</mat-checkbox>
+						</div>
+					</div>
+				</div>
+			</form>
+
+		</div>
+		<div class="col-md-12 my-3 cardSection">
+			<div class="radio">
+				<input id="cash" name="paymentMethod" type="radio"  (click)="changeDetection('cash')">
+				<label for="cash" class="radio-label">Payment with Cash</label>
+			</div>
+		</div>
+
+		<div class="col-md-12 text-right mr-4">
+			<button type="button" class="custom-filled-button m-3 mr-4" (click)="makePayment()">
+				Pay
+			</button>
+		</div>
+	</div>
+</section>
+
+<!-- modal -->
+
+
+<div class="modal fade" id="warnDeleteCard" tabindex="-1" role="dialog" aria-labelledby="warnDeleteCard" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header pb-0">
+				<h3 class="mb-0">Delete Card</h3>
+			</div>
+			<div class="modal-body text-center">
+				<p>Are you sure, You want to delete card?</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="custom-btn savebutton" (click)="deleteCard()">Delete</button>
+				<button type="button" class="custom-btn resetbutton" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>

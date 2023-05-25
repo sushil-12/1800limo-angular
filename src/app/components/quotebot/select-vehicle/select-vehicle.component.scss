@@ -4,6 +4,10 @@
 .imageStyle {
 	width: 40%;
 }
+.show {
+	overflow: visible;
+	height: auto;
+  }
 @media only screen and (min-width: 767px)
 {
 	.imageStyle {
@@ -44,13 +48,18 @@
 	}
 }
 
+#vehicle-preview-button
+{
+	display: none;
+}
+
 section#vehicle-listing-container {
 	&:last-child {
 		margin-bottom: 4rem;
 	}
 	
 	.vehicle-listing-card {
-		--card-max-width: 17rem;
+		--card-max-width: 18.5rem;
 		position: relative;
 		width: 100%;
 		border-radius: 1.3rem;
@@ -151,7 +160,8 @@ section#vehicle-listing-container {
 			}
 			#vehicle-preview-button
 			{
-				position: absolute;
+				display: block;
+				position: relative;
 				right: 0;
 				bottom: 0;
 			}
@@ -748,11 +758,60 @@ img.img-cir {
 }
 
 .custom-filled-button {
-	font-size: 0.88rem;
+	font-size: 1.00rem;
 	padding: 0.395rem 0.5rem;
+	box-shadow             : 0px 5px 10px 1px rgba(0, 0, 0, 0.4);
+	transition             : box-shadow 0.1s ease-in-out;
 }
 
 .custom-filled-back-button {
 	font-size: 0.98rem;
 	padding: 0.475rem 1rem;
+	box-shadow             : 0px 5px 10px 1px rgba(0, 0, 0, 0.4);
+	transition             : box-shadow 0.1s ease-in-out;
 }
+
+
+.btn-bg-green {
+	width                  : -webkit-fit-content;
+	width                  : -moz-fit-content;
+	width                  : fit-content;
+	height                 : -webkit-fit-content;
+	height                 : -moz-fit-content;
+	height                 : fit-content;
+	background-color 	   :rgb(51, 198, 88);
+	border                 : 1.5px solid rgb(51, 198, 88);
+	border-radius          : 20px;
+    box-shadow             : 0px 5px 10px 1px rgba(0, 0, 0, 0.4);
+	transition             : box-shadow 0.1s ease-in-out;
+	letter-spacing: 1px;
+	font-family: "Roboto", sans-serif;
+	font-weight: 500;
+	color: #000000;
+	margin: 0 3px;
+	font-size: 0.88rem;
+	padding: 0.395rem 0.5rem;
+}
+
+
+.filter-btn{
+	display: inline-block;
+    font-weight: 400;
+    color: #fff;
+    text-align: center;
+    vertical-align: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    background-color: transparent;
+    border: 1px solid transparent;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: 0.25rem;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+button.link { 
+	background:none;
+	border:none;
+ }

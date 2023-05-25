@@ -1,19 +1,40 @@
-.adminbox_shadow.user_information,
+.adminbox_shadow.user_information{
+	font-family: "PT Serif", serif !important;
+	background-color: #f5f4fe;
+}
 .adminbox_shadow.user_information .mat-form-field,
 .mat-calendar {
 	font-family: "PT Serif", serif !important;
 }
+hr{
+	border-top: 1px solid black
+}
 button {
 	font-family: "PT Serif", serif !important;
+}
+.none-display{
+	display: none;
 }
 
 .booking_status {
 	font-size: medium;
 	color: #fff;
 }
-
+.x-circle-btn{
+	opacity: 1;
+	color: red;
+	font-size: xx-large;
+}
 .pending {
 	background-color: #0474fc;
+}
+
+.partial_paid {
+	background-color: #00CCCC;
+}
+
+.paid {
+	background-color: #D1B000;
 }
 
 .assigned {
@@ -56,31 +77,16 @@ button {
 	background-color: #7c7c84;
 }
 
+.refund{
+	background-color:#A020F0;
+}
+
 .btnclass {
 	margin-top: 20px;
 	height: 60px;
 	width: 100%;
 }
 
-@media only screen and (min-width: 768px) and (max-width: 1200px) {
-	.startdate {
-		padding-right: 5px;
-	}
-
-	.startdate2 {
-		padding-left: 5px;
-		padding-right: 5px;
-	}
-
-	.startdate3 {
-		padding-left: 5px;
-	}
-
-	.btnclass {
-		// padding-right: 5px;
-		width: 100%;
-	}
-}
 
 .odd p {
 	cursor: pointer;
@@ -90,7 +96,9 @@ button {
 	color: #fff !important;
 	background-color: var(--orange-color) !important;
 	border-color: var(--orange-color) !important;
-	padding: 10px 40px;
+	padding: 10px 40px;	
+	transition: box-shadow 0.1s ease-in-out;
+    box-shadow: 0px 5px 10px 1px rgb(0 0 0 / 40%);
 }
 
 .modal-header {
@@ -140,18 +148,154 @@ button {
 	position: absolute;
 	bottom: -60px;
 	left: 15px;
+	transition: box-shadow 0.1s ease-in-out;
+    box-shadow: 0px 5px 10px 1px rgb(0 0 0 / 40%);
 }
 
+.saveButtonModal {
+	color: #fff !important;
+	background-color: #5dbd8a;
+	border-color: #5dbd8a;
+	padding: 10px 40px;
+	bottom: -60px;
+	left: 15px;
+	transition: box-shadow 0.1s ease-in-out;
+    box-shadow: 0px 5px 10px 1px rgb(0 0 0 / 40%);
+}
+
+
 table {
-	width: auto;
-	white-space: nowrap;
+	width: 100;
+	white-space: break-spaces;
 	padding: 10px;
 	min-width: 5rem;
+
 	thead th {
 		color: #000000;
 		font-weight: 600;
 	}
-	tbody td > p {
+
+	tbody td>p {
 		margin: 0;
 	}
 }
+
+a:hover {
+	text-decoration: none;
+	// color: unset !important;
+}
+
+input,
+input::placeholder,
+input::-webkit-input-placeholder {
+	padding: 0 !important;
+}
+
+
+.booking-id-font{
+	font-size: large;
+}
+
+.preview-output-feild{
+	font-size: x-large;
+}
+
+.view-button{
+	background-color: #5373aa !important;
+	color: #fff !important;
+	padding: 5px 8px !important;
+	border-radius: 3rem !important;
+}
+
+.x-cross-btn{
+	background: #fff !important;
+    color: #ff0000 !important;
+    /* position: absolute; */
+    top: 5px;
+    right: 15px;
+    border-radius: 20px;
+    width: 25px;
+    opacity: 1 !important;
+}
+
+.x-close-btn{
+	float: right;
+    font-size: 1.8rem;
+    font-weight: 700;
+    line-height: 1;
+	border: none;
+}
+.center {
+	margin: 0;
+	position: absolute;
+	top: 53%;
+	left: 50%;
+	-ms-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+  }
+
+  .preview-pickup-color{
+	color: #007500;
+  }
+  .preview-dropoff-color{
+	color:  #FF0000 ;
+  }
+  .preview-airport-color{
+	color:  #00008B ;
+  }
+@media only screen and (min-width: 768px) and (max-width: 1200px) {
+	.startdate {
+		padding-right: 5px;
+	}
+
+	.startdate2 {
+		padding-left: 5px;
+		padding-right: 5px;
+	}
+
+	.startdate3 {
+		padding-left: 5px;
+	}
+
+	.btnclass {
+		// padding-right: 5px;
+		width: 100%;
+	}
+}
+
+@media only screen and (max-width: 475px)
+{
+	#AuditTrailModal
+	{
+		.modal-body
+		{
+			overflow: auto;
+			table {
+				width: 450px;
+				thead tr th#date
+				{
+					width: 115px
+				}
+			}
+		}
+	}
+	.align-btn{
+		flex-direction: row-reverse;
+		align-items:end;
+		width: 100%;
+		margin: 1rem;
+	}
+	// .bottom-container{
+	// 	border:1px solid green !important;
+
+	// }
+
+	// .bottom-container > button{
+	// 	position: relative;
+	// 	border:1px solid pink;
+	// 	bottom: 10px
+	// }
+}
+
+
+

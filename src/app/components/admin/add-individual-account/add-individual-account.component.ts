@@ -49,6 +49,7 @@ export class AddIndividualAccountComponent implements OnInit
 
 	ngOnInit(): void
 	{
+		this.buildAddIndividualForm();
 		const currentYear = (new Date()).getFullYear();
 		for (let i = 0; i < 40; i++)
 		{
@@ -62,6 +63,7 @@ export class AddIndividualAccountComponent implements OnInit
 			let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement);
 			autocomplete.addListener("place_changed", () =>
 			{
+				console.log('auto fill address-->>>')
 				this.ngZone.run(() =>
 				{
 					//get the place result
@@ -101,32 +103,7 @@ export class AddIndividualAccountComponent implements OnInit
 		});
 
 		//add amenity form validation
-		this.addIndividualAccountForm = this.formBuilder.group({
-			role: ['5', [Validators.required, Validators.pattern("^[0-9].*$")]],//individual
-			firstName: ['', Validators.required],
-			middleName: [''],
-			lastName: ['', Validators.required],
-			mobile: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(10), Validators.maxLength(10)]],
-			mobileIsd: ['+1', Validators.required],
-			mobileCountry: ['us'],
-			work: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(10), Validators.maxLength(10)]],
-			workIsd: ['+1', Validators.required],
-			workCountry: ['us'],
-			email: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
-			address: ['', Validators.required],
-			city: ['', Validators.required],
-			state: ['', Validators.required],
-			country: ['', Validators.required],
-			zipCode: ['', Validators.required],
-			latitude: [''],
-			longitude: [''],
-			card_type: ['personal', Validators.required],
-			number: ['', [Validators.required, Validators.pattern("^[0-9\\s]*$"), Validators.maxLength(18), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
-			cvc: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.maxLength(5), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
-			exp_month: ['', Validators.required],
-			exp_year: ['', Validators.required],
-			name: ['', Validators.required],
-		});
+		
 		/* Card Number Spacing */
 
 		$('#card-number').on('keypress change blur', function ()
@@ -144,6 +121,35 @@ export class AddIndividualAccountComponent implements OnInit
 			{
 				$('#card-number').trigger("change");
 			});
+		});
+	}
+
+	buildAddIndividualForm(){
+		this.addIndividualAccountForm = this.formBuilder.group({
+			role: ['5', [Validators.required, Validators.pattern("^[0-9].*$")]],//individual
+			firstName: ['', Validators.required],
+			middleName: [''],
+			lastName: ['', Validators.required],
+			mobile: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
+			mobileIsd: ['+1', Validators.required],
+			mobileCountry: ['us'],
+			work: [''],
+			workIsd: ['+1', Validators.required],
+			workCountry: ['us'],
+			email: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.]+\.[a-zA-Z]{2,}$/i)]],
+			address: ['', Validators.required],
+			city: ['', Validators.required],
+			state: ['', Validators.required],
+			country: ['', Validators.required],
+			zipCode: ['', Validators.required],
+			latitude: [''],
+			longitude: [''],
+			card_type: ['personal', Validators.required],
+			number: ['', [Validators.required, Validators.pattern("^[0-9\\s]*$"), Validators.maxLength(20), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
+			cvc: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.maxLength(5), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
+			exp_month: ['', Validators.required],
+			exp_year: ['', Validators.required],
+			name: ['', Validators.required],
 		});
 	}
 
@@ -216,7 +222,7 @@ export class AddIndividualAccountComponent implements OnInit
 
 	resetForm()
 	{
-		this.addIndividualAccountForm.reset();
+		this.buildAddIndividualForm()
 	}
 	backButton()
 	{

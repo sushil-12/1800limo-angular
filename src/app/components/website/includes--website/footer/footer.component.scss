@@ -4,24 +4,24 @@
 
 .logbutton {
 	// border            : 1px solid #5dbd8a !important;
-	width: 300px !important;
-	height: 50px !important;
-	margin: 20px auto;
-	margin-top: 0%;
-	padding-top: 13px !important;
+	width             : 300px !important;
+	height            : 50px !important;
+	margin            : 20px auto;
+	margin-top        : 0%;
+	padding-top       : 13px !important;
 	-webkit-appearance: none;
-	appearance: none;
-	height: 40px;
-	background-color: #5dbd8a !important;
-	border-radius: 15px !important;
-	padding: 0px 10px;
-	color: #fff;
-	transition: 0.6s;
-	display: block;
+	appearance        : none;
+	height            : 40px;
+	background-color  : #5dbd8a !important;
+	border-radius     : 15px !important;
+	padding           : 0px 10px;
+	color             : #fff;
+	transition        : 0.6s;
+	display           : block;
 }
 
 .dropdown-menu hr {
-	margin: 5px 10px 5px 10px;
+	margin    : 5px 10px 5px 10px;
 	background: #646464;
 }
 
@@ -34,14 +34,14 @@ a.user-profile {
 
 .logbutton:hover {
 	background-color: #5dbd8a !important;
-	color: #fff !important;
+	color           : #fff !important;
 }
 
 #btn-back-to-top {
 	position: fixed;
-	bottom: 20px;
-	right: 20px;
-	display: none;
+	bottom  : 20px;
+	right   : 20px;
+	display : none;
 }
 
 .clearfix img {
@@ -50,7 +50,7 @@ a.user-profile {
 
 @media only screen and (max-width: 767px) {
 	.clearfix img {
-		height: 130px;
+		height       : 130px;
 		margin-bottom: 20px;
 	}
 }
@@ -62,10 +62,10 @@ a.user-profile {
 }
 
 .scrollButton {
-	right: -15px;
+	right     : -15px;
 	text-align: end;
 	margin-top: -75px;
-	bottom: -55px;
+	bottom    : -55px;
 }
 
 @media only screen and (min-width: 768px) {
@@ -97,26 +97,27 @@ a.user-profile:active::after {
 }
 
 .login_btn {
-	width: 300px;
-	margin: auto;
+	width  : 300px;
+	margin : auto;
 	padding: 0;
 }
 
 .dropdown-menu {
-	width: 300px !important;
-	right: 0;
-	margin: 0px;
-	color: #fff !important;
+	width           : 300px !important;
+	right           : 0;
+	margin          : 0px;
+	color           : #fff !important;
 	background-color: #fff !important;
-	border: 1px solid #5dbd8a;
-	top: -2px !important;
-	transform: none !important;
-	left: 0px !important;
-	top: 50px !important;
-	margin: auto !important;
+	border          : 1px solid #5dbd8a;
+	top             : -2px !important;
+	transform       : none !important;
+	left            : 0px !important;
+	top             : 50px !important;
+	margin          : auto !important;
 }
 
 @media (min-width: 280px) and (max-width: 311px) {
+
 	// .dropdown-menu {
 	//     max-width       : 215px !important;
 	//     right           : 0;
@@ -130,33 +131,33 @@ a.user-profile:active::after {
 	// }
 	.logbutton {
 		// border            : 1px solid #5dbd8a !important;
-		width: 215px !important;
-		height: 50px !important;
-		margin: 20px auto;
-		margin-top: 0%;
-		padding-top: 13px !important;
+		width             : 215px !important;
+		height            : 50px !important;
+		margin            : 20px auto;
+		margin-top        : 0%;
+		padding-top       : 13px !important;
 		-webkit-appearance: none;
-		-moz-appearance: none;
-		appearance: none;
-		height: 40px;
-		border-radius: 15px;
-		padding: 0px 10px;
-		color: #fff;
-		transition: 0.6s;
-		display: block;
+		-moz-appearance   : none;
+		appearance        : none;
+		height            : 40px;
+		border-radius     : 15px;
+		padding           : 0px 10px;
+		color             : #fff;
+		transition        : 0.6s;
+		display           : block;
 	}
 
 	.socials svg {
-		height: 30px !important;
-		width: 30px !important;
-		margin: 0px 0px 0px 14px;
+		height    : 30px !important;
+		width     : 30px !important;
+		margin    : 0px 0px 0px 14px;
 		margin-top: -15px !important;
 	}
 
 	.socials {
-		margin-top: 0px;
+		margin-top   : 0px;
 		margin-bottom: 15px;
-		text-align: left;
+		text-align   : left;
 	}
 
 	.socials i {
@@ -165,7 +166,7 @@ a.user-profile:active::after {
 
 	.footerButton {
 		margin-left: -10px !important;
-		margin-top: -5px !important;
+		margin-top : -5px !important;
 	}
 }
 
@@ -252,7 +253,7 @@ a.user-profile:active::after {
 }
 
 .login_btn #dropdownFooter:focus {
-	color: #fff !important;
+	color     : #fff !important;
 	background: #5dbd8a !important;
 }
 
@@ -300,27 +301,36 @@ a.user-profile:active::after {
 
 .dropdown-menu {
 	hr {
-		margin: 5px 10px 5px 10px;
+		margin    : 5px 10px 5px 10px;
 		background: #646464;
 	}
 
 	.dropdown-item.nav-disabled {
 		opacity: 0.6;
-		cursor: default;
+		cursor : default;
 	}
 
 	.dropdown-item {
-		display: block;
-		border-radius: 8px;
+		display         : block;
+		border-radius   : 8px;
 		background-color: var(--orange-color);
-		margin: 14px 15px;
-		width: auto;
-		padding: 8px 15px;
+		margin          : 14px 15px;
+		width           : auto;
+		padding         : 8px 15px;
 
 		&:hover:not(.dropdown-item.nav-disabled) {
 			background-color: #be691d;
 		}
 	}
+
+	.driver-dropdown {
+		background-color: var(--green);
+	}
+
+	.driver-dropdown:hover {
+		color: #000 !important;
+	}
+
 
 	.dropdown-item:not(.dropdown-item.nav-disabled) {
 		box-shadow: 0 3px 10px -6px rgba(0, 0, 0, 0.6);
@@ -330,3 +340,15 @@ a.user-profile:active::after {
 		box-shadow: none;
 	}
 }
+
+.gear-bg {
+	color: aliceblue !important;
+}
+
+
+.logout-background {
+	background: #8080805c !important;
+}
+
+
+

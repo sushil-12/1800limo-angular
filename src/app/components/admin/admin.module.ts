@@ -98,6 +98,16 @@ import { NewBookingComponent } from './new-booking/new-booking.component';
 import { RatesFormComponent } from './rates-form/rates-form.component';
 import { FinalizeBookingComponent } from './finalize-booking/finalize-booking.component';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { FinalizeRatesComponent } from './finalize-rates/finalize-rates.component';
+import { NgxPrintModule } from 'ngx-print';
+import { BadgeCitiesComponent } from './badge-cities/badge-cities.component';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatIconModule } from '@angular/material/icon';
+import { CustomInvoiceComponent } from './custom-invoice/custom-invoice.component';
+import { StaffPermissionsComponent } from './staff-permissions/staff-permissions.component';
+import {MatTabsModule} from '@angular/material/tabs';
+import { StaffRolesListComponent } from './staff-roles-list/staff-roles-list.component';
 
 @NgModule({
 	declarations: [
@@ -175,7 +185,12 @@ import { NgSelectModule } from '@ng-select/ng-select';
 		BookingDetailsComponent,
 		NewBookingComponent,
 		RatesFormComponent,
-		FinalizeBookingComponent
+		FinalizeBookingComponent,
+		FinalizeRatesComponent,
+		BadgeCitiesComponent,
+		CustomInvoiceComponent,
+		StaffPermissionsComponent,
+		StaffRolesListComponent
 	],
 	imports: [
 		CommonModule,
@@ -189,12 +204,16 @@ import { NgSelectModule } from '@ng-select/ng-select';
 		Ng2TelInputModule,
 		AgmCoreModule,
 		AgmDirectionModule,
+		MatNativeDateModule,
 		MatFormFieldModule,
 		MatInputModule,
 		MatSelectModule,
 		SharedModule,
 		MatRadioModule,
-		NgSelectModule
+		NgSelectModule,
+		NgxPrintModule,
+		MatChipsModule,
+		MatTabsModule
 	],
 	exports: [BookingStatusTextReplacePipe]
 })

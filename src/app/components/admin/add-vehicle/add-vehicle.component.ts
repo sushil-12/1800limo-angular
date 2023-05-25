@@ -16,8 +16,7 @@ declare var $: any;
 	templateUrl: './add-vehicle.component.html',
 	styleUrls: ['./add-vehicle.component.scss']
 })
-export class AddVehicleComponent implements OnInit
-{
+export class AddVehicleComponent implements OnInit {
 
 	public tree: any;
 	public affiliateId: string;
@@ -48,6 +47,7 @@ export class AddVehicleComponent implements OnInit
 	public nonChargableAmenities: object;
 	public specialAmenities: object;
 	public interiors: object;
+	public allModels = JSON.parse(sessionStorage.getItem('models'));
 
 	public vehicleImage1: string;
 	public vehicleImage2: string;
@@ -106,75 +106,60 @@ export class AddVehicleComponent implements OnInit
 		private httpClient: HttpClient,
 		private errorModal: ErrorDialogService) { }
 
-	ngAfterViewChecked()
-	{
+	ngAfterViewChecked() {
 		$(".camera-svg").tooltip({
 			trigger: 'hover'
 		});
-		$(".camera-svg").on('mouseleave', function ()
-		{
+		$(".camera-svg").on('mouseleave', function () {
 			$(this).tooltip('dispose');
 		});
-		$(".camera-svg").on('click', function ()
-		{
+		$(".camera-svg").on('click', function () {
 			$(this).tooltip('dispose');
 		});
 		$(".backbutton").tooltip({
 			trigger: 'hover'
 		});
-		$(".backbutton").on('mouseleave', function ()
-		{
+		$(".backbutton").on('mouseleave', function () {
 			$(this).tooltip('dispose');
 		});
-		$(".backbutton").on('click', function ()
-		{
+		$(".backbutton").on('click', function () {
 			$(this).tooltip('dispose');
 		});
 	}
 
-	ngOnInit(): void
-	{
-		$('#vehicleTypeField').focusout(() =>
-		{
+	ngOnInit(): void {
+		$('#vehicleTypeField').focusout(() => {
 			this.errorMsg = true;
 		})
-		$('#makeField').focusout(() =>
-		{
+		$('#makeField').focusout(() => {
 			this.errorMsg1 = true;
 		})
-		$('#modelField').focusout(() =>
-		{
+		$('#modelField').focusout(() => {
 			this.errorMsg2 = true;
 		})
-		$('#yearField').focusout(() =>
-		{
+		$('#yearField').focusout(() => {
 			this.errorMsg3 = true;
 		})
-		$('#colorField').focusout(() =>
-		{
+		$('#colorField').focusout(() => {
 			this.errorMsg4 = true;
 		})
 		//pick vehicle type id from query params
 		this.activatedroute.queryParamMap
-			.subscribe((params) =>
-			{
+			.subscribe((params) => {
 				this.paramResponse = { ...params.keys, ...params };
 				this.vehicleTypeId = this.paramResponse.params.vehicleTypeId;
 			}
 			);
-		this.httpClient.get("assets/json/charterOptions.json").subscribe((data: any) =>
-		{
+		this.httpClient.get("assets/json/charterOptions.json").subscribe((data: any) => {
 			this.nonCharterCancelOptions = data;
 			this.charterCancelOptions = data;
 		});
 
 		//data for dropdown of seats and luggage
-		for (let i = 2; i <= 75; i++)
-		{
+		for (let i = 2; i <= 75; i++) {
 			this.luggageOptions.push(i);
 		}
-		for (let i = 4; i <= 75; i++)
-		{
+		for (let i = 4; i <= 75; i++) {
 			this.seatOptions.push(i);
 		}
 
@@ -224,28 +209,23 @@ export class AddVehicleComponent implements OnInit
 		});
 
 		this.affiliateType = sessionStorage.getItem("affiliateType");
-		if (this.affiliateType != 'fleet_operator')
-		{
+		if (this.affiliateType != 'fleet_operator') {
 			this.addVehicleForm.controls['licensePlate'].setValidators([Validators.required]);
 			this.addVehicleForm.controls['licensePlate'].updateValueAndValidity();
 			this.addVehicleForm.controls['rearPlateImage'].setValidators([Validators.required]);
 			this.addVehicleForm.controls['rearPlateImage'].updateValueAndValidity();
 		}
 
-		this.stateManagementService.getNumberOfVehicles().subscribe(numberOfVehicles =>
-		{
+		this.stateManagementService.getNumberOfVehicles().subscribe(numberOfVehicles => {
 			let numberOfVehiclesCanBeAdded;
-			if (this.affiliateType == 'fleet_operator')
-			{
+			if (this.affiliateType == 'fleet_operator') {
 				this.addVehicleForm.controls['numberOfVehicles'].setValidators([Validators.required, Validators.pattern("^[0-9]*$")]);
 			}
-			else if (this.affiliateType == 'black_limo_operator')
-			{
+			else if (this.affiliateType == 'black_limo_operator') {
 				numberOfVehiclesCanBeAdded = 2 - numberOfVehicles;
 				this.addVehicleForm.controls['numberOfVehicles'].setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.min(1), Validators.max(numberOfVehiclesCanBeAdded)]);
 			}
-			else
-			{
+			else {
 				numberOfVehiclesCanBeAdded = 1 - numberOfVehicles;
 				this.addVehicleForm.controls['numberOfVehicles'].setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.min(1), Validators.max(numberOfVehiclesCanBeAdded)]);
 			}
@@ -257,13 +237,11 @@ export class AddVehicleComponent implements OnInit
 		// Load Our amenities using API
 		this.adminService.adminAffiliateGetFieldsData()
 			.pipe(
-				catchError(err =>
-				{
+				catchError(err => {
 					this.spinner.hide();
 					return throwError(err);
 				})
-			).subscribe(result =>
-			{
+			).subscribe(result => {
 				this.response = result;
 				this.filteredYear = this.year = this.response.data.years;
 				this.filteredMake = this.make = this.response.data.make;
@@ -274,7 +252,8 @@ export class AddVehicleComponent implements OnInit
 				this.nonChargableAmenities = this.response.data.nonChargableAmenities;
 				this.specialAmenities = this.response.data.specialAmenities;
 				this.interiors = this.response.data.vehicleInterior;
-
+				const vehicleInterior: FormArray = this.addVehicleForm.get('vehicleInterior') as FormArray;
+				vehicleInterior.push(new FormControl('1'));
 				sessionStorage.setItem('models', JSON.stringify(this.model));
 				console.log("<><><><><><><><><><><><><><><><><><>", this.response.data)
 
@@ -313,10 +292,8 @@ export class AddVehicleComponent implements OnInit
 				//get models as per make
 				let models = JSON.parse(sessionStorage.getItem('models'));
 				let selectedMake = this.make[0].ID;
-				let resmodels = models.filter(function (model)
-				{
-					if (model.make_id == selectedMake)
-					{
+				let resmodels = models.filter(function (model) {
+					if (model.make_id == selectedMake) {
 						return true;
 					}
 				});
@@ -340,23 +317,20 @@ export class AddVehicleComponent implements OnInit
 				});
 				this.spinner.hide();
 			});
+		this.Subscriptions()
+
 	}
-	closeButton()
-	{
+	closeButton() {
 		this.closeTab.emit();
 	}
 	//Start of autocomplete search and selection
-	searchSorting(keyword, a, b)
-	{
+	searchSorting(keyword, a, b) {
 		// Sort results by matching name with keyword position in name
-		if (a.name.toLowerCase().indexOf(keyword.toLowerCase()) > b.name.toLowerCase().indexOf(keyword.toLowerCase()))
-		{
+		if (a.name.toLowerCase().indexOf(keyword.toLowerCase()) > b.name.toLowerCase().indexOf(keyword.toLowerCase())) {
 			return 1;
-		} else if (a.name.toLowerCase().indexOf(keyword.toLowerCase()) < b.name.toLowerCase().indexOf(keyword.toLowerCase()))
-		{
+		} else if (a.name.toLowerCase().indexOf(keyword.toLowerCase()) < b.name.toLowerCase().indexOf(keyword.toLowerCase())) {
 			return -1;
-		} else
-		{
+		} else {
 			if (a.name > b.name)
 				return 1;
 			else
@@ -364,36 +338,29 @@ export class AddVehicleComponent implements OnInit
 		}
 	}
 
-	searchVehicleType(keyword)
-	{
+	searchVehicleType(keyword) {
 		this.addVehicleForm.patchValue({
 			vehicleType: '',
 		});
-		if (keyword == '')
-		{
+		if (keyword == '') {
 			this.filteredVehicleTypes = this.vehicleTypes;
 		}
-		else
-		{
-			this.filteredVehicleTypes = this.vehicleTypes.filter((vehicle_Type: any) =>
-			{
-				if (vehicle_Type.name.toLowerCase() === keyword.toLowerCase())
-				{
+		else {
+			this.filteredVehicleTypes = this.vehicleTypes.filter((vehicle_Type: any) => {
+				if (vehicle_Type.name.toLowerCase() === keyword.toLowerCase()) {
 					this.addVehicleForm.patchValue({
 						vehicleType: vehicle_Type.ID,
 					});
 				}
 				return vehicle_Type.name.toLowerCase().includes(keyword.toLowerCase());
 			})
-				.sort((a: any, b: any) =>
-				{
+				.sort((a: any, b: any) => {
 					return this.searchSorting(keyword, a, b)
 				});
 		}
 	}
 
-	selectVehicleType(val, isSelected)
-	{
+	selectVehicleType(val, isSelected) {
 		if (isSelected)// ignore on deselection of the previous option 
 		{
 			this.addVehicleForm.patchValue({
@@ -402,75 +369,85 @@ export class AddVehicleComponent implements OnInit
 		}
 	}
 
-	searchMake(keyword)
-	{
+	searchMake(keyword) {
 		this.addVehicleForm.patchValue({
 			make: '',
 		});
-		if (keyword == '')
-		{
+		if (keyword == '') {
 			this.filteredMake = this.make;
 		}
-		else
-		{
-			this.filteredMake = this.make.filter((mk: any) =>
-			{
-				if (mk.name.toLowerCase() === keyword.toLowerCase())
-				{
+		else {
+			this.filteredMake = this.make.filter((mk: any) => {
+				if (mk.name.toLowerCase() === keyword.toLowerCase()) {
 					this.addVehicleForm.patchValue({
 						make: mk.ID,
 					});
 				}
 				return mk.name.toLowerCase().includes(keyword.toLowerCase());
 			})
-				.sort((a: any, b: any) =>
-				{
+				.sort((a: any, b: any) => {
 					return this.searchSorting(keyword, a, b)
 				});
 		}
 	}
-	selectMake(val, isSelected)
-	{
+	selectMake(val, isSelected) {
+		console.log('make select is clicked-->>>', val)
 		if (isSelected)// ignore on deselection of the previous option
 		{
 			this.addVehicleForm.patchValue({
 				make: val,
 			});
-			this.changeMake(val);
 			let modelField: any = document.getElementById('modelField');
 			modelField.value = '';
+			// setTimeout(() => {
+			// 	this.changeMake(val);
+			// }, 200)
 		}
 	}
+	Subscriptions() {
+		this.addVehicleForm.get('make')?.valueChanges.subscribe((value: string) => {
+			console.log('change value is--->>', value)
+			let models = this.allModels
+			this.filteredModel = this.model = models.filter(function (model) {
+				if (model.make_id == value) {
+					return true;
+				}
+			});
+		})
+		
+		// this.addVehicleForm.get('make').valueChanges.subscribe((value: string) => {
+		// 	console.log('in function change make-->',value )
+		// 	// let models = this.allModels
+		// 	// this.filteredModel = this.model = models.filter(function (model) {
+		// 	// 	if (model.make_id == value) {
+		// 	// 		return true;
+		// 	// 	}
+		// 	// });
+		// })
+	}
 
-	searchModel(keyword)
-	{
+	searchModel(keyword) {
 		this.addVehicleForm.patchValue({
 			model: '',
 		});
-		if (keyword == '')
-		{
-			this.filteredModel = this.model;
-		}
-		else
-		{
-			this.filteredModel = this.model.filter((mdl: any) =>
-			{
-				if (mdl.name.toLowerCase() === keyword.toLowerCase())
-				{
+		if (keyword.length) {
+			this.filteredModel = this.model.filter((mdl: any) => {
+				if (mdl.name.toLowerCase() === keyword.toLowerCase()) {
 					this.addVehicleForm.patchValue({
 						model: mdl.ID,
 					});
 				}
 				return mdl.name.toLowerCase().includes(keyword.toLowerCase());
 			})
-				.sort((a: any, b: any) =>
-				{
+				.sort((a: any, b: any) => {
 					return this.searchSorting(keyword, a, b)
 				});
 		}
+		else {
+			this.filteredModel = this.model;
+		}
 	}
-	selectModel(val, isSelected)
-	{
+	selectModel(val, isSelected) {
 		if (isSelected)// ignore on deselection of the previous option
 		{
 			this.addVehicleForm.patchValue({
@@ -479,35 +456,28 @@ export class AddVehicleComponent implements OnInit
 		}
 	}
 
-	searchYear(keyword)
-	{
+	searchYear(keyword) {
 		this.addVehicleForm.patchValue({
 			year: '',
 		});
-		if (keyword == '')
-		{
+		if (keyword == '') {
 			this.filteredYear = this.year;
 		}
-		else
-		{
-			this.filteredYear = this.year.filter((yr: any) =>
-			{
-				if (yr.name.toLowerCase() === keyword.toLowerCase())
-				{
+		else {
+			this.filteredYear = this.year.filter((yr: any) => {
+				if (yr.name.toLowerCase() === keyword.toLowerCase()) {
 					this.addVehicleForm.patchValue({
 						year: yr.ID,
 					});
 				}
 				return yr.name.toLowerCase().includes(keyword.toLowerCase());
 			})
-				.sort((a: any, b: any) =>
-				{
+				.sort((a: any, b: any) => {
 					return this.searchSorting(keyword, a, b)
 				});
 		}
 	}
-	selectYear(val, isSelected)
-	{
+	selectYear(val, isSelected) {
 		if (isSelected)// ignore on deselection of the previous option
 		{
 			this.addVehicleForm.patchValue({
@@ -516,35 +486,28 @@ export class AddVehicleComponent implements OnInit
 		}
 	}
 
-	searchColor(keyword)
-	{
+	searchColor(keyword) {
 		this.addVehicleForm.patchValue({
 			color: '',
 		});
-		if (keyword == '')
-		{
+		if (keyword == '') {
 			this.filteredColor = this.color;
 		}
-		else
-		{
-			this.filteredColor = this.color.filter((cl: any) =>
-			{
-				if (cl.name.toLowerCase() === keyword.toLowerCase())
-				{
+		else {
+			this.filteredColor = this.color.filter((cl: any) => {
+				if (cl.name.toLowerCase() === keyword.toLowerCase()) {
 					this.addVehicleForm.patchValue({
 						color: cl.ID,
 					});
 				}
 				return cl.name.toLowerCase().includes(keyword.toLowerCase());
 			})
-				.sort((a: any, b: any) =>
-				{
+				.sort((a: any, b: any) => {
 					return this.searchSorting(keyword, a, b)
 				});
 		}
 	}
-	selectColor(val, isSelected)
-	{
+	selectColor(val, isSelected) {
 		if (isSelected)// ignore on deselection of the previous option
 		{
 			this.addVehicleForm.patchValue({
@@ -553,106 +516,86 @@ export class AddVehicleComponent implements OnInit
 		}
 	}
 	//End of autocomplete search and selection
-	typeOfService(type)
-	{
+	typeOfService(type) {
 		this.serviceType = type;
 	}
 
-	onAmenitiesCheckboxChange(val, ischecked)
-	{
+	onAmenitiesCheckboxChange(val, ischecked) {
 		const amenities: FormArray = this.addVehicleForm.get('amenities') as FormArray;
-		if (ischecked)
-		{
+		if (ischecked) {
 			amenities.push(new FormControl(val));
-		} else
-		{
+		} else {
 			const index = amenities.controls.findIndex(x => x.value === val);
 			amenities.removeAt(index);
 		}
 	}
-	onSpecialAmenitiesCheckboxChange(e)
-	{
+	onSpecialAmenitiesCheckboxChange(e) {
 		const specialAmenities: FormArray = this.addVehicleForm.get('specialAmenities') as FormArray;
-		if (e.target.checked)
-		{
+		if (e.target.checked) {
 			specialAmenities.push(new FormControl(e.target.value));
-		} else
-		{
+		} else {
 			const index = specialAmenities.controls.findIndex(x => x.value === e.target.value);
 			specialAmenities.removeAt(index);
 		}
 	}
-	onInteriorsCheckboxChange(e)
-	{
+	onInteriorsCheckboxChange(e) {
 		const vehicleInterior: FormArray = this.addVehicleForm.get('vehicleInterior') as FormArray;
-		if (e.target.checked)
-		{
+		console.log('------>>>>>>' , vehicleInterior)
+		if (e.target.checked) {
 			vehicleInterior.push(new FormControl(e.target.value));
-		} else
-		{
+		} else {
 			const index = vehicleInterior.controls.findIndex(x => x.value === e.target.value);
 			vehicleInterior.removeAt(index);
 		}
 	}
 
-	onFileChange(event, imageId, imageNumber)
-	{
-		this.stateManagementService.setprogressBar(true);
+	onFileChange(event, imageId, imageNumber) {
+		// this.stateManagementService.setprogressBar(true);
 		const reader = new FileReader();
-		if (event.target.files && event.target.files.length)
-		{
+		if (event.target.files && event.target.files.length) {
 			const [file] = event.target.files;
 			reader.readAsDataURL(file);
-			reader.onload = () =>
-			{
+			reader.onload = () => {
 				this.imageSrc = reader.result as string;
 				this.adminService.uploadVehicleImage(this.imageSrc)
 					.pipe(
-						catchError(err =>
-						{
-							this.stateManagementService.setprogressBar(false);
+						catchError(err => {
+							// this.stateManagementService.setprogressBar(false);
 							return throwError(err);
 						})
 					)
-					.subscribe(result =>
-					{
+					.subscribe(result => {
 						this.response = result;
 						this.addVehicleForm.patchValue({
 							["vehicle_image_" + imageNumber]: this.response.data.id,
 						});
 						this["vehicleImage" + imageNumber] = this.response.data.image;
 
-						this.stateManagementService.setprogressBar(false);
+						// this.stateManagementService.setprogressBar(false);
 					});
 			};
 		}
 	}
 
-	vehicleOfficialImagesChange(event, imageType, imageId)
-	{
-		this.stateManagementService.setprogressBar(true);
+	vehicleOfficialImagesChange(event, imageType, imageId) {
+		// this.stateManagementService.setprogressBar(true);
 		const reader = new FileReader();
-		if (event.target.files && event.target.files.length)
-		{
+		if (event.target.files && event.target.files.length) {
 			const [file] = event.target.files;
 			reader.readAsDataURL(file);
-			reader.onload = () =>
-			{
+			reader.onload = () => {
 				this.imageSrc = reader.result as string;
 				this.adminService.uploadVehicleImage(this.imageSrc)
 					.pipe(
-						catchError(err =>
-						{
-							this.stateManagementService.setprogressBar(false);
+						catchError(err => {
+							// this.stateManagementService.setprogressBar(false);
 							return throwError(err);
 						})
 					)
-					.subscribe(result =>
-					{
+					.subscribe(result => {
 						this.response = result;
 
-						switch (imageType)
-						{
+						switch (imageType) {
 							case 'rearPlate': {
 								this.addVehicleForm.patchValue({
 									rearPlateImage: this.response.data.id,
@@ -702,23 +645,20 @@ export class AddVehicleComponent implements OnInit
 								break;
 							}
 						}
-						this.stateManagementService.setprogressBar(false);
+						// this.stateManagementService.setprogressBar(false);
 					});
 			};
 		}
 	}
 
-	showImageInModal(imageUrl)
-	{
+	showImageInModal(imageUrl) {
 		this.modalImage = imageUrl;
 		$("#imageModal").addClass("showImage");
 		$("#imageModal").removeClass("d-none");
 	}
 
-	deleteImage(id, imageType, imageNumber = null)
-	{
-		switch (imageType)
-		{
+	deleteImage(id, imageType, imageNumber = null) {
+		switch (imageType) {
 			case 'rearPlate': {
 				this.addVehicleForm.patchValue({
 					rearPlateImage: '',
@@ -768,21 +708,18 @@ export class AddVehicleComponent implements OnInit
 	}
 
 
-	get f()
-	{
+	get f() {
 		return this.addVehicleForm.controls;
 	}
 
-	submitForm()
-	{
+	submitForm() {
 		this.addVehicleForm.patchValue({
 			acc_id: this.affiliateId
 		});
 
 		this.submittedForm = true;
 		// stop here if form is invalid
-		if (this.addVehicleForm.invalid)
-		{
+		if (this.addVehicleForm.invalid) {
 			return;
 		}
 		this.spinner.show(); // show spinner
@@ -790,15 +727,13 @@ export class AddVehicleComponent implements OnInit
 
 		this.adminService.adminAffiliateSubmitVehicle(this.addVehicleForm.value)
 			.pipe(
-				catchError(err =>
-				{
+				catchError(err => {
 					this.spinner.hide(); // hide spinner
 					this.disableSubmitButton = false; //enable submit button
 					return throwError(err);
 				})
 			)
-			.subscribe(result =>
-			{
+			.subscribe(result => {
 				this.response = result;
 				this.spinner.hide(); // hide spinner
 				this.disableSubmitButton = true; //enable submit button
@@ -808,13 +743,11 @@ export class AddVehicleComponent implements OnInit
 				this.router.navigate(['admin/affiliate/step5/add-vehicle-rates'], { queryParams: { vehicleId: this.response.data.id } });
 			});
 	}
-	backButton()
-	{
+	backButton() {
 		this.router.navigate(['/admin/affiliate/step5']);
 	}
 
-	resetForm()
-	{
+	resetForm() {
 		this.submittedForm = true;
 		this.addVehicleForm.reset();
 		this.vehicleImageArray = [];
@@ -845,37 +778,31 @@ export class AddVehicleComponent implements OnInit
 		this.mcImage = this.oldvehicleImage[13];
 	}
 
-	changeMake(selectedMake)
-	{
-		let models = JSON.parse(sessionStorage.getItem('models'));
-		this.filteredModel = this.model = models.filter(function (model)
-		{
-			if (model.make_id == selectedMake)
-			{
+	changeMake(selectedMake) {
+		this.spinner.show()
+		console.log('in function change make-->', selectedMake)
+		let models = this.allModels
+		this.filteredModel = this.model = models.filter(function (model) {
+			if (model.make_id == selectedMake) {
 				return true;
 			}
 		});
+		this.spinner.hide()
 	}
-
-
 	service: Array<any> = []
-	onServiceChange(value: string)
-	{
+	onServiceChange(value: string) {
 		console.log(value)
-		if (this.service.includes(value))
-		{
+		if (this.service.includes(value)) {
 			// a never reaching code line
 			this.service = this.service.filter(val => val != value)
-		} else
-		{
+		} else {
 			this.service = []
 			this.service.push(value)
 		}
 
 		// as per new update from client: he wants to make the whole thing work as a radio button
 		return
-		if (!is_service_valid(value, this.service))
-		{
+		if (!is_service_valid(value, this.service)) {
 			this.errorModal.openDialog({
 				errors: {
 					error: 'Cannot choose Local and Over The Road service at the same time'
@@ -892,17 +819,13 @@ export class AddVehicleComponent implements OnInit
 		 * 
 		 * @param value: String [Required] value to check
 		 */
-		function is_service_valid(value: string, service: Array<any>)
-		{
-			if (value == 'local' && service.includes('over_the_road'))
-			{
+		function is_service_valid(value: string, service: Array<any>) {
+			if (value == 'local' && service.includes('over_the_road')) {
 				return false
-			} else if (value == 'over_the_road' && service.includes('local'))
-			{
+			} else if (value == 'over_the_road' && service.includes('local')) {
 				return false
 			}
-			else
-			{
+			else {
 				return true
 			}
 		}

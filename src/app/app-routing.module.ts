@@ -32,6 +32,9 @@ import { AffiliateGuard } from 'src/app/guards/affiliate.guard';
 import { AffiliateTemplateComponent } from './components/affiliate/affiliate-template/affiliate-template.component';
 import { AffiliateEmailConfirmationComponent } from './components/email-pages/affiliate-email-confirmation/affiliate-email-confirmation.component';
 import { DispatchEmailConfirmationComponent } from './components/email-pages/dispatch-email-confirmation/dispatch-email-confirmation.component';
+import { LocateMapComponent } from './components/locate-map/locate-map.component';
+import { BookingStatusVerificationComponent } from './components/email-pages/booking-status-verification/booking-status-verification.component';
+import { TransactionHistoryComponent } from './components/website/transaction-history/transaction-history.component';
 
 
 const routes: Routes = [
@@ -124,6 +127,11 @@ const routes: Routes = [
 				component: ClientTCComponent
 			},
 			{
+				path: 'transaction-history',
+				component: TransactionHistoryComponent
+			},
+			
+			{
 				path: 'email',
 				children: [
 					{
@@ -133,6 +141,10 @@ const routes: Routes = [
 					{
 						path: 'dispatcher-email-confirmation',
 						component: AffiliateEmailConfirmationComponent
+					},
+					{
+						path: 'booking-email-confirmation',
+						component: BookingStatusVerificationComponent
 					}
 				]
 			}
@@ -240,6 +252,10 @@ const routes: Routes = [
 				loadChildren: () => import('./components/affiliate/affiliate.module').then(m => m.AffiliateModule)
 			}
 		]
+	},
+	{
+		path: 'locate-map',
+		component: LocateMapComponent
 	},
 	{
 		path: '**',

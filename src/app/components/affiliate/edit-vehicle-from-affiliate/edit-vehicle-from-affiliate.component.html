@@ -3,12 +3,12 @@
 	<section class="user_information">
 		<h2 class="headinginfo">
 			Vehicle Settings
-			<span class="text-danger">(Choose Correct Vehicle Type)</span>
+			<span style="color: red;">(Choose Correct Vehicle Type)</span>
 		</h2>
 		<div class="container mt-1">
 			<div class="row">
 				<div class="col-md-6">
-					<mat-form-field appearance="outline" [ngClass]="
+					<!-- <mat-form-field appearance="outline" [ngClass]="
 							(errorMsg && f.vehicleType.errors) ||
 							(submittedForm && f.vehicleType.errors)
 								? 'mat-form-field-invalid ng-invalid'
@@ -44,7 +44,11 @@
 								{{ vehicleType.name }}
 							</mat-option>
 						</mat-autocomplete>
-					</mat-form-field>
+					</mat-form-field> -->
+					<ng-select appearance="outline" [items]="filteredVehicleTypes" dropdownPosition="bottom"
+							[markFirst]="true" [virtualScroll]="true" bindLabel="name" bindValue="ID"
+							placeholder="Vehicle Type" formControlName="vehicleType" id="vehicleTypeField" >
+						</ng-select>
 					<div *ngIf="
 							(errorMsg && f.vehicleType.errors) ||
 							(submittedForm && f.vehicleType.errors)
@@ -55,7 +59,7 @@
 					</div>
 				</div>
 				<div class="col-md-6">
-					<mat-form-field appearance="outline" [ngClass]="
+					<!-- <mat-form-field appearance="outline" [ngClass]="
 							(errorMsg1 && f.make.errors) ||
 							(submittedForm && f.make.errors)
 								? 'mat-form-field-invalid ng-invalid'
@@ -87,7 +91,11 @@
 								{{ m.name }}
 							</mat-option>
 						</mat-autocomplete>
-					</mat-form-field>
+					</mat-form-field> -->
+					<ng-select appearance="outline" [items]="filteredMake" dropdownPosition="bottom"
+							[markFirst]="true" [virtualScroll]="true" bindLabel="name" bindValue="ID"
+							placeholder="Make" formControlName="make" id="makeField">
+						</ng-select>
 					<div *ngIf="
 							(errorMsg1 && f.make.errors) ||
 							(submittedForm && f.make.errors)
@@ -98,7 +106,7 @@
 					</div>
 				</div>
 				<div class="col-md-6">
-					<mat-form-field appearance="outline" [ngClass]="
+					<!-- <mat-form-field appearance="outline" [ngClass]="
 							(errorMsg2 && f.model.errors) ||
 							(submittedForm && f.model.errors)
 								? 'mat-form-field-invalid ng-invalid'
@@ -128,7 +136,11 @@
 								{{ m.name }}
 							</mat-option>
 						</mat-autocomplete>
-					</mat-form-field>
+					</mat-form-field> -->
+					<ng-select appearance="outline" [items]="filteredModel" dropdownPosition="bottom"
+							[markFirst]="true" [virtualScroll]="true" bindLabel="name" bindValue="ID"
+							placeholder="Model" formControlName="model" id="modelField">
+						</ng-select>
 					<div *ngIf="
 							(errorMsg2 && f.model.errors) ||
 							(submittedForm && f.model.errors)
@@ -146,30 +158,30 @@
 						<input matInput type="number" placeholder="Number of Vehicles"
 							formControlName="numberOfVehicles" tabindex="1" />
 					</mat-form-field>
-					<div *ngIf="submittedForm && f.numberOfVehicles.errors"
+					<div *ngIf="submittedForm && f?.numberOfVehicles?.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.numberOfVehicles.errors.required">
-							The Number of Vehicles is required.
+						<div *ngIf="f?.numberOfVehicles?.errors?.required">
+							The Number of Vehicles is required?.
 						</div>
-						<div *ngIf="f.numberOfVehicles.errors.pattern">
-							Enter Numbers Only.
+						<div *ngIf="f?.numberOfVehicles?.errors?.pattern">
+							Enter Numbers Only?.
 						</div>
-						<div *ngIf="f.numberOfVehicles.errors.min">
+						<div *ngIf="f?.numberOfVehicles?.errors?.min">
 							Please enter atleast 1 vehicle
 						</div>
-						<div *ngIf="f.numberOfVehicles.errors.max">
+						<div *ngIf="f?.numberOfVehicles?.errors?.max">
 							<div *ngIf="
-									f.numberOfVehicles.errors.max.actual >
-									f.numberOfVehicles.errors.max.max
+									f?.numberOfVehicles?.errors?.max?.actual >
+									f?.numberOfVehicles?.errors?.max?.max
 								">
 								You can't enter more than
-								{{ f.numberOfVehicles.errors.max.max }} vehicle
+								{{ f?.numberOfVehicles?.errors?.max?.max }} vehicle
 							</div>
 						</div>
 					</div>
 				</div>
 				<div class="col-md-6">
-					<mat-form-field appearance="outline" [ngClass]="
+					<!-- <mat-form-field appearance="outline" [ngClass]="
 							(errorMsg3 && f.year.errors) ||
 							(submittedForm && f.year.errors)
 								? 'mat-form-field-invalid ng-invalid'
@@ -199,19 +211,23 @@
 								{{ year.name }}
 							</mat-option>
 						</mat-autocomplete>
-					</mat-form-field>
+					</mat-form-field> -->
+					<ng-select appearance="outline" [items]="filteredYear" dropdownPosition="bottom"
+							[markFirst]="true" [virtualScroll]="true" bindLabel="name" bindValue="ID"
+							placeholder="Year" formControlName="year" id="yearField">
+						</ng-select>
 					<div *ngIf="
-							(errorMsg3 && f.year.errors) ||
-							(submittedForm && f.year.errors)
+							(errorMsg3 && f?.year?.errors) ||
+							(submittedForm && f?.year?.errors)
 						" class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.year.errors.required">
+						<div *ngIf="f?.year?.errors?.required">
 							The Year is required
 						</div>
 					</div>
 				</div>
 				<div class="col-md-6">
-					<mat-form-field appearance="outline" [ngClass]="
-							(errorMsg4 && f.color.errors) ||
+					<!-- <mat-form-field appearance="outline" [ngClass]="
+							(errorMsg4 && f?.color.errors) ||
 							(submittedForm && f.color.errors)
 								? 'mat-form-field-invalid ng-invalid'
 								: ''
@@ -240,17 +256,20 @@
 								{{ color.name }}
 							</mat-option>
 						</mat-autocomplete>
-					</mat-form-field>
+					</mat-form-field> -->
+					<ng-select appearance="outline" [items]="filteredColor" dropdownPosition="bottom"
+							[markFirst]="true" [virtualScroll]="true" bindLabel="name" bindValue="ID"
+							placeholder="Color" formControlName="color" id="colorField">
+						</ng-select>
 					<div *ngIf="
-							(errorMsg4 && f.color.errors) ||
-							(submittedForm && f.color.errors)
+							(errorMsg4 && f?.color?.errors) ||
+							(submittedForm && f?.color?.errors)
 						" class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.color.errors.required">
+						<div *ngIf="f?.color?.errors?.required">
 							The Color is required
 						</div>
 					</div>
 				</div>
-
 				<!-- Number of Seats -->
 				<div class="col-md-6">
 					<label class="select-seat-label">Number of Pax Seats / Seat Belts
@@ -279,15 +298,15 @@
 						</svg>
 					</div>
 					<div *ngIf="
-							(submittedForm && f.seats.errors) ||
-							(f.seats.touched && f.seats.errors)
+							(submittedForm && f?.seats?.errors) ||
+							(f?.seats?.touched && f?.seats?.errors)
 						" class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.seats.errors.required">
+						<div *ngIf="f?.seats?.errors?.required">
 							The Pax Seats / Seat Belts is required
 						</div>
 					</div>
-					<div *ngIf="f.seats.errors" class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.seats.errors.pattern">
+					<div *ngIf="f?.seats?.errors" class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="f?.seats?.errors?.pattern">
 							The Pax Seats / Seat Belts should be a number
 						</div>
 					</div>
@@ -321,15 +340,15 @@
 						</svg>
 					</div>
 					<div *ngIf="
-							(submittedForm && f.luggage.errors) ||
-							(f.luggage.touched && f.luggage.errors)
+							(submittedForm && f?.luggage?.errors) ||
+							(f?.luggage?.touched && f?.luggage?.errors)
 						" class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.luggage.errors.required">
+						<div *ngIf="f?.luggage?.errors?.required">
 							The Luggage is required
 						</div>
 					</div>
-					<div *ngIf="f.luggage.errors" class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.luggage.errors.pattern">
+					<div *ngIf="f?.luggage?.errors" class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="f?.luggage?.errors?.pattern">
 							The Luggage should be a number
 						</div>
 					</div>
@@ -346,8 +365,8 @@
 							</option>
 							<option *ngFor="
 									let nonCharterCancelOption of nonCharterCancelOptions
-								" [value]="nonCharterCancelOption.value">
-								{{ nonCharterCancelOption.label }}
+								" [value]="nonCharterCancelOption?.value">
+								{{ nonCharterCancelOption?.label }}
 							</option>
 						</select>
 						<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
@@ -366,16 +385,16 @@
 					</div>
 					<div *ngIf="
 							(submittedForm &&
-								f.nonCharterCancelPolicy.errors) ||
-							(f.nonCharterCancelPolicy.touched &&
-								f.nonCharterCancelPolicy.errors)
+								f?.nonCharterCancelPolicy?.errors) ||
+							(f?.nonCharterCancelPolicy?.touched &&
+								f?.nonCharterCancelPolicy?.errors)
 						" class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.nonCharterCancelPolicy.errors.required">
+						<div *ngIf="f?.nonCharterCancelPolicy?.errors?.required">
 							The Charter Cancel Times is required
 						</div>
 					</div>
-					<div *ngIf="f.nonCharterCancelPolicy.errors" class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.nonCharterCancelPolicy.errors.pattern">
+					<div *ngIf="f?.nonCharterCancelPolicy?.errors" class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="f?.nonCharterCancelPolicy?.errors?.pattern">
 							The Charter Cancel Times should be a number
 						</div>
 					</div>
@@ -392,8 +411,8 @@
 							</option>
 							<option *ngFor="
 									let charterCancelOption of charterCancelOptions
-								" [value]="charterCancelOption.value">
-								{{ charterCancelOption.label }}
+								" [value]="charterCancelOption?.value">
+								{{ charterCancelOption?.label }}
 							</option>
 						</select>
 						<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
@@ -428,20 +447,21 @@
 
 				<!-- License Plate -->
 				<div class="col-md-6">
-					<mat-form-field appearance="outline" [ngClass]="
+					<mat-form-field appearance="outline" >
+						<!-- [ngClass]="
 							(errorMsg2 && f.licensePlate.errors) ||
 							(submittedForm && f.licensePlate.errors)
 								? 'mat-form-field-invalid ng-invalid'
 								: ''
-						">
+						" -->
 						<mat-label>
 							License Plate
-							<span class="asterisk">*</span>
+							<!-- <span class="asterisk">*</span> -->
 						</mat-label>
 						<input matInput placeholder="License Plate" (focus)="$event.target.select()"
 							formControlName="licensePlate" tabindex="1" />
 					</mat-form-field>
-					<div *ngIf="
+					<!-- <div *ngIf="
 							(submittedForm && f.licensePlate.errors) ||
 							(f.licensePlate.touched &&
 								f.licensePlate.errors)
@@ -449,14 +469,20 @@
 						<div *ngIf="f.licensePlate.errors.required">
 							The License Plate is required
 						</div>
-					</div>
+					</div> -->
 				</div>
 			</div>
+		</div>
+		</section>
+			<section class="user_information my-2">
+				<div class="container mt-1">
 			<div class="row mt-3">
 				<div class="col-md-4">
 					<div class="input-checkbox">
 						<div class="checkbox" [ngClass]="
-								service.includes('local') ? 'active' : ''
+								service.includes('local')
+								? 'active'
+								: ''
 							" (click)="onServiceChange('local')">
 							Local Service
 						</div>
@@ -485,10 +511,10 @@
 			</div>
 		</div>
 	</section>
-
 	<section class="user_information">
 		<h2 class="headinginfo">
-			Choose Chargable Amenities <span class="asterisk">* </span>
+			Choose Chargable Amenities 
+			<span class="asterisk">* </span>
 			<span class="spanText">(Choose each chargable amenity you supply or provide)</span>
 		</h2>
 		<div class="container mt-1">
@@ -496,31 +522,32 @@
 					let chargableAmenityGroup of chargableAmenities | keyvalue
 				">
 				<div class="custom-control custom-checkbox" *ngFor="
-						let chargableAmenity of chargableAmenityGroup.value
+						let chargableAmenity of chargableAmenityGroup?.value
 							| keyvalue
 					">
-					<input type="checkbox" class="custom-control-input" id="amenity_{{ chargableAmenity.value.name }}"
-						[value]="chargableAmenity.value.id" [checked]="chargableAmenity.value.isSelected" (change)="
+					<input type="checkbox" class="custom-control-input" id="amenity_{{ chargableAmenity?.value?.name }}"
+						[value]="chargableAmenity?.value?.id" [checked]="chargableAmenity?.value?.isSelected" (change)="
 							onAmenitiesCheckboxChange(
 								$event.target.value,
 								$event.target.checked
 							)
 						" tabindex="1" />
-					<label class="custom-control-label" for="amenity_{{ chargableAmenity.value.name }}">
-						<span *ngIf="chargableAmenity.chargeable === 'yes'" class="amenity-dollar">&nbsp; $</span>
-						{{ chargableAmenity.value.name }}
+					<label class="custom-control-label" for="amenity_{{ chargableAmenity?.value?.name }}">
+						<span *ngIf="chargableAmenity?.chargeable === 'yes'" class="amenity-dollar">&nbsp; $</span>
+						{{ chargableAmenity?.value?.name }}
 					</label>
 				</div>
 			</div>
-			<div *ngIf="submittedForm && f.amenities.errors" class="text-danger margin-bottom-thin my-mat-hint">
-				<div *ngIf="f.amenities.errors.required">
+			<div *ngIf="submittedForm && f?.amenities?.errors" class="text-danger margin-bottom-thin my-mat-hint">
+				<div *ngIf="f?.amenities?.errors?.required">
 					Please select atleast one Chargable Amenity.
 				</div>
 			</div>
 		</div>
 
 		<h2 class="headinginfo topMargin">
-			Choose Non Chargable Amenities <span class="asterisk">* </span>
+			Choose Non Chargable Amenities 
+			<span class="asterisk">* </span>
 			<span class="spanText">(Choose each non chargable amenity you supply or provide)</span>
 		</h2>
 		<div class="container mt-1 non-chargable-amenity">
@@ -529,25 +556,25 @@
 						| keyvalue
 				">
 				<div class="custom-control custom-checkbox" *ngFor="
-						let nonChargableAmenity of nonChargableAmenityGroup.value
+						let nonChargableAmenity of nonChargableAmenityGroup?.value
 							| keyvalue
 					">
 					<input type="checkbox" class="custom-control-input"
-						id="amenity_{{ nonChargableAmenity.value.name }}" [value]="nonChargableAmenity.value.id"
-						[checked]="nonChargableAmenity.value.isSelected" (change)="
+						id="amenity_{{ nonChargableAmenity?.value?.name }}" [value]="nonChargableAmenity?.value?.id"
+						[checked]="nonChargableAmenity?.value?.isSelected" (change)="
 							onAmenitiesCheckboxChange(
 								$event.target.value,
 								$event.target.checked
 							)
 						" tabindex="1" />
-					<label class="custom-control-label" for="amenity_{{ nonChargableAmenity.value.name }}">{{
-						nonChargableAmenity.value.name }}</label>
-					<label *ngIf="nonChargableAmenity.value.chargeable === 'yes'" class="amenity-dollar">&nbsp;
+					<label class="custom-control-label" for="amenity_{{ nonChargableAmenity?.value?.name }}">{{
+						nonChargableAmenity?.value?.name }}</label>
+					<label *ngIf="nonChargableAmenity?.value?.chargeable === 'yes'" class="amenity-dollar">&nbsp;
 						$</label>
 				</div>
 			</div>
-			<div *ngIf="submittedForm && f.amenities.errors" class="text-danger margin-bottom-thin my-mat-hint">
-				<div *ngIf="f.amenities.errors.required">
+			<div *ngIf="submittedForm && f?.amenities?.errors" class="text-danger margin-bottom-thin my-mat-hint">
+				<div *ngIf="f?.amenities?.errors?.required">
 					Please select atleast one Non Chargable Amenity.
 				</div>
 			</div>
@@ -566,11 +593,26 @@
 						let i = index
 					">
 					<input type="checkbox" class="custom-control-input"
-						id="specialAmenity_{{ specialAmenities[i].name }}" [value]="specialAmenities[i].id"
+						id="specialAmenity_{{ specialAmenities[i]?.name }}" [value]="specialAmenities[i]?.id"
 						(change)="onSpecialAmenitiesCheckboxChange($event)" [formControl]="specialAmenityObj"
 						tabindex="1" />
-					<label class="custom-control-label" for="specialAmenity_{{ specialAmenities[i].name }}">{{
-						specialAmenities[i].name }}</label>
+					<label class="custom-control-label" for="specialAmenity_{{ specialAmenities[i]?.name }}">{{
+						specialAmenities[i]?.name }}</label>
+				</div>
+			</div>
+			<div *ngIf="submittedForm && f?.specialAmenities?.errors" class="text-danger margin-bottom-thin my-mat-hint">
+				<div *ngIf="f?.specialAmenities?.errors?.required">
+					Please select atleast one Special Amenity.
+				</div>
+			</div>
+		</div>	
+		<!-- <div class="container mt-1">
+			<div class="choose_ameniteslist">
+				<div class="custom-control custom-checkbox" *ngFor="let specialAmenity of specialAmenities">
+					<input type="checkbox" class="custom-control-input" id="specialAmenity_{{ specialAmenity.name }}"
+						[value]="specialAmenity.id" (change)="onSpecialAmenitiesCheckboxChange($event)" tabindex="1" />
+					<label class="custom-control-label" for="specialAmenity_{{ specialAmenity.name }}">{{
+						specialAmenity.name }}</label>
 				</div>
 			</div>
 			<div *ngIf="submittedForm && f.specialAmenities.errors" class="text-danger margin-bottom-thin my-mat-hint">
@@ -578,11 +620,12 @@
 					Please select atleast one Special Amenity.
 				</div>
 			</div>
-		</div>
+		</div> -->
 	</section>
 	<section class="user_information">
 		<h2 class="headinginfo">
-			Choose Interiors <span class="asterisk">* </span>
+			Choose Interiors 
+			<!-- <span class="asterisk">* </span> -->
 			<span class="spanText">(Choose each interior option for this vehicle)</span>
 		</h2>
 		<div class="container">
@@ -604,6 +647,21 @@
 				</div>
 			</div>
 		</div>
+		<!-- <div class="container mt-1">
+			<div class="choose_ameniteslist">
+				<div class="custom-control custom-checkbox" *ngFor="let interior of interiors">
+					<input type="checkbox" class="custom-control-input" id="interior_{{ interior.name }}"
+						[value]="interior.id" (change)="onInteriorsCheckboxChange($event)" tabindex="1"
+						/>
+					<label class="custom-control-label" for="interior_{{ interior.name }}">{{ interior.name }}</label>
+				</div>
+			</div>
+			<div *ngIf="submittedForm && f.vehicleInterior.errors" class="text-danger margin-bottom-thin my-mat-hint">
+				<div *ngIf="f.vehicleInterior.errors.required">
+					Please select atleast one Interior.
+				</div>
+			</div>
+		</div> -->
 	</section>
 
 	<!-- Main page content-->
@@ -632,7 +690,7 @@
 				Photo Tip – Take Interior Pix On Cloudy Days)
 			</span>
 		</h2>
-		<h6 class="text-danger m-2 ml-3">
+		<h6 class="m-2 ml-3" style="color: red;">
 			(iPhone users only take photos by portrait view.)
 		</h6>
 		<div class="container mt-1">
@@ -1253,7 +1311,7 @@
 						<div class="vehtype_extint">
 							<div>
 								<p>
-									Rear Plate
+									Rear Plate <span class="asterisk">*</span>
 								</p>
 								<img src="{{ rearPlateImage }}" (click)="showImageInModal(rearPlateImage)"
 									tabindex="-1" />
@@ -1305,7 +1363,7 @@
 						<div class="col-md-4">
 							<div class="vehtype_extint">
 								<div>
-									<p>Rear Plate</p>
+									<p>Rear Plate <span class="asterisk">*</span></p>  
 									<div class="emptyImage">
 										<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
 									</div>
@@ -1635,22 +1693,23 @@
 			</div>
 		</div>
 	</section>
+	<div class="row flex flex-wrap-reverse my-4">
+		<button class="custom-filled-back-button m-2 mx-4" routerLink="/affiliate/step5">
+			BACK
+		</button>
+		<div class="col-md-auto mx-auto">
+			<button class="custom-filled-reset-button m-2" (click)="resetForm()" tabIndex="2">
+				RESET
+			</button>
+			<button type="submit" class="custom-filled-button m-2" (click)="submitForm()" tabIndex="1">
+				SAVE
+			</button>
+		</div>
+	</div>
 </form>
 
 
-<div class="row flex flex-wrap-reverse my-4">
-	<button class="custom-filled-back-button m-2 mx-4" routerLink="/affiliate/step5">
-		BACK
-	</button>
-	<div class="col-md-auto mx-auto">
-		<button class="custom-filled-reset-button m-2" (click)="resetForm()" tabIndex="2">
-			RESET
-		</button>
-		<button class="custom-filled-button m-2" (click)="submitForm()" tabIndex="1">
-			SAVE
-		</button>
-	</div>
-</div>
+
 
 
 

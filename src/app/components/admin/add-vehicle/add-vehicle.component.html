@@ -7,7 +7,7 @@
 		<div class="container mt-1 ">
 			<div class="row ">
 				<div class="col-md-6">
-					<mat-form-field appearance="outline"
+					<!-- <mat-form-field appearance="outline"
 						[ngClass]="(errorMsg && f.vehicleType.errors) || (submittedForm && f.vehicleType.errors) ? 'mat-form-field-invalid ng-invalid' : ''">
 						<mat-label>Vehicle Type <span class="asterisk">*</span></mat-label>
 						<input type="text" id="vehicleTypeField" placeholder="Pick one" aria-label="Number" matInput
@@ -18,14 +18,18 @@
 								{{vehicleType.name}}
 							</mat-option>
 						</mat-autocomplete>
-					</mat-form-field>
+					</mat-form-field> -->
+					<ng-select appearance="outline" [items]="filteredVehicleTypes" dropdownPosition="bottom"
+							[markFirst]="true" [virtualScroll]="true" bindLabel="name" bindValue="ID"
+							placeholder="Vehicle Type" formControlName="vehicleType">
+						</ng-select>
 					<div *ngIf="(errorMsg && f.vehicleType.errors) || (submittedForm && f.vehicleType.errors)"
 						class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.vehicleType.errors.required">The Vehicle Type is required</div>
 					</div>
 				</div>
 				<div class="col-md-6">
-					<mat-form-field appearance="outline"
+					<!-- <mat-form-field appearance="outline"
 						[ngClass]="(errorMsg1 && f.make.errors) || (submittedForm && f.make.errors) ? 'mat-form-field-invalid ng-invalid' : ''">
 						<mat-label>Make <span class="asterisk">*</span></mat-label>
 						<input type="search" id="makeField" placeholder="Pick one" aria-label="Number" matInput
@@ -36,14 +40,18 @@
 								{{m.name}}
 							</mat-option>
 						</mat-autocomplete>
-					</mat-form-field>
+					</mat-form-field> -->
+					<ng-select appearance="outline" [items]="filteredMake" dropdownPosition="bottom"
+							[markFirst]="true" [virtualScroll]="true" bindLabel="name" bindValue="ID"
+							placeholder="Make" formControlName="make">
+						</ng-select>
 					<div *ngIf="(errorMsg1 && f.make.errors) || (submittedForm && f.make.errors)"
 						class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.make.errors.required">The Make and Model is required</div>
 					</div>
 				</div>
 				<div class="col-md-6">
-					<mat-form-field appearance="outline"
+					<!-- <mat-form-field appearance="outline"
 						[ngClass]="(errorMsg2 && f.model.errors) || (submittedForm && f.model.errors) ? 'mat-form-field-invalid ng-invalid' : ''">
 						<mat-label>Model <span class="asterisk">*</span></mat-label>
 						<input type="search" id="modelField" placeholder="Pick one" aria-label="Number" matInput
@@ -54,7 +62,11 @@
 								{{m.name}}
 							</mat-option>
 						</mat-autocomplete>
-					</mat-form-field>
+					</mat-form-field> -->
+					<ng-select appearance="outline" [items]="filteredModel" dropdownPosition="bottom"
+							[markFirst]="true" [virtualScroll]="true" bindLabel="name" bindValue="ID"
+							placeholder="Model" formControlName="model">
+						</ng-select>
 					<div *ngIf="(errorMsg2 && f.model.errors) || (submittedForm && f.model.errors)"
 						class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.model.errors.required">The Make and Model is required</div>
@@ -254,9 +266,9 @@
 					<input type="checkbox" class="custom-control-input" id="amenity_{{chargableAmenity.value.name}}"
 						[value]="chargableAmenity.value.id"
 						(change)="onAmenitiesCheckboxChange($event.target.value,$event.target.checked)" tabindex="1">
-					<label class="custom-control-label"
+					<label class="custom-control-label text-wrap" style="width: 100px;"
 						for="amenity_{{chargableAmenity.value.name}}">{{chargableAmenity.value.name}}</label>
-					<label *ngIf="chargableAmenity.value.chargeable==='yes'" class="amenity-dollar">&nbsp; $</label>
+					<label *ngIf="chargableAmenity.value.chargeable==='yes'" class="amenity-dollar">$</label>
 				</div>
 			</div>
 			<div *ngIf="submittedForm && f.amenities.errors" class="text-danger margin-bottom-thin my-mat-hint">
@@ -314,7 +326,7 @@
 			<div class="choose_ameniteslist">
 				<div class="custom-control custom-checkbox" *ngFor="let interior of interiors">
 					<input type="checkbox" class="custom-control-input" id="interior_{{interior.name}}"
-						[value]="interior.id" (change)="onInteriorsCheckboxChange($event)" tabindex="1">
+						[value]="interior.id" (change)="onInteriorsCheckboxChange($event)" tabindex="1" [checked]="interior.id=='1'">
 					<label class="custom-control-label" for="interior_{{interior.name}}">{{interior.name}}</label>
 				</div>
 			</div>

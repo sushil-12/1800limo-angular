@@ -1,7 +1,7 @@
 <ngx-spinner></ngx-spinner>
 <main>
 	<!-- Main page content-->
-	<form [formGroup]="addIndividualAccountForm">
+	<form [formGroup]="addIndividualAccountForm" appInvalidControlScroll>
 		<section class="user_information">
 			<h2 class="headinginfo adminbox_shadow">Individual Account</h2>
 
@@ -40,12 +40,12 @@
 								class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Mobile<span
 									class="asterisk">
 									*</span></label>
-							<input matInput placeholder="Mobile" formControlName="mobile"
+							<input matInput type="number" placeholder="Mobile" formControlName="mobile"
 								ng2TelInput
 								[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
 								placeholder="1234567890" class="phoneNumberClass"
 								(countryChange)="onCountryChange($event,'mobile')"
-								(intlTelInputObject)="telInputObjectMobile($event)" tabIndex="1" />
+								(intlTelInputObject)="telInputObjectMobile($event)" />
 						</mat-form-field>
 						<div *ngIf="submittedForm && f.mobile.errors || f.mobile.touched && f.mobile.errors"
 							class="text-danger margin-bottom-thin my-mat-hint">
@@ -80,12 +80,12 @@
 							<label
 								class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Work<span
 									class="asterisk">
-									*</span></label>
-							<input matInput placeholder="Work" formControlName="work" ng2TelInput
+									</span></label>
+							<input matInput type="number" placeholder="Work" formControlName="work" ng2TelInput
 								[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
 								placeholder="1234567890" class="phoneNumberClass"
 								(countryChange)="onCountryChange($event,'work')"
-								(intlTelInputObject)="telInputObjectWork($event)" tabIndex="1" />
+								(intlTelInputObject)="telInputObjectWork($event)" />
 						</mat-form-field>
 						<div *ngIf="submittedForm && f.work.errors || f.work.touched && f.work.errors"
 							class="text-danger margin-bottom-thin my-mat-hint">
@@ -93,7 +93,8 @@
 						</div>
 						<div *ngIf="f.work.errors"
 							class="text-danger margin-bottom-thin my-mat-hint">
-							<div *ngIf="f.work.errors?.invalid_Pattern;else plusError">Do not add
+							<div *ngIf="f.work.errors?.pattern">Enter only numbers</div>
+							<!-- <div *ngIf="f.work.errors?.invalid_Pattern;else plusError">Do not add
 								Dashes
 								with numbers</div>
 							<ng-template #plusError>
@@ -112,7 +113,7 @@
 											be 15</div>
 									</ng-template>
 								</ng-template>
-							</ng-template>
+							</ng-template> -->
 						</div>
 					</div>
 					<div class="col-md-4">
@@ -121,7 +122,7 @@
 							<input formControlName="email" type="email" matInput
 								placeholder="E-mail">
 						</mat-form-field>
-						<div *ngIf="submittedForm && f.email.errors" class="text-danger">
+						<div *ngIf="(f.email.errors && (f.email.touched || f.email.dirty))" class="text-danger">
 							<div *ngIf="f.email.errors.required">This field is required</div>
 							<div *ngIf="f.email.errors.pattern">Email format should be valid</div>
 						</div>
@@ -190,7 +191,7 @@
 				<div class="row">
 					<div class="col-md-3 pr-0 borderright mobilePadding">
 						<div class="form-group radio-tile-group">
-							<div class="custom-radio input-container">
+							<div class="custom-radio input-container btn-shadow">
 								<input class="radio-button" id="personal" type="radio"
 									name="card_type" checked="" formControlName="card_type"
 									value="personal" tabindex="-1">
@@ -207,7 +208,7 @@
 					</div>
 					<div class="col-md-3 pl-0 mobilePadding">
 						<div class="form-group radio-tile-group">
-							<div class="custom-radio input-container">
+							<div class="custom-radio input-container btn-shadow">
 								<input class="radio-button" id="business" type="radio"
 									name="card_type" formControlName="card_type" value="business"
 									tabindex="-1">
@@ -228,7 +229,7 @@
 						<mat-form-field appearance="outline">
 							<mat-label>Card Holder First & Last Name*</mat-label>
 							<input matInput placeholder="Card Holder First & Last Name"
-								formControlName="name" tabindex="1">
+								formControlName="name" >
 						</mat-form-field>
 						<div *ngIf="submittedForm && f.name.errors || f.name.touched && f.name.errors"
 							class="text-danger margin-bottom-thin my-mat-hint">
@@ -239,7 +240,7 @@
 						<mat-form-field appearance="outline">
 							<mat-label>Card No# *</mat-label>
 							<input matInput placeholder="Card No#" formControlName="number"
-								tabindex="1" id="card-number">
+								id="card-number">
 						</mat-form-field>
 						<div *ngIf="submittedForm && f.number.errors || f.number.touched && f.number.errors"
 							class="text-danger margin-bottom-thin my-mat-hint">
@@ -259,10 +260,10 @@
 										Numbers Only
 									</div>
 									<ng-template #numberLength>
-										<div *ngIf="f.number.errors.minlength">Minimum length should
-											be 16</div>
+										<!-- <div *ngIf="f.number.errors.minlength">Minimum length should
+											be 16</div> -->
 										<div *ngIf="f.number.errors.maxlength">Maximum length should
-											be 16</div>
+											be 20</div>
 									</ng-template>
 								</ng-template>
 							</ng-template>
@@ -271,20 +272,20 @@
 					<div class="col-md-4">
 						<mat-form-field appearance="outline">
 							<mat-label>Expiry Month*</mat-label>
-							<mat-select formControlName="exp_month" tabindex="1">
+							<mat-select formControlName="exp_month" >
 								<mat-option value="">Choose Expiry Month</mat-option>
-								<mat-option value='01'>Janaury</mat-option>
-								<mat-option value='02'>February</mat-option>
-								<mat-option value='03'>March</mat-option>
-								<mat-option value='04'>April</mat-option>
-								<mat-option value='05'>May</mat-option>
-								<mat-option value='06'>June</mat-option>
-								<mat-option value='07'>July</mat-option>
-								<mat-option value='08'>August</mat-option>
-								<mat-option value='09'>September</mat-option>
-								<mat-option value='10'>October</mat-option>
-								<mat-option value='11'>November</mat-option>
-								<mat-option value='12'>December</mat-option>
+								<mat-option value='01'>01</mat-option>
+								<mat-option value='02'>02</mat-option>
+								<mat-option value='03'>03</mat-option>
+								<mat-option value='04'>04</mat-option>
+								<mat-option value='05'>05</mat-option>
+								<mat-option value='06'>06</mat-option>
+								<mat-option value='07'>07</mat-option>
+								<mat-option value='08'>08</mat-option>
+								<mat-option value='09'>09</mat-option>
+								<mat-option value='10'>10</mat-option>
+								<mat-option value='11'>11</mat-option>
+								<mat-option value='12'>12</mat-option>
 							</mat-select>
 						</mat-form-field>
 						<div *ngIf="submittedForm && f.exp_month.errors || f.exp_month.touched && f.exp_month.errors"
@@ -295,7 +296,7 @@
 					<div class="col-md-4">
 						<mat-form-field appearance="outline">
 							<mat-label>Expiry Year*</mat-label>
-							<mat-select formControlName="exp_year" tabindex="1">
+							<mat-select formControlName="exp_year" >
 								<mat-option value="">Choose Expiry Year</mat-option>
 								<mat-option *ngFor="let yearOption of yearOptions"
 									value="{{yearOption}}">{{yearOption}}
@@ -310,7 +311,7 @@
 					<div class="col-md-4">
 						<mat-form-field appearance="outline">
 							<mat-label>CVV*</mat-label>
-							<input matInput placeholder="CVV" formControlName="cvc" tabindex="1">
+							<input matInput placeholder="CVV" formControlName="cvc" >
 						</mat-form-field>
 						<div *ngIf="submittedForm && f.cvc.errors || f.cvc.touched && f.cvc.errors"
 							class="text-danger margin-bottom-thin my-mat-hint">
@@ -333,7 +334,7 @@
 										<div *ngIf="f.cvc.errors.minlength">Minimum length should be
 											3</div>
 										<div *ngIf="f.cvc.errors.maxlength">Maximum length should be
-											3</div>
+											5</div>
 									</ng-template>
 								</ng-template>
 							</ng-template>
@@ -344,12 +345,12 @@
 		</section>
 		<section class="billing_inforamtion">
 			<ul>
-				<li><button class="custom-btn savebutton" (click)="submitForm()"
-						[disabled]="disableSubmitButton" tabindex="-1">SAVE</button> </li>
-				<li><button class="custom-btn resetbutton" (click)="resetForm()"
-						tabindex="-1">RESET</button> </li>
-				<li><button class="custom-btn backbutton" (click)="backButton()"
-						tabindex="-1">BACK</button> </li>
+				<li><button class="custom-btn savebutton btn-shadow" (click)="submitForm()"
+						[disabled]="disableSubmitButton" >SAVE</button> </li>
+				<li><button class="custom-btn resetbutton btn-shadow" (click)="resetForm()"
+						>RESET</button> </li>
+				<li><button class="custom-btn backbutton btn-shadow" (click)="backButton()"
+						>BACK</button> </li>
 			</ul>
 		</section>
 	</form>

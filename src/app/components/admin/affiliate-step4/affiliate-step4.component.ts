@@ -13,8 +13,7 @@ declare var $: any;
 	templateUrl: './affiliate-step4.component.html',
 	styleUrls: ['./affiliate-step4.component.scss']
 })
-export class AffiliateStep4Component implements OnInit
-{
+export class AffiliateStep4Component implements OnInit {
 
 	color: ThemePalette = 'primary';
 	checked = false;
@@ -52,8 +51,7 @@ export class AffiliateStep4Component implements OnInit
 		private spinner: NgxSpinnerService,
 		private activatedroute: ActivatedRoute) { }
 
-	ngOnInit(): void
-	{
+	ngOnInit(): void {
 
 		/** spinner starts on init */
 		this.affiliateType = sessionStorage.getItem("affiliateType");
@@ -61,82 +59,67 @@ export class AffiliateStep4Component implements OnInit
 		this.loadDriver();//load driver
 	}
 
-	enableDisableClicked(id)
-	{
+	enableDisableClicked(id) {
 		this.driverToDelete = id;
 		this.alertMessage = "Are you sure you want to delete this Driver?"
 	}
-	loadDriver()
-	{
-		this.stateManagementService.setprogressBar(true);
+	loadDriver() {
+		// this.stateManagementService.setprogressBar(true);
 		// Load Our driver using API
-		this.adminService.driverList(this.affiliateId).then(result =>
-		{
+		this.adminService.driverList(this.affiliateId).then(result => {
 			this.driverRes = result;
 			this.driverList = this.driverRes.data.data;
-			this.stateManagementService.setprogressBar(false);
+			// this.stateManagementService.setprogressBar(false);
 		})
 	}
-	driverAccountStatus(id, param)
-	{
+	driverAccountStatus(id, param) {
 		this.storeId = id;
 		this.storeStatus = param;
 	}
 
-	addDriverClick(accountId)
-	{
+	addDriverClick(accountId) {
 		this.router.navigate(['/admin/affiliate/step4/add-driver']);
 	}
 
-	clickEditDriver(driverId)
-	{
+	clickEditDriver(driverId) {
 		this.router.navigate(['/admin/affiliate/step4/add-driver'], { queryParams: { driverId: driverId } });
 	}
 	// Suspend or continue driver
-	accountStatus(accountStatus)
-	{
-		this.stateManagementService.setprogressBar(true);
+	accountStatus(accountStatus) {
+		// this.stateManagementService.setprogressBar(true);
 		$('#suspendModal').modal('hide');
 		console.log("value is", accountStatus)
 		this.adminService.driverStatus(this.storeId, accountStatus)
 			.pipe(
-				catchError(err =>
-				{
-					this.stateManagementService.setprogressBar(false);
+				catchError(err => {
+					// this.stateManagementService.setprogressBar(false);
 					return throwError(err);
 				})
-			).subscribe(result =>
-			{
-				this.stateManagementService.setprogressBar(false);
+			).subscribe(result => {
+				// this.stateManagementService.setprogressBar(false);
 			});
-		if (accountStatus == 'enable')
-		{
+		if (accountStatus == 'enable') {
 			$('#Continue_' + this.storeId).addClass('checkedContinueLabel');
 			$('#Suspend_' + this.storeId).removeClass('checkedSuspendLabel');
-		} else if (accountStatus == 'suspend')
-		{
+		} else if (accountStatus == 'suspend') {
 			$('#Suspend_' + this.storeId).addClass('checkedSuspendLabel');
 			$('#Continue_' + this.storeId).removeClass('checkedContinueLabel');
 		}
 	}
 	//Delete Driver
-	delete()
-	{
+	delete() {
 		// this.stateManagementService.setprogressBar(true);
 		var status = 'disable';
 		$('#deleteConfirmationModal').modal('hide');
 
 		this.adminService.driverStatus(this.driverToDelete, status)
 			.pipe(
-				catchError(err =>
-				{
+				catchError(err => {
 					// this.stateManagementService.setprogressBar(false);
 					return throwError(err);
 				})
-			).subscribe(result =>
-			{
-				this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() =>
-				{
+			).subscribe(result => {
+				this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
 					this.router.navigate(['/admin/affiliate/step4']);
 				});
 				// this.stateManagementService.setprogressBar(false);
@@ -144,33 +127,28 @@ export class AffiliateStep4Component implements OnInit
 	}
 
 	//for paginator
-	counter()
-	{
+	counter() {
 		var currentPage;
 		var startFrom;
 		var endTo;
 
-		if (this.currentPage < 5)
-		{
+		if (this.currentPage < 5) {
 			startFrom = 0;
 			endTo = 5;
 		}
-		else if (this.currentPage < this.totalPage)
-		{
+		else if (this.currentPage < this.totalPage) {
 			currentPage = this.currentPage
 			endTo = currentPage + 1;
 			startFrom = endTo - 5;
 		}
-		else
-		{
+		else {
 			endTo = this.totalPage;
 			startFrom = endTo - 5;
 		}
 
 		var i;
 		var udpArr = new Array();
-		for (i = startFrom; i < endTo; i++)
-		{
+		for (i = startFrom; i < endTo; i++) {
 			udpArr.push(i + 1);
 		}
 		return udpArr;

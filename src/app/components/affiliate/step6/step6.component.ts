@@ -12,8 +12,7 @@ import { StateManagementService } from '../../../services/statemanagement.servic
 	templateUrl: './step6.component.html',
 	styleUrls: ['./step6.component.scss']
 })
-export class Step6Component implements OnInit
-{
+export class Step6Component implements OnInit {
 
 	Step6Form: FormGroup
 	public src: string;
@@ -30,6 +29,7 @@ export class Step6Component implements OnInit
 	// show/hide content variables
 	main_content: string
 	section_content: string
+	account_approval:string = localStorage.getItem('account_approval') || ''
 
 
 	// array variables
@@ -42,12 +42,11 @@ export class Step6Component implements OnInit
 		private stateManagementService: StateManagementService,
 	) { }
 
-	ngOnInit(): void
-	{
+	ngOnInit(): void {
+		$('.HeadingH1').css({display: "block"})
 		this.fetchStep6Data();
 
-		this.affiliateService.getSignatureImage().subscribe((response: any) =>
-		{
+		this.affiliateService.getSignatureImage().subscribe((response: any) => {
 			this.signatureImg = response.signature_url;
 			console.log("check response", this.signatureImg)
 		})
@@ -108,10 +107,8 @@ export class Step6Component implements OnInit
 		// ------------------------------------------------------------ canvas ends ------------------------------------s
 	}
 
-	signature(signatureImage)
-	{
-		switch (signatureImage)
-		{
+	signature(signatureImage) {
+		switch (signatureImage) {
 			case 'digitalSign': {
 				this.signatureImage = false;
 				break;
@@ -123,15 +120,13 @@ export class Step6Component implements OnInit
 		}
 	}
 
-	srcChange(src)
-	{
+	srcChange(src) {
 		this.src = src;
 
 		console.log(this.src, "image preview")
 	}
 
-	clear()
-	{
+	clear() {
 		this.clearMe = !this.clearMe;
 	}
 
@@ -140,20 +135,17 @@ export class Step6Component implements OnInit
 	// 	this.signing = false;
 	// }
 
-	fetchStep6Data()
-	{
+	fetchStep6Data() {
 		this.spinner.show()
 
 		this.affiliateService.fetchStepData('step6')
 			.pipe(
-				catchError(err =>
-				{
+				catchError(err => {
 					this.spinner.hide()
 					console.log('Facing Issues while fetching data -> [fetchStep6Data()] ----', err)
 					return throwError(err)
 				})
-			).subscribe(({ data }: any) =>
-			{
+			).subscribe(({ data }: any) => {
 				this.spinner.hide()
 				console.log('\n\n\n ------------------------------------ \n')
 				console.log('\n Receiving Response from Backend .....', data)
@@ -163,30 +155,24 @@ export class Step6Component implements OnInit
 
 			})
 	}
-	signImageChange(event, imageType, imageId = null)
-	{
+	signImageChange(event, imageType, imageId = null) {
 		this.stateManagementService.setprogressBar(true);
 		const reader = new FileReader();
-		if (event.target.files && event.target.files.length)
-		{
+		if (event.target.files && event.target.files.length) {
 			const [file] = event.target.files;
 			reader.readAsDataURL(file);
-			reader.onload = () =>
-			{
+			reader.onload = () => {
 				this.signatureImg = reader.result as string;
 				this.affiliateService.uploadVehicleImage(this.signatureImg)
 					.pipe(
-						catchError(err =>
-						{
+						catchError(err => {
 							this.stateManagementService.setprogressBar(false);
 							return throwError(err);
 						})
 					)
-					.subscribe(({ data }: any) =>
-					{
+					.subscribe(({ data }: any) => {
 
-						switch (imageType)
-						{
+						switch (imageType) {
 							case 'signatureImg': {
 								this.signatureImg = data.image;
 								this.signature_id = data.ID;
@@ -202,10 +188,8 @@ export class Step6Component implements OnInit
 		}
 	}
 
-	deleteImage(id, imageType)
-	{
-		switch (imageType)
-		{
+	deleteImage(id, imageType) {
+		switch (imageType) {
 			case 'signatureImg': {
 
 				this.signatureImg = '';
@@ -217,21 +201,18 @@ export class Step6Component implements OnInit
 		}
 	}
 
-	showImageInModal(imageUrl)
-	{
+	showImageInModal(imageUrl) {
 		console.log("enter in image modal", imageUrl)
 		this.modalImage = imageUrl;
 		$("#imageModal").addClass("showImage");
 		$("#imageModal").removeClass("d-none");
 	}
 
-	closeButton()
-	{
+	closeButton() {
 		this.closeTab.emit();
 	}
 
-	submitForm()
-	{
+	submitForm() {
 
 		this.spinner.show();
 		const currentUser = JSON.parse(localStorage.getItem("currentUser"));
@@ -284,26 +265,21 @@ export class Step6Component implements OnInit
 		// obj['signature_id'] = this.signature_id
 		this.affiliateService.affiliateTermsAccept(obj)
 			.pipe(
-				catchError(err =>
-				{
+				catchError(err => {
 					this.spinner.hide();//hide spinner
 					console.error('Facing Error: ', err)
-					if (err.otherParams.step)
-					{
-						this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() =>
-						{
+					if (err.otherParams.step) {
+						this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
 							this.router.navigate(['/affiliate/step1']);
 						});
 					}
 					return throwError(err);
 				})
 			)
-			.subscribe(({ success }: any) =>
-			{
+			.subscribe(({ success }: any) => {
 				this.spinner.hide();//hide spinner
 
-				if (success == true)
-				{
+				if (success == true) {
 					this.affiliateService.updateStepsLocal('6');
 					localStorage.setItem('account_approval', 'completed');
 				}
@@ -315,8 +291,7 @@ export class Step6Component implements OnInit
 
 
 
-	generateStep6Content(data: any)
-	{
+	generateStep6Content(data: any) {
 		// if (data.other_listing_arr != null && data.other_listing_arr.length > 0)
 		// {
 		// 	data.other_listing_arr.forEach((item) =>

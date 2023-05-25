@@ -16,7 +16,7 @@
 		</div>
 		<div class="row" *ngIf="driverList">
 			<div class="col-md-12" *ngIf="affiliateType==='fleet_operator' || driverList.length==0">
-				<button class="custom-btn add-button" (click)="addDriverClick(accountId)" tabindex="1">
+				<button class="custom-btn add-button btn-shadow" (click)="addDriverClick(accountId)" tabindex="1">
 					<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-plus-circle"
 						viewBox="0 0 16 16">
 						<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
@@ -34,20 +34,26 @@
 					aria-describedby="dataTable_info" style="width: 100%;" width="100%" cellspacing="0">
 					<thead>
 						<tr role="row">
+							<th class="tableWidth">Actions</th>
 							<th>Driver Image</th>
 							<th>Name</th>
 							<th>Cell</th>
 							<th>Email</th>
 							<th>Delete</th>
 							<th [hidden]="affiliateType!='fleet_operator'">Account Status</th>
-							<th class="tableWidth">Actions</th>
 						</tr>
 					</thead>
 					<tbody>
 						<ng-container *ngIf="driverList">
 							<tr role="row" class="odd" *ngFor="let driver of driverList">
+								<td class="tableWidth">
+									<a class="user-profileded btn btn-icon btn-transparent-dark btn-shadow"
+										id="navbarDropdownUserImage" (click)="clickEditDriver(driver.id)" role="button"
+										tabindex="1"> <span>Edit Driver</span>
+									</a>
+								</td>
 								<td><img class="rounded-circle" src="{{driver.DriverImage.image}}"></td>
-								<td>{{driver.FirstName+' '+driver.MiddleName+' '+driver.LastName}}</td>
+								<td>{{driver.FirstName+' '+(driver?.MiddleName||'')+' '+driver.LastName}}</td>
 								<td class="pointer"><a href="tel:{{driver.CellIsd+' '+driver.CellNumber}}"
 										tabindex="-1">{{driver.CellIsd+' '+driver.CellNumber}}</a></td>
 								<td class="pointer"><a href="mailto:{{driver.Email}}" tabindex="-1">{{driver.Email}}</a>
@@ -71,12 +77,6 @@
 												(click)="driverAccountStatus(driver.id, 'suspend')">Suspend</label>
 										</div>
 									</div>
-								</td>
-								<td class="tableWidth">
-									<a class="user-profileded btn btn-icon btn-transparent-dark"
-										id="navbarDropdownUserImage" (click)="clickEditDriver(driver.id)" role="button"
-										tabindex="1"> <span>Edit Driver</span>
-									</a>
 								</td>
 							</tr>
 							<tr *ngIf="!driverList?.length">

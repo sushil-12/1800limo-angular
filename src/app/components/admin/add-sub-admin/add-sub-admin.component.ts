@@ -52,7 +52,7 @@ export class AddSubAdminComponent implements OnInit
 			lastName: ['', Validators.required],
 			mobile: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(10), Validators.maxLength(10)]],
 			mobileIsd: ['+1', Validators.required],
-			email: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
+			email: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.]+\.[a-zA-Z]{2,}$/i)]],
 			address: ['', Validators.required],
 			city: ['', Validators.required],
 			state: ['', Validators.required],

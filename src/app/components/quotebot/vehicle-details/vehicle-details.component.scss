@@ -188,6 +188,25 @@ button.custom-btn {
 	background-color       : var(--orange);
 	border                 : 1.5px solid var(--orange);
 	border-radius          : 20px;
+	box-shadow             : 0px 5px 10px 1px rgba(0, 0, 0, 0.4);
+	transition             : box-shadow 0.1s ease-in-out;
+	color: #000000;
+	margin: 0 3px;
+}
+
+.btn-bg-green {
+	width                  : -webkit-fit-content;
+	width                  : -moz-fit-content;
+	width                  : fit-content;
+	height                 : -webkit-fit-content;
+	height                 : -moz-fit-content;
+	height                 : fit-content;
+	padding                : 0.275rem 0.67rem;
+	background-color 	   :rgb(51, 198, 88);
+	border                 : 1.5px solid rgb(51, 198, 88);
+	border-radius          : 20px;
+    box-shadow             : 0px 5px 10px 1px rgba(0, 0, 0, 0.4);
+	transition             : box-shadow 0.1s ease-in-out;
 	color: #000000;
 	margin: 0 3px;
 }

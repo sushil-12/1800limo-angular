@@ -4,6 +4,10 @@
 	font-family: 'PT Serif', serif !important;
 }
 
+hr{
+	border-top: 1px solid black
+}
+
 .booking_status {
 	font-size: medium;
 	color    : #fff;
@@ -18,9 +22,11 @@
 .pending {
 	background-color: #0474fc;
 }
-
+.partial_paid {
+	background-color: #00CCCC;
+}
 .assigned {
-	background-color: #543424;
+	background-color: var(--green-color);
 }
 
 .rejected {
@@ -30,7 +36,9 @@
 .cancelled {
 	background-color: #dc3545;
 }
-
+.paid {
+	background-color: #D1B000;
+}
 .en_route_pu {
 	background-color: #6454ac;
 }
@@ -58,6 +66,9 @@
 .comped {
 	background-color: #7c7c84;
 }
+.refund{
+	background-color:#A020F0;
+}
 
 
 table {
@@ -76,4 +87,224 @@ table {
 .custom-filled-button
 {
 	padding: 0.375rem 0.985rem;
+}
+.btnclass {
+	margin-top: 20px;
+	height: 60px;
+	width: 100%;
+}
+
+
+.odd p {
+	cursor: pointer;
+}
+
+.btnStyle {
+	color: #fff !important;
+	background-color: var(--orange-color) !important;
+	border-color: var(--orange-color) !important;
+	padding: 10px 40px;	
+	transition: box-shadow 0.1s ease-in-out;
+    box-shadow: 0px 5px 10px 1px rgb(0 0 0 / 40%);
+}
+
+.modal-header {
+	justify-content: center;
+}
+
+#sendEmailModal .modal-content hr {
+	border: 2px solid var(--orange-color);
+	width: 180px;
+	background-color: var(--orange-color);
+	// margin          : 10px 347px 20px 347px;
+	display: block;
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+#Layer_1 {
+	height: 48px;
+	width: 48px;
+}
+
+.mailBoxStyle svg {
+	width: 60px;
+	height: 60px;
+	margin-top: -5px;
+}
+
+.iconStyle {
+	margin: 20px 20px 10px 20px;
+	cursor: pointer;
+}
+
+.iconStyle a {
+	text-decoration: none;
+	color: #000;
+}
+
+.headingStyle {
+	margin-top: 7px;
+}
+
+.saveButton {
+	color: #fff !important;
+	background-color: #5dbd8a;
+	border-color: #5dbd8a;
+	padding: 10px 40px;
+	position: absolute;
+	bottom: -60px;
+	left: 15px;
+	transition: box-shadow 0.1s ease-in-out;
+    box-shadow: 0px 5px 10px 1px rgb(0 0 0 / 40%);
+}
+
+.saveButtonModal {
+	color: #fff !important;
+	background-color: #5dbd8a;
+	border-color: #5dbd8a;
+	padding: 10px 40px;
+	bottom: -60px;
+	left: 15px;
+	transition: box-shadow 0.1s ease-in-out;
+    box-shadow: 0px 5px 10px 1px rgb(0 0 0 / 40%);
+}
+
+
+table {
+	width: 100;
+	white-space: break-spaces;
+	padding: 10px;
+	min-width: 5rem;
+
+	thead th {
+		color: #000000;
+		font-weight: 600;
+	}
+
+	tbody td>p {
+		margin: 0;
+	}
+}
+
+a:hover {
+	text-decoration: none;
+	// color: unset !important;
+}
+
+input,
+input::placeholder,
+input::-webkit-input-placeholder {
+	padding: 0 !important;
+}
+
+
+.booking-id-font{
+	font-size: large;
+}
+
+.preview-output-feild{
+	font-size: x-large;
+}
+
+.view-button{
+	background-color: #5373aa !important;
+	color: #fff !important;
+	padding: 5px 8px !important;
+	border-radius: 3rem !important;
+}
+
+.x-cross-btn{
+	background: #fff !important;
+    color: #ff0000 !important;
+    /* position: absolute; */
+    top: 5px;
+    right: 15px;
+    border-radius: 20px;
+    width: 25px;
+    opacity: 1 !important;
+}
+
+.x-close-btn{
+	float: right;
+    font-size: 1.8rem;
+    font-weight: 700;
+    line-height: 1;
+	border: none;
+}
+.x-circle-btn{
+	opacity: 1;
+	color: red;
+	font-size: xx-large;
+}
+.center {
+	margin: 0;
+	position: absolute;
+	top: 53%;
+	left: 50%;
+	-ms-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+  }
+
+  .preview-pickup-color{
+	color: #007500;
+  }
+  .preview-dropoff-color{
+	color:  #FF0000 ;
+  }
+  .preview-airport-color{
+	color:  #00008B !important ;
+  }
+@media only screen and (min-width: 768px) and (max-width: 1200px) {
+	.startdate {
+		padding-right: 5px;
+	}
+
+	.startdate2 {
+		padding-left: 5px;
+		padding-right: 5px;
+	}
+
+	.startdate3 {
+		padding-left: 5px;
+	}
+
+	.btnclass {
+		// padding-right: 5px;
+		width: 100%;
+	}
+}
+
+@media only screen and (max-width: 475px)
+{
+	#AuditTrailModal
+	{
+		.modal-body
+		{
+			overflow: auto;
+			table {
+				width: 450px;
+				thead tr th#date
+				{
+					width: 115px
+				}
+			}
+		}
+	}
+	.align-btn{
+		flex-direction: row-reverse;
+		align-items:end;
+		width: 100%;
+		margin: 1rem;
+	}
+	// .bottom-container{
+	// 	border:1px solid green !important;
+
+	// }
+
+	// .bottom-container > button{
+	// 	position: relative;
+	// 	border:1px solid pink;
+	// 	bottom: 10px
+	// }
 }

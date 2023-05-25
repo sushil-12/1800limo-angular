@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 //material
 import { NgxSpinnerModule } from "ngx-spinner";
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatRadioModule } from '@angular/material/radio';
+
 //
 import { AgmCoreModule } from '@agm/core';
 import { AgmDirectionModule } from 'agm-direction';
@@ -14,7 +16,7 @@ import { MatSelectModule } from '@angular/material/select';
 // import { InvalidControlScrollDirective } from '../../directives/scroll-to-invalid.directive';
 // import { PinchZoomModule } from 'ngx-pinch-zoom';
 import { SharedModule } from '../shared/shared.module';
-
+import { NgSelectModule } from '@ng-select/ng-select';
 import { AffiliateRoutingModule } from './affiliate-routing.module';
 import { AffiliateComponent } from './affiliate.component';
 import { AffiliateTemplateComponent } from './affiliate-template/affiliate-template.component';
@@ -45,6 +47,11 @@ import { ProfileComponent } from './profile/profile.component';
 import { InvoiceSummaryComponent } from './invoice-summary/invoice-summary.component';
 import { FarmOutComponent } from './farm-out/farm-out.component';
 import { VehicleRateSettingsComponent } from './vehicle-rate-settings/vehicle-rate-settings.component';
+import { AffiliateFinalizeComponent } from './affiliate-finalize/affiliate-finalize.component';
+import { AffiliateFinalizeRatesComponent } from './affiliate-finalize-rates/affiliate-finalize-rates.component';
+import { NewBookingComponent } from './new-booking/new-booking.component';
+import { NgxPrintModule } from 'ngx-print';
+import { RatesFormsComponent } from './rates-forms/rates-forms.component';
 
 @NgModule({
 	declarations: [
@@ -72,7 +79,11 @@ import { VehicleRateSettingsComponent } from './vehicle-rate-settings/vehicle-ra
 		ProfileComponent,
 		InvoiceSummaryComponent,
 		FarmOutComponent,
-		VehicleRateSettingsComponent
+		VehicleRateSettingsComponent,
+		AffiliateFinalizeComponent,
+		AffiliateFinalizeRatesComponent,
+		NewBookingComponent,
+		RatesFormsComponent
 	],
 	imports: [
 		CommonModule,
@@ -90,8 +101,11 @@ import { VehicleRateSettingsComponent } from './vehicle-rate-settings/vehicle-ra
 		MatMomentDateModule,
 		MatInputModule,
 		MatSelectModule,
+		NgSelectModule,
+		MatRadioModule,
 		// PinchZoomModule,
-		SharedModule
+		SharedModule,
+		NgxPrintModule
 	]
 })
 export class AffiliateModule { }
