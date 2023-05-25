@@ -75,6 +75,18 @@ export class HttpConfigInterceptor implements HttpInterceptor {
 						location.reload()
 					}, 2800)
 				}
+				else if (errorData.status == 488)
+				{
+					this.errors = {
+						errors: {
+							'error': "You are not authorized to access this resource"
+						}
+					};
+					setTimeout(() =>
+					{
+						this.router.navigate(['/home'])
+					}, 2800)
+				}
 				else if (errorData.status == 500)
 				{
 					this.errors = {

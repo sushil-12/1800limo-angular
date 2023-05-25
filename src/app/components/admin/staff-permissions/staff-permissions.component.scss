@@ -34,11 +34,45 @@
   :host ::ng-deep.mat-tab-label.mat-tab-label-active {
       background-color: transparent;
       color: #fff;
-      background-color: rgba(229, 93, 8, 0.697);
-      border-right: 2px solid rgba(229, 93, 8, 0.697);
+      opacity: inherit;
+      background-color: #f29439 !important;
+      border-right: 2px solid #f29439;
   }
   /* Styles for the active tab label */
   :host ::ng-deep.mat-tab-label {
       background-color: transparent;
       /* background-color: lightgray; */
   }
+
+  :host ::ng-deep.mat-tab-label-content{
+    padding: 20px;
+    font-size: 16px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  :host ::ng-deep.mat-tab-label{
+    margin:0px 10px 10px 0px;
+    border-radius: 8px;
+    background-color: #ffff;
+    height: 40px !important;
+    padding: 0px 0px !important;
+  }
+
+  :host ::ng-deep.mat-tab-list{
+  max-height: 560px;
+  height: 100%;
+  overflow-y: scroll;}
+    
+
+th{
+  background-color: #3e4553 !important;
+  border: #fff solid 1px !important;
+  color: #fff;
+}
+td{
+  background-color: #fff !important;
+  border: #fff solid 1px !important;
+  color: black;
+}

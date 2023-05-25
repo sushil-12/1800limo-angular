@@ -1,0 +1,44 @@
+.view-button{
+	background-color: #5373aa !important;
+	color: #fff !important;
+	padding: 5px 8px !important;
+	border-radius: 3rem !important;
+    border: #5373aa !important;
+}
+
+
+.btnStyle {
+	color: #fff !important;
+	background-color: var(--orange-color) !important;
+	border-color: var(--orange-color) !important;
+	padding: 10px 40px;	
+	transition: box-shadow 0.1s ease-in-out;
+    box-shadow: 0px 5px 10px 1px rgb(0 0 0 / 40%);
+}
+.saveButtonModal {
+	color: #fff !important;
+	background-color: #5dbd8a;
+	border-color: #5dbd8a;
+	padding: 10px 40px;
+	bottom: -60px;
+	left: 15px;
+	transition: box-shadow 0.1s ease-in-out;
+    box-shadow: 0px 5px 10px 1px rgb(0 0 0 / 40%);
+}
+.x-cross-btn{
+	background: #fff !important;
+    color: #ff0000 !important;
+    /* position: absolute; */
+    top: 5px;
+    right: 15px;
+    border-radius: 20px;
+    width: 25px;
+    opacity: 1 !important;
+}
+.x-close-btn{
+	float: right;
+    font-size: 1.8rem;
+    font-weight: 700;
+    line-height: 1;
+	border: none;
+}

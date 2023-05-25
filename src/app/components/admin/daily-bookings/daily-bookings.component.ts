@@ -56,6 +56,8 @@ export class DailyBookingsComponent implements OnInit {
 	notification_msg: any;
 	status_list: any = [];
 	audit_Trail: any = [];
+	role: any = JSON.parse(localStorage.getItem('userData'))?.RoleName || ''
+	subModules: any = localStorage.getItem('sub_modules') || '';
 
 	constructor(
 		private adminService: AdminService,
@@ -69,13 +71,13 @@ export class DailyBookingsComponent implements OnInit {
 
 		let date = new Date();
 		let timestamp = date.getTime()
-	//     const options:any = {
-	// 		year: 'numeric',
-	// 		month: '2-digit',
-	// 		day: '2-digit',
-	// 	};
-	// const localeDateString = date.toLocaleDateString(undefined, options).
-	// replace(/(\d+)\/(\d+)\/(\d+)/,'$3-$1-$2');
+		//     const options:any = {
+		// 		year: 'numeric',
+		// 		month: '2-digit',
+		// 		day: '2-digit',
+		// 	};
+		// const localeDateString = date.toLocaleDateString(undefined, options).
+		// replace(/(\d+)\/(\d+)\/(\d+)/,'$3-$1-$2');
 		// Set Search Filters According to cookies or the intial state
 		this.startDate = this.adminService.checkCookie('startDate') ?
 			this.adminService.getCookie('startDate') :
@@ -145,6 +147,9 @@ export class DailyBookingsComponent implements OnInit {
 			emailTarget: ["", Validators.required],
 		});
 	}
+	ngAfterViewInit(): void {
+		this.subModules = localStorage.getItem('sub_modules')
+	}
 
 	/**
 	 * Configure date as per todays date and the future +7 days
@@ -193,7 +198,7 @@ export class DailyBookingsComponent implements OnInit {
 		}
 	}
 	emailAll() {
-		console.log('In function email all', this.sendEmailForm.value.reservation_id ,this.sendEmailForm.value.emailTarget )
+		console.log('In function email all', this.sendEmailForm.value.reservation_id, this.sendEmailForm.value.emailTarget)
 		let data = {
 			reservation_id: this.sendEmailForm.value.reservation_id
 		}
@@ -329,7 +334,9 @@ export class DailyBookingsComponent implements OnInit {
 			this.lastPageUrl = this.bookingsRes.data.last_page_url;
 			this.prevPageUrl = this.bookingsRes.data.prev_page_url;
 			this.nextPageUrl = this.bookingsRes.data.next_page_url;
+			this.subModules = localStorage.getItem('sub_modules')
 			this.spinner.hide();
+
 		})
 	}
 
@@ -369,17 +376,17 @@ export class DailyBookingsComponent implements OnInit {
 		console.log('---------__>>>>>>', dateType, date)
 		this[dateType] = date
 	}
-	fomatAffiliateType(type:any){
-		if(type=='taxi_operator'){
+	fomatAffiliateType(type: any) {
+		if (type == 'taxi_operator') {
 			return "T"
 		}
-		else if(type == 'fleet_operator'){
+		else if (type == 'fleet_operator') {
 			return "F"
 		}
-		else if(type == 'black_limo_operator'){
+		else if (type == 'black_limo_operator') {
 			return "I/O"
 		}
-		else if(type=='gig_operator'){
+		else if (type == 'gig_operator') {
 			return "G"
 		}
 	}
@@ -540,9 +547,9 @@ export class DailyBookingsComponent implements OnInit {
 			return text
 		}
 	}
-	formatPhoneNumber(ph:any){
-		if(!ph.includes('+')){
-			return '+'+ph
+	formatPhoneNumber(ph: any) {
+		if (!ph.includes('+')) {
+			return '+' + ph
 		}
 		return ph;
 
@@ -554,7 +561,7 @@ export class DailyBookingsComponent implements OnInit {
 		this.adminService.getBookingPreview(booking_id).subscribe((response: any) => {
 			this.spinner.hide();
 			this.bookingPreview = response.data;
-			this.bookingPreview['booking_instructions'] = this.bookingPreview?.booking_instructions.replaceAll('<br />' , ' ')
+			this.bookingPreview['booking_instructions'] = this.bookingPreview?.booking_instructions.replaceAll('<br />', ' ')
 		})
 	}
 
@@ -597,7 +604,7 @@ export class DailyBookingsComponent implements OnInit {
 			|| (navigator.userAgent.includes("Mac") && "ontouchend" in document)
 	}
 
-	 showLocationPointOnMap(booking_id: number, type: string) {
+	showLocationPointOnMap(booking_id: number, type: string) {
 		// const options = {
 		// 	enableHighAccuracy: true,
 		// 	timeout: 5000,
@@ -625,48 +632,48 @@ export class DailyBookingsComponent implements OnInit {
 		// 	})
 		// 	}
 
-				let isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-				console.log('isSafari', isSafari)
-				this.spinner.show()
-				this.adminService.getLocationPoints(booking_id).subscribe((response: any) => {
-					this.spinner.hide();
-					if ("lat" in response?.data?.pickupDetail && "long" in response?.data?.pickupDetail && "lat" in response?.data?.dropoffDetail && "long" in response?.data?.dropoffDetail) {
-						sessionStorage.setItem('pickup', JSON.stringify(response?.data?.pickupDetail.address));
-						sessionStorage.setItem('dropoff', JSON.stringify(response?.data?.dropoffDetail.address));
-						let googleDirectionUrl; 
-						let iosDirectionUrl;
-						if(type=='pickup'){
-							googleDirectionUrl = 'https://www.google.com/maps/dir/?api=1'+'&destination=' +
-								encodeURIComponent(response?.data?.pickupDetail.address) + '&travelmode=driving'
-							iosDirectionUrl = 'http://maps.apple.com/?daddr=' +
-									encodeURIComponent(response?.data?.pickupDetail.address)
-						}
-						else{
-							googleDirectionUrl = 'https://www.google.com/maps/dir/?api=1'+'&destination=' +
-							encodeURIComponent(response?.data?.dropoffDetail.address) + '&travelmode=driving'
-							iosDirectionUrl = 'http://maps.apple.com/?daddr=' +
-									encodeURIComponent(response?.data?.dropoffDetail.address)
-						}
-						// this.router.navigate(['/locate-map'], {
-						// 	queryParams: {
-						// 		plat: response?.data?.pickupDetail?.lat.toString(),
-						// 		plng: response?.data?.pickupDetail?.long.toString(),
-						// 		dlat: response?.data?.dropoffDetail?.lat.toString(),
-						// 		dlng: response.data?.dropoffDetail?.long.toString(),
-						// 	},
-						// 	queryParamsHandling: 'merge'
-						// });
-						if (this.iOS()) {
-							setTimeout(() => {
-								window.location.href = iosDirectionUrl;
-							})
-						}
-						else {
-							window.open(googleDirectionUrl, '_blank');
-						}
-					} else {
-						throw new Error('Error: Location Points Not Specified Properly. ');
-					}
-				})
+		let isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+		console.log('isSafari', isSafari)
+		this.spinner.show()
+		this.adminService.getLocationPoints(booking_id).subscribe((response: any) => {
+			this.spinner.hide();
+			if ("lat" in response?.data?.pickupDetail && "long" in response?.data?.pickupDetail && "lat" in response?.data?.dropoffDetail && "long" in response?.data?.dropoffDetail) {
+				sessionStorage.setItem('pickup', JSON.stringify(response?.data?.pickupDetail.address));
+				sessionStorage.setItem('dropoff', JSON.stringify(response?.data?.dropoffDetail.address));
+				let googleDirectionUrl;
+				let iosDirectionUrl;
+				if (type == 'pickup') {
+					googleDirectionUrl = 'https://www.google.com/maps/dir/?api=1' + '&destination=' +
+						encodeURIComponent(response?.data?.pickupDetail.address) + '&travelmode=driving'
+					iosDirectionUrl = 'http://maps.apple.com/?daddr=' +
+						encodeURIComponent(response?.data?.pickupDetail.address)
+				}
+				else {
+					googleDirectionUrl = 'https://www.google.com/maps/dir/?api=1' + '&destination=' +
+						encodeURIComponent(response?.data?.dropoffDetail.address) + '&travelmode=driving'
+					iosDirectionUrl = 'http://maps.apple.com/?daddr=' +
+						encodeURIComponent(response?.data?.dropoffDetail.address)
+				}
+				// this.router.navigate(['/locate-map'], {
+				// 	queryParams: {
+				// 		plat: response?.data?.pickupDetail?.lat.toString(),
+				// 		plng: response?.data?.pickupDetail?.long.toString(),
+				// 		dlat: response?.data?.dropoffDetail?.lat.toString(),
+				// 		dlng: response.data?.dropoffDetail?.long.toString(),
+				// 	},
+				// 	queryParamsHandling: 'merge'
+				// });
+				if (this.iOS()) {
+					setTimeout(() => {
+						window.location.href = iosDirectionUrl;
+					})
+				}
+				else {
+					window.open(googleDirectionUrl, '_blank');
+				}
+			} else {
+				throw new Error('Error: Location Points Not Specified Properly. ');
 			}
+		})
+	}
 }

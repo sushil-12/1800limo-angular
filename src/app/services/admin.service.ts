@@ -64,6 +64,9 @@ export class AdminService {
 	deleteCookie(key: string) {
 		document.cookie = `${key}=' ';expires=Thu, 01 Jan 1970 00:00:00 UTC;`;
 	}
+	getMyPermissions(){
+		return this.httpClient.get(this.serverUrl + 'my-permissions');
+	}
 
 	changeSortOrder(data: any) {
 		return this.httpClient.put(this.serverUrl + 'vehicle-types-sorting', data);
@@ -1045,6 +1048,18 @@ export class AdminService {
 
 	refund(body: any) {
 		return this.httpClient.post(`${this.serverUrl}admin/refund-request`, body)
+	}
+	getPermission(id:any){
+		return this.httpClient.get(`${this.serverUrl}admin/permissions/${id}`)
+	}
+	getRoles(){
+		return this.httpClient.get(`${this.serverUrl}admin/roles`)
+	}
+	updartePermission(id,data){
+		return this.httpClient.post(`${this.serverUrl}admin/assign-permissions/${id}`,data)
+	}
+	addRole(data){
+		return this.httpClient.post(`${this.serverUrl}admin/create-role`,data)
 	}
 
 

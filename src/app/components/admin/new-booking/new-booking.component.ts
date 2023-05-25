@@ -1758,6 +1758,19 @@ export class NewBookingComponent implements OnInit {
 				}, 2000)
 			}
 		})
+		// this.BookingForm.get('driver_id').valueChanges.subscribe((value: string) => {
+		// 	this.DriverList
+		// 	this.SetFormValue('driver_name', `${data.FirstName} ${data.MiddleName ?? ''} ${data.LastName}`)
+		// 	this.SetFormValue('driver_gender', data.Gender)
+		// 	this.SetFormValue('driver_cell', data.CellNumber)
+		// 	this.SetFormValue('driver_cell_isd', data.CellIsd)
+		// 	this.SetFormValue('driver_cell_country', data.CellNumberCountry)
+		// 	this.SetFormValue('driver_email', data.Email)
+		// 	this.SetFormValue('driver_phone_type', data.PhoneType ?? '');
+		// 	this.DrvTelObject.setCountry(this.BookingForm.get('driver_cell_country').value);
+		// })
+
+		
 	}
 
 	resetDriverAndVehicle(affiliate_type: string) {
