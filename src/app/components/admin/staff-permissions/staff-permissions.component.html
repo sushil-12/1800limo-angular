@@ -1,5 +1,5 @@
 <div class="col-12">
-    <mat-tab-group mat-align-tabs="center" animationDuration="200ms" vertical>
+    <mat-tab-group animationDuration="200ms" vertical>
         <mat-tab label="{{formatText(group_name.key)}}"
             *ngFor="let group_name of group_data | keyvalue: returnZero; index as group_name_index">
             <main>
