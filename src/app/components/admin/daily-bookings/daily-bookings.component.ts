@@ -56,7 +56,7 @@ export class DailyBookingsComponent implements OnInit {
 	notification_msg: any;
 	status_list: any = [];
 	audit_Trail: any = [];
-	role: any = JSON.parse(localStorage.getItem('userData'))?.RoleName || ''
+	currentUser: any = localStorage.getItem('userData') || ''
 	subModules: any = localStorage.getItem('sub_modules') || '';
 
 	constructor(
@@ -334,7 +334,8 @@ export class DailyBookingsComponent implements OnInit {
 			this.lastPageUrl = this.bookingsRes.data.last_page_url;
 			this.prevPageUrl = this.bookingsRes.data.prev_page_url;
 			this.nextPageUrl = this.bookingsRes.data.next_page_url;
-			this.subModules = localStorage.getItem('sub_modules')
+			this.subModules = localStorage.getItem('sub_modules') || ''
+			this.currentUser = localStorage.getItem('userData') || ''
 			this.spinner.hide();
 
 		})

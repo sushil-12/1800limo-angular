@@ -50,7 +50,7 @@ export class AddSubAdminComponent implements OnInit
 			firstName: ['', Validators.required],
 			middleName: [''],
 			lastName: ['', Validators.required],
-			mobile: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(10), Validators.maxLength(10)]],
+			mobile: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(10), Validators.maxLength(12)]],
 			mobileIsd: ['+1', Validators.required],
 			email: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.]+\.[a-zA-Z]{2,}$/i)]],
 			address: ['', Validators.required],
@@ -203,7 +203,22 @@ export class AddSubAdminComponent implements OnInit
 
 	resetForm()
 	{
-		this.addSubAdminAccountForm.reset();
+		this.addSubAdminAccountForm = this.formBuilder.group({
+			id: [],
+			firstName: ['', Validators.required],
+			middleName: [''],
+			lastName: ['', Validators.required],
+			mobile: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(10), Validators.maxLength(12)]],
+			mobileIsd: ['+1', Validators.required],
+			email: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.]+\.[a-zA-Z]{2,}$/i)]],
+			address: ['', Validators.required],
+			city: ['', Validators.required],
+			state: ['', Validators.required],
+			country: ['', Validators.required],
+			zipCode: ['', Validators.required],
+			latitude: [''],
+			longitude: [''],
+		});
 	}
 	backButton()
 	{

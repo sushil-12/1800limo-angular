@@ -320,7 +320,7 @@
 								data-parent="#accordionSidebar" tabIndex="-1">
 								<div class="py-2 collapse-inner rounded">
 									<a class="collapse-item" [routerLinkActive]="['active']"
-										(click)="closeSidebarFunc(false)"
+										(click)="closeSidebarFunc(false)" *ngIf="role=='admin' || modules.includes('vehicle')"
 										routerLink="/admin/master-vehicle-types">
 										Master Vehicle Types
 										</a>
