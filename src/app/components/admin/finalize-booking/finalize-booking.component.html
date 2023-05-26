@@ -166,7 +166,7 @@
 <!-- Rates Section End -->
 
 <!-- Payment Section -->
-<section class="section-container" *ngIf="BookingDetail?.payment_status=='unpaid' || BookingDetail?.payable_amount > 0">
+<section class="section-container" *ngIf="(BookingDetail?.payment_status=='unpaid' || BookingDetail?.payable_amount > 0) && (currentUser?.RoleName == 'admin' || subModules.includes('can_pay_booking'))">
 	<div class="col-md-12 p-0" (click)="handlePaymentSection()">
 		<h4 class="section-dropdown-header mb-0">
 			Payment

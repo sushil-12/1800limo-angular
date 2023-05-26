@@ -183,16 +183,16 @@
 								data-parent="#accordionSidebar" tabIndex="-1">
 								<div class="py-2 collapse-inner rounded">
 									<a class="collapse-item" [routerLinkActive]="['active']"
-										routerLink="/admin/individual-account-admin" *ngIf="modules.includes('individual_account')"
+										routerLink="/admin/individual-account-admin" *ngIf="role=='admin' ||modules.includes('individual_account')"
 										(click)="closeSidebarFunc(false)">Individual</a>
 									<a class="collapse-item" [routerLinkActive]="['active']"
-										routerLink="/admin/corporate-account-admin" *ngIf="modules.includes('corporate_account')"
+										routerLink="/admin/corporate-account-admin" *ngIf="role=='admin' || modules.includes('corporate_account')"
 										(click)="closeSidebarFunc(false)">Corporate</a>
 									<a class="collapse-item" [routerLinkActive]="['active']"
-										routerLink="/admin/travel-planner-account-admin" *ngIf="modules.includes('travel_planner_account')"
+										routerLink="/admin/travel-planner-account-admin" *ngIf="role=='admin' || modules.includes('travel_planner_account')"
 										(click)="closeSidebarFunc(false)">Travel Planner</a>
 									<a class="collapse-item" [routerLinkActive]="['active']"
-										routerLink="/admin/tour-guide-account-admin" *ngIf="modules.includes('tour_guide_account')"
+										routerLink="/admin/tour-guide-account-admin" *ngIf="role=='admin' || modules.includes('tour_guide_account')"
 										(click)="closeSidebarFunc(false)">Tour Guide</a>
 								</div>
 							</div>
@@ -320,7 +320,7 @@
 								data-parent="#accordionSidebar" tabIndex="-1">
 								<div class="py-2 collapse-inner rounded">
 									<a class="collapse-item" [routerLinkActive]="['active']"
-										(click)="closeSidebarFunc(false)"
+										(click)="closeSidebarFunc(false)" *ngIf="role=='admin' || modules.includes('vehicle')"
 										routerLink="/admin/master-vehicle-types">
 										Master Vehicle Types
 										</a>

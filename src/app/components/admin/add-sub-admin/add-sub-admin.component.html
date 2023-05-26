@@ -32,15 +32,17 @@
 					</div>
 					<div class="col-md-4" *ngIf="!subAdminId">
 						<mat-form-field appearance="outline" class="mat-custom-phone">
-							<mat-label>Mobile <span class="asterisk">*</span></mat-label>
-							<input type="number" matInput ng2TelInput (countryChange)="onCountryChange($event)"
+							<mat-label>Mobile<span class="asterisk">*</span></mat-label>
+							<input matInput ng2TelInput
+								[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
+								(countryChange)="onCountryChange($event)"
 								placeholder="Mobile" formControlName="mobile">
 						</mat-form-field>
-						<div *ngIf="submittedForm && f.mobile.errors" class="text-danger">
+						<div *ngIf="f.mobile.invalid && (f.mobile.touched || f.mobile.dirty)" class="text-danger">
 							<div *ngIf="f.mobile.errors.required">This field is required</div>
 							<div *ngIf="f.mobile.errors.pattern">This field should be a number</div>
 							<div *ngIf="f.mobile.errors.minlength">Minimum length should be 10</div>
-							<div *ngIf="f.mobile.errors.maxlength">Maximum length should be 10</div>
+							<div *ngIf="f.mobile.errors.maxlength">Maximum length should be 12</div>
 						</div>
 					</div>
 					<div [ngClass]="subAdminId ? 'col-md-6' : 'col-md-4'">
@@ -109,10 +111,10 @@
 		<!-----BILLING INFO-------------->
 		<section class="billing_inforamtion">
 			<ul>
-				<li><button class="custom-btn savebutton" (click)="submitForm()"
+				<li><button class="custom-btn savebutton btn-shadow" (click)="submitForm()"
 						[disabled]="disableSubmitButton">SAVE</button> </li>
-				<li><button class="custom-btn resetbutton" (click)="resetForm()">RESET</button> </li>
-				<li><button class="custom-btn backbutton" (click)="backButton()">BACK</button> </li>
+				<li><button class="custom-btn resetbutton btn-shadow" (click)="resetForm()">RESET</button> </li>
+				<li><button class="custom-btn backbutton btn-shadow" (click)="backButton()">BACK</button> </li>
 			</ul>
 		</section>
 	</form>

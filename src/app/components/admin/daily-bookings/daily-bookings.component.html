@@ -110,7 +110,7 @@
 										<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
 											aria-labelledby="navbarDropdownUserImage">
 											<a class="dropdown-item" [routerLink]="['/admin/new-booking']"
-											*ngIf="role == 'admin' || subModules.includes('edit_booking')"
+											*ngIf="currentUser?.RoleName == 'admin' || subModules.includes('edit_booking')"
 												[queryParams]="{bookingId: booking.booking_id, updateType: 'edit'}">
 												
 												<div class="dropdown-item-icon"></div>
@@ -120,11 +120,11 @@
 												data-target="#return_repeat_booking_Modal"
 												[routerLink]="['/admin/new-booking']"
 												[queryParams]="{bookingId: booking.booking_id, updateType: 'repeat'}"
-												*ngIf="role == 'admin' || subModules.includes('repeat_booking')" >
+												*ngIf="currentUser?.RoleName == 'admin' || subModules.includes('repeat_booking')" >
 												<div class="dropdown-item-icon" *></div>
 												Repeat
 											</a>
-											<a *ngIf="booking.service_type=='oneway' && (role == 'admin' || subModules.includes('repeat_booking'))" class="dropdown-item"
+											<a *ngIf="booking.service_type=='oneway' && (currentUser?.RoleName == 'admin' || subModules.includes('repeat_booking'))" class="dropdown-item"
 												data-toggle="modal" data-target="#return_repeat_booking_Modal"
 												[routerLink]="['/admin/new-booking']"
 												[queryParams]="{bookingId: booking.booking_id, updateType: 'return'}" >
@@ -133,14 +133,14 @@
 											</a>
 											<a class="dropdown-item" [routerLink]="['/admin/finalize-booking']"
 												[queryParams]="{bookingId: booking.booking_id}"
-												*ngIf="role == 'admin' || subModules.includes('finalize_booking')">
+												*ngIf="currentUser?.RoleName == 'admin' || subModules.includes('finalize_booking')">
 												<!-- *ngIf="booking.payment_status!='paid'" -->
 												<div class="dropdown-item-icon"></div>
 												Finalize
 											</a>
 											<a class="dropdown-item" [routerLink]="['/admin/invoice-summary']"
 												[queryParams]="{bookingId: booking.booking_id}"
-												*ngIf="(booking.payment_status=='paid' || booking.payment_status=='refund' ||  booking.payment_status=='partial_paid') && (role == 'admin' || subModules.includes('invoice_booking'))" >
+												*ngIf="(booking.payment_status=='paid' || booking.payment_status=='refund' ||  booking.payment_status=='partial_paid') && (currentUser?.RoleName == 'admin' || subModules.includes('invoice_booking'))" >
 												<div class="dropdown-item-icon"></div>
 												Invoice
 											</a>
@@ -152,40 +152,34 @@
 											<a class="dropdown-item"
 												(click)="sendEmailClicked(booking.booking_id,'customer')"
 												data-toggle="modal" data-target="#emailModal"
-												*ngIf="role == 'admin' || subModules.includes('email_customer')">
-												<!-- *ngIf="booking.payment_status!='paid'" -->
+												*ngIf="currentUser?.RoleName == 'admin' || subModules.includes('email_customer')">
 												<div class="dropdown-item-icon"></div>
 												Email Customer
 											</a>
 											<a class="dropdown-item"
 												(click)="sendEmailClicked(booking.booking_id,'affiliate')"
 												data-toggle="modal" data-target="#emailModal"
-												*ngIf="role == 'admin' || subModules.includes('email_affiliate')">
-												<!-- *ngIf="booking.payment_status!='paid'" -->
+												*ngIf="currentUser?.RoleName == 'admin' || subModules.includes('email_affiliate')">
 												<div class="dropdown-item-icon"></div>
 												Email Affiliate
 											</a>
-											<!-- (click)="emailPassenger(booking.booking_id)" -->
 											<a class="dropdown-item"
 												(click)="sendEmailClicked(booking.booking_id,'emailPassenger')"
 												data-toggle="modal" data-target="#emailPassenger"
-												*ngIf="role == 'admin' || subModules.includes('email_passenger')">
-												<!-- *ngIf="booking.payment_status!='paid'" -->
+												*ngIf="currentUser?.RoleName == 'admin' || subModules.includes('email_passenger')">
 												<div class="dropdown-item-icon"></div>
 												Email Passenger
 											</a>
 											<a class="dropdown-item"
 												(click)="sendEmailClicked(booking.booking_id,'emailAll')"
-												data-toggle="modal" data-target="#emailAll">
-												<!-- *ngIf="booking.payment_status!='paid'" -->
-												<div class="dropdown-item-icon"
-												*ngIf="role == 'admin' || subModules.includes('email_all')"></div>
+												data-toggle="modal" data-target="#emailAll"
+												*ngIf="currentUser?.RoleName == 'admin' || subModules.includes('email_all')">
+												<div class="dropdown-item-icon"></div>
 												Email All
 											</a>
 											<a class="dropdown-item" (click)="auditTrail(booking.booking_id)"
 												data-toggle="modal" data-target="#AuditTrailModal" 
-												*ngIf="role == 'admin' || subModules.includes('audit_trial')">
-												<!-- *ngIf="booking.payment_status!='paid'" -->
+												*ngIf="currentUser?.RoleName == 'admin' || subModules.includes('audit_trial')">
 												<div class="dropdown-item-icon"></div>
 												Audit Trial
 											</a>
@@ -202,7 +196,7 @@
 									</td>
 									<td>
 										<div data-toggle="modal" (click)="changeBookingStatus(booking.booking_id)"
-											data-target="#change_status_booking_Modal"
+											data-target="#change_status_booking_Modal" [ngClass]="subModules.includes('change_booking_status') ? '' : 'disabled-btn'"
 											[className]="'badge badge-pill booking_status cursor-pointer ' + booking.booking_status">
 											{{booking.booking_status | bookingStatusTextReplace :
 											'_' : ' ' |titlecase}}
@@ -214,7 +208,8 @@
 									</td>
 									<td>
 										<p data-target="#sendEmailModal" style="white-space: pre" data-toggle="modal"
-											(click)="openModal(booking, 'Passenger')" id="box">
+											(click)="openModal(booking, 'Passenger')" id="box"
+											[ngClass]="subModules.includes('can_send_notifications') ? '' : 'disabled-btn'">
 											<span class="font-weight-bolder"
 												[innerHTML]="highlighText(booking.passenger_name)"></span> |
 											<span [innerHTML]="highlighText( booking.passenger_cell_isd)"></span>
@@ -228,6 +223,7 @@
 									<td>
 										<p data-target="#sendEmailModal" data-toggle="modal"
 											(click)="openModal(booking, 'Loose_Affiliate')"
+											[ngClass]="subModules.includes('can_send_notifications') ? '' : 'disabled-btn'"
 											*ngIf="booking.affiliate_type == null; else otherAffiliate">
 											<span class="font-weight-bolder"
 												[innerHTML]="highlighText(booking.loose_affiliate_name)"></span>|
@@ -237,6 +233,7 @@
 										<ng-template #otherAffiliate>
 											<p data-target="#sendEmailModal" data-toggle="modal"
 												(click)="openModal(booking, 'Affiliate')"
+												[ngClass]="subModules.includes('can_send_notifications') ? '' : 'disabled-btn'"
 												*ngIf="booking.affiliate_type != 'gig_operator'; else gigOperator">
 												<span class="font-weight-bolder"
 													[innerHTML]="highlighText(booking.driver_first_name)"></span>&nbsp;
@@ -249,6 +246,7 @@
 											</p>
 											<ng-template #gigOperator>
 												<p data-target="#sendEmailModal" data-toggle="modal"
+												[ngClass]="subModules.includes('can_send_notifications') ? '' : 'disabled-btn'"
 													(click)="openModal(booking, 'Affiliate')">
 													<span  class="font-weight-bolder" [innerHTML]="highlighText(booking.driver_first_name)"></span>&nbsp;
 													<span class="font-weight-bolder" [innerHTML]="highlighText(booking.driver_last_name)"></span>&nbsp;

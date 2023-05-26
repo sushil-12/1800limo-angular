@@ -39,6 +39,8 @@ export class InvoiceSummaryComponent implements OnInit {
 	currencyOptions: any;
 	currencySymbol: any;
 	paymentJson: any[];
+	subModules: any = [];
+	currentUser: any;
 	constructor(
 		private adminService: AdminService,
 		private router: Router,
@@ -67,6 +69,7 @@ export class InvoiceSummaryComponent implements OnInit {
 					this.getInvoiceData()
 				}
 			});
+
 	}
 
 	visible = true;
@@ -131,6 +134,8 @@ export class InvoiceSummaryComponent implements OnInit {
 				this.refundAmountForm.controls['refundAmount'].updateValueAndValidity();
 				this.spinner.hide();//hide spinner
 				this.currencySymbol = this.getCurrencySymbol(this.invoiceData.currency)
+				this.subModules = localStorage.getItem('sub_modules') || [];
+				this.currentUser = localStorage.getItem('userData') || "";
 			});
 		this.adminService.getPaymentLogs(this.bookingId)
 			.pipe(
