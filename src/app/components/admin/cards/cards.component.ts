@@ -47,6 +47,8 @@ export class CardsComponent implements OnInit
 	public nextPageUrl: string;
 	show: boolean;
 	paymentJson: any;
+	subModules: any=[];
+	currentUser: any;
 
 	constructor(
 		private adminService: AdminService,
@@ -79,6 +81,8 @@ export class CardsComponent implements OnInit
 			);
 
 		this.loadCards(this.accountId);//load cards
+		this.subModules = localStorage.getItem('sub_modules') || [];
+		this.currentUser = localStorage.getItem('userData') || "";
 	}
 
 	loadCards(accountId)
