@@ -243,6 +243,10 @@ input::-webkit-input-placeholder {
   .preview-airport-color{
 	color:  #00008B ;
   }
+  .disabled-btn{
+	pointer-events: none;
+	cursor: not-allowed !important;
+  }
 @media only screen and (min-width: 768px) and (max-width: 1200px) {
 	.startdate {
 		padding-right: 5px;
