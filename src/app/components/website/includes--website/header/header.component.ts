@@ -7,6 +7,7 @@ import { throwError } from 'rxjs';
 import { NgxSpinnerService } from "ngx-spinner";
 import { HomeComponent } from '../../home/home.component';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
+import { AdminService } from 'src/app/services/admin.service';
 declare var $: any;
 
 @Component({
@@ -30,6 +31,7 @@ export class HeaderComponent implements OnInit
 		private router: Router,
 		private spinner: NgxSpinnerService,
 		private authService: AuthService,
+		private adminService : AdminService,
 		private stateManagementService: StateManagementService,
 		private errorDialogService: ErrorDialogService
 	)
@@ -48,6 +50,7 @@ export class HeaderComponent implements OnInit
 		// this.headerScroll();
 
 		//Get logged in user name
+		this.getPermissions()
 		this.currentUser = this.stateManagementService.getUser()
 		// Get Steps
 		this.steps = localStorage.getItem("stepCompleted");
@@ -62,6 +65,22 @@ export class HeaderComponent implements OnInit
 			this.Value = "Continue Affiliate Set-Up";
 		}
 
+	}
+
+	getPermissions(){
+		this.adminService.getMyPermissions()
+			.pipe(
+				catchError(err =>
+				{
+					this.spinner.hide();//hide spinner
+					return throwError(err);
+				})
+			).subscribe((response: any) =>
+			{
+				this.spinner.hide();//hide spinner
+				localStorage.setItem('modules',response?.data?.modules)
+				localStorage.setItem('sub_modules',response?.data?.sub_modules)
+			});
 	}
 
 
@@ -101,6 +120,8 @@ export class HeaderComponent implements OnInit
 				if (success)
 				{
 					this.stateManagementService.removeUser()
+					localStorage.removeItem('modules')
+					localStorage.removeItem('sub_modules')
 					this.router.navigate(['/home']);
 					location.reload()
 					console.log("Logout Successfully");

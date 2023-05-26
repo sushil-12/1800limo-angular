@@ -76,3 +76,24 @@ td{
   border: #fff solid 1px !important;
   color: black;
 }
+
+@media only screen and (max-width: 475px)
+{
+  mat-tab-group {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column !important;
+  }
+
+  :host ::ng-deep.mat-tab-labels{
+    justify-content: start;
+    flex-direction: row;
+  }
+  :host ::ng-deep.mat-tab-label-content{
+    font-size: smaller;
+    white-space: break-spaces !important;
+  }
+  :host ::ng-deep.mat-tab-list{
+    overflow-y: initial;
+  }
+}

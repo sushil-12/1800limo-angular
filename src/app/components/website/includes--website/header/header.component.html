@@ -101,7 +101,7 @@
 								</div>{{ Value }}
 							</div>
 							<ng-template #adminRole>
-								<div *ngIf="currentUser.roleName=='admin'" class="dropdown-item nav-item-bt-1"
+								<div *ngIf="currentUser.roleName=='admin' || currentUser.roleName=='sub_admin'" class="dropdown-item nav-item-bt-1"
 									(click)="dashboard('admin')">
 									<div class="d-inline dropdown-item-icon gear-bg settingsvg ">
 										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"

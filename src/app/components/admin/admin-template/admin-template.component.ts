@@ -5,6 +5,7 @@ import { StateManagementService } from 'src/app/services/statemanagement.service
 import { NgxSpinnerService } from "ngx-spinner";
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
+import { AdminService } from 'src/app/services/admin.service';
 
 @Component({
 	selector: 'app-admin-template',
@@ -29,9 +30,11 @@ export class AdminTemplateComponent implements OnInit
 	chevron4: boolean = false;
 
 	modules:any = localStorage.getItem('modules') || ''
+	subModules:any = localStorage.getItem('sub_modules') || ''
 	constructor(private router: Router, private authService: AuthService,
 		private stateManagementService: StateManagementService,
-		private spinner: NgxSpinnerService,) { }
+		private spinner: NgxSpinnerService,
+		private adminService:AdminService) { }
 
 	// ngAfterViewInit()
 	// {
@@ -44,6 +47,9 @@ export class AdminTemplateComponent implements OnInit
 
 	ngOnInit(): void
 	{
+
+		console.log('On load admin template component')
+		this.getPermission()
 		this.screenWidth = window.innerWidth;
 
 		//Get ProgressBar
@@ -68,6 +74,25 @@ export class AdminTemplateComponent implements OnInit
 		this.role = currentUser.roleName;
 
 
+	}
+	getPermission(){
+		this.adminService.getMyPermissions()
+				.pipe(
+					catchError(err =>
+					{
+						this.spinner.hide();//hide spinner
+						return throwError(err);
+					})
+				).subscribe((response: any) =>
+				{
+					this.spinner.hide();//hide spinner
+					localStorage.setItem('modules','')
+					localStorage.setItem('sub_modules','')
+					localStorage.setItem('modules',response?.data?.modules)
+					localStorage.setItem('sub_modules',response?.data?.sub_modules)
+					this.subModules = response?.data?.sub_modules
+					this.modules = response?.data?.modules
+				});
 	}
 	showSidebarFunc(status)
 	{
