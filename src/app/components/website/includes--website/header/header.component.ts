@@ -50,8 +50,10 @@ export class HeaderComponent implements OnInit
 		// this.headerScroll();
 
 		//Get logged in user name
-		this.getPermissions()
 		this.currentUser = this.stateManagementService.getUser()
+		if(this.currentUser){
+			this.getPermissions()
+		}
 		// Get Steps
 		this.steps = localStorage.getItem("stepCompleted");
 		this.accountStatus = localStorage.getItem("account_approval");
