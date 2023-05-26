@@ -32,8 +32,10 @@
 					</div>
 					<div class="col-md-4" *ngIf="!subAdminId">
 						<mat-form-field appearance="outline" class="mat-custom-phone">
-							<mat-label>Mobile <span class="asterisk">*</span></mat-label>
-							<input type="number" matInput ng2TelInput (countryChange)="onCountryChange($event)"
+							<mat-label>Mobile<span class="asterisk">*</span></mat-label>
+							<input matInput ng2TelInput
+								[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
+								(countryChange)="onCountryChange($event)"
 								placeholder="Mobile" formControlName="mobile">
 						</mat-form-field>
 						<div *ngIf="submittedForm && f.mobile.errors" class="text-danger">
