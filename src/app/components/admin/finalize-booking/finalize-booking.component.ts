@@ -32,6 +32,8 @@ export class FinalizeBookingComponent implements OnInit {
 	return_edit_rates_value: any;
 	affiliate_type:string;
 	finalize_btn : string = "Finalize"
+	subModules:any = [];
+	currentUser:any;
 
 	finalize_params = {
 		distance: 0,
@@ -92,6 +94,8 @@ export class FinalizeBookingComponent implements OnInit {
 			cardId: ["", Validators.required],
 			accId: ["", Validators.required],
 		});
+		this.subModules = localStorage.getItem('sub_modules') || [];
+		this.currentUser = localStorage.getItem('userData') || "";
 	}
 
 

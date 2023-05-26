@@ -41,7 +41,7 @@
 								<th>Card No.</th>
 								<th>MM/YYYY</th>
 								<th>Card Type</th>
-								<th>Payment</th>
+								<th *ngIf="currentUser?.RoleName == 'admin' || subModules.includes('can_pay_booking')">Payment</th>
 								<th>Delete</th>
 							</tr>
 						</thead>
@@ -57,7 +57,7 @@
 											<td>0{{card.exp_month+'/'+card.exp_year}}</td>
 										</ng-template>
 										<td class="text-capitalize">{{card.card_type}}</td>
-										<td>
+										<td *ngIf="currentUser?.RoleName == 'admin' || subModules.includes('can_pay_booking')">
 											<button class="custom-filled-button orange-button"
 												style="color:#fff;padding: 5px 12px !important;"
 												data-toggle="modal" data-target="#paymentModal"

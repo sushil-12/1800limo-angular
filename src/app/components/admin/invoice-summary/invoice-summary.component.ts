@@ -39,6 +39,8 @@ export class InvoiceSummaryComponent implements OnInit {
 	currencyOptions: any;
 	currencySymbol: any;
 	paymentJson: any[];
+	subModules:any=[];
+	currentUser:any;
 	constructor(
 		private adminService: AdminService,
 		private router: Router,
@@ -67,6 +69,8 @@ export class InvoiceSummaryComponent implements OnInit {
 					this.getInvoiceData()
 				}
 			});
+		this.subModules = localStorage.getItem('sub_modules') || [];
+		this.currentUser = localStorage.getItem('userData') || "";
 	}
 
 	visible = true;
