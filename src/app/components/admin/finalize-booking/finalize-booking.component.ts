@@ -177,7 +177,7 @@ export class FinalizeBookingComponent implements OnInit {
 					this.scroll('NumVehicles')
 
 					this.subModules = localStorage.getItem('sub_modules') || [];
-					this.currentUser = localStorage.getItem('userData') || "";
+					this.currentUser = JSON.parse(localStorage.getItem('userData')) || "";
 				}, 600)
 			});
 		// api for card detailss
