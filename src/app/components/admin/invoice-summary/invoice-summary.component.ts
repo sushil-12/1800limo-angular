@@ -135,7 +135,7 @@ export class InvoiceSummaryComponent implements OnInit {
 				this.spinner.hide();//hide spinner
 				this.currencySymbol = this.getCurrencySymbol(this.invoiceData.currency)
 				this.subModules = localStorage.getItem('sub_modules') || [];
-				this.currentUser = localStorage.getItem('userData') || "";
+				this.currentUser = JSON.parse(localStorage.getItem('userData')) || "";
 			});
 		this.adminService.getPaymentLogs(this.bookingId)
 			.pipe(

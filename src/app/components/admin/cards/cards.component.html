@@ -11,7 +11,7 @@
 			</div>
 
 			<div class="row d-flex justify-content-between">
-				<div class="col-md-10">
+				<div class="col-md-10" *ngIf="currentUser?.RoleName == 'admin' || subModules.includes('can_add_edit_card')">
 					<button class="custom-btn add-button" data-toggle="modal" (click)="addCardClick(accountId)">
 						<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-plus-circle"
 							viewBox="0 0 16 16">

@@ -16,8 +16,7 @@ declare var $: any;
 	templateUrl: './cards.component.html',
 	styleUrls: ['./cards.component.scss']
 })
-export class CardsComponent implements OnInit
-{
+export class CardsComponent implements OnInit {
 
 	color: ThemePalette = 'primary';
 	checked = false;
@@ -31,7 +30,7 @@ export class CardsComponent implements OnInit
 	public cardId: string;
 	public cardsRes: any;
 	public cards: any;
-	public ID:any
+	public ID: any
 
 	public firstPage: Number;
 	public lastPage: Number;
@@ -47,7 +46,7 @@ export class CardsComponent implements OnInit
 	public nextPageUrl: string;
 	show: boolean;
 	paymentJson: any;
-	subModules: any=[];
+	subModules: any = [];
 	currentUser: any;
 
 	constructor(
@@ -59,8 +58,7 @@ export class CardsComponent implements OnInit
 		private stateManagementService: StateManagementService,
 		private activatedroute: ActivatedRoute) { }
 
-	ngOnInit(): void
-	{
+	ngOnInit(): void {
 		this.buildPaymentForm()
 
 		/** spinner starts on init */
@@ -68,81 +66,67 @@ export class CardsComponent implements OnInit
 
 		//pick vehicle id from query params
 		this.activatedroute.queryParamMap
-			.subscribe((params) =>
-			{
+			.subscribe((params) => {
 				this.paramResponse = { ...params.keys, ...params };
 				this.accountId = this.paramResponse.params.accountId;
 				this.accountType = this.paramResponse.params.accountType;
-				if (!this.accountId)
-				{
+				if (!this.accountId) {
 					this.redirectCases();
 				}
 			}
 			);
 
 		this.loadCards(this.accountId);//load cards
-		this.subModules = localStorage.getItem('sub_modules') || [];
-		this.currentUser = localStorage.getItem('userData') || "";
 	}
 
-	loadCards(accountId)
-	{
+	loadCards(accountId) {
 		// Load Our cards using API
-		this.adminService.cardsList(accountId).then(result =>
-		{
+		this.adminService.cardsList(accountId).then(result => {
 			this.cardsRes = result;
 			this.cards = this.cardsRes.data;
 			console.log("<><><>><>><>><><><<><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<", JSON.stringify(this.cards))
+			this.subModules = localStorage.getItem('sub_modules') || [];
+			this.currentUser = JSON.parse(localStorage.getItem('userData')) || "";
 			this.stateManagementService.setprogressBar(false);
 		});
 	}
 
-	addCardClick(accountId)
-	{
+	addCardClick(accountId) {
 		this.router.navigate(['/admin/add-card'], { queryParams: { accountType: this.accountType, accountId: accountId } });
 	}
 
-	clickEditCard(cardId)
-	{
+	clickEditCard(cardId) {
 		this.router.navigate(['/admin/edit-card'], { queryParams: { accountType: this.accountType, accountId: this.accountId, cardId: cardId } });
 	}
 
-	enableDisableClicked(id)
-	{
+	enableDisableClicked(id) {
 		this.cardToDelete = id;
 		console.log("hgsdfj>>>>>>>>>>>>>>>>>>>>??????????????????????????", this.cardToDelete)
 		this.alertMessage = "Are you sure you want to delete this Card?"
 	}
-	delete()
-	{
+	delete() {
 		this.stateManagementService.setprogressBar(true);
 		$('#deleteConfirmationModal').modal('hide');
 		this.adminService.deleteCard(this.cardToDelete, this.accountId)
 			.pipe(
-				catchError(err =>
-				{
+				catchError(err => {
 					this.stateManagementService.setprogressBar(false);
 					return throwError(err);
 				})
-			).subscribe(result =>
-			{
-				this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() =>
-				{
+			).subscribe(result => {
+				this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
 					this.router.navigate(['/admin/cards'], { queryParams: { accountType: this.accountType, accountId: this.accountId } });
 				});
 				this.stateManagementService.setprogressBar(false);
 			});
 	}
 
-	backButtonClick()
-	{
+	backButtonClick() {
 		this.redirectCases();
 	}
 
-	redirectCases()
-	{
-		switch (this.accountType)
-		{
+	redirectCases() {
+		switch (this.accountType) {
 			case 'individual': {
 				this.router.navigate(['/admin/individual-account-admin']);
 				break;
@@ -167,33 +151,28 @@ export class CardsComponent implements OnInit
 	}
 
 	//for paginator
-	counter()
-	{
+	counter() {
 		var currentPage;
 		var startFrom;
 		var endTo;
 
-		if (this.currentPage < 5)
-		{
+		if (this.currentPage < 5) {
 			startFrom = 0;
 			endTo = 5;
 		}
-		else if (this.currentPage < this.totalPage)
-		{
+		else if (this.currentPage < this.totalPage) {
 			currentPage = this.currentPage
 			endTo = currentPage + 1;
 			startFrom = endTo - 5;
 		}
-		else
-		{
+		else {
 			endTo = this.totalPage;
 			startFrom = endTo - 5;
 		}
 
 		var i;
 		var udpArr = new Array();
-		for (i = startFrom; i < endTo; i++)
-		{
+		for (i = startFrom; i < endTo; i++) {
 			udpArr.push(i + 1);
 		}
 		return udpArr;
@@ -204,13 +183,13 @@ export class CardsComponent implements OnInit
 	buildPaymentForm() {
 		this.paymentForm = this.$form.group({
 			amount: ['', [Validators.required]],
-			payment_description:['']
+			payment_description: ['']
 		})
 	}
-	formatDate(date:any){
+	formatDate(date: any) {
 		return moment(date).format('YYYY-MM-DD')
 	}
-	paymentLogs(){
+	paymentLogs() {
 		this.spinner.show()
 		this.adminService.paymentLogs(this.accountId).subscribe((response: any) => {
 			// this.$errors.openDialog({
@@ -224,15 +203,15 @@ export class CardsComponent implements OnInit
 		})
 	}
 
-	payment(){
+	payment() {
 		this.spinner.show()
 		let body = {
-			customerId : this.accountId,
-			cardId : this.ID, 
-			amount : this.Form.amount.value,
-			description :  this.Form.payment_description.value
+			customerId: this.accountId,
+			cardId: this.ID,
+			amount: this.Form.amount.value,
+			description: this.Form.payment_description.value
 		}
-		console.log('in function payment',body)
+		console.log('in function payment', body)
 		this.adminService.chargeByCard(body).subscribe((response: any) => {
 			this.$errors.openDialog({
 				errors: {
@@ -245,19 +224,21 @@ export class CardsComponent implements OnInit
 		this.show = false
 		this.paymentForm.patchValue({
 			amount: 0,
-			payment_description:'' })
+			payment_description: ''
+		})
 		$("#paymentModal").modal("hide");
 	}
-	navigate(record:any){
+	navigate(record: any) {
 		$("#paymentLogs").modal("hide");
-		console.log('Navigate to invoice--->>',record)
-		this.router.navigate(['/admin/custom-invoice-summary'],{ queryParams: { invoiceId: record.id} });
+		console.log('Navigate to invoice--->>', record)
+		this.router.navigate(['/admin/custom-invoice-summary'], { queryParams: { invoiceId: record.id } });
 	}
 
 	closeModal() {
 		this.paymentForm.patchValue({
 			amount: 0,
-			payment_description:'' })
+			payment_description: ''
+		})
 		this.show = false
 		$("#paymentModal").modal("hide");
 	}

@@ -29,6 +29,7 @@ export class StaffPermissionsComponent implements OnInit {
         this.role_id = params.role 
 			}
 		})
+    this.$spinner.show()
     this.getPermissions();
    
   }
@@ -36,13 +37,10 @@ export class StaffPermissionsComponent implements OnInit {
 		return 0;
 	}
   getPermissions(){
+    this.$spinner.show()
     this.$api.getPermission(this.role_id).subscribe((response: any) => {
 			console.log('response-->>' , response)
       this.group_data = response?.data
-      let keys = Object.keys(this.group_data)
-      keys.map(i=>{
-        this.checkAllBoxs ={i:false}
-      })
 			this.$spinner.hide()
 		})
   }
@@ -52,7 +50,7 @@ export class StaffPermissionsComponent implements OnInit {
   }
 
   handleChangeToggle(event:any,id:any){
-    // this.$spinner.show()
+    this.$spinner.show()
     console.log('handleChangeToggle-->>',event.checked,id)
     let data = {
       role_id:this.role_id,
@@ -66,15 +64,15 @@ export class StaffPermissionsComponent implements OnInit {
       //     error: `<span class='text-success'>${response.message}</span>`
       //   }
       // })
-      // this.getPermissions();
+      this.getPermissions();
 			this.$spinner.hide()
 		})
   }
-  setAll(checked:any,group_name){
-    console.log('in set all function-->>', checked,group_name)
-    this.checkAllBoxs[group_name.key] = checked
-    let temp = group_name.value.map(i=> i.is_permitted = checked)
-    this.group_data[group_name.name] = temp
-  }
+  // setAll(checked:any,group_name){
+  //   console.log('in set all function-->>', checked,group_name)
+  //   this.checkAllBoxs[group_name.key] = checked
+  //   let temp = group_name.value.map(i=> i.is_permitted = checked)
+  //   this.group_data[group_name.name] = temp
+  // }
 
 }

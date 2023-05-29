@@ -11,7 +11,7 @@
 				<div class="row">
 					<div class="col-md-3 pr-0 borderright mobilePadding">
 						<div class="form-group radio-tile-group">
-							<div class="custom-radio input-container">
+							<div class="custom-radio input-container btn-shadow">
 								<input class="radio-button" id="personal" type="radio"
 									name="card_type" checked="" formControlName="card_type"
 									value="personal" tabindex="-1">
@@ -28,7 +28,7 @@
 					</div>
 					<div class="col-md-3 pl-0 mobilePadding">
 						<div class="form-group radio-tile-group">
-							<div class="custom-radio input-container">
+							<div class="custom-radio input-container btn-shadow">
 								<input class="radio-button" id="business" type="radio"
 									name="card_type" formControlName="card_type" value="business"
 									tabindex="-1">
@@ -165,11 +165,11 @@
 		</section>
 		<section class="billing_inforamtion">
 			<ul>
-				<li><button class="custom-btn savebutton" (click)="submitForm()"
+				<li><button class="custom-btn savebutton btn-shadow" (click)="submitForm()"
 						[disabled]="disableSubmitButton" >SAVE</button> </li>
-				<li><button class="custom-btn resetbutton" (click)="resetForm()"
+				<li><button class="custom-btn resetbutton btn-shadow" (click)="resetForm()"
 						>RESET</button> </li>
-				<li><button class="custom-btn backbutton" (click)="backButton()"
+				<li><button class="custom-btn backbutton btn-shadow" (click)="backButton()"
 						>BACK</button> </li>
 			</ul>
 		</section>

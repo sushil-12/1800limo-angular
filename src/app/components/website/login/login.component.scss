@@ -49,7 +49,7 @@ label+input[type=radio]+label {
 }
 
 .radio-group {
-	border       : solid $borderWidth $bg;
+	border       : solid 1px $bg;
 	display      : inline-block;
 	border-radius: 10px;
 	overflow     : hidden;
