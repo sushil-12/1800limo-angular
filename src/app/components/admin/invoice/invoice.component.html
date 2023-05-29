@@ -44,16 +44,16 @@
                     <td>
                       <a class="user-profileded btn btn-icon btn-transparent-dark dropdown-toggle"
                         id="navbarDropdownUserImage" href="javascript:void(0);" role="button" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">
+                        aria-haspopup="true" aria-expanded="false" (click)="clicViewInvoice(invoice.booking_id)">
                         <span>View</span>
                       </a>
-                      <div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
+                      <!-- <div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
                       aria-labelledby="navbarDropdownUserImage">
-                      <a class="dropdown-item" (click)="clicViewInvoice(invoice.booking_id)">
+                      <a class="dropdown-item" >
                         <div class="dropdown-item-icon"></div>
                         View Invoice Summary
                       </a>
-                    </div>
+                    </div> -->
                     </td>
                     <td class="text-center font-weight-bolder cursor-pointer text-underline">
                       {{ invoice.booking_id }}

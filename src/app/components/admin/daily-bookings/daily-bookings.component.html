@@ -196,7 +196,7 @@
 									</td>
 									<td>
 										<div data-toggle="modal" (click)="changeBookingStatus(booking.booking_id)"
-											data-target="#change_status_booking_Modal" [ngClass]="subModules.includes('change_booking_status') ? '' : 'disabled-btn'"
+											data-target="#change_status_booking_Modal" [ngClass]="currentUser?.RoleName == 'admin' || subModules.includes('change_booking_status') ? '' : 'disabled-btn'"
 											[className]="'badge badge-pill booking_status cursor-pointer ' + booking.booking_status">
 											{{booking.booking_status | bookingStatusTextReplace :
 											'_' : ' ' |titlecase}}
@@ -209,7 +209,7 @@
 									<td>
 										<p data-target="#sendEmailModal" style="white-space: pre" data-toggle="modal"
 											(click)="openModal(booking, 'Passenger')" id="box"
-											[ngClass]="subModules.includes('can_send_notifications') ? '' : 'disabled-btn'">
+											[ngClass]="currentUser?.RoleName == 'admin' || subModules.includes('can_send_notifications') ? '' : 'disabled-btn'">
 											<span class="font-weight-bolder"
 												[innerHTML]="highlighText(booking.passenger_name)"></span> |
 											<span [innerHTML]="highlighText( booking.passenger_cell_isd)"></span>
@@ -223,7 +223,7 @@
 									<td>
 										<p data-target="#sendEmailModal" data-toggle="modal"
 											(click)="openModal(booking, 'Loose_Affiliate')"
-											[ngClass]="subModules.includes('can_send_notifications') ? '' : 'disabled-btn'"
+											[ngClass]="currentUser?.RoleName == 'admin' || subModules.includes('can_send_notifications') ? '' : 'disabled-btn'"
 											*ngIf="booking.affiliate_type == null; else otherAffiliate">
 											<span class="font-weight-bolder"
 												[innerHTML]="highlighText(booking.loose_affiliate_name)"></span>|
@@ -246,7 +246,7 @@
 											</p>
 											<ng-template #gigOperator>
 												<p data-target="#sendEmailModal" data-toggle="modal"
-												[ngClass]="subModules.includes('can_send_notifications') ? '' : 'disabled-btn'"
+												[ngClass]="currentUser?.RoleName == 'admin' || subModules.includes('can_send_notifications') ? '' : 'disabled-btn'"
 													(click)="openModal(booking, 'Affiliate')">
 													<span  class="font-weight-bolder" [innerHTML]="highlighText(booking.driver_first_name)"></span>&nbsp;
 													<span class="font-weight-bolder" [innerHTML]="highlighText(booking.driver_last_name)"></span>&nbsp;
