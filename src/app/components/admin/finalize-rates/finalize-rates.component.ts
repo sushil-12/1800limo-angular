@@ -7,6 +7,7 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { ActivatedRoute } from "@angular/router";
 
 import { BehaviorSubject, combineLatest, Observable, Subject, Subscription } from "rxjs";
+declare var $ :any;
 @Component({
 	selector: 'app-finalize-rates',
 	templateUrl: './finalize-rates.component.html',
@@ -325,6 +326,7 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 			}
 		});
 	}
+	
 
 	getRatesData() {
 		return this.ratesdata.asObservable();
@@ -438,10 +440,14 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 	toggleDropdown(section: string) {
 		this.rate_params["chevrons"][section] = !this.rate_params["chevrons"][section];
 	}
+	
 
 	handleSubHeading(items: string) {
 		console.log(items, "check items")
 		this.rate_params["chevrons"][items] = !this.rate_params["chevrons"][items];
+	}
+	getTabIndex(item:any){
+		return this.rate_params["chevrons"][item] ? 0 : 1
 	}
 
 	handleSubHeadingScroll(items: string, id: any) {

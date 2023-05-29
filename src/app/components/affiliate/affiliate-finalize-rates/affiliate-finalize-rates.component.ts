@@ -421,6 +421,9 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 		console.log(items, "check items")
 		this.rate_params["chevrons"][items] = !this.rate_params["chevrons"][items];
 	}
+	getTabIndex(item:any){
+		return this.rate_params["chevrons"][item] ? 0 : 1
+	}
 
 	handleSubHeadingScroll(items: string , id:any) {
 		this.rate_params["chevrons"][items] = !this.rate_params["chevrons"][items];

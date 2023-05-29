@@ -90,6 +90,10 @@ export class RatesFormComponent implements OnInit, OnChanges {
 		console.log(items, "check items")
 		this.rate_params["chevrons"][items] = !this.rate_params["chevrons"][items];
 	}
+	getTabIndex(item:any){
+		return this.rate_params["chevrons"][item] ? 0 : 1
+	}
+
 
 	ngOnChanges(changes: SimpleChanges) {
 		console.warn("Change has been detected: ", changes);
