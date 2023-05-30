@@ -284,7 +284,7 @@
 					<mat-slide-toggle [checked]="sub_item?.value?.controls?.type?.value == 'percent'" [tabIndex]="getTabIndex('r_'+item.key)"
 						(change)="changeValue('ReturnRatesForm', item.key, sub_item.key, 'type', $event.checked ? 'percent' : 'flat')">
 						<i class="bi mx-1"
-							[ngClass]="sub_item?.value?.controls?.type?.value === 'flat' ? 'bi-currency-dollar' : 'bi-percent'"></i>
+							[ngClass]="(sub_item?.value?.controls?.type?.value === 'flat' || sub_item?.value?.controls?.type?.value === null) ? 'bi-currency-dollar' : 'bi-percent'"></i>
 					</mat-slide-toggle>
 				</div>
 			</div>
