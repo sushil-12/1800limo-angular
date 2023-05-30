@@ -40,13 +40,13 @@ export class InvoiceComponent implements OnInit {
     private spinner: NgxSpinnerService) { }
 
   ngOnInit(): void {
+    this.spinner.show();
       this.loadInvoice();//load invoices
   }
 
   loadInvoice(pageUrl=null)
   {
       /** spinner starts on init */
-      this.spinner.show();
 
       var keyword = ((document.getElementById("keyword2") as HTMLInputElement).value);
       // console.log(keyword);
@@ -78,6 +78,17 @@ export class InvoiceComponent implements OnInit {
   {
     this.router.navigate(['/admin/invoice-summary'],{queryParams:{bookingId:bookingId}});
   }
+
+  highlighText(args: string) {
+    let searchText = ((document.getElementById("keyword2") as HTMLInputElement).value);
+       
+		if (!searchText) { return args; }
+		if (args) {
+			args = args.toString()
+			var re = new RegExp(searchText, 'gi'); //'gi' for case insensitive and can use 'g' if you want the search to be case sensitive.
+			return args.replace(re, '<mark class="font-weight-bold">$&</mark>');
+		}
+	}
 
   //for pagination
   counter() {

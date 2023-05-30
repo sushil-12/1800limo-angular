@@ -197,11 +197,11 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 		// build form
 		this.RatesForm = this.$form.group({
 			all_inclusive_rates: this.$form.group({}),
-			others: this.$form.group({}),
 			direct_taxes: this.$form.group({}),
 			taxes: this.$form.group({}),
 			amenities: this.$form.group({}),
 			misc: this.$form.group({}),
+			others: this.$form.group({}),
 		});
 
 		// fetch the data from backend
@@ -233,11 +233,11 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 
 		this.ReturnRatesForm = this.$form.group({
 			all_inclusive_rates: this.$form.group({}),
-			others: this.$form.group({}),
 			direct_taxes: this.$form.group({}),
 			taxes: this.$form.group({}),
 			amenities: this.$form.group({}),
 			misc: this.$form.group({}),
+			others: this.$form.group({}),
 		});
 
 		this.getRatesData().subscribe((response: any) => {

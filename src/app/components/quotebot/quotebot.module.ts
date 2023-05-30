@@ -9,6 +9,7 @@ import { FailedQuoteRequestConfirmationComponent } from '../email_templates/fail
 import { ReplacePipe } from '../../pipes/replace.pipe';
 import { VehicleDetailsComponent } from './vehicle-details/vehicle-details.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { SharedModule } from '../shared/shared.module';
 
 
 @NgModule({
@@ -24,6 +25,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 
 	imports: [
 		CommonModule,
+		SharedModule,
 		QuotebotRoutingModule,
 		NgxSpinnerModule
 	]
