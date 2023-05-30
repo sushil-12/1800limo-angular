@@ -246,6 +246,7 @@ export class NewBookingComponent implements OnInit {
 			total_passengers: [1],
 			luggage_count: [0],
 			booking_instructions: [''],
+			return_booking_instructions: [''],
 			affiliate_type: ['affiliate'],
 			affiliate_id: [''],
 			lose_affiliate_name: ['', this.customValidator.whitespace()],
@@ -366,7 +367,7 @@ export class NewBookingComponent implements OnInit {
 		this.SetFormValue('return_pickup_date', future_full_date.slice(0, future_full_date.indexOf('T')))
 		this.SetFormValue('number_of_vehicles', 1)
 		this.SetFormValue('booking_instructions', 'Text client day before each booking to confirm driver name and cell #');
-
+		this.SetFormValue('return_booking_instructions', 'Text client day before each booking to confirm driver name and cell #');
 
 		if (this.BookingForm.value.transfer_type.includes('city_')) {
 			this.SetFormValue('meet_greet_choices', 1)

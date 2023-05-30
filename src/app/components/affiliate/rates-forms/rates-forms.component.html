@@ -51,7 +51,7 @@
 							{{ textFormatter(sub_item?.value?.controls?.rate_label?.value) |
 							titlecase }}
 						</mat-label>
-						<input type="number" matInput placeholder="0" formControlName="baserate" tabindex="1"
+						<input type="number" matInput placeholder="0" formControlName="baserate" [tabIndex]="getTabIndex(item.key)"
 							class="font-weight-bolder rate-input-field text-right" (focus)="$event.target.select()" />
 					</mat-form-field>
 					<div class="errors" *ngIf="sub_item.key === 'Kilometer_Rate' && trigger_error">
@@ -109,7 +109,7 @@
 			<div class="col-2" *ngIf="item.key === 'taxes'">
 				<!-- Matslide Toggle -->
 				<div class="d-block">
-					<mat-slide-toggle [checked]="sub_item?.value?.controls?.type?.value == 'percent'"
+					<mat-slide-toggle [checked]="sub_item?.value?.controls?.type?.value == 'percent'" [tabIndex]="getTabIndex(item.key)"
 						(change)="changeValue('RatesForm', item.key, sub_item.key, 'type', $event.checked ? 'percent' : 'flat')">
 						<i class="bi mx-1"
 							[ngClass]="sub_item?.value?.controls?.type?.value === 'flat' ? 'bi-currency-dollar' : 'bi-percent'"></i>

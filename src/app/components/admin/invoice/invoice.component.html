@@ -56,7 +56,7 @@
                     </div> -->
                     </td>
                     <td class="text-center font-weight-bolder cursor-pointer text-underline">
-                      {{ invoice.booking_id }}
+                      <span [innerHTML]="highlighText(invoice.booking_id)"></span>
                     </td>
                     <td>
                       <div [className]="'badge badge-pill booking_status cursor-pointer ' + invoice?.status">
@@ -64,24 +64,24 @@
                       </div>
                     </td>
                     <td class="text-center font-weight-bolder cursor-pointer text-underline">
-                      {{ invoice.invoice_number }}
+                      <span [innerHTML]="highlighText(invoice.invoice_number)"></span>
                     </td>
                     <td class="sorting_1">
                       <p>{{ invoice.date }}</p>
                     </td>
                     <td>
                       <p data-target="#sendEmailModal" style="white-space: pre" data-toggle="modal">
-                        {{ invoice.passenger_name }} |
-                        {{ invoice.passenger_phone }}
+                      <span [innerHTML]="highlighText(invoice.passenger_name)"></span> |
+                      <span [innerHTML]="highlighText(invoice.passenger_phone)"></span>
                       </p>
                       <span class="text-underline cursor-pointer">
-                        {{ invoice.pickup_address }}
+                      <span [innerHTML]="highlighText(invoice.pickup_address )"></span>
                       </span>
                     </td>
                     <td>
                       <p data-target="#sendEmailModal" style="white-space: pre" data-toggle="modal">
-                        {{ invoice.driver_name }} |
-                        {{ invoice.driver_phone }}
+                      <span [innerHTML]="highlighText(invoice.driver_name)"></span> |
+                      <span [innerHTML]="highlighText(invoice.driver_phone)"></span>
                       </p>
                       <span class="text-underline cursor-pointer">
                         {{ invoice.dropoff_address }}
@@ -90,11 +90,11 @@
                     <td>{{invoice.aff_vehicle_type}}</td>
                     <td>
                       <p style="white-space: pre" >
-                        {{ invoice?.account_first_name }} |
-                        {{ invoice?.account_last_name }}
+                      <span [innerHTML]="highlighText(invoice?.account_first_name)"></span> |
+                      <span [innerHTML]="highlighText(invoice?.account_last_name)"></span>
                       </p>
                       <span class="text-underline cursor-pointer">
-                        {{ invoice?.account_email }}
+                      <span [innerHTML]="highlighText(invoice?.account_email)"></span>
                       </span>
                     </td>
                   </tr>
