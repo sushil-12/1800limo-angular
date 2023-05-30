@@ -6,6 +6,11 @@
 .mat-calendar {
 	font-family: "PT Serif", serif !important;
 }
+.box-outline {
+	border: solid 3px;
+    border-radius: 4px;
+}
+
 hr{
 	border-top: 1px solid black
 }
@@ -74,7 +79,7 @@ button {
 }
 
 .comped {
-	background-color: #7c7c84;
+	background-color: #C4A484;
 }
 
 .refund{
@@ -242,6 +247,9 @@ input::-webkit-input-placeholder {
   }
   .preview-airport-color{
 	color:  #00008B ;
+  }
+  .preview-extra-stop-color{
+	color: #cdcd11;
   }
   .disabled-btn{
 	pointer-events: none;

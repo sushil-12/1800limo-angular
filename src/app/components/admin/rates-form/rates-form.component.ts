@@ -90,6 +90,10 @@ export class RatesFormComponent implements OnInit, OnChanges {
 		console.log(items, "check items")
 		this.rate_params["chevrons"][items] = !this.rate_params["chevrons"][items];
 	}
+	getTabIndex(item:any){
+		return this.rate_params["chevrons"][item] ? 0 : 1
+	}
+
 
 	ngOnChanges(changes: SimpleChanges) {
 		console.warn("Change has been detected: ", changes);
@@ -227,11 +231,11 @@ export class RatesFormComponent implements OnInit, OnChanges {
 		// build form
 		this.RatesForm = this.$form.group({
 			all_inclusive_rates: this.$form.group({}),
-			others: this.$form.group({}),
 			direct_taxes: this.$form.group({}),
 			taxes: this.$form.group({}),
 			amenities: this.$form.group({}),
 			misc: this.$form.group({}),
+			others: this.$form.group({}),
 		});
 
 		// fetch the data from backend
@@ -275,11 +279,11 @@ export class RatesFormComponent implements OnInit, OnChanges {
 
 		this.ReturnRatesForm = this.$form.group({
 			all_inclusive_rates: this.$form.group({}),
-			others: this.$form.group({}),
 			direct_taxes: this.$form.group({}),
 			taxes: this.$form.group({}),
 			amenities: this.$form.group({}),
 			misc: this.$form.group({}),
+			others: this.$form.group({}),
 		});
 
 		this.getRatesData().subscribe((response: any) => {

@@ -191,11 +191,11 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 		// build form
 		this.RatesForm = this.$form.group({
 			all_inclusive_rates: this.$form.group({}),
-			others: this.$form.group({}),
 			direct_taxes: this.$form.group({}),
 			taxes: this.$form.group({}),
 			amenities: this.$form.group({}),
 			misc: this.$form.group({}),
+			others: this.$form.group({}),
 		});
 
 		// fetch the data from backend
@@ -227,11 +227,11 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 
 		this.ReturnRatesForm = this.$form.group({
 			all_inclusive_rates: this.$form.group({}),
-			others: this.$form.group({}),
 			direct_taxes: this.$form.group({}),
 			taxes: this.$form.group({}),
 			amenities: this.$form.group({}),
 			misc: this.$form.group({}),
+			others: this.$form.group({}),
 		});
 
 		this.getRatesData().subscribe((response: any) => {
@@ -420,6 +420,9 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 	handleSubHeading(items: string) {
 		console.log(items, "check items")
 		this.rate_params["chevrons"][items] = !this.rate_params["chevrons"][items];
+	}
+	getTabIndex(item:any){
+		return this.rate_params["chevrons"][item] ? 0 : 1
 	}
 
 	handleSubHeadingScroll(items: string , id:any) {

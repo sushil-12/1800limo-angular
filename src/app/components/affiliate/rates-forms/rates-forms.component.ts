@@ -226,11 +226,11 @@ export class RatesFormsComponent implements OnInit {
 		// build form
 		this.RatesForm = this.$form.group({
 			all_inclusive_rates: this.$form.group({}),
-			others: this.$form.group({}),
 			direct_taxes: this.$form.group({}),
 			taxes: this.$form.group({}),
 			amenities: this.$form.group({}),
 			misc: this.$form.group({}),
+			others: this.$form.group({}),
 		});
 
 		// fetch the data from backend
@@ -274,11 +274,11 @@ export class RatesFormsComponent implements OnInit {
 
 		this.ReturnRatesForm = this.$form.group({
 			all_inclusive_rates: this.$form.group({}),
-			others: this.$form.group({}),
 			direct_taxes: this.$form.group({}),
 			taxes: this.$form.group({}),
 			amenities: this.$form.group({}),
 			misc: this.$form.group({}),
+			others: this.$form.group({}),
 		});
 
 		this.getRatesData().subscribe((response: any) => {
@@ -317,6 +317,9 @@ export class RatesFormsComponent implements OnInit {
 		return this.RatesForm.controls;
 	}
 
+	getTabIndex(item:any){
+		return this.rate_params["chevrons"][item] ? 0 : 1
+	}
 	get ReturnRateForm(): Record<string, any> {
 		if (!this.ReturnRatesForm) {
 			return;

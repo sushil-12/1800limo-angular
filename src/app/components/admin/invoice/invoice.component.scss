@@ -4,7 +4,10 @@
     height: 60px;
     width: 100%;
 }
-
+.mat-form-field-hide-placeholder{
+	border: solid 3px;
+    border-radius: 4px;
+}
 
 .adminbox_shadow.user_information,
 .adminbox_shadow.user_information .mat-form-field,
@@ -15,7 +18,7 @@ button {
 	font-family: "PT Serif", serif !important;
 }
 
-.booking_status {
+.booking_status {	
 	font-size: medium;
 	color: #fff;
 }

@@ -48,10 +48,10 @@
 	}
 }
 
-#vehicle-preview-button
-{
-	display: none;
-}
+// #vehicle-preview-button
+// {
+// 	display: none;
+// }
 
 section#vehicle-listing-container {
 	&:last-child {
@@ -158,13 +158,13 @@ section#vehicle-listing-container {
 					}
 				}
 			}
-			#vehicle-preview-button
-			{
-				display: block;
-				position: relative;
-				right: 0;
-				bottom: 0;
-			}
+			// #vehicle-preview-button
+			// {
+			// 	display: block;
+			// 	position: relative;
+			// 	right: 0;
+			// 	bottom: 0;
+			// }
 		}
 	}
 }
