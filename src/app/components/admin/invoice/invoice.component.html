@@ -42,7 +42,7 @@
                 <tbody class="invoiceTbody" *ngFor="let invoice of invoices">
                   <tr role="row" class="odd">
                     <td>
-                      <a class="user-profileded btn btn-icon btn-transparent-dark dropdown-toggle"
+                      <a class="user-profileded btn btn-icon btn-transparent-dark"
                         id="navbarDropdownUserImage" href="javascript:void(0);" role="button" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false" (click)="clicViewInvoice(invoice.booking_id)">
                         <span>View</span>
@@ -84,10 +84,11 @@
                       <span [innerHTML]="highlighText(invoice.driver_phone)"></span>
                       </p>
                       <span class="text-underline cursor-pointer">
-                        {{ invoice.dropoff_address }}
+                      <span [innerHTML]="highlighText(invoice.dropoff_address)"></span>
                       </span>
                     </td>
-                    <td>{{invoice.aff_vehicle_type}}</td>
+                      
+                    <td><span [innerHTML]="highlighText(invoice.aff_vehicle_type)"></span></td>
                     <td>
                       <p style="white-space: pre" >
                       <span [innerHTML]="highlighText(invoice?.account_first_name)"></span> |
