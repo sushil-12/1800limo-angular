@@ -20,7 +20,7 @@
 								*ngFor="let tile of ['black_limo_operator', 'fleet_operator', 'taxi_operator', 'gig_operator']; index as tile_index"
 								(click)="affiliateTypeSwitch(tile_index)"
 								[ngClass]="f.AffiliateType.value == tile ? 'active' : ''">
-								<div id="check-icon" class="w-100">
+								<div id="check-icon" class="w-100" *ngIf="f.AffiliateType.value===tile">
 									<i class="bi bi-check-lg"></i>
 								</div>
 								<input type="radio" id="radio-button_{{ tile_index }}" class="radio-button" />

@@ -24,7 +24,7 @@
             <mat-label>OTP</mat-label>
             <input matInput placeholder="OTP Number" formControlName="otp">
          </mat-form-field> -->
-				<ng-otp-input  [config]="{length:6}" (onInputChange)="onOtpChange($event)"></ng-otp-input>
+				<ng-otp-input  [config]="{length:6,allowNumbersOnly:true}" (onInputChange)="onOtpChange($event)"></ng-otp-input>
          <div *ngIf="submitted && f.otp.errors" class="text-danger">
             <div *ngIf="f.otp.errors.required">The OTP is required</div>
             <div *ngIf="f.otp.errors.pattern; else phoneNumberError">The OTP is not valid</div>

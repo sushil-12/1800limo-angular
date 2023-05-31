@@ -128,7 +128,7 @@ export class HomeComponent implements OnInit {
 		this.steps = localStorage.getItem("stepCompleted");
 		this.accountStatus = localStorage.getItem("account_approval");
 
-		if (this.accountStatus == "completed") {
+		if (this.accountStatus == "completed" || this.accountStatus == "accepted") {
 			this.value = "Manage / Daily Bookings";
 		}
 		else {
@@ -981,9 +981,15 @@ export class HomeComponent implements OnInit {
 
 	dashboard(role) {
 		if (role == 'affiliate') {
+			let isAffiliate_approved = localStorage.getItem('account_approval')
 			this.spinner.show();//show spinner
-			this.router.navigateByUrl('/affiliate');
-			console.log("step 0  dashboard")
+			if(isAffiliate_approved == "accepted"){
+				this.router.navigateByUrl('/affiliate/my-bookings');
+			}
+			else{
+				this.router.navigateByUrl('/affiliate');
+				console.log("step 0  dashboard")
+			}
 		}
 		else if (role == 'admin') {
 			this.spinner.show();//show spinner
