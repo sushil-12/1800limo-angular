@@ -51,6 +51,7 @@ export class MyBookingsComponent implements OnInit {
 	isAffiliate: boolean = false
 	isLooseAffiliate: boolean = false;
 	audit_Trail: any;
+	company_name:any =JSON.parse(localStorage.getItem('currentUser'))?.affiliate_company || ''
 
 	constructor(
 		private affiliateService: AffiliateService,

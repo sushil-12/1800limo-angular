@@ -27,6 +27,9 @@ export class LoginComponent implements OnInit, AfterViewInit
 	Role: string;
 	countryChangeObject: any;
 	roleSelected: string;
+	alert_individual:boolean=false;
+	alert_corporate:boolean=false;
+	alert_travel_agent:boolean=false;
 	constructor(private formBuilder: FormBuilder, private router: Router, private authService: AuthService, private changeDetectorRef: ChangeDetectorRef,
 		private errorDialogService: ErrorDialogService,
 		private customValidator: CustomvalidationService)
@@ -184,6 +187,13 @@ export class LoginComponent implements OnInit, AfterViewInit
 	}
 
 	get f() { return this.loginForm.controls; }
+	clearAlert(){
+		setTimeout(()=>{
+			this.alert_corporate=false;
+			this.alert_individual=false;
+			this.alert_travel_agent=false;
+		},3000)
+	}
 	loginCheck()
 	{
 		this.submitted = true;

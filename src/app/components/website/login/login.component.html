@@ -14,29 +14,31 @@
 			</div>
 			<div class="row" *ngIf="Role != 'admin' && Role !='sub_admin'">
 				<div class="col-md-12 mt-3">
-					<div class="radio-group role" style="box-shadow: 0 5px 12px -6px rgb(0 0 0);">
+					<div class="radio-group role" style="box-shadow: 0 5px 12px -6px rgb(0 0 0);" (click)="alert_individual=!alert_individual;clearAlert()">
 						<input type="radio" id="individual" name="role" checked="" value="individual" disabled
-							formControlName="role" (click)="loginButtons('individual')">
+							formControlName="role" (click)="loginButtons('individual');">
 						<label for="individual" class="text-center text-secondary"
 							style="cursor: default">Individual</label>
-					</div>
-					<div class="radio-group role" style="box-shadow: 0 5px 12px -6px rgb(0 0 0);">
-						<input type="radio" id="corporate" name="role" checked="" value="corporate" disabled
-							formControlName="role" (click)="loginButtons('corporate')">
+						</div>
+						<div class="radio-group role" style="box-shadow: 0 5px 12px -6px rgb(0 0 0);" (click)="alert_corporate=!alert_corporate;clearAlert()">
+							<input type="radio" id="corporate" name="role" checked="" value="corporate" disabled
+							formControlName="role" (click)="loginButtons('corporate');">
 						<label for="corporate" class="text-secondary" style="cursor: default;">Corporate</label>
 					</div>
-					<div class="radio-group role" style="box-shadow: 0 5px 12px -6px rgb(0 0 0);">
+					<div class="radio-group role" style="box-shadow: 0 5px 12px -6px rgb(0 0 0);" (click)="alert_travel_agent=!alert_travel_agent;clearAlert()">
 						<input type="radio" id="travel_agent" name="role" checked="" value="travel_agent"
-							formControlName="role" disabled (click)="loginButtons('travel_agent')">
+							formControlName="role" disabled (click)="loginButtons('travel_agent');">
 						<label for="travel_agent" class="text-secondary" style="cursor: default;">Travel Agent</label>
 					</div>
-
 					<div class="radio-group role" style="box-shadow: 0 5px 12px -6px rgb(0 0 0);">
 						<input type="radio" id="driver/fleet" name="role" checked="" value="driver"
-							formControlName="role" (click)="loginButtons('driver')">
+						formControlName="role" (click)="loginButtons('driver')">
 						<label for="driver/fleet">Driver / Chauffeur / Fleet - To Drive</label>
 					</div>
-			</div>
+				</div>
+				<p class="text-danger margin-bottom-thin my-mat-hint"
+				[ngClass]="(alert_individual || alert_corporate || alert_travel_agent)? '':'hide-alert'">
+				 Currently only Drivers are allowed to Sign In</p>
 	</div>
 
 	<h3 class="mt-3">Choose Country Flag and Enter Your Phone Number</h3>

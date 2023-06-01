@@ -58,7 +58,7 @@ export class HeaderComponent implements OnInit
 		this.steps = localStorage.getItem("stepCompleted");
 		this.accountStatus = localStorage.getItem("account_approval");
 
-		if (this.accountStatus == "completed")
+		if (this.accountStatus == "completed" || this.accountStatus == "accepted")
 		{
 			this.Value = "Manage / Daily Bookings";
 		}

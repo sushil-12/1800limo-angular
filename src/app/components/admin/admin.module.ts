@@ -108,6 +108,8 @@ import { CustomInvoiceComponent } from './custom-invoice/custom-invoice.componen
 import { StaffPermissionsComponent } from './staff-permissions/staff-permissions.component';
 import {MatTabsModule} from '@angular/material/tabs';
 import { StaffRolesListComponent } from './staff-roles-list/staff-roles-list.component';
+import { BookingLogsComponent } from './booking-logs/booking-logs.component';
+import {MatTableModule} from '@angular/material/table';
 
 @NgModule({
 	declarations: [
@@ -190,7 +192,8 @@ import { StaffRolesListComponent } from './staff-roles-list/staff-roles-list.com
 		BadgeCitiesComponent,
 		CustomInvoiceComponent,
 		StaffPermissionsComponent,
-		StaffRolesListComponent
+		StaffRolesListComponent,
+		BookingLogsComponent
 	],
 	imports: [
 		CommonModule,
@@ -213,7 +216,8 @@ import { StaffRolesListComponent } from './staff-roles-list/staff-roles-list.com
 		NgSelectModule,
 		NgxPrintModule,
 		MatChipsModule,
-		MatTabsModule
+		MatTabsModule,
+		MatTableModule
 	],
 	exports: [BookingStatusTextReplacePipe]
 })
