@@ -77,6 +77,7 @@ import { BadgeCitiesComponent } from './badge-cities/badge-cities.component';
 import { CustomInvoiceComponent } from './custom-invoice/custom-invoice.component';
 import { StaffPermissionsComponent } from './staff-permissions/staff-permissions.component';
 import { StaffRolesListComponent } from './staff-roles-list/staff-roles-list.component';
+import { BookingLogsComponent } from './booking-logs/booking-logs.component';
 
 
 const routes: Routes = [
@@ -204,6 +205,11 @@ const routes: Routes = [
 		path: 'booking-details',
 		canActivate: [SubAdminGuard],
 		component: CreateNewBooking2Component
+	},
+	{
+		path: 'booking-logs',
+		canActivate: [SubAdminGuard],
+		component: BookingLogsComponent
 	},
 	{
 		path: 'finalize-booking',
