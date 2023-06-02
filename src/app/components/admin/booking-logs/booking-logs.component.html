@@ -1,5 +1,7 @@
 <section>
-
+    <div class="alert alert-info" role="alert">
+        NOTE: THIS IS CURRENTLY IN TESTING PHASE 
+      </div>
     <mat-table [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z8">
         <ng-container matColumnDef="{{column}}" *ngFor="let column of columnsToDisplay">
             <mat-header-cell *matHeaderCellDef> {{formatText(column) | titlecase}} </mat-header-cell>

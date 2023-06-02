@@ -743,6 +743,7 @@ export class Step2Component implements OnInit {
 		this.addBankForm.reset();
 		this.id_front_image = "";
 		this.id_back_image = "";
+		this.canChangeDocument = true;
 	}
 
 	/**
