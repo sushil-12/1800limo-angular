@@ -931,6 +931,10 @@ export class HomeComponent implements OnInit {
 		let max_length = 75
 		if (fieldName == 'p') {
 			// for passenger
+			$('#no_of_passenger').addClass('highlight-text')
+			setTimeout(()=>{
+				$('#no_of_passenger').removeClass('highlight-text')
+			},1000)
 			if (changeType == 'i' && this.quoteBotForm.value.no_of_passenger < max_length) {
 				this.QBForm.no_of_passenger.setValue(this.quoteBotForm.value.no_of_passenger + 1)
 			} else if (changeType == 'd' && this.quoteBotForm.value.no_of_passenger > 1) {
@@ -938,6 +942,10 @@ export class HomeComponent implements OnInit {
 			}
 		} else {
 			// for luggage
+			$('#no_of_luggage').addClass('highlight-text')
+			setTimeout(()=>{
+				$('#no_of_luggage').removeClass('highlight-text')
+			},1000)
 			if (changeType == 'i' && this.quoteBotForm.value.no_of_luggage < max_length) {
 				this.QBForm.no_of_luggage.setValue(this.quoteBotForm.value.no_of_luggage + 1)
 			} else if (changeType == 'd' && this.quoteBotForm.value.no_of_luggage >= 1) {

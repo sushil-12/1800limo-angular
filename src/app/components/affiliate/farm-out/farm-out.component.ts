@@ -111,7 +111,13 @@ export class FarmOutComponent implements OnInit
 		});
 		this.loadBookings()
 
+		$("#search-field-farmout").addClass("box-outline")
+
 	}
+	ngAfterViewInit(): void {
+		$("#search-field-farmout").addClass("box-outline")
+	}
+
 
 	loadBookings(pageUrl = null) {
 		/** spinner starts on init */

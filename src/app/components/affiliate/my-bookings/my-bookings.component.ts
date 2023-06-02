@@ -89,7 +89,14 @@ export class MyBookingsComponent implements OnInit {
 			reservation_id: ['', Validators.required],
 			emailTarget: ['', Validators.required]
 		});
+
+		$("#search-field-my-booking").addClass("box-outline")
 	}
+
+	ngAfterViewInit(): void {
+		$("#search-field-my-booking").addClass("box-outline")
+	}
+
 
 
 	loadBookings(pageUrl = null) {

@@ -899,6 +899,9 @@ export class AdminService {
 		}
 		return this.httpClient.get(path).toPromise();
 	}
+	getBookingLogs(){
+		return this.httpClient.get(this.serverUrl + 'admin/booking-payment-logs');
+	}
 
 	//sub Admin API
 	addSubAdmin(data) {

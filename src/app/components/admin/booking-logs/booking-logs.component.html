@@ -1,63 +1,49 @@
+<section>
 
-<mat-table
-  [dataSource]="dataSource"
-  multiTemplateDataRows
-  class="mat-elevation-z8"
->
-  <ng-container
-    matColumnDef="{{column}}"
-    *ngFor="let column of columnsToDisplay"
-  >
-    <mat-header-cell *matHeaderCellDef> {{column}} </mat-header-cell>
-    <mat-cell *matCellDef="let element"> {{element[column]}} </mat-cell>
-  </ng-container>
+    <mat-table [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z8">
+        <ng-container matColumnDef="{{column}}" *ngFor="let column of columnsToDisplay">
+            <mat-header-cell *matHeaderCellDef> {{formatText(column) | titlecase}} </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element[column]}} </mat-cell>
+        </ng-container>
 
-  <ng-container matColumnDef="expandedDetail">
-    <mat-cell *matCellDef="let element">
-      <div
-        class="example-element-detail w-100"
-        [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'"
-      >
-        <table class="table table-responsive" width="100%">
-          <thead>
-            <tr>
-              <th colspan="100%">Amount Captured</th>
-              <th colspan="100%">Refunded Amount</th>
-              <th colspan="100%">Description</th>
-              <th colspan="100%">Transfer Amount</th>
-              <th colspan="100%">Transfer Status</th>
-              <th colspan="100%">Transfer To</th>
-              <th colspan="100%">Status</th>
-              <th colspan="100%">Action</th>
-            </tr>
-            <tr *ngFor="let row of element.charges">
-              <td colspan="100%">{{ row.amount_captured }}</td>
-              <td colspan="100%">{{ row.amount_refunded }}</td>
-              <td colspan="100%">{{ row.description }}</td>
-              <td colspan="100%">{{ row.transfer?.transfer_amount }}</td>
-              <td colspan="100%">{{ row.transfer?.account_name }}</td>
-              <td colspan="100%">{{ row.transfer?.created }}</td>
-              <td colspan="100%">{{ row.transfer?.status }}</td>
-              <td colspan="100%">
-                <a href="{{ row.transfer?.receipt_url }}">View At stripe</a>
-              </td>
-            </tr>
-          </thead>
-        </table>
-      </div>
-    </mat-cell>
-  </ng-container>
+        <ng-container matColumnDef="expandedDetail">
+            <mat-cell *matCellDef="let element">
+                <div class="example-element-detail w-100 table-responsive"
+                    [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                    <table class="table table-striped dataTable dt-responsive" width="100%">
+                        <thead>
+                            <tr role="row">
+                                <th colspan="100%">Description</th>
+                                <th colspan="100%">Transfer Amount</th>
+                                <th colspan="100%">Transfer Status</th>
+                                <th colspan="100%">Transfer To</th>
+                                <th colspan="100%">Status</th>
+                                <th colspan="100%">Action</th>
+                            </tr>
+                            <tr *ngFor="let row of element.charges" role="row" class="odd">
+                                <td colspan="100%">{{ row.description }}</td>
+                                <td colspan="100%">{{ row.transfer?.transfer_amount }}</td>
+                                <td colspan="100%">{{ row.transfer?.account_name | titlecase}}</td>
+                                <td colspan="100%">{{ FormatDate(row.transfer?.created) }}</td>
+                                <td colspan="100%"> <span
+                                        [className]="'badge badge-pill booking_status cursor-pointer ' + row.transfer?.status ">{{
+                                        row.transfer?.status | titlecase}}</span></td>
+                                <td colspan="100%">
+                                    <a href="{{ row.transfer?.receipt_url }}" target="_blank">View At stripe</a>
+                                </td>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </mat-cell>
+        </ng-container>
 
-  <mat-header-row *matHeaderRowDef="columnsToDisplay"></mat-header-row>
-  <mat-row
-    *matRowDef="let element; columns: columnsToDisplay;"
-    class="example-element-row"
-    [class.example-expanded-row]="expandedElement === element"
-    (click)="expandedElement = expandedElement === element ? null : element"
-  >
-  </mat-row>
-  <mat-row
-    *matRowDef="let row; columns: ['expandedDetail']"
-    class="example-detail-row"
-  ></mat-row>
-</mat-table>
+        <mat-header-row *matHeaderRowDef="columnsToDisplay"></mat-header-row>
+        <mat-row *matRowDef="let element; columns: columnsToDisplay;" class="example-element-row"
+            [ngClass]="element.booking_type == 'Affiliate' ? '' : 'block-click'"
+            [class.example-expanded-row]="expandedElement === element"
+            (click)="expandedElement = expandedElement === element ? null : element">
+        </mat-row>
+        <mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></mat-row>
+    </mat-table>
+</section>
