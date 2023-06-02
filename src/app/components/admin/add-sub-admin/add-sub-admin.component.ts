@@ -56,7 +56,7 @@ export class AddSubAdminComponent implements OnInit
 			address: ['', Validators.required],
 			city: ['', Validators.required],
 			state: ['', Validators.required],
-			country: ['', Validators.required],
+			country: ['United States', Validators.required],
 			zipCode: ['', Validators.required],
 			latitude: [''],
 			longitude: [''],
@@ -140,10 +140,10 @@ export class AddSubAdminComponent implements OnInit
 						this.addSubAdminAccountForm.patchValue({
 							state: place.address_components[2].long_name
 						});
-					if (place.address_components[3])
-						this.addSubAdminAccountForm.patchValue({
-							country: place.address_components[3].long_name
-						});
+					// if (place.address_components[3])
+					// 	this.addSubAdminAccountForm.patchValue({
+					// 		country: place.address_components[3].long_name
+					// 	});
 					if (place.address_components[4])
 						this.addSubAdminAccountForm.patchValue({
 							zipCode: place.address_components[4].long_name
@@ -156,9 +156,10 @@ export class AddSubAdminComponent implements OnInit
 	onCountryChange(event)
 	{
 		this.addSubAdminAccountForm.patchValue({
-			mobileIsd: '+' + event.dialCode
+			mobileIsd: '+' + event.dialCode,
+			country:event.name
 		});
-		// console.log(this.countryCode);
+		console.log(event);
 	}
 
 	get f()

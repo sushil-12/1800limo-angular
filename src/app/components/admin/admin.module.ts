@@ -110,6 +110,8 @@ import {MatTabsModule} from '@angular/material/tabs';
 import { StaffRolesListComponent } from './staff-roles-list/staff-roles-list.component';
 import { BookingLogsComponent } from './booking-logs/booking-logs.component';
 import {MatTableModule} from '@angular/material/table';
+import {MatExpansionModule} from '@angular/material/expansion';
+
 
 @NgModule({
 	declarations: [
@@ -217,7 +219,8 @@ import {MatTableModule} from '@angular/material/table';
 		NgxPrintModule,
 		MatChipsModule,
 		MatTabsModule,
-		MatTableModule
+		MatTableModule,
+		MatExpansionModule
 	],
 	exports: [BookingStatusTextReplacePipe]
 })

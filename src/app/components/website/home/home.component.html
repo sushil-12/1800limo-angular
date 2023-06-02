@@ -696,7 +696,7 @@
 													<div class="input-group">
 														<div class="input-group-prepend">
 															<button style="min-width: 2.5rem"
-																class="btn btn-decrement btn-outline-secondary"
+																class="btn btn-decrement btn-outline-secondary highlightButton"
 																type="button" (click)="change('d','p')">
 																<strong>-</strong>
 															</button>
@@ -704,11 +704,11 @@
 														<input type="number" formControlName="no_of_passenger" min="0"
 															max="1000" step="1" inputmode="decimal"
 															style="text-align: center" class="form-control"
-															placeholder=""
+															placeholder="" id="no_of_passenger"
 															[class.errorValid]="submitted && QBForm.no_of_passenger.errors">
 														<div class="input-group-append">
 															<button style="min-width: 2.5rem"
-																class="btn btn-increment btn-outline-secondary"
+																class="btn btn-increment btn-outline-secondary highlightButton"
 																type="button" (click)="change('i','p')">
 																<strong>+</strong>
 															</button>
@@ -751,7 +751,7 @@
 														<input type="number" formControlName="no_of_luggage" min="0"
 															max="2000" step="1" inputmode="decimal"
 															style="text-align: center" class="form-control "
-															placeholder=""
+															placeholder="" id="no_of_luggage"
 															[class.errorValid]="submitted && QBForm.no_of_luggage.errors">
 														<div class="input-group-append">
 															<button style="min-width: 2.5rem"
