@@ -78,6 +78,7 @@ export class Step1Component implements OnInit, AfterViewInit
 
 
 	private subs: Subscription = new Subscription()
+	affiliateDetail: any;
 
 	constructor(
 		private affiliateService: AffiliateService,
@@ -254,6 +255,7 @@ export class Step1Component implements OnInit, AfterViewInit
 						)
 						.subscribe(({ data }: any) =>
 						{
+							this.affiliateDetail = data
 							this.addAffiliateAccountForm.patchValue({
 								acc_id: data.id,
 								FirstName: data.FirstName,
@@ -1268,8 +1270,113 @@ export class Step1Component implements OnInit, AfterViewInit
 
 	resetForm()
 	{
-		this.addAffiliateAccountForm.reset();
+		// this.addAffiliateAccountForm.reset();
+		this.addAffiliateAccountForm = this.formBuilder.group({
+			acc_id: [""],
+			AffiliateType: ["", Validators.required],
+			FirstName: ["", Validators.required],
+			MiddleName: [""],
+			LastName: ["", Validators.required],
+			Gender: ["", Validators.required],
+			CellNumber: [
+				this.currentUser.phone,
+				[
+					Validators.required,
+					Validators.pattern("^[0-9]*$"),
+					Validators.minLength(4),
+					Validators.maxLength(15),
+					this.customValidator.dashValidator(),
+					this.customValidator.plusValidator(),
+				],
+			],
+			CellIsd: ["+1", Validators.required],
+			CellNumberCountry: ["us", Validators.required],
+			Email: [
+				"",
+				[
+					Validators.required,
+					Validators.pattern("^[a-zA-Z0-9.]+@[a-z0-9.-]+\\.[a-z]{2,4}$"),
+				],
+			],
+			FirstYearBusiness: ["", [Validators.required]],
+			CompanyName: ["" , [Validators.required]],
+			DBA: [""],
+			Dispatch: [
+				"",
+				[
+					Validators.pattern("^[0-9]*$"),
+					Validators.minLength(4),
+					Validators.maxLength(15),
+					Validators.required,
+					this.customValidator.dashValidator(),
+					this.customValidator.plusValidator(),
+				],
+			],
+			DispatchIsd: ["+1"],
+			DispatchCountry: ["us"],
+			dispatchEmail: [
+				"",
+				[
+					Validators.pattern(
+						"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,4}$"
+					),
+				],
+			],
+			CompanyCellNumber: [
+				"",
+				[
+					Validators.pattern("^[0-9]*$"),
+					Validators.minLength(4),
+					Validators.maxLength(15),
+					this.customValidator.dashValidator(),
+					this.customValidator.plusValidator(),
+				],
+			],
+			CompanyCellIsd: ["+1"],
+			CompanyCellNumberCountry: ["us"],
+			Fax: [
+				"",
+				[
+					Validators.pattern("^[0-9]*$"),
+					Validators.minLength(4),
+					Validators.maxLength(15),
+					this.customValidator.dashValidator(),
+					this.customValidator.plusValidator(),
+				],
+			],
+			cpcn_tpc: [
+				"",
+				[
+					Validators.pattern("^[0-9]*$"),
+					Validators.minLength(4),
+					Validators.maxLength(15),
+					this.customValidator.dashValidator(),
+					this.customValidator.plusValidator(),
+				],
+			],
+			FaxIsd: ["+1"],
+			FaxCountry: ["us"],
+			BusinessFrontPhoto: ["" , [Validators.required]],
+			BusinessBackPhoto: [""],
+			LanguagesSpoken: this.formBuilder.array([], [Validators.required]),
+			LanguagesGet: this.formBuilder.array([]),
+			Associations: this.formBuilder.array([]),
+			AssociationsGet: this.formBuilder.array([]),
+		});
 		this.BusinessFrontPhoto = "";
 		this.BusinessBackPhoto = "";
+		this.onLanguageChange("1", true);
+		this.addAffiliateAccountForm.patchValue({
+			Email: this.affiliateDetail.Email,
+			CellNumber: this.affiliateDetail.CellNumber,
+			AffiliateType : this.affiliateDetail.AffiliateType
+		});
+		if (this.affiliateDetail.AffiliateType != "gig_operator")
+							{
+								this.addAffiliateAccountForm.patchValue({
+									dispatchEmail: this.affiliateDetail.dispatchEmail,
+								});
+							}
+		this.addAffiliateAccountForm.updateValueAndValidity()
 	}
 }

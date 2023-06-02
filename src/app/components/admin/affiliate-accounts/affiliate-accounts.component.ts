@@ -128,9 +128,13 @@ export class AffiliateAccountsComponent implements OnInit {
 
 	loadAffiliateOperators(pageUrl = null) {
 		/** spinner starts on init */
+		var keyword = ((document.getElementById("keyword1") as HTMLInputElement).value);
+		if(keyword.length>0){
+			this.filter_type = 'all'
+			console.log('keyword--->>>' , keyword , this.filter_type)
+		}
 		this.spinner.show();
 
-		var keyword = ((document.getElementById("keyword1") as HTMLInputElement).value);
 		// console.log(keyword);
 		// Load Our blackCarLimoBus using API
 		this.adminService.blackCarLimoBusAccounts(pageUrl, this.affiliateType, this.filter_type, keyword).then((result: any) => {
