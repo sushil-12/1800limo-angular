@@ -488,7 +488,7 @@ export class HomeComponent implements OnInit {
 				pickup_type: 'city',
 				dropoff_type: 'airport',
 				pickup_date: new Date().toISOString().split('T')[0],
-				pickup_time: '19:30:00',
+				pickup_time: currentTime,
 				return_pickup_date: new Date().toISOString().split('T')[0],
 				return_pickup_time: '12:00:00',
 				no_of_passenger: 1,
