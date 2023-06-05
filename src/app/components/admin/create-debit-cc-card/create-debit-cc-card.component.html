@@ -46,8 +46,8 @@
                                 </div>
                                 <div class="col-md-6">
                                     <mat-form-field appearance="outline">
-                                        <mat-label>CSC<span class="asterisk">*</span></mat-label>
-                                        <input matInput placeholder="CSC" formControlName="cvc">
+                                        <mat-label>CVC<span class="asterisk">*</span></mat-label>
+                                        <input matInput placeholder="CVC" formControlName="cvc">
                                     </mat-form-field>                                     
                                     <div *ngIf="submittedForm && f.cvc.errors" class="text-danger">
                                        <div *ngIf="f.cvc.errors.required">This field is required</div>
@@ -142,11 +142,11 @@
                         </div>
                     </div>
             </section>
-            <section class="billing_inforamtion">
+            <div class="billing_inforamtion">
                 <ul>
                     <li><button class="custom-btn savebutton box-shadow" (click)="submitForm()" [disabled]="disableSubmitButton">SAVE</button> </li>
                     <li><button class="custom-btn resetbutton box-shadow" (click)="resetForm()">RESET</button> </li>
                 </ul>
-            </section>
+            </div>
           </form>
 </main>
