@@ -354,13 +354,18 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 			//google translate
 			var v = document.createElement("script");
 			v.type = "text/javascript";
-			v.innerHTML = "function googleTranslateElementInit() { new google.translate.TranslateElement({ pageLanguage: 'en' }, 'google_translate_element_mobile'); } ";
+			v.innerHTML = "function googleTranslateElementInit() { new google.translate.TranslateElement({ pageLanguage: 'en' ,layout: google.translate.TranslateElement.InlineLayout.SIMPLE}, 'google_translate_element_mobile'); } ";
 			this.elementRef.nativeElement.appendChild(v);
 			var s = document.createElement("script");
 			s.type = "text/javascript";
 			s.src = "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
 			this.elementRef.nativeElement.appendChild(s);
-			
+			setTimeout(()=>{
+				$('body').find(".VIpgJd-ZVi9od-xl07Ob-lTBxed").attr('href', 'javascript:void(0)'); 
+				$('.VIpgJd-ZVi9od-xl07Ob-lTBxed').find('span:first').text('Select language / Translate')
+				$('goog-te-combo').find('option:first').text('Select language / Translate')
+	
+			},1000)
 		}
 
 		if (this.desktopWidth > '767')
@@ -378,12 +383,17 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 
 			setTimeout(()=>{
 				$('body').find(".VIpgJd-ZVi9od-xl07Ob-lTBxed").attr('href', 'javascript:void(0)'); 
+				$('.VIpgJd-ZVi9od-xl07Ob-lTBxed').find('span:first').text('Select language / Translate')
+				$('goog-te-combo').find('option:first').text('Select language / Translate')
 				$('.goog-te-gadget-simple').css({height :'auto'}); 
 			},1000)
 
 		}
 		setTimeout(()=>{
 			$('body').find(".VIpgJd-ZVi9od-xl07Ob-lTBxed").attr('href', 'javascript:void(0)'); 
+			$('.VIpgJd-ZVi9od-xl07Ob-lTBxed').find('span:first').text('Select language / Translate')
+			$('goog-te-combo').find('option:first').text('Select language / Translate')
+			$('.goog-te-gadget-simple').css({height :'auto'}); 
 		},1000)
 		//a.addEventListener("click",function(e){e.preventDefault(); alert("preform action");});
 		//translator 
