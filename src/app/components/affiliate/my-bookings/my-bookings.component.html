@@ -1,246 +1,246 @@
 <ngx-spinner></ngx-spinner>
 <main>
 	<!-- Main page content-->
-	<section class="adminbox_shadow user_information">
-		<h2 class="headinginfo">{{company_name | titlecase}} Bookings</h2>
-		<div class="containeredd mt-1 ">
-			<div class="row my-2 align-items-center">
-				<!-- Start-Date -->
-				<div class="col-sm-4 col-md-4 my-2">
-					<mat-form-field appearance="outline" class="m-0 text-xl">
-						<mat-label>
-							Start Date <span class="asterisk"> * </span>
-						</mat-label>
-						<input matInput [setOutputDateFormat]="outputDateFormat" [matDatepicker]="picker1"
-							placeholder="Start Date" id="id_4" (dateChangeWithFormat)="changeDate('startDate', $event)"
-							(click)="picker1.open()" [value]="startDate" [max]="endDate" readonly />
-						<mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-						<mat-datepicker #picker1></mat-datepicker>
-					</mat-form-field>
-				</div>
-
-				<!-- End-Date -->
-				<div class="col-sm-4 col-md-4 my-2">
-					<mat-form-field appearance="outline" class="m-0">
-						<mat-label>
-							End Date <span class="asterisk"> * </span>
-						</mat-label>
-						<input matInput [setOutputDateFormat]="outputDateFormat" [matDatepicker]="picker2"
-							placeholder="End Date" id="id_5" (dateChangeWithFormat)="changeDate('endDate',$event)"
-							(click)="picker2.open()" [value]="endDate" [min]="startDate" readonly />
-						<mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-						<mat-datepicker #picker2></mat-datepicker>
-					</mat-form-field>
-				</div>
-
-				<!-- Search Button -->
-				<div class="align-btn d-flex justify-content-around">
-					<div class="col-sm-2 ml-n5">
-						<button class="custom-filled-button orange-button"
-							style="color:#fff;padding: 5px 12px !important;"
-							(click)="loadBookings(); saveCookie('affiliate_startDate', startDate); saveCookie('affiliate_endDate', endDate);saveCookie('affiliate_search',searchText)">
-							Search
-						</button>
-					</div>
-					<div class="col-sm-2">
-						<button class="custom-filled-back-button"
-							style="white-space: nowrap;color:#fff;padding: 5px 12px !important;"
-							(click)=" reset();loadBookings()">
-							Reset
-						</button>
-					</div>
-				</div>
-			</div>
-			<div class="row my-2 mb-3">
-				<div class="col-md-12">
-					<div id="search-field-my-booking">
-						<mat-form-field appearance="outline" class="m-0">
-							<input matInput type="text" (keypress)="handleKeypressEvents()"
-								(keyup)="searchInBookings($event.target.value)" [value]="searchText"
-								placeholder="Search" id="keyword">
+		<section class="adminbox_shadow user_information">
+			<h2 class="headinginfo">{{company_name | titlecase}} Bookings</h2>
+			<div class="containeredd mt-1 ">
+				<div class="row my-2 align-items-center">
+					<!-- Start-Date -->
+					<div class="col-sm-4 col-md-4 my-2">
+						<mat-form-field appearance="outline" class="m-0 text-xl">
+							<mat-label>
+								Start Date <span class="asterisk"> * </span>
+							</mat-label>
+							<input matInput [setOutputDateFormat]="outputDateFormat" [matDatepicker]="picker1"
+								placeholder="Start Date" id="id_4" (dateChangeWithFormat)="changeDate('startDate', $event)"
+								(click)="picker1.open()" [value]="startDate" [max]="endDate" readonly />
+							<mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+							<mat-datepicker #picker1></mat-datepicker>
 						</mat-form-field>
 					</div>
-				</div>
-			</div>
-		</div>
-		<div class="containeredd driverside_table">
-			<div class="row">
-				<div class="col-md-12 custom_table">
-					<div class="table-responsive" style="min-height: 350px" *ngIf="!noError">
-						<table class="table table-dark table-striped table-bordered dataTable dt-responsive"
-							id="dataTable" role="grid" aria-describedby="dataTable_info" cellspacing="0">
-							<thead>
-								<tr role="row">
-									<th>Actions</th>
-									<th>Booking</th>
-									<th>Status</th>
-									<th>Date</th>
-									<th>Pax</th>
-									<th>Driver</th>
-									<th>Vehicle</th>
-									<!-- <th>Status</th> -->
-								</tr>
-							</thead>
-							<tbody>
-								<tr role="row" class="odd" *ngFor="let booking of bookings">
-									<td>
-										<a class="user-profileded view-button btn-transparent-dark dropdown-toggle font-weight-bold"
-											id="navbarDropdownUserImage" href="javascript:void(0);" role="button"
-											data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-											<span>View</span>
-										</a>
-										<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
-											aria-labelledby="navbarDropdownUserImage">
-											<a class="dropdown-item" (click)="editAction(booking?.booking_id,'edit')">
-												<div class="dropdown-item-icon"></div>
-												Edit
-											</a>
-											<!-- <a class="dropdown-item" data-toggle="modal"
-												data-target="#return_repeat_booking_Modal"
-												(click)="returnRepeatAction('repeat',booking?.booking_id,booking?.service_type)">
-												<div class="dropdown-item-icon"></div>
-												Repeat
-											</a>
-											<a *ngIf="booking?.service_type=='oneway'" class="dropdown-item"
-												data-toggle="modal" data-target="#return_repeat_booking_Modal"
-												(click)="returnRepeatAction('return',booking?.booking_id,booking?.service_type)">
-												<div class="dropdown-item-icon"></div>
-												Return
-											</a> -->
-											<a class="dropdown-item" (click)="finalizeAction(booking?.booking_id)">
-												<div class="dropdown-item-icon"></div>
-												Finalize
-											</a>
-											<a class="dropdown-item" routerLink="/affiliate/invoice-summary"
-												[queryParams]="{bookingId: booking?.booking_id}"
-												*ngIf="booking?.payment_status=='paid'">
-												<div class="dropdown-item-icon"></div>
-												Invoice
-											</a>
-											<!-- <a class="dropdown-item" (click)="changeBookingStatus(booking?.booking_id)"
-												data-toggle="modal" data-target="#change_status_booking_Modal">
-												<div class="dropdown-item-icon"></div>
-												Change Status
-											</a> -->
-											<a class="dropdown-item"
-												(click)="sendEmailClicked(booking?.booking_id,'customer')"
-												data-toggle="modal" data-target="#emailModal">
-												<div class="dropdown-item-icon"></div>
-												Email Customer
-											</a>
-											<a class="dropdown-item" (click)="auditTrail(booking.booking_id)"
-												data-toggle="modal" data-target="#AuditTrailModal">
-												<!-- *ngIf="booking.payment_status!='paid'" -->
-												<div class="dropdown-item-icon"></div>
-												Audit Trial
-											</a>
-											<!-- <a class="dropdown-item">
-												<div class="dropdown-item-icon"></div>
-												Cancel
-											</a> -->
-										</div>
-									</td>
-
-									<td class="text-center font-weight-bolder cursor-pointer text-underline"
-										(click)="showBookingPreviewModal(booking?.booking_id)">
-										<p class="booking-id-font font-weight-bolder cursor-pointer text-underline">
-											<span [innerHTML]="highlighText(booking?.booking_id )"></span>
-										</p>
-									</td>
-									<td>
-										<div data-toggle="modal" data-target="#change_status_booking_Modal"
-											[className]="'badge badge-pill booking_status cursor-pointer ' + booking?.booking_status">
-											{{booking?.booking_status | bookingStatusTextReplace :
-											'_' : ' ' |titlecase}}
-										</div>
-									</td>
-									<td class="sorting_1">
-										<p style="font-weight: 600 !important;">{{ FormatDate(booking?.pickup_date) }}
-										</p>
-										<p>{{ FormatTime(booking?.pickup_time) }}</p>
-									</td>
-									<td>
-										<p data-target="#sendEmailModal" style="white-space: pre" data-toggle="modal"
-											(click)="openModal(booking, 'Passenger')" id="box">
-											<span class="font-weight-bolder"
-												[innerHTML]="highlighText(booking?.passenger_name)"></span> |
-											<span [innerHTML]="highlighText( formatPhoneNumber(booking?.pax_tel))"></span>
-										</p>
-										<span class="text-underline cursor-pointer"
-											(click)="showLocationPointOnMap(booking?.booking_id, 'pickup')">
-											<span [innerHTML]="highlighText(booking?.pickup_address)"></span>
-										</span>
-									</td>
-									<td>
-
-										<p data-target="#sendEmailModal" data-toggle="modal"
-											(click)="openModal(booking, 'Affiliate')">
-											<span class="font-weight-bolder"
-												[innerHTML]="highlighText(booking?.driver_name)"></span>&nbsp;
-											|
-											<span [innerHTML]="highlighText(booking?.driver_tel)"></span>
-										</p>
-
-										<span class="text-underline cursor-pointer"
-											(click)="showLocationPointOnMap(booking?.booking_id, 'dropoff')">
-											<span [innerHTML]="highlighText(booking?.dropoff_address)"></span>
-										</span>
-									</td>
-									<td>
-										<span [innerHTML]="highlighText(booking?.vehicle_cat_name)"></span>
-									</td>
-									<!-- <td>
-										<mat-slide-toggle class="example-margin" [color]="color"
-											[checked]="booking?.status" [disabled]="disabled"
-											(change)="enableDisableClicked($event,booking?.booking_id)">
-										</mat-slide-toggle>
-									</td> -->
-
-								</tr>
-							</tbody>
-						</table>
+	
+					<!-- End-Date -->
+					<div class="col-sm-4 col-md-4 my-2">
+						<mat-form-field appearance="outline" class="m-0">
+							<mat-label>
+								End Date <span class="asterisk"> * </span>
+							</mat-label>
+							<input matInput [setOutputDateFormat]="outputDateFormat" [matDatepicker]="picker2"
+								placeholder="End Date" id="id_5" (dateChangeWithFormat)="changeDate('endDate',$event)"
+								(click)="picker2.open()" [value]="endDate" [min]="startDate" readonly />
+							<mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+							<mat-datepicker #picker2></mat-datepicker>
+						</mat-form-field>
 					</div>
-					<p class="text-danger text-lg" *ngIf="noError">
-						No Results Found?.
-					</p>
-					<!----PAGINATION---->
-					<!----BACK BTN---->
-					<nav aria-label="Page navigation example" *ngIf="totalRecords > 15">
-						<ul class="pagination pagination-circle pg-blue">
-							<li *ngIf="currentPage!=1" class="page-item disabled"
-								(click)="loadBookings(firstPageUrl, startDate, endDate, searchText, filtertype)">
-								<a class="page-link">First</a>
-							</li>
-							<li *ngIf="currentPage!=1" class="page-item disabled"
-								(click)="loadBookings(prevPageUrl, startDate, endDate, searchText, filtertype)">
-								<a class="page-link" aria-label="Previous">
-									<span aria-hidden="true">&laquo;</span>
-									<span class="sr-only">Previous</span>
-								</a>
-							</li>
-							<li *ngFor="let in of counter() ;let i = index"
-								[ngClass]="(in==currentPage)?'page-item active':'page-item'"
-								(click)="loadBookings(path+'?page='+in, startDate, endDate, searchText, filtertype)"
-								[disabled]="(in==currentPage)?true:false">
-								<a class="page-link">{{in}}</a>
-							</li>
-							<li *ngIf="currentPage!=lastPage" class="page-item"
-								(click)="loadBookings(nextPageUrl, startDate, endDate, searchText, filtertype)">
-								<a class="page-link" aria-label="Next">
-									<span aria-hidden="true">&raquo;</span>
-									<span class="sr-only">Next</span>
-								</a>
-							</li>
-							<li *ngIf="currentPage!=lastPage" class="page-item"
-								(click)="loadBookings(lastPageUrl, startDate, endDate, searchText, filtertype)">
-								<a class="page-link">Last</a>
-							</li>
-						</ul>
-					</nav>
+	
+					<!-- Search Button -->
+					<div class="align-btn d-flex justify-content-around">
+						<div class="col-sm-2 ml-n5">
+							<button class="custom-filled-button orange-button"
+								style="color:#fff;padding: 5px 12px !important;"
+								(click)="loadBookings(); saveCookie('affiliate_startDate', startDate); saveCookie('affiliate_endDate', endDate);saveCookie('affiliate_search',searchText)">
+								Search
+							</button>
+						</div>
+						<div class="col-sm-2">
+							<button class="custom-filled-back-button"
+								style="white-space: nowrap;color:#fff;padding: 5px 12px !important;"
+								(click)=" reset();loadBookings()">
+								Reset
+							</button>
+						</div>
+					</div>
+				</div>
+				<div class="row my-2 mb-3">
+					<div class="col-md-12">
+						<div id="search-field-my-booking">
+							<mat-form-field appearance="outline" class="m-0">
+								<input matInput type="text" (keypress)="handleKeypressEvents()"
+									(keyup)="searchInBookings($event.target.value)" [value]="searchText"
+									placeholder="Search" id="keyword">
+							</mat-form-field>
+						</div>
+					</div>
 				</div>
 			</div>
-		</div>
-	</section>
+			<div class="containeredd driverside_table">
+				<div class="row">
+					<div class="col-md-12 custom_table">
+						<div class="table-responsive" style="min-height: 350px" *ngIf="!noError">
+							<table class="table table-dark table-striped table-bordered dataTable dt-responsive"
+								id="dataTable" role="grid" aria-describedby="dataTable_info" cellspacing="0">
+								<thead>
+									<tr role="row">
+										<th>Actions</th>
+										<th>Booking</th>
+										<th>Status</th>
+										<th>Date</th>
+										<th>Pax</th>
+										<th>Driver</th>
+										<th>Vehicle</th>
+										<!-- <th>Status</th> -->
+									</tr>
+								</thead>
+								<tbody>
+									<tr role="row" class="odd" *ngFor="let booking of bookings">
+										<td>
+											<a class="user-profileded view-button btn-transparent-dark dropdown-toggle font-weight-bold"
+												id="navbarDropdownUserImage" href="javascript:void(0);" role="button"
+												data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+												<span>View</span>
+											</a>
+											<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
+												aria-labelledby="navbarDropdownUserImage">
+												<a class="dropdown-item" (click)="editAction(booking?.booking_id,'edit')">
+													<div class="dropdown-item-icon"></div>
+													Edit
+												</a>
+												<!-- <a class="dropdown-item" data-toggle="modal"
+													data-target="#return_repeat_booking_Modal"
+													(click)="returnRepeatAction('repeat',booking?.booking_id,booking?.service_type)">
+													<div class="dropdown-item-icon"></div>
+													Repeat
+												</a>
+												<a *ngIf="booking?.service_type=='oneway'" class="dropdown-item"
+													data-toggle="modal" data-target="#return_repeat_booking_Modal"
+													(click)="returnRepeatAction('return',booking?.booking_id,booking?.service_type)">
+													<div class="dropdown-item-icon"></div>
+													Return
+												</a> -->
+												<a class="dropdown-item" (click)="finalizeAction(booking?.booking_id)">
+													<div class="dropdown-item-icon"></div>
+													Finalize
+												</a>
+												<a class="dropdown-item" routerLink="/affiliate/invoice-summary"
+													[queryParams]="{bookingId: booking?.booking_id}"
+													*ngIf="booking?.payment_status=='paid'">
+													<div class="dropdown-item-icon"></div>
+													Invoice
+												</a>
+												<!-- <a class="dropdown-item" (click)="changeBookingStatus(booking?.booking_id)"
+													data-toggle="modal" data-target="#change_status_booking_Modal">
+													<div class="dropdown-item-icon"></div>
+													Change Status
+												</a> -->
+												<a class="dropdown-item"
+													(click)="sendEmailClicked(booking?.booking_id,'customer')"
+													data-toggle="modal" data-target="#emailModal">
+													<div class="dropdown-item-icon"></div>
+													Email Customer
+												</a>
+												<a class="dropdown-item" (click)="auditTrail(booking.booking_id)"
+													data-toggle="modal" data-target="#AuditTrailModal">
+													<!-- *ngIf="booking.payment_status!='paid'" -->
+													<div class="dropdown-item-icon"></div>
+													Audit Trial
+												</a>
+												<!-- <a class="dropdown-item">
+													<div class="dropdown-item-icon"></div>
+													Cancel
+												</a> -->
+											</div>
+										</td>
+	
+										<td class="text-center font-weight-bolder cursor-pointer text-underline"
+											(click)="showBookingPreviewModal(booking?.booking_id)">
+											<p class="booking-id-font font-weight-bolder cursor-pointer text-underline">
+												<span [innerHTML]="highlighText(booking?.booking_id )"></span>
+											</p>
+										</td>
+										<td>
+											<div data-toggle="modal" data-target="#change_status_booking_Modal"
+												[className]="'badge badge-pill booking_status cursor-pointer ' + booking?.booking_status">
+												{{booking?.booking_status | bookingStatusTextReplace :
+												'_' : ' ' |titlecase}}
+											</div>
+										</td>
+										<td class="sorting_1">
+											<p style="font-weight: 600 !important;">{{ FormatDate(booking?.pickup_date) }}
+											</p>
+											<p>{{ FormatTime(booking?.pickup_time) }}</p>
+										</td>
+										<td>
+											<p data-target="#sendEmailModal" style="white-space: pre" data-toggle="modal"
+												(click)="openModal(booking, 'Passenger')" id="box">
+												<span class="font-weight-bolder"
+													[innerHTML]="highlighText(booking?.passenger_name)"></span> |
+												<span [innerHTML]="highlighText( formatPhoneNumber(booking?.pax_tel))"></span>
+											</p>
+											<span class="text-underline cursor-pointer"
+												(click)="showLocationPointOnMap(booking?.booking_id, 'pickup')">
+												<span [innerHTML]="highlighText(booking?.pickup_address)"></span>
+											</span>
+										</td>
+										<td>
+	
+											<p data-target="#sendEmailModal" data-toggle="modal"
+												(click)="openModal(booking, 'Affiliate')">
+												<span class="font-weight-bolder"
+													[innerHTML]="highlighText(booking?.driver_name)"></span>&nbsp;
+												|
+												<span [innerHTML]="highlighText(booking?.driver_tel)"></span>
+											</p>
+	
+											<span class="text-underline cursor-pointer"
+												(click)="showLocationPointOnMap(booking?.booking_id, 'dropoff')">
+												<span [innerHTML]="highlighText(booking?.dropoff_address)"></span>
+											</span>
+										</td>
+										<td>
+											<span [innerHTML]="highlighText(booking?.vehicle_cat_name)"></span>
+										</td>
+										<!-- <td>
+											<mat-slide-toggle class="example-margin" [color]="color"
+												[checked]="booking?.status" [disabled]="disabled"
+												(change)="enableDisableClicked($event,booking?.booking_id)">
+											</mat-slide-toggle>
+										</td> -->
+	
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<p class="text-danger text-lg" *ngIf="noError">
+							No Results Found?.
+						</p>
+						<!----PAGINATION---->
+						<!----BACK BTN---->
+						<nav aria-label="Page navigation example" *ngIf="totalRecords > 15">
+							<ul class="pagination pagination-circle pg-blue">
+								<li *ngIf="currentPage!=1" class="page-item disabled"
+									(click)="loadBookings(firstPageUrl, startDate, endDate, searchText, filtertype)">
+									<a class="page-link">First</a>
+								</li>
+								<li *ngIf="currentPage!=1" class="page-item disabled"
+									(click)="loadBookings(prevPageUrl, startDate, endDate, searchText, filtertype)">
+									<a class="page-link" aria-label="Previous">
+										<span aria-hidden="true">&laquo;</span>
+										<span class="sr-only">Previous</span>
+									</a>
+								</li>
+								<li *ngFor="let in of counter() ;let i = index"
+									[ngClass]="(in==currentPage)?'page-item active':'page-item'"
+									(click)="loadBookings(path+'?page='+in, startDate, endDate, searchText, filtertype)"
+									[disabled]="(in==currentPage)?true:false">
+									<a class="page-link">{{in}}</a>
+								</li>
+								<li *ngIf="currentPage!=lastPage" class="page-item"
+									(click)="loadBookings(nextPageUrl, startDate, endDate, searchText, filtertype)">
+									<a class="page-link" aria-label="Next">
+										<span aria-hidden="true">&raquo;</span>
+										<span class="sr-only">Next</span>
+									</a>
+								</li>
+								<li *ngIf="currentPage!=lastPage" class="page-item"
+									(click)="loadBookings(lastPageUrl, startDate, endDate, searchText, filtertype)">
+									<a class="page-link">Last</a>
+								</li>
+							</ul>
+						</nav>
+					</div>
+				</div>
+			</div>
+		</section>
 </main>
 
 <!-- repeat/return booking type modal -->
@@ -283,7 +283,7 @@
 
 <!-- send email modal -->
 <div class="modal fade" id="emailModal" tabindex="-1" role="dialog" aria-labelledby="emailModal" aria-hidden="true">
-	<div class="modal-dialog" role="document">
+	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content">
 			<div class="modal-header pb-0">
 				<h3 class="mb-0">Email</h3>
@@ -322,7 +322,7 @@
 <!-- Audit trail Modal -->
 <div class="modal fade bd-example-modal-lg" id="AuditTrailModal" tabindex="-1" role="dialog"
 	aria-labelledby="exampleModalLabel" aria-hidden="true">
-	<div class="modal-dialog modal-lg" role="document">
+	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content user_information bottom-container">
 			<div class="modal-header pb-0">
 				<h3 class="modal-title mb-0">Audit Trial</h3>
@@ -358,7 +358,7 @@
 <!-- send email and call modal -->
 <div class="modal fade" id="sendEmailModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
 	aria-hidden="true" data-backdrop="static" data-keyboard="false">
-	<div class="modal-dialog" role="document">
+	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content" style="background: #f5f4fe;">
 			<button type="button" (click)="closeModal()" class="close closeButton x-circle-btn m-1 mx-3" data-dismiss="modal"
 				aria-label="Close">
@@ -526,7 +526,7 @@
 <!-- Notification Modal -->
 <div class="modal fade center" id="notificationModal" tabindex="-1" role="dialog" aria-labelledby="notificationModal"
 	aria-hidden="true">
-	<div class="modal-dialog" role="document">
+	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content">
 			<button type="button" class="close closeButton" data-dismiss="notificationModal" aria-label="Close"
 				id="closeModal" style="z-index: 10;">
