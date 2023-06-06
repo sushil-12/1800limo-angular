@@ -102,11 +102,11 @@ export class AffiliateStep2Component implements OnInit {
 			AccountHolderFirstName: ['', Validators.required],
 			AccountHolderLastName: ['', Validators.required],
 			AccountNumber: ['', [Validators.required, Validators.pattern("^[0-9]*$"), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
-			Routing: ['', [Validators.required , Validators.pattern("^[0-9]*$")]],
+			Routing: ['', [Validators.required]],
 			AccountType: ['company', Validators.required],
 			ssn: ['', [Validators.required, Validators.pattern("^[0-9]*$"), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
 			haveEin: ['yesEin'],
-			ein: [''],
+			ein: ['', []],
 			currency: ['', Validators.required],
 			dobDay: ['', Validators.required],
 			dobMonth: ['', Validators.required],
@@ -309,10 +309,19 @@ export class AffiliateStep2Component implements OnInit {
 		switch (haveEinNo) {
 			case 'noEin': {
 				this.haveEinNo = false;
+				this.addBankForm.patchValue({
+					haveEin : false
+				})
 				break;
 			}
 			case 'yesEin': {
 				this.haveEinNo = true;
+				console.log('validation updated')
+				this.addBankForm.patchValue({
+					haveEin : true
+				})
+				this.addBankForm.controls['ein'].setValidators([Validators.required])
+				this.addBankForm.controls['ein'].updateValueAndValidity()
 				break;
 			}
 		}
@@ -320,6 +329,14 @@ export class AffiliateStep2Component implements OnInit {
 
 	changeRadio(form_control: string, value: any) {
 		this.SetFormValue(form_control, value)
+		if (value) {
+			this.addBankForm.controls['ein'].setValidators([Validators.required])
+			this.addBankForm.controls['ein'].updateValueAndValidity()
+		}
+		else{
+			this.addBankForm.controls['ein'].setValidators([])
+			this.addBankForm.controls['ein'].updateValueAndValidity()
+		}
 	}
 
 	changeCountry(selectedCountryCode) {

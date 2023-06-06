@@ -190,7 +190,7 @@
 								<td>
 									
 										<p data-target="#sendEmailModal" data-toggle="modal"
-											(click)="openModal(booking, 'Affiliate')"
+											(click)="openModal(booking, 'Affiliate')" class="disabled-btn"
 											*ngIf="booking?.affiliate_type != 'gig_operator'; else gigOperator">
 											<span class="font-weight-bolder"
 												[innerHTML]="highlighText(booking?.driver_name)"></span>&nbsp;|

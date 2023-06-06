@@ -1277,7 +1277,7 @@ export class CreateNewBookingComponent implements OnInit {
 						error: `<span class='text-success'>${response.message}</span>`
 					}
 				})
-				this.$router.navigate(['/admin/daily-bookings-admin'])
+				this.$router.navigate(['/affiliate/farm-out'])
 				this.$spinner.hide()
 			})
 		}
