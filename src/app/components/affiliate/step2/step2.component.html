@@ -441,7 +441,8 @@
 				</div>
 				<div class="col-md-6 mt-3" *ngIf="f?.haveEin?.value">
 					<mat-form-field appearance="outline">
-						<mat-label>EIN / Business ID #</mat-label>
+						<mat-label>EIN / Business ID #  <span
+							class="asterisk">*</span></mat-label>
 						<input matInput placeholder="EIN / Business ID #"
 							(focus)="$event?.target?.select()" formControlName="ein" tabindex="1" />
 					</mat-form-field>
