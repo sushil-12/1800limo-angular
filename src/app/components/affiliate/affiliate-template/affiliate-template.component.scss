@@ -83,6 +83,9 @@ mat-progress-bar {
 	right   : 115px;
 	z-index : -1;
 }
+:host ::ng-deep .VIpgJd-ZVi9od-l4eHX-hSRGPd{
+	display:none !important;
+	}
 
 
 @media only screen and (max-width:767px) {
