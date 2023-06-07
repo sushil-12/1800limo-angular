@@ -33,6 +33,7 @@ export class AffiliateStepsTemplateComponent implements OnInit {
 	public response: any;
 	affiliateId: string;
 	stepsObj: string;
+	affiliateName: any;
 
 	constructor(
 		private router: Router,
@@ -44,6 +45,7 @@ export class AffiliateStepsTemplateComponent implements OnInit {
 	ngOnInit() {
 		this.currentStep = this.router.url.substring(this.router.url.indexOf('step'));
 		this.affiliateId = sessionStorage.getItem('affiliateId');
+		this.affiliateName = JSON.parse(sessionStorage.getItem('affiliateUserData')).FirstName 
 		if (this.affiliateId) {
 			this.adminService.getStepsCompleted(this.affiliateId)
 				.pipe(
