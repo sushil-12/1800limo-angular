@@ -663,7 +663,6 @@ export class AffiliateStep1Component implements OnInit {
 		// console.log(JSON.stringify(this.addVehicleRatesForm.value));
 		this.spinner.show();
 		this.disableSubmitButton = true; //disable submit button
-
 		this.adminService.addAffiliateAccount(this.addAffiliateAccountForm.value)
 			.pipe(
 				catchError(err => {
@@ -689,7 +688,9 @@ export class AffiliateStep1Component implements OnInit {
 						console.log('routing to step 2 _-->>')
 						
 					}
-					
+					let affiliateName = this.addAffiliateAccountForm.value.FirstName + ' ' + this.addAffiliateAccountForm.value.LastName
+						console.log('------_>>>>>>>>>>> affiliate name' , affiliateName)
+						sessionStorage.setItem("affiliateName" , affiliateName)
 					// done by Ishpreet
 					this.router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
 							this.router.navigate(['/admin/affiliate/step2'])
