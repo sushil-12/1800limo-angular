@@ -45,7 +45,6 @@ export class AffiliateStepsTemplateComponent implements OnInit {
 	ngOnInit() {
 		this.currentStep = this.router.url.substring(this.router.url.indexOf('step'));
 		this.affiliateId = sessionStorage.getItem('affiliateId');
-		this.affiliateName = JSON.parse(sessionStorage.getItem('affiliateUserData')).FirstName 
 		if (this.affiliateId) {
 			this.adminService.getStepsCompleted(this.affiliateId)
 				.pipe(
@@ -76,12 +75,17 @@ export class AffiliateStepsTemplateComponent implements OnInit {
 			}
 		}
 	}
+	getAffiliateName(){
+		this.affiliateName = sessionStorage.getItem('affiliateName') || ""
+
+	}
 
 	stepCompletionTick() {
 		for (let [key, value] of Object.entries(this.stepCompletedObj)) {
 			let stepNumber = key;
 			this[stepNumber] = 'md-step ' + value + (this.currentStep == stepNumber ? ' active' : '');
 		}
+		this.getAffiliateName()
 	}
 
 	stepClicked(step) {
@@ -114,6 +118,7 @@ export class AffiliateStepsTemplateComponent implements OnInit {
 			console.log('nav------step' , nav_step)
 			this.router.navigate(['/admin/affiliate/' + (nav_step)])
 		}
+		this.getAffiliateName();
 
 	}
 }

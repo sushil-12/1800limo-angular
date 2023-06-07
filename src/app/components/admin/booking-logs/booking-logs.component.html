@@ -2,10 +2,40 @@
     <div class="alert alert-info" role="alert">
         NOTE: THIS IS CURRENTLY IN TESTING PHASE 
       </div>
+
+
+      <div class="containeredd mt-1 ">
+        <div class="row ">
+          <div class="col-md-10 mt-3 mb-3">
+            <mat-form-field appearance="outline">
+              <mat-label>Search Filter by Key word</mat-label>
+              <input type="text" matInput placeholder="Search Filter by Key word" 
+              (keyup)="searchInBookingslogs($event.target.value)" [value]="searchText"
+              id="keyword2">
+            </mat-form-field>
+          </div>
+          <div class="col-md-2 mt-3 mb-3">
+            <button class="custom-btn button2 btnclass box-shadow" (click)="searchInBookingslogs(searchText)">SEARCH</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- <div class="row">
+        <div id="search-field" class="col-md-8">
+            <mat-form-field appearance="outline" class="m-0">
+                <input matInput type="text" (keypress)="handleKeypressEvents()"
+                    (keyup)="searchInBookingslogs($event.target.value)" [value]="searchText"
+                    placeholder="Search" id="keyword">
+            </mat-form-field>
+        </div>
+        <div class="col-md-2">
+            <button class="custom-btn button2 btnclass box-shadow" (click)="searchInBookingslogs(searchText)">SEARCH</button>
+          </div>
+    </div> -->
     <mat-table [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z8">
         <ng-container matColumnDef="{{column}}" *ngFor="let column of columnsToDisplay">
             <mat-header-cell *matHeaderCellDef> {{formatText(column) | titlecase}} </mat-header-cell>
-            <mat-cell *matCellDef="let element"> {{element[column]}} </mat-cell>
+            <mat-cell *matCellDef="let element"> {{columnData(element,column)}} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="expandedDetail">
@@ -48,4 +78,36 @@
         </mat-row>
         <mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></mat-row>
     </mat-table>
+    <nav aria-label="Page navigation example" *ngIf="totalRecords > 15">
+        <ul class="pagination pagination-circle pg-blue">
+            <li *ngIf="currentPage!=1" class="page-item disabled"
+                (click)="getBookingLogs(firstPageUrl, searchText)">
+                <a class="page-link">First</a>
+            </li>
+            <li *ngIf="currentPage!=1" class="page-item disabled"
+                (click)="getBookingLogs(prevPageUrl, searchText)">
+                <a class="page-link" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                    <span class="sr-only">Previous</span>
+                </a>
+            </li>
+            <li *ngFor="let in of counter() ;let i = index"
+                [ngClass]="(in==currentPage)?'page-item active':'page-item'"
+                (click)="getBookingLogs(path+'?page='+in, searchText)"
+                [disabled]="(in==currentPage)?true:false">
+                <a class="page-link">{{in}}</a>
+            </li>
+            <li *ngIf="currentPage!=lastPage" class="page-item"
+                (click)="getBookingLogs(nextPageUrl, searchText)">
+                <a class="page-link" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </li>
+            <li *ngIf="currentPage!=lastPage" class="page-item"
+                (click)="getBookingLogs(lastPageUrl, searchText)">
+                <a class="page-link">Last</a>
+            </li>
+        </ul>
+    </nav>
 </section>
