@@ -2,9 +2,14 @@ mat-form-field input {
 	background-color: #fff;
 	margin-bottom: 0;
 }
-
+section{
+	background-color: none !important;
+}
 .highlight-text {
 	font-size: x-large !important;
+}
+.personalized_wrapper {
+    background-color: #000 !important;
 }
 
 #myTab {
@@ -253,6 +258,13 @@ mat-form-field input {
 		display: block;
 	}
 }
+
+@media only screen and (max-width: 480px){
+	.bannerform_wrapper {
+		background-color: black !important;
+	}
+}
+
 
 .logbutton {
 	// border            : 1px solid #5dbd8a !important;
@@ -695,7 +707,7 @@ a.user-profile:active::after {
 
 .bannerform_wrapper .quoteform_homewrapper .input-group .input-group-append .input-group-text {
 	height: 30px !important;
-	background-color: var(--orange-color);
+	background-color: var(--orange-color) !important;
 	color: #fff !important;
 	border: none;
 	width: 30px;
