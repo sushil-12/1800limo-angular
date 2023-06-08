@@ -128,9 +128,13 @@ export class AffiliateAccountsComponent implements OnInit {
 
 	loadAffiliateOperators(pageUrl = null) {
 		/** spinner starts on init */
+		var keyword = ((document.getElementById("keyword1") as HTMLInputElement).value);
+		if(keyword.length>0){
+			this.filter_type = 'all'
+			console.log('keyword--->>>' , keyword , this.filter_type)
+		}
 		this.spinner.show();
 
-		var keyword = ((document.getElementById("keyword1") as HTMLInputElement).value);
 		// console.log(keyword);
 		// Load Our blackCarLimoBus using API
 		this.adminService.blackCarLimoBusAccounts(pageUrl, this.affiliateType, this.filter_type, keyword).then((result: any) => {
@@ -160,11 +164,12 @@ export class AffiliateAccountsComponent implements OnInit {
 		this.router.navigate(['/admin/affiliate/step0']);
 	}
 
-	editAffiliateAccount(affiliate_id: number, affiliate_type: string) {
+	editAffiliateAccount(affiliate_id: number, affiliate_type: string , affiliateUserData) {
 		// this.affiliateService.updateStepsArrayLocal(this.response.data.affiliateParmas.step_completed);
 		// this.affiliateService.updateStepsCompletedObject(this.response.data.affiliateParmas.step_completed_obj);
 		sessionStorage.setItem('affiliateId', JSON.stringify(affiliate_id))
 		sessionStorage.setItem("affiliateType", affiliate_type);
+		sessionStorage.setItem('affiliateName' , affiliateUserData.FirstName +' '+ affiliateUserData.LastName)
 		this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
 			this.router.navigate(['/admin/affiliate/step0']);
 		});

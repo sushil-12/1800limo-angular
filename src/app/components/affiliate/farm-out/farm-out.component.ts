@@ -111,7 +111,13 @@ export class FarmOutComponent implements OnInit
 		});
 		this.loadBookings()
 
+		$("#search-field-farmout").addClass("box-outline")
+
 	}
+	ngAfterViewInit(): void {
+		$("#search-field-farmout").addClass("box-outline")
+	}
+
 
 	loadBookings(pageUrl = null) {
 		/** spinner starts on init */
@@ -259,7 +265,7 @@ export class FarmOutComponent implements OnInit
 
 	editAction(bookingId, updateType) {
 		if (updateType == 'change') {
-			this.$router.navigate(['/affiliate/new-booking'], { queryParams: { bookingId: bookingId, updateType: updateType } });
+			this.$router.navigate(['/affiliate/new-booking'], { queryParams: { bookingId: bookingId, updateType: updateType , nav : 'false' } });
 		}
 		else {
 			this.$router.navigate(['/affiliate/new-booking'], { queryParams: { bookingId: bookingId } });

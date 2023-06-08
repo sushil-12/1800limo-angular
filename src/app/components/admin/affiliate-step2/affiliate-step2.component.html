@@ -217,8 +217,8 @@
 					</div>
 				</div>
 				<div class="col-md-6 mt-3" *ngIf="f.haveEin.value">
-					<mat-form-field appearance="outline">
-						<mat-label>EIN / Business ID #</mat-label>
+					<mat-form-field appearance="outline"> 
+						<mat-label>EIN / Business ID # <span class="asterisk">*</span></mat-label>
 						<input matInput placeholder="EIN / Business ID #" (focus)="$event.target.select()"
 							formControlName="ein" tabindex="1" />
 					</mat-form-field>
@@ -502,19 +502,19 @@
 		</div>
 	</section>
 
-	<section class="billing_inforamtion">
+	<div class="billing_inforamtion">
 		<ul>
 			<li><button class="custom-filled-button" (click)="submitForm()" [disabled]="disableSubmitButton"
 					tabindex="1">SAVE</button> </li>
 			<li><button class="custom-filled-button" (click)="resetForm()" tabindex="1">RESET</button> </li>
 		</ul>
-	</section>
+	</div>
 </form>
 
 <!-- Country wise Document modal -->
 <div class="modal fade" id="verificationDocumentModal" tabindex="-1" role="dialog"
 	aria-labelledby="verificationDocumentModal" aria-hidden="true">
-	<div class="modal-dialog" role="document">
+	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content user_information">
 			<button type="button" class="close closeButton" data-dismiss="modal" aria-label="Close">
 				<span aria-hidden="true">&times;</span>
@@ -616,7 +616,7 @@
 <!-- Affiliate Email sent modal -->
 <div class="modal fade" id="showEmailVerificationAlert" tabindex="-1" role="dialog"
 	aria-labelledby="showEmailVerificationAlert" aria-hidden="true">
-	<div class="modal-dialog" role="document">
+	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title mb-0 text-center">We shot you an email, please verify your email address.</h5>

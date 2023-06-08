@@ -483,6 +483,14 @@ export class Step2Component implements OnInit {
 
 	changeRadio(form_control: string, value: any) {
 		this.SetFormValue(form_control, value)
+		if (value) {
+			this.addBankForm.controls['ein'].setValidators([Validators.required])
+			this.addBankForm.controls['ein'].updateValueAndValidity()
+		}
+		else{
+			this.addBankForm.controls['ein'].setValidators([])
+			this.addBankForm.controls['ein'].updateValueAndValidity()
+		}
 	}
 
 	changeIdentityCountry(selectedCountryCode) {
@@ -743,6 +751,7 @@ export class Step2Component implements OnInit {
 		this.addBankForm.reset();
 		this.id_front_image = "";
 		this.id_back_image = "";
+		this.canChangeDocument = true;
 	}
 
 	/**

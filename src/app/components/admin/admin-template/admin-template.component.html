@@ -153,6 +153,9 @@
 										routerLink="/admin/invoices-admin"
 										(click)="closeSidebarFunc(false)">Invoices</a>
 									<a class="collapse-item" [routerLinkActive]="['active']"
+										routerLink="/admin/booking-logs"
+										(click)="closeSidebarFunc(false)">Booking logs</a>
+									<a class="collapse-item" [routerLinkActive]="['active']"
 										routerLink="/admin/create-debit-cc-card-admin" *ngIf="role=='admin' || subModules.includes('can_add_edit_card')"
 										(click)="closeSidebarFunc(false)">Create Debit/CC Card</a>
 								</div>

@@ -247,7 +247,7 @@ export class AffiliateFinalizeComponent implements OnInit {
 								error: `<span class='text-success'>${response.message}</span>`
 							}
 						})
-						this.router.navigate(['/admin/invoice-summary'] ,{ queryParams: { bookingId: this.bookingId } })
+						this.router.navigate(['/affiliate/invoice-summary'] ,{ queryParams: { bookingId: this.bookingId } })
 						console.log('response---------------------->>' , response)
 						this.spinner.hide()
 					})

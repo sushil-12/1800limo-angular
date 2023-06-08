@@ -20,7 +20,7 @@
 								*ngFor="let tile of ['black_limo_operator', 'fleet_operator', 'taxi_operator', 'gig_operator']; index as tile_index"
 								(click)="affiliateTypeSwitch(tile_index)"
 								[ngClass]="f.AffiliateType.value == tile ? 'active' : ''">
-								<div id="check-icon" class="w-100">
+								<div id="check-icon" class="w-100" *ngIf="f.AffiliateType.value===tile">
 									<i class="bi bi-check-lg"></i>
 								</div>
 								<input type="radio" id="radio-button_{{ tile_index }}" class="radio-button" />
@@ -320,6 +320,25 @@
 							This field is required
 						</div>
 					</div>
+				</div>
+				<div class="col-md-6 mt-1">
+					<mat-form-field appearance="outline" class="example-full-width">
+						<mat-label>Badge City
+						</mat-label>
+						<input type="text"
+							   placeholder="Pick one"
+							   aria-label="Number"
+							   matInput
+							   formControlName="badge_city_name"
+							   [matAutocomplete]="auto" 
+							   (keyup)="handleBadgeCity($event.target.value)">
+						<mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+						  <mat-option *ngFor="let option of filteredOptions" 
+						  (onSelectionChange)="selectBadgeCity(option,$event.isUserInput)" [value]="option.name">
+							{{option.name}}
+						  </mat-option>
+						</mat-autocomplete>
+					  </mat-form-field>
 				</div>
 			</div>
 		</div>
@@ -931,7 +950,7 @@
 <!-- Instructions modal -->
 <div class="modal fade" id="instructionsModal" tabindex="-1" role="dialog" aria-labelledby="instructionsModal"
 	aria-hidden="true">
-	<div class="modal-dialog" role="document">
+	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content">
 			<button type="button" class="close closeButton" data-dismiss="modal" aria-label="Close">
 				<span aria-hidden="true">&times;</span>
@@ -986,7 +1005,7 @@
 <!-- Affiliate selection Instructions modal -->
 <div class="modal fade" id="affiliateInstructionsModal" tabindex="-1" role="dialog"
 	aria-labelledby="affiliateInstructionsModal" aria-hidden="true">
-	<div class="modal-dialog" role="document">
+	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content">
 			<button type="button" class="close closeButton" data-dismiss="modal" aria-label="Close">
 				<span aria-hidden="true">&times;</span>
@@ -1009,7 +1028,7 @@
 <!-- Affiliate selection alertMessage modal -->
 <div class="modal fade" id="affiliateAlertMessageModal" tabindex="-1" role="dialog"
 	aria-labelledby="affiliateAlertMessageModal" aria-hidden="true">
-	<div class="modal-dialog" role="document">
+	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content">
 			<button type="button" class="close closeButton" data-dismiss="modal" aria-label="Close">
 				<span aria-hidden="true">&times;</span>
@@ -1031,7 +1050,7 @@
 <!-- Edit Affiliate Email modal -->
 <div class="modal fade" id="editAffiliateEmailModal" tabindex="-1" role="dialog"
 	aria-labelledby="editAffiliateEmailModal" aria-hidden="true">
-	<div class="modal-dialog" role="document">
+	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content">
 			<button type="button" class="close closeButton" data-dismiss="modal" aria-label="Close">
 				<span aria-hidden="true">&times;</span>
@@ -1218,7 +1237,7 @@
 <!-- Edit Dispatch Email modal -->
 <div class="modal fade" id="editDispatchEmailModal" tabindex="-1" role="dialog" aria-labelledby="editDispatchEmailModal"
 	aria-hidden="true">
-	<div class="modal-dialog" role="document">
+	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content">
 			<button type="button" class="close closeButton" data-dismiss="modal" aria-label="Close">
 				<span aria-hidden="true">&times;</span>

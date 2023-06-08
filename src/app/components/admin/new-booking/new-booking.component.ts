@@ -106,6 +106,7 @@ export class NewBookingComponent implements OnInit {
 	QB_vehicle_id: any = null;
 	unique_key: any;
 	firstLoadAffiliateId: void;
+	updateType: any;
 
 
 	constructor(
@@ -131,6 +132,7 @@ export class NewBookingComponent implements OnInit {
 		this.$routeurl.queryParams.subscribe((params: any) => {
 			if (params && params.bookingId && !this.booking_id) {
 				this.is_booking_edit_case = true
+				this.updateType = params.updateType
 				this.SetFormValue('reservation_id', params.bookingId)
 				params.updateType ? this.SetFormValue('updateType', params.updateType) : this.SetFormValue('updateType', 'edit')
 			}
@@ -152,6 +154,14 @@ export class NewBookingComponent implements OnInit {
 		// fetch the big data
 		this.fetchAirportsAndBigData()
 
+	}
+
+	ngAfterViewInit(): void{
+		console.log('<<<<<<<<<<<<<<<<<<<<<-----------ng after view init--------------->>>>>>>>>>>>>')
+		if(this.updateType == 'repeat' || this.updateType == 'return'){
+			this.scroll('travel_time')
+			this.SetFormValue('pickup_date' , moment().format('YYYY-MM-DD'))
+		}
 	}
 
 	dateFormat(value: any) {
@@ -511,7 +521,18 @@ export class NewBookingComponent implements OnInit {
 			}
 
 			this.$spinner.hide('normalspinner')
+			console.log('<<<<<<<<<<<-----------set pickup date------->>>>', moment().format('YYYY-MM-DD') , this.updateType)
+		if(this.updateType == 'repeat' || this.updateType == 'return'){
+			this.scroll('travel_time')
+			this.SetFormValue('pickup_date' , moment().format('YYYY-MM-DD'))
+		}
 		})
+		
+	}
+	scroll(id) {
+		let el = document.getElementById(id);
+		console.log(`scrolling to ${id}`, el);
+		el.scrollIntoView(true);
 	}
 
 	SetFormValue(form_control: string, value: any) {

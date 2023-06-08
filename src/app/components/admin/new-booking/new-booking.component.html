@@ -15,7 +15,7 @@
 <form class="container-fluid" [formGroup]="BookingForm" appInvalidControlScroll>
 	<div id="page-container">
 		<!-- Section - Booking Type -->
-		<div class="section-container mt-5">
+		<div class="section-container mt-2">
 			<h2>
 				Booking Type
 			</h2>
@@ -90,7 +90,7 @@
 		<!-- Section - Booking Type Ends -->
 
 		<!-- Client Accounts Section -->
-		<div class="section-container mt-5">
+		<div class="section-container mt-2">
 			<h4>
 				Client Accounts
 			</h4>
@@ -630,7 +630,7 @@
 
 
 		<!-- Section - Affiliate/Loose Details -->
-		<div class="section-container mt-5">
+		<div class="section-container mt-2">
 			<h2>
 				Affiliate Details
 			</h2>
@@ -1049,7 +1049,6 @@
 				</div>
 			</div>
 			<!-- Affiliate Vehicle Information Ends -->
-
 			<!-- Visible in Affiliate as well as Loose Affiliate Section -->
 			<!-- Affiliate Driver Information -->
 			<div class="px-4 my-4" *ngIf="Form.affiliate_type.value == 'loose_affiliate' || Form.affiliate_id.value">
@@ -1208,7 +1207,7 @@
 			<!-- Affiliate Driver Information Ends -->
 
 			<!-- Section Booking details start -->
-			<h2>
+			<h2 id="booking_detail_section">
 				Booking Details
 			</h2>
 			<div class="row">
@@ -1254,7 +1253,7 @@
 				</div>
 
 				<!-- Travel Time -->
-				<div class="col-md-5 m-2">
+				<div class="col-md-5 m-2" id="travel_time">
 					<mat-form-field appearance="outline">
 						<mat-label>
 							Travel Time
@@ -1266,7 +1265,7 @@
 			</div>
 
 
-			<h4 class="pl-2 mt-3">
+			<h4 class="pl-2 mt-3" id="pickup_details">
 				Pickup
 			</h4>
 

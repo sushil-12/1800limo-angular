@@ -5,6 +5,7 @@
 * {
     --green: #33c658;
     --blue: #0053b5;
+    --section-bg-color:#f5f4fe;
 }
 
 body {
@@ -185,7 +186,18 @@ button.custom-filled-reset-button {
     padding: 10px !important;
     width: 70% !important;
 }
-
+.section-container{
+    background-color: var(--section-bg-color) !important;
+}
+section{
+    background-color: var(--section-bg-color) !important;
+}
+.md-stepper-horizontal{
+    background-color: var(--section-bg-color) !important;
+}
+.ng-select-container{
+    background-color: #FFF;
+}
 .finalize-rates .section-container {
     padding-bottom: 12px !important;
     margin-top: 20px !important;
@@ -211,3 +223,8 @@ button.custom-filled-reset-button {
     top: 1.84375em;
     margin-top: 0 !important;
 }
+
+// .modal{
+//     position: absolute !important;
+//     top: 10% !important;
+// }

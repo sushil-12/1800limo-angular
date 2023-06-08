@@ -51,7 +51,7 @@ button {
 }
 
 .cancelled {
-	background-color: #45200d;
+	background-color: #FF0000;
 }
 
 .en_route_pu {
@@ -275,7 +275,7 @@ input::-webkit-input-placeholder {
 	}
 }
 
-@media only screen and (max-width: 475px)
+@media only screen and (max-width: 575px)
 {
 	#AuditTrailModal
 	{

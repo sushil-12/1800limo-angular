@@ -33,6 +33,7 @@ export class AffiliateStepsTemplateComponent implements OnInit {
 	public response: any;
 	affiliateId: string;
 	stepsObj: string;
+	affiliateName: any;
 
 	constructor(
 		private router: Router,
@@ -74,12 +75,17 @@ export class AffiliateStepsTemplateComponent implements OnInit {
 			}
 		}
 	}
+	getAffiliateName(){
+		this.affiliateName = sessionStorage.getItem('affiliateName') || ""
+
+	}
 
 	stepCompletionTick() {
 		for (let [key, value] of Object.entries(this.stepCompletedObj)) {
 			let stepNumber = key;
 			this[stepNumber] = 'md-step ' + value + (this.currentStep == stepNumber ? ' active' : '');
 		}
+		this.getAffiliateName()
 	}
 
 	stepClicked(step) {
@@ -112,6 +118,7 @@ export class AffiliateStepsTemplateComponent implements OnInit {
 			console.log('nav------step' , nav_step)
 			this.router.navigate(['/admin/affiliate/' + (nav_step)])
 		}
+		this.getAffiliateName();
 
 	}
 }

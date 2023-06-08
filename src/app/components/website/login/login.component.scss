@@ -10,6 +10,9 @@
 	text-align      : center;
 	left            : -5px;
 }
+.row{
+	justify-content: space-around;
+}
 
 $bg         : #33c658;
 $borderWidth: 2px;
@@ -48,6 +51,9 @@ label+input[type=radio]+label {
 	text-align : center;
 }
 
+.hide-alert{
+	display: none;
+}
 .radio-group {
 	border       : solid 1px $bg;
 	display      : inline-block;
@@ -61,6 +67,7 @@ label+input[type=radio]+label {
 		display      : grid;
 		border-radius: 10px;
 		overflow     : hidden;
+		margin       : 7px;
 	}
 
 	label+input[type=radio]+label {

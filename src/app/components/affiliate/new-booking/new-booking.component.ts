@@ -93,6 +93,7 @@ export class NewBookingComponent implements OnInit {
 	is_booking_edit_case: boolean = false
 	reset_button: boolean = false
 	submitBookingForm: boolean;
+	nav_to_farmIn: boolean = true;
 
 
 	constructor(
@@ -117,6 +118,7 @@ export class NewBookingComponent implements OnInit {
 		// build the form first 
 		this.buildBookingForm()
 		this.$routeurl.queryParams.subscribe((params: any) => {
+			this.nav_to_farmIn = params.nav == 'true' ? true : false
 			if (params && params.bookingId && !this.booking_id) {
 				this.is_booking_edit_case = true
 				this.SetFormValue('reservation_id', params.bookingId)
@@ -1190,7 +1192,8 @@ export class NewBookingComponent implements OnInit {
 						error: `<span class='text-success'>${response.message}</span>`
 					}
 				})
-				this.$router.navigate(['/affiliate/my-bookings'])
+				this.nav_to_farmIn ? this.$router.navigate(['/affiliate/my-bookings']) : this.$router.navigate(['/affiliate/farm-out'])
+				
 				this.$spinner.hide()
 			})
 		}

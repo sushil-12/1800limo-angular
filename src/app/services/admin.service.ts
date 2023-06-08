@@ -899,6 +899,17 @@ export class AdminService {
 		}
 		return this.httpClient.get(path).toPromise();
 	}
+	getBookingLogs(url,keyword = ''){
+		var path;
+		if (url) {
+			path = url + '&search=' + keyword;
+		}
+		else {
+			path = this.serverUrl + 'admin/booking-payment-logs' + '?&search=' + keyword;
+		}
+		return this.httpClient.get(path);
+		// return this.httpClient.get(this.serverUrl + 'admin/booking-payment-logs');
+	}
 
 	//sub Admin API
 	addSubAdmin(data) {

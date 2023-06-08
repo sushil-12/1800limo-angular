@@ -34,7 +34,7 @@ hr{
 }
 
 .cancelled {
-	background-color: #dc3545;
+	background-color: #FF0000;
 }
 .paid {
 	background-color: #D1B000;
@@ -234,6 +234,10 @@ input::-webkit-input-placeholder {
 	color: red;
 	font-size: xx-large;
 }
+.box-outline {
+	border: solid 3px;
+    border-radius: 4px;
+}
 .center {
 	margin: 0;
 	position: absolute;
@@ -251,6 +255,11 @@ input::-webkit-input-placeholder {
   }
   .preview-airport-color{
 	color:  #00008B !important ;
+  }
+
+  .disabled-btn{
+	pointer-events: none;
+	cursor: not-allowed !important;
   }
 @media only screen and (min-width: 768px) and (max-width: 1200px) {
 	.startdate {
@@ -272,7 +281,7 @@ input::-webkit-input-placeholder {
 	}
 }
 
-@media only screen and (max-width: 475px)
+@media only screen and (max-width: 575px)
 {
 	#AuditTrailModal
 	{

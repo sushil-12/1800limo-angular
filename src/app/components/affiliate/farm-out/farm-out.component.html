@@ -55,7 +55,7 @@
 			</div>
 		</div>
 		<div class="col-md-12">
-			<div id="search-field">
+			<div id="search-field-farmout">
 				<mat-form-field appearance="outline" class="m-0">
 					<input matInput type="text" (keypress)="handleKeypressEvents()"
 						(keyup)="searchInBookings($event.target.value)" [value]="searchText"
@@ -190,7 +190,7 @@
 								<td>
 									
 										<p data-target="#sendEmailModal" data-toggle="modal"
-											(click)="openModal(booking, 'Affiliate')"
+											(click)="openModal(booking, 'Affiliate')" class="disabled-btn"
 											*ngIf="booking?.affiliate_type != 'gig_operator'; else gigOperator">
 											<span class="font-weight-bolder"
 												[innerHTML]="highlighText(booking?.driver_name)"></span>&nbsp;|
@@ -276,7 +276,7 @@
 <!-- FARMOUT MODAL -->
 <div class="modal fade" id="farmout-modal" data-backdrop="static" data-keyboard="false" tabindex="-1"
 	aria-labelledby="farmoutModalLabel" aria-hidden="true">
-	<div class="modal-dialog">
+	<div class="modal-dialog modal-dialog-centered">
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title" id="exampleModalLabel"> Farm Out Booking </h5>
@@ -303,7 +303,7 @@
 
 
 <div class="modal fade" id="emailModal" tabindex="-1" role="dialog" aria-labelledby="emailModal" aria-hidden="true">
-	<div class="modal-dialog" role="document">
+	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content">
 			<div class="modal-header pb-0">
 				<h3 class="mb-0">Email</h3>
@@ -342,7 +342,7 @@
 <!-- Audit trail Modal -->
 <div class="modal fade bd-example-modal-lg" id="AuditTrailModal" tabindex="-1" role="dialog"
 	aria-labelledby="exampleModalLabel" aria-hidden="true">
-	<div class="modal-dialog modal-lg" role="document">
+	<div class="modal-dialog modal-lg modal-dialog-centered" role="document">
 		<div class="modal-content user_information bottom-container">
 			<div class="modal-header pb-0">
 				<h3 class="modal-title mb-0">Audit Trial</h3>
@@ -378,7 +378,7 @@
 <!-- send email and call modal -->
 <div class="modal fade" id="sendEmailModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
 	aria-hidden="true" data-backdrop="static" data-keyboard="false">
-	<div class="modal-dialog" role="document">
+	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content" style="background: #f5f4fe;">
 			<button type="button" (click)="closeModal()" class="close closeButton x-circle-btn m-1 mx-3" data-dismiss="modal"
 				aria-label="Close">
@@ -546,7 +546,7 @@
 <!-- Notification Modal -->
 <div class="modal fade center" id="notificationModal" tabindex="-1" role="dialog" aria-labelledby="notificationModal"
 	aria-hidden="true">
-	<div class="modal-dialog" role="document">
+	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content">
 			<button type="button" class="close closeButton" data-dismiss="notificationModal" aria-label="Close"
 				id="closeModal" style="z-index: 10;">

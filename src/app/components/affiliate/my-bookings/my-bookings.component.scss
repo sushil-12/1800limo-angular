@@ -13,6 +13,11 @@ hr{
 	color    : #fff;
 }
 
+.box-outline {
+	border: solid 3px;
+    border-radius: 4px;
+}
+
 .btnclass {
 	margin-top: 20px;
 	height    : 60px;
@@ -34,7 +39,7 @@ hr{
 }
 
 .cancelled {
-	background-color: #dc3545;
+	background-color: #FF0000;
 }
 .paid {
 	background-color: #D1B000;
@@ -255,6 +260,11 @@ input::-webkit-input-placeholder {
   .preview-airport-color{
 	color:  #00008B !important ;
   }
+
+  .disabled-btn{
+	pointer-events: none;
+	cursor: not-allowed !important;
+  }
 @media only screen and (min-width: 768px) and (max-width: 1200px) {
 	.startdate {
 		padding-right: 5px;
@@ -275,7 +285,7 @@ input::-webkit-input-placeholder {
 	}
 }
 
-@media only screen and (max-width: 475px)
+@media only screen and (max-width: 575px)
 {
 	#AuditTrailModal
 	{
@@ -307,4 +317,12 @@ input::-webkit-input-placeholder {
 	// 	border:1px solid pink;
 	// 	bottom: 10px
 	// }
+}
+@media only screen and (max-width: 767px){
+	main {
+		padding: inherit !important;
+	}
+	#layoutSidenav_content{
+    padding: 0px !important;
+	}
 }

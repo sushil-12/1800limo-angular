@@ -51,6 +51,7 @@ export class MyBookingsComponent implements OnInit {
 	isAffiliate: boolean = false
 	isLooseAffiliate: boolean = false;
 	audit_Trail: any;
+	company_name:any =JSON.parse(localStorage.getItem('currentUser'))?.affiliate_company || ''
 
 	constructor(
 		private affiliateService: AffiliateService,
@@ -88,7 +89,14 @@ export class MyBookingsComponent implements OnInit {
 			reservation_id: ['', Validators.required],
 			emailTarget: ['', Validators.required]
 		});
+
+		$("#search-field-my-booking").addClass("box-outline")
 	}
+
+	ngAfterViewInit(): void {
+		$("#search-field-my-booking").addClass("box-outline")
+	}
+
 
 
 	loadBookings(pageUrl = null) {
@@ -379,10 +387,10 @@ export class MyBookingsComponent implements OnInit {
 
 	editAction(bookingId, updateType) {
 		if (updateType == 'change') {
-			this.router.navigate(['/affiliate/new-booking'], { queryParams: { bookingId: bookingId, updateType: updateType } });
+			this.router.navigate(['/affiliate/new-booking'], { queryParams: { bookingId: bookingId, updateType: updateType , nav : 'true'} });
 		}
 		else {
-			this.router.navigate(['/affiliate/new-booking'], { queryParams: { bookingId: bookingId } });
+			this.router.navigate(['/affiliate/new-booking'], { queryParams: { bookingId: bookingId , nav : 'true'} });
 		}
 	}
 

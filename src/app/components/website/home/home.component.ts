@@ -16,6 +16,7 @@ import { SharedModule } from 'src/app/components/shared/shared.module';
 
 // data for select fields
 import { constant_data } from 'src/assets/js/data.js'
+import * as moment from 'moment';
 
 
 declare var $: any;
@@ -128,7 +129,7 @@ export class HomeComponent implements OnInit {
 		this.steps = localStorage.getItem("stepCompleted");
 		this.accountStatus = localStorage.getItem("account_approval");
 
-		if (this.accountStatus == "completed") {
+		if (this.accountStatus == "completed" || this.accountStatus == "accepted") {
 			this.value = "Manage / Daily Bookings";
 		}
 		else {
@@ -211,6 +212,7 @@ export class HomeComponent implements OnInit {
 		this.fetchHomePageData();
 	}
 	// ngOnInit() ends
+
 
 
 	fetchPageData(section: string) {
@@ -405,6 +407,10 @@ export class HomeComponent implements OnInit {
 			return true
 		}
 	}
+	roundToNearest15(minutes) {
+		const quarterHour = 15;
+		return Math.round(minutes / quarterHour) * quarterHour;
+	  }
 
 	prefillQuotebot() {
 		if (localStorage.getItem('quotebot_form')) {
@@ -460,13 +466,30 @@ export class HomeComponent implements OnInit {
 			// $(`#pickupTime option[value=\"${previous_quotebot.pickup_time}\"]`).attr('selected', 'selected')
 		} else {
 			// fill default values
+
+			const now = new Date();
+
+			// Get the current time components
+			const hours = now.getHours();
+			const minutes = now.getMinutes();
+			const seconds = now.getSeconds();
+
+			// Pad single digits with leading zeros
+			const formattedHours = hours.toString().padStart(2, '0');
+			const formattedMinutes = this.roundToNearest15(minutes.toString().padStart(2, '0'));
+			
+			// Combine the time components into a string
+			const currentTime = `${formattedHours}:${formattedMinutes}:00`;
+
+			// Print the current local time
+			console.log(currentTime);
 			this.quoteBotForm.patchValue({
 				service_type: 'one_way',
 				booking_hour: '2',
 				pickup_type: 'city',
 				dropoff_type: 'airport',
 				pickup_date: new Date().toISOString().split('T')[0],
-				pickup_time: '12:00:00',
+				pickup_time: currentTime,
 				return_pickup_date: new Date().toISOString().split('T')[0],
 				return_pickup_time: '12:00:00',
 				no_of_passenger: 1,
@@ -485,9 +508,9 @@ export class HomeComponent implements OnInit {
 			this.airports_data = response.success ? response.data : []
 			this.airports_data_copy = JSON.parse(JSON.stringify(this.airports_data))
 			this.airports_data_pickup = JSON.parse(JSON.stringify(this.airports_data))
-			this.airports_data_dropoff =  JSON.parse(JSON.stringify(this.airports_data))
-			this.airports_data_r_pickup =  JSON.parse(JSON.stringify(this.airports_data))
-			this.airports_data_r_dropoff =  JSON.parse(JSON.stringify(this.airports_data))
+			this.airports_data_dropoff = JSON.parse(JSON.stringify(this.airports_data))
+			this.airports_data_r_pickup = JSON.parse(JSON.stringify(this.airports_data))
+			this.airports_data_r_dropoff = JSON.parse(JSON.stringify(this.airports_data))
 		})
 	}
 	returnSearchAirport(searchText: any) {
@@ -931,6 +954,10 @@ export class HomeComponent implements OnInit {
 		let max_length = 75
 		if (fieldName == 'p') {
 			// for passenger
+			$('#no_of_passenger').addClass('highlight-text')
+			setTimeout(() => {
+				$('#no_of_passenger').removeClass('highlight-text')
+			}, 1000)
 			if (changeType == 'i' && this.quoteBotForm.value.no_of_passenger < max_length) {
 				this.QBForm.no_of_passenger.setValue(this.quoteBotForm.value.no_of_passenger + 1)
 			} else if (changeType == 'd' && this.quoteBotForm.value.no_of_passenger > 1) {
@@ -938,6 +965,10 @@ export class HomeComponent implements OnInit {
 			}
 		} else {
 			// for luggage
+			$('#no_of_luggage').addClass('highlight-text')
+			setTimeout(() => {
+				$('#no_of_luggage').removeClass('highlight-text')
+			}, 1000)
 			if (changeType == 'i' && this.quoteBotForm.value.no_of_luggage < max_length) {
 				this.QBForm.no_of_luggage.setValue(this.quoteBotForm.value.no_of_luggage + 1)
 			} else if (changeType == 'd' && this.quoteBotForm.value.no_of_luggage >= 1) {
@@ -981,9 +1012,15 @@ export class HomeComponent implements OnInit {
 
 	dashboard(role) {
 		if (role == 'affiliate') {
+			let isAffiliate_approved = localStorage.getItem('account_approval')
 			this.spinner.show();//show spinner
-			this.router.navigateByUrl('/affiliate');
-			console.log("step 0  dashboard")
+			if (isAffiliate_approved == "accepted") {
+				this.router.navigateByUrl('/affiliate/my-bookings');
+			}
+			else {
+				this.router.navigateByUrl('/affiliate');
+				console.log("step 0  dashboard")
+			}
 		}
 		else if (role == 'admin') {
 			this.spinner.show();//show spinner

@@ -1,0 +1,180 @@
+.mat-table {
+    width: 100%;
+  }
+  
+  .mat-row.example-detail-row {
+    min-height: 0;
+  }
+  
+  .mat-row.example-element-row:not(.example-expanded-row):hover {
+    background: #777;
+  }
+  
+  .mat-row.example-element-row:not(.example-expanded-row):active {
+    background: #efefef;
+  }
+  .mat-header-cell {
+    font-size: 15px;
+    font-weight: 900;
+    color: rgb(0 0 0);
+    background-color: #f29439;
+    border: #FFF solid 2px;
+  }
+  mat-row{
+    background-color: #f5f4fe;
+  }
+
+  .mat-cell{
+    border: #FFF solid 0.5px;
+  }
+  
+  mat-cell, mat-header-cell, mat-footer-cell {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    word-wrap: break-word;
+    min-height: inherit;
+    justify-content: space-around;
+}
+  .example-element-row .mat-cell {
+    border-bottom-width: 0;
+  }
+  
+  .example-element-detail {
+    // overflow: hidden;
+    display: flex;
+  }
+  
+  .example-element-diagram {
+    min-width: 80px;
+    border: 2px solid black;
+    padding: 8px;
+    font-weight: lighter;
+    margin: 8px 0;
+    height: 104px;
+  }
+  
+  .example-element-symbol {
+    font-weight: bold;
+    font-size: 40px;
+    line-height: normal;
+  }
+  
+  // .example-element-description {
+  //   padding: 16px;
+  // }
+  
+  .example-element-description-attribution {
+    opacity: 0.5;
+  }
+
+  .block-click{
+    pointer-events: none;
+  }
+  
+  ul {
+    display: flex;
+    padding: 0px 15px;
+    margin-top: 40px;
+  }
+  a{
+    margin: 5px;
+  }
+
+.table th{
+  padding: 0.35rem !important;
+}
+
+table {
+	width: 100;
+	white-space: break-spaces;
+	min-width: 5rem;
+
+	thead th {
+		color: #000000;
+		font-weight: 600;
+	}
+
+	tbody td>p {
+		margin: 0;
+	}
+}
+// .mat-row:nth-child(even){
+//   background-color: red;
+// }
+// .mat-row:nth-child(odd){
+//   background-color: black;
+// }
+.badge{
+  color: #FFF !important;
+}
+
+.pending {
+	background-color: #0474fc;
+}
+
+.partial_paid {
+	background-color: #00CCCC;
+}
+
+.paid {
+	background-color: #D1B000;
+}
+
+.succeeded {
+  font-size: inherit;
+  padding: 8px;
+	background-color: var(--green-color);
+}
+
+.rejected {
+	background-color: #dc3545;
+}
+
+.cancelled {
+	background-color: #FF0000;
+}
+
+.en_route_pu {
+	background-color: #6454ac;
+}
+
+.on_location {
+	background-color: #7289da;
+}
+
+.en_route_do {
+	background-color: #1abc9c;
+}
+
+.ended {
+	background-color: #8cc43c;
+}
+
+.finalized {
+	background-color: #fcac04;
+}
+
+.non_payable {
+	background-color: #ec4c8c;
+}
+
+.comped {
+	background-color: #C4A484;
+}
+
+.refund{
+	background-color:#A020F0;
+}
+
+th{
+  background-color: #6e6d6d !important;
+  border: #fff solid 1px !important;
+  color: #fff !important;
+}
+td{
+  background-color: #f5f4fe !important;
+  border: #fff solid 1px !important;
+  color: black;
+}
