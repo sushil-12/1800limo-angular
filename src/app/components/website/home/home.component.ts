@@ -214,6 +214,7 @@ export class HomeComponent implements OnInit {
 	// ngOnInit() ends
 
 
+
 	fetchPageData(section: string) {
 		if (section != undefined && this.homePageData != undefined) {
 			if (this.homePageData) {
