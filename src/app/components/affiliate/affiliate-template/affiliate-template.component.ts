@@ -1,12 +1,12 @@
-import { Component, OnInit, AfterViewInit, ElementRef } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ElementRef, SimpleChanges, Input } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
 import { AffiliateService } from '../../../services/affiliate.service';
 import { StateManagementService } from '../../../services/statemanagement.service';
 import { ErrorDialogService } from '../../../services/error-dialog/errordialog.service';
 import { NgxSpinnerService } from "ngx-spinner";
-import { Router } from '@angular/router';
+import { Router,Event, NavigationEnd } from '@angular/router';
 import { catchError } from 'rxjs/operators';
-import { throwError } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { state } from '@angular/animations';
 import { SharedModule } from 'src/app/components/shared/shared.module';
 
@@ -41,6 +41,8 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 	public progressBar: boolean;
 	chevron_up: boolean = false;
 
+
+	@Input() router1: any;
 	is_email_verified: boolean = true
 	is_bank_verified: boolean = true
 	is_show_verification_icon: boolean = false
@@ -54,7 +56,21 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 		public errorDialogService: ErrorDialogService,
 		private elementRef: ElementRef,
 		private $shared: SharedModule
-	) { }
+	) {
+		this.router.events.subscribe((event: Event) => {
+            if (event instanceof NavigationEnd) {
+				let url =event.urlAfterRedirects.split('/')[2]
+				const step = url.charAt(url.length - 1);
+				console.log('step-->>>' , step)
+				if (url.substr(0, 4) == 'step')
+				{
+					this.stepClick(step, true);
+				}
+            }
+        });
+
+   }
+	 
 
 	ngOnInit(): void
 	{
@@ -88,10 +104,28 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 			});
 		});
 
+
+		// var observer = new Observable(
+		// 	function subscribe(subscriber) {
+		// 	   try {
+		// 		  subscriber.next("My First Observable");
+		// 		  subscriber.next("Testing Observable");
+		// 	   } catch(e){
+		// 		  subscriber.error(e);
+		// 	   }
+		// 	}
+		//  );
+		//  observer.subscribe(x => console.log(x), (e)=>console.log(e), 
+		// 	()=>console.log("Observable is complete"));
+
+
+
 		const tree = this.router.parseUrl(this.router.url);
-		console.log(tree)
+		console.log('---tree ----->>>' ,tree)
 		this.secondPartUrl = tree.root.children.primary.segments[1].path;
 		const step = this.secondPartUrl.charAt(this.secondPartUrl.length - 1);
+		console.log('step-->>>' , step)
+
 
 		if (this.secondPartUrl.substr(0, 4) == 'step')
 		{
@@ -105,6 +139,9 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 		// this.checkApplicationStatus()
 
 		console.info(this.$shared.fetchCookies('lastroute'))
+	}
+	ngOnChanges(changes: SimpleChanges): void{
+		console.log('------->>>>>>>>>>>>>>' , changes)
 	}
 
 	myFunction(){
@@ -362,8 +399,12 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 			this.elementRef.nativeElement.appendChild(s);
 			setTimeout(()=>{
 				$('body').find(".VIpgJd-ZVi9od-xl07Ob-lTBxed").attr('href', 'javascript:void(0)'); 
-				$('.VIpgJd-ZVi9od-xl07Ob-lTBxed').find('span:first').text('Select language / Translate')
-				$('goog-te-combo').find('option:first').text('Select language / Translate')
+				$('.VIpgJd-ZVi9od-xl07Ob-lTBxed').find('span:first').text('Translate')
+				$('goog-te-combo').find('option:first').text('Translate')
+				const elements = document.querySelectorAll('.VIpgJd-ZVi9od-xl07Ob-lTBxed');
+				if (elements.length === 2) {
+					elements[0].parentNode.removeChild(elements[0]);
+				}
 	
 			},1000)
 		}
@@ -383,17 +424,25 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 
 			setTimeout(()=>{
 				$('body').find(".VIpgJd-ZVi9od-xl07Ob-lTBxed").attr('href', 'javascript:void(0)'); 
-				$('.VIpgJd-ZVi9od-xl07Ob-lTBxed').find('span:first').text('Select language / Translate')
-				$('goog-te-combo').find('option:first').text('Select language / Translate')
+				$('.VIpgJd-ZVi9od-xl07Ob-lTBxed').find('span:first').text('Translate')
+				$('goog-te-combo').find('option:first').text('Translate')
 				$('.goog-te-gadget-simple').css({height :'auto'}); 
+				const elements = document.querySelectorAll('.VIpgJd-ZVi9od-xl07Ob-lTBxed');
+				if (elements.length === 2) {
+					elements[0].parentNode.removeChild(elements[0]);
+				}
 			},1000)
 
 		}
 		setTimeout(()=>{
 			$('body').find(".VIpgJd-ZVi9od-xl07Ob-lTBxed").attr('href', 'javascript:void(0)'); 
-			$('.VIpgJd-ZVi9od-xl07Ob-lTBxed').find('span:first').text('Select language / Translate')
-			$('goog-te-combo').find('option:first').text('Select language / Translate')
+			$('.VIpgJd-ZVi9od-xl07Ob-lTBxed').find('span:first').text('Translate')
+			$('goog-te-combo').find('option:first').text('Translate')
 			$('.goog-te-gadget-simple').css({height :'auto'}); 
+			const elements = document.querySelectorAll('.VIpgJd-ZVi9od-xl07Ob-lTBxed');
+				if (elements.length === 2) {
+					elements[0].parentNode.removeChild(elements[0]);
+				}
 		},1000)
 		//a.addEventListener("click",function(e){e.preventDefault(); alert("preform action");});
 		//translator 

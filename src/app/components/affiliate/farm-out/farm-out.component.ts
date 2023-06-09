@@ -8,6 +8,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AffiliateService } from '../../../services/affiliate.service';
 import { ThemePalette } from '@angular/material/core';
 import * as moment from 'moment';
+import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 
 declare var $: any
 
@@ -57,7 +58,7 @@ export class FarmOutComponent implements OnInit
 	OUTPUTDATEFORMAT = 'YYYY-MM-DD'
 	show:boolean= false;
 	farmout_modal_body: string
-
+	cancelBookingId:any = null;
 	start_date: string
 	end_date: string
 	bookingPreview: any;
@@ -66,7 +67,8 @@ export class FarmOutComponent implements OnInit
 		private $affiliateService: AffiliateService,
 		private $spinner: NgxSpinnerService,
 		private $router: Router,
-		private formBuilder: FormBuilder
+		private formBuilder: FormBuilder,
+		private $errors:ErrorDialogService
 	) { }
 
 	ngOnInit(): void 
@@ -246,6 +248,30 @@ export class FarmOutComponent implements OnInit
 				break;
 			}
 		}
+	}
+	cancelBooking(){
+		console.log('in function cancel booking')
+		this.$spinner.show();
+
+		this.$affiliateService.cancelBooking(this.cancelBookingId)
+			.pipe(
+				catchError(err => {
+					this.$spinner.hide();//hide spinner
+					$('#cancelBooking').modal('hide');
+					return throwError(err);
+				})
+			)
+			.subscribe(({ data, success, message }: any) => {
+				if (success == true) {
+					this.loadBookings()
+					$('#cancelBooking').modal('hide');
+					this.$errors.openDialog({
+						errors: {
+							error: `<span class='text-success'>${message}</span>`
+						}
+					})
+				}
+			});
 	}
 
 	openModal(booking: any, selection_button: string) {

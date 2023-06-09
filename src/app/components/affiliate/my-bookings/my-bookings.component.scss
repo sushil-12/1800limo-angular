@@ -75,6 +75,10 @@ hr{
 	background-color:#A020F0;
 }
 
+.block-click{
+	pointer-events: none;
+	cursor:not-allowed
+}
 
 table {
 	width: 100%;

@@ -100,7 +100,7 @@
 						</thead>
 						<tbody>
 							<tr role="row" class="odd" *ngFor="let booking of bookings">
-								<td>
+								<td  [ngClass]="booking?.booking_status=='rejected' ? 'block-click' : ''">
 									<a class="user-profileded view-button btn-transparent-dark dropdown-toggle font-weight-bold"
 											id="navbarDropdownUserImage" href="javascript:void(0);" role="button"
 											data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -150,10 +150,12 @@
 												<div class="dropdown-item-icon"></div>
 												Audit Trial
 											</a>
-											<!-- <a class="dropdown-item">
+											<a class="dropdown-item" (click)="cancelBookingId=booking.booking_id"
+												data-toggle="modal" data-target="#cancelBooking" 
+												*ngIf="booking?.booking_status !='refund' && booking?.booking_status !='paid' && booking?.booking_status !='partial_paid' && booking?.booking_status !='cancelled'">
 												<div class="dropdown-item-icon"></div>
-												Cancel
-											</a> -->
+												Rejected
+											</a>
 									</div>
 								</td>
 
@@ -319,7 +321,23 @@
 		</div>
 	</div>
 </div>
-
+<div class="modal fade" id="cancelBooking" tabindex="-1" role="dialog" aria-labelledby="cancelBooking" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header pb-0">
+				<h3 class="mb-0">Reject Booking</h3>
+			</div>
+			<div class="modal-body text-center">
+				<p>Are you sure, You want to Reject booking?</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="custom-btn savebutton" (click)="cancelBooking()">
+					Yes</button>
+				<button type="button" class="custom-btn resetbutton" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
 <!-- <div class="modal fade" id="emailPassenger" tabindex="-1" role="dialog" aria-labelledby="emailPassenger"
 	aria-hidden="true">
 	<div class="modal-dialog" role="document">

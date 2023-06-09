@@ -51,6 +51,8 @@ export class ProfileComponent implements OnInit {
          this.AffiliatePhoneObject.setCountry(data.phone_country);
          this.profile_pic = data.profile_pic;
       });
+		$('.HeadingH1').css({display: "none"})
+
   }
   telInputObjectCell(obj) {
     this.AffiliatePhoneObject = obj;
