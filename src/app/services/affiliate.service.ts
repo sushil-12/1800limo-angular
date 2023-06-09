@@ -441,6 +441,9 @@ export class AffiliateService
 	{
 		return this.httpClient.post(this.serverUrl + 'reservation-detail-email', data);
 	}
+	cancelBooking(id){
+		return this.httpClient.get(this.serverUrl + 'change-booking-status/rejected/'+id)
+	}
 
 
 	//Create booking
