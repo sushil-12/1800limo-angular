@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
@@ -30,6 +30,7 @@ export class OtpComponent implements OnInit, OnDestroy {
 	public timeDifference;
 	public secondsToDday;
 	@ViewChild(NgOtpInputComponent, { static: false }) ngOtpInput: NgOtpInputComponent;
+	@ViewChild('otpInput') otpInput: ElementRef;
 	constructor(
 		private formBuilder: FormBuilder,
 		private router: Router,
@@ -110,13 +111,34 @@ export class OtpComponent implements OnInit, OnDestroy {
 		this.$route.queryParams.subscribe((params: any) => {
 			if (params.otp) {
 				setTimeout(() => {
-					this.ngOtpInput.setValue(params.otp);
-					this.otpForm.get('otp').setValue(params.otp)
-					this.otpForm.updateValueAndValidity()
-					this.otpCheck()
+					// this.ngOtpInput.setValue(params.otp);
+					// this.otpForm.get('otp').setValue(params.otp)
+					// this.otpForm.updateValueAndValidity()
+					this.ngOtpInput.focusTo(this.otpInput)
+					// this.otpCheck()
 				}, 2000)
 			}
 		})
+		document.querySelectorAll('.otp-input').forEach(occurence => {
+			occurence.addEventListener('click', (e) => {
+			  console.log('A link was clicked');
+			});
+		  });
+	}
+
+	ngAfterViewInit()
+	{
+		setTimeout(() => {
+			$(document).ready(function() {
+				// Set focus on the input field
+				console.log('------------->>>otpInput' , $('#otpInput'))
+				
+				
+				console.log('click trigger')
+			  });
+			  $(".otp-input:first").focus();
+			  $(".otp-input:first").trigger('click');
+		}, 2000);
 	}
 
 	countdownTimer() {

@@ -67,6 +67,7 @@ import { LocateMapComponent } from './components/locate-map/locate-map.component
 import { BookingStatusVerificationComponent } from './components/email-pages/booking-status-verification/booking-status-verification.component';
 import { TransactionHistoryComponent } from './components/website/transaction-history/transaction-history.component';
 import { NgOtpInputModule } from  'ng-otp-input';
+import { AutoDetectOtpDirective } from './auto-detect-otp.directive';
 @NgModule({
 	declarations: [
 		AppComponent,
@@ -102,6 +103,7 @@ import { NgOtpInputModule } from  'ng-otp-input';
 		LocateMapComponent,
 		BookingStatusVerificationComponent,
 		TransactionHistoryComponent,
+		AutoDetectOtpDirective,
 	],
 	imports: [
 		BrowserModule,
