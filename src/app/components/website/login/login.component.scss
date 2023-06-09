@@ -59,6 +59,17 @@ label+input[type=radio]+label {
 	display      : inline-block;
 	border-radius: 10px;
 	overflow     : hidden;
+	background-color: #FFF;
+	margin-left: 2px;
+}
+
+:host ::ng-deep .mat-form-field-wrapper{
+	border: solid 3px;
+	border-radius: 8px;
+}
+
+#formContent{
+	background-color: #f5f4fe;
 }
 
 @media only screen and (max-width:767px) {
@@ -67,7 +78,8 @@ label+input[type=radio]+label {
 		display      : grid;
 		border-radius: 10px;
 		overflow     : hidden;
-		margin       : 7px;
+		margin-bottom: 12px;
+		height: 42px;
 	}
 
 	label+input[type=radio]+label {

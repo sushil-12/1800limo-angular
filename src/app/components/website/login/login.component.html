@@ -23,17 +23,17 @@
 						<div class="radio-group role" style="box-shadow: 0 5px 12px -6px rgb(0 0 0);" (click)="alert_corporate=!alert_corporate;clearAlert()">
 							<input type="radio" id="corporate" name="role" checked="" value="corporate" disabled
 							formControlName="role" (click)="loginButtons('corporate');">
-						<label for="corporate" class="text-secondary" style="cursor: default;">Corporate</label>
+						<label for="corporate" class="text-center text-secondary" style="cursor: default;">Corporate</label>
 					</div>
 					<div class="radio-group role" style="box-shadow: 0 5px 12px -6px rgb(0 0 0);" (click)="alert_travel_agent=!alert_travel_agent;clearAlert()">
 						<input type="radio" id="travel_agent" name="role" checked="" value="travel_agent"
 							formControlName="role" disabled (click)="loginButtons('travel_agent');">
-						<label for="travel_agent" class="text-secondary" style="cursor: default;">Travel Agent</label>
+						<label for="travel_agent" class="text-center text-secondary" style="cursor: default;">Travel Agent</label>
 					</div>
 					<div class="radio-group role" style="box-shadow: 0 5px 12px -6px rgb(0 0 0);">
 						<input type="radio" id="driver/fleet" name="role" checked="" value="driver"
 						formControlName="role" (click)="loginButtons('driver')">
-						<label for="driver/fleet">Driver / Chauffeur / Fleet - To Drive</label>
+						<label for="driver/fleet" class="text-center">Driver / Chauffeur / Fleet - To Drive</label>
 					</div>
 				</div>
 				<p class="text-danger margin-bottom-thin my-mat-hint"
@@ -46,10 +46,10 @@
 	<mat-progress-bar class="my-color my-4" mode="indeterminate" *ngIf="showProgressBar"></mat-progress-bar>
 	<mat-form-field appearance="outline" class="mat-custom-phone topLabelClass">
 		<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Phone Number</label>
-		<input matInput placeholder="1234567890" formControlName="phone" ng2TelInput
+		<input matInput appAutoFocusDirective placeholder="1234567890" formControlName="phone" ng2TelInput
 			[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
 			(countryChange)="onCountryChange($event)" class="phoneNumberClass" tabIndex="1"
-			(intlTelInputObject)="telInputObjectCell($event)" />
+			(intlTelInputObject)="telInputObjectCell($event)" id="phn-input" />
 	</mat-form-field>
 	<div *ngIf="submitted && f.phone.errors" class="text-danger margin-bottom-thin my-mat-hint">
 		<div *ngIf="f.phone.errors.required">The Phone Number is required</div>
