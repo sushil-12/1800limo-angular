@@ -51,7 +51,7 @@ button {
 }
 
 .cancelled {
-	background-color: #FF0000;
+	background-color: #FF69B4;
 }
 
 .en_route_pu {
@@ -109,6 +109,9 @@ button {
 .modal-header {
 	justify-content: center;
 }
+// .modal-content {
+//     padding: 0 !important;
+// }
 
 #sendEmailModal .modal-content hr {
 	border: 2px solid var(--orange-color);
