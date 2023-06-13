@@ -152,6 +152,7 @@ export class DailyBookingsComponent implements OnInit {
 	ngAfterViewInit(): void {
 		this.subModules = localStorage.getItem('sub_modules')
 		$("#search-field").addClass("box-outline")
+		$('#layoutSidenav_content').addClass("layout_shadow")
 	}
 
 	/**

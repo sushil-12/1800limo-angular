@@ -498,7 +498,7 @@ export class NewBookingComponent implements OnInit {
 			}
       
       this.$spinner.hide('normalspinner')
-	  this.scroll('no_of_vehicle')
+	  this.scroll('booking_detail')
 		})
 	}
 
