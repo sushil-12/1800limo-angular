@@ -11,31 +11,39 @@ export class ScrollToTopComponent implements OnInit
 
 	scrollTop()
 	{
-		(function smoothscroll()
-		{
-			var currentScroll = document.documentElement.scrollTop || document.body.scrollTop;
-			console.log(currentScroll);
-			if (currentScroll > 0)
-			{
+		window.scrollTo({
+			top: 0,
+			behavior: "smooth" // Optional, adds smooth scrolling effect
+		  });
+		
+		// (function smoothscroll()
+		// {
+		// 	var currentScroll = document.documentElement.scrollTop || document.body.scrollTop;
+		// 	console.log(currentScroll);
+		// 	if (currentScroll > 0)
+		// 	{
 				
-				window.requestAnimationFrame(smoothscroll);
-				window.scrollTo(0, currentScroll - ((currentScroll) / 6)-20);
+		// 		// window.requestAnimationFrame(smoothscroll);
 				
-			}
-		})();
+		// 	}
+		// })();
 	}
 
 
 	scrollDown(){
-		(function smoothDownScroll()
-		{
-			var currentScroll = document.documentElement.scrollTop || document.body.scrollTop;
-			if (currentScroll < (document.documentElement.scrollHeight-700))
-			{
-				window.requestAnimationFrame(smoothDownScroll);
-				window.scrollTo(0, currentScroll + ((currentScroll + 50) / 8));
-			}
-		})();
+			window.scrollTo({
+			  top: document.body.scrollHeight,
+			  behavior: "smooth" // Optional, adds smooth scrolling effect
+			});
+		// (function smoothDownScroll()
+		// {
+		// 	var currentScroll = document.documentElement.scrollTop || document.body.scrollTop;
+		// 	if (currentScroll < (document.documentElement.scrollHeight-700))
+		// 	{
+		// 		window.requestAnimationFrame(smoothDownScroll);
+		// 		window.scrollTo(0, currentScroll + ((currentScroll + 50) / 8));
+		// 	}
+		// })();
 	}
 
 	ngOnInit()
