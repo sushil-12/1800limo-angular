@@ -99,12 +99,17 @@ export class HeaderComponent implements OnInit {
 			setTimeout(() => {
 				$('body').find(".VIpgJd-ZVi9od-xl07Ob-lTBxed").attr('href', 'javascript:void(0)');
 				$('.goog-te-gadget-simple').css({ height: 'auto' });
+				const elements = document.querySelectorAll('.VIpgJd-ZVi9od-xl07Ob-lTBxed');
+				$('.VIpgJd-ZVi9od-xl07Ob-lTBxed').find('span:first').text('Translate')
+				if (elements.length === 2) {
+					elements[0].parentNode.removeChild(elements[0]);
+				}
 			}, 1000)
 		}
 		setTimeout(() => {
 			$('body').find(".VIpgJd-ZVi9od-xl07Ob-lTBxed").attr('href', 'javascript:void(0)');
 			const elements = document.querySelectorAll('.VIpgJd-ZVi9od-xl07Ob-lTBxed');
-			$('.VIpgJd-ZVi9od-xl07Ob-lTBxed').find('span:first').text('Select language / Translate')
+			$('.VIpgJd-ZVi9od-xl07Ob-lTBxed').find('span:first').text('Translate')
 			if (elements.length === 2) {
 				elements[0].parentNode.removeChild(elements[0]);
 			}

@@ -52,7 +52,7 @@ export class MyBookingsComponent implements OnInit {
 	isLooseAffiliate: boolean = false;
 	audit_Trail: any;
 	company_name:any =JSON.parse(localStorage.getItem('currentUser'))?.affiliate_company || ''
-
+	cancelBookingId:any = null
 	constructor(
 		private affiliateService: AffiliateService,
 		private router: Router,
@@ -365,6 +365,31 @@ export class MyBookingsComponent implements OnInit {
 		console.log('open modal-->>>>>>>', selection_button)
 		this.passengerDetails = booking;
 		this.passengerDetails['selection_button'] = selection_button
+	}
+	cancelBooking(){
+		console.log('in function cancel booking')
+		this.spinner.show();
+
+		this.affiliateService.cancelBooking(this.cancelBookingId)
+			.pipe(
+				catchError(err => {
+					this.spinner.hide();//hide spinner
+					$('#cancelBooking').modal('hide');
+					return throwError(err);
+				})
+			)
+			.subscribe(({ data, success, message }: any) => {
+				if (success == true) {
+					this.spinner.hide();//hide spinner
+					this.loadBookings()
+					$('#cancelBooking').modal('hide');
+					this.$errors.openDialog({
+						errors: {
+							error: `<span class='text-success'>${message}</span>`
+						}
+					})
+				}
+			});
 	}
 
 	// messageField(format)

@@ -1426,6 +1426,9 @@ export class Step1Component implements OnInit, AfterViewInit
 	{
 		this.closeTab.emit();
 	}
+	back(){
+		this.router.navigate(['/affiliate/step0'])
+	}
 	handleBadgeCity(value:any){
 		console.log(value , this.filteredOptions)
 		this.filteredOptions = this.badgeOptions.filter((i:any)=> i.name.toLowerCase().includes(value.toLowerCase()))
