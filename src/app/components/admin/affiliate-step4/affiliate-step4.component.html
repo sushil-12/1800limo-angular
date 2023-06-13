@@ -66,12 +66,12 @@
 								<td [hidden]="affiliateType!='fleet_operator'">
 									<div class="row">
 										<div class="col-md-12">
-											<label id="Continue_{{driver.id}}" class="toggle toggle-left continueLabel"
+											<label id="Continue_{{driver.id}}" class="toggle toggle-left continueLabel box-shadow"
 												[ngClass]="driver.status ? 'checkedContinueLabel' : ''"
 												(click)="driverAccountStatus(driver.id, 'continue')" data-toggle="modal"
 												data-target="#suspendModal">Continue</label>
 
-											<label id="Suspend_{{driver.id}}" class="toggle toggle-right suspendLabel"
+											<label id="Suspend_{{driver.id}}" class="toggle toggle-right suspendLabel box-shadow"
 												[ngClass]="!driver.status ? 'checkedSuspendLabel' : ''"
 												data-toggle="modal" data-target="#suspendModal"
 												(click)="driverAccountStatus(driver.id, 'suspend')">Suspend</label>

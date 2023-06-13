@@ -10,6 +10,10 @@
 	border: solid 3px;
     border-radius: 4px;
 }
+.layout_shadow{
+	box-shadow: 3px 3px 20px -6px rgb(40 40 40 / 50%);
+    border-radius: 12px;
+}
 
 hr{
 	border-top: 1px solid black
@@ -29,6 +33,7 @@ button {
 	opacity: 1;
 	color: red;
 	font-size: xx-large;
+	width: max-content;
 }
 .pending {
 	background-color: #0474fc;
@@ -232,6 +237,7 @@ input::-webkit-input-placeholder {
     font-weight: 700;
     line-height: 1;
 	border: none;
+	z-index: 10;
 }
 .center {
 	margin: 0;
