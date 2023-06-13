@@ -14,6 +14,7 @@ import { HttpClient } from "@angular/common/http";
 declare var $: any;
 import * as moment from "moment";
 import { ErrorDialogService } from "src/app/services/error-dialog/errordialog.service";
+import { MatSelect } from "@angular/material/select";
 
 @Component({
 	selector: "app-daily-bookings",
@@ -22,6 +23,7 @@ import { ErrorDialogService } from "src/app/services/error-dialog/errordialog.se
 })
 export class DailyBookingsComponent implements OnInit {
 	@ViewChild('inputmsg', { static: false }) message: ElementRef;
+	@ViewChild('select') select: MatSelect;
 	outputDateFormat = "YYYY-MM-DD";
 	color: ThemePalette = "primary";
 	public firstPage: Number;
@@ -421,6 +423,9 @@ export class DailyBookingsComponent implements OnInit {
 		this.changeStatusForm.patchValue({
 			reservation_id: bookingId,
 		});
+		setTimeout(() => {
+			this.select.open();
+		}, 600);
 	}
 
 	submitChangeStatusForm() {

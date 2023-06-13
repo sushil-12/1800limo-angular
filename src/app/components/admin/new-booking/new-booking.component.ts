@@ -158,7 +158,7 @@ export class NewBookingComponent implements OnInit {
 
 	ngAfterViewInit(): void{
 		console.log('<<<<<<<<<<<<<<<<<<<<<-----------ng after view init--------------->>>>>>>>>>>>>')
-		if(this.updateType == 'repeat' || this.updateType == 'return'){
+		if(this.updateType == 'repeat' || this.updateType == 'return' || this.updateType == 'edit'){
 			this.scroll('travel_time')
 			this.SetFormValue('pickup_date' , moment().format('YYYY-MM-DD'))
 		}
@@ -790,8 +790,9 @@ export class NewBookingComponent implements OnInit {
 			if (response.success && Object.keys(response.data).length > 0) {
 				this.chosen_user = response.data
 				this.chosen_user['name'] = `${response.data.first_name} ${response.data.middle_name ?? ''} ${response.data.last_name}`
+				this.autofillData('passenger', this.chosen_user);
 				if (!this.Form.reservation_id.value) {
-					this.autofillData('passenger', this.chosen_user);
+					// this.autofillData('passenger', this.chosen_user);
 				}
 			}
 			this.$spinner.hide();
@@ -1132,6 +1133,7 @@ export class NewBookingComponent implements OnInit {
 
 	autofillData(filling_for: string, data: any) {
 		if (filling_for === 'passenger') {
+			console.log('--->>>> filling passenger info' , data)
 			data.middle_name ?
 				this.SetFormValue('passenger_name', `${data?.first_name} ${data?.middle_name} ${data?.last_name}`) : this.SetFormValue('passenger_name', `${data?.first_name} ${data?.last_name}`)
 			this.SetFormValue('passenger_email', data.email)
