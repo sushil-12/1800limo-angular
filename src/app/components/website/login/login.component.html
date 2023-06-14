@@ -35,6 +35,11 @@
 						formControlName="role" (click)="loginButtons('driver')">
 						<label for="driver/fleet" class="text-center">Driver / Chauffeur / Fleet - To Drive</label>
 					</div>
+					<div class="radio-group role" style="box-shadow: 0 5px 12px -6px rgb(0 0 0);">
+						<input type="radio" id="sub_admin" name="role" checked="" value="sub_admin"
+						formControlName="role" (click)="loginButtons('sub_admin')">
+						<label for="sub_admin" class="text-center">login as Sub-Admin</label>
+					</div>
 				</div>
 				<p class="text-danger margin-bottom-thin my-mat-hint"
 				[ngClass]="(alert_individual || alert_corporate || alert_travel_agent)? '':'hide-alert'">
@@ -67,7 +72,8 @@
 		</ng-template>
 	</div>
 	<button class="custom-filled-button my-3" (click)="loginCheck()" [disabled]="disableSubmit">Sign In</button>
-	</form>
+</form>
+
 	<!-- Remind Passowrd -->
 	<div id="formFooter">
 		<p class="firebaseui-tos firebaseui-phone-tos">By tapping Verify, you are indicating that you accept our <a

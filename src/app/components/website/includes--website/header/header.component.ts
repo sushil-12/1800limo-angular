@@ -67,65 +67,48 @@ export class HeaderComponent implements OnInit {
 	}
 
 
-	ngAfterViewInit() {
-		this.desktopWidth = window.innerWidth;
-		// if (this.desktopWidth <= '767')
-		// {
-		// 	//google translate
-		// 	var v = document.createElement("script");
-		// 	v.type = "text/javascript";
-		// 	v.innerHTML = "function googleTranslateElementInit() { new google.translate.TranslateElement({ pageLanguage: 'en' }, 'google_translate_element_mobile'); } ";
-		// 	this.elementRef.nativeElement.appendChild(v);
-		// 	var s = document.createElement("script");
-		// 	s.type = "text/javascript";
-		// 	s.src = "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
-		// 	this.elementRef.nativeElement.appendChild(s);
-
-		// }
-
-		if (this.desktopWidth > '767') {
-			//google translate
-			console.log('<<<<<<<-------select language------>>>>>>>>')
-			console.log("Sushil")
-			var v = document.createElement("script");
-			v.type = "text/javascript";
-			v.innerHTML = "function googleTranslateElementInit() { new google.translate.TranslateElement({ pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.SIMPLE }, 'google_translate_element_desktop'); } ";
-			this.elementRef.nativeElement.appendChild(v);
-			var s = document.createElement("script");
-			s.type = "text/javascript";
-			s.src = "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
-			this.elementRef.nativeElement.appendChild(s);
-
-			setTimeout(() => {
-				$('body').find(".VIpgJd-ZVi9od-xl07Ob-lTBxed").attr('href', 'javascript:void(0)');
-				$('.goog-te-gadget-simple').css({ height: 'auto' });
-				const elements = document.querySelectorAll('.VIpgJd-ZVi9od-xl07Ob-lTBxed');
-				$('.VIpgJd-ZVi9od-xl07Ob-lTBxed').find('span:first').text('Translate')
-				if (elements.length === 2) {
-					elements[0].parentNode.removeChild(elements[0]);
-				}
-			}, 1000)
-		}
-		setTimeout(() => {
-			$('body').find(".VIpgJd-ZVi9od-xl07Ob-lTBxed").attr('href', 'javascript:void(0)');
-			const elements = document.querySelectorAll('.VIpgJd-ZVi9od-xl07Ob-lTBxed');
-			$('.VIpgJd-ZVi9od-xl07Ob-lTBxed').find('span:first').text('Translate')
-			if (elements.length === 2) {
-				elements[0].parentNode.removeChild(elements[0]);
-			}
-		}, 1000)
-		//a.addEventListener("click",function(e){e.preventDefault(); alert("preform action");});
-		//translator 
-
-		// if (this.screenWidth <= '991')
-		// {
-		// 	$("body").addClass("sidenav-toggled");
-		// 	this.showSidebar = true;
-		// }
-
-
-	}
-
+	ngAfterViewInit(): void{
+		console.log('<<<<<<<-------select language------>>>>>>>>')
+		var v = document.createElement("script");
+		v.type = "text/javascript";
+		v.innerHTML = "function googleTranslateElementInit() { new google.translate.TranslateElement({ pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.VERTICAL}, 'google_translate_element_home'); } ";
+		this.elementRef.nativeElement.appendChild(v);
+		var s = document.createElement("script");
+		s.type = "text/javascript";
+		s.src = "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
+		this.elementRef.nativeElement.appendChild(s);
+		console.log('exxxxxxxxxxxxxxxxx')
+			
+						$('.goog-te-gadget').html($('.goog-te-gadget').children());
+						$("#google-translate").fadeIn('1000');
+					  
+					  
+						function cleartimer() {     
+							setTimeout(function(){ 
+								window.clearInterval(myVar); 
+							}, 500);             
+						}
+						function myTimer() {
+							if ($('.goog-te-combo option:first').length) {
+								$('.goog-te-combo option:first').html('Translate');
+								cleartimer();
+							}
+						}
+						var myVar = setInterval(function(){ myTimer() }, 0); 
+					  
+		   
+	// setTimeout(() => {
+	// 	console.log('------- set timeout exe')
+	// 	$('body').find(".VIpgJd-ZVi9od-xl07Ob-lTBxed").attr('href', 'javascript:void(0)'); 
+	// 	$('.VIpgJd-ZVi9od-xl07Ob-lTBxed').find('span:first').text('Translate')
+	// 	$('goog-te-combo').find('option:first').text('Translate')
+	// 	$('.goog-te-gadget-simple').css({height :'auto'}); 
+	// 	const elements = document.querySelectorAll('.VIpgJd-ZVi9od-xl07Ob-lTBxed');
+	// 	if (elements.length === 2) {
+	// 		elements[0].parentNode.removeChild(elements[0]);
+	// 	}
+	// }, 300)
+}
 	getPermissions() {
 		this.adminService.getMyPermissions()
 			.pipe(
@@ -146,7 +129,7 @@ export class HeaderComponent implements OnInit {
 	}
 
 	loginButtons(role: string) {
-		if (role != 'driver') {
+		if (role != 'driver' && role!='sub_admin') {
 			this.errorDialogService.openDialog({
 				errors: {
 					error: 'Currently only Drivers are allowed to Sign In. User accounts coming soon! Recruiting quality vetted drivers, and chauffeurs, only at this time. Refer a trusted driver/ chauffeur to 1-800 - LIMO.COM now! You deserve the best.'
@@ -155,7 +138,10 @@ export class HeaderComponent implements OnInit {
 			return
 		}
 		//navigate to login screen
-		this.router.navigateByUrl('/login/' + role);
+		// this.router.navigate(['/login/' + role]);
+		this.router.navigateByUrl('/login/' + role).then(()=>{
+			window.location.reload()
+		});
 	}
 
 	logout() {
