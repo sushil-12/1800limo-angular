@@ -160,7 +160,9 @@ export class LoginComponent implements OnInit, AfterViewInit
 			return
 		}
 		//navigate to login screen
-		this.router.navigate(['/login/' + role]);
+		this.router.navigate(['/login/' + role]).then(()=>{
+			window.location.reload()
+		});
 		// this.router.navigateByUrl('/login/' + role).then(()=>{
 		// 	this.router.navigate(['/login/' + role]).then(()=>{
 		// 	console.log(`After navigation I am on:${this.router.url}`)
