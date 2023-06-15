@@ -19,3 +19,21 @@ mat-progress-bar {
 	box-shadow: 3px 3px 20px -6px rgb(40 40 40 / 50%);
     border-radius: 12px;
 }
+:host ::ng-deep .VIpgJd-ZVi9od-l4eHX-hSRGPd {
+	display: none !important;
+}
+
+:host ::ng-deep .goog-te-gadget .goog-te-combo {
+	// margin: 0 !important;
+	border: none !important;
+	box-shadow: none !important;
+	border-radius: 0 0px 10px 10px !important;
+	width: 130px !important;
+	max-width: 100% !important;
+}
+
+@media only screen and (max-width:767px) {
+	.hideMobile {
+		display: none;
+	}
+}
