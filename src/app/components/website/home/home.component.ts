@@ -98,7 +98,9 @@ export class HomeComponent implements OnInit {
 		private authService: AuthService,
 		private errorDialogService: ErrorDialogService,
 		private quotebotService: QuotebotService,
-		private globalFunctions: SharedModule
+		private globalFunctions: SharedModule,
+		private elementRef: ElementRef,
+
 	) { }
 
 
@@ -111,6 +113,8 @@ export class HomeComponent implements OnInit {
 
 	ngOnInit() {
 		this.fetchAirportsData()
+
+		
 		setTimeout(() => {
 
 			$('[data-toggle="modal"]').tooltip();//Bootstrap tooltip
@@ -211,8 +215,50 @@ export class HomeComponent implements OnInit {
 
 		this.fetchHomePageData();
 	}
+	
 	// ngOnInit() ends
-
+	// ngAfterViewInit(): void{
+	// 		console.log('<<<<<<<-------select language------>>>>>>>>')
+	// 		var v = document.createElement("script");
+	// 		v.type = "text/javascript";
+	// 		v.innerHTML = "function googleTranslateElementInit() { new google.translate.TranslateElement({ pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.VERTICAL}, 'google_translate_element_home'); } ";
+	// 		this.elementRef.nativeElement.appendChild(v);
+	// 		var s = document.createElement("script");
+	// 		s.type = "text/javascript";
+	// 		s.src = "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
+	// 		this.elementRef.nativeElement.appendChild(s);
+	// 		console.log('exxxxxxxxxxxxxxxxx')
+				
+	// 						$('.goog-te-gadget').html($('.goog-te-gadget').children());
+	// 						$("#google-translate").fadeIn('1000');
+						  
+						  
+	// 						function cleartimer() {     
+	// 							setTimeout(function(){ 
+	// 								window.clearInterval(myVar); 
+	// 							}, 500);             
+	// 						}
+	// 						function myTimer() {
+	// 							if ($('.goog-te-combo option:first').length) {
+	// 								$('.goog-te-combo option:first').html('Translate');
+	// 								cleartimer();
+	// 							}
+	// 						}
+	// 						var myVar = setInterval(function(){ myTimer() }, 0); 
+						  
+			   
+	// 	// setTimeout(() => {
+	// 	// 	console.log('------- set timeout exe')
+	// 	// 	$('body').find(".VIpgJd-ZVi9od-xl07Ob-lTBxed").attr('href', 'javascript:void(0)'); 
+	// 	// 	$('.VIpgJd-ZVi9od-xl07Ob-lTBxed').find('span:first').text('Translate')
+	// 	// 	$('goog-te-combo').find('option:first').text('Translate')
+	// 	// 	$('.goog-te-gadget-simple').css({height :'auto'}); 
+	// 	// 	const elements = document.querySelectorAll('.VIpgJd-ZVi9od-xl07Ob-lTBxed');
+	// 	// 	if (elements.length === 2) {
+	// 	// 		elements[0].parentNode.removeChild(elements[0]);
+	// 	// 	}
+	// 	// }, 300)
+	// }
 
 
 	fetchPageData(section: string) {
@@ -980,7 +1026,7 @@ export class HomeComponent implements OnInit {
 
 	// loginbuttons
 	loginButtons(role: string) {
-		if (role != 'driver') {
+		if (role != 'driver' && role!='sub_admin') {
 			this.errorDialogService.openDialog({
 				errors: {
 					error: 'Currently only Drivers are allowed to Sign In. User accounts coming soon! Recruiting quality vetted drivers, and chauffeurs, only at this time. Refer a trusted driver/ chauffeur to 1-800 - LIMO.COM now! You deserve the best.'
