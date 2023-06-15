@@ -60,6 +60,7 @@ export class DailyBookingsComponent implements OnInit {
 	audit_Trail: any = [];
 	currentUser: any = JSON.parse(localStorage.getItem('userData')) || ''
 	subModules: any = localStorage.getItem('sub_modules') || '';
+	useDateFilter: Boolean = false;
 
 	constructor(
 		private adminService: AdminService,
@@ -154,7 +155,11 @@ export class DailyBookingsComponent implements OnInit {
 		$("#search-field").addClass("box-outline")
 		// $('#layoutSidenav_content').addClass("layout_shadow")
 	}
-
+	handleChangeCheckbox(value:any){
+		console.log('event---->> ' ,value)
+		this.useDateFilter = value
+		this.loadBookings(null, this.startDate, this.endDate, this.searchText);
+	}
 	/**
 	 * Configure date as per todays date and the future +7 days
 	 */
@@ -320,7 +325,7 @@ export class DailyBookingsComponent implements OnInit {
 		search_value == '' && this.spinner.show();
 		this.noError = false
 		// Load Our bookings using API
-		this.adminService.loadBookings(pageUrl, start_date, end_date, search_value ?? '').then((result: any) => {
+		this.adminService.loadBookings(pageUrl, start_date, end_date, this.useDateFilter,search_value ?? '').then((result: any) => {
 			if (result?.data?.data == 0) {
 				this.noError = true
 			}

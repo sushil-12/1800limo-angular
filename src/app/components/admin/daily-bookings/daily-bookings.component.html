@@ -5,6 +5,7 @@
 		<section class="adminbox_shadow user_information">
 			<h2 class="headinginfo">Admin Daily Bookings </h2>
 			<div class="containeredd mt-1 ">
+
 				<div class="row my-2 align-items-center">
 					<!-- Start-Date -->
 					<div class="col-sm-4 col-md-4 my-2">
@@ -33,24 +34,26 @@
 							<mat-datepicker #picker2></mat-datepicker>
 						</mat-form-field>
 					</div>
-	
 					<!-- Search Button -->
-					<div class="align-btn d-flex justify-content-around">
-						<div class="col-sm-2 ml-n5">
-							<button class="custom-filled-button orange-button"
-								style="color:#fff;padding: 5px 12px !important;"
-								(click)="loadBookings(null, startDate, endDate, searchText); saveCookie('startDate', startDate); saveCookie('endDate', endDate)">
-								Search
-							</button>
+						<div class="align-btn d-flex justify-content-around">
+							<div class="col-sm-2 ml-n5">
+								<button class="custom-filled-button orange-button"
+									style="color:#fff;padding: 5px 12px !important;"
+									(click)="loadBookings(null, startDate, endDate, searchText); saveCookie('startDate', startDate); saveCookie('endDate', endDate)">
+									Search
+								</button>
+							</div>
+							<div class="col-sm-2">
+								<button class="custom-filled-back-button"
+									style="white-space: nowrap;color:#fff;padding: 5px 12px !important;"
+									(click)="reset(); loadBookings(null, startDate, endDate, searchText)">
+									Reset
+								</button>
+							</div>
 						</div>
-						<div class="col-sm-2">
-							<button class="custom-filled-back-button"
-								style="white-space: nowrap;color:#fff;padding: 5px 12px !important;"
-								(click)="reset(); loadBookings(null, startDate, endDate, searchText)">
-								Reset
-							</button>
-						</div>
-					</div>
+				</div>
+				<div>
+					<p><mat-checkbox (change)="handleChangeCheckbox($event.checked)">Use Date filter</mat-checkbox></p>
 				</div>
 				<div class="row my-2 mb-3">
 					<!-- <div class="col-md-3">
