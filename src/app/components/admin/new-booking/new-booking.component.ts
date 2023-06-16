@@ -1322,20 +1322,20 @@ export class NewBookingComponent implements OnInit {
 		this.submitBookingForm = true
 		console.log(this.BookingForm);
 		console.log(this.BookingForm.status);
-		let EditedKeys = []
-		Object.keys(this.bookingResponse).map(i=>{
-			let value = this.bookingResponse[`${i}`] === null ? '' :this.bookingResponse[`${i}`]
-			let value1 = this.BookingForm.value[`${i}`] === undefined ? '' :this.BookingForm.value[`${i}`]
-			console.log('value',i,'--->>>',value1,'--->>>' , value )
-			if(value1 != value && this.BookingForm.value[`${i}`] !== undefined){
-				EditedKeys.push(i)
-			} 
-		})
+		// let EditedKeys = []
+		// Object.keys(this.bookingResponse)?.map(i=>{
+		// 	let value = this.bookingResponse[`${i}`] === null ? '' :this.bookingResponse[`${i}`]
+		// 	let value1 = this.BookingForm.value[`${i}`] === undefined ? '' :this.BookingForm.value[`${i}`]
+		// 	console.log('value',i,'--->>>',value1,'--->>>' , value )
+		// 	if(value1 != value && this.BookingForm.value[`${i}`] !== undefined){
+		// 		EditedKeys.push(i)
+		// 	} 
+		// })
 		
-		console.log(' Edited keys  ---->>>>' , EditedKeys)
-		if (this.BookingForm.invalid) {
-			return;
-		}
+		// console.log(' Edited keys  ---->>>>' , EditedKeys)
+		// if (this.BookingForm.invalid) {
+		// 	return;
+		// }
 
 		if (preview) {
 			let value = this.BookingForm.value
