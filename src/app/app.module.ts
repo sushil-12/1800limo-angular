@@ -68,6 +68,8 @@ import { BookingStatusVerificationComponent } from './components/email-pages/boo
 import { TransactionHistoryComponent } from './components/website/transaction-history/transaction-history.component';
 import { NgOtpInputModule } from  'ng-otp-input';
 import { AutoDetectOtpDirective } from './auto-detect-otp.directive';
+import { LongPressDirective } from './directives/long-press.directive';
+import { AutoFocusDirective } from './directives/auto-focus.directive';
 @NgModule({
 	declarations: [
 		AppComponent,
@@ -104,6 +106,8 @@ import { AutoDetectOtpDirective } from './auto-detect-otp.directive';
 		BookingStatusVerificationComponent,
 		TransactionHistoryComponent,
 		AutoDetectOtpDirective,
+		LongPressDirective,
+		AutoFocusDirective,
 	],
 	imports: [
 		BrowserModule,

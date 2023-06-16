@@ -24,6 +24,7 @@ import { MatSelect } from "@angular/material/select";
 export class DailyBookingsComponent implements OnInit {
 	@ViewChild('inputmsg', { static: false }) message: ElementRef;
 	@ViewChild('select') select: MatSelect;
+	@ViewChild('sendEmailModalFocus') sendEmailModalFocus: any;
 	outputDateFormat = "YYYY-MM-DD";
 	color: ThemePalette = "primary";
 	public firstPage: Number;
@@ -154,6 +155,7 @@ export class DailyBookingsComponent implements OnInit {
 		this.subModules = localStorage.getItem('sub_modules')
 		$("#search-field").addClass("box-outline")
 		// $('#layoutSidenav_content').addClass("layout_shadow")
+		this.sendEmailModalFocus.nativeElement.querySelector('textarea').focus();
 	}
 	handleChangeCheckbox(value:any){
 		console.log('event---->> ' ,value)
@@ -186,6 +188,9 @@ export class DailyBookingsComponent implements OnInit {
 	}
 
 	messageField(format) {
+		setTimeout(()=>{
+			this.sendEmailModalFocus.nativeElement.querySelector('textarea').focus();
+		},1000)
 		this.show = true;
 		switch (format) {
 			case "Phone": {
@@ -311,13 +316,18 @@ export class DailyBookingsComponent implements OnInit {
 		$("#closeModal1").click(() => {
 			$("#notificationModal").modal("hide");
 		});
+		$('#sendEmailModal').modal('hide')		
 		this.message.nativeElement.value = ""
 		this.show = false
 	}
 
 	closeModal() {
+		// this.sendEmailModal.nativeElement.querySelector('textarea').blur();
+		$('#sendEmailModal').modal('hide')
 		this.message.nativeElement.value = ""
 		this.show = false
+		// this.sendEmailModal.nativeElement.querySelector('textarea').focus();
+
 	}
 
 	noError: boolean = false
@@ -352,6 +362,15 @@ export class DailyBookingsComponent implements OnInit {
 
 	show = false;
 	openModal(booking: any, selection_button: string) {
+		try {
+			setTimeout(()=>{
+				// $('textarea').attr('autofocus', 'autofocus');
+				this.sendEmailModalFocus.nativeElement.querySelector('textarea').focus();
+			},1000)
+		} catch (error) {
+		console.log('----------error------->>>>>> ' ,error )
+			
+		}
 		this.passengerDetails = booking;
 		this.passengerDetails["selection_button"] = selection_button;
 	}

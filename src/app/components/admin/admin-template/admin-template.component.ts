@@ -93,7 +93,7 @@ export class AdminTemplateComponent implements OnInit
 			console.log('-----google translate element for mobile view-------->>>>')
 			var v = document.createElement("script");
 			v.type = "text/javascript";
-			v.innerHTML = "function googleTranslateElementInit() { new google.translate.TranslateElement({ pageLanguage: 'en',layout: google.translate.TranslateElement.InlineLayout.VERTICAL}, 'google_translate_element_mobile'); } ";
+			v.innerHTML = "function googleTranslateElementInit() { new google.translate.TranslateElement({ pageLanguage: 'en',layout: google.translate.TranslateElement.InlineLayout.VERTICAL}, 'google_translate_element_admin_mobile'); } ";
 			this.elementRef.nativeElement.appendChild(v);
 			var s = document.createElement("script");
 			s.type = "text/javascript";
