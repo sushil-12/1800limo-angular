@@ -163,6 +163,7 @@ export class FinalizeBookingComponent implements OnInit {
 			.getFinalizeDetails(booking_id)
 			.pipe()
 			.subscribe((response: any) => {
+				this.$spinner.hide();
 				console.log(response.data, "check response");
 				this.BookingDetail = response.data
 				this.transferType = this.BookingDetail.transfer_type
@@ -177,7 +178,6 @@ export class FinalizeBookingComponent implements OnInit {
 				this.affiliate_type = response.data.affiliate_type
 				this.visibility = response.data.payment_status == 'paid' ? false : true
 				this.paidAmount = response.data?.paid_amount ? parseFloat(response.data?.paid_amount) : 0
-				this.$spinner.hide();
 				setTimeout(() => {
 					this.scroll('NumVehicles')
 
