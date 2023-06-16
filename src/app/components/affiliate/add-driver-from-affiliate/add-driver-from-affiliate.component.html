@@ -11,10 +11,10 @@
 							formControlName="FirstName" tabindex="1">
 					</mat-form-field>
 					<div *ngIf="
-							(submittedForm && f.FirstName.errors) ||
-							(f.FirstName.touched && f.FirstName.errors)
+							(submittedForm && f?.FirstName?.errors) ||
+							(f?.FirstName?.touched && f?.FirstName?.errors)
 						" class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.FirstName.errors.required">
+						<div *ngIf="f?.FirstName?.errors?.required">
 							This field is required
 						</div>
 					</div>
@@ -29,10 +29,10 @@
 							formControlName="MiddleName" tabindex="1">
 					</mat-form-field>
 					<div *ngIf="
-							(submittedForm && f.MiddleName.errors) ||
-							(f.MiddleName.touched && f.MiddleName.errors)
+							(submittedForm && f?.MiddleName?.errors) ||
+							(f?.MiddleName?.touched && f?.MiddleName?.errors)
 						" class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.MiddleName.errors.required">
+						<div *ngIf="f?.MiddleName?.errors?.required">
 							This field is required
 						</div>
 					</div>
@@ -44,10 +44,10 @@
 							formControlName="LastName" tabindex="1">
 					</mat-form-field>
 					<div *ngIf="
-							(submittedForm && f.LastName.errors) ||
-							(f.LastName.touched && f.LastName.errors)
+							(submittedForm && f?.LastName?.errors) ||
+							(f?.LastName?.touched && f?.LastName?.errors)
 						" class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.LastName.errors.required">
+						<div *ngIf="f?.LastName?.errors?.required">
 							This field is required
 						</div>
 					</div>
@@ -76,10 +76,10 @@
 						</svg>
 					</div>
 					<div *ngIf="
-							(submittedForm && f.Gender.errors) ||
-							(f.Gender.touched && f.Gender.errors)
+							(submittedForm && f?.Gender?.errors) ||
+							(f?.Gender?.touched && f?.Gender?.errors)
 						" class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.Gender.errors.required">
+						<div *ngIf="f?.Gender?.errors?.required">
 							This field is required
 						</div>
 					</div>
@@ -95,23 +95,23 @@
 							class="phoneNumberClass" (intlTelInputObject)="telInputObjectCell($event)" tabindex="1" />
 					</mat-form-field>
 					<div *ngIf="
-							(submittedForm && f.CellNumber.errors) ||
-							(f.CellNumber.touched && f.CellNumber.errors)
+							(submittedForm && f?.CellNumber?.errors) ||
+							(f?.CellNumber?.touched && f?.CellNumber?.errors)
 						" class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.CellNumber.errors.required">
+						<div *ngIf="f?.CellNumber?.errors?.required">
 							This field is required
 						</div>
 					</div>
-					<div *ngIf="f.CellNumber.errors" class="text-danger margin-bottom-thin my-mat-hint">
+					<div *ngIf="f?.CellNumber?.errors" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="
-								f.CellNumber.errors?.invalid_Pattern;
+								f?.CellNumber?.errors?.invalid_Pattern;
 								else plusError
 							">
 							Do not add Dashes with numbers
 						</div>
 						<ng-template #plusError>
 							<div *ngIf="
-									f.CellNumber.errors?.invalidPattern;
+									f?.CellNumber?.errors?.invalidPattern;
 									else allErrors
 								">
 								Do not enter + sign

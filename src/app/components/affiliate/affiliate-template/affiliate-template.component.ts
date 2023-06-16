@@ -62,7 +62,7 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 				let url =event.urlAfterRedirects.split('/')[2]
 				const step = url.charAt(url.length - 1);
 				console.log('step-->>>' , step)
-				if (url.substr(0, 4) == 'step')
+				if (url.substr(0, 4) == 'step' && event.urlAfterRedirects.split('/').length===3 && url.includes('step'))
 				{
 					this.stepClick(step, true);
 				}
