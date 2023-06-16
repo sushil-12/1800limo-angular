@@ -817,6 +817,9 @@ export class AdminService {
 	getFinalizeDetails(reservation_id: number) {
 		return this.httpClient.get(`${this.serverUrl}admin/finalize-booking-detail/${reservation_id}`);
 	}
+	getPaymentDetailFinalize(reservation_id: number){
+		return this.httpClient.get(`${this.serverUrl}admin/booking-payment-log/${reservation_id}`);
+	}
 	updateFinalizeRates(data) {
 		return this.httpClient.post(`${this.serverUrl}admin/finalize-rate-edit`, data)
 	}

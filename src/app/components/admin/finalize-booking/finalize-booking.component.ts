@@ -66,6 +66,7 @@ export class FinalizeBookingComponent implements OnInit {
 			return arr
 		})(),
 	}
+	paymentDetailByCard: any;
 	constructor(
 		private $form: FormBuilder,
 		private $api: AdminService,
@@ -75,21 +76,25 @@ export class FinalizeBookingComponent implements OnInit {
 		private $spinner: NgxSpinnerService,
 		private customValidator: CustomvalidationService
 	) {
-	}
-
-	ngOnInit(): void {
-		this.$spinner.show();
-		this.buildingCardForm();
 		this.$route.queryParams.subscribe((params: any) => {
+			this.$spinner.show()
 			isDevMode && console.log("Params Found: ", params);
 			if (params.bookingId) {
 				this.bookingId = params.bookingId;
 				this.getReservationDetails(this.bookingId);
+				this.paymentDetail(this.bookingId)
 			} else {
 				// navigate back to dashboard in case of no booking Id specified.
 				this.$router.navigate(["/admin/daily-bookings-admin"]);
 			}
 		});
+	}
+
+	ngOnInit(): void {
+		
+		// this.$spinner.show('normalspinner');
+	
+		this.buildingCardForm();
 		this.deleteCardForm = this.$form.group({
 			cardId: ["", Validators.required],
 			accId: ["", Validators.required],
@@ -153,7 +158,7 @@ export class FinalizeBookingComponent implements OnInit {
 
 	init_rates: boolean = false;
 	getReservationDetails(booking_id: number = 0) {
-		this.$spinner.show();
+		// this.$spinner.show();
 		this.$api
 			.getFinalizeDetails(booking_id)
 			.pipe()
@@ -182,6 +187,17 @@ export class FinalizeBookingComponent implements OnInit {
 			});
 		// api for card detailss
 		// getFinalizeDetails 
+	}
+	paymentDetail(bookingId){
+		this.$api
+			.getPaymentDetailFinalize(bookingId)
+			.pipe()
+			.subscribe((response: any) => {
+				console.log(response.data, "check response paymentDetail");
+				if(response.data){
+					this.paymentDetailByCard = response?.data?.charges
+				}
+			});
 	}
 	dateFormat(value: any) {
 		if (value) {
