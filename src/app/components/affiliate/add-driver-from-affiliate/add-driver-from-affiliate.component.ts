@@ -132,6 +132,7 @@ export class AddDriverFromAffiliateComponent
 	}
 
 	ngOnInit(): void {
+		console.log('add-driver-from-affiliate-component init()------------_>>>>>>>>>>>')
 		this.httpClient
 			.get("assets/json/proDriverYears.json")
 			.subscribe((data: any) => {
