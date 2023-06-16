@@ -50,7 +50,7 @@ export class DailyBookingsComponent implements OnInit {
 	public sendEmailForm: FormGroup;
 	public submitted: boolean = false;
 	searchText: string = "";
-	// filtertype: string = "";
+	filtertype: string = "";
 
 	passengerDetails: any;
 	senderValue: string;
@@ -61,7 +61,7 @@ export class DailyBookingsComponent implements OnInit {
 	audit_Trail: any = [];
 	currentUser: any = JSON.parse(localStorage.getItem('userData')) || ''
 	subModules: any = localStorage.getItem('sub_modules') || '';
-	useDateFilter: Boolean = false;
+	useDateFilter:boolean=false;
 
 	constructor(
 		private adminService: AdminService,
@@ -96,6 +96,10 @@ export class DailyBookingsComponent implements OnInit {
 		this.searchText = this.adminService.checkCookie('search') ?
 			this.adminService.getCookie('search')
 			: "";
+		
+		this.useDateFilter = this.adminService.checkCookie('useDateFilter') ?
+		(this.adminService.getCookie('useDateFilter') ? true : false)
+		: false;
 
 		this.adminService.getStatusList()
 			.pipe(
@@ -160,6 +164,7 @@ export class DailyBookingsComponent implements OnInit {
 	handleChangeCheckbox(value:any){
 		console.log('event---->> ' ,value)
 		this.useDateFilter = value
+		this.saveCookie('useDateFilter',value)
 		this.loadBookings(null, this.startDate, this.endDate, this.searchText);
 	}
 	/**
@@ -180,6 +185,8 @@ export class DailyBookingsComponent implements OnInit {
 		this.adminService.deleteCookie('startDate')
 		this.adminService.deleteCookie('endDate')
 		this.adminService.deleteCookie('search')
+		this.adminService.deleteCookie('useDateFilter')
+		this.useDateFilter = false
 		// this.adminService.deleteCookie('filtertype')
 		this.searchText = "";
 		// this.filtertype = 'bookingid';

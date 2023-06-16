@@ -52,7 +52,7 @@
 						</div>
 				</div>
 				<div>
-					<p><mat-checkbox (change)="handleChangeCheckbox($event.checked)">Use Date filter</mat-checkbox></p>
+					<p><mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">Use Date filter</mat-checkbox></p>
 				</div>
 				<div class="row my-2 mb-3">
 					<!-- <div class="col-md-3">
