@@ -504,7 +504,8 @@ export class HomeComponent implements OnInit {
 			this.quoteBotSwitch(previous_quotebot.service_type)
 
 			if (new Date(this.QBForm.pickup_date.value).getDate() < new Date().getDate() || new Date(this.QBForm.pickup_date.value).getMonth() + 1 < new Date().getMonth() + 1) {
-				this.SetFormValue('pickup_date', new Date().toISOString().split('T')[0])
+				console.log('----------ssssssssssssssetttttttttt',this.getTimeHHMMSS(this.QBForm.pickup_date.value,true))
+				this.SetFormValue('pickup_date', this.getTimeHHMMSS(this.QBForm.pickup_date.value,true))
 			}
 
 			// set values for data receiving from data.js
@@ -513,29 +514,15 @@ export class HomeComponent implements OnInit {
 		} else {
 			// fill default values
 
-			const now = new Date();
+		
 
-			// Get the current time components
-			const hours = now.getHours();
-			const minutes = now.getMinutes();
-			const seconds = now.getSeconds();
-
-			// Pad single digits with leading zeros
-			const formattedHours = hours.toString().padStart(2, '0');
-			const formattedMinutes = this.roundToNearest15(minutes.toString().padStart(2, '0'));
-			
-			// Combine the time components into a string
-			const currentTime = `${formattedHours}:${formattedMinutes}:00`;
-
-			// Print the current local time
-			console.log(currentTime);
 			this.quoteBotForm.patchValue({
 				service_type: 'one_way',
 				booking_hour: '2',
 				pickup_type: 'city',
 				dropoff_type: 'airport',
 				pickup_date: new Date().toISOString().split('T')[0],
-				pickup_time: currentTime,
+				pickup_time: this.getTimeHHMMSS('',false),
 				return_pickup_date: new Date().toISOString().split('T')[0],
 				return_pickup_time: '12:00:00',
 				no_of_passenger: 1,
@@ -544,6 +531,28 @@ export class HomeComponent implements OnInit {
 
 			this.quoteBotSwitch('one_way')
 		}
+	}
+
+	getTimeHHMMSS(date,isExist){
+		let now = new Date();
+		if(isExist){
+			now = new Date(date)
+		}
+
+		// Get the current time components
+		const hours = now.getHours();
+		const minutes = now.getMinutes();
+		const seconds = now.getSeconds();
+
+		// Pad single digits with leading zeros
+		const formattedHours = hours.toString().padStart(2, '0');
+		const formattedMinutes = this.roundToNearest15(minutes.toString().padStart(2, '0'));
+		
+		// Combine the time components into a string
+		const currentTime = `${formattedHours}:${formattedMinutes}:00`;
+		console.log('----------nnnnnnnnnnnnnnnnnt',currentTime)
+
+		return currentTime
 	}
 
 	/**
