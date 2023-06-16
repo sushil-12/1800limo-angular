@@ -165,7 +165,7 @@
 
 
 <!-- Rates Section End -->
-<section  class="section-container" *ngIf="(BookingDetail?.payment_status=='paid' || BookingDetail?.payment_status=='partial_paid' || BookingDetail?.payment_status=='refund')&& paymentDetailByCard.length > 0 ">
+<section  class="section-container" *ngIf="(BookingDetail?.payment_status=='paid' || BookingDetail?.payment_status=='partial_paid' || BookingDetail?.payment_status=='refund')&& paymentDetailByCard?.length > 0 ">
 	<h4 class="section-dropdown-header mb-0">
 		Cards Used for Payment
 	</h4>
@@ -178,13 +178,13 @@
 				<th scope="col">Recipt</th>
 			</tr>
 		</thead>
-		<tbody *ngIf="paymentDetailByCard.length > 0; else noData">
+		<tbody *ngIf="paymentDetailByCard?.length > 0; else noData">
 			<tr *ngFor="let item of paymentDetailByCard">
-				<td>{{item.card_details.name}}</td>
-				<td>xxxx-xxxx-xxxx-{{item.card_details.last4}}</td>
-				<td>{{item.transfer.transfer_amount}}</td>
+				<td>{{item?.card_details?.name}}</td>
+				<td>xxxx-xxxx-xxxx-{{item?.card_details?.last4}}</td>
+				<td>{{item?.transfer?.transfer_amount}}</td>
 				<td>
-					<a href="{{ item.transfer.receipt_url }}" target="_blank">View At stripe</a></td>
+					<a href="{{ item?.transfer?.receipt_url }}" target="_blank">View At stripe</a></td>
 			</tr>
 		</tbody>
 		<ng-template #noData>
