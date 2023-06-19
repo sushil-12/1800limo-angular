@@ -33,6 +33,7 @@ export class AdminTemplateComponent implements OnInit
 	modules:any = localStorage.getItem('modules') || ''
 	subModules:any = localStorage.getItem('sub_modules') || ''
 	desktopWidth: any;
+	name: any;
 	constructor(private router: Router, private authService: AuthService,
 		private stateManagementService: StateManagementService,
 		private spinner: NgxSpinnerService,
@@ -76,6 +77,7 @@ export class AdminTemplateComponent implements OnInit
 
 		const currentUser = this.authService.currentUserValue;
 		this.role = currentUser.roleName;
+		this.name = currentUser.name
 
 
 	}

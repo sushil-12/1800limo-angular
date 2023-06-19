@@ -49,47 +49,7 @@ export class EditVehicleRatesComponent implements OnInit {
 
 	ngOnInit(): void {
 		//add amenity form validation
-		this.addVehicleRatesForm = this.formBuilder.group({
-			id: [''],
-			acc_id: [''],
-			affiliate_type: [''],
-			vehicle_id: ['', [Validators.required, Validators.pattern("^[0-9]*$")]],
-			currency: ['$', Validators.required],
-			hourly_rate: ['', [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)]],
-			hourly_rate_after_five_hours: ['', [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)]],
-			hours_day_rate: [8, [Validators.pattern(/^\d+(\.\d+)?$/)]],
-			day_rate: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
-			km_mile: ['mile', Validators.required],
-			milage_rate: ['', [Validators.required,,Validators.pattern(/^\d+(\.\d+)?$/)]],
-			kilometer_rate: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
-			minimum_airport_departure_rate: ['', [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)]],
-			minimum_airport_arrival_rate: ['', [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)]],
-			minimum_city_rate: ['', [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)]],
-			minimum_cruise_port_arrival_rate: ['', [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)]],
-			minimum_on_demand_rate: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
-			per_person_group_ride_rate: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
-			airport_city_percentage_booking_cancel_charges: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
-			charter_percentage_booking_cancel_charges: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
-			gratuity: ['20', [Validators.required, Validators.pattern("^[0-9]*$")]],
-			is_gratuity: ['yes', Validators.required],
-			amenites_rates: new FormGroup({}),
-			airport_arrival_tax_per_us: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
-			airport_departure_tax_per_us: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
-			sea_port_tax_per_us: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
-			city_congestion_tax_per_us: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
-			rate_range: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
-			city_tax_percent_flat: ['flat'],
-			state_tax_percent_flat: ['flat'],
-			vat_percent_flat: ['flat'],
-			rate_range_percent_flat: ['flat'],
-			workman_comp_percent_flat: ['flat'],
-			other_transportation_tax_percent_flat: ['flat'],
-			city_tax: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
-			state_tax: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
-			vat: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
-			workmans_comp: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
-			other_transportation_tax: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]]
-		});
+		this.buildVehicleRateForm();
 		//autopopulate values of departure in arrival
 		this.addVehicleRatesForm.get('minimum_airport_departure_rate').valueChanges.subscribe(
 			value => {
@@ -247,6 +207,50 @@ export class EditVehicleRatesComponent implements OnInit {
 			});
 	}
 
+	buildVehicleRateForm(){
+		this.addVehicleRatesForm = this.formBuilder.group({
+			id: [''],
+			acc_id: [''],
+			affiliate_type: [''],
+			vehicle_id: ['', [Validators.required, Validators.pattern("^[0-9]*$")]],
+			currency: ['$', Validators.required],
+			hourly_rate: ['', [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)]],
+			hourly_rate_after_five_hours: ['', [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)]],
+			hours_day_rate: [8, [Validators.pattern(/^\d+(\.\d+)?$/)]],
+			day_rate: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
+			km_mile: ['mile', Validators.required],
+			milage_rate: ['', [Validators.required,,Validators.pattern(/^\d+(\.\d+)?$/)]],
+			kilometer_rate: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
+			minimum_airport_departure_rate: ['', [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)]],
+			minimum_airport_arrival_rate: ['', [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)]],
+			minimum_city_rate: ['', [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)]],
+			minimum_cruise_port_arrival_rate: ['', [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)]],
+			minimum_on_demand_rate: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
+			per_person_group_ride_rate: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
+			airport_city_percentage_booking_cancel_charges: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
+			charter_percentage_booking_cancel_charges: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
+			gratuity: ['20', [Validators.required, Validators.pattern("^[0-9]*$")]],
+			is_gratuity: ['yes', Validators.required],
+			amenites_rates: new FormGroup({}),
+			airport_arrival_tax_per_us: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
+			airport_departure_tax_per_us: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
+			sea_port_tax_per_us: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
+			city_congestion_tax_per_us: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
+			rate_range: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
+			city_tax_percent_flat: ['flat'],
+			state_tax_percent_flat: ['flat'],
+			vat_percent_flat: ['flat'],
+			rate_range_percent_flat: ['flat'],
+			workman_comp_percent_flat: ['flat'],
+			other_transportation_tax_percent_flat: ['flat'],
+			city_tax: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
+			state_tax: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
+			vat: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
+			workmans_comp: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
+			other_transportation_tax: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]]
+		});
+	}
+
 	IsZeroValidator(value: any, form_control: string)
 	{
 		if(value == 0)
@@ -389,9 +393,27 @@ export class EditVehicleRatesComponent implements OnInit {
 	}
 
 	resetForm() {
-		this.addVehicleRatesForm.reset();
-
+		// this.addVehicleRatesForm.reset();
+		this.buildVehicleRateForm();
+		this.adminService.getVehicleInfo(this.vehicleId)
+		.pipe(
+			catchError(err => {
+				// this.stateManagementService.setprogressBar(false);
+				return throwError(err);
+			})
+		).subscribe(({ data }: any) => {
+			if (data.amenities) {
+				Object.entries(data.amenities).forEach(
+					([key, value]) => {
+						console.log(key, value)
+						this.amenites_rates.addControl(key, this.resetAmenties(value))
+					}
+				);
+			}})
 		// this.SetFormValue("km_mile", "mile")
+	}
+	resetAmenties(e){
+		return this.formBuilder.group({...e, price:0})
 	}
 
 
