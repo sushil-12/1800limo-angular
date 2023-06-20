@@ -126,7 +126,7 @@ export class AdminTemplateComponent implements OnInit
 			console.log('<<<<<<<-------select language------>>>>>>>>')
 			var v = document.createElement("script");
 			v.type = "text/javascript";
-			v.innerHTML = "function googleTranslateElementInit() { new google.translate.TranslateElement({ pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.VERTICAL }, 'google_translate_element_admin_desktop'); } ";
+			v.innerHTML = "function googleTranslateElementInit() { new google.translate.TranslateElement({ pageLanguage: 'en', autoDisplay: false, layout: google.translate.TranslateElement.InlineLayout.VERTICAL }, 'google_translate_element_admin_desktop'); } ";
 			this.elementRef.nativeElement.appendChild(v);
 			var s = document.createElement("script");
 			s.type = "text/javascript";

@@ -61,7 +61,7 @@ export class DailyBookingsComponent implements OnInit {
 	audit_Trail: any = [];
 	currentUser: any = JSON.parse(localStorage.getItem('userData')) || ''
 	subModules: any = localStorage.getItem('sub_modules') || '';
-	useDateFilter:boolean=false;
+	useDateFilter:boolean=true;
 
 	constructor(
 		private adminService: AdminService,
@@ -99,7 +99,7 @@ export class DailyBookingsComponent implements OnInit {
 		
 		this.useDateFilter = this.adminService.checkCookie('useDateFilter') ?
 		(this.adminService.getCookie('useDateFilter') ? true : false)
-		: false;
+		: true;
 
 		this.adminService.getStatusList()
 			.pipe(
@@ -186,7 +186,7 @@ export class DailyBookingsComponent implements OnInit {
 		this.adminService.deleteCookie('endDate')
 		this.adminService.deleteCookie('search')
 		this.adminService.deleteCookie('useDateFilter')
-		this.useDateFilter = false
+		this.useDateFilter = true
 		// this.adminService.deleteCookie('filtertype')
 		this.searchText = "";
 		// this.filtertype = 'bookingid';
