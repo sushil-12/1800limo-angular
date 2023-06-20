@@ -11,9 +11,17 @@
     color           : #fff !important;
     background-color: #F33C2F;
     border-color    : #F33C2F;
-    padding         : 15px 40px;
+    padding         : 14px 23px;
+	
 }
 
+.billing_inforamtion ul{
+	display: flex;
+    justify-content: right;
+	margin: 0px 14px !important;
+	padding-bottom: 20px !important;
+    padding-top: 15px !important;
+}
 @media only screen and (min-width:1199px) {
 	.deactivate-button:hover {
 		background-color: #d12c20;

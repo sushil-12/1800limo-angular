@@ -6,3 +6,20 @@
 	left            : -6px;
 	top             : 30px;
 }
+
+
+.resetbutton,
+.backbutton,
+.savebutton
+ {
+    padding: 14px 45px !important;
+	
+}
+
+.billing_inforamtion ul {
+	margin: 0px 14px !important;
+	padding-bottom: 20px !important;
+    padding-top: 15px !important;
+	display: flex;
+    justify-content: right;
+}
