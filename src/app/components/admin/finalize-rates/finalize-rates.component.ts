@@ -3,7 +3,7 @@
 import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild, OnChanges } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { AdminService } from "src/app/services/admin.service";
-import { NgxSpinnerService } from "ngx-spinner";
+// import { NgxSpinnerService } from "ngx-spinner";
 import { ActivatedRoute } from "@angular/router";
 
 import { BehaviorSubject, combineLatest, Observable, Subject, Subscription } from "rxjs";
@@ -77,7 +77,7 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 	constructor(
 		private $form: FormBuilder,
 		private $api: AdminService,
-		private $spinner: NgxSpinnerService,
+		// private $spinner: NgxSpinnerService,
 		private $route: ActivatedRoute,
 	) { }
 
@@ -316,6 +316,7 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 	fetchRates(affiliate: string, bookingId: number = 0) {
 		// this.$spinner.show()
 		this.$api.fetchAdminNewBookingRates(affiliate, bookingId).subscribe((response: any) => {
+		// this.$spinner.hide();
 			if (response?.success && response?.data?.rateArray) {
 				if (Object.keys(response.data.rateArray).length) {
 					this.ratesdata.next(response.data.rateArray);

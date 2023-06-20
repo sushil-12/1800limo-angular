@@ -33,6 +33,7 @@ export class InvoiceComponent implements OnInit {
   public lastPageUrl:string;
   public prevPageUrl:string;
   public nextPageUrl:string;
+  searchText:any='';
 
   constructor(
     private adminService:AdminService,
@@ -40,14 +41,30 @@ export class InvoiceComponent implements OnInit {
     private spinner: NgxSpinnerService) { }
 
   ngOnInit(): void {
+    this.searchText = this.adminService.checkCookie('search_invoice') ?
+    this.adminService.getCookie('search_invoice')
+    : "";
     this.spinner.show();
       this.loadInvoice();//load invoices
   }
+  timer: any
+	searchInBookings(search_value: string) {
+		this.searchText = search_value
+		console.log('--->>>>>', search_value)
+		clearTimeout(this.timer);
+		this.timer = setTimeout(() => {
+			this.saveCookie("search_invoice", this.searchText);
+			this.loadInvoice()
+		}, 700)
+	}
+  handleKeypressEvents() {
+		clearTimeout(this.timer)
+	}
 
   loadInvoice(pageUrl=null)
   {
       /** spinner starts on init */
-
+      console.log('--->>> searchText--->>' , this.searchText)
       var keyword = ((document.getElementById("keyword2") as HTMLInputElement).value);
       // console.log(keyword);
       // Load Our invoices using API
@@ -73,6 +90,9 @@ export class InvoiceComponent implements OnInit {
         this.spinner.hide();//hide spinner
       });
   }
+  saveCookie(key: string, value: string) {
+		this.adminService.setCookie(key, value, 30);
+	}
 
   clicViewInvoice(bookingId)
   {

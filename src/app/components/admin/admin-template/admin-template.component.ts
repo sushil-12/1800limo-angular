@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
 import { Router } from '@angular/router';
 import { StateManagementService } from 'src/app/services/statemanagement.service';
@@ -6,6 +6,7 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { AdminService } from 'src/app/services/admin.service';
+declare var $: any;
 
 @Component({
 	selector: 'app-admin-template',
@@ -31,10 +32,14 @@ export class AdminTemplateComponent implements OnInit
 
 	modules:any = localStorage.getItem('modules') || ''
 	subModules:any = localStorage.getItem('sub_modules') || ''
+	desktopWidth: any;
+	name: any;
 	constructor(private router: Router, private authService: AuthService,
 		private stateManagementService: StateManagementService,
 		private spinner: NgxSpinnerService,
-		private adminService:AdminService) { }
+		private adminService:AdminService,
+		private elementRef: ElementRef,
+		) { }
 
 	// ngAfterViewInit()
 	// {
@@ -72,8 +77,79 @@ export class AdminTemplateComponent implements OnInit
 
 		const currentUser = this.authService.currentUserValue;
 		this.role = currentUser.roleName;
+		this.name = currentUser.name
 
 
+	}
+
+	ngAfterViewInit()
+	{
+		
+		this.googleTranslateInitFunction();
+	}
+	googleTranslateInitFunction(){
+		this.desktopWidth = window.innerWidth;
+		if (this.desktopWidth <= '767')
+		{
+			//google translate
+			console.log('-----google translate element for mobile view-------->>>>')
+			var v = document.createElement("script");
+			v.type = "text/javascript";
+			v.innerHTML = "function googleTranslateElementInit() { new google.translate.TranslateElement({ pageLanguage: 'en',layout: google.translate.TranslateElement.InlineLayout.VERTICAL}, 'google_translate_element_admin_mobile'); } ";
+			this.elementRef.nativeElement.appendChild(v);
+			var s = document.createElement("script");
+			s.type = "text/javascript";
+			s.src = "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
+			this.elementRef.nativeElement.appendChild(s);
+
+				$('.goog-te-gadget').html($('.goog-te-gadget').children());
+				$("#google-translate").fadeIn('1000');
+			  
+			  
+				function cleartimer() {     
+					setTimeout(function(){ 
+						window.clearInterval(myVar); 
+					}, 500);             
+				}
+				function myTimer() {
+					if ($('.goog-te-combo option:first').length) {
+						$('.goog-te-combo option:first').html('Translate');
+						cleartimer();
+					}
+				}
+				var myVar = setInterval(function(){ myTimer() }, 0); 
+		}
+
+		if (this.desktopWidth > '767')
+		{
+			//google translate
+			console.log('<<<<<<<-------select language------>>>>>>>>')
+			var v = document.createElement("script");
+			v.type = "text/javascript";
+			v.innerHTML = "function googleTranslateElementInit() { new google.translate.TranslateElement({ pageLanguage: 'en', autoDisplay: false, layout: google.translate.TranslateElement.InlineLayout.VERTICAL }, 'google_translate_element_admin_desktop'); } ";
+			this.elementRef.nativeElement.appendChild(v);
+			var s = document.createElement("script");
+			s.type = "text/javascript";
+			s.src = "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
+			this.elementRef.nativeElement.appendChild(s);
+				$('.goog-te-gadget').html($('.goog-te-gadget').children());
+				$("#google-translate").fadeIn('1000');
+			  
+			  
+				function cleartimer() {     
+					setTimeout(function(){ 
+						window.clearInterval(myVar); 
+					}, 500);             
+				}
+				function myTimer() {
+					if ($('.goog-te-combo option:first').length) {
+						$('.goog-te-combo option:first').html('Translate');
+						cleartimer();
+					}
+				}
+				var myVar = setInterval(function(){ myTimer() }, 0); 
+			  
+		}
 	}
 	getPermission(){
 		this.adminService.getMyPermissions()

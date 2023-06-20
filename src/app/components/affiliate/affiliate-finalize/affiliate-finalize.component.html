@@ -372,7 +372,8 @@
 	</app-affiliate-finalize-rates>
 	<div class="row mb-3" id="submitForm" *ngIf="BookingDetail?.payment_status=='unpaid'">
 		<div class="col-md-12 text-right">
-			<button type="button" class="custom-filled-button ratesButton m-3" (click)="submitForm()">
+			<button type="button" class="custom-filled-button ratesButton m-3" 
+			[ngClass]="finalize_btn=='Finalized'? 'color-grey':''" (click)="submitForm()">
 				{{finalize_btn}}
 			</button>
 		</div>

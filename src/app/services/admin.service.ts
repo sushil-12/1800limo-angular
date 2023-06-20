@@ -817,6 +817,9 @@ export class AdminService {
 	getFinalizeDetails(reservation_id: number) {
 		return this.httpClient.get(`${this.serverUrl}admin/finalize-booking-detail/${reservation_id}`);
 	}
+	getPaymentDetailFinalize(reservation_id: number){
+		return this.httpClient.get(`${this.serverUrl}admin/booking-payment-log/${reservation_id}`);
+	}
 	updateFinalizeRates(data) {
 		return this.httpClient.post(`${this.serverUrl}admin/finalize-rate-edit`, data)
 	}
@@ -836,13 +839,13 @@ export class AdminService {
 		return this.httpClient.get(this.serverUrl + `admin/booking-audit-records/${bookingId}`)
 	}
 
-	loadBookings(url, startDate, endDate, keyword = '') {
+	loadBookings(url, startDate, endDate, useDateFilter,keyword = '') {
 		var path;
 		if (url) {
-			path = url + '&from=' + startDate + '&to=' + endDate + '&search=' + keyword;
+			path = url + '&from=' + startDate + '&to=' + endDate + '&search=' + keyword +'&useDateFilter='+useDateFilter;
 		}
 		else {
-			path = this.serverUrl + 'reservations' + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword;
+			path = this.serverUrl + 'reservations' + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword+'&useDateFilter='+useDateFilter;
 		}
 		return this.httpClient.get(path).toPromise();
 	}

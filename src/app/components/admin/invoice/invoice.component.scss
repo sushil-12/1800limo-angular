@@ -8,7 +8,9 @@
 	border: solid 3px;
     border-radius: 4px;
 }
-
+.btnclass {
+    margin-top: 15px !important;
+}
 .adminbox_shadow.user_information,
 .adminbox_shadow.user_information .mat-form-field,
 .mat-calendar {
@@ -43,7 +45,7 @@ button {
 }
 
 .cancelled {
-	background-color: #45200d;
+	background-color: #FF69B4;
 }
 
 .en_route_pu {

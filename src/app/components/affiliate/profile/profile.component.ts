@@ -36,20 +36,21 @@ export class ProfileComponent implements OnInit {
         })
       ).subscribe(({ data }: any) => {
         this.stateManagementService.setprogressBar(false);//hide progressbar
-
+        
+        this.profile_pic = data?.profile_pic;
         let first_name: any = document.getElementById('first_name');
-        first_name.value = data.first_name;
+        first_name.value = data?.first_name;
         let middle_name: any = document.getElementById('middle_name');
-        middle_name.value = data.middle_name;
+        middle_name.value = data?.middle_name;
         let last_name: any = document.getElementById('last_name');
-        last_name.value = data.last_name;
+        last_name.value = data?.last_name;
         let email: any = document.getElementById('email');
-        email.value = data.email;
+        email.value = data?.email;
         let phone: any = document.getElementById('phone');
-        phone.value = data.phone;
+        phone.value = data?.phone;
          //set country flag in phone number fields
-         this.AffiliatePhoneObject.setCountry(data.phone_country);
-         this.profile_pic = data.profile_pic;
+         this.AffiliatePhoneObject.setCountry(data?.phone_country);
+         console.log('--->> profile pic--->>>' , this.profile_pic)
       });
 		$('.HeadingH1').css({display: "none"})
 

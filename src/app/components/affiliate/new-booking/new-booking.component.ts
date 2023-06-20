@@ -144,6 +144,12 @@ export class NewBookingComponent implements OnInit {
 
 	}
 
+	scroll(id) {
+		let el = document.getElementById(id);
+		console.log(`scrolling to ${id}`, el);
+		el.scrollIntoView(true);
+	}
+
 	dateFormat(value: any) {
 		return moment(value, 'YYYY-MM-DD').format('ll')
 	}
@@ -492,6 +498,7 @@ export class NewBookingComponent implements OnInit {
 			}
       
       this.$spinner.hide('normalspinner')
+	  this.scroll('booking_detail')
 		})
 	}
 

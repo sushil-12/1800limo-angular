@@ -98,7 +98,9 @@ export class HomeComponent implements OnInit {
 		private authService: AuthService,
 		private errorDialogService: ErrorDialogService,
 		private quotebotService: QuotebotService,
-		private globalFunctions: SharedModule
+		private globalFunctions: SharedModule,
+		private elementRef: ElementRef,
+
 	) { }
 
 
@@ -111,6 +113,8 @@ export class HomeComponent implements OnInit {
 
 	ngOnInit() {
 		this.fetchAirportsData()
+
+		
 		setTimeout(() => {
 
 			$('[data-toggle="modal"]').tooltip();//Bootstrap tooltip
@@ -211,8 +215,50 @@ export class HomeComponent implements OnInit {
 
 		this.fetchHomePageData();
 	}
+	
 	// ngOnInit() ends
-
+	// ngAfterViewInit(): void{
+	// 		console.log('<<<<<<<-------select language------>>>>>>>>')
+	// 		var v = document.createElement("script");
+	// 		v.type = "text/javascript";
+	// 		v.innerHTML = "function googleTranslateElementInit() { new google.translate.TranslateElement({ pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.VERTICAL}, 'google_translate_element_home'); } ";
+	// 		this.elementRef.nativeElement.appendChild(v);
+	// 		var s = document.createElement("script");
+	// 		s.type = "text/javascript";
+	// 		s.src = "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
+	// 		this.elementRef.nativeElement.appendChild(s);
+	// 		console.log('exxxxxxxxxxxxxxxxx')
+				
+	// 						$('.goog-te-gadget').html($('.goog-te-gadget').children());
+	// 						$("#google-translate").fadeIn('1000');
+						  
+						  
+	// 						function cleartimer() {     
+	// 							setTimeout(function(){ 
+	// 								window.clearInterval(myVar); 
+	// 							}, 500);             
+	// 						}
+	// 						function myTimer() {
+	// 							if ($('.goog-te-combo option:first').length) {
+	// 								$('.goog-te-combo option:first').html('Translate');
+	// 								cleartimer();
+	// 							}
+	// 						}
+	// 						var myVar = setInterval(function(){ myTimer() }, 0); 
+						  
+			   
+	// 	// setTimeout(() => {
+	// 	// 	console.log('------- set timeout exe')
+	// 	// 	$('body').find(".VIpgJd-ZVi9od-xl07Ob-lTBxed").attr('href', 'javascript:void(0)'); 
+	// 	// 	$('.VIpgJd-ZVi9od-xl07Ob-lTBxed').find('span:first').text('Translate')
+	// 	// 	$('goog-te-combo').find('option:first').text('Translate')
+	// 	// 	$('.goog-te-gadget-simple').css({height :'auto'}); 
+	// 	// 	const elements = document.querySelectorAll('.VIpgJd-ZVi9od-xl07Ob-lTBxed');
+	// 	// 	if (elements.length === 2) {
+	// 	// 		elements[0].parentNode.removeChild(elements[0]);
+	// 	// 	}
+	// 	// }, 300)
+	// }
 
 
 	fetchPageData(section: string) {
@@ -458,7 +504,8 @@ export class HomeComponent implements OnInit {
 			this.quoteBotSwitch(previous_quotebot.service_type)
 
 			if (new Date(this.QBForm.pickup_date.value).getDate() < new Date().getDate() || new Date(this.QBForm.pickup_date.value).getMonth() + 1 < new Date().getMonth() + 1) {
-				this.SetFormValue('pickup_date', new Date().toISOString().split('T')[0])
+				console.log('----------ssssssssssssssetttttttttt',this.getTimeHHMMSS(this.QBForm.pickup_date.value,true))
+				this.SetFormValue('pickup_date', this.getTimeHHMMSS(this.QBForm.pickup_date.value,true))
 			}
 
 			// set values for data receiving from data.js
@@ -467,29 +514,15 @@ export class HomeComponent implements OnInit {
 		} else {
 			// fill default values
 
-			const now = new Date();
+		
 
-			// Get the current time components
-			const hours = now.getHours();
-			const minutes = now.getMinutes();
-			const seconds = now.getSeconds();
-
-			// Pad single digits with leading zeros
-			const formattedHours = hours.toString().padStart(2, '0');
-			const formattedMinutes = this.roundToNearest15(minutes.toString().padStart(2, '0'));
-			
-			// Combine the time components into a string
-			const currentTime = `${formattedHours}:${formattedMinutes}:00`;
-
-			// Print the current local time
-			console.log(currentTime);
 			this.quoteBotForm.patchValue({
 				service_type: 'one_way',
 				booking_hour: '2',
 				pickup_type: 'city',
 				dropoff_type: 'airport',
 				pickup_date: new Date().toISOString().split('T')[0],
-				pickup_time: currentTime,
+				pickup_time: this.getTimeHHMMSS('',false),
 				return_pickup_date: new Date().toISOString().split('T')[0],
 				return_pickup_time: '12:00:00',
 				no_of_passenger: 1,
@@ -498,6 +531,28 @@ export class HomeComponent implements OnInit {
 
 			this.quoteBotSwitch('one_way')
 		}
+	}
+
+	getTimeHHMMSS(date,isExist){
+		let now = new Date();
+		if(isExist){
+			now = new Date(date)
+		}
+
+		// Get the current time components
+		const hours = now.getHours();
+		const minutes = now.getMinutes();
+		const seconds = now.getSeconds();
+
+		// Pad single digits with leading zeros
+		const formattedHours = hours.toString().padStart(2, '0');
+		const formattedMinutes = this.roundToNearest15(minutes.toString().padStart(2, '0'));
+		
+		// Combine the time components into a string
+		const currentTime = `${formattedHours}:${formattedMinutes}:00`;
+		console.log('----------nnnnnnnnnnnnnnnnnt',currentTime)
+
+		return currentTime
 	}
 
 	/**
@@ -980,7 +1035,7 @@ export class HomeComponent implements OnInit {
 
 	// loginbuttons
 	loginButtons(role: string) {
-		if (role != 'driver') {
+		if (role != 'driver' && role!='sub_admin') {
 			this.errorDialogService.openDialog({
 				errors: {
 					error: 'Currently only Drivers are allowed to Sign In. User accounts coming soon! Recruiting quality vetted drivers, and chauffeurs, only at this time. Refer a trusted driver/ chauffeur to 1-800 - LIMO.COM now! You deserve the best.'

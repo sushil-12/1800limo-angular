@@ -35,6 +35,12 @@
 			<!-- <line _ngcontent-qpx-c164="" x1="9.37" x2="36.63" y1="1.37" y2="25.63" fill="none" stroke="#010101" stroke-miterlimit="5" stroke-width="4"></line><line _ngcontent-qpx-c164="" x1="9.37" x2="40.63" y1="54.63" y2="25.63" fill="none" stroke="#010101" stroke-miterlimit="5" stroke-width="4"></line> -->
 		</button>
 		<ul class="navbar-nav align-items-center ml-auto">
+			<li class="hideMobile">
+				<!-- <div id="google-translate">
+					<div id="google_translate_element_desktop"></div>
+				  </div> -->
+				<div id="google_translate_element_admin_desktop"></div>
+			</li>
 			<li class="nav-item dropdown no-caret mr-2 dropdown-user">
 				<a class="user-profile btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownUserImage"
 					href="javascript:void(0);" role="button" data-toggle="dropdown" aria-haspopup="true"
@@ -44,7 +50,7 @@
 							d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22ZM15 10C15 11.6569 13.6569 13 12 13C10.3431 13 9 11.6569 9 10C9 8.34315 10.3431 7 12 7C13.6569 7 15 8.34315 15 10ZM5.99927 17C7.36758 15.1783 9.54609 14 11.9998 14C14.4535 14 16.6321 15.1783 18.0004 17C16.6321 18.8217 14.4535 20 11.9998 20C9.54609 20 7.36758 18.8217 5.99927 17Z"
 							clip-rule="evenodd" />
 					</svg>
-					<span>Admin</span>
+					<span>{{this.name}}</span>
 				</a>
 				<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
 					aria-labelledby="navbarDropdownUserImage" tabIndex="-1">
@@ -55,7 +61,7 @@
 								clip-rule="evenodd" />
 						</svg>
 						<div class="dropdown-user-details">
-							<div class="dropdown-user-details-name">Admin</div>
+							<div class="dropdown-user-details-name">{{this.name}}</div>
 						</div>
 					</h6>
 					<div class="dropdown-divider"></div>
@@ -79,6 +85,7 @@
 	</mat-progress-bar>
 	<div id="layoutSidenav">
 		<div id="layoutSidenav_nav">
+			<div id="google_translate_element_admin_mobile"></div>
 			<nav class="sidenav shadow-right">
 				<div class="sidenav-menu">
 					<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">

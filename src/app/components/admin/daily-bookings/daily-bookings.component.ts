@@ -14,6 +14,7 @@ import { HttpClient } from "@angular/common/http";
 declare var $: any;
 import * as moment from "moment";
 import { ErrorDialogService } from "src/app/services/error-dialog/errordialog.service";
+import { MatSelect } from "@angular/material/select";
 
 @Component({
 	selector: "app-daily-bookings",
@@ -22,6 +23,8 @@ import { ErrorDialogService } from "src/app/services/error-dialog/errordialog.se
 })
 export class DailyBookingsComponent implements OnInit {
 	@ViewChild('inputmsg', { static: false }) message: ElementRef;
+	@ViewChild('select') select: MatSelect;
+	@ViewChild('sendEmailModalFocus') sendEmailModalFocus: any;
 	outputDateFormat = "YYYY-MM-DD";
 	color: ThemePalette = "primary";
 	public firstPage: Number;
@@ -47,7 +50,7 @@ export class DailyBookingsComponent implements OnInit {
 	public sendEmailForm: FormGroup;
 	public submitted: boolean = false;
 	searchText: string = "";
-	// filtertype: string = "";
+	filtertype: string = "";
 
 	passengerDetails: any;
 	senderValue: string;
@@ -58,6 +61,7 @@ export class DailyBookingsComponent implements OnInit {
 	audit_Trail: any = [];
 	currentUser: any = JSON.parse(localStorage.getItem('userData')) || ''
 	subModules: any = localStorage.getItem('sub_modules') || '';
+	useDateFilter:boolean=true;
 
 	constructor(
 		private adminService: AdminService,
@@ -92,6 +96,10 @@ export class DailyBookingsComponent implements OnInit {
 		this.searchText = this.adminService.checkCookie('search') ?
 			this.adminService.getCookie('search')
 			: "";
+		
+		this.useDateFilter = this.adminService.checkCookie('useDateFilter') ?
+		(this.adminService.getCookie('useDateFilter') ? true : false)
+		: true;
 
 		this.adminService.getStatusList()
 			.pipe(
@@ -150,8 +158,15 @@ export class DailyBookingsComponent implements OnInit {
 	ngAfterViewInit(): void {
 		this.subModules = localStorage.getItem('sub_modules')
 		$("#search-field").addClass("box-outline")
+		// $('#layoutSidenav_content').addClass("layout_shadow")
+		this.sendEmailModalFocus.nativeElement.querySelector('textarea').focus();
 	}
-
+	handleChangeCheckbox(value:any){
+		console.log('event---->> ' ,value)
+		this.useDateFilter = value
+		this.saveCookie('useDateFilter',value)
+		this.loadBookings(null, this.startDate, this.endDate, this.searchText);
+	}
 	/**
 	 * Configure date as per todays date and the future +7 days
 	 */
@@ -170,6 +185,8 @@ export class DailyBookingsComponent implements OnInit {
 		this.adminService.deleteCookie('startDate')
 		this.adminService.deleteCookie('endDate')
 		this.adminService.deleteCookie('search')
+		this.adminService.deleteCookie('useDateFilter')
+		this.useDateFilter = true
 		// this.adminService.deleteCookie('filtertype')
 		this.searchText = "";
 		// this.filtertype = 'bookingid';
@@ -178,6 +195,9 @@ export class DailyBookingsComponent implements OnInit {
 	}
 
 	messageField(format) {
+		setTimeout(()=>{
+			this.sendEmailModalFocus.nativeElement.querySelector('textarea').focus();
+		},1000)
 		this.show = true;
 		switch (format) {
 			case "Phone": {
@@ -303,13 +323,18 @@ export class DailyBookingsComponent implements OnInit {
 		$("#closeModal1").click(() => {
 			$("#notificationModal").modal("hide");
 		});
+		$('#sendEmailModal').modal('hide')		
 		this.message.nativeElement.value = ""
 		this.show = false
 	}
 
 	closeModal() {
+		// this.sendEmailModal.nativeElement.querySelector('textarea').blur();
+		$('#sendEmailModal').modal('hide')
 		this.message.nativeElement.value = ""
 		this.show = false
+		// this.sendEmailModal.nativeElement.querySelector('textarea').focus();
+
 	}
 
 	noError: boolean = false
@@ -317,7 +342,7 @@ export class DailyBookingsComponent implements OnInit {
 		search_value == '' && this.spinner.show();
 		this.noError = false
 		// Load Our bookings using API
-		this.adminService.loadBookings(pageUrl, start_date, end_date, search_value ?? '').then((result: any) => {
+		this.adminService.loadBookings(pageUrl, start_date, end_date, this.useDateFilter,search_value ?? '').then((result: any) => {
 			if (result?.data?.data == 0) {
 				this.noError = true
 			}
@@ -344,6 +369,15 @@ export class DailyBookingsComponent implements OnInit {
 
 	show = false;
 	openModal(booking: any, selection_button: string) {
+		try {
+			setTimeout(()=>{
+				// $('textarea').attr('autofocus', 'autofocus');
+				this.sendEmailModalFocus.nativeElement.querySelector('textarea').focus();
+			},1000)
+		} catch (error) {
+		console.log('----------error------->>>>>> ' ,error )
+			
+		}
 		this.passengerDetails = booking;
 		this.passengerDetails["selection_button"] = selection_button;
 	}
@@ -421,6 +455,9 @@ export class DailyBookingsComponent implements OnInit {
 		this.changeStatusForm.patchValue({
 			reservation_id: bookingId,
 		});
+		setTimeout(() => {
+			this.select.open();
+		}, 600);
 	}
 
 	submitChangeStatusForm() {

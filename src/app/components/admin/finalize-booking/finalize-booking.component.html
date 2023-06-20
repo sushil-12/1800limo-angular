@@ -1,5 +1,6 @@
 <ngx-spinner></ngx-spinner>
-<section class="section-container">
+<ngx-spinner name="normalspinner"></ngx-spinner>
+<section class="section-container" *ngIf="BookingDetail">
 	<div class="container" id="print-section">
 		<h3 class="font-weight-bolder mb-1 text-center">Finalize Booking</h3>
 		<hr>
@@ -156,7 +157,7 @@
 </app-finalize-rates>
 <div class="row mb-3" id="submitForm">
 	<div class="col-md-12 text-right" >
-		<button type="button" class="custom-filled-button ratesButton m-3" (click)="submitForm()">
+		<button type="button" class="custom-filled-button ratesButton m-3" [ngClass]="finalize_btn=='Finalized'? 'color-grey':''" (click)="submitForm()">
 			{{finalize_btn}}
 		</button>
 	</div>
@@ -164,9 +165,39 @@
 
 
 <!-- Rates Section End -->
-
+<section  class="section-container" *ngIf="(BookingDetail?.payment_status=='paid' || BookingDetail?.payment_status=='partial_paid' || BookingDetail?.payment_status=='refund')&& paymentDetailByCard?.length > 0 ">
+	<h4 class="section-dropdown-header mb-0">
+		Cards Used for Payment
+	</h4>
+	<table class="table table-borderless">
+		<thead class="bg-transparent">
+			<tr>
+				<th scope="col">Name on Card</th>
+				<th scope="col">Card Number</th>
+				<th scope="col">Transfer Amount</th>
+				<th scope="col">Recipt</th>
+			</tr>
+		</thead>
+		<tbody *ngIf="paymentDetailByCard?.length > 0; else noData">
+			<tr *ngFor="let item of paymentDetailByCard">
+				<td>{{item?.card_details?.name}}</td>
+				<td>xxxx-xxxx-xxxx-{{item?.card_details?.last4}}</td>
+				<td>{{item?.transfer?.transfer_amount}}</td>
+				<td>
+					<a href="{{ item?.transfer?.receipt_url }}" target="_blank">View At stripe</a></td>
+			</tr>
+		</tbody>
+		<ng-template #noData>
+			<tbody>
+				<p class="text-danger text-lg">No
+					Card Found !</p>
+			</tbody>
+		</ng-template>
+	</table>
+</section>
 <!-- Payment Section -->
-<section class="section-container" *ngIf="(BookingDetail?.payment_status=='unpaid' || BookingDetail?.payable_amount > 0) && (currentUser?.RoleName == 'admin' || subModules.includes('can_pay_booking'))">
+<section class="section-container" style="margin-top: 22px !important;"
+ *ngIf="(BookingDetail?.payment_status=='unpaid' || BookingDetail?.payable_amount > 0) && (currentUser?.RoleName == 'admin' || subModules.includes('can_pay_booking'))">
 	<div class="col-md-12 p-0" (click)="handlePaymentSection()">
 		<h4 class="section-dropdown-header mb-0">
 			Payment

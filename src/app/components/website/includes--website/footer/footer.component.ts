@@ -64,7 +64,7 @@ export class FooterComponent implements OnInit
 	// loginbuttons
 	loginButtons(role: string)
 	{
-		if (role != 'driver')
+		if (role != 'driver' && role!= 'sub_admin')
 		{
 			this.errorDialogService.openDialog({
 				errors: {

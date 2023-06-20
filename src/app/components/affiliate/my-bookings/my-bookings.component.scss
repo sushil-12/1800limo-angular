@@ -35,11 +35,11 @@ hr{
 }
 
 .rejected {
-	background-color: #fc6404;
+	background-color: #dc3545;
 }
 
 .cancelled {
-	background-color: #FF0000;
+	background-color: #FF69B4;
 }
 .paid {
 	background-color: #D1B000;
@@ -245,6 +245,7 @@ input::-webkit-input-placeholder {
 	opacity: 1;
 	color: red;
 	font-size: xx-large;
+	width: max-content;
 }
 .center {
 	margin: 0;

@@ -138,7 +138,7 @@
 												*ngIf="booking?.booking_status !='refund' && booking?.booking_status !='paid' && booking?.booking_status !='partial_paid'  && booking?.booking_status !='cancelled'"
 												data-toggle="modal" data-target="#cancelBooking">
 												<div class="dropdown-item-icon"></div>
-												Rejected
+												Reject
 											</a>
 											</div>
 										</td>
@@ -377,18 +377,18 @@
 
 <!-- send email and call modal -->
 <div class="modal fade" id="sendEmailModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-	aria-hidden="true" data-backdrop="static" data-keyboard="false">
+	aria-hidden="true" data-keyboard="false">
 	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content" style="background: #f5f4fe;">
-			<button type="button" (click)="closeModal()" class="close closeButton x-circle-btn m-1 mx-3" data-dismiss="modal"
-				aria-label="Close">
-				<i class="bi bi-x-circle"></i>
-			</button>
 			<div class="modal-header pb-0">
 				<h3 class="modal-title mb-0">
 					Booking # : {{ passengerDetails?.booking_id }}
 				</h3>
 			</div>
+			<button type="button" (click)="closeModal()" class="close closeButton x-circle-btn m-2" data-dismiss="modal"
+			aria-label="Close">
+			<i class="bi bi-x-circle"></i>
+		</button>
 			<hr>
 			<div class="text-center iconStyle">
 				<div class="row">
@@ -536,9 +536,9 @@
 					</div>
 				</div>
 			</div>
-			<div class="modal-footer pt-0" [style.display]="show ? 'none' : ''">
+			<!-- <div class="modal-footer pt-0" [style.display]="show ? 'none' : ''">
 				<button type="button" data-dismiss="modal" (click)="closeModal()" class="btn btnStyle">Close</button>
-			</div>
+			</div> -->
 		</div>
 	</div>
 </div>
