@@ -85,7 +85,7 @@ export class AdminTemplateComponent implements OnInit {
 	}
 
 	handleDivClick(event: MouseEvent | TouchEvent) {
-		console.log('Clicked/touched parent div' ,this.showSidebar);
+		console.log('Clicked/touched parent div' ,event,this.showSidebar);
 		if(!this.showSidebar){
 			$("body").toggleClass("sidenav-toggled");
 			this.showSidebar = true
@@ -189,74 +189,70 @@ export class AdminTemplateComponent implements OnInit {
 
 	closeSidebarFunc(status) {
 		if (this.screenWidth <= '991') {
-			$("body").removeClass("sidenav-toggled");
-			if (status) {
+			console.log('in function close side bar function' , this.showSidebar)
 				this.showSidebar = true;
-			}
-			else {
-				this.showSidebar = false;
-			}
+				$("body").removeClass("sidenav-toggled");
 		}
 	}
 	invoiceFunc(status) {
 		this.chevron = !this.chevron
-		if (this.screenWidth <= '991') {
-			$("body").removeClass("sidenav-toggled");
-			if (status) {
-				this.showSidebar = true;
-			}
-			else {
-				this.showSidebar = false;
-			}
-		}
+		// if (this.screenWidth <= '991') {
+		// 	$("body").removeClass("sidenav-toggled");
+		// 	if (status) {
+		// 		this.showSidebar = true;
+		// 	}
+		// 	else {
+		// 		this.showSidebar = false;
+		// 	}
+		// }
 	}
 	userAccountFunc(status) {
 		this.chevron1 = !this.chevron1
-		if (this.screenWidth <= '991') {
-			$("body").removeClass("sidenav-toggled");
-			if (status) {
-				this.showSidebar = true;
-			}
-			else {
-				this.showSidebar = false;
-			}
-		}
+		// if (this.screenWidth <= '991') {
+		// 	$("body").removeClass("sidenav-toggled");
+		// 	if (status) {
+		// 		this.showSidebar = true;
+		// 	}
+		// 	else {
+		// 		this.showSidebar = false;
+		// 	}
+		// }
 	}
 	reportFunc(status) {
 		this.chevron2 = !this.chevron2
-		if (this.screenWidth <= '991') {
-			$("body").removeClass("sidenav-toggled");
-			if (status) {
-				this.showSidebar = true;
-			}
-			else {
-				this.showSidebar = false;
-			}
-		}
+		// if (this.screenWidth <= '991') {
+		// 	$("body").removeClass("sidenav-toggled");
+		// 	if (status) {
+		// 		this.showSidebar = true;
+		// 	}
+		// 	else {
+		// 		this.showSidebar = false;
+		// 	}
+		// }
 	}
 	settingFunc(status) {
 		this.chevron3 = !this.chevron3
-		if (this.screenWidth <= '991') {
-			$("body").removeClass("sidenav-toggled");
-			if (status) {
-				this.showSidebar = true;
-			}
-			else {
-				this.showSidebar = false;
-			}
-		}
+		// if (this.screenWidth <= '991') {
+		// 	$("body").removeClass("sidenav-toggled");
+		// 	if (status) {
+		// 		this.showSidebar = true;
+		// 	}
+		// 	else {
+		// 		this.showSidebar = false;
+		// 	}
+		// }
 	}
 	webPageCMSFunc(status) {
 		this.chevron4 = !this.chevron4
-		if (this.screenWidth <= '991') {
-			$("body").removeClass("sidenav-toggled");
-			if (status) {
-				this.showSidebar = true;
-			}
-			else {
-				this.showSidebar = false;
-			}
-		}
+		// if (this.screenWidth <= '991') {
+		// 	$("body").removeClass("sidenav-toggled");
+		// 	if (status) {
+		// 		this.showSidebar = true;
+		// 	}
+		// 	else {
+		// 		this.showSidebar = false;
+		// 	}
+		// }
 	}
 
 	logout() {

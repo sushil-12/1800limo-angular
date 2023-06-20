@@ -9,6 +9,13 @@ mat-form-field input {
 //   :host ::ng-deep .VIpgJd-ZVi9od-l4eHX-hSRGPd{
 // 	display:none !important;
 // 	}
+
+// .g-translator{position: absolute;right:0;left: auto;top:-6px;bottom: auto;z-index:9999}
+:host ::ng-deep .g-translator .goog-te-gadget .goog-te-combo{margin: 0!important;border:none!important;box-shadow:none!important;border-radius: 0 0px 10px 10px!important;width: 130px!important;
+    max-width: 100%!important;}
+#navbarsExample05{padding-top: 10px;}
+:host ::ng-deep .goog-te-gadget{color:#011533 !important}
+:host ::ng-deep .VIpgJd-ZVi9od-l4eHX-hSRGPd{display: none!important;}
 section{
 	background-color: none !important;
 }
@@ -47,6 +54,9 @@ section{
 	}
 }
 
+.telephone_mobile {
+    padding: 10px 0px 10px 0px !important;
+}
 .font-weight-bolder {
 	font-size: 16px !important;
 }
@@ -347,6 +357,14 @@ a.user-profile:active::after {
 	color: var(--orange) !important;
 }
 
+@media only screen and (max-width:767px) {
+	.hideMobile {
+		display: none;
+	}
+	.hideDesktop {
+		display: block;
+	}
+}
 @media only screen and (max-width: 360px) {
 	.bannertext .dropdown-menu {
 		max-width: 100%;
