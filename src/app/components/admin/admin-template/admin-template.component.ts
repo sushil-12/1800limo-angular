@@ -13,8 +13,7 @@ declare var $: any;
 	templateUrl: './admin-template.component.html',
 	styleUrls: ['./admin-template.component.scss']
 })
-export class AdminTemplateComponent implements OnInit
-{
+export class AdminTemplateComponent implements OnInit {
 	copyright_text: string = new Date().getFullYear().toString() + ' 1800LIMO.COM'
 	public role: string;
 	public affiliateAccountStatus: string;
@@ -30,16 +29,16 @@ export class AdminTemplateComponent implements OnInit
 	chevron3: boolean = false;
 	chevron4: boolean = false;
 
-	modules:any = localStorage.getItem('modules') || ''
-	subModules:any = localStorage.getItem('sub_modules') || ''
+	modules: any = localStorage.getItem('modules') || ''
+	subModules: any = localStorage.getItem('sub_modules') || ''
 	desktopWidth: any;
 	name: any;
 	constructor(private router: Router, private authService: AuthService,
 		private stateManagementService: StateManagementService,
 		private spinner: NgxSpinnerService,
-		private adminService:AdminService,
+		private adminService: AdminService,
 		private elementRef: ElementRef,
-		) { }
+	) { }
 
 	// ngAfterViewInit()
 	// {
@@ -50,18 +49,15 @@ export class AdminTemplateComponent implements OnInit
 	// 	}
 	// }
 
-	ngOnInit(): void
-	{
+	ngOnInit(): void {
 
 		console.log('On load admin template component')
 		this.getPermission()
 		this.screenWidth = window.innerWidth;
 
 		//Get ProgressBar
-		this.stateManagementService.getprogressBar().subscribe(commonProgressBar =>
-		{
-			setTimeout(() =>
-			{
+		this.stateManagementService.getprogressBar().subscribe(commonProgressBar => {
+			setTimeout(() => {
 				this.progressBar = commonProgressBar;
 			});
 
@@ -82,15 +78,29 @@ export class AdminTemplateComponent implements OnInit
 
 	}
 
-	ngAfterViewInit()
-	{
-		
+	ngAfterViewInit() {
+
 		this.googleTranslateInitFunction();
+
 	}
-	googleTranslateInitFunction(){
+
+	handleDivClick(event: MouseEvent | TouchEvent) {
+		console.log('Clicked/touched parent div' ,this.showSidebar);
+		if(!this.showSidebar){
+			$("body").toggleClass("sidenav-toggled");
+			this.showSidebar = true
+		}
+		// if (targetElement.id === 'layoutSidenav_nav') {
+		// 	// Ignore the click event if the target is the child div with id 'layoutSidenav_nav'
+		// 	console.log('click ignore')
+		// 	return;
+		// }
+
+		// Handle the click/touch event on the parent div here
+	}
+	googleTranslateInitFunction() {
 		this.desktopWidth = window.innerWidth;
-		if (this.desktopWidth <= '767')
-		{
+		if (this.desktopWidth <= '767') {
 			//google translate
 			console.log('-----google translate element for mobile view-------->>>>')
 			var v = document.createElement("script");
@@ -102,26 +112,25 @@ export class AdminTemplateComponent implements OnInit
 			s.src = "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
 			this.elementRef.nativeElement.appendChild(s);
 
-				$('.goog-te-gadget').html($('.goog-te-gadget').children());
-				$("#google-translate").fadeIn('1000');
-			  
-			  
-				function cleartimer() {     
-					setTimeout(function(){ 
-						window.clearInterval(myVar); 
-					}, 500);             
+			$('.goog-te-gadget').html($('.goog-te-gadget').children());
+			$("#google-translate").fadeIn('1000');
+
+
+			function cleartimer() {
+				setTimeout(function () {
+					window.clearInterval(myVar);
+				}, 500);
+			}
+			function myTimer() {
+				if ($('.goog-te-combo option:first').length) {
+					$('.goog-te-combo option:first').html('Translate');
+					cleartimer();
 				}
-				function myTimer() {
-					if ($('.goog-te-combo option:first').length) {
-						$('.goog-te-combo option:first').html('Translate');
-						cleartimer();
-					}
-				}
-				var myVar = setInterval(function(){ myTimer() }, 0); 
+			}
+			var myVar = setInterval(function () { myTimer() }, 0);
 		}
 
-		if (this.desktopWidth > '767')
-		{
+		if (this.desktopWidth > '767') {
 			//google translate
 			console.log('<<<<<<<-------select language------>>>>>>>>')
 			var v = document.createElement("script");
@@ -132,168 +141,135 @@ export class AdminTemplateComponent implements OnInit
 			s.type = "text/javascript";
 			s.src = "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
 			this.elementRef.nativeElement.appendChild(s);
-				$('.goog-te-gadget').html($('.goog-te-gadget').children());
-				$("#google-translate").fadeIn('1000');
-			  
-			  
-				function cleartimer() {     
-					setTimeout(function(){ 
-						window.clearInterval(myVar); 
-					}, 500);             
+			$('.goog-te-gadget').html($('.goog-te-gadget').children());
+			$("#google-translate").fadeIn('1000');
+
+
+			function cleartimer() {
+				setTimeout(function () {
+					window.clearInterval(myVar);
+				}, 500);
+			}
+			function myTimer() {
+				if ($('.goog-te-combo option:first').length) {
+					$('.goog-te-combo option:first').html('Translate');
+					cleartimer();
 				}
-				function myTimer() {
-					if ($('.goog-te-combo option:first').length) {
-						$('.goog-te-combo option:first').html('Translate');
-						cleartimer();
-					}
-				}
-				var myVar = setInterval(function(){ myTimer() }, 0); 
-			  
+			}
+			var myVar = setInterval(function () { myTimer() }, 0);
+
 		}
 	}
-	getPermission(){
+	getPermission() {
 		this.adminService.getMyPermissions()
-				.pipe(
-					catchError(err =>
-					{
-						this.spinner.hide();//hide spinner
-						return throwError(err);
-					})
-				).subscribe((response: any) =>
-				{
+			.pipe(
+				catchError(err => {
 					this.spinner.hide();//hide spinner
-					localStorage.setItem('modules','')
-					localStorage.setItem('sub_modules','')
-					localStorage.setItem('modules',response?.data?.modules)
-					localStorage.setItem('sub_modules',response?.data?.sub_modules)
-					this.subModules = response?.data?.sub_modules
-					this.modules = response?.data?.modules
-				});
+					return throwError(err);
+				})
+			).subscribe((response: any) => {
+				this.spinner.hide();//hide spinner
+				localStorage.setItem('modules', '')
+				localStorage.setItem('sub_modules', '')
+				localStorage.setItem('modules', response?.data?.modules)
+				localStorage.setItem('sub_modules', response?.data?.sub_modules)
+				this.subModules = response?.data?.sub_modules
+				this.modules = response?.data?.modules
+			});
 	}
-	showSidebarFunc(status)
-	{
+	showSidebarFunc(status) {
 		$("body").toggleClass("sidenav-toggled");
-		if (status)
-		{
+		if (status) {
 			this.showSidebar = true;
 		}
-		else
-		{
+		else {
 			this.showSidebar = false;
 		}
 	}
 
-	closeSidebarFunc(status)
-	{
-		if (this.screenWidth <= '991')
-		{
+	closeSidebarFunc(status) {
+		if (this.screenWidth <= '991') {
 			$("body").removeClass("sidenav-toggled");
-			if (status)
-			{
+			if (status) {
 				this.showSidebar = true;
 			}
-			else
-			{
+			else {
 				this.showSidebar = false;
 			}
 		}
 	}
-	invoiceFunc(status)
-	{
+	invoiceFunc(status) {
 		this.chevron = !this.chevron
-		if (this.screenWidth <= '991')
-		{
+		if (this.screenWidth <= '991') {
 			$("body").removeClass("sidenav-toggled");
-			if (status)
-			{
+			if (status) {
 				this.showSidebar = true;
 			}
-			else
-			{
+			else {
 				this.showSidebar = false;
 			}
 		}
 	}
-	userAccountFunc(status)
-	{
+	userAccountFunc(status) {
 		this.chevron1 = !this.chevron1
-		if (this.screenWidth <= '991')
-		{
+		if (this.screenWidth <= '991') {
 			$("body").removeClass("sidenav-toggled");
-			if (status)
-			{
+			if (status) {
 				this.showSidebar = true;
 			}
-			else
-			{
+			else {
 				this.showSidebar = false;
 			}
 		}
 	}
-	reportFunc(status)
-	{
+	reportFunc(status) {
 		this.chevron2 = !this.chevron2
-		if (this.screenWidth <= '991')
-		{
+		if (this.screenWidth <= '991') {
 			$("body").removeClass("sidenav-toggled");
-			if (status)
-			{
+			if (status) {
 				this.showSidebar = true;
 			}
-			else
-			{
+			else {
 				this.showSidebar = false;
 			}
 		}
 	}
-	settingFunc(status)
-	{
+	settingFunc(status) {
 		this.chevron3 = !this.chevron3
-		if (this.screenWidth <= '991')
-		{
+		if (this.screenWidth <= '991') {
 			$("body").removeClass("sidenav-toggled");
-			if (status)
-			{
+			if (status) {
 				this.showSidebar = true;
 			}
-			else
-			{
+			else {
 				this.showSidebar = false;
 			}
 		}
 	}
-	webPageCMSFunc(status)
-	{
+	webPageCMSFunc(status) {
 		this.chevron4 = !this.chevron4
-		if (this.screenWidth <= '991')
-		{
+		if (this.screenWidth <= '991') {
 			$("body").removeClass("sidenav-toggled");
-			if (status)
-			{
+			if (status) {
 				this.showSidebar = true;
 			}
-			else
-			{
+			else {
 				this.showSidebar = false;
 			}
 		}
 	}
 
-	logout()
-	{
+	logout() {
 		this.spinner.show();//show spinner
 		this.authService.logout()
 			.pipe(
-				catchError(err =>
-				{
+				catchError(err => {
 					this.spinner.hide();//hide spinner
 					return throwError(err);
 				})
-			).subscribe(({ success }: any) =>
-			{
+			).subscribe(({ success }: any) => {
 				this.spinner.hide();//hide spinner
-				if (success == true)
-				{
+				if (success == true) {
 					this.stateManagementService.removeUser();
 					console.log("Logout Successfully");
 				}

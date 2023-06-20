@@ -72,7 +72,10 @@ hr{
 .block-click{
 	pointer-events: none;
 }
-
+.box-special-instruction{
+	overflow-y: auto;
+	max-height: 200px;
+}
 
 table {
 	width: 100%;

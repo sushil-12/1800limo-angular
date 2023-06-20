@@ -52,7 +52,10 @@ ul {
 		}
 	}
 }
-
+.box-special-instruction{
+	overflow-y: auto;
+	max-height: 200px;
+}
 .section-dropdown {
 	overflow: hidden;
 	cursor: pointer;
