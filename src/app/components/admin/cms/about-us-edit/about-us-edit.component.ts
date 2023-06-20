@@ -28,6 +28,7 @@ export class AboutUsEditComponent implements OnInit
 	public disableSubmitButton: any;
 	public response: any;
 	timeline_images: Array<any> = []
+	submittedForm:boolean;
 
 
 	public editAboutUsForm: FormGroup;
@@ -374,12 +375,14 @@ export class AboutUsEditComponent implements OnInit
 	saveEditValue()
 	{
 		// console.log(this.editAboutUsForm); return false;
-		if (this.editAboutUsForm.invalid)
-		{
-			return false;
-		}
+		this.submittedForm = true
+		// if (this.editAboutUsForm.invalid)
+		// {
+		// 	console.log('--------invalid form---------',this.editAboutUsForm , this.submittedForm)
+		// 	return false;
+		// }
 
-		// this.spinner.show();
+		this.spinner.show();
 		//this.disableSubmitButton=true;
 		this.adminServices.saveDataAboutUsSection(this.editAboutUsForm.value)
 			.pipe(
