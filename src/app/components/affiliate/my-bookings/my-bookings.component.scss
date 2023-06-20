@@ -91,7 +91,10 @@ table {
 		font-weight: 600;
 	}
 }
-
+.box-special-instruction{
+	overflow-y: auto;
+	max-height: 200px;
+}
 
 .custom-filled-button
 {
