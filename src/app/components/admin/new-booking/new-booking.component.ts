@@ -157,11 +157,11 @@ export class NewBookingComponent implements OnInit {
 
 	}
 
-	ngAfterViewInit(): void{
+	ngAfterViewInit(): void {
 		console.log('<<<<<<<<<<<<<<<<<<<<<-----------ng after view init--------------->>>>>>>>>>>>>')
-		if(this.updateType == 'repeat' || this.updateType == 'return' || this.updateType == 'edit'){
+		if (this.updateType == 'repeat' || this.updateType == 'return' || this.updateType == 'edit') {
 			this.scroll('travel_time')
-			this.SetFormValue('pickup_date' , moment().format('YYYY-MM-DD'))
+			this.SetFormValue('pickup_date', moment().format('YYYY-MM-DD'))
 		}
 	}
 
@@ -443,7 +443,7 @@ export class NewBookingComponent implements OnInit {
 			this.bookingResponse = response.data
 			this.firstLoadVehicleId = response.data.vehicle_id
 			this.firstLoadAffiliateId = response.data.affiliate_id
-			this.SetFormValue('affiliate_type',response.data.affiliate_type)
+			this.SetFormValue('affiliate_type', response.data.affiliate_type)
 			this.autofillData('cruise', editing_data);
 			console.log(editing_data, "check big data")
 			for (let item in editing_data) {
@@ -523,13 +523,13 @@ export class NewBookingComponent implements OnInit {
 			}
 
 			this.$spinner.hide('normalspinner')
-			console.log('<<<<<<<<<<<-----------set pickup date------->>>>', moment().format('YYYY-MM-DD') , this.updateType)
-		if(this.updateType == 'repeat' || this.updateType == 'return'){
-			this.scroll('travel_time')
-			this.SetFormValue('pickup_date' , moment().format('YYYY-MM-DD'))
-		}
+			console.log('<<<<<<<<<<<-----------set pickup date------->>>>', moment().format('YYYY-MM-DD'), this.updateType)
+			if (this.updateType == 'repeat' || this.updateType == 'return') {
+				this.scroll('travel_time')
+				this.SetFormValue('pickup_date', moment().format('YYYY-MM-DD'))
+			}
 		})
-		
+
 	}
 	scroll(id) {
 		let el = document.getElementById(id);
@@ -1135,7 +1135,7 @@ export class NewBookingComponent implements OnInit {
 
 	autofillData(filling_for: string, data: any) {
 		if (filling_for === 'passenger') {
-			console.log('--->>>> filling passenger info' , data)
+			console.log('--->>>> filling passenger info', data)
 			data.middle_name ?
 				this.SetFormValue('passenger_name', `${data?.first_name} ${data?.middle_name} ${data?.last_name}`) : this.SetFormValue('passenger_name', `${data?.first_name} ${data?.last_name}`)
 			this.SetFormValue('passenger_email', data.email)
@@ -1331,7 +1331,7 @@ export class NewBookingComponent implements OnInit {
 		// 		EditedKeys.push(i)
 		// 	} 
 		// })
-		
+
 		// console.log(' Edited keys  ---->>>>' , EditedKeys)
 		// if (this.BookingForm.invalid) {
 		// 	return;
@@ -1588,6 +1588,7 @@ export class NewBookingComponent implements OnInit {
 			if (value) {
 				this.chooseAffiliate()
 				this.fetchAffiliateInformation(value)
+				this.scroll('booking_detail_section')
 			}
 		})
 

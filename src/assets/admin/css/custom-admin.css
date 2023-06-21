@@ -2434,6 +2434,8 @@ table #navbarDropdownUserImage {
     user-select: none;
     border: 1px solid;
     border-radius: 15px;
+    transition: box-shadow 0.1s ease-in-out;
+    box-shadow: 0px 5px 20px -6px rgb(0 0 0 / 60%);
 }
 
 .button1 {
