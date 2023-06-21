@@ -1246,7 +1246,7 @@
 							Travel Date
 						</mat-label>
 						<input matInput setOutputDateFormat="YYYY-MM-DD" [matDatepicker]="onwy_dt"
-							placeholder="Travel Date" (dateChangeWithFormat)="SetFormValue('pickup_date', $event)"
+							placeholder="Travel Date" (dateChangeWithFormat)="SetFormValue('pickup_date', $event);SetFormValue('return_pickup_date', $event)"
 							formControlName="pickup_date" (click)="onwy_dt.open()" readonly />
 						<mat-datepicker-toggle matSuffix [for]="onwy_dt"></mat-datepicker-toggle>
 						<mat-datepicker #onwy_dt></mat-datepicker>
