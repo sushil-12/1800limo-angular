@@ -291,7 +291,7 @@
 					<!----BACK BTN---->
 					<nav aria-label="Page navigation example" *ngIf="totalRecords > 15">
 						<ul class="pagination pagination-circle pg-blue">
-							<li *ngIf="currentPage!=1" class="page-item disabled"
+							<!-- <li *ngIf="currentPage!=1" class="page-item disabled"
 								(click)="loadBookings(firstPageUrl, startDate, endDate, searchText, filtertype)">
 								<a class="page-link">First</a>
 							</li>
@@ -318,6 +318,10 @@
 							<li *ngIf="currentPage!=lastPage" class="page-item"
 								(click)="loadBookings(lastPageUrl, startDate, endDate, searchText, filtertype)">
 								<a class="page-link">Last</a>
+							</li> -->
+							<li class="page-item disabled" *ngIf="nextPageUrl"
+								(click)="handleShowMore(nextPageUrl,startDate, endDate, searchText)">
+								<a class="page-link">Show more</a>
 							</li>
 						</ul>
 					</nav>

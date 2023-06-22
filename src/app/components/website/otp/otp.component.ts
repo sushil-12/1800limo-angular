@@ -213,6 +213,7 @@ export class OtpComponent implements OnInit, OnDestroy {
 					Phone: this.response.data.user.phone,
 					RoleName: this.response.data.user.roleName,
 					PhoneCountry: this.response.data.user.phoneCountry,
+					profile_picture : this.response?.data?.user?.profile_picture
 				}
 				//end
 
