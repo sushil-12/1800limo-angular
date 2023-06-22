@@ -14,7 +14,17 @@
     padding         : 14px 23px;
 	
 }
-
+.vehtype_extintwrap ul {
+    display: flex;
+    justify-content: left !important;
+   
+}
+.vehtype_extint img {
+    width: 154px;
+    height: 100%;
+    object-fit: contain !important;
+    cursor: zoom-in;
+}
 .billing_inforamtion ul{
 	display: flex;
     justify-content: right;

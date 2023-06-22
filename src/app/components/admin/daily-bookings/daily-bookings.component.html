@@ -164,7 +164,7 @@
 													data-toggle="modal" data-target="#emailModal"
 													*ngIf="currentUser?.RoleName == 'admin' || subModules.includes('email_affiliate')">
 													<div class="dropdown-item-icon"></div>
-													Email Affiliate
+													{{ booking.affiliate_id === 0 ? 'Email Loose Affiliate' : 'Email Affiliate' }}
 												</a>
 												<a class="dropdown-item"
 													(click)="sendEmailClicked(booking.booking_id,'emailPassenger')"
