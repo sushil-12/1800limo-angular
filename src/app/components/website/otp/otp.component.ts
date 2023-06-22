@@ -216,6 +216,7 @@ export class OtpComponent implements OnInit, OnDestroy {
 				}
 				//end
 
+				//set profile pic link here
 				localStorage.setItem('userData', JSON.stringify(loginUserDetail))
 				localStorage.setItem('currentUser', JSON.stringify(this.response.data.user));
 				localStorage.setItem('access_token', this.response.data.access_token);

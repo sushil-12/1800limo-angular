@@ -27,7 +27,7 @@
 							<mat-label class="">
 								Service Type
 							</mat-label>
-							<mat-select formControlName="service_type"
+							<mat-select formControlName="service_type" [(ngModel)]="service_type" (selectionChange)="onSelectionChangeServiceType($event)"
 								[ngStyle]="{'cursor': Form.updateType.value == 'edit' ? 'not-allowed' : 'default'}">
 								<mat-option value="one_way">One Way</mat-option>
 								<mat-option value="round_trip">Round Trip</mat-option>
@@ -45,7 +45,7 @@
 								Transfer Type
 							</mat-label>
 							<mat-select formControlName="transfer_type" class="font-weight-bolder"
-								(selectionChange)="changeTransferType($event.value)">
+								(selectionChange)="changeTransferType($event.value)" [(ngModel)]="transfer_type">
 								<mat-option [value]="tf_type" class="font-weight-bolder"
 									*ngFor="let tf_type of booking_params.transfer_types">
 									{{ textFormatter(tf_type) | titlecase }}
@@ -62,7 +62,7 @@
 							<mat-label class="">
 								Return Transfer Type
 							</mat-label>
-							<mat-select formControlName="return_transfer_type">
+							<mat-select formControlName="return_transfer_type" [(ngModel)]="return_transfer_type" (selectionChange)="changeReturnTransferType($event.value)">
 								<mat-option [value]="tf_type" class="font-weight-bolder"
 									*ngFor="let tf_type of booking_params.transfer_types">
 									{{ textFormatter(tf_type) | titlecase }}
@@ -1211,6 +1211,78 @@
 			<h2 id="booking_detail_section">
 				Booking Details
 			</h2>
+			<!-- <div class="section-container mt-2"> -->
+				<!-- <h4>
+					Booking Type
+				</h4> -->
+				<div class="row px-4" *ngIf="Form.updateType.value != 'edit'">
+					<!-- Service Type -->
+					<div class="flex-grow-1 m-2">
+						<div>
+							<mat-form-field appearance="outline">
+								<mat-label class="">
+									Service Type
+								</mat-label>
+								<mat-select formControlName="service_type" [(ngModel)]="service_type" (selectionChange)="onSelectionChangeServiceType($event)"
+									[ngStyle]="{'cursor': Form.updateType.value == 'edit' ? 'not-allowed' : 'default'}">
+									<mat-option value="one_way">One Way</mat-option>
+									<mat-option value="round_trip">Round Trip</mat-option>
+									<mat-option value="charter_tour">Charter/Tour</mat-option>
+								</mat-select>
+							</mat-form-field>
+						</div>
+					</div>
+	
+					<!-- Transfer Type -->
+					<div class="flex-grow-1 m-2">
+						<div>
+							<mat-form-field appearance="outline">
+								<mat-label class="">
+									Transfer Type
+								</mat-label>
+								<mat-select formControlName="transfer_type" class="font-weight-bolder"
+									(selectionChange)="changeTransferType($event.value)" [(ngModel)]="transfer_type">
+									<mat-option [value]="tf_type" class="font-weight-bolder"
+										*ngFor="let tf_type of booking_params.transfer_types">
+										{{ textFormatter(tf_type) | titlecase }}
+									</mat-option>
+								</mat-select>
+							</mat-form-field>
+						</div>
+					</div>
+	
+					<!-- Return Transfer Type -->
+					<div class="flex-grow-1 m-2" *ngIf="Form.service_type.value == 'round_trip'">
+						<div>
+							<mat-form-field appearance="outline">
+								<mat-label class="">
+									Return Transfer Type
+								</mat-label>
+								<mat-select formControlName="return_transfer_type" [(ngModel)]="return_transfer_type" (selectionChange)="changeReturnTransferType($event.value)">
+									<mat-option [value]="tf_type" class="font-weight-bolder"
+										*ngFor="let tf_type of booking_params.transfer_types">
+										{{ textFormatter(tf_type) | titlecase }}
+									</mat-option>
+								</mat-select>
+							</mat-form-field>
+						</div>
+					</div>
+	
+					<!-- Hours -->
+					<div class="flex-grow-1 m-2" *ngIf="Form.service_type.value == 'charter_tour'">
+						<div>
+							<mat-form-field appearance="outline">
+								<mat-label>
+									Number of Hours
+								</mat-label>
+								<input type="number" matInput placeholder="Enter Hours" formControlName="number_of_hours"
+									(focus)="$event.target.select()" />
+								<span matSuffix>Hrs.</span>
+							</mat-form-field>
+						</div>
+					</div>
+				</div>
+			<!-- </div> -->
 			<div class="row">
 				<!-- Meet Greet Choices -->
 				<div class="col-md-5 m-2">
@@ -1891,6 +1963,73 @@
 			<h2>
 				Return Booking
 			</h2>
+			<div class="row px-4" *ngIf="Form.updateType.value != 'edit'">
+				<!-- Service Type -->
+				<div class="flex-grow-1 m-2">
+					<div>
+						<mat-form-field appearance="outline">
+							<mat-label class="">
+								Service Type
+							</mat-label>
+							<mat-select formControlName="service_type" [(ngModel)]="service_type" (selectionChange)="onSelectionChangeServiceType($event)"
+								[ngStyle]="{'cursor': Form.updateType.value == 'edit' ? 'not-allowed' : 'default'}">
+								<mat-option value="one_way">One Way</mat-option>
+								<mat-option value="round_trip">Round Trip</mat-option>
+								<mat-option value="charter_tour">Charter/Tour</mat-option>
+							</mat-select>
+						</mat-form-field>
+					</div>
+				</div>
+
+				<!-- Transfer Type -->
+				<div class="flex-grow-1 m-2">
+					<div>
+						<mat-form-field appearance="outline">
+							<mat-label class="">
+								Transfer Type
+							</mat-label>
+							<mat-select formControlName="transfer_type" class="font-weight-bolder"
+								(selectionChange)="changeTransferType($event.value)" [(ngModel)]="Form.transfer_type.value">
+								<mat-option [value]="tf_type" class="font-weight-bolder"
+									*ngFor="let tf_type of booking_params.transfer_types">
+									{{ textFormatter(tf_type) | titlecase }}
+								</mat-option>
+							</mat-select>
+						</mat-form-field>
+					</div>
+				</div>
+
+				<!-- Return Transfer Type -->
+				<div class="flex-grow-1 m-2" *ngIf="Form.service_type.value == 'round_trip'">
+					<div>
+						<mat-form-field appearance="outline">
+							<mat-label class="">
+								Return Transfer Type
+							</mat-label>
+							<mat-select formControlName="return_transfer_type" [(ngModel)]="return_transfer_type" (selectionChange)="changeReturnTransferType($event.value)">
+								<mat-option [value]="tf_type" class="font-weight-bolder"
+									*ngFor="let tf_type of booking_params.transfer_types">
+									{{ textFormatter(tf_type) | titlecase }}
+								</mat-option>
+							</mat-select>
+						</mat-form-field>
+					</div>
+				</div>
+
+				<!-- Hours -->
+				<div class="flex-grow-1 m-2" *ngIf="Form.service_type.value == 'charter_tour'">
+					<div>
+						<mat-form-field appearance="outline">
+							<mat-label>
+								Number of Hours
+							</mat-label>
+							<input type="number" matInput placeholder="Enter Hours" formControlName="number_of_hours"
+								(focus)="$event.target.select()" />
+							<span matSuffix>Hrs.</span>
+						</mat-form-field>
+					</div>
+				</div>
+			</div>
 			<div class="row">
 				<!-- Meet Greet Choices -->
 				<div class="col-md-5 m-2">

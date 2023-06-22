@@ -1,6 +1,6 @@
 <ngx-spinner></ngx-spinner>
 <main *ngIf="invoiceData" style="background: #f5f4fe;">
-	<div class="row m-2 d-flex justify-content-between" style="padding: 20px 0 0 0;">
+	<div class="row m-2 d-flex justify-content-between" id="btn-display-coloumn" style="padding: 20px 0 0 0;">
 		<div>
 			<button class="custom-btn print-btn box-shadow my-1" style="height: 40px;width: 130px;font-size: 14px;"
 				[useExistingCss]="true" printTitle="Invoice" printSectionId="print-section" ngxPrint>
@@ -89,6 +89,10 @@
 								<p class="m-0 invoice-p text-white invoice-status-bar">
 									Date of Service:<span class="invoice-text-bold invoice-status-bar">
 										{{invoiceData.date_of_service}}</span>
+								</p>
+								<p class="m-0 invoice-p text-white invoice-status-bar">
+									Invoice Date:<span class="invoice-text-bold invoice-status-bar">
+										{{invoiceData.created_at}}</span>
 								</p>
 							</div>
 						</div>

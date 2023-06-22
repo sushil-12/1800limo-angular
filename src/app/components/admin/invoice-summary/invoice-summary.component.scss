@@ -437,6 +437,9 @@ dd {
 	// .invoice .justify-content-end {
 	// 	justify-content: left !important;
 	// }
+	#btn-display-coloumn{
+		flex-direction: column;
+	}
 	
 	.invoice .invoice-subhead{
 		padding: 19.0px !important;

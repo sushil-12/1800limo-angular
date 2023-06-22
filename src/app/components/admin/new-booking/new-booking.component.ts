@@ -108,7 +108,9 @@ export class NewBookingComponent implements OnInit {
 	firstLoadAffiliateId: void;
 	updateType: any;
 	bookingResponse: any;
-
+	service_type: any = 'one_way';
+	transfer_type :any = 'city_to_city'
+	return_transfer_type :any = 'city_to_city'
 
 	constructor(
 		private $form: FormBuilder,
@@ -397,6 +399,7 @@ export class NewBookingComponent implements OnInit {
 		}
 	}
 	changeTransferType(type: string) {
+		this.transfer_type = type
 		if (type.includes('city_')) {
 			this.SetFormValue('meet_greet_choices', 1)
 			this.SetFormValue('meet_greet_choices_name', "Driver - Text/call when on location")
@@ -783,7 +786,13 @@ export class NewBookingComponent implements OnInit {
 		}
 	}
 
+	onSelectionChangeServiceType(event: any) {
+		this.service_type = event.value;
+	  }
 
+	  changeReturnTransferType(event: any) {
+		this.return_transfer_type  = event
+	  }
 
 	chooseUser(account_id: number) {
 		this.$spinner.show()
@@ -1502,6 +1511,7 @@ export class NewBookingComponent implements OnInit {
 				return temp.reverse().join('_')
 			}
 			this.SetFormValue('return_transfer_type', reverseStringChars(value))
+			this.return_transfer_type = reverseStringChars(value)
 		})
 
 		// Account Type Subscription

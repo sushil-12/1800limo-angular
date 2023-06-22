@@ -52,10 +52,10 @@
 	<mat-progress-bar class="my-color my-4" mode="indeterminate" *ngIf="showProgressBar"></mat-progress-bar>
 	<mat-form-field appearance="outline" class="mat-custom-phone topLabelClass">
 		<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Phone Number</label>
-		<input matInput appAutoFocusDirective placeholder="1234567890" formControlName="phone" ng2TelInput
+		<input matInput placeholder="1234567890" formControlName="phone" ng2TelInput
 			[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
 			(countryChange)="onCountryChange($event)" class="phoneNumberClass" tabIndex="1"
-			(intlTelInputObject)="telInputObjectCell($event)" id="phn-input" />
+			(intlTelInputObject)="telInputObjectCell($event)" id="phn-input" autofocus/>
 	</mat-form-field>
 	<div *ngIf="submitted && f.phone.errors" class="text-danger margin-bottom-thin my-mat-hint">
 		<div *ngIf="f.phone.errors.required">The Phone Number is required</div>
