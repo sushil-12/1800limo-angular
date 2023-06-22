@@ -41,7 +41,7 @@ export class DailyBookingsComponent implements OnInit {
 	public nextPageUrl: string;
 	public sendMessageField: boolean = null;
 	public bookingsRes: any;
-	public bookings: any;
+	public bookings: any =[];
 	public bookingStatusColor: string;
 	public startDate: string;
 	public endDate: string;
@@ -365,6 +365,32 @@ export class DailyBookingsComponent implements OnInit {
 			this.spinner.hide();
 
 		})
+	}
+
+	handleShowMore(pageUrl = null, start_date: string, end_date: string, search_value: string = ''){
+			search_value == '' && this.spinner.show();
+			this.noError = false
+			// Load Our bookings using API
+			this.adminService.loadBookings(pageUrl, start_date, end_date, this.useDateFilter,search_value ?? '').then((result: any) => {
+				if (result?.data?.data == 0) {
+					this.noError = true
+				}
+				this.bookingsRes = result;
+				this.bookings = this.bookings.concat(this.bookingsRes.data.data);
+				this.totalRecords = this.bookingsRes.data.total;
+				this.firstPage = 1;
+				this.lastPage = this.bookingsRes.data.last_page;
+				this.totalPage = this.bookingsRes.data.last_page;
+				this.currentPage = this.bookingsRes.data.current_page;
+				this.from = this.bookingsRes.data.from;
+				this.to = this.bookingsRes.data.to;
+				this.path = this.bookingsRes.data.path;
+				this.firstPageUrl = this.bookingsRes.data.first_page_url;
+				this.lastPageUrl = this.bookingsRes.data.last_page_url;
+				this.prevPageUrl = this.bookingsRes.data.prev_page_url;
+				this.nextPageUrl = this.bookingsRes.data.next_page_url;
+				this.spinner.hide();
+			})
 	}
 
 	show = false;
