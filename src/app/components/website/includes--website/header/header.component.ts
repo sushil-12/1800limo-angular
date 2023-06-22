@@ -64,6 +64,18 @@ export class HeaderComponent implements OnInit {
 			this.Value = "Continue Affiliate Set-Up";
 		}
 
+		// For Select Box Dropdown
+		$(window).on('load', function() {
+			$(".goog-te-combo").css({
+				'-webkit-appearance': 'none',
+				'-moz-appearance': 'none',
+				'background': 'transparent url("data:image/svg+xml;utf8,<svg fill=\'black\' height=\'24\' viewBox=\'0 0 24 24\' width=\'24\' xmlns=\'http://www.w3.org/2000/svg\'><path d=\'M7 10l5 5 5-5z\'/><path d=\'M0 0h24v24H0z\' fill=\'none\'/></svg>") no-repeat 100% 5px',
+				'border': '1px solid #dfdfdf',
+				'border-radius': '2px',
+				'margin-right': '2rem'
+			});
+		})
+
 	}
 
 
