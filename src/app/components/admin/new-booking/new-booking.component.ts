@@ -1598,7 +1598,9 @@ export class NewBookingComponent implements OnInit {
 			if (value) {
 				this.chooseAffiliate()
 				this.fetchAffiliateInformation(value)
-				this.scroll('booking_detail_section')
+				if(this.Form.updateType.value != 'edit' && this.Form.updateType.value != 'repeat' && this.Form.updateType.value != 'return' ){
+					this.scroll('booking_detail_section')
+				}
 			}
 		})
 
