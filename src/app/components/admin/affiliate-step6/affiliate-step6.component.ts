@@ -16,6 +16,7 @@ export class AffiliateStep6Component implements OnInit {
   public stepCompleted: string;
   public submittedForm: boolean;
   public response: any;
+  status: any;
 
 
   constructor(
@@ -25,6 +26,19 @@ export class AffiliateStep6Component implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    const affiliateId = sessionStorage.getItem("affiliateId");
+    this.affiliateId = affiliateId;
+    this.adminService.getStepsCompleted(this.affiliateId).pipe(
+      catchError(err => {
+        this.spinner.hide();//hide spinner
+        return throwError(err);
+      })
+    )
+    .subscribe(({ success ,data}: any) => {
+      this.spinner.hide();//hide spinner
+      this.status = data?.account_approval
+      console.log('statuys---->>>' , this.status)
+    });
   }
 
   submitForm() {
@@ -53,7 +67,6 @@ export class AffiliateStep6Component implements OnInit {
       )
       .subscribe(({ success }: any) => {
         this.spinner.hide();//hide spinner
-
         if (success == true) {
           this.adminService.updateStepsLocal('6');
         }

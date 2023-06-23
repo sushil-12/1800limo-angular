@@ -402,6 +402,7 @@
             business days either by check or a direct deposit into your bank account.You may add up to a 20%
             gratuity. Clients may hand tip extra.
         </p>
-        <button class="forstep_booknow custom-btn savebutton box-shadow" (click)="submitForm()">Accept</button>
+        <button class="forstep_booknow custom-btn savebutton box-shadow" *ngIf="status!='accepted'" (click)="submitForm()">Accept</button>
+        <button class="forstep_booknow custom-btn gray-color box-shadow" *ngIf="status=='accepted'">Accepted</button>
     </div>
 </section>
