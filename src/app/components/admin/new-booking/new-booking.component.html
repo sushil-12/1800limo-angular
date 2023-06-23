@@ -80,6 +80,7 @@
 								Number of Hours
 							</mat-label>
 							<input type="number" matInput placeholder="Enter Hours" formControlName="number_of_hours"
+							  [(ngModel)]="number_of_hours" (keyup)="handleNoOfHours($event.target.value)"
 								(focus)="$event.target.select()" />
 							<span matSuffix>Hrs.</span>
 						</mat-form-field>
@@ -1276,7 +1277,8 @@
 									Number of Hours
 								</mat-label>
 								<input type="number" matInput placeholder="Enter Hours" formControlName="number_of_hours"
-									(focus)="$event.target.select()" />
+								[(ngModel)]="number_of_hours" (keyup)="handleNoOfHours($event.target.value)"	
+								(focus)="$event.target.select()" />
 								<span matSuffix>Hrs.</span>
 							</mat-form-field>
 						</div>
@@ -2024,6 +2026,7 @@
 								Number of Hours
 							</mat-label>
 							<input type="number" matInput placeholder="Enter Hours" formControlName="number_of_hours"
+							[(ngModel)]="number_of_hours" (keyup)="handleNoOfHours($event.target.value)"
 								(focus)="$event.target.select()" />
 							<span matSuffix>Hrs.</span>
 						</mat-form-field>

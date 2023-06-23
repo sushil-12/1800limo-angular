@@ -86,11 +86,11 @@
 								</p>
 							</div>
 							<div class="p-2 col-6 bd-highlight " *ngIf="invoiceData.date_of_service">
-								<p class="m-0 invoice-p text-white invoice-status-bar">
+								<p class="m-1 invoice-p text-white invoice-status-bar">
 									Date of Service:<span class="invoice-text-bold invoice-status-bar">
 										{{invoiceData.date_of_service}}</span>
 								</p>
-								<p class="m-0 invoice-p text-white invoice-status-bar">
+								<p class="m-1 invoice-p text-white invoice-status-bar">
 									Invoice Date:<span class="invoice-text-bold invoice-status-bar">
 										{{invoiceData.created_at}}</span>
 								</p>
@@ -98,8 +98,6 @@
 						</div>
 						<div class="div">
 							<dl class="m-0">
-
-
 								<dt class="invoice-p" *ngIf="invoiceData.passenger_name">Passenger Name </dt>
 								<dd class="invoice-text-b">{{invoiceData.passenger_name}}
 								</dd>
