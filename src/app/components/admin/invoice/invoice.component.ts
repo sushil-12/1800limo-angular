@@ -5,6 +5,7 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import {ThemePalette} from '@angular/material/core';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-invoice',
@@ -33,7 +34,12 @@ export class InvoiceComponent implements OnInit {
   public lastPageUrl:string;
   public prevPageUrl:string;
   public nextPageUrl:string;
+  public startDate: string;
+	public endDate: string;
+	outputDateFormat = "YYYY-MM-DD";
   searchText:any='';
+	useDateFilter:boolean=true;
+
 
   constructor(
     private adminService:AdminService,
@@ -41,6 +47,22 @@ export class InvoiceComponent implements OnInit {
     private spinner: NgxSpinnerService) { }
 
   ngOnInit(): void {
+
+    let date = new Date();
+		let timestamp = date.getTime()
+		this.startDate = this.adminService.checkCookie('startDate_invoice') ?
+			this.adminService.getCookie('startDate_invoice') :
+			moment(timestamp).format('YYYY-MM-DD')
+
+		date.setDate(date.getDate() + 7);
+		timestamp = date.getTime()
+		this.endDate = this.adminService.checkCookie('endDate_invoice') ?
+			this.adminService.getCookie('endDate_invoice') :
+			moment(timestamp).format('YYYY-MM-DD')
+		
+		this.useDateFilter = this.adminService.checkCookie('useDateFilter_invoice') ?
+		(this.adminService.getCookie('useDateFilter_invoice')=='true' ? true : false)
+		: true;
     this.searchText = this.adminService.checkCookie('search_invoice') ?
     this.adminService.getCookie('search_invoice')
     : "";
@@ -64,11 +86,13 @@ export class InvoiceComponent implements OnInit {
   loadInvoice(pageUrl=null)
   {
       /** spinner starts on init */
+      this.spinner.show()
       console.log('--->>> searchText--->>' , this.searchText)
       var keyword = ((document.getElementById("keyword2") as HTMLInputElement).value);
       // console.log(keyword);
       // Load Our invoices using API
-      this.adminService.invoiceList(pageUrl,keyword).then(result=>{
+      this.adminService.invoiceList(pageUrl,this.startDate,this.endDate,this.useDateFilter,keyword).then(result=>{
+        this.spinner.hide()
         this.invoiceRes=result;
         this.invoices=this.invoiceRes.data.data;
 
@@ -110,6 +134,11 @@ export class InvoiceComponent implements OnInit {
 		}
 	}
 
+  changeDate(dateType, date) {
+		console.log('---------__>>>>>>', dateType, date)
+		this[dateType] = date
+	}
+
   //for pagination
   counter() {
     var currentPage;
@@ -139,4 +168,26 @@ export class InvoiceComponent implements OnInit {
     }
     return udpArr;
   }
+  handleChangeCheckbox(value:any){
+		console.log('event---->> ' ,value)
+		this.useDateFilter = value
+		this.saveCookie('useDateFilter_invoice',value)
+		this.loadInvoice();
+	}
+  reset() {
+		let date = new Date();
+		let timestamp = date.getTime()
+		this.startDate = moment(timestamp).format('YYYY-MM-DD')
+		date.setDate(date.getDate() + 7);
+		timestamp = date.getTime()
+		this.endDate = moment(timestamp).format('YYYY-MM-DD')
+		this.adminService.deleteCookie('startDate_invoice')
+		this.adminService.deleteCookie('endDate_invoice')
+		this.adminService.deleteCookie('search_invoice')
+		this.adminService.deleteCookie('useDateFilter_invoice')
+		this.useDateFilter = true
+		this.searchText = "";
+
+		console.log('Reset Successfully. ');
+	}
 }

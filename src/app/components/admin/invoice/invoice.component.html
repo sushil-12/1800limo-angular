@@ -3,7 +3,7 @@
   <!-- Main page content-->
   <section class="user_information">
     <h2 class="headinginfo">Invoices</h2>
-    <div class="containeredd mt-1 ">
+    <!-- <div class="containeredd mt-1 ">
       <div class="row ">
         <div class="col-md-10 mt-3 mb-3">
           <mat-form-field appearance="outline" class="m-0">
@@ -11,26 +11,89 @@
               (keyup)="searchInBookings($event.target.value)" [value]="searchText"
               placeholder="Search" id="keyword2">
           </mat-form-field>
-          <!-- <mat-form-field appearance="outline">
-            <mat-label>Search Filter by Key word</mat-label>
-            <input type="text" matInput placeholder="Search Filter by Key word" 
-            (keyup)="searchInBookings($event.target.value)" [value]="searchText"
-            id="keyword2">
-          </mat-form-field> -->
         </div>
         <div class="col-md-2 mb-3">
           <button class="custom-btn button2 btnclass box-shadow" (click)="loadInvoice();saveCookie('search_invoice',searchText)">SEARCH</button>
         </div>
       </div>
+    </div> -->
+
+    <div class="containeredd mt-1 ">
+
+      <div class="row my-2 align-items-center">
+        <!-- Start-Date -->
+        <div class="col-sm-4 col-md-4 my-2">
+          <mat-form-field appearance="outline" class="m-0 text-xl">
+            <mat-label>
+              Start Date <span class="asterisk"> * </span>
+            </mat-label>
+            <input matInput [setOutputDateFormat]="outputDateFormat" [matDatepicker]="picker1"
+              placeholder="Start Date" id="id_4" (dateChangeWithFormat)="changeDate('startDate', $event)"
+              (click)="picker1.open()" [value]="startDate" [max]="endDate" readonly />
+            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <!-- End-Date -->
+        <div class="col-sm-4 col-md-4 my-2">
+          <mat-form-field appearance="outline" class="m-0">
+            <mat-label>
+              End Date <span class="asterisk"> * </span>
+            </mat-label>
+            <input matInput [setOutputDateFormat]="outputDateFormat" [matDatepicker]="picker2"
+              placeholder="End Date" id="id_5" (dateChangeWithFormat)="changeDate('endDate',$event)"
+              (click)="picker2.open()" [value]="endDate" [min]="startDate" readonly />
+            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+            <mat-datepicker #picker2></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <!-- Search Button -->
+          <div class="align-btn d-flex justify-content-around">
+            <div class="col-sm-2 ml-n5">
+              <button class="custom-filled-button orange-button"
+                style="color:#fff;padding: 5px 12px !important;"
+                (click)="loadInvoice(); saveCookie('startDate_invoice', startDate); saveCookie('endDate_invoice', endDate)">
+                Search
+              </button>
+            </div>
+            <div class="col-sm-2">
+              <button class="custom-filled-back-button"
+                style="white-space: nowrap;color:#fff;padding: 5px 12px !important;"
+                (click)="reset(); loadInvoice()">
+                Reset
+              </button>
+            </div>
+          </div>
+      </div>
+      <div>
+        <p><mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">Use Date filter</mat-checkbox></p>
+      </div>
+      <div class="row my-2 mb-3">
+        <div class="col-md-12">
+          <div id="search-field">
+            <mat-form-field appearance="outline" class="m-0">
+              <input matInput type="text" (keypress)="handleKeypressEvents()"
+                (keyup)="searchInBookings($event.target.value)" [value]="searchText"
+                placeholder="Search" id="keyword2">
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
     </div>
+
+    
 
     <section class="adminbox_shadow user_information">
       <div class="containeredd driverside_table">
         <div class="row">
+          <p class="text-danger text-lg" *ngIf="invoices.length==0" >
+            No Results Found.
+          </p>
           <div class="col-md-12 custom_table">
             <div class="table-responsive" style="min-height: 350px">
               <table class="table table-dark table-striped table-bordered dataTable dt-responsive" id="dataTable"
-                role="grid" aria-describedby="dataTable_info" cellspacing="0">
+                role="grid" aria-describedby="dataTable_info" cellspacing="0"  *ngIf="invoices.length >0">
                 <thead>
                   <tr role="row">
                     <th>Actions</th>
@@ -107,9 +170,6 @@
                 </tbody>
               </table>
             </div>
-            <p class="text-danger text-lg" *ngIf="invoices.length==0" >
-              No Results Found.
-            </p>
           </div>
         </div>
       </div>
@@ -118,7 +178,7 @@
     <div class="containeredd driverside_table">
       <div class="row">
         <!----BACK BTN---->
-        <nav aria-label="Page navigation example">
+        <nav aria-label="Page navigation example" *ngIf="invoices.length > 15">
           <ul class="pagination pagination-circle pg-blue">
             <li *ngIf="currentPage!=1" class="page-item disabled" (click)="loadInvoice(firstPageUrl)"><a
                 class="page-link">First</a></li>
