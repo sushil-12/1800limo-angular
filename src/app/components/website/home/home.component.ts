@@ -598,9 +598,8 @@ export class HomeComponent implements OnInit {
 	}
 	returnSearchAirport(searchText: any) {
 		console.log('search text is->', searchText)
-
 		return JSON.parse(JSON.stringify(this.airports_data_copy.filter((item: any) => {
-			return item.airport.split('-')[0].toLowerCase().includes(searchText.toLowerCase())
+			return (item.city.toLowerCase().includes(searchText) || item.airport.split('-')[0].toLowerCase().includes(searchText.toLowerCase()))
 		})))
 	}
 
