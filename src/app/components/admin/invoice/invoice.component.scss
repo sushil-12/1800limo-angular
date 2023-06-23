@@ -25,6 +25,19 @@ button {
 	color: #fff;
 }
 
+:host ::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-ripple .mat-ripple-element {
+	opacity: 0.03 !important;
+	background-color: #f3933d !important;
+  }
+  
+  :host ::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background,
+  .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
+	background-color: #f3933d !important;
+  }
+  :host ::ng-deep .mat-checkbox-ripple .mat-ripple-element,
+  .mat-checkbox-checked.mat-accent .mat-checkbox-background {
+	background-color: #f3933d !important;
+  }
 .pending {
 	background-color: #0474fc;
 }
@@ -192,4 +205,14 @@ input, input::placeholder, input::-webkit-input-placeholder
 }
 .invoiceTbody{
 	border : 1px solid #fff !important;
+}
+
+@media only screen and (max-width: 575px)
+{
+	.align-btn{
+		flex-direction: row-reverse;
+		align-items:end;
+		width: 100%;
+		margin: 1rem;
+	}
 }

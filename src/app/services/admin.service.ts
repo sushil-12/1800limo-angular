@@ -892,13 +892,14 @@ export class AdminService {
 	getInvoiceRefundHistoryCommon(id) {
 		return this.httpClient.get(this.serverUrl + 'get-refund-list/' + id);
 	}
-	invoiceList(url, keyword) {
+	invoiceList(url, startDate, endDate, useDateFilter,keyword = '') {
 		var path;
 		if (url) {
-			path = url + '&search=' + keyword;
+			path = url + '&from=' + startDate + '&to=' + endDate + '&search=' + keyword +'&useDateFilter='+useDateFilter;
+
 		}
 		else {
-			path = this.serverUrl + 'invoices' + '?search=' + keyword;
+			path = this.serverUrl + 'invoices' + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword+'&useDateFilter='+useDateFilter;
 		}
 		return this.httpClient.get(path).toPromise();
 	}

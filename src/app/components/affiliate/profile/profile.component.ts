@@ -38,6 +38,12 @@ export class ProfileComponent implements OnInit {
         this.stateManagementService.setprogressBar(false);//hide progressbar
         
         this.profile_pic = data?.profile_pic;
+        let userInfo = JSON.parse(localStorage.getItem('userData'))
+        if(userInfo){
+          userInfo['profile_picture'] = data?.profile_pic
+          localStorage.setItem('userData' , JSON.stringify(userInfo))
+        }
+        console.log('--->> profile pic--->>>' , this.profile_pic)
         let first_name: any = document.getElementById('first_name');
         first_name.value = data?.first_name;
         let middle_name: any = document.getElementById('middle_name');
@@ -50,7 +56,6 @@ export class ProfileComponent implements OnInit {
         phone.value = data?.phone;
          //set country flag in phone number fields
          this.AffiliatePhoneObject.setCountry(data?.phone_country);
-         console.log('--->> profile pic--->>>' , this.profile_pic)
       });
 		$('.HeadingH1').css({display: "none"})
 
@@ -75,9 +80,15 @@ export class ProfileComponent implements OnInit {
           )
           .subscribe(({ data, message }: any) => {
             this.profile_pic = data.image;
+            let userInfo = JSON.parse(localStorage.getItem('userData'))
+            if(userInfo){
+              userInfo['profile_picture'] = data?.image
+              localStorage.setItem('userData' , JSON.stringify(userInfo))
+            }
             this.stateManagementService.setprogressBar(false);//hide progressbar
             this.snackbarMsg = message;
             this.openSnackbar();
+            window.location.reload()
           });
       };
     }
