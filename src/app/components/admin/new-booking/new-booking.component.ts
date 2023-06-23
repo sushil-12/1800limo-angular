@@ -814,6 +814,10 @@ export class NewBookingComponent implements OnInit {
 			this.$spinner.hide();
 		})
 	}
+	handleClientAccount(value:any){
+		console.log('---------------------_>>>>>>>>>>>>>> client acc value',value)
+		this.chooseUser(value.id)
+	}
 
 	fetchAffiliates(affiliate_type: 'affiliate' | 'loose_affiliate') {
 		if (affiliate_type == 'loose_affiliate') {
@@ -1575,8 +1579,8 @@ export class NewBookingComponent implements OnInit {
 		})
 
 		this.BookingForm.get('acc_id').valueChanges.subscribe((value: number) => {
-			if (value) {
-				this.chooseUser(value)
+			if (value && this.updateType == 'repeat' && this.updateType == 'return' && this.updateType == 'edit') {
+				this.chooseUser(value)	
 			}
 		})
 

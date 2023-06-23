@@ -462,7 +462,7 @@
 						<!-- Ng-Select -->
 						<ng-select appearance="outline" [items]="ClientAccounts" bindLabel="name" bindValue="id"
 							placeholder="Select Client Account" dropdownPosition="bottom" [markFirst]="true"
-							[virtualScroll]="true" formControlName="acc_id">
+							[virtualScroll]="true" formControlName="acc_id" (change)="handleClientAccount($event)">
 						</ng-select>
 					</div>
 				</div>
