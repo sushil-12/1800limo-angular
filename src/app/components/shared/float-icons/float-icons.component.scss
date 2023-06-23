@@ -1,6 +1,13 @@
 li {
 	list-style: none;
 }
+.chat-logo{
+	position: fixed;
+	bottom: 0;
+	right: 0;
+	height: 150px;
+	z-index: 10;
+}
 
 svg {
 	width: 50px;

@@ -111,6 +111,7 @@ export class NewBookingComponent implements OnInit {
 	service_type: any = 'one_way';
 	transfer_type :any = 'city_to_city'
 	return_transfer_type :any = 'city_to_city'
+	number_of_hours: any ='0';
 
 	constructor(
 		private $form: FormBuilder,
@@ -435,6 +436,9 @@ export class NewBookingComponent implements OnInit {
 				meet_greet_choices_name: event.source.triggerValue
 			})
 		}
+	}
+	handleNoOfHours(value){
+		this.number_of_hours = value
 	}
 	prefillViaBookingID(booking_id: number) {
 		// console.warn('Prefilling via Booking Id')

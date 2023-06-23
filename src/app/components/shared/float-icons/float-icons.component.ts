@@ -24,6 +24,7 @@ export class FloatIconsComponent implements OnInit
 
 	chevronFunctionality()
 	{
+		console.log('chat logo clicked--->>')
 		this.chevron = !this.chevron
 		console.log(this.chevron)
 	}
