@@ -1,7 +1,7 @@
 .scrollTopButton {
     position: fixed;
     bottom: 65px;
-    left: 3px;
+    right: 3px;
     opacity: 0;
     transition: all .2s ease-in-out;
     // z-index: 99999;
@@ -10,7 +10,7 @@
 .scrollDownButton {
     position: fixed;
     bottom: 65px;
-    left: 3px;
+    right: 3px;
     opacity: 0;
     transition: all .2s ease-in-out;
     // z-index: 99999;

@@ -215,6 +215,12 @@ export class HomeComponent implements OnInit {
 		});
 
 		this.fetchHomePageData();
+
+		$('.scrollDownButton').css('left', '3px');
+		$('.scrollDownButton').css('right', '');
+		$('.scrollTopButton').css('left', '3px');
+		$('.scrollTopButton').css('right', '');
+
 	}
 	
 	// ngOnInit() ends
