@@ -12,7 +12,7 @@
 					<h2>Hello, Create an Account or Sign In.</h2>
 				</ng-template>
 			</div>
-			<div class="row" *ngIf="Role != 'admin' && Role !='sub_admin'">
+			<div class="row" *ngIf="Role != 'admin' && Role !='sub_admin' && Role !='driver'">
 				<div class="col-md-12 mt-3">
 					<div class="radio-group role" style="box-shadow: 0 5px 12px -6px rgb(0 0 0);" (click)="alert_individual=!alert_individual;clearAlert()">
 						<input type="radio" id="individual" name="role" checked="" value="individual" disabled
@@ -35,11 +35,11 @@
 						formControlName="role" (click)="loginButtons('driver')">
 						<label for="driver/fleet" class="text-center">Driver / Chauffeur / Fleet - To Drive</label>
 					</div>
-					<div class="radio-group role" style="box-shadow: 0 5px 12px -6px rgb(0 0 0);">
+					<!-- <div class="radio-group role" style="box-shadow: 0 5px 12px -6px rgb(0 0 0);">
 						<input type="radio" id="sub_admin" name="role" checked="" value="sub_admin"
 						formControlName="role" (click)="loginButtons('sub_admin')">
 						<label for="sub_admin" class="text-center">login as Sub-Admin</label>
-					</div>
+					</div> -->
 				</div>
 				<p class="text-danger margin-bottom-thin my-mat-hint"
 				[ngClass]="(alert_individual || alert_corporate || alert_travel_agent)? '':'hide-alert'">
@@ -52,10 +52,10 @@
 	<mat-progress-bar class="my-color my-4" mode="indeterminate" *ngIf="showProgressBar"></mat-progress-bar>
 	<mat-form-field appearance="outline" class="mat-custom-phone topLabelClass">
 		<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Phone Number</label>
-		<input matInput appAutoFocusDirective placeholder="1234567890" formControlName="phone" ng2TelInput
+		<input matInput placeholder="1234567890" formControlName="phone" ng2TelInput
 			[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
 			(countryChange)="onCountryChange($event)" class="phoneNumberClass" tabIndex="1"
-			(intlTelInputObject)="telInputObjectCell($event)" id="phn-input" />
+			(intlTelInputObject)="telInputObjectCell($event)" id="phn-input" autofocus/>
 	</mat-form-field>
 	<div *ngIf="submitted && f.phone.errors" class="text-danger margin-bottom-thin my-mat-hint">
 		<div *ngIf="f.phone.errors.required">The Phone Number is required</div>

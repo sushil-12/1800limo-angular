@@ -1,6 +1,13 @@
 li {
 	list-style: none;
 }
+.chat-logo{
+	position: fixed;
+	bottom: 5px;
+	right: 15px;
+	height: 86px;
+	z-index: 10;
+}
 
 svg {
 	width: 50px;
@@ -153,6 +160,14 @@ mat-form-field {
 		display: inline-block;
 		text-align: center;
 		text-decoration: none;
+	}
+
+	.chat-logo{
+		position: fixed;
+		bottom: 20px;
+		right: 15px;
+		height: 70px;
+		z-index: 10;
 	}
 }
 

@@ -46,6 +46,7 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 	is_email_verified: boolean = true
 	is_bank_verified: boolean = true
 	is_show_verification_icon: boolean = false
+	profile_pic_url: any;
 
 	constructor(
 		private router: Router,
@@ -145,6 +146,7 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 	{
 		
 		this.googleTranslateInitFunction();
+		this.profile_pic_url = JSON.parse(localStorage.getItem('userData'))?.profile_picture
 	}
 	ngOnChanges(changes: SimpleChanges): void{
 		console.log('------->>>>>>>>>>>>>>' , changes)

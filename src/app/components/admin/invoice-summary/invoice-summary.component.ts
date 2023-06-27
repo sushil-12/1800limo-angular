@@ -184,7 +184,8 @@ export class InvoiceSummaryComponent implements OnInit {
 	sendInvoiceToAny() {
 
 		let data = {
-			email_addresses: this.emails
+			// email_addresses: this.emails
+			email_address: this.str_email
 		}
 
 

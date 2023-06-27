@@ -108,7 +108,10 @@ export class NewBookingComponent implements OnInit {
 	firstLoadAffiliateId: void;
 	updateType: any;
 	bookingResponse: any;
-
+	service_type: any = 'one_way';
+	transfer_type :any = 'city_to_city'
+	return_transfer_type :any = 'city_to_city'
+	number_of_hours: any ='0';
 
 	constructor(
 		private $form: FormBuilder,
@@ -157,11 +160,11 @@ export class NewBookingComponent implements OnInit {
 
 	}
 
-	ngAfterViewInit(): void{
+	ngAfterViewInit(): void {
 		console.log('<<<<<<<<<<<<<<<<<<<<<-----------ng after view init--------------->>>>>>>>>>>>>')
-		if(this.updateType == 'repeat' || this.updateType == 'return' || this.updateType == 'edit'){
+		if (this.updateType == 'repeat' || this.updateType == 'return' || this.updateType == 'edit') {
 			this.scroll('travel_time')
-			this.SetFormValue('pickup_date' , moment().format('YYYY-MM-DD'))
+			this.SetFormValue('pickup_date', moment().format('YYYY-MM-DD'))
 		}
 	}
 
@@ -397,6 +400,7 @@ export class NewBookingComponent implements OnInit {
 		}
 	}
 	changeTransferType(type: string) {
+		this.transfer_type = type
 		if (type.includes('city_')) {
 			this.SetFormValue('meet_greet_choices', 1)
 			this.SetFormValue('meet_greet_choices_name', "Driver - Text/call when on location")
@@ -433,6 +437,9 @@ export class NewBookingComponent implements OnInit {
 			})
 		}
 	}
+	handleNoOfHours(value){
+		this.number_of_hours = value
+	}
 	prefillViaBookingID(booking_id: number) {
 		// console.warn('Prefilling via Booking Id')
 		this.$spinner.show('normalspinner');
@@ -443,7 +450,8 @@ export class NewBookingComponent implements OnInit {
 			this.bookingResponse = response.data
 			this.firstLoadVehicleId = response.data.vehicle_id
 			this.firstLoadAffiliateId = response.data.affiliate_id
-			this.SetFormValue('affiliate_type',response.data.affiliate_type)
+			this.number_of_hours = response?.data?.number_of_hours
+			this.SetFormValue('affiliate_type', response.data.affiliate_type)
 			this.autofillData('cruise', editing_data);
 			console.log(editing_data, "check big data")
 			for (let item in editing_data) {
@@ -523,13 +531,13 @@ export class NewBookingComponent implements OnInit {
 			}
 
 			this.$spinner.hide('normalspinner')
-			console.log('<<<<<<<<<<<-----------set pickup date------->>>>', moment().format('YYYY-MM-DD') , this.updateType)
-		if(this.updateType == 'repeat' || this.updateType == 'return'){
-			this.scroll('travel_time')
-			this.SetFormValue('pickup_date' , moment().format('YYYY-MM-DD'))
-		}
+			console.log('<<<<<<<<<<<-----------set pickup date------->>>>', moment().format('YYYY-MM-DD'), this.updateType)
+			if (this.updateType == 'repeat' || this.updateType == 'return') {
+				this.scroll('travel_time')
+				this.SetFormValue('pickup_date', moment().format('YYYY-MM-DD'))
+			}
 		})
-		
+
 	}
 	scroll(id) {
 		let el = document.getElementById(id);
@@ -783,7 +791,13 @@ export class NewBookingComponent implements OnInit {
 		}
 	}
 
+	onSelectionChangeServiceType(event: any) {
+		this.service_type = event.value;
+	  }
 
+	  changeReturnTransferType(event: any) {
+		this.return_transfer_type  = event
+	  }
 
 	chooseUser(account_id: number) {
 		this.$spinner.show()
@@ -799,6 +813,10 @@ export class NewBookingComponent implements OnInit {
 			}
 			this.$spinner.hide();
 		})
+	}
+	handleClientAccount(value:any){
+		console.log('---------------------_>>>>>>>>>>>>>> client acc value',value)
+		this.chooseUser(value.id)
 	}
 
 	fetchAffiliates(affiliate_type: 'affiliate' | 'loose_affiliate') {
@@ -1135,7 +1153,7 @@ export class NewBookingComponent implements OnInit {
 
 	autofillData(filling_for: string, data: any) {
 		if (filling_for === 'passenger') {
-			console.log('--->>>> filling passenger info' , data)
+			console.log('--->>>> filling passenger info', data)
 			data.middle_name ?
 				this.SetFormValue('passenger_name', `${data?.first_name} ${data?.middle_name} ${data?.last_name}`) : this.SetFormValue('passenger_name', `${data?.first_name} ${data?.last_name}`)
 			this.SetFormValue('passenger_email', data.email)
@@ -1331,7 +1349,7 @@ export class NewBookingComponent implements OnInit {
 		// 		EditedKeys.push(i)
 		// 	} 
 		// })
-		
+
 		// console.log(' Edited keys  ---->>>>' , EditedKeys)
 		// if (this.BookingForm.invalid) {
 		// 	return;
@@ -1502,6 +1520,7 @@ export class NewBookingComponent implements OnInit {
 				return temp.reverse().join('_')
 			}
 			this.SetFormValue('return_transfer_type', reverseStringChars(value))
+			this.return_transfer_type = reverseStringChars(value)
 		})
 
 		// Account Type Subscription
@@ -1560,8 +1579,8 @@ export class NewBookingComponent implements OnInit {
 		})
 
 		this.BookingForm.get('acc_id').valueChanges.subscribe((value: number) => {
-			if (value) {
-				this.chooseUser(value)
+			if (value && this.updateType == 'repeat' && this.updateType == 'return' && this.updateType == 'edit') {
+				this.chooseUser(value)	
 			}
 		})
 
@@ -1573,6 +1592,16 @@ export class NewBookingComponent implements OnInit {
 				if (this.Form.service_type.value === 'round_trip') {
 					this.init_return_rates = true;
 				}
+					this.SetFormValue('vehicle_type_name', '');
+					this.BookingForm.get('vehicle_make').setValue('')
+					this.BookingForm.get('vehicle_make_name').setValue('')
+					this.BookingForm.get('vehicle_model').setValue('')
+					this.BookingForm.get('vehicle_model_name').setValue('')
+					this.BookingForm.get('vehicle_year').setValue('')
+					this.BookingForm.get('vehicle_year_name').setValue('')
+					this.BookingForm.get('vehicle_color').setValue('')
+					this.BookingForm.get('vehicle_color_name').setValue('')
+					this.BookingForm.updateValueAndValidity();
 			}
 			else {
 				this.init_rates = true;
@@ -1588,6 +1617,9 @@ export class NewBookingComponent implements OnInit {
 			if (value) {
 				this.chooseAffiliate()
 				this.fetchAffiliateInformation(value)
+				if(this.Form.updateType.value != 'edit' && this.Form.updateType.value != 'repeat' && this.Form.updateType.value != 'return' ){
+					this.scroll('booking_detail_section')
+				}
 			}
 		})
 
@@ -1601,24 +1633,45 @@ export class NewBookingComponent implements OnInit {
 		// })
 
 		this.BookingForm.get('vehicle_type').valueChanges.subscribe((value: string) => {
+			console.log('on change of vehicle type-->>> value' ,value )
 			if (this.Form.affiliate_type.value == 'affiliate') {
-				console.log('in function change value for affilliate', value)
-				this.VehicleList.map(i => (i.unique_key == this.unique_key) ? this.handleSelectVehicleType(i) : '')
+				console.log('in function change value for affilliate vehicle_type', value)
+				if(value){
+					this.VehicleList.map(i => (i.unique_key == this.unique_key) ? this.handleSelectVehicleType(i) : '')
+				}
+				else{
+					this.SetFormValue('vehicle_type_name', '');
+					this.BookingForm.get('vehicle_make').setValue('')
+					this.BookingForm.get('vehicle_make_name').setValue('')
+					this.BookingForm.get('vehicle_model').setValue('')
+					this.BookingForm.get('vehicle_model_name').setValue('')
+					this.BookingForm.get('vehicle_year').setValue('')
+					this.BookingForm.get('vehicle_year_name').setValue('')
+					this.BookingForm.get('vehicle_color').setValue('')
+					this.BookingForm.get('vehicle_color_name').setValue('')
+					this.BookingForm.updateValueAndValidity();
+				}
+
 			} else {
 				if (value && this.BigData) {
 					let name = this.BigData['vehicleCategories'].find(item => item.id == value)['name']
 					this.SetFormValue('vehicle_type_name', name);
 					this.BookingForm.get('vehicle_make').setValue('')
+					this.BookingForm.get('vehicle_make_name').setValue('')
 					this.BookingForm.get('vehicle_model').setValue('')
+					this.BookingForm.get('vehicle_model_name').setValue('')
 					this.BookingForm.get('vehicle_year').setValue('')
+					this.BookingForm.get('vehicle_year_name').setValue('')
 					this.BookingForm.get('vehicle_color').setValue('')
+					this.BookingForm.get('vehicle_color_name').setValue('')
+					this.BookingForm.updateValueAndValidity();
 				}
 			}
 		})
 
 		this.BookingForm.get('vehicle_make').valueChanges.subscribe((value: string) => {
 			if (this.Form.affiliate_type.value == 'affiliate') {
-				console.log('in function change value for affilliate')
+				console.log('in function change value for affilliate  vehicle_make')
 			} else {
 				if (value && this.BigData) {
 					this.BigData['vehicleModels'] = this.BigData_COPY?.vehicleModels.filter(item => item.make_id == value)
@@ -1626,40 +1679,56 @@ export class NewBookingComponent implements OnInit {
 					this.SetFormValue('vehicle_model', this.BigData?.vehicleModels[0]['id'])
 					this.SetFormValue('vehicle_make_name', name)
 				}
+				else{
+					this.BookingForm.get('vehicle_make_name').setValue('')
+					this.BookingForm.updateValueAndValidity();
+				}
 			}
 		})
 
 		this.BookingForm.get('vehicle_model').valueChanges.subscribe((value: string) => {
 			if (this.Form.affiliate_type.value == 'affiliate') {
-				console.log('in function change value for affilliate')
+				console.log('in function change value for affilliate vehicle_model')
 
 			} else {
 				if (value && this.BigData) {
-
 					let name = this.BigData['vehicleModels'].find(item => item.id == value)['name']
 					this.SetFormValue('vehicle_model_name', name)
+				}
+				else{
+					this.BookingForm.get('vehicle_model_name').setValue('')
+					this.BookingForm.updateValueAndValidity();
 				}
 			}
 		})
 
 		this.BookingForm.get('vehicle_year').valueChanges.subscribe((value: string) => {
 			if (this.Form.affiliate_type.value == 'affiliate') {
-				console.log('in function change value for affilliate')
+				console.log('in function change value for affilliate vehicle_year')
 			} else {
 				if (value && this.BigData) {
 					let name = this.BigData['vehicleYears'].find(item => item.id == value)['name']
 					this.SetFormValue('vehicle_year_name', name)
 				}
+				else{
+					this.BookingForm.get('vehicle_year_name').setValue('')
+					this.BookingForm.updateValueAndValidity();
+				}
 			}
 		})
 		this.BookingForm.get('vehicle_color').valueChanges.subscribe((value: string) => {
 			if (this.Form.affiliate_type.value == 'affiliate') {
-				console.log('in function change value for affilliate')
+				console.log('in function change value for affilliate vehicle_color')
 
 			} else {
 				if (value && this.BigData) {
 					let name = this.BigData['vehicleColors'].find(item => item.id == value)['name']
 					this.SetFormValue('vehicle_color_name', name)
+				}
+				else{
+					this.BookingForm.get('vehicle_color_name').setValue('')
+					this.BookingForm.updateValueAndValidity();
+
 				}
 			}
 		})
