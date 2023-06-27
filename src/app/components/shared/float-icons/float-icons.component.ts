@@ -14,12 +14,27 @@ export class FloatIconsComponent implements OnInit
 
 	ngOnInit(): void
 	{
-		$("#fixed-form-container .body").hide();
-		$("#fixed-form-container .button").click(function ()
-		{
-			$(this).next("#fixed-form-container div").slideToggle(400);
-			$(this).toggleClass("expanded");
-		});
+		// $("#fixed-form-container .body").hide();
+		// $("#fixed-form-container .button").click(function ()
+		// {
+		// 	$(this).next("#fixed-form-container div").slideToggle(400);
+		// 	$(this).toggleClass("expanded");
+		// });
+
+		$(document).ready(function() {
+			// Add an event listener for Bootstrap modal shown event
+			$('#chat-modal').on('shown.bs.modal', function() {
+			  console.log('Modal opened');
+			  // Do something when the modal is opened
+			});
+		  
+			// Add an event listener for Bootstrap modal hidden event
+			$('#chat-modal').on('hidden.bs.modal', function() {
+			  console.log('Modal closed');
+			//   this.chevronFunctionality()
+			  // Do something when the modal is closed
+			});
+		  });
 	}
 
 	chevronFunctionality()

@@ -216,10 +216,10 @@ export class HomeComponent implements OnInit {
 
 		this.fetchHomePageData();
 
-		$('.scrollDownButton').css('left', '3px');
-		$('.scrollDownButton').css('right', '');
-		$('.scrollTopButton').css('left', '3px');
-		$('.scrollTopButton').css('right', '');
+		// $('.scrollDownButton').css('left', '3px');
+		// $('.scrollDownButton').css('right', '');
+		// $('.scrollTopButton').css('left', '3px');
+		// $('.scrollTopButton').css('right', '');
 
 	}
 	
@@ -599,7 +599,7 @@ export class HomeComponent implements OnInit {
 	returnSearchAirport(searchText: any) {
 		console.log('search text is->', searchText)
 		return JSON.parse(JSON.stringify(this.airports_data_copy.filter((item: any) => {
-			return (item.city.toLowerCase().includes(searchText) || item.airport.split('-')[0].toLowerCase().includes(searchText.toLowerCase()))
+			return (item.city.toLowerCase().includes(searchText.toLowerCase()) || item.airport.split('-')[0].toLowerCase().includes(searchText.toLowerCase()) || item?.name.toLowerCase().includes(searchText.toLowerCase()))
 		})))
 	}
 
@@ -621,7 +621,7 @@ export class HomeComponent implements OnInit {
 			this.airports_data_r_dropoff = (letter == '') ? JSON.parse(JSON.stringify(this.airports_data_copy)) : this.returnSearchAirport(letter)
 		}
 
-		console.log('airport data-------->>>>>>>>>', this.airports_data)
+		// console.log('airport data-------->>>>>>>>>', this.airports_data)
 
 		// assign the value to form control if airport code is entered, as the code will give zero results for airport.
 		if (this.airports_data.length == 0) {
