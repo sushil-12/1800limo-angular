@@ -3,12 +3,15 @@ li {
 }
 .chat-logo{
 	position: fixed;
-	bottom: 5px;
-	right: 15px;
-	height: 86px;
+	bottom: 40px;
+	left: 30px;
+	height: 70px;
 	z-index: 10;
 }
-
+.modal-content {
+    border-radius: 0rem !important; 
+    padding: 1rem 0; 
+}
 svg {
 	width: 50px;
 	height: 50px;
@@ -69,7 +72,7 @@ mat-form-field {
 #fixed-form-container {
 	position: fixed;
 	bottom: 0px;
-	right: 0;
+	left: 0;
 	text-align: center;
 	margin: 0;
 	z-index: 4;
@@ -86,7 +89,7 @@ mat-form-field {
 	position: absolute;
 	-moz-border-radius: 5px;
 	-webkit-border-radius: 5px;
-	border-radius: 50px 0px 0px 0px;
+	border-radius: 0px 50px 0px 0px;
 	padding: 8px 8px 8px 45px;
 	background-image: linear-gradient(to bottom, #5fc6f2, #26acec, #0090e4, #0073d7, #1954c5);
 	color: #fff;
@@ -153,7 +156,7 @@ mat-form-field {
 		position: absolute;
 		-moz-border-radius: 5px;
 		-webkit-border-radius: 5px;
-		border-radius: 50px 0px 0px 0px;
+		border-radius: 0px 50px 0px 0px;
 		padding: 8px 8px 8px 20px;
 		background-image: linear-gradient(to bottom, #5fc6f2, #26acec, #0090e4, #0073d7, #1954c5);
 		color: #fff;
@@ -164,7 +167,7 @@ mat-form-field {
 
 	.chat-logo{
 		position: fixed;
-		bottom: 20px;
+		bottom: 44px;
 		right: 15px;
 		height: 70px;
 		z-index: 10;
