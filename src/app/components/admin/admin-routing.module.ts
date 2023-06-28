@@ -78,6 +78,7 @@ import { CustomInvoiceComponent } from './custom-invoice/custom-invoice.componen
 import { StaffPermissionsComponent } from './staff-permissions/staff-permissions.component';
 import { StaffRolesListComponent } from './staff-roles-list/staff-roles-list.component';
 import { BookingLogsComponent } from './booking-logs/booking-logs.component';
+import { DemoAddIndividualComponent } from './demo-add-individual/demo-add-individual.component';
 
 
 const routes: Routes = [
@@ -335,6 +336,11 @@ const routes: Routes = [
 		path: 'add-individual-account',
 		canActivate: [SubAdminGuard],
 		component: AddIndividualAccountComponent
+	},
+	{
+		path: 'demo-add-individual-account',
+		canActivate: [SubAdminGuard],
+		component: DemoAddIndividualComponent
 	},
 	{
 		path: 'edit-individual-account',
