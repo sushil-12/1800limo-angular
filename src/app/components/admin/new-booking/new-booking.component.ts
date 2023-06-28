@@ -1465,7 +1465,8 @@ export class NewBookingComponent implements OnInit {
 		let total_time = 0
 		return new Promise((resolve) => {
 			data.routes[0].legs.forEach((item: any) => {
-				if (item.distance.value == 0) {
+				console.log('cal distance--->> this.BookingForm.get',this.BookingForm.get('service_type').value)
+				if (item.distance.value == 0 && this.BookingForm.get('service_type').value != 'charter_tour') {
 					this.$errors.openDialog({
 						errors: {
 							error: 'Please select a valid location point.'
