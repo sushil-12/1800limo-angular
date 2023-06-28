@@ -111,6 +111,7 @@ import { StaffRolesListComponent } from './staff-roles-list/staff-roles-list.com
 import { BookingLogsComponent } from './booking-logs/booking-logs.component';
 import {MatTableModule} from '@angular/material/table';
 import {MatExpansionModule} from '@angular/material/expansion';
+import { DemoAddIndividualComponent } from './demo-add-individual/demo-add-individual.component';
 
 
 @NgModule({
@@ -195,7 +196,8 @@ import {MatExpansionModule} from '@angular/material/expansion';
 		CustomInvoiceComponent,
 		StaffPermissionsComponent,
 		StaffRolesListComponent,
-		BookingLogsComponent
+		BookingLogsComponent,
+		DemoAddIndividualComponent
 	],
 	imports: [
 		CommonModule,
