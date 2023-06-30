@@ -252,7 +252,7 @@ export class NewBookingComponent implements OnInit {
 					cvv: ['']
 				})
 			}),
-			passenger_name: [''],
+			passenger_name: ['',this.customValidator.whitespace()],
 			passenger_email: ['', Validators.email],
 			passenger_cell: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
 			passenger_cell_isd: ['+1'],
@@ -1548,13 +1548,13 @@ export class NewBookingComponent implements OnInit {
 				}
 
 				(<FormGroup>loose_customer.get('card_details')).get('card_number').setValidators([Validators.required, Validators.pattern("^[0-9]*$"), , Validators.minLength(12), Validators.maxLength(20),]);
-				(<FormGroup>loose_customer.get('card_details')).get('name').setValidators([Validators.required, this.customValidator.whitespace()]);
+				(<FormGroup>loose_customer.get('card_details')).get('name').setValidators([Validators.required]);
 				(<FormGroup>loose_customer.get('card_details')).get('cvv').setValidators([Validators.required, Validators.pattern("^[0-9]*$")]);
 				loose_customer.get('email').setValidators([Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.]+\.[a-zA-Z]{2,}$/i)])
 				loose_customer.get('phone').setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)])
-				loose_customer.get('first_name').setValidators([Validators.required, this.customValidator.whitespace()])
-				loose_customer.get('middle_name').setValidators(this.customValidator.whitespace())
-				loose_customer.get('last_name').setValidators([Validators.required, this.customValidator.whitespace()])
+				loose_customer.get('first_name').setValidators([Validators.required])
+				// loose_customer.get('middle_name').setValidators(this.customValidator.whitespace())
+				loose_customer.get('last_name').setValidators([Validators.required])
 				loose_customer.get('address').setValidators(this.customValidator.whitespace())
 
 			}
@@ -1994,8 +1994,6 @@ export class NewBookingComponent implements OnInit {
 	showLocationPointOnMap(address:any) {
 		let isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 		console.log('isSafari', isSafari)
-		this.$spinner.show()
-			this.$spinner.hide();
 			if(address){
 				let googleDirectionUrl;
 				let iosDirectionUrl;
