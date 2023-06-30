@@ -3092,9 +3092,10 @@
 								</span>
 							</div>
 							<div class="col-md-8">
-								<span class="font-weight-bolder">
+								<span class="font-weight-bolder" >
 									{{ textFormatter(Form.pickup.value) }}
 								</span>
+								<span (click)="showLocationPointOnMap(Form.pickup.value)"><i class="bi bi-geo-alt-fill"></i></span>
 							</div>
 						</div>
 					</div>
@@ -3208,6 +3209,7 @@
 									<span class="font-weight-bolder">
 										{{ stop.address }}
 									</span>
+								<span (click)="showLocationPointOnMap(stop.address)"><i class="bi bi-geo-alt-fill"></i></span>
 								</div>
 							</div>
 						</div>
@@ -3232,6 +3234,7 @@
 								<span class="font-weight-bolder">
 									{{ textFormatter(Form.dropoff.value) }}
 								</span>
+								<span (click)="showLocationPointOnMap(Form.dropoff.value)"><i class="bi bi-geo-alt-fill"></i></span>
 							</div>
 						</div>
 					</div>
@@ -3390,6 +3393,7 @@
 									<span class="font-weight-bolder">
 										{{ textFormatter(Form.return_pickup.value) | titlecase }}
 									</span>
+								<span (click)="showLocationPointOnMap(Form.return_pickup.value)"><i class="bi bi-geo-alt-fill"></i></span>
 								</div>
 							</div>
 						</div>
@@ -3502,6 +3506,7 @@
 										<span class="font-weight-bolder">
 											{{ stop.address }}
 										</span>
+								<span (click)="showLocationPointOnMap(stop.address)"><i class="bi bi-geo-alt-fill"></i></span>
 									</div>
 								</div>
 							</div>
@@ -3525,6 +3530,7 @@
 									<span class="font-weight-bolder">
 										{{ textFormatter(Form.return_dropoff.value) | titlecase }}
 									</span>
+								<span (click)="showLocationPointOnMap(Form.return_dropff.value)"><i class="bi bi-geo-alt-fill"></i></span>
 								</div>
 							</div>
 						</div>

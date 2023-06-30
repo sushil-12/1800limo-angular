@@ -39,7 +39,7 @@
 					<p>Refunded Amount </p>
 					<strong>$ {{ BookingDetail?.total_amount_refunded }}</strong>
 				</div>
-				
+
 				<div class="col-md-4 field">
 					<p>Pickup Date </p>
 					<strong>{{ dateFormat2(BookingDetail?.pickup_date) }} | {{ dateFormat(BookingDetail?.pickup_date)
@@ -152,12 +152,13 @@
 <app-finalize-rates class="d-flex flex-wrap finalize-rates" [initRates]="init_rates"
 	[affiliate_type]="'loose_affiliate'" (formvalue)="RateFormValue($event)" [distance]="finalize_params.distance"
 	[reservation_id]="finalize_params.booking_id" [reset]="false" [hours]="finalize_params.number_of_hours"
-	[vehicles]="finalize_params.number_of_vehicles" (returnformvalue)="ReturnRateFormValue($event)" 
+	[vehicles]="finalize_params.number_of_vehicles" (returnformvalue)="ReturnRateFormValue($event)"
 	(returnNumberOfHr)="HandleReturnNumberOfHr($event)">
 </app-finalize-rates>
 <div class="row mb-3" id="submitForm">
-	<div class="col-md-12 text-right" >
-		<button type="button" class="custom-filled-button ratesButton m-3" [ngClass]="finalize_btn=='Finalized'? 'color-grey':''" (click)="submitForm()">
+	<div class="col-md-12 text-right">
+		<button type="button" class="custom-filled-button ratesButton m-3"
+			[ngClass]="finalize_btn=='Finalized'? 'color-grey':''" (click)="submitForm()">
 			{{finalize_btn}}
 		</button>
 	</div>
@@ -165,16 +166,17 @@
 
 
 <!-- Rates Section End -->
-<section  class="section-container" *ngIf="(BookingDetail?.payment_status=='paid' || BookingDetail?.payment_status=='partial_paid' || BookingDetail?.payment_status=='refund')&& paymentDetailByCard?.length > 0 ">
+<section class="section-container"
+	*ngIf="(BookingDetail?.payment_status=='paid' || BookingDetail?.payment_status=='partial_paid' || BookingDetail?.payment_status=='refund')&& paymentDetailByCard?.length > 0 ">
 	<h4 class="section-dropdown-header mb-0">
-		Cards Used for Payment
+		Past Payments
 	</h4>
 	<table class="table table-borderless">
 		<thead class="bg-transparent">
 			<tr>
 				<th scope="col">Name on Card</th>
 				<th scope="col">Card Number</th>
-				<th scope="col">Transfer Amount</th>
+				<th scope="col" *ngIf="BookingDetail?.affiliate_type!='loose_affiliate'" >Transfer Amount</th>
 				<th scope="col">Recipt</th>
 			</tr>
 		</thead>
@@ -182,9 +184,10 @@
 			<tr *ngFor="let item of paymentDetailByCard">
 				<td>{{item?.card_details?.name}}</td>
 				<td>xxxx-xxxx-xxxx-{{item?.card_details?.last4}}</td>
-				<td>{{item?.transfer?.transfer_amount}}</td>
+				<td *ngIf="BookingDetail?.affiliate_type!='loose_affiliate'">{{item?.transfer?.transfer_amount}}</td>
 				<td>
-					<a href="{{ item?.transfer?.receipt_url }}" target="_blank">View At stripe</a></td>
+					<a href="{{ BookingDetail?.affiliate_type!='loose_affiliate' ?  item?.transfer?.receipt_url : main_receipt_url}}" target="_blank">View At stripe</a>
+				</td>
 			</tr>
 		</tbody>
 		<ng-template #noData>
@@ -197,7 +200,7 @@
 </section>
 <!-- Payment Section -->
 <section class="section-container" style="margin-top: 22px !important;"
- *ngIf="(BookingDetail?.payment_status=='unpaid' || BookingDetail?.payable_amount > 0) && (currentUser?.RoleName == 'admin' || subModules.includes('can_pay_booking'))">
+	*ngIf="(BookingDetail?.payment_status=='unpaid' || BookingDetail?.payable_amount > 0) && (currentUser?.RoleName == 'admin' || subModules.includes('can_pay_booking'))">
 	<div class="col-md-12 p-0" (click)="handlePaymentSection()">
 		<h4 class="section-dropdown-header mb-0">
 			Payment
@@ -233,8 +236,8 @@
 							<td>{{item.name}}</td>
 							<td>{{item.last4}}</td>
 							<td>{{item.exp_month}}/{{item.exp_year}}</td>
-							<td (click)="deleteCardClicked(item)" 
-							data-toggle="modal" data-target="#warnDeleteCard"><i class="bi bi-trash3-fill m-0"></i></td>
+							<td (click)="deleteCardClicked(item)" data-toggle="modal" data-target="#warnDeleteCard"><i
+									class="bi bi-trash3-fill m-0"></i></td>
 						</tr>
 					</tbody>
 					<ng-template #noData>
@@ -385,14 +388,13 @@
 		</div>
 		<div class="col-md-12 my-3 cardSection">
 			<div class="radio">
-				<input id="cash" name="paymentMethod" type="radio"  (click)="changeDetection('cash')">
+				<input id="cash" name="paymentMethod" type="radio" (click)="changeDetection('cash')">
 				<label for="cash" class="radio-label">Payment with Cash</label>
 			</div>
 		</div>
 
 		<div class="col-md-12 text-right mr-4">
-			<button type="button" class="custom-filled-button m-3 mr-4"
-			        data-toggle="modal" data-target="#paymentModal">
+			<button type="button" class="custom-filled-button m-3 mr-4" data-toggle="modal" data-target="#paymentModal">
 				Pay
 			</button>
 		</div>
@@ -406,7 +408,8 @@
 <!-- modal -->
 
 
-<div class="modal fade" id="warnDeleteCard" tabindex="-1" role="dialog" aria-labelledby="warnDeleteCard" aria-hidden="true">
+<div class="modal fade" id="warnDeleteCard" tabindex="-1" role="dialog" aria-labelledby="warnDeleteCard"
+	aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content">
 			<div class="modal-header pb-0">
@@ -439,7 +442,8 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="custom-btn resetbutton" data-dismiss="modal">Close</button>
-				<button type="button" class="custom-btn savebutton" (click)="makePayment()" [hidden]="payableAmount <= 0">
+				<button type="button" class="custom-btn savebutton" (click)="makePayment()"
+					[hidden]="payableAmount <= 0">
 					Pay</button>
 			</div>
 		</div>

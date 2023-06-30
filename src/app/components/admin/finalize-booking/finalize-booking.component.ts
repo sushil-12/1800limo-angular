@@ -67,6 +67,7 @@ export class FinalizeBookingComponent implements OnInit {
 		})(),
 	}
 	paymentDetailByCard: any;
+	main_receipt_url: any;
 	constructor(
 		private $form: FormBuilder,
 		private $api: AdminService,
@@ -195,6 +196,7 @@ export class FinalizeBookingComponent implements OnInit {
 			.subscribe((response: any) => {
 				console.log(response.data, "check response paymentDetail");
 				if(response.data){
+					this.main_receipt_url = response?.data?.main_receipt_url
 					this.paymentDetailByCard = response?.data?.charges
 				}
 			});

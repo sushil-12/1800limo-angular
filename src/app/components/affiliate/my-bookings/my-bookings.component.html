@@ -617,6 +617,105 @@
 						</div>
 					</div>
 					<hr>
+
+							<!-- Passenger Information -->
+							<h4 class="font-weight m-0 mt-3">
+								Passenger Information
+							</h4>
+		
+							<!-- Passenger > Name -->
+							<div class="mx-2">
+								<div class="row m-0">
+									<div class="col-md-4 key">
+										<span>
+											Name
+										</span>
+									</div>
+									<div class="col-md-8 value">
+										<span class="font-weight-bolder preview-output-feild">
+											{{ textFormatter(bookingPreview?.passenger_name) }}
+										</span>
+									</div>
+								</div>
+							</div>
+		
+							<!-- Passenger > Email -->
+							<!-- <div class="mx-2">
+								<div class="row m-0">
+									<div class="col-md-4 key">
+										<span>
+											Email
+										</span>
+									</div>
+									<div class="col-md-8 value">
+										<span class="font-weight-bolder preview-output-feild">
+											{{ textFormatter(bookingPreview?.passenger_email) }}
+										</span>
+									</div>
+								</div>
+							</div> -->
+		
+							<!-- Passenger > Phone -->
+							<div class="mx-2">
+								<div class="row m-0">
+									<div class="col-md-4 key">
+										<span>
+											Phone
+										</span>
+									</div>
+									<div class="col-md-8 value">
+										<span class="font-weight-bolder preview-output-feild">
+											({{ bookingPreview?.passenger_cell_isd }})
+											{{ textFormatter(bookingPreview?.passenger_cell) }}
+										</span>
+									</div>
+								</div>
+							</div>
+							<div class="mx-2">
+								<div class="row m-0">
+									<div class="col-md-4 key">
+										<span>
+											No. of passenger
+										</span>
+									</div>
+									<div class="col-md-8 value">
+										<span class="font-weight-bolder preview-output-feild">
+											{{ bookingPreview?.total_passengers }}
+										</span>
+									</div>
+								</div>
+							</div>
+							<div class="mx-2">
+								<div class="row m-0">
+									<div class="col-md-4 key">
+										<span>
+											Luggage count
+										</span>
+									</div>
+									<div class="col-md-8 value">
+										<span class="font-weight-bolder preview-output-feild">
+											{{ bookingPreview?.luggage_count }}
+										</span>
+									</div>
+								</div>
+							</div>
+							<hr>
+							
+							<div class="mx-2">
+								<div class="row m-0">
+									<div class="col-md-4 key">
+										<span>
+											Special Instruction
+										</span>
+									</div>
+									<div class="col-md-8 value box-special-instruction">
+										<span class="font-weight-bolder preview-output-feild" style="white-space: pre-wrap;"> 
+											{{bookingPreview?.booking_instructions}}
+										</span>
+									</div>
+								</div>
+							</div>
+							<hr>
 					<!-- Booking Information - Ends -->
 
 					<!-- affiliate details -->
@@ -910,104 +1009,6 @@
 					</div>
 					<hr>
 
-					<!-- Passenger Information -->
-					<h4 class="font-weight m-0 mt-3">
-						Passenger Information
-					</h4>
-
-					<!-- Passenger > Name -->
-					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Name
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
-									{{ textFormatter(bookingPreview?.passenger_name) }}
-								</span>
-							</div>
-						</div>
-					</div>
-
-					<!-- Passenger > Email -->
-					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Email
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
-									{{ textFormatter(bookingPreview?.passenger_email) }}
-								</span>
-							</div>
-						</div>
-					</div>
-
-					<!-- Passenger > Phone -->
-					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Phone
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
-									({{ bookingPreview?.passenger_cell_isd }})
-									{{ textFormatter(bookingPreview?.passenger_cell) }}
-								</span>
-							</div>
-						</div>
-					</div>
-					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									No. of passenger
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
-									{{ bookingPreview?.total_passengers }}
-								</span>
-							</div>
-						</div>
-					</div>
-					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Luggage count
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
-									{{ bookingPreview?.luggage_count }}
-								</span>
-							</div>
-						</div>
-					</div>
-					<hr>
-					
-					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Special Instruction
-								</span>
-							</div>
-							<div class="col-md-8 value box-special-instruction">
-								<span class="font-weight-bolder preview-output-feild" style="white-space: pre-wrap;"> 
-									{{bookingPreview?.booking_instructions}}
-								</span>
-							</div>
-						</div>
-					</div>
-					<hr>
 					<!-- Travel Information -->
 					<!-- <h4 class="font-weight m-0 mt-3">
 						Travel Information
