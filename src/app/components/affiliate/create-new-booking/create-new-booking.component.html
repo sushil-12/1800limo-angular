@@ -48,7 +48,7 @@
 								(selectionChange)="changeTransferType($event.value)">
 								<mat-option [value]="tf_type" class="font-weight-bolder"
 									*ngFor="let tf_type of booking_params.transfer_types">
-									{{ textFormatter(tf_type) | titlecase }}
+									{{ textFormatterTransferType(tf_type) | titlecase }}
 								</mat-option>
 							</mat-select>
 						</mat-form-field>
@@ -65,7 +65,7 @@
 							<mat-select formControlName="return_transfer_type">
 								<mat-option [value]="tf_type" class="font-weight-bolder"
 									*ngFor="let tf_type of booking_params.transfer_types">
-									{{ textFormatter(tf_type) | titlecase }}
+									{{ textFormatterTransferType(tf_type) | titlecase }}
 								</mat-option>
 							</mat-select>
 						</mat-form-field>

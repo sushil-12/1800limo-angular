@@ -1820,6 +1820,16 @@ export class CreateNewBookingComponent implements OnInit {
 		event && this.SetFormValue(form_control, event.id);
 	}
 
+	textFormatterTransferType(text:any){
+		try {
+			return text.replace(/[\\\_$]+/g, ' ')+'?'
+		}
+		catch
+		{
+			return text
+		}
+	}
+
 	setValueByBookNow() {
 		let QB: any = JSON.parse(localStorage.getItem('quotebot_form'))
 		let selected_vehicle :any = JSON.parse(sessionStorage.getItem('selected_vehicle'))

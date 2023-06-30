@@ -2014,6 +2014,16 @@ export class NewBookingComponent implements OnInit {
 			}
 	}
 
+	textFormatterTransferType(text:any){
+		try {
+			return text.replace(/[\\\_$]+/g, ' ')+'?'
+		}
+		catch
+		{
+			return text
+		}
+	}
+
 	change(event: any, form_control: string) {
 		console.log(event, form_control)
 		event && this.SetFormValue(form_control, event.id);
