@@ -20,6 +20,19 @@
 	cursor: pointer;
 }
 
+.status-btn{
+	padding: 8px 10px;
+	border-radius: 16px;
+}
+.btn-ctn{
+	color: green;
+    border: 1px solid #33c658; 
+}
+.btn-suspend{
+	color: red;
+    border: 1px solid red;
+}
+
 .box-shadow{
 	box-shadow: 0px 5px 20px -6px rgb(0 0 0 / 100%);
 }
@@ -75,7 +88,7 @@ html {
 
 .checkedContinueLabel {
 	cursor          : default;
-	color           : #fff;
+	color           : #fff !important;
 	background-color: var(--green-color);
 	z-index         : 1;
 	width           : 85px;
@@ -88,7 +101,7 @@ html {
 
 .checkedSuspendLabel {
 	cursor          : default;
-	color           : #fff;
+	color           : #fff !important;
 	background-color: #dc3545;
 	transition      : color 200ms;
 
