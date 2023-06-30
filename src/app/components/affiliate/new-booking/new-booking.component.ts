@@ -24,7 +24,7 @@ export class NewBookingComponent implements OnInit {
 	todays_date: string = moment().format('YYYY-MM-DD');
 
 	booking_params: any = {
-		transfer_types: ["airport_to_city", "airport_to_airport", "airport_to_cruise", "city_to_city", "city_to_airport", "city_to_cruise", "cruise_to_airport", "cruise_to_city"],
+		transfer_types: ["airport_to_city", "airport_to_airport", "airport_to_cruise", "city_to_city", "city_to_airport", "city_to_cruise", "cruise_to_airport?", "cruise_to_city"],
 		client_account_types: ['individual', 'corporate', 'travel_planner', 'loose_customer'],
 		affiliate_accounts: ['affiliate', 'loose_affiliate'],
 		numbers: (() => {
@@ -702,11 +702,12 @@ export class NewBookingComponent implements OnInit {
 
 	fetchAirportsAndBigData(): void {
 		let s = setInterval(() => {
-      let bigData = this.$api.getAirportsAndBigData()
-			if (bigData) {
+    //   let bigData = this.$api.getAirportsAndBigData()
+	// bigData
+			if (true) {
 				this.$spinner.hide('fetchspinner');
-				this.BigData = JSON.parse(JSON.stringify(bigData));
-				this.BigData_COPY = JSON.parse(JSON.stringify(this.BigData));
+				// this.BigData = JSON.parse(JSON.stringify(bigData));
+				// this.BigData_COPY = JSON.parse(JSON.stringify(this.BigData));
 				// format the name of each airports/airlines data as 'code - name, city, country'
 				this.BigData.airportsData.map((item: any) => item['formatted_name'] = `${item.code} - ${item.name}, ${item.city}, ${item.country}`);
         this.BigData.airlinesData.map((item: any) => item['formatted_name'] = `${item.code} - ${item.name}, ${item.country}`);
@@ -1162,6 +1163,15 @@ export class NewBookingComponent implements OnInit {
 		// console.log(controlEl.getBoundingClientRect());
 		const labelOffset = 90;
 		return controlEl.getBoundingClientRect().top + window.scrollY - labelOffset;
+	}
+	textFormatterTransferType(text:any){
+		try {
+			return text.replace(/[\\\_$]+/g, ' ')+'?'
+		}
+		catch
+		{
+			return text
+		}
 	}
 
 
