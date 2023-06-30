@@ -333,6 +333,7 @@
 										*ngIf="QBForm.pickup_type.value != 'airport'">
 										<div class="input-contain d-flex align-items-center"
 											[class.errorValid]="submitted && QBForm.pickup_address.errors">
+											<!-- <img src="../../../../assets/images/start_location.png" alt="start_location"> -->
 											<div class="input-box">
 												<input type="text"
 													[attr.placeholder]="QBForm.pickup_type.value == 'city' ? 'City - Pickup Address?' : 'Cruise Port Name / Address?'"

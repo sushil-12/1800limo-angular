@@ -1083,6 +1083,7 @@
 								<span class="font-weight-bolder preview-output-feild">
 									{{ textFormatter(bookingPreview.pickup) }}
 								</span>
+								<span (click)="showLocationPointOnMapByAddress(bookingPreview.pickup)"><i class="bi bi-geo-alt-fill"></i></span>
 							</div>
 						</div>
 					</div>
@@ -1100,6 +1101,7 @@
 								<span class="font-weight-bolder preview-output-feild">
 									{{ textFormatter(bookingPreview?.pickup_airport_name) }}
 								</span>
+								<span (click)="showLocationPointOnMapByAddress(bookingPreview?.pickup_airport_name)"><i class="bi bi-geo-alt-fill"></i></span>
 							</div>
 						</div>
 						<!-- Airport -->
@@ -1194,6 +1196,7 @@
 									<span class="font-weight-bolder preview-output-feild">
 										{{ stop?.address }}
 									</span>
+								<span (click)="showLocationPointOnMapByAddress(stop?.address)"><i class="bi bi-geo-alt-fill"></i></span>
 								</div>
 							</div>
 						</div>
@@ -1219,6 +1222,7 @@
 								<span class="font-weight-bolder preview-output-feild">
 									{{ textFormatter(bookingPreview?.dropoff) }}
 								</span>
+								<span (click)="showLocationPointOnMapByAddress(bookingPreview?.dropoff)"><i class="bi bi-geo-alt-fill"></i></span>
 							</div>
 						</div>
 					</div>
@@ -1236,6 +1240,7 @@
 								<span class="font-weight-bolder preview-output-feild">
 									{{ textFormatter(bookingPreview?.dropoff_airport_name ) }}
 								</span>
+								<span (click)="showLocationPointOnMapByAddress(bookingPreview?.dropoff_airport_name)"><i class="bi bi-geo-alt-fill"></i></span>
 							</div>
 						</div>
 						<!-- Airport -->
