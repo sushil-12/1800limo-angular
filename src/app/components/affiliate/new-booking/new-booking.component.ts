@@ -1727,6 +1727,45 @@ export class NewBookingComponent implements OnInit {
 		return moment(time, "HH:mm:ss").format("LT");
 	}
 
+	iOS() {
+		return [
+			'iPad Simulator',
+			'iPhone Simulator',
+			'iPod Simulator',
+			'iPad',
+			'iPhone',
+			'iPod'
+		].includes(navigator.platform)
+			// iPad on iOS 13 detection
+			|| (navigator.userAgent.includes("Mac") && "ontouchend" in document)
+	}
+
+
+	showLocationPointOnMap(address:any) {
+		let isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+		console.log('isSafari', isSafari)
+		this.$spinner.show()
+			this.$spinner.hide();
+			if(address){
+				let googleDirectionUrl;
+				let iosDirectionUrl;
+					googleDirectionUrl = 'https://www.google.com/maps/dir/?api=1' + '&destination=' +
+						encodeURIComponent(address) + '&travelmode=driving'
+					iosDirectionUrl = 'http://maps.apple.com/?daddr=' +
+						encodeURIComponent(address)
+				if (this.iOS()) {
+					setTimeout(() => {
+						window.location.href = iosDirectionUrl;
+					})
+				}
+				else {
+					window.open(googleDirectionUrl, '_blank');
+				}
+			} else {
+				throw new Error('Error: Location Points Not Specified Properly. ');
+			}
+	}
+
   setValueByBookNow(){
     let QB :any = JSON.parse(localStorage.getItem('quotebot_form')) 
     // for (const key in QB) {
