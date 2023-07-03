@@ -86,6 +86,16 @@ section {
 .font-weight-bolder {
 	font-size: 16px !important;
 }
+.swap_btn{
+	margin-top: 25px;
+    margin-left: -10px;
+    margin-right: 10px;
+    // background-color: rgba(60,64,67,0.04);
+    // background-size: 24px 24px;
+}
+.swap_btn:hover {
+	transform: scale(1.5); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+  }
 
 // .container:not(.checkourveh_wrapper) {
 // 		max-width: 900px;

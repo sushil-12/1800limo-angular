@@ -263,11 +263,11 @@ export class NewBookingComponent implements OnInit {
 			return_booking_instructions: [''],
 			affiliate_type: ['affiliate'],
 			affiliate_id: [''],
-			lose_affiliate_name: ['',[Validators.required, this.customValidator.whitespace()]],
-			lose_affiliate_phone: ['', [Validators.required,Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
+			lose_affiliate_name: ['',[ this.customValidator.whitespace()]],
+			lose_affiliate_phone: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
 			lose_affiliate_phone_isd: ['+1'],
 			lose_affiliate_phone_country: ['us'],
-			lose_affiliate_email: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.]+\.[a-zA-Z]{2,}$/i)]],
+			lose_affiliate_email: ['', [ Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.]+\.[a-zA-Z]{2,}$/i)]],
 			vehicle_type: [''],
 			vehicle_type_name: [''],
 			vehicle_id: [''],
@@ -1590,6 +1590,10 @@ export class NewBookingComponent implements OnInit {
 		this.BookingForm.get('affiliate_type').valueChanges.subscribe((value: string) => {
 			if (value == 'loose_affiliate') {
 				this.toggleDropdown(null)
+				this.BookingForm.get('lose_affiliate_name').setValidators([Validators.required])
+				this.BookingForm.get('lose_affiliate_phone').setValidators([Validators.required])
+				this.BookingForm.get('lose_affiliate_email').setValidators([Validators.required])
+				this.BookingForm.updateValueAndValidity()
 				this.init_rates = true
 				if (this.Form.service_type.value === 'round_trip') {
 					this.init_return_rates = true;
@@ -1606,6 +1610,10 @@ export class NewBookingComponent implements OnInit {
 					this.BookingForm.updateValueAndValidity();
 			}
 			else {
+				this.BookingForm.get('lose_affiliate_name').clearValidators()
+				this.BookingForm.get('lose_affiliate_phone').clearValidators()
+				this.BookingForm.get('lose_affiliate_email').clearValidators()
+				this.BookingForm.updateValueAndValidity()
 				this.init_rates = true;
 				if (this.Form.service_type.value === 'round_trip') {
 					this.init_return_rates = true;
