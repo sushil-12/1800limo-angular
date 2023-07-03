@@ -2,28 +2,53 @@ mat-form-field input {
 	background-color: #fff;
 	margin-bottom: 0;
 }
+
 #google-translate {
 	display: none;
-  }
+}
 
 //   :host ::ng-deep .VIpgJd-ZVi9od-l4eHX-hSRGPd{
 // 	display:none !important;
 // 	}
 
 // .g-translator{position: absolute;right:0;left: auto;top:-6px;bottom: auto;z-index:9999}
-:host ::ng-deep .g-translator .goog-te-gadget .goog-te-combo{margin: 0!important;border:none!important;box-shadow:none!important;border-radius: 0 0px 10px 10px!important;width: 130px!important;
-    max-width: 100%!important;}
-#navbarsExample05{padding-top: 10px;}
-:host ::ng-deep .goog-te-gadget{color:#011533 !important}
-:host ::ng-deep .VIpgJd-ZVi9od-l4eHX-hSRGPd{display: none!important;}
-section{
+:host ::ng-deep .g-translator .goog-te-gadget .goog-te-combo {
+	margin: 0 !important;
+	border: none !important;
+	border-radius: 0 0px 10px 10px !important;
+	width: 130px !important;
+	max-width: 100% !important;
+	box-shadow: 5px 3px 20px -6px rgb(255 255 255);
+	border-radius: 12px;
+}
+
+#navbarsExample05 {
+	padding-top: 10px;
+}
+
+:host ::ng-deep .goog-te-gadget {
+	color: #011533 !important
+}
+
+:host ::ng-deep .VIpgJd-ZVi9od-l4eHX-hSRGPd {
+	display: none !important;
+}
+
+:host ::ng-deep #targetLanguage {
+	box-shadow: 5px 3px 20px -6px rgb(255 255 255);
+	border-radius: 12px;
+}
+
+section {
 	background-color: none !important;
 }
+
 .highlight-text {
 	font-size: x-large !important;
 }
+
 .personalized_wrapper {
-    background-color: #000 !important;
+	background-color: #000 !important;
 }
 
 #myTab {
@@ -55,8 +80,9 @@ section{
 }
 
 .telephone_mobile {
-    padding: 10px 0px 10px 0px !important;
+	padding: 10px 0px 10px 0px !important;
 }
+
 .font-weight-bolder {
 	font-size: 16px !important;
 }
@@ -276,7 +302,7 @@ section{
 	}
 }
 
-@media only screen and (max-width: 480px){
+@media only screen and (max-width: 480px) {
 	.bannerform_wrapper {
 		background-color: black !important;
 	}
@@ -361,10 +387,12 @@ a.user-profile:active::after {
 	.hideMobile {
 		display: none;
 	}
+
 	.hideDesktop {
 		display: block;
 	}
 }
+
 @media only screen and (max-width: 360px) {
 	.bannertext .dropdown-menu {
 		max-width: 100%;
@@ -532,7 +560,7 @@ a.user-profile:active::after {
 .errorMsg {
 	margin-bottom: 10px !important;
 	border: 2px solid;
-    border-radius: 14px;
+	border-radius: 14px;
 }
 
 .cross-svg {
@@ -551,9 +579,10 @@ a.user-profile:active::after {
 .input-f {
 	margin: 0 !important;
 }
-.google_map_logos{
+
+.google_map_logos {
 	display: flex;
-    flex-direction: column;
+	flex-direction: column;
 	background-color: #FFF;
 }
 

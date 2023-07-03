@@ -27,7 +27,8 @@
 							<mat-label class="">
 								Service Type
 							</mat-label>
-							<mat-select formControlName="service_type" [(ngModel)]="service_type" (selectionChange)="onSelectionChangeServiceType($event)"
+							<mat-select formControlName="service_type" [(ngModel)]="service_type"
+								(selectionChange)="onSelectionChangeServiceType($event)"
 								[ngStyle]="{'cursor': Form.updateType.value == 'edit' ? 'not-allowed' : 'default'}">
 								<mat-option value="one_way">One Way</mat-option>
 								<mat-option value="round_trip">Round Trip</mat-option>
@@ -62,7 +63,8 @@
 							<mat-label class="">
 								Return Transfer Type
 							</mat-label>
-							<mat-select formControlName="return_transfer_type" [(ngModel)]="return_transfer_type" (selectionChange)="changeReturnTransferType($event.value)">
+							<mat-select formControlName="return_transfer_type" [(ngModel)]="return_transfer_type"
+								(selectionChange)="changeReturnTransferType($event.value)">
 								<mat-option [value]="tf_type" class="font-weight-bolder"
 									*ngFor="let tf_type of booking_params.transfer_types">
 									{{ textFormatterTransferType(tf_type) | titlecase }}
@@ -80,7 +82,7 @@
 								Number of Hours
 							</mat-label>
 							<input type="number" matInput placeholder="Enter Hours" formControlName="number_of_hours"
-							  [(ngModel)]="number_of_hours" (keyup)="handleNoOfHours($event.target.value)"
+								[(ngModel)]="number_of_hours" (keyup)="handleNoOfHours($event.target.value)"
 								(focus)="$event.target.select()" />
 							<span matSuffix>Hrs.</span>
 						</mat-form-field>
@@ -623,7 +625,7 @@
 						</mat-form-field>
 					</div>
 
-				
+
 				</div>
 			</div>
 			<!-- Passenger Information Ends -->
@@ -710,6 +712,9 @@
 					<div class="error-box">
 						<div class="error-message"
 							*ngIf="Form.lose_affiliate_name.invalid && (Form.lose_affiliate_name.touched || Form.lose_affiliate_name.dirty)">
+							<p class="text-danger text-lg m-0" *ngIf="Form.lose_affiliate_name.errors?.required">
+								This field is required
+							</p>
 							<p class="text-danger text-lg m-0" *ngIf="Form.lose_affiliate_name.errors?.whitespace">
 								Extra White Space are not Allowed
 							</p>
@@ -730,6 +735,9 @@
 					<div class="error-box">
 						<div class="error-message"
 							*ngIf="Form.lose_affiliate_phone.invalid && (Form.lose_affiliate_phone.touched || Form.lose_affiliate_phone.dirty)">
+							<p class="text-danger text-lg m-0" *ngIf="Form.lose_affiliate_phone.errors?.required">
+								This field is required
+							</p>
 							<p class="text-danger text-lg m-0"
 								*ngIf="Form.lose_affiliate_phone.errors?.pattern;else looseAffError">
 								Only Numbers are Allowed
@@ -758,7 +766,10 @@
 					<div class="error-box">
 						<div class="error-message"
 							*ngIf="Form.lose_affiliate_email.invalid && (Form.lose_affiliate_email.touched || Form.lose_affiliate_email.dirty)">
-							<p class="text-danger text-lg m-0" *ngIf="Form.lose_affiliate_email.errors?.email">
+							<p class="text-danger text-lg m-0" *ngIf="Form.lose_affiliate_email.errors?.required">
+								This field is required
+							</p>
+							<p class="text-danger text-lg m-0" *ngIf="Form.lose_affiliate_email.errors?.pattern">
 								Please enter a valid Email Id
 							</p>
 						</div>
@@ -782,7 +793,8 @@
 						[ngClass]="Form.vehicle_type.value && !Form.vehicle_make.value ? 'col-md-6 col-xl-4' : Form.vehicle_make.value ? 'col-md-4 col-xl-3' : 'col-md-12'">
 						<ng-select appearance="outline" [items]="vehicleType_arr" bindLabel="formatted_name"
 							bindValue="vehicleType_id" placeholder="Select Vehicle Type" dropdownPosition="bottom"
-							[markFirst]="true" [virtualScroll]="true" formControlName="vehicle_type" (change)="handleChangeVehicleType($event)">
+							[markFirst]="true" [virtualScroll]="true" formControlName="vehicle_type"
+							(change)="handleChangeVehicleType($event)">
 						</ng-select>
 					</div>
 
@@ -797,8 +809,8 @@
 
 					<!-- Model -->
 					<div id="model" class="col-md-4 col-xl-3 block-cursor" *ngIf="Form.vehicle_make.value">
-						<ng-select appearance="outline" [items]="vehicleModal_arr" bindLabel="model" bindValue="model_id"
-							placeholder="Select Model" dropdownPosition="bottom" [markFirst]="true"
+						<ng-select appearance="outline" [items]="vehicleModal_arr" bindLabel="model"
+							bindValue="model_id" placeholder="Select Model" dropdownPosition="bottom" [markFirst]="true"
 							[virtualScroll]="true" formControlName="vehicle_model">
 						</ng-select>
 					</div>
@@ -813,8 +825,8 @@
 
 					<!-- Color -->
 					<div id="color" class="col-md-3 block-cursor">
-						<ng-select appearance="outline" [items]="vehicleColor_arr" bindLabel="color" bindValue="color_id"
-							placeholder="Select Color" dropdownPosition="bottom" [markFirst]="true"
+						<ng-select appearance="outline" [items]="vehicleColor_arr" bindLabel="color"
+							bindValue="color_id" placeholder="Select Color" dropdownPosition="bottom" [markFirst]="true"
 							[virtualScroll]="true" formControlName="vehicle_color">
 						</ng-select>
 					</div>
@@ -861,7 +873,7 @@
 			</div>
 
 
-			
+
 			<!-- Loose affiliate vehicle information -->
 			<div class="px-4 mt-4" *ngIf="Form.affiliate_type.value == 'loose_affiliate'">
 				<h4>
@@ -1213,77 +1225,79 @@
 				Booking Details
 			</h2>
 			<!-- <div class="section-container mt-2"> -->
-				<!-- <h4>
+			<!-- <h4>
 					Booking Type
 				</h4> -->
-				<div class="row px-4" *ngIf="Form.updateType.value != 'edit'">
-					<!-- Service Type -->
-					<div class="flex-grow-1 m-2">
-						<div>
-							<mat-form-field appearance="outline">
-								<mat-label class="">
-									Service Type
-								</mat-label>
-								<mat-select formControlName="service_type" [(ngModel)]="service_type" (selectionChange)="onSelectionChangeServiceType($event)"
-									[ngStyle]="{'cursor': Form.updateType.value == 'edit' ? 'not-allowed' : 'default'}">
-									<mat-option value="one_way">One Way</mat-option>
-									<mat-option value="round_trip">Round Trip</mat-option>
-									<mat-option value="charter_tour">Charter/Tour</mat-option>
-								</mat-select>
-							</mat-form-field>
-						</div>
-					</div>
-	
-					<!-- Transfer Type -->
-					<div class="flex-grow-1 m-2">
-						<div>
-							<mat-form-field appearance="outline">
-								<mat-label class="">
-									Transfer Type
-								</mat-label>
-								<mat-select formControlName="transfer_type" class="font-weight-bolder"
-									(selectionChange)="changeTransferType($event.value)" [(ngModel)]="transfer_type">
-									<mat-option [value]="tf_type" class="font-weight-bolder"
-										*ngFor="let tf_type of booking_params.transfer_types">
-										{{ textFormatterTransferType(tf_type) | titlecase }}
-									</mat-option>
-								</mat-select>
-							</mat-form-field>
-						</div>
-					</div>
-	
-					<!-- Return Transfer Type -->
-					<div class="flex-grow-1 m-2" *ngIf="Form.service_type.value == 'round_trip'">
-						<div>
-							<mat-form-field appearance="outline">
-								<mat-label class="">
-									Return Transfer Type
-								</mat-label>
-								<mat-select formControlName="return_transfer_type" [(ngModel)]="return_transfer_type" (selectionChange)="changeReturnTransferType($event.value)">
-									<mat-option [value]="tf_type" class="font-weight-bolder"
-										*ngFor="let tf_type of booking_params.transfer_types">
-										{{ textFormatterTransferType(tf_type) | titlecase }}
-									</mat-option>
-								</mat-select>
-							</mat-form-field>
-						</div>
-					</div>
-	
-					<!-- Hours -->
-					<div class="flex-grow-1 m-2" *ngIf="Form.service_type.value == 'charter_tour'">
-						<div>
-							<mat-form-field appearance="outline">
-								<mat-label>
-									Number of Hours
-								</mat-label>
-								<input type="number" matInput placeholder="Enter Hours" formControlName="number_of_hours"
-								[(ngModel)]="number_of_hours" (keyup)="handleNoOfHours($event.target.value)"	
-								(focus)="$event.target.select()" />
-								<span matSuffix>Hrs.</span>
-							</mat-form-field>
-						</div>
+			<div class="row px-4" *ngIf="Form.updateType.value != 'edit'">
+				<!-- Service Type -->
+				<div class="flex-grow-1 m-2">
+					<div>
+						<mat-form-field appearance="outline">
+							<mat-label class="">
+								Service Type
+							</mat-label>
+							<mat-select formControlName="service_type" [(ngModel)]="service_type"
+								(selectionChange)="onSelectionChangeServiceType($event)"
+								[ngStyle]="{'cursor': Form.updateType.value == 'edit' ? 'not-allowed' : 'default'}">
+								<mat-option value="one_way">One Way</mat-option>
+								<mat-option value="round_trip">Round Trip</mat-option>
+								<mat-option value="charter_tour">Charter/Tour</mat-option>
+							</mat-select>
+						</mat-form-field>
 					</div>
 				</div>
+
+				<!-- Transfer Type -->
+				<div class="flex-grow-1 m-2">
+					<div>
+						<mat-form-field appearance="outline">
+							<mat-label class="">
+								Transfer Type
+							</mat-label>
+							<mat-select formControlName="transfer_type" class="font-weight-bolder"
+								(selectionChange)="changeTransferType($event.value)" [(ngModel)]="transfer_type">
+								<mat-option [value]="tf_type" class="font-weight-bolder"
+									*ngFor="let tf_type of booking_params.transfer_types">
+									{{ textFormatterTransferType(tf_type) | titlecase }}
+								</mat-option>
+							</mat-select>
+						</mat-form-field>
+					</div>
+				</div>
+
+				<!-- Return Transfer Type -->
+				<div class="flex-grow-1 m-2" *ngIf="Form.service_type.value == 'round_trip'">
+					<div>
+						<mat-form-field appearance="outline">
+							<mat-label class="">
+								Return Transfer Type
+							</mat-label>
+							<mat-select formControlName="return_transfer_type" [(ngModel)]="return_transfer_type"
+								(selectionChange)="changeReturnTransferType($event.value)">
+								<mat-option [value]="tf_type" class="font-weight-bolder"
+									*ngFor="let tf_type of booking_params.transfer_types">
+									{{ textFormatterTransferType(tf_type) | titlecase }}
+								</mat-option>
+							</mat-select>
+						</mat-form-field>
+					</div>
+				</div>
+
+				<!-- Hours -->
+				<div class="flex-grow-1 m-2" *ngIf="Form.service_type.value == 'charter_tour'">
+					<div>
+						<mat-form-field appearance="outline">
+							<mat-label>
+								Number of Hours
+							</mat-label>
+							<input type="number" matInput placeholder="Enter Hours" formControlName="number_of_hours"
+								[(ngModel)]="number_of_hours" (keyup)="handleNoOfHours($event.target.value)"
+								(focus)="$event.target.select()" />
+							<span matSuffix>Hrs.</span>
+						</mat-form-field>
+					</div>
+				</div>
+			</div>
 			<!-- </div> -->
 			<div class="row">
 				<!-- Meet Greet Choices -->
@@ -1292,8 +1306,9 @@
 						<mat-label>
 							Meet and Greet Choices <span class="asterisk"></span>
 						</mat-label>
-						<mat-select formControlName="meet_greet_choices" (selectionChange)="handleChangeMeetAndGreet($event ,'')">
-							<mat-option *ngFor="let meetGreet of BigData?.meetGreets" [value]="meetGreet.id" >
+						<mat-select formControlName="meet_greet_choices"
+							(selectionChange)="handleChangeMeetAndGreet($event ,'')">
+							<mat-option *ngFor="let meetGreet of BigData?.meetGreets" [value]="meetGreet.id">
 								{{ meetGreet.message }}
 							</mat-option>
 						</mat-select>
@@ -1320,7 +1335,8 @@
 							Travel Date
 						</mat-label>
 						<input matInput setOutputDateFormat="YYYY-MM-DD" [matDatepicker]="onwy_dt"
-							placeholder="Travel Date" (dateChangeWithFormat)="SetFormValue('pickup_date', $event);SetFormValue('return_pickup_date', $event)"
+							placeholder="Travel Date"
+							(dateChangeWithFormat)="SetFormValue('pickup_date', $event);SetFormValue('return_pickup_date', $event)"
 							formControlName="pickup_date" (click)="onwy_dt.open()" readonly />
 						<mat-datepicker-toggle matSuffix [for]="onwy_dt"></mat-datepicker-toggle>
 						<mat-datepicker #onwy_dt></mat-datepicker>
@@ -1641,8 +1657,8 @@
 					<mat-label>
 						Special Instructions
 					</mat-label>
-					<textarea matInput style="white-space: pre-wrap;" formControlName="booking_instructions" (focus)="$event.target.select()"
-						rows="5"></textarea>
+					<textarea matInput style="white-space: pre-wrap;" formControlName="booking_instructions"
+						(focus)="$event.target.select()" rows="5"></textarea>
 				</mat-form-field>
 			</div>
 			<div class="row m-2">
@@ -1664,7 +1680,7 @@
 					</div>
 				</div>
 			</div>
-				
+
 			<!-- Extra Stop Address Field -->
 			<div class="row mt-2 mb-4 align-items-center m-0"
 				*ngFor="let extra_stop of ExtraStops.controls; index as stop_index">
@@ -1956,7 +1972,7 @@
 
 
 		<!-- Section - Booking Details -->
-	
+
 		<!-- Section - Booking Details Ends -->
 
 
@@ -1973,7 +1989,8 @@
 							<mat-label class="">
 								Service Type
 							</mat-label>
-							<mat-select formControlName="service_type" [(ngModel)]="service_type" (selectionChange)="onSelectionChangeServiceType($event)"
+							<mat-select formControlName="service_type" [(ngModel)]="service_type"
+								(selectionChange)="onSelectionChangeServiceType($event)"
 								[ngStyle]="{'cursor': Form.updateType.value == 'edit' ? 'not-allowed' : 'default'}">
 								<mat-option value="one_way">One Way</mat-option>
 								<mat-option value="round_trip">Round Trip</mat-option>
@@ -1991,7 +2008,8 @@
 								Transfer Type
 							</mat-label>
 							<mat-select formControlName="transfer_type" class="font-weight-bolder"
-								(selectionChange)="changeTransferType($event.value)" [(ngModel)]="Form.transfer_type.value">
+								(selectionChange)="changeTransferType($event.value)"
+								[(ngModel)]="Form.transfer_type.value">
 								<mat-option [value]="tf_type" class="font-weight-bolder"
 									*ngFor="let tf_type of booking_params.transfer_types">
 									{{ textFormatterTransferType(tf_type) | titlecase }}
@@ -2008,7 +2026,8 @@
 							<mat-label class="">
 								Return Transfer Type
 							</mat-label>
-							<mat-select formControlName="return_transfer_type" [(ngModel)]="return_transfer_type" (selectionChange)="changeReturnTransferType($event.value)">
+							<mat-select formControlName="return_transfer_type" [(ngModel)]="return_transfer_type"
+								(selectionChange)="changeReturnTransferType($event.value)">
 								<mat-option [value]="tf_type" class="font-weight-bolder"
 									*ngFor="let tf_type of booking_params.transfer_types">
 									{{ textFormatterTransferType(tf_type) | titlecase }}
@@ -2026,7 +2045,7 @@
 								Number of Hours
 							</mat-label>
 							<input type="number" matInput placeholder="Enter Hours" formControlName="number_of_hours"
-							[(ngModel)]="number_of_hours" (keyup)="handleNoOfHours($event.target.value)"
+								[(ngModel)]="number_of_hours" (keyup)="handleNoOfHours($event.target.value)"
 								(focus)="$event.target.select()" />
 							<span matSuffix>Hrs.</span>
 						</mat-form-field>
@@ -2040,7 +2059,8 @@
 						<mat-label>
 							Meet and Greet Choices <span class="asterisk"></span>
 						</mat-label>
-						<mat-select formControlName="return_meet_greet_choices" (selectionChange)="handleChangeMeetAndGreet($event ,'return')">
+						<mat-select formControlName="return_meet_greet_choices"
+							(selectionChange)="handleChangeMeetAndGreet($event ,'return')">
 							<mat-option *ngFor="let meetGreet of BigData?.meetGreets" [value]="meetGreet.id">
 								{{ meetGreet.message }}
 							</mat-option>
@@ -2368,8 +2388,8 @@
 					<mat-label>
 						Special Instructions
 					</mat-label>
-					<textarea matInput style="white-space: pre-wrap;" formControlName="return_booking_instructions" (focus)="$event.target.select()"
-						rows="5"></textarea>
+					<textarea matInput style="white-space: pre-wrap;" formControlName="return_booking_instructions"
+						(focus)="$event.target.select()" rows="5"></textarea>
 				</mat-form-field>
 			</div>
 
@@ -2560,7 +2580,7 @@
 						<div class="col-md-8 value">
 							<span class="font-weight-bolder">
 								{{ Form.vehicle_type_name.value}}
-								</span>
+							</span>
 						</div>
 					</div>
 					<div class="row p-2">
@@ -2572,7 +2592,7 @@
 						<div class="col-md-8 value">
 							<span class="font-weight-bolder">
 								{{ Form.vehicle_make_name.value}}
-								</span>
+							</span>
 						</div>
 					</div>
 					<div class="row p-2">
@@ -2584,7 +2604,7 @@
 						<div class="col-md-8 value">
 							<span class="font-weight-bolder">
 								{{ Form.vehicle_model_name.value}}
-								</span>
+							</span>
 						</div>
 					</div>
 					<div class="row p-2">
@@ -2596,7 +2616,7 @@
 						<div class="col-md-8 value">
 							<span class="font-weight-bolder">
 								{{ Form.vehicle_year_name.value}}
-								</span>
+							</span>
 						</div>
 					</div>
 					<div class="row p-2">
@@ -2608,7 +2628,7 @@
 						<div class="col-md-8 value">
 							<span class="font-weight-bolder">
 								{{ Form.vehicle_color_name.value}}
-								</span>
+							</span>
 						</div>
 					</div>
 					<div class="row p-2">
@@ -2620,7 +2640,7 @@
 						<div class="col-md-8 value">
 							<span class="font-weight-bolder">
 								{{ Form.vehicle_license_plate.value}}
-								</span>
+							</span>
 						</div>
 					</div>
 					<div class="row p-2">
@@ -2632,10 +2652,10 @@
 						<div class="col-md-8 value">
 							<span class="font-weight-bolder">
 								{{ Form.vehicle_seats.value}}
-								</span>
+							</span>
 						</div>
 					</div>
-					
+
 					<hr>
 					<!-- Affiliate Information -->
 					<ng-container *ngIf="Form.affiliate_type.value == 'affiliate' then affiliateUser">
@@ -2972,7 +2992,7 @@
 								</span>
 							</div>
 							<div class="col-md-8 value">
-								<span class="font-weight-bolder" style="white-space: pre-wrap;"> 
+								<span class="font-weight-bolder" style="white-space: pre-wrap;">
 									{{Form?.meet_greet_choices_name.value}}
 								</span>
 							</div>
@@ -2986,7 +3006,7 @@
 								</span>
 							</div>
 							<div class="col-md-8 value">
-								<span class="font-weight-bolder" style="white-space: pre-wrap;"> 
+								<span class="font-weight-bolder" style="white-space: pre-wrap;">
 									{{Form?.return_meet_greet_choices_name.value}}
 								</span>
 							</div>
@@ -3000,7 +3020,7 @@
 								</span>
 							</div>
 							<div class="col-md-8 value box-special-instruction">
-								<span class="font-weight-bolder" style="white-space: pre-wrap;"> 
+								<span class="font-weight-bolder" style="white-space: pre-wrap;">
 									{{Form?.booking_instructions.value}}
 								</span>
 							</div>
@@ -3014,7 +3034,7 @@
 								</span>
 							</div>
 							<div class="col-md-8 value box-special-instruction">
-								<span class="font-weight-bolder" style="white-space: pre-wrap;"> 
+								<span class="font-weight-bolder" style="white-space: pre-wrap;">
 									{{Form?.return_booking_instructions.value}}
 								</span>
 							</div>
@@ -3092,10 +3112,11 @@
 								</span>
 							</div>
 							<div class="col-md-8">
-								<span class="font-weight-bolder" >
+								<span class="font-weight-bolder">
 									{{ textFormatter(Form.pickup.value) }}
 								</span>
-								<span (click)="showLocationPointOnMap(Form.pickup.value)"><i class="bi bi-geo-alt-fill"></i></span>
+								<span (click)="showLocationPointOnMap(Form.pickup.value)"><i
+										class="bi bi-geo-alt-fill"></i></span>
 							</div>
 						</div>
 					</div>
@@ -3209,7 +3230,8 @@
 									<span class="font-weight-bolder">
 										{{ stop.address }}
 									</span>
-								<span (click)="showLocationPointOnMap(stop.address)"><i class="bi bi-geo-alt-fill"></i></span>
+									<span (click)="showLocationPointOnMap(stop.address)"><i
+											class="bi bi-geo-alt-fill"></i></span>
 								</div>
 							</div>
 						</div>
@@ -3234,7 +3256,8 @@
 								<span class="font-weight-bolder">
 									{{ textFormatter(Form.dropoff.value) }}
 								</span>
-								<span (click)="showLocationPointOnMap(Form.dropoff.value)"><i class="bi bi-geo-alt-fill"></i></span>
+								<span (click)="showLocationPointOnMap(Form.dropoff.value)"><i
+										class="bi bi-geo-alt-fill"></i></span>
 							</div>
 						</div>
 					</div>
@@ -3393,13 +3416,15 @@
 									<span class="font-weight-bolder">
 										{{ textFormatter(Form.return_pickup.value) | titlecase }}
 									</span>
-								<span (click)="showLocationPointOnMap(Form.return_pickup.value)"><i class="bi bi-geo-alt-fill"></i></span>
+									<span (click)="showLocationPointOnMap(Form.return_pickup.value)"><i
+											class="bi bi-geo-alt-fill"></i></span>
 								</div>
 							</div>
 						</div>
 
 						<!-- Return > Pickup > Airline Details -->
-						<div class="mx-2 preview-pickup-color" *ngIf="Form.return_transfer_type.value.includes('airport_')">
+						<div class="mx-2 preview-pickup-color"
+							*ngIf="Form.return_transfer_type.value.includes('airport_')">
 							<!-- Airport -->
 							<div class="row p-2">
 								<div class="col-md-4 key">
@@ -3443,7 +3468,8 @@
 						</div>
 
 						<!-- Return > Pickup > Cruise Details -->
-						<div class="mx-2 preview-pickup-color" *ngIf="Form.return_transfer_type.value.includes('cruise_')">
+						<div class="mx-2 preview-pickup-color"
+							*ngIf="Form.return_transfer_type.value.includes('cruise_')">
 							<div class="row p-2">
 								<div class="col-md-4 key">
 									<span>
@@ -3506,7 +3532,8 @@
 										<span class="font-weight-bolder">
 											{{ stop.address }}
 										</span>
-								<span (click)="showLocationPointOnMap(stop.address)"><i class="bi bi-geo-alt-fill"></i></span>
+										<span (click)="showLocationPointOnMap(stop.address)"><i
+												class="bi bi-geo-alt-fill"></i></span>
 									</div>
 								</div>
 							</div>
@@ -3519,7 +3546,8 @@
 							Dropoff Details
 						</h5>
 						<!-- Return > Dropoff > City Details  -->
-						<div class="mx-2 preview-dropoff-color" *ngIf="Form.return_transfer_type.value.includes('_city')">
+						<div class="mx-2 preview-dropoff-color"
+							*ngIf="Form.return_transfer_type.value.includes('_city')">
 							<div class="row p-2">
 								<div class="col-md-4 key">
 									<span>
@@ -3530,13 +3558,15 @@
 									<span class="font-weight-bolder">
 										{{ textFormatter(Form.return_dropoff.value) | titlecase }}
 									</span>
-								<span (click)="showLocationPointOnMap(Form.return_dropff.value)"><i class="bi bi-geo-alt-fill"></i></span>
+									<span (click)="showLocationPointOnMap(Form.return_dropff.value)"><i
+											class="bi bi-geo-alt-fill"></i></span>
 								</div>
 							</div>
 						</div>
 
 						<!-- Return > Dropoff > Airline Details -->
-						<div class="mx-2 preview-dropoff-color" *ngIf="Form.return_transfer_type.value.includes('_airport')">
+						<div class="mx-2 preview-dropoff-color"
+							*ngIf="Form.return_transfer_type.value.includes('_airport')">
 							<!-- Airport -->
 							<div class="row p-2">
 								<div class="col-md-4 key">
@@ -3581,7 +3611,8 @@
 						</div>
 
 						<!-- Return > Dropoff > Cruise Details -->
-						<div class="mx-2 preview-dropoff-color" *ngIf="Form.return_transfer_type.value.includes('_cruise')">
+						<div class="mx-2 preview-dropoff-color"
+							*ngIf="Form.return_transfer_type.value.includes('_cruise')">
 							<!-- Cruise Port -->
 							<div class="row p-2">
 								<div class="col-md-4 key">
