@@ -115,7 +115,7 @@ export class HomeComponent implements OnInit {
 	ngOnInit() {
 		this.fetchAirportsData()
 
-		
+
 		setTimeout(() => {
 
 			$('[data-toggle="modal"]').tooltip();//Bootstrap tooltip
@@ -222,9 +222,9 @@ export class HomeComponent implements OnInit {
 		// $('.scrollTopButton').css('right', '');
 
 	}
-	
+
 	// ngOnInit() ends
-	ngAfterViewInit(): void{
+	ngAfterViewInit(): void {
 		this.desktopWidth = window.innerWidth;
 		if (this.desktopWidth <= '767') {
 			//google translate
@@ -285,7 +285,7 @@ export class HomeComponent implements OnInit {
 			var myVar = setInterval(function () { myTimer() }, 0);
 
 		}
-					  
+
 	}
 
 
@@ -484,7 +484,7 @@ export class HomeComponent implements OnInit {
 	roundToNearest15(minutes) {
 		const quarterHour = 15;
 		return Math.round(minutes / quarterHour) * quarterHour;
-	  }
+	}
 
 	prefillQuotebot() {
 		if (localStorage.getItem('quotebot_form')) {
@@ -532,8 +532,8 @@ export class HomeComponent implements OnInit {
 			this.quoteBotSwitch(previous_quotebot.service_type)
 
 			if (new Date(this.QBForm.pickup_date.value).getDate() < new Date().getDate() || new Date(this.QBForm.pickup_date.value).getMonth() + 1 < new Date().getMonth() + 1) {
-				console.log('----------ssssssssssssssetttttttttt',this.getTimeHHMMSS(this.QBForm.pickup_date.value,true))
-				this.SetFormValue('pickup_date', this.getTimeHHMMSS(this.QBForm.pickup_date.value,true))
+				console.log('----------ssssssssssssssetttttttttt', this.getTimeHHMMSS(this.QBForm.pickup_date.value, true))
+				this.SetFormValue('pickup_date', this.getTimeHHMMSS(this.QBForm.pickup_date.value, true))
 			}
 
 			// set values for data receiving from data.js
@@ -542,7 +542,7 @@ export class HomeComponent implements OnInit {
 		} else {
 			// fill default values
 
-		
+
 
 			this.quoteBotForm.patchValue({
 				service_type: 'one_way',
@@ -550,7 +550,7 @@ export class HomeComponent implements OnInit {
 				pickup_type: 'city',
 				dropoff_type: 'airport',
 				pickup_date: new Date().toISOString().split('T')[0],
-				pickup_time: this.getTimeHHMMSS('',false),
+				pickup_time: this.getTimeHHMMSS('', false),
 				return_pickup_date: new Date().toISOString().split('T')[0],
 				return_pickup_time: '12:00:00',
 				no_of_passenger: 1,
@@ -561,9 +561,9 @@ export class HomeComponent implements OnInit {
 		}
 	}
 
-	getTimeHHMMSS(date,isExist){
+	getTimeHHMMSS(date, isExist) {
 		let now = new Date();
-		if(isExist){
+		if (isExist) {
 			now = new Date(date)
 		}
 
@@ -575,10 +575,10 @@ export class HomeComponent implements OnInit {
 		// Pad single digits with leading zeros
 		const formattedHours = hours.toString().padStart(2, '0');
 		const formattedMinutes = this.roundToNearest15(minutes.toString().padStart(2, '0'));
-		
+
 		// Combine the time components into a string
 		const currentTime = `${formattedHours}:${formattedMinutes}:00`;
-		console.log('----------nnnnnnnnnnnnnnnnnt',currentTime)
+		console.log('----------nnnnnnnnnnnnnnnnnt', currentTime)
 
 		return currentTime
 	}
@@ -976,6 +976,23 @@ export class HomeComponent implements OnInit {
 
 	}
 
+	swapPickupDropoff(value: any) {
+		console.log(' swap function clicked')
+			this.quoteBotForm.patchValue({
+				pickup_type: this.quoteBotForm.get('dropoff_type').value,
+				dropoff_type: this.quoteBotForm.get('pickup_type').value,
+				pickup_address: this.quoteBotForm.get('dropoff_address').value ,
+				pickup_airport:  this.quoteBotForm.get('dropoff_airport').value,
+				dropoff_airport: this.quoteBotForm.get('pickup_airport').value,
+				dropoff_address: this.quoteBotForm.get('pickup_address').value,
+				return_pickup_airport:  this.quoteBotForm.get('return_dropoff_airport').value,
+				return_pickup_address:  this.quoteBotForm.get('return_dropoff_address').value,
+				return_dropoff_airport:  this.quoteBotForm.get('return_pickup_airport').value,
+				return_dropoff_address:  this.quoteBotForm.get('return_pickup_address').value,
+				})
+	
+	}
+
 
 
 	// --------------------------------- 	Quotebot Data Ends 	----------------------------------------------
@@ -1062,7 +1079,7 @@ export class HomeComponent implements OnInit {
 
 	// loginbuttons
 	loginButtons(role: string) {
-		if (role != 'driver' && role!='sub_admin') {
+		if (role != 'driver' && role != 'sub_admin') {
 			this.errorDialogService.openDialog({
 				errors: {
 					error: 'Currently only Drivers are allowed to Sign In. User accounts coming soon! Recruiting quality vetted drivers, and chauffeurs, only at this time. Refer a trusted driver/ chauffeur to 1-800 - LIMO.COM now! You deserve the best.'

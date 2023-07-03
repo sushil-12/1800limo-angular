@@ -531,6 +531,8 @@ a.user-profile:active::after {
 
 .errorMsg {
 	margin-bottom: 10px !important;
+	border: 2px solid;
+    border-radius: 14px;
 }
 
 .cross-svg {
@@ -548,6 +550,11 @@ a.user-profile:active::after {
 
 .input-f {
 	margin: 0 !important;
+}
+.google_map_logos{
+	display: flex;
+    flex-direction: column;
+	background-color: #FFF;
 }
 
 /* ------------- TIME PICKER ------------------------ */
