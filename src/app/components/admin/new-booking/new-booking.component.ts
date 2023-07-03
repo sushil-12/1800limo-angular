@@ -263,11 +263,11 @@ export class NewBookingComponent implements OnInit {
 			return_booking_instructions: [''],
 			affiliate_type: ['affiliate'],
 			affiliate_id: [''],
-			lose_affiliate_name: ['', this.customValidator.whitespace()],
-			lose_affiliate_phone: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
+			lose_affiliate_name: ['',[Validators.required, this.customValidator.whitespace()]],
+			lose_affiliate_phone: ['', [Validators.required,Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
 			lose_affiliate_phone_isd: ['+1'],
 			lose_affiliate_phone_country: ['us'],
-			lose_affiliate_email: ['', Validators.email],
+			lose_affiliate_email: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.]+\.[a-zA-Z]{2,}$/i)]],
 			vehicle_type: [''],
 			vehicle_type_name: [''],
 			vehicle_id: [''],
@@ -1351,9 +1351,9 @@ export class NewBookingComponent implements OnInit {
 		// })
 
 		// console.log(' Edited keys  ---->>>>' , EditedKeys)
-		// if (this.BookingForm.invalid) {
-		// 	return;
-		// }
+		if (this.BookingForm.invalid) {
+			return;
+		}
 
 		if (preview) {
 			let value = this.BookingForm.value
@@ -1556,6 +1556,7 @@ export class NewBookingComponent implements OnInit {
 				// loose_customer.get('middle_name').setValidators(this.customValidator.whitespace())
 				loose_customer.get('last_name').setValidators([Validators.required])
 				loose_customer.get('address').setValidators(this.customValidator.whitespace())
+				loose_customer.updateValueAndValidity()
 
 			}
 			else {
