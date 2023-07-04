@@ -1590,9 +1590,9 @@ export class NewBookingComponent implements OnInit {
 		this.BookingForm.get('affiliate_type').valueChanges.subscribe((value: string) => {
 			if (value == 'loose_affiliate') {
 				this.toggleDropdown(null)
-				// this.BookingForm.get('lose_affiliate_name').setValidators([Validators.required])
-				// this.BookingForm.get('lose_affiliate_phone').setValidators([Validators.required ,Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)])
-				// this.BookingForm.get('lose_affiliate_email').setValidators([Validators.required ,Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.]+\.[a-zA-Z]{2,}$/i)])
+				this.BookingForm.get('lose_affiliate_name').setValidators([Validators.required])
+				this.BookingForm.get('lose_affiliate_phone').setValidators([Validators.required ,Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)])
+				this.BookingForm.get('lose_affiliate_email').setValidators([Validators.required ,Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.]+\.[a-zA-Z]{2,}$/i)])
 				this.BookingForm.updateValueAndValidity()
 				this.init_rates = true
 				if (this.Form.service_type.value === 'round_trip') {
@@ -1610,23 +1610,16 @@ export class NewBookingComponent implements OnInit {
 					this.BookingForm.updateValueAndValidity();
 			}
 			else {
+				console.log('value--->> clearing validations for--> ', value)
 				this.BookingForm.get('lose_affiliate_name').clearValidators()
-				this.BookingForm.get('lose_affiliate_name').setValidators([])
-				this.BookingForm.get('lose_affiliate_name').markAsPristine()
-				this.BookingForm.get('lose_affiliate_name').markAsUntouched()
+				this.BookingForm.get('lose_affiliate_name').updateValueAndValidity()
 
 				this.BookingForm.get('lose_affiliate_phone').clearValidators()
-				this.BookingForm.get('lose_affiliate_phone').setValidators(null)
-				this.BookingForm.get('lose_affiliate_phone').markAsPristine()
-				this.BookingForm.get('lose_affiliate_phone').markAsUntouched()
+				this.BookingForm.get('lose_affiliate_phone').updateValueAndValidity()
 
 
 				this.BookingForm.get('lose_affiliate_email').clearValidators()
-				this.BookingForm.get('lose_affiliate_email').setValidators(null)
-				this.BookingForm.get('lose_affiliate_email').markAsPristine()
-				this.BookingForm.get('lose_affiliate_email').markAsUntouched()
-
-				this.BookingForm.updateValueAndValidity()
+				this.BookingForm.get('lose_affiliate_email').updateValueAndValidity()
 
 				console.log('clear validation')
 				this.init_rates = true;

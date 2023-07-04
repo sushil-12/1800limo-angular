@@ -39,6 +39,7 @@ export class InvoiceComponent implements OnInit {
 	outputDateFormat = "YYYY-MM-DD";
   searchText:any='';
 	useDateFilter:boolean=true;
+  audit_Trail: any;
 
 
   constructor(
@@ -189,5 +190,22 @@ export class InvoiceComponent implements OnInit {
 		this.searchText = "";
 
 		console.log('Reset Successfully. ');
+	}
+
+  auditTrail(bookingId: any) {
+		console.log('In function audit trail', bookingId)
+		this.spinner.show()
+		this.adminService.auditTrailInfoInvoice(bookingId)
+			.pipe(
+				catchError((err) => {
+					return throwError(err);
+				})
+			)
+			.subscribe((response: any) => {
+				this.spinner.hide()
+				console.log('audit trail --->>>>>>>>', response)
+				this.audit_Trail = response.data
+				// $("#AuditTrailModal").modal("hide");
+			});
 	}
 }
