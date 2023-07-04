@@ -112,16 +112,21 @@
                     <td>
                       <a class="user-profileded btn btn-icon btn-transparent-dark"
                         id="navbarDropdownUserImage" href="javascript:void(0);" role="button" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false" (click)="clicViewInvoice(invoice.booking_id)">
+                        aria-haspopup="true" aria-expanded="false">
                         <span>View</span>
                       </a>
-                      <!-- <div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
+                      <div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
                       aria-labelledby="navbarDropdownUserImage">
-                      <a class="dropdown-item" >
-                        <div class="dropdown-item-icon"></div>
+                      <a class="dropdown-item" (click)="clicViewInvoice(invoice.booking_id)">
+                        <div class="dropdown-item-icon" ></div>
                         View Invoice Summary
                       </a>
-                    </div> -->
+                      <a class="dropdown-item" (click)="auditTrail(invoice.booking_id)"
+                      data-toggle="modal" data-target="#AuditTrailModal">
+                      <div class="dropdown-item-icon"></div>
+                      Audit Trial
+                    </a>
+                    </div>
                     </td>
                     <td class="text-center font-weight-bolder cursor-pointer text-underline">
                       <span [innerHTML]="highlighText(invoice.booking_id)"></span>
@@ -206,3 +211,44 @@
     </div>
   </section>
 </main>
+
+
+<!-- Audit trail Modal -->
+<div class="modal fade bd-example-modal-lg" id="AuditTrailModal" tabindex="-1" role="dialog"
+	aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content user_information bottom-container">
+			<div class="modal-header pb-0">
+				<h3 class="modal-title mb-0">Audit Trial</h3>
+			</div>
+			<div class="modal-body">
+				<!-- {{invoiceData.audit_trail | json}} -->
+				<table id="audittrail" class="table table-striped table-responsive">
+					<thead style="background-color: white;">
+						<tr>
+							<th scope="col">#</th>
+							<th scope="col">Description</th>
+							<th scope="col" id="date">Created Date</th>
+						</tr>
+					</thead>
+					<tbody>
+
+						<!-- <ng-container *ngIf="audit_Trail; else not_found"> -->
+						<tr *ngFor="let record of audit_Trail; let i=index">
+							<th scope="row">{{i+1}}</th>
+							<td style="word-wrap: break-word;">{{record.message}}</td>
+							<td>{{record.created_at}}</td>
+						</tr>
+
+					</tbody>
+				</table>
+			</div>
+			<div class="modal-footer justify-content-end">
+				<button type="button" class="x-close-btn x-cross-btn mx-3" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true" class="bi bi-x-circle"></span>
+				</button>
+
+			</div>
+		</div>
+	</div>
+</div>

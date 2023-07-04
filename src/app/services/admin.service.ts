@@ -820,6 +820,9 @@ export class AdminService {
 	getPaymentDetailFinalize(reservation_id: number){
 		return this.httpClient.get(`${this.serverUrl}admin/booking-payment-log/${reservation_id}`);
 	}
+	// saveCard(data){
+	// 	return this.httpClient.post(`${this.serverUrl}admin/finalize-rate-edit`, data)
+	// }
 	updateFinalizeRates(data) {
 		return this.httpClient.post(`${this.serverUrl}admin/finalize-rate-edit`, data)
 	}
@@ -837,6 +840,9 @@ export class AdminService {
 	}
 	auditTrailInfo(bookingId) {
 		return this.httpClient.get(this.serverUrl + `admin/booking-audit-records/${bookingId}`)
+	}
+	auditTrailInfoInvoice(bookingId) {
+		return this.httpClient.get(this.serverUrl + `admin/booking-audit-records/${bookingId}/invoice`)
 	}
 
 	loadBookings(url, startDate, endDate, useDateFilter,keyword = '') {

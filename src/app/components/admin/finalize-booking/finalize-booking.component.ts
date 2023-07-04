@@ -92,9 +92,9 @@ export class FinalizeBookingComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
-		
+
 		// this.$spinner.show('normalspinner');
-	
+
 		this.buildingCardForm();
 		this.deleteCardForm = this.$form.group({
 			cardId: ["", Validators.required],
@@ -189,13 +189,13 @@ export class FinalizeBookingComponent implements OnInit {
 		// api for card detailss
 		// getFinalizeDetails 
 	}
-	paymentDetail(bookingId){
+	paymentDetail(bookingId) {
 		this.$api
 			.getPaymentDetailFinalize(bookingId)
 			.pipe()
 			.subscribe((response: any) => {
 				console.log(response.data, "check response paymentDetail");
-				if(response.data){
+				if (response.data) {
 					this.main_receipt_url = response?.data?.main_receipt_url
 					this.paymentDetailByCard = response?.data?.charges
 				}
@@ -414,6 +414,38 @@ export class FinalizeBookingComponent implements OnInit {
 		console.log('____<><><><><><><><>', data)
 		this.finalize_params['number_of_hours'] = data
 
+	}
+	saveCardDetails() {
+		console.log('saving card details')
+		this.$spinner.show()
+		// {
+		// 	"CreditCardsDetail": {
+		// 		"name": "TESTT",
+		// 			"card_number": "4242424242424242",
+		// 				"exp_month": "01",
+		// 					"exp_year": 2026,
+		// 						"cvv": "233",
+		// 							"save_card_detail": false
+		// 	},
+		// 	"isExistingCard": false,
+		// 		"saveCreditCardOnly": true,
+		// 			"paymentMethod": "credit_card",
+		// 				"reservation_id": "853",
+		// 					"grand_total": 122.5
+		// }
+		// let dataToSend = {
+
+		// }
+		// this.$api.paymentProcessing(dataToSend).subscribe((response: any) => {
+		// 	console.log(response)
+		// 	this.$errors.openDialog({
+		// 		errors: {
+		// 			error: `<span class='text-success'>${response.message}</span>`
+		// 		}
+		// 	})
+		// 	console.log('response---------------------->>', response)
+		// 	this.$spinner.hide()
+		// })
 	}
 	showSaveButton(visibility: boolean) {
 		this.visibility = !this.visibility
