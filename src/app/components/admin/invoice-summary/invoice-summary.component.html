@@ -316,7 +316,7 @@
 
 <!-- refund modal starts -->
 <div class="modal fade" id="refundModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-	aria-hidden="true" data-backdrop="static" data-keyboard="false" *ngIf="show">
+	aria-hidden="true" >
 	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content user_inforamtion">
 			<button type="button" (click)="closeModal()" class="close closeButton x-circle-btn" data-dismiss="modal"
@@ -351,8 +351,8 @@
 					</div>
 				</form>
 			</div>
-			<div class="modal-footer d-flex justify-content-between">
-				<button type="button" (click)="closeModal()" class="btn btnStyle">Close</button>
+			<div class="modal-footer d-flex justify-content-center">
+				<!-- <button type="button" (click)="closeModal()" class="btn btnStyle">Close</button> -->
 				<button class="btn saveButtonModal" type="submit" (click)="refund()" >Submit</button>
 			</div>
 		</div>
@@ -362,11 +362,11 @@
 
 <!-- send Invoice to Any -->
 <div class="modal fade" id="sendInvoiceToAny" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-	aria-hidden="true" data-backdrop="static" data-keyboard="false" *ngIf="show_sendInvoiceToAny">
+	aria-hidden="true" >
 	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content user_inforamtion">
 			<button type="button" class="close closeButton x-circle-btn" data-dismiss="modal"
-				aria-label="Close" (click)="closeModal_send_in_to_any()">
+				aria-label="Close" >
 				<i class="bi bi-x-circle"></i>
 			</button>
 			<div class="modal-header pb-0">
@@ -399,8 +399,8 @@
 						</div>
 					</div>
 			</div>
-			<div class="modal-footer d-flex justify-content-between">
-				<button type="button"  (click)="closeModal_send_in_to_any()" class="btn btnStyle">Close</button>
+			<div class="modal-footer d-flex justify-content-center">
+				<!-- <button type="button"  (click)="closeModal_send_in_to_any()" class="btn btnStyle">Close</button> -->
 				<button class="btn saveButtonModal" type="submit" (click)="sendInvoiceToAny()">Submit</button>
 			</div>
 		</div>
