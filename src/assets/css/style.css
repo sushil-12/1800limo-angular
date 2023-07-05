@@ -1015,10 +1015,10 @@ header {
 
 .ourmission_wrapper h2 {
 	text-align    : left;
-	font-size     : 28px !important;
+	font-size     : 30px !important;
 	text-transform: uppercase;
 	color         : #000 !important;
-	font-weight   : 400 !important;
+	font-weight   : 600 !important;
 }
 
 .ourmission_wrapper p {
@@ -1104,9 +1104,9 @@ height:280px !important;
 .ourservice_wrapper h2 {
 	text-transform: uppercase;
 	text-align    : left;
-	font-size     : 28px !important;
+	font-size     : 30px !important;
 	color         : #000 !important;
-	font-weight   : 400 !important;
+	font-weight   : 600 !important;
 	text-align    : center !important;
 }
 
