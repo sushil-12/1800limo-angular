@@ -326,12 +326,15 @@ export class FinalizeBookingComponent implements OnInit {
 			this.$spinner.show()
 			this.$api.paymentProcessing(dataToSend).subscribe((response: any) => {
 				console.log(response)
-				this.$errors.openDialog({
-					errors: {
-						error: `<span class='text-success'>${response.message}</span>`
-					}
-				})
-				this.$router.navigate(['/admin/invoice-summary'], { queryParams: { bookingId: this.bookingId } })
+				// this.$errors.openDialog({
+				// 	errors: {
+				// 		error: `<span class='text-success'>${response.message}</span>`
+				// 	}
+				// })
+				// this.$router.navigate(['/admin/invoice-summary'], { queryParams: { bookingId: this.bookingId } })
+				// this.$router.navigate(['/admin/invoice-summary'], { queryParams: { bookingId: this.bookingId } })
+				this.$router.navigate(['/admin/daily-bookings-admin'])
+				
 				console.log('response---------------------->>', response)
 				this.$spinner.hide()
 			})
@@ -372,12 +375,13 @@ export class FinalizeBookingComponent implements OnInit {
 				}
 				this.$spinner.show()
 				this.$api.paymentProcessing(dataToSend).subscribe((response: any) => {
-					this.$errors.openDialog({
-						errors: {
-							error: `<span class='text-success'>${response.message}</span>`
-						}
-					})
-					this.$router.navigate(['/admin/invoice-summary'], { queryParams: { bookingId: this.bookingId } })
+					// this.$errors.openDialog({
+					// 	errors: {
+					// 		error: `<span class='text-success'>${response.message}</span>`
+					// 	}
+					// })
+					// this.$router.navigate(['/admin/invoice-summary'], { queryParams: { bookingId: this.bookingId } })
+				this.$router.navigate(['/admin/daily-bookings-admin'])
 					console.log('response---------------------->>', response)
 					this.$spinner.hide()
 				})
@@ -419,33 +423,46 @@ export class FinalizeBookingComponent implements OnInit {
 		console.log('saving card details')
 		this.$spinner.show()
 		// {
-		// 	"CreditCardsDetail": {
-		// 		"name": "TESTT",
-		// 			"card_number": "4242424242424242",
-		// 				"exp_month": "01",
-		// 					"exp_year": 2026,
-		// 						"cvv": "233",
-		// 							"save_card_detail": false
-		// 	},
-		// 	"isExistingCard": false,
-		// 		"saveCreditCardOnly": true,
-		// 			"paymentMethod": "credit_card",
-		// 				"reservation_id": "853",
-		// 					"grand_total": 122.5
+			
 		// }
 		// let dataToSend = {
-
+		// 	CreditCardsDetail: {
+		// 		name: "TESTT",
+		// 		card_number: "4242424242424242",
+		// 		exp_month: "01",
+		// 		exp_year: 2026,
+		// 		cvv: "233",
+		// 		save_card_detail: false
+		// 	},
+		// 	isExistingCard: false,
+			
+		// 	paymentMethod: "credit_card",
+		// 	reservation_id: "853",
+		// 	grand_total: 122.5
 		// }
-		// this.$api.paymentProcessing(dataToSend).subscribe((response: any) => {
-		// 	console.log(response)
-		// 	this.$errors.openDialog({
-		// 		errors: {
-		// 			error: `<span class='text-success'>${response.message}</span>`
-		// 		}
-		// 	})
-		// 	console.log('response---------------------->>', response)
-		// 	this.$spinner.hide()
-		// })
+
+		let dataToSend = {
+			CreditCardsDetail: { ...this.cardForm.value },
+			isExistingCard: false,
+			paymentMethod: 'credit_card',
+			saveCreditCardOnly: true,
+			reservation_id: this.bookingId,
+			grand_total: this.payableAmount
+		}
+		this.$api.paymentProcessing(dataToSend).subscribe((response: any) => {
+			console.log(response)
+			this.$errors.openDialog({
+				errors: {
+					error: `<span class='text-success'>${response.message}</span>`
+				}
+			})
+			console.log('response---------------------->>', response)
+			this.$spinner.hide()			
+			this.getReservationDetails(this.bookingId)
+			this.buildingCardForm()
+			this.changeDetection('card')
+
+		})
 	}
 	showSaveButton(visibility: boolean) {
 		this.visibility = !this.visibility

@@ -1,9 +1,9 @@
 <main>
 	<ngx-spinner></ngx-spinner>
+	<div class="row d-flex justify-content-center md-stepper-horizontal orange" md-stepper-step *ngIf="affiliateName?.length>0">
+		<span class="affiliate-name">Operator - {{affiliateName}}</span>
+	</div>
 	<div class="md-stepper-horizontal orange" tabindex="-1">
-		<div class="row d-flex justify-content-center" md-stepper-step *ngIf="affiliateName?.length>0">
-			<span class="affiliate-name">Operator - {{affiliateName}}</span>
-		</div>
 		<div>
 			<a class="md-step active" [ngClass]="affiliateId=='' ? 'md-step' : 'md-step'"
 			[className]="step0" [routerLinkActive]="['active']" (click)="stepClicked(0)"
