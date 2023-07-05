@@ -1657,7 +1657,7 @@
 					<mat-label>
 						Special Instructions
 					</mat-label>
-					<textarea matInput style="white-space: pre-wrap;" formControlName="booking_instructions"
+					<textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" formControlName="booking_instructions"
 						(focus)="$event.target.select()" rows="5"></textarea>
 				</mat-form-field>
 			</div>
