@@ -89,13 +89,14 @@ section {
 .swap_btn{
 	margin-top: 25px;
     margin-left: -10px;
-    margin-right: 10px;
+    margin-right: 9px;
     // background-color: rgba(60,64,67,0.04);
     // background-size: 24px 24px;
+	scale: 1.5;
 }
-.swap_btn:hover {
-	transform: scale(1.5); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
-  }
+// .swap_btn:hover {
+// 	transform: scale(1.5); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+//   }
 
 // .container:not(.checkourveh_wrapper) {
 // 		max-width: 900px;
@@ -317,7 +318,9 @@ section {
 		background-color: black !important;
 	}
 }
-
+.img-fluid{
+	height: 24px;
+}
 
 .logbutton {
 	// border            : 1px solid #5dbd8a !important;
@@ -571,10 +574,11 @@ a.user-profile:active::after {
 	margin-bottom: 10px !important;
 	border: 2px solid;
 	border-radius: 14px;
+	box-shadow: 5px 3px 20px -6px rgb(1 1 1);
 }
 
 .cross-svg {
-	background-color: white;
+	background-color: #f5f4fe;
 	border-radius: 0 5px 5px 0;
 	align-self: center;
 	margin-left: -4px;
@@ -593,7 +597,7 @@ a.user-profile:active::after {
 .google_map_logos {
 	display: flex;
 	flex-direction: column;
-	background-color: #FFF;
+	background-color: #f5f4fe;;
 }
 
 /* ------------- TIME PICKER ------------------------ */
@@ -774,6 +778,7 @@ a.user-profile:active::after {
 
 .bannerform_wrapper .quoteform_homewrapper input {
 	border-radius: 5px;
+	background-color: #f5f4fe !important;
 }
 
 .bannerform_wrapper .quoteform_homewrapper .input-group .input-group-append .input-group-text {
@@ -847,6 +852,7 @@ a.user-profile:active::after {
 
 .bannerform_wrapper .quoteform_homewrapper .time input {
 	padding: 0px 0px 0px 10px;
+	background-color: #f5f4fe !important;
 }
 
 #timepicker2 input {
