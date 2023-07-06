@@ -3134,6 +3134,9 @@
 								<span class="font-weight-bolder preview-airport-color">
 									{{ textFormatter(Form.pickup_airport_name.value) }}
 								</span>
+								<span class="font-weight-bolder preview-airport-color" 
+								(click)="showLocationPointOnMap(Form.pickup_airport_name.value)"><i
+									class="bi bi-geo-alt-fill"></i></span>
 							</div>
 						</div>
 						<!-- Airport -->
@@ -3275,6 +3278,9 @@
 								<span class="font-weight-bolder">
 									{{ textFormatter(Form.dropoff_airport_name.value ) }}
 								</span>
+								<span class="font-weight-bolder"
+								 (click)="showLocationPointOnMap(Form.dropoff_airport_name.value)"><i
+									class="bi bi-geo-alt-fill"></i></span>
 							</div>
 						</div>
 						<!-- Airport -->
@@ -3436,6 +3442,9 @@
 									<span class="font-weight-bolder preview-airport-color">
 										{{ textFormatter(Form.return_pickup_airport_name.value) }}
 									</span>
+									<span class="font-weight-bolder preview-airport-color"
+									(click)="showLocationPointOnMap(Form.return_pickup_airport_name.value)"><i
+										class="bi bi-geo-alt-fill"></i></span>
 								</div>
 							</div>
 							<!-- Airline -->
@@ -3578,6 +3587,9 @@
 									<span class="font-weight-bolder preview-airport-color">
 										{{ textFormatter(Form.return_dropoff_airport_name.value) }}
 									</span>
+									<span class="font-weight-bolder preview-airport-color"
+									(click)="showLocationPointOnMap(Form.return_dropoff_airport_name.value)"><i
+										class="bi bi-geo-alt-fill"></i></span>
 								</div>
 							</div>
 

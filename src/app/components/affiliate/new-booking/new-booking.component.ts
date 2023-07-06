@@ -122,6 +122,7 @@ export class NewBookingComponent implements OnInit {
 			if (params && params.bookingId && !this.booking_id) {
 				this.is_booking_edit_case = true
 				this.SetFormValue('reservation_id', params.bookingId)
+				console.log('settting-------------- reservation_id', params.bookingId)
 				params.updateType ? this.SetFormValue('updateType', params.updateType) : this.SetFormValue('updateType', 'edit')
 			}
       else if(params && params.new=='true'){
@@ -411,7 +412,7 @@ export class NewBookingComponent implements OnInit {
 	}
 
 	prefillViaBookingID(booking_id: number) {
-		console.warn('Prefilling via Booking Id')
+		console.warn('Prefilling via Booking Id',booking_id)
 		this.$spinner.show('normalspinner');
 		this.affiliateService.getBookingDataForEdit(booking_id).subscribe((response: any) => {
 			response.data.booking_instructions =  response?.data?.booking_instructions?.replaceAll('<br />' , '')
@@ -702,19 +703,20 @@ export class NewBookingComponent implements OnInit {
 
 	fetchAirportsAndBigData(): void {
 		let s = setInterval(() => {
-    //   let bigData = this.$api.getAirportsAndBigData()
+      let bigData = this.$api.getAirportsAndBigData()
 	// bigData
-			if (true) {
+			if (bigData) {
 				this.$spinner.hide('fetchspinner');
-				// this.BigData = JSON.parse(JSON.stringify(bigData));
-				// this.BigData_COPY = JSON.parse(JSON.stringify(this.BigData));
+				this.BigData = JSON.parse(JSON.stringify(bigData));
+				this.BigData_COPY = JSON.parse(JSON.stringify(this.BigData));
 				// format the name of each airports/airlines data as 'code - name, city, country'
 				this.BigData.airportsData.map((item: any) => item['formatted_name'] = `${item.code} - ${item.name}, ${item.city}, ${item.country}`);
-        this.BigData.airlinesData.map((item: any) => item['formatted_name'] = `${item.code} - ${item.name}, ${item.country}`);
+       			 this.BigData.airlinesData.map((item: any) => item['formatted_name'] = `${item.code} - ${item.name}, ${item.country}`);
 				this.BigData_COPY.airportsData.map((item: any) => item['formatted_name'] = `${item.code} - ${item.name}, ${item.city}, ${item.country}`);
 				this.BigData_COPY.airlinesData.map((item: any) => item['formatted_name'] = `${item.code} - ${item.name}, ${item.country}`);
 
 				this.MapController();
+				console.log('this.Form.reservation_id.value----------->>>>>>>>>>>>>',this.Form.reservation_id.value)
 				this.Form.reservation_id.value ? this.prefillViaBookingID(this.Form.reservation_id.value) : '';
         this.newBooking ? this.setValueByBookNow() : "";
 				clearInterval(s);
