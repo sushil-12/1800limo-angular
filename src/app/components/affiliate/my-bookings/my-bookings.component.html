@@ -531,9 +531,9 @@
 								cdkAutosizeMaxRows="10" #autosize="cdkTextareaAutosize" #inputmsg
 								(focus)="$event.target.select()"></textarea>
 						</mat-form-field>
-						<div class="d-flex justify-content-between mt-2">
-							<button type="button" data-dismiss="modal" (click)="closeModal()"
-								class="btn btnStyle">Close</button>
+						<div class="d-flex justify-content-center mt-2">
+							<!-- <button type="button" data-dismiss="modal" (click)="closeModal()"
+								class="btn btnStyle">Close</button> -->
 							<button class="btn saveButtonModal" (click)="submit(inputmsg.value, sendMessageField)"
 								data-dismiss="modal">Send</button>
 						</div>
