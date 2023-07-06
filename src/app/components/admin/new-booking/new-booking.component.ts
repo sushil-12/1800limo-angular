@@ -1598,6 +1598,7 @@ export class NewBookingComponent implements OnInit {
 				if (this.Form.service_type.value === 'round_trip') {
 					this.init_return_rates = true;
 				}
+				if(this.Form.updateType.value !='edit' && this.Form.updateType.value !='repeat' && this.Form.updateType.value !='return' ){
 					this.SetFormValue('vehicle_type_name', '');
 					this.BookingForm.get('vehicle_make').setValue('')
 					this.BookingForm.get('vehicle_make_name').setValue('')
@@ -1608,6 +1609,7 @@ export class NewBookingComponent implements OnInit {
 					this.BookingForm.get('vehicle_color').setValue('')
 					this.BookingForm.get('vehicle_color_name').setValue('')
 					this.BookingForm.updateValueAndValidity();
+				}
 			}
 			else {
 				console.log('value--->> clearing validations for--> ', value)
