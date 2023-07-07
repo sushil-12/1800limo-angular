@@ -1042,52 +1042,55 @@ export class HomeComponent implements OnInit {
 	}
 
 	swapPickupDropoff(value: any) {
-		console.log(' swap function clicked before-->>',this.quoteBotForm ,this.QBForm.dropoff_airport_name)
-		let temp_dropoff = {
-			dropoff_address: this.quoteBotForm.get('dropoff_address')?.value,
-			dropoff_airport: this.quoteBotForm.get('dropoff_airport')?.value,
-			dropoff_airport_name: this.quoteBotForm.get('dropoff_airport_name')?.value,
-			dropoff_airport_lat: this.quoteBotForm.get('dropoff_airport_lat')?.value,
-			dropoff_airport_long: this.quoteBotForm.get('dropoff_airport_long')?.value,
-			dropoff_address_lat: this.quoteBotForm.get('dropoff_address_lat')?.value,
-			dropoff_address_long: this.quoteBotForm.get('dropoff_address_long')?.value,
+		try {
+			let temp_dropoff = {
+				dropoff_address: this.quoteBotForm.get('dropoff_address')?.value,
+				dropoff_airport: this.quoteBotForm.get('dropoff_airport')?.value,
+				dropoff_airport_name: this.ReturnNameOfAirportById(this.quoteBotForm.get('dropoff_airport')?.value),
+				dropoff_airport_lat: this.quoteBotForm.get('dropoff_airport_lat')?.value,
+				dropoff_airport_long: this.quoteBotForm.get('dropoff_airport_long')?.value,
+				dropoff_address_lat: this.quoteBotForm.get('dropoff_address_lat')?.value,
+				dropoff_address_long: this.quoteBotForm.get('dropoff_address_long')?.value,
+			}
+			this.quoteBotForm.patchValue({
+				pickup_type: this.quoteBotForm.get('dropoff_type')?.value,
+				dropoff_type: this.quoteBotForm.get('pickup_type')?.value,
+	
+				dropoff_airport: this.quoteBotForm.get('pickup_airport')?.value,
+				dropoff_airport_name: this.ReturnNameOfAirportById(this.quoteBotForm.get('pickup_airport')?.value),
+				dropoff_address: this.quoteBotForm.get('pickup_address')?.value,
+				dropoff_airport_lat: this.quoteBotForm.get('pickup_airport_lat')?.value,
+				dropoff_airport_long: this.quoteBotForm.get('pickup_airport_long')?.value,
+				dropoff_address_lat: this.quoteBotForm.get('pickup_address_lat')?.value,
+				dropoff_address_long: this.quoteBotForm.get('pickup_address_long')?.value,
+				pickup_address: temp_dropoff?.dropoff_address,
+				pickup_airport: temp_dropoff?.dropoff_airport,
+				pickup_airport_name: temp_dropoff?.dropoff_airport_name,
+				pickup_airport_lat: temp_dropoff?.dropoff_airport_lat,
+				pickup_airport_long: temp_dropoff?.dropoff_airport_long,
+				pickup_address_lat: temp_dropoff?.dropoff_address_lat,
+				pickup_address_long: temp_dropoff?.dropoff_address_long,
+	
+	
+				return_pickup_airport: this.quoteBotForm.get('return_dropoff_airport')?.value,
+				return_pickup_airport_name: this.quoteBotForm.get('return_dropoff_airport_name')?.value,
+				return_pickup_address: this.quoteBotForm.get('return_dropoff_address')?.value,
+				return_dropoff_airport: this.quoteBotForm.get('return_pickup_airport')?.value,
+				return_dropoff_airport_name: this.quoteBotForm.get('return_pickup_airport_name')?.value,
+				return_dropoff_address: this.quoteBotForm.get('return_pickup_address')?.value,
+				return_pickup_airport_lat: this.quoteBotForm.get('return_dropoff_airport_lat')?.value,
+				return_pickup_airport_long: this.quoteBotForm.get('return_dropoff_airport_long')?.value,
+				return_pickup_address_lat: this.quoteBotForm.get('return_dropoff_address_lat')?.value,
+				return_pickup_address_long: this.quoteBotForm.get('return_dropoff_address_long')?.value,
+				return_dropoff_airport_lat: this.quoteBotForm.get('return_pickup_airport_lat')?.value,
+				return_dropoff_airport_long: this.quoteBotForm.get('return_pickup_airport_long')?.value,
+				return_dropoff_address_lat: this.quoteBotForm.get('return_pickup_address_lat')?.value,
+				return_dropoff_address_long: this.quoteBotForm.get('return_pickup_address_long')?.value,
+			})
+			
+		} catch (error) {
+			console.log(error)
 		}
-		this.quoteBotForm.patchValue({
-			pickup_type: this.quoteBotForm.get('dropoff_type')?.value,
-			dropoff_type: this.quoteBotForm.get('pickup_type')?.value,
-
-			dropoff_airport: this.quoteBotForm.get('pickup_airport')?.value,
-			dropoff_airport_name: this.quoteBotForm.get('pickup_airport_name')?.value,
-			dropoff_address: this.quoteBotForm.get('pickup_address')?.value,
-			dropoff_airport_lat: this.quoteBotForm.get('pickup_airport_lat')?.value,
-			dropoff_airport_long: this.quoteBotForm.get('pickup_airport_long')?.value,
-			dropoff_address_lat: this.quoteBotForm.get('pickup_address_lat')?.value,
-			dropoff_address_long: this.quoteBotForm.get('pickup_address_long')?.value,
-			pickup_address: temp_dropoff?.dropoff_address,
-			pickup_airport: temp_dropoff?.dropoff_airport,
-			pickup_airport_name: temp_dropoff?.dropoff_airport_name,
-			pickup_airport_lat: temp_dropoff?.dropoff_airport_lat,
-			pickup_airport_long: temp_dropoff?.dropoff_airport_long,
-			pickup_address_lat: temp_dropoff?.dropoff_address_lat,
-			pickup_address_long: temp_dropoff?.dropoff_address_long,
-
-
-			return_pickup_airport: this.quoteBotForm.get('return_dropoff_airport')?.value,
-			return_pickup_airport_name: this.quoteBotForm.get('return_dropoff_airport_name')?.value,
-			return_pickup_address: this.quoteBotForm.get('return_dropoff_address')?.value,
-			return_dropoff_airport: this.quoteBotForm.get('return_pickup_airport')?.value,
-			return_dropoff_airport_name: this.quoteBotForm.get('return_pickup_airport_name')?.value,
-			return_dropoff_address: this.quoteBotForm.get('return_pickup_address')?.value,
-			return_pickup_airport_lat: this.quoteBotForm.get('return_dropoff_airport_lat')?.value,
-			return_pickup_airport_long: this.quoteBotForm.get('return_dropoff_airport_long')?.value,
-			return_pickup_address_lat: this.quoteBotForm.get('return_dropoff_address_lat')?.value,
-			return_pickup_address_long: this.quoteBotForm.get('return_dropoff_address_long')?.value,
-			return_dropoff_airport_lat: this.quoteBotForm.get('return_pickup_airport_lat')?.value,
-			return_dropoff_airport_long: this.quoteBotForm.get('return_pickup_airport_long')?.value,
-			return_dropoff_address_lat: this.quoteBotForm.get('return_pickup_address_lat')?.value,
-			return_dropoff_address_long: this.quoteBotForm.get('return_pickup_address_long')?.value,
-		})
-		console.log(' swap function clicked after-->>',this.quoteBotForm.value)
 		// need to set values of vars
 		this.vars = {
 			dropoff_airport_name: this.ReturnNameOfAirportById(this.quoteBotForm.get('dropoff_airport')?.value),
@@ -1104,7 +1107,8 @@ export class HomeComponent implements OnInit {
 	}
 	ReturnNameOfAirportById(id: any) {
 		let airport = this.airports_data.find((item) => item.id == id)
-		return airport.airports
+		console.log('airport found-->>>',id,airport)
+		return airport ? airport.airport : ''
 	}
 
 
