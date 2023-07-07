@@ -479,14 +479,32 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 
 			if (formgroup == "others") {
 				// let kmrate = (<FormGroup>((<FormGroup>this.RatesForm.get("all_inclusive_rates")).get("Base_Rate"))).get("amount").value;
-				let kmrate = await this.calculateBaseRate('RatesForm') - this.calc_admin_share;
-				let basevalue = (<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("baserate").value;
+				let type = (<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("type").value;
+				(<FormGroup>((<FormGroup>this.RatesForm.get("others")).get(subform))).get("type").valueChanges.subscribe((value: any) => {
+					this.calculateAmount("RatesForm", formgroup, subform);
+				});
+				if (type === "flat") {
+					let kmrate = await this.calculateBaseRate('RatesForm') - this.calc_admin_share;
+					let basevalue = (<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("baserate").value;
 
-				let amount = Number(Number((basevalue / 100) * kmrate).toFixed(2));
+					let amount = Number(Number((basevalue)).toFixed(2));
 
-				(<FormGroup>(<FormGroup>this.RatesForm.get(formgroup)).get(subform)).get("amount").setValue(amount);
-				// set value of percentage same as gratuity
-				(<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("percentage").setValue(basevalue);
+					(<FormGroup>(<FormGroup>this.RatesForm.get(formgroup)).get(subform)).get("amount").setValue(amount);
+					// set value of percentage same as gratuity
+					(<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("percentage").setValue(basevalue);
+					console.log('km rate-->>', kmrate, '-->> basevalue-->>', basevalue, '-->> amount', amount)
+				}
+				if (type === "percent") {
+					let kmrate = await this.calculateBaseRate('RatesForm') - this.calc_admin_share;
+					let basevalue = (<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("baserate").value;
+
+					let amount = Number(Number((basevalue / 100) * kmrate).toFixed(2));
+
+					(<FormGroup>(<FormGroup>this.RatesForm.get(formgroup)).get(subform)).get("amount").setValue(amount);
+					// set value of percentage same as gratuity
+					(<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("percentage").setValue(basevalue);
+					console.log('km rate-->>', kmrate, '-->> basevalue-->>', basevalue, '-->> amount', amount)
+				}
 			}
 
 			if (formgroup == "taxes") {
