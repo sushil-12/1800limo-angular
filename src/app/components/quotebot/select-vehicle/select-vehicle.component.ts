@@ -659,6 +659,10 @@ export class SelectVehicleComponent implements OnInit
 		})
 	}
 
+	closeAllAccordian(){
+		$('.collapse').collapse('hide');
+	}
+
 	/**
 	 * Navigate to booking page for final confirmation or other details
 	 *
