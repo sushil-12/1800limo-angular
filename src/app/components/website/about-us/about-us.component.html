@@ -188,7 +188,7 @@
 							<img src="assets/images/about-2007.png">
 						</div>
 						<ng-template #showParagraph>
-							<p>{{carouselInstructions}}</p>
+							<p [innerHTML]="carouselInstructions"></p>
 						</ng-template>
 					</ng-template>
 				</ng-template>
