@@ -24,7 +24,7 @@
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
 						<mat-label>Agency Name</mat-label>
-						<input matInput placeholder="Agency Name" (focus)="$event.target.select()"
+						<input matInput placeholder="Optional" (focus)="$event.target.select()"
 							formControlName="AgentName" tabIndex="1">
 					</mat-form-field>
 				</div>
@@ -78,7 +78,7 @@
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
 						<mat-label>Insurance / Agent Email</mat-label>
-						<input matInput placeholder="Insurance / Agent Email" (focus)="$event.target.select()"
+						<input matInput placeholder="Optional" (focus)="$event.target.select()"
 							formControlName="AgentEmail" tabIndex="1" />
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.AgentEmail.errors"

@@ -18,7 +18,7 @@
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
 						<mat-label>Agency Name</mat-label>
-						<input matInput class="font-weight-bold" placeholder="Agency Name" formControlName="AgentName" tabIndex="1">
+						<input matInput class="font-weight-bold" placeholder="Optional" formControlName="AgentName" tabIndex="1">
 					</mat-form-field>
 				</div>
 				<div    class="col-md-6">
@@ -55,7 +55,7 @@
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
 						<mat-label>Insurance / Agent Email</mat-label>
-						<input matInput class="font-weight-bold" placeholder="Insurance / Agent Email" formControlName="AgentEmail" tabIndex="1">
+						<input matInput class="font-weight-bold" placeholder="Optional" formControlName="AgentEmail" tabIndex="1">
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.AgentEmail.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
