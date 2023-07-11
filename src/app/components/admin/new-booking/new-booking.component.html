@@ -9,14 +9,16 @@
 	</p>
 </ngx-spinner>
 <ngx-spinner name="normalspinner"></ngx-spinner>
-
+<div class="d-flex justify-content-end mr-3	">
+	<h3 class="m-0">  <span class="badge badge-secondary">Booking #123</span></h3>
+</div>
 
 
 <form class="container-fluid" [formGroup]="BookingForm" appInvalidControlScroll>
 	<div id="page-container">
 		<!-- Section - Booking Type -->
-		<div class="section-container mt-2">
-			<h2 class="border-bottom border-secondary pb-4">
+		<div class="section-container mt-0">
+			<h2 class="border-secondary">
 				Booking Type
 			</h2>
 			<div class="row px-4">
@@ -94,7 +96,7 @@
 
 		<!-- Client Accounts Section -->
 		<div class="section-container mt-2">
-			<h4 class="border-bottom border-secondary pb-4">
+			<h4 class=" border-secondary pb-4">
 				Client Accounts
 			</h4>
 
@@ -521,6 +523,10 @@
 			</ng-template>
 
 
+			
+		</div>
+		<!-- Client Accounts Section Ends -->
+		<div class="section-container mt-2">
 			<!-- Passenger Information -->
 			<div id="passenger-information" class="px-4 mt-4">
 				<h2>
@@ -630,12 +636,10 @@
 			</div>
 			<!-- Passenger Information Ends -->
 		</div>
-		<!-- Client Accounts Section Ends -->
-
 
 		<!-- Section - Affiliate/Loose Details -->
 		<div class="section-container mt-2">
-			<h2 class="border-bottom border-secondary pb-4">
+			<h2 class=" border-secondary pb-4">
 				Affiliate Details
 			</h2>
 			<!-- Affiliate Type -->
@@ -1218,6 +1222,8 @@
 
 				</div>
 			</div>
+			</div>
+			<div class="section-container mt-2">
 			<!-- Affiliate Driver Information Ends -->
 
 			<!-- Section Booking details start -->

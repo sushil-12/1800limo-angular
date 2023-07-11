@@ -18,8 +18,11 @@ mat-form-field input {
 	border-radius: 0 0px 10px 10px !important;
 	width: 130px !important;
 	max-width: 100% !important;
-	box-shadow: 5px 3px 20px -6px rgb(255 255 255);
+	box-shadow:5px 3px 20px -6px #080808;
 	border-radius: 12px;
+	font-weight: 600 !important;
+	background-color: #C3C6D5 !important;
+    color: #1a071a !important;
 }
 
 #navbarsExample05 {
@@ -50,6 +53,7 @@ section {
 .personalized_wrapper {
 	background-color: #000 !important;
 }
+
 
 #myTab {
 	li a {
@@ -93,6 +97,12 @@ section {
     // background-color: rgba(60,64,67,0.04);
     // background-size: 24px 24px;
 	scale: 1.5;
+}
+.goog-te-gadget .goog-te-combo {
+    margin: 15px 0 0 15px !important;
+    cursor: pointer !important;
+    background-color: #C3C6D5 !important;
+    color: #1a071a !important;
 }
 // .swap_btn:hover {
 // 	transform: scale(1.5); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
