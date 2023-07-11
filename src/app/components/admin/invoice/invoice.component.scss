@@ -134,6 +134,10 @@ button {
 	justify-content: center;
 }
 
+.modal-lg{
+	max-width: 688px !important;
+}
+
 #sendEmailModal .modal-content hr {
 	border: 2px solid var(--orange-color);
 	width: 180px;
