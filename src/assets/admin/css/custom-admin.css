@@ -29,7 +29,9 @@ div#goog-gt-tt {
 .goog-logo-link {
     display: none !important;
 }
-
+.goog-te-gadget {
+    color: transparent !important;
+}
 .goog-te-gadget .goog-te-combo {
     margin: 15px 0 0 15px !important;
     cursor: pointer !important;

@@ -18,10 +18,10 @@ mat-form-field input {
 	border-radius: 0 0px 10px 10px !important;
 	width: 130px !important;
 	max-width: 100% !important;
-	box-shadow:5px 3px 20px -6px #080808;
+	box-shadow: inset 0 0 8px #554d3fa8;
 	border-radius: 12px;
 	font-weight: 600 !important;
-	background-color: #C3C6D5 !important;
+	background-color: #d0d8ff !important ;
     color: #1a071a !important;
 }
 
@@ -30,7 +30,7 @@ mat-form-field input {
 }
 
 :host ::ng-deep .goog-te-gadget {
-	color: #011533 !important
+	color: transparent !important
 }
 
 :host ::ng-deep .VIpgJd-ZVi9od-l4eHX-hSRGPd {

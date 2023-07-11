@@ -13,6 +13,9 @@ $primary-color: var(--orange-color);
     max-height: 100%;
     object-fit: cover;
 }
+.aboutnw_sliderdesc p {
+    font-weight: 400 !important;
+}
 
 .radio-button {
     opacity: 0;
