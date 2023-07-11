@@ -22,7 +22,15 @@
 			width: 85.7%;
 		}
 }
-
+@media only screen and (max-width: 767px)
+{
+	
+		#vehicle-preview-button{
+			display: flex !important;;
+			justify-content: space-between !important;
+	
+		}
+}
 #fixed-section-container {
 	cursor: pointer;
 	#fixed-section-box {
