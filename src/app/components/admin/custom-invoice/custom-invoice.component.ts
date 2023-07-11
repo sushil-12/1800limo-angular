@@ -143,7 +143,7 @@ export class CustomInvoiceComponent implements OnInit {
   sendInvoiceToAny() {
 
     let data = {
-      email_addresses: this.emails
+      email_addresses: this.str_email
     }
 
 

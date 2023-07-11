@@ -1,9 +1,9 @@
 .mat-form-field-empty.mat-form-field-label {
     color: #808080;
 }
-button:hover {
-    opacity: .51;
-}
+// button:hover {
+//     opacity: .51;
+// }
 
 * {
     --green: #33c658;
@@ -231,3 +231,19 @@ section{
 //     position: absolute !important;
 //     top: 10% !important;
 // }
+@media only screen and (max-width: 1024px) {
+    button:hover{
+        animation-duration: 1s;
+        animation-name: slidein;
+    }
+}
+@keyframes slidein {
+    0% {
+        border-color: #669bd9;
+        background-color:#669bd9;
+    }
+    100% {
+        border-color: #669bd9;
+        background-color:#669bd9;
+    }
+  }
