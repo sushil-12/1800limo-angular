@@ -222,8 +222,9 @@ import { DemoAddIndividualComponent } from './demo-add-individual/demo-add-indiv
 		MatChipsModule,
 		MatTabsModule,
 		MatTableModule,
-		MatExpansionModule
+		MatExpansionModule,
+		MatIconModule
 	],
-	exports: [BookingStatusTextReplacePipe]
+	exports: [BookingStatusTextReplacePipe,MatIconModule]
 })
 export class AdminModule { }
