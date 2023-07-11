@@ -12,6 +12,21 @@
 	font-size: 0.9rem !important;
     padding: 0.295rem 0.5rem !important;
 }
+.text-rate{
+	color:var(--orange) !important;
+}
+
+.mob-height{
+	height: 100vh;
+}
+
+.sup-red{
+	color: red !important;
+    font-size: 22px;
+    position: relative;
+    top: 1px;
+    left: 8px;
+}
 .show {
 	overflow: visible;
 	height: auto;
