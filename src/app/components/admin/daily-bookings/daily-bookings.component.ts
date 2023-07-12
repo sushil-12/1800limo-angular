@@ -15,6 +15,7 @@ declare var $: any;
 import * as moment from "moment";
 import { ErrorDialogService } from "src/app/services/error-dialog/errordialog.service";
 import { MatSelect } from "@angular/material/select";
+import { DatePickerComponent } from "../../shared/date-picker/date-picker.component";
 
 @Component({
 	selector: "app-daily-bookings",
@@ -22,6 +23,7 @@ import { MatSelect } from "@angular/material/select";
 	styleUrls: ["./daily-bookings.component.scss"],
 })
 export class DailyBookingsComponent implements OnInit {
+	exampleHeader = DatePickerComponent
 	@ViewChild('inputmsg', { static: false }) message: ElementRef;
 	@ViewChild('select') select: MatSelect;
 	@ViewChild('sendEmailModalFocus') sendEmailModalFocus: any;

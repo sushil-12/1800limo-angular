@@ -16,13 +16,19 @@
 								placeholder="Start Date" id="id_4" (dateChangeWithFormat)="changeDate('startDate', $event)"
 								(click)="picker1.open()" [value]="startDate" [max]="endDate" readonly />
 							<mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-							<mat-datepicker #picker1></mat-datepicker>
+							<mat-datepicker #picker1 [calendarHeaderComponent]="exampleHeader"></mat-datepicker>
 						</mat-form-field>
+						<!-- <mat-form-field appearance="outline">
+							<mat-label>Start date <span class="asterisk"> * </span></mat-label>
+							<input matInput [matDatepicker]="picker3">
+							<mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+							<mat-datepicker #picker3 [calendarHeaderComponent]="exampleHeader"></mat-datepicker>
+						  </mat-form-field> -->
 					</div>
-	
+
 					<!-- End-Date -->
 					<div class="col-sm-4 col-md-4 my-2">
-						<mat-form-field appearance="outline" class="m-0">
+						<mat-form-field appearance="outline" class="m-0 text-xl">
 							<mat-label>
 								End Date <span class="asterisk"> * </span>
 							</mat-label>
@@ -30,8 +36,14 @@
 								placeholder="End Date" id="id_5" (dateChangeWithFormat)="changeDate('endDate',$event)"
 								(click)="picker2.open()" [value]="endDate" [min]="startDate" readonly />
 							<mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-							<mat-datepicker #picker2></mat-datepicker>
+							<mat-datepicker #picker2 [calendarHeaderComponent]="exampleHeader"></mat-datepicker>
 						</mat-form-field>
+						<!-- <mat-form-field appearance="outline">
+							<mat-label>End date <span class="asterisk"> * </span></mat-label>
+							<input matInput [matDatepicker]="picker4">
+							<mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
+							<mat-datepicker #picker4 [calendarHeaderComponent]="exampleHeader"></mat-datepicker>
+						  </mat-form-field> -->
 					</div>
 					<!-- Search Button -->
 						<div class="align-btn d-flex justify-content-around">
