@@ -2806,6 +2806,12 @@ table #navbarDropdownUserImage {
     background-color: var(--orange-color) !important;
 }
 
+@media (min-width : 570px)  and (max-width: 1023px){
+    .timepicker__header {
+        height:303px !important
+    }
+}
+
 .clock-face__number>span.active {
     background-color: var(--orange-color) !important;
     color: var(--clock-face-time-active-color);

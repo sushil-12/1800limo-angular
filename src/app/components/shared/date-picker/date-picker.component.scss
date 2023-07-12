@@ -14,3 +14,7 @@
   .example-double-arrow .mat-icon {
     margin: -22%;
   }
+
+ :host::ng-deep .bi::before, [class^="bi-"]::before, [class*=" bi-"]::before {
+  font-weight: 900 !important;
+}
