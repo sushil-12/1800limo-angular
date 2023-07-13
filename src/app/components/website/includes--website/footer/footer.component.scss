@@ -311,6 +311,7 @@ a.user-profile:active::after {
 	.dropdown-item.nav-disabled {
 		opacity: 0.6;
 		cursor : default;
+		background-color: #FFF;
 	}
 
 	.dropdown-item {
@@ -353,5 +354,8 @@ a.user-profile:active::after {
 	background: #8080805c !important;
 }
 
+.sub-admin-dropdown:hover{
+	background-color: #FFF !important;
+}
 
 

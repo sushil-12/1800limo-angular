@@ -252,9 +252,9 @@ export class NewBookingComponent implements OnInit {
 					cvv: ['']
 				})
 			}),
-			passenger_name: ['',this.customValidator.whitespace()],
-			passenger_email: ['', Validators.email],
-			passenger_cell: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
+			passenger_name: ['',[Validators.required,this.customValidator.whitespace()]],
+			passenger_email: ['',[Validators.required, Validators.email]],
+			passenger_cell: ['', [Validators.required,Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
 			passenger_cell_isd: ['+1'],
 			passenger_cell_country: ['us'],
 			total_passengers: [1],
