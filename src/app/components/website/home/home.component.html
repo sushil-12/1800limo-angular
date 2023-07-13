@@ -125,10 +125,7 @@
 				<div class="g-translator d-flex justify-content-center">
 					<div id="google_translate_element_home_desktop"></div>
 				</div>
-				<div class="d-flex justify-content-center">
-					<span>PREARRANGED</span>
-				</div>
-				<h3>FREE Instant Quotes<br> in Over <span data-toggle="modal" id="countriestooltip"
+				<h3>FREE Prearranged Quotes<br> in Over <span data-toggle="modal" id="countriestooltip"
 						class="showCountries p-0" data-placement="top" title="Click to check list of Countries"
 						data-target="#showCountriesModal" id="quotebot_redirect">40 Countries</span>
 				</h3>
@@ -581,7 +578,8 @@
 									<!-- Return Pickup Date -->
 									<div class="col-6 col-md-6">
 										<label>Return Pickup Date</label>
-										<div class="pickupdate returnPickupDate">
+										<!--class name for logo to reverse returnPickupDate -->
+										<div class="pickupdate">
 											<mat-form-field appearance="fill">
 												<input matInput [matDatepicker]="picker3" [min]="minDate"
 													placeholder="Return Pickup Date" id="returnPickupDate"
