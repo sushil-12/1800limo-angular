@@ -546,6 +546,9 @@
 						<div class="error-box">
 							<div class="error-message"
 								*ngIf="Form.passenger_name.invalid && (Form.passenger_name.touched || Form.passenger_name.dirty)">
+								<p class="text-danger text-lg m-0" *ngIf="Form.passenger_name.errors?.required">
+									This field is required
+								</p>
 								<p class="text-danger text-lg m-0" *ngIf="Form.passenger_name.errors?.whitespace">
 									Extra White Space are not Allowed
 								</p>
@@ -565,6 +568,9 @@
 						<div class="error-box">
 							<div class="error-message"
 								*ngIf="Form.passenger_email.invalid && (Form.passenger_email.touched || Form.passenger_email.dirty)">
+								<p class="text-danger text-lg m-0" *ngIf="Form.passenger_email.errors?.required">
+									This field is required
+								</p>
 								<p class="text-danger text-lg m-0" *ngIf="Form.passenger_email.errors?.email">
 									Please enter a valid Email Id
 								</p>
@@ -587,6 +593,10 @@
 						<div class="error-box">
 							<div class="error-message"
 								*ngIf="Form.passenger_cell.invalid && (Form.passenger_cell.touched || Form.passenger_cell.dirty)">
+								<p class="text-danger text-lg m-0"
+									*ngIf="Form.passenger_cell.errors?.required">
+									This field is required
+								</p>
 								<p class="text-danger text-lg m-0"
 									*ngIf="Form.passenger_cell.errors?.pattern;else otherError">
 									Only Numbers are Allowed

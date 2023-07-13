@@ -96,45 +96,8 @@ export class AffiliateStep1Component implements OnInit {
 	ngOnInit(): void {
 		this.currentUser = this.authService.currentUserValue;
 		//add amenity form validation
-		this.addAffiliateAccountForm = this.formBuilder.group({
-			id: [''],
-			AffiliateType: ['', Validators.required],
-			Title: ['mr', Validators.required],
-			FirstName: ['', Validators.required],
-			MiddleName: [''],
-			LastName: ['', Validators.required],
-			Gender: ['male', Validators.required],
-			CellNumber: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
-			CellIsd: ['+1', Validators.required],
-			Email: ['', [Validators.required,Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.]+\.[a-zA-Z]{2,}$/i)]],
-			badge_city :[''],
-			badge_city_name:[''],
-			latitude: [''],
-			longitude: [''],
-			FirstYearBusiness: ['', [Validators.required ,Validators.pattern("^[0-9]*$")]],
-			CellNumberCountry: ['us', Validators.required],
-			CompanyName: ['', Validators.required],
-			DBA: [''],
-			dispatchEmail: ['', [Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.]+\.[a-zA-Z]{2,}$/i)]],
-			Dispatch: [''],
-			DispatchIsd: ['+1'],
-			DispatchCountry: ['us'],
-			BusinessFrontPhoto: [''],
-			BusinessBackPhoto: [''],
-			CompanyCellNumber: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
-			CompanyCellIsd: ['+1', Validators.required],
-			CompanyCellNumberCountry: ['us'],
-			FaxCountry: ['us'],
-			Fax: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
-			cpcn_tpc: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
-			FaxIsd: ['+1', Validators.required],
-			LanguagesGet: this.formBuilder.array([]),
-			Associations: this.formBuilder.array([]),
-			AssociationsGet: this.formBuilder.array([]),
-			LanguagesSpoken: this.formBuilder.array([], [Validators.required]),
-			notify_sms: [true],
-			notify_email: [true],
-		});
+		this.buildAffiliateAccountForm();
+	
 	
 		this.addAffiliateAccountForm.patchValue({AffiliateType:'black_limo_operator'})
 		this.affiliateTypeSwitch("black_limo_operator");
@@ -323,6 +286,48 @@ export class AffiliateStep1Component implements OnInit {
 			this.affiliateTypeSwitch(sessionStorage.getItem("affiliateType"))
 		}
 		window.scrollTo(0,0);
+	}
+
+	buildAffiliateAccountForm(){
+		this.addAffiliateAccountForm = this.formBuilder.group({
+			id: [''],
+			AffiliateType: ['', Validators.required],
+			Title: ['mr', Validators.required],
+			FirstName: ['', Validators.required],
+			MiddleName: [''],
+			LastName: ['', Validators.required],
+			Gender: ['male', Validators.required],
+			CellNumber: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
+			CellIsd: ['+1', Validators.required],
+			Email: ['', [Validators.required,Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.]+\.[a-zA-Z]{2,}$/i)]],
+			badge_city :[''],
+			badge_city_name:[''],
+			latitude: [''],
+			longitude: [''],
+			FirstYearBusiness: ['', [Validators.required ,Validators.pattern("^[0-9]*$")]],
+			CellNumberCountry: ['us', Validators.required],
+			CompanyName: ['', Validators.required],
+			DBA: [''],
+			dispatchEmail: ['', [Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.]+\.[a-zA-Z]{2,}$/i)]],
+			Dispatch: [''],
+			DispatchIsd: ['+1'],
+			DispatchCountry: ['us'],
+			BusinessFrontPhoto: [''],
+			BusinessBackPhoto: [''],
+			CompanyCellNumber: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
+			CompanyCellIsd: ['+1', Validators.required],
+			CompanyCellNumberCountry: ['us'],
+			FaxCountry: ['us'],
+			Fax: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
+			cpcn_tpc: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
+			FaxIsd: ['+1', Validators.required],
+			LanguagesGet: this.formBuilder.array([]),
+			Associations: this.formBuilder.array([]),
+			AssociationsGet: this.formBuilder.array([]),
+			LanguagesSpoken: this.formBuilder.array([], [Validators.required]),
+			notify_sms: [true],
+			notify_email: [true],
+		});
 	}
 
 	affiliateTypeSwitch(affiliateType) {
@@ -702,9 +707,24 @@ export class AffiliateStep1Component implements OnInit {
 
 
 	resetForm() {
-		this.addAffiliateAccountForm.reset();
+		// this.addAffiliateAccountForm.reset();
+		this.buildAffiliateAccountForm();
+		this.addAffiliateAccountForm.patchValue({
+			id: this.response2.data.id,
+			Email: this.response2.data.Email,
+			dispatchEmail: this.response2.data.dispatchEmail,
+			Gender:''
+		});
 		this.BusinessFrontPhoto = "";
 		this.BusinessBackPhoto = "";
+		this.onLanguageChange("1", true);
+		if (this.response2.data.AffiliateType != "gig_operator")
+							{
+								this.addAffiliateAccountForm.patchValue({
+									dispatchEmail: this.response2.data.dispatchEmail,
+								});
+							}
+		this.addAffiliateAccountForm.updateValueAndValidity()
 	}
 
 }
