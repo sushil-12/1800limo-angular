@@ -659,11 +659,11 @@
 									
 									
 								</div>
-								<div class="row mt-2 pt-1 ml-1"  *ngIf="QBForm.service_type.value == 'round_trip'" style="background-color: #f5f4fe;; border-radius: 5px; width: 100%;">
-									<div class="google_map_logos ml-2">
-										<img src="../../../../assets/images/start_location.png" alt="img">
-										<img src="../../../../assets/images/three_dot_map.png" alt="img">
-										<img src="../../../../assets/images/location_logo.png" alt="img">
+								<div class="row mt-2 pt-1 ml-1"  *ngIf="QBForm.service_type.value == 'round_trip'">
+									<div class="google_map_logos">
+										<img src="../../../../assets/images/start_location.png" class="img-fluid" alt="img">
+										<img src="../../../../assets/images/three_dot_map.png" class="img-fluid" alt="img">
+										<img src="../../../../assets/images/location_logo.png" class="img-fluid" alt="img">
 									</div>
 									<!-- PICKUP AIRPORT -->
 									<div class="col-10 mr-0 pl-0 ml-0">
@@ -699,7 +699,9 @@
 									</div>
 								</div>
 								<!-- RETURN PICKUP AIRPORT ENDS -->
-
+								<div class="d-flex justify-content-center">
+									<span class="span-term-to">TO</span>
+								</div>
 								<!-- Return Pickup Address -->
 								<div class="errorMsg col-md-12" *ngIf="QBForm.dropoff_type.value != 'airport'">
 									<div class="input-contain d-flex align-items-center"

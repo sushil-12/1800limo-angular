@@ -665,6 +665,18 @@ export class HomeComponent implements OnInit {
 
 	selectedAirport(list: any, value: any, field_name: string): void {
 		console.log('selectedAirport-->>' , value)
+		if(field_name=='pickup_airport'){
+			this.SetFormValue('return_dropoff_airport_name', value.airport)
+		}
+		else if(field_name=='dropoff_airport'){
+			this.SetFormValue('return_pickup_airport_name', value.airport)
+		}
+		else if(field_name=='return_pickup_airport'){
+			this.SetFormValue('dropoff_airport_name', value.airport)
+		}
+		else if(field_name=='return_dropoff_airport'){
+			this.SetFormValue('pickup_airport_name', value.airport)
+		}
 		this.SetFormValue(field_name, value.id)
 		this.SetFormValue(field_name + '_name', value.airport)
 		this.SetFormValue(field_name + '_lat', value.lat)
