@@ -752,14 +752,25 @@
 				</div>
 			</div>
 		</section>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-7">
+			
+				</div>
+				<div class="col-md-5">
+					<div class="billing_inforamtion">
+						<ul class="d-flex justify-content-center">
+														<li><button class="custom-filled-button mr-2" (click)="submitForm()" [disabled]="disableSubmitButton"
+									tabIndex="1">SAVE</button> </li>
+							<li><button class="custom-filled-button mr-2" (click)="resetForm()" tabIndex="1">RESET</button> </li>
+						</ul>
+					</div>
+				</div>
+			</div>
+				</div>
+				
 	
-		<div class="billing_inforamtion">
-			<ul class="d-flex justify-content-end">
-				<li><button class="custom-filled-button mr-2" (click)="submitForm()" [disabled]="disableSubmitButton"
-						tabIndex="1">SAVE</button> </li>
-				<li><button class="custom-filled-button mr-2" (click)="resetForm()" tabIndex="1">RESET</button> </li>
-			</ul>
-		</div>
+		
 	</form>
 	<!-- </main> -->
 	
