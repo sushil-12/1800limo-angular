@@ -622,6 +622,9 @@ export class DailyBookingsComponent implements OnInit {
 		return ph;
 
 	}
+	formatText(text){
+		return text.replaceAll('_' , ' ')
+	}
 
 	bookingPreview: any
 	showBookingPreviewModal(booking_id: number) {
@@ -629,9 +632,11 @@ export class DailyBookingsComponent implements OnInit {
 		this.adminService.getBookingPreview(booking_id).subscribe((response: any) => {
 			this.spinner.hide();
 			this.bookingPreview = response.data;
+			if(this.bookingPreview?.payment_status=='unpaid'){
+				this.rates_preview = this.bookingPreview?.rates_preview
+			}
 			// for(let i in this.bookingPreview?.rates_preview){
 			// 	if(!Array.isArray(this.bookingPreview?.rates_preview[i])){
-				// this.rates_preview = this.bookingPreview?.rates_preview
 			// 	}
 			// }
 			this.bookingPreview['booking_instructions'] = this.bookingPreview?.booking_instructions.replaceAll('<br />', ' ')
