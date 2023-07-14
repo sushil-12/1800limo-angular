@@ -90,7 +90,7 @@
 							<mat-form-field appearance="outline" class="m-0">
 								<input matInput type="text" (keypress)="handleKeypressEvents()"
 									(keyup)="searchInBookings($event.target.value)" [value]="searchText"
-									placeholder="Search" id="keyword">
+									placeholder="Search" id="keyword" autofocus>
 							</mat-form-field>
 						</div>
 					</div>
@@ -983,7 +983,7 @@
 							</span>
 						</div>
 					</div>
-					<div class="row" *ngIf="bookingPreview?.rates_preview">
+					<!-- <div class="row" *ngIf="bookingPreview?.rates_preview">
 						<div class="col-md-4 key">
 							<span>
 								Stripe Fee
@@ -1019,19 +1019,22 @@
 
 							</span>
 						</div>
-					</div>
-					<!-- <div class="row" *ngFor="let item of rates_preview | keyvalue: returnZero; index as item_index">
-						<div class="col-md-4 key">
-							<span>
-								{{item?.key}}
-							</span>
-						</div>
-						<div class="col-md-8 value"  >
-							<span class="font-weight-bolder preview-output-feild">
-								 $ {{item?.value }}
-							</span>
-						</div>
 					</div> -->
+					<h4 class="font-weight m-0 mt-3" *ngIf="this.bookingPreview?.payment_status=='unpaid'">
+						Rates distribution
+					</h4>
+					<div class="row" *ngFor="let item of rates_preview | keyvalue: returnZero; index as item_index" >
+						<div class="col-md-4 key" *ngIf="item?.key!='ratesDetail' && item?.value!=0">
+							<span>
+								{{formatText(item?.key) | titlecase}}
+							</span>
+						</div>
+						<div class="col-md-8 value" *ngIf="item?.key!='ratesDetail'&& item?.value!=0">
+							<span class="font-weight-bolder preview-output-feild">
+								 $ {{(item?.value).toFixed(2)}}
+							</span>
+						</div>
+					</div>
 					<hr>
 					<!-- Grand Total -->
 					<div class="mx-2" *ngIf="bookingPreview?.meet_greet_choice_name">

@@ -699,9 +699,7 @@
 									</div>
 								</div>
 								<!-- RETURN PICKUP AIRPORT ENDS -->
-								<div class="d-flex justify-content-center">
-									<span class="span-term-to">TO</span>
-								</div>
+								
 								<!-- Return Pickup Address -->
 								<div class="errorMsg col-md-12" *ngIf="QBForm.dropoff_type.value != 'airport'">
 									<div class="input-contain d-flex align-items-center"
@@ -744,7 +742,9 @@
 									</ng-template>
 								</div>
 
-
+								<div class="d-flex justify-content-center">
+									<span class="span-term-to">TO</span>
+								</div>
 								<!-- RETURN DROPOFF AIRPORT -->
 								<div class="errorMsg col-12 col-md-12"
 									*ngIf="QBForm.pickup_type.value == 'airport'">
