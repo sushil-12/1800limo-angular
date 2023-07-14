@@ -93,7 +93,6 @@ section {
 .swap_btn{
 	margin-top: 36px;
     margin-left: -14px;
-    margin-right: 6px;
     // background-color: rgba(60,64,67,0.04);
     // background-size: 24px 24px;
 	scale: 1.5;
@@ -329,7 +328,7 @@ section {
 	}
 }
 .img-fluid{
-	height: 28px;
+	height: 30px;
 }
 
 .logbutton {
@@ -584,7 +583,7 @@ a.user-profile:active::after {
 	margin-bottom: 10px !important;
 	border: 2px solid;
 	border-radius: 14px;
-	box-shadow: 5px 3px 20px -6px rgb(1 1 1);
+	box-shadow: 5px 3px 20px -6px #f5f4fe;
 	background-color: #f5f4fe;
 }
 
@@ -610,7 +609,7 @@ a.user-profile:active::after {
 	flex-direction: column;
 	background-color: #f5f4fe;
 	border-radius: 18px;
-    padding: 8px;
+    padding: 5px;
 }
 
 /* ------------- TIME PICKER ------------------------ */
