@@ -91,9 +91,9 @@ section {
 	font-size: 16px !important;
 }
 .swap_btn{
-	margin-top: 25px;
-    margin-left: -10px;
-    margin-right: 9px;
+	margin-top: 36px;
+    margin-left: -14px;
+    margin-right: 6px;
     // background-color: rgba(60,64,67,0.04);
     // background-size: 24px 24px;
 	scale: 1.5;
@@ -329,7 +329,7 @@ section {
 	}
 }
 .img-fluid{
-	height: 24px;
+	height: 28px;
 }
 
 .logbutton {
@@ -585,6 +585,7 @@ a.user-profile:active::after {
 	border: 2px solid;
 	border-radius: 14px;
 	box-shadow: 5px 3px 20px -6px rgb(1 1 1);
+	background-color: #f5f4fe;
 }
 
 .cross-svg {
@@ -607,7 +608,9 @@ a.user-profile:active::after {
 .google_map_logos {
 	display: flex;
 	flex-direction: column;
-	background-color: #f5f4fe;;
+	background-color: #f5f4fe;
+	border-radius: 18px;
+    padding: 8px;
 }
 
 /* ------------- TIME PICKER ------------------------ */
@@ -869,6 +872,11 @@ a.user-profile:active::after {
 	padding-left: 40px;
 	border-radius: 5px;
 	z-index: 0;
+}
+.span-term-to{
+	color: #FFF;
+	font-size: 14px !important;
+    font-weight: 900;
 }
 
 // .bannerform_wrapper .quoteform_homewrapper .input-group .input-group-addon {

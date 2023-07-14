@@ -396,9 +396,10 @@
 
 
 								<!-- PICKUP/DROPOFF AIRPORT/ADDRESS -->
-								<div class="row m-0 pt-1" style="background-color:#f5f4fe;;border-radius: 5px;">
+								<!-- style="background-color:#f5f4fe;;border-radius: 5px;" -->
+								<div class="row m-0 pt-1">
 									
-									<div class="google_map_logos ml-2">
+									<div class="google_map_logos">
 										<img src="../../../../assets/images/start_location.png" alt="img" class="img-fluid">
 										<img src="../../../../assets/images/three_dot_map.png" alt="img" class="img-fluid">
 										<img src="../../../../assets/images/location_logo.png" alt="img" class="img-fluid">
@@ -485,7 +486,9 @@
 												</div>
 											</ng-template>
 										</div>
-
+										<div class="d-flex justify-content-center">
+											<span class="span-term-to">TO</span>
+										</div>
 										<!-- DROPOFF AIRPORT -->
 										<div class="errorMsg col-12 col-md-12"
 											*ngIf="QBForm.dropoff_type.value == 'airport'">
