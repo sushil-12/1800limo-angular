@@ -1055,6 +1055,7 @@ export class HomeComponent implements OnInit {
 
 	swapPickupDropoff(value: any) {
 		try {
+			this.spinner.show()
 			let temp_dropoff = {
 				dropoff_address: this.quoteBotForm.get('dropoff_address')?.value,
 				dropoff_airport: this.quoteBotForm.get('dropoff_airport')?.value,
@@ -1101,6 +1102,7 @@ export class HomeComponent implements OnInit {
 			})
 			
 		} catch (error) {
+			this.spinner.hide()
 			console.log(error)
 		}
 		// need to set values of vars
@@ -1114,7 +1116,7 @@ export class HomeComponent implements OnInit {
 			this.vars['return_dropoff_airport_name'] = this.vars['pickup_airport_name']
 			this.vars['return_pickup_airport_name'] = this.vars['dropoff_airport_name']
 		}
-
+		this.spinner.hide()
 
 	}
 	ReturnNameOfAirportById(id: any) {
