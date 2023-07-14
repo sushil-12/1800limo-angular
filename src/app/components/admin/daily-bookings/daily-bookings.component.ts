@@ -64,6 +64,7 @@ export class DailyBookingsComponent implements OnInit {
 	currentUser: any = JSON.parse(localStorage.getItem('userData')) || ''
 	subModules: any = localStorage.getItem('sub_modules') || '';
 	useDateFilter:boolean=true;
+	rates_preview: any;
 
 	constructor(
 		private adminService: AdminService,
@@ -628,6 +629,11 @@ export class DailyBookingsComponent implements OnInit {
 		this.adminService.getBookingPreview(booking_id).subscribe((response: any) => {
 			this.spinner.hide();
 			this.bookingPreview = response.data;
+			// for(let i in this.bookingPreview?.rates_preview){
+			// 	if(!Array.isArray(this.bookingPreview?.rates_preview[i])){
+				// this.rates_preview = this.bookingPreview?.rates_preview
+			// 	}
+			// }
 			this.bookingPreview['booking_instructions'] = this.bookingPreview?.booking_instructions.replaceAll('<br />', ' ')
 		})
 	}

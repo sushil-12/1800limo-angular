@@ -983,6 +983,55 @@
 							</span>
 						</div>
 					</div>
+					<div class="row" *ngIf="bookingPreview?.rates_preview">
+						<div class="col-md-4 key">
+							<span>
+								Stripe Fee
+							</span>
+						</div>
+						<div class="col-md-8 value"  >
+							<span class="font-weight-bolder preview-output-feild">
+								 $ {{(bookingPreview?.rates_preview?.stripe_fees).toFixed(2) }}
+							</span>
+						</div>
+					</div>
+					<div class="row" *ngIf="bookingPreview?.rates_preview">
+						<div class="col-md-4 key">
+							<span>
+								Affiliate share
+							</span>
+						</div>
+						<div class="col-md-8 value"  >
+							<span class="font-weight-bolder preview-output-feild">
+								 $ {{(bookingPreview?.rates_preview?.total_price - (bookingPreview?.rates_preview?.stripe_fees+bookingPreview?.rates_preview?.admin_share)).toFixed(2) }}
+							</span>
+						</div>
+					</div>
+					<div class="row" *ngIf="bookingPreview?.rates_preview">
+						<div class="col-md-4 key">
+							<span>
+								Admin share
+							</span>
+						</div>
+						<div class="col-md-8 value"  >
+							<span class="font-weight-bolder preview-output-feild">
+								$ {{(bookingPreview?.rates_preview?.stripe_fees+bookingPreview?.rates_preview?.admin_share).toFixed(2) }}
+
+							</span>
+						</div>
+					</div>
+					<!-- <div class="row" *ngFor="let item of rates_preview | keyvalue: returnZero; index as item_index">
+						<div class="col-md-4 key">
+							<span>
+								{{item?.key}}
+							</span>
+						</div>
+						<div class="col-md-8 value"  >
+							<span class="font-weight-bolder preview-output-feild">
+								 $ {{item?.value }}
+							</span>
+						</div>
+					</div> -->
 					<hr>
 					<!-- Grand Total -->
 					<div class="mx-2" *ngIf="bookingPreview?.meet_greet_choice_name">
