@@ -191,29 +191,15 @@
 					</div>
 				</div>
 				<div class="col-md-4">
-					<label class="selectYearBusinessLabel">First Year Pro Driver
-						<span class="asterisk">*</span></label>
-					<div class="selectStyle">
-						<select class="selectInputStyle" (click)="selectDropdownYearBusiness()"
-							formControlName="StartDate" tabindex="1">
-							<option *ngFor="let proDriverYear of proDriverYears" [value]="proDriverYear.value">
+					<mat-form-field appearance="outline">
+						<mat-label>First Year Pro Driver <span class="asterisk">*</span></mat-label>
+						<mat-select formControlName="StartDate" tabindex="1">
+							<mat-option value="">Choose Expiry Year</mat-option>
+							<mat-option *ngFor="let proDriverYear of proDriverYears" [value]="proDriverYear.value">
 								{{ proDriverYear.label }}
-							</option>
-						</select>
-						<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
-							style="enable-background: new 0 0 122.88 63.9" xml:space="preserve">
-							<style type="text/css">
-								.sty0 {
-									fill-rule: evenodd;
-									clip-rule: evenodd;
-								}
-							</style>
-							<g>
-								<polygon class="sty0" points="61.44,63.9 122.88,0 0,0 61.44,63.9" />
-							</g>
-						</svg>
-					</div>
+							</mat-option>
+						</mat-select>
+					</mat-form-field>
 					<div *ngIf="
 							(submittedForm && f.StartDate.errors) ||
 							(f.StartDate.touched && f.StartDate.errors)

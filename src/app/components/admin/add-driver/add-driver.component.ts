@@ -74,6 +74,7 @@ export class AddDriverComponent implements OnInit {
 	public stateOptions: any = [];
 
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
+	proDriverYears: any;
 	constructor(
 		private adminService: AdminService,
 		private router: Router,
@@ -108,7 +109,11 @@ export class AddDriverComponent implements OnInit {
 	}
 	ngOnInit(): void {
 		this.currentDate = formatDate(new Date(), 'yyyy-MM-dd', 'en');
-
+		this.httpClient
+		.get("assets/json/proDriverYears.json")
+		.subscribe((data: any) => {
+			this.proDriverYears = data;
+		});
 		//pick driver id from query params
 		this.activatedroute.queryParamMap
 			.subscribe((params) => {
@@ -123,6 +128,8 @@ export class AddDriverComponent implements OnInit {
 		this.affiliateType = this.currentUser.AffiliateType;
 
 		//add driver form validation
+		// start date validations before 
+		// [Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(4), this.customValidator.dashValidator(), this.customValidator.plusValidator()]
 		this.addDriverForm = this.formBuilder.group({
 			id: [''],//driver id for edit purpose
 			acc_id: [this.affiliateId, Validators.required],//affiliate account id
@@ -135,7 +142,7 @@ export class AddDriverComponent implements OnInit {
 			CellNumberCountry: ['us', Validators.required],
 			Email: ['', [Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
 			Dress: ['', Validators.required],
-			StartDate: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(4), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
+			StartDate: ['',Validators.required],
 			FluentLanguages: this.formBuilder.array([], [Validators.required]),
 			LanguagesGet: this.formBuilder.array([]),
 			Veteran: ['no'],
