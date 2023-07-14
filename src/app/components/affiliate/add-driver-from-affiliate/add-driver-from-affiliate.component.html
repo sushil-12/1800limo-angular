@@ -1391,21 +1391,27 @@
 		</div>
 	</section>
 </form>
-
-
-<div class="row flex flex-wrap-reverse my-4">
-	<button class="custom-filled-back-button m-2 mx-4" routerLink="/affiliate/step4">
-		BACK
-	</button>
-	<div class="col-md-auto mx-auto">
-		<button class="custom-filled-reset-button m-2" (click)="resetForm()" tabIndex="2">
-			RESET
-		</button>
-		<button class="custom-filled-button m-2" (click)="submitForm()" tabIndex="1">
-			SAVE
-		</button>
+<div class="container">
+	<div class="row py-4">
+		<div class="col-md-7">
+			<button class="custom-filled-back-button m-2 mx-4" routerLink="/affiliate/step4">
+				BACK
+			</button>
+		</div>
+		<div class="col-md-5 ">
+			<div class="d-flex justify-content-center">
+				<button class="custom-filled-reset-button m-2" (click)="resetForm()" tabIndex="2">
+					RESET
+				</button>
+				<button class="custom-filled-button m-2" (click)="submitForm()" tabIndex="1">
+					SAVE
+				</button>
+			</div>
+		</div>
 	</div>
-</div>
+		</div>
+
+
 
 
 

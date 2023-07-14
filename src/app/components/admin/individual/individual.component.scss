@@ -8,6 +8,10 @@
 	border: solid 3px;
     border-radius: 4px;
 }
+ .mat-form-field-appearance-outline .mat-form-field-label {
+    top: 1.3675em !important;
+}
+
 table {
 	width: 100;
 	white-space: break-spaces;
