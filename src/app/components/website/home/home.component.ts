@@ -115,7 +115,6 @@ export class HomeComponent implements OnInit {
 	ngOnInit() {
 		this.fetchAirportsData()
 
-
 		setTimeout(() => {
 
 			$('[data-toggle="modal"]').tooltip();//Bootstrap tooltip
@@ -419,6 +418,20 @@ export class HomeComponent implements OnInit {
 	 * Fill Return Details for the form
 	 */
 	fillReturnDetails() {
+		this.quoteBotForm.get('return_pickup_address').setValidators([Validators.required])
+		this.quoteBotForm.get('return_pickup_address_lat').setValidators([Validators.required])
+		this.quoteBotForm.get('return_pickup_address_long').setValidators([Validators.required])
+		this.quoteBotForm.get('return_dropoff_address').setValidators([Validators.required])
+		this.quoteBotForm.get('return_dropoff_address_lat').setValidators([Validators.required])
+		this.quoteBotForm.get('return_dropoff_address_long').setValidators([Validators.required])
+		this.quoteBotForm.get('return_pickup_airport').setValidators([Validators.required])
+		this.quoteBotForm.get('return_pickup_airport_lat').setValidators([Validators.required])
+		this.quoteBotForm.get('return_pickup_airport_long').setValidators([Validators.required])
+		this.quoteBotForm.get('return_dropoff_airport').setValidators([Validators.required])
+		this.quoteBotForm.get('return_dropoff_airport_lat').setValidators([Validators.required])
+		this.quoteBotForm.get('return_dropoff_airport_long').setValidators([Validators.required])
+		this.quoteBotForm.updateValueAndValidity()
+
 		this.quoteBotForm.patchValue({
 			return_pickup_address: this.QBForm.dropoff_address.value,
 			return_pickup_address_lat: this.QBForm.dropoff_address_lat.value,
@@ -446,39 +459,39 @@ export class HomeComponent implements OnInit {
 			dropoff_type: ['', Validators.required],
 			pickup_date: ['', Validators.required],
 			pickup_time: ['', Validators.required],
-			pickup_airport: ['', Validators.required],
+			pickup_airport: ['',Validators.required],
 			pickup_airport_name: [''],
-			pickup_airport_lat: ['', Validators.required],
-			pickup_airport_long: ['', Validators.required],
-			pickup_address: ['', Validators.required],
-			pickup_address_lat: ['', Validators.required],
-			pickup_address_long: ['', Validators.required],
-			dropoff_airport: ['', Validators.required],
+			pickup_airport_lat: ['',Validators.required],
+			pickup_airport_long: ['',Validators.required],
+			pickup_address: ['',Validators.required],
+			pickup_address_lat: ['',Validators.required],
+			pickup_address_long: ['',Validators.required],
+			dropoff_airport: ['',Validators.required],
 			dropoff_airport_name: [''],
-			dropoff_airport_lat: ['', Validators.required],
-			dropoff_airport_long: ['', Validators.required],
-			dropoff_address: ['', Validators.required],
-			dropoff_address_lat: ['', Validators.required],
-			dropoff_address_long: ['', Validators.required],
-			return_pickup_date: ['', Validators.required],
-			return_pickup_time: ['', Validators.required],
-			return_pickup_airport: ['', Validators.required],
+			dropoff_airport_lat: ['',Validators.required],
+			dropoff_airport_long: ['',Validators.required],
+			dropoff_address: ['',Validators.required],
+			dropoff_address_lat: ['',Validators.required],
+			dropoff_address_long: ['',Validators.required],
+			return_pickup_date: ['',],
+			return_pickup_time: ['',],
+			return_pickup_airport: ['',],
 			return_pickup_airport_name: [''],
-			return_pickup_airport_lat: ['', Validators.required],
-			return_pickup_airport_long: ['', Validators.required],
-			return_pickup_address: ['', Validators.required],
-			return_pickup_address_lat: ['', Validators.required],
-			return_pickup_address_long: ['', Validators.required],
-			return_dropoff_airport: ['', Validators.required],
+			return_pickup_airport_lat: ['',],
+			return_pickup_airport_long: ['',],
+			return_pickup_address: ['',],
+			return_pickup_address_lat: ['',],
+			return_pickup_address_long: ['',],
+			return_dropoff_airport: ['',],
 			return_dropoff_airport_name: [''],
-			return_dropoff_airport_lat: ['', Validators.required],
-			return_dropoff_airport_long: ['', Validators.required],
-			return_dropoff_address: ['', Validators.required],
-			return_dropoff_address_lat: ['', Validators.required],
-			return_dropoff_address_long: ['', Validators.required],
-			no_of_passenger: ['', Validators.required],
-			no_of_luggage: ['', Validators.required],
-			location_info: this.formBuilder.array([], Validators.required),
+			return_dropoff_airport_lat: ['',],
+			return_dropoff_airport_long: ['',],
+			return_dropoff_address: ['',],
+			return_dropoff_address_lat: ['',],
+			return_dropoff_address_long: ['',],
+			no_of_passenger: ['',],
+			no_of_luggage: ['',],
+			location_info: this.formBuilder.array([],),
 		});
 
 		if (this.quoteBotForm) {
@@ -499,7 +512,7 @@ export class HomeComponent implements OnInit {
 				booking_hour: previous_quotebot.booking_hour,
 				pickup_type: previous_quotebot.pickup_type,
 				dropoff_type: previous_quotebot.dropoff_type,
-				pickup_date: previous_quotebot.pickup_date,
+				pickup_date: new Date(previous_quotebot.pickup_date).toISOString().split('T')[0],
 				pickup_time: previous_quotebot.pickup_time,
 				pickup_airport: previous_quotebot.pickup_airport,
 				pickup_airport_name: previous_quotebot?.other_details?.pickup_airport_name,
@@ -536,7 +549,7 @@ export class HomeComponent implements OnInit {
 				location_info: previous_quotebot.location_info
 			})
 			this.vars = previous_quotebot.other_details
-			console.warn('pickup_time: ', this.QBForm.pickup_time.value)
+			console.warn('pickup_time: & date', this.QBForm.pickup_time.value, this.QBForm.pickup_date.value)
 			this.quoteBotSwitch(previous_quotebot.service_type)
 
 			if (new Date(this.QBForm.pickup_date.value).getDate() < new Date().getDate() || new Date(this.QBForm.pickup_date.value).getMonth() + 1 < new Date().getMonth() + 1) {
@@ -568,6 +581,7 @@ export class HomeComponent implements OnInit {
 			this.quoteBotSwitch('one_way')
 		}
 	}
+
 
 	getTimeHHMMSS(date, isExist) {
 		let now = new Date();
@@ -664,19 +678,8 @@ export class HomeComponent implements OnInit {
 	}
 
 	selectedAirport(list: any, value: any, field_name: string): void {
-		console.log('selectedAirport-->>' , value)
-		if(field_name=='pickup_airport'){
-			this.SetFormValue('return_dropoff_airport_name', value.airport)
-		}
-		else if(field_name=='dropoff_airport'){
-			this.SetFormValue('return_pickup_airport_name', value.airport)
-		}
-		else if(field_name=='return_pickup_airport'){
-			this.SetFormValue('dropoff_airport_name', value.airport)
-		}
-		else if(field_name=='return_dropoff_airport'){
-			this.SetFormValue('pickup_airport_name', value.airport)
-		}
+		console.log('selectedAirport-->>', value)
+
 		this.SetFormValue(field_name, value.id)
 		this.SetFormValue(field_name + '_name', value.airport)
 		this.SetFormValue(field_name + '_lat', value.lat)
@@ -686,11 +689,27 @@ export class HomeComponent implements OnInit {
 		if (field_name.includes('pickup_airport')) this.vars['return_dropoff_airport_name'] = value.airport
 		if (field_name.includes('dropoff_airport')) this.vars['return_pickup_airport_name'] = value.airport
 		this.fillReturnDetails()
+		try {
+			if (field_name == 'pickup_airport') {
+				this.SetFormValue('return_dropoff_airport_name', value.airport)
+			}
+			else if (field_name == 'dropoff_airport') {
+				this.SetFormValue('return_pickup_airport_name', value.airport)
+			}
+			else if (field_name == 'return_pickup_airport') {
+				this.SetFormValue('dropoff_airport_name', value.airport)
+			}
+			else if (field_name == 'return_dropoff_airport') {
+				this.SetFormValue('pickup_airport_name', value.airport)
+			}
+		} catch (error) {
+			console.log(error)
+		}
 	}
 
 	SetFormValue(field_name: string, value: string | number) {
 		console.log(`Filling ${value} into ${field_name}`)
-		this.quoteBotForm.get(field_name).setValue(value)
+		this.quoteBotForm.get(field_name)?.setValue(value)
 		this.quoteBotForm.updateValueAndValidity()
 	}
 
@@ -723,7 +742,7 @@ export class HomeComponent implements OnInit {
 			case 'pickup_airport':
 				console.log('resseting pickup address')
 				this.quoteBotForm.patchValue({
-					pickup_airport:'',
+					pickup_airport: '',
 					pickup_airport_name: '',
 					pickup_airport_lat: '',
 					pickup_airport_long: '',
@@ -916,29 +935,43 @@ export class HomeComponent implements OnInit {
 		// remove return keys for other than round_trip
 		if (form.get('service_type').value == "one_way" || form.get('service_type').value == 'charter_tour') {
 			console.log('Removing Controls ...')
-			for (const key in form.controls) {
-				if (key.includes('return_')) {
-					// clear all validators 
-					this.quoteBotForm.removeControl(key)
-					this.quoteBotForm.updateValueAndValidity()
-				}
-			}
+			// for (const key in form.controls) {
+			// 	if (key.includes('return_')) {
+			// 		// clear all validators 
+			// 		this.quoteBotForm.removeControl(key)
+			// 		this.quoteBotForm.updateValueAndValidity()
+			// 	}
+			// }
 
 
 			if (form.get('pickup_type').value == 'airport') {
+				console.log('clear validator for 1')
 				this.clearValidatorsAndReset(['pickup_address', 'pickup_address_lat', 'pickup_address_long'])
+				this.addRequiredValidators(['pickup_airport', 'pickup_airport_lat', 'pickup_airport_long'])
 			}
-			else if (this.QBForm.dropoff_type.value == 'airport') {
+			if (this.QBForm.dropoff_type.value == 'airport') {
+				console.log('clear validator for 2')
 				this.clearValidatorsAndReset(['dropoff_address', 'dropoff_address_lat', 'dropoff_address_long'])
+				this.addRequiredValidators(['dropoff_airport', 'dropoff_airport_lat', 'dropoff_airport_long'])
+
 			}
-			else if (this.QBForm.pickup_type.value != 'airport') {
+			if (this.QBForm.pickup_type.value != 'airport') {
+				console.log('clear validator for 3')
 				this.clearValidatorsAndReset(['pickup_airport', 'pickup_airport_lat', 'pickup_airport_long'])
+				this.addRequiredValidators(['pickup_address', 'pickup_address_lat', 'pickup_address_long'])
 			}
-			else {
-				this.clearValidatorsAndReset(['dropoff_airport', 'dropoff_airport_lat', 'dropoff_airport_long'])
-			}
+			// else {
+			// 	this.clearValidatorsAndReset(['dropoff_airport', 'dropoff_airport_lat', 'dropoff_airport_long'])
+			// }
 			this.quoteBotForm.updateValueAndValidity()
 		}
+		console.log('form validated')
+	}
+	addRequiredValidators(arr: Array<string>){
+		arr.forEach((item: string) => {
+			this.quoteBotForm.get(item).setValidators([Validators.required])
+			this.quoteBotForm.get(item).updateValueAndValidity()
+		})
 	}
 	clearValidatorsAndReset(arr: Array<string>) {
 		arr.forEach((item: string) => {
@@ -951,11 +984,11 @@ export class HomeComponent implements OnInit {
 		this.submitted = true
 		this.ValidateForm(this.quoteBotForm)
 
-		console.log(this.quoteBotForm);
+		console.log('checking form valid', this.quoteBotForm.valid, this.QBForm.location_info.valid);
 
 		// enter only if values excluding location_info presents invalid status
-		if (this.quoteBotForm.invalid && this.QBForm.location_info.valid) {
-			console.log(this.quoteBotForm)
+		if (!this.quoteBotForm.valid && !this.QBForm.location_info.valid) {
+			console.log('-------------->>>>>>>>>>>>>>>>>>> returning the form', this.quoteBotForm)
 			return
 		}
 
@@ -1068,7 +1101,7 @@ export class HomeComponent implements OnInit {
 			this.quoteBotForm.patchValue({
 				pickup_type: this.quoteBotForm.get('dropoff_type')?.value,
 				dropoff_type: this.quoteBotForm.get('pickup_type')?.value,
-	
+
 				dropoff_airport: this.quoteBotForm.get('pickup_airport')?.value,
 				dropoff_airport_name: this.ReturnNameOfAirportById(this.quoteBotForm.get('pickup_airport')?.value),
 				dropoff_address: this.quoteBotForm.get('pickup_address')?.value,
@@ -1083,8 +1116,8 @@ export class HomeComponent implements OnInit {
 				pickup_airport_long: temp_dropoff?.dropoff_airport_long,
 				pickup_address_lat: temp_dropoff?.dropoff_address_lat,
 				pickup_address_long: temp_dropoff?.dropoff_address_long,
-	
-	
+
+
 				return_pickup_airport: this.quoteBotForm.get('return_dropoff_airport')?.value,
 				return_pickup_airport_name: this.quoteBotForm.get('return_dropoff_airport_name')?.value,
 				return_pickup_address: this.quoteBotForm.get('return_dropoff_address')?.value,
@@ -1100,7 +1133,7 @@ export class HomeComponent implements OnInit {
 				return_dropoff_address_lat: this.quoteBotForm.get('return_pickup_address_lat')?.value,
 				return_dropoff_address_long: this.quoteBotForm.get('return_pickup_address_long')?.value,
 			})
-			
+
 		} catch (error) {
 			this.spinner.hide()
 			console.log(error)
@@ -1121,7 +1154,7 @@ export class HomeComponent implements OnInit {
 	}
 	ReturnNameOfAirportById(id: any) {
 		let airport = this.airports_data.find((item) => item.id == id)
-		console.log('airport found-->>>',id,airport)
+		console.log('airport found-->>>', id, airport)
 		return airport ? airport.airport : ''
 	}
 
