@@ -400,11 +400,13 @@
 								<div class="row m-0 pt-1">
 									
 									<div class="google_map_logos mr-1">
-										<img src="../../../../assets/images/start_location.png" alt="img" class="img-fluid">
-										<img src="../../../../assets/images/three_dot_map.png" alt="img" class="img-fluid">
-										<img src="../../../../assets/images/location_logo.png" alt="img" class="img-fluid">
+										<img src="../../../../assets/images/start_location.png" alt="img"
+											class="img-fluid">
+										<img src="../../../../assets/images/three_dot_map.png" alt="img"
+											class="img-fluid">
+										<img src="../../../../assets/images/location_logo.png" alt="img"
+											class="img-fluid">
 									</div>
-								
 									<!-- PICKUP AIRPORT -->
 									<div class="col-10 mr-0 pl-0 ml-0">
 										<div class="errorMsg col-12 col-md-12"
@@ -418,8 +420,8 @@
 														(keyup)="searchAirport($event.target.value, 'pickup_airport')"
 														[matAutocomplete]="airportautocomplete"
 														formControlName="pickup_airport_name">
-														<mat-autocomplete #airportautocomplete="matAutocomplete">
-															<mat-option
+													<mat-autocomplete #airportautocomplete="matAutocomplete">
+														<mat-option
 															*ngFor="let airport_obj of airports_data_pickup; index as airport_obj_index"
 															(onSelectionChange)="selectedAirport(airports_data_pickup, airport_obj, 'pickup_airport')">
 															{{ airport_obj.airport }}
@@ -436,6 +438,12 @@
 														<path
 															d="M 39.486328 6.9785156 A 1.50015 1.50015 0 0 0 38.439453 7.4394531 L 24 21.878906 L 9.5605469 7.4394531 A 1.50015 1.50015 0 0 0 8.484375 6.984375 A 1.50015 1.50015 0 0 0 7.4394531 9.5605469 L 21.878906 24 L 7.4394531 38.439453 A 1.50015 1.50015 0 1 0 9.5605469 40.560547 L 24 26.121094 L 38.439453 40.560547 A 1.50015 1.50015 0 1 0 40.560547 38.439453 L 26.121094 24 L 40.560547 9.5605469 A 1.50015 1.50015 0 0 0 39.486328 6.9785156 z" />
 													</svg>
+												</div>
+											</div>
+											<div *ngIf="submitted && QBForm.pickup_airport.errors;"
+												class="text-danger">
+												<div *ngIf="QBForm.pickup_airport.errors.required">
+													Pickup airport is required
 												</div>
 											</div>
 										</div>
@@ -501,8 +509,8 @@
 														(keyup)="searchAirport($event.target.value, 'dropoff_airport')"
 														[matAutocomplete]="dropoffairportautocomplete"
 														formControlName="dropoff_airport_name">
-														<mat-autocomplete #dropoffairportautocomplete="matAutocomplete">
-															<mat-option
+													<mat-autocomplete #dropoffairportautocomplete="matAutocomplete">
+														<mat-option
 															*ngFor="let airport_obj of airports_data_dropoff; index as airport_obj_index"
 															(onSelectionChange)="selectedAirport(airports_data_dropoff, airport_obj, 'dropoff_airport')">
 															{{ airport_obj.airport }}
@@ -519,6 +527,12 @@
 														<path
 															d="M 39.486328 6.9785156 A 1.50015 1.50015 0 0 0 38.439453 7.4394531 L 24 21.878906 L 9.5605469 7.4394531 A 1.50015 1.50015 0 0 0 8.484375 6.984375 A 1.50015 1.50015 0 0 0 7.4394531 9.5605469 L 21.878906 24 L 7.4394531 38.439453 A 1.50015 1.50015 0 1 0 9.5605469 40.560547 L 24 26.121094 L 38.439453 40.560547 A 1.50015 1.50015 0 1 0 40.560547 38.439453 L 26.121094 24 L 40.560547 9.5605469 A 1.50015 1.50015 0 0 0 39.486328 6.9785156 z" />
 													</svg>
+												</div>
+											</div>
+											<div *ngIf="submitted && QBForm.dropoff_airport.errors;"
+												class="text-danger">
+												<div *ngIf="QBForm.dropoff_airport.errors.required">
+													Dropoff airport is required
 												</div>
 											</div>
 										</div>
@@ -570,11 +584,12 @@
 										</div>
 									</div>
 									<div>
-										<img src="../../../../assets/images/swap_logo.png" alt="img" class="swap_btn" (click)="swapPickupDropoff('oneway')">
+										<img src="../../../../assets/images/swap_logo.png" alt="img" class="swap_btn"
+											(click)="swapPickupDropoff('oneway')">
 									</div>
 									<!-- PICKUP/DROPOFF AIRPORT/ADDRESS ENDS -->
 								</div>
-								
+
 
 								<!-- RETURN FIELDS [ROUND TRIP] -->
 								<div class="row" *ngIf="QBForm.service_type.value == 'round_trip'">
@@ -659,172 +674,186 @@
 									
 									
 								</div>
-								<div class="row mt-2 pt-1 ml-1"  *ngIf="QBForm.service_type.value == 'round_trip'">
+								<div class="row mt-2 pt-1 ml-1" *ngIf="QBForm.service_type.value == 'round_trip'">
 									<div class="google_map_logos">
-										<img src="../../../../assets/images/start_location.png" class="img-fluid" alt="img">
-										<img src="../../../../assets/images/three_dot_map.png" class="img-fluid" alt="img">
-										<img src="../../../../assets/images/location_logo.png" class="img-fluid" alt="img">
+										<img src="../../../../assets/images/start_location.png" class="img-fluid"
+											alt="img">
+										<img src="../../../../assets/images/three_dot_map.png" class="img-fluid"
+											alt="img">
+										<img src="../../../../assets/images/location_logo.png" class="img-fluid"
+											alt="img">
 									</div>
 									<!-- PICKUP AIRPORT -->
 									<div class="col-10 mr-0 pl-0 ml-0">
 										<div class="errorMsg col-12 col-md-12"
-									*ngIf="QBForm.dropoff_type.value == 'airport'">
-									<div class="input-contain d-flex align-items-center">
-										<div class="input-box">
-											<input type="text" placeholder="Return Airport Code / Name?"
-												#retairportinput id="return_pickup_airport"
-												class="input-f font-weight-bolder"
-												(keyup)="searchAirport($event.target.value, 'return_pickup_airport')"
-												[matAutocomplete]="returnpickupairportautocomplete"
-												formControlName="return_pickup_airport_name">
-												<mat-autocomplete #returnpickupairportautocomplete="matAutocomplete">
-													<mat-option
-													*ngFor="let airport_obj of airports_data_r_pickup; index as airport_obj_index"
-													(onSelectionChange)="selectedAirport(airports_data_r_pickup, airport_obj, 'return_pickup_airport')">
-													{{ airport_obj.airport }}
-												</mat-option>
-											</mat-autocomplete>
+											*ngIf="QBForm.dropoff_type.value == 'airport'">
+											<div class="input-contain d-flex align-items-center">
+												<div class="input-box">
+													<input type="text" placeholder="Return Airport Code / Name?"
+														#retairportinput id="return_pickup_airport"
+														class="input-f font-weight-bolder"
+														(keyup)="searchAirport($event.target.value, 'return_pickup_airport')"
+														[matAutocomplete]="returnpickupairportautocomplete"
+														formControlName="return_pickup_airport_name">
+													<mat-autocomplete
+														#returnpickupairportautocomplete="matAutocomplete">
+														<mat-option
+															*ngFor="let airport_obj of airports_data_r_pickup; index as airport_obj_index"
+															(onSelectionChange)="selectedAirport(airports_data_r_pickup, airport_obj, 'return_pickup_airport')">
+															{{ airport_obj.airport }}
+														</mat-option>
+													</mat-autocomplete>
+												</div>
+												<!-- [value]="fillAirportData(airports_data_r_pickup, 'return_pickup_airport', 'id', 'airport')" -->
+												<!-- CROSS SVG -->
+												<div class="cross-svg">
+													<svg *ngIf="retairportinput.value" fill="#000000"
+														xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"
+														class="crossStyle pickUpsvg" width="48px" height="48px"
+														name="svgType" (click)="reset('return_pickup_airport')">
+														<path
+															d="M 39.486328 6.9785156 A 1.50015 1.50015 0 0 0 38.439453 7.4394531 L 24 21.878906 L 9.5605469 7.4394531 A 1.50015 1.50015 0 0 0 8.484375 6.984375 A 1.50015 1.50015 0 0 0 7.4394531 9.5605469 L 21.878906 24 L 7.4394531 38.439453 A 1.50015 1.50015 0 1 0 9.5605469 40.560547 L 24 26.121094 L 38.439453 40.560547 A 1.50015 1.50015 0 1 0 40.560547 38.439453 L 26.121094 24 L 40.560547 9.5605469 A 1.50015 1.50015 0 0 0 39.486328 6.9785156 z" />
+													</svg>
+												</div>
+											</div>
+											<div *ngIf="submitted && QBForm.return_pickup_airport.errors;"
+												class="text-danger">
+												<div *ngIf="QBForm.return_pickup_airport.errors.required">
+													Return pickup airport is required
+												</div>
+											</div>
 										</div>
-										<!-- [value]="fillAirportData(airports_data_r_pickup, 'return_pickup_airport', 'id', 'airport')" -->
-										<!-- CROSS SVG -->
-										<div class="cross-svg">
-											<svg *ngIf="retairportinput.value" fill="#000000"
-												xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"
-												class="crossStyle pickUpsvg" width="48px" height="48px"
-												name="svgType" (click)="reset('return_pickup_airport')">
-												<path
-													d="M 39.486328 6.9785156 A 1.50015 1.50015 0 0 0 38.439453 7.4394531 L 24 21.878906 L 9.5605469 7.4394531 A 1.50015 1.50015 0 0 0 8.484375 6.984375 A 1.50015 1.50015 0 0 0 7.4394531 9.5605469 L 21.878906 24 L 7.4394531 38.439453 A 1.50015 1.50015 0 1 0 9.5605469 40.560547 L 24 26.121094 L 38.439453 40.560547 A 1.50015 1.50015 0 1 0 40.560547 38.439453 L 26.121094 24 L 40.560547 9.5605469 A 1.50015 1.50015 0 0 0 39.486328 6.9785156 z" />
-											</svg>
-										</div>
-									</div>
-								</div>
-								<!-- RETURN PICKUP AIRPORT ENDS -->
-								
-								<!-- Return Pickup Address -->
-								<div class="errorMsg col-md-12" *ngIf="QBForm.dropoff_type.value != 'airport'">
-									<div class="input-contain d-flex align-items-center"
-										[class.errorValid]="submitted && QBForm.return_pickup_address.errors">
-										<div class="input-box">
-											<input type="text"
-												[attr.placeholder]="QBForm.dropoff_type.value == 'city' ? 'City - Return Pickup Address' : 'Cruise Port Name / Address'"
-												id="return_pickup_address" #retaddressinput
-												matGoogleMapsAutocomplete
-												[value]="QBForm.return_pickup_address.value"
-												(onAutocompleteSelected)="onAutocompleteSelected($event, 'return_pickup_address')"
-												(onLocationSelected)="onLocationSelected($event, 'return_pickup_address')"
-												formControlName="return_pickup_address"
-												class="input-f font-weight-bolder">
-										</div>
-										<div class="cross-svg">
-											<svg *ngIf="retaddressinput.value" fill="#000000"
-												xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"
-												class="crossStyle pickUpsvg" width="48px" height="48px"
-												name="svgType" (click)="reset('return_pickup_address')">
-												<path
-													d="M 39.486328 6.9785156 A 1.50015 1.50015 0 0 0 38.439453 7.4394531 L 24 21.878906 L 9.5605469 7.4394531 A 1.50015 1.50015 0 0 0 8.484375 6.984375 A 1.50015 1.50015 0 0 0 7.4394531 9.5605469 L 21.878906 24 L 7.4394531 38.439453 A 1.50015 1.50015 0 1 0 9.5605469 40.560547 L 24 26.121094 L 38.439453 40.560547 A 1.50015 1.50015 0 1 0 40.560547 38.439453 L 26.121094 24 L 40.560547 9.5605469 A 1.50015 1.50015 0 0 0 39.486328 6.9785156 z" />
-											</svg>
-										</div>
-									</div>
-									<div *ngIf="submitted && QBForm.return_pickup_address.errors; else DropoffAddressError"
-										class="text-danger">
-										<div *ngIf="QBForm.return_pickup_address.errors.required">Return Pickup
-											Address is required
-										</div>
-									</div>
-									<input type="hidden" formControlName="return_pickup_address_lat">
-									<input type="hidden" formControlName="return_pickup_address_long">
-									<ng-template #DropoffAddressError>
-										<div *ngIf="submitted && QBForm.return_pickup_address_lat.errors;"
-											class="text-danger">
-											<div *ngIf="QBForm.return_pickup_address_lat.errors.required">Please
-												enter valid Return Pickup Address</div>
-										</div>
-									</ng-template>
-								</div>
+										<!-- RETURN PICKUP AIRPORT ENDS -->
 
-								<div class="d-flex justify-content-center">
-									<span class="span-term-to">TO</span>
-								</div>
-								<!-- RETURN DROPOFF AIRPORT -->
-								<div class="errorMsg col-12 col-md-12"
-									*ngIf="QBForm.pickup_type.value == 'airport'">
-									<div class="input-contain d-flex align-items-center">
-										<div class="input-box">
-											<input type="text" placeholder="Return Airport Code / Name?"
-												#retdropairportinput id="return_dropoff_airport"
-												class="input-f font-weight-bolder"
-												(keyup)="searchAirport($event.target.value, 'return_dropoff_airport')"
-												[matAutocomplete]="returndropoffairportautocomplete"
-												formControlName="return_dropoff_airport_name">
-												<mat-autocomplete #returndropoffairportautocomplete="matAutocomplete">
-													<mat-option
-													*ngFor="let airport_obj of airports_data_r_dropoff; index as airport_obj_index"
-													(onSelectionChange)="selectedAirport(airports_data_r_dropoff, airport_obj, 'return_dropoff_airport')">
-													{{ airport_obj.airport }}
-												</mat-option>
-											</mat-autocomplete>
+										<!-- Return Pickup Address -->
+										<div class="errorMsg col-md-12" *ngIf="QBForm.dropoff_type.value != 'airport'">
+											<div class="input-contain d-flex align-items-center"
+												[class.errorValid]="submitted && QBForm.return_pickup_address.errors">
+												<div class="input-box">
+													<input type="text"
+														[attr.placeholder]="QBForm.dropoff_type.value == 'city' ? 'City - Return Pickup Address' : 'Cruise Port Name / Address'"
+														id="return_pickup_address" #retaddressinput
+														matGoogleMapsAutocomplete
+														[value]="QBForm.return_pickup_address.value"
+														(onAutocompleteSelected)="onAutocompleteSelected($event, 'return_pickup_address')"
+														(onLocationSelected)="onLocationSelected($event, 'return_pickup_address')"
+														formControlName="return_pickup_address"
+														class="input-f font-weight-bolder">
+												</div>
+												<div class="cross-svg">
+													<svg *ngIf="retaddressinput.value" fill="#000000"
+														xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"
+														class="crossStyle pickUpsvg" width="48px" height="48px"
+														name="svgType" (click)="reset('return_pickup_address')">
+														<path
+															d="M 39.486328 6.9785156 A 1.50015 1.50015 0 0 0 38.439453 7.4394531 L 24 21.878906 L 9.5605469 7.4394531 A 1.50015 1.50015 0 0 0 8.484375 6.984375 A 1.50015 1.50015 0 0 0 7.4394531 9.5605469 L 21.878906 24 L 7.4394531 38.439453 A 1.50015 1.50015 0 1 0 9.5605469 40.560547 L 24 26.121094 L 38.439453 40.560547 A 1.50015 1.50015 0 1 0 40.560547 38.439453 L 26.121094 24 L 40.560547 9.5605469 A 1.50015 1.50015 0 0 0 39.486328 6.9785156 z" />
+													</svg>
+												</div>
+											</div>
+											<div *ngIf="submitted && QBForm.return_pickup_address.errors; else DropoffAddressError"
+												class="text-danger">
+												<div *ngIf="QBForm.return_pickup_address.errors.required">Return Pickup
+													Address is required
+												</div>
+											</div>
+											<input type="hidden" formControlName="return_pickup_address_lat">
+											<input type="hidden" formControlName="return_pickup_address_long">
+											<ng-template #DropoffAddressError>
+												<div *ngIf="submitted && QBForm.return_pickup_address_lat.errors;"
+													class="text-danger">
+													<div *ngIf="QBForm.return_pickup_address_lat.errors.required">Please
+														enter valid Return Pickup Address</div>
+												</div>
+											</ng-template>
 										</div>
-										<!-- [value]="fillAirportData(airports_data_r_dropoff, 'return_dropoff_airport', 'id', 'airport')" -->
-										<!-- CROSS SVG -->
-										<div class="cross-svg">
-											<svg *ngIf="retdropairportinput.value" fill="#000000"
-												xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"
-												class="crossStyle pickUpsvg" width="48px" height="48px"
-												name="svgType" (click)="reset('return_dropoff_airport')">
-												<path
-													d="M 39.486328 6.9785156 A 1.50015 1.50015 0 0 0 38.439453 7.4394531 L 24 21.878906 L 9.5605469 7.4394531 A 1.50015 1.50015 0 0 0 8.484375 6.984375 A 1.50015 1.50015 0 0 0 7.4394531 9.5605469 L 21.878906 24 L 7.4394531 38.439453 A 1.50015 1.50015 0 1 0 9.5605469 40.560547 L 24 26.121094 L 38.439453 40.560547 A 1.50015 1.50015 0 1 0 40.560547 38.439453 L 26.121094 24 L 40.560547 9.5605469 A 1.50015 1.50015 0 0 0 39.486328 6.9785156 z" />
-											</svg>
-										</div>
-									</div>
-								</div>
-								<!-- RETURN DROPOFF AIRPORT ENDS -->
 
-								<!-- Return Dropoff Address -->
-								<div class="errorMsg col-md-12" *ngIf="QBForm.pickup_type.value != 'airport'">
-									<div class="input-contain d-flex align-items-center"
-										[class.errorValid]="submitted && QBForm.return_dropoff_address.errors">
-										<div class="input-box">
-											<input type="text"
-												[attr.placeholder]="QBForm.pickup_type.value == 'city' ? 'City - Return Dropoff Address' : 'Cruise Port Name / Address'"
-												matGoogleMapsAutocomplete id="return_dropoff_address"
-												#retdropaddressinput formControlName="return_dropoff_address"
-												class="input-f font-weight-bolder"
-												[value]="QBForm.return_dropoff_address.value"
-												(onAutocompleteSelected)="onAutocompleteSelected($event, 'return_dropoff_address')"
-												(onLocationSelected)="onLocationSelected($event, 'return_dropoff_address')">
+										<div class="d-flex justify-content-center">
+											<span class="span-term-to">TO</span>
 										</div>
-										<div class="cross-svg">
-											<svg *ngIf="retdropaddressinput.value" fill="#000000"
-												xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"
-												class="crossStyle pickUpsvg" width="48px" height="48px"
-												name="svgType" (click)="reset('return_dropoff_address')">
-												<path
-													d="M 39.486328 6.9785156 A 1.50015 1.50015 0 0 0 38.439453 7.4394531 L 24 21.878906 L 9.5605469 7.4394531 A 1.50015 1.50015 0 0 0 8.484375 6.984375 A 1.50015 1.50015 0 0 0 7.4394531 9.5605469 L 21.878906 24 L 7.4394531 38.439453 A 1.50015 1.50015 0 1 0 9.5605469 40.560547 L 24 26.121094 L 38.439453 40.560547 A 1.50015 1.50015 0 1 0 40.560547 38.439453 L 26.121094 24 L 40.560547 9.5605469 A 1.50015 1.50015 0 0 0 39.486328 6.9785156 z" />
-											</svg>
+										<!-- RETURN DROPOFF AIRPORT -->
+										<div class="errorMsg col-12 col-md-12"
+											*ngIf="QBForm.pickup_type.value == 'airport'">
+											<div class="input-contain d-flex align-items-center">
+												<div class="input-box">
+													<input type="text" placeholder="Return Airport Code / Name?"
+														#retdropairportinput id="return_dropoff_airport"
+														class="input-f font-weight-bolder"
+														(keyup)="searchAirport($event.target.value, 'return_dropoff_airport')"
+														[matAutocomplete]="returndropoffairportautocomplete"
+														formControlName="return_dropoff_airport_name">
+													<mat-autocomplete
+														#returndropoffairportautocomplete="matAutocomplete">
+														<mat-option
+															*ngFor="let airport_obj of airports_data_r_dropoff; index as airport_obj_index"
+															(onSelectionChange)="selectedAirport(airports_data_r_dropoff, airport_obj, 'return_dropoff_airport')">
+															{{ airport_obj.airport }}
+														</mat-option>
+													</mat-autocomplete>
+												</div>
+												<!-- [value]="fillAirportData(airports_data_r_dropoff, 'return_dropoff_airport', 'id', 'airport')" -->
+												<!-- CROSS SVG -->
+												<div class="cross-svg">
+													<svg *ngIf="retdropairportinput.value" fill="#000000"
+														xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"
+														class="crossStyle pickUpsvg" width="48px" height="48px"
+														name="svgType" (click)="reset('return_dropoff_airport')">
+														<path
+															d="M 39.486328 6.9785156 A 1.50015 1.50015 0 0 0 38.439453 7.4394531 L 24 21.878906 L 9.5605469 7.4394531 A 1.50015 1.50015 0 0 0 8.484375 6.984375 A 1.50015 1.50015 0 0 0 7.4394531 9.5605469 L 21.878906 24 L 7.4394531 38.439453 A 1.50015 1.50015 0 1 0 9.5605469 40.560547 L 24 26.121094 L 38.439453 40.560547 A 1.50015 1.50015 0 1 0 40.560547 38.439453 L 26.121094 24 L 40.560547 9.5605469 A 1.50015 1.50015 0 0 0 39.486328 6.9785156 z" />
+													</svg>
+												</div>
+											</div>
 										</div>
-									</div>
-									<div *ngIf="submitted && QBForm.return_dropoff_address.errors; else DropoffAddressError"
-										class="text-danger">
-										<div *ngIf="QBForm.return_dropoff_address.errors.required">Return Drop Off
-											Address is required
+										<!-- RETURN DROPOFF AIRPORT ENDS -->
+
+										<!-- Return Dropoff Address -->
+										<div class="errorMsg col-md-12" *ngIf="QBForm.pickup_type.value != 'airport'">
+											<div class="input-contain d-flex align-items-center"
+												[class.errorValid]="submitted && QBForm.return_dropoff_address.errors">
+												<div class="input-box">
+													<input type="text"
+														[attr.placeholder]="QBForm.pickup_type.value == 'city' ? 'City - Return Dropoff Address' : 'Cruise Port Name / Address'"
+														matGoogleMapsAutocomplete id="return_dropoff_address"
+														#retdropaddressinput formControlName="return_dropoff_address"
+														class="input-f font-weight-bolder"
+														[value]="QBForm.return_dropoff_address.value"
+														(onAutocompleteSelected)="onAutocompleteSelected($event, 'return_dropoff_address')"
+														(onLocationSelected)="onLocationSelected($event, 'return_dropoff_address')">
+												</div>
+												<div class="cross-svg">
+													<svg *ngIf="retdropaddressinput.value" fill="#000000"
+														xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"
+														class="crossStyle pickUpsvg" width="48px" height="48px"
+														name="svgType" (click)="reset('return_dropoff_address')">
+														<path
+															d="M 39.486328 6.9785156 A 1.50015 1.50015 0 0 0 38.439453 7.4394531 L 24 21.878906 L 9.5605469 7.4394531 A 1.50015 1.50015 0 0 0 8.484375 6.984375 A 1.50015 1.50015 0 0 0 7.4394531 9.5605469 L 21.878906 24 L 7.4394531 38.439453 A 1.50015 1.50015 0 1 0 9.5605469 40.560547 L 24 26.121094 L 38.439453 40.560547 A 1.50015 1.50015 0 1 0 40.560547 38.439453 L 26.121094 24 L 40.560547 9.5605469 A 1.50015 1.50015 0 0 0 39.486328 6.9785156 z" />
+													</svg>
+												</div>
+											</div>
+											<div *ngIf="submitted && QBForm.return_dropoff_address.errors; else DropoffAddressError"
+												class="text-danger">
+												<div *ngIf="QBForm.return_dropoff_address.errors.required">Return Drop
+													Off
+													Address is required
+												</div>
+											</div>
+											<input type="hidden" formControlName="return_dropoff_address_lat">
+											<input type="hidden" formControlName="return_dropoff_address_long">
+											<ng-template #DropoffAddressError>
+												<div *ngIf="submitted && QBForm.return_dropoff_address_lat.errors;"
+													class="text-danger">
+													<div *ngIf="QBForm.return_dropoff_address_lat.errors.required">
+														Please
+														enter valid Return Drop Off Address</div>
+												</div>
+											</ng-template>
 										</div>
-									</div>
-									<input type="hidden" formControlName="return_dropoff_address_lat">
-									<input type="hidden" formControlName="return_dropoff_address_long">
-									<ng-template #DropoffAddressError>
-										<div *ngIf="submitted && QBForm.return_dropoff_address_lat.errors;"
-											class="text-danger">
-											<div *ngIf="QBForm.return_dropoff_address_lat.errors.required">Please
-												enter valid Return Drop Off Address</div>
-										</div>
-									</ng-template>
-								</div>
 
 
 
 									</div>
 									<div>
-										<img src="../../../../assets/images/swap_logo.png" alt="img" class="swap_btn" (click)="swapPickupDropoff('roundtrip')">
+										<img src="../../../../assets/images/swap_logo.png" alt="img" class="swap_btn"
+											(click)="swapPickupDropoff('roundtrip')">
 									</div>
 									<!-- PICKUP/DROPOFF AIRPORT/ADDRESS ENDS -->
 								</div>
@@ -832,11 +861,11 @@
 
 								<span>1 large luggage = 2 carry on. Golf Bag / Skis = Minivan / SUV</span>
 
-								
+
 							</form>
 							<div id="search-button-container">
 								<div id="search-button-box">
-									<button type="button" class="custom-filled-button" (click)="fileTheQuote()">
+									<button type="submit" class="custom-filled-button" (click)="fileTheQuote()">
 										Search Rates
 									</button>
 								</div>
