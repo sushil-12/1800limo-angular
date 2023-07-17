@@ -1516,9 +1516,9 @@
 					<hr>
 
 					<!-- Rate Distribution Information -->
-					<div class="distribution_rate" *ngIf="bookingPreview.loose_affiliate!==null">
+					<div class="distribution_rate" *ngIf="bookingPreview.affiliate_type === 'affiliate' ">
 						<h4 class="font-weight-bolder m-0 my-3">
-							Rates Distribution
+							Rates Distribution {{bookingPreview.loose_affiliate}}
 						</h4>
 
 						<div class="mx-2">
@@ -1530,7 +1530,7 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										{{rates_preview?.ride_base_rate.toFixed(2)}}
+										${{rates_preview?.ride_base_rate.toFixed(2)}}
 									</span>
 									(Fare Base Rate)
 								</div>
@@ -1546,7 +1546,7 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										{{rates_preview?.admin_share.toFixed(2) }}
+										${{rates_preview?.admin_share.toFixed(2) }}
 									</span>
 									(25% of Base Rate)
 								</div>
@@ -1562,7 +1562,7 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										{{rates_preview?.other_taxes.toFixed(2)}}
+										${{rates_preview?.other_taxes.toFixed(2)}}
 									</span>
 									(Total of all taxes and other charges)
 								</div>
@@ -1577,7 +1577,7 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										{{rates_preview?.total_price.toFixed(2)}}
+										${{rates_preview?.total_price.toFixed(2)}}
 									</span>
 									(Actual Cost to Customer)
 								</div>
@@ -1592,7 +1592,7 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										{{rates_preview?.stripe_fees.toFixed(2)}}
+										${{rates_preview?.stripe_fees.toFixed(2)}}
 									</span>
 									(Platform fee 2.9%  + 30 cents - Paid from Admin share)
 								</div>
@@ -1607,7 +1607,7 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										{{(rates_preview?.total_price - rates_preview?.stripe_fees).toFixed(2)}} 
+										${{(rates_preview?.total_price - rates_preview?.stripe_fees).toFixed(2)}} 
 									</span>
 									(Excluding platform fee)
 								</div>
@@ -1623,7 +1623,7 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										{{rates_preview?.affiliate_share.toFixed(2)}}
+										${{rates_preview?.affiliate_share.toFixed(2)}}
 									</span>
 									( Total Price - (Admin share + Stripe fees) ) 
 								</div>
