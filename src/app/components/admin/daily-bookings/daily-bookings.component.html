@@ -1,73 +1,74 @@
 <ngx-spinner></ngx-spinner>
 <main>
 	<!-- Main page content-->
-		<section class="adminbox_shadow user_information">
-			<h2 class="headinginfo">Admin Daily Bookings </h2>
-			<div class="containeredd mt-1 ">
+	<section class="adminbox_shadow user_information">
+		<h2 class="headinginfo">Admin Daily Bookings </h2>
+		<div class="containeredd mt-1 ">
 
-				<div class="row my-2 align-items-center">
-					<!-- Start-Date -->
-					<div class="col-sm-4 col-md-4 my-2">
-						<mat-form-field appearance="outline" class="m-0 text-xl">
-							<mat-label>
-								Start Date <span class="asterisk"> * </span>
-							</mat-label>
-							<input matInput [setOutputDateFormat]="outputDateFormat" [matDatepicker]="picker1"
-								placeholder="Start Date" id="id_4" (dateChangeWithFormat)="changeDate('startDate', $event)"
-								(click)="picker1.open()" [value]="startDate" [max]="endDate" readonly />
-							<mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-							<mat-datepicker #picker1 [calendarHeaderComponent]="exampleHeader"></mat-datepicker>
-						</mat-form-field>
-						<!-- <mat-form-field appearance="outline">
+			<div class="row my-2 align-items-center">
+				<!-- Start-Date -->
+				<div class="col-sm-4 col-md-4 my-2">
+					<mat-form-field appearance="outline" class="m-0 text-xl">
+						<mat-label>
+							Start Date <span class="asterisk"> * </span>
+						</mat-label>
+						<input matInput [setOutputDateFormat]="outputDateFormat" [matDatepicker]="picker1"
+							placeholder="Start Date" id="id_4" (dateChangeWithFormat)="changeDate('startDate', $event)"
+							(click)="picker1.open()" [value]="startDate" [max]="endDate" readonly />
+						<mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+						<mat-datepicker #picker1 [calendarHeaderComponent]="exampleHeader"></mat-datepicker>
+					</mat-form-field>
+					<!-- <mat-form-field appearance="outline">
 							<mat-label>Start date <span class="asterisk"> * </span></mat-label>
 							<input matInput [matDatepicker]="picker3">
 							<mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
 							<mat-datepicker #picker3 [calendarHeaderComponent]="exampleHeader"></mat-datepicker>
 						  </mat-form-field> -->
-					</div>
+				</div>
 
-					<!-- End-Date -->
-					<div class="col-sm-4 col-md-4 my-2">
-						<mat-form-field appearance="outline" class="m-0 text-xl">
-							<mat-label>
-								End Date <span class="asterisk"> * </span>
-							</mat-label>
-							<input matInput [setOutputDateFormat]="outputDateFormat" [matDatepicker]="picker2"
-								placeholder="End Date" id="id_5" (dateChangeWithFormat)="changeDate('endDate',$event)"
-								(click)="picker2.open()" [value]="endDate" [min]="startDate" readonly />
-							<mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-							<mat-datepicker #picker2 [calendarHeaderComponent]="exampleHeader"></mat-datepicker>
-						</mat-form-field>
-						<!-- <mat-form-field appearance="outline">
+				<!-- End-Date -->
+				<div class="col-sm-4 col-md-4 my-2">
+					<mat-form-field appearance="outline" class="m-0 text-xl">
+						<mat-label>
+							End Date <span class="asterisk"> * </span>
+						</mat-label>
+						<input matInput [setOutputDateFormat]="outputDateFormat" [matDatepicker]="picker2"
+							placeholder="End Date" id="id_5" (dateChangeWithFormat)="changeDate('endDate',$event)"
+							(click)="picker2.open()" [value]="endDate" [min]="startDate" readonly />
+						<mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+						<mat-datepicker #picker2 [calendarHeaderComponent]="exampleHeader"></mat-datepicker>
+					</mat-form-field>
+					<!-- <mat-form-field appearance="outline">
 							<mat-label>End date <span class="asterisk"> * </span></mat-label>
 							<input matInput [matDatepicker]="picker4">
 							<mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
 							<mat-datepicker #picker4 [calendarHeaderComponent]="exampleHeader"></mat-datepicker>
 						  </mat-form-field> -->
+				</div>
+				<!-- Search Button -->
+				<div class="align-btn d-flex justify-content-around">
+					<div class="col-sm-2 ml-n5">
+						<button class="custom-filled-button orange-button"
+							style="color:#fff;padding: 5px 12px !important;"
+							(click)="loadBookings(null, startDate, endDate, searchText); saveCookie('startDate', startDate); saveCookie('endDate', endDate)">
+							Search
+						</button>
 					</div>
-					<!-- Search Button -->
-						<div class="align-btn d-flex justify-content-around">
-							<div class="col-sm-2 ml-n5">
-								<button class="custom-filled-button orange-button"
-									style="color:#fff;padding: 5px 12px !important;"
-									(click)="loadBookings(null, startDate, endDate, searchText); saveCookie('startDate', startDate); saveCookie('endDate', endDate)">
-									Search
-								</button>
-							</div>
-							<div class="col-sm-2">
-								<button class="custom-filled-back-button"
-									style="white-space: nowrap;color:#fff;padding: 5px 12px !important;"
-									(click)="reset(); loadBookings(null, startDate, endDate, searchText)">
-									Reset
-								</button>
-							</div>
-						</div>
+					<div class="col-sm-2">
+						<button class="custom-filled-back-button"
+							style="white-space: nowrap;color:#fff;padding: 5px 12px !important;"
+							(click)="reset(); loadBookings(null, startDate, endDate, searchText)">
+							Reset
+						</button>
+					</div>
 				</div>
-				<div>
-					<p><mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">Use Date filter</mat-checkbox></p>
-				</div>
-				<div class="row my-2 mb-3">
-					<!-- <div class="col-md-3">
+			</div>
+			<div>
+				<p><mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">Use Date
+						filter</mat-checkbox></p>
+			</div>
+			<div class="row my-2 mb-3">
+				<!-- <div class="col-md-3">
 						<div id="filter-type">
 							<mat-form-field appearance="outline" class="m-0">
 								<mat-label>
@@ -85,225 +86,233 @@
 							</mat-form-field>
 						</div>
 					</div> -->
-					<div class="col-md-12">
-						<div id="search-field">
-							<mat-form-field appearance="outline" class="m-0">
-								<input matInput type="text" (keypress)="handleKeypressEvents()"
-									(keyup)="searchInBookings($event.target.value)" [value]="searchText"
-									placeholder="Search" id="keyword" autofocus>
-							</mat-form-field>
-						</div>
+				<div class="col-md-12">
+					<div id="search-field">
+						<mat-form-field appearance="outline" class="m-0">
+							<input matInput type="text" (keypress)="handleKeypressEvents()"
+								(keyup)="searchInBookings($event.target.value)" [value]="searchText"
+								placeholder="Search" id="keyword" autofocus>
+						</mat-form-field>
 					</div>
 				</div>
 			</div>
-			<div class="containeredd driverside_table">
-				<div class="row">
-					<div class="col-md-12 custom_table">
-						<div class="table-responsive" style="min-height: 350px" *ngIf="!noError">
-							<table class="table table-dark table-striped table-bordered dataTable dt-responsive"
-								id="dataTable" role="grid" aria-describedby="dataTable_info" cellspacing="0">
-								<thead>
-									<tr role="row">
-										<th>Actions</th>
-										<th>Booking</th>
-										<th>Status</th>
-										<th>Date</th>
-										<th>Pax</th>
-										<th>Driver</th>
-										<th>Vehicle</th>
-										<!-- <th>Status</th> -->
-									</tr>
-								</thead>
-								<tbody>
-									<tr role="row" class="odd" *ngFor="let booking of bookings">
-										<td>
-											<a class="user-profileded view-button btn-transparent-dark dropdown-toggle font-weight-bold"
-												href="javascript:void(0);" role="button" data-toggle="dropdown"
-												aria-haspopup="true" aria-expanded="false">
-												<span>View</span>
-											</a>
-											<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
-												aria-labelledby="navbarDropdownUserImage">
-												<a class="dropdown-item" [routerLink]="['/admin/new-booking']"
+		</div>
+		<div class="containeredd driverside_table">
+			<div class="row">
+				<div class="col-md-12 custom_table">
+					<div class="table-responsive" style="min-height: 350px" *ngIf="!noError">
+						<table class="table table-dark table-striped table-bordered dataTable dt-responsive"
+							id="dataTable" role="grid" aria-describedby="dataTable_info" cellspacing="0">
+							<thead>
+								<tr role="row">
+									<th>Actions</th>
+									<th>Booking</th>
+									<th>Status</th>
+									<th>Date</th>
+									<th>Pax</th>
+									<th>Driver</th>
+									<th>Vehicle</th>
+									<!-- <th>Status</th> -->
+								</tr>
+							</thead>
+							<tbody>
+								<tr role="row" class="odd" *ngFor="let booking of bookings">
+									<td>
+										<a class="user-profileded view-button btn-transparent-dark dropdown-toggle font-weight-bold"
+											href="javascript:void(0);" role="button" data-toggle="dropdown"
+											aria-haspopup="true" aria-expanded="false">
+											<span>View</span>
+										</a>
+										<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
+											aria-labelledby="navbarDropdownUserImage">
+											<a class="dropdown-item" [routerLink]="['/admin/new-booking']"
 												*ngIf="currentUser?.RoleName == 'admin' || subModules.includes('edit_booking')"
-													[queryParams]="{bookingId: booking.booking_id, updateType: 'edit'}">
-													
-													<div class="dropdown-item-icon"></div>
-													Edit
-												</a>
-												<a class="dropdown-item" data-toggle="modal"
-													data-target="#return_repeat_booking_Modal"
-													[routerLink]="['/admin/new-booking']"
-													[queryParams]="{bookingId: booking.booking_id, updateType: 'repeat'}"
-													*ngIf="currentUser?.RoleName == 'admin' || subModules.includes('repeat_booking')" >
-													<div class="dropdown-item-icon" *></div>
-													Repeat
-												</a>
-												<a *ngIf="booking.service_type=='oneway' && (currentUser?.RoleName == 'admin' || subModules.includes('repeat_booking'))" class="dropdown-item"
-													data-toggle="modal" data-target="#return_repeat_booking_Modal"
-													[routerLink]="['/admin/new-booking']"
-													[queryParams]="{bookingId: booking.booking_id, updateType: 'return'}" >
-													<div class="dropdown-item-icon"></div>
-													Return
-												</a>
-												<a class="dropdown-item" [routerLink]="['/admin/finalize-booking']"
-													[queryParams]="{bookingId: booking.booking_id}"
-													*ngIf="currentUser?.RoleName == 'admin' || subModules.includes('finalize_booking')">
-													<!-- *ngIf="booking.payment_status!='paid'" -->
-													<div class="dropdown-item-icon"></div>
-													Finalize
-												</a>
-												<a class="dropdown-item" [routerLink]="['/admin/invoice-summary']"
-													[queryParams]="{bookingId: booking.booking_id}"
-													*ngIf="(booking.payment_status=='paid' || booking.payment_status=='refund' ||  booking.payment_status=='partial_paid') && (currentUser?.RoleName == 'admin' || subModules.includes('invoice_booking'))" >
-													<div class="dropdown-item-icon"></div>
-													Invoice
-												</a>
-												<!-- <a class="dropdown-item" (click)="changeBookingStatus(booking.booking_id)"
+												[queryParams]="{bookingId: booking.booking_id, updateType: 'edit'}">
+
+												<div class="dropdown-item-icon"></div>
+												Edit
+											</a>
+											<a class="dropdown-item" data-toggle="modal"
+												data-target="#return_repeat_booking_Modal"
+												[routerLink]="['/admin/new-booking']"
+												[queryParams]="{bookingId: booking.booking_id, updateType: 'repeat'}"
+												*ngIf="currentUser?.RoleName == 'admin' || subModules.includes('repeat_booking')">
+												<div class="dropdown-item-icon" *></div>
+												Repeat
+											</a>
+											<a *ngIf="booking.service_type=='oneway' && (currentUser?.RoleName == 'admin' || subModules.includes('repeat_booking'))"
+												class="dropdown-item" data-toggle="modal"
+												data-target="#return_repeat_booking_Modal"
+												[routerLink]="['/admin/new-booking']"
+												[queryParams]="{bookingId: booking.booking_id, updateType: 'return'}">
+												<div class="dropdown-item-icon"></div>
+												Return
+											</a>
+											<a class="dropdown-item" [routerLink]="['/admin/finalize-booking']"
+												[queryParams]="{bookingId: booking.booking_id}"
+												*ngIf="currentUser?.RoleName == 'admin' || subModules.includes('finalize_booking')">
+												<!-- *ngIf="booking.payment_status!='paid'" -->
+												<div class="dropdown-item-icon"></div>
+												Finalize
+											</a>
+											<a class="dropdown-item" [routerLink]="['/admin/invoice-summary']"
+												[queryParams]="{bookingId: booking.booking_id}"
+												*ngIf="(booking.payment_status=='paid' || booking.payment_status=='refund' ||  booking.payment_status=='partial_paid') && (currentUser?.RoleName == 'admin' || subModules.includes('invoice_booking'))">
+												<div class="dropdown-item-icon"></div>
+												Invoice
+											</a>
+											<!-- <a class="dropdown-item" (click)="changeBookingStatus(booking.booking_id)"
 													data-toggle="modal" data-target="#change_status_booking_Modal">
 													<div class="dropdown-item-icon"></div>
 													Change Status
 												</a> -->
-												<a class="dropdown-item"
-													(click)="sendEmailClicked(booking.booking_id,'customer')"
-													data-toggle="modal" data-target="#emailModal"
-													*ngIf="currentUser?.RoleName == 'admin' || subModules.includes('email_customer')">
-													<div class="dropdown-item-icon"></div>
-													Email Customer
-												</a>
-												<a class="dropdown-item"
-													(click)="sendEmailClicked(booking.booking_id,'affiliate')"
-													data-toggle="modal" data-target="#emailModal"
-													*ngIf="currentUser?.RoleName == 'admin' || subModules.includes('email_affiliate')">
-													<div class="dropdown-item-icon"></div>
-													{{ booking.affiliate_id ? 'Email Affiliate' : ' Email Loose Affiliate' }}
-												</a>
-												<a class="dropdown-item"
-													(click)="sendEmailClicked(booking.booking_id,'emailPassenger')"
-													data-toggle="modal" data-target="#emailPassenger"
-													*ngIf="currentUser?.RoleName == 'admin' || subModules.includes('email_passenger')">
-													<div class="dropdown-item-icon"></div>
-													Email Passenger
-												</a>
-												<a class="dropdown-item"
-													(click)="sendEmailClicked(booking.booking_id,'emailAll')"
-													data-toggle="modal" data-target="#emailAll"
-													*ngIf="currentUser?.RoleName == 'admin' || subModules.includes('email_all')">
-													<div class="dropdown-item-icon"></div>
-													Email All
-												</a>
-												<a class="dropdown-item" (click)="auditTrail(booking.booking_id)"
-													data-toggle="modal" data-target="#AuditTrailModal" 
-													*ngIf="currentUser?.RoleName == 'admin' || subModules.includes('audit_trial')">
-													<div class="dropdown-item-icon"></div>
-													Audit Trial
-												</a>
-												
-											</div>
-										</td>
-	
-										<td class="text-center font-weight-bolder cursor-pointer text-underline"
-											data-toggle="modal" data-target="#previewBookingOnID"
-											(click)="showBookingPreviewModal(booking.booking_id)">
-											<p class="booking-id-font font-weight-bolder cursor-pointer text-underline">
-												<span [innerHTML]="highlighText(booking.booking_id )"></span>
-											</p>
-										</td>
-										<td>
-											<div data-toggle="modal" (click)="changeBookingStatus(booking.booking_id)"
-												data-target="#change_status_booking_Modal" [ngClass]="currentUser?.RoleName == 'admin' || subModules.includes('change_booking_status') ? '' : 'disabled-btn'"
-												[className]="'badge badge-pill booking_status cursor-pointer ' + booking.booking_status">
-												{{booking.booking_status | bookingStatusTextReplace :
-												'_' : ' ' |titlecase}}
-											</div>
-										</td>
-										<td class="sorting_1">
-											<p style="font-weight: 600 !important;">{{ FormatDate(booking.pickup_date) }}</p>
-											<p>{{ FormatTime(booking.pickup_time) }}</p>
-										</td>
-										<td>
-											<p data-target="#sendEmailModal" style="white-space: pre" data-toggle="modal"
-												(click)="openModal(booking, 'Passenger')" id="box"
-												[ngClass]="currentUser?.RoleName == 'admin' || subModules.includes('can_send_notifications') ? '' : 'disabled-btn'">
-												<span class="font-weight-bolder"
-													[innerHTML]="highlighText(booking.passenger_name)"></span> |
-												<span [innerHTML]="highlighText( booking.passenger_cell_isd)"></span>
-												<span [innerHTML]="highlighText( booking.passenger_cell)"></span>
-											</p>
-											<span class="text-underline cursor-pointer">
-												<span [innerHTML]="highlighText(booking.pickup_address)"></span>
-											</span>
-											<span class="loc-logo"
+											<a class="dropdown-item"
+												(click)="sendEmailClicked(booking.booking_id,'customer')"
+												data-toggle="modal" data-target="#emailModal"
+												*ngIf="currentUser?.RoleName == 'admin' || subModules.includes('email_customer')">
+												<div class="dropdown-item-icon"></div>
+												Email Customer
+											</a>
+											<a class="dropdown-item"
+												(click)="sendEmailClicked(booking.booking_id,'affiliate')"
+												data-toggle="modal" data-target="#emailModal"
+												*ngIf="currentUser?.RoleName == 'admin' || subModules.includes('email_affiliate')">
+												<div class="dropdown-item-icon"></div>
+												{{ booking.affiliate_id ? 'Email Affiliate' : ' Email Loose Affiliate'
+												}}
+											</a>
+											<a class="dropdown-item"
+												(click)="sendEmailClicked(booking.booking_id,'emailPassenger')"
+												data-toggle="modal" data-target="#emailPassenger"
+												*ngIf="currentUser?.RoleName == 'admin' || subModules.includes('email_passenger')">
+												<div class="dropdown-item-icon"></div>
+												Email Passenger
+											</a>
+											<a class="dropdown-item"
+												(click)="sendEmailClicked(booking.booking_id,'emailAll')"
+												data-toggle="modal" data-target="#emailAll"
+												*ngIf="currentUser?.RoleName == 'admin' || subModules.includes('email_all')">
+												<div class="dropdown-item-icon"></div>
+												Email All
+											</a>
+											<a class="dropdown-item" (click)="auditTrail(booking.booking_id)"
+												data-toggle="modal" data-target="#AuditTrailModal"
+												*ngIf="currentUser?.RoleName == 'admin' || subModules.includes('audit_trial')">
+												<div class="dropdown-item-icon"></div>
+												Audit Trial
+											</a>
+
+										</div>
+									</td>
+
+									<td class="text-center font-weight-bolder cursor-pointer text-underline"
+										data-toggle="modal" data-target="#previewBookingOnID"
+										(click)="showBookingPreviewModal(booking.booking_id)">
+										<p class="booking-id-font font-weight-bolder cursor-pointer text-underline">
+											<span [innerHTML]="highlighText(booking.booking_id )"></span>
+										</p>
+									</td>
+									<td>
+										<div data-toggle="modal" (click)="changeBookingStatus(booking.booking_id)"
+											data-target="#change_status_booking_Modal"
+											[ngClass]="currentUser?.RoleName == 'admin' || subModules.includes('change_booking_status') ? '' : 'disabled-btn'"
+											[className]="'badge badge-pill booking_status cursor-pointer ' + booking.booking_status">
+											{{booking.booking_status | bookingStatusTextReplace :
+											'_' : ' ' |titlecase}}
+										</div>
+									</td>
+									<td class="sorting_1">
+										<p style="font-weight: 600 !important;">{{ FormatDate(booking.pickup_date) }}
+										</p>
+										<p>{{ FormatTime(booking.pickup_time) }}</p>
+									</td>
+									<td>
+										<p data-target="#sendEmailModal" style="white-space: pre" data-toggle="modal"
+											(click)="openModal(booking, 'Passenger')" id="box"
+											[ngClass]="currentUser?.RoleName == 'admin' || subModules.includes('can_send_notifications') ? '' : 'disabled-btn'">
+											<span class="font-weight-bolder"
+												[innerHTML]="highlighText(booking.passenger_name)"></span> |
+											<span [innerHTML]="highlighText( booking.passenger_cell_isd)"></span>
+											<span [innerHTML]="highlighText( booking.passenger_cell)"></span>
+										</p>
+										<span class="text-underline cursor-pointer">
+											<span [innerHTML]="highlighText(booking.pickup_address)"></span>
+										</span>
+										<span class="loc-logo"
 											(click)="showLocationPointOnMap(booking.booking_id, 'pickup')">
-												&nbsp;&nbsp;&nbsp;<i class="bi bi-geo-alt-fill"></i></span>
-										</td>
-										<td>
+											&nbsp;&nbsp;&nbsp;<i class="bi bi-geo-alt-fill"></i></span>
+									</td>
+									<td>
+										<p data-target="#sendEmailModal" data-toggle="modal"
+											(click)="openModal(booking, 'Loose_Affiliate')"
+											[ngClass]="currentUser?.RoleName == 'admin' || subModules.includes('can_send_notifications') ? '' : 'disabled-btn'"
+											*ngIf="booking.affiliate_type == null; else otherAffiliate">
+											<span class="font-weight-bolder"
+												[innerHTML]="highlighText(booking.loose_affiliate_name)"></span>|
+											<span [innerHTML]="highlighText(booking.loose_affiliate_phone_isd)"></span>
+											<span [innerHTML]="highlighText(booking.loose_affiliate_phone)"></span>
+										</p>
+										<ng-template #otherAffiliate>
 											<p data-target="#sendEmailModal" data-toggle="modal"
-												(click)="openModal(booking, 'Loose_Affiliate')"
+												(click)="openModal(booking, 'Affiliate')"
 												[ngClass]="currentUser?.RoleName == 'admin' || subModules.includes('can_send_notifications') ? '' : 'disabled-btn'"
-												*ngIf="booking.affiliate_type == null; else otherAffiliate">
+												*ngIf="booking.affiliate_type != 'gig_operator'; else gigOperator">
 												<span class="font-weight-bolder"
-													[innerHTML]="highlighText(booking.loose_affiliate_name)"></span>|
-												<span [innerHTML]="highlighText(booking.loose_affiliate_phone_isd)"></span>
-												<span [innerHTML]="highlighText(booking.loose_affiliate_phone)"></span>
+													[innerHTML]="highlighText(booking.company_name)"></span>&nbsp;
+
+												<!-- <span class="font-weight-bolder"
+														[innerHTML]="highlighText(booking.driver_last_name)"></span>&nbsp; -->
+												<span
+													class="font-weight-bolder">({{fomatAffiliateType(booking.affiliate_type)}})</span>
+												|
+												<span [innerHTML]="highlighText(booking.affiliate_dispatch_isd)"></span>
+												<span
+													[innerHTML]="highlighText(booking.affiliate_dispatch_number)"></span>
 											</p>
-											<ng-template #otherAffiliate>
+											<ng-template #gigOperator>
 												<p data-target="#sendEmailModal" data-toggle="modal"
-													(click)="openModal(booking, 'Affiliate')"
 													[ngClass]="currentUser?.RoleName == 'admin' || subModules.includes('can_send_notifications') ? '' : 'disabled-btn'"
-													*ngIf="booking.affiliate_type != 'gig_operator'; else gigOperator">
+													(click)="openModal(booking, 'Affiliate')">
 													<span class="font-weight-bolder"
 														[innerHTML]="highlighText(booking.company_name)"></span>&nbsp;
-														
-													<!-- <span class="font-weight-bolder"
-														[innerHTML]="highlighText(booking.driver_last_name)"></span>&nbsp; -->
-														<span class="font-weight-bolder">({{fomatAffiliateType(booking.affiliate_type)}})</span> |
-													<span [innerHTML]="highlighText(booking.affiliate_dispatch_isd)"></span>
+													<!-- <span class="font-weight-bolder" [innerHTML]="highlighText(booking.driver_last_name)"></span>&nbsp; -->
 													<span
-														[innerHTML]="highlighText(booking.affiliate_dispatch_number)"></span>
+														class="font-weight-bolder">({{fomatAffiliateType(booking.affiliate_type)}})</span>|
+													<span [innerHTML]="highlighText(booking.gig_cell_isd)"></span>
+													<span [innerHTML]="highlighText(booking.gig_cell_mobile)"></span>
 												</p>
-												<ng-template #gigOperator>
-													<p data-target="#sendEmailModal" data-toggle="modal"
-													[ngClass]="currentUser?.RoleName == 'admin' || subModules.includes('can_send_notifications') ? '' : 'disabled-btn'"
-														(click)="openModal(booking, 'Affiliate')">
-														<span  class="font-weight-bolder" [innerHTML]="highlighText(booking.company_name)"></span>&nbsp;
-														<!-- <span class="font-weight-bolder" [innerHTML]="highlighText(booking.driver_last_name)"></span>&nbsp; -->
-														<span class="font-weight-bolder">({{fomatAffiliateType(booking.affiliate_type)}})</span>|
-														<span [innerHTML]="highlighText(booking.gig_cell_isd)"></span>
-														<span [innerHTML]="highlighText(booking.gig_cell_mobile)"></span>
-													</p>
-												</ng-template>
 											</ng-template>
-											<span class="text-underline cursor-pointer">
-												<span [innerHTML]="highlighText(booking.dropoff_address)"></span>
-											</span>
-											<span class="loc-logo" 
+										</ng-template>
+										<span class="text-underline cursor-pointer">
+											<span [innerHTML]="highlighText(booking.dropoff_address)"></span>
+										</span>
+										<span class="loc-logo"
 											(click)="showLocationPointOnMap(booking.booking_id, 'dropoff')">
-												&nbsp;&nbsp;&nbsp;<i class="bi bi-geo-alt-fill"></i></span>
-										</td>
-										<td>
-											<span [innerHTML]="highlighText(booking.vehicle_cat_name)"></span>
-										</td>
-										<!-- <td>
+											&nbsp;&nbsp;&nbsp;<i class="bi bi-geo-alt-fill"></i></span>
+									</td>
+									<td>
+										<span [innerHTML]="highlighText(booking.vehicle_cat_name)"></span>
+									</td>
+									<!-- <td>
 											<mat-slide-toggle class="example-margin" [color]="color"
 												[checked]="booking.status" [disabled]="disabled"
 												(change)="enableDisableClicked($event,booking.booking_id)">
 											</mat-slide-toggle>
 										</td> -->
-	
-									</tr>
-								</tbody>
-							</table>
-						</div>
-						<p class="text-danger text-lg" *ngIf="noError">
-							No Results Found.
-						</p>
+
+								</tr>
+							</tbody>
+						</table>
 					</div>
-					<!----PAGINATION---->
-					<!----BACK BTN---->
-					<nav aria-label="Page navigation example" *ngIf="totalRecords > 15">
-						<ul class="pagination pagination-circle pg-blue">
-							<!-- <li *ngIf="currentPage!=1" class="page-item disabled"
+					<p class="text-danger text-lg" *ngIf="noError">
+						No Results Found.
+					</p>
+				</div>
+				<!----PAGINATION---->
+				<!----BACK BTN---->
+				<nav aria-label="Page navigation example" *ngIf="totalRecords > 15">
+					<ul class="pagination pagination-circle pg-blue">
+						<!-- <li *ngIf="currentPage!=1" class="page-item disabled"
 								(click)="loadBookings(firstPageUrl, startDate, endDate, searchText, filtertype)">
 								<a class="page-link">First</a>
 							</li>
@@ -331,15 +340,15 @@
 								(click)="loadBookings(lastPageUrl, startDate, endDate, searchText, filtertype)">
 								<a class="page-link">Last</a>
 							</li> -->
-							<li class="page-item disabled" *ngIf="nextPageUrl"
-								(click)="handleShowMore(nextPageUrl,startDate, endDate, searchText)">
-								<a class="page-link">Show more</a>
-							</li>
-						</ul>
-					</nav>
-				</div>
+						<li class="page-item disabled" *ngIf="nextPageUrl"
+							(click)="handleShowMore(nextPageUrl,startDate, endDate, searchText)">
+							<a class="page-link">Show more</a>
+						</li>
+					</ul>
+				</nav>
 			</div>
-		</section>
+		</div>
+	</section>
 </main>
 
 <!-- repeat/return booking type modal -->
@@ -359,7 +368,7 @@
 						<div class="col-md-12">
 							<mat-form-field appearance="outline">
 								<mat-label>Change Status</mat-label>
-							<mat-select #select formControlName="booking_status">
+								<mat-select #select formControlName="booking_status">
 									<mat-option *ngFor="let item of status_list"
 										[value]="item.value">{{item.status}}</mat-option>
 								</mat-select>
@@ -370,11 +379,12 @@
 			</div>
 			<div>
 				<div class="d-flex justify-content-center">
-				<button type="button" class="custom-btn button2" (click)="submitChangeStatusForm()">Change
-					Status</button></div>
+					<button type="button" class="custom-btn button2" (click)="submitChangeStatusForm()">Change
+						Status</button>
+				</div>
 				<div class="d-flex justify-content-end mx-2">
-					<button type="button" class="x-close-btn x-circle-btn" data-dismiss="modal"
-						aria-label="Close" style="background: none;">
+					<button type="button" class="x-close-btn x-circle-btn" data-dismiss="modal" aria-label="Close"
+						style="background: none;">
 						<i class="bi bi-x-circle"></i>
 					</button>
 				</div>
@@ -420,8 +430,7 @@
 		</div>
 	</div>
 </div>
-<div class="modal fade" id="emailAll" tabindex="-1" role="dialog" aria-labelledby="emailAll"
-	aria-hidden="true">
+<div class="modal fade" id="emailAll" tabindex="-1" role="dialog" aria-labelledby="emailAll" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content">
 			<div class="modal-header pb-0">
@@ -492,7 +501,7 @@
 	aria-hidden="true" data-keyboard="false" #sendEmailModalFocus>
 	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content" style="background: #f5f4fe;">
-			
+
 			<div class="modal-header pb-0">
 				<h3 class="modal-title mb-0">
 					Booking # : {{ passengerDetails?.booking_id }}
@@ -636,8 +645,8 @@
 							<mat-label>
 								{{ sendMessageField ? 'Send SMS' : 'Send Email' }}
 							</mat-label>
-							<textarea matInput id="myTextarea" placeholder="Write a Message...." id="clearField" cdkTextareaAutosize
-								cdkAutosizeMaxRows="10" #autosize="cdkTextareaAutosize" #inputmsg
+							<textarea matInput id="myTextarea" placeholder="Write a Message...." id="clearField"
+								cdkTextareaAutosize cdkAutosizeMaxRows="10" #autosize="cdkTextareaAutosize" #inputmsg
 								(focus)="$event.target.select()"></textarea>
 						</mat-form-field>
 						<div class="d-flex justify-content-center mt-2">
@@ -868,7 +877,7 @@
 						<div class="col-md-8 value">
 							<span class="font-weight-bolder">
 								{{ bookingPreview?.vehicle_type_name}}
-								</span>
+							</span>
 						</div>
 					</div>
 					<div class="row p-2">
@@ -880,7 +889,7 @@
 						<div class="col-md-8 value">
 							<span class="font-weight-bolder">
 								{{ bookingPreview?.vehicle_make}}
-								</span>
+							</span>
 						</div>
 					</div>
 					<div class="row p-2">
@@ -892,7 +901,7 @@
 						<div class="col-md-8 value">
 							<span class="font-weight-bolder">
 								{{ bookingPreview?.vehicle_model}}
-								</span>
+							</span>
 						</div>
 					</div>
 					<div class="row p-2">
@@ -904,7 +913,7 @@
 						<div class="col-md-8 value">
 							<span class="font-weight-bolder">
 								{{ bookingPreview?.vehicle_year}}
-								</span>
+							</span>
 						</div>
 					</div>
 					<div class="row p-2">
@@ -916,7 +925,7 @@
 						<div class="col-md-8 value">
 							<span class="font-weight-bolder">
 								{{ bookingPreview?.vehicle_color}}
-								</span>
+							</span>
 						</div>
 					</div>
 					<div class="row p-2">
@@ -928,7 +937,7 @@
 						<div class="col-md-8 value">
 							<span class="font-weight-bolder">
 								{{ bookingPreview?.vehicle_license_plate}}
-								</span>
+							</span>
 						</div>
 					</div>
 					<div class="row p-2">
@@ -940,7 +949,7 @@
 						<div class="col-md-8 value">
 							<span class="font-weight-bolder">
 								{{ bookingPreview?.vehicle_seats}}
-								</span>
+							</span>
 						</div>
 					</div>
 					<hr>
@@ -965,9 +974,9 @@
 								Refund amount
 							</span>
 						</div>
-						<div class="col-md-8 value"  >
+						<div class="col-md-8 value">
 							<span class="font-weight-bolder preview-output-feild">
-								 $ {{-(bookingPreview?.total_amount_refunded).toFixed(2) }}
+								$ {{-(bookingPreview?.total_amount_refunded).toFixed(2) }}
 							</span>
 						</div>
 					</div>
@@ -977,53 +986,17 @@
 								New total
 							</span>
 						</div>
-						<div class="col-md-8 value"  >
+						<div class="col-md-8 value">
 							<span class="font-weight-bolder preview-output-feild">
-								 $ {{(bookingPreview?.grand_total- bookingPreview?.total_amount_refunded).toFixed(2) }}
+								$ {{(bookingPreview?.grand_total- bookingPreview?.total_amount_refunded).toFixed(2) }}
 							</span>
 						</div>
 					</div>
-					<!-- <div class="row" *ngIf="bookingPreview?.rates_preview">
-						<div class="col-md-4 key">
-							<span>
-								Stripe Fee
-							</span>
-						</div>
-						<div class="col-md-8 value"  >
-							<span class="font-weight-bolder preview-output-feild">
-								 $ {{(bookingPreview?.rates_preview?.stripe_fees).toFixed(2) }}
-							</span>
-						</div>
-					</div>
-					<div class="row" *ngIf="bookingPreview?.rates_preview">
-						<div class="col-md-4 key">
-							<span>
-								Affiliate share
-							</span>
-						</div>
-						<div class="col-md-8 value"  >
-							<span class="font-weight-bolder preview-output-feild">
-								 $ {{(bookingPreview?.rates_preview?.total_price - (bookingPreview?.rates_preview?.stripe_fees+bookingPreview?.rates_preview?.admin_share)).toFixed(2) }}
-							</span>
-						</div>
-					</div>
-					<div class="row" *ngIf="bookingPreview?.rates_preview">
-						<div class="col-md-4 key">
-							<span>
-								Admin share
-							</span>
-						</div>
-						<div class="col-md-8 value"  >
-							<span class="font-weight-bolder preview-output-feild">
-								$ {{(bookingPreview?.rates_preview?.stripe_fees+bookingPreview?.rates_preview?.admin_share).toFixed(2) }}
-
-							</span>
-						</div>
-					</div> -->
-					<h4 class="font-weight m-0 mt-3" *ngIf="this.bookingPreview?.payment_status=='unpaid'">
+					
+					<!-- <h4 class="font-weight m-0 mt-3" *ngIf="this.bookingPreview?.payment_status=='unpaid'">
 						Rates distribution
 					</h4>
-					<div class="row" *ngFor="let item of rates_preview | keyvalue: returnZero; index as item_index" >
+					<div class="row" *ngFor="let item of rates_preview | keyvalue: returnZero; index as item_index">
 						<div class="col-md-4 key" *ngIf="item?.key!='ratesDetail' && item?.value!=0">
 							<span>
 								{{formatText(item?.key) | titlecase}}
@@ -1031,10 +1004,10 @@
 						</div>
 						<div class="col-md-8 value" *ngIf="item?.key!='ratesDetail'&& item?.value!=0">
 							<span class="font-weight-bolder preview-output-feild">
-								 $ {{(item?.value).toFixed(2)}}
+								$ {{(item?.value).toFixed(2)}}
 							</span>
 						</div>
-					</div>
+					</div> -->
 					<hr>
 					<!-- Grand Total -->
 					<div class="mx-2" *ngIf="bookingPreview?.meet_greet_choice_name">
@@ -1052,7 +1025,7 @@
 						</div>
 					</div>
 					<div class="mx-2">
-						<div class="row m-0" *ngIf="bookingPreview?.return_meet_greet_choice_name"> 
+						<div class="row m-0" *ngIf="bookingPreview?.return_meet_greet_choice_name">
 							<div class="col-md-4 key">
 								<span>
 									Return Meet and Greet
@@ -1079,7 +1052,7 @@
 							</div>
 						</div>
 					</div>
-					
+
 					<hr>
 					<!-- Driver Information -->
 					<h4 class="font-weight m-0 mt-3">
@@ -1291,7 +1264,8 @@
 								<span class="font-weight-bolder preview-output-feild">
 									{{ textFormatter(bookingPreview.pickup) }}
 								</span>
-								<span (click)="showLocationPointOnMapByAddress(bookingPreview.pickup)"><i class="bi bi-geo-alt-fill"></i></span>
+								<span (click)="showLocationPointOnMapByAddress(bookingPreview.pickup)"><i
+										class="bi bi-geo-alt-fill"></i></span>
 							</div>
 						</div>
 					</div>
@@ -1309,7 +1283,8 @@
 								<span class="font-weight-bolder preview-output-feild">
 									{{ textFormatter(bookingPreview.pickup_airport_name) }}
 								</span>
-								<span (click)="showLocationPointOnMapByAddress(bookingPreview.pickup_airport_name)"><i class="bi bi-geo-alt-fill"></i></span>
+								<span (click)="showLocationPointOnMapByAddress(bookingPreview.pickup_airport_name)"><i
+										class="bi bi-geo-alt-fill"></i></span>
 							</div>
 						</div>
 						<!-- Airport -->
@@ -1393,7 +1368,8 @@
 						<h5 class="m-0 text-xl preview-extra-stop-color">
 							Extra Stops
 						</h5>
-						<div class="mx-2 preview-extra-stop-color" *ngFor="let stop of bookingPreview.extra_stops; index as stop_index">
+						<div class="mx-2 preview-extra-stop-color"
+							*ngFor="let stop of bookingPreview.extra_stops; index as stop_index">
 							<div class="row m-0 mx-2">
 								<div class="col-md-4 key">
 									<span>
@@ -1404,7 +1380,8 @@
 									<span class="font-weight-bolder preview-output-feild">
 										{{ stop.address }}
 									</span>
-								<span (click)="showLocationPointOnMapByAddress(stop.address)"><i class="bi bi-geo-alt-fill"></i></span>
+									<span (click)="showLocationPointOnMapByAddress(stop.address)"><i
+											class="bi bi-geo-alt-fill"></i></span>
 								</div>
 							</div>
 						</div>
@@ -1413,6 +1390,7 @@
 					<hr style="width: 50%; margin: 1rem auto; border: 1.3px solid #aeaeae;"
 						*ngIf="bookingPreview.extra_stops && bookingPreview.extra_stops.length == 0" />
 					<hr>
+
 					<!-- ############# Dropoff ################# -->
 					<h5 class="px-2 m-0 my-3 text-xl preview-dropoff-color">
 						Drop Off Details
@@ -1430,7 +1408,8 @@
 								<span class="font-weight-bolder preview-output-feild">
 									{{ textFormatter(bookingPreview.dropoff) }}
 								</span>
-								<span (click)="showLocationPointOnMapByAddress(bookingPreview.dropoff)"><i class="bi bi-geo-alt-fill"></i></span>
+								<span (click)="showLocationPointOnMapByAddress(bookingPreview.dropoff)"><i
+										class="bi bi-geo-alt-fill"></i></span>
 							</div>
 						</div>
 					</div>
@@ -1448,7 +1427,8 @@
 								<span class="font-weight-bolder preview-output-feild">
 									{{ textFormatter(bookingPreview.dropoff_airport_name ) }}
 								</span>
-								<span (click)="showLocationPointOnMapByAddress(bookingPreview.dropoff_airport_name)"><i class="bi bi-geo-alt-fill"></i></span>
+								<span (click)="showLocationPointOnMapByAddress(bookingPreview.dropoff_airport_name)"><i
+										class="bi bi-geo-alt-fill"></i></span>
 							</div>
 						</div>
 						<!-- Airport -->
@@ -1530,7 +1510,128 @@
 						<!-- Cruise Time -->
 					</div>
 					<!-- Dropoff > Cruise Details - Ends -->
+
+					<!-- 2ND p -->
+
+					<hr>
+
+					<!-- Rate Distribution Information -->
+					<div class="distribution_rate" *ngIf="bookingPreview.affiliate_type === 'affiliate' ">
+						<h4 class="font-weight-bolder m-0 my-3">
+							Rates Distribution {{bookingPreview.loose_affiliate}}
+						</h4>
+
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key d-flex align-items-center">
+									<span class="">
+										Base Rate
+									</span>
+								</div>
+								<div class="col-md-8 value preview-airport-color">
+									<span class="font-weight-bolder preview-output-feild">
+										${{rates_preview?.ride_base_rate.toFixed(2)}}
+									</span>
+									(Fare Base Rate)
+								</div>
+							</div>
+						</div>
+
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key d-flex align-items-center">
+									<span class="">
+										Admin Share 
+									</span>
+								</div>
+								<div class="col-md-8 value preview-airport-color">
+									<span class="font-weight-bolder preview-output-feild">
+										${{rates_preview?.admin_share.toFixed(2) }}
+									</span>
+									(25% of Base Rate)
+								</div>
+							</div>
+						</div>
+
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key d-flex align-items-center">
+									<span class="">
+										Other Taxes
+									</span>
+								</div>
+								<div class="col-md-8 value preview-airport-color">
+									<span class="font-weight-bolder preview-output-feild">
+										${{rates_preview?.other_taxes.toFixed(2)}}
+									</span>
+									(Total of all taxes and other charges)
+								</div>
+							</div>
+						</div>
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key d-flex align-items-center">
+									<span class="">
+										Total Cost
+									</span>
+								</div>
+								<div class="col-md-8 value preview-airport-color">
+									<span class="font-weight-bolder preview-output-feild">
+										${{rates_preview?.total_price.toFixed(2)}}
+									</span>
+									(Actual Cost to Customer)
+								</div>
+							</div>
+						</div>
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key d-flex align-items-center">
+									<span class="">
+										Stripe fees
+									</span>
+								</div>
+								<div class="col-md-8 value preview-airport-color">
+									<span class="font-weight-bolder preview-output-feild">
+										${{rates_preview?.stripe_fees.toFixed(2)}}
+									</span>
+									(Platform fee 2.9%  + 30 cents - Paid from Admin share)
+								</div>
+							</div>
+						</div>
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key d-flex align-items-center">
+									<span class="">
+										Actual Amount Recieved
+									</span>
+								</div>
+								<div class="col-md-8 value preview-airport-color">
+									<span class="font-weight-bolder preview-output-feild">
+										${{(rates_preview?.total_price - rates_preview?.stripe_fees).toFixed(2)}} 
+									</span>
+									(Excluding platform fee)
+								</div>
+							</div>
+						</div>
+
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key d-flex align-items-center">
+									<span class="">
+										Affliate Payout
+									</span>
+								</div>
+								<div class="col-md-8 value preview-airport-color">
+									<span class="font-weight-bolder preview-output-feild">
+										${{rates_preview?.affiliate_share.toFixed(2)}}
+									</span>
+									( Total Price - (Admin share + Stripe fees) ) 
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
+
 			</div>
 
 

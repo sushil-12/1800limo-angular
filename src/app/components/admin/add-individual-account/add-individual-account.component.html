@@ -343,15 +343,25 @@
 				</div>
 			</div>
 		</section>
-		<div class="billing_inforamtion d-flex justify-content-end">
-			<ul>
-				<li><button class="custom-btn mr-2 savebutton btn-shadow" (click)="submitForm()"
-						[disabled]="disableSubmitButton" >SAVE</button> </li>
-				<li><button class="custom-btn  mr-2 resetbutton btn-shadow" (click)="resetForm()"
-						>RESET</button> </li>
-				<li><button class="custom-btn  mr-3 backbutton btn-shadow" (click)="backButton()"
-						>BACK</button> </li>
-			</ul>
-		</div>
+		<div class="container">
+            <div class="row py-4">
+                <div class="col-md-6">
+                  
+                </div>
+                <div class="col-md-6 ">
+                    <div class="billing_inforamtion">
+                        <ul class="d-flex justify-content-center">
+                            <li><button class="custom-btn mr-2 savebutton btn-shadow" (click)="submitForm()"
+								[disabled]="disableSubmitButton" >SAVE</button> </li>
+						<li><button class="custom-btn  mr-2 resetbutton btn-shadow" (click)="resetForm()"
+								>RESET</button> </li>
+						<li><button class="custom-btn  mr-3 backbutton btn-shadow" (click)="backButton()"
+								>BACK</button> </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+                </div>
+	
 	</form>
 </main>

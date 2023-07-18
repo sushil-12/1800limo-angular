@@ -375,13 +375,23 @@
 				</div>
 			</div>
 		</section>
-		<section class="billing_inforamtion">
-			<ul>
-				<li><button class="custom-btn savebutton" (click)="submitForm()"
-						[disabled]="disableSubmitButton">SAVE</button> </li>
-				<li><button class="custom-btn resetbutton" (click)="resetForm()">RESET</button> </li>
-				<li><button class="custom-btn backbutton" (click)="backButton()">BACK</button> </li>
-			</ul>
-		</section>
+		<div class="container">
+            <div class="row py-4">
+                <div class="col-md-6">
+                  
+                </div>
+                <div class="col-md-6 ">
+                    <div class="billing_inforamtion">
+                        <ul class="d-flex justify-content-center">
+                            <li><button class="custom-btn savebutton" (click)="submitForm()"
+								[disabled]="disableSubmitButton">SAVE</button> </li>
+						<li><button class="custom-btn resetbutton" (click)="resetForm()">RESET</button> </li>
+						<li><button class="custom-btn backbutton" (click)="backButton()">BACK</button> </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+                </div>
+	
 	</form>
 </main>
