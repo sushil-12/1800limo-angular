@@ -1,0 +1,15 @@
+<div class="example-header">
+    <button mat-icon-button class="example-double-arrow" (click)="previousClicked('year')">
+      <i class="bi bi-chevron-double-left"></i>
+    </button>
+    <button mat-icon-button (click)="previousClicked('month')">
+      <i class="bi bi-chevron-left"></i>
+    </button>
+    <span class="example-header-label">{{periodLabel}}</span>
+    <button mat-icon-button (click)="nextClicked('month')">
+      <i class="bi bi-chevron-right"></i>
+    </button>
+    <button mat-icon-button class="example-double-arrow" (click)="nextClicked('year')">
+      <i class="bi bi-chevron-double-right"></i>
+    </button>
+  </div>

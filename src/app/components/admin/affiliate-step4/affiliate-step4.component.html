@@ -66,7 +66,19 @@
 								<td [hidden]="affiliateType!='fleet_operator'">
 									<div class="row">
 										<div class="col-md-12">
-											<label id="Continue_{{driver.id}}" class="toggle toggle-left continueLabel box-shadow"
+											<a class="status-btn btn-ctn btn-shadow mr-1"  id="Continue_{{driver.id}}"
+												[ngClass]="driver.status ? 'checkedContinueLabel' : ''"
+												data-toggle="modal" data-target="#suspendModal"
+												(click)="driverAccountStatus(driver.id, 'continue')" role="button"
+												tabindex="1"> <span>Active</span>
+											</a>
+											<a class="status-btn btn-suspend btn-shadow"  id="Suspend_{{driver.id}}"
+												[ngClass]="!driver.status ? 'checkedSuspendLabel' : ''"
+												data-toggle="modal" data-target="#suspendModal"
+												(click)="driverAccountStatus(driver.id, 'suspend')" role="button"
+												tabindex="1"> <span>Suspend</span>
+											</a>
+											<!-- <label id="Continue_{{driver.id}}" class="toggle toggle-left continueLabel box-shadow"
 												[ngClass]="driver.status ? 'checkedContinueLabel' : ''"
 												(click)="driverAccountStatus(driver.id, 'continue')" data-toggle="modal"
 												data-target="#suspendModal">Continue</label>
@@ -74,7 +86,7 @@
 											<label id="Suspend_{{driver.id}}" class="toggle toggle-right suspendLabel box-shadow"
 												[ngClass]="!driver.status ? 'checkedSuspendLabel' : ''"
 												data-toggle="modal" data-target="#suspendModal"
-												(click)="driverAccountStatus(driver.id, 'suspend')">Suspend</label>
+												(click)="driverAccountStatus(driver.id, 'suspend')">Suspend</label> -->
 										</div>
 									</div>
 								</td>

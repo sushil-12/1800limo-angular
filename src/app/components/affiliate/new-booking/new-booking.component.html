@@ -48,7 +48,7 @@
 								(selectionChange)="changeTransferType($event.value)">
 								<mat-option [value]="tf_type" class="font-weight-bolder"
 									*ngFor="let tf_type of booking_params.transfer_types">
-									{{ textFormatter(tf_type) | titlecase }}
+									{{ textFormatterTransferType(tf_type) | titlecase }}
 								</mat-option>
 							</mat-select>
 						</mat-form-field>
@@ -65,7 +65,7 @@
 							<mat-select formControlName="return_transfer_type">
 								<mat-option [value]="tf_type" class="font-weight-bolder"
 									*ngFor="let tf_type of booking_params.transfer_types">
-									{{ textFormatter(tf_type) | titlecase }}
+									{{ textFormatterTransferType(tf_type) | titlecase }}
 								</mat-option>
 							</mat-select>
 						</mat-form-field>
@@ -2075,6 +2075,7 @@
 								<span class="font-weight-bolder">
 									{{ textFormatter(Form.pickup.value) }}
 								</span>
+								<span (click)="showLocationPointOnMap(Form.pickup.value)"><i class="bi bi-geo-alt-fill"></i></span>
 							</div>
 						</div>
 					</div>
@@ -2092,6 +2093,8 @@
 								<span class="font-weight-bolder">
 									{{ textFormatter(Form.pickup_airport_name.value) }}
 								</span>
+								<span (click)="showLocationPointOnMap(Form.pickup_airport_name.value)">
+									<i class="bi bi-geo-alt-fill"></i></span>
 							</div>
 						</div>
 						<!-- Airport -->
@@ -2188,6 +2191,7 @@
 									<span class="font-weight-bolder">
 										{{ stop.address }}
 									</span>
+								<span (click)="showLocationPointOnMap(stop.address)"><i class="bi bi-geo-alt-fill"></i></span>
 								</div>
 							</div>
 						</div>
@@ -2212,6 +2216,7 @@
 								<span class="font-weight-bolder">
 									{{ textFormatter(Form.dropoff.value) }}
 								</span>
+								<span (click)="showLocationPointOnMap(Form.dropoff.value)"><i class="bi bi-geo-alt-fill"></i></span>
 							</div>
 						</div>
 					</div>
@@ -2229,6 +2234,9 @@
 								<span class="font-weight-bolder">
 									{{ textFormatter(Form.dropoff_airport_name.value ) }}
 								</span>
+								<span (click)="showLocationPointOnMap(Form.dropoff_airport_name.value)">
+									<i class="bi bi-geo-alt-fill"></i></span>
+
 							</div>
 						</div>
 						<!-- Airport -->
@@ -2370,6 +2378,7 @@
 									<span class="font-weight-bolder">
 										{{ textFormatter(Form.return_pickup.value) | titlecase }}
 									</span>
+								<span (click)="showLocationPointOnMap(Form.return_pickup.value)"><i class="bi bi-geo-alt-fill"></i></span>
 								</div>
 							</div>
 						</div>
@@ -2387,6 +2396,9 @@
 									<span class="font-weight-bolder">
 										{{ textFormatter(Form.return_pickup_airport_name.value) }}
 									</span>
+								<span (click)="showLocationPointOnMap(Form.return_pickup_airport_name.value)">
+									<i class="bi bi-geo-alt-fill"></i></span>
+
 								</div>
 							</div>
 							<!-- Airline -->
@@ -2482,6 +2494,7 @@
 										<span class="font-weight-bolder">
 											{{ stop.address }}
 										</span>
+								<span (click)="showLocationPointOnMap(stop.address)"><i class="bi bi-geo-alt-fill"></i></span>
 									</div>
 								</div>
 							</div>
@@ -2505,6 +2518,7 @@
 									<span class="font-weight-bolder">
 										{{ textFormatter(Form.return_dropoff.value) | titlecase }}
 									</span>
+								<span (click)="showLocationPointOnMap(Form.return_dropff.value)"><i class="bi bi-geo-alt-fill"></i></span>
 								</div>
 							</div>
 						</div>
@@ -2522,6 +2536,8 @@
 									<span class="font-weight-bolder">
 										{{ textFormatter(Form.return_dropoff_airport_name.value) }}
 									</span>
+									<span (click)="showLocationPointOnMap(Form.return_dropoff_airport_name.value)">
+										<i class="bi bi-geo-alt-fill"></i></span>
 								</div>
 							</div>
 

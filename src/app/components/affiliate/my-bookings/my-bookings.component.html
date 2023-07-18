@@ -57,7 +57,7 @@
 							<mat-form-field appearance="outline" class="m-0">
 								<input matInput type="text" (keypress)="handleKeypressEvents()"
 									(keyup)="searchInBookings($event.target.value)" [value]="searchText"
-									placeholder="Search" id="keyword">
+									placeholder="Search" id="keyword" autofocus>
 							</mat-form-field>
 						</div>
 					</div>
@@ -168,10 +168,12 @@
 													[innerHTML]="highlighText(booking?.passenger_name)"></span> |
 												<span [innerHTML]="highlighText( formatPhoneNumber(booking?.pax_tel))"></span>
 											</p>
-											<span class="text-underline cursor-pointer"
-												(click)="showLocationPointOnMap(booking?.booking_id, 'pickup')">
+											<span class="text-underline cursor-pointer">
 												<span [innerHTML]="highlighText(booking?.pickup_address)"></span>
 											</span>
+											<span class="loc-logo"
+											(click)="showLocationPointOnMap(booking.booking_id, 'pickup')">
+												&nbsp;&nbsp;&nbsp;<i class="bi bi-geo-alt-fill"></i></span>
 										</td>
 										<td>
 	
@@ -184,10 +186,12 @@
 												<span [innerHTML]="highlighText(booking?.driver_tel)"></span>
 											</p>
 	
-											<span class="text-underline cursor-pointer"
-												(click)="showLocationPointOnMap(booking?.booking_id, 'dropoff')">
+											<span class="text-underline cursor-pointer">
 												<span [innerHTML]="highlighText(booking?.dropoff_address)"></span>
 											</span>
+											<span class="loc-logo"
+											(click)="showLocationPointOnMap(booking.booking_id, 'dropoff')">
+												&nbsp;&nbsp;&nbsp;<i class="bi bi-geo-alt-fill"></i></span>
 										</td>
 										<td>
 											<span [innerHTML]="highlighText(booking?.vehicle_cat_name)"></span>
@@ -527,9 +531,9 @@
 								cdkAutosizeMaxRows="10" #autosize="cdkTextareaAutosize" #inputmsg
 								(focus)="$event.target.select()"></textarea>
 						</mat-form-field>
-						<div class="d-flex justify-content-between mt-2">
-							<button type="button" data-dismiss="modal" (click)="closeModal()"
-								class="btn btnStyle">Close</button>
+						<div class="d-flex justify-content-center mt-2">
+							<!-- <button type="button" data-dismiss="modal" (click)="closeModal()"
+								class="btn btnStyle">Close</button> -->
 							<button class="btn saveButtonModal" (click)="submit(inputmsg.value, sendMessageField)"
 								data-dismiss="modal">Send</button>
 						</div>
@@ -613,6 +617,105 @@
 						</div>
 					</div>
 					<hr>
+
+							<!-- Passenger Information -->
+							<h4 class="font-weight m-0 mt-3">
+								Passenger Information
+							</h4>
+		
+							<!-- Passenger > Name -->
+							<div class="mx-2">
+								<div class="row m-0">
+									<div class="col-md-4 key">
+										<span>
+											Name
+										</span>
+									</div>
+									<div class="col-md-8 value">
+										<span class="font-weight-bolder preview-output-feild">
+											{{ textFormatter(bookingPreview?.passenger_name) }}
+										</span>
+									</div>
+								</div>
+							</div>
+		
+							<!-- Passenger > Email -->
+							<!-- <div class="mx-2">
+								<div class="row m-0">
+									<div class="col-md-4 key">
+										<span>
+											Email
+										</span>
+									</div>
+									<div class="col-md-8 value">
+										<span class="font-weight-bolder preview-output-feild">
+											{{ textFormatter(bookingPreview?.passenger_email) }}
+										</span>
+									</div>
+								</div>
+							</div> -->
+		
+							<!-- Passenger > Phone -->
+							<div class="mx-2">
+								<div class="row m-0">
+									<div class="col-md-4 key">
+										<span>
+											Phone
+										</span>
+									</div>
+									<div class="col-md-8 value">
+										<span class="font-weight-bolder preview-output-feild">
+											({{ bookingPreview?.passenger_cell_isd }})
+											{{ textFormatter(bookingPreview?.passenger_cell) }}
+										</span>
+									</div>
+								</div>
+							</div>
+							<div class="mx-2">
+								<div class="row m-0">
+									<div class="col-md-4 key">
+										<span>
+											No. of passenger
+										</span>
+									</div>
+									<div class="col-md-8 value">
+										<span class="font-weight-bolder preview-output-feild">
+											{{ bookingPreview?.total_passengers }}
+										</span>
+									</div>
+								</div>
+							</div>
+							<div class="mx-2">
+								<div class="row m-0">
+									<div class="col-md-4 key">
+										<span>
+											Luggage count
+										</span>
+									</div>
+									<div class="col-md-8 value">
+										<span class="font-weight-bolder preview-output-feild">
+											{{ bookingPreview?.luggage_count }}
+										</span>
+									</div>
+								</div>
+							</div>
+							<hr>
+							
+							<div class="mx-2">
+								<div class="row m-0">
+									<div class="col-md-4 key">
+										<span>
+											Special Instruction
+										</span>
+									</div>
+									<div class="col-md-8 value box-special-instruction">
+										<span class="font-weight-bolder preview-output-feild" style="white-space: pre-wrap;"> 
+											{{bookingPreview?.booking_instructions}}
+										</span>
+									</div>
+								</div>
+							</div>
+							<hr>
 					<!-- Booking Information - Ends -->
 
 					<!-- affiliate details -->
@@ -906,104 +1009,6 @@
 					</div>
 					<hr>
 
-					<!-- Passenger Information -->
-					<h4 class="font-weight m-0 mt-3">
-						Passenger Information
-					</h4>
-
-					<!-- Passenger > Name -->
-					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Name
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
-									{{ textFormatter(bookingPreview?.passenger_name) }}
-								</span>
-							</div>
-						</div>
-					</div>
-
-					<!-- Passenger > Email -->
-					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Email
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
-									{{ textFormatter(bookingPreview?.passenger_email) }}
-								</span>
-							</div>
-						</div>
-					</div>
-
-					<!-- Passenger > Phone -->
-					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Phone
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
-									({{ bookingPreview?.passenger_cell_isd }})
-									{{ textFormatter(bookingPreview?.passenger_cell) }}
-								</span>
-							</div>
-						</div>
-					</div>
-					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									No. of passenger
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
-									{{ bookingPreview?.total_passengers }}
-								</span>
-							</div>
-						</div>
-					</div>
-					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Luggage count
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
-									{{ bookingPreview?.luggage_count }}
-								</span>
-							</div>
-						</div>
-					</div>
-					<hr>
-					
-					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Special Instruction
-								</span>
-							</div>
-							<div class="col-md-8 value box-special-instruction">
-								<span class="font-weight-bolder preview-output-feild" style="white-space: pre-wrap;"> 
-									{{bookingPreview?.booking_instructions}}
-								</span>
-							</div>
-						</div>
-					</div>
-					<hr>
 					<!-- Travel Information -->
 					<!-- <h4 class="font-weight m-0 mt-3">
 						Travel Information
@@ -1078,6 +1083,7 @@
 								<span class="font-weight-bolder preview-output-feild">
 									{{ textFormatter(bookingPreview.pickup) }}
 								</span>
+								<span (click)="showLocationPointOnMapByAddress(bookingPreview.pickup)"><i class="bi bi-geo-alt-fill"></i></span>
 							</div>
 						</div>
 					</div>
@@ -1095,6 +1101,7 @@
 								<span class="font-weight-bolder preview-output-feild">
 									{{ textFormatter(bookingPreview?.pickup_airport_name) }}
 								</span>
+								<span (click)="showLocationPointOnMapByAddress(bookingPreview?.pickup_airport_name)"><i class="bi bi-geo-alt-fill"></i></span>
 							</div>
 						</div>
 						<!-- Airport -->
@@ -1189,6 +1196,7 @@
 									<span class="font-weight-bolder preview-output-feild">
 										{{ stop?.address }}
 									</span>
+								<span (click)="showLocationPointOnMapByAddress(stop?.address)"><i class="bi bi-geo-alt-fill"></i></span>
 								</div>
 							</div>
 						</div>
@@ -1214,6 +1222,7 @@
 								<span class="font-weight-bolder preview-output-feild">
 									{{ textFormatter(bookingPreview?.dropoff) }}
 								</span>
+								<span (click)="showLocationPointOnMapByAddress(bookingPreview?.dropoff)"><i class="bi bi-geo-alt-fill"></i></span>
 							</div>
 						</div>
 					</div>
@@ -1231,6 +1240,7 @@
 								<span class="font-weight-bolder preview-output-feild">
 									{{ textFormatter(bookingPreview?.dropoff_airport_name ) }}
 								</span>
+								<span (click)="showLocationPointOnMapByAddress(bookingPreview?.dropoff_airport_name)"><i class="bi bi-geo-alt-fill"></i></span>
 							</div>
 						</div>
 						<!-- Airport -->

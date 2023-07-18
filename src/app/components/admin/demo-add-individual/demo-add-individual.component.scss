@@ -1,0 +1,69 @@
+.mobileLabelClass.mat-form-field-appearance-fill.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
+	padding-left    : 0px;
+	background-color: #fff;
+	max-width       : 70px;
+	text-align      : center;
+	left            : -6px;
+	top             : 30px;
+}
+
+
+.btn-shadow{
+	box-shadow: 0px 5px 20px -6px rgb(0 0 0 / 60%);
+}
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-outline-gap{
+	border-top-color: #f44336!important;
+}
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.ng-untouched.mat-form-field-should-float.mat-focused .mat-form-field-outline-gap{
+	border-top-color: #3f51b5!important;
+}
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.ng-touched.ng-dirty.mat-form-field-should-float.ng-valid .mat-form-field-outline-gap{
+	border-top-color: rgba(0,0,0,.12)!important;
+}
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.ng-touched.mat-form-field-should-float.ng-valid.mat-focused .mat-form-field-outline-gap{
+	border-top-color: #3f51b5!important;
+}
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float.ng-dirty.ng-valid.ng-touched .mat-form-field-flex:hover .mat-form-field-outline-gap{border-top-color: rgba(0,0,0,.87)!important;}
+
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float.mat-focused .mat-form-field-outline-gap{
+	border-top-color: #f44336!important;
+}
+:host ::ng-deep.mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick .mat-form-field-outline-gap{
+	border-top-color: #3f51b5!important;
+}
+:host ::ng-deep.mat-form-field-type-mat-select.mat-form-field-appearance-outline.mat-form-field-can-float.ng-untouched.ng-invalid.mat-form-field-should-float .mat-form-field-outline-gap{
+	border-top-color: rgba(0,0,0,.12)!important;
+}
+:host ::ng-deep.mat-form-field-type-mat-select.mat-form-field-appearance-outline.mat-form-field-can-float.ng-untouched.ng-invalid .mat-form-field-flex:hover .mat-form-field-outline-gap{border-top-color: rgba(0,0,0,.87)!important;}
+
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-form-field-wrapper .mat-form-field-infix mat-label{
+	font-weight: normal!important;
+	font-size: 14px!important;
+	color: #191919;
+}
+:host ::ng-deep.mat-form-field-appearance-outline .mat-form-field-label{top:1.3675em}
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-form-field-wrapper .mat-form-field-infix .labelClass{font-weight: normal!important;
+	font-size: 14px!important;
+	color: #191919;
+top:2.05em}
+:host ::ng-deep .mat-form-field {
+	.mat-form-field-outline {
+	  &-end {
+		border-radius: 0 10px 10px 0 !important;
+	  }
+  
+	  &-start {
+		border-radius: 10px 0 0 10px !important;
+		flex-grow: 1;
+	  }
+	}
+  }
+  :host ::ng-deep .mat-form-field .mat-form-field-wrapper{
+		border-radius: 10px;
+		background-color: rgb(226, 226, 226,1);
+  } 
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-form-field-wrapper .mat-form-field-infix .labelClass+.iti--allow-dropdown .iti__flag-container{top:-12px}
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label,:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-input-server:focus+.mat-form-field-label-wrapper .mat-form-field-label{transform:translateY(-0.8em) scale(0.75)!important;width:133.3333333333%}
+
+// :host ::ng-deep.user_information .mat-form-field-appearance-outline.mat-form-field-can-float .mat-input-server:focus+.mat-form-field-label-wrapper .mat-form-field-label{transform:translateY(-1em) scale(0.75)!important;width:133.3333333333%}
+

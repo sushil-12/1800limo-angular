@@ -144,8 +144,8 @@
 					</div>
 				</form>
 			</div>
-			<div class="modal-footer d-flex justify-content-between">
-				<button type="button" (click)="closeModal()" class="btn btnStyle">Close</button>
+			<div class="modal-footer d-flex justify-content-center">
+				<!-- <button type="button" (click)="closeModal()" class="btn btnStyle">Close</button> -->
 				<button class="btn saveButtonModal" type="submit" (click)="payment() "
 				 [disabled]="Form.amount?.invalid && (Form.amount.touched || Form.amount.dirty)">Submit</button>
 			</div>

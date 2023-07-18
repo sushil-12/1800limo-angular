@@ -24,7 +24,7 @@ export class NewBookingComponent implements OnInit {
 	todays_date: string = moment().format('YYYY-MM-DD');
 
 	booking_params: any = {
-		transfer_types: ["airport_to_city", "airport_to_airport", "airport_to_cruise", "city_to_city", "city_to_airport", "city_to_cruise", "cruise_to_airport", "cruise_to_city"],
+		transfer_types: ["airport_to_city", "airport_to_airport", "airport_to_cruise", "city_to_city", "city_to_airport", "city_to_cruise", "cruise_to_airport?", "cruise_to_city"],
 		client_account_types: ['individual', 'corporate', 'travel_planner', 'loose_customer'],
 		affiliate_accounts: ['affiliate', 'loose_affiliate'],
 		numbers: (() => {
@@ -122,6 +122,7 @@ export class NewBookingComponent implements OnInit {
 			if (params && params.bookingId && !this.booking_id) {
 				this.is_booking_edit_case = true
 				this.SetFormValue('reservation_id', params.bookingId)
+				console.log('settting-------------- reservation_id', params.bookingId)
 				params.updateType ? this.SetFormValue('updateType', params.updateType) : this.SetFormValue('updateType', 'edit')
 			}
       else if(params && params.new=='true'){
@@ -411,7 +412,7 @@ export class NewBookingComponent implements OnInit {
 	}
 
 	prefillViaBookingID(booking_id: number) {
-		console.warn('Prefilling via Booking Id')
+		console.warn('Prefilling via Booking Id',booking_id)
 		this.$spinner.show('normalspinner');
 		this.affiliateService.getBookingDataForEdit(booking_id).subscribe((response: any) => {
 			response.data.booking_instructions =  response?.data?.booking_instructions?.replaceAll('<br />' , '')
@@ -703,17 +704,19 @@ export class NewBookingComponent implements OnInit {
 	fetchAirportsAndBigData(): void {
 		let s = setInterval(() => {
       let bigData = this.$api.getAirportsAndBigData()
+	// bigData
 			if (bigData) {
 				this.$spinner.hide('fetchspinner');
 				this.BigData = JSON.parse(JSON.stringify(bigData));
 				this.BigData_COPY = JSON.parse(JSON.stringify(this.BigData));
 				// format the name of each airports/airlines data as 'code - name, city, country'
 				this.BigData.airportsData.map((item: any) => item['formatted_name'] = `${item.code} - ${item.name}, ${item.city}, ${item.country}`);
-        this.BigData.airlinesData.map((item: any) => item['formatted_name'] = `${item.code} - ${item.name}, ${item.country}`);
+       			 this.BigData.airlinesData.map((item: any) => item['formatted_name'] = `${item.code} - ${item.name}, ${item.country}`);
 				this.BigData_COPY.airportsData.map((item: any) => item['formatted_name'] = `${item.code} - ${item.name}, ${item.city}, ${item.country}`);
 				this.BigData_COPY.airlinesData.map((item: any) => item['formatted_name'] = `${item.code} - ${item.name}, ${item.country}`);
 
 				this.MapController();
+				console.log('this.Form.reservation_id.value----------->>>>>>>>>>>>>',this.Form.reservation_id.value)
 				this.Form.reservation_id.value ? this.prefillViaBookingID(this.Form.reservation_id.value) : '';
         this.newBooking ? this.setValueByBookNow() : "";
 				clearInterval(s);
@@ -1163,6 +1166,15 @@ export class NewBookingComponent implements OnInit {
 		const labelOffset = 90;
 		return controlEl.getBoundingClientRect().top + window.scrollY - labelOffset;
 	}
+	textFormatterTransferType(text:any){
+		try {
+			return text.replace(/[\\\_$]+/g, ' ')+'?'
+		}
+		catch
+		{
+			return text
+		}
+	}
 
 
 	submitForm(preview: boolean) {
@@ -1361,13 +1373,13 @@ export class NewBookingComponent implements OnInit {
 				}
 
 				(<FormGroup>loose_customer.get('card_details')).get('card_number').setValidators([Validators.required, Validators.pattern("^[0-9]*$"), , Validators.minLength(12), Validators.maxLength(20),]);
-				(<FormGroup>loose_customer.get('card_details')).get('name').setValidators([Validators.required, this.customValidator.whitespace()]);
+				(<FormGroup>loose_customer.get('card_details')).get('name').setValidators([Validators.required]);
 				(<FormGroup>loose_customer.get('card_details')).get('cvv').setValidators([Validators.required, Validators.pattern("^[0-9]*$")]);
 				loose_customer.get('email').setValidators([Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.]+\.[a-zA-Z]{2,}$/i)])
 				loose_customer.get('phone').setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)])
-				loose_customer.get('first_name').setValidators([Validators.required, this.customValidator.whitespace()])
-				loose_customer.get('middle_name').setValidators(this.customValidator.whitespace())
-				loose_customer.get('last_name').setValidators([Validators.required, this.customValidator.whitespace()])
+				loose_customer.get('first_name').setValidators([Validators.required])
+				// loose_customer.get('middle_name').setValidators(this.customValidator.whitespace())
+				loose_customer.get('last_name').setValidators([Validators.required])
 				loose_customer.get('address').setValidators(this.customValidator.whitespace())
 
 			}
@@ -1725,6 +1737,45 @@ export class NewBookingComponent implements OnInit {
 	  }
 	  FormatTime(time: string) {
 		return moment(time, "HH:mm:ss").format("LT");
+	}
+
+	iOS() {
+		return [
+			'iPad Simulator',
+			'iPhone Simulator',
+			'iPod Simulator',
+			'iPad',
+			'iPhone',
+			'iPod'
+		].includes(navigator.platform)
+			// iPad on iOS 13 detection
+			|| (navigator.userAgent.includes("Mac") && "ontouchend" in document)
+	}
+
+
+	showLocationPointOnMap(address:any) {
+		let isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+		console.log('isSafari', isSafari)
+		this.$spinner.show()
+			this.$spinner.hide();
+			if(address){
+				let googleDirectionUrl;
+				let iosDirectionUrl;
+					googleDirectionUrl = 'https://www.google.com/maps/dir/?api=1' + '&destination=' +
+						encodeURIComponent(address) + '&travelmode=driving'
+					iosDirectionUrl = 'http://maps.apple.com/?daddr=' +
+						encodeURIComponent(address)
+				if (this.iOS()) {
+					setTimeout(() => {
+						window.location.href = iosDirectionUrl;
+					})
+				}
+				else {
+					window.open(googleDirectionUrl, '_blank');
+				}
+			} else {
+				throw new Error('Error: Location Points Not Specified Properly. ');
+			}
 	}
 
   setValueByBookNow(){

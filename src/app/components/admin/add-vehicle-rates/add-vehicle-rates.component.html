@@ -700,11 +700,21 @@
 			</div>
 		</div>
 	</section>
-	<div class="billing_inforamtion">
-		<ul>
-			<li><button class="custom-btn savebutton box-shadow" (click)="submitForm()" [disabled]="disableSubmitButton"
-					tabindex="1">SAVE</button> </li>
-			<li><button class="custom-btn resetbutton box-shadow" (click)="resetForm()" tabindex="1">RESET</button> </li>
-		</ul>
-	</div>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-7">
+		
+			</div>
+			<div class="col-md-5">
+				<div class="billing_inforamtion">
+					<ul class="d-flex justify-content-center">
+						<li><button class="custom-btn savebutton box-shadow" (click)="submitForm()" [disabled]="disableSubmitButton"
+								tabindex="1">SAVE</button> </li>
+						<li><button class="custom-btn resetbutton box-shadow" (click)="resetForm()" tabindex="1">RESET</button> </li>
+					</ul>
+				</div>
+			</div>
+		</div>
+			</div>
+	
 </form>

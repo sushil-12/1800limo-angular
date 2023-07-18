@@ -1131,16 +1131,26 @@
 			</div>
 		</div>
 	</section>
-	<div class="billing_inforamtion">
-		<ul>
-			<li><button class="custom-btn savebutton box-shadow" (click)="submitForm()" [disabled]="disableSubmitButton"
-					tabindex="1">SAVE</button> </li>
-			<li><button class="custom-btn resetbutton box-shadow" (click)="resetForm()" tabindex="1">RESET</button> </li>
-			<li><button class="custom-btn backbutton box-shadow" type="button" (click)="backButton()" data-toggle="tooltip"
-					data-placement="top" title="Clicking back button deletes all fields." tabindex="1">BACK</button>
-			</li>
-		</ul>
+	<div class="container">
+<div class="row">
+	<div class="col-md-6">
+
 	</div>
+	<div class="col-md-6">
+		<div class="billing_inforamtion">
+			<ul class="d-flex justify-content-center">
+				<li><button class="custom-btn savebutton box-shadow" (click)="submitForm()" [disabled]="disableSubmitButton"
+						tabindex="1">SAVE</button> </li>
+				<li><button class="custom-btn resetbutton box-shadow" (click)="resetForm()" tabindex="1">RESET</button> </li>
+				<li><button class="custom-btn backbutton box-shadow" type="button" (click)="backButton()" data-toggle="tooltip"
+						data-placement="top" title="Clicking back button deletes all fields." tabindex="1">BACK</button>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+	</div>
+	
 </form>
 <!-- Image modal -->
 <app-image-modal (closeTab)="closeButton()" [modalImage]="modalImage"></app-image-modal>

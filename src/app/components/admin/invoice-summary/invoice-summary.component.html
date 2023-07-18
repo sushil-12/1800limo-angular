@@ -53,6 +53,10 @@
 							<p class="invoice-dollar--color display-4">
 								<strong style="font-size: xx-large;"><span>{{currencySymbol}}</span>{{invoiceData?.paid_amount}}</strong>
 							</p>
+							<!-- Invoice Status
+							<p class="invoice-dollar--color display-4">
+								<strong style="font-size: xx-large;">{{invoiceData?.invoice_status | titlecase}}</strong>
+							</p> -->
 						</div>
 					</div>
 					<!-- <div class="d-flex bd-highlight flex-row-reverse mb-3 px-3">
@@ -80,9 +84,13 @@
 						<div class="d-flex bd-highlight invoice-subhead p-4 col-12 mr-2">
 							<div class="mr-auto  col-6 p-2 bd-highlight invoice-status-bar"
 								*ngIf="invoiceData.service_type">
-								<p class="m-0 invoice-p text-white invoice-status-bar">
+								<p class="m-1 invoice-p text-white invoice-status-bar">
 									Service Type: <span
 										class="invoice-text-bold invoice-status-bar">{{invoiceData.service_type}}</span>
+								</p>
+								<p class="m-1 invoice-p text-white invoice-status-bar">
+									Invoice Status: <span
+										class="invoice-text-bold invoice-status-bar">{{invoiceData?.invoice_status | titlecase}}</span>
 								</p>
 							</div>
 							<div class="p-2 col-6 bd-highlight " *ngIf="invoiceData.date_of_service">
@@ -316,7 +324,7 @@
 
 <!-- refund modal starts -->
 <div class="modal fade" id="refundModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-	aria-hidden="true" data-backdrop="static" data-keyboard="false" *ngIf="show">
+	aria-hidden="true" >
 	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content user_inforamtion">
 			<button type="button" (click)="closeModal()" class="close closeButton x-circle-btn" data-dismiss="modal"
@@ -351,8 +359,8 @@
 					</div>
 				</form>
 			</div>
-			<div class="modal-footer d-flex justify-content-between">
-				<button type="button" (click)="closeModal()" class="btn btnStyle">Close</button>
+			<div class="modal-footer d-flex justify-content-center">
+				<!-- <button type="button" (click)="closeModal()" class="btn btnStyle">Close</button> -->
 				<button class="btn saveButtonModal" type="submit" (click)="refund()" >Submit</button>
 			</div>
 		</div>
@@ -362,11 +370,11 @@
 
 <!-- send Invoice to Any -->
 <div class="modal fade" id="sendInvoiceToAny" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-	aria-hidden="true" data-backdrop="static" data-keyboard="false" *ngIf="show_sendInvoiceToAny">
+	aria-hidden="true" >
 	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content user_inforamtion">
 			<button type="button" class="close closeButton x-circle-btn" data-dismiss="modal"
-				aria-label="Close" (click)="closeModal_send_in_to_any()">
+				aria-label="Close" >
 				<i class="bi bi-x-circle"></i>
 			</button>
 			<div class="modal-header pb-0">
@@ -399,8 +407,8 @@
 						</div>
 					</div>
 			</div>
-			<div class="modal-footer d-flex justify-content-between">
-				<button type="button"  (click)="closeModal_send_in_to_any()" class="btn btnStyle">Close</button>
+			<div class="modal-footer d-flex justify-content-center">
+				<!-- <button type="button"  (click)="closeModal_send_in_to_any()" class="btn btnStyle">Close</button> -->
 				<button class="btn saveButtonModal" type="submit" (click)="sendInvoiceToAny()">Submit</button>
 			</div>
 		</div>

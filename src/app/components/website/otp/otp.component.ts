@@ -114,7 +114,7 @@ export class OtpComponent implements OnInit, OnDestroy {
 					this.ngOtpInput.setValue(params.otp);
 					this.otpForm.get('otp').setValue(params.otp)
 					this.otpForm.updateValueAndValidity()
-					this.ngOtpInput.focusTo(this.otpInput)
+					// this.ngOtpInput.focusTo(this.otpInput)
 					this.otpCheck()
 				}, 2000)
 			}

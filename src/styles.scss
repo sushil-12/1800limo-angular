@@ -1,6 +1,9 @@
 .mat-form-field-empty.mat-form-field-label {
     color: #808080;
 }
+// button:hover {
+//     opacity: .51;
+// }
 
 * {
     --green: #33c658;
@@ -224,7 +227,28 @@ section{
     margin-top: 0 !important;
 }
 
+.bi-geo-alt-fill{
+    color: #ff0000;
+    font-size: 18px;
+}
+
 // .modal{
 //     position: absolute !important;
 //     top: 10% !important;
 // }
+@media only screen and (max-width: 1024px) {
+    button:hover{
+        animation-duration: 1s;
+        animation-name: slidein;
+    }
+}
+@keyframes slidein {
+    0% {
+        border-color: #669bd9;
+        background-color:#669bd9;
+    }
+    100% {
+        border-color: #669bd9;
+        background-color:#669bd9;
+    }
+  }

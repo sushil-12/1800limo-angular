@@ -15,6 +15,7 @@ declare var $: any;
 import * as moment from "moment";
 import { ErrorDialogService } from "src/app/services/error-dialog/errordialog.service";
 import { MatSelect } from "@angular/material/select";
+import { DatePickerComponent } from "../../shared/date-picker/date-picker.component";
 
 @Component({
 	selector: "app-daily-bookings",
@@ -22,6 +23,7 @@ import { MatSelect } from "@angular/material/select";
 	styleUrls: ["./daily-bookings.component.scss"],
 })
 export class DailyBookingsComponent implements OnInit {
+	exampleHeader = DatePickerComponent
 	@ViewChild('inputmsg', { static: false }) message: ElementRef;
 	@ViewChild('select') select: MatSelect;
 	@ViewChild('sendEmailModalFocus') sendEmailModalFocus: any;
@@ -62,6 +64,7 @@ export class DailyBookingsComponent implements OnInit {
 	currentUser: any = JSON.parse(localStorage.getItem('userData')) || ''
 	subModules: any = localStorage.getItem('sub_modules') || '';
 	useDateFilter:boolean=true;
+	rates_preview: any;
 
 	constructor(
 		private adminService: AdminService,
@@ -98,7 +101,7 @@ export class DailyBookingsComponent implements OnInit {
 			: "";
 		
 		this.useDateFilter = this.adminService.checkCookie('useDateFilter') ?
-		(this.adminService.getCookie('useDateFilter') ? true : false)
+		(this.adminService.getCookie('useDateFilter')=='true' ? true : false)
 		: true;
 
 		this.adminService.getStatusList()
@@ -619,6 +622,9 @@ export class DailyBookingsComponent implements OnInit {
 		return ph;
 
 	}
+	formatText(text){
+		return text.replaceAll('_' , ' ')
+	}
 
 	bookingPreview: any
 	showBookingPreviewModal(booking_id: number) {
@@ -626,6 +632,13 @@ export class DailyBookingsComponent implements OnInit {
 		this.adminService.getBookingPreview(booking_id).subscribe((response: any) => {
 			this.spinner.hide();
 			this.bookingPreview = response.data;
+			if(this.bookingPreview?.payment_status=='unpaid'){
+				this.rates_preview = this.bookingPreview?.rates_preview
+			}
+			// for(let i in this.bookingPreview?.rates_preview){
+			// 	if(!Array.isArray(this.bookingPreview?.rates_preview[i])){
+			// 	}
+			// }
 			this.bookingPreview['booking_instructions'] = this.bookingPreview?.booking_instructions.replaceAll('<br />', ' ')
 		})
 	}
@@ -740,5 +753,28 @@ export class DailyBookingsComponent implements OnInit {
 				throw new Error('Error: Location Points Not Specified Properly. ');
 			}
 		})
+	}
+
+	showLocationPointOnMapByAddress(address:any) {
+		let isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+		console.log('isSafari', isSafari)
+			if(address){
+				let googleDirectionUrl;
+				let iosDirectionUrl;
+					googleDirectionUrl = 'https://www.google.com/maps/dir/?api=1' + '&destination=' +
+						encodeURIComponent(address) + '&travelmode=driving'
+					iosDirectionUrl = 'http://maps.apple.com/?daddr=' +
+						encodeURIComponent(address)
+				if (this.iOS()) {
+					setTimeout(() => {
+						window.location.href = iosDirectionUrl;
+					})
+				}
+				else {
+					window.open(googleDirectionUrl, '_blank');
+				}
+			} else {
+				throw new Error('Error: Location Points Not Specified Properly. ');
+			}
 	}
 }

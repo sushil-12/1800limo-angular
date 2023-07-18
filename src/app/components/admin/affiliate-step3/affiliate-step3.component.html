@@ -18,10 +18,10 @@
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
 						<mat-label>Agency Name</mat-label>
-						<input matInput class="font-weight-bold" placeholder="Agency Name" formControlName="AgentName" tabIndex="1">
+						<input matInput class="font-weight-bold" placeholder="Optional" formControlName="AgentName" tabIndex="1">
 					</mat-form-field>
 				</div>
-				<div class="col-md-6">
+				<div    class="col-md-6">
 					<mat-form-field appearance="outline" class="mat-custom-phone topLabelClass">
 						<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Agency / Insurance
 							Telephone #<span class="asterisk"> *</span></label>
@@ -55,7 +55,7 @@
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
 						<mat-label>Insurance / Agent Email</mat-label>
-						<input matInput class="font-weight-bold" placeholder="Insurance / Agent Email" formControlName="AgentEmail" tabIndex="1">
+						<input matInput class="font-weight-bold" placeholder="Optional" formControlName="AgentEmail" tabIndex="1">
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.AgentEmail.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -166,7 +166,13 @@
 			<div class="row">
 				<div class="col-md-12 mb-2">
 					<h3 class="addveh_top d-md-flex justify-content-between align-items-center">
-						<label class="alert alert-danger">Add 1-800-LIMO.COM as Additionaly Insured.</label>
+						<label class="alert alert-danger">Add 1-800-LIMO.COM as Additionaly Insured.
+
+							<div> <a href="https://1800limo.co/" class="text-dark"> 1-800-LIMO.COM</a><br>
+								4217 Oak Ave<br>
+								Brookfiekd, IL 60513</div>
+						</label>
+
 					</h3>
 				</div>
 			</div>
@@ -314,13 +320,24 @@
 			</div>
 		</div>
 	</section>
-	<div class="billing_inforamtion">
-		<ul class="d-flex justify-content-end">
-			<li><button class="custom-filled-button mr-2" (click)="submitForm()" [disabled]="disableSubmitButton"
-					tabindex="1">SAVE</button> </li>
-			<li><button class="custom-filled-button mr-2" (click)="resetForm()" tabindex="1">RESET</button> </li>
-		</ul>
-	</div>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-7">
+		
+			</div>
+			<div class="col-md-5">
+				<div class="billing_inforamtion ">
+					<ul class="d-flex justify-content-center">
+						<li><button class="custom-filled-button mr-2" (click)="submitForm()" [disabled]="disableSubmitButton"
+								tabindex="1">SAVE</button> </li>
+						<li><button class="custom-filled-button mr-2" (click)="resetForm()" tabindex="1">RESET</button> </li>
+					</ul>
+				</div>
+			</div>
+		</div>
+			</div>
+			
+	
 </form>
 <!-- Affiliate Email sent modal -->
 <div class="modal fade" id="showStripe24HourAlert" tabindex="-1" role="dialog" aria-labelledby="showStripe24HourAlert"

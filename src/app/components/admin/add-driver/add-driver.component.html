@@ -107,12 +107,43 @@
 						<div *ngIf="f.Dress.errors.required">This field is required</div>
 					</div>
 				</div>
+				<!-- <span class="optionalTextStyle">(Example:1998)</span> -->
+				<!-- <div class="col-md-4">
+					<mat-form-field appearance="outline">
+						<mat-label>First Year Pro Driver <span class="asterisk">*</span></mat-label>
+						<input matInput formControlName="StartDate"
+							placeholder="First Year Pro Driver" tabindex="1">
+					</mat-form-field>
+					<div *ngIf="submittedForm && f.StartDate.errors || f.StartDate.touched && f.StartDate.errors"
+						class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="f.StartDate.errors.required">This field is required</div>
+					</div>
+					<div *ngIf="f.StartDate.errors" class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="f.StartDate.errors?.invalid_Pattern;else plusError">Do not add Dashes
+							with numbers</div>
+						<ng-template #plusError>
+							<div *ngIf="f.StartDate.errors?.invalidPattern;else allErrors">Do not enter +
+								sign</div>
+							<ng-template #allErrors>
+								<div *ngIf="f.StartDate.errors?.pattern;else numberLength">Enter Numbers Only
+								</div>
+								<ng-template #numberLength>
+									<div *ngIf="f.StartDate.errors.minlength">Minimum length should be 4</div>
+									<div *ngIf="f.StartDate.errors.maxlength">Maximum length should be 4</div>
+								</ng-template>
+							</ng-template>
+						</ng-template>
+					</div>
+				</div> -->
 				<div class="col-md-4">
 					<mat-form-field appearance="outline">
-						<mat-label>First Year Professional Driving <span class="optionalTextStyle">(Example:
-								1998)</span></mat-label>
-						<input matInput formControlName="StartDate"
-							placeholder="First Year Professional Driving (Example: 1998)" tabindex="1">
+						<mat-label>First Year Pro Driver <span class="asterisk">*</span></mat-label>
+						<mat-select formControlName="StartDate" tabindex="1">
+							<mat-option value="">Choose Expiry Year</mat-option>
+							<mat-option *ngFor="let proDriverYear of proDriverYears" [value]="proDriverYear.value">
+								{{ proDriverYear.label }}
+							</mat-option>
+						</mat-select>
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.StartDate.errors || f.StartDate.touched && f.StartDate.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -135,6 +166,39 @@
 						</ng-template>
 					</div>
 				</div>
+				<!-- <div class="col-md-4">
+					<label class="selectYearBusinessLabel">First Year Pro Driver
+						<span class="asterisk">*</span></label>
+					<div class="selectStyle">
+						<select class="selectInputStyle" (click)="selectDropdownYearBusiness($event)"
+							formControlName="StartDate" tabindex="1">
+							<option *ngFor="let proDriverYear of proDriverYears" [value]="proDriverYear.value">
+								{{ proDriverYear.label }}
+							</option>
+						</select>
+						<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
+							style="enable-background: new 0 0 122.88 63.9" xml:space="preserve">
+							<style type="text/css">
+								.sty0 {
+									fill-rule: evenodd;
+									clip-rule: evenodd;
+								}
+							</style>
+							<g>
+								<polygon class="sty0" points="61.44,63.9 122.88,0 0,0 61.44,63.9" />
+							</g>
+						</svg>
+					</div>
+					<div *ngIf="
+							(submittedForm && f.StartDate.errors) ||
+							(f.StartDate.touched && f.StartDate.errors)
+						" class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="f.StartDate.errors.required">
+							This field is required
+						</div>
+					</div>
+				</div> -->
 
 			</div>
 		</div>
@@ -1089,17 +1153,28 @@
 			</div>
 		</div>
 	</section>
-	<div class="billing_inforamtion">
-		<ul>
-			<li><button class="custom-filled-button" (click)="submitForm()" [disabled]="disableSubmitButton"
-					tabindex="1">SAVE</button></li>
-			<li><button class="custom-filled-button" type="reset" (click)="resetForm()" tabindex="1">RESET</button>
-			</li>
-			<li><button class="custom-filled-button" type="button" (click)="backButton()" data-toggle="tooltip"
-					data-placement="top" title="Clicking back button deletes all fields." tabindex="1">BACK</button>
-			</li>
-		</ul>
-	</div>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-7">
+		
+			</div>
+			<div class="col-md-5">
+				<div class="billing_inforamtion">
+					<ul>
+						<li><button class="custom-filled-button" (click)="submitForm()" [disabled]="disableSubmitButton"
+								tabindex="1">SAVE</button></li>
+						<li><button class="custom-filled-button" type="reset" (click)="resetForm()" tabindex="1">RESET</button>
+						</li>
+						<li><button class="custom-filled-button" type="button" (click)="backButton()" data-toggle="tooltip"
+								data-placement="top" title="Clicking back button deletes all fields." tabindex="1">BACK</button>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+			</div>
+			
+	
 </form>
 
 <!-- Image modal -->

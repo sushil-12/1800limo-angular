@@ -108,7 +108,7 @@
 			</div>
 
 			<!-- Flat | Percent -->
-			<div class="col-2" *ngIf="item.key === 'taxes'">
+			<div class="col-2" *ngIf="item.key === 'taxes' || item.key == 'others'" >
 				<!-- Matslide Toggle -->
 				<div class="d-block">
 					<mat-slide-toggle [checked]="sub_item?.value?.controls?.type?.value == 'percent'" [tabIndex]="getTabIndex(item.key)"

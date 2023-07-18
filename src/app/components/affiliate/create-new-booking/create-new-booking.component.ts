@@ -1438,13 +1438,13 @@ export class CreateNewBookingComponent implements OnInit {
 				}
 
 				(<FormGroup>loose_customer.get('card_details')).get('card_number').setValidators([Validators.required, Validators.pattern("^[0-9]*$"), , Validators.minLength(12), Validators.maxLength(20),]);
-				(<FormGroup>loose_customer.get('card_details')).get('name').setValidators([Validators.required, this.customValidator.whitespace()]);
+				(<FormGroup>loose_customer.get('card_details')).get('name').setValidators([Validators.required]);
 				(<FormGroup>loose_customer.get('card_details')).get('cvv').setValidators([Validators.required, Validators.pattern("^[0-9]*$")]);
 				loose_customer.get('email').setValidators([Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.]+\.[a-zA-Z]{2,}$/i)])
 				loose_customer.get('phone').setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)])
-				loose_customer.get('first_name').setValidators([Validators.required, this.customValidator.whitespace()])
-				loose_customer.get('middle_name').setValidators(this.customValidator.whitespace())
-				loose_customer.get('last_name').setValidators([Validators.required, this.customValidator.whitespace()])
+				loose_customer.get('first_name').setValidators([Validators.required])
+				// loose_customer.get('middle_name').setValidators()
+				loose_customer.get('last_name').setValidators([Validators.required])
 				loose_customer.get('address').setValidators(this.customValidator.whitespace())
 
 			}
@@ -1776,9 +1776,58 @@ export class CreateNewBookingComponent implements OnInit {
 		}
 	}
 
+	iOS() {
+		return [
+			'iPad Simulator',
+			'iPhone Simulator',
+			'iPod Simulator',
+			'iPad',
+			'iPhone',
+			'iPod'
+		].includes(navigator.platform)
+			// iPad on iOS 13 detection
+			|| (navigator.userAgent.includes("Mac") && "ontouchend" in document)
+	}
+
+
+	showLocationPointOnMap(address:any) {
+		let isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+		console.log('isSafari', isSafari)
+		this.$spinner.show()
+			this.$spinner.hide();
+			if(address){
+				let googleDirectionUrl;
+				let iosDirectionUrl;
+					googleDirectionUrl = 'https://www.google.com/maps/dir/?api=1' + '&destination=' +
+						encodeURIComponent(address) + '&travelmode=driving'
+					iosDirectionUrl = 'http://maps.apple.com/?daddr=' +
+						encodeURIComponent(address)
+				if (this.iOS()) {
+					setTimeout(() => {
+						window.location.href = iosDirectionUrl;
+					})
+				}
+				else {
+					window.open(googleDirectionUrl, '_blank');
+				}
+			} else {
+				throw new Error('Error: Location Points Not Specified Properly. ');
+			}
+	}
+
 	change(event: any, form_control: string) {
 		console.log(event, form_control)
 		event && this.SetFormValue(form_control, event.id);
+	}
+
+	textFormatterTransferType(text:any){
+		try {
+			return text.replace(/[\\\_$]+/g, ' ')+'?'
+		}
+		catch
+		{
+			return text
+		}
 	}
 
 	setValueByBookNow() {

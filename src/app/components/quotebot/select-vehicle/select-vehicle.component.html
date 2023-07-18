@@ -36,7 +36,7 @@
 
 
 <!-- FILTERS AND VEHICLE LISTING SECTION -->
-<section class="container-fluid pt-2 pb-5" [ngClass]="openfilters ? 'position-fixed' : ''">
+<section class="container-fluid pt-2 pb-5 mob-height" [ngClass]="openfilters ? 'position-fixed' : ''">
 	<div id="page-instruction-text" class="mx-2 mt-4 mb-2">
 		<h5>
 			Select the vehicle that meets your requirements.
@@ -257,10 +257,16 @@
 									</div>
 								</div>
 								<!-- OUTER CARD -->
-								<div class="my-2" *ngIf="role==2">
+								<!-- <div class="my-2" *ngIf="role==2">
 									<div class="font-weight-bold display-5" style="font-size: 18px;">
 										Affiliate Vehicles
 									</div>
+								</div> -->
+								<div class="d-flex justify-content-end">
+									<button type="button" (click)="closeAllAccordian()"
+										class="custom-filled-button grey-button">
+										Close all
+									</button>
 								</div>
 							</div>
 							<div id="filter-buttons" class="mt-4">
@@ -364,8 +370,8 @@
 									vehinfo['rate_breakdown_' + getKeyName()]?.grand_total : '0.00' }}
 								</span>
 							</p>
-							<span class="text-secondary">
-								All Inclusive Rate<sup>*</sup>
+							<span class="text-secondary text-rate">
+								All Inclusive Rate<sup class="sup-red">*</sup>
 							</span>
 							
 							<div class="d-flex" *ngIf="vehinfo?.vehicle_details.year">
@@ -392,9 +398,10 @@
 						<button class="custom-filled-button orange-button mx-2" (click)="viewDetails(vehinfo)">
 							Vehicle Details
 						</button>
-						<button class="custom-filled-button" (click)="bookNow(vehinfo)">
+						<button class="custom-filled-button text-white rounded-pill" (click)="bookNow(vehinfo)">
 							Book Now
 						</button>
+
 					</div>
 					<!-- PREVIEW BUTTON ENDS -->
 				</div>
