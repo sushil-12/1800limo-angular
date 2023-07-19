@@ -517,14 +517,14 @@ export class HomeComponent implements OnInit {
 		if (localStorage.getItem('quotebot_form')) {
 			let previous_quotebot = JSON.parse(localStorage.getItem('quotebot_form'))
 			// fill previous values if localStorage has item
-			console.log('filling QB form from local-->>>' , previous_quotebot)
+			console.log('filling QB form from local-->>>' , previous_quotebot,previous_quotebot?.service_type.length>1 )
 			this.quoteBotForm.patchValue({
 				service_type: previous_quotebot?.service_type,
 				booking_hour: previous_quotebot?.booking_hour || 2,
 				pickup_type: previous_quotebot?.pickup_type,
 				dropoff_type: previous_quotebot?.dropoff_type,
 				pickup_date: this.isValidDate(previous_quotebot?.pickup_date) ? previous_quotebot?.pickup_date.split('T')[0] : new Date().toISOString().split('T')[0],
-				pickup_time: previous_quotebot?.pickup_time || "12:00:00",
+				pickup_time: previous_quotebot.pickup_time ? this.validateTimeHHMMSS(previous_quotebot.pickup_time) : "12:00:00",
 				pickup_airport: previous_quotebot?.pickup_airport,
 				pickup_airport_name: previous_quotebot?.other_details?.pickup_airport_name,
 				pickup_airport_lat: previous_quotebot?.pickup_airport_lat,
@@ -561,7 +561,7 @@ export class HomeComponent implements OnInit {
 			})
 			this.vars = previous_quotebot.other_details
 			console.warn('pickup_time: & date', this.QBForm.pickup_time.value, this.QBForm.pickup_date.value)
-			this.quoteBotSwitch(previous_quotebot.service_type)
+			this.quoteBotSwitch(previous_quotebot?.service_type.length>1 ? previous_quotebot?.service_type.length : "one_way")
 
 			if (new Date(this.QBForm.pickup_date.value).getDate() < new Date().getDate() || new Date(this.QBForm.pickup_date.value).getMonth() + 1 < new Date().getMonth() + 1) {
 				console.log('----------ssssssssssssssetttttttttt', this.getTimeHHMMSS(this.QBForm.pickup_date.value, true))
@@ -591,6 +591,22 @@ export class HomeComponent implements OnInit {
 
 			this.quoteBotSwitch('one_way')
 		}
+	}
+	validateTimeHHMMSS(time){
+		let arr = time.split(':')
+		const hours = arr[0];
+		const minutes = arr[1];
+		const seconds = arr[2];
+
+		// Pad single digits with leading zeros
+		const formattedHours = hours.toString();
+		const formattedMinutes = this.roundToNearest15(minutes.toString()).toString().padStart(2, '0');
+
+		// Combine the time components into a string
+		const currentTime = `${formattedHours}:${formattedMinutes}:00`;
+		console.log('----------validateTimeHHMMSS-->>>', arr,formattedMinutes,currentTime)
+
+		return currentTime
 	}
 
 
@@ -986,11 +1002,9 @@ export class HomeComponent implements OnInit {
 	}
 	clearValidatorsAndReset(arr: Array<string>) {
 		arr.forEach((item: string) => {
-			this.quoteBotForm.patchValue(
-				{[item]: ''},
-			)
 			console.log('clearing valildations from ' , item)
 			this.quoteBotForm.get(item).clearValidators()
+			this.quoteBotForm.get(item).reset()
 			this.quoteBotForm.get(item).updateValueAndValidity()
 		})
 	}
