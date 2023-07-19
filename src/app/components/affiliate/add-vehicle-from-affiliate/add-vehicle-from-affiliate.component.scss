@@ -230,8 +230,15 @@ top:2.05em}
 	height: 100%;
 	border-radius: 10px;
 }
+.mat-option{
+	background-color: rgb(226, 226, 226,1) !important;
+}
+:host ::ng-deep .ng-option{
+	background-color: rgb(226, 226, 226,1) !important;
+}
 
 :host ::ng-deep .select-cancel-label,.select-seat-label,.select-charter-cancel-label,.select-luggage-label{
 	background-color: rgb(226, 226, 226,1) !important;
 	transform: translateY(0.4em) scale(0.9) !important;
+	opacity: 0.5;
 }
