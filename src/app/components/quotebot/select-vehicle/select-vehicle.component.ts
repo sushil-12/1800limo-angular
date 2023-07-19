@@ -479,7 +479,7 @@ export class SelectVehicleComponent implements OnInit
 			{
 				this.no_vehicle_msg = 'No Vehicle found with the applied filter.'
 			}
-			this.vehicleDetails = response.data.filter(i=> i?.rate_breakdown_one_way.grand_total > 0)
+			this.vehicleDetails = [...response.data]
 			this.vehicleDetails = this.vehicleDetails.map(i=> {
 				if(i?.affiliate_company && i?.affiliate_name){
 					i['readMore']=(i?.affiliate_company?.length || i?.affiliate_name?.length) > 8 ? true : false 
