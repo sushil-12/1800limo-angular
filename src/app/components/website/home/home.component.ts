@@ -561,7 +561,7 @@ export class HomeComponent implements OnInit {
 			})
 			this.vars = previous_quotebot.other_details
 			console.warn('pickup_time: & date', this.QBForm.pickup_time.value, this.QBForm.pickup_date.value)
-			this.quoteBotSwitch(previous_quotebot?.service_type.length>1 ? previous_quotebot?.service_type.length : "one_way")
+			this.quoteBotSwitch(previous_quotebot?.service_type.length>1 ? previous_quotebot?.service_type : "one_way")
 
 			if (new Date(this.QBForm.pickup_date.value).getDate() < new Date().getDate() || new Date(this.QBForm.pickup_date.value).getMonth() + 1 < new Date().getMonth() + 1) {
 				console.log('----------ssssssssssssssetttttttttt', this.getTimeHHMMSS(this.QBForm.pickup_date.value, true))
