@@ -74,6 +74,16 @@
 										<div class="dropdown-item-icon"></div>
 										Edit Individual Account
 									</a>
+									<a class="dropdown-item" [routerLink]="['/admin/booking-list']"
+											[queryParams]="{type: 'past', id:individual?.id , isAffiliate:'false'}">
+											<div class="dropdown-item-icon"></div>
+											Past bookings
+										</a>
+										<a class="dropdown-item" [routerLink]="['/admin/booking-list']"
+											[queryParams]="{type: 'future', id: individual?.user_id,isAffiliate:'false'}">
+											<div class="dropdown-item-icon"></div>
+											Future bookings
+										</a>
 									<a class="dropdown-item" (click)="clickIndividualCards(individual.id)">
 										<div class="dropdown-item-icon" *></div>
 										View Cards

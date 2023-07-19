@@ -502,51 +502,62 @@ export class HomeComponent implements OnInit {
 		const quarterHour = 15;
 		return Math.round(minutes / quarterHour) * quarterHour;
 	}
+	isValidDate(dateString) {
+		// Attempt to create a Date object from the provided dateString
+		const date :any = new Date(dateString);
+	
+		console.log('in function validate date-->' , date , date.getTime(), new Date().getTime(),(date=="Invalid Date" && date.getTime() > new Date().getTime()) ? false : true)
+		// Check if the Date object is valid and the dateString is a valid date
+		// The condition isNaN(date) will be true if the date is not valid
+		// Also, check if the parsed date string is equal to the original dateString
+		return  date.getTime() > new Date().getTime() ? true : false;
+	  }
 
 	prefillQuotebot() {
 		if (localStorage.getItem('quotebot_form')) {
 			let previous_quotebot = JSON.parse(localStorage.getItem('quotebot_form'))
 			// fill previous values if localStorage has item
+			console.log('filling QB form from local-->>>' , previous_quotebot)
 			this.quoteBotForm.patchValue({
-				service_type: previous_quotebot.service_type,
-				booking_hour: previous_quotebot.booking_hour,
-				pickup_type: previous_quotebot.pickup_type,
-				dropoff_type: previous_quotebot.dropoff_type,
-				pickup_date: new Date(previous_quotebot.pickup_date).toISOString().split('T')[0],
-				pickup_time: previous_quotebot.pickup_time,
-				pickup_airport: previous_quotebot.pickup_airport,
+				service_type: previous_quotebot?.service_type,
+				booking_hour: previous_quotebot?.booking_hour || 2,
+				pickup_type: previous_quotebot?.pickup_type,
+				dropoff_type: previous_quotebot?.dropoff_type,
+				pickup_date: this.isValidDate(previous_quotebot?.pickup_date) ? previous_quotebot?.pickup_date.split('T')[0] : new Date().toISOString().split('T')[0],
+				pickup_time: previous_quotebot?.pickup_time || "12:00:00",
+				pickup_airport: previous_quotebot?.pickup_airport,
 				pickup_airport_name: previous_quotebot?.other_details?.pickup_airport_name,
-				pickup_airport_lat: previous_quotebot.pickup_airport_lat,
-				pickup_airport_long: previous_quotebot.pickup_airport_long,
-				pickup_address: previous_quotebot.pickup_address,
-				pickup_address_lat: previous_quotebot.pickup_address_lat,
-				pickup_address_long: previous_quotebot.pickup_address_long,
-				dropoff_airport: previous_quotebot.dropoff_airport,
+				pickup_airport_lat: previous_quotebot?.pickup_airport_lat,
+				pickup_airport_long: previous_quotebot?.pickup_airport_long,
+				pickup_address: previous_quotebot?.pickup_address,
+				pickup_address_lat: previous_quotebot?.pickup_address_lat,
+				pickup_address_long: previous_quotebot?.pickup_address_long,
+				dropoff_airport: previous_quotebot?.dropoff_airport,
 				dropoff_airport_name: previous_quotebot?.other_details?.dropoff_airport_name,
-				dropoff_airport_lat: previous_quotebot.dropoff_airport_lat,
-				dropoff_airport_long: previous_quotebot.dropoff_airport_long,
-				dropoff_address: previous_quotebot.dropoff_address,
-				dropoff_address_lat: previous_quotebot.dropoff_address_lat,
-				dropoff_address_long: previous_quotebot.dropoff_address_long,
+				dropoff_airport_lat: previous_quotebot?.dropoff_airport_lat,
+				dropoff_airport_long: previous_quotebot?.dropoff_airport_long,
+				dropoff_address: previous_quotebot?.dropoff_address,
+				dropoff_address_lat: previous_quotebot?.dropoff_address_lat,
+				dropoff_address_long: previous_quotebot?.dropoff_address_long,
 				return_pickup_date: new Date().toISOString().substring(0, 10),
-				return_pickup_time: previous_quotebot.return_pickup_time ?? '12:00:00',
-				return_pickup_airport: previous_quotebot.return_pickup_airport,
+				return_pickup_time: previous_quotebot?.return_pickup_time ?? '12:00:00',
+				return_pickup_airport: previous_quotebot?.return_pickup_airport,
 				return_pickup_airport_name: previous_quotebot?.other_details?.return_pickup_airport_name,
-				return_pickup_airport_lat: previous_quotebot.return_pickup_airport_lat,
-				return_pickup_airport_long: previous_quotebot.return_pickup_airport_long,
-				return_pickup_address: previous_quotebot.return_pickup_address ?? previous_quotebot.dropoff_address,
-				return_pickup_address_lat: previous_quotebot.return_pickup_address_lat,
-				return_pickup_address_long: previous_quotebot.return_pickup_address_long,
-				return_dropoff_airport: previous_quotebot.return_dropoff_airport,
+				return_pickup_airport_lat: previous_quotebot?.return_pickup_airport_lat,
+				return_pickup_airport_long: previous_quotebot?.return_pickup_airport_long,
+				return_pickup_address: previous_quotebot?.return_pickup_address ?? previous_quotebot?.dropoff_address,
+				return_pickup_address_lat: previous_quotebot?.return_pickup_address_lat,
+				return_pickup_address_long: previous_quotebot?.return_pickup_address_long,
+				return_dropoff_airport: previous_quotebot?.return_dropoff_airport,
 				return_dropoff_airport_name: previous_quotebot?.other_details?.return_dropoff_airport_name,
-				return_dropoff_airport_lat: previous_quotebot.return_dropoff_airport_lat,
-				return_dropoff_airport_long: previous_quotebot.return_dropoff_airport_long,
-				return_dropoff_address: previous_quotebot.return_dropoff_address ?? previous_quotebot.pickup_address,
-				return_dropoff_address_lat: previous_quotebot.return_dropoff_address_lat,
-				return_dropoff_address_long: previous_quotebot.return_dropoff_address_long,
-				no_of_passenger: previous_quotebot.no_of_passenger,
-				no_of_luggage: previous_quotebot.no_of_luggage,
-				location_info: previous_quotebot.location_info
+				return_dropoff_airport_lat: previous_quotebot?.return_dropoff_airport_lat,
+				return_dropoff_airport_long: previous_quotebot?.return_dropoff_airport_long,
+				return_dropoff_address: previous_quotebot?.return_dropoff_address ?? previous_quotebot?.pickup_address,
+				return_dropoff_address_lat: previous_quotebot?.return_dropoff_address_lat,
+				return_dropoff_address_long: previous_quotebot?.return_dropoff_address_long,
+				no_of_passenger: previous_quotebot?.no_of_passenger || 1,
+				no_of_luggage: previous_quotebot?.no_of_luggage || 1,
+				location_info: previous_quotebot?.location_info
 			})
 			this.vars = previous_quotebot.other_details
 			console.warn('pickup_time: & date', this.QBForm.pickup_time.value, this.QBForm.pickup_date.value)
@@ -975,8 +986,12 @@ export class HomeComponent implements OnInit {
 	}
 	clearValidatorsAndReset(arr: Array<string>) {
 		arr.forEach((item: string) => {
+			this.quoteBotForm.patchValue(
+				{[item]: ''},
+			)
+			console.log('clearing valildations from ' , item)
 			this.quoteBotForm.get(item).clearValidators()
-			this.quoteBotForm.get(item).reset()
+			this.quoteBotForm.get(item).updateValueAndValidity()
 		})
 	}
 
@@ -1223,9 +1238,9 @@ export class HomeComponent implements OnInit {
 				$('#no_of_passenger').removeClass('highlight-text')
 			}, 1000)
 			if (changeType == 'i' && this.quoteBotForm.value.no_of_passenger < max_length) {
-				this.QBForm.no_of_passenger.setValue(this.quoteBotForm.value.no_of_passenger + 1)
+				this.QBForm.no_of_passenger.setValue(parseInt(this.quoteBotForm.value.no_of_passenger) + 1)
 			} else if (changeType == 'd' && this.quoteBotForm.value.no_of_passenger > 1) {
-				this.QBForm.no_of_passenger.setValue(this.quoteBotForm.value.no_of_passenger - 1)
+				this.QBForm.no_of_passenger.setValue(parseInt(this.quoteBotForm.value.no_of_passenger) - 1)
 			}
 		} else {
 			// for luggage
@@ -1234,9 +1249,9 @@ export class HomeComponent implements OnInit {
 				$('#no_of_luggage').removeClass('highlight-text')
 			}, 1000)
 			if (changeType == 'i' && this.quoteBotForm.value.no_of_luggage < max_length) {
-				this.QBForm.no_of_luggage.setValue(this.quoteBotForm.value.no_of_luggage + 1)
+				this.QBForm.no_of_luggage.setValue(parseInt(this.quoteBotForm.value.no_of_luggage) + 1)
 			} else if (changeType == 'd' && this.quoteBotForm.value.no_of_luggage >= 1) {
-				this.QBForm.no_of_luggage.setValue(this.quoteBotForm.value.no_of_luggage - 1)
+				this.QBForm.no_of_luggage.setValue(parseInt(this.quoteBotForm.value.no_of_luggage) - 1)
 			}
 		}
 	}
