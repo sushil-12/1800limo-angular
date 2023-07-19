@@ -844,7 +844,16 @@ export class AdminService {
 	auditTrailInfoInvoice(bookingId) {
 		return this.httpClient.get(this.serverUrl + `admin/booking-audit-records/${bookingId}/invoice`)
 	}
-
+	loadPastFutureBookings(url,id,type,isAffiliate,keyword = '') {
+		var path;
+		if (url) {
+			path = url + '&search=' + keyword ;
+		}
+		else {
+			path = this.serverUrl + 'reservations/'+ id + '?past='+ type+ '&affiliate_bookings='+isAffiliate+'&search=' + keyword;
+		}
+		return this.httpClient.get(path).toPromise();
+	}
 	loadBookings(url, startDate, endDate, useDateFilter,keyword = '') {
 		var path;
 		if (url) {

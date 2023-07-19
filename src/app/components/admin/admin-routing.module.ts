@@ -79,6 +79,7 @@ import { StaffPermissionsComponent } from './staff-permissions/staff-permissions
 import { StaffRolesListComponent } from './staff-roles-list/staff-roles-list.component';
 import { BookingLogsComponent } from './booking-logs/booking-logs.component';
 import { DemoAddIndividualComponent } from './demo-add-individual/demo-add-individual.component';
+import { AffiliateBookingComponent } from './affiliate-booking/affiliate-booking.component';
 
 
 const routes: Routes = [
@@ -191,6 +192,12 @@ const routes: Routes = [
 		canActivate: [SubAdminGuard],
 		component: DailyBookingsComponent
 	},
+	{
+		path: 'booking-list',
+		canActivate: [SubAdminGuard],
+		component: AffiliateBookingComponent
+	},
+	
 	{
 		path: 'create-new-booking',
 		canActivate: [SubAdminGuard],
