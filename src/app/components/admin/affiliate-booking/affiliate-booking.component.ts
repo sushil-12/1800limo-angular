@@ -54,6 +54,7 @@ export class AffiliateBookingComponent implements OnInit {
 	filtertype: string = "";
   type :boolean= null;
   isAffiliate:boolean = null
+  userName:string = ''
 
 	passengerDetails: any;
 	senderValue: string;
@@ -67,6 +68,7 @@ export class AffiliateBookingComponent implements OnInit {
 	useDateFilter:boolean=true;
 	rates_preview: any;
   accountID: string;
+	bookingType: string ;
 
 	constructor(
 		private adminService: AdminService,
@@ -83,8 +85,10 @@ export class AffiliateBookingComponent implements OnInit {
 			console.log('-_>>>>>>>' , params)
       if(params){
         this.accountID = params?.id,
+		this.bookingType = params?.type
         this.type = params?.type == 'past' ? true : false
         this.isAffiliate = params?.isAffiliate == 'true' ? true : false
+		this.userName = params?.for
       }
 		})
 

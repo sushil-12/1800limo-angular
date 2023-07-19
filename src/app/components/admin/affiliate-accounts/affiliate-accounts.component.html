@@ -129,12 +129,12 @@
 											titlecase }} Account
 										</a>
 										<a class="dropdown-item" [routerLink]="['/admin/booking-list']"
-											[queryParams]="{type: 'past', id:blackCarLimoBus?.id , isAffiliate:'true'}">
+											[queryParams]="{type: 'past', id:blackCarLimoBus?.id , isAffiliate:'true' , for:blackCarLimoBus?.FirstName}">
 											<div class="dropdown-item-icon"></div>
 											Past bookings
 										</a>
 										<a class="dropdown-item" [routerLink]="['/admin/booking-list']"
-											[queryParams]="{type: 'future', id: blackCarLimoBus?.user_id,isAffiliate:'true'}">
+											[queryParams]="{type: 'future', id: blackCarLimoBus?.id,isAffiliate:'true',for:blackCarLimoBus?.FirstName}">
 											<div class="dropdown-item-icon"></div>
 											Future bookings
 										</a>
