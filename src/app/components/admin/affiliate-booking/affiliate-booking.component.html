@@ -2,7 +2,7 @@
 <main>
 	<!-- Main page content-->
 	<section class="adminbox_shadow user_information">
-		<h2 class="headinginfo">Booking list </h2>
+		<h2 class="headinginfo">{{userName |titlecase}}'s {{bookingType | titlecase}} Booking list </h2>
 		<div class="containeredd mt-1 ">
 
 			
@@ -1449,7 +1449,7 @@
 					<hr>
 
 					<!-- Rate Distribution Information -->
-					<div class="distribution_rate" *ngIf="bookingPreview.affiliate_type === 'affiliate' ">
+					<div class="distribution_rate" *ngIf="bookingPreview.affiliate_type === 'affiliate' && bookingPreview.payment_status=='unpaid'">
 						<h4 class="font-weight-bolder m-0 my-3">
 							Rates Distribution {{bookingPreview.loose_affiliate}}
 						</h4>

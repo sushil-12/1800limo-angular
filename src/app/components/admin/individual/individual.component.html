@@ -75,12 +75,12 @@
 										Edit Individual Account
 									</a>
 									<a class="dropdown-item" [routerLink]="['/admin/booking-list']"
-											[queryParams]="{type: 'past', id:individual?.id , isAffiliate:'false'}">
+											[queryParams]="{type: 'past', id:individual?.id , isAffiliate:'false' , for:individual?.first_name}">
 											<div class="dropdown-item-icon"></div>
 											Past bookings
 										</a>
 										<a class="dropdown-item" [routerLink]="['/admin/booking-list']"
-											[queryParams]="{type: 'future', id: individual?.user_id,isAffiliate:'false'}">
+											[queryParams]="{type: 'future', id: individual?.id,isAffiliate:'false' , for:individual?.first_name}">
 											<div class="dropdown-item-icon"></div>
 											Future bookings
 										</a>
