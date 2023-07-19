@@ -99,7 +99,7 @@ export class DailyBookingsComponent implements OnInit {
 		this.searchText = this.adminService.checkCookie('search') ?
 			this.adminService.getCookie('search')
 			: "";
-		
+		console.log('usedatefilter---->>>>>>>' , this.adminService.getCookie('useDateFilter'))
 		this.useDateFilter = this.adminService.checkCookie('useDateFilter') ?
 		(this.adminService.getCookie('useDateFilter')=='true' ? true : false)
 		: true;

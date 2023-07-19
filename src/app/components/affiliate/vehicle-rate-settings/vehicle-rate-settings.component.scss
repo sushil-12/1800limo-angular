@@ -231,6 +231,9 @@ div#rate-manager-slider {
 	}
 }
 
+// #cd-percent label{
+// 	font-size: 1.1vw !important;
+// }
 
 
 :host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-outline-gap{
@@ -289,4 +292,11 @@ top:2.05em}
 
 :host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-outline-gap {
     border-top-color: #b2b2b2 !important;
+}
+
+.mat-option{
+	background-color: rgb(226, 226, 226,1) !important;
+}
+:host ::ng-deep .ng-option{
+	background-color: rgb(226, 226, 226,1) !important;
 }
