@@ -243,14 +243,14 @@
 				</div>
 				<!----PAGINATION---->
 				<!----BACK BTN---->
-				<nav aria-label="Page navigation example" *ngIf="totalRecords > 15">
+				<nav aria-label="Page navigation example" *ngIf="totalRecords > 5">
 					<ul class="pagination pagination-circle pg-blue">
-						<!-- <li *ngIf="currentPage!=1" class="page-item disabled"
-								(click)="loadBookings(firstPageUrl, startDate, endDate, searchText, filtertype)">
+						<li *ngIf="currentPage!=1" class="page-item disabled"
+								(click)="loadBookings(firstPageUrl, accountID, type,isAffiliate,searchText)">
 								<a class="page-link">First</a>
 							</li>
 							<li *ngIf="currentPage!=1" class="page-item disabled"
-								(click)="loadBookings(prevPageUrl, startDate, endDate, searchText, filtertype)">
+								(click)="loadBookings(prevPageUrl, accountID, type,isAffiliate,searchText)">
 								<a class="page-link" aria-label="Previous">
 									<span aria-hidden="true">&laquo;</span>
 									<span class="sr-only">Previous</span>
@@ -258,25 +258,25 @@
 							</li>
 							<li *ngFor="let in of counter() ;let i = index"
 								[ngClass]="(in==currentPage)?'page-item active':'page-item'"
-								(click)="loadBookings(path+'?page='+in, startDate, endDate, searchText, filtertype)"
+								(click)="loadBookings(path+'?page='+in,  accountID, type,isAffiliate,searchText)"
 								[disabled]="(in==currentPage)?true:false">
 								<a class="page-link">{{in}}</a>
 							</li>
 							<li *ngIf="currentPage!=lastPage" class="page-item"
-								(click)="loadBookings(nextPageUrl, startDate, endDate, searchText, filtertype)">
+								(click)="loadBookings(nextPageUrl,  accountID, type,isAffiliate,searchText)">
 								<a class="page-link" aria-label="Next">
 									<span aria-hidden="true">&raquo;</span>
 									<span class="sr-only">Next</span>
 								</a>
 							</li>
 							<li *ngIf="currentPage!=lastPage" class="page-item"
-								(click)="loadBookings(lastPageUrl, startDate, endDate, searchText, filtertype)">
+								(click)="loadBookings(lastPageUrl,  accountID, type,isAffiliate,searchText)">
 								<a class="page-link">Last</a>
-							</li> -->
-						<li class="page-item disabled" *ngIf="nextPageUrl"
+							</li>
+						<!-- <li class="page-item disabled" *ngIf="nextPageUrl"
 							(click)="handleShowMore(nextPageUrl,startDate, endDate, searchText)">
 							<a class="page-link">Show more</a>
-						</li>
+						</li> -->
 					</ul>
 				</nav>
 			</div>
