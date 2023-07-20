@@ -270,11 +270,11 @@ export class FinalizeBookingComponent implements OnInit {
 		console.log('\n\n Submitting Form', body);
 		this.$spinner.show()
 		this.$api.updateFinalizeRates(body).subscribe((response: any) => {
-			this.$errors.openDialog({
-				errors: {
-					error: `<span class='text-success'>${response.message}</span>`
-				}
-			})
+			// this.$errors.openDialog({
+			// 	errors: {
+			// 		error: `<span class='text-success'>${response.message}</span>`
+			// 	}
+			// })
 			// this.$router.navigate(['/admin/daily-bookings-admin'])
 			console.log('response-->>', response)
 			this.$spinner.hide()
