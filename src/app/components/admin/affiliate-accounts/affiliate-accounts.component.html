@@ -57,7 +57,8 @@
 				<div class="col-md-4 py-2">
 					<mat-form-field appearance="outline" class="m-0">
 						<mat-label>Search Filter by Key word</mat-label>
-						<input type="text" matInput placeholder="Search Filter by Key word" id="keyword1" autofocus>
+						<input type="text" matInput [value]="searchText" (keyup)="handleSearchKeyword($event.target.value)"
+						placeholder="Search Filter by Key word" id="keyword1" autofocus>
 					</mat-form-field>
 				</div>
 				<div class="col-md-2 py-2">
@@ -152,7 +153,7 @@
 											data-toggle="modal" data-target="#rejectCauseModal">Reject</button>
 									</div>
 									<ng-template #notCompleted>
-										<div
+										<div (click)="navigateToStep0Inprogress(blackCarLimoBus.id, blackCarLimoBus.AffiliateType , blackCarLimoBus)"
 											[className]="'badge badge-pill approval_status ' + blackCarLimoBus.account_approval">
 											{{blackCarLimoBus.account_approval |
 											bookingStatusTextReplace : '_' : ' '

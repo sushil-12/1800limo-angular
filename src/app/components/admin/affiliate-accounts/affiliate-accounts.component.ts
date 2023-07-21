@@ -54,6 +54,7 @@ export class AffiliateAccountsComponent implements OnInit {
 		step6: "uncompleted"
 	}
 	affiliateId: string = '';
+	searchText: any = '';
 
 	constructor(
 		private adminService: AdminService,
@@ -65,6 +66,7 @@ export class AffiliateAccountsComponent implements OnInit {
 	ngOnInit(): void {
 		this.operatorSelect = 'all';
 		this.filter_type = 'all'
+		this.searchText = localStorage.getItem('affiliateSearch') ? localStorage.getItem('affiliateSearch') : ''
 
 		this.affiliateTypeSwitch('all')
 		sessionStorage.clear()
@@ -126,9 +128,23 @@ export class AffiliateAccountsComponent implements OnInit {
 		this.loadAffiliateOperators()
 	}
 
+	timer: any
+	handleSearchKeyword(text:any){
+		console.log('on change search text-->>' , text)
+		this.searchText = text
+		clearTimeout(this.timer);
+		this.timer = setTimeout(() => {
+			localStorage.setItem('affiliateSearch' , text)
+			this.loadAffiliateOperators()
+		}, 700)
+	}
+	handleKeypressEvents() {
+		clearTimeout(this.timer)
+	}
+
 	loadAffiliateOperators(pageUrl = null) {
 		/** spinner starts on init */
-		var keyword = ((document.getElementById("keyword1") as HTMLInputElement).value);
+		var keyword = this.searchText
 		if(keyword.length>0){
 			this.filter_type = 'all'
 			console.log('keyword--->>>' , keyword , this.filter_type)
@@ -174,6 +190,17 @@ export class AffiliateAccountsComponent implements OnInit {
 			this.router.navigate(['/admin/affiliate/step0']);
 		});
 
+	}
+	navigateToStep0Inprogress(affiliate_id: number, affiliate_type: string , affiliateUserData){
+		console.log('in function navigate to step 0 in case status in-progesas', affiliateUserData)
+		if(affiliateUserData?.account_approval=="in-progress"){
+			sessionStorage.setItem('affiliateId', JSON.stringify(affiliate_id))
+			sessionStorage.setItem("affiliateType", affiliate_type);
+			sessionStorage.setItem('affiliateName' , affiliateUserData.FirstName +' '+ affiliateUserData.LastName)
+			this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
+				this.router.navigate(['/admin/affiliate/step0']);
+			});
+		}
 	}
 
 	viewAffiliateCreditCards(affiliate_id: number) {

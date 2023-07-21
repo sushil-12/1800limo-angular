@@ -891,17 +891,17 @@
 </section>
 
 <!------------------VIEW OUR VEHICLES------------------------------->
-<section class="checkourveh_wrapper">
+<section class="checkourveh_wrapper" style="background-color: black !important;">
 	<div class="container">
-		<h2>{{ fetchPageData('VIEW OUR VEHICLES')?.title }}</h2>
+		<h2 style="color: #FFF;">{{ fetchPageData('VIEW OUR VEHICLES')?.title }}</h2>
 		<hr>
-		<h6>{{ fetchPageData('VIEW OUR VEHICLES')?.subtitle }}</h6>
+		<h6 style="color: #FFF;">{{ fetchPageData('VIEW OUR VEHICLES')?.subtitle }}</h6>
 		<div class="chk_vehicles_parent">
 			<div class="chk_vehicles owl-carousel owl-theme viewVehicleCarousel">
 				<div class="item" *ngFor="let vehicle of vehicles">
 					<a class="ns-user">
 						<img src="{{vehicle?.vehicle_image}}" alt="semi">
-						<p>{{vehicle?.vehicle_name}}</p>
+						<p style="color: #FFF;">{{vehicle?.vehicle_name}}</p>
 					</a>
 				</div>
 			</div>

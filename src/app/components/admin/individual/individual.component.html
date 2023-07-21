@@ -28,7 +28,7 @@
 					<mat-form-field appearance="outline">
 						<mat-label>Type here to search</mat-label>
 						<input type="text" matInput placeholder="Search Filter by Key word" 
-						(keyup)="loadIndividuals()"
+						(keyup)="handleSearchKeyword($event.target.value)" [value]="searchText"
 						id="keyword" autofocus>
 					</mat-form-field>
 				</div>
