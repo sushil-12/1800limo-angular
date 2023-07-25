@@ -61,8 +61,25 @@ export class AdminService {
 		return false
 	}
 
-	deleteCookie(key: string) {
-		document.cookie = `${key}=' ';expires=Thu, 01 Jan 1970 00:00:00 UTC;`;
+	deleteCookie(cookieName: string) {
+		const cookies = document.cookie.split(';');
+		console.log('cookies-->>>>>>>',cookies)
+
+		for (let i = 0; i < cookies.length; i++) {
+		  const cookie = cookies[i].trim();
+		  // Check if the cookie starts with the desired name
+		  if (cookie.indexOf(cookieName + '=') === 0) {
+			  console.log('selected cookies-->>' , cookie)
+			// Extract the cookie's name and value
+			const [name, value] = cookie.split('=');
+	  
+			// Split the cookie path and value
+			const [path,] = value.split(';');
+	  
+			// Set the expiration date in the past to delete the cookie
+			document.cookie = `${name}=${path}; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=${path}`;
+		  }
+		}
 	}
 	getMyPermissions(){
 		return this.httpClient.get(this.serverUrl + 'my-permissions');
@@ -844,7 +861,16 @@ export class AdminService {
 	auditTrailInfoInvoice(bookingId) {
 		return this.httpClient.get(this.serverUrl + `admin/booking-audit-records/${bookingId}/invoice`)
 	}
-
+	loadPastFutureBookings(url,id,type,isAffiliate,keyword = '') {
+		var path;
+		if (url) {
+			path = url + '&search=' + keyword ;
+		}
+		else {
+			path = this.serverUrl + 'reservations/'+ id + '?past='+ type+ '&affiliate_bookings='+isAffiliate+'&search=' + keyword;
+		}
+		return this.httpClient.get(path).toPromise();
+	}
 	loadBookings(url, startDate, endDate, useDateFilter,keyword = '') {
 		var path;
 		if (url) {

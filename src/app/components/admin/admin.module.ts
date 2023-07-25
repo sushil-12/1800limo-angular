@@ -112,6 +112,7 @@ import { BookingLogsComponent } from './booking-logs/booking-logs.component';
 import {MatTableModule} from '@angular/material/table';
 import {MatExpansionModule} from '@angular/material/expansion';
 import { DemoAddIndividualComponent } from './demo-add-individual/demo-add-individual.component';
+import { AffiliateBookingComponent } from './affiliate-booking/affiliate-booking.component';
 
 
 @NgModule({
@@ -197,7 +198,8 @@ import { DemoAddIndividualComponent } from './demo-add-individual/demo-add-indiv
 		StaffPermissionsComponent,
 		StaffRolesListComponent,
 		BookingLogsComponent,
-		DemoAddIndividualComponent
+		DemoAddIndividualComponent,
+		AffiliateBookingComponent
 	],
 	imports: [
 		CommonModule,

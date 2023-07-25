@@ -39,8 +39,8 @@
 										class="user-profile btn btn-icon btn-transparent-dark dropdown-toggle custom-filled-button"
 										style="padding: 0.875rem 2.258rem;" id="navbarDropdownUserImage" role="button"
 										data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-										{{currentUser.affiliateCompanyName ? currentUser.affiliateCompanyName :
-										currentUser.name}}
+										{{currentUser?.affiliateCompanyName ? currentUser?.affiliateCompanyName :
+										currentUser?.name}}
 									</button>
 									<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
 										aria-labelledby="navbarDropdownUserImage">
@@ -52,12 +52,12 @@
 											</svg>
 											<div class="dropdown-user-details">
 												<div class="dropdown-user-details-name">
-													{{currentUser.affiliateCompanyName ?
-													currentUser.affiliateCompanyName : currentUser.name}}</div>
+													{{currentUser?.affiliateCompanyName ?
+													currentUser?.affiliateCompanyName : currentUser?.name}}</div>
 											</div>
 										</h6>
 										<div class="dropdown-divider"></div>
-										<div *ngIf="currentUser.roleName=='driver' && accountStatus; else adminRole"
+										<div *ngIf="currentUser?.roleName=='driver' && accountStatus; else adminRole"
 											class="dropdown-item" (click)="dashboard('affiliate')">
 											<div class="dropdown-item-icon settingsvg">
 												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -72,7 +72,7 @@
 											</div>{{ value }}
 										</div>
 										<ng-template #adminRole>
-											<div *ngIf="currentUser.roleName=='admin'" class="dropdown-item"
+											<div *ngIf="currentUser?.roleName=='admin'" class="dropdown-item"
 												(click)="dashboard('admin')">
 												<div class="dropdown-item-icon gear-bg settingsvg font-weight-bolder">
 													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -131,19 +131,19 @@
 				</h3>
 				<ul class="nav nav-tabs" id="myTab" role="tablist">
 					<li class="nav-item" role="presentation">
-						<a class="nav-link" [ngClass]="QBForm.service_type.value == 'one_way' ? 'active' : ''"
+						<a class="nav-link" [ngClass]="QBForm?.service_type?.value == 'one_way' ? 'active' : ''"
 							(click)="quoteBotSwitch('one_way')">
 							One Way
 						</a>
 					</li>
 					<li class="nav-item" role="presentation">
-						<a class="nav-link" [ngClass]="QBForm.service_type.value == 'round_trip' ? 'active' : ''"
+						<a class="nav-link" [ngClass]="QBForm?.service_type?.value == 'round_trip' ? 'active' : ''"
 							(click)="quoteBotSwitch('round_trip')">
 							Round Trip
 						</a>
 					</li>
 					<li class="nav-item" role="presentation">
-						<a class="nav-link" [ngClass]="QBForm.service_type.value =='charter_tour' ? 'active' : ''"
+						<a class="nav-link" [ngClass]="QBForm?.service_type?.value =='charter_tour' ? 'active' : ''"
 							(click)="quoteBotSwitch('charter_tour')">
 							Charter / Tour
 						</a>
@@ -163,21 +163,21 @@
 								<div class="row">
 									<!-- Booking Hours -->
 									<div class="col-12 col-md-12"
-										[hidden]="QBForm.service_type.value != 'charter_tour'">
+										[hidden]="QBForm?.service_type?.value != 'charter_tour'">
 										<label>Booking Hours</label>
 										<div class="inselect">
-											<select (change)="changeDetection.bookingHours($event)"
+											<select (change)="changeDetection?.bookingHours($event)"
 												class="selectHoursFields font-weight-bolder"
 												formControlName="booking_hour"
-												[class.errorValid]="submitted && QBForm.booking_hour.errors">
-												<option *ngFor="let hour of hour_values" [value]="hour.return_value">
-													{{ hour.display_value }}
+												[class.errorValid]="submitted && QBForm?.booking_hour?.errors">
+												<option *ngFor="let hour of hour_values" [value]="hour?.return_value">
+													{{ hour?.display_value }}
 												</option>
 											</select>
 											<i class="fa fa-angle-down bookingHoursDrop" aria-hidden="true"></i>
 										</div>
-										<div *ngIf="submitted && QBForm.booking_hour.errors" class="text-danger">
-											<div *ngIf="QBForm.booking_hour.errors.required">
+										<div *ngIf="submitted && QBForm?.booking_hour?.errors" class="text-danger">
+											<div *ngIf="QBForm?.booking_hour?.errors?.required">
 												Booking Hours is required
 											</div>
 										</div>
@@ -188,15 +188,15 @@
 										<label>Pickup Type</label>
 										<div class="inselect">
 											<select formControlName="pickup_type" class="font-weight-bolder"
-												[class.errorValid]="submitted && QBForm.pickup_type.errors">
+												[class.errorValid]="submitted && QBForm?.pickup_type?.errors">
 												<option value="airport">Airport?</option>
 												<option value="cruise">Cruise Port?</option>
 												<option value="city">City?</option>
 											</select>
 											<i class="fa fa-angle-down" aria-hidden="true"></i>
 										</div>
-										<div *ngIf="submitted && QBForm.pickup_type.errors" class="text-danger">
-											<div *ngIf="QBForm.pickup_type.errors.required">
+										<div *ngIf="submitted && QBForm?.pickup_type?.errors" class="text-danger">
+											<div *ngIf="QBForm?.pickup_type?.errors?.required">
 												Pickup Type is required
 											</div>
 										</div>
@@ -207,15 +207,15 @@
 										<label>Drop Off Type </label>
 										<div class="inselect">
 											<select formControlName="dropoff_type" class="font-weight-bolder"
-												[class.errorValid]="submitted && QBForm.dropoff_type.errors">
+												[class.errorValid]="submitted && QBForm?.dropoff_type?.errors">
 												<option Value="airport">Airport?</option>
 												<option Value="cruise">Cruise Port?</option>
 												<option Value="city">City?</option>
 											</select>
 											<i class="fa fa-angle-down" aria-hidden="true"></i>
 										</div>
-										<div *ngIf="submitted && QBForm.dropoff_type.errors" class="text-danger">
-											<div *ngIf="QBForm.dropoff_type.errors.required">
+										<div *ngIf="submitted && QBForm?.dropoff_type?.errors" class="text-danger">
+											<div *ngIf="QBForm?.dropoff_type?.errors?.required">
 												Travel type is required
 											</div>
 										</div>
@@ -234,20 +234,20 @@
 													[min]="minDate" formControlName="pickup_date"
 													class="font-weight-bolder"
 													(dateChange)="changeDetection.pickupDate($event.target.value)"
-													(click)="picker1.open()"
-													[class.errorValid]="submitted && QBForm.pickup_date.errors">
+													(click)="picker1.open()" readonly
+													[class.errorValid]="submitted && QBForm?.pickup_date?.errors">
 												<mat-datepicker-toggle matSuffix [for]="picker1">
 												</mat-datepicker-toggle>
 												<mat-datepicker #picker1></mat-datepicker>
 											</mat-form-field>
 										</div>
-										<div *ngIf="submitted && QBForm.pickup_date.errors" class="text-danger">
+										<div *ngIf="submitted && QBForm?.pickup_date?.errors" class="text-danger">
 											<div
-												*ngIf="QBForm.pickup_date.errors.matDatepickerParse; else pickupDateError">
+												*ngIf="QBForm?.pickup_date?.errors?.matDatepickerParse; else pickupDateError">
 												Pickup Date is not valid
 											</div>
 											<ng-template #pickupDateError>
-												<div *ngIf="QBForm.pickup_date.errors.required">
+												<div *ngIf="QBForm?.pickup_date?.errors?.required">
 													Pickup Date is required
 												</div>
 											</ng-template>
@@ -263,9 +263,9 @@
 												formControlName="pickup_time" class="font-weight-bolder"
 												style="flex: 1 1 100%; box-sizing: border-box; max-width: 100%;"
 												(change)="changeDetection.pickupTime($event, 'pickup_time')"
-												[class.errorValid]="submitted && QBForm.pickup_time.errors">
-												<option *ngFor="let time of time_values" [value]="time.return_value">
-													{{ time.display_value }}
+												[class.errorValid]="submitted && QBForm?.pickup_time?.errors">
+												<option *ngFor="let time of time_values" [value]="time?.return_value">
+													{{ time?.display_value }}
 												</option>
 											</select>
 											<svg fill="#fff" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"
@@ -286,14 +286,14 @@
 											<div class="input-group time" id="timepicker">
 												<input type="time" class="form-control" placeholder="HH:MM"
 													(change)="changeDetection.pickupTime($event, 'pickup_time')"
-													[value]="QBForm.pickup_time.value" class="font-weight-bolder" />
+													[value]="QBForm?.pickup_time?.value" class="font-weight-bolder" />
 												<em class="input-group-append input-group-addon">
 													<em class="input-group-text"></em>
 												</em>
 											</div>
 										</div>
-										<div *ngIf="submitted && QBForm.pickup_time.errors" class="text-danger">
-											<div *ngIf="QBForm.pickup_time.errors.required">Pickup Time is required
+										<div *ngIf="submitted && QBForm?.pickup_time?.errors" class="text-danger">
+											<div *ngIf="QBForm?.pickup_time?.errors?.required">Pickup Time is required
 											</div>
 										</div>
 									</div>
@@ -326,8 +326,8 @@
 														<input type="number" formControlName="no_of_passenger" min="0"
 															max="1000" step="1" inputmode="decimal"
 															style="text-align: center" class="form-control"
-															placeholder="" id="no_of_passenger"
-															[class.errorValid]="submitted && QBForm.no_of_passenger.errors">
+															placeholder="" id="no_of_passenger" 
+															[class.errorValid]="submitted && QBForm?.no_of_passenger?.errors">
 														<div class="input-group-append">
 															<button style="min-width: 2.5rem"
 																class="btn btn-increment btn-outline-secondary highlightButton"
@@ -339,8 +339,8 @@
 												</li>
 											</ul>
 										</div>
-										<div *ngIf="submitted && QBForm.no_of_passenger.errors" class="text-danger">
-											<div *ngIf="QBForm.no_of_passenger.errors.required"># of Passengers is
+										<div *ngIf="submitted && QBForm?.no_of_passenger?.errors" class="text-danger">
+											<div *ngIf="QBForm?.no_of_passenger?.errors?.required"># of Passengers is
 												required
 											</div>
 										</div>
@@ -373,8 +373,8 @@
 														<input type="number" formControlName="no_of_luggage" min="0"
 															max="2000" step="1" inputmode="decimal"
 															style="text-align: center" class="form-control "
-															placeholder="" id="no_of_luggage"
-															[class.errorValid]="submitted && QBForm.no_of_luggage.errors">
+															placeholder="" id="no_of_luggage" 
+															[class.errorValid]="submitted && QBForm?.no_of_luggage?.errors">
 														<div class="input-group-append">
 															<button style="min-width: 2.5rem"
 																class="btn btn-increment btn-outline-secondary"
@@ -386,8 +386,8 @@
 												</li>
 											</ul>
 										</div>
-										<div *ngIf="submitted && QBForm.no_of_luggage.errors" class="text-danger">
-											<div *ngIf="QBForm.no_of_luggage.errors.required">
+										<div *ngIf="submitted && QBForm?.no_of_luggage?.errors" class="text-danger">
+											<div *ngIf="QBForm?.no_of_luggage?.errors?.required">
 												# of Luggage is required
 											</div>
 										</div>
@@ -410,7 +410,7 @@
 									<!-- PICKUP AIRPORT -->
 									<div class="col-10 mr-0 pl-0 ml-0">
 										<div class="errorMsg col-12 col-md-12"
-											*ngIf="QBForm.pickup_type.value == 'airport'">
+											*ngIf="QBForm?.pickup_type?.value == 'airport'">
 											<div class="input-contain d-flex align-items-center">
 												<div class="input-box">
 													<input type="text" placeholder="Airport Code / Name?"
@@ -424,14 +424,14 @@
 														<mat-option
 															*ngFor="let airport_obj of airports_data_pickup; index as airport_obj_index"
 															(onSelectionChange)="selectedAirport(airports_data_pickup, airport_obj, 'pickup_airport')">
-															{{ airport_obj.airport }}
+															{{ airport_obj?.airport }}
 														</mat-option>
 													</mat-autocomplete>
 												</div>
 												<!-- [value]="fillAirportData(airports_data_pickup, 'pickup_airport', 'id', 'airport')" -->
 												<!-- CROSS SVG -->
 												<div class="cross-svg">
-													<svg *ngIf="airportinput.value" fill="#000000"
+													<svg *ngIf="airportinput?.value" fill="#000000"
 														xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"
 														class="crossStyle pickUpsvg" width="48px" height="48px"
 														name="svgType" (click)="reset('pickup_airport')">
@@ -440,9 +440,9 @@
 													</svg>
 												</div>
 											</div>
-											<div *ngIf="submitted && QBForm.pickup_airport.errors;"
+											<div *ngIf="submitted && QBForm?.pickup_airport?.errors;"
 												class="text-danger">
-												<div *ngIf="QBForm.pickup_airport.errors.required">
+												<div *ngIf="QBForm?.pickup_airport?.errors?.required">
 													Pickup airport is required
 												</div>
 											</div>
@@ -451,15 +451,15 @@
 
 										<!-- PICKUP ADDRESS -->
 										<div class="errorMsg col-12 col-md-12"
-											*ngIf="QBForm.pickup_type.value != 'airport'">
+											*ngIf="QBForm?.pickup_type?.value != 'airport'">
 											<div class="input-contain d-flex align-items-center"
-												[class.errorValid]="submitted && QBForm.pickup_address.errors">
+												[class.errorValid]="submitted && QBForm?.pickup_address?.errors">
 												<!-- <img src="../../../../assets/images/start_location.png" alt="start_location"> -->
 												<div class="input-box">
 													<input type="text"
-														[attr.placeholder]="QBForm.pickup_type.value == 'city' ? 'City - Pickup Address?' : 'Cruise Port Name / Address?'"
+														[attr.placeholder]="QBForm?.pickup_type?.value == 'city' ? 'City - Pickup Address?' : 'Cruise Port Name / Address?'"
 														id="pickup_address" #addressinput
-														[value]="QBForm.pickup_address.value"
+														[value]="QBForm?.pickup_address?.value"
 														formControlName="pickup_address"
 														(focus)="$event.target.select()"
 														class="input-f font-weight-bolder" matGoogleMapsAutocomplete
@@ -468,7 +468,7 @@
 												</div>
 												<!-- CROSS SVG -->
 												<div class="cross-svg">
-													<svg *ngIf="addressinput.value" fill="#000000"
+													<svg *ngIf="addressinput?.value" fill="#000000"
 														xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"
 														class="crossStyle pickUpsvg" width="48px" height="48px"
 														name="svgType" (click)="reset('pickup_address')">
@@ -477,18 +477,18 @@
 													</svg>
 												</div>
 											</div>
-											<div *ngIf="submitted && QBForm.pickup_address.errors; else PickupAddressError"
+											<div *ngIf="submitted && QBForm?.pickup_address?.errors; else PickupAddressError"
 												class="text-danger">
-												<div *ngIf="QBForm.pickup_address.errors.required">
+												<div *ngIf="QBForm?.pickup_address?.errors?.required">
 													Pickup Address is required
 												</div>
 											</div>
 											<input type="hidden" formControlName="pickup_address_lat">
 											<input type="hidden" formControlName="pickup_address_long">
 											<ng-template #PickupAddressError>
-												<div *ngIf="submitted && QBForm.pickup_address_lat.errors;"
+												<div *ngIf="submitted && QBForm?.pickup_address_lat?.errors;"
 													class="text-danger">
-													<div *ngIf="QBForm.pickup_address_lat.errors.required">
+													<div *ngIf="QBForm?.pickup_address_lat?.errors?.required">
 														Please enter valid Pickup Address
 													</div>
 												</div>
@@ -513,14 +513,14 @@
 														<mat-option
 															*ngFor="let airport_obj of airports_data_dropoff; index as airport_obj_index"
 															(onSelectionChange)="selectedAirport(airports_data_dropoff, airport_obj, 'dropoff_airport')">
-															{{ airport_obj.airport }}
+															{{ airport_obj?.airport }}
 														</mat-option>
 													</mat-autocomplete>
 												</div>
 												<!-- [value]="fillAirportData(airports_data_dropoff, 'dropoff_airport', 'id', 'airport')" -->
 												<!-- CROSS SVG -->
 												<div class="cross-svg">
-													<svg *ngIf="dropairportinput.value" fill="#000000"
+													<svg *ngIf="dropairportinput?.value" fill="#000000"
 														xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"
 														class="crossStyle pickUpsvg" width="48px" height="48px"
 														name="svgType" (click)="reset('dropoff_airport')">
@@ -529,9 +529,9 @@
 													</svg>
 												</div>
 											</div>
-											<div *ngIf="submitted && QBForm.dropoff_airport.errors;"
+											<div *ngIf="submitted && QBForm?.dropoff_airport?.errors;"
 												class="text-danger">
-												<div *ngIf="QBForm.dropoff_airport.errors.required">
+												<div *ngIf="QBForm?.dropoff_airport?.errors?.required">
 													Dropoff airport is required
 												</div>
 											</div>
@@ -541,13 +541,13 @@
 
 										<!-- DROPOFF ADDRESS -->
 										<div class="errorMsg col-12 col-md-12"
-											*ngIf="QBForm.dropoff_type.value != 'airport'">
+											*ngIf="QBForm?.dropoff_type?.value != 'airport'">
 											<div class="input-contain d-flex align-items-center">
 												<div class="input-box">
 													<input type="text"
-														[attr.placeholder]="QBForm.dropoff_type.value == 'city' ? 'City - Dropoff Address?': 'Cruise Port Name / Address?'"
+														[attr.placeholder]="QBForm?.dropoff_type?.value == 'city' ? 'City - Dropoff Address?': 'Cruise Port Name / Address?'"
 														id="dropoff_address" #dropaddressinput
-														[value]="QBForm.dropoff_address.value"
+														[value]="QBForm?.dropoff_address?.value"
 														formControlName="dropoff_address"
 														(focus)="$event.target.select()"
 														class="input-f font-weight-bolder" matGoogleMapsAutocomplete
@@ -556,7 +556,7 @@
 												</div>
 												<!-- CROSS SVG -->
 												<div class="cross-svg">
-													<svg *ngIf="dropaddressinput.value" fill="#000000"
+													<svg *ngIf="dropaddressinput?.value" fill="#000000"
 														xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"
 														class="crossStyle pickUpsvg" width="48px" height="48px"
 														name="svgType" (click)="reset('dropoff_address')">
@@ -565,18 +565,18 @@
 													</svg>
 												</div>
 											</div>
-											<div *ngIf="submitted && QBForm.dropoff_address.errors; else DropoffAddressError"
+											<div *ngIf="submitted && QBForm?.dropoff_address?.errors; else DropoffAddressError"
 												class="text-danger">
-												<div *ngIf="QBForm.dropoff_address.errors.required">
+												<div *ngIf="QBForm?.dropoff_address?.errors?.required">
 													Drop Off Address is required
 												</div>
 											</div>
 											<input type="hidden" formControlName="dropoff_address_lat">
 											<input type="hidden" formControlName="dropoff_address_long">
 											<ng-template #DropoffAddressError>
-												<div *ngIf="submitted && QBForm.dropoff_address_lat.errors;"
+												<div *ngIf="submitted && QBForm?.dropoff_address_lat?.errors;"
 													class="text-danger">
-													<div *ngIf="QBForm.dropoff_address_lat.errors.required">
+													<div *ngIf="QBForm?.dropoff_address_lat?.errors?.required">
 														Please enter valid Drop Off Address
 													</div>
 												</div>
@@ -592,7 +592,7 @@
 
 
 								<!-- RETURN FIELDS [ROUND TRIP] -->
-								<div class="row" *ngIf="QBForm.service_type.value == 'round_trip'">
+								<div class="row" *ngIf="QBForm?.service_type?.value == 'round_trip'">
 									<!-- Return Pickup Date -->
 									<div class="col-6 col-md-6">
 										<label>Return Pickup Date</label>
@@ -603,20 +603,20 @@
 													placeholder="Return Pickup Date" id="returnPickupDate"
 													(change)="changeDetection.return_pickup_date($event.target.value)"
 													class="font-weight-bolder"
-													[class.errorValid]="submitted && QBForm.return_pickup_date.errors"
+													[class.errorValid]="submitted && QBForm?.return_pickup_date?.errors"
 													formControlName="return_pickup_date" (click)="picker3.open()">
 												<mat-datepicker-toggle matSuffix [for]="picker3">
 												</mat-datepicker-toggle>
 												<mat-datepicker #picker3></mat-datepicker>
 											</mat-form-field>
 										</div>
-										<div *ngIf="submitted && QBForm.return_pickup_date.errors" class="text-danger">
+										<div *ngIf="submitted && QBForm?.return_pickup_date?.errors" class="text-danger">
 											<div
-												*ngIf="QBForm.return_pickup_date.errors.matDatepickerParse; else returnPickupDateRoundError">
+												*ngIf="QBForm?.return_pickup_date?.errors?.matDatepickerParse; else returnPickupDateRoundError">
 												Return Pickup Date is not valid
 											</div>
 											<ng-template #returnPickupDateRoundError>
-												<div *ngIf="QBForm.return_pickup_date.errors.required">
+												<div *ngIf="QBForm?.return_pickup_date?.errors?.required">
 													Return Pickup Date is required
 												</div>
 											</ng-template>
@@ -632,9 +632,9 @@
 												formControlName="return_pickup_time" class="font-weight-bolder"
 												style="flex: 1 1 100%; box-sizing: border-box; max-width: 100%;"
 												(change)="changeDetection.pickupTime($event, 'return_pickup_time')"
-												[class.errorValid]="submitted && QBForm.return_pickup_time.errors">
-												<option *ngFor="let time of time_values" [value]="time.return_value">
-													{{ time.display_value }}
+												[class.errorValid]="submitted && QBForm?.return_pickup_time?.errors">
+												<option *ngFor="let time of time_values" [value]="time?.return_value">
+													{{ time?.display_value }}
 												</option>
 											</select>
 											<svg fill="#fff" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"
@@ -656,14 +656,14 @@
 												<input type="time" class="form-control" placeholder="HH:MM"
 													class="font-weight-bolder"
 													(change)="changeDetection.pickupTime($event, 'return_pickup_time')"
-													[value]="QBForm.return_pickup_time.value" />
+													[value]="QBForm?.return_pickup_time?.value" />
 												<em class="input-group-append input-group-addon">
 													<em class="input-group-text"></em>
 												</em>
 											</div>
 										</div>
-										<div *ngIf="submitted && QBForm.return_pickup_time.errors" class="text-danger">
-											<div *ngIf="QBForm.return_pickup_time.errors.required">
+										<div *ngIf="submitted && QBForm?.return_pickup_time?.errors" class="text-danger">
+											<div *ngIf="QBForm?.return_pickup_time?.errors?.required">
 												Return Pickup Time is required
 											</div>
 										</div>
@@ -674,7 +674,7 @@
 									
 									
 								</div>
-								<div class="row mt-2 pt-1 ml-1" *ngIf="QBForm.service_type.value == 'round_trip'">
+								<div class="row mt-2 pt-1 ml-1" *ngIf="QBForm?.service_type?.value == 'round_trip'">
 									<div class="google_map_logos">
 										<img src="../../../../assets/images/start_location.png" class="img-fluid"
 											alt="img">
@@ -686,7 +686,7 @@
 									<!-- PICKUP AIRPORT -->
 									<div class="col-10 mr-0 pl-0 ml-0">
 										<div class="errorMsg col-12 col-md-12"
-											*ngIf="QBForm.dropoff_type.value == 'airport'">
+											*ngIf="QBForm?.dropoff_type?.value == 'airport'">
 											<div class="input-contain d-flex align-items-center">
 												<div class="input-box">
 													<input type="text" placeholder="Return Airport Code / Name?"
@@ -700,14 +700,14 @@
 														<mat-option
 															*ngFor="let airport_obj of airports_data_r_pickup; index as airport_obj_index"
 															(onSelectionChange)="selectedAirport(airports_data_r_pickup, airport_obj, 'return_pickup_airport')">
-															{{ airport_obj.airport }}
+															{{ airport_obj?.airport }}
 														</mat-option>
 													</mat-autocomplete>
 												</div>
 												<!-- [value]="fillAirportData(airports_data_r_pickup, 'return_pickup_airport', 'id', 'airport')" -->
 												<!-- CROSS SVG -->
 												<div class="cross-svg">
-													<svg *ngIf="retairportinput.value" fill="#000000"
+													<svg *ngIf="retairportinput?.value" fill="#000000"
 														xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"
 														class="crossStyle pickUpsvg" width="48px" height="48px"
 														name="svgType" (click)="reset('return_pickup_airport')">
@@ -716,9 +716,9 @@
 													</svg>
 												</div>
 											</div>
-											<div *ngIf="submitted && QBForm.return_pickup_airport.errors;"
+											<div *ngIf="submitted && QBForm?.return_pickup_airport?.errors;"
 												class="text-danger">
-												<div *ngIf="QBForm.return_pickup_airport.errors.required">
+												<div *ngIf="QBForm?.return_pickup_airport?.errors?.required">
 													Return pickup airport is required
 												</div>
 											</div>
@@ -726,22 +726,22 @@
 										<!-- RETURN PICKUP AIRPORT ENDS -->
 
 										<!-- Return Pickup Address -->
-										<div class="errorMsg col-md-12" *ngIf="QBForm.dropoff_type.value != 'airport'">
+										<div class="errorMsg col-md-12" *ngIf="QBForm?.dropoff_type?.value != 'airport'">
 											<div class="input-contain d-flex align-items-center"
-												[class.errorValid]="submitted && QBForm.return_pickup_address.errors">
+												[class.errorValid]="submitted && QBForm?.return_pickup_address?.errors">
 												<div class="input-box">
 													<input type="text"
-														[attr.placeholder]="QBForm.dropoff_type.value == 'city' ? 'City - Return Pickup Address' : 'Cruise Port Name / Address'"
+														[attr.placeholder]="QBForm?.dropoff_type?.value == 'city' ? 'City - Return Pickup Address' : 'Cruise Port Name / Address'"
 														id="return_pickup_address" #retaddressinput
 														matGoogleMapsAutocomplete
-														[value]="QBForm.return_pickup_address.value"
+														[value]="QBForm?.return_pickup_address?.value"
 														(onAutocompleteSelected)="onAutocompleteSelected($event, 'return_pickup_address')"
 														(onLocationSelected)="onLocationSelected($event, 'return_pickup_address')"
 														formControlName="return_pickup_address"
 														class="input-f font-weight-bolder">
 												</div>
 												<div class="cross-svg">
-													<svg *ngIf="retaddressinput.value" fill="#000000"
+													<svg *ngIf="retaddressinput?.value" fill="#000000"
 														xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"
 														class="crossStyle pickUpsvg" width="48px" height="48px"
 														name="svgType" (click)="reset('return_pickup_address')">
@@ -750,18 +750,18 @@
 													</svg>
 												</div>
 											</div>
-											<div *ngIf="submitted && QBForm.return_pickup_address.errors; else DropoffAddressError"
+											<div *ngIf="submitted && QBForm?.return_pickup_address?.errors; else DropoffAddressError"
 												class="text-danger">
-												<div *ngIf="QBForm.return_pickup_address.errors.required">Return Pickup
+												<div *ngIf="QBForm?.return_pickup_address?.errors?.required">Return Pickup
 													Address is required
 												</div>
 											</div>
 											<input type="hidden" formControlName="return_pickup_address_lat">
 											<input type="hidden" formControlName="return_pickup_address_long">
 											<ng-template #DropoffAddressError>
-												<div *ngIf="submitted && QBForm.return_pickup_address_lat.errors;"
+												<div *ngIf="submitted && QBForm?.return_pickup_address_lat?.errors;"
 													class="text-danger">
-													<div *ngIf="QBForm.return_pickup_address_lat.errors.required">Please
+													<div *ngIf="QBForm?.return_pickup_address_lat?.errors?.required">Please
 														enter valid Return Pickup Address</div>
 												</div>
 											</ng-template>
@@ -772,7 +772,7 @@
 										</div>
 										<!-- RETURN DROPOFF AIRPORT -->
 										<div class="errorMsg col-12 col-md-12"
-											*ngIf="QBForm.pickup_type.value == 'airport'">
+											*ngIf="QBForm?.pickup_type?.value == 'airport'">
 											<div class="input-contain d-flex align-items-center">
 												<div class="input-box">
 													<input type="text" placeholder="Return Airport Code / Name?"
@@ -786,14 +786,14 @@
 														<mat-option
 															*ngFor="let airport_obj of airports_data_r_dropoff; index as airport_obj_index"
 															(onSelectionChange)="selectedAirport(airports_data_r_dropoff, airport_obj, 'return_dropoff_airport')">
-															{{ airport_obj.airport }}
+															{{ airport_obj?.airport }}
 														</mat-option>
 													</mat-autocomplete>
 												</div>
 												<!-- [value]="fillAirportData(airports_data_r_dropoff, 'return_dropoff_airport', 'id', 'airport')" -->
 												<!-- CROSS SVG -->
 												<div class="cross-svg">
-													<svg *ngIf="retdropairportinput.value" fill="#000000"
+													<svg *ngIf="retdropairportinput?.value" fill="#000000"
 														xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"
 														class="crossStyle pickUpsvg" width="48px" height="48px"
 														name="svgType" (click)="reset('return_dropoff_airport')">
@@ -806,21 +806,21 @@
 										<!-- RETURN DROPOFF AIRPORT ENDS -->
 
 										<!-- Return Dropoff Address -->
-										<div class="errorMsg col-md-12" *ngIf="QBForm.pickup_type.value != 'airport'">
+										<div class="errorMsg col-md-12" *ngIf="QBForm?.pickup_type?.value != 'airport'">
 											<div class="input-contain d-flex align-items-center"
-												[class.errorValid]="submitted && QBForm.return_dropoff_address.errors">
+												[class.errorValid]="submitted && QBForm?.return_dropoff_address?.errors">
 												<div class="input-box">
 													<input type="text"
-														[attr.placeholder]="QBForm.pickup_type.value == 'city' ? 'City - Return Dropoff Address' : 'Cruise Port Name / Address'"
+														[attr.placeholder]="QBForm?.pickup_type?.value == 'city' ? 'City - Return Dropoff Address' : 'Cruise Port Name / Address'"
 														matGoogleMapsAutocomplete id="return_dropoff_address"
 														#retdropaddressinput formControlName="return_dropoff_address"
 														class="input-f font-weight-bolder"
-														[value]="QBForm.return_dropoff_address.value"
+														[value]="QBForm?.return_dropoff_address?.value"
 														(onAutocompleteSelected)="onAutocompleteSelected($event, 'return_dropoff_address')"
 														(onLocationSelected)="onLocationSelected($event, 'return_dropoff_address')">
 												</div>
 												<div class="cross-svg">
-													<svg *ngIf="retdropaddressinput.value" fill="#000000"
+													<svg *ngIf="retdropaddressinput?.value" fill="#000000"
 														xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"
 														class="crossStyle pickUpsvg" width="48px" height="48px"
 														name="svgType" (click)="reset('return_dropoff_address')">
@@ -829,9 +829,9 @@
 													</svg>
 												</div>
 											</div>
-											<div *ngIf="submitted && QBForm.return_dropoff_address.errors; else DropoffAddressError"
+											<div *ngIf="submitted && QBForm?.return_dropoff_address?.errors; else DropoffAddressError"
 												class="text-danger">
-												<div *ngIf="QBForm.return_dropoff_address.errors.required">Return Drop
+												<div *ngIf="QBForm?.return_dropoff_address?.errors?.required">Return Drop
 													Off
 													Address is required
 												</div>
@@ -839,9 +839,9 @@
 											<input type="hidden" formControlName="return_dropoff_address_lat">
 											<input type="hidden" formControlName="return_dropoff_address_long">
 											<ng-template #DropoffAddressError>
-												<div *ngIf="submitted && QBForm.return_dropoff_address_lat.errors;"
+												<div *ngIf="submitted && QBForm?.return_dropoff_address_lat?.errors;"
 													class="text-danger">
-													<div *ngIf="QBForm.return_dropoff_address_lat.errors.required">
+													<div *ngIf="QBForm?.return_dropoff_address_lat?.errors?.required">
 														Please
 														enter valid Return Drop Off Address</div>
 												</div>
@@ -891,17 +891,17 @@
 </section>
 
 <!------------------VIEW OUR VEHICLES------------------------------->
-<section class="checkourveh_wrapper">
+<section class="checkourveh_wrapper" style="background-color: black !important;">
 	<div class="container">
-		<h2>{{ fetchPageData('VIEW OUR VEHICLES')?.title }}</h2>
+		<h2 style="color: #FFF;">{{ fetchPageData('VIEW OUR VEHICLES')?.title }}</h2>
 		<hr>
-		<h6>{{ fetchPageData('VIEW OUR VEHICLES')?.subtitle }}</h6>
+		<h6 style="color: #FFF;">{{ fetchPageData('VIEW OUR VEHICLES')?.subtitle }}</h6>
 		<div class="chk_vehicles_parent">
 			<div class="chk_vehicles owl-carousel owl-theme viewVehicleCarousel">
 				<div class="item" *ngFor="let vehicle of vehicles">
 					<a class="ns-user">
-						<img src="{{vehicle.vehicle_image}}" alt="semi">
-						<p>{{vehicle.vehicle_name}}</p>
+						<img src="{{vehicle?.vehicle_image}}" alt="semi">
+						<p style="color: #FFF;">{{vehicle?.vehicle_name}}</p>
 					</a>
 				</div>
 			</div>
@@ -945,10 +945,10 @@
 		<div class="owl-carousel owl-theme destinationCarousel">
 			<div class="item"
 				*ngFor="let sliderData of fetchPageData('PERSONALIZED DESTINATIONS AND AMENITIES')?.slider_type_content">
-				<img src="{{sliderData.image}}" alt="a1">
+				<img src="{{sliderData?.image}}" alt="a1">
 				<div class="personalized_text">
-					<h3>{{sliderData.title}}</h3>
-					<p class="mb-0">{{sliderData.content}}
+					<h3>{{sliderData?.title}}</h3>
+					<p class="mb-0">{{sliderData?.content}}
 					</p>
 				</div>
 			</div>
@@ -1026,7 +1026,7 @@
 		<hr>
 		<div class="row logo_image justify-content-center">
 			<div class="col-2 col-md-2" *ngFor="let clientLogo of fetchPageData('SOME OF OUR CLIENTS')?.images">
-				<img src="{{clientLogo.path}}" alt="client1" class="img-fluid">
+				<img src="{{clientLogo?.path}}" alt="client1" class="img-fluid">
 			</div>
 		</div>
 	</div>
@@ -1040,7 +1040,7 @@
 		<hr>
 		<div class="client_logo owl-carousel owl-theme">
 			<div class="item" *ngFor="let clientLogo of fetchPageData('SOME OF OUR CLIENTS')?.images">
-				<img src="{{clientLogo.path}}" alt="client1">
+				<img src="{{clientLogo?.path}}" alt="client1">
 			</div>
 		</div>
 	</div>

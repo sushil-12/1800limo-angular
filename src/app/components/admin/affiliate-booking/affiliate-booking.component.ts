@@ -18,11 +18,12 @@ import { MatSelect } from "@angular/material/select";
 import { DatePickerComponent } from "../../shared/date-picker/date-picker.component";
 
 @Component({
-	selector: "app-daily-bookings",
-	templateUrl: "./daily-bookings.component.html",
-	styleUrls: ["./daily-bookings.component.scss"],
+  selector: 'app-affiliate-booking',
+  templateUrl: './affiliate-booking.component.html',
+  styleUrls: ['./affiliate-booking.component.scss']
 })
-export class DailyBookingsComponent implements OnInit {
+export class AffiliateBookingComponent implements OnInit {
+
 	exampleHeader = DatePickerComponent
 	@ViewChild('inputmsg', { static: false }) message: ElementRef;
 	@ViewChild('select') select: MatSelect;
@@ -45,14 +46,15 @@ export class DailyBookingsComponent implements OnInit {
 	public bookingsRes: any;
 	public bookings: any =[];
 	public bookingStatusColor: string;
-	public startDate: string;
-	public endDate: string;
 	// public returnRepeatForm: FormGroup;
 	public changeStatusForm: FormGroup;
 	public sendEmailForm: FormGroup;
 	public submitted: boolean = false;
 	searchText: string = "";
 	filtertype: string = "";
+  type :boolean= null;
+  isAffiliate:boolean = null
+  userName:string = ''
 
 	passengerDetails: any;
 	senderValue: string;
@@ -65,6 +67,8 @@ export class DailyBookingsComponent implements OnInit {
 	subModules: any = localStorage.getItem('sub_modules') || '';
 	useDateFilter:boolean=true;
 	rates_preview: any;
+  accountID: string;
+	bookingType: string ;
 
 	constructor(
 		private adminService: AdminService,
@@ -72,37 +76,21 @@ export class DailyBookingsComponent implements OnInit {
 		private spinner: NgxSpinnerService,
 		private formBuilder: FormBuilder,
 		private $errorDialog: ErrorDialogService,
+		private $routeurl: ActivatedRoute,
 	) { }
 
 	ngOnInit(): void {
 
-		let date = new Date();
-		let timestamp = date.getTime()
-		//     const options:any = {
-		// 		year: 'numeric',
-		// 		month: '2-digit',
-		// 		day: '2-digit',
-		// 	};
-		// const localeDateString = date.toLocaleDateString(undefined, options).
-		// replace(/(\d+)\/(\d+)\/(\d+)/,'$3-$1-$2');
-		// Set Search Filters According to cookies or the intial state
-		this.startDate = this.adminService.checkCookie('startDate') ?
-			this.adminService.getCookie('startDate') :
-			moment(timestamp).format('YYYY-MM-DD')
-
-		date.setDate(date.getDate() + 7);
-		timestamp = date.getTime()
-		this.endDate = this.adminService.checkCookie('endDate') ?
-			this.adminService.getCookie('endDate') :
-			moment(timestamp).format('YYYY-MM-DD')
-
-		this.searchText = this.adminService.checkCookie('search') ?
-			this.adminService.getCookie('search')
-			: "";
-		console.log('usedatefilter---->>>>>>>' , this.adminService.getCookie('useDateFilter'))
-		this.useDateFilter = this.adminService.checkCookie('useDateFilter') ?
-		(this.adminService.getCookie('useDateFilter')=='true' ? true : false)
-		: true;
+		this.$routeurl.queryParams.subscribe((params: any) => {
+			console.log('-_>>>>>>>' , params)
+      if(params){
+        this.accountID = params?.id,
+		this.bookingType = params?.type
+        this.type = params?.type == 'past' ? true : false
+        this.isAffiliate = params?.isAffiliate == 'true' ? true : false
+		this.userName = params?.for
+      }
+		})
 
 		this.adminService.getStatusList()
 			.pipe(
@@ -115,35 +103,9 @@ export class DailyBookingsComponent implements OnInit {
 				this.status_list = data;
 			})
 
-		// this.filtertype = this.adminService.checkCookie('filtertype') ?
-		// 	this.adminService.getCookie('filtertype') :
-		// 	"bookingid";
-
-		// if (this.adminService.checkCookie('startDate'))
-		// {
-		// 	this.startDate = this.adminService.getCookie('startDate');
-		// }
-
-		// Override End Date
-		// if (this.adminService.checkCookie('endDate'))
-		// {
-		// 	this.endDate = this.adminService.getCookie('endDate');
-		// }
-
-		// // Override Search Text
-		// if (this.adminService.checkCookie('search'))
-		// {
-		// 	this.searchText = this.adminService.getCookie('search');
-		// }
-
-		// Override Filter Type
-		// if (this.adminService.checkCookie('filtertype'))
-		// {
-		// 	this.filtertype = this.adminService.getCookie('filtertype');
-		// }
 
 
-		this.loadBookings(null, this.startDate, this.endDate, this.searchText);
+		this.loadBookings(null,this.accountID, this.type,this.isAffiliate,this.searchText);
 
 
 		//change status booking form validation
@@ -168,32 +130,14 @@ export class DailyBookingsComponent implements OnInit {
 		console.log('event---->> ' ,value)
 		this.useDateFilter = value
 		this.saveCookie('useDateFilter',value)
-		this.loadBookings(null, this.startDate, this.endDate, this.searchText);
+		this.loadBookings(null,this.accountID, this.type,this.isAffiliate,this.searchText);
 	}
 	/**
 	 * Configure date as per todays date and the future +7 days
 	 */
 	reset() {
-		let date = new Date();
-		let timestamp = date.getTime()
-		// const options:any = {
-		// 	year: 'numeric',
-		// 	month: '2-digit',
-		// 	day: '2-digit',
-		// };
-		this.startDate = moment(timestamp).format('YYYY-MM-DD')
-		date.setDate(date.getDate() + 7);
-		timestamp = date.getTime()
-		this.endDate = moment(timestamp).format('YYYY-MM-DD')
-		this.adminService.deleteCookie('startDate')
-		this.adminService.deleteCookie('endDate')
-		this.adminService.deleteCookie('search')
-		this.adminService.deleteCookie('useDateFilter')
-		this.useDateFilter = true
-		// this.adminService.deleteCookie('filtertype')
+	
 		this.searchText = "";
-		// this.filtertype = 'bookingid';
-
 		console.log('Reset Successfully. ');
 	}
 
@@ -341,11 +285,11 @@ export class DailyBookingsComponent implements OnInit {
 	}
 
 	noError: boolean = false
-	loadBookings(pageUrl = null, start_date: string, end_date: string, search_value: string = '') {
+	loadBookings(pageUrl = null,accountID:string,type:boolean,isAffiliate:boolean ,search_value: string = '') {
 		search_value == '' && this.spinner.show();
 		this.noError = false
 		// Load Our bookings using API
-		this.adminService.loadBookings(pageUrl, start_date, end_date, this.useDateFilter,search_value ?? '').then((result: any) => {
+		this.adminService.loadPastFutureBookings(pageUrl, accountID,type, isAffiliate,search_value ?? '').then((result: any) => {
 			if (result?.data?.data == 0) {
 				this.noError = true
 			}
@@ -370,11 +314,11 @@ export class DailyBookingsComponent implements OnInit {
 		})
 	}
 
-	handleShowMore(pageUrl = null, start_date: string, end_date: string, search_value: string = ''){
+	handleShowMore(pageUrl = null, type: string, isAffiliate: boolean, search_value: string = ''){
 			search_value == '' && this.spinner.show();
 			this.noError = false
 			// Load Our bookings using API
-			this.adminService.loadBookings(pageUrl, start_date, end_date, this.useDateFilter,search_value ?? '').then((result: any) => {
+			this.adminService.loadPastFutureBookings(pageUrl, type,isAffiliate,search_value ?? '').then((result: any) => {
 				if (result?.data?.data == 0) {
 					this.noError = true
 				}
@@ -511,7 +455,7 @@ export class DailyBookingsComponent implements OnInit {
 			.subscribe(({ data, success, message }: any) => {
 				if (success == true) {
 					$("#change_status_booking_Modal").modal("hide");
-					this.loadBookings(null, this.startDate, this.endDate, this.searchText)
+					this.loadBookings(null,this.accountID,this.type,this.isAffiliate,this.searchText)
 					// this.router
 					// 	.navigateByUrl("/RefreshComponent", {
 					// 		skipLocationChange: true,
@@ -651,7 +595,7 @@ export class DailyBookingsComponent implements OnInit {
 		clearTimeout(this.timer);
 		this.timer = setTimeout(() => {
 			this.saveCookie("search", this.searchText);
-			this.loadBookings(null, this.startDate, this.endDate, search_value)
+			this.loadBookings(null,this.accountID,this.type,this.isAffiliate,search_value)
 		}, 700)
 	}
 
@@ -663,12 +607,6 @@ export class DailyBookingsComponent implements OnInit {
 		this.adminService.setCookie(key, value, 30);
 	}
 
-	// changeFilterType(value: string) {
-	// 	console.log(value)
-	// 	this.filtertype = value
-	// 	this.saveCookie('filtertype', this.filtertype);
-	// 	this.loadBookings(null, this.startDate, this.endDate, this.searchText, this.filtertype);
-	// }
 	iOS() {
 		return [
 			'iPad Simulator',
@@ -778,3 +716,4 @@ export class DailyBookingsComponent implements OnInit {
 			}
 	}
 }
+
