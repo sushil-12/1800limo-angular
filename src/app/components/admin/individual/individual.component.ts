@@ -34,6 +34,7 @@ export class IndividualComponent implements OnInit
 	public lastPageUrl: string;
 	public prevPageUrl: string;
 	public nextPageUrl: string;
+	searchText: string = '';
 
 	constructor(
 		private adminService: AdminService,
@@ -42,7 +43,23 @@ export class IndividualComponent implements OnInit
 
 	ngOnInit(): void
 	{
+		this.searchText = localStorage.getItem('individualSearch') ? localStorage.getItem('individualSearch') : '' 
 		this.loadIndividuals();//load individuals
+
+	}
+
+	timer: any
+	handleSearchKeyword(text:any){
+		console.log('on change search text-->>' , text)
+		this.searchText = text
+		clearTimeout(this.timer);
+		this.timer = setTimeout(() => {
+			localStorage.setItem('individualSearch' , text)
+			this.loadIndividuals()
+		}, 700)
+	}
+	handleKeypressEvents() {
+		clearTimeout(this.timer)
 	}
 
 	loadIndividuals(pageUrl = null)
@@ -50,7 +67,8 @@ export class IndividualComponent implements OnInit
 		/** spinner starts on init */
 		// this.spinner.show();
 
-		var keyword = ((document.getElementById("keyword") as HTMLInputElement).value);
+		// var keyword = ((document.getElementById("keyword") as HTMLInputElement).value);
+		let keyword = this.searchText
 		// console.log(keyword);
 		// Load Our individuals using API
 		this.adminService.individualAccounts(pageUrl, keyword).then(result =>

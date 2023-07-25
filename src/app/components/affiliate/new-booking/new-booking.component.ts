@@ -1206,11 +1206,11 @@ export class NewBookingComponent implements OnInit {
 
 			this.$spinner.show()
 			this.affiliateService.createBooking(value).subscribe((response: any) => {
-				this.$errors.openDialog({
-					errors: {
-						error: `<span class='text-success'>${response.message}</span>`
-					}
-				})
+				// this.$errors.openDialog({
+				// 	errors: {
+				// 		error: `<span class='text-success'>${response.message}</span>`
+				// 	}
+				// })
 				this.nav_to_farmIn ? this.$router.navigate(['/affiliate/my-bookings']) : this.$router.navigate(['/affiliate/farm-out'])
 				
 				this.$spinner.hide()

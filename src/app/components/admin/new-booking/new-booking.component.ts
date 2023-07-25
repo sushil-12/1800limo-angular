@@ -253,7 +253,7 @@ export class NewBookingComponent implements OnInit {
 				})
 			}),
 			passenger_name: ['',[Validators.required,this.customValidator.whitespace()]],
-			passenger_email: ['',[Validators.required, Validators.email]],
+			passenger_email: ['',[ Validators.email]],
 			passenger_cell: ['', [Validators.required,Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
 			passenger_cell_isd: ['+1'],
 			passenger_cell_country: ['us'],
@@ -1375,11 +1375,11 @@ export class NewBookingComponent implements OnInit {
 
 			this.$spinner.show()
 			this.$api.createBooking(value, this.Form.updateType.value).subscribe((response: any) => {
-				this.$errors.openDialog({
-					errors: {
-						error: `<span class='text-success'>${response.message}</span>`
-					}
-				})
+				// this.$errors.openDialog({
+				// 	errors: {
+				// 		error: `<span class='text-success'>${response.message}</span>`
+				// 	}
+				// })
 				this.$router.navigate(['/admin/daily-bookings-admin'])
 				this.$spinner.hide()
 			})
