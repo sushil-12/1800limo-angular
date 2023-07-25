@@ -247,7 +247,7 @@ export class OtpComponent implements OnInit, OnDestroy {
 						this.affiliateService.updateStepsCompletedObject(this.response.data.affiliateParmas.step_completed_obj);
 						switch (this.response.data.affiliateParmas.account_approval) {
 							case 'accepted': {
-								if (QB_redirectUrl.length && vehicle_selected) {
+								if (QB_redirectUrl=='true' && vehicle_selected) {
 									this.router.navigate([
 										'/affiliate/create-new-booking'
 									],
