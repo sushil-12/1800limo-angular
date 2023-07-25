@@ -151,7 +151,7 @@
 					</div>
 				</div>
 				<div class="col-md-6">
-					<mat-form-field appearance="outline">
+					<mat-form-field appearance="outline" style="margin-top: 0px;">
 						<mat-label>
 							Number of Vehicles <span class="asterisk">*</span>
 						</mat-label>
@@ -191,7 +191,7 @@
 							(submittedForm && f.year.errors)
 								? 'mat-form-field-invalid ng-invalid'
 								: ''
-						">
+						" style="margin-top: 0px;">
 						<mat-label>Year <span class="asterisk">*</span></mat-label>
 						<input type="search" id="yearField" placeholder="Choose One" aria-label="Number" matInput
 							(keyup)="searchYear($event.target.value)" (focus)="$event.target.select()"
@@ -232,7 +232,7 @@
 							(submittedForm && f.color.errors)
 								? 'mat-form-field-invalid ng-invalid'
 								: ''
-						">
+						" style="margin-top: 0px;">
 						<mat-label>Color <span class="asterisk">*</span></mat-label>
 						<input type="search" id="colorField" placeholder="Choose One" aria-label="Number" matInput
 							(keyup)="searchColor($event.target.value)" (focus)="$event.target.select()"
@@ -453,10 +453,10 @@
 								: ''
 						" -->
 						<mat-label>
-							License Plate
+							License Plate #
 							<!-- <span class="asterisk">*</span> -->
 						</mat-label>
-						<input matInput placeholder="License Plate" (focus)="$event.target.select()"
+						<input matInput placeholder="License Plate #" (focus)="$event.target.select()"
 							formControlName="licensePlate" tabindex="1" />
 					</mat-form-field>
 					<!-- <div *ngIf="
