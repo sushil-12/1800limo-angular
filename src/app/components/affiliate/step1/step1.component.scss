@@ -534,7 +534,12 @@ top:2.05em}
 :host ::ng-deep .select-gender-label,.select-year-label{
 	background-color: rgb(226, 226, 226,1) !important;
 	transform: translateY(0.4em) scale(0.9) !important;
-	opacity: 0.5;
+}
+
+:host ::ng-deep .select-year-label{
+	transform: translateY(0.4em) translateX(-0.8em) scale(0.9) !important;
+    opacity: 0.8;
+    font-size: 11px !important;
 }
 
 
@@ -543,4 +548,19 @@ top:2.05em}
 }
 :host ::ng-deep .ng-option{
 	background-color: rgb(226, 226, 226,1) !important;
+}
+
+:host ::ng-deep .select-gender-label{
+	transform: translateY(0.4em) translateX(-0.2em) scale(0.9) !important;
+    opacity: 0.8;
+    font-size: 11px !important;
+}
+:host ::ng-deep .iti__selected-flag{
+	transform: translateY(5px);
+}
+
+
+.topLabelClass.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
+    text-align: start;
+    padding-left: 8px;
 }

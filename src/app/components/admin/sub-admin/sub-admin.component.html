@@ -71,7 +71,7 @@
 											</a>
 										</div>
 									</td>
-									<td>{{subAdmin.first_name+' '+subAdmin.middle_name+' '+subAdmin.last_name}}</td>
+									<td>{{subAdmin.first_name +' '}}{{subAdmin?.middle_name ? subAdmin?.middle_name : ' '}} {{subAdmin.last_name}}</td>
 									<td>{{subAdmin.email}}</td>
 									<td>{{subAdmin.mobileIsd+subAdmin.mobile}}</td>
 									<td>{{subAdmin.address}}</td>
