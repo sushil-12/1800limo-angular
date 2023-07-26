@@ -2065,6 +2065,7 @@ export class NewBookingComponent implements OnInit {
 		this.SetFormValue('service_type', QB?.service_type)
 		if (QB?.service_type == 'charter_tour') {
 			this.SetFormValue('number_of_hours', QB?.booking_hour)
+			this.number_of_hours = QB?.booking_hour
 		}
 		let transfer_type_value = QB?.pickup_type + '_to_' + QB?.dropoff_type
 		let return_transfer_type_value = QB?.dropoff_type + '_to_' + QB?.pickup_type
