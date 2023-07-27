@@ -165,3 +165,8 @@ ul {
 .labelClass {
 	font-weight: 700;
 }
+
+
+:host ::ng-deep.ng-select .ng-select-container.ng-appearance-outline:after {
+	height: 100%;
+}
