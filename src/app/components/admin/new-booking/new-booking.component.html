@@ -19,7 +19,7 @@
 		<!-- Section - Booking Type -->
 		<div class="section-container mt-0">
 			<h2 class="border-secondary">
-				Booking Type
+				Booking Type 
 			</h2>
 			<div class="row px-4">
 				<!-- Service Type -->
@@ -1995,7 +1995,7 @@
 		<!-- Section - Return Journey Details -->
 		<div class="section-container" *ngIf="Form.service_type.value == 'round_trip'">
 			<h2>
-				Return Booking
+				Return Booking  
 			</h2>
 			<div class="row px-4" *ngIf="Form.updateType.value != 'edit'">
 				<!-- Service Type -->
@@ -2426,7 +2426,7 @@
 			<div class="row my-2 align-items-center"
 				*ngFor="let extra_stop of ReturnExtraStops.controls; index as stop_index">
 				<div class="extra-stop-field col-md-11">
-					<mat-form-field appearance="outline" class="m-0">
+					<mat-form-field appearance="outline" class="">
 						<mat-label>
 							Return Extra Stop Address {{ stop_index + 1 }}
 						</mat-label>
@@ -2438,7 +2438,7 @@
 				</div>
 				<div class="col-md-1">
 					<div class="delete-icons">
-						<i class="bi bi-trash text-danger font-weight-bolder"
+						<i class="bi bi-trash text-2xl text-danger font-weight-bolder"
 							(click)="deleteExtraStop(true, stop_index)"></i>
 					</div>
 				</div>
