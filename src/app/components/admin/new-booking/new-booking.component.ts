@@ -512,9 +512,9 @@ export class NewBookingComponent implements OnInit {
 				service_type: response.data.service_type == 'oneway' ? 'one_way' : response.data['service_type'] == 'roundtrip' ? 'round_trip' : 'charter_tour',
 			})
 
-			// if (this.Form.updateType.value == 'edit') {
-			// 	this.booking_params.client_account_types.pop()
-			// }
+			if (this.Form.updateType.value == 'edit') {
+				this.booking_params.client_account_types.pop()
+			}
 			this.booking_id = this.Form.reservation_id.value;
 			this.Form.affiliate_id.value != 0 ? this.chooseAffiliate() : ''
 			try {
