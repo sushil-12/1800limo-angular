@@ -512,9 +512,9 @@ export class NewBookingComponent implements OnInit {
 				service_type: response.data.service_type == 'oneway' ? 'one_way' : response.data['service_type'] == 'roundtrip' ? 'round_trip' : 'charter_tour',
 			})
 
-			if (this.Form.updateType.value == 'edit') {
-				this.booking_params.client_account_types.pop()
-			}
+			// if (this.Form.updateType.value == 'edit') {
+			// 	this.booking_params.client_account_types.pop()
+			// }
 			this.booking_id = this.Form.reservation_id.value;
 			this.Form.affiliate_id.value != 0 ? this.chooseAffiliate() : ''
 			try {
@@ -1005,8 +1005,9 @@ export class NewBookingComponent implements OnInit {
 							if (this.VehicleList[i].ID == this.QB_vehicle_id) {
 								let vehicle_type_id = this.BigData['vehicleCategories'].find(item => item.name == this.VehicleList[i].vehicleType)['id']
 								this.SetFormValue('vehicle_type', vehicle_type_id)
-								this.SetFormValue('vehicle_id', this.VehicleList[i].ID);
-								this.autofillData('vehicle', this.VehicleList[i]);
+								// this.SetFormValue('vehicle_id', this.VehicleList[i].ID);
+								// this.autofillData('vehicle', this.VehicleList[i]);
+								this.handleSelectVehicleType(this.VehicleList[i])
 								break;
 							}
 						}
@@ -1026,10 +1027,19 @@ export class NewBookingComponent implements OnInit {
 		this.$api.driverList(affiliate_id).then((response: any) => {
 			if (response.success && response.data?.data.length > 0) {
 				this.DriverList = response.data.data
+				console.log('driver list' , this.DriverList)
+				let isValueSet = false
 				for (let i = 0; i < this.DriverList.length; i++) {
-					this.SetFormValue('driver_id', this.DriverList[i].id)
-					this.autofillData('driver', this.DriverList[i])
-					break;
+					if(this.bookingResponse?.driver_id && this.DriverList[i]?.id == this.bookingResponse?.driver_id){
+						this.SetFormValue('driver_id', this.DriverList[i]?.id)
+						this.autofillData('driver', this.DriverList[i])
+						isValueSet = true
+						break;
+					}
+				}
+				if(!isValueSet){
+					this.SetFormValue('driver_id', this.DriverList[0].id)
+					this.autofillData('driver', this.DriverList[0])
 				}
 
 				// autofill data
@@ -1204,13 +1214,22 @@ export class NewBookingComponent implements OnInit {
 		// }
 
 		if (filling_for == 'driver') {
-			this.SetFormValue('driver_name', `${data.FirstName} ${data.MiddleName ?? ''} ${data.LastName}`)
-			this.SetFormValue('driver_gender', data.Gender)
-			this.SetFormValue('driver_cell', data.CellNumber)
-			this.SetFormValue('driver_cell_isd', data.CellIsd)
-			this.SetFormValue('driver_cell_country', data.CellNumberCountry)
-			this.SetFormValue('driver_email', data.Email)
-			this.SetFormValue('driver_phone_type', data.PhoneType ?? '');
+			console.log('autofill data driver info-->>>'  , data,this.DriverList)
+			let info = data
+			if(!isNaN(data)){
+				for(let i=0;i<this.DriverList.length;i++){
+					if(this.DriverList[i].id == data){
+						info = {...this.DriverList[i]}
+					}
+				}
+			}
+			this.SetFormValue('driver_name', `${info?.FirstName} ${info?.MiddleName ?? ''} ${info?.LastName}`)
+			this.SetFormValue('driver_gender', info?.Gender)
+			this.SetFormValue('driver_cell', info?.CellNumber)
+			this.SetFormValue('driver_cell_isd', info?.CellIsd)
+			this.SetFormValue('driver_cell_country', info?.CellNumberCountry)
+			this.SetFormValue('driver_email', info?.Email)
+			this.SetFormValue('driver_phone_type', info?.PhoneType ?? '');
 			this.DrvTelObject.setCountry(this.BookingForm.get('driver_cell_country').value);
 		}
 	}
@@ -2129,8 +2148,8 @@ export class NewBookingComponent implements OnInit {
 		setTimeout(() => {
 			console.log('settimeout finction---------------------------------------------------------------')
 			this.fetchQBAffiliateVehicles(selected_vehicle?.affiliate_id)
-			// this.fetchAffiliateDrivers(this.affiliate_id)
-		}, 500)
+			this.fetchAffiliateDrivers(this.affiliate_id)
+		}, 5000)
 	}
 }
 
