@@ -51,7 +51,8 @@ export class SubAdminComponent implements OnInit {
       /** spinner starts on init */
       this.spinner.show();
 
-      var keyword = ((document.getElementById("keyword") as HTMLInputElement).value);
+      // var keyword = ((document.getElementById("keyword") as HTMLInputElement).value);
+      let keyword = this.searchText
       // console.log(keyword);
       // Load Our subAdmins using API
       this.adminService.subAdminAccounts(pageUrl,keyword).then(result=>{
