@@ -34,6 +34,7 @@ export class SubAdminComponent implements OnInit {
   public lastPageUrl:string;
   public prevPageUrl:string;
   public nextPageUrl:string;
+  searchText: string = "";
 
   constructor(
     private adminService:AdminService,
@@ -41,6 +42,7 @@ export class SubAdminComponent implements OnInit {
     private spinner: NgxSpinnerService) { }
 
   ngOnInit(): void {
+		 this.searchText = localStorage.getItem('subAdminSearch') ? localStorage.getItem('subAdminSearch') : '' 
       this.loadSubAdmin();//load subAdmins
   }
 
@@ -74,6 +76,20 @@ export class SubAdminComponent implements OnInit {
         this.spinner.hide();//hide spinner
       });
   }
+
+  timer: any
+	handleSearchKeyword(text:any){
+		console.log('on change search text-->>' , text)
+		this.searchText = text
+		clearTimeout(this.timer);
+		this.timer = setTimeout(() => {
+			localStorage.setItem('subAdminSearch' , text)
+      this.loadSubAdmin()
+		}, 700)
+	}
+	handleKeypressEvents() {
+		clearTimeout(this.timer)
+	}
 
   addSubAdminClick(subAdminId)
   {
