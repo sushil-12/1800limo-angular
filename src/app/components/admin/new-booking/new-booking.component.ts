@@ -2009,6 +2009,10 @@ export class NewBookingComponent implements OnInit {
 		this.LCTelObject = event;
 	}
 
+	LCTelInputObjectUSA(event: any){
+		event.setCountry('us');
+	}
+
 	PaxTelInputObject(event: any) {
 		this.PaxTelObject = event;
 	}

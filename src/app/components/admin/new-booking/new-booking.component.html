@@ -576,8 +576,7 @@
 							</label>
 							<input matInput formControlName="phone" ng2TelInput [ng2TelInputOptions]="{
 									preferredCountries: ['us', 'ca', 'mx', 'gb']
-								}" placeholder="1234567890" class="phoneNumberClass" (intlTelInputObject)="LCTelInputObject($event)"
-								(countryChange)="SetFormValue('loose_customer>phone_isd', $event.dialCode); SetFormValue('loose_customer>phone_country', $event.iso2)"
+								}" placeholder="1234567890" class="phoneNumberClass" (intlTelInputObject)="LCTelInputObjectUSA($event)"
 								(focus)="$event.target.select()" style="cursor: not-allowed;" readonly/>
 						</mat-form-field>
 						<div class="error-box">
