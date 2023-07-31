@@ -472,11 +472,10 @@
 				</div>
 
 				<!-- Chosen User Information -->
-				<div *ngIf="Form.updateType.value == 'edit' || chosen_user" formGroupName="loose_customer">
+				<!-- <div *ngIf="Form.updateType.value == 'edit' || chosen_user" formGroupName="loose_customer">
 
 				
 				<div class="row px-4" >
-					<!-- First Name -->
 					<div class="col-md-4 looseError">
 						<mat-form-field appearance="outline" class="m-0">
 							<mat-label class="required-field">
@@ -500,7 +499,6 @@
 						</div>
 					</div>
 
-					<!-- Middle Name -->
 					<div class="col-md-4 looseError">
 						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>
@@ -520,7 +518,6 @@
 						</div>
 					</div>
 
-					<!-- Last Name -->
 					<div class="col-md-4 looseError">
 						<mat-form-field appearance="outline" class="m-0">
 							<mat-label class="required-field">
@@ -546,7 +543,6 @@
 				</div>
 
 				<div class="row px-4">
-					<!-- Email -->
 					<div class="col-md-4 looseError">
 						<mat-form-field appearance="outline" class="m-0">
 							<mat-label class="required-field">
@@ -568,7 +564,6 @@
 						</div>
 					</div>
 
-					<!-- Phone -->
 					<div class="col-md-4 looseError">
 						<mat-form-field appearance="outline" class="mat-custom-phone m-0 cellLabelClass">
 							<label
@@ -606,22 +601,9 @@
 							</div>
 						</div>
 					</div>
-
-					<!-- Address -->
-					<!-- <div class="col-md-4 looseError">
-						<mat-form-field appearance="outline" class="m-0">
-							<mat-label>
-								Address
-							</mat-label>
-							<input type="text" matInput placeholder="Type your address"
-								matGoogleMapsAutocomplete
-								(onAutocompleteSelected)="fillLooseCustomerAddress($event.formatted_address)"
-								(focus)="$event.target.select()" />
-						</mat-form-field>
-					</div> -->
 				</div>
-			</div>
-				<!-- <div id="user-info" *ngIf="chosen_user">
+			</div> -->
+				<div id="user-info" *ngIf="chosen_user">
 					<div id="info-container" class="mx-auto">
 						<div id="info-display-box"
 							class="d-flex flex-wrap justify-content-center justify-content-md-start"
@@ -668,7 +650,7 @@
 							}
 						}
 					</style>
-				</div> -->
+				</div>
 			</ng-template>
 
 
