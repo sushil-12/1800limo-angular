@@ -459,20 +459,20 @@ export class HomeComponent implements OnInit {
 			dropoff_type: ['', Validators.required],
 			pickup_date: ['', Validators.required],
 			pickup_time: ['', Validators.required],
-			pickup_airport: ['',Validators.required],
+			pickup_airport: ['', Validators.required],
 			pickup_airport_name: [''],
-			pickup_airport_lat: ['',Validators.required],
-			pickup_airport_long: ['',Validators.required],
-			pickup_address: ['',Validators.required],
-			pickup_address_lat: ['',Validators.required],
-			pickup_address_long: ['',Validators.required],
-			dropoff_airport: ['',Validators.required],
+			pickup_airport_lat: ['', Validators.required],
+			pickup_airport_long: ['', Validators.required],
+			pickup_address: ['', Validators.required],
+			pickup_address_lat: ['', Validators.required],
+			pickup_address_long: ['', Validators.required],
+			dropoff_airport: ['', Validators.required],
 			dropoff_airport_name: [''],
-			dropoff_airport_lat: ['',Validators.required],
-			dropoff_airport_long: ['',Validators.required],
-			dropoff_address: ['',Validators.required],
-			dropoff_address_lat: ['',Validators.required],
-			dropoff_address_long: ['',Validators.required],
+			dropoff_airport_lat: ['', Validators.required],
+			dropoff_airport_long: ['', Validators.required],
+			dropoff_address: ['', Validators.required],
+			dropoff_address_lat: ['', Validators.required],
+			dropoff_address_long: ['', Validators.required],
 			return_pickup_date: ['',],
 			return_pickup_time: ['',],
 			return_pickup_airport: ['',],
@@ -502,28 +502,38 @@ export class HomeComponent implements OnInit {
 		const quarterHour = 15;
 		return Math.round(minutes / quarterHour) * quarterHour;
 	}
-	isValidDate(dateString) {
+	returnValidDate(dateString) {
 		// Attempt to create a Date object from the provided dateString
-		const date :any = new Date(dateString);
-	
-		console.log('in function validate date-->' , date , date.getTime(), new Date().getTime(),(date=="Invalid Date" && date.getTime() > new Date().getTime()) ? false : true)
+		const date: any = new Date(dateString);
+			console.log('in function validate date-->', date, date.getTime(), new Date().getTime())
+			if (date.getTime() > new Date().getTime()) {		
+				console.log('formattedDate' , moment(date).format('YYYY-MM-DD'))
+				// this.SetFormValue('pickup_date', date)
+				return moment(date).format('YYYY-MM-DD')
+				
+			} else {	
+				console.log('formattedDate', moment(new Date()).format('YYYY-MM-DD'))
+				return  moment(new Date()).format('YYYY-MM-DD')
+			}
+
+
 		// Check if the Date object is valid and the dateString is a valid date
 		// The condition isNaN(date) will be true if the date is not valid
 		// Also, check if the parsed date string is equal to the original dateString
-		return  date.getTime() > new Date().getTime() ? true : false;
-	  }
+	}
 
 	prefillQuotebot() {
 		if (localStorage.getItem('quotebot_form')) {
 			let previous_quotebot = JSON.parse(localStorage.getItem('quotebot_form'))
+			console.log('return date function' , this.returnValidDate(previous_quotebot?.pickup_date))
 			// fill previous values if localStorage has item
-			console.log('filling QB form from local-->>>' , previous_quotebot,previous_quotebot?.service_type.length>1 )
+			console.log('filling QB form from local-->>>', previous_quotebot, previous_quotebot?.service_type.length > 1)
 			this.quoteBotForm.patchValue({
 				service_type: previous_quotebot?.service_type,
 				booking_hour: previous_quotebot?.booking_hour || 2,
 				pickup_type: previous_quotebot?.pickup_type,
 				dropoff_type: previous_quotebot?.dropoff_type,
-				pickup_date: this.isValidDate(previous_quotebot?.pickup_date) ? previous_quotebot?.pickup_date.split('T')[0] : new Date().toISOString().split('T')[0],
+				pickup_date: this.returnValidDate(previous_quotebot?.pickup_date),
 				pickup_time: previous_quotebot.pickup_time ? this.validateTimeHHMMSS(previous_quotebot.pickup_time) : "12:00:00",
 				pickup_airport: previous_quotebot?.pickup_airport,
 				pickup_airport_name: previous_quotebot?.other_details?.pickup_airport_name,
@@ -561,12 +571,12 @@ export class HomeComponent implements OnInit {
 			})
 			this.vars = previous_quotebot.other_details
 			console.warn('pickup_time: & date', this.QBForm.pickup_time.value, this.QBForm.pickup_date.value)
-			this.quoteBotSwitch(previous_quotebot?.service_type.length>1 ? previous_quotebot?.service_type : "one_way")
+			this.quoteBotSwitch(previous_quotebot?.service_type.length > 1 ? previous_quotebot?.service_type : "one_way")
 
-			if (new Date(this.QBForm.pickup_date.value).getDate() < new Date().getDate() || new Date(this.QBForm.pickup_date.value).getMonth() + 1 < new Date().getMonth() + 1) {
-				console.log('----------ssssssssssssssetttttttttt', this.getTimeHHMMSS(this.QBForm.pickup_date.value, true))
-				this.SetFormValue('pickup_date', this.getTimeHHMMSS(this.QBForm.pickup_date.value, true))
-			}
+			// if (new Date(this.QBForm.pickup_date.value).getDate() < new Date().getDate() || new Date(this.QBForm.pickup_date.value).getMonth() + 1 < new Date().getMonth() + 1) {
+			// 	console.log('----------ssssssssssssssetttttttttt', this.getTimeHHMMSS(this.QBForm.pickup_date.value, true))
+			// 	this.SetFormValue('pickup_date', this.getTimeHHMMSS(this.QBForm.pickup_date.value, true))
+			// }
 
 			// set values for data receiving from data.js
 			// $('pickupTime option:selected').attr('selected', null)
@@ -592,7 +602,7 @@ export class HomeComponent implements OnInit {
 			this.quoteBotSwitch('one_way')
 		}
 	}
-	validateTimeHHMMSS(time){
+	validateTimeHHMMSS(time) {
 		let arr = time.split(':')
 		const hours = arr[0];
 		const minutes = arr[1];
@@ -604,7 +614,7 @@ export class HomeComponent implements OnInit {
 
 		// Combine the time components into a string
 		const currentTime = `${formattedHours}:${formattedMinutes}:00`;
-		console.log('----------validateTimeHHMMSS-->>>', arr,formattedMinutes,currentTime)
+		console.log('----------validateTimeHHMMSS-->>>', arr, formattedMinutes, currentTime)
 
 		return currentTime
 	}
@@ -873,6 +883,7 @@ export class HomeComponent implements OnInit {
 	 */
 	changeDetection = {
 		pickupDate: (value: any) => {
+			console.log('--->>>>' ,value )
 			this.SetFormValue('pickup_date', value)
 		},
 		pickupTime: (event: any = null, form_control: string) => {
@@ -994,7 +1005,7 @@ export class HomeComponent implements OnInit {
 		}
 		console.log('form validated')
 	}
-	addRequiredValidators(arr: Array<string>){
+	addRequiredValidators(arr: Array<string>) {
 		arr.forEach((item: string) => {
 			this.quoteBotForm.get(item).setValidators([Validators.required])
 			this.quoteBotForm.get(item).updateValueAndValidity()
@@ -1002,7 +1013,7 @@ export class HomeComponent implements OnInit {
 	}
 	clearValidatorsAndReset(arr: Array<string>) {
 		arr.forEach((item: string) => {
-			console.log('clearing valildations from ' , item)
+			console.log('clearing valildations from ', item)
 			this.quoteBotForm.get(item).clearValidators()
 			this.quoteBotForm.get(item).reset()
 			this.quoteBotForm.get(item).updateValueAndValidity()
