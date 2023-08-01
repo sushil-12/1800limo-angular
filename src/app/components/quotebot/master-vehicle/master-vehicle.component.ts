@@ -21,12 +21,12 @@ interface Filters
 }
 
 @Component({
-	selector: 'app-select-vehicle',
-	templateUrl: './select-vehicle.component.html',
-	styleUrls: ['./select-vehicle.component.scss']
+  selector: 'app-master-vehicle',
+  templateUrl: './master-vehicle.component.html',
+  styleUrls: ['./master-vehicle.component.scss']
 })
-export class SelectVehicleComponent implements OnInit
-{
+export class MasterVehicleComponent implements OnInit {
+
 	/**
 	 * 
 	 * Please DO NOT CHANGE any conditions in this file.
@@ -48,7 +48,7 @@ export class SelectVehicleComponent implements OnInit
 	 */
 	innerWidth = window.innerWidth
 	currentUser = JSON.parse(localStorage.getItem('currentUser'))
-	
+
 
 	FILTERS_ORDER = [
 		{
@@ -131,11 +131,11 @@ export class SelectVehicleComponent implements OnInit
 
 	// Filters
 	filters: Filters = {
-		original: JSON.parse(sessionStorage.getItem('filters'))?.original,
-		copy: JSON.parse(sessionStorage.getItem('filters'))?.copy,
-		request:JSON.parse(sessionStorage.getItem('filters'))?.request,
-		selections: JSON.parse(sessionStorage.getItem('filters'))?.selections,
-		vars: JSON.parse(sessionStorage.getItem('filters'))?.vars
+		original: {},
+		copy: {},
+		request: {},
+		selections: [],
+		vars: {}
 	}
 
 	min_length: number = 12 	// number of filters to show in one column and on the filters sidebar
@@ -209,7 +209,6 @@ export class SelectVehicleComponent implements OnInit
 
 		this.fetchMasterVehicles()	// fetches 16 vehicle categories
 		this.getAllFilters()	// fetch filters from database
-		this.getVehicleDetails()
 	}
 	// ngOnInit ends
 	// documentgetElementById('affiliate-info')
@@ -463,37 +462,36 @@ export class SelectVehicleComponent implements OnInit
 	 */
 	getVehicleDetails()
 	{
-		console.log('Fetching Vehicle Details. ')
-		let data = {}
-		if (this.quotebot_form != null)
-		{
-			data = this.quotebot_form
-			data['filters'] = this.filters.request
-		}
-		// console.group('Sending Data to backend ... ', data)
-		// console.groupEnd()
-		this.$spinner.show()
-		// fetch the vehicle details - API HIT
-		this.$quotebotService.getVehicleDetails(data).subscribe((response: any) =>
-		{
-			if (response.data.length == 0)
-			{
-				this.no_vehicle_msg = 'No Vehicle found with the applied filter.'
-			}
-			this.vehicleDetails = [...response.data]
-			this.vehicleDetails = this.vehicleDetails.map(i=> {
-				if(i?.affiliate_company && i?.affiliate_name){
-					i['readMore']=(i?.affiliate_company?.length || i?.affiliate_name?.length) > 8 ? true : false 
-				}
-				else{
-					i['readMore'] = false
-				}
-				return i
-			})
-			console.log('vehicle details-->>>' , this.vehicleDetails)
-			this.Sort.LowToHigh() // default sort to Low-High
-			this.$spinner.hide()
-		})
+    sessionStorage.setItem('filters' ,JSON.stringify(this.filters))
+		this.$router.navigateByUrl('/quotebot/select-vehicle')
+		// console.log('Fetching Vehicle Details. ')
+		// let data = {}
+		// if (this.quotebot_form != null)
+		// {
+		// 	data = this.quotebot_form
+		// 	data['filters'] = this.filters.request
+		// }
+		// this.$spinner.show()
+		// this.$quotebotService.getVehicleDetails(data).subscribe((response: any) =>
+		// {
+		// 	if (response.data.length == 0)
+		// 	{
+		// 		this.no_vehicle_msg = 'No Vehicle found with the applied filter.'
+		// 	}
+		// 	this.vehicleDetails = [...response.data]
+		// 	this.vehicleDetails = this.vehicleDetails.map(i=> {
+		// 		if(i?.affiliate_company && i?.affiliate_name){
+		// 			i['readMore']=(i?.affiliate_company?.length || i?.affiliate_name?.length) > 8 ? true : false 
+		// 		}
+		// 		else{
+		// 			i['readMore'] = false
+		// 		}
+		// 		return i
+		// 	})
+		// 	console.log('vehicle details-->>>' , this.vehicleDetails)
+		// 	this.Sort.LowToHigh() // default sort to Low-High
+		// 	this.$spinner.hide()
+		// })
 	}
 
 
@@ -707,11 +705,7 @@ export class SelectVehicleComponent implements OnInit
 
 	clearFilters(filter: Filters['selections'])
 	{
-		console.log('filter clear filter clicked--->>' , !filter,this.filters.selections.length)
-		if (this.filters.selections.length <= 1 || !filter){
-			this.$router.navigateByUrl('/quotebot/master-vehicle')
-			return
-		}  // don't do anything if no filter is selected
+		if (this.filters.selections.length == 0) return // don't do anything if no filter is selected
 
 		if (filter !== null && this.filters.selections.length > 1)
 		{
@@ -804,12 +798,9 @@ export class SelectVehicleComponent implements OnInit
 
 	backButton()
 	{
-		// when its time to go back to home page
-		// if (this.vehicleDetails.length == 0)
-		// {
-		// 	return
-		// }
-		this.$router.navigateByUrl('/quotebot/master-vehicle')
+	
+			this.$router.navigateByUrl('/home')
+		
 
 		// remove all selections
 		// while (this.filters.selections.length > 0)

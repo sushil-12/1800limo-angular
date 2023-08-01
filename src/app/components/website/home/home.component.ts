@@ -1105,7 +1105,7 @@ export class HomeComponent implements OnInit {
 
 			console.log(`\n\n\n Receiving Response after filing the quote .....\n ${response} \n\n\n`, this.quoteBotForm.value)
 			localStorage.setItem('quotebot_form', JSON.stringify(this.quoteBotForm.value));
-			this.router.navigate(['quotebot/select-vehicle']);
+			this.router.navigate(['quotebot/master-vehicle']);
 			return
 		}, (error) => {
 			console.group('Facing Some Issues while calculating distance .... Error fetched ->\n')
