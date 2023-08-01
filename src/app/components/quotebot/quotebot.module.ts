@@ -10,6 +10,7 @@ import { ReplacePipe } from '../../pipes/replace.pipe';
 import { VehicleDetailsComponent } from './vehicle-details/vehicle-details.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { SharedModule } from '../shared/shared.module';
+import { MasterVehicleComponent } from './master-vehicle/master-vehicle.component';
 
 
 @NgModule({
@@ -20,6 +21,7 @@ import { SharedModule } from '../shared/shared.module';
 		FailedQuoteRequestConfirmationComponent,
 		ReplacePipe,
 		VehicleDetailsComponent,
+		MasterVehicleComponent,
 
 	],
 

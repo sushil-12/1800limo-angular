@@ -4,11 +4,16 @@ import { Routes, RouterModule } from '@angular/router';
 import { SelectVehicleComponent } from './select-vehicle/select-vehicle.component';
 import { FailedQuoteRequestComponent } from './failed-quote-request/failed-quote-request.component';
 import { VehicleDetailsComponent } from './vehicle-details/vehicle-details.component';
+import { MasterVehicleComponent } from './master-vehicle/master-vehicle.component';
 
 const routes: Routes = [
 	{
 		path: 'select-vehicle',
 		component: SelectVehicleComponent
+	},
+	{
+		path: 'master-vehicle',
+		component: MasterVehicleComponent
 	},
 	{
 		path: 'vehicle-details',
