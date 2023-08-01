@@ -468,30 +468,30 @@ export class NewBookingComponent implements OnInit {
 					}
 				}
 			}
-			if (editing_data?.loose_customer) {
-				console.log('n function fill loose customer data', editing_data?.loose_customer)
-				try {
-					for (let item in editing_data?.loose_customer) {
-						if (editing_data?.loose_customer[item]) {
-							console.log('LC set value for', item, editing_data?.loose_customer[item])
-							this.SetLCFormValue(item, editing_data?.loose_customer[item])
-						}
-					}
-					this.SetLCFormValue('phone' ,editing_data?.loose_customer?.mobile )
-					this.fillLooseCustomerAddress(editing_data?.loose_customer?.address)
-					const loose_customer = (this.BookingForm.get('loose_customer') as FormGroup)
-					loose_customer.get('email').setValidators([Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.]+\.[a-zA-Z]{2,}$/i)])
-					loose_customer.get('phone').setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)])
-					loose_customer.get('first_name').setValidators([Validators.required])
-					// loose_customer.get('middle_name').setValidators(this.customValidator.whitespace())
-					loose_customer.get('last_name').setValidators([Validators.required])
-					loose_customer.get('address').setValidators(this.customValidator.whitespace())
-					loose_customer.updateValueAndValidity()
-				}
-				catch (error) {
-					console.log('error--->>>>>>', error)
-				}
-			}
+			// if (editing_data?.loose_customer) {
+			// 	console.log('n function fill loose customer data', editing_data?.loose_customer)
+			// 	try {
+			// 		for (let item in editing_data?.loose_customer) {
+			// 			if (editing_data?.loose_customer[item]) {
+			// 				console.log('LC set value for', item, editing_data?.loose_customer[item])
+			// 				this.SetLCFormValue(item, editing_data?.loose_customer[item])
+			// 			}
+			// 		}
+			// 		this.SetLCFormValue('phone' ,editing_data?.loose_customer?.mobile )
+			// 		this.fillLooseCustomerAddress(editing_data?.loose_customer?.address)
+			// 		const loose_customer = (this.BookingForm.get('loose_customer') as FormGroup)
+			// 		loose_customer.get('email').setValidators([Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.]+\.[a-zA-Z]{2,}$/i)])
+			// 		loose_customer.get('phone').setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)])
+			// 		loose_customer.get('first_name').setValidators([Validators.required])
+			// 		// loose_customer.get('middle_name').setValidators(this.customValidator.whitespace())
+			// 		loose_customer.get('last_name').setValidators([Validators.required])
+			// 		loose_customer.get('address').setValidators(this.customValidator.whitespace())
+			// 		loose_customer.updateValueAndValidity()
+			// 	}
+			// 	catch (error) {
+			// 		console.log('error--->>>>>>', error)
+			// 	}
+			// }
 			this.SetFormValue('pickup_airport_option', this.BigData.airportsData.find((item: any) => item.id == this.Form.pickup_airport.value));
 			this.SetFormValue('pickup_airline_option', this.BigData.airlinesData.find((item: any) => item.id == this.Form.pickup_airline.value));
 			this.SetFormValue('dropoff_airport_option', this.BigData.airportsData.find((item: any) => item.id == this.Form.dropoff_airport.value));

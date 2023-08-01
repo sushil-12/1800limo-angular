@@ -130,13 +130,22 @@
 							<div class="map-image img-Block mt-4 mt-lg-0">
 								<div id="google_map">
 									<div id="map"></div>
+									<div class="row">
+										<h6 class="mx-2">
+											Total Distance:  {{convertToMi(distance)}} mi 
+										</h6>
+										<h6 class="mx-2">
+											Estimated time:  {{convertToMinutes(duration)}} mins
+										</h6>
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 				<!-- VEHICLE SELECTED DETAILS ENDS -->
-
+				<!-- {{ mToMi(distance) }} Miles / {{ mToKm(distance)
+				}} -->
 			</div>
 		</div>
 	</div>
