@@ -174,8 +174,10 @@ export class MasterVehicleComponent implements OnInit {
 	ngOnInit(): void
 	{
 		window.scrollTo(0, 0)
+		// sessionStorage.removeItem('selected_vehicle')
+		sessionStorage.removeItem('filters')
+		console.log('filter removed from session storage')
 		this.$spinner.show()
-		sessionStorage.removeItem('selected_vehicle')
 		// Note: Do not add anything here or before below conditional logic. This should be the first step
 		if (localStorage.getItem('quotebot_form') == null)
 		{
@@ -331,17 +333,17 @@ export class MasterVehicleComponent implements OnInit {
 				name: 'Child Certified Driver'
 			}]
 			// fetch the last selected category
-			this.$state.get().subscribe((data: any) =>
-			{
-				if (data && data.selected_filters != undefined)
-				{
-					data.selected_filters.forEach((item: Filters['selections']) =>
-					{
-						this.filterSelection(true, item['catg_name'], item)
-					})
-					this.getVehicleDetails()
-				}
-			})
+			// this.$state.get().subscribe((data: any) =>
+			// {
+			// 	if (data && data.selected_filters != undefined)
+			// 	{
+			// 		data.selected_filters.forEach((item: Filters['selections']) =>
+			// 		{
+			// 			this.filterSelection(true, item['catg_name'], item)
+			// 		})
+			// 		// this.getVehicleDetails()
+			// 	}
+			// })
 			console.group('Filters List: ', this.filters)
 			console.log('--------------------------------\n\n')
 			console.groupEnd()
@@ -463,6 +465,7 @@ export class MasterVehicleComponent implements OnInit {
 	getVehicleDetails()
 	{
     sessionStorage.setItem('filters' ,JSON.stringify(this.filters))
+	console.log('===============================>> navigate to select vehicle')
 		this.$router.navigateByUrl('/quotebot/select-vehicle')
 		// console.log('Fetching Vehicle Details. ')
 		// let data = {}

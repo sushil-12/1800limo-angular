@@ -604,6 +604,7 @@ export class HomeComponent implements OnInit {
 	}
 	validateTimeHHMMSS(time) {
 		let arr = time.split(':')
+		if(arr.length != 3) return '12:00:00'
 		const hours = arr[0];
 		const minutes = arr[1];
 		const seconds = arr[2];
@@ -614,7 +615,7 @@ export class HomeComponent implements OnInit {
 
 		// Combine the time components into a string
 		const currentTime = `${formattedHours}:${formattedMinutes}:00`;
-		console.log('----------validateTimeHHMMSS-->>>', arr, formattedMinutes, currentTime)
+		console.log('----------validateTimeHHMMSS-->>>', arr, currentTime)
 
 		return currentTime
 	}
@@ -633,7 +634,7 @@ export class HomeComponent implements OnInit {
 
 		// Pad single digits with leading zeros
 		const formattedHours = hours.toString().padStart(2, '0');
-		const formattedMinutes = this.roundToNearest15(minutes.toString().padStart(2, '0'));
+		const formattedMinutes = this.roundToNearest15(minutes).toString().padStart(2, '0');
 
 		// Combine the time components into a string
 		const currentTime = `${formattedHours}:${formattedMinutes}:00`;

@@ -18,6 +18,8 @@ export class VehicleDetailsComponent implements OnInit {
 	quotebot_form: any	// quotebot details from previous page
 	one_way_rates: any
 	round_trip_rates: any
+	distance:any = 0
+	duration:any = 0
 
 	driver_info_display_keys: Array<string> = ['gender', 'dress', 'experience', 'languages', 'insurance_limit']
 
@@ -221,6 +223,16 @@ export class VehicleDetailsComponent implements OnInit {
 
 			directionsService.route(obj, (response, error) => {
 				console.log('Directions Service Response: ', response)
+				console.log('Distance-->>>>>', response?.routes)
+				response?.routes?.map((i:any)=>{
+					i?.legs.map((j)=>{
+						this.distance +=  j.distance.value
+						this.duration += j.duration.value
+						console.log('--<distance>>' , j.distance.value)
+						console.log('--<duration>>' , j.duration.value)
+
+					})
+				})
 				directionsRenderer.setDirections(response)
 			})
 		})
@@ -233,6 +245,12 @@ export class VehicleDetailsComponent implements OnInit {
 
 	textFormat(text: string) {
 		return text.replace(/[_|-]/g, ' ')
+	}
+	convertToMi(value){
+		return (value * 0.000621371 ).toFixed(2)
+	}
+	convertToMinutes(value){
+		return (value/60).toFixed(2)
 	}
 
 	/**

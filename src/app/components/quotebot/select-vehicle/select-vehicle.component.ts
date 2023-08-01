@@ -332,17 +332,17 @@ export class SelectVehicleComponent implements OnInit
 				name: 'Child Certified Driver'
 			}]
 			// fetch the last selected category
-			this.$state.get().subscribe((data: any) =>
-			{
-				if (data && data.selected_filters != undefined)
-				{
-					data.selected_filters.forEach((item: Filters['selections']) =>
-					{
-						this.filterSelection(true, item['catg_name'], item)
-					})
-					this.getVehicleDetails()
-				}
-			})
+			// this.$state.get().subscribe((data: any) =>
+			// {
+			// 	if (data && data.selected_filters != undefined)
+			// 	{
+			// 		data.selected_filters.forEach((item: Filters['selections']) =>
+			// 		{
+			// 			this.filterSelection(true, item['catg_name'], item)
+			// 		})
+			// 		this.getVehicleDetails()
+			// 	}
+			// })
 			console.group('Filters List: ', this.filters)
 			console.log('--------------------------------\n\n')
 			console.groupEnd()
