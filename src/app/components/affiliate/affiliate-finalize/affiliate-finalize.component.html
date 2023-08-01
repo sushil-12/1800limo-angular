@@ -42,7 +42,17 @@
 
 	<h4 class="m-2">Journey Details</h4>
 	<div class="row ml-2">
-
+		<div class="col-md-4 field">
+			<p>Pickup Date </p>
+			<strong>{{ dateFormat2(BookingDetail?.pickup_date) }} | {{ dateFormat(BookingDetail?.pickup_date)
+				}}</strong>
+		</div>
+		<div class="col-md-4 field">
+			<p>Pickup Time</p>
+			<strong>{{ timeFormat2(BookingDetail?.pickup_time) }} |
+				{{ timeFormat(BookingDetail?.pickup_time) }}</strong>
+		</div>
+	
 	<div class="col-md-4 field" *ngIf="BookingDetail?.pickup_address">
 		<p>Pickup Address: </p>
 		<strong> {{ BookingDetail?.pickup_address }}</strong>
@@ -90,16 +100,6 @@
 	<div class="col-md-4 field" *ngIf="BookingDetail?.meet_greet_choices">
 		<p> Meet and Greet Choices: </p>
 		<strong>{{ BookingDetail?.meet_greet_choices }}</strong>
-	</div>
-	<div class="col-md-4 field">
-		<p>Pickup Date </p>
-		<strong>{{ dateFormat2(BookingDetail?.pickup_date) }} | {{ dateFormat(BookingDetail?.pickup_date)
-			}}</strong>
-	</div>
-	<div class="col-md-4 field">
-		<p>Pickup Time</p>
-		<strong>{{ timeFormat2(BookingDetail?.pickup_time) }} |
-			{{ timeFormat(BookingDetail?.pickup_time) }}</strong>
 	</div>
 
 

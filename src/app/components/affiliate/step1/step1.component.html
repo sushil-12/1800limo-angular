@@ -185,7 +185,7 @@
 				</ng-template>
 				<div class="col-md-6">
 					<mat-form-field appearance="outline" class="read-only mat-custom-phone cellLabelClass">
-						<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Cell<span
+						<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass" style="transform: translateY(-1.5em) scale(0.9) !important;">Cell<span
 								class="asterisk"> *</span></label>
 						<input matInput placeholder="Cell" formControlName="CellNumber" ng2TelInput
 							[ng2TelInputOptions]="{
@@ -478,8 +478,7 @@
 				</ng-template>
 				<div class="col-md-6">
 					<mat-form-field appearance="outline" class="mat-custom-phone topLabelClass">
-						<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">24Hr Dispatch Tel
-							#
+						<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">24Hr Cell Phone Dispatch # 
 							<span class="asterisk"> *</span></label>
 						<input matInput formControlName="Dispatch" ng2TelInput [ng2TelInputOptions]="{
 								preferredCountries: ['us', 'ca', 'mx', 'gb']
@@ -589,11 +588,11 @@
 					</div>
 				</div>
 				<div class="col-md-6">
-					<mat-form-field appearance="outline" class="mat-custom-phone">
-						<mat-label>FAX</mat-label>
-						<input matInput placeholder="FAX" formControlName="Fax" ng2TelInput [ng2TelInputOptions]="{
+					<mat-form-field appearance="outline"  class="mat-custom-phone topLabelClass">
+						<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">FAX </label>
+						<input matInput formControlName="Fax" ng2TelInput [ng2TelInputOptions]="{
 								preferredCountries: ['us', 'ca', 'mx', 'gb']
-							}" (countryChange)="onCountryChange($event, 'Fax')" (intlTelInputObject)="telInputObjectFax($event)"
+							}" placeholder="FAX" class="phoneNumberClass" (countryChange)="onCountryChange($event, 'Fax')" (intlTelInputObject)="telInputObjectFax($event)"
 							tabIndex="1" />
 					</mat-form-field>
 					<div *ngIf="f.Fax.errors" class="text-danger margin-bottom-thin my-mat-hint">

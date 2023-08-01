@@ -28,7 +28,7 @@
 					<mat-form-field appearance="outline">
 						<mat-label>Type here to search</mat-label>
 						<input type="text" matInput placeholder="Search Filter by Key word" 
-						(keyup)="loadIndividuals()"
+						(keyup)="handleSearchKeyword($event.target.value)" [value]="searchText"
 						id="keyword" autofocus>
 					</mat-form-field>
 				</div>
@@ -74,6 +74,16 @@
 										<div class="dropdown-item-icon"></div>
 										Edit Individual Account
 									</a>
+									<a class="dropdown-item" [routerLink]="['/admin/booking-list']"
+											[queryParams]="{type: 'past', id:individual?.id , isAffiliate:'false' , for:individual?.first_name}">
+											<div class="dropdown-item-icon"></div>
+											Past bookings
+										</a>
+										<a class="dropdown-item" [routerLink]="['/admin/booking-list']"
+											[queryParams]="{type: 'future', id: individual?.id,isAffiliate:'false' , for:individual?.first_name}">
+											<div class="dropdown-item-icon"></div>
+											Future bookings
+										</a>
 									<a class="dropdown-item" (click)="clickIndividualCards(individual.id)">
 										<div class="dropdown-item-icon" *></div>
 										View Cards
