@@ -368,7 +368,8 @@ export class RatesFormComponent implements OnInit, OnChanges {
 			transfer_type: transfer_type_value,
 			numberOfVehicles: 1,
 			no_of_hours: no_of_hours,
-			distance: location_info.distance.value
+			distance: location_info.distance.value,
+			is_master_vehicle: JSON.parse(sessionStorage.getItem('selected_vehicle'))?.is_master_vehicle 
 		}
 		this.$api.fetchRatesByAffiliateVeh(vehicle_id, data).subscribe((response: any) => {
 			this.ratesdata.next(response?.data?.rateArray)
