@@ -320,7 +320,12 @@ export class SelectVehicleComponent implements OnInit
 			for (let catg in this.filters.original)
 			{
 				// changing the name here? Do not forget to change in the includes and selected filters function.
-				this.filters.original[catg].unshift({ id: 0, name: 'any or all', checked: true })
+				if(this.filters?.selections.length){
+					this.filters.original[catg].unshift({ id: 0, name: 'any or all', checked: false })
+				}
+				else{
+					this.filters.original[catg].unshift({ id: 0, name: 'any or all', checked: true })
+				}
 			}
 
 
@@ -464,6 +469,7 @@ export class SelectVehicleComponent implements OnInit
 	getVehicleDetails()
 	{
 		console.log('Fetching Vehicle Details. ')
+		sessionStorage.setItem('filters' , JSON.stringify(this.filters))
 		let data = {}
 		if (this.quotebot_form != null)
 		{
