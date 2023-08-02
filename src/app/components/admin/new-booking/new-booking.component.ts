@@ -235,7 +235,7 @@ export class NewBookingComponent implements OnInit {
 			number_of_hours: ['0'],
 			acc_id: [''],
 			account_type: ['individual'],
-			change_individual_data:[true],
+			change_individual_data:[false],
 			loose_customer: this.$form.group({
 				first_name: [''],
 				middle_name: [''],
@@ -245,7 +245,6 @@ export class NewBookingComponent implements OnInit {
 				phone_country: ['us'],
 				email: [''],
 				address: [''],
-				change_individual_data:[true],
 				card_details: this.$form.group({
 					name: [''],
 					card_number: [''],
@@ -833,7 +832,7 @@ export class NewBookingComponent implements OnInit {
 				this.chosen_user = response.data
 				this.chosen_user['name'] = `${response.data.first_name} ${response.data.middle_name ?? ''} ${response.data.last_name}`
 				this.autofillData('passenger', this.chosen_user);
-				this.fillLCDetails(this.chosen_user)
+				// this.fillLCDetails(this.chosen_user)
 				if (!this.Form.reservation_id.value) {
 					// this.autofillData('passenger', this.chosen_user);
 				}
