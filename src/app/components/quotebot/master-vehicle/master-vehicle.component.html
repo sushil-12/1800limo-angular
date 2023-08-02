@@ -300,7 +300,7 @@
 					<div id="master-vehicle-box" class="col-md-3 mb-5 d-flex flex-nowrap flex-md-wrap cursor-pointer"
 						style="gap: 10px" *ngFor="let vehicle_obj of master_vehicles; index as vehicle_obj_index"
 						(click)="selectCategory(vehicle_obj?.name)">
-						<div id="vehicle-image" class="imageStyle">
+						<div id="vehicle-image" class="imageStyle bg-white">
 							<img [src]="vehicle_obj.cat_img" class="img-fluid"
 								[attr.id]="'vehicle_' + vehicle_obj_index" />
 						</div>
