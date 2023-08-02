@@ -1061,7 +1061,8 @@ export class AdminService {
 			.set('service_type', data?.service_type)
 			.set('numberOfVehicles', data?.numberOfVehicles)
 			.set('distance', data?.distance)
-			.set('no_of_hours', data?.no_of_hours);
+			.set('no_of_hours', data?.no_of_hours)
+			.set('is_master_vehicle' , data?.is_master_vehicle);
 		return this.httpClient.get(`${this.serverUrl}admin/booking-rates-vehicle`, { params })
 	}
 	checkUniquePhoneNumberForLooseCustomer(customer_data: Record<string, any>) {

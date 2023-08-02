@@ -680,7 +680,7 @@ export class SelectVehicleComponent implements OnInit
 			if (JSON.parse(localStorage.getItem('currentUser'))['roleName'] == 'admin')
 			{
 				this.$router.navigate(['/admin/new-booking'],
-				{ queryParams: {affiliate_id:vehicle_selected.affiliate_id, vehicle_id:vehicle_selected.id,new : true }})
+				{ queryParams: {affiliate_id:vehicle_selected.affiliate_id, vehicle_id:vehicle_selected.id,new : true ,is_master_vehicle:vehicle_selected?.is_master_vehicle}})
 			} else
 			{
 				let user = JSON.parse(localStorage.getItem('currentUser'))['roleName']
@@ -689,7 +689,7 @@ export class SelectVehicleComponent implements OnInit
 				this.$router.navigate([
 					'/' + user + '/create-new-booking'
 				],
-				{ queryParams: {affiliate_id:vehicle_selected.affiliate_id, vehicle_id:vehicle_selected.id,new : true } })
+				{ queryParams: {affiliate_id:vehicle_selected.affiliate_id, vehicle_id:vehicle_selected.id,new : true , is_master_vehicle:vehicle_selected?.is_master_vehicle} })
 			}
 		} else
 		{
