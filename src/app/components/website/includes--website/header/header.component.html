@@ -7,7 +7,7 @@
 	
 	<nav class="navbar navbar-expand-lg navbar-dark ">
 		<a class="navbar-brand" href="">
-			<img src="assets/images/HomepageLogo.png">
+			<img src="assets/images/HomepageLogo.png" tabindex="1" >
 		</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample05"
 			aria-controls="navbarsExample05" aria-expanded="false" aria-label="Toggle navigation">
@@ -22,28 +22,28 @@
 		<div class="collapse navbar-collapse align-items-center" id="navbarsExample05">
 			<div class="nav_top d-lg-block d-none text-center" style="flex-basis: auto; flex-grow: 1;">
 				<a href="tel:+18005466266" class="cell-no">
-					<i class="fas fa-phone-alt" aria-hidden="true"></i>
+					<i class="fas fa-phone-alt" aria-hidden="true" tabindex="1"></i>
 					+1-800-5466.266
 				</a>
 				<!-- <div class="g-translator d-flex justify-content-center"><div id="google_translate_element_home_desktop"></div></div> -->
 			</div>
 			<!--  class="hideDesktop"></div> -->
 			<ul class="navbar-nav ml-auto">
-				<li class="nav-item"> <a class="nav-link" [routerLinkActive]="['active']" routerLink="/home">Home </a>
+				<li class="nav-item"> <a class="nav-link" [routerLinkActive]="['active']" routerLink="/home"  tabindex="1">Home </a>
 				</li>
-				<li class="nav-item"> <a class="nav-link" [routerLinkActive]="['active']" routerLink="about-us">ABOUT
+				<li class="nav-item"> <a class="nav-link" [routerLinkActive]="['active']" routerLink="about-us"  tabindex="1">ABOUT
 						US / HISTORY</a>
 				</li>
-				<li class="nav-item"> <a class="nav-link" [routerLinkActive]="['active']" routerLink="fleet">FLEET</a>
+				<li class="nav-item"> <a class="nav-link" [routerLinkActive]="['active']" routerLink="fleet"  tabindex="1">FLEET</a>
 				</li>
-				<li class="nav-item"> <a class="nav-link" [routerLink]="['services']">SERVICES</a>
+				<li class="nav-item"> <a class="nav-link" [routerLink]="['services']"  tabindex="1">SERVICES</a>
 				</li>
-				<li class="nav-item"> <a class="nav-link" [routerLinkActive]="['active']" routerLink="safety">Safety</a>
+				<li class="nav-item"> <a class="nav-link" [routerLinkActive]="['active']" routerLink="safety"  tabindex="1">Safety</a>
 				</li>
 			</ul>
 			<div class="nav-item dropdown button-signin" *ngIf="!currentUser; else loggedInUser">
-				<a class="nav-link dropdown-toggle" href="#" id="dropdown05" data-toggle="dropdown" aria-haspopup="true"
-					aria-expanded="false">
+				<a class="nav-link dropdown-toggle" tabindex="1" href="#" id="dropdown05" data-toggle="dropdown" aria-haspopup="true"
+					aria-expanded="false" >
 					LOGIN / CREATE
 				</a>
 				<div class="dropdown-menu" aria-labelledby="dropdown05">
@@ -68,7 +68,7 @@
 			<ng-template #loggedInUser>
 				<ul class="navbar-nav">
 					<li class="nav-item dropdown no-caret mr-2 dropdown-user">
-						<a class="user-profile btn btn-icon btn-transparent-dark dropdown-toggle"
+						<a class="user-profile btn btn-icon btn-transparent-dark dropdown-toggle" tabindex="1"
 							id="navbarDropdownUserImage" href="javascript:void(0);" role="button" data-toggle="dropdown"
 							aria-haspopup="true" aria-expanded="false">
 							{{ currentUser?.affiliate_company ? currentUser?.affiliate_company

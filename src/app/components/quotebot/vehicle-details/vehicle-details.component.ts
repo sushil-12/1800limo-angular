@@ -42,7 +42,7 @@ export class VehicleDetailsComponent implements OnInit {
 					error: 'Please file a quote first, before selecting vehicles.'
 				}
 			})
-			this._router.navigate(['/home'])
+			this._router.navigate(['/home' ,  { queryParams: {r:true} }])
 		} else if (sessionStorage.getItem('selected_vehicle') === null) {
 			this._errorDialogService.openDialog({
 				errors: {
@@ -59,9 +59,9 @@ export class VehicleDetailsComponent implements OnInit {
 				this.selected_vehicle['name_initials'] = name.join(' ')
 			}
 			this.quotebot_form = JSON.parse(localStorage.getItem('quotebot_form'))
-
-
-			this.one_way_rates = this.selected_vehicle[Object.keys(this.selected_vehicle).find(value => /^rate_breakdown_one_way/g.test(value))]
+			let rates = this.selected_vehicle[Object.keys(this.selected_vehicle).find(value => /^rate_breakdown_one_way/g.test(value))]
+			this.one_way_rates =  rates ? rates :  this.selected_vehicle[Object.keys(this.selected_vehicle).find(value => /^rate_breakdown_charter_tour/g.test(value))]
+			console.log('rates-->>' , rates ? 'yes' : 'no' , this.one_way_rates)
 
 			this.round_trip_rates = this.selected_vehicle[Object.keys(this.selected_vehicle).find(value => /^rate_breakdown_round_trip/g.test(value))]
 
