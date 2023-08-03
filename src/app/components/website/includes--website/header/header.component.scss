@@ -6,7 +6,7 @@
 	background: #8080805c;
 }
 
-.sub-admin-dropdown{
+.sub-admin-dropdown {
 	background-color: var(--orange-color);
 }
 
@@ -78,12 +78,28 @@
 ul {
 	background-color: #000;
 }
+
 // .g-translator{position: absolute;right:0;left: auto;top:-6px;bottom: auto;z-index:9999}
-:host ::ng-deep .g-translator .goog-te-gadget .goog-te-combo{margin: 0!important;border:none!important;box-shadow:none!important;border-radius: 0 0px 10px 10px!important;width: 130px!important;
-    max-width: 100%!important;}
-#navbarsExample05{padding-top: 10px;}
-:host ::ng-deep .goog-te-gadget{color:#011533 !important}
-:host ::ng-deep .VIpgJd-ZVi9od-l4eHX-hSRGPd{display: none!important;}
+:host ::ng-deep .g-translator .goog-te-gadget .goog-te-combo {
+	margin: 0 !important;
+	border: none !important;
+	box-shadow: none !important;
+	border-radius: 0 0px 10px 10px !important;
+	width: 130px !important;
+	max-width: 100% !important;
+}
+
+#navbarsExample05 {
+	padding-top: 10px;
+}
+
+:host ::ng-deep .goog-te-gadget {
+	color: #011533 !important
+}
+
+:host ::ng-deep .VIpgJd-ZVi9od-l4eHX-hSRGPd {
+	display: none !important;
+}
 
 @media only screen and (min-width: 980px) {
 	ul {
@@ -92,8 +108,12 @@ ul {
 }
 
 @media only screen and (max-width:991px) {
+
 	// header .navbar-dark .navbar-toggler{padding-top: 20px;}
-	header .home_header{background-color: transparent!important;}
+	header .home_header {
+		background-color: transparent !important;
+	}
+
 	.navbar-dark .navbar-nav .nav-link {
 		color: var(--orange-color) !important;
 	}
@@ -127,4 +147,11 @@ ul {
 
 .dropdown-item {
 	font-weight: 600;
+}
+
+.focus-border {
+	border: 2px solid #ffffff;
+	/* Apply a blue border when focused */
+	box-shadow: 0 0 5px #ffffff;
+	/* Add a shadow effect (optional) */
 }

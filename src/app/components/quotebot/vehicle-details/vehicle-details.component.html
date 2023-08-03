@@ -532,7 +532,7 @@
 						<th> Rate </th>
 						<th> Amount </th>
 					</thead>
-					<tbody *ngIf="quotebot_form.service_type == 'one_way'">
+					<tbody *ngIf="quotebot_form.service_type == 'one_way' || quotebot_form.service_type == 'charter_tour'">
 						<tr
 							*ngFor="let rate of one_way_rates?.rateArray?.all_inclusive_rates | keyvalue; index as rate_index">
 							<td>

@@ -123,7 +123,7 @@
 
 			<div class="col-md-6 col-xl-5 quoteform_homewrapper" appScrollToSection>
 				<div class="g-translator d-flex justify-content-center">
-					<div id="google_translate_element_home_desktop"></div>
+					<div id="google_translate_element_home_desktop" ></div>
 				</div>
 				<h3>FREE Prearranged Quotes<br> in Over <span data-toggle="modal" id="countriestooltip"
 						class="showCountries p-0" data-placement="top" title="Click to check list of Countries"
@@ -132,19 +132,19 @@
 				<ul class="nav nav-tabs" id="myTab" role="tablist">
 					<li class="nav-item" role="presentation">
 						<a class="nav-link" [ngClass]="QBForm?.service_type?.value == 'one_way' ? 'active' : ''"
-							(click)="quoteBotSwitch('one_way')">
+							(click)="quoteBotSwitch('one_way')"  (keyup.enter)="quoteBotSwitch('one_way')" >
 							One Way
 						</a>
 					</li>
 					<li class="nav-item" role="presentation">
 						<a class="nav-link" [ngClass]="QBForm?.service_type?.value == 'round_trip' ? 'active' : ''"
-							(click)="quoteBotSwitch('round_trip')">
+							(click)="quoteBotSwitch('round_trip')" (keyup.enter)="quoteBotSwitch('round_trip')" >
 							Round Trip
 						</a>
 					</li>
 					<li class="nav-item" role="presentation">
 						<a class="nav-link" [ngClass]="QBForm?.service_type?.value =='charter_tour' ? 'active' : ''"
-							(click)="quoteBotSwitch('charter_tour')">
+							(click)="quoteBotSwitch('charter_tour')" (keyup.enter)="quoteBotSwitch('charter_tour')"  >
 							Charter / Tour
 						</a>
 					</li>
@@ -169,7 +169,7 @@
 											<select (change)="changeDetection?.bookingHours($event)"
 												class="selectHoursFields font-weight-bolder"
 												formControlName="booking_hour"
-												[class.errorValid]="submitted && QBForm?.booking_hour?.errors">
+												[class.errorValid]="submitted && QBForm?.booking_hour?.errors"  >
 												<option *ngFor="let hour of hour_values" [value]="hour?.return_value">
 													{{ hour?.display_value }}
 												</option>
@@ -187,7 +187,7 @@
 									<div class="col-6 col-md-6">
 										<label>Pickup Type</label>
 										<div class="inselect">
-											<select formControlName="pickup_type" class="font-weight-bolder"
+											<select formControlName="pickup_type" class="font-weight-bolder" 
 												[class.errorValid]="submitted && QBForm?.pickup_type?.errors">
 												<option value="airport">Airport?</option>
 												<option value="cruise">Cruise Port?</option>
@@ -206,7 +206,7 @@
 									<div class="col-6 col-md-6">
 										<label>Drop Off Type </label>
 										<div class="inselect">
-											<select formControlName="dropoff_type" class="font-weight-bolder"
+											<select formControlName="dropoff_type" class="font-weight-bolder" 
 												[class.errorValid]="submitted && QBForm?.dropoff_type?.errors">
 												<option Value="airport">Airport?</option>
 												<option Value="cruise">Cruise Port?</option>
@@ -232,7 +232,7 @@
 											<mat-form-field appearance="fill">
 												<input matInput [matDatepicker]="picker1" placeholder="Pickup Date"
 													[min]="minDate" formControlName="pickup_date"
-													class="font-weight-bolder"
+													class="font-weight-bolder" 
 													(dateChange)="changeDetection.pickupDate($event.target.value)"
 													(click)="picker1.open()" readonly
 													[class.errorValid]="submitted && QBForm?.pickup_date?.errors">
@@ -260,7 +260,7 @@
 										<div class="inselect pickupTime">
 											<!-- <input type="time" placeholder="Pickup Time" class="d-block d-lg-none" /> -->
 											<select name="pickupTime" placeholder="Pickup Time" required
-												formControlName="pickup_time" class="font-weight-bolder"
+												formControlName="pickup_time" class="font-weight-bolder" 
 												style="flex: 1 1 100%; box-sizing: border-box; max-width: 100%;"
 												(change)="changeDetection.pickupTime($event, 'pickup_time')"
 												[class.errorValid]="submitted && QBForm?.pickup_time?.errors">
@@ -284,7 +284,7 @@
 										<div class="form-group">
 											<label>Pickup Time</label>
 											<div class="input-group time" id="timepicker">
-												<input type="time" class="form-control" placeholder="HH:MM"
+												<input type="time" class="form-control" placeholder="HH:MM" 
 													(change)="changeDetection.pickupTime($event, 'pickup_time')"
 													[value]="QBForm?.pickup_time?.value" class="font-weight-bolder" />
 												<em class="input-group-append input-group-addon">
@@ -430,7 +430,7 @@
 											<div class="input-contain d-flex align-items-center">
 												<div class="input-box">
 													<input type="text" placeholder="Airport Code / Name?"
-														id="pickup_airport" #airportinput
+														id="pickup_airport" #airportinput 
 														class="input-f font-weight-bolder"
 														(focus)="$event.target.select()"
 														(keyup)="searchAirport($event.target.value, 'pickup_airport')"
@@ -476,7 +476,7 @@
 														[attr.placeholder]="QBForm?.pickup_type?.value == 'city' ? 'City - Pickup Address?' : 'Cruise Port Name / Address?'"
 														id="pickup_address" #addressinput
 														[value]="QBForm?.pickup_address?.value"
-														formControlName="pickup_address"
+														formControlName="pickup_address" 
 														(focus)="$event.target.select()"
 														class="input-f font-weight-bolder" matGoogleMapsAutocomplete
 														(onAutocompleteSelected)="onAutocompleteSelected($event, 'pickup_address')"
@@ -521,7 +521,7 @@
 													<input type="text" placeholder="Drop off Airport Code / Name?"
 														id="dropoff_airport" #dropairportinput
 														class="input-f font-weight-bolder"
-														(focus)="$event.target.select()"
+														(focus)="$event.target.select()" 
 														(keyup)="searchAirport($event.target.value, 'dropoff_airport')"
 														[matAutocomplete]="dropoffairportautocomplete"
 														formControlName="dropoff_airport_name">
@@ -565,7 +565,7 @@
 														id="dropoff_address" #dropaddressinput
 														[value]="QBForm?.dropoff_address?.value"
 														formControlName="dropoff_address"
-														(focus)="$event.target.select()"
+														(focus)="$event.target.select()" 
 														class="input-f font-weight-bolder" matGoogleMapsAutocomplete
 														(onAutocompleteSelected)="onAutocompleteSelected($event, 'dropoff_address')"
 														(onLocationSelected)="onLocationSelected($event, 'dropoff_address')" />
@@ -618,7 +618,7 @@
 												<input matInput [matDatepicker]="picker3" [min]="minDate"
 													placeholder="Return Pickup Date" id="returnPickupDate"
 													(change)="changeDetection.return_pickup_date($event.target.value)"
-													class="font-weight-bolder"
+													class="font-weight-bolder"  readonly
 													[class.errorValid]="submitted && QBForm?.return_pickup_date?.errors"
 													formControlName="return_pickup_date" (click)="picker3.open()">
 												<mat-datepicker-toggle matSuffix [for]="picker3">
@@ -645,7 +645,7 @@
 										<div class="inselect pickupTime">
 											<!-- <input type="time" placeholder="Pickup Time" class="d-block d-lg-none" /> -->
 											<select name="returPickupTime" placeholder="Return Pickup Time" required=""
-												formControlName="return_pickup_time" class="font-weight-bolder"
+												formControlName="return_pickup_time" class="font-weight-bolder" 
 												style="flex: 1 1 100%; box-sizing: border-box; max-width: 100%;"
 												(change)="changeDetection.pickupTime($event, 'return_pickup_time')"
 												[class.errorValid]="submitted && QBForm?.return_pickup_time?.errors">
@@ -723,7 +723,7 @@
 												<div class="input-box">
 													<input type="text" placeholder="Return Airport Code / Name?"
 														#retairportinput id="return_pickup_airport"
-														class="input-f font-weight-bolder"
+														class="input-f font-weight-bolder" 
 														(keyup)="searchAirport($event.target.value, 'return_pickup_airport')"
 														[matAutocomplete]="returnpickupairportautocomplete"
 														formControlName="return_pickup_airport_name">
@@ -765,7 +765,7 @@
 													<input type="text"
 														[attr.placeholder]="QBForm?.dropoff_type?.value == 'city' ? 'City - Return Pickup Address' : 'Cruise Port Name / Address'"
 														id="return_pickup_address" #retaddressinput
-														matGoogleMapsAutocomplete
+														matGoogleMapsAutocomplete 
 														[value]="QBForm?.return_pickup_address?.value"
 														(onAutocompleteSelected)="onAutocompleteSelected($event, 'return_pickup_address')"
 														(onLocationSelected)="onLocationSelected($event, 'return_pickup_address')"
@@ -809,7 +809,7 @@
 												<div class="input-box">
 													<input type="text" placeholder="Return Airport Code / Name?"
 														#retdropairportinput id="return_dropoff_airport"
-														class="input-f font-weight-bolder"
+														class="input-f font-weight-bolder" 
 														(keyup)="searchAirport($event.target.value, 'return_dropoff_airport')"
 														[matAutocomplete]="returndropoffairportautocomplete"
 														formControlName="return_dropoff_airport_name">
@@ -846,7 +846,7 @@
 														[attr.placeholder]="QBForm?.pickup_type?.value == 'city' ? 'City - Return Dropoff Address' : 'Cruise Port Name / Address'"
 														matGoogleMapsAutocomplete id="return_dropoff_address"
 														#retdropaddressinput formControlName="return_dropoff_address"
-														class="input-f font-weight-bolder"
+														class="input-f font-weight-bolder" 
 														[value]="QBForm?.return_dropoff_address?.value"
 														(onAutocompleteSelected)="onAutocompleteSelected($event, 'return_dropoff_address')"
 														(onLocationSelected)="onLocationSelected($event, 'return_dropoff_address')">
@@ -897,7 +897,8 @@
 							</form>
 							<div id="search-button-container">
 								<div id="search-button-box">
-									<button type="submit" class="custom-filled-button" (click)="fileTheQuote()">
+									<button type="submit" class="custom-filled-button"
+									 (click)="fileTheQuote()" (keyup.enter)="fileTheQuote()">
 										Search Rates
 									</button>
 								</div>
