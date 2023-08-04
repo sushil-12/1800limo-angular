@@ -18,6 +18,8 @@ export class VehicleDetailsComponent implements OnInit {
 	quotebot_form: any	// quotebot details from previous page
 	one_way_rates: any
 	round_trip_rates: any
+	distance:any = 0
+	duration:any = 0
 
 	driver_info_display_keys: Array<string> = ['gender', 'dress', 'experience', 'languages', 'insurance_limit']
 
@@ -40,7 +42,7 @@ export class VehicleDetailsComponent implements OnInit {
 					error: 'Please file a quote first, before selecting vehicles.'
 				}
 			})
-			this._router.navigate(['/home'])
+			this._router.navigate(['/home' ,  { queryParams: {r:true} }])
 		} else if (sessionStorage.getItem('selected_vehicle') === null) {
 			this._errorDialogService.openDialog({
 				errors: {
@@ -57,9 +59,9 @@ export class VehicleDetailsComponent implements OnInit {
 				this.selected_vehicle['name_initials'] = name.join(' ')
 			}
 			this.quotebot_form = JSON.parse(localStorage.getItem('quotebot_form'))
-
-
-			this.one_way_rates = this.selected_vehicle[Object.keys(this.selected_vehicle).find(value => /^rate_breakdown_one_way/g.test(value))]
+			let rates = this.selected_vehicle[Object.keys(this.selected_vehicle).find(value => /^rate_breakdown_one_way/g.test(value))]
+			this.one_way_rates =  rates ? rates :  this.selected_vehicle[Object.keys(this.selected_vehicle).find(value => /^rate_breakdown_charter_tour/g.test(value))]
+			console.log('rates-->>' , rates ? 'yes' : 'no' , this.one_way_rates)
 
 			this.round_trip_rates = this.selected_vehicle[Object.keys(this.selected_vehicle).find(value => /^rate_breakdown_round_trip/g.test(value))]
 
@@ -221,6 +223,16 @@ export class VehicleDetailsComponent implements OnInit {
 
 			directionsService.route(obj, (response, error) => {
 				console.log('Directions Service Response: ', response)
+				console.log('Distance-->>>>>', response?.routes)
+				response?.routes?.map((i:any)=>{
+					i?.legs.map((j)=>{
+						this.distance +=  j.distance.value
+						this.duration += j.duration.value
+						console.log('--<distance>>' , j.distance.value)
+						console.log('--<duration>>' , j.duration.value)
+
+					})
+				})
 				directionsRenderer.setDirections(response)
 			})
 		})
@@ -233,6 +245,12 @@ export class VehicleDetailsComponent implements OnInit {
 
 	textFormat(text: string) {
 		return text.replace(/[_|-]/g, ' ')
+	}
+	convertToMi(value){
+		return (value * 0.000621371 ).toFixed(2)
+	}
+	convertToMinutes(value){
+		return (value/60).toFixed(2)
 	}
 
 	/**

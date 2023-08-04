@@ -113,6 +113,26 @@ export class HomeComponent implements OnInit {
 	address: string;
 
 	ngOnInit() {
+		try {
+			const elementsWithTabIndex = document.querySelectorAll('[tabindex]');
+
+		// Add event listeners for focus and blur events to each element
+		console.log('home-- elementsWithTabIndex-->' , elementsWithTabIndex)
+		elementsWithTabIndex?.forEach((element) => {
+			element.addEventListener('focus', () => {
+				element.classList.add('focus-border'); // Add the focus-border class on focus
+				console.log('element-->>class added' , element)
+			});
+
+			element.addEventListener('blur', () => {
+				element.classList.remove('focus-border'); // Remove the focus-border class on blur (when focus is lost)
+			});
+		});
+		} catch (error) {
+			console.log(error)
+		}
+		
+		
 		this.fetchAirportsData()
 
 		setTimeout(() => {
@@ -505,16 +525,16 @@ export class HomeComponent implements OnInit {
 	returnValidDate(dateString) {
 		// Attempt to create a Date object from the provided dateString
 		const date: any = new Date(dateString);
-			console.log('in function validate date-->', date, date.getTime(), new Date().getTime())
-			if (date.getTime() > new Date().getTime()) {		
-				console.log('formattedDate' , moment(date).format('YYYY-MM-DD'))
-				// this.SetFormValue('pickup_date', date)
-				return moment(date).format('YYYY-MM-DD')
-				
-			} else {	
-				console.log('formattedDate', moment(new Date()).format('YYYY-MM-DD'))
-				return  moment(new Date()).format('YYYY-MM-DD')
-			}
+		console.log('in function validate date-->', date, date.getTime(), new Date().getTime())
+		if (date.getTime() > new Date().getTime()) {
+			console.log('formattedDate', moment(date).format('YYYY-MM-DD'))
+			// this.SetFormValue('pickup_date', date)
+			return moment(date).format('YYYY-MM-DD')
+
+		} else {
+			console.log('formattedDate', moment(new Date()).format('YYYY-MM-DD'))
+			return moment(new Date()).format('YYYY-MM-DD')
+		}
 
 
 		// Check if the Date object is valid and the dateString is a valid date
@@ -525,7 +545,7 @@ export class HomeComponent implements OnInit {
 	prefillQuotebot() {
 		if (localStorage.getItem('quotebot_form')) {
 			let previous_quotebot = JSON.parse(localStorage.getItem('quotebot_form'))
-			console.log('return date function' , this.returnValidDate(previous_quotebot?.pickup_date))
+			console.log('return date function', this.returnValidDate(previous_quotebot?.pickup_date))
 			// fill previous values if localStorage has item
 			console.log('filling QB form from local-->>>', previous_quotebot, previous_quotebot?.service_type.length > 1)
 			this.quoteBotForm.patchValue({
@@ -604,6 +624,7 @@ export class HomeComponent implements OnInit {
 	}
 	validateTimeHHMMSS(time) {
 		let arr = time.split(':')
+		if (arr.length != 3) return '12:00:00'
 		const hours = arr[0];
 		const minutes = arr[1];
 		const seconds = arr[2];
@@ -614,7 +635,7 @@ export class HomeComponent implements OnInit {
 
 		// Combine the time components into a string
 		const currentTime = `${formattedHours}:${formattedMinutes}:00`;
-		console.log('----------validateTimeHHMMSS-->>>', arr, formattedMinutes, currentTime)
+		console.log('----------validateTimeHHMMSS-->>>', arr, currentTime)
 
 		return currentTime
 	}
@@ -633,7 +654,7 @@ export class HomeComponent implements OnInit {
 
 		// Pad single digits with leading zeros
 		const formattedHours = hours.toString().padStart(2, '0');
-		const formattedMinutes = this.roundToNearest15(minutes.toString().padStart(2, '0'));
+		const formattedMinutes = this.roundToNearest15(minutes).toString().padStart(2, '0');
 
 		// Combine the time components into a string
 		const currentTime = `${formattedHours}:${formattedMinutes}:00`;
@@ -883,7 +904,7 @@ export class HomeComponent implements OnInit {
 	 */
 	changeDetection = {
 		pickupDate: (value: any) => {
-			console.log('--->>>>' ,value )
+			console.log('--->>>>', value)
 			this.SetFormValue('pickup_date', value)
 		},
 		pickupTime: (event: any = null, form_control: string) => {
@@ -1105,7 +1126,7 @@ export class HomeComponent implements OnInit {
 
 			console.log(`\n\n\n Receiving Response after filing the quote .....\n ${response} \n\n\n`, this.quoteBotForm.value)
 			localStorage.setItem('quotebot_form', JSON.stringify(this.quoteBotForm.value));
-			this.router.navigate(['quotebot/select-vehicle']);
+			this.router.navigate(['quotebot/master-vehicle']);
 			return
 		}, (error) => {
 			console.group('Facing Some Issues while calculating distance .... Error fetched ->\n')

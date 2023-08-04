@@ -51,7 +51,7 @@
 			<div id="back-button">
 				<button type="button" class="custom-filled-button green-button" (click)="backButton()">
 					<i class="bi bi-arrow-left mx-2"></i>
-					Back to Master Vehicles
+					Back to Home
 				</button>
 			</div>
 		</div>
@@ -287,133 +287,9 @@
 		</section>
 		<!-- FILTERS SECTION ENDS -->
 
-		<ng-container *ngIf="vehicleDetails.length > 0; then vehicleListing"></ng-container>
-
-		<!-- VEHICLE LISTING SECTION -->
-		<ng-template #vehicleListing>
-			<section id="vehicle-listing-container"
-				class="col-md-auto col-lg-9 d-flex flex-row flex-wrap justify-content-center justify-content-lg-start"
-				style="gap: 13px" [ngStyle]="openfilters ? {'z-index': -1, 'position': 'relative'} : ''">
-				<div id="vehicle-listing-card_{{ vehinfo_index }}" class="vehicle-listing-card"
-					*ngFor="let vehinfo of vehicleDetails; index as vehinfo_index"
-					(click)="innerWidth < 1023 ? viewDetails(vehinfo) : ''">
-					<!-- DIV: AFFILIATE INFO -->
-					<div id="affiliate-info"
-						*ngIf="currentUser != null && currentUser?.roleName == 'admin' && (vehinfo?.affiliate_name || vehinfo?.affiliate_company)">
-						<button class="link" *ngIf="vehinfo?.readMore">
-							<p class="text-left text-secondary m-0 my-md-2" style="color: #007fee !important;">
-								<span (click)="editAffiliateAccount(vehinfo)">
-									{{vehinfo?.affiliate_company.slice(0,7) }}
-								{{'/ '+vehinfo?.affiliate_name.slice(0,7) }}
-								</span>
-								<span (click)="handleReadMore(vehinfo , false)" style="color: black;">...more</span>
-							</p>
-						</button>
-						<button class="link"  *ngIf="!vehinfo?.readMore">
-							<p class="text-left text-secondary m-0 my-md-2" style="color: #007fee !important;">
-								<span (click)="editAffiliateAccount(vehinfo)">
-									{{vehinfo?.affiliate_company }}
-								{{'/ '+vehinfo?.affiliate_name }}
-								</span>
-								<span (click)="handleReadMore(vehinfo , true)" style="color: black;">...less</span>
-							</p>
-						</button>
-
-						<!-- <ng-template #readMoreTemp>
-							<p class="text-left text-secondary m-0 my-md-2" [class.show]="!show" >
-								{{ vehinfo.affiliate_company.length > 10 ? vehinfo.affiliate_company.slice(0,5)+"..." : vehinfo.affiliate_company }}
-								{{vehinfo.affiliate_name.length > 10 ?  '/ '+vehinfo.affiliate_name.slice(0,5)+'...' : '/ '+vehinfo.affiliate_name  }}
-							</p>
-							<p class="text-left text-secondary m-0 my-md-2" [class.show]="show">
-								{{ vehinfo.affiliate_company }}
-								{{'/ '+vehinfo.affiliate_name}}
-							</p>
-							<button (click)="show+index = !show+index">{{ show ? 'Show less': 'Show More' }}</button>
-						</ng-template> -->
-					</div>
-					<div *ngIf="vehinfo?.is_master_vehicle==true || vehinfo?.affiliate_id==''">
-						<p style="padding: 4px; font-weight: bolder;">Master vehicle</p>
-					</div>
-					<!-- AFFILIATE INFO ENDS -->
-
-					<!-- DIV: VEHICLE DETAILS -->
-					<div id="vehicle-details"
-						class="details d-flex flex-row flex-wrap justify-content-left align-items-center">
-						<!-- VEHICLE: IMAGE -->
-						<div id="vehicle-image_{{ vehinfo_index }}" class="vehicle-image m-0">
-							<img id="V_I_{{ vehinfo_index }}" [src]="vehinfo.vehicle_images[0]" class="img-fluid" style="object-fit: contain;" />
-						</div>
-						<!-- IMAGE ENDS -->
-
-						<!-- VEHICLE: INFORMATION -->
-						<div id="vehinfo_{{ vehinfo_index }}" class="vehicle-info">
-							<!-- VEHICLE: NAME -->
-							<p class="name">
-								{{ vehinfo.name }}
-							</p>
-
-							<!-- VEHICLE: PAX/LUG -->
-							<p class="pax-lugg text-secondary">
-								<span id="pax_{{ vehinfo_index }}">
-									<i class="bi bi-person-fill text-orange mx-1"></i>:
-									{{ vehinfo.passenger }}
-								</span>
-								<span id="lugg_{{ vehinfo_index }}">
-									<i class="bi bi-briefcase-fill text-orange mx-1"></i>:
-									{{ vehinfo.luggage }}
-								</span>
-							</p>
-
-							<!-- VEHICLE: PRICE -->
-							<p class="price">
-								{{ formatter(getKeyName()) | titlecase }}:
-								<span>
-									$
-									{{ vehinfo['rate_breakdown_' + getKeyName()]?.grand_total != undefined ?
-									vehinfo['rate_breakdown_' + getKeyName()]?.grand_total : '0.00' }}
-								</span>
-							</p>
-							<span class="text-secondary text-rate">
-								All Inclusive Rate<sup class="sup-red">*</sup>
-							</span>
-							
-							<div class="d-flex" *ngIf="vehinfo?.vehicle_details.year">
-								<span class="text-secondary">Year</span>
-								<span class="ml-1 font-weight-bold"> {{vehinfo?.vehicle_details.year}}</span>
-
-							</div>
-							<div class="d-flex" *ngIf="vehinfo?.vehicle_details.make">
-								<span class="text-secondary">Make</span>
-								<span class="ml-1 font-weight-bold"> {{vehinfo?.vehicle_details.make}}</span>
-							</div>
-							<div class="d-flex" *ngIf="vehinfo?.vehicle_details.model">
-								<span class="text-secondary">Model</span>
-								<span class="ml-1 font-weight-bold"> {{vehinfo?.vehicle_details.model}}</span>
-							</div>
-						</div>
-						<!-- INFORMATION ENDS -->
-					</div>
-					<!-- VEHICLE DETAILS ENDS -->
-
-					<!-- DIV: PREVIEW BUTTON -->
-					<!-- class="m-3" -->
-					<div id="vehicle-preview-button">
-						<button class="custom-filled-button orange-button mx-2" (click)="viewDetails(vehinfo)">
-							Vehicle Details
-						</button>
-						<button class="custom-filled-button text-dark rounded-pill" (click)="bookNow(vehinfo)">
-							Book Now
-						</button>
-
-					</div>
-					<!-- PREVIEW BUTTON ENDS -->
-				</div>
-			</section>
-		</ng-template>
-		<!-- VEHICLE LISTING SECTION ENDS -->
+		
 
 		<!-- MASTER VEHICLE TYPES SECTION -->
-		<!-- <ng-template #MasterVehicleListing>
 			<div class="col-md-12 col-lg-9" [ngStyle]="openfilters ? {'z-index': -1, 'position': 'relative'} : ''"
 				*ngIf="vehicleDetails.length == 0 || master_vehicles.length == 0">
 				<p style="font-size: 1rem; font-weight: 500; color: #e63232"
@@ -424,7 +300,7 @@
 					<div id="master-vehicle-box" class="col-md-3 mb-5 d-flex flex-nowrap flex-md-wrap cursor-pointer"
 						style="gap: 10px" *ngFor="let vehicle_obj of master_vehicles; index as vehicle_obj_index"
 						(click)="selectCategory(vehicle_obj?.name)">
-						<div id="vehicle-image" class="bg-white imageStyle">
+						<div id="vehicle-image" class="imageStyle bg-white">
 							<img [src]="vehicle_obj.cat_img" class="img-fluid"
 								[attr.id]="'vehicle_' + vehicle_obj_index" />
 						</div>
@@ -451,7 +327,6 @@
 					</div>
 				</div>
 			</div>
-		</ng-template> -->
 		<!-- MASTER VEHICLE TYPES SECTION ENDS -->
 	</div>
 </section>
