@@ -213,11 +213,11 @@ export class CardsComponent implements OnInit {
 		}
 		console.log('in function payment', body)
 		this.adminService.chargeByCard(body).subscribe((response: any) => {
-			this.$errors.openDialog({
-				errors: {
-					error: `<span class='text-success'>${response.message}</span>`
-				}
-			})
+			// this.$errors.openDialog({
+			// 	errors: {
+			// 		error: `<span class='text-success'>${response.message}</span>`
+			// 	}
+			// })
 			this.spinner.hide()
 		})
 		this.ID = ""

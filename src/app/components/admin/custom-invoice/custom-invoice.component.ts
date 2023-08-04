@@ -130,11 +130,11 @@ export class CustomInvoiceComponent implements OnInit {
     this.$spinner.show()
 
     this.adminService.sendCustomInvoiveToCustomer(this.invoiceId).subscribe((response: any) => {
-      this.$errors.openDialog({
-        errors: {
-          error: `<span class='text-success'>${response.message}</span>`
-        }
-      })
+      // this.$errors.openDialog({
+      //   errors: {
+      //     error: `<span class='text-success'>${response.message}</span>`
+      //   }
+      // })
       // this.$router.navigate(['/admin/daily-bookings-admin'])
       console.log('response-->>', response)
       this.$spinner.hide()

@@ -383,11 +383,11 @@ export class MyBookingsComponent implements OnInit {
 					this.spinner.hide();//hide spinner
 					this.loadBookings()
 					$('#cancelBooking').modal('hide');
-					this.$errors.openDialog({
-						errors: {
-							error: `<span class='text-success'>${message}</span>`
-						}
-					})
+					// this.$errors.openDialog({
+					// 	errors: {
+					// 		error: `<span class='text-success'>${message}</span>`
+					// 	}
+					// })
 				}
 			});
 	}
