@@ -3,7 +3,7 @@
 <div *ngIf="ratesform" [formGroup]="RatesForm" class="section-dropdown finalizeRates mt-2"
 	[ngClass]="{'w-100': ratesform && !returnratesform, 'w-50': ratesform && returnratesform}"
 	[ngStyle]="affiliate_type == 'affiliate' ? {'height': '0', 'padding': '0'} : ''">
-	<div class="row cursor-pointer" (click)="toggleDropdown('section')">
+	<div class="row cursor-pointer" (click)="toggleDropdown('section')" id="rate-heading">
 		<div class="col-12 col-md-12">
 			<h4 class="m-0">
 				Rates
@@ -132,6 +132,9 @@
 			<i class="bi bi-x fa-2x" 
 			(click)="handleSubHeadingScroll(item.key,'RateFormItem-' + item_index)"></i>
 		</div>
+	</div>
+	<div class="row d-flex justify-content-end mx-2">
+		<button class="closeAll-btn" id="closeAll-btn" (click)="closeAllChevrons()">Close all</button>
 	</div>
 
 	<hr style="border-top: 2.5px solid #000000; " />

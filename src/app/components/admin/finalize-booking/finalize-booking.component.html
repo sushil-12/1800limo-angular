@@ -397,8 +397,10 @@
 		</div>
 
 		<div class="col-md-12 text-right mr-4">
-			<button type="button" class="custom-filled-button m-3 mr-4" data-toggle="modal" data-target="#paymentModal">
-				Pay
+			<button type="button" class="custom-filled-button m-3 mr-4" 
+			[ngClass]="finalize_btn=='Finalized'? '':'color-grey'"
+			data-toggle="modal" data-target="#paymentModal">
+				Charge
 			</button>
 		</div>
 	</div>
@@ -447,7 +449,7 @@
 				<button type="button" class="custom-btn resetbutton" data-dismiss="modal">Close</button>
 				<button type="button" class="custom-btn savebutton" (click)="makePayment()"
 					[hidden]="payableAmount <= 0">
-					Pay</button>
+					Charge</button>
 			</div>
 		</div>
 	</div>

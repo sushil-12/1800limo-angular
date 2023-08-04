@@ -121,7 +121,9 @@ export class HomeComponent implements OnInit {
 		elementsWithTabIndex?.forEach((element) => {
 			element.addEventListener('focus', () => {
 				element.classList.add('focus-border'); // Add the focus-border class on focus
-				console.log('element-->>class added' , element)
+				setTimeout(()=>{
+					element.classList.remove('focus-border');
+				},1500)
 			});
 
 			element.addEventListener('blur', () => {
