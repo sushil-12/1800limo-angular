@@ -265,11 +265,11 @@ export class FarmOutComponent implements OnInit
 				if (success == true) {
 					this.loadBookings()
 					$('#cancelBooking').modal('hide');
-					this.$errors.openDialog({
-						errors: {
-							error: `<span class='text-success'>${message}</span>`
-						}
-					})
+					// this.$errors.openDialog({
+					// 	errors: {
+					// 		error: `<span class='text-success'>${message}</span>`
+					// 	}
+					// })
 				}
 			});
 	}

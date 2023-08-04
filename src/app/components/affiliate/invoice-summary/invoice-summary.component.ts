@@ -93,11 +93,11 @@ export class InvoiceSummaryComponent implements OnInit
 	sendInvoiceToCustomer(){
 		this.spinner.show()
 		this.affiliateService.sendInvoiveToCustomer(this.bookingId).subscribe((response: any) => {
-			this.$errors.openDialog({
-				errors: {
-					error: `<span class='text-success'>${response.message}</span>`
-				}
-			})
+			// this.$errors.openDialog({
+			// 	errors: {
+			// 		error: `<span class='text-success'>${response.message}</span>`
+			// 	}
+			// })
 			// this.$router.navigate(['/admin/daily-bookings-admin'])
 			console.log('response-->>' , response)
 			this.spinner.hide()
@@ -115,11 +115,11 @@ export class InvoiceSummaryComponent implements OnInit
 				invoice_id: this.invoiceData.invoice_number
 			}
 			this.affiliateService.refund(body).subscribe((response: any) => {
-				this.$errors.openDialog({
-					errors: {
-						error: `<span class='text-success'>${response.message}</span>`
-					}
-				})
+				// this.$errors.openDialog({
+				// 	errors: {
+				// 		error: `<span class='text-success'>${response.message}</span>`
+				// 	}
+				// })
 				// this.$router.navigate(['/admin/daily-bookings-admin'])
 				this.fetchInvoiceData()
 				// this.$spinner.hide()
