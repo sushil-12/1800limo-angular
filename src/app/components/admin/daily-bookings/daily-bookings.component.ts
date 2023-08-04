@@ -96,9 +96,7 @@ export class DailyBookingsComponent implements OnInit {
 			this.adminService.getCookie('endDate') :
 			moment(timestamp).format('YYYY-MM-DD')
 
-		this.searchText = this.adminService.checkCookie('search') ?
-			this.adminService.getCookie('search')
-			: "";
+		this.searchText = localStorage.getItem('DBSearch') ? localStorage.getItem('DBSearch') : ''
 		console.log('usedatefilter---->>>>>>>' , this.adminService.getCookie('useDateFilter'))
 		this.useDateFilter = this.adminService.checkCookie('useDateFilter') ?
 		(this.adminService.getCookie('useDateFilter')=='true' ? true : false)
@@ -187,7 +185,8 @@ export class DailyBookingsComponent implements OnInit {
 		this.endDate = moment(timestamp).format('YYYY-MM-DD')
 		this.adminService.deleteCookie('startDate')
 		this.adminService.deleteCookie('endDate')
-		this.adminService.deleteCookie('search')
+		// this.adminService.deleteCookie('search')
+		localStorage.removeItem('DBSearch')
 		this.adminService.deleteCookie('useDateFilter')
 		this.useDateFilter = true
 		// this.adminService.deleteCookie('filtertype')
@@ -650,7 +649,8 @@ export class DailyBookingsComponent implements OnInit {
 		console.log('--->>>>>', search_value)
 		clearTimeout(this.timer);
 		this.timer = setTimeout(() => {
-			this.saveCookie("search", this.searchText);
+			// this.saveCookie("search", this.searchText);
+			localStorage.setItem('DBSearch' , this.searchText)
 			this.loadBookings(null, this.startDate, this.endDate, search_value)
 		}, 700)
 	}

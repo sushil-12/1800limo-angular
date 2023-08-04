@@ -181,11 +181,11 @@ export class AffiliateFinalizeComponent implements OnInit {
 		console.log('\n\n Submitting Form', body);
 		this.affiliateService.updateFinalizeRates(body).subscribe((response: any) => {
 			this.spinner.hide()
-			this.$errors.openDialog({
-				errors: {
-					error: `<span class='text-success'>${response.message}</span>`
-				}
-			})
+			// this.$errors.openDialog({
+			// 	errors: {
+			// 		error: `<span class='text-success'>${response.message}</span>`
+			// 	}
+			// })
 			// this.$router.navigate(['/admin/daily-bookings-admin'])
 			console.log('response-->>', response)
 		})
@@ -242,11 +242,11 @@ export class AffiliateFinalizeComponent implements OnInit {
 			}
 			this.spinner.show()
 					this.affiliateService.paymentProcessing(dataToSend).subscribe((response: any) => {
-						this.$errors.openDialog({
-							errors: {
-								error: `<span class='text-success'>${response.message}</span>`
-							}
-						})
+						// this.$errors.openDialog({
+						// 	errors: {
+						// 		error: `<span class='text-success'>${response.message}</span>`
+						// 	}
+						// })
 						this.router.navigate(['/affiliate/invoice-summary'] ,{ queryParams: { bookingId: this.bookingId } })
 						console.log('response---------------------->>' , response)
 						this.spinner.hide()
@@ -291,11 +291,11 @@ export class AffiliateFinalizeComponent implements OnInit {
 				console.log('<<<<<<<<---- data to send --->>>>>',dataToSend)
 				this.spinner.show()
 					this.affiliateService.paymentProcessing(dataToSend).subscribe((response: any) => {
-						this.$errors.openDialog({
-							errors: {
-								error: `<span class='text-success'>${response.message}</span>`
-							}
-						})
+						// this.$errors.openDialog({
+						// 	errors: {
+						// 		error: `<span class='text-success'>${response.message}</span>`
+						// 	}
+						// })
 						this.router.navigate(['/affiliate/invoice-summary'] ,{ queryParams: { bookingId: this.bookingId } })
 						console.log('response---------------------->>' , response)
 						this.spinner.hide()

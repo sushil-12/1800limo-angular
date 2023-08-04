@@ -3,10 +3,11 @@ mat-form-field input {
 	margin-bottom: 0;
 }
 
-// * :focus{
-// 	border: solid;
-// }
-
+// *:focus {
+// 	border: 2px solid #f80000; /* Apply a blue border when focused */
+// 	box-shadow: 0 0 5px #f80000; /* Add a shadow effect (optional) */
+// 	scale: 1.05;
+//   }
 #google-translate {
 	display: none;
 }
@@ -39,6 +40,14 @@ mat-form-field input {
   border: 2px solid #f3933d; /* Apply a blue border when focused */
   box-shadow: 0 0 5px #f3933d; /* Add a shadow effect (optional) */
   scale: 1.05;
+}
+
+#no_of_passenger:focus , #no_of_luggage:focus{
+	border: 2px solid #1600ff; /* Apply a blue border when focused */
+	box-shadow: 0 0 5px #1600ff; /* Add a shadow effect (optional) */
+	scale: 1.05;
+	top: 5px;
+    height: 30px
 }
 
 #navbarsExample05 {

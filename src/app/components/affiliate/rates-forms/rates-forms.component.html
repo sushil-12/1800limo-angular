@@ -3,7 +3,7 @@
 <div *ngIf="ratesform" [formGroup]="RatesForm" class="section-container section-dropdown mt-2"
 	[ngClass]="{'w-100': ratesform && !returnratesform, 'w-50': ratesform && returnratesform}">
 	<!-- [ngStyle]="affiliate_type == 'affiliate' ? {'height': '0', 'padding': '0'} : ''" -->
-	<div class="row cursor-pointer" (click)="toggleDropdown('section')">
+	<div class="row cursor-pointer" (click)="toggleDropdown('section')" id="rate-heading">
 		<div class="col-12 col-md-12">
 			<h4 class="section-dropdown-header m-0">
 				Rates

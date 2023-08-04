@@ -192,8 +192,17 @@ export class RatesFormsComponent implements OnInit {
 	}
 	scroll(id) {
 		let el = document.getElementById(id);
-		console.log(`scrolling to ${id}`, el);
-		el.scrollIntoView();
+		let elementRect = el.getBoundingClientRect();
+		let absoluteElementTop = elementRect.top + window.pageYOffset;
+		let topElement = absoluteElementTop - 200;
+		
+		console.log(`scrolling to ${id}`, el , absoluteElementTop ,window.innerHeight);
+		window.scrollTo({
+			top: topElement,
+			behavior: 'smooth'
+		});
+		// console.log(`scrolling to ${id}`, el);
+		// el.scrollIntoView();
 	}
 	closeAllChevrons() {
 		this.rate_params["chevrons"]['section'] = false
@@ -204,7 +213,7 @@ export class RatesFormsComponent implements OnInit {
 		this.rate_params["chevrons"]['amenities'] = false
 		this.rate_params["chevrons"]['misc'] = false
 		setTimeout(() => {
-			this.scroll('closeAll-btn')
+			this.scroll('rate-heading')
 		}, 300)
 	}
 	closeReturnAllChevrons() {
@@ -216,7 +225,7 @@ export class RatesFormsComponent implements OnInit {
 		this.rate_params["chevrons"]['r_amenities'] = false
 		this.rate_params["chevrons"]['r_misc'] = false
 		setTimeout(() => {
-			this.scroll('closeAll-btn_r')
+			this.scroll('rate-heading')
 		}, 300)
 	}
 	initRates() {

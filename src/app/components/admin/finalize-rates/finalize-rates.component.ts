@@ -175,8 +175,16 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 
 	scroll(id) {
 		let el = document.getElementById(id);
-		console.log(`scrolling to ${id}`, el);
-		el.scrollIntoView();
+		let elementRect = el.getBoundingClientRect();
+		let absoluteElementTop = elementRect.top + window.pageYOffset;
+		let topElement = absoluteElementTop - 200;
+		
+		console.log(`scrolling to ${id}`, el , absoluteElementTop ,window.innerHeight);
+		window.scrollTo({
+			top: topElement,
+			behavior: 'smooth'
+		});
+		// el.scrollIntoView({ behavior: 'smooth' });
 	}
 	returnZero() {
 		return 0;
@@ -468,7 +476,7 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 		this.rate_params["chevrons"]['amenities']=false
 		this.rate_params["chevrons"]['misc']=false
 		setTimeout(()=>{
-			this.scroll('closeAll-btn')
+			this.scroll('rate-heading')
 		},300)
 	}
 
