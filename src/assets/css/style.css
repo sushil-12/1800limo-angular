@@ -3135,7 +3135,7 @@ margin-top: 50px !important;
 .chk_vehicles.owl-theme .owl-dots .owl-dot span {
 	width     : 4px;
 	height    : 4px;
-	background: #000;
+	background: #fff;
 }
 
 .chk_vehicles.owl-theme .owl-dots .owl-dot.active span {

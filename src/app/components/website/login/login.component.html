@@ -12,7 +12,7 @@
 					<h2>Hello, Create an Account or Sign In.</h2>
 				</ng-template>
 			</div>
-			<div class="row" *ngIf="Role != 'admin' && Role !='sub_admin' && Role !='driver'">
+			<div class="row" *ngIf="Role != 'admin' && Role !='sub_admin' && Role !='driver' && Role !='travel_agent'">
 				<div class="col-md-12 mt-3">
 					<div class="radio-group role" style="box-shadow: 0 5px 12px -6px rgb(0 0 0);" (click)="alert_individual=!alert_individual;clearAlert()">
 						<input type="radio" id="individual" name="role" checked="" value="individual" disabled
@@ -25,7 +25,8 @@
 							formControlName="role" (click)="loginButtons('corporate');">
 						<label for="corporate" class="text-center text-secondary" style="cursor: default;">Corporate</label>
 					</div>
-					<div class="radio-group role" style="box-shadow: 0 5px 12px -6px rgb(0 0 0);" (click)="alert_travel_agent=!alert_travel_agent;clearAlert()">
+					<!-- (click)="alert_travel_agent=!alert_travel_agent;clearAlert()" -->
+					<div class="radio-group role" style="box-shadow: 0 5px 12px -6px rgb(0 0 0);" >
 						<input type="radio" id="travel_agent" name="role" checked="" value="travel_agent"
 							formControlName="role" disabled (click)="loginButtons('travel_agent');">
 						<label for="travel_agent" class="text-center text-secondary" style="cursor: default;">Travel Agent</label>
