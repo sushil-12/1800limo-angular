@@ -718,7 +718,7 @@
 							<input matInput formControlName="passenger_cell" ng2TelInput [ng2TelInputOptions]="{
 									preferredCountries: ['us', 'ca', 'mx', 'gb']
 								}" placeholder="1234567890" class="phoneNumberClass" (intlTelInputObject)="PaxTelInputObject($event)"
-								(countryChange)="SetFormValue('passenger_cell_isd', $event.dialCode); SetFormValue('passenger_cell_country', $event.iso2)"
+								(countryChange)="SetFormValue('passenger_cell_isd','+'+ $event.dialCode); SetFormValue('passenger_cell_country', $event.iso2)"
 								(focus)="$event.target.select()" />
 						</mat-form-field>
 						<div class="error-box">

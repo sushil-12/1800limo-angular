@@ -1434,7 +1434,7 @@ export class Step1Component implements OnInit, AfterViewInit
 		this.filteredOptions = this.badgeOptions.filter((i:any)=> i.name.toLowerCase().includes(value.toLowerCase()))
 	}
 	selectBadgeCity(option:any,isUserInput){
-		console.log('in function selectBadgeCity-->>>' ,isUserInput)
+		console.log('in function selectBadgeCity-->>>' ,option,isUserInput)
 		if(isUserInput){
 			this.addAffiliateAccountForm.patchValue({
 				badge_city:option.id
@@ -2213,17 +2213,32 @@ export class Step1Component implements OnInit, AfterViewInit
 			.click();
 		return false;
 	}
+	scroll(id){
+		let el = document.getElementById(id);
+		let elementRect = el.getBoundingClientRect();
+		let absoluteElementTop = elementRect.top + window.pageYOffset;
+		let topElement = absoluteElementTop - 200;
+		
+		console.log(`scrolling to ${id}`, el , absoluteElementTop ,window.innerHeight);
+		window.scrollTo({
+			top: topElement,
+			behavior: 'smooth'
+		});
+	}
 
 	resetForm()
 	{
+		console.log('this.affiliateDetail?.acc_id--->>' , this.affiliateDetail)
 		// this.addAffiliateAccountForm.reset();
 		this.addAffiliateAccountForm = this.formBuilder.group({
-			acc_id: [""],
+			acc_id: [this.affiliateDetail?.id],
 			AffiliateType: ["", Validators.required],
 			FirstName: ["", Validators.required],
 			MiddleName: [""],
 			LastName: ["", Validators.required],
 			Gender: ["", Validators.required],
+			badge_city :[''],
+			badge_city_name:[''],
 			CellNumber: [
 				this.currentUser.phone,
 				[
@@ -2324,5 +2339,6 @@ export class Step1Component implements OnInit, AfterViewInit
 								});
 							}
 		this.addAffiliateAccountForm.updateValueAndValidity()
+		this.scroll('owner_info')
 	}
 }

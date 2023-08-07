@@ -35,6 +35,7 @@ import { DispatchEmailConfirmationComponent } from './components/email-pages/dis
 import { LocateMapComponent } from './components/locate-map/locate-map.component';
 import { BookingStatusVerificationComponent } from './components/email-pages/booking-status-verification/booking-status-verification.component';
 import { TransactionHistoryComponent } from './components/website/transaction-history/transaction-history.component';
+import { AgentTemplateComponent } from './components/travel-agent/agent-template/agent-template.component';
 
 
 const routes: Routes = [
@@ -164,7 +165,7 @@ const routes: Routes = [
 	},
 	{
 		path: 'login',
-		redirectTo: 'login/driver',
+		component: LoginComponent,
 	},
 	{
 		path: 'otp',
@@ -250,6 +251,20 @@ const routes: Routes = [
 			{
 				path: '',
 				loadChildren: () => import('./components/affiliate/affiliate.module').then(m => m.AffiliateModule)
+			}
+		]
+	},
+	{
+		path: 'agent',
+		component: AgentTemplateComponent,
+		// canActivate: [AdminGuardGuard],
+		data: {
+			title: 'agent'
+		},
+		children: [
+			{
+				path: '',
+				loadChildren: () => import('./components/travel-agent/travel-agent.module').then(m => m.TravelAgentModule)
 			}
 		]
 	},
