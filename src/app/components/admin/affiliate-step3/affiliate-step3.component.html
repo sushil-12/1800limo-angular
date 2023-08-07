@@ -237,7 +237,7 @@
 										</li>
 									</ul>
 								</div>
-								<div *ngIf="submittedForm && f.insCertificate.errors"
+								<div *ngIf="submittedForm && f.insCertificate.errors || f.insCertificate.touched && f.insCertificate.errors"
 									class="text-danger text-center margin-bottom-thin my-mat-hint mb-4">
 									<div *ngIf="f.insCertificate.errors.required">The Proof of Insurance Certificate is
 										required</div>

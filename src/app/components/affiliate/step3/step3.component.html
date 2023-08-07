@@ -14,7 +14,7 @@
 					</mat-form-field>
 					<div *ngIf="
 							(submittedForm && f.CompanyName.errors) ||
-							(f.CompanyName.touched && f.CompanyName.errors)
+							(f.CompanyName.touched && f.CompanyName.errors) 
 						" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.CompanyName.errors.required">
 							This field is required
@@ -505,7 +505,7 @@
 				<button class="custom-filled-reset-button mr-3 m-2" (click)="resetForm()" tabIndex="2">
 					RESET
 				</button>
-				<button class="custom-filled-button m-2" (click)="submitForm()" tabIndex="1">
+				<button  type="submit" class="custom-filled-button m-2" (click)="submitForm()" tabIndex="1">
 					SAVE
 				</button>
 			</div>

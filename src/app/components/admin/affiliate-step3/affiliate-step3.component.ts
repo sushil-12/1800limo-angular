@@ -315,7 +315,18 @@ export class AffiliateStep3Component implements OnInit {
 	}
 
 	resetForm() {
-		this.addInsuranceForm.reset();
+		// this.addInsuranceForm.reset();
+		this.addInsuranceForm.patchValue({
+			CompanyName: '',
+			AgentName: '',
+			AgentTelephone: '',
+			policyNumber: '',
+			policyExpiredDay: '',
+			policyExpiredMonth: '',
+			policyExpiredYear: '',
+			insuranceLimits: '',
+			AgentEmail: '',
+		})
 		this.insCertificateImage = "";
 		this.insuranceCardImage = "";
 	}
