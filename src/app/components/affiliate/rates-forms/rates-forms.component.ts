@@ -204,6 +204,12 @@ export class RatesFormsComponent implements OnInit {
 		// console.log(`scrolling to ${id}`, el);
 		// el.scrollIntoView();
 	}
+	handleNegtiveValue(formgroup,subform,formcontrol,value){
+		let v = parseFloat((Math.abs(Number(value))).toFixed(2));
+		(<FormGroup>(<FormGroup>this.RatesForm.get(formgroup)).get(subform)).get(formcontrol).setValue(v);
+		this.RatesForm.updateValueAndValidity();
+		console.log('handleNegtiveValue-->>' , formgroup,subform,formcontrol,parseFloat((Math.abs(Number(value))).toFixed(2))) 
+	}
 	closeAllChevrons() {
 		this.rate_params["chevrons"]['section'] = false
 		this.rate_params["chevrons"]['all_inclusive_rates'] = false
