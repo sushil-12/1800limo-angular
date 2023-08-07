@@ -197,7 +197,12 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 			return text;
 		}
 	}
-
+	handleNegtiveValue(formgroup,subform,formcontrol,value){
+		let v = parseFloat((Math.abs(Number(value))).toFixed(2));
+		(<FormGroup>(<FormGroup>this.RatesForm.get(formgroup)).get(subform)).get(formcontrol).setValue(v);
+		this.RatesForm.updateValueAndValidity();
+		console.log('handleNegtiveValue-->>' , formgroup,subform,formcontrol,parseFloat((Math.abs(Number(value))).toFixed(2))) 
+	}
 	initRates() {
 		console.log("Init Rates");
 

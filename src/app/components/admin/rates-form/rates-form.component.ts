@@ -178,6 +178,12 @@ export class RatesFormComponent implements OnInit, OnChanges {
 	returnZero() {
 		return 0;
 	}
+	handleNegtiveValue(formgroup,subform,formcontrol,value){
+		let v = parseFloat((Math.abs(Number(value))).toFixed(2));
+		(<FormGroup>(<FormGroup>this.RatesForm.get(formgroup)).get(subform)).get(formcontrol).setValue(v);
+		this.RatesForm.updateValueAndValidity();
+		console.log('handleNegtiveValue-->>' , formgroup,subform,formcontrol,parseFloat((Math.abs(Number(value))).toFixed(2))) 
+	}
 
 	textFormatter(text: string) {
 		try {
