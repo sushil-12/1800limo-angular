@@ -748,7 +748,25 @@ export class Step2Component implements OnInit {
 	}
 
 	resetForm() {
-		this.addBankForm.reset();
+		this.addBankForm.patchValue({//affiliate account id
+			BankName: '',
+			BankAddress: '',
+			AccountHolderFirstName: '',
+			AccountHolderMiddleName: '',
+			AccountHolderLastName: '',
+			AccountNumber: '',
+			Routing: '',
+			AccountType: 'company',
+			ssn: '',
+			haveEin: 'yesEin',
+			ein: '',
+			currency: '',
+			dobDay: '',
+			dobMonth:'',
+			dobYear: '',
+			id_front_image: '',
+			id_back_image: '',
+		});
 		this.id_front_image = "";
 		this.id_back_image = "";
 		this.canChangeDocument = true;

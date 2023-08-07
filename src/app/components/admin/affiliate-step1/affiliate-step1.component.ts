@@ -125,7 +125,7 @@ export class AffiliateStep1Component implements OnInit {
 				this.associations = this.response.data.associations;
 
 				this.affiliateId = sessionStorage.getItem("affiliateId");
-				this.affiliateType = sessionStorage.getItem("affiliateType");
+				this.affiliateType = sessionStorage.getItem("affiliateType")!='all-operators' ? sessionStorage.getItem("affiliateType") : 'black_limo_operator' ;
 				this.addAffiliateAccountForm.patchValue({
 					AffiliateType: this.affiliateType
 				});
@@ -281,8 +281,8 @@ export class AffiliateStep1Component implements OnInit {
 		this.spinner.hide()
 				// this.stateManagementService.setprogressBar(false);
 			});
-
-		if (sessionStorage.getItem("affiliateType") != "all_operators") {
+		
+			if (sessionStorage.getItem("affiliateType") != "all-operators") {
 			this.affiliateTypeSwitch(sessionStorage.getItem("affiliateType"))
 		}
 		window.scrollTo(0,0);

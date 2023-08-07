@@ -235,7 +235,7 @@ export class NewBookingComponent implements OnInit {
 			number_of_hours: ['0'],
 			acc_id: [''],
 			account_type: ['individual'],
-			change_individual_data:[false],
+			change_individual_data: [false],
 			loose_customer: this.$form.group({
 				first_name: [''],
 				middle_name: [''],
@@ -459,7 +459,11 @@ export class NewBookingComponent implements OnInit {
 				if (item.includes('extra_stops') || item.includes('languages') || item.includes('dresses'), item.toLowerCase().includes('amenities')) {
 					// console.log('Skipping in the case of Extra Stops. ')
 				}
-				if (editing_data[item]) {
+				if (item == "passenger_cell_isd") {
+					console.log('passenger_cell_isd-->>', item, editing_data[item])
+					this.SetFormValue(item, '+'+editing_data[item]);
+				}
+				if (editing_data[item] && item != "passenger_cell_isd") {
 					if (isNaN(Number(editing_data[item]))) {
 						this.SetFormValue(item, editing_data[item]);
 					} else {
@@ -841,12 +845,12 @@ export class NewBookingComponent implements OnInit {
 		})
 	}
 
-	fillLCDetails(choose_user:any){
-		this.SetLCFormValue('first_name' ,choose_user?.first_name )
-		this.SetLCFormValue('middle_name' ,choose_user?.middle_name )
-		this.SetLCFormValue('last_name' ,choose_user?.last_name )
-		this.SetLCFormValue('email' ,choose_user?.email )
-		this.SetLCFormValue('phone' ,choose_user?.mobile )
+	fillLCDetails(choose_user: any) {
+		this.SetLCFormValue('first_name', choose_user?.first_name)
+		this.SetLCFormValue('middle_name', choose_user?.middle_name)
+		this.SetLCFormValue('last_name', choose_user?.last_name)
+		this.SetLCFormValue('email', choose_user?.email)
+		this.SetLCFormValue('phone', choose_user?.mobile)
 	}
 
 	handleClientAccount(value: any) {
@@ -2008,7 +2012,7 @@ export class NewBookingComponent implements OnInit {
 		this.LCTelObject = event;
 	}
 
-	LCTelInputObjectUSA(event: any){
+	LCTelInputObjectUSA(event: any) {
 		event.setCountry('us');
 	}
 
