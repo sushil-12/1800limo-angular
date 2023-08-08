@@ -558,3 +558,10 @@ top:2.05em}
 .mat-form-field.read-only {
     border-radius: 10px;
 }
+:host ::ng-deep .mat-input-element{
+	font-weight: 500;
+}
+
+:host ::ng-deep .selectStyle select {
+	font-weight: 400;
+}

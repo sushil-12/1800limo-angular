@@ -225,3 +225,11 @@ top:1.65em}
 	transform: translateY(0.4em) translateX(-0.5em) scale(0.9) !important;
 	opacity: 0.7;
 }
+
+:host ::ng-deep .mat-input-element{
+	font-weight: 500;
+}
+
+:host ::ng-deep .selectStyle select {
+	font-weight: 400;
+}

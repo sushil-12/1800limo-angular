@@ -177,9 +177,9 @@
 										</td>
 										<td>
 	
+											<!-- class="disabled-btn" -->
 											<p data-target="#sendEmailModal" data-toggle="modal"
-											class="disabled-btn"
-												(click)="openModal(booking, 'Affiliate')">
+												(click)="openModal(booking, 'Driver')">
 												<span class="font-weight-bolder"
 													[innerHTML]="highlighText(booking?.driver_name)"></span>&nbsp;
 												|
@@ -397,10 +397,8 @@
 			<div class="text-center iconStyle">
 				<div class="row">
 					<div class="col-md-12">
-						<h5 class="mb-5" *ngIf="passengerDetails?.selection_button == 'Affiliate'">
-							Connect with {{ passengerDetails?.driver_first_name }} {{
-							passengerDetails?.driver_last_name
-							}} Via</h5>
+						<h5 class="mb-5" *ngIf="passengerDetails?.selection_button == 'Driver'">
+							Connect with {{ passengerDetails?.driver_name }} Via</h5>
 						<h5 class="mb-5" *ngIf="passengerDetails?.selection_button == 'Passenger'">
 							Connect with {{ passengerDetails?.passenger_name }} Via</h5>
 						<h5 class="mb-5" *ngIf="passengerDetails?.selection_button == 'Loose_Affiliate'">
@@ -463,8 +461,8 @@
 							</svg>
 							<h6 class="headingStyle">Make Call</h6>
 						</a>
-						<a *ngIf="passengerDetails?.selection_button == 'Affiliate'"
-							href="tel:{{passengerDetails?.affiliate_dispatch_isd}}{{passengerDetails?.affiliate_dispatch_number}}">
+						<a *ngIf="passengerDetails?.selection_button == 'Driver'"
+							href="tel:{{passengerDetails?.driver_cell_isd}}{{passengerDetails?.driver_cell_number}}">
 							<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"
 								viewBox="0 0 122.88 122.88">
 								<defs>
