@@ -325,7 +325,7 @@ export class Step3Component implements OnInit, AfterViewInit
 			this.addInsuranceForm.get("insuranceCard").clearValidators();
 			this.addInsuranceForm.get("insuranceCard").updateValueAndValidity();
 		}
-		console.log(this.addInsuranceForm);
+		console.log('form->',this.addInsuranceForm);
 		this.submittedForm = true;
 		// stop here if form is invalid
 		if (this.addInsuranceForm.invalid)
@@ -366,7 +366,26 @@ export class Step3Component implements OnInit, AfterViewInit
 
 	resetForm()
 	{
-		this.addInsuranceForm.reset();
+		// this.addInsuranceForm.reset();
+		window.scroll({
+			top: 0,
+			left: 0,
+			behavior: "smooth"
+		});
+		this.addInsuranceForm.patchValue({
+			CompanyName: '',
+			AgentName: '',
+			AgentTelephone: '',
+			policyNumber: '',
+			policyExpiredDay: '',
+			policyExpiredMonth: '',
+			policyExpiredYear: '',
+			insuranceLimits: '50000',
+			AgentEmail: '',
+			insCertificate: '',
+			insuranceCard: ''
+		})
+		this.submittedForm = true
 		this.insCertificateImage = "";
 		this.insuranceCardImage = "";
 	}
