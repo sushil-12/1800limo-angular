@@ -758,6 +758,7 @@ export class AddDriverComponent implements OnInit {
 			const index = FluentLanguages.controls.findIndex(x => x.value === val);
 			FluentLanguages.removeAt(index);
 		}
+		console.log('onLanguageChange' , val,ischecked)
 	}
 
 	showImageInModal(imageUrl) {
@@ -773,6 +774,7 @@ export class AddDriverComponent implements OnInit {
 	submitForm() {
 		this.submittedForm = true;
 		// stop here if form is invalid
+		console.log(this.addDriverForm)
 		if (this.addDriverForm.invalid) {
 			return;
 		}
@@ -803,7 +805,44 @@ export class AddDriverComponent implements OnInit {
 	}
 
 	resetForm() {
-		this.addDriverForm.reset();
+		console.log('reseting values-->>' , this.addDriverForm)
+		this.addDriverForm.patchValue({
+			FirstName: "",
+			MiddleName: "",
+			LastName: "",
+			Gender: "",
+			CellNumber: "",
+			CellIsd: "+1",
+			CellNumberCountry: "us",
+			Email: "",
+			Dress: 1,
+			StartDate: "",
+			Veteran: "no",
+			DoD: "no",
+			SchoolBusCertified: "no",
+			FoidCard: "no",
+			Covid19Vaccination: "no",
+			BackgroundCertified: "no",
+			ExPolice: "no",
+			DriverImage: "",
+			DriverLicense: "",
+			StarRating: "",
+			starRatingValue: "",
+			VeteranIdCard: "",
+			schoolBusCertificateImage: "",
+			DoDImage: "",
+			FoidCardImage: "",
+			BackgroundCheckerID: "",
+			CheckerID: "",
+			BackgroundCompanyTelNumber: "",
+			VaccinationCardImage: "",
+			PoliceForceTelephone: "",
+			LastPoliceDepartment: "",
+			Country: "",
+			State: "",
+			City: "",
+			ZipCode: "",
+		});
 		this.DriverImage = "";
 		this.DriverLicense = "";
 		this.StarRating = "";
@@ -813,6 +852,11 @@ export class AddDriverComponent implements OnInit {
 		this.schoolBusCertificateImage = "";
 		this.VaccinationCardImage = "";
 		this.DoDImage = "";
+		this.onLanguageChange('1', true);//set english as default language
+		window.scrollTo({
+			top :0,
+			behavior:'smooth'
+		})
 	}
 	backButton() {
 		this.router.navigate(['/admin/affiliate/step4']);
