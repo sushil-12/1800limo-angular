@@ -557,7 +557,49 @@ export class VehicleRateSettingsComponent implements OnInit {
 	 * Resets the whole form to initial values i.e. when the form is newly built
 	 */
 	resetForm() {
-		this.VehicleRateSettingsForm.reset();
+		// this.VehicleRateSettingsForm.reset();
+		this.VehicleRateSettingsForm.patchValue({
+			currency: '$',
+			hourly_rate: 0, 
+			hourly_rate_after_five_hours: 0,
+			hours_day_rate: 8,
+			day_rate: 0, 
+			km_mile: 'mile',
+			milage_rate: 0,
+			kilometer_rate: 0,
+			minimum_airport_departure_rate: 0,
+			minimum_airport_arrival_rate: 0,
+			minimum_city_rate: 0,
+			minimum_cruise_port_arrival_rate: 0,
+			minimum_cruise_port_departure_rate: 0,
+			minimum_on_demand_rate: 0,
+			per_person_group_ride_rate: 0,
+			airport_city_percentage_booking_cancel_charges: 0,
+			charter_percentage_booking_cancel_charges: 0,
+			rate_range: '0',
+			gratuity: '20',
+			is_gratuity: 'no',
+			amenities_rates: new FormGroup({}),
+			airport_arrival_tax_per_us: "",
+			airport_departure_tax_per_us: "",
+			sea_port_tax_per_us: "",
+			city_congestion_tax_per_us: "",
+			rate_range_percent_flat: 'flat',
+			city_tax_percent_flat: 'flat',
+			state_tax_percent_flat: 'flat',
+			vat_percent_flat: 'flat',
+			workman_comp_percent_flat: 'flat',
+			other_transportation_tax_percent_flat: 'flat',
+			city_tax:0,
+			state_tax:0,
+			vat:0,
+			workmans_comp: 0, 
+			other_transportation_tax:0,
+		})
+		window.scrollTo({
+			top:0,
+			behavior:'smooth'
+		})
 	}
 
 }
