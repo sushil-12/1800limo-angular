@@ -138,7 +138,7 @@ export class AddDriverFromAffiliateComponent
 			.subscribe((data: any) => {
 				this.proDriverYears = data;
 			});
-		$("#firstName").focus();
+		// $("#firstName").focus();
 		this.currentDate = formatDate(new Date(), "yyyy-MM-dd", "en");
 
 		//pick driver id from query params
@@ -428,6 +428,7 @@ export class AddDriverFromAffiliateComponent
 										data.BackgroundCertified,
 									ExPolice: data.ExPolice,
 								});
+								this.selectDropdownGender()
 
 								//get and set languages
 								const languagesGet: FormArray =
@@ -494,6 +495,7 @@ export class AddDriverFromAffiliateComponent
 										FirstYearBusiness:
 											data.FirstYearBusiness,
 									});
+									this.selectDropdownGender()
 
 									data.Veteran &&
 										this.SetFormValue(
@@ -990,7 +992,42 @@ export class AddDriverFromAffiliateComponent
 	}
 
 	resetForm() {
-		this.addDriverForm.reset();
+		this.addDriverForm.patchValue({
+			FirstName: "",
+			MiddleName: "",
+			LastName: "",
+			Gender: "",
+			CellNumber: "",
+			Email: "",
+			Dress: 1,
+			StartDate: "",
+			Veteran: "no",
+			DoD: "no",
+			SchoolBusCertified: "no",
+			FoidCard: "no",
+			Covid19Vaccination: "no",
+			BackgroundCertified: "no",
+			ExPolice: "no",
+			DriverImage: "",
+			DriverLicense: "",
+			StarRating: "",
+			starRatingValue: "",
+			VeteranIdCard: "",
+			schoolBusCertificateImage: "",
+			DoDImage: "",
+			FoidCardImage: "",
+			BackgroundCheckerID: "",
+			CheckerID: "",
+			BackgroundCompanyTelNumber: "",
+			VaccinationCardImage: "",
+			PoliceForceTelephone: "",
+			LastPoliceDepartment: "",
+			Country: "",
+			State: "",
+			City: "",
+			ZipCode: "",
+			FirstYearBusiness: "6 mos",
+		});
 		this.DriverImage = "";
 		this.DriverLicense = "";
 		this.StarRating = "";
@@ -999,12 +1036,18 @@ export class AddDriverFromAffiliateComponent
 		this.FoidCardImage = "";
 		this.BackgroundCheckerID = "";
 		this.VaccinationCardImage = "";
-		this.DoDImage = "";
+		this.DoDImage = "",
+		window.scrollTo({
+			top:0,
+			behavior:'smooth'
+		})
+		this.submittedForm= true
 	}
 	backButton() {
 		this.router.navigate(["/affiliate/step4"]);
 	}
 	selectDropdownGender() {
+		console.log('---true---')
 		$(".selectGenderLabel")
 			.removeClass("selectGenderLabel ")
 			.addClass("select-gender-label");
