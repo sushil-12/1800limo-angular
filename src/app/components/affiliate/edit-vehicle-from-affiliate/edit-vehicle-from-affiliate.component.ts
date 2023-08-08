@@ -1061,7 +1061,25 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 	{
 		this.submittedForm = true;
 
-		this.addVehicleForm.reset();
+		// this.addVehicleForm.reset();
+		this.addVehicleForm.patchValue({
+			vehicleType: ['', Validators.required],
+			make: '',
+			model: '',
+			year: '',
+			color: '',
+			licensePlate: '',
+			numberOfVehicles: '',
+			seats: '',
+			luggage: '',
+			charterCancelPolicy: '2',
+			nonCharterCancelPolicy: '2',
+			rearPlateImage: '',
+			windowPermitImage: '',
+			windowPermit2Image: '',
+			usdotPermitImage: '',
+			mcImage: '',
+		})
 		this.vehicleImageArray = [];
 		let vehicleTypeField: any = document.getElementById('vehicleTypeField');
 		vehicleTypeField.value = "";
