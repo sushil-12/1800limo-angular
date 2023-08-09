@@ -275,7 +275,7 @@
 					</div>
 				</div>
 
-				<div class="col-md-6">
+				<div class="col-md-3">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label>Minimum Cruise Port Rate - Arrival <span class="asterisk">*</span></mat-label>
 						<span matPrefix
@@ -284,7 +284,7 @@
 						<ng-template #hideZero9>
 							<span matPrefix>{{currencySymbol}} &nbsp;</span>
 						</ng-template>
-						<input matInput placeholder="Minimum Cruise Port Arrival Rate"
+						<input matInput placeholder="Minimum Cruise Port Arrival Rate" (keyup)="handleChangeMCPAR($event.target.value)"
 							formControlName="minimum_cruise_port_arrival_rate" tabindex="1">
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.minimum_cruise_port_arrival_rate.errors || f.minimum_cruise_port_arrival_rate.touched && f.minimum_cruise_port_arrival_rate.errors"
@@ -296,6 +296,30 @@
 						<div *ngIf="f.minimum_cruise_port_arrival_rate.errors.pattern">Enter Numbers only</div>
 					</div>
 					<div *ngIf="IsZeroValidator(f.minimum_cruise_port_arrival_rate.value, 'minimum_cruise_port_arrival_rate')" class="text-danger margin-bottom-thin my-mat-hint">
+						<div >Any value required</div>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<mat-form-field class="mat-form-field-rates" appearance="outline">
+						<mat-label>Minimum Cruise Port Rate - Departure <span class="asterisk">*</span></mat-label>
+						<span matPrefix
+							*ngIf="f.minimum_cruise_port_departure_rate.value == null || f.minimum_cruise_port_departure_rate.value == ''; else hideZero9">{{currencySymbol}}
+							 &nbsp;</span>
+						<ng-template #hideZero9>
+							<span matPrefix>{{currencySymbol}} &nbsp;</span>
+						</ng-template>
+						<input matInput placeholder="Minimum Cruise Port Arrival Rate"
+							formControlName="minimum_cruise_port_departure_rate" tabindex="1">
+					</mat-form-field>
+					<div *ngIf="submittedForm && f.minimum_cruise_port_departure_rate.errors || f.minimum_cruise_port_departure_rate.touched && f.minimum_cruise_port_departure_rate.errors"
+						class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="f.minimum_cruise_port_departure_rate.errors.required">This field is required</div>
+					</div>
+					<div *ngIf="submittedForm && f.minimum_cruise_port_departure_rate.errors || f.minimum_cruise_port_departure_rate.touched && f.minimum_cruise_port_departure_rate.errors"
+						class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="f.minimum_cruise_port_departure_rate.errors.pattern">Enter Numbers only</div>
+					</div>
+					<div *ngIf="IsZeroValidator(f.minimum_cruise_port_departure_rate.value, 'minimum_cruise_port_departure_rate')" class="text-danger margin-bottom-thin my-mat-hint">
 						<div >Any value required</div>
 					</div>
 				</div>
@@ -363,10 +387,11 @@
 								</div>
 							</div>
 						</div>
+						<!-- (keyup)="getRateRange($event.target.value)" -->
 						<div class="col-md-12 col-lg-6">
 							<mat-form-field class="mat-form-field-rates" appearance="outline">
 								<mat-label>Rate Manager</mat-label>
-								<input matInput placeholder="Rate Manager" formControlName="rate_range" tabindex="1">
+								<input matInput placeholder="Rate Manager"  formControlName="rate_range" tabindex="1">
 							</mat-form-field>
 							<div *ngIf="submittedForm && f.rate_range.errors || f.rate_range.touched && f.rate_range.errors"
 								class="text-danger margin-bottom-thin my-mat-hint">
