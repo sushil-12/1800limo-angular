@@ -1154,15 +1154,37 @@
 			</div>
 		</div>
 	</section>
+	<div class="container">
+		<div class="row py-4">
+			<div class="col-md-7">
+			  
+			</div>
+			<div class="col-md-5 ">
+				<div class="billing_inforamtion">
+					<ul class="d-flex justify-content-center">
+					
+						<li><button class="custom-btn savebutton" (click)="submitForm()" [disabled]="disableSubmitButton"
+							tabindex="1">SAVE</button> </li>
+					
+							<li><button class="custom-btn resetbutton" (click)="resetForm()" tabindex="1">RESET</button> </li>
+					
+							<li><button class="custom-btn backbutton" type="button" (click)="backButton()" data-toggle="modal"
+								data-placement="top" title="Clicking back button deletes all fields." tabindex="1">BACK</button>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+			</div>
 	<div class="billing_inforamtion">
-		<ul>
-			<li><button class="custom-btn savebutton" (click)="submitForm()" [disabled]="disableSubmitButton"
-					tabindex="1">SAVE</button> </li>
-			<li><button class="custom-btn resetbutton" (click)="resetForm()" tabindex="1">RESET</button> </li>
-			<li><button class="custom-btn backbutton" type="button" (click)="backButton()" data-toggle="modal"
-					data-placement="top" title="Clicking back button deletes all fields." tabindex="1">BACK</button>
-			</li>
-		</ul>
+		
+		
+		
+	
+		
+		
+		
+		
 	</div>
 </form>
 
