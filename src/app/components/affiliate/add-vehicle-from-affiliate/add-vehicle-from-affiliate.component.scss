@@ -245,3 +245,11 @@ top:2.05em}
     opacity: 0.7;
     left: -0.05em;
 }
+
+:host ::ng-deep .mat-input-element{
+	font-weight: 500;
+}
+
+:host ::ng-deep .selectStyle select {
+	font-weight: 400;
+}
