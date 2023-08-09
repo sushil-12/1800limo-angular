@@ -432,6 +432,13 @@ export class FarmOutComponent implements OnInit
 				? this.passengerDetails.pax_tel
 				: this.passengerDetails.passenger_email;
 			this.reciptentName = this.passengerDetails.passenger_name;
+		} else if (this.passengerDetails.selection_button == "Driver") {
+			console.log('driver')
+			this.sendInformation = format
+				? this.passengerDetails?.driver_cell_isd +
+				this.passengerDetails?.driver_cell_number
+				: this.passengerDetails?.driver_email;
+			this.reciptentName = this.passengerDetails?.driver_name;
 		} else {
 			this.sendInformation = format
 				? this.passengerDetails.loose_affiliate_phone_isd +
