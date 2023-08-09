@@ -78,3 +78,12 @@
  .cvcWidth {
  	width: 300px !important;
  }
+
+
+:host ::ng-deep.ng-select .ng-select-container.ng-appearance-outline:after {
+	height: 100%;
+}
+
+::ng-deep .col-md-3.margin-mat-field {
+    margin-top: -15px;
+}

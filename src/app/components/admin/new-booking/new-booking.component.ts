@@ -461,7 +461,8 @@ export class NewBookingComponent implements OnInit {
 				}
 				if (item == "passenger_cell_isd") {
 					console.log('passenger_cell_isd-->>', item, editing_data[item])
-					this.SetFormValue(item, '+'+editing_data[item]);
+					let value = editing_data[item].includes('+') ? editing_data[item] : '+'.concat(editing_data[item])
+					this.SetFormValue(item, value);
 				}
 				if (editing_data[item] && item != "passenger_cell_isd") {
 					if (isNaN(Number(editing_data[item]))) {
