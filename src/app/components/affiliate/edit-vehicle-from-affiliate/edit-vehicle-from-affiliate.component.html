@@ -48,6 +48,9 @@
 					<ng-select appearance="outline" [items]="filteredVehicleTypes" dropdownPosition="bottom"
 							[markFirst]="true" [virtualScroll]="true" bindLabel="name" bindValue="ID"
 							placeholder="Vehicle Type" formControlName="vehicleType" id="vehicleTypeField" >
+							<ng-template ng-label-tmp let-item="item">
+								<span style="font-weight: 500;">{{ item.name }}</span>
+							  </ng-template>
 						</ng-select>
 					<div *ngIf="
 							(errorMsg && f.vehicleType.errors) ||
@@ -95,6 +98,9 @@
 					<ng-select appearance="outline" [items]="filteredMake" dropdownPosition="bottom"
 							[markFirst]="true" [virtualScroll]="true" bindLabel="name" bindValue="ID"
 							placeholder="Make" formControlName="make" id="makeField">
+							<ng-template ng-label-tmp let-item="item">
+								<span style="font-weight: 500;">{{ item.name }}</span>
+							  </ng-template>
 						</ng-select>
 					<div *ngIf="
 							(errorMsg1 && f.make.errors) ||
@@ -140,6 +146,9 @@
 					<ng-select appearance="outline" [items]="filteredModel" dropdownPosition="bottom"
 							[markFirst]="true" [virtualScroll]="true" bindLabel="name" bindValue="ID"
 							placeholder="Model" formControlName="model" id="modelField">
+							<ng-template ng-label-tmp let-item="item">
+								<span style="font-weight: 500;">{{ item.name }}</span>
+							  </ng-template>
 						</ng-select>
 					<div *ngIf="
 							(errorMsg2 && f.model.errors) ||
@@ -215,6 +224,9 @@
 					<ng-select appearance="outline" [items]="filteredYear" dropdownPosition="bottom"
 							[markFirst]="true" [virtualScroll]="true" bindLabel="name" bindValue="ID"
 							placeholder="Year" formControlName="year" id="yearField">
+							<ng-template ng-label-tmp let-item="item">
+								<span style="font-weight: 500;">{{ item.name }}</span>
+							  </ng-template>
 						</ng-select>
 					<div *ngIf="
 							(errorMsg3 && f?.year?.errors) ||
@@ -260,6 +272,9 @@
 					<ng-select appearance="outline" [items]="filteredColor" dropdownPosition="bottom"
 							[markFirst]="true" [virtualScroll]="true" bindLabel="name" bindValue="ID"
 							placeholder="Color" formControlName="color" id="colorField">
+							<ng-template ng-label-tmp let-item="item">
+								<span style="font-weight: 500;">{{ item.name }}</span>
+							  </ng-template>
 						</ng-select>
 					<div *ngIf="
 							(errorMsg4 && f?.color?.errors) ||

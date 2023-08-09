@@ -247,17 +247,17 @@ top:2.05em}
 	background-color: rgb(226, 226, 226,1) !important;
 }
 
-// :host ::ng-deep .mat-input-element{
-// 	font-weight: 500;
-// }
+:host ::ng-deep .mat-input-element{
+	font-weight: 500;
+}
 
-// :host ::ng-deep .selectStyle select {
-// 	font-weight: 400;
-// }
+:host ::ng-deep .selectStyle select {
+	font-weight: 400;
+}
 
-// :host ::ng-deep .mat-select-value-text {
-// 	font-weight: 500 !important;
-//   }
-//  :host ::ng-deep .ng-value {
-// 	font-weight: 400;
-//   }
+:host ::ng-deep .mat-select-value-text {
+	font-weight: 500 !important;
+  }
+ :host ::ng-deep .ng-value {
+	font-weight: 400;
+  }
