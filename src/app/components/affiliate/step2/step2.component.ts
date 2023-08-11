@@ -57,6 +57,7 @@ export class Step2Component implements OnInit {
 
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
 	selectedCountryName: any;
+	rotationDegrees: number =0;
 	constructor(
 		private affiliateService: AffiliateService,
 		private router: Router,
@@ -599,6 +600,13 @@ export class Step2Component implements OnInit {
 		$("#imageModal").addClass("showImage");
 		$("#imageModal").removeClass("d-none");
 	}
+
+	rotateImage(): void {
+		this.rotationDegrees += 90;
+		if (this.rotationDegrees >= 360) {
+		  this.rotationDegrees = 0;
+		}
+	  }
 
 	stripeRefreshAccountLink() {
 		this.affiliateService.stripeRefreshAccountLink(this.response.stripeDetail.stripe_conncet_account_id)

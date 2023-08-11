@@ -73,7 +73,7 @@
 					</div>
 				</div>
 				<div class="col-md-6">
-					<mat-form-field appearance="outline">
+					<mat-form-field appearance="outline" class="margin-zero">
 						<mat-label>
 							Number of Vehicles <span class="asterisk">*</span>
 						</mat-label>
@@ -218,6 +218,44 @@
 							number</div>
 					</div>
 				</div>
+				<!-- <div class="col-md-6">
+					<mat-form-field appearance="outline">
+						<mat-label>Transfer Cancellation Policy <span class="asterisk">*</span></mat-label>
+						<mat-select formControlName="transferCancelPolicyQB" tabindex="1">
+							<mat-option value="">Choose Transfer Cancel policy</mat-option>
+							<mat-option *ngFor="let charterCancelOption of charterCancelOptions"
+								[value]="charterCancelOption.value">{{charterCancelOption.label}}</mat-option>
+						</mat-select>
+					</mat-form-field>
+					<div *ngIf="submittedForm && f.transferCancelPolicyQB?.errors || f.transferCancelPolicyQB?.touched && f.transferCancelPolicyQB?.errors"
+						class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="f.transferCancelPolicyQB?.errors?.required">The Charter Cancel Times is required
+						</div>
+					</div>
+					<div *ngIf="f.transferCancelPolicyQB?.errors" class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="f.transferCancelPolicyQB?.errors?.pattern">The Charter Cancel Times should be a
+							number</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<mat-form-field appearance="outline">
+						<mat-label>Charter Cancellation Policy <span class="asterisk">*</span></mat-label>
+						<mat-select formControlName="charterCancelPolicyQB" tabindex="1">
+							<mat-option value="">Choose Charter Cancel policy</mat-option>
+							<mat-option *ngFor="let charterCancelOption of charterCancelOptions"
+								[value]="charterCancelOption.value">{{charterCancelOption.label}}</mat-option>
+						</mat-select>
+					</mat-form-field>
+					<div *ngIf="submittedForm && f.charterCancelPolicyQB?.errors || f.charterCancelPolicyQB?.touched && f.charterCancelPolicyQB?.errors"
+						class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="f.charterCancelPolicyQB?.errors?.required">The Charter Cancel Times is required
+						</div>
+					</div>
+					<div *ngIf="f.charterCancelPolicyQB?.errors" class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="f.charterCancelPolicyQB?.errors?.pattern">The Charter Cancel Times should be a
+							number</div>
+					</div>
+				</div> -->
 			</div>
 
 			<div class="row mt-3">
