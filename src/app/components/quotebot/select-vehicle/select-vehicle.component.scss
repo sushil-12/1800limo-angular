@@ -31,6 +31,21 @@
 	overflow: visible;
 	height: auto;
   }
+
+  .cancel-policy{
+	color: red;
+    background-color: #fff9f1;
+    padding: 4px;
+    font-weight: 500;
+    // font-size: 13px;
+  }
+
+  .rounded-pill{
+	font-size: 14px;
+    border-radius: 50% !important;
+    width: 70px;
+	color: #FFF !important;
+  }
 @media only screen and (min-width: 767px)
 {
 	.imageStyle {
@@ -44,6 +59,9 @@
 			display: flex !important;;
 			justify-content: space-between !important;
 	
+		}
+		.cancel-policy{
+			font-size: 13px;
 		}
 }
 #fixed-section-container {
