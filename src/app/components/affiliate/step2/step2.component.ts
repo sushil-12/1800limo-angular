@@ -58,6 +58,8 @@ export class Step2Component implements OnInit {
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
 	selectedCountryName: any;
 	rotationDegrees: number =0;
+	badgeOptions: any;
+	filteredOptions: any;
 	constructor(
 		private affiliateService: AffiliateService,
 		private router: Router,
@@ -133,6 +135,8 @@ export class Step2Component implements OnInit {
 			street: ['', Validators.required],
 			city: ['', Validators.required],
 			state: ['', Validators.required],
+			badge_city :[''],
+			badge_city_name:[''],
 			country: ['', Validators.required],
 			zipCode: ['', [Validators.required, this.customValidator.plusValidator()]],
 			unit: [''],
@@ -297,6 +301,15 @@ export class Step2Component implements OnInit {
 				});
 			}
 		})
+
+		// this.affiliateService.getAllEnableBadgeCities().pipe(
+		// 	catchError(err => {
+		// 		return throwError(err)
+		// 	})
+		// ).subscribe((res:any)=> {
+		// 	this.badgeOptions = res?.data
+		// 	this.filteredOptions = res?.data
+		// })
 	}
 	// ngOnInit Ends 
 
@@ -607,6 +620,21 @@ export class Step2Component implements OnInit {
 		  this.rotationDegrees = 0;
 		}
 	  }
+
+	  handleBadgeCity(value:any){
+		console.log(value , this.filteredOptions)
+		this.filteredOptions = this.badgeOptions.filter((i:any)=> i.name.toLowerCase().includes(value.toLowerCase()))
+	}
+	selectBadgeCity(option:any,isUserInput){
+		console.log('in function selectBadgeCity-->>>' ,option,isUserInput)
+		if(isUserInput){
+			this.addBankForm.patchValue({
+				badge_city:option.id
+			})
+			// this.addAffiliateAccountForm.updateValueAndValidity()
+		}
+
+	}
 
 	stripeRefreshAccountLink() {
 		this.affiliateService.stripeRefreshAccountLink(this.response.stripeDetail.stripe_conncet_account_id)

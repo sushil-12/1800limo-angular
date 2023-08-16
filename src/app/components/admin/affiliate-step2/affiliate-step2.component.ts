@@ -55,6 +55,8 @@ export class AffiliateStep2Component implements OnInit {
 
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
 	stepsObj: any;
+	filteredOptions: any;
+	badgeOptions: any;
 
 	constructor(
 		private adminService: AdminService,
@@ -116,6 +118,8 @@ export class AffiliateStep2Component implements OnInit {
 			address: ['', Validators.required],
 			latitude: ['', Validators.required],
 			longitude: ['', Validators.required],
+			badge_city :[''],
+			badge_city_name:[''],
 			street: ['', Validators.required],
 			city: ['', Validators.required],
 			state: ['', Validators.required],
@@ -150,6 +154,14 @@ export class AffiliateStep2Component implements OnInit {
 
 			this.fillGlobalValue('', 'currency', true)
 		})
+		this.adminService.getAllEnableBadgeCities().pipe(
+			catchError(err => {
+				return throwError(err)
+			})
+		).subscribe((res:any)=> {
+			this.badgeOptions = res?.data
+			this.filteredOptions = res?.data
+		})
 
 		this.httpClient.get("assets/json/countryStateList.json").subscribe(data => {
 			this.countryOptions = data;
@@ -171,6 +183,14 @@ export class AffiliateStep2Component implements OnInit {
 								this.stripeErrors = this.response.data.stripeDetail.stripe_errors;
 							}
 							//set images and their ID
+							this.badgeOptions.map((i:any)=>{
+								if(i?.id==this.response?.data?.badge_city){
+									this.addBankForm.patchValue({
+										badge_city:i?.id,
+										badge_city_name:i?.name
+									})
+								}
+							})
 							this.id_front_image = this.response.data.bankinfo.id_front_image.image;
 							this.id_back_image = this.response.data.bankinfo.id_back_image.image;
 							this.id_front_image_id = this.response.data.bankinfo.id_front_image.ID;
@@ -348,6 +368,20 @@ export class AffiliateStep2Component implements OnInit {
 		if (selectedCountryData) {
 			this.stateOptions = selectedCountryData[0].regions;
 		}
+	}
+	handleBadgeCity(value:any){
+		console.log(value , this.filteredOptions)
+		this.filteredOptions = this.badgeOptions.filter((i:any)=> i.name.toLowerCase().includes(value.toLowerCase()))
+	}
+	selectBadgeCity(option:any,isUserInput){
+		console.log('in function selectBadgeCity-->>>' ,isUserInput)
+		if(isUserInput){
+			this.addBankForm.patchValue({
+				badge_city:option.id
+			})
+			// this.addAffiliateAccountForm.updateValueAndValidity()
+		}
+
 	}
 	changeIdentityCountry(selectedCountryCode) {
 		this.httpClient.get("assets/json/stripeDocumentData.json").subscribe((stripeDocumentData: any) => {
