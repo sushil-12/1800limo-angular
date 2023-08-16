@@ -39,6 +39,7 @@ export class EditVehicleRatesComponent implements OnInit {
 
 
 	public response: any;
+	thumb_value: number = 0;
 
 	constructor(
 		private adminService: AdminService,
@@ -256,6 +257,26 @@ export class EditVehicleRatesComponent implements OnInit {
 		this.initRateRangeObject();
 	}
 
+	changeDetection = {
+		radioButton: (form_control: string, value: any) => {
+			this.SetFormValue(form_control, value)
+		}
+	}
+
+	/**
+	 * increment/decrement the thumb value based on the value provided.
+	 * 
+	 * @params value: Number [Required] expected values(1/-1)
+	 */
+	changeThumb(value: number, style?: string) {
+		if (style == '+') {
+			this.getRateRange(this.thumb_value + value)
+		}
+		if (style == '-') {
+			this.getRateRange(this.thumb_value - value)
+		}
+	}
+
 	IsZeroValidator(value: any, form_control: string)
 	{
 		if(value == 0)
@@ -292,7 +313,7 @@ export class EditVehicleRatesComponent implements OnInit {
 	 */
 		getRateRange(range_value: number) {
 			console.log('range_value', range_value)
-			// this.thumb_value = range_value
+			this.thumb_value = range_value
 			this.SetFormValue('rate_range', range_value)
 			// --------- For Flat ------------------
 			if (this.form.rate_range_percent_flat.value == 'flat') {

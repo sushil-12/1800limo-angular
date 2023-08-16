@@ -89,7 +89,8 @@ export class AddVehicleRatesComponent implements OnInit {
 			minimum_airport_departure_rate: ['', [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)]],
 			minimum_airport_arrival_rate: ['', [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)]],
 			minimum_city_rate: ['', [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)]],
-			minimum_cruise_port_arrival_rate: ['', [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)]],
+			minimum_cruise_port_arrival_rate: ['', [ Validators.pattern(/^\d+(\.\d+)?$/)]],
+			minimum_cruise_port_departure_rate : ['', [ Validators.pattern(/^\d+(\.\d+)?$/)]],
 			minimum_on_demand_rate: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
 			per_person_group_ride_rate: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
 			airport_city_percentage_booking_cancel_charges: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
@@ -178,6 +179,12 @@ export class AddVehicleRatesComponent implements OnInit {
 				is_gratuity: 'no'
 			});
 		}
+	}
+	handleChangeMCPAR(value){
+		
+		this.addVehicleRatesForm.patchValue({
+			minimum_cruise_port_departure_rate : value ? value : null
+		})
 	}
 
 	changeAmenityRate(babySeatKey, babySeatValue) {

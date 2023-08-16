@@ -528,7 +528,7 @@ export class AffiliateService
 		return this.httpClient.put(this.serverUrl + 'deactivate-account', {});
 	}
 	getAllEnableBadgeCities() {
-		return this.httpClient.get(this.serverUrl + 'admin/all-enabled-badge-cities');
+		return this.httpClient.get(this.serverUrl + 'all-enabled-badge-cities');
 	}
 	getCurrencies()
 	{

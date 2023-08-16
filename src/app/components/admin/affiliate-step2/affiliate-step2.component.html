@@ -411,6 +411,25 @@
 						</div>
 					</ng-template>
 				</div>
+				<div class="col-md-4">
+					<mat-form-field appearance="outline" class="example-full-width">
+						<mat-label>Badge City
+						</mat-label>
+						<input type="text"
+							   placeholder="Pick one"
+							   aria-label="Number"
+							   matInput
+							   formControlName="badge_city_name"
+							   [matAutocomplete]="auto" 
+							   (keyup)="handleBadgeCity($event.target.value)">
+						<mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+						  <mat-option *ngFor="let option of filteredOptions" 
+						  (onSelectionChange)="selectBadgeCity(option,$event.isUserInput)" [value]="option.name">
+							{{option.name}}
+						  </mat-option>
+						</mat-autocomplete>
+					  </mat-form-field>
+				</div>
 				<div class="col-md-12 map-wrapper" *ngIf="latitude">
 					<agm-map [latitude]="latitude" [longitude]="longitude">
 						<agm-marker [latitude]="latitude" [longitude]="longitude" [markerDraggable]="true">

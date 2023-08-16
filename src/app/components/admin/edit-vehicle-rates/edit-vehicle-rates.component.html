@@ -277,7 +277,9 @@
 
 				<div class="col-md-3">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
-						<mat-label>Minimum Cruise Port Rate - Arrival <span class="asterisk">*</span></mat-label>
+						<mat-label>Minimum Cruise Port Rate - Arrival 
+							<!-- <span class="asterisk">*</span> -->
+						</mat-label>
 						<span matPrefix
 							*ngIf="f.minimum_cruise_port_arrival_rate.value == null || f.minimum_cruise_port_arrival_rate.value == ''; else hideZero9">{{currencySymbol}}
 							 &nbsp;</span>
@@ -301,7 +303,9 @@
 				</div>
 				<div class="col-md-3">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
-						<mat-label>Minimum Cruise Port Rate - Departure <span class="asterisk">*</span></mat-label>
+						<mat-label>Minimum Cruise Port Rate - Departure 
+							<!-- <span class="asterisk">*</span> -->
+						</mat-label>
 						<span matPrefix
 							*ngIf="f.minimum_cruise_port_departure_rate.value == null || f.minimum_cruise_port_departure_rate.value == ''; else hideZero9">{{currencySymbol}}
 							 &nbsp;</span>
@@ -359,6 +363,14 @@
 					</div>
 				</div>
 				<div class="col-md-12">
+					<h2 class="headinginfo my-4">
+						Rate Manager
+						<span class="spanText"> (Adjust Your rates up or down)</span>
+						<br />
+						<span class="text-orange" style="font-size: 0.95rem">
+							Click on the range value to reset.
+						</span>
+					</h2>
 					<div class="row">
 						<div class="col-md-6 col-lg-3 pr-0 borderright mobilePadding">
 							<div class="form-group radio-tile-group assment_radio">
@@ -387,8 +399,37 @@
 								</div>
 							</div>
 						</div>
+						<div id="rate-manager-slider" class="col-md-6 mt-3 p-0">
+							<span id="sign-percent-minus" (click)="changeThumb(1, '-')">
+								-
+								<i class="bi text-orange" [ngClass]="
+										form.rate_range_percent_flat.value == 'percent'
+											? 'bi-percent'
+											: 'bi-currency-dollar'
+									"></i>
+							</span>
+							<span class="mx-lg-1">
+								<input type="range" [value]="form.rate_range.value" min="-50" max="50" id="slider"
+									(input)="getRateRange($event.target.value)" />
+							</span>
+							<span id="sign-percent-plus" (click)="changeThumb(1, '+')">
+								+
+								<i class="bi text-orange" [ngClass]="
+										form.rate_range_percent_flat.value == 'percent'
+											? 'bi-percent'
+											: 'bi-currency-dollar'
+									"></i>
+							</span>
+							<p id="thumb-value" class="text-center m-0 mt-3" (click)="getRateRange(0)">
+								<i class="bi bi-currency-dollar text-orange"
+									*ngIf="form.rate_range_percent_flat.value == 'flat'"></i>
+								{{ thumb_value }}
+								<i class="bi bi-percent text-orange"
+									*ngIf="form.rate_range_percent_flat.value == 'percent'"></i>
+							</p>
+						</div>
 						<!-- (keyup)="getRateRange($event.target.value)" -->
-						<div class="col-md-12 col-lg-6">
+						<!-- <div class="col-md-12 col-lg-6">
 							<mat-form-field class="mat-form-field-rates" appearance="outline">
 								<mat-label>Rate Manager</mat-label>
 								<input matInput placeholder="Rate Manager"  formControlName="rate_range" tabindex="1">
@@ -397,7 +438,9 @@
 								class="text-danger margin-bottom-thin my-mat-hint">
 								<div *ngIf="f.rate_range.errors.pattern">Enter Numbers only</div>
 							</div>
-						</div>
+						</div> -->
+						<!-- RATE MANAGER -->
+	
 					</div>
 				</div>
 

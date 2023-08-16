@@ -489,7 +489,7 @@
 								<img src="{{ id_front_image }}"
 									[style.transform]="'rotate(' + rotationDegrees + 'deg)'"
 									(click)="showImageInModal(id_front_image)" tabindex="-1" />
-									<li>
+									<!-- <li>
 										<a class="delete-btn" (click)="rotateImage()" tabindex="1">
 											<svg xmlns="http://www.w3.org/2000/svg"
 												viewBox="0 0 32 32">
@@ -498,7 +498,7 @@
 											</svg>
 											Rotate
 										</a>
-									</li>
+									</li> -->
 								<ul *ngIf="canChangeDocument" class="mt-3">
 									<li>
 										<button class="changeuploaded" tabindex="1">
@@ -726,7 +726,26 @@
 						</div>
 					</ng-template>
 				</div>
-				<div class="col-md-6 d-md-block d-none"></div>
+				<div class="col-md-4">
+					<mat-form-field appearance="outline" class="example-full-width">
+						<mat-label>Badge City
+						</mat-label>
+						<input type="text"
+							   placeholder="Pick one"
+							   aria-label="Number"
+							   matInput
+							   formControlName="badge_city_name"
+							   [matAutocomplete]="auto" 
+							   (keyup)="handleBadgeCity($event.target.value)">
+						<mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+						  <mat-option *ngFor="let option of filteredOptions" 
+						  (onSelectionChange)="selectBadgeCity(option,$event.isUserInput)" [value]="option.name">
+							{{option.name}}
+						  </mat-option>
+						</mat-autocomplete>
+					  </mat-form-field>
+				</div>
+				<!-- <div class="col-md-6 d-md-block d-none"></div> -->
 				<div class="col-md-12 map-wrapper" *ngIf="latitude">
 					<agm-map [latitude]="latitude" [longitude]="longitude">
 						<agm-marker [latitude]="latitude" [longitude]="longitude"
