@@ -248,53 +248,53 @@ export class DuplicateVehicleComponent implements OnInit, AfterViewChecked
 
 				//set all default images 
 				this.vehicleImage1 = this.oldvehicleImage[0] = this.response.data.vehicleImage1.image;
-				this.vehicleImage2 = this.oldvehicleImage[1] = this.response.data.vehicleImage2.image;
-				this.vehicleImage3 = this.oldvehicleImage[2] = this.response.data.vehicleImage3.image;
-				this.vehicleImage4 = this.oldvehicleImage[3] = this.response.data.vehicleImage4.image;
-				this.vehicleImage5 = this.oldvehicleImage[4] = this.response.data.vehicleImage5.image;
-				this.vehicleImage6 = this.oldvehicleImage[5] = this.response.data.vehicleImage6.image;
-				this.vehicleImage7 = this.oldvehicleImage[6] = this.response.data.vehicleImage7.image;
-				this.vehicleImage8 = this.oldvehicleImage[7] = this.response.data.vehicleImage8.image;
-				this.vehicleImage9 = this.oldvehicleImage[8] = this.response.data.vehicleImage9.image;
+				// this.vehicleImage2 = this.oldvehicleImage[1] = this.response.data.vehicleImage2.image;
+				// this.vehicleImage3 = this.oldvehicleImage[2] = this.response.data.vehicleImage3.image;
+				// this.vehicleImage4 = this.oldvehicleImage[3] = this.response.data.vehicleImage4.image;
+				// this.vehicleImage5 = this.oldvehicleImage[4] = this.response.data.vehicleImage5.image;
+				// this.vehicleImage6 = this.oldvehicleImage[5] = this.response.data.vehicleImage6.image;
+				// this.vehicleImage7 = this.oldvehicleImage[6] = this.response.data.vehicleImage7.image;
+				// this.vehicleImage8 = this.oldvehicleImage[7] = this.response.data.vehicleImage8.image;
+				// this.vehicleImage9 = this.oldvehicleImage[8] = this.response.data.vehicleImage9.image;
 
 				this.vehicleImageId1 = this.response.data.vehicleImage1.id;
-				this.vehicleImageId2 = this.response.data.vehicleImage2.id;
-				this.vehicleImageId3 = this.response.data.vehicleImage3.id;
-				this.vehicleImageId4 = this.response.data.vehicleImage4.id;
-				this.vehicleImageId5 = this.response.data.vehicleImage5.id;
-				this.vehicleImageId6 = this.response.data.vehicleImage6.id;
-				this.vehicleImageId7 = this.response.data.vehicleImage7.id;
-				this.vehicleImageId8 = this.response.data.vehicleImage8.id;
-				this.vehicleImageId9 = this.response.data.vehicleImage9.id;
+				// this.vehicleImageId2 = this.response.data.vehicleImage2.id;
+				// this.vehicleImageId3 = this.response.data.vehicleImage3.id;
+				// this.vehicleImageId4 = this.response.data.vehicleImage4.id;
+				// this.vehicleImageId5 = this.response.data.vehicleImage5.id;
+				// this.vehicleImageId6 = this.response.data.vehicleImage6.id;
+				// this.vehicleImageId7 = this.response.data.vehicleImage7.id;
+				// this.vehicleImageId8 = this.response.data.vehicleImage8.id;
+				// this.vehicleImageId9 = this.response.data.vehicleImage9.id;
 
-				this.rearPlateImage = this.oldvehicleImage[9] = this.response.data.rear_plate.image;
-				this.windowPermitImage = this.oldvehicleImage[10] = this.response.data.window_permit.image;
-				this.windowPermit2Image = this.oldvehicleImage[11] = this.response.data.window_permit_1.image;
-				this.usdotPermitImage = this.oldvehicleImage[12] = this.response.data.USDOT_permit.image;
-				this.mcImage = this.oldvehicleImage[13] = this.response.data.mc.image;
+				// this.rearPlateImage = this.oldvehicleImage[9] = this.response.data.rear_plate.image;
+				// this.windowPermitImage = this.oldvehicleImage[10] = this.response.data.window_permit.image;
+				// this.windowPermit2Image = this.oldvehicleImage[11] = this.response.data.window_permit_1.image;
+				// this.usdotPermitImage = this.oldvehicleImage[12] = this.response.data.USDOT_permit.image;
+				// this.mcImage = this.oldvehicleImage[13] = this.response.data.mc.image;
 
-				this.rearPlateId = this.response.data.rear_plate.id;
-				this.windowPermitId = this.response.data.window_permit.id;
-				this.windowPermit2Id = this.response.data.window_permit_1.id;
-				this.usdotPermitId = this.response.data.USDOT_permit.id;
-				this.mcId = this.response.data.mc.id;
+				// this.rearPlateId = this.response.data.rear_plate.id;
+				// this.windowPermitId = this.response.data.window_permit.id;
+				// this.windowPermit2Id = this.response.data.window_permit_1.id;
+				// this.usdotPermitId = this.response.data.USDOT_permit.id;
+				// this.mcId = this.response.data.mc.id;
 
 				//patching default images
 				this.addVehicleForm.patchValue({
 					vehicle_image_1: this.vehicleImageId1,
-					vehicle_image_2: this.vehicleImageId2,
-					vehicle_image_3: this.vehicleImageId3,
-					vehicle_image_4: this.vehicleImageId4,
-					vehicle_image_5: this.vehicleImageId5,
-					vehicle_image_6: this.vehicleImageId6,
-					vehicle_image_7: this.vehicleImageId7,
-					vehicle_image_8: this.vehicleImageId8,
-					vehicle_image_9: this.vehicleImageId9,
-					rearPlateImage: this.rearPlateId,
-					windowPermitImage: this.windowPermitId,
-					windowPermit2Image: this.windowPermit2Id,
-					usdotPermitImage: this.usdotPermitId,
-					mcImage: this.mcId,
+					// vehicle_image_2: this.vehicleImageId2,
+					// vehicle_image_3: this.vehicleImageId3,
+					// vehicle_image_4: this.vehicleImageId4,
+					// vehicle_image_5: this.vehicleImageId5,
+					// vehicle_image_6: this.vehicleImageId6,
+					// vehicle_image_7: this.vehicleImageId7,
+					// vehicle_image_8: this.vehicleImageId8,
+					// vehicle_image_9: this.vehicleImageId9,
+					// rearPlateImage: this.rearPlateId,
+					// windowPermitImage: this.windowPermitId,
+					// windowPermit2Image: this.windowPermit2Id,
+					// usdotPermitImage: this.usdotPermitId,
+					// mcImage: this.mcId,
 				});
 				sessionStorage.setItem('models', JSON.stringify(this.model));
 
