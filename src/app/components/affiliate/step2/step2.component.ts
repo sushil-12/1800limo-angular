@@ -9,6 +9,7 @@ import { HttpClient } from "@angular/common/http";
 import { CustomvalidationService } from '../../../services/customvalidation.service';
 import { SharedModule } from '../../shared/shared.module';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { AdminService } from 'src/app/services/admin.service';
 declare var $: any;
 
 @Component({
@@ -62,6 +63,7 @@ export class Step2Component implements OnInit {
 	filteredOptions: any;
 	constructor(
 		private affiliateService: AffiliateService,
+		private adminService: AdminService,
 		private router: Router,
 		private formBuilder: FormBuilder,
 		private httpClient: HttpClient,
@@ -302,14 +304,14 @@ export class Step2Component implements OnInit {
 			}
 		})
 
-		// this.affiliateService.getAllEnableBadgeCities().pipe(
-		// 	catchError(err => {
-		// 		return throwError(err)
-		// 	})
-		// ).subscribe((res:any)=> {
-		// 	this.badgeOptions = res?.data
-		// 	this.filteredOptions = res?.data
-		// })
+		this.adminService.getAllEnableBadgeCities().pipe(
+			catchError(err => {
+				return throwError(err)
+			})
+		).subscribe((res:any)=> {
+			this.badgeOptions = res?.data
+			this.filteredOptions = res?.data
+		})
 	}
 	// ngOnInit Ends 
 

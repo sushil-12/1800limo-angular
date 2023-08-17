@@ -354,12 +354,12 @@
 
 				<!-- Airport/City Cancel Times -->
 				<div class="col-md-6">
-					<label class="select-cancel-label">Airport / City Cancel Times
+					<label class="select-cancel-label">Airport / City Cancel Policy
 						<span class="asterisk">*</span></label>
 					<div class="selectStyle">
 						<select class="selectInputStyle" formControlName="nonCharterCancelPolicy" tabindex="1">
 							<option value="">
-								Choose Airport / City Cancel Times
+								Choose Airport / City Cancel Policy
 							</option>
 							<option *ngFor="
 									let nonCharterCancelOption of nonCharterCancelOptions
@@ -388,24 +388,24 @@
 								f.nonCharterCancelPolicy.errors)
 						" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.nonCharterCancelPolicy.errors.required">
-							The Charter Cancel Times is required
+							The Charter Cancel Policy is required
 						</div>
 					</div>
 					<div *ngIf="f.nonCharterCancelPolicy.errors" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.nonCharterCancelPolicy.errors.pattern">
-							The Charter Cancel Times should be a number
+							The Charter Cancel Policy should be a number
 						</div>
 					</div>
 				</div>
 
-				<!-- Charter Cancel Times -->
+				<!-- Charter Cancel Policy -->
 				<div class="col-md-6">
-					<label class="select-charter-cancel-label">Charter Cancel Times
+					<label class="select-charter-cancel-label">Charter Cancel Policy
 						<span class="asterisk">*</span></label>
 					<div class="selectStyle">
 						<select class="selectInputStyle" formControlName="charterCancelPolicy" tabindex="1">
 							<option value="">
-								Choose Charter Cancel Times
+								Choose Charter Cancel Policy
 							</option>
 							<option *ngFor="
 									let charterCancelOption of charterCancelOptions

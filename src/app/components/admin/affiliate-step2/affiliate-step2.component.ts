@@ -183,14 +183,7 @@ export class AffiliateStep2Component implements OnInit {
 								this.stripeErrors = this.response.data.stripeDetail.stripe_errors;
 							}
 							//set images and their ID
-							this.badgeOptions.map((i:any)=>{
-								if(i?.id==this.response?.data?.badge_city){
-									this.addBankForm.patchValue({
-										badge_city:i?.id,
-										badge_city_name:i?.name
-									})
-								}
-							})
+							
 							this.id_front_image = this.response.data.bankinfo.id_front_image.image;
 							this.id_back_image = this.response.data.bankinfo.id_back_image.image;
 							this.id_front_image_id = this.response.data.bankinfo.id_front_image.ID;
@@ -235,6 +228,14 @@ export class AffiliateStep2Component implements OnInit {
 							this.haveEin(this.response.data.bankinfo.ein ? 'yesEin' : 'noEin');
 							this.changeCountry(this.response.data.bankinfo.country);//for selected country
 							// this.stateManagementService.setprogressBar(false);
+							this.badgeOptions.map((i:any)=>{
+								if(i.id==this.response?.data?.badge_city){
+									this.addBankForm.patchValue({
+										badge_city:i?.id,
+										badge_city_name:i?.name
+									})
+								}
+							})
 						});
 				}
 				else {

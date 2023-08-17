@@ -307,7 +307,7 @@ export class AdminService {
 		return result;
 	}
 	getAllEnableBadgeCities() {
-		return this.httpClient.get(this.serverUrl + 'admin/all-enabled-badge-cities');
+		return this.httpClient.get(this.serverUrl + 'all-enabled-badge-cities');
 	}
 	getAllBadgeCities() {
 		return this.httpClient.get(this.serverUrl + 'admin/all-badge-cities');
