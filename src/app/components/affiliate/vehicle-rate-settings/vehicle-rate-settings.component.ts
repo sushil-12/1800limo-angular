@@ -186,9 +186,9 @@ export class VehicleRateSettingsComponent implements OnInit {
 				this.dayRateCalculations()
 			}
 		);
-		this.VehicleRateSettingsForm.get('minimum_airport_arrival_rate').valueChanges.subscribe(value => {
-			this.SetFormValue('minimum_airport_departure_rate', value)
-		})
+		// this.VehicleRateSettingsForm.get('minimum_airport_arrival_rate').valueChanges.subscribe(value => {
+		// 	this.SetFormValue('minimum_airport_departure_rate', value)
+		// })
 
 		this.VehicleRateSettingsForm.get('minimum_cruise_port_arrival_rate').valueChanges.subscribe(value => {
 			this.SetFormValue('minimum_cruise_port_departure_rate', value)
