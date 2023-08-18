@@ -120,7 +120,7 @@ export class AffiliateStep2Component implements OnInit {
 			longitude: ['', Validators.required],
 			badge_city :[''],
 			badge_city_name:[''],
-			street: ['', Validators.required],
+			street: [''],
 			city: ['', Validators.required],
 			state: ['', Validators.required],
 			country: ['', Validators.required],

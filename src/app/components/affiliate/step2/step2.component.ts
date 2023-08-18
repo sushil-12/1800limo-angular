@@ -134,7 +134,7 @@ export class Step2Component implements OnInit {
 			address: ['', Validators.required],
 			latitude: ['', Validators.required],
 			longitude: ['', Validators.required],
-			street: ['', Validators.required],
+			street: [''],
 			city: ['', Validators.required],
 			state: ['', Validators.required],
 			badge_city :[''],
