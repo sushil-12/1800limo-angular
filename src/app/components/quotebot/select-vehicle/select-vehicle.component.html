@@ -392,7 +392,9 @@
 							</div>
 							<span class="d-flex cancel-policy">
 								<i class="bi bi-exclamation-circle-fill" style="color: red;"></i>
-								 Cancellation Policy 4 hrs</span>
+								 Cancellation Policy 
+								 {{quotebot_form?.service_type == 'charter_tour' ? convertHrIntoDays(vehinfo?.charterCancelPolicy) : convertHrIntoDays(vehinfo?.nonCharterCancelPolicy
+								 )}}</span>
 						</div>
 						<!-- INFORMATION ENDS -->
 					</div>
