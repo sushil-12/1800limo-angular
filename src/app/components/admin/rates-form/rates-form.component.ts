@@ -31,6 +31,8 @@ export class RatesFormComponent implements OnInit, OnChanges {
 	ReturnRatesForm: FormGroup;
 
 	ratesdata = new BehaviorSubject<any>({});
+	returnRatesdata = new BehaviorSubject<any>({});
+
 	temp: any;
 
 	ratesform: boolean = false;
@@ -70,6 +72,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 
 	vehicles: number = 1;
 	hours: number = 0;
+	newBooking: boolean = false;
 
 	constructor(
 		private $form: FormBuilder,
@@ -82,6 +85,9 @@ export class RatesFormComponent implements OnInit, OnChanges {
 		this.$routeurl.queryParams.subscribe((params: any) => {
 			if (!params?.vehicle_id ) {
 				this.fetchRates('');
+			}
+			if (params && params.new == 'true') {
+				this.newBooking = params.new == 'true'
 			}
 		})
 	}
@@ -184,7 +190,11 @@ export class RatesFormComponent implements OnInit, OnChanges {
 		this.RatesForm.updateValueAndValidity();
 		console.log('handleNegtiveValue-->>' , formgroup,subform,formcontrol,parseFloat((Math.abs(Number(value))).toFixed(2))) 
 	}
-
+	handleNegtiveValuReturn(formgroup,subform,formcontrol,value){
+		let v = parseFloat((Math.abs(Number(value))).toFixed(2));
+		(<FormGroup>(<FormGroup>this.ReturnRatesForm.get(formgroup)).get(subform)).get(formcontrol).setValue(v);
+		this.ReturnRatesForm.updateValueAndValidity();
+	}
 	textFormatter(text: string) {
 		try {
 			return text.replace(/[\\\_$]+/g, " ");
@@ -301,18 +311,41 @@ export class RatesFormComponent implements OnInit, OnChanges {
 			others: this.$form.group({}),
 		});
 
-		this.getRatesData().subscribe((response: any) => {
-			if (response && Object.keys(response).length > 0) {
-				this.buildRatesForm('ReturnRatesForm', response);
-				if (this.bookingId) {
-					for (let formgroup in this.ReturnRateForm) {
-						for (let subform in this.ReturnRateForm[formgroup].controls) {
-							this.calculateAmount('ReturnRatesForm', formgroup, subform)
+		if(this.newBooking){
+			this.getReturnRatesData().subscribe((response: any) => {
+				if (response && Object.keys(response).length > 0) {
+					this.buildRatesForm('ReturnRatesForm', response);
+					if (this.bookingId) {
+						for (let formgroup in this.ReturnRateForm) {
+							for (let subform in this.ReturnRateForm[formgroup].controls) {
+								this.calculateAmount('ReturnRatesForm', formgroup, subform)
+							}
 						}
 					}
 				}
-			}
-		});
+			});
+				console.log('calculating return total for QB ')
+				for (let formgroup in this.ReturnRateForm) {
+					for (let subform in this.ReturnRateForm[formgroup].controls) {
+							this.calculateAmount('ReturnRatesForm', formgroup, subform)
+					}
+				}
+			
+		}
+		else{
+			this.getRatesData().subscribe((response: any) => {
+				if (response && Object.keys(response).length > 0) {
+					this.buildRatesForm('ReturnRatesForm', response);
+					if (this.bookingId) {
+						for (let formgroup in this.ReturnRateForm) {
+							for (let subform in this.ReturnRateForm[formgroup].controls) {
+								this.calculateAmount('ReturnRatesForm', formgroup, subform)
+							}
+						}
+					}
+				}
+			});
+		}
 
 		this.ReturnRatesForm.valueChanges.subscribe((value: any) => {
 			this.calculateTotal("ReturnRatesForm");
@@ -389,9 +422,15 @@ export class RatesFormComponent implements OnInit, OnChanges {
 		this.$api.fetchRatesByAffiliateVeh(vehicle_id, data).subscribe((response: any) => {
 			this.ratesdata.next(response?.data?.rateArray)
 			this.initRates();
+			if(data.service_type == 'round_trip'){
+				this.returnRatesdata.next(response?.data?.retrunRateArray)
+				this.initReturnRates()
+			}
 		});
 	}
-
+	getReturnRatesData() {
+		return this.returnRatesdata.asObservable();
+	}
 	getRatesData() {
 		return this.ratesdata.asObservable();
 	}
@@ -543,7 +582,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 				if (subform == 'Base_Rate') {
 					this.calc_admin_share = (amount * this.admin_share) / 100;
 					console.log('calc_admin_share--->>', amount, this.calc_admin_share)
-					amount = amount + this.calc_admin_share;
+					amount = parseFloat((amount + this.calc_admin_share).toFixed(2));
 				}
 
 				(<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("amount").setValue(amount);
@@ -619,7 +658,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 				let amount = baserate;
 				if (subform == 'Base_Rate') {
 					this.r_calc_admin_share = (amount * this.admin_share) / 100;
-					amount = amount + this.r_calc_admin_share;
+					amount = parseFloat((amount + this.r_calc_admin_share).toFixed(2));
 				}
 				(<FormGroup>((<FormGroup>this.ReturnRatesForm.get(formgroup)).get(subform))).get("amount").setValue(amount);
 			}
