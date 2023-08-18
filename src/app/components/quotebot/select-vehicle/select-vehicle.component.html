@@ -393,8 +393,7 @@
 							<span class="d-flex cancel-policy" *ngIf="!vehinfo?.is_master_vehicle">
 								<i class="bi bi-exclamation-circle-fill" style="color: red;"></i>
 								 Cancellation Policy 
-								 {{quotebot_form?.service_type == 'charter_tour' ? convertHrIntoDays(vehinfo?.charterCancelPolicy) : convertHrIntoDays(vehinfo?.nonCharterCancelPolicy
-								 )}}</span>
+								 {{convertHrIntoDays(vehinfo?.cancellation_policy)}}</span>
 						</div>
 						<!-- INFORMATION ENDS -->
 					</div>
