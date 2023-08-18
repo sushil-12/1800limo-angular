@@ -458,6 +458,19 @@ export class SelectVehicleComponent implements OnInit
 		}
 
 	}
+	convertHrIntoDays(hours){
+		let res : any= hours/24
+		if(res<=2){   
+			res = hours + ' hrs'
+		}
+		if(2<res && res<7){
+			res = res + ' days'
+		}
+		if(7<=res){
+			res = res/7 + ' Wk'
+		}
+		return res;
+	}
 
 
 	/**
