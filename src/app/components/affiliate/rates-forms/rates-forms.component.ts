@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
@@ -10,7 +10,7 @@ import { AffiliateService } from 'src/app/services/affiliate.service';
   templateUrl: './rates-forms.component.html',
   styleUrls: ['./rates-forms.component.scss']
 })
-export class RatesFormsComponent implements OnInit {
+export class RatesFormsComponent implements OnInit , OnChanges {
   @Input("initRates") init_rates: boolean = false;
 	@Input("initReturnRates") init_r_rates: boolean = false;
 	@Input("affiliate_type") affiliate_type: string = "";
@@ -30,6 +30,7 @@ export class RatesFormsComponent implements OnInit {
 	ReturnRatesForm: FormGroup;
 
 	ratesdata = new BehaviorSubject<any>({});
+	returnRatesdata = new BehaviorSubject<any>({});
 	temp: any;
 
 	ratesform: boolean = false;
@@ -69,6 +70,7 @@ export class RatesFormsComponent implements OnInit {
 
 	vehicles: number = 1;
 	hours: number = 0;
+	newBooking: boolean;
 
 	constructor(
 		private $form: FormBuilder,
@@ -81,6 +83,9 @@ export class RatesFormsComponent implements OnInit {
 		this.$routeurl.queryParams.subscribe((params: any) => {
 			if (!params?.vehicle_id ) {
 				this.fetchRates('');
+			}
+			if (params && params.new == 'true') {
+				this.newBooking = params.new == 'true'
 			}
 		})
 	}
@@ -210,6 +215,11 @@ export class RatesFormsComponent implements OnInit {
 		this.RatesForm.updateValueAndValidity();
 		console.log('handleNegtiveValue-->>' , formgroup,subform,formcontrol,parseFloat((Math.abs(Number(value))).toFixed(2))) 
 	}
+	handleNegtiveValuReturn(formgroup,subform,formcontrol,value){
+		let v = parseFloat((Math.abs(Number(value))).toFixed(2));
+		(<FormGroup>(<FormGroup>this.ReturnRatesForm.get(formgroup)).get(subform)).get(formcontrol).setValue(v);
+		this.ReturnRatesForm.updateValueAndValidity();
+	}
 	closeAllChevrons() {
 		this.rate_params["chevrons"]['section'] = false
 		this.rate_params["chevrons"]['all_inclusive_rates'] = false
@@ -295,19 +305,41 @@ export class RatesFormsComponent implements OnInit {
 			misc: this.$form.group({}),
 			others: this.$form.group({}),
 		});
-
-		this.getRatesData().subscribe((response: any) => {
-			if (response && Object.keys(response).length > 0) {
-				this.buildRatesForm('ReturnRatesForm', response);
-				if (this.bookingId) {
-					for (let formgroup in this.ReturnRateForm) {
-						for (let subform in this.ReturnRateForm[formgroup].controls) {
-							this.calculateAmount('ReturnRatesForm', formgroup, subform)
+		if(this.newBooking){
+			this.getReturnRatesData().subscribe((response: any) => {
+				if (response && Object.keys(response).length > 0) {
+					this.buildRatesForm('ReturnRatesForm', response);
+					if (this.bookingId) {
+						for (let formgroup in this.ReturnRateForm) {
+							for (let subform in this.ReturnRateForm[formgroup].controls) {
+								this.calculateAmount('ReturnRatesForm', formgroup, subform)
+							}
 						}
 					}
 				}
-			}
-		});
+			});
+				console.log('calculating return total for QB ')
+				for (let formgroup in this.ReturnRateForm) {
+					for (let subform in this.ReturnRateForm[formgroup].controls) {
+							this.calculateAmount('ReturnRatesForm', formgroup, subform)
+					}
+				}
+		}
+		else{
+			this.getRatesData().subscribe((response: any) => {
+				if (response && Object.keys(response).length > 0) {
+					this.buildRatesForm('ReturnRatesForm', response);
+					if (this.bookingId) {
+						for (let formgroup in this.ReturnRateForm) {
+							for (let subform in this.ReturnRateForm[formgroup].controls) {
+								this.calculateAmount('ReturnRatesForm', formgroup, subform)
+							}
+						}
+					}
+				}
+			});
+		}
+		
 
 		this.ReturnRatesForm.valueChanges.subscribe((value: any) => {
 			this.calculateTotal("ReturnRatesForm");
@@ -387,11 +419,18 @@ export class RatesFormsComponent implements OnInit {
 		this.adminServices.fetchRatesByAffiliateVeh(vehicle_id, data).subscribe((response: any) => {
 			this.ratesdata.next(response?.data?.rateArray)
 			this.initRates();
+			if(data.service_type == 'round_trip'){
+				this.returnRatesdata.next(response?.data?.retrunRateArray)
+				this.initReturnRates()
+			}
 		});
 	}
 
 	getRatesData() {
 		return this.ratesdata.asObservable();
+	}
+	getReturnRatesData() {
+		return this.returnRatesdata.asObservable();
 	}
 	handleHourChange(event: any) {
 		console.log('------->>>>>>>', event.target.value)
