@@ -207,6 +207,7 @@ export class EditVehicleRatesComponent implements OnInit {
 						});
 						this.km_mile_switch(this.response.data.km_mile);//show selected input field 
 						// this.stateManagementService.setprogressBar(false);
+						this.updateRateRangeObject()
 					});
 			});
 	}
@@ -305,6 +306,18 @@ export class EditVehicleRatesComponent implements OnInit {
 		})
 		console.log('Rate Range Object Initialised ', this.rate_range_object)
 		return true
+	}
+	updateRateRangeObject() {
+		for (let form_name in this.rate_range_object) {
+			try {
+				// console.log(form_name,typeof this.addVehicleRatesForm.get(form_name).value)
+				this.rate_range_object[form_name] = parseFloat(this.addVehicleRatesForm.get(form_name).value.toFixed(2))
+			}
+			catch (err) {
+				console.log(form_name, typeof this.addVehicleRatesForm.get(form_name).value, err)
+			}
+		}
+		console.log(this.rate_range_object)
 	}
 
 		/**

@@ -36,7 +36,10 @@ export class AddVehicleRatesComponent implements OnInit {
 	public submittedForm: boolean;
 	public disableSubmitButton: boolean = false;
 
-	public response: any;
+	public response: any;	
+	rate_range_object: any = {}
+	thumb_value: number = 0;
+
 
 	constructor(
 		private adminService: AdminService,
@@ -168,6 +171,8 @@ export class AddVehicleRatesComponent implements OnInit {
 				// this.stateManagementService.setprogressBar(false);
 			});
 		this.km_mile_switch('mile');
+		this.initRateRangeObject();
+		this.updateRateRangeObject()
 	}
 	changeGraruity(e) {
 		if (e.checked) {
@@ -197,6 +202,133 @@ export class AddVehicleRatesComponent implements OnInit {
 					}
 				});
 		}
+	}
+	get form() {
+		return this.addVehicleRatesForm.controls
+	}
+	changeThumb(value: number, style?: string) {
+		if (style == '+') {
+			this.getRateRange(this.thumb_value + value)
+		}
+		if (style == '-') {
+			this.getRateRange(this.thumb_value - value)
+		}
+	}
+
+
+	/**
+	 * build a new object with keys as the form control names and and values as the value of those controls.
+	 */
+	initRateRangeObject(): boolean {
+		let form_control_names = ['milage_rate', 'kilometer_rate', 'hourly_rate', 'hourly_rate_after_five_hours', 'day_rate', 'minimum_city_rate', 'minimum_airport_departure_rate', 'minimum_airport_arrival_rate', 'minimum_cruise_port_arrival_rate', 'minimum_cruise_port_departure_rate', 'airport_city_percentage_booking_cancel_charges', 'per_person_group_ride_rate']
+		form_control_names.forEach((name: string) => {
+			this.rate_range_object[name] = this.addVehicleRatesForm.get(name).value ?? 0
+		})
+		console.log('Rate Range Object Initialised ', this.rate_range_object)
+		return true
+	}
+	updateRateRangeObject() {
+		for (let form_name in this.rate_range_object) {
+			try {
+				// console.log(form_name,typeof this.addVehicleRatesForm.get(form_name).value)
+				this.rate_range_object[form_name] = parseFloat(this.addVehicleRatesForm.get(form_name).value.toFixed(2))
+			}
+			catch (err) {
+				console.log(form_name, typeof this.addVehicleRatesForm.get(form_name).value, err)
+			}
+		}
+		console.log(this.rate_range_object)
+	}
+
+		/**
+	 * 
+	 * @param range_value current value of the slider
+	 */
+		getRateRange(range_value: number) {
+			console.log('range_value', range_value)
+			this.thumb_value = range_value
+			this.SetFormValue('rate_range', range_value)
+			// --------- For Flat ------------------
+			if (this.form.rate_range_percent_flat.value == 'flat') {
+				// for neutral
+				if (range_value == 0) {
+					console.log('B')
+					for (const key in this.rate_range_object) {
+						this.SetFormValue('rate_range', '0')
+						this.SetFormValue(key, this.rate_range_object[key])
+					}
+				}
+	
+				// for negative side indicator
+				if (range_value < 0) {
+					for (const key in this.rate_range_object) {
+						this.rate_range_object[key] == null && this.SetFormValue(key, 0)	// set 0 if null
+						// decrease by number and set value upto two decimal places and update
+						// let value = Math.round(Number.EPSILON + (Math.abs(parseInt(this.rate_range_object[key])) - Math.abs(range_value)) * 100) / 100
+						let value = parseFloat(Math.abs(this.rate_range_object[key] - Math.abs(range_value)).toFixed(2))
+						this.SetFormValue(key, value)
+					}
+				}
+	
+				// for positive side indicator
+				if (range_value > 0) {
+					for (const key in this.rate_range_object) {
+						this.rate_range_object[key] == null && this.SetFormValue(key, 0) 	// set 0 if null
+	
+						// let value = this.rate_range_object[key]
+						// increase by number and set value upto two decimal places and update
+						// let value = Math.round(Number.EPSILON + (Math.abs(parseInt(this.rate_range_object[key])) + Math.abs(range_value)) * 100) / 100
+						let value = parseFloat(Math.abs(this.rate_range_object[key] + Math.abs(range_value)).toFixed(2))
+						this.SetFormValue(key, value)
+					}
+				}
+				console.log(this.rate_range_object)
+			}
+			// -------------- For Percentage ------------------
+			else {
+				// for neutral
+				if (range_value == 0) {
+					for (const key in this.rate_range_object) {
+						this.SetFormValue('rate_range', '0')
+						this.SetFormValue(key, this.rate_range_object[key])
+					}
+				}
+				// for negative side indicator
+				if (range_value < 0) {
+					for (const key in this.rate_range_object) {
+						this.rate_range_object[key] == null && this.SetFormValue(key, 0)	// set 0 if null
+	
+						// decrease by percentage and set value upto two decimal places and update
+						let percentage_value = this.rate_range_object[key] - (this.rate_range_object[key] * Math.abs(range_value) / 100)
+						let value = Math.round(Number.EPSILON + percentage_value * 100) / 100
+						this.SetFormValue(key, value)
+					}
+				}
+	
+				// for positive side indicator
+				if (range_value > 0) {
+					for (const key in this.rate_range_object) {
+						this.rate_range_object[key] == null && this.SetFormValue(key, 0)	// set 0 if null
+	
+						// decrease by percentage and set value upto two decimal places and update
+						let percentage_value = this.rate_range_object[key] + (this.rate_range_object[key] * Math.abs(range_value) / 100)
+						let value = Math.round(Number.EPSILON + percentage_value * 100) / 100
+						this.SetFormValue(key, value)
+					}
+				}
+			}
+		}
+
+		/**
+	 * Set the specified value into form
+	 * 
+	 * @params form_control: String [Required] Form Control name
+	 * @params value: String [Required] value to be saved in form
+	 */
+	SetFormValue(form_control: string, value: any) {
+		console.info('Setting Value of ', form_control, ': ', value)
+		this.addVehicleRatesForm.get(form_control).setValue(value)
+		this.addVehicleRatesForm.updateValueAndValidity()
 	}
 
 	get amenites_rates() {
