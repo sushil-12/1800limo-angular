@@ -947,7 +947,7 @@ export class CreateNewBookingComponent implements OnInit {
 		}
 		this.$spinner.show()
 		this.affiliateService.getVehicleDataByAffiliateId(affiliate_id).then((response: any) => {
-			console.log('get vehicle data response------------------->>>>>>>>>>>>>>>', response.success && response.data.length > 0, response.data)
+			console.log('get vehicle data response------------------->>>>>>>>>>>>>>>', response.success && response.data?.vehicleList.length > 0, response.data)
 			if (response.success && response.data?.vehicleList.length > 0) {
 				this.VehicleList = response.data?.vehicleList
 				console.log('in else vehicle list ---->>>>>>', this.VehicleList)
@@ -1024,7 +1024,8 @@ export class CreateNewBookingComponent implements OnInit {
 			return
 		}
 		this.$spinner.show()
-		this.$api.adminAffiliateVehicleList(affiliate_id).then((response: any) => {
+		// this.$api.adminAffiliateVehicleList(affiliate_id).then((response: any) => {
+		this.affiliateService.getVehicleDataByAffiliateId(affiliate_id).then((response: any) => {
 			console.log('get affiliate vehicle data----->>>>>>>>>' , response.data)
 			if (response.success && response.data.vehicleList.length > 0) {
 				this.VehicleList = response.data.vehicleList
@@ -1032,6 +1033,8 @@ export class CreateNewBookingComponent implements OnInit {
 				this.VehicleList.map((item: any) => item['formatted_name'] = `${item.vehicleType} - ${item.make} (${item.model})`);
 
 				// autofill data if isRatesCompleted:true
+				this.vehicleType_arr = this.VehicleList = this.vehicleMake_arr = this.VehicleList = this.vehicleModal_arr = this.VehicleList = this.vehicleYear_arr = this.VehicleList = this.vehicleColor_arr = this.VehicleList
+
 				for(let i=0;i<this.VehicleList.length;i++){
 					if(this.VehicleList[i].isRatesCompleted){
 						if(this.QB_vehicle_id){
@@ -1059,12 +1062,13 @@ export class CreateNewBookingComponent implements OnInit {
 		console.log('in function fectch driver info -------------------')
 
 		this.$spinner.show()
-		this.affiliateService.driverList().then((response: any) => {
+		this.affiliateService.driverList(affiliate_id).then((response: any) => {
 			if (response.success && response.data?.data.length > 0) {
 				this.DriverList = response.data.data
 				let isValueSet = false
 				for(let i =0;i<this.DriverList.length;i++){
 					this.SetFormValue('driver_id', this.DriverList[i].id)
+					console.log('autofill driver info--->>', this.DriverList[i])
 					this.autofillData('driver', this.DriverList[i])
 					isValueSet = true
 					break;
@@ -1512,7 +1516,7 @@ export class CreateNewBookingComponent implements OnInit {
 		this.booking_params['chevrons'][type] = !this.booking_params['chevrons'][type]
 	}
 	handleChangeVehicleType(event) {
-		console.log('in function handle change vehicle type', event.unique_key)
+		console.log('in function handle change vehicle type', event,event.unique_key)
 		this.VehicleList.map(i => (i.unique_key == event.unique_key) ? this.handleSelectVehicleType(i) : '')
 
 	}

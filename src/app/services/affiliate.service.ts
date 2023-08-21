@@ -276,9 +276,14 @@ export class AffiliateService
 	}
 
 	//Driver
-	async driverList()
+	async driverList(id)
 	{
-		const result = await this.httpClient.get(this.serverUrl + 'get-affiliate-drivers').toPromise();
+		const result = await this.httpClient.get(this.serverUrl + 'get-affiliate-drivers?affiliate_id='+id).toPromise();
+		return result;
+	}
+	async getAffiliateDriver(id)
+	{
+		const result = await this.httpClient.get(this.serverUrl + 'get-affiliate-driver/'+id).toPromise();
 		return result;
 	}
 	addDriver(data)

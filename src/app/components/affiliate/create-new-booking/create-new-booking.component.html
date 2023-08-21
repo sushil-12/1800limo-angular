@@ -779,7 +779,7 @@
 
 			<!-- Visible in Affiliate as well as Loose Affiliate Section -->
 			<!-- Affiliate Vehicle Information -->
-			<div class="px-4 mt-4" *ngIf="Form.affiliate_type.value == 'loose_affiliate' || Form.affiliate_id.value">
+			<div class="px-4 mt-4" *ngIf="Form.affiliate_type.value == 'loose_affiliate'">
 				<h4>
 					Vehicle Preferences
 				</h4>
@@ -949,6 +949,95 @@
 					<!-- Number of Seats -->
 					<div class="col-md-3">
 						<mat-form-field appearance="outline" class="vehicleLable m-0" style="margin-top: 0px !important;">
+							<mat-label>
+								Number of Seats
+							</mat-label>
+							<input type="text" matInput formControlName="vehicle_seats" placeholder="Number of Seats"
+								(focus)="$event.target.select()" />
+						</mat-form-field>
+						<div class="error-box">
+							<div class="error-message"
+								*ngIf="Form.vehicle_seats.invalid && (Form.vehicle_seats.touched || Form.vehicle_seats.dirty)">
+								<p class="text-danger text-lg m-0" *ngIf="Form.vehicle_seats.errors?.pattern">
+									Only Numbers are Allowed
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="px-4 mt-4" *ngIf="Form.affiliate_type.value == 'affiliate'">
+				<h4>
+					Vehicle Preferences
+				</h4>
+				<div class="row">
+					<!-- Vehicle Type -->
+					<div id="vehicle-type"
+						[ngClass]="Form.vehicle_type.value && !Form.vehicle_make.value ? 'col-md-6 col-xl-4' : Form.vehicle_make.value ? 'col-md-4 col-xl-3' : 'col-md-12'">
+						<ng-select appearance="outline" [items]="vehicleType_arr" bindLabel="formatted_name"
+							bindValue="vehicleType_id" placeholder="Select Vehicle Type" dropdownPosition="bottom"
+							[markFirst]="true" [virtualScroll]="true" formControlName="vehicle_type"
+							(change)="handleChangeVehicleType($event)">
+						</ng-select>
+					</div>
+
+					<!-- Make -->
+					<div id="make" *ngIf="Form.vehicle_type.value" class="block-cursor"
+						[ngClass]="Form.vehicle_make.value ? 'col-md-4 col-xl-3' : 'col-md-6 col-xl-4'">
+						<ng-select appearance="outline" [items]="vehicleMake_arr" dropdownPosition="bottom"
+							[markFirst]="true" [virtualScroll]="true" bindLabel="make" bindValue="make_id"
+							placeholder="Select Make" formControlName="vehicle_make">
+						</ng-select>
+					</div>
+
+					<!-- Model -->
+					<div id="model" class="col-md-4 col-xl-3 block-cursor" *ngIf="Form.vehicle_make.value">
+						<ng-select appearance="outline" [items]="vehicleModal_arr" bindLabel="model"
+							bindValue="model_id" placeholder="Select Model" dropdownPosition="bottom" [markFirst]="true"
+							[virtualScroll]="true" formControlName="vehicle_model">
+						</ng-select>
+					</div>
+
+					<!-- Year -->
+					<div id="year" class="col-md-3 block-cursor">
+						<ng-select appearance="outline" [items]="vehicleYear_arr" bindLabel="year" bindValue="year_id"
+							placeholder="Select Year" dropdownPosition="bottom" [markFirst]="true"
+							[virtualScroll]="true" formControlName="vehicle_year">
+						</ng-select>
+					</div>
+
+					<!-- Color -->
+					<div id="color" class="col-md-3 block-cursor">
+						<ng-select appearance="outline" [items]="vehicleColor_arr" bindLabel="color"
+							bindValue="color_id" placeholder="Select Color" dropdownPosition="bottom" [markFirst]="true"
+							[virtualScroll]="true" formControlName="vehicle_color">
+						</ng-select>
+					</div>
+
+					<!-- License Plate -->
+					<div class="col-md-3 margin-mat-field">
+						<mat-form-field appearance="outline" class="vehicleLable mt-0">
+							<mat-label>
+								License Plate #
+							</mat-label>
+							<input type="text" matInput (focus)="$event.target.select()"
+								formControlName="vehicle_license_plate" placeholder="License Plate #">
+						</mat-form-field>
+						<div class="error-box">
+							<div class="error-message"
+								*ngIf="Form.vehicle_license_plate.invalid && (Form.vehicle_license_plate.touched || Form.vehicle_license_plate.dirty)">
+								<p class="text-danger text-lg m-0"
+									*ngIf="Form.vehicle_license_plate.errors?.whitespace">
+									Extra White Space are not Allowed
+								</p>
+							</div>
+						</div>
+					</div>
+
+					<!-- Number of Seats -->
+					<div class="col-md-3 margin-mat-field">
+						<mat-form-field appearance="outline" class="vehicleLable m-0">
 							<mat-label>
 								Number of Seats
 							</mat-label>
