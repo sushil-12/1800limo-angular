@@ -84,7 +84,7 @@ export class Step4Component implements OnInit {
 	loadDriver() {
 		this.spinner.show(); //show spinner
 		// Load Our driver using API
-		this.affiliateService.driverList().then(result => {
+		this.affiliateService.driverList(undefined).then(result => {
 			this.driverRes = result;
 			this.driverList = this.driverRes.data.data;
 			this.spinner.hide(); //hide spinner
