@@ -157,6 +157,10 @@ ul {
   .preview-airport-color{
 	color:  #00008B !important ;
   }
+  .block-cursor{
+	cursor: pointer;
+    pointer-events: none;
+}
 
 
 :host ::ng-deep.ng-select .ng-select-container.ng-appearance-outline:after {

@@ -92,6 +92,12 @@ export class CreateNewBookingComponent implements OnInit {
 	AffiliateAccounts: Array<Record<string, any>> = []
 	VehicleList: Array<Record<string, any>> = []
 	DriverList: Array<Record<string, any>> = []
+	vehicleType_arr: any;
+	vehicleMake_arr: any;
+	vehicleModal_arr: any;
+	vehicleYear_arr: any;
+	vehicleColor_arr: any;
+	firstLoadVehicleId: any;
 
 	chosen_user: Record<string, any>
 
@@ -109,6 +115,14 @@ export class CreateNewBookingComponent implements OnInit {
 	newBooking: boolean = false;
 	QB_vehicle_id: any = null;
 	params_QB_vehicle_id :any = null
+	updateType: any;
+	bookingResponse: any;
+	unique_key: any;
+	firstLoadAffiliateId: any;
+	service_type: any = 'one_way';
+	transfer_type: any = 'city_to_city'
+	return_transfer_type: any = 'city_to_city'
+	number_of_hours: any = '0';
 
 
 	constructor(
@@ -136,6 +150,7 @@ export class CreateNewBookingComponent implements OnInit {
 		this.$routeurl.queryParams.subscribe((params: any) => {
 			if (params && params.bookingId && !this.booking_id) {
 				this.is_booking_edit_case = true
+				this.updateType = params.updateType
 				this.SetFormValue('reservation_id', params.bookingId)
 				params.updateType ? this.SetFormValue('updateType', params.updateType) : this.SetFormValue('updateType', 'edit')
 			}
@@ -255,10 +270,10 @@ export class CreateNewBookingComponent implements OnInit {
 			affiliate_type: ['affiliate'],
 			affiliate_id: [''],
 			lose_affiliate_name: ['', this.customValidator.whitespace()],
-			lose_affiliate_phone: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
+			lose_affiliate_phone: [''],
 			lose_affiliate_phone_isd: ['+1'],
 			lose_affiliate_phone_country: ['us'],
-			lose_affiliate_email: ['', Validators.email],
+			lose_affiliate_email: [''],
 			vehicle_type: [''],
 			vehicle_type_name: [''],
 			vehicle_id: [''],
@@ -283,6 +298,7 @@ export class CreateNewBookingComponent implements OnInit {
 			driver_image_id: [''],
 			vehicle_image_id: [''],
 			meet_greet_choices: [2],
+			meet_greet_choices_name: ['Driver -  Airport - Text/call after plane lands with curbside meet location'],
 			number_of_vehicles: [''],
 			pickup_date: [''],
 			pickup_time: ['12:00 am'],
@@ -318,6 +334,7 @@ export class CreateNewBookingComponent implements OnInit {
 			return_meet_greet_choices: [2],
 			return_pickup_date: [''],
 			return_pickup_time: ['12:00 pm'],
+			return_meet_greet_choices_name: ['Driver -  Airport - Text/call after plane lands with curbside meet location'],
 			return_extra_stops: this.$form.array([]),
 			return_pickup: [''],
 			return_pickup_latitude: [''],
@@ -370,31 +387,41 @@ export class CreateNewBookingComponent implements OnInit {
 		this.SetFormValue('return_pickup_date', future_full_date.slice(0, future_full_date.indexOf('T')))
 		this.SetFormValue('number_of_vehicles', 1)
 		this.SetFormValue('booking_instructions', 'Text client day before each booking to confirm driver name and cell #');
+		this.SetFormValue('return_booking_instructions', 'Text client day before each booking to confirm driver name and cell #');
 
 
 		if (this.BookingForm.value.transfer_type.includes('city_')) {
 			this.SetFormValue('meet_greet_choices', 1)
+			this.SetFormValue('meet_greet_choices_name', "Driver - Text/call when on location")
 		} else {
 			this.SetFormValue('meet_greet_choices', 2)
+			this.SetFormValue('meet_greet_choices_name', "Driver -  Airport - Text/call after plane lands with curbside meet location")
 		}
 
 		if (this.BookingForm.value.transfer_type.includes('_city')) {
 			this.SetFormValue('return_meet_greet_choices', 1)
+			this.SetFormValue('return_meet_greet_choices_name', "Driver - Text/call when on location")
 		} else {
 			this.SetFormValue('return_meet_greet_choices', 2)
+			this.SetFormValue('meet_greet_choices_name', "Driver -  Airport - Text/call after plane lands with curbside meet location")
 		}
 	}
 	changeTransferType(type: string) {
+		this.transfer_type = type
 		if (type.includes('city_')) {
 			this.SetFormValue('meet_greet_choices', 1)
+			this.SetFormValue('meet_greet_choices_name', "Driver - Text/call when on location")
 		} else {
 			this.SetFormValue('meet_greet_choices', 2)
+			this.SetFormValue('meet_greet_choices_name', "Driver -  Airport - Text/call after plane lands with curbside meet location")
 		}
 
 		if (type.includes('_city')) {
 			this.SetFormValue('return_meet_greet_choices', 1)
+			this.SetFormValue('return_meet_greet_choices_name', "Driver - Text/call when on location")
 		} else {
 			this.SetFormValue('return_meet_greet_choices', 2)
+			this.SetFormValue('return_meet_greet_choices_name', "Driver -  Airport - Text/call after plane lands with curbside meet location")
 		}
 	}
 
@@ -402,6 +429,19 @@ export class CreateNewBookingComponent implements OnInit {
 		console.log('value', value)
 		if (value) {
 			this.monthOptions = this.months.filter(i => i.value.includes(value))
+		}
+	}
+	handleChangeMeetAndGreet(event: any, type: string) {
+		console.log('in function meet and greet-->>>', event.source.triggerValue, type)
+		if (type == 'return') {
+			this.BookingForm.patchValue({
+				return_meet_greet_choices_name: event.source.triggerValue
+			})
+		}
+		else {
+			this.BookingForm.patchValue({
+				meet_greet_choices_name: event.source.triggerValue
+			})
 		}
 	}
 
@@ -412,11 +452,21 @@ export class CreateNewBookingComponent implements OnInit {
 			response.data.booking_instructions = response.data.booking_instructions.replaceAll('<br />', '')
 			console.log('response <><><><><', response.data)
 			let editing_data = response.data
+			this.bookingResponse = response.data
+			this.firstLoadVehicleId = response.data.vehicle_id
+			this.firstLoadAffiliateId = response.data.affiliate_id
+			this.number_of_hours = response?.data?.number_of_hours
+			this.SetFormValue('affiliate_type', response.data.affiliate_type)
 			this.autofillData('cruise', editing_data);
 			console.log(editing_data, "check big data")
 			for (let item in editing_data) {
 				if (item.includes('extra_stops') || item.includes('languages') || item.includes('dresses'), item.toLowerCase().includes('amenities')) {
 					// console.log('Skipping in the case of Extra Stops. ')
+				}
+				if (item == "passenger_cell_isd") {
+					console.log('passenger_cell_isd-->>', item, editing_data[item])
+					let value = editing_data[item].includes('+') ? editing_data[item] : '+'.concat(editing_data[item])
+					this.SetFormValue(item, value);
 				}
 				if (editing_data[item]) {
 					if (isNaN(Number(editing_data[item]))) {
@@ -472,9 +522,9 @@ export class CreateNewBookingComponent implements OnInit {
 				service_type: response.data.service_type == 'oneway' ? 'one_way' : response.data['service_type'] == 'roundtrip' ? 'round_trip' : 'charter_tour',
 			})
 
-			if (this.Form.updateType.value == 'edit') {
-				this.booking_params.client_account_types.pop()
-			}
+			// if (this.Form.updateType.value == 'edit') {
+			// 	this.booking_params.client_account_types.pop()
+			// }
 			this.booking_id = this.Form.reservation_id.value;
 			this.Form.affiliate_id.value != 0 ? this.chooseAffiliate() : ''
 			try {
@@ -744,6 +794,13 @@ export class CreateNewBookingComponent implements OnInit {
 		}
 	}
 
+	onSelectionChangeServiceType(event: any) {
+		this.service_type = event.value;
+	}
+
+	changeReturnTransferType(event: any) {
+		this.return_transfer_type = event
+	}
 
 
 	chooseUser(account_id: number) {
@@ -760,6 +817,19 @@ export class CreateNewBookingComponent implements OnInit {
 			}
 			this.$spinner.hide();
 		})
+	}
+
+	fillLCDetails(choose_user: any) {
+		this.SetLCFormValue('first_name', choose_user?.first_name)
+		this.SetLCFormValue('middle_name', choose_user?.middle_name)
+		this.SetLCFormValue('last_name', choose_user?.last_name)
+		this.SetLCFormValue('email', choose_user?.email)
+		this.SetLCFormValue('phone', choose_user?.mobile)
+	}
+
+	handleClientAccount(value: any) {
+		console.log('---------------------_>>>>>>>>>>>>>> client acc value', value)
+		this.chooseUser(value.id)
 	}
 
 	fetchAffiliates(affiliate_type: 'affiliate' | 'loose_affiliate') {
@@ -854,6 +924,21 @@ export class CreateNewBookingComponent implements OnInit {
 			this.$spinner.hide('normalspinner');
 		})
 	}
+	handleSelectVehicleType(selectedVehicle: any) {
+		console.log('selectweed vehicle-->>>>', selectedVehicle, selectedVehicle.licensePlate === null)
+		this.SetFormValue('vehicle_id', selectedVehicle.ID);
+		this.SetFormValue('vehicle_type_name', selectedVehicle.vehicleType)
+		this.SetFormValue('vehicle_make', selectedVehicle.make_id);
+		this.SetFormValue('vehicle_make_name', selectedVehicle.make);
+		this.SetFormValue('vehicle_model', selectedVehicle.model_id);
+		this.SetFormValue('vehicle_model_name', selectedVehicle.model);
+		this.SetFormValue('vehicle_year', selectedVehicle.year_id);
+		this.SetFormValue('vehicle_year_name', selectedVehicle.year);
+		this.SetFormValue('vehicle_color', selectedVehicle.color_id);
+		this.SetFormValue('vehicle_color_name', selectedVehicle.color);
+		selectedVehicle.licensePlate === null ? this.BookingForm.get('vehicle_license_plate').setValue('') : this.SetFormValue('vehicle_license_plate', selectedVehicle.licensePlate)
+		this.SetFormValue('vehicle_seats', selectedVehicle.seats)
+	}
 
 	fetchAffiliateVehicles(affiliate_id: number) {
 		if (!affiliate_id) {
@@ -862,27 +947,42 @@ export class CreateNewBookingComponent implements OnInit {
 		}
 		this.$spinner.show()
 		this.affiliateService.getVehicleDataByAffiliateId(affiliate_id).then((response: any) => {
-			console.log('get vehicle data response------------------->>>>>>>>>>>>>>>', response.success && response.data.length > 0, response.data)
+			console.log('get vehicle data response------------------->>>>>>>>>>>>>>>', response.success && response.data?.vehicleList.length > 0, response.data)
 			if (response.success && response.data?.vehicleList.length > 0) {
 				this.VehicleList = response.data?.vehicleList
 				console.log('in else vehicle list ---->>>>>>', this.VehicleList)
 				// add a key with formatted name to every value
 				this.VehicleList.map((item: any) => item['formatted_name'] = `${item.vehicleType} - ${item.make} (${item.model})`);
 
-				// autofill data if isRatesCompleted:true
-				for(let i=0;i<this.VehicleList.length;i++){
-					if(this.VehicleList[i].isRatesCompleted){
-								let vehicle_type_id = this.BigData['vehicleCategories'].find(item => item.name == this.VehicleList[i].vehicleType)['id']
-								this.SetFormValue('vehicle_type', vehicle_type_id)
+				this.vehicleType_arr = this.VehicleList = this.vehicleMake_arr = this.VehicleList = this.vehicleModal_arr = this.VehicleList = this.vehicleYear_arr = this.VehicleList = this.vehicleColor_arr = this.VehicleList
+				for (let i = 0; i < this.VehicleList.length; i++) {
+					if (this.VehicleList[i].isRatesCompleted) {
+						// let vehicle_type_id = this.BigData['vehicleCategories'].find(item => item.name == this.VehicleList[i].vehicleType)['id']
+						if (affiliate_id == this.firstLoadAffiliateId) {
+							if (this.VehicleList[i].ID == this.firstLoadVehicleId) {
+								console.log('selected vehicle on first load---------------------------------->>>>>', this.VehicleList[i])
 								this.SetFormValue('vehicle_id', this.VehicleList[i].ID);
-								this.autofillData('vehicle', this.VehicleList[i]);
-								this.QB_vehicle_id= null
+								this.SetFormValue('vehicle_type', this.VehicleList[i].vehicleType_id)
+								this.SetFormValue('vehicle_type_name', this.VehicleList[i].vehicleType)
+								this.unique_key = this.VehicleList[i].unique_key
+								this.handleSelectVehicleType(this.VehicleList[i])
+								// this.autofillData('vehicle', this.VehicleList[i]);
 								break;
 							}
-							else{
-								continue;
-							}
 						}
+						else {
+							console.log('new affiliate seleted')
+							this.SetFormValue('vehicle_id', this.VehicleList[i].ID);
+							this.SetFormValue('vehicle_type', this.VehicleList[i].vehicleType_id)
+							this.SetFormValue('vehicle_type_name', this.VehicleList[i].vehicleType)
+							this.unique_key = this.VehicleList[i].unique_key
+							this.handleSelectVehicleType(this.VehicleList[i])
+							// this.autofillData('vehicle', this.VehicleList[i]);
+							break;
+						}
+
+					}
+				}
 
 				// if (this.VehicleList.length == 1) {
 				// 	let vehicle_type_id = this.BigData['vehicleCategories'].find(item => item.name == this.VehicleList[0].vehicleType)['id']
@@ -924,7 +1024,8 @@ export class CreateNewBookingComponent implements OnInit {
 			return
 		}
 		this.$spinner.show()
-		this.$api.adminAffiliateVehicleList(affiliate_id).then((response: any) => {
+		// this.$api.adminAffiliateVehicleList(affiliate_id).then((response: any) => {
+		this.affiliateService.getVehicleDataByAffiliateId(affiliate_id).then((response: any) => {
 			console.log('get affiliate vehicle data----->>>>>>>>>' , response.data)
 			if (response.success && response.data.vehicleList.length > 0) {
 				this.VehicleList = response.data.vehicleList
@@ -932,14 +1033,17 @@ export class CreateNewBookingComponent implements OnInit {
 				this.VehicleList.map((item: any) => item['formatted_name'] = `${item.vehicleType} - ${item.make} (${item.model})`);
 
 				// autofill data if isRatesCompleted:true
+				this.vehicleType_arr = this.VehicleList = this.vehicleMake_arr = this.VehicleList = this.vehicleModal_arr = this.VehicleList = this.vehicleYear_arr = this.VehicleList = this.vehicleColor_arr = this.VehicleList
+
 				for(let i=0;i<this.VehicleList.length;i++){
 					if(this.VehicleList[i].isRatesCompleted){
 						if(this.QB_vehicle_id){
 							if(this.VehicleList[i].ID == this.QB_vehicle_id ){
 								let vehicle_type_id = this.BigData['vehicleCategories'].find(item => item.name == this.VehicleList[i].vehicleType)['id']
 								this.SetFormValue('vehicle_type', vehicle_type_id)
-								this.SetFormValue('vehicle_id', this.VehicleList[i].ID);
-								this.autofillData('vehicle', this.VehicleList[i]);
+								// this.SetFormValue('vehicle_id', this.VehicleList[i].ID);
+								// this.autofillData('vehicle', this.VehicleList[i]);
+								this.handleSelectVehicleType(this.VehicleList[i])
 								break;
 							}
 						}
@@ -958,13 +1062,20 @@ export class CreateNewBookingComponent implements OnInit {
 		console.log('in function fectch driver info -------------------')
 
 		this.$spinner.show()
-		this.affiliateService.driverList().then((response: any) => {
+		this.affiliateService.driverList(affiliate_id).then((response: any) => {
 			if (response.success && response.data?.data.length > 0) {
 				this.DriverList = response.data.data
+				let isValueSet = false
 				for(let i =0;i<this.DriverList.length;i++){
 					this.SetFormValue('driver_id', this.DriverList[i].id)
+					console.log('autofill driver info--->>', this.DriverList[i])
 					this.autofillData('driver', this.DriverList[i])
+					isValueSet = true
 					break;
+				}
+				if (!isValueSet) {
+					this.SetFormValue('driver_id', this.DriverList[0].id)
+					this.autofillData('driver', this.DriverList[0])
 				}
 				// autofill data
 				// if (this.DriverList.length == 1) {
@@ -1075,6 +1186,15 @@ export class CreateNewBookingComponent implements OnInit {
 			return ''
 		}
 	}
+	fetchSpecialInstruction(form_group_name: string, index: number) {
+		try {
+			return (<FormArray>this.BookingForm.get(form_group_name)).at(index).get('booking_instructions').value
+		}
+		catch
+		{
+			return ''
+		}
+	}
 
 	autofillData(filling_for: string, data: any) {
 		if (filling_for === 'passenger') {
@@ -1107,33 +1227,41 @@ export class CreateNewBookingComponent implements OnInit {
 			}
 		}
 
-		if (filling_for == 'vehicle') {
-			this.SetFormValue('vehicle_license_plate', data.licensePlate)
-			this.SetFormValue('vehicle_seats', data.seats)
+		// if (filling_for == 'vehicle') {
+		// 	this.SetFormValue('vehicle_license_plate', data.licensePlate)
+		// 	this.SetFormValue('vehicle_seats', data.seats)
 
-			// fill values of make/model/year/color
-			let i = 0
-			let legend = ['make', 'model', 'year', 'color']
-			for (let item of ['vehicleMakes', 'vehicleModels', 'vehicleYears', 'vehicleColors']) {
-				let obj = this.BigData[item].find(j => j.name == data[legend[i]])
-				console.log('loop for -->>' , legend[i] , item , obj)
-				if(obj){
-					this.SetFormValue('vehicle_' + legend[i], obj?.id)
-					let name = obj['name']; // name
-					this.SetFormValue("vehicle_" + legend[i] + "_name", name);
-				}
-				i++;
-			}
-		}
+		// 	// fill values of make/model/year/color
+		// 	let i = 0
+		// 	let legend = ['make', 'model', 'year', 'color']
+		// 	for (let item of ['vehicleMakes', 'vehicleModels', 'vehicleYears', 'vehicleColors']) {
+		// 		let obj = this.BigData[item].find(j => j.name == data[legend[i]])
+		// 		console.log('loop for -->>' , legend[i] , item , obj)
+		// 		if(obj){
+		// 			this.SetFormValue('vehicle_' + legend[i], obj?.id)
+		// 			let name = obj['name']; // name
+		// 			this.SetFormValue("vehicle_" + legend[i] + "_name", name);
+		// 		}
+		// 		i++;
+		// 	}
+		// }
 
 		if (filling_for == 'driver') {
-			this.SetFormValue('driver_name', `${data.FirstName} ${data.MiddleName ?? ''} ${data.LastName}`)
-			this.SetFormValue('driver_gender', data.Gender)
-			this.SetFormValue('driver_cell', data.CellNumber)
-			this.SetFormValue('driver_cell_isd', data.CellIsd)
-			this.SetFormValue('driver_cell_country', data.CellNumberCountry)
-			this.SetFormValue('driver_email', data.Email)
-			this.SetFormValue('driver_phone_type', data.PhoneType ?? '');
+			let info = data
+			if (!isNaN(data)) {
+				for (let i = 0; i < this.DriverList.length; i++) {
+					if (this.DriverList[i].id == data) {
+						info = { ...this.DriverList[i] }
+					}
+				}
+			}
+			this.SetFormValue('driver_name', `${info?.FirstName} ${info?.MiddleName ?? ''} ${info?.LastName}`)
+			this.SetFormValue('driver_gender', info?.Gender)
+			this.SetFormValue('driver_cell', info?.CellNumber)
+			this.SetFormValue('driver_cell_isd', info?.CellIsd)
+			this.SetFormValue('driver_cell_country', info?.CellNumberCountry)
+			this.SetFormValue('driver_email', info?.Email)
+			this.SetFormValue('driver_phone_type', info?.PhoneType ?? '');
 			this.DrvTelObject.setCountry(this.BookingForm.get('driver_cell_country').value);
 		}
 	}
@@ -1387,6 +1515,11 @@ export class CreateNewBookingComponent implements OnInit {
 		// console.log('Toggle Dropdown ', type)
 		this.booking_params['chevrons'][type] = !this.booking_params['chevrons'][type]
 	}
+	handleChangeVehicleType(event) {
+		console.log('in function handle change vehicle type', event,event.unique_key)
+		this.VehicleList.map(i => (i.unique_key == event.unique_key) ? this.handleSelectVehicleType(i) : '')
+
+	}
 
 	Subscriptions() {
 		// Service Type
@@ -1394,6 +1527,7 @@ export class CreateNewBookingComponent implements OnInit {
 			this.init_return_rates = false;
 			if (value == 'round_trip') {
 				this.init_return_rates = true;
+				console.log('init_return_rates---------->>>>>>>>' , this.init_return_rates)
 				setTimeout(() => {
 					this.MapController(true)
 				}, 2000)
@@ -1479,14 +1613,44 @@ export class CreateNewBookingComponent implements OnInit {
 		this.BookingForm.get('affiliate_type').valueChanges.subscribe((value: string) => {
 			if (value == 'loose_affiliate') {
 				this.toggleDropdown(null)
+				this.BookingForm.get('lose_affiliate_name').setValidators([Validators.required])
+				this.BookingForm.get('lose_affiliate_phone').setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)])
+				this.BookingForm.get('lose_affiliate_email').setValidators([Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.]+\.[a-zA-Z]{2,}$/i)])
+				this.BookingForm.updateValueAndValidity()
 				this.init_rates = true
 				if (this.Form.service_type.value === 'round_trip') {
 					this.init_return_rates = true;
 				}
+				if (this.Form.updateType.value != 'edit' && this.Form.updateType.value != 'repeat' && this.Form.updateType.value != 'return') {
+					this.SetFormValue('vehicle_type_name', '');
+					this.BookingForm.get('vehicle_make').setValue('')
+					this.BookingForm.get('vehicle_make_name').setValue('')
+					this.BookingForm.get('vehicle_model').setValue('')
+					this.BookingForm.get('vehicle_model_name').setValue('')
+					this.BookingForm.get('vehicle_year').setValue('')
+					this.BookingForm.get('vehicle_year_name').setValue('')
+					this.BookingForm.get('vehicle_color').setValue('')
+					this.BookingForm.get('vehicle_color_name').setValue('')
+					this.BookingForm.updateValueAndValidity();
+				}
 			}
 			else {
-				this.init_rates = false;
-				this.init_return_rates = false;
+				console.log('value--->> clearing validations for--> ', value)
+				this.BookingForm.get('lose_affiliate_name').clearValidators()
+				this.BookingForm.get('lose_affiliate_name').updateValueAndValidity()
+
+				this.BookingForm.get('lose_affiliate_phone').clearValidators()
+				this.BookingForm.get('lose_affiliate_phone').updateValueAndValidity()
+
+
+				this.BookingForm.get('lose_affiliate_email').clearValidators()
+				this.BookingForm.get('lose_affiliate_email').updateValueAndValidity()
+
+				console.log('clear validation')
+				this.init_rates = true;
+				if (this.Form.service_type.value === 'round_trip') {
+					this.init_return_rates = true;
+				}
 				this.fetchAffiliates('affiliate')
 				this.chooseAffiliate()
 			}
@@ -1510,39 +1674,102 @@ export class CreateNewBookingComponent implements OnInit {
 		// })
 
 		this.BookingForm.get('vehicle_type').valueChanges.subscribe((value: string) => {
-			if (value && this.BigData) {
-				let name = this.BigData['vehicleCategories'].find(item => item.id == value)['name']
-				this.SetFormValue('vehicle_type_name', name);
+			if (this.Form.affiliate_type.value == 'affiliate') {
+				console.log('in function change value for affilliate vehicle_type', value)
+				if (value) {
+					this.VehicleList.map(i => (i.unique_key == this.unique_key) ? this.handleSelectVehicleType(i) : '')
+				}
+				else {
+					this.SetFormValue('vehicle_type_name', '');
+					this.BookingForm.get('vehicle_make').setValue('')
+					this.BookingForm.get('vehicle_make_name').setValue('')
+					this.BookingForm.get('vehicle_model').setValue('')
+					this.BookingForm.get('vehicle_model_name').setValue('')
+					this.BookingForm.get('vehicle_year').setValue('')
+					this.BookingForm.get('vehicle_year_name').setValue('')
+					this.BookingForm.get('vehicle_color').setValue('')
+					this.BookingForm.get('vehicle_color_name').setValue('')
+					this.BookingForm.updateValueAndValidity();
+				}
+
+			} else {
+				if (value && this.BigData) {
+					let name = this.BigData['vehicleCategories'].find(item => item.id == value)['name']
+					this.SetFormValue('vehicle_type_name', name);
+					this.BookingForm.get('vehicle_make').setValue('')
+					this.BookingForm.get('vehicle_make_name').setValue('')
+					this.BookingForm.get('vehicle_model').setValue('')
+					this.BookingForm.get('vehicle_model_name').setValue('')
+					this.BookingForm.get('vehicle_year').setValue('')
+					this.BookingForm.get('vehicle_year_name').setValue('')
+					this.BookingForm.get('vehicle_color').setValue('')
+					this.BookingForm.get('vehicle_color_name').setValue('')
+					this.BookingForm.updateValueAndValidity();
+				}
 			}
 		})
 
 		this.BookingForm.get('vehicle_make').valueChanges.subscribe((value: string) => {
-			if (value && this.BigData) {
-				this.BigData['vehicleModels'] = this.BigData_COPY?.vehicleModels.filter(item => item.make_id == value)
-				let name = this.BigData['vehicleMakes'].find(item => item.id == value)['name']
-				this.SetFormValue('vehicle_model', this.BigData?.vehicleModels[0]['id'])
-				this.SetFormValue('vehicle_make_name', name)
+			if (this.Form.affiliate_type.value == 'affiliate') {
+				console.log('in function change value for affilliate  vehicle_make')
+			} else {
+				if (value && this.BigData) {
+					this.BigData['vehicleModels'] = this.BigData_COPY?.vehicleModels.filter(item => item.make_id == value)
+					let name = this.BigData['vehicleMakes'].find(item => item.id == value)['name']
+					this.SetFormValue('vehicle_model', this.BigData?.vehicleModels[0]['id'])
+					this.SetFormValue('vehicle_make_name', name)
+				}
+				else {
+					this.BookingForm.get('vehicle_make_name').setValue('')
+					this.BookingForm.updateValueAndValidity();
+				}
 			}
 		})
 
 		this.BookingForm.get('vehicle_model').valueChanges.subscribe((value: string) => {
-			if (value && this.BigData) {
+			if (this.Form.affiliate_type.value == 'affiliate') {
+				console.log('in function change value for affilliate vehicle_model')
 
-				let name = this.BigData['vehicleModels'].find(item => item.id == value)['name']
-				this.SetFormValue('vehicle_model_name', name)
+			} else {
+				if (value && this.BigData) {
+					let name = this.BigData['vehicleModels'].find(item => item.id == value)['name']
+					this.SetFormValue('vehicle_model_name', name)
+				}
+				else {
+					this.BookingForm.get('vehicle_model_name').setValue('')
+					this.BookingForm.updateValueAndValidity();
+				}
 			}
 		})
 
 		this.BookingForm.get('vehicle_year').valueChanges.subscribe((value: string) => {
-			if (value && this.BigData) {
-				let name = this.BigData['vehicleYears'].find(item => item.id == value)['name']
-				this.SetFormValue('vehicle_year_name', name)
+			if (this.Form.affiliate_type.value == 'affiliate') {
+				console.log('in function change value for affilliate vehicle_year')
+			} else {
+				if (value && this.BigData) {
+					let name = this.BigData['vehicleYears'].find(item => item.id == value)['name']
+					this.SetFormValue('vehicle_year_name', name)
+				}
+				else {
+					this.BookingForm.get('vehicle_year_name').setValue('')
+					this.BookingForm.updateValueAndValidity();
+				}
 			}
 		})
 		this.BookingForm.get('vehicle_color').valueChanges.subscribe((value: string) => {
-			if (value && this.BigData) {
-				let name = this.BigData['vehicleColors'].find(item => item.id == value)['name']
-				this.SetFormValue('vehicle_color_name', name)
+			if (this.Form.affiliate_type.value == 'affiliate') {
+				console.log('in function change value for affilliate vehicle_color')
+
+			} else {
+				if (value && this.BigData) {
+					let name = this.BigData['vehicleColors'].find(item => item.id == value)['name']
+					this.SetFormValue('vehicle_color_name', name)
+				}
+				else {
+					this.BookingForm.get('vehicle_color_name').setValue('')
+					this.BookingForm.updateValueAndValidity();
+
+				}
 			}
 		})
 		// Pickup Airport
@@ -1844,6 +2071,7 @@ export class CreateNewBookingComponent implements OnInit {
 		this.SetFormValue('service_type', QB?.service_type)
 		if(QB?.service_type == 'charter_tour'){
 			this.SetFormValue('number_of_hours', QB?.booking_hour)
+			this.number_of_hours = QB?.booking_hour
 		}
 		let transfer_type_value = QB?.pickup_type + '_to_' + QB?.dropoff_type
 		let return_transfer_type_value = QB?.dropoff_type + '_to_' + QB?.pickup_type
@@ -1908,7 +2136,7 @@ export class CreateNewBookingComponent implements OnInit {
 		setTimeout(() => {
 			console.log('settimeout finction---------------------------------------------------------------')
 			this.fetchQBAffiliateVehicles(selected_vehicle?.affiliate_id)
-			// this.fetchAffiliateDrivers(this.affiliate_id)
-		}, 500)
+			this.fetchAffiliateDrivers(this.affiliate_id)
+		}, 5000)
 	}
 }
