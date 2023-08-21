@@ -1039,6 +1039,7 @@ export class NewBookingComponent implements OnInit {
 				this.VehicleList.map((item: any) => item['formatted_name'] = `${item.vehicleType} - ${item.make} (${item.model})`);
 
 				// autofill data if isRatesCompleted:true
+				this.vehicleType_arr = this.VehicleList = this.vehicleMake_arr = this.VehicleList = this.vehicleModal_arr = this.VehicleList = this.vehicleYear_arr = this.VehicleList = this.vehicleColor_arr = this.VehicleList
 				for (let i = 0; i < this.VehicleList.length; i++) {
 					if (this.VehicleList[i].isRatesCompleted) {
 						if (this.QB_vehicle_id) {

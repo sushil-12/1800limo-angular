@@ -2655,10 +2655,11 @@
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
+			<!-- *ngIf="Form.affiliate_type.value == 'loose_affiliate' -->
 			<div class="modal-body" style="font-family: 'PT Serif', serif;">
 				<div class="container text-lg">
 					<!-- Rates/Taxes -->
-					<h4 class="font-weight-bolder m-0 mt-3" *ngIf="Form.affiliate_type.value == 'loose_affiliate'">
+					<h4 class="font-weight-bolder m-0 mt-3" >
 						Rates/Taxes
 					</h4>
 					<div class="mx-2" *ngIf="init_rates && RatesForm">
@@ -2675,8 +2676,9 @@
 							</div>
 						</div>
 					</div>
+					<!-- && Form.affiliate_type.value!='affiliate' -->
 					<div class="mx-2"
-						*ngIf="ReturnRatesForm && init_return_rates && Form.affiliate_type.value!='affiliate'">
+						*ngIf="ReturnRatesForm && init_return_rates ">
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
