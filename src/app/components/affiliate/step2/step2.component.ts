@@ -642,12 +642,10 @@ export class Step2Component implements OnInit {
 				canvas.height = img.width;
 				console.log('canvas-->>' , canvas)
 				const ctx = canvas.getContext('2d');
-				ctx.save(); // Save the current state
 				ctx.translate(canvas.width / 2, canvas.height / 2);
 				ctx.rotate(Math.PI); // Rotate by 180 degrees
 				ctx.drawImage(img, -img.width / 2, -img.height / 2);
 				console.log('ctx-->>')
-				ctx.restore();
 				const rotatedImageUrl = canvas.toDataURL('image/png'); // Change format if needed
 				console.log('rotatedImageUrl==>>' , rotatedImageUrl)
 				resolve(rotatedImageUrl);

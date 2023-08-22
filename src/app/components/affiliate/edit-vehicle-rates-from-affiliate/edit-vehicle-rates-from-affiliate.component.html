@@ -208,14 +208,14 @@
 				<!-- MIN. INTRACITY RATE -->
 				<div class="col-md-6">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
-						<mat-label>Minimum Intra City Rate <span class="asterisk">*</span></mat-label>
+						<mat-label>Minimum City to City Rate <span class="asterisk">*</span></mat-label>
 						<span matPrefix
 							*ngIf="form.minimum_city_rate.value == null || form.minimum_city_rate.value == ''; else hideZero5">{{currencySymbol}}
 							0 &nbsp;</span>
 						<ng-template #hideZero5>
 							<span matPrefix>{{currencySymbol}} &nbsp;</span>
 						</ng-template>
-						<input matInput placeholder="Minimum Intra City Rate" formControlName="minimum_city_rate"
+						<input matInput placeholder="Minimum City to City Rate" formControlName="minimum_city_rate"
 							(change)="updateRateRangeObject()" tabindex="1" />
 					</mat-form-field>
 					<div *ngIf="submittedForm && form.minimum_city_rate.errors || form.minimum_city_rate.touched && form.minimum_city_rate.errors"
