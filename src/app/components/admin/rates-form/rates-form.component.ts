@@ -392,6 +392,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 	fetchRates(affiliate: string, bookingId: number = 0) {
 		this.$api.fetchAdminNewBookingRates(affiliate, bookingId).subscribe((response: any) => {
 			if (response?.success && response?.data?.rateArray) {
+				this.is_readonly_min_rate = response?.data?.min_rate_involved ? true : false
 				this.ratesdata.next(response.data.rateArray);
 			}
 		});
@@ -534,6 +535,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 			let value = this.RatesForm.value;
 			value["grand_total"] = this.grandtotal;
 			value["sub_total"] = this.subtotal;
+			value["min_rate_involved"] = this.is_readonly_min_rate
 
 			this.formvalue.emit(value);
 		}
@@ -543,7 +545,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 			}
 			let value = this.ReturnRatesForm.value;
 			value["r_grandtotal"] = this.r_grandtotal;
-			value["r_subtotal"] = this.r_subtotal;
+			value["r_subtotal"] = this.r_subtotal
 
 			this.returnformvalue.emit(value);
 		}

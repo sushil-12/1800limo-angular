@@ -1421,8 +1421,10 @@ export class NewBookingComponent implements OnInit {
 				value['rateArray'] = JSON.parse(JSON.stringify(this.RatesForm))
 				value['grand_total'] = value['rateArray']['grand_total']
 				value['sub_total'] = value['rateArray']['sub_total']
+				value['min_rate_involved'] = value['rateArray']['min_rate_involved']
 				delete value['rateArray']['grand_total']
 				delete value['rateArray']['sub_total']
+				delete value['rateArray']['min_rate_involved']
 				// Return Rates Form
 				if (this.Form.service_type.value == 'round_trip' && this.ReturnRatesForm) {
 					value['returnRateArray'] = JSON.parse(JSON.stringify(this.ReturnRatesForm))

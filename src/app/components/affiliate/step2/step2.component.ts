@@ -616,10 +616,51 @@ export class Step2Component implements OnInit {
 		$("#imageModal").removeClass("d-none");
 	}
 
-	rotateImage(): void {
-		this.rotationDegrees += 90;
-		if (this.rotationDegrees >= 360) {
-		  this.rotationDegrees = 0;
+	// rotateImage(): void {
+	// 	this.rotationDegrees += 180;
+	// 	if (this.rotationDegrees >= 360) {
+	// 	  this.rotationDegrees = 0;
+	// 	}
+	//   }
+	async rotateImage(imageUrl : string){
+		try {
+			console.log('in function rotate imgagesd' , imageUrl)
+			let url = await this.retriveRotateImage(imageUrl)
+			console.log('response url' , url)
+		} catch (error) {
+			console.log('error' , error)
+		}
+	}
+	retriveRotateImage(imageUrl: string): Promise<string> {
+		try {
+			return new Promise<string>((resolve, reject) => {
+			  const img = new Image();
+			  img.src = imageUrl;
+			  img.onload = () => {
+				const canvas = document.createElement('canvas');
+				canvas.width = img.height; // Swap width and height for 180-degree rotation
+				canvas.height = img.width;
+				console.log('canvas-->>' , canvas)
+				const ctx = canvas.getContext('2d');
+				ctx.save(); // Save the current state
+				ctx.translate(canvas.width / 2, canvas.height / 2);
+				ctx.rotate(Math.PI); // Rotate by 180 degrees
+				ctx.drawImage(img, -img.width / 2, -img.height / 2);
+				console.log('ctx-->>')
+				ctx.restore();
+				const rotatedImageUrl = canvas.toDataURL('image/png'); // Change format if needed
+				console.log('rotatedImageUrl==>>' , rotatedImageUrl)
+				resolve(rotatedImageUrl);
+			  };
+			  console.log('onload function ends')
+		  
+			  img.onerror = (error) => {
+				console.log('rejected-->>' , error)
+				reject(error);
+			  };
+			});
+		} catch (error) {
+			console.log('convert function error' , error)
 		}
 	  }
 
