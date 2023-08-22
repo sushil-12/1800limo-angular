@@ -71,6 +71,8 @@ export class RatesFormsComponent implements OnInit , OnChanges {
 	vehicles: number = 1;
 	hours: number = 0;
 	newBooking: boolean;
+	is_readonly_min_rate: boolean = false;
+
 
 	constructor(
 		private $form: FormBuilder,
@@ -388,6 +390,7 @@ export class RatesFormsComponent implements OnInit , OnChanges {
 	fetchRates(affiliate: string, bookingId: number = 0) {
 		this.$api.fetchBookingRates(bookingId).subscribe((response: any) => {
 			if (response?.success && response?.data?.rateArray) {
+			this.is_readonly_min_rate = response?.data?.min_rate_involved ? true : false
 				this.ratesdata.next(response.data.rateArray);
 			}
 		});
@@ -417,6 +420,7 @@ export class RatesFormsComponent implements OnInit , OnChanges {
 			distance: location_info.distance.value
 		}
 		this.adminServices.fetchRatesByAffiliateVeh(vehicle_id, data).subscribe((response: any) => {
+			this.is_readonly_min_rate = response?.data?.min_rate_involved ? true : false
 			this.ratesdata.next(response?.data?.rateArray)
 			this.initRates();
 			if(data.service_type == 'round_trip'){
@@ -530,7 +534,7 @@ export class RatesFormsComponent implements OnInit , OnChanges {
 			let value = this.RatesForm.value;
 			value["grand_total"] = this.grandtotal;
 			value["sub_total"] = this.subtotal;
-
+			value["min_rate_involved"] = this.is_readonly_min_rate
 			this.formvalue.emit(value);
 		}
 		if (form == 'ReturnRatesForm' && this.ReturnRatesForm) {
@@ -570,17 +574,24 @@ export class RatesFormsComponent implements OnInit , OnChanges {
 				let amount = 0;
 
 				// Hourly Rate - only in case of hours
-				if (this.hours != 0 && subform == 'Base_Rate') {
+				if (this.hours != 0 && subform == 'Base_Rate' && !this.is_readonly_min_rate) {
 					amount = Number(Number(Number(this.hours) * baserate).toFixed(2));
-				} else {
+				}else {
 					amount = baserate;
 				}
 
 				// Admin Share Calculation
-				if (subform == 'Base_Rate') {
+				if (subform == 'Base_Rate' && !this.is_readonly_min_rate) {
 					this.calc_admin_share = (amount * this.admin_share) / 100;
 					console.log('calc_admin_share--->>', amount, this.calc_admin_share)
+					amount = parseFloat((amount + this.calc_admin_share).toFixed(2));
+				}
+				console.log('is_readonly_min_rate-->>' ,this.is_readonly_min_rate )
+				if(this.is_readonly_min_rate && subform == 'Base_Rate'){
+					let min_rate = (<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("baserate").value;
+					this.calc_admin_share = (min_rate * this.admin_share) / 100
 					amount = amount + this.calc_admin_share;
+					console.log('is_readonly_min_rate_amount-->>' , amount , this.calc_admin_share )
 				}
 
 				(<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("amount").setValue(amount);
