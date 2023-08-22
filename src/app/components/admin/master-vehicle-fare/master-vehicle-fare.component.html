@@ -101,6 +101,9 @@
 					<div *ngIf="is_form_submitted && form.milage_rate.errors || form.milage_rate.touched && form.milage_rate.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="form.milage_rate.errors.required">This field is required</div>
+						<div *ngIf="form.milage_rate.errors.min">
+							minimum value will be 2
+						</div>
 					</div>
 					<div *ngIf="form.milage_rate.errors" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="form.milage_rate.errors.pattern">Enter Numbers only</div>
@@ -124,6 +127,9 @@
 						<div *ngIf="is_form_submitted && form.kilometer_rate.errors || form.kilometer_rate.touched && form.kilometer_rate.errors"
 							class="text-danger margin-bottom-thin my-mat-hint">
 							<div *ngIf="form.kilometer_rate.errors.required">This field is required</div>
+							<div *ngIf="form.kilometer_rate.errors.min">
+								minimum value will be 1.71
+							</div>
 						</div>
 						<div *ngIf="form.kilometer_rate.errors" class="text-danger margin-bottom-thin my-mat-hint">
 							<div *ngIf="form.kilometer_rate.errors.pattern">Enter Numbers only</div>
@@ -232,7 +238,7 @@
 				<div class="col-md-6">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label>
-							Minimum Intra City Rate <span class="asterisk">*</span>
+							Minimum City to City Rate <span class="asterisk">*</span>
 						</mat-label>
 						<span matPrefix
 							*ngIf="form.minimum_city_rate.value == null || form.minimum_city_rate.value == ''; else hideZero5">{{currency_symbol}}
@@ -240,7 +246,7 @@
 						<ng-template #hideZero5>
 							<span matPrefix>{{currency_symbol}} &nbsp;</span>
 						</ng-template>
-						<input matInput placeholder="Minimum Intra City Rate" formControlName="minimum_city_rate" tabindex="1"
+						<input matInput placeholder="Minimum City to City Rate" formControlName="minimum_city_rate" tabindex="1"
 							type="number" (focus)="$event.target.select()" (change)="updateRateRangeObject()"
 							autocomplete="off" />
 					</mat-form-field>
