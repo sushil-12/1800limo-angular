@@ -270,7 +270,14 @@ export class Step2Component implements OnInit {
 								id_back_image: this.response.data?.bankinfo?.id_back_image?.ID,
 							});
 							this.changeCountry(this.response.data?.bankinfo?.country);//for selected country
-
+							this.badgeOptions.map((i:any)=>{
+								if(i.id==this.response?.data?.bankinfo?.badge_city){
+									this.addBankForm.patchValue({
+										badge_city:i.id,
+										badge_city_name:i.name
+									})
+								}
+							})
 							// if (this.postCountryName == this.getCountryName)
 							// {
 							// 	this.addBankForm.value.currency = this.response.data.bankinfo.currency;

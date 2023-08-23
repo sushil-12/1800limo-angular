@@ -229,7 +229,7 @@ export class AffiliateStep2Component implements OnInit {
 							this.changeCountry(this.response.data.bankinfo.country);//for selected country
 							// this.stateManagementService.setprogressBar(false);
 							this.badgeOptions.map((i:any)=>{
-								if(i.id==this.response?.data?.badge_city){
+								if(i.id==this.response?.data?.bankinfo?.badge_city){
 									this.addBankForm.patchValue({
 										badge_city:i?.id,
 										badge_city_name:i?.name
