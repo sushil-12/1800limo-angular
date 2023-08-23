@@ -681,13 +681,7 @@ export class Step2Component implements OnInit {
 	}
 	async retriveRotateImage(imageUrl: string) {
 		console.log(imageUrl, "imageUrl");
-		const response = await fetch(imageUrl, {
-			method: "GET", 
-			mode: "no-cors", 
-			cache: "no-cache", 
-			// Remove the "Content-Type" header, as it's not necessary for a GET request.
-			credentials: "include", // Change to "include" to send cookies and other credentials.
-		});
+		const response = await fetch(imageUrl)
 		
 		const imageBlob = await response.blob();
 
