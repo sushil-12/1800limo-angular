@@ -494,6 +494,10 @@ const routes: Routes = [
 				component: EditVehicleRatesComponent
 			},
 			{
+				path: 'step5/duplicate-vehicle',
+				component: EditVehicleComponent
+			},
+			{
 				path: 'step6',
 				component: AffiliateStep6Component
 			}
