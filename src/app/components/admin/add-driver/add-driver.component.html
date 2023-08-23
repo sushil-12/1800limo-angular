@@ -1156,18 +1156,23 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-md-7">
-		
+				<div class="billing_inforamtion">
+				<ul>
+					<li>
+						<button class="custom-filled-back-button" type="button" (click)="backButton()" data-toggle="tooltip"
+						data-placement="top" title="Clicking back button deletes all fields." tabindex="1">BACK</button>
+					</li>
+				</ul>
+				</div>
 			</div>
 			<div class="col-md-5">
 				<div class="billing_inforamtion">
 					<ul>
+						<li><button class="custom-filled-reset-button" (click)="resetForm()" tabindex="1">RESET</button></li>
 						<li><button class="custom-filled-button" (click)="submitForm()" [disabled]="disableSubmitButton"
 								tabindex="1">SAVE</button></li>
-						<li><button class="custom-filled-button" (click)="resetForm()" tabindex="1">RESET</button>
-						</li>
-						<li><button class="custom-filled-button" type="button" (click)="backButton()" data-toggle="tooltip"
-								data-placement="top" title="Clicking back button deletes all fields." tabindex="1">BACK</button>
-						</li>
+						<!-- <li>
+						</li> -->
 					</ul>
 				</div>
 			</div>

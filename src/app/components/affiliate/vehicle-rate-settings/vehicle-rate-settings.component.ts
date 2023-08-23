@@ -186,6 +186,7 @@ export class VehicleRateSettingsComponent implements OnInit {
 			workmans_comp: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			other_transportation_tax: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]]
 		})
+		this.changeDetection.radioButton('km_mile', 'mile')
 
 		if (this.VehicleRateSettingsForm) {
 			return true
