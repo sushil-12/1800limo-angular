@@ -146,8 +146,9 @@ export class EditVehicleComponent implements OnInit {
 		})
 
 		this.activatedroute.queryParamMap
-			.subscribe((params) => {
+			.subscribe((params:any) => {
 				this.paramResponse = { ...params.keys, ...params };
+				console.log('params-->>>1' , params['params'],this.paramResponse.params?.new)
 				this.vehicleTypeId = this.paramResponse.params.vehicleTypeId;
 				this.vehicleId = this.paramResponse.params.vehicleId;
 			}
@@ -157,7 +158,7 @@ export class EditVehicleComponent implements OnInit {
 			this.charterCancelOptions = data;
 		});
 		const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-		this.affiliateId = currentUser.account_id;
+		this.affiliateId = sessionStorage.getItem("affiliateId");
 
 		//data for dropdown of seats and luggage
 		for (let i = 2; i <= 75; i++) {
@@ -170,6 +171,7 @@ export class EditVehicleComponent implements OnInit {
 
 		//add amenity form validation
 		this.addVehicleForm = this.formBuilder.group({
+			acc_id:[''],
 			affiliate_type: [''],
 			id: ['', Validators.required],
 			vehicleType: ['', Validators.required],
@@ -909,8 +911,32 @@ export class EditVehicleComponent implements OnInit {
 
 		this.spinner.show(); // show spinner
 		this.disableSubmitButton = true; //disable submit button
-
 		this.addVehicleForm.get('affiliate_type').setValue(this.affiliateType)
+		if(this.paramResponse.params?.new == 'true'){
+			console.log('Submit for duplicate vehicle')
+			console.log('this.addVehicleForm.value--->',this.addVehicleForm.value)
+			this.addVehicleForm.patchValue({
+				acc_id: this.affiliateId
+			});
+			this.adminService.adminAffiliateSubmitVehicle(this.addVehicleForm.value)
+			.pipe(
+				catchError(err => {
+					this.spinner.hide(); // hide spinner
+					this.disableSubmitButton = false; //enable submit button
+					return throwError(err);
+				})
+			)
+			.subscribe(result => {
+				this.response = result;
+				console.log('response duplicate vehicle' , result)
+				this.spinner.hide(); // hide spinner
+				this.disableSubmitButton = true; //enable submit button
+
+				this.stateManagementService.addNumberOfVehicles(this.addVehicleForm.value.numberOfVehicles);
+
+				this.router.navigate(['admin/affiliate/step5/add-vehicle-rates'], { queryParams: { vehicleId: this.response.data.id } });
+			});
+		}else{
 
 		this.adminService.adminAffiliateEditVehicle(this.addVehicleForm.value)
 			.pipe(
@@ -929,6 +955,7 @@ export class EditVehicleComponent implements OnInit {
 
 				this.router.navigate(['/admin/affiliate/step5']);
 			});
+		}
 	}
 
 	resetForm() {

@@ -146,6 +146,7 @@ export class AddVehicleComponent implements OnInit {
 		//pick vehicle type id from query params
 		this.activatedroute.queryParamMap
 			.subscribe((params) => {
+				console.log('params--->>>' , params)
 				this.paramResponse = { ...params.keys, ...params };
 				this.vehicleTypeId = this.paramResponse.params.vehicleTypeId;
 			}
