@@ -128,19 +128,6 @@
 				</div>
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
-						<mat-label>
-							License Plate #
-							<span *ngIf="affiliateType!='fleet_operator'; else nonFleetOperator"
-								class="asterisk">*</span>
-							<ng-template #nonFleetOperator>
-								<span class="theme-color">(optional)</span>
-							</ng-template>
-						</mat-label>
-						<input matInput placeholder="License Plate #" formControlName="licensePlate" tabindex="1">
-					</mat-form-field>
-				</div>
-				<div class="col-md-6">
-					<mat-form-field appearance="outline">
 						<mat-label>Number of Pax Seats / Seat Belts <span class="asterisk">*</span></mat-label>
 						<mat-select formControlName="seats" tabindex="1">
 							<mat-option value="">Choose Pax Seats / Seat Belts</mat-option>
@@ -202,6 +189,19 @@
 						<div *ngIf="f.charterCancelPolicy.errors.pattern">The Charter Cancel Policy should be a number
 						</div>
 					</div>
+				</div>	
+				<div class="col-md-6">
+					<mat-form-field appearance="outline">
+						<mat-label>
+							License Plate #
+							<span *ngIf="affiliateType!='fleet_operator'; else nonFleetOperator"
+								class="asterisk">*</span>
+							<ng-template #nonFleetOperator>
+								<span class="theme-color">(optional)</span>
+							</ng-template>
+						</mat-label>
+						<input matInput placeholder="License Plate #" formControlName="licensePlate" tabindex="1">
+					</mat-form-field>
 				</div>
 				<div class="col-md-3 pr-0 borderright mobilePadding">
 					<div class="form-group radio-tile-group">
@@ -1132,23 +1132,29 @@
 		</div>
 	</section>
 	<div class="container">
-<div class="row">
-	<div class="col-md-6">
-
-	</div>
-	<div class="col-md-6">
-		<div class="billing_inforamtion">
-			<ul class="d-flex justify-content-center">
-				<li><button class="custom-btn savebutton box-shadow" (click)="submitForm()" [disabled]="disableSubmitButton"
-						tabindex="1">SAVE</button> </li>
-				<li><button class="custom-btn resetbutton box-shadow" (click)="resetForm()" tabindex="1">RESET</button> </li>
-				<li><button class="custom-btn backbutton box-shadow" type="button" (click)="backButton()" data-toggle="tooltip"
-						data-placement="top" title="Clicking back button deletes all fields." tabindex="1">BACK</button>
+		<div class="row py-4">
+			<div class="col-md-7">
+				<div class="billing_inforamtion">
+					<ul class="d-flex">
+				<li><button class="custom-filled-back-button" type="button" (click)="backButton()" data-toggle="modal"
+					data-placement="top" title="Clicking back button deletes all fields." tabindex="1">BACK</button>
 				</li>
 			</ul>
+			</div>
+			</div>
+			<div class="col-md-5 ">
+				<div class="billing_inforamtion">
+					<ul class="d-flex justify-content-center">
+					
+						<li><button class="custom-filled-reset-button" (click)="resetForm()" tabindex="1">RESET</button> </li>
+						<li><button class="custom-filled-button" (click)="submitForm()" [disabled]="disableSubmitButton"
+							tabindex="1">SAVE</button> </li>
+					
+						
+					</ul>
+				</div>
+			</div>
 		</div>
-	</div>
-</div>
 	</div>
 	
 </form>

@@ -240,11 +240,14 @@ export class AffiliateStep2Component implements OnInit {
 				}
 				else {
 					this.canChangeDocument = true;//can add or change documents
+					// this.canChangeAddress = true;//can add or change address
 
 					//for selected country
 					this.changeCountry(currentUser.CellNumberCountry.toUpperCase());
 					this.addBankForm.patchValue({
-						country: currentUser.CellNumberCountry.toUpperCase()
+						country: currentUser.CellNumberCountry.toUpperCase(),AccountHolderFirstName: currentUser?.FirstName,
+						AccountHolderMiddleName: currentUser?.MiddleName,
+						AccountHolderLastName: currentUser?.LastName
 					});
 				}
 			}

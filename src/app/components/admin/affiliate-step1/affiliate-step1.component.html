@@ -322,7 +322,7 @@
 					</div> -->
 	
 					<!-- end -->
-					<div class="col-md-6">
+					<!-- <div class="col-md-6">
 						<mat-form-field appearance="outline">
 							<mat-label>First Year Professional Driver (Example: 1998) <span class="asterisk">*</span>
 							</mat-label>
@@ -341,7 +341,23 @@
 								<div *ngIf="f.FirstYearBusiness.errors.maxlength">Maximum length should be 4</div>
 							</ng-template>
 						</div>
-					</div>
+					</div> -->
+						<div class="col-md-6">
+							<mat-form-field appearance="outline">
+								<mat-label>First Year Professional Driver <span class="asterisk">*</span></mat-label>
+								<mat-select formControlName="FirstYearBusiness" tabindex="1">
+									<mat-option value="">First Year Professional Driver</mat-option>
+									<mat-option *ngFor="let startBusinessYear of startBusinessYears"
+										[value]="startBusinessYear.value">
+										{{ startBusinessYear.label }}
+									</mat-option>
+								</mat-select>
+							</mat-form-field>
+							<div *ngIf="submittedForm && f.FirstYearBusiness.errors" class="text-danger margin-bottom-thin my-mat-hint">
+								<div *ngIf="f.FirstYearBusiness.errors.required">This field is required</div>
+							</div>
+						</div>
+					
 					<!-- <div class="col-md-6 my-3">
 						<mat-form-field appearance="outline" class="example-full-width">
 							<mat-label>Badge City
@@ -759,9 +775,9 @@
 				<div class="col-md-5">
 					<div class="billing_inforamtion">
 						<ul class="d-flex justify-content-center">
-														<li><button class="custom-filled-button mr-2" (click)="submitForm()" [disabled]="disableSubmitButton"
-									tabIndex="1">SAVE</button> </li>
-							<li><button class="custom-filled-button mr-2" (click)="resetForm()" tabIndex="1">RESET</button> </li>
+							<li><button class="custom-filled-reset-button mr-2" (click)="resetForm()" tabIndex="1">RESET</button> </li>
+							<li><button class="custom-filled-button mr-2" (click)="submitForm()" [disabled]="disableSubmitButton"
+								tabIndex="1">SAVE</button> </li>
 						</ul>
 					</div>
 				</div>

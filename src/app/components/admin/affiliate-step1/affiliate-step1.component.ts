@@ -10,6 +10,7 @@ import { CustomvalidationService } from '../../../services/customvalidation.serv
 import { MapsAPILoader } from '@agm/core';
 import { data } from 'jquery';
 import { AdminService } from 'src/app/services/admin.service';
+import { HttpClient } from '@angular/common/http';
 declare var $: any;
 
 @Component({
@@ -59,6 +60,7 @@ export class AffiliateStep1Component implements OnInit {
 	public notify_email: boolean;
 	badgeOptions: string[] = [];
     filteredOptions: any;
+	public startBusinessYears: Array<Object>;
 	// stateManagementService: any;
 
 	constructor(
@@ -71,6 +73,7 @@ export class AffiliateStep1Component implements OnInit {
 		private mapsAPILoader: MapsAPILoader,
 		private stateManagementService: StateManagementService,
 		private ngZone: NgZone,
+		private httpClient: HttpClient,
 		private customValidator: CustomvalidationService
 	) { }
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
@@ -113,6 +116,13 @@ export class AffiliateStep1Component implements OnInit {
 			this.badgeOptions = res?.data
 			this.filteredOptions = res?.data
 		})
+
+		this.httpClient
+			.get("assets/json/businessYear.json")
+			.subscribe((data: any) =>
+			{
+				this.startBusinessYears = data;
+			});
 		this.adminService.getAssicationsLanguages()
 			.pipe(
 				catchError(err => {

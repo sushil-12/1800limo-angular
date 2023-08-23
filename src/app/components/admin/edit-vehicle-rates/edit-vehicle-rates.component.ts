@@ -256,6 +256,7 @@ export class EditVehicleRatesComponent implements OnInit {
 			other_transportation_tax: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]]
 		});
 		this.initRateRangeObject();
+		this.km_mile_switch('mile')
 	}
 
 	changeDetection = {
