@@ -577,6 +577,11 @@
 										tabIndex="-1">
 									<ul class="mt-3">
 										<li>
+											<a class="custom-arrow-clockwise-button"
+											(click)="fetchImageBlob(BusinessFrontPhoto ,'BusinessFrontPhoto',BusinessFrontPhotoId )">
+											 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+										</li>
+										<li>
 											<button class="changeuploaded" tabIndex="1">
 												<input type="file" #resetImages
 													(change)="businessCardImageChange($event,'BusinessFrontPhoto',BusinessFrontPhotoId)"
@@ -643,6 +648,11 @@
 									<p>Business Card Back Photo <span class="optionalTextStyle">(optional)</span></p>
 									<img src="{{BusinessBackPhoto}}" (click)="showImageInModal(BusinessBackPhoto)">
 									<ul class="mt-3">
+									<li>
+										<a class="custom-arrow-clockwise-button"
+										(click)="fetchImageBlob(BusinessBackPhoto ,'BusinessBackPhoto',BusinessBackPhotoId )">
+										 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+									</li>
 										<li>
 											<button class="changeuploaded" tabIndex="1">
 												<input type="file" #resetImages
