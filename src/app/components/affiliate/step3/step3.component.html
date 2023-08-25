@@ -328,6 +328,11 @@
 									tabindex="-1">
 								<ul class="mt-3 ng-star-inserted">
 									<li>
+										<button class="custom-arrow-clockwise-button"
+										(click)="fetchImageBlob(insCertificateImage ,'insCertificate',insCertificateId)">
+										 <i class="bi bi-arrow-clockwise"></i>rotate</button>
+									</li>
+									<li>
 										<button class="changeuploaded" tabindex="1">
 											<input type="file" (change)="
 													vehicleOfficialImagesChange(

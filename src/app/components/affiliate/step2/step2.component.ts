@@ -39,7 +39,9 @@ export class Step2Component implements OnInit {
 	public id_front_image: string;
 	public id_back_image: string;
 	public id_front_image_id: string;
+	public id_front_image_degree : number = 0
 	public id_back_image_id: string;
+	public id_back_image_degree : number = 0
 	public imageSrc: string;
 	public cardToDelete: number;
 	public date25YearsBack: string;
@@ -58,9 +60,10 @@ export class Step2Component implements OnInit {
 
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
 	selectedCountryName: any;
-	rotationDegrees: number =0;
 	badgeOptions: any;
 	filteredOptions: any;
+	rotateDriverLicence:boolean = false;
+	rotateDriverLicenceBack:boolean = false;
 	constructor(
 		private affiliateService: AffiliateService,
 		private adminService: AdminService,
@@ -223,6 +226,9 @@ export class Step2Component implements OnInit {
 							//set images and their ID
 							this.id_front_image = this.response.data?.bankinfo?.id_front_image?.image;
 							this.id_back_image = this.response.data?.bankinfo?.id_back_image?.image;
+							this.id_front_image_degree = this.response.data?.bankinfo?.id_front_image?.orientation || 0;
+							this.id_back_image_degree = this.response.data?.bankinfo?.id_back_image?.orientation  || 0;
+
 							this.id_front_image_id = this.response.data.bankinfo?.id_front_image?.ID;
 							this.id_back_image_id = this.response.data?.bankinfo?.id_back_image?.ID;
 							//Documents changable or not.
@@ -589,6 +595,8 @@ export class Step2Component implements OnInit {
 	}
 
 
+
+
 	idCardImageChange(event, imageType, imageId = null) {
 		this.stateManagementService.setprogressBar(true);
 		const reader = new FileReader();
@@ -660,106 +668,96 @@ export class Step2Component implements OnInit {
 		$("#imageModal").addClass("showImage");
 		$("#imageModal").removeClass("d-none");
 	}
-
-	// rotateImage(): void {
-	// 	this.rotationDegrees += 180;
-	// 	if (this.rotationDegrees >= 360) {
-	// 	  this.rotationDegrees = 0;
+	handleRotateSec(key:string){
+		this[key] = !this[key]
+	}
+	// rotateImage(key:string): void {
+	// 			console.log('rotating', key,'to ', this[key]);
+	// 	this[key] += 180;
+	// 	if (this[key] >= 360) {
+	// 	  this[key] = 0;
 	// 	}
 	//   }
-	blobToDataURL(blob: Blob) {
+	updateImageOrentation(key){
+		this.stateManagementService.setprogressBar(true);
+		let data = {
+			id : this[key +'_id'],
+			// id :  '',
+			image : this[key],
+			orientation : this[key +'_degree'] 
+		}
+		console.log('img date' , key , data)
+		this.adminService.updateOrientationImage(data)
+		.pipe(
+			catchError(err => {
+				this.stateManagementService.setprogressBar(false);
+				return throwError(err);
+			})
+		)
+		.subscribe(({ data }: any) => {
+			console.log('data-->>' , data)
+			this.stateManagementService.setprogressBar(false);
+		})
+	}
+	fetchImageBlob(url){
+		this.stateManagementService.setprogressBar(true);
+		
+		this.adminService.fetchImageBlob(url)
+		.pipe(
+			catchError(err => {
+				this.stateManagementService.setprogressBar(false);
+				return throwError(err);
+			})
+		)
+		.subscribe(({ data }: any) => {
+			console.log('data-->>' , data)
+			this.stateManagementService.setprogressBar(false);
+		})
+	}
+	blobToDataURL(blob: Blob , key , id) {
 		var reader = new FileReader();
 		reader.readAsDataURL(blob);
 		reader.onload = () => {
 			let dataUrl = reader.result;
 			console.log(dataUrl); //DataURL
-			this.idCardImageChange1(dataUrl, "id_front_image");
+			this.idCardImageChange1(dataUrl, key,id);
 		};
 	}
 
-	async rotateImage(imageUrl : string){
+	async rotateImage(imageUrl : string, key ,id){
 		try {
 			console.log('in function rotate imgagesd' , imageUrl)
-			let url = await this.retriveRotateImage(imageUrl)
+			let url = await this.retriveRotateImage(imageUrl, key ,id)
 			console.log('response url' , url)
 		} catch (error) {
 			console.log('error' , error)
 		}
 	}
-	async retriveRotateImage(imageUrl: string) {
+	async retriveRotateImage(imageUrl: string, key ,id) {
 		console.log(imageUrl, "imageUrl");
-		const response = await fetch(imageUrl)
-		
+		const response :any = await this.fetchImageBlob(imageUrl)
 		const imageBlob = await response.blob();
-
 		const canvas = document.createElement("canvas");
 		const ctx = canvas.getContext("2d");
-
 		const img = new Image();
 		img.src = URL.createObjectURL(imageBlob);
-
 		img.onload = () => {
 			// Rotate the image by 90 degrees (or your desired angle)
 			canvas.width = img.width; 
 			canvas.height = img.height;
 			ctx.translate(canvas.width / 2, canvas.height / 2);
-			ctx.rotate(Math.PI/2); // Rotate by 180 degrees
+			ctx.rotate(Math.PI); // Rotate by 180 degrees
 			ctx.drawImage(img, -img.width / 2, -img.height / 2);
-			// ctx.rotate(Math.PI / 2);
 			// ctx.drawImage(img, 0, -canvas.width);
 
 			// Convert the canvas to a Blob (JPEG format)
 			canvas.toBlob((blob) => {
 				console.log(blob);
 
-				this.blobToDataURL(blob);
-
-				// Add the rotated image Blob to the FormData object
-				// formData.append("rotatedImage", blob, "rotated.jpg");
-
-				// Send the FormData to the server using a POST request
-				// fetch("your_upload_endpoint", {
-				//     method: "POST",
-				//     body: formData,
-				// })
-				// .then(response => response.json())
-				// .then(data => {
-				//     // Handle the server response here
-				//     console.log(data);
-				// })
-				// .catch(error => {
-				//     console.error("Error:", error);
+				this.blobToDataURL(blob, key ,id);
 				// });
 			}, "image/jpeg");
 		}
-		// try {
-		// 	return new Promise<string>((resolve, reject) => {
-		// 	  const img = new Image();
-		// 	  img.src = imageUrl;
-		// 	  img.onload = () => {
-		// 		const canvas = document.createElement('canvas');
-		// 		canvas.width = img.height; // Swap width and height for 180-degree rotation
-		// 		canvas.height = img.width;
-		// 		console.log('canvas-->>' , canvas)
-		// 		const ctx = canvas.getContext('2d');
-		// 		ctx.translate(canvas.width / 2, canvas.height / 2);
-		// 		ctx.rotate(Math.PI); // Rotate by 180 degrees
-		// 		ctx.drawImage(img, -img.width / 2, -img.height / 2);
-		// 		console.log('ctx-->>')
-		// 		const rotatedImageUrl = canvas.toDataURL('image/png'); // Change format if needed
-		// 		console.log('rotatedImageUrl==>>' , rotatedImageUrl)
-		// 		resolve(rotatedImageUrl);
-		// 	  };
-		// 	  console.log('onload function ends')
-		  
-		// 	  img.onerror = (error) => {
-		// 		console.log('rejected-->>' , error)
-		// 		reject(error);
-		// 	  };
-		// 	});
-		// } catch (error) {
-		// 	console.log('convert function error' , error)
-		// }
 	  }
 
 	  handleBadgeCity(value:any){
