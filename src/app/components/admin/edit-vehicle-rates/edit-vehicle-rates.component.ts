@@ -431,9 +431,9 @@ export class EditVehicleRatesComponent implements OnInit {
 		if (babySeatValue.label == 'Baby_Seat') {
 			Object.entries(this.addVehicleRatesForm.value.amenites_rates).forEach(
 				([key, value]: any) => {
-					if (value.label == 'Booster_Seat' || value.label == 'Baggage_Meet_Dom_' || value.label == 'Baggage_Meet_Int_') {
-						(this.amenites_rates.get(key) as FormGroup).setValue({ ...value, price: babySeatValue.price });
-					}
+					// if (value.label == 'Booster_Seat' || value.label == 'Baggage_Meet_Dom_' || value.label == 'Baggage_Meet_Int_') {
+					// 	(this.amenites_rates.get(key) as FormGroup).setValue({ ...value, price: babySeatValue.price });
+					// }
 				});
 		}
 	}

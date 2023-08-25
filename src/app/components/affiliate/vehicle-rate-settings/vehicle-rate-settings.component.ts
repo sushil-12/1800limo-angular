@@ -227,8 +227,8 @@ export class VehicleRateSettingsComponent implements OnInit {
 		);
 
 		this.VehicleRateSettingsForm.get('airport_arrival_tax_per_us').valueChanges.subscribe(value => {
-			this.SetFormValue('airport_departure_tax_per_us', value)
-			this.SetFormValue('sea_port_tax_per_us', value)
+			// this.SetFormValue('airport_departure_tax_per_us', value)
+			// this.SetFormValue('sea_port_tax_per_us', value)
 		})
 
 		// fetch previous vehicle rates on edit case
@@ -345,9 +345,9 @@ export class VehicleRateSettingsComponent implements OnInit {
 		if (babySeatValue.label == 'Baby_Seat') {
 			Object.entries(this.VehicleRateSettingsForm.value.amenities_rates).forEach(
 				([key, value]: any) => {
-					if (value.label == 'Booster_Seat' || value.label == 'Baggage_Meet_Dom_' || value.label == 'Baggage_Meet_Int_') {
-						(this.AmenitiesRates.get(key) as FormGroup).setValue({ ...value, price: babySeatValue.price });
-					}
+					// if (value.label == 'Booster_Seat' || value.label == 'Baggage_Meet_Dom_' || value.label == 'Baggage_Meet_Int_') {
+					// 	(this.AmenitiesRates.get(key) as FormGroup).setValue({ ...value, price: babySeatValue.price });
+					// }
 				});
 		}
 	}
