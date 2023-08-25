@@ -209,6 +209,15 @@ export class AdminService {
 	adminAffiliateGetFieldsData() {
 		return this.httpClient.get(this.serverUrl + 'admin/vehicle-data');
 	}
+	updateOrientationImage(data)
+	{
+		console.log('img data' , data)
+		return this.httpClient.put(this.serverUrl + 'edit-single-image',data);
+	}
+	fetchImageBlob(url)
+	{
+		return this.httpClient.get(this.serverUrl + 'return-blob-image?url='+url);
+	}
 	// end
 
 	//vehicle

@@ -130,6 +130,61 @@ button.custom-filled-reset-button {
     border-color: var(--orange);
 }
 
+.custom-confirm-button{
+    position: sticky;
+    left: 50px;
+    color: #fff;
+    text-transform: uppercase;
+    padding: 0.5rem 0.8rem 0.5em 0.3em;
+    border-radius: 10px;
+    font-size: 0.855rem;
+    margin: 0 8px;
+    font-weight: 500;
+    display: inline-block;
+    text-align: center;
+    border: 0;
+    overflow: hidden;
+    background-color: var(--green-color);
+    cursor: pointer;
+    box-shadow: 0px 5px 10px -1px rgb(0 0 0 / 40%);
+}
+.custom-arrow-clockwise-button{
+    position: sticky;
+    left: 50px;
+    color: #fff;
+    text-transform: uppercase;
+    padding: 0.5rem 0.8rem 0.5em 0.3em;
+    border-radius: 10px;
+    font-size: 0.855rem;
+    margin: 0 8px;
+    font-weight: 500;
+    display: inline-block;
+    text-align: center;
+    border: 0;
+    overflow: hidden;
+    background-color:darkorange;
+    cursor: pointer;
+    box-shadow: 0px 5px 10px -1px rgb(0 0 0 / 40%);
+}
+.custom-x-button{
+    position: sticky;
+    left: 50px;
+    color: #fff;
+    text-transform: uppercase;
+    padding: 0.5rem 0.8rem 0.5em 0.3em;
+    border-radius: 10px;
+    font-size: 0.855rem;
+    margin: 0 8px;
+    font-weight: 500;
+    display: inline-block;
+    text-align: center;
+    border: 0;
+    overflow: hidden;
+    background-color: red;
+    cursor: pointer;
+    box-shadow: 0px 5px 10px -1px rgb(0 0 0 / 40%);
+}
+
 .text-underline {
     text-decoration: underline;
 }
