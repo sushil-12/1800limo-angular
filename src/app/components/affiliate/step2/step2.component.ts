@@ -699,7 +699,7 @@ export class Step2Component implements OnInit {
 			this.stateManagementService.setprogressBar(false);
 		})
 	}
-	fetchImageBlob(url){
+	fetchImageBlob(url ,key ,id){
 		this.stateManagementService.setprogressBar(true);
 		
 		this.adminService.fetchImageBlob(url)
@@ -709,38 +709,16 @@ export class Step2Component implements OnInit {
 				return throwError(err);
 			})
 		)
-		.subscribe(({ data }: any) => {
-			console.log('data-->>' , data)
+		.subscribe(async({ data }: any) => {
 			this.stateManagementService.setprogressBar(false);
-		})
-	}
-	blobToDataURL(blob: Blob , key , id) {
-		var reader = new FileReader();
-		reader.readAsDataURL(blob);
-		reader.onload = () => {
-			let dataUrl = reader.result;
-			console.log(dataUrl); //DataURL
-			this.idCardImageChange1(dataUrl, key,id);
-		};
-	}
-
-	async rotateImage(imageUrl : string, key ,id){
-		try {
-			console.log('in function rotate imgagesd' , imageUrl)
-			let url = await this.retriveRotateImage(imageUrl, key ,id)
-			console.log('response url' , url)
-		} catch (error) {
-			console.log('error' , error)
-		}
-	}
-	async retriveRotateImage(imageUrl: string, key ,id) {
-		console.log(imageUrl, "imageUrl");
-		const response :any = await this.fetchImageBlob(imageUrl)
-		const imageBlob = await response.blob();
+			const response = await fetch(data);
+			const imageBlob = await response.blob()
+			console.log('imageBlob',imageBlob)
 		const canvas = document.createElement("canvas");
 		const ctx = canvas.getContext("2d");
 		const img = new Image();
 		img.src = URL.createObjectURL(imageBlob);
+		console.log('img-->' , img)
 		img.onload = () => {
 			// Rotate the image by 90 degrees (or your desired angle)
 			canvas.width = img.width; 
@@ -758,7 +736,17 @@ export class Step2Component implements OnInit {
 				// });
 			}, "image/jpeg");
 		}
-	  }
+		})
+	}
+	blobToDataURL(blob: Blob , key , id) {
+		var reader = new FileReader();
+		reader.readAsDataURL(blob);
+		reader.onload = () => {
+			let dataUrl = reader.result;
+			console.log(dataUrl); //DataURL
+			this.idCardImageChange1(dataUrl, key,id);
+		};
+	}
 
 	  handleBadgeCity(value:any){
 		console.log(value , this.filteredOptions)

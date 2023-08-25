@@ -493,9 +493,9 @@
 									<!-- handleRotateSec('rotateDriverLicence'); -->
 								<ul class="mt-3" *ngIf="canChangeDocument && !rotateDriverLicence">
 											  <li>
-												<button class="custom-arrow-clockwise-button"
-												(click)="rotateImage(id_front_image ,'id_front_image',id_front_image_id )">
-												 <i class="bi bi-arrow-clockwise"></i>rotate</button>
+												<a class="custom-arrow-clockwise-button"
+												(click)="fetchImageBlob(id_front_image ,'id_front_image',id_front_image_id )">
+												 <i class="bi bi-arrow-clockwise"></i>rotate</a>
 											</li>
 									<li>
 										<button class="changeuploaded" tabindex="1">
@@ -614,9 +614,9 @@
 									(click)="showImageInModal(id_back_image)" tabindex="-1" />
 								<ul *ngIf="canChangeDocument && !rotateDriverLicenceBack" class="mt-3">
 									<li>
-										<button class="custom-arrow-clockwise-button"
-										(click)="rotateImage(id_back_image ,'id_back_image',id_back_image_id )">
-										 <i class="bi bi-arrow-clockwise"></i>rotate</button>
+										<a class="custom-arrow-clockwise-button"
+										(click)="fetchImageBlob(id_back_image ,'id_back_image',id_back_image_id )">
+										 <i class="bi bi-arrow-clockwise"></i>rotate</a>
 									</li>
 									<li>
 										<button class="changeuploaded" tabindex="1">
@@ -978,7 +978,7 @@
 							<button class="custom-filled-reset-button m-2" (click)="resetForm()" tabIndex="2">
 								RESET
 							</button>
-							<button class="custom-filled-button m-2" (click)="submitForm()" tabIndex="1">
+							<button type="submit" class="custom-filled-button m-2" (click)="submitForm()" tabIndex="1">
 								SAVE
 							</button>
 						</div>
