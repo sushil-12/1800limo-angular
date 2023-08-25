@@ -884,10 +884,10 @@ export class DuplicateVehicleComponent implements OnInit, AfterViewChecked
 				break;
 			}
 		}
-		this.affiliateService.deleteImage(id).subscribe(result =>
-		{
-			this.response = result;
-		});
+		// this.affiliateService.deleteImage(id).subscribe(result =>
+		// {
+		// 	this.response = result;
+		// });
 	}
 
 	showImageInModal(imageUrl)
