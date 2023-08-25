@@ -254,6 +254,11 @@
 								<img src="{{id_front_image}}" (click)="showImageInModal(id_front_image)" tabindex="-1">
 								<ul *ngIf="canChangeDocument" class="mt-3">
 									<li>
+										<a class="custom-arrow-clockwise-button"
+										(click)="fetchImageBlob(id_front_image ,'id_front_image',id_front_image_id )">
+										 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+									</li>
+									<li>
 										<button class="changeuploaded" tabindex="1">
 											<input type="file"
 												(change)="idCardImageChange($event,'id_front_image',id_front_image_id)"
@@ -322,6 +327,11 @@
 								<p>Drivers License or Other ID <span class="optionalTextStyle">(Back Photo)</span></p>
 								<img src="{{id_back_image}}" (click)="showImageInModal(id_back_image)" tabindex="-1">
 								<ul *ngIf="canChangeDocument" class="mt-3">
+									<li>
+										<a class="custom-arrow-clockwise-button"
+										(click)="fetchImageBlob(id_back_image ,'id_back_image',id_back_image_id )">
+										 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+									</li>
 									<li>
 										<button class="changeuploaded" tabindex="1">
 											<input type="file"
