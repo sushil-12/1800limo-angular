@@ -419,6 +419,11 @@
 									tabindex="-1">
 								<ul class="mt-3">
 									<li>
+										<a class="custom-arrow-clockwise-button"
+										(click)="fetchImageBlob(insuranceCardImage ,'insuranceCard',insuranceCardId)">
+										 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+									</li>
+									<li>
 										<button class="changeuploaded" tabindex="1">
 											<input type="file" (change)="
 													vehicleOfficialImagesChange(
