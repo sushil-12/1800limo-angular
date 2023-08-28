@@ -1,2 +1,178 @@
-<p>agent-template works!</p>
-<router-outlet></router-outlet>
+<div class="affilate-wrapper admin-wrapper">
+	<ngx-spinner></ngx-spinner>
+	<nav id="sidenavAccordion" class="topnav navbar navbar-expand">
+		<a class="navbar-brand active" routerLink="/" tabindex="-1">
+			<img src="assets/admin/images/new_logo.png">
+		</a>
+		<button class="btn btn-icon btn-transparent-dark mr-lg-2" id="sidebarToggle" tabindex="-1">
+			<svg *ngIf="showSidebar===true" xmlns="http://www.w3.org/2000/svg"
+				(click)="showSidebarFunc(false)" width="24" height="24" fill="currentColor" class="bi bi-chevron-left"
+				viewBox="0 0 16 16">
+				<path fill-rule="evenodd"
+					d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+			</svg>
+		
+			<svg (click)="showSidebarFunc(true)" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+					fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16" *ngIf="showSidebar===false">
+					<path fill-rule="evenodd"
+						d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+				</svg>
+		</button>
+		<ul class="navbar-nav align-items-center ml-auto">
+			<li class="hideMobile">
+				<!-- <div id="google-translate">
+					<div id="google_translate_element_desktop"></div>
+				  </div> -->
+				<div id="google_translate_element_desktop"></div>
+			</li>
+			<li class="nav-item dropdown no-caret dropdown-user">
+				<a class="user-profile btn btn-icon btn-transparent-dark dropdown-toggle"
+					id="navbarDropdownUserImage" href="javascript:void(0);" role="button"
+					data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" tabindex="-1">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" *ngIf="!profile_pic_url">
+						<path fill="#000" fill-rule="evenodd"
+							d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22ZM15 10C15 11.6569 13.6569 13 12 13C10.3431 13 9 11.6569 9 10C9 8.34315 10.3431 7 12 7C13.6569 7 15 8.34315 15 10ZM5.99927 17C7.36758 15.1783 9.54609 14 11.9998 14C14.4535 14 16.6321 15.1783 18.0004 17C16.6321 18.8217 14.4535 20 11.9998 20C9.54609 20 7.36758 18.8217 5.99927 17Z"
+							clip-rule="evenodd" />
+					</svg>
+					<img src="{{profile_pic_url}}" height="24px" width="24px" *ngIf="profile_pic_url">
+					<span class="font-weight-bold">
+						{{ currentUser?.affiliate_company ? currentUser?.affiliate_company :
+						currentUser?.name }}
+					</span>
+				</a>
+				<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
+					aria-labelledby="navbarDropdownUserImage">
+					<h6 class="user-profile dropdown-header d-flex align-items-center">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" *ngIf="!profile_pic_url">
+							<path fill="#000" fill-rule="evenodd"
+								d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22ZM15 10C15 11.6569 13.6569 13 12 13C10.3431 13 9 11.6569 9 10C9 8.34315 10.3431 7 12 7C13.6569 7 15 8.34315 15 10ZM5.99927 17C7.36758 15.1783 9.54609 14 11.9998 14C14.4535 14 16.6321 15.1783 18.0004 17C16.6321 18.8217 14.4535 20 11.9998 20C9.54609 20 7.36758 18.8217 5.99927 17Z"
+								clip-rule="evenodd" />
+						</svg>
+					<img src="{{profile_pic_url}}" height="24px" width="24px" *ngIf="profile_pic_url">
+
+						<div class="dropdown-user-details">
+							<div class="dropdown-user-details-name font-weight-bold">
+								{{ currentUser?.affiliate_company ? currentUser?.affiliate_company :
+								currentUser?.name }}
+							</div>
+						</div>
+					</h6>
+					<div class="dropdown-divider"></div>
+					<a class="dropdown-item" [routerLinkActive]="['active']"
+						routerLink="/affiliate/profile" tabindex="-1">
+						<div class="dropdown-item-icon">
+							<svg width="24" height="24" viewBox="0 0 24 24" class=" profileSvg">
+								<g fill="none" fill-rule="evenodd" stroke="#5dbd8a"
+									stroke-linecap="round" stroke-linejoin="round"
+									stroke-width="1.5" transform="translate(4 2.5)">
+									<circle cx="7.579" cy="4.778" r="4.778" />
+									<path
+										d="M5.32907052e-15,16.2013731 C-0.00126760558,15.8654831 0.0738531734,15.5336997 0.219695816,15.2311214 C0.677361723,14.3157895 1.96797958,13.8306637 3.0389178,13.610984 C3.81127745,13.4461621 4.59430539,13.3360488 5.38216724,13.2814646 C6.84083861,13.1533327 8.30793524,13.1533327 9.76660662,13.2814646 C10.5544024,13.3366774 11.3373865,13.4467845 12.1098561,13.610984 C13.1807943,13.8306637 14.4714121,14.270023 14.929078,15.2311214 C15.2223724,15.8479159 15.2223724,16.5639836 14.929078,17.1807781 C14.4714121,18.1418765 13.1807943,18.5812358 12.1098561,18.7917621 C11.3383994,18.9634099 10.5550941,19.0766219 9.76660662,19.1304349 C8.57936754,19.2310812 7.38658584,19.2494317 6.19681255,19.1853548 C5.92221301,19.1853548 5.65676678,19.1853548 5.38216724,19.1304349 C4.59663136,19.077285 3.8163184,18.9640631 3.04807112,18.7917621 C1.96797958,18.5812358 0.686515041,18.1418765 0.219695816,17.1807781 C0.0745982583,16.8746908 -0.000447947969,16.5401098 5.32907052e-15,16.2013731 Z" />
+								</g>
+							</svg>
+							<!-- <img src="{{profile_pic_url}}" height="24px" width="24px"> -->
+						</div>
+						My Profile
+					</a>
+					<a class="dropdown-item" (click)="logout()" tabindex="-1">
+						<div class="dropdown-item-icon">
+							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+								viewBox="0 0 24 24" fill="none" stroke="currentColor"
+								stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+								class="feather feather-log-out">
+								<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+								<polyline points="16 17 21 12 16 7"></polyline>
+								<line x1="21" y1="12" x2="9" y2="12"></line>
+							</svg>
+						</div>
+						Logout
+					</a>
+				</div>
+			</li>
+		</ul>
+	</nav>
+	<mat-progress-bar class="mb-3 my-color" mode="indeterminate" *ngIf="progressBar">
+	</mat-progress-bar>
+	<div id="layoutSidenav">
+		<div id="layoutSidenav_nav">
+			<nav class="sidenav shadow-right">
+				<div class="sidenav-menu">
+					<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion"
+						id="accordionSidebar">
+                        <!-- [hidden]="affiliateAccountStatus!='accepted'" -->
+						<li class="nav-item" >
+							<a class="nav-link collapsed" [routerLinkActive]="['active']"
+								routerLink="/travel_agent/bookings"
+								(click)="closeSidebarFunc(false)" tabindex="-1">
+								<svg id="Layer_1" data-name="Layer 1"
+									xmlns="http://www.w3.org/2000/svg" viewBox="0 0 117.78 122.88">
+									<title>timecard</title>
+									<path
+										d="M57.35,116.3H7.46a7.48,7.48,0,0,1-5.27-2.19L2,113.87a7.43,7.43,0,0,1-2-5V7.46A7.45,7.45,0,0,1,2.19,2.19L2.42,2a7.42,7.42,0,0,1,5-2H91.88a7.48,7.48,0,0,1,7.46,7.46v49.4a37.78,37.78,0,0,0-6.41-1.2V7.46a1.1,1.1,0,0,0-1.05-1H7.46a1.08,1.08,0,0,0-.66.23l-.08.08a1.06,1.06,0,0,0-.31.74V108.84a1,1,0,0,0,.23.65l.09.08a1,1,0,0,0,.73.32H53.71a38.12,38.12,0,0,0,3.64,6.41ZM85.18,82.12h2.89a2,2,0,0,1,1.43.59,2.06,2.06,0,0,1,.6,1.44V94.77h9.59a2,2,0,0,1,2,2v3a2.12,2.12,0,0,1-.6,1.44l-.08.07a2,2,0,0,1-1.35.52H84a1,1,0,0,1-1-1V84a2,2,0,0,1,.59-1.29,2,2,0,0,1,1.43-.6ZM89,65.38A28.75,28.75,0,1,1,68.7,73.8,28.67,28.67,0,0,1,89,65.38Zm16.26,12.49A23,23,0,1,0,112,94.13a22.92,22.92,0,0,0-6.73-16.26Zm-62.55,5.5a3.65,3.65,0,0,1,0-7.18h9.58a3.65,3.65,0,0,1,0,7.18Zm-22-9.28h9A1.18,1.18,0,0,1,31,75.27v9a1.18,1.18,0,0,1-1.18,1.18h-9a1.18,1.18,0,0,1-1.18-1.18v-9a1.18,1.18,0,0,1,1.18-1.18Zm0-51.94h9A1.18,1.18,0,0,1,31,23.33v9a1.18,1.18,0,0,1-1.18,1.18h-9a1.18,1.18,0,0,1-1.18-1.18v-9a1.18,1.18,0,0,1,1.18-1.18Zm22,9.27a3.33,3.33,0,0,1-3-3.58,3.34,3.34,0,0,1,3-3.59H78.25a3.34,3.34,0,0,1,3,3.59,3.33,3.33,0,0,1-3,3.58ZM18.34,54.1a2,2,0,0,1,.38-2.82,2.23,2.23,0,0,1,3-.09l2.1,2.17L29.07,48a1.93,1.93,0,0,1,2.82.3,2.23,2.23,0,0,1,.18,3l-7,7.14a1.94,1.94,0,0,1-2.82-.3l-.16-.19a1.94,1.94,0,0,1-.31-.26L18.34,54.1Zm24.4,2.69a3.34,3.34,0,0,1-3-3.59,3.34,3.34,0,0,1,3-3.59H78.25a3.34,3.34,0,0,1,3,3.59,3.34,3.34,0,0,1-3,3.59Z" />
+								</svg>
+								<span> My bookings </span>
+							</a>
+						</li>
+						<!-- FARM OUT BOOKING -->
+                        <!-- [hidden]="affiliateAccountStatus!='accepted'" -->
+						<li class="nav-item" >
+							<a class="nav-link collapsed" [routerLinkActive]="['active']"
+								[routerLink]="['/travel_agent/create-booking']"
+								(click)="closeSidebarFunc(false)" tabindex="-1">
+								<!-- SVG ICON -->
+								<svg id="Layer_1" data-name="Layer 1"
+									xmlns="http://www.w3.org/2000/svg" viewBox="0 0 117.78 122.88">
+									<title>timecard</title>
+									<path
+										d="M57.35,116.3H7.46a7.48,7.48,0,0,1-5.27-2.19L2,113.87a7.43,7.43,0,0,1-2-5V7.46A7.45,7.45,0,0,1,2.19,2.19L2.42,2a7.42,7.42,0,0,1,5-2H91.88a7.48,7.48,0,0,1,7.46,7.46v49.4a37.78,37.78,0,0,0-6.41-1.2V7.46a1.1,1.1,0,0,0-1.05-1H7.46a1.08,1.08,0,0,0-.66.23l-.08.08a1.06,1.06,0,0,0-.31.74V108.84a1,1,0,0,0,.23.65l.09.08a1,1,0,0,0,.73.32H53.71a38.12,38.12,0,0,0,3.64,6.41ZM85.18,82.12h2.89a2,2,0,0,1,1.43.59,2.06,2.06,0,0,1,.6,1.44V94.77h9.59a2,2,0,0,1,2,2v3a2.12,2.12,0,0,1-.6,1.44l-.08.07a2,2,0,0,1-1.35.52H84a1,1,0,0,1-1-1V84a2,2,0,0,1,.59-1.29,2,2,0,0,1,1.43-.6ZM89,65.38A28.75,28.75,0,1,1,68.7,73.8,28.67,28.67,0,0,1,89,65.38Zm16.26,12.49A23,23,0,1,0,112,94.13a22.92,22.92,0,0,0-6.73-16.26Zm-62.55,5.5a3.65,3.65,0,0,1,0-7.18h9.58a3.65,3.65,0,0,1,0,7.18Zm-22-9.28h9A1.18,1.18,0,0,1,31,75.27v9a1.18,1.18,0,0,1-1.18,1.18h-9a1.18,1.18,0,0,1-1.18-1.18v-9a1.18,1.18,0,0,1,1.18-1.18Zm0-51.94h9A1.18,1.18,0,0,1,31,23.33v9a1.18,1.18,0,0,1-1.18,1.18h-9a1.18,1.18,0,0,1-1.18-1.18v-9a1.18,1.18,0,0,1,1.18-1.18Zm22,9.27a3.33,3.33,0,0,1-3-3.58,3.34,3.34,0,0,1,3-3.59H78.25a3.34,3.34,0,0,1,3,3.59,3.33,3.33,0,0,1-3,3.58ZM18.34,54.1a2,2,0,0,1,.38-2.82,2.23,2.23,0,0,1,3-.09l2.1,2.17L29.07,48a1.93,1.93,0,0,1,2.82.3,2.23,2.23,0,0,1,.18,3l-7,7.14a1.94,1.94,0,0,1-2.82-.3l-.16-.19a1.94,1.94,0,0,1-.31-.26L18.34,54.1Zm24.4,2.69a3.34,3.34,0,0,1-3-3.59,3.34,3.34,0,0,1,3-3.59H78.25a3.34,3.34,0,0,1,3,3.59,3.34,3.34,0,0,1-3,3.59Z" />
+								</svg>
+								<span> Create Booking </span>
+							</a>
+						</li>
+						<!-- FARM OUT BOOKING ENDS -->
+						<li>
+							<!-- <div id="google-translate">
+								<div id="google_translate_element_mobile"></div>
+							  </div> -->
+							<div id="google_translate_element_mobile"></div>
+						</li>
+						<hr class="sidebar-divider d-none d-md-block">
+						<div class="text-center d-none d-md-inline">
+							<button class="rounded-circle border-0" id="sidebarToggle"
+								tabindex="-1"></button>
+						</div>
+					</ul>
+				</div>
+			</nav>
+		</div>
+
+
+
+		<div id="layoutSidenav_content" (click)="handleDivClick($event)">
+			<main style="padding: inherit;">
+				<!-- <h1 class="HeadingH1">
+					<div>
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+							<rect fill="none" />
+							<ellipse cx="128" cy="128" rx="24" ry="40" />
+							<path
+								d="M128,24A104,104,0,1,0,232,128,104.12041,104.12041,0,0,0,128,24Zm0,160c-27.63281,0-40-28.125-40-56s12.36719-56,40-56,40,28.125,40,56S155.63281,184,128,184Z" />
+						</svg>
+						Agreement
+					</div>
+				</h1> -->
+				<router-outlet></router-outlet>
+			</main>
+			<footer class="admin-footer">
+				<div class="col-9 pl-0 mt-5">
+					<p>Copyright © 2001-{{currentYear}} 1-800-LIMO.COM</p>
+				</div>
+				<div class="col-3">
+				</div>
+			</footer>
+		</div>
+	</div>
+</div>
+<app-scroll-to-top></app-scroll-to-top>
+
+<!-- <app-float-icons></app-float-icons> -->

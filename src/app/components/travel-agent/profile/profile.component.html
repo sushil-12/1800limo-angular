@@ -1,0 +1,490 @@
+<main>
+	<!-- Main page content-->
+	<form [formGroup]="profileForm" appInvalidControlScroll>
+		<section class="user_information">
+			<h2 class="headinginfo adminbox_shadow">Profile</h2>
+			<div class="container mt-1 ">
+                <div class="vehtype_extintwrap single-image">
+                    <div class="row mt-2">
+                        <div class="col-md-4">
+                            <div class="vehtype_extint">
+                                <div>
+                                    <p class="d-flex justify-content-left">Profile Picture</p>
+                                    <img *ngIf="profile_pic; else no_profile_pic" class="profile_pic"
+                                        src="{{profile_pic}}" alt="Profile Picture"
+                                        (click)="showImageInModal(profile_pic)">
+                                    <ng-template #no_profile_pic>
+                                        <img class="profile_pic" src="../../../../assets/images/user.png"
+                                            alt="Profile Picture">
+                                    </ng-template>
+                                    <ul class="mt-3 d-flex justify-content-left">
+                                        <li>
+                                            <button tabindex="1" class="changeuploaded">
+                                                <input type="file" (change)="profile_pic_change($event)" tabindex="-1">
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                                    <path fill="none" d="M0 0h24v24H0V0z"></path>
+                                                    <circle cx="12" cy="12" r="3"></circle>
+                                                    <path
+                                                        d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z">
+                                                    </path>
+                                                </svg>
+                                                Change
+                                            </button>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+				<div class="row ">
+					<div class="col-md-4">
+						<mat-form-field appearance="outline">
+							<mat-label>First Name <span class="asterisk">*</span></mat-label>
+							<input formControlName="firstName" type="text" matInput placeholder="First Name">
+						</mat-form-field>
+						<div *ngIf="submittedForm && f?.firstName?.errors" class="text-danger">
+							<div *ngIf="f?.firstName?.errors?.required">This field is required</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<mat-form-field appearance="outline">
+							<mat-label>Middle Name </mat-label>
+							<input formControlName="middleName" type="text" matInput placeholder="Middle Name">
+						</mat-form-field>
+						<div *ngIf="submittedForm && f?.middleName?.errors" class="text-danger">
+							<div *ngIf="f?.middleName?.errors?.required">This field is required</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<mat-form-field appearance="outline">
+							<mat-label>Last Name <span class="asterisk">*</span></mat-label>
+							<input formControlName="lastName" type="text" matInput placeholder="Last Name">
+						</mat-form-field>
+						<div *ngIf="submittedForm && f?.lastName?.errors" class="text-danger">
+							<div *ngIf="f?.lastName?.errors?.required">This field is required</div>
+						</div>
+					</div>
+
+					<div class="col-md-4">
+						<mat-form-field appearance="outline" class="mobileLabelClass">
+							<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Contact<span
+									class="asterisk">
+									*</span></label>
+							<input matInput placeholder="Contact" formControlName="work" ng2TelInput
+								[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
+								placeholder="1234567890" class="phoneNumberClass"
+								(countryChange)="onCountryChange($event,'work')"
+								(intlTelInputObject)="telInputObjectOffice($event)" tabIndex="1" />
+						</mat-form-field>
+						<div *ngIf="submittedForm && f?.work?.errors || f?.work?.touched && f?.work?.errors"
+							class="text-danger margin-bottom-thin my-mat-hint">
+							<div *ngIf="f?.work?.errors?.required">This field is required</div>
+						</div>
+						<div *ngIf="f?.work?.errors" class="text-danger margin-bottom-thin my-mat-hint">
+							<div *ngIf="f?.work?.errors?.invalid_Pattern;else plusError">Do not add Dashes
+								with numbers</div>
+							<ng-template #plusError>
+								<div *ngIf="f?.work?.errors?.invalidPattern;else allErrors">Do not enter +
+									sign</div>
+								<ng-template #allErrors>
+									<div *ngIf="f?.work?.errors?.pattern;else numberLength">Enter Numbers Without
+										Spaces or Dashes
+									</div>
+									<ng-template #numberLength>
+										<div *ngIf="f?.work?.errors?.minlength">Minimum length should be 4</div>
+										<div *ngIf="f?.work?.errors?.maxlength">Maximum length should be 15</div>
+									</ng-template>
+								</ng-template>
+							</ng-template>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<mat-form-field appearance="outline" class="mobileLabelClass">
+							<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Mobile<span
+									class="asterisk">
+									*</span></label>
+							<input matInput placeholder="Mobile" formControlName="mobile" ng2TelInput
+								[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
+								placeholder="1234567890" class="phoneNumberClass" readonly
+								(countryChange)="onCountryChange($event,'mobile')"
+								(intlTelInputObject)="telInputObjectMobile($event)" tabIndex="1" />
+						</mat-form-field>
+						<div *ngIf="submittedForm && f?.mobile?.errors || f?.mobile?.touched && f?.mobile?.errors"
+							class="text-danger margin-bottom-thin my-mat-hint">
+							<div *ngIf="f?.mobile?.errors?.required">This field is required</div>
+						</div>
+						<div *ngIf="f?.mobile?.errors" class="text-danger margin-bottom-thin my-mat-hint">
+							<div *ngIf="f?.mobile?.errors?.invalid_Pattern;else plusError">Do not add Dashes
+								with numbers</div>
+							<ng-template #plusError>
+								<div *ngIf="f?.mobile?.errors?.invalidPattern;else allErrors">Do not enter +
+									sign</div>
+								<ng-template #allErrors>
+									<div *ngIf="f?.mobile?.errors?.pattern;else numberLength">Enter Numbers Without
+										Spaces or Dashes
+									</div>
+									<ng-template #numberLength>
+										<div *ngIf="f?.mobile?.errors?.minlength">Minimum length should be 4</div>
+										<div *ngIf="f?.mobile?.errors?.maxlength">Maximum length should be 15</div>
+									</ng-template>
+								</ng-template>
+							</ng-template>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<mat-form-field appearance="outline">
+							<mat-label>E-mail <span class="asterisk">*</span></mat-label>
+							<input formControlName="email" type="text" matInput placeholder="E-mail">
+						</mat-form-field>
+						<div *ngIf="submittedForm && f?.email?.errors" class="text-danger">
+							<div *ngIf="f?.email?.errors?.required">This field is required</div>
+							<div *ngIf="f?.email?.errors?.pattern">Email format should be valid</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<section class="user_information">
+			<h2 class="headinginfo adminbox_shadow"> Travel Agency Information </h2>
+			<div class="container mt-1 ">
+				<div class="row ">
+					<div class="col-md-6">
+						<mat-form-field appearance="outline">
+							<mat-label>Agency Name <span class="asterisk">*</span></mat-label>
+							<input formControlName="agencyName" type="text" matInput placeholder="Agency Name">
+						</mat-form-field>
+						<div *ngIf="submittedForm && f?.agencyName?.errors" class="text-danger">
+							<div *ngIf="f?.agencyName?.errors?.required">This field is required</div>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<mat-form-field appearance="outline">
+							<mat-label>Payee Name <span class="asterisk">*</span></mat-label>
+							<input formControlName="payee" type="text" matInput placeholder="Payee Name">
+						</mat-form-field>
+						<div *ngIf="submittedForm && f?.payee?.errors" class="text-danger">
+							<div *ngIf="f?.payee?.errors?.required">This field is required</div>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<mat-form-field appearance="outline">
+							<mat-label>IATA # <span class="asterisk">*</span></mat-label>
+							<input formControlName="iata" type="text" matInput placeholder="IATA">
+						</mat-form-field>
+						<div *ngIf="submittedForm && f?.iata?.errors" class="text-danger">
+							<div *ngIf="f?.iata?.errors?.required">This field is required</div>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<mat-form-field appearance="outline" class="mobileLabelClass">
+							<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Fax<span
+									class="asterisk">
+									*</span></label>
+							<input matInput placeholder="Fax" formControlName="fax" ng2TelInput
+								[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
+								placeholder="1234567890" class="phoneNumberClass"
+								(countryChange)="onCountryChange($event,'fax')"
+								(intlTelInputObject)="telInputObjectFax($event)" tabIndex="1" />
+						</mat-form-field>
+						<div *ngIf="submittedForm && f?.fax?.errors || f?.fax?.touched && f?.fax?.errors"
+							class="text-danger margin-bottom-thin my-mat-hint">
+							<div *ngIf="f?.fax?.errors?.required">This field is required</div>
+						</div>
+						<div *ngIf="f?.fax?.errors" class="text-danger margin-bottom-thin my-mat-hint">
+							<div *ngIf="f?.fax?.errors?.invalid_Pattern;else plusError">Do not add Dashes
+								with numbers</div>
+							<ng-template #plusError>
+								<div *ngIf="f?.fax?.errors?.invalidPattern;else allErrors">Do not enter +
+									sign</div>
+								<ng-template #allErrors>
+									<div *ngIf="f?.fax?.errors?.pattern;else numberLength">Enter Numbers Without
+										Spaces or Dashes
+									</div>
+									<ng-template #numberLength>
+										<div *ngIf="f?.fax?.errors?.minlength">Minimum length should be 4</div>
+										<div *ngIf="f?.fax?.errors?.maxlength">Maximum length should be 15</div>
+									</ng-template>
+								</ng-template>
+							</ng-template>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<mat-form-field appearance="outline" class="phoneLabelClass">
+							<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Office
+								Phone<span class="asterisk">
+									*</span></label>
+							<input matInput placeholder="Office Phone" formControlName="officeNumber" ng2TelInput
+								[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
+								placeholder="1234567890" class="phoneNumberClass"
+								(countryChange)="onCountryChange($event,'officeNumber')"
+								(intlTelInputObject)="telInputObjectOfficePhone($event)" tabIndex="1" />
+						</mat-form-field>
+						<div *ngIf="submittedForm && f?.officeNumber?.errors || f?.officeNumber?.touched && f?.officeNumber?.errors"
+							class="text-danger margin-bottom-thin my-mat-hint">
+							<div *ngIf="f?.officeNumber?.errors?.required">This field is required</div>
+						</div>
+						<div *ngIf="f?.officeNumber?.errors" class="text-danger margin-bottom-thin my-mat-hint">
+							<div *ngIf="f?.officeNumber?.errors?.invalid_Pattern;else plusError">Do not add Dashes
+								with numbers</div>
+							<ng-template #plusError>
+								<div *ngIf="f?.officeNumber?.errors?.invalidPattern;else allErrors">Do not enter +
+									sign</div>
+								<ng-template #allErrors>
+									<div *ngIf="f?.officeNumber?.errors?.pattern;else numberLength">Enter Numbers Without
+										Spaces or Dashes
+									</div>
+									<ng-template #numberLength>
+										<div *ngIf="f?.officeNumber?.errors?.minlength">Minimum length should be 4</div>
+										<div *ngIf="f?.officeNumber?.errors?.maxlength">Maximum length should be 15</div>
+									</ng-template>
+								</ng-template>
+							</ng-template>
+						</div>
+					</div>
+
+					<div class="col-md-6">
+						<mat-form-field appearance="outline">
+							<mat-label>Address <span class="asterisk">*</span></mat-label>
+							<input formControlName="address" type="text" matInput placeholder="Address" #search1>
+						</mat-form-field>
+						<!-- <textarea placeholder="Address" formControlName="address"></textarea> -->
+						<div *ngIf="submittedForm && f?.address?.errors" class="text-danger">
+							<div *ngIf="f?.address?.errors?.required">This field is required</div>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<mat-form-field appearance="outline">
+							<mat-label>City <span class="asterisk">*</span></mat-label>
+							<input formControlName="city" type="text" matInput placeholder="City">
+						</mat-form-field>
+						<div *ngIf="submittedForm && f?.city?.errors" class="text-danger">
+							<div *ngIf="f?.city?.errors?.required">This field is required</div>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<mat-form-field appearance="outline">
+							<mat-label>State/Province <span class="asterisk">*</span></mat-label>
+							<input formControlName="state" type="text" matInput placeholder="State/Province">
+						</mat-form-field>
+						<div *ngIf="submittedForm && f?.state?.errors" class="text-danger">
+							<div *ngIf="f?.state?.errors?.required">This field is required</div>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<mat-form-field appearance="outline">
+							<mat-label>Country <span class="asterisk">*</span></mat-label>
+							<input formControlName="country" type="text" matInput placeholder="Country">
+						</mat-form-field>
+						<div *ngIf="submittedForm && f?.country?.errors" class="text-danger">
+							<div *ngIf="f?.country?.errors?.required">This field is required</div>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<mat-form-field appearance="outline">
+							<mat-label>Zip Code <span class="asterisk">*</span></mat-label>
+							<input formControlName="zipCode" type="text" matInput placeholder="Zip Code">
+						</mat-form-field>
+						<div *ngIf="submittedForm && f?.zipCode?.errors" class="text-danger">
+							<div *ngIf="f?.zipCode?.errors?.required">This field is required</div>
+							<div *ngIf="f?.zipCode?.errors?.pattern">This field should be a number</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+        <section class="user_information">
+			<h2 class="headinginfo"> Billing Information</h2>
+			<div class="container py-2" id="accordionSidebar1">
+				<h3 class="headinginfoH3 mt-3">Credit Card <img class="creditcard_pay"
+						src="assets/admin/images/creditcard_pay.png" tabindex="-1"></h3>
+				<div class="row">
+					<div class="col-md-3 pr-0 borderright mobilePadding">
+						<div class="form-group radio-tile-group">
+							<div class="custom-radio input-container">
+								<input class="radio-button" id="personal" type="radio" name="card_type" checked=""
+									formControlName="card_type" value="personal" tabindex="-1">
+								<div class="radio-tile">
+									<label class="radio-tile-label" for="personal">Personal</label>
+								</div>
+							</div>
+							<div *ngIf="submittedForm && f.card_type.errors || f.card_type.touched && f.card_type.errors"
+								class="text-danger margin-bottom-thin my-mat-hint">
+								<div *ngIf="f.card_type.errors.required">This field is required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3 pl-0 mobilePadding">
+						<div class="form-group radio-tile-group">
+							<div class="custom-radio input-container">
+								<input class="radio-button" id="business" type="radio" name="card_type"
+									formControlName="card_type" value="business" tabindex="-1">
+								<div class="radio-tile">
+									<label class="radio-tile-label" for="business">Business</label>
+								</div>
+								<div *ngIf="submittedForm && f.card_type.errors || f.card_type.touched && f.card_type.errors"
+									class="text-danger margin-bottom-thin my-mat-hint">
+									<div *ngIf="f.card_type.errors.required">This field is required</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-6">
+						<mat-form-field appearance="outline">
+							<mat-label>Card Holder First & Last Name*</mat-label>
+							<input matInput placeholder="Card Holder First & Last Name" formControlName="name"
+								tabindex="1">
+						</mat-form-field>
+						<div *ngIf="submittedForm && f.name.errors || f.name.touched && f.name.errors"
+							class="text-danger margin-bottom-thin my-mat-hint">
+							<div *ngIf="f.name.errors.required">This field is required</div>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<mat-form-field appearance="outline">
+							<mat-label>Card No# *</mat-label>
+							<input matInput placeholder="Card No#" formControlName="number" tabindex="1"
+								id="card-number">
+						</mat-form-field>
+						<div *ngIf="submittedForm && f.number.errors || f.number.touched && f.number.errors"
+							class="text-danger margin-bottom-thin my-mat-hint">
+							<div *ngIf="f.number.errors.required">This field is required</div>
+						</div>
+						<div *ngIf="f.number.errors" class="text-danger margin-bottom-thin my-mat-hint">
+							<div *ngIf="f.number.errors?.invalid_Pattern;else plusError">Do not add Dashes
+								with numbers</div>
+							<ng-template #plusError>
+								<div *ngIf="f.number.errors?.invalidPattern;else allErrors">Do not enter +
+									sign</div>
+								<ng-template #allErrors>
+									<div *ngIf="f.number.errors?.pattern;else numberLength">Enter Numbers Only
+									</div>
+									<ng-template #numberLength>
+										<div *ngIf="f.number.errors.minlength">Minimum length should be 16</div>
+										<div *ngIf="f.number.errors.maxlength">Maximum length should be 16</div>
+									</ng-template>
+								</ng-template>
+							</ng-template>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<mat-form-field appearance="outline">
+							<mat-label>Expiry Month*</mat-label>
+							<mat-select formControlName="exp_month" tabindex="1">
+								<mat-option value="">Choose Expiry Month</mat-option>
+								<mat-option value='01'>Janaury</mat-option>
+								<mat-option value='02'>February</mat-option>
+								<mat-option value='03'>March</mat-option>
+								<mat-option value='04'>April</mat-option>
+								<mat-option value='05'>May</mat-option>
+								<mat-option value='06'>June</mat-option>
+								<mat-option value='07'>July</mat-option>
+								<mat-option value='08'>August</mat-option>
+								<mat-option value='09'>September</mat-option>
+								<mat-option value='10'>October</mat-option>
+								<mat-option value='11'>November</mat-option>
+								<mat-option value='12'>December</mat-option>
+							</mat-select>
+						</mat-form-field>
+						<div *ngIf="submittedForm && f.exp_month.errors || f.exp_month.touched && f.exp_month.errors"
+							class="text-danger margin-bottom-thin my-mat-hint">
+							<div *ngIf="f.exp_month.errors.required">This field is required</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<mat-form-field appearance="outline">
+							<mat-label>Expiry Year*</mat-label>
+							<mat-select formControlName="exp_year" tabindex="1">
+								<mat-option value="">Choose Expiry Year</mat-option>
+								<mat-option *ngFor="let yearOption of yearOptions" value="{{yearOption}}">{{yearOption}}
+								</mat-option>
+							</mat-select>
+						</mat-form-field>
+						<div *ngIf="submittedForm && f.exp_year.errors || f.exp_year.touched && f.exp_year.errors"
+							class="text-danger margin-bottom-thin my-mat-hint">
+							<div *ngIf="f.exp_year.errors.required">This field is required</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<mat-form-field appearance="outline">
+							<mat-label>CSC*</mat-label>
+							<input matInput placeholder="CSC" formControlName="cvc" tabindex="1">
+						</mat-form-field>
+						<div *ngIf="submittedForm && f.cvc.errors || f.cvc.touched && f.cvc.errors"
+							class="text-danger margin-bottom-thin my-mat-hint">
+							<div *ngIf="f.cvc.errors.required">This field is required</div>
+						</div>
+						<div *ngIf="f.cvc.errors" class="text-danger margin-bottom-thin my-mat-hint">
+							<div *ngIf="f.cvc.errors?.invalid_Pattern;else plusError">Do not add Dashes
+								with numbers</div>
+							<ng-template #plusError>
+								<div *ngIf="f.cvc.errors?.invalidPattern;else allErrors">Do not enter +
+									sign</div>
+								<ng-template #allErrors>
+									<div *ngIf="f.cvc.errors?.pattern;else numberLength">Enter Numbers Only
+									</div>
+									<ng-template #numberLength>
+										<div *ngIf="f.cvc.errors.minlength">Minimum length should be 3</div>
+										<div *ngIf="f.cvc.errors.maxlength">Maximum length should be 3</div>
+									</ng-template>
+								</ng-template>
+							</ng-template>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<div class="container">
+            <div class="row py-4">
+                <div class="col-md-6">
+                  
+                </div>
+                <div class="col-md-6 ">
+                    <div class="billing_inforamtion">
+                        <ul class="d-flex justify-content-center">
+                            <li><button class="custom-filled-button" type="submit" (click)="submit()"
+								tabindex="-1">SAVE</button> </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+                </div>
+		
+	</form>
+</main>
+
+<!-- <div class="modal fade" id="deactivateConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <button type="button" class="close closeButton" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <div class="modal-body text-center">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" height="70">
+                    <g data-name="Layer 51" fill="#ea4444" class="color000 svgShape">
+                        <path d="M16,2A14,14,0,1,0,30,16,14,14,0,0,0,16,2Zm0,26A12,12,0,1,1,28,16,12,12,0,0,1,16,28Z"
+                            fill="#ea4444" class="color000 svgShape"></path>
+                        <path
+                            d="M22.71,9.29a1,1,0,0,0-1.42,0L16,14.59l-5.29-5.3a1,1,0,0,0-1.42,1.42L14.59,16l-5.3,5.29a1,1,0,0,0,0,1.42,1,1,0,0,0,1.42,0L16,17.41l5.29,5.3a1,1,0,0,0,1.42,0,1,1,0,0,0,0-1.42L17.41,16l5.3-5.29A1,1,0,0,0,22.71,9.29Z"
+                            fill="#ea4444" class="color000 svgShape"></path>
+                    </g>
+                </svg>
+                <h5 class="modal-title my-3" id="exampleModalLabel">Once you suspend, you can't use your account.<br> Only Admin can reactivate your account.</h5>
+            </div>
+            <div class="text-center">
+                <button type="button" class="custom-btn yes-btn mr-2"
+                    (click)="deactivateAffiliateAccount()">Yes</button>
+                <button type="button" class="custom-btn no-btn" data-dismiss="modal" aria-label="Close">No</button>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+<!-- Image modal -->
+<app-image-modal (closeTab)="closeButton()" [modalImage]="modalImage"></app-image-modal>
+
+<!-- snackbar -->
+<!-- <div id="snackbar">{{snackbarMsg}}</div> -->

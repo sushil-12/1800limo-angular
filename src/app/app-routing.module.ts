@@ -255,7 +255,7 @@ const routes: Routes = [
 		]
 	},
 	{
-		path: 'agent',
+		path: 'travel_agent',
 		component: AgentTemplateComponent,
 		// canActivate: [AdminGuardGuard],
 		data: {
