@@ -107,6 +107,7 @@
 								<tr role="row">
 									<th>Actions</th>
 									<th>Booking</th>
+									<th>Total</th>
 									<th>Status</th>
 									<th>Date</th>
 									<th>Pax</th>
@@ -210,6 +211,11 @@
 										(click)="showBookingPreviewModal(booking.booking_id)">
 										<p class="booking-id-font font-weight-bolder cursor-pointer text-underline">
 											<span [innerHTML]="highlighText(booking.booking_id )"></span>
+										</p>
+									</td>
+									<td class="text-center font-weight-bolder cursor-pointer">
+										<p class="booking-id-font font-weight-bolder cursor-pointer">
+											<span class="currency">$</span><span [innerHTML]="highlighText(booking.grand_total)"></span>
 										</p>
 									</td>
 									<td>
@@ -706,7 +712,7 @@
 		<div class="modal-content" style="background: #f5f4fe;">
 			<div class="modal-header d-flex justify-content-start py-0">
 				<h3 class="modal-title">
-					Preview Booking
+					Preview Booking #{{bookingPreview?.reservation_id}}
 				</h3>
 				<!-- <button type="button" class="close x-circle-btn" data-dismiss="modal" aria-label="Close" >
 					<span aria-hidden="true" class="bi bi-x-circle"></span>

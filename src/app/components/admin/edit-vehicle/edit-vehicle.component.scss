@@ -29,6 +29,16 @@
 	outline  : none;
 	transform: scale(1.2, 1.2);
 }
+:host ::ng-deep.ng-select .ng-select-container.ng-appearance-outline:after {
+	height: 100%;
+}
+
+::ng-deep .col-md-3.margin-mat-field {
+    margin-top: -15px;
+}
+.margin-zero{
+	margin-top: 0px;
+}
 
 @media only screen and (min-width:1199px) {
 	.input-container:focus {
@@ -53,4 +63,9 @@
 	.mobilePadding {
 		padding: 0px 15px !important;
 	}
+
+	.mat-form-field {
+		margin-top: 20px;
+	}
+
 }

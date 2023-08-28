@@ -259,6 +259,11 @@
 								<img src="{{DriverImage}}" (click)="showImageInModal(DriverImage)" tabindex="-1">
 								<ul class="mt-3">
 									<li>
+										<a class="custom-arrow-clockwise-button"
+										(click)="fetchImageBlob(DriverImage ,'DriverImage',DriverImageId)">
+										 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+									</li>
+									<li>
 										<button class="changeuploaded" tabindex="1">
 											<input type="file"
 												(change)="vehicleOfficialImagesChange($event,'DriverImage',DriverImageId)"
@@ -328,6 +333,11 @@
 										class="asterisk">*</span></p>
 								<img src="{{DriverLicense}}" (click)="showImageInModal(DriverLicense)" tabindex="-1">
 								<ul class="mt-3">
+									<li>
+										<a class="custom-arrow-clockwise-button"
+										(click)="fetchImageBlob(DriverLicense ,'DriverLicense',DriverLicenseId)">
+										 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+									</li>
 									<li>
 										<button class="changeuploaded" tabindex="1">
 											<input type="file"
@@ -400,6 +410,11 @@
 								<p>Star Rating (Min 4.5) </p>
 								<img src="{{StarRating}}" (click)="showImageInModal(StarRating)" tabindex="-1">
 								<ul class="mt-3">
+									<li>
+										<a class="custom-arrow-clockwise-button"
+										(click)="fetchImageBlob(StarRating ,'StarRating',StarRatingId)">
+										 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+									</li>
 									<li>
 										<button class="changeuploaded" tabindex="1">
 											<input type="file"
@@ -497,6 +512,11 @@
 											tabindex="-1">
 										<ul class="mt-3">
 											<li>
+												<a class="custom-arrow-clockwise-button"
+												(click)="fetchImageBlob(VeteranIdCard ,'VeteranIdCard',VeteranIdCardId)">
+												 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+											</li>
+											<li>
 												<button class="changeuploaded" tabindex="1">
 													<input type="file"
 														(change)="vehicleOfficialImagesChange($event,'VeteranIdCard',VeteranIdCardId)"
@@ -580,6 +600,11 @@
 									<div>
 										<p>DoD Image <span class="asterisk">*</span></p>
 										<img src="{{DoDImage}}" (click)="showImageInModal(DoDImage)" tabindex="-1">
+										<li>
+											<a class="custom-arrow-clockwise-button"
+											(click)="fetchImageBlob(DoDImage ,'DoDImage',DoDImageId)">
+											 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+										</li>
 										<ul class="mt-3">
 											<li>
 												<button class="changeuploaded" tabindex="1">
@@ -670,6 +695,11 @@
 											tabindex="-1">
 										<ul class="mt-3">
 											<li>
+												<a class="custom-arrow-clockwise-button"
+												(click)="fetchImageBlob(FoidCardImage ,'FoidCardImage',FoidCardImageId)">
+												 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+											</li>
+											<li>
 												<button class="changeuploaded" tabindex="1">
 													<input type="file"
 														(change)="vehicleOfficialImagesChange($event,'FoidCardImage',FoidCardImageId)"
@@ -757,6 +787,11 @@
 										<img src="{{schoolBusCertificateImage}}"
 											(click)="showImageInModal(schoolBusCertificateImage)" tabindex="-1">
 										<ul class="mt-3">
+											<li>
+												<a class="custom-arrow-clockwise-button"
+												(click)="fetchImageBlob(schoolBusCertificateImage ,'schoolBusCertificateImage',schoolBusCertificateImageIdId)">
+												 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+											</li>
 											<li>
 												<button class="changeuploaded" tabindex="1">
 													<input type="file"
@@ -846,6 +881,11 @@
 										<img src="{{BackgroundCheckerID}}"
 											(click)="showImageInModal(BackgroundCheckerID)" tabindex="-1">
 										<ul class="mt-3 mb-0">
+											<li>
+												<a class="custom-arrow-clockwise-button"
+												(click)="fetchImageBlob(BackgroundCheckerID ,'BackgroundCheckerID',BackgroundCheckerIDId)">
+												 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+											</li>
 											<li>
 												<button class="changeuploaded" tabindex="1">
 													<input type="file"
@@ -974,6 +1014,11 @@
 										<img src="{{VaccinationCardImage}}"
 											(click)="showImageInModal(VaccinationCardImage)" tabindex="-1">
 										<ul class="mt-3">
+											<li>
+												<a class="custom-arrow-clockwise-button"
+												(click)="fetchImageBlob(VaccinationCardImage ,'VaccinationCardImage',VaccinationCardImageId)">
+												 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+											</li>
 											<li>
 												<button class="changeuploaded" tabindex="1">
 													<input type="file"
@@ -1156,18 +1201,23 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-md-7">
-		
+				<div class="billing_inforamtion">
+				<ul>
+					<li>
+						<button class="custom-filled-back-button" type="button" (click)="backButton()" data-toggle="tooltip"
+						data-placement="top" title="Clicking back button deletes all fields." tabindex="1">BACK</button>
+					</li>
+				</ul>
+				</div>
 			</div>
 			<div class="col-md-5">
 				<div class="billing_inforamtion">
 					<ul>
+						<li><button class="custom-filled-reset-button" (click)="resetForm()" tabindex="1">RESET</button></li>
 						<li><button class="custom-filled-button" (click)="submitForm()" [disabled]="disableSubmitButton"
 								tabindex="1">SAVE</button></li>
-						<li><button class="custom-filled-button" type="reset" (click)="resetForm()" tabindex="1">RESET</button>
-						</li>
-						<li><button class="custom-filled-button" type="button" (click)="backButton()" data-toggle="tooltip"
-								data-placement="top" title="Clicking back button deletes all fields." tabindex="1">BACK</button>
-						</li>
+						<!-- <li>
+						</li> -->
 					</ul>
 				</div>
 			</div>

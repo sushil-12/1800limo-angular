@@ -299,11 +299,11 @@ export class FinalizeBookingComponent implements OnInit {
 	deleteCard() {
 		this.$spinner.show()
 		this.$api.deleteCardFinalize(this.deleteCardForm.value.cardId, this.deleteCardForm.value.accId).subscribe((response: any) => {
-			this.$errors.openDialog({
-				errors: {
-					error: `<span class='text-success'>${response.message}</span>`
-				}
-			})
+			// this.$errors.openDialog({
+			// 	errors: {
+			// 		error: `<span class='text-success'>${response.message}</span>`
+			// 	}
+			// })
 			// this.$router.navigate(['/admin/daily-bookings-admin'])
 			this.$spinner.hide()
 			this.getReservationDetails(this.bookingId)
@@ -451,11 +451,11 @@ export class FinalizeBookingComponent implements OnInit {
 		}
 		this.$api.paymentProcessing(dataToSend).subscribe((response: any) => {
 			console.log(response)
-			this.$errors.openDialog({
-				errors: {
-					error: `<span class='text-success'>${response.message}</span>`
-				}
-			})
+			// this.$errors.openDialog({
+			// 	errors: {
+			// 		error: `<span class='text-success'>${response.message}</span>`
+			// 	}
+			// })
 			console.log('response---------------------->>', response)
 			this.$spinner.hide()			
 			this.getReservationDetails(this.bookingId)

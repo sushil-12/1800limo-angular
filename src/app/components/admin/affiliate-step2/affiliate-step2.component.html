@@ -254,6 +254,11 @@
 								<img src="{{id_front_image}}" (click)="showImageInModal(id_front_image)" tabindex="-1">
 								<ul *ngIf="canChangeDocument" class="mt-3">
 									<li>
+										<a class="custom-arrow-clockwise-button"
+										(click)="fetchImageBlob(id_front_image ,'id_front_image',id_front_image_id )">
+										 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+									</li>
+									<li>
 										<button class="changeuploaded" tabindex="1">
 											<input type="file"
 												(change)="idCardImageChange($event,'id_front_image',id_front_image_id)"
@@ -323,6 +328,11 @@
 								<img src="{{id_back_image}}" (click)="showImageInModal(id_back_image)" tabindex="-1">
 								<ul *ngIf="canChangeDocument" class="mt-3">
 									<li>
+										<a class="custom-arrow-clockwise-button"
+										(click)="fetchImageBlob(id_back_image ,'id_back_image',id_back_image_id )">
+										 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+									</li>
+									<li>
 										<button class="changeuploaded" tabindex="1">
 											<input type="file"
 												(change)="idCardImageChange($event,'id_back_image',id_back_image_id)"
@@ -390,6 +400,8 @@
 				<div class="col-md-12">
 					<h3 class="addveh_top d-md-flex justify-content-between align-items-center mb-0">
 						<label class="alert alert-danger">Enter Address and Choose From Drop Down.</label>
+						<label class="alert alert-danger my-2 mx-2">Choose nearest major city or airport location</label>
+						<label></label>
 					</h3>
 				</div>
 			</div>
@@ -410,6 +422,25 @@
 							<div *ngIf="f.latitude.errors.required">Please enter valid address.</div>
 						</div>
 					</ng-template>
+				</div>
+				<div class="col-md-4">
+					<mat-form-field appearance="outline" class="example-full-width">
+						<mat-label>Badge City
+						</mat-label>
+						<input type="text"
+							   placeholder="Pick one"
+							   aria-label="Number"
+							   matInput
+							   formControlName="badge_city_name"
+							   [matAutocomplete]="auto" 
+							   (keyup)="handleBadgeCity($event.target.value)">
+						<mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+						  <mat-option *ngFor="let option of filteredOptions" 
+						  (onSelectionChange)="selectBadgeCity(option,$event.isUserInput)" [value]="option.name">
+							{{option.name}}
+						  </mat-option>
+						</mat-autocomplete>
+					  </mat-form-field>
 				</div>
 				<div class="col-md-12 map-wrapper" *ngIf="latitude">
 					<agm-map [latitude]="latitude" [longitude]="longitude">
@@ -454,7 +485,7 @@
 						<div *ngIf="f.state.errors.required">This field is required</div>
 					</div>
 				</div>
-				<div class="col-md-6">
+				<!-- <div class="col-md-6">
 					<mat-form-field appearance="outline">
 						<mat-label>Street <span class="asterisk">*</span></mat-label>
 						<input matInput placeholder="Street" formControlName="street" disabled tabindex="1">
@@ -463,7 +494,7 @@
 						class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.street.errors.required">This field is required</div>
 					</div>
-				</div>
+				</div> -->
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
 						<mat-label>City <span class="asterisk">*</span></mat-label>
@@ -509,9 +540,9 @@
 			<div class="col-md-5">
 				<div class="billing_inforamtion">
 					<ul class=" d-flex justify-content-center">
+						<li><button class="custom-filled-reset-button mr-2" (click)="resetForm()" tabindex="1">RESET</button> </li>
 						<li><button class="custom-filled-button mr-2" (click)="submitForm()" [disabled]="disableSubmitButton"
 								tabindex="1">SAVE</button> </li>
-						<li><button class="custom-filled-button mr-2" (click)="resetForm()" tabindex="1">RESET</button> </li>
 					</ul>
 				</div>
 			</div>

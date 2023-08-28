@@ -390,6 +390,10 @@
 								<span class="text-secondary">Model</span>
 								<span class="ml-1 font-weight-bold"> {{vehinfo?.vehicle_details.model}}</span>
 							</div>
+							<span class="d-flex cancel-policy" *ngIf="!vehinfo?.is_master_vehicle">
+								<i class="bi bi-exclamation-circle-fill" style="color: red;"></i>
+								&nbsp; Cancellation Policy 
+								 {{convertHrIntoDays(vehinfo?.cancellation_policy)}}</span>
 						</div>
 						<!-- INFORMATION ENDS -->
 					</div>
@@ -397,8 +401,9 @@
 
 					<!-- DIV: PREVIEW BUTTON -->
 					<!-- class="m-3" -->
-					<div id="vehicle-preview-button">
-						<button class="custom-filled-button orange-button mx-2" (click)="viewDetails(vehinfo)">
+					<div id="vehicle-preview-button" style="display: flex;justify-content: space-around;">
+						<button class="custom-filled-button orange-button mx-2" (click)="viewDetails(vehinfo)"
+							style="height: 40px; margin-top: 10px;">
 							Vehicle Details
 						</button>
 						<button class="custom-filled-button text-dark rounded-pill" (click)="bookNow(vehinfo)">

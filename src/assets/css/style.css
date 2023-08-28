@@ -511,7 +511,7 @@ header {
 	/* color        : var(--orange-color); */
 	color        : #fff;
 	margin-bottom: 0px;
-	font-size    : 12px;
+	font-size    : 15px;
 	width        : 100%;
 	display      : inline-block;
 	text-align   : center;
@@ -552,14 +552,14 @@ header {
 .bannerform_wrapper .qutedrates li {
 	list-style-type: disc;
 	color          : #fff;
-	font-size      : 12px;
+	font-size      : 15px;
 	margin         : 0 15px 0 15px;
 	padding        : 15px 0px 8px 0px;
 }
 
 .bannerform_wrapper a.vichlepolicy {
 	color          : var(--orange-color);
-	font-size      : 12px;
+	font-size      : 15px;
 	text-align     : center;
 	width          : 100%;
 	text-decoration: none;
@@ -1427,7 +1427,7 @@ background-repeat      : no-repeat; background-position: bottom right; */
 }
 
 .ridenow_wrapper p {
-	font-size  : 14px;
+	font-size  : 16px;
 	color      : #fff;
 	font-weight: 300;
 }
@@ -3135,7 +3135,7 @@ margin-top: 50px !important;
 .chk_vehicles.owl-theme .owl-dots .owl-dot span {
 	width     : 4px;
 	height    : 4px;
-	background: #000;
+	background: #fff;
 }
 
 .chk_vehicles.owl-theme .owl-dots .owl-dot.active span {
@@ -3906,11 +3906,11 @@ header .navbar-toggler {
 	}
 
 	.bannerform_wrapper .quoteform_homewrapper span {
-		font-size: 11px;
+		font-size: 14px;
 	}
 
 	.bannerform_wrapper .qutedrates li {
-		font-size: 12px
+		font-size: 15px
 	}
 
 

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
@@ -10,7 +10,7 @@ import { AffiliateService } from 'src/app/services/affiliate.service';
   templateUrl: './rates-forms.component.html',
   styleUrls: ['./rates-forms.component.scss']
 })
-export class RatesFormsComponent implements OnInit {
+export class RatesFormsComponent implements OnInit , OnChanges {
   @Input("initRates") init_rates: boolean = false;
 	@Input("initReturnRates") init_r_rates: boolean = false;
 	@Input("affiliate_type") affiliate_type: string = "";
@@ -30,6 +30,7 @@ export class RatesFormsComponent implements OnInit {
 	ReturnRatesForm: FormGroup;
 
 	ratesdata = new BehaviorSubject<any>({});
+	returnRatesdata = new BehaviorSubject<any>({});
 	temp: any;
 
 	ratesform: boolean = false;
@@ -69,6 +70,9 @@ export class RatesFormsComponent implements OnInit {
 
 	vehicles: number = 1;
 	hours: number = 0;
+	newBooking: boolean;
+	is_readonly_min_rate: boolean = false;
+
 
 	constructor(
 		private $form: FormBuilder,
@@ -81,6 +85,9 @@ export class RatesFormsComponent implements OnInit {
 		this.$routeurl.queryParams.subscribe((params: any) => {
 			if (!params?.vehicle_id ) {
 				this.fetchRates('');
+			}
+			if (params && params.new == 'true') {
+				this.newBooking = params.new == 'true'
 			}
 		})
 	}
@@ -192,8 +199,28 @@ export class RatesFormsComponent implements OnInit {
 	}
 	scroll(id) {
 		let el = document.getElementById(id);
-		console.log(`scrolling to ${id}`, el);
-		el.scrollIntoView();
+		let elementRect = el.getBoundingClientRect();
+		let absoluteElementTop = elementRect.top + window.pageYOffset;
+		let topElement = absoluteElementTop - 200;
+		
+		console.log(`scrolling to ${id}`, el , absoluteElementTop ,window.innerHeight);
+		window.scrollTo({
+			top: topElement,
+			behavior: 'smooth'
+		});
+		// console.log(`scrolling to ${id}`, el);
+		// el.scrollIntoView();
+	}
+	handleNegtiveValue(formgroup,subform,formcontrol,value){
+		let v = parseFloat((Math.abs(Number(value))).toFixed(2));
+		(<FormGroup>(<FormGroup>this.RatesForm.get(formgroup)).get(subform)).get(formcontrol).setValue(v);
+		this.RatesForm.updateValueAndValidity();
+		console.log('handleNegtiveValue-->>' , formgroup,subform,formcontrol,parseFloat((Math.abs(Number(value))).toFixed(2))) 
+	}
+	handleNegtiveValuReturn(formgroup,subform,formcontrol,value){
+		let v = parseFloat((Math.abs(Number(value))).toFixed(2));
+		(<FormGroup>(<FormGroup>this.ReturnRatesForm.get(formgroup)).get(subform)).get(formcontrol).setValue(v);
+		this.ReturnRatesForm.updateValueAndValidity();
 	}
 	closeAllChevrons() {
 		this.rate_params["chevrons"]['section'] = false
@@ -204,7 +231,7 @@ export class RatesFormsComponent implements OnInit {
 		this.rate_params["chevrons"]['amenities'] = false
 		this.rate_params["chevrons"]['misc'] = false
 		setTimeout(() => {
-			this.scroll('closeAll-btn')
+			this.scroll('rate-heading')
 		}, 300)
 	}
 	closeReturnAllChevrons() {
@@ -216,7 +243,7 @@ export class RatesFormsComponent implements OnInit {
 		this.rate_params["chevrons"]['r_amenities'] = false
 		this.rate_params["chevrons"]['r_misc'] = false
 		setTimeout(() => {
-			this.scroll('closeAll-btn_r')
+			this.scroll('rate-heading')
 		}, 300)
 	}
 	initRates() {
@@ -280,19 +307,41 @@ export class RatesFormsComponent implements OnInit {
 			misc: this.$form.group({}),
 			others: this.$form.group({}),
 		});
-
-		this.getRatesData().subscribe((response: any) => {
-			if (response && Object.keys(response).length > 0) {
-				this.buildRatesForm('ReturnRatesForm', response);
-				if (this.bookingId) {
-					for (let formgroup in this.ReturnRateForm) {
-						for (let subform in this.ReturnRateForm[formgroup].controls) {
-							this.calculateAmount('ReturnRatesForm', formgroup, subform)
+		if(this.newBooking){
+			this.getReturnRatesData().subscribe((response: any) => {
+				if (response && Object.keys(response).length > 0) {
+					this.buildRatesForm('ReturnRatesForm', response);
+					if (this.bookingId) {
+						for (let formgroup in this.ReturnRateForm) {
+							for (let subform in this.ReturnRateForm[formgroup].controls) {
+								this.calculateAmount('ReturnRatesForm', formgroup, subform)
+							}
 						}
 					}
 				}
-			}
-		});
+			});
+				console.log('calculating return total for QB ')
+				for (let formgroup in this.ReturnRateForm) {
+					for (let subform in this.ReturnRateForm[formgroup].controls) {
+							this.calculateAmount('ReturnRatesForm', formgroup, subform)
+					}
+				}
+		}
+		else{
+			this.getRatesData().subscribe((response: any) => {
+				if (response && Object.keys(response).length > 0) {
+					this.buildRatesForm('ReturnRatesForm', response);
+					if (this.bookingId) {
+						for (let formgroup in this.ReturnRateForm) {
+							for (let subform in this.ReturnRateForm[formgroup].controls) {
+								this.calculateAmount('ReturnRatesForm', formgroup, subform)
+							}
+						}
+					}
+				}
+			});
+		}
+		
 
 		this.ReturnRatesForm.valueChanges.subscribe((value: any) => {
 			this.calculateTotal("ReturnRatesForm");
@@ -341,6 +390,7 @@ export class RatesFormsComponent implements OnInit {
 	fetchRates(affiliate: string, bookingId: number = 0) {
 		this.$api.fetchBookingRates(bookingId).subscribe((response: any) => {
 			if (response?.success && response?.data?.rateArray) {
+			this.is_readonly_min_rate = response?.data?.min_rate_involved ? true : false
 				this.ratesdata.next(response.data.rateArray);
 			}
 		});
@@ -370,13 +420,21 @@ export class RatesFormsComponent implements OnInit {
 			distance: location_info.distance.value
 		}
 		this.adminServices.fetchRatesByAffiliateVeh(vehicle_id, data).subscribe((response: any) => {
+			this.is_readonly_min_rate = response?.data?.min_rate_involved ? true : false
 			this.ratesdata.next(response?.data?.rateArray)
 			this.initRates();
+			if(data.service_type == 'round_trip'){
+				this.returnRatesdata.next(response?.data?.retrunRateArray)
+				this.initReturnRates()
+			}
 		});
 	}
 
 	getRatesData() {
 		return this.ratesdata.asObservable();
+	}
+	getReturnRatesData() {
+		return this.returnRatesdata.asObservable();
 	}
 	handleHourChange(event: any) {
 		console.log('------->>>>>>>', event.target.value)
@@ -476,7 +534,7 @@ export class RatesFormsComponent implements OnInit {
 			let value = this.RatesForm.value;
 			value["grand_total"] = this.grandtotal;
 			value["sub_total"] = this.subtotal;
-
+			value["min_rate_involved"] = this.is_readonly_min_rate
 			this.formvalue.emit(value);
 		}
 		if (form == 'ReturnRatesForm' && this.ReturnRatesForm) {
@@ -516,17 +574,24 @@ export class RatesFormsComponent implements OnInit {
 				let amount = 0;
 
 				// Hourly Rate - only in case of hours
-				if (this.hours != 0 && subform == 'Base_Rate') {
+				if (this.hours != 0 && subform == 'Base_Rate' && !this.is_readonly_min_rate) {
 					amount = Number(Number(Number(this.hours) * baserate).toFixed(2));
-				} else {
+				}else {
 					amount = baserate;
 				}
 
 				// Admin Share Calculation
-				if (subform == 'Base_Rate') {
+				if (subform == 'Base_Rate' && !this.is_readonly_min_rate) {
 					this.calc_admin_share = (amount * this.admin_share) / 100;
 					console.log('calc_admin_share--->>', amount, this.calc_admin_share)
+					amount = parseFloat((amount + this.calc_admin_share).toFixed(2));
+				}
+				console.log('is_readonly_min_rate-->>' ,this.is_readonly_min_rate )
+				if(this.is_readonly_min_rate && subform == 'Base_Rate'){
+					let min_rate = (<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("baserate").value;
+					this.calc_admin_share = (min_rate * this.admin_share) / 100
 					amount = amount + this.calc_admin_share;
+					console.log('is_readonly_min_rate_amount-->>' , amount , this.calc_admin_share )
 				}
 
 				(<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("amount").setValue(amount);

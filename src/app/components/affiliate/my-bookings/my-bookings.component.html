@@ -73,6 +73,7 @@
 									<tr role="row">
 										<th>Actions</th>
 										<th>Booking</th>
+										<th>Total</th>
 										<th>Status</th>
 										<th>Date</th>
 										<th>Pax</th>
@@ -149,6 +150,11 @@
 												<span [innerHTML]="highlighText(booking?.booking_id )"></span>
 											</p>
 										</td>
+										<td class="text-center font-weight-bolder cursor-pointer">
+											<p class="booking-id-font font-weight-bolder cursor-pointer">
+												<span class="currency">$</span><span [innerHTML]="highlighText(booking.grand_total)"></span>
+											</p>
+										</td>
 										<td>
 											<div data-toggle="modal" data-target="#change_status_booking_Modal"
 												[className]="'badge badge-pill booking_status cursor-pointer ' + booking?.booking_status">
@@ -177,9 +183,9 @@
 										</td>
 										<td>
 	
+											<!-- class="disabled-btn" -->
 											<p data-target="#sendEmailModal" data-toggle="modal"
-											class="disabled-btn"
-												(click)="openModal(booking, 'Affiliate')">
+												(click)="openModal(booking, 'Driver')">
 												<span class="font-weight-bolder"
 													[innerHTML]="highlighText(booking?.driver_name)"></span>&nbsp;
 												|
@@ -397,10 +403,8 @@
 			<div class="text-center iconStyle">
 				<div class="row">
 					<div class="col-md-12">
-						<h5 class="mb-5" *ngIf="passengerDetails?.selection_button == 'Affiliate'">
-							Connect with {{ passengerDetails?.driver_first_name }} {{
-							passengerDetails?.driver_last_name
-							}} Via</h5>
+						<h5 class="mb-5" *ngIf="passengerDetails?.selection_button == 'Driver'">
+							Connect with {{ passengerDetails?.driver_name }} Via</h5>
 						<h5 class="mb-5" *ngIf="passengerDetails?.selection_button == 'Passenger'">
 							Connect with {{ passengerDetails?.passenger_name }} Via</h5>
 						<h5 class="mb-5" *ngIf="passengerDetails?.selection_button == 'Loose_Affiliate'">
@@ -463,8 +467,8 @@
 							</svg>
 							<h6 class="headingStyle">Make Call</h6>
 						</a>
-						<a *ngIf="passengerDetails?.selection_button == 'Affiliate'"
-							href="tel:{{passengerDetails?.affiliate_dispatch_isd}}{{passengerDetails?.affiliate_dispatch_number}}">
+						<a *ngIf="passengerDetails?.selection_button == 'Driver'"
+							href="tel:{{passengerDetails?.driver_cell_isd}}{{passengerDetails?.driver_cell_number}}">
 							<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"
 								viewBox="0 0 122.88 122.88">
 								<defs>
@@ -584,7 +588,7 @@
 		<div class="modal-content" style="background: #f5f4fe;">
 			<div class="modal-header d-flex justify-content-start py-0">
 				<h3 class="modal-title">
-					Preview Booking
+					Preview Booking #{{bookingPreview?.reservation_id}}
 				</h3>
 				<!-- <button type="button" class="close x-circle-btn" data-dismiss="modal" aria-label="Close" >
 					<span aria-hidden="true" class="bi bi-x-circle"></span>

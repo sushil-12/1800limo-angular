@@ -354,12 +354,12 @@
 
 				<!-- Airport/City Cancel Times -->
 				<div class="col-md-6">
-					<label class="select-cancel-label">Airport / City Cancel Times
+					<label class="select-cancel-label">Airport / City Cancel Policy
 						<span class="asterisk">*</span></label>
 					<div class="selectStyle">
 						<select class="selectInputStyle" formControlName="nonCharterCancelPolicy" tabindex="1">
 							<option value="">
-								Choose Airport / City Cancel Times
+								Choose Airport / City Cancel Policy
 							</option>
 							<option *ngFor="
 									let nonCharterCancelOption of nonCharterCancelOptions
@@ -388,24 +388,24 @@
 								f.nonCharterCancelPolicy.errors)
 						" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.nonCharterCancelPolicy.errors.required">
-							The Charter Cancel Times is required
+							The Charter Cancel Policy is required
 						</div>
 					</div>
 					<div *ngIf="f.nonCharterCancelPolicy.errors" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.nonCharterCancelPolicy.errors.pattern">
-							The Charter Cancel Times should be a number
+							The Charter Cancel Policy should be a number
 						</div>
 					</div>
 				</div>
 
-				<!-- Charter Cancel Times -->
+				<!-- Charter Cancel Policy -->
 				<div class="col-md-6">
-					<label class="select-charter-cancel-label">Charter Cancel Times
+					<label class="select-charter-cancel-label">Charter Cancel Policy
 						<span class="asterisk">*</span></label>
 					<div class="selectStyle">
 						<select class="selectInputStyle" formControlName="charterCancelPolicy" tabindex="1">
 							<option value="">
-								Choose Charter Cancel Times
+								Choose Charter Cancel Policy
 							</option>
 							<option *ngFor="
 									let charterCancelOption of charterCancelOptions
@@ -679,6 +679,11 @@
 							<img src="{{ vehicleImage1 }}" (click)="showImageInModal(vehicleImage1)" tabindex="-1" />
 							<ul class="mt-3">
 								<li>
+									<a class="custom-arrow-clockwise-button"
+									(click)="fetchImageBlob(vehicleImage1 ,'1',vehicleImageId1)">
+									 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+								</li>
+								<li>
 									<button class="changeuploaded" tabindex="1">
 										<input type="file" (change)="
 												onFileChange(
@@ -705,6 +710,11 @@
 							<p>Vehicle Image 2</p>
 							<img src="{{ vehicleImage2 }}" (click)="showImageInModal(vehicleImage2)" tabindex="-1" />
 							<ul class="mt-3">
+								<li>
+									<a class="custom-arrow-clockwise-button"
+									(click)="fetchImageBlob(vehicleImage2,'2',vehicleImageId2)">
+									 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+								</li>
 								<li>
 									<button class="changeuploaded" tabindex="1">
 										<input type="file" (change)="
@@ -777,6 +787,11 @@
 							<img src="{{ vehicleImage3 }}" (click)="showImageInModal(vehicleImage3)" tabindex="-1" />
 							<ul class="mt-3">
 								<li>
+									<a class="custom-arrow-clockwise-button"
+									(click)="fetchImageBlob(vehicleImage3,'3',vehicleImageId3)">
+									 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+								</li>
+								<li>
 									<button class="changeuploaded" tabindex="1">
 										<input type="file" (change)="
 												onFileChange(
@@ -847,6 +862,11 @@
 							<p>Vehicle Image 4</p>
 							<img src="{{ vehicleImage4 }}" (click)="showImageInModal(vehicleImage4)" tabindex="-1" />
 							<ul class="mt-3">
+								<li>
+									<a class="custom-arrow-clockwise-button"
+									(click)="fetchImageBlob(vehicleImage4,'4',vehicleImageId4)">
+									 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+								</li>
 								<li>
 									<button class="changeuploaded" tabindex="1">
 										<input type="file" (change)="
@@ -919,6 +939,11 @@
 							<img src="{{ vehicleImage5 }}" (click)="showImageInModal(vehicleImage5)" tabindex="-1" />
 							<ul class="mt-3">
 								<li>
+									<a class="custom-arrow-clockwise-button"
+									(click)="fetchImageBlob(vehicleImage5,'5',vehicleImageId5)">
+									 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+								</li>
+								<li>
 									<button class="changeuploaded" tabindex="1">
 										<input type="file" (change)="
 												onFileChange(
@@ -989,6 +1014,11 @@
 							<p>Vehicle Image 6</p>
 							<img src="{{ vehicleImage6 }}" (click)="showImageInModal(vehicleImage6)" tabindex="-1" />
 							<ul class="mt-3">
+								<li>
+									<a class="custom-arrow-clockwise-button"
+									(click)="fetchImageBlob(vehicleImage6,'6',vehicleImageId6)">
+									 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+								</li>
 								<li>
 									<button class="changeuploaded" tabindex="1">
 										<input type="file" (change)="
@@ -1061,6 +1091,11 @@
 							<img src="{{ vehicleImage7 }}" (click)="showImageInModal(vehicleImage7)" tabindex="-1" />
 							<ul class="mt-3">
 								<li>
+									<a class="custom-arrow-clockwise-button"
+									(click)="fetchImageBlob(vehicleImage7,'7',vehicleImageId7)">
+									 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+								</li>
+								<li>
 									<button class="changeuploaded" tabindex="1">
 										<input type="file" (change)="
 												onFileChange(
@@ -1132,6 +1167,11 @@
 							<img src="{{ vehicleImage8 }}" (click)="showImageInModal(vehicleImage8)" tabindex="-1" />
 							<ul class="mt-3">
 								<li>
+									<a class="custom-arrow-clockwise-button"
+									(click)="fetchImageBlob(vehicleImage8,'8',vehicleImageId8)">
+									 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+								</li>
+								<li>
 									<button class="changeuploaded" tabindex="1">
 										<input type="file" (change)="
 												onFileChange(
@@ -1202,6 +1242,11 @@
 							<p>Vehicle Image 9</p>
 							<img src="{{ vehicleImage9 }}" (click)="showImageInModal(vehicleImage9)" tabindex="-1" />
 							<ul class="mt-3">
+								<li>
+									<a class="custom-arrow-clockwise-button"
+									(click)="fetchImageBlob(vehicleImage9,'9',vehicleImageId9)">
+									 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+								</li>
 								<li>
 									<button class="changeuploaded" tabindex="1">
 										<input type="file" (change)="
@@ -1283,6 +1328,11 @@
 								<img src="{{ rearPlateImage }}" (click)="showImageInModal(rearPlateImage)"
 									tabindex="-1" />
 								<ul class="mt-3">
+									<li>
+										<a class="custom-arrow-clockwise-button"
+										(click)="fetchImageBlob(rearPlateImage,'rearPlate',rearPlateId)">
+										 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+									</li>
 									<li>
 										<button class="changeuploaded" tabindex="1">
 											<input type="file" (change)="
@@ -1374,6 +1424,11 @@
 									" tabindex="-1" />
 								<ul class="mt-3">
 									<li>
+										<a class="custom-arrow-clockwise-button"
+										(click)="fetchImageBlob(windowPermitImage,'windowPermit',windowPermitId)">
+										 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+									</li>
+									<li>
 										<button class="changeuploaded" tabindex="1">
 											<input type="file" (change)="
 													vehicleOfficialImagesChange(
@@ -1461,6 +1516,11 @@
 										showImageInModal(windowPermit2Image)
 									" tabindex="-1" />
 								<ul class="mt-3">
+									<li>
+										<a class="custom-arrow-clockwise-button"
+										(click)="fetchImageBlob(windowPermit2Image,'windowPermit2',windowPermit2Id)">
+										 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+									</li>
 									<li>
 										<button class="changeuploaded" tabindex="1">
 											<input type="file" (change)="
@@ -1558,6 +1618,11 @@
 									tabindex="-1" />
 								<ul class="mt-3">
 									<li>
+										<a class="custom-arrow-clockwise-button"
+										(click)="fetchImageBlob(usdotPermitImage,'usdotPermit',usdotPermitId)">
+										 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+									</li>
+									<li>
 										<button class="changeuploaded" tabindex="1">
 											<input type="file" (change)="
 													vehicleOfficialImagesChange(
@@ -1650,6 +1715,11 @@
 								</p>
 								<img src="{{ mcImage }}" (click)="showImageInModal(mcImage)" tabindex="-1" />
 								<ul class="mt-3">
+									<li>
+										<a class="custom-arrow-clockwise-button"
+										(click)="fetchImageBlob(mcImage,'mc',mcId)">
+										 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+									</li>
 									<li>
 										<button class="changeuploaded" tabindex="1">
 											<input type="file" (change)="

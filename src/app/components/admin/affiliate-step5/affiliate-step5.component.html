@@ -77,6 +77,12 @@
 												<div class="dropdown-item-icon"></div>
 												Edit Rates
 											</a>
+											<a class="dropdown-item"
+												*ngIf="canAddVehicle"
+												(click)="clickedDuplicateVehicle(vehicle.ID)">
+												<div class="dropdown-item-icon"></div>
+												Duplicate Vehicle
+											</a>
 										</div>
 									</td>
 									<td><img src="{{vehicle.vehicleImage}}"></td>

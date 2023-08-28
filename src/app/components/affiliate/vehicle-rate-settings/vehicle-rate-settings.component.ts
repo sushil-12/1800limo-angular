@@ -85,6 +85,12 @@ export class VehicleRateSettingsComponent implements OnInit {
 			})
 		})
 	}
+	Subscriptions(){
+		this.VehicleRateSettingsForm.get('km_mile').valueChanges.subscribe((value: string) => {
+			console.log('value for km_mile-->' , value)
+		})
+	}
+	
 
 	/**
 	 * Set the specified value into form
@@ -106,6 +112,20 @@ export class VehicleRateSettingsComponent implements OnInit {
 	changeDetection = {
 		radioButton: (form_control: string, value: any) => {
 			this.SetFormValue(form_control, value)
+			if(value =="kilometer"){
+				console.log('set validator for km')
+				this.VehicleRateSettingsForm.get('kilometer_rate')?.setValidators([Validators.required,Validators.pattern("^[0-9]*(\.[0-9]+)?$"),Validators.min(1.71)]); // Set back the validator
+				this.VehicleRateSettingsForm.get('milage_rate')?.clearValidators(); // Clear the validator
+				this.VehicleRateSettingsForm.get('kilometer_rate')?.updateValueAndValidity();
+				this.VehicleRateSettingsForm.get('milage_rate')?.updateValueAndValidity();
+			}
+			else if(value =="mile"){
+				console.log('set validator for mile')
+				this.VehicleRateSettingsForm.get('milage_rate')?.setValidators([Validators.required,Validators.pattern("^[0-9]*(\.[0-9]+)?$") ,Validators.min(2)]); // Set back the validator
+				this.VehicleRateSettingsForm.get('kilometer_rate')?.clearValidators(); 
+				this.VehicleRateSettingsForm.get('milage_rate')?.updateValueAndValidity()
+				this.VehicleRateSettingsForm.get('kilometer_rate')?.updateValueAndValidity();
+			}
 		},
 		currencySymbol: (value: any) => {
 			console.log(value)
@@ -135,13 +155,13 @@ export class VehicleRateSettingsComponent implements OnInit {
 			hours_day_rate: [8, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			day_rate: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			km_mile: ['mile', Validators.required],
-			milage_rate: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
-			kilometer_rate: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
+			milage_rate: [2, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
+			kilometer_rate: [1.71, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			minimum_airport_departure_rate: [0, [Validators.required, Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			minimum_airport_arrival_rate: [0, [Validators.required, Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			minimum_city_rate: [0, [Validators.required, Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
-			minimum_cruise_port_arrival_rate: [0, [Validators.required, Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
-			minimum_cruise_port_departure_rate: [0, [Validators.required, Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
+			minimum_cruise_port_arrival_rate: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
+			minimum_cruise_port_departure_rate: [0, [ Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			minimum_on_demand_rate: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			per_person_group_ride_rate: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			airport_city_percentage_booking_cancel_charges: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
@@ -166,6 +186,7 @@ export class VehicleRateSettingsComponent implements OnInit {
 			workmans_comp: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			other_transportation_tax: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]]
 		})
+		this.changeDetection.radioButton('km_mile', 'mile')
 
 		if (this.VehicleRateSettingsForm) {
 			return true
@@ -186,9 +207,9 @@ export class VehicleRateSettingsComponent implements OnInit {
 				this.dayRateCalculations()
 			}
 		);
-		this.VehicleRateSettingsForm.get('minimum_airport_arrival_rate').valueChanges.subscribe(value => {
-			this.SetFormValue('minimum_airport_departure_rate', value)
-		})
+		// this.VehicleRateSettingsForm.get('minimum_airport_arrival_rate').valueChanges.subscribe(value => {
+		// 	this.SetFormValue('minimum_airport_departure_rate', value)
+		// })
 
 		this.VehicleRateSettingsForm.get('minimum_cruise_port_arrival_rate').valueChanges.subscribe(value => {
 			this.SetFormValue('minimum_cruise_port_departure_rate', value)
@@ -206,8 +227,8 @@ export class VehicleRateSettingsComponent implements OnInit {
 		);
 
 		this.VehicleRateSettingsForm.get('airport_arrival_tax_per_us').valueChanges.subscribe(value => {
-			this.SetFormValue('airport_departure_tax_per_us', value)
-			this.SetFormValue('sea_port_tax_per_us', value)
+			// this.SetFormValue('airport_departure_tax_per_us', value)
+			// this.SetFormValue('sea_port_tax_per_us', value)
 		})
 
 		// fetch previous vehicle rates on edit case
@@ -275,6 +296,7 @@ export class VehicleRateSettingsComponent implements OnInit {
 			});
 			console.group(this.VehicleRateSettingsForm)
 			console.groupEnd()
+			this.changeDetection.radioButton('km_mile',response.data.km_mile ?? 'mile')
 			this.updateRateRangeObject();
 		})
 		this.initRateRangeObject();
@@ -323,9 +345,9 @@ export class VehicleRateSettingsComponent implements OnInit {
 		if (babySeatValue.label == 'Baby_Seat') {
 			Object.entries(this.VehicleRateSettingsForm.value.amenities_rates).forEach(
 				([key, value]: any) => {
-					if (value.label == 'Booster_Seat' || value.label == 'Baggage_Meet_Dom_' || value.label == 'Baggage_Meet_Int_') {
-						(this.AmenitiesRates.get(key) as FormGroup).setValue({ ...value, price: babySeatValue.price });
-					}
+					// if (value.label == 'Booster_Seat' || value.label == 'Baggage_Meet_Dom_' || value.label == 'Baggage_Meet_Int_') {
+					// 	(this.AmenitiesRates.get(key) as FormGroup).setValue({ ...value, price: babySeatValue.price });
+					// }
 				});
 		}
 	}
@@ -557,7 +579,49 @@ export class VehicleRateSettingsComponent implements OnInit {
 	 * Resets the whole form to initial values i.e. when the form is newly built
 	 */
 	resetForm() {
-		this.VehicleRateSettingsForm.reset();
+		// this.VehicleRateSettingsForm.reset();
+		this.VehicleRateSettingsForm.patchValue({
+			currency: '$',
+			hourly_rate: 0, 
+			hourly_rate_after_five_hours: 0,
+			hours_day_rate: 8,
+			day_rate: 0, 
+			km_mile: 'mile',
+			milage_rate: 2,
+			kilometer_rate: 1.71,
+			minimum_airport_departure_rate: 0,
+			minimum_airport_arrival_rate: 0,
+			minimum_city_rate: 0,
+			minimum_cruise_port_arrival_rate: 0,
+			minimum_cruise_port_departure_rate: 0,
+			minimum_on_demand_rate: 0,
+			per_person_group_ride_rate: 0,
+			airport_city_percentage_booking_cancel_charges: 0,
+			charter_percentage_booking_cancel_charges: 0,
+			rate_range: '0',
+			gratuity: '20',
+			is_gratuity: 'no',
+			amenities_rates: new FormGroup({}),
+			airport_arrival_tax_per_us: "",
+			airport_departure_tax_per_us: "",
+			sea_port_tax_per_us: "",
+			city_congestion_tax_per_us: "",
+			rate_range_percent_flat: 'flat',
+			city_tax_percent_flat: 'flat',
+			state_tax_percent_flat: 'flat',
+			vat_percent_flat: 'flat',
+			workman_comp_percent_flat: 'flat',
+			other_transportation_tax_percent_flat: 'flat',
+			city_tax:0,
+			state_tax:0,
+			vat:0,
+			workmans_comp: 0, 
+			other_transportation_tax:0,
+		})
+		window.scrollTo({
+			top:0,
+			behavior:'smooth'
+		})
 	}
 
 }

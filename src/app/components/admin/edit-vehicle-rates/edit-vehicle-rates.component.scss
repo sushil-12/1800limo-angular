@@ -28,7 +28,50 @@
 		margin-bottom: 0px;
 	}
 }
+div#rate-manager-slider {
+	width: 100%;
 
+	&>span {
+		cursor: pointer;
+
+		input {
+			width: 85%;
+		}
+	}
+
+	&>p {
+		width : auto;
+		cursor: pointer;
+	}
+
+	#slider {
+		background-color: #908c8c;
+		appearance      : none;
+		outline         : none;
+		border-radius   : 10px;
+		height          : 3px
+	}
+
+	#slider::-webkit-slider-thumb {
+		-webkit-appearance: none;
+		appearance        : none;
+		width             : 25px;
+		height            : 25px;
+		border-radius     : 50%;
+		background-color  : var(--orange-color);
+		cursor            : pointer;
+		border            : 3px solid var(--orange-color);
+	}
+
+	#slider::-moz-range-thumb {
+		width           : 25px;
+		height          : 25px;
+		border-radius   : 50%;
+		background-color: var(--orange-color);
+		cursor          : pointer;
+		border          : 3px solid var(--orange-color);
+	}
+}
 
 .cityTaxErrorMsg {
 	margin-bottom: 20px;

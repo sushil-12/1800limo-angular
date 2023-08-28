@@ -166,11 +166,25 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 			}
 		}
 	}
+	handleNegtiveValue(formgroup,subform,formcontrol,value){
+		let v = parseFloat((Math.abs(Number(value))).toFixed(2));
+		(<FormGroup>(<FormGroup>this.RatesForm.get(formgroup)).get(subform)).get(formcontrol).setValue(v);
+		this.RatesForm.updateValueAndValidity();
+		console.log('handleNegtiveValue-->>' , formgroup,subform,formcontrol,parseFloat((Math.abs(Number(value))).toFixed(2))) 
+	}
 
 	scroll(id) {
 		let el = document.getElementById(id);
-		console.log(`scrolling to ${id}` , el);
-		el.scrollIntoView();
+		let elementRect = el.getBoundingClientRect();
+		let absoluteElementTop = elementRect.top + window.pageYOffset;
+		let topElement = absoluteElementTop - 200;
+		
+		console.log(`scrolling to ${id}`, el , absoluteElementTop ,window.innerHeight);
+		window.scrollTo({
+			top: topElement,
+			behavior: 'smooth'
+		});
+		// el.scrollIntoView();
 	  }
 	returnZero() {
 		return 0;
@@ -433,7 +447,18 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 			el.scrollIntoView();
 		},600)
 	}
-
+	closeAllChevrons(){
+		this.rate_params["chevrons"]['section']=false
+		this.rate_params["chevrons"]['all_inclusive_rates']=false
+		this.rate_params["chevrons"]['others']=false
+		this.rate_params["chevrons"]['direct_taxes']=false
+		this.rate_params["chevrons"]['taxes']=false
+		this.rate_params["chevrons"]['amenities']=false
+		this.rate_params["chevrons"]['misc']=false
+		setTimeout(()=>{
+			this.scroll('rate-heading')
+		},300)
+	}
 
 	async calculateAmount(form: string, formgroup: string, subform: string) {
 		console.log('in function calculate amount')

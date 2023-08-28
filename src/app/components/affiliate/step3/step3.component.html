@@ -14,7 +14,7 @@
 					</mat-form-field>
 					<div *ngIf="
 							(submittedForm && f.CompanyName.errors) ||
-							(f.CompanyName.touched && f.CompanyName.errors)
+							(f.CompanyName.touched && f.CompanyName.errors) 
 						" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.CompanyName.errors.required">
 							This field is required
@@ -328,6 +328,11 @@
 									tabindex="-1">
 								<ul class="mt-3 ng-star-inserted">
 									<li>
+										<a class="custom-arrow-clockwise-button"
+										(click)="fetchImageBlob(insCertificateImage ,'insCertificate',insCertificateId)">
+										 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+									</li>
+									<li>
 										<button class="changeuploaded" tabindex="1">
 											<input type="file" (change)="
 													vehicleOfficialImagesChange(
@@ -414,6 +419,11 @@
 									tabindex="-1">
 								<ul class="mt-3">
 									<li>
+										<a class="custom-arrow-clockwise-button"
+										(click)="fetchImageBlob(insuranceCardImage ,'insuranceCard',insuranceCardId)">
+										 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+									</li>
+									<li>
 										<button class="changeuploaded" tabindex="1">
 											<input type="file" (change)="
 													vehicleOfficialImagesChange(
@@ -491,7 +501,6 @@
 			</div>
 		</div>
 	</section>
-</form>
 
 <div class="container">
 	<div class="row py-4">
@@ -505,13 +514,14 @@
 				<button class="custom-filled-reset-button mr-3 m-2" (click)="resetForm()" tabIndex="2">
 					RESET
 				</button>
-				<button class="custom-filled-button m-2" (click)="submitForm()" tabIndex="1">
+				<button  type="submit" class="custom-filled-button m-2" (click)="submitForm()" tabIndex="1">
 					SAVE
 				</button>
 			</div>
 		</div>
 	</div>
 		</div>
+</form>
 		
 
 

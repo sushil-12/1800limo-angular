@@ -2,10 +2,10 @@
 <ngx-spinner></ngx-spinner>
 <div *ngIf="ratesform" [formGroup]="RatesForm" class="section-container section-dropdown finalizeRates mt-5"
 	[ngClass]="{'w-100': ratesform && !returnratesform, 'w-50': ratesform && returnratesform}"
-	[ngStyle]="affiliate_type == 'affiliate' ? {'height': '0', 'padding': '0'} : ''">
-	<div class="row cursor-pointer" (click)="toggleDropdown('section')">
+	[ngStyle]="affiliate_type == 'affiliate' ? {'height': '0', 'padding': '0'} : ''" >
+	<div class="row cursor-pointer" (click)="toggleDropdown('section')" >
 		<div class="col-12 col-md-12">
-			<h4 class="m-0">
+			<h4 class="m-0" id="rate-heading" style="color: #f3933d;">
 				Rates
 			</h4>
 		</div>
@@ -53,7 +53,7 @@
 							titlecase }}
 						</mat-label>
 						<input type="number" matInput placeholder="0" formControlName="baserate" [tabIndex]="getTabIndex(item.key)"
-							class="font-weight-bolder rate-input-field text-right" (focus)="$event.target.select()" />
+							class="font-weight-bolder rate-input-field text-right" (focus)="$event.target.select()" (change)="handleNegtiveValue(item.key,sub_item.key,'baserate',$event.target.value)"/>
 					</mat-form-field>
 					<div class="errors" *ngIf="sub_item.key === 'Kilometer_Rate' && trigger_error">
 						<div class="error-field">

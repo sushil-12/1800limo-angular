@@ -10,6 +10,7 @@ import { CustomvalidationService } from '../../../services/customvalidation.serv
 import { MapsAPILoader } from '@agm/core';
 import { data } from 'jquery';
 import { AdminService } from 'src/app/services/admin.service';
+import { HttpClient } from '@angular/common/http';
 declare var $: any;
 
 @Component({
@@ -59,6 +60,7 @@ export class AffiliateStep1Component implements OnInit {
 	public notify_email: boolean;
 	badgeOptions: string[] = [];
     filteredOptions: any;
+	public startBusinessYears: Array<Object>;
 	// stateManagementService: any;
 
 	constructor(
@@ -71,6 +73,7 @@ export class AffiliateStep1Component implements OnInit {
 		private mapsAPILoader: MapsAPILoader,
 		private stateManagementService: StateManagementService,
 		private ngZone: NgZone,
+		private httpClient: HttpClient,
 		private customValidator: CustomvalidationService
 	) { }
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
@@ -113,6 +116,13 @@ export class AffiliateStep1Component implements OnInit {
 			this.badgeOptions = res?.data
 			this.filteredOptions = res?.data
 		})
+
+		this.httpClient
+			.get("assets/json/businessYear.json")
+			.subscribe((data: any) =>
+			{
+				this.startBusinessYears = data;
+			});
 		this.adminService.getAssicationsLanguages()
 			.pipe(
 				catchError(err => {
@@ -125,7 +135,7 @@ export class AffiliateStep1Component implements OnInit {
 				this.associations = this.response.data.associations;
 
 				this.affiliateId = sessionStorage.getItem("affiliateId");
-				this.affiliateType = sessionStorage.getItem("affiliateType");
+				this.affiliateType = sessionStorage.getItem("affiliateType")!='all-operators' ? sessionStorage.getItem("affiliateType") : 'black_limo_operator' ;
 				this.addAffiliateAccountForm.patchValue({
 					AffiliateType: this.affiliateType
 				});
@@ -281,8 +291,8 @@ export class AffiliateStep1Component implements OnInit {
 		this.spinner.hide()
 				// this.stateManagementService.setprogressBar(false);
 			});
-
-		if (sessionStorage.getItem("affiliateType") != "all_operators") {
+		
+			if (sessionStorage.getItem("affiliateType") != "all-operators") {
 			this.affiliateTypeSwitch(sessionStorage.getItem("affiliateType"))
 		}
 		window.scrollTo(0,0);
@@ -469,6 +479,92 @@ export class AffiliateStep1Component implements OnInit {
 			// this.addAffiliateAccountForm.updateValueAndValidity()
 		}
 
+	}
+	fetchImageBlob(url ,key ,id){
+		this.stateManagementService.setprogressBar(true);
+		
+		this.adminService.fetchImageBlob(url)
+		.pipe(
+			catchError(err => {
+				this.stateManagementService.setprogressBar(false);
+				return throwError(err);
+			})
+		)
+		.subscribe(async({ data }: any) => {
+			this.stateManagementService.setprogressBar(false);
+			const response = await fetch(data);
+			const imageBlob = await response.blob()
+			console.log('imageBlob',imageBlob)
+		const canvas = document.createElement("canvas");
+		const ctx = canvas.getContext("2d");
+		const img = new Image();
+		img.src = URL.createObjectURL(imageBlob);
+		console.log('img-->' , img)
+		img.onload = () => {
+			// Rotate the image by 90 degrees (or your desired angle)
+			canvas.width = img.width; 
+			canvas.height = img.height;
+			ctx.translate(canvas.width / 2, canvas.height / 2);
+			ctx.rotate(Math.PI); // Rotate by 180 degrees
+			ctx.drawImage(img, -img.width / 2, -img.height / 2);
+			// ctx.drawImage(img, 0, -canvas.width);
+
+			// Convert the canvas to a Blob (JPEG format)
+			canvas.toBlob((blob) => {
+				console.log(blob);
+
+				this.blobToDataURL(blob, key ,id);
+				// });
+			}, "image/jpeg");
+		}
+		})
+	}
+	blobToDataURL(blob: Blob , key , id) {
+		var reader = new FileReader();
+		reader.readAsDataURL(blob);
+		reader.onload = () => {
+			let dataUrl = reader.result;
+			console.log(dataUrl); //DataURL
+			this.businessCardImageChange1(dataUrl, key,id);
+		};
+	}
+
+	businessCardImageChange1(imageUrl, imageType, imageId = null)
+	{
+		this.stateManagementService.setprogressBar(true); //show progressBar
+				this.imageSrc = imageUrl;
+				this.adminService.uploadVehicleImage(this.imageSrc)
+					.pipe(
+						catchError(err => {
+							this.stateManagementService.setprogressBar(false); // hide progressBar
+							return throwError(err);
+						})
+					)
+					.subscribe(({ data }: any) => {
+						switch (imageType) {
+							case 'BusinessFrontPhoto': {
+								this.addAffiliateAccountForm.patchValue({
+									BusinessFrontPhoto: data.id,
+								});
+								this.BusinessFrontPhoto = data.image;
+								this.BusinessFrontPhotoId = data.id;
+								break;
+							}
+							case 'BusinessBackPhoto': {
+								this.addAffiliateAccountForm.patchValue({
+									BusinessBackPhoto: data.id,
+								});
+								this.BusinessBackPhoto = data.image;
+								this.BusinessBackPhotoId = data.id;
+								break;
+							}
+							default: {
+								break;
+							}
+						}
+						this.stateManagementService.setprogressBar(false); // hide progressBar
+					});
+		// console.log(this.addInsuranceForm.value);
 	}
 
 	businessCardImageChange(event, imageType, imageId = null) {

@@ -577,8 +577,10 @@
 		</div>
 
 		<div class="col-md-12 text-right mr-4">
-			<button type="button" class="custom-filled-button m-3 mr-4" (click)="makePayment()">
-				Pay
+			<button type="button" class="custom-filled-button m-3 mr-4" 
+			[ngClass]="finalize_btn=='Finalized'? '':'color-grey'"
+			(click)="makePayment()">
+				Charge
 			</button>
 		</div>
 	</div>

@@ -51,8 +51,8 @@ export class MyBookingsComponent implements OnInit {
 	isAffiliate: boolean = false
 	isLooseAffiliate: boolean = false;
 	audit_Trail: any;
-	company_name:any =JSON.parse(localStorage.getItem('currentUser'))?.affiliate_company || ''
-	cancelBookingId:any = null
+	company_name: any = JSON.parse(localStorage.getItem('currentUser'))?.affiliate_company || ''
+	cancelBookingId: any = null
 	constructor(
 		private affiliateService: AffiliateService,
 		private router: Router,
@@ -100,7 +100,7 @@ export class MyBookingsComponent implements OnInit {
 
 
 	loadBookings(pageUrl = null) {
-		$('.HeadingH1').css({display: "none"})
+		$('.HeadingH1').css({ display: "none" })
 		/** spinner starts on init */
 		this.spinner.show();
 
@@ -136,7 +136,7 @@ export class MyBookingsComponent implements OnInit {
 	searchInBookings(search_value: string) {
 		this.searchText = search_value
 		console.log('--->>>>>', search_value)
-		this.saveCookie('affiliate_search',search_value)
+		this.saveCookie('affiliate_search', search_value)
 		clearTimeout(this.timer);
 		this.timer = setTimeout(() => {
 			this.loadBookings(null)
@@ -152,12 +152,12 @@ export class MyBookingsComponent implements OnInit {
 		}
 	}
 	saveCookie(key: string, value: string) {
-		console.log('in function set cookies for',key,value)
+		console.log('in function set cookies for', key, value)
 		this.affiliateService.setCookie(key, value, 30);
 	}
-	formatPhoneNumber(ph:any){
-		if(!ph.includes('+')){
-			return '+'+ph
+	formatPhoneNumber(ph: any) {
+		if (!ph.includes('+')) {
+			return '+' + ph
 		}
 		return ph;
 
@@ -218,7 +218,7 @@ export class MyBookingsComponent implements OnInit {
 				this.bookingPreview = response.data;
 				this.isAffiliate = this.bookingPreview.affiliate_type == "affiliate" ? true : false;
 				this.isLooseAffiliate = this.bookingPreview.affiliate_type == "loose_affiliate" ? true : false;
-				this.bookingPreview['booking_instructions'] = this.bookingPreview?.booking_instructions.replaceAll('<br />' , ' ')
+				this.bookingPreview['booking_instructions'] = this.bookingPreview?.booking_instructions.replaceAll('<br />', ' ')
 				console.log('get preview data-->>>', this.bookingPreview.affiliate_type, this.isAffiliate)
 				$('#previewBookingOnID').modal('show');
 			})
@@ -252,13 +252,21 @@ export class MyBookingsComponent implements OnInit {
 
 
 	submit(message, format) {
-		console.log('format', this.passengerDetails)
+		console.log('format', format, this.passengerDetails)
 		if (this.passengerDetails.selection_button == "Passenger") {
 			this.sendInformation = format
 				? this.passengerDetails.pax_tel
 				: this.passengerDetails.passenger_email;
 			this.reciptentName = this.passengerDetails.passenger_name;
-		} else {
+		} else if (this.passengerDetails.selection_button == "Driver") {
+			console.log('driver')
+			this.sendInformation = format
+				? this.passengerDetails?.driver_cell_isd +
+				this.passengerDetails?.driver_cell_number
+				: this.passengerDetails?.driver_email;
+			this.reciptentName = this.passengerDetails?.driver_name;
+		}
+		else {
 			this.sendInformation = format
 				? this.passengerDetails.loose_affiliate_phone_isd +
 				this.passengerDetails.loose_affiliate_phone
@@ -362,11 +370,11 @@ export class MyBookingsComponent implements OnInit {
 
 	show = false
 	openModal(booking: any, selection_button: string) {
-		console.log('open modal-->>>>>>>', selection_button)
+		console.log('open modal-->>>>>>>', booking, selection_button)
 		this.passengerDetails = booking;
 		this.passengerDetails['selection_button'] = selection_button
 	}
-	cancelBooking(){
+	cancelBooking() {
 		console.log('in function cancel booking')
 		this.spinner.show();
 
@@ -383,11 +391,11 @@ export class MyBookingsComponent implements OnInit {
 					this.spinner.hide();//hide spinner
 					this.loadBookings()
 					$('#cancelBooking').modal('hide');
-					this.$errors.openDialog({
-						errors: {
-							error: `<span class='text-success'>${message}</span>`
-						}
-					})
+					// this.$errors.openDialog({
+					// 	errors: {
+					// 		error: `<span class='text-success'>${message}</span>`
+					// 	}
+					// })
 				}
 			});
 	}
@@ -412,10 +420,10 @@ export class MyBookingsComponent implements OnInit {
 
 	editAction(bookingId, updateType) {
 		if (updateType == 'change') {
-			this.router.navigate(['/affiliate/new-booking'], { queryParams: { bookingId: bookingId, updateType: updateType , nav : 'true'} });
+			this.router.navigate(['/affiliate/new-booking'], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'true' } });
 		}
 		else {
-			this.router.navigate(['/affiliate/new-booking'], { queryParams: { bookingId: bookingId , nav : 'true'} });
+			this.router.navigate(['/affiliate/new-booking'], { queryParams: { bookingId: bookingId, nav: 'true' } });
 		}
 	}
 
@@ -569,26 +577,26 @@ export class MyBookingsComponent implements OnInit {
 			}
 		})
 	}
-	showLocationPointOnMapByAddress(address:any) {
+	showLocationPointOnMapByAddress(address: any) {
 		let isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 		console.log('isSafari', isSafari)
-			if(address){
-				let googleDirectionUrl;
-				let iosDirectionUrl;
-					googleDirectionUrl = 'https://www.google.com/maps/dir/?api=1' + '&destination=' +
-						encodeURIComponent(address) + '&travelmode=driving'
-					iosDirectionUrl = 'http://maps.apple.com/?daddr=' +
-						encodeURIComponent(address)
-				if (this.iOS()) {
-					setTimeout(() => {
-						window.location.href = iosDirectionUrl;
-					})
-				}
-				else {
-					window.open(googleDirectionUrl, '_blank');
-				}
-			} else {
-				throw new Error('Error: Location Points Not Specified Properly. ');
+		if (address) {
+			let googleDirectionUrl;
+			let iosDirectionUrl;
+			googleDirectionUrl = 'https://www.google.com/maps/dir/?api=1' + '&destination=' +
+				encodeURIComponent(address) + '&travelmode=driving'
+			iosDirectionUrl = 'http://maps.apple.com/?daddr=' +
+				encodeURIComponent(address)
+			if (this.iOS()) {
+				setTimeout(() => {
+					window.location.href = iosDirectionUrl;
+				})
 			}
+			else {
+				window.open(googleDirectionUrl, '_blank');
+			}
+		} else {
+			throw new Error('Error: Location Points Not Specified Properly. ');
+		}
 	}
 }

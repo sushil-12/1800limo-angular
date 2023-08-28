@@ -249,6 +249,9 @@ export class VehicleDetailsComponent implements OnInit {
 	convertToMi(value){
 		return (value * 0.000621371 ).toFixed(2)
 	}
+	convertToKm(value){
+		return (value * 0.001).toFixed(2)
+	}
 	convertToMinutes(value){
 		return (value/60).toFixed(2)
 	}

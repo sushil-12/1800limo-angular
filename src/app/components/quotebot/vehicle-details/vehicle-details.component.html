@@ -132,7 +132,7 @@
 									<div id="map"></div>
 									<div class="row">
 										<h6 class="mx-2">
-											Total Distance:  {{convertToMi(distance)}} mi 
+											Total Distance:  {{convertToMi(distance)}} mi /  {{convertToKm(distance)}} km
 										</h6>
 										<h6 class="mx-2">
 											Estimated time:  {{convertToMinutes(duration)}} mins
@@ -539,7 +539,7 @@
 								{{ rate.value.rate_label }}
 							</td>
 							<td>
-								${{ rate.value.baserate }} {{ (rate.value.multitple != undefined ||
+								${{ rate.value.baserate.toFixed(2) }} {{ (rate.value.multitple != undefined ||
 								rate.value.multiple
 								== null )
 								? ' ' : 'x' }} {{ rate.value.multiple !== undefined ?
@@ -575,7 +575,7 @@
 								{{ rate.value.rate_label }}
 							</td>
 							<td>
-								${{ rate.value.baserate }} {{ (rate.value.multitple != undefined ||
+								${{ rate.value.baserate.toFixed(2) }} {{ (rate.value.multitple != undefined ||
 								rate.value.multiple
 								== null )
 								? ' ' : 'x' }} {{ rate.value.multiple !== undefined ?

@@ -73,7 +73,7 @@
 					</div>
 				</div>
 				<div class="col-md-6">
-					<mat-form-field appearance="outline">
+					<mat-form-field appearance="outline" class="margin-zero">
 						<mat-label>
 							Number of Vehicles <span class="asterisk">*</span>
 						</mat-label>
@@ -132,19 +132,6 @@
 				</div>
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
-						<mat-label>
-							License Plate #
-							<span *ngIf="affiliateType!='fleet_operator'; else nonFleetOperator"
-								class="asterisk">*</span>
-							<ng-template #nonFleetOperator>
-								<span class="theme-color">(optional)</span>
-							</ng-template>
-						</mat-label>
-						<input matInput placeholder="License Plate #" formControlName="licensePlate" tabindex="1">
-					</mat-form-field>
-				</div>
-				<div class="col-md-6">
-					<mat-form-field appearance="outline">
 						<mat-label>Number of Pax Seats / Seat Belts <span class="asterisk">*</span></mat-label>
 						<mat-select formControlName="seats" tabindex="1">
 							<mat-option value="">Choose Pax Seats / Seat Belts</mat-option>
@@ -181,43 +168,94 @@
 				</div>
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
-						<mat-label>Airport / City Cancel Times <span class="asterisk">*</span></mat-label>
+						<mat-label>Airport / City Cancel Policy <span class="asterisk">*</span></mat-label>
 						<mat-select formControlName="nonCharterCancelPolicy" tabindex="1">
-							<mat-option value="">Choose Airport / City Cancel Times</mat-option>
+							<mat-option value="">Choose Airport / City Cancel Policy</mat-option>
 							<mat-option *ngFor="let nonCharterCancelOption of nonCharterCancelOptions"
 								[value]="nonCharterCancelOption.value">{{nonCharterCancelOption.label}}</mat-option>
 						</mat-select>
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.nonCharterCancelPolicy.errors || f.nonCharterCancelPolicy.touched && f.nonCharterCancelPolicy.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.nonCharterCancelPolicy.errors.required">The Charter Cancel Times is required
+						<div *ngIf="f.nonCharterCancelPolicy.errors.required">The Charter Cancel Policy is required
 						</div>
 					</div>
 					<div *ngIf="f.nonCharterCancelPolicy.errors" class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.nonCharterCancelPolicy.errors.pattern">The Charter Cancel Times should be a
+						<div *ngIf="f.nonCharterCancelPolicy.errors.pattern">The Charter Cancel Policy should be a
 							number
 						</div>
 					</div>
 				</div>
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
-						<mat-label>Charter Cancel Times <span class="asterisk">*</span></mat-label>
+						<mat-label>Charter Cancel Policy <span class="asterisk">*</span></mat-label>
 						<mat-select formControlName="charterCancelPolicy" tabindex="1">
-							<mat-option value="">Choose Charter Cancel Times</mat-option>
+							<mat-option value="">Choose Charter Cancel Policy</mat-option>
 							<mat-option *ngFor="let charterCancelOption of charterCancelOptions"
 								[value]="charterCancelOption.value">{{charterCancelOption.label}}</mat-option>
 						</mat-select>
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.charterCancelPolicy.errors || f.charterCancelPolicy.touched && f.charterCancelPolicy.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.charterCancelPolicy.errors.required">The Charter Cancel Times is required
+						<div *ngIf="f.charterCancelPolicy.errors.required">The Charter Cancel Policy is required
 						</div>
 					</div>
 					<div *ngIf="f.charterCancelPolicy.errors" class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.charterCancelPolicy.errors.pattern">The Charter Cancel Times should be a
+						<div *ngIf="f.charterCancelPolicy.errors.pattern">The Charter Cancel Policy should be a
 							number</div>
 					</div>
 				</div>
+				<div class="col-md-6">
+					<mat-form-field appearance="outline">
+						<mat-label>
+							License Plate #
+							<span *ngIf="affiliateType!='fleet_operator'; else nonFleetOperator"
+								class="asterisk">*</span>
+							<ng-template #nonFleetOperator>
+								<span class="theme-color">(optional)</span>
+							</ng-template>
+						</mat-label>
+						<input matInput placeholder="License Plate #" formControlName="licensePlate" tabindex="1">
+					</mat-form-field>
+				</div>
+				<!-- <div class="col-md-6">
+					<mat-form-field appearance="outline">
+						<mat-label>Transfer Cancellation Policy <span class="asterisk">*</span></mat-label>
+						<mat-select formControlName="transferCancelPolicyQB" tabindex="1">
+							<mat-option value="">Choose Transfer Cancel policy</mat-option>
+							<mat-option *ngFor="let charterCancelOption of charterCancelOptions"
+								[value]="charterCancelOption.value">{{charterCancelOption.label}}</mat-option>
+						</mat-select>
+					</mat-form-field>
+					<div *ngIf="submittedForm && f.transferCancelPolicyQB?.errors || f.transferCancelPolicyQB?.touched && f.transferCancelPolicyQB?.errors"
+						class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="f.transferCancelPolicyQB?.errors?.required">The Charter Cancel Times is required
+						</div>
+					</div>
+					<div *ngIf="f.transferCancelPolicyQB?.errors" class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="f.transferCancelPolicyQB?.errors?.pattern">The Charter Cancel Times should be a
+							number</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<mat-form-field appearance="outline">
+						<mat-label>Charter Cancellation Policy <span class="asterisk">*</span></mat-label>
+						<mat-select formControlName="charterCancelPolicyQB" tabindex="1">
+							<mat-option value="">Choose Charter Cancel policy</mat-option>
+							<mat-option *ngFor="let charterCancelOption of charterCancelOptions"
+								[value]="charterCancelOption.value">{{charterCancelOption.label}}</mat-option>
+						</mat-select>
+					</mat-form-field>
+					<div *ngIf="submittedForm && f.charterCancelPolicyQB?.errors || f.charterCancelPolicyQB?.touched && f.charterCancelPolicyQB?.errors"
+						class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="f.charterCancelPolicyQB?.errors?.required">The Charter Cancel Times is required
+						</div>
+					</div>
+					<div *ngIf="f.charterCancelPolicyQB?.errors" class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="f.charterCancelPolicyQB?.errors?.pattern">The Charter Cancel Times should be a
+							number</div>
+					</div>
+				</div> -->
 			</div>
 
 			<div class="row mt-3">
@@ -369,13 +407,28 @@
 				<div class="row">
 					<div class="col-md-4" *ngIf="vehicleImage1">
 						<div class="vehtype_extint">
-							<p>Vehicle Image 1 <span class="asterisk">*</span></p>
-							<img src="{{vehicleImage1}}" (click)="showImageInModal(vehicleImage1)" tabindex="-1">
+							<p>
+								<span class="text-danger">
+									{{ vehicleImage1.includes('extint1') ? 'Change' : '' }}
+								</span>
+								Vehicle Image 1 <span class="asterisk">*</span>
+							</p>
+							<img src="{{ vehicleImage1 }}" (click)="showImageInModal(vehicleImage1)" tabindex="-1" />
 							<ul class="mt-3">
 								<li>
+									<a class="custom-arrow-clockwise-button"
+									(click)="fetchImageBlob(vehicleImage1 ,'1',vehicleImageId1)">
+									 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+								</li>
+								<li>
 									<button class="changeuploaded" tabindex="1">
-										<input type="file" (change)="onFileChange($event,vehicleImageId1,'1')"
-											tabindex="-1">
+										<input type="file" (change)="
+												onFileChange(
+													$event,
+													vehicleImageId1,
+													'1'
+												)
+											" tabindex="-1" />
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 											<path fill="none" d="M0 0h24v24H0V0z" />
 											<circle cx="12" cy="12" r="3" />
@@ -392,12 +445,22 @@
 					<div class="col-md-4" *ngIf="vehicleImage2; else noVehicleImage2">
 						<div class="vehtype_extint">
 							<p>Vehicle Image 2</p>
-							<img src="{{vehicleImage2}}" (click)="showImageInModal(vehicleImage2)" tabindex="-1">
+							<img src="{{ vehicleImage2 }}" (click)="showImageInModal(vehicleImage2)" tabindex="-1" />
 							<ul class="mt-3">
 								<li>
+									<a class="custom-arrow-clockwise-button"
+									(click)="fetchImageBlob(vehicleImage2,'2',vehicleImageId2)">
+									 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+								</li>
+								<li>
 									<button class="changeuploaded" tabindex="1">
-										<input type="file" (change)="onFileChange($event,vehicleImageId2,'2')"
-											tabindex="-1">
+										<input type="file" (change)="
+												onFileChange(
+													$event,
+													vehicleImageId2,
+													'2'
+												)
+											" tabindex="-1" />
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 											<path fill="none" d="M0 0h24v24H0V0z" />
 											<circle cx="12" cy="12" r="3" />
@@ -407,8 +470,14 @@
 										Change
 									</button>
 								</li>
-								<li><a class="delete-btn" (click)="deleteImage(vehicleImageId2,'vehicleImage','2')"
-										tabindex="1">
+								<li>
+									<a class="delete-btn" (click)="
+											deleteImage(
+												vehicleImageId2,
+												'vehicleImage',
+												'2'
+											)
+										" tabindex="1">
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 											<path
 												d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
@@ -423,13 +492,18 @@
 							<div class="vehtype_extint">
 								<p>Vehicle Image 2</p>
 								<div class="emptyImage">
-									<img src="../../../../assets/images/empty-image.png" tabindex="-1">
+									<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
 								</div>
 								<ul class="mt-3">
 									<li>
 										<button class="adduploaded" tabindex="1">
-											<input type="file" (change)="onFileChange($event,vehicleImageId2,'2')"
-												tabindex="-1">
+											<input type="file" (change)="
+													onFileChange(
+														$event,
+														vehicleImageId2,
+														'2'
+													)
+												" tabindex="-1" />
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -447,12 +521,22 @@
 					<div class="col-md-4" *ngIf="vehicleImage3; else noVehicleImage3">
 						<div class="vehtype_extint">
 							<p>Vehicle Image 3</p>
-							<img src="{{vehicleImage3}}" (click)="showImageInModal(vehicleImage3)" tabindex="-1">
+							<img src="{{ vehicleImage3 }}" (click)="showImageInModal(vehicleImage3)" tabindex="-1" />
 							<ul class="mt-3">
 								<li>
+									<a class="custom-arrow-clockwise-button"
+									(click)="fetchImageBlob(vehicleImage3,'3',vehicleImageId3)">
+									 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+								</li>
+								<li>
 									<button class="changeuploaded" tabindex="1">
-										<input type="file" (change)="onFileChange($event,vehicleImageId3,'3')"
-											tabindex="-1">
+										<input type="file" (change)="
+												onFileChange(
+													$event,
+													vehicleImageId3,
+													'3'
+												)
+											" tabindex="-1" />
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 											<path fill="none" d="M0 0h24v24H0V0z" />
 											<circle cx="12" cy="12" r="3" />
@@ -462,8 +546,14 @@
 										Change
 									</button>
 								</li>
-								<li><a class="delete-btn" (click)="deleteImage(vehicleImageId3,'vehicleImage','3')"
-										tabindex="1">
+								<li>
+									<a class="delete-btn" (click)="
+											deleteImage(
+												vehicleImageId3,
+												'vehicleImage',
+												'3'
+											)
+										" tabindex="1">
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 											<path
 												d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
@@ -478,13 +568,18 @@
 							<div class="vehtype_extint">
 								<p>Vehicle Image 3</p>
 								<div class="emptyImage">
-									<img src="../../../../assets/images/empty-image.png" tabindex="-1">
+									<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
 								</div>
 								<ul class="mt-3">
 									<li>
 										<button class="adduploaded" tabindex="1">
-											<input type="file" (change)="onFileChange($event,vehicleImageId3,'3')"
-												tabindex="-1">
+											<input type="file" (change)="
+													onFileChange(
+														$event,
+														vehicleImageId3,
+														'3'
+													)
+												" tabindex="-1" />
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -502,12 +597,22 @@
 					<div class="col-md-4" *ngIf="vehicleImage4; else noVehicleImage4">
 						<div class="vehtype_extint">
 							<p>Vehicle Image 4</p>
-							<img src="{{vehicleImage4}}" (click)="showImageInModal(vehicleImage4)" tabindex="-1">
+							<img src="{{ vehicleImage4 }}" (click)="showImageInModal(vehicleImage4)" tabindex="-1" />
 							<ul class="mt-3">
 								<li>
+									<a class="custom-arrow-clockwise-button"
+									(click)="fetchImageBlob(vehicleImage4,'4',vehicleImageId4)">
+									 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+								</li>
+								<li>
 									<button class="changeuploaded" tabindex="1">
-										<input type="file" (change)="onFileChange($event,vehicleImageId4,'4')"
-											tabindex="-1">
+										<input type="file" (change)="
+												onFileChange(
+													$event,
+													vehicleImageId4,
+													'4'
+												)
+											" tabindex="-1" />
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 											<path fill="none" d="M0 0h24v24H0V0z" />
 											<circle cx="12" cy="12" r="3" />
@@ -517,8 +622,14 @@
 										Change
 									</button>
 								</li>
-								<li><a class="delete-btn" (click)="deleteImage(vehicleImageId4,'vehicleImage','4')"
-										tabindex="1">
+								<li>
+									<a class="delete-btn" (click)="
+											deleteImage(
+												vehicleImageId4,
+												'vehicleImage',
+												'4'
+											)
+										" tabindex="1">
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 											<path
 												d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
@@ -533,13 +644,18 @@
 							<div class="vehtype_extint">
 								<p>Vehicle Image 4</p>
 								<div class="emptyImage">
-									<img src="../../../../assets/images/empty-image.png" tabindex="-1">
+									<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
 								</div>
 								<ul class="mt-3">
 									<li>
 										<button class="adduploaded" tabindex="1">
-											<input type="file" (change)="onFileChange($event,vehicleImageId4,'4')"
-												tabindex="-1">
+											<input type="file" (change)="
+													onFileChange(
+														$event,
+														vehicleImageId4,
+														'4'
+													)
+												" tabindex="-1" />
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -557,12 +673,22 @@
 					<div class="col-md-4" *ngIf="vehicleImage5; else noVehicleImage5">
 						<div class="vehtype_extint">
 							<p>Vehicle Image 5</p>
-							<img src="{{vehicleImage5}}" (click)="showImageInModal(vehicleImage5)" tabindex="-1">
+							<img src="{{ vehicleImage5 }}" (click)="showImageInModal(vehicleImage5)" tabindex="-1" />
 							<ul class="mt-3">
 								<li>
+									<a class="custom-arrow-clockwise-button"
+									(click)="fetchImageBlob(vehicleImage5,'5',vehicleImageId5)">
+									 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+								</li>
+								<li>
 									<button class="changeuploaded" tabindex="1">
-										<input type="file" (change)="onFileChange($event,vehicleImageId5,'5')"
-											tabindex="-1">
+										<input type="file" (change)="
+												onFileChange(
+													$event,
+													vehicleImageId5,
+													'5'
+												)
+											" tabindex="-1" />
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 											<path fill="none" d="M0 0h24v24H0V0z" />
 											<circle cx="12" cy="12" r="3" />
@@ -572,8 +698,14 @@
 										Change
 									</button>
 								</li>
-								<li><a class="delete-btn" (click)="deleteImage(vehicleImageId5,'vehicleImage','5')"
-										tabindex="1">
+								<li>
+									<a class="delete-btn" (click)="
+											deleteImage(
+												vehicleImageId5,
+												'vehicleImage',
+												'5'
+											)
+										" tabindex="1">
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 											<path
 												d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
@@ -588,13 +720,18 @@
 							<div class="vehtype_extint">
 								<p>Vehicle Image 5</p>
 								<div class="emptyImage">
-									<img src="../../../../assets/images/empty-image.png" tabindex="-1">
+									<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
 								</div>
 								<ul class="mt-3">
 									<li>
 										<button class="adduploaded" tabindex="1">
-											<input type="file" (change)="onFileChange($event,vehicleImageId5,'5')"
-												tabindex="-1">
+											<input type="file" (change)="
+													onFileChange(
+														$event,
+														vehicleImageId5,
+														'5'
+													)
+												" tabindex="-1" />
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -612,12 +749,22 @@
 					<div class="col-md-4" *ngIf="vehicleImage6; else noVehicleImage6">
 						<div class="vehtype_extint">
 							<p>Vehicle Image 6</p>
-							<img src="{{vehicleImage6}}" (click)="showImageInModal(vehicleImage6)" tabindex="-1">
+							<img src="{{ vehicleImage6 }}" (click)="showImageInModal(vehicleImage6)" tabindex="-1" />
 							<ul class="mt-3">
 								<li>
+									<a class="custom-arrow-clockwise-button"
+									(click)="fetchImageBlob(vehicleImage6,'6',vehicleImageId6)">
+									 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+								</li>
+								<li>
 									<button class="changeuploaded" tabindex="1">
-										<input type="file" (change)="onFileChange($event,vehicleImageId6,'6')"
-											tabindex="-1">
+										<input type="file" (change)="
+												onFileChange(
+													$event,
+													vehicleImageId6,
+													'6'
+												)
+											" tabindex="-1" />
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 											<path fill="none" d="M0 0h24v24H0V0z" />
 											<circle cx="12" cy="12" r="3" />
@@ -627,8 +774,14 @@
 										Change
 									</button>
 								</li>
-								<li><a class="delete-btn" (click)="deleteImage(vehicleImageId6,'vehicleImage','6')"
-										tabindex="1">
+								<li>
+									<a class="delete-btn" (click)="
+											deleteImage(
+												vehicleImageId6,
+												'vehicleImage',
+												'6'
+											)
+										" tabindex="1">
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 											<path
 												d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
@@ -643,13 +796,18 @@
 							<div class="vehtype_extint">
 								<p>Vehicle Image 6</p>
 								<div class="emptyImage">
-									<img src="../../../../assets/images/empty-image.png" tabindex="-1">
+									<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
 								</div>
 								<ul class="mt-3">
 									<li>
 										<button class="adduploaded" tabindex="1">
-											<input type="file" (change)="onFileChange($event,vehicleImageId6,'6')"
-												tabindex="-1">
+											<input type="file" (change)="
+													onFileChange(
+														$event,
+														vehicleImageId6,
+														'6'
+													)
+												" tabindex="-1" />
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -667,12 +825,22 @@
 					<div class="col-md-4" *ngIf="vehicleImage7; else noVehicleImage7">
 						<div class="vehtype_extint">
 							<p>Vehicle Image 7</p>
-							<img src="{{vehicleImage7}}" (click)="showImageInModal(vehicleImage7)" tabindex="-1">
+							<img src="{{ vehicleImage7 }}" (click)="showImageInModal(vehicleImage7)" tabindex="-1" />
 							<ul class="mt-3">
 								<li>
+									<a class="custom-arrow-clockwise-button"
+									(click)="fetchImageBlob(vehicleImage7,'7',vehicleImageId7)">
+									 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+								</li>
+								<li>
 									<button class="changeuploaded" tabindex="1">
-										<input type="file" (change)="onFileChange($event,vehicleImageId7,'7')"
-											tabindex="-1">
+										<input type="file" (change)="
+												onFileChange(
+													$event,
+													vehicleImageId7,
+													'7'
+												)
+											" tabindex="-1" />
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 											<path fill="none" d="M0 0h24v24H0V0z" />
 											<circle cx="12" cy="12" r="3" />
@@ -682,8 +850,14 @@
 										Change
 									</button>
 								</li>
-								<li><a class="delete-btn" (click)="deleteImage(vehicleImageId7,'vehicleImage','7')"
-										tabindex="1">
+								<li>
+									<a class="delete-btn" (click)="
+											deleteImage(
+												vehicleImageId7,
+												'vehicleImage',
+												'7'
+											)
+										" tabindex="1">
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 											<path
 												d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
@@ -698,13 +872,18 @@
 							<div class="vehtype_extint">
 								<p>Vehicle Image 7</p>
 								<div class="emptyImage">
-									<img src="../../../../assets/images/empty-image.png" tabindex="-1">
+									<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
 								</div>
 								<ul class="mt-3">
 									<li>
 										<button class="adduploaded" tabindex="1">
-											<input type="file" (change)="onFileChange($event,vehicleImageId7,'7')"
-												tabindex="-1">
+											<input type="file" (change)="
+													onFileChange(
+														$event,
+														vehicleImageId7,
+														'7'
+													)
+												" tabindex="-1" />
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -722,12 +901,22 @@
 					<div class="col-md-4" *ngIf="vehicleImage8; else noVehicleImage8">
 						<div class="vehtype_extint">
 							<p>Vehicle Image 8</p>
-							<img src="{{vehicleImage8}}" (click)="showImageInModal(vehicleImage8)" tabindex="-1">
+							<img src="{{ vehicleImage8 }}" (click)="showImageInModal(vehicleImage8)" tabindex="-1" />
 							<ul class="mt-3">
 								<li>
+									<a class="custom-arrow-clockwise-button"
+									(click)="fetchImageBlob(vehicleImage8,'8',vehicleImageId8)">
+									 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+								</li>
+								<li>
 									<button class="changeuploaded" tabindex="1">
-										<input type="file" (change)="onFileChange($event,vehicleImageId8,'8')"
-											tabindex="-1">
+										<input type="file" (change)="
+												onFileChange(
+													$event,
+													vehicleImageId8,
+													'8'
+												)
+											" tabindex="-1" />
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 											<path fill="none" d="M0 0h24v24H0V0z" />
 											<circle cx="12" cy="12" r="3" />
@@ -737,8 +926,14 @@
 										Change
 									</button>
 								</li>
-								<li><a class="delete-btn" (click)="deleteImage(vehicleImageId8,'vehicleImage','8')"
-										tabindex="1">
+								<li>
+									<a class="delete-btn" (click)="
+											deleteImage(
+												vehicleImageId8,
+												'vehicleImage',
+												'8'
+											)
+										" tabindex="1">
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 											<path
 												d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
@@ -753,13 +948,18 @@
 							<div class="vehtype_extint">
 								<p>Vehicle Image 8</p>
 								<div class="emptyImage">
-									<img src="../../../../assets/images/empty-image.png" tabindex="-1">
+									<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
 								</div>
 								<ul class="mt-3">
 									<li>
 										<button class="adduploaded" tabindex="1">
-											<input type="file" (change)="onFileChange($event,vehicleImageId8,'8')"
-												tabindex="-1">
+											<input type="file" (change)="
+													onFileChange(
+														$event,
+														vehicleImageId8,
+														'8'
+													)
+												" tabindex="-1" />
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -777,12 +977,22 @@
 					<div class="col-md-4" *ngIf="vehicleImage9; else noVehicleImage9">
 						<div class="vehtype_extint">
 							<p>Vehicle Image 9</p>
-							<img src="{{vehicleImage9}}" (click)="showImageInModal(vehicleImage9)" tabindex="-1">
+							<img src="{{ vehicleImage9 }}" (click)="showImageInModal(vehicleImage9)" tabindex="-1" />
 							<ul class="mt-3">
 								<li>
+									<a class="custom-arrow-clockwise-button"
+									(click)="fetchImageBlob(vehicleImage9,'9',vehicleImageId9)">
+									 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+								</li>
+								<li>
 									<button class="changeuploaded" tabindex="1">
-										<input type="file" (change)="onFileChange($event,vehicleImageId9,'9')"
-											tabindex="-1">
+										<input type="file" (change)="
+												onFileChange(
+													$event,
+													vehicleImageId9,
+													'9'
+												)
+											" tabindex="-1" />
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 											<path fill="none" d="M0 0h24v24H0V0z" />
 											<circle cx="12" cy="12" r="3" />
@@ -792,8 +1002,14 @@
 										Change
 									</button>
 								</li>
-								<li><a class="delete-btn" (click)="deleteImage(vehicleImageId9,'vehicleImage','9')"
-										tabindex="1">
+								<li>
+									<a class="delete-btn" (click)="
+											deleteImage(
+												vehicleImageId9,
+												'vehicleImage',
+												'9'
+											)
+										" tabindex="1">
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 											<path
 												d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
@@ -808,13 +1024,18 @@
 							<div class="vehtype_extint">
 								<p>Vehicle Image 9</p>
 								<div class="emptyImage">
-									<img src="../../../../assets/images/empty-image.png" tabindex="-1">
+									<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
 								</div>
 								<ul class="mt-3">
 									<li>
 										<button class="adduploaded" tabindex="1">
-											<input type="file" (change)="onFileChange($event,vehicleImageId9,'9')"
-												tabindex="-1">
+											<input type="file" (change)="
+													onFileChange(
+														$event,
+														vehicleImageId9,
+														'9'
+													)
+												" tabindex="-1" />
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -830,26 +1051,34 @@
 					</ng-template>
 				</div>
 
-				<hr>
+				<hr />
 
-				<div class="row">
+				<div class="row" *ngIf="affiliateType != 'fleet_operator'">
 					<div class="col-md-4" *ngIf="rearPlateImage; else noRearPlateImage">
 						<div class="vehtype_extint">
 							<div>
-								<p>Rear Plate<span class="optionalTextStyle"> (w/exp decal)</span>
-									<span *ngIf="affiliateType!='fleet_operator'; else nonFleetOperator"
-										class="asterisk">*</span>
-									<ng-template #nonFleetOperator>
-										<span class="theme-color">(optional)</span>
-									</ng-template>
+								<p>
+									Rear Plate <span class="asterisk">* </span>
+									<span class="optionalTextStyle">(w/exp decal)
+									</span>
 								</p>
-								<img src="{{rearPlateImage}}" (click)="showImageInModal(rearPlateImage)" tabindex="-1">
+								<img src="{{ rearPlateImage }}" (click)="showImageInModal(rearPlateImage)"
+									tabindex="-1" />
 								<ul class="mt-3">
 									<li>
+										<a class="custom-arrow-clockwise-button"
+										(click)="fetchImageBlob(rearPlateImage,'rearPlate',rearPlateId)">
+										 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+									</li>
+									<li>
 										<button class="changeuploaded" tabindex="1">
-											<input type="file"
-												(change)="vehicleOfficialImagesChange($event,'rearPlate',rearPlateId)"
-												tabindex="-1">
+											<input type="file" (change)="
+													vehicleOfficialImagesChange(
+														$event,
+														'rearPlate',
+														rearPlateId
+													)
+												" tabindex="-1" />
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -859,8 +1088,15 @@
 											Change
 										</button>
 									</li>
-									<li *ngIf="affiliateType=='fleet_operator'"><a class="delete-btn"
-											(click)="deleteImage(rearPlateId,'rearPlate')" tabindex="1">
+									<li *ngIf="
+											affiliateType == 'fleet_operator'
+										">
+										<a class="delete-btn" (click)="
+												deleteImage(
+													rearPlateId,
+													'rearPlate'
+												)
+											" tabindex="1">
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 												<path
 													d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
@@ -872,23 +1108,32 @@
 						</div>
 						<div *ngIf="submittedForm && f.rearPlateImage.errors"
 							class="text-danger margin-bottom-thin my-mat-hint">
-							<div *ngIf="f.rearPlateImage.errors.required">The Rear Plate Image is required</div>
+							<div *ngIf="f.rearPlateImage.errors.required">
+								The Rear Plate Image is required
+							</div>
 						</div>
 					</div>
 					<ng-template #noRearPlateImage>
 						<div class="col-md-4">
 							<div class="vehtype_extint">
 								<div>
-									<p>Window Permit</p>
+									<p>
+										Rear Plate Image
+										<span class="asterisk">*</span>
+									</p>
 									<div class="emptyImage">
-										<img src="../../../../assets/images/empty-image.png" tabindex="-1">
+										<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
 									</div>
 									<ul class="mt-3">
 										<li>
 											<button class="adduploaded" tabindex="1">
-												<input type="file"
-													(change)="vehicleOfficialImagesChange($event,'windowPermit',windowPermitId)"
-													tabindex="-1">
+												<input type="file" (change)="
+														vehicleOfficialImagesChange(
+															$event,
+															'rearPlate',
+															rearPlateId
+														)
+													" tabindex="-1" />
 												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 													<path fill="none" d="M0 0h24v24H0V0z" />
 													<circle cx="12" cy="12" r="3" />
@@ -907,15 +1152,28 @@
 					<div class="col-md-4" *ngIf="windowPermitImage; else noWindowPermitImage">
 						<div class="vehtype_extint">
 							<div>
-								<p>Window Permit</p>
-								<img src="{{windowPermitImage}}" (click)="showImageInModal(windowPermitImage)"
-									tabindex="-1">
+								<p>
+									Window Permit
+									<!-- <span *ngIf="affiliateType != 'fleet_operator'" class="asterisk">*</span> -->
+								</p>
+								<img src="{{ windowPermitImage }}" (click)="
+										showImageInModal(windowPermitImage)
+									" tabindex="-1" />
 								<ul class="mt-3">
 									<li>
+										<a class="custom-arrow-clockwise-button"
+										(click)="fetchImageBlob(windowPermitImage,'windowPermit',windowPermitId)">
+										 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+									</li>
+									<li>
 										<button class="changeuploaded" tabindex="1">
-											<input type="file"
-												(change)="vehicleOfficialImagesChange($event,'windowPermit',windowPermitId)"
-												tabindex="-1">
+											<input type="file" (change)="
+													vehicleOfficialImagesChange(
+														$event,
+														'windowPermit',
+														windowPermitId
+													)
+												" tabindex="-1" />
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -925,8 +1183,13 @@
 											Change
 										</button>
 									</li>
-									<li><a class="delete-btn" (click)="deleteImage(windowPermitId,'windowPermit')"
-											tabindex="1">
+									<li>
+										<a class="delete-btn" (click)="
+												deleteImage(
+													windowPermitId,
+													'windowPermit'
+												)
+											" tabindex="1">
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 												<path
 													d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
@@ -941,16 +1204,23 @@
 						<div class="col-md-4">
 							<div class="vehtype_extint">
 								<div>
-									<p>Window Permit</p>
+									<p>
+										Window Permit
+										<!-- <span *ngIf="affiliateType !='fleet_operator'" class="asterisk">*</span> -->
+									</p>
 									<div class="emptyImage">
-										<img src="../../../../assets/images/empty-image.png" tabindex="-1">
+										<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
 									</div>
 									<ul class="mt-3">
 										<li>
 											<button class="adduploaded" tabindex="1">
-												<input type="file"
-													(change)="vehicleOfficialImagesChange($event,'windowPermit',windowPermitId)"
-													tabindex="-1">
+												<input type="file" (change)="
+														vehicleOfficialImagesChange(
+															$event,
+															'windowPermit',
+															windowPermitId
+														)
+													" tabindex="-1" />
 												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 													<path fill="none" d="M0 0h24v24H0V0z" />
 													<circle cx="12" cy="12" r="3" />
@@ -969,15 +1239,34 @@
 					<div class="col-md-4" *ngIf="windowPermit2Image; else noWindowPermit2Image">
 						<div class="vehtype_extint">
 							<div>
-								<p>Secretary of State</p>
-								<img src="{{windowPermit2Image}}" (click)="showImageInModal(windowPermit2Image)"
-									tabindex="-1">
+								<p>
+									Secretary of State
+									<!-- <span *ngIf="
+											affiliateType != 'fleet_operator';
+											else nonFleetOperator
+										" class="asterisk">*</span> -->
+									<ng-template #nonFleetOperator>
+										<span class="optionalTextStyle">(optional)</span>
+									</ng-template>
+								</p>
+								<img src="{{ windowPermit2Image }}" (click)="
+										showImageInModal(windowPermit2Image)
+									" tabindex="-1" />
 								<ul class="mt-3">
 									<li>
+										<a class="custom-arrow-clockwise-button"
+										(click)="fetchImageBlob(windowPermit2Image,'windowPermit2',windowPermit2Id)">
+										 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+									</li>
+									<li>
 										<button class="changeuploaded" tabindex="1">
-											<input type="file"
-												(change)="vehicleOfficialImagesChange($event,'windowPermit2',windowPermit2Id)"
-												tabindex="-1">
+											<input type="file" (change)="
+													vehicleOfficialImagesChange(
+														$event,
+														'windowPermit2',
+														windowPermit2Id
+													)
+												" tabindex="-1" />
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -987,8 +1276,13 @@
 											Change
 										</button>
 									</li>
-									<li><a class="delete-btn" (click)="deleteImage(windowPermit2Id,'windowPermit2')"
-											tabindex="1">
+									<li>
+										<a class="delete-btn" (click)="
+												deleteImage(
+													windowPermit2Id,
+													'windowPermit2'
+												)
+											" tabindex="1">
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 												<path
 													d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
@@ -1003,16 +1297,30 @@
 						<div class="col-md-4">
 							<div class="vehtype_extint">
 								<div>
-									<p>Secretary of State</p>
+									<p>
+										Secretary of State
+										<!-- <span *ngIf="
+												affiliateType !=
+													'fleet_operator';
+												else nonFleetOperator
+											" class="asterisk">*</span> -->
+										<ng-template #nonFleetOperator>
+											<span class="optionalTextStyle">(optional)</span>
+										</ng-template>
+									</p>
 									<div class="emptyImage">
-										<img src="../../../../assets/images/empty-image.png" tabindex="-1">
+										<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
 									</div>
 									<ul class="mt-3">
 										<li>
 											<button class="adduploaded" tabindex="1">
-												<input type="file"
-													(change)="vehicleOfficialImagesChange($event,'windowPermit2',windowPermit2Id)"
-													tabindex="-1">
+												<input type="file" (change)="
+														vehicleOfficialImagesChange(
+															$event,
+															'windowPermit2',
+															windowPermit2Id
+														)
+													" tabindex="-1" />
 												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 													<path fill="none" d="M0 0h24v24H0V0z" />
 													<circle cx="12" cy="12" r="3" />
@@ -1029,19 +1337,37 @@
 					</ng-template>
 				</div>
 
-				<div class="row">
+				<div class="row" *ngIf="affiliateType != 'fleet_operator'">
 					<div class="col-md-4" *ngIf="usdotPermitImage; else noUsdotPermitImage">
 						<div class="vehtype_extint">
 							<div>
-								<p>USDOT Permit</p>
-								<img src="{{usdotPermitImage}}" (click)="showImageInModal(usdotPermitImage)"
-									tabindex="-1">
+								<p>
+									USDOT Permit
+									<!-- <span *ngIf="
+											affiliateType != 'fleet_operator';
+											else nonFleetOperator
+										" class="asterisk">*</span> -->
+									<ng-template #nonFleetOperator>
+										<span class="optionalTextStyle">(optional)</span>
+									</ng-template>
+								</p>
+								<img src="{{ usdotPermitImage }}" (click)="showImageInModal(usdotPermitImage)"
+									tabindex="-1" />
 								<ul class="mt-3">
 									<li>
+										<a class="custom-arrow-clockwise-button"
+										(click)="fetchImageBlob(usdotPermitImage,'usdotPermit',usdotPermitId)">
+										 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+									</li>
+									<li>
 										<button class="changeuploaded" tabindex="1">
-											<input type="file"
-												(change)="vehicleOfficialImagesChange($event,'usdotPermit',usdotPermitId)"
-												tabindex="-1">
+											<input type="file" (change)="
+													vehicleOfficialImagesChange(
+														$event,
+														'usdotPermit',
+														usdotPermitId
+													)
+												" tabindex="-1" />
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -1051,8 +1377,13 @@
 											Change
 										</button>
 									</li>
-									<li><a class="delete-btn" (click)="deleteImage(usdotPermitId,'usdotPermit')"
-											tabindex="1">
+									<li>
+										<a class="delete-btn" (click)="
+												deleteImage(
+													usdotPermitId,
+													'usdotPermit'
+												)
+											" tabindex="1">
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 												<path
 													d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
@@ -1067,16 +1398,30 @@
 						<div class="col-md-4">
 							<div class="vehtype_extint">
 								<div>
-									<p>USDOT Permit</p>
+									<p>
+										USDOT Permit
+										<!-- <span *ngIf="
+												affiliateType !=
+													'fleet_operator';
+												else nonFleetOperator
+											" class="asterisk">*</span> -->
+										<ng-template #nonFleetOperator>
+											<span class="optionalTextStyle">(optional)</span>
+										</ng-template>
+									</p>
 									<div class="emptyImage">
-										<img src="../../../../assets/images/empty-image.png" tabindex="-1">
+										<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
 									</div>
 									<ul class="mt-3">
 										<li>
 											<button class="adduploaded" tabindex="1">
-												<input type="file"
-													(change)="vehicleOfficialImagesChange($event,'usdotPermit',usdotPermitId)"
-													tabindex="-1">
+												<input type="file" (change)="
+														vehicleOfficialImagesChange(
+															$event,
+															'usdotPermit',
+															usdotPermitId
+														)
+													" tabindex="-1" />
 												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 													<path fill="none" d="M0 0h24v24H0V0z" />
 													<circle cx="12" cy="12" r="3" />
@@ -1095,13 +1440,32 @@
 					<div class="col-md-4" *ngIf="mcImage; else noMcImage">
 						<div class="vehtype_extint">
 							<div>
-								<p>Vehicle Inspection Certificate</p>
-								<img src="{{mcImage}}" (click)="showImageInModal(mcImage)" tabindex="-1">
+								<p>
+									Vehicle Inspection Certificate
+									<!-- <span *ngIf="
+											affiliateType != 'fleet_operator';
+											else nonFleetOperator
+										" class="asterisk">*</span> -->
+									<ng-template #nonFleetOperator>
+										<span class="optionalTextStyle">(optional)</span>
+									</ng-template>
+								</p>
+								<img src="{{ mcImage }}" (click)="showImageInModal(mcImage)" tabindex="-1" />
 								<ul class="mt-3">
 									<li>
+										<a class="custom-arrow-clockwise-button"
+										(click)="fetchImageBlob(mcImage,'mc',mcId)">
+										 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+									</li>
+									<li>
 										<button class="changeuploaded" tabindex="1">
-											<input type="file" (change)="vehicleOfficialImagesChange($event,'mc',mcId)"
-												tabindex="-1">
+											<input type="file" (change)="
+													vehicleOfficialImagesChange(
+														$event,
+														'mc',
+														mcId
+													)
+												" tabindex="-1" />
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -1111,7 +1475,8 @@
 											Change
 										</button>
 									</li>
-									<li><a class="delete-btn" (click)="deleteImage(mcId,'mc')" tabindex="1">
+									<li>
+										<a class="delete-btn" (click)="deleteImage(mcId, 'mc')" tabindex="1">
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 												<path
 													d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
@@ -1126,16 +1491,30 @@
 						<div class="col-md-4">
 							<div class="vehtype_extint">
 								<div>
-									<p>Vehicle Inspection Certificate</p>
+									<p>
+										Vehicle Inspection Certificate
+										<!-- <span *ngIf="
+												affiliateType !=
+													'fleet_operator';
+												else nonFleetOperator
+											" class="asterisk">*</span> -->
+										<ng-template #nonFleetOperator>
+											<span class="optionalTextStyle">(optional)</span>
+										</ng-template>
+									</p>
 									<div class="emptyImage">
-										<img src="../../../../assets/images/empty-image.png" tabindex="-1">
+										<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
 									</div>
 									<ul class="mt-3">
 										<li>
 											<button class="adduploaded" tabindex="1">
-												<input type="file"
-													(change)="vehicleOfficialImagesChange($event,'mc',mcId)"
-													tabindex="-1">
+												<input type="file" (change)="
+														vehicleOfficialImagesChange(
+															$event,
+															'mc',
+															mcId
+														)
+													" tabindex="-1" />
 												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 													<path fill="none" d="M0 0h24v24H0V0z" />
 													<circle cx="12" cy="12" r="3" />
@@ -1154,15 +1533,40 @@
 			</div>
 		</div>
 	</section>
-	<div class="billing_inforamtion">
-		<ul>
-			<li><button class="custom-btn savebutton" (click)="submitForm()" [disabled]="disableSubmitButton"
-					tabindex="1">SAVE</button> </li>
-			<li><button class="custom-btn resetbutton" (click)="resetForm()" tabindex="1">RESET</button> </li>
-			<li><button class="custom-btn backbutton" type="button" (click)="backButton()" data-toggle="modal"
+	<div class="container">
+		<div class="row py-4">
+			<div class="col-md-7">
+				<div class="billing_inforamtion">
+					<ul class="d-flex">
+				<li><button class="custom-filled-back-button" type="button" (click)="backButton()" data-toggle="modal"
 					data-placement="top" title="Clicking back button deletes all fields." tabindex="1">BACK</button>
-			</li>
-		</ul>
+				</li>
+			</ul>
+			</div>
+			</div>
+			<div class="col-md-5 ">
+				<div class="billing_inforamtion">
+					<ul class="d-flex justify-content-center">
+					
+						<li><button class="custom-filled-reset-button" (click)="resetForm()" tabindex="1">RESET</button> </li>
+						<li><button class="custom-filled-button" (click)="submitForm()" [disabled]="disableSubmitButton"
+							tabindex="1">SAVE</button> </li>
+					
+						
+					</ul>
+				</div>
+			</div>
+		</div>
+			</div>
+	<div class="billing_inforamtion">
+		
+		
+		
+	
+		
+		
+		
+		
 	</div>
 </form>
 

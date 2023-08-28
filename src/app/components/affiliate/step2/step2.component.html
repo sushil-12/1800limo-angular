@@ -488,7 +488,15 @@
 								</p>
 								<img src="{{ id_front_image }}"
 									(click)="showImageInModal(id_front_image)" tabindex="-1" />
-								<ul *ngIf="canChangeDocument" class="mt-3">
+									<!-- *ngIf="" -->
+									<!-- [style.transform]="'rotate(' + id_front_image_degree + 'deg)'" -->
+									<!-- handleRotateSec('rotateDriverLicence'); -->
+								<ul class="mt-3" *ngIf="canChangeDocument && !rotateDriverLicence">
+											  <li>
+												<a class="custom-arrow-clockwise-button"
+												(click)="fetchImageBlob(id_front_image ,'id_front_image',id_front_image_id )">
+												 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+											</li>
 									<li>
 										<button class="changeuploaded" tabindex="1">
 											<input type="file" (change)="
@@ -524,6 +532,23 @@
 										</a>
 									</li>
 								</ul>
+									<ul class="mt-3" *ngIf="rotateDriverLicence">
+									<li>
+										<button class="custom-arrow-clockwise-button"
+										 (click)="rotateImage('id_front_image_degree')">
+										 <i class="bi bi-arrow-clockwise"></i>rotate</button>
+									</li>
+									<li>
+										<button class="custom-confirm-button"
+										 (click)="updateImageOrentation('id_front_image');handleRotateSec('rotateDriverLicence')">
+											<i class="bi bi-check2"></i>confirm</button>
+									</li>
+									<li>
+										<button class="custom-x-button"
+										 (click)="handleRotateSec('rotateDriverLicence');rotateImage('id_front_image_degree')">
+										 <i class="bi bi-x-lg"></i>cancel</button>
+									</li>
+								</ul>
 							</div>
 						</div>
 					</div>
@@ -544,6 +569,7 @@
 										<img src="../../../../assets/images/empty-image.png"
 											tabindex="-1" />
 									</div>
+									
 									<ul *ngIf="canChangeDocument" class="mt-3">
 										<li>
 											<button class="adduploaded" tabindex="1">
@@ -586,7 +612,12 @@
 								</p>
 								<img src="{{ id_back_image }}"
 									(click)="showImageInModal(id_back_image)" tabindex="-1" />
-								<ul *ngIf="canChangeDocument" class="mt-3">
+								<ul *ngIf="canChangeDocument && !rotateDriverLicenceBack" class="mt-3">
+									<li>
+										<a class="custom-arrow-clockwise-button"
+										(click)="fetchImageBlob(id_back_image ,'id_back_image',id_back_image_id )">
+										 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+									</li>
 									<li>
 										<button class="changeuploaded" tabindex="1">
 											<input type="file" (change)="
@@ -622,6 +653,23 @@
 										</a>
 									</li>
 								</ul>
+								<ul class="mt-3" *ngIf="rotateDriverLicenceBack">
+									<li>
+										<button class="custom-arrow-clockwise-button"
+										 (click)="rotateImage('id_back_image_degree')">
+										 <i class="bi bi-arrow-clockwise"></i>rotate</button>
+									</li>
+									<li>
+										<button class="custom-confirm-button"
+										 (click)="updateImageOrentation('id_back_image');handleRotateSec('rotateDriverLicenceBack')">
+											<i class="bi bi-check2"></i>confirm</button>
+									</li>
+									<li>
+										<button class="custom-x-button"
+										 (click)="handleRotateSec('rotateDriverLicenceBack');rotateImage('id_back_image_degree')">
+										 <i class="bi bi-x-lg"></i>cancel</button>
+									</li>
+								</ul>
 							</div>
 						</div>
 					</div>
@@ -637,7 +685,7 @@
 										<img src="../../../../assets/images/empty-image.png"
 											tabindex="-1" />
 									</div>
-									<ul *ngIf="canChangeDocument" class="mt-3">
+									<ul *ngIf="canChangeDocument"  class="mt-3">
 										<li>
 											<button class="adduploaded" tabindex="1">
 												<input type="file" (change)="
@@ -673,14 +721,15 @@
 		</h2>
 		<div class="container mt-4">
 			<div class="row">
-				<div class="col-md-7">
+				<div class="col-md-9">
 					<h3
 						class="addveh_top d-md-flex justify-content-between align-items-center mb-0">
 						<label class="alert alert-danger">Enter Address and Choose From Drop
 							Down.</label>
+						<label class="alert alert-danger my-2">Choose nearest major city or airport location</label>
 					</h3>
 				</div>
-				<div class="col-md-5" *ngIf="!canChangeAddress">
+				<div class="col-md-3" *ngIf="!canChangeAddress">
 					<button type="button" class="adressChangeButton m-0 h-100" data-toggle="modal"
 						data-target="#requestAddressChangeModal" tabindex="1">
 						Request Address Change
@@ -715,7 +764,26 @@
 						</div>
 					</ng-template>
 				</div>
-				<div class="col-md-6 d-md-block d-none"></div>
+				<div class="col-md-4">
+					<mat-form-field appearance="outline" class="example-full-width">
+						<mat-label>Badge City
+						</mat-label>
+						<input type="text"
+							   placeholder="Pick one"
+							   aria-label="Number"
+							   matInput
+							   formControlName="badge_city_name"
+							   [matAutocomplete]="auto" 
+							   (keyup)="handleBadgeCity($event.target.value)">
+						<mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+						  <mat-option *ngFor="let option of filteredOptions" 
+						  (onSelectionChange)="selectBadgeCity(option,$event.isUserInput)" [value]="option.name">
+							{{option.name}}
+						  </mat-option>
+						</mat-autocomplete>
+					  </mat-form-field>
+				</div>
+				<!-- <div class="col-md-6 d-md-block d-none"></div> -->
 				<div class="col-md-12 map-wrapper" *ngIf="latitude">
 					<agm-map [latitude]="latitude" [longitude]="longitude">
 						<agm-marker [latitude]="latitude" [longitude]="longitude"
@@ -811,7 +879,7 @@
 						</ol>
 					</div>
 				</div>
-				<div class="col-md-6">
+				<!-- <div class="col-md-6">
 					<mat-form-field appearance="outline" [class.read-only]="!canChangeAddress">
 						<mat-label>Street <span class="asterisk">*</span></mat-label>
 						<input matInput placeholder="Street" formControlName="street"
@@ -826,7 +894,7 @@
 							This field is required
 						</div>
 					</div>
-				</div>
+				</div> -->
 				<div class="col-md-6">
 					<mat-form-field appearance="outline" [class.read-only]="!canChangeAddress">
 						<mat-label>City <span class="asterisk">*</span></mat-label>
@@ -910,7 +978,7 @@
 							<button class="custom-filled-reset-button m-2" (click)="resetForm()" tabIndex="2">
 								RESET
 							</button>
-							<button class="custom-filled-button m-2" (click)="submitForm()" tabIndex="1">
+							<button type="submit" class="custom-filled-button m-2" (click)="submitForm()" tabIndex="1">
 								SAVE
 							</button>
 						</div>

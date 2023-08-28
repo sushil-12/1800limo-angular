@@ -186,6 +186,11 @@
 									tabindex="-1">
 								<ul class="mt-3 ng-star-inserted">
 									<li>
+										<a class="custom-arrow-clockwise-button"
+										(click)="fetchImageBlob(insCertificateImage ,'insCertificate',insCertificateId)">
+										 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+									</li>
+									<li>
 										<button class="changeuploaded" tabindex="1">
 											<input type="file"
 												(change)="vehicleOfficialImagesChange($event,'insCertificate',insCertificateId)"
@@ -237,7 +242,7 @@
 										</li>
 									</ul>
 								</div>
-								<div *ngIf="submittedForm && f.insCertificate.errors"
+								<div *ngIf="submittedForm && f.insCertificate.errors || f.insCertificate.touched && f.insCertificate.errors"
 									class="text-danger text-center margin-bottom-thin my-mat-hint mb-4">
 									<div *ngIf="f.insCertificate.errors.required">The Proof of Insurance Certificate is
 										required</div>
@@ -255,6 +260,11 @@
 								<img src="{{insuranceCardImage}}" (click)="showImageInModal(insuranceCardImage)"
 									tabindex="-1">
 								<ul class="mt-3">
+									<li>
+										<a class="custom-arrow-clockwise-button"
+										(click)="fetchImageBlob(insuranceCardImage ,'insuranceCard',insuranceCardId)">
+										 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+									</li>
 									<li>
 										<button class="changeuploaded" tabindex="1">
 											<input type="file"
@@ -328,9 +338,9 @@
 			<div class="col-md-5">
 				<div class="billing_inforamtion ">
 					<ul class="d-flex justify-content-center">
+						<li><button class="custom-filled-reset-button mr-2" (click)="resetForm()" tabindex="1">RESET</button> </li>
 						<li><button class="custom-filled-button mr-2" (click)="submitForm()" [disabled]="disableSubmitButton"
 								tabindex="1">SAVE</button> </li>
-						<li><button class="custom-filled-button mr-2" (click)="resetForm()" tabindex="1">RESET</button> </li>
 					</ul>
 				</div>
 			</div>

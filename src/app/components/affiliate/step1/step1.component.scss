@@ -564,3 +564,11 @@ top:2.05em}
     text-align: start;
     padding-left: 8px;
 }
+
+:host ::ng-deep .mat-input-element{
+	font-weight: 500;
+}
+
+:host ::ng-deep .selectStyle select {
+	font-weight: 400;
+}

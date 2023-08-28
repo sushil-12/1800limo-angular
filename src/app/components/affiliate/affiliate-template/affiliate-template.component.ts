@@ -21,7 +21,7 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 {
 
 	public userImage: string = 'assets/images/user.png';
-	public showSidebar: boolean = false;
+	public showSidebar: boolean = true;
 	public currentUser: any;
 	public stepCompleted: any;
 	public stepCompletedObj: any;
@@ -178,6 +178,20 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 				resolve(response.data)
 			})
 		})
+	}
+	handleDivClick(event: MouseEvent | TouchEvent) {
+		console.log('Clicked/touched parent div' ,event,this.showSidebar);
+		if(!this.showSidebar){
+			$("body").toggleClass("sidenav-toggled");
+			this.showSidebar = true
+		}
+		// if (targetElement.id === 'layoutSidenav_nav') {
+		// 	// Ignore the click event if the target is the child div with id 'layoutSidenav_nav'
+		// 	console.log('click ignore')
+		// 	return;
+		// }
+
+		// Handle the click/touch event on the parent div here
 	}
 	checkApplicationStatus()
 	{
@@ -496,15 +510,15 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 	{
 		if (this.screenWidth <= '991')
 		{
+			this.showSidebar = true;
 			$("body").removeClass("sidenav-toggled");
-			if (status)
-			{
-				this.showSidebar = true;
-			}
-			else
-			{
-				this.showSidebar = false;
-			}
+			// if (status)
+			// {
+			// }
+			// else
+			// {
+			// 	this.showSidebar = false;
+			// }
 		}
 	}
 

@@ -8,6 +8,7 @@ import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { HttpClient } from "@angular/common/http";
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
+import { AdminService } from 'src/app/services/admin.service';
 declare var $: any;
 
 @Component({
@@ -97,6 +98,7 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 	constructor(
 		private affiliateService: AffiliateService,
 		private stateManagementService: StateManagementService,
+		private adminService: AdminService,
 		private router: Router,
 		private formBuilder: FormBuilder,
 		private spinner: NgxSpinnerService,
@@ -279,38 +281,38 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 				sessionStorage.setItem('models', JSON.stringify(this.model));
 
 				this.vehicleImage1 = this.oldvehicleImage[0] = this.response.data.vehicleImage1.image;
-				// this.vehicleImage2 = this.oldvehicleImage[1] = this.response.data.vehicleImage2.image;
-				// this.vehicleImage3 = this.oldvehicleImage[2] = this.response.data.vehicleImage3.image;
-				// this.vehicleImage4 = this.oldvehicleImage[3] = this.response.data.vehicleImage4.image;
-				// this.vehicleImage5 = this.oldvehicleImage[4] = this.response.data.vehicleImage5.image;
-				// this.vehicleImage6 = this.oldvehicleImage[5] = this.response.data.vehicleImage6.image;
-				// this.vehicleImage7 = this.oldvehicleImage[6] = this.response.data.vehicleImage7.image;
-				// this.vehicleImage8 = this.oldvehicleImage[7] = this.response.data.vehicleImage8.image;
-				// this.vehicleImage9 = this.oldvehicleImage[8] = this.response.data.vehicleImage9.image;
+				this.vehicleImage2 = this.oldvehicleImage[1] = this.response.data.vehicleImage2.image;
+				this.vehicleImage3 = this.oldvehicleImage[2] = this.response.data.vehicleImage3.image;
+				this.vehicleImage4 = this.oldvehicleImage[3] = this.response.data.vehicleImage4.image;
+				this.vehicleImage5 = this.oldvehicleImage[4] = this.response.data.vehicleImage5.image;
+				this.vehicleImage6 = this.oldvehicleImage[5] = this.response.data.vehicleImage6.image;
+				this.vehicleImage7 = this.oldvehicleImage[6] = this.response.data.vehicleImage7.image;
+				this.vehicleImage8 = this.oldvehicleImage[7] = this.response.data.vehicleImage8.image;
+				this.vehicleImage9 = this.oldvehicleImage[8] = this.response.data.vehicleImage9.image;
 
 				this.vehicleImageId1 = this.response.data.vehicleImage1.id;
-				// this.vehicleImageId2 = this.response.data.vehicleImage2.id;
-				// this.vehicleImageId3 = this.response.data.vehicleImage3.id;
-				// this.vehicleImageId4 = this.response.data.vehicleImage4.id;
-				// this.vehicleImageId5 = this.response.data.vehicleImage5.id;
-				// this.vehicleImageId6 = this.response.data.vehicleImage6.id;
-				// this.vehicleImageId7 = this.response.data.vehicleImage7.id;
-				// this.vehicleImageId8 = this.response.data.vehicleImage8.id;
-				// this.vehicleImageId9 = this.response.data.vehicleImage9.id;
+				this.vehicleImageId2 = this.response.data.vehicleImage2.id;
+				this.vehicleImageId3 = this.response.data.vehicleImage3.id;
+				this.vehicleImageId4 = this.response.data.vehicleImage4.id;
+				this.vehicleImageId5 = this.response.data.vehicleImage5.id;
+				this.vehicleImageId6 = this.response.data.vehicleImage6.id;
+				this.vehicleImageId7 = this.response.data.vehicleImage7.id;
+				this.vehicleImageId8 = this.response.data.vehicleImage8.id;
+				this.vehicleImageId9 = this.response.data.vehicleImage9.id;
 
 				if (this.affiliateType != 'fleet_operator')
 				{
-					// this.rearPlateImage = this.oldvehicleImage[9] = this.response.data.rear_plate.image;
-					// this.windowPermitImage = this.oldvehicleImage[10] = this.response.data.window_permit.image;
-					// this.windowPermit2Image = this.oldvehicleImage[11] = this.response.data.window_permit_1.image;
-					// this.usdotPermitImage = this.oldvehicleImage[12] = this.response.data.USDOT_permit.image;
-					// this.mcImage = this.oldvehicleImage[13] = this.response.data.mc.image;
+					this.rearPlateImage = this.oldvehicleImage[9] = this.response.data.rear_plate.image;
+					this.windowPermitImage = this.oldvehicleImage[10] = this.response.data.window_permit.image;
+					this.windowPermit2Image = this.oldvehicleImage[11] = this.response.data.window_permit_1.image;
+					this.usdotPermitImage = this.oldvehicleImage[12] = this.response.data.USDOT_permit.image;
+					this.mcImage = this.oldvehicleImage[13] = this.response.data.mc.image;
 
-					// this.rearPlateId = this.response.data.rear_plate.id;
-					// this.windowPermitId = this.response.data.window_permit.id;
-					// this.windowPermit2Id = this.response.data.window_permit_1.id;
-					// this.usdotPermitId = this.response.data.USDOT_permit.id;
-					// this.mcId = this.response.data.mc.id;
+					this.rearPlateId = this.response.data.rear_plate.id;
+					this.windowPermitId = this.response.data.window_permit.id;
+					this.windowPermit2Id = this.response.data.window_permit_1.id;
+					this.usdotPermitId = this.response.data.USDOT_permit.id;
+					this.mcId = this.response.data.mc.id;
 				}
 
 				//get models as per make
@@ -619,6 +621,78 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 			vehicleInterior.removeAt(index);
 		}
 	}
+	fetchImageBlob(url ,key ,id){
+		this.stateManagementService.setprogressBar(true);
+		
+		this.adminService.fetchImageBlob(url)
+		.pipe(
+			catchError(err => {
+				this.stateManagementService.setprogressBar(false);
+				return throwError(err);
+			})
+		)
+		.subscribe(async({ data }: any) => {
+			this.stateManagementService.setprogressBar(false);
+			const response = await fetch(data);
+			const imageBlob = await response.blob()
+			console.log('imageBlob',imageBlob)
+		const canvas = document.createElement("canvas");
+		const ctx = canvas.getContext("2d");
+		const img = new Image();
+		img.src = URL.createObjectURL(imageBlob);
+		console.log('img-->' , img)
+		img.onload = () => {
+			// Rotate the image by 90 degrees (or your desired angle)
+			canvas.width = img.width; 
+			canvas.height = img.height;
+			ctx.translate(canvas.width / 2, canvas.height / 2);
+			ctx.rotate(Math.PI); // Rotate by 180 degrees
+			ctx.drawImage(img, -img.width / 2, -img.height / 2);
+			// ctx.drawImage(img, 0, -canvas.width);
+
+			// Convert the canvas to a Blob (JPEG format)
+			canvas.toBlob((blob) => {
+				console.log(blob);
+
+				this.blobToDataURL(blob, key ,id);
+				// });
+			}, "image/jpeg");
+		}
+		})
+	}
+	blobToDataURL(blob: Blob , key , id) {
+		var reader = new FileReader();
+		reader.readAsDataURL(blob);
+		reader.onload = () => {
+			let dataUrl = reader.result;
+			console.log(dataUrl); //DataURL
+			isNaN(parseInt(key)) ? this.vehicleOfficialImagesChange1(dataUrl, key,id) :this.onFileChange1(dataUrl, key,id);
+		};
+	}
+	onFileChange1(dataUrl, imageNumber,imageId)
+	{
+		this.stateManagementService.setprogressBar(true);
+				this.imageSrc = dataUrl;
+				this.affiliateService.uploadVehicleImage(this.imageSrc)
+					.pipe(
+						catchError(err =>
+						{
+							this.stateManagementService.setprogressBar(false);
+							return throwError(err);
+						})
+					)
+					.subscribe(result =>
+					{
+						this.response = result;
+						this.addVehicleForm.patchValue({
+							["vehicle_image_" + imageNumber]: this.response.data.id,
+						});
+						this["vehicleImage" + imageNumber] = this.response.data.image;
+
+						this.stateManagementService.setprogressBar(false);
+					});
+	}
+
 
 	onFileChange(event, imageId, imageNumber)
 	{
@@ -651,6 +725,77 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 					});
 			};
 		}
+	}
+
+	vehicleOfficialImagesChange1(url, imageType, imageId)
+	{
+		this.stateManagementService.setprogressBar(true);
+				this.imageSrc = url;
+				this.affiliateService.uploadVehicleImage(this.imageSrc)
+					.pipe(
+						catchError(err =>
+						{
+							this.stateManagementService.setprogressBar(false);
+							return throwError(err);
+						})
+					)
+					.subscribe(result =>
+					{
+						this.response = result;
+
+						switch (imageType)
+						{
+							case 'rearPlate': {
+								this.addVehicleForm.patchValue({
+									rearPlateImage: this.response.data.id,
+								});
+								// this.rearPlateUploaded=true;
+								this.rearPlateImage = this.response.data.image;
+								// this.deleteImage(imageId,'rearPlate');//delete previous image
+								break;
+							}
+							case 'windowPermit': {
+								this.addVehicleForm.patchValue({
+									windowPermitImage: this.response.data.id,
+								});
+								// this.windowPermitUploaded=true;
+								this.windowPermitImage = this.response.data.image;
+								// this.deleteImage(imageId,'windowPermit');//delete previous image
+								break;
+							}
+							case 'windowPermit2': {
+								this.addVehicleForm.patchValue({
+									windowPermit2Image: this.response.data.id,
+								});
+								// this.windowPermit2Uploaded=true;
+								this.windowPermit2Image = this.response.data.image;
+								// this.deleteImage(imageId,'windowPermit2');//delete previous image
+								break;
+							}
+							case 'usdotPermit': {
+								this.addVehicleForm.patchValue({
+									usdotPermitImage: this.response.data.id,
+								});
+								// this.usdotPermitUploaded=true;
+								this.usdotPermitImage = this.response.data.image;
+								// this.deleteImage(imageId,'usdotPermit');//delete previous image
+								break;
+							}
+							case 'mc': {
+								// this.deleteImage(imageId,'mc');//delete previous image
+								this.addVehicleForm.patchValue({
+									mcImage: this.response.data.id,
+								});
+								// this.mcUploaded=true;
+								this.mcImage = this.response.data.image;
+								break;
+							}
+							default: {
+								break;
+							}
+						}
+						this.stateManagementService.setprogressBar(false);
+					});
 	}
 
 	vehicleOfficialImagesChange(event, imageType, imageId)

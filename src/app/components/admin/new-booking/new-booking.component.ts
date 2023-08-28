@@ -235,7 +235,7 @@ export class NewBookingComponent implements OnInit {
 			number_of_hours: ['0'],
 			acc_id: [''],
 			account_type: ['individual'],
-			change_individual_data:[false],
+			change_individual_data: [false],
 			loose_customer: this.$form.group({
 				first_name: [''],
 				middle_name: [''],
@@ -459,7 +459,12 @@ export class NewBookingComponent implements OnInit {
 				if (item.includes('extra_stops') || item.includes('languages') || item.includes('dresses'), item.toLowerCase().includes('amenities')) {
 					// console.log('Skipping in the case of Extra Stops. ')
 				}
-				if (editing_data[item]) {
+				if (item == "passenger_cell_isd") {
+					console.log('passenger_cell_isd-->>', item, editing_data[item])
+					let value = editing_data[item].includes('+') ? editing_data[item] : '+'.concat(editing_data[item])
+					this.SetFormValue(item, value);
+				}
+				if (editing_data[item] && item != "passenger_cell_isd") {
 					if (isNaN(Number(editing_data[item]))) {
 						this.SetFormValue(item, editing_data[item]);
 					} else {
@@ -841,12 +846,12 @@ export class NewBookingComponent implements OnInit {
 		})
 	}
 
-	fillLCDetails(choose_user:any){
-		this.SetLCFormValue('first_name' ,choose_user?.first_name )
-		this.SetLCFormValue('middle_name' ,choose_user?.middle_name )
-		this.SetLCFormValue('last_name' ,choose_user?.last_name )
-		this.SetLCFormValue('email' ,choose_user?.email )
-		this.SetLCFormValue('phone' ,choose_user?.mobile )
+	fillLCDetails(choose_user: any) {
+		this.SetLCFormValue('first_name', choose_user?.first_name)
+		this.SetLCFormValue('middle_name', choose_user?.middle_name)
+		this.SetLCFormValue('last_name', choose_user?.last_name)
+		this.SetLCFormValue('email', choose_user?.email)
+		this.SetLCFormValue('phone', choose_user?.mobile)
 	}
 
 	handleClientAccount(value: any) {
@@ -1034,6 +1039,7 @@ export class NewBookingComponent implements OnInit {
 				this.VehicleList.map((item: any) => item['formatted_name'] = `${item.vehicleType} - ${item.make} (${item.model})`);
 
 				// autofill data if isRatesCompleted:true
+				this.vehicleType_arr = this.VehicleList = this.vehicleMake_arr = this.VehicleList = this.vehicleModal_arr = this.VehicleList = this.vehicleYear_arr = this.VehicleList = this.vehicleColor_arr = this.VehicleList
 				for (let i = 0; i < this.VehicleList.length; i++) {
 					if (this.VehicleList[i].isRatesCompleted) {
 						if (this.QB_vehicle_id) {
@@ -1415,8 +1421,10 @@ export class NewBookingComponent implements OnInit {
 				value['rateArray'] = JSON.parse(JSON.stringify(this.RatesForm))
 				value['grand_total'] = value['rateArray']['grand_total']
 				value['sub_total'] = value['rateArray']['sub_total']
+				value['min_rate_involved'] = value['rateArray']['min_rate_involved']
 				delete value['rateArray']['grand_total']
 				delete value['rateArray']['sub_total']
+				delete value['rateArray']['min_rate_involved']
 				// Return Rates Form
 				if (this.Form.service_type.value == 'round_trip' && this.ReturnRatesForm) {
 					value['returnRateArray'] = JSON.parse(JSON.stringify(this.ReturnRatesForm))
@@ -2008,7 +2016,7 @@ export class NewBookingComponent implements OnInit {
 		this.LCTelObject = event;
 	}
 
-	LCTelInputObjectUSA(event: any){
+	LCTelInputObjectUSA(event: any) {
 		event.setCountry('us');
 	}
 

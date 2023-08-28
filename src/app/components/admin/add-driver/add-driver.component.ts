@@ -452,6 +452,141 @@ export class AddDriverComponent implements OnInit {
 		});
 	}
 
+	fetchImageBlob(url ,key ,id){
+		this.stateManagementService.setprogressBar(true);
+		
+		this.adminService.fetchImageBlob(url)
+		.pipe(
+			catchError(err => {
+				this.stateManagementService.setprogressBar(false);
+				return throwError(err);
+			})
+		)
+		.subscribe(async({ data }: any) => {
+			this.stateManagementService.setprogressBar(false);
+			const response = await fetch(data);
+			const imageBlob = await response.blob()
+			console.log('imageBlob',imageBlob)
+		const canvas = document.createElement("canvas");
+		const ctx = canvas.getContext("2d");
+		const img = new Image();
+		img.src = URL.createObjectURL(imageBlob);
+		console.log('img-->' , img)
+		img.onload = () => {
+			// Rotate the image by 90 degrees (or your desired angle)
+			canvas.width = img.width; 
+			canvas.height = img.height;
+			ctx.translate(canvas.width / 2, canvas.height / 2);
+			ctx.rotate(Math.PI); // Rotate by 180 degrees
+			ctx.drawImage(img, -img.width / 2, -img.height / 2);
+			// ctx.drawImage(img, 0, -canvas.width);
+
+			// Convert the canvas to a Blob (JPEG format)
+			canvas.toBlob((blob) => {
+				console.log(blob);
+
+				this.blobToDataURL(blob, key ,id);
+				// });
+			}, "image/jpeg");
+		}
+		})
+	}
+	blobToDataURL(blob: Blob , key , id) {
+		var reader = new FileReader();
+		reader.readAsDataURL(blob);
+		reader.onload = () => {
+			let dataUrl = reader.result;
+			console.log(dataUrl); //DataURL
+			this.vehicleOfficialImagesChange1(dataUrl, key,id);
+		};
+	}
+
+	vehicleOfficialImagesChange1(imgUrl, imageType, imageId) {
+		this.stateManagementService.setprogressBar(true);
+				this.imageSrc = imgUrl
+				this.adminService
+					.uploadVehicleImage(this.imageSrc)
+					.pipe(
+						catchError((err) => {
+							this.stateManagementService.setprogressBar(false);
+							return throwError(err);
+						})
+					)
+					.subscribe(({ data }: any) => {
+						switch (imageType) {
+							case "DriverImage": {
+								this.addDriverForm.patchValue({
+									DriverImage: data.id,
+								});
+								this.DriverImage = data.image;
+								this.DriverImageId = data.id;
+								break;
+							}
+							case "DriverLicense": {
+								this.addDriverForm.patchValue({
+									DriverLicense: data.id,
+								});
+								this.DriverLicense = data.image;
+								break;
+							}
+							case "StarRating": {
+								this.addDriverForm.patchValue({
+									StarRating: data.id,
+								});
+								this.StarRating = data.image;
+								break;
+							}
+							case "VeteranIdCard": {
+								this.addDriverForm.patchValue({
+									VeteranIdCard: data.id,
+								});
+								this.VeteranIdCard = data.image;
+								break;
+							}
+							case "schoolBusCertificateImage": {
+								this.addDriverForm.patchValue({
+									schoolBusCertificateImage: data.id,
+								});
+								this.schoolBusCertificateImage = data.image;
+								break;
+							}
+							case "FoidCardImage": {
+								this.addDriverForm.patchValue({
+									FoidCardImage: data.id,
+								});
+								this.FoidCardImage = data.image;
+								break;
+							}
+							case "BackgroundCheckerID": {
+								this.addDriverForm.patchValue({
+									BackgroundCheckerID: data.id,
+								});
+								this.BackgroundCheckerID = data.image;
+								break;
+							}
+							case "VaccinationCardImage": {
+								this.addDriverForm.patchValue({
+									VaccinationCardImage: data.id,
+								});
+								this.VaccinationCardImage = data.image;
+								break;
+							}
+							case "DoDImage": {
+								this.addDriverForm.patchValue({
+									DoDImage: data.id,
+								});
+								this.DoDImage = data.image;
+								break;
+							}
+							default: {
+								break;
+							}
+						}
+						this.stateManagementService.setprogressBar(false);
+					});
+	}
+
+
 	vehicleOfficialImagesChange(event, imageType, imageId) {
 		// this.stateManagementService.setprogressBar(true);
 		const reader = new FileReader();
@@ -758,6 +893,7 @@ export class AddDriverComponent implements OnInit {
 			const index = FluentLanguages.controls.findIndex(x => x.value === val);
 			FluentLanguages.removeAt(index);
 		}
+		console.log('onLanguageChange' , val,ischecked)
 	}
 
 	showImageInModal(imageUrl) {
@@ -773,6 +909,7 @@ export class AddDriverComponent implements OnInit {
 	submitForm() {
 		this.submittedForm = true;
 		// stop here if form is invalid
+		console.log(this.addDriverForm)
 		if (this.addDriverForm.invalid) {
 			return;
 		}
@@ -803,7 +940,44 @@ export class AddDriverComponent implements OnInit {
 	}
 
 	resetForm() {
-		this.addDriverForm.reset();
+		console.log('reseting values-->>' , this.addDriverForm)
+		this.addDriverForm.patchValue({
+			FirstName: "",
+			MiddleName: "",
+			LastName: "",
+			Gender: "",
+			CellNumber: "",
+			CellIsd: "+1",
+			CellNumberCountry: "us",
+			Email: "",
+			Dress: 1,
+			StartDate: "",
+			Veteran: "no",
+			DoD: "no",
+			SchoolBusCertified: "no",
+			FoidCard: "no",
+			Covid19Vaccination: "no",
+			BackgroundCertified: "no",
+			ExPolice: "no",
+			DriverImage: "",
+			DriverLicense: "",
+			StarRating: "",
+			starRatingValue: "",
+			VeteranIdCard: "",
+			schoolBusCertificateImage: "",
+			DoDImage: "",
+			FoidCardImage: "",
+			BackgroundCheckerID: "",
+			CheckerID: "",
+			BackgroundCompanyTelNumber: "",
+			VaccinationCardImage: "",
+			PoliceForceTelephone: "",
+			LastPoliceDepartment: "",
+			Country: "",
+			State: "",
+			City: "",
+			ZipCode: "",
+		});
 		this.DriverImage = "";
 		this.DriverLicense = "";
 		this.StarRating = "";
@@ -813,6 +987,11 @@ export class AddDriverComponent implements OnInit {
 		this.schoolBusCertificateImage = "";
 		this.VaccinationCardImage = "";
 		this.DoDImage = "";
+		this.onLanguageChange('1', true);//set english as default language
+		window.scrollTo({
+			top :0,
+			behavior:'smooth'
+		})
 	}
 	backButton() {
 		this.router.navigate(['/admin/affiliate/step4']);
