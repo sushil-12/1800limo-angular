@@ -152,9 +152,9 @@ export class OtpComponent implements OnInit, OnDestroy {
 	onOtpChange(value) {
 		this.otpForm.get('otp').setValue(value)
 		this.otpForm.updateValueAndValidity()
-		if(value.length >=6){
-			this.otpCheck()
-		}
+		// if(value.length >=6){
+		// 	this.otpCheck()
+		// }
 	}
 
 	resendOtp() {
