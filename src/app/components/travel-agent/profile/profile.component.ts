@@ -25,12 +25,13 @@ export class ProfileComponent implements OnInit {
   public MobileObject: any;
   public FaxObject: any;
   public OfficePhoneObject: any;
-  public currentUser :any = JSON.parse(localStorage.getItem('currentUser'))
+  public currentUser: any = JSON.parse(localStorage.getItem('currentUser'))
 
   private geoCoder;
   @ViewChild('search1')
   public searchElementRef: ElementRef;
   response: any;
+  defaultCountryCode: string;
 
   constructor(
     private stateManagementService: StateManagementService,
@@ -82,23 +83,45 @@ export class ProfileComponent implements OnInit {
             });
           if (place.address_components[4])
             this.profileForm.patchValue({
-              zipCode: place.address_components[place.address_components.length - 1].long_name
+              zip: place.address_components[place.address_components.length - 1].long_name
             });
         });
       });
     });
     this.stateManagementService.setprogressBar(false);//hide progressbar
-    this.currentUser?.is_profile_complete ? this.getProfileData() : ''
+    if (this.currentUser?.is_profile_complete) {
+      this.getProfileData()
+    }
+    else {
+      this.profileForm.get('name')?.setValidators([Validators.required]);
+      this.profileForm.get('number')?.setValidators([Validators.required, Validators.pattern("^[0-9\\s]*$"), Validators.minLength(16), Validators.maxLength(20), this.customValidator.dashValidator(), this.customValidator.plusValidator()]);
+      this.profileForm.get('exp_month')?.setValidators([Validators.required]);
+      this.profileForm.get('exp_year')?.setValidators([Validators.required]);
+      this.profileForm.get('cvc')?.setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(3), Validators.maxLength(4), this.customValidator.dashValidator(), this.customValidator.plusValidator()]);
+
+      this.profileForm.get('name')?.updateValueAndValidity();
+      this.profileForm.get('number')?.updateValueAndValidity();
+      this.profileForm.get('exp_year')?.updateValueAndValidity();
+      this.profileForm.get('exp_month')?.updateValueAndValidity();
+      this.profileForm.get('cvc')?.updateValueAndValidity();
+      this.profileForm.patchValue({
+        mobile: this.currentUser?.phone,
+        mobileIsd: this.currentUser?.isd,
+        mobileCountry: this.currentUser?.phoneCountry
+      })
+      this.defaultCountryCode = this.currentUser?.phoneCountry;
+    }
 
   }
 
   buildProfileForm() {
     this.profileForm = this.formBuilder.group({
       acc_id: [''],
+      tp_id:[''],
       firstName: ['', Validators.required],
       middleName: [''],
       lastName: ['', Validators.required],
-      work: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
+      work_contact_number: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
       workIsd: ['+1', Validators.required],
       workCountry: ['us'],
       mobile: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
@@ -109,24 +132,24 @@ export class ProfileComponent implements OnInit {
       city: ['', Validators.required],
       state: ['', Validators.required],
       country: ['', Validators.required],
-      zipCode: ['', Validators.required],
-      agencyName: ['', Validators.required],
+      zip: ['', Validators.required],
+      agency_name: ['', Validators.required],
       payee: ['', Validators.required],
       iata: ['', Validators.required],
       fax: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
       faxIsd: ['+1', Validators.required],
       faxCountry: ['us'],
-      officeNumber: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
+      office_number: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
       isd_office_number: ['+1', Validators.required],
       office_country_code: ['us'],
       latitude: [''],
       longitude: [''],
       card_type: ['personal', Validators.required],
-			number: ['', [Validators.required, Validators.pattern("^[0-9\\s]*$"), Validators.minLength(16), Validators.maxLength(20), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
-			cvc: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(3), Validators.maxLength(3), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
-			exp_month: ['', Validators.required],
-			exp_year: ['', Validators.required],
-			name: ['', Validators.required],
+      number: [''],
+      cvc: [''],
+      exp_month: [''],
+      exp_year: [''],
+      name: [''],
     });
   }
   get f() {
@@ -145,49 +168,57 @@ export class ProfileComponent implements OnInit {
         this.profile_pic = data?.profile_pic;
         this.profileForm.patchValue({
           acc_id: data?.acc_id,
+          tp_id : data?.tp_id,
           firstName: data?.first_name,
           middleName: data?.middle_name,
           lastName: data?.last_name,
-          work: data?.work,
-          workCountry: data?.officeCountry,
+          work_contact_number: data?.work_contact_number,
+          workIsd: data?.workIsd || '+1',
+          workCountry: data?.workCountry || 'us',
           mobile: data?.mobile,
-          mobileIsd: data?.mobileIsd,
-          mobileCountry: data?.mobileCountry,
+          mobileIsd: data?.mobileIsd || '+1',
+          mobileCountry: data?.mobileCountry || 'us',
           email: data?.email,
           address: data?.address,
           city: data?.city,
           state: data?.state,
           country: data?.country,
-          zipCode: data?.zipCode,
-          agencyName: data?.agencyName,
+          zip: data?.zip,
+          agency_name: data?.agency_name,
           payee: data?.payee,
           iata: data?.iata,
           fax: data?.fax,
-          faxCountry: data?.faxCountry,
-          officeNumber: data?.officeNumber,
-          office_country_code: data?.office_country_code,
+          faxIsd: data?.faxIsd || '+1',
+          faxCountry: data?.faxCountry || 'us',
+          office_number: data?.office_number,
+          isd_office_number: data?.isd_office_number || '+1',
+          office_country_code: data?.office_country_code || 'us',
           latitude: data?.latitude,
           longitude: data?.longitude,
         })
         console.log('profile data-->>>>', data)
+        this.MobileObject.setCountry(data?.mobileCountry)
+        this.OfficeObject.setCountry(data?.workCountry);
+        this.FaxObject.setCountry(data?.faxCountry);
+        this.OfficePhoneObject.setCountry(data?.office_country_code);
       });
   }
   onCountryChange(event, type) {
     if (type == 'mobile') {
-      console.log("11111")
+      console.log("11111", event)
       this.profileForm.patchValue({
         mobileIsd: '+' + event.dialCode,
         mobileCountry: event.iso2
       });
     }
-    else if (type == 'work') {
+    else if (type == 'work_contact_number') {
       console.log("222222")
       this.profileForm.patchValue({
         workIsd: '+' + event.dialCode,
         workCountry: event.iso2
       });
     }
-    else if (type == 'officeNumber') {
+    else if (type == 'office_number') {
       console.log("333333")
       this.profileForm.patchValue({
         isd_office_number: '+' + event.dialCode,
@@ -207,6 +238,7 @@ export class ProfileComponent implements OnInit {
     this.OfficeObject = obj;
   }
   telInputObjectMobile(obj) {
+    console.log('telInputMobile', obj)
     this.MobileObject = obj;
   }
   telInputObjectFax(obj) {
@@ -268,7 +300,7 @@ export class ProfileComponent implements OnInit {
     // console.log(JSON.stringify(this.addVehicleRatesForm.value));
     this.spinner.show();
 
-    this.travelAgentService.updateProfile(this.profileForm.value)
+    this.travelAgentService.updateProfile(this.profileForm.value, this.currentUser?.is_profile_complete)
       .pipe(
         catchError(err => {
           this.spinner.hide();//hide spinner
@@ -276,11 +308,12 @@ export class ProfileComponent implements OnInit {
         })
       )
       .subscribe(result => {
-        this.response= result;
+        this.response = result;
         this.spinner.hide();//hide spinner
-        if(this.response?.data?.is_profile_complete){
+        if (this.response?.data?.is_profile_complete) {
           const currentUser = JSON.parse(localStorage.getItem('currentUser'))
-          localStorage.setItem('currentUser' , currentUser)
+          currentUser['is_profile_complete'] = true
+          localStorage.setItem('currentUser', JSON.stringify(currentUser))
           this.router.navigate(['/travel_agent/bookings']);
         }
       });

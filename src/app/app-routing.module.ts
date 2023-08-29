@@ -36,6 +36,7 @@ import { LocateMapComponent } from './components/locate-map/locate-map.component
 import { BookingStatusVerificationComponent } from './components/email-pages/booking-status-verification/booking-status-verification.component';
 import { TransactionHistoryComponent } from './components/website/transaction-history/transaction-history.component';
 import { AgentTemplateComponent } from './components/travel-agent/agent-template/agent-template.component';
+import { CheckProfileCompleteGuard } from './guards/check-profile-complete.guard';
 
 
 const routes: Routes = [
@@ -61,7 +62,8 @@ const routes: Routes = [
 			},
 			{
 				path: 'quotebot_section',
-				component: HomeComponent
+				component: HomeComponent,
+				canActivate: [CheckProfileCompleteGuard],
 			},
 			{
 				path: 'about-us',

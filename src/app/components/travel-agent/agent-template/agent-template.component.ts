@@ -23,6 +23,8 @@ export class AgentTemplateComponent implements OnInit {
 	public progressBar: boolean;
 	profile_pic_url: any;
 	chevron_up: boolean = false;
+	chevron: boolean = false;
+
   constructor(
 		private router: Router,
 		private stateManagementService: StateManagementService,
@@ -133,6 +135,9 @@ export class AgentTemplateComponent implements OnInit {
 			this.showSidebar = true
 		}
   }
+  invoiceFunc(status) {
+	this.chevron = !this.chevron
+}
 
   showSidebarFunc(status)
 	{

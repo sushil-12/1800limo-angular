@@ -12,13 +12,29 @@ export class TravelAgentService {
 	private serverUrl = environment.serverUrl + 'travel-planner/';
   constructor(private httpClient: HttpClient) { }
 
+  checkIsProfileCompleted(){
+    let loggedInUserData = JSON.parse(localStorage.getItem('currentUser'))
+    let role = JSON.parse(localStorage.getItem('userData'))?.RoleName
+    if(role=='travel_agent'){
+      return loggedInUserData?.is_profile_complete
+    }
+    else{
+      return true
+    }
+  }
+
   getProfileDetail()
 	{
 		return this.httpClient.get(`${this.serverUrl}get-profile-data`)
 	}
 
-  updateProfile(data){
-    return this.httpClient.post(this.serverUrl + 'edit-travel-planner-account', data);
+  updateProfile(data , updateBasicInfo){
+    if(updateBasicInfo){
+      return this.httpClient.post(this.serverUrl + 'update-travel-planner-account', data);
+    }
+    else{
+      return this.httpClient.post(this.serverUrl + 'create-travel-planner-account', data);
+    }
   }
   
 }
