@@ -85,7 +85,7 @@ export class OtpComponent implements OnInit, OnDestroy {
 					break;
 				}
 				case 'travel_agent': {
-					this.router.navigateByUrl('/user');
+					this.router.navigateByUrl('/travel_agent');
 					break;
 				}
 				default: {
@@ -152,9 +152,9 @@ export class OtpComponent implements OnInit, OnDestroy {
 	onOtpChange(value) {
 		this.otpForm.get('otp').setValue(value)
 		this.otpForm.updateValueAndValidity()
-		if(value.length >=6){
-			this.otpCheck()
-		}
+		// if(value.length >=6){
+		// 	this.otpCheck()
+		// }
 	}
 
 	resendOtp() {
@@ -300,7 +300,10 @@ export class OtpComponent implements OnInit, OnDestroy {
 						break;
 					}
 					case 'travel_agent': {
-						this.router.navigateByUrl('/user');
+						if(this.response.data.user?.is_profile_complete)
+							this.router.navigateByUrl('/travel_agent');
+						else
+							this.router.navigateByUrl('/travel_agent/profile');
 						break;
 					}
 					default: {

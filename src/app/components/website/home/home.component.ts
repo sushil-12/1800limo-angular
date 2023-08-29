@@ -544,6 +544,13 @@ export class HomeComponent implements OnInit {
 		// Also, check if the parsed date string is equal to the original dateString
 	}
 
+	format(text){
+		if(text)
+			return text.replace('_' ,' ');
+		else
+			return ' ';
+	}
+
 	prefillQuotebot() {
 		if (localStorage.getItem('quotebot_form')) {
 			let previous_quotebot = JSON.parse(localStorage.getItem('quotebot_form'))
@@ -1353,7 +1360,11 @@ export class HomeComponent implements OnInit {
 			this.spinner.show();//show spinner
 			this.router.navigateByUrl('/admin/daily-bookings-admin');
 			console.log("step 0  dashboard");
-
+		}
+		else{
+			console.log(`redirecting to ${role}/bookings`)
+			this.spinner.show();
+			this.router.navigateByUrl(`${role}/bookings`)
 		}
 	}
 
