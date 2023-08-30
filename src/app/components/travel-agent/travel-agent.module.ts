@@ -5,13 +5,46 @@ import { TravelAgentRoutingModule } from './travel-agent-routing.module';
 import { TravelAgentComponent } from './travel-agent.component';
 import { BookingComponent } from './booking/booking.component';
 import { AgentTemplateComponent } from './agent-template/agent-template.component';
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { Ng2TelInputModule } from 'ng2-tel-input';
+import { AgmCoreModule } from '@agm/core';
+import { AgmDirectionModule } from 'agm-direction';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatMomentDateModule } from '@angular/material-moment-adapter';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { MatRadioModule } from '@angular/material/radio';
+import { SharedModule } from '../shared/shared.module';
+import { NgxPrintModule } from 'ngx-print';
+import { ProfileComponent } from './profile/profile.component';
 
 
 @NgModule({
-  declarations: [TravelAgentComponent, BookingComponent, AgentTemplateComponent],
+  declarations: [TravelAgentComponent, BookingComponent, AgentTemplateComponent, ProfileComponent],
   imports: [
     CommonModule,
-    TravelAgentRoutingModule
+    TravelAgentRoutingModule,
+		NgxSpinnerModule,
+		MatProgressBarModule,
+		FormsModule,
+		ReactiveFormsModule,
+		MatSlideToggleModule,
+		Ng2TelInputModule,
+		AgmCoreModule,
+		AgmDirectionModule,
+		MatNativeDateModule,
+		MatMomentDateModule,
+		MatInputModule,
+		MatSelectModule,
+		NgSelectModule,
+		MatRadioModule,
+		// PinchZoomModule,
+		SharedModule,
+		NgxPrintModule
   ]
 })
 export class TravelAgentModule { }

@@ -138,13 +138,12 @@ export class HeaderComponent implements OnInit {
 			});
 	}
 
-
 	scroll(el: HTMLElement) {
 		el.scrollIntoView();
 	}
 
 	loginButtons(role: string) {
-		if (role != 'driver' && role!='sub_admin') {
+		if (role != 'driver' && role!='sub_admin' && role!='travel_agent') {
 			this.errorDialogService.openDialog({
 				errors: {
 					error: 'Currently only Drivers are allowed to Sign In. User accounts coming soon! Recruiting quality vetted drivers, and chauffeurs, only at this time. Refer a trusted driver/ chauffeur to 1-800 - LIMO.COM now! You deserve the best.'
@@ -198,6 +197,17 @@ export class HeaderComponent implements OnInit {
 			console.log("step 0  dashboard");
 
 		}
+		else{
+			console.log(`redirecting to ${role}/bookings`)
+			this.spinner.show();
+			this.router.navigateByUrl(`${role}/bookings`)
+		}
 	}
+	redirectCompleteProfile(role){
+		console.log('redirecting to complete profile',role)
+		this.spinner.show()
+		this.router.navigateByUrl(`${role}/profile`)
+	}
+
 
 }
