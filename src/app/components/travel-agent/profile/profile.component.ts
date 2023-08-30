@@ -8,6 +8,7 @@ import { CustomvalidationService } from 'src/app/services/customvalidation.servi
 import { MapsAPILoader } from '@agm/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Router } from '@angular/router';
+import { AffiliateService } from 'src/app/services/affiliate.service';
 
 @Component({
   selector: 'app-profile',
@@ -17,6 +18,7 @@ import { Router } from '@angular/router';
 export class ProfileComponent implements OnInit {
   public profile_pic: any;
   public modalImage: string;
+  public imageSrc: string;
   public phoneObject: any;
   public profileForm: FormGroup;
   @Input() closeTab: EventEmitter<any> = new EventEmitter();
@@ -34,6 +36,7 @@ export class ProfileComponent implements OnInit {
   defaultCountryCode: string;
 
   constructor(
+    private affiliateService: AffiliateService,
     private stateManagementService: StateManagementService,
     private formBuilder: FormBuilder,
     private customValidator: CustomvalidationService,
@@ -258,34 +261,35 @@ export class ProfileComponent implements OnInit {
     // $("#imageModal").show();
   }
   profile_pic_change(event) {
-    // this.stateManagementService.setprogressBar(true);//show progressbar
-    // const reader = new FileReader();
-    // if (event.target.files && event.target.files.length) {
-    //   const [file] = event.target.files;
-    //   reader.readAsDataURL(file);
-    //   reader.onload = () => {
-    //     this.imageSrc = reader.result as string;
-    //     this.affiliateService.uploadProfilePicture(this.imageSrc)
-    //       .pipe(
-    //         catchError(err => {
-    //           this.stateManagementService.setprogressBar(false);//hide progressbar
-    //           return throwError(err);
-    //         })
-    //       )
-    //       .subscribe(({ data, message }: any) => {
-    //         this.profile_pic = data.image;
-    //         let userInfo = JSON.parse(localStorage.getItem('userData'))
-    //         if(userInfo){
-    //           userInfo['profile_picture'] = data?.image
-    //           localStorage.setItem('userData' , JSON.stringify(userInfo))
-    //         }
-    //         this.stateManagementService.setprogressBar(false);//hide progressbar
-    //         this.snackbarMsg = message;
-    //         this.openSnackbar();
-    //         window.location.reload()
-    //       });
-    //   };
-    // }
+    console.log('in function upload profile pic')
+    this.stateManagementService.setprogressBar(true);//show progressbar
+    const reader = new FileReader();
+    if (event.target.files && event.target.files.length) {
+      const [file] = event.target.files;
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        this.imageSrc = reader.result as string;
+        this.travelAgentService.uploadProfilePicture(this.imageSrc)
+          .pipe(
+            catchError(err => {
+              this.stateManagementService.setprogressBar(false);//hide progressbar
+              return throwError(err);
+            })
+          )
+          .subscribe(({ data, message }: any) => {
+            this.profile_pic = data.image;
+            let userInfo = JSON.parse(localStorage.getItem('userData'))
+            if(userInfo){
+              userInfo['profile_picture'] = data?.image
+              localStorage.setItem('userData' , JSON.stringify(userInfo))
+            }
+            this.stateManagementService.setprogressBar(false);//hide progressbar
+            // this.snackbarMsg = message;
+            // this.openSnackbar();
+            window.location.reload()
+          });
+      };
+    }
   }
   submit() {
     console.log(this.profileForm);
@@ -310,12 +314,15 @@ export class ProfileComponent implements OnInit {
       .subscribe(result => {
         this.response = result;
         this.spinner.hide();//hide spinner
+        const currentUser = JSON.parse(localStorage.getItem('currentUser'))
         if (this.response?.data?.is_profile_complete) {
-          const currentUser = JSON.parse(localStorage.getItem('currentUser'))
           currentUser['is_profile_complete'] = true
-          localStorage.setItem('currentUser', JSON.stringify(currentUser))
           this.router.navigate(['/travel_agent/bookings']);
         }
+        currentUser['name'] = this.response?.data?.name
+        localStorage.setItem('currentUser', JSON.stringify(currentUser))
+        window.location.reload()
+
       });
   }
 

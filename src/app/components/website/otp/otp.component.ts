@@ -85,7 +85,7 @@ export class OtpComponent implements OnInit, OnDestroy {
 					break;
 				}
 				case 'travel_agent': {
-					this.router.navigateByUrl('/travel_agent');
+					this.router.navigateByUrl('/travel_agent/bookings');
 					break;
 				}
 				default: {
@@ -301,7 +301,7 @@ export class OtpComponent implements OnInit, OnDestroy {
 					}
 					case 'travel_agent': {
 						if(this.response.data.user?.is_profile_complete)
-							this.router.navigateByUrl('/travel_agent');
+							this.router.navigateByUrl('/travel_agent/bookings');
 						else
 							this.router.navigateByUrl('/travel_agent/profile');
 						break;

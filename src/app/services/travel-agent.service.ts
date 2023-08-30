@@ -36,5 +36,9 @@ export class TravelAgentService {
       return this.httpClient.post(this.serverUrl + 'create-travel-planner-account', data);
     }
   }
+  uploadProfilePicture(image)
+	{
+		return this.httpClient.post(this.serverUrl + 'profile-detail/upload-image', { 'image': image });
+	}
   
 }
