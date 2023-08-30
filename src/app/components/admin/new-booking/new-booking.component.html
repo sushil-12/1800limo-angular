@@ -2635,7 +2635,20 @@
 
 
 
-
+<div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="paymentModal" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header pb-0 d-flex justify-content-center">
+				<h4 class="mb-0 ">{{confirmMsg}}</h4>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="custom-btn resetbutton" data-dismiss="modal" (click)="navigateToDailyBooking()">Cancel</button>
+				<button type="button" class="custom-btn savebutton" data-dismiss="modal" (click)="proceed=false;submitForm(true)">
+					Confirm</button>
+			</div>
+		</div>
+	</div>
+</div>
 
 
 

@@ -87,7 +87,7 @@ export class NewBookingComponent implements OnInit {
 	vehicleYear_arr: any;
 	vehicleColor_arr: any;
 	firstLoadVehicleId: any;
-
+	proceed:boolean = true
 	chosen_user: Record<string, any>
 
 	distance: number = 0
@@ -112,6 +112,7 @@ export class NewBookingComponent implements OnInit {
 	transfer_type: any = 'city_to_city'
 	return_transfer_type: any = 'city_to_city'
 	number_of_hours: any = '0';
+	confirmMsg: any;
 
 	constructor(
 		private $form: FormBuilder,
@@ -1381,7 +1382,9 @@ export class NewBookingComponent implements OnInit {
 	}
 
 
-
+	navigateToDailyBooking(){
+		this.$router.navigate(['/admin/daily-bookings-admin'])
+	}
 
 
 	isChecked(form_control: string, object: any) {
@@ -1417,6 +1420,7 @@ export class NewBookingComponent implements OnInit {
 
 		if (preview) {
 			let value = this.BookingForm.value
+			value['proceed'] = this.proceed
 			if (this.RatesForm) {
 				value['rateArray'] = JSON.parse(JSON.stringify(this.RatesForm))
 				value['grand_total'] = value['rateArray']['grand_total']
@@ -1442,8 +1446,14 @@ export class NewBookingComponent implements OnInit {
 				// 		error: `<span class='text-success'>${response.message}</span>`
 				// 	}
 				// })
-				this.$router.navigate(['/admin/daily-bookings-admin'])
-				this.$spinner.hide()
+				if(response.data?.is_confirm==false){
+					this.confirmMsg = response?.message
+					this.$spinner.hide()
+					$('#confirmationModal').modal('show')
+				}
+				else{
+					this.$router.navigate(['/admin/daily-bookings-admin'])
+				}
 			})
 		}
 		else {

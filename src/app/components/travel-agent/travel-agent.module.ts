@@ -21,10 +21,11 @@ import { MatRadioModule } from '@angular/material/radio';
 import { SharedModule } from '../shared/shared.module';
 import { NgxPrintModule } from 'ngx-print';
 import { ProfileComponent } from './profile/profile.component';
+import { CreateBookingComponent } from './create-booking/create-booking.component';
 
 
 @NgModule({
-  declarations: [TravelAgentComponent, BookingComponent, AgentTemplateComponent, ProfileComponent],
+  declarations: [TravelAgentComponent, BookingComponent, AgentTemplateComponent, ProfileComponent, CreateBookingComponent],
   imports: [
     CommonModule,
     TravelAgentRoutingModule,
