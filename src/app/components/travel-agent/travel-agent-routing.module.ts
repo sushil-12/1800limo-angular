@@ -4,6 +4,7 @@ import { BookingComponent } from './booking/booking.component';
 import { ProfileComponent } from './profile/profile.component';
 import { CheckProfileCompleteGuard } from 'src/app/guards/check-profile-complete.guard';
 import { CreateBookingComponent } from './create-booking/create-booking.component';
+import { CardsComponent } from './cards/cards.component';
 const routes: Routes = [
   {
     path:'bookings',
@@ -18,7 +19,13 @@ const routes: Routes = [
     path:'create-booking',
     component:CreateBookingComponent,
     canActivate: [CheckProfileCompleteGuard],
+  },
+  {
+    path:'debit-cc-card',
+    component:CardsComponent,
+    canActivate: [CheckProfileCompleteGuard],
   }
+ 
 ];
 
 @NgModule({
