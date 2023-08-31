@@ -286,7 +286,7 @@ export class ProfileComponent implements OnInit {
             this.stateManagementService.setprogressBar(false);//hide progressbar
             // this.snackbarMsg = message;
             // this.openSnackbar();
-            window.location.reload()
+            // window.location.reload()
           });
       };
     }
@@ -317,11 +317,11 @@ export class ProfileComponent implements OnInit {
         const currentUser = JSON.parse(localStorage.getItem('currentUser'))
         if (this.response?.data?.is_profile_complete) {
           currentUser['is_profile_complete'] = true
-          this.router.navigate(['/travel_agent/bookings']);
+          currentUser['name'] = this.response?.data?.first_name +' ' + this.response?.data?.last_name
+          localStorage.setItem('currentUser', JSON.stringify(currentUser))
+          window.location.reload()
+          // this.router.navigate(['/travel_agent/bookings']);
         }
-        currentUser['name'] = this.response?.data?.name
-        localStorage.setItem('currentUser', JSON.stringify(currentUser))
-        window.location.reload()
 
       });
   }

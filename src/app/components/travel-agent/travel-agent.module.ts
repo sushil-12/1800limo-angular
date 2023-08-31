@@ -22,13 +22,25 @@ import { SharedModule } from '../shared/shared.module';
 import { NgxPrintModule } from 'ngx-print';
 import { ProfileComponent } from './profile/profile.component';
 import { CreateBookingComponent } from './create-booking/create-booking.component';
+import { PinchZoomModule } from 'ngx-pinch-zoom';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatTableModule } from '@angular/material/table';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatIconModule } from '@angular/material/icon';
 
 
 @NgModule({
-  declarations: [TravelAgentComponent, BookingComponent, AgentTemplateComponent, ProfileComponent, CreateBookingComponent],
-  imports: [
-    CommonModule,
-    TravelAgentRoutingModule,
+	declarations: [
+		TravelAgentComponent,
+		BookingComponent,
+		AgentTemplateComponent,
+		ProfileComponent,
+		CreateBookingComponent],
+	imports: [
+		CommonModule,
+		TravelAgentRoutingModule,
 		NgxSpinnerModule,
 		MatProgressBarModule,
 		FormsModule,
@@ -43,9 +55,15 @@ import { CreateBookingComponent } from './create-booking/create-booking.componen
 		MatSelectModule,
 		NgSelectModule,
 		MatRadioModule,
-		// PinchZoomModule,
+		PinchZoomModule,
 		SharedModule,
-		NgxPrintModule
-  ]
+		NgxPrintModule,
+		MatDialogModule,
+		MatFormFieldModule,
+		MatTabsModule,
+		MatTableModule,
+		MatExpansionModule,
+		MatIconModule
+	]
 })
 export class TravelAgentModule { }
