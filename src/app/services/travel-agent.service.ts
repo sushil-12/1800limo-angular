@@ -40,5 +40,12 @@ export class TravelAgentService {
 	{
 		return this.httpClient.post(this.serverUrl + 'profile-detail/upload-image', { 'image': image });
 	}
+
+  cardsList(){
+    return this.httpClient.get(`${this.serverUrl}view-credit-card`) 
+  }
+  deleteCard(card_id){
+    return this.httpClient.delete(this.serverUrl + `delete-credit-card/${card_id}`);
+  }
   
 }

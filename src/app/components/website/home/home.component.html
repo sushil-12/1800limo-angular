@@ -57,7 +57,7 @@
 											</div>
 										</h6>
 										<div class="dropdown-divider"></div>
-										<div class="dropdown-item"
+										<div class="dropdown-item" *ngIf="currentUser?.roleName=='travel_agent'"
 												(click)="dashboard(currentUser?.roleName)">
 												<div class="dropdown-item-icon gear-bg settingsvg font-weight-bolder">
 													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"

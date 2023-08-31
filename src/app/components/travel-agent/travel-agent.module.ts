@@ -29,6 +29,8 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatTableModule } from '@angular/material/table';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
+import { CardsComponent } from './cards/cards.component';
+import { AddCardComponent } from './add-card/add-card.component';
 
 
 @NgModule({
@@ -37,7 +39,9 @@ import { MatIconModule } from '@angular/material/icon';
 		BookingComponent,
 		AgentTemplateComponent,
 		ProfileComponent,
-		CreateBookingComponent],
+		CreateBookingComponent,
+		CardsComponent,
+		AddCardComponent],
 	imports: [
 		CommonModule,
 		TravelAgentRoutingModule,
