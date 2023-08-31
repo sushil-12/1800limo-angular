@@ -5,6 +5,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { CheckProfileCompleteGuard } from 'src/app/guards/check-profile-complete.guard';
 import { CreateBookingComponent } from './create-booking/create-booking.component';
 import { CardsComponent } from './cards/cards.component';
+import { AddCardComponent } from './add-card/add-card.component';
 const routes: Routes = [
   {
     path:'bookings',
@@ -23,6 +24,11 @@ const routes: Routes = [
   {
     path:'debit-cc-card',
     component:CardsComponent,
+    canActivate: [CheckProfileCompleteGuard],
+  },
+  {
+    path:'add-card',
+    component:AddCardComponent,
     canActivate: [CheckProfileCompleteGuard],
   }
  
