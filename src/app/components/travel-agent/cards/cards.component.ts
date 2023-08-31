@@ -50,7 +50,7 @@ export class CardsComponent implements OnInit {
 
   addCardClick() {
     // { queryParams: { accountType: this.accountType, accountId: accountId } }
-		this.router.navigate(['/admin/add-card']);
+		this.router.navigate(['/travel_agent/add-card']);
 	}
   backButtonClick() {
 	}
@@ -64,9 +64,7 @@ export class CardsComponent implements OnInit {
 					return throwError(err);
 				})
 			).subscribe(result => {
-				// this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
-				// 	this.router.navigate(['/admin/cards'], { queryParams: { accountType: this.accountType, accountId: this.accountId } });
-				// });
+				window.location.reload();
 				this.stateManagementService.setprogressBar(false);
 			});
 	}

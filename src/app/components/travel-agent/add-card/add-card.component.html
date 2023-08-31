@@ -1,1 +1,191 @@
-<p>add-card works!</p>
+<ngx-spinner></ngx-spinner>
+<main>
+	<!-- Main page content-->
+	<form [formGroup]="addCardForm" appInvalidControlScroll>
+		<!-----BILLING INFO-------------->
+		<section class="user_information">
+			<h2 class="headinginfo"> Billing Information</h2>
+			<div class="container py-2" id="accordionSidebar1">
+				<h3 class="headinginfoH3 mt-3">Credit Card <img class="creditcard_pay"
+						src="assets/admin/images/creditcard_pay.png" tabindex="-1"></h3>
+				<div class="row">
+					<div class="col-md-3 pr-0 borderright mobilePadding">
+						<div class="form-group radio-tile-group">
+							<div class="custom-radio input-container btn-shadow">
+								<input class="radio-button" id="personal" type="radio"
+									name="card_type" checked="" formControlName="card_type"
+									value="personal" tabindex="-1">
+								<div class="radio-tile">
+									<label class="radio-tile-label" for="personal">Personal</label>
+								</div>
+							</div>
+							<div *ngIf="submittedForm && f.card_type.errors || f.card_type.touched && f.card_type.errors"
+								class="text-danger margin-bottom-thin my-mat-hint">
+								<div *ngIf="f.card_type.errors.required">This field is required
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3 pl-0 mobilePadding">
+						<div class="form-group radio-tile-group">
+							<div class="custom-radio input-container btn-shadow">
+								<input class="radio-button" id="business" type="radio"
+									name="card_type" formControlName="card_type" value="business"
+									tabindex="-1">
+								<div class="radio-tile">
+									<label class="radio-tile-label" for="business">Business</label>
+								</div>
+								<div *ngIf="submittedForm && f.card_type.errors || f.card_type.touched && f.card_type.errors"
+									class="text-danger margin-bottom-thin my-mat-hint">
+									<div *ngIf="f.card_type.errors.required">This field is required
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-6">
+						<mat-form-field appearance="outline">
+							<mat-label>Card Holder First & Last Name*</mat-label>
+							<input matInput placeholder="Card Holder First & Last Name"
+								formControlName="name" >
+						</mat-form-field>
+						<div *ngIf="submittedForm && f.name.errors || f.name.touched && f.name.errors"
+							class="text-danger margin-bottom-thin my-mat-hint">
+							<div *ngIf="f.name.errors.required">This field is required</div>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<mat-form-field appearance="outline">
+							<mat-label>Card No*</mat-label>
+							<input matInput placeholder="Card No" formControlName="number"
+								id="card-number">
+						</mat-form-field>
+						<div *ngIf="submittedForm && f.number.errors || f.number.touched && f.number.errors"
+							class="text-danger margin-bottom-thin my-mat-hint">
+							<div *ngIf="f.number.errors.required">This field is required</div>
+						</div>
+						<div *ngIf="f.number.errors"
+							class="text-danger margin-bottom-thin my-mat-hint">
+							<div *ngIf="f.number.errors?.invalid_Pattern;else plusError">Do not add
+								Dashes
+								with numbers</div>
+							<ng-template #plusError>
+								<div *ngIf="f.number.errors?.invalidPattern;else allErrors">Do not
+									enter +
+									sign</div>
+								<ng-template #allErrors>
+									<div *ngIf="f.number.errors?.pattern;else numberLength">Enter
+										Numbers Only
+									</div>
+									<ng-template #numberLength>
+										<div *ngIf="f.number.errors.minlength">Minimum length should
+											be 16</div>
+										<div *ngIf="f.number.errors.maxlength">Maximum length should
+											be 20</div>
+									</ng-template>
+								</ng-template>
+							</ng-template>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<mat-form-field appearance="outline">
+							<mat-label>Expiry Month*</mat-label>
+							<mat-select formControlName="exp_month" >
+								<mat-option value="">Choose Expiry Month</mat-option>
+								<mat-option value='01'>01</mat-option>
+								<mat-option value='02'>02</mat-option>
+								<mat-option value='03'>03</mat-option>
+								<mat-option value='04'>04</mat-option>
+								<mat-option value='05'>05</mat-option>
+								<mat-option value='06'>06</mat-option>
+								<mat-option value='07'>07</mat-option>
+								<mat-option value='08'>08</mat-option>
+								<mat-option value='09'>09</mat-option>
+								<mat-option value='10'>10</mat-option>
+								<mat-option value='11'>11</mat-option>
+								<mat-option value='12'>12</mat-option>
+							</mat-select>
+						</mat-form-field>
+						<div *ngIf="submittedForm && f.exp_month.errors || f.exp_month.touched && f.exp_month.errors"
+							class="text-danger margin-bottom-thin my-mat-hint">
+							<div *ngIf="f.exp_month.errors.required">This field is required</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<mat-form-field appearance="outline">
+							<mat-label>Expiry Year*</mat-label>
+							<mat-select formControlName="exp_year" >
+								<mat-option value="">Choose Expiry Year</mat-option>
+								<mat-option *ngFor="let yearOption of yearOptions"
+									value="{{yearOption}}">{{yearOption}}
+								</mat-option>
+							</mat-select>
+						</mat-form-field>
+						<div *ngIf="submittedForm && f.exp_year.errors || f.exp_year.touched && f.exp_year.errors"
+							class="text-danger margin-bottom-thin my-mat-hint">
+							<div *ngIf="f.exp_year.errors.required">This field is required</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<mat-form-field appearance="outline">
+							<mat-label>CVV*</mat-label>
+							<input matInput placeholder="CVV" formControlName="cvc" >
+						</mat-form-field>
+						<div *ngIf="submittedForm && f.cvc.errors || f.cvc.touched && f.cvc.errors"
+							class="text-danger margin-bottom-thin my-mat-hint">
+							<div *ngIf="f.cvc.errors.required">This field is required</div>
+						</div>
+						<div *ngIf="f.cvc.errors"
+							class="text-danger margin-bottom-thin my-mat-hint">
+							<div *ngIf="f.cvc.errors?.invalid_Pattern;else plusError">Do not add
+								Dashes
+								with numbers</div>
+							<ng-template #plusError>
+								<div *ngIf="f.cvc.errors?.invalidPattern;else allErrors">Do not
+									enter +
+									sign</div>
+								<ng-template #allErrors>
+									<div *ngIf="f.cvc.errors?.pattern;else numberLength">Enter
+										Numbers Only
+									</div>
+									<ng-template #numberLength>
+										<div *ngIf="f.cvc.errors.minlength">Minimum length should be
+											3</div>
+										<div *ngIf="f.cvc.errors.maxlength">Maximum length should be
+											5</div>
+									</ng-template>
+								</ng-template>
+							</ng-template>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<div class="container">
+            <div class="row py-4">
+                <div class="col-md-7">
+                  
+                </div>
+                <div class="col-md-5 ">
+                    <div class="billing_inforamtion">
+                        <ul class="d-flex justify-content-center">
+                            <li><button class="custom-filled-reset-button" (click)="resetForm()"
+                                    >RESET</button> </li>
+							<li><button class="custom-filled-button" (click)="submitForm()"
+								[disabled]="disableSubmitButton" >SAVE</button> </li>
+						<!-- <li><button class="custom-btn backbutton btn-shadow" (click)="backButton()"
+								>BACK</button> </li> -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+                </div>
+
+
+
+
+	
+	</form>
+</main>

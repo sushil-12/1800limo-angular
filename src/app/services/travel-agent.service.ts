@@ -47,5 +47,8 @@ export class TravelAgentService {
   deleteCard(card_id){
     return this.httpClient.delete(this.serverUrl + `delete-credit-card/${card_id}`);
   }
+  addCard(data){
+    return this.httpClient.post(this.serverUrl + 'add-credit-card', data);
+  }
   
 }
