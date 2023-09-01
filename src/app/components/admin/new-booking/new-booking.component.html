@@ -2599,9 +2599,9 @@
 
 
 		<app-rates-form class="d-flex flex-wrap" [initRates]="init_rates" [affiliate_type]="Form.affiliate_type.value"
-			[distance]="distance_for_rates" [reservation_id]="booking_id" [reset]="reset_button" [reset]="reset_button"
+			[distance]="distance" [reservation_id]="booking_id" [reset]="reset_button" [reset]="reset_button"
 			[initReturnRates]="init_return_rates" (formvalue)="RateFormValue($event)" [vehicle_id]="QB_vehicle_id"
-			[hours]="Form.number_of_hours?.value" [vehicles]="Form.number_of_vehicles?.value"
+			[hours]="Form.number_of_hours?.value" [vehicles]="Form.number_of_vehicles?.value" [book_data]="booking_data"
 			(returnformvalue)="ReturnRateFormValue($event)" (returnNumberOfHr)="HandleReturnNumberOfHr($event)">
 		</app-rates-form>
 

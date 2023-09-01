@@ -21,7 +21,8 @@ export class RatesFormComponent implements OnInit, OnChanges {
 	@Input("hours") nums: number = 0;
 	@Input("vehicle_id") QB_vehicle_id: any = 0;
 	@Input('reset') reset: boolean = false;
-
+	@Input('book_data') book_data: any = {};
+	
 	// Throw Events.
 	@Output("formvalue") formvalue = new EventEmitter<Record<string, any>>();
 	@Output("returnformvalue") returnformvalue = new EventEmitter<Record<string, any>>();
@@ -110,11 +111,36 @@ export class RatesFormComponent implements OnInit, OnChanges {
 		this.returnratesform =
 			changes.init_r_rates?.currentValue ?? this.returnratesform;
 
+		// if(changes?.distance.currentValue){
+		// 	console.log('<><><>><><><><><><><><><><><><><><>' ,changes?.distance.currentValue , changes?.book_data?.currentValue)
+		// 	this.fetchRatesArrayByAffiliateVehicle(changes?.book_data?.currentValue)
+		// }
+		if(changes?.book_data?.currentValue){
+			this.fetchRatesArrayByAffiliateVehicle(changes?.book_data?.currentValue)
+		}
 		if (changes?.QB_vehicle_id?.currentValue) {
 				console.log('got QB_vehicle_id------->>>>>>>>>', changes.QB_vehicle_id)
 				this.QB_vehicle_id = changes?.QB_vehicle_id?.currentValue
-				this.fetchRatesArrayByAffiliateVehicle(this.QB_vehicle_id)
+				let QB: any = JSON.parse(localStorage.getItem('quotebot_form'))
+				let no_of_hours = null
+				if (QB?.service_type == 'charter_tour') {
+					no_of_hours = QB?.booking_hour
+				}
+				let location_info = QB?.location_info[0]
+				let transfer_type_value = QB?.pickup_type + '_to_' + QB?.dropoff_type
+				let return_transfer_type_value = QB?.dropoff_type + '_to_' + QB?.pickup_type
+				let data = {
+					vehicle_id : this.QB_vehicle_id,
+					service_type: QB?.service_type,
+					transfer_type: transfer_type_value,
+					numberOfVehicles: 1,
+					no_of_hours: no_of_hours,
+					distance: location_info.distance.value,
+					is_master_vehicle: JSON.parse(sessionStorage.getItem('selected_vehicle'))?.is_master_vehicle 
+				}
+				this.fetchRatesArrayByAffiliateVehicle(data)
 		}
+		
 		// if asked to initialise the rates
 		if (changes.init_rates?.currentValue) {
 			if(!this.QB_vehicle_id){
@@ -273,7 +299,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 		})
 
 		//calculating totals of rates form if data auto fill by quote bot 
-		if(this.QB_vehicle_id){
+		if(this.QB_vehicle_id || this.distance){
 			console.log('calculating total for QB ')
 			for (let formgroup in this.RateForm) {
 				for (let subform in this.RateForm[formgroup].controls) {
@@ -397,31 +423,12 @@ export class RatesFormComponent implements OnInit, OnChanges {
 			}
 		});
 	}
-	fetchRatesArrayByAffiliateVehicle(vehicle_id) {
+	fetchRatesArrayByAffiliateVehicle(data) {
 		this.ratesdata.next({})
 		console.log('<<<<<<<<<<<________ data to send fetchRatesArrayByAffiliateVehicle---------------->>>>>>>>>>>>>>',
-			vehicle_id)
-		let QB: any = JSON.parse(localStorage.getItem('quotebot_form'))
-		let no_of_hours = null
-		if (QB?.service_type == 'charter_tour') {
-			no_of_hours = QB?.booking_hour
-		}
-		let location_info = QB?.location_info[0]
-		// let return_location_info = QB?.location_info[1]
-		// need to handle create return rate form
-		// if(QB?.service_type == "round_trip"){
-		// }
-		let transfer_type_value = QB?.pickup_type + '_to_' + QB?.dropoff_type
-		let return_transfer_type_value = QB?.dropoff_type + '_to_' + QB?.pickup_type
-		let data = {
-			service_type: QB?.service_type,
-			transfer_type: transfer_type_value,
-			numberOfVehicles: 1,
-			no_of_hours: no_of_hours,
-			distance: location_info.distance.value,
-			is_master_vehicle: JSON.parse(sessionStorage.getItem('selected_vehicle'))?.is_master_vehicle 
-		}
-		this.$api.fetchRatesByAffiliateVeh(vehicle_id, data).subscribe((response: any) => {
+			data.vehicle_id)
+	if(data?.vehicle_id && data.distance){
+		this.$api.fetchRatesByAffiliateVeh(data.vehicle_id, data).subscribe((response: any) => {
 			this.is_readonly_min_rate = response?.data?.min_rate_involved ? true : false
 			this.ratesdata.next(response?.data?.rateArray)
 			this.initRates();
@@ -430,6 +437,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 				this.initReturnRates()
 			}
 		});
+	}
 	}
 	getReturnRatesData() {
 		return this.returnRatesdata.asObservable();
