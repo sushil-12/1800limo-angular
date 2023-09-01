@@ -367,6 +367,40 @@
 						<div *ngIf="f.per_person_group_ride_rate.errors.pattern">Enter Numbers only</div>
 					</div>
 				</div>
+				<div class="col-md-3">
+					<mat-form-field class="mat-form-field-rates" appearance="outline">
+						<mat-label>Extra stop - same town</mat-label>
+						<span matPrefix
+							*ngIf="f.in_town_extra_stop.value == null || f.in_town_extra_stop.value == ''; else hideZero16">{{currencySymbol}}
+							 &nbsp;</span>
+						<ng-template #hideZero16>
+							<span matPrefix>{{currencySymbol}} &nbsp;</span>
+						</ng-template>
+						<input matInput type="number" placeholder="Shared Ride Rate - Per Person" (change)="updateRateRangeObject()"
+							formControlName="in_town_extra_stop" tabindex="1">
+					</mat-form-field>
+					<div *ngIf="submittedForm && f.in_town_extra_stop.errors || f.in_town_extra_stop.touched && f.in_town_extra_stop.errors"
+						class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="f.in_town_extra_stop.errors.pattern">Enter Numbers only</div>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<mat-form-field class="mat-form-field-rates" appearance="outline">
+						<mat-label>Extra stop - outside town</mat-label>
+						<span matPrefix
+							*ngIf="f.outside_town_extra_stop.value == null || f.outside_town_extra_stop.value == ''; else hideZero16">{{currencySymbol}}
+							 &nbsp;</span>
+						<ng-template #hideZero16>
+							<span matPrefix>{{currencySymbol}} &nbsp;</span>
+						</ng-template>
+						<input matInput type="number" placeholder="Shared Ride Rate - Per Person" (change)="updateRateRangeObject()"
+							formControlName="outside_town_extra_stop" tabindex="1">
+					</mat-form-field>
+					<div *ngIf="submittedForm && f.outside_town_extra_stop.errors || f.outside_town_extra_stop.touched && f.outside_town_extra_stop.errors"
+						class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="f.outside_town_extra_stop.errors.pattern">Enter Numbers only</div>
+					</div>
+				</div>
 				<div class="col-md-12">
 					<h2 class="headinginfo my-4">
 						Rate Manager

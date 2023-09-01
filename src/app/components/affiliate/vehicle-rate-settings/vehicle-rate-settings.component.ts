@@ -163,6 +163,8 @@ export class VehicleRateSettingsComponent implements OnInit {
 			minimum_cruise_port_arrival_rate: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			minimum_cruise_port_departure_rate: [0, [ Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			minimum_on_demand_rate: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
+			in_town_extra_stop:[0, [Validators.pattern(/^\d+(\.\d+)?$/)]],
+			outside_town_extra_stop:[0, [Validators.pattern(/^\d+(\.\d+)?$/)]],
 			per_person_group_ride_rate: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			airport_city_percentage_booking_cancel_charges: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			charter_percentage_booking_cancel_charges: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
@@ -292,7 +294,9 @@ export class VehicleRateSettingsComponent implements OnInit {
 				baby_seat: response.data.baby_seat ?? 0,
 				booster_seat: response.data.booster_seat ?? 0,
 				bike_rack: response.data.bike_rack ?? 0,
-				per_diem: response.data.per_diem ?? 0
+				per_diem: response.data.per_diem ?? 0,
+				in_town_extra_stop: response.data.in_town_extra_stop,
+				outside_town_extra_stop:response.data.outside_town_extra_stop,
 			});
 			console.group(this.VehicleRateSettingsForm)
 			console.groupEnd()

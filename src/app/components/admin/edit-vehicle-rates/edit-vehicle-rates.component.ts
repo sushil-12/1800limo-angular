@@ -203,7 +203,9 @@ export class EditVehicleRatesComponent implements OnInit {
 							baby_seat: this.response.data.baby_seat,
 							booster_seat: this.response.data.booster_seat,
 							bike_rack: this.response.data.bike_rack,
-							per_diem: this.response.data.per_diem
+							per_diem: this.response.data.per_diem,
+							in_town_extra_stop : this.response.data?.in_town_extra_stop,
+							outside_town_extra_stop : this.response.data?.outside_town_extra_stop
 						});
 						this.km_mile_switch(this.response.data.km_mile);//show selected input field 
 						// this.stateManagementService.setprogressBar(false);
@@ -233,6 +235,8 @@ export class EditVehicleRatesComponent implements OnInit {
 			minimum_cruise_port_departure_rate: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
 			minimum_on_demand_rate: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
 			per_person_group_ride_rate: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
+			in_town_extra_stop:['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
+			outside_town_extra_stop:['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
 			airport_city_percentage_booking_cancel_charges: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
 			charter_percentage_booking_cancel_charges: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
 			gratuity: ['20', [Validators.required, Validators.pattern("^[0-9]*$")]],
