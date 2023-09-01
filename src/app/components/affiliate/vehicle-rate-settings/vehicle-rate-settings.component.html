@@ -489,6 +489,30 @@
 					</div>
 				</div>
 			</div>
+			<div class="col-md-3">
+				<mat-form-field class="mat-form-field-rates" appearance="outline">
+					<mat-label>Extra stop - same town</mat-label>
+					<span matPrefix>{{ currency_symbol }} &nbsp;</span>
+					<input matInput type="number" placeholder="Shared Ride Rate - Per Person" (change)="updateRateRangeObject()"
+						formControlName="in_town_extra_stop" tabindex="1">
+				</mat-form-field>
+				<div *ngIf="is_form_submitted && form.in_town_extra_stop.errors || form.in_town_extra_stop.touched && form.in_town_extra_stop.errors"
+					class="text-danger margin-bottom-thin my-mat-hint">
+					<div *ngIf="form.in_town_extra_stop.errors.pattern">Enter Numbers only</div>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<mat-form-field class="mat-form-field-rates" appearance="outline">
+					<mat-label>Extra stop - outside town</mat-label>
+					<span matPrefix>{{ currency_symbol }} &nbsp;</span>
+					<input matInput type="number" placeholder="Shared Ride Rate - Per Person" (change)="updateRateRangeObject()"
+						formControlName="outside_town_extra_stop" tabindex="1">
+				</mat-form-field>
+				<div *ngIf="is_form_submitted && form.outside_town_extra_stop.errors || form.outside_town_extra_stop.touched && form.outside_town_extra_stop.errors"
+					class="text-danger margin-bottom-thin my-mat-hint">
+					<div *ngIf="form.outside_town_extra_stop.errors.pattern">Enter Numbers only</div>
+				</div>
+			</div>
 		</div>
 		<!-- ROW 5 ENDS -->
 

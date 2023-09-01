@@ -96,6 +96,8 @@ export class AddVehicleRatesComponent implements OnInit {
 			minimum_cruise_port_departure_rate : ['', [ Validators.pattern(/^\d+(\.\d+)?$/)]],
 			minimum_on_demand_rate: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
 			per_person_group_ride_rate: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
+			in_town_extra_stop:['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
+			outside_town_extra_stop:['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
 			airport_city_percentage_booking_cancel_charges: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
 			charter_percentage_booking_cancel_charges: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
 			gratuity: ['20', [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)]],
