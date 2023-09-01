@@ -338,7 +338,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 			others: this.$form.group({}),
 		});
 
-		if(this.newBooking){
+		if(this.newBooking || this.distance){
 			this.getReturnRatesData().subscribe((response: any) => {
 				if (response && Object.keys(response).length > 0) {
 					this.buildRatesForm('ReturnRatesForm', response);
