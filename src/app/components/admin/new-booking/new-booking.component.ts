@@ -113,6 +113,7 @@ export class NewBookingComponent implements OnInit {
 	return_transfer_type: any = 'city_to_city'
 	number_of_hours: any = '0';
 	confirmMsg: any;
+	booking_data:any;
 
 	constructor(
 		private $form: FormBuilder,
@@ -155,12 +156,21 @@ export class NewBookingComponent implements OnInit {
 			this.fetchAffiliates('affiliate')
 			this.select(true, 'driver_languages', 1)
 		})
-
 		// fetch the big data
 		this.fetchAirportsAndBigData()
 
 	}
-
+	buildBookingData(){
+		this.booking_data = {
+			vehicle_id: this.BookingForm.get('vehicle_id').value,
+			transfer_type: this.transfer_type,
+			service_type :this.service_type,
+			numberOfVehicles :1,
+			distance : this.distance, 
+			no_of_hours : this.number_of_hours,
+			is_master_vehicle : false
+		}
+	}
 	ngAfterViewInit(): void {
 		console.log('<<<<<<<<<<<<<<<<<<<<<-----------ng after view init--------------->>>>>>>>>>>>>')
 		if (this.updateType == 'repeat' || this.updateType == 'return' || this.updateType == 'edit') {
@@ -726,6 +736,7 @@ export class NewBookingComponent implements OnInit {
 							})
 						} else {
 							this.distance = response.distance
+							this.buildBookingData()
 							this.BookingForm.patchValue({
 								journeyDistance: response.distance,
 								journeyTime: response.time
@@ -964,6 +975,7 @@ export class NewBookingComponent implements OnInit {
 		this.SetFormValue('vehicle_color_name', selectedVehicle.color);
 		selectedVehicle.licensePlate === null ? this.BookingForm.get('vehicle_license_plate').setValue('') : this.SetFormValue('vehicle_license_plate', selectedVehicle.licensePlate)
 		this.SetFormValue('vehicle_seats', selectedVehicle.seats)
+		this.buildBookingData()
 	}
 
 	fetchAffiliateVehicles(affiliate_id: any) {
