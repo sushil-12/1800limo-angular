@@ -31,6 +31,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { CardsComponent } from './cards/cards.component';
 import { AddCardComponent } from './add-card/add-card.component';
+import { InvoiceDashComponent } from './invoice-dash/invoice-dash.component';
 
 
 @NgModule({
@@ -41,7 +42,8 @@ import { AddCardComponent } from './add-card/add-card.component';
 		ProfileComponent,
 		CreateBookingComponent,
 		CardsComponent,
-		AddCardComponent],
+		AddCardComponent,
+		InvoiceDashComponent],
 	imports: [
 		CommonModule,
 		TravelAgentRoutingModule,

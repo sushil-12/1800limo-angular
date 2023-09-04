@@ -22,6 +22,8 @@ export class RatesFormComponent implements OnInit, OnChanges {
 	@Input("vehicle_id") QB_vehicle_id: any = 0;
 	@Input('reset') reset: boolean = false;
 	@Input('book_data') book_data: any = {};
+
+	
 	
 	// Throw Events.
 	@Output("formvalue") formvalue = new EventEmitter<Record<string, any>>();

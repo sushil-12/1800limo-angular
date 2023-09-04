@@ -114,6 +114,8 @@ export class NewBookingComponent implements OnInit {
 	number_of_hours: any = '0';
 	confirmMsg: any;
 	booking_data:any;
+	extraStops_rate:any = 0
+	selectedVehicle: any;
 
 	constructor(
 		private $form: FormBuilder,
@@ -168,7 +170,8 @@ export class NewBookingComponent implements OnInit {
 			numberOfVehicles :1,
 			distance : this.distance, 
 			no_of_hours : this.number_of_hours,
-			is_master_vehicle : false
+			is_master_vehicle : false,
+			extraStops: this.BookingForm.get('extra_stops').value
 		}
 	}
 	ngAfterViewInit(): void {
@@ -736,7 +739,9 @@ export class NewBookingComponent implements OnInit {
 							})
 						} else {
 							this.distance = response.distance
-							this.buildBookingData()
+							if(!this.BookingForm.get('extra_stops')?.value?.length || this.BookingForm.get('extra_stops')?.value[0]['rate']?.length){
+								this.buildBookingData()
+							}
 							this.BookingForm.patchValue({
 								journeyDistance: response.distance,
 								journeyTime: response.time
@@ -962,6 +967,7 @@ export class NewBookingComponent implements OnInit {
 		})
 	}
 	handleSelectVehicleType(selectedVehicle: any) {
+		this.selectedVehicle = selectedVehicle
 		console.log('selectweed vehicle-->>>>', selectedVehicle, selectedVehicle.licensePlate === null)
 		this.SetFormValue('vehicle_id', selectedVehicle.ID);
 		this.SetFormValue('vehicle_type_name', selectedVehicle.vehicleType)
@@ -1298,6 +1304,7 @@ export class NewBookingComponent implements OnInit {
 				address: new FormControl(''),
 				latitude: new FormControl(''),
 				longitude: new FormControl(''),
+				rate:  new FormControl(''),
 				booking_instructions: new FormControl('')
 			}))
 		}
@@ -1307,6 +1314,7 @@ export class NewBookingComponent implements OnInit {
 				address: new FormControl(''),
 				latitude: new FormControl(''),
 				longitude: new FormControl(''),
+				rate:  new FormControl(''),
 				booking_instructions: new FormControl('')
 			}))
 		}
@@ -1343,24 +1351,91 @@ export class NewBookingComponent implements OnInit {
 			this.MapController(true)
 		}
 		else {
+			
 			if (address) {
 				(<FormArray>this.BookingForm.get('extra_stops')).at(index).patchValue({
-					address: address.formatted_address
+					address: address.formatted_address,
 				});
+				let pickup_location = this.Form.pickup.value
+				if (this.Form.transfer_type.value.includes('airport_')) {
+					pickup_location = this.Form.pickup_airport.value
+				}
+				this.checkExtraStopInTown(pickup_location,address.formatted_address ,is_return,index )
 			}
 
 			if (location) {
 				(<FormArray>this.BookingForm.get('extra_stops')).at(index).patchValue({
 					latitude: location.latitude,
-					longitude: location.longitude
+					longitude: location.longitude,
 				})
 			}
-
 			this.BookingForm.updateValueAndValidity();
 			this.MapController()
 		}
 	}
+	
+	// recalculateExtraStopRates(){
+	// 	this.extraStops_rate = 0
+	// 	if (this.ExtraStops.length > 0) {
+	// 		for (let i = 0; i < this.ExtraStops.length; i++) {
+	// 			console.log('ExtraStops-->>' , i)
+	// 			let stop = (<FormGroup>(<FormArray>this.BookingForm.get('extra_stops')).at(i))
+	// 			let pickup_location = this.Form.pickup.value
+	// 			if (this.Form.transfer_type.value.includes('airport_')) {
+	// 				pickup_location = this.Form.pickup_airport.value
+	// 			}
+	// 			let extra_stop_location = stop.get('address').value 
+	// 			this.checkExtraStopInTown(pickup_location,extra_stop_location)
+	// 		}
+	// 	}
+	// }
+	getTown(geocodeResult) {
+		for (let i = 0; i < geocodeResult.length; i++) {
+			const addressComponents = geocodeResult[i].address_components;
+			for (let j = 0; j < addressComponents.length; j++) {
+				const types = addressComponents[j].types;
+				if (types.includes('locality')) {
+					return addressComponents[j].long_name;
+				}
+			}
+		}
+		return null;
+	}
+	checkExtraStopInTown(location1: string, location2: string,is_return:boolean,index:any) {
+		const geocoder = new google.maps.Geocoder();
+		geocoder.geocode({ address: location1 }, (results1, status1) => {
+		  if (status1 === 'OK' && results1.length > 0) {
+			const town1 = this.getTown(results1);
+			geocoder.geocode({ address: location2 },async (results2, status2) => {
+			  if (status2 === 'OK' && results2.length > 0) {
+				const town2 = this.getTown(results2);
+	  
+				if (town1 === town2) {
+					console.log('Both locations are in the same town/city.',this.extraStops_rate);
+					await (<FormArray>this.BookingForm.get('extra_stops')).at(index).patchValue({
+						rate : 'in_town'
+					});
+				} else {
+					console.log('Locations are in different towns/cities.',this.extraStops_rate);
+					(<FormArray>this.BookingForm.get('extra_stops')).at(index).patchValue({
+						rate : 'out_town'
+					});
+				}
+				setTimeout(()=>{
+					this.buildBookingData()
+				},300)
+			  } else {
+				console.error('Geocoding for Location 2 failed:', status2);
+			  }
+			});
+		  } else {
+			console.error('Geocoding for Location 1 failed:', status1);
+		  }
+		});
+	  }
 
+
+	
 
 	fillExtraStopInstruction(is_return: boolean, index: number, event: any) {
 		console.log(is_return, index, event.target.value);

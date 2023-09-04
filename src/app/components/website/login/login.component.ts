@@ -242,13 +242,13 @@ export class LoginComponent implements OnInit, AfterViewInit
 				this.response = result;
 				var userId = this.response.data.id;
 				sessionStorage.setItem('userId', '' + userId);
-
+				let email = this.response?.data?.email
 				if (environment['environmentName'] !== 'Production')
 				{
-					this.router.navigateByUrl('/otp' + `?otp=${result.data.otp}`);
+					this.router.navigateByUrl('/otp' + `?otp=${result.data.otp}?email=${email}`);
 				} else
 				{
-					this.router.navigateByUrl('/otp');
+					this.router.navigateByUrl('/otp'+`?email=${email}`);
 				}
 			});
 	}
