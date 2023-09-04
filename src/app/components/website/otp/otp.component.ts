@@ -31,6 +31,7 @@ export class OtpComponent implements OnInit, OnDestroy {
 	public secondsToDday;
 	@ViewChild(NgOtpInputComponent, { static: false }) ngOtpInput: NgOtpInputComponent;
 	@ViewChild('otpInput') otpInput: ElementRef;
+	email: any = null;
 	constructor(
 		private formBuilder: FormBuilder,
 		private router: Router,
@@ -117,6 +118,9 @@ export class OtpComponent implements OnInit, OnDestroy {
 					// this.ngOtpInput.focusTo(this.otpInput)
 					// this.otpCheck()
 				}, 2000)
+			}
+			if(params.email){
+				this.email = params.email
 			}
 		})
 		document.querySelectorAll('.otp-input').forEach(occurence => {

@@ -1837,7 +1837,7 @@
 						<input type="text" matInput placeholder="Type your address" matGoogleMapsAutocomplete
 							(onAutocompleteSelected)="fillExtraStop(false, stop_index, $event, null)"
 							(focus)="$event.target.select()" [value]="fetchStopValue('extra_stops', stop_index)"
-							(onLocationSelected)="fillExtraStop(false, stop_index, null, $event)" />
+							(onLocationSelected)="fillExtraStop(false, stop_index, null, $event);" />
 					</mat-form-field>
 				</div>
 				<div class="col-1 p-0 p-md-3">

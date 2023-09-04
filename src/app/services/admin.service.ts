@@ -1072,7 +1072,7 @@ export class AdminService {
 			.set('distance', data?.distance)
 			.set('no_of_hours', data?.no_of_hours)
 			.set('is_master_vehicle' , data?.is_master_vehicle);
-		return this.httpClient.get(`${this.serverUrl}admin/booking-rates-vehicle`, { params })
+		return this.httpClient.post(`${this.serverUrl}admin/booking-rates-vehicle?${params.toString()}`, {extra_stops : data?.extraStops })
 	}
 	checkUniquePhoneNumberForLooseCustomer(customer_data: Record<string, any>) {
 		return this.httpClient.post(`${this.serverUrl}admin/check-unique-user`, customer_data)
