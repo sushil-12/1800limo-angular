@@ -33,6 +33,7 @@ import { CardsComponent } from './cards/cards.component';
 import { AddCardComponent } from './add-card/add-card.component';
 import { InvoiceDashComponent } from './invoice-dash/invoice-dash.component';
 import { InvoiceDashSummaryComponent } from './invoice-dash-summary/invoice-dash-summary.component';
+import { StripeFormComponent } from './stripe-form/stripe-form.component';
 
 
 @NgModule({
@@ -45,7 +46,8 @@ import { InvoiceDashSummaryComponent } from './invoice-dash-summary/invoice-dash
 		CardsComponent,
 		AddCardComponent,
 		InvoiceDashComponent,
-		InvoiceDashSummaryComponent],
+		InvoiceDashSummaryComponent,
+		StripeFormComponent],
 	imports: [
 		CommonModule,
 		TravelAgentRoutingModule,

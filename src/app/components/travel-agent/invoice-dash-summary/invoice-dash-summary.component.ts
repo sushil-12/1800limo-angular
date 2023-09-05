@@ -65,6 +65,10 @@ export class InvoiceDashSummaryComponent implements OnInit {
   
     }
 
+    backButton() {
+      this.router.navigate(['/travel_agent/invoices']);
+    }
+
   getCurrencyData() {
 		console.log('in function get currency data')
 		this.httpClient.get("assets/json/currencyOptions1.json").subscribe(data => {
