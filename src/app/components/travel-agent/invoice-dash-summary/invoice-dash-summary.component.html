@@ -1,0 +1,290 @@
+<ngx-spinner></ngx-spinner>
+<main *ngIf="invoiceData" style="background: #f5f4fe;">
+	<div class="row m-2 d-flex justify-content-between" id="btn-display-coloumn" style="padding: 20px 0 0 0;">
+		<div>
+			<button class="custom-btn print-btn box-shadow my-1" style="height: 40px;width: 130px;font-size: 14px;"
+				[useExistingCss]="true" printTitle="Invoice" printSectionId="print-section" ngxPrint>
+				Print Invoice</button>
+		</div>
+	
+	</div>
+	<section class="invoice" id="print-section">
+		<div class="container p-0">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="d-flex justify-content-between bd-highlight mb-3 invoice-header  p-4">
+						<!-- <div class="mr-auto p-2 bd-highlight">
+							<img src="assets/admin/images/new_logo.png" class="logo" alt="">
+						</div> -->
+						<div class="p-2 bd-highlight ml-2" style="margin: auto 0;">
+							<p class="my-1 invoice-head--text">Invoice {{invoiceData.invoice_number}}</p>
+							<p class="m-0 invoice-text--booking">
+								Booking # {{invoiceData.reservation_id}}
+							</p>
+						</div>
+						<div class="bd-highlight invoice-p m-3">
+							Paid Amount
+							<p class="invoice-dollar--color display-4">
+								<strong style="font-size: xx-large;"><span>{{currencySymbol}}</span>{{invoiceData?.paid_amount}}</strong>
+							</p>
+							<!-- Invoice Status
+							<p class="invoice-dollar--color display-4">
+								<strong style="font-size: xx-large;">{{invoiceData?.invoice_status | titlecase}}</strong>
+							</p> -->
+						</div>
+					</div>
+					<!-- <div class="d-flex bd-highlight flex-row-reverse mb-3 px-3">
+						<div class="mr-auto  bd-highlight">
+							<p class="m-0 invoice-p">
+								Status
+							</p>
+							<p class="invoice-text--color">
+								<strong>{{invoiceData.invoice_status |titlecase}}</strong>
+							</p>
+						</div>
+						<div class="bd-highlight invoice-p">
+							Paid Amount
+							<p class="invoice-dollar--color display-4">
+								<strong style="font-size: xx-large;">${{invoiceData.grand_total}}</strong>
+							</p>
+						</div>
+					</div> -->
+
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12" *ngIf="invoiceData.service_type">
+					<div class="invoice-passenger mx-3">
+						<div class="d-flex bd-highlight invoice-subhead p-4 col-12 mr-2">
+							<div class="mr-auto  col-6 p-2 bd-highlight invoice-status-bar"
+								*ngIf="invoiceData.service_type">
+								<p class="m-1 invoice-p text-white invoice-status-bar">
+									Service Type: <span
+										class="invoice-text-bold invoice-status-bar">{{invoiceData.service_type}}</span>
+								</p>
+								<p class="m-1 invoice-p text-white invoice-status-bar">
+									Invoice Status: <span
+										class="invoice-text-bold invoice-status-bar">{{invoiceData?.invoice_status | titlecase}}</span>
+								</p>
+							</div>
+							<div class="p-2 col-6 bd-highlight " *ngIf="invoiceData.date_of_service">
+								<p class="m-1 invoice-p text-white invoice-status-bar">
+									Date of Service:<span class="invoice-text-bold invoice-status-bar">
+										{{invoiceData.date_of_service}}</span>
+								</p>
+								<p class="m-1 invoice-p text-white invoice-status-bar">
+									Invoice Date:<span class="invoice-text-bold invoice-status-bar">
+										{{invoiceData.created_at}}</span>
+								</p>
+							</div>
+						</div>
+						<div class="div">
+							<dl class="m-0">
+								<dt class="invoice-p" *ngIf="invoiceData.passenger_name">Passenger Name </dt>
+								<dd class="invoice-text-b">{{invoiceData.passenger_name}}
+								</dd>
+								<dt class="invoice-p" *ngIf="invoiceData.passenger_cell">Passenger Phone</dt>
+								<dd class="invoice-text-b"> {{invoiceData.passenger_cell}}</dd>
+								<dt class="invoice-p" *ngIf="invoiceData.passenger_email">
+									Passenger Email
+								</dt>
+								<dd class="invoice-text-b text-break">{{invoiceData.passenger_email}}</dd>
+							</dl>
+						</div>
+						<div class="div border-top">
+							<dl class="m-0">
+								<dt class="invoice-p" *ngIf="invoiceData.pickup_address">Pickup Address
+								</dt>
+								<dd class="invoice-text-b"> {{invoiceData.pickup_address}}
+								</dd>
+								<dt class="invoice-p" *ngIf="invoiceData.pickup_airport"> <span>Pickup Airport</span>
+								</dt>
+								<dd class="invoice-text-b"> {{invoiceData.pickup_airport}}
+								</dd>
+								<dt class="invoice-p" *ngIf="invoiceData.pickup_airline"> <span>Pickup Airline</span>
+								</dt>
+								<dd class="invoice-text-b"> {{invoiceData.pickup_airline}}
+								</dd>
+								<dt class="invoice-p" *ngIf="invoiceData.dropoff_airport">
+									Drop-off Airport
+								</dt>
+								<dd class="invoice-text-b">{{invoiceData.dropoff_airport}}</dd>
+								<dt class="invoice-p" *ngIf="invoiceData.dropoff_airline">
+									Drop-off Airline
+								</dt>
+								<dd class="invoice-text-b">{{invoiceData.dropoff_airline}}</dd>
+								<dt class="invoice-p" *ngIf="invoiceData.dropoff_address">
+									Drop-off Address
+								</dt>
+								<dd class="invoice-text-b">{{invoiceData.dropoff_address}}</dd>
+							</dl>
+						</div>
+
+
+						<div class="div border-top">
+							<dl class="m-0">
+								<dt class="invoice-p" *ngIf="invoiceData.vehicle_type.vehicle_cat_name">Vehicle Type
+
+								</dt>
+								<dd class="invoice-text-b"> {{invoiceData.vehicle_type.vehicle_cat_name}}
+								</dd>
+								<dt class="invoice-p" *ngIf="invoiceData.transfer_type"><span>Transfer Type</span></dt>
+								<dd class="invoice-text-b"> {{invoiceData.transfer_type}}
+								</dd>
+								<dt class="invoice-p" *ngIf="invoiceData.created_at">
+									Booking Create Date
+								</dt>
+								<dd class="invoice-text-b"> {{invoiceData.created_at}}</dd>
+							</dl>
+						</div>
+					</div>
+					<!-- <div class="row" *ngIf="invoiceData.special_instruction">
+						<div class="col-md-12">
+							<p class="mt-3 ml-4 invoice-p">
+								<span class="invoice-text--red">Special Instruction -</span>
+								{{invoiceData.special_instruction}}
+							</p>
+						</div>
+					</div> -->
+					<div class="row">
+						<div class="col-md-12">
+							<div class="div-payment">
+
+								<dl class="ml-3 dl-payment">
+									<p class="payment-text ">Payment Details</p>
+									<dt class="invoice-text--name">Payment Method Type </dt>
+									<dd class="invoice-text--entry">{{invoiceData.billing_detail.payment_method ==
+										'credit_card' ?
+										'Credit Card' : 'Cash' }}
+									</dd>
+									<dt class="invoice-text--name"
+										*ngIf="invoiceData.billing_detail.payment_method=='credit_card'">Name on Credit
+										Card </dt>
+									<dd class="invoice-text--entry"
+										*ngIf="invoiceData.billing_detail.payment_method=='credit_card'">
+										{{invoiceData.billing_detail.name_on_credit_card ?
+										invoiceData.billing_detail.name_on_credit_card : ' - '}}</dd>
+									<dt class="invoice-text--name"
+										*ngIf="invoiceData.billing_detail.payment_method=='credit_card'">
+										Credit Card Number
+									</dt>
+									<dd class="invoice-text--entry"
+										*ngIf="invoiceData.billing_detail.payment_method=='credit_card'">
+										{{invoiceData.billing_detail.credit_card_number ?
+										invoiceData.billing_detail.credit_card_number : ' - '}} </dd>
+									<dt class="invoice-text--name"
+										*ngIf="invoiceData.billing_detail.payment_method=='credit_card'">
+										Expiry Date
+									</dt>
+									<dd class="invoice-text--entry"
+										*ngIf="invoiceData.billing_detail.payment_method=='credit_card'">
+										{{invoiceData.billing_detail.credit_card_expiry_date
+										?
+										invoiceData.billing_detail.credit_card_expiry_date : ' - '}}</dd>
+									<dt class="invoice-text--name"
+										*ngIf="invoiceData.billing_detail.payment_method=='credit_card'">
+										Billing Address
+									</dt>
+									<dd class="invoice-text--entry"
+										*ngIf="invoiceData.billing_detail.payment_method=='credit_card'">
+										{{invoiceData.billing_detail.billing_address ?
+										invoiceData.billing_detail.billing_address : ' - '}}</dd>
+								</dl>
+							</div>
+						</div>
+					</div>
+					<div class="invoice-passenger m-3">
+						<div class="invoice-subhead px-3">
+							<div class="mr-auto p-2 bd-highlight">
+								<p class="m-0 text-charges">
+									Charges
+								</p>
+							</div>
+						</div>
+						<div class="div" *ngIf="invoiceData.priceDetail">
+                            <div class="col-md-12 p-3 row" *ngFor="let priceObj of invoiceData.priceDetail | keyvalue">
+								<div class="col-3">
+									<p class="invoice-text-charges">{{priceObj.key | bookingStatusTextReplace:'_':' '}}
+									</p>
+								</div>
+								<div>
+
+								</div>
+								<div class="col-6">
+									<ul style="list-style: none;margin:0;color: #1c1a1a;font-size:15px">
+										<li style="margin-bottom: 8px;" class="invoice-charges-textb"
+											*ngFor="let price of priceObj.value">
+											<span *ngIf="price.amount">{{price.rate_label}}</span>
+										</li>
+									</ul>
+								</div>
+								<div class="col-3 d-flex justify-content-end">
+									<ul style="list-style: none;margin:0;color: #1c1a1a;font-size:15px">
+										<li style="margin-bottom: 8px; " class="invoice-charges-textb "
+											*ngFor="let price of priceObj.value">
+											<span class="font-weight-bold" *ngIf="price.amount">
+											{{currencySymbol+price.amount}}</span>
+										</li>
+									</ul>
+								</div>
+							</div>
+							<!-- to show refund ammount -->
+
+							<div class="invoice-subhead px-3">
+								<div class="row d-flex justify-content-between">
+									<p class="m-0 p-1 text-charges">
+										Sub Total
+									</p>
+									<p class="m-0 p-1 text-charges">
+										<span >{{currencySymbol}}</span>
+										{{invoiceData?.sub_total.toFixed(2)}}
+									</p>
+								</div>
+								<div class="row d-flex justify-content-between">
+									<p class="m-0 p-1 text-charges">
+										No. of vehicles
+									</p>
+									<p class="m-0 p-1 text-charges">
+										<i class="bi bi-x font-weight-bolder"></i>
+										{{invoiceData?.number_of_vehicles}}
+									</p>
+								</div>
+								<div class="row d-flex justify-content-between">
+									<p class="m-0 p-1 text-charges" >
+										Total-Amount</p>
+										<p class="m-0 p-1 text-charges font-weight-bold">
+											<span >{{currencySymbol}}</span>{{this.invoiceData?.grand_total.toFixed(2)}}
+										</p>
+									</div>
+									<div class="row d-flex justify-content-between" *ngIf="(this.invoiceData?.grand_total - invoiceData?.paid_amount) > 0">
+										<p class="m-0 p-1 text-charges">
+											Payable payment
+											<!-- <i class="bi bi-info-circle-fill"></i> -->
+										</p>
+										<p class="m-0 p-1 text-charges">
+											<span >{{currencySymbol}}</span>{{(this.invoiceData?.grand_total.toFixed(2) - invoiceData?.paid_amount).toFixed(2)}}
+										</p>
+									</div>
+								<!-- <div class="row d-flex justify-content-between" >
+									<p class="m-0 p-1 text-charges" >
+										Grand-Amount</p>
+									<p class="m-0 p-1 text-charges font-weight-bold">
+										<span >{{currencySymbol}}</span>{{amount.toFixed(2)}}
+									</p>
+								</div> -->
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- <div class="col-md-12 row d-flex justify-content-center">
+				<p><a href="mailto:info@1800limo.com" target="_blank" class="contactMail">info@1800limo.com</a></p>
+			</div> -->
+			<!-- <div class="col-md-12 row mx-2" style="
+		height: 10px;
+		background: #F2933C;">
+			</div> -->
+		</div>
+	</section>
+
+</main>

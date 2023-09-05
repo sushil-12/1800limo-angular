@@ -32,6 +32,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { CardsComponent } from './cards/cards.component';
 import { AddCardComponent } from './add-card/add-card.component';
 import { InvoiceDashComponent } from './invoice-dash/invoice-dash.component';
+import { InvoiceDashSummaryComponent } from './invoice-dash-summary/invoice-dash-summary.component';
 
 
 @NgModule({
@@ -43,7 +44,8 @@ import { InvoiceDashComponent } from './invoice-dash/invoice-dash.component';
 		CreateBookingComponent,
 		CardsComponent,
 		AddCardComponent,
-		InvoiceDashComponent],
+		InvoiceDashComponent,
+		InvoiceDashSummaryComponent],
 	imports: [
 		CommonModule,
 		TravelAgentRoutingModule,

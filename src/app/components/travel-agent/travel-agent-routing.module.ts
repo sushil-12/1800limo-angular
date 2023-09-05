@@ -7,6 +7,7 @@ import { CreateBookingComponent } from './create-booking/create-booking.componen
 import { CardsComponent } from './cards/cards.component';
 import { AddCardComponent } from './add-card/add-card.component';
 import { InvoiceDashComponent } from './invoice-dash/invoice-dash.component';
+import { InvoiceDashSummaryComponent } from './invoice-dash-summary/invoice-dash-summary.component';
 const routes: Routes = [
   {
     path:'bookings',
@@ -30,6 +31,11 @@ const routes: Routes = [
   {
     path:'invoices',
     component:InvoiceDashComponent,
+    canActivate: [CheckProfileCompleteGuard],
+  },
+  {
+    path:'invoice-summary',
+    component:InvoiceDashSummaryComponent,
     canActivate: [CheckProfileCompleteGuard],
   },
   {
