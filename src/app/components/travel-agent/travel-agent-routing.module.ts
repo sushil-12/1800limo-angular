@@ -8,6 +8,7 @@ import { CardsComponent } from './cards/cards.component';
 import { AddCardComponent } from './add-card/add-card.component';
 import { InvoiceDashComponent } from './invoice-dash/invoice-dash.component';
 import { InvoiceDashSummaryComponent } from './invoice-dash-summary/invoice-dash-summary.component';
+import { StripeFormComponent } from './stripe-form/stripe-form.component';
 const routes: Routes = [
   {
     path:'bookings',
@@ -41,6 +42,11 @@ const routes: Routes = [
   {
     path:'add-card',
     component:AddCardComponent,
+    canActivate: [CheckProfileCompleteGuard],
+  },
+  {
+    path:'stripe-form',
+    component:StripeFormComponent,
     canActivate: [CheckProfileCompleteGuard],
   }
  
