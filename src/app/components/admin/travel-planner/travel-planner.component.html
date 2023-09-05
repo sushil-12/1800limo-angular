@@ -31,7 +31,7 @@
 					</mat-form-field>
 				</div>
 				<div class="col-md-2  mt-3 mb-3">
-					<button class="custom-btn button2 btnclass" (click)="loadTravelPlanners()">SAVE</button>
+					<button class="custom-btn button2 btnclass" (click)="loadTravelPlanners()">Search</button>
 				</div>
 			</div>
 		</div>
@@ -43,6 +43,8 @@
 						aria-describedby="dataTable_info" style="width: 100%;" width="100%" cellspacing="0">
 						<thead>
 							<tr role="row">
+								<th>Actions</th>
+								<th>Status</th>
 								<th>Name</th>
 								<th>Email</th>
 								<th>Mobile</th>
@@ -53,31 +55,10 @@
 								<th>City</th>
 								<th>State</th>
 								<th>Country</th>
-								<th>Status</th>
-								<th>Actions</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr role="row" class="odd" *ngFor="let travelPlanner of travelPlanners">
-								<td *ngIf="travelPlanner.middle_name == null;else middleName">{{travelPlanner.first_name+' '+travelPlanner.last_name}}</td>
-								<ng-template #middleName>
-									<td>{{travelPlanner.first_name+' '+travelPlanner.middle_name+' '+travelPlanner.last_name}}</td>
-								</ng-template>
-								<td>{{travelPlanner.email}}</td>
-								<td>{{travelPlanner.mobileIsd+travelPlanner.mobile}}</td>
-								<td>{{travelPlanner.agency_name}}</td>
-								<td>{{travelPlanner.payee}}</td>
-								<td>{{travelPlanner.iata}}</td>
-								<td>{{travelPlanner.street}}</td>
-								<td>{{travelPlanner.city}}</td>
-								<td>{{travelPlanner.state}}</td>
-								<td>{{travelPlanner.country}}</td>
-								<td>
-									<mat-slide-toggle class="example-margin" [color]="color"
-										[checked]="travelPlanner.status" [disabled]="disabled"
-										(change)="enableDisableClicked($event,travelPlanner.id)">
-									</mat-slide-toggle>
-								</td>
 								<td>
 									<a class="user-profileded btn btn-icon btn-transparent-dark dropdown-toggle"
 										id="navbarDropdownUserImage" href="javascript:void(0);" role="button"
@@ -100,6 +81,27 @@
 										</a>
 									</div>
 								</td>
+								<td>
+									<mat-slide-toggle class="example-margin" [color]="color"
+										[checked]="travelPlanner.status" [disabled]="disabled"
+										(change)="enableDisableClicked($event,travelPlanner.id)">
+									</mat-slide-toggle>
+								</td>
+								<td *ngIf="travelPlanner.middle_name == null;else middleName">
+									{{travelPlanner.first_name+' '+travelPlanner.last_name}}</td>
+								<ng-template #middleName>
+									<td>{{travelPlanner.first_name+' '+travelPlanner.middle_name+'
+										'+travelPlanner.last_name}}</td>
+								</ng-template>
+								<td>{{travelPlanner.email}}</td>
+								<td>{{travelPlanner.mobileIsd+travelPlanner.mobile}}</td>
+								<td>{{travelPlanner.agency_name}}</td>
+								<td>{{travelPlanner.payee}}</td>
+								<td>{{travelPlanner.iata}}</td>
+								<td>{{travelPlanner.street}}</td>
+								<td>{{travelPlanner.city}}</td>
+								<td>{{travelPlanner.state}}</td>
+								<td>{{travelPlanner.country}}</td>
 							</tr>
 
 						</tbody>
