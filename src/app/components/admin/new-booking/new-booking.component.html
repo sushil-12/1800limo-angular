@@ -104,7 +104,7 @@
 			<div class="row">
 				<div class="col-md-12 col-lg-10">
 					<mat-radio-group aria-label="Select an option" formControlName="account_type">
-						<mat-radio-button [value]="ca" class="my-2 ml-4 mr-3"
+						<mat-radio-button [value]="ca" class="my-2 ml-4 mr-3" (change)="handleClientAccChange()"
 							*ngFor="let ca of booking_params.client_account_types">
 							{{ textFormatter(ca) | titlecase }}
 						</mat-radio-button>

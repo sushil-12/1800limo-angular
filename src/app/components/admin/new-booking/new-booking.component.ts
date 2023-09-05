@@ -871,6 +871,10 @@ export class NewBookingComponent implements OnInit {
 		this.SetLCFormValue('email', choose_user?.email)
 		this.SetLCFormValue('phone', choose_user?.mobile)
 	}
+	handleClientAccChange(){
+		this.BookingForm.get('acc_id').setValue(null);
+		this.chosen_user = null
+	}
 
 	handleClientAccount(value: any) {
 		console.log('---------------------_>>>>>>>>>>>>>> client acc value', value)
