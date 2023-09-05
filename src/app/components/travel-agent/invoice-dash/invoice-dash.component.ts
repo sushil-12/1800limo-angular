@@ -1,4 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import * as moment from 'moment';
+import { AdminService } from 'src/app/services/admin.service';
+import { TravelAgentService } from 'src/app/services/travel-agent.service';
+import { DatePickerComponent } from '../../shared/date-picker/date-picker.component';
+import { NgxSpinnerService } from "ngx-spinner";
+import { catchError } from 'rxjs/operators';
+import { throwError } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-invoice-dash',
@@ -6,10 +14,204 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./invoice-dash.component.scss']
 })
 export class InvoiceDashComponent implements OnInit {
+  exampleHeader = DatePickerComponent;
+  outputDateFormat = "YYYY-MM-DD";
 
-  constructor() { }
+  public invoices:any=[];
+  public startDate: string;
+	public endDate: string;
+  public firstPage:Number;
+  public lastPage:Number;
+  public totalPage:Number;
+  public currentPage:any;
+  public from:Number;
+  public to:Number;
+  public path:string;
+  public firstPageUrl:string;
+  public lastPageUrl:string;
+  public prevPageUrl:string;
+  public nextPageUrl:string;
+  public invoiceRes:any;
+  audit_Trail: any;
+  searchText:any='';
+	useDateFilter:boolean=true;
+  
+  constructor(private TravelService: TravelAgentService,private adminService: AdminService, private router: Router,
+    private spinner: NgxSpinnerService) { }
 
   ngOnInit(): void {
+
+    let date = new Date();
+		let timestamp = date.getTime()
+		//     const options:any = {
+		// 		year: 'numeric',
+		// 		month: '2-digit',
+		// 		day: '2-digit',
+		// 	};
+		// const localeDateString = date.toLocaleDateString(undefined, options).
+		// replace(/(\d+)\/(\d+)\/(\d+)/,'$3-$1-$2');
+		// Set Search Filters According to cookies or the intial state
+		this.startDate = this.adminService.checkCookie('startDate_invoice') ?
+			this.adminService.getCookie('startDate_invoice') :
+			moment(timestamp).format('YYYY-MM-DD')
+
+		date.setDate(date.getDate() + 7);
+		timestamp = date.getTime()
+		this.endDate = this.adminService.checkCookie('endDate_invoice') ?
+			this.adminService.getCookie('endDate_invoice') :
+			moment(timestamp).format('YYYY-MM-DD')
+
+      this.useDateFilter = this.adminService.checkCookie('useDateFilterInvoice') ?
+      (this.adminService.getCookie('useDateFilterInvoice')=='true' ? true : false)
+      : true;
+      this.searchText = this.adminService.checkCookie('search_invoice') ?
+      this.adminService.getCookie('search_invoice')
+      : "";
+      this.spinner.show();
+        this.loadInvoice();//load invoices
+
   }
+
+  timer: any
+	searchInBookings(search_value: string) {
+		this.searchText = search_value
+		console.log('--->>>>>', search_value)
+		clearTimeout(this.timer);
+		this.timer = setTimeout(() => {
+			this.saveCookie("search_invoice", this.searchText);
+			this.loadInvoice()
+		}, 700)
+	}
+  handleKeypressEvents() {
+		clearTimeout(this.timer)
+	}
+
+  changeDate(dateType, date) {
+    console.log('---------__>>>>>>', dateType, date)
+    this[dateType] = date
+  }
+
+  saveCookie(key: string, value: string) {
+		this.adminService.setCookie(key, value, 30);
+	}
+
+  clicViewInvoice(bookingId)
+  {
+    this.router.navigate(['/travel_agent/invoice-summary'],{queryParams:{bookingId:bookingId}});
+  }
+
+  loadInvoice(pageUrl=null){
+    /** spinner starts on init */
+    this.spinner.show()
+    console.log('--->>> searchText--->>' , this.searchText)
+    var keyword = ((document.getElementById("keyword3") as HTMLInputElement).value);
+    // console.log(keyword);
+    // Load Our invoices using API
+    this.adminService.invoiceList(pageUrl,this.startDate,this.endDate,this.useDateFilter,keyword).then(result=>{
+      this.spinner.hide()
+      this.invoiceRes=result;
+      this.invoices=this.invoiceRes.data.data;
+
+      this.firstPage=1;
+      this.lastPage=this.invoiceRes.data.last_page;
+      this.totalPage=this.invoiceRes.data.last_page;
+      this.currentPage=this.invoiceRes.data.current_page;
+      this.from=this.invoiceRes.data.from;
+      this.to=this.invoiceRes.data.to;
+      this.path=this.invoiceRes.data.path;
+      this.firstPageUrl=this.invoiceRes.data.first_page_url;
+      this.lastPageUrl=this.invoiceRes.data.last_page_url;
+      this.prevPageUrl=this.invoiceRes.data.prev_page_url;
+      this.nextPageUrl=this.invoiceRes.data.next_page_url;
+      // sessionStorage.setItem('invoice',JSON.stringify(this.invoice));
+      this.spinner.hide();//hide spinner
+    })
+    .catch(err=>{
+      this.spinner.hide();//hide spinner
+    });
+  }
+
+  highlighText(args: string) {
+    let searchText = ((document.getElementById("keyword3") as HTMLInputElement).value);
+       
+		if (!searchText) { return args; }
+		if (args) {
+			args = args.toString()
+			var re = new RegExp(searchText, 'gi'); //'gi' for case insensitive and can use 'g' if you want the search to be case sensitive.
+			return args.replace(re, '<mark class="font-weight-bold">$&</mark>');
+		}
+	}
+
+
+   //for pagination
+   counter() {
+    var currentPage;
+    var startFrom;
+    var endTo;
+
+    if(this.currentPage<5)
+    {
+      startFrom=0;
+      endTo=this.totalPage;
+    }
+    else if(this.currentPage<this.totalPage){
+      currentPage=this.currentPage
+      endTo=currentPage+1;
+      startFrom=endTo-5;
+    }
+    else{
+      endTo=this.totalPage;
+      startFrom=endTo-5;
+    }
+
+    var i;
+    var udpArr=new Array();
+    for(i=startFrom;i<endTo;i++)
+    {
+      udpArr.push(i+1);
+    }
+    return udpArr;
+  }
+
+  reset() {
+		let date = new Date();
+		let timestamp = date.getTime()
+		this.startDate = moment(timestamp).format('YYYY-MM-DD')
+		date.setDate(date.getDate() + 7);
+		timestamp = date.getTime()
+		this.endDate = moment(timestamp).format('YYYY-MM-DD')
+		this.adminService.deleteCookie('startDate_invoice')
+		this.adminService.deleteCookie('endDate_invoice')
+		this.adminService.deleteCookie('search_invoice')
+		this.adminService.deleteCookie('useDateFilterInvoice')
+		this.useDateFilter = true
+		this.searchText = "";
+
+		console.log('Reset Successfully. ');
+	}
+
+  handleChangeCheckbox(value:any){
+		console.log('event---->> ' ,value)
+		this.useDateFilter = value
+		this.saveCookie('useDateFilterInvoice',value)
+		this.loadInvoice();
+	}
+
+  auditTrail(bookingId: any) {
+		console.log('In function audit trail', bookingId)
+		this.spinner.show()
+		this.adminService.auditTrailInfoInvoice(bookingId)
+			.pipe(
+				catchError((err) => {
+					return throwError(err);
+				})
+			)
+			.subscribe((response: any) => {
+				this.spinner.hide()
+				console.log('audit trail --->>>>>>>>', response)
+				this.audit_Trail = response.data
+				// $("#AuditTrailModal").modal("hide");
+			});
+	}
 
 }
