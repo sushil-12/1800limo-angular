@@ -377,13 +377,8 @@
 				<div class="col-md-3">
                     <mat-form-field class="mat-form-field-rates" appearance="outline">
                         <mat-label>Extra stop - same town</mat-label>
-                        <span matPrefix
-                            *ngIf="f.in_town_extra_stop.value == null || f.in_town_extra_stop.value == ''; else hideZero16">{{currencySymbol}}
-                             &nbsp;</span>
-                        <ng-template #hideZero16>
                             <span matPrefix>{{currencySymbol}} &nbsp;</span>
-                        </ng-template>
-                        <input matInput type="number" placeholder="Shared Ride Rate - Per Person" (change)="updateRateRangeObject()"
+                        <input matInput type="number" placeholder="Extra stop - same town" (change)="updateRateRangeObject()"
                             formControlName="in_town_extra_stop" tabindex="1">
                     </mat-form-field>
                     <div *ngIf="submittedForm && f.in_town_extra_stop.errors || f.in_town_extra_stop.touched && f.in_town_extra_stop.errors"
@@ -394,13 +389,8 @@
                 <div class="col-md-3">
                     <mat-form-field class="mat-form-field-rates" appearance="outline">
                         <mat-label>Extra stop - outside town</mat-label>
-                        <span matPrefix
-                            *ngIf="f.outside_town_extra_stop.value == null || f.outside_town_extra_stop.value == ''; else hideZero16">{{currencySymbol}}
-                             &nbsp;</span>
-                        <ng-template #hideZero16>
                             <span matPrefix>{{currencySymbol}} &nbsp;</span>
-                        </ng-template>
-                        <input matInput type="number" placeholder="Shared Ride Rate - Per Person" (change)="updateRateRangeObject()"
+                        <input matInput type="number" placeholder="Extra stop - outside town" (change)="updateRateRangeObject()"
                             formControlName="outside_town_extra_stop" tabindex="1">
                     </mat-form-field>
                     <div *ngIf="submittedForm && f.outside_town_extra_stop.errors || f.outside_town_extra_stop.touched && f.outside_town_extra_stop.errors"

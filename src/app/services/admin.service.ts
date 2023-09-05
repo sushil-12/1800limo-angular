@@ -800,6 +800,7 @@ export class AdminService {
 	}
 
 	chooseUser(id: number, accountType: string) {
+		console.log('choosen account-->>' , accountType)
 		switch (accountType) {
 			case 'individual': {
 				return this.httpClient.get(this.serverUrl + 'get-an-account/' + id);
@@ -807,7 +808,7 @@ export class AdminService {
 			case 'corporate': {
 				return this.httpClient.get(this.serverUrl + 'get-corporate-account/' + id);
 			}
-			case 'travel': {
+			case 'travel_planner': {
 				return this.httpClient.get(this.serverUrl + 'get-travel-planner-account/' + id);
 			}
 			default: {

@@ -133,7 +133,8 @@
                     </td>
                     <td>
                       <div [className]="'badge badge-pill booking_status cursor-pointer ' + invoice?.status">
-                        {{invoice?.status |titlecase}}
+                        {{invoice?.status| bookingStatusTextReplace :
+                          '_' : ' ' |titlecase}}
                       </div>
                     </td>
                     <td class="text-center font-weight-bolder cursor-pointer text-underline">
