@@ -111,8 +111,7 @@ export class BookingComponent implements OnInit {
 
 		// var keyword = ((document.getElementById("keyword") as HTMLInputElement).value);
 		// Load Our bookings using API
-		this.affiliateService.loadBookings(pageUrl, this.searchText, this.startDate, this.endDate).then(result => {
-			console.log('result------------------------->>>', result)
+		this.travelAgentService.loadBookings(pageUrl, this.searchText, this.startDate, this.endDate).then(result => {
 			this.bookingsRes = result;
 			this.bookings = this.bookingsRes?.data?.data;
 			this.totalRecords = this.bookingsRes?.data?.total;
@@ -128,6 +127,7 @@ export class BookingComponent implements OnInit {
 			this.lastPageUrl = this.bookingsRes?.data?.last_page_url;
 			this.prevPageUrl = this.bookingsRes?.data?.prev_page_url;
 			this.nextPageUrl = this.bookingsRes?.data?.next_page_url;
+			console.log('result------------------------->>>', result)
 			this.spinner.hide();//hide spinner
 		})
 			.catch(err => {

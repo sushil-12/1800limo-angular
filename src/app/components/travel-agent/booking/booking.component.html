@@ -79,7 +79,6 @@
 										<th>Pax</th>
 										<th>Driver</th>
 										<th>Vehicle</th>
-										<!-- <th>Status</th> -->
 									</tr>
 								</thead>
 								<tbody>
@@ -104,7 +103,6 @@
 												</a>
 												<a class="dropdown-item" (click)="auditTrail(booking.booking_id)"
 													data-toggle="modal" data-target="#AuditTrailModal">
-													<!-- *ngIf="booking.payment_status!='paid'" -->
 													<div class="dropdown-item-icon"></div>
 													Audit Trial
 												</a>
@@ -117,7 +115,7 @@
 												<span [innerHTML]="highlighText(booking?.booking_id )"></span>
 											</p>
 										</td>
-										<td class="text-center font-weight-bolder cursor-pointer">
+										 <td class="text-center font-weight-bolder cursor-pointer">
 											<p class="booking-id-font font-weight-bolder cursor-pointer">
 												<span class="currency">$</span><span [innerHTML]="highlighText(booking.grand_total)"></span>
 											</p>
@@ -125,8 +123,7 @@
 										<td>
 											<div data-toggle="modal" data-target="#change_status_booking_Modal"
 												[className]="'badge badge-pill booking_status cursor-pointer ' + booking?.booking_status">
-												{{booking?.booking_status | bookingStatusTextReplace :
-												'_' : ' ' |titlecase}}
+												{{booking?.booking_status  |titlecase}}
 											</div>
 										</td>
 										<td class="sorting_1">
@@ -149,8 +146,6 @@
 												&nbsp;&nbsp;&nbsp;<i class="bi bi-geo-alt-fill"></i></span>
 										</td>
 										<td>
-	
-											<!-- class="disabled-btn" -->
 											<p data-target="#sendEmailModal" data-toggle="modal"
 												(click)="openModal(booking, 'Driver')">
 												<span class="font-weight-bolder"
@@ -169,13 +164,6 @@
 										<td>
 											<span [innerHTML]="highlighText(booking?.vehicle_cat_name)"></span>
 										</td>
-										<!-- <td>
-											<mat-slide-toggle class="example-margin" [color]="color"
-												[checked]="booking?.status" [disabled]="disabled"
-												(change)="enableDisableClicked($event,booking?.booking_id)">
-											</mat-slide-toggle>
-										</td> -->
-	
 									</tr>
 								</tbody>
 							</table>

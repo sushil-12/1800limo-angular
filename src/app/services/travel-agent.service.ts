@@ -50,5 +50,21 @@ export class TravelAgentService {
   addCard(data){
     return this.httpClient.post(this.serverUrl + 'add-credit-card', data);
   }
+
+  loadBookings(url, keyword, startDate, endDate)
+	{
+		var path;
+		if (url)
+		{
+			path = url + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword;
+		}
+		else
+		{
+			path = this.serverUrl + 'get-bookings' + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword;
+		}
+		return this.httpClient.get(path).toPromise();
+	}
+
+  
   
 }
