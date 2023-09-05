@@ -1064,15 +1064,15 @@ export class AdminService {
 		}
 	}
 	fetchRatesByAffiliateVeh(vehicle_id, data) {
-		const params = new HttpParams()
-			.set('vehicle_id', vehicle_id)
-			.set('transfer_type', data?.transfer_type)
-			.set('service_type', data?.service_type)
-			.set('numberOfVehicles', data?.numberOfVehicles)
-			.set('distance', data?.distance)
-			.set('no_of_hours', data?.no_of_hours)
-			.set('is_master_vehicle' , data?.is_master_vehicle);
-		return this.httpClient.post(`${this.serverUrl}admin/booking-rates-vehicle?${params.toString()}`, {extra_stops : data?.extraStops })
+		// const params = new HttpParams()
+		// 	.set('vehicle_id', vehicle_id)
+		// 	.set('transfer_type', data?.transfer_type)
+		// 	.set('service_type', data?.service_type)
+		// 	.set('numberOfVehicles', data?.numberOfVehicles)
+		// 	.set('distance', data?.distance)
+		// 	.set('no_of_hours', data?.no_of_hours)
+		// 	.set('is_master_vehicle' , data?.is_master_vehicle);
+		return this.httpClient.post(`${this.serverUrl}admin/booking-rates-vehicle`,data )
 	}
 	checkUniquePhoneNumberForLooseCustomer(customer_data: Record<string, any>) {
 		return this.httpClient.post(`${this.serverUrl}admin/check-unique-user`, customer_data)

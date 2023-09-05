@@ -171,7 +171,8 @@ export class NewBookingComponent implements OnInit {
 			distance : this.distance, 
 			no_of_hours : this.number_of_hours,
 			is_master_vehicle : false,
-			extraStops: this.BookingForm.get('extra_stops').value
+			extra_stops: this.BookingForm.get('extra_stops').value,
+			return_extra_stops : this.BookingForm.get('return_extra_stops').value
 		}
 	}
 	ngAfterViewInit(): void {
@@ -1329,6 +1330,7 @@ export class NewBookingComponent implements OnInit {
 			(<FormArray>this.BookingForm.get('extra_stops')).removeAt(stop_index)
 			this.MapController()
 		}
+		this.buildBookingData()
 	}
 
 
@@ -1340,6 +1342,11 @@ export class NewBookingComponent implements OnInit {
 				(<FormArray>this.BookingForm.get('return_extra_stops')).at(index).patchValue({
 					address: address.formatted_address
 				})
+				let return_pickup_location = this.Form.return_pickup.value
+				if (this.Form.transfer_type.value.includes('_airport')) {
+					return_pickup_location = this.Form.return_pickup_airport.value
+				}
+				this.checkExtraStopInTown(return_pickup_location,address.formatted_address ,'return_extra_stops',index )
 			}
 			if (location) {
 				(<FormArray>this.BookingForm.get('return_extra_stops')).at(index).patchValue({
@@ -1360,7 +1367,7 @@ export class NewBookingComponent implements OnInit {
 				if (this.Form.transfer_type.value.includes('airport_')) {
 					pickup_location = this.Form.pickup_airport.value
 				}
-				this.checkExtraStopInTown(pickup_location,address.formatted_address ,is_return,index )
+				this.checkExtraStopInTown(pickup_location,address.formatted_address ,'extra_stops',index )
 			}
 
 			if (location) {
@@ -1401,7 +1408,7 @@ export class NewBookingComponent implements OnInit {
 		}
 		return null;
 	}
-	checkExtraStopInTown(location1: string, location2: string,is_return:boolean,index:any) {
+	checkExtraStopInTown(location1: string, location2: string,formKey:string,index:any) {
 		const geocoder = new google.maps.Geocoder();
 		geocoder.geocode({ address: location1 }, (results1, status1) => {
 		  if (status1 === 'OK' && results1.length > 0) {
@@ -1412,12 +1419,12 @@ export class NewBookingComponent implements OnInit {
 	  
 				if (town1 === town2) {
 					console.log('Both locations are in the same town/city.',this.extraStops_rate);
-					await (<FormArray>this.BookingForm.get('extra_stops')).at(index).patchValue({
+					await (<FormArray>this.BookingForm.get([formKey])).at(index).patchValue({
 						rate : 'in_town'
 					});
 				} else {
 					console.log('Locations are in different towns/cities.',this.extraStops_rate);
-					(<FormArray>this.BookingForm.get('extra_stops')).at(index).patchValue({
+					(<FormArray>this.BookingForm.get([formKey])).at(index).patchValue({
 						rate : 'out_town'
 					});
 				}
