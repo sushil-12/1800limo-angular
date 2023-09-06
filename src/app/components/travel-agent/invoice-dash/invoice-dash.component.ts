@@ -208,7 +208,7 @@ export class InvoiceDashComponent implements OnInit {
   auditTrail(bookingId: any) {
 		console.log('In function audit trail', bookingId)
 		this.spinner.show()
-		this.adminService.auditTrailInfoInvoice(bookingId)
+		this.TravelService.auditTrailInfoInvoice(bookingId)
 			.pipe(
 				catchError((err) => {
 					return throwError(err);
