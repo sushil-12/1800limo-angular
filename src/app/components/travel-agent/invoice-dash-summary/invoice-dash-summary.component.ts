@@ -79,7 +79,7 @@ export class InvoiceDashSummaryComponent implements OnInit {
 
   getInvoiceData() {
 
-		this.adminService.getInvoiceData(this.bookingId)
+		this.TravelService.getInvoiceData(this.bookingId)
 			.pipe(
 				catchError(err => {
 					this.spinner.hide();//hide spinner
