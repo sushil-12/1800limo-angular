@@ -82,5 +82,10 @@ export class TravelAgentService {
 	getInvoiceData(id) {
 		return this.httpClient.get(this.serverUrl + 'invoice-summary/' + id);
 	}
+
+  //audit trail info 
+  auditTrailInfoInvoice(bookingId) {
+		return this.httpClient.get(this.serverUrl + `booking-audit-records/${bookingId}/invoice`)
+	}
   
 }
