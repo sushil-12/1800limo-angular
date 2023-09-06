@@ -51,7 +51,21 @@ export class TravelAgentService {
     return this.httpClient.post(this.serverUrl + 'add-credit-card', data);
   }
 
-  //invoice list 
+  loadBookings(url, keyword, startDate, endDate)
+	{
+		var path;
+		if (url)
+		{
+			path = url + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword;
+		}
+		else
+		{
+			path = this.serverUrl + 'get-bookings' + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword;
+		}
+		return this.httpClient.get(path).toPromise();
+	}
+
+  //get invoice list
   invoiceList(url, startDate, endDate, useDateFilter,keyword = '') {
 		var path;
 		if (url) {
