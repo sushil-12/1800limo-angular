@@ -65,6 +65,22 @@ export class TravelAgentService {
 		return this.httpClient.get(path).toPromise();
 	}
 
-  
+  //get invoice list
+  invoiceList(url, startDate, endDate, useDateFilter,keyword = '') {
+		var path;
+		if (url) {
+			path = url + '&from=' + startDate + '&to=' + endDate + '&search=' + keyword +'&useDateFilter='+useDateFilter;
+
+		}
+		else {
+			path = this.serverUrl + 'invoices' + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword+'&useDateFilter='+useDateFilter;
+		}
+		return this.httpClient.get(path).toPromise();
+	}
+
+  //invoice summary
+	getInvoiceData(id) {
+		return this.httpClient.get(this.serverUrl + 'invoice-summary/' + id);
+	}
   
 }

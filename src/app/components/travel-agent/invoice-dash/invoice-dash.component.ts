@@ -72,6 +72,8 @@ export class InvoiceDashComponent implements OnInit {
 
   }
 
+
+  //set search text filter in invoices
   timer: any
 	searchInBookings(search_value: string) {
 		this.searchText = search_value
@@ -82,6 +84,7 @@ export class InvoiceDashComponent implements OnInit {
 			this.loadInvoice()
 		}, 700)
 	}
+
   handleKeypressEvents() {
 		clearTimeout(this.timer)
 	}
@@ -95,11 +98,14 @@ export class InvoiceDashComponent implements OnInit {
 		this.adminService.setCookie(key, value, 30);
 	}
 
+  //view invoice summary
   clicViewInvoice(bookingId)
   {
     this.router.navigate(['/travel_agent/invoice-summary'],{queryParams:{bookingId:bookingId}});
   }
 
+
+  //get invoice list function
   loadInvoice(pageUrl=null){
     /** spinner starts on init */
     this.spinner.show()
@@ -107,7 +113,7 @@ export class InvoiceDashComponent implements OnInit {
     var keyword = ((document.getElementById("keyword3") as HTMLInputElement).value);
     // console.log(keyword);
     // Load Our invoices using API
-    this.adminService.invoiceList(pageUrl,this.startDate,this.endDate,this.useDateFilter,keyword).then(result=>{
+    this.TravelService.invoiceList(pageUrl,this.startDate,this.endDate,this.useDateFilter,keyword).then(result=>{
       this.spinner.hide()
       this.invoiceRes=result;
       this.invoices=this.invoiceRes.data.data;
@@ -173,6 +179,7 @@ export class InvoiceDashComponent implements OnInit {
     return udpArr;
   }
 
+  //reset the filters for the invoice list
   reset() {
 		let date = new Date();
 		let timestamp = date.getTime()
@@ -190,6 +197,7 @@ export class InvoiceDashComponent implements OnInit {
 		console.log('Reset Successfully. ');
 	}
 
+  //handle use date filter chekbox to apply or remove date filter
   handleChangeCheckbox(value:any){
 		console.log('event---->> ' ,value)
 		this.useDateFilter = value
