@@ -94,6 +94,7 @@ this.mapFunction();
 			year--;
 			temp++;
 		}
+		const currentUser = JSON.parse(sessionStorage.getItem("affiliateUserData"));
 
     	//add amenity form validation
 		this.addBankForm = this.formBuilder.group({
@@ -133,6 +134,49 @@ this.mapFunction();
 			primaryYY: [''],
 			primaryCardHolderName: ['']
 		});
+		this.httpClient.get("assets/json/currencyOptions.json").subscribe(data => {
+			for (const key in data) {
+				this.currencyOptions.push(data[key])
+				this.currencyOptions_copy.push(data[key])
+			}
+			this.currencyOptions.sort((a: any, b: any) => {
+				if (a.countryName.toLowerCase() > b.countryName.toLowerCase()) {
+					return 1
+				}
+				else if (a.countryName.toLowerCase() < b.countryName.toLowerCase()) {
+					return -1
+				}
+				else {
+					return 0
+				}
+
+			})
+
+			this.fillGlobalValue('', 'currency', true)
+		})
+
+		this.adminService.getAllEnableBadgeCities().pipe(
+			catchError(err => {
+				return throwError(err)
+			})
+		).subscribe((res:any)=> {
+			this.badgeOptions = res?.data
+			this.filteredOptions = res?.data
+		})
+
+		this.httpClient.get("assets/json/countryStateList.json").subscribe(data => {
+			this.countryOptions = data;
+		})
+		if (this.affiliateId) {
+			this.getFormData()
+		}
+		else {
+		//for selected country
+			this.changeCountry(currentUser.CellNumberCountry.toUpperCase());
+			this.addBankForm.patchValue({
+				country: currentUser.CellNumberCountry.toUpperCase()
+			});
+		}
     
   }//google map autocomplete
 	latitude: number;
@@ -201,6 +245,121 @@ this.mapFunction();
 		});
 	}
 
+	getFormData(){
+		const currentUser = JSON.parse(sessionStorage.getItem("affiliateUserData"));
+		
+			if (this.stepCompleted.includes('2')) {
+				this.isStep2Completed = true;
+				// this.stateManagementService.setprogressBar(true);
+	
+				this.adminService.getBankOfAffiliate(this.affiliateId)
+					.pipe(
+						catchError(err => {
+							// this.stateManagementService.setprogressBar(false);
+							return throwError(err);
+						})
+					).subscribe(result => {
+						this.response = result;
+						//to show stripe errors at the top
+						if (this.response.data.stripeDetail.stripe_errors) {
+							this.stripeErrors = this.response.data.stripeDetail.stripe_errors;
+						}
+						//set images and their ID
+						
+						this.id_front_image = this.response.data.bankinfo.id_front_image.image;
+						this.id_back_image = this.response.data.bankinfo.id_back_image.image;
+						this.id_front_image_id = this.response.data.bankinfo.id_front_image.ID;
+						this.id_back_image_id = this.response.data.bankinfo.id_back_image.ID;
+						//Documents changable or not.
+						if (this.response.data.stripeDetail.additional_doc_verification_status == 'unverified') {
+							this.canChangeDocument = true;
+						}
+						else {
+							this.canChangeDocument = false;
+						}
+	
+						this.addBankForm.patchValue({
+							id: this.response.data.bankinfo.id,
+							BankName: this.response.data.bankinfo.BankName,
+							BankAddress: this.response.data.bankinfo.BankAddress,
+							AccountHolderFirstName: this.response.data.bankinfo.AccountHolderFirstName,
+							AccountHolderLastName: this.response.data.bankinfo.AccountHolderLastName,
+							AccountNumber: this.response.data.bankinfo.AccountNumber,
+							Routing: this.response.data.bankinfo.Routing,
+							AccountType: this.response.data.bankinfo.AccountType,
+							currency: this.response.data.bankinfo.currency,
+							ssn: this.response.data.bankinfo.ssn,
+							haveEin: this.response.data.bankinfo.ein ? 'yesEin' : 'noEin',
+							ein: this.response.data.bankinfo.ein,
+							address: this.response.data.bankinfo.address,
+							latitude: this.response.data.bankinfo.latitude,
+							longitude: this.response.data.bankinfo.longitude,
+							street: this.response.data.bankinfo.street,
+							unit: this.response.data.bankinfo.unit,
+							city: this.response.data.bankinfo.city,
+							state: this.response.data.bankinfo.state,
+							country: this.response.data.bankinfo.country,
+							zipCode: this.response.data.bankinfo.zipCode,
+							dobDay: this.response.data.bankinfo.dobDay,
+							dobMonth: this.response.data.bankinfo.dobMonth,
+							dobYear: this.response.data.bankinfo.dobYear,
+							id_front_image: this.response.data.bankinfo.id_front_image.ID,
+							id_back_image: this.response.data.bankinfo.id_back_image.ID,
+						});
+	
+						this.haveEin(this.response.data.bankinfo.ein ? 'yesEin' : 'noEin');
+						this.changeCountry(this.response.data.bankinfo.country);//for selected country
+						// this.stateManagementService.setprogressBar(false);
+						this.badgeOptions.map((i:any)=>{
+							if(i.id==this.response?.data?.bankinfo?.badge_city){
+								this.addBankForm.patchValue({
+									badge_city:i?.id,
+									badge_city_name:i?.name
+								})
+							}
+						})
+					});
+			}
+			else {
+				this.canChangeDocument = true;//can add or change documents
+				// this.canChangeAddress = true;//can add or change address
+	
+				//for selected country
+				this.changeCountry(currentUser.CellNumberCountry.toUpperCase());
+				this.addBankForm.patchValue({
+					country: currentUser.CellNumberCountry.toUpperCase(),AccountHolderFirstName: currentUser?.FirstName,
+					AccountHolderMiddleName: currentUser?.MiddleName,
+					AccountHolderLastName: currentUser?.LastName
+				});
+			}
+		
+	}
+
+
+	fillGlobalValue(type: string = '', form_control: string, autofill: boolean = false) {
+		let object: any;
+		if (autofill) {
+			// fetch the phone country in current user logged in from local storage. Default is 'US'
+			const current_user = localStorage.getItem('currentUser') ? JSON.parse(localStorage.getItem('currentUser')) : { phoneCountry: 'US' }
+			object = this.globalFunctions.ListSearch('find', this.currencyOptions, current_user.phoneCountry, 'currencyCountry')
+			console.log(object)
+		}
+		else {
+			object = this.globalFunctions.ListSearch('filter', this.currencyOptions, this.f.currency.value, 'currency')
+			object = this.globalFunctions.ListSearch('find', this.currencyOptions, 'us', 'currencyCountry')
+		}
+
+		this.SetFormValue(form_control, object['currency'] + '-' + object['currencyCountry'])
+
+		// assign the object value
+		if (object) {
+			return `${object['countryName']} - ${object['symbol']}`
+		}
+		else {
+			return ''
+		}
+	}
+
 
   changeCountry(selectedCountryCode) {
 		let selectedCountryData: any;
@@ -210,6 +369,28 @@ this.mapFunction();
 		});
 		if (selectedCountryData) {
 			this.stateOptions = selectedCountryData[0].regions;
+		}
+	}
+
+	haveEin(haveEinNo) {
+		switch (haveEinNo) {
+			case 'noEin': {
+				this.haveEinNo = false;
+				this.addBankForm.patchValue({
+					haveEin : false
+				})
+				break;
+			}
+			case 'yesEin': {
+				this.haveEinNo = true;
+				console.log('validation updated')
+				this.addBankForm.patchValue({
+					haveEin : true
+				})
+				this.addBankForm.controls['ein'].setValidators([Validators.required])
+				this.addBankForm.controls['ein'].updateValueAndValidity()
+				break;
+			}
 		}
 	}
 
