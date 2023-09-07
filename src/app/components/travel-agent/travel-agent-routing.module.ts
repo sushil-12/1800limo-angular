@@ -11,13 +11,19 @@ import { InvoiceDashSummaryComponent } from './invoice-dash-summary/invoice-dash
 import { StripeFormComponent } from './stripe-form/stripe-form.component';
 const routes: Routes = [
   {
+		path: '',
+		redirectTo: '/home',
+		pathMatch: 'full'
+	},
+  {
     path:'bookings',
     component:BookingComponent,
     canActivate: [CheckProfileCompleteGuard],
   },
   {
     path:'profile',
-    component:ProfileComponent
+    component:ProfileComponent,
+    canActivate: [CheckProfileCompleteGuard]
   },
   {
     path:'create-booking',

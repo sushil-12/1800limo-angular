@@ -19,7 +19,7 @@ export class TravelAgentService {
       return loggedInUserData?.is_profile_complete
     }
     else{
-      return true
+      return false
     }
   }
 
@@ -99,7 +99,7 @@ export class TravelAgentService {
 	}
 
   travelAgentNotification(data) {
-		return this.httpClient.post(this.serverUrl + 'admin-notification-daily-booking', data);
+		return this.httpClient.post(this.serverUrl + 'notification-daily-booking', data);
 	}
   
 }
