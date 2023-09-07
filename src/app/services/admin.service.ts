@@ -1120,9 +1120,14 @@ export class AdminService {
 		return this.httpClient.post(`${this.serverUrl}admin/create-role`,data)
 	}
 
-	//list of emails of affilate accounts
+	//list of affilate accounts
 	getEmailList(){
 		return this.httpClient.get(`${this.serverUrl}affiliate-accountss/emails`)
+	}
+
+	//send email
+	sendEmailAffiliate(body:any){
+		return this.httpClient.post(`${this.serverUrl}send-email-data-to-users`,body)
 	}
 
 

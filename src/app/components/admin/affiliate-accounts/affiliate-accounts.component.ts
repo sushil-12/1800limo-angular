@@ -6,6 +6,7 @@ import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { ThemePalette } from '@angular/material/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 declare var $: any;
 
 @Component({
@@ -63,6 +64,7 @@ export class AffiliateAccountsComponent implements OnInit {
 		private router: Router,
 		private $form: FormBuilder,
 		private spinner: NgxSpinnerService,
+		private $errors: ErrorDialogService,
 		private formBuilder: FormBuilder,
 		private activatedRoute: ActivatedRoute) { }
 
@@ -80,7 +82,6 @@ export class AffiliateAccountsComponent implements OnInit {
 			acc_id: ['', Validators.required],
 			reject_cause: ['', Validators.required],
 		});
-		console.log("emailssss------->",this.affiliate_accounts_emails)
 
 		this.adminService.getEmailList()
 			.pipe(
@@ -89,10 +90,7 @@ export class AffiliateAccountsComponent implements OnInit {
 				})
 			)
 			.subscribe(({ data, success, message }: any) => {
-				
 					this.affiliate_accounts_emails = data
-					console.log("emailssss------->",this.affiliate_accounts_emails)
-				
 			});
 
 			
@@ -381,20 +379,23 @@ export class AffiliateAccountsComponent implements OnInit {
 
 	//submit email modal
 	sendEmail() {
-		// this.spinner.show()
-		// let body = {
-			
-		// }
-		// console.log('in function payment', body)
-		// this.adminService.chargeByCard(body).subscribe((response: any) => {
-		// 	// this.$errors.openDialog({
-		// 	// 	errors: {
-		// 	// 		error: `<span class='text-success'>${response.message}</span>`
-		// 	// 	}
-		// 	// })
-		// 	this.spinner.hide()
-		// })
-		console.log("in modal send email form submiut",this.emails.value)
+		this.spinner.show()
+		let body = {
+			subject: this.sendEmailForm.get('subject').value,
+			message: this.sendEmailForm.get('text_message').value,
+			recipents: this.emails.value
+		}
+		console.log("body-------->",body)
+		this.adminService.sendEmailAffiliate(body).subscribe((response: any) => {
+			this.$errors.openDialog({
+			  errors: {
+				error: `<span class='text-success'>${response.message}</span>`
+			  }
+			})
+			this.spinner.hide()
+			console.log("response-------->",response)
+		  })
+		
 		this.show = false
 		this.sendEmailForm.patchValue({
 			subject: "",
