@@ -5,7 +5,7 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { ThemePalette } from '@angular/material/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 declare var $: any;
 
 @Component({
@@ -14,13 +14,15 @@ declare var $: any;
 	styleUrls: ['./affiliate-accounts.component.scss']
 })
 export class AffiliateAccountsComponent implements OnInit {
-
+	emails = new FormControl('');
+    emailList: string[] = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato'];
 	color: ThemePalette = 'primary';
 	checked = false;
 	disabled = false;
-
+	show: boolean;
 	public paramResponse: any;
 	public affiliate_accounts: any;
+	public affiliate_accounts_emails:any=[];
 	public affiliateType: string;
 	public heading: string;
 	public addButton: string;
@@ -28,11 +30,11 @@ export class AffiliateAccountsComponent implements OnInit {
 	public submitted: boolean = false;
 	public lastPartUrl: any;
 	public rejectCauseForm: FormGroup;
-
+	sendEmailForm: FormGroup;
 	public firstPage: Number;
 	public lastPage: Number;
 	public totalPage: Number;
-	public currentPage: Number;
+	public currentPage: any;
 	public from: Number;
 	public to: Number;
 	public path: string;
@@ -59,11 +61,14 @@ export class AffiliateAccountsComponent implements OnInit {
 	constructor(
 		private adminService: AdminService,
 		private router: Router,
+		private $form: FormBuilder,
 		private spinner: NgxSpinnerService,
 		private formBuilder: FormBuilder,
 		private activatedRoute: ActivatedRoute) { }
 
 	ngOnInit(): void {
+
+		this.buildSendEmailForm();
 		this.operatorSelect = 'all';
 		this.filter_type = 'all'
 		this.searchText = localStorage.getItem('affiliateSearch') ? localStorage.getItem('affiliateSearch') : ''
@@ -75,7 +80,25 @@ export class AffiliateAccountsComponent implements OnInit {
 			acc_id: ['', Validators.required],
 			reject_cause: ['', Validators.required],
 		});
+		console.log("emailssss------->",this.affiliate_accounts_emails)
+
+		this.adminService.getEmailList()
+			.pipe(
+				catchError(err => {
+					return throwError(err);
+				})
+			)
+			.subscribe(({ data, success, message }: any) => {
+				
+					this.affiliate_accounts_emails = data
+					console.log("emailssss------->",this.affiliate_accounts_emails)
+				
+			});
+
+			
+
 	}
+
 
 	affiliateTypeSwitch(_affiliateType: string) {
 		switch (_affiliateType) {
@@ -333,4 +356,52 @@ export class AffiliateAccountsComponent implements OnInit {
 			})
 		}
 	}
+
+	get Form() {
+		return this.sendEmailForm.controls;
+	}
+
+	//build email modal
+	buildSendEmailForm() {
+		this.sendEmailForm = this.$form.group({
+			subject: [''],
+			text_message: ['']
+		})
+	}
+
+	//close email modal
+	closeModal() {
+		this.sendEmailForm.patchValue({
+			amount: 0,
+			payment_description: ''
+		})
+		this.show = false
+		$("#sendEmailModal").modal("hide");
+	}
+
+	//submit email modal
+	sendEmail() {
+		// this.spinner.show()
+		// let body = {
+			
+		// }
+		// console.log('in function payment', body)
+		// this.adminService.chargeByCard(body).subscribe((response: any) => {
+		// 	// this.$errors.openDialog({
+		// 	// 	errors: {
+		// 	// 		error: `<span class='text-success'>${response.message}</span>`
+		// 	// 	}
+		// 	// })
+		// 	this.spinner.hide()
+		// })
+		console.log("in modal send email form submiut",this.emails.value)
+		this.show = false
+		this.sendEmailForm.patchValue({
+			subject: "",
+			text_message: ''
+		})
+		this.emails = new FormControl('')
+		$("#sendEmailModal").modal("hide");
+	}
+
 }
