@@ -48,6 +48,11 @@ const routes: Routes = [
     path:'stripe-form',
     component:StripeFormComponent,
     canActivate: [CheckProfileCompleteGuard],
+  },
+  {
+    path:'new-booking',
+    component:CreateBookingComponent,
+    canActivate: [CheckProfileCompleteGuard],
   }
  
 ];
