@@ -19,6 +19,7 @@ declare var $: any;
 })
 export class BookingComponent implements OnInit {
 	@ViewChild('inputmsg', { static: false }) message: ElementRef;
+	@ViewChild('sendEmailModalFocus') sendEmailModalFocus: any;
 	exampleHeader = DatePickerComponent
 
 	color: ThemePalette = 'primary';
@@ -212,7 +213,7 @@ export class BookingComponent implements OnInit {
 	showBookingPreviewModal(booking_id: number) {
 		console.log("hii im here")
 		this.spinner.show()
-		this.affiliateService.getBookingPreview(booking_id)
+		this.travelAgentService.getBookingPreview(booking_id)
 			.pipe(
 				catchError((err) => {
 					this.spinner.hide(); //hide spinner
@@ -287,7 +288,7 @@ export class BookingComponent implements OnInit {
 			sendContent: message,
 		};
 		console.log('submit modal values---->>', obj)
-		this.affiliateService.affiliateNotification(obj)
+		this.travelAgentService.travelAgentNotification(obj)
 			.pipe(
 				catchError((err: any) => {
 					console.log('err------->>>>>>>', err)
@@ -375,6 +376,15 @@ export class BookingComponent implements OnInit {
 
 	show = false
 	openModal(booking: any, selection_button: string) {
+		try {
+			setTimeout(()=>{
+				// $('textarea').attr('autofocus', 'autofocus');
+				this.sendEmailModalFocus.nativeElement.querySelector('textarea').focus();
+			},1000)
+		} catch (error) {
+		console.log('----------error------->>>>>> ' ,error )
+			
+		}
 		console.log('open modal-->>>>>>>', booking, selection_button)
 		this.passengerDetails = booking;
 		this.passengerDetails['selection_button'] = selection_button
@@ -422,15 +432,14 @@ export class BookingComponent implements OnInit {
 	// }
 
 
-
 	editAction(bookingId, updateType) {
-		if (updateType == 'change') {
-			this.router.navigate(['/affiliate/new-booking'], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'true' } });
-		}
-		else {
-			this.router.navigate(['/affiliate/new-booking'], { queryParams: { bookingId: bookingId, nav: 'true' } });
-		}
-	}
+        if (updateType == 'change') {
+            this.router.navigate(['/travel_agent/new-booking'], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'true' } });
+        }
+        else {
+            this.router.navigate(['/travel_agent/new-booking'], { queryParams: { bookingId: bookingId, nav: 'true' } });
+        }
+    }
 
 	finalizeAction(bookingId) {
 		this.router.navigate(['/affiliate/finalize-booking'], { queryParams: { bookingId: bookingId } });
@@ -543,7 +552,7 @@ export class BookingComponent implements OnInit {
 		let isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 		console.log('isSafari', isSafari)
 		// this.spinner.show()
-		this.affiliateService.getLocationPoints(booking_id).subscribe((response: any) => {
+		this.travelAgentService.getLocationPoints(booking_id).subscribe((response: any) => {
 			this.spinner.hide();
 			if ("lat" in response?.data?.pickupDetail && "long" in response?.data?.pickupDetail && "lat" in response?.data?.dropoffDetail && "long" in response?.data?.dropoffDetail) {
 				sessionStorage.setItem('pickup', JSON.stringify(response?.data?.pickupDetail.address));

@@ -87,5 +87,19 @@ export class TravelAgentService {
   auditTrailInfoInvoice(bookingId) {
 		return this.httpClient.get(this.serverUrl + `booking-audit-records/${bookingId}/invoice`)
 	}
+
+  //get location map
+  getLocationPoints(booking_id: number) {
+		return this.httpClient.get(`${this.serverUrl}booking-location/${booking_id}`)
+	}
+
+  //get details of the booking
+  getBookingPreview(reservation_id: number) {
+		return this.httpClient.get(`${this.serverUrl}get-booking-preview/${reservation_id}`);
+	}
+
+  travelAgentNotification(data) {
+		return this.httpClient.post(this.serverUrl + 'admin-notification-daily-booking', data);
+	}
   
 }
