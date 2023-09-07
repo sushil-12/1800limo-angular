@@ -103,7 +103,7 @@
                     <th>Pax Info</th>
                     <th>Driver Info</th>
                     <th>Vehicle Type</th>
-                    <th>Account Info</th>
+                    <!-- <th>Account Info</th> -->
                   </tr>
                 </thead>
                 <tbody class="invoiceTbody" *ngFor="let invoice of invoices">
@@ -132,7 +132,7 @@
                     </td>
                     <td>
                       <div [className]="'badge badge-pill booking_status cursor-pointer ' + invoice?.status">
-                        {{invoice?.status |titlecase}}
+                        {{textFormatter(invoice?.status) |titlecase}}
                       </div>
                     </td>
                     <td class="text-center font-weight-bolder cursor-pointer text-underline">
@@ -161,7 +161,7 @@
                     </td>
 
                     <td><span [innerHTML]="highlighText(invoice.aff_vehicle_type)"></span></td>
-                    <td>
+                    <!-- <td>
                       <p style="white-space: pre">
                         <span [innerHTML]="highlighText(invoice?.account_first_name)"></span>&nbsp;
                         <span [innerHTML]="highlighText(invoice?.account_last_name)"></span>
@@ -169,7 +169,7 @@
                       <span class="text-underline cursor-pointer">
                         <span [innerHTML]="highlighText(invoice?.account_email)"></span>
                       </span>
-                    </td>
+                    </td> -->
                   </tr>
                 </tbody>
               </table>

@@ -16,6 +16,11 @@ export class CheckProfileCompleteGuard implements CanActivate {
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot) {
+      const currentUser:any= JSON.parse(localStorage.getItem('userData'))
+      if(currentUser?.RoleName != 'travel_agent'){
+      this.router.navigate(['/home']);
+        return false;
+      }
     if (this.authService.checkIsProfileCompleted()) {
       console.log("in if travel agenr",this.authService.checkIsProfileCompleted())
         return true;

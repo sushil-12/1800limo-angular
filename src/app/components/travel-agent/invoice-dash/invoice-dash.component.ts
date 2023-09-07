@@ -98,6 +98,16 @@ export class InvoiceDashComponent implements OnInit {
 		this.adminService.setCookie(key, value, 30);
 	}
 
+  textFormatter(text: string) {
+		try {
+			return text.replace(/[\\\_$]+/g, ' ')
+		}
+		catch
+		{
+			return text
+		}
+	}
+
   //view invoice summary
   clicViewInvoice(bookingId)
   {
