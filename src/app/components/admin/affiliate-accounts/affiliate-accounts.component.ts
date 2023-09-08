@@ -370,8 +370,8 @@ export class AffiliateAccountsComponent implements OnInit {
 	//close email modal
 	closeModal() {
 		this.sendEmailForm.patchValue({
-			amount: 0,
-			payment_description: ''
+			subject: "",
+			text_message: ''
 		})
 		this.show = false
 		$("#sendEmailModal").modal("hide");
@@ -401,7 +401,7 @@ export class AffiliateAccountsComponent implements OnInit {
 			subject: "",
 			text_message: ''
 		})
-		this.emails = new FormControl('')
+		this.emails.setValue('');
 		$("#sendEmailModal").modal("hide");
 	}
 

@@ -262,7 +262,7 @@ export class LoginComponent implements OnInit, AfterViewInit
 					this.router.navigateByUrl('/otp' + `?otp=${result.data.otp}?email=${email}`);
 				} else
 				{
-					this.router.navigateByUrl('/otp'+`?email=${email}`);
+					this.router.navigateByUrl('/otp');
 				}
 			});
 	}

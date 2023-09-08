@@ -8,3 +8,45 @@
 	border: solid 3px;
     border-radius: 4px;
 }
+
+
+
+.btnclass
+{
+    margin-top: 25px;
+    height: 60px;
+    width: 100%;
+}
+.mat-form-field-hide-placeholder{
+	border: solid 3px;
+    border-radius: 4px;
+}
+ .mat-form-field-appearance-outline .mat-form-field-label {
+    top: 1.3675em !important;
+}
+
+table {
+	width: 100;
+	white-space: break-spaces;
+	padding: 10px;
+	min-width: 5rem;
+
+	thead th {
+		color: #000000;
+		font-weight: 600;
+	}
+
+	tbody td>p {
+		margin: 0;
+	}
+}
+
+a:hover {
+	text-decoration: none;
+	color: unset !important;
+}
+
+.dropdown-item{
+	padding: 0.7rem 1.8rem !important;
+	font-size: 16px;
+}
