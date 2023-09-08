@@ -101,5 +101,9 @@ export class TravelAgentService {
   travelAgentNotification(data) {
 		return this.httpClient.post(this.serverUrl + 'notification-daily-booking', data);
 	}
+
+  getBookingDataForEdit(id,updateType){
+		return this.httpClient.get(this.serverUrl + `get-reservation/${id}/${updateType}`);
+  }
   
 }
