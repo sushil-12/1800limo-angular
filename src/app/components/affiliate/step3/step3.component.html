@@ -30,8 +30,7 @@
 				</div>
 				<div class="col-md-6">
 					<mat-form-field appearance="outline" class="mat-custom-phone topLabelClass">
-						<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass" 
-						>Agency / Insurance
+						<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Agency / Insurance
 							Telephone # <span class="asterisk">*</span></label>
 						<input matInput placeholder="1234567890" (focus)="$event.target.select()"
 							formControlName="AgentTelephone" ng2TelInput
@@ -311,7 +310,7 @@
 
 							<div> <a href="https://1800limo.co/" class="text-dark"> 1-800-LIMO.COM</a><br>
 								4217 Oak Ave<br>
-								Brookfiekd, IL 60513</div>
+								Brookfield, IL 60513</div>
 						</label>
 
 					</h3>
@@ -329,8 +328,8 @@
 								<ul class="mt-3 ng-star-inserted">
 									<li>
 										<a class="custom-arrow-clockwise-button"
-										(click)="fetchImageBlob(insCertificateImage ,'insCertificate',insCertificateId)">
-										 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+											(click)="fetchImageBlob(insCertificateImage ,'insCertificate',insCertificateId)">
+											<i class="bi bi-arrow-clockwise"></i>rotate</a>
 									</li>
 									<li>
 										<button class="changeuploaded" tabindex="1">
@@ -420,8 +419,8 @@
 								<ul class="mt-3">
 									<li>
 										<a class="custom-arrow-clockwise-button"
-										(click)="fetchImageBlob(insuranceCardImage ,'insuranceCard',insuranceCardId)">
-										 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+											(click)="fetchImageBlob(insuranceCardImage ,'insuranceCard',insuranceCardId)">
+											<i class="bi bi-arrow-clockwise"></i>rotate</a>
 									</li>
 									<li>
 										<button class="changeuploaded" tabindex="1">
@@ -502,27 +501,27 @@
 		</div>
 	</section>
 
-<div class="container">
-	<div class="row py-4">
-		<div class="col-md-7">
-			<button class="custom-filled-back-button m-2 mx-4" routerLink="/affiliate/step2">
-				BACK
-			</button>
-		</div>
-		<div class="col-md-5">
-			<div class="d-flex justify-content-center">
-				<button class="custom-filled-reset-button mr-3 m-2" (click)="resetForm()" tabIndex="2">
-					RESET
+	<div class="container">
+		<div class="row py-4">
+			<div class="col-md-7">
+				<button class="custom-filled-back-button m-2 mx-4" routerLink="/affiliate/step2">
+					BACK
 				</button>
-				<button  type="submit" class="custom-filled-button m-2" (click)="submitForm()" tabIndex="1">
-					SAVE
-				</button>
+			</div>
+			<div class="col-md-5">
+				<div class="d-flex justify-content-center">
+					<button class="custom-filled-reset-button mr-3 m-2" (click)="resetForm()" tabIndex="2">
+						RESET
+					</button>
+					<button type="submit" class="custom-filled-button m-2" (click)="submitForm()" tabIndex="1">
+						SAVE
+					</button>
+				</div>
 			</div>
 		</div>
 	</div>
-		</div>
 </form>
-		
+
 
 
 
