@@ -215,7 +215,8 @@
 									</td>
 									<td class="text-center font-weight-bolder cursor-pointer">
 										<p class="booking-id-font font-weight-bolder cursor-pointer">
-											<span class="currency">$</span><span [innerHTML]="highlighText(booking.grand_total)"></span>
+											<span class="currency">$</span><span
+												[innerHTML]="highlighText(booking.grand_total)"></span>
 										</p>
 									</td>
 									<td>
@@ -871,7 +872,7 @@
 						<hr>
 					</ng-template>
 					<!-- Grand Total -->
-					<h4 class="font-weight-bolder m-0">
+					<h4 class=" m-0">
 						Vehicle Preferences
 					</h4>
 					<div class="row p-2">
@@ -998,7 +999,7 @@
 							</span>
 						</div>
 					</div>
-					
+
 					<!-- <h4 class="font-weight m-0 mt-3" *ngIf="this.bookingPreview?.payment_status=='unpaid'">
 						Rates distribution
 					</h4>
@@ -1523,7 +1524,8 @@
 					<hr>
 
 					<!-- Rate Distribution Information -->
-					<div class="distribution_rate" *ngIf="bookingPreview.affiliate_type === 'affiliate' && bookingPreview.payment_status=='unpaid'">
+					<div class="distribution_rate"
+						*ngIf="bookingPreview.affiliate_type === 'affiliate' && bookingPreview.payment_status=='unpaid'">
 						<h4 class="font-weight-bolder m-0 my-3">
 							Rates Distribution {{bookingPreview.loose_affiliate}}
 						</h4>
@@ -1548,7 +1550,7 @@
 							<div class="row m-0">
 								<div class="col-md-4 key d-flex align-items-center">
 									<span class="">
-										Admin Share 
+										Admin Share
 									</span>
 								</div>
 								<div class="col-md-8 value preview-airport-color">
@@ -1601,7 +1603,7 @@
 									<span class="font-weight-bolder preview-output-feild">
 										${{rates_preview?.stripe_fees.toFixed(2)}}
 									</span>
-									(Platform fee 2.9%  + 30 cents - <b>Paid from Admin share</b>)
+									(Platform fee 2.9% + 30 cents - <b>Paid from Admin share</b>)
 								</div>
 							</div>
 						</div>
@@ -1614,7 +1616,7 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										${{(rates_preview?.total_price - rates_preview?.stripe_fees).toFixed(2)}} 
+										${{(rates_preview?.total_price - rates_preview?.stripe_fees).toFixed(2)}}
 									</span>
 									(Excluding platform fee)
 								</div>
@@ -1632,7 +1634,7 @@
 									<span class="font-weight-bolder preview-output-feild">
 										${{rates_preview?.affiliate_share.toFixed(2)}}
 									</span>
-									( Total Price - (Ride Base Rate + Other Taxes) ) 
+									( Total Price - (Ride Base Rate + Other Taxes) )
 								</div>
 							</div>
 						</div>

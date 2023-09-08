@@ -315,9 +315,9 @@ export class AffiliateService
 	}
 
 	//Vehicles 
-	async affiliateVehicleList()
+	async affiliateVehicleList(show_all_vehicles)
 	{
-		const result = await this.httpClient.get(this.serverUrl + 'get-affiliate-vehicles').toPromise();
+		const result = await this.httpClient.get(this.serverUrl + `get-affiliate-vehicles?show_all_vehicles=${show_all_vehicles}`).toPromise();
 		return result;
 	}
 	async getVehicleDataByAffiliateId(affiliate_id){

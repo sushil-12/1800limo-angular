@@ -10,7 +10,7 @@
 </ngx-spinner>
 <ngx-spinner name="normalspinner"></ngx-spinner>
 <div class="d-flex justify-content-end mr-3 " *ngIf="updateType=='edit'">
-    <h3 class="m-0">  <span class="badge badge-secondary">Booking #{{booking_id}}</span></h3>
+	<h3 class="m-0"> <span class="badge badge-secondary">Booking #{{booking_id}}</span></h3>
 </div>
 
 
@@ -19,7 +19,7 @@
 		<!-- Section - Booking Type -->
 		<div class="section-container mt-0">
 			<h2 class="border-secondary">
-				Booking Type 
+				Booking Type
 			</h2>
 			<div class="row px-4">
 				<!-- Service Type -->
@@ -654,7 +654,7 @@
 			</ng-template>
 
 
-			
+
 		</div>
 		<!-- Client Accounts Section Ends -->
 		<div class="section-container mt-2">
@@ -724,8 +724,7 @@
 						<div class="error-box">
 							<div class="error-message"
 								*ngIf="Form.passenger_cell.invalid && (Form.passenger_cell.touched || Form.passenger_cell.dirty)">
-								<p class="text-danger text-lg m-0"
-									*ngIf="Form.passenger_cell.errors?.required">
+								<p class="text-danger text-lg m-0" *ngIf="Form.passenger_cell.errors?.required">
 									This field is required
 								</p>
 								<p class="text-danger text-lg m-0"
@@ -1188,7 +1187,7 @@
 					</div>
 
 					<!-- Number of Seats -->
-					<div class="col-md-3 margin-mat-field" >
+					<div class="col-md-3 margin-mat-field">
 						<mat-form-field appearance="outline" class="vehicleLable m-0">
 							<mat-label>
 								Number of Seats
@@ -1363,8 +1362,8 @@
 
 				</div>
 			</div>
-			</div>
-			<div class="section-container mt-2">
+		</div>
+		<div class="section-container mt-2">
 			<!-- Affiliate Driver Information Ends -->
 
 			<!-- Section Booking details start -->
@@ -1593,7 +1592,8 @@
 
 					<!-- Flight Number -->
 					<div class="col-md-6 col-lg-3">
-						<mat-form-field appearance="outline" class="vehicleLable mt-0" style="margin-top: 0px !important;">
+						<mat-form-field appearance="outline" class="vehicleLable mt-0"
+							style="margin-top: 0px !important;">
 							<mat-label>
 								Flight Number
 							</mat-label>
@@ -1604,7 +1604,8 @@
 
 					<!-- Origin Airport / City -->
 					<div class="col-md-6 col-lg-3">
-						<mat-form-field appearance="outline" class="vehicleLable mt-0" style="margin-top: 0px !important;">
+						<mat-form-field appearance="outline" class="vehicleLable mt-0"
+							style="margin-top: 0px !important;">
 							<mat-label>
 								Origin Airport / City
 							</mat-label>
@@ -1747,7 +1748,8 @@
 
 					<!-- Flight Number -->
 					<div class="col-md-5 col-lg-3">
-						<mat-form-field appearance="outline" class="vehicleLable mt-0" style="margin-top: 0px !important;">
+						<mat-form-field appearance="outline" class="vehicleLable mt-0"
+							style="margin-top: 0px !important;">
 							<mat-label>
 								Flight Number
 							</mat-label>
@@ -1804,8 +1806,8 @@
 					<mat-label>
 						Special Instructions
 					</mat-label>
-					<textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" formControlName="booking_instructions"
-						(focus)="$event.target.select()" rows="5"></textarea>
+					<textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+						formControlName="booking_instructions" (focus)="$event.target.select()" rows="5"></textarea>
 				</mat-form-field>
 			</div>
 			<div class="row m-2">
@@ -2126,7 +2128,7 @@
 		<!-- Section - Return Journey Details -->
 		<div class="section-container" *ngIf="Form.service_type.value == 'round_trip'">
 			<h2>
-				Return Booking  
+				Return Booking
 			</h2>
 			<div class="row px-4" *ngIf="Form.updateType.value != 'edit'">
 				<!-- Service Type -->
@@ -2334,7 +2336,8 @@
 
 					<!-- Flight Number -->
 					<div class="col-md-6 col-lg-3">
-						<mat-form-field appearance="outline" class="vehicleLable mt-0" style="margin-top: 0px !important;">
+						<mat-form-field appearance="outline" class="vehicleLable mt-0"
+							style="margin-top: 0px !important;">
 							<mat-label>
 								Flight Number
 							</mat-label>
@@ -2478,7 +2481,8 @@
 
 					<!-- Flight Number -->
 					<div class="col-md-5 col-lg-3">
-						<mat-form-field appearance="outline" class="vehicleLable mt-0" style="margin-top: 0px !important;">
+						<mat-form-field appearance="outline" class="vehicleLable mt-0"
+							style="margin-top: 0px !important;">
 							<mat-label>
 								Flight Number
 							</mat-label>
@@ -2635,15 +2639,18 @@
 
 
 
-<div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="paymentModal" aria-hidden="true">
+<div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="paymentModal"
+	aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content">
 			<div class="modal-header pb-0 d-flex justify-content-center">
 				<h6 class="mb-0 ">{{confirmMsg}}</h6>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="custom-btn resetbutton" data-dismiss="modal" (click)="navigateToDailyBooking()">Cancel</button>
-				<button type="button" class="custom-btn savebutton" data-dismiss="modal" (click)="proceed=false;submitForm(true)">
+				<button type="button" class="custom-btn resetbutton" data-dismiss="modal"
+					(click)="navigateToDailyBooking()">Cancel</button>
+				<button type="button" class="custom-btn savebutton" data-dismiss="modal"
+					(click)="proceed=false;submitForm(true)">
 					Confirm</button>
 			</div>
 		</div>
@@ -2672,7 +2679,7 @@
 			<div class="modal-body" style="font-family: 'PT Serif', serif;">
 				<div class="container text-lg">
 					<!-- Rates/Taxes -->
-					<h4 class="font-weight-bolder m-0 mt-3" >
+					<h4 class="font-weight-bolder m-0 mt-3">
 						Rates/Taxes
 					</h4>
 					<div class="mx-2" *ngIf=" RatesForm">
@@ -2690,8 +2697,7 @@
 						</div>
 					</div>
 					<!-- && Form.affiliate_type.value!='affiliate' -->
-					<div class="mx-2"
-						*ngIf="ReturnRatesForm && init_return_rates ">
+					<div class="mx-2" *ngIf="ReturnRatesForm && init_return_rates ">
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
@@ -2793,7 +2799,7 @@
 							</span>
 						</div>
 					</div>
-					<div class="row p-2" >
+					<div class="row p-2">
 						<div class="col-md-4 key">
 							<span>
 								Licence plate
@@ -3297,9 +3303,9 @@
 								<span class="font-weight-bolder preview-airport-color">
 									{{ textFormatter(Form.pickup_airport_name.value) }}
 								</span>
-								<span class="font-weight-bolder preview-airport-color" 
-								(click)="showLocationPointOnMap(Form.pickup_airport_name.value)"><i
-									class="bi bi-geo-alt-fill"></i></span>
+								<span class="font-weight-bolder preview-airport-color"
+									(click)="showLocationPointOnMap(Form.pickup_airport_name.value)"><i
+										class="bi bi-geo-alt-fill"></i></span>
 							</div>
 						</div>
 						<!-- Airport -->
@@ -3442,8 +3448,8 @@
 									{{ textFormatter(Form.dropoff_airport_name.value ) }}
 								</span>
 								<span class="font-weight-bolder"
-								 (click)="showLocationPointOnMap(Form.dropoff_airport_name.value)"><i
-									class="bi bi-geo-alt-fill"></i></span>
+									(click)="showLocationPointOnMap(Form.dropoff_airport_name.value)"><i
+										class="bi bi-geo-alt-fill"></i></span>
 							</div>
 						</div>
 						<!-- Airport -->
@@ -3606,8 +3612,8 @@
 										{{ textFormatter(Form.return_pickup_airport_name.value) }}
 									</span>
 									<span class="font-weight-bolder preview-airport-color"
-									(click)="showLocationPointOnMap(Form.return_pickup_airport_name.value)"><i
-										class="bi bi-geo-alt-fill"></i></span>
+										(click)="showLocationPointOnMap(Form.return_pickup_airport_name.value)"><i
+											class="bi bi-geo-alt-fill"></i></span>
 								</div>
 							</div>
 							<!-- Airline -->
@@ -3638,6 +3644,7 @@
 								</div>
 							</div>
 						</div>
+
 
 						<!-- Return > Pickup > Cruise Details -->
 						<div class="mx-2 preview-pickup-color"
@@ -3687,7 +3694,7 @@
 							</div>
 						</div>
 
-
+						<hr />
 						<!-- Return > Extra Stops -->
 						<div *ngIf="Form.return_extra_stops.value.length > 0" class="preview-extra-stop-color">
 							<h5 class="p-2 m-0 text-xl">
@@ -3711,7 +3718,7 @@
 							</div>
 						</div>
 
-						<hr style="width: 50%; margin: 1.6rem auto; border: 1.2px solid #aeaeae;" />
+						<hr />
 
 						<!-- ############## Dropoff #################### -->
 						<h5 class="px-2 m-1 text-xl preview-dropoff-color">
@@ -3751,8 +3758,8 @@
 										{{ textFormatter(Form.return_dropoff_airport_name.value) }}
 									</span>
 									<span class="font-weight-bolder preview-airport-color"
-									(click)="showLocationPointOnMap(Form.return_dropoff_airport_name.value)"><i
-										class="bi bi-geo-alt-fill"></i></span>
+										(click)="showLocationPointOnMap(Form.return_dropoff_airport_name.value)"><i
+											class="bi bi-geo-alt-fill"></i></span>
 								</div>
 							</div>
 
