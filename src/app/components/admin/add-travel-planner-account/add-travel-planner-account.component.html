@@ -269,7 +269,7 @@
 				<div class="row">
 					<div class="col-md-3 pr-0 borderright mobilePadding">
 						<div class="form-group radio-tile-group">
-							<div class="custom-radio input-container">
+							<div class="custom-radio input-container btn-shadow">
 								<input class="radio-button" id="personal" type="radio" name="card_type" checked=""
 									formControlName="card_type" value="personal" tabindex="-1">
 								<div class="radio-tile">
@@ -284,7 +284,7 @@
 					</div>
 					<div class="col-md-3 pl-0 mobilePadding">
 						<div class="form-group radio-tile-group">
-							<div class="custom-radio input-container">
+							<div class="custom-radio input-container btn-shadow">
 								<input class="radio-button" id="business" type="radio" name="card_type"
 									formControlName="card_type" value="business" tabindex="-1">
 								<div class="radio-tile">
@@ -377,8 +377,8 @@
 					</div>
 					<div class="col-md-4">
 						<mat-form-field appearance="outline">
-							<mat-label>CSC*</mat-label>
-							<input matInput placeholder="CSC" formControlName="cvc" tabindex="1">
+							<mat-label>CVV*</mat-label>
+							<input matInput placeholder="CVV" formControlName="cvc" tabindex="1">
 						</mat-form-field>
 						<div *ngIf="submittedForm && f.cvc.errors || f.cvc.touched && f.cvc.errors"
 							class="text-danger margin-bottom-thin my-mat-hint">

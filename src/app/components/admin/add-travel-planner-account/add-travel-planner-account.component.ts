@@ -74,28 +74,64 @@ export class AddTravelPlannerAccountComponent implements OnInit
 						return;
 					}
 					console.log(place);
-					//Fill one way form pickup address fields
 					this.addTravelPlannerAccountForm.patchValue({
 						latitude: place.geometry.location.lat(),
-						longitude: place.geometry.location.lng()
-					});
-					if (place.address_components[1])
-						this.addTravelPlannerAccountForm.patchValue({
-							city: place.address_components[1].long_name
-						});
-					if (place.address_components[2])
-						this.addTravelPlannerAccountForm.patchValue({
-							state: place.address_components[2].long_name
-						});
-					if (place.address_components[3])
-						this.addTravelPlannerAccountForm.patchValue({
-							country: place.address_components[3].long_name
-						});
-					if (place.address_components[4])
-						this.addTravelPlannerAccountForm.patchValue({
-							zipCode: place.address_components[place.address_components.length - 1].long_name
-						});
+						longitude: place.geometry.location.lng(),
+						address : place?.formatted_address
+					  });
+						for (var i = 0; i < place.address_components.length; i++) {
+						for (var j = 0; j < place.address_components[i].types.length; j++) {
+							if (place.address_components[i].types[j] == "country") {
+								this.addTravelPlannerAccountForm.patchValue({
+									country: place.address_components[i].long_name
+								});
+								// this.changeCountry(place.address_components[i].short_name)
+							}
+							else if (place.address_components[i].types[j] == "administrative_area_level_1") {
+								this.addTravelPlannerAccountForm.patchValue({
+									state: place.address_components[i].long_name
+								});
+							}
+							else if (place.address_components[i].types[j] == "administrative_area_level_3") {
+								this.addTravelPlannerAccountForm.patchValue({
+									city: place.address_components[i].long_name
+								});
+							}
+							else if (place.address_components[i].types[j] == "postal_code") {
+								this.addTravelPlannerAccountForm.patchValue({
+									zipCode: place.address_components[i].long_name
+								});
+							}
+							else if (place.address_components[i].types[j] == "street_number") {
+								this.addTravelPlannerAccountForm.patchValue({
+									street: place.address_components[i].long_name
+								});
+							}
+						}
+					}
+					//Fill one way form pickup address fields
+					// this.addTravelPlannerAccountForm.patchValue({
+					// 	latitude: place.geometry.location.lat(),
+					// 	longitude: place.geometry.location.lng()
+					// });
+					// if (place.address_components[1])
+					// 	this.addTravelPlannerAccountForm.patchValue({
+					// 		city: place.address_components[1].long_name
+					// 	});
+					// if (place.address_components[2])
+					// 	this.addTravelPlannerAccountForm.patchValue({
+					// 		state: place.address_components[2].long_name
+					// 	});
+					// if (place.address_components[3])
+					// 	this.addTravelPlannerAccountForm.patchValue({
+					// 		country: place.address_components[3].long_name
+					// 	});
+					// if (place.address_components[4])
+					// 	this.addTravelPlannerAccountForm.patchValue({
+					// 		zipCode: place.address_components[place.address_components.length - 1].long_name
+					// 	});
 				});
+				
 			});
 		});
 
