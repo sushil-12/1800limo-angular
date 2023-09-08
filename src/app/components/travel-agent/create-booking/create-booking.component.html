@@ -218,164 +218,38 @@
 			<h2 class=" border-secondary pb-4">
 				Affiliate Details
 			</h2>
-			<!-- Affiliate Type -->
-			<div class="row">
-				<div class="col-md-12 col-lg-10">
-					<mat-radio-group aria-label="Select an option" formControlName="affiliate_type">
-						<mat-radio-button [value]="aa" class="my-2 ml-4 mr-5 mx-md-4"
-							(click)="resetDriverAndVehicle(aa)" *ngFor="let aa of booking_params.affiliate_accounts">
-							{{ textFormatter(aa) | titlecase }}
-						</mat-radio-button>
-					</mat-radio-group>
-				</div>
-			</div>
-			<!-- Choose Affiliate -->
-			<!-- Only Visible in affiliate section -->
-			<div class="row px-4" *ngIf="Form.affiliate_type.value == 'affiliate'">
-				<div class="col-md-12">
-
-					<!-- Ng-Select -->
-					<ng-select appearance="outline" [items]="AffiliateAccounts" bindLabel="name" bindValue="id"
-						placeholder="Select Affiliate" dropdownPosition="bottom" [markFirst]="true"
-						[virtualScroll]="true" formControlName="affiliate_id">
-					</ng-select>
-				</div>
-			</div>
-
-			<!-- Vehicle ID -->
-			<div class="row" *ngIf="false">
-				<div id="vehicle_id" class="col-md-12" *ngIf="Form.affiliate_type.value !== 'loose_affiliate'">
-
-					<!-- Ng-Select - Vehicle ID -->
-					<ng-select appearance="outline" [items]="VehicleList" *ngIf="VehicleList.length > 1"
-						dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true" bindLabel="formatted_name"
-						bindValue="ID" placeholder="Select Vehicle" formControlName="vehicle_id">
-					</ng-select>
-				</div>
-			</div>
-			<!-- Visible in Affiliate as well as Loose Affiliate Section -->
-			<!-- Affiliate Vehicle Information -->
-			<div class="px-4 mt-4" *ngIf="Form.affiliate_type.value == 'affiliate'">
-				<h4>
-					Vehicle Preferences
-				</h4>
-				<div class="row">
-					<!-- Vehicle Type -->
-					<div id="vehicle-type"
-						[ngClass]="Form.vehicle_type.value && !Form.vehicle_make.value ? 'col-md-6 col-xl-4' : Form.vehicle_make.value ? 'col-md-4 col-xl-3' : 'col-md-12'">
-						<ng-select appearance="outline" [items]="vehicleType_arr" bindLabel="formatted_name"
-							bindValue="vehicleType_id" placeholder="Select Vehicle Type" dropdownPosition="bottom"
-							[markFirst]="true" [virtualScroll]="true" formControlName="vehicle_type"
-							(change)="handleChangeVehicleType($event)">
-						</ng-select>
-					</div>
-
-					<!-- Make -->
-					<div id="make" *ngIf="Form.vehicle_type.value" class="block-cursor"
-						[ngClass]="Form.vehicle_make.value ? 'col-md-4 col-xl-3' : 'col-md-6 col-xl-4'">
-						<ng-select appearance="outline" [items]="vehicleMake_arr" dropdownPosition="bottom"
-							[markFirst]="true" [virtualScroll]="true" bindLabel="make" bindValue="make_id"
-							placeholder="Select Make" formControlName="vehicle_make">
-						</ng-select>
-					</div>
-
-					<!-- Model -->
-					<div id="model" class="col-md-4 col-xl-3 block-cursor" *ngIf="Form.vehicle_make.value">
-						<ng-select appearance="outline" [items]="vehicleModal_arr" bindLabel="model"
-							bindValue="model_id" placeholder="Select Model" dropdownPosition="bottom" [markFirst]="true"
-							[virtualScroll]="true" formControlName="vehicle_model">
-						</ng-select>
-					</div>
-
-					<!-- Year -->
-					<div id="year" class="col-md-3 block-cursor">
-						<ng-select appearance="outline" [items]="vehicleYear_arr" bindLabel="year" bindValue="year_id"
-							placeholder="Select Year" dropdownPosition="bottom" [markFirst]="true"
-							[virtualScroll]="true" formControlName="vehicle_year">
-						</ng-select>
-					</div>
-
-					<!-- Color -->
-					<div id="color" class="col-md-3 block-cursor">
-						<ng-select appearance="outline" [items]="vehicleColor_arr" bindLabel="color"
-							bindValue="color_id" placeholder="Select Color" dropdownPosition="bottom" [markFirst]="true"
-							[virtualScroll]="true" formControlName="vehicle_color">
-						</ng-select>
-					</div>
-
-					<!-- License Plate -->
-					<div class="col-md-3 margin-mat-field">
-						<mat-form-field appearance="outline" class="vehicleLable mt-0">
-							<mat-label>
-								License Plate #
-							</mat-label>
-							<input type="text" matInput (focus)="$event.target.select()"
-								formControlName="vehicle_license_plate" placeholder="License Plate #">
-						</mat-form-field>
-						<div class="error-box">
-							<div class="error-message"
-								*ngIf="Form.vehicle_license_plate.invalid && (Form.vehicle_license_plate.touched || Form.vehicle_license_plate.dirty)">
-								<p class="text-danger text-lg m-0"
-									*ngIf="Form.vehicle_license_plate.errors?.whitespace">
-									Extra White Space are not Allowed
-								</p>
-							</div>
-						</div>
-					</div>
-
-					<!-- Number of Seats -->
-					<div class="col-md-3 margin-mat-field">
-						<mat-form-field appearance="outline" class="vehicleLable m-0">
-							<mat-label>
-								Number of Seats
-							</mat-label>
-							<input type="text" matInput formControlName="vehicle_seats" placeholder="Number of Seats"
-								(focus)="$event.target.select()" />
-						</mat-form-field>
-						<div class="error-box">
-							<div class="error-message"
-								*ngIf="Form.vehicle_seats.invalid && (Form.vehicle_seats.touched || Form.vehicle_seats.dirty)">
-								<p class="text-danger text-lg m-0" *ngIf="Form.vehicle_seats.errors?.pattern">
-									Only Numbers are Allowed
-								</p>
-							</div>
-						</div>
+			<div id="info-container" class="mx-auto">
+				<div id="info-display-box"
+					class="d-flex flex-wrap justify-content-center justify-content-md-start"
+					style="gap: 15px; padding: 0 15px;">
+					<div id="info" class="info mx-2"
+						*ngFor="let item of ['name', 'mobile', 'email', 'country', 'zip', 'address']">
+						<label class="text-lg m-0 mx-2">
+							{{ item | titlecase }}:
+						</label>
+						<label class="text-lg m-0 font-weight-bolder">
+							{{ item | titlecase }}
+						</label>
 					</div>
 				</div>
 			</div>
-			<!-- Affiliate Vehicle Information Ends -->
-			<!-- Visible in Affiliate as well as Loose Affiliate Section -->
+	
 			<!-- Affiliate Driver Information -->
-			<div class="px-4 my-4" *ngIf="Form.affiliate_type.value == 'loose_affiliate' || Form.affiliate_id.value">
+			<div class="px-4 my-4" >
 				<h4>
 					Driver Preferences
 				</h4>
 				<div class="row">
 					<!-- Affiliate Driver Name -->
-					<div id="driver" class="col-md-3" *ngIf="Form.affiliate_type.value != 'loose_affiliate'">
-						<mat-form-field appearance="outline" class="m-0">
-							<mat-label>
-								Choose Driver
-							</mat-label>
-							<mat-select formControlName="driver_id" placholder="Choose Driver"
-								(selectionChange)="autofillData('driver', $event.value)">
-								<mat-option *ngFor="let driver of DriverList" [value]="driver.id">
-									{{ driver.FirstName }} {{ driver.MiddleName != null ?
-									driver.MiddleName : ''
-									}} {{ driver.LastName }}
-								</mat-option>
-							</mat-select>
-						</mat-form-field>
-					</div>
 
 					<!-- Loose Affiliate Driver Name -->
-					<div id="driver-name" class="col-md-3" *ngIf="Form.affiliate_type.value == 'loose_affiliate'">
+					<div id="driver-name" class="col-md-3">
 						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>
 								Driver Name
 							</mat-label>
 							<input matInput formControlName="driver_name" type="text" placeholder="Driver Name"
-								(focus)="$event.target.select()" />
+								(focus)="$event.target.select()"/>
 						</mat-form-field>
 						<div class="error-box">
 							<div class="error-message"

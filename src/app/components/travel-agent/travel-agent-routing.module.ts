@@ -23,7 +23,7 @@ const routes: Routes = [
   {
     path:'profile',
     component:ProfileComponent,
-    canActivate: [CheckProfileCompleteGuard]
+    // canActivate: [CheckProfileCompleteGuard]
   },
   {
     path:'create-booking',
