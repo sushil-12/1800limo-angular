@@ -70,24 +70,39 @@ export class ProfileComponent implements OnInit {
           //Fill one way form pickup address fields
           this.profileForm.patchValue({
             latitude: place.geometry.location.lat(),
-            longitude: place.geometry.location.lng()
+            longitude: place.geometry.location.lng(),
+            address:place?.formatted_address
           });
-          if (place.address_components[1])
-            this.profileForm.patchValue({
-              city: place.address_components[1].long_name
-            });
-          if (place.address_components[2])
-            this.profileForm.patchValue({
-              state: place.address_components[2].long_name
-            });
-          if (place.address_components[3])
-            this.profileForm.patchValue({
-              country: place.address_components[3].long_name
-            });
-          if (place.address_components[4])
-            this.profileForm.patchValue({
-              zip: place.address_components[place.address_components.length - 1].long_name
-            });
+          for (var i = 0; i < place.address_components.length; i++) {
+						for (var j = 0; j < place.address_components[i].types.length; j++) {
+							if (place.address_components[i].types[j] == "country") {
+								this.profileForm.patchValue({
+									country: place.address_components[i].long_name
+								});
+								// this.changeCountry(place.address_components[i].short_name)
+							}
+							else if (place.address_components[i].types[j] == "administrative_area_level_1") {
+								this.profileForm.patchValue({
+									state: place.address_components[i].long_name
+								});
+							}
+							else if (place.address_components[i].types[j] == "administrative_area_level_3") {
+								this.profileForm.patchValue({
+									city: place.address_components[i].long_name
+								});
+							}
+							else if (place.address_components[i].types[j] == "postal_code") {
+								this.profileForm.patchValue({
+									zip: place.address_components[i].long_name
+								});
+							}
+							else if (place.address_components[i].types[j] == "street_number") {
+								this.profileForm.patchValue({
+									street: place.address_components[i].long_name
+								});
+							}
+						}
+					}
         });
       });
     });
@@ -182,7 +197,7 @@ export class ProfileComponent implements OnInit {
           mobileIsd: data?.mobileIsd || '+1',
           mobileCountry: data?.mobileCountry || 'us',
           email: data?.email,
-          address: data?.address,
+          address: data?.street,
           city: data?.city,
           state: data?.state,
           country: data?.country,
@@ -260,6 +275,13 @@ export class ProfileComponent implements OnInit {
     $("#imageModal").removeClass("d-none");
     // $("#imageModal").show();
   }
+  fillAddress(form_control: string, address: any) {
+		console.log('Address: ', address)
+		this.profileForm.patchValue({
+      address: address.formatted_address
+    })
+	}
+
   profile_pic_change(event) {
     console.log('in function upload profile pic')
     this.stateManagementService.setprogressBar(true);//show progressbar

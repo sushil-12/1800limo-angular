@@ -77,6 +77,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 	hours: number = 0;
 	newBooking: boolean = false;
 	is_readonly_min_rate: boolean = false;
+	bookingType: any = 'new';
 
 	constructor(
 		private $form: FormBuilder,
@@ -92,6 +93,9 @@ export class RatesFormComponent implements OnInit, OnChanges {
 			}
 			if (params && params.new == 'true') {
 				this.newBooking = params.new == 'true'
+			}
+			if (params && params.updateType) {
+				this.bookingType = params.updateType
 			}
 		})
 	}
@@ -429,7 +433,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 		this.ratesdata.next({})
 		console.log('<<<<<<<<<<<________ data to send fetchRatesArrayByAffiliateVehicle---------------->>>>>>>>>>>>>>',
 			data.vehicle_id)
-	if(data?.vehicle_id && data.distance){
+	if(data?.vehicle_id && data.distance && this.bookingType !='edit' ){
 		this.$api.fetchRatesByAffiliateVeh(data.vehicle_id, data).subscribe((response: any) => {
 			this.is_readonly_min_rate = response?.data?.min_rate_involved ? true : false
 			this.ratesdata.next(response?.data?.rateArray)

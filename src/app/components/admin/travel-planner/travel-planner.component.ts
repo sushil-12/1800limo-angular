@@ -65,7 +65,7 @@ export class TravelPlannerComponent implements OnInit {
       /** spinner starts on init */
       this.spinner.show();
 
-      var keyword = ((document.getElementById("keyword") as HTMLInputElement).value);
+      var keyword = this.searchText;
 
       // Load Our travelPlanners using API
       this.adminService.travelPlannerAccounts(pageUrl,keyword).then(result=>{
