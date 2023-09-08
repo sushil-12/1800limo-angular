@@ -30,6 +30,12 @@ const routes: Routes = [
     component:CreateBookingComponent,
     canActivate: [CheckProfileCompleteGuard],
   },
+
+  {
+    path:'create-new-booking',
+    component:CreateBookingComponent,
+    canActivate: [CheckProfileCompleteGuard],
+  },
   {
     path:'debit-cc-card',
     component:CardsComponent,

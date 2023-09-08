@@ -25,7 +25,7 @@ export class TravelPlannerComponent implements OnInit {
   public firstPage:Number;
   public lastPage:Number;
   public totalPage:Number;
-  public currentPage:Number;
+  public currentPage:any;
   public from:Number;
   public to:Number;
   public path:string;
@@ -33,6 +33,7 @@ export class TravelPlannerComponent implements OnInit {
   public lastPageUrl:string;
   public prevPageUrl:string;
   public nextPageUrl:string;
+  searchText: any;
 
   constructor(
     private adminService:AdminService,
@@ -40,8 +41,24 @@ export class TravelPlannerComponent implements OnInit {
     private spinner: NgxSpinnerService) { }
 
   ngOnInit(): void {
+		this.searchText = localStorage.getItem('TravelAgentSearch') ? localStorage.getItem('TravelAgentSearch') : '' 
       this.loadTravelPlanners();//load travelPlanners
   }
+
+	timer: any
+	handleSearchKeyword(text:any){
+		console.log('on change search text-->>' , text)
+		this.searchText = text
+		clearTimeout(this.timer);
+		this.timer = setTimeout(() => {
+			localStorage.setItem('TravelAgentSearch' , text)
+			this.loadTravelPlanners()
+		}, 700)
+	}
+	handleKeypressEvents() {
+		clearTimeout(this.timer)
+	}
+
 
   loadTravelPlanners(pageUrl=null)
   {
