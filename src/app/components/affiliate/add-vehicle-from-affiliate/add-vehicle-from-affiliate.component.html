@@ -45,7 +45,7 @@
 							</mat-option>
 						</mat-autocomplete>
 					</mat-form-field> -->
-					<ng-select appearance="outline" [items]="filteredVehicleTypes" dropdownPosition="bottom"
+					<ng-select appearance="outline" id="vehicle_type" [items]="filteredVehicleTypes" dropdownPosition="bottom"
 							[markFirst]="true" [virtualScroll]="true" bindLabel="name" bindValue="ID"
 							placeholder="Vehicle Type" formControlName="vehicleType" id="vehicleTypeField">
 						</ng-select>
