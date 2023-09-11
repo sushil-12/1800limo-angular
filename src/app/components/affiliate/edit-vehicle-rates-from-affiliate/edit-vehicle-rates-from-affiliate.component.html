@@ -24,7 +24,8 @@
 					</label>
 					<label class="alert alert-danger">We do not add 25% to tips, tax, tolls, or per diem
 					</label>
-					<label class="alert alert-danger mt-2">Raise or lower your rates in real time, depending on demand or season .
+					<label class="alert alert-danger mt-2">Raise or lower your rates in real time, depending on demand
+						or season .
 					</label>
 				</div>
 				<div class="col-md-12">
@@ -208,14 +209,14 @@
 				<!-- MIN. INTRACITY RATE -->
 				<div class="col-md-6">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
-						<mat-label>Minimum City to City Rate <span class="asterisk">*</span></mat-label>
+						<mat-label>Minimum City to Intercity rate <span class="asterisk">*</span></mat-label>
 						<span matPrefix
 							*ngIf="form.minimum_city_rate.value == null || form.minimum_city_rate.value == ''; else hideZero5">{{currencySymbol}}
 							0 &nbsp;</span>
 						<ng-template #hideZero5>
 							<span matPrefix>{{currencySymbol}} &nbsp;</span>
 						</ng-template>
-						<input matInput placeholder="Minimum City to City Rate" formControlName="minimum_city_rate"
+						<input matInput placeholder="Minimum City to Intercity rate" formControlName="minimum_city_rate"
 							(change)="updateRateRangeObject()" tabindex="1" />
 					</mat-form-field>
 					<div *ngIf="submittedForm && form.minimum_city_rate.errors || form.minimum_city_rate.touched && form.minimum_city_rate.errors"
@@ -606,7 +607,7 @@
 				<br><br><br><br><br>
 				<div class="col-md-6">
 					<div class="row">
-					
+
 						<div class="col-md-12 col-lg-6 cityTaxErrorMsg ">
 							<mat-form-field class="mat-form-field-rates" appearance="outline" class="cityTax">
 								<mat-label>City Tax</mat-label>
@@ -647,7 +648,7 @@
 				</div>
 				<div class="col-md-6">
 					<div class="row">
-					
+
 						<div class="col-md-12 col-lg-6 cityTaxErrorMsg">
 							<mat-form-field class="mat-form-field-rates" appearance="outline" class="cityTax">
 								<mat-label>State Tax</mat-label>
@@ -688,7 +689,7 @@
 				</div>
 				<div class="col-md-6">
 					<div class="row">
-						
+
 						<div class="col-md-12 col-lg-6 cityTaxErrorMsg">
 							<mat-form-field class="mat-form-field-rates" appearance="outline" class="cityTax">
 								<mat-label>VAT</mat-label>
@@ -728,7 +729,7 @@
 				</div>
 				<div class="col-md-6">
 					<div class="row">
-						
+
 						<div class="col-md-12 col-lg-6 cityTaxErrorMsg">
 							<mat-form-field class="mat-form-field-rates" appearance="outline" class="cityTax">
 								<mat-label>Workman's Comp</mat-label>
@@ -770,7 +771,7 @@
 				</div>
 				<div class="col-md-6">
 					<div class="row">
-					
+
 						<div class="col-md-12 col-lg-6 cityTaxErrorMsg">
 							<mat-form-field class="mat-form-field-rates" appearance="outline" class="cityTax">
 								<mat-label>Other Transportation Tax</mat-label>
@@ -816,7 +817,7 @@
 			</div>
 		</div>
 	</section>
-	
+
 	<section class="billing_inforamtion">
 		<ul>
 			<li><button class="custom-btn savebutton" (click)="submitForm()" [disabled]="disableSubmitButton"

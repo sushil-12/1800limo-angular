@@ -31,7 +31,8 @@
 				</div>
 				<div class="col-lg-6 col-md-12 mt-lg-0 mt-4">
 					<ol class="alert alert-box alert-danger">
-						<li>Enter an all-inclusive rate in each rate bucket with your desired gratuity and office fees.</li>
+						<li>Enter an all-inclusive rate in each rate bucket with your desired gratuity and office fees.
+						</li>
 						<li>Raise or lower your rates in real time depending on demand or season.</li>
 						<li>1-800-LIMO.COM auto adds a 25% customer convenience fee to your all-inclusive rates.</li>
 					</ol>
@@ -256,10 +257,10 @@
 			<div class="col-md-6">
 				<mat-form-field class="mat-form-field-rates" appearance="outline">
 					<mat-label>
-						Minimum City to City Rate <span class="asterisk">*</span>
+						Minimum City to Intercity rate <span class="asterisk">*</span>
 					</mat-label>
 					<span matPrefix>{{ currency_symbol }} &nbsp;</span>
-					<input type="number" matInput placeholder="Minimum City to City Rate"
+					<input type="number" matInput placeholder="Minimum City to Intercity rate"
 						formControlName="minimum_city_rate" tabindex="1" (change)="updateRateRangeObject()"
 						autocomplete="off" (focus)="$event.target.select()" />
 				</mat-form-field>
@@ -493,8 +494,8 @@
 				<mat-form-field class="mat-form-field-rates" appearance="outline">
 					<mat-label>Extra stop - same town</mat-label>
 					<span matPrefix>{{ currency_symbol }} &nbsp;</span>
-					<input matInput type="number" placeholder="Shared Ride Rate - Per Person" (change)="updateRateRangeObject()"
-						formControlName="in_town_extra_stop" tabindex="1">
+					<input matInput type="number" placeholder="Shared Ride Rate - Per Person"
+						(change)="updateRateRangeObject()" formControlName="in_town_extra_stop" tabindex="1">
 				</mat-form-field>
 				<div *ngIf="is_form_submitted && form.in_town_extra_stop.errors || form.in_town_extra_stop.touched && form.in_town_extra_stop.errors"
 					class="text-danger margin-bottom-thin my-mat-hint">
@@ -503,10 +504,10 @@
 			</div>
 			<div class="col-md-3">
 				<mat-form-field class="mat-form-field-rates" appearance="outline">
-					<mat-label>Extra stop - outside town</mat-label>
+					<mat-label>Extra stop - different town</mat-label>
 					<span matPrefix>{{ currency_symbol }} &nbsp;</span>
-					<input matInput type="number" placeholder="Shared Ride Rate - Per Person" (change)="updateRateRangeObject()"
-						formControlName="outside_town_extra_stop" tabindex="1">
+					<input matInput type="number" placeholder="Shared Ride Rate - Per Person"
+						(change)="updateRateRangeObject()" formControlName="outside_town_extra_stop" tabindex="1">
 				</mat-form-field>
 				<div *ngIf="is_form_submitted && form.outside_town_extra_stop.errors || form.outside_town_extra_stop.touched && form.outside_town_extra_stop.errors"
 					class="text-danger margin-bottom-thin my-mat-hint">
@@ -853,7 +854,7 @@
 				<!-- CITY TAX -->
 				<div class="col-md-6">
 					<div class="row">
-						
+
 						<div class="col-md-12 col-lg-6 cityTaxErrorMsg">
 							<mat-form-field class="mat-form-field-rates" appearance="outline" class="cityTax">
 								<mat-label>City Tax</mat-label>
@@ -893,7 +894,7 @@
 				<!-- State Tax -->
 				<div class="col-md-6">
 					<div class="row">
-						
+
 						<div class="col-md-12 col-lg-6 cityTaxErrorMsg">
 							<mat-form-field class="mat-form-field-rates" appearance="outline" class="cityTax">
 								<mat-label>State Tax</mat-label>
@@ -933,7 +934,7 @@
 				<!-- VAT -->
 				<div class="col-md-6">
 					<div class="row">
-						
+
 						<div class="col-md-12 col-lg-6 cityTaxErrorMsg">
 							<mat-form-field class="mat-form-field-rates" appearance="outline" class="cityTax">
 								<mat-label>VAT</mat-label>
@@ -971,7 +972,7 @@
 				<!-- WORKMAN'S COMPENSATION-->
 				<div class="col-md-6">
 					<div class="row">
-						
+
 						<div class="col-md-12 col-lg-6 cityTaxErrorMsg">
 							<mat-form-field class="mat-form-field-rates" appearance="outline" class="cityTax">
 								<mat-label>Workman's Comp</mat-label>
@@ -1011,7 +1012,7 @@
 				<!-- OTHER TRANSPORTATION TAX -->
 				<div class="col-md-6">
 					<div class="row">
-						
+
 						<div class="col-md-12 col-lg-6 cityTaxErrorMsg">
 							<mat-form-field class="mat-form-field-rates" appearance="outline" class="cityTax">
 								<mat-label>Other Transportation Tax</mat-label>
@@ -1074,9 +1075,6 @@
 				</div>
 			</div>
 		</div>
-			</div>
-	
+	</div>
+
 </form>
-
-
-
