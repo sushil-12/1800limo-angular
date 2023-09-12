@@ -1681,7 +1681,7 @@
 			<div *ngIf="searchSubstring(Form.transfer_type.value, '_airport')">
 				<div class="row px-2">
 					<!-- Airport -->
-					<div class="col-md-5 col-lg-3">
+					<div class="col-md-6">
 						<!-- <mat-form-field appearance="outline">
 							<mat-label>
 								Airport
@@ -1714,7 +1714,7 @@
 					</div>
 
 					<!-- Airline -->
-					<div class="col-md-5 col-lg-3">
+					<div class="col-md-6">
 						<!-- <mat-form-field appearance="outline">
 							<mat-label>
 								Airline
@@ -1746,7 +1746,7 @@
 					</div>
 
 					<!-- Flight Number -->
-					<div class="col-md-5 col-lg-3">
+					<div class="col-md-6">
 						<mat-form-field appearance="outline" class="vehicleLable mt-0" style="margin-top: 0px !important;">
 							<mat-label>
 								Flight Number
@@ -3379,8 +3379,9 @@
 							</div>
 						</div>
 					</div>
-					<hr>
 					<!-- Extra Stops -->
+					<hr *ngIf="Form.extra_stops.value.length > 0" />
+
 					<div *ngIf="Form.extra_stops.value.length > 0" class="preview-extra-stop-color">
 						<h5 class="p-2 m-0 text-xl">
 							Extra Stops
@@ -3400,10 +3401,11 @@
 											class="bi bi-geo-alt-fill"></i></span>
 								</div>
 							</div>
+							<hr>
 						</div>
 					</div>
 
-					<hr *ngIf="Form.extra_stops.value.length > 0" />
+					<hr *ngIf="Form.extra_stops.value.length == 0" />
 
 					<!-- ############# Dropoff ################# -->
 					<h5 class="px-2 m-1 text-xl preview-dropoff-color">
@@ -3527,8 +3529,9 @@
 
 
 					<!-- Return Information -->
+					<!-- style="width: 75%; margin: 1.6rem auto; border: 1.2px solid #000;" / -->
 					<div *ngIf="Form.service_type.value == 'round_trip'">
-						<hr style="width: 75%; margin: 1.6rem auto; border: 1.2px solid #000;" />
+						<hr>
 						<h4 class="font-weight-bolder">
 							Return Trip
 						</h4>
@@ -3686,8 +3689,7 @@
 								</div>
 							</div>
 						</div>
-
-
+					<hr *ngIf="Form.return_extra_stops.value.length > 0">
 						<!-- Return > Extra Stops -->
 						<div *ngIf="Form.return_extra_stops.value.length > 0" class="preview-extra-stop-color">
 							<h5 class="p-2 m-0 text-xl">
@@ -3708,10 +3710,11 @@
 												class="bi bi-geo-alt-fill"></i></span>
 									</div>
 								</div>
+								<hr>
 							</div>
 						</div>
-
-						<hr style="width: 50%; margin: 1.6rem auto; border: 1.2px solid #aeaeae;" />
+						<!-- style="width: 50%; margin: 1.6rem auto; border: 1.2px solid #aeaeae;" -->
+						<hr *ngIf="Form.return_extra_stops.value.length == 0"/>
 
 						<!-- ############## Dropoff #################### -->
 						<h5 class="px-2 m-1 text-xl preview-dropoff-color">
