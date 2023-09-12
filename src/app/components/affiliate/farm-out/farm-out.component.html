@@ -1185,9 +1185,9 @@
 							</div>
 						</div>
 					</div>
-
+					<hr *ngIf="bookingPreview?.extra_stops?.length > 0">
 					<!-- Extra Stops -->
-					<div class="preview-pickup-color"
+					<div 
 						*ngIf="bookingPreview?.extra_stops && bookingPreview?.extra_stops?.length > 0">
 						<h5 class="m-0 text-xl">
 							Extra Stops
@@ -1206,11 +1206,11 @@
 								<span (click)="showLocationPointOnMapByAddress(stop?.address)"><i class="bi bi-geo-alt-fill"></i></span>
 								</div>
 							</div>
+							<hr>
 						</div>
 					</div>
 
 					<hr *ngIf="bookingPreview?.extra_stops && bookingPreview?.extra_stops?.length == 0" />
-					<hr>
 					<!-- ############# Dropoff ################# -->
 					<h5 class="px-2 m-0 my-3 text-xl preview-dropoff-color">
 						Drop Off Details
