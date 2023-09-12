@@ -111,7 +111,7 @@ export class NewBookingComponent implements OnInit {
 	service_type: any = 'one_way';
 	transfer_type: any = 'city_to_city'
 	return_transfer_type: any = 'city_to_city'
-	number_of_hours: any = '0';
+	number_of_hours: any = '2';
 	confirmMsg: any;
 	booking_data:any;
 	extraStops_rate:any = 0
@@ -456,6 +456,9 @@ export class NewBookingComponent implements OnInit {
 	}
 	handleNoOfHours(value) {
 		this.number_of_hours = value
+		console.log('in function handle no of hours->' , value , value > 0)
+		this.number_of_hours > 0 ? this.buildBookingData() : ''
+		
 	}
 	prefillViaBookingID(booking_id: number) {
 		// console.warn('Prefilling via Booking Id')
