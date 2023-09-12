@@ -101,6 +101,7 @@ export class DailyBookingsComponent implements OnInit {
 		this.useDateFilter = this.adminService.checkCookie('useDateFilter') ?
 		(this.adminService.getCookie('useDateFilter')=='true' ? true : false)
 		: true;
+		console.log('useDateFilter-->' , this.useDateFilter)
 
 		this.adminService.getStatusList()
 			.pipe(

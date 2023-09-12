@@ -307,7 +307,8 @@ export class RatesFormsComponent implements OnInit , OnChanges {
 			misc: this.$form.group({}),
 			others: this.$form.group({}),
 		});
-		if(this.newBooking){
+
+		if(this.newBooking || this.distance){
 			this.getReturnRatesData().subscribe((response: any) => {
 				if (response && Object.keys(response).length > 0) {
 					this.buildRatesForm('ReturnRatesForm', response);
@@ -326,9 +327,10 @@ export class RatesFormsComponent implements OnInit , OnChanges {
 							this.calculateAmount('ReturnRatesForm', formgroup, subform)
 					}
 				}
+			
 		}
 		else{
-			this.getRatesData().subscribe((response: any) => {
+			this.getReturnRatesData().subscribe((response: any) => {
 				if (response && Object.keys(response).length > 0) {
 					this.buildRatesForm('ReturnRatesForm', response);
 					if (this.bookingId) {
@@ -341,7 +343,6 @@ export class RatesFormsComponent implements OnInit , OnChanges {
 				}
 			});
 		}
-		
 
 		this.ReturnRatesForm.valueChanges.subscribe((value: any) => {
 			this.calculateTotal("ReturnRatesForm");
@@ -413,11 +414,13 @@ export class RatesFormsComponent implements OnInit , OnChanges {
 		let transfer_type_value = QB?.pickup_type + '_to_' + QB?.dropoff_type
 		let return_transfer_type_value = QB?.dropoff_type + '_to_' + QB?.pickup_type
 		let data = {
+			vehicle_id : this.QB_vehicle_id,
 			service_type: QB?.service_type,
 			transfer_type: transfer_type_value,
 			numberOfVehicles: 1,
 			no_of_hours: no_of_hours,
-			distance: location_info.distance.value
+			distance: location_info.distance.value,
+			is_master_vehicle: JSON.parse(sessionStorage.getItem('selected_vehicle'))?.is_master_vehicle
 		}
 		this.adminServices.fetchRatesByAffiliateVeh(vehicle_id, data).subscribe((response: any) => {
 			this.is_readonly_min_rate = response?.data?.min_rate_involved ? true : false
@@ -675,15 +678,36 @@ export class RatesFormsComponent implements OnInit , OnChanges {
 			if (formgroup == "others") {
 				// Gratuity
 				// let kmrate = (<FormGroup>((<FormGroup>(this.ReturnRatesForm.get("all_inclusive_rates"))).get("Base_Rate"))).get("amount").value;
-				let kmrate = await this.calculateBaseRate('ReturnRatesForm') - this.r_calc_admin_share;
+				let type = (<FormGroup>((<FormGroup>this.ReturnRatesForm.get(formgroup)).get(subform))).get("type").value;
+				if (type === "flat") {
+					let kmrate = await this.calculateBaseRate('ReturnRatesForm') - this.r_calc_admin_share;
 				let basevalue = (<FormGroup>((<FormGroup>this.ReturnRatesForm.get(formgroup)).get(subform))).get("baserate").value;
 
-				let amount = Number(Number((basevalue / 100) * kmrate).toFixed(2)
-				);
+				let amount = Number(Number(basevalue)).toFixed(2);
 
 				(<FormGroup>((<FormGroup>this.ReturnRatesForm.get(formgroup)).get(subform))).get("amount").setValue(amount);
 				// set value of percentage same as gratuity
 				(<FormGroup>((<FormGroup>this.ReturnRatesForm.get(formgroup)).get(subform))).get("percentage").setValue(basevalue);
+				}
+
+				if (type === "percent") {
+					// let kmrate = (<FormGroup>((<FormGroup>(this.ReturnRatesForm.get("all_inclusive_rates"))).get("Base_Rate"))).get("amount").value;
+					let kmrate = await this.calculateBaseRate('ReturnRatesForm') - this.r_calc_admin_share;
+					let basevalue = (<FormGroup>((<FormGroup>this.ReturnRatesForm.get(formgroup)).get(subform))).get("baserate").value;
+	
+					let amount = Number(Number((basevalue / 100) * kmrate).toFixed(2)
+					);
+	
+					(<FormGroup>((<FormGroup>this.ReturnRatesForm.get(formgroup)).get(subform))).get("amount").setValue(amount);
+					// set value of percentage same as gratuity
+					(<FormGroup>((<FormGroup>this.ReturnRatesForm.get(formgroup)).get(subform))).get("percentage").setValue(basevalue);
+				}
+
+				// Flat | Percentage - Taxes
+				(<FormGroup>((<FormGroup>this.ReturnRatesForm.get("others")).get(subform))).get("type").valueChanges.subscribe((value: any) => {
+					this.calculateAmount("ReturnRatesForm", formgroup, subform);
+				});
+				
 			}
 
 			if (formgroup == "taxes") {

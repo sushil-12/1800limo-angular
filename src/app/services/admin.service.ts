@@ -64,6 +64,7 @@ export class AdminService {
 	deleteCookie(cookieName: string) {
 		const cookies = document.cookie.split(';');
 		console.log('cookies-->>>>>>>',cookies)
+		document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 
 		for (let i = 0; i < cookies.length; i++) {
 		  const cookie = cookies[i].trim();
@@ -78,6 +79,7 @@ export class AdminService {
 	  
 			// Set the expiration date in the past to delete the cookie
 			document.cookie = `${name}=${path}; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=${path}`;
+
 		  }
 		}
 	}

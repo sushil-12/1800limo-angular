@@ -724,7 +724,7 @@
 			<div *ngIf="searchSubstring(Form.transfer_type.value, 'airport_')">
 				<div class="row px-2">
 					<!-- Airport -->
-					<div class="col-md-6 col-lg-3">
+					<div class="col-md-6">
 						<!-- <mat-form-field appearance="outline">
 							<mat-label>
 								Airport
@@ -758,7 +758,7 @@
 					</div>
 
 					<!-- Airline -->
-					<div class=" col-md-6 col-lg-3">
+					<div class=" col-md-6">
 						<!-- <mat-form-field appearance="outline">
 							<mat-label>
 								Airline
@@ -789,7 +789,7 @@
 					</div>
 
 					<!-- Flight Number -->
-					<div class="col-md-6 col-lg-3">
+					<div class="col-md-6">
 						<mat-form-field appearance="outline" class="vehicleLable mt-0" style="margin-top: 0px !important;">
 							<mat-label>
 								Flight Number
@@ -800,7 +800,7 @@
 					</div>
 
 					<!-- Origin Airport / City -->
-					<div class="col-md-6 col-lg-3">
+					<div class="col-md-6">
 						<mat-form-field appearance="outline" class="vehicleLable mt-0" style="margin-top: 0px !important;">
 							<mat-label>
 								Origin Airport / City
@@ -878,7 +878,7 @@
 			<div *ngIf="searchSubstring(Form.transfer_type.value, '_airport')">
 				<div class="row px-2">
 					<!-- Airport -->
-					<div class="col-md-5 col-lg-3">
+					<div class="col-md-6">
 						<!-- <mat-form-field appearance="outline">
 							<mat-label>
 								Airport
@@ -911,7 +911,7 @@
 					</div>
 
 					<!-- Airline -->
-					<div class="col-md-5 col-lg-3">
+					<div class="col-md-6">
 						<!-- <mat-form-field appearance="outline">
 							<mat-label>
 								Airline
@@ -943,7 +943,7 @@
 					</div>
 
 					<!-- Flight Number -->
-					<div class="col-md-5 col-lg-3">
+					<div class="col-md-6">
 						<mat-form-field appearance="outline" class="vehicleLable mt-0" style="margin-top: 0px !important;">
 							<mat-label>
 								Flight Number
@@ -1377,7 +1377,7 @@
 			<div *ngIf="searchSubstring(Form.return_transfer_type.value, 'airport_')">
 				<div class="row px-2">
 					<!-- Airport -->
-					<div class="col-md-6 col-lg-3">
+					<div class="col-md-6">
 						<!-- <mat-form-field appearance="outline">
 							<mat-label>
 								Airport
@@ -1409,7 +1409,7 @@
 					</div>
 
 					<!-- Airline -->
-					<div class="col-md-6 col-lg-3">
+					<div class="col-md-6">
 						<!-- <mat-form-field appearance="outline">
 							<mat-label>
 								Airline
@@ -1440,7 +1440,7 @@
 					</div>
 
 					<!-- Flight Number -->
-					<div class="col-md-6 col-lg-3">
+					<div class="col-md-6">
 						<mat-form-field appearance="outline" class="vehicleLable mt-0" style="margin-top: 0px !important;">
 							<mat-label>
 								Flight Number
@@ -1519,7 +1519,7 @@
 			<div *ngIf="searchSubstring(Form.return_transfer_type.value, '_airport')">
 				<div class="row px-2">
 					<!-- Airport -->
-					<div class="col-md-5 col-lg-3">
+					<div class="col-md-6">
 						<!-- <mat-form-field appearance="outline">
 							<mat-label>
 								Airport
@@ -1552,7 +1552,7 @@
 					</div>
 
 					<!-- Airline -->
-					<div class="col-md-5 col-lg-3">
+					<div class="col-md-6">
 						<!-- <mat-form-field appearance="outline">
 							<mat-label>
 								Airline
@@ -1584,7 +1584,7 @@
 					</div>
 
 					<!-- Flight Number -->
-					<div class="col-md-5 col-lg-3">
+					<div class="col-md-6">
 						<mat-form-field appearance="outline" class="vehicleLable mt-0" style="margin-top: 0px !important;">
 							<mat-label>
 								Flight Number
@@ -1758,7 +1758,7 @@
 					<h4 class="font-weight-bolder m-0 mt-3">
 						Rates/Taxes
 					</h4>
-					<div class="mx-2" *ngIf="init_rates && RatesForm">
+					<div class="mx-2" *ngIf="RatesForm">
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
@@ -1786,8 +1786,8 @@
 								</span>
 							</div>
 						</div>
-						<hr>
 					</div>
+					<hr>
 					<!-- Booking Type -->
 					<h4 class="font-weight-bolder m-0">
 						Booking Type
@@ -2174,9 +2174,9 @@
 							</div>
 						</div>
 					</div>
-
+					<hr *ngIf="Form.extra_stops.value.length > 0"> 
 					<!-- Extra Stops -->
-					<div class="preview-pickup-color" *ngIf="Form.extra_stops.value.length > 0">
+					<div  *ngIf="Form.extra_stops.value.length > 0">
 						<h5 class="p-2 m-0 text-xl">
 							Extra Stops
 						</h5>
@@ -2194,6 +2194,7 @@
 								<span (click)="showLocationPointOnMap(stop.address)"><i class="bi bi-geo-alt-fill"></i></span>
 								</div>
 							</div>
+							<hr>
 						</div>
 					</div>
 
@@ -2477,7 +2478,7 @@
 							</div>
 						</div>
 
-
+						<hr>
 						<!-- Return > Extra Stops -->
 						<div *ngIf="Form.return_extra_stops.value.length > 0">
 							<h5 class="p-2 m-0 text-xl">
@@ -2497,10 +2498,11 @@
 								<span (click)="showLocationPointOnMap(stop.address)"><i class="bi bi-geo-alt-fill"></i></span>
 									</div>
 								</div>
+								<hr>
 							</div>
 						</div>
 
-						<hr />
+						<hr *ngIf="Form.return_extra_stops.value.length == 0"/>
 
 						<!-- ############## Dropoff #################### -->
 						<h5 class="px-2 m-1 text-xl">

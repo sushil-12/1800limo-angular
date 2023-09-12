@@ -2874,7 +2874,7 @@
 								</span>
 							</div>
 							<div class="col-md-8 value">
-								<span class="font-weight-bolder">
+								<span class="font-weight-bolder preview-airport-color">
 									{{ textFormatter(Form.pickup_airport_name.value) }}
 								</span>
 								<span (click)="showLocationPointOnMap(Form.pickup_airport_name.value)">
@@ -2960,6 +2960,7 @@
 						</div>
 					</div>
 
+					<hr *ngIf="Form.extra_stops.value.length > 0">
 					<!-- Extra Stops -->
 					<div class="preview-pickup-color" *ngIf="Form.extra_stops.value.length > 0">
 						<h5 class="p-2 m-0 text-xl">
@@ -2979,11 +2980,11 @@
 								<span (click)="showLocationPointOnMap(stop.address)"><i class="bi bi-geo-alt-fill"></i></span>
 								</div>
 							</div>
+							<hr>
 						</div>
 					</div>
 
-					<hr style="width: 50%; margin: 1rem auto; border: 1.3px solid #aeaeae;"
-						*ngIf="Form.extra_stops.value.length == 0" />
+					<hr *ngIf="Form.extra_stops.value.length == 0" />
 
 					<!-- ############# Dropoff ################# -->
 					<h5 class="px-2 m-1 text-xl preview-dropoff-color">
@@ -3011,13 +3012,13 @@
 					<div class="mx-2 preview-dropoff-color" *ngIf="Form.transfer_type.value.includes('_airport')">
 						<!-- Airport -->
 						<div class="row p-2">
-							<div class="col-md-4 key preview-airport-color">
+							<div class="col-md-4 key ">
 								<span>
 									Airport
 								</span>
 							</div>
 							<div class="col-md-8 value">
-								<span class="font-weight-bolder">
+								<span class="font-weight-bolder preview-airport-color">
 									{{ textFormatter(Form.dropoff_airport_name.value ) }}
 								</span>
 								<span (click)="showLocationPointOnMap(Form.dropoff_airport_name.value)">
@@ -3110,12 +3111,12 @@
 						<h4 class="font-weight-bolder">
 							Return Trip
 						</h4>
-						<h5 class="px-2 m-1 text-xl">
+						<h5 class="px-2 m-1 text-xl preview-pickup-color">
 							Pickup Details
 						</h5>
 
 						<!-- Return > Pickup > Date -->
-						<div class="mx-2">
+						<div class="mx-2 preview-pickup-color">
 							<div class="row m-0">
 								<div class="col-md-4 key">
 									<span>
@@ -3133,7 +3134,7 @@
 						</div>
 
 						<!-- Return > Pickup > Time -->
-						<div class="mx-2">
+						<div class="mx-2 preview-pickup-color">
 							<div class="row m-0">
 								<div class="col-md-4 key">
 									<span>
@@ -3151,7 +3152,7 @@
 						</div>
 
 						<!-- Return > Pickup > City Details -->
-						<div class="mx-2"
+						<div class="mx-2 preview-pickup-color"
 							*ngIf="Form.return_transfer_type.value.includes('city_') || Form.return_transfer_type.value.includes('cruise_')">
 							<div class="row p-2">
 								<div class="col-md-4 key">
@@ -3169,7 +3170,7 @@
 						</div>
 
 						<!-- Return > Pickup > Airline Details -->
-						<div class="mx-2" *ngIf="Form.return_transfer_type.value.includes('airport_')">
+						<div class="mx-2 preview-pickup-color" *ngIf="Form.return_transfer_type.value.includes('airport_')">
 							<!-- Airport -->
 							<div class="row p-2">
 								<div class="col-md-4 key">
@@ -3178,7 +3179,7 @@
 									</span>
 								</div>
 								<div class="col-md-8 value">
-									<span class="font-weight-bolder">
+									<span class="font-weight-bolder preview-airport-color">
 										{{ textFormatter(Form.return_pickup_airport_name.value) }}
 									</span>
 								<span (click)="showLocationPointOnMap(Form.return_pickup_airport_name.value)">
@@ -3216,7 +3217,7 @@
 						</div>
 
 						<!-- Return > Pickup > Cruise Details -->
-						<div class="mx-2" *ngIf="Form.return_transfer_type.value.includes('cruise_')">
+						<div class="mx-2 preview-pickup-color" *ngIf="Form.return_transfer_type.value.includes('cruise_')">
 							<div class="row p-2">
 								<div class="col-md-4 key">
 									<span>
@@ -3262,7 +3263,7 @@
 							</div>
 						</div>
 
-
+						<hr *ngIf="Form.return_extra_stops.value.length > 0">
 						<!-- Return > Extra Stops -->
 						<div *ngIf="Form.return_extra_stops.value.length > 0">
 							<h5 class="p-2 m-0 text-xl">
@@ -3282,17 +3283,18 @@
 								<span (click)="showLocationPointOnMap(stop.address)"><i class="bi bi-geo-alt-fill"></i></span>
 									</div>
 								</div>
+								<hr>
 							</div>
 						</div>
 
-						<hr style="width: 50%; margin: 1.6rem auto; border: 1.2px solid #aeaeae;" />
+						<hr *ngIf="Form.return_extra_stops.value.length == 0">
 
 						<!-- ############## Dropoff #################### -->
-						<h5 class="px-2 m-1 text-xl">
+						<h5 class="px-2 m-1 text-xl preview-dropoff-color">
 							Dropoff Details
 						</h5>
 						<!-- Return > Dropoff > City Details  -->
-						<div class="mx-2" *ngIf="Form.return_transfer_type.value.includes('_city')">
+						<div class="mx-2 preview-dropoff-color" *ngIf="Form.return_transfer_type.value.includes('_city')">
 							<div class="row p-2">
 								<div class="col-md-4 key">
 									<span>
@@ -3309,7 +3311,7 @@
 						</div>
 
 						<!-- Return > Dropoff > Airline Details -->
-						<div class="mx-2" *ngIf="Form.return_transfer_type.value.includes('_airport')">
+						<div class="mx-2 preview-dropoff-color" *ngIf="Form.return_transfer_type.value.includes('_airport')">
 							<!-- Airport -->
 							<div class="row p-2">
 								<div class="col-md-4 key">
@@ -3318,7 +3320,7 @@
 									</span>
 								</div>
 								<div class="col-md-8 value">
-									<span class="font-weight-bolder">
+									<span class="font-weight-bolder preview-airport-color">
 										{{ textFormatter(Form.return_dropoff_airport_name.value) }}
 									</span>
 								<span (click)="showLocationPointOnMap(Form.return_dropoff_airport_name.value)">
@@ -3357,7 +3359,7 @@
 						</div>
 
 						<!-- Return > Dropoff > Cruise Details -->
-						<div class="mx-2" *ngIf="Form.return_transfer_type.value.includes('_cruise')">
+						<div class="mx-2 preview-dropoff-color" *ngIf="Form.return_transfer_type.value.includes('_cruise')">
 							<!-- Cruise Port -->
 							<div class="row p-2">
 								<div class="col-md-4 key">
