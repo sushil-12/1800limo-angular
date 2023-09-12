@@ -307,7 +307,7 @@ export class OtpComponent implements OnInit, OnDestroy {
 						if(this.response.data.user?.is_profile_complete)
 							this.router.navigateByUrl('/travel_agent/bookings');
 						else
-							this.router.navigateByUrl('/travel_agent/profile');
+							this.router.navigateByUrl('/travel_agent/profile/step1');
 						break;
 					}
 					default: {

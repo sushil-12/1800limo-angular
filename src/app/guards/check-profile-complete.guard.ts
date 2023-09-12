@@ -27,11 +27,11 @@ export class CheckProfileCompleteGuard implements CanActivate {
     }
     this.errorDialog.openDialog({
       errors: {
-        error: 'Please complete the profile first'
+        error: 'Please complete the registration first'
       }
     })
     console.log('travel agent profile');
-    this.router.navigate(['/travel_agent/profile']);
+    this.router.navigate(['/travel_agent/profile/step1']);
     return false;
   }
 

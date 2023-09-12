@@ -3,7 +3,7 @@ import { TravelAgentService } from '../../../services/travel-agent.service';
 import { StateManagementService } from 'src/app/services/statemanagement.service';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { CustomvalidationService } from 'src/app/services/customvalidation.service';
 import { MapsAPILoader } from '@agm/core';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -16,6 +16,7 @@ import { AffiliateService } from 'src/app/services/affiliate.service';
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
+  timezone=new FormControl('')
   public profile_pic: any;
   public modalImage: string;
   public imageSrc: string;
@@ -81,21 +82,21 @@ export class ProfileComponent implements OnInit {
 								});
 								// this.changeCountry(place.address_components[i].short_name)
 							}
-							else if (place.address_components[i].types[j] == "administrative_area_level_1") {
-								this.profileForm.patchValue({
-									state: place.address_components[i].long_name
-								});
-							}
-							else if (place.address_components[i].types[j] == "administrative_area_level_3") {
-								this.profileForm.patchValue({
-									city: place.address_components[i].long_name
-								});
-							}
-							else if (place.address_components[i].types[j] == "postal_code") {
-								this.profileForm.patchValue({
-									zip: place.address_components[i].long_name
-								});
-							}
+							// else if (place.address_components[i].types[j] == "administrative_area_level_1") {
+							// 	this.profileForm.patchValue({
+							// 		state: place.address_components[i].long_name
+							// 	});
+							// }
+							// else if (place.address_components[i].types[j] == "administrative_area_level_3") {
+							// 	this.profileForm.patchValue({
+							// 		city: place.address_components[i].long_name
+							// 	});
+							// }
+							// else if (place.address_components[i].types[j] == "postal_code") {
+							// 	this.profileForm.patchValue({
+							// 		zip: place.address_components[i].long_name
+							// 	});
+							// }
 							else if (place.address_components[i].types[j] == "street_number") {
 								this.profileForm.patchValue({
 									street: place.address_components[i].long_name
@@ -147,10 +148,10 @@ export class ProfileComponent implements OnInit {
       mobileCountry: ['us'],
       email: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.]+\.[a-zA-Z]{2,}$/i)]],
       address: ['', Validators.required],
-      city: ['', Validators.required],
-      state: ['', Validators.required],
+      city: [''],
+      state: [''],
       country: ['', Validators.required],
-      zip: ['', Validators.required],
+      zip: [''],
       agency_name: ['', Validators.required],
       payee: ['', Validators.required],
       iata: ['', Validators.required],
