@@ -157,9 +157,19 @@ export class RatesFormComponent implements OnInit, OnChanges {
 
 		if (changes.init_r_rates?.currentValue || this.returnratesform) {
 			this.hours = 0;
-			if (!changes.vehs) {
-				this.initReturnRates();
-			}
+			// if (!changes.vehs) {
+			// 	this.initReturnRates();
+			// }
+				let data = {
+					vehicle_id : this.book_data?.vehicle_id,
+					service_type: this.book_data?.service_type,
+					transfer_type: this.book_data?.transfer_type,
+					numberOfVehicles: this.book_data?.numberOfVehicles,
+					no_of_hours: this.book_data?.no_of_hours,
+					distance: this.book_data?.distance,
+					is_master_vehicle:this.book_data?.is_master_vehicle 
+				}
+				this.fillReturnRateForm(data)
 		}
 
 		if (changes.nums) {
@@ -366,7 +376,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 			
 		}
 		else{
-			this.getRatesData().subscribe((response: any) => {
+			this.getReturnRatesData().subscribe((response: any) => {
 				if (response && Object.keys(response).length > 0) {
 					this.buildRatesForm('ReturnRatesForm', response);
 					if (this.bookingId) {
@@ -427,6 +437,16 @@ export class RatesFormComponent implements OnInit, OnChanges {
 				this.is_readonly_min_rate = response?.data?.min_rate_involved ? true : false
 				this.ratesdata.next(response.data.rateArray);
 			}
+		});
+	}
+
+	fillReturnRateForm(data){
+		this.returnRatesdata.next({})
+		console.log('in function fill return rate form' , data)
+		this.$api.fetchRatesByAffiliateVeh(data.vehicle_id, data).subscribe((response: any) => {
+			this.is_readonly_min_rate = response?.data?.min_rate_involved ? true : false
+				this.returnRatesdata.next(response?.data?.retrunRateArray)
+				this.initReturnRates()
 		});
 	}
 	fetchRatesArrayByAffiliateVehicle(data) {

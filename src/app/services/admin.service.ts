@@ -187,8 +187,8 @@ export class AdminService {
 	//
 	// add / edit / update vehicle for admin-affiliate-step 5
 	// Add / Edit / Get vehicle data for admin affliliate step 5
-	async adminAffiliateVehicleList(id) {
-		const result = await this.httpClient.get(this.serverUrl + 'admin/get-affiliate-all-vehicles/' + id).toPromise();
+	async adminAffiliateVehicleList(id , flag=true) {
+		const result = await this.httpClient.get(this.serverUrl + 'admin/get-affiliate-all-vehicles/' + id + `?show_all_vehicles=${flag}`).toPromise();
 		return result;
 	}
 	getLooseAffiliateVehicles(vehicle_type_id: number) {
