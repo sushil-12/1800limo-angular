@@ -163,6 +163,7 @@ export class NewBookingComponent implements OnInit {
 
 	}
 	buildBookingData(){
+		console.log('rebuild booking data')
 		this.booking_data = {
 			vehicle_id: this.BookingForm.get('vehicle_id').value,
 			transfer_type: this.transfer_type,
@@ -841,6 +842,7 @@ export class NewBookingComponent implements OnInit {
 
 	onSelectionChangeServiceType(event: any) {
 		this.service_type = event.value;
+		this.buildBookingData()
 	}
 
 	changeReturnTransferType(event: any) {
@@ -995,7 +997,7 @@ export class NewBookingComponent implements OnInit {
 			return
 		}
 		this.$spinner.show()
-		this.$api.adminAffiliateVehicleList(affiliate_id).then((response: any) => {
+		this.$api.adminAffiliateVehicleList(affiliate_id,false).then((response: any) => {
 			console.log('get affiliate vehicle data----->>>>>>>>>', response.data)
 			if (response.success && response.data.vehicleList.length > 0) {
 				this.VehicleList = response.data.vehicleList
@@ -1055,7 +1057,7 @@ export class NewBookingComponent implements OnInit {
 			return
 		}
 		this.$spinner.show()
-		this.$api.adminAffiliateVehicleList(affiliate_id).then((response: any) => {
+		this.$api.adminAffiliateVehicleList(affiliate_id,false).then((response: any) => {
 			console.log('get affiliate vehicle data----->>>>>>>>>', response.data)
 			if (response.success && response.data.vehicleList.length > 0) {
 				this.VehicleList = response.data.vehicleList

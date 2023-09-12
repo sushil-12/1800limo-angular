@@ -1098,7 +1098,7 @@ export class CreateBookingComponent implements OnInit {
 			return
 		}
 		this.$spinner.show()
-		this.$api.adminAffiliateVehicleList(affiliate_id).then((response: any) => {
+		this.$api.adminAffiliateVehicleList(affiliate_id,false).then((response: any) => {
 			console.log('get affiliate vehicle data----->>>>>>>>>', response.data)
 			if (response.success && response.data.vehicleList.length > 0) {
 				this.VehicleList = response.data.vehicleList
@@ -1145,7 +1145,7 @@ export class CreateBookingComponent implements OnInit {
 			return
 		}
 		this.$spinner.show()
-		this.$api.adminAffiliateVehicleList(affiliate_id).then((response: any) => {
+		this.$api.adminAffiliateVehicleList(affiliate_id,false).then((response: any) => {
 			console.log('get affiliate vehicle data----->>>>>>>>>', response.data)
 			if (response.success && response.data.vehicleList.length > 0) {
 				this.VehicleList = response.data.vehicleList
