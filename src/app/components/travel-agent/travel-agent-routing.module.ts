@@ -9,6 +9,7 @@ import { AddCardComponent } from './add-card/add-card.component';
 import { InvoiceDashComponent } from './invoice-dash/invoice-dash.component';
 import { InvoiceDashSummaryComponent } from './invoice-dash-summary/invoice-dash-summary.component';
 import { StripeFormComponent } from './stripe-form/stripe-form.component';
+import { TravelAgentStepsTemplateComponent } from './travel-agent-steps-template/travel-agent-steps-template.component';
 const routes: Routes = [
   {
 		path: '',
@@ -23,7 +24,7 @@ const routes: Routes = [
   {
     path:'profile',
     component:ProfileComponent,
-    // canActivate: [CheckProfileCompleteGuard]
+    canActivate: [CheckProfileCompleteGuard]
   },
   {
     path:'create-booking',
@@ -65,7 +66,25 @@ const routes: Routes = [
     path:'new-booking',
     component:CreateBookingComponent,
     canActivate: [CheckProfileCompleteGuard],
-  }
+  },
+  {
+		path: 'profile',
+		canActivate: [],
+		component: TravelAgentStepsTemplateComponent,
+		data: {
+			title: 'TravelAgent'
+		},
+		children: [
+			{
+				path: 'step1',
+				component: ProfileComponent
+			},
+			{
+				path: 'step2',
+				component: StripeFormComponent
+			},
+		]
+	}
  
 ];
 

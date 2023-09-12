@@ -4,54 +4,54 @@
 		<section class="user_information">
 			<h2 class="headinginfo adminbox_shadow">Profile</h2>
 			<div class="container mt-1 ">
-                <div class="vehtype_extintwrap single-image">
-                    <div class="row mt-2">
-                        <div class="col-md-4">
-                            <div class="vehtype_extint">
-                                <div>
-                                    <!-- <p class="d-flex justify-content-left">Profile Picture</p> -->
-                                    <img *ngIf="profile_pic; else no_profile_pic" class="profile_pic"
-                                        src="{{profile_pic}}" alt="Profile Picture"
-                                        (click)="showImageInModal(profile_pic)">
-                                    <ng-template #no_profile_pic>
-                                        <img class="profile_pic" src="../../../../assets/images/user.png"
-                                            alt="Profile Picture">
-                                    </ng-template>
-                                    <ul class="mt-3 d-flex justify-content-left" *ngIf="profile_pic">
-                                        <li>
-                                            <button tabindex="1" class="changeuploaded">
-                                                <input type="file" (change)="profile_pic_change($event)" tabindex="-1">
-                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                                    <path fill="none" d="M0 0h24v24H0V0z"></path>
-                                                    <circle cx="12" cy="12" r="3"></circle>
-                                                    <path
-                                                        d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z">
-                                                    </path>
-                                                </svg>
-                                                Change
-                                            </button>
-                                        </li>
-                                    </ul>
+				<div class="vehtype_extintwrap single-image">
+					<div class="row mt-2">
+						<div class="col-md-4">
+							<div class="vehtype_extint">
+								<div>
+									<!-- <p class="d-flex justify-content-left">Profile Picture</p> -->
+									<img *ngIf="profile_pic; else no_profile_pic" class="profile_pic"
+										src="{{profile_pic}}" alt="Profile Picture"
+										(click)="showImageInModal(profile_pic)">
+									<ng-template #no_profile_pic>
+										<img class="profile_pic" src="../../../../assets/images/user.png"
+											alt="Profile Picture">
+									</ng-template>
+									<ul class="mt-3 d-flex justify-content-left" *ngIf="profile_pic">
+										<li>
+											<button tabindex="1" class="changeuploaded">
+												<input type="file" (change)="profile_pic_change($event)" tabindex="-1">
+												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+													<path fill="none" d="M0 0h24v24H0V0z"></path>
+													<circle cx="12" cy="12" r="3"></circle>
+													<path
+														d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z">
+													</path>
+												</svg>
+												Change
+											</button>
+										</li>
+									</ul>
 									<ul class="mt-3 d-flex justify-content-left" *ngIf="!profile_pic">
-                                        <li>
-                                            <button tabindex="1" class="changeuploaded">
-                                                <input type="file" (change)="profile_pic_change($event)" tabindex="-1">
-                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                                    <path fill="none" d="M0 0h24v24H0V0z"></path>
-                                                    <circle cx="12" cy="12" r="3"></circle>
-                                                    <path
-                                                        d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z">
-                                                    </path>
-                                                </svg>
-                                                upload
-                                            </button>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+										<li>
+											<button tabindex="1" class="changeuploaded">
+												<input type="file" (change)="profile_pic_change($event)" tabindex="-1">
+												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+													<path fill="none" d="M0 0h24v24H0V0z"></path>
+													<circle cx="12" cy="12" r="3"></circle>
+													<path
+														d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z">
+													</path>
+												</svg>
+												upload
+											</button>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 				<div class="row ">
 					<div class="col-md-4">
 						<mat-form-field appearance="outline">
@@ -97,18 +97,23 @@
 							<div *ngIf="f?.work_contact_number?.errors?.required">This field is required</div>
 						</div>
 						<div *ngIf="f?.work_contact_number?.errors" class="text-danger margin-bottom-thin my-mat-hint">
-							<div *ngIf="f?.work_contact_number?.errors?.invalid_Pattern;else plusError">Do not add Dashes
+							<div *ngIf="f?.work_contact_number?.errors?.invalid_Pattern;else plusError">Do not add
+								Dashes
 								with numbers</div>
 							<ng-template #plusError>
-								<div *ngIf="f?.work_contact_number?.errors?.invalidPattern;else allErrors">Do not enter +
+								<div *ngIf="f?.work_contact_number?.errors?.invalidPattern;else allErrors">Do not enter
+									+
 									sign</div>
 								<ng-template #allErrors>
-									<div *ngIf="f?.work_contact_number?.errors?.pattern;else numberLength">Enter Numbers Without
+									<div *ngIf="f?.work_contact_number?.errors?.pattern;else numberLength">Enter Numbers
+										Without
 										Spaces or Dashes
 									</div>
 									<ng-template #numberLength>
-										<div *ngIf="f?.work_contact_number?.errors?.minlength">Minimum length should be 4</div>
-										<div *ngIf="f?.work_contact_number?.errors?.maxlength">Maximum length should be 15</div>
+										<div *ngIf="f?.work_contact_number?.errors?.minlength">Minimum length should be
+											4</div>
+										<div *ngIf="f?.work_contact_number?.errors?.maxlength">Maximum length should be
+											15</div>
 									</ng-template>
 								</ng-template>
 							</ng-template>
@@ -156,6 +161,17 @@
 							<div *ngIf="f?.email?.errors?.required">This field is required</div>
 							<div *ngIf="f?.email?.errors?.pattern">Email format should be valid</div>
 						</div>
+					</div>
+					<div class="col-md-4">
+						<mat-form-field appearance="outline">
+							<mat-label>Timezone</mat-label>
+							<mat-select formControlName="timezone">
+								<mat-option value="">Choose timezone</mat-option>
+								<mat-option value='01'>IST</mat-option>
+								<mat-option value='02'>PST</mat-option>
+								<mat-option value='03'>EST</mat-option>
+							</mat-select>
+						</mat-form-field>
 					</div>
 				</div>
 			</div>
@@ -246,12 +262,15 @@
 								<div *ngIf="f?.office_number?.errors?.invalidPattern;else allErrors">Do not enter +
 									sign</div>
 								<ng-template #allErrors>
-									<div *ngIf="f?.office_number?.errors?.pattern;else numberLength">Enter Numbers Without
+									<div *ngIf="f?.office_number?.errors?.pattern;else numberLength">Enter Numbers
+										Without
 										Spaces or Dashes
 									</div>
 									<ng-template #numberLength>
-										<div *ngIf="f?.office_number?.errors?.minlength">Minimum length should be 4</div>
-										<div *ngIf="f?.office_number?.errors?.maxlength">Maximum length should be 15</div>
+										<div *ngIf="f?.office_number?.errors?.minlength">Minimum length should be 4
+										</div>
+										<div *ngIf="f?.office_number?.errors?.maxlength">Maximum length should be 15
+										</div>
 									</ng-template>
 								</ng-template>
 							</ng-template>
@@ -261,15 +280,14 @@
 					<div class="col-md-6">
 						<mat-form-field appearance="outline">
 							<mat-label>Address <span class="asterisk">*</span></mat-label>
-							<input formControlName="address" type="text" matInput
-							 placeholder="Address" #search1>
+							<input formControlName="address" type="text" matInput placeholder="Address" #search1>
 						</mat-form-field>
 						<!-- <textarea placeholder="Address" formControlName="address"></textarea> -->
 						<div *ngIf="submittedForm && f?.address?.errors" class="text-danger">
 							<div *ngIf="f?.address?.errors?.required">This field is required</div>
 						</div>
 					</div>
-					<div class="col-md-6">
+					<!-- <div class="col-md-6">
 						<mat-form-field appearance="outline">
 							<mat-label>City <span class="asterisk">*</span></mat-label>
 							<input formControlName="city" type="text" matInput placeholder="City">
@@ -286,7 +304,7 @@
 						<div *ngIf="submittedForm && f?.state?.errors" class="text-danger">
 							<div *ngIf="f?.state?.errors?.required">This field is required</div>
 						</div>
-					</div>
+					</div> -->
 					<div class="col-md-6">
 						<mat-form-field appearance="outline">
 							<mat-label>Country <span class="asterisk">*</span></mat-label>
@@ -296,7 +314,7 @@
 							<div *ngIf="f?.country?.errors?.required">This field is required</div>
 						</div>
 					</div>
-					<div class="col-md-6">
+					<!-- <div class="col-md-6">
 						<mat-form-field appearance="outline">
 							<mat-label>Zip Code <span class="asterisk">*</span></mat-label>
 							<input formControlName="zip" type="text" matInput placeholder="Zip Code">
@@ -305,11 +323,11 @@
 							<div *ngIf="f?.zip?.errors?.required">This field is required</div>
 							<div *ngIf="f?.zip?.errors?.pattern">This field should be a number</div>
 						</div>
-					</div>
+					</div> -->
 				</div>
 			</div>
 		</section>
-        <section class="user_information" *ngIf="!this.currentUser?.is_profile_complete">
+		<section class="user_information" *ngIf="!this.currentUser?.is_profile_complete">
 			<h2 class="headinginfo"> Billing Information</h2>
 			<div class="container py-2" id="accordionSidebar1">
 				<h3 class="headinginfoH3 mt-3">Credit Card <img class="creditcard_pay"
@@ -453,21 +471,21 @@
 			</div>
 		</section>
 		<div class="container">
-            <div class="row py-4">
-                <div class="col-md-6">
-                  
-                </div>
-                <div class="col-md-6 ">
-                    <div class="billing_inforamtion">
-                        <ul class="d-flex justify-content-center">
-                            <li><button class="custom-filled-button" type="submit" (click)="submit()"
-								tabindex="-1">SAVE</button> </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-                </div>
-		
+			<div class="row py-4">
+				<div class="col-md-6">
+
+				</div>
+				<div class="col-md-6 ">
+					<div class="billing_inforamtion">
+						<ul class="d-flex justify-content-center">
+							<li><button class="custom-filled-button" type="submit" (click)="submit()"
+									tabindex="-1">SAVE</button> </li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+
 	</form>
 </main>
 

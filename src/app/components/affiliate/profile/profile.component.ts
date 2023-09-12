@@ -4,6 +4,7 @@ import { StateManagementService } from 'src/app/services/statemanagement.service
 import { Router } from '@angular/router';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-profile',
@@ -19,6 +20,7 @@ export class ProfileComponent implements OnInit {
   public modalImage: string;
   public AffiliatePhoneObject: any;
   @Input() closeTab: EventEmitter<any> = new EventEmitter();
+  timezone=new FormControl('')
 
   constructor(
     private affiliateService: AffiliateService,

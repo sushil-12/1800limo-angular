@@ -105,5 +105,17 @@ export class TravelAgentService {
   getBookingDataForEdit(id,updateType){
 		return this.httpClient.get(this.serverUrl + `get-reservation/${id}/${updateType}`);
   }
+
+  getStepsCompleted(id) {
+		return this.httpClient.get(this.serverUrl + 'get-affiliate-step-completed/' + id);
+	}
+
+  updateStepsArrayLocal(stepArray) {
+		sessionStorage.setItem('stepCompleted', stepArray.toString())
+	}
+
+  updateStepsCompletedObj(stepObject) {
+		sessionStorage.setItem('step_completed_obj', JSON.stringify(stepObject))
+	}
   
 }
