@@ -167,7 +167,9 @@ export class RatesFormComponent implements OnInit, OnChanges {
 					numberOfVehicles: this.book_data?.numberOfVehicles,
 					no_of_hours: this.book_data?.no_of_hours,
 					distance: this.book_data?.distance,
-					is_master_vehicle:this.book_data?.is_master_vehicle 
+					is_master_vehicle:this.book_data?.is_master_vehicle,
+					extra_stops:this.book_data?.extra_stops,
+					return_extra_stops:this.book_data?.return_extra_stops
 				}
 				this.fillReturnRateForm(data)
 		}
