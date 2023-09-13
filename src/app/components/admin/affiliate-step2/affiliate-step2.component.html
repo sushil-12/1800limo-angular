@@ -100,7 +100,8 @@
 						<mat-label>Checking Routing Number<span class="asterisk">*</span></mat-label>
 						<input matInput placeholder="Checking Routing Number*" formControlName="Routing">
 					</mat-form-field>
-					<div *ngIf="f.Routing.errors && (f.Routing.touched || f.Routing.dirty )" class="text-danger margin-bottom-thin my-mat-hint">
+					<div *ngIf="f.Routing.errors && (f.Routing.touched || f.Routing.dirty )"
+						class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.Routing.errors.required">This field is required</div>
 						<div *ngIf="f.Routing.errors.pattern">This field should be a number</div>
 					</div>
@@ -217,7 +218,7 @@
 					</div>
 				</div>
 				<div class="col-md-6 mt-3" *ngIf="f.haveEin.value">
-					<mat-form-field appearance="outline"> 
+					<mat-form-field appearance="outline">
 						<mat-label>EIN / Business ID # <span class="asterisk">*</span></mat-label>
 						<input matInput placeholder="EIN / Business ID #" (focus)="$event.target.select()"
 							formControlName="ein" tabindex="1" />
@@ -255,8 +256,8 @@
 								<ul *ngIf="canChangeDocument" class="mt-3">
 									<li>
 										<a class="custom-arrow-clockwise-button"
-										(click)="fetchImageBlob(id_front_image ,'id_front_image',id_front_image_id )">
-										 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+											(click)="fetchImageBlob(id_front_image ,'id_front_image',id_front_image_id )">
+											<i class="bi bi-arrow-clockwise"></i>rotate</a>
 									</li>
 									<li>
 										<button class="changeuploaded" tabindex="1">
@@ -329,8 +330,8 @@
 								<ul *ngIf="canChangeDocument" class="mt-3">
 									<li>
 										<a class="custom-arrow-clockwise-button"
-										(click)="fetchImageBlob(id_back_image ,'id_back_image',id_back_image_id )">
-										 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+											(click)="fetchImageBlob(id_back_image ,'id_back_image',id_back_image_id )">
+											<i class="bi bi-arrow-clockwise"></i>rotate</a>
 									</li>
 									<li>
 										<button class="changeuploaded" tabindex="1">
@@ -400,7 +401,8 @@
 				<div class="col-md-12">
 					<h3 class="addveh_top d-md-flex justify-content-between align-items-center mb-0">
 						<label class="alert alert-danger">Enter Address and Choose From Drop Down.</label>
-						<label class="alert alert-danger my-2 mx-2">Choose nearest major city or airport location</label>
+						<label class="alert alert-danger my-2 mx-2">Choose nearest major city or airport
+							location</label>
 						<label></label>
 					</h3>
 				</div>
@@ -427,20 +429,16 @@
 					<mat-form-field appearance="outline" class="example-full-width">
 						<mat-label>Badge City
 						</mat-label>
-						<input type="text"
-							   placeholder="Pick one"
-							   aria-label="Number"
-							   matInput
-							   formControlName="badge_city_name"
-							   [matAutocomplete]="auto" 
-							   (keyup)="handleBadgeCity($event.target.value)">
+						<input type="text" placeholder="Pick one" aria-label="Number" matInput
+							formControlName="badge_city_name" [matAutocomplete]="auto"
+							(keyup)="handleBadgeCity($event.target.value)">
 						<mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-						  <mat-option *ngFor="let option of filteredOptions" 
-						  (onSelectionChange)="selectBadgeCity(option,$event.isUserInput)" [value]="option.name">
-							{{option.name}}
-						  </mat-option>
+							<mat-option *ngFor="let option of filteredOptions"
+								(onSelectionChange)="selectBadgeCity(option,$event.isUserInput)" [value]="option.name">
+								{{option.name}}
+							</mat-option>
 						</mat-autocomplete>
-					  </mat-form-field>
+					</mat-form-field>
 				</div>
 				<div class="col-md-12 map-wrapper" *ngIf="latitude">
 					<agm-map [latitude]="latitude" [longitude]="longitude">
@@ -535,22 +533,304 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-md-7">
-		
+
 			</div>
 			<div class="col-md-5">
 				<div class="billing_inforamtion">
 					<ul class=" d-flex justify-content-center">
-						<li><button class="custom-filled-reset-button mr-2" (click)="resetForm()" tabindex="1">RESET</button> </li>
-						<li><button class="custom-filled-button mr-2" (click)="submitForm()" [disabled]="disableSubmitButton"
-								tabindex="1">SAVE</button> </li>
+						<li><button class="custom-filled-reset-button mr-2" (click)="resetForm()"
+								tabindex="1">RESET</button> </li>
+						<li><button class="custom-filled-button mr-2" (click)="submitForm()"
+								[disabled]="disableSubmitButton" tabindex="1">SAVE</button> </li>
 					</ul>
 				</div>
 			</div>
 		</div>
-			</div>
-			
+	</div>
 
-	
+	<!-- <section class="user_information mt-2" *ngIf="!isStep2Completed; else stepNotCompleted">
+		<h2 class="headinginfo">
+			Farm-Out Booking Payment <span class="spanText">(Optional)</span>
+		</h2>
+		<div class="" id="accordionSidebar1">
+			<div class="">
+				<div class="container py-2">
+					<h3 class="headinginfoH3 mt-3">
+						Credit Card
+						<img class="creditcard_pay" src="assets/admin/images/creditcard_pay.png" tabindex="-1" />
+					</h3>
+					<div class="row">
+						<div class="col-md-6">
+							<div id="card-type-container" class="w-100 d-flex flex-nowrap justify-content-center">
+								<div id="cd-personal" class="card-type"
+									[ngClass]="f?.primaryCardType?.value == 'personal' ? 'active' : ''"
+									(click)="changeRadio('primaryCardType', 'personal')">
+									<label>Personal</label>
+								</div>
+								<div id="cd-business" class="card-type"
+									[ngClass]="f?.primaryCardType?.value == 'business' ? 'active' : ''"
+									(click)="changeRadio('primaryCardType', 'business')">
+									<label>Business</label>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<mat-form-field appearance="outline">
+								<mat-label>Card Holder First & Last Name</mat-label>
+								<input matInput placeholder="Card Holder First & Last Name"
+									(focus)="$event.target.select()" formControlName="primaryCardHolderName"
+									tabindex="1" />
+							</mat-form-field>
+						</div>
+						<div class="col-md-6">
+							<mat-form-field appearance="outline">
+								<mat-label>Card No#</mat-label>
+								<input matInput placeholder="Card No#" (focus)="$event.target.select()"
+									formControlName="primaryCardNumber" tabindex="1" />
+							</mat-form-field>
+							<div *ngIf="f?.primaryCardNumber?.errors"
+								class="text-danger margin-bottom-thin my-mat-hint">
+								<div *ngIf="
+												f?.primaryCardNumber?.errors
+													?.invalid_Pattern;
+												else plusError
+											">
+									Do not add Dashes with numbers
+								</div>
+								<ng-template #plusError>
+									<div *ngIf="
+													f?.primaryCardNumber?.errors
+														?.invalidPattern;
+													else allErrors
+												">
+										Do not enter + sign
+									</div>
+									<ng-template #allErrors>
+										<div *ngIf="
+														f?.primaryCardNumber?.errors
+															?.pattern;
+														else numberLength
+													">
+											Enter Numbers Without Spaces or
+											Dashes
+										</div>
+										<ng-template #numberLength>
+											<div *ngIf="
+															f?.primaryCardNumber?.errors
+																?.minlength
+														">
+												Minimum length should be 16
+											</div>
+											<div *ngIf="
+															f?.primaryCardNumber?.errors
+																?.maxlength
+														">
+												Maximum length should be 16
+											</div>
+										</ng-template>
+									</ng-template>
+								</ng-template>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<label class="select-ex-month-label">
+								Expiration Month
+							</label>
+							<div class="selectStyle">
+								<select class="selectInputStyle" (click)="selectDropdownExMonth()"
+									formControlName="primaryMM" tabindex="1">
+									<option value="">
+										Choose Expiration Month
+									</option>
+									<option value="1">01</option>
+									<option value="2">02</option>
+									<option value="3">03</option>
+									<option value="4">04</option>
+									<option value="5">05</option>
+									<option value="6">06</option>
+									<option value="7">07</option>
+									<option value="8">08</option>
+									<option value="9">09</option>
+									<option value="10">10</option>
+									<option value="11">11</option>
+									<option value="12">12</option>
+								</select>
+								<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+									xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
+									style="
+												enable-background: new 0 0 122.88 63.9;
+											" xml:space="preserve">
+									<style type="text/css">
+										.sty0 {
+											fill-rule: evenodd;
+											clip-rule: evenodd;
+										}
+									</style>
+									<g>
+										<polygon class="sty0" points="61.44,63.9 122.88,0 0,0 61.44,63.9" />
+									</g>
+								</svg>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<label class="select-ex-year-label">Expiration Year</label>
+							<div class="selectStyle">
+								<select class="selectInputStyle" (click)="selectDropdownExYear()"
+									formControlName="primaryYY" tabindex="1">
+									<option value="">
+										Choose Expiration Year
+									</option>
+									<option *ngFor="let yearOption of yearOptions" value="{{ yearOption }}">
+										{{ yearOption }}
+									</option>
+								</select>
+								<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+									xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
+									style="
+												enable-background: new 0 0 122.88 63.9;
+											" xml:space="preserve">
+									<style type="text/css">
+										.sty0 {
+											fill-rule: evenodd;
+											clip-rule: evenodd;
+										}
+									</style>
+									<g>
+										<polygon class="sty0" points="61.44,63.9 122.88,0 0,0 61.44,63.9" />
+									</g>
+								</svg>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<mat-form-field appearance="outline">
+								<mat-label>CVV</mat-label>
+								<input matInput placeholder="CVV" (focus)="$event.target.select()"
+									formControlName="primaryCSC" tabindex="1" />
+							</mat-form-field>
+							<div *ngIf="f?.primaryCSC?.errors" class="text-danger margin-bottom-thin my-mat-hint">
+								<div *ngIf="
+												f?.primaryCSC?.errors?.invalid_Pattern;
+												else plusError
+											">
+									Do not add Dashes with numbers
+								</div>
+								<ng-template #plusError>
+									<div *ngIf="
+													f?.primaryCSC?.errors?.invalidPattern;
+													else allErrors
+												">
+										Do not enter + sign
+									</div>
+									<ng-template #allErrors>
+										<div *ngIf="
+														f?.primaryCSC?.errors?.pattern;
+														else numberLength
+													">
+											Enter Numbers Without Spaces or
+											Dashes
+										</div>
+										<ng-template #numberLength>
+											<div *ngIf="
+															f?.primaryCSC?.errors
+																?.minlength
+														">
+												Minimum length should be 3
+											</div>
+											<div *ngIf="
+															f?.primaryCSC?.errors
+																?.maxlength
+														">
+												Maximum length should be 3
+											</div>
+										</ng-template>
+									</ng-template>
+								</ng-template>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section> -->
+	<h2>NOTE: Please fill out the above details to add card</h2>
+
+	<section class="user_information driverbooking_top adminbox_shadow" *ngIf="isStep2Completed">
+		<h2 class="headinginfo">
+			Farm-Out Booking Payments <span>(Optional)</span>
+		</h2>
+		<div class="containeredd">
+			<div class="row mt-3">
+				<div class="col-md-12 mb-2">
+					<label class="alert alert-danger">Add Debit/Credit Card To Pay Farm Out
+						Bookings and earn a 10% Travel Agent commission. (Optional)</label>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<button class="custom-btn add-button" (click)="addCardClick(accountId)" tabindex="-1">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-plus-circle"
+							viewBox="0 0 16 16">
+							<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+							<path
+								d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+						</svg>
+						Add Debit / Credit card
+					</button>
+				</div>
+			</div>
+		</div>
+		<div class="containeredd driverside_table">
+			<div class="row">
+				<div class="col-md-12 custom_table table-responsive">
+					<table class="table table-striped dataTable dt-responsive" id="dataTable" role="grid"
+						aria-describedby="dataTable_info" style="width: 100%" width="100%" cellspacing="0"
+						tabindex="-1">
+						<thead>
+							<tr role="row">
+								<th>Card Holder First & Last Name</th>
+								<th>Card No.</th>
+								<th>MM/YYYY</th>
+								<th>Card Type</th>
+								<th>Delete</th>
+							</tr>
+						</thead>
+						<tbody>
+
+							<ng-container *ngIf="cards">
+								<tr role="row" class="odd" *ngFor="let card of cards">
+									<td class="text-capitalize">{{card.name}}</td>
+									<td>{{card.last4}}</td>
+									<td *ngIf="card.exp_month >= 10; else showZero">
+										{{card.exp_month+'/'+card.exp_year}}</td>
+									<ng-template #showZero>
+										<td>0{{card.exp_month+'/'+card.exp_year}}</td>
+									</ng-template>
+									<td class="text-capitalize">{{card.card_type}}</td>
+
+									<td>
+										<i class="fa fa-trash" style="font-size: x-large; color:#d64646"
+											(click)="enableDisableClicked(card.ID)" data-toggle="modal"
+											data-target="#deleteConfirmationModal"></i>
+									</td>
+								</tr>
+							</ng-container>
+
+
+							<ng-container *ngIf="!cards">
+								<tr>
+									<td colspan="6">No Card found!</td>
+								</tr>
+							</ng-container>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</section>
+
+
 </form>
 
 <!-- Country wise Document modal -->
