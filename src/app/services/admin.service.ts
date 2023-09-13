@@ -1066,7 +1066,6 @@ export class AdminService {
 			return this.httpClient.get(`${this.serverUrl}admin/booking-rates`)
 		}
 	}
-	fetchRatesByAffiliateVeh(vehicle_id, data) {
 		// const params = new HttpParams()
 		// 	.set('vehicle_id', vehicle_id)
 		// 	.set('transfer_type', data?.transfer_type)
@@ -1075,6 +1074,8 @@ export class AdminService {
 		// 	.set('distance', data?.distance)
 		// 	.set('no_of_hours', data?.no_of_hours)
 		// 	.set('is_master_vehicle' , data?.is_master_vehicle);
+	fetchRatesByAffiliateVeh(vehicle_id, data) {
+		data['vehicle_id'] = vehicle_id
 		return this.httpClient.post(`${this.serverUrl}admin/booking-rates-vehicle`,data )
 	}
 	checkUniquePhoneNumberForLooseCustomer(customer_data: Record<string, any>) {

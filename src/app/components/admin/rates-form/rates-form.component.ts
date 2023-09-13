@@ -78,6 +78,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 	newBooking: boolean = false;
 	is_readonly_min_rate: boolean = false;
 	bookingType: any = 'new';
+	master_vehicle_id: any = null;
 
 	constructor(
 		private $form: FormBuilder,
@@ -88,6 +89,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 
 	ngOnInit(): void {
 		this.$routeurl.queryParams.subscribe((params: any) => {
+			console.log('params-->>' , params)
 			if (!params?.vehicle_id ) {
 				this.fetchRates('');
 			}
@@ -96,6 +98,9 @@ export class RatesFormComponent implements OnInit, OnChanges {
 			}
 			if (params && params.updateType) {
 				this.bookingType = params.updateType
+			}
+			if(params && params.is_master_vehicle == 'true'){
+				this.master_vehicle_id = params.vehicle_id
 			}
 		})
 	}
@@ -122,30 +127,31 @@ export class RatesFormComponent implements OnInit, OnChanges {
 		// 	this.fetchRatesArrayByAffiliateVehicle(changes?.book_data?.currentValue)
 		// }
 		if(changes?.book_data?.currentValue){
+
 			this.fetchRatesArrayByAffiliateVehicle(changes?.book_data?.currentValue)
 		}
-		if (changes?.QB_vehicle_id?.currentValue) {
-				console.log('got QB_vehicle_id------->>>>>>>>>', changes.QB_vehicle_id)
-				this.QB_vehicle_id = changes?.QB_vehicle_id?.currentValue
-				let QB: any = JSON.parse(localStorage.getItem('quotebot_form'))
-				let no_of_hours = null
-				if (QB?.service_type == 'charter_tour') {
-					no_of_hours = QB?.booking_hour
-				}
-				let location_info = QB?.location_info[0]
-				let transfer_type_value = QB?.pickup_type + '_to_' + QB?.dropoff_type
-				let return_transfer_type_value = QB?.dropoff_type + '_to_' + QB?.pickup_type
-				let data = {
-					vehicle_id : this.QB_vehicle_id,
-					service_type: QB?.service_type,
-					transfer_type: transfer_type_value,
-					numberOfVehicles: 1,
-					no_of_hours: no_of_hours,
-					distance: location_info.distance.value,
-					is_master_vehicle: JSON.parse(sessionStorage.getItem('selected_vehicle'))?.is_master_vehicle 
-				}
-				this.fetchRatesArrayByAffiliateVehicle(data)
-		}
+		// if (changes?.QB_vehicle_id?.currentValue) {
+		// 		console.log('got QB_vehicle_id------->>>>>>>>>', changes.QB_vehicle_id)
+		// 		this.QB_vehicle_id = changes?.QB_vehicle_id?.currentValue
+		// 		let QB: any = JSON.parse(localStorage.getItem('quotebot_form'))
+		// 		let no_of_hours = null
+		// 		if (QB?.service_type == 'charter_tour') {
+		// 			no_of_hours = QB?.booking_hour
+		// 		}
+		// 		let location_info = QB?.location_info[0]
+		// 		let transfer_type_value = QB?.pickup_type + '_to_' + QB?.dropoff_type
+		// 		let return_transfer_type_value = QB?.dropoff_type + '_to_' + QB?.pickup_type
+		// 		let data = {
+		// 			vehicle_id : this.QB_vehicle_id,
+		// 			service_type: QB?.service_type,
+		// 			transfer_type: transfer_type_value,
+		// 			numberOfVehicles: 1,
+		// 			no_of_hours: no_of_hours,
+		// 			distance: location_info.distance.value,
+		// 			is_master_vehicle: JSON.parse(sessionStorage.getItem('selected_vehicle'))?.is_master_vehicle 
+		// 		}
+		// 		this.fetchRatesArrayByAffiliateVehicle(data)
+		// }
 		
 		// if asked to initialise the rates
 		if (changes.init_rates?.currentValue) {
@@ -155,24 +161,24 @@ export class RatesFormComponent implements OnInit, OnChanges {
 		}
 	
 
-		if (changes.init_r_rates?.currentValue || this.returnratesform) {
-			this.hours = 0;
-			// if (!changes.vehs) {
-			// 	this.initReturnRates();
-			// }
-				let data = {
-					vehicle_id : this.book_data?.vehicle_id,
-					service_type: this.book_data?.service_type,
-					transfer_type: this.book_data?.transfer_type,
-					numberOfVehicles: this.book_data?.numberOfVehicles,
-					no_of_hours: this.book_data?.no_of_hours,
-					distance: this.book_data?.distance,
-					is_master_vehicle:this.book_data?.is_master_vehicle,
-					extra_stops:this.book_data?.extra_stops,
-					return_extra_stops:this.book_data?.return_extra_stops
-				}
-				this.fillReturnRateForm(data)
-		}
+		// if (changes.init_r_rates?.currentValue || this.returnratesform) {
+		// 	this.hours = 0;
+		// 	// if (!changes.vehs) {
+		// 	// 	this.initReturnRates();
+		// 	// }
+		// 		let data = {
+		// 			vehicle_id : this.master_vehicle_id ? this.master_vehicle_id : this.book_data?.vehicle_id,
+		// 			service_type: this.book_data?.service_type,
+		// 			transfer_type: this.book_data?.transfer_type,
+		// 			numberOfVehicles: this.book_data?.numberOfVehicles,
+		// 			no_of_hours: this.book_data?.no_of_hours,
+		// 			distance: this.book_data?.distance,
+		// 			is_master_vehicle:this.book_data?.is_master_vehicle,
+		// 			extra_stops:this.book_data?.extra_stops,
+		// 			return_extra_stops:this.book_data?.return_extra_stops
+		// 		}
+		// 			this.fillReturnRateForm(data)
+		// }
 
 		if (changes.nums) {
 			this.hours = Number(changes.nums.currentValue)
@@ -454,18 +460,19 @@ export class RatesFormComponent implements OnInit, OnChanges {
 	fetchRatesArrayByAffiliateVehicle(data) {
 		this.ratesdata.next({})
 		console.log('<<<<<<<<<<<________ data to send fetchRatesArrayByAffiliateVehicle---------------->>>>>>>>>>>>>>',
-			data.vehicle_id)
-	if(data?.vehicle_id && this.bookingType !='edit' ){
-		this.$api.fetchRatesByAffiliateVeh(data.vehicle_id, data).subscribe((response: any) => {
-			this.is_readonly_min_rate = response?.data?.min_rate_involved ? true : false
-			this.ratesdata.next(response?.data?.rateArray)
-			this.initRates();
+			data.vehicle_id , this.master_vehicle_id)
+			let vehicle_id = this.master_vehicle_id ? this.master_vehicle_id : data?.vehicle_id
+		this.$api.fetchRatesByAffiliateVeh(vehicle_id, data).subscribe((response: any) => {
+			if(this.bookingType !='edit'){
+				this.is_readonly_min_rate = response?.data?.min_rate_involved ? true : false
+				this.ratesdata.next(response?.data?.rateArray)
+				this.initRates();
+			}
 			if(data.service_type == 'round_trip'){
 				this.returnRatesdata.next(response?.data?.retrunRateArray)
 				this.initReturnRates()
 			}
 		});
-	}
 	}
 	getReturnRatesData() {
 		return this.returnRatesdata.asObservable();
