@@ -116,6 +116,7 @@ export class NewBookingComponent implements OnInit {
 	booking_data:any;
 	extraStops_rate:any = 0
 	selectedVehicle: any;
+	is_master_vehicle: boolean = JSON.parse(sessionStorage.getItem('selected_vehicle'))?.is_master_vehicle || false
 
 	constructor(
 		private $form: FormBuilder,
@@ -171,7 +172,7 @@ export class NewBookingComponent implements OnInit {
 			numberOfVehicles :1,
 			distance : this.distance, 
 			no_of_hours : this.number_of_hours,
-			is_master_vehicle : false,
+			is_master_vehicle : this.is_master_vehicle,
 			extra_stops: this.BookingForm.get('extra_stops').value,
 			return_extra_stops : this.BookingForm.get('return_extra_stops').value
 		}
@@ -1351,9 +1352,9 @@ export class NewBookingComponent implements OnInit {
 				(<FormArray>this.BookingForm.get('return_extra_stops')).at(index).patchValue({
 					address: address.formatted_address
 				})
-				let return_pickup_location = this.Form.return_pickup.value
+				let return_pickup_location = this.Form.return_pickup?.value
 				if (this.Form.transfer_type.value.includes('_airport')) {
-					return_pickup_location = this.Form.return_pickup_airport.value
+					return_pickup_location = this.Form.return_pickup_airport_name?.value
 				}
 				this.checkExtraStopInTown(return_pickup_location,address.formatted_address ,'return_extra_stops',index )
 			}
@@ -1374,7 +1375,7 @@ export class NewBookingComponent implements OnInit {
 				});
 				let pickup_location = this.Form.pickup.value
 				if (this.Form.transfer_type.value.includes('airport_')) {
-					pickup_location = this.Form.pickup_airport.value
+					pickup_location = this.Form.pickup_airport_name.value
 				}
 				this.checkExtraStopInTown(pickup_location,address.formatted_address ,'extra_stops',index )
 			}
@@ -1418,6 +1419,7 @@ export class NewBookingComponent implements OnInit {
 		return null;
 	}
 	checkExtraStopInTown(location1: string, location2: string,formKey:string,index:any) {
+		console.log('in function check extra stop in town' , location1 , location2)
 		const geocoder = new google.maps.Geocoder();
 		geocoder.geocode({ address: location1 }, (results1, status1) => {
 		  if (status1 === 'OK' && results1.length > 0) {
