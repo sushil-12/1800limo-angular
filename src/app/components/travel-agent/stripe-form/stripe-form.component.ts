@@ -26,7 +26,7 @@ export class StripeFormComponent implements OnInit {
 	public submittedForm: boolean;
 	public disableSubmitButton: boolean = false;
 	public response: any;
-	public affiliateId: string;
+	public travelAgentId: string;
 	public stepCompleted: any;
 	public isStep2Completed: boolean = false;
 	public countryDocumentsArray: any = [];
@@ -96,10 +96,14 @@ this.mapFunction();
 		}
 		const currentUser = JSON.parse(sessionStorage.getItem("affiliateUserData"));
 
+		//get travelagent id
+		const userDataTravelAgent = JSON.parse(localStorage.getItem("currentUser"))?.account_id
+		this.travelAgentId = userDataTravelAgent
+
     	//add amenity form validation
 		this.addBankForm = this.formBuilder.group({
 			id: [''],//bank id for edit purpose
-			acc_id: [this.affiliateId, [Validators.required, Validators.pattern("^[0-9].*$")]],//affiliate account id
+			acc_id: [this.travelAgentId, [Validators.required, Validators.pattern("^[0-9].*$")]],//affiliate account id
 			BankName: [''],
 			BankAddress: [''],
 			AccountHolderFirstName: ['', Validators.required],
@@ -128,8 +132,8 @@ this.mapFunction();
 			zipCode: [''],
 			unit: [''],
 			primaryCardType: ['personal'],
-			primaryCardNumber: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(16), Validators.maxLength(16), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
-			primaryCSC: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(3), Validators.maxLength(3), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
+			// primaryCardNumber: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(16), Validators.maxLength(16), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
+			// primaryCSC: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(3), Validators.maxLength(3), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
 			primaryMM: [''],
 			primaryYY: [''],
 			primaryCardHolderName: ['']
@@ -167,7 +171,7 @@ this.mapFunction();
 		this.httpClient.get("assets/json/countryStateList.json").subscribe(data => {
 			this.countryOptions = data;
 		})
-		if (this.affiliateId) {
+		if (this.travelAgentId) {
 			this.getFormData()
 		}
 		else {
@@ -214,7 +218,7 @@ this.mapFunction();
 									state: place.address_components[i].short_name
 								});
 							}
-							else if (place.address_components[i].types[j] == "administrative_area_level_2") {
+							else if (place.address_components[i].types[j] == "administrative_area_level_2" || place.address_components[i].types[j] == "administrative_area_level_3") {
 								this.addBankForm.patchValue({
 									city: place.address_components[i].long_name
 								});
@@ -248,11 +252,12 @@ this.mapFunction();
 	getFormData(){
 		const currentUser = JSON.parse(sessionStorage.getItem("affiliateUserData"));
 		
-			if (this.stepCompleted.includes('2')) {
-				this.isStep2Completed = true;
+			if (true) {
+				// this.stepCompleted.includes('2') IF CONDITION
+				// this.isStep2Completed = true;
 				// this.stateManagementService.setprogressBar(true);
 	
-				this.adminService.getBankOfAffiliate(this.affiliateId)
+				this.travelService.getBankOfTravelAgent(this.travelAgentId)
 					.pipe(
 						catchError(err => {
 							// this.stateManagementService.setprogressBar(false);
@@ -277,6 +282,7 @@ this.mapFunction();
 						else {
 							this.canChangeDocument = false;
 						}
+						
 	
 						this.addBankForm.patchValue({
 							id: this.response.data.bankinfo.id,
@@ -609,12 +615,12 @@ this.mapFunction();
 		if (this.addBankForm.invalid) {
 			return;
 		}
-		this.addBankForm.value.stepCompleted = this.adminService.getUpdatedStepsLocal('2');
+		// this.addBankForm.value.stepCompleted = this.adminService.getUpdatedStepsLocal('2');
 		console.log(this.addBankForm.value);
 		// console.log(JSON.stringify(this.addVehicleRatesForm.value));
 		this.disableSubmitButton = true; //disable submit button
 		this.spinner.show();
-		this.adminService.addBankOfAffiliate(this.addBankForm.value)
+		this.travelService.addBankOfTravelAgent(this.addBankForm.value)
 			.pipe(
 				catchError(err => {
 					this.spinner.hide();//hide spinner
@@ -627,9 +633,8 @@ this.mapFunction();
 				this.spinner.hide();//hide spinner
 				this.disableSubmitButton = false; //enable submit button
 
-
 				this.router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
-					this.router.navigate(['/admin/affiliate/step3'])
+					this.router.navigate(['/travel_agent/bookings'])
 				);
 			});
 	}

@@ -117,5 +117,14 @@ export class TravelAgentService {
   updateStepsCompletedObj(stepObject) {
 		sessionStorage.setItem('step_completed_obj', JSON.stringify(stepObject))
 	}
+
+  addBankOfTravelAgent(data) {
+			return this.httpClient.post(this.serverUrl + 'add-a-bank', data);
+		
+	}
+
+  getBankOfTravelAgent(id) {
+		return this.httpClient.get(this.serverUrl + 'get-a-bank/' + id);
+	}
   
 }

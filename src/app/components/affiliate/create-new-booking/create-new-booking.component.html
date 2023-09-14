@@ -331,10 +331,10 @@
 								</div>
 							</div>
 
-							<!-- Expiration Month -->
+							<!-- Expiry Month -->
 							<div class="col-md-4">
 								<mat-form-field appearance="outline" class="m-0">
-									<mat-label class="required-field">Expiration Month</mat-label>
+									<mat-label class="required-field">Expiry Month</mat-label>
 									<input type="number" matInput formControlName="exp_month" [matAutocomplete]="auto"
 										(keyup)="handleChangeMonth($event.target.value)">
 									<mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
@@ -354,7 +354,7 @@
 								</div>
 								<!-- <mat-form-field appearance="outline" class="m-0">
 									<mat-label class="required-field">
-										Expiration Month
+										Expiry Month
 									</mat-label>
 									<mat-select formControlName="exp_month">
 										<mat-option value='1'>01</mat-option>
@@ -373,11 +373,11 @@
 								</mat-form-field> -->
 							</div>
 
-							<!-- Expiration Year -->
+							<!-- Expiry Year -->
 							<div class="col-md-4">
 								<mat-form-field appearance="outline" class="m-0">
 									<mat-label class="required-field">
-										Expiration Year
+										Expiry Year
 									</mat-label>
 									<mat-select formControlName="exp_year">
 										<mat-option [value]="number" *ngFor="let number of booking_params.years">
@@ -928,7 +928,8 @@
 
 					<!-- License Plate -->
 					<div class="col-md-3">
-						<mat-form-field appearance="outline" class="vehicleLable mt-0" style="margin-top: 0px !important;">
+						<mat-form-field appearance="outline" class="vehicleLable mt-0"
+							style="margin-top: 0px !important;">
 							<mat-label>
 								License Plate #
 							</mat-label>
@@ -948,7 +949,8 @@
 
 					<!-- Number of Seats -->
 					<div class="col-md-3">
-						<mat-form-field appearance="outline" class="vehicleLable m-0" style="margin-top: 0px !important;">
+						<mat-form-field appearance="outline" class="vehicleLable m-0"
+							style="margin-top: 0px !important;">
 							<mat-label>
 								Number of Seats
 							</mat-label>
@@ -1363,7 +1365,8 @@
 
 					<!-- Flight Number -->
 					<div class="col-md-6 col-lg-3">
-						<mat-form-field appearance="outline" class="vehicleLable mt-0" style="margin-top: 0px !important;">
+						<mat-form-field appearance="outline" class="vehicleLable mt-0"
+							style="margin-top: 0px !important;">
 							<mat-label>
 								Flight Number
 							</mat-label>
@@ -1374,7 +1377,8 @@
 
 					<!-- Origin Airport / City -->
 					<div class="col-md-6 col-lg-3">
-						<mat-form-field appearance="outline" class="vehicleLable mt-0" style="margin-top: 0px !important;">
+						<mat-form-field appearance="outline" class="vehicleLable mt-0"
+							style="margin-top: 0px !important;">
 							<mat-label>
 								Origin Airport / City
 							</mat-label>
@@ -1517,7 +1521,8 @@
 
 					<!-- Flight Number -->
 					<div class="col-md-5 col-lg-3">
-						<mat-form-field appearance="outline" class="vehicleLable mt-0" style="margin-top: 0px !important;">
+						<mat-form-field appearance="outline" class="vehicleLable mt-0"
+							style="margin-top: 0px !important;">
 							<mat-label>
 								Flight Number
 							</mat-label>
@@ -2013,7 +2018,8 @@
 
 					<!-- Flight Number -->
 					<div class="col-md-6 col-lg-3">
-						<mat-form-field appearance="outline" class="vehicleLable mt-0" style="margin-top: 0px !important;">
+						<mat-form-field appearance="outline" class="vehicleLable mt-0"
+							style="margin-top: 0px !important;">
 							<mat-label>
 								Flight Number
 							</mat-label>
@@ -2157,7 +2163,8 @@
 
 					<!-- Flight Number -->
 					<div class="col-md-5 col-lg-3">
-						<mat-form-field appearance="outline" class="vehicleLable mt-0" style="margin-top: 0px !important;">
+						<mat-form-field appearance="outline" class="vehicleLable mt-0"
+							style="margin-top: 0px !important;">
 							<mat-label>
 								Flight Number
 							</mat-label>
@@ -2270,9 +2277,10 @@
 
 		<app-rates-forms class="d-flex flex-wrap" [initRates]="init_rates" [affiliate_type]="Form.affiliate_type.value"
 			[distance]="distance_for_rates" [reservation_id]="booking_id" [reset]="reset_button"
-			[initReturnRates]="init_return_rates" (formvalue)="RateFormValue($event)" [vehicle_id]="params_QB_vehicle_id"
-			[hours]="Form.number_of_hours?.value" [vehicles]="Form.number_of_vehicles?.value"
-			(returnformvalue)="ReturnRateFormValue($event)" (returnNumberOfHr)="HandleReturnNumberOfHr($event)">
+			[initReturnRates]="init_return_rates" (formvalue)="RateFormValue($event)"
+			[vehicle_id]="params_QB_vehicle_id" [hours]="Form.number_of_hours?.value"
+			[vehicles]="Form.number_of_vehicles?.value" (returnformvalue)="ReturnRateFormValue($event)"
+			(returnNumberOfHr)="HandleReturnNumberOfHr($event)">
 		</app-rates-forms>
 
 
@@ -2342,8 +2350,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="mx-2"
-						*ngIf="ReturnRatesForm && init_return_rates">
+					<div class="mx-2" *ngIf="ReturnRatesForm && init_return_rates">
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
@@ -2859,7 +2866,8 @@
 								<span class="font-weight-bolder">
 									{{ textFormatter(Form.pickup.value) }}
 								</span>
-								<span (click)="showLocationPointOnMap(Form.pickup.value)"><i class="bi bi-geo-alt-fill"></i></span>
+								<span (click)="showLocationPointOnMap(Form.pickup.value)"><i
+										class="bi bi-geo-alt-fill"></i></span>
 							</div>
 						</div>
 					</div>
@@ -2977,7 +2985,8 @@
 									<span class="font-weight-bolder">
 										{{ stop.address }}
 									</span>
-								<span (click)="showLocationPointOnMap(stop.address)"><i class="bi bi-geo-alt-fill"></i></span>
+									<span (click)="showLocationPointOnMap(stop.address)"><i
+											class="bi bi-geo-alt-fill"></i></span>
 								</div>
 							</div>
 							<hr>
@@ -3003,7 +3012,8 @@
 								<span class="font-weight-bolder">
 									{{ textFormatter(Form.dropoff.value) }}
 								</span>
-								<span (click)="showLocationPointOnMap(Form.dropoff.value)"><i class="bi bi-geo-alt-fill"></i></span>
+								<span (click)="showLocationPointOnMap(Form.dropoff.value)"><i
+										class="bi bi-geo-alt-fill"></i></span>
 							</div>
 						</div>
 					</div>
@@ -3164,13 +3174,15 @@
 									<span class="font-weight-bolder">
 										{{ textFormatter(Form.return_pickup.value) | titlecase }}
 									</span>
-								<span (click)="showLocationPointOnMap(Form.return_pickup.value)"><i class="bi bi-geo-alt-fill"></i></span>
+									<span (click)="showLocationPointOnMap(Form.return_pickup.value)"><i
+											class="bi bi-geo-alt-fill"></i></span>
 								</div>
 							</div>
 						</div>
 
 						<!-- Return > Pickup > Airline Details -->
-						<div class="mx-2 preview-pickup-color" *ngIf="Form.return_transfer_type.value.includes('airport_')">
+						<div class="mx-2 preview-pickup-color"
+							*ngIf="Form.return_transfer_type.value.includes('airport_')">
 							<!-- Airport -->
 							<div class="row p-2">
 								<div class="col-md-4 key">
@@ -3182,8 +3194,8 @@
 									<span class="font-weight-bolder preview-airport-color">
 										{{ textFormatter(Form.return_pickup_airport_name.value) }}
 									</span>
-								<span (click)="showLocationPointOnMap(Form.return_pickup_airport_name.value)">
-									<i class="bi bi-geo-alt-fill"></i></span>
+									<span (click)="showLocationPointOnMap(Form.return_pickup_airport_name.value)">
+										<i class="bi bi-geo-alt-fill"></i></span>
 
 								</div>
 							</div>
@@ -3217,7 +3229,8 @@
 						</div>
 
 						<!-- Return > Pickup > Cruise Details -->
-						<div class="mx-2 preview-pickup-color" *ngIf="Form.return_transfer_type.value.includes('cruise_')">
+						<div class="mx-2 preview-pickup-color"
+							*ngIf="Form.return_transfer_type.value.includes('cruise_')">
 							<div class="row p-2">
 								<div class="col-md-4 key">
 									<span>
@@ -3280,7 +3293,8 @@
 										<span class="font-weight-bolder">
 											{{ stop.address }}
 										</span>
-								<span (click)="showLocationPointOnMap(stop.address)"><i class="bi bi-geo-alt-fill"></i></span>
+										<span (click)="showLocationPointOnMap(stop.address)"><i
+												class="bi bi-geo-alt-fill"></i></span>
 									</div>
 								</div>
 								<hr>
@@ -3294,7 +3308,8 @@
 							Dropoff Details
 						</h5>
 						<!-- Return > Dropoff > City Details  -->
-						<div class="mx-2 preview-dropoff-color" *ngIf="Form.return_transfer_type.value.includes('_city')">
+						<div class="mx-2 preview-dropoff-color"
+							*ngIf="Form.return_transfer_type.value.includes('_city')">
 							<div class="row p-2">
 								<div class="col-md-4 key">
 									<span>
@@ -3305,13 +3320,15 @@
 									<span class="font-weight-bolder">
 										{{ textFormatter(Form.return_dropoff.value) | titlecase }}
 									</span>
-								<span (click)="showLocationPointOnMap(Form.return_dropoff.value)"><i class="bi bi-geo-alt-fill"></i></span>
+									<span (click)="showLocationPointOnMap(Form.return_dropoff.value)"><i
+											class="bi bi-geo-alt-fill"></i></span>
 								</div>
 							</div>
 						</div>
 
 						<!-- Return > Dropoff > Airline Details -->
-						<div class="mx-2 preview-dropoff-color" *ngIf="Form.return_transfer_type.value.includes('_airport')">
+						<div class="mx-2 preview-dropoff-color"
+							*ngIf="Form.return_transfer_type.value.includes('_airport')">
 							<!-- Airport -->
 							<div class="row p-2">
 								<div class="col-md-4 key">
@@ -3323,8 +3340,8 @@
 									<span class="font-weight-bolder preview-airport-color">
 										{{ textFormatter(Form.return_dropoff_airport_name.value) }}
 									</span>
-								<span (click)="showLocationPointOnMap(Form.return_dropoff_airport_name.value)">
-									<i class="bi bi-geo-alt-fill"></i></span>
+									<span (click)="showLocationPointOnMap(Form.return_dropoff_airport_name.value)">
+										<i class="bi bi-geo-alt-fill"></i></span>
 
 								</div>
 							</div>
@@ -3359,7 +3376,8 @@
 						</div>
 
 						<!-- Return > Dropoff > Cruise Details -->
-						<div class="mx-2 preview-dropoff-color" *ngIf="Form.return_transfer_type.value.includes('_cruise')">
+						<div class="mx-2 preview-dropoff-color"
+							*ngIf="Form.return_transfer_type.value.includes('_cruise')">
 							<!-- Cruise Port -->
 							<div class="row p-2">
 								<div class="col-md-4 key">

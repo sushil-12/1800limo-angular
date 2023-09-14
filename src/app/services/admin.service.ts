@@ -77,7 +77,7 @@ export class AdminService {
 			// Split the cookie path and value
 			const [path,] = value.split(';');
 	  
-			// Set the expiration date in the past to delete the cookie
+			// Set the Expiry date in the past to delete the cookie
 			document.cookie = `${name}=${path}; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=${path}`;
 
 		  }

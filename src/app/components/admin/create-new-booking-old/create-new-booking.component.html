@@ -287,13 +287,13 @@
 								</mat-form-field>
 							</div>
 						</div>
-						<!-- Expiration Month/Year | CVV -->
+						<!-- Expiry Month/Year | CVV -->
 						<div class="row">
-							<!-- Expiration Month -->
+							<!-- Expiry Month -->
 							<div class="col-md-4">
 								<mat-form-field appearance="outline">
 									<mat-label>
-										Expiration Month <span class="asterisk">*</span>
+										Expiry Month <span class="asterisk">*</span>
 									</mat-label>
 									<mat-select formControlName="exp_month" (focus)="$event.target.select()">
 										<mat-option value='1'>01</mat-option>
@@ -312,11 +312,11 @@
 								</mat-form-field>
 							</div>
 
-							<!-- Expiration Year -->
+							<!-- Expiry Year -->
 							<div class="col-md-4">
 								<mat-form-field appearance="outline">
 									<mat-label>
-										Expiration Year <span class="asterisk">*</span>
+										Expiry Year <span class="asterisk">*</span>
 									</mat-label>
 									<mat-select formControlName="exp_year" (focus)="$event.target.select()">
 										<mat-option [value]="number" *ngFor="let number of years">
