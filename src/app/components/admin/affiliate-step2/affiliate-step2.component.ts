@@ -52,11 +52,13 @@ export class AffiliateStep2Component implements OnInit {
 	public disableSubmitRequestAddressChangeButton: boolean = false;
 	public showProgressBar: boolean = false;
 	public haveEinNo: boolean = true;
+	public cardsRes:any;
 
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
 	stepsObj: any;
 	filteredOptions: any;
 	badgeOptions: any;
+	cards: any;
 
 	constructor(
 		private adminService: AdminService,
@@ -75,10 +77,17 @@ export class AffiliateStep2Component implements OnInit {
 
 	ngOnInit(): void {
 
+		
+
 		//code related to autocomplete and map
 		this.spinner.show()
 		this.mapFunction();
+
+		//prepare list of years for add card
 		const currentYear = (new Date()).getFullYear();
+		for (let i = 0; i < 40; i++) {
+			this.yearOptions.push(currentYear + i);
+		}
 		//prepare list of days for DOB
 		for (let i = 1; i <= 31; i++) {
 			this.dobDay.push(i);
@@ -259,6 +268,8 @@ export class AffiliateStep2Component implements OnInit {
 				});
 			}
 		})
+this.loadCards(this.affiliateId)
+
 	}//google map autocomplete
 	latitude: number;
 	longitude: number;
@@ -525,10 +536,14 @@ export class AffiliateStep2Component implements OnInit {
 		}
 	}
 
-	// addCardClick(accountId)
-	// {
-	// 	this.router.navigate(['/admin/add-card'], { queryParams: { accountType: 'blackCarLimoBus', accountId: this.affiliateId } })
-	// }
+	addCardClick(accountId)
+	{
+		this.router.navigate(['/admin/add-card'], { queryParams: { accountType: 'blackCarLimoBus', accountId: this.affiliateId , for: 'affiliate' } })
+	}
+	enableDisableClicked(id) {
+		this.cardToDelete = id;
+		this.alertMessage = "Are you sure you want to delete this Card?"
+	}
 	delete() {
 		// this.stateManagementService.setprogressBar(true);
 		$('#deleteConfirmationModal').modal('hide');
@@ -540,7 +555,7 @@ export class AffiliateStep2Component implements OnInit {
 				})
 			).subscribe(result => {
 				this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
-					this.router.navigate(['/admin /affiliate/step2']);
+					this.router.navigate(['/admin/affiliate/step2']);
 				});
 				// this.stateManagementService.setprogressBar(false);
 			});
@@ -611,20 +626,43 @@ export class AffiliateStep2Component implements OnInit {
 					return throwError(err);
 				})
 			)
-			.subscribe(result => {
-				this.response = result;
+			.subscribe(({ success, data }: any) => {
+				// this.response = result;
 				this.spinner.hide();//hide spinner
 				this.disableSubmitButton = false; //enable submit button
 
-
-				this.router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
-					this.router.navigate(['/admin/affiliate/step3'])
-				);
+				if (data.stripe_account_type == 'standard') {
+					if (data.stripe_response.account_link) {
+						window.open(data.stripe_response.account_link.url, "_self");
+						// window.location.href=data.stripe_response.account_link.url;
+					}
+				}
+				else {
+					this.router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
+					this.router.navigate(['/admin/affiliate/step2'])
+					);
+				}
+				// this.router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
+				// 	this.router.navigate(['/admin/affiliate/step3'])
+				// );
 			});
 	}
 	closeButton() {
 		this.closeTab.emit();
 	}
+
+     loadCards(accountId) {
+	// Load Our cards using API
+	this.adminService.cardsList(accountId).then(result => {
+		this.cardsRes = result;
+		this.cards = this.cardsRes.data;
+		console.log("<><><>><>><>><><><<><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<", JSON.stringify(this.cards))
+		
+		this.stateManagementService.setprogressBar(false);
+	});
+}
+
+
 	resetForm() {
 		this.addBankForm.reset();
 		this.id_front_image = "";
@@ -689,6 +727,13 @@ export class AffiliateStep2Component implements OnInit {
 		if (object) {
 			this.SetFormValue(form_control, object['currency'])
 		}
+	}
+	selectDropdownExMonth() {
+		$('.selectExMonthLabel').removeClass('selectExMonthLabel ').addClass('select-ex-month-label');
+	}
+
+	selectDropdownExYear() {
+		$('.selectExYearLabel').removeClass('selectExYearLabel ').addClass('select-ex-year-label');
 	}
 
 }

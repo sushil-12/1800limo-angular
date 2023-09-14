@@ -25,6 +25,7 @@ export class AddCardComponent implements OnInit
 	public accountId: string;
 	public accountType: string;
 	public yearOptions: any = [];
+	addingCartFor: any;
 
 
 	constructor(
@@ -47,6 +48,7 @@ export class AddCardComponent implements OnInit
 				this.paramResponse = { ...params.keys, ...params };
 				this.accountId = this.paramResponse.params.accountId;
 				this.accountType = this.paramResponse.params.accountType;
+				this.addingCartFor = this.paramResponse.params.for;
 				if (!this.accountId)
 				{
 					this.redirectCases();
@@ -171,8 +173,13 @@ export class AddCardComponent implements OnInit
 				this.response = result;
 				this.spinner.hide();
 				this.disableSubmitButton = false; //enable submit button
+				if(this.addingCartFor === 'affiliate'){
+					this.router.navigate(['/admin/affiliate/step2'])
+				}
+				else{
 
-				this.router.navigate(['/admin/cards'], { queryParams: { accountType: this.accountType, accountId: this.accountId } });
+					this.router.navigate(['/admin/cards'], { queryParams: { accountType: this.accountType, accountId: this.accountId } });
+				}
 			});
 	}
 
