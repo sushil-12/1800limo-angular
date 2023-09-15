@@ -320,7 +320,7 @@
 										<ng-template #cardLength>
 											<p class="text-danger text-lg m-0"
 												*ngIf="LooseCustomer.card_details.controls.card_number.errors?.minlength">
-												Minimum length should be 12
+												Minimum length should be 16
 											</p>
 											<p class="text-danger text-lg m-0"
 												*ngIf="LooseCustomer.card_details.controls.card_number.errors?.maxlength">
@@ -331,10 +331,10 @@
 								</div>
 							</div>
 
-							<!-- Expiration Month -->
+							<!-- Expiry Month -->
 							<div class="col-md-4">
 								<mat-form-field appearance="outline" class="m-0">
-									<mat-label class="required-field">Expiration Month</mat-label>
+									<mat-label class="required-field">Expiry Month</mat-label>
 									<input type="number" matInput formControlName="exp_month" [matAutocomplete]="auto"
 										(keyup)="handleChangeMonth($event.target.value)">
 									<mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
@@ -354,7 +354,7 @@
 								</div>
 								<!-- <mat-form-field appearance="outline" class="m-0">
 									<mat-label class="required-field">
-										Expiration Month
+										Expiry Month
 									</mat-label>
 									<mat-select formControlName="exp_month">
 										<mat-option value='1'>01</mat-option>
@@ -373,11 +373,11 @@
 								</mat-form-field> -->
 							</div>
 
-							<!-- Expiration Year -->
+							<!-- Expiry Year -->
 							<div class="col-md-4">
 								<mat-form-field appearance="outline" class="m-0">
 									<mat-label class="required-field">
-										Expiration Year
+										Expiry Year
 									</mat-label>
 									<mat-select formControlName="exp_year">
 										<mat-option [value]="number" *ngFor="let number of booking_params.years">
@@ -416,16 +416,16 @@
 											*ngIf="LooseCustomer.card_details.controls.cvv.errors?.pattern">
 											Only Numbers are Allowed
 										</p>
-										<!-- <ng-template #cvvLength>
+										<!-- <ng-template #cvvLength> -->
 											<p class="text-danger text-lg m-0"
 												*ngIf="LooseCustomer.card_details.controls.cvv.errors?.minlength">
 												Minimum length should be 3
 											</p>
 											<p class="text-danger text-lg m-0"
 												*ngIf="LooseCustomer.card_details.controls.cvv.errors?.maxlength">
-												Maximum length should be 3
+												Maximum length should be 5
 											</p>
-										</ng-template> -->
+										<!-- </ng-template> -->
 									</div>
 								</div>
 							</div>

@@ -65,10 +65,10 @@
                     <div class="col-md-4">
                         <mat-form-field appearance="outline">
                             <mat-label>
-                                Expiration Month <sup style="color: #ff0000">*</sup>
+                                Expiry Month <sup style="color: #ff0000">*</sup>
                             </mat-label>
                             <mat-select formControlName="exp_month" tabindex="1">
-                                <mat-option value="">Choose Expiration Month</mat-option>
+                                <mat-option value="">Choose Expiry Month</mat-option>
                                 <mat-option value='01'>Janaury</mat-option>
                                 <mat-option value='02'>February</mat-option>
                                 <mat-option value='03'>March</mat-option>
@@ -91,10 +91,10 @@
                     <div class="col-md-4">
                         <mat-form-field appearance="outline">
                             <mat-label>
-                                Expiration Year<sup style="color: #ff0000">*</sup>
+                                Expiry Year<sup style="color: #ff0000">*</sup>
                             </mat-label>
                             <mat-select formControlName="exp_year" tabindex="1">
-                                <mat-option value="">Choose Expiration Year</mat-option>
+                                <mat-option value="">Choose Expiry Year</mat-option>
                                 <mat-option *ngFor="let yearOption of yearOptions" value="{{yearOption}}">{{yearOption}}
                                 </mat-option>
                             </mat-select>

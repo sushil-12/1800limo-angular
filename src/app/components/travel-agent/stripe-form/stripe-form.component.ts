@@ -11,22 +11,21 @@ import { CustomvalidationService } from 'src/app/services/customvalidation.servi
 import { StateManagementService } from 'src/app/services/statemanagement.service';
 import { TravelAgentService } from 'src/app/services/travel-agent.service';
 import { SharedModule } from '../../shared/shared.module';
-declare var $:any;
+declare var $: any;
 @Component({
-  selector: 'app-stripe-form',
-  templateUrl: './stripe-form.component.html',
-  styleUrls: ['./stripe-form.component.scss']
+	selector: 'app-stripe-form',
+	templateUrl: './stripe-form.component.html',
+	styleUrls: ['./stripe-form.component.scss']
 })
 export class StripeFormComponent implements OnInit {
 
 
 
-  public addBankForm: FormGroup;
-  public requestAddressChangeForm: FormGroup;
+	public addBankForm: FormGroup;
+	public requestAddressChangeForm: FormGroup;
 	public submittedForm: boolean;
 	public disableSubmitButton: boolean = false;
 	public response: any;
-	public affiliateId: string;
 	public stepCompleted: any;
 	public isStep2Completed: boolean = false;
 	public countryDocumentsArray: any = [];
@@ -59,10 +58,11 @@ export class StripeFormComponent implements OnInit {
 	stepsObj: any;
 	filteredOptions: any;
 	badgeOptions: any;
+	travelAgentId: any;
 
-  constructor(
-    private adminService: AdminService,
-    private travelService: TravelAgentService,
+	constructor(
+		private adminService: AdminService,
+		private travelService: TravelAgentService,
 		private router: Router,
 		private formBuilder: FormBuilder,
 		private httpClient: HttpClient,
@@ -74,13 +74,15 @@ export class StripeFormComponent implements OnInit {
 		private el: ElementRef,
 		private customValidator: CustomvalidationService,
 		private globalFunctions: SharedModule
-  ) { }
+	) { }
 
-  ngOnInit(): void {
+	ngOnInit(): void {
+		const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+		this.travelAgentId = currentUser?.account_id
 
-this.mapFunction();
+		this.mapFunction();
 
-    const currentYear = (new Date()).getFullYear();
+		const currentYear = (new Date()).getFullYear();
 		//prepare list of days for DOB
 		for (let i = 1; i <= 31; i++) {
 			this.dobDay.push(i);
@@ -94,12 +96,10 @@ this.mapFunction();
 			year--;
 			temp++;
 		}
-		const currentUser = JSON.parse(sessionStorage.getItem("affiliateUserData"));
-
-    	//add amenity form validation
+		//add amenity form validation
 		this.addBankForm = this.formBuilder.group({
 			id: [''],//bank id for edit purpose
-			acc_id: [this.affiliateId, [Validators.required, Validators.pattern("^[0-9].*$")]],//affiliate account id
+			acc_id: [this.travelAgentId, [Validators.required, Validators.pattern("^[0-9].*$")]],//affiliate account id
 			BankName: [''],
 			BankAddress: [''],
 			AccountHolderFirstName: ['', Validators.required],
@@ -119,8 +119,8 @@ this.mapFunction();
 			address: ['', Validators.required],
 			latitude: ['', Validators.required],
 			longitude: ['', Validators.required],
-			badge_city :[''],
-			badge_city_name:[''],
+			badge_city: [''],
+			badge_city_name: [''],
 			street: [''],
 			city: [''],
 			state: [''],
@@ -155,30 +155,30 @@ this.mapFunction();
 			this.fillGlobalValue('', 'currency', true)
 		})
 
-		this.adminService.getAllEnableBadgeCities().pipe(
-			catchError(err => {
-				return throwError(err)
-			})
-		).subscribe((res:any)=> {
-			this.badgeOptions = res?.data
-			this.filteredOptions = res?.data
-		})
+		// this.adminService.getAllEnableBadgeCities().pipe(
+		// 	catchError(err => {
+		// 		return throwError(err)
+		// 	})
+		// ).subscribe((res:any)=> {
+		// 	this.badgeOptions = res?.data
+		// 	this.filteredOptions = res?.data
+		// })
 
 		this.httpClient.get("assets/json/countryStateList.json").subscribe(data => {
 			this.countryOptions = data;
 		})
-		if (this.affiliateId) {
+		if (this.travelAgentId) {
 			this.getFormData()
 		}
 		else {
-		//for selected country
-			this.changeCountry(currentUser.CellNumberCountry.toUpperCase());
-			this.addBankForm.patchValue({
-				country: currentUser.CellNumberCountry.toUpperCase()
-			});
+			//for selected country
+			// this.changeCountry(currentUser.CellNumberCountry.toUpperCase());
+			// this.addBankForm.patchValue({
+			// 	country: currentUser.CellNumberCountry.toUpperCase()
+			// });
 		}
-    
-  }//google map autocomplete
+
+	}//google map autocomplete
 	latitude: number;
 	longitude: number;
 	requestLatitude: number;
@@ -186,10 +186,10 @@ this.mapFunction();
 	@ViewChild('search1')
 	public searchElementRef: ElementRef;
 
-  mapFunction() {
+	mapFunction() {
 		this.mapsAPILoader.load().then(() => {
 			//For Address field
-			console.log('---search ref element-->>>>>>',this.searchElementRef.nativeElement.value)
+			console.log('---search ref element-->>>>>>', this.searchElementRef.nativeElement.value)
 			let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement);
 			autocomplete.addListener("place_changed", () => {
 				this.ngZone.run(() => {
@@ -200,7 +200,7 @@ this.mapFunction();
 					if (place.geometry === undefined || place.geometry === null) {
 						return;
 					}
-					console.log('---->> place',place)
+					console.log('---->> place', place)
 					for (var i = 0; i < place.address_components.length; i++) {
 						for (var j = 0; j < place.address_components[i].types.length; j++) {
 							if (place.address_components[i].types[j] == "country") {
@@ -241,98 +241,91 @@ this.mapFunction();
 				});
 			});
 			// }  
-		this.spinner.hide()
+			this.spinner.hide()
 		});
 	}
 
-	getFormData(){
-		const currentUser = JSON.parse(sessionStorage.getItem("affiliateUserData"));
-		
-			if (this.stepCompleted.includes('2')) {
-				this.isStep2Completed = true;
-				// this.stateManagementService.setprogressBar(true);
-	
-				this.adminService.getBankOfAffiliate(this.affiliateId)
-					.pipe(
-						catchError(err => {
-							// this.stateManagementService.setprogressBar(false);
-							return throwError(err);
-						})
-					).subscribe(result => {
-						this.response = result;
-						//to show stripe errors at the top
-						if (this.response.data.stripeDetail.stripe_errors) {
-							this.stripeErrors = this.response.data.stripeDetail.stripe_errors;
-						}
-						//set images and their ID
-						
-						this.id_front_image = this.response.data.bankinfo.id_front_image.image;
-						this.id_back_image = this.response.data.bankinfo.id_back_image.image;
-						this.id_front_image_id = this.response.data.bankinfo.id_front_image.ID;
-						this.id_back_image_id = this.response.data.bankinfo.id_back_image.ID;
-						//Documents changable or not.
-						if (this.response.data.stripeDetail.additional_doc_verification_status == 'unverified') {
-							this.canChangeDocument = true;
-						}
-						else {
-							this.canChangeDocument = false;
-						}
-	
-						this.addBankForm.patchValue({
-							id: this.response.data.bankinfo.id,
-							BankName: this.response.data.bankinfo.BankName,
-							BankAddress: this.response.data.bankinfo.BankAddress,
-							AccountHolderFirstName: this.response.data.bankinfo.AccountHolderFirstName,
-							AccountHolderLastName: this.response.data.bankinfo.AccountHolderLastName,
-							AccountNumber: this.response.data.bankinfo.AccountNumber,
-							Routing: this.response.data.bankinfo.Routing,
-							AccountType: this.response.data.bankinfo.AccountType,
-							currency: this.response.data.bankinfo.currency,
-							ssn: this.response.data.bankinfo.ssn,
-							haveEin: this.response.data.bankinfo.ein ? 'yesEin' : 'noEin',
-							ein: this.response.data.bankinfo.ein,
-							address: this.response.data.bankinfo.address,
-							latitude: this.response.data.bankinfo.latitude,
-							longitude: this.response.data.bankinfo.longitude,
-							street: this.response.data.bankinfo.street,
-							unit: this.response.data.bankinfo.unit,
-							city: this.response.data.bankinfo.city,
-							state: this.response.data.bankinfo.state,
-							country: this.response.data.bankinfo.country,
-							zipCode: this.response.data.bankinfo.zipCode,
-							dobDay: this.response.data.bankinfo.dobDay,
-							dobMonth: this.response.data.bankinfo.dobMonth,
-							dobYear: this.response.data.bankinfo.dobYear,
-							id_front_image: this.response.data.bankinfo.id_front_image.ID,
-							id_back_image: this.response.data.bankinfo.id_back_image.ID,
-						});
-	
-						this.haveEin(this.response.data.bankinfo.ein ? 'yesEin' : 'noEin');
-						this.changeCountry(this.response.data.bankinfo.country);//for selected country
+	getFormData() {
+		console.log('in function get bank data travel agent')
+		// const currentUser = JSON.parse(sessionStorage.getItem("affiliateUserData"));
+		// this.stepCompleted.includes('2')
+		if (true) {
+			// this.isStep2Completed = true;
+			this.stateManagementService.setprogressBar(true);
+
+			this.travelService.getBankOfAffiliate(this.travelAgentId)
+				.pipe(
+					catchError(err => {
 						// this.stateManagementService.setprogressBar(false);
-						this.badgeOptions.map((i:any)=>{
-							if(i.id==this.response?.data?.bankinfo?.badge_city){
-								this.addBankForm.patchValue({
-									badge_city:i?.id,
-									badge_city_name:i?.name
-								})
-							}
-						})
+						return throwError(err);
+					})
+				).subscribe(result => {
+					this.response = result;
+					//to show stripe errors at the top
+					if (this.response.data.stripeDetail.stripe_errors) {
+						this.stripeErrors = this.response.data.stripeDetail.stripe_errors;
+					}
+					//set images and their ID
+
+					this.id_front_image = this.response.data.bankinfo.id_front_image.image;
+					this.id_back_image = this.response.data.bankinfo.id_back_image.image;
+					this.id_front_image_id = this.response.data.bankinfo.id_front_image.ID;
+					this.id_back_image_id = this.response.data.bankinfo.id_back_image.ID;
+					//Documents changable or not.
+					if (this.response.data.stripeDetail.additional_doc_verification_status == 'unverified') {
+						this.canChangeDocument = true;
+					}
+					else {
+						this.canChangeDocument = false;
+					}
+
+					this.addBankForm.patchValue({
+						id: this.response.data.bankinfo.id,
+						BankName: this.response.data.bankinfo.BankName,
+						BankAddress: this.response.data.bankinfo.BankAddress,
+						AccountHolderFirstName: this.response.data.bankinfo.AccountHolderFirstName,
+						AccountHolderLastName: this.response.data.bankinfo.AccountHolderLastName,
+						AccountNumber: this.response.data.bankinfo.AccountNumber,
+						Routing: this.response.data.bankinfo.Routing,
+						AccountType: this.response.data.bankinfo.AccountType,
+						currency: this.response.data.bankinfo.currency,
+						ssn: this.response.data.bankinfo.ssn,
+						haveEin: this.response.data.bankinfo.ein ? 'yesEin' : 'noEin',
+						ein: this.response.data.bankinfo.ein,
+						address: this.response.data.bankinfo.address,
+						latitude: this.response.data.bankinfo.latitude,
+						longitude: this.response.data.bankinfo.longitude,
+						street: this.response.data.bankinfo.street,
+						unit: this.response.data.bankinfo.unit,
+						city: this.response.data.bankinfo.city,
+						state: this.response.data.bankinfo.state,
+						country: this.response.data.bankinfo.country,
+						zipCode: this.response.data.bankinfo.zipCode,
+						dobDay: this.response.data.bankinfo.dobDay,
+						dobMonth: this.response.data.bankinfo.dobMonth,
+						dobYear: this.response.data.bankinfo.dobYear,
+						id_front_image: this.response.data.bankinfo.id_front_image.ID,
+						id_back_image: this.response.data.bankinfo.id_back_image.ID,
 					});
-			}
-			else {
-				this.canChangeDocument = true;//can add or change documents
-				// this.canChangeAddress = true;//can add or change address
-	
-				//for selected country
-				this.changeCountry(currentUser.CellNumberCountry.toUpperCase());
-				this.addBankForm.patchValue({
-					country: currentUser.CellNumberCountry.toUpperCase(),AccountHolderFirstName: currentUser?.FirstName,
-					AccountHolderMiddleName: currentUser?.MiddleName,
-					AccountHolderLastName: currentUser?.LastName
+
+					this.haveEin(this.response.data.bankinfo.ein ? 'yesEin' : 'noEin');
+					this.changeCountry(this.response.data.bankinfo.country);//for selected country
+					this.stateManagementService.setprogressBar(false);
 				});
-			}
-		
+		}
+		else {
+			this.canChangeDocument = true;//can add or change documents
+			// this.canChangeAddress = true;//can add or change address
+
+			//for selected country
+			// this.changeCountry(currentUser.CellNumberCountry.toUpperCase());
+			// this.addBankForm.patchValue({
+			// 	country: currentUser.CellNumberCountry.toUpperCase(),AccountHolderFirstName: currentUser?.FirstName,
+			// 	AccountHolderMiddleName: currentUser?.MiddleName,
+			// 	AccountHolderLastName: currentUser?.LastName
+			// });
+		}
+
 	}
 
 
@@ -361,7 +354,7 @@ this.mapFunction();
 	}
 
 
-  changeCountry(selectedCountryCode) {
+	changeCountry(selectedCountryCode) {
 		let selectedCountryData: any;
 
 		selectedCountryData = this.countryOptions.filter(function (countryOption) {
@@ -377,7 +370,7 @@ this.mapFunction();
 			case 'noEin': {
 				this.haveEinNo = false;
 				this.addBankForm.patchValue({
-					haveEin : false
+					haveEin: false
 				})
 				break;
 			}
@@ -385,7 +378,7 @@ this.mapFunction();
 				this.haveEinNo = true;
 				console.log('validation updated')
 				this.addBankForm.patchValue({
-					haveEin : true
+					haveEin: true
 				})
 				this.addBankForm.controls['ein'].setValidators([Validators.required])
 				this.addBankForm.controls['ein'].updateValueAndValidity()
@@ -394,38 +387,38 @@ this.mapFunction();
 		}
 	}
 
-  handleBadgeCity(value:any){
-		console.log(value , this.filteredOptions)
-		this.filteredOptions = this.badgeOptions.filter((i:any)=> i.name.toLowerCase().includes(value.toLowerCase()))
+	handleBadgeCity(value: any) {
+		console.log(value, this.filteredOptions)
+		this.filteredOptions = this.badgeOptions.filter((i: any) => i.name.toLowerCase().includes(value.toLowerCase()))
 	}
 
-  selectBadgeCity(option:any,isUserInput){
-		console.log('in function selectBadgeCity-->>>' ,isUserInput)
-		if(isUserInput){
+	selectBadgeCity(option: any, isUserInput) {
+		console.log('in function selectBadgeCity-->>>', isUserInput)
+		if (isUserInput) {
 			this.addBankForm.patchValue({
-				badge_city:option.id
+				badge_city: option.id
 			})
 			// this.addAffiliateAccountForm.updateValueAndValidity()
 		}
 
 	}
 
-  get f() {
+	get f() {
 		return this.addBankForm.controls;
 	}
 
-  SetFormValue(form_control: string, value: any) {
+	SetFormValue(form_control: string, value: any) {
 		this.addBankForm.get(form_control).setValue(value)
 		this.addBankForm.updateValueAndValidity()
 	}
 
-  changeRadio(form_control: string, value: any) {
+	changeRadio(form_control: string, value: any) {
 		this.SetFormValue(form_control, value)
 		if (value) {
 			this.addBankForm.controls['ein'].setValidators([Validators.required])
 			this.addBankForm.controls['ein'].updateValueAndValidity()
 		}
-		else{
+		else {
 			this.addBankForm.controls['ein'].setValidators([])
 			this.addBankForm.controls['ein'].updateValueAndValidity()
 		}
@@ -440,100 +433,100 @@ this.mapFunction();
 		})
 	}
 
-  showImageInModal(imageUrl) {
+	showImageInModal(imageUrl) {
 		this.modalImage = imageUrl;
 		$("#imageModal").addClass("showImage");
 		$("#imageModal").removeClass("d-none");
 	}
 
-  fetchImageBlob(url ,key ,id){
+	fetchImageBlob(url, key, id) {
 		this.stateManagementService.setprogressBar(true);
-		
+
 		this.adminService.fetchImageBlob(url)
-		.pipe(
-			catchError(err => {
+			.pipe(
+				catchError(err => {
+					this.stateManagementService.setprogressBar(false);
+					return throwError(err);
+				})
+			)
+			.subscribe(async ({ data }: any) => {
 				this.stateManagementService.setprogressBar(false);
-				return throwError(err);
+				const response = await fetch(data);
+				const imageBlob = await response.blob()
+				console.log('imageBlob', imageBlob)
+				const canvas = document.createElement("canvas");
+				const ctx = canvas.getContext("2d");
+				const img = new Image();
+				img.src = URL.createObjectURL(imageBlob);
+				console.log('img-->', img)
+				img.onload = () => {
+					// Rotate the image by 90 degrees (or your desired angle)
+					canvas.width = img.width;
+					canvas.height = img.height;
+					ctx.translate(canvas.width / 2, canvas.height / 2);
+					ctx.rotate(Math.PI); // Rotate by 180 degrees
+					ctx.drawImage(img, -img.width / 2, -img.height / 2);
+					// ctx.drawImage(img, 0, -canvas.width);
+
+					// Convert the canvas to a Blob (JPEG format)
+					canvas.toBlob((blob) => {
+						console.log(blob);
+
+						this.blobToDataURL(blob, key, id);
+						// });
+					}, "image/jpeg");
+				}
 			})
-		)
-		.subscribe(async({ data }: any) => {
-			this.stateManagementService.setprogressBar(false);
-			const response = await fetch(data);
-			const imageBlob = await response.blob()
-			console.log('imageBlob',imageBlob)
-		const canvas = document.createElement("canvas");
-		const ctx = canvas.getContext("2d");
-		const img = new Image();
-		img.src = URL.createObjectURL(imageBlob);
-		console.log('img-->' , img)
-		img.onload = () => {
-			// Rotate the image by 90 degrees (or your desired angle)
-			canvas.width = img.width; 
-			canvas.height = img.height;
-			ctx.translate(canvas.width / 2, canvas.height / 2);
-			ctx.rotate(Math.PI); // Rotate by 180 degrees
-			ctx.drawImage(img, -img.width / 2, -img.height / 2);
-			// ctx.drawImage(img, 0, -canvas.width);
-
-			// Convert the canvas to a Blob (JPEG format)
-			canvas.toBlob((blob) => {
-				console.log(blob);
-
-				this.blobToDataURL(blob, key ,id);
-				// });
-			}, "image/jpeg");
-		}
-		})
 	}
 
-  blobToDataURL(blob: Blob , key , id) {
+	blobToDataURL(blob: Blob, key, id) {
 		var reader = new FileReader();
 		reader.readAsDataURL(blob);
 		reader.onload = () => {
 			let dataUrl = reader.result;
 			console.log(dataUrl); //DataURL
-			this.idCardImageChange1(dataUrl, key,id);
+			this.idCardImageChange1(dataUrl, key, id);
 		};
 	}
 
-  idCardImageChange1(dataUrl, imageType, imageId = null) {
+	idCardImageChange1(dataUrl, imageType, imageId = null) {
 		this.stateManagementService.setprogressBar(true);
-				this.imageSrc = dataUrl;
-				this.adminService.uploadVehicleImage(this.imageSrc)
-					.pipe(
-						catchError(err => {
-							this.stateManagementService.setprogressBar(false);
-							return throwError(err);
-						})
-					)
-					.subscribe(({ data }: any) => {
+		this.imageSrc = dataUrl;
+		this.adminService.uploadVehicleImage(this.imageSrc)
+			.pipe(
+				catchError(err => {
+					this.stateManagementService.setprogressBar(false);
+					return throwError(err);
+				})
+			)
+			.subscribe(({ data }: any) => {
 
-						switch (imageType) {
-							case 'id_front_image': {
-								this.addBankForm.patchValue({
-									id_front_image: data.id,
-								});
-								this.id_front_image = data.image;
-								this.id_front_image_id = data.id;
-								break;
-							}
-							case 'id_back_image': {
-								this.addBankForm.patchValue({
-									id_back_image: data.id,
-								});
-								this.id_back_image = data.image;
-								this.id_back_image_id = data.id;
-								break;
-							}
-							default: {
-								break;
-							}
-						}
-						this.stateManagementService.setprogressBar(false);
-					});
+				switch (imageType) {
+					case 'id_front_image': {
+						this.addBankForm.patchValue({
+							id_front_image: data.id,
+						});
+						this.id_front_image = data.image;
+						this.id_front_image_id = data.id;
+						break;
+					}
+					case 'id_back_image': {
+						this.addBankForm.patchValue({
+							id_back_image: data.id,
+						});
+						this.id_back_image = data.image;
+						this.id_back_image_id = data.id;
+						break;
+					}
+					default: {
+						break;
+					}
+				}
+				this.stateManagementService.setprogressBar(false);
+			});
 	}
-  
-  idCardImageChange(event, imageType, imageId = null) {
+
+	idCardImageChange(event, imageType, imageId = null) {
 		this.stateManagementService.setprogressBar(true);
 		const reader = new FileReader();
 		if (event.target.files && event.target.files.length)
@@ -551,7 +544,7 @@ this.mapFunction();
 						})
 					)
 					.subscribe(({ data }: any) => {
-            this.stateManagementService.setprogressBar(false);
+						this.stateManagementService.setprogressBar(false);
 
 						switch (imageType) {
 							case 'id_front_image': {
@@ -580,7 +573,7 @@ this.mapFunction();
 		}
 	}
 
-  deleteImage(id, imageType) {
+	deleteImage(id, imageType) {
 		switch (imageType) {
 			case 'id_front_image': {
 				this.addBankForm.patchValue({
@@ -609,12 +602,12 @@ this.mapFunction();
 		if (this.addBankForm.invalid) {
 			return;
 		}
-		this.addBankForm.value.stepCompleted = this.adminService.getUpdatedStepsLocal('2');
+		// this.addBankForm.value.stepCompleted = this.adminService.getUpdatedStepsLocal('2');
 		console.log(this.addBankForm.value);
 		// console.log(JSON.stringify(this.addVehicleRatesForm.value));
 		this.disableSubmitButton = true; //disable submit button
 		this.spinner.show();
-		this.adminService.addBankOfAffiliate(this.addBankForm.value)
+		this.travelService.addBankOfAffiliate(this.addBankForm.value)
 			.pipe(
 				catchError(err => {
 					this.spinner.hide();//hide spinner
@@ -628,9 +621,9 @@ this.mapFunction();
 				this.disableSubmitButton = false; //enable submit button
 
 
-				this.router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
-					this.router.navigate(['/admin/affiliate/step3'])
-				);
+				// this.router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
+				// 	this.router.navigate(['/admin/affiliate/step3'])
+				// );
 			});
 	}
 	closeButton() {
