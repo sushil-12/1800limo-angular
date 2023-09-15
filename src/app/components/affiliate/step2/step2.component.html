@@ -1040,13 +1040,13 @@
 						</div>
 						<div class="col-md-4">
 							<label class="select-ex-month-label">
-								Expiration Month
+								Expiry Month
 							</label>
 							<div class="selectStyle">
 								<select class="selectInputStyle" (click)="selectDropdownExMonth()"
 									formControlName="primaryMM" tabindex="1">
 									<option value="">
-										Choose Expiration Month
+										Choose Expiry Month
 									</option>
 									<option value="1">01</option>
 									<option value="2">02</option>
@@ -1079,12 +1079,12 @@
 							</div>
 						</div>
 						<div class="col-md-4">
-							<label class="select-ex-year-label">Expiration Year</label>
+							<label class="select-ex-year-label">Expiry Year</label>
 							<div class="selectStyle">
 								<select class="selectInputStyle" (click)="selectDropdownExYear()"
 									formControlName="primaryYY" tabindex="1">
 									<option value="">
-										Choose Expiration Year
+										Choose Expiry Year
 									</option>
 									<option *ngFor="let yearOption of yearOptions" value="{{ yearOption }}">
 										{{ yearOption }}

@@ -7,7 +7,7 @@
 		<div class="container mt-1 ">
 			<div class="row ">
 				<div class="col-md-6">
-					<mat-form-field appearance="outline"
+					<mat-form-field appearance="outline" style="border: 3px solid red;border-radius: 10px;"
 						[ngClass]="(errorMsg && f.vehicleType.errors) || (submittedForm && f.vehicleType.errors) ? 'mat-form-field-invalid ng-invalid' : ''">
 						<mat-label>Vehicle Type <span class="asterisk">*</span></mat-label>
 						<input type="text" id="vehicleTypeField" (focus)="$event.target.select()" placeholder="Pick one"
