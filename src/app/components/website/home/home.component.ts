@@ -924,7 +924,8 @@ export class HomeComponent implements OnInit {
 			this.SetFormValue(form_control, event.target.value)
 		},
 		return_pickup_date: (value: any) => {
-			this.SetFormValue('return_pickup_date',  value.format("YYYY-MM-DD"))
+			console.log('value-- return ' , value )
+			this.SetFormValue('return_pickup_date',  value)
 		},
 
 		bookingHours: (event: any) => {
