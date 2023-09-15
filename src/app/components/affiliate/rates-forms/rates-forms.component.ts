@@ -110,6 +110,10 @@ export class RatesFormsComponent implements OnInit , OnChanges {
 				this.QB_vehicle_id = changes?.QB_vehicle_id?.currentValue
 				this.fetchRatesArrayByAffiliateVehicle(this.QB_vehicle_id)
 		}
+		// if(changes?.book_data?.currentValue){
+
+		// 	this.fetchRatesArrayByAffiliateVehicle(changes?.book_data?.currentValue)
+		// }
 		// if asked to initialise the rates
 		if (changes.init_rates?.currentValue) {
 			if(!this.QB_vehicle_id){
