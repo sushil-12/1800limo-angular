@@ -35,7 +35,7 @@
 			<div class="col-md-4">
 				<p>Quote Amount <strong>${{ quoteAmount }}</strong></p>
 			</div>
-			
+
 		</div>
 	</div>
 
@@ -52,140 +52,140 @@
 			<strong>{{ timeFormat2(BookingDetail?.pickup_time) }} |
 				{{ timeFormat(BookingDetail?.pickup_time) }}</strong>
 		</div>
-	
-	<div class="col-md-4 field" *ngIf="BookingDetail?.pickup_address">
-		<p>Pickup Address: </p>
-		<strong> {{ BookingDetail?.pickup_address }}</strong>
-	</div>
-	<div class="col-md-4 field" *ngIf="BookingDetail?.pickup_airport_name">
-		<p>Pickup Airport: </p>
-		<strong>{{ BookingDetail?.pickup_airport_name }}</strong>
-	</div>
-	<div class="col-md-4 field" *ngIf="BookingDetail?.pickup_airline_name">
-		<p>Pickup Airline: </p>
-		<strong> {{ BookingDetail?.pickup_airline_name }}</strong>
-	</div>
-	<div class="col-md-4 field" *ngIf="BookingDetail?.pickup_flight">
-		<p>Pickup Flight Number: </p>
-		<strong>{{ BookingDetail?.pickup_flight }}</strong>
-	</div>
-	<div class="col-md-4 field" *ngIf="BookingDetail?.origin_airport_city">
-		<p>Pickup Origin Airport / City: </p>
-		<strong>{{ BookingDetail?.origin_airport_city }}</strong>
-	</div>
-	<div class="col-md-4 field" *ngIf="BookingDetail?.dropoff_address">
-		<p>Drop-Off Address: </p>
-		<strong>{{ BookingDetail?.dropoff_address }}</strong>
-	</div>
-	<div class="col-md-4 field" *ngIf="BookingDetail?.dropoff_airport_name">
-		<p>Drop-Off Airport: </p>
-		<strong>{{ BookingDetail?.dropoff_airport_name }}</strong>
-	</div>
-	<div class="col-md-4 field" *ngIf="BookingDetail?.dropoff_airline_name">
-		<p>Drop-Off Airline: </p>
-		<strong>{{ BookingDetail?.dropoff_airline_name }}</strong>
-	</div>
-	<div class="col-md-4 field" *ngIf="BookingDetail?.dropoff_flight">
-		<p> Drop-Off Flight Number: </p>
-		<strong>{{ BookingDetail?.dropoff_flight }}</strong>
-	</div>
-	<div class="col-md-4 field" *ngIf="BookingDetail?.stop_1">
-		<p> Extra Stops Number 2: </p>
-		<strong>{{ BookingDetail?.stop_1 }}</strong>
-	</div>
-	<div class="col-md-4 field" *ngIf="BookingDetail?.stop_2">
-		<p> Extra Stops Number 3: </p>
-		<strong>{{ BookingDetail?.stop_2 }}</strong>
-	</div>
-	<div class="col-md-4 field" *ngIf="BookingDetail?.meet_greet_choices">
-		<p> Meet and Greet Choices: </p>
-		<strong>{{ BookingDetail?.meet_greet_choices }}</strong>
-	</div>
+
+		<div class="col-md-4 field" *ngIf="BookingDetail?.pickup_address">
+			<p>Pickup Address: </p>
+			<strong> {{ BookingDetail?.pickup_address }}</strong>
+		</div>
+		<div class="col-md-4 field" *ngIf="BookingDetail?.pickup_airport_name">
+			<p>Pickup Airport: </p>
+			<strong>{{ BookingDetail?.pickup_airport_name }}</strong>
+		</div>
+		<div class="col-md-4 field" *ngIf="BookingDetail?.pickup_airline_name">
+			<p>Pickup Airline: </p>
+			<strong> {{ BookingDetail?.pickup_airline_name }}</strong>
+		</div>
+		<div class="col-md-4 field" *ngIf="BookingDetail?.pickup_flight">
+			<p>Pickup Flight Number: </p>
+			<strong>{{ BookingDetail?.pickup_flight }}</strong>
+		</div>
+		<div class="col-md-4 field" *ngIf="BookingDetail?.origin_airport_city">
+			<p>Pickup Origin Airport / City: </p>
+			<strong>{{ BookingDetail?.origin_airport_city }}</strong>
+		</div>
+		<div class="col-md-4 field" *ngIf="BookingDetail?.dropoff_address">
+			<p>Drop-Off Address: </p>
+			<strong>{{ BookingDetail?.dropoff_address }}</strong>
+		</div>
+		<div class="col-md-4 field" *ngIf="BookingDetail?.dropoff_airport_name">
+			<p>Drop-Off Airport: </p>
+			<strong>{{ BookingDetail?.dropoff_airport_name }}</strong>
+		</div>
+		<div class="col-md-4 field" *ngIf="BookingDetail?.dropoff_airline_name">
+			<p>Drop-Off Airline: </p>
+			<strong>{{ BookingDetail?.dropoff_airline_name }}</strong>
+		</div>
+		<div class="col-md-4 field" *ngIf="BookingDetail?.dropoff_flight">
+			<p> Drop-Off Flight Number: </p>
+			<strong>{{ BookingDetail?.dropoff_flight }}</strong>
+		</div>
+		<div class="col-md-4 field" *ngIf="BookingDetail?.stop_1">
+			<p> Extra Stops Number 2: </p>
+			<strong>{{ BookingDetail?.stop_1 }}</strong>
+		</div>
+		<div class="col-md-4 field" *ngIf="BookingDetail?.stop_2">
+			<p> Extra Stops Number 3: </p>
+			<strong>{{ BookingDetail?.stop_2 }}</strong>
+		</div>
+		<div class="col-md-4 field" *ngIf="BookingDetail?.meet_greet_choices">
+			<p> Meet and Greet Choices: </p>
+			<strong>{{ BookingDetail?.meet_greet_choices }}</strong>
+		</div>
 
 
 
 
-	<div *ngIf="BookingDetail.service_type=='roundtrip'">
-		<div class="col-md-4 field" *ngIf="BookingDetail.return_pickup_address">
-			<p> Return Pickup Address: </p>
-			<strong> {{BookingDetail.return_pickup_address}} </strong>
+		<div *ngIf="BookingDetail.service_type=='roundtrip'">
+			<div class="col-md-4 field" *ngIf="BookingDetail.return_pickup_address">
+				<p> Return Pickup Address: </p>
+				<strong> {{BookingDetail.return_pickup_address}} </strong>
+			</div>
+			<div class="col-md-4" *ngIf="BookingDetail.return_pickup_airport_name">
+				<p> Return Pickup Airport: </p>
+				<strong> {{BookingDetail.return_pickup_airport_name}} </strong>
+			</div>
+			<div class="col-md-4" *ngIf="BookingDetail.return_pickup_airline_name">
+				<p> Return Pickup Airline: </p>
+				<strong> {{BookingDetail.return_pickup_airline_name}} </strong>
+			</div>
+			<div class="col-md-4" *ngIf="BookingDetail.return_pickup_flight">
+				<p> Return Pickup Flight Number: </p>
+				<strong> {{BookingDetail.return_pickup_flight}} </strong>
+			</div>
+			<div class="col-md-4" *ngIf="BookingDetail.return_origin_airport_city">
+				<p> Return Pickup Origin Airport / City: </p>
+				<strong> {{BookingDetail.return_origin_airport_city}}
+				</strong>
+			</div>
+			<div class="col-md-4" *ngIf="BookingDetail.return_pickup_latitude">
+				<p> Return Pickup Latitude/Longitude: </p>
+				<strong> {{BookingDetail.return_pickup_latitude}}/{{BookingDetail.return_pickup_longitude}}
+				</strong>
+			</div>
+			<div class="col-md-4" *ngIf="BookingDetail.return_dropoff_address">
+				<p> Return Drop-Off Address: </p>
+				<strong> {{BookingDetail.return_dropoff_address}} </strong>
+			</div>
+			<div class="col-md-4" *ngIf="BookingDetail.return_dropoff_airport_name">
+				<p> Return Drop-Off Airport: </p>
+				<strong> {{BookingDetail.return_dropoff_airport_name}} </strong>
+			</div>
+			<div class="col-md-4" *ngIf="BookingDetail.return_dropoff_airline_name">
+				<p>Return Drop-Off Airline: </p>
+				<strong> {{BookingDetail.return_dropoff_airline_name}} </strong>
+			</div>
+			<div class="col-md-4" *ngIf="BookingDetail.return_dropoff_flight">
+				<p> Return Drop-Off Flight Number: </p>
+				<strong> {{BookingDetail.return_dropoff_flight}} </strong>
+			</div>
+			<div class="col-md-4" *ngIf="BookingDetail.return_dropoff_latitude">
+				<p> Return Drop-Off Latitude/Longitude: </p>
+				<strong> {{BookingDetail.return_dropoff_latitude}}/{{BookingDetail.return_dropoff_longitude}}
+				</strong>
+			</div>
+			<div class="col-md-4" *ngIf="BookingDetail.return_stop_1">
+				<p> Return Extra Stops Number 2: </p>
+				<strong>{{BookingDetail.return_stop_1}} </strong>
+			</div>
+			<div class="col-md-4" *ngIf="BookingDetail.return_stop_1_latitude && BookingDetail.return_stop_1_longitude">
+				<p> Return Extra Stops Number 2 Latitude/Longitude: </p>
+				<strong> {{BookingDetail.return_stop_1_latitude}}/{{BookingDetail.return_stop_1_longitude}}
+				</strong>
+			</div>
+			<div class="col-md-4" *ngIf="BookingDetail.return_stop_2">
+				<p> Return Extra Stops Number 3: </p>
+				<strong> {{BookingDetail.return_stop_2}} </strong>
+			</div>
+			<div class="col-md-4" *ngIf="BookingDetail.return_stop_2_latitude && BookingDetail.return_stop_2_longitude">
+				<p> Return Extra Stops Number 3
+					Latitude/Longitude: </p>
+				<strong>{{BookingDetail.return_stop_2_latitude}}/{{BookingDetail.return_stop_2_longitude}}
+				</strong>
+			</div>
+			<div class="col-md-4" *ngIf="BookingDetail.return_meet_greet_choices">
+				<p> Return Meet and Greet Choices: </p>
+				<strong> {{BookingDetail.return_meet_greet_choices
+					|titlecase}} </strong>
+			</div>
+			<div class="col-md-4" *ngIf="BookingDetail.return_pickup_date">
+				<p> Return Travel Date: </p>
+				<strong> {{BookingDetail.return_pickup_date}} </strong>
+			</div>
+			<div class="col-md-4" *ngIf="BookingDetail.return_pickup_time">
+				<p> Return Travel Time: </p>
+				<strong> {{BookingDetail.return_pickup_time}} </strong>
+			</div>
 		</div>
-		<div class="col-md-4" *ngIf="BookingDetail.return_pickup_airport_name">
-			<p> Return Pickup Airport: </p>
-			<strong> {{BookingDetail.return_pickup_airport_name}} </strong>
-		</div>
-		<div class="col-md-4" *ngIf="BookingDetail.return_pickup_airline_name">
-			<p> Return Pickup Airline: </p>
-			<strong> {{BookingDetail.return_pickup_airline_name}} </strong>
-		</div>
-		<div class="col-md-4" *ngIf="BookingDetail.return_pickup_flight">
-			<p> Return Pickup Flight Number: </p>
-			<strong> {{BookingDetail.return_pickup_flight}} </strong>
-		</div>
-		<div class="col-md-4" *ngIf="BookingDetail.return_origin_airport_city">
-			<p> Return Pickup Origin Airport / City: </p>
-			<strong> {{BookingDetail.return_origin_airport_city}}
-			</strong>
-		</div>
-		<div class="col-md-4" *ngIf="BookingDetail.return_pickup_latitude">
-			<p> Return Pickup Latitude/Longitude: </p>
-			<strong> {{BookingDetail.return_pickup_latitude}}/{{BookingDetail.return_pickup_longitude}}
-			</strong>
-		</div>
-		<div class="col-md-4" *ngIf="BookingDetail.return_dropoff_address">
-			<p> Return Drop-Off Address: </p>
-			<strong> {{BookingDetail.return_dropoff_address}} </strong>
-		</div>
-		<div class="col-md-4" *ngIf="BookingDetail.return_dropoff_airport_name">
-			<p> Return Drop-Off Airport: </p>
-			<strong> {{BookingDetail.return_dropoff_airport_name}} </strong>
-		</div>
-		<div class="col-md-4" *ngIf="BookingDetail.return_dropoff_airline_name">
-			<p>Return Drop-Off Airline: </p>
-			<strong> {{BookingDetail.return_dropoff_airline_name}} </strong>
-		</div>
-		<div class="col-md-4" *ngIf="BookingDetail.return_dropoff_flight">
-			<p> Return Drop-Off Flight Number: </p>
-			<strong> {{BookingDetail.return_dropoff_flight}} </strong>
-		</div>
-		<div class="col-md-4" *ngIf="BookingDetail.return_dropoff_latitude">
-			<p> Return Drop-Off Latitude/Longitude: </p>
-			<strong> {{BookingDetail.return_dropoff_latitude}}/{{BookingDetail.return_dropoff_longitude}}
-			</strong>
-		</div>
-		<div class="col-md-4" *ngIf="BookingDetail.return_stop_1">
-			<p> Return Extra Stops Number 2: </p>
-			<strong>{{BookingDetail.return_stop_1}} </strong>
-		</div>
-		<div class="col-md-4" *ngIf="BookingDetail.return_stop_1_latitude && BookingDetail.return_stop_1_longitude">
-			<p> Return Extra Stops Number 2 Latitude/Longitude: </p>
-			<strong> {{BookingDetail.return_stop_1_latitude}}/{{BookingDetail.return_stop_1_longitude}}
-			</strong>
-		</div>
-		<div class="col-md-4" *ngIf="BookingDetail.return_stop_2">
-			<p> Return Extra Stops Number 3: </p>
-			<strong> {{BookingDetail.return_stop_2}} </strong>
-		</div>
-		<div class="col-md-4" *ngIf="BookingDetail.return_stop_2_latitude && BookingDetail.return_stop_2_longitude">
-			<p> Return Extra Stops Number 3
-				Latitude/Longitude: </p>
-			<strong>{{BookingDetail.return_stop_2_latitude}}/{{BookingDetail.return_stop_2_longitude}}
-			</strong>
-		</div>
-		<div class="col-md-4" *ngIf="BookingDetail.return_meet_greet_choices">
-			<p> Return Meet and Greet Choices: </p>
-			<strong> {{BookingDetail.return_meet_greet_choices
-				|titlecase}} </strong>
-		</div>
-		<div class="col-md-4" *ngIf="BookingDetail.return_pickup_date">
-			<p> Return Travel Date: </p>
-			<strong> {{BookingDetail.return_pickup_date}} </strong>
-		</div>
-		<div class="col-md-4" *ngIf="BookingDetail.return_pickup_time">
-			<p> Return Travel Time: </p>
-			<strong> {{BookingDetail.return_pickup_time}} </strong>
-		</div>
-	</div>
 	</div>
 	<hr>
 
@@ -205,7 +205,7 @@
 	<hr>
 
 	<h4 class="m-2">Passenger Information</h4>
-	<div class="row ml-2" >
+	<div class="row ml-2">
 		<div class="col-md-4" *ngIf="BookingDetail.passenger_name">
 			<p> Passenger Name: </p>
 			<strong> {{BookingDetail.passenger_name}} </strong>
@@ -357,7 +357,7 @@
 		</div>
 
 	</div>
-	
+
 
 </section>
 
@@ -366,14 +366,14 @@
 
 <section class="section-container mt-2">
 	<app-affiliate-finalize-rates *ngIf="init_rates" class="d-flex flex-wrap finalize-rates" [initRates]="init_rates"
-	(formvalue)="RateFormValue($event)" [distance]="finalize_params.distance"
-	[reservation_id]="finalize_params.booking_id" [reset]="false" [hours]="hours"
-	[vehicles]="finalize_params.number_of_vehicles" (returnNumberOfHr)="HandleReturnNumberOfHr($event)">
+		(formvalue)="RateFormValue($event)" [distance]="finalize_params.distance"
+		[reservation_id]="finalize_params.booking_id" [reset]="false" [hours]="hours"
+		[vehicles]="finalize_params.number_of_vehicles" (returnNumberOfHr)="HandleReturnNumberOfHr($event)">
 	</app-affiliate-finalize-rates>
 	<div class="row mb-3" id="submitForm" *ngIf="BookingDetail?.payment_status=='unpaid'">
 		<div class="col-md-12 text-right">
-			<button type="button" class="custom-filled-button ratesButton m-3" 
-			[ngClass]="finalize_btn=='Finalized'? 'color-grey':''" (click)="submitForm()">
+			<button type="button" class="custom-filled-button ratesButton m-3"
+				[ngClass]="finalize_btn=='Finalized'? 'color-grey':''" (click)="submitForm()">
 				{{finalize_btn}}
 			</button>
 		</div>
@@ -571,15 +571,14 @@
 		</div>
 		<div class="col-md-12 my-3 cardSection">
 			<div class="radio">
-				<input id="cash" name="paymentMethod" type="radio"  (click)="changeDetection('cash')">
+				<input id="cash" name="paymentMethod" type="radio" (click)="changeDetection('cash')">
 				<label for="cash" class="radio-label">Payment with Cash</label>
 			</div>
 		</div>
 
 		<div class="col-md-12 text-right mr-4">
-			<button type="button" class="custom-filled-button m-3 mr-4" 
-			[ngClass]="finalize_btn=='Finalized'? '':'color-grey'"
-			(click)="makePayment()">
+			<button type="button" class="custom-filled-button m-3 mr-4"
+				[ngClass]="finalize_btn=='Finalized'? '':'color-grey'" (click)="makePayment()">
 				Charge
 			</button>
 		</div>
@@ -589,7 +588,8 @@
 <!-- modal -->
 
 
-<div class="modal fade" id="warnDeleteCard" tabindex="-1" role="dialog" aria-labelledby="warnDeleteCard" aria-hidden="true">
+<div class="modal fade" id="warnDeleteCard" tabindex="-1" role="dialog" aria-labelledby="warnDeleteCard"
+	aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content">
 			<div class="modal-header pb-0">

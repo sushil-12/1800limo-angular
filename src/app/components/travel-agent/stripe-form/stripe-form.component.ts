@@ -128,8 +128,8 @@ export class StripeFormComponent implements OnInit {
 			zipCode: [''],
 			unit: [''],
 			primaryCardType: ['personal'],
-			primaryCardNumber: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(16), Validators.maxLength(16), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
-			primaryCSC: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(3), Validators.maxLength(3), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
+			// primaryCardNumber: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(16), Validators.maxLength(16), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
+			// primaryCSC: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(3), Validators.maxLength(3), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
 			primaryMM: [''],
 			primaryYY: [''],
 			primaryCardHolderName: ['']
@@ -214,7 +214,7 @@ export class StripeFormComponent implements OnInit {
 									state: place.address_components[i].short_name
 								});
 							}
-							else if (place.address_components[i].types[j] == "administrative_area_level_2") {
+							else if (place.address_components[i].types[j] == "administrative_area_level_2" || place.address_components[i].types[j] == "administrative_area_level_3") {
 								this.addBankForm.patchValue({
 									city: place.address_components[i].long_name
 								});
