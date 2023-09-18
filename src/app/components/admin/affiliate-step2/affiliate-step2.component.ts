@@ -639,7 +639,7 @@ this.loadCards(this.affiliateId)
 				}
 				else {
 					this.router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
-					this.router.navigate(['/admin/affiliate/step2'])
+					this.router.navigate(['/admin/affiliate/step3'])
 					);
 				}
 				// this.router.navigateByUrl('/', { skipLocationChange: true }).then(() =>

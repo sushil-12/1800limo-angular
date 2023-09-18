@@ -86,6 +86,7 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 	public charterCancelOptions: Array<Object>;
 	public nonCharterCancelOptions: Array<Object>;
 	public serviceType: string;
+	isVehicleTypeSelected: boolean = false
 
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
 	errorMsg: boolean;
@@ -403,6 +404,11 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 				});
 		}
 	}
+	handleChangeVehicleType(value){
+		console.log('Selected Value:', value);
+		
+		this.isVehicleTypeSelected = value ? true : false
+	}
 
 	selectVehicleType(val, isSelected)
 	{
@@ -454,12 +460,8 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 		}
 	}
 	// Subscriptions() {
-	// 	this.addVehicleForm.get('make')?.valueChanges.subscribe((value: string) => {
-	// 		setTimeout(()=>{
-	// 			this.changeMake(value);
-	// 		},200)
-	// 		let modelField: any = document.getElementById('modelField');
-	// 		modelField.value = '';
+	// 	this.addVehicleForm.get('vehicleType')?.valueChanges.subscribe((value: string) => {
+	// 		console.log('change in vehicle type-->>' , value)
 	// 	})
 	
 	// }

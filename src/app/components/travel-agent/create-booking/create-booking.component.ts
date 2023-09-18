@@ -11,7 +11,7 @@ import { CustomvalidationService } from 'src/app/services/customvalidation.servi
 import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { pluck } from 'rxjs/operators';
 import { TravelAgentService } from 'src/app/services/travel-agent.service';
-
+declare var $: any
 @Component({
   selector: 'app-create-booking',
   templateUrl: './create-booking.component.html',
@@ -1739,6 +1739,67 @@ export class CreateBookingComponent implements OnInit {
 	HandleReturnNumberOfHr(data: any) {
 		console.log('____<><><><><><><><>', data)
 		this.BookingForm.get('number_of_hours').setValue(data)
+	}
+	submitForm(preview: boolean) {
+		this.submitBookingForm = true
+		console.log(this.BookingForm);
+		console.log(this.BookingForm.status);
+		// let EditedKeys = []
+		// Object.keys(this.bookingResponse)?.map(i=>{
+		// 	let value = this.bookingResponse[`${i}`] === null ? '' :this.bookingResponse[`${i}`]
+		// 	let value1 = this.BookingForm.value[`${i}`] === undefined ? '' :this.BookingForm.value[`${i}`]
+		// 	console.log('value',i,'--->>>',value1,'--->>>' , value )
+		// 	if(value1 != value && this.BookingForm.value[`${i}`] !== undefined){
+		// 		EditedKeys.push(i)
+		// 	} 
+		// })
+
+		// console.log(' Edited keys  ---->>>>' , EditedKeys)
+		if (this.BookingForm.invalid) {
+			return;
+		}
+
+		if (preview) {
+			let value = this.BookingForm.value
+			value['proceed'] = this.proceed
+			if (this.RatesForm) {
+				value['rateArray'] = JSON.parse(JSON.stringify(this.RatesForm))
+				value['grand_total'] = value['rateArray']['grand_total']
+				value['sub_total'] = value['rateArray']['sub_total']
+				value['min_rate_involved'] = value['rateArray']['min_rate_involved']
+				delete value['rateArray']['grand_total']
+				delete value['rateArray']['sub_total']
+				delete value['rateArray']['min_rate_involved']
+				// Return Rates Form
+				if (this.Form.service_type.value == 'round_trip' && this.ReturnRatesForm) {
+					value['returnRateArray'] = JSON.parse(JSON.stringify(this.ReturnRatesForm))
+					value['return_grand_total'] = value['returnRateArray']['r_grandtotal']
+					value['return_sub_total'] = value['returnRateArray']['r_subtotal']
+					delete value['returnRateArray']['r_grandtotal']
+					delete value['returnRateArray']['r_subtotal']
+				}
+			}
+
+			this.$spinner.show()
+			this.$api.createBooking(value, this.Form.updateType.value).subscribe((response: any) => {
+				// this.$errors.openDialog({
+				// 	errors: {
+				// 		error: `<span class='text-success'>${response.message}</span>`
+				// 	}
+				// })
+				if(response.data?.is_confirm==false){
+					this.confirmMsg = response?.message
+					this.$spinner.hide()
+					$('#confirmationModal').modal('show')
+				}
+				else{
+					this.$router.navigate(['/admin/daily-bookings-admin'])
+				}
+			})
+		}
+		else {
+			$('#previewBooking').modal('handleUpdate').modal('show')
+		}
 	}
 
 
