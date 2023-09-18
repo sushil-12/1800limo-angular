@@ -320,7 +320,7 @@
 										<ng-template #cardLength>
 											<p class="text-danger text-lg m-0"
 												*ngIf="LooseCustomer.card_details.controls.card_number.errors?.minlength">
-												Minimum length should be 12
+												Minimum length should be 16
 											</p>
 											<p class="text-danger text-lg m-0"
 												*ngIf="LooseCustomer.card_details.controls.card_number.errors?.maxlength">
@@ -416,16 +416,16 @@
 											*ngIf="LooseCustomer.card_details.controls.cvv.errors?.pattern">
 											Only Numbers are Allowed
 										</p>
-										<!-- <ng-template #cvvLength>
-											<p class="text-danger text-lg m-0"
-												*ngIf="LooseCustomer.card_details.controls.cvv.errors?.minlength">
-												Minimum length should be 3
-											</p>
-											<p class="text-danger text-lg m-0"
-												*ngIf="LooseCustomer.card_details.controls.cvv.errors?.maxlength">
-												Maximum length should be 3
-											</p>
-										</ng-template> -->
+										<!-- <ng-template #cvvLength> -->
+										<p class="text-danger text-lg m-0"
+											*ngIf="LooseCustomer.card_details.controls.cvv.errors?.minlength">
+											Minimum length should be 3
+										</p>
+										<p class="text-danger text-lg m-0"
+											*ngIf="LooseCustomer.card_details.controls.cvv.errors?.maxlength">
+											Maximum length should be 5
+										</p>
+										<!-- </ng-template> -->
 									</div>
 								</div>
 							</div>
@@ -1299,7 +1299,7 @@
 			<div *ngIf="searchSubstring(Form.transfer_type.value, 'airport_')">
 				<div class="row px-2">
 					<!-- Airport -->
-					<div class="col-md-6 col-lg-3">
+					<div class="col-md-6">
 						<!-- <mat-form-field appearance="outline">
 							<mat-label>
 								Airport
@@ -1333,7 +1333,7 @@
 					</div>
 
 					<!-- Airline -->
-					<div class=" col-md-6 col-lg-3">
+					<div class=" col-md-6">
 						<!-- <mat-form-field appearance="outline">
 							<mat-label>
 								Airline
@@ -1364,7 +1364,7 @@
 					</div>
 
 					<!-- Flight Number -->
-					<div class="col-md-6 col-lg-3">
+					<div class="col-md-6">
 						<mat-form-field appearance="outline" class="vehicleLable mt-0"
 							style="margin-top: 0px !important;">
 							<mat-label>
@@ -1376,7 +1376,7 @@
 					</div>
 
 					<!-- Origin Airport / City -->
-					<div class="col-md-6 col-lg-3">
+					<div class="col-md-6">
 						<mat-form-field appearance="outline" class="vehicleLable mt-0"
 							style="margin-top: 0px !important;">
 							<mat-label>
@@ -1455,7 +1455,7 @@
 			<div *ngIf="searchSubstring(Form.transfer_type.value, '_airport')">
 				<div class="row px-2">
 					<!-- Airport -->
-					<div class="col-md-5 col-lg-3">
+					<div class="col-md-6">
 						<!-- <mat-form-field appearance="outline">
 							<mat-label>
 								Airport
@@ -1488,7 +1488,7 @@
 					</div>
 
 					<!-- Airline -->
-					<div class="col-md-5 col-lg-3">
+					<div class="col-md-6">
 						<!-- <mat-form-field appearance="outline">
 							<mat-label>
 								Airline
@@ -1520,7 +1520,7 @@
 					</div>
 
 					<!-- Flight Number -->
-					<div class="col-md-5 col-lg-3">
+					<div class="col-md-6">
 						<mat-form-field appearance="outline" class="vehicleLable mt-0"
 							style="margin-top: 0px !important;">
 							<mat-label>
@@ -1954,7 +1954,7 @@
 			<div *ngIf="searchSubstring(Form.return_transfer_type.value, 'airport_')">
 				<div class="row px-2">
 					<!-- Airport -->
-					<div class="col-md-6 col-lg-3">
+					<div class="col-md-6">
 						<!-- <mat-form-field appearance="outline">
 							<mat-label>
 								Airport
@@ -1986,7 +1986,7 @@
 					</div>
 
 					<!-- Airline -->
-					<div class="col-md-6 col-lg-3">
+					<div class="col-md-6">
 						<!-- <mat-form-field appearance="outline">
 							<mat-label>
 								Airline
@@ -2017,7 +2017,7 @@
 					</div>
 
 					<!-- Flight Number -->
-					<div class="col-md-6 col-lg-3">
+					<div class="col-md-6">
 						<mat-form-field appearance="outline" class="vehicleLable mt-0"
 							style="margin-top: 0px !important;">
 							<mat-label>
@@ -2097,7 +2097,7 @@
 			<div *ngIf="searchSubstring(Form.return_transfer_type.value, '_airport')">
 				<div class="row px-2">
 					<!-- Airport -->
-					<div class="col-md-5 col-lg-3">
+					<div class="col-md-6">
 						<!-- <mat-form-field appearance="outline">
 							<mat-label>
 								Airport
@@ -2130,7 +2130,7 @@
 					</div>
 
 					<!-- Airline -->
-					<div class="col-md-5 col-lg-3">
+					<div class="col-md-6">
 						<!-- <mat-form-field appearance="outline">
 							<mat-label>
 								Airline
@@ -2162,7 +2162,7 @@
 					</div>
 
 					<!-- Flight Number -->
-					<div class="col-md-5 col-lg-3">
+					<div class="col-md-6">
 						<mat-form-field appearance="outline" class="vehicleLable mt-0"
 							style="margin-top: 0px !important;">
 							<mat-label>

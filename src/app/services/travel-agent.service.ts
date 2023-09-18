@@ -107,7 +107,7 @@ export class TravelAgentService {
   }
 
   getStepsCompleted(id) {
-		return this.httpClient.get(this.serverUrl + 'get-affiliate-step-completed/' + id);
+		return this.httpClient.get(this.serverUrl + 'get-travel-step-completed/' + id);
 	}
 
   updateStepsArrayLocal(stepArray) {
@@ -118,13 +118,12 @@ export class TravelAgentService {
 		sessionStorage.setItem('step_completed_obj', JSON.stringify(stepObject))
 	}
 
-  addBankOfTravelAgent(data) {
-			return this.httpClient.post(this.serverUrl + 'add-a-bank', data);
-		
-	}
+  getBankOfAffiliate(acc_id){
+		return this.httpClient.get(this.serverUrl + `get-a-bank/${acc_id}`);
+  }
+  addBankOfAffiliate(data){
+    return this.httpClient.post(this.serverUrl + 'add-a-bank', data);
 
-  getBankOfTravelAgent(id) {
-		return this.httpClient.get(this.serverUrl + 'get-a-bank/' + id);
-	}
+  }
   
 }

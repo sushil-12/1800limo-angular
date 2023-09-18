@@ -461,7 +461,8 @@ export class RatesFormComponent implements OnInit, OnChanges {
 		this.ratesdata.next({})
 		console.log('<<<<<<<<<<<________ data to send fetchRatesArrayByAffiliateVehicle---------------->>>>>>>>>>>>>>',
 			data.vehicle_id , this.master_vehicle_id)
-			let vehicle_id = this.master_vehicle_id ? this.master_vehicle_id : data?.vehicle_id
+			let vehicle_id = data?.vehicle_id.toString().length ? data?.vehicle_id : this.master_vehicle_id
+			data['is_master_vehicle'] = data?.vehicle_id.toString().length ? false : true
 		this.$api.fetchRatesByAffiliateVeh(vehicle_id, data).subscribe((response: any) => {
 			if(this.bookingType !='edit'){
 				this.is_readonly_min_rate = response?.data?.min_rate_involved ? true : false

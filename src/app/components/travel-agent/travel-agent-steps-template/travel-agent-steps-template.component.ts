@@ -28,7 +28,7 @@ export class TravelAgentStepsTemplateComponent implements OnInit {
 	tree: any;
 	public errors: object;
 	public response: any;
-	affiliateId: string;
+	travelAgentId: string;
 	stepsObj: string;
 	affiliateName: any;
 
@@ -40,9 +40,9 @@ export class TravelAgentStepsTemplateComponent implements OnInit {
 
 	ngOnInit() {
 		this.currentStep = this.router.url.substring(this.router.url.indexOf('step'));
-		this.affiliateId = sessionStorage.getItem('affiliateId');
-		if (this.affiliateId) {
-			this.travelAgentService.getStepsCompleted(this.affiliateId)
+		this.travelAgentId = JSON.parse(localStorage.getItem('currentUser'))?.account_id
+		if (this.travelAgentId) {
+			this.travelAgentService.getStepsCompleted(this.travelAgentId)
 				.pipe(
 					catchError(err => {
 						return throwError(err);
@@ -61,7 +61,7 @@ export class TravelAgentStepsTemplateComponent implements OnInit {
 					}
 				});
 		}
-		if (!this.affiliateId) {
+		if (!this.travelAgentId) {
 			this.stepsObj = JSON.parse(sessionStorage.getItem('step_completed_obj'));
 			for (let [key, value] of Object.entries(this.stepsObj)) {
 				if (key == 'step0' && value == 'completed') {
@@ -71,17 +71,17 @@ export class TravelAgentStepsTemplateComponent implements OnInit {
 		}
 	}
 	
-	getAffiliateName(){
-		this.affiliateName = sessionStorage.getItem('affiliateName') || ""
+	// getAffiliateName(){
+	// 	this.affiliateName = sessionStorage.getItem('affiliateName') || ""
 
-	}
+	// }
 
 	stepCompletionTick() {
 		for (let [key, value] of Object.entries(this.stepCompletedObj)) {
 			let stepNumber = key;
 			this[stepNumber] = 'md-step ' + value + (this.currentStep == stepNumber ? ' active' : '');
 		}
-		this.getAffiliateName()
+		// this.getAffiliateName()
 	}
 
 	stepClicked(step) {
@@ -114,7 +114,7 @@ export class TravelAgentStepsTemplateComponent implements OnInit {
 			console.log('nav------step' , nav_step)
 			this.router.navigate(['/travel_agent/profile/' + (nav_step)])
 		}
-		this.getAffiliateName();
+		// this.getAffiliateName();
 
 	}
 

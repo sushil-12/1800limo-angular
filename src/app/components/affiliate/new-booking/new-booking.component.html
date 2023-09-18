@@ -30,7 +30,7 @@
 							<mat-select formControlName="service_type"
 								[ngStyle]="{'cursor': Form.updateType.value == 'edit' ? 'not-allowed' : 'default'}">
 								<mat-option value="one_way">One Way</mat-option>
-								<mat-option value="round_trip">Round Trip</mat-option>
+								<!-- <mat-option value="round_trip">Round Trip</mat-option> -->
 								<mat-option value="charter_tour">Charter/Tour</mat-option>
 							</mat-select>
 						</mat-form-field>
@@ -320,7 +320,7 @@
 										<ng-template #cardLength>
 											<p class="text-danger text-lg m-0"
 												*ngIf="LooseCustomer.card_details.controls.card_number.errors?.minlength">
-												Minimum length should be 12
+												Minimum length should be 16
 											</p>
 											<p class="text-danger text-lg m-0"
 												*ngIf="LooseCustomer.card_details.controls.card_number.errors?.maxlength">
@@ -416,16 +416,16 @@
 											*ngIf="LooseCustomer.card_details.controls.cvv.errors?.pattern">
 											Only Numbers are Allowed
 										</p>
-										<!-- <ng-template #cvvLength>
+										<!-- <ng-template #cvvLength> -->
 											<p class="text-danger text-lg m-0"
 												*ngIf="LooseCustomer.card_details.controls.cvv.errors?.minlength">
 												Minimum length should be 3
 											</p>
 											<p class="text-danger text-lg m-0"
 												*ngIf="LooseCustomer.card_details.controls.cvv.errors?.maxlength">
-												Maximum length should be 3
+												Maximum length should be 5
 											</p>
-										</ng-template> -->
+										<!-- </ng-template> -->
 									</div>
 								</div>
 							</div>
@@ -1709,10 +1709,10 @@
 
 		</div>
 
-		<app-rates-forms [initRates]="true" [affiliate_type]="Form.affiliate_type.value" [distance]="distance_for_rates"
-			[reservation_id]="booking_id" [reset]="reset_button" (formvalue)="RateFormValue($event)"
-			[hours]="Form.number_of_hours?.value" [vehicles]="Form.number_of_vehicles?.value"
-			(returnNumberOfHr)="HandleReturnNumberOfHr($event)">
+		<app-rates-forms class="d-flex flex-wrap" [initRates]="true" [affiliate_type]="Form.affiliate_type.value" 
+			[reservation_id]="booking_id" [reset]="reset_button" (formvalue)="RateFormValue($event)" [distance]="distance_for_rates"
+			[hours]="Form.number_of_hours?.value" [vehicles]="Form.number_of_vehicles?.value" [initReturnRates]="init_return_rates"
+			(returnNumberOfHr)="HandleReturnNumberOfHr($event)" (returnformvalue)="ReturnRateFormValue($event)">
 		</app-rates-forms>
 		<div class="row">
 			<div class="col-md-12">

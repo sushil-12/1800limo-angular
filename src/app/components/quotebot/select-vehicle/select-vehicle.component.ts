@@ -174,6 +174,9 @@ export class SelectVehicleComponent implements OnInit
 	ngOnInit(): void
 	{
 		window.scrollTo(0, 0)
+		if(!JSON.parse(sessionStorage.getItem('filters'))){
+			this.$router.navigateByUrl('/home')
+		}
 		this.$spinner.show()
 		sessionStorage.removeItem('selected_vehicle')
 		// Note: Do not add anything here or before below conditional logic. This should be the first step
