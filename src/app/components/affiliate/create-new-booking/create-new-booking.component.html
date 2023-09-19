@@ -28,6 +28,7 @@
 								Service Type
 							</mat-label>
 							<mat-select formControlName="service_type"
+							(selectionChange)="onSelectionChangeServiceType($event)"
 								[ngStyle]="{'cursor': Form.updateType.value == 'edit' ? 'not-allowed' : 'default'}">
 								<mat-option value="one_way">One Way</mat-option>
 								<mat-option value="round_trip">Round Trip</mat-option>
@@ -2276,7 +2277,7 @@
 
 
 		<app-rates-forms class="d-flex flex-wrap" [initRates]="init_rates" [affiliate_type]="Form.affiliate_type.value"
-			[distance]="distance_for_rates" [reservation_id]="booking_id" [reset]="reset_button"
+			[distance]="distance_for_rates" [book_data]="booking_data" [reservation_id]="booking_id" [reset]="reset_button"
 			[initReturnRates]="init_return_rates" (formvalue)="RateFormValue($event)"
 			[vehicle_id]="params_QB_vehicle_id" [hours]="Form.number_of_hours?.value"
 			[vehicles]="Form.number_of_vehicles?.value" (returnformvalue)="ReturnRateFormValue($event)"

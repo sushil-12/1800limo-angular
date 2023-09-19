@@ -123,6 +123,9 @@ export class CreateNewBookingComponent implements OnInit {
 	transfer_type: any = 'city_to_city'
 	return_transfer_type: any = 'city_to_city'
 	number_of_hours: any = '0';
+	booking_data:any={}
+	is_master_vehicle: boolean = JSON.parse(sessionStorage.getItem('selected_vehicle'))?.is_master_vehicle || false
+	extraStops_rate:any = 0
 
 
 	constructor(
@@ -698,6 +701,9 @@ export class CreateNewBookingComponent implements OnInit {
 							})
 						} else {
 							this.distance = response.distance
+							if(!this.BookingForm.get('extra_stops')?.value?.length || this.BookingForm.get('extra_stops')?.value[0]['rate']?.length){
+								this.buildBookingData()
+							}
 							this.BookingForm.patchValue({
 								journeyDistance: response.distance,
 								journeyTime: response.time
@@ -792,10 +798,6 @@ export class CreateNewBookingComponent implements OnInit {
 				this.$spinner.hide()
 			})
 		}
-	}
-
-	onSelectionChangeServiceType(event: any) {
-		this.service_type = event.value;
 	}
 
 	changeReturnTransferType(event: any) {
@@ -938,6 +940,7 @@ export class CreateNewBookingComponent implements OnInit {
 		this.SetFormValue('vehicle_color_name', selectedVehicle.color);
 		selectedVehicle.licensePlate === null ? this.BookingForm.get('vehicle_license_plate').setValue('') : this.SetFormValue('vehicle_license_plate', selectedVehicle.licensePlate)
 		this.SetFormValue('vehicle_seats', selectedVehicle.seats)
+		this.buildBookingData()
 	}
 
 	fetchAffiliateVehicles(affiliate_id: number) {
@@ -1268,14 +1271,16 @@ export class CreateNewBookingComponent implements OnInit {
 
 
 
-	addExtraStop(is_return: boolean = false) {
+addExtraStop(is_return: boolean = false) {
 		// console.log('Adding Extra Stop ...')
 		if (is_return) {
 			let index = Object.keys(this.ReturnExtraStops).length + 1;
 			(<FormArray>this.BookingForm.get('return_extra_stops')).push(new FormGroup({
 				address: new FormControl(''),
 				latitude: new FormControl(''),
-				longitude: new FormControl('')
+				longitude: new FormControl(''),
+				rate:  new FormControl(''),
+				booking_instructions: new FormControl('')
 			}))
 		}
 		else {
@@ -1283,11 +1288,12 @@ export class CreateNewBookingComponent implements OnInit {
 			(<FormArray>this.BookingForm.get('extra_stops')).push(new FormGroup({
 				address: new FormControl(''),
 				latitude: new FormControl(''),
-				longitude: new FormControl('')
+				longitude: new FormControl(''),
+				rate:  new FormControl(''),
+				booking_instructions: new FormControl('')
 			}))
 		}
 	}
-
 	deleteExtraStop(is_return: boolean, stop_index: number) {
 		if (is_return) {
 			(<FormArray>this.BookingForm.get('return_extra_stops')).removeAt(stop_index)
@@ -1308,6 +1314,11 @@ export class CreateNewBookingComponent implements OnInit {
 				(<FormArray>this.BookingForm.get('return_extra_stops')).at(index).patchValue({
 					address: address.formatted_address
 				})
+				let return_pickup_location = this.Form.return_pickup?.value
+				if (this.Form.transfer_type.value.includes('_airport')) {
+					return_pickup_location = this.Form.return_pickup_airport_name?.value
+				}
+				this.checkExtraStopInTown(return_pickup_location,address.formatted_address ,'return_extra_stops',index )
 			}
 			if (location) {
 				(<FormArray>this.BookingForm.get('return_extra_stops')).at(index).patchValue({
@@ -1323,6 +1334,11 @@ export class CreateNewBookingComponent implements OnInit {
 				(<FormArray>this.BookingForm.get('extra_stops')).at(index).patchValue({
 					address: address.formatted_address
 				});
+				let pickup_location = this.Form.pickup.value
+				if (this.Form.transfer_type.value.includes('airport_')) {
+					pickup_location = this.Form.pickup_airport_name.value
+				}
+				this.checkExtraStopInTown(pickup_location,address.formatted_address ,'extra_stops',index )
 			}
 
 			if (location) {
@@ -1336,6 +1352,52 @@ export class CreateNewBookingComponent implements OnInit {
 			this.MapController()
 		}
 	}
+	getTown(geocodeResult) {
+		for (let i = 0; i < geocodeResult.length; i++) {
+			const addressComponents = geocodeResult[i].address_components;
+			for (let j = 0; j < addressComponents.length; j++) {
+				const types = addressComponents[j].types;
+				if (types.includes('locality')) {
+					return addressComponents[j].long_name;
+				}
+			}
+		}
+		return null;
+	}
+
+	checkExtraStopInTown(location1: string, location2: string,formKey:string,index:any) {
+		console.log('in function check extra stop in town' , location1 , location2)
+		const geocoder = new google.maps.Geocoder();
+		geocoder.geocode({ address: location1 }, (results1, status1) => {
+		  if (status1 === 'OK' && results1.length > 0) {
+			const town1 = this.getTown(results1);
+			geocoder.geocode({ address: location2 },async (results2, status2) => {
+			  if (status2 === 'OK' && results2.length > 0) {
+				const town2 = this.getTown(results2);
+	  
+				if (town1 === town2) {
+					console.log('Both locations are in the same town/city.',this.extraStops_rate);
+					await (<FormArray>this.BookingForm.get([formKey])).at(index).patchValue({
+						rate : 'in_town'
+					});
+				} else {
+					console.log('Locations are in different towns/cities.',this.extraStops_rate);
+					(<FormArray>this.BookingForm.get([formKey])).at(index).patchValue({
+						rate : 'out_town'
+					});
+				}
+				setTimeout(()=>{
+					this.buildBookingData()
+				},300)
+			  } else {
+				console.error('Geocoding for Location 2 failed:', status2);
+			  }
+			});
+		  } else {
+			console.error('Geocoding for Location 1 failed:', status1);
+		  }
+		});
+	  }
 
 
 	select(is_checked: boolean, form_control: string, value: any) {
@@ -2056,6 +2118,29 @@ export class CreateNewBookingComponent implements OnInit {
 			return text
 		}
 	}
+	buildBookingData(){
+		console.log('rebuild booking data')
+		this.booking_data = {
+			vehicle_id: this.BookingForm.get('vehicle_id').value,
+			transfer_type: this.transfer_type,
+			service_type :this.service_type,
+			numberOfVehicles :1,
+			distance : this.distance, 
+			no_of_hours : this.number_of_hours,
+			is_master_vehicle : this.is_master_vehicle,
+			extra_stops: this.BookingForm.get('extra_stops').value,
+			return_extra_stops : this.BookingForm.get('return_extra_stops').value
+		}
+	}
+	handleNoOfHours(value) {
+		this.number_of_hours = value
+		console.log('in function handle no of hours->' , value , value > 0)
+		this.number_of_hours > 0 ? this.buildBookingData() : ''
+	}
+	onSelectionChangeServiceType(event: any) {
+		this.service_type = event.value;
+		this.buildBookingData()
+	}
 
 	setValueByBookNow() {
 		let QB: any = JSON.parse(localStorage.getItem('quotebot_form'))
@@ -2075,6 +2160,8 @@ export class CreateNewBookingComponent implements OnInit {
 		}
 		let transfer_type_value = QB?.pickup_type + '_to_' + QB?.dropoff_type
 		let return_transfer_type_value = QB?.dropoff_type + '_to_' + QB?.pickup_type
+		this.service_type = QB?.service_type
+		this.transfer_type = transfer_type_value
 		this.SetFormValue('transfer_type', transfer_type_value)
 		this.SetFormValue('return_transfer_type', return_transfer_type_value)
 		this.SetFormValue('total_passengers', QB?.no_of_luggage)

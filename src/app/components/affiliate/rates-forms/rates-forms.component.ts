@@ -20,6 +20,7 @@ export class RatesFormsComponent implements OnInit , OnChanges {
 	@Input("hours") nums: number = 0;
 	@Input("vehicle_id") QB_vehicle_id: any = 0;
 	@Input('reset') reset: boolean = false;
+	@Input('book_data') book_data: any = {};
 
 	// Throw Events.
 	@Output("formvalue") formvalue = new EventEmitter<Record<string, any>>();
@@ -72,6 +73,8 @@ export class RatesFormsComponent implements OnInit , OnChanges {
 	hours: number = 0;
 	newBooking: boolean;
 	is_readonly_min_rate: boolean = false;
+	bookingType: any;
+	master_vehicle_id: any;
 
 
 	constructor(
@@ -83,11 +86,18 @@ export class RatesFormsComponent implements OnInit , OnChanges {
 
 	ngOnInit(): void {
 		this.$routeurl.queryParams.subscribe((params: any) => {
+			console.log('params _->' , params)
 			if (!params?.vehicle_id ) {
 				this.fetchRates('');
 			}
 			if (params && params.new == 'true') {
 				this.newBooking = params.new == 'true'
+			}
+			if (params && params.updateType) {
+				this.bookingType = params.updateType
+			}
+			if(params && params.is_master_vehicle == 'true'){
+				this.master_vehicle_id = params.vehicle_id
 			}
 		})
 	}
@@ -105,15 +115,14 @@ export class RatesFormsComponent implements OnInit , OnChanges {
 		this.returnratesform =
 			changes.init_r_rates?.currentValue ?? this.returnratesform;
 
-		if (changes?.QB_vehicle_id?.currentValue) {
-				console.log('got QB_vehicle_id------->>>>>>>>>', changes.QB_vehicle_id)
-				this.QB_vehicle_id = changes?.QB_vehicle_id?.currentValue
-				this.fetchRatesArrayByAffiliateVehicle(this.QB_vehicle_id)
-		}
-		// if(changes?.book_data?.currentValue){
-
-		// 	this.fetchRatesArrayByAffiliateVehicle(changes?.book_data?.currentValue)
+		// if (changes?.QB_vehicle_id?.currentValue) {
+		// 		console.log('got QB_vehicle_id------->>>>>>>>>', changes.QB_vehicle_id)
+		// 		this.QB_vehicle_id = changes?.QB_vehicle_id?.currentValue
+		// 		this.fetchRatesArrayByAffiliateVehicle(this.QB_vehicle_id)
 		// }
+		if(changes?.book_data?.currentValue){
+			this.fetchRatesArrayByAffiliateVehicle(changes?.book_data?.currentValue)
+		}
 		// if asked to initialise the rates
 		if (changes.init_rates?.currentValue) {
 			if(!this.QB_vehicle_id){
@@ -273,7 +282,7 @@ export class RatesFormsComponent implements OnInit , OnChanges {
 		})
 
 		//calculating totals of rates form if data auto fill by quote bot 
-		if(this.QB_vehicle_id){
+		if(true){
 			console.log('calculating total for QB ')
 			for (let formgroup in this.RateForm) {
 				for (let subform in this.RateForm[formgroup].controls) {
@@ -399,37 +408,21 @@ export class RatesFormsComponent implements OnInit , OnChanges {
 				this.ratesdata.next(response.data.rateArray);
 			}
 		});
+			this.initRates();
 	}
 
-	fetchRatesArrayByAffiliateVehicle(vehicle_id) {
+	fetchRatesArrayByAffiliateVehicle(data) {
 		this.ratesdata.next({})
 		console.log('<<<<<<<<<<<________ data to send fetchRatesArrayByAffiliateVehicle---------------->>>>>>>>>>>>>>',
-			vehicle_id)
-		let QB: any = JSON.parse(localStorage.getItem('quotebot_form'))
-		let no_of_hours = null
-		if (QB?.service_type == 'charter_tour') {
-			no_of_hours = QB?.booking_hour
-		}
-		let location_info = QB?.location_info[0]
-		// let return_location_info = QB?.location_info[1]
-		// need to handle create return rate form
-		// if(QB?.service_type == "round_trip"){
-		// }
-		let transfer_type_value = QB?.pickup_type + '_to_' + QB?.dropoff_type
-		let return_transfer_type_value = QB?.dropoff_type + '_to_' + QB?.pickup_type
-		let data = {
-			vehicle_id : this.QB_vehicle_id,
-			service_type: QB?.service_type,
-			transfer_type: transfer_type_value,
-			numberOfVehicles: 1,
-			no_of_hours: no_of_hours,
-			distance: location_info.distance.value,
-			is_master_vehicle: JSON.parse(sessionStorage.getItem('selected_vehicle'))?.is_master_vehicle
-		}
+			data , this.master_vehicle_id)
+			let vehicle_id = data?.vehicle_id.toString().length ? data?.vehicle_id : this.master_vehicle_id
+			data['is_master_vehicle'] = data?.vehicle_id.toString().length ? false : true
 		this.adminServices.fetchRatesByAffiliateVeh(vehicle_id, data).subscribe((response: any) => {
-			this.is_readonly_min_rate = response?.data?.min_rate_involved ? true : false
-			this.ratesdata.next(response?.data?.rateArray)
-			this.initRates();
+			if(this.bookingType !='edit'){
+				this.is_readonly_min_rate = response?.data?.min_rate_involved ? true : false
+				this.ratesdata.next(response?.data?.rateArray)
+				this.initRates();
+			}
 			if(data.service_type == 'round_trip'){
 				this.returnRatesdata.next(response?.data?.retrunRateArray)
 				this.initReturnRates()

@@ -28,9 +28,10 @@
 								Service Type
 							</mat-label>
 							<mat-select formControlName="service_type"
+							(selectionChange)="onSelectionChangeServiceType($event)"
 								[ngStyle]="{'cursor': Form.updateType.value == 'edit' ? 'not-allowed' : 'default'}">
 								<mat-option value="one_way">One Way</mat-option>
-								<!-- <mat-option value="round_trip">Round Trip</mat-option> -->
+								<mat-option value="round_trip">Round Trip</mat-option>
 								<mat-option value="charter_tour">Charter/Tour</mat-option>
 							</mat-select>
 						</mat-form-field>
@@ -80,6 +81,7 @@
 								Number of Hours
 							</mat-label>
 							<input type="number" matInput placeholder="Enter Hours" formControlName="number_of_hours"
+							[(ngModel)]="number_of_hours" (keyup)="handleNoOfHours($event.target.value)"
 								(focus)="$event.target.select()" />
 							<span matSuffix>Hrs.</span>
 						</mat-form-field>
@@ -1710,7 +1712,8 @@
 		</div>
 
 		<app-rates-forms class="d-flex flex-wrap" [initRates]="true" [affiliate_type]="Form.affiliate_type.value" 
-			[reservation_id]="booking_id" [reset]="reset_button" (formvalue)="RateFormValue($event)" [distance]="distance_for_rates"
+			[reservation_id]="booking_id" [reset]="reset_button" (formvalue)="RateFormValue($event)"
+			[distance]="distance_for_rates" [book_data]="booking_data"
 			[hours]="Form.number_of_hours?.value" [vehicles]="Form.number_of_vehicles?.value" [initReturnRates]="init_return_rates"
 			(returnNumberOfHr)="HandleReturnNumberOfHr($event)" (returnformvalue)="ReturnRateFormValue($event)">
 		</app-rates-forms>
@@ -2486,7 +2489,7 @@
 							</div>
 						</div>
 
-						<hr>
+						<hr *ngIf="Form.return_extra_stops.value.length > 0" >
 						<!-- Return > Extra Stops -->
 						<div *ngIf="Form.return_extra_stops.value.length > 0">
 							<h5 class="p-2 m-0 text-xl">

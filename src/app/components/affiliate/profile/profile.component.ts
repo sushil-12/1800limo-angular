@@ -45,7 +45,9 @@ export class ProfileComponent implements OnInit {
         })
       ).subscribe(({ data }: any) => {
         this.stateManagementService.setprogressBar(false);//hide progressbar
-        
+        this.timezoneForm.patchValue({
+          timezone : data?.timezone
+        })
         this.profile_pic = data?.profile_pic;
         let userInfo = JSON.parse(localStorage.getItem('userData'))
         if(userInfo){

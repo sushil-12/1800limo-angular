@@ -578,7 +578,7 @@ export class HomeComponent implements OnInit {
 				dropoff_address: previous_quotebot?.dropoff_address,
 				dropoff_address_lat: previous_quotebot?.dropoff_address_lat,
 				dropoff_address_long: previous_quotebot?.dropoff_address_long,
-				return_pickup_date: new Date().toISOString().substring(0, 10),
+				return_pickup_date: this.returnValidDate(previous_quotebot?.return_pickup_date),
 				return_pickup_time: previous_quotebot?.return_pickup_time ?? '12:00:00',
 				return_pickup_airport: previous_quotebot?.return_pickup_airport,
 				return_pickup_airport_name: previous_quotebot?.other_details?.return_pickup_airport_name,
@@ -924,8 +924,8 @@ export class HomeComponent implements OnInit {
 			this.SetFormValue(form_control, event.target.value)
 		},
 		return_pickup_date: (value: any) => {
-			console.log('value-- return ' , value )
-			this.SetFormValue('return_pickup_date',  value)
+			console.log('value-- return ' ,  value.format("YYYY-MM-DD") )
+			this.SetFormValue('return_pickup_date',   value.format("YYYY-MM-DD"))
 		},
 
 		bookingHours: (event: any) => {

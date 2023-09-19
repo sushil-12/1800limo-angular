@@ -631,7 +631,7 @@
 											<mat-form-field appearance="fill">
 												<input matInput [matDatepicker]="picker3" [min]="minDate"
 													placeholder="Return Pickup Date" id="returnPickupDate"
-													(change)="changeDetection.return_pickup_date($event.target.value)"
+													(dateChange)="changeDetection.return_pickup_date($event.target.value)"
 													class="font-weight-bolder"  readonly tabindex="1"
 													[class.errorValid]="submitted && QBForm?.return_pickup_date?.errors"
 													formControlName="return_pickup_date" (click)="picker3.open()">
