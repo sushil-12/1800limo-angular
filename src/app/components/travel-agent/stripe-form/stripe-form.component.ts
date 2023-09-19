@@ -251,7 +251,7 @@ export class StripeFormComponent implements OnInit {
 		// this.stepCompleted.includes('2')
 		if (true) {
 			// this.isStep2Completed = true;
-			this.stateManagementService.setprogressBar(true);
+			// this.stateManagementService.setprogressBar(true);
 
 			this.travelService.getBankOfAffiliate(this.travelAgentId)
 				.pipe(
