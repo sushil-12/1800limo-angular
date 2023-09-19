@@ -5,6 +5,7 @@ import * as moment from 'moment';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { AdminService } from 'src/app/services/admin.service';
 import { AffiliateService } from 'src/app/services/affiliate.service';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 
@@ -51,7 +52,10 @@ export class AffiliateFinalizeComponent implements OnInit {
 	}
 	quoteAmount: any;
 	hours: any;
+	main_receipt_url: any;
+	paymentDetailByCard: any;
 	constructor(
+		private $api: AdminService,
 		private affiliateService: AffiliateService,
 		private $form: FormBuilder,
 		private router: Router,
@@ -76,6 +80,7 @@ export class AffiliateFinalizeComponent implements OnInit {
 					// this.buildChargesFormGroup()
 					// this.chargesForm.get('reservation_id').setValue(this.bookingId)
 					this.getBookingData()
+					this.paymentDetail(this.bookingId)
 				}
 			});
 			this.deleteCardForm = this.$form.group({
@@ -158,6 +163,18 @@ export class AffiliateFinalizeComponent implements OnInit {
 	RateFormValue(form: any) {
 		console.log('rate form value ------>>>>', form)
 		this.edit_rates_value = form
+	}
+	paymentDetail(bookingId) {
+		this.$api
+			.getPaymentDetailFinalize(bookingId)
+			.pipe()
+			.subscribe((response: any) => {
+				console.log(response.data, "check response paymentDetail");
+				if (response.data) {
+					this.main_receipt_url = response?.data?.main_receipt_url
+					this.paymentDetailByCard = response?.data?.charges
+				}
+			});
 	}
 
 

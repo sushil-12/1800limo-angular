@@ -1133,5 +1133,9 @@ export class AdminService {
 		return this.httpClient.post(`${this.serverUrl}send-email-data-to-users`,body)
 	}
 
+	changeTimezone(value){
+		return this.httpClient.put(`${this.serverUrl}update-timezone/${value}`,'')
+	}
+
 
 }

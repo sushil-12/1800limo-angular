@@ -57,6 +57,7 @@ export class Step2Component implements OnInit {
 	public disableSubmitRequestAddressChangeButton: boolean = false;
 	public showProgressBar: boolean = false;
 	public haveEinNo: boolean = true;
+	public isBadgeCity : boolean = false;
 
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
 	selectedCountryName: any;
@@ -282,6 +283,7 @@ export class Step2Component implements OnInit {
 										badge_city:i.id,
 										badge_city_name:i.name
 									})
+									this.isBadgeCity = true
 								}
 							})
 							// if (this.postCountryName == this.getCountryName)
@@ -758,6 +760,7 @@ export class Step2Component implements OnInit {
 			this.addBankForm.patchValue({
 				badge_city:option.id
 			})
+			this.isBadgeCity = false
 			// this.addAffiliateAccountForm.updateValueAndValidity()
 		}
 

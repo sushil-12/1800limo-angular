@@ -70,6 +70,9 @@ agm-map {
 	color           : var(--orange-color);
 }
 
+.border-red{
+	border: 3px solid red;border-radius: 10px;
+}
 
 .adressChangeButton:hover svg path {
 	fill: #fff;

@@ -739,8 +739,7 @@
 					</ng-template>
 				</div>
 				<div class="col-md-4">
-					<mat-form-field appearance="outline" class="example-full-width"
-						style="border: 3px solid red;border-radius: 10px;">
+					<mat-form-field appearance="outline" class="example-full-width" [ngClass]="isBadgeCity ? '' : 'border-red'">
 						<mat-label>Badge City
 						</mat-label>
 						<input type="text" placeholder="Pick one" aria-label="Number" matInput
@@ -858,7 +857,7 @@
 						</div>
 					</div>
 				</div> -->
-				<div class="col-md-6">
+				<!-- <div class="col-md-6">
 					<mat-form-field appearance="outline" [class.read-only]="!canChangeAddress">
 						<mat-label>City <span class="asterisk">*</span></mat-label>
 						<input matInput (focus)="$event.target.select()" placeholder="City" formControlName="city"
@@ -872,7 +871,7 @@
 							This field is required
 						</div>
 					</div>
-				</div>
+				</div> -->
 				<div class="col-md-6">
 					<mat-form-field appearance="outline" [class.read-only]="!canChangeAddress">
 						<mat-label>Unit#</mat-label>

@@ -381,7 +381,39 @@
 </section>
 
 
-
+<section class="section-container mt-2"
+	*ngIf="(BookingDetail?.payment_status=='paid' || BookingDetail?.payment_status=='partial_paid' || BookingDetail?.payment_status=='refund')&& paymentDetailByCard?.length > 0 ">
+	<h4 class="section-dropdown-header mb-0">
+		Past Payments
+	</h4>
+	<table class="table table-borderless">
+		<thead class="bg-transparent">
+			<tr>
+				<th scope="col">Name on Card</th>
+				<th scope="col">Card Number</th>
+				<th scope="col" *ngIf="BookingDetail?.affiliate_type!='loose_affiliate'">Transfer Amount</th>
+				<th scope="col">Recipt</th>
+			</tr>
+		</thead>
+		<tbody *ngIf="paymentDetailByCard?.length > 0; else noData">
+			<tr *ngFor="let item of paymentDetailByCard">
+				<td>{{item?.card_details?.name}}</td>
+				<td>xxxx-xxxx-xxxx-{{item?.card_details?.last4}}</td>
+				<td *ngIf="BookingDetail?.affiliate_type!='loose_affiliate'">{{item?.transfer?.transfer_amount}}</td>
+				<td>
+					<a href="{{ BookingDetail?.affiliate_type!='loose_affiliate' ?  item?.transfer?.receipt_url : main_receipt_url}}"
+						target="_blank">View At stripe</a>
+				</td>
+			</tr>
+		</tbody>
+		<ng-template #noData>
+			<tbody>
+				<p class="text-danger text-lg">No
+					Card Found !</p>
+			</tbody>
+		</ng-template>
+	</table>
+</section>
 <!-- payment section -->
 <section class="section-container mt-2" *ngIf="BookingDetail?.payment_status=='unpaid'">
 	<div class="col-md-12 p-0" (click)="handlePaymentSection()">

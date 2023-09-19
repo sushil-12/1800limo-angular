@@ -257,6 +257,11 @@ top:2.05em}
 	font-weight: 400;
 }
 
-:host ::ng-deep #vehicleTypeField .ng-select-container.ng-appearance-outline{
+// :host ::ng-deep #vehicleTypeField .ng-select-container.ng-appearance-outline{
+// 		border: 3px solid red;
+// }
+.border-red{
 	border: 3px solid red;
+	padding: 0px;
+	border-radius: 10px;
 }
