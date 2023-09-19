@@ -133,7 +133,7 @@ export class AffiliateStep2Component implements OnInit {
 			city: ['', Validators.required],
 			state: ['', Validators.required],
 			country: ['', Validators.required],
-			zipCode: ['', [Validators.required, Validators.pattern("^[0-9]*$")]],
+			zipCode: ['', Validators.required],
 			unit: [''],
 			primaryCardType: ['personal'],
 			primaryCardNumber: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(16), Validators.maxLength(16), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],

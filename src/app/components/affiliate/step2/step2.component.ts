@@ -144,7 +144,7 @@ export class Step2Component implements OnInit {
 			badge_city :[''],
 			badge_city_name:[''],
 			country: ['', Validators.required],
-			zipCode: ['', [Validators.required, this.customValidator.plusValidator()]],
+			zipCode: ['', Validators.required],
 			unit: [''],
 			primaryCardType: ['personal'],
 			primaryCardNumber: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(16), Validators.maxLength(16), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
