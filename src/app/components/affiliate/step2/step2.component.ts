@@ -752,6 +752,9 @@ export class Step2Component implements OnInit {
 
 	  handleBadgeCity(value:any){
 		console.log(value , this.filteredOptions)
+		if(!value){
+			this.isBadgeCity = false
+		}
 		this.filteredOptions = this.badgeOptions.filter((i:any)=> i.name.toLowerCase().includes(value.toLowerCase()))
 	}
 	selectBadgeCity(option:any,isUserInput){
@@ -760,7 +763,7 @@ export class Step2Component implements OnInit {
 			this.addBankForm.patchValue({
 				badge_city:option.id
 			})
-			this.isBadgeCity = false
+			this.isBadgeCity = true
 			// this.addAffiliateAccountForm.updateValueAndValidity()
 		}
 
