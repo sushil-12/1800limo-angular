@@ -2805,6 +2805,20 @@
 							</div>
 						</div>
 					</div>
+					<div class="mx-2" *ngIf="Form.service_type.value == 'round_trip'">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Return Special Instruction
+								</span>
+							</div>
+							<div class="col-md-8 value box-special-instruction">
+								<span class="font-weight-bolder" style="white-space: pre-wrap;">
+									{{Form?.return_booking_instructions.value}}
+								</span>
+							</div>
+						</div>
+					</div>
 					<hr>
 					<!-- Travel Information -->
 					<h4 class="font-weight-bolder m-0 mt-3">
