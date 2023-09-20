@@ -721,8 +721,23 @@
 			</div>
 			<div class="modal-body" style="font-family: 'PT Serif', serif;">
 				<div class="container text-lg" *ngIf="bookingPreview">
+					<h4 class="font-weight-bolder m-0 mt-1">
+						Rates / Taxes
+					</h4>
+					<div class="row" *ngIf="bookingPreview?.grand_total">
+						<div class="col-md-4 key">
+							<span>
+								Grand Total
+							</span>
+						</div>
+						<div class="col-md-8 value">
+							<span class="font-weight-bolder preview-output-feild">
+								$ {{ bookingPreview?.grand_total }}
+							</span>
+						</div>
+					</div>
 					<!-- Booking Type -->
-					<h4 class="font-weight m-0">
+					<h4 class="font-weight-bolder m-0">
 						Booking Type
 					</h4>
 					<!-- Booking Information -->
@@ -748,131 +763,13 @@
 					<hr>
 					<!-- Booking Information - Ends -->
 
-					<!-- affiliate details -->
-					<ng-container *ngIf="bookingPreview?.affiliate_type == 'affiliate' then affiliateUser">
-					</ng-container>
-
-					<!-- Affiliate -->
-					<ng-template #affiliateUser>
-						<h4 class="font-weight m-0 mt-3">
-							Affiliate Information
-						</h4>
-
-						<!-- Affiliate > Name -->
-						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key">
-									<span>
-										Name
-									</span>
-								</div>
-								<div class="col-md-8 value">
-									<span class="font-weight-bolder preview-output-feild"
-										*ngIf="bookingPreview?.MiddleName == null;else affiliateMiddleName">
-										{{ textFormatter(bookingPreview?.affiliate_name) }}
-									</span>
-								</div>
-							</div>
-						</div>
-
-						<!-- Affiliate > Email -->
-						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key">
-									<span>
-										Email
-									</span>
-								</div>
-								<div class="col-md-8 value">
-									<span class="font-weight-bolder preview-output-feild">
-										{{ textFormatter(bookingPreview?.affiliate_email) }}
-									</span>
-								</div>
-							</div>
-						</div>
-
-						<!-- Affiliate > Phone -->
-						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key">
-									<span>
-										Phone
-									</span>
-								</div>
-								<div class="col-md-8 value">
-									<span class="font-weight-bolder preview-output-feild">
-										({{ bookingPreview?.affiliate_phone_isd }}){{
-										textFormatter(bookingPreview?.affiliate_phone) }}
-									</span>
-								</div>
-							</div>
-						</div>
-						<hr>
-					</ng-template>
 
 
 
-					<!-- loose affiliate details -->
-					<ng-container *ngIf="bookingPreview?.affiliate_type == 'loose_affiliate' then looseAffiliate">
-					</ng-container>
 
-					<ng-template #looseAffiliate>
-						<h4 class="font-weight m-0 mt-3">
-							Loose Affiliate Information
-						</h4>
 
-						<!-- Loose Affiliate > Name -->
-						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key">
-									<span>
-										Name
-									</span>
-								</div>
-								<div class="col-md-8 value">
-									<span class="font-weight-bolder preview-output-feild">
-										{{ textFormatter(bookingPreview?.lose_affiliate_name) }}
-									</span>
-								</div>
-							</div>
-						</div>
-
-						<!-- Loose Affiliate > Email -->
-						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key">
-									<span>
-										Email
-									</span>
-								</div>
-								<div class="col-md-8 value">
-									<span class="font-weight-bolder preview-output-feild">
-										{{ textFormatter(bookingPreview?.lose_affiliate_email) }}
-									</span>
-								</div>
-							</div>
-						</div>
-
-						<!-- Loose Affiliate > Phone -->
-						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key">
-									<span>
-										Phone
-									</span>
-								</div>
-								<div class="col-md-8 value">
-									<span class="font-weight-bolder preview-output-feild">
-										({{ bookingPreview?.lose_affiliate_phone_isd }}){{
-										textFormatter(bookingPreview?.lose_affiliate_phone) }}
-									</span>
-								</div>
-							</div>
-						</div>
-						<hr>
-					</ng-template>
 					<!-- Grand Total -->
-					<h4 class=" m-0">
+					<h4 class="font-weight-bolder m-0">
 						Vehicle Preferences
 					</h4>
 					<div class="row p-2">
@@ -960,110 +857,130 @@
 						</div>
 					</div>
 					<hr>
-					<h4 class="font-weight m-0 mt-3">
-						Rates / Taxes
-					</h4>
-					<div class="row">
-						<div class="col-md-4 key">
-							<span>
-								Grand Total
-							</span>
-						</div>
-						<div class="col-md-8 value">
-							<span class="font-weight-bolder preview-output-feild">
-								$ {{ bookingPreview.grand_total }}
-							</span>
-						</div>
-					</div>
-					<div class="row" *ngIf="bookingPreview.total_amount_refunded>0">
-						<div class="col-md-4 key">
-							<span>
-								Refund amount
-							</span>
-						</div>
-						<div class="col-md-8 value">
-							<span class="font-weight-bolder preview-output-feild">
-								$ {{-(bookingPreview?.total_amount_refunded).toFixed(2) }}
-							</span>
-						</div>
-					</div>
-					<div class="row" *ngIf="bookingPreview.total_amount_refunded>0">
-						<div class="col-md-4 key">
-							<span>
-								New total
-							</span>
-						</div>
-						<div class="col-md-8 value">
-							<span class="font-weight-bolder preview-output-feild">
-								$ {{(bookingPreview?.grand_total- bookingPreview?.total_amount_refunded).toFixed(2) }}
-							</span>
-						</div>
-					</div>
+					<!-- affiliate details -->
+					<ng-container *ngIf="bookingPreview?.affiliate_type == 'affiliate' then affiliateUser">
+					</ng-container>
 
-					<!-- <h4 class="font-weight m-0 mt-3" *ngIf="this.bookingPreview?.payment_status=='unpaid'">
-						Rates distribution
-					</h4>
-					<div class="row" *ngFor="let item of rates_preview | keyvalue: returnZero; index as item_index">
-						<div class="col-md-4 key" *ngIf="item?.key!='ratesDetail' && item?.value!=0">
-							<span>
-								{{formatText(item?.key) | titlecase}}
-							</span>
-						</div>
-						<div class="col-md-8 value" *ngIf="item?.key!='ratesDetail'&& item?.value!=0">
-							<span class="font-weight-bolder preview-output-feild">
-								$ {{(item?.value).toFixed(2)}}
-							</span>
-						</div>
-					</div> -->
-					<hr>
-					<!-- Grand Total -->
-					<div class="mx-2" *ngIf="bookingPreview?.meet_greet_choice_name">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Meet and Greet
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
-									{{ textFormatter(bookingPreview?.meet_greet_choice_name)| titlecase }}
-								</span>
-							</div>
-						</div>
-					</div>
-					<div class="mx-2">
-						<div class="row m-0" *ngIf="bookingPreview?.return_meet_greet_choice_name">
-							<div class="col-md-4 key">
-								<span>
-									Return Meet and Greet
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
-									{{ textFormatter(bookingPreview?.return_meet_greet_choice_name)| titlecase }}
-								</span>
-							</div>
-						</div>
-					</div>
-					<hr>
-					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Special Instruction
-								</span>
-							</div>
-							<div class="col-md-8 value box-special-instruction">
-								<span class="font-weight-bolder preview-output-feild" style="white-space: pre-wrap;">
-									{{ textFormatter(bookingPreview?.booking_instructions)| titlecase }}
-								</span>
-							</div>
-						</div>
-					</div>
+					<!-- Affiliate -->
+					<ng-template #affiliateUser>
+						<h4 class="font-weight-bolder m-0 mt-3">
+							Affiliate Information
+						</h4>
 
+						<!-- Affiliate > Name -->
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key">
+									<span>
+										Name
+									</span>
+								</div>
+								<div class="col-md-8 value">
+									<span class="font-weight-bolder preview-output-feild"
+										*ngIf="bookingPreview?.MiddleName == null;else affiliateMiddleName">
+										{{ textFormatter(bookingPreview?.affiliate_name) }}
+									</span>
+								</div>
+							</div>
+						</div>
+
+						<!-- Affiliate > Email -->
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key">
+									<span>
+										Email
+									</span>
+								</div>
+								<div class="col-md-8 value">
+									<span class="font-weight-bolder preview-output-feild">
+										{{ textFormatter(bookingPreview?.affiliate_email) }}
+									</span>
+								</div>
+							</div>
+						</div>
+
+						<!-- Affiliate > Phone -->
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key">
+									<span>
+										Phone
+									</span>
+								</div>
+								<div class="col-md-8 value">
+									<span class="font-weight-bolder preview-output-feild">
+										({{ bookingPreview?.affiliate_phone_isd }}){{
+										textFormatter(bookingPreview?.affiliate_phone) }}
+									</span>
+								</div>
+							</div>
+						</div>
+
+					</ng-template>
+
+					<!-- loose affiliate details -->
+					<ng-container *ngIf="bookingPreview?.affiliate_type == 'loose_affiliate' then looseAffiliate">
+					</ng-container>
+
+					<ng-template #looseAffiliate>
+						<h4 class="font-weight m-0 mt-3">
+							Loose Affiliate Information
+						</h4>
+
+						<!-- Loose Affiliate > Name -->
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key">
+									<span>
+										Name
+									</span>
+								</div>
+								<div class="col-md-8 value">
+									<span class="font-weight-bolder preview-output-feild">
+										{{ textFormatter(bookingPreview?.lose_affiliate_name) }}
+									</span>
+								</div>
+							</div>
+						</div>
+
+						<!-- Loose Affiliate > Email -->
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key">
+									<span>
+										Email
+									</span>
+								</div>
+								<div class="col-md-8 value">
+									<span class="font-weight-bolder preview-output-feild">
+										{{ textFormatter(bookingPreview?.lose_affiliate_email) }}
+									</span>
+								</div>
+							</div>
+						</div>
+
+						<!-- Loose Affiliate > Phone -->
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key">
+									<span>
+										Phone
+									</span>
+								</div>
+								<div class="col-md-8 value">
+									<span class="font-weight-bolder preview-output-feild">
+										({{ bookingPreview?.lose_affiliate_phone_isd }}){{
+										textFormatter(bookingPreview?.lose_affiliate_phone) }}
+									</span>
+								</div>
+							</div>
+						</div>
+						<hr>
+					</ng-template>
 					<hr>
 					<!-- Driver Information -->
-					<h4 class="font-weight m-0 mt-3">
+					<h4 class="font-weight-bolder m-0 mt-3">
 						Driver Information
 					</h4>
 					<!-- Driver Name -->
@@ -1116,8 +1033,37 @@
 					</div>
 					<hr>
 
+					<div class="row" *ngIf="bookingPreview.total_amount_refunded>0">
+						<div class="col-md-4 key">
+							<span>
+								Refund amount
+							</span>
+						</div>
+						<div class="col-md-8 value">
+							<span class="font-weight-bolder preview-output-feild">
+								$ {{-(bookingPreview?.total_amount_refunded).toFixed(2) }}
+							</span>
+						</div>
+					</div>
+					<div class="row" *ngIf="bookingPreview.total_amount_refunded>0">
+						<div class="col-md-4 key">
+							<span>
+								New total
+							</span>
+						</div>
+						<div class="col-md-8 value">
+							<span class="font-weight-bolder preview-output-feild">
+								$ {{(bookingPreview?.grand_total- bookingPreview?.total_amount_refunded).toFixed(2) }}
+							</span>
+						</div>
+					</div>
+
+
+
+
+
 					<!-- Passenger Information -->
-					<h4 class="font-weight m-0 mt-3">
+					<h4 class="font-weight-bolder m-0 mt-3">
 						Passenger Information
 					</h4>
 
@@ -1198,13 +1144,59 @@
 						</div>
 					</div>
 					<hr>
+					<!-- Grand Total -->
+					<div class="mx-2" *ngIf="bookingPreview?.meet_greet_choice_name">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Meet and Greet
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder preview-output-feild">
+									{{ textFormatter(bookingPreview?.meet_greet_choice_name)| titlecase }}
+								</span>
+							</div>
+						</div>
+					</div>
+					<div class="mx-2">
+						<div class="row m-0" *ngIf="bookingPreview?.return_meet_greet_choice_name">
+							<div class="col-md-4 key">
+								<span>
+									Return Meet and Greet
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder preview-output-feild">
+									{{ textFormatter(bookingPreview?.return_meet_greet_choice_name)| titlecase }}
+								</span>
+							</div>
+						</div>
+					</div>
+					<hr>
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Special Instruction
+								</span>
+							</div>
+							<div class="col-md-8 value box-special-instruction">
+								<span class="font-weight-bolder preview-output-feild" style="white-space: pre-wrap;">
+									{{ textFormatter(bookingPreview?.booking_instructions)| titlecase }}
+								</span>
+							</div>
+						</div>
+					</div>
+
+					<hr>
 					<!-- Travel Information -->
-					<!-- <h4 class="font-weight m-0 mt-3">
+					<h4 class="font-weight-bolder m-0 mt-3">
 						Travel Information
-					</h4> -->
+					</h4>
 
 					<!-- Number of Hours -->
-					<div class="mx-2" *ngIf="bookingPreview.service_type == 'charter_tour'">
+					<div class="mx-2" *ngIf="bookingPreview?.service_type == 'Charter Tour'">
 						<div class="row">
 							<div class="col-md-4 key">
 								<span>
@@ -1213,7 +1205,7 @@
 							</div>
 							<div class="col-md-8 value">
 								<span class="font-weight-bolder preview-output-feild">
-									{{ bookingPreview.number_of_hours }}
+									{{ bookingPreview?.number_of_hours }}
 								</span>
 							</div>
 						</div>
@@ -1398,7 +1390,7 @@
 
 					<hr style="width: 50%; margin: 1rem auto; border: 1.3px solid #aeaeae;"
 						*ngIf="bookingPreview.extra_stops && bookingPreview.extra_stops.length == 0" />
-			
+
 
 					<!-- ############# Dropoff ################# -->
 					<h5 class="px-2 m-0 my-3 text-xl preview-dropoff-color">
