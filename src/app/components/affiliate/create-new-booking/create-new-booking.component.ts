@@ -270,6 +270,7 @@ export class CreateNewBookingComponent implements OnInit {
 			total_passengers: [1],
 			luggage_count: [0],
 			booking_instructions: [''],
+			return_booking_instructions: [''],
 			affiliate_type: ['affiliate'],
 			affiliate_id: [''],
 			lose_affiliate_name: ['', this.customValidator.whitespace()],
@@ -426,6 +427,17 @@ export class CreateNewBookingComponent implements OnInit {
 			this.SetFormValue('return_meet_greet_choices', 2)
 			this.SetFormValue('return_meet_greet_choices_name', "Driver -  Airport - Text/call after plane lands with curbside meet location")
 		}
+	}
+	handleClientAccChange(){
+		this.BookingForm.get('acc_id').setValue(null);
+		this.chosen_user = null
+		this.BookingForm.patchValue({
+			passenger_name: '',
+			passenger_email:'',
+			passenger_cell: '',
+			passenger_cell_isd: '+1',
+			passenger_cell_country: 'us',
+		})
 	}
 
 	handleChangeMonth(value: any) {
