@@ -880,6 +880,13 @@ export class NewBookingComponent implements OnInit {
 	handleClientAccChange(){
 		this.BookingForm.get('acc_id').setValue(null);
 		this.chosen_user = null
+		this.BookingForm.patchValue({
+			passenger_name: '',
+			passenger_email:'',
+			passenger_cell: '',
+			passenger_cell_isd: '+1',
+			passenger_cell_country: 'us',
+		})
 	}
 
 	handleClientAccount(value: any) {

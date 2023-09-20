@@ -100,7 +100,7 @@
 			<div class="row">
 				<div class="col-md-12 col-lg-10">
 					<mat-radio-group aria-label="Select an option" formControlName="account_type">
-						<mat-radio-button [value]="ca" class="my-2 ml-4 mr-3"
+						<mat-radio-button [value]="ca" class="my-2 ml-4 mr-3" (change)="handleClientAccChange()"
 							*ngFor="let ca of booking_params.client_account_types">
 							{{ textFormatter(ca) | titlecase }}
 						</mat-radio-button>
@@ -622,16 +622,6 @@
 						</mat-form-field>
 					</div>
 
-					<!-- Special Instructions -->
-					<div class="col-md-12 my-2">
-						<mat-form-field appearance="outline">
-							<mat-label>
-								Special Instructions
-							</mat-label>
-							<textarea matInput style="white-space: pre-wrap;" formControlName="booking_instructions"
-								(focus)="$event.target.select()" rows="5"></textarea>
-						</mat-form-field>
-					</div>
 				</div>
 			</div>
 			<!-- Passenger Information Ends -->
@@ -1574,8 +1564,18 @@
 					</div>
 				</div>
 			</div>
+			<!-- Special Instructions -->
+			<div class="col-md-12 my-2">
+				<mat-form-field appearance="outline">
+					<mat-label>
+						Special Instructions
+					</mat-label>
+					<textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+						formControlName="booking_instructions" (focus)="$event.target.select()" rows="5"></textarea>
+				</mat-form-field>
+			</div>
 			<div class="row m-2">
-				<p class="text-danger text-lg">
+				<p class="text-lg" style="color: #dc3545!important;">
 					NOTE : Enter pickup and drop off locations first, then enter extra stops.
 				</p>
 			</div>
@@ -2216,7 +2216,20 @@
 					</div>
 				</div>
 			</div>
-
+			<div class="col-md-12 my-2">
+				<mat-form-field appearance="outline">
+					<mat-label>
+						Special Instructions
+					</mat-label>
+					<textarea matInput style="white-space: pre-wrap;" formControlName="return_booking_instructions"
+						(focus)="$event.target.select()" rows="5"></textarea>
+				</mat-form-field>
+			</div>
+			<div class="row m-2">
+				<p class="text-lg" style="color: #dc3545!important;">
+					NOTE : Enter pickup and drop off locations first, then enter extra stops.
+				</p>
+			</div>
 
 			<!-- Extra Stops -->
 			<div class="row my-3 justify-items-end">
