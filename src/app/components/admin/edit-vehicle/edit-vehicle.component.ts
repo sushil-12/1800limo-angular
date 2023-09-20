@@ -96,6 +96,7 @@ export class EditVehicleComponent implements OnInit {
 	errorMsg2: boolean;
 	errorMsg3: boolean;
 	errorMsg4: boolean;
+	duplicateVehcile: any;
 
 	constructor(
 		private adminService: AdminService,
@@ -151,6 +152,7 @@ export class EditVehicleComponent implements OnInit {
 				console.log('params-->>>1' , params['params'],this.paramResponse.params?.new)
 				this.vehicleTypeId = this.paramResponse.params.vehicleTypeId;
 				this.vehicleId = this.paramResponse.params.vehicleId;
+				this.duplicateVehcile = this.paramResponse.params?.duplicateVehcile
 			}
 			);
 		this.httpClient.get("assets/json/charterOptions.json").subscribe((data: any) => {
@@ -233,6 +235,7 @@ export class EditVehicleComponent implements OnInit {
 				this.filteredColor = this.color = this.response.data.color;
 				this.specialAmenities = this.response.data.specialAmenities;
 				this.interiors = this.response.data.vehicleInterior;
+				
 				this.oldvehicleImage[0] = this.response.data.vehicleImage1.image;
 				this.oldvehicleImage[1] = this.response.data.vehicleImage2.image;
 				this.oldvehicleImage[2] = this.response.data.vehicleImage3.image;
@@ -260,7 +263,7 @@ export class EditVehicleComponent implements OnInit {
 						})
 					).subscribe(result2 => {
 						this.response2 = result2;
-						if (this.response2.data.vehicle_image_1) {
+						if (this.response2.data.vehicle_image_1 ) {
 							this.vehicleImage1 = this.response2.data.vehicle_image_1.image;
 							this.vehicleImageId1 = this.response2.data.vehicle_image_1.ID;
 							this.addVehicleForm.patchValue({
@@ -271,7 +274,7 @@ export class EditVehicleComponent implements OnInit {
 							this.vehicleImage1 = '';
 							this.vehicleImageId1 = '';
 						}
-						if (this.response2.data.vehicle_image_2) {
+						if (this.response2.data.vehicle_image_2 && this.duplicateVehcile != 'true') {
 							this.vehicleImage2 = this.response2.data.vehicle_image_2.image;
 							this.vehicleImageId2 = this.response2.data.vehicle_image_2.ID;
 							this.addVehicleForm.patchValue({
@@ -282,7 +285,7 @@ export class EditVehicleComponent implements OnInit {
 							this.vehicleImage2 = '';
 							this.vehicleImageId2 = '';
 						}
-						if (this.response2.data.vehicle_image_3) {
+						if (this.response2.data.vehicle_image_3 && this.duplicateVehcile != 'true') {
 							this.vehicleImage3 = this.response2.data.vehicle_image_3.image;
 							this.vehicleImageId3 = this.response2.data.vehicle_image_3.ID;
 							this.addVehicleForm.patchValue({
@@ -293,7 +296,7 @@ export class EditVehicleComponent implements OnInit {
 							this.vehicleImage3 = '';
 							this.vehicleImageId3 = '';
 						}
-						if (this.response2.data.vehicle_image_4) {
+						if (this.response2.data.vehicle_image_4 && this.duplicateVehcile != 'true') {
 							this.vehicleImage4 = this.response2.data.vehicle_image_4.image;
 							this.vehicleImageId4 = this.response2.data.vehicle_image_4.ID;
 							this.addVehicleForm.patchValue({
@@ -304,7 +307,7 @@ export class EditVehicleComponent implements OnInit {
 							this.vehicleImage4 = '';
 							this.vehicleImageId4 = '';
 						}
-						if (this.response2.data.vehicle_image_5) {
+						if (this.response2.data.vehicle_image_5 && this.duplicateVehcile != 'true') {
 							this.vehicleImage5 = this.response2.data.vehicle_image_5.image;
 							this.vehicleImageId5 = this.response2.data.vehicle_image_5.ID;
 							this.addVehicleForm.patchValue({
@@ -315,7 +318,7 @@ export class EditVehicleComponent implements OnInit {
 							this.vehicleImage5 = '';
 							this.vehicleImageId5 = '';
 						}
-						if (this.response2.data.vehicle_image_6) {
+						if (this.response2.data.vehicle_image_6 && this.duplicateVehcile != 'true') {
 							this.vehicleImage6 = this.response2.data.vehicle_image_6.image;
 							this.vehicleImageId6 = this.response2.data.vehicle_image_6.ID;
 							this.addVehicleForm.patchValue({
@@ -326,7 +329,7 @@ export class EditVehicleComponent implements OnInit {
 							this.vehicleImage6 = '';
 							this.vehicleImageId6 = '';
 						}
-						if (this.response2.data.vehicle_image_7) {
+						if (this.response2.data.vehicle_image_7 && this.duplicateVehcile != 'true') {
 							this.vehicleImage7 = this.response2.data.vehicle_image_7.image;
 							this.vehicleImageId7 = this.response2.data.vehicle_image_7.ID;
 							this.addVehicleForm.patchValue({
@@ -337,7 +340,7 @@ export class EditVehicleComponent implements OnInit {
 							this.vehicleImage7 = '';
 							this.vehicleImageId7 = '';
 						}
-						if (this.response2.data.vehicle_image_8) {
+						if (this.response2.data.vehicle_image_8 && this.duplicateVehcile != 'true') {
 							this.vehicleImage8 = this.response2.data.vehicle_image_8.image;
 							this.vehicleImageId8 = this.response2.data.vehicle_image_8.ID;
 							this.addVehicleForm.patchValue({
@@ -348,7 +351,7 @@ export class EditVehicleComponent implements OnInit {
 							this.vehicleImage8 = '';
 							this.vehicleImageId8 = '';
 						}
-						if (this.response2.data.vehicle_image_9) {
+						if (this.response2.data.vehicle_image_9 && this.duplicateVehcile != 'true') {
 							this.vehicleImage9 = this.response2.data.vehicle_image_9.image;
 							this.vehicleImageId9 = this.response2.data.vehicle_image_9.ID;
 							this.addVehicleForm.patchValue({

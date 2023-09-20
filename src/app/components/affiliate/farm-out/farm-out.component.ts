@@ -290,12 +290,7 @@ export class FarmOutComponent implements OnInit
 	}
 
 	editAction(bookingId, updateType) {
-		if (updateType == 'change') {
 			this.$router.navigate(['/affiliate/new-booking'], { queryParams: { bookingId: bookingId, updateType: updateType , nav : 'false' } });
-		}
-		else {
-			this.$router.navigate(['/affiliate/new-booking'], { queryParams: { bookingId: bookingId } });
-		}
 	}
 	finalizeAction(bookingId) {
 		this.$router.navigate(['/affiliate/finalize-booking'], { queryParams: { bookingId: bookingId } });
