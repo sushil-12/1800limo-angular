@@ -1268,9 +1268,7 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 			this.filteredModel = []
 			return false
 		}
-		this.addVehicleForm.patchValue({
-			model : this.filteredModel[0]?.ID
-		})
+		
 		let models = JSON.parse(sessionStorage.getItem('models'));
 		this.filteredModel = models.filter(function (model)
 		{
@@ -1279,6 +1277,9 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 				return true;
 			}
 		});
+		this.addVehicleForm.patchValue({
+			model : this.filteredModel[0]?.ID
+		})
 		if (onFirstLoad == 'onFirstLoad' || this.onFirstLoad==1)
 		{
 			console.log('->>' , this.onFirstLoad)

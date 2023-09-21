@@ -23,7 +23,7 @@ export class FarmOutComponent implements OnInit
 	@ViewChild('inputmsg', { static: false }) message: ElementRef;
 	color: ThemePalette = 'primary';
 	outputDateFormat = 'YYYY-MM-DD';
-	public totalRecords: Number;
+	public totalRecords: any;
 	public firstPage: Number;
 	public lastPage: Number;
 	public totalPage: Number;

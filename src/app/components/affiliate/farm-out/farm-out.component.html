@@ -638,7 +638,7 @@
 						</div>
 						<div class="col-md-8 value">
 							<span class="font-weight-bolder preview-output-feild">
-								$ {{-(bookingPreview?.total_amount_refunded).toFixed(2) }}
+								$ {{-(bookingPreview?.total_amount_refunded)?.toFixed(2) }}
 							</span>
 						</div>
 					</div>
@@ -1098,9 +1098,9 @@
 							</div>
 							<div class="col-md-8">
 								<span class="font-weight-bolder preview-output-feild">
-									{{ textFormatter(bookingPreview.pickup) }}
+									{{ textFormatter(bookingPreview?.pickup) }}
 								</span>
-								<span (click)="showLocationPointOnMapByAddress(bookingPreview.pickup)"><i
+								<span (click)="showLocationPointOnMapByAddress(bookingPreview?.pickup)"><i
 										class="bi bi-geo-alt-fill"></i></span>
 							</div>
 						</div>

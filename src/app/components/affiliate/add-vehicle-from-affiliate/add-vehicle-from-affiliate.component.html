@@ -45,11 +45,11 @@
 							</mat-option>
 						</mat-autocomplete>
 					</mat-form-field> -->
+					<!-- [ngClass]="{ 'border-red': (errorMsg && f.vehicleType.errors) || (submittedForm && f.vehicleType.errors) || !isVehicleTypeSelected }" -->
 					<ng-select appearance="outline" id="vehicle_type" [items]="filteredVehicleTypes" dropdownPosition="bottom"
 							[markFirst]="true" [virtualScroll]="true" bindLabel="name" bindValue="ID"
 							placeholder="Vehicle Type" formControlName="vehicleType" id="vehicleTypeField"
-							(change)="handleChangeVehicleType($event)"
-							[ngClass]="{ 'border-red': (errorMsg && f.vehicleType.errors) || (submittedForm && f.vehicleType.errors) || !isVehicleTypeSelected }">
+							(change)="handleChangeVehicleType($event)">
 						</ng-select>
 					<div *ngIf="
 							(errorMsg && f.vehicleType.errors) ||
