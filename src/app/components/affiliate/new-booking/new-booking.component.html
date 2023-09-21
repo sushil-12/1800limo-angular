@@ -622,17 +622,6 @@
 							</mat-select>
 						</mat-form-field>
 					</div>
-
-					<!-- Special Instructions -->
-					<div class="col-md-12 my-2">
-						<mat-form-field appearance="outline">
-							<mat-label>
-								Special Instructions
-							</mat-label>
-							<textarea matInput style="white-space: pre-wrap;" formControlName="booking_instructions"
-								(focus)="$event.target.select()" rows="5"></textarea>
-						</mat-form-field>
-					</div>
 				</div>
 			</div>
 			<!-- Passenger Information Ends -->
@@ -1000,8 +989,18 @@
 					</div>
 				</div>
 			</div>
+			<!-- Special Instructions -->
+			<div class="col-md-12 my-2">
+				<mat-form-field appearance="outline">
+					<mat-label>
+						Special Instructions
+					</mat-label>
+					<textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+						formControlName="booking_instructions" (focus)="$event.target.select()" rows="5"></textarea>
+				</mat-form-field>
+			</div>
 			<div class="row m-2">
-				<p class="text-danger text-lg">
+				<p class="text-lg" style="color: #dc3545!important;">
 					NOTE : Enter pickup and drop off locations first, then enter extra stops.
 				</p>
 			</div>
@@ -1498,6 +1497,21 @@
 					</div>
 				</div>
 			</div>
+			<div class="col-md-12 my-2">
+				<mat-form-field appearance="outline">
+					<mat-label>
+						Special Instructions
+					</mat-label>
+					<textarea matInput style="white-space: pre-wrap;" formControlName="return_booking_instructions"
+						(focus)="$event.target.select()" rows="5"></textarea>
+				</mat-form-field>
+			</div>
+			<div class="row m-2">
+				<p class="text-lg" style="color: #dc3545!important;">
+					NOTE : Enter pickup and drop off locations first, then enter extra stops.
+				</p>
+			</div>
+			
 
 
 
@@ -2003,6 +2017,20 @@
 							<div class="col-md-8 value box-special-instruction">
 								<span class="font-weight-bolder" style="white-space: pre-wrap;">
 									{{Form?.booking_instructions.value}}
+								</span>
+							</div>
+						</div>
+					</div>
+					<div class="mx-2" *ngIf="Form.service_type.value == 'round_trip'">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Return Special Instruction
+								</span>
+							</div>
+							<div class="col-md-8 value box-special-instruction">
+								<span class="font-weight-bolder" style="white-space: pre-wrap;">
+									{{Form?.return_booking_instructions.value}}
 								</span>
 							</div>
 						</div>

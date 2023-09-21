@@ -707,6 +707,9 @@ export class CreateNewBookingComponent implements OnInit {
 					this.fetchDistanceAndTime(response).then((response: { distance: number, time: number }) => {
 						if (is_return) {
 							this.return_distance = response.distance
+							if(!this.BookingForm.get('return_extra_stops')?.value?.length || this.BookingForm.get('return_extra_stops')?.value[0]['rate']?.length){
+								this.buildBookingData()
+							}
 							this.BookingForm.patchValue({
 								returnJourneyDistance: response.distance,
 								returnJourneyTime: response.time
@@ -2138,6 +2141,7 @@ addExtraStop(is_return: boolean = false) {
 			service_type :this.service_type,
 			numberOfVehicles :1,
 			distance : this.distance, 
+			return_distance : this.return_distance,
 			no_of_hours : this.number_of_hours,
 			is_master_vehicle : this.is_master_vehicle,
 			extra_stops: this.BookingForm.get('extra_stops').value,
