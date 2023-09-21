@@ -212,6 +212,9 @@ export class InvoiceSummaryComponent implements OnInit {
 			return moment(timestamp * 1000).format('MMMM Do YYYY, h:mm:ss a')
 		}
 	}
+	formatText(value){
+		return value ? value.replaceAll('_' , ' ') : ''
+	}
 
 	getCurrencyData() {
 		console.log('in function get currency data')

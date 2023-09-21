@@ -250,6 +250,7 @@ export class NewBookingComponent implements OnInit {
 			total_passengers: [1],
 			luggage_count: [0],
 			booking_instructions: [''],
+			return_booking_instructions: [''],
 			affiliate_type: ['affiliate'],
 			affiliate_id: [''],
 			lose_affiliate_name: ['', this.customValidator.whitespace()],
@@ -370,6 +371,7 @@ export class NewBookingComponent implements OnInit {
 		this.SetFormValue('return_pickup_date', future_full_date.slice(0, future_full_date.indexOf('T')))
 		this.SetFormValue('number_of_vehicles', 1)
 		this.SetFormValue('booking_instructions', 'Text client day before each booking to confirm driver name and cell #');
+		this.SetFormValue('return_booking_instructions', 'Text client day before each booking to confirm driver name and cell #');
 
 
 		if (this.BookingForm.value.transfer_type.includes('city_')) {
@@ -654,6 +656,9 @@ export class NewBookingComponent implements OnInit {
 					this.fetchDistanceAndTime(response).then((response: { distance: number, time: number }) => {
 						if (is_return) {
 							this.return_distance = response.distance
+							if(!this.BookingForm.get('return_extra_stops')?.value?.length || this.BookingForm.get('return_extra_stops')?.value[0]['rate']?.length){
+								this.buildBookingData()
+							}
 							this.BookingForm.patchValue({
 								returnJourneyDistance: response.distance,
 								returnJourneyTime: response.time
@@ -922,6 +927,7 @@ export class NewBookingComponent implements OnInit {
 			service_type :this.service_type,
 			numberOfVehicles :1,
 			distance : this.distance, 
+			return_distance : this.return_distance,
 			no_of_hours : this.number_of_hours,
 			is_master_vehicle : this.is_master_vehicle,
 			extra_stops: this.BookingForm.get('extra_stops').value,
