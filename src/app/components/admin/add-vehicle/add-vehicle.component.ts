@@ -38,7 +38,7 @@ export class AddVehicleComponent implements OnInit {
 	public make: Array<any>;
 	public filteredMake: Array<object>;
 	public model: Array<any>;
-	public filteredModel: Array<object>;
+	public filteredModel: Array<any>;
 	public vehicleTypes: Array<object>;
 	public filteredVehicleTypes: Array<object>;
 	public color: Array<object>;
@@ -89,6 +89,8 @@ export class AddVehicleComponent implements OnInit {
 	public charterCancelOptions: Array<Object>;
 	public nonCharterCancelOptions: Array<Object>;
 	public serviceType: string;
+	isVehicleTypeSelected: boolean = false
+
 
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
 	errorMsg: boolean;
@@ -338,6 +340,11 @@ export class AddVehicleComponent implements OnInit {
 				return -1;
 		}
 	}
+	handleChangeVehicleType(value){
+		console.log('Selected Value:', value);
+		
+		this.isVehicleTypeSelected = value ? true : false
+	}
 
 	searchVehicleType(keyword) {
 		this.addVehicleForm.patchValue({
@@ -408,12 +415,15 @@ export class AddVehicleComponent implements OnInit {
 	Subscriptions() {
 		this.addVehicleForm.get('make')?.valueChanges.subscribe((value: string) => {
 			console.log('change value is--->>', value)
-			let models = this.allModels
-			this.filteredModel = this.model = models.filter(function (model) {
-				if (model.make_id == value) {
-					return true;
-				}
-			});
+			// let models = this.allModels
+			// this.filteredModel = this.model = models.filter(function (model) {
+			// 	if (model.make_id == value) {
+			// 		return true;
+			// 	}
+			// });
+			this.changeMake(value);
+			let modelField: any = document.getElementById('modelField');
+			modelField.value = '';
 		})
 		
 		// this.addVehicleForm.get('make').valueChanges.subscribe((value: string) => {
@@ -922,15 +932,24 @@ vehicleOfficialImagesChange(event, imageType, imageId) {
 	}
 
 	changeMake(selectedMake) {
-		this.spinner.show()
-		console.log('in function change make-->', selectedMake)
-		let models = this.allModels
-		this.filteredModel = this.model = models.filter(function (model) {
+		console.log('selectedMake-->>>>' , selectedMake)
+		if(!selectedMake){
+			this.addVehicleForm.patchValue({
+				model : ''
+			})
+			this.filteredModel = []
+			return false
+		}
+		
+		let models = JSON.parse(sessionStorage.getItem('models'));
+		this.filteredModel = models.filter(function (model) {
 			if (model.make_id == selectedMake) {
 				return true;
 			}
 		});
-		this.spinner.hide()
+		this.addVehicleForm.patchValue({
+			model : this.filteredModel[0]?.ID
+		})
 	}
 	service: Array<any> = []
 	onServiceChange(value: string) {

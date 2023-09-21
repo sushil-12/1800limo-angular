@@ -36,7 +36,7 @@ export class EditVehicleComponent implements OnInit {
 	public make: Array<any>;
 	public filteredMake: Array<object>;
 	public model: Array<any>;
-	public filteredModel: Array<object>;
+	public filteredModel: Array<any>;
 	public vehicleTypes: Array<object>;
 	public filteredVehicleTypes: Array<object>;
 	public color: Array<object>;
@@ -469,11 +469,14 @@ export class EditVehicleComponent implements OnInit {
 		this.addVehicleForm.get('make')?.valueChanges.subscribe((value: string) => {
 			console.log('change value is--->>', value)
 			let models = this.allModels
-			this.filteredModel = this.model = models.filter(function (model) {
-				if (model.make_id == value) {
-					return true;
-				}
-			});
+			// this.filteredModel = this.model = models.filter(function (model) {
+			// 	if (model.make_id == value) {
+			// 		return true;
+			// 	}
+			// });
+			this.changeMake(value);
+			let modelField: any = document.getElementById('modelField');
+			modelField.value = '';
 		})
 	}
 	searchVehicleType(keyword) {
@@ -540,6 +543,7 @@ export class EditVehicleComponent implements OnInit {
 			modelField.value = '';
 		}
 	}
+	
 
 	searchModel(keyword) {
 		this.addVehicleForm.patchValue({
@@ -1141,12 +1145,24 @@ export class EditVehicleComponent implements OnInit {
 	}
 
 	changeMake(selectedMake, onFirstLoad = null) {
+		console.log('selectedMake-->>>>' , selectedMake)
+		if(!selectedMake){
+			this.addVehicleForm.patchValue({
+				model : ''
+			})
+			this.filteredModel = []
+			return false
+		}
+		
 		let models = JSON.parse(sessionStorage.getItem('models'));
 		this.filteredModel = models.filter(function (model) {
 			if (model.make_id == selectedMake) {
 				return true;
 			}
 		});
+		this.addVehicleForm.patchValue({
+			model : this.filteredModel[0]?.ID
+		})
 		if (onFirstLoad == 'onFirstLoad') {
 			this.addVehicleForm.patchValue({
 				model: this.response2.data.model
