@@ -5,6 +5,7 @@ import { SelectVehicleComponent } from './select-vehicle/select-vehicle.componen
 import { FailedQuoteRequestComponent } from './failed-quote-request/failed-quote-request.component';
 import { VehicleDetailsComponent } from './vehicle-details/vehicle-details.component';
 import { MasterVehicleComponent } from './master-vehicle/master-vehicle.component';
+import { NewBookingComponent } from './new-booking/new-booking.component';
 
 const routes: Routes = [
 	{
@@ -22,6 +23,10 @@ const routes: Routes = [
 	{
 		path: 'failed-quote-request',
 		component: FailedQuoteRequestComponent
+	},
+	{
+		path: 'new-booking',
+		component: NewBookingComponent
 	}
 ];
 

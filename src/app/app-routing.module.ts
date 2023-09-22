@@ -37,6 +37,7 @@ import { BookingStatusVerificationComponent } from './components/email-pages/boo
 import { TransactionHistoryComponent } from './components/website/transaction-history/transaction-history.component';
 import { AgentTemplateComponent } from './components/travel-agent/agent-template/agent-template.component';
 import { CheckProfileCompleteGuard } from './guards/check-profile-complete.guard';
+import { CreateBookingComponent } from './components/travel-agent/create-booking/create-booking.component';
 
 
 const routes: Routes = [
