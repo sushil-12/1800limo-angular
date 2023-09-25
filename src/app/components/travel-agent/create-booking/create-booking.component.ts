@@ -108,6 +108,14 @@ export class CreateBookingComponent implements OnInit {
 	firstLoadAffiliateId: void;
 	confirmMsg: any;
 	bookingResponse: any;
+	booking_data: any ;
+	is_master_vehicle: boolean = JSON.parse(sessionStorage.getItem('selected_vehicle'))?.is_master_vehicle || false
+	master_vehicle_id: any;
+	bookingType: any;
+	subtotal:Number=0
+	agentShare:Number =0;
+	grandtotal:Number=0
+	vehicles:Number=1
 
   constructor(
     private $form: FormBuilder,
@@ -132,9 +140,15 @@ export class CreateBookingComponent implements OnInit {
 			this.SetFormValue('reservation_id', params.bookingId)
 			params.updateType ? this.SetFormValue('updateType', params.updateType) : this.SetFormValue('updateType', 'edit')
 		}
-		else if (params && params.new == 'true') {
+		if (params && params.new == 'true') {
 			this.newBooking = params.new == 'true'
 			this.affiliate_id = parseInt(params.affiliate_id)
+		}
+		if(params && params.is_master_vehicle == 'true'){
+			this.master_vehicle_id = params.vehicle_id
+		}
+		if (params && params.updateType) {
+			this.bookingType = params.updateType
 		}
 		else {
 			this.resetFields()
@@ -365,7 +379,7 @@ export class CreateBookingComponent implements OnInit {
 
 				this.MapController();
 				this.Form.reservation_id.value ? this.prefillViaBookingID(this.Form.reservation_id.value) : '';
-				// this.newBooking ? this.setValueByBookNow() : "";
+				this.newBooking ? this.setValueByBookNow() : "";
 				clearInterval(s);
 			}
 			else {
@@ -1862,6 +1876,35 @@ export class CreateBookingComponent implements OnInit {
 			throw new Error('Error: Location Points Not Specified Properly. ');
 		}
 	}
+
+	buildBookingData(){
+		console.log('rebuild booking data')
+		let booking_data = {
+			vehicle_id: this.BookingForm.get('vehicle_id').value,
+			transfer_type: this.transfer_type,
+			service_type :this.service_type,
+			numberOfVehicles :1,
+			distance : this.distance, 
+			return_distance : this.return_distance,
+			no_of_hours : this.number_of_hours,
+			is_master_vehicle : this.is_master_vehicle,
+			extra_stops: this.BookingForm.get('extra_stops').value,
+			return_extra_stops : this.BookingForm.get('return_extra_stops').value
+		}
+
+		let vehicle_id = booking_data?.vehicle_id.toString().length ? booking_data?.vehicle_id : this.master_vehicle_id
+		booking_data['is_master_vehicle'] = booking_data?.vehicle_id.toString().length ? false : true
+	this.$api.fetchRatesByAffiliateVeh(vehicle_id, booking_data).subscribe((response: any) => {
+		if(this.bookingType !='edit'){
+			this.subtotal= response?.data?.sub_total
+			this.grandtotal= response?.data?.grand_total
+		}
+		if(this.booking_data.service_type == 'round_trip'){
+			
+		}
+	});
+	}
+
 	setValueByBookNow() {
 		let QB: any = JSON.parse(localStorage.getItem('quotebot_form'))
 		let selected_vehicle: any = JSON.parse(sessionStorage.getItem('selected_vehicle'))
@@ -1935,7 +1978,7 @@ export class CreateBookingComponent implements OnInit {
 		this.SetFormValue('driver_email',selected_vehicle?.driverInformation?.email)
 		this.SetFormValue('driver_cell',selected_vehicle?.driverInformation?.phone)
 		this.SetFormValue('driver_gender',selected_vehicle?.driverInformation?.gender)
-
+		this.SetFormValue('vehicle_id', selected_vehicle?.id)
 		
 			// driver_cell_isd: ['+1'],
 			// driver_cell_country: ['us'],
@@ -1949,6 +1992,7 @@ export class CreateBookingComponent implements OnInit {
 		}
 		this.MapController()
 		this.MapController(true)
+		this.buildBookingData()
 		// setTimeout(() => {
 		// 	console.log('settimeout finction---------------------------------------------------------------')
 		// 	this.fetchQBAffiliateVehicles(selected_vehicle?.affiliate_id)

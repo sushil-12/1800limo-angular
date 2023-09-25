@@ -216,30 +216,56 @@
 		</div>
 
 		<!-- Section - Affiliate/Loose Details -->
-		<div class="row mt-2">
-			<div class="col-md-6 section-container">
-            <h3 class=" border-secondary pb-4">
-                Driver Details
-            </h3>
-            <dl class="row d-flex justify-content-around" *ngIf="driver_info">
-                <div *ngFor="let item of ['name', 'phone', 'gender']">
-                    <dt class="col-sm-3">{{ item | titlecase }}:</dt>
-                    <dd class="col-sm-9"> {{ driver_info[item] | titlecase }}</dd>
-                </div>
-              </dl>
-            </div>
-            <div class="col-md-6 section-container">
+		<div class="row section-container mt-2">
+			<div class="col-md-6">
+				<h3 class=" border-secondary pb-4">
+					Driver Details
+				</h3>
+				  <div class="row" *ngIf="driver_info">
+					<div class="col-md-4 field">
+						<p>Name:</p>
+						<strong>{{ driver_info["name"] | titlecase }}</strong>
+					</div>
+					<div class="col-md-4 field">
+						<p>Phone:</p>
+						<strong>{{ driver_info["phone"] | titlecase }}</strong>
+					</div>
+	
+					<div class="col-md-4 field">
+						<p>Gender:</p>
+						<strong>{{ driver_info["gender"] | titlecase }}</strong>
+					</div>
+					</div>
+			</div>
+			<div class="col-md-6">
                 <h3 class=" border-secondary pb-4">
                     Vehicle Details
                 </h3>
-                <dl class="row d-flex justify-content-around" *ngIf="driver_info">
-                    <div *ngFor="let item of ['type', 'make', 'model']">
-                        <dt class="col-sm-3">{{ item | titlecase }}:</dt>
-                        <dd class="col-sm-9"> {{ driver_info[item] | titlecase }}</dd>
-                    </div>
-                  </dl>
-            </div>
+				<div class="row" *ngIf="driver_info">
+					<div class="col-md-4 field">
+						<p>Type:</p>
+						<strong>{{ driver_info["type"] | titlecase }}</strong>
+					</div>
+					<div class="col-md-4 field">
+						<p>Make:</p>
+						<strong>{{ driver_info["make"] | titlecase }}</strong>
+					</div>
+					
+					<div class="col-md-4 field">
+						<p>Model:</p>
+						<strong>{{ driver_info["model"] | titlecase }}</strong>
+					</div>
+				</div>
+				<!-- <dl class="row d-flex justify-content-around" *ngIf="driver_info">
+						<dt class="col-sm-3">Type:</dt>
+						<dd class="col-sm-9"> {{ driver_info["type"] | titlecase }}</dd>
+						<dt class="col-sm-3">Make:</dt>
+						<dd class="col-sm-9"> {{ driver_info["make"] | titlecase }}</dd>
+						<dt class="col-sm-3">Model:</dt>
+						<dd class="col-sm-9"> {{ driver_info["model"] | titlecase }}</dd>
+				  </dl> -->
 			</div>
+            </div>
 		<div class="section-container mt-2">
 			<!-- Affiliate Driver Information Ends -->
 

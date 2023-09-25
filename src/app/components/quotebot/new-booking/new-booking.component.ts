@@ -10,6 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CustomvalidationService } from 'src/app/services/customvalidation.service';
 import { pluck } from 'rxjs/operators';
 import { AdminService } from 'src/app/services/admin.service';
+import { QuotebotService } from 'src/app/services/quotebot.service';
 
 declare var $: any
 @Component({
@@ -119,6 +120,7 @@ export class NewBookingComponent implements OnInit {
 	constructor(
 		private $form: FormBuilder,
 		private $api: AdminService,
+		private $quotebotService: QuotebotService,
 		private $shared: SharedModule,
 		private $spinner: NgxSpinnerService,
 		private $mapsapi: MapsAPILoader,
@@ -1517,17 +1519,6 @@ export class NewBookingComponent implements OnInit {
 		this.submitBookingForm = true
 		console.log(this.BookingForm);
 		console.log(this.BookingForm.status);
-		// let EditedKeys = []
-		// Object.keys(this.bookingResponse)?.map(i=>{
-		// 	let value = this.bookingResponse[`${i}`] === null ? '' :this.bookingResponse[`${i}`]
-		// 	let value1 = this.BookingForm.value[`${i}`] === undefined ? '' :this.BookingForm.value[`${i}`]
-		// 	console.log('value',i,'--->>>',value1,'--->>>' , value )
-		// 	if(value1 != value && this.BookingForm.value[`${i}`] !== undefined){
-		// 		EditedKeys.push(i)
-		// 	} 
-		// })
-
-		// console.log(' Edited keys  ---->>>>' , EditedKeys)
 		if (this.BookingForm.invalid) {
 			return;
 		}
@@ -1554,7 +1545,7 @@ export class NewBookingComponent implements OnInit {
 			}
 
 			this.$spinner.show()
-			this.$api.createBooking(value, this.Form.updateType.value).subscribe((response: any) => {
+			this.$quotebotService.createBooking(value, this.Form.updateType.value).subscribe((response: any) => {
 				// this.$errors.openDialog({
 				// 	errors: {
 				// 		error: `<span class='text-success'>${response.message}</span>`

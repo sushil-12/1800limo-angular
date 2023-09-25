@@ -75,6 +75,12 @@ export class AddIndividualAccountComponent implements OnInit
 					}
 					console.log(place);
 					this.addIndividualAccountForm.patchValue({
+						zipCode: '',
+						city:'',
+						state : '',
+						country:''
+					})
+					this.addIndividualAccountForm.patchValue({
 						address: place.formatted_address
 					})
 					//Fill one way form pickup address fields
@@ -82,22 +88,43 @@ export class AddIndividualAccountComponent implements OnInit
 						latitude: place.geometry.location.lat(),
 						longitude: place.geometry.location.lng()
 					});
-					if (place.address_components[1])
-						this.addIndividualAccountForm.patchValue({
-							city: place.address_components[1].long_name
-						});
-					if (place.address_components[2])
-						this.addIndividualAccountForm.patchValue({
-							state: place.address_components[2].long_name
-						});
-					if (place.address_components[3])
-						this.addIndividualAccountForm.patchValue({
-							country: place.address_components[3].long_name
-						});
-					if (place.address_components[4])
-						this.addIndividualAccountForm.patchValue({
-							zipCode: place.address_components[place.address_components.length - 1].long_name
-						});
+					place.address_components.forEach(component => {
+						const types = component.types;
+				
+						if (types.includes('postal_code')) {
+							this.addIndividualAccountForm.patchValue({
+								zipCode: component.long_name
+							});
+						} else if (types.includes('locality')) {
+							this.addIndividualAccountForm.patchValue({
+								city: component.long_name
+							});
+						} else if (types.includes('administrative_area_level_1')) {
+							this.addIndividualAccountForm.patchValue({
+								state: component.long_name
+							});
+						} else if (types.includes('country')) {
+							this.addIndividualAccountForm.patchValue({
+								country: component.long_name
+							});
+						}
+					  });
+					// if (place.address_components[1])
+					// 	this.addIndividualAccountForm.patchValue({
+					// 		city: place.address_components[1].long_name
+					// 	});
+					// if (place.address_components[2])
+					// 	this.addIndividualAccountForm.patchValue({
+					// 		state: place.address_components[2].long_name
+					// 	});
+					// if (place.address_components[3])
+					// 	this.addIndividualAccountForm.patchValue({
+					// 		country: place.address_components[3].long_name
+					// 	});
+					// if (place.address_components[4])
+					// 	this.addIndividualAccountForm.patchValue({
+					// 		zipCode: place.address_components[place.address_components.length - 1].long_name
+					// 	});
 				});
 			});
 		});
@@ -152,6 +179,7 @@ export class AddIndividualAccountComponent implements OnInit
 			name: ['', Validators.required],
 		});
 	}
+	
 
 
 	onCountryChange(event, type)
