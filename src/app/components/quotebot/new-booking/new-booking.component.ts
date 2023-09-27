@@ -124,6 +124,8 @@ export class NewBookingComponent implements OnInit {
 	subtotal: any = 0;
 	grandtotal: any = 0;
 	r_subtotal: any = 0;
+	rateArray: any;
+	returnRateArray: any;
 
 	constructor(
 		private $form: FormBuilder,
@@ -200,6 +202,8 @@ export class NewBookingComponent implements OnInit {
 	this.$api.fetchRatesByAffiliateVeh(vehicle_id, this.booking_data).subscribe((response: any) => {
 		this.subtotal = 0
 		this.r_subtotal = 0
+		this.rateArray = response?.data?.rateArray
+		this.returnRateArray = response?.data?.retrunRateArray
 		for (let outerKey in response?.data?.rateArray) {
 			if (response?.data?.rateArray.hasOwnProperty(outerKey)) {
 			  const innerObject = response?.data?.rateArray[outerKey];
@@ -1578,23 +1582,21 @@ export class NewBookingComponent implements OnInit {
 		if (preview) {
 			let value = this.BookingForm.value
 			value['proceed'] = this.proceed
-			if (this.RatesForm) {
-				value['rateArray'] = JSON.parse(JSON.stringify(this.RatesForm))
-				value['grand_total'] = value['rateArray']['grand_total']
-				value['sub_total'] = value['rateArray']['sub_total']
+				value['rateArray'] = this.rateArray
+				value['grand_total'] = this.Form.number_of_vehicles.value * this.subtotal
+				value['sub_total'] = this.subtotal
 				value['min_rate_involved'] = value['rateArray']['min_rate_involved']
 				delete value['rateArray']['grand_total']
 				delete value['rateArray']['sub_total']
 				delete value['rateArray']['min_rate_involved']
 				// Return Rates Form
-				if (this.Form.service_type.value == 'round_trip' && this.ReturnRatesForm) {
-					value['returnRateArray'] = JSON.parse(JSON.stringify(this.ReturnRatesForm))
-					value['return_grand_total'] = value['returnRateArray']['r_grandtotal']
-					value['return_sub_total'] = value['returnRateArray']['r_subtotal']
+				if (this.Form.service_type.value == 'round_trip') {
+					value['returnRateArray'] = this.returnRateArray
+					value['return_grand_total'] = this.Form.number_of_vehicles.value * this.r_subtotal
+					value['return_sub_total'] = this.r_subtotal
 					delete value['returnRateArray']['r_grandtotal']
 					delete value['returnRateArray']['r_subtotal']
 				}
-			}
 
 			this.$spinner.show()
 			this.$quotebotService.createBooking(value, this.Form.updateType.value).subscribe((response: any) => {
