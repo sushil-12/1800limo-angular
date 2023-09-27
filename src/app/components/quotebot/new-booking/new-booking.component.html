@@ -1968,7 +1968,7 @@
 					<h4 class="font-weight-bolder m-0 mt-1">
 						Rates/Taxes
 					</h4>
-					<div class="mx-2" *ngIf="grandtotal">
+					<div class="mx-2" *ngIf="subtotal">
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
@@ -1977,7 +1977,7 @@
 							</div>
 							<div class="col-md-8 value">
 								<span class="font-weight-bolder">
-									${{ grandtotal.toFixed(2) }}
+									${{ (Form.number_of_vehicles.value * subtotal).toFixed(2) }}
 								</span>
 							</div>
 						</div>
