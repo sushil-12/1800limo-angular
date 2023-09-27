@@ -314,7 +314,7 @@ export class NewBookingComponent implements OnInit {
 				phone: ['',[Validators.required]],
 				phone_isd: ['+1'],
 				phone_country: ['us'],
-				email: ['',[Validators.required]],
+				email: ['',[Validators.required ,Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
 				address: [''],
 				card_details: this.$form.group({
 					name: [''],
@@ -2300,6 +2300,7 @@ export class NewBookingComponent implements OnInit {
 		let return_transfer_type_value = QB?.dropoff_type + '_to_' + QB?.pickup_type
 		console.log('transfer_type_value00>>>' , transfer_type_value)
 		this.SetFormValue('transfer_type', transfer_type_value)
+		this.service_type = QB?.service_type
 		this.transfer_type = transfer_type_value
 		this.return_transfer_type = return_transfer_type_value
 		// this.SetFormValue('return_transfer_type', return_transfer_type_value)
