@@ -790,7 +790,7 @@ export class NewBookingComponent implements OnInit {
 						if (is_return) {
 							this.return_distance = response.distance
 							if(!this.BookingForm.get('return_extra_stops')?.value?.length || this.BookingForm.get('return_extra_stops')?.value[0]['rate']?.length){
-								this.buildBookingData()
+								// this.buildBookingData()
 							}
 							this.BookingForm.patchValue({
 								returnJourneyDistance: response.distance,
@@ -2285,18 +2285,10 @@ export class NewBookingComponent implements OnInit {
 	}
 
 	setValueByBookNow() {
-		let QB: any = JSON.parse(localStorage.getItem('quotebot_form'))
-		let selected_vehicle: any = JSON.parse(sessionStorage.getItem('selected_vehicle'))
-  
-
-		// for (const key in QB) {
-		//   console.log(`QB______${key}: ${QB[key]}`);
-		//   this.SetFormValue(key ,QB[key])
-		// }    
+		try {
+			let QB: any = JSON.parse(localStorage.getItem('quotebot_form'))
+		let selected_vehicle: any = JSON.parse(sessionStorage.getItem('selected_vehicle'))   
 		this.affiliate_id = selected_vehicle?.affiliate_id
-
-
-		//dropOFF
 		this.SetFormValue('service_type', QB?.service_type)
 		if (QB?.service_type == 'charter_tour') {
 			this.SetFormValue('number_of_hours', QB?.booking_hour)
@@ -2363,13 +2355,13 @@ export class NewBookingComponent implements OnInit {
 		this.SetFormValue('driver_cell',selected_vehicle?.driverInformation?.phone.replaceAll('+',''))
 		this.SetFormValue('driver_gender',selected_vehicle?.driverInformation?.gender)
 		this.SetFormValue('vehicle_id' , selected_vehicle?.id)
-		this.driverImgUrl = selected_vehicle?.driverInformation?.imageUrl
+		this.driverImgUrl = selected_vehicle?.driverInformation?.imageUrl || "../../../../assets/images/driverImg.jpg"
 		this.vehicleImgUrl = selected_vehicle?.vehicle_images[0]
-		this.driver_info = selected_vehicle?.driverInformation
-		this.driver_info['type'] = selected_vehicle?.name
-		this.driver_info['make'] = selected_vehicle?.vehicle_details?.make
-		this.driver_info['model'] = selected_vehicle?.vehicle_details?.model
-		this.driver_info['year']  = selected_vehicle?.vehicle_details?.year
+		this.driver_info = selected_vehicle?.driverInformation || ""
+		this.driver_info['type'] = selected_vehicle?.name || ""
+		this.driver_info['make'] = selected_vehicle?.vehicle_details?.make || ""
+		this.driver_info['model'] = selected_vehicle?.vehicle_details?.model || ""
+		this.driver_info['year']  = selected_vehicle?.vehicle_details?.year || ""
 		if (QB?.pickup_type == 'airport') {
 			let location = {
 				latitude: QB?.pickup_airport_lat,
@@ -2379,11 +2371,10 @@ export class NewBookingComponent implements OnInit {
 		}
 		this.MapController()
 		this.MapController(true)
-		// setTimeout(() => {
-		// 	console.log('settimeout finction---------------------------------------------------------------')
-		// 	this.fetchQBAffiliateVehicles(selected_vehicle?.affiliate_id)
-		// 	this.fetchAffiliateDrivers(this.affiliate_id)
-		// }, 5000)
+		} catch (error) {
+			console.log('error--->>>' , error)
+		}
+		
 	}
 }
 
