@@ -323,7 +323,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 		})
 
 		//calculating totals of rates form if data auto fill by quote bot 
-		if(this.QB_vehicle_id || this.distance){
+		
 			console.log('calculating total for QB ')
 			for (let formgroup in this.RateForm) {
 				for (let subform in this.RateForm[formgroup].controls) {
@@ -333,7 +333,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 						}
 				}
 			}
-		}
+		
 		// will send the rates form value to the booking component on any change in the whole form
 		this.RatesForm.valueChanges.subscribe((value: any) => {
 			this.calculateTotal("RatesForm");
@@ -442,6 +442,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 	fetchRates(affiliate: string, bookingId: number = 0) {
 		this.$api.fetchAdminNewBookingRates(affiliate, bookingId).subscribe((response: any) => {
 			if (response?.success && response?.data?.rateArray) {
+				this.ratesdata.next({})
 				this.is_readonly_min_rate = response?.data?.min_rate_involved ? true : false
 				this.ratesdata.next(response.data.rateArray);
 				this.initRates();
