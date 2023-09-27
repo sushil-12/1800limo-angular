@@ -199,21 +199,21 @@ export class RatesFormComponent implements OnInit, OnChanges {
 		if (changes.bookingId && changes.bookingId.currentValue !== 0) {
 			this.fetchRates("", changes.bookingId?.currentValue)
 
-			this.getRatesData().subscribe((response: any) => {
-				if (response && Object.keys(response).length > 0) {
-					for (let item in this.RateForm) {
-						for (let key in (<FormGroup>this.RatesForm.get(item)).controls) {
-							console.log(item, key);
-							let baserate = response[item][key]["baserate"];
-							let type = response[item][key]["type"] ?? "flat";
-							(<FormGroup>((<FormGroup>this.RatesForm.get(item)).get(key))).get("baserate").setValue(baserate);
-							if ((<FormGroup>((<FormGroup>this.RatesForm.get(item)).get(key))).get("type")) {
-								(<FormGroup>((<FormGroup>this.RatesForm.get(item)).get(key))).get("type").setValue(type);
-							}
-						}
-					}
-				}
-			})
+			// this.getRatesData().subscribe((response: any) => {
+			// 	if (response && Object.keys(response).length > 0) {
+			// 		for (let item in this.RateForm) {
+			// 			for (let key in (<FormGroup>this.RatesForm.get(item)).controls) {
+			// 				console.log(item, key);
+			// 				let baserate = response[item][key]["baserate"];
+			// 				let type = response[item][key]["type"] ?? "flat";
+			// 				(<FormGroup>((<FormGroup>this.RatesForm.get(item)).get(key))).get("baserate").setValue(baserate);
+			// 				if ((<FormGroup>((<FormGroup>this.RatesForm.get(item)).get(key))).get("type")) {
+			// 					(<FormGroup>((<FormGroup>this.RatesForm.get(item)).get(key))).get("type").setValue(type);
+			// 				}
+			// 			}
+			// 		}
+			// 	}
+			// })
 		}
 
 		if (changes.reset && changes.reset.currentValue) {
@@ -444,6 +444,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 			if (response?.success && response?.data?.rateArray) {
 				this.is_readonly_min_rate = response?.data?.min_rate_involved ? true : false
 				this.ratesdata.next(response.data.rateArray);
+				this.initRates();
 			}
 		});
 	}
@@ -458,13 +459,13 @@ export class RatesFormComponent implements OnInit, OnChanges {
 		});
 	}
 	fetchRatesArrayByAffiliateVehicle(data) {
-		this.ratesdata.next({})
 		console.log('<<<<<<<<<<<________ data to send fetchRatesArrayByAffiliateVehicle---------------->>>>>>>>>>>>>>',
-			data.vehicle_id , this.master_vehicle_id)
-			let vehicle_id = data?.vehicle_id.toString().length ? data?.vehicle_id : this.master_vehicle_id
-			data['is_master_vehicle'] = data?.vehicle_id.toString().length ? false : true
+		data.vehicle_id , this.master_vehicle_id)
+		let vehicle_id = data?.vehicle_id.toString().length ? data?.vehicle_id : this.master_vehicle_id
+		data['is_master_vehicle'] = data?.vehicle_id.toString().length ? false : true
 		this.$api.fetchRatesByAffiliateVeh(vehicle_id, data).subscribe((response: any) => {
 			if(this.bookingType !='edit'){
+				this.ratesdata.next({})
 				this.is_readonly_min_rate = response?.data?.min_rate_involved ? true : false
 				this.ratesdata.next(response?.data?.rateArray)
 				this.initRates();
