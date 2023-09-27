@@ -89,20 +89,22 @@
 									</mat-slide-toggle>
 								</td>
 								<td *ngIf="travelPlanner.middle_name == null;else middleName">
-									{{travelPlanner.first_name+' '+travelPlanner.last_name}}</td>
+									<span [innerHTML]="highlighText(travelPlanner.first_name+' '+travelPlanner.last_name)"></span>
+									</td>
 								<ng-template #middleName>
-									<td>{{travelPlanner.first_name+' '+travelPlanner.middle_name+'
+									<td>
+										<span [innerHTML]="highlighText(travelPlanner.first_name+' '+travelPlanner.last_name)"></span>{{travelPlanner.first_name+' '+travelPlanner.middle_name+'
 										'+travelPlanner.last_name}}</td>
 								</ng-template>
-								<td>{{travelPlanner.email}}</td>
-								<td>{{travelPlanner.mobileIsd+travelPlanner.mobile}}</td>
-								<td>{{travelPlanner.agency_name}}</td>
-								<td>{{travelPlanner.payee}}</td>
-								<td>{{travelPlanner.iata}}</td>
-								<td>{{travelPlanner.street}}</td>
-								<td>{{travelPlanner.city}}</td>
-								<td>{{travelPlanner.state}}</td>
-								<td>{{travelPlanner.country}}</td>
+								<td><span [innerHTML]="highlighText(travelPlanner.email)"></span></td>
+								<td><span [innerHTML]="highlighText(travelPlanner.mobileIsd+travelPlanner.mobile)"></span></td>
+								<td><span [innerHTML]="highlighText(travelPlanner.agency_name)"></span></td>
+								<td><span [innerHTML]="highlighText(travelPlanner.payee)"></span></td>
+								<td><span [innerHTML]="highlighText(travelPlanner.iata)"></span></td>
+								<td><span [innerHTML]="highlighText(travelPlanner.street)"></span></td>
+								<td><span [innerHTML]="highlighText(travelPlanner.city)"></span></td>
+								<td><span [innerHTML]="highlighText(travelPlanner.state)"></span></td>
+								<td><span [innerHTML]="highlighText(travelPlanner.country)"></span></td>
 							</tr>
 
 						</tbody>

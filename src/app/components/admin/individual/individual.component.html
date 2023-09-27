@@ -96,16 +96,16 @@
 									(change)="enableDisableClicked($event,individual.id)">
 								</mat-slide-toggle>
 							</td>
-							<td *ngIf="individual.middle_name == null;else middleName">{{individual.first_name+' '+individual.last_name}}</td>
+							<td *ngIf="individual.middle_name == null;else middleName"><span [innerHTML]="highlighText(individual.first_name+' '+individual.last_name)"></span></td>
 								<ng-template #middleName>
-									<td>{{individual.first_name+' '+individual.middle_name+' '+individual.last_name}}</td>
+									<td><span [innerHTML]="highlighText(individual.first_name+' '+individual.middle_name+' '+individual.last_name)"></span></td>
 								</ng-template>
-								<td>{{individual.email}}</td>
-								<td>{{individual.mobileIsd+individual.mobile}}</td>
-								<td>{{individual.address}}</td>
-								<td>{{individual.city}}</td>
-								<td>{{individual.state}}</td>
-								<td>{{individual.country}}</td>
+								<td><span [innerHTML]="highlighText(individual.email)"></span></td>
+								<td><span [innerHTML]="highlighText(individual.mobileIsd+individual.mobile)"></span></td>
+								<td><span [innerHTML]="highlighText(individual.address)"></span></td>
+								<td><span [innerHTML]="highlighText(individual.city)"></span></td>
+								<td><span [innerHTML]="highlighText(individual.state)"></span></td>
+								<td><span [innerHTML]="highlighText(individual.country)"></span></td>
 					</tbody>
 				</table>
 			</div>

@@ -14,9 +14,9 @@ hr{
 	color: #000;
 	border-radius: 12px;
 	padding: 12px;
-	width: 100%;
+	width: 90%;
 	font-size: 1rem;
-	margin: 1.2rem auto;
+	margin: 0.8rem auto;
 	box-shadow: 3px 3px 20px -6px rgba(40, 40, 40, 0.5);
 }
 
@@ -26,10 +26,6 @@ mat-form-field {
 
 .mat-form-field.m-0 {
 	margin: 1rem 0 0 0 !important;
-}
-
-.cursor-not-allowed{
-	cursor: not-allowed;
 }
 
 .extra-stop-field:not(.extra-stop-field:first-child) {
@@ -148,7 +144,7 @@ ul {
 
 .cellLabelClass.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
 	padding-left: 0px;
-	background-color: #fff;
+	// background-color: #fff;
 	max-width: 60px;
 	text-align: center;
 	left: -5px;
@@ -169,7 +165,24 @@ ul {
 .labelClass {
 	font-weight: 700;
 }
+.player-holder{
+	height:150px;
+	max-width:650px;
+	text-align: center;
+ }
+ .player-thumb{
+	width: 150px;
+	height: 150px;
+	display: inline-block;
+	// border-radius: 50%;
+	// background-image: url(https://1800limoapi.infodevbox.com/storage/images/rEu5OQ7U4fsUhn0qikabAeLbQEonNxYHZiNfKo8S.png);
+	background-size: cover;
+	background-position: center;
+ }
 
+ .w-45{
+	width: 45% !important;
+ }
 
 :host ::ng-deep.ng-select .ng-select-container.ng-appearance-outline:after {
 	height: 100%;
@@ -178,7 +191,6 @@ ul {
 ::ng-deep .col-md-3.margin-mat-field {
     margin-top: -15px;
 }
-
 
 :host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-outline-gap{
 	border-top-color: #f44336!important;
@@ -271,7 +283,7 @@ top:2.05em}
 .mat-option{
 	background-color: rgb(226, 226, 226,1) !important;
 }
-:host ::ng-deep .ng-option{
+:host ::ng-deep .ng-option {
 	background-color: rgb(226, 226, 226,1) !important;
 }
 
@@ -296,11 +308,6 @@ top:2.05em}
 :host ::ng-deep ng-select span {
     font-weight: 500;
 }
-
 :host ::ng-deep #vehicleTypeField .ng-select-container.ng-appearance-outline{
 	border: 3px solid red;
-}
-
-:host ::ng-deep .mat-form-field-label .mat-empty .mat-form-field-empty .labelClass{
-	transform: translateY(-1.2em) scale(0.75) !important;
 }
