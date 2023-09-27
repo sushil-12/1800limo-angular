@@ -126,6 +126,7 @@ export class NewBookingComponent implements OnInit {
 	r_subtotal: any = 0;
 	rateArray: any;
 	returnRateArray: any;
+	min_rate_involved: boolean = false;
 
 	constructor(
 		private $form: FormBuilder,
@@ -202,6 +203,7 @@ export class NewBookingComponent implements OnInit {
 	this.$api.fetchRatesByAffiliateVeh(vehicle_id, this.booking_data).subscribe((response: any) => {
 		this.subtotal = 0
 		this.r_subtotal = 0
+		this.min_rate_involved = response?.data?.min_rate_involved
 		this.rateArray = response?.data?.rateArray
 		this.returnRateArray = response?.data?.retrunRateArray
 		for (let outerKey in response?.data?.rateArray) {
@@ -1585,7 +1587,7 @@ export class NewBookingComponent implements OnInit {
 				value['rateArray'] = this.rateArray
 				value['grand_total'] = this.Form.number_of_vehicles.value * this.subtotal
 				value['sub_total'] = this.subtotal
-				value['min_rate_involved'] = value['rateArray']['min_rate_involved']
+				value['min_rate_involved'] = this.min_rate_involved
 				delete value['rateArray']['grand_total']
 				delete value['rateArray']['sub_total']
 				delete value['rateArray']['min_rate_involved']
