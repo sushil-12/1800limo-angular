@@ -52,7 +52,7 @@ export class QuotebotService
 			return this.httpClient.put(this.serverUrl + 'edit-reservation', data);
 		}
 		else {
-			return this.httpClient.post(this.serverUrl + 'create-reservation', data);
+			return this.httpClient.post(this.serverUrl + 'quote/create-reservation', data);
 		}
 	}
 }

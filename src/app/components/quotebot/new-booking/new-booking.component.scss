@@ -144,7 +144,7 @@ ul {
 
 .cellLabelClass.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
 	padding-left: 0px;
-	background-color: #fff;
+	// background-color: #fff;
 	max-width: 60px;
 	text-align: center;
 	left: -5px;
@@ -165,7 +165,24 @@ ul {
 .labelClass {
 	font-weight: 700;
 }
+.player-holder{
+	height:150px;
+	max-width:650px;
+	text-align: center;
+ }
+ .player-thumb{
+	width: 150px;
+	height: 150px;
+	display: inline-block;
+	// border-radius: 50%;
+	// background-image: url(https://1800limoapi.infodevbox.com/storage/images/rEu5OQ7U4fsUhn0qikabAeLbQEonNxYHZiNfKo8S.png);
+	background-size: cover;
+	background-position: center;
+ }
 
+ .w-45{
+	width: 45% !important;
+ }
 
 :host ::ng-deep.ng-select .ng-select-container.ng-appearance-outline:after {
 	height: 100%;

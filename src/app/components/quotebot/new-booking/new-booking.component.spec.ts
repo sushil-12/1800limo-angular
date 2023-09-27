@@ -5,6 +5,8 @@ import { NewBookingComponent } from './new-booking.component';
 describe('NewBookingComponent', () => {
   let component: NewBookingComponent;
   let fixture: ComponentFixture<NewBookingComponent>;
+  
+
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
