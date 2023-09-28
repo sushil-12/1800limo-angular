@@ -101,7 +101,9 @@ export class TravelAgentService {
   travelAgentNotification(data) {
 		return this.httpClient.post(this.serverUrl + 'notification-daily-booking', data);
 	}
-
+  auditTrailInfo(bookingId){
+		return this.httpClient.get(this.serverUrl+`booking-audit-records/${bookingId}`)
+	}
   getBookingDataForEdit(id,updateType){
 		return this.httpClient.get(this.serverUrl + `get-reservation/${id}/${updateType}`);
   }
