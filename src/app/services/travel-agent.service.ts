@@ -107,7 +107,7 @@ export class TravelAgentService {
   }
 
   getStepsCompleted(id) {
-		return this.httpClient.get(this.serverUrl + 'get-travel-step-completed/' + id);
+		return this.httpClient.get(this.serverUrl + 'get-step-completed');
 	}
 
   updateStepsArrayLocal(stepArray) {

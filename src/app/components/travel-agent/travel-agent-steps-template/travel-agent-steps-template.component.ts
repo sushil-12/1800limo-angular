@@ -64,8 +64,9 @@ export class TravelAgentStepsTemplateComponent implements OnInit {
 		if (!this.travelAgentId) {
 			this.stepsObj = JSON.parse(sessionStorage.getItem('step_completed_obj'));
 			for (let [key, value] of Object.entries(this.stepsObj)) {
-				if (key == 'step0' && value == 'completed') {
-					this['step0'] = 'md-step ' + 'completed'
+				// key == 'step0' &&
+				if (value == 'completed') {
+					this[key] = 'md-step ' + 'completed'
 				}
 			}
 		}
