@@ -213,35 +213,11 @@
 		</div>
 
 		<!-- Section - Affiliate/Loose Details -->
-		<div class="section-container mt-2">
+		<!-- <div class="section-container mt-2">
 			<h2 class=" border-secondary">
 				Driver Details
 			</h2>
-			<!-- <div id="info-container" class="mx-auto">
-				<div id="info-display-box"
-					class="d-flex flex-wrap justify-content-center justify-content-md-start"
-					style="gap: 15px; padding: 0 15px;">
-					<div id="info" class="info mx-2"
-						*ngFor="let item of ['name', 'mobile', 'email', 'country', 'zip', 'address']">
-						<label class="text-lg m-0 mx-2">
-							{{ item | titlecase }}:
-						</label>
-						<label class="text-lg m-0 font-weight-bolder">
-							{{ item | titlecase }}
-						</label>
-					</div>
-				</div>
-			</div> -->
-
-			<!-- Affiliate Driver Information -->
-			<!-- <div class="px-4 my-4" >
-				<h4>
-					Driver Preferences
-				</h4> -->
 			<div class="row">
-				<!-- Affiliate Driver Name -->
-
-				<!-- Loose Affiliate Driver Name -->
 				<div id="driver-name" class="col-md-3">
 					<mat-form-field appearance="outline" class="m-0 cursor-not-allowed">
 						<mat-label>
@@ -259,8 +235,6 @@
 						</div>
 					</div>
 				</div>
-
-				<!-- Affiliate Driver Email -->
 				<div id="driver-email" class="col-md-3" *ngIf="Form.affiliate_type.value != 'loose_affiliate'">
 					<mat-form-field appearance="outline" class="m-0 cursor-not-allowed">
 						<mat-label>
@@ -278,8 +252,6 @@
 						</div>
 					</div>
 				</div>
-
-				<!-- Affiliate Driver Cell -->
 				<div id="driver-cell" class="col-md-3" *ngIf="Form.affiliate_type.value != 'loose_affiliate'">
 					<mat-form-field appearance="outline" class="mat-custom-phone m-0 cursor-not-allowed">
 						<mat-label>
@@ -292,8 +264,6 @@
 							(countryChange)="SetFormValue('driver_cell_isd', '+' + $event.dialCode); SetFormValue('driver_cell_country', $event.iso2)" />
 					</mat-form-field>
 				</div>
-
-				<!-- Affiliate Diver Gender -->
 				<div id="driver-gender" class="col-md-3" *ngIf="Form.affiliate_type.value != 'loose_affiliate'">
 					<mat-form-field appearance="outline" class="m-0 cursor-not-allowed">
 						<mat-label>
@@ -306,9 +276,75 @@
 						</mat-select>
 					</mat-form-field>
 				</div>
-
 			</div>
-			<!-- </div> -->
+		</div> -->
+		<div class="section-container mt-2" *ngIf="driver_info">
+			<h2>
+				Transportation Details
+			</h2>
+			<div class="row px-4 mt-4">
+				<div class="col-md-6">
+					<div class="card" style="background-color: #e2e2e2;">
+						<div class="row"  style="align-items: center;">
+							<div class="col-sm-12 col-lg-6 col-md-6 player-holder">
+								<div><img class="player-thumb" src="{{driverImgUrl}}"></div>
+							</div>
+							<div class="col-sm-12 col-lg-6 col-md-6">
+								<div class="card-body">
+									<h5 class="card-title">Driver Details</h5>
+									<h6 class="card-subtitle mb-2 text-muted">Your Reliable Ride Partner!
+									</h6>
+									<p class="card-text">
+										<span>Driver Name:</span>
+										<strong class="ml-2">{{ driver_info["name"] | titlecase }}</strong>
+									</p>
+									<p class="card-text">
+										<span>Driver Phone:</span>
+										<strong class="ml-2">{{ driver_info["phone"] | titlecase }}</strong>
+									</p>
+									<p class="card-text">
+										<span>Driver Gender:</span>
+										<strong class="ml-2">{{ driver_info["gender"] | titlecase }}</strong>
+									</p>
+								</div>
+							</div>
+						</div>
+						
+					</div>
+				</div>
+
+				<div class="col-md-6">
+					<div class="card" style="background-color: #e2e2e2;">
+						<div class="row" style="align-items: center;">
+							<div class="col-sm-12 col-lg-6 col-md-6 player-holder">
+								<div><img class="player-thumb" src="{{vehicleImgUrl}}"></div>
+
+							</div>
+							<div class="col-sm-12 col-lg-6 col-md-6">
+								<div class="card-body">
+									<h5 class="card-title">Vehicle Details</h5>
+									<h6 class="card-subtitle mb-2 text-muted">Vehicle Specs at a Glance!
+									</h6>
+									<p class="card-text">
+										<span>Vehicle Type:</span>
+										<strong class="ml-2">{{ driver_info["type"] | titlecase }}</strong>
+									</p>
+									<p class="card-text">
+										<span>Vehicle Make:</span>
+										<strong class="ml-2">{{ driver_info["make"] | titlecase }}</strong>
+									</p>
+									<p class="card-text">
+										<span>Vehicle Model:</span>
+										<strong class="ml-2">{{ driver_info["model"] | titlecase }}</strong>
+									</p>
+								</div>
+							</div>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+				
 		</div>
 		<div class="section-container mt-2">
 			<!-- Affiliate Driver Information Ends -->

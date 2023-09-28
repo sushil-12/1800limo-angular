@@ -116,6 +116,13 @@ export class CreateBookingComponent implements OnInit {
 	agentShare:Number =0;
 	grandtotal:Number=0
 	vehicles:Number=1
+	driverImgUrl: any = '../../../../assets/images/driverImg.jpg';
+	vehicleImgUrl: any = '';
+	driver_info: any = {};
+	r_subtotal: number;
+	min_rate_involved: any;
+	returnRateArray: any;
+	rateArray: any;
 
   constructor(
     private $form: FormBuilder,
@@ -150,9 +157,9 @@ export class CreateBookingComponent implements OnInit {
 		if (params && params.updateType) {
 			this.bookingType = params.updateType
 		}
-		else {
-			this.resetFields()
-		}
+		// else {
+		// 	this.resetFields()
+		// }
 		// place in query params to reinitialise things when modes of new and edit are toggled
 		// Subscriptions
 		this.Subscriptions()
@@ -335,6 +342,7 @@ export class CreateBookingComponent implements OnInit {
 			this.SetFormValue('return_meet_greet_choices', 2)
 			this.SetFormValue('return_meet_greet_choices_name', "Driver -  Airport - Text/call after plane lands with curbside meet location")
 		}
+		console.log('booking form init completed--------------------_>>>>>>>>>><><><')
 	}
   SetFormValue(form_control: string, value: any) {
 		if (!value || !form_control) {
@@ -491,6 +499,39 @@ export class CreateBookingComponent implements OnInit {
 				this.SetFormValue('pickup_date', moment().format('YYYY-MM-DD'))
 			}
 		})
+		this.fetchRates(booking_id)
+	}
+	fetchRates(bookingId: number = 0) {
+		this.$api.fetchAdminNewBookingRates(null, bookingId).subscribe((response: any) => {
+			this.subtotal = 0
+			this.r_subtotal = 0
+			this.min_rate_involved = response?.data?.min_rate_involved
+			this.rateArray = response?.data?.rateArray
+			this.returnRateArray = response?.data?.retrunRateArray
+			for (let outerKey in response?.data?.rateArray) {
+				if (response?.data?.rateArray.hasOwnProperty(outerKey)) {
+				  const innerObject = response?.data?.rateArray[outerKey];
+				  for (let innerKey in innerObject) {
+					if (innerObject.hasOwnProperty(innerKey)) {
+					this.subtotal+= innerObject[innerKey].amount
+	
+					}
+				  }
+				}
+			  }
+			  if(this.booking_data.service_type == 'round_trip'){
+				for (let outerKey in response?.data?.retrunRateArray) {
+					if (response?.data?.retrunRateArray.hasOwnProperty(outerKey)) {
+					  const innerObject = response?.data?.retrunRateArray[outerKey];
+					  for (let innerKey in innerObject) {
+						if (innerObject.hasOwnProperty(innerKey)) {
+						this.r_subtotal+= innerObject[innerKey].amount
+						}
+					  }
+					}
+				  }
+			}
+		});
 	}
 	autofillData(filling_for: string, data: any) {
 		if (filling_for === 'passenger') {
@@ -553,6 +594,17 @@ export class CreateBookingComponent implements OnInit {
 		this.SetFormValue('driver_cell_country', data?.driver_cell_country)
 		this.SetFormValue('driver_email', data?.driver_email)
 		this.SetFormValue('driver_phone_type', data?.driver_phone_type ?? '');
+		try {
+			this.driver_info['name'] = data?.driver_name
+			this.driver_info["phone"] =data?.driver_cell_isd + data?.driver_cell
+			this.driver_info["gender"] = data?.driver_gender
+			this.driver_info["type"] = data?.vehicle_type_name
+			this.driver_info["make"] = data?.vehicle_make_name
+			this.driver_info["model"] = data?.vehicle_model_name
+		} catch (error) {
+			console.log('error-->' , error)
+		}
+
 	}
 
 	dateFormat(value: any) {
@@ -1314,7 +1366,7 @@ export class CreateBookingComponent implements OnInit {
 
 	resetFields() {
 		this.chosen_user = null
-		this.buildBookingForm()
+		// this.buildBookingForm()
 		this.MapController()
 		this.driver_image = {}
 		this.vehicle_image = {}
@@ -1980,6 +2032,13 @@ export class CreateBookingComponent implements OnInit {
 		this.SetFormValue('driver_gender',selected_vehicle?.driverInformation?.gender)
 		this.SetFormValue('vehicle_id', selected_vehicle?.id)
 		
+		this.driverImgUrl = selected_vehicle?.driverInformation?.imageUrl || "../../../../assets/images/driverImg.jpg"
+		this.vehicleImgUrl = selected_vehicle?.vehicle_images[0]
+		this.driver_info = selected_vehicle?.driverInformation || ""
+		this.driver_info['type'] = selected_vehicle?.name || ""
+		this.driver_info['make'] = selected_vehicle?.vehicle_details?.make || ""
+		this.driver_info['model'] = selected_vehicle?.vehicle_details?.model || ""
+		this.driver_info['year']  = selected_vehicle?.vehicle_details?.year || ""
 			// driver_cell_isd: ['+1'],
 			// driver_cell_country: ['us'],
 		
