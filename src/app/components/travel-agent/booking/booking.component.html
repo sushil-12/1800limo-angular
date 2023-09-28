@@ -125,7 +125,7 @@
 									<td>
 										<div data-toggle="modal" data-target="#change_status_booking_Modal"
 											[className]="'badge badge-pill booking_status cursor-pointer ' + booking?.booking_status">
-											{{textFormatter(booking?.booking_status)  |titlecase}}
+											{{textFormatter(booking?.booking_status) |titlecase}}
 										</div>
 									</td>
 									<td class="sorting_1">
@@ -1333,5 +1333,53 @@
 <button type="button" class="custom-btn yes-btn mr-2" (click)="delete()">Yes</button>
 <button type="button" class="custom-btn no-btn" data-dismiss="modal" aria-label="Close">No</button>
 </div> -->
+	</div>
+</div>
+
+<!-- Audit trail Modal -->
+<div class="modal fade bd-example-modal-lg" id="AuditTrailModal" tabindex="-1" role="dialog"
+	aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content user_information bottom-container">
+			<div class="modal-header pb-0">
+				<h3 class="modal-title mb-0">Audit Trial</h3>
+			</div>
+			<div class="modal-body">
+				<!-- {{invoiceData.audit_trail | json}} -->
+				<table id="audittrail" class="table table-striped">
+					<thead style="background-color: white;">
+						<tr>
+							<th scope="col">#</th>
+							<th scope="col">Description</th>
+							<th scope="col" id="date">Created Date</th>
+						</tr>
+					</thead>
+					<tbody>
+
+						<!-- <ng-container *ngIf="audit_Trail; else not_found"> -->
+						<tr *ngFor="let record of audit_Trail; let i=index">
+							<th scope="row">{{i+1}}</th>
+							<td style="word-wrap: break-word;">{{record.message}}</td>
+							<td>{{record.created_at}}</td>
+						</tr>
+
+						<!-- </ng-container> -->
+						<!-- <ng-template #not_found>
+							<tr>
+								<td colspan = "3">No Record Found!</td>
+							</tr>	
+						</ng-template> -->
+
+
+					</tbody>
+				</table>
+			</div>
+			<div class="modal-footer justify-content-end">
+				<button type="button" class="x-close-btn x-cross-btn mx-3" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true" class="bi bi-x-circle"></span>
+				</button>
+
+			</div>
+		</div>
 	</div>
 </div>

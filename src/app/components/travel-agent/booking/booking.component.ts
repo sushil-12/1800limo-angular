@@ -195,7 +195,7 @@ export class BookingComponent implements OnInit {
 	auditTrail(bookingId: any) {
 		console.log('In function audit trail', bookingId)
 		this.spinner.show()
-		this.affiliateService.auditTrailInfo(bookingId)
+		this.travelAgentService.auditTrailInfo(bookingId)
 			.pipe(
 				catchError((err) => {
 					return throwError(err);
