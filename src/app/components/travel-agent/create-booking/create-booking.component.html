@@ -29,7 +29,7 @@
 							<mat-label class="">
 								Service Type
 							</mat-label>
-							<mat-select formControlName="service_type" [(ngModel)]="service_type"
+							<mat-select formControlName="service_type"
 								(selectionChange)="onSelectionChangeServiceType($event)"
 								[ngStyle]="{'cursor': Form.updateType.value == 'edit' ? 'not-allowed' : 'default'}">
 								<mat-option value="one_way">One Way</mat-option>
@@ -65,7 +65,7 @@
 							<mat-label class="">
 								Return Transfer Type
 							</mat-label>
-							<mat-select formControlName="return_transfer_type" [(ngModel)]="return_transfer_type"
+							<mat-select formControlName="return_transfer_type"
 								(selectionChange)="changeReturnTransferType($event.value)">
 								<mat-option [value]="tf_type" class="font-weight-bolder"
 									*ngFor="let tf_type of booking_params.transfer_types">
@@ -318,7 +318,6 @@
 						<div class="row" style="align-items: center;">
 							<div class="col-sm-12 col-lg-6 col-md-6 player-holder">
 								<div><img class="player-thumb" src="{{vehicleImgUrl}}"></div>
-
 							</div>
 							<div class="col-sm-12 col-lg-6 col-md-6">
 								<div class="card-body">
@@ -360,7 +359,7 @@
 							<mat-label class="">
 								Service Type
 							</mat-label>
-							<mat-select formControlName="service_type" [(ngModel)]="service_type"
+							<mat-select formControlName="service_type"
 								(selectionChange)="onSelectionChangeServiceType($event)"
 								[ngStyle]="{'cursor': Form.updateType.value == 'edit' ? 'not-allowed' : 'default'}">
 								<mat-option value="one_way">One Way</mat-option>
@@ -773,7 +772,7 @@
 							<mat-label class="">
 								Service Type
 							</mat-label>
-							<mat-select formControlName="service_type" [(ngModel)]="service_type"
+							<mat-select formControlName="service_type"
 								(selectionChange)="onSelectionChangeServiceType($event)"
 								[ngStyle]="{'cursor': Form.updateType.value == 'edit' ? 'not-allowed' : 'default'}">
 								<mat-option value="one_way">One Way</mat-option>
@@ -1166,6 +1165,17 @@
 	<div class="row">
 	<div class="section-container finalizeRates"
 	[ngClass]="{'w-100': service_type!='round_trip', 'w-50': service_type=='round_trip'}">
+	<div class="row px-2 justify-content-between align-items-center">
+		<div class="col-md-6">
+			<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
+				Agent share
+			</p>
+		</div>
+		<div class="col-md-4 text-3xl text-right">
+			<i class="bi bi-currency-dollar text-danger"></i>
+			{{ agentShare.toFixed(2) }}
+		</div>
+	</div>
         <div class="row px-2 justify-content-between align-items-center">
             <div class="col-md-6">
                 <p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
@@ -1186,18 +1196,7 @@
             </div>
             <div class="col-md-4 col-xl-5 text-3xl text-right" id="NumVehicles">
                 <i class="bi bi-x text-dark font-weight-bolder"></i>
-                {{ vehicles }}
-            </div>
-        </div>
-		<div class="row px-2 justify-content-between align-items-center">
-            <div class="col-md-6">
-                <p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
-                    Agent share
-                </p>
-            </div>
-            <div class="col-md-4 text-3xl text-right">
-                <i class="bi bi-currency-dollar text-danger"></i>
-                {{ agentShare.toFixed(2) }}
+                {{ Form.number_of_vehicles.value }}
             </div>
         </div>
     
@@ -1210,7 +1209,7 @@
             </div>
             <div class="col-md-4 col-xl-5 text-3xl text-right">
                 <i class="bi bi-currency-dollar text-danger"></i>
-                {{ grandtotal.toFixed(2) }}
+                {{ grandtotal.toFixed(2) * Form.number_of_vehicles.value }}
             </div>
         </div>
     </div>
@@ -1227,7 +1226,6 @@
                 {{ r_subtotal.toFixed(2) }}
             </div>
         </div>
-        <!-- Number of Vehicles/Hours -->
         <div class="row px-2 justify-content-between align-items-center" >
             <div class="col-md-6 col-xl-7">
                 <p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
@@ -1236,7 +1234,7 @@
             </div>
             <div class="col-md-4 col-xl-5 text-3xl text-right" id="NumVehicles">
                 <i class="bi bi-x text-dark font-weight-bolder"></i>
-                {{ vehicles }}
+                {{ Form.number_of_vehicles.value }}
             </div>
         </div>
 		<div class="row px-2 justify-content-between align-items-center">
@@ -1247,11 +1245,9 @@
             </div>
             <div class="col-md-4 text-3xl text-right">
                 <i class="bi bi-currency-dollar text-danger"></i>
-                {{ r_subtotal.toFixed(2) }}
+                {{ r_agentShare.toFixed(2) }}
             </div>
         </div>
-    
-        <!-- Total -->
         <div class="row px-2 justify-content-between align-items-center">
             <div class="col-md-6 col-xl-7">
                 <p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
@@ -1298,7 +1294,7 @@
 					<h4 class="font-weight-bolder m-0 mt-3">
 						Rates/Taxes
 					</h4>
-					<div class="mx-2" *ngIf=" RatesForm">
+					<div class="mx-2" *ngIf="grandtotal">
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
@@ -1307,13 +1303,13 @@
 							</div>
 							<div class="col-md-8 value">
 								<span class="font-weight-bolder">
-									${{ RatesForm.grand_total.toFixed(2) }}
+									${{ grandtotal.toFixed(2) * Form.number_of_vehicles.value }}
 								</span>
 							</div>
 						</div>
 					</div>
 					<!-- && Form.affiliate_type.value!='affiliate' -->
-					<div class="mx-2" *ngIf="ReturnRatesForm && init_return_rates ">
+					<div class="mx-2" *ngIf="r_grandtotal">
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
@@ -1322,7 +1318,7 @@
 							</div>
 							<div class="col-md-8 value">
 								<span class="font-weight-bolder">
-									${{ ReturnRatesForm.r_grandtotal.toFixed(2) }}
+									${{ r_grandtotal.toFixed(2) * Form.number_of_vehicles.value }}
 								</span>
 							</div>
 						</div>

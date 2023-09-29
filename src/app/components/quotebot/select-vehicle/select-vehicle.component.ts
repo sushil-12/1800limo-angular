@@ -720,7 +720,7 @@ export class SelectVehicleComponent implements OnInit
 			// 		error: 'Please open an account or login to proceed.'
 			// 	}
 			// })
-			window.alert('Creating booking without logged In')
+			// window.alert('Creating booking without logged In')
 			this.$router.navigate([
 				'/quotebot/new-booking'
 			],

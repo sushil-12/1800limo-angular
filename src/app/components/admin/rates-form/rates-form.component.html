@@ -106,6 +106,18 @@
 					</mat-form-field>
 				</div>
 			</div>
+			<div class="col-3" *ngIf="sub_item.key === 'Base_Rate' && isTravelShare">
+				<div>
+					<mat-form-field appearance="outline" class="m-0">
+						<mat-label>
+							Travel Share {{ travel_share }} %
+						</mat-label>
+						<input type="number" matInput placeholder="0" [value]="travel_agent_share"
+							style="cursor: not-allowed" class="font-weight-bolder rate-input-field text-right"
+							readonly />
+					</mat-form-field>
+				</div>
+			</div>
 
 			<!-- Flat | Percent -->
 			<div class="col-2" *ngIf="item.key === 'taxes' || item.key == 'others'">

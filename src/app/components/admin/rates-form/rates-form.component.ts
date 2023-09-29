@@ -21,6 +21,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 	@Input("hours") nums: number = 0;
 	@Input("vehicle_id") QB_vehicle_id: any = 0;
 	@Input('reset') reset: boolean = false;
+	@Input('isTravelShare') isTravelShare: boolean = false;
 	@Input('book_data') book_data: any = {};
 
 	
@@ -70,6 +71,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 	grandtotal: number = 0;
 	r_grandtotal: number = 0;
 	admin_share: number = 25;
+	travel_share :number = 10
 	calc_admin_share: number = 0;
 	r_calc_admin_share: number = 0;
 
@@ -79,6 +81,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 	is_readonly_min_rate: boolean = false;
 	bookingType: any = 'new';
 	master_vehicle_id: any = null;
+	travel_agent_share : any = 0;
 
 	constructor(
 		private $form: FormBuilder,
@@ -635,6 +638,11 @@ export class RatesFormComponent implements OnInit, OnChanges {
 					amount = parseFloat((amount + this.calc_admin_share).toFixed(2));
 				}
 				console.log('is_readonly_min_rate-->>' ,this.is_readonly_min_rate )
+				if(this.isTravelShare && subform == 'Base_Rate'){
+					let min_rate = (<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("baserate").value;
+					this.travel_agent_share = (min_rate * this.travel_share) / 100
+					amount = amount + this.travel_agent_share;
+					}
 				if(this.is_readonly_min_rate && subform == 'Base_Rate'){
 					let min_rate = (<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("baserate").value;
 					this.calc_admin_share = (min_rate * this.admin_share) / 100
