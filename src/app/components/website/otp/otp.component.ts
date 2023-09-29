@@ -304,10 +304,13 @@ export class OtpComponent implements OnInit, OnDestroy {
 						break;
 					}
 					case 'travel_agent': {
+						sessionStorage.setItem('step_completed', JSON.stringify(this.response.data?.travel_planner.step_completed))
+						sessionStorage.setItem('step_completed_obj', JSON.stringify(this.response.data?.travel_planner.step_completed_obj))
 						if(this.response.data.user?.is_profile_complete)
 							this.router.navigateByUrl('/travel_agent/bookings');
 						else
 							this.router.navigateByUrl('/travel_agent/profile/step1');
+						
 						break;
 					}
 					default: {

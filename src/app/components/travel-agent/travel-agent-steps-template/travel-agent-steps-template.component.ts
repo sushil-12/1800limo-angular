@@ -101,8 +101,8 @@ export class TravelAgentStepsTemplateComponent implements OnInit {
 
 		console.log('Inside block')
 
-
-		if (step >= 1 && steps_completed != null && steps_completed.includes((step) + '')) {
+		// && steps_completed.includes((step) + '')
+		if (step >= 1 && steps_completed != null ) {
 			this.router.navigate(['/travel_agent/profile/step' + step]);
 
 		} else {

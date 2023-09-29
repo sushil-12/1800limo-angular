@@ -619,11 +619,21 @@ export class StripeFormComponent implements OnInit {
 				this.response = result;
 				this.spinner.hide();//hide spinner
 				this.disableSubmitButton = false; //enable submit button
-
-
-				// this.router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
-				// 	this.router.navigate(['/admin/affiliate/step3'])
-				// );
+				this.travelService.getStepsCompleted(this.travelAgentId)
+				.pipe(
+					catchError(err => {
+						return throwError(err);
+					})
+				).subscribe(({ data }: any) => {
+					if (data) {
+						const stepCompleted = data.step_completed;
+						const stepCompletedObj = data.step_completed_obj;
+						sessionStorage.setItem('step_completed_obj',JSON.stringify(stepCompletedObj))
+					}
+					this.router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
+					this.router.navigate(['/travel_agent/bookings'])
+				);
+				});				
 			});
 	}
 	closeButton() {

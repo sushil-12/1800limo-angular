@@ -23,6 +23,11 @@ export class TravelAgentService {
     }
   }
 
+  getStepCompletedObj(){
+    let step_completed_obj = JSON.parse(sessionStorage.getItem('step_completed_obj'))
+    return step_completed_obj;
+  }
+
   getProfileDetail()
 	{
 		return this.httpClient.get(`${this.serverUrl}get-profile-data`)

@@ -112,14 +112,16 @@ export class CreateBookingComponent implements OnInit {
 	is_master_vehicle: boolean = JSON.parse(sessionStorage.getItem('selected_vehicle'))?.is_master_vehicle || false
 	master_vehicle_id: any;
 	bookingType: any;
-	subtotal:Number=0
-	agentShare:Number =0;
-	grandtotal:Number=0
+	subtotal:any=0
+	agentShare:any =0;
+	grandtotal:any=0
 	vehicles:Number=1
 	driverImgUrl: any = '../../../../assets/images/driverImg.jpg';
 	vehicleImgUrl: any = '';
 	driver_info: any = {};
-	r_subtotal: number;
+	r_subtotal: any=0;
+	r_agentShare : any =0;
+	r_grandtotal:any = 0;
 	min_rate_involved: any;
 	returnRateArray: any;
 	rateArray: any;
@@ -407,6 +409,8 @@ export class CreateBookingComponent implements OnInit {
 			this.firstLoadVehicleId = response.data.vehicle_id
 			this.firstLoadAffiliateId = response.data.affiliate_id
 			this.number_of_hours = response?.data?.number_of_hours
+			this.vehicleImgUrl = response?.data?.vehicle_images[0]
+			this.driverImgUrl = response?.data?.driver_image
 			this.SetFormValue('affiliate_type', response.data.affiliate_type)
 			this.autofillData('cruise', editing_data);
 			this.fillDriverInfo(editing_data);
@@ -508,6 +512,7 @@ export class CreateBookingComponent implements OnInit {
 			this.min_rate_involved = response?.data?.min_rate_involved
 			this.rateArray = response?.data?.rateArray
 			this.returnRateArray = response?.data?.retrunRateArray
+			this.agentShare = response?.data?.rateArray?.all_inclusive_rates?.Base_Rate?.baserate * 0.10
 			for (let outerKey in response?.data?.rateArray) {
 				if (response?.data?.rateArray.hasOwnProperty(outerKey)) {
 				  const innerObject = response?.data?.rateArray[outerKey];
@@ -518,8 +523,10 @@ export class CreateBookingComponent implements OnInit {
 					}
 				  }
 				}
-			  }
-			  if(this.booking_data.service_type == 'round_trip'){
+			}
+			this.grandtotal = (parseFloat(this.subtotal))
+			console.log('grandtotal->' , 	this.grandtotal)
+			  if(this.booking_data?.service_type == 'round_trip'){
 				for (let outerKey in response?.data?.retrunRateArray) {
 					if (response?.data?.retrunRateArray.hasOwnProperty(outerKey)) {
 					  const innerObject = response?.data?.retrunRateArray[outerKey];
@@ -953,6 +960,9 @@ export class CreateBookingComponent implements OnInit {
 							})
 						} else {
 							this.distance = response.distance
+							if(!this.BookingForm.get('extra_stops')?.value?.length || this.BookingForm.get('extra_stops')?.value[0]['rate']?.length){
+								this.buildBookingData()
+							}
 							this.BookingForm.patchValue({
 								journeyDistance: response.distance,
 								journeyTime: response.time
@@ -1812,17 +1822,6 @@ export class CreateBookingComponent implements OnInit {
 		this.submitBookingForm = true
 		console.log(this.BookingForm);
 		console.log(this.BookingForm.status);
-		// let EditedKeys = []
-		// Object.keys(this.bookingResponse)?.map(i=>{
-		// 	let value = this.bookingResponse[`${i}`] === null ? '' :this.bookingResponse[`${i}`]
-		// 	let value1 = this.BookingForm.value[`${i}`] === undefined ? '' :this.BookingForm.value[`${i}`]
-		// 	console.log('value',i,'--->>>',value1,'--->>>' , value )
-		// 	if(value1 != value && this.BookingForm.value[`${i}`] !== undefined){
-		// 		EditedKeys.push(i)
-		// 	} 
-		// })
-
-		// console.log(' Edited keys  ---->>>>' , EditedKeys)
 		if (this.BookingForm.invalid) {
 			return;
 		}
@@ -1830,23 +1829,21 @@ export class CreateBookingComponent implements OnInit {
 		if (preview) {
 			let value = this.BookingForm.value
 			value['proceed'] = this.proceed
-			if (this.RatesForm) {
-				value['rateArray'] = JSON.parse(JSON.stringify(this.RatesForm))
-				value['grand_total'] = value['rateArray']['grand_total']
-				value['sub_total'] = value['rateArray']['sub_total']
-				value['min_rate_involved'] = value['rateArray']['min_rate_involved']
+				value['rateArray'] = this.rateArray
+				value['grand_total'] = this.grandtotal * this.Form.number_of_vehicles.value
+				value['sub_total'] = this.subtotal
+				value['min_rate_involved'] = this.min_rate_involved
 				delete value['rateArray']['grand_total']
 				delete value['rateArray']['sub_total']
 				delete value['rateArray']['min_rate_involved']
 				// Return Rates Form
-				if (this.Form.service_type.value == 'round_trip' && this.ReturnRatesForm) {
-					value['returnRateArray'] = JSON.parse(JSON.stringify(this.ReturnRatesForm))
-					value['return_grand_total'] = value['returnRateArray']['r_grandtotal']
-					value['return_sub_total'] = value['returnRateArray']['r_subtotal']
+				if (this.Form.service_type.value == 'round_trip') {
+					value['returnRateArray'] = this.returnRateArray
+					value['return_grand_total'] = this.r_grandtotal *  this.Form.number_of_vehicles.value
+					value['return_sub_total'] = this.r_subtotal
 					delete value['returnRateArray']['r_grandtotal']
 					delete value['returnRateArray']['r_subtotal']
 				}
-			}
 
 			this.$spinner.show()
 			this.$api.createBooking(value, this.Form.updateType.value).subscribe((response: any) => {
@@ -1861,7 +1858,7 @@ export class CreateBookingComponent implements OnInit {
 					$('#confirmationModal').modal('show')
 				}
 				else{
-					this.$router.navigate(['/admin/daily-bookings-admin'])
+					this.$router.navigate(['/travel_agent/bookings'])
 				}
 			})
 		}
@@ -1949,6 +1946,7 @@ export class CreateBookingComponent implements OnInit {
 	this.$api.fetchRatesByAffiliateVeh(vehicle_id, booking_data).subscribe((response: any) => {
 		if(this.bookingType !='edit'){
 			this.subtotal= response?.data?.sub_total
+			this.agentShare = response?.data?.rateArray?.all_inclusive_rates?.Base_Rate?.baserate * 0.10
 			this.grandtotal= response?.data?.grand_total
 		}
 		if(this.booking_data.service_type == 'round_trip'){
@@ -1969,12 +1967,15 @@ export class CreateBookingComponent implements OnInit {
 
 		//dropOFF
 		this.SetFormValue('service_type', QB?.service_type)
+		this.service_type = QB?.service_type
 		if (QB?.service_type == 'charter_tour') {
 			this.SetFormValue('number_of_hours', QB?.booking_hour)
 			this.number_of_hours = QB?.booking_hour
 		}
 		let transfer_type_value = QB?.pickup_type + '_to_' + QB?.dropoff_type
 		let return_transfer_type_value = QB?.dropoff_type + '_to_' + QB?.pickup_type
+		this.transfer_type = transfer_type_value
+		this.return_transfer_type = return_transfer_type_value
 		this.SetFormValue('transfer_type', transfer_type_value)
 		this.SetFormValue('return_transfer_type', return_transfer_type_value)
 		this.SetFormValue('total_passengers', QB?.no_of_luggage)
@@ -2049,9 +2050,7 @@ export class CreateBookingComponent implements OnInit {
 			}
 			this.fillLocationPoints('airport', location)
 		}
-		this.MapController()
-		this.MapController(true)
-		this.buildBookingData()
+		this.MapController(this.transfer_type=='round_trip' ? true:false)
 		// setTimeout(() => {
 		// 	console.log('settimeout finction---------------------------------------------------------------')
 		// 	this.fetchQBAffiliateVehicles(selected_vehicle?.affiliate_id)

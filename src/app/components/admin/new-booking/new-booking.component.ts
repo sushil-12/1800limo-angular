@@ -117,7 +117,7 @@ export class NewBookingComponent implements OnInit {
 	extraStops_rate:any = 0
 	selectedVehicle: any;
 	is_master_vehicle: boolean = JSON.parse(sessionStorage.getItem('selected_vehicle'))?.is_master_vehicle || false
-
+	isTravelShare:boolean = false
 	constructor(
 		private $form: FormBuilder,
 		private $api: AdminService,
@@ -473,6 +473,7 @@ export class NewBookingComponent implements OnInit {
 			this.firstLoadVehicleId = response.data.vehicle_id
 			this.firstLoadAffiliateId = response.data.affiliate_id
 			this.number_of_hours = response?.data?.number_of_hours
+			this.isTravelShare =  response?.data?.account_type=='travel_planner' ? true : false
 			this.SetFormValue('affiliate_type', response.data.affiliate_type)
 			this.autofillData('cruise', editing_data);
 			console.log(editing_data, "check big data")
@@ -881,7 +882,8 @@ export class NewBookingComponent implements OnInit {
 		this.SetLCFormValue('email', choose_user?.email)
 		this.SetLCFormValue('phone', choose_user?.mobile)
 	}
-	handleClientAccChange(){
+	handleClientAccChange(selectedAcc){
+		this.isTravelShare =  selectedAcc=='travel_planner' ? true : false
 		this.BookingForm.get('acc_id').setValue(null);
 		this.chosen_user = null
 		this.BookingForm.patchValue({

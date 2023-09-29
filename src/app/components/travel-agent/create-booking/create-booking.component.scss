@@ -171,13 +171,14 @@ ul {
 }
 
 .player-thumb{
-	width: 150px;
+	width :100%;
 	height: 150px;
 	display: inline-block;
 	// border-radius: 50%;
 	// background-image: url(https://1800limoapi.infodevbox.com/storage/images/rEu5OQ7U4fsUhn0qikabAeLbQEonNxYHZiNfKo8S.png);
 	background-size: cover;
 	background-position: center;
+	object-fit: contain;
  }
 
 :host ::ng-deep.ng-select .ng-select-container.ng-appearance-outline:after {
