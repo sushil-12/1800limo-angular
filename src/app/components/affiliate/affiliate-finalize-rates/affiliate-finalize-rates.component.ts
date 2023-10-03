@@ -19,6 +19,7 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 	@Input("reservation_id") bookingId: number = 0;
 	@Input("vehicles") vehs: number = 0;
 	@Input("hours") nums: number = 0;
+	@Input('isTravelShare') isTravelShare: boolean = false;
 	@Input('reset') reset: boolean = false;
 
 	// Throw Events.
@@ -70,7 +71,9 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 	vehicles: number = 1;
 	hours: number = 0;
 	is_readonly_min_rate: boolean = false;
-
+	travel_share :number = 10
+	travel_agent_share : any = 0;
+	
 	constructor(
 		private $form: FormBuilder,
 		// private $api: AdminService,
@@ -129,6 +132,12 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 		} else {
 			console.log('Resetting Number of Vehicles ');
 			this.vehicles = 1;
+		}
+		if(changes.isTravelShare){
+			this.initRates();
+			if (this.ReturnRatesForm) {
+				this.initReturnRates
+			}
 		}
 
 		if (changes.bookingId && changes.bookingId.currentValue !== 0) {
@@ -492,6 +501,11 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 					this.calc_admin_share = (amount * this.admin_share) / 100;
 					amount = amount + this.calc_admin_share;
 				}
+				if(this.isTravelShare && subform == 'Base_Rate'){
+					let min_rate = (<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("baserate").value;
+					this.travel_agent_share = (min_rate * this.travel_share) / 100
+					amount = amount + this.travel_agent_share;
+					}
 				if (label == "Minimum Rate" ) {
 					this.is_readonly_min_rate = true
 					let min_rate = (<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("baserate").value;

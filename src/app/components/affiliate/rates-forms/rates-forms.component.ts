@@ -146,6 +146,12 @@ export class RatesFormsComponent implements OnInit , OnChanges {
 			this.hours = Number(changes.nums.currentValue)
 			this.RatesForm && this.calculateAmount('RatesForm', 'all_inclusive_rates', 'Base_Rate');
 		}
+		if(changes.isTravelShare){
+			this.initRates();
+			if (this.ReturnRatesForm) {
+				this.initReturnRates
+			}
+		}
 
 		this.vehicles = changes.vehs ? changes.vehs.currentValue : this.vehicles;
 		if (this.vehicles) {
@@ -624,7 +630,7 @@ export class RatesFormsComponent implements OnInit , OnChanges {
 					console.log('km rate-->>', kmrate, '-->> basevalue-->>', basevalue, '-->> amount', amount)
 				}
 				if (type === "percent") {
-					let kmrate = await this.calculateBaseRate('RatesForm') - this.calc_admin_share;
+					let kmrate = await this.calculateBaseRate('RatesForm') - this.calc_admin_share - this.travel_agent_share;
 					let basevalue = (<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("baserate").value;
 
 					let amount = Number(Number((basevalue / 100) * kmrate).toFixed(2));
@@ -644,7 +650,7 @@ export class RatesFormsComponent implements OnInit , OnChanges {
 
 				if (type === "percent") {
 					// let kmrate = (<FormGroup>((<FormGroup>(this.RatesForm.get("all_inclusive_rates"))).get("Base_Rate"))).get("amount").value;
-					let kmrate = await this.calculateBaseRate('RatesForm') - this.calc_admin_share;
+					let kmrate = await this.calculateBaseRate('RatesForm') - this.calc_admin_share - this.travel_agent_share;
 					let taxvalue = (<FormGroup>((<FormGroup>this.RatesForm.get("taxes")).get(subform))).get("baserate").value;
 
 					let amount = Number(Number((taxvalue / 100) * kmrate).toFixed(2));
@@ -703,7 +709,7 @@ export class RatesFormsComponent implements OnInit , OnChanges {
 
 				if (type === "percent") {
 					// let kmrate = (<FormGroup>((<FormGroup>(this.ReturnRatesForm.get("all_inclusive_rates"))).get("Base_Rate"))).get("amount").value;
-					let kmrate = await this.calculateBaseRate('ReturnRatesForm') - this.r_calc_admin_share;
+					let kmrate = await this.calculateBaseRate('ReturnRatesForm') - this.r_calc_admin_share - this.r_travel_agent_share;
 					let basevalue = (<FormGroup>((<FormGroup>this.ReturnRatesForm.get(formgroup)).get(subform))).get("baserate").value;
 	
 					let amount = Number(Number((basevalue / 100) * kmrate).toFixed(2)
@@ -729,7 +735,7 @@ export class RatesFormsComponent implements OnInit , OnChanges {
 
 				if (type === "percent") {
 					// let kmrate = (<FormGroup>((<FormGroup>(this.ReturnRatesForm.get("all_inclusive_rates"))).get("Base_Rate"))).get("amount").value;
-					let kmrate = await this.calculateBaseRate('ReturnRatesForm') - this.r_calc_admin_share;
+					let kmrate = await this.calculateBaseRate('ReturnRatesForm') - this.r_calc_admin_share - this.r_travel_agent_share;
 					let taxvalue = (<FormGroup>((<FormGroup>this.ReturnRatesForm.get("taxes")).get(subform))).get("baserate").value;
 
 					let amount = Number(Number((taxvalue / 100) * kmrate).toFixed(2));
