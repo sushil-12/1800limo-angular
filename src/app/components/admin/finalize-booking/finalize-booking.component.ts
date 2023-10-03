@@ -68,6 +68,7 @@ export class FinalizeBookingComponent implements OnInit {
 	}
 	paymentDetailByCard: any;
 	main_receipt_url: any;
+	isTravelShare: boolean;
 	constructor(
 		private $form: FormBuilder,
 		private $api: AdminService,
@@ -166,6 +167,7 @@ export class FinalizeBookingComponent implements OnInit {
 			.subscribe((response: any) => {
 				this.$spinner.hide();
 				console.log(response.data, "check response");
+				this.isTravelShare =  response?.data?.account_type=='travel_planner' ? true : false
 				this.BookingDetail = response.data
 				this.transferType = this.BookingDetail.transfer_type
 				this.init_rates = true;

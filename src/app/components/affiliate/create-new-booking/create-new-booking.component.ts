@@ -126,6 +126,7 @@ export class CreateNewBookingComponent implements OnInit {
 	booking_data:any={}
 	is_master_vehicle: boolean = JSON.parse(sessionStorage.getItem('selected_vehicle'))?.is_master_vehicle || false
 	extraStops_rate:any = 0
+	isTravelShare: boolean;
 
 
 	constructor(
@@ -428,7 +429,8 @@ export class CreateNewBookingComponent implements OnInit {
 			this.SetFormValue('return_meet_greet_choices_name', "Driver -  Airport - Text/call after plane lands with curbside meet location")
 		}
 	}
-	handleClientAccChange(){
+	handleClientAccChange(selectedAcc){
+		this.isTravelShare =  selectedAcc=='travel_planner' ? true : false
 		this.BookingForm.get('acc_id').setValue(null);
 		this.chosen_user = null
 		this.BookingForm.patchValue({
@@ -465,6 +467,7 @@ export class CreateNewBookingComponent implements OnInit {
 		this.$spinner.show('normalspinner');
 		this.$api.getBookingDataForEdit(booking_id, this.Form.updateType.value).subscribe((response: any) => {
 			response.data.booking_instructions = response.data.booking_instructions.replaceAll('<br />', '')
+			this.isTravelShare =  response?.data?.account_type=='travel_planner' ? true : false
 			console.log('response <><><><><', response.data)
 			let editing_data = response.data
 			this.bookingResponse = response.data

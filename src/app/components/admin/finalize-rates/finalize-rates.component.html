@@ -94,13 +94,25 @@
 			</div>
 
 			<!-- Admin Share -->
-			<div class="col-5 col-sm-5 col-md-5" *ngIf="sub_item.key == 'Base_Rate' ">
+			<div class="col-3 col-sm-3 col-md-3" *ngIf="sub_item.key == 'Base_Rate' ">
 				<div>
 					<mat-form-field appearance="outline" class="m-0">
 						<mat-label>
 							Admin Share {{ admin_share }} %
 						</mat-label>
 						<input type="number" matInput placeholder="0" [value]="calc_admin_share"
+							style="cursor: not-allowed" class="font-weight-bolder rate-input-field text-right"
+							readonly />
+					</mat-form-field>
+				</div>
+			</div>
+			<div class="col-3" *ngIf="sub_item.key === 'Base_Rate' && isTravelShare">
+				<div>
+					<mat-form-field appearance="outline" class="m-0">
+						<mat-label>
+							Travel Share {{ travel_share }} %
+						</mat-label>
+						<input type="number" matInput placeholder="0" [value]="travel_agent_share"
 							style="cursor: not-allowed" class="font-weight-bolder rate-input-field text-right"
 							readonly />
 					</mat-form-field>
@@ -238,13 +250,25 @@
 			</div>
 
 			<!-- Admin Share -->
-			<div class="col-3" *ngIf="sub_item.key === 'Base_Rate'">
+			<div class="col-3 col-md-3" *ngIf="sub_item.key === 'Base_Rate'">
 				<div>
 					<mat-form-field appearance="outline" class="m-0">
 						<mat-label>
 							Admin Share {{ admin_share }} %
 						</mat-label>
 						<input type="number" matInput placeholder="0" [value]="r_calc_admin_share"
+							style="cursor: not-allowed" class="font-weight-bolder rate-input-field text-right"
+							readonly />
+					</mat-form-field>
+				</div>
+			</div>
+			<div class="col-3" *ngIf="sub_item.key === 'Base_Rate' && isTravelShare">
+				<div>
+					<mat-form-field appearance="outline" class="m-0">
+						<mat-label>
+							Travel Share {{ travel_share }} %
+						</mat-label>
+						<input type="number" matInput placeholder="0" [value]="r_travel_agent_share"
 							style="cursor: not-allowed" class="font-weight-bolder rate-input-field text-right"
 							readonly />
 					</mat-form-field>

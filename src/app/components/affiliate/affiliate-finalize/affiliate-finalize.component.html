@@ -366,7 +366,7 @@
 
 <section class="section-container mt-2">
 	<app-affiliate-finalize-rates *ngIf="init_rates" class="d-flex flex-wrap finalize-rates" [initRates]="init_rates"
-		(formvalue)="RateFormValue($event)" [distance]="finalize_params.distance"
+		(formvalue)="RateFormValue($event)" [distance]="finalize_params.distance" [isTravelShare]="isTravelShare"
 		[reservation_id]="finalize_params.booking_id" [reset]="false" [hours]="hours"
 		[vehicles]="finalize_params.number_of_vehicles" (returnNumberOfHr)="HandleReturnNumberOfHr($event)">
 	</app-affiliate-finalize-rates>

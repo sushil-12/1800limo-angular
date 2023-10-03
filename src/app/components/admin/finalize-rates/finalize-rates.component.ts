@@ -23,6 +23,7 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 	@Input("reservation_id") bookingId: number = 0;
 	@Input("vehicles") vehs: number = 0;
 	@Input("hours") nums: number = 0;
+	@Input('isTravelShare') isTravelShare: boolean = false;
 	@Input('reset') reset: boolean = false;
 
 	// Throw Events.
@@ -73,6 +74,9 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 
 	vehicles: number = 1;
 	hours: number = 0;
+	travel_share :number = 10
+	travel_agent_share : any = 0;
+	r_travel_agent_share : any = 0;
 
 	constructor(
 		private $form: FormBuilder,
@@ -135,6 +139,12 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 		} else {
 			console.log('Resetting Number of Vehicles ');
 			this.vehicles = 1;
+		}
+		if(changes.isTravelShare){
+			this.initRates();
+			if (this.ReturnRatesForm) {
+				this.initReturnRates
+			}
 		}
 
 		if (changes.bookingId && changes.bookingId.currentValue !== 0) {
@@ -518,6 +528,11 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 					this.calc_admin_share = (amount * this.admin_share) / 100;
 					amount = amount + this.calc_admin_share;
 				}
+				if(this.isTravelShare && subform == 'Base_Rate'){
+					let min_rate = (<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("baserate").value;
+					this.travel_agent_share = (min_rate * this.travel_share) / 100
+					amount = amount + this.travel_agent_share;
+					}
 				if (label == "Minimum Rate" ) {
 					this.is_readonly_min_rate = true
 					let min_rate = (<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("baserate").value;
@@ -546,7 +561,7 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 					console.log('km rate-->>', kmrate, '-->> basevalue-->>', basevalue, '-->> amount', amount)
 				}
 				if (type === "percent") {
-					let kmrate = await this.calculateBaseRate('RatesForm') - this.calc_admin_share;
+					let kmrate = await this.calculateBaseRate('RatesForm') - this.calc_admin_share - this.travel_agent_share;
 					let basevalue = (<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("baserate").value;
 
 					let amount = Number(Number((basevalue / 100) * kmrate).toFixed(2));
@@ -568,7 +583,7 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 
 				if (type === "percent") {
 					// let kmrate = (<FormGroup>((<FormGroup>(this.RatesForm.get("all_inclusive_rates"))).get("Base_Rate"))).get("amount").value;
-					let kmrate = await this.calculateBaseRate('RatesForm') - this.calc_admin_share;
+					let kmrate = await this.calculateBaseRate('RatesForm') - this.calc_admin_share - this.travel_agent_share;
 					let taxvalue = (<FormGroup>((<FormGroup>this.RatesForm.get("taxes")).get(subform))).get("baserate").value;
 
 					let amount = Number(Number((taxvalue / 100) * kmrate).toFixed(2));
@@ -601,7 +616,13 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 				if (subform == 'Base_Rate') {
 					this.r_calc_admin_share = (amount * this.admin_share) / 100;
 					amount = amount + this.r_calc_admin_share;
+					if(this.isTravelShare && subform == 'Base_Rate'){
+						let min_rate = (<FormGroup>((<FormGroup>this.ReturnRatesForm.get(formgroup)).get(subform))).get("baserate").value;
+						this.r_travel_agent_share = (min_rate * this.travel_share) / 100
+						amount = amount + this.r_travel_agent_share;
+					}
 				}
+
 				(<FormGroup>((<FormGroup>this.ReturnRatesForm.get(formgroup)).get(subform))).get("amount").setValue(amount);
 			}
 
