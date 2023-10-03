@@ -437,7 +437,7 @@ export class BookingComponent implements OnInit {
             this.router.navigate(['/travel_agent/new-booking'], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'true' } });
         }
         else {
-            this.router.navigate(['/travel_agent/new-booking'], { queryParams: { bookingId: bookingId, nav: 'true' } });
+            this.router.navigate(['/travel_agent/new-booking'], { queryParams: { bookingId: bookingId, updateType: updateType,nav: 'true' } });
         }
     }
 

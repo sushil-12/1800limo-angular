@@ -476,7 +476,7 @@ export class AffiliateService
 			case 'corporate': {
 				return this.httpClient.get(this.serverUrl + 'get-corporate-account/' + id);
 			}
-			case 'travel': {
+			case 'travel_planner': {
 				return this.httpClient.get(this.serverUrl + 'get-travel-planner-account/' + id);
 			}
 			default: {

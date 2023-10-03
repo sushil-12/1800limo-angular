@@ -41,7 +41,6 @@ export class TravelAgentStepsTemplateComponent implements OnInit {
 	ngOnInit() {
 		this.currentStep = this.router.url.substring(this.router.url.indexOf('step'));
 		this.travelAgentId = JSON.parse(localStorage.getItem('currentUser'))?.account_id
-		if (this.travelAgentId) {
 			this.travelAgentService.getStepsCompleted(this.travelAgentId)
 				.pipe(
 					catchError(err => {
@@ -60,7 +59,7 @@ export class TravelAgentStepsTemplateComponent implements OnInit {
 						}
 					}
 				});
-		}
+		
 		if (!this.travelAgentId) {
 			this.stepsObj = JSON.parse(sessionStorage.getItem('step_completed_obj'));
 			for (let [key, value] of Object.entries(this.stepsObj)) {
