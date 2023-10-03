@@ -100,6 +100,7 @@ export class NewBookingComponent implements OnInit {
 	transfer_type: any = 'city_to_city'
 	number_of_hours: any = '2';
 	is_master_vehicle: boolean = JSON.parse(sessionStorage.getItem('selected_vehicle'))?.is_master_vehicle || false
+	isTravelShare: boolean;
 
 
 
@@ -419,12 +420,26 @@ export class NewBookingComponent implements OnInit {
 			this.monthOptions = this.months.filter(i=> i.value.includes(value))
 		}
 	}
+	handleClientAccChange(selectedAcc){
+		this.isTravelShare =  selectedAcc=='travel_planner' ? true : false
+		this.BookingForm.get('acc_id').setValue(null);
+		this.chosen_user = null
+		this.BookingForm.patchValue({
+			passenger_name: '',
+			passenger_email:'',
+			passenger_cell: '',
+			passenger_cell_isd: '+1',
+			passenger_cell_country: 'us',
+		})
+	}
 
 	prefillViaBookingID(booking_id: number) {
 		console.warn('Prefilling via Booking Id',booking_id)
 		this.$spinner.show('normalspinner');
 		this.affiliateService.getBookingDataForEdit(booking_id).subscribe((response: any) => {
+			this.SetFormValue('account_type', response?.data?.account_type)
 			response.data.booking_instructions =  response?.data?.booking_instructions?.replaceAll('<br />' , '')
+			this.isTravelShare =  response?.data?.account_type=='travel_planner' ? true : false
 			let editing_data = response?.data
 			this.autofillData('cruise', editing_data);
 			console.log(editing_data, "check big data")
@@ -744,6 +759,7 @@ export class NewBookingComponent implements OnInit {
 
 
 	fetchClientAccounts(account_type: string) {
+		console.log('fetchClientAccounts->>',account_type)
 		const legend = {
 			individual: 'individual',
 			corporate: 'corporate',
@@ -771,6 +787,7 @@ export class NewBookingComponent implements OnInit {
 	chooseUser(account_id: number) {
 		this.$spinner.show()
 		this.chosen_user = {}
+		console.log('chooseUser---->>>',this.Form.account_type.value)
 		this.affiliateService.chooseUser(account_id, this.Form.account_type.value).subscribe((response: any) => {
 			if (response.success && Object.keys(response.data).length > 0) {
 				this.chosen_user = response.data

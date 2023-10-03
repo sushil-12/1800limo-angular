@@ -7,7 +7,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { CustomvalidationService } from 'src/app/services/customvalidation.service';
 import { MapsAPILoader } from '@agm/core';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AffiliateService } from 'src/app/services/affiliate.service';
 
 @Component({
@@ -30,11 +30,18 @@ export class ProfileComponent implements OnInit {
   public OfficePhoneObject: any;
   public currentUser: any = JSON.parse(localStorage.getItem('currentUser'))
 
-  private geoCoder;
-  @ViewChild('search1')
-  public searchElementRef: ElementRef;
+  	//google map autocomplete
+	title: string = 'AGM project';
+	latitude: number;
+	longitude: number;
+	zoom: number;
+	address: string;
+	private geoCoder;
+	@ViewChild('search1')
+	public searchElementRef: ElementRef;
   response: any;
   defaultCountryCode: string;
+  lastSegment: string;
 
   constructor(
     private affiliateService: AffiliateService,
@@ -45,10 +52,17 @@ export class ProfileComponent implements OnInit {
     private ngZone: NgZone,
     private spinner: NgxSpinnerService,
     private router: Router,
+    private route: ActivatedRoute,
     private travelAgentService: TravelAgentService,
   ) { }
 
   ngOnInit(): void {
+    this.route.url.subscribe(segments => {
+      // The "step" part is in the last segment
+      const lastSegment = segments[segments.length - 1];
+      this.lastSegment = lastSegment.path;
+      console.log(`Step: ${this.lastSegment}`);
+    });
     const currentYear = (new Date()).getFullYear();
     for (let i = 0; i < 40; i++) {
       this.yearOptions.push(currentYear + i);
@@ -82,21 +96,21 @@ export class ProfileComponent implements OnInit {
 								});
 								// this.changeCountry(place.address_components[i].short_name)
 							}
-							// else if (place.address_components[i].types[j] == "administrative_area_level_1") {
-							// 	this.profileForm.patchValue({
-							// 		state: place.address_components[i].long_name
-							// 	});
-							// }
-							// else if (place.address_components[i].types[j] == "administrative_area_level_3") {
-							// 	this.profileForm.patchValue({
-							// 		city: place.address_components[i].long_name
-							// 	});
-							// }
-							// else if (place.address_components[i].types[j] == "postal_code") {
-							// 	this.profileForm.patchValue({
-							// 		zip: place.address_components[i].long_name
-							// 	});
-							// }
+							else if (place.address_components[i].types[j] == "administrative_area_level_1") {
+								this.profileForm.patchValue({
+									state: place.address_components[i].long_name
+								});
+							}
+							else if (place.address_components[i].types[j] == "administrative_area_level_3") {
+								this.profileForm.patchValue({
+									city: place.address_components[i].long_name
+								});
+							}
+							else if (place.address_components[i].types[j] == "postal_code") {
+								this.profileForm.patchValue({
+									zip: place.address_components[i].long_name
+								});
+							}
 							else if (place.address_components[i].types[j] == "street_number") {
 								this.profileForm.patchValue({
 									street: place.address_components[i].long_name
@@ -198,7 +212,7 @@ export class ProfileComponent implements OnInit {
           mobileIsd: data?.mobileIsd || '+1',
           mobileCountry: data?.mobileCountry || 'us',
           email: data?.email,
-          address: data?.street,
+          address: data?.address,
           city: data?.city,
           state: data?.state,
           country: data?.country,
@@ -341,9 +355,17 @@ export class ProfileComponent implements OnInit {
         if (this.response?.data?.is_profile_complete) {
           currentUser['is_profile_complete'] = true
           currentUser['name'] = this.response?.data?.first_name +' ' + this.response?.data?.last_name
+          currentUser['account_id'] = this.response?.data?.acc_id
           localStorage.setItem('currentUser', JSON.stringify(currentUser))
+          if(this.lastSegment=='step1'){
+          this.router.navigateByUrl('/travel_agent/profile/step2').then(() => {
+            window.location.reload();
+          });
+
+          }
+          else{
           window.location.reload()
-          // this.router.navigate(['/travel_agent/bookings']);
+          }
         }
 
       });
