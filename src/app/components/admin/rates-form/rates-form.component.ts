@@ -82,6 +82,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 	bookingType: any = 'new';
 	master_vehicle_id: any = null;
 	travel_agent_share : any = 0;
+	r_travel_agent_share : any = 0;
 
 	constructor(
 		private $form: FormBuilder,
@@ -724,6 +725,11 @@ export class RatesFormComponent implements OnInit, OnChanges {
 				if (subform == 'Base_Rate') {
 					this.r_calc_admin_share = (amount * this.admin_share) / 100;
 					amount = parseFloat((amount + this.r_calc_admin_share).toFixed(2));
+					if(this.isTravelShare && subform == 'Base_Rate'){
+						let min_rate = (<FormGroup>((<FormGroup>this.ReturnRatesForm.get(formgroup)).get(subform))).get("baserate").value;
+						this.r_travel_agent_share = (min_rate * this.travel_share) / 100
+						amount = amount + this.r_travel_agent_share;
+						}
 				}
 				(<FormGroup>((<FormGroup>this.ReturnRatesForm.get(formgroup)).get(subform))).get("amount").setValue(amount);
 			}
