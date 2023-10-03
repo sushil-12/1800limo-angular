@@ -246,6 +246,30 @@
 						</div>
 					</div>
 				</div>
+				<div class="col-md-3 looseError">
+					<mat-form-field appearance="outline" class="m-0">
+						<mat-label>
+							No. of Passengers <span class="asterisk"></span>
+						</mat-label>
+						<mat-select formControlName="total_passengers">
+							<mat-option *ngFor="let option of booking_params.numbers" [value]="option">
+								{{ option }}
+							</mat-option>
+						</mat-select>
+					</mat-form-field>
+				</div>
+				<div class="col-md-3 looseError">
+					<mat-form-field appearance="outline" class="m-0">
+						<mat-label>
+							Luggage Count <span class="asterisk"></span>
+						</mat-label>
+						<mat-select formControlName="luggage_count">
+							<mat-option *ngFor="let option of booking_params.numbers" [value]="option">
+								{{ option }}
+							</mat-option>
+						</mat-select>
+					</mat-form-field>
+				</div>
 				<!-- Personal Information Ends -->
 	
 				<!-- Credit Card Details -->
@@ -393,10 +417,8 @@
 					<h2>
 						Passenger Information
 					</h2>
-					<!-- <p class="ml-2" style="color: #dc4335;">*All Field are required</p> -->
 					<div class="row">
-						<!-- Passenger Name -->
-						<div class="col-md-4">
+						<!-- <div class="col-md-4">
 							<mat-form-field appearance="outline" class="m-0">
 								<mat-label>
 									Passenger Name <span class="asterisk"></span>
@@ -416,8 +438,6 @@
 								</div>
 							</div>
 						</div>
-	
-						<!-- Passenger Email -->
 						<div class="col-md-4">
 							<mat-form-field appearance="outline" class="m-0">
 								<mat-label>
@@ -438,8 +458,6 @@
 								</div>
 							</div>
 						</div>
-	
-						<!-- Passenger Cell -->
 						<div class="col-md-4">
 							<mat-form-field appearance="outline" class="mat-custom-phone m-0 pcellLabelClass">
 								<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Passenger
@@ -471,40 +489,12 @@
 									</ng-template>
 								</div>
 							</div>
-						</div>
-	
-						<!-- Passenger Count -->
-						<div class="col-md-3 looseError">
-							<mat-form-field appearance="outline" class="m-0">
-								<mat-label>
-									No. of Passengers <span class="asterisk"></span>
-								</mat-label>
-								<mat-select formControlName="total_passengers">
-									<mat-option *ngFor="let option of booking_params.numbers" [value]="option">
-										{{ option }}
-									</mat-option>
-								</mat-select>
-							</mat-form-field>
-						</div>
-	
-						<!-- Luggage Count -->
-						<div class="col-md-3 looseError">
-							<mat-form-field appearance="outline" class="m-0">
-								<mat-label>
-									Luggage Count <span class="asterisk"></span>
-								</mat-label>
-								<mat-select formControlName="luggage_count">
-									<mat-option *ngFor="let option of booking_params.numbers" [value]="option">
-										{{ option }}
-									</mat-option>
-								</mat-select>
-							</mat-form-field>
-						</div>
+						</div> -->
+						
 	
 	
 					</div>
 				</div>
-				<!-- Passenger Information Ends -->
 			</div>
 	
 			<!-- Section - Affiliate/Loose Details -->
@@ -2139,11 +2129,9 @@
 						<hr>
 					</ng-template>
 					<!-- Passenger Information -->
-					<h4 class="font-weight-bolder m-0 mt-3">
+					<!-- <h4 class="font-weight-bolder m-0 mt-3">
 						Passenger Information
 					</h4>
-
-					<!-- Passenger > Name -->
 					<div class="mx-2">
 						<div class="row m-0">
 							<div class="col-md-4 key">
@@ -2158,8 +2146,6 @@
 							</div>
 						</div>
 					</div>
-
-					<!-- Passenger > Email -->
 					<div class="mx-2">
 						<div class="row m-0">
 							<div class="col-md-4 key">
@@ -2174,8 +2160,6 @@
 							</div>
 						</div>
 					</div>
-
-					<!-- Passenger > Phone -->
 					<div class="mx-2">
 						<div class="row m-0">
 							<div class="col-md-4 key">
@@ -2190,7 +2174,7 @@
 								</span>
 							</div>
 						</div>
-					</div>
+					</div> -->
 					<div class="mx-2">
 						<div class="row m-0">
 							<div class="col-md-4 key">
