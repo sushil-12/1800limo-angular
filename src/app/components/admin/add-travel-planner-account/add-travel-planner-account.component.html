@@ -17,12 +17,10 @@
 					</div>
 					<div class="col-md-4">
 						<mat-form-field appearance="outline">
-							<mat-label>Middle Name <span class="asterisk">*</span></mat-label>
+							<mat-label>Middle Name</mat-label>
 							<input formControlName="middleName" type="text" matInput placeholder="Middle Name">
 						</mat-form-field>
-						<div *ngIf="submittedForm && f.middleName.errors" class="text-danger">
-							<div *ngIf="f.middleName.errors.required">This field is required</div>
-						</div>
+
 					</div>
 					<div class="col-md-4">
 						<mat-form-field appearance="outline">

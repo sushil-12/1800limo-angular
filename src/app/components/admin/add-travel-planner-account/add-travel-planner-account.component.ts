@@ -139,7 +139,7 @@ export class AddTravelPlannerAccountComponent implements OnInit
 		this.addTravelPlannerAccountForm = this.formBuilder.group({
 			role: ['3', [Validators.required, Validators.pattern("^[0-9].*$")]],//travelPlanner
 			firstName: ['', Validators.required],
-			middleName: ['', Validators.required],
+			middleName: [''],
 			lastName: ['', Validators.required],
 			office: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
 			officeIsd: ['+1', Validators.required],
