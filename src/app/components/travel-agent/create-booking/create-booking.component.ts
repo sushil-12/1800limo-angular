@@ -512,18 +512,18 @@ export class CreateBookingComponent implements OnInit {
 			this.min_rate_involved = response?.data?.min_rate_involved
 			this.rateArray = response?.data?.rateArray
 			this.returnRateArray = response?.data?.retrunRateArray
-			this.agentShare = response?.data?.rateArray?.all_inclusive_rates?.Base_Rate?.baserate * 0.10
 			for (let outerKey in response?.data?.rateArray) {
 				if (response?.data?.rateArray.hasOwnProperty(outerKey)) {
-				  const innerObject = response?.data?.rateArray[outerKey];
-				  for (let innerKey in innerObject) {
-					if (innerObject.hasOwnProperty(innerKey)) {
-					this.subtotal+= innerObject[innerKey].amount
-	
+					const innerObject = response?.data?.rateArray[outerKey];
+					for (let innerKey in innerObject) {
+						if (innerObject.hasOwnProperty(innerKey)) {
+							this.subtotal+= innerObject[innerKey].amount
+							
+						}
 					}
-				  }
 				}
 			}
+			this.agentShare = response?.data?.rateArray?.all_inclusive_rates?.Base_Rate?.baserate * 0.10
 			this.grandtotal = (parseFloat(this.subtotal))
 			console.log('grandtotal->' , 	this.grandtotal)
 			  if(this.booking_data?.service_type == 'round_trip'){
