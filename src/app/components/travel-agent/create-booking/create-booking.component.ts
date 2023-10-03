@@ -1945,12 +1945,38 @@ export class CreateBookingComponent implements OnInit {
 		booking_data['is_master_vehicle'] = booking_data?.vehicle_id.toString().length ? false : true
 	this.$api.fetchRatesByAffiliateVeh(vehicle_id, booking_data).subscribe((response: any) => {
 		if(this.bookingType !='edit'){
-			this.subtotal= response?.data?.sub_total
+			this.subtotal = 0
+			this.r_subtotal = 0
+			this.min_rate_involved = response?.data?.min_rate_involved
+			this.rateArray = response?.data?.rateArray
+			this.returnRateArray = response?.data?.retrunRateArray
+			for (let outerKey in response?.data?.rateArray) {
+				if (response?.data?.rateArray.hasOwnProperty(outerKey)) {
+					const innerObject = response?.data?.rateArray[outerKey];
+					for (let innerKey in innerObject) {
+						if (innerObject.hasOwnProperty(innerKey)) {
+							this.subtotal+= innerObject[innerKey].amount
+							
+						}
+					}
+				}
+			}
 			this.agentShare = response?.data?.rateArray?.all_inclusive_rates?.Base_Rate?.baserate * 0.10
-			this.grandtotal= response?.data?.grand_total
+			this.grandtotal = (parseFloat(this.subtotal))
 		}
-		if(this.booking_data.service_type == 'round_trip'){
-			
+		if(booking_data.service_type == 'round_trip'){
+			for (let outerKey in response?.data?.retrunRateArray) {
+				if (response?.data?.retrunRateArray.hasOwnProperty(outerKey)) {
+				  const innerObject = response?.data?.retrunRateArray[outerKey];
+				  for (let innerKey in innerObject) {
+					if (innerObject.hasOwnProperty(innerKey)) {
+					this.r_subtotal+= innerObject[innerKey].amount
+					}
+				  }
+				}
+			  }
+			  this.r_agentShare = response?.data?.rateArray?.all_inclusive_rates?.Base_Rate?.baserate * 0.10
+			this.r_grandtotal = (parseFloat(this.r_subtotal))
 		}
 	});
 	}

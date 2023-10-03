@@ -100,9 +100,7 @@
 				<h2>
 					Passenger Information
 				</h2>
-				<!-- <p class="ml-2" style="color: #dc4335;">*All Field are required</p> -->
 				<div class="row">
-					<!-- Passenger Name -->
 					<div class="col-md-4">
 						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>
@@ -124,7 +122,6 @@
 						</div>
 					</div>
 
-					<!-- Passenger Email -->
 					<div class="col-md-4">
 						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>
@@ -146,7 +143,6 @@
 						</div>
 					</div>
 
-					<!-- Passenger Cell -->
 					<div class="col-md-4">
 						<mat-form-field appearance="outline" class="mat-custom-phone m-0 pcellLabelClass">
 							<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Passenger
@@ -180,7 +176,6 @@
 						</div>
 					</div>
 
-					<!-- Passenger Count -->
 					<div class="col-md-3 looseError">
 						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>
@@ -1215,6 +1210,17 @@
     </div>
 	<div class="section-container finalizeRates" *ngIf="service_type=='round_trip'"
 	[ngClass]="{'w-50': service_type=='round_trip'}">
+	<div class="row px-2 justify-content-between align-items-center">
+		<div class="col-md-6">
+			<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
+				Agent share
+			</p>
+		</div>
+		<div class="col-md-4 text-3xl text-right">
+			<i class="bi bi-currency-dollar text-danger"></i>
+			{{ r_agentShare.toFixed(2) }}
+		</div>
+	</div>
         <div class="row px-2 justify-content-between align-items-center">
             <div class="col-md-6">
                 <p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
@@ -1235,17 +1241,6 @@
             <div class="col-md-4 col-xl-5 text-3xl text-right" id="NumVehicles">
                 <i class="bi bi-x text-dark font-weight-bolder"></i>
                 {{ Form.number_of_vehicles.value }}
-            </div>
-        </div>
-		<div class="row px-2 justify-content-between align-items-center">
-            <div class="col-md-6">
-                <p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
-                    Agent share
-                </p>
-            </div>
-            <div class="col-md-4 text-3xl text-right">
-                <i class="bi bi-currency-dollar text-danger"></i>
-                {{ r_agentShare.toFixed(2) }}
             </div>
         </div>
         <div class="row px-2 justify-content-between align-items-center">
@@ -1403,11 +1398,9 @@
 					<hr>
 
 					<!-- Passenger Information -->
-					<h4 class="font-weight-bolder m-0 mt-3">
+					<!-- <h4 class="font-weight-bolder m-0 mt-3">
 						Passenger Information
 					</h4>
-
-					<!-- Passenger > Name -->
 					<div class="mx-2">
 						<div class="row m-0">
 							<div class="col-md-4 key">
@@ -1422,8 +1415,6 @@
 							</div>
 						</div>
 					</div>
-
-					<!-- Passenger > Email -->
 					<div class="mx-2">
 						<div class="row m-0">
 							<div class="col-md-4 key">
@@ -1438,8 +1429,6 @@
 							</div>
 						</div>
 					</div>
-
-					<!-- Passenger > Phone -->
 					<div class="mx-2">
 						<div class="row m-0">
 							<div class="col-md-4 key">
@@ -1454,7 +1443,7 @@
 								</span>
 							</div>
 						</div>
-					</div>
+					</div> -->
 					<div class="mx-2">
 						<div class="row m-0">
 							<div class="col-md-4 key">
