@@ -9,7 +9,7 @@
 					[routerLink]="['/home']" />
 				<h2 *ngIf=" Role == 'admin'; else userLogin ">Welcome Admin</h2>
 				<ng-template #userLogin>
-					<h2>Hello, Create an Account or Sign In.</h2>
+					<h2>Welcome {{format(Role) | titlecase}}, Create an Account or Sign In.</h2>
 				</ng-template>
 			</div>
 			<div class="row" *ngIf="Role != 'admin' && Role !='sub_admin' && Role !='driver' && Role !='travel_agent'">

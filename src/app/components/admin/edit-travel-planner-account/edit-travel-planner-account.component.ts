@@ -76,37 +76,37 @@ export class EditTravelPlannerAccountComponent implements OnInit
 
 				this.editTravelPlannerAccountForm.patchValue({
 					id: this.travelPlannerId,
-					firstName: this.response.data.first_name,
-					middleName: this.response.data.middle_name,
-					lastName: this.response.data.last_name,
-					mobile: this.response.data.mobile,
+					firstName: this.response?.data?.first_name,
+					middleName: this.response?.data?.middle_name,
+					lastName: this.response?.data?.last_name,
+					mobile: this.response?.data?.mobile,
 					mobileIsd: '+1',
-					office: this.response.data.office,
+					office: this.response?.data?.office,
 					officeIsd: '+1',
-					officeNumber: this.response.data.officeNumber,
+					officeNumber: this.response?.data?.officeNumber,
 					isd_office_number: '+1',
-					agencyName: this.response.data.agency_name,
-					payee: this.response.data.payee,
-					iata: this.response.data.iata,
-					fax: this.response.data.fax,
+					agencyName: this.response?.data?.agency_name,
+					payee: this.response?.data?.payee,
+					iata: this.response?.data?.iata,
+					fax: this.response?.data?.fax,
 					faxIsd: '+1',
-					email: this.response.data.email,
-					address: this.response.data.street,
-					city: this.response.data.city,
-					state: this.response.data.state,
-					country: this.response.data.country,
-					zipCode: this.response.data.zip,
-					companyName: this.response.data.company_name,
-					department: this.response.data.department,
-					businessDescription: this.response.data.zip,
+					email: this.response?.data?.email,
+					address: this.response?.data?.address,
+					city: this.response?.data?.city,
+					state: this.response?.data?.state,
+					country: this.response?.data?.country,
+					zipCode: this.response?.data?.zip,
+					companyName: this.response?.data?.company_name,
+					department: this.response?.data?.department,
+					businessDescription: this.response?.data?.zip,
 					// latitude:this.response.data.latitude,
 					// longitude:this.response.data.longitude,
 				});
 				this.spinner.hide();//hide spinner
-				this.MobileObject.setCountry(this.response.data.mobileCountry);
-				this.OfficeObject.setCountry(this.response.data.officeCountry);
-				this.OfficePhoneObject.setCountry(this.response.data.office_country_code);
-				this.FaxObject.setCountry(this.response.data.faxCountry);
+				this.MobileObject.setCountry(this.response?.data?.mobileCountry);
+				this.OfficeObject.setCountry(this.response?.data?.officeCountry);
+				this.OfficePhoneObject.setCountry(this.response?.data?.office_country_code);
+				this.FaxObject.setCountry(this.response?.data?.faxCountry);
 			});
 
 		//google map autocomplete
@@ -132,22 +132,51 @@ export class EditTravelPlannerAccountComponent implements OnInit
 						latitude: place.geometry.location.lat(),
 						longitude: place.geometry.location.lng()
 					});
-					if (place.address_components[1])
-						this.editTravelPlannerAccountForm.patchValue({
-							city: place.address_components[1].long_name
-						});
-					if (place.address_components[2])
-						this.editTravelPlannerAccountForm.patchValue({
-							state: place.address_components[2].long_name
-						});
-					if (place.address_components[3])
-						this.editTravelPlannerAccountForm.patchValue({
-							country: place.address_components[3].long_name
-						});
-					if (place.address_components[4])
-						this.editTravelPlannerAccountForm.patchValue({
-							zipCode: place.address_components[place.address_components.length - 1].long_name
-						});
+					for (var i = 0; i < place.address_components.length; i++) {
+						for (var j = 0; j < place.address_components[i].types.length; j++) {
+							if (place.address_components[i].types[j] == "country") {
+								this.editTravelPlannerAccountForm.patchValue({
+									country: place.address_components[i].long_name
+								});
+							}
+							else if (place.address_components[i].types[j] == "administrative_area_level_1") {
+								this.editTravelPlannerAccountForm.patchValue({
+									state: place.address_components[i].long_name
+								});
+							}
+							else if (place.address_components[i].types[j] == "administrative_area_level_3") {
+								this.editTravelPlannerAccountForm.patchValue({
+									city: place.address_components[i].long_name
+								});
+							}
+							else if (place.address_components[i].types[j] == "postal_code") {
+								this.editTravelPlannerAccountForm.patchValue({
+									zipCode: place.address_components[i].long_name
+								});
+							}
+							else if (place.address_components[i].types[j] == "street_number") {
+								this.editTravelPlannerAccountForm.patchValue({
+									address: place.address_components[i].long_name
+								});
+							}
+						}
+					}
+					// if (place.address_components[1])
+					// 	this.editTravelPlannerAccountForm.patchValue({
+					// 		city: place.address_components[1].long_name
+					// 	});
+					// if (place.address_components[2])
+					// 	this.editTravelPlannerAccountForm.patchValue({
+					// 		state: place.address_components[2].long_name
+					// 	});
+					// if (place.address_components[3])
+					// 	this.editTravelPlannerAccountForm.patchValue({
+					// 		country: place.address_components[3].long_name
+					// 	});
+					// if (place.address_components[4])
+					// 	this.editTravelPlannerAccountForm.patchValue({
+					// 		zipCode: place.address_components[place.address_components.length - 1].long_name
+					// 	});
 				});
 			});
 		});
@@ -167,8 +196,8 @@ export class EditTravelPlannerAccountComponent implements OnInit
 			mobileCountry: ['us'],
 			email: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.]+\.[a-zA-Z]{2,}$/i)]],
 			address: ['', Validators.required],
-			city: ['', Validators.required],
-			state: ['', Validators.required],
+			city: [''],
+			state: [''],
 			country: ['', Validators.required],
 			zipCode: ['', Validators.required],
 			agencyName: ['', Validators.required],

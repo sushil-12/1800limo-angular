@@ -113,7 +113,7 @@ export class ProfileComponent implements OnInit {
 							}
 							else if (place.address_components[i].types[j] == "street_number") {
 								this.profileForm.patchValue({
-									street: place.address_components[i].long_name
+									address: place.address_components[i].long_name
 								});
 							}
 						}

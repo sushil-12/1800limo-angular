@@ -244,32 +244,33 @@
 									(focus)="$event.target.select()" />
 							</mat-form-field>
 						</div>
+						<div class="col-md-4 looseError">
+							<mat-form-field appearance="outline" class="m-0">
+								<mat-label>
+									No. of Passengers <span class="asterisk"></span>
+								</mat-label>
+								<mat-select formControlName="total_passengers">
+									<mat-option *ngFor="let option of booking_params.numbers" [value]="option">
+										{{ option }}
+									</mat-option>
+								</mat-select>
+							</mat-form-field>
+						</div>
+						<div class="col-md-4 looseError">
+							<mat-form-field appearance="outline" class="m-0">
+								<mat-label>
+									Luggage Count <span class="asterisk"></span>
+								</mat-label>
+								<mat-select formControlName="luggage_count">
+									<mat-option *ngFor="let option of booking_params.numbers" [value]="option">
+										{{ option }}
+									</mat-option>
+								</mat-select>
+							</mat-form-field>
+						</div>
 					</div>
 				</div>
-				<div class="col-md-3 looseError">
-					<mat-form-field appearance="outline" class="m-0">
-						<mat-label>
-							No. of Passengers <span class="asterisk"></span>
-						</mat-label>
-						<mat-select formControlName="total_passengers">
-							<mat-option *ngFor="let option of booking_params.numbers" [value]="option">
-								{{ option }}
-							</mat-option>
-						</mat-select>
-					</mat-form-field>
-				</div>
-				<div class="col-md-3 looseError">
-					<mat-form-field appearance="outline" class="m-0">
-						<mat-label>
-							Luggage Count <span class="asterisk"></span>
-						</mat-label>
-						<mat-select formControlName="luggage_count">
-							<mat-option *ngFor="let option of booking_params.numbers" [value]="option">
-								{{ option }}
-							</mat-option>
-						</mat-select>
-					</mat-form-field>
-				</div>
+				
 				<!-- Personal Information Ends -->
 	
 				<!-- Credit Card Details -->
@@ -411,14 +412,13 @@
 			</div>
 			</div>
 			<!-- Client Accounts Section Ends -->
-			<div class="section-container mt-2">
-				<!-- Passenger Information -->
+			<!-- <div class="section-container mt-2">
 				<div id="passenger-information" class="px-4 mt-4">
 					<h2>
 						Passenger Information
 					</h2>
 					<div class="row">
-						<!-- <div class="col-md-4">
+						<div class="col-md-4">
 							<mat-form-field appearance="outline" class="m-0">
 								<mat-label>
 									Passenger Name <span class="asterisk"></span>
@@ -489,13 +489,13 @@
 									</ng-template>
 								</div>
 							</div>
-						</div> -->
+						</div>
 						
 	
 	
 					</div>
 				</div>
-			</div>
+			</div> -->
 	
 			<!-- Section - Affiliate/Loose Details -->
 			<div class="section-container mt-2">
@@ -1973,7 +1973,7 @@
 						</div>
 					</div>
 					<!-- && Form.affiliate_type.value!='affiliate' -->
-					<div class="mx-2" *ngIf="ReturnRatesForm && init_return_rates ">
+					<div class="mx-2" *ngIf="r_subtotal">
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
@@ -1982,7 +1982,7 @@
 							</div>
 							<div class="col-md-8 value">
 								<span class="font-weight-bolder">
-									${{ ReturnRatesForm.r_grandtotal.toFixed(2) }}
+									${{ (Form.number_of_vehicles.value * r_subtotal).toFixed(2) }}
 								</span>
 							</div>
 						</div>

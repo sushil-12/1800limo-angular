@@ -200,6 +200,9 @@ export class LoginComponent implements OnInit, AfterViewInit
 			return { 'plusError': true };
 		}
 	}
+	format(value){
+		return value ? value.replaceAll('_',' ') : ''
+	}
 
 	onCountryChange(event)
 	{
