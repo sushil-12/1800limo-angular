@@ -76,7 +76,8 @@
 							<mat-label>Last Name <span class="asterisk">*</span></mat-label>
 							<input formControlName="lastName" type="text" matInput placeholder="Last Name">
 						</mat-form-field>
-						<div *ngIf="submittedForm && f?.lastName?.errors" class="text-danger">
+						<div *ngIf="submittedForm && f?.lastName?.errors || f?.lastName?.touched && f?.lastName?.errors"
+							class="text-danger">
 							<div *ngIf="f?.lastName?.errors?.required">This field is required</div>
 						</div>
 					</div>
@@ -157,7 +158,8 @@
 							<mat-label>E-mail <span class="asterisk">*</span></mat-label>
 							<input formControlName="email" type="text" matInput placeholder="E-mail">
 						</mat-form-field>
-						<div *ngIf="submittedForm && f?.email?.errors" class="text-danger">
+						<div *ngIf="submittedForm && f?.email?.errors || f?.email?.touched && f?.email?.errors"
+							class="text-danger">
 							<div *ngIf="f?.email?.errors?.required">This field is required</div>
 							<div *ngIf="f?.email?.errors?.pattern">Email format should be valid</div>
 						</div>

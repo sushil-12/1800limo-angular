@@ -109,3 +109,12 @@ top:2.05em}
 	background-color: rgb(226, 226, 226,1) !important;
 }
 
+
+.mat-option{
+    background-color: rgb(226, 226, 226,1) !important;
+}
+
+:host ::ng-deep .ng-option{
+    background-color: rgb(226, 226, 226,1) !important;
+}
+
