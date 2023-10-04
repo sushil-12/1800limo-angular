@@ -179,7 +179,7 @@ export class CreateBookingComponent implements OnInit {
 			return_transfer_type: ['city_to_city', Validators.required],
 			number_of_hours: ['0'],
 			acc_id: [''],
-			account_type: ['individual'],
+			account_type: ['travel_planner'],
 			change_individual_data: [false],
 			loose_customer: this.$form.group({
 				first_name: [''],
@@ -1849,7 +1849,7 @@ export class CreateBookingComponent implements OnInit {
 				}
 
 			this.$spinner.show()
-			this.$api.createBooking(value, this.Form.updateType.value).subscribe((response: any) => {
+			this.TravelAgentService.createBooking(value, this.Form.updateType.value).subscribe((response: any) => {
 				// this.$errors.openDialog({
 				// 	errors: {
 				// 		error: `<span class='text-success'>${response.message}</span>`

@@ -102,7 +102,7 @@ export class AffiliateFinalizeComponent implements OnInit {
 				console.log('response getBookingData Affiliate--->>>>', data)
 				this.BookingDetail = data?.booking_detail
 				this.transferType = this.BookingDetail?.transfer_type
-				this.isTravelShare =  data?.booking_detail?.account_type=='travel_planner' ? true : false
+				this.isTravelShare =  data?.booking_detail?.account_type=='Travel Agent' ? true : false
 				this.finalize_params.number_of_vehicles = data?.booking_detail?.number_of_vehicles
 				this.init_rates = true;
 				this.hours =  data?.booking_detail?.number_of_hours

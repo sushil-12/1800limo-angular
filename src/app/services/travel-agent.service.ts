@@ -69,6 +69,17 @@ export class TravelAgentService {
 		}
 		return this.httpClient.get(path).toPromise();
 	}
+  createBooking(data: any, update_type: string) {
+		if (update_type == 'return' || update_type == 'repeat') {
+			return this.httpClient.post(`${this.serverUrl}duplicate-reservation`, data)
+		}
+		if (data.reservation_id) {
+			return this.httpClient.put(this.serverUrl + 'edit-reservation', data);
+		}
+		else {
+			return this.httpClient.post(this.serverUrl + 'create-reservation', data);
+		}
+	}
 
   //get invoice list
   invoiceList(url, startDate, endDate, useDateFilter,keyword = '') {
