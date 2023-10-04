@@ -104,7 +104,7 @@ export class AddTravelPlannerAccountComponent implements OnInit
 							}
 							else if (place.address_components[i].types[j] == "street_number") {
 								this.addTravelPlannerAccountForm.patchValue({
-									street: place.address_components[i].long_name
+									address: place.address_components[i].long_name
 								});
 							}
 						}
@@ -149,8 +149,8 @@ export class AddTravelPlannerAccountComponent implements OnInit
 			mobileCountry: ['us'],
 			email: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.]+\.[a-zA-Z]{2,}$/i)]],
 			address: ['', Validators.required],
-			city: ['', Validators.required],
-			state: ['', Validators.required],
+			city: [''],
+			state: [''],
 			country: ['', Validators.required],
 			zipCode: ['', Validators.required],
 			agencyName: ['', Validators.required],
