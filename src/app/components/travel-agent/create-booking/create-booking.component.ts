@@ -1953,13 +1953,12 @@ export class CreateBookingComponent implements OnInit {
 			this.min_rate_involved = response?.data?.min_rate_involved
 			this.rateArray = response?.data?.rateArray
 			this.rateArray.all_inclusive_rates.Base_Rate.amount = response?.data?.rateArray?.all_inclusive_rates?.Base_Rate.amount + response?.data?.rateArray?.all_inclusive_rates?.Base_Rate?.baserate * 0.10
-			this.returnRateArray = response?.data?.retrunRateArray
 			for (let outerKey in this.rateArray) {
 				if (this.rateArray.hasOwnProperty(outerKey)) {
 					const innerObject = this.rateArray[outerKey];
 					for (let innerKey in innerObject) {
 						if (innerObject.hasOwnProperty(innerKey)) {
-							this.subtotal+= innerObject[innerKey].amount
+							this.subtotal+= innerObject[innerKey].amount ? innerObject[innerKey].amount : 0
 							
 						}
 					}
@@ -1969,18 +1968,19 @@ export class CreateBookingComponent implements OnInit {
 			this.grandtotal = (parseFloat(this.subtotal))
 		}
 		if(booking_data.service_type == 'round_trip'){
-			this.returnRateArray.all_inclusive_rates.Base_Rate.amount = response?.data?.returnRateArray?.all_inclusive_rates?.Base_Rate.amount + response?.data?.returnRateArray?.all_inclusive_rates?.Base_Rate?.baserate * 0.10
+			this.returnRateArray = response?.data?.retrunRateArray
+			this.returnRateArray.all_inclusive_rates.Base_Rate.amount = response?.data?.retrunRateArray?.all_inclusive_rates?.Base_Rate.amount + response?.data?.retrunRateArray?.all_inclusive_rates?.Base_Rate?.baserate * 0.10
 			for (let outerKey in this.returnRateArray) {
 				if (this.returnRateArray.hasOwnProperty(outerKey)) {
 				  const innerObject = this.returnRateArray[outerKey];
 				  for (let innerKey in innerObject) {
 					if (innerObject.hasOwnProperty(innerKey)) {
-					this.r_subtotal+= innerObject[innerKey].amount
+					this.r_subtotal+= innerObject[innerKey].amount ? innerObject[innerKey].amount : 0
 					}
 				  }
 				}
 			  }
-			  this.r_agentShare = response?.data?.rateArray?.all_inclusive_rates?.Base_Rate?.baserate * 0.10
+			  this.r_agentShare = response?.data?.retrunRateArray?.all_inclusive_rates?.Base_Rate?.baserate * 0.10
 			this.r_grandtotal = (parseFloat(this.r_subtotal))
 		}
 	});
