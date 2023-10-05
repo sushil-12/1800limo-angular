@@ -274,7 +274,7 @@
 				<!-- Personal Information Ends -->
 	
 				<!-- Credit Card Details -->
-				<!-- <div id="credit-card-details" class="mt-4 px-4" formGroupName="card_details">
+				<div id="credit-card-details" class="mt-4 px-4" formGroupName="card_details">
 					<h4>
 						Card Details
 					</h4>
@@ -323,7 +323,7 @@
 									<ng-template #cardLength>
 										<p class="text-danger text-lg m-0"
 											*ngIf="LooseCustomer.card_details.controls.card_number.errors?.minlength">
-											Minimum length should be 12
+											Minimum length should be 16
 										</p>
 										<p class="text-danger text-lg m-0"
 											*ngIf="LooseCustomer.card_details.controls.card_number.errors?.maxlength">
@@ -401,14 +401,14 @@
 										</p>
 										<p class="text-danger text-lg m-0"
 											*ngIf="LooseCustomer.card_details.controls.cvv.errors?.maxlength">
-											Maximum length should be 3
+											Maximum length should be 5
 										</p>
 									</ng-template>
 								</div>
 							</div>
 						</div>
 					</div>
-				</div> -->
+				</div>
 			</div>
 			</div>
 			<!-- Client Accounts Section Ends -->

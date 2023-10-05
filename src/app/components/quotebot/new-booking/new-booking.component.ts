@@ -319,11 +319,11 @@ export class NewBookingComponent implements OnInit {
 				email: ['',[Validators.required ,Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
 				address: [''],
 				card_details: this.$form.group({
-					name: [''],
-					card_number: [''],
-					exp_month: [''],
-					exp_year: [''],
-					cvv: ['']
+					name: ['',[Validators.required]],
+					card_number: ['',[Validators.required, Validators.pattern("^[0-9]*$"), , Validators.minLength(16), Validators.maxLength(20)]],
+					exp_month: ['',[Validators.required]],
+					exp_year: ['',[Validators.required]],
+					cvv: ['',[Validators.required, Validators.pattern("^[0-9]*$"),Validators.minLength(3),Validators.maxLength(5)]]
 				})
 			}),
 			passenger_name: ['', [, this.customValidator.whitespace()]],
