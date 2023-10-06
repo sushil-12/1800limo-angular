@@ -70,6 +70,7 @@ import { NgOtpInputModule } from  'ng-otp-input';
 import { AutoDetectOtpDirective } from './auto-detect-otp.directive';
 import { LongPressDirective } from './directives/long-press.directive';
 import { AutoFocusDirective } from './directives/auto-focus.directive';
+import { IndividualConfirmationComponent } from './components/email-pages/individual-confirmation/individual-confirmation.component';
 @NgModule({
 	declarations: [
 		AppComponent,
@@ -108,6 +109,7 @@ import { AutoFocusDirective } from './directives/auto-focus.directive';
 		AutoDetectOtpDirective,
 		LongPressDirective,
 		AutoFocusDirective,
+		IndividualConfirmationComponent,
 	],
 	imports: [
 		BrowserModule,
