@@ -126,17 +126,17 @@ export class ProfileComponent implements OnInit {
       this.getProfileData()
     }
     else {
-      this.profileForm.get('name')?.setValidators([Validators.required]);
-      this.profileForm.get('number')?.setValidators([Validators.required, Validators.pattern("^[0-9\\s]*$"), Validators.minLength(16), Validators.maxLength(20), this.customValidator.dashValidator(), this.customValidator.plusValidator()]);
-      this.profileForm.get('exp_month')?.setValidators([Validators.required]);
-      this.profileForm.get('exp_year')?.setValidators([Validators.required]);
-      this.profileForm.get('cvc')?.setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(3), Validators.maxLength(4), this.customValidator.dashValidator(), this.customValidator.plusValidator()]);
+      // this.profileForm.get('name')?.setValidators([Validators.required]);
+      // this.profileForm.get('number')?.setValidators([Validators.required, Validators.pattern("^[0-9\\s]*$"), Validators.minLength(16), Validators.maxLength(20), this.customValidator.dashValidator(), this.customValidator.plusValidator()]);
+      // this.profileForm.get('exp_month')?.setValidators([Validators.required]);
+      // this.profileForm.get('exp_year')?.setValidators([Validators.required]);
+      // this.profileForm.get('cvc')?.setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(3), Validators.maxLength(4), this.customValidator.dashValidator(), this.customValidator.plusValidator()]);
 
-      this.profileForm.get('name')?.updateValueAndValidity();
-      this.profileForm.get('number')?.updateValueAndValidity();
-      this.profileForm.get('exp_year')?.updateValueAndValidity();
-      this.profileForm.get('exp_month')?.updateValueAndValidity();
-      this.profileForm.get('cvc')?.updateValueAndValidity();
+      // this.profileForm.get('name')?.updateValueAndValidity();
+      // this.profileForm.get('number')?.updateValueAndValidity();
+      // this.profileForm.get('exp_year')?.updateValueAndValidity();
+      // this.profileForm.get('exp_month')?.updateValueAndValidity();
+      // this.profileForm.get('cvc')?.updateValueAndValidity();
       this.profileForm.patchValue({
         mobile: this.currentUser?.phone,
         mobileIsd: this.currentUser?.isd,
