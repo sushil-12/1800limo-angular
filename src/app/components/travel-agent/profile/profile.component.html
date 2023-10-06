@@ -369,7 +369,7 @@
 				<div class="row">
 					<div class="col-md-6">
 						<mat-form-field appearance="outline">
-							<mat-label>Card Holder First & Last Name*</mat-label>
+							<mat-label>Card Holder First & Last Name</mat-label>
 							<input matInput placeholder="Card Holder First & Last Name" formControlName="name"
 								tabindex="1">
 						</mat-form-field>
@@ -380,7 +380,7 @@
 					</div>
 					<div class="col-md-6">
 						<mat-form-field appearance="outline">
-							<mat-label>Card No# *</mat-label>
+							<mat-label>Card No# </mat-label>
 							<input matInput placeholder="Card No#" formControlName="number" tabindex="1"
 								id="card-number">
 						</mat-form-field>
@@ -407,7 +407,7 @@
 					</div>
 					<div class="col-md-4">
 						<mat-form-field appearance="outline">
-							<mat-label>Expiry Month*</mat-label>
+							<mat-label>Expiry Month</mat-label>
 							<mat-select formControlName="exp_month" tabindex="1">
 								<mat-option value="">Choose Expiry Month</mat-option>
 								<mat-option value='01'>01</mat-option>
@@ -431,7 +431,7 @@
 					</div>
 					<div class="col-md-4">
 						<mat-form-field appearance="outline">
-							<mat-label>Expiry Year*</mat-label>
+							<mat-label>Expiry Year</mat-label>
 							<mat-select formControlName="exp_year" tabindex="1">
 								<mat-option value="">Choose Expiry Year</mat-option>
 								<mat-option *ngFor="let yearOption of yearOptions" value="{{yearOption}}">{{yearOption}}
@@ -445,7 +445,7 @@
 					</div>
 					<div class="col-md-4">
 						<mat-form-field appearance="outline">
-							<mat-label>CVV*</mat-label>
+							<mat-label>CVV</mat-label>
 							<input matInput placeholder="CSC" formControlName="cvc" tabindex="1">
 						</mat-form-field>
 						<div *ngIf="submittedForm && f.cvc.errors || f.cvc.touched && f.cvc.errors"
