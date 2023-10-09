@@ -449,6 +449,10 @@ export class AffiliateService
 	cancelBooking(id){
 		return this.httpClient.get(this.serverUrl + 'change-booking-status/rejected/'+id)
 	}
+	acceptBooking(id){
+		return this.httpClient.get(this.serverUrl + 'change-booking-status/accepted/'+id)
+	}
+
 
 
 	//Create booking

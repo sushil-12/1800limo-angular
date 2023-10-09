@@ -141,6 +141,12 @@
 												<div class="dropdown-item-icon"></div>
 												Reject
 											</a>
+											<a class="dropdown-item" (click)="cancelBookingId=booking.booking_id"
+												*ngIf="booking?.booking_status !='refund' && booking?.booking_status !='paid' && booking?.booking_status !='partial_paid'  && booking?.booking_status !='cancelled'"
+												data-toggle="modal" data-target="#acceptBooking">
+												<div class="dropdown-item-icon"></div>
+												Accept
+											</a>
 										</div>
 									</td>
 
@@ -327,6 +333,25 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="custom-btn savebutton" (click)="cancelBooking()">
+					Yes</button>
+				<button type="button" class="custom-btn resetbutton" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="acceptBooking" tabindex="-1" role="dialog" aria-labelledby="acceptBooking"
+	aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header pb-0">
+				<h3 class="mb-0">Accept Booking</h3>
+			</div>
+			<div class="modal-body text-center">
+				<p>Are you sure, You want to Accept booking?</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="custom-btn savebutton" (click)="acceptBooking()">
 					Yes</button>
 				<button type="button" class="custom-btn resetbutton" data-dismiss="modal">Close</button>
 			</div>
