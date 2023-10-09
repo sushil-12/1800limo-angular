@@ -43,7 +43,7 @@ export class ModifyBookingComponent implements OnInit {
     let data = {
       modify_message : this.modifyBookingForm.value.details
     } 
-    // this.$spinner.show()
+    this.$spinner.show()
 		this.$api.cancellationBooking(this.url,data).subscribe((response: any) => {
       this.$spinner.hide()
       this.$errors.openDialog({
