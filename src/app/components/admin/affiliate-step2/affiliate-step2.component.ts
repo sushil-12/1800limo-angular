@@ -384,6 +384,7 @@ this.loadCards(this.affiliateId)
 			this.stateOptions = selectedCountryData[0].regions;
 		}
 	}
+	
 	handleBadgeCity(value:any){
 		console.log(value , this.filteredOptions)
 		this.filteredOptions = this.badgeOptions.filter((i:any)=> i.name.toLowerCase().includes(value.toLowerCase()))
@@ -393,6 +394,20 @@ this.loadCards(this.affiliateId)
 		if(isUserInput){
 			this.addBankForm.patchValue({
 				badge_city:option.id
+			})
+			// this.addAffiliateAccountForm.updateValueAndValidity()
+		}
+	}
+
+	handleCurrency(value:any){
+		console.log(value , this.filteredOptions)
+		this.currencyOptions = this.currencyOptions_copy.filter((i:any)=> i.countryName.toLowerCase().includes(value.toLowerCase()))
+	}
+	selectCurrency(option:any,isUserInput){
+		console.log('in function selectBadgeCity-->>>' ,isUserInput)
+		if(isUserInput){
+			this.addBankForm.patchValue({
+				currency:option.currency + '-' + option.currencyCountry
 			})
 			// this.addAffiliateAccountForm.updateValueAndValidity()
 		}
