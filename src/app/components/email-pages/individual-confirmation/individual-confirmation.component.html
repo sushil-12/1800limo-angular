@@ -1,1 +1,52 @@
-<p>individual-confirmation works!</p>
+<ngx-spinner></ngx-spinner>
+<div class="container" [formGroup]="ReasonForm" appInvalidControlScroll>
+    <div class="wrp-cntr">
+        <div id="card" class="d-flex flex-column justify-content-center align-items-center">
+            <!-- <p class="text-center header m-0">
+                {{ 'Confirmation'}}
+            </p>
+            <hr class="org-ln" /> -->
+            <!-- <div class="img-eml mt-4 mb-3">
+				<img src="assets/images/error.png" *ngIf="false" />
+				<img src="assets/images/email.png" *ngIf="true" />
+			</div> -->
+            <div class="my-3">
+                <p class="text-center text-content font-weight-bolder">
+                    Why do you want to cancel booking?
+                </p>
+            </div>
+            <!-- <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group" formControlName="selected_reason">
+                <mat-radio-button class="example-radio-button" *ngFor="let reason of reasonArray" [value]="reason">
+                    {{reason}}
+                </mat-radio-button>
+            </mat-radio-group> -->
+            <div class="row">
+				<div class="col-md-4">
+					<mat-radio-group aria-label="Select an option" formControlName="selected_reason">
+						<mat-radio-button [value]="reason" class="my-2 ml-4 mr-3" 
+							*ngFor="let reason of reasonArray" (change)="handleChangeReason(reason)">
+							{{ reason }}
+						</mat-radio-button>
+					</mat-radio-group>
+				</div>
+			</div>
+            
+            <div class="col-md-6" *ngIf="Form.selected_reason.value=='others'">
+                <mat-form-field appearance="outline">
+                    <mat-label>Other</mat-label>
+                    <input matInput placeholder="other"
+                        formControlName="reason" >
+                </mat-form-field>
+                <!-- <div *ngIf="f.name.errors || f.name.touched && f.name.errors"
+                    class="text-danger margin-bottom-thin my-mat-hint">
+                    <div *ngIf="f.name.errors.required">This field is required</div>
+                </div> -->
+            </div>
+            <div class="my-2">
+				<button class="custom-filled-button orange-button" style="color: #fff;" (click)="submitForm()">
+							Submit
+						</button>
+			</div>
+        </div>
+    </div>
+</div>

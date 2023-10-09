@@ -38,6 +38,8 @@ import { TransactionHistoryComponent } from './components/website/transaction-hi
 import { AgentTemplateComponent } from './components/travel-agent/agent-template/agent-template.component';
 import { CheckProfileCompleteGuard } from './guards/check-profile-complete.guard';
 import { CreateBookingComponent } from './components/travel-agent/create-booking/create-booking.component';
+import { IndividualConfirmationComponent } from './components/email-pages/individual-confirmation/individual-confirmation.component';
+import { ModifyBookingComponent } from './components/email-pages/modify-booking/modify-booking.component';
 
 
 const routes: Routes = [
@@ -149,6 +151,14 @@ const routes: Routes = [
 					{
 						path: 'booking-email-confirmation',
 						component: BookingStatusVerificationComponent
+					},
+					{
+						path: 'confirm-requests',
+						component: IndividualConfirmationComponent
+					},
+					{
+						path: 'cancel-requests',
+						component: ModifyBookingComponent
 					}
 				]
 			}

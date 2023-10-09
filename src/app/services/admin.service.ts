@@ -1106,6 +1106,9 @@ export class AdminService {
 	sendCustomInvoiceToAny(id,data){
 		return this.httpClient.post(`${this.serverUrl}send-invoice-data-to-anyone/${id}`, data)
 	}
+	cancellationBooking(url,data){
+		return this.httpClient.post(`${url}`,data)
+	}
 
 	refund(body: any) {
 		return this.httpClient.post(`${this.serverUrl}admin/refund-request`, body)

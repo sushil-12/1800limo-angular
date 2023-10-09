@@ -1,0 +1,32 @@
+<ngx-spinner></ngx-spinner>
+<div class="container" [formGroup]="modifyBookingForm" appInvalidControlScroll>
+    <div class="wrp-cntr">
+        <div id="card" class="d-flex flex-column justify-content-center align-items-center">
+            <div class="my-3">
+                <p class="text-center text-content font-weight-bolder">
+                    Enter the detail of booking you want to modify?
+                </p>
+            </div>
+            
+            <div class="col-md-6" >
+                <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>
+                        Enter details
+                    </mat-label>
+                    <textarea matInput id="myTextarea" placeholder="Write a Message...." rows="5" id="clearField" formControlName="details"
+                        cdkTextareaAutosize cdkAutosizeMaxRows="10" #autosize="cdkTextareaAutosize" #inputmsg
+                        (focus)="$event.target.select()"></textarea>
+                </mat-form-field>
+                <!-- <div *ngIf="f.name.errors || f.name.touched && f.name.errors"
+                    class="text-danger margin-bottom-thin my-mat-hint">
+                    <div *ngIf="f.name.errors.required">This field is required</div>
+                </div> -->
+            </div>
+            <div class="my-2">
+				<button class="custom-filled-button orange-button" style="color: #fff;" (click)="submitForm()">
+							Submit
+						</button>
+			</div>
+        </div>
+    </div>
+</div>
