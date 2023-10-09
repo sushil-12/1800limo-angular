@@ -71,6 +71,8 @@ import { AutoDetectOtpDirective } from './auto-detect-otp.directive';
 import { LongPressDirective } from './directives/long-press.directive';
 import { AutoFocusDirective } from './directives/auto-focus.directive';
 import { IndividualConfirmationComponent } from './components/email-pages/individual-confirmation/individual-confirmation.component';
+import { MatRadioModule } from '@angular/material/radio';
+import { ModifyBookingComponent } from './components/email-pages/modify-booking/modify-booking.component';
 @NgModule({
 	declarations: [
 		AppComponent,
@@ -110,6 +112,7 @@ import { IndividualConfirmationComponent } from './components/email-pages/indivi
 		LongPressDirective,
 		AutoFocusDirective,
 		IndividualConfirmationComponent,
+		ModifyBookingComponent,
 	],
 	imports: [
 		BrowserModule,
@@ -132,7 +135,8 @@ import { IndividualConfirmationComponent } from './components/email-pages/indivi
 		MatSelectModule,
 		NgxSpinnerModule,
 		SharedModule,
-		NgOtpInputModule
+		NgOtpInputModule,
+		MatRadioModule
 	],
 	providers: [
 		{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },

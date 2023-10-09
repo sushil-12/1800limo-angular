@@ -6,11 +6,12 @@ import { AdminService } from 'src/app/services/admin.service';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 
 @Component({
-  selector: 'app-individual-confirmation',
-  templateUrl: './individual-confirmation.component.html',
-  styleUrls: ['./individual-confirmation.component.scss']
+  selector: 'app-modify-booking',
+  templateUrl: './modify-booking.component.html',
+  styleUrls: ['./modify-booking.component.scss']
 })
-export class IndividualConfirmationComponent implements OnInit {
+export class ModifyBookingComponent implements OnInit {
+
   url: string;
 
   constructor(
@@ -21,8 +22,7 @@ export class IndividualConfirmationComponent implements OnInit {
     private activatedroute: ActivatedRoute,
 		private $errors: ErrorDialogService,
   ) { }
-  ReasonForm: FormGroup
-  public reasonArray = ['Booked by mistake', 'Too expensive', 'Flight or Transportation Delays' ,'others']
+  modifyBookingForm: FormGroup
   ngOnInit(): void {
     this.activatedroute.queryParams.subscribe((params) =>
 			{
@@ -31,32 +31,18 @@ export class IndividualConfirmationComponent implements OnInit {
 				this.url = atob(params.message)
         console.log('->>>>>>>>>..',this.url,atob(params.message))
 			});
-    this.ReasonForm = this.$form.group({
-      selected_reason: ['', Validators.required],
-      reason: ['']
+    this.modifyBookingForm = this.$form.group({
+      details: ['', Validators.required]
     })
   }
   get Form() {
-    return this.ReasonForm.controls;
-  }
-  handleChangeReason(value) {
-    if (value == 'others') {
-      this.ReasonForm.get('other').setValidators(Validators.required);
-      this.ReasonForm.get('other').updateValueAndValidity;
-    }
-    else {
-      this.ReasonForm.patchValue({
-        reason : value
-      })
-      this.ReasonForm.get('other').clearValidators();
-      this.ReasonForm.get('other').updateValueAndValidity();
-    }
+    return this.modifyBookingForm.controls;
   }
   submitForm(){
-    console.log('form submitted', this.url, this.ReasonForm.value)
+    console.log('form submitted', this.url, this.modifyBookingForm.value)
     let data = {
-      modify_message : this.ReasonForm.value.reason
-    }
+      modify_message : this.modifyBookingForm.value.details
+    } 
     // this.$spinner.show()
 		this.$api.cancellationBooking(this.url,data).subscribe((response: any) => {
       this.$spinner.hide()
