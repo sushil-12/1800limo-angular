@@ -176,7 +176,7 @@
 						<mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
 							<mat-option *ngFor="let currencyOption of currencyOptions"
 								(onSelectionChange)="selectCurrency(option,$event.isUserInput)"
-								[value]="currencyOption.currency + '-' + currencyOption.currencyCountry">
+								[value]="currencyOption.countryName + '-' + currencyOption.symbol">
 								{{ currencyOption.countryName }} - {{ currencyOption.symbol }}
 							</mat-option>
 						</mat-autocomplete>
