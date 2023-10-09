@@ -41,6 +41,9 @@ export class IndividualConfirmationComponent implements OnInit {
   }
   handleChangeReason(value) {
     if (value == 'others') {
+      this.ReasonForm.patchValue({
+        reason : ''
+      })
       this.ReasonForm.get('other').setValidators(Validators.required);
       this.ReasonForm.get('other').updateValueAndValidity;
     }
@@ -55,9 +58,9 @@ export class IndividualConfirmationComponent implements OnInit {
   submitForm(){
     console.log('form submitted', this.url, this.ReasonForm.value)
     let data = {
-      modify_message : this.ReasonForm.value.reason
+      cancellation_reason : this.ReasonForm.value.reason
     }
-    // this.$spinner.show()
+    this.$spinner.show()
 		this.$api.cancellationBooking(this.url,data).subscribe((response: any) => {
       this.$spinner.hide()
       this.$errors.openDialog({

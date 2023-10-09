@@ -153,11 +153,11 @@ const routes: Routes = [
 						component: BookingStatusVerificationComponent
 					},
 					{
-						path: 'confirm-requests',
+						path: 'cancel-requests',
 						component: IndividualConfirmationComponent
 					},
 					{
-						path: 'cancel-requests',
+						path: 'confirm-requests',
 						component: ModifyBookingComponent
 					}
 				]
