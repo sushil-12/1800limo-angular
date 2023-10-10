@@ -118,6 +118,7 @@ export class NewBookingComponent implements OnInit {
 	selectedVehicle: any;
 	is_master_vehicle: boolean = JSON.parse(sessionStorage.getItem('selected_vehicle'))?.is_master_vehicle || false
 	isTravelShare:boolean = false
+	travelStaffAccounts: any;
 	constructor(
 		private $form: FormBuilder,
 		private $api: AdminService,
@@ -253,6 +254,8 @@ export class NewBookingComponent implements OnInit {
 			number_of_hours: ['0'],
 			acc_id: [''],
 			account_type: ['individual'],
+			travel_client_id:[''],
+			travel_client_acc:['travel_individual'],
 			change_individual_data: [false],
 			loose_customer: this.$form.group({
 				first_name: [''],
@@ -474,6 +477,9 @@ export class NewBookingComponent implements OnInit {
 			this.firstLoadAffiliateId = response.data.affiliate_id
 			this.number_of_hours = response?.data?.number_of_hours
 			this.isTravelShare =  response?.data?.account_type=='travel_planner' ? true : false
+			if(response?.data?.account_type=='travel_planner'){
+				this.getTravelClientAccounts(response?.data?.acc_id)
+			}
 			this.SetFormValue('affiliate_type', response.data.affiliate_type)
 			this.autofillData('cruise', editing_data);
 			console.log(editing_data, "check big data")
@@ -803,7 +809,6 @@ export class NewBookingComponent implements OnInit {
 
 	fetchAirportsAndBigData(): void {
 		let s = setInterval(() => {
-
 			if (this.$api.getAirportsAndBigData()) {
 				this.$spinner.hide('fetchspinner');
 				this.BigData = JSON.parse(JSON.stringify(this.$api.getAirportsAndBigData()));
@@ -882,6 +887,12 @@ export class NewBookingComponent implements OnInit {
 		this.SetLCFormValue('email', choose_user?.email)
 		this.SetLCFormValue('phone', choose_user?.mobile)
 	}
+	getTravelClientAccounts(id){
+		this.$api.getTravelClientAccount(id).subscribe((response: any) => {
+			console.log("accounts->>>>>>>>>>",response)
+			this.travelStaffAccounts = response?.data
+		})
+	}
 	handleClientAccChange(selectedAcc){
 		this.isTravelShare =  selectedAcc=='travel_planner' ? true : false
 		this.BookingForm.get('acc_id').setValue(null);
@@ -898,6 +909,25 @@ export class NewBookingComponent implements OnInit {
 	handleClientAccount(value: any) {
 		console.log('---------------------_>>>>>>>>>>>>>> client acc value', value)
 		this.chooseUser(value.id)
+		if(this.BookingForm.get('account_type').value == 'travel_planner'){
+			this.BookingForm.patchValue({
+				travel_client_id : ''
+			})
+			this.getTravelClientAccounts(value.id)
+		}
+		
+	}
+
+	handleChangeTravelAccounts(selectedAcc){
+		console.log('handleChangeTravelAccounts-->>',selectedAcc )
+	}
+	handleTravelStaffAccounts(value: any){
+		console.log('handleTravelStaffAccounts--->>>' , value)
+		this.$api.getTravelClientDetailById(value.id).subscribe((response: any) => {
+			console.log("detail ->>>>>>>",response)
+			this.autofillData('passenger', response?.data);
+		})
+
 	}
 
 	fetchAffiliates(affiliate_type: 'affiliate' | 'loose_affiliate') {
@@ -1775,6 +1805,13 @@ export class NewBookingComponent implements OnInit {
 				this.chooseUser(value)
 			}
 		})
+
+		this.BookingForm.get('travel_client_id').valueChanges.subscribe((value: number) => {
+			if (value && this.updateType == 'repeat' && this.updateType == 'return' && this.updateType == 'edit') {
+				this.handleTravelStaffAccounts({id:value})
+			}
+		})
+		
 
 		// Affiliate Type
 		this.BookingForm.get('affiliate_type').valueChanges.subscribe((value: string) => {

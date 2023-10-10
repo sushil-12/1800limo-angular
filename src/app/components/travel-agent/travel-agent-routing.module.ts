@@ -84,7 +84,12 @@ const routes: Routes = [
 				component: StripeFormComponent
 			},
 		]
-	}
+	}, 
+  {
+    path:'staff-account-list',
+    // component:CreateBookingComponent,
+    canActivate: [CheckProfileCompleteGuard],
+  },
  
 ];
 

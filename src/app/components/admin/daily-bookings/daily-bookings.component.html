@@ -281,7 +281,7 @@
 													[ngClass]="currentUser?.RoleName == 'admin' || subModules.includes('can_send_notifications') ? '' : 'disabled-btn'"
 													(click)="openModal(booking, 'Affiliate')">
 													<span class="font-weight-bolder"
-														[innerHTML]="highlighText(booking.company_name)"></span>&nbsp;
+														[innerHTML]="highlighText(booking.driver_first_name + ' ' + booking.driver_last_name)"></span>&nbsp;
 													<!-- <span class="font-weight-bolder" [innerHTML]="highlighText(booking.driver_last_name)"></span>&nbsp; -->
 													<span
 														class="font-weight-bolder">({{fomatAffiliateType(booking.affiliate_type)}})</span>|
