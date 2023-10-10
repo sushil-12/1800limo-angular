@@ -17,12 +17,10 @@
 					</div>
 					<div class="col-md-4">
 						<mat-form-field appearance="outline">
-							<mat-label>Middle Name <span class="asterisk">*</span></mat-label>
+							<mat-label>Middle Name</mat-label>
 							<input formControlName="middleName" type="text" matInput placeholder="Middle Name">
 						</mat-form-field>
-						<div *ngIf="submittedForm && f.middleName.errors" class="text-danger">
-							<div *ngIf="f.middleName.errors.required">This field is required</div>
-						</div>
+
 					</div>
 					<div class="col-md-4">
 						<mat-form-field appearance="outline">
@@ -221,7 +219,7 @@
 							<div *ngIf="f.address.errors.required">This field is required</div>
 						</div>
 					</div>
-					<div class="col-md-6">
+					<!-- <div class="col-md-6">
 						<mat-form-field appearance="outline">
 							<mat-label>City <span class="asterisk">*</span></mat-label>
 							<input formControlName="city" type="text" matInput placeholder="City">
@@ -238,7 +236,7 @@
 						<div *ngIf="submittedForm && f.state.errors" class="text-danger">
 							<div *ngIf="f.state.errors.required">This field is required</div>
 						</div>
-					</div>
+					</div> -->
 					<div class="col-md-6">
 						<mat-form-field appearance="outline">
 							<mat-label>Country <span class="asterisk">*</span></mat-label>
@@ -269,7 +267,7 @@
 				<div class="row">
 					<div class="col-md-3 pr-0 borderright mobilePadding">
 						<div class="form-group radio-tile-group">
-							<div class="custom-radio input-container">
+							<div class="custom-radio input-container btn-shadow">
 								<input class="radio-button" id="personal" type="radio" name="card_type" checked=""
 									formControlName="card_type" value="personal" tabindex="-1">
 								<div class="radio-tile">
@@ -284,7 +282,7 @@
 					</div>
 					<div class="col-md-3 pl-0 mobilePadding">
 						<div class="form-group radio-tile-group">
-							<div class="custom-radio input-container">
+							<div class="custom-radio input-container btn-shadow">
 								<input class="radio-button" id="business" type="radio" name="card_type"
 									formControlName="card_type" value="business" tabindex="-1">
 								<div class="radio-tile">
@@ -342,18 +340,18 @@
 							<mat-label>Expiry Month*</mat-label>
 							<mat-select formControlName="exp_month" tabindex="1">
 								<mat-option value="">Choose Expiry Month</mat-option>
-								<mat-option value='01'>Janaury</mat-option>
-								<mat-option value='02'>February</mat-option>
-								<mat-option value='03'>March</mat-option>
-								<mat-option value='04'>April</mat-option>
-								<mat-option value='05'>May</mat-option>
-								<mat-option value='06'>June</mat-option>
-								<mat-option value='07'>July</mat-option>
-								<mat-option value='08'>August</mat-option>
-								<mat-option value='09'>September</mat-option>
-								<mat-option value='10'>October</mat-option>
-								<mat-option value='11'>November</mat-option>
-								<mat-option value='12'>December</mat-option>
+								<mat-option value='01'>01</mat-option>
+								<mat-option value='02'>02</mat-option>
+								<mat-option value='03'>03</mat-option>
+								<mat-option value='04'>04</mat-option>
+								<mat-option value='05'>05</mat-option>
+								<mat-option value='06'>06</mat-option>
+								<mat-option value='07'>07</mat-option>
+								<mat-option value='08'>08</mat-option>
+								<mat-option value='09'>09</mat-option>
+								<mat-option value='10'>10</mat-option>
+								<mat-option value='11'>11</mat-option>
+								<mat-option value='12'>12</mat-option>
 							</mat-select>
 						</mat-form-field>
 						<div *ngIf="submittedForm && f.exp_month.errors || f.exp_month.touched && f.exp_month.errors"
@@ -377,8 +375,8 @@
 					</div>
 					<div class="col-md-4">
 						<mat-form-field appearance="outline">
-							<mat-label>CSC*</mat-label>
-							<input matInput placeholder="CSC" formControlName="cvc" tabindex="1">
+							<mat-label>CVV*</mat-label>
+							<input matInput placeholder="CVV" formControlName="cvc" tabindex="1">
 						</mat-form-field>
 						<div *ngIf="submittedForm && f.cvc.errors || f.cvc.touched && f.cvc.errors"
 							class="text-danger margin-bottom-thin my-mat-hint">
@@ -405,22 +403,24 @@
 			</div>
 		</section>
 		<div class="container">
-            <div class="row py-4">
-                <div class="col-md-6">
-                  
-                </div>
-                <div class="col-md-6 ">
-                    <div class="billing_inforamtion">
-                        <ul class="d-flex justify-content-center">
-                            <li><button class="custom-btn savebutton" (click)="submitForm()" [disabled]="disableSubmitButton"
-								tabindex="-1">SAVE</button> </li>
-						<li><button class="custom-btn resetbutton" (click)="resetForm()" tabindex="-1">RESET</button> </li>
-						<li><button class="custom-btn backbutton" (click)="backButton()" tabindex="-1">BACK</button> </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-                </div>
-		
+			<div class="row py-4">
+				<div class="col-md-6">
+
+				</div>
+				<div class="col-md-6 ">
+					<div class="billing_inforamtion">
+						<ul class="d-flex justify-content-center">
+							<li><button class="custom-btn savebutton" (click)="submitForm()"
+									[disabled]="disableSubmitButton" tabindex="-1">SAVE</button> </li>
+							<li><button class="custom-btn resetbutton" (click)="resetForm()"
+									tabindex="-1">RESET</button> </li>
+							<li><button class="custom-btn backbutton" (click)="backButton()" tabindex="-1">BACK</button>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+
 	</form>
 </main>

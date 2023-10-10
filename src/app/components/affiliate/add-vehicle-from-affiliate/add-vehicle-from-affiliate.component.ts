@@ -37,7 +37,7 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 	public make: Array<any>;
 	public filteredMake: Array<object>;
 	public model: Array<any>;
-	public filteredModel: Array<object>;
+	public filteredModel: Array<any>;
 	public vehicleTypes: Array<object>;
 	public filteredVehicleTypes: Array<object>;
 	public color: Array<object>;
@@ -86,6 +86,7 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 	public charterCancelOptions: Array<Object>;
 	public nonCharterCancelOptions: Array<Object>;
 	public serviceType: string;
+	isVehicleTypeSelected: boolean = false
 
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
 	errorMsg: boolean;
@@ -403,6 +404,11 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 				});
 		}
 	}
+	handleChangeVehicleType(value){
+		console.log('Selected Value:', value);
+		
+		this.isVehicleTypeSelected = value ? true : false
+	}
 
 	selectVehicleType(val, isSelected)
 	{
@@ -449,17 +455,13 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 				make: val,
 			});
 			this.changeMake(val);
-			let modelField: any = document.getElementById('modelField');
-			modelField.value = '';
+			// let modelField: any = document.getElementById('modelField');
+			// modelField.value = '';
 		}
 	}
 	// Subscriptions() {
-	// 	this.addVehicleForm.get('make')?.valueChanges.subscribe((value: string) => {
-	// 		setTimeout(()=>{
-	// 			this.changeMake(value);
-	// 		},200)
-	// 		let modelField: any = document.getElementById('modelField');
-	// 		modelField.value = '';
+	// 	this.addVehicleForm.get('vehicleType')?.valueChanges.subscribe((value: string) => {
+	// 		console.log('change in vehicle type-->>' , value)
 	// 	})
 	
 	// }
@@ -1024,7 +1026,14 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 
 	changeMake(selectedMake)
 	{
-		console.log('spinner show in function change make')
+		console.log('spinner show in function change make',selectedMake)
+		if(!selectedMake){
+			this.addVehicleForm.patchValue({
+				model : ''
+			})
+			this.filteredModel = []
+			return false
+		}
 		this.spinner.show()
 		let models = JSON.parse(sessionStorage.getItem('models'));
 		this.filteredModel = this.model = models.filter(function (model)
@@ -1035,6 +1044,9 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 			}
 		});
 		console.log('spinner hide in function change make')
+		this.addVehicleForm.patchValue({
+			model : this.filteredModel[0]?.ID
+		})
 		this.spinner.hide()
 	}
 

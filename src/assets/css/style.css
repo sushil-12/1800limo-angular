@@ -256,8 +256,8 @@ header a.nav-link.active {
 .dropdown.button-signin a:hover {
 	color: var(--orange-color);
 }
-
-.dropdown.button-signin a.dropdown-item:not(a.text-secondary) {
+/* a.dropdown-item:not(a.text-secondary)  */
+.dropdown.button-signin {
 	color: #000 !important
 }
 

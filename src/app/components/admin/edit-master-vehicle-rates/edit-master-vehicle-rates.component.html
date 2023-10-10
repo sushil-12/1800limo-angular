@@ -34,7 +34,8 @@
 					</label>
 					<label class="alert alert-danger  mt-2">We do not add 25% to tips, tax, tolls, or per diem
 					</label>
-					<label class="alert alert-danger mt-2">Raise or lower your rates in real time, depending on demand or season .
+					<label class="alert alert-danger mt-2">Raise or lower your rates in real time, depending on demand
+						or season .
 					</label>
 				</div>
 				<div class="col-md-12">
@@ -194,14 +195,14 @@
 				</div>
 				<div class="col-md-6">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
-						<mat-label>Minimum City to City Rate <span class="asterisk">*</span></mat-label>
+						<mat-label>Minimum City to Intercity rate <span class="asterisk">*</span></mat-label>
 						<span matPrefix
 							*ngIf="f.minimum_city_rate.value == null || f.minimum_city_rate.value == ''; else hideZero5">{{currencySymbol}}
 							0 &nbsp;</span>
 						<ng-template #hideZero5>
 							<span matPrefix>{{currencySymbol}} &nbsp;</span>
 						</ng-template>
-						<input matInput placeholder="Minimum City to City Rate" formControlName="minimum_city_rate"
+						<input matInput placeholder="Minimum City to Intercity rate" formControlName="minimum_city_rate"
 							tabindex="1">
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.minimum_city_rate.errors || f.minimum_city_rate.touched && f.minimum_city_rate.errors"

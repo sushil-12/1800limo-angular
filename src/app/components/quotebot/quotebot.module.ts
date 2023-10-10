@@ -11,6 +11,21 @@ import { VehicleDetailsComponent } from './vehicle-details/vehicle-details.compo
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { SharedModule } from '../shared/shared.module';
 import { MasterVehicleComponent } from './master-vehicle/master-vehicle.component';
+import { NewBookingComponent } from './new-booking/new-booking.component';
+import { Ng2TelInputModule } from 'ng2-tel-input';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatRadioModule } from '@angular/material/radio';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { AdminRoutingModule } from '../admin/admin-routing.module';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { AgmCoreModule } from '@agm/core';
+import { AgmDirectionModule } from 'agm-direction';
 
 
 @NgModule({
@@ -22,6 +37,7 @@ import { MasterVehicleComponent } from './master-vehicle/master-vehicle.componen
 		ReplacePipe,
 		VehicleDetailsComponent,
 		MasterVehicleComponent,
+		NewBookingComponent,
 
 	],
 
@@ -29,7 +45,21 @@ import { MasterVehicleComponent } from './master-vehicle/master-vehicle.componen
 		CommonModule,
 		SharedModule,
 		QuotebotRoutingModule,
-		NgxSpinnerModule
+		NgxSpinnerModule,
+		Ng2TelInputModule,
+		FormsModule,
+		ReactiveFormsModule,
+		MatNativeDateModule,
+		MatFormFieldModule,
+		MatInputModule,
+		MatSelectModule,
+		MatRadioModule,
+		NgSelectModule,
+		MatDialogModule,
+		MatProgressBarModule,
+		MatSlideToggleModule,
+		AgmCoreModule,
+		AgmDirectionModule,
 	]
 })
 export class QuotebotModule { }

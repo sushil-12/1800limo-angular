@@ -1,5 +1,5 @@
 import { Component, OnInit, ElementRef, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
 import { catchError } from 'rxjs/operators';
@@ -30,9 +30,13 @@ export class LoginComponent implements OnInit, AfterViewInit
 	alert_individual:boolean=false;
 	alert_corporate:boolean=false;
 	alert_travel_agent:boolean=false;
-	constructor(private formBuilder: FormBuilder, private router: Router, private authService: AuthService, private changeDetectorRef: ChangeDetectorRef,
+	constructor(private formBuilder: FormBuilder,
+		private router: Router,
+		private authService: AuthService,
+		private changeDetectorRef: ChangeDetectorRef,
 		private errorDialogService: ErrorDialogService,
-		private customValidator: CustomvalidationService)
+		private customValidator: CustomvalidationService,
+		private route: ActivatedRoute)
 	{
 		if (this.authService.currentUserValue)
 		{
@@ -125,6 +129,16 @@ export class LoginComponent implements OnInit, AfterViewInit
 		// else if (!sessionStorage.getItem('clicked_login_role')) {
 		//   sessionStorage.setItem('clicked_login_role', 'individual');
 		// }
+		this.route.params.subscribe((params: Params) => {
+			const role = params['role'];
+			console.log('Role:', role);
+			const existRoles = ['admin' , 'driver' , 'sub_admin' , 'travel_agent']
+			if(!existRoles.includes(role)){
+				this.router.navigate(['/login/driver']).then(()=>{
+					window.location.reload()
+				});
+			}
+		  });
 
 
 		const pageUrl = this.router.parseUrl(this.router.url);
@@ -186,6 +200,9 @@ export class LoginComponent implements OnInit, AfterViewInit
 			return { 'plusError': true };
 		}
 	}
+	format(value){
+		return value ? value.replaceAll('_',' ') : ''
+	}
 
 	onCountryChange(event)
 	{
@@ -242,10 +259,10 @@ export class LoginComponent implements OnInit, AfterViewInit
 				this.response = result;
 				var userId = this.response.data.id;
 				sessionStorage.setItem('userId', '' + userId);
-
+				let email = this.response?.data?.email
 				if (environment['environmentName'] !== 'Production')
 				{
-					this.router.navigateByUrl('/otp' + `?otp=${result.data.otp}`);
+					this.router.navigateByUrl('/otp' + `?otp=${result.data.otp}?email=${email}`);
 				} else
 				{
 					this.router.navigateByUrl('/otp');

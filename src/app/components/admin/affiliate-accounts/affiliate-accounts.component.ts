@@ -5,7 +5,8 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { ThemePalette } from '@angular/material/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 declare var $: any;
 
 @Component({
@@ -14,13 +15,15 @@ declare var $: any;
 	styleUrls: ['./affiliate-accounts.component.scss']
 })
 export class AffiliateAccountsComponent implements OnInit {
-
+	emails = new FormControl('');
+    emailList: string[] = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato'];
 	color: ThemePalette = 'primary';
 	checked = false;
 	disabled = false;
-
+	show: boolean;
 	public paramResponse: any;
 	public affiliate_accounts: any;
+	public affiliate_accounts_emails:any=[];
 	public affiliateType: string;
 	public heading: string;
 	public addButton: string;
@@ -28,11 +31,11 @@ export class AffiliateAccountsComponent implements OnInit {
 	public submitted: boolean = false;
 	public lastPartUrl: any;
 	public rejectCauseForm: FormGroup;
-
+	sendEmailForm: FormGroup;
 	public firstPage: Number;
 	public lastPage: Number;
 	public totalPage: Number;
-	public currentPage: Number;
+	public currentPage: any;
 	public from: Number;
 	public to: Number;
 	public path: string;
@@ -59,11 +62,15 @@ export class AffiliateAccountsComponent implements OnInit {
 	constructor(
 		private adminService: AdminService,
 		private router: Router,
+		private $form: FormBuilder,
 		private spinner: NgxSpinnerService,
+		private $errors: ErrorDialogService,
 		private formBuilder: FormBuilder,
 		private activatedRoute: ActivatedRoute) { }
 
 	ngOnInit(): void {
+
+		this.buildSendEmailForm();
 		this.operatorSelect = 'all';
 		this.filter_type = 'all'
 		this.searchText = localStorage.getItem('affiliateSearch') ? localStorage.getItem('affiliateSearch') : ''
@@ -75,7 +82,21 @@ export class AffiliateAccountsComponent implements OnInit {
 			acc_id: ['', Validators.required],
 			reject_cause: ['', Validators.required],
 		});
+
+		this.adminService.getEmailList()
+			.pipe(
+				catchError(err => {
+					return throwError(err);
+				})
+			)
+			.subscribe(({ data, success, message }: any) => {
+					this.affiliate_accounts_emails = data
+			});
+
+			
+
 	}
+
 
 	affiliateTypeSwitch(_affiliateType: string) {
 		switch (_affiliateType) {
@@ -264,6 +285,14 @@ export class AffiliateAccountsComponent implements OnInit {
 				}
 			});
 	}
+	highlighText(args: string) {
+		if (!this.searchText) { return args; }
+		if (args) {
+			args = args.toString()
+			var re = new RegExp(this.searchText, 'gi'); //'gi' for case insensitive and can use 'g' if you want the search to be case sensitive.
+			return args.replace(re, '<mark class="font-weight-bold">$&</mark>');
+		}
+	}
 
 	enableDisableClicked(event, id) {
 		this.spinner.show();//show spinner
@@ -333,4 +362,55 @@ export class AffiliateAccountsComponent implements OnInit {
 			})
 		}
 	}
+
+	get Form() {
+		return this.sendEmailForm.controls;
+	}
+
+	//build email modal
+	buildSendEmailForm() {
+		this.sendEmailForm = this.$form.group({
+			subject: [''],
+			text_message: ['']
+		})
+	}
+
+	//close email modal
+	closeModal() {
+		this.sendEmailForm.patchValue({
+			subject: "",
+			text_message: ''
+		})
+		this.show = false
+		$("#sendEmailModal").modal("hide");
+	}
+
+	//submit email modal
+	sendEmail() {
+		this.spinner.show()
+		let body = {
+			subject: this.sendEmailForm.get('subject').value,
+			message: this.sendEmailForm.get('text_message').value,
+			recipents: this.emails.value
+		}
+		console.log("body-------->",body)
+		this.adminService.sendEmailAffiliate(body).subscribe((response: any) => {
+			this.$errors.openDialog({
+			  errors: {
+				error: `<span class='text-success'>${response.message}</span>`
+			  }
+			})
+			this.spinner.hide()
+			console.log("response-------->",response)
+		  })
+		
+		this.show = false
+		this.sendEmailForm.patchValue({
+			subject: "",
+			text_message: ''
+		})
+		this.emails.setValue('');
+		$("#sendEmailModal").modal("hide");
+	}
+
 }

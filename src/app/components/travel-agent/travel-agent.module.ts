@@ -21,13 +21,40 @@ import { MatRadioModule } from '@angular/material/radio';
 import { SharedModule } from '../shared/shared.module';
 import { NgxPrintModule } from 'ngx-print';
 import { ProfileComponent } from './profile/profile.component';
+import { CreateBookingComponent } from './create-booking/create-booking.component';
+import { PinchZoomModule } from 'ngx-pinch-zoom';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatTableModule } from '@angular/material/table';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatIconModule } from '@angular/material/icon';
+import { CardsComponent } from './cards/cards.component';
+import { AddCardComponent } from './add-card/add-card.component';
+import { InvoiceDashComponent } from './invoice-dash/invoice-dash.component';
+import { InvoiceDashSummaryComponent } from './invoice-dash-summary/invoice-dash-summary.component';
+import { StripeFormComponent } from './stripe-form/stripe-form.component';
+import { TravelAgentStepsTemplateComponent } from './travel-agent-steps-template/travel-agent-steps-template.component';
+import { RatesFormTaComponent } from './rates-form-ta/rates-form-ta.component';
 
 
 @NgModule({
-  declarations: [TravelAgentComponent, BookingComponent, AgentTemplateComponent, ProfileComponent],
-  imports: [
-    CommonModule,
-    TravelAgentRoutingModule,
+	declarations: [
+		TravelAgentComponent,
+		BookingComponent,
+		AgentTemplateComponent,
+		ProfileComponent,
+		CreateBookingComponent,
+		CardsComponent,
+		AddCardComponent,
+		InvoiceDashComponent,
+		InvoiceDashSummaryComponent,
+		StripeFormComponent,
+		TravelAgentStepsTemplateComponent,
+		RatesFormTaComponent],
+	imports: [
+		CommonModule,
+		TravelAgentRoutingModule,
 		NgxSpinnerModule,
 		MatProgressBarModule,
 		FormsModule,
@@ -42,9 +69,15 @@ import { ProfileComponent } from './profile/profile.component';
 		MatSelectModule,
 		NgSelectModule,
 		MatRadioModule,
-		// PinchZoomModule,
+		PinchZoomModule,
 		SharedModule,
-		NgxPrintModule
-  ]
+		NgxPrintModule,
+		MatDialogModule,
+		MatFormFieldModule,
+		MatTabsModule,
+		MatTableModule,
+		MatExpansionModule,
+		MatIconModule
+	]
 })
 export class TravelAgentModule { }

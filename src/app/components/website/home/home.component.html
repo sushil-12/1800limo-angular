@@ -18,9 +18,9 @@
 								data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">LOGIN /
 								CREATE</button>
 							<div class="dropdown-menu" aria-labelledby="dropdown05">
-								<a class="dropdown-item box-shadow" (click)="loginButtons('individual')">Individual</a>
-								<a class="dropdown-item box-shadow" (click)="loginButtons('corporate')">Corporate</a>
-								<a class="dropdown-item box-shadow" (click)="loginButtons('travel_agent')">Travel
+								<a class="dropdown-item box-shadow" style="background-color: #fff;" (click)="loginButtons('individual')">Individual</a>
+								<a class="dropdown-item box-shadow" style="background-color: #fff;" (click)="loginButtons('corporate')">Corporate</a>
+								<a class="dropdown-item ta-btn" style="color: #fff !important;" (click)="loginButtons('travel_agent')">Travel
 									Agent</a>
 								<hr>
 								<a class="dropdown-item driver-dropdown box-shadow" (click)="loginButtons('driver')">
@@ -57,7 +57,7 @@
 											</div>
 										</h6>
 										<div class="dropdown-divider"></div>
-										<div class="dropdown-item"
+										<div class="dropdown-item" *ngIf="currentUser?.roleName=='travel_agent'"
 												(click)="dashboard(currentUser?.roleName)">
 												<div class="dropdown-item-icon gear-bg settingsvg font-weight-bolder">
 													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -631,7 +631,7 @@
 											<mat-form-field appearance="fill">
 												<input matInput [matDatepicker]="picker3" [min]="minDate"
 													placeholder="Return Pickup Date" id="returnPickupDate"
-													(change)="changeDetection.return_pickup_date($event.target.value)"
+													(dateChange)="changeDetection.return_pickup_date($event.target.value)"
 													class="font-weight-bolder"  readonly tabindex="1"
 													[class.errorValid]="submitted && QBForm?.return_pickup_date?.errors"
 													formControlName="return_pickup_date" (click)="picker3.open()">

@@ -131,7 +131,7 @@ export class AffiliateStep5Component implements OnInit {
 	}
 
 	clickedDuplicateVehicle(vehicleId){
-		this.router.navigate(['/admin/affiliate/step5/duplicate-vehicle'], { queryParams: { vehicleId: vehicleId, vehicleTypeId: this.vehicleTypeId , new : true} });
+		this.router.navigate(['/admin/affiliate/step5/duplicate-vehicle'], { queryParams: { vehicleId: vehicleId, vehicleTypeId: this.vehicleTypeId , new : true , duplicateVehcile : true} });
 	}
 
 	clickEditVehicleRates(vehicleId) {

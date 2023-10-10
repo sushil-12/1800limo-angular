@@ -21,7 +21,9 @@
 					</mat-form-field> -->
 					<ng-select appearance="outline" [items]="filteredVehicleTypes" dropdownPosition="bottom"
 							[markFirst]="true" [virtualScroll]="true" bindLabel="name" bindValue="ID"
-							placeholder="Vehicle Type" formControlName="vehicleType">
+							placeholder="Vehicle Type" formControlName="vehicleType" 
+							(change)="handleChangeVehicleType($event)"
+							[ngClass]="{ 'border-red': (errorMsg && f.vehicleType.errors) || (submittedForm && f.vehicleType.errors) || !isVehicleTypeSelected }">
 						</ng-select>
 					<div *ngIf="(errorMsg && f.vehicleType.errors) || (submittedForm && f.vehicleType.errors)"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -65,7 +67,7 @@
 					</mat-form-field> -->
 					<ng-select appearance="outline" [items]="filteredModel" dropdownPosition="bottom"
 							[markFirst]="true" [virtualScroll]="true" bindLabel="name" bindValue="ID"
-							placeholder="Model" formControlName="model">
+							placeholder="Model" formControlName="model" id="modelField">
 						</ng-select>
 					<div *ngIf="(errorMsg2 && f.model.errors) || (submittedForm && f.model.errors)"
 						class="text-danger margin-bottom-thin my-mat-hint">

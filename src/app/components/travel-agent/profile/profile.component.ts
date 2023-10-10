@@ -3,11 +3,12 @@ import { TravelAgentService } from '../../../services/travel-agent.service';
 import { StateManagementService } from 'src/app/services/statemanagement.service';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { CustomvalidationService } from 'src/app/services/customvalidation.service';
 import { MapsAPILoader } from '@agm/core';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AffiliateService } from 'src/app/services/affiliate.service';
 
 @Component({
   selector: 'app-profile',
@@ -15,8 +16,10 @@ import { Router } from '@angular/router';
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
+  timezone=new FormControl('')
   public profile_pic: any;
   public modalImage: string;
+  public imageSrc: string;
   public phoneObject: any;
   public profileForm: FormGroup;
   @Input() closeTab: EventEmitter<any> = new EventEmitter();
@@ -27,13 +30,21 @@ export class ProfileComponent implements OnInit {
   public OfficePhoneObject: any;
   public currentUser: any = JSON.parse(localStorage.getItem('currentUser'))
 
-  private geoCoder;
-  @ViewChild('search1')
-  public searchElementRef: ElementRef;
+  	//google map autocomplete
+	title: string = 'AGM project';
+	latitude: number;
+	longitude: number;
+	zoom: number;
+	address: string;
+	private geoCoder;
+	@ViewChild('search1')
+	public searchElementRef: ElementRef;
   response: any;
   defaultCountryCode: string;
+  lastSegment: string;
 
   constructor(
+    private affiliateService: AffiliateService,
     private stateManagementService: StateManagementService,
     private formBuilder: FormBuilder,
     private customValidator: CustomvalidationService,
@@ -41,10 +52,17 @@ export class ProfileComponent implements OnInit {
     private ngZone: NgZone,
     private spinner: NgxSpinnerService,
     private router: Router,
+    private route: ActivatedRoute,
     private travelAgentService: TravelAgentService,
   ) { }
 
   ngOnInit(): void {
+    this.route.url.subscribe(segments => {
+      // The "step" part is in the last segment
+      const lastSegment = segments[segments.length - 1];
+      this.lastSegment = lastSegment.path;
+      console.log(`Step: ${this.lastSegment}`);
+    });
     const currentYear = (new Date()).getFullYear();
     for (let i = 0; i < 40; i++) {
       this.yearOptions.push(currentYear + i);
@@ -67,24 +85,39 @@ export class ProfileComponent implements OnInit {
           //Fill one way form pickup address fields
           this.profileForm.patchValue({
             latitude: place.geometry.location.lat(),
-            longitude: place.geometry.location.lng()
+            longitude: place.geometry.location.lng(),
+            address:place?.formatted_address
           });
-          if (place.address_components[1])
-            this.profileForm.patchValue({
-              city: place.address_components[1].long_name
-            });
-          if (place.address_components[2])
-            this.profileForm.patchValue({
-              state: place.address_components[2].long_name
-            });
-          if (place.address_components[3])
-            this.profileForm.patchValue({
-              country: place.address_components[3].long_name
-            });
-          if (place.address_components[4])
-            this.profileForm.patchValue({
-              zip: place.address_components[place.address_components.length - 1].long_name
-            });
+          for (var i = 0; i < place.address_components.length; i++) {
+						for (var j = 0; j < place.address_components[i].types.length; j++) {
+							if (place.address_components[i].types[j] == "country") {
+								this.profileForm.patchValue({
+									country: place.address_components[i].long_name
+								});
+								// this.changeCountry(place.address_components[i].short_name)
+							}
+							else if (place.address_components[i].types[j] == "administrative_area_level_1") {
+								this.profileForm.patchValue({
+									state: place.address_components[i].long_name
+								});
+							}
+							else if (place.address_components[i].types[j] == "administrative_area_level_3") {
+								this.profileForm.patchValue({
+									city: place.address_components[i].long_name
+								});
+							}
+							else if (place.address_components[i].types[j] == "postal_code") {
+								this.profileForm.patchValue({
+									zip: place.address_components[i].long_name
+								});
+							}
+							else if (place.address_components[i].types[j] == "street_number") {
+								this.profileForm.patchValue({
+									address: place.address_components[i].long_name
+								});
+							}
+						}
+					}
         });
       });
     });
@@ -93,17 +126,17 @@ export class ProfileComponent implements OnInit {
       this.getProfileData()
     }
     else {
-      this.profileForm.get('name')?.setValidators([Validators.required]);
-      this.profileForm.get('number')?.setValidators([Validators.required, Validators.pattern("^[0-9\\s]*$"), Validators.minLength(16), Validators.maxLength(20), this.customValidator.dashValidator(), this.customValidator.plusValidator()]);
-      this.profileForm.get('exp_month')?.setValidators([Validators.required]);
-      this.profileForm.get('exp_year')?.setValidators([Validators.required]);
-      this.profileForm.get('cvc')?.setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(3), Validators.maxLength(4), this.customValidator.dashValidator(), this.customValidator.plusValidator()]);
+      // this.profileForm.get('name')?.setValidators([Validators.required]);
+      // this.profileForm.get('number')?.setValidators([Validators.required, Validators.pattern("^[0-9\\s]*$"), Validators.minLength(16), Validators.maxLength(20), this.customValidator.dashValidator(), this.customValidator.plusValidator()]);
+      // this.profileForm.get('exp_month')?.setValidators([Validators.required]);
+      // this.profileForm.get('exp_year')?.setValidators([Validators.required]);
+      // this.profileForm.get('cvc')?.setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(3), Validators.maxLength(4), this.customValidator.dashValidator(), this.customValidator.plusValidator()]);
 
-      this.profileForm.get('name')?.updateValueAndValidity();
-      this.profileForm.get('number')?.updateValueAndValidity();
-      this.profileForm.get('exp_year')?.updateValueAndValidity();
-      this.profileForm.get('exp_month')?.updateValueAndValidity();
-      this.profileForm.get('cvc')?.updateValueAndValidity();
+      // this.profileForm.get('name')?.updateValueAndValidity();
+      // this.profileForm.get('number')?.updateValueAndValidity();
+      // this.profileForm.get('exp_year')?.updateValueAndValidity();
+      // this.profileForm.get('exp_month')?.updateValueAndValidity();
+      // this.profileForm.get('cvc')?.updateValueAndValidity();
       this.profileForm.patchValue({
         mobile: this.currentUser?.phone,
         mobileIsd: this.currentUser?.isd,
@@ -129,10 +162,10 @@ export class ProfileComponent implements OnInit {
       mobileCountry: ['us'],
       email: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.]+\.[a-zA-Z]{2,}$/i)]],
       address: ['', Validators.required],
-      city: ['', Validators.required],
-      state: ['', Validators.required],
+      city: [''],
+      state: [''],
       country: ['', Validators.required],
-      zip: ['', Validators.required],
+      zip: [''],
       agency_name: ['', Validators.required],
       payee: ['', Validators.required],
       iata: ['', Validators.required],
@@ -257,35 +290,43 @@ export class ProfileComponent implements OnInit {
     $("#imageModal").removeClass("d-none");
     // $("#imageModal").show();
   }
+  fillAddress(form_control: string, address: any) {
+		console.log('Address: ', address)
+		this.profileForm.patchValue({
+      address: address.formatted_address
+    })
+	}
+
   profile_pic_change(event) {
-    // this.stateManagementService.setprogressBar(true);//show progressbar
-    // const reader = new FileReader();
-    // if (event.target.files && event.target.files.length) {
-    //   const [file] = event.target.files;
-    //   reader.readAsDataURL(file);
-    //   reader.onload = () => {
-    //     this.imageSrc = reader.result as string;
-    //     this.affiliateService.uploadProfilePicture(this.imageSrc)
-    //       .pipe(
-    //         catchError(err => {
-    //           this.stateManagementService.setprogressBar(false);//hide progressbar
-    //           return throwError(err);
-    //         })
-    //       )
-    //       .subscribe(({ data, message }: any) => {
-    //         this.profile_pic = data.image;
-    //         let userInfo = JSON.parse(localStorage.getItem('userData'))
-    //         if(userInfo){
-    //           userInfo['profile_picture'] = data?.image
-    //           localStorage.setItem('userData' , JSON.stringify(userInfo))
-    //         }
-    //         this.stateManagementService.setprogressBar(false);//hide progressbar
-    //         this.snackbarMsg = message;
-    //         this.openSnackbar();
-    //         window.location.reload()
-    //       });
-    //   };
-    // }
+    console.log('in function upload profile pic')
+    this.stateManagementService.setprogressBar(true);//show progressbar
+    const reader = new FileReader();
+    if (event.target.files && event.target.files.length) {
+      const [file] = event.target.files;
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        this.imageSrc = reader.result as string;
+        this.travelAgentService.uploadProfilePicture(this.imageSrc)
+          .pipe(
+            catchError(err => {
+              this.stateManagementService.setprogressBar(false);//hide progressbar
+              return throwError(err);
+            })
+          )
+          .subscribe(({ data, message }: any) => {
+            this.profile_pic = data.image;
+            let userInfo = JSON.parse(localStorage.getItem('userData'))
+            if(userInfo){
+              userInfo['profile_picture'] = data?.image
+              localStorage.setItem('userData' , JSON.stringify(userInfo))
+            }
+            this.stateManagementService.setprogressBar(false);//hide progressbar
+            // this.snackbarMsg = message;
+            // this.openSnackbar();
+            // window.location.reload()
+          });
+      };
+    }
   }
   submit() {
     console.log(this.profileForm);
@@ -310,12 +351,23 @@ export class ProfileComponent implements OnInit {
       .subscribe(result => {
         this.response = result;
         this.spinner.hide();//hide spinner
+        const currentUser = JSON.parse(localStorage.getItem('currentUser'))
         if (this.response?.data?.is_profile_complete) {
-          const currentUser = JSON.parse(localStorage.getItem('currentUser'))
           currentUser['is_profile_complete'] = true
+          currentUser['name'] = this.response?.data?.first_name +' ' + this.response?.data?.last_name
+          currentUser['account_id'] = this.response?.data?.acc_id
           localStorage.setItem('currentUser', JSON.stringify(currentUser))
-          this.router.navigate(['/travel_agent/bookings']);
+          if(this.lastSegment=='step1'){
+          this.router.navigateByUrl('/travel_agent/profile/step2').then(() => {
+            window.location.reload();
+          });
+
+          }
+          else{
+          window.location.reload()
+          }
         }
+
       });
   }
 

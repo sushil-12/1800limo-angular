@@ -43,4 +43,16 @@ export class QuotebotService
 		console.log('Fetching Airports Data')
 		return this.httpClient.get(`${this.serverUrl}get-airports`)
 	}
+
+	createBooking(data: any, update_type: string) {
+		if (update_type == 'return' || update_type == 'repeat') {
+			return this.httpClient.post(`${this.serverUrl}duplicate-reservation`, data)
+		}
+		if (data.reservation_id) {
+			return this.httpClient.put(this.serverUrl + 'edit-reservation', data);
+		}
+		else {
+			return this.httpClient.post(this.serverUrl + 'quote/create-reservation', data);
+		}
+	}
 }

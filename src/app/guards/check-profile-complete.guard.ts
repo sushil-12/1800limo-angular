@@ -10,25 +10,43 @@ import { ErrorDialogService } from '../services/error-dialog/errordialog.service
 export class CheckProfileCompleteGuard implements CanActivate {
   constructor(
     private router: Router,
-    private authService: TravelAgentService ,
-    private errorDialog : ErrorDialogService
+    private authService: TravelAgentService,
+    private errorDialog: ErrorDialogService
   ) { }
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot) {
-    if (this.authService.checkIsProfileCompleted()) {
-      console.log("in if travel agenr",this.authService.checkIsProfileCompleted())
-        return true;
+    const currentUser: any = JSON.parse(localStorage.getItem('userData'))
+    if (currentUser?.RoleName != 'travel_agent') {
+      this.router.navigate(['/home']);
+      return false;
     }
-    this.errorDialog.openDialog({
-      errors: {
-        error: 'Please complete the profile first'
+    if (this.authService.getStepCompletedObj()) {
+      for (let [key, value] of Object.entries(this.authService.getStepCompletedObj())) {
+        console.log('value-->>' , value)
+        if (value == 'uncompleted') {
+          this.errorDialog.openDialog({
+            errors: {
+              error: 'Please complete the registration first'
+            }
+          })
+          this.router.navigate([`/travel_agent/profile/${key}`]);
+        }
       }
-    })
-    console.log('travel agent profile');
-    this.router.navigate(['/travel_agent/profile']);
-    return false;
+    }
+    // if (this.authService.checkIsProfileCompleted()) {
+    //   console.log("in if travel agenr",this.authService.checkIsProfileCompleted())
+    //     return true;
+    // }
+    // this.errorDialog.openDialog({
+    //   errors: {
+    //     error: 'Please complete the registration first'
+    //   }
+    // })
+    // console.log('travel agent profile');
+    // this.router.navigate(['/travel_agent/profile/step1']);
+    return true;
   }
 
-  
+
 }

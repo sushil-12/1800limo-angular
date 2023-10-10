@@ -3,7 +3,19 @@ import { Routes, RouterModule } from '@angular/router';
 import { BookingComponent } from './booking/booking.component';
 import { ProfileComponent } from './profile/profile.component';
 import { CheckProfileCompleteGuard } from 'src/app/guards/check-profile-complete.guard';
+import { CreateBookingComponent } from './create-booking/create-booking.component';
+import { CardsComponent } from './cards/cards.component';
+import { AddCardComponent } from './add-card/add-card.component';
+import { InvoiceDashComponent } from './invoice-dash/invoice-dash.component';
+import { InvoiceDashSummaryComponent } from './invoice-dash-summary/invoice-dash-summary.component';
+import { StripeFormComponent } from './stripe-form/stripe-form.component';
+import { TravelAgentStepsTemplateComponent } from './travel-agent-steps-template/travel-agent-steps-template.component';
 const routes: Routes = [
+  {
+		path: '',
+		redirectTo: '/home',
+		pathMatch: 'full'
+	},
   {
     path:'bookings',
     component:BookingComponent,
@@ -11,8 +23,69 @@ const routes: Routes = [
   },
   {
     path:'profile',
-    component:ProfileComponent
-  }
+    component:ProfileComponent,
+    canActivate: [CheckProfileCompleteGuard]
+  },
+  {
+    path:'create-booking',
+    component:CreateBookingComponent,
+    canActivate: [CheckProfileCompleteGuard],
+  },
+
+  {
+    path:'create-new-booking',
+    component:CreateBookingComponent,
+    canActivate: [CheckProfileCompleteGuard],
+  },
+  {
+    path:'debit-cc-card',
+    component:CardsComponent,
+    canActivate: [CheckProfileCompleteGuard],
+  },
+  {
+    path:'invoices',
+    component:InvoiceDashComponent,
+    canActivate: [CheckProfileCompleteGuard],
+  },
+  {
+    path:'invoice-summary',
+    component:InvoiceDashSummaryComponent,
+    canActivate: [CheckProfileCompleteGuard],
+  },
+  {
+    path:'add-card',
+    component:AddCardComponent,
+    canActivate: [CheckProfileCompleteGuard],
+  },
+  {
+    path:'stripe-form',
+    component:StripeFormComponent,
+    canActivate: [CheckProfileCompleteGuard],
+  },
+  {
+    path:'new-booking',
+    component:CreateBookingComponent,
+    canActivate: [CheckProfileCompleteGuard],
+  },
+  {
+		path: 'profile',
+		canActivate: [],
+		component: TravelAgentStepsTemplateComponent,
+		data: {
+			title: 'TravelAgent'
+		},
+		children: [
+			{
+				path: 'step1',
+				component: ProfileComponent
+			},
+			{
+				path: 'step2',
+				component: StripeFormComponent
+			},
+		]
+	}
+ 
 ];
 
 @NgModule({

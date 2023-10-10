@@ -23,7 +23,7 @@ export class FarmOutComponent implements OnInit
 	@ViewChild('inputmsg', { static: false }) message: ElementRef;
 	color: ThemePalette = 'primary';
 	outputDateFormat = 'YYYY-MM-DD';
-	public totalRecords: Number;
+	public totalRecords: any;
 	public firstPage: Number;
 	public lastPage: Number;
 	public totalPage: Number;
@@ -290,12 +290,7 @@ export class FarmOutComponent implements OnInit
 	}
 
 	editAction(bookingId, updateType) {
-		if (updateType == 'change') {
 			this.$router.navigate(['/affiliate/new-booking'], { queryParams: { bookingId: bookingId, updateType: updateType , nav : 'false' } });
-		}
-		else {
-			this.$router.navigate(['/affiliate/new-booking'], { queryParams: { bookingId: bookingId } });
-		}
 	}
 	finalizeAction(bookingId) {
 		this.$router.navigate(['/affiliate/finalize-booking'], { queryParams: { bookingId: bookingId } });

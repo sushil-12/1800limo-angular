@@ -96,6 +96,8 @@ export class AddVehicleRatesComponent implements OnInit {
 			minimum_cruise_port_departure_rate : ['', [ Validators.pattern(/^\d+(\.\d+)?$/)]],
 			minimum_on_demand_rate: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
 			per_person_group_ride_rate: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
+			in_town_extra_stop:['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
+			outside_town_extra_stop:['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
 			airport_city_percentage_booking_cancel_charges: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
 			charter_percentage_booking_cancel_charges: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
 			gratuity: ['20', [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)]],
@@ -220,7 +222,10 @@ export class AddVehicleRatesComponent implements OnInit {
 	 * build a new object with keys as the form control names and and values as the value of those controls.
 	 */
 	initRateRangeObject(): boolean {
-		let form_control_names = ['milage_rate', 'kilometer_rate', 'hourly_rate', 'hourly_rate_after_five_hours', 'day_rate', 'minimum_city_rate', 'minimum_airport_departure_rate', 'minimum_airport_arrival_rate', 'minimum_cruise_port_arrival_rate', 'minimum_cruise_port_departure_rate', 'airport_city_percentage_booking_cancel_charges', 'per_person_group_ride_rate']
+		let form_control_names = ['milage_rate', 'kilometer_rate', 'hourly_rate', 'hourly_rate_after_five_hours',
+		 'day_rate', 'minimum_city_rate', 'minimum_airport_departure_rate', 'minimum_airport_arrival_rate', 
+		 'minimum_cruise_port_arrival_rate', 'minimum_cruise_port_departure_rate', 'in_town_extra_stop' ,'outside_town_extra_stop',
+		 'airport_city_percentage_booking_cancel_charges', 'per_person_group_ride_rate']
 		form_control_names.forEach((name: string) => {
 			this.rate_range_object[name] = this.addVehicleRatesForm.get(name).value ?? 0
 		})

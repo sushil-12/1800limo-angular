@@ -1,0 +1,25 @@
+<main>
+    <ngx-spinner></ngx-spinner>
+    <div class="md-stepper-horizontal orange" tabindex="-1">
+        <div class="stepper-travel-agent">
+            <a class="md-step" [className]="step1" [ngClass]="travelAgentId=='' ? 'md-step' : 'md-step'"
+                [routerLinkActive]="['active']" (click)="stepClicked(1)" routerLink="/travel_agent/profile/step1">
+                <div class="md-step-circle"><span>1</span></div>
+                <div class="md-step-title">Step 1</div>
+                <div class="md-step-optional">Complete Profile</div>
+                <div class="md-step-bar-left"></div>
+                <div class="md-step-bar-right"></div>
+            </a>
+            <a class="md-step" [className]="step2" [ngClass]="travelAgentId=='' ? 'md-step' : 'md-step'"
+                [routerLinkActive]="['active']" (click)="stepClicked(2)" routerLink="/travel_agent/profile/step2">
+                <div class="md-step-circle"><span>2</span></div>
+                <div class="md-step-title">Step 2</div>
+                <div class="md-step-optional">Stripe Banking Details</div>
+                <div class="md-step-bar-left"></div>
+                <div class="md-step-bar-right"></div>
+            </a>
+        </div>
+
+    </div>
+    <router-outlet></router-outlet>
+</main>

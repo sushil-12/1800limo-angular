@@ -63,7 +63,7 @@ export class Step5Component implements OnInit, AfterViewChecked {
 		this.is_account_accepted = localStorage.getItem('account_approval') == 'accepted'
 
 		// Load Our vehicles using API
-		this.affiliateService.affiliateVehicleList().then(result => {
+		this.affiliateService.affiliateVehicleList(true).then(result => {
 			this.vehiclesRes = result;
 			this.vehicles = this.vehiclesRes?.data?.vehicleList;
 			this.affiliate_type = this.currentUser?.affiliate_type.toLowerCase()

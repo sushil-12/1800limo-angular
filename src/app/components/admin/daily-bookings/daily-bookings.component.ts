@@ -32,7 +32,7 @@ export class DailyBookingsComponent implements OnInit {
 	public firstPage: Number;
 	public lastPage: Number;
 	public totalPage: Number;
-	public totalRecords: Number;
+	public totalRecords: any;
 	public currentPage: any;
 	public from: Number;
 	public to: Number;
@@ -86,21 +86,22 @@ export class DailyBookingsComponent implements OnInit {
 		// const localeDateString = date.toLocaleDateString(undefined, options).
 		// replace(/(\d+)\/(\d+)\/(\d+)/,'$3-$1-$2');
 		// Set Search Filters According to cookies or the intial state
-		this.startDate = this.adminService.checkCookie('startDate') ?
-			this.adminService.getCookie('startDate') :
+		this.startDate = localStorage.getItem('admin_startDate') ?
+			localStorage.getItem('admin_startDate') :
 			moment(timestamp).format('YYYY-MM-DD')
 
 		date.setDate(date.getDate() + 7);
 		timestamp = date.getTime()
-		this.endDate = this.adminService.checkCookie('endDate') ?
-			this.adminService.getCookie('endDate') :
+		this.endDate = localStorage.getItem('admin_endDate') ?
+			localStorage.getItem('admin_endDate') :
 			moment(timestamp).format('YYYY-MM-DD')
 
 		this.searchText = localStorage.getItem('DBSearch') ? localStorage.getItem('DBSearch') : ''
-		console.log('usedatefilter---->>>>>>>' , this.adminService.getCookie('useDateFilter'))
-		this.useDateFilter = this.adminService.checkCookie('useDateFilter') ?
-		(this.adminService.getCookie('useDateFilter')=='true' ? true : false)
+		console.log('usedatefilter---->>>>>>>' , localStorage.getItem('useDateFilter'))
+		this.useDateFilter = localStorage.getItem('useDateFilter') ?
+		(localStorage.getItem('useDateFilter')=='true' ? true : false)
 		: true;
+		console.log('useDateFilter-->' , this.useDateFilter)
 
 		this.adminService.getStatusList()
 			.pipe(
@@ -183,11 +184,11 @@ export class DailyBookingsComponent implements OnInit {
 		date.setDate(date.getDate() + 7);
 		timestamp = date.getTime()
 		this.endDate = moment(timestamp).format('YYYY-MM-DD')
-		this.adminService.deleteCookie('startDate')
-		this.adminService.deleteCookie('endDate')
+		localStorage.removeItem('admin_startDate')
+		localStorage.removeItem('admin_endDate')
 		// this.adminService.deleteCookie('search')
 		localStorage.removeItem('DBSearch')
-		this.adminService.deleteCookie('useDateFilter')
+		localStorage.removeItem('useDateFilter')
 		this.useDateFilter = true
 		// this.adminService.deleteCookie('filtertype')
 		this.searchText = "";
@@ -660,7 +661,8 @@ export class DailyBookingsComponent implements OnInit {
 	}
 
 	saveCookie(key: string, value: string) {
-		this.adminService.setCookie(key, value, 30);
+		// this.adminService.setCookie(key, value, 30);
+		localStorage.setItem(key,value)
 	}
 
 	// changeFilterType(value: string) {

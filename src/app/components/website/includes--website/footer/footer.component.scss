@@ -45,6 +45,16 @@ a.user-profile {
 	color           : #fff !important;
 }
 
+.ta-btn:hover{
+	color: #000 !important;
+}
+.ta-btn{
+	background-color: teal !important;
+    font-weight: 500;
+    box-shadow: 0 5px 10px -6px rgb(0 0 0);
+    color: #fff !important;	
+}
+
 #btn-back-to-top {
 	position: fixed;
 	bottom  : 20px;

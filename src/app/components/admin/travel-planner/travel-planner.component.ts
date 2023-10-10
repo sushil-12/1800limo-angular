@@ -25,7 +25,7 @@ export class TravelPlannerComponent implements OnInit {
   public firstPage:Number;
   public lastPage:Number;
   public totalPage:Number;
-  public currentPage:Number;
+  public currentPage:any;
   public from:Number;
   public to:Number;
   public path:string;
@@ -33,6 +33,7 @@ export class TravelPlannerComponent implements OnInit {
   public lastPageUrl:string;
   public prevPageUrl:string;
   public nextPageUrl:string;
+  searchText: any;
 
   constructor(
     private adminService:AdminService,
@@ -40,15 +41,31 @@ export class TravelPlannerComponent implements OnInit {
     private spinner: NgxSpinnerService) { }
 
   ngOnInit(): void {
+		this.searchText = localStorage.getItem('TravelAgentSearch') ? localStorage.getItem('TravelAgentSearch') : '' 
       this.loadTravelPlanners();//load travelPlanners
   }
+
+	timer: any
+	handleSearchKeyword(text:any){
+		console.log('on change search text-->>' , text)
+		this.searchText = text
+		clearTimeout(this.timer);
+		this.timer = setTimeout(() => {
+			localStorage.setItem('TravelAgentSearch' , text)
+			this.loadTravelPlanners()
+		}, 700)
+	}
+	handleKeypressEvents() {
+		clearTimeout(this.timer)
+	}
+
 
   loadTravelPlanners(pageUrl=null)
   {
       /** spinner starts on init */
       this.spinner.show();
 
-      var keyword = ((document.getElementById("keyword") as HTMLInputElement).value);
+      var keyword = this.searchText;
 
       // Load Our travelPlanners using API
       this.adminService.travelPlannerAccounts(pageUrl,keyword).then(result=>{
@@ -93,6 +110,15 @@ export class TravelPlannerComponent implements OnInit {
   {
     this.router.navigate(['/admin/staff'],{queryParams:{accountType:'travelPlanner',accountId:travelPlannerId}});
   }
+
+  highlighText(args: string) {
+		if (!this.searchText) { return args; }
+		if (args) {
+			args = args.toString()
+			var re = new RegExp(this.searchText, 'gi'); //'gi' for case insensitive and can use 'g' if you want the search to be case sensitive.
+			return args.replace(re, '<mark class="font-weight-bold">$&</mark>');
+		}
+	}
 
   enableDisableClicked(event,id)
   {

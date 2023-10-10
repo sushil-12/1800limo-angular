@@ -40,7 +40,7 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 	public make: Array<any>;
 	public filteredMake: Array<object>;
 	public model: Array<any>;
-	public filteredModel: Array<object>;
+	public filteredModel: Array<any>;
 	public vehicleTypes: Array<object>;
 	public filteredVehicleTypes: Array<object>;
 	public color: Array<object>;
@@ -1261,6 +1261,14 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 	changeMake(selectedMake, onFirstLoad = null)
 	{
 		console.log('------>>>>' , onFirstLoad)
+		if(!selectedMake){
+			this.addVehicleForm.patchValue({
+				model : ''
+			})
+			this.filteredModel = []
+			return false
+		}
+		
 		let models = JSON.parse(sessionStorage.getItem('models'));
 		this.filteredModel = models.filter(function (model)
 		{
@@ -1269,6 +1277,9 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 				return true;
 			}
 		});
+		this.addVehicleForm.patchValue({
+			model : this.filteredModel[0]?.ID
+		})
 		if (onFirstLoad == 'onFirstLoad' || this.onFirstLoad==1)
 		{
 			console.log('->>' , this.onFirstLoad)

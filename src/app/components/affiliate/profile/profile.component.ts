@@ -4,6 +4,8 @@ import { StateManagementService } from 'src/app/services/statemanagement.service
 import { Router } from '@angular/router';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { AdminService } from 'src/app/services/admin.service';
 
 @Component({
   selector: 'app-profile',
@@ -19,14 +21,21 @@ export class ProfileComponent implements OnInit {
   public modalImage: string;
   public AffiliatePhoneObject: any;
   @Input() closeTab: EventEmitter<any> = new EventEmitter();
+  timezoneForm: FormGroup;
 
   constructor(
     private affiliateService: AffiliateService,
     private stateManagementService:StateManagementService,
-    private router: Router
-  ) { }
+    private router: Router,
+    private fb: FormBuilder,
+		private $api: AdminService,
+  ) {  }
 
   ngOnInit(): void {
+
+    this.timezoneForm = this.fb.group({
+      timezone: [''],
+    });
     this.stateManagementService.setprogressBar(true); //show progressbar
     this.affiliateService.getProfileDetail()
       .pipe(
@@ -36,7 +45,9 @@ export class ProfileComponent implements OnInit {
         })
       ).subscribe(({ data }: any) => {
         this.stateManagementService.setprogressBar(false);//hide progressbar
-        
+        this.timezoneForm.patchValue({
+          timezone : data?.timezone
+        })
         this.profile_pic = data?.profile_pic;
         let userInfo = JSON.parse(localStorage.getItem('userData'))
         if(userInfo){
@@ -110,7 +121,17 @@ export class ProfileComponent implements OnInit {
         this.router.navigate(['/affiliate/step2']);
       });
   }
+  onTimezoneChange(event: any): void {
+    const selectedValue = event.value;
+    console.log('Selected Timezone:', selectedValue);
+    this.$api
+			.changeTimezone(selectedValue)
+			.pipe()
+			.subscribe((response: any) => {
+				console.log(response,'timezone changed success');
+			});
 
+  }
   closeButton() {
     this.closeTab.emit();
   }

@@ -5,6 +5,7 @@ import * as moment from 'moment';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { AdminService } from 'src/app/services/admin.service';
 import { AffiliateService } from 'src/app/services/affiliate.service';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 
@@ -51,7 +52,11 @@ export class AffiliateFinalizeComponent implements OnInit {
 	}
 	quoteAmount: any;
 	hours: any;
+	main_receipt_url: any;
+	paymentDetailByCard: any;
+	isTravelShare: boolean;
 	constructor(
+		private $api: AdminService,
 		private affiliateService: AffiliateService,
 		private $form: FormBuilder,
 		private router: Router,
@@ -76,6 +81,7 @@ export class AffiliateFinalizeComponent implements OnInit {
 					// this.buildChargesFormGroup()
 					// this.chargesForm.get('reservation_id').setValue(this.bookingId)
 					this.getBookingData()
+					this.paymentDetail(this.bookingId)
 				}
 			});
 			this.deleteCardForm = this.$form.group({
@@ -96,6 +102,7 @@ export class AffiliateFinalizeComponent implements OnInit {
 				console.log('response getBookingData Affiliate--->>>>', data)
 				this.BookingDetail = data?.booking_detail
 				this.transferType = this.BookingDetail?.transfer_type
+				this.isTravelShare =  data?.booking_detail?.account_type=='Travel Agent' ? true : false
 				this.finalize_params.number_of_vehicles = data?.booking_detail?.number_of_vehicles
 				this.init_rates = true;
 				this.hours =  data?.booking_detail?.number_of_hours
@@ -158,6 +165,18 @@ export class AffiliateFinalizeComponent implements OnInit {
 	RateFormValue(form: any) {
 		console.log('rate form value ------>>>>', form)
 		this.edit_rates_value = form
+	}
+	paymentDetail(bookingId) {
+		this.$api
+			.getPaymentDetailFinalize(bookingId)
+			.pipe()
+			.subscribe((response: any) => {
+				console.log(response.data, "check response paymentDetail");
+				if (response.data) {
+					this.main_receipt_url = response?.data?.main_receipt_url
+					this.paymentDetailByCard = response?.data?.charges
+				}
+			});
 	}
 
 

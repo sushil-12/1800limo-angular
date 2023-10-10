@@ -61,8 +61,8 @@ export class InvoiceComponent implements OnInit {
 			this.adminService.getCookie('endDate_invoice') :
 			moment(timestamp).format('YYYY-MM-DD')
 		
-		this.useDateFilter = this.adminService.checkCookie('useDateFilterInvoice') ?
-		(this.adminService.getCookie('useDateFilterInvoice')=='true' ? true : false)
+		this.useDateFilter = this.adminService.checkCookie('use_date_filter_invoice') ?
+		(this.adminService.getCookie('use_date_filter_invoice')=='true' ? true : false)
 		: true;
     this.searchText = this.adminService.checkCookie('search_invoice') ?
     this.adminService.getCookie('search_invoice')
@@ -172,7 +172,7 @@ export class InvoiceComponent implements OnInit {
   handleChangeCheckbox(value:any){
 		console.log('event---->> ' ,value)
 		this.useDateFilter = value
-		this.saveCookie('useDateFilterInvoice',value)
+		this.saveCookie('use_date_filter_invoice',value)
 		this.loadInvoice();
 	}
   reset() {
@@ -185,7 +185,7 @@ export class InvoiceComponent implements OnInit {
 		this.adminService.deleteCookie('startDate_invoice')
 		this.adminService.deleteCookie('endDate_invoice')
 		this.adminService.deleteCookie('search_invoice')
-		this.adminService.deleteCookie('useDateFilterInvoice')
+		this.adminService.deleteCookie('use_date_filter_invoice')
 		this.useDateFilter = true
 		this.searchText = "";
 

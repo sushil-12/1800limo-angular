@@ -31,6 +31,7 @@ export class OtpComponent implements OnInit, OnDestroy {
 	public secondsToDday;
 	@ViewChild(NgOtpInputComponent, { static: false }) ngOtpInput: NgOtpInputComponent;
 	@ViewChild('otpInput') otpInput: ElementRef;
+	email: any = null;
 	constructor(
 		private formBuilder: FormBuilder,
 		private router: Router,
@@ -85,7 +86,7 @@ export class OtpComponent implements OnInit, OnDestroy {
 					break;
 				}
 				case 'travel_agent': {
-					this.router.navigateByUrl('/travel_agent');
+					this.router.navigateByUrl('/travel_agent/bookings');
 					break;
 				}
 				default: {
@@ -117,6 +118,9 @@ export class OtpComponent implements OnInit, OnDestroy {
 					// this.ngOtpInput.focusTo(this.otpInput)
 					// this.otpCheck()
 				}, 2000)
+			}
+			if(params.email){
+				this.email = params.email
 			}
 		})
 		document.querySelectorAll('.otp-input').forEach(occurence => {
@@ -152,9 +156,9 @@ export class OtpComponent implements OnInit, OnDestroy {
 	onOtpChange(value) {
 		this.otpForm.get('otp').setValue(value)
 		this.otpForm.updateValueAndValidity()
-		// if(value.length >=6){
-		// 	this.otpCheck()
-		// }
+		if(value.length >=6){
+			this.otpCheck()
+		}
 	}
 
 	resendOtp() {
@@ -300,10 +304,13 @@ export class OtpComponent implements OnInit, OnDestroy {
 						break;
 					}
 					case 'travel_agent': {
+						sessionStorage.setItem('step_completed', JSON.stringify(this.response.data?.travel_planner.step_completed))
+						sessionStorage.setItem('step_completed_obj', JSON.stringify(this.response.data?.travel_planner.step_completed_obj))
 						if(this.response.data.user?.is_profile_complete)
-							this.router.navigateByUrl('/travel_agent');
+							this.router.navigateByUrl('/travel_agent/bookings');
 						else
-							this.router.navigateByUrl('/travel_agent/profile');
+							this.router.navigateByUrl('/travel_agent/profile/step1');
+						
 						break;
 					}
 					default: {

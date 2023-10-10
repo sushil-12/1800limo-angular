@@ -65,22 +65,22 @@
                     <div class="col-md-4">
                         <mat-form-field appearance="outline">
                             <mat-label>
-                                Expiration Month <sup style="color: #ff0000">*</sup>
+                                Expiry Month <sup style="color: #ff0000">*</sup>
                             </mat-label>
                             <mat-select formControlName="exp_month" tabindex="1">
-                                <mat-option value="">Choose Expiration Month</mat-option>
-                                <mat-option value='01'>Janaury</mat-option>
-                                <mat-option value='02'>February</mat-option>
-                                <mat-option value='03'>March</mat-option>
-                                <mat-option value='04'>April</mat-option>
-                                <mat-option value='05'>May</mat-option>
-                                <mat-option value='06'>June</mat-option>
-                                <mat-option value='07'>July</mat-option>
-                                <mat-option value='08'>August</mat-option>
-                                <mat-option value='09'>September</mat-option>
-                                <mat-option value='10'>October</mat-option>
-                                <mat-option value='11'>November</mat-option>
-                                <mat-option value='12'>December</mat-option>
+                                <mat-option value="">Choose Expiry Month</mat-option>
+                                <mat-option value='01'>01</mat-option>
+                                <mat-option value='02'>02</mat-option>
+                                <mat-option value='03'>03</mat-option>
+                                <mat-option value='04'>04</mat-option>
+                                <mat-option value='05'>05</mat-option>
+                                <mat-option value='06'>06</mat-option>
+                                <mat-option value='07'>07</mat-option>
+                                <mat-option value='08'>08</mat-option>
+                                <mat-option value='09'>09</mat-option>
+                                <mat-option value='10'>10</mat-option>
+                                <mat-option value='11'>11</mat-option>
+                                <mat-option value='12'>12</mat-option>
                             </mat-select>
                         </mat-form-field>
                         <div *ngIf="submittedForm && f.exp_month.errors || f.exp_month.touched && f.exp_month.errors"
@@ -91,10 +91,10 @@
                     <div class="col-md-4">
                         <mat-form-field appearance="outline">
                             <mat-label>
-                                Expiration Year<sup style="color: #ff0000">*</sup>
+                                Expiry Year<sup style="color: #ff0000">*</sup>
                             </mat-label>
                             <mat-select formControlName="exp_year" tabindex="1">
-                                <mat-option value="">Choose Expiration Year</mat-option>
+                                <mat-option value="">Choose Expiry Year</mat-option>
                                 <mat-option *ngFor="let yearOption of yearOptions" value="{{yearOption}}">{{yearOption}}
                                 </mat-option>
                             </mat-select>
@@ -138,20 +138,22 @@
         <div class="container">
             <div class="row py-4">
                 <div class="col-md-6">
-                  
+
                 </div>
                 <div class="col-md-6 ">
                     <div class="billing_inforamtion">
                         <ul class="d-flex justify-content-center">
-                            <li><button class="custom-btn savebutton btn-shadow" (click)="submitForm()" [disabled]="disableSubmitButton"
-                                    tabindex="-1">SAVE</button> </li>
-                            <li><button class="custom-btn resetbutton btn-shadow" (click)="resetForm()" tabindex="-1">RESET</button> </li>
-                            <li><button class="custom-btn backbutton btn-shadow" (click)="backButton()" tabindex="-1">BACK</button> </li>
+                            <li><button class="custom-btn savebutton btn-shadow" (click)="submitForm()"
+                                    [disabled]="disableSubmitButton" tabindex="-1">SAVE</button> </li>
+                            <li><button class="custom-btn resetbutton btn-shadow" (click)="resetForm()"
+                                    tabindex="-1">RESET</button> </li>
+                            <li><button class="custom-btn backbutton btn-shadow" (click)="backButton()"
+                                    tabindex="-1">BACK</button> </li>
                         </ul>
                     </div>
                 </div>
             </div>
-                </div>
-      
+        </div>
+
     </form>
 </main>

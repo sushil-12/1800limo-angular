@@ -64,6 +64,7 @@ export class AdminService {
 	deleteCookie(cookieName: string) {
 		const cookies = document.cookie.split(';');
 		console.log('cookies-->>>>>>>',cookies)
+		document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 
 		for (let i = 0; i < cookies.length; i++) {
 		  const cookie = cookies[i].trim();
@@ -76,8 +77,9 @@ export class AdminService {
 			// Split the cookie path and value
 			const [path,] = value.split(';');
 	  
-			// Set the expiration date in the past to delete the cookie
+			// Set the Expiry date in the past to delete the cookie
 			document.cookie = `${name}=${path}; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=${path}`;
+
 		  }
 		}
 	}
@@ -187,8 +189,8 @@ export class AdminService {
 	//
 	// add / edit / update vehicle for admin-affiliate-step 5
 	// Add / Edit / Get vehicle data for admin affliliate step 5
-	async adminAffiliateVehicleList(id) {
-		const result = await this.httpClient.get(this.serverUrl + 'admin/get-affiliate-all-vehicles/' + id).toPromise();
+	async adminAffiliateVehicleList(id , flag=true) {
+		const result = await this.httpClient.get(this.serverUrl + 'admin/get-affiliate-all-vehicles/' + id + `?show_all_vehicles=${flag}`).toPromise();
 		return result;
 	}
 	getLooseAffiliateVehicles(vehicle_type_id: number) {
@@ -800,6 +802,7 @@ export class AdminService {
 	}
 
 	chooseUser(id: number, accountType: string) {
+		console.log('choosen account-->>' , accountType)
 		switch (accountType) {
 			case 'individual': {
 				return this.httpClient.get(this.serverUrl + 'get-an-account/' + id);
@@ -807,7 +810,7 @@ export class AdminService {
 			case 'corporate': {
 				return this.httpClient.get(this.serverUrl + 'get-corporate-account/' + id);
 			}
-			case 'travel': {
+			case 'travel_planner': {
 				return this.httpClient.get(this.serverUrl + 'get-travel-planner-account/' + id);
 			}
 			default: {
@@ -1063,16 +1066,17 @@ export class AdminService {
 			return this.httpClient.get(`${this.serverUrl}admin/booking-rates`)
 		}
 	}
+		// const params = new HttpParams()
+		// 	.set('vehicle_id', vehicle_id)
+		// 	.set('transfer_type', data?.transfer_type)
+		// 	.set('service_type', data?.service_type)
+		// 	.set('numberOfVehicles', data?.numberOfVehicles)
+		// 	.set('distance', data?.distance)
+		// 	.set('no_of_hours', data?.no_of_hours)
+		// 	.set('is_master_vehicle' , data?.is_master_vehicle);
 	fetchRatesByAffiliateVeh(vehicle_id, data) {
-		const params = new HttpParams()
-			.set('vehicle_id', vehicle_id)
-			.set('transfer_type', data?.transfer_type)
-			.set('service_type', data?.service_type)
-			.set('numberOfVehicles', data?.numberOfVehicles)
-			.set('distance', data?.distance)
-			.set('no_of_hours', data?.no_of_hours)
-			.set('is_master_vehicle' , data?.is_master_vehicle);
-		return this.httpClient.get(`${this.serverUrl}admin/booking-rates-vehicle`, { params })
+		data['vehicle_id'] = vehicle_id
+		return this.httpClient.post(`${this.serverUrl}admin/booking-rates-vehicle`,data )
 	}
 	checkUniquePhoneNumberForLooseCustomer(customer_data: Record<string, any>) {
 		return this.httpClient.post(`${this.serverUrl}admin/check-unique-user`, customer_data)
@@ -1102,6 +1106,9 @@ export class AdminService {
 	sendCustomInvoiceToAny(id,data){
 		return this.httpClient.post(`${this.serverUrl}send-invoice-data-to-anyone/${id}`, data)
 	}
+	cancellationBooking(url,data){
+		return this.httpClient.post(`${url}`,data)
+	}
 
 	refund(body: any) {
 		return this.httpClient.post(`${this.serverUrl}admin/refund-request`, body)
@@ -1119,6 +1126,19 @@ export class AdminService {
 		return this.httpClient.post(`${this.serverUrl}admin/create-role`,data)
 	}
 
+	//list of affilate accounts
+	getEmailList(){
+		return this.httpClient.get(`${this.serverUrl}affiliate-accountss/emails`)
+	}
+
+	//send email
+	sendEmailAffiliate(body:any){
+		return this.httpClient.post(`${this.serverUrl}send-email-data-to-users`,body)
+	}
+
+	changeTimezone(value){
+		return this.httpClient.put(`${this.serverUrl}update-timezone/${value}`,'')
+	}
 
 
 }

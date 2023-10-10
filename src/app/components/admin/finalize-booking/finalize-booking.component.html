@@ -149,7 +149,7 @@
 	</div>
 </section>
 <!-- Rates Section -->
-<app-finalize-rates class="d-flex flex-wrap finalize-rates" [initRates]="init_rates"
+<app-finalize-rates class="d-flex flex-wrap finalize-rates" [initRates]="init_rates" [isTravelShare]="isTravelShare"
 	[affiliate_type]="'loose_affiliate'" (formvalue)="RateFormValue($event)" [distance]="finalize_params.distance"
 	[reservation_id]="finalize_params.booking_id" [reset]="false" [hours]="finalize_params.number_of_hours"
 	[vehicles]="finalize_params.number_of_vehicles" (returnformvalue)="ReturnRateFormValue($event)"
@@ -176,7 +176,7 @@
 			<tr>
 				<th scope="col">Name on Card</th>
 				<th scope="col">Card Number</th>
-				<th scope="col" *ngIf="BookingDetail?.affiliate_type!='loose_affiliate'" >Transfer Amount</th>
+				<th scope="col" *ngIf="BookingDetail?.affiliate_type!='loose_affiliate'">Transfer Amount</th>
 				<th scope="col">Recipt</th>
 			</tr>
 		</thead>
@@ -186,7 +186,8 @@
 				<td>xxxx-xxxx-xxxx-{{item?.card_details?.last4}}</td>
 				<td *ngIf="BookingDetail?.affiliate_type!='loose_affiliate'">{{item?.transfer?.transfer_amount}}</td>
 				<td>
-					<a href="{{ BookingDetail?.affiliate_type!='loose_affiliate' ?  item?.transfer?.receipt_url : main_receipt_url}}" target="_blank">View At stripe</a>
+					<a href="{{ BookingDetail?.affiliate_type!='loose_affiliate' ?  item?.transfer?.receipt_url : main_receipt_url}}"
+						target="_blank">View At stripe</a>
 				</td>
 			</tr>
 		</tbody>
@@ -306,11 +307,11 @@
 							</div>
 						</div>
 
-						<!-- Expiration Month -->
+						<!-- Expiry Month -->
 						<div class="col-md-4 my-2">
 							<mat-form-field appearance="outline" class="m-0">
 								<mat-label class="required-field">
-									Expiration Month
+									Expiry Month
 								</mat-label>
 								<mat-select formControlName="exp_month" tabindex="0">
 									<mat-option value='01'>01</mat-option>
@@ -335,11 +336,11 @@
 							</div>
 						</div>
 
-						<!-- Expiration Year -->
+						<!-- Expiry Year -->
 						<div class="col-md-4 my-2">
 							<mat-form-field appearance="outline" class="m-0">
 								<mat-label class="required-field">
-									Expiration Year
+									Expiry Year
 								</mat-label>
 								<mat-select formControlName="exp_year" tabindex="0">
 									<mat-option [value]="number" *ngFor="let number of card_params.years">
@@ -397,9 +398,8 @@
 		</div>
 
 		<div class="col-md-12 text-right mr-4">
-			<button type="button" class="custom-filled-button m-3 mr-4" 
-			[ngClass]="finalize_btn=='Finalized'? '':'color-grey'"
-			data-toggle="modal" data-target="#paymentModal">
+			<button type="button" class="custom-filled-button m-3 mr-4"
+				[ngClass]="finalize_btn=='Finalized'? '':'color-grey'" data-toggle="modal" data-target="#paymentModal">
 				Charge
 			</button>
 		</div>

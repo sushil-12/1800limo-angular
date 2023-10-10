@@ -173,7 +173,7 @@ export class AddDriverComponent implements OnInit {
 			Country: [''],
 			State: [''],
 			City: [''],
-			ZipCode: ['', [Validators.pattern("^[0-9]*$")]],
+			ZipCode: ['', Validators.required],
 		});
 
 		if (this.affiliateType != 'fleet_operator') {

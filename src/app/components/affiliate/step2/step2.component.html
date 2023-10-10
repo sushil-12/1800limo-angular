@@ -56,14 +56,13 @@
 				</ul>
 			</div>
 			<div class="col-12" *ngIf="response?.data?.bankinfo?.stripe_account_type == 'standard'">
-				<button class="forstep_nextveh" data-toggle="modal"
-					data-target="#verificationDocumentModal" (click)="stripeRefreshAccountLink()"
-					tabindex="-1">
+				<button class="forstep_nextveh" data-toggle="modal" data-target="#verificationDocumentModal"
+					(click)="stripeRefreshAccountLink()" tabindex="-1">
 					<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
 					Edit Bank Information on Stripe
 				</button>
-				<button *ngIf="selectedCountryName == 'BR'" class="btn btn-primary"
-					id="updateStripe" style="float:right;" (click)="updateStripeURL()">Update Stripe
+				<button *ngIf="selectedCountryName == 'BR'" class="btn btn-primary" id="updateStripe"
+					style="float:right;" (click)="updateStripeURL()">Update Stripe
 					Details</button>
 			</div>
 		</div>
@@ -76,8 +75,7 @@
 			Company Bank Settings
 			<span class="spanText">
 				(Per
-				<a href="https://www?.stripe?.com/" target="_blank"
-					style="text-decoration: underline">Stripe</a>
+				<a href="https://www?.stripe?.com/" target="_blank" style="text-decoration: underline">Stripe</a>
 				- For Identification, Verification & Direct Deposits)
 			</span>
 		</h2>
@@ -85,8 +83,7 @@
 			<div class="row">
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
-						<mat-label>Bank Name <span
-								class="optionalText">(Optional)</span></mat-label>
+						<mat-label>Bank Name <span class="optionalText">(Optional)</span></mat-label>
 						<input matInput placeholder="Bank Name" (focus)="$event?.target?.select()"
 							formControlName="BankName" tabindex="1" />
 					</mat-form-field>
@@ -96,9 +93,8 @@
 						<mat-label>Bank Address
 							<span class="optionalText">(Optional)</span>
 						</mat-label>
-						<input matInput placeholder="Bank Address (Optional)"
-							(focus)="$event?.target?.select()" formControlName="BankAddress"
-							tabindex="1" />
+						<input matInput placeholder="Bank Address (Optional)" (focus)="$event?.target?.select()"
+							formControlName="BankAddress" tabindex="1" />
 					</mat-form-field>
 				</div>
 				<div class="col-md-4">
@@ -151,9 +147,8 @@
 							Bank Account Number
 							<span class="asterisk">*</span>
 						</mat-label>
-						<input matInput placeholder="Account Number"
-							(focus)="$event?.target?.select()" formControlName="AccountNumber"
-							tabindex="1" />
+						<input matInput placeholder="Account Number" (focus)="$event?.target?.select()"
+							formControlName="AccountNumber" tabindex="1" />
 					</mat-form-field>
 					<div *ngIf="
 							(submittedForm && f?.AccountNumber?.errors) ||
@@ -163,8 +158,7 @@
 							This field is required
 						</div>
 					</div>
-					<div *ngIf="f?.AccountNumber?.errors"
-						class="text-danger margin-bottom-thin my-mat-hint">
+					<div *ngIf="f?.AccountNumber?.errors" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="
 								f?.AccountNumber?.errors?.invalid_Pattern;
 								else plusError
@@ -191,9 +185,8 @@
 						<mat-label>Check Routing # / Bank Branch #
 							<span class="asterisk">*</span>
 						</mat-label>
-						<input matInput placeholder="Check Routing # / Bank Branch #"
-							(focus)="$event?.target?.select()" formControlName="Routing"
-							tabindex="1" />
+						<input matInput placeholder="Check Routing # / Bank Branch #" (focus)="$event?.target?.select()"
+							formControlName="Routing" tabindex="1" />
 					</mat-form-field>
 					<div *ngIf="
 							(submittedForm && f?.Routing?.errors) ||
@@ -205,18 +198,16 @@
 					</div>
 				</div>
 				<div class="col-md-6">
-					<label class="select-account-label">Account Type <span
-							class="asterisk">*</span></label>
+					<label class="select-account-label">Account Type <span class="asterisk">*</span></label>
 					<div class="selectStyle">
-						<select class="selectInputStyle" (click)="selectDropdownAccount()"
-							formControlName="AccountType" tabindex="1">
+						<select class="selectInputStyle" (click)="selectDropdownAccount()" formControlName="AccountType"
+							tabindex="1">
 							<option value="individual">Personal</option>
 							<option value="company">Business</option>
 						</select>
 						<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-							viewBox="0 0 122.88 63.9" style="enable-background: new 0 0 122.88 63.9"
-							xml:space="preserve">
+							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
+							style="enable-background: new 0 0 122.88 63.9" xml:space="preserve">
 							<style type="text/css">
 								.sty0 {
 									fill-rule: evenodd;
@@ -238,11 +229,10 @@
 					</div>
 				</div>
 				<div class="col-md-2 col-4 birthMonth">
-					<label class="select-month-label">Month of Birth <span
-							class="asterisk">*</span></label>
+					<label class="select-month-label">Month of Birth <span class="asterisk">*</span></label>
 					<div class="selectStyle">
-						<select class="selectInputStyle" (click)="selectDropdownMonth()"
-							formControlName="dobMonth" tabindex="1" id="selectDropdown">
+						<select class="selectInputStyle" (click)="selectDropdownMonth()" formControlName="dobMonth"
+							tabindex="1" id="selectDropdown">
 							<option value="">Month</option>
 							<option value="01">01</option>
 							<option value="02">02</option>
@@ -258,9 +248,8 @@
 							<option value="12">12</option>
 						</select>
 						<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-							viewBox="0 0 122.88 63.9" style="enable-background: new 0 0 122.88 63.9"
-							xml:space="preserve">
+							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
+							style="enable-background: new 0 0 122.88 63.9" xml:space="preserve">
 							<style type="text/css">
 								.sty0 {
 									fill-rule: evenodd;
@@ -282,20 +271,18 @@
 					</div>
 				</div>
 				<div class="col-md-2 col-4 birthDay">
-					<label class="select-day-label">Day of Birth <span
-							class="asterisk">*</span></label>
+					<label class="select-day-label">Day of Birth <span class="asterisk">*</span></label>
 					<div class="selectStyle">
-						<select class="selectInputStyle" (click)="selectDropdownDay()"
-							formControlName="dobDay" tabindex="1" id="selectDropdown">
+						<select class="selectInputStyle" (click)="selectDropdownDay()" formControlName="dobDay"
+							tabindex="1" id="selectDropdown">
 							<option value="">Day</option>
 							<option *ngFor="let day of dobDay" value="{{ day }}">
 								{{ day }}
 							</option>
 						</select>
 						<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-							viewBox="0 0 122.88 63.9" style="enable-background: new 0 0 122.88 63.9"
-							xml:space="preserve">
+							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
+							style="enable-background: new 0 0 122.88 63.9" xml:space="preserve">
 							<style type="text/css">
 								.sty0 {
 									fill-rule: evenodd;
@@ -317,20 +304,18 @@
 					</div>
 				</div>
 				<div class="col-md-2 col-4 birthYear">
-					<label class="select-year-label">Year of Birth <span
-							class="asterisk">*</span></label>
+					<label class="select-year-label">Year of Birth <span class="asterisk">*</span></label>
 					<div class="selectStyle">
-						<select class="selectInputStyle" (click)="selectDropdownYear()"
-							formControlName="dobYear" tabindex="1" id="selectDropdown">
+						<select class="selectInputStyle" (click)="selectDropdownYear()" formControlName="dobYear"
+							tabindex="1" id="selectDropdown">
 							<option value="">Year</option>
 							<option *ngFor="let year of dobYear" value="{{ year }}">
 								{{ year }}
 							</option>
 						</select>
 						<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-							viewBox="0 0 122.88 63.9" style="enable-background: new 0 0 122.88 63.9"
-							xml:space="preserve">
+							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
+							style="enable-background: new 0 0 122.88 63.9" xml:space="preserve">
 							<style type="text/css">
 								.sty0 {
 									fill-rule: evenodd;
@@ -352,8 +337,7 @@
 					</div>
 				</div>
 				<div class="col-md-6">
-					<label class="select-currency-label">Currency <span
-							class="asterisk">*</span></label>
+					<label class="select-currency-label">Currency <span class="asterisk">*</span></label>
 					<!-- Search and Fill functionality -->
 					<!-- <input type="text" placeholder="Search by Name" matInput
 							(keyup)="searchGlobalValue('currency', $event?.target?.value)" [matAutocomplete]="autocurrency"
@@ -367,8 +351,8 @@
 
 					<!-- Select Functionality -->
 					<div class="selectStyle">
-						<select class="selectInputStyle" (click)="selectDropdownCurrency()"
-							formControlName="currency" tabindex="1">
+						<select class="selectInputStyle" (click)="selectDropdownCurrency()" formControlName="currency"
+							tabindex="1">
 							<option value="">Choose Currency</option>
 							<option *ngFor="let currencyOption of currencyOptions" [value]="
 									currencyOption?.currency +
@@ -391,10 +375,10 @@
 				</div>
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
-						<mat-label>SSN Personal ID # / Business ID #
+						<mat-label>SSN Personal ID #
 							<span class="asterisk">*</span>
 						</mat-label>
-						<input matInput placeholder="SSN Personal ID # / Business ID #"
+						<input matInput placeholder="SSN Personal ID #"
 							(focus)="$event?.target?.select()" formControlName="ssn" tabindex="1" />
 					</mat-form-field>
 					<div *ngIf="
@@ -441,10 +425,9 @@
 				</div>
 				<div class="col-md-6 mt-3" *ngIf="f?.haveEin?.value">
 					<mat-form-field appearance="outline">
-						<mat-label>EIN / Business ID #  <span
-							class="asterisk">*</span></mat-label>
-						<input matInput placeholder="EIN / Business ID #"
-							(focus)="$event?.target?.select()" formControlName="ein" tabindex="1" />
+						<mat-label>EIN / Business ID # <span class="asterisk">*</span></mat-label>
+						<input matInput placeholder="EIN / Business ID #" (focus)="$event?.target?.select()"
+							formControlName="ein" tabindex="1" />
 					</mat-form-field>
 					<div *ngIf="
 							(submittedForm && f?.ein?.errors) ||
@@ -468,10 +451,8 @@
 						</h2>
 					</div>
 					<div class="col-auto text-right">
-						<button id="btn-country-verify-docs"
-							class="custom-filled-button orange-button text-center"
-							data-toggle="modal" data-target="#verificationDocumentModal"
-							tabindex="1">
+						<button id="btn-country-verify-docs" class="custom-filled-button orange-button text-center"
+							data-toggle="modal" data-target="#verificationDocumentModal" tabindex="1">
 							Acceptable Country Owner Verification Document
 						</button>
 					</div>
@@ -486,17 +467,17 @@
 									</span>
 									<span class="asterisk">*</span>
 								</p>
-								<img src="{{ id_front_image }}"
-									(click)="showImageInModal(id_front_image)" tabindex="-1" />
-									<!-- *ngIf="" -->
-									<!-- [style.transform]="'rotate(' + id_front_image_degree + 'deg)'" -->
-									<!-- handleRotateSec('rotateDriverLicence'); -->
+								<img src="{{ id_front_image }}" (click)="showImageInModal(id_front_image)"
+									tabindex="-1" />
+								<!-- *ngIf="" -->
+								<!-- [style.transform]="'rotate(' + id_front_image_degree + 'deg)'" -->
+								<!-- handleRotateSec('rotateDriverLicence'); -->
 								<ul class="mt-3" *ngIf="canChangeDocument && !rotateDriverLicence">
-											  <li>
-												<a class="custom-arrow-clockwise-button"
-												(click)="fetchImageBlob(id_front_image ,'id_front_image',id_front_image_id )">
-												 <i class="bi bi-arrow-clockwise"></i>rotate</a>
-											</li>
+									<li>
+										<a class="custom-arrow-clockwise-button"
+											(click)="fetchImageBlob(id_front_image ,'id_front_image',id_front_image_id )">
+											<i class="bi bi-arrow-clockwise"></i>rotate</a>
+									</li>
 									<li>
 										<button class="changeuploaded" tabindex="1">
 											<input type="file" (change)="
@@ -506,8 +487,7 @@
 														id_front_image_id
 													)
 												" tabindex="-1" />
-											<svg xmlns="http://www.w3.org/2000/svg"
-												viewBox="0 0 24 24">
+											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
 												<path
@@ -523,8 +503,7 @@
 													'id_front_image'
 												)
 											" tabindex="1">
-											<svg xmlns="http://www.w3.org/2000/svg"
-												viewBox="0 0 32 32">
+											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 												<path
 													d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
 											</svg>
@@ -532,21 +511,21 @@
 										</a>
 									</li>
 								</ul>
-									<ul class="mt-3" *ngIf="rotateDriverLicence">
+								<ul class="mt-3" *ngIf="rotateDriverLicence">
 									<li>
 										<button class="custom-arrow-clockwise-button"
-										 (click)="rotateImage('id_front_image_degree')">
-										 <i class="bi bi-arrow-clockwise"></i>rotate</button>
+											(click)="rotateImage('id_front_image_degree')">
+											<i class="bi bi-arrow-clockwise"></i>rotate</button>
 									</li>
 									<li>
 										<button class="custom-confirm-button"
-										 (click)="updateImageOrentation('id_front_image');handleRotateSec('rotateDriverLicence')">
+											(click)="updateImageOrentation('id_front_image');handleRotateSec('rotateDriverLicence')">
 											<i class="bi bi-check2"></i>confirm</button>
 									</li>
 									<li>
 										<button class="custom-x-button"
-										 (click)="handleRotateSec('rotateDriverLicence');rotateImage('id_front_image_degree')">
-										 <i class="bi bi-x-lg"></i>cancel</button>
+											(click)="handleRotateSec('rotateDriverLicence');rotateImage('id_front_image_degree')">
+											<i class="bi bi-x-lg"></i>cancel</button>
 									</li>
 								</ul>
 							</div>
@@ -566,10 +545,9 @@
 										<span class="asterisk">*</span>
 									</p>
 									<div class="emptyImage">
-										<img src="../../../../assets/images/empty-image.png"
-											tabindex="-1" />
+										<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
 									</div>
-									
+
 									<ul *ngIf="canChangeDocument" class="mt-3">
 										<li>
 											<button class="adduploaded" tabindex="1">
@@ -579,8 +557,7 @@
 															'id_front_image'
 														)
 													" tabindex="-1" />
-												<svg xmlns="http://www.w3.org/2000/svg"
-													viewBox="0 0 24 24">
+												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 													<path fill="none" d="M0 0h24v24H0V0z" />
 													<circle cx="12" cy="12" r="3" />
 													<path
@@ -610,13 +587,13 @@
 									Drivers License or Other ID
 									<span class="optionalTextStyle">(Back Photo)</span>
 								</p>
-								<img src="{{ id_back_image }}"
-									(click)="showImageInModal(id_back_image)" tabindex="-1" />
+								<img src="{{ id_back_image }}" (click)="showImageInModal(id_back_image)"
+									tabindex="-1" />
 								<ul *ngIf="canChangeDocument && !rotateDriverLicenceBack" class="mt-3">
 									<li>
 										<a class="custom-arrow-clockwise-button"
-										(click)="fetchImageBlob(id_back_image ,'id_back_image',id_back_image_id )">
-										 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+											(click)="fetchImageBlob(id_back_image ,'id_back_image',id_back_image_id )">
+											<i class="bi bi-arrow-clockwise"></i>rotate</a>
 									</li>
 									<li>
 										<button class="changeuploaded" tabindex="1">
@@ -627,8 +604,7 @@
 														id_back_image_id
 													)
 												" tabindex="-1" />
-											<svg xmlns="http://www.w3.org/2000/svg"
-												viewBox="0 0 24 24">
+											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
 												<path
@@ -644,8 +620,7 @@
 													'id_back_image'
 												)
 											" tabindex="1">
-											<svg xmlns="http://www.w3.org/2000/svg"
-												viewBox="0 0 32 32">
+											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 												<path
 													d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
 											</svg>
@@ -656,18 +631,18 @@
 								<ul class="mt-3" *ngIf="rotateDriverLicenceBack">
 									<li>
 										<button class="custom-arrow-clockwise-button"
-										 (click)="rotateImage('id_back_image_degree')">
-										 <i class="bi bi-arrow-clockwise"></i>rotate</button>
+											(click)="rotateImage('id_back_image_degree')">
+											<i class="bi bi-arrow-clockwise"></i>rotate</button>
 									</li>
 									<li>
 										<button class="custom-confirm-button"
-										 (click)="updateImageOrentation('id_back_image');handleRotateSec('rotateDriverLicenceBack')">
+											(click)="updateImageOrentation('id_back_image');handleRotateSec('rotateDriverLicenceBack')">
 											<i class="bi bi-check2"></i>confirm</button>
 									</li>
 									<li>
 										<button class="custom-x-button"
-										 (click)="handleRotateSec('rotateDriverLicenceBack');rotateImage('id_back_image_degree')">
-										 <i class="bi bi-x-lg"></i>cancel</button>
+											(click)="handleRotateSec('rotateDriverLicenceBack');rotateImage('id_back_image_degree')">
+											<i class="bi bi-x-lg"></i>cancel</button>
 									</li>
 								</ul>
 							</div>
@@ -682,10 +657,9 @@
 										<span class="optionalTextStyle">(Back Photo)</span>
 									</p>
 									<div class="emptyImage">
-										<img src="../../../../assets/images/empty-image.png"
-											tabindex="-1" />
+										<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
 									</div>
-									<ul *ngIf="canChangeDocument"  class="mt-3">
+									<ul *ngIf="canChangeDocument" class="mt-3">
 										<li>
 											<button class="adduploaded" tabindex="1">
 												<input type="file" (change)="
@@ -695,8 +669,7 @@
 															id_back_image_id
 														)
 													" tabindex="-1" />
-												<svg xmlns="http://www.w3.org/2000/svg"
-													viewBox="0 0 24 24">
+												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 													<path fill="none" d="M0 0h24v24H0V0z" />
 													<circle cx="12" cy="12" r="3" />
 													<path
@@ -719,30 +692,31 @@
 			Company Address Information
 			<span class="spanText">(Per Stripe)</span>
 		</h2>
+		<!-- <div class="row d-flex flex-row-reverse">
+			<div class="col-md-3" *ngIf="!canChangeAddress">
+				<button type="button" class="adressChangeButton m-0 h-100" data-toggle="modal"
+					data-target="#requestAddressChangeModal" tabindex="1">
+					Request Address Change
+				</button>
+			</div>
+		</div> -->
 		<div class="container mt-4">
 			<div class="row">
-				<div class="col-md-9">
-					<h3
-						class="addveh_top d-md-flex justify-content-between align-items-center mb-0">
-						<label class="alert alert-danger">Enter Address and Choose From Drop
+				<div class="col-md-10">
+					<h3 class="addveh_top d-md-flex justify-content-between align-items-center mb-0">
+						<label class="alert alert-danger mr-2">Enter Address and Choose From Drop
 							Down.</label>
 						<label class="alert alert-danger my-2">Choose nearest major city or airport location</label>
 					</h3>
 				</div>
-				<div class="col-md-3" *ngIf="!canChangeAddress">
-					<button type="button" class="adressChangeButton m-0 h-100" data-toggle="modal"
-						data-target="#requestAddressChangeModal" tabindex="1">
-						Request Address Change
-					</button>
-				</div>
+
 			</div>
 			<div class="row">
 				<div class="col-md-6">
 					<mat-form-field appearance="outline" [class.read-only]="!canChangeAddress">
 						<mat-label>Enter Business/Base Address</mat-label>
-						<input matInput placeholder="Search Here and Set Location Pin"
-							(focus)="$event.target.select()" [readonly]="!canChangeAddress"
-							formControlName="address" #search1 tabindex="1" />
+						<input matInput placeholder="Search Here and Set Location Pin" (focus)="$event.target.select()"
+							[readonly]="!canChangeAddress" formControlName="address" #search1 tabindex="1" />
 					</mat-form-field>
 					<div *ngIf="
 							(submittedForm && f?.address?.errors) ||
@@ -765,41 +739,33 @@
 					</ng-template>
 				</div>
 				<div class="col-md-4">
-					<mat-form-field appearance="outline" class="example-full-width">
+					<mat-form-field appearance="outline" class="example-full-width" [ngClass]="isBadgeCity ? '' : 'border-red'">
 						<mat-label>Badge City
 						</mat-label>
-						<input type="text"
-							   placeholder="Pick one"
-							   aria-label="Number"
-							   matInput
-							   formControlName="badge_city_name"
-							   [matAutocomplete]="auto" 
-							   (keyup)="handleBadgeCity($event.target.value)">
+						<input type="text" placeholder="Pick one" aria-label="Number" matInput
+							formControlName="badge_city_name" [matAutocomplete]="auto"
+							(keyup)="handleBadgeCity($event.target.value)">
 						<mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-						  <mat-option *ngFor="let option of filteredOptions" 
-						  (onSelectionChange)="selectBadgeCity(option,$event.isUserInput)" [value]="option.name">
-							{{option.name}}
-						  </mat-option>
+							<mat-option *ngFor="let option of filteredOptions"
+								(onSelectionChange)="selectBadgeCity(option,$event.isUserInput)" [value]="option.name">
+								{{option.name}}
+							</mat-option>
 						</mat-autocomplete>
-					  </mat-form-field>
+					</mat-form-field>
 				</div>
 				<!-- <div class="col-md-6 d-md-block d-none"></div> -->
 				<div class="col-md-12 map-wrapper" *ngIf="latitude">
 					<agm-map [latitude]="latitude" [longitude]="longitude">
-						<agm-marker [latitude]="latitude" [longitude]="longitude"
-							[markerDraggable]="true">
+						<agm-marker [latitude]="latitude" [longitude]="longitude" [markerDraggable]="true">
 						</agm-marker>
 					</agm-map>
 				</div>
 
 				<div class="col-md-6">
-					<label class="select-country-label">Country <span
-							class="asterisk">*</span></label>
+					<label class="select-country-label">Country <span class="asterisk">*</span></label>
 					<div class="selectStyle">
-						<select class="selectInputStyle" (click)="selectDropdownCountry()"
-							formControlName="country"
-							(selectionChange)="changeCountry($event.value)"
-							[disabled]="!canChangeAddress" tabindex="1">
+						<select class="selectInputStyle" (click)="selectDropdownCountry()" formControlName="country"
+							(selectionChange)="changeCountry($event.value)" [disabled]="!canChangeAddress" tabindex="1">
 							<option value="">Choose Country</option>
 							<option *ngFor="let countryOption of countryOptions"
 								[value]="countryOption?.countryShortCode">
@@ -807,9 +773,8 @@
 							</option>
 						</select>
 						<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-							viewBox="0 0 122.88 63.9" style="enable-background: new 0 0 122.88 63.9"
-							xml:space="preserve">
+							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
+							style="enable-background: new 0 0 122.88 63.9" xml:space="preserve">
 							<style type="text/css">
 								.sty0 {
 									fill-rule: evenodd;
@@ -831,21 +796,18 @@
 					</div>
 				</div>
 				<div class="col-md-6">
-					<label class="select-state-label">State/Province <span
-							class="asterisk">*</span></label>
+					<label class="select-state-label">State/Province <span class="asterisk">*</span></label>
 					<div class="selectStyle">
-						<select class="selectInputStyle" (click)="selectDropdownState()"
-							formControlName="state" [disabled]="!canChangeAddress" tabindex="1">
+						<select class="selectInputStyle" (click)="selectDropdownState()" formControlName="state"
+							[disabled]="!canChangeAddress" tabindex="1">
 							<option value="">Choose State/Province</option>
-							<option *ngFor="let stateOption of stateOptions"
-								[value]="stateOption?.shortCode">
+							<option *ngFor="let stateOption of stateOptions" [value]="stateOption?.shortCode">
 								{{ stateOption?.name }}
 							</option>
 						</select>
 						<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-							viewBox="0 0 122.88 63.9" style="enable-background: new 0 0 122.88 63.9"
-							xml:space="preserve">
+							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
+							style="enable-background: new 0 0 122.88 63.9" xml:space="preserve">
 							<style type="text/css">
 								.sty0 {
 									fill-rule: evenodd;
@@ -895,38 +857,37 @@
 						</div>
 					</div>
 				</div> -->
-				<div class="col-md-6">
+				<!-- <div class="col-md-6">
 					<mat-form-field appearance="outline" [class.read-only]="!canChangeAddress">
 						<mat-label>City <span class="asterisk">*</span></mat-label>
-						<input matInput (focus)="$event.target.select()" placeholder="City"
-							formControlName="city" [readonly]="!canChangeAddress" disabled
-							tabindex="1" />
+						<input matInput (focus)="$event.target.select()" placeholder="City" formControlName="city"
+							[readonly]="!canChangeAddress" disabled tabindex="1" />
 					</mat-form-field>
 					<div *ngIf="
 							(submittedForm && f?.city?.errors) ||
 							(f?.city?.touched && f?.city?.errors)
 						" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f?.city?.errors?.required">
-							This field is required 
+							This field is required
 						</div>
 					</div>
-				</div>
-<div class="col-md-6">
-<mat-form-field appearance="outline" [class.read-only]="!canChangeAddress">
-	<mat-label>Unit#</mat-label>
-	<input matInput placeholder="Unit" (focus)="$event.target.select()"
-		formControlName="unit" [readonly]="!canChangeAddress" tabindex="1" />
-</mat-form-field>
-<div *ngIf="
+				</div> -->
+				<div class="col-md-6">
+					<mat-form-field appearance="outline" [class.read-only]="!canChangeAddress">
+						<mat-label>Unit#</mat-label>
+						<input matInput placeholder="Unit" (focus)="$event.target.select()" formControlName="unit"
+							[readonly]="!canChangeAddress" tabindex="1" />
+					</mat-form-field>
+					<div *ngIf="
 		(submittedForm && f?.unit?.errors) ||
 		(f?.unit?.touched && f?.unit?.errors)
 	" class="text-danger margin-bottom-thin my-mat-hint">
-	<div *ngIf="f?.unit?.errors?.required">
-		This field is required
-	</div>
-</div>
-</div>
-				<div class="col-md-6">  
+						<div *ngIf="f?.unit?.errors?.required">
+							This field is required
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
 					<mat-form-field appearance="outline" [class.read-only]="!canChangeAddress">
 						<mat-label>Zip Code <span class="asterisk">*</span></mat-label>
 						<input matInput placeholder="Zip Code" (focus)="$event.target.select()"
@@ -940,8 +901,7 @@
 							This field is required
 						</div>
 					</div>
-					<div *ngIf="f?.zipCode?.errors"
-						class="text-danger margin-bottom-thin my-mat-hint">
+					<div *ngIf="f?.zipCode?.errors" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="
 								f?.zipCode?.errors?.invalid_Pattern;
 								else plusError
@@ -969,7 +929,7 @@
 	<div class="container">
 		<div class="row py-4">
 			<div class="col-md-7">
-				
+
 			</div>
 			<div class="col-md-5">
 				<div class="">
@@ -986,7 +946,7 @@
 				</div>
 			</div>
 		</div>
-			</div>
+	</div>
 
 
 
@@ -1000,13 +960,11 @@
 				<div class="container py-2">
 					<h3 class="headinginfoH3 mt-3">
 						Credit Card
-						<img class="creditcard_pay" src="assets/admin/images/creditcard_pay.png"
-							tabindex="-1" />
+						<img class="creditcard_pay" src="assets/admin/images/creditcard_pay.png" tabindex="-1" />
 					</h3>
 					<div class="row">
 						<div class="col-md-6">
-							<div id="card-type-container"
-								class="w-100 d-flex flex-nowrap justify-content-center">
+							<div id="card-type-container" class="w-100 d-flex flex-nowrap justify-content-center">
 								<div id="cd-personal" class="card-type"
 									[ngClass]="f?.primaryCardType?.value == 'personal' ? 'active' : ''"
 									(click)="changeRadio('primaryCardType', 'personal')">
@@ -1025,15 +983,14 @@
 							<mat-form-field appearance="outline">
 								<mat-label>Card Holder First & Last Name</mat-label>
 								<input matInput placeholder="Card Holder First & Last Name"
-									(focus)="$event.target.select()"
-									formControlName="primaryCardHolderName" tabindex="1" />
+									(focus)="$event.target.select()" formControlName="primaryCardHolderName"
+									tabindex="1" />
 							</mat-form-field>
 						</div>
 						<div class="col-md-6">
 							<mat-form-field appearance="outline">
 								<mat-label>Card No#</mat-label>
-								<input matInput placeholder="Card No#"
-									(focus)="$event.target.select()"
+								<input matInput placeholder="Card No#" (focus)="$event.target.select()"
 									formControlName="primaryCardNumber" tabindex="1" />
 							</mat-form-field>
 							<div *ngIf="f?.primaryCardNumber?.errors"
@@ -1082,13 +1039,13 @@
 						</div>
 						<div class="col-md-4">
 							<label class="select-ex-month-label">
-								Expiration Month
+								Expiry Month
 							</label>
 							<div class="selectStyle">
 								<select class="selectInputStyle" (click)="selectDropdownExMonth()"
 									formControlName="primaryMM" tabindex="1">
 									<option value="">
-										Choose Expiration Month
+										Choose Expiry Month
 									</option>
 									<option value="1">01</option>
 									<option value="2">02</option>
@@ -1104,8 +1061,8 @@
 									<option value="12">12</option>
 								</select>
 								<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-									xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-									viewBox="0 0 122.88 63.9" style="
+									xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
+									style="
 										enable-background: new 0 0 122.88 63.9;
 									" xml:space="preserve">
 									<style type="text/css">
@@ -1115,28 +1072,26 @@
 										}
 									</style>
 									<g>
-										<polygon class="sty0"
-											points="61.44,63.9 122.88,0 0,0 61.44,63.9" />
+										<polygon class="sty0" points="61.44,63.9 122.88,0 0,0 61.44,63.9" />
 									</g>
 								</svg>
 							</div>
 						</div>
 						<div class="col-md-4">
-							<label class="select-ex-year-label">Expiration Year</label>
+							<label class="select-ex-year-label">Expiry Year</label>
 							<div class="selectStyle">
 								<select class="selectInputStyle" (click)="selectDropdownExYear()"
 									formControlName="primaryYY" tabindex="1">
 									<option value="">
-										Choose Expiration Year
+										Choose Expiry Year
 									</option>
-									<option *ngFor="let yearOption of yearOptions"
-										value="{{ yearOption }}">
+									<option *ngFor="let yearOption of yearOptions" value="{{ yearOption }}">
 										{{ yearOption }}
 									</option>
 								</select>
 								<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-									xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-									viewBox="0 0 122.88 63.9" style="
+									xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 63.9"
+									style="
 										enable-background: new 0 0 122.88 63.9;
 									" xml:space="preserve">
 									<style type="text/css">
@@ -1146,8 +1101,7 @@
 										}
 									</style>
 									<g>
-										<polygon class="sty0"
-											points="61.44,63.9 122.88,0 0,0 61.44,63.9" />
+										<polygon class="sty0" points="61.44,63.9 122.88,0 0,0 61.44,63.9" />
 									</g>
 								</svg>
 							</div>
@@ -1158,8 +1112,7 @@
 								<input matInput placeholder="CVV" (focus)="$event.target.select()"
 									formControlName="primaryCSC" tabindex="1" />
 							</mat-form-field>
-							<div *ngIf="f?.primaryCSC?.errors"
-								class="text-danger margin-bottom-thin my-mat-hint">
+							<div *ngIf="f?.primaryCSC?.errors" class="text-danger margin-bottom-thin my-mat-hint">
 								<div *ngIf="
 										f?.primaryCSC?.errors?.invalid_Pattern;
 										else plusError
@@ -1213,17 +1166,15 @@
 				<div class="row mt-3">
 					<div class="col-md-12 mb-2">
 						<label class="alert alert-danger">Add Debit/Credit Card To Pay Farm Out
-							Bookings.</label>
+							Bookings and earn a 10% Travel Agent commission. (Optional)</label>
 					</div>
 				</div>
 				<div class="row">
 					<div class="col-md-12">
-						<button class="custom-btn add-button" (click)="addCardClick(accountId)"
-							tabindex="-1">
-							<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-								class="bi bi-plus-circle" viewBox="0 0 16 16">
-								<path
-									d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+						<button class="custom-btn add-button" (click)="addCardClick(accountId)" tabindex="-1">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-plus-circle"
+								viewBox="0 0 16 16">
+								<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
 								<path
 									d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
 							</svg>
@@ -1235,9 +1186,9 @@
 			<div class="containeredd driverside_table">
 				<div class="row">
 					<div class="col-md-12 custom_table table-responsive">
-						<table class="table table-striped dataTable dt-responsive" id="dataTable"
-							role="grid" aria-describedby="dataTable_info" style="width: 100%"
-							width="100%" cellspacing="0" tabindex="-1">
+						<table class="table table-striped dataTable dt-responsive" id="dataTable" role="grid"
+							aria-describedby="dataTable_info" style="width: 100%" width="100%" cellspacing="0"
+							tabindex="-1">
 							<thead>
 								<tr role="row">
 									<th>Card Holder First & Last Name</th>
@@ -1415,8 +1366,7 @@
 </div>
 
 <!-- Delete confirmation modal -->
-<app-delete-confirmation (deleteRecord)="delete()"
-	[alertMessage]="alertMessage"></app-delete-confirmation>
+<app-delete-confirmation (deleteRecord)="delete()" [alertMessage]="alertMessage"></app-delete-confirmation>
 
 <!-- Affiliate Email sent modal -->
 <div class="modal fade" id="showEmailVerificationAlert" tabindex="-1" role="dialog"
@@ -1428,10 +1378,10 @@
 			</button>
 			<div class="modal-header">
 				<h5 class="modal-title mb-0 text-center">
-					We shot you an email for owner/ 24Hr Cell Phone Dispatch #  <br />
+					We shot you an email for owner/ 24Hr Cell Phone Dispatch # <br />
 					Please verify one / both email addresses. <br />
 					Operators need to continue seamlessly through All steps
-					without 24Hr Cell Phone Dispatch #  verification. <br />
+					without 24Hr Cell Phone Dispatch # verification. <br />
 					Admin cannot turn affiliate on, until verified.
 					Affiliate/admin needs to be alerted that this is the only
 					issue.
@@ -1451,8 +1401,7 @@
 
 <!-- Request Address Change -->
 <div class="modal fade" id="requestAddressChangeModal" tabindex="-1" role="dialog"
-	aria-labelledby="requestAddressChangeModal" aria-hidden="true"
-	style="padding-right: 0 !important">
+	aria-labelledby="requestAddressChangeModal" aria-hidden="true" style="padding-right: 0 !important">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<button type="button" class="close closeButton" data-dismiss="modal" aria-label="Close">
@@ -1463,8 +1412,7 @@
 					<h5 class="text-center mb-2 mt-3">{{ displayMsg }}</h5>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="custom-btn button2" data-dismiss="modal"
-						tabindex="-1">
+					<button type="button" class="custom-btn button2" data-dismiss="modal" tabindex="-1">
 						OK
 					</button>
 				</div>
@@ -1475,15 +1423,13 @@
 						<h3 class="modal-title mb-0">Request Address Change</h3>
 					</div>
 					<!-- progress bar -->
-					<mat-progress-bar mode="indeterminate"
-						*ngIf="showProgressBar"></mat-progress-bar>
+					<mat-progress-bar mode="indeterminate" *ngIf="showProgressBar"></mat-progress-bar>
 					<div class="modal-body pt-0">
 						<div class="row">
 							<div class="col-md-6">
 								<mat-form-field appearance="outline">
 									<mat-label>Address</mat-label>
-									<input matInput placeholder="Address"
-										formControlName="requestAddress" #search2 />
+									<input matInput placeholder="Address" formControlName="requestAddress" #search2 />
 								</mat-form-field>
 								<div *ngIf="
 										(submittedRequestAddressChangeForm &&
@@ -1503,10 +1449,9 @@
 								</div>
 							</div>
 							<div class="col-md-12 map-wrapper" *ngIf="requestLatitude">
-								<agm-map [latitude]="requestLatitude"
-									[longitude]="requestLongitude">
-									<agm-marker [latitude]="requestLatitude"
-										[longitude]="requestLongitude" [markerDraggable]="true">
+								<agm-map [latitude]="requestLatitude" [longitude]="requestLongitude">
+									<agm-marker [latitude]="requestLatitude" [longitude]="requestLongitude"
+										[markerDraggable]="true">
 									</agm-marker>
 								</agm-map>
 							</div>
@@ -1580,8 +1525,7 @@
 									<mat-label>Street
 										<span class="asterisk">*</span>
 									</mat-label>
-									<input matInput placeholder="Street"
-										formControlName="requestStreet" />
+									<input matInput placeholder="Street" formControlName="requestStreet" />
 								</mat-form-field>
 								<div *ngIf="
 										(submittedRequestAddressChangeForm &&
@@ -1605,8 +1549,7 @@
 									<mat-label>City
 										<span class="asterisk">*</span>
 									</mat-label>
-									<input matInput placeholder="City"
-										formControlName="requestCity" />
+									<input matInput placeholder="City" formControlName="requestCity" />
 								</mat-form-field>
 								<div *ngIf="
 										(submittedRequestAddressChangeForm &&
@@ -1628,8 +1571,7 @@
 							<div class="col-md-6">
 								<mat-form-field appearance="outline">
 									<mat-label>Unit#</mat-label>
-									<input matInput placeholder="Unit"
-										formControlName="requestUnit" />
+									<input matInput placeholder="Unit" formControlName="requestUnit" />
 								</mat-form-field>
 								<div *ngIf="
 										(submittedRequestAddressChangeForm &&
@@ -1653,8 +1595,7 @@
 									<mat-label>Zip Code
 										<span class="asterisk">*</span>
 									</mat-label>
-									<input matInput placeholder="Zip Code"
-										formControlName="requestZipCode" />
+									<input matInput placeholder="Zip Code" formControlName="requestZipCode" />
 								</mat-form-field>
 								<div *ngIf="
 										(submittedRequestAddressChangeForm &&
@@ -1708,8 +1649,7 @@
 						</div>
 					</div>
 					<div class="modal-footer pb-0">
-						<button type="button" class="custom-btn button2"
-							(click)="requestAddressChange()"
+						<button type="button" class="custom-btn button2" (click)="requestAddressChange()"
 							[disabled]="disableSubmitRequestAddressChangeButton" tabindex="-1">
 							Submit
 						</button>

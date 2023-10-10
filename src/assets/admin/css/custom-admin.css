@@ -1077,9 +1077,9 @@ a.user-profile {
 }
 
 .user-profile img {
-    height: 40px !important;
-    width: 40px !important;
-    border-radius: 50%;
+    height: 50px !important;
+    width: 46px !important;
+    border-radius: 48%;
     padding: 1px;
     margin-right: 4px;
 }

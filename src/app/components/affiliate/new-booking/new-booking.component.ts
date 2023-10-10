@@ -83,6 +83,7 @@ export class NewBookingComponent implements OnInit {
 	chosen_user: Record<string, any>
 
 	distance: number = 0
+	extraStops_rate:any = 0
 	return_distance: number = 0
 	distance_for_rates: string = ''
 	amenities: Array<string> = []
@@ -94,6 +95,13 @@ export class NewBookingComponent implements OnInit {
 	reset_button: boolean = false
 	submitBookingForm: boolean;
 	nav_to_farmIn: boolean = true;
+	booking_data: any = {};
+	service_type: any = 'one_way';
+	transfer_type: any = 'city_to_city'
+	number_of_hours: any = '2';
+	is_master_vehicle: boolean = JSON.parse(sessionStorage.getItem('selected_vehicle'))?.is_master_vehicle || false
+	isTravelShare: boolean;
+
 
 
 	constructor(
@@ -243,6 +251,7 @@ export class NewBookingComponent implements OnInit {
 			total_passengers: [1],
 			luggage_count: [0],
 			booking_instructions: [''],
+			return_booking_instructions: [''],
 			affiliate_type: ['affiliate'],
 			affiliate_id: [''],
 			lose_affiliate_name: ['', this.customValidator.whitespace()],
@@ -363,6 +372,7 @@ export class NewBookingComponent implements OnInit {
 		this.SetFormValue('return_pickup_date', future_full_date.slice(0, future_full_date.indexOf('T')))
 		this.SetFormValue('number_of_vehicles', 1)
 		this.SetFormValue('booking_instructions', 'Text client day before each booking to confirm driver name and cell #');
+		this.SetFormValue('return_booking_instructions', 'Text client day before each booking to confirm driver name and cell #');
 
 
 		if (this.BookingForm.value.transfer_type.includes('city_')) {
@@ -410,12 +420,26 @@ export class NewBookingComponent implements OnInit {
 			this.monthOptions = this.months.filter(i=> i.value.includes(value))
 		}
 	}
+	handleClientAccChange(selectedAcc){
+		this.isTravelShare =  selectedAcc=='travel_planner' ? true : false
+		this.BookingForm.get('acc_id').setValue(null);
+		this.chosen_user = null
+		this.BookingForm.patchValue({
+			passenger_name: '',
+			passenger_email:'',
+			passenger_cell: '',
+			passenger_cell_isd: '+1',
+			passenger_cell_country: 'us',
+		})
+	}
 
 	prefillViaBookingID(booking_id: number) {
 		console.warn('Prefilling via Booking Id',booking_id)
 		this.$spinner.show('normalspinner');
 		this.affiliateService.getBookingDataForEdit(booking_id).subscribe((response: any) => {
+			this.SetFormValue('account_type', response?.data?.account_type)
 			response.data.booking_instructions =  response?.data?.booking_instructions?.replaceAll('<br />' , '')
+			this.isTravelShare =  response?.data?.account_type=='travel_planner' ? true : false
 			let editing_data = response?.data
 			this.autofillData('cruise', editing_data);
 			console.log(editing_data, "check big data")
@@ -647,12 +671,18 @@ export class NewBookingComponent implements OnInit {
 					this.fetchDistanceAndTime(response).then((response: { distance: number, time: number }) => {
 						if (is_return) {
 							this.return_distance = response.distance
+							if(!this.BookingForm.get('return_extra_stops')?.value?.length || this.BookingForm.get('return_extra_stops')?.value[0]['rate']?.length){
+								this.buildBookingData()
+							}
 							this.BookingForm.patchValue({
 								returnJourneyDistance: response.distance,
 								returnJourneyTime: response.time
 							})
 						} else {
 							this.distance = response.distance
+							if(!this.BookingForm.get('extra_stops')?.value?.length || this.BookingForm.get('extra_stops')?.value[0]['rate']?.length){
+								this.buildBookingData()
+							}
 							this.BookingForm.patchValue({
 								journeyDistance: response.distance,
 								journeyTime: response.time
@@ -729,6 +759,7 @@ export class NewBookingComponent implements OnInit {
 
 
 	fetchClientAccounts(account_type: string) {
+		console.log('fetchClientAccounts->>',account_type)
 		const legend = {
 			individual: 'individual',
 			corporate: 'corporate',
@@ -756,6 +787,7 @@ export class NewBookingComponent implements OnInit {
 	chooseUser(account_id: number) {
 		this.$spinner.show()
 		this.chosen_user = {}
+		console.log('chooseUser---->>>',this.Form.account_type.value)
 		this.affiliateService.chooseUser(account_id, this.Form.account_type.value).subscribe((response: any) => {
 			if (response.success && Object.keys(response.data).length > 0) {
 				this.chosen_user = response.data
@@ -904,6 +936,30 @@ export class NewBookingComponent implements OnInit {
 		// })
 	}
 
+	buildBookingData(){
+		console.log('rebuild booking data')
+		this.booking_data = {
+			vehicle_id: this.BookingForm.get('vehicle_id').value,
+			transfer_type: this.transfer_type,
+			service_type :this.service_type,
+			numberOfVehicles :1,
+			distance : this.distance, 
+			return_distance : this.return_distance,
+			no_of_hours : this.number_of_hours,
+			is_master_vehicle : this.is_master_vehicle,
+			extra_stops: this.BookingForm.get('extra_stops').value,
+			return_extra_stops : this.BookingForm.get('return_extra_stops').value
+		}
+	}
+	handleNoOfHours(value) {
+		this.number_of_hours = value
+		console.log('in function handle no of hours->' , value , value > 0)
+		this.number_of_hours > 0 ? this.buildBookingData() : ''
+	}
+	onSelectionChangeServiceType(event: any) {
+		this.service_type = event.value;
+		this.buildBookingData()
+	}
 	chooseDriver(driver_data: any) {
 		this.autofillData('driver', driver_data)
 	}
@@ -1072,7 +1128,9 @@ export class NewBookingComponent implements OnInit {
 			(<FormArray>this.BookingForm.get('return_extra_stops')).push(new FormGroup({
 				address: new FormControl(''),
 				latitude: new FormControl(''),
-				longitude: new FormControl('')
+				longitude: new FormControl(''),
+				rate:  new FormControl(''),
+				booking_instructions: new FormControl('')
 			}))
 		}
 		else {
@@ -1080,7 +1138,9 @@ export class NewBookingComponent implements OnInit {
 			(<FormArray>this.BookingForm.get('extra_stops')).push(new FormGroup({
 				address: new FormControl(''),
 				latitude: new FormControl(''),
-				longitude: new FormControl('')
+				longitude: new FormControl(''),
+				rate:  new FormControl(''),
+				booking_instructions: new FormControl('')
 			}))
 		}
 	}
@@ -1094,6 +1154,7 @@ export class NewBookingComponent implements OnInit {
 			(<FormArray>this.BookingForm.get('extra_stops')).removeAt(stop_index)
 			this.MapController()
 		}
+		this.buildBookingData()
 	}
 
 
@@ -1105,6 +1166,11 @@ export class NewBookingComponent implements OnInit {
 				(<FormArray>this.BookingForm.get('return_extra_stops')).at(index).patchValue({
 					address: address.formatted_address
 				})
+				let return_pickup_location = this.Form.return_pickup?.value
+				if (this.Form.transfer_type.value.includes('_airport')) {
+					return_pickup_location = this.Form.return_pickup_airport_name?.value
+				}
+				this.checkExtraStopInTown(return_pickup_location,address.formatted_address ,'return_extra_stops',index )
 			}
 			if (location) {
 				(<FormArray>this.BookingForm.get('return_extra_stops')).at(index).patchValue({
@@ -1120,6 +1186,11 @@ export class NewBookingComponent implements OnInit {
 				(<FormArray>this.BookingForm.get('extra_stops')).at(index).patchValue({
 					address: address.formatted_address
 				});
+				let pickup_location = this.Form.pickup.value
+				if (this.Form.transfer_type.value.includes('airport_')) {
+					pickup_location = this.Form.pickup_airport_name.value
+				}
+				this.checkExtraStopInTown(pickup_location,address.formatted_address ,'extra_stops',index )
 			}
 
 			if (location) {
@@ -1133,6 +1204,52 @@ export class NewBookingComponent implements OnInit {
 			this.MapController()
 		}
 	}
+	getTown(geocodeResult) {
+		for (let i = 0; i < geocodeResult.length; i++) {
+			const addressComponents = geocodeResult[i].address_components;
+			for (let j = 0; j < addressComponents.length; j++) {
+				const types = addressComponents[j].types;
+				if (types.includes('locality')) {
+					return addressComponents[j].long_name;
+				}
+			}
+		}
+		return null;
+	}
+
+	checkExtraStopInTown(location1: string, location2: string,formKey:string,index:any) {
+		console.log('in function check extra stop in town' , location1 , location2)
+		const geocoder = new google.maps.Geocoder();
+		geocoder.geocode({ address: location1 }, (results1, status1) => {
+		  if (status1 === 'OK' && results1.length > 0) {
+			const town1 = this.getTown(results1);
+			geocoder.geocode({ address: location2 },async (results2, status2) => {
+			  if (status2 === 'OK' && results2.length > 0) {
+				const town2 = this.getTown(results2);
+	  
+				if (town1 === town2) {
+					console.log('Both locations are in the same town/city.',this.extraStops_rate);
+					await (<FormArray>this.BookingForm.get([formKey])).at(index).patchValue({
+						rate : 'in_town'
+					});
+				} else {
+					console.log('Locations are in different towns/cities.',this.extraStops_rate);
+					(<FormArray>this.BookingForm.get([formKey])).at(index).patchValue({
+						rate : 'out_town'
+					});
+				}
+				setTimeout(()=>{
+					this.buildBookingData()
+				},300)
+			  } else {
+				console.error('Geocoding for Location 2 failed:', status2);
+			  }
+			});
+		  } else {
+			console.error('Geocoding for Location 1 failed:', status1);
+		  }
+		});
+	  }
 
 
 	select(is_checked: boolean, form_control: string, value: any) {
@@ -1374,9 +1491,9 @@ export class NewBookingComponent implements OnInit {
 					}
 				}
 
-				(<FormGroup>loose_customer.get('card_details')).get('card_number').setValidators([Validators.required, Validators.pattern("^[0-9]*$"), , Validators.minLength(12), Validators.maxLength(20),]);
+				(<FormGroup>loose_customer.get('card_details')).get('card_number').setValidators([Validators.required, Validators.pattern("^[0-9]*$"), , Validators.minLength(16), Validators.maxLength(20),]);
 				(<FormGroup>loose_customer.get('card_details')).get('name').setValidators([Validators.required]);
-				(<FormGroup>loose_customer.get('card_details')).get('cvv').setValidators([Validators.required, Validators.pattern("^[0-9]*$")]);
+				(<FormGroup>loose_customer.get('card_details')).get('cvv').setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(3), Validators.maxLength(5)]);
 				loose_customer.get('email').setValidators([Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.]+\.[a-zA-Z]{2,}$/i)])
 				loose_customer.get('phone').setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)])
 				loose_customer.get('first_name').setValidators([Validators.required])

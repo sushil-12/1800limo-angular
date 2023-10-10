@@ -19,7 +19,7 @@ export class MyBookingsComponent implements OnInit {
 	@ViewChild('inputmsg', { static: false }) message: ElementRef;
 	color: ThemePalette = 'primary';
 	outputDateFormat = 'YYYY-MM-DD';
-	public totalRecords: Number;
+	public totalRecords: any;
 	public firstPage: Number;
 	public lastPage: Number;
 	public totalPage: Number;
@@ -400,6 +400,31 @@ export class MyBookingsComponent implements OnInit {
 			});
 	}
 
+	acceptBooking() {
+		console.log('in function cancel booking')
+		this.spinner.show();
+
+		this.affiliateService.acceptBooking(this.cancelBookingId)
+			.pipe(
+				catchError(err => {
+					this.spinner.hide();//hide spinner
+					$('#acceptBooking').modal('hide');
+					return throwError(err);
+				})
+			)
+			.subscribe(({ data, success, message }: any) => {
+				if (success == true) {
+					this.spinner.hide();//hide spinner
+					this.loadBookings()
+					$('#acceptBooking').modal('hide');
+					// this.$errors.openDialog({
+					// 	errors: {
+					// 		error: `<span class='text-success'>${message}</span>`
+					// 	}
+					// })
+				}
+			});
+	}
 	// messageField(format)
 	// {
 	// 	this.show = true;
@@ -419,12 +444,7 @@ export class MyBookingsComponent implements OnInit {
 
 
 	editAction(bookingId, updateType) {
-		if (updateType == 'change') {
 			this.router.navigate(['/affiliate/new-booking'], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'true' } });
-		}
-		else {
-			this.router.navigate(['/affiliate/new-booking'], { queryParams: { bookingId: bookingId, nav: 'true' } });
-		}
 	}
 
 	finalizeAction(bookingId) {

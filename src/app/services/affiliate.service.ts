@@ -315,9 +315,9 @@ export class AffiliateService
 	}
 
 	//Vehicles 
-	async affiliateVehicleList()
+	async affiliateVehicleList(show_all_vehicles)
 	{
-		const result = await this.httpClient.get(this.serverUrl + 'get-affiliate-vehicles').toPromise();
+		const result = await this.httpClient.get(this.serverUrl + `get-affiliate-vehicles?show_all_vehicles=${show_all_vehicles}`).toPromise();
 		return result;
 	}
 	async getVehicleDataByAffiliateId(affiliate_id){
@@ -449,6 +449,10 @@ export class AffiliateService
 	cancelBooking(id){
 		return this.httpClient.get(this.serverUrl + 'change-booking-status/rejected/'+id)
 	}
+	acceptBooking(id){
+		return this.httpClient.get(this.serverUrl + 'change-booking-status/accepted/'+id)
+	}
+
 
 
 	//Create booking
@@ -476,7 +480,7 @@ export class AffiliateService
 			case 'corporate': {
 				return this.httpClient.get(this.serverUrl + 'get-corporate-account/' + id);
 			}
-			case 'travel': {
+			case 'travel_planner': {
 				return this.httpClient.get(this.serverUrl + 'get-travel-planner-account/' + id);
 			}
 			default: {

@@ -70,7 +70,7 @@
 								</a>
 								<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
 									aria-labelledby="navbarDropdownUserImage">
-									<a class="dropdown-item" (click)="clickEditIndividual(individual.id)">
+									<a class="dropdown-item" (click)="clickEditIndividual(individual?.id)">
 										<div class="dropdown-item-icon"></div>
 										Edit Individual Account
 									</a>
@@ -84,7 +84,7 @@
 											<div class="dropdown-item-icon"></div>
 											Future bookings
 										</a>
-									<a class="dropdown-item" (click)="clickIndividualCards(individual.id)">
+									<a class="dropdown-item" (click)="clickIndividualCards(individual?.id)">
 										<div class="dropdown-item-icon" *></div>
 										View Cards
 									</a>
@@ -92,20 +92,20 @@
 							</td>
 							<td class="text-center font-weight-bolder cursor-pointer text-underline">
 								<mat-slide-toggle class="example-margin" [color]="color"
-									[checked]="individual.status" [disabled]="disabled"
-									(change)="enableDisableClicked($event,individual.id)">
+									[checked]="individual?.status" [disabled]="disabled"
+									(change)="enableDisableClicked($event,individual?.id)">
 								</mat-slide-toggle>
 							</td>
-							<td *ngIf="individual.middle_name == null;else middleName">{{individual.first_name+' '+individual.last_name}}</td>
+							<td *ngIf="individual?.middle_name == null;else middleName"><span [innerHTML]="highlighText(individual?.first_name+' '+individual?.last_name)"></span></td>
 								<ng-template #middleName>
-									<td>{{individual.first_name+' '+individual.middle_name+' '+individual.last_name}}</td>
+									<td><span [innerHTML]="highlighText(individual?.first_name+' '+individual?.middle_name+' '+individual?.last_name)"></span></td>
 								</ng-template>
-								<td>{{individual.email}}</td>
-								<td>{{individual.mobileIsd+individual.mobile}}</td>
-								<td>{{individual.address}}</td>
-								<td>{{individual.city}}</td>
-								<td>{{individual.state}}</td>
-								<td>{{individual.country}}</td>
+								<td><span [innerHTML]="highlighText(individual?.email)"></span></td>
+								<td><span [innerHTML]="highlighText(individual?.mobileIsd+individual?.mobile)"></span></td>
+								<td><span [innerHTML]="highlighText(individual?.address)"></span></td>
+								<td><span [innerHTML]="highlighText(individual?.city)"></span></td>
+								<td><span [innerHTML]="highlighText(individual?.state)"></span></td>
+								<td><span [innerHTML]="highlighText(individual?.country)"></span></td>
 					</tbody>
 				</table>
 			</div>

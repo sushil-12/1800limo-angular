@@ -174,6 +174,9 @@ export class SelectVehicleComponent implements OnInit
 	ngOnInit(): void
 	{
 		window.scrollTo(0, 0)
+		if(!JSON.parse(sessionStorage.getItem('filters'))){
+			this.$router.navigateByUrl('/home')
+		}
 		this.$spinner.show()
 		sessionStorage.removeItem('selected_vehicle')
 		// Note: Do not add anything here or before below conditional logic. This should be the first step
@@ -717,10 +720,16 @@ export class SelectVehicleComponent implements OnInit
 			// 		error: 'Please open an account or login to proceed.'
 			// 	}
 			// })
-			localStorage.setItem('QB_redirectUrl','true')
-			this.$router.navigate(['/login/driver'], {
-				skipLocationChange: true
-			})
+			// window.alert('Creating booking without logged In')
+			this.$router.navigate([
+				'/quotebot/new-booking'
+			],
+			{ queryParams: {affiliate_id:vehicle_selected.affiliate_id, vehicle_id:vehicle_selected.id,new : true , is_master_vehicle:vehicle_selected?.is_master_vehicle} })
+			//  Redirecting to create new booking without login 
+			// localStorage.setItem('QB_redirectUrl','true')
+			// this.$router.navigate(['/login/driver'], {
+			// 	skipLocationChange: true
+			// })
 		}
 	}
 
