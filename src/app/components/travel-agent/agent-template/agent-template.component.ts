@@ -24,6 +24,7 @@ export class AgentTemplateComponent implements OnInit {
 	profile_pic_url: any;
 	chevron_up: boolean = false;
 	chevron: boolean = false;
+	chevron1: boolean = false;
 
   constructor(
 		private router: Router,
@@ -137,6 +138,9 @@ export class AgentTemplateComponent implements OnInit {
   }
   invoiceFunc(status) {
 	this.chevron = !this.chevron
+}
+userAccountFunc(status) {
+	this.chevron1 = !this.chevron1
 }
 
   showSidebarFunc(status)

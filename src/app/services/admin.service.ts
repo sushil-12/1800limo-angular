@@ -530,6 +530,9 @@ export class AdminService {
 	travelPlannerAccountStatus(id, status) {
 		return this.httpClient.put(this.serverUrl + 'travel-planner-status', { 'id': id, 'status': status });
 	}
+	getTravelClientAccount(id){
+		return this.httpClient.get(this.serverUrl + 'get-account-for-travel-agent/' + id);
+	}
 
 	//cards
 	async cardsList(id) {
@@ -818,6 +821,11 @@ export class AdminService {
 			}
 		}
 	}
+
+	getTravelClientDetailById(id){
+		return this.httpClient.get(this.serverUrl + 'get-an-account/' + id);
+	}
+
 	createBooking(data: any, update_type: string) {
 		if (update_type == 'return' || update_type == 'repeat') {
 			return this.httpClient.post(`${this.serverUrl}duplicate-reservation`, data)
