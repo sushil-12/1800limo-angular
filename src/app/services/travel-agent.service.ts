@@ -141,7 +141,28 @@ export class TravelAgentService {
   }
   addBankOfAffiliate(data){
     return this.httpClient.post(this.serverUrl + 'add-a-bank', data);
-
   }
+
+  getTravelClientAccounts(url, keyword){
+    var path;
+		if (url) {
+			path = url + '&search=' + keyword;
+		}
+		else {
+			path = this.serverUrl + 'accounts' + '?search=' + keyword;
+		}
+		return this.httpClient.get(path).toPromise();;
+  }
+  addAccount(data,id=null) {
+	if(id){
+		//update api here
+	}
+	else{
+		return this.httpClient.post(this.serverUrl + 'add-account', data);
+	}
+	}
+	getClientAccount(id){
+		return this.httpClient.get(this.serverUrl + `get-an-account/${id}`);
+	}
   
 }

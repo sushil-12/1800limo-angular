@@ -1811,6 +1811,58 @@ export class NewBookingComponent implements OnInit {
 				this.handleTravelStaffAccounts({id:value})
 			}
 		})
+		this.BookingForm.get('travel_client_acc').valueChanges.subscribe((value: any) => {
+			if (value == 'travel_loose_customer') {
+				const loose_customer = (this.BookingForm.get('loose_customer') as FormGroup)
+				// for every 'item' in loose_customer
+				for (let item in loose_customer.controls) {
+					// if 'item' in loose_customer is a formgroup, like card_details
+					if ((<FormGroup>this.BookingForm.get('loose_customer')).get(item) instanceof FormGroup) {
+						console.log(item)
+						// for every 'key' in card_details formgroup
+						for (let key in (loose_customer.get(item) as FormGroup).controls) {
+							// set validators in card_details
+							(<FormGroup>loose_customer.get(item)).get(key).setValidators([Validators.required]);
+							(<FormGroup>loose_customer.get(item)).get(key).updateValueAndValidity();
+
+						}
+					}
+
+					if (item != 'middle_name' && item != 'address') {
+						loose_customer.get(item).setValidators([Validators.required]);
+					}
+				}
+
+				(<FormGroup>loose_customer.get('card_details')).get('card_number').setValidators([Validators.required, Validators.pattern("^[0-9]*$"), , Validators.minLength(12), Validators.maxLength(20),]);
+				(<FormGroup>loose_customer.get('card_details')).get('name').setValidators([Validators.required]);
+				(<FormGroup>loose_customer.get('card_details')).get('cvv').setValidators([Validators.required, Validators.pattern("^[0-9]*$")]);
+				loose_customer.get('email').setValidators([Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.]+\.[a-zA-Z]{2,}$/i)])
+				loose_customer.get('phone').setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)])
+				loose_customer.get('first_name').setValidators([Validators.required])
+				// loose_customer.get('middle_name').setValidators(this.customValidator.whitespace())
+				loose_customer.get('last_name').setValidators([Validators.required])
+				loose_customer.get('address').setValidators(this.customValidator.whitespace())
+				loose_customer.updateValueAndValidity()
+
+			}
+			else {
+				const loose_customer = (this.BookingForm.get('loose_customer') as FormGroup)
+				// for every 'item' in loose_customer
+				for (let item in loose_customer.controls) {
+					// if 'item' in loose_customer is a formgroup, like card_details
+					if (loose_customer.get(item) instanceof FormGroup) {
+						// for every 'key' in card_details formgroup
+						for (let key in (loose_customer.get(item) as FormGroup).controls) {
+							// clear validators in card_details
+							loose_customer.get(item).get(key).clearValidators()
+							loose_customer.get(item).get(key).updateValueAndValidity()
+						}
+					}
+					loose_customer.get(item).clearValidators()
+					loose_customer.get(item).updateValueAndValidity()
+				}
+			}
+		})
 		
 
 		// Affiliate Type
