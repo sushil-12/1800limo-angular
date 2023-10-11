@@ -156,6 +156,7 @@ export class TravelAgentService {
   addAccount(data,id=null) {
 	if(id){
 		//update api here
+		return this.httpClient.put(this.serverUrl + `edit-account/${id}`, data);
 	}
 	else{
 		return this.httpClient.post(this.serverUrl + 'add-account', data);
