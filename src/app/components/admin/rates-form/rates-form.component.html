@@ -1,6 +1,6 @@
 <!-- Rates and Taxes -->
 
-<div *ngIf="ratesform" [formGroup]="RatesForm" class="section-container section-dropdown mt-5"
+<div *ngIf="ratesform" [formGroup]="RatesForm" class="section-container section-dropdown mt-2"
 	[ngClass]="{'w-100': ratesform && !returnratesform, 'w-50': ratesform && returnratesform}">
 	<!-- [ngStyle]="affiliate_type == 'affiliate' ? {'height': '0', 'padding': '0'} : ''" -->
 	<div class="row cursor-pointer" (click)="toggleDropdown('section')" id="rate-heading">
@@ -13,7 +13,8 @@
 
 	<div [attr.id]="'RateFormItem-' + item_index" class="my-4 px-md-3 rateSubSection" [formGroupName]="item.key"
 		[ngClass]="{'active': rate_params.chevrons[item.key]}"
-		*ngFor="let item of RateForm | keyvalue: returnZero; index as item_index" [ngStyle]="item.key == 'direct_taxes' ? {'display':'none'}: ''">
+		*ngFor="let item of RateForm | keyvalue: returnZero; index as item_index"
+		[ngStyle]="item.key == 'direct_taxes' ? {'display':'none'}: ''">
 		<div class="col-12 col-md-12" (click)="handleSubHeading(item.key)">
 			<h5 class="section-dropdown-header" *ngIf="item.key == 'all_inclusive_rates'">
 				Vehicle Base Rates
@@ -51,8 +52,10 @@
 							{{ textFormatter(sub_item?.value?.controls?.rate_label?.value) |
 							titlecase }}
 						</mat-label>
-						<input type="number" matInput placeholder="0" formControlName="baserate" [tabIndex]="getTabIndex(item.key)"
-							class="font-weight-bolder rate-input-field text-right" (focus)="$event.target.select()" (change)="handleNegtiveValue(item.key,sub_item.key,'baserate',$event.target.value)" />
+						<input type="number" matInput placeholder="0" formControlName="baserate"
+							[tabIndex]="getTabIndex(item.key)" class="font-weight-bolder rate-input-field text-right"
+							(focus)="$event.target.select()"
+							(change)="handleNegtiveValue(item.key,sub_item.key,'baserate',$event.target.value)" />
 					</mat-form-field>
 					<div class="errors" *ngIf="sub_item.key === 'Kilometer_Rate' && trigger_error">
 						<div class="error-field">
@@ -84,12 +87,12 @@
 						<mat-label>
 							Number of Hours
 						</mat-label>
-						<input type="number" matInput placeholder="0" [value]="hours"
-						 [readonly]="is_readonly_min_rate"
+						<input type="number" matInput placeholder="0" [value]="hours" [readonly]="is_readonly_min_rate"
 							class="font-weight-bolder rate-input-field text-right"
 							(change)="handleHourChange($event)" />
 					</mat-form-field>
-					<span *ngIf="is_readonly_min_rate">Hours cannot be edited as these are the minimum rates issued</span>
+					<span *ngIf="is_readonly_min_rate">Hours cannot be edited as these are the minimum rates
+						issued</span>
 				</div>
 			</div>
 
@@ -123,7 +126,8 @@
 			<div class="col-2" *ngIf="item.key === 'taxes' || item.key == 'others'">
 				<!-- Matslide Toggle -->
 				<div class="d-block">
-					<mat-slide-toggle [checked]="sub_item?.value?.controls?.type?.value == 'percent'" [tabIndex]="getTabIndex(item.key)"
+					<mat-slide-toggle [checked]="sub_item?.value?.controls?.type?.value == 'percent'"
+						[tabIndex]="getTabIndex(item.key)"
 						(change)="changeValue('RatesForm', item.key, sub_item.key, 'type', $event.checked ? 'percent' : 'flat')">
 						<i class="bi mx-1"
 							[ngClass]="(sub_item?.value?.controls?.type?.value === 'flat' || sub_item?.value?.controls?.type?.value === null)  ? 'bi-currency-dollar' : 'bi-percent'"></i>
@@ -141,8 +145,7 @@
 			</div>
 		</div>
 		<div class="row d-flex justify-content-end m-2">
-			<i class="bi bi-x fa-2x" 
-			(click)="handleSubHeadingScroll(item.key,'RateFormItem-' + item_index)"></i>
+			<i class="bi bi-x fa-2x" (click)="handleSubHeadingScroll(item.key,'RateFormItem-' + item_index)"></i>
 		</div>
 	</div>
 	<div class="row d-flex justify-content-end mx-2">
@@ -157,7 +160,7 @@
 			</p>
 		</div>
 		<div class="col-md-4 text-3xl text-right">
-			<i class="bi bi-currency-dollar"  style="color: #dc3545!important;"></i>
+			<i class="bi bi-currency-dollar" style="color: #dc3545!important;"></i>
 			{{ subtotal.toFixed(2) }}
 		</div>
 	</div>
@@ -182,7 +185,7 @@
 			</p>
 		</div>
 		<div class="col-md-4 col-xl-5 text-3xl text-right">
-			<i class="bi bi-currency-dollar"  style="color: #dc3545!important;"></i>
+			<i class="bi bi-currency-dollar" style="color: #dc3545!important;"></i>
 			{{ grandtotal.toFixed(2) }}
 		</div>
 	</div>
@@ -214,7 +217,8 @@
 
 	<div [attr.id]="'ReturnRateFormItem-' + item_index" class="my-4 px-md-3 rateSubSection" [formGroupName]="item.key"
 		[ngClass]="{'active': rate_params.chevrons['r_'+item.key]}"
-		*ngFor="let item of ReturnRateForm | keyvalue: returnZero; index as item_index" [ngStyle]="item.key == 'direct_taxes' ? {'display':'none'}: ''">
+		*ngFor="let item of ReturnRateForm | keyvalue: returnZero; index as item_index"
+		[ngStyle]="item.key == 'direct_taxes' ? {'display':'none'}: ''">
 		<div class="col-12 col-md-12" (click)="handleSubHeading('r_'+item.key)">
 			<h5 class="section-dropdown-header" *ngIf="item.key == 'all_inclusive_rates'">
 				Vehicle Base Rates
@@ -254,7 +258,8 @@
 						</mat-label>
 						<input type="number" matInput placeholder="0" [tabIndex]="getTabIndex('r_'+item.key)"
 							class="font-weight-bolder rate-input-field text-right" (focus)="$event.target.select()"
-							formControlName="baserate"  (change)="handleNegtiveValuReturn(item.key,sub_item.key,'baserate',$event.target.value)" />
+							formControlName="baserate"
+							(change)="handleNegtiveValuReturn(item.key,sub_item.key,'baserate',$event.target.value)" />
 					</mat-form-field>
 					<div class="errors" *ngIf="sub_item.key === 'Kilometer_Rate' && trigger_error">
 						<div class="error-field">
@@ -307,7 +312,8 @@
 			<div class="col-auto" *ngIf="item.key === 'taxes' || item.key == 'others'" [formGroupName]="sub_item.key">
 				<!-- Matslide Toggle -->
 				<div class="d-block">
-					<mat-slide-toggle [checked]="sub_item?.value?.controls?.type?.value == 'percent'" [tabIndex]="getTabIndex('r_'+item.key)"
+					<mat-slide-toggle [checked]="sub_item?.value?.controls?.type?.value == 'percent'"
+						[tabIndex]="getTabIndex('r_'+item.key)"
 						(change)="changeValue('ReturnRatesForm', item.key, sub_item.key, 'type', $event.checked ? 'percent' : 'flat')">
 						<i class="bi mx-1"
 							[ngClass]="(sub_item?.value?.controls?.type?.value === 'flat' || sub_item?.value?.controls?.type?.value === null) ? 'bi-currency-dollar' : 'bi-percent'"></i>
@@ -318,15 +324,15 @@
 			<div id="rate-amount" class="col-auto" *ngIf="sub_item.key !== 'Minimum_Rate'">
 				<div class="rate-amount text-2xl font-weight-bolder text-right">
 					<p class="m-0 m-lg-3">
-						<i class="bi bi-currency-dollar"  style="color: #dc3545!important;"></i>
+						<i class="bi bi-currency-dollar" style="color: #dc3545!important;"></i>
 						{{ sub_item?.value?.controls?.amount.value }}
 					</p>
 				</div>
 			</div>
 		</div>
 		<div class="row d-flex justify-content-end m-2">
-			<i class="bi bi-x fa-2x" 
-			(click)="handleSubHeadingScroll('r_'+item.key,'ReturnRateFormItem-' + item_index)"></i>
+			<i class="bi bi-x fa-2x"
+				(click)="handleSubHeadingScroll('r_'+item.key,'ReturnRateFormItem-' + item_index)"></i>
 		</div>
 	</div>
 	<div class="row d-flex justify-content-end mx-2">
@@ -342,7 +348,7 @@
 			</p>
 		</div>
 		<div class="col-md-4 text-3xl text-right">
-			<i class="bi bi-currency-dollar"  style="color: #dc3545!important;"></i>
+			<i class="bi bi-currency-dollar" style="color: #dc3545!important;"></i>
 			{{ r_subtotal.toFixed(2) }}
 		</div>
 	</div>
@@ -367,7 +373,7 @@
 			</p>
 		</div>
 		<div class="col-md-4 col-xl-5 text-3xl text-right">
-			<i class="bi bi-currency-dollar"  style="color: #dc3545!important;"></i>
+			<i class="bi bi-currency-dollar" style="color: #dc3545!important;"></i>
 			{{ r_grandtotal.toFixed(2) }}
 		</div>
 	</div>

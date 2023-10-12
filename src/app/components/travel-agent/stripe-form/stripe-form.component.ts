@@ -365,6 +365,22 @@ export class StripeFormComponent implements OnInit {
 		}
 	}
 
+	handleCurrency(value:any){
+		console.log(value , this.filteredOptions)
+		this.currencyOptions = this.currencyOptions_copy.filter((i:any)=> i.countryName.toLowerCase().includes(value.toLowerCase()))
+	}
+
+	selectCurrency(option:any,isUserInput){
+		console.log('in function selectBadgeCity-->>>' ,isUserInput)
+		if(isUserInput){
+			this.addBankForm.patchValue({
+				currency:option.countryName + '-' + option.symbol
+			})
+			// this.addAffiliateAccountForm.updateValueAndValidity()
+		}
+
+	}
+
 	haveEin(haveEinNo) {
 		switch (haveEinNo) {
 			case 'noEin': {

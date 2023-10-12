@@ -754,6 +754,9 @@ export class CreateNewBookingComponent implements OnInit {
 		return (<FormArray>this.BookingForm.get('return_extra_stops'));
 	}
 
+	convertToMinutes(value){
+		return (value/60).toFixed(2)
+	}
 
 	fillAddress(form_control: string, address: any) {
 		// console.log('Address: ', address)
