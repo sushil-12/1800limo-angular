@@ -23,7 +23,7 @@ export class AddClientAccountComponent implements OnInit {
 	public yearOptions: any = [];
 	public MobileObject: any;
 	public WorkObject: any;
-  clientId: any;
+  clientId: any = null;
 
 	constructor(
 		private travelService: TravelAgentService,
@@ -60,39 +60,41 @@ export class AddClientAccountComponent implements OnInit {
 			this.yearOptions.push(currentYear + i);
 		}
 
-    this.travelService.getClientAccount(this.clientId)
-			.pipe(
-				catchError(err =>
-				{
-					this.spinner.hide();//hide spinner
-					return throwError(err);
-				})
-			).subscribe(result =>
-			{
-				this.response = result;
-
-				this.addIndividualAccountForm.patchValue({
-					id: this.clientId,
-					firstName: this.response.data.first_name,
-					middleName: this.response.data.middle_name,
-					lastName: this.response.data.last_name,
-					mobile: this.response.data.mobile,
-					mobileIsd: '+44',
-					work: this.response.data.work_contact_number,
-					workIsd: '+44',
-					email: this.response.data.email,
-					address: this.response.data.address,
-					city: this.response.data.city,
-					state: this.response.data.state,
-					country: this.response.data.country,
-					zipCode: this.response.data.zip,
-					latitude: this.response.data.latitude,
-					longitude: this.response.data.longitude,
-				});
-				this.spinner.hide();//hide spinner
-				this.MobileObject.setCountry(this.response.data.mobileCountry);
-				this.WorkObject.setCountry(this.response.data.workCountry);
-			});
+    if(this.clientId){
+      this.travelService.getClientAccount(this.clientId)
+        .pipe(
+          catchError(err =>
+          {
+            this.spinner.hide();//hide spinner
+            return throwError(err);
+          })
+        ).subscribe(result =>
+        {
+          this.response = result;
+  
+          this.addIndividualAccountForm.patchValue({
+            id: this.clientId,
+            firstName: this.response.data.first_name,
+            middleName: this.response.data.middle_name,
+            lastName: this.response.data.last_name,
+            mobile: this.response.data.mobile,
+            mobileIsd: '+44',
+            work: this.response.data.work_contact_number,
+            workIsd: '+44',
+            email: this.response.data.email,
+            address: this.response.data.address,
+            city: this.response.data.city,
+            state: this.response.data.state,
+            country: this.response.data.country,
+            zipCode: this.response.data.zip,
+            latitude: this.response.data.latitude,
+            longitude: this.response.data.longitude,
+          });
+          this.spinner.hide();//hide spinner
+          this.MobileObject.setCountry(this.response.data.mobileCountry);
+          this.WorkObject.setCountry(this.response.data.workCountry);
+        });
+    }
 		//google map autocomplete
 		this.mapsAPILoader.load().then(() =>
 		{
