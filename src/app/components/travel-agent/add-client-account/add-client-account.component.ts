@@ -24,6 +24,7 @@ export class AddClientAccountComponent implements OnInit {
 	public MobileObject: any;
 	public WorkObject: any;
   clientId: any = null;
+	type: any = null;
 
 	constructor(
 		private travelService: TravelAgentService,
@@ -53,6 +54,9 @@ export class AddClientAccountComponent implements OnInit {
     this.$routeurl.queryParams.subscribe((params: any) => {
       console.log('params---->>>>>', params)
       this.clientId = params?.clientId
+	  if(params && params.type){
+		this.type = params.type
+	  }
 		})
 		const currentYear = (new Date()).getFullYear();
 		for (let i = 0; i < 40; i++)
@@ -189,6 +193,14 @@ export class AddClientAccountComponent implements OnInit {
 				$('#card-number').trigger("change");
 			});
 		});
+
+		if(this.type=='edit'){
+			['name','number','cvc','exp_month','exp_year'].forEach(i=>{
+				console.log('i--_>>>>>', i)
+				this.addIndividualAccountForm.get(i).clearValidators();
+				this.addIndividualAccountForm.get(i).updateValueAndValidity();
+			})
+		}
 	}
 
 	buildAddIndividualForm(){

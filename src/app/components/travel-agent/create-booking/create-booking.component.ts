@@ -125,6 +125,7 @@ export class CreateBookingComponent implements OnInit {
 	min_rate_involved: any;
 	returnRateArray: any;
 	rateArray: any;
+	travelStaffAccounts: any;
 
   constructor(
     private $form: FormBuilder,
@@ -167,6 +168,7 @@ export class CreateBookingComponent implements OnInit {
 		this.Subscriptions()
 		// this.fetchClientAccounts('individual')
 		// this.fetchAffiliates('affiliate')
+		this.getTravelClientAccounts()
 		this.select(true, 'driver_languages', 1)
 	})
 		this.fetchAirportsAndBigData()
@@ -180,6 +182,8 @@ export class CreateBookingComponent implements OnInit {
 			number_of_hours: ['0'],
 			acc_id: [''],
 			account_type: ['travel_planner'],
+			travel_client_id:[''],
+			travel_client_acc:['travel_individual'],
 			change_individual_data: [false],
 			loose_customer: this.$form.group({
 				first_name: [''],
@@ -676,6 +680,39 @@ export class CreateBookingComponent implements OnInit {
 	changeReturnTransferType(event: any) {
 		this.return_transfer_type = event
 	}
+
+	getTravelClientAccounts(){
+		this.TravelAgentService.getAllTravelClientAccountList('individual').then((result:any)=>{
+			console.log("accounts->>>>>>>>>>",result)
+			this.travelStaffAccounts = result?.data
+		  })
+		  .catch(err=>{
+			this.$spinner.hide();//hide spinner
+		  });
+	}
+	handleClientAccount(value: any) {
+		console.log('---------------------_>>>>>>>>>>>>>> client acc value', value)
+		this.chooseUser(value.id)
+		if(this.BookingForm.get('account_type').value == 'travel_planner'){
+			this.BookingForm.patchValue({
+				travel_client_id : ''
+			})
+			this.getTravelClientAccounts()
+		}
+		
+	}
+
+	handleChangeTravelAccounts(selectedAcc){
+		console.log('handleChangeTravelAccounts-->>',selectedAcc )
+	}
+	handleTravelStaffAccounts(value: any){
+		console.log('handleTravelStaffAccounts--->>>' , value)
+		this.TravelAgentService.getTravelClientDetailById(value.id).subscribe((response: any) => {
+			console.log("detail ->>>>>>>",response)
+			this.autofillData('passenger', response?.data);
+		})
+
+	}
   PaxTelInputObject(event: any) {
 		this.PaxTelObject = event;
 	}
@@ -1111,10 +1148,10 @@ export class CreateBookingComponent implements OnInit {
 		this.SetLCFormValue('phone', choose_user?.mobile)
 	}
 
-	handleClientAccount(value: any) {
-		console.log('---------------------_>>>>>>>>>>>>>> client acc value', value)
-		this.chooseUser(value.id)
-	}
+	// handleClientAccount(value: any) {
+	// 	console.log('---------------------_>>>>>>>>>>>>>> client acc value', value)
+	// 	this.chooseUser(value.id)
+	// }
 
 	fetchAffiliates(affiliate_type: 'affiliate' | 'loose_affiliate') {
 		if (affiliate_type == 'loose_affiliate') {
@@ -1564,6 +1601,63 @@ export class CreateBookingComponent implements OnInit {
 		// 		this.autofillData('vehicle', v);
 		// 	}
 		// })
+		this.BookingForm.get('travel_client_id').valueChanges.subscribe((value: number) => {
+			if (value && this.updateType == 'repeat' && this.updateType == 'return' && this.updateType == 'edit') {
+				this.handleTravelStaffAccounts({id:value})
+			}
+		})
+		this.BookingForm.get('travel_client_acc').valueChanges.subscribe((value: any) => {
+			if (value == 'travel_loose_customer') {
+				const loose_customer = (this.BookingForm.get('loose_customer') as FormGroup)
+				// for every 'item' in loose_customer
+				for (let item in loose_customer.controls) {
+					// if 'item' in loose_customer is a formgroup, like card_details
+					if ((<FormGroup>this.BookingForm.get('loose_customer')).get(item) instanceof FormGroup) {
+						console.log(item)
+						// for every 'key' in card_details formgroup
+						for (let key in (loose_customer.get(item) as FormGroup).controls) {
+							// set validators in card_details
+							(<FormGroup>loose_customer.get(item)).get(key).setValidators([Validators.required]);
+							(<FormGroup>loose_customer.get(item)).get(key).updateValueAndValidity();
+
+						}
+					}
+
+					if (item != 'middle_name' && item != 'address') {
+						loose_customer.get(item).setValidators([Validators.required]);
+					}
+				}
+
+				(<FormGroup>loose_customer.get('card_details')).get('card_number').setValidators([Validators.required, Validators.pattern("^[0-9]*$"), , Validators.minLength(12), Validators.maxLength(20),]);
+				(<FormGroup>loose_customer.get('card_details')).get('name').setValidators([Validators.required]);
+				(<FormGroup>loose_customer.get('card_details')).get('cvv').setValidators([Validators.required, Validators.pattern("^[0-9]*$")]);
+				loose_customer.get('email').setValidators([Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.]+\.[a-zA-Z]{2,}$/i)])
+				loose_customer.get('phone').setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)])
+				loose_customer.get('first_name').setValidators([Validators.required])
+				// loose_customer.get('middle_name').setValidators(this.customValidator.whitespace())
+				loose_customer.get('last_name').setValidators([Validators.required])
+				loose_customer.get('address').setValidators(this.customValidator.whitespace())
+				loose_customer.updateValueAndValidity()
+
+			}
+			else {
+				const loose_customer = (this.BookingForm.get('loose_customer') as FormGroup)
+				// for every 'item' in loose_customer
+				for (let item in loose_customer.controls) {
+					// if 'item' in loose_customer is a formgroup, like card_details
+					if (loose_customer.get(item) instanceof FormGroup) {
+						// for every 'key' in card_details formgroup
+						for (let key in (loose_customer.get(item) as FormGroup).controls) {
+							// clear validators in card_details
+							loose_customer.get(item).get(key).clearValidators()
+							loose_customer.get(item).get(key).updateValueAndValidity()
+						}
+					}
+					loose_customer.get(item).clearValidators()
+					loose_customer.get(item).updateValueAndValidity()
+				}
+			}
+		})
 
 		this.BookingForm.get('vehicle_type').valueChanges.subscribe((value: string) => {
 			console.log('on change of vehicle type-->>> value', value)
