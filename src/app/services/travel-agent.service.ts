@@ -165,5 +165,11 @@ export class TravelAgentService {
 	getClientAccount(id){
 		return this.httpClient.get(this.serverUrl + `get-an-account/${id}`);
 	}
+	getAllTravelClientAccountList(type){
+		return this.httpClient.get(this.serverUrl + `get-account-by-type/${type}`).toPromise();;
+	}
+	getTravelClientDetailById(id){
+		return this.httpClient.get(this.serverUrl + 'get-an-account/' + id);
+	}
   
 }

@@ -94,6 +94,404 @@
 		</div>
 		<!-- Section - Booking Type Ends -->
 
+		<!-- Section - Affiliate/Loose Details -->
+		<!-- <div class="section-container mt-2">
+			<h2 class=" border-secondary">
+				Driver Details
+			</h2>
+			<div class="row">
+				<div id="driver-name" class="col-md-3">
+					<mat-form-field appearance="outline" class="m-0 cursor-not-allowed">
+						<mat-label>
+							Driver Name
+						</mat-label>
+						<input matInput formControlName="driver_name" type="text" placeholder="Driver Name"
+							(focus)="$event.target.select()" readonly/>
+					</mat-form-field>
+					<div class="error-box">
+						<div class="error-message"
+							*ngIf="Form.driver_name.invalid && (Form.driver_name.touched || Form.driver_name.dirty)">
+							<p class="text-danger text-lg m-0" *ngIf="Form.driver_name.errors?.whitespace">
+								Extra White Space are not Allowed
+							</p>
+						</div>
+					</div>
+				</div>
+				<div id="driver-email" class="col-md-3" *ngIf="Form.affiliate_type.value != 'loose_affiliate'">
+					<mat-form-field appearance="outline" class="m-0 cursor-not-allowed">
+						<mat-label>
+							Email
+						</mat-label>
+						<input matInput formControlName="driver_email" type="text" readonly
+							(focus)="$event.target.select()" placeholder="Email">
+					</mat-form-field>
+					<div class="error-box">
+						<div class="error-message"
+							*ngIf="Form.driver_email.invalid && (Form.driver_email.touched || Form.driver_email.dirty)">
+							<p class="text-danger text-lg m-0" *ngIf="Form.driver_email.errors?.email">
+								Please enter a valid Email Id
+							</p>
+						</div>
+					</div>
+				</div>
+				<div id="driver-cell" class="col-md-3" *ngIf="Form.affiliate_type.value != 'loose_affiliate'">
+					<mat-form-field appearance="outline" class="mat-custom-phone m-0 cursor-not-allowed">
+						<mat-label>
+							Phone
+						</mat-label>
+						<input matInput placeholder="Phone Number" type="text" readonly formControlName="driver_cell"
+							(focus)="$event.target.select()"
+							[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}" ng2TelInput
+							(intlTelInputObject)="DrvTelInputObject($event)" readonly
+							(countryChange)="SetFormValue('driver_cell_isd', '+' + $event.dialCode); SetFormValue('driver_cell_country', $event.iso2)" />
+					</mat-form-field>
+				</div>
+				<div id="driver-gender" class="col-md-3" *ngIf="Form.affiliate_type.value != 'loose_affiliate'">
+					<mat-form-field appearance="outline" class="m-0 cursor-not-allowed">
+						<mat-label>
+							Gender
+						</mat-label>
+						<mat-select formControlName="driver_gender" [disabled]="true">
+							<mat-option value="male"> Male </mat-option>
+							<mat-option value="female"> Female </mat-option>
+							<mat-option value="lgbtq+">X (LGBTQAI+)</mat-option>
+						</mat-select>
+					</mat-form-field>
+				</div>
+			</div>
+		</div> -->
+		<div class="section-container mt-2">
+			<h4 class=" border-secondary">
+				Client Accounts
+			</h4>
+		<div *ngIf="Form['account_type'].value == 'travel_planner'">
+			<div class="row">
+				<div class="col-md-12 col-lg-10 d-flex justify-content-center">
+					<mat-radio-group aria-label="Select an option" formControlName="travel_client_acc">
+						<mat-radio-button [value]="'travel_individual'" class="my-2 ml-4 mr-3" (change)="handleChangeTravelAccounts('travel_individual')">
+							Individual
+						</mat-radio-button>
+						<mat-radio-button [value]="'travel_loose_customer'" class="my-2 ml-4 mr-3" (change)="handleChangeTravelAccounts('travel_loose_customer')">
+							Loose customer
+						</mat-radio-button>
+					</mat-radio-group>
+				</div>
+			</div>
+			<div class="col-md-10" *ngIf="Form['travel_client_acc'].value != 'travel_loose_customer'">
+				<ng-select appearance="outline" [items]="travelStaffAccounts" bindLabel="name" bindValue="id"
+						placeholder="Select Client Account" dropdownPosition="bottom" [markFirst]="true"
+						[virtualScroll]="true" formControlName="travel_client_id" (change)="handleTravelStaffAccounts($event)">
+					</ng-select>
+			</div>
+		</div>
+		<ng-container
+				*ngIf="Form['account_type'].value == 'loose_customer' || (Form['travel_client_acc'].value == 'travel_loose_customer' && Form['account_type'].value == 'travel_planner') then LooseCustomerSection;">
+			</ng-container>
+				<!-- Loose Customer -->
+				<ng-template #LooseCustomerSection>
+					<div formGroupName="loose_customer">
+						<!-- Personal Information -->
+						<div class="px-4">
+							<h4>
+								Personal Information
+							</h4>
+							<div class="row">
+								<!-- First Name -->
+								<div class="col-md-4 looseError">
+									<mat-form-field appearance="outline" class="m-0">
+										<mat-label class="required-field">
+											First Name
+										</mat-label>
+										<input matInput placeholder="First Name" type="text" formControlName="first_name"
+											(focus)="$event.target.select()">
+									</mat-form-field>
+									<div class="error-box">
+										<div class="error-message"
+											*ngIf="(submitBookingForm && LooseCustomer.first_name.invalid) || (LooseCustomer.first_name.touched && LooseCustomer.first_name.dirty)">
+											<p class="text-danger text-lg m-0"
+												*ngIf="LooseCustomer.first_name.errors?.required">
+												This field is required
+											</p>
+											<p class="text-danger text-lg m-0"
+												*ngIf="LooseCustomer.first_name.errors?.whitespace">
+												Extra White Space are not Allowed
+											</p>
+										</div>
+									</div>
+								</div>
+	
+								<!-- Middle Name -->
+								<div class="col-md-4 looseError">
+									<mat-form-field appearance="outline" class="m-0">
+										<mat-label>
+											Middle Name
+										</mat-label>
+										<input matInput placeholder="Middle Name" type="text" formControlName="middle_name"
+											(focus)="$event.target.select()">
+									</mat-form-field>
+									<div class="error-box">
+										<div class="error-message"
+											*ngIf="LooseCustomer.middle_name.invalid && (LooseCustomer.middle_name.touched || LooseCustomer.middle_name.dirty)">
+											<p class="text-danger text-lg m-0"
+												*ngIf="LooseCustomer.middle_name.errors?.whitespace">
+												Extra White Space are not Allowed
+											</p>
+										</div>
+									</div>
+								</div>
+	
+								<!-- Last Name -->
+								<div class="col-md-4 looseError">
+									<mat-form-field appearance="outline" class="m-0">
+										<mat-label class="required-field">
+											Last Name
+										</mat-label>
+										<input matInput placeholder="Last Name" type="text" formControlName="last_name"
+											(focus)="$event.target.select()">
+									</mat-form-field>
+									<div class="error-box">
+										<div class="error-message"
+											*ngIf="(submitBookingForm && LooseCustomer.last_name.invalid) || (LooseCustomer.last_name.touched && LooseCustomer.last_name.dirty)">
+											<p class="text-danger text-lg m-0"
+												*ngIf="LooseCustomer.last_name.errors?.required">
+												This field is required
+											</p>
+											<p class="text-danger text-lg m-0"
+												*ngIf="LooseCustomer.last_name.errors?.whitespace">
+												Extra White Space are not Allowed
+											</p>
+										</div>
+									</div>
+								</div>
+							</div>
+	
+							<div class="row">
+								<!-- Email -->
+								<div class="col-md-4 looseError">
+									<mat-form-field appearance="outline" class="m-0">
+										<mat-label class="required-field">
+											Email
+										</mat-label>
+										<input matInput placeholder="Email" type="text" formControlName="email"
+											[email]="true" (focus)="$event.target.select()">
+									</mat-form-field>
+									<div class="error-box">
+										<div class="error-message"
+											*ngIf="LooseCustomer.email.invalid && (LooseCustomer.email.touched || LooseCustomer.email.dirty)">
+											<p class="text-danger text-lg m-0" *ngIf="LooseCustomer.email.errors?.required">
+												This field is required
+											</p>
+											<p class="text-danger text-lg m-0" *ngIf="LooseCustomer.email.errors?.pattern">
+												Please enter a valid Email Id
+											</p>
+										</div>
+									</div>
+								</div>
+	
+								<!-- Phone -->
+								<div class="col-md-4 looseError">
+									<mat-form-field appearance="outline" class="mat-custom-phone m-0 cellLabelClass">
+										<label
+											class="mat-form-field-label required-field mat-empty mat-form-field-empty labelClass">Phone
+										</label>
+										<input matInput formControlName="phone" ng2TelInput [ng2TelInputOptions]="{
+												preferredCountries: ['us', 'ca', 'mx', 'gb']
+											}" placeholder="1234567890" class="phoneNumberClass" (intlTelInputObject)="LCTelInputObject($event)"
+											(countryChange)="SetFormValue('loose_customer>phone_isd', $event.dialCode); SetFormValue('loose_customer>phone_country', $event.iso2)"
+											(focus)="$event.target.select()" />
+									</mat-form-field>
+									<div class="error-box">
+										<div class="error-message"
+											*ngIf="( submitBookingForm && (is_loose_customer_unique || LooseCustomer.phone.invalid)) || (LooseCustomer.phone.touched && LooseCustomer.phone.dirty)">
+											<p class="text-danger text-lg m-0" *ngIf="LooseCustomer.phone.errors?.required">
+												This field is required
+											</p>
+											<p class="text-danger text-lg m-0"
+												*ngIf="LooseCustomer.phone.errors?.pattern;else otherError">
+												Only Numbers are Allowed
+											</p>
+											<ng-template #otherError>
+												<p class="text-danger text-lg m-0"
+													*ngIf="LooseCustomer.phone.errors?.minlength">
+													Minimum length should be 4
+												</p>
+												<p class="text-danger text-lg m-0"
+													*ngIf="LooseCustomer.phone.errors?.maxlength">
+													Maximum length should be 15
+												</p>
+											</ng-template>
+											<p class="text-danger text-lg m-0" *ngIf="is_loose_customer_unique">
+												This Phone Number is already registered. Please enter
+												any other.
+											</p>
+										</div>
+									</div>
+								</div>
+	
+								<!-- Address -->
+								<div class="col-md-4 looseError">
+									<mat-form-field appearance="outline" class="m-0">
+										<mat-label>
+											Address
+										</mat-label>
+										<input type="text" matInput placeholder="Type your address"
+											matGoogleMapsAutocomplete
+											(onAutocompleteSelected)="fillLooseCustomerAddress($event.formatted_address)"
+											(focus)="$event.target.select()" />
+									</mat-form-field>
+								</div>
+							</div>
+						</div>
+						<!-- Personal Information Ends -->
+	
+						<!-- Credit Card Details -->
+						<div id="credit-card-details" class="mt-4 px-4" formGroupName="card_details">
+							<h4>
+								Card Details
+							</h4>
+							<div class="row">
+								<!-- Card Holder Name -->
+								<div class="col-md-6">
+									<mat-form-field appearance="outline" class="m-0">
+										<mat-label class="required-field">
+											Name of Card Holder
+										</mat-label>
+										<input matInput placeholder="First & Last Name" type="text" formControlName="name"
+											(focus)="$event.target.select()">
+									</mat-form-field>
+									<div class="error-box">
+										<div class="error-message"
+											*ngIf="( submitBookingForm && LooseCustomer.card_details.controls.name.invalid) || (LooseCustomer.card_details.controls.name.touched && LooseCustomer.card_details.controls.name.dirty)">
+											<p class="text-danger text-lg m-0"
+												*ngIf="LooseCustomer.card_details.controls.name.errors?.required">
+												This field is required
+											</p>
+											<p class="text-danger text-lg m-0"
+												*ngIf="LooseCustomer.card_details.controls.name.errors?.whitespace">
+												Extra White Space are not Allowed
+											</p>
+										</div>
+									</div>
+								</div>
+								<!-- Card Number -->
+								<div class="col-md-6">
+									<mat-form-field appearance="outline" class="m-0">
+										<mat-label class="required-field">
+											Card Number
+										</mat-label>
+										<input matInput placeholder="xxxx xxxx xxxx xxxx" type="text"
+											formControlName="card_number" (focus)="$event.target.select()">
+									</mat-form-field>
+									<div class="error-box">
+										<div class="error-message"
+											*ngIf="( submitBookingForm && LooseCustomer.card_details.controls.card_number.invalid) || (LooseCustomer.card_details.controls.card_number.touched && LooseCustomer.card_details.controls.card_number.dirty)">
+											<p class="text-danger text-lg m-0"
+												*ngIf="LooseCustomer.card_details.controls.card_number.errors?.required">
+												This field is required
+											</p>
+											<p class="text-danger text-lg m-0"
+												*ngIf="LooseCustomer.card_details.controls.card_number.errors?.pattern;else cardLength">
+												Only Numbers are Allowed
+											</p>
+											<ng-template #cardLength>
+												<p class="text-danger text-lg m-0"
+													*ngIf="LooseCustomer.card_details.controls.card_number.errors?.minlength">
+													Minimum length should be 12
+												</p>
+												<p class="text-danger text-lg m-0"
+													*ngIf="LooseCustomer.card_details.controls.card_number.errors?.maxlength">
+													Maximum length should be 20
+												</p>
+											</ng-template>
+										</div>
+									</div>
+								</div>
+	
+								<!-- Expiry Month -->
+								<div class="col-md-4">
+									<mat-form-field appearance="outline" class="m-0">
+										<mat-label class="required-field">Expiry Month</mat-label>
+										<input type="number" matInput formControlName="exp_month" [matAutocomplete]="auto"
+											(keyup)="handleChangeMonth($event.target.value)">
+										<mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+											<mat-option *ngFor="let m of monthOptions" [value]="m.value">
+												{{m.value}}
+											</mat-option>
+										</mat-autocomplete>
+									</mat-form-field>
+									<div class="error-box">
+										<div class="error-message"
+											*ngIf="( submitBookingForm && LooseCustomer.card_details.controls.exp_month.invalid) || (LooseCustomer.card_details.controls.exp_month.touched && LooseCustomer.card_details.controls.exp_month.dirty)">
+											<p class="text-danger text-lg m-0"
+												*ngIf="LooseCustomer.card_details.controls.exp_month.errors?.required">
+												This field is required
+											</p>
+										</div>
+									</div>
+								</div>
+	
+								<!-- Expiry Year -->
+								<div class="col-md-4">
+									<mat-form-field appearance="outline" class="m-0">
+										<mat-label class="required-field">
+											Expiry Year
+										</mat-label>
+										<mat-select formControlName="exp_year">
+											<mat-option [value]="number" *ngFor="let number of booking_params.years">
+												{{ number }}
+											</mat-option>
+										</mat-select>
+									</mat-form-field>
+									<div class="error-box">
+										<div class="error-message"
+											*ngIf="( submitBookingForm && LooseCustomer.card_details.controls.exp_year.invalid) || (LooseCustomer.card_details.controls.exp_year.touched && LooseCustomer.card_details.controls.exp_year.dirty)">
+											<p class="text-danger text-lg m-0"
+												*ngIf="LooseCustomer.card_details.controls.exp_year.errors?.required">
+												This field is required
+											</p>
+										</div>
+									</div>
+								</div>
+	
+								<!-- CVV -->
+								<div class="col-md-4">
+									<mat-form-field appearance="outline" class="m-0">
+										<mat-label class="required-field">
+											CVV
+										</mat-label>
+										<input matInput placeholder="0000" type="text" (focus)="$event.target.select()"
+											formControlName="cvv">
+									</mat-form-field>
+									<div class="error-box">
+										<div class="error-message"
+											*ngIf="( submitBookingForm && LooseCustomer.card_details.controls.cvv.invalid) || (LooseCustomer.card_details.controls.cvv.touched && LooseCustomer.card_details.controls.cvv.dirty)">
+											<p class="text-danger text-lg m-0"
+												*ngIf="LooseCustomer.card_details.controls.cvv.errors?.required">
+												This field is required
+											</p>
+											<p class="text-danger text-lg m-0"
+												*ngIf="LooseCustomer.card_details.controls.cvv.errors?.pattern">
+												Only Numbers are Allowed
+											</p>
+											<!-- <ng-template #cvvLength>
+												<p class="text-danger text-lg m-0"
+													*ngIf="LooseCustomer.card_details.controls.cvv.errors?.minlength">
+													Minimum length should be 3
+												</p>
+												<p class="text-danger text-lg m-0"
+													*ngIf="LooseCustomer.card_details.controls.cvv.errors?.maxlength">
+													Maximum length should be 3
+												</p>
+											</ng-template> -->
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- Credit Card Details Ends -->
+				</ng-template>
+		</div>
 		<div class="section-container mt-2">
 			<!-- Passenger Information -->
 			<div id="passenger-information" class="px-4 mt-4">
@@ -206,73 +604,6 @@
 			</div>
 			<!-- Passenger Information Ends -->
 		</div>
-
-		<!-- Section - Affiliate/Loose Details -->
-		<!-- <div class="section-container mt-2">
-			<h2 class=" border-secondary">
-				Driver Details
-			</h2>
-			<div class="row">
-				<div id="driver-name" class="col-md-3">
-					<mat-form-field appearance="outline" class="m-0 cursor-not-allowed">
-						<mat-label>
-							Driver Name
-						</mat-label>
-						<input matInput formControlName="driver_name" type="text" placeholder="Driver Name"
-							(focus)="$event.target.select()" readonly/>
-					</mat-form-field>
-					<div class="error-box">
-						<div class="error-message"
-							*ngIf="Form.driver_name.invalid && (Form.driver_name.touched || Form.driver_name.dirty)">
-							<p class="text-danger text-lg m-0" *ngIf="Form.driver_name.errors?.whitespace">
-								Extra White Space are not Allowed
-							</p>
-						</div>
-					</div>
-				</div>
-				<div id="driver-email" class="col-md-3" *ngIf="Form.affiliate_type.value != 'loose_affiliate'">
-					<mat-form-field appearance="outline" class="m-0 cursor-not-allowed">
-						<mat-label>
-							Email
-						</mat-label>
-						<input matInput formControlName="driver_email" type="text" readonly
-							(focus)="$event.target.select()" placeholder="Email">
-					</mat-form-field>
-					<div class="error-box">
-						<div class="error-message"
-							*ngIf="Form.driver_email.invalid && (Form.driver_email.touched || Form.driver_email.dirty)">
-							<p class="text-danger text-lg m-0" *ngIf="Form.driver_email.errors?.email">
-								Please enter a valid Email Id
-							</p>
-						</div>
-					</div>
-				</div>
-				<div id="driver-cell" class="col-md-3" *ngIf="Form.affiliate_type.value != 'loose_affiliate'">
-					<mat-form-field appearance="outline" class="mat-custom-phone m-0 cursor-not-allowed">
-						<mat-label>
-							Phone
-						</mat-label>
-						<input matInput placeholder="Phone Number" type="text" readonly formControlName="driver_cell"
-							(focus)="$event.target.select()"
-							[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}" ng2TelInput
-							(intlTelInputObject)="DrvTelInputObject($event)" readonly
-							(countryChange)="SetFormValue('driver_cell_isd', '+' + $event.dialCode); SetFormValue('driver_cell_country', $event.iso2)" />
-					</mat-form-field>
-				</div>
-				<div id="driver-gender" class="col-md-3" *ngIf="Form.affiliate_type.value != 'loose_affiliate'">
-					<mat-form-field appearance="outline" class="m-0 cursor-not-allowed">
-						<mat-label>
-							Gender
-						</mat-label>
-						<mat-select formControlName="driver_gender" [disabled]="true">
-							<mat-option value="male"> Male </mat-option>
-							<mat-option value="female"> Female </mat-option>
-							<mat-option value="lgbtq+">X (LGBTQAI+)</mat-option>
-						</mat-select>
-					</mat-form-field>
-				</div>
-			</div>
-		</div> -->
 		<div class="section-container mt-2" *ngIf="driver_info">
 			<h2>
 				Transportation Details
@@ -1396,7 +1727,67 @@
 						</div>
 					</div>
 					<hr>
+					<ng-container *ngIf="Form['travel_client_acc'].value == 'travel_loose_customer' then LooseCustomerSec">
+					</ng-container>
 
+					<!-- Loose Customer -->
+					<ng-template #LooseCustomerSec>
+						<h4 class="font-weight-bolder m-0 mt-3">
+							Loose Customer Information
+						</h4>
+
+						<!-- Loose Customer > Name -->
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key">
+									<span>
+										Name
+									</span>
+								</div>
+								<div class="col-md-8 value">
+									<span class="font-weight-bolder">
+										{{ textFormatter(LooseCustomer.first_name.value) }} {{
+										textFormatter(LooseCustomer.middle_name.value) }} {{
+										textFormatter(LooseCustomer.last_name.value) }}
+									</span>
+								</div>
+							</div>
+						</div>
+
+						<!-- Loose Customer > Email -->
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key">
+									<span>
+										Email
+									</span>
+								</div>
+								<div class="col-md-8 value">
+									<span class="font-weight-bolder">
+										{{ textFormatter(LooseCustomer.email.value) }}
+									</span>
+								</div>
+							</div>
+						</div>
+
+						<!-- Loose Customer > Phone -->
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key">
+									<span>
+										Phone
+									</span>
+								</div>
+								<div class="col-md-8 value">
+									<span class="font-weight-bolder">
+										({{ LooseCustomer.phone_isd.value }})
+										{{ textFormatter(LooseCustomer.phone.value) }}
+									</span>
+								</div>
+							</div>
+						</div>
+						<hr>
+					</ng-template>	
 					<!-- Passenger Information -->
 					<h4 class="font-weight-bolder m-0 mt-3">
 						Passenger Information

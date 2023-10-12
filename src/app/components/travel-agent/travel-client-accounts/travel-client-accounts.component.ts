@@ -100,7 +100,7 @@ export class TravelClientAccountsComponent implements OnInit {
 
   clickEditTravelPlanner(clientId)
   {
-    this.router.navigate(['/travel_agent/edit-client-account'],{queryParams:{clientId:clientId}});
+    this.router.navigate(['/travel_agent/edit-client-account'],{queryParams:{clientId:clientId , type:'edit'}});
   }
 
   clickTravelPlannerCards(clientId)
