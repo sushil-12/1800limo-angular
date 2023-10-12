@@ -18,6 +18,8 @@ export class CardsComponent implements OnInit {
 	public cards: any;
   alertMessage: string;
 	public cardToDelete: any;
+	clientId: any= null;
+	name :any = 'Agent'
 
 
   constructor(
@@ -31,12 +33,26 @@ export class CardsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.loadCards()
+	this.activatedroute.queryParams.subscribe((params: any) => {
+		console.log('params---->>>>>', params)
+		if(params && params.accountId){
+			this.clientId = params?.accountId
+		}
+		if(params && params.name){
+			this.name = params?.name
+		}
+		})
+		if(this.clientId){
+			this.loadCards(this.clientId)
+		}
+		else{
+			this.loadCards()
+		}
   }
 
-  loadCards() {
+  loadCards(id=null) {
 		// Load Our cards using API
-		this.TravelAgentService.cardsList().pipe(
+		this.TravelAgentService.cardsList(id).pipe(
       catchError(err => {
         this.stateManagementService.setprogressBar(false);//hide progressbar
         return throwError(err);
