@@ -637,6 +637,10 @@ export class NewBookingComponent implements OnInit {
 		}
 	}
 
+	convertToMinutes(value){
+		return (value/60).toFixed(2)
+	}
+
 
 	MapController(is_return: boolean = false) {
 		// console.log('Map has been initialised.')
@@ -754,6 +758,7 @@ export class NewBookingComponent implements OnInit {
 								returnJourneyDistance: response.distance,
 								returnJourneyTime: response.time
 							})
+							console.log("returnJourneyTime=========>",this.BookingForm.get('returnJourneyTime').value)
 						} else {
 							this.distance = response.distance
 							if(!this.BookingForm.get('extra_stops')?.value?.length || this.BookingForm.get('extra_stops')?.value[0]['rate']?.length){
@@ -763,6 +768,7 @@ export class NewBookingComponent implements OnInit {
 								journeyDistance: response.distance,
 								journeyTime: response.time
 							})
+							console.log("returnJourneyTime=========>",this.BookingForm.get('journeyTime').value)
 						}
 						// this.distance_for_rates = ((): string =>
 						// {

@@ -13,13 +13,15 @@ hr{
 	background-color: #fff;
 	color: #000;
 	border-radius: 12px;
-	padding: 12px;
+	padding: 12px 12px 0px 12px;
 	width: 100%;
 	font-size: 1rem;
 	margin: 1.2rem auto;
 	box-shadow: 3px 3px 20px -6px rgba(40, 40, 40, 0.5);
 }
-
+.border-secondary{
+	margin: 0 0 6px !important;
+}
 mat-form-field {
 	margin: 1rem 0 !important;
 }

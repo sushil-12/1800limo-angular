@@ -28,7 +28,7 @@
 								Service Type
 							</mat-label>
 							<mat-select formControlName="service_type"
-							(selectionChange)="onSelectionChangeServiceType($event)"
+								(selectionChange)="onSelectionChangeServiceType($event)"
 								[ngStyle]="{'cursor': Form.updateType.value == 'edit' ? 'not-allowed' : 'default'}">
 								<mat-option value="one_way">One Way</mat-option>
 								<mat-option value="round_trip">Round Trip</mat-option>
@@ -81,7 +81,7 @@
 								Number of Hours
 							</mat-label>
 							<input type="number" matInput placeholder="Enter Hours" formControlName="number_of_hours"
-							[(ngModel)]="number_of_hours" (keyup)="handleNoOfHours($event.target.value)"
+								[(ngModel)]="number_of_hours" (keyup)="handleNoOfHours($event.target.value)"
 								(focus)="$event.target.select()" />
 							<span matSuffix>Hrs.</span>
 						</mat-form-field>
@@ -419,14 +419,14 @@
 											Only Numbers are Allowed
 										</p>
 										<!-- <ng-template #cvvLength> -->
-											<p class="text-danger text-lg m-0"
-												*ngIf="LooseCustomer.card_details.controls.cvv.errors?.minlength">
-												Minimum length should be 3
-											</p>
-											<p class="text-danger text-lg m-0"
-												*ngIf="LooseCustomer.card_details.controls.cvv.errors?.maxlength">
-												Maximum length should be 5
-											</p>
+										<p class="text-danger text-lg m-0"
+											*ngIf="LooseCustomer.card_details.controls.cvv.errors?.minlength">
+											Minimum length should be 3
+										</p>
+										<p class="text-danger text-lg m-0"
+											*ngIf="LooseCustomer.card_details.controls.cvv.errors?.maxlength">
+											Maximum length should be 5
+										</p>
 										<!-- </ng-template> -->
 									</div>
 								</div>
@@ -1511,7 +1511,7 @@
 					NOTE : Enter pickup and drop off locations first, then enter extra stops.
 				</p>
 			</div>
-			
+
 
 
 
@@ -1725,11 +1725,12 @@
 
 		</div>
 
-		<app-rates-forms class="d-flex flex-wrap" [initRates]="true" [affiliate_type]="Form.affiliate_type.value" 
+		<app-rates-forms class="d-flex flex-wrap" [initRates]="true" [affiliate_type]="Form.affiliate_type.value"
 			[reservation_id]="booking_id" [reset]="reset_button" (formvalue)="RateFormValue($event)"
 			[distance]="distance_for_rates" [book_data]="booking_data" [isTravelShare]="isTravelShare"
-			[hours]="Form.number_of_hours?.value" [vehicles]="Form.number_of_vehicles?.value" [initReturnRates]="init_return_rates"
-			(returnNumberOfHr)="HandleReturnNumberOfHr($event)" (returnformvalue)="ReturnRateFormValue($event)">
+			[hours]="Form.number_of_hours?.value" [vehicles]="Form.number_of_vehicles?.value"
+			[initReturnRates]="init_return_rates" (returnNumberOfHr)="HandleReturnNumberOfHr($event)"
+			(returnformvalue)="ReturnRateFormValue($event)">
 		</app-rates-forms>
 		<div class="row">
 			<div class="col-md-12">
@@ -2517,7 +2518,7 @@
 							</div>
 						</div>
 
-						<hr *ngIf="Form.return_extra_stops.value.length > 0" >
+						<hr *ngIf="Form.return_extra_stops.value.length > 0">
 						<!-- Return > Extra Stops -->
 						<div *ngIf="Form.return_extra_stops.value.length > 0">
 							<h5 class="p-2 m-0 text-xl">

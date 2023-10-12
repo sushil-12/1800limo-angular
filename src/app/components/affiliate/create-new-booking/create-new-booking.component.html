@@ -15,10 +15,10 @@
 <form class="container-fluid" [formGroup]="BookingForm" appInvalidControlScroll>
 	<div id="page-container">
 		<!-- Section - Booking Type -->
-		<div class="section-container mt-2">
-			<h2>
+		<div class="section-container">
+			<h4 class="border-secondary">
 				Booking Type
-			</h2>
+			</h4>
 			<div class="row px-4">
 				<!-- Service Type -->
 				<div class="flex-grow-1 m-2">
@@ -28,7 +28,7 @@
 								Service Type
 							</mat-label>
 							<mat-select formControlName="service_type"
-							(selectionChange)="onSelectionChangeServiceType($event)"
+								(selectionChange)="onSelectionChangeServiceType($event)"
 								[ngStyle]="{'cursor': Form.updateType.value == 'edit' ? 'not-allowed' : 'default'}">
 								<mat-option value="one_way">One Way</mat-option>
 								<mat-option value="round_trip">Round Trip</mat-option>
@@ -520,11 +520,11 @@
 
 
 			<!-- Passenger Information -->
-			<div id="passenger-information" class="px-4 mt-4">
-				<h2>
+			<div id="passenger-information" class="border-secondary">
+				<h4>
 					Passenger Information
-				</h2>
-				<div class="row">
+				</h4>
+				<div class="row mb-2">
 					<!-- Passenger Name -->
 					<div class="col-md-4">
 						<mat-form-field appearance="outline" class="m-0">
@@ -1623,10 +1623,15 @@
 						<div class="google_map">
 							<div id="map" class="map"></div>
 						</div>
-						<h6>
-							Total Distance: {{ mToMi(distance) }} Miles / {{ mToKm(distance)
-							}} Km
-						</h6>
+						<div class="row">
+							<h6 class="mx-2">
+								Total Distance: {{ mToMi(distance) }} Miles / {{ mToKm(distance)
+								}} Km
+							</h6>
+							<h6 class="mx-2">
+								Estimated time: {{convertToMinutes(Form.journeyTime.value)}} mins
+							</h6>
+						</div>
 					</div>
 				</div>
 				<!-- AGM Map Ends -->
@@ -2290,9 +2295,9 @@
 
 
 		<app-rates-forms class="d-flex flex-wrap" [initRates]="init_rates" [affiliate_type]="Form.affiliate_type.value"
-			[distance]="distance_for_rates" [book_data]="booking_data" [reservation_id]="booking_id" [reset]="reset_button"
-			[initReturnRates]="init_return_rates" (formvalue)="RateFormValue($event)" [isTravelShare]="isTravelShare"
-			[vehicle_id]="params_QB_vehicle_id" [hours]="Form.number_of_hours?.value"
+			[distance]="distance_for_rates" [book_data]="booking_data" [reservation_id]="booking_id"
+			[reset]="reset_button" [initReturnRates]="init_return_rates" (formvalue)="RateFormValue($event)"
+			[isTravelShare]="isTravelShare" [vehicle_id]="params_QB_vehicle_id" [hours]="Form.number_of_hours?.value"
 			[vehicles]="Form.number_of_vehicles?.value" (returnformvalue)="ReturnRateFormValue($event)"
 			(returnNumberOfHr)="HandleReturnNumberOfHr($event)">
 		</app-rates-forms>
