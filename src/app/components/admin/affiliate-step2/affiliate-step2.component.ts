@@ -407,7 +407,9 @@ this.loadCards(this.affiliateId)
 		console.log('in function selectBadgeCity-->>>' ,isUserInput)
 		if(isUserInput){
 			this.addBankForm.patchValue({
-				currency:option.countryName + '-' + option.symbol
+				currency:option.countryName + '-' + option.symbol,
+				currencyshow:option.countryName + '-' + option.symbol
+
 			})
 			// this.addAffiliateAccountForm.updateValueAndValidity()
 		}
