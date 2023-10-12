@@ -16,7 +16,7 @@ import { AffiliateService } from 'src/app/services/affiliate.service';
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
-  timezone=new FormControl('')
+  // timezone=new FormControl('')
   public profile_pic: any;
   public modalImage: string;
   public imageSrc: string;
@@ -183,6 +183,7 @@ export class ProfileComponent implements OnInit {
       exp_month: [''],
       exp_year: [''],
       name: [''],
+      timezone : ['']
     });
   }
   get f() {
