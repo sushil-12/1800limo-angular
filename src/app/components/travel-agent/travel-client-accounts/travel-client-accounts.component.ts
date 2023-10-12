@@ -105,7 +105,7 @@ export class TravelClientAccountsComponent implements OnInit {
 
   clickTravelPlannerCards(clientId)
   {
-    this.router.navigate(['/travel_agent/debit-cc-card'],{queryParams:{accountType:'travelPlanner',accountId:clientId}});
+    this.router.navigate(['/travel_agent/debit-cc-card'],{queryParams:{accountType:'travelPlanner',accountId:clientId.id , name:clientId.first_name}});
   }
 
   highlighText(args: string) {
