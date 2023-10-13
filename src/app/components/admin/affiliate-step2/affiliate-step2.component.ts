@@ -119,6 +119,7 @@ export class AffiliateStep2Component implements OnInit {
 			haveEin: ['yesEin'],
 			ein: ['', []],
 			currency: ['', Validators.required],
+			currencyShow : [''],
 			dobDay: ['', Validators.required],
 			dobMonth: ['', Validators.required],
 			dobYear: ['', Validators.required],
@@ -233,7 +234,7 @@ export class AffiliateStep2Component implements OnInit {
 								id_front_image: this.response.data.bankinfo.id_front_image.ID,
 								id_back_image: this.response.data.bankinfo.id_back_image.ID,
 							});
-
+							this.currencySelection(this.response.data.bankinfo.currency)
 							this.haveEin(this.response.data.bankinfo.ein ? 'yesEin' : 'noEin');
 							this.changeCountry(this.response.data.bankinfo.country);//for selected country
 							// this.stateManagementService.setprogressBar(false);
@@ -268,6 +269,7 @@ export class AffiliateStep2Component implements OnInit {
 				});
 			}
 		})
+
 this.loadCards(this.affiliateId)
 
 	}//google map autocomplete
@@ -337,6 +339,7 @@ this.loadCards(this.affiliateId)
 		});
 	}
 
+	
 	get f() {
 		return this.addBankForm.controls;
 	}
@@ -400,20 +403,35 @@ this.loadCards(this.affiliateId)
 	}
 
 	handleCurrency(value:any){
-		console.log(value , this.filteredOptions)
+		console.log(value , this.currencyOptions)
 		this.currencyOptions = this.currencyOptions_copy.filter((i:any)=> i.countryName.toLowerCase().includes(value.toLowerCase()))
 	}
 	selectCurrency(option:any,isUserInput){
-		console.log('in function selectBadgeCity-->>>' ,isUserInput)
+		console.log('in function selectBadgeCity-->>>' ,isUserInput,option)
 		if(isUserInput){
 			this.addBankForm.patchValue({
-				currency:option.countryName + '-' + option.symbol,
-				currencyshow:option.countryName + '-' + option.symbol
-
+				currency:option.currency + '-' + option.currencyCountry
 			})
 			// this.addAffiliateAccountForm.updateValueAndValidity()
 		}
-
+	}
+	onSelectionChange(event){
+		console.log('event-sdfksjfsldkfhsdflkdshf>>',event.option, event.option.value,event.option.viewValue)
+		this.addBankForm.patchValue({
+			currency:event.option.value,
+			currencyShow : event.option.viewValue
+		})
+	}
+	currencySelection(value){
+		this.currencyOptions_copy.map(i=>{
+			let concatValue = i.currency+'-'+i.currencyCountry
+			if(value == concatValue){
+				console.log('select option-->>', value)
+				this.addBankForm.patchValue({
+					currencyShow : i.countryName + '-' + i.symbol
+				})
+			}
+		})
 	}
 	changeIdentityCountry(selectedCountryCode) {
 		this.httpClient.get("assets/json/stripeDocumentData.json").subscribe((stripeDocumentData: any) => {
