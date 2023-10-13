@@ -667,6 +667,10 @@ export class NewBookingComponent implements OnInit {
 			return
 		}
 	}
+	convertToMinutes(value){
+		return (value/60).toFixed(2)
+	}
+
 
 	SetLCFormValue(form_control: string, value: any) {
 		if (!value || !form_control) {

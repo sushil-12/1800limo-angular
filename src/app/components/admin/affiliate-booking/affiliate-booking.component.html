@@ -5,7 +5,7 @@
 		<h2 class="headinginfo">{{userName |titlecase}}'s {{bookingType | titlecase}} Booking list </h2>
 		<div class="containeredd mt-1 ">
 
-			
+
 			<div class="row my-2 mb-3">
 				<!-- <div class="col-md-3">
 						<div id="filter-type">
@@ -173,7 +173,8 @@
 										</span>
 										<span class="loc-logo"
 											(click)="showLocationPointOnMap(booking.booking_id, 'pickup')">
-											&nbsp;&nbsp;&nbsp;<i class="bi bi-geo-alt-fill"></i></span>
+											&nbsp;&nbsp;&nbsp;<i class="bi bi-geo-alt-fill"
+												style="font-size:24px"></i></span>
 									</td>
 									<td>
 										<p data-target="#sendEmailModal" data-toggle="modal"
@@ -221,7 +222,8 @@
 										</span>
 										<span class="loc-logo"
 											(click)="showLocationPointOnMap(booking.booking_id, 'dropoff')">
-											&nbsp;&nbsp;&nbsp;<i class="bi bi-geo-alt-fill"></i></span>
+											&nbsp;&nbsp;&nbsp;<i class="bi bi-geo-alt-fill"
+												style="font-size:24px"></i></span>
 									</td>
 									<td>
 										<span [innerHTML]="highlighText(booking.vehicle_cat_name)"></span>
@@ -246,33 +248,33 @@
 				<nav aria-label="Page navigation example" *ngIf="totalRecords > 5">
 					<ul class="pagination pagination-circle pg-blue">
 						<li *ngIf="currentPage!=1" class="page-item disabled"
-								(click)="loadBookings(firstPageUrl, accountID, type,isAffiliate,searchText)">
-								<a class="page-link">First</a>
-							</li>
-							<li *ngIf="currentPage!=1" class="page-item disabled"
-								(click)="loadBookings(prevPageUrl, accountID, type,isAffiliate,searchText)">
-								<a class="page-link" aria-label="Previous">
-									<span aria-hidden="true">&laquo;</span>
-									<span class="sr-only">Previous</span>
-								</a>
-							</li>
-							<li *ngFor="let in of counter() ;let i = index"
-								[ngClass]="(in==currentPage)?'page-item active':'page-item'"
-								(click)="loadBookings(path+'?page='+in,  accountID, type,isAffiliate,searchText)"
-								[disabled]="(in==currentPage)?true:false">
-								<a class="page-link">{{in}}</a>
-							</li>
-							<li *ngIf="currentPage!=lastPage" class="page-item"
-								(click)="loadBookings(nextPageUrl,  accountID, type,isAffiliate,searchText)">
-								<a class="page-link" aria-label="Next">
-									<span aria-hidden="true">&raquo;</span>
-									<span class="sr-only">Next</span>
-								</a>
-							</li>
-							<li *ngIf="currentPage!=lastPage" class="page-item"
-								(click)="loadBookings(lastPageUrl,  accountID, type,isAffiliate,searchText)">
-								<a class="page-link">Last</a>
-							</li>
+							(click)="loadBookings(firstPageUrl, accountID, type,isAffiliate,searchText)">
+							<a class="page-link">First</a>
+						</li>
+						<li *ngIf="currentPage!=1" class="page-item disabled"
+							(click)="loadBookings(prevPageUrl, accountID, type,isAffiliate,searchText)">
+							<a class="page-link" aria-label="Previous">
+								<span aria-hidden="true">&laquo;</span>
+								<span class="sr-only">Previous</span>
+							</a>
+						</li>
+						<li *ngFor="let in of counter() ;let i = index"
+							[ngClass]="(in==currentPage)?'page-item active':'page-item'"
+							(click)="loadBookings(path+'?page='+in,  accountID, type,isAffiliate,searchText)"
+							[disabled]="(in==currentPage)?true:false">
+							<a class="page-link">{{in}}</a>
+						</li>
+						<li *ngIf="currentPage!=lastPage" class="page-item"
+							(click)="loadBookings(nextPageUrl,  accountID, type,isAffiliate,searchText)">
+							<a class="page-link" aria-label="Next">
+								<span aria-hidden="true">&raquo;</span>
+								<span class="sr-only">Next</span>
+							</a>
+						</li>
+						<li *ngIf="currentPage!=lastPage" class="page-item"
+							(click)="loadBookings(lastPageUrl,  accountID, type,isAffiliate,searchText)">
+							<a class="page-link">Last</a>
+						</li>
 						<!-- <li class="page-item disabled" *ngIf="nextPageUrl"
 							(click)="handleShowMore(nextPageUrl,startDate, endDate, searchText)">
 							<a class="page-link">Show more</a>
@@ -649,7 +651,7 @@
 				<div class="container text-lg" *ngIf="bookingPreview">
 					<!-- Booking Type -->
 					<h4 class="font-weight m-0">
-						Booking Type 
+						Booking Type
 					</h4>
 					<!-- Booking Information -->
 					<div class="row">
@@ -925,7 +927,7 @@
 							</span>
 						</div>
 					</div>
-					
+
 					<!-- <h4 class="font-weight m-0 mt-3" *ngIf="this.bookingPreview?.payment_status=='unpaid'">
 						Rates distribution
 					</h4>
@@ -1198,7 +1200,7 @@
 									{{ textFormatter(bookingPreview.pickup) }}
 								</span>
 								<span (click)="showLocationPointOnMapByAddress(bookingPreview.pickup)"><i
-										class="bi bi-geo-alt-fill"></i></span>
+										class="bi bi-geo-alt-fill" style="font-size:24px"></i></span>
 							</div>
 						</div>
 					</div>
@@ -1217,7 +1219,7 @@
 									{{ textFormatter(bookingPreview.pickup_airport_name) }}
 								</span>
 								<span (click)="showLocationPointOnMapByAddress(bookingPreview.pickup_airport_name)"><i
-										class="bi bi-geo-alt-fill"></i></span>
+										class="bi bi-geo-alt-fill" style="font-size:24px"></i></span>
 							</div>
 						</div>
 						<!-- Airport -->
@@ -1314,7 +1316,7 @@
 										{{ stop.address }}
 									</span>
 									<span (click)="showLocationPointOnMapByAddress(stop.address)"><i
-											class="bi bi-geo-alt-fill"></i></span>
+											class="bi bi-geo-alt-fill" style="font-size:24px"></i></span>
 								</div>
 							</div>
 						</div>
@@ -1342,7 +1344,7 @@
 									{{ textFormatter(bookingPreview.dropoff) }}
 								</span>
 								<span (click)="showLocationPointOnMapByAddress(bookingPreview.dropoff)"><i
-										class="bi bi-geo-alt-fill"></i></span>
+										class="bi bi-geo-alt-fill" style="font-size:24px"></i></span>
 							</div>
 						</div>
 					</div>
@@ -1361,7 +1363,7 @@
 									{{ textFormatter(bookingPreview.dropoff_airport_name ) }}
 								</span>
 								<span (click)="showLocationPointOnMapByAddress(bookingPreview.dropoff_airport_name)"><i
-										class="bi bi-geo-alt-fill"></i></span>
+										class="bi bi-geo-alt-fill" style="font-size:24px"></i></span>
 							</div>
 						</div>
 						<!-- Airport -->
@@ -1449,7 +1451,8 @@
 					<hr>
 
 					<!-- Rate Distribution Information -->
-					<div class="distribution_rate" *ngIf="bookingPreview.affiliate_type === 'affiliate' && bookingPreview.payment_status=='unpaid'">
+					<div class="distribution_rate"
+						*ngIf="bookingPreview.affiliate_type === 'affiliate' && bookingPreview.payment_status=='unpaid'">
 						<h4 class="font-weight-bolder m-0 my-3">
 							Rates Distribution {{bookingPreview.loose_affiliate}}
 						</h4>
@@ -1474,7 +1477,7 @@
 							<div class="row m-0">
 								<div class="col-md-4 key d-flex align-items-center">
 									<span class="">
-										Admin Share 
+										Admin Share
 									</span>
 								</div>
 								<div class="col-md-8 value preview-airport-color">
@@ -1527,7 +1530,7 @@
 									<span class="font-weight-bolder preview-output-feild">
 										${{rates_preview?.stripe_fees.toFixed(2)}}
 									</span>
-									(Platform fee 2.9%  + 30 cents - Paid from Admin share)
+									(Platform fee 2.9% + 30 cents - Paid from Admin share)
 								</div>
 							</div>
 						</div>
@@ -1540,7 +1543,7 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										${{(rates_preview?.total_price - rates_preview?.stripe_fees).toFixed(2)}} 
+										${{(rates_preview?.total_price - rates_preview?.stripe_fees).toFixed(2)}}
 									</span>
 									(Excluding platform fee)
 								</div>
@@ -1558,7 +1561,7 @@
 									<span class="font-weight-bolder preview-output-feild">
 										${{rates_preview?.affiliate_share.toFixed(2)}}
 									</span>
-									( Total Price - (Admin share + Stripe fees) ) 
+									( Total Price - (Admin share + Stripe fees) )
 								</div>
 							</div>
 						</div>
