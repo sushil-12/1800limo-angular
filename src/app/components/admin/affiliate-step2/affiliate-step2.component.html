@@ -444,9 +444,9 @@
 						<mat-label>Badge City
 						</mat-label>
 						<input type="text" placeholder="Pick one" aria-label="Number" matInput
-							formControlName="badge_city_name" [matAutocomplete]="auto"
+							formControlName="badge_city_name" [matAutocomplete]="auto1"
 							(keyup)="handleBadgeCity($event.target.value)">
-						<mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+						<mat-autocomplete  #auto1="matAutocomplete">
 							<mat-option *ngFor="let option of filteredOptions"
 								(onSelectionChange)="selectBadgeCity(option,$event.isUserInput)" [value]="option.name">
 								{{option.name}}

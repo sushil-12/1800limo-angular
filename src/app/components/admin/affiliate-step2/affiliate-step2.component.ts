@@ -389,8 +389,8 @@ this.loadCards(this.affiliateId)
 	}
 	
 	handleBadgeCity(value:any){
-		console.log(value , this.filteredOptions)
 		this.filteredOptions = this.badgeOptions.filter((i:any)=> i.name.toLowerCase().includes(value.toLowerCase()))
+		console.log(value , this.filteredOptions)
 	}
 	selectBadgeCity(option:any,isUserInput){
 		console.log('in function selectBadgeCity-->>>' ,isUserInput)
