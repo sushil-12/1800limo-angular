@@ -690,6 +690,9 @@ export class CreateBookingComponent implements OnInit {
 			this.$spinner.hide();//hide spinner
 		  });
 	}
+	convertToMinutes(value){
+		return (value/60).toFixed(2)
+	}
 	handleClientAccount(value: any) {
 		console.log('---------------------_>>>>>>>>>>>>>> client acc value', value)
 		this.chooseUser(value.id)

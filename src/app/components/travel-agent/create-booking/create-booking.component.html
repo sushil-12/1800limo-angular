@@ -18,9 +18,9 @@
 	<div id="page-container">
 		<!-- Section - Booking Type -->
 		<div class="section-container mt-0">
-			<h2 class="border-secondary">
+			<h4 class="border-secondary">
 				Booking Type
-			</h2>
+			</h4>
 			<div class="row px-4">
 				<!-- Service Type -->
 				<div class="flex-grow-1 m-2">
@@ -202,7 +202,7 @@
 						<h4>
 							Personal Information
 						</h4>
-						<div class="row">
+						<div class="row margin-bottom-minus-10">
 							<!-- First Name -->
 							<div class="col-md-4 looseError">
 								<mat-form-field appearance="outline" class="m-0">
@@ -272,7 +272,7 @@
 							</div>
 						</div>
 
-						<div class="row">
+						<div class="row margin-bottom-minus-10">
 							<!-- Email -->
 							<div class="col-md-4 looseError">
 								<mat-form-field appearance="outline" class="m-0">
@@ -356,7 +356,7 @@
 						<h4>
 							Card Details
 						</h4>
-						<div class="row">
+						<div class="row margin-bottom-minus-10">
 							<!-- Card Holder Name -->
 							<div class="col-md-6">
 								<mat-form-field appearance="outline" class="m-0">
@@ -502,9 +502,9 @@
 		<div class="section-container mt-2">
 			<!-- Passenger Information -->
 			<div id="passenger-information" class="px-4 mt-4">
-				<h2>
+				<h4>
 					Passenger Information
-				</h2>
+				</h4>
 				<div class="row">
 					<div class="col-md-4">
 						<mat-form-field appearance="outline" class="m-0">
@@ -612,9 +612,9 @@
 			<!-- Passenger Information Ends -->
 		</div>
 		<div class="section-container mt-2" *ngIf="driver_info">
-			<h2>
+			<h4>
 				Transportation Details
-			</h2>
+			</h4>
 			<div class="row px-4 mt-4">
 				<div class="col-md-6">
 					<div class="card" style="background-color: #e2e2e2;">
@@ -681,9 +681,9 @@
 		<div class="section-container mt-2">
 			<!-- Affiliate Driver Information Ends -->
 			<!-- Section Booking details start -->
-			<h2 id="booking_detail_section">
+			<h4 id="booking_detail_section">
 				Booking Details
-			</h2>
+			</h4>
 			<div class="row px-4" *ngIf="Form.updateType.value != 'edit'">
 				<!-- Service Type -->
 				<div class="flex-grow-1 m-2">
@@ -757,7 +757,7 @@
 			<!-- </div> -->
 			<div class="row">
 				<!-- Meet Greet Choices -->
-				<div class="col-md-11 ">
+				<div class="col-md-11 ml-3">
 					<mat-form-field appearance="outline">
 						<mat-label>
 							Meet and Greet Choices <span class="asterisk"></span>
@@ -772,7 +772,7 @@
 				</div>
 
 				<!-- Number Of Vehicles -->
-				<div class="col-md-3">
+				<div class="col-md-3 ml-3">
 					<mat-form-field appearance="outline">
 						<mat-label>
 							Number of Vehicles
@@ -815,7 +815,7 @@
 			</h4>
 			<!-- Pickup - Address Field -->
 			<div *ngIf="!searchSubstring(Form.transfer_type.value, 'airport_')">
-				<div class="row px-2">
+				<div class="row px-3">
 					<div class="col-md-12">
 						<mat-form-field appearance="outline">
 							<mat-label> Pickup Address </mat-label>
@@ -929,8 +929,8 @@
 			</h4>
 			<!-- Dropoff - Address Field -->
 			<div *ngIf="!searchSubstring(Form.transfer_type.value, '_airport')">
-				<div class="row px-2">
-					<div class="col-md-12">
+				<div class="row px-2 ml-1">
+					<div class="col-md-12 ml-1">
 						<mat-form-field appearance="outline">
 							<mat-label> Dropoff Address </mat-label>
 							<input type="text" matInput placeholder="Type your address" matGoogleMapsAutocomplete
@@ -943,7 +943,7 @@
 			</div>
 			<!-- Dropoff - Airport Field -->
 			<div *ngIf="searchSubstring(Form.transfer_type.value, '_airport')">
-				<div class="row px-2">
+				<div class="row px-3">
 					<!-- Airport -->
 					<div class="col-md-5 col-lg-3">
 
@@ -1080,10 +1080,15 @@
 						<div class="google_map">
 							<div id="map" class="map"></div>
 						</div>
-						<h6>
-							Total Distance: {{ mToMi(distance) }} Miles / {{ mToKm(distance)
-							}} Km
-						</h6>
+						<div class="row">
+							<h6 class="mx-2">
+								Total Distance: {{ mToMi(distance) }} Miles / {{ mToKm(distance)
+								}} Km
+							</h6>
+							<h6 class="mx-2">
+								Estimated time: {{convertToMinutes(Form.journeyTime.value)}} mins
+							</h6>
+						</div>
 					</div>
 				</div>
 				<!-- AGM Map Ends -->
@@ -1097,7 +1102,7 @@
 			<h2>
 				Return Booking
 			</h2>
-			<div class="row px-4" *ngIf="Form.updateType.value != 'edit'">
+			<div class="row px-3 margin-bottom-minus-10" *ngIf="Form.updateType.value != 'edit'">
 				<!-- Service Type -->
 				<div class="flex-grow-1 m-2">
 					<div>
@@ -1168,7 +1173,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="row">
+			<div class="row margin-bottom-minus-10">
 				<!-- Meet Greet Choices -->
 				<div class="col-md-5 m-2">
 					<mat-form-field appearance="outline">
@@ -1221,7 +1226,7 @@
 
 			<!-- Return Pickup - Address Field -->
 			<div *ngIf="!searchSubstring(Form.return_transfer_type.value, 'airport_')">
-				<div class="row px-2">
+				<div class="row px-2 ml-1">
 					<div class="col-md-12">
 						<mat-form-field appearance="outline">
 							<mat-label> Pickup Address </mat-label>
@@ -1345,7 +1350,7 @@
 
 			<!-- Return Dropoff - Airport Field -->
 			<div *ngIf="searchSubstring(Form.return_transfer_type.value, '_airport')">
-				<div class="row px-2">
+				<div class="row px-2 ml-1">
 					<!-- Airport -->
 					<div class="col-md-5 col-lg-3">
 
@@ -1477,17 +1482,22 @@
 
 
 			<!-- AGM Map -->
-			<div class="row">
+			<div class="row margin-top-minus-20">
 				<!-- AGM Map -->
-				<div class="col-md-12">
+				<div class="col-md-12 ">
 					<div class="map-block">
 						<div class="google_map">
 							<div id="return_map" class="map"></div>
 						</div>
-						<h6>
-							Total Distance: {{ mToMi(return_distance) }} Miles / {{
-							mToKm(return_distance) }} Km
-						</h6>
+						<div class="row">
+							<h6 class="mx-2">
+								Total Distance: {{ mToMi(distance) }} Miles / {{ mToKm(distance)
+								}} Km
+							</h6>
+							<h6 class="mx-2">
+								Estimated time: {{convertToMinutes(Form.journeyTime.value)}} mins
+							</h6>
+						</div>
 					</div>
 				</div>
 				<!-- AGM Map Ends -->
@@ -1745,7 +1755,7 @@
 						</h4>
 
 						<!-- Loose Customer > Name -->
-						<div class="mx-2">
+						<div class="mx-2 margin-bottom-minus-10">
 							<div class="row m-0">
 								<div class="col-md-4 key">
 									<span>
