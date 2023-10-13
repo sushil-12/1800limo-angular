@@ -159,20 +159,19 @@
 					</div>
 				</div>
 				<div class="col-md-6">
-					<!-- <mat-form-field appearance="outline">
+					<mat-form-field appearance="outline">
 						<mat-label>Currency <span class="asterisk">*</span></mat-label>
 						<input type="text" placeholder="Pick one" aria-label="Number" matInput
-							formControlName="currency" [matAutocomplete]="auto"
+							formControlName="currencyShow" [matAutocomplete]="auto"
 							(keyup)="handleCurrency($event.target.value)">
-						<mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+						<mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="onSelectionChange($event)">
 							<mat-option *ngFor="let currencyOption of currencyOptions"
-								(onSelectionChange)="selectCurrency(option,$event.isUserInput)"
-								[value]="currencyOption.countryName + '-' + currencyOption.symbol">
+								[value]="currencyOption.currency + '-' + currencyOption.currencyCountry">
 								{{ currencyOption.countryName }} - {{ currencyOption.symbol }}
 							</mat-option>
 						</mat-autocomplete>
-					</mat-form-field> -->
-					<mat-form-field appearance="outline">
+					</mat-form-field>
+					<!-- <mat-form-field appearance="outline">
 						<mat-label>Currency <span class="asterisk">*</span></mat-label>
 						<mat-select formControlName="currency" tabindex="1">
 							<mat-option value="">Choose Currency</mat-option>
@@ -182,7 +181,7 @@
 								{{ currencyOption.countryName }} - {{ currencyOption.symbol }}
 							</mat-option>
 						</mat-select>
-					</mat-form-field>
+					</mat-form-field> -->
 
 					<div *ngIf="submittedForm && f.currency.errors" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.currency.errors.required">
