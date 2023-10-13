@@ -330,14 +330,15 @@
 									(change)="handleChangeTravelAccounts('travel_individual')">
 									Individual
 								</mat-radio-button>
-								<!-- <mat-radio-button [value]="'travel_loose_customer'" class="my-2 ml-4 mr-3"
+								<mat-radio-button [value]="'travel_loose_customer'" class="my-2 ml-4 mr-3"
 									(change)="handleChangeTravelAccounts('travel_loose_customer')">
 									Loose customer
-								</mat-radio-button> -->
+								</mat-radio-button>
 							</mat-radio-group>
 						</div>
 					</div>
-					<div class="col-md-10" *ngIf="Form['travel_client_acc'].value != 'travel_loose_customer'">
+					<div class="col-md-10 margin-left-10"
+						*ngIf="Form['travel_client_acc'].value != 'travel_loose_customer'">
 						<ng-select appearance="outline" [items]="travelStaffAccounts" bindLabel="name" bindValue="id"
 							placeholder="Select Client Account" dropdownPosition="bottom" [markFirst]="true"
 							[virtualScroll]="true" formControlName="travel_client_id"
@@ -358,7 +359,7 @@
 						<h4>
 							Personal Information
 						</h4>
-						<div class="row">
+						<div class="row margin-bottom-minus-20">
 							<!-- First Name -->
 							<div class="col-md-4 looseError">
 								<mat-form-field appearance="outline" class="m-0">
@@ -428,7 +429,7 @@
 							</div>
 						</div>
 
-						<div class="row">
+						<div class="row margin-bottom-minus-20">
 							<!-- Email -->
 							<div class="col-md-4 looseError">
 								<mat-form-field appearance="outline" class="m-0">
@@ -512,7 +513,7 @@
 						<h4>
 							Card Details
 						</h4>
-						<div class="row">
+						<div class="row margin-bottom-minus-20">
 							<!-- Card Holder Name -->
 							<div class="col-md-6">
 								<mat-form-field appearance="outline" class="m-0">
@@ -569,7 +570,8 @@
 									</div>
 								</div>
 							</div>
-
+						</div>
+						<div class="row ">
 							<!-- Expiry Month -->
 							<div class="col-md-4">
 								<mat-form-field appearance="outline" class="m-0">
@@ -779,7 +781,7 @@
 					</div>
 
 					<!-- Luggage Count -->
-					<div class="col-md-3 looseError">
+					<div class="col-md-3 mb-4 looseError">
 						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>
 								Luggage Count <span class="asterisk"></span>
@@ -865,7 +867,7 @@
 
 			<!-- Visible in only Loose Affiliate Section -->
 			<!-- Loose Affiliate Section -->
-			<div class="row px-4" *ngIf="Form.affiliate_type.value == 'loose_affiliate'">
+			<div class="row px-4 margin-bottom-minus-20" *ngIf="Form.affiliate_type.value == 'loose_affiliate'">
 				<div class="col-md-4 col-lg-4">
 					<mat-form-field appearance="outline" class="m-0">
 						<mat-label>
@@ -1231,10 +1233,10 @@
 			<!-- Visible in Affiliate as well as Loose Affiliate Section -->
 			<!-- Affiliate Driver Information -->
 			<div class="px-4 my-4" *ngIf="Form.affiliate_type.value == 'loose_affiliate' || Form.affiliate_id.value">
-				<h4>
+				<h4 class="margin-top-minus">
 					Driver Preferences
 				</h4>
-				<div class="row">
+				<div class="row ">
 					<!-- Affiliate Driver Name -->
 					<div id="driver" class="col-md-3" *ngIf="Form.affiliate_type.value != 'loose_affiliate'">
 						<mat-form-field appearance="outline" class="m-0">
@@ -2688,12 +2690,6 @@
 		</div>
 	</div>
 </div>
-
-
-
-
-
-
 
 
 <div class="modal fade" id="previewBooking" aria-labelledby="previewBookingLabel" aria-hidden="true">
