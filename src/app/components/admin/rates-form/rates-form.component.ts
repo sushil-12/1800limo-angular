@@ -194,6 +194,12 @@ export class RatesFormComponent implements OnInit, OnChanges {
 				this.initReturnRates
 			}
 		}
+		// if(changes.affiliate_type?.currentValue){
+		// 	this.initRates();
+		// 	if (this.ReturnRatesForm) {
+		// 		this.initReturnRates
+		// 	}
+		// }
 
 		this.vehicles = changes.vehs ? changes.vehs.currentValue : this.vehicles;
 		if (this.vehicles) {
