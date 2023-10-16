@@ -154,7 +154,7 @@ export class ProfileComponent implements OnInit {
       firstName: ['', Validators.required],
       middleName: [''],
       lastName: ['', Validators.required],
-      work_contact_number: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
+      work_contact_number: [''],
       workIsd: ['+1', Validators.required],
       workCountry: ['us'],
       mobile: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],

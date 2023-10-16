@@ -545,19 +545,24 @@ export class CreateBookingComponent implements OnInit {
 		});
 	}
 	autofillData(filling_for: string, data: any) {
-		if (filling_for === 'passenger') {
-			console.log('--->>>> filling passenger info', data)
+		try {
+			if (filling_for === 'passenger') {
+				console.log('--->>>> filling passenger info', data)
 			data.middle_name ?
 				this.SetFormValue('passenger_name', `${data?.first_name} ${data?.middle_name} ${data?.last_name}`) : this.SetFormValue('passenger_name', `${data?.first_name} ${data?.last_name}`)
-			this.SetFormValue('passenger_email', data.email)
-			this.SetFormValue('passenger_cell', data.mobile)
-			this.SetFormValue('passenger_cell_isd', data.mobileIsd)
-			this.SetFormValue('passenger_cell_country', data.mobileCountry)
-			this.SetFormValue('origin_airport_city', data.origin_airport_city)
-			this.SetFormValue('pickup_flight', data.pickup_flight)
-			this.SetFormValue('dropoff_flight', data.dropoff_flight)
+			this.SetFormValue('passenger_email', data?.email)
+			this.SetFormValue('passenger_cell', data?.mobile)
+			this.SetFormValue('passenger_cell_isd', data?.mobileIsd)
+			this.SetFormValue('passenger_cell_country', data?.mobileCountry)
+			this.SetFormValue('origin_airport_city', data?.origin_airport_city)
+			this.SetFormValue('pickup_flight', data?.pickup_flight)
+			this.SetFormValue('dropoff_flight', data?.dropoff_flight)
 		}
-
+		
+	} catch (error) {
+	console.log('error----->>>>>>' , error)	
+	}
+		
 		if (filling_for === 'cruise') {
 			if (data?.cruise_port == null) {
 				this.SetFormValue('cruise_port', data?.return_cruise_port);
@@ -717,11 +722,15 @@ export class CreateBookingComponent implements OnInit {
 		}
 	}
 	handleTravelStaffAccounts(value: any){
-		console.log('handleTravelStaffAccounts--->>>' , value)
-		this.TravelAgentService.getTravelClientDetailById(value.id).subscribe((response: any) => {
-			console.log("detail ->>>>>>>",response)
-			this.autofillData('passenger', response?.data);
-		})
+		try {
+			console.log('handleTravelStaffAccounts--->>>' , value)
+			this.TravelAgentService.getTravelClientDetailById(value.id).subscribe((response: any) => {
+				console.log("detail ->>>>>>>",response)
+				this.autofillData('passenger', response?.data);
+			})
+		} catch (error) {
+			console.log('error--->>>>' , error)
+		}
 
 	}
   PaxTelInputObject(event: any) {

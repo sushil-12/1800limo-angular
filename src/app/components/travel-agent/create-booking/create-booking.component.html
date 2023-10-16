@@ -185,10 +185,10 @@
 						[virtualScroll]="true" formControlName="travel_client_id"
 						(change)="handleTravelStaffAccounts($event)">
 					</ng-select>
-					<div *ngIf="(submitBookingForm && Form.travel_client_id.invalid) || (Form.travel_client_id.touched && Form.travel_client_id.dirty)"
+					<!-- <div *ngIf="(submitBookingForm && Form.travel_client_id.invalid) || (Form.travel_client_id.touched && Form.travel_client_id.dirty)"
 						class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="Form.travel_client_id.errors.required">Select an Individual</div>
-					</div>
+					</div> -->
 				</div>
 			</div>
 			<ng-container
