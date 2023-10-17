@@ -173,7 +173,7 @@ export class AddDriverComponent implements OnInit {
 			Country: [''],
 			State: [''],
 			City: [''],
-			ZipCode: ['', Validators.required],
+			ZipCode: [''],
 		});
 
 		if (this.affiliateType != 'fleet_operator') {
@@ -851,7 +851,7 @@ export class AddDriverComponent implements OnInit {
 				this.addDriverForm.controls['Country'].setValidators([Validators.required]);
 				this.addDriverForm.controls['State'].setValidators([Validators.required]);
 				this.addDriverForm.controls['City'].setValidators([Validators.required]);
-				this.addDriverForm.controls['ZipCode'].setValidators([Validators.required, Validators.pattern("^[0-9]*$"), this.customValidator.dashValidator(), this.customValidator.plusValidator()]);
+				this.addDriverForm.controls['ZipCode'].setValidators([Validators.required]);
 			} else {
 				this.addDriverForm.patchValue({
 					ExPolice: 'no'

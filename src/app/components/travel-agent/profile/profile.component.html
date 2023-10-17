@@ -4,12 +4,11 @@
 		<section class="user_information">
 			<h2 class="headinginfo adminbox_shadow">Profile</h2>
 			<div class="container mt-1 ">
-				<div class="vehtype_extintwrap single-image">
+				<!-- <div class="vehtype_extintwrap single-image">
 					<div class="row mt-2">
 						<div class="col-md-4">
 							<div class="vehtype_extint">
 								<div>
-									<!-- <p class="d-flex justify-content-left">Profile Picture</p> -->
 									<img *ngIf="profile_pic; else no_profile_pic" class="profile_pic"
 										src="{{profile_pic}}" alt="Profile Picture"
 										(click)="showImageInModal(profile_pic)">
@@ -51,7 +50,7 @@
 							</div>
 						</div>
 					</div>
-				</div>
+				</div> -->
 				<div class="row ">
 					<div class="col-md-4">
 						<mat-form-field appearance="outline">
@@ -84,9 +83,7 @@
 
 					<div class="col-md-4">
 						<mat-form-field appearance="outline" class="mobileLabelClass">
-							<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Contact<span
-									class="asterisk">
-									*</span></label>
+							<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Contact</label>
 							<input matInput placeholder="Contact" formControlName="work_contact_number" ng2TelInput
 								[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
 								placeholder="1234567890" class="phoneNumberClass"
