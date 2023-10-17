@@ -12,20 +12,23 @@
 				</svg> -->
 				Print Invoice</button>
 		</div>
-		<div *ngIf="(invoiceData.billing_detail.payment_method =='credit_card' && invoiceData.invoice_status!='refund') &&(currentUser?.RoleName=='admin'|| subModules.includes('can_handle_refund'))">
+		<div
+			*ngIf="(invoiceData.billing_detail.payment_method =='credit_card' && invoiceData.invoice_status!='refund') &&(currentUser?.RoleName=='admin'|| subModules.includes('can_handle_refund'))">
 			<button class="custom-btn refund-btn box-shadow" style="height: 40px;width: 130px; font-size: 14px;
 				padding: 10px;" data-toggle="modal" data-target="#refundModal" (click)="show=!show">
 				Refund</button>
 		</div>
 		<div>
 			<button class="custom-btn button2 box-shadow my-1" style="height: 40px;width: 200px; font-size: 14px;
-			padding: 10px;" data-toggle="modal" data-target="#sendInvoiceToAny" (click)="show_sendInvoiceToAny=!show_sendInvoiceToAny"
-			*ngIf="currentUser?.RoleName=='admin'|| subModules.includes('send_invoice_to_anyone')">
-			Send Invoice to Anyone</button>
+			padding: 10px;" data-toggle="modal" data-target="#sendInvoiceToAny"
+				(click)="show_sendInvoiceToAny=!show_sendInvoiceToAny"
+				*ngIf="currentUser?.RoleName=='admin'|| subModules.includes('send_invoice_to_anyone')">
+				Send Invoice to Anyone</button>
 		</div>
 		<div>
 			<button class="custom-btn button2 box-shadow my-1" style="height: 40px;width: 200px; font-size: 14px;
-			padding: 10px;" (click)="sendInvoiceToCustomer()" *ngIf="currentUser?.RoleName=='admin'|| subModules.includes('send_invoice_to_customer')">
+			padding: 10px;" (click)="sendInvoiceToCustomer()"
+				*ngIf="currentUser?.RoleName=='admin'|| subModules.includes('send_invoice_to_customer')">
 				Send to Account Holder</button>
 		</div>
 		<!-- <div>
@@ -51,7 +54,8 @@
 						<div class="bd-highlight invoice-p m-3">
 							Paid Amount
 							<p class="invoice-dollar--color display-4">
-								<strong style="font-size: xx-large;"><span>{{currencySymbol}}</span>{{invoiceData?.paid_amount}}</strong>
+								<strong
+									style="font-size: xx-large;"><span>{{currencySymbol}}</span>{{invoiceData?.paid_amount}}</strong>
 							</p>
 							<!-- Invoice Status
 							<p class="invoice-dollar--color display-4">
@@ -90,7 +94,8 @@
 								</p>
 								<p class="m-1 invoice-p text-white invoice-status-bar">
 									Invoice Status: <span
-										class="invoice-text-bold invoice-status-bar">{{formatText(invoiceData?.invoice_status) | titlecase}}</span>
+										class="invoice-text-bold invoice-status-bar">{{formatText(invoiceData?.invoice_status)
+										| titlecase}}</span>
 								</p>
 							</div>
 							<div class="p-2 col-6 bd-highlight " *ngIf="invoiceData.date_of_service">
@@ -249,7 +254,7 @@
 										<li style="margin-bottom: 8px; " class="invoice-charges-textb "
 											*ngFor="let price of priceObj.value">
 											<span class="font-weight-bold" *ngIf="price.amount">
-											{{currencySymbol+price.amount}}</span>
+												{{currencySymbol+price.amount}}</span>
 										</li>
 									</ul>
 								</div>
@@ -262,7 +267,7 @@
 										Sub Total
 									</p>
 									<p class="m-0 p-1 text-charges">
-										<span >{{currencySymbol}}</span>
+										<span>{{currencySymbol}}</span>
 										{{invoiceData?.sub_total.toFixed(2)}}
 									</p>
 								</div>
@@ -276,21 +281,23 @@
 									</p>
 								</div>
 								<div class="row d-flex justify-content-between">
-									<p class="m-0 p-1 text-charges" >
+									<p class="m-0 p-1 text-charges">
 										Total-Amount</p>
-										<p class="m-0 p-1 text-charges font-weight-bold">
-											<span >{{currencySymbol}}</span>{{this.invoiceData?.grand_total.toFixed(2)}}
-										</p>
-									</div>
-									<div class="row d-flex justify-content-between" *ngIf="(this.invoiceData?.grand_total - invoiceData?.paid_amount) > 0">
-										<p class="m-0 p-1 text-charges">
-											Payable payment
-											<!-- <i class="bi bi-info-circle-fill"></i> -->
-										</p>
-										<p class="m-0 p-1 text-charges">
-											<span >{{currencySymbol}}</span>{{(this.invoiceData?.grand_total.toFixed(2) - invoiceData?.paid_amount).toFixed(2)}}
-										</p>
-									</div>
+									<p class="m-0 p-1 text-charges font-weight-bold">
+										<span>{{currencySymbol}}</span>{{this.invoiceData?.grand_total.toFixed(2)}}
+									</p>
+								</div>
+								<div class="row d-flex justify-content-between"
+									*ngIf="(this.invoiceData?.grand_total - invoiceData?.paid_amount) > 0">
+									<p class="m-0 p-1 text-charges">
+										Payable payment
+										<!-- <i class="bi bi-info-circle-fill"></i> -->
+									</p>
+									<p class="m-0 p-1 text-charges">
+										<span>{{currencySymbol}}</span>{{(this.invoiceData?.grand_total.toFixed(2) -
+										invoiceData?.paid_amount).toFixed(2)}}
+									</p>
+								</div>
 								<!-- <div class="row d-flex justify-content-between" >
 									<p class="m-0 p-1 text-charges" >
 										Grand-Amount</p>
@@ -314,9 +321,11 @@
 	</section>
 	<section class="billing_inforamtion">
 		<div class="row m-2">
-			<button class="ok-btn custom-ok-btn box-shadow ml-3" style="height: 40px;width: 100px; font-size: 14px;" type="button" (click)="backButton()" tabindex="1">OK</button>
+			<button class="ok-btn custom-ok-btn box-shadow ml-3" style="height: 40px;width: 100px; font-size: 14px;"
+				type="button" (click)="backButton()" tabindex="1">OK</button>
 			<button class="custom-btn refund-btn box-shadow ml-3" style="height: 40px;width: 130px; font-size: 14px;
-				padding: 10px;"  data-toggle="modal" data-target="#paymentLogs" *ngIf="invoiceData.billing_detail.payment_method !='cash'" >Payment logs</button>
+				padding: 10px;" data-toggle="modal" data-target="#paymentLogs"
+				*ngIf="invoiceData.billing_detail.payment_method !='cash'">Payment logs</button>
 		</div>
 	</section>
 </main>
@@ -324,7 +333,7 @@
 
 <!-- refund modal starts -->
 <div class="modal fade" id="refundModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-	aria-hidden="true" >
+	aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content user_inforamtion">
 			<button type="button" (click)="closeModal()" class="close closeButton x-circle-btn" data-dismiss="modal"
@@ -339,10 +348,10 @@
 					<div class="form-group">
 						<div class="col-md-12">
 							<mat-form-field appearance="outline">
-								<mat-label>Amount</mat-label>
+								<mat-label>Amount<span class="asterisk1">*</span></mat-label>
 								<span class="currencySymbol" matPrefix>{{currencySymbol}}</span>
 								<input matInput type="number" formControlName="refundAmount"
-									value="invoiceData.grand_total" required>
+									value="invoiceData.grand_total">
 							</mat-form-field>
 							<div class="error-box">
 								<div class="error-message"
@@ -361,7 +370,7 @@
 			</div>
 			<div class="modal-footer d-flex justify-content-center">
 				<!-- <button type="button" (click)="closeModal()" class="btn btnStyle">Close</button> -->
-				<button class="btn saveButtonModal" type="submit" (click)="refund()" >Submit</button>
+				<button class="btn saveButtonModal" type="submit" (click)="refund()">Submit</button>
 			</div>
 		</div>
 	</div>
@@ -370,26 +379,25 @@
 
 <!-- send Invoice to Any -->
 <div class="modal fade" id="sendInvoiceToAny" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-	aria-hidden="true" >
+	aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content user_inforamtion">
-			<button type="button" class="close closeButton x-circle-btn" data-dismiss="modal"
-				aria-label="Close" >
+			<button type="button" class="close closeButton x-circle-btn" data-dismiss="modal" aria-label="Close">
 				<i class="bi bi-x-circle"></i>
 			</button>
 			<div class="modal-header pb-0">
 				<h3 class="mb-0" id="exampleModalLabel">Send Invoice</h3>
 			</div>
 			<div class="modal-body">
-					<div class="form-group">
-						<div class="col-md-12">
-							<mat-form-field appearance="outline">
-								<mat-label>Enter email</mat-label>
-								<input matInput 
-								placeholder="eg : xyz@gmail.com, abc@gmail.com" [value]="str_email" (keyup)="handleInputEmail($event)" type="text" required>
-							</mat-form-field>
+				<div class="form-group">
+					<div class="col-md-12">
+						<mat-form-field appearance="outline">
+							<mat-label>Enter email <span class="asterisk">*</span></mat-label>
+							<input matInput placeholder="eg : xyz@gmail.com, abc@gmail.com" [value]="str_email"
+								(keyup)="handleInputEmail($event)" type="text">
+						</mat-form-field>
 
-							<!-- <mat-form-field class="example-chip-list" appearance="outline">
+						<!-- <mat-form-field class="example-chip-list" appearance="outline">
 								<mat-chip-list #chipList aria-label="Email selection">
 								  <mat-chip *ngFor="let email of emails" [selectable]="selectable"
 										   [removable]="removable" (removed)="remove(email)">
@@ -404,8 +412,8 @@
 										 (matChipInputTokenEnd)="add($event)">
 								</mat-chip-list>
 							  </mat-form-field> -->
-						</div>
 					</div>
+				</div>
 			</div>
 			<div class="modal-footer d-flex justify-content-center">
 				<!-- <button type="button"  (click)="closeModal_send_in_to_any()" class="btn btnStyle">Close</button> -->

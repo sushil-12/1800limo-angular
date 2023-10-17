@@ -173,7 +173,8 @@
 						<input type="text" placeholder="Pick one" aria-label="Number" matInput
 							formControlName="currencyShow" [matAutocomplete]="auto"
 							(keyup)="handleCurrency($event.target.value)">
-						<mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="onSelectionChange($event)">
+						<mat-autocomplete autoActiveFirstOption #auto="matAutocomplete"
+							(optionSelected)="onSelectionChange($event)">
 							<mat-option *ngFor="let currencyOption of currencyOptions"
 								[value]="currencyOption.currency + '-' + currencyOption.currencyCountry">
 								{{ currencyOption.countryName }} - {{ currencyOption.symbol }}
@@ -446,7 +447,7 @@
 						<input type="text" placeholder="Pick one" aria-label="Number" matInput
 							formControlName="badge_city_name" [matAutocomplete]="auto1"
 							(keyup)="handleBadgeCity($event.target.value)">
-						<mat-autocomplete  #auto1="matAutocomplete">
+						<mat-autocomplete #auto1="matAutocomplete">
 							<mat-option *ngFor="let option of filteredOptions"
 								(onSelectionChange)="selectBadgeCity(option,$event.isUserInput)" [value]="option.name">
 								{{option.name}}
@@ -803,7 +804,7 @@
 						tabindex="-1">
 						<thead>
 							<tr role="row">
-								<th>Card Holder First & Last Name</th>
+								<th>First & Last Name</th>
 								<th>Card No.</th>
 								<th>MM/YYYY</th>
 								<th>Card Type</th>
