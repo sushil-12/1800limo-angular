@@ -95,11 +95,51 @@
 												<div class="dropdown-item-icon"></div>
 												Edit
 											</a>
-											<a class="dropdown-item" routerLink="/affiliate/invoice-summary"
+											<a class="dropdown-item" data-toggle="modal"
+												data-target="#return_repeat_booking_Modal"
+												[routerLink]="['/travel_agent/new-booking']"
+												[queryParams]="{bookingId: booking.booking_id, updateType: 'repeat'}">
+												<div class="dropdown-item-icon" *></div>
+												Repeat
+											</a>
+											<a *ngIf="booking.service_type=='oneway'"
+												class="dropdown-item" data-toggle="modal"
+												data-target="#return_repeat_booking_Modal"
+												[routerLink]="['/travel_agent/new-booking']"
+												[queryParams]="{bookingId: booking.booking_id, updateType: 'return'}">
+												<div class="dropdown-item-icon"></div>
+												Return
+											</a>
+											<a class="dropdown-item" routerLink="/travel_agent/invoice-summary"
 												[queryParams]="{bookingId: booking?.booking_id}"
 												*ngIf="booking?.payment_status=='paid'">
 												<div class="dropdown-item-icon"></div>
 												Invoice
+											</a>
+											<a class="dropdown-item"
+												(click)="sendEmailClicked(booking.booking_id,'customer')"
+												data-toggle="modal" data-target="#emailModal">
+												<div class="dropdown-item-icon"></div>
+												Email Customer
+											</a>
+											<!-- <a class="dropdown-item"
+												(click)="sendEmailClicked(booking.booking_id,'affiliate')"
+												data-toggle="modal" data-target="#emailModal">
+												<div class="dropdown-item-icon"></div>
+												{{ booking.affiliate_id ? 'Email Affiliate' : ' Email Loose Affiliate'
+												}}
+											</a> -->
+											<a class="dropdown-item"
+												(click)="sendEmailClicked(booking.booking_id,'emailPassenger')"
+												data-toggle="modal" data-target="#emailPassenger">
+												<div class="dropdown-item-icon"></div>
+												Email Passenger
+											</a>
+											<a class="dropdown-item"
+												(click)="sendEmailClicked(booking.booking_id,'emailAll')"
+												data-toggle="modal" data-target="#emailAll">
+												<div class="dropdown-item-icon"></div>
+												Email All
 											</a>
 											<a class="dropdown-item" (click)="auditTrail(booking.booking_id)"
 												data-toggle="modal" data-target="#AuditTrailModal">
@@ -1386,6 +1426,62 @@
 					<span aria-hidden="true" class="bi bi-x-circle"></span>
 				</button>
 
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- send email modal -->
+<div class="modal fade" id="emailModal" tabindex="-1" role="dialog" aria-labelledby="emailModal" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header pb-0">
+				<h3 class="mb-0">Email</h3>
+			</div>
+			<div class="modal-body text-center">
+				<p>Are you sure, You want to send email?</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="custom-btn savebutton" (click)="emailForm()">Send
+					Email</button>
+				<button type="button" class="custom-btn resetbutton" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="emailPassenger" tabindex="-1" role="dialog" aria-labelledby="emailPassenger"
+	aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header pb-0">
+				<h3 class="mb-0">Email</h3>
+			</div>
+			<div class="modal-body text-center">
+				<p>Are you sure, You want to send email?</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="custom-btn savebutton" (click)="emailPassenger()">Send
+					Email</button>
+				<button type="button" class="custom-btn resetbutton" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="emailAll" tabindex="-1" role="dialog" aria-labelledby="emailAll" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header pb-0">
+				<h3 class="mb-0">Email</h3>
+			</div>
+			<div class="modal-body text-center">
+				<p>Are you sure, You want to send email?</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="custom-btn savebutton" (click)="emailAll()">Send
+					Email</button>
+				<button type="button" class="custom-btn resetbutton" data-dismiss="modal">Close</button>
 			</div>
 		</div>
 	</div>

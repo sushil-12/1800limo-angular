@@ -176,5 +176,16 @@ export class TravelAgentService {
 	getTravelClientDetailById(id){
 		return this.httpClient.get(this.serverUrl + 'get-an-account/' + id);
 	}
+
+	sendEmail(data)
+	{
+		return this.httpClient.post(this.serverUrl + 'send-reservation-detail-email', data);
+	}
+	passengerBooking(data) {
+		return this.httpClient.post(this.serverUrl + 'passenger-booking-confirmation-email', data)
+	}
+	bookingEmailAll(data) {
+		return this.httpClient.post(this.serverUrl + 'send-reservation-detail-email-to-all', data)
+	}
   
 }
