@@ -272,9 +272,8 @@
 				<div class="row">
 					<div class="col-md-6">
 						<mat-form-field appearance="outline">
-							<mat-label>Card Holder First & Last Name*</mat-label>
-							<input matInput placeholder="Card Holder First & Last Name" formControlName="name"
-								tabindex="1">
+							<mat-label>First & Last Name*</mat-label>
+							<input matInput placeholder="First & Last Name" formControlName="name" tabindex="1">
 						</mat-form-field>
 						<div *ngIf="submittedForm && f.name.errors || f.name.touched && f.name.errors"
 							class="text-danger margin-bottom-thin my-mat-hint">
