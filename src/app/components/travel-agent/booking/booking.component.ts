@@ -445,6 +445,43 @@ export class BookingComponent implements OnInit {
 		this.router.navigate(['/affiliate/finalize-booking'], { queryParams: { bookingId: bookingId } });
 	}
 
+	emailPassenger() {
+		console.log('In function email passenger', this.sendEmailForm.value.reservation_id)
+		let data = {
+			reservation_id: this.sendEmailForm.value.reservation_id
+		}
+		this.spinner.show()
+		this.travelAgentService.passengerBooking(data)
+			.pipe(
+				catchError((err) => {
+					return throwError(err);
+				})
+			)
+			.subscribe((response: any) => {
+				console.log('response--------->>>>>>>>', response)
+				this.spinner.hide()
+				$("#emailPassenger").modal("hide");
+			});
+	}
+	emailAll() {
+		console.log('In function email all', this.sendEmailForm.value.reservation_id, this.sendEmailForm.value.emailTarget)
+		let data = {
+			reservation_id: this.sendEmailForm.value.reservation_id
+		}
+		this.spinner.show()
+		this.travelAgentService.bookingEmailAll(data)
+			.pipe(
+				catchError((err) => {
+					return throwError(err);
+				})
+			)
+			.subscribe((response: any) => {
+				console.log('response--------->>>>>>>>', response)
+				this.spinner.hide()
+				$("#emailAll").modal("hide");
+			});
+	}
+
 	returnRepeatAction(actionType, bookingId, serviceType) {
 		console.log(actionType, bookingId, serviceType);
 
@@ -514,7 +551,7 @@ export class BookingComponent implements OnInit {
 
 		this.spinner.show();
 
-		this.affiliateService.sendEmail(this.sendEmailForm.value)
+		this.travelAgentService.sendEmail(this.sendEmailForm.value)
 			.pipe(
 				catchError(err => {
 					this.spinner.hide();//hide spinner
