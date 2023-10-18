@@ -1010,7 +1010,9 @@ export class NewBookingComponent implements OnInit {
 		// for other cases
 		this.BigData[list_name] = this.BigData[list_name].filter((item: any) => item[search_with].toLowerCase().startsWith(search_value.toLowerCase()))
 	}
-
+	convertToMinutes(value){
+		return (value/60).toFixed(2)
+	}
 
 	fillValue(list: Array<Record<string, any> | string> | null = null, form_control: string, return_key: string = null, sep?: string): string | number {
 		// fail-safe

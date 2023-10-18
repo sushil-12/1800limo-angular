@@ -279,7 +279,7 @@
 							<div class="col-md-6">
 								<mat-form-field appearance="outline" class="m-0">
 									<mat-label class="required-field">
-										Name of Card Holder
+										First & Last Name
 									</mat-label>
 									<input matInput placeholder="First & Last Name" type="text" formControlName="name"
 										(focus)="$event.target.select()">
@@ -524,12 +524,12 @@
 				<h4>
 					Passenger Information
 				</h4>
-				<div class="row mb-2">
+				<div class="row mb-2 px-4">
 					<!-- Passenger Name -->
 					<div class="col-md-4">
 						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>
-								Passenger Name <span class="asterisk"></span>
+								Passenger Name
 							</mat-label>
 							<input matInput placeholder="Passenger Name" type="text" formControlName="passenger_name"
 								(focus)="$event.target.select()" />
@@ -598,7 +598,7 @@
 					<div class="col-md-3 looseError">
 						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>
-								No. of Passengers <span class="asterisk"></span>
+								No. of Passengers
 							</mat-label>
 							<mat-select formControlName="total_passengers">
 								<mat-option *ngFor="let option of booking_params.numbers" [value]="option">
@@ -609,10 +609,10 @@
 					</div>
 
 					<!-- Luggage Count -->
-					<div class="col-md-3 looseError">
+					<div class="col-md-3 mb-2 looseError">
 						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>
-								Luggage Count <span class="asterisk"></span>
+								Luggage Count
 							</mat-label>
 							<mat-select formControlName="luggage_count">
 								<mat-option *ngFor="let option of booking_params.numbers" [value]="option">
@@ -1213,10 +1213,10 @@
 			</h2>
 			<div class="row">
 				<!-- Meet Greet Choices -->
-				<div class="col-md-11">
+				<div class="col-md-11 ml-3">
 					<mat-form-field appearance="outline">
 						<mat-label>
-							Meet and Greet Choices <span class="asterisk"></span>
+							Meet and Greet Choices
 						</mat-label>
 						<mat-select formControlName="meet_greet_choices">
 							<mat-option *ngFor="let meetGreet of BigData?.meetGreets" [value]="meetGreet.id">
@@ -1227,7 +1227,7 @@
 				</div>
 
 				<!-- Number Of Vehicles -->
-				<div class="col-md-3">
+				<div class="col-md-3 ml-3">
 					<mat-form-field appearance="outline">
 						<mat-label>
 							Number of Vehicles
@@ -1895,7 +1895,7 @@
 				<div class="col-md-5 m-2">
 					<mat-form-field appearance="outline">
 						<mat-label>
-							Meet and Greet Choices <span class="asterisk"></span>
+							Meet and Greet Choices
 						</mat-label>
 						<mat-select formControlName="return_meet_greet_choices">
 							<mat-option *ngFor="let meetGreet of BigData?.meetGreets" [value]="meetGreet.id">

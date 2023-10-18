@@ -243,7 +243,7 @@ top:2.05em}
 
 :host ::ng-deep .select-cancel-label,.select-seat-label,.select-charter-cancel-label,.select-luggage-label{
 	background-color: rgb(226, 226, 226,1) !important;
-	transform: translateY(0.4em) translateX(-0.75em) scale(0.9) !important;
+	transform: translateY(0.7em) translateX(-0.75em) scale(0.9) !important;
 	opacity: 0.7;
 }
 .mat-option{
@@ -267,3 +267,6 @@ top:2.05em}
  :host ::ng-deep .ng-value {
 	font-weight: 400;
   }
+  .asterisk{
+	font-size: 19px;
+}
