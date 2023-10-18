@@ -169,7 +169,7 @@ export class ProfileComponent implements OnInit {
       agency_name: ['', Validators.required],
       payee: ['', Validators.required],
       iata: ['', Validators.required],
-      fax: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
+      fax: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
       faxIsd: ['+1', Validators.required],
       faxCountry: ['us'],
       office_number: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
