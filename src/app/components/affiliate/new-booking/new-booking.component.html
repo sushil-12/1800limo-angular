@@ -530,7 +530,7 @@
 					<div class="col-md-4">
 						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>
-								Passenger Name <span class="asterisk"></span>
+								Passenger Name <span class="asterisk">*</span>
 							</mat-label>
 							<input matInput placeholder="Passenger Name" type="text" formControlName="passenger_name"
 								(focus)="$event.target.select()" />
@@ -549,7 +549,7 @@
 					<div class="col-md-4">
 						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>
-								Passenger Email
+								Passenger Email <span class="asterisk">*</span>
 							</mat-label>
 							<input matInput placeholder="Passenger Email" type="text" formControlName="passenger_email"
 								(focus)="$event.target.select()" />
@@ -568,7 +568,7 @@
 					<div class="col-md-4">
 						<mat-form-field appearance="outline" class="mat-custom-phone m-0 pcellLabelClass">
 							<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Passenger
-								Cell
+								Cell <span class="asterisk">*</span>
 							</label>
 							<input matInput formControlName="passenger_cell" ng2TelInput [ng2TelInputOptions]="{
 									preferredCountries: ['us', 'ca', 'mx', 'gb']

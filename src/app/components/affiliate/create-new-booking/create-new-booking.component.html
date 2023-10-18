@@ -92,7 +92,7 @@
 
 		<!-- Client Accounts Section -->
 		<div class="section-container mt-2">
-			<h4>
+			<h4 class="border-secondary">
 				Client Accounts
 			</h4>
 
@@ -117,10 +117,10 @@
 				<div formGroupName="loose_customer">
 					<!-- Personal Information -->
 					<div class="px-4">
-						<h4>
+						<h4 class="border-secondary">
 							Personal Information
 						</h4>
-						<div class="row">
+						<div class="row margin-bottom-minus-22">
 							<!-- First Name -->
 							<div class="col-md-4 looseError">
 								<mat-form-field appearance="outline" class="m-0">
@@ -190,7 +190,7 @@
 							</div>
 						</div>
 
-						<div class="row">
+						<div class="row margin-bottom-minus-22">
 							<!-- Email -->
 							<div class="col-md-4 looseError">
 								<mat-form-field appearance="outline" class="m-0">
@@ -271,7 +271,7 @@
 
 					<!-- Credit Card Details -->
 					<div id="credit-card-details" class="mt-4 px-4" formGroupName="card_details">
-						<h4>
+						<h4 class="border-secondary">
 							Card Details
 						</h4>
 						<div class="row">
@@ -333,7 +333,7 @@
 							</div>
 
 							<!-- Expiry Month -->
-							<div class="col-md-4">
+							<div class="col-md-4 margin-top-minus-20">
 								<mat-form-field appearance="outline" class="m-0">
 									<mat-label class="required-field">Expiry Month</mat-label>
 									<input type="number" matInput formControlName="exp_month" [matAutocomplete]="auto"
@@ -375,7 +375,7 @@
 							</div>
 
 							<!-- Expiry Year -->
-							<div class="col-md-4">
+							<div class="col-md-4 margin-top-minus-20">
 								<mat-form-field appearance="outline" class="m-0">
 									<mat-label class="required-field">
 										Expiry Year
@@ -398,7 +398,7 @@
 							</div>
 
 							<!-- CVV -->
-							<div class="col-md-4">
+							<div class="col-md-4 margin-top-minus-20">
 								<mat-form-field appearance="outline" class="m-0">
 									<mat-label class="required-field">
 										CVV
@@ -520,16 +520,16 @@
 
 
 			<!-- Passenger Information -->
-			<div id="passenger-information" class="border-secondary">
-				<h4>
+			<div id="passenger-information">
+				<h4 class="border-secondary ml-2 mt-1">
 					Passenger Information
 				</h4>
 				<div class="row mb-2 px-4">
 					<!-- Passenger Name -->
-					<div class="col-md-4">
+					<div class="col-md-4 margin-bottom-minus-22">
 						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>
-								Passenger Name
+								Passenger Name <span class="asterisk">*</span>
 							</mat-label>
 							<input matInput placeholder="Passenger Name" type="text" formControlName="passenger_name"
 								(focus)="$event.target.select()" />
@@ -548,7 +548,7 @@
 					<div class="col-md-4">
 						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>
-								Passenger Email
+								Passenger Email <span class="asterisk">*</span>
 							</mat-label>
 							<input matInput placeholder="Passenger Email" type="text" formControlName="passenger_email"
 								(focus)="$event.target.select()" />
@@ -567,7 +567,7 @@
 					<div class="col-md-4">
 						<mat-form-field appearance="outline" class="mat-custom-phone m-0 pcellLabelClass">
 							<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Passenger
-								Cell
+								Cell <span class="asterisk">*</span>
 							</label>
 							<input matInput formControlName="passenger_cell" ng2TelInput [ng2TelInputOptions]="{
 									preferredCountries: ['us', 'ca', 'mx', 'gb']
@@ -595,7 +595,7 @@
 					</div>
 
 					<!-- Passenger Count -->
-					<div class="col-md-3 looseError">
+					<div class="col-md-3 margin-top-minus-20 looseError">
 						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>
 								No. of Passengers
@@ -609,7 +609,7 @@
 					</div>
 
 					<!-- Luggage Count -->
-					<div class="col-md-3 mb-2 looseError">
+					<div class="col-md-3 margin-top-minus-20 mb-2 looseError">
 						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>
 								Luggage Count
@@ -631,9 +631,9 @@
 
 		<!-- Section - Affiliate/Loose Details -->
 		<div class="section-container mt-2">
-			<h2>
+			<h4 class="border-secondary">
 				Affiliate Details
-			</h2>
+			</h4>
 			<!-- Affiliate Type -->
 			<div class="row">
 				<div class="col-md-12 col-lg-10">
@@ -771,7 +771,7 @@
 			<!-- Visible in Affiliate as well as Loose Affiliate Section -->
 			<!-- Affiliate Vehicle Information -->
 			<div class="px-4 mt-4" *ngIf="Form.affiliate_type.value == 'loose_affiliate'">
-				<h4>
+				<h4 class="border-secondary">
 					Vehicle Preferences
 				</h4>
 				<div class="row">
@@ -961,7 +961,7 @@
 			</div>
 
 			<div class="px-4 mt-4" *ngIf="Form.affiliate_type.value == 'affiliate'">
-				<h4>
+				<h4 class="border-secondary margin-top-minus-20">
 					Vehicle Preferences
 				</h4>
 				<div class="row">
@@ -1029,7 +1029,7 @@
 					</div>
 
 					<!-- Number of Seats -->
-					<div class="col-md-3 margin-mat-field">
+					<div class="col-md-3 margin-mat-field margin-bottom-minus-22">
 						<mat-form-field appearance="outline" class="vehicleLable m-0">
 							<mat-label>
 								Number of Seats
@@ -1053,7 +1053,7 @@
 			<!-- Visible in Affiliate as well as Loose Affiliate Section -->
 			<!-- Affiliate Driver Information -->
 			<div class="px-4 my-4" *ngIf="Form.affiliate_type.value == 'loose_affiliate' || Form.affiliate_id.value">
-				<h4>
+				<h4 class="border-secondary margin-top-minus-20">
 					Driver Preferences
 				</h4>
 				<div class="row">
@@ -1208,9 +1208,9 @@
 			<!-- Affiliate Driver Information Ends -->
 
 			<!-- Section Booking details start -->
-			<h2>
+			<h4 class="border-secondary">
 				Booking Details
-			</h2>
+			</h4>
 			<div class="row">
 				<!-- Meet Greet Choices -->
 				<div class="col-md-11 ml-3">
@@ -1266,13 +1266,13 @@
 			</div>
 
 
-			<h4 class="pl-2 mt-3">
+			<h4 class="pl-2 mt-1 mb-2">
 				Pickup
 			</h4>
 
 			<!-- Pickup - Address Field -->
 			<div *ngIf="!searchSubstring(Form.transfer_type.value, 'airport_')">
-				<div class="row px-2">
+				<div class="row px-2 margin-top-minus-20">
 					<div class="col-md-12">
 						<mat-form-field appearance="outline">
 							<mat-label> Pickup Address </mat-label>
@@ -1422,7 +1422,7 @@
 			</div>
 
 
-			<h4 class="pl-2 mt-3">
+			<h4 class="pl-2 mt-1 mb-2">
 				Dropoff
 			</h4>
 
@@ -1511,7 +1511,7 @@
 					</div>
 
 					<!-- Flight Number -->
-					<div class="col-md-6">
+					<div class="col-md-6 margin-bottom-minus-22">
 						<mat-form-field appearance="outline" class="vehicleLable mt-0"
 							style="margin-top: 0px !important;">
 							<mat-label>

@@ -20,7 +20,13 @@ hr{
 	box-shadow: 3px 3px 20px -6px rgba(40, 40, 40, 0.5);
 }
 .border-secondary{
-	margin: 0 0 6px !important;
+	margin: 0 0 0px !important;
+}
+.margin-bottom-minus-22{
+	margin-bottom: -22px !important;
+}
+.margin-top-minus-20{
+	margin-top: -20px !important;
 }
 mat-form-field {
 	margin: 1rem 0 !important;
@@ -295,4 +301,8 @@ top:2.05em}
 }
 .required-field::after{
 	font-size: 19px !important;
+}
+.asterisk{
+	font-size: 19px;
+	margin-left: 2px;
 }
