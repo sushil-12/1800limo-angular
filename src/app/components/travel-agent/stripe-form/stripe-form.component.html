@@ -191,9 +191,9 @@
 				</div>
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
-						<mat-label>SSN Personal ID #
+						<mat-label>SSN(USA required by stripe/GOVT ID for other countries)
 							<span class="asterisk">*</span></mat-label>
-						<input matInput placeholder="SSN Personal ID #  *" formControlName="ssn" tabindex="1" />
+						<input matInput placeholder="SSN(USA required by stripe/GOVT ID for other countries)" formControlName="ssn" tabindex="1" />
 					</mat-form-field>
 					<div *ngIf="
 							(submittedForm && f.ssn.errors) ||

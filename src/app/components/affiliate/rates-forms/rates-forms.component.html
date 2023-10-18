@@ -15,24 +15,24 @@
 		[ngClass]="{'active': rate_params.chevrons[item.key]}"
 		*ngFor="let item of RateForm | keyvalue: returnZero; index as item_index" [ngStyle]="item.key == 'direct_taxes' ? {'display':'none'}: ''">
 		<div class="col-12 col-md-12" (click)="handleSubHeading(item.key)">
-			<h5 class="section-dropdown-header" *ngIf="item.key == 'all_inclusive_rates'">
-				Vehicle Base Rates
-			</h5>
-			<h5 class="section-dropdown-header" *ngIf="item.key == 'others'">
-				Special Event Surge Pricing
-			</h5>
-			<h5 class="section-dropdown-header" *ngIf="item.key == 'misc'">
-				Additional Misc. Charges
-			</h5>
-			<h5 class="section-dropdown-header" *ngIf="item.key == 'amenities'">
-				Extra Charge Amenities
-			</h5>
-			<h5 class="section-dropdown-header" *ngIf="item.key == 'direct_taxes'">
-				Direct Taxes
-			</h5>
-			<h5 class="section-dropdown-header" *ngIf="item.key == 'taxes'">
-				Tolls/Taxes
-			</h5>
+			<div class="row ml-1 section-dropdown-header" *ngIf="item.key == 'all_inclusive_rates'">
+				<h5>Vehicle Base Rates</h5>
+			</div>
+			<div class="section-dropdown-header" *ngIf="item.key == 'others'">
+				<h5>Special Event Surge Pricing</h5>
+			</div>
+			<div class="row ml-1 section-dropdown-header" *ngIf="item.key == 'misc'">
+				<h5>Additional Misc. Charges</h5> <p> (Parking, Bar, Mics)</p>
+			</div>
+			<div class="row ml-1 section-dropdown-header" *ngIf="item.key == 'amenities'">
+				<h5>Extra Charge Amenities</h5> <p> (Baby, Booster, Baggage, etc)</p>
+			</div>
+			<div class="row ml-1 section-dropdown-header" *ngIf="item.key == 'direct_taxes'">
+				<h5>Direct Taxes</h5>
+			</div>
+			<div class="row ml-1 section-dropdown-header" *ngIf="item.key == 'taxes'">
+				<h5>Tolls/Taxes</h5> <p> (Airport, Sea, City, Others)</p>
+			</div>
 			<!-- <h5 class="section-dropdown-header" *ngIf="item.key != 'others'"> 
 				{{ textFormatter(item.key) | titlecase }}
 			</h5> -->
