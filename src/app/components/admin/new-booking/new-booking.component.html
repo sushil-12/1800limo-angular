@@ -692,7 +692,7 @@
 					<div class="col-md-4">
 						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>
-								Passenger Name <span class="asterisk"></span>
+								Passenger Name <span class="asterisk">*</span>
 							</mat-label>
 							<input matInput placeholder="Passenger Name" type="text" formControlName="passenger_name"
 								(focus)="$event.target.select()" />
@@ -714,7 +714,7 @@
 					<div class="col-md-4">
 						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>
-								Passenger Email
+								Passenger Email <span class="asterisk">*</span>
 							</mat-label>
 							<input matInput placeholder="Passenger Email" type="text" formControlName="passenger_email"
 								(focus)="$event.target.select()" />
@@ -736,7 +736,7 @@
 					<div class="col-md-4">
 						<mat-form-field appearance="outline" class="mat-custom-phone m-0 pcellLabelClass">
 							<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Passenger
-								Cell
+								Cell <span class="asterisk">*</span>
 							</label>
 							<input matInput formControlName="passenger_cell" ng2TelInput [ng2TelInputOptions]="{
 									preferredCountries: ['us', 'ca', 'mx', 'gb']
@@ -871,7 +871,7 @@
 				<div class="col-md-4 col-lg-4">
 					<mat-form-field appearance="outline" class="m-0">
 						<mat-label>
-							Name
+							Name <span class="asterisk">*</span>
 						</mat-label>
 						<input type="text" matInput placeholder="Full Name" (focus)="$event.target.select()"
 							formControlName="lose_affiliate_name" />
@@ -891,7 +891,8 @@
 				<!-- Phone -->
 				<div class="col-md-4">
 					<mat-form-field appearance="outline" class="mat-custom-phone m-0 cellLabelClass">
-						<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Phone
+						<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Phone <span
+								class="asterisk">*</span>
 						</label>
 						<input matInput formControlName="lose_affiliate_phone" ng2TelInput [ng2TelInputOptions]="{
 								preferredCountries: ['us', 'ca', 'mx', 'gb']
@@ -925,7 +926,7 @@
 				<div class="col-md-4 col-lg-4">
 					<mat-form-field appearance="outline" class="m-0">
 						<mat-label>
-							Email
+							Email <span class="asterisk">*</span>
 						</mat-label>
 						<input type="text" matInput placeholder="Email" (focus)="$event.target.select()"
 							formControlName="lose_affiliate_email" />
@@ -3108,7 +3109,7 @@
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
-									Name
+									Name <span class="asterisk">*</span>
 								</span>
 							</div>
 							<div class="col-md-8 value">
