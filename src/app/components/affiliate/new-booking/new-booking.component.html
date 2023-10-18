@@ -637,7 +637,7 @@
 			</h2>
 			<div class="row">
 				<!-- Meet Greet Choices -->
-				<div class="col-md-11">
+				<div class="col-md-11 ml-3">
 					<mat-form-field appearance="outline">
 						<mat-label>
 							Meet and Greet Choices <span class="asterisk"></span>
@@ -652,7 +652,7 @@
 				</div>
 
 				<!-- Number Of Vehicles -->
-				<div class="col-md-3" id="no_of_vehicle">
+				<div class="col-md-3 ml-3" id="no_of_vehicle">
 					<mat-form-field appearance="outline">
 						<mat-label>
 							Number of Vehicles
@@ -697,7 +697,7 @@
 
 			<!-- Pickup - Address Field -->
 			<div *ngIf="!searchSubstring(Form.transfer_type.value, 'airport_')">
-				<div class="row px-2">
+				<div class="row ml-1">
 					<div class="col-md-12">
 						<mat-form-field appearance="outline">
 							<mat-label> Pickup Address </mat-label>
@@ -713,7 +713,7 @@
 
 			<!-- Pickup - Airport Fields -->
 			<div *ngIf="searchSubstring(Form.transfer_type.value, 'airport_')">
-				<div class="row px-2">
+				<div class="row ml-1">
 					<!-- Airport -->
 					<div class="col-md-6">
 						<!-- <mat-form-field appearance="outline">
@@ -808,7 +808,7 @@
 
 			<!-- Pickup - Cruise Details -->
 			<div *ngIf="searchSubstring(Form.transfer_type.value, 'cruise_')">
-				<div class="row px-2">
+				<div class="row ml-1">
 					<!-- Cruise Port -->
 					<div class="col-md-4">
 						<mat-form-field appearance="outline">
@@ -853,7 +853,7 @@
 
 			<!-- Dropoff - Address Field -->
 			<div *ngIf="!searchSubstring(Form.transfer_type.value, '_airport')">
-				<div class="row px-2">
+				<div class="row ml-1">
 					<div class="col-md-12">
 						<mat-form-field appearance="outline">
 							<mat-label> Dropoff Address </mat-label>
@@ -869,7 +869,7 @@
 
 			<!-- Dropoff - Airport Field -->
 			<div *ngIf="searchSubstring(Form.transfer_type.value, '_airport')">
-				<div class="row px-2">
+				<div class="row ml-1">
 					<!-- Airport -->
 					<div class="col-md-6">
 						<!-- <mat-form-field appearance="outline">
@@ -952,7 +952,7 @@
 
 			<!-- Dropoff - Cruise Details -->
 			<div *ngIf="searchSubstring(Form.transfer_type.value, '_cruise')">
-				<div class="row px-2">
+				<div class="row ml-1">
 					<!-- Cruise Port -->
 					<div class="col-md-4">
 						<mat-form-field appearance="outline">
@@ -1048,10 +1048,16 @@
 						<div class="google_map">
 							<div id="map" class="map"></div>
 						</div>
-						<h6>
-							Total Distance: {{ mToMi(distance) }} Miles / {{ mToKm(distance)
-							}} Km
-						</h6>
+						<div class="row">
+							<h6>
+								Total Distance: {{ mToMi(distance) }} Miles / {{ mToKm(distance)
+								}} Km
+							</h6>
+							<h6 class="mx-2">
+								Estimated time: {{convertToMinutes(Form.journeyTime.value)}} mins
+							</h6>
+						</div>
+
 					</div>
 				</div>
 				<!-- AGM Map Ends -->
@@ -1704,10 +1710,16 @@
 						<div class="google_map">
 							<div id="return_map" class="map"></div>
 						</div>
-						<h6>
-							Total Distance: {{ mToMi(return_distance) }} Miles / {{
-							mToKm(return_distance) }} Km
-						</h6>
+						<div class="row">
+							<h6>
+								Total Distance: {{ mToMi(return_distance) }} Miles / {{
+								mToKm(return_distance) }} Km
+							</h6>
+							<h6 class="mx-2">
+								Estimated time: {{convertToMinutes(Form.returnJourneyTime.value)}} mins
+							</h6>
+						</div>
+
 					</div>
 				</div>
 				<!-- AGM Map Ends -->

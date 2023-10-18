@@ -26,9 +26,8 @@
                 <div class="row">
                     <div class="col-md-6">
                         <mat-form-field appearance="outline">
-                            <mat-label>Card Holder First & Last Name*</mat-label>
-                            <input matInput placeholder="Card Holder First & Last Name" formControlName="name"
-                                tabindex="1">
+                            <mat-label>First & Last Name <span class="asterisk">*</span></mat-label>
+                            <input matInput placeholder="First & Last Name" formControlName="name" tabindex="1">
                         </mat-form-field>
                         <div *ngIf="submittedForm && f.name.errors || f.name.touched && f.name.errors"
                             class="text-danger margin-bottom-thin my-mat-hint">
@@ -37,7 +36,7 @@
                     </div>
                     <div class="col-md-6">
                         <mat-form-field appearance="outline">
-                            <mat-label>Card No *</mat-label>
+                            <mat-label>Card No <span class="asterisk">*</span></mat-label>
                             <input matInput placeholder="Card No" formControlName="number" tabindex="1"
                                 id="card-number">
                         </mat-form-field>
@@ -65,7 +64,7 @@
                     <div class="col-md-4">
                         <mat-form-field appearance="outline">
                             <mat-label>
-                                Expiry Month <sup style="color: #ff0000">*</sup>
+                                Expiry Month <span class="asterisk">*</span>
                             </mat-label>
                             <mat-select formControlName="exp_month" tabindex="1">
                                 <mat-option value="">Choose Expiry Month</mat-option>
@@ -91,7 +90,7 @@
                     <div class="col-md-4">
                         <mat-form-field appearance="outline">
                             <mat-label>
-                                Expiry Year<sup style="color: #ff0000">*</sup>
+                                Expiry Year <span class="asterisk">*</span>
                             </mat-label>
                             <mat-select formControlName="exp_year" tabindex="1">
                                 <mat-option value="">Choose Expiry Year</mat-option>
@@ -107,7 +106,7 @@
                     <div class="col-md-4">
                         <mat-form-field appearance="outline">
                             <mat-label>
-                                CVV <sup style="color: #ff0000;">*</sup>
+                                CVV <span class="asterisk">*</span>
                             </mat-label>
                             <input matInput placeholder="CSC" formControlName="cvc" tabindex="1">
                         </mat-form-field>

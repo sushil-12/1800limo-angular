@@ -222,7 +222,7 @@ top:1.65em}
 
 :host ::ng-deep .select-ex-month-label,.select-ex-day-label,.select-ex-year-label,.select-insurance-label{
 	background-color: rgb(226, 226, 226,1) !important;
-	transform: translateY(0.4em) translateX(-0.5em) scale(1) !important;
+	transform: translateY(0.5em) translateX(-0.5em) scale(1) !important;
 	opacity: 0.7;
 }
 
@@ -232,4 +232,13 @@ top:1.65em}
 
 :host ::ng-deep .selectStyle select {
 	font-weight: 400;
+}
+.asterisk{
+	font-size: 19px;
+	margin-left: 2px;
+}
+.asterisk1{
+	font-size: 14px;
+	margin-left: 2px;
+	color: #ff0000;
 }
