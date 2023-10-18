@@ -370,11 +370,13 @@
 				</div>
 
 				<!-- Airport/City Cancel Times -->
-				<div class="col-md-6">
+				
+				<div class="col-md-6" >
 					<label class="select-cancel-label">Airport / City Cancel Times
 						<span class="asterisk">*</span></label>
-					<div class="selectStyle">
-						<select class="selectInputStyle" formControlName="nonCharterCancelPolicy" tabindex="1">
+					<div class="selectStyle" [ngClass]="changeNonCharterCancelPolicy ? '' : 'border-red'">
+						<select class="selectInputStyle" formControlName="nonCharterCancelPolicy" 
+						        (change)="handleNonCharterCancelPolicy($event)" tabindex="1">
 							<option value="">
 								Choose Airport / City Cancel Times
 							</option>
@@ -419,8 +421,9 @@
 				<div class="col-md-6">
 					<label class="select-charter-cancel-label">Charter Cancel Times
 						<span class="asterisk">*</span></label>
-					<div class="selectStyle">
-						<select class="selectInputStyle" formControlName="charterCancelPolicy" tabindex="1">
+					<div class="selectStyle" [ngClass]="changeCharterCancelPolicy ? '' : 'border-red'">
+						<select class="selectInputStyle" formControlName="charterCancelPolicy" 
+						 (change)="handleChangeCharterCancelPolicy($event)"   tabindex="1">
 							<option value="">
 								Choose Charter Cancel Times
 							</option>

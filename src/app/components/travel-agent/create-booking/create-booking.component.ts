@@ -1945,12 +1945,13 @@ export class CreateBookingComponent implements OnInit {
 
 		if (preview) {
 			let value = this.BookingForm.value
+			value['is_master_vehicle'] = this.is_master_vehicle 
 			value['proceed'] = this.proceed
 				value['rateArray'] = this.rateArray
 				value['grand_total'] = this.grandtotal * this.Form.number_of_vehicles.value
 				value['sub_total'] = this.subtotal
 				value['min_rate_involved'] = this.min_rate_involved
-				delete value['rateArray']['grand_total']
+				delete value['rateArray']['grand_total']/*  */
 				delete value['rateArray']['sub_total']
 				delete value['rateArray']['min_rate_involved']
 				// Return Rates Form

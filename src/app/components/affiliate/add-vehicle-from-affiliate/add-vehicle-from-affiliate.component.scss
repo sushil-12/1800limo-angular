@@ -16,6 +16,10 @@
 	margin-top: -5px;
 	cursor    : pointer;
 }
+.border-red{
+	border: 3px solid red;border-radius: 10px;
+}
+
 
 .camera-svg:hover {
 	transform: scale(1.2, 1.2);

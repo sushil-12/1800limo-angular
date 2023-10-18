@@ -321,6 +321,21 @@
 						</div>
 					</div>
 				</div>
+				<div class="col-md-6">
+					<mat-form-field appearance="outline" class="example-full-width" [ngClass]="isBadgeCity ? '' : 'border-red'">
+						<mat-label>Badge City
+						</mat-label>
+						<input type="text" placeholder="Pick one" aria-label="Number" matInput
+							formControlName="badge_city_name" [matAutocomplete]="auto"
+							(keyup)="handleBadgeCity($event.target.value)">
+						<mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+							<mat-option *ngFor="let option of filteredOptions"
+								(onSelectionChange)="selectBadgeCity(option,$event.isUserInput)" [value]="option.name">
+								{{option.name}}
+							</mat-option>
+						</mat-autocomplete>
+					</mat-form-field>
+				</div>
 				
 			</div>
 		</div>

@@ -75,6 +75,8 @@ export class Step1Component implements OnInit, AfterViewInit
 	public filterGender: Array<Object>;
 	errorMsg2: boolean;
 	public filteredGender: Array<any>;
+	public isBadgeCity : boolean = false;
+
 
 
 
@@ -529,6 +531,9 @@ export class Step1Component implements OnInit, AfterViewInit
 	handleBadgeCity(value:any){
 		console.log(value , this.filteredOptions)
 		this.filteredOptions = this.badgeOptions.filter((i:any)=> i.name.toLowerCase().includes(value.toLowerCase()))
+		if(!value){
+		this.isBadgeCity = false	
+		}
 	}
 	selectBadgeCity(option:any,isUserInput){
 		console.log('in function selectBadgeCity-->>>' ,option,isUserInput)
@@ -537,6 +542,7 @@ export class Step1Component implements OnInit, AfterViewInit
 				badge_city:option.id
 			})
 			// this.addAffiliateAccountForm.updateValueAndValidity()
+			this.isBadgeCity = true
 		}
 
 	}
