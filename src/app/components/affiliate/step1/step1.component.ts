@@ -76,6 +76,7 @@ export class Step1Component implements OnInit, AfterViewInit
 	errorMsg2: boolean;
 	public filteredGender: Array<any>;
 	public isBadgeCity : boolean = false;
+	public tooltipText: string;
 
 
 
@@ -1417,6 +1418,20 @@ export class Step1Component implements OnInit, AfterViewInit
 			top: topElement,
 			behavior: 'smooth'
 		});
+	}
+	changeTooltipText(value){
+		if(value == "black_limo_operator"){
+			this.tooltipText = "Only 2 vehicle maximum with same driver."
+		}
+		else if(value == "fleet_operator"){
+			this.tooltipText = "Fleet Operators may enter unlimited vehicles and drivers."
+		}
+		else if(value == "taxi_operator"){
+			this.tooltipText = "Operators can only have 1 vehicle operation."
+		}
+		else{
+			this.tooltipText = "Operate any like new luxury Mid-Size Sedan or Larger"
+		}
 	}
 
 	resetForm()

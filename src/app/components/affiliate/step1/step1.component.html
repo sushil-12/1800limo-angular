@@ -16,21 +16,24 @@
 				<div class="col-md-12">
 					<div id="radio-tiles-container" class="w-auto">
 						<div class="radio-tiles d-flex flex-wrap align-items-center justify-content-around">
-							<div class="tile text-center" id="tile_{{ tile_index }}"
+							<div class=" wrapper tile text-center" id="tile_{{ tile_index }}"
 								*ngFor="let tile of ['black_limo_operator', 'fleet_operator', 'taxi_operator', 'gig_operator']; index as tile_index"
 								(click)="affiliateTypeSwitch(tile_index)"
 								[ngClass]="f.AffiliateType.value == tile ? 'active' : ''">
 								<div id="check-icon" class="w-100" *ngIf="f.AffiliateType.value===tile">
 									<i class="bi bi-check-lg"></i>
 								</div>
-								<input type="radio" id="radio-button_{{ tile_index }}" class="radio-button" />
+								<input type="radio" (mouseover)="changeTooltipText(tile)"
+									id="radio-button_{{ tile_index }}" class="radio-button" />
 								<div id="tile-name">
-									<p>
-										{{ tile.includes('black') ? 'Black Car/Limo Owner Op.' : tile.includes('fleet')
-										? 'Fleet Operator Owned' : tile.includes('taxi') ? 'Taxi Operator' : 'Gig
+									<p id="tooltip">
+										{{ tile.includes('black') ? 'Black Car/Limo Owner Op.' : tile.includes('fleet')?
+										'Fleet Operator Owned' : tile.includes('taxi') ? 'Taxi Operator' : 'Gig
 										Operator' }}
 									</p>
+									<div class="tooltip">{{tooltipText}}</div>
 								</div>
+
 							</div>
 						</div>
 					</div>
