@@ -209,7 +209,7 @@ top:1.65em}
 		border-radius: 10px;
 		background-color: rgb(226, 226, 226,1);
   } 
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-form-field-wrapper .mat-form-field-infix .labelClass+.iti--allow-dropdown .iti__flag-container{top:-12px}
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-form-field-wrapper .mat-form-field-infix .labelClass+.iti--allow-dropdown .iti__flag-container{top:-2px}
 :host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label,:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-input-server:focus+.mat-form-field-label-wrapper .mat-form-field-label{transform:translateY(-0.8em) scale(0.85)!important;width:133.3333333333%}
 
 :host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-outline-gap {
@@ -222,8 +222,9 @@ top:1.65em}
 
 :host ::ng-deep .select-ex-month-label,.select-ex-day-label,.select-ex-year-label,.select-insurance-label{
 	background-color: rgb(226, 226, 226,1) !important;
-	transform: translateY(0.5em) translateX(-0.5em) scale(1) !important;
+	transform: translateY(0.8em) translateX(-0.5em) scale(1) !important;
 	opacity: 0.7;
+	background: none !important;
 }
 
 :host ::ng-deep .mat-input-element{
@@ -238,7 +239,11 @@ top:1.65em}
 	margin-left: 2px;
 }
 .asterisk1{
-	font-size: 14px;
-	margin-left: 2px;
-	color: #ff0000;
+	font-size: 19px !important;
+    margin-left: 2px;
+    color: #ff0000 !important;
+    background: none !important;
+}
+.user_information .selectInputStyle{
+	height: 58px !important;
 }

@@ -209,8 +209,9 @@ top:1.65em}
 
 :host ::ng-deep .select-gender-label,.select-dress-label{
 	background-color: rgb(226, 226, 226,1) !important;
-	transform: translateY(0.6em) scale(1) !important;
+	transform: translateY(0.9em) scale(1) !important;
 	opacity: 0.7;
+	background: none !important;
 }
 
 :host ::ng-deep .mat-input-element{
@@ -228,3 +229,12 @@ top:1.65em}
 	font-size: 17.5px;
 	margin-left: 2px;
   }
+  .asterisk1{
+	font-size: 19px !important;
+    margin-left: 2px;
+    color: #ff0000 !important;
+    background: none !important;
+}
+.user_information .selectInputStyle{
+	height: 58px !important;
+}

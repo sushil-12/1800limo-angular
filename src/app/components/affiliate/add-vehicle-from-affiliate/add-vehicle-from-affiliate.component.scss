@@ -177,7 +177,7 @@
 
 :host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-form-field-wrapper .mat-form-field-infix mat-label{
 	font-weight: normal!important;
-	font-size: 14px!important;
+	font-size: 16px!important;
 	color: #191919;
 }
 :host ::ng-deep.mat-form-field-appearance-outline .mat-form-field-label{top:1.3675em}
@@ -225,9 +225,10 @@ top:2.05em}
 }
 
 :host ::ng-deep .ng-select .ng-has-value .ng-placeholder, .ng-select.ng-select-opened .ng-placeholder {
-    transform: translateY(-0.68125em) scale(0.7) perspective(100px) translateZ(0.001px);
+    transform: translateY(-0.68125em) scale(0.8) perspective(100px) translateZ(0.001px);
 	color: #000;
 	top: 0.95em;
+	background: none !important;
 }
 
 :host ::ng-deep .ng-select.ng-select-focused .ng-select-container .ng-value-container .ng-placeholder{
@@ -247,10 +248,11 @@ top:2.05em}
 
 :host ::ng-deep .select-cancel-label,.select-seat-label,.select-charter-cancel-label,.select-luggage-label{
 	background-color: rgb(226, 226, 226,1) !important;
-	transform: translateY(0.4em) scale(1) !important;
+	transform: translateY(0.7em) scale(1) !important;
 	top: 1.3em;
     opacity: 0.7;
-    left: -0.05em;
+    // left: -0.05em;
+	background: none !important;
 }
 
 :host ::ng-deep .mat-input-element{
@@ -273,6 +275,11 @@ top:2.05em}
 	font-size: 18px;
 }
 .asterisk1{
-	font-size: 14px;
-	color: red;
+	font-size: 18px !important;
+    margin-left: 2px;
+    color: #ff0000 !important;
+    background: none !important;
+}
+.user_information .selectInputStyle{
+	height: 58px !important;
 }
