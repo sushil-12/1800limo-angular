@@ -1492,6 +1492,7 @@ export class CreateBookingComponent implements OnInit {
 			}
 			this.SetFormValue('return_transfer_type', reverseStringChars(value))
 			this.return_transfer_type = reverseStringChars(value)
+			// this.buildBookingData()
 		})
 
 		// Account Type Subscription
@@ -2048,8 +2049,8 @@ export class CreateBookingComponent implements OnInit {
 		console.log('rebuild booking data')
 		let booking_data = {
 			vehicle_id: this.BookingForm.get('vehicle_id').value,
-			transfer_type: this.transfer_type,
-			service_type :this.service_type,
+			transfer_type: this.BookingForm.get('transfer_type').value,
+			service_type :this.BookingForm.get('service_type').value,
 			numberOfVehicles :1,
 			distance : this.distance, 
 			return_distance : this.return_distance,
