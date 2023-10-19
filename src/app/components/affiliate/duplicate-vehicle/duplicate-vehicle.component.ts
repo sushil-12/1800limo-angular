@@ -91,6 +91,8 @@ export class DuplicateVehicleComponent implements OnInit, AfterViewChecked
 	public charterCancelOptions: Array<Object>;
 	public nonCharterCancelOptions: Array<Object>;
 	public serviceType: string;
+	changeNonCharterCancelPolicy : boolean = false
+	changeCharterCancelPolicy : boolean = false
 
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
 	errorMsg: boolean;
@@ -521,6 +523,14 @@ export class DuplicateVehicleComponent implements OnInit, AfterViewChecked
 			});
 			console.log(2, val)
 		}
+	}
+
+	handleNonCharterCancelPolicy(event){
+		console.log('in function handleNonCharterCancelPolicy--->>', event)
+		this.changeNonCharterCancelPolicy = true
+	}
+	handleChangeCharterCancelPolicy(event){
+		this.changeCharterCancelPolicy = true
 	}
 
 	searchYear(keyword)
