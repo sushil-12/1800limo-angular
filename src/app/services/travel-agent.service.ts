@@ -61,16 +61,16 @@ export class TravelAgentService {
     return this.httpClient.post(this.serverUrl + 'add-credit-card', data);
   }
 
-  loadBookings(url, keyword, startDate, endDate)
+  loadBookings(url, keyword, startDate, endDate, useDateFilter)
 	{
 		var path;
 		if (url)
 		{
-			path = url + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword;
+			path = url + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword +'&useDateFilter='+useDateFilter;
 		}
 		else
 		{
-			path = this.serverUrl + 'get-bookings' + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword;
+			path = this.serverUrl + 'get-bookings' + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword +'&useDateFilter='+useDateFilter;
 		}
 		return this.httpClient.get(path).toPromise();
 	}

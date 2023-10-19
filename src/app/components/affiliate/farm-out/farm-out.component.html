@@ -63,6 +63,10 @@
 			</div>
 		</div>
 	</div>
+	<div class="ml-4">  
+		<p><mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">Use Date
+				filter</mat-checkbox></p>
+	</div>
 	<!-- DIVISION: SEARCH PARAMETERS ENDS -->
 
 	<!-- DIVISION: CREATE NEW FARMOUT BUTTON -->

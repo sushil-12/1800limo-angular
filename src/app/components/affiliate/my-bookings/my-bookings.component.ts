@@ -53,6 +53,8 @@ export class MyBookingsComponent implements OnInit {
 	audit_Trail: any;
 	company_name: any = JSON.parse(localStorage.getItem('currentUser'))?.affiliate_company || ''
 	cancelBookingId: any = null
+	useDateFilter:boolean=true;
+
 	constructor(
 		private affiliateService: AffiliateService,
 		private router: Router,
@@ -76,6 +78,11 @@ export class MyBookingsComponent implements OnInit {
 		this.searchText = this.affiliateService.checkCookie('affiliate_search') ?
 			this.affiliateService.getCookie('affiliate_search')
 			: "";
+
+		this.useDateFilter = localStorage.getItem('farmInuseDateFilter') ?
+			(localStorage.getItem('farmInuseDateFilter')=='true' ? true : false)
+			: true;
+			console.log('farmInuseDateFilter-->' , this.useDateFilter)
 
 		this.loadBookings();
 
@@ -106,7 +113,7 @@ export class MyBookingsComponent implements OnInit {
 
 		// var keyword = ((document.getElementById("keyword") as HTMLInputElement).value);
 		// Load Our bookings using API
-		this.affiliateService.loadBookings(pageUrl, this.searchText, this.startDate, this.endDate).then(result => {
+		this.affiliateService.loadBookings(pageUrl, this.searchText, this.startDate, this.endDate, this.useDateFilter).then(result => {
 			console.log('result------------------------->>>', result)
 			this.bookingsRes = result;
 			this.bookings = this.bookingsRes?.data?.data;
@@ -124,6 +131,9 @@ export class MyBookingsComponent implements OnInit {
 			this.prevPageUrl = this.bookingsRes?.data?.prev_page_url;
 			this.nextPageUrl = this.bookingsRes?.data?.next_page_url;
 			this.spinner.hide();//hide spinner
+			if(this.bookingsRes?.data?.data.length == 0){
+				this.noError = true
+			}
 		})
 			.catch(err => {
 				this.spinner.hide();//hide spinner
@@ -160,7 +170,13 @@ export class MyBookingsComponent implements OnInit {
 			return '+' + ph
 		}
 		return ph;
-
+	}
+	handleChangeCheckbox(value:any){
+		console.log('event---->> ' ,value)
+		this.useDateFilter = value
+		// this.saveCookie('useDateFilter',value)
+		localStorage.setItem('farmInuseDateFilter',value)
+		this.loadBookings();
 	}
 
 	reset() {
@@ -173,6 +189,8 @@ export class MyBookingsComponent implements OnInit {
 		this.affiliateService.deleteCookie('affiliate_search')
 		// this.affiliateService.deleteCookie('filtertype')
 		this.searchText = "";
+		localStorage.removeItem('farmInuseDateFilter')
+		this.useDateFilter = true
 		// this.filtertype = 'bookingid';
 
 		console.log('Reset Successfully. ');

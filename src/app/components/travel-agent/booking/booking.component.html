@@ -62,6 +62,10 @@
 					</div>
 				</div>
 			</div>
+			<div>  
+				<p><mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">Use Date
+						filter</mat-checkbox></p>
+			</div>
 		</div>
 		<div class="containeredd driverside_table">
 			<div class="row">
