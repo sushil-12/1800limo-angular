@@ -310,7 +310,7 @@
 							</p>
 							<p id="vehicle-price" class="font-weight-bolder" style="font-size: 1.1rem"
 								*ngIf="('rate_breakdown_' + getKeyName()) != undefined || ('rate_breakdown_' + getKeyName()).length <= 0">
-								<span style="color: var(--orange);">
+								<span style="color: #c94505;font-weight: 700;">
 									From
 								</span>
 								${{ vehicle_obj['rate_breakdown_' + getKeyName()]?.grand_total != undefined ?
