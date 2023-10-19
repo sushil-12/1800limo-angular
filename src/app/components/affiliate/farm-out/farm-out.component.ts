@@ -62,6 +62,7 @@ export class FarmOutComponent implements OnInit
 	start_date: string
 	end_date: string
 	bookingPreview: any;
+	useDateFilter:boolean=true;
 
 	constructor(
 		private $affiliateService: AffiliateService,
@@ -101,6 +102,11 @@ export class FarmOutComponent implements OnInit
 			this.$affiliateService.getCookie('farmout_search')
 			: "";
 
+		this.useDateFilter = localStorage.getItem('farmOutuseDateFilter') ?
+			(localStorage.getItem('farmOutuseDateFilter')=='true' ? true : false)
+			: true;
+			console.log('farmOutuseDateFilter-->' , this.useDateFilter)
+
 		this.changeStatusForm = this.formBuilder.group({
 			reservation_id: ['', Validators.required],
 			booking_status: ['', Validators.required]
@@ -127,7 +133,7 @@ export class FarmOutComponent implements OnInit
 
 		// var keyword = ((document.getElementById("keyword") as HTMLInputElement).value);
 		// Load Our bookings using API
-		this.$affiliateService.loadFarmoutBookings(pageUrl, this.searchText, this.startDate, this.endDate).then(result => {
+		this.$affiliateService.loadFarmoutBookings(pageUrl, this.searchText, this.startDate, this.endDate, this.useDateFilter).then(result => {
 			this.$spinner.hide();//hide spinner
 			console.log('result---->>>', result)
 			this.bookingsRes = result;
@@ -182,9 +188,19 @@ export class FarmOutComponent implements OnInit
 		this.$affiliateService.deleteCookie('farmout_search')
 		// this.affiliateService.deleteCookie('filtertype')
 		this.searchText = "";
+		localStorage.removeItem('farmInuseDateFilter')
+		this.useDateFilter = true
 		// this.filtertype = 'bookingid';
 
 		console.log('Reset Successfully. ');
+	}
+
+	handleChangeCheckbox(value:any){
+		console.log('event---->> ' ,value)
+		this.useDateFilter = value
+		// this.saveCookie('useDateFilter',value)
+		localStorage.setItem('farmOutuseDateFilter',value)
+		this.loadBookings();
 	}
 
 	dateFormat(value: any) {
