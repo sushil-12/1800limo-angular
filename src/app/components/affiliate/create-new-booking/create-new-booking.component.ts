@@ -964,6 +964,32 @@ export class CreateNewBookingComponent implements OnInit {
 		this.buildBookingData()
 	}
 
+	handleLooseCustomerPhone(event){
+		console.log('handleLooseCustomerPhone->>', event, event.target.value)
+		this.BookingForm.patchValue({
+			passenger_cell : event.target.value
+		})
+	}
+	handleLooseCustomerName(event){
+		const loose_customer = (this.BookingForm.get('loose_customer') as FormGroup)
+		this.BookingForm.patchValue({
+			passenger_name : loose_customer.get('first_name').value + ' ' + loose_customer.get('last_name').value
+		})
+	}
+
+	handleLooseAffiliateName(){
+		this.BookingForm.patchValue({
+			driver_name : this.BookingForm.get('lose_affiliate_name').value
+		})
+		 
+	}
+
+	handleLooseAffiliatePhone(){
+		this.BookingForm.patchValue({
+			driver_cell : this.BookingForm.get('lose_affiliate_phone').value
+		})
+	}
+
 	fetchAffiliateVehicles(affiliate_id: number) {
 		if (!affiliate_id) {
 			console.error('Invalid Paramater affiliate_data', affiliate_id)
