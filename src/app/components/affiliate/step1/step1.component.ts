@@ -1422,16 +1422,16 @@ export class Step1Component implements OnInit, AfterViewInit
 	}
 	changeTooltipText(value){
 		if(value == "black_limo_operator"){
-			this.tooltipText = "Only 2 vehicle maximum with same driver."
+			this.tooltipText = "Black Car can advertise only two vehicles, or change to Fleet Operator."
 		}
 		else if(value == "fleet_operator"){
-			this.tooltipText = "Fleet Operators may enter unlimited vehicles and drivers."
+			this.tooltipText = "Fleet Operators can advertise unlimited vehicles"
 		}
 		else if(value == "taxi_operator"){
-			this.tooltipText = "Operators can only have 1 vehicle operation."
+			this.tooltipText = "Taxi can only advertise one vehicle."
 		}
 		else{
-			this.tooltipText = "Operate any like new luxury Mid-Size Sedan or Larger"
+			this.tooltipText = "Gig Driver can only advertise one vehicle."
 		}
 	}
 

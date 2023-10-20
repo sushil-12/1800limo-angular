@@ -17,6 +17,11 @@
 	background-color: #f3933d !important;
   }
 
+
+  textarea.mat-input-element.cdk-textarea-autosize{
+	font-size: 22px;
+  }
+  
 .adminbox_shadow.user_information .mat-form-field,
 .mat-calendar {
 	font-family: "PT Serif", serif !important;
