@@ -1364,6 +1364,8 @@ export class NewBookingComponent implements OnInit {
 		return 0	// for keeping the order
 	}
 
+
+
 	/**
 	* upload image with the specified name and set form value with its id.
 	* @param event input event
@@ -1445,6 +1447,15 @@ export class NewBookingComponent implements OnInit {
 	}
 
 	Subscriptions() {
+
+		// this.BookingForm.get('transfer_type').valueChanges.subscribe((value: string) => {
+		// 	const reverseStringChars = (text: string) => {
+		// 		let temp = text.split('_')
+		// 		return temp.reverse().join('_')
+		// 	}
+		// 	this.SetFormValue('return_transfer_type', reverseStringChars(value))
+		// })
+
 		// Service Type
 		this.BookingForm.get('service_type').valueChanges.subscribe((value: string) => {
 			this.init_return_rates = false;
