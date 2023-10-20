@@ -128,7 +128,7 @@
 										First Name
 									</mat-label>
 									<input matInput placeholder="First Name" type="text" formControlName="first_name"
-										(focus)="$event.target.select()">
+										(focus)="$event.target.select()" (keyup)="handleLooseCustomerName($event)">
 								</mat-form-field>
 								<div class="error-box">
 									<div class="error-message"
@@ -172,7 +172,7 @@
 										Last Name
 									</mat-label>
 									<input matInput placeholder="Last Name" type="text" formControlName="last_name"
-										(focus)="$event.target.select()">
+										(focus)="$event.target.select()" (keyup)="handleLooseCustomerName($event)">
 								</mat-form-field>
 								<div class="error-box">
 									<div class="error-message"
@@ -221,7 +221,7 @@
 									</label>
 									<input matInput formControlName="phone" ng2TelInput [ng2TelInputOptions]="{
 											preferredCountries: ['us', 'ca', 'mx', 'gb']
-										}" placeholder="1234567890" class="phoneNumberClass" (intlTelInputObject)="LCTelInputObject($event)"
+										}" placeholder="1234567890" class="phoneNumberClass" (intlTelInputObject)="LCTelInputObject($event)" (keyup)="handleLooseCustomerPhone($event)"
 										(countryChange)="SetFormValue('loose_customer>phone_isd', $event.dialCode); SetFormValue('loose_customer>phone_country', $event.iso2)"
 										(focus)="$event.target.select()" />
 								</mat-form-field>
@@ -703,7 +703,7 @@
 							Name
 						</mat-label>
 						<input type="text" matInput placeholder="Full Name" (focus)="$event.target.select()"
-							formControlName="lose_affiliate_name" />
+							formControlName="lose_affiliate_name" (keyup)="handleLooseAffiliateName()"/>
 					</mat-form-field>
 					<div class="error-box">
 						<div class="error-message"
@@ -721,7 +721,7 @@
 						</label>
 						<input matInput formControlName="lose_affiliate_phone" ng2TelInput [ng2TelInputOptions]="{
 								preferredCountries: ['us', 'ca', 'mx', 'gb']
-							}" placeholder="1234567890" class="phoneNumberClass" (intlTelInputObject)="LATelInputObject($event)"
+							}" placeholder="1234567890" class="phoneNumberClass" (intlTelInputObject)="LATelInputObject($event)" (keyup)="handleLooseAffiliatePhone()"
 							(countryChange)="SetFormValue('lose_affiliate_phone_isd', '+' + $event.dialCode); SetFormValue('lose_affiliate_phone_country', $event.iso2)"
 							(focus)="$event.target.select()" />
 					</mat-form-field>
