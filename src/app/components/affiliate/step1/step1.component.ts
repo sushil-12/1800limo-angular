@@ -294,6 +294,7 @@ export class Step1Component implements OnInit, AfterViewInit
 										badge_city_name:i.name
 									})
 								}
+								this.isBadgeCity = true
 							})
 
 							//Show edit/resend button on affiliate email field

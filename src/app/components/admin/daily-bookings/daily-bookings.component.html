@@ -206,11 +206,12 @@
 										</div>
 									</td>
 
-									<td class="text-center font-weight-bolder cursor-pointer text-underline"
+									<td class="text-center font-weight-bolder cursor-pointer "
 										data-toggle="modal" data-target="#previewBookingOnID"
 										(click)="showBookingPreviewModal(booking.booking_id)">
-										<p class="booking-id-font font-weight-bolder cursor-pointer text-underline">
-											<span [innerHTML]="highlighText(booking.booking_id )"></span>
+										<p class="booking-id-font font-weight-bolder cursor-pointer">
+											<span class="text-underline" [innerHTML]="highlighText(booking.booking_id )"></span>
+											<span style="text-decoration: none;">{{showAccountType(booking?.account_type)}}</span>
 										</p>
 									</td>
 									<td class="text-center font-weight-bolder cursor-pointer">
