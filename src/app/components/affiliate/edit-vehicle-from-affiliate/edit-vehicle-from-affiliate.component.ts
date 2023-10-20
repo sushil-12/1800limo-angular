@@ -93,8 +93,8 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 	public nonCharterCancelOptions: Array<Object>;
 	public serviceType: string;
 	service: Array<any> = []
-	changeNonCharterCancelPolicy : boolean = false
-	changeCharterCancelPolicy : boolean = false
+	changeNonCharterCancelPolicy : boolean = true
+	changeCharterCancelPolicy : boolean = true
 
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
 	errorMsg: boolean;
