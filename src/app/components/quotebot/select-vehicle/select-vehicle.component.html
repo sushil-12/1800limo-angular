@@ -6,7 +6,8 @@
 		<div id="fixed-section-box" class="d-flex justify-content-center align-items-center">
 			<div id="filters-button" class="d-block d-lg-none">
 				<button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
-					class="filter-btn btn-secondary dropdown-toggle pl-4" (click)="openfilters = true" type="button">
+					class="filter-btn btn-secondary dropdown-toggle pl-4 mb-3" (click)="openfilters = true"
+					type="button">
 					Filters
 					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
 						class="bi bi-filter" viewBox="0 0 16 16">
@@ -15,7 +16,7 @@
 					</svg>
 				</button>
 			</div>
-			<div id="sort-button">
+			<div id="sort-button" class="mb-3">
 				<button class="filter-btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
 					data-toggle="dropdown" aria-controls="dropdownMenu" aria-label="Toggle Navigation"
 					aria-expanded="false">
@@ -304,16 +305,16 @@
 							<p class="text-left text-secondary m-0 my-md-2" style="color: #007fee !important;">
 								<span (click)="editAffiliateAccount(vehinfo)">
 									{{vehinfo?.affiliate_company.slice(0,7) }}
-								{{'/ '+vehinfo?.affiliate_name.slice(0,7) }}
+									{{'/ '+vehinfo?.affiliate_name.slice(0,7) }}
 								</span>
 								<span (click)="handleReadMore(vehinfo , false)" style="color: black;">...more</span>
 							</p>
 						</button>
-						<button class="link"  *ngIf="!vehinfo?.readMore">
+						<button class="link" *ngIf="!vehinfo?.readMore">
 							<p class="text-left text-secondary m-0 my-md-2" style="color: #007fee !important;">
 								<span (click)="editAffiliateAccount(vehinfo)">
 									{{vehinfo?.affiliate_company }}
-								{{'/ '+vehinfo?.affiliate_name }}
+									{{'/ '+vehinfo?.affiliate_name }}
 								</span>
 								<span (click)="handleReadMore(vehinfo , true)" style="color: black;">...less</span>
 							</p>
@@ -341,7 +342,8 @@
 						class="details d-flex flex-row flex-wrap justify-content-left align-items-center">
 						<!-- VEHICLE: IMAGE -->
 						<div id="vehicle-image_{{ vehinfo_index }}" class="vehicle-image m-0">
-							<img id="V_I_{{ vehinfo_index }}" [src]="vehinfo.vehicle_images[0]" class="img-fluid" style="object-fit: contain;" />
+							<img id="V_I_{{ vehinfo_index }}" [src]="vehinfo.vehicle_images[0]" class="img-fluid"
+								style="object-fit: contain;" />
 						</div>
 						<!-- IMAGE ENDS -->
 
@@ -376,7 +378,7 @@
 							<span class="text-secondary text-rate">
 								All Inclusive Rate<sup class="sup-red">*</sup>
 							</span>
-							
+
 							<div class="d-flex" *ngIf="vehinfo?.vehicle_details.year">
 								<span class="text-secondary">Year</span>
 								<span class="ml-1 font-weight-bold"> {{vehinfo?.vehicle_details.year}}</span>
@@ -392,8 +394,8 @@
 							</div>
 							<span class="d-flex cancel-policy" *ngIf="!vehinfo?.is_master_vehicle">
 								<i class="bi bi-exclamation-circle-fill" style="color: red;"></i>
-								&nbsp; Cancellation Policy 
-								 {{convertHrIntoDays(vehinfo?.cancellation_policy)}}</span>
+								&nbsp; Cancellation Policy
+								{{convertHrIntoDays(vehinfo?.cancellation_policy)}}</span>
 						</div>
 						<!-- INFORMATION ENDS -->
 					</div>

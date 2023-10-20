@@ -127,9 +127,15 @@ ul {
 		color: var(--orange-color) !important;
 	}
 
-	.dropdown.button-signin a {
-		color: var(--orange-color) !important;
-	}
+	// .dropdown.button-signin a {
+	// 	color: var(--orange-color) !important;
+	// }
+.nav-link .dropdown-toggle{
+	color: var(--orange-color) !important;
+}
+.dropdown-menu .dropdown-item{
+	color: #fff !important;
+}
 
 	.allinner_wrapper header nav .navbar-nav li a {
 		color: var(--orange-color) !important;
@@ -163,4 +169,7 @@ ul {
 	/* Apply a blue border when focused */
 	box-shadow: 0 0 5px #ffffff;
 	/* Add a shadow effect (optional) */
+}
+.text-header-drop{
+	color: #fff !important;
 }
