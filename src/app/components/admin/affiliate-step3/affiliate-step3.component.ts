@@ -103,8 +103,8 @@ export class AffiliateStep3Component implements OnInit {
 			AgentEmail: ['', [Validators.pattern("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")]],
 			insCertificate: ['', Validators.required],
 			insuranceCard: ['', Validators.required],
-		}, { validator: this.customValidationFunction });
-
+		});
+		// , { validator: this.customValidationFunction }
 
 		if (this.affiliateId) {
 			if (stepCompleted.includes('3')) {
