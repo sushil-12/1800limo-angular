@@ -353,25 +353,6 @@
 										</p>
 									</div>
 								</div>
-								<!-- <mat-form-field appearance="outline" class="m-0">
-									<mat-label class="required-field">
-										Expiry Month
-									</mat-label>
-									<mat-select formControlName="exp_month">
-										<mat-option value='1'>01</mat-option>
-										<mat-option value='2'>02</mat-option>
-										<mat-option value='3'>03</mat-option>
-										<mat-option value='4'>04</mat-option>
-										<mat-option value='5'>05</mat-option>
-										<mat-option value='6'>06</mat-option>
-										<mat-option value='7'>07</mat-option>
-										<mat-option value='8'>08</mat-option>
-										<mat-option value='9'>09</mat-option>
-										<mat-option value='10'>10</mat-option>
-										<mat-option value='11'>11</mat-option>
-										<mat-option value='12'>12</mat-option>
-									</mat-select>
-								</mat-form-field> -->
 							</div>
 
 							<!-- Expiry Year -->
@@ -441,25 +422,6 @@
 			<ng-template #OtherAccountsSection>
 				<div class="row px-4">
 					<div class="col-md-12">
-						<!-- <mat-form-field appearance="outline">
-							<mat-label>Choose User</mat-label>
-							<input #searchInput type="text" id="userField" placeholder="Choose User"
-								(focus)="$event.target.select()" matInput
-								(click)="openAutoCompletePanel()"
-								(keyup)="searchAccountType($event.target.value)"
-								[value]="fillValue(filteredAccountTypes, 'acc_id', 'name')"
-								[matAutocomplete]="chooseuseratcmplt" />
-							<mat-autocomplete #chooseuseratcmplt="matAutocomplete">
-								<div>
-									<mat-option *ngFor="let user of filteredAccountTypes"
-										[value]="user.name" (click)="chooseUser(user.id)">
-										{{ user.name }}
-									</mat-option>
-								</div>
-							</mat-autocomplete>
-						</mat-form-field> -->
-
-						<!-- Ng-Select -->
 						<ng-select appearance="outline" [items]="ClientAccounts" bindLabel="name" bindValue="id"
 							placeholder="Select Client Account" dropdownPosition="bottom" [markFirst]="true"
 							[virtualScroll]="true" formControlName="acc_id">
