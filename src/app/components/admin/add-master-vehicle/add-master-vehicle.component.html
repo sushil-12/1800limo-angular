@@ -63,8 +63,8 @@
 						<mat-label>
 							Number of Vehicles <span class="asterisk">*</span>
 						</mat-label>
-						<input matInput type="number" placeholder="Number of Vehicles" formControlName="numberOfVehicles"
-							tabindex="1">
+						<input matInput type="number" placeholder="Number of Vehicles"
+							formControlName="numberOfVehicles" tabindex="1">
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.numberOfVehicles.errors || f.numberOfVehicles.touched && f.numberOfVehicles.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -120,7 +120,8 @@
 					<mat-form-field appearance="outline">
 						<mat-label>
 							License Plate
-							<span *ngIf="affiliateType!='fleet_operator'; else nonFleetOperator" class="asterisk">*</span>
+							<span *ngIf="affiliateType!='fleet_operator'; else nonFleetOperator"
+								class="asterisk">*</span>
 							<ng-template #nonFleetOperator>
 								<span class="theme-color">(optional)</span>
 							</ng-template>
@@ -267,7 +268,8 @@
 		<h2 class="headinginfo topMargin"> Choose Non Chargable Amenities* <span>( Choose each non chargable amenity
 				you supply or provide )</span> </h2>
 		<div class="container mt-1 non-chargable-amenity">
-			<div class="choose_ameniteslist mt-3" *ngFor="let nonChargableAmenityGroup of nonChargableAmenities | keyvalue">
+			<div class="choose_ameniteslist mt-3"
+				*ngFor="let nonChargableAmenityGroup of nonChargableAmenities | keyvalue">
 				<div class="custom-control custom-checkbox"
 					*ngFor="let nonChargableAmenity of nonChargableAmenityGroup.value | keyvalue">
 					<!-- {{nonChargableAmenity.value | json}}<br> -->
@@ -308,8 +310,8 @@
 		<div class="container mt-1 ">
 			<div class="choose_ameniteslist">
 				<div class="custom-control custom-checkbox" *ngFor="let interior of interiors">
-					<input type="checkbox" class="custom-control-input" id="interior_{{interior.name}}" [value]="interior.id"
-						(change)="onInteriorsCheckboxChange($event)" tabindex="1">
+					<input type="checkbox" class="custom-control-input" id="interior_{{interior.name}}"
+						[value]="interior.id" (change)="onInteriorsCheckboxChange($event)" tabindex="1">
 					<label class="custom-control-label" for="interior_{{interior.name}}">{{interior.name}}</label>
 				</div>
 			</div>
@@ -322,8 +324,8 @@
 	<!-- Main page content-->
 	<section class="user_information">
 		<h2 class="headinginfo">Exterior and Interior <span>( Exterior And Interior – <svg data-toggle="modal"
-					data-placement="top" title="Click for Photo Tip" data-target="#photoInstructionsModal" class="camera-svg"
-					viewBox="0 0 297.88 216" xml:space="preserve" tabindex="1">
+					data-placement="top" title="Click for Photo Tip" data-target="#photoInstructionsModal"
+					class="camera-svg" viewBox="0 0 297.88 216" xml:space="preserve" tabindex="1">
 					<style type="text/css">
 						.st0 {
 							fill: #F89B41;
@@ -357,7 +359,8 @@
 							<ul class="mt-3">
 								<li>
 									<button class="changeuploaded" tabindex="1">
-										<input type="file" (change)="onFileChange($event,vehicleImageId1,'1')" tabindex="-1">
+										<input type="file" (change)="onFileChange($event,vehicleImageId1,'1')"
+											tabindex="-1">
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 											<path fill="none" d="M0 0h24v24H0V0z" />
 											<circle cx="12" cy="12" r="3" />
@@ -378,7 +381,8 @@
 							<ul class="mt-3">
 								<li>
 									<button class="changeuploaded" tabindex="1">
-										<input type="file" (change)="onFileChange($event,vehicleImageId2,'2')" tabindex="-1">
+										<input type="file" (change)="onFileChange($event,vehicleImageId2,'2')"
+											tabindex="-1">
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 											<path fill="none" d="M0 0h24v24H0V0z" />
 											<circle cx="12" cy="12" r="3" />
@@ -388,7 +392,8 @@
 										Change
 									</button>
 								</li>
-								<li><a class="delete-btn" (click)="deleteImage(vehicleImageId2,'vehicleImage','2')" tabindex="1">
+								<li><a class="delete-btn" (click)="deleteImage(vehicleImageId2,'vehicleImage','2')"
+										tabindex="1">
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 											<path
 												d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
@@ -408,7 +413,8 @@
 								<ul class="mt-3">
 									<li>
 										<button class="adduploaded" tabindex="1">
-											<input type="file" (change)="onFileChange($event,vehicleImageId2,'2')" tabindex="-1">
+											<input type="file" (change)="onFileChange($event,vehicleImageId2,'2')"
+												tabindex="-1">
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -430,7 +436,8 @@
 							<ul class="mt-3">
 								<li>
 									<button class="changeuploaded" tabindex="1">
-										<input type="file" (change)="onFileChange($event,vehicleImageId3,'3')" tabindex="-1">
+										<input type="file" (change)="onFileChange($event,vehicleImageId3,'3')"
+											tabindex="-1">
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 											<path fill="none" d="M0 0h24v24H0V0z" />
 											<circle cx="12" cy="12" r="3" />
@@ -440,7 +447,8 @@
 										Change
 									</button>
 								</li>
-								<li><a class="delete-btn" (click)="deleteImage(vehicleImageId3,'vehicleImage','3')" tabindex="1">
+								<li><a class="delete-btn" (click)="deleteImage(vehicleImageId3,'vehicleImage','3')"
+										tabindex="1">
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 											<path
 												d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
@@ -460,7 +468,8 @@
 								<ul class="mt-3">
 									<li>
 										<button class="adduploaded" tabindex="1">
-											<input type="file" (change)="onFileChange($event,vehicleImageId3,'3')" tabindex="-1">
+											<input type="file" (change)="onFileChange($event,vehicleImageId3,'3')"
+												tabindex="-1">
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -482,7 +491,8 @@
 							<ul class="mt-3">
 								<li>
 									<button class="changeuploaded" tabindex="1">
-										<input type="file" (change)="onFileChange($event,vehicleImageId4,'4')" tabindex="-1">
+										<input type="file" (change)="onFileChange($event,vehicleImageId4,'4')"
+											tabindex="-1">
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 											<path fill="none" d="M0 0h24v24H0V0z" />
 											<circle cx="12" cy="12" r="3" />
@@ -492,7 +502,8 @@
 										Change
 									</button>
 								</li>
-								<li><a class="delete-btn" (click)="deleteImage(vehicleImageId4,'vehicleImage','4')" tabindex="1">
+								<li><a class="delete-btn" (click)="deleteImage(vehicleImageId4,'vehicleImage','4')"
+										tabindex="1">
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 											<path
 												d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
@@ -512,7 +523,8 @@
 								<ul class="mt-3">
 									<li>
 										<button class="adduploaded" tabindex="1">
-											<input type="file" (change)="onFileChange($event,vehicleImageId4,'4')" tabindex="-1">
+											<input type="file" (change)="onFileChange($event,vehicleImageId4,'4')"
+												tabindex="-1">
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -534,7 +546,8 @@
 							<ul class="mt-3">
 								<li>
 									<button class="changeuploaded" tabindex="1">
-										<input type="file" (change)="onFileChange($event,vehicleImageId5,'5')" tabindex="-1">
+										<input type="file" (change)="onFileChange($event,vehicleImageId5,'5')"
+											tabindex="-1">
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 											<path fill="none" d="M0 0h24v24H0V0z" />
 											<circle cx="12" cy="12" r="3" />
@@ -544,7 +557,8 @@
 										Change
 									</button>
 								</li>
-								<li><a class="delete-btn" (click)="deleteImage(vehicleImageId5,'vehicleImage','5')" tabindex="1">
+								<li><a class="delete-btn" (click)="deleteImage(vehicleImageId5,'vehicleImage','5')"
+										tabindex="1">
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 											<path
 												d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
@@ -564,7 +578,8 @@
 								<ul class="mt-3">
 									<li>
 										<button class="adduploaded" tabindex="1">
-											<input type="file" (change)="onFileChange($event,vehicleImageId5,'5')" tabindex="-1">
+											<input type="file" (change)="onFileChange($event,vehicleImageId5,'5')"
+												tabindex="-1">
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -586,7 +601,8 @@
 							<ul class="mt-3">
 								<li>
 									<button class="changeuploaded" tabindex="1">
-										<input type="file" (change)="onFileChange($event,vehicleImageId6,'6')" tabindex="-1">
+										<input type="file" (change)="onFileChange($event,vehicleImageId6,'6')"
+											tabindex="-1">
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 											<path fill="none" d="M0 0h24v24H0V0z" />
 											<circle cx="12" cy="12" r="3" />
@@ -596,7 +612,8 @@
 										Change
 									</button>
 								</li>
-								<li><a class="delete-btn" (click)="deleteImage(vehicleImageId6,'vehicleImage','6')" tabindex="1">
+								<li><a class="delete-btn" (click)="deleteImage(vehicleImageId6,'vehicleImage','6')"
+										tabindex="1">
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 											<path
 												d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
@@ -616,7 +633,8 @@
 								<ul class="mt-3">
 									<li>
 										<button class="adduploaded" tabindex="1">
-											<input type="file" (change)="onFileChange($event,vehicleImageId6,'6')" tabindex="-1">
+											<input type="file" (change)="onFileChange($event,vehicleImageId6,'6')"
+												tabindex="-1">
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -638,7 +656,8 @@
 							<ul class="mt-3">
 								<li>
 									<button class="changeuploaded" tabindex="1">
-										<input type="file" (change)="onFileChange($event,vehicleImageId7,'7')" tabindex="-1">
+										<input type="file" (change)="onFileChange($event,vehicleImageId7,'7')"
+											tabindex="-1">
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 											<path fill="none" d="M0 0h24v24H0V0z" />
 											<circle cx="12" cy="12" r="3" />
@@ -648,7 +667,8 @@
 										Change
 									</button>
 								</li>
-								<li><a class="delete-btn" (click)="deleteImage(vehicleImageId7,'vehicleImage','7')" tabindex="1">
+								<li><a class="delete-btn" (click)="deleteImage(vehicleImageId7,'vehicleImage','7')"
+										tabindex="1">
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 											<path
 												d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
@@ -668,7 +688,8 @@
 								<ul class="mt-3">
 									<li>
 										<button class="adduploaded" tabindex="1">
-											<input type="file" (change)="onFileChange($event,vehicleImageId7,'7')" tabindex="-1">
+											<input type="file" (change)="onFileChange($event,vehicleImageId7,'7')"
+												tabindex="-1">
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -690,7 +711,8 @@
 							<ul class="mt-3">
 								<li>
 									<button class="changeuploaded" tabindex="1">
-										<input type="file" (change)="onFileChange($event,vehicleImageId8,'8')" tabindex="-1">
+										<input type="file" (change)="onFileChange($event,vehicleImageId8,'8')"
+											tabindex="-1">
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 											<path fill="none" d="M0 0h24v24H0V0z" />
 											<circle cx="12" cy="12" r="3" />
@@ -700,7 +722,8 @@
 										Change
 									</button>
 								</li>
-								<li><a class="delete-btn" (click)="deleteImage(vehicleImageId8,'vehicleImage','8')" tabindex="1">
+								<li><a class="delete-btn" (click)="deleteImage(vehicleImageId8,'vehicleImage','8')"
+										tabindex="1">
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 											<path
 												d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
@@ -720,7 +743,8 @@
 								<ul class="mt-3">
 									<li>
 										<button class="adduploaded" tabindex="1">
-											<input type="file" (change)="onFileChange($event,vehicleImageId8,'8')" tabindex="-1">
+											<input type="file" (change)="onFileChange($event,vehicleImageId8,'8')"
+												tabindex="-1">
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -742,7 +766,8 @@
 							<ul class="mt-3">
 								<li>
 									<button class="changeuploaded" tabindex="1">
-										<input type="file" (change)="onFileChange($event,vehicleImageId9,'9')" tabindex="-1">
+										<input type="file" (change)="onFileChange($event,vehicleImageId9,'9')"
+											tabindex="-1">
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 											<path fill="none" d="M0 0h24v24H0V0z" />
 											<circle cx="12" cy="12" r="3" />
@@ -752,7 +777,8 @@
 										Change
 									</button>
 								</li>
-								<li><a class="delete-btn" (click)="deleteImage(vehicleImageId9,'vehicleImage','9')" tabindex="1">
+								<li><a class="delete-btn" (click)="deleteImage(vehicleImageId9,'vehicleImage','9')"
+										tabindex="1">
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 											<path
 												d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
@@ -772,7 +798,8 @@
 								<ul class="mt-3">
 									<li>
 										<button class="adduploaded" tabindex="1">
-											<input type="file" (change)="onFileChange($event,vehicleImageId9,'9')" tabindex="-1">
+											<input type="file" (change)="onFileChange($event,vehicleImageId9,'9')"
+												tabindex="-1">
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -795,7 +822,8 @@
 						<div class="vehtype_extint">
 							<div>
 								<p>Rear Plate (w/exp decal)
-									<span *ngIf="affiliateType!='fleet_operator'; else nonFleetOperator" class="asterisk">*</span>
+									<span *ngIf="affiliateType!='fleet_operator'; else nonFleetOperator"
+										class="asterisk">*</span>
 									<ng-template #nonFleetOperator>
 										<span class="theme-color">(optional)</span>
 									</ng-template>
@@ -827,7 +855,8 @@
 								</ul>
 							</div>
 						</div>
-						<div *ngIf="submittedForm && f.rearPlateImage.errors" class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="submittedForm && f.rearPlateImage.errors"
+							class="text-danger margin-bottom-thin my-mat-hint">
 							<div *ngIf="f.rearPlateImage.errors.required">The Rear Plate Image is required</div>
 						</div>
 					</div>
@@ -864,7 +893,8 @@
 						<div class="vehtype_extint">
 							<div>
 								<p>Window Permit</p>
-								<img src="{{windowPermitImage}}" (click)="showImageInModal(windowPermitImage)" tabindex="-1">
+								<img src="{{windowPermitImage}}" (click)="showImageInModal(windowPermitImage)"
+									tabindex="-1">
 								<ul class="mt-3">
 									<li>
 										<button class="changeuploaded" tabindex="1">
@@ -880,7 +910,8 @@
 											Change
 										</button>
 									</li>
-									<li><a class="delete-btn" (click)="deleteImage(windowPermitId,'windowPermit')" tabindex="1">
+									<li><a class="delete-btn" (click)="deleteImage(windowPermitId,'windowPermit')"
+											tabindex="1">
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 												<path
 													d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
@@ -924,7 +955,8 @@
 						<div class="vehtype_extint">
 							<div>
 								<p>Secretary of State</p>
-								<img src="{{windowPermit2Image}}" (click)="showImageInModal(windowPermit2Image)" tabindex="-1">
+								<img src="{{windowPermit2Image}}" (click)="showImageInModal(windowPermit2Image)"
+									tabindex="-1">
 								<ul class="mt-3">
 									<li>
 										<button class="changeuploaded" tabindex="1">
@@ -940,7 +972,8 @@
 											Change
 										</button>
 									</li>
-									<li><a class="delete-btn" (click)="deleteImage(windowPermit2Id,'windowPermit2')" tabindex="1">
+									<li><a class="delete-btn" (click)="deleteImage(windowPermit2Id,'windowPermit2')"
+											tabindex="1">
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 												<path
 													d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
@@ -986,7 +1019,8 @@
 						<div class="vehtype_extint">
 							<div>
 								<p>USDOT Permit</p>
-								<img src="{{usdotPermitImage}}" (click)="showImageInModal(usdotPermitImage)" tabindex="-1">
+								<img src="{{usdotPermitImage}}" (click)="showImageInModal(usdotPermitImage)"
+									tabindex="-1">
 								<ul class="mt-3">
 									<li>
 										<button class="changeuploaded" tabindex="1">
@@ -1002,7 +1036,8 @@
 											Change
 										</button>
 									</li>
-									<li><a class="delete-btn" (click)="deleteImage(usdotPermitId,'usdotPermit')" tabindex="1">
+									<li><a class="delete-btn" (click)="deleteImage(usdotPermitId,'usdotPermit')"
+											tabindex="1">
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 												<path
 													d="M30,5H22V4a3,3,0,0,0-3-3H13a3,3,0,0,0-3,3V5H2A1,1,0,0,0,2,7H5V26a5.006,5.006,0,0,0,5,5H22a5.006,5.006,0,0,0,5-5V7h3a1,1,0,0,0,0-2ZM12,4a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1V5H12ZM25,26a3,3,0,0,1-3,3H10a3,3,0,0,1-3-3V7H25Z" />
@@ -1083,7 +1118,8 @@
 									<ul class="mt-3">
 										<li>
 											<button class="adduploaded" tabindex="1">
-												<input type="file" (change)="vehicleOfficialImagesChange($event,'mc',mcId)"
+												<input type="file"
+													(change)="vehicleOfficialImagesChange($event,'mc',mcId)"
 													tabindex="-1">
 												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 													<path fill="none" d="M0 0h24v24H0V0z" />
@@ -1104,6 +1140,37 @@
 		</div>
 	</section>
 	<div class="container">
+		<div class="row justify-content-between">
+
+			<div class="billing_inforamtion">
+				<ul>
+					<li>
+
+						<button class="custom-filled-back-button" (click)="backButton()">
+							BACK
+						</button>
+					</li>
+				</ul>
+			</div>
+
+
+			<div class="billing_inforamtion">
+				<ul>
+					<li>
+						<button class="custom-filled-reset-button" (click)="resetForm()" tabIndex="2">
+							RESET
+						</button>
+					</li>
+					<li><button class="custom-filled-button" (click)="submitForm()" tabIndex="1">
+							SAVE
+						</button>
+					</li>
+				</ul>
+			</div>
+
+		</div>
+	</div>
+	<!-- <div class="container">
 		<div class="row py-4">
 			<div class="col-md-6">
 			  
@@ -1121,7 +1188,7 @@
 				</div>
 			</div>
 		</div>
-			</div>
+			</div> -->
 
 
 </form>
