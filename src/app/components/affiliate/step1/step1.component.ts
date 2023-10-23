@@ -210,10 +210,6 @@ export class Step1Component implements OnInit, AfterViewInit
 			cpcn_tpc: [
 				"",
 				[
-					Validators.pattern("^[0-9]*$"),
-					Validators.minLength(4),
-					Validators.maxLength(15),
-					this.customValidator.dashValidator(),
 					this.customValidator.plusValidator(),
 				],
 			],
@@ -1517,10 +1513,6 @@ export class Step1Component implements OnInit, AfterViewInit
 			cpcn_tpc: [
 				"",
 				[
-					Validators.pattern("^[0-9]*$"),
-					Validators.minLength(4),
-					Validators.maxLength(15),
-					this.customValidator.dashValidator(),
 					this.customValidator.plusValidator(),
 				],
 			],

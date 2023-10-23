@@ -57,7 +57,7 @@
 				<div class="col-md-4 py-2">
 					<mat-form-field appearance="outline" class="m-0">
 						<mat-label>Search Filter by Key word</mat-label>
-						<input type="text" matInput [value]="searchText"
+						<input type="text" matInput [value]="searchText" (focus)="$event.target.select()"
 							(keyup)="handleSearchKeyword($event.target.value)" placeholder="Search Filter by Key word"
 							id="keyword1" autofocus>
 					</mat-form-field>
