@@ -759,7 +759,38 @@
 			</div>
 		</div>
 	</section>
-	<section class="billing_inforamtion">
+	<div class="container">
+		<div class="row justify-content-between">
+
+			<div class="billing_inforamtion">
+				<ul>
+					<li>
+
+						<button class="custom-filled-back-button" (click)="backButton()">
+							BACK
+						</button>
+					</li>
+				</ul>
+			</div>
+
+
+			<div class="billing_inforamtion">
+				<ul>
+					<li>
+						<button class="custom-filled-reset-button" (click)="resetForm()" tabIndex="2">
+							RESET
+						</button>
+					</li>
+					<li><button class="custom-filled-button" (click)="submitForm()" tabIndex="1">
+							SAVE
+						</button>
+					</li>
+				</ul>
+			</div>
+
+		</div>
+	</div>
+	<!-- <section class="billing_inforamtion">
 		<ul>
 			<li><button class="custom-btn savebutton" (click)="submitForm()" [disabled]="disableSubmitButton"
 					tabindex="1">SAVE</button> </li>
@@ -767,5 +798,5 @@
 			<li><button class="custom-btn backbutton" (click)="backButton()" data-toggle="tooltip" data-placement="top"
 					title="Clicking back button deletes all fields." tabindex="1">BACK</button> </li>
 		</ul>
-	</section>
+	</section> -->
 </form>

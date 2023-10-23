@@ -20,11 +20,11 @@
 						</mat-autocomplete>
 					</mat-form-field> -->
 					<ng-select appearance="outline" [items]="filteredVehicleTypes" dropdownPosition="bottom"
-							[markFirst]="true" [virtualScroll]="true" bindLabel="name" bindValue="ID"
-							placeholder="Vehicle Type" formControlName="vehicleType" 
-							(change)="handleChangeVehicleType($event)"
-							[ngClass]="{ 'border-red': (errorMsg && f.vehicleType.errors) || (submittedForm && f.vehicleType.errors) || !isVehicleTypeSelected }">
-						</ng-select>
+						[markFirst]="true" [virtualScroll]="true" bindLabel="name" bindValue="ID"
+						placeholder="Vehicle Type" formControlName="vehicleType"
+						(change)="handleChangeVehicleType($event)"
+						[ngClass]="{ 'border-red': (errorMsg && f.vehicleType.errors) || (submittedForm && f.vehicleType.errors) || !isVehicleTypeSelected }">
+					</ng-select>
 					<div *ngIf="(errorMsg && f.vehicleType.errors) || (submittedForm && f.vehicleType.errors)"
 						class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.vehicleType.errors.required">The Vehicle Type is required</div>
@@ -43,10 +43,10 @@
 							</mat-option>
 						</mat-autocomplete>
 					</mat-form-field> -->
-					<ng-select appearance="outline" [items]="filteredMake" dropdownPosition="bottom"
-							[markFirst]="true" [virtualScroll]="true" bindLabel="name" bindValue="ID"
-							placeholder="Make" formControlName="make">
-						</ng-select>
+					<ng-select appearance="outline" [items]="filteredMake" dropdownPosition="bottom" [markFirst]="true"
+						[virtualScroll]="true" bindLabel="name" bindValue="ID" placeholder="Make"
+						formControlName="make">
+					</ng-select>
 					<div *ngIf="(errorMsg1 && f.make.errors) || (submittedForm && f.make.errors)"
 						class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.make.errors.required">The Make and Model is required</div>
@@ -65,10 +65,10 @@
 							</mat-option>
 						</mat-autocomplete>
 					</mat-form-field> -->
-					<ng-select appearance="outline" [items]="filteredModel" dropdownPosition="bottom"
-							[markFirst]="true" [virtualScroll]="true" bindLabel="name" bindValue="ID"
-							placeholder="Model" formControlName="model" id="modelField">
-						</ng-select>
+					<ng-select appearance="outline" [items]="filteredModel" dropdownPosition="bottom" [markFirst]="true"
+						[virtualScroll]="true" bindLabel="name" bindValue="ID" placeholder="Model"
+						formControlName="model" id="modelField">
+					</ng-select>
 					<div *ngIf="(errorMsg2 && f.model.errors) || (submittedForm && f.model.errors)"
 						class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.model.errors.required">The Make and Model is required</div>
@@ -366,7 +366,8 @@
 			<div class="choose_ameniteslist">
 				<div class="custom-control custom-checkbox" *ngFor="let interior of interiors">
 					<input type="checkbox" class="custom-control-input" id="interior_{{interior.name}}"
-						[value]="interior.id" (change)="onInteriorsCheckboxChange($event)" tabindex="1" [checked]="interior.id=='1'">
+						[value]="interior.id" (change)="onInteriorsCheckboxChange($event)" tabindex="1"
+						[checked]="interior.id=='1'">
 					<label class="custom-control-label" for="interior_{{interior.name}}">{{interior.name}}</label>
 				</div>
 			</div>
@@ -419,8 +420,8 @@
 							<ul class="mt-3">
 								<li>
 									<a class="custom-arrow-clockwise-button"
-									(click)="fetchImageBlob(vehicleImage1 ,'1',vehicleImageId1)">
-									 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+										(click)="fetchImageBlob(vehicleImage1 ,'1',vehicleImageId1)">
+										<i class="bi bi-arrow-clockwise"></i>rotate</a>
 								</li>
 								<li>
 									<button class="changeuploaded" tabindex="1">
@@ -451,8 +452,8 @@
 							<ul class="mt-3">
 								<li>
 									<a class="custom-arrow-clockwise-button"
-									(click)="fetchImageBlob(vehicleImage2,'2',vehicleImageId2)">
-									 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+										(click)="fetchImageBlob(vehicleImage2,'2',vehicleImageId2)">
+										<i class="bi bi-arrow-clockwise"></i>rotate</a>
 								</li>
 								<li>
 									<button class="changeuploaded" tabindex="1">
@@ -527,8 +528,8 @@
 							<ul class="mt-3">
 								<li>
 									<a class="custom-arrow-clockwise-button"
-									(click)="fetchImageBlob(vehicleImage3,'3',vehicleImageId3)">
-									 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+										(click)="fetchImageBlob(vehicleImage3,'3',vehicleImageId3)">
+										<i class="bi bi-arrow-clockwise"></i>rotate</a>
 								</li>
 								<li>
 									<button class="changeuploaded" tabindex="1">
@@ -603,8 +604,8 @@
 							<ul class="mt-3">
 								<li>
 									<a class="custom-arrow-clockwise-button"
-									(click)="fetchImageBlob(vehicleImage4,'4',vehicleImageId4)">
-									 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+										(click)="fetchImageBlob(vehicleImage4,'4',vehicleImageId4)">
+										<i class="bi bi-arrow-clockwise"></i>rotate</a>
 								</li>
 								<li>
 									<button class="changeuploaded" tabindex="1">
@@ -679,8 +680,8 @@
 							<ul class="mt-3">
 								<li>
 									<a class="custom-arrow-clockwise-button"
-									(click)="fetchImageBlob(vehicleImage5,'5',vehicleImageId5)">
-									 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+										(click)="fetchImageBlob(vehicleImage5,'5',vehicleImageId5)">
+										<i class="bi bi-arrow-clockwise"></i>rotate</a>
 								</li>
 								<li>
 									<button class="changeuploaded" tabindex="1">
@@ -755,8 +756,8 @@
 							<ul class="mt-3">
 								<li>
 									<a class="custom-arrow-clockwise-button"
-									(click)="fetchImageBlob(vehicleImage6,'6',vehicleImageId6)">
-									 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+										(click)="fetchImageBlob(vehicleImage6,'6',vehicleImageId6)">
+										<i class="bi bi-arrow-clockwise"></i>rotate</a>
 								</li>
 								<li>
 									<button class="changeuploaded" tabindex="1">
@@ -831,8 +832,8 @@
 							<ul class="mt-3">
 								<li>
 									<a class="custom-arrow-clockwise-button"
-									(click)="fetchImageBlob(vehicleImage7,'7',vehicleImageId7)">
-									 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+										(click)="fetchImageBlob(vehicleImage7,'7',vehicleImageId7)">
+										<i class="bi bi-arrow-clockwise"></i>rotate</a>
 								</li>
 								<li>
 									<button class="changeuploaded" tabindex="1">
@@ -907,8 +908,8 @@
 							<ul class="mt-3">
 								<li>
 									<a class="custom-arrow-clockwise-button"
-									(click)="fetchImageBlob(vehicleImage8,'8',vehicleImageId8)">
-									 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+										(click)="fetchImageBlob(vehicleImage8,'8',vehicleImageId8)">
+										<i class="bi bi-arrow-clockwise"></i>rotate</a>
 								</li>
 								<li>
 									<button class="changeuploaded" tabindex="1">
@@ -983,8 +984,8 @@
 							<ul class="mt-3">
 								<li>
 									<a class="custom-arrow-clockwise-button"
-									(click)="fetchImageBlob(vehicleImage9,'9',vehicleImageId9)">
-									 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+										(click)="fetchImageBlob(vehicleImage9,'9',vehicleImageId9)">
+										<i class="bi bi-arrow-clockwise"></i>rotate</a>
 								</li>
 								<li>
 									<button class="changeuploaded" tabindex="1">
@@ -1069,8 +1070,8 @@
 								<ul class="mt-3">
 									<li>
 										<a class="custom-arrow-clockwise-button"
-										(click)="fetchImageBlob(rearPlateImage,'rearPlate',rearPlateId)">
-										 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+											(click)="fetchImageBlob(rearPlateImage,'rearPlate',rearPlateId)">
+											<i class="bi bi-arrow-clockwise"></i>rotate</a>
 									</li>
 									<li>
 										<button class="changeuploaded" tabindex="1">
@@ -1164,8 +1165,8 @@
 								<ul class="mt-3">
 									<li>
 										<a class="custom-arrow-clockwise-button"
-										(click)="fetchImageBlob(windowPermitImage,'windowPermit',windowPermitId)">
-										 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+											(click)="fetchImageBlob(windowPermitImage,'windowPermit',windowPermitId)">
+											<i class="bi bi-arrow-clockwise"></i>rotate</a>
 									</li>
 									<li>
 										<button class="changeuploaded" tabindex="1">
@@ -1257,8 +1258,8 @@
 								<ul class="mt-3">
 									<li>
 										<a class="custom-arrow-clockwise-button"
-										(click)="fetchImageBlob(windowPermit2Image,'windowPermit2',windowPermit2Id)">
-										 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+											(click)="fetchImageBlob(windowPermit2Image,'windowPermit2',windowPermit2Id)">
+											<i class="bi bi-arrow-clockwise"></i>rotate</a>
 									</li>
 									<li>
 										<button class="changeuploaded" tabindex="1">
@@ -1358,8 +1359,8 @@
 								<ul class="mt-3">
 									<li>
 										<a class="custom-arrow-clockwise-button"
-										(click)="fetchImageBlob(usdotPermitImage,'usdotPermit',usdotPermitId)">
-										 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+											(click)="fetchImageBlob(usdotPermitImage,'usdotPermit',usdotPermitId)">
+											<i class="bi bi-arrow-clockwise"></i>rotate</a>
 									</li>
 									<li>
 										<button class="changeuploaded" tabindex="1">
@@ -1456,8 +1457,8 @@
 								<ul class="mt-3">
 									<li>
 										<a class="custom-arrow-clockwise-button"
-										(click)="fetchImageBlob(mcImage,'mc',mcId)">
-										 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+											(click)="fetchImageBlob(mcImage,'mc',mcId)">
+											<i class="bi bi-arrow-clockwise"></i>rotate</a>
 									</li>
 									<li>
 										<button class="changeuploaded" tabindex="1">
@@ -1536,40 +1537,33 @@
 		</div>
 	</section>
 	<div class="container">
-		<div class="row py-4">
-			<div class="col-md-7">
-				<div class="billing_inforamtion">
-					<ul class="d-flex">
-				<li><button class="custom-filled-back-button" type="button" (click)="backButton()" data-toggle="modal"
-					data-placement="top" title="Clicking back button deletes all fields." tabindex="1">BACK</button>
-				</li>
-			</ul>
+		<div class="row justify-content-between">
+
+			<div class="billing_inforamtion">
+				<ul>
+					<li>
+						<button class="custom-filled-back-button" type="button" (click)="backButton()"
+							data-toggle="tooltip" data-placement="top" title="Clicking back button deletes all fields."
+							tabindex="1">BACK</button>
+					</li>
+				</ul>
+
 			</div>
-			</div>
-			<div class="col-md-5 ">
-				<div class="billing_inforamtion">
-					<ul class="d-flex justify-content-center">
-					
-						<li><button class="custom-filled-reset-button" (click)="resetForm()" tabindex="1">RESET</button> </li>
-						<li><button class="custom-filled-button" (click)="submitForm()" [disabled]="disableSubmitButton"
-							tabindex="1">SAVE</button> </li>
-					
-						
-					</ul>
-				</div>
+
+			<div class="billing_inforamtion">
+				<ul>
+					<li><button class="custom-filled-reset-button" (click)="resetForm()" tabindex="1">RESET</button>
+					</li>
+					<li><button class="custom-filled-button" (click)="submitForm()" [disabled]="disableSubmitButton"
+							tabindex="1">SAVE</button></li>
+					<!-- <li>
+						</li> -->
+				</ul>
+
 			</div>
 		</div>
-			</div>
-	<div class="billing_inforamtion">
-		
-		
-		
-	
-		
-		
-		
-		
 	</div>
+
 </form>
 
 <!-- Image modal -->

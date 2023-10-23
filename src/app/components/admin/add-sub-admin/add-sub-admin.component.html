@@ -35,8 +35,7 @@
 							<mat-label>Mobile<span class="asterisk">*</span></mat-label>
 							<input matInput ng2TelInput
 								[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
-								(countryChange)="onCountryChange($event)"
-								placeholder="Mobile" formControlName="mobile">
+								(countryChange)="onCountryChange($event)" placeholder="Mobile" formControlName="mobile">
 						</mat-form-field>
 						<div *ngIf="f.mobile.invalid && (f.mobile.touched || f.mobile.dirty)" class="text-danger">
 							<div *ngIf="f.mobile.errors.required">This field is required</div>
@@ -109,13 +108,44 @@
 			</div>
 		</section>
 		<!-----BILLING INFO-------------->
-		<div class="billing_inforamtion">
+		<div class="container">
+			<div class="row justify-content-between">
+
+				<div class="billing_inforamtion">
+					<ul>
+						<li>
+
+							<button class="custom-filled-back-button" (click)="backButton()">
+								BACK
+							</button>
+						</li>
+					</ul>
+				</div>
+
+
+				<div class="billing_inforamtion">
+					<ul>
+						<li>
+							<button class="custom-filled-reset-button" (click)="resetForm()" tabIndex="2">
+								RESET
+							</button>
+						</li>
+						<li><button class="custom-filled-button" (click)="submitForm()" tabIndex="1">
+								SAVE
+							</button>
+						</li>
+					</ul>
+				</div>
+
+			</div>
+		</div>
+		<!-- <div class="billing_inforamtion">
 			<ul class="d-flex justify-content-end"> 
 				<li><button class="custom-btn savebutton mr-2 btn-shadow" (click)="submitForm()"
 						[disabled]="disableSubmitButton">SAVE</button> </li>
 				<li><button class="custom-btn resetbutton mr-2 btn-shadow" (click)="resetForm()">RESET</button> </li>
 				<li><button class="custom-btn backbutton mr-2 btn-shadow" (click)="backButton()">BACK</button> </li>
 			</ul>
-		</div>
+		</div> -->
 	</form>
 </main>
