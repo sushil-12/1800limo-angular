@@ -93,7 +93,7 @@ export class TravelPlannerComponent implements OnInit {
 
   addTravelPlannerClick(travelPlannerId)
   {
-    this.router.navigate(['/admin/add-travel-planner-account'],{queryParams:{travelPlannerId:travelPlannerId}});
+    this.router.navigate(['/admin/add-travel-planner-account/step1'],{queryParams:{travelPlannerId:travelPlannerId}});
   }
 
   clickEditTravelPlanner(travelPlannerId)

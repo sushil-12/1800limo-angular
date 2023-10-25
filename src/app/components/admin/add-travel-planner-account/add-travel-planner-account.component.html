@@ -34,9 +34,8 @@
 
 					<div class="col-md-4">
 						<mat-form-field appearance="outline" class="mobileLabelClass">
-							<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Contact<span
-									class="asterisk">
-									*</span></label>
+							<label
+								class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Contact</label>
 							<input matInput placeholder="Contact" formControlName="office" ng2TelInput
 								[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
 								placeholder="1234567890" class="phoneNumberClass"
@@ -45,7 +44,7 @@
 						</mat-form-field>
 						<div *ngIf="submittedForm && f.office.errors || f.office.touched && f.office.errors"
 							class="text-danger margin-bottom-thin my-mat-hint">
-							<div *ngIf="f.office.errors.required">This field is required</div>
+							<!-- <div *ngIf="f.office.errors.required">This field is required</div> -->
 						</div>
 						<div *ngIf="f.office.errors" class="text-danger margin-bottom-thin my-mat-hint">
 							<div *ngIf="f.office.errors?.invalid_Pattern;else plusError">Do not add Dashes
@@ -135,18 +134,17 @@
 					</div>
 					<div class="col-md-6">
 						<mat-form-field appearance="outline">
-							<mat-label>IATA # <span class="asterisk">*</span></mat-label>
-							<input formControlName="iata" type="text" matInput placeholder="IATA">
+							<mat-label>Address <span class="asterisk">*</span></mat-label>
+							<input formControlName="address" type="text" matInput placeholder="Address" #search1>
 						</mat-form-field>
-						<div *ngIf="submittedForm && f.iata.errors" class="text-danger">
-							<div *ngIf="f.iata.errors.required">This field is required</div>
+						<!-- <textarea placeholder="Address" formControlName="address"></textarea> -->
+						<div *ngIf="submittedForm && f.address.errors" class="text-danger">
+							<div *ngIf="f.address.errors.required">This field is required</div>
 						</div>
 					</div>
 					<div class="col-md-6">
 						<mat-form-field appearance="outline" class="mobileLabelClass">
-							<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Fax<span
-									class="asterisk">
-									*</span></label>
+							<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Fax</label>
 							<input matInput placeholder="Fax" formControlName="fax" ng2TelInput
 								[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
 								placeholder="1234567890" class="phoneNumberClass"
@@ -155,7 +153,7 @@
 						</mat-form-field>
 						<div *ngIf="submittedForm && f.fax.errors || f.fax.touched && f.fax.errors"
 							class="text-danger margin-bottom-thin my-mat-hint">
-							<div *ngIf="f.fax.errors.required">This field is required</div>
+							<!-- <div *ngIf="f.fax.errors.required">This field is required</div> -->
 						</div>
 						<div *ngIf="f.fax.errors" class="text-danger margin-bottom-thin my-mat-hint">
 							<div *ngIf="f.fax.errors?.invalid_Pattern;else plusError">Do not add Dashes
@@ -208,17 +206,16 @@
 							</ng-template>
 						</div>
 					</div>
-
 					<div class="col-md-6">
 						<mat-form-field appearance="outline">
-							<mat-label>Address <span class="asterisk">*</span></mat-label>
-							<input formControlName="address" type="text" matInput placeholder="Address" #search1>
+							<mat-label>IATA # <span class="asterisk">*</span></mat-label>
+							<input formControlName="iata" type="text" matInput placeholder="IATA">
 						</mat-form-field>
-						<!-- <textarea placeholder="Address" formControlName="address"></textarea> -->
-						<div *ngIf="submittedForm && f.address.errors" class="text-danger">
-							<div *ngIf="f.address.errors.required">This field is required</div>
+						<div *ngIf="submittedForm && f.iata.errors" class="text-danger">
+							<div *ngIf="f.iata.errors.required">This field is required</div>
 						</div>
 					</div>
+
 					<!-- <div class="col-md-6">
 						<mat-form-field appearance="outline">
 							<mat-label>City <span class="asterisk">*</span></mat-label>
