@@ -296,23 +296,23 @@
 				<div class="row">
 					<div class="col-md-6">
 						<mat-form-field appearance="outline">
-							<mat-label>First & Last Name*</mat-label>
+							<mat-label>First & Last Name</mat-label>
 							<input matInput placeholder="First & Last Name" formControlName="name" tabindex="1">
 						</mat-form-field>
 						<div *ngIf="submittedForm && f.name.errors || f.name.touched && f.name.errors"
 							class="text-danger margin-bottom-thin my-mat-hint">
-							<div *ngIf="f.name.errors.required">This field is required</div>
+							<!-- <div *ngIf="f.name.errors.required">This field is required</div> -->
 						</div>
 					</div>
 					<div class="col-md-6">
 						<mat-form-field appearance="outline">
-							<mat-label>Card No# *</mat-label>
+							<mat-label>Card No#</mat-label>
 							<input matInput placeholder="Card No#" formControlName="number" tabindex="1"
 								id="card-number">
 						</mat-form-field>
 						<div *ngIf="submittedForm && f.number.errors || f.number.touched && f.number.errors"
 							class="text-danger margin-bottom-thin my-mat-hint">
-							<div *ngIf="f.number.errors.required">This field is required</div>
+							<!-- <div *ngIf="f.number.errors.required">This field is required</div> -->
 						</div>
 						<div *ngIf="f.number.errors" class="text-danger margin-bottom-thin my-mat-hint">
 							<div *ngIf="f.number.errors?.invalid_Pattern;else plusError">Do not add Dashes
@@ -333,7 +333,7 @@
 					</div>
 					<div class="col-md-4">
 						<mat-form-field appearance="outline">
-							<mat-label>Expiry Month*</mat-label>
+							<mat-label>Expiry Month</mat-label>
 							<mat-select formControlName="exp_month" tabindex="1">
 								<mat-option value="">Choose Expiry Month</mat-option>
 								<mat-option value='01'>01</mat-option>
@@ -352,12 +352,12 @@
 						</mat-form-field>
 						<div *ngIf="submittedForm && f.exp_month.errors || f.exp_month.touched && f.exp_month.errors"
 							class="text-danger margin-bottom-thin my-mat-hint">
-							<div *ngIf="f.exp_month.errors.required">This field is required</div>
+							<!-- <div *ngIf="f.exp_month.errors.required">This field is required</div> -->
 						</div>
 					</div>
 					<div class="col-md-4">
 						<mat-form-field appearance="outline">
-							<mat-label>Expiry Year*</mat-label>
+							<mat-label>Expiry Year</mat-label>
 							<mat-select formControlName="exp_year" tabindex="1">
 								<mat-option value="">Choose Expiry Year</mat-option>
 								<mat-option *ngFor="let yearOption of yearOptions" value="{{yearOption}}">{{yearOption}}
@@ -366,17 +366,17 @@
 						</mat-form-field>
 						<div *ngIf="submittedForm && f.exp_year.errors || f.exp_year.touched && f.exp_year.errors"
 							class="text-danger margin-bottom-thin my-mat-hint">
-							<div *ngIf="f.exp_year.errors.required">This field is required</div>
+							<!-- <div *ngIf="f.exp_year.errors.required">This field is required</div> -->
 						</div>
 					</div>
 					<div class="col-md-4">
 						<mat-form-field appearance="outline">
-							<mat-label>CVV*</mat-label>
+							<mat-label>CVV</mat-label>
 							<input matInput placeholder="CVV" formControlName="cvc" tabindex="1">
 						</mat-form-field>
 						<div *ngIf="submittedForm && f.cvc.errors || f.cvc.touched && f.cvc.errors"
 							class="text-danger margin-bottom-thin my-mat-hint">
-							<div *ngIf="f.cvc.errors.required">This field is required</div>
+							<!-- <div *ngIf="f.cvc.errors.required">This field is required</div> -->
 						</div>
 						<div *ngIf="f.cvc.errors" class="text-danger margin-bottom-thin my-mat-hint">
 							<div *ngIf="f.cvc.errors?.invalid_Pattern;else plusError">Do not add Dashes

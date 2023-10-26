@@ -43,6 +43,10 @@ export class TravelPlannerComponent implements OnInit {
   ngOnInit(): void {
 		this.searchText = localStorage.getItem('TravelAgentSearch') ? localStorage.getItem('TravelAgentSearch') : '' 
       this.loadTravelPlanners();//load travelPlanners
+
+        localStorage.removeItem('travelAgent_id' )
+        sessionStorage.removeItem('stepCompleted')
+        sessionStorage.removeItem('step_completed_obj')
   }
 
 	timer: any
@@ -93,12 +97,13 @@ export class TravelPlannerComponent implements OnInit {
 
   addTravelPlannerClick(travelPlannerId)
   {
-    this.router.navigate(['/admin/add-travel-planner-account/step1'],{queryParams:{travelPlannerId:travelPlannerId}});
+    this.router.navigate(['/admin/travel-planner-account/step1'],{queryParams:{travelPlannerId:travelPlannerId}});
   }
 
   clickEditTravelPlanner(travelPlannerId)
   {
-    this.router.navigate(['/admin/edit-travel-planner-account'],{queryParams:{travelPlannerId:travelPlannerId}});
+    localStorage.setItem('travelAgent_id', travelPlannerId)
+    this.router.navigate(['/admin/travel-planner-account/step1'],{queryParams:{travelPlannerId:travelPlannerId}});
   }
 
   clickTravelPlannerCards(travelPlannerId)

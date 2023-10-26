@@ -367,7 +367,7 @@ const routes: Routes = [
 		component: EditCorporateAccountComponent
 	},
 	{
-		path: 'add-travel-planner-account',
+		path: 'travel-planner-account',
 		// canActivate: [],
 		canActivate: [SubAdminGuard],
 		component: TravelAgentStepsComponent,

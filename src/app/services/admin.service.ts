@@ -508,8 +508,13 @@ export class AdminService {
 	}
 
 	//corporate api
-	addTravelPlannerAccount(data) {
-		return this.httpClient.post(this.serverUrl + 'add-travel-planner-account', data);
+	addTravelPlannerAccount(data,id=null) {
+		if(id){
+			return this.httpClient.put(this.serverUrl + 'edit-travel-planner-account', data);
+		}
+		else{
+			return this.httpClient.post(this.serverUrl + 'add-travel-planner-account', data);
+		}
 	}
 	travelPlannerAccounts(url, keyword) {
 		var path;
@@ -1147,6 +1152,35 @@ export class AdminService {
 	changeTimezone(value){
 		return this.httpClient.put(`${this.serverUrl}update-timezone/${value}`,'')
 	}
+
+	// travel agent stripe add,edit,get api step2
+	getBankOfTravelAgent(acc_id){
+		return this.httpClient.get(this.serverUrl + `get-travel-planner-bank/${acc_id}`);
+  }
+  addBankOfTravelAgent(data, id=null){
+	if(id){
+		return this.httpClient.put(this.serverUrl + 'edit-travel-planner-bank', data);
+	}
+	else{
+		return this.httpClient.post(this.serverUrl + 'add-travel-planner-bank', data);
+	}
+  }
+  updateBankOfTravelAgent(data){
+    return this.httpClient.put(this.serverUrl + 'edit-travel-planner-bank', data);
+  }
+
+
+  getStepsCompletedTravelAgent(acc_id = 0) {
+	return this.httpClient.get(this.serverUrl + `get-travel-planner-step-completed/${acc_id}`);
+}
+
+updateStepsArrayLocalTravelAgent(stepArray) {
+	sessionStorage.setItem('stepCompleted', stepArray.toString())
+}
+
+updateStepsCompletedObjTravelAgent(stepObject) {
+	sessionStorage.setItem('step_completed_obj', JSON.stringify(stepObject))
+}
 
 
 }
