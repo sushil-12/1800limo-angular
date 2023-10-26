@@ -80,6 +80,8 @@ import { StaffRolesListComponent } from './staff-roles-list/staff-roles-list.com
 import { BookingLogsComponent } from './booking-logs/booking-logs.component';
 import { DemoAddIndividualComponent } from './demo-add-individual/demo-add-individual.component';
 import { AffiliateBookingComponent } from './affiliate-booking/affiliate-booking.component';
+import { TravelAgentStepsComponent } from './travel-agent-steps/travel-agent-steps.component';
+import { TravelAgentStripeFormComponent } from './travel-agent-stripe-form/travel-agent-stripe-form.component';
 
 
 const routes: Routes = [
@@ -365,15 +367,34 @@ const routes: Routes = [
 		component: EditCorporateAccountComponent
 	},
 	{
-		path: 'add-travel-planner-account',
+		path: 'travel-planner-account',
+		// canActivate: [],
 		canActivate: [SubAdminGuard],
-		component: AddTravelPlannerAccountComponent
-	},
-	{
-		path: 'edit-travel-planner-account',
-		canActivate: [SubAdminGuard],
-		component: EditTravelPlannerAccountComponent
-	},
+		component: TravelAgentStepsComponent,
+		data: {
+			title: 'TravelAgent'
+		},
+		children: [
+			{
+				path: 'step1',
+				component: AddTravelPlannerAccountComponent
+			},
+			{
+				path: 'step2',
+				component: TravelAgentStripeFormComponent
+			},
+		]
+	}, 
+	// {
+	// 	path: 'add-travel-planner-account',
+	// 	canActivate: [SubAdminGuard],
+	// 	component: AddTravelPlannerAccountComponent
+	// },
+	// {
+	// 	path: 'edit-travel-planner-account',
+	// 	canActivate: [SubAdminGuard],
+	// 	component: EditTravelPlannerAccountComponent
+	// },
 	{
 		path: 'cards',
 		canActivate: [SubAdminGuard],
