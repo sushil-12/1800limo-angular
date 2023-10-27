@@ -73,7 +73,8 @@
 								[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
 								placeholder="1234567890" class="phoneNumberClass"
 								(countryChange)="onCountryChange($event,'mobile')"
-								(intlTelInputObject)="telInputObjectMobile($event)" tabIndex="1" />
+								(intlTelInputObject)="telInputObjectMobile($event)" tabIndex="1"
+								[readonly]="travelPlannerId" />
 						</mat-form-field>
 						<div *ngIf="submittedForm && f.mobile.errors || f.mobile.touched && f.mobile.errors"
 							class="text-danger margin-bottom-thin my-mat-hint">
@@ -256,7 +257,7 @@
 				</div>
 			</div>
 		</section>
-		<section class="user_information">
+		<section class="user_information" *ngIf="!travelPlannerId">
 			<h2 class="headinginfo"> Billing Information</h2>
 			<div class="container py-2" id="accordionSidebar1">
 				<h3 class="headinginfoH3 mt-3">Credit Card <img class="creditcard_pay"
