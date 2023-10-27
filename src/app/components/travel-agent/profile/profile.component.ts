@@ -165,7 +165,7 @@ export class ProfileComponent implements OnInit {
       city: [''],
       state: [''],
       country: ['', Validators.required],
-      zip: [''],
+      zip: ['',[Validators.required]],
       agency_name: ['', Validators.required],
       payee: ['', Validators.required],
       iata: ['', Validators.required],

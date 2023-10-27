@@ -313,16 +313,17 @@
 							<div *ngIf="f?.country?.errors?.required">This field is required</div>
 						</div>
 					</div>
-					<!-- <div class="col-md-6">
+					<div class="col-md-6">
 						<mat-form-field appearance="outline">
 							<mat-label>Zip Code <span class="asterisk">*</span></mat-label>
 							<input formControlName="zip" type="text" matInput placeholder="Zip Code">
 						</mat-form-field>
-						<div *ngIf="submittedForm && f?.zip?.errors" class="text-danger">
+						<div *ngIf="submittedForm && f?.zip?.errors || f.zip.touched && f.zip.errors"
+							class="text-danger">
 							<div *ngIf="f?.zip?.errors?.required">This field is required</div>
 							<div *ngIf="f?.zip?.errors?.pattern">This field should be a number</div>
 						</div>
-					</div> -->
+					</div>
 				</div>
 			</div>
 		</section>
