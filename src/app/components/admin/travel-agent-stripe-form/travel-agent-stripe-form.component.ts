@@ -79,23 +79,23 @@ export class TravelAgentStripeFormComponent implements OnInit {
 
 	ngOnInit(): void {
 		// const currentUser = localStorage.getItem("travelAgent_id")
-		this.travelAgentId = localStorage.getItem("travelAgent_id")
-
-		// if(JSON.parse(sessionStorage.getItem('step_completed_obj'))){
-		// 	 let check_step = JSON.parse(sessionStorage.getItem('step_completed_obj'))
-		// 	 console.log(check_step.step1,check_step.step2,"chekc step 1 and 2")
-		// 	 if(check_step.step1 == "uncompleted"){
-		// 	 this.router.navigate(["/admin/travel-planner-account/step1"])
-		// 	 this.errordialog.openDialog({
-		// 		errors: {
-		// 			error: `Please complete previous step first.`
-		// 		}
-		// 	})
-		// 	 }
-		// 	 else{
-		// 		this.router.navigate(["/admin/travel-planner-account/step2"])
-		// 	 }
-		// }
+		
+		if(JSON.parse(sessionStorage.getItem('step_completed_obj'))){
+			let check_step = JSON.parse(sessionStorage.getItem('step_completed_obj'))
+			console.log(check_step.step1,check_step.step2,"chekc step 1 and 2")
+			if(check_step.step2 == "completed"){
+				//  this.router.navigate(["/admin/travel-planner-account/step1"])
+				//  this.errordialog.openDialog({
+					// 	errors: {
+						// 		error: `Please complete previous step first.`
+						// 	}
+						// })
+						this.travelAgentId = localStorage.getItem("travelAgent_id")
+			 }
+			//  else{
+			// 	this.router.navigate(["/admin/travel-planner-account/step2"])
+			//  }
+		}
 
 		this.mapFunction();
 
@@ -116,7 +116,7 @@ export class TravelAgentStripeFormComponent implements OnInit {
 		//add amenity form validation
 		this.addBankForm = this.formBuilder.group({
 			id: [''],//bank id for edit purpose
-			acc_id: [this.travelAgentId, [Validators.required, Validators.pattern("^[0-9].*$")]],//affiliate account id
+			acc_id: [localStorage.getItem("travelAgent_id"), [ Validators.pattern("^[0-9].*$")]],//affiliate account id
 			BankName: [''],
 			BankAddress: [''],
 			AccountHolderFirstName: ['', Validators.required],
