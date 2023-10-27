@@ -139,6 +139,7 @@ export class AddTravelPlannerAccountComponent implements OnInit
 		//add amenity form validation
 		this.addTravelPlannerAccountForm = this.formBuilder.group({
 			id: [''],//travelPlanner
+			acc_id:[''],
 			role: ['3', [Validators.required, Validators.pattern("^[0-9].*$")]],//travelPlanner
 			firstName: ['', Validators.required],
 			middleName: [''],
@@ -200,6 +201,9 @@ export class AddTravelPlannerAccountComponent implements OnInit
 			// } 
 			if(localStorage.getItem('travelAgent_id')){
 				this.travelPlannerId = localStorage.getItem('travelAgent_id')
+				this.addTravelPlannerAccountForm.patchValue({
+				acc_id:this.travelPlannerId
+				}) 
 				this.getTravelAgentData()
 			}
 		})
@@ -347,7 +351,7 @@ export class AddTravelPlannerAccountComponent implements OnInit
 				this.spinner.hide();//hide spinner
 				this.disableSubmitButton = false; //enable submit button
 				// console.log(this.response?.id,"this.response?.data?.id")
-				localStorage.setItem('travelAgent_id',this.response?.data?.id)
+				localStorage.setItem('travelAgent_id',this.response?.data?.acc_id)
 				this.router.navigateByUrl('/admin/travel-planner-account/step2').then(() => {
 					window.location.reload();
 				  });
