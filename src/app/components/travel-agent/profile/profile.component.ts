@@ -16,7 +16,7 @@ import { AffiliateService } from 'src/app/services/affiliate.service';
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
-  timezone=new FormControl('')
+  // timezone=new FormControl('')
   public profile_pic: any;
   public modalImage: string;
   public imageSrc: string;
@@ -154,7 +154,7 @@ export class ProfileComponent implements OnInit {
       firstName: ['', Validators.required],
       middleName: [''],
       lastName: ['', Validators.required],
-      work_contact_number: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
+      work_contact_number: [''],
       workIsd: ['+1', Validators.required],
       workCountry: ['us'],
       mobile: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
@@ -169,7 +169,7 @@ export class ProfileComponent implements OnInit {
       agency_name: ['', Validators.required],
       payee: ['', Validators.required],
       iata: ['', Validators.required],
-      fax: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
+      fax: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
       faxIsd: ['+1', Validators.required],
       faxCountry: ['us'],
       office_number: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
@@ -183,6 +183,7 @@ export class ProfileComponent implements OnInit {
       exp_month: [''],
       exp_year: [''],
       name: [''],
+      timezone : ['']
     });
   }
   get f() {

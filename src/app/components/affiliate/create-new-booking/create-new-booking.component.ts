@@ -754,6 +754,9 @@ export class CreateNewBookingComponent implements OnInit {
 		return (<FormArray>this.BookingForm.get('return_extra_stops'));
 	}
 
+	convertToMinutes(value){
+		return (value/60).toFixed(2)
+	}
 
 	fillAddress(form_control: string, address: any) {
 		// console.log('Address: ', address)
@@ -959,6 +962,32 @@ export class CreateNewBookingComponent implements OnInit {
 		selectedVehicle.licensePlate === null ? this.BookingForm.get('vehicle_license_plate').setValue('') : this.SetFormValue('vehicle_license_plate', selectedVehicle.licensePlate)
 		this.SetFormValue('vehicle_seats', selectedVehicle.seats)
 		this.buildBookingData()
+	}
+
+	handleLooseCustomerPhone(event){
+		console.log('handleLooseCustomerPhone->>', event, event.target.value)
+		this.BookingForm.patchValue({
+			passenger_cell : event.target.value
+		})
+	}
+	handleLooseCustomerName(event){
+		const loose_customer = (this.BookingForm.get('loose_customer') as FormGroup)
+		this.BookingForm.patchValue({
+			passenger_name : loose_customer.get('first_name').value + ' ' + loose_customer.get('last_name').value
+		})
+	}
+
+	handleLooseAffiliateName(){
+		this.BookingForm.patchValue({
+			driver_name : this.BookingForm.get('lose_affiliate_name').value
+		})
+		 
+	}
+
+	handleLooseAffiliatePhone(){
+		this.BookingForm.patchValue({
+			driver_cell : this.BookingForm.get('lose_affiliate_phone').value
+		})
 	}
 
 	fetchAffiliateVehicles(affiliate_id: number) {

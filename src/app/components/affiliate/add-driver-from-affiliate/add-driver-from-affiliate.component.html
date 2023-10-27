@@ -53,7 +53,7 @@
 					</div>
 				</div>
 				<div class="col-md-4">
-					<label class="selectGenderLabel">Gender <span class="asterisk">*</span></label>
+					<label class="selectGenderLabel">Gender <span class="asterisk1">*</span></label>
 					<div class="selectStyle">
 						<select class="selectInputStyle" (click)="selectDropdownGender()" formControlName="Gender"
 							tabindex="1">
@@ -159,7 +159,7 @@
 					</div>
 				</div>
 				<div class="col-md-4">
-					<label class="select-dress-label">Dress <span class="asterisk">*</span></label>
+					<label class="select-dress-label">Dress <span class="asterisk1">*</span></label>
 					<div class="selectStyle">
 						<select class="selectInputStyle" (click)="selectDropdownDress()" formControlName="Dress"
 							tabindex="1">
@@ -280,8 +280,8 @@
 								<ul class="mt-3">
 									<li>
 										<a class="custom-arrow-clockwise-button"
-										(click)="fetchImageBlob(DriverImage ,'DriverImage',DriverImageId)">
-										 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+											(click)="fetchImageBlob(DriverImage ,'DriverImage',DriverImageId)">
+											<i class="bi bi-arrow-clockwise"></i>rotate</a>
 									</li>
 									<li>
 										<button class="changeuploaded" tabindex="1">
@@ -354,11 +354,11 @@
 										class="asterisk">*</span></p>
 								<img src="{{DriverLicense}}" (click)="showImageInModal(DriverLicense)" tabindex="-1">
 								<ul class="mt-3">
-								<li>
-									<a class="custom-arrow-clockwise-button"
-									(click)="fetchImageBlob(DriverLicense ,'DriverLicense',DriverLicenseId)">
-									 <i class="bi bi-arrow-clockwise"></i>rotate</a>
-								</li>
+									<li>
+										<a class="custom-arrow-clockwise-button"
+											(click)="fetchImageBlob(DriverLicense ,'DriverLicense',DriverLicenseId)">
+											<i class="bi bi-arrow-clockwise"></i>rotate</a>
+									</li>
 									<li>
 										<button class="changeuploaded" tabindex="1">
 											<input type="file"
@@ -434,8 +434,8 @@
 								<ul class="mt-3">
 									<li>
 										<a class="custom-arrow-clockwise-button"
-										(click)="fetchImageBlob(StarRating ,'StarRating',StarRatingId)">
-										 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+											(click)="fetchImageBlob(StarRating ,'StarRating',StarRatingId)">
+											<i class="bi bi-arrow-clockwise"></i>rotate</a>
 									</li>
 									<li>
 										<button class="changeuploaded" tabindex="1">
@@ -563,8 +563,8 @@
 										<ul class="mt-3">
 											<li>
 												<a class="custom-arrow-clockwise-button"
-												(click)="fetchImageBlob(VeteranIdCard ,'VeteranIdCard',VeteranIdCardId)">
-												 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+													(click)="fetchImageBlob(VeteranIdCard ,'VeteranIdCard',VeteranIdCardId)">
+													<i class="bi bi-arrow-clockwise"></i>rotate</a>
 											</li>
 											<li>
 												<button class="changeuploaded" tabindex="1">
@@ -670,8 +670,8 @@
 										<ul class="mt-3">
 											<li>
 												<a class="custom-arrow-clockwise-button"
-												(click)="fetchImageBlob(DoDImage ,'DoDImage',DoDImageId)">
-												 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+													(click)="fetchImageBlob(DoDImage ,'DoDImage',DoDImageId)">
+													<i class="bi bi-arrow-clockwise"></i>rotate</a>
 											</li>
 											<li>
 												<button class="changeuploaded" tabindex="1">
@@ -776,8 +776,8 @@
 										<ul class="mt-3">
 											<li>
 												<a class="custom-arrow-clockwise-button"
-												(click)="fetchImageBlob(FoidCardImage ,'FoidCardImage',FoidCardImageId)">
-												 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+													(click)="fetchImageBlob(FoidCardImage ,'FoidCardImage',FoidCardImageId)">
+													<i class="bi bi-arrow-clockwise"></i>rotate</a>
 											</li>
 											<li>
 												<button class="changeuploaded" tabindex="1">
@@ -886,10 +886,9 @@
 											(click)="showImageInModal(schoolBusCertificateImage)" tabindex="-1">
 										<ul class="mt-3">
 											<li>
-												<a class="custom-arrow-clockwise-button"
-												(click)="fetchImageBlob(schoolBusCertificateImage ,'schoolBusCertificateImage',
+												<a class="custom-arrow-clockwise-button" (click)="fetchImageBlob(schoolBusCertificateImage ,'schoolBusCertificateImage',
 												schoolBusCertificateImageIdId)">
-												 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+													<i class="bi bi-arrow-clockwise"></i>rotate</a>
 											</li>
 											<li>
 												<button class="changeuploaded" tabindex="1">
@@ -1004,10 +1003,9 @@
 											(click)="showImageInModal(BackgroundCheckerID)" tabindex="-1">
 										<ul class="mt-3 mb-0">
 											<li>
-												<a class="custom-arrow-clockwise-button"
-												(click)="fetchImageBlob(BackgroundCheckerID ,'BackgroundCheckerID',
+												<a class="custom-arrow-clockwise-button" (click)="fetchImageBlob(BackgroundCheckerID ,'BackgroundCheckerID',
 												BackgroundCheckerIDId)">
-												 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+													<i class="bi bi-arrow-clockwise"></i>rotate</a>
 											</li>
 											<li>
 												<button class="changeuploaded" tabindex="1">
@@ -1185,10 +1183,9 @@
 											(click)="showImageInModal(VaccinationCardImage)" tabindex="-1">
 										<ul class="mt-3">
 											<li>
-												<a class="custom-arrow-clockwise-button"
-												(click)="fetchImageBlob(VaccinationCardImage ,'VaccinationCardImage',
+												<a class="custom-arrow-clockwise-button" (click)="fetchImageBlob(VaccinationCardImage ,'VaccinationCardImage',
 												VaccinationCardImageId)">
-												 <i class="bi bi-arrow-clockwise"></i>rotate</a>
+													<i class="bi bi-arrow-clockwise"></i>rotate</a>
 											</li>
 											<li>
 												<button class="changeuploaded" tabindex="1">
@@ -1438,25 +1435,38 @@
 			</div>
 		</div>
 	</section>
-<div class="container">
-	<div class="row py-4">
-		<div class="col-md-7">
-			<button class="custom-filled-back-button m-2 mx-4" routerLink="/affiliate/step4">
-				BACK
-			</button>
-		</div>
-		<div class="col-md-5 ">
-			<div class="d-flex justify-content-center">
-				<button class="custom-filled-reset-button m-2" (click)="resetForm()" tabIndex="2">
-					RESET
-				</button>
-				<button type="submit" class="custom-filled-button m-2" (click)="submitForm()" tabIndex="1">
-					SAVE
-				</button>
+	<div class="container">
+		<div class="row justify-content-between">
+
+			<div class="billing_inforamtion">
+				<ul>
+					<li>
+
+						<button class="custom-filled-back-button" routerLink="/affiliate/step4">
+							BACK
+						</button>
+					</li>
+				</ul>
 			</div>
+
+
+			<div class="billing_inforamtion">
+				<ul>
+					<li>
+						<button class="custom-filled-reset-button" (click)="resetForm()" tabIndex="2">
+							RESET
+						</button>
+					</li>
+					<li><button class="custom-filled-button" (click)="submitForm()" tabIndex="1">
+							SAVE
+						</button>
+					</li>
+				</ul>
+			</div>
+
 		</div>
 	</div>
-		</div>
+
 </form>
 
 

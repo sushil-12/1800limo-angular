@@ -1,13 +1,13 @@
 <header
 	[ngClass]="(currentRoute=='home' || currentRoute=='services' || currentRoute=='quotebot_section')?'home_header':''"
 	id="navbar">
-	
-		<!-- <div class="g-translator hideMobile"><div id="google_translate_element_header"></div></div> -->
-	
-	
+
+	<!-- <div class="g-translator hideMobile"><div id="google_translate_element_header"></div></div> -->
+
+
 	<nav class="navbar navbar-expand-lg navbar-dark ">
 		<a class="navbar-brand" href="">
-			<img src="assets/images/HomepageLogo.png" tabindex="1" >
+			<img src="assets/images/HomepageLogo.png" tabindex="1">
 		</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample05"
 			aria-controls="navbarsExample05" aria-expanded="false" aria-label="Toggle navigation">
@@ -22,45 +22,55 @@
 		<div class="collapse navbar-collapse align-items-center" id="navbarsExample05">
 			<div class="nav_top d-lg-block d-none text-center" style="flex-basis: auto; flex-grow: 1;">
 				<a href="tel:+18005466266" class="cell-no" tabindex="1">
-					<i class="fas fa-phone-alt" aria-hidden="true" ></i>
+					<i class="fas fa-phone-alt" aria-hidden="true"></i>
 					+1-800-5466.266
 				</a>
 				<!-- <div class="g-translator d-flex justify-content-center"><div id="google_translate_element_home_desktop"></div></div> -->
 			</div>
 			<!--  class="hideDesktop"></div> -->
 			<ul class="navbar-nav ml-auto">
-				<li class="nav-item"> <a class="nav-link" [routerLinkActive]="['active']" routerLink="/home"  tabindex="1">Home </a>
+				<li class="nav-item"> <a class="nav-link" [routerLinkActive]="['active']" routerLink="/home"
+						tabindex="1">Home </a>
 				</li>
-				<li class="nav-item"> <a class="nav-link" [routerLinkActive]="['active']" routerLink="about-us"  tabindex="1">ABOUT
+				<li class="nav-item"> <a class="nav-link" [routerLinkActive]="['active']" routerLink="about-us"
+						tabindex="1">ABOUT
 						US / HISTORY</a>
 				</li>
-				<li class="nav-item"> <a class="nav-link" [routerLinkActive]="['active']" routerLink="fleet"  tabindex="1">FLEET</a>
+				<li class="nav-item"> <a class="nav-link" [routerLinkActive]="['active']" routerLink="fleet"
+						tabindex="1">FLEET</a>
 				</li>
-				<li class="nav-item"> <a class="nav-link" [routerLink]="['services']"  tabindex="1">SERVICES</a>
+				<li class="nav-item"> <a class="nav-link" [routerLink]="['services']" tabindex="1">SERVICES</a>
 				</li>
-				<li class="nav-item"> <a class="nav-link" [routerLinkActive]="['active']" routerLink="safety"  tabindex="1">Safety</a>
+				<li class="nav-item"> <a class="nav-link" [routerLinkActive]="['active']" routerLink="safety"
+						tabindex="1">Safety</a>
 				</li>
 			</ul>
 			<div class="nav-item dropdown button-signin" *ngIf="!currentUser; else loggedInUser">
-				<a class="nav-link dropdown-toggle" tabindex="1" href="#" id="dropdown05" data-toggle="dropdown" aria-haspopup="true"
-					aria-expanded="false" >
+				<a class="nav-link dropdown-toggle" tabindex="1" href="#" id="dropdown05" data-toggle="dropdown"
+					aria-haspopup="true" aria-expanded="false">
 					LOGIN / CREATE
 				</a>
 				<div class="dropdown-menu" aria-labelledby="dropdown05">
-					<a class="dropdown-item nav-disabled" style="color: #000 !important;" (click)="loginButtons('individual')">
+					<a class="dropdown-item nav-disabled" style="color: #000 !important;font-size: 17px;"
+						(click)="loginButtons('individual')">
 						Individual
 					</a>
-					<a class="dropdown-item nav-disabled" style="color: #000 !important;" (click)="loginButtons('corporate')">
+					<a class="dropdown-item nav-disabled" style="color: #000 !important;font-size: 17px;"
+						(click)="loginButtons('corporate')">
 						Corporate
 					</a>
-					<a class="dropdown-item ta-btn"  (click)="loginButtons('travel_agent')">
+					<a class="dropdown-item ta-btn text-header-drop" (click)="loginButtons('travel_agent')"
+						style="font-size: 17px;">
 						Travel Agent
 					</a>
 					<hr>
-					<a class="dropdown-item driver-dropdown" style="box-shadow: 0 5px 10px -6px rgb(0 0 0);" (click)="loginButtons('driver')">
-						Driver / Chauffeur / Fleet - To Drive
+					<a class="dropdown-item ta-btn driver-dropdown text-header-drop"
+						style="box-shadow: 0 5px 10px -6px rgb(0 0 0);font-size: 17px;"
+						(click)="loginButtons('driver')">
+						Driver - Blk Car | Fleet | Taxi | Gig
 					</a>
-					<a class="dropdown-item sub-admin-dropdown" (click)="loginButtons('sub_admin')">
+					<a class="dropdown-item ta-btn sub-admin-dropdown text-header-drop" style="font-size: 17px;"
+						(click)="loginButtons('sub_admin')">
 						Sub Admin
 					</a>
 				</div>
@@ -110,8 +120,8 @@
 								</div>{{ Value }}
 							</div>
 							<ng-template #adminRole>
-								<div *ngIf="currentUser.roleName=='admin' || currentUser.roleName=='sub_admin';else otherRole" class="dropdown-item nav-item-bt-1"
-									(click)="dashboard('admin')">
+								<div *ngIf="currentUser.roleName=='admin' || currentUser.roleName=='sub_admin';else otherRole"
+									class="dropdown-item nav-item-bt-1" (click)="dashboard('admin')">
 									<div class="d-inline dropdown-item-icon gear-bg settingsvg ">
 										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
 											viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -127,32 +137,34 @@
 							</ng-template>
 							<ng-template #otherRole>
 								<div *ngIf="currentUser?.is_profile_complete==true; else completeProfile"
-								class="dropdown-item" (click)="dashboard(currentUser?.roleName)">
-								<div class="d-inline dropdown-item-icon settingsvg">
-									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-										fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-										stroke-linejoin="round" class="feather feather-settings">
-										<circle cx="12" cy="12" r="3"></circle>
-										<path
-											d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
-										</path>
-									</svg>
-								</div>Dashboard
-							</div>
+									class="dropdown-item" (click)="dashboard(currentUser?.roleName)">
+									<div class="d-inline dropdown-item-icon settingsvg">
+										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+											viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+											stroke-linecap="round" stroke-linejoin="round"
+											class="feather feather-settings">
+											<circle cx="12" cy="12" r="3"></circle>
+											<path
+												d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+											</path>
+										</svg>
+									</div>Dashboard
+								</div>
 							</ng-template>
 							<ng-template #completeProfile>
 								<div class="dropdown-item" (click)="redirectCompleteProfile(currentUser?.roleName)">
-								<div class="d-inline dropdown-item-icon settingsvg">
-									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-										fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-										stroke-linejoin="round" class="feather feather-settings">
-										<circle cx="12" cy="12" r="3"></circle>
-										<path
-											d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
-										</path>
-									</svg>
-								</div>Complete profile
-							</div>
+									<div class="d-inline dropdown-item-icon settingsvg">
+										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+											viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+											stroke-linecap="round" stroke-linejoin="round"
+											class="feather feather-settings">
+											<circle cx="12" cy="12" r="3"></circle>
+											<path
+												d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+											</path>
+										</svg>
+									</div>Complete profile
+								</div>
 							</ng-template>
 							<div class="dropdown-item logout-background" (click)="logout()">
 								<div class="d-inline dropdown-item-icon">

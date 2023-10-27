@@ -46,8 +46,13 @@ export class TravelAgentService {
 		return this.httpClient.post(this.serverUrl + 'profile-detail/upload-image', { 'image': image });
 	}
 
-  cardsList(){
-    return this.httpClient.get(`${this.serverUrl}view-credit-card`) 
+  cardsList(id=null){
+	if(id){
+		return this.httpClient.get(`${this.serverUrl}client-credit-cards/${id}`) 
+	}
+	else{
+		return this.httpClient.get(`${this.serverUrl}view-credit-card`) 
+	}
   }
   deleteCard(card_id){
     return this.httpClient.delete(this.serverUrl + `delete-credit-card/${card_id}`);
@@ -56,16 +61,16 @@ export class TravelAgentService {
     return this.httpClient.post(this.serverUrl + 'add-credit-card', data);
   }
 
-  loadBookings(url, keyword, startDate, endDate)
+  loadBookings(url, keyword, startDate, endDate, useDateFilter)
 	{
 		var path;
 		if (url)
 		{
-			path = url + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword;
+			path = url + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword +'&useDateFilter='+useDateFilter;
 		}
 		else
 		{
-			path = this.serverUrl + 'get-bookings' + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword;
+			path = this.serverUrl + 'get-bookings' + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword +'&useDateFilter='+useDateFilter;
 		}
 		return this.httpClient.get(path).toPromise();
 	}
@@ -141,7 +146,46 @@ export class TravelAgentService {
   }
   addBankOfAffiliate(data){
     return this.httpClient.post(this.serverUrl + 'add-a-bank', data);
-
   }
+
+  getTravelClientAccounts(url, keyword){
+    var path;
+		if (url) {
+			path = url + '&search=' + keyword;
+		}
+		else {
+			path = this.serverUrl + 'accounts' + '?search=' + keyword;
+		}
+		return this.httpClient.get(path).toPromise();;
+  }
+  addAccount(data,id=null) {
+	if(id){
+		//update api here
+		return this.httpClient.put(this.serverUrl + `edit-account/${id}`, data);
+	}
+	else{
+		return this.httpClient.post(this.serverUrl + 'add-account', data);
+	}
+	}
+	getClientAccount(id){
+		return this.httpClient.get(this.serverUrl + `get-an-account/${id}`);
+	}
+	getAllTravelClientAccountList(type){
+		return this.httpClient.get(this.serverUrl + `get-account-by-type/${type}`).toPromise();;
+	}
+	getTravelClientDetailById(id){
+		return this.httpClient.get(this.serverUrl + 'get-an-account/' + id);
+	}
+
+	sendEmail(data)
+	{
+		return this.httpClient.post(this.serverUrl + 'send-reservation-detail-email', data);
+	}
+	passengerBooking(data) {
+		return this.httpClient.post(this.serverUrl + 'passenger-booking-confirmation-email', data)
+	}
+	bookingEmailAll(data) {
+		return this.httpClient.post(this.serverUrl + 'send-reservation-detail-email-to-all', data)
+	}
   
 }

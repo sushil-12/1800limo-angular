@@ -13,13 +13,21 @@ hr{
 	background-color: #fff;
 	color: #000;
 	border-radius: 12px;
-	padding: 12px;
+	padding: 12px 12px 0px 12px;
 	width: 100%;
 	font-size: 1rem;
 	margin: 1.2rem auto;
 	box-shadow: 3px 3px 20px -6px rgba(40, 40, 40, 0.5);
 }
-
+.border-secondary{
+	margin: 0 0 0px !important;
+}
+.margin-bottom-minus-22{
+	margin-bottom: -22px !important;
+}
+.margin-top-minus-20{
+	margin-top: -20px !important;
+}
 mat-form-field {
 	margin: 1rem 0 !important;
 }
@@ -199,7 +207,7 @@ ul {
 
 :host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-form-field-wrapper .mat-form-field-infix mat-label{
 	font-weight: normal!important;
-	font-size: 14px!important;
+	font-size: 17px!important;
 	color: #191919;
 }
 :host ::ng-deep.mat-form-field-appearance-outline .mat-form-field-label{top:1.3675em}
@@ -223,7 +231,7 @@ top:2.05em}
 		border-radius: 10px;
 		background-color: rgb(226, 226, 226,1);
   } 
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-form-field-wrapper .mat-form-field-infix .labelClass+.iti--allow-dropdown .iti__flag-container{top:-12px}
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-form-field-wrapper .mat-form-field-infix .labelClass+.iti--allow-dropdown .iti__flag-container{top:4px}
 :host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label,:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-input-server:focus+.mat-form-field-label-wrapper .mat-form-field-label{transform:translateY(-0.6em) scale(0.90)!important;width:133.3333333333%}
 
 :host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-outline-gap {
@@ -247,14 +255,16 @@ top:2.05em}
 }
 
 :host ::ng-deep .ng-select .ng-has-value .ng-placeholder, .ng-select.ng-select-opened .ng-placeholder {
-    transform: translateY(-0.68125em) scale(0.7) perspective(100px) translateZ(0.001px);
+    transform: translateY(-0.68125em) scale(0.8) perspective(100px) translateZ(0.001px);
 	color: #000;
 	top: 0.95em;
+	background: none !important;
 }
 
 :host ::ng-deep .ng-select.ng-select-focused .ng-select-container .ng-value-container .ng-placeholder{
-    transform: translateY(-0.68125em) scale(0.6) perspective(100px) translateZ(0.001px) !important;
+    transform: translateY(-0.68125em) scale(0.8) perspective(100px) translateZ(0.001px) !important;
 	color: #000;
+	background: none !important;
 }
 :host ::ng-deep .ng-select .ng-select-container.ng-appearance-outline:after {
 	height: 100%;
@@ -290,4 +300,11 @@ top:2.05em}
 }
 :host ::ng-deep #vehicleTypeField .ng-select-container.ng-appearance-outline{
 	border: 3px solid red;
+}
+.required-field::after{
+	font-size: 19px !important;
+}
+.asterisk{
+	font-size: 19px;
+	margin-left: 2px;
 }

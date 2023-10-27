@@ -19,7 +19,12 @@ hr{
 	margin: 1.2rem auto;
 	box-shadow: 3px 3px 20px -6px rgba(40, 40, 40, 0.5);
 }
-
+.margin-top-minus-20{
+	margin-top: -20px !important;
+}
+.margin-bottom-minus-10{
+	margin-bottom: -10px !important;
+}
 mat-form-field {
 	margin: 1rem 0 !important;
 }
@@ -148,7 +153,7 @@ ul {
 
 .cellLabelClass.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
 	padding-left: 0px;
-	background-color: #fff;
+	// background-color: #fff;
 	max-width: 60px;
 	text-align: center;
 	left: -5px;
@@ -241,8 +246,8 @@ top:2.05em}
 		border-radius: 10px;
 		background-color: rgb(226, 226, 226,1);
   } 
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-form-field-wrapper .mat-form-field-infix .labelClass+.iti--allow-dropdown .iti__flag-container{top:-12px}
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label,:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-input-server:focus+.mat-form-field-label-wrapper .mat-form-field-label{transform:translateY(-0.8em) scale(0.75)!important;width:133.3333333333%}
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-form-field-wrapper .mat-form-field-infix .labelClass+.iti--allow-dropdown .iti__flag-container{top:-2px}
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label,:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-input-server:focus+.mat-form-field-label-wrapper .mat-form-field-label{transform:translateY(-0.8em) scale(0.95)!important;width:133.3333333333%}
 
 :host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-outline-gap {
     border-top-color: #b2b2b2 !important;
@@ -265,13 +270,13 @@ top:2.05em}
 }
 
 :host ::ng-deep .ng-select .ng-has-value .ng-placeholder, .ng-select.ng-select-opened .ng-placeholder {
-    transform: translateY(-0.68125em) scale(0.6) perspective(100px) translateZ(0.001px);
+    transform: translateY(-0.68125em) scale(0.7) perspective(100px) translateZ(0.001px);
 	color: #000;
 	top: 0.95em;
 }
 
 :host ::ng-deep .ng-select.ng-select-focused .ng-select-container .ng-value-container .ng-placeholder{
-    transform: translateY(-0.68125em) scale(0.6) perspective(100px) translateZ(0.001px) !important;
+    transform: translateY(-0.68125em) scale(0.7) perspective(100px) translateZ(0.001px) !important;
 	color: #000;
 }
 :host ::ng-deep .ng-select .ng-select-container.ng-appearance-outline:after {
@@ -312,5 +317,8 @@ top:2.05em}
 }
 
 :host ::ng-deep .mat-form-field-label .mat-empty .mat-form-field-empty .labelClass{
-	transform: translateY(-1.2em) scale(0.75) !important;
+	transform: translateY(-1.2em) scale(0.90) !important;
+}
+.required-field:after{
+	font-size: 21px !important;
 }

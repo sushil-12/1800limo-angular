@@ -10,6 +10,8 @@ import { InvoiceDashComponent } from './invoice-dash/invoice-dash.component';
 import { InvoiceDashSummaryComponent } from './invoice-dash-summary/invoice-dash-summary.component';
 import { StripeFormComponent } from './stripe-form/stripe-form.component';
 import { TravelAgentStepsTemplateComponent } from './travel-agent-steps-template/travel-agent-steps-template.component';
+import { TravelClientAccountsComponent } from './travel-client-accounts/travel-client-accounts.component';
+import { AddClientAccountComponent } from './add-client-account/add-client-account.component';
 const routes: Routes = [
   {
 		path: '',
@@ -84,8 +86,23 @@ const routes: Routes = [
 				component: StripeFormComponent
 			},
 		]
-	}
- 
+	}, 
+  {
+    path:'staff-account-list',
+    component:TravelClientAccountsComponent,
+    canActivate: [CheckProfileCompleteGuard],
+  },
+  {
+    path:'add-client-account',
+    component:AddClientAccountComponent,
+    canActivate: [CheckProfileCompleteGuard],
+  },
+  {
+    path:'edit-client-account',
+    component:AddClientAccountComponent,
+    canActivate: [CheckProfileCompleteGuard],
+  },
+  
 ];
 
 @NgModule({

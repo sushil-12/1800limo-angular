@@ -88,9 +88,9 @@ export class StripeFormComponent implements OnInit {
 			this.dobDay.push(i);
 		}
 		//prepare list of year for DOB
-		let year = currentYear - 25;
+		let year = currentYear - 18;
 		let temp = 0;
-		while (temp < 55)//max 80 year age
+		while (temp < 60)//max 80 year age
 		{
 			this.dobYear.push(year);
 			year--;
@@ -111,6 +111,7 @@ export class StripeFormComponent implements OnInit {
 			haveEin: ['yesEin'],
 			ein: ['', []],
 			currency: ['', Validators.required],
+			currencyShow: [''],
 			dobDay: ['', Validators.required],
 			dobMonth: ['', Validators.required],
 			dobYear: ['', Validators.required],
@@ -308,6 +309,7 @@ export class StripeFormComponent implements OnInit {
 						id_back_image: this.response.data.bankinfo.id_back_image.ID,
 					});
 
+					this.currencySelection(this.response.data.bankinfo.currency)
 					this.haveEin(this.response.data.bankinfo.ein ? 'yesEin' : 'noEin');
 					this.changeCountry(this.response.data.bankinfo.country);//for selected country
 					this.stateManagementService.setprogressBar(false);
@@ -363,6 +365,39 @@ export class StripeFormComponent implements OnInit {
 		if (selectedCountryData) {
 			this.stateOptions = selectedCountryData[0].regions;
 		}
+	}
+
+	handleCurrency(value:any){
+		console.log(value , this.filteredOptions)
+		this.currencyOptions = this.currencyOptions_copy.filter((i:any)=> i.countryName.toLowerCase().includes(value.toLowerCase()))
+	}
+
+	selectCurrency(option:any,isUserInput){
+		console.log('in function selectBadgeCity-->>>' ,isUserInput)
+		if(isUserInput){
+			this.addBankForm.patchValue({
+				currency:option.countryName + '-' + option.symbol
+			})
+			// this.addAffiliateAccountForm.updateValueAndValidity()
+		}
+	}
+	onSelectionChange(event){
+		console.log('event- onSelectionChange>>', event.option.value,event.option.viewValue)
+		this.addBankForm.patchValue({
+			currency:event.option.value,
+			currencyShow : event.option.viewValue
+		})
+	}
+	currencySelection(value){
+		this.currencyOptions_copy.map(i=>{
+			let concatValue = i.currency+'-'+i.currencyCountry
+			if(value == concatValue){
+				console.log('select option-->>', value)
+				this.addBankForm.patchValue({
+					currencyShow : i.countryName + '-' + i.symbol
+				})
+			}
+		})
 	}
 
 	haveEin(haveEinNo) {

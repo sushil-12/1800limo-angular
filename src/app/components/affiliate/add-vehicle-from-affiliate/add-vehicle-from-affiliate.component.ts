@@ -87,6 +87,8 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 	public nonCharterCancelOptions: Array<Object>;
 	public serviceType: string;
 	isVehicleTypeSelected: boolean = false
+	changeNonCharterCancelPolicy : boolean = false
+	changeCharterCancelPolicy : boolean = false
 
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
 	errorMsg: boolean;
@@ -609,6 +611,13 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 			const index = specialAmenities.controls.findIndex(x => x.value === e.target.value);
 			specialAmenities.removeAt(index);
 		}
+	}
+	handleNonCharterCancelPolicy(event){
+		console.log('in function handleNonCharterCancelPolicy--->>', event)
+		this.changeNonCharterCancelPolicy = true
+	}
+	handleChangeCharterCancelPolicy(event){
+		this.changeCharterCancelPolicy = true
 	}
 
 	onInteriorsCheckboxChange(e) 

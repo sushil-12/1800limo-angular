@@ -75,6 +75,9 @@ export class Step1Component implements OnInit, AfterViewInit
 	public filterGender: Array<Object>;
 	errorMsg2: boolean;
 	public filteredGender: Array<any>;
+	public isBadgeCity : boolean = false;
+	public tooltipText: string;
+
 
 
 
@@ -207,10 +210,6 @@ export class Step1Component implements OnInit, AfterViewInit
 			cpcn_tpc: [
 				"",
 				[
-					Validators.pattern("^[0-9]*$"),
-					Validators.minLength(4),
-					Validators.maxLength(15),
-					this.customValidator.dashValidator(),
 					this.customValidator.plusValidator(),
 				],
 			],
@@ -291,6 +290,7 @@ export class Step1Component implements OnInit, AfterViewInit
 										badge_city_name:i.name
 									})
 								}
+								this.isBadgeCity = true
 							})
 
 							//Show edit/resend button on affiliate email field
@@ -529,6 +529,9 @@ export class Step1Component implements OnInit, AfterViewInit
 	handleBadgeCity(value:any){
 		console.log(value , this.filteredOptions)
 		this.filteredOptions = this.badgeOptions.filter((i:any)=> i.name.toLowerCase().includes(value.toLowerCase()))
+		if(!value){
+		this.isBadgeCity = false	
+		}
 	}
 	selectBadgeCity(option:any,isUserInput){
 		console.log('in function selectBadgeCity-->>>' ,option,isUserInput)
@@ -537,6 +540,7 @@ export class Step1Component implements OnInit, AfterViewInit
 				badge_city:option.id
 			})
 			// this.addAffiliateAccountForm.updateValueAndValidity()
+			this.isBadgeCity = true
 		}
 
 	}
@@ -1412,6 +1416,20 @@ export class Step1Component implements OnInit, AfterViewInit
 			behavior: 'smooth'
 		});
 	}
+	changeTooltipText(value){
+		if(value == "black_limo_operator"){
+			this.tooltipText = "Black Car can advertise only two vehicles, or change to Fleet Operator."
+		}
+		else if(value == "fleet_operator"){
+			this.tooltipText = "Fleet Operators can advertise unlimited vehicles"
+		}
+		else if(value == "taxi_operator"){
+			this.tooltipText = "Taxi can only advertise one vehicle."
+		}
+		else{
+			this.tooltipText = "Gig Driver can only advertise one vehicle."
+		}
+	}
 
 	resetForm()
 	{
@@ -1495,10 +1513,6 @@ export class Step1Component implements OnInit, AfterViewInit
 			cpcn_tpc: [
 				"",
 				[
-					Validators.pattern("^[0-9]*$"),
-					Validators.minLength(4),
-					Validators.maxLength(15),
-					this.customValidator.dashValidator(),
 					this.customValidator.plusValidator(),
 				],
 			],

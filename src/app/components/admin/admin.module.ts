@@ -113,6 +113,8 @@ import {MatTableModule} from '@angular/material/table';
 import {MatExpansionModule} from '@angular/material/expansion';
 import { DemoAddIndividualComponent } from './demo-add-individual/demo-add-individual.component';
 import { AffiliateBookingComponent } from './affiliate-booking/affiliate-booking.component';
+import { TravelAgentStepsComponent } from './travel-agent-steps/travel-agent-steps.component';
+import { TravelAgentStripeFormComponent } from './travel-agent-stripe-form/travel-agent-stripe-form.component';
 
 
 @NgModule({
@@ -199,7 +201,9 @@ import { AffiliateBookingComponent } from './affiliate-booking/affiliate-booking
 		StaffRolesListComponent,
 		BookingLogsComponent,
 		DemoAddIndividualComponent,
-		AffiliateBookingComponent
+		AffiliateBookingComponent,
+		TravelAgentStepsComponent,
+		TravelAgentStripeFormComponent
 	],
 	imports: [
 		CommonModule,

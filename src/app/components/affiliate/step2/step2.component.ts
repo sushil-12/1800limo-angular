@@ -102,9 +102,9 @@ export class Step2Component implements OnInit {
 			this.dobDay.push(i);
 		}
 		//prepare list of year for DOB
-		let year = currentYear - 25;
+		let year = currentYear - 18;
 		let temp = 0;
-		while (temp < 55)//max 80 year age
+		while (temp < 60)//max 80 year age
 		{
 			this.dobYear.push(year);
 			year--;

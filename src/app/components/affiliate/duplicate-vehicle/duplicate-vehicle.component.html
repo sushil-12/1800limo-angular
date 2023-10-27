@@ -166,9 +166,9 @@
 
 				<!-- Airport/City Cancel Times -->
 				<div class="col-md-6">
-					<mat-form-field appearance="outline">
+					<mat-form-field appearance="outline" [ngClass]="changeNonCharterCancelPolicy ? '' : 'border-red'">
 						<mat-label>Airport / City Cancel Times <span class="asterisk">*</span></mat-label>
-						<mat-select formControlName="nonCharterCancelPolicy" tabindex="1">
+						<mat-select formControlName="nonCharterCancelPolicy" tabindex="1" (selectionChange)="handleNonCharterCancelPolicy($event)">
 							<mat-option value="">Choose Airport / City Cancel Times</mat-option>
 							<mat-option *ngFor="let nonCharterCancelOption of nonCharterCancelOptions"
 								[value]="nonCharterCancelOption.value">
@@ -187,9 +187,9 @@
 
 				<!-- Charter Cancel Times -->
 				<div class="col-md-6">
-					<mat-form-field appearance="outline">
+					<mat-form-field appearance="outline" [ngClass]="changeCharterCancelPolicy ? '' : 'border-red'">
 						<mat-label>Charter Cancel Times <span class="asterisk">*</span></mat-label>
-						<mat-select formControlName="charterCancelPolicy" tabindex="1">
+						<mat-select formControlName="charterCancelPolicy" tabindex="1" (selectionChange)="handleChangeCharterCancelPolicy($event)">
 							<mat-option value="">Choose Charter Cancel Times</mat-option>
 							<mat-option *ngFor="let charterCancelOption of charterCancelOptions"
 								[value]="charterCancelOption.value">
@@ -894,7 +894,7 @@
 						<div class="col-md-4">
 							<div class="vehtype_extint">
 								<div>
-									<p>Window Permit</p>
+									<p>Rear Plate </p>
 									<div class="emptyImage">
 										<img src="../../../../assets/images/empty-image.png" tabindex="-1">
 									</div>
@@ -902,7 +902,7 @@
 										<li>
 											<button class="adduploaded" tabindex="1">
 												<input type="file"
-													(change)="vehicleOfficialImagesChange($event,'windowPermit',windowPermitId)"
+													(change)="vehicleOfficialImagesChange($event,'rearPlate',rearPlateId)"
 													tabindex="-1">
 												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 													<path fill="none" d="M0 0h24v24H0V0z" />

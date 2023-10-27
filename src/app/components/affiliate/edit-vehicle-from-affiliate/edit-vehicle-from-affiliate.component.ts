@@ -93,6 +93,8 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 	public nonCharterCancelOptions: Array<Object>;
 	public serviceType: string;
 	service: Array<any> = []
+	changeNonCharterCancelPolicy : boolean = true
+	changeCharterCancelPolicy : boolean = true
 
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
 	errorMsg: boolean;
@@ -592,6 +594,13 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 			let modelField: any = document.getElementById('modelField');
 			modelField.value = '';
 		}
+	}
+	handleNonCharterCancelPolicy(event){
+		console.log('in function handleNonCharterCancelPolicy--->>', event)
+		this.changeNonCharterCancelPolicy = true
+	}
+	handleChangeCharterCancelPolicy(event){
+		this.changeCharterCancelPolicy = true
 	}
 
 	Subscriptions() {

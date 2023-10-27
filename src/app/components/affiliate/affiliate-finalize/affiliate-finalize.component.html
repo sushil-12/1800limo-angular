@@ -498,8 +498,8 @@
 								<mat-label class="required-field">
 									Card Number
 								</mat-label>
-								<input matInput placeholder="xxxx xxxx xxxx xxxx" type="text"
-									formControlName="card_number" tabindex="0" (focus)="$event.target.select()">
+								<input matInput placeholder="xxxxxxxxxxxxxxxx" type="text" formControlName="card_number"
+									tabindex="0" (focus)="$event.target.select()">
 							</mat-form-field>
 							<div class="error-message"
 								*ngIf="cardForm.controls.card_number.invalid && (cardForm.controls.card_number.touched || cardForm.controls.card_number.dirty)">

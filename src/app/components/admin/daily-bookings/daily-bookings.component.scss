@@ -17,6 +17,11 @@
 	background-color: #f3933d !important;
   }
 
+
+  textarea.mat-input-element.cdk-textarea-autosize{
+	font-size: 22px;
+  }
+  
 .adminbox_shadow.user_information .mat-form-field,
 .mat-calendar {
 	font-family: "PT Serif", serif !important;
@@ -71,6 +76,9 @@ button {
 }
 .paid {
 	background-color: #D1B000;
+}
+.driver_unassigned{
+	background-color: #00CCCC;
 }
 
 .assigned {
@@ -358,6 +366,8 @@ a.dropdown-item {
     padding: 0.4rem 1.4rem !important;
     font-size: 16px;
 }
-
+.asterisk{
+	font-size: 1.5rem;
+}
 
 

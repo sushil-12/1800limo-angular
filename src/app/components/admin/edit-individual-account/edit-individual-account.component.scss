@@ -9,13 +9,16 @@
 
 .cellLabelClass.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
 	padding-left    : 0px;
-	background-color: #e5e5e5;
+	// background-color: #e5e5e5;
 	max-width       : 70px;
 	text-align      : center;
 	left            : -6px;
-	top             : 32px;
+	top             : 34px;
 }
 
 .btn-shadow{
 	box-shadow: 0px 5px 20px -6px rgb(0 0 0 / 60%);
+}
+.asterisk{
+	font-size: 1.4rem;
 }

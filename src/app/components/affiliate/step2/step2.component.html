@@ -75,7 +75,7 @@
 			Company Bank Settings
 			<span class="spanText">
 				(Per
-				<a href="https://www?.stripe?.com/" target="_blank" style="text-decoration: underline">Stripe</a>
+				<a href="https://www?.stripe?.com/" target="_blank" style="text-decoration: underline">STRIPE</a>
 				- For Identification, Verification & Direct Deposits)
 			</span>
 		</h2>
@@ -198,7 +198,7 @@
 					</div>
 				</div>
 				<div class="col-md-6">
-					<label class="select-account-label">Account Type <span class="asterisk">*</span></label>
+					<label class="select-account-label">Account Type <span class="asterisk1">*</span></label>
 					<div class="selectStyle">
 						<select class="selectInputStyle" (click)="selectDropdownAccount()" formControlName="AccountType"
 							tabindex="1">
@@ -229,7 +229,7 @@
 					</div>
 				</div>
 				<div class="col-md-2 col-4 birthMonth">
-					<label class="select-month-label">Month of Birth <span class="asterisk">*</span></label>
+					<label class="select-month-label">Month of Birth <span class="asterisk1">*</span></label>
 					<div class="selectStyle">
 						<select class="selectInputStyle" (click)="selectDropdownMonth()" formControlName="dobMonth"
 							tabindex="1" id="selectDropdown">
@@ -271,7 +271,7 @@
 					</div>
 				</div>
 				<div class="col-md-2 col-4 birthDay">
-					<label class="select-day-label">Day of Birth <span class="asterisk">*</span></label>
+					<label class="select-day-label">Day of Birth <span class="asterisk1">*</span></label>
 					<div class="selectStyle">
 						<select class="selectInputStyle" (click)="selectDropdownDay()" formControlName="dobDay"
 							tabindex="1" id="selectDropdown">
@@ -304,7 +304,7 @@
 					</div>
 				</div>
 				<div class="col-md-2 col-4 birthYear">
-					<label class="select-year-label">Year of Birth <span class="asterisk">*</span></label>
+					<label class="select-year-label">Year of Birth <span class="asterisk1">*</span></label>
 					<div class="selectStyle">
 						<select class="selectInputStyle" (click)="selectDropdownYear()" formControlName="dobYear"
 							tabindex="1" id="selectDropdown">
@@ -337,7 +337,7 @@
 					</div>
 				</div>
 				<div class="col-md-6">
-					<label class="select-currency-label">Currency <span class="asterisk">*</span></label>
+					<label class="select-currency-label">Currency <span class="asterisk1">*</span></label>
 					<!-- Search and Fill functionality -->
 					<!-- <input type="text" placeholder="Search by Name" matInput
 							(keyup)="searchGlobalValue('currency', $event?.target?.value)" [matAutocomplete]="autocurrency"
@@ -375,10 +375,10 @@
 				</div>
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
-						<mat-label>SSN Personal ID #
+						<mat-label>SSN (USA required by STRIPE / Government ID for other countries)
 							<span class="asterisk">*</span>
 						</mat-label>
-						<input matInput placeholder="SSN Personal ID #"
+						<input matInput placeholder="SSN (USA required by STRIPE / Government ID for other countries)"
 							(focus)="$event?.target?.select()" formControlName="ssn" tabindex="1" />
 					</mat-form-field>
 					<div *ngIf="
@@ -690,7 +690,7 @@
 	<section class="user_information">
 		<h2 class="headinginfo adminbox_shadow">
 			Company Address Information
-			<span class="spanText">(Per Stripe)</span>
+			<span class="spanText">(Per STRIPE)</span>
 		</h2>
 		<!-- <div class="row d-flex flex-row-reverse">
 			<div class="col-md-3" *ngIf="!canChangeAddress">
@@ -706,7 +706,7 @@
 					<h3 class="addveh_top d-md-flex justify-content-between align-items-center mb-0">
 						<label class="alert alert-danger mr-2">Enter Address and Choose From Drop
 							Down.</label>
-						<label class="alert alert-danger my-2">Choose nearest major city or airport location</label>
+						<!-- <label class="alert alert-danger my-2">Choose nearest major city or airport location</label> -->
 					</h3>
 				</div>
 
@@ -738,7 +738,7 @@
 						</div>
 					</ng-template>
 				</div>
-				<div class="col-md-4">
+				<!-- <div class="col-md-4">
 					<mat-form-field appearance="outline" class="example-full-width" [ngClass]="isBadgeCity ? '' : 'border-red'">
 						<mat-label>Badge City
 						</mat-label>
@@ -752,7 +752,7 @@
 							</mat-option>
 						</mat-autocomplete>
 					</mat-form-field>
-				</div>
+				</div> -->
 				<!-- <div class="col-md-6 d-md-block d-none"></div> -->
 				<div class="col-md-12 map-wrapper" *ngIf="latitude">
 					<agm-map [latitude]="latitude" [longitude]="longitude">
@@ -762,7 +762,7 @@
 				</div>
 
 				<div class="col-md-6">
-					<label class="select-country-label">Country <span class="asterisk">*</span></label>
+					<label class="select-country-label">Country <span class="asterisk1">*</span></label>
 					<div class="selectStyle">
 						<select class="selectInputStyle" (click)="selectDropdownCountry()" formControlName="country"
 							(selectionChange)="changeCountry($event.value)" [disabled]="!canChangeAddress" tabindex="1">
@@ -796,7 +796,7 @@
 					</div>
 				</div>
 				<div class="col-md-6">
-					<label class="select-state-label">State/Province <span class="asterisk">*</span></label>
+					<label class="select-state-label">State/Province <span class="asterisk1">*</span></label>
 					<div class="selectStyle">
 						<select class="selectInputStyle" (click)="selectDropdownState()" formControlName="state"
 							[disabled]="!canChangeAddress" tabindex="1">

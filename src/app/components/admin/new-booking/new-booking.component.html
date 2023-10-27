@@ -18,9 +18,9 @@
 	<div id="page-container">
 		<!-- Section - Booking Type -->
 		<div class="section-container mt-0">
-			<h2 class="border-secondary">
+			<h4 class="border-secondary">
 				Booking Type
-			</h2>
+			</h4>
 			<div class="row px-4">
 				<!-- Service Type -->
 				<div class="flex-grow-1 m-2">
@@ -96,7 +96,7 @@
 
 		<!-- Client Accounts Section -->
 		<div class="section-container mt-2">
-			<h4 class=" border-secondary pb-4">
+			<h4 class=" border-secondary">
 				Client Accounts
 			</h4>
 
@@ -112,337 +112,8 @@
 				</div>
 			</div>
 
-			<ng-container
-				*ngIf="Form['account_type'].value == 'loose_customer' then LooseCustomerSection; else OtherAccountsSection">
-			</ng-container>
-
-			<!-- Loose Customer -->
-			<ng-template #LooseCustomerSection>
-				<div formGroupName="loose_customer">
-					<!-- Personal Information -->
-					<div class="px-4">
-						<h4>
-							Personal Information
-						</h4>
-						<div class="row">
-							<!-- First Name -->
-							<div class="col-md-4 looseError">
-								<mat-form-field appearance="outline" class="m-0">
-									<mat-label class="required-field">
-										First Name
-									</mat-label>
-									<input matInput placeholder="First Name" type="text" formControlName="first_name"
-										(focus)="$event.target.select()">
-								</mat-form-field>
-								<div class="error-box">
-									<div class="error-message"
-										*ngIf="(submitBookingForm && LooseCustomer.first_name.invalid) || (LooseCustomer.first_name.touched && LooseCustomer.first_name.dirty)">
-										<p class="text-danger text-lg m-0"
-											*ngIf="LooseCustomer.first_name.errors?.required">
-											This field is required
-										</p>
-										<p class="text-danger text-lg m-0"
-											*ngIf="LooseCustomer.first_name.errors?.whitespace">
-											Extra White Space are not Allowed
-										</p>
-									</div>
-								</div>
-							</div>
-
-							<!-- Middle Name -->
-							<div class="col-md-4 looseError">
-								<mat-form-field appearance="outline" class="m-0">
-									<mat-label>
-										Middle Name
-									</mat-label>
-									<input matInput placeholder="Middle Name" type="text" formControlName="middle_name"
-										(focus)="$event.target.select()">
-								</mat-form-field>
-								<div class="error-box">
-									<div class="error-message"
-										*ngIf="LooseCustomer.middle_name.invalid && (LooseCustomer.middle_name.touched || LooseCustomer.middle_name.dirty)">
-										<p class="text-danger text-lg m-0"
-											*ngIf="LooseCustomer.middle_name.errors?.whitespace">
-											Extra White Space are not Allowed
-										</p>
-									</div>
-								</div>
-							</div>
-
-							<!-- Last Name -->
-							<div class="col-md-4 looseError">
-								<mat-form-field appearance="outline" class="m-0">
-									<mat-label class="required-field">
-										Last Name
-									</mat-label>
-									<input matInput placeholder="Last Name" type="text" formControlName="last_name"
-										(focus)="$event.target.select()">
-								</mat-form-field>
-								<div class="error-box">
-									<div class="error-message"
-										*ngIf="(submitBookingForm && LooseCustomer.last_name.invalid) || (LooseCustomer.last_name.touched && LooseCustomer.last_name.dirty)">
-										<p class="text-danger text-lg m-0"
-											*ngIf="LooseCustomer.last_name.errors?.required">
-											This field is required
-										</p>
-										<p class="text-danger text-lg m-0"
-											*ngIf="LooseCustomer.last_name.errors?.whitespace">
-											Extra White Space are not Allowed
-										</p>
-									</div>
-								</div>
-							</div>
-						</div>
-
-						<div class="row">
-							<!-- Email -->
-							<div class="col-md-4 looseError">
-								<mat-form-field appearance="outline" class="m-0">
-									<mat-label class="required-field">
-										Email
-									</mat-label>
-									<input matInput placeholder="Email" type="text" formControlName="email"
-										[email]="true" (focus)="$event.target.select()">
-								</mat-form-field>
-								<div class="error-box">
-									<div class="error-message"
-										*ngIf="LooseCustomer.email.invalid && (LooseCustomer.email.touched || LooseCustomer.email.dirty)">
-										<p class="text-danger text-lg m-0" *ngIf="LooseCustomer.email.errors?.required">
-											This field is required
-										</p>
-										<p class="text-danger text-lg m-0" *ngIf="LooseCustomer.email.errors?.pattern">
-											Please enter a valid Email Id
-										</p>
-									</div>
-								</div>
-							</div>
-
-							<!-- Phone -->
-							<div class="col-md-4 looseError">
-								<mat-form-field appearance="outline" class="mat-custom-phone m-0 cellLabelClass">
-									<label
-										class="mat-form-field-label required-field mat-empty mat-form-field-empty labelClass">Phone
-									</label>
-									<input matInput formControlName="phone" ng2TelInput [ng2TelInputOptions]="{
-											preferredCountries: ['us', 'ca', 'mx', 'gb']
-										}" placeholder="1234567890" class="phoneNumberClass" (intlTelInputObject)="LCTelInputObject($event)"
-										(countryChange)="SetFormValue('loose_customer>phone_isd', $event.dialCode); SetFormValue('loose_customer>phone_country', $event.iso2)"
-										(focus)="$event.target.select()" />
-								</mat-form-field>
-								<div class="error-box">
-									<div class="error-message"
-										*ngIf="( submitBookingForm && (is_loose_customer_unique || LooseCustomer.phone.invalid)) || (LooseCustomer.phone.touched && LooseCustomer.phone.dirty)">
-										<p class="text-danger text-lg m-0" *ngIf="LooseCustomer.phone.errors?.required">
-											This field is required
-										</p>
-										<p class="text-danger text-lg m-0"
-											*ngIf="LooseCustomer.phone.errors?.pattern;else otherError">
-											Only Numbers are Allowed
-										</p>
-										<ng-template #otherError>
-											<p class="text-danger text-lg m-0"
-												*ngIf="LooseCustomer.phone.errors?.minlength">
-												Minimum length should be 4
-											</p>
-											<p class="text-danger text-lg m-0"
-												*ngIf="LooseCustomer.phone.errors?.maxlength">
-												Maximum length should be 15
-											</p>
-										</ng-template>
-										<p class="text-danger text-lg m-0" *ngIf="is_loose_customer_unique">
-											This Phone Number is already registered. Please enter
-											any other.
-										</p>
-									</div>
-								</div>
-							</div>
-
-							<!-- Address -->
-							<div class="col-md-4 looseError">
-								<mat-form-field appearance="outline" class="m-0">
-									<mat-label>
-										Address
-									</mat-label>
-									<input type="text" matInput placeholder="Type your address"
-										matGoogleMapsAutocomplete
-										(onAutocompleteSelected)="fillLooseCustomerAddress($event.formatted_address)"
-										(focus)="$event.target.select()" />
-								</mat-form-field>
-							</div>
-						</div>
-					</div>
-					<!-- Personal Information Ends -->
-
-					<!-- Credit Card Details -->
-					<div id="credit-card-details" class="mt-4 px-4" formGroupName="card_details">
-						<h4>
-							Card Details
-						</h4>
-						<div class="row">
-							<!-- Card Holder Name -->
-							<div class="col-md-6">
-								<mat-form-field appearance="outline" class="m-0">
-									<mat-label class="required-field">
-										Name of Card Holder
-									</mat-label>
-									<input matInput placeholder="First & Last Name" type="text" formControlName="name"
-										(focus)="$event.target.select()">
-								</mat-form-field>
-								<div class="error-box">
-									<div class="error-message"
-										*ngIf="( submitBookingForm && LooseCustomer.card_details.controls.name.invalid) || (LooseCustomer.card_details.controls.name.touched && LooseCustomer.card_details.controls.name.dirty)">
-										<p class="text-danger text-lg m-0"
-											*ngIf="LooseCustomer.card_details.controls.name.errors?.required">
-											This field is required
-										</p>
-										<p class="text-danger text-lg m-0"
-											*ngIf="LooseCustomer.card_details.controls.name.errors?.whitespace">
-											Extra White Space are not Allowed
-										</p>
-									</div>
-								</div>
-							</div>
-							<!-- Card Number -->
-							<div class="col-md-6">
-								<mat-form-field appearance="outline" class="m-0">
-									<mat-label class="required-field">
-										Card Number
-									</mat-label>
-									<input matInput placeholder="xxxx xxxx xxxx xxxx" type="text"
-										formControlName="card_number" (focus)="$event.target.select()">
-								</mat-form-field>
-								<div class="error-box">
-									<div class="error-message"
-										*ngIf="( submitBookingForm && LooseCustomer.card_details.controls.card_number.invalid) || (LooseCustomer.card_details.controls.card_number.touched && LooseCustomer.card_details.controls.card_number.dirty)">
-										<p class="text-danger text-lg m-0"
-											*ngIf="LooseCustomer.card_details.controls.card_number.errors?.required">
-											This field is required
-										</p>
-										<p class="text-danger text-lg m-0"
-											*ngIf="LooseCustomer.card_details.controls.card_number.errors?.pattern;else cardLength">
-											Only Numbers are Allowed
-										</p>
-										<ng-template #cardLength>
-											<p class="text-danger text-lg m-0"
-												*ngIf="LooseCustomer.card_details.controls.card_number.errors?.minlength">
-												Minimum length should be 12
-											</p>
-											<p class="text-danger text-lg m-0"
-												*ngIf="LooseCustomer.card_details.controls.card_number.errors?.maxlength">
-												Maximum length should be 20
-											</p>
-										</ng-template>
-									</div>
-								</div>
-							</div>
-
-							<!-- Expiry Month -->
-							<div class="col-md-4">
-								<mat-form-field appearance="outline" class="m-0">
-									<mat-label class="required-field">Expiry Month</mat-label>
-									<input type="number" matInput formControlName="exp_month" [matAutocomplete]="auto"
-										(keyup)="handleChangeMonth($event.target.value)">
-									<mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-										<mat-option *ngFor="let m of monthOptions" [value]="m.value">
-											{{m.value}}
-										</mat-option>
-									</mat-autocomplete>
-								</mat-form-field>
-								<div class="error-box">
-									<div class="error-message"
-										*ngIf="( submitBookingForm && LooseCustomer.card_details.controls.exp_month.invalid) || (LooseCustomer.card_details.controls.exp_month.touched && LooseCustomer.card_details.controls.exp_month.dirty)">
-										<p class="text-danger text-lg m-0"
-											*ngIf="LooseCustomer.card_details.controls.exp_month.errors?.required">
-											This field is required
-										</p>
-									</div>
-								</div>
-								<!-- <mat-form-field appearance="outline" class="m-0">
-									<mat-label class="required-field">
-										Expiry Month
-									</mat-label>
-									<mat-select formControlName="exp_month">
-										<mat-option value='1'>01</mat-option>
-										<mat-option value='2'>02</mat-option>
-										<mat-option value='3'>03</mat-option>
-										<mat-option value='4'>04</mat-option>
-										<mat-option value='5'>05</mat-option>
-										<mat-option value='6'>06</mat-option>
-										<mat-option value='7'>07</mat-option>
-										<mat-option value='8'>08</mat-option>
-										<mat-option value='9'>09</mat-option>
-										<mat-option value='10'>10</mat-option>
-										<mat-option value='11'>11</mat-option>
-										<mat-option value='12'>12</mat-option>
-									</mat-select>
-								</mat-form-field> -->
-							</div>
-
-							<!-- Expiry Year -->
-							<div class="col-md-4">
-								<mat-form-field appearance="outline" class="m-0">
-									<mat-label class="required-field">
-										Expiry Year
-									</mat-label>
-									<mat-select formControlName="exp_year">
-										<mat-option [value]="number" *ngFor="let number of booking_params.years">
-											{{ number }}
-										</mat-option>
-									</mat-select>
-								</mat-form-field>
-								<div class="error-box">
-									<div class="error-message"
-										*ngIf="( submitBookingForm && LooseCustomer.card_details.controls.exp_year.invalid) || (LooseCustomer.card_details.controls.exp_year.touched && LooseCustomer.card_details.controls.exp_year.dirty)">
-										<p class="text-danger text-lg m-0"
-											*ngIf="LooseCustomer.card_details.controls.exp_year.errors?.required">
-											This field is required
-										</p>
-									</div>
-								</div>
-							</div>
-
-							<!-- CVV -->
-							<div class="col-md-4">
-								<mat-form-field appearance="outline" class="m-0">
-									<mat-label class="required-field">
-										CVV
-									</mat-label>
-									<input matInput placeholder="0000" type="text" (focus)="$event.target.select()"
-										formControlName="cvv">
-								</mat-form-field>
-								<div class="error-box">
-									<div class="error-message"
-										*ngIf="( submitBookingForm && LooseCustomer.card_details.controls.cvv.invalid) || (LooseCustomer.card_details.controls.cvv.touched && LooseCustomer.card_details.controls.cvv.dirty)">
-										<p class="text-danger text-lg m-0"
-											*ngIf="LooseCustomer.card_details.controls.cvv.errors?.required">
-											This field is required
-										</p>
-										<p class="text-danger text-lg m-0"
-											*ngIf="LooseCustomer.card_details.controls.cvv.errors?.pattern">
-											Only Numbers are Allowed
-										</p>
-										<!-- <ng-template #cvvLength>
-											<p class="text-danger text-lg m-0"
-												*ngIf="LooseCustomer.card_details.controls.cvv.errors?.minlength">
-												Minimum length should be 3
-											</p>
-											<p class="text-danger text-lg m-0"
-												*ngIf="LooseCustomer.card_details.controls.cvv.errors?.maxlength">
-												Maximum length should be 3
-											</p>
-										</ng-template> -->
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- Credit Card Details Ends -->
-			</ng-template>
-
-
 			<!-- Choose User -->
-			<ng-template #OtherAccountsSection>
+			<div *ngIf="Form['account_type'].value != 'loose_customer'">
 				<div class="row px-4">
 					<div class="col-md-12">
 						<!-- <mat-form-field appearance="outline">
@@ -651,25 +322,377 @@
 						}
 					</style>
 				</div>
+				<div *ngIf="Form['account_type'].value == 'travel_planner'">
+					<div class="row">
+						<div class="col-md-12 col-lg-10 d-flex justify-content-center">
+							<mat-radio-group aria-label="Select an option" formControlName="travel_client_acc">
+								<mat-radio-button [value]="'travel_individual'" class="my-2 ml-4 mr-3"
+									(change)="handleChangeTravelAccounts('travel_individual')">
+									Individual
+								</mat-radio-button>
+								<mat-radio-button [value]="'travel_loose_customer'" class="my-2 ml-4 mr-3"
+									(change)="handleChangeTravelAccounts('travel_loose_customer')">
+									Loose customer
+								</mat-radio-button>
+							</mat-radio-group>
+						</div>
+					</div>
+					<div class="col-md-10 margin-left-10"
+						*ngIf="Form['travel_client_acc'].value != 'travel_loose_customer'">
+						<ng-select appearance="outline" [items]="travelStaffAccounts" bindLabel="name" bindValue="id"
+							placeholder="Select Client Account" dropdownPosition="bottom" [markFirst]="true"
+							[virtualScroll]="true" formControlName="travel_client_id"
+							(change)="handleTravelStaffAccounts($event)">
+						</ng-select>
+					</div>
+				</div>
+			</div>
+
+			<ng-container
+				*ngIf="Form['account_type'].value == 'loose_customer' || (Form['travel_client_acc'].value == 'travel_loose_customer' && Form['account_type'].value == 'travel_planner') then LooseCustomerSection;">
+			</ng-container>
+			<!-- Loose Customer -->
+			<ng-template #LooseCustomerSection>
+				<div formGroupName="loose_customer">
+					<!-- Personal Information -->
+					<div class="px-4">
+						<h4>
+							Personal Information
+						</h4>
+						<div class="row margin-bottom-minus-20">
+							<!-- First Name -->
+							<div class="col-md-4 looseError">
+								<mat-form-field appearance="outline" class="m-0">
+									<mat-label class="required-field">
+										First Name
+									</mat-label>
+									<input matInput placeholder="First Name" type="text" formControlName="first_name"
+										(focus)="$event.target.select()" (keyup)="handleLooseCustomerName($event)">
+								</mat-form-field>
+								<div class="error-box">
+									<div class="error-message"
+										*ngIf="(submitBookingForm && LooseCustomer.first_name.invalid) || (LooseCustomer.first_name.touched && LooseCustomer.first_name.dirty)">
+										<p class="text-danger text-lg m-0"
+											*ngIf="LooseCustomer.first_name.errors?.required">
+											This field is required
+										</p>
+										<p class="text-danger text-lg m-0"
+											*ngIf="LooseCustomer.first_name.errors?.whitespace">
+											Extra White Space are not Allowed
+										</p>
+									</div>
+								</div>
+							</div>
+
+							<!-- Middle Name -->
+							<div class="col-md-4 looseError">
+								<mat-form-field appearance="outline" class="m-0">
+									<mat-label>
+										Middle Name
+									</mat-label>
+									<input matInput placeholder="Middle Name" type="text" formControlName="middle_name"
+										(focus)="$event.target.select()">
+								</mat-form-field>
+								<div class="error-box">
+									<div class="error-message"
+										*ngIf="LooseCustomer.middle_name.invalid && (LooseCustomer.middle_name.touched || LooseCustomer.middle_name.dirty)">
+										<p class="text-danger text-lg m-0"
+											*ngIf="LooseCustomer.middle_name.errors?.whitespace">
+											Extra White Space are not Allowed
+										</p>
+									</div>
+								</div>
+							</div>
+
+							<!-- Last Name -->
+							<div class="col-md-4 looseError">
+								<mat-form-field appearance="outline" class="m-0">
+									<mat-label class="required-field">
+										Last Name
+									</mat-label>
+									<input matInput placeholder="Last Name" type="text" formControlName="last_name"
+										(focus)="$event.target.select()" (keyup)="handleLooseCustomerName($event)">
+								</mat-form-field>
+								<div class="error-box">
+									<div class="error-message"
+										*ngIf="(submitBookingForm && LooseCustomer.last_name.invalid) || (LooseCustomer.last_name.touched && LooseCustomer.last_name.dirty)">
+										<p class="text-danger text-lg m-0"
+											*ngIf="LooseCustomer.last_name.errors?.required">
+											This field is required
+										</p>
+										<p class="text-danger text-lg m-0"
+											*ngIf="LooseCustomer.last_name.errors?.whitespace">
+											Extra White Space are not Allowed
+										</p>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row margin-bottom-minus-20">
+							<!-- Email -->
+							<div class="col-md-4 looseError">
+								<mat-form-field appearance="outline" class="m-0">
+									<mat-label class="required-field">
+										Email
+									</mat-label>
+									<input matInput placeholder="Email" type="text" formControlName="email"
+										[email]="true" (focus)="$event.target.select()">
+								</mat-form-field>
+								<div class="error-box">
+									<div class="error-message"
+										*ngIf="LooseCustomer.email.invalid && (LooseCustomer.email.touched || LooseCustomer.email.dirty)">
+										<p class="text-danger text-lg m-0" *ngIf="LooseCustomer.email.errors?.required">
+											This field is required
+										</p>
+										<p class="text-danger text-lg m-0" *ngIf="LooseCustomer.email.errors?.pattern">
+											Please enter a valid Email Id
+										</p>
+									</div>
+								</div>
+							</div>
+
+							<!-- Phone -->
+							<div class="col-md-4 looseError">
+								<mat-form-field appearance="outline" class="mat-custom-phone m-0 cellLabelClass">
+									<label
+										class="mat-form-field-label required-field mat-empty mat-form-field-empty labelClass">Phone
+									</label>
+									<input matInput formControlName="phone" ng2TelInput [ng2TelInputOptions]="{
+												preferredCountries: ['us', 'ca', 'mx', 'gb']
+											}" placeholder="1234567890" class="phoneNumberClass" (intlTelInputObject)="LCTelInputObject($event)" (keyup)="handleLooseCustomerPhone($event)"
+										(countryChange)="SetFormValue('loose_customer>phone_isd', $event.dialCode); SetFormValue('loose_customer>phone_country', $event.iso2)"
+										(focus)="$event.target.select()" />
+								</mat-form-field>
+								<div class="error-box">
+									<div class="error-message"
+										*ngIf="( submitBookingForm && (is_loose_customer_unique || LooseCustomer.phone.invalid)) || (LooseCustomer.phone.touched && LooseCustomer.phone.dirty)">
+										<p class="text-danger text-lg m-0" *ngIf="LooseCustomer.phone.errors?.required">
+											This field is required
+										</p>
+										<p class="text-danger text-lg m-0"
+											*ngIf="LooseCustomer.phone.errors?.pattern;else otherError">
+											Only Numbers are Allowed
+										</p>
+										<ng-template #otherError>
+											<p class="text-danger text-lg m-0"
+												*ngIf="LooseCustomer.phone.errors?.minlength">
+												Minimum length should be 4
+											</p>
+											<p class="text-danger text-lg m-0"
+												*ngIf="LooseCustomer.phone.errors?.maxlength">
+												Maximum length should be 15
+											</p>
+										</ng-template>
+										<p class="text-danger text-lg m-0" *ngIf="is_loose_customer_unique">
+											This Phone Number is already registered. Please enter
+											any other.
+										</p>
+									</div>
+								</div>
+							</div>
+
+							<!-- Address -->
+							<div class="col-md-4 looseError">
+								<mat-form-field appearance="outline" class="m-0">
+									<mat-label>
+										Address
+									</mat-label>
+									<input type="text" matInput placeholder="Type your address"
+										matGoogleMapsAutocomplete
+										(onAutocompleteSelected)="fillLooseCustomerAddress($event.formatted_address)"
+										(focus)="$event.target.select()" />
+								</mat-form-field>
+							</div>
+						</div>
+					</div>
+					<!-- Personal Information Ends -->
+
+					<!-- Credit Card Details -->
+					<div id="credit-card-details" class="mt-4 px-4" formGroupName="card_details">
+						<h4>
+							Card Details
+						</h4>
+						<div class="row margin-bottom-minus-20">
+							<!-- Card Holder Name -->
+							<div class="col-md-6">
+								<mat-form-field appearance="outline" class="m-0">
+									<mat-label class="required-field">
+										First & Last Name
+									</mat-label>
+									<input matInput placeholder="First & Last Name" type="text" formControlName="name"
+										(focus)="$event.target.select()">
+								</mat-form-field>
+								<div class="error-box">
+									<div class="error-message"
+										*ngIf="( submitBookingForm && LooseCustomer.card_details.controls.name.invalid) || (LooseCustomer.card_details.controls.name.touched && LooseCustomer.card_details.controls.name.dirty)">
+										<p class="text-danger text-lg m-0"
+											*ngIf="LooseCustomer.card_details.controls.name.errors?.required">
+											This field is required
+										</p>
+										<p class="text-danger text-lg m-0"
+											*ngIf="LooseCustomer.card_details.controls.name.errors?.whitespace">
+											Extra White Space are not Allowed
+										</p>
+									</div>
+								</div>
+							</div>
+							<!-- Card Number -->
+							<div class="col-md-6">
+								<mat-form-field appearance="outline" class="m-0">
+									<mat-label class="required-field">
+										Card Number
+									</mat-label>
+									<input matInput placeholder="xxxxxxxxxxxxxxxx" type="text"
+										formControlName="card_number" (focus)="$event.target.select()">
+								</mat-form-field>
+								<div class="error-box">
+									<div class="error-message"
+										*ngIf="( submitBookingForm && LooseCustomer.card_details.controls.card_number.invalid) || (LooseCustomer.card_details.controls.card_number.touched && LooseCustomer.card_details.controls.card_number.dirty)">
+										<p class="text-danger text-lg m-0"
+											*ngIf="LooseCustomer.card_details.controls.card_number.errors?.required">
+											This field is required
+										</p>
+										<p class="text-danger text-lg m-0"
+											*ngIf="LooseCustomer.card_details.controls.card_number.errors?.pattern;else cardLength">
+											Only Numbers are Allowed
+										</p>
+										<ng-template #cardLength>
+											<p class="text-danger text-lg m-0"
+												*ngIf="LooseCustomer.card_details.controls.card_number.errors?.minlength">
+												Minimum length should be 12
+											</p>
+											<p class="text-danger text-lg m-0"
+												*ngIf="LooseCustomer.card_details.controls.card_number.errors?.maxlength">
+												Maximum length should be 20
+											</p>
+										</ng-template>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row ">
+							<!-- Expiry Month -->
+							<div class="col-md-4">
+								<mat-form-field appearance="outline" class="m-0">
+									<mat-label class="required-field">Expiry Month</mat-label>
+									<input type="number" matInput formControlName="exp_month" [matAutocomplete]="auto"
+										(keyup)="handleChangeMonth($event.target.value)">
+									<mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+										<mat-option *ngFor="let m of monthOptions" [value]="m.value">
+											{{m.value}}
+										</mat-option>
+									</mat-autocomplete>
+								</mat-form-field>
+								<div class="error-box">
+									<div class="error-message"
+										*ngIf="( submitBookingForm && LooseCustomer.card_details.controls.exp_month.invalid) || (LooseCustomer.card_details.controls.exp_month.touched && LooseCustomer.card_details.controls.exp_month.dirty)">
+										<p class="text-danger text-lg m-0"
+											*ngIf="LooseCustomer.card_details.controls.exp_month.errors?.required">
+											This field is required
+										</p>
+									</div>
+								</div>
+								<!-- <mat-form-field appearance="outline" class="m-0">
+										<mat-label class="required-field">
+											Expiry Month
+										</mat-label>
+										<mat-select formControlName="exp_month">
+											<mat-option value='1'>01</mat-option>
+											<mat-option value='2'>02</mat-option>
+											<mat-option value='3'>03</mat-option>
+											<mat-option value='4'>04</mat-option>
+											<mat-option value='5'>05</mat-option>
+											<mat-option value='6'>06</mat-option>
+											<mat-option value='7'>07</mat-option>
+											<mat-option value='8'>08</mat-option>
+											<mat-option value='9'>09</mat-option>
+											<mat-option value='10'>10</mat-option>
+											<mat-option value='11'>11</mat-option>
+											<mat-option value='12'>12</mat-option>
+										</mat-select>
+									</mat-form-field> -->
+							</div>
+
+							<!-- Expiry Year -->
+							<div class="col-md-4">
+								<mat-form-field appearance="outline" class="m-0">
+									<mat-label class="required-field">
+										Expiry Year
+									</mat-label>
+									<mat-select formControlName="exp_year">
+										<mat-option [value]="number" *ngFor="let number of booking_params.years">
+											{{ number }}
+										</mat-option>
+									</mat-select>
+								</mat-form-field>
+								<div class="error-box">
+									<div class="error-message"
+										*ngIf="( submitBookingForm && LooseCustomer.card_details.controls.exp_year.invalid) || (LooseCustomer.card_details.controls.exp_year.touched && LooseCustomer.card_details.controls.exp_year.dirty)">
+										<p class="text-danger text-lg m-0"
+											*ngIf="LooseCustomer.card_details.controls.exp_year.errors?.required">
+											This field is required
+										</p>
+									</div>
+								</div>
+							</div>
+
+							<!-- CVV -->
+							<div class="col-md-4">
+								<mat-form-field appearance="outline" class="m-0">
+									<mat-label class="required-field">
+										CVV
+									</mat-label>
+									<input matInput placeholder="0000" type="text" (focus)="$event.target.select()"
+										formControlName="cvv">
+								</mat-form-field>
+								<div class="error-box">
+									<div class="error-message"
+										*ngIf="( submitBookingForm && LooseCustomer.card_details.controls.cvv.invalid) || (LooseCustomer.card_details.controls.cvv.touched && LooseCustomer.card_details.controls.cvv.dirty)">
+										<p class="text-danger text-lg m-0"
+											*ngIf="LooseCustomer.card_details.controls.cvv.errors?.required">
+											This field is required
+										</p>
+										<p class="text-danger text-lg m-0"
+											*ngIf="LooseCustomer.card_details.controls.cvv.errors?.pattern">
+											Only Numbers are Allowed
+										</p>
+										<!-- <ng-template #cvvLength>
+												<p class="text-danger text-lg m-0"
+													*ngIf="LooseCustomer.card_details.controls.cvv.errors?.minlength">
+													Minimum length should be 3
+												</p>
+												<p class="text-danger text-lg m-0"
+													*ngIf="LooseCustomer.card_details.controls.cvv.errors?.maxlength">
+													Maximum length should be 3
+												</p>
+											</ng-template> -->
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- Credit Card Details Ends -->
 			</ng-template>
 
 
 
 		</div>
 		<!-- Client Accounts Section Ends -->
-		<div class="section-container mt-2">
+		<div class="section-container">
 			<!-- Passenger Information -->
-			<div id="passenger-information" class="px-4 mt-4">
-				<h2>
+			<div id="passenger-information" class="border-secondary">
+				<h4>
 					Passenger Information
-				</h2>
+				</h4>
 				<!-- <p class="ml-2" style="color: #dc4335;">*All Field are required</p> -->
-				<div class="row">
+				<div class="row px-4">
 					<!-- Passenger Name -->
 					<div class="col-md-4">
 						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>
-								Passenger Name <span class="asterisk"></span>
+								Passenger Name <span class="asterisk">*</span>
 							</mat-label>
 							<input matInput placeholder="Passenger Name" type="text" formControlName="passenger_name"
 								(focus)="$event.target.select()" />
@@ -691,7 +714,7 @@
 					<div class="col-md-4">
 						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>
-								Passenger Email
+								Passenger Email <span class="asterisk">*</span>
 							</mat-label>
 							<input matInput placeholder="Passenger Email" type="text" formControlName="passenger_email"
 								(focus)="$event.target.select()" />
@@ -713,7 +736,7 @@
 					<div class="col-md-4">
 						<mat-form-field appearance="outline" class="mat-custom-phone m-0 pcellLabelClass">
 							<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Passenger
-								Cell
+								Cell <span class="asterisk">*</span>
 							</label>
 							<input matInput formControlName="passenger_cell" ng2TelInput [ng2TelInputOptions]="{
 									preferredCountries: ['us', 'ca', 'mx', 'gb']
@@ -758,7 +781,7 @@
 					</div>
 
 					<!-- Luggage Count -->
-					<div class="col-md-3 looseError">
+					<div class="col-md-3 mb-4 looseError">
 						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>
 								Luggage Count <span class="asterisk"></span>
@@ -779,9 +802,9 @@
 
 		<!-- Section - Affiliate/Loose Details -->
 		<div class="section-container mt-2">
-			<h2 class=" border-secondary pb-4">
+			<h4 class=" border-secondary">
 				Affiliate Details
-			</h2>
+			</h4>
 			<!-- Affiliate Type -->
 			<div class="row">
 				<div class="col-md-12 col-lg-10">
@@ -844,14 +867,14 @@
 
 			<!-- Visible in only Loose Affiliate Section -->
 			<!-- Loose Affiliate Section -->
-			<div class="row px-4" *ngIf="Form.affiliate_type.value == 'loose_affiliate'">
+			<div class="row px-4 margin-bottom-minus-20" *ngIf="Form.affiliate_type.value == 'loose_affiliate'">
 				<div class="col-md-4 col-lg-4">
 					<mat-form-field appearance="outline" class="m-0">
 						<mat-label>
-							Name
+							Name <span class="asterisk">*</span>
 						</mat-label>
 						<input type="text" matInput placeholder="Full Name" (focus)="$event.target.select()"
-							formControlName="lose_affiliate_name" />
+							formControlName="lose_affiliate_name"  (keyup)="handleLooseAffiliateName()"/>
 					</mat-form-field>
 					<div class="error-box">
 						<div class="error-message"
@@ -868,11 +891,12 @@
 				<!-- Phone -->
 				<div class="col-md-4">
 					<mat-form-field appearance="outline" class="mat-custom-phone m-0 cellLabelClass">
-						<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Phone
+						<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Phone <span
+								class="asterisk">*</span>
 						</label>
 						<input matInput formControlName="lose_affiliate_phone" ng2TelInput [ng2TelInputOptions]="{
 								preferredCountries: ['us', 'ca', 'mx', 'gb']
-							}" placeholder="1234567890" class="phoneNumberClass" (intlTelInputObject)="LATelInputObject($event)"
+							}" placeholder="1234567890" class="phoneNumberClass" (intlTelInputObject)="LATelInputObject($event)" (keyup)="handleLooseAffiliatePhone()"
 							(countryChange)="SetFormValue('lose_affiliate_phone_isd', '+' + $event.dialCode); SetFormValue('lose_affiliate_phone_country', $event.iso2)"
 							(focus)="$event.target.select()" />
 					</mat-form-field>
@@ -902,7 +926,7 @@
 				<div class="col-md-4 col-lg-4">
 					<mat-form-field appearance="outline" class="m-0">
 						<mat-label>
-							Email
+							Email <span class="asterisk">*</span>
 						</mat-label>
 						<input type="text" matInput placeholder="Email" (focus)="$event.target.select()"
 							formControlName="lose_affiliate_email" />
@@ -927,7 +951,7 @@
 
 			<!-- Visible in Affiliate as well as Loose Affiliate Section -->
 			<!-- Affiliate Vehicle Information -->
-			<div class="px-4 mt-4" *ngIf="Form.affiliate_type.value == 'affiliate'">
+			<div class="px-4 mt-2" *ngIf="Form.affiliate_type.value == 'affiliate'">
 				<h4>
 					Vehicle Preferences
 				</h4>
@@ -1210,10 +1234,10 @@
 			<!-- Visible in Affiliate as well as Loose Affiliate Section -->
 			<!-- Affiliate Driver Information -->
 			<div class="px-4 my-4" *ngIf="Form.affiliate_type.value == 'loose_affiliate' || Form.affiliate_id.value">
-				<h4>
+				<h4 class="margin-top-minus">
 					Driver Preferences
 				</h4>
-				<div class="row">
+				<div class="row ">
 					<!-- Affiliate Driver Name -->
 					<div id="driver" class="col-md-3" *ngIf="Form.affiliate_type.value != 'loose_affiliate'">
 						<mat-form-field appearance="outline" class="m-0">
@@ -1367,9 +1391,9 @@
 			<!-- Affiliate Driver Information Ends -->
 
 			<!-- Section Booking details start -->
-			<h2 id="booking_detail_section">
+			<h4 id="booking_detail_section">
 				Booking Details
-			</h2>
+			</h4>
 			<!-- <div class="section-container mt-2"> -->
 			<!-- <h4>
 					Booking Type
@@ -1445,7 +1469,7 @@
 				</div>
 			</div>
 			<!-- </div> -->
-			<div class="row">
+			<div class="row px-3">
 				<!-- Meet Greet Choices -->
 				<div class="col-md-11 ">
 					<mat-form-field appearance="outline">
@@ -1502,13 +1526,13 @@
 			</div>
 
 
-			<h4 class="pl-2 mt-3" id="pickup_details">
+			<h4 class="border-secondary pl-2 mt-2" id="pickup_details">
 				Pickup
 			</h4>
 
 			<!-- Pickup - Address Field -->
 			<div *ngIf="!searchSubstring(Form.transfer_type.value, 'airport_')">
-				<div class="row px-2">
+				<div class="row px-3">
 					<div class="col-md-12">
 						<mat-form-field appearance="outline">
 							<mat-label> Pickup Address </mat-label>
@@ -1524,7 +1548,7 @@
 
 			<!-- Pickup - Airport Fields -->
 			<div *ngIf="searchSubstring(Form.transfer_type.value, 'airport_')">
-				<div class="row px-2">
+				<div class="row px-4">
 					<!-- Airport -->
 					<div class="col-md-6">
 						<!-- <mat-form-field appearance="outline">
@@ -1619,7 +1643,7 @@
 
 			<!-- Pickup - Cruise Details -->
 			<div *ngIf="searchSubstring(Form.transfer_type.value, 'cruise_')">
-				<div class="row px-2">
+				<div class="row px-3">
 					<!-- Cruise Port -->
 					<div class="col-md-4">
 						<mat-form-field appearance="outline">
@@ -1658,13 +1682,13 @@
 			</div>
 
 
-			<h4 class="pl-2 mt-3">
+			<h4 class="border-secondary pl-2 mt-3">
 				Dropoff
 			</h4>
 
 			<!-- Dropoff - Address Field -->
 			<div *ngIf="!searchSubstring(Form.transfer_type.value, '_airport')">
-				<div class="row px-2">
+				<div class="row px-3">
 					<div class="col-md-12">
 						<mat-form-field appearance="outline">
 							<mat-label> Dropoff Address </mat-label>
@@ -1680,7 +1704,7 @@
 
 			<!-- Dropoff - Airport Field -->
 			<div *ngIf="searchSubstring(Form.transfer_type.value, '_airport')">
-				<div class="row px-2">
+				<div class="row px-3">
 					<!-- Airport -->
 					<div class="col-md-6">
 						<!-- <mat-form-field appearance="outline">
@@ -1763,7 +1787,7 @@
 
 			<!-- Dropoff - Cruise Details -->
 			<div *ngIf="searchSubstring(Form.transfer_type.value, '_cruise')">
-				<div class="row px-2">
+				<div class="row px-3">
 					<!-- Cruise Port -->
 					<div class="col-md-4">
 						<mat-form-field appearance="outline">
@@ -1863,15 +1887,20 @@
 			<!-- AGM Map -->
 			<div class="row">
 				<!-- AGM Map -->
-				<div class="col-md-12">
+				<div class="col-md-12 margin-top-minus">
 					<div class="map-block">
 						<div class="google_map">
 							<div id="map" class="map"></div>
 						</div>
-						<h6>
-							Total Distance: {{ mToMi(distance) }} Miles / {{ mToKm(distance)
-							}} Km
-						</h6>
+						<div class="row">
+							<h6 class="mx-2">
+								Total Distance: {{ mToMi(distance) }} Miles / {{ mToKm(distance)
+								}} Km
+							</h6>
+							<h6 class="mx-2">
+								Estimated time: {{convertToMinutes(Form.journeyTime.value)}} mins
+							</h6>
+						</div>
 					</div>
 				</div>
 				<!-- AGM Map Ends -->
@@ -2201,7 +2230,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="row">
+			<div class="row px-3">
 				<!-- Meet Greet Choices -->
 				<div class="col-md-5 m-2">
 					<mat-form-field appearance="outline">
@@ -2254,7 +2283,7 @@
 
 			<!-- Return Pickup - Address Field -->
 			<div *ngIf="!searchSubstring(Form.return_transfer_type.value, 'airport_')">
-				<div class="row px-2">
+				<div class="row px-3">
 					<div class="col-md-12">
 						<mat-form-field appearance="outline">
 							<mat-label> Pickup Address </mat-label>
@@ -2270,7 +2299,7 @@
 
 			<!-- Return Pickup - Airport Fields -->
 			<div *ngIf="searchSubstring(Form.return_transfer_type.value, 'airport_')">
-				<div class="row px-2">
+				<div class="row px-3">
 					<!-- Airport -->
 					<div class="col-md-6 ">
 						<!-- <mat-form-field appearance="outline">
@@ -2351,7 +2380,7 @@
 
 			<!-- Return Pickup - Cruise Details -->
 			<div *ngIf="searchSubstring(Form.return_transfer_type.value, 'cruise_')">
-				<div class="row px-2">
+				<div class="row px-3">
 					<!-- Cruise Port -->
 					<div class="col-md-4">
 						<mat-form-field appearance="outline">
@@ -2397,7 +2426,7 @@
 
 			<!-- Return Dropoff - Address Field -->
 			<div *ngIf="!searchSubstring(Form.return_transfer_type.value, '_airport')">
-				<div class="row px-2">
+				<div class="row px-3">
 					<div class="col-md-12">
 						<mat-form-field appearance="outline">
 							<mat-label> Dropoff Address </mat-label>
@@ -2413,7 +2442,7 @@
 
 			<!-- Return Dropoff - Airport Field -->
 			<div *ngIf="searchSubstring(Form.return_transfer_type.value, '_airport')">
-				<div class="row px-2">
+				<div class="row px-3">
 					<!-- Airport -->
 					<div class="col-md-6">
 						<!-- <mat-form-field appearance="outline">
@@ -2496,7 +2525,7 @@
 
 			<!-- Return Dropoff - Cruise Details -->
 			<div *ngIf="searchSubstring(Form.return_transfer_type.value, '_cruise')">
-				<div class="row px-2">
+				<div class="row px-3">
 					<!-- Cruise Port -->
 					<div class="col-md-4">
 						<mat-form-field appearance="outline">
@@ -2606,11 +2635,12 @@
 		</div>
 		<!-- Section - Return Journey Details Ends -->
 
-		
+
 		<app-rates-form class="d-flex flex-wrap" [initRates]="init_rates" [affiliate_type]="Form.affiliate_type.value"
-			[distance]="distance" [reservation_id]="booking_id" [reset]="reset_button" [reset]="reset_button" [isTravelShare]="isTravelShare"
-			[initReturnRates]="init_return_rates" (formvalue)="RateFormValue($event)" [vehicle_id]="QB_vehicle_id"
-			[hours]="Form.number_of_hours?.value" [vehicles]="Form.number_of_vehicles?.value" [book_data]="booking_data"
+			[distance]="distance" [reservation_id]="booking_id" [reset]="reset_button" [reset]="reset_button"
+			[isTravelShare]="isTravelShare" [initReturnRates]="init_return_rates" (formvalue)="RateFormValue($event)"
+			[vehicle_id]="QB_vehicle_id" [hours]="Form.number_of_hours?.value"
+			[vehicles]="Form.number_of_vehicles?.value" [book_data]="booking_data"
 			(returnformvalue)="ReturnRateFormValue($event)" (returnNumberOfHr)="HandleReturnNumberOfHr($event)">
 		</app-rates-form>
 
@@ -2661,12 +2691,6 @@
 		</div>
 	</div>
 </div>
-
-
-
-
-
-
 
 
 <div class="modal fade" id="previewBooking" aria-labelledby="previewBookingLabel" aria-hidden="true">
@@ -3085,7 +3109,7 @@
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
-									Name
+									Name <span class="asterisk">*</span>
 								</span>
 							</div>
 							<div class="col-md-8 value">
@@ -3289,8 +3313,8 @@
 								<span class="font-weight-bolder">
 									{{ textFormatter(Form.pickup.value) }}
 								</span>
-								<span (click)="showLocationPointOnMap(Form.pickup.value)"><i
-										class="bi bi-geo-alt-fill"></i></span>
+								<span (click)="showLocationPointOnMap(Form.pickup.value)"><i class="bi bi-geo-alt-fill"
+										style="font-size:24px"></i></span>
 							</div>
 						</div>
 					</div>
@@ -3310,7 +3334,7 @@
 								</span>
 								<span class="font-weight-bolder preview-airport-color"
 									(click)="showLocationPointOnMap(Form.pickup_airport_name.value)"><i
-										class="bi bi-geo-alt-fill"></i></span>
+										class="bi bi-geo-alt-fill" style="font-size:24px"></i></span>
 							</div>
 						</div>
 						<!-- Airport -->
@@ -3408,8 +3432,8 @@
 									<span class="font-weight-bolder">
 										{{ stop.address }}
 									</span>
-									<span (click)="showLocationPointOnMap(stop.address)"><i
-											class="bi bi-geo-alt-fill"></i></span>
+									<span (click)="showLocationPointOnMap(stop.address)"><i class="bi bi-geo-alt-fill"
+											style="font-size:24px"></i></span>
 								</div>
 							</div>
 							<hr>
@@ -3419,7 +3443,7 @@
 					<hr *ngIf="Form.extra_stops.value.length == 0" />
 
 					<!-- ############# Dropoff ################# -->
-					<h5 class="px-2 m-1 text-xl preview-dropoff-color">
+					<h5 class="px-4 m-1 text-xl preview-dropoff-color">
 						Drop Off Details
 					</h5>
 					<!-- Dropoff > City Details -->
@@ -3435,8 +3459,8 @@
 								<span class="font-weight-bolder">
 									{{ textFormatter(Form.dropoff.value) }}
 								</span>
-								<span (click)="showLocationPointOnMap(Form.dropoff.value)"><i
-										class="bi bi-geo-alt-fill"></i></span>
+								<span (click)="showLocationPointOnMap(Form.dropoff.value)"><i class="bi bi-geo-alt-fill"
+										style="font-size:24px"></i></span>
 							</div>
 						</div>
 					</div>
@@ -3456,7 +3480,7 @@
 								</span>
 								<span class="font-weight-bolder"
 									(click)="showLocationPointOnMap(Form.dropoff_airport_name.value)"><i
-										class="bi bi-geo-alt-fill"></i></span>
+										class="bi bi-geo-alt-fill" style="font-size:24px"></i></span>
 							</div>
 						</div>
 						<!-- Airport -->
@@ -3546,7 +3570,7 @@
 						<h4 class="font-weight-bolder">
 							Return Trip
 						</h4>
-						<h5 class="px-2 m-1 text-xl preview-pickup-color">
+						<h5 class="px-3 m-1 text-xl preview-pickup-color">
 							Pickup Details
 						</h5>
 
@@ -3600,7 +3624,7 @@
 										{{ textFormatter(Form.return_pickup.value) | titlecase }}
 									</span>
 									<span (click)="showLocationPointOnMap(Form.return_pickup.value)"><i
-											class="bi bi-geo-alt-fill"></i></span>
+											class="bi bi-geo-alt-fill" style="font-size:24px"></i></span>
 								</div>
 							</div>
 						</div>
@@ -3621,7 +3645,7 @@
 									</span>
 									<span class="font-weight-bolder preview-airport-color"
 										(click)="showLocationPointOnMap(Form.return_pickup_airport_name.value)"><i
-											class="bi bi-geo-alt-fill"></i></span>
+											class="bi bi-geo-alt-fill" style="font-size:24px"></i></span>
 								</div>
 							</div>
 							<!-- Airline -->
@@ -3718,7 +3742,7 @@
 											{{ stop.address }}
 										</span>
 										<span (click)="showLocationPointOnMap(stop.address)"><i
-												class="bi bi-geo-alt-fill"></i></span>
+												class="bi bi-geo-alt-fill" style="font-size:24px"></i></span>
 									</div>
 								</div>
 								<hr>
@@ -3728,7 +3752,7 @@
 						<hr *ngIf="Form.return_extra_stops.value.length == 0" />
 
 						<!-- ############## Dropoff #################### -->
-						<h5 class="px-2 m-1 text-xl preview-dropoff-color">
+						<h5 class="px-3 m-1 text-xl preview-dropoff-color">
 							Dropoff Details
 						</h5>
 						<!-- Return > Dropoff > City Details  -->
@@ -3745,7 +3769,7 @@
 										{{ textFormatter(Form.return_dropoff.value) | titlecase }}
 									</span>
 									<span (click)="showLocationPointOnMap(Form.return_dropff.value)"><i
-											class="bi bi-geo-alt-fill"></i></span>
+											class="bi bi-geo-alt-fill" style="font-size:24px"></i></span>
 								</div>
 							</div>
 						</div>
@@ -3766,7 +3790,7 @@
 									</span>
 									<span class="font-weight-bolder preview-airport-color"
 										(click)="showLocationPointOnMap(Form.return_dropoff_airport_name.value)"><i
-											class="bi bi-geo-alt-fill"></i></span>
+											class="bi bi-geo-alt-fill" style="font-size:24px"></i></span>
 								</div>
 							</div>
 

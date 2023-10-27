@@ -14,6 +14,9 @@
 .vehtype_extint p {
 	margin-bottom: 0 !important;
 }
+.border-red{
+	border: 3px solid red;border-radius: 10px;
+}
 
 .camera-svg {
 	height    : 35px;
@@ -243,8 +246,9 @@ top:2.05em}
 
 :host ::ng-deep .select-cancel-label,.select-seat-label,.select-charter-cancel-label,.select-luggage-label{
 	background-color: rgb(226, 226, 226,1) !important;
-	transform: translateY(0.4em) translateX(-0.75em) scale(0.9) !important;
+	transform: translateY(0.8em) translateX(-0.75em) scale(0.9) !important;
 	opacity: 0.7;
+	background: none !important;
 }
 .mat-option{
 	background-color: rgb(226, 226, 226,1) !important;
@@ -267,3 +271,12 @@ top:2.05em}
  :host ::ng-deep .ng-value {
 	font-weight: 400;
   }
+  .asterisk{
+	font-size: 19px;
+}
+.asterisk1{
+	font-size: 18px !important;
+    margin-left: 2px;
+    color: #ff0000 !important;
+    background: none !important;
+}

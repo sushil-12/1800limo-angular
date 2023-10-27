@@ -27,9 +27,9 @@
             <mat-label>
               Start Date <span class="asterisk"> * </span>
             </mat-label>
-            <input matInput [setOutputDateFormat]="outputDateFormat" [matDatepicker]="picker1"
-              placeholder="Start Date" id="id_4" (dateChangeWithFormat)="changeDate('startDate', $event)"
-              (click)="picker1.open()" [value]="startDate" [max]="endDate" readonly />
+            <input matInput [setOutputDateFormat]="outputDateFormat" [matDatepicker]="picker1" placeholder="Start Date"
+              id="id_4" (dateChangeWithFormat)="changeDate('startDate', $event)" (click)="picker1.open()"
+              [value]="startDate" [max]="endDate" readonly />
             <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
             <mat-datepicker #picker1></mat-datepicker>
           </mat-form-field>
@@ -41,59 +41,58 @@
             <mat-label>
               End Date <span class="asterisk"> * </span>
             </mat-label>
-            <input matInput [setOutputDateFormat]="outputDateFormat" [matDatepicker]="picker2"
-              placeholder="End Date" id="id_5" (dateChangeWithFormat)="changeDate('endDate',$event)"
-              (click)="picker2.open()" [value]="endDate" [min]="startDate" readonly />
+            <input matInput [setOutputDateFormat]="outputDateFormat" [matDatepicker]="picker2" placeholder="End Date"
+              id="id_5" (dateChangeWithFormat)="changeDate('endDate',$event)" (click)="picker2.open()" [value]="endDate"
+              [min]="startDate" readonly />
             <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
             <mat-datepicker #picker2></mat-datepicker>
           </mat-form-field>
         </div>
         <!-- Search Button -->
-          <div class="align-btn d-flex justify-content-around">
-            <div class="col-sm-2 ml-n5">
-              <button class="custom-filled-button orange-button"
-                style="color:#fff;padding: 5px 12px !important;"
-                (click)="loadInvoice(); saveCookie('startDate_invoice', startDate); saveCookie('endDate_invoice', endDate)">
-                Search
-              </button>
-            </div>
-            <div class="col-sm-2">
-              <button class="custom-filled-back-button"
-                style="white-space: nowrap;color:#fff;padding: 5px 12px !important;"
-                (click)="reset(); loadInvoice()">
-                Reset
-              </button>
-            </div>
+        <div class="align-btn d-flex justify-content-around">
+          <div class="col-sm-2 ml-n5">
+            <button class="custom-filled-button orange-button" style="color:#fff;padding: 5px 12px !important;"
+              (click)="loadInvoice(); saveCookie('startDate_invoice', startDate); saveCookie('endDate_invoice', endDate)">
+              Search
+            </button>
           </div>
+          <div class="col-sm-2">
+            <button class="custom-filled-back-button"
+              style="white-space: nowrap;color:#fff;padding: 5px 12px !important;" (click)="reset(); loadInvoice()">
+              Reset
+            </button>
+          </div>
+        </div>
       </div>
       <div>
-        <p><mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">Use Date filter</mat-checkbox></p>
+        <p><mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">Uncheck this box to
+            view all invoices</mat-checkbox></p>
       </div>
       <div class="row my-2 mb-3">
         <div class="col-md-12">
           <div id="search-field">
             <mat-form-field appearance="outline" class="m-0">
-              <input matInput type="text" (keypress)="handleKeypressEvents()"
-                (keyup)="searchInBookings($event.target.value)" [value]="searchText"
-                placeholder="Search" id="keyword2" autofocus>
+              <input matInput type="text" (keypress)="handleKeypressEvents()" (focus)="$event.target.select()"
+                (keyup)="searchInBookings($event.target.value)" [value]="searchText" placeholder="Search" id="keyword2"
+                autofocus>
             </mat-form-field>
           </div>
         </div>
       </div>
     </div>
 
-    
+
 
     <section class="adminbox_shadow user_information">
       <div class="containeredd driverside_table">
         <div class="row">
-          <p class="text-danger text-lg" *ngIf="invoices.length==0" >
+          <p class="text-danger text-lg" *ngIf="invoices.length==0">
             No Results Found.
           </p>
           <div class="col-md-12 custom_table">
             <div class="table-responsive" style="min-height: 350px">
               <table class="table table-dark table-striped table-bordered dataTable dt-responsive" id="dataTable"
-                role="grid" aria-describedby="dataTable_info" cellspacing="0"  *ngIf="invoices.length >0">
+                role="grid" aria-describedby="dataTable_info" cellspacing="0" *ngIf="invoices.length >0">
                 <thead>
                   <tr role="row">
                     <th>Actions</th>
@@ -116,17 +115,17 @@
                         <span>View</span>
                       </a>
                       <div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
-                      aria-labelledby="navbarDropdownUserImage">
-                      <a class="dropdown-item" (click)="clicViewInvoice(invoice.booking_id)">
-                        <div class="dropdown-item-icon" ></div>
-                        View Invoice Summary
-                      </a>
-                      <a class="dropdown-item" (click)="auditTrail(invoice.booking_id)"
-                      data-toggle="modal" data-target="#AuditTrailModal">
-                      <div class="dropdown-item-icon"></div>
-                      Audit Trial
-                    </a>
-                    </div>
+                        aria-labelledby="navbarDropdownUserImage">
+                        <a class="dropdown-item" (click)="clicViewInvoice(invoice.booking_id)">
+                          <div class="dropdown-item-icon"></div>
+                          View Invoice Summary
+                        </a>
+                        <a class="dropdown-item" (click)="auditTrail(invoice.booking_id)" data-toggle="modal"
+                          data-target="#AuditTrailModal">
+                          <div class="dropdown-item-icon"></div>
+                          Audit Trial
+                        </a>
+                      </div>
                     </td>
                     <td class="text-center font-weight-bolder cursor-pointer text-underline">
                       <span [innerHTML]="highlighText(invoice.booking_id)"></span>
@@ -134,7 +133,7 @@
                     <td>
                       <div [className]="'badge badge-pill booking_status cursor-pointer ' + invoice?.status">
                         {{invoice?.status| bookingStatusTextReplace :
-                          '_' : ' ' |titlecase}}
+                        '_' : ' ' |titlecase}}
                       </div>
                     </td>
                     <td class="text-center font-weight-bolder cursor-pointer text-underline">
@@ -145,31 +144,31 @@
                     </td>
                     <td>
                       <p data-target="#sendEmailModal" style="white-space: pre" data-toggle="modal">
-                      <span [innerHTML]="highlighText(invoice.passenger_name)"></span> |
-                      <span [innerHTML]="highlighText(invoice.passenger_phone)"></span>
+                        <span [innerHTML]="highlighText(invoice.passenger_name)"></span> |
+                        <span [innerHTML]="highlighText(invoice.passenger_phone)"></span>
                       </p>
                       <span class="text-underline cursor-pointer">
-                      <span [innerHTML]="highlighText(invoice.pickup_address )"></span>
+                        <span [innerHTML]="highlighText(invoice.pickup_address )"></span>
                       </span>
                     </td>
                     <td>
                       <p data-target="#sendEmailModal" style="white-space: pre" data-toggle="modal">
-                      <span [innerHTML]="highlighText(invoice.driver_name)"></span> |
-                      <span [innerHTML]="highlighText(invoice.driver_phone)"></span>
+                        <span [innerHTML]="highlighText(invoice.driver_name)"></span> |
+                        <span [innerHTML]="highlighText(invoice.driver_phone)"></span>
                       </p>
                       <span class="text-underline cursor-pointer">
-                      <span [innerHTML]="highlighText(invoice.dropoff_address)"></span>
+                        <span [innerHTML]="highlighText(invoice.dropoff_address)"></span>
                       </span>
                     </td>
-                      
+
                     <td><span [innerHTML]="highlighText(invoice.aff_vehicle_type)"></span></td>
                     <td>
-                      <p style="white-space: pre" >
-                      <span [innerHTML]="highlighText(invoice?.account_first_name)"></span> |
-                      <span [innerHTML]="highlighText(invoice?.account_last_name)"></span>
+                      <p style="white-space: pre">
+                        <span [innerHTML]="highlighText(invoice?.account_first_name)"></span> |
+                        <span [innerHTML]="highlighText(invoice?.account_last_name)"></span>
                       </p>
                       <span class="text-underline cursor-pointer">
-                      <span [innerHTML]="highlighText(invoice?.account_email)"></span>
+                        <span [innerHTML]="highlighText(invoice?.account_email)"></span>
                       </span>
                     </td>
                   </tr>
@@ -216,40 +215,40 @@
 
 <!-- Audit trail Modal -->
 <div class="modal fade bd-example-modal-lg" id="AuditTrailModal" tabindex="-1" role="dialog"
-	aria-labelledby="exampleModalLabel" aria-hidden="true">
-	<div class="modal-dialog modal-lg" role="document">
-		<div class="modal-content user_information bottom-container">
-			<div class="modal-header pb-0">
-				<h3 class="modal-title mb-0">Audit Trial</h3>
-			</div>
-			<div class="modal-body">
-				<!-- {{invoiceData.audit_trail | json}} -->
-				<table id="audittrail" class="table table-striped table-responsive">
-					<thead style="background-color: white;">
-						<tr>
-							<th scope="col">#</th>
-							<th scope="col">Description</th>
-							<th scope="col" id="date">Created Date</th>
-						</tr>
-					</thead>
-					<tbody>
+  aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content user_information bottom-container">
+      <div class="modal-header pb-0">
+        <h3 class="modal-title mb-0">Audit Trial</h3>
+      </div>
+      <div class="modal-body">
+        <!-- {{invoiceData.audit_trail | json}} -->
+        <table id="audittrail" class="table table-striped table-responsive">
+          <thead style="background-color: white;">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Description</th>
+              <th scope="col" id="date">Created Date</th>
+            </tr>
+          </thead>
+          <tbody>
 
-						<!-- <ng-container *ngIf="audit_Trail; else not_found"> -->
-						<tr *ngFor="let record of audit_Trail; let i=index">
-							<th scope="row">{{i+1}}</th>
-							<td style="word-wrap: break-word;">{{record.message}}</td>
-							<td>{{record.created_at}}</td>
-						</tr>
+            <!-- <ng-container *ngIf="audit_Trail; else not_found"> -->
+            <tr *ngFor="let record of audit_Trail; let i=index">
+              <th scope="row">{{i+1}}</th>
+              <td style="word-wrap: break-word;">{{record.message}}</td>
+              <td>{{record.created_at}}</td>
+            </tr>
 
-					</tbody>
-				</table>
-			</div>
-			<div class="modal-footer justify-content-end">
-				<button type="button" class="x-close-btn x-cross-btn mx-3" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true" class="bi bi-x-circle"></span>
-				</button>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer justify-content-end">
+        <button type="button" class="x-close-btn x-cross-btn mx-3" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" class="bi bi-x-circle"></span>
+        </button>
 
-			</div>
-		</div>
-	</div>
+      </div>
+    </div>
+  </div>
 </div>

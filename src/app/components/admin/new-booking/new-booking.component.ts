@@ -118,6 +118,7 @@ export class NewBookingComponent implements OnInit {
 	selectedVehicle: any;
 	is_master_vehicle: boolean = JSON.parse(sessionStorage.getItem('selected_vehicle'))?.is_master_vehicle || false
 	isTravelShare:boolean = false
+	travelStaffAccounts: any;
 	constructor(
 		private $form: FormBuilder,
 		private $api: AdminService,
@@ -253,6 +254,8 @@ export class NewBookingComponent implements OnInit {
 			number_of_hours: ['0'],
 			acc_id: [''],
 			account_type: ['individual'],
+			travel_client_id:[''],
+			travel_client_acc:['travel_individual'],
 			change_individual_data: [false],
 			loose_customer: this.$form.group({
 				first_name: [''],
@@ -474,6 +477,9 @@ export class NewBookingComponent implements OnInit {
 			this.firstLoadAffiliateId = response.data.affiliate_id
 			this.number_of_hours = response?.data?.number_of_hours
 			this.isTravelShare =  response?.data?.account_type=='travel_planner' ? true : false
+			if(response?.data?.account_type=='travel_planner'){
+				this.getTravelClientAccounts(response?.data?.acc_id)
+			}
 			this.SetFormValue('affiliate_type', response.data.affiliate_type)
 			this.autofillData('cruise', editing_data);
 			console.log(editing_data, "check big data")
@@ -631,6 +637,10 @@ export class NewBookingComponent implements OnInit {
 		}
 	}
 
+	convertToMinutes(value){
+		return (value/60).toFixed(2)
+	}
+
 
 	MapController(is_return: boolean = false) {
 		// console.log('Map has been initialised.')
@@ -748,6 +758,7 @@ export class NewBookingComponent implements OnInit {
 								returnJourneyDistance: response.distance,
 								returnJourneyTime: response.time
 							})
+							console.log("returnJourneyTime=========>",this.BookingForm.get('returnJourneyTime').value)
 						} else {
 							this.distance = response.distance
 							if(!this.BookingForm.get('extra_stops')?.value?.length || this.BookingForm.get('extra_stops')?.value[0]['rate']?.length){
@@ -757,6 +768,7 @@ export class NewBookingComponent implements OnInit {
 								journeyDistance: response.distance,
 								journeyTime: response.time
 							})
+							console.log("returnJourneyTime=========>",this.BookingForm.get('journeyTime').value)
 						}
 						// this.distance_for_rates = ((): string =>
 						// {
@@ -803,7 +815,6 @@ export class NewBookingComponent implements OnInit {
 
 	fetchAirportsAndBigData(): void {
 		let s = setInterval(() => {
-
 			if (this.$api.getAirportsAndBigData()) {
 				this.$spinner.hide('fetchspinner');
 				this.BigData = JSON.parse(JSON.stringify(this.$api.getAirportsAndBigData()));
@@ -882,6 +893,12 @@ export class NewBookingComponent implements OnInit {
 		this.SetLCFormValue('email', choose_user?.email)
 		this.SetLCFormValue('phone', choose_user?.mobile)
 	}
+	getTravelClientAccounts(id){
+		this.$api.getTravelClientAccount(id).subscribe((response: any) => {
+			console.log("accounts->>>>>>>>>>",response)
+			this.travelStaffAccounts = response?.data
+		})
+	}
 	handleClientAccChange(selectedAcc){
 		this.isTravelShare =  selectedAcc=='travel_planner' ? true : false
 		this.BookingForm.get('acc_id').setValue(null);
@@ -898,6 +915,51 @@ export class NewBookingComponent implements OnInit {
 	handleClientAccount(value: any) {
 		console.log('---------------------_>>>>>>>>>>>>>> client acc value', value)
 		this.chooseUser(value.id)
+		if(this.BookingForm.get('account_type').value == 'travel_planner'){
+			this.BookingForm.patchValue({
+				travel_client_id : ''
+			})
+			this.getTravelClientAccounts(value.id)
+		}
+		
+	}
+
+	handleChangeTravelAccounts(selectedAcc){
+		console.log('handleChangeTravelAccounts-->>',selectedAcc )
+	}
+	handleTravelStaffAccounts(value: any){
+		console.log('handleTravelStaffAccounts--->>>' , value)
+		this.$api.getTravelClientDetailById(value.id).subscribe((response: any) => {
+			console.log("detail ->>>>>>>",response)
+			this.autofillData('passenger', response?.data);
+		})
+
+	}
+
+	handleLooseCustomerPhone(event){
+		console.log('handleLooseCustomerPhone->>', event, event.target.value)
+		this.BookingForm.patchValue({
+			passenger_cell : event.target.value
+		})
+	}
+	handleLooseCustomerName(event){
+		const loose_customer = (this.BookingForm.get('loose_customer') as FormGroup)
+		this.BookingForm.patchValue({
+			passenger_name : loose_customer.get('first_name').value + ' ' + loose_customer.get('last_name').value
+		})
+	}
+
+	handleLooseAffiliateName(){
+		this.BookingForm.patchValue({
+			driver_name : this.BookingForm.get('lose_affiliate_name').value
+		})
+		 
+	}
+
+	handleLooseAffiliatePhone(){
+		this.BookingForm.patchValue({
+			driver_cell : this.BookingForm.get('lose_affiliate_phone').value
+		})
 	}
 
 	fetchAffiliates(affiliate_type: 'affiliate' | 'loose_affiliate') {
@@ -1775,6 +1837,65 @@ export class NewBookingComponent implements OnInit {
 				this.chooseUser(value)
 			}
 		})
+
+		this.BookingForm.get('travel_client_id').valueChanges.subscribe((value: number) => {
+			if (value && this.updateType == 'repeat' && this.updateType == 'return' && this.updateType == 'edit') {
+				this.handleTravelStaffAccounts({id:value})
+			}
+		})
+		this.BookingForm.get('travel_client_acc').valueChanges.subscribe((value: any) => {
+			if (value == 'travel_loose_customer') {
+				const loose_customer = (this.BookingForm.get('loose_customer') as FormGroup)
+				// for every 'item' in loose_customer
+				for (let item in loose_customer.controls) {
+					// if 'item' in loose_customer is a formgroup, like card_details
+					if ((<FormGroup>this.BookingForm.get('loose_customer')).get(item) instanceof FormGroup) {
+						console.log(item)
+						// for every 'key' in card_details formgroup
+						for (let key in (loose_customer.get(item) as FormGroup).controls) {
+							// set validators in card_details
+							(<FormGroup>loose_customer.get(item)).get(key).setValidators([Validators.required]);
+							(<FormGroup>loose_customer.get(item)).get(key).updateValueAndValidity();
+
+						}
+					}
+
+					if (item != 'middle_name' && item != 'address') {
+						loose_customer.get(item).setValidators([Validators.required]);
+					}
+				}
+
+				(<FormGroup>loose_customer.get('card_details')).get('card_number').setValidators([Validators.required, Validators.pattern("^[0-9]*$"), , Validators.minLength(12), Validators.maxLength(20),]);
+				(<FormGroup>loose_customer.get('card_details')).get('name').setValidators([Validators.required]);
+				(<FormGroup>loose_customer.get('card_details')).get('cvv').setValidators([Validators.required, Validators.pattern("^[0-9]*$")]);
+				loose_customer.get('email').setValidators([Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.]+\.[a-zA-Z]{2,}$/i)])
+				loose_customer.get('phone').setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)])
+				loose_customer.get('first_name').setValidators([Validators.required])
+				// loose_customer.get('middle_name').setValidators(this.customValidator.whitespace())
+				loose_customer.get('last_name').setValidators([Validators.required])
+				loose_customer.get('address').setValidators(this.customValidator.whitespace())
+				loose_customer.updateValueAndValidity()
+
+			}
+			else {
+				const loose_customer = (this.BookingForm.get('loose_customer') as FormGroup)
+				// for every 'item' in loose_customer
+				for (let item in loose_customer.controls) {
+					// if 'item' in loose_customer is a formgroup, like card_details
+					if (loose_customer.get(item) instanceof FormGroup) {
+						// for every 'key' in card_details formgroup
+						for (let key in (loose_customer.get(item) as FormGroup).controls) {
+							// clear validators in card_details
+							loose_customer.get(item).get(key).clearValidators()
+							loose_customer.get(item).get(key).updateValueAndValidity()
+						}
+					}
+					loose_customer.get(item).clearValidators()
+					loose_customer.get(item).updateValueAndValidity()
+				}
+			}
+		})
+		
 
 		// Affiliate Type
 		this.BookingForm.get('affiliate_type').valueChanges.subscribe((value: string) => {

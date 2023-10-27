@@ -58,6 +58,8 @@ export class BookingComponent implements OnInit {
 	audit_Trail: any;
 	company_name: any = JSON.parse(localStorage.getItem('currentUser'))?.affiliate_company || ''
 	cancelBookingId: any = null
+	useDateFilter:boolean=true;
+
 	constructor(
 		private affiliateService: AffiliateService,
 		private travelAgentService: TravelAgentService,
@@ -82,6 +84,11 @@ export class BookingComponent implements OnInit {
 		this.searchText = this.affiliateService.checkCookie('ta_search') ?
 			this.affiliateService.getCookie('ta_search')
 			: "";
+
+		this.useDateFilter = localStorage.getItem('traveluseDateFilter') ?
+			(localStorage.getItem('traveluseDateFilter')=='true' ? true : false)
+			: true;
+			console.log('traveluseDateFilter-->' , this.useDateFilter)
 
 		this.loadBookings();
 
@@ -112,7 +119,7 @@ export class BookingComponent implements OnInit {
 
 		// var keyword = ((document.getElementById("keyword") as HTMLInputElement).value);
 		// Load Our bookings using API
-		this.travelAgentService.loadBookings(pageUrl, this.searchText, this.startDate, this.endDate).then(result => {
+		this.travelAgentService.loadBookings(pageUrl, this.searchText, this.startDate, this.endDate, this.useDateFilter).then(result => {
 			this.bookingsRes = result;
 			this.bookings = this.bookingsRes?.data?.data;
 			this.totalRecords = this.bookingsRes?.data?.total;
@@ -179,10 +186,21 @@ export class BookingComponent implements OnInit {
 		this.affiliateService.deleteCookie('ta_search')
 		// this.affiliateService.deleteCookie('filtertype')
 		this.searchText = "";
+		localStorage.removeItem('traveluseDateFilter')
+		this.useDateFilter = true
 		// this.filtertype = 'bookingid';
 
 		console.log('Reset Successfully. ');
 	}
+
+	handleChangeCheckbox(value:any){
+		console.log('event---->> ' ,value)
+		this.useDateFilter = value
+		// this.saveCookie('useDateFilter',value)
+		localStorage.setItem('traveluseDateFilter',value)
+		this.loadBookings();
+	}
+
 	textFormatter(text: string) {
 		try {
 			return text.replace(/[\\\_$]+/g, ' ')
@@ -445,6 +463,43 @@ export class BookingComponent implements OnInit {
 		this.router.navigate(['/affiliate/finalize-booking'], { queryParams: { bookingId: bookingId } });
 	}
 
+	emailPassenger() {
+		console.log('In function email passenger', this.sendEmailForm.value.reservation_id)
+		let data = {
+			reservation_id: this.sendEmailForm.value.reservation_id
+		}
+		this.spinner.show()
+		this.travelAgentService.passengerBooking(data)
+			.pipe(
+				catchError((err) => {
+					return throwError(err);
+				})
+			)
+			.subscribe((response: any) => {
+				console.log('response--------->>>>>>>>', response)
+				this.spinner.hide()
+				$("#emailPassenger").modal("hide");
+			});
+	}
+	emailAll() {
+		console.log('In function email all', this.sendEmailForm.value.reservation_id, this.sendEmailForm.value.emailTarget)
+		let data = {
+			reservation_id: this.sendEmailForm.value.reservation_id
+		}
+		this.spinner.show()
+		this.travelAgentService.bookingEmailAll(data)
+			.pipe(
+				catchError((err) => {
+					return throwError(err);
+				})
+			)
+			.subscribe((response: any) => {
+				console.log('response--------->>>>>>>>', response)
+				this.spinner.hide()
+				$("#emailAll").modal("hide");
+			});
+	}
+
 	returnRepeatAction(actionType, bookingId, serviceType) {
 		console.log(actionType, bookingId, serviceType);
 
@@ -514,7 +569,7 @@ export class BookingComponent implements OnInit {
 
 		this.spinner.show();
 
-		this.affiliateService.sendEmail(this.sendEmailForm.value)
+		this.travelAgentService.sendEmail(this.sendEmailForm.value)
 			.pipe(
 				catchError(err => {
 					this.spinner.hide();//hide spinner

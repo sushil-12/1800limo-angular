@@ -194,6 +194,12 @@ export class RatesFormComponent implements OnInit, OnChanges {
 				this.initReturnRates
 			}
 		}
+		// if(changes.affiliate_type?.currentValue){
+		// 	this.initRates();
+		// 	if (this.ReturnRatesForm) {
+		// 		this.initReturnRates
+		// 	}
+		// }
 
 		this.vehicles = changes.vehs ? changes.vehs.currentValue : this.vehicles;
 		if (this.vehicles) {
@@ -475,8 +481,10 @@ export class RatesFormComponent implements OnInit, OnChanges {
 		let vehicle_id = data?.vehicle_id.toString().length ? data?.vehicle_id : this.master_vehicle_id
 		data['is_master_vehicle'] = data?.vehicle_id.toString().length ? false : true
 		this.$api.fetchRatesByAffiliateVeh(vehicle_id, data).subscribe((response: any) => {
-			if(this.bookingType !='edit'){
+			if(this.bookingType !='edit'  && this.bookingType !='repeat'){
 				this.ratesdata.next({})
+				this.calc_admin_share = 0
+				this.travel_agent_share = 0
 				this.is_readonly_min_rate = response?.data?.min_rate_involved ? true : false
 				this.ratesdata.next(response?.data?.rateArray)
 				this.initRates();

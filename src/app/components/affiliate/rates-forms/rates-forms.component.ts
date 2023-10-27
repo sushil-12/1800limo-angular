@@ -428,7 +428,7 @@ export class RatesFormsComponent implements OnInit , OnChanges {
 			let vehicle_id = data?.vehicle_id.toString().length ? data?.vehicle_id : this.master_vehicle_id
 			data['is_master_vehicle'] = data?.vehicle_id.toString().length ? false : true
 		this.adminServices.fetchRatesByAffiliateVeh(vehicle_id, data).subscribe((response: any) => {
-			if(this.bookingType !='edit'){
+			if(this.bookingType !='edit' && this.bookingType !='repeat'){
 				this.is_readonly_min_rate = response?.data?.min_rate_involved ? true : false
 				this.ratesdata.next(response?.data?.rateArray)
 				this.initRates();

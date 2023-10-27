@@ -579,6 +579,15 @@ export class DailyBookingsComponent implements OnInit {
 		return moment(time, "HH:mm:ss").format("LT");
 	}
 
+	showAccountType(value){
+		if(value == 'individual'){
+			return '(INDV)'
+		}
+		else if(value == 'travel_planner'){
+			return '(TA)'
+		}
+	}
+
 
 	dateFormat(value: any) {
 		return moment(value, 'YYYY-MM-DD').format('ll')

@@ -28,7 +28,7 @@
 								Service Type
 							</mat-label>
 							<mat-select formControlName="service_type"
-							(selectionChange)="onSelectionChangeServiceType($event)"
+								(selectionChange)="onSelectionChangeServiceType($event)"
 								[ngStyle]="{'cursor': Form.updateType.value == 'edit' ? 'not-allowed' : 'default'}">
 								<mat-option value="one_way">One Way</mat-option>
 								<mat-option value="round_trip">Round Trip</mat-option>
@@ -81,7 +81,7 @@
 								Number of Hours
 							</mat-label>
 							<input type="number" matInput placeholder="Enter Hours" formControlName="number_of_hours"
-							[(ngModel)]="number_of_hours" (keyup)="handleNoOfHours($event.target.value)"
+								[(ngModel)]="number_of_hours" (keyup)="handleNoOfHours($event.target.value)"
 								(focus)="$event.target.select()" />
 							<span matSuffix>Hrs.</span>
 						</mat-form-field>
@@ -221,8 +221,7 @@
 										class="mat-form-field-label required-field mat-empty mat-form-field-empty labelClass">Phone
 									</label>
 									<input matInput formControlName="phone" ng2TelInput [ng2TelInputOptions]="{
-											preferredCountries: ['us', 'ca', 'mx', 'gb']
-										}" placeholder="1234567890" class="phoneNumberClass" (intlTelInputObject)="LCTelInputObject($event)"
+											preferredCountries: ['us', 'ca', 'mx', 'gb'] }"  placeholder="1234567890" class="phoneNumberClass" (intlTelInputObject)="LCTelInputObject($event)"
 										(countryChange)="SetFormValue('loose_customer>phone_isd', $event.dialCode); SetFormValue('loose_customer>phone_country', $event.iso2)"
 										(focus)="$event.target.select()" />
 								</mat-form-field>
@@ -305,7 +304,7 @@
 									<mat-label class="required-field">
 										Card Number
 									</mat-label>
-									<input matInput placeholder="xxxx xxxx xxxx xxxx" type="text"
+									<input matInput placeholder="xxxxxxxxxxxxxxxx" type="text"
 										formControlName="card_number" (focus)="$event.target.select()">
 								</mat-form-field>
 								<div class="error-box">
@@ -419,14 +418,14 @@
 											Only Numbers are Allowed
 										</p>
 										<!-- <ng-template #cvvLength> -->
-											<p class="text-danger text-lg m-0"
-												*ngIf="LooseCustomer.card_details.controls.cvv.errors?.minlength">
-												Minimum length should be 3
-											</p>
-											<p class="text-danger text-lg m-0"
-												*ngIf="LooseCustomer.card_details.controls.cvv.errors?.maxlength">
-												Maximum length should be 5
-											</p>
+										<p class="text-danger text-lg m-0"
+											*ngIf="LooseCustomer.card_details.controls.cvv.errors?.minlength">
+											Minimum length should be 3
+										</p>
+										<p class="text-danger text-lg m-0"
+											*ngIf="LooseCustomer.card_details.controls.cvv.errors?.maxlength">
+											Maximum length should be 5
+										</p>
 										<!-- </ng-template> -->
 									</div>
 								</div>
@@ -530,7 +529,7 @@
 					<div class="col-md-4">
 						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>
-								Passenger Name <span class="asterisk"></span>
+								Passenger Name <span class="asterisk">*</span>
 							</mat-label>
 							<input matInput placeholder="Passenger Name" type="text" formControlName="passenger_name"
 								(focus)="$event.target.select()" />
@@ -549,7 +548,7 @@
 					<div class="col-md-4">
 						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>
-								Passenger Email
+								Passenger Email <span class="asterisk">*</span>
 							</mat-label>
 							<input matInput placeholder="Passenger Email" type="text" formControlName="passenger_email"
 								(focus)="$event.target.select()" />
@@ -568,7 +567,7 @@
 					<div class="col-md-4">
 						<mat-form-field appearance="outline" class="mat-custom-phone m-0 pcellLabelClass">
 							<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Passenger
-								Cell
+								Cell <span class="asterisk">*</span>
 							</label>
 							<input matInput formControlName="passenger_cell" ng2TelInput [ng2TelInputOptions]="{
 									preferredCountries: ['us', 'ca', 'mx', 'gb']
@@ -637,7 +636,7 @@
 			</h2>
 			<div class="row">
 				<!-- Meet Greet Choices -->
-				<div class="col-md-11">
+				<div class="col-md-11 ml-3">
 					<mat-form-field appearance="outline">
 						<mat-label>
 							Meet and Greet Choices <span class="asterisk"></span>
@@ -652,7 +651,7 @@
 				</div>
 
 				<!-- Number Of Vehicles -->
-				<div class="col-md-3" id="no_of_vehicle">
+				<div class="col-md-3 ml-3" id="no_of_vehicle">
 					<mat-form-field appearance="outline">
 						<mat-label>
 							Number of Vehicles
@@ -697,7 +696,7 @@
 
 			<!-- Pickup - Address Field -->
 			<div *ngIf="!searchSubstring(Form.transfer_type.value, 'airport_')">
-				<div class="row px-2">
+				<div class="row ml-1">
 					<div class="col-md-12">
 						<mat-form-field appearance="outline">
 							<mat-label> Pickup Address </mat-label>
@@ -713,7 +712,7 @@
 
 			<!-- Pickup - Airport Fields -->
 			<div *ngIf="searchSubstring(Form.transfer_type.value, 'airport_')">
-				<div class="row px-2">
+				<div class="row ml-1">
 					<!-- Airport -->
 					<div class="col-md-6">
 						<!-- <mat-form-field appearance="outline">
@@ -808,7 +807,7 @@
 
 			<!-- Pickup - Cruise Details -->
 			<div *ngIf="searchSubstring(Form.transfer_type.value, 'cruise_')">
-				<div class="row px-2">
+				<div class="row ml-1">
 					<!-- Cruise Port -->
 					<div class="col-md-4">
 						<mat-form-field appearance="outline">
@@ -853,7 +852,7 @@
 
 			<!-- Dropoff - Address Field -->
 			<div *ngIf="!searchSubstring(Form.transfer_type.value, '_airport')">
-				<div class="row px-2">
+				<div class="row ml-1">
 					<div class="col-md-12">
 						<mat-form-field appearance="outline">
 							<mat-label> Dropoff Address </mat-label>
@@ -869,7 +868,7 @@
 
 			<!-- Dropoff - Airport Field -->
 			<div *ngIf="searchSubstring(Form.transfer_type.value, '_airport')">
-				<div class="row px-2">
+				<div class="row ml-1">
 					<!-- Airport -->
 					<div class="col-md-6">
 						<!-- <mat-form-field appearance="outline">
@@ -952,7 +951,7 @@
 
 			<!-- Dropoff - Cruise Details -->
 			<div *ngIf="searchSubstring(Form.transfer_type.value, '_cruise')">
-				<div class="row px-2">
+				<div class="row ml-1">
 					<!-- Cruise Port -->
 					<div class="col-md-4">
 						<mat-form-field appearance="outline">
@@ -1048,10 +1047,16 @@
 						<div class="google_map">
 							<div id="map" class="map"></div>
 						</div>
-						<h6>
-							Total Distance: {{ mToMi(distance) }} Miles / {{ mToKm(distance)
-							}} Km
-						</h6>
+						<div class="row">
+							<h6>
+								Total Distance: {{ mToMi(distance) }} Miles / {{ mToKm(distance)
+								}} Km
+							</h6>
+							<h6 class="mx-2">
+								Estimated time: {{convertToMinutes(Form.journeyTime.value)}} mins
+							</h6>
+						</div>
+
 					</div>
 				</div>
 				<!-- AGM Map Ends -->
@@ -1511,7 +1516,7 @@
 					NOTE : Enter pickup and drop off locations first, then enter extra stops.
 				</p>
 			</div>
-			
+
 
 
 
@@ -1704,10 +1709,16 @@
 						<div class="google_map">
 							<div id="return_map" class="map"></div>
 						</div>
-						<h6>
-							Total Distance: {{ mToMi(return_distance) }} Miles / {{
-							mToKm(return_distance) }} Km
-						</h6>
+						<div class="row">
+							<h6>
+								Total Distance: {{ mToMi(return_distance) }} Miles / {{
+								mToKm(return_distance) }} Km
+							</h6>
+							<h6 class="mx-2">
+								Estimated time: {{convertToMinutes(Form.returnJourneyTime.value)}} mins
+							</h6>
+						</div>
+
 					</div>
 				</div>
 				<!-- AGM Map Ends -->
@@ -1725,11 +1736,12 @@
 
 		</div>
 
-		<app-rates-forms class="d-flex flex-wrap" [initRates]="true" [affiliate_type]="Form.affiliate_type.value" 
+		<app-rates-forms class="d-flex flex-wrap" [initRates]="true" [affiliate_type]="Form.affiliate_type.value"
 			[reservation_id]="booking_id" [reset]="reset_button" (formvalue)="RateFormValue($event)"
 			[distance]="distance_for_rates" [book_data]="booking_data" [isTravelShare]="isTravelShare"
-			[hours]="Form.number_of_hours?.value" [vehicles]="Form.number_of_vehicles?.value" [initReturnRates]="init_return_rates"
-			(returnNumberOfHr)="HandleReturnNumberOfHr($event)" (returnformvalue)="ReturnRateFormValue($event)">
+			[hours]="Form.number_of_hours?.value" [vehicles]="Form.number_of_vehicles?.value"
+			[initReturnRates]="init_return_rates" (returnNumberOfHr)="HandleReturnNumberOfHr($event)"
+			(returnformvalue)="ReturnRateFormValue($event)">
 		</app-rates-forms>
 		<div class="row">
 			<div class="col-md-12">
@@ -2110,8 +2122,8 @@
 								<span class="font-weight-bolder">
 									{{ textFormatter(Form.pickup.value) }}
 								</span>
-								<span (click)="showLocationPointOnMap(Form.pickup.value)"><i
-										class="bi bi-geo-alt-fill"></i></span>
+								<span (click)="showLocationPointOnMap(Form.pickup.value)"><i class="bi bi-geo-alt-fill"
+										style="font-size:24px"></i></span>
 							</div>
 						</div>
 					</div>
@@ -2130,7 +2142,7 @@
 									{{ textFormatter(Form.pickup_airport_name.value) }}
 								</span>
 								<span (click)="showLocationPointOnMap(Form.pickup_airport_name.value)">
-									<i class="bi bi-geo-alt-fill"></i></span>
+									<i class="bi bi-geo-alt-fill" style="font-size:24px"></i></span>
 							</div>
 						</div>
 						<!-- Airport -->
@@ -2227,8 +2239,8 @@
 									<span class="font-weight-bolder">
 										{{ stop.address }}
 									</span>
-									<span (click)="showLocationPointOnMap(stop.address)"><i
-											class="bi bi-geo-alt-fill"></i></span>
+									<span (click)="showLocationPointOnMap(stop.address)"><i class="bi bi-geo-alt-fill"
+											style="font-size:24px"></i></span>
 								</div>
 							</div>
 							<hr>
@@ -2254,8 +2266,8 @@
 								<span class="font-weight-bolder">
 									{{ textFormatter(Form.dropoff.value) }}
 								</span>
-								<span (click)="showLocationPointOnMap(Form.dropoff.value)"><i
-										class="bi bi-geo-alt-fill"></i></span>
+								<span (click)="showLocationPointOnMap(Form.dropoff.value)"><i class="bi bi-geo-alt-fill"
+										style="font-size:24px"></i></span>
 							</div>
 						</div>
 					</div>
@@ -2274,7 +2286,7 @@
 									{{ textFormatter(Form.dropoff_airport_name.value ) }}
 								</span>
 								<span (click)="showLocationPointOnMap(Form.dropoff_airport_name.value)">
-									<i class="bi bi-geo-alt-fill"></i></span>
+									<i class="bi bi-geo-alt-fill" style="font-size:24px"></i></span>
 
 							</div>
 						</div>
@@ -2418,7 +2430,7 @@
 										{{ textFormatter(Form.return_pickup.value) | titlecase }}
 									</span>
 									<span (click)="showLocationPointOnMap(Form.return_pickup.value)"><i
-											class="bi bi-geo-alt-fill"></i></span>
+											class="bi bi-geo-alt-fill" style="font-size:24px"></i></span>
 								</div>
 							</div>
 						</div>
@@ -2437,7 +2449,7 @@
 										{{ textFormatter(Form.return_pickup_airport_name.value) }}
 									</span>
 									<span (click)="showLocationPointOnMap(Form.return_pickup_airport_name.value)">
-										<i class="bi bi-geo-alt-fill"></i></span>
+										<i class="bi bi-geo-alt-fill" style="font-size:24px"></i></span>
 
 								</div>
 							</div>
@@ -2517,7 +2529,7 @@
 							</div>
 						</div>
 
-						<hr *ngIf="Form.return_extra_stops.value.length > 0" >
+						<hr *ngIf="Form.return_extra_stops.value.length > 0">
 						<!-- Return > Extra Stops -->
 						<div *ngIf="Form.return_extra_stops.value.length > 0">
 							<h5 class="p-2 m-0 text-xl">
@@ -2535,7 +2547,7 @@
 											{{ stop.address }}
 										</span>
 										<span (click)="showLocationPointOnMap(stop.address)"><i
-												class="bi bi-geo-alt-fill"></i></span>
+												class="bi bi-geo-alt-fill" style="font-size:24px"></i></span>
 									</div>
 								</div>
 								<hr>
@@ -2561,7 +2573,7 @@
 										{{ textFormatter(Form.return_dropoff.value) | titlecase }}
 									</span>
 									<span (click)="showLocationPointOnMap(Form.return_dropff.value)"><i
-											class="bi bi-geo-alt-fill"></i></span>
+											class="bi bi-geo-alt-fill" style="font-size:24px"></i></span>
 								</div>
 							</div>
 						</div>
@@ -2580,7 +2592,7 @@
 										{{ textFormatter(Form.return_dropoff_airport_name.value) }}
 									</span>
 									<span (click)="showLocationPointOnMap(Form.return_dropoff_airport_name.value)">
-										<i class="bi bi-geo-alt-fill"></i></span>
+										<i class="bi bi-geo-alt-fill" style="font-size:24px"></i></span>
 								</div>
 							</div>
 

@@ -28,7 +28,8 @@
 					<mat-form-field appearance="outline">
 						<mat-label>Search Filter by Key word</mat-label>
 						<input type="text" matInput (keyup)="handleSearchKeyword($event.target.value)"
-							[value]="searchText" placeholder="Search Filter by Key word" id="keyword">
+							(focus)="$event.target.select()" [value]="searchText"
+							placeholder="Search Filter by Key word" id="keyword">
 					</mat-form-field>
 				</div>
 				<!-- <div class="col-md-2  mt-3 mb-3">
@@ -53,8 +54,6 @@
 								<th>Payee Name</th>
 								<th>IATA</th>
 								<th>Address</th>
-								<th>City</th>
-								<th>State</th>
 								<th>Country</th>
 							</tr>
 						</thead>
@@ -76,10 +75,10 @@
 											<div class="dropdown-item-icon"></div>
 											View Cards
 										</a>
-										<a class="dropdown-item" (click)="clickTravelPlannerStaff(travelPlanner.id)">
+										<!-- <a class="dropdown-item" (click)="clickTravelPlannerStaff(travelPlanner.id)">
 											<div class="dropdown-item-icon"></div>
 											View Staff
-										</a>
+										</a> -->
 									</div>
 								</td>
 								<td>
@@ -89,20 +88,23 @@
 									</mat-slide-toggle>
 								</td>
 								<td *ngIf="travelPlanner.middle_name==null;else middleName">
-									<span [innerHTML]="highlighText(travelPlanner.first_name+' '+travelPlanner.last_name)"></span>
-									</td>
+									<span
+										[innerHTML]="highlighText(travelPlanner.first_name+' '+travelPlanner.last_name)"></span>
+								</td>
 								<ng-template #middleName>
 									<td>
-										<span [innerHTML]="highlighText(travelPlanner.first_name+' '+travelPlanner.middle_name+' '+travelPlanner.last_name)"></span></td>
+										<span
+											[innerHTML]="highlighText(travelPlanner.first_name+' '+travelPlanner.middle_name+' '+travelPlanner.last_name)"></span>
+									</td>
 								</ng-template>
 								<td><span [innerHTML]="highlighText(travelPlanner.email)"></span></td>
-								<td><span [innerHTML]="highlighText(travelPlanner.mobileIsd+travelPlanner.mobile)"></span></td>
+								<td><span
+										[innerHTML]="highlighText(travelPlanner.mobileIsd+travelPlanner.mobile)"></span>
+								</td>
 								<td><span [innerHTML]="highlighText(travelPlanner.agency_name)"></span></td>
 								<td><span [innerHTML]="highlighText(travelPlanner.payee)"></span></td>
 								<td><span [innerHTML]="highlighText(travelPlanner.iata)"></span></td>
-								<td><span [innerHTML]="highlighText(travelPlanner.street)"></span></td>
-								<td><span [innerHTML]="highlighText(travelPlanner.city)"></span></td>
-								<td><span [innerHTML]="highlighText(travelPlanner.state)"></span></td>
+								<td><span [innerHTML]="highlighText(travelPlanner.address)"></span></td>
 								<td><span [innerHTML]="highlighText(travelPlanner.country)"></span></td>
 							</tr>
 

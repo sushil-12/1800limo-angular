@@ -667,6 +667,10 @@ export class NewBookingComponent implements OnInit {
 			return
 		}
 	}
+	convertToMinutes(value){
+		return (value/60).toFixed(2)
+	}
+
 
 	SetLCFormValue(form_control: string, value: any) {
 		if (!value || !form_control) {
@@ -1583,6 +1587,7 @@ export class NewBookingComponent implements OnInit {
 
 		if (preview) {
 			let value = this.BookingForm.value
+			value['is_master_vehicle'] = this.is_master_vehicle
 			value['proceed'] = this.proceed
 				value['rateArray'] = this.rateArray
 				value['grand_total'] = this.Form.number_of_vehicles.value * this.subtotal

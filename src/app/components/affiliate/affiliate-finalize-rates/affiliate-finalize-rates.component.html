@@ -13,27 +13,31 @@
 
 	<div [attr.id]="'RateFormItem-' + item_index" class="my-4 px-md-3 rateSubSection" [formGroupName]="item.key"
 		[ngClass]="{'active': rate_params.chevrons[item.key]}"
-		*ngFor="let item of RateForm | keyvalue: returnZero; index as item_index" [ngStyle]="item.key == 'direct_taxes' ? {'display':'none'}: ''">
+		*ngFor="let item of RateForm | keyvalue: returnZero; index as item_index"
+		[ngStyle]="item.key == 'direct_taxes' ? {'display':'none'}: ''">
 		<div class="col-12 col-md-12" (click)="handleSubHeading(item.key)">
-			<h5 class="section-dropdown-header" *ngIf="item.key == 'all_inclusive_rates'">
-				Vehicle Base Rates
-			</h5>
-			<h5 class="section-dropdown-header" *ngIf="item.key == 'others'">
-				Special Event Surge Pricing
-			</h5>
-			<h5 class="section-dropdown-header" *ngIf="item.key == 'misc'">
-				Additional Misc. Charges
-			</h5>
-			<h5 class="section-dropdown-header" *ngIf="item.key == 'amenities'">
-				Extra Charge Amenities
-			</h5>
-			<h5 class="section-dropdown-header" *ngIf="item.key == 'direct_taxes'">
-				Direct Taxes
-			</h5>
-			<h5 class="section-dropdown-header" *ngIf="item.key == 'taxes'">
-				Tolls/Taxes
-			</h5>
-			
+			<div class="row ml-1 section-dropdown-header" *ngIf="item.key == 'all_inclusive_rates'">
+				<h5>Vehicle Base Rates</h5>
+			</div>
+			<div class="section-dropdown-header" *ngIf="item.key == 'others'">
+				<h5>Special Event Surge Pricing</h5>
+			</div>
+			<div class="row ml-1 section-dropdown-header" *ngIf="item.key == 'misc'">
+				<h5>Additional Misc. Charges &nbsp;</h5>
+				<p> (Parking, Bar, Mics)</p>
+			</div>
+			<div class="row ml-1 section-dropdown-header" *ngIf="item.key == 'amenities'">
+				<h5>Extra Charge Amenities &nbsp;</h5>
+				<p> (Baby, Booster, Baggage, etc)</p>
+			</div>
+			<div class="row ml-1 section-dropdown-header" *ngIf="item.key == 'direct_taxes'">
+				<h5>Direct Taxes</h5>
+			</div>
+			<div class="row ml-1 section-dropdown-header" *ngIf="item.key == 'taxes'">
+				<h5>Tolls/Taxes &nbsp;</h5>
+				<p> (Airport, Sea, City, Others)</p>
+			</div>
+
 			<!-- <h5 class="section-dropdown-header" *ngIf="item.key != 'others'"> 
 				{{ textFormatter(item.key) | titlecase }}
 			</h5> -->
@@ -52,8 +56,10 @@
 							{{ textFormatter(sub_item?.value?.controls?.rate_label?.value) |
 							titlecase }}
 						</mat-label>
-						<input type="number" matInput placeholder="0" formControlName="baserate" [tabIndex]="getTabIndex(item.key)"
-							class="font-weight-bolder rate-input-field text-right" (focus)="$event.target.select()"  (change)="handleNegtiveValue(item.key,sub_item.key,'baserate',$event.target.value)" />
+						<input type="number" matInput placeholder="0" formControlName="baserate"
+							[tabIndex]="getTabIndex(item.key)" class="font-weight-bolder rate-input-field text-right"
+							(focus)="$event.target.select()"
+							(change)="handleNegtiveValue(item.key,sub_item.key,'baserate',$event.target.value)" />
 					</mat-form-field>
 					<div class="errors" *ngIf="sub_item.key === 'Kilometer_Rate' && trigger_error">
 						<div class="error-field">
@@ -86,10 +92,13 @@
 							Number of Hours
 						</mat-label>
 						<!-- style="cursor: not-allowed" -->
-						<input type="number" matInput placeholder="0" [value]="hours" [ngClass]="is_readonly_min_rate ? 'block-cursor' : ''"
-							class="font-weight-bolder rate-input-field text-right" (change)="changeInHours($event.target.value)" [readonly]="is_readonly_min_rate" />
+						<input type="number" matInput placeholder="0" [value]="hours"
+							[ngClass]="is_readonly_min_rate ? 'block-cursor' : ''"
+							class="font-weight-bolder rate-input-field text-right"
+							(change)="changeInHours($event.target.value)" [readonly]="is_readonly_min_rate" />
 					</mat-form-field>
-					<span *ngIf="is_readonly_min_rate">Hours cannot be edited as these are the minimum rates issued</span>
+					<span *ngIf="is_readonly_min_rate">Hours cannot be edited as these are the minimum rates
+						issued</span>
 				</div>
 			</div>
 
@@ -123,7 +132,8 @@
 			<div class="col-2" *ngIf="item.key === 'taxes' || item.key == 'others'">
 				<!-- Matslide Toggle -->
 				<div class="d-block">
-					<mat-slide-toggle [checked]="sub_item?.value?.controls?.type?.value == 'percent'" [tabIndex]="getTabIndex(item.key)"
+					<mat-slide-toggle [checked]="sub_item?.value?.controls?.type?.value == 'percent'"
+						[tabIndex]="getTabIndex(item.key)"
 						(change)="changeValue('RatesForm', item.key, sub_item.key, 'type', $event.checked ? 'percent' : 'flat')">
 						<i class="bi mx-1"
 							[ngClass]="sub_item?.value?.controls?.type?.value === 'flat' ? 'bi-currency-dollar' : 'bi-percent'"></i>
@@ -141,8 +151,7 @@
 			</div>
 		</div>
 		<div class="row d-flex justify-content-end m-2">
-			<i class="bi bi-x fa-2x" 
-			(click)="handleSubHeadingScroll(item.key,'RateFormItem-' + item_index)"></i>
+			<i class="bi bi-x fa-2x" (click)="handleSubHeadingScroll(item.key,'RateFormItem-' + item_index)"></i>
 		</div>
 	</div>
 	<div class="row d-flex justify-content-end mx-2">
@@ -188,6 +197,3 @@
 		</div>
 	</div>
 </div>
-
-
-
