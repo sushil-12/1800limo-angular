@@ -17,7 +17,7 @@
 					</div>
 					<div class="col-md-4">
 						<mat-form-field appearance="outline">
-							<mat-label>Middle Name</mat-label>
+							<mat-label>Middle Name<span class="asterisk"></span></mat-label>
 							<input formControlName="middleName" type="text" matInput placeholder="Middle Name">
 						</mat-form-field>
 
@@ -34,8 +34,8 @@
 
 					<div class="col-md-4">
 						<mat-form-field appearance="outline" class="mobileLabelClass">
-							<label
-								class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Contact</label>
+							<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Contact<span
+									class="asterisk"></span></label>
 							<input matInput placeholder="Contact" formControlName="office" ng2TelInput
 								[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
 								placeholder="1234567890" class="phoneNumberClass"
@@ -145,7 +145,9 @@
 					</div>
 					<div class="col-md-6">
 						<mat-form-field appearance="outline" class="mobileLabelClass">
-							<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Fax</label>
+							<label
+								class="mat-form-field-label mat-empty mat-form-field-empty labelClass margin-left-minus">Fax<span
+									class="asterisk"></span></label>
 							<input matInput placeholder="Fax" formControlName="fax" ng2TelInput
 								[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
 								placeholder="1234567890" class="phoneNumberClass"
