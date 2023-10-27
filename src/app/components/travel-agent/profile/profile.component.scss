@@ -121,4 +121,7 @@ top:2.05em}
 	font-size: 19px;
 	margin-left: 2px;
 }
+:host ::ng-deep .mat-input-element{
+	font-weight: 500;
+}
 
