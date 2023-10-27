@@ -11,6 +11,7 @@ import { CustomvalidationService } from 'src/app/services/customvalidation.servi
 import { StateManagementService } from 'src/app/services/statemanagement.service';
 import { TravelAgentService } from 'src/app/services/travel-agent.service';
 import { SharedModule } from '../../shared/shared.module';
+import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 
 @Component({
   selector: 'app-travel-agent-stripe-form',
@@ -72,7 +73,8 @@ export class TravelAgentStripeFormComponent implements OnInit {
 		private ngZone: NgZone,
 		private el: ElementRef,
 		private customValidator: CustomvalidationService,
-		private globalFunctions: SharedModule
+		private globalFunctions: SharedModule,
+		private errordialog: ErrorDialogService,
 	) { }
 
 	ngOnInit(): void {
@@ -81,8 +83,17 @@ export class TravelAgentStripeFormComponent implements OnInit {
 
 		if(JSON.parse(sessionStorage.getItem('step_completed_obj'))){
 			 let check_step = JSON.parse(sessionStorage.getItem('step_completed_obj'))
-			 if(check_step.step2 == "uncompleted"){
-				this.router.navigate(["/admin/travel-planner-account/step1"])
+			 console.log(check_step.step1,check_step.step2,"chekc step 1 and 2")
+			 if(check_step.step1 == "uncompleted"){
+			 this.router.navigate(["/admin/travel-planner-account/step1"])
+			 this.errordialog.openDialog({
+				errors: {
+					error: `Please complete previous step first.`
+				}
+			})
+			 }
+			 else{
+				this.router.navigate(["/admin/travel-planner-account/step2"])
 			 }
 		}
 
