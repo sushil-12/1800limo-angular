@@ -52,12 +52,17 @@ export class TravelAgentStepsComponent implements OnInit {
 					if (data) {
 						const stepCompleted = data.step_completed;
 						const stepCompletedObj = data.step_completed_obj;
+						console.log(stepCompleted,stepCompletedObj,"uin step compleyted chec")
 						if (stepCompleted) {
 							this.stepCompleted = stepCompleted;
 							this.stepCompletedObj = stepCompletedObj;
 							this.adminService.updateStepsArrayLocalTravelAgent(stepCompleted);
 							this.adminService.updateStepsCompletedObjTravelAgent(stepCompletedObj);
 							this.stepCompletionTick();
+						}
+						else{
+							this.adminService.updateStepsArrayLocalTravelAgent(stepCompleted);
+							this.adminService.updateStepsCompletedObjTravelAgent(stepCompletedObj);
 						}
 					}
 				});
@@ -114,7 +119,7 @@ export class TravelAgentStepsComponent implements OnInit {
 				}
 			})
 			console.log('nav------step' , nav_step)
-			this.router.navigate(['/travel-planner-account/' + (nav_step)])
+			this.router.navigate(['/admin/travel-planner-account/' + (nav_step)])
 		}
 		// this.getAffiliateName();
 
