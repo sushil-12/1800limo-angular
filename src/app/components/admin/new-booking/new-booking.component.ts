@@ -590,17 +590,28 @@ export class NewBookingComponent implements OnInit {
 
 			this.$spinner.hide('normalspinner')
 			console.log('<<<<<<<<<<<-----------set pickup date------->>>>', moment().format('YYYY-MM-DD'), this.updateType)
-			if (this.updateType == 'repeat' || this.updateType == 'return') {
-				this.scroll('travel_time')
+			if (this.updateType == 'repeat' || this.updateType == 'return' || this.updateType == 'edit') {
+				this.scroll('travel_date')
 				this.SetFormValue('pickup_date', moment().format('YYYY-MM-DD'))
 			}
 		})
 
 	}
 	scroll(id) {
+		// let el = document.getElementById(id);
+		// let elementRect = el.getBoundingClientRect();
+		// let absoluteElementTop = elementRect.top + window.pageYOffset;
+		// let topElement = absoluteElementTop - 200;
+		
+		// console.log(`scrolling to ${id}`, el , absoluteElementTop ,window.innerHeight);
+		// window.scrollTo({
+		// 	top: topElement,
+		// 	behavior: 'smooth'
+		// });
+		
 		let el = document.getElementById(id);
 		console.log(`scrolling to ${id}`, el);
-		el.scrollIntoView(true);
+		el.scrollIntoView({ behavior: 'smooth' });
 	}
 
 	SetFormValue(form_control: string, value: any) {

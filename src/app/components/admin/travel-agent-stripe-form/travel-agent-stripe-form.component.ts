@@ -81,21 +81,21 @@ export class TravelAgentStripeFormComponent implements OnInit {
 		// const currentUser = localStorage.getItem("travelAgent_id")
 		this.travelAgentId = localStorage.getItem("travelAgent_id")
 
-		if(JSON.parse(sessionStorage.getItem('step_completed_obj'))){
-			 let check_step = JSON.parse(sessionStorage.getItem('step_completed_obj'))
-			 console.log(check_step.step1,check_step.step2,"chekc step 1 and 2")
-			 if(check_step.step1 == "uncompleted"){
-			 this.router.navigate(["/admin/travel-planner-account/step1"])
-			 this.errordialog.openDialog({
-				errors: {
-					error: `Please complete previous step first.`
-				}
-			})
-			 }
-			 else{
-				this.router.navigate(["/admin/travel-planner-account/step2"])
-			 }
-		}
+		// if(JSON.parse(sessionStorage.getItem('step_completed_obj'))){
+		// 	 let check_step = JSON.parse(sessionStorage.getItem('step_completed_obj'))
+		// 	 console.log(check_step.step1,check_step.step2,"chekc step 1 and 2")
+		// 	 if(check_step.step1 == "uncompleted"){
+		// 	 this.router.navigate(["/admin/travel-planner-account/step1"])
+		// 	 this.errordialog.openDialog({
+		// 		errors: {
+		// 			error: `Please complete previous step first.`
+		// 		}
+		// 	})
+		// 	 }
+		// 	 else{
+		// 		this.router.navigate(["/admin/travel-planner-account/step2"])
+		// 	 }
+		// }
 
 		this.mapFunction();
 

@@ -350,8 +350,8 @@ export class AddTravelPlannerAccountComponent implements OnInit
 				this.response = result;
 				this.spinner.hide();//hide spinner
 				this.disableSubmitButton = false; //enable submit button
-				// console.log(this.response?.id,"this.response?.data?.id")
-				localStorage.setItem('travelAgent_id',this.response?.data?.acc_id)
+				console.log("this.response?.data?.id",this.response)
+				localStorage.setItem('travelAgent_id',this.response?.data?.id)
 				this.router.navigateByUrl('/admin/travel-planner-account/step2').then(() => {
 					window.location.reload();
 				  });
