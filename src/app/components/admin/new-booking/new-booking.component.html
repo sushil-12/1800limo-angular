@@ -693,7 +693,7 @@
 					<div class="col-md-4">
 						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>
-								Passenger Name <span class="asterisk">*</span>
+								Passenger Name
 							</mat-label>
 							<input matInput placeholder="Passenger Name" type="text" formControlName="passenger_name"
 								(focus)="$event.target.select()" />
@@ -3111,7 +3111,7 @@
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
-									Name <span class="asterisk">*</span>
+									Name
 								</span>
 							</div>
 							<div class="col-md-8 value">
@@ -3369,7 +3369,7 @@
 						</div>
 						<!-- Flight Number -->
 						<!-- Distance Details -->
-						<!-- <div class="row m-0">
+						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
 									Total Distance
@@ -3393,7 +3393,7 @@
 									{{convertToMinutes(Form.journeyTime.value)}} mins
 								</span>
 							</div>
-						</div> -->
+						</div>
 						<!-- Distance Details -->
 					</div>
 
@@ -3472,7 +3472,7 @@
 					<hr *ngIf="Form.extra_stops.value.length == 0" />
 
 					<!-- ############# Dropoff ################# -->
-					<h5 class="px-4 m-1 text-xl preview-dropoff-color">
+					<h5 class="m-1 text-xl preview-dropoff-color">
 						Drop Off Details
 					</h5>
 					<!-- Dropoff > City Details -->
@@ -3905,27 +3905,6 @@
 					</div>
 				</div>
 
-				<!-- AGM Map -->
-				<div class="row">
-					<!-- AGM Map -->
-					<div class="col-md-12 margin-top-minus">
-						<div class="map-block">
-							<div class="google_map">
-								<div id="map" class="map"></div>
-							</div>
-							<div class="row">
-								<h6 class="mx-2">
-									Total Distance: {{ mToMi(distance) }} Miles / {{ mToKm(distance)
-									}} Km
-								</h6>
-								<h6 class="mx-2">
-									Estimated time: {{convertToMinutes(Form.journeyTime.value)}} mins
-								</h6>
-							</div>
-						</div>
-					</div>
-					<!-- AGM Map Ends -->
-				</div>
 			</div>
 
 
