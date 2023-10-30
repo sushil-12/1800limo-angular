@@ -59,6 +59,7 @@ export class StripeFormComponent implements OnInit {
 	filteredOptions: any;
 	badgeOptions: any;
 	travelAgentId: any;
+	acc_id1:any;
 
 	constructor(
 		private adminService: AdminService,
@@ -77,9 +78,29 @@ export class StripeFormComponent implements OnInit {
 	) { }
 
 	ngOnInit(): void {
+		//setting acc_id to send in add bank api
 		const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-		this.travelAgentId = currentUser?.account_id
+		this.acc_id1 = currentUser?.account_id
 
+		//checking if step 2 completed then setting travel agent id to call edit bank api
+		if(JSON.parse(sessionStorage.getItem('step_completed_obj'))){
+			let check_step = JSON.parse(sessionStorage.getItem('step_completed_obj'))
+			console.log(check_step.step1,check_step.step2,"chekc step 1 and 2")
+			if(check_step.step2 == "completed"){
+				//  this.router.navigate(["/admin/travel-planner-account/step1"])
+				//  this.errordialog.openDialog({
+					// 	errors: {
+						// 		error: `Please complete previous step first.`
+						// 	}
+						// })
+						const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+		                this.travelAgentId = currentUser?.account_id
+						// this.travelAgentId = localStorage.getItem("travelAgent_id")
+			 }
+			//  else{
+			// 	this.router.navigate(["/admin/travel-planner-account/step2"])
+			//  }
+		}
 		this.mapFunction();
 
 		const currentYear = (new Date()).getFullYear();
@@ -99,7 +120,7 @@ export class StripeFormComponent implements OnInit {
 		//add amenity form validation
 		this.addBankForm = this.formBuilder.group({
 			id: [''],//bank id for edit purpose
-			acc_id: [this.travelAgentId, [Validators.required, Validators.pattern("^[0-9].*$")]],//affiliate account id
+			acc_id: [this.acc_id1, [Validators.required, Validators.pattern("^[0-9].*$")]],//affiliate account id
 			BankName: [''],
 			BankAddress: [''],
 			AccountHolderFirstName: ['', Validators.required],
@@ -642,7 +663,7 @@ export class StripeFormComponent implements OnInit {
 		// console.log(JSON.stringify(this.addVehicleRatesForm.value));
 		this.disableSubmitButton = true; //disable submit button
 		this.spinner.show();
-		this.travelService.addBankOfAffiliate(this.addBankForm.value)
+		this.travelService.addBankOfAffiliate(this.addBankForm.value,this.travelAgentId)
 			.pipe(
 				catchError(err => {
 					this.spinner.hide();//hide spinner
