@@ -114,44 +114,8 @@ export class TravelAgentStripeFormComponent implements OnInit {
 			temp++;
 		}
 		//add amenity form validation
-		this.addBankForm = this.formBuilder.group({
-			id: [''],//bank id for edit purpose
-			acc_id: [localStorage.getItem("travelAgent_id"), [ Validators.pattern("^[0-9].*$")]],//affiliate account id
-			BankName: [''],
-			BankAddress: [''],
-			AccountHolderFirstName: ['', Validators.required],
-			AccountHolderLastName: ['', Validators.required],
-			AccountNumber: ['', [Validators.required, this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
-			Routing: ['', [Validators.required]],
-			AccountType: ['company', Validators.required],
-			ssn: ['', [Validators.required, Validators.pattern("^[0-9]*$"), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
-			haveEin: ['yesEin'],
-			ein: ['', []],
-			currency: ['', Validators.required],
-			currencyShow: [''],
-			dobDay: ['', Validators.required],
-			dobMonth: ['', Validators.required],
-			dobYear: ['', Validators.required],
-			id_front_image: ['', Validators.required],
-			id_back_image: [''],
-			address: ['', Validators.required],
-			latitude: ['', Validators.required],
-			longitude: ['', Validators.required],
-			badge_city: [''],
-			badge_city_name: [''],
-			street: [''],
-			city: [''],
-			state: [''],
-			country: ['', Validators.required],
-			zipCode: [''],
-			unit: [''],
-			primaryCardType: ['personal'],
-			// primaryCardNumber: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(16), Validators.maxLength(16), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
-			// primaryCSC: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(3), Validators.maxLength(3), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
-			primaryMM: [''],
-			primaryYY: [''],
-			primaryCardHolderName: ['']
-		});
+		this.buildBankForm()
+		
 		this.httpClient.get("assets/json/currencyOptions.json").subscribe(data => {
 			for (const key in data) {
 				this.currencyOptions.push(data[key])
@@ -196,7 +160,49 @@ export class TravelAgentStripeFormComponent implements OnInit {
 			// });
 		}
 
-	}//google map autocomplete
+	}
+	
+	buildBankForm(){
+		this.addBankForm = this.formBuilder.group({
+			id: [''],//bank id for edit purpose
+			acc_id: [localStorage.getItem("travelAgent_id"), [ Validators.pattern("^[0-9].*$")]],//affiliate account id
+			BankName: [''],
+			BankAddress: [''],
+			AccountHolderFirstName: ['', Validators.required],
+			AccountHolderLastName: ['', Validators.required],
+			AccountNumber: ['', [Validators.required, this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
+			Routing: ['', [Validators.required]],
+			AccountType: ['company', Validators.required],
+			ssn: ['', [Validators.required, Validators.pattern("^[0-9]*$"), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
+			haveEin: ['yesEin'],
+			ein: ['', []],
+			currency: ['', Validators.required],
+			currencyShow: [''],
+			dobDay: ['', Validators.required],
+			dobMonth: ['', Validators.required],
+			dobYear: ['', Validators.required],
+			id_front_image: ['', Validators.required],
+			id_back_image: [''],
+			address: ['', Validators.required],
+			latitude: ['', Validators.required],
+			longitude: ['', Validators.required],
+			badge_city: [''],
+			badge_city_name: [''],
+			street: [''],
+			city: [''],
+			state: [''],
+			country: ['', Validators.required],
+			zipCode: [''],
+			unit: [''],
+			primaryCardType: ['personal'],
+			// primaryCardNumber: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(16), Validators.maxLength(16), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
+			// primaryCSC: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(3), Validators.maxLength(3), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
+			primaryMM: [''],
+			primaryYY: [''],
+			primaryCardHolderName: ['']
+		});
+	}
+	//google map autocomplete
 	latitude: number;
 	longitude: number;
 	requestLatitude: number;
@@ -242,11 +248,11 @@ export class TravelAgentStripeFormComponent implements OnInit {
 									zipCode: place.address_components[i].long_name
 								});
 							}
-							else if (place.address_components[i].types[j] == "street_number") {
-								this.addBankForm.patchValue({
-									street: place.address_components[i].long_name
-								});
-							}
+							// else if (place.address_components[i].types[j] == "street_number") {
+							// 	this.addBankForm.patchValue({
+							// 		street: place.address_components[i].long_name
+							// 	});
+							// }
 						}
 					}
 					this.addBankForm.patchValue({
@@ -692,9 +698,11 @@ export class TravelAgentStripeFormComponent implements OnInit {
 		this.closeTab.emit();
 	}
 	resetForm() {
-		this.addBankForm.reset();
+		this.buildBankForm();
 		this.id_front_image = "";
 		this.id_back_image = "";
+		window.scrollTo({ top: 0, behavior: 'smooth' });
+
 	}
 
 
