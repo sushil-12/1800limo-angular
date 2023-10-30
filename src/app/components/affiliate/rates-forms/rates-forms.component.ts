@@ -280,7 +280,7 @@ export class RatesFormsComponent implements OnInit , OnChanges {
 			taxes: this.$form.group({}),
 			amenities: this.$form.group({}),
 			misc: this.$form.group({}),
-			others: this.$form.group({}),
+			// others: this.$form.group({}), // As discussed we don't need gratuity bucket
 		});
 
 		// fetch the data from backend
@@ -328,7 +328,7 @@ export class RatesFormsComponent implements OnInit , OnChanges {
 			taxes: this.$form.group({}),
 			amenities: this.$form.group({}),
 			misc: this.$form.group({}),
-			others: this.$form.group({}),
+			// others: this.$form.group({}), // As discussed we don't need gratuity bucket
 		});
 
 		if(this.newBooking || this.distance){
