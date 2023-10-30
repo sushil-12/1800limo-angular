@@ -349,6 +349,9 @@ export class RatesFormComponent implements OnInit, OnChanges {
 						}
 				}
 			}
+
+			this.calculateTotal("RatesForm");
+			this.calculateGrandTotal("RatesForm");
 		
 		// will send the rates form value to the booking component on any change in the whole form
 		this.RatesForm.valueChanges.subscribe((value: any) => {
@@ -357,7 +360,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 		});
 		(<FormGroup>this.RatesForm.get('all_inclusive_rates')).valueChanges.subscribe(() => {
 			for (let formgroup in this.RateForm) {
-				for (let subform in this.RateForm[formgroup].controls) {
+				for (let subform in this.RateForm[formgroup]?.controls) {
 					if (formgroup != 'all_inclusive_rates') {
 						this.calculateAmount('RatesForm', formgroup, subform)
 					}
@@ -668,39 +671,11 @@ export class RatesFormComponent implements OnInit, OnChanges {
 				(<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("amount").setValue(amount);
 			}
 
-			if (formgroup == "others") {
-				// let kmrate = (<FormGroup>((<FormGroup>this.RatesForm.get("all_inclusive_rates")).get("Base_Rate"))).get("amount").value;
-				let type = (<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("type").value;
-				(<FormGroup>((<FormGroup>this.RatesForm.get("others")).get(subform))).get("type").valueChanges.subscribe((value: any) => {
-					this.calculateAmount("RatesForm", formgroup, subform);
-				});
-				if (type === "flat") {
-					let kmrate = await this.calculateBaseRate('RatesForm') - this.calc_admin_share;
-					let basevalue = (<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("baserate").value;
-
-					let amount = Number(Number((basevalue)).toFixed(2));
-
-					(<FormGroup>(<FormGroup>this.RatesForm.get(formgroup)).get(subform)).get("amount").setValue(amount);
-					// set value of percentage same as gratuity
-					(<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("percentage").setValue(basevalue);
-					console.log('km rate-->>', kmrate, '-->> basevalue-->>', basevalue, '-->> amount', amount)
-				}
-				if (type === "percent") {
-					let kmrate = await this.calculateBaseRate('RatesForm') - this.calc_admin_share - this.travel_agent_share;
-					let basevalue = (<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("baserate").value;
-
-					let amount = Number(Number((basevalue / 100) * kmrate).toFixed(2));
-
-					(<FormGroup>(<FormGroup>this.RatesForm.get(formgroup)).get(subform)).get("amount").setValue(amount);
-					// set value of percentage same as gratuity
-					(<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("percentage").setValue(basevalue);
-					console.log('km rate-->>', kmrate, '-->> basevalue-->>', basevalue, '-->> amount', amount)
-				}
-			}
+		
 
 			if (formgroup == "taxes") {
 				let type = (<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("type").value;
-				if (type === "flat") {
+				if (type === "flat" || type==null) {
 					(<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("amount").setValue(baserate);
 				}
 
