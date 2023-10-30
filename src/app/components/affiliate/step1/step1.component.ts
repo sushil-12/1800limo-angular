@@ -478,15 +478,15 @@ export class Step1Component implements OnInit, AfterViewInit
 					});
 					//update dispatch email form validation
 					this.updateDispatchEmailForm = this.formBuilder.group({
-						phoneOtp: [
-							"",
-							[
-								Validators.required,
-								Validators.pattern("^[0-9]*$"),
-								Validators.minLength(6),
-								Validators.maxLength(6),
-							],
-						],
+						// phoneOtp: [
+						// 	"",
+						// 	[
+						// 		Validators.required,
+						// 		Validators.pattern("^[0-9]*$"),
+						// 		Validators.minLength(6),
+						// 		Validators.maxLength(6),
+						// 	],
+						// ],
 						emailOtp: [
 							"",
 							[
