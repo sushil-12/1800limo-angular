@@ -460,7 +460,8 @@
 									</label>
 									<input matInput formControlName="phone" ng2TelInput [ng2TelInputOptions]="{
 												preferredCountries: ['us', 'ca', 'mx', 'gb']
-											}" placeholder="1234567890" class="phoneNumberClass" (intlTelInputObject)="LCTelInputObject($event)" (keyup)="handleLooseCustomerPhone($event)"
+											}" placeholder="1234567890" class="phoneNumberClass" (intlTelInputObject)="LCTelInputObject($event)"
+										(keyup)="handleLooseCustomerPhone($event)"
 										(countryChange)="SetFormValue('loose_customer>phone_isd', $event.dialCode); SetFormValue('loose_customer>phone_country', $event.iso2)"
 										(focus)="$event.target.select()" />
 								</mat-form-field>
@@ -874,7 +875,7 @@
 							Name <span class="asterisk">*</span>
 						</mat-label>
 						<input type="text" matInput placeholder="Full Name" (focus)="$event.target.select()"
-							formControlName="lose_affiliate_name"  (keyup)="handleLooseAffiliateName()"/>
+							formControlName="lose_affiliate_name" (keyup)="handleLooseAffiliateName()" />
 					</mat-form-field>
 					<div class="error-box">
 						<div class="error-message"
@@ -896,7 +897,8 @@
 						</label>
 						<input matInput formControlName="lose_affiliate_phone" ng2TelInput [ng2TelInputOptions]="{
 								preferredCountries: ['us', 'ca', 'mx', 'gb']
-							}" placeholder="1234567890" class="phoneNumberClass" (intlTelInputObject)="LATelInputObject($event)" (keyup)="handleLooseAffiliatePhone()"
+							}" placeholder="1234567890" class="phoneNumberClass" (intlTelInputObject)="LATelInputObject($event)"
+							(keyup)="handleLooseAffiliatePhone()"
 							(countryChange)="SetFormValue('lose_affiliate_phone_isd', '+' + $event.dialCode); SetFormValue('lose_affiliate_phone_country', $event.iso2)"
 							(focus)="$event.target.select()" />
 					</mat-form-field>
@@ -3366,6 +3368,33 @@
 							</div>
 						</div>
 						<!-- Flight Number -->
+						<!-- Distance Details -->
+						<!-- <div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Total Distance
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ mToMi(distance) }} Miles / {{ mToKm(distance)
+									}} Km
+								</span>
+							</div>
+						</div>
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Estimated time
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{convertToMinutes(Form.journeyTime.value)}} mins
+								</span>
+							</div>
+						</div> -->
+						<!-- Distance Details -->
 					</div>
 
 					<!-- Pickup > Cruise Details -->
@@ -3871,8 +3900,31 @@
 									</span>
 								</div>
 							</div>
+
 						</div>
 					</div>
+				</div>
+
+				<!-- AGM Map -->
+				<div class="row">
+					<!-- AGM Map -->
+					<div class="col-md-12 margin-top-minus">
+						<div class="map-block">
+							<div class="google_map">
+								<div id="map" class="map"></div>
+							</div>
+							<div class="row">
+								<h6 class="mx-2">
+									Total Distance: {{ mToMi(distance) }} Miles / {{ mToKm(distance)
+									}} Km
+								</h6>
+								<h6 class="mx-2">
+									Estimated time: {{convertToMinutes(Form.journeyTime.value)}} mins
+								</h6>
+							</div>
+						</div>
+					</div>
+					<!-- AGM Map Ends -->
 				</div>
 			</div>
 
