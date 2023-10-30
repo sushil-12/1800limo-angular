@@ -63,9 +63,9 @@
 						<div *ngIf="f.AccountNumber.errors.required">
 							This field is required
 						</div>
-						<div *ngIf="f.AccountNumber.errors.pattern">
+						<!-- <div *ngIf="f.AccountNumber.errors.pattern">
 							This field should be a number
-						</div>
+						</div> -->
 					</div>
 				</div>
 				<div class="col-md-6">
@@ -164,7 +164,8 @@
 						<input type="text" placeholder="Pick one" aria-label="Number" matInput
 							formControlName="currencyShow" [matAutocomplete]="auto"
 							(keyup)="handleCurrency($event.target.value)">
-						<mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="onSelectionChange($event)">
+						<mat-autocomplete autoActiveFirstOption #auto="matAutocomplete"
+							(optionSelected)="onSelectionChange($event)">
 							<mat-option *ngFor="let currencyOption of currencyOptions"
 								[value]="currencyOption.currency + '-' + currencyOption.currencyCountry">
 								{{ currencyOption.countryName }} - {{ currencyOption.symbol }}
@@ -193,7 +194,8 @@
 					<mat-form-field appearance="outline">
 						<mat-label>SSN(USA required by stripe/GOVT ID for other countries)
 							<span class="asterisk">*</span></mat-label>
-						<input matInput placeholder="SSN(USA required by stripe/GOVT ID for other countries)" formControlName="ssn" tabindex="1" />
+						<input matInput placeholder="SSN(USA required by stripe/GOVT ID for other countries)"
+							formControlName="ssn" tabindex="1" />
 					</mat-form-field>
 					<div *ngIf="
 							(submittedForm && f.ssn.errors) ||
