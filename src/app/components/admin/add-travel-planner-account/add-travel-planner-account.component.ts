@@ -365,8 +365,15 @@ export class AddTravelPlannerAccountComponent implements OnInit
 
 	resetForm()
 	{
-		// this.addTravelPlannerAccountForm.reset();
-		this.buildTravelAgentForm();
+		const keepValues = [
+		this.addTravelPlannerAccountForm.controls.mobile.value,
+		
+	 ];
+
+	 
+	 // this.addTravelPlannerAccountForm.reset();
+	 this.buildTravelAgentForm();
+	 this.addTravelPlannerAccountForm.controls.mobile.patchValue(keepValues[0]);
 		window.scrollTo({ top: 0, behavior: 'smooth' });
 	}
 	backButton()
