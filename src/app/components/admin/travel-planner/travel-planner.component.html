@@ -99,7 +99,7 @@
 								</ng-template>
 								<td><span [innerHTML]="highlighText(travelPlanner.email)"></span></td>
 								<td><span
-										[innerHTML]="highlighText(travelPlanner.mobileIsd+travelPlanner.mobile)"></span>
+										[innerHTML]="highlighText(travelPlanner.mobileIsd+travelPlanner.mobile+' '+'('+travelPlanner?.mobileCountry.toUpperCase()+')')"></span>
 								</td>
 								<td><span [innerHTML]="highlighText(travelPlanner.agency_name)"></span></td>
 								<td><span [innerHTML]="highlighText(travelPlanner.payee)"></span></td>
