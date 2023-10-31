@@ -5,7 +5,7 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import {ThemePalette} from '@angular/material/core';
-
+declare var $: any;
 @Component({
   selector: 'app-travel-planner',
   templateUrl: './travel-planner.component.html',
@@ -122,6 +122,22 @@ export class TravelPlannerComponent implements OnInit {
 			args = args.toString()
 			var re = new RegExp(this.searchText, 'gi'); //'gi' for case insensitive and can use 'g' if you want the search to be case sensitive.
 			return args.replace(re, '<mark class="font-weight-bold">$&</mark>');
+		}
+	}
+
+  messagetype: Record<string, any>
+	sendMessage(type: 'email' | 'sms', travelPlanner: Object, message: string = null) {
+		console.log('Request to send a Message to travel agent id: ', type, travelPlanner['id'])
+		this.messagetype = { type, travelPlanner }
+		$('#messageModal').modal('show')
+		$('#messageModal').find('.modal-header').find('h4').text('Contact to Travel Agent via ' + type.toUpperCase())
+		$('#messageModal').find('.modal-body').find('p#affiliate-details').html(`Travel Agent Name: ${travelPlanner['first_name']} ${travelPlanner['last_name']}<br/>Travel Agent Email: ${travelPlanner['email']}`)
+		if (message != null) {
+			this.adminService.sendAffiliateMessage(type, travelPlanner['id'], { sendContent: message },).subscribe((response: any) => {
+				if (response.success) {
+					console.log('Message Sent Successfully. ')
+				}
+			})
 		}
 	}
 
