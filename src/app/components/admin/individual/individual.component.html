@@ -27,9 +27,9 @@
 				<div class="col-md-12 mt-3 mb-3">
 					<mat-form-field appearance="outline">
 						<mat-label>Type here to search</mat-label>
-						<input type="text" matInput placeholder="Search Filter by Key word" (focus)="$event.target.select()"
-						(keyup)="handleSearchKeyword($event.target.value)" [value]="searchText"
-						id="keyword" autofocus>
+						<input type="text" matInput placeholder="Search Filter by Key word"
+							(focus)="$event.target.select()" (keyup)="handleSearchKeyword($event.target.value)"
+							[value]="searchText" id="keyword" autofocus>
 					</mat-form-field>
 				</div>
 				<!-- <div class="col-md-2  mt-3 mb-3">
@@ -38,111 +38,117 @@
 			</div>
 		</div>
 
-<!-- new table design -->
+		<!-- new table design -->
 
 
-<div class="containeredd driverside_table">
-	<div class="row">
-		<div class="col-md-12 custom_table">
-			<div class="table-responsive" style="min-height: 350px">
-				<table class="table table-dark table-striped table-bordered dataTable dt-responsive"
-					id="dataTable" role="grid" aria-describedby="dataTable_info" cellspacing="0">
-					<thead>
-						<tr role="row">
-							<th>Actions</th>
-							<th>Status</th>
-							<th>Name</th>
-							<th>Email</th>
-							<th>Mobile</th>
-							<th>Address</th>
-							<th>City</th>
-							<th>State</th>
-							<th>Country</th>
-						</tr>
-					</thead>
-					<tbody >
-						<tr role="row" class="odd" *ngFor="let individual of individuals">
-							<td>
-								<a class="user-profileded view-button btn-transparent-dark dropdown-toggle"
-									id="navbarDropdownUserImage" href="javascript:void(0);" role="button"
-									data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									<span>View</span>
-								</a>
-								<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
-									aria-labelledby="navbarDropdownUserImage">
-									<a class="dropdown-item" (click)="clickEditIndividual(individual?.id)">
-										<div class="dropdown-item-icon"></div>
-										Edit Individual Account
-									</a>
-									<a class="dropdown-item" [routerLink]="['/admin/booking-list']"
-											[queryParams]="{type: 'past', id:individual?.id , isAffiliate:'false' , for:individual?.first_name}">
-											<div class="dropdown-item-icon"></div>
-											Past bookings
+		<div class="containeredd driverside_table">
+			<div class="row">
+				<div class="col-md-12 custom_table">
+					<div class="table-responsive" style="min-height: 350px">
+						<table class="table table-dark table-striped table-bordered dataTable dt-responsive"
+							id="dataTable" role="grid" aria-describedby="dataTable_info" cellspacing="0">
+							<thead>
+								<tr role="row">
+									<th>Actions</th>
+									<th>Status</th>
+									<th>Name</th>
+									<th>Email</th>
+									<th>Mobile</th>
+									<th>Address</th>
+									<th>City</th>
+									<th>State</th>
+									<th>Country</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr role="row" class="odd" *ngFor="let individual of individuals">
+									<td>
+										<a class="user-profileded view-button btn-transparent-dark dropdown-toggle"
+											id="navbarDropdownUserImage" href="javascript:void(0);" role="button"
+											data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+											<span>View</span>
 										</a>
-										<a class="dropdown-item" [routerLink]="['/admin/booking-list']"
-											[queryParams]="{type: 'future', id: individual?.id,isAffiliate:'false' , for:individual?.first_name}">
-											<div class="dropdown-item-icon"></div>
-											Future bookings
-										</a>
-									<a class="dropdown-item" (click)="clickIndividualCards(individual?.id)">
-										<div class="dropdown-item-icon" *></div>
-										View Cards
-									</a>
-								</div>
-							</td>
-							<td class="text-center font-weight-bolder cursor-pointer text-underline">
-								<mat-slide-toggle class="example-margin" [color]="color"
-									[checked]="individual?.status" [disabled]="disabled"
-									(change)="enableDisableClicked($event,individual?.id)">
-								</mat-slide-toggle>
-							</td>
-							<td *ngIf="individual?.middle_name == null;else middleName"><span [innerHTML]="highlighText(individual?.first_name+' '+individual?.last_name)"></span></td>
-								<ng-template #middleName>
-									<td><span [innerHTML]="highlighText(individual?.first_name+' '+individual?.middle_name+' '+individual?.last_name)"></span></td>
-								</ng-template>
-								<td><span [innerHTML]="highlighText(individual?.email)"></span></td>
-								<td><span [innerHTML]="highlighText(individual?.mobileIsd+individual?.mobile)"></span></td>
-								<td><span [innerHTML]="highlighText(individual?.address)"></span></td>
-								<td><span [innerHTML]="highlighText(individual?.city)"></span></td>
-								<td><span [innerHTML]="highlighText(individual?.state)"></span></td>
-								<td><span [innerHTML]="highlighText(individual?.country)"></span></td>
-					</tbody>
-				</table>
-			</div>
-			<!-- <p class="text-danger text-lg" *ngIf="noError">
+										<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
+											aria-labelledby="navbarDropdownUserImage">
+											<a class="dropdown-item" (click)="clickEditIndividual(individual?.id)">
+												<div class="dropdown-item-icon"></div>
+												Edit Individual Account
+											</a>
+											<a class="dropdown-item" [routerLink]="['/admin/booking-list']"
+												[queryParams]="{type: 'past', id:individual?.id , isAffiliate:'false' , for:individual?.first_name}">
+												<div class="dropdown-item-icon"></div>
+												Past bookings
+											</a>
+											<a class="dropdown-item" [routerLink]="['/admin/booking-list']"
+												[queryParams]="{type: 'future', id: individual?.id,isAffiliate:'false' , for:individual?.first_name}">
+												<div class="dropdown-item-icon"></div>
+												Future bookings
+											</a>
+											<a class="dropdown-item" (click)="clickIndividualCards(individual?.id)">
+												<div class="dropdown-item-icon" *></div>
+												View Cards
+											</a>
+										</div>
+									</td>
+									<td class="text-center font-weight-bolder cursor-pointer text-underline">
+										<mat-slide-toggle class="example-margin" [color]="color"
+											[checked]="individual?.status" [disabled]="disabled"
+											(change)="enableDisableClicked($event,individual?.id)">
+										</mat-slide-toggle>
+									</td>
+									<td *ngIf="individual?.middle_name == null;else middleName"><span
+											[innerHTML]="highlighText(individual?.first_name+' '+individual?.last_name)"></span>
+									</td>
+									<ng-template #middleName>
+										<td><span
+												[innerHTML]="highlighText(individual?.first_name+' '+individual?.middle_name+' '+individual?.last_name)"></span>
+										</td>
+									</ng-template>
+									<td><span [innerHTML]="highlighText(individual?.email)"></span></td>
+									<td><span
+											[innerHTML]="highlighText(individual?.mobileIsd+individual?.mobile+' '+'('+individual?.mobileCountry.toUpperCase()+')')"></span>
+									</td>
+									<td><span [innerHTML]="highlighText(individual?.address)"></span></td>
+									<td><span [innerHTML]="highlighText(individual?.city)"></span></td>
+									<td><span [innerHTML]="highlighText(individual?.state)"></span></td>
+									<td><span [innerHTML]="highlighText(individual?.country)"></span></td>
+							</tbody>
+						</table>
+					</div>
+					<!-- <p class="text-danger text-lg" *ngIf="noError">
 				No Results Found.
 			</p> -->
+				</div>
+				<!----PAGINATION---->
+				<!----BACK BTN---->
+				<nav aria-label="Page navigation example">
+					<ul class="pagination pagination-circle pg-blue">
+						<li *ngIf="currentPage!=1" class="page-item disabled" (click)="loadIndividuals(firstPageUrl)"><a
+								class="page-link">First</a></li>
+						<li *ngIf="currentPage!=1" class="page-item disabled" (click)="loadIndividuals(prevPageUrl)">
+							<a class="page-link" aria-label="Previous">
+								<span aria-hidden="true">&laquo;</span>
+								<span class="sr-only">Previous</span>
+							</a>
+						</li>
+						<li *ngFor="let in of counter() ;let i = index"
+							[ngClass]="(in==currentPage)?'page-item active':'page-item'"
+							(click)="loadIndividuals(path+'?page='+in)" [disabled]="(in==currentPage)?true:false">
+							<a class="page-link">{{in}}</a>
+						</li>
+						<li *ngIf="currentPage!=lastPage" class="page-item" (click)="loadIndividuals(nextPageUrl)">
+							<a class="page-link" aria-label="Next">
+								<span aria-hidden="true">&raquo;</span>
+								<span class="sr-only">Next</span>
+							</a>
+						</li>
+						<li *ngIf="currentPage!=lastPage" class="page-item" (click)="loadIndividuals(lastPageUrl)"><a
+								class="page-link">Last</a></li>
+					</ul>
+				</nav>
+			</div>
 		</div>
-		<!----PAGINATION---->
-		<!----BACK BTN---->
-		<nav aria-label="Page navigation example">
-			<ul class="pagination pagination-circle pg-blue">
-				<li *ngIf="currentPage!=1" class="page-item disabled" (click)="loadIndividuals(firstPageUrl)"><a
-						class="page-link">First</a></li>
-				<li *ngIf="currentPage!=1" class="page-item disabled" (click)="loadIndividuals(prevPageUrl)">
-					<a class="page-link" aria-label="Previous">
-						<span aria-hidden="true">&laquo;</span>
-						<span class="sr-only">Previous</span>
-					</a>
-				</li>
-				<li *ngFor="let in of counter() ;let i = index"
-					[ngClass]="(in==currentPage)?'page-item active':'page-item'"
-					(click)="loadIndividuals(path+'?page='+in)" [disabled]="(in==currentPage)?true:false">
-					<a class="page-link">{{in}}</a>
-				</li>
-				<li *ngIf="currentPage!=lastPage" class="page-item" (click)="loadIndividuals(nextPageUrl)">
-					<a class="page-link" aria-label="Next">
-						<span aria-hidden="true">&raquo;</span>
-						<span class="sr-only">Next</span>
-					</a>
-				</li>
-				<li *ngIf="currentPage!=lastPage" class="page-item" (click)="loadIndividuals(lastPageUrl)"><a
-						class="page-link">Last</a></li>
-			</ul>
-		</nav>
-	</div>
-</div>
-<!-- design end -->
+		<!-- design end -->
 		<!-- <div class="containeredd driverside_table">
 			<div class="row">
 				<div class="col-md-12 custom_table table-responsive">

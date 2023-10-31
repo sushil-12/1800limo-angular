@@ -7,6 +7,7 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { CustomvalidationService } from '../../../services/customvalidation.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
 	selector: 'app-add-travel-planner-account',
@@ -26,6 +27,7 @@ export class AddTravelPlannerAccountComponent implements OnInit
 	public FaxObject: any;
 	public OfficePhoneObject: any;
 	travelPlannerId: any = null;
+	public countryCodeName:any="United States" ;
 
 
 	constructor(
@@ -36,7 +38,8 @@ export class AddTravelPlannerAccountComponent implements OnInit
 		private activatedroute: ActivatedRoute,
 		private mapsAPILoader: MapsAPILoader,
 		private ngZone: NgZone,
-		private customValidator: CustomvalidationService
+		private customValidator: CustomvalidationService,
+		private httpClient: HttpClient,
 	) { }
 
 
@@ -57,6 +60,7 @@ export class AddTravelPlannerAccountComponent implements OnInit
 		{
 			this.yearOptions.push(currentYear + i);
 		}
+		
 		//google map autocomplete
 		this.mapsAPILoader.load().then(() =>
 		{
@@ -134,6 +138,7 @@ export class AddTravelPlannerAccountComponent implements OnInit
 				});
 				
 			});
+			
 		});
 
 		//add amenity form validation
@@ -237,11 +242,12 @@ export class AddTravelPlannerAccountComponent implements OnInit
 	{
 		if (type == 'mobile')
 		{
-			console.log("11111")
+			console.log("11111",event)
 			this.addTravelPlannerAccountForm.patchValue({
 				mobileIsd: '+' + event.dialCode,
 				mobileCountry: event.iso2
 			});
+			this.countryCodeName = event.name?.split('(')[0].trim()
 		}
 		else if (type == 'office')
 		{
@@ -321,6 +327,14 @@ export class AddTravelPlannerAccountComponent implements OnInit
 				this.OfficeObject.setCountry(this.response?.data?.officeCountry);
 				this.OfficePhoneObject.setCountry(this.response?.data?.office_country_code);
 				this.FaxObject.setCountry(this.response?.data?.faxCountry);
+				this.httpClient
+		.get("assets/json/countryCodeWithIsd.json")
+		.subscribe((data: any) => {
+			// this.countryCodeName = data;
+			console.log("country code--->",this.countryCodeName)
+			let selectedCountryObj=data.find(i=> i.code.toLowerCase()==this.response?.data?.mobileCountry)
+			this.countryCodeName = selectedCountryObj.name
+		});
 			});
 	}
 
