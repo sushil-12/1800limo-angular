@@ -709,8 +709,8 @@ export class StripeFormComponent implements OnInit {
 		 // this.addBankForm.reset();
 		 this.addBankForm.reset();
 		//  this.addBankForm.controls.mobile.patchValue(keepValues[0]);
-		 this.addBankForm.controls.id.patchValue(keepValues[1]);
-		 this.addBankForm.controls.acc_id.patchValue(keepValues[2]);
+		 this.addBankForm.controls.id.patchValue(keepValues[0]);
+		 this.addBankForm.controls.acc_id.patchValue(keepValues[1]);
 		//  this.addBankForm.controls.mobileIsd.patchValue(keepValues[3]);
 		//  this.addBankForm.controls.mobileCountry.patchValue(keepValues[4]);
 		
