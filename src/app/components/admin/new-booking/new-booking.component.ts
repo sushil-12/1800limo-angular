@@ -120,6 +120,7 @@ export class NewBookingComponent implements OnInit {
 	isTravelShare:boolean = false
 	travelStaffAccounts: any;
 	isCreatedByAdmin: boolean = true;
+	shareArray: any;
 
 	constructor(
 		private $form: FormBuilder,
@@ -1626,7 +1627,7 @@ export class NewBookingComponent implements OnInit {
 				shareArray['deducted_admin_share'] = shareArray['adminShare']- shareArray['stripeFee']
 				shareArray['travelAgentShare'] = base_rate * 0.10  
 			}
-			
+			this.shareArray = shareArray
 			console.log('in function createReservationShareArray-->>>' , base_rate, shareArray )
 			return shareArray;
 			// value['rateArray'] = JSON.parse(JSON.stringify(this.RatesForm))
