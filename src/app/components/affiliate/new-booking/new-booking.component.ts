@@ -466,7 +466,12 @@ export class NewBookingComponent implements OnInit {
 			this.SetFormValue('return_pickup_airline_option', this.BigData?.airlinesData?.find((item: any) => item?.id == this.Form?.return_pickup_airline?.value));
 			this.SetFormValue('return_dropoff_airport_option', this.BigData?.airportsData?.find((item: any) => item?.id == this?.Form?.return_dropoff_airport?.value));
 			this.SetFormValue('return_dropoff_airline_option', this.BigData?.airlinesData?.find((item: any) => item?.id == this?.Form?.return_dropoff_airline?.value));
-
+			if ( this.BookingForm?.get('updateType')?.value == 'edit') {
+				// this.scroll('travel_date')
+				// this.SetFormValue('pickup_date', moment().format('YYYY-MM-DD'))
+				this.SetFormValue('pickup_date', editing_data?.pickup_date)
+			}
+			
 			if (editing_data?.driver_image) {
 				this.SetFormValue('driver_image_id', editing_data?.driver_image?.id);
 				this.driver_image['image'] = editing_data?.driver_image?.image;
@@ -525,6 +530,7 @@ export class NewBookingComponent implements OnInit {
       this.$spinner.hide('normalspinner')
 	  this.scroll('booking_detail')
 		})
+		
 	}
 
 	SetFormValue(form_control: string, value: any) {
