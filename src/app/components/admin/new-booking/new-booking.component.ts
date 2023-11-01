@@ -590,9 +590,18 @@ export class NewBookingComponent implements OnInit {
 
 			this.$spinner.hide('normalspinner')
 			console.log('<<<<<<<<<<<-----------set pickup date------->>>>', moment().format('YYYY-MM-DD'), this.updateType)
-			if (this.updateType == 'repeat' || this.updateType == 'return' || this.updateType == 'edit') {
+			if ( this.updateType == 'edit') {
 				this.scroll('travel_date')
-				this.SetFormValue('pickup_date', moment().format('YYYY-MM-DD'))
+				// this.SetFormValue('pickup_date', moment().format('YYYY-MM-DD'))
+				this.SetFormValue('pickup_date', this.bookingResponse?.pickup_date)
+			}
+			if(this.updateType == 'repeat' || this.updateType == 'return' ){
+				if(new Date(this.bookingResponse?.pickup_date).getTime() < new Date().getTime()){
+					this.SetFormValue('pickup_date', moment().format('YYYY-MM-DD'))
+				}
+				else{
+					this.SetFormValue('pickup_date', this.bookingResponse?.pickup_date)
+				}
 			}
 		})
 
