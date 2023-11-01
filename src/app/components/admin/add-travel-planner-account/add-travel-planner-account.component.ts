@@ -383,7 +383,8 @@ export class AddTravelPlannerAccountComponent implements OnInit
 		this.addTravelPlannerAccountForm.controls.mobile.value,
 		this.addTravelPlannerAccountForm.controls.id.value,
 		this.addTravelPlannerAccountForm.controls.acc_id.value,
-		this.addTravelPlannerAccountForm.controls.mobileIsd.value
+		this.addTravelPlannerAccountForm.controls.mobileIsd.value,
+		this.addTravelPlannerAccountForm.controls.mobileCountry.value
 		
 	 ];
 
@@ -394,6 +395,8 @@ export class AddTravelPlannerAccountComponent implements OnInit
 	 this.addTravelPlannerAccountForm.controls.id.patchValue(keepValues[1]);
 	 this.addTravelPlannerAccountForm.controls.acc_id.patchValue(keepValues[2]);
 	 this.addTravelPlannerAccountForm.controls.mobileIsd.patchValue(keepValues[3]);
+	 this.addTravelPlannerAccountForm.controls.mobileCountry.patchValue(keepValues[4]);
+
 		window.scrollTo({ top: 0, behavior: 'smooth' });
 	}
 	backButton()

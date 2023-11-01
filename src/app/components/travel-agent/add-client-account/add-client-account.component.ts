@@ -307,6 +307,7 @@ export class AddClientAccountComponent implements OnInit {
 			this.addIndividualAccountForm.controls.mobile.value,
 			this.addIndividualAccountForm.controls.id.value,
 			this.addIndividualAccountForm.controls.mobileIsd.value,
+			this.addIndividualAccountForm.controls.mobileCountry.value,
 			
 		 ];
 
@@ -314,6 +315,7 @@ export class AddClientAccountComponent implements OnInit {
 		this.addIndividualAccountForm.controls.mobile.patchValue(keepValues[0]);
 		this.addIndividualAccountForm.controls.id.patchValue(keepValues[1]);
 		this.addIndividualAccountForm.controls.mobileIsd.patchValue(keepValues[2]);
+		this.addIndividualAccountForm.controls.mobileCountry.patchValue(keepValues[3]);
 
 		console.log(this.addIndividualAccountForm.value)
 	}
