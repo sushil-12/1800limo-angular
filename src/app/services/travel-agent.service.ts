@@ -144,8 +144,14 @@ export class TravelAgentService {
   getBankOfAffiliate(acc_id){
 		return this.httpClient.get(this.serverUrl + `get-a-bank/${acc_id}`);
   }
-  addBankOfAffiliate(data){
-    return this.httpClient.post(this.serverUrl + 'add-a-bank', data);
+  addBankOfAffiliate(data,id=null){
+	if(id){
+		return this.httpClient.put(this.serverUrl + 'edit-a-bank', data);
+	}
+	else{
+		return this.httpClient.post(this.serverUrl + 'add-a-bank', data);
+	}
+    // return this.httpClient.post(this.serverUrl + 'add-a-bank', data);
   }
 
   getTravelClientAccounts(url, keyword){

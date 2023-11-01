@@ -7,6 +7,7 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { CustomvalidationService } from '../../../services/customvalidation.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
 	selector: 'app-add-travel-planner-account',
@@ -26,6 +27,7 @@ export class AddTravelPlannerAccountComponent implements OnInit
 	public FaxObject: any;
 	public OfficePhoneObject: any;
 	travelPlannerId: any = null;
+	public countryCodeName:any="United States" ;
 
 
 	constructor(
@@ -36,7 +38,8 @@ export class AddTravelPlannerAccountComponent implements OnInit
 		private activatedroute: ActivatedRoute,
 		private mapsAPILoader: MapsAPILoader,
 		private ngZone: NgZone,
-		private customValidator: CustomvalidationService
+		private customValidator: CustomvalidationService,
+		private httpClient: HttpClient,
 	) { }
 
 
@@ -57,6 +60,7 @@ export class AddTravelPlannerAccountComponent implements OnInit
 		{
 			this.yearOptions.push(currentYear + i);
 		}
+		
 		//google map autocomplete
 		this.mapsAPILoader.load().then(() =>
 		{
@@ -103,11 +107,11 @@ export class AddTravelPlannerAccountComponent implements OnInit
 									zipCode: place.address_components[i].long_name
 								});
 							}
-							else if (place.address_components[i].types[j] == "street_number") {
-								this.addTravelPlannerAccountForm.patchValue({
-									address: place.address_components[i].long_name
-								});
-							}
+							// else if (place.address_components[i].types[j] == "street_number") {
+							// 	this.addTravelPlannerAccountForm.patchValue({
+							// 		address: place.address_components[i].long_name
+							// 	});
+							// }
 						}
 					}
 					//Fill one way form pickup address fields
@@ -134,11 +138,51 @@ export class AddTravelPlannerAccountComponent implements OnInit
 				});
 				
 			});
+			
 		});
 
 		//add amenity form validation
+		this.buildTravelAgentForm()
+		/* Card Number Spacing */
+
+		$('#card-number').on('keypress change blur', function ()
+		{
+			$(this).val(function (index, value)
+			{
+				return value.replace(/[^a-z0-9]+/gi, '').replace(/(.{4})/g, '$1 ');
+			});
+		});
+
+		$('#card-number').on('copy cut paste', function ()
+		{
+			setTimeout(function ()
+			{
+				$('#card-number').trigger("change");
+			});
+		});
+	
+		this.activatedroute.queryParams.subscribe((params: any) =>
+		{
+			// if (params.travelPlannerId )
+			// {
+			// 	this.travelPlannerId = params.travelPlannerId
+			// 	this.getTravelAgentData()
+			// } 
+			if(localStorage.getItem('travelAgent_id')){
+				this.travelPlannerId = localStorage.getItem('travelAgent_id')
+				this.addTravelPlannerAccountForm.patchValue({
+				acc_id:this.travelPlannerId
+				}) 
+				this.getTravelAgentData()
+			}
+		})
+
+	}
+
+	buildTravelAgentForm(){
 		this.addTravelPlannerAccountForm = this.formBuilder.group({
 			id: [''],//travelPlanner
+			acc_id:[''],
 			role: ['3', [Validators.required, Validators.pattern("^[0-9].*$")]],//travelPlanner
 			firstName: ['', Validators.required],
 			middleName: [''],
@@ -167,43 +211,12 @@ export class AddTravelPlannerAccountComponent implements OnInit
 			latitude: [''],
 			longitude: [''],
 			card_type: ['personal', Validators.required],
-			number: ['', [Validators.pattern("^[0-9\\s]*$"), Validators.minLength(19), Validators.maxLength(19), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
+			number: ['', [Validators.pattern("^[0-9\\s]*$"), Validators.minLength(16), Validators.maxLength(19), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
 			cvc: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(3), Validators.maxLength(3), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
 			exp_month: [''],
 			exp_year: [''],
 			name: [''],
 		});
-		/* Card Number Spacing */
-
-		$('#card-number').on('keypress change blur', function ()
-		{
-			$(this).val(function (index, value)
-			{
-				return value.replace(/[^a-z0-9]+/gi, '').replace(/(.{4})/g, '$1 ');
-			});
-		});
-
-		$('#card-number').on('copy cut paste', function ()
-		{
-			setTimeout(function ()
-			{
-				$('#card-number').trigger("change");
-			});
-		});
-	
-		this.activatedroute.queryParams.subscribe((params: any) =>
-		{
-			// if (params.travelPlannerId )
-			// {
-			// 	this.travelPlannerId = params.travelPlannerId
-			// 	this.getTravelAgentData()
-			// } 
-			if(localStorage.getItem('travelAgent_id')){
-				this.travelPlannerId = localStorage.getItem('travelAgent_id')
-				this.getTravelAgentData()
-			}
-		})
-
 	}
 
 
@@ -229,11 +242,12 @@ export class AddTravelPlannerAccountComponent implements OnInit
 	{
 		if (type == 'mobile')
 		{
-			console.log("11111")
+			console.log("11111",event)
 			this.addTravelPlannerAccountForm.patchValue({
 				mobileIsd: '+' + event.dialCode,
 				mobileCountry: event.iso2
 			});
+			this.countryCodeName = event.name?.split('(')[0].trim()
 		}
 		else if (type == 'office')
 		{
@@ -313,6 +327,14 @@ export class AddTravelPlannerAccountComponent implements OnInit
 				this.OfficeObject.setCountry(this.response?.data?.officeCountry);
 				this.OfficePhoneObject.setCountry(this.response?.data?.office_country_code);
 				this.FaxObject.setCountry(this.response?.data?.faxCountry);
+				this.httpClient
+		.get("assets/json/countryCodeWithIsd.json")
+		.subscribe((data: any) => {
+			// this.countryCodeName = data;
+			console.log("country code--->",this.countryCodeName)
+			let selectedCountryObj=data.find(i=> i.code.toLowerCase()==this.response?.data?.mobileCountry)
+			this.countryCodeName = selectedCountryObj.name
+		});
 			});
 	}
 
@@ -346,7 +368,7 @@ export class AddTravelPlannerAccountComponent implements OnInit
 				this.response = result;
 				this.spinner.hide();//hide spinner
 				this.disableSubmitButton = false; //enable submit button
-				// console.log(this.response?.id,"this.response?.data?.id")
+				console.log("this.response?.data?.id",this.response)
 				localStorage.setItem('travelAgent_id',this.response?.data?.id)
 				this.router.navigateByUrl('/admin/travel-planner-account/step2').then(() => {
 					window.location.reload();
@@ -357,7 +379,20 @@ export class AddTravelPlannerAccountComponent implements OnInit
 
 	resetForm()
 	{
-		this.addTravelPlannerAccountForm.reset();
+		const keepValues = [
+		this.addTravelPlannerAccountForm.controls.mobile.value,
+		this.addTravelPlannerAccountForm.controls.id.value,
+		this.addTravelPlannerAccountForm.controls.acc_id.value
+		
+	 ];
+
+	 
+	 // this.addTravelPlannerAccountForm.reset();
+	 this.buildTravelAgentForm();
+	 this.addTravelPlannerAccountForm.controls.mobile.patchValue(keepValues[0]);
+	 this.addTravelPlannerAccountForm.controls.id.patchValue(keepValues[1]);
+	 this.addTravelPlannerAccountForm.controls.acc_id.patchValue(keepValues[2]);
+		window.scrollTo({ top: 0, behavior: 'smooth' });
 	}
 	backButton()
 	{

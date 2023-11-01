@@ -224,7 +224,7 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 			taxes: this.$form.group({}),
 			amenities: this.$form.group({}),
 			misc: this.$form.group({}),
-			others: this.$form.group({}),
+			// others: this.$form.group({}), // As discussed we don't need gratuity bucket
 		});
 
 		// fetch the data from backend
@@ -260,7 +260,7 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 			taxes: this.$form.group({}),
 			amenities: this.$form.group({}),
 			misc: this.$form.group({}),
-			others: this.$form.group({}),
+			// others: this.$form.group({}), // As discussed we don't need gratuity bucket
 		});
 
 		this.getRatesData().subscribe((response: any) => {

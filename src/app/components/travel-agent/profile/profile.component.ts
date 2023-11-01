@@ -86,7 +86,7 @@ export class ProfileComponent implements OnInit {
           this.profileForm.patchValue({
             latitude: place.geometry.location.lat(),
             longitude: place.geometry.location.lng(),
-            address:place?.formatted_address
+            address:place?.formatted_address 
           });
           for (var i = 0; i < place.address_components.length; i++) {
 						for (var j = 0; j < place.address_components[i].types.length; j++) {
@@ -111,11 +111,11 @@ export class ProfileComponent implements OnInit {
 									zip: place.address_components[i].long_name
 								});
 							}
-							else if (place.address_components[i].types[j] == "street_number") {
-								this.profileForm.patchValue({
-									address: place.address_components[i].long_name
-								});
-							}
+							// else if (place.address_components[i].types[j] == "street_number") {
+							// 	this.profileForm.patchValue({
+							// 		address: place.address_components[i].long_name
+							// 	});
+							// }
 						}
 					}
         });
@@ -165,7 +165,7 @@ export class ProfileComponent implements OnInit {
       city: [''],
       state: [''],
       country: ['', Validators.required],
-      zip: [''],
+      zip: ['',[Validators.required]],
       agency_name: ['', Validators.required],
       payee: ['', Validators.required],
       iata: ['', Validators.required],

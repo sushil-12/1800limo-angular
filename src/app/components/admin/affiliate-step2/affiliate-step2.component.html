@@ -86,13 +86,13 @@
 				</div>
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
-						<mat-label>Account Number<span class="asterisk">*</span></mat-label>
+						<mat-label>Account # / IBAN Number<span class="asterisk">*</span></mat-label>
 						<input matInput placeholder="Account Number*" formControlName="AccountNumber">
 					</mat-form-field>
 					<div *ngIf="f.AccountNumber.errors && (f.AccountNumber.touched || f.AccountNumber.dirty )"
 						class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.AccountNumber.errors.required">This field is required</div>
-						<div *ngIf="f.AccountNumber.errors.pattern">This field should be a number</div>
+						<!-- <div *ngIf="f.AccountNumber.errors.pattern">This field should be a number</div> -->
 					</div>
 				</div>
 				<div class="col-md-6">
@@ -442,7 +442,7 @@
 						</div>
 					</ng-template>
 				</div>
-				<div class="col-md-4">
+				<!-- <div class="col-md-4">
 					<mat-form-field appearance="outline" class="example-full-width">
 						<mat-label>Badge City
 						</mat-label>
@@ -456,7 +456,7 @@
 							</mat-option>
 						</mat-autocomplete>
 					</mat-form-field>
-				</div>
+				</div> -->
 				<div class="col-md-12 map-wrapper" *ngIf="latitude">
 					<agm-map [latitude]="latitude" [longitude]="longitude">
 						<agm-marker [latitude]="latitude" [longitude]="longitude" [markerDraggable]="true">

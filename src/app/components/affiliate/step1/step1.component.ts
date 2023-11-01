@@ -478,15 +478,15 @@ export class Step1Component implements OnInit, AfterViewInit
 					});
 					//update dispatch email form validation
 					this.updateDispatchEmailForm = this.formBuilder.group({
-						phoneOtp: [
-							"",
-							[
-								Validators.required,
-								Validators.pattern("^[0-9]*$"),
-								Validators.minLength(6),
-								Validators.maxLength(6),
-							],
-						],
+						// phoneOtp: [
+						// 	"",
+						// 	[
+						// 		Validators.required,
+						// 		Validators.pattern("^[0-9]*$"),
+						// 		Validators.minLength(6),
+						// 		Validators.maxLength(6),
+						// 	],
+						// ],
 						emailOtp: [
 							"",
 							[
@@ -663,6 +663,12 @@ export class Step1Component implements OnInit, AfterViewInit
 				{
 					this.SetFormValue('dispatchEmail', value)
 				})
+			
+				if(this.addAffiliateAccountForm.get('dispatchEmail').value == ""){
+				this.addAffiliateAccountForm.patchValue({
+						dispatchEmail: this.addAffiliateAccountForm.value.Email
+					})
+				}
 				break;
 			}
 			case "black_limo_operator": {
@@ -687,6 +693,11 @@ export class Step1Component implements OnInit, AfterViewInit
 				this.affiliateInstruction =
 					"Black Car / Owner Operators need to be fully licensed by city and state with a $500k/$500k minimum insurance policy. Only 2 vehicle maximum with same driver.";
 				this.conditionalValidations("black_limo_operator");
+				if(this.addAffiliateAccountForm.get('dispatchEmail').value == ""){
+					this.addAffiliateAccountForm.patchValue({
+							dispatchEmail: this.addAffiliateAccountForm.value.Email
+						})
+					}
 				try
 				{
 					this.subs.unsubscribe()
@@ -725,6 +736,11 @@ export class Step1Component implements OnInit, AfterViewInit
 					{
 						$("#affiliateInstructionsModal").modal("show");
 					}
+					if(this.addAffiliateAccountForm.get('dispatchEmail').value == ""){
+						this.addAffiliateAccountForm.patchValue({
+								dispatchEmail: this.addAffiliateAccountForm.value.Email
+							})
+						}
 				}
 				this.showCompanyInformation = true;
 				this.selectedAffiliate = "taxi_operator";

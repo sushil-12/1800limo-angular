@@ -188,7 +188,7 @@
 								<td class="clickable" (click)="sendMessage('sms', blackCarLimoBus)"
 									data-messagetype="sms">
 									<span
-										[innerHTML]="highlighText(blackCarLimoBus.CellIsd+blackCarLimoBus.CellNumber)"></span>
+										[innerHTML]="highlighText(blackCarLimoBus.CellIsd+blackCarLimoBus.CellNumber+' '+'('+blackCarLimoBus?.CellNumberCountry.toUpperCase()+')')"></span>
 								</td>
 								<td><span [innerHTML]="highlighText(blackCarLimoBus.CompanyName)"></span></td>
 								<td><span [innerHTML]="highlighText(blackCarLimoBus.DBA)"></span></td>

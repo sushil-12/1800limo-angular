@@ -144,7 +144,7 @@
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
 						<mat-label>
-							Bank Account Number
+							Account # / IBAN Number
 							<span class="asterisk">*</span>
 						</mat-label>
 						<input matInput placeholder="Account Number" (focus)="$event?.target?.select()"
@@ -173,9 +173,9 @@
 								Do not enter + sign
 							</div>
 							<ng-template #allErrors>
-								<div *ngIf="f?.AccountNumber?.errors?.pattern">
+								<!-- <div *ngIf="f?.AccountNumber?.errors?.pattern">
 									Enter Numbers Only
-								</div>
+								</div> -->
 							</ng-template>
 						</ng-template>
 					</div>
