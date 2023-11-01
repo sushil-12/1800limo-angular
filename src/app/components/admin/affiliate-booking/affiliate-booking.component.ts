@@ -33,7 +33,7 @@ export class AffiliateBookingComponent implements OnInit {
 	public firstPage: Number;
 	public lastPage: Number;
 	public totalPage: Number;
-	public totalRecords: Number;
+	public totalRecords: any;
 	public currentPage: any;
 	public from: Number;
 	public to: Number;
