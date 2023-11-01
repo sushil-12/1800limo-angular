@@ -696,7 +696,24 @@ export class StripeFormComponent implements OnInit {
 		this.closeTab.emit();
 	}
 	resetForm() {
-		this.addBankForm.reset();
+		const keepValues = [
+			// this.addBankForm.controls.mobile.value,
+			this.addBankForm.controls.id.value,
+			this.addBankForm.controls.acc_id.value,
+			// this.addBankForm.controls.mobileIsd.value,
+			// this.addBankForm.controls.mobileCountry.value
+			
+		 ];
+	
+		 
+		 // this.addBankForm.reset();
+		 this.addBankForm.reset();
+		//  this.addBankForm.controls.mobile.patchValue(keepValues[0]);
+		 this.addBankForm.controls.id.patchValue(keepValues[1]);
+		 this.addBankForm.controls.acc_id.patchValue(keepValues[2]);
+		//  this.addBankForm.controls.mobileIsd.patchValue(keepValues[3]);
+		//  this.addBankForm.controls.mobileCountry.patchValue(keepValues[4]);
+		
 		this.id_front_image = "";
 		this.id_back_image = "";
 	}
