@@ -306,12 +306,15 @@ export class AddClientAccountComponent implements OnInit {
 		const keepValues = [
 			this.addIndividualAccountForm.controls.mobile.value,
 			this.addIndividualAccountForm.controls.id.value,
+			this.addIndividualAccountForm.controls.mobileIsd.value,
 			
 		 ];
 
 		this.buildAddIndividualForm()
 		this.addIndividualAccountForm.controls.mobile.patchValue(keepValues[0]);
 		this.addIndividualAccountForm.controls.id.patchValue(keepValues[1]);
+		this.addIndividualAccountForm.controls.mobileIsd.patchValue(keepValues[2]);
+
 		console.log(this.addIndividualAccountForm.value)
 	}
 	backButton()
