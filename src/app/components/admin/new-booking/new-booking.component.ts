@@ -1603,7 +1603,7 @@ export class NewBookingComponent implements OnInit {
 	}
 
 	createReservationShareArray(){
-
+		console.log('in function createReservationShareArray')
 		if (this.RatesForm) {
 		let base_rate = 0
 		for (const key of Object.keys(this.RatesForm.all_inclusive_rates)) {
