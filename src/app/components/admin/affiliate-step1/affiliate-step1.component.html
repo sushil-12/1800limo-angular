@@ -172,7 +172,7 @@
 					<mat-form-field appearance="outline">
 						<mat-label>First Name <span class="asterisk">*</span></mat-label>
 						<input type="text" matInput placeholder="First Name" id="FirstName" formControlName="FirstName"
-							tabIndex="1">
+							tabIndex="1" (focus)="$event.target.select()">
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.FirstName.errors || f.FirstName.touched && f.FirstName.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -182,13 +182,15 @@
 				<div class="col-md-4">
 					<mat-form-field appearance="outline">
 						<mat-label>Middle Name</mat-label>
-						<input type="text" matInput placeholder="Middle Name" formControlName="MiddleName" tabIndex="1">
+						<input type="text" matInput placeholder="Middle Name" formControlName="MiddleName" tabIndex="1"
+							(focus)="$event.target.select()">
 					</mat-form-field>
 				</div>
 				<div class="col-md-4">
 					<mat-form-field appearance="outline">
 						<mat-label>Last Name <span class="asterisk">*</span></mat-label>
-						<input type="text" matInput placeholder="Last Name" formControlName="LastName" tabIndex="1">
+						<input type="text" matInput placeholder="Last Name" formControlName="LastName" tabIndex="1"
+							(focus)="$event.target.select()">
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.LastName.errors || f.LastName.touched && f.LastName.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -217,7 +219,8 @@
 							[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
 							placeholder="1234567890" class="phoneNumberClass"
 							(countryChange)="onCountryChange($event,'CellNumber')"
-							(intlTelInputObject)="telInputObjectCell($event)" tabIndex="1" />
+							(intlTelInputObject)="telInputObjectCell($event)" tabIndex="1"
+							(focus)="$event.target.select()" />
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.CellNumber.errors || f.CellNumber.touched && f.CellNumber.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -248,7 +251,7 @@
 						<input [class.errorColor]="
 									affiliateEmailStatus == 'no'
 								" matInput placeholder="E-mail" formControlName="Email" [readonly]="affiliateEmailReadonly" tabIndex="1"
-							id="email_verified" />
+							id="email_verified" (focus)="$event.target.select()" />
 						<svg *ngIf="affiliateEmailStatus == 'yes'" xmlns="http://www.w3.org/2000/svg"
 							class="email-verified" viewBox="0 0 48 48">
 							<path fill="none" d="M0 0h48v48h-48z" />
@@ -365,7 +368,7 @@
 						</mat-label>
 						<input type="text" placeholder="Pick one" aria-label="Number" matInput
 							formControlName="badge_city_name" [matAutocomplete]="auto"
-							(keyup)="handleBadgeCity($event.target.value)">
+							(keyup)="handleBadgeCity($event.target.value)" (focus)="$event.target.select()">
 						<mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
 							<mat-option *ngFor="let option of filteredOptions"
 								(onSelectionChange)="selectBadgeCity(option,$event.isUserInput)" [value]="option.name">
@@ -386,7 +389,8 @@
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
 						<mat-label>Your Company Name <span class="asterisk">*</span></mat-label>
-						<input matInput placeholder="Your Company Name" formControlName="CompanyName" tabIndex="1">
+						<input matInput placeholder="Your Company Name" formControlName="CompanyName" tabIndex="1"
+							(focus)="$event.target.select()">
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.CompanyName.errors || f.CompanyName.touched && f.CompanyName.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -396,7 +400,8 @@
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
 						<mat-label>Doing Business As?</mat-label>
-						<input matInput placeholder="Doing Business As?" formControlName="DBA" tabIndex="1">
+						<input matInput placeholder="Doing Business As?" formControlName="DBA" tabIndex="1"
+							(focus)="$event.target.select()">
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.DBA.errors || f.DBA.touched && f.DBA.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -425,7 +430,7 @@
 						<input [class.errorColor]="
 							dispatchEmailStatus == 'no'
 								" matInput placeholder="24 Hr Dispatch E-mail" formControlName="dispatchEmail"
-							[readonly]="dispatchEmailReadonly" tabIndex="1" />
+							[readonly]="dispatchEmailReadonly" tabIndex="1" (focus)="$event.target.select()" />
 						<svg *ngIf="dispatchEmailStatus == 'yes'" xmlns="http://www.w3.org/2000/svg"
 							class="email-verified" viewBox="0 0 48 48">
 							<path fill="none" d="M0 0h48v48h-48z" />
@@ -463,7 +468,8 @@
 							[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
 							placeholder="1234567890" class="phoneNumberClass"
 							(countryChange)="onCountryChange($event,'Dispatch')" type="tel" id="phone"
-							(intlTelInputObject)="telInputObjectDispatch($event)" tabIndex="1" />
+							(intlTelInputObject)="telInputObjectDispatch($event)" tabIndex="1"
+							(focus)="$event.target.select()" />
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.Dispatch.errors || f.Dispatch.touched && f.Dispatch.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -494,7 +500,8 @@
 							[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
 							placeholder="1234567890" class="phoneNumberClass"
 							(countryChange)="onCountryChange($event,'CompanyCellNumber')"
-							(intlTelInputObject)="telInputObjectCompanyCell($event)" tabIndex="1" />
+							(intlTelInputObject)="telInputObjectCompanyCell($event)" tabIndex="1"
+							(focus)="$event.target.select()" />
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.CompanyCellNumber.errors || f.CompanyCellNumber.touched && f.CompanyCellNumber.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -524,7 +531,8 @@
 							[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
 							placeholder="1234567890" class="phoneNumberClass"
 							(countryChange)="onCountryChange($event,'Fax')"
-							(intlTelInputObject)="telInputObjectFax($event)" tabIndex="1" />
+							(intlTelInputObject)="telInputObjectFax($event)" tabIndex="1"
+							(focus)="$event.target.select()" />
 					</mat-form-field>
 					<div *ngIf="f.Fax.errors" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.Fax.errors?.invalid_Pattern;else plusError">Do not add Dashes
@@ -547,7 +555,8 @@
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
 						<mat-label>City/State Permit #</mat-label>
-						<input matInput placeholder="City/State Permit #" formControlName="cpcn_tpc" tabIndex="1" />
+						<input matInput placeholder="City/State Permit #" formControlName="cpcn_tpc" tabIndex="1"
+							(focus)="$event.target.select()" />
 					</mat-form-field>
 					<div *ngIf="f.cpcn_tpc.errors" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.cpcn_tpc.errors?.invalid_Pattern;else plusError">Do not add Dashes

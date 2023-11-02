@@ -54,20 +54,22 @@
 					<!-- <mat-label>Bank Name <span class="asterisk">*</span></mat-label> -->
 					<mat-form-field appearance="outline">
 						<mat-label>Bank Name </mat-label>
-						<input matInput placeholder="Bank Name" id="BankName" formControlName="BankName">
+						<input matInput placeholder="Bank Name" id="BankName" formControlName="BankName"
+							(focus)="$event.target.select()">
 					</mat-form-field>
 				</div>
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
 						<mat-label>Bank Address </mat-label>
-						<input matInput placeholder="Bank Address" formControlName="BankAddress">
+						<input matInput placeholder="Bank Address" formControlName="BankAddress"
+							(focus)="$event.target.select()">
 					</mat-form-field>
 				</div>
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
 						<mat-label>Account Holder First Name<span class="asterisk">*</span></mat-label>
 						<input matInput placeholder="Account Holder First Name*"
-							formControlName="AccountHolderFirstName">
+							formControlName="AccountHolderFirstName" (focus)="$event.target.select()">
 					</mat-form-field>
 					<div *ngIf="f.AccountHolderFirstName.errors && (f.AccountHolderFirstName.touched || f.AccountHolderFirstName.dirty )"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -77,7 +79,8 @@
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
 						<mat-label>Account Holder Last Name<span class="asterisk">*</span></mat-label>
-						<input matInput placeholder="Account Holder Last Name*" formControlName="AccountHolderLastName">
+						<input matInput placeholder="Account Holder Last Name*" formControlName="AccountHolderLastName"
+							(focus)="$event.target.select()">
 					</mat-form-field>
 					<div *ngIf="f.AccountHolderLastName.errors && (f.AccountHolderLastName.touched || f.AccountHolderLastName.dirty )"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -87,7 +90,8 @@
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
 						<mat-label>Account # / IBAN Number<span class="asterisk">*</span></mat-label>
-						<input matInput placeholder="Account Number*" formControlName="AccountNumber">
+						<input matInput placeholder="Account Number*" formControlName="AccountNumber"
+							(focus)="$event.target.select()">
 					</mat-form-field>
 					<div *ngIf="f.AccountNumber.errors && (f.AccountNumber.touched || f.AccountNumber.dirty )"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -98,7 +102,8 @@
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
 						<mat-label>Checking Routing Number<span class="asterisk">*</span></mat-label>
-						<input matInput placeholder="Checking Routing Number*" formControlName="Routing">
+						<input matInput placeholder="Checking Routing Number*" formControlName="Routing"
+							(focus)="$event.target.select()">
 					</mat-form-field>
 					<div *ngIf="f.Routing.errors && (f.Routing.touched || f.Routing.dirty )"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -172,7 +177,7 @@
 						<mat-label>Currency <span class="asterisk">*</span></mat-label>
 						<input type="text" placeholder="Pick one" aria-label="Number" matInput
 							formControlName="currencyShow" [matAutocomplete]="auto"
-							(keyup)="handleCurrency($event.target.value)">
+							(keyup)="handleCurrency($event.target.value)" (focus)="$event.target.select()">
 						<mat-autocomplete autoActiveFirstOption #auto="matAutocomplete"
 							(optionSelected)="onSelectionChange($event)">
 							<mat-option *ngFor="let currencyOption of currencyOptions"
@@ -203,7 +208,7 @@
 						<mat-label>SSN (USA required by STRIPE / Government ID for other countries)<span
 								class="asterisk">*</span></mat-label>
 						<input matInput placeholder="SSN (USA required by STRIPE / Government ID for other countries)"
-							formControlName="ssn" tabindex="1">
+							formControlName="ssn" tabindex="1" (focus)="$event.target.select()">
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.ssn.errors || f.ssn.touched && f.ssn.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -429,7 +434,7 @@
 					<mat-form-field appearance="outline">
 						<mat-label>Enter Business/Base Address</mat-label>
 						<input matInput placeholder="Search Here and Set Location Pin" formControlName="address"
-							#search1 tabindex="1">
+							#search1 tabindex="1" (focus)="$event.target.select()">
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.address.errors || f.address.touched && f.address.errors; else latLongError"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -513,7 +518,8 @@
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
 						<mat-label>City <span class="asterisk">*</span></mat-label>
-						<input matInput placeholder="City" formControlName="city" disabled tabindex="1">
+						<input matInput placeholder="City" formControlName="city" disabled tabindex="1"
+							(focus)="$event.target.select()">
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.city.errors || f.city.touched && f.city.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -523,7 +529,8 @@
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
 						<mat-label>Unit#</mat-label>
-						<input matInput placeholder="Unit" formControlName="unit" tabindex="1">
+						<input matInput placeholder="Unit" formControlName="unit" tabindex="1"
+							(focus)="$event.target.select()">
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.unit.errors || f.unit.touched && f.unit.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -533,7 +540,8 @@
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
 						<mat-label>Zip Code <span class="asterisk">*</span></mat-label>
-						<input matInput placeholder="Zip Code" formControlName="zipCode" tabindex="1">
+						<input matInput placeholder="Zip Code" formControlName="zipCode" tabindex="1"
+							(focus)="$event.target.select()">
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.zipCode.errors || f.zipCode.touched && f.zipCode.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
