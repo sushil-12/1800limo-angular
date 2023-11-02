@@ -121,6 +121,7 @@ export class NewBookingComponent implements OnInit {
 	travelStaffAccounts: any;
 	isCreatedByAdmin: boolean = true;
 	shareArray: any;
+	r_shareArray: any;
 
 	constructor(
 		private $form: FormBuilder,
@@ -1609,6 +1610,9 @@ export class NewBookingComponent implements OnInit {
 		for (const key of Object.keys(this.RatesForm.all_inclusive_rates)) {
 			base_rate += this.RatesForm.all_inclusive_rates[key].baserate;
 		}
+		for (const key of Object.keys(this.RatesForm.amenities)) {
+			base_rate += this.RatesForm.amenities[key].baserate;
+		}
 			let grandTotal = this.BookingForm.value.rateArray.grand_total
 			let stripeFee = grandTotal * 0.029 + 0.30
 			let adminShare = base_rate * 0.25 
@@ -1641,9 +1645,12 @@ export class NewBookingComponent implements OnInit {
 		for (const key of Object.keys(this.ReturnRatesForm.all_inclusive_rates)) {
 			base_rate += this.ReturnRatesForm.all_inclusive_rates[key].baserate;
 		}
+		for (const key of Object.keys(this.ReturnRatesForm.amenities)) {
+			base_rate += this.ReturnRatesForm.amenities[key].baserate;
+		}
 			let returnGrandTotal = this.BookingForm.value.returnRateArray.r_grandtotal
 			let stripeFee = returnGrandTotal * 0.029 + 0.30
-			let adminShare = base_rate * 0.25 + stripeFee
+			let adminShare = base_rate * 0.25 
 			let returnShareArray = {
 				baseRate : base_rate,
 				returnGrandTotal : returnGrandTotal,
@@ -1653,9 +1660,12 @@ export class NewBookingComponent implements OnInit {
 			}
 			// travelAgentShare : 
 			if(this.BookingForm.value?.account_type == 'travel_planner' && this.BookingForm.value?.affiliate_type == 'affiliate'){
-				returnShareArray['adminShare'] = base_rate * 0.15 + stripeFee
+				returnShareArray['adminShare'] = base_rate * 0.15 
+				returnShareArray['deducted_admin_share'] = returnShareArray['adminShare']- returnShareArray['stripeFee']
 				returnShareArray['travelAgentShare'] = base_rate * 0.10  
 			}
+
+			this.r_shareArray = returnShareArray
 			
 			console.log('in function createReservationreturnShareArray-->>>' , base_rate, returnShareArray )
 			return returnShareArray;
