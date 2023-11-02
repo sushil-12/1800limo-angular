@@ -317,9 +317,14 @@ export class VehicleDetailsComponent implements OnInit {
 			// 		error: 'Please open an account or login to proceed.'
 			// 	}
 			// })
-			this._router.navigate(['/login/driver'], {
-				skipLocationChange: true
-			})
+			// this._router.navigate(['/login/driver'], {
+			// 	skipLocationChange: true
+			// })
+			console.log("TESTTTTTT1")
+			this._router.navigate([
+				'/quotebot/new-booking'
+			],
+			{ queryParams: {affiliate_id:vehicle_selected.affiliate_id, vehicle_id:vehicle_selected.id,new : true , is_master_vehicle:vehicle_selected?.is_master_vehicle} })
 		}
 	}
 
