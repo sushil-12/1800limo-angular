@@ -134,7 +134,7 @@ div.row {
 			text-transform  : uppercase;
 			background-color: #fff;
 			color           : #000;
-			border          : 2.5px solid #52a87a;
+			border          : 2.5px solid var(--green-color);
 			width           : 100%;
 			height          : auto;
 			letter-spacing  : 1.6px
@@ -151,7 +151,7 @@ div.row {
 		}
 
 		&>div.active {
-			background-color: #52a87a;
+			background-color: var(--green-color);
 			color           : #fff;
 		}
 	}
@@ -205,4 +205,7 @@ div#rate-manager-slider {
 
 .input-container {
 	margin-top: 0 !important;
+}
+.asterisk{
+	font-size: 1.4rem;
 }
