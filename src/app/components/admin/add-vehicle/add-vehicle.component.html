@@ -80,7 +80,7 @@
 							Number of Vehicles <span class="asterisk">*</span>
 						</mat-label>
 						<input matInput type="number" placeholder="Number of Vehicles"
-							formControlName="numberOfVehicles" tabindex="1">
+							formControlName="numberOfVehicles" tabindex="1" (focus)="$event.target.select()">
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.numberOfVehicles.errors || f.numberOfVehicles.touched && f.numberOfVehicles.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -101,7 +101,8 @@
 						[ngClass]="(errorMsg3 && f.year.errors) || (submittedForm && f.year.errors) ? 'mat-form-field-invalid ng-invalid' : ''">
 						<mat-label>Year <span class="asterisk">*</span></mat-label>
 						<input type="search" id="yearField" placeholder="Pick one" aria-label="Number" matInput
-							(keyup)="searchYear($event.target.value)" [matAutocomplete]="auto4" tabindex="1">
+							(keyup)="searchYear($event.target.value)" [matAutocomplete]="auto4" tabindex="1"
+							(focus)="$event.target.select()">
 						<mat-autocomplete #auto4="matAutocomplete">
 							<mat-option *ngFor="let year of filteredYear" [value]="year.name"
 								(onSelectionChange)="selectYear(year.ID,$event.isUserInput)">
@@ -119,7 +120,8 @@
 						[ngClass]="(errorMsg4 && f.color.errors) || (submittedForm && f.color.errors) ? 'mat-form-field-invalid ng-invalid' : ''">
 						<mat-label>Color <span class="asterisk">*</span></mat-label>
 						<input type="search" id="colorField" placeholder="Pick one" aria-label="Number" matInput
-							(keyup)="searchColor($event.target.value)" [matAutocomplete]="auto5" tabindex="1">
+							(keyup)="searchColor($event.target.value)" [matAutocomplete]="auto5" tabindex="1"
+							(focus)="$event.target.select()">
 						<mat-autocomplete #auto5="matAutocomplete">
 							<mat-option *ngFor="let color of filteredColor" [value]="color.name"
 								(onSelectionChange)="selectColor(color.ID,$event.isUserInput)">
@@ -217,7 +219,8 @@
 								<span class="theme-color">(optional)</span>
 							</ng-template>
 						</mat-label>
-						<input matInput placeholder="License Plate #" formControlName="licensePlate" tabindex="1">
+						<input matInput placeholder="License Plate #" formControlName="licensePlate" tabindex="1"
+							(focus)="$event.target.select()">
 					</mat-form-field>
 				</div>
 				<!-- <div class="col-md-6">
@@ -305,7 +308,8 @@
 					<!-- {{chargableAmenity.value | json}}<br> -->
 					<input type="checkbox" class="custom-control-input" id="amenity_{{chargableAmenity.value.name}}"
 						[value]="chargableAmenity.value.id"
-						(change)="onAmenitiesCheckboxChange($event.target.value,$event.target.checked)" tabindex="1">
+						(change)="onAmenitiesCheckboxChange($event.target.value,$event.target.checked)" tabindex="1"
+						(focus)="$event.target.select()">
 					<label class="custom-control-label text-wrap" style="width: 100px;"
 						for="amenity_{{chargableAmenity.value.name}}">{{chargableAmenity.value.name}}</label>
 					<label *ngIf="chargableAmenity.value.chargeable==='yes'" class="amenity-dollar">$</label>
@@ -328,7 +332,8 @@
 					<!-- {{nonChargableAmenity.value | json}}<br> -->
 					<input type="checkbox" class="custom-control-input" id="amenity_{{nonChargableAmenity.value.name}}"
 						[value]="nonChargableAmenity.value.id"
-						(change)="onAmenitiesCheckboxChange($event.target.value,$event.target.checked)" tabindex="1">
+						(change)="onAmenitiesCheckboxChange($event.target.value,$event.target.checked)" tabindex="1"
+						(focus)="$event.target.select()">
 					<label class="custom-control-label"
 						for="amenity_{{nonChargableAmenity.value.name}}">{{nonChargableAmenity.value.name}}</label>
 					<label *ngIf="nonChargableAmenity.value.chargeable==='yes'" class="amenity-dollar">&nbsp;
@@ -348,7 +353,8 @@
 			<div class="choose_ameniteslist">
 				<div class="custom-control custom-checkbox" *ngFor="let specialAmenity of specialAmenities">
 					<input type="checkbox" class="custom-control-input" id="specialAmenity_{{specialAmenity.name}}"
-						[value]="specialAmenity.id" (change)="onSpecialAmenitiesCheckboxChange($event)" tabindex="1">
+						[value]="specialAmenity.id" (change)="onSpecialAmenitiesCheckboxChange($event)" tabindex="1"
+						(focus)="$event.target.select()">
 					<label class="custom-control-label"
 						for="specialAmenity_{{specialAmenity.name}}">{{specialAmenity.name}}</label>
 				</div>
@@ -367,7 +373,7 @@
 				<div class="custom-control custom-checkbox" *ngFor="let interior of interiors">
 					<input type="checkbox" class="custom-control-input" id="interior_{{interior.name}}"
 						[value]="interior.id" (change)="onInteriorsCheckboxChange($event)" tabindex="1"
-						[checked]="interior.id=='1'">
+						[checked]="interior.id=='1'" (focus)="$event.target.select()">
 					<label class="custom-control-label" for="interior_{{interior.name}}">{{interior.name}}</label>
 				</div>
 			</div>

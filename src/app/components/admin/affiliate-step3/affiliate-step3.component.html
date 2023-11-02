@@ -8,7 +8,7 @@
 					<mat-form-field appearance="outline">
 						<mat-label>Name of Insurance Company <span class="asterisk">*</span></mat-label>
 						<input matInput class="font-weight-bold" placeholder="Name of Insurance Company"
-							formControlName="CompanyName" tabIndex="1">
+							formControlName="CompanyName" tabIndex="1" (focus)="$event.target.select()">
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.CompanyName.errors || f.CompanyName.touched && f.CompanyName.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -19,7 +19,7 @@
 					<mat-form-field appearance="outline">
 						<mat-label>Agency Name</mat-label>
 						<input matInput class="font-weight-bold" placeholder="Optional" formControlName="AgentName"
-							tabIndex="1">
+							tabIndex="1" (focus)="$event.target.select()">
 					</mat-form-field>
 				</div>
 				<div class="col-md-6">
@@ -30,7 +30,8 @@
 							formControlName="AgentTelephone" ng2TelInput
 							[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
 							(countryChange)="onCountryChange($event,'AgentTelephone')" class="phoneNumberClass"
-							(intlTelInputObject)="telInputObjectAgentTelephone($event)" tabIndex="1" />
+							(intlTelInputObject)="telInputObjectAgentTelephone($event)" tabIndex="1"
+							(focus)="$event.target.select()" />
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.AgentTelephone.errors || f.AgentTelephone.touched && f.AgentTelephone.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -58,7 +59,7 @@
 					<mat-form-field appearance="outline">
 						<mat-label>Insurance / Agent Email</mat-label>
 						<input matInput class="font-weight-bold" placeholder="Optional" formControlName="AgentEmail"
-							tabIndex="1">
+							tabIndex="1" (focus)="$event.target.select()">
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.AgentEmail.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -139,7 +140,7 @@
 					<mat-form-field appearance="outline">
 						<mat-label>Policy Number <span class="asterisk">*</span></mat-label>
 						<input matInput class="font-weight-bold" placeholder="Policy Number"
-							formControlName="policyNumber" tabIndex="1">
+							formControlName="policyNumber" tabIndex="1" (focus)="$event.target.select()">
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.policyNumber.errors || f.policyNumber.touched && f.policyNumber.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
