@@ -6,7 +6,7 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import {ThemePalette} from '@angular/material/core';
-
+declare var $: any;
 @Component({
   selector: 'app-sub-admin',
   templateUrl: './sub-admin.component.html',
@@ -130,6 +130,22 @@ export class SubAdminComponent implements OnInit {
       this.spinner.hide();//hide spinner
     });
   }
+
+  messagetype: Record<string, any>
+	sendMessage(type: 'email' | 'sms', subAdmin: Object, message: string = null) {
+		console.log('Request to send a Message to subAdmin id: ', type, subAdmin['id'])
+		this.messagetype = { type, subAdmin }
+		$('#messageModal').modal('show')
+		$('#messageModal').find('.modal-header').find('h4').text('Contact to Sub-Amdin via ' + type.toUpperCase())
+		$('#messageModal').find('.modal-body').find('p#affiliate-details').html(`Sub-Amdin Name: ${subAdmin['first_name']} ${subAdmin['last_name']}<br/>Sub-Amdin Email: ${subAdmin['email']}`)
+		if (message != null) {
+			this.adminService.sendAffiliateMessage(type, subAdmin['id'], { sendContent: message },).subscribe((response: any) => {
+				if (response.success) {
+					console.log('Message Sent Successfully. ')
+				}
+			})
+		}
+	}
 
   //for pagination
   counter() {

@@ -5,7 +5,7 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { ThemePalette } from '@angular/material/core';
-
+declare var $: any;
 @Component({
 	selector: 'app-individual',
 	templateUrl: './individual.component.html',
@@ -120,6 +120,23 @@ export class IndividualComponent implements OnInit
 			return args.replace(re, '<mark class="font-weight-bold">$&</mark>');
 		}
 	}
+
+	messagetype: Record<string, any>
+	sendMessage(type: 'email' | 'sms', individual: Object, message: string = null) {
+		console.log('Request to send a Message to individual id: ', type, individual['id'])
+		this.messagetype = { type, individual }
+		$('#messageModal').modal('show')
+		$('#messageModal').find('.modal-header').find('h4').text('Contact to Individual via ' + type.toUpperCase())
+		$('#messageModal').find('.modal-body').find('p#affiliate-details').html(`Individual Name: ${individual['first_name']} ${individual['last_name']}<br/>Individual Email: ${individual['email']}`)
+		if (message != null) {
+			this.adminService.sendAffiliateMessage(type, individual['id'], { sendContent: message },).subscribe((response: any) => {
+				if (response.success) {
+					console.log('Message Sent Successfully. ')
+				}
+			})
+		}
+	}
+
 	enableDisableClicked(event, id)
 	{
 		this.spinner.show();//show spinner
