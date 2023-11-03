@@ -643,12 +643,12 @@
 							<mat-label class="amenityLabel">
 								{{amenity.value.value.name}}
 							</mat-label>
-							<span matPrefix
+							<!-- <span matPrefix
 								*ngIf="amenity.value.value.price == null || amenity.value.value.price == ''; else hideZero18">
-								{{currency_symbol}} 0 &nbsp;</span>
-							<ng-template #hideZero18>
-								<span matPrefix>{{currency_symbol}} &nbsp;</span>
-							</ng-template>
+								{{currency_symbol}} 0 &nbsp;</span> -->
+							<!-- <ng-template #hideZero18> -->
+							<span matPrefix>{{currency_symbol}} &nbsp;</span>
+							<!-- </ng-template> -->
 							<input type="number" matInput placeholder={{amenity.value.value.name}}
 								formControlName="price" [id]="amenity.value.value.label"
 								(input)="changeAmenityRate(amenity.key,amenity.value.value)" tabindex="1">
