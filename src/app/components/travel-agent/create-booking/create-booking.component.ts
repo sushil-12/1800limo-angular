@@ -144,6 +144,7 @@ export class CreateBookingComponent implements OnInit {
 		this.buildBookingForm()
     // this.$spinner.show();
 	this.$routeurl.queryParams.subscribe((params: any) => {
+		console.log('params-->>>', params)
 		if (params && params.bookingId && !this.booking_id) {
 			this.is_booking_edit_case = true
 			this.updateType = params.updateType
@@ -156,6 +157,8 @@ export class CreateBookingComponent implements OnInit {
 		}
 		if(params && params.is_master_vehicle == 'true'){
 			this.master_vehicle_id = params.vehicle_id
+			this.is_master_vehicle = true
+			console.log('is master vehicle', this.is_master_vehicle)
 		}
 		if (params && params.updateType) {
 			this.bookingType = params.updateType
@@ -2061,7 +2064,7 @@ export class CreateBookingComponent implements OnInit {
 		}
 
 		let vehicle_id = booking_data?.vehicle_id.toString().length ? booking_data?.vehicle_id : this.master_vehicle_id
-		booking_data['is_master_vehicle'] = booking_data?.vehicle_id.toString().length ? false : true
+		// booking_data['is_master_vehicle'] = booking_data?.vehicle_id.toString().length ? false : true
 	this.$api.fetchRatesByAffiliateVeh(vehicle_id, booking_data).subscribe((response: any) => {
 		if(this.bookingType !='edit'){
 			this.subtotal = 0
