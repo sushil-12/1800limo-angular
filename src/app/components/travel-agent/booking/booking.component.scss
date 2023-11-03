@@ -81,7 +81,9 @@ button {
 .assigned {
 	background-color: var(--green-color);
 }
-
+.driver_unassigned{
+	background-color: #00CCCC;
+}
 .rejected {
 	background-color: #dc3545;
 }
