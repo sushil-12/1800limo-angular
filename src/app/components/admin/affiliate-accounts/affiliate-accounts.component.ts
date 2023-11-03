@@ -58,6 +58,7 @@ export class AffiliateAccountsComponent implements OnInit {
 	}
 	affiliateId: string = '';
 	searchText: any = '';
+	affiliate_count: any;
 
 	constructor(
 		private adminService: AdminService,
@@ -176,7 +177,7 @@ export class AffiliateAccountsComponent implements OnInit {
 		// Load Our blackCarLimoBus using API
 		this.adminService.blackCarLimoBusAccounts(pageUrl, this.affiliateType, this.filter_type, keyword).then((result: any) => {
 			this.affiliate_accounts = result.data.data;
-
+			this.affiliate_count = result.data.account_counts;
 			this.firstPage = 1;
 			this.lastPage = result.data.last_page;
 			this.totalPage = result.data.last_page;

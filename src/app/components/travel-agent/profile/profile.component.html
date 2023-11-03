@@ -315,8 +315,9 @@
 					</div>
 					<div class="col-md-6">
 						<mat-form-field appearance="outline">
-							<mat-label>Zip Code <span class="asterisk">*</span></mat-label>
-							<input formControlName="zip" type="text" matInput placeholder="Zip Code">
+							<mat-label>Zip Code / Country Address Code <span class="asterisk">*</span></mat-label>
+							<input formControlName="zip" type="text" matInput
+								placeholder="Zip Code / Country Address Code">
 						</mat-form-field>
 						<div *ngIf="submittedForm && f?.zip?.errors || f.zip.touched && f.zip.errors"
 							class="text-danger">

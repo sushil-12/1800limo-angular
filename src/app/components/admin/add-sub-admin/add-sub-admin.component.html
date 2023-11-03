@@ -105,9 +105,9 @@
 					</div>
 					<div class="col-md-6">
 						<mat-form-field appearance="outline">
-							<mat-label>Zip Code </mat-label>
-							<input type="text" matInput placeholder="Zip Code" formControlName="zipCode"
-								(focus)="$event.target.select()">
+							<mat-label>Zip Code / Country Address Code </mat-label>
+							<input type="text" matInput placeholder="Zip Code / Country Address Code"
+								formControlName="zipCode" (focus)="$event.target.select()">
 						</mat-form-field>
 						<div *ngIf="submittedForm && f.zipCode.errors" class="text-danger">
 							<div *ngIf="f.zipCode.errors.required">This field is required</div>

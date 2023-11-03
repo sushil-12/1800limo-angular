@@ -889,8 +889,8 @@
 				</div>
 				<div class="col-md-6">
 					<mat-form-field appearance="outline" [class.read-only]="!canChangeAddress">
-						<mat-label>Zip Code <span class="asterisk">*</span></mat-label>
-						<input matInput placeholder="Zip Code" (focus)="$event.target.select()"
+						<mat-label>Zip Code / Country Address Code <span class="asterisk">*</span></mat-label>
+						<input matInput placeholder="Zip Code / Country Address Code" (focus)="$event.target.select()"
 							formControlName="zipCode" [readonly]="!canChangeAddress" tabindex="1" />
 					</mat-form-field>
 					<div *ngIf="
@@ -1592,10 +1592,11 @@
 							</div>
 							<div class="col-md-6">
 								<mat-form-field appearance="outline">
-									<mat-label>Zip Code
+									<mat-label>Zip Code / Country Address Code
 										<span class="asterisk">*</span>
 									</mat-label>
-									<input matInput placeholder="Zip Code" formControlName="requestZipCode" />
+									<input matInput placeholder="Zip Code / Country Address Code"
+										formControlName="requestZipCode" />
 								</mat-form-field>
 								<div *ngIf="
 										(submittedRequestAddressChangeForm &&
