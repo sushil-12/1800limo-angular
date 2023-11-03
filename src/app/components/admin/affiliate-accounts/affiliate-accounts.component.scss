@@ -93,3 +93,24 @@ a.dropdown-item {
     font-size: 22px;
     margin-left: 2px;
   }
+
+  .headingStatus{
+display: flex;
+gap: 20px;
+margin-left: 4px;
+  }
+
+  .headingAccepted{
+font-size: 20px;
+color: #00bd1f;
+  }
+
+  .headingInProgress{
+    font-size: 20px;
+    color: #0474fc;
+  }
+
+  .headingRejected{
+    font-size: 20px;
+    color: #fc0404;
+  }
