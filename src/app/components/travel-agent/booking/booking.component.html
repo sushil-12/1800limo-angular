@@ -55,9 +55,9 @@
 				<div class="col-md-12">
 					<div id="search-field-my-booking">
 						<mat-form-field appearance="outline" class="m-0">
-							<input matInput type="text" (keypress)="handleKeypressEvents()" (focus)="$event.target.select()"
-								(keyup)="searchInBookings($event.target.value)" [value]="searchText"
-								placeholder="Search" id="keyword" autofocus>
+							<input matInput type="text" (keypress)="handleKeypressEvents()"
+								(focus)="$event.target.select()" (keyup)="searchInBookings($event.target.value)"
+								[value]="searchText" placeholder="Search" id="keyword" autofocus>
 						</mat-form-field>
 					</div>
 				</div>
@@ -195,10 +195,14 @@
 									<td>
 										<p data-target="#sendEmailModal" data-toggle="modal"
 											(click)="openModal(booking, 'Driver')">
-											<span class="font-weight-bolder"
+											<span class="font-weight-bolder" *ngIf="!booking?.driver_name">1800Limo
+												Chauffers</span>
+
+
+											<span class="font-weight-bolder" *ngIf="booking?.driver_name"
 												[innerHTML]="highlighText(booking?.driver_name)"></span>&nbsp;
 											|
-											<span
+											<span *ngif="booking?.driver_cell_isd"
 												[innerHTML]="highlighText(booking?.driver_cell_isd + booking?.driver_tel)"></span>
 										</p>
 
