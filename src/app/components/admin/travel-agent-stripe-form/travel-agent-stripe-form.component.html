@@ -557,6 +557,11 @@
                                 {{ countryOption.countryName }}</mat-option>
                         </mat-select>
                     </mat-form-field>
+                    <!-- <mat-form-field appearance="outline">
+                        <mat-label>Country <span class="asterisk">*</span></mat-label>
+                        <input formControlName="country" type="text" matInput placeholder="Country"
+                            (focus)="$event.target.select()">
+                    </mat-form-field> -->
                     <div *ngIf="
 							(submittedForm && f.country.errors) ||
 							(f.country.touched && f.country.errors)

@@ -1780,7 +1780,7 @@ export class NewBookingComponent implements OnInit {
 				}, 2000)
 			}
 			if (value != 'charter_tour') {
-				this.BookingForm.get('number_of_hours').setValue(2)
+				this.BookingForm.get('number_of_hours').setValue(0)
 				this.BookingForm.updateValueAndValidity()
 				console.log(this.BookingForm.get('number_of_hours').value);
 			}

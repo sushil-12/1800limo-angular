@@ -28,6 +28,8 @@ export class AddTravelPlannerAccountComponent implements OnInit
 	public OfficePhoneObject: any;
 	travelPlannerId: any = null;
 	public countryCodeName:any="United States" ;
+	countryOptions: any;
+	stateOptions: any;
 
 
 	constructor(
@@ -60,7 +62,9 @@ export class AddTravelPlannerAccountComponent implements OnInit
 		{
 			this.yearOptions.push(currentYear + i);
 		}
-		
+		this.httpClient.get("assets/json/countryStateList.json").subscribe(data => {
+			this.countryOptions = data;
+		})
 		//google map autocomplete
 		this.mapsAPILoader.load().then(() =>
 		{
@@ -88,7 +92,7 @@ export class AddTravelPlannerAccountComponent implements OnInit
 						for (var j = 0; j < place.address_components[i].types.length; j++) {
 							if (place.address_components[i].types[j] == "country") {
 								this.addTravelPlannerAccountForm.patchValue({
-									country: place.address_components[i].long_name
+									country: place.address_components[i].short_name
 								});
 								// this.changeCountry(place.address_components[i].short_name)
 							}
@@ -220,7 +224,16 @@ export class AddTravelPlannerAccountComponent implements OnInit
 	}
 
 
+	changeCountry(selectedCountryCode) {
+		let selectedCountryData: any;
 
+		selectedCountryData = this.countryOptions.filter(function (countryOption) {
+			return countryOption.countryShortCode == selectedCountryCode;
+		});
+		if (selectedCountryData) {
+			this.stateOptions = selectedCountryData[0].regions;
+		}
+	}
 
 	telInputObjectOffice(obj)
 	{
