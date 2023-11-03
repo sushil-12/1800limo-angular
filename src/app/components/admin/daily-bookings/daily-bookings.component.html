@@ -49,7 +49,7 @@
 				<div class="align-btn d-flex justify-content-around">
 					<div class="col-sm-2 ml-n5">
 						<button class="custom-filled-button orange-button"
-							style="color:#fff;padding: 5px 12px !important;" 
+							style="color:#fff;padding: 5px 12px !important;"
 							(click)="loadBookings(null, startDate, endDate, searchText); saveCookie('admin_startDate', startDate); saveCookie('admin_endDate', endDate)">
 							Search
 						</button>
@@ -89,9 +89,9 @@
 				<div class="col-md-12">
 					<div id="search-field">
 						<mat-form-field appearance="outline" class="m-0">
-							<input matInput type="text" (keypress)="handleKeypressEvents()" (focus)="$event.target.select()"
-								(keyup)="searchInBookings($event.target.value)" [value]="searchText"
-								placeholder="Search" id="keyword" autofocus>
+							<input matInput type="text" (keypress)="handleKeypressEvents()"
+								(focus)="$event.target.select()" (keyup)="searchInBookings($event.target.value)"
+								[value]="searchText" placeholder="Search" id="keyword" autofocus>
 						</mat-form-field>
 					</div>
 				</div>
@@ -206,12 +206,14 @@
 										</div>
 									</td>
 
-									<td class="text-center font-weight-bolder cursor-pointer "
-										data-toggle="modal" data-target="#previewBookingOnID"
+									<td class="text-center font-weight-bolder cursor-pointer " data-toggle="modal"
+										data-target="#previewBookingOnID"
 										(click)="showBookingPreviewModal(booking.booking_id)">
 										<p class="booking-id-font font-weight-bolder cursor-pointer">
-											<span class="text-underline" [innerHTML]="highlighText(booking.booking_id )"></span>
-											<span style="text-decoration: none;">&nbsp;{{showAccountType(booking?.account_type)}}</span>
+											<span class="text-underline"
+												[innerHTML]="highlighText(booking.booking_id )"></span>
+											<span
+												style="text-decoration: none;">&nbsp;{{showAccountType(booking?.account_type)}}</span>
 										</p>
 									</td>
 									<td class="text-center font-weight-bolder cursor-pointer">
@@ -257,7 +259,7 @@
 											[ngClass]="currentUser?.RoleName == 'admin' || subModules.includes('can_send_notifications') ? '' : 'disabled-btn'"
 											*ngIf="booking.affiliate_type == null; else otherAffiliate">
 											<span class="font-weight-bolder"
-												[innerHTML]="highlighText(booking.loose_affiliate_name)"></span>|
+												[innerHTML]="highlighText(booking.loose_affiliate_name+ ' '+'(L)')"></span>|
 											<span [innerHTML]="highlighText(booking.loose_affiliate_phone_isd)"></span>
 											<span [innerHTML]="highlighText(booking.loose_affiliate_phone)"></span>
 										</p>
