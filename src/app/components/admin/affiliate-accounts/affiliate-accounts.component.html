@@ -119,14 +119,15 @@
 								<th>Affiliate Type</th>
 								<th>Name</th>
 								<th>Email</th>
+								<th>Badge City</th>
 								<th>Cell</th>
 								<th>Company Name</th>
 								<th>DBA</th>
-								<th>Badge City</th>
+
 								<th>Languages</th>
 								<!-- <th>Associations</th> -->
 								<th>Address</th>
-								<th>City</th>
+								<!-- <th>City</th> -->
 								<!-- <th>State</th>
 								<th>Country</th> -->
 							</tr>
@@ -196,6 +197,7 @@
 									data-messagetype="email">
 									<span [innerHTML]="highlighText(blackCarLimoBus.Email)"></span>
 								</td>
+								<td><span [innerHTML]="highlighText(blackCarLimoBus.badge_city_name)"></span></td>
 								<td class="clickable" (click)="sendMessage('sms', blackCarLimoBus)"
 									data-messagetype="sms">
 									<span
@@ -203,11 +205,11 @@
 								</td>
 								<td><span [innerHTML]="highlighText(blackCarLimoBus.CompanyName)"></span></td>
 								<td><span [innerHTML]="highlighText(blackCarLimoBus.DBA)"></span></td>
-								<td><span [innerHTML]="highlighText(blackCarLimoBus.badge_city_name)"></span></td>
+
 								<td><span [innerHTML]="highlighText(blackCarLimoBus.LanguagesSpoken)"></span></td>
 								<!-- <td><span [innerHTML]="highlighText(blackCarLimoBus.Associations)"></span></td> -->
 								<td><span [innerHTML]="highlighText(blackCarLimoBus.Address)"></span></td>
-								<td><span [innerHTML]="highlighText(blackCarLimoBus.City)"></span></td>
+								<!-- <td><span [innerHTML]="highlighText(blackCarLimoBus.City)"></span></td> -->
 								<!-- <td>{{blackCarLimoBus.State}}</td>
 								<td>{{blackCarLimoBus.Country}}</td> -->
 							</tr>
