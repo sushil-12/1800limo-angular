@@ -165,7 +165,8 @@
 									</div>
 								</td>
 								<td>
-									<div *ngIf="blackCarLimoBus.account_approval=='completed'; else notCompleted">
+									<div class="accpet_reject_div"
+										*ngIf="blackCarLimoBus.account_approval=='completed'; else notCompleted">
 										<button class="acceptButton"
 											(click)="acceptAffiliate(blackCarLimoBus.id)">Accept</button>
 										<button class="rejectButton" (click)="rejectAffiliateClick(blackCarLimoBus.id)"
