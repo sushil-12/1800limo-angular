@@ -115,6 +115,7 @@ import { DemoAddIndividualComponent } from './demo-add-individual/demo-add-indiv
 import { AffiliateBookingComponent } from './affiliate-booking/affiliate-booking.component';
 import { TravelAgentStepsComponent } from './travel-agent-steps/travel-agent-steps.component';
 import { TravelAgentStripeFormComponent } from './travel-agent-stripe-form/travel-agent-stripe-form.component';
+import { RecoverAccountsComponent } from './recover-accounts/recover-accounts.component';
 
 
 @NgModule({
@@ -203,7 +204,8 @@ import { TravelAgentStripeFormComponent } from './travel-agent-stripe-form/trave
 		DemoAddIndividualComponent,
 		AffiliateBookingComponent,
 		TravelAgentStepsComponent,
-		TravelAgentStripeFormComponent
+		TravelAgentStripeFormComponent,
+		RecoverAccountsComponent
 	],
 	imports: [
 		CommonModule,

@@ -257,7 +257,10 @@ export class EditVehicleRatesComponent implements OnInit {
 			state_tax: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
 			vat: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
 			workmans_comp: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
-			other_transportation_tax: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]]
+			other_transportation_tax: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
+			early_late_charges:[0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
+			holiday_charges:[0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
+			friday_saturday_charges:[0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 		});
 		this.initRateRangeObject();
 		this.km_mile_switch('mile')

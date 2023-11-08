@@ -1277,6 +1277,37 @@
 							</div>
 						</div>
 					</div>
+					<!-- Distance Details -->
+					<div class="mx-2 preview-pickup-color">
+						<div class="row m-0">
+							<div class="col-md-4">
+								<span>
+									Total Distance
+								</span>
+							</div>
+							<div class="col-md-8 ">
+								<span class="font-weight-bolder preview-output-feild">
+									{{ mToMi(bookingPreview?.distance) }} Miles / {{ mToKm(bookingPreview?.distance)
+									}} Km
+								</span>
+							</div>
+						</div>
+					</div>
+					<div class="mx-2 preview-pickup-color">
+						<div class="row m-0">
+							<div class="col-md-4">
+								<span>
+									Estimated time
+								</span>
+							</div>
+							<div class="col-md-8">
+								<span class="font-weight-bolder preview-output-feild">
+									{{convertToMinutes(bookingPreview.duration)}} mins
+								</span>
+							</div>
+						</div>
+					</div>
+					<!-- Distance Details -->
 
 					<!-- Pickup > Airline Details -->
 					<div class="mx-2 preview-pickup-color" *ngIf="bookingPreview.transfer_type.includes('airport_')">
@@ -1324,6 +1355,7 @@
 							</div>
 						</div>
 						<!-- Flight Number -->
+
 					</div>
 
 					<!-- Pickup > Cruise Details -->
