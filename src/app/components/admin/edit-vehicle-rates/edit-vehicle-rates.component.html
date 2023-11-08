@@ -384,7 +384,7 @@
 				</div>
 				<div class="col-md-6">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
-						<mat-label>Early AM / Late PM</mat-label>
+						<mat-label>Early AM / Late PM Surge Rate</mat-label>
 						<span matPrefix>{{currencySymbol}} &nbsp;</span>
 						<input matInput type="number" placeholder="Early AM / Late PM"
 							(change)="updateRateRangeObject()" formControlName="early_late_charges" tabindex="1"
@@ -397,7 +397,7 @@
 				</div>
 				<div class="col-md-6">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
-						<mat-label>Holiday Rate</mat-label>
+						<mat-label>Holiday Surge Rate</mat-label>
 						<span matPrefix>{{currencySymbol}} &nbsp;</span>
 						<input matInput type="number" placeholder="Holiday Rate" (change)="updateRateRangeObject()"
 							formControlName="holiday_charges" tabindex="1" (focus)="$event.target.select()">
@@ -409,7 +409,7 @@
 				</div>
 				<div class="col-md-6">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
-						<mat-label>Friday/Saturday Night</mat-label>
+						<mat-label>Friday/Saturday Night Surge Rate</mat-label>
 						<span matPrefix>{{currencySymbol}} &nbsp;</span>
 						<input matInput type="number" placeholder="Friday/Saturday Night"
 							(change)="updateRateRangeObject()" formControlName="friday_saturday_charges" tabindex="1"
