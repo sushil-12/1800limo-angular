@@ -34,7 +34,7 @@ export class RecoverAccountsComponent implements OnInit {
   searchText: any;
   accounts: any;
   isDeletedAcc: boolean = false;
-  showActionColumn: boolean;
+  showActionColumn: boolean = true;
   title: string = 'All';
 
   constructor(
