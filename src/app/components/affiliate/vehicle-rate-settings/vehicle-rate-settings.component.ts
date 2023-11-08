@@ -186,7 +186,10 @@ export class VehicleRateSettingsComponent implements OnInit {
 			state_tax: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			vat: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			workmans_comp: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
-			other_transportation_tax: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]]
+			other_transportation_tax: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
+			early_late_charges:[0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
+			holiday_charges:[0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
+			friday_saturday_charges:[0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 		})
 		this.changeDetection.radioButton('km_mile', 'mile')
 
@@ -297,6 +300,9 @@ export class VehicleRateSettingsComponent implements OnInit {
 				per_diem: response.data.per_diem ?? 0,
 				in_town_extra_stop: response.data.in_town_extra_stop,
 				outside_town_extra_stop:response.data.outside_town_extra_stop,
+				early_late_charges:response.data.early_late_charges,
+				holiday_charges:response.data.holiday_charges,
+				friday_saturday_charges:response.data.friday_saturday_charges
 			});
 			console.group(this.VehicleRateSettingsForm)
 			console.groupEnd()
