@@ -526,6 +526,16 @@ export class AdminService {
 		}
 		return this.httpClient.get(path).toPromise();;
 	}
+	getAccounts(url, isDeletedAcc, keyword) {
+		var path;
+		if (url) {
+			path = url + '?deleted=' + isDeletedAcc + '&search=' + keyword;;
+		}
+		else {
+			path = this.serverUrl + 'admin/all-user' + '?deleted=' + isDeletedAcc  + '&search=' + keyword;
+		}
+		return this.httpClient.get(path).toPromise();;
+	}
 	getTravelPlannerAccount(id) {
 		return this.httpClient.get(this.serverUrl + 'get-travel-planner-account/' + id);
 	}
@@ -558,6 +568,10 @@ export class AdminService {
 	}
 	deleteCard(id, acc_id) {
 		return this.httpClient.delete(this.serverUrl + 'delete-credit-card/' + acc_id + '/' + id);
+	}
+
+	deleteAccount(id) {
+		return this.httpClient.delete(this.serverUrl + 'admin/delete-user/' + id);
 	}
 
 

@@ -55,9 +55,9 @@
 				<div class="col-md-12">
 					<div id="search-field-my-booking">
 						<mat-form-field appearance="outline" class="m-0">
-							<input matInput type="text" (keypress)="handleKeypressEvents()" (focus)="$event.target.select()"
-								(keyup)="searchInBookings($event.target.value)" [value]="searchText"
-								placeholder="Search" id="keyword" autofocus>
+							<input matInput type="text" (keypress)="handleKeypressEvents()"
+								(focus)="$event.target.select()" (keyup)="searchInBookings($event.target.value)"
+								[value]="searchText" placeholder="Search" id="keyword" autofocus>
 						</mat-form-field>
 					</div>
 				</div>
@@ -1183,6 +1183,36 @@
 							</div>
 						</div>
 						<!-- Flight Number -->
+					</div>
+					<!-- Distance Details -->
+					<div class="mx-2 preview-pickup-color">
+						<div class="row m-0">
+							<div class="col-md-4">
+								<span>
+									Total Distance
+								</span>
+							</div>
+							<div class="col-md-8 ">
+								<span class="font-weight-bolder preview-output-feild">
+									{{ mToMi(bookingPreview?.distance) }} Miles / {{ mToKm(bookingPreview?.distance)
+									}} Km
+								</span>
+							</div>
+						</div>
+					</div>
+					<div class="mx-2 preview-pickup-color">
+						<div class="row m-0">
+							<div class="col-md-4">
+								<span>
+									Estimated time
+								</span>
+							</div>
+							<div class="col-md-8">
+								<span class="font-weight-bolder preview-output-feild">
+									{{convertToMinutes(bookingPreview.duration)}} mins
+								</span>
+							</div>
+						</div>
 					</div>
 
 					<!-- Pickup > Cruise Details -->

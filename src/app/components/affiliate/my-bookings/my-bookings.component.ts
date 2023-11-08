@@ -557,6 +557,17 @@ export class MyBookingsComponent implements OnInit {
 			});
 	}
 
+	convertToMinutes(value){
+		return (value/60).toFixed(2)
+	}
+	mToMi(distance: number): string {
+		return (distance / 1609).toFixed(2)
+	}
+
+	mToKm(distance: number): string {
+		return (distance / 1000).toFixed(2)
+	}
+
 
 	iOS() {
 		return [

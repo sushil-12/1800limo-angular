@@ -83,6 +83,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 	master_vehicle_id: any = null;
 	travel_agent_share : any = 0;
 	r_travel_agent_share : any = 0;
+	emptyRateArray: any;
 
 	constructor(
 		private $form: FormBuilder,
@@ -461,6 +462,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 	fetchRates(affiliate: string, bookingId: number = 0) {
 		this.$api.fetchAdminNewBookingRates(affiliate, bookingId).subscribe((response: any) => {
 			if (response?.success && response?.data?.rateArray) {
+				this.emptyRateArray = response?.data?.rateArray
 				this.ratesdata.next({})
 				this.is_readonly_min_rate = response?.data?.min_rate_involved ? true : false
 				this.ratesdata.next(response.data.rateArray);
@@ -479,24 +481,32 @@ export class RatesFormComponent implements OnInit, OnChanges {
 		});
 	}
 	fetchRatesArrayByAffiliateVehicle(data) {
-		console.log('<<<<<<<<<<<________ data to send fetchRatesArrayByAffiliateVehicle---------------->>>>>>>>>>>>>>',
+		console.log('<<<<<<<<<<<________ data to send fetchRatesArrayByAffiliateVehicle---------------->>>>>>>>>>>>>>',data,
 		data.vehicle_id , this.master_vehicle_id)
-		let vehicle_id = data?.vehicle_id.toString().length ? data?.vehicle_id : this.master_vehicle_id
-		data['is_master_vehicle'] = data?.vehicle_id.toString().length ? false : true
-		this.$api.fetchRatesByAffiliateVeh(vehicle_id, data).subscribe((response: any) => {
-			if(this.bookingType !='edit'  && this.bookingType !='repeat'){
-				this.ratesdata.next({})
-				this.calc_admin_share = 0
-				this.travel_agent_share = 0
-				this.is_readonly_min_rate = response?.data?.min_rate_involved ? true : false
-				this.ratesdata.next(response?.data?.rateArray)
-				this.initRates();
+		try {
+			let vehicle_id =  ''
+			if(data.vehicle_id){
+				vehicle_id = data?.vehicle_id.toString().length ? data?.vehicle_id : this.master_vehicle_id
+				data['is_master_vehicle'] = data?.vehicle_id.toString().length ? false : true
 			}
-			if(data.service_type == 'round_trip'){
-				this.returnRatesdata.next(response?.data?.retrunRateArray)
-				this.initReturnRates()
-			}
-		});
+			this.$api.fetchRatesByAffiliateVeh(vehicle_id, data).subscribe((response: any) => {
+				if(this.bookingType !='edit'  && this.bookingType !='repeat'){
+					this.ratesdata.next({})
+					this.calc_admin_share = 0
+					this.travel_agent_share = 0
+					this.is_readonly_min_rate = response?.data?.min_rate_involved ? true : false
+					this.ratesdata.next(response?.data?.rateArray)
+					this.initRates();
+				}
+				if(data.service_type == 'round_trip'){
+					this.returnRatesdata.next(response?.data?.retrunRateArray)
+					this.initReturnRates()
+				}
+			});
+		} catch (error) {
+			
+			console.log('error--__>>>>' , error)
+		}
 	}
 	getReturnRatesData() {
 		return this.returnRatesdata.asObservable();

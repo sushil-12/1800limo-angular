@@ -11,18 +11,17 @@
 				class="feather feather-menu">
 				<line x1="9.37" x2="36.63" y1="1.37" y2="24.63" fill="none" stroke="#010101" stroke-miterlimit="10" stroke-width="4"></line><line x1="9.37" x2="38.63" y1="54.63" y2="26.63" fill="none" stroke="#010101" stroke-miterlimit="10" stroke-width="4"></line>	
 			</svg>  -->
-			<svg *ngIf="showSidebar===true" xmlns="http://www.w3.org/2000/svg"
-				(click)="showSidebarFunc(false)" width="24" height="24" fill="currentColor" class="bi bi-chevron-left"
-				viewBox="0 0 16 16">
+			<svg *ngIf="showSidebar===true" xmlns="http://www.w3.org/2000/svg" (click)="showSidebarFunc(false)"
+				width="24" height="24" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
 				<path fill-rule="evenodd"
 					d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
 			</svg>
-		
+
 			<svg (click)="showSidebarFunc(true)" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-					fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16" *ngIf="showSidebar===false">
-					<path fill-rule="evenodd"
-						d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
-				</svg>
+				fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16" *ngIf="showSidebar===false">
+				<path fill-rule="evenodd"
+					d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+			</svg>
 			<!-- <line _ngcontent-qpx-c164="" x1="9.37" x2="36.63" y1="1.37" y2="25.63" fill="none" stroke="#010101" stroke-miterlimit="5" stroke-width="4"></line><line _ngcontent-qpx-c164="" x1="9.37" x2="40.63" y1="54.63" y2="25.63" fill="none" stroke="#010101" stroke-miterlimit="5" stroke-width="4"></line> -->
 		</button>
 		<ul class="navbar-nav align-items-center ml-auto">
@@ -128,10 +127,11 @@
 							</a>
 						</li>
 						<!--3th -->
-						<li class="nav-item" [hidden]="affiliateAccountStatus=='completed'" *ngIf="role=='admin' || modules.includes('Invoices')">
+						<li class="nav-item" [hidden]="affiliateAccountStatus=='completed'"
+							*ngIf="role=='admin' || modules.includes('Invoices')">
 							<a class="nav-link collapsed dropdwn" [routerLinkActive]="['active']" data-toggle="collapse"
 								data-target="#collapse5" aria-expanded="true" aria-controls="collapseUtilities"
-								tabIndex="-1" >
+								tabIndex="-1">
 								<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
 									xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 									viewBox="0 0 96.41 122.88" style="enable-background:new 0 0 96.41 122.88"
@@ -151,19 +151,21 @@
 										routerLink="/admin/invoices-admin"
 										(click)="closeSidebarFunc(false)">Invoices</a>
 									<a class="collapse-item" [routerLinkActive]="['active']"
-										routerLink="/admin/booking-logs"
-										(click)="closeSidebarFunc(false)">Booking logs</a>
+										routerLink="/admin/booking-logs" (click)="closeSidebarFunc(false)">Booking
+										logs</a>
 									<a class="collapse-item" [routerLinkActive]="['active']"
-										routerLink="/admin/create-debit-cc-card-admin" *ngIf="role=='admin' || subModules.includes('can_add_edit_card')"
+										routerLink="/admin/create-debit-cc-card-admin"
+										*ngIf="role=='admin' || subModules.includes('can_add_edit_card')"
 										(click)="closeSidebarFunc(false)">Create Debit/CC Card</a>
 								</div>
 							</div>
 						</li>
 						<!--4th -->
-						<li class="nav-item" *ngIf="role=='admin' || modules.includes('individual_account') || modules.includes('corporate_account') || modules.includes('travel_planner_account') || modules.includes('tour_guide_account') ">
+						<li class="nav-item"
+							*ngIf="role=='admin' || modules.includes('individual_account') || modules.includes('corporate_account') || modules.includes('travel_planner_account') || modules.includes('tour_guide_account') ">
 							<a class="nav-link collapsed dropdwn" [routerLinkActive]="['active']" data-toggle="collapse"
 								data-target="#collapse6" aria-expanded="true" aria-controls="collapseUtilities"
-								tabIndex="-1" >
+								tabIndex="-1">
 								<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"
 									viewBox="0 0 108.81 122.88">
 									<defs>
@@ -177,24 +179,34 @@
 									<path
 										d="M62.72,69.75H99.84a9,9,0,0,1,9,9V113.9a9,9,0,0,1-9,9H62.72a9,9,0,0,1-9-9V78.72a9,9,0,0,1,9-9ZM84.46,28.19a3.15,3.15,0,0,1,2.29,3v5.29H94.6a6.82,6.82,0,0,1,4.88,2,6.91,6.91,0,0,1,2,4.88V60.21h-6V43.42a1,1,0,0,0-.28-.7,1,1,0,0,0-.71-.28H86.75V60.2H80.44V35H54.21A3.17,3.17,0,0,1,51,31.83V6.29H6.32v95.48H43.76v6.31H16.37V116a1,1,0,0,0,.28.7,1,1,0,0,0,.7.28H43.74v5.93H17.39A7,7,0,0,1,10.47,116v-7.88H5.66a5.66,5.66,0,0,1-4-1.65,5.6,5.6,0,0,1-1.66-4V5.65A5.65,5.65,0,0,1,5.66,0H54.21a3.09,3.09,0,0,1,2.42,1.16l27.83,27ZM20,51.62A2.05,2.05,0,0,0,18,53.76,2,2,0,0,0,20,55.89H57A2.05,2.05,0,0,0,59,53.76,2,2,0,0,0,57,51.62Zm0,15.27A2,2,0,0,0,18.06,69,2,2,0,0,0,20,71.15h23.7V66.89Zm0,15.26a2,2,0,0,0-1.92,2.13A2,2,0,0,0,20,86.41h23.7V82.15Zm0-45.79A2,2,0,0,0,18,38.49,2,2,0,0,0,20,40.62H41.89a2,2,0,0,0,1.91-2.13,2,2,0,0,0-1.91-2.13ZM20,21.1a2,2,0,0,0-1.92,2.13A2,2,0,0,0,20,25.36H32a2,2,0,0,0,1.91-2.13A2,2,0,0,0,32,21.1Zm37.37-10L76.24,28.69H57.35V11.06Zm17.4,85.68c-.58-.9-1.64-2.13-1.64-3.2A1.7,1.7,0,0,1,74.26,92c-.05-.9-.09-1.82-.09-2.73,0-.53,0-1.07,0-1.6a4.29,4.29,0,0,1,.18-1,5.74,5.74,0,0,1,2.55-3.25,8,8,0,0,1,1.39-.66c.89-.32.45-1.8,1.41-1.82,2.25-.06,6,2,7.39,3.57a5.69,5.69,0,0,1,1.48,3.7l-.09,3.94a1.29,1.29,0,0,1,.94.81c.31,1.24-1,2.79-1.58,3.78s-2.67,3.87-2.67,3.89a.73.73,0,0,0,.19.45c3.28,4.52,12.93,1.67,12.93,10.65H64.23c0-9,9.65-6.13,12.93-10.64.16-.24.24-.37.23-.47S75,97.1,74.75,96.75Z" />
 								</svg>
-								<span class="ml-3" style="width: 65%" (click)="userAccountFunc(false)">User Accounts</span>
+								<span class="ml-3" style="width: 65%" (click)="userAccountFunc(false)">User
+									Accounts</span>
 								<i class="bi" [ngClass]="chevron1 ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
 							</a>
 							<div id="collapse6" class="collapse" aria-labelledby="headingUtilities"
 								data-parent="#accordionSidebar" tabIndex="-1">
 								<div class="py-2 collapse-inner rounded">
 									<a class="collapse-item" [routerLinkActive]="['active']"
-										routerLink="/admin/individual-account-admin" *ngIf="role=='admin' ||modules.includes('individual_account')"
+										routerLink="/admin/individual-account-admin"
+										*ngIf="role=='admin' ||modules.includes('individual_account')"
 										(click)="closeSidebarFunc(false)">Individual</a>
 									<a class="collapse-item" [routerLinkActive]="['active']"
-										routerLink="/admin/corporate-account-admin" *ngIf="role=='admin' || modules.includes('corporate_account')"
+										routerLink="/admin/corporate-account-admin"
+										*ngIf="role=='admin' || modules.includes('corporate_account')"
 										(click)="closeSidebarFunc(false)">Corporate</a>
 									<a class="collapse-item" [routerLinkActive]="['active']"
-										routerLink="/admin/travel-planner-account-admin" *ngIf="role=='admin' || modules.includes('travel_planner_account')"
+										routerLink="/admin/travel-planner-account-admin"
+										*ngIf="role=='admin' || modules.includes('travel_planner_account')"
 										(click)="closeSidebarFunc(false)">Travel Planner</a>
 									<a class="collapse-item" [routerLinkActive]="['active']"
-										routerLink="/admin/tour-guide-account-admin" *ngIf="role=='admin' || modules.includes('tour_guide_account')"
+										routerLink="/admin/tour-guide-account-admin"
+										*ngIf="role=='admin' || modules.includes('tour_guide_account')"
 										(click)="closeSidebarFunc(false)">Tour Guide</a>
+									<a class="collapse-item" [routerLinkActive]="['active']"
+										routerLink="/admin/recover-accounts"
+										*ngIf="role=='admin' || modules.includes('individual_account')"
+										(click)="closeSidebarFunc(false)">All Accounts</a>
+
 								</div>
 							</div>
 						</li>
@@ -228,18 +240,20 @@
 
 						<!--6th(I)  staff admin permissions -->
 						<li class="nav-item" *ngIf="role=='admin'">
-							<a class="nav-link collapsed" [routerLinkActive]="['active']" routerLink="/admin/staff-roles-list"
-								(click)="closeSidebarFunc(false)" tabIndex="-1">
-								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-toggles" viewBox="0 0 16 16">
-									<path d="M4.5 9a3.5 3.5 0 1 0 0 7h7a3.5 3.5 0 1 0 0-7h-7zm7 6a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5zm-7-14a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zm2.45 0A3.49 3.49 0 0 1 8 3.5 3.49 3.49 0 0 1 6.95 6h4.55a2.5 2.5 0 0 0 0-5H6.95zM4.5 0h7a3.5 3.5 0 1 1 0 7h-7a3.5 3.5 0 1 1 0-7z"/>
-								  </svg><span>Roles and Permissions</span>
+							<a class="nav-link collapsed" [routerLinkActive]="['active']"
+								routerLink="/admin/staff-roles-list" (click)="closeSidebarFunc(false)" tabIndex="-1">
+								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+									class="bi bi-toggles" viewBox="0 0 16 16">
+									<path
+										d="M4.5 9a3.5 3.5 0 1 0 0 7h7a3.5 3.5 0 1 0 0-7h-7zm7 6a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5zm-7-14a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zm2.45 0A3.49 3.49 0 0 1 8 3.5 3.49 3.49 0 0 1 6.95 6h4.55a2.5 2.5 0 0 0 0-5H6.95zM4.5 0h7a3.5 3.5 0 1 1 0 7h-7a3.5 3.5 0 1 1 0-7z" />
+								</svg><span>Roles and Permissions</span>
 							</a>
 						</li>
 						<!--7th -->
 						<li class="nav-item" *ngIf="role=='admin'">
 							<a class="nav-link collapsed dropdwn" [routerLinkActive]="['active']" data-toggle="collapse"
 								data-target="#collapse8" aria-expanded="true" aria-controls="collapseUtilities"
-								tabIndex="-1" >
+								tabIndex="-1">
 								<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
 									xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 									viewBox="0 0 103.12 122.88" style="enable-background:new 0 0 103.12 122.88"
@@ -304,7 +318,7 @@
 						<li class="nav-item" *ngIf="role=='admin' || role=='sub_admin'">
 							<a class="nav-link collapsed dropdwn" [routerLinkActive]="['active']" data-toggle="collapse"
 								data-target="#collapse10" aria-expanded="true" aria-controls="collapseUtilities"
-								tabIndex="-1" >
+								tabIndex="-1">
 								<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
 									xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 									viewBox="0 0 122.88 122.878" enable-background="new 0 0 122.88 122.878"
@@ -314,59 +328,73 @@
 											d="M101.589,14.7l8.818,8.819c2.321,2.321,2.321,6.118,0,8.439l-7.101,7.101 c1.959,3.658,3.454,7.601,4.405,11.752h9.199c3.283,0,5.969,2.686,5.969,5.968V69.25c0,3.283-2.686,5.969-5.969,5.969h-10.039 c-1.231,4.063-2.992,7.896-5.204,11.418l6.512,6.51c2.321,2.323,2.321,6.12,0,8.44l-8.818,8.819c-2.321,2.32-6.119,2.32-8.439,0 l-7.102-7.102c-3.657,1.96-7.601,3.456-11.753,4.406v9.199c0,3.282-2.685,5.968-5.968,5.968H53.629 c-3.283,0-5.969-2.686-5.969-5.968v-10.039c-4.063-1.232-7.896-2.993-11.417-5.205l-6.511,6.512c-2.323,2.321-6.12,2.321-8.441,0 l-8.818-8.818c-2.321-2.321-2.321-6.118,0-8.439l7.102-7.102c-1.96-3.657-3.456-7.6-4.405-11.751H5.968 C2.686,72.067,0,69.382,0,66.099V53.628c0-3.283,2.686-5.968,5.968-5.968h10.039c1.232-4.063,2.993-7.896,5.204-11.418l-6.511-6.51 c-2.321-2.322-2.321-6.12,0-8.44l8.819-8.819c2.321-2.321,6.118-2.321,8.439,0l7.101,7.101c3.658-1.96,7.601-3.456,11.753-4.406 V5.969C50.812,2.686,53.498,0,56.78,0h12.471c3.282,0,5.968,2.686,5.968,5.969v10.036c4.064,1.231,7.898,2.992,11.422,5.204 l6.507-6.509C95.471,12.379,99.268,12.379,101.589,14.7L101.589,14.7z M61.44,36.92c13.54,0,24.519,10.98,24.519,24.519 c0,13.538-10.979,24.519-24.519,24.519c-13.539,0-24.519-10.98-24.519-24.519C36.921,47.9,47.901,36.92,61.44,36.92L61.44,36.92z" />
 									</g>
 								</svg>
-								<span class="ml-3" style="width: 65%" (click)="settingFunc(false)">Vehicle Settings</span>
+								<span class="ml-3" style="width: 65%" (click)="settingFunc(false)">Vehicle
+									Settings</span>
 								<i class="bi" [ngClass]="chevron3 ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
 							</a>
 							<div id="collapse10" class="collapse" aria-labelledby="headingUtilities"
 								data-parent="#accordionSidebar" tabIndex="-1">
 								<div class="py-2 collapse-inner rounded">
 									<a class="collapse-item" [routerLinkActive]="['active']"
-										(click)="closeSidebarFunc(false)" *ngIf="role=='admin' || modules.includes('vehicle')"
+										(click)="closeSidebarFunc(false)"
+										*ngIf="role=='admin' || modules.includes('vehicle')"
 										routerLink="/admin/master-vehicle-types">
 										Master Vehicle Types
-										</a>
+									</a>
 									<a class="collapse-item" [routerLinkActive]="['active']"
-										(click)="closeSidebarFunc(false)" *ngIf="role=='admin' || modules.includes('Affiliate Preference')"
+										(click)="closeSidebarFunc(false)"
+										*ngIf="role=='admin' || modules.includes('Affiliate Preference')"
 										routerLink="/admin/affiliate-preference">Affilate
 										Preference</a>
 									<a class="collapse-item" [routerLinkActive]="['active']"
-										(click)="closeSidebarFunc(false)" *ngIf="role=='admin' || modules.includes('Amenities')"
-										 routerLink="/admin/amenities">Amenities</a>
+										(click)="closeSidebarFunc(false)"
+										*ngIf="role=='admin' || modules.includes('Amenities')"
+										routerLink="/admin/amenities">Amenities</a>
 									<a class="collapse-item" [routerLinkActive]="['active']"
-										(click)="closeSidebarFunc(false)" *ngIf="role=='admin' || modules.includes('Interior Amenities')"
+										(click)="closeSidebarFunc(false)"
+										*ngIf="role=='admin' || modules.includes('Interior Amenities')"
 										routerLink="/admin/interiorAmenity">Interior
 										Amenities</a>
 									<a class="collapse-item" [routerLinkActive]="['active']"
-										(click)="closeSidebarFunc(false)" *ngIf="role=='admin' || modules.includes('Special Amenities')"
-										 routerLink="/admin/specialAmenity">Special
+										(click)="closeSidebarFunc(false)"
+										*ngIf="role=='admin' || modules.includes('Special Amenities')"
+										routerLink="/admin/specialAmenity">Special
 										Amenities</a>
 									<a class="collapse-item" [routerLinkActive]="['active']"
-										(click)="closeSidebarFunc(false)" *ngIf="role=='admin' || modules.includes('Colors')"
-										 routerLink="/admin/vehicle-colors">Colors</a>
+										(click)="closeSidebarFunc(false)"
+										*ngIf="role=='admin' || modules.includes('Colors')"
+										routerLink="/admin/vehicle-colors">Colors</a>
 									<a class="collapse-item" [routerLinkActive]="['active']"
-										(click)="closeSidebarFunc(false)" *ngIf="role=='admin' || modules.includes('Driver Language')"
-										 routerLink="/admin/driver-language">Driver
+										(click)="closeSidebarFunc(false)"
+										*ngIf="role=='admin' || modules.includes('Driver Language')"
+										routerLink="/admin/driver-language">Driver
 										language</a>
 									<a class="collapse-item" [routerLinkActive]="['active']"
-										(click)="closeSidebarFunc(false)" *ngIf="role=='admin' || modules.includes('Driver Dress')"
-										 routerLink="/admin/driver-dress">Driver
+										(click)="closeSidebarFunc(false)"
+										*ngIf="role=='admin' || modules.includes('Driver Dress')"
+										routerLink="/admin/driver-dress">Driver
 										Dress</a>
 									<a class="collapse-item" [routerLinkActive]="['active']"
-										(click)="closeSidebarFunc(false)" *ngIf="role=='admin' || modules.includes('Make')"
-										 routerLink="/admin/vehicle-make">Make</a>
+										(click)="closeSidebarFunc(false)"
+										*ngIf="role=='admin' || modules.includes('Make')"
+										routerLink="/admin/vehicle-make">Make</a>
 									<a class="collapse-item" [routerLinkActive]="['active']"
-										(click)="closeSidebarFunc(false)" *ngIf="role=='admin' || modules.includes('Meet and Greet')"
-										 routerLink="/admin/meet-and-greet">Meet and
+										(click)="closeSidebarFunc(false)"
+										*ngIf="role=='admin' || modules.includes('Meet and Greet')"
+										routerLink="/admin/meet-and-greet">Meet and
 										Greet</a>
 									<a class="collapse-item" [routerLinkActive]="['active']"
-										(click)="closeSidebarFunc(false)" *ngIf="role=='admin' || modules.includes('Model')"
-										 routerLink="/admin/vehicle-model">Model</a>
+										(click)="closeSidebarFunc(false)"
+										*ngIf="role=='admin' || modules.includes('Model')"
+										routerLink="/admin/vehicle-model">Model</a>
 									<a class="collapse-item" [routerLinkActive]="['active']"
-										(click)="closeSidebarFunc(false)" *ngIf="role=='admin' || modules.includes('Years')"
-										 routerLink="/admin/vehicle-years">Years</a>
+										(click)="closeSidebarFunc(false)"
+										*ngIf="role=='admin' || modules.includes('Years')"
+										routerLink="/admin/vehicle-years">Years</a>
 									<a class="collapse-item" [routerLinkActive]="['active']"
-										(click)="closeSidebarFunc(false)" *ngIf="role=='admin' || modules.includes('Badge Cities')"
-										 routerLink="/admin/badge-cities">Badge Cities</a>
+										(click)="closeSidebarFunc(false)"
+										*ngIf="role=='admin' || modules.includes('Badge Cities')"
+										routerLink="/admin/badge-cities">Badge Cities</a>
 
 								</div>
 							</div>
@@ -376,7 +404,7 @@
 						<li class="nav-item" *ngIf="role=='admin' || modules.includes('cms_pages')">
 							<a class="nav-link collapsed dropdwn" [routerLinkActive]="['active']" data-toggle="collapse"
 								data-target="#collapse11" aria-expanded="true" aria-controls="collapseUtilities"
-								tabIndex="-1" >
+								tabIndex="-1">
 								<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
 									xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 									viewBox="0 0 110.74 122.88" style="enable-background:new 0 0 110.74 122.88"
@@ -386,7 +414,8 @@
 											d="M48.47,116.35c1.8,0,3.27,1.46,3.27,3.26c0,1.8-1.46,3.26-3.27,3.26H7.6c-2.09,0-3.99-0.85-5.37-2.23 C0.85,119.27,0,117.38,0,115.28V7.6C0,5.5,0.85,3.61,2.23,2.23C3.61,0.85,5.5,0,7.6,0h93.3c2.09,0,3.99,0.86,5.37,2.23 c1.38,1.38,2.23,3.27,2.23,5.37v53.95c0,1.8-1.46,3.26-3.26,3.26c-1.8,0-3.26-1.46-3.26-3.26V7.6c0-0.29-0.12-0.56-0.32-0.75 c-0.2-0.2-0.47-0.32-0.75-0.32H7.6c-0.29,0-0.56,0.12-0.76,0.31C6.65,7.05,6.53,7.31,6.53,7.6v107.68c0,0.29,0.12,0.56,0.32,0.75 c0.2,0.2,0.47,0.32,0.76,0.32L48.47,116.35L48.47,116.35L48.47,116.35z M33.94,57.92c-0.62-1.07-0.17-4.13,1.16-5.21 c3.8-2.22,9.04-1.53,12.7-4.09c0.21-0.32,0.44-0.78,0.67-1.29c0.33-0.76,0.64-1.59,0.83-2.16c-0.81-0.96-1.51-2.04-2.17-3.1 l-2.2-3.5c-0.8-1.2-1.22-2.3-1.25-3.2c-0.01-0.42,0.06-0.81,0.22-1.15c0.16-0.36,0.41-0.65,0.76-0.88c0.16-0.11,0.34-0.2,0.53-0.27 c-0.15-1.9-0.2-4.29-0.1-6.3c0.05-0.47,0.14-0.95,0.27-1.43c0.56-2.01,1.97-3.63,3.72-4.74c0.96-0.61,2.02-1.08,3.12-1.39 c0.7-0.2-0.6-2.43,0.13-2.51c3.5-0.36,9.15,2.83,11.59,5.47c1.22,1.32,1.99,3.08,2.16,5.4l-0.14,5.71l0,0 c0.61,0.19,1,0.57,1.16,1.2c0.18,0.7-0.01,1.67-0.61,3.01l0,0c-0.01,0.02-0.02,0.05-0.04,0.07l-2.51,4.13 c-0.92,1.52-1.86,3.04-3.08,4.24c0.11,0.16,0.23,0.32,0.34,0.48c0.5,0.73,1,1.46,1.64,2.11c0.02,0.02,0.04,0.05,0.05,0.07 c2.89,2.04,9.92,2.54,12.62,4.04l0.11,0.06c1.39,1.07,1.82,4.13,1.18,5.2H33.94L33.94,57.92z M102.29,79.04 c-0.53-0.51-1.14-0.75-1.84-0.74c-0.71,0.01-1.31,0.29-1.8,0.81l-4.05,4.22l11.37,10.98l4.09-4.26c0.49-0.5,0.69-1.14,0.68-1.84 c-0.01-0.69-0.26-1.33-0.76-1.8L102.29,79.04L102.29,79.04L102.29,79.04z M84.54,116.17c-1.5,0.48-3,0.97-4.49,1.46 c-1.5,0.5-3,1-4.49,1.5c-3.53,1.16-5.51,1.8-5.93,1.92c-0.4,0.12-0.17-1.53,0.73-4.99l2.81-10.83l0,0l17.82-18.18l11.36,10.93 L84.54,116.17L84.54,116.17L84.54,116.17z M31.74,95.36c-1.8,0-3.27-1.48-3.27-3.31s1.46-3.31,3.27-3.31h22.21 c1.8,0,3.27,1.48,3.27,3.31s-1.46,3.31-3.27,3.31H31.74L31.74,95.36L31.74,95.36z M31.74,74.67c-1.8,0-3.26-1.46-3.26-3.27 c0-1.8,1.46-3.26,3.26-3.26h44.05c1.8,0,3.26,1.46,3.26,3.26c0,1.8-1.46,3.27-3.26,3.27H31.74L31.74,74.67L31.74,74.67z" />
 									</g>
 								</svg>
-								<span class="ml-3" style="width: 65%" (click)="webPageCMSFunc(false)">Web Page CMS</span>
+								<span class="ml-3" style="width: 65%" (click)="webPageCMSFunc(false)">Web Page
+									CMS</span>
 								<i class="bi" [ngClass]="chevron4 ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
 							</a>
 							<div id="collapse11" class="collapse" aria-labelledby="headingUtilities"
@@ -411,7 +440,7 @@
 				</div>
 			</nav>
 		</div>
-		<div id="layoutSidenav_content" (click)="handleDivClick($event)" >
+		<div id="layoutSidenav_content" (click)="handleDivClick($event)">
 			<router-outlet></router-outlet>
 			<footer class="admin-footer mt-5">
 				<div>
