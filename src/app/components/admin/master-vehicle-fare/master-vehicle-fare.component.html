@@ -518,44 +518,32 @@
 						</div>
 					</div>
 				</div>
-				<!-- <div class="col-md-3">
+				<div class="col-md-3">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
-						<mat-label>Extra stop - same town</mat-label> -->
-				<!-- <span matPrefix
-							*ngIf="form.friday_saturday_charges.value == null || form.friday_saturday_charges.value == ''; else hideZero23">
-							{{currency_symbol}} 0 &nbsp;</span> -->
-				<!-- <ng-template #hideZero23> -->
-				<!-- <span matPrefix>
-							{{currency_symbol}} &nbsp;
-						</span> -->
-				<!-- </ng-template> -->
-				<!-- <input matInput type="number" placeholder="Shared Ride Rate - Per Person"
-							(change)="updateRateRangeObject()" formControlName="in_town_extra_stop" tabindex="1">
+						<mat-label>Extra stop - same town</mat-label>
+						<span matPrefix>{{currency_symbol}} &nbsp;</span>
+						<input matInput type="number" placeholder="Extra stop - same town"
+							(change)="updateRateRangeObject()" formControlName="in_town_extra_stop" tabindex="1"
+							(focus)="$event.target.select()">
 					</mat-form-field>
 					<div *ngIf="is_form_submitted && form.in_town_extra_stop.errors || form.in_town_extra_stop.touched && form.in_town_extra_stop.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="form.in_town_extra_stop.errors.pattern">Enter Numbers only</div>
 					</div>
-				</div> -->
-				<!-- <div class="col-md-3">
+				</div>
+				<div class="col-md-3">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label>Extra stop - different town</mat-label>
-						<span matPrefix
-							*ngIf="form.friday_saturday_charges.value == null || form.friday_saturday_charges.value == ''; else hideZero23">
-							{{currency_symbol}} 0 &nbsp;</span>
-						<ng-template #hideZero23>
-						<span matPrefix>
-							{{currency_symbol}} &nbsp;
-						</span>
-						</ng-template> 
-						<input matInput type="number" placeholder="Shared Ride Rate - Per Person"
-							(change)="updateRateRangeObject()" formControlName="outside_town_extra_stop" tabindex="1">
+						<span matPrefix>{{currency_symbol}} &nbsp;</span>
+						<input matInput type="number" placeholder="Extra stop - different town"
+							(change)="updateRateRangeObject()" formControlName="outside_town_extra_stop" tabindex="1"
+							(focus)="$event.target.select()">
 					</mat-form-field>
 					<div *ngIf="is_form_submitted && form.outside_town_extra_stop.errors || form.outside_town_extra_stop.touched && form.outside_town_extra_stop.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="form.outside_town_extra_stop.errors.pattern">Enter Numbers only</div>
 					</div>
-				</div> -->
+				</div>
 			</div>
 			<!-- ROW 7 ENDS -->
 			<!-- RATE BUCKETS ENDS -->
