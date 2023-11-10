@@ -57,6 +57,7 @@
                                 <th>Role</th>
                                 <!-- <th>Name</th> -->
                                 <th>Connected</th>
+                                <th>Created at</th>
                                 <!-- <th>Agency Name</th>
                                 <th>Payee Name</th>
                                 <th>IATA</th>
@@ -69,33 +70,15 @@
                                 <td *ngIf="showActionColumn">
 
                                     <a class="user-profileded btn btn-icon btn-transparent-dark "
-                                        id="navbarDropdownUserImage" href="javascript:void(0);" role="button"
-                                        aria-haspopup="true" aria-expanded="false" (click)="deleteAccount(account.id)">
+                                        id="navbarDropdownUserImage" role="button" aria-haspopup="true"
+                                        aria-expanded="false" (click)="enableDisableClickedDelete(account.id)"
+                                        data-toggle="modal" data-target="#deleteConfirmationModal">
+                                        <!-- (click)="deleteAccount(account.id)" -->
                                         <!-- data-toggle="dropdown"  dropdown-toggle-->
                                         <!-- <span>View</span> -->
                                         <i class="fa fa-trash" aria-hidden="true" style="color: white;"></i>
                                     </a>
-                                    <!-- <div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
-                                        aria-labelledby="navbarDropdownUserImage">
-                                        <a class="dropdown-item" (click)="deleteAccount(account.id)">
-                                            <div class="dropdown-item-icon"></div>
-                                            Delete Account
-                                        </a> -->
-                                    <!-- <a class="dropdown-item" (click)="clickTravelPlannerCards(account.id)">
-                                            <div class="dropdown-item-icon"></div>
-                                            View Cards
-                                        </a> -->
-                                    <!-- <a class="dropdown-item" (click)="clickTravelPlannerStaff(travelPlanner.id)">
-											<div class="dropdown-item-icon"></div>
-											View Staff
-										</a> -->
-                                    <!-- </div> -->
                                 </td>
-                                <!-- <td>
-                                    <mat-slide-toggle class="example-margin" [color]="color" [checked]="account.status"
-                                        [disabled]="disabled" (change)="enableDisableClicked($event,account.id)">
-                                    </mat-slide-toggle>
-                                </td> -->
                                 <td class="clickable" (click)="sendMessage('sms', account)" data-messagetype="sms"><span
                                         [innerHTML]="highlighText(account.isd+account.phone+' '+'('+account?.phoneCountry.toUpperCase()+')')"></span>
                                 </td>
@@ -110,6 +93,9 @@
                                 </td> -->
                                 <td>
                                     <span>{{formatText(account.is_connected) | titlecase}}</span>
+                                </td>
+                                <td>
+                                    <span [innerHTML]="highlighText(account.created_at?.split('T')[0])"></span>
                                 </td>
 
                                 <!-- <td><span [innerHTML]="highlighText(account.agency_name)"></span></td>
@@ -152,3 +138,5 @@
         </div>
     </section>
 </main>
+<!-- Delete confirmation modal -->
+<app-delete-confirmation (deleteRecord)="deleteAccount()" [alertMessage]="alertMessage"></app-delete-confirmation>

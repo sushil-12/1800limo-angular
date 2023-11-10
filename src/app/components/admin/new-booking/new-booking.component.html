@@ -769,7 +769,7 @@
 
 					<!-- Passenger Count -->
 					<div class="col-md-3 looseError">
-						<mat-form-field appearance="outline" class="m-0">
+						<!-- <mat-form-field appearance="outline" class="m-0">
 							<mat-label>
 								No. of Passengers <span class="asterisk"></span>
 							</mat-label>
@@ -778,12 +778,32 @@
 									{{ option }}
 								</mat-option>
 							</mat-select>
+						</mat-form-field> -->
+						<mat-form-field appearance="outline" class="m-0">
+							<mat-label>No. of Passengers <span class="asterisk"></span></mat-label>
+							<input type="number" matInput formControlName="total_passengers" [matAutocomplete]="auto"
+								(keyup)="handleChangeNoPasengers($event.target.value)">
+							<mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+								<mat-option *ngFor="let option of booking_params.numbers" [value]="option">
+									{{option}}
+								</mat-option>
+							</mat-autocomplete>
 						</mat-form-field>
 					</div>
 
 					<!-- Luggage Count -->
 					<div class="col-md-3 mb-4 looseError">
 						<mat-form-field appearance="outline" class="m-0">
+							<mat-label>Luggage Count <span class="asterisk"></span></mat-label>
+							<input type="number" matInput formControlName="luggage_count" [matAutocomplete]="auto"
+								(keyup)="handleChangeLuggaeCOunt($event.target.value)">
+							<mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+								<mat-option *ngFor="let option of booking_params.numbers" [value]="option">
+									{{option}}
+								</mat-option>
+							</mat-autocomplete>
+						</mat-form-field>
+						<!-- <mat-form-field appearance="outline" class="m-0">
 							<mat-label>
 								Luggage Count <span class="asterisk"></span>
 							</mat-label>
@@ -792,7 +812,7 @@
 									{{ option }}
 								</mat-option>
 							</mat-select>
-						</mat-form-field>
+						</mat-form-field> -->
 					</div>
 
 

@@ -58,6 +58,7 @@ export class NewBookingComponent implements OnInit {
 
 	months: any = [{ value: '01' }, { value: '02' }, { value: '03' }, { value: '04' }, { value: '05' }, { value: '06' }, { value: '07' }, { value: '08' }, { value: '09' }, { value: '10' }, { value: '11' }, { value: '12' }]
 	monthOptions: any = [...this.months]
+	numbers:any = [...this.booking_params.numbers]
 	//[{value:'01'},{value:'02'},{value:'03'},{value:'04'},{value:'05'},{value:'06'},{value:'07'},{value:'08'},{value:'09'},{value:'10'},{value:'11'},{value:'12'}]
 
 	LCTelObject: any
@@ -446,6 +447,25 @@ export class NewBookingComponent implements OnInit {
 			this.monthOptions = this.months.filter(i => i.value.includes(value))
 		}
 	}
+	handleChangeNoPasengers(value: any) {
+		console.log('value', value)
+		if (value) {
+			this.booking_params.numbers = this.numbers.filter(i => i.toString().includes(value))
+		}
+		else{
+			this.booking_params.numbers = this.numbers
+		}
+	}
+	handleChangeLuggaeCOunt(value: any) {
+		console.log('value', value)
+		if (value) {
+			this.booking_params.numbers = this.numbers.filter(i => i.toString().includes(value))
+		}
+		else{
+			this.booking_params.numbers = this.numbers
+		}
+	}
+
 	handleChangeMeetAndGreet(event: any, type: string) {
 		console.log('in function meet and greet-->>>', event.source.triggerValue, type)
 		if (type == 'return') {

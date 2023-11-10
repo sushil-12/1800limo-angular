@@ -591,7 +591,7 @@ export class DailyBookingsComponent implements OnInit {
 
 	showAccountType(value){
 		if(value == 'individual'){
-			return '(INDV)'
+			return '(IN)'
 		}
 		else if(value == 'travel_planner'){
 			return '(TA)'
