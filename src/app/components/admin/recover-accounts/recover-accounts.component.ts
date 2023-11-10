@@ -31,6 +31,8 @@ export class RecoverAccountsComponent implements OnInit {
   public lastPageUrl:string;
   public prevPageUrl:string;
   public nextPageUrl:string;
+  public accountToDelete: number;
+  public alertMessage: string;
   searchText: any;
   accounts: any;
   isDeletedAcc: boolean = false;
@@ -118,16 +120,26 @@ export class RecoverAccountsComponent implements OnInit {
     }
   }
 
-  deleteAccount(id){
+  enableDisableClickedDelete(id) {
+    $('#deleteConfirmationModal').modal('show');
+    console.log('in function open modal', this.accountToDelete)
+		this.accountToDelete = id;
+		this.alertMessage = "Are you sure you want to delete this Card?"
+	}
 
-    console.log('in function delete account', id)
-    this.adminService.deleteAccount(id)
+  deleteAccount(){
+    $('#deleteConfirmationModal').modal('hide');
+    console.log('in function delete account', this.accountToDelete)
+    this.adminService.deleteAccount(this.accountToDelete)
     .pipe(
       catchError(err => {
         // this.stateManagementService.setprogressBar(false);
         return throwError(err);
       })
     ).subscribe(result => {
+      this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
+        this.router.navigate(['/admin/recover-accounts']);
+      });
       this.loadAccounts()
       });
 
