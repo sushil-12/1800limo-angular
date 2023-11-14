@@ -615,8 +615,19 @@ export class MasterVehicleFareComponent implements OnInit
 	 * Resets the whole form to initial values i.e. when the form is newly built
 	 */
 	resetForm()
-	{
-		this.VehicleRateSettingsForm.reset();
+	
+		{
+			const keepValues = [
+			this.VehicleRateSettingsForm.controls.acc_id.value,
+			this.VehicleRateSettingsForm.controls.id.value,
+			]
+			
+		
+		 this.VehicleRateSettingsForm.reset();
+		 this.VehicleRateSettingsForm.controls.acc_id.patchValue(keepValues[0]);
+		 this.VehicleRateSettingsForm.controls.id.patchValue(keepValues[1]);
+
+		console.log(this.VehicleRateSettingsForm.value)
 	}
 
 }
