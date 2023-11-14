@@ -56,8 +56,15 @@ export class AffiliateStepsGuard implements CanActivate {
     else {//if current step is 2 or above
       if (stepCompleted.includes('1'))//if step 1 is completed
       {
-        console.log('step greater than 1 allowed');
-        return true;
+        const lastCompletedStep = stepCompleted[stepCompleted.length - 1]
+        if(currentStep <= (parseInt(lastCompletedStep) + 1)){
+          
+          console.log('step greater than 1 allowed');
+          return true;
+        }
+        else{
+          nextStep = parseInt(lastCompletedStep) + 1
+        }
       }
       else if (stepCompleted.includes('0')) {//if step 0 is completed
         console.log('step greater than 1 redirected to step 1');
