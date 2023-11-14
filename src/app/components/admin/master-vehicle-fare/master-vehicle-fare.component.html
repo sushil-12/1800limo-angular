@@ -93,7 +93,7 @@
 				<!-- RATE BUCKET: MILEAGE RATE -->
 				<div class="col-md-6" *ngIf="form.km_mile.value == 'mile'; else kilometer_rate">
 					<mat-form-field class="mat-form-field-rates m-0" appearance="outline">
-						<mat-label>Milage Rate <span class="asterisk">*</span></mat-label>
+						<mat-label>Milage Rate {{ currency_symbol }} per mile<span class="asterisk">*</span></mat-label>
 						<!-- <span matPrefix
 							*ngIf="form.milage_rate.value == null || form.milage_rate.value == ''; else hideZero">{{currency_symbol}}
 							0 &nbsp;</span> -->
@@ -120,7 +120,8 @@
 				<ng-template #kilometer_rate>
 					<div class="col-md-6">
 						<mat-form-field class="mat-form-field-rates m-0" appearance="outline">
-							<mat-label>Kilometer Rate <span class="asterisk">*</span></mat-label>
+							<mat-label>Kilometer Rate {{ currency_symbol }} per km<span
+									class="asterisk">*</span></mat-label>
 							<!-- <span matPrefix
 								*ngIf="form.kilometer_rate.value == null || form.kilometer_rate.value == ''; else hideZero">{{currency_symbol}}
 								0 &nbsp;</span>
