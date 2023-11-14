@@ -81,7 +81,7 @@
 				</div>
 				<div class="col-md-6" *ngIf="milage_rate_selected; else kilometer_rate">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
-						<mat-label>Mileage Rate <span class="asterisk">*</span></mat-label>
+						<mat-label>Mileage Rate {{currencySymbol}} per mile<span class="asterisk">*</span></mat-label>
 						<span matPrefix
 							*ngIf="f.milage_rate.value == null || f.milage_rate.value == ''; else hideZero">{{currencySymbol}}
 							&nbsp;</span>
@@ -107,7 +107,8 @@
 				<ng-template #kilometer_rate>
 					<div class="col-md-6">
 						<mat-form-field class="mat-form-field-rates" appearance="outline">
-							<mat-label>Kilometer Rate <span class="asterisk">*</span></mat-label>
+							<mat-label>Kilometer Rate {{currencySymbol}} per km<span
+									class="asterisk">*</span></mat-label>
 							<span matPrefix
 								*ngIf="f.kilometer_rate.value == null || f.kilometer_rate.value == ''; else hideZero">{{currencySymbol}}
 								&nbsp;</span>
