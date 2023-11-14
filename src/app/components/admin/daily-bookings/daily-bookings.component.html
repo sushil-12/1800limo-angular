@@ -56,7 +56,7 @@
 					</div>
 					<div class="col-sm-2">
 						<button class="custom-filled-back-button"
-							style="white-space: nowrap;color:#fff;padding: 5px 12px !important;"
+							style="white-space: nowrap;color:#fff;padding: 5px 12px !important; background-color: #000 !important;"
 							(click)="reset(); loadBookings(null, startDate, endDate, searchText)">
 							Reset
 						</button>
@@ -202,6 +202,13 @@
 												<div class="dropdown-item-icon"></div>
 												Audit Trial
 											</a>
+											<a class="dropdown-item" [routerLink]="['/quotebot/select-vehicle']"
+												*ngIf="currentUser?.RoleName == 'admin' || subModules.includes('reAffiliate')"
+												[queryParams]="{bookingId: booking.booking_id}">
+												<div class="dropdown-item-icon"></div>
+												ReAffiliate
+											</a>
+
 
 										</div>
 									</td>
