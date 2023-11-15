@@ -172,7 +172,7 @@ export class DailyBookingsComponent implements OnInit {
 		this.saveCookie('useDateFilter',value)
 		this.loadBookings(null, this.startDate, this.endDate, this.searchText);
 	}
-	handleChangeCheckboxSort(value:any,type:string){
+	handleCheckboxSort(value:any,type:string){
 		console.log('event---->> ' ,value,type)
 		this[type] = value
 		if(value && type == 'use_pickup_date'){
