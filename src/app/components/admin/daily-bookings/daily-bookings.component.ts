@@ -47,6 +47,7 @@ export class DailyBookingsComponent implements OnInit {
 	public bookingStatusColor: string;
 	public startDate: string;
 	public endDate: string;
+	public orderBy:string = 'pickup_date_desc';
 	// public returnRepeatForm: FormGroup;
 	public changeStatusForm: FormGroup;
 	public sendEmailForm: FormGroup;
@@ -64,6 +65,8 @@ export class DailyBookingsComponent implements OnInit {
 	currentUser: any = JSON.parse(localStorage.getItem('userData')) || ''
 	subModules: any = localStorage.getItem('sub_modules') || '';
 	useDateFilter:boolean=true;
+	use_pickup_date:boolean=true;
+	use_created_at:boolean=false;
 	rates_preview: any;
 
 	constructor(
@@ -168,6 +171,25 @@ export class DailyBookingsComponent implements OnInit {
 		this.useDateFilter = value
 		this.saveCookie('useDateFilter',value)
 		this.loadBookings(null, this.startDate, this.endDate, this.searchText);
+	}
+	handleChangeCheckboxSort(value:any,type:string){
+		console.log('event---->> ' ,value,type)
+		this[type] = value
+		if(value && type == 'use_pickup_date'){
+			this.use_created_at = false
+			this.orderBy = 'pickup_date_desc'
+		}
+		if(value && type == 'use_created_at'){
+			this.use_pickup_date = false
+			this.orderBy = 'created_at_desc'
+		}
+		if(!this.use_created_at && !this.use_pickup_date){
+			this.orderBy = ''
+		}
+		this.loadBookings(null, this.startDate, this.endDate, this.searchText);
+		// this.useDateFilter = value
+		// this.saveCookie('useDateFilter',value)
+		// this.loadBookings(null, this.startDate, this.endDate, this.searchText);
 	}
 	/**
 	 * Configure date as per todays date and the future +7 days
@@ -345,7 +367,7 @@ export class DailyBookingsComponent implements OnInit {
 		search_value == '' && this.spinner.show();
 		this.noError = false
 		// Load Our bookings using API
-		this.adminService.loadBookings(pageUrl, start_date, end_date, this.useDateFilter,search_value ?? '').then((result: any) => {
+		this.adminService.loadBookings(pageUrl, start_date, end_date, this.useDateFilter,search_value ?? '', this.orderBy).then((result: any) => {
 			if (result?.data?.data == 0) {
 				this.noError = true
 			}
@@ -374,7 +396,7 @@ export class DailyBookingsComponent implements OnInit {
 			search_value == '' && this.spinner.show();
 			this.noError = false
 			// Load Our bookings using API
-			this.adminService.loadBookings(pageUrl, start_date, end_date, this.useDateFilter,search_value ?? '').then((result: any) => {
+			this.adminService.loadBookings(pageUrl, start_date, end_date, this.useDateFilter,search_value ?? '', this.orderBy).then((result: any) => {
 				if (result?.data?.data == 0) {
 					this.noError = true
 				}
@@ -797,5 +819,9 @@ export class DailyBookingsComponent implements OnInit {
 			} else {
 				throw new Error('Error: Location Points Not Specified Properly. ');
 			}
+	}
+	reAffiliate(booking_id){
+		console.log('in functiuon reaffiliate' , booking_id)
+		this.router.navigate(['quotebot/select-vehicle'], { queryParams: { booking_id } });
 	}
 }
