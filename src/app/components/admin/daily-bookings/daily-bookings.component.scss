@@ -372,3 +372,15 @@ a.dropdown-item {
 }
 
 
+.sortCheckBox{
+	display: flex;
+	justify-content: flex-end;
+	gap: 10px;
+}
+@media only screen and (max-width: 768px){
+	.sortCheckBox{
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+	}
+}

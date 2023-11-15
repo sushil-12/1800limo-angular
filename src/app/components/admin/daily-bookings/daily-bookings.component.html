@@ -63,9 +63,19 @@
 					</div>
 				</div>
 			</div>
-			<div>
-				<p><mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">Uncheck this
-						box to view all bookings</mat-checkbox></p>
+			<div class="row d-flex justify-content-between">
+				<div class="col-md-6">
+					<p><mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">Uncheck
+							this
+							box to view all bookings</mat-checkbox></p>
+				</div>
+
+				<div class="col-md-6 sortCheckBox">
+					<p><mat-checkbox (change)="handleChangeCheckboxSort($event.checked,'use_pickup_date')"
+							[checked]="use_pickup_date">Order by pickup date</mat-checkbox></p>
+					<p><mat-checkbox (change)="handleChangeCheckboxSort($event.checked,'use_created_at')"
+							[checked]="use_created_at">Order by Created at</mat-checkbox></p>
+				</div>
 			</div>
 			<div class="row my-2 mb-3">
 				<!-- <div class="col-md-3">
@@ -202,9 +212,8 @@
 												<div class="dropdown-item-icon"></div>
 												Audit Trial
 											</a>
-											<!-- <a class="dropdown-item" [routerLink]="['/quotebot/select-vehicle']"
-												*ngIf="currentUser?.RoleName == 'admin' || subModules.includes('reAffiliate')"
-												[queryParams]="{bookingId: booking.booking_id}">
+											<!-- <a class="dropdown-item" (click)="reAffiliate(booking.booking_id)"
+												*ngIf="currentUser?.RoleName == 'admin' || subModules.includes('reAffiliate')">
 												<div class="dropdown-item-icon"></div>
 												ReAffiliate
 											</a> -->
