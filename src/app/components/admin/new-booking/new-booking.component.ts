@@ -13,6 +13,7 @@ import { RatesFormComponent } from '../rates-form/rates-form.component';
 import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { Observable, of } from 'rxjs';
 import { CustomvalidationService } from 'src/app/services/customvalidation.service';
+import { param } from 'jquery';
 
 declare var $: any
 @Component({
@@ -151,7 +152,13 @@ export class NewBookingComponent implements OnInit {
 				this.newBooking = params.new == 'true'
 				this.affiliate_id = parseInt(params.affiliate_id)
 			}
-			else {
+			else if(params?.reaffiliate_book_id ){
+				this.updateType=params?.updateType
+				this.newBooking = true
+				console.log("in reaffiliate update type book id",params?.reaffiliate_book_id)
+				this.SetFormValue('reservation_id', params.reaffiliate_book_id)
+			}
+			else{
 				this.resetFields()
 			}
 			// place in query params to reinitialise things when modes of new and edit are toggled
@@ -2407,6 +2414,93 @@ export class NewBookingComponent implements OnInit {
 	}
 
 	setValueByBookNow() {
+        if(this.updateType == 'reaffiliate'){
+			console.log("in reaffiliate update type")
+			this.$api.getBookingDataForEdit(this.Form.reservation_id.value, this.updateType).subscribe((response: any) => {
+				response.data.booking_instructions = response.data.booking_instructions.replaceAll('<br />', '')
+				console.log('response <><><><><', response.data)
+				let editing_data = response.data
+				delete editing_data.affiliate_id
+				this.number_of_hours = response?.data?.number_of_hours
+				this.isTravelShare =  response?.data?.account_type=='travel_planner' ? true : false
+				if(response?.data?.account_type=='travel_planner'){
+					this.getTravelClientAccounts(response?.data?.acc_id)
+				}
+				this.autofillData('cruise', editing_data);
+				console.log(editing_data, "check big data")
+				for (let item in editing_data) {
+					if (item.includes('extra_stops') || item.includes('languages') || item.includes('dresses'), item.toLowerCase().includes('amenities')) {
+						// console.log('Skipping in the case of Extra Stops. ')
+					}
+					if (item == "passenger_cell_isd") {
+						console.log('passenger_cell_isd-->>', item, editing_data[item])
+						let value = editing_data[item].includes('+') ? editing_data[item] : '+'.concat(editing_data[item])
+						this.SetFormValue(item, value);
+					}
+					if (editing_data[item] && item != "passenger_cell_isd") {
+						if (isNaN(Number(editing_data[item]))) {
+							this.SetFormValue(item, editing_data[item]);
+						} else {
+							this.SetFormValue(item, Number(editing_data[item]));
+						}
+					}
+				}
+
+	
+				if (editing_data.driver_image) {
+					this.SetFormValue('driver_image_id', editing_data.driver_image.id);
+					this.driver_image['image'] = editing_data.driver_image.image;
+				}
+				if (editing_data.vehicle_image) {
+					this.SetFormValue('vehicle_image_id', editing_data.vehicle_image.id);
+					this.vehicle_image['image'] = editing_data.vehicle_image.image;
+				}
+	
+	
+				if (editing_data.extra_stops && editing_data.extra_stops.length > 0) {
+					editing_data.extra_stops.forEach((item: any, index: number) => {
+						if (item.hasOwnProperty('address')) {
+							item['formatted_address'] = item.address;
+							this.addExtraStop();
+							this.fillExtraStop(false, index, item, item);
+							console.log(this.BookingForm);
+						}
+					})
+				}
+				else {
+					console.error('No Extra Stops found.')
+				}
+				this.BookingForm.updateValueAndValidity()
+	
+				// override specific value
+				this.BookingForm.patchValue({
+					service_type: response.data.service_type == 'oneway' ? 'one_way' : response.data['service_type'] == 'roundtrip' ? 'round_trip' : 'charter_tour',
+				})
+	
+				try {
+					this.PaxTelObject.setCountry(this.BookingForm.get('passenger_cell_country').value);
+				} catch
+				{
+					console.error('Set Country Value is null.')
+				}
+	
+				this.$spinner.hide('normalspinner')
+				console.log('<<<<<<<<<<<-----------set pickup date------->>>>', moment().format('YYYY-MM-DD'), this.updateType)
+				if ( this.updateType == 'edit') {
+					this.scroll('travel_date')
+					// this.SetFormValue('pickup_date', moment().format('YYYY-MM-DD'))
+					this.SetFormValue('pickup_date', editing_data?.pickup_date)
+				}
+				if(this.updateType == 'repeat' || this.updateType == 'return' ){
+					if(new Date(editing_data?.pickup_date).getTime() < new Date().getTime()){
+						this.SetFormValue('pickup_date', moment().format('YYYY-MM-DD'))
+					}
+					else{
+						this.SetFormValue('pickup_date', editing_data?.pickup_date)
+					}
+				}
+			})
+		}
 		let QB: any = JSON.parse(localStorage.getItem('quotebot_form'))
 		let selected_vehicle: any = JSON.parse(sessionStorage.getItem('selected_vehicle'))
 		// for (const key in QB) {
