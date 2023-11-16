@@ -31,6 +31,10 @@ export class QuotebotService
 	{
 		return this.httpClient.post(`${this.serverUrl}quote/vehicle-listing`, filters)
 	}
+	getQuoteData(id:any)
+	{
+		return this.httpClient.get(`${this.serverUrl}quote/copy/${id}`)
+	}
 
 	getMasterVehicleTypes(quotebot_data: any)
 	{

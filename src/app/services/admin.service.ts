@@ -910,13 +910,13 @@ export class AdminService {
 		}
 		return this.httpClient.get(path).toPromise();
 	}
-	loadBookings(url, startDate, endDate, useDateFilter,keyword = '') {
+	loadBookings(url, startDate, endDate, useDateFilter,keyword = '',orderBy) {
 		var path;
 		if (url) {
-			path = url + '&from=' + startDate + '&to=' + endDate + '&search=' + keyword +'&useDateFilter='+useDateFilter;
+			path = url + '&from=' + startDate + '&to=' + endDate + '&search=' + keyword +'&useDateFilter='+useDateFilter +'&orderBy='+orderBy;
 		}
 		else {
-			path = this.serverUrl + 'reservations' + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword+'&useDateFilter='+useDateFilter;
+			path = this.serverUrl + 'reservations' + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword+'&useDateFilter='+useDateFilter+'&order_by='+orderBy;
 		}
 		return this.httpClient.get(path).toPromise();
 	}
