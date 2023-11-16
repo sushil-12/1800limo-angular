@@ -45,8 +45,8 @@ export class RecoverAccountsComponent implements OnInit {
     private spinner: NgxSpinnerService) { }
 
   ngOnInit(): void {
-		// this.searchText = localStorage.getItem('TravelAgentSearch') ? localStorage.getItem('TravelAgentSearch') : '' 
-    this.searchText = ''
+		this.searchText = localStorage.getItem('allAccountsSearch') ? localStorage.getItem('allAccountsSearch') : '' 
+    // this.searchText = ''
       this.loadAccounts();//load travelPlanners
 
         // localStorage.removeItem('travelAgent_id' )
@@ -58,7 +58,7 @@ export class RecoverAccountsComponent implements OnInit {
 		this.searchText = text
 		clearTimeout(this.timer);
 		this.timer = setTimeout(() => {
-			// localStorage.setItem('TravelAgentSearch' , text)
+			localStorage.setItem('allAccountsSearch' , text)
 			this.loadAccounts()
 		}, 700)
 	}
@@ -124,7 +124,7 @@ export class RecoverAccountsComponent implements OnInit {
     $('#deleteConfirmationModal').modal('show');
     console.log('in function open modal', this.accountToDelete)
 		this.accountToDelete = id;
-		this.alertMessage = "Are you sure you want to delete this Card?"
+		this.alertMessage = "Are you sure you want to delete this account?"
 	}
 
   deleteAccount(){
