@@ -930,6 +930,17 @@ export class AdminService {
 		return this.httpClient.post(this.serverUrl + 'payment-processing', data);
 	}
 
+	getQuoteData(id:any)
+	{
+		return this.httpClient.get(`${this.serverUrl}quote/copy/${id}`)
+	}
+
+	getFilterData(id:any)
+	{
+		return this.httpClient.get(`${this.serverUrl}quote/static_filter/${id}`)
+	}
+
+
 	//booking actions
 	returnRepeatBooking(data) {
 		return this.httpClient.post(this.serverUrl + 'repeat-return-reservation', data);
