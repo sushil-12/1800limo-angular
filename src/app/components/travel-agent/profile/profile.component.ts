@@ -160,7 +160,7 @@ export class ProfileComponent implements OnInit {
       mobile: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
       mobileIsd: ['+1', Validators.required],
       mobileCountry: ['us'],
-      email: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.]+\.[a-zA-Z]{2,}$/i)]],
+      email: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9.]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]],
       address: ['', Validators.required],
       city: [''],
       state: [''],
