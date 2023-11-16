@@ -71,8 +71,8 @@
 				</div>
 
 				<div class="col-md-6 sortCheckBox">
-					<p><mat-checkbox (change)="handleCheckboxSort($event.checked,'use_pickup_date')"
-							[checked]="use_pickup_date">Order by pickup date</mat-checkbox></p>
+					<!-- <p><mat-checkbox (change)="handleCheckboxSort($event.checked,'use_pickup_date')"
+							[checked]="use_pickup_date">Order by pickup date</mat-checkbox></p> -->
 					<p><mat-checkbox (change)="handleCheckboxSort($event.checked,'use_created_at')"
 							[checked]="use_created_at">Order by Created at</mat-checkbox></p>
 				</div>
@@ -212,11 +212,11 @@
 												<div class="dropdown-item-icon"></div>
 												Audit Trial
 											</a>
-											<!-- <a class="dropdown-item" (click)="reAffiliate(booking.booking_id)"
+											<a class="dropdown-item" (click)="reAffiliate(booking.booking_id)"
 												*ngIf="currentUser?.RoleName == 'admin' || subModules.includes('reAffiliate')">
 												<div class="dropdown-item-icon"></div>
 												ReAffiliate
-											</a> -->
+											</a>
 
 
 										</div>

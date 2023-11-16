@@ -152,6 +152,8 @@ export class SelectVehicleComponent implements OnInit
 	role:number = JSON.parse(localStorage.getItem("currentUser"))?.role 
 	openfilters: boolean = false
 	changeText:boolean = false
+	bookingId: any = null;
+	quotebotNewData: any;
 
 
 	constructor(
@@ -188,7 +190,7 @@ export class SelectVehicleComponent implements OnInit
 				}
 			})
 			this.$router.navigateByUrl('/')
-			return
+
 		} else
 		{
 			// fetch the user's travelling quote
@@ -197,6 +199,10 @@ export class SelectVehicleComponent implements OnInit
 
 		this.$activatedRoute.queryParams.subscribe((params: any) =>
 		{
+			console.log('paramsa->>>>' , params.booking_id)
+			if(params?.booking_id){
+				this.bookingId = params?.booking_id
+			}
 			if (params?.list == 'master')
 			{
 				this.vehicleDetails = []
@@ -208,11 +214,20 @@ export class SelectVehicleComponent implements OnInit
 			{
 				this.Sort.HighToLow()
 			}
+
+			
 		})
 
 		this.fetchMasterVehicles()	// fetches 16 vehicle categories
 		this.getAllFilters()	// fetch filters from database
-		this.getVehicleDetails()
+		console.log('booking data' , this.bookingId)
+		if(this.bookingId){
+			console.log('booking data-->>>>>>' , this.bookingId)
+			this.getQuoteDetails(this.bookingId)
+		}
+		else{
+			this.getVehicleDetails()
+		}
 	}
 	// ngOnInit ends
 	// documentgetElementById('affiliate-info')
@@ -319,7 +334,6 @@ export class SelectVehicleComponent implements OnInit
 			this.$spinner.hide()
 			// format every filter name from response
 			this.filters.original = JSON.parse(JSON.stringify(response.data)) // create a deep copy of the response object
-
 			for (let catg in this.filters.original)
 			{
 				// changing the name here? Do not forget to change in the includes and selected filters function.
@@ -514,6 +528,52 @@ export class SelectVehicleComponent implements OnInit
 			})
 			console.log('vehicle details-->>>' , this.vehicleDetails)
 			this.Sort.LowToHigh() // default sort to Low-High
+			this.$spinner.hide()
+		})
+	}
+
+	getQuoteDetails(id){
+		this.$quotebotService.getQuoteData(id).subscribe((response: any) =>
+		{
+			try {
+			console.log('in function get quote data' , response)
+			if (response.data.vehicleData.length == 0)
+			{
+				this.no_vehicle_msg = 'No Vehicle found with the applied filter.'
+			}
+			
+			this.vehicleDetails = [...response.data?.vehicleData]
+			this.quotebotNewData = response.data?.quote
+						
+				let location_info=[]
+				let tempObj={
+					distance:{
+						text:this.quotebotNewData?.distance/1000 + "km",
+						value:Number(this.quotebotNewData?.distance)
+					},
+					duration:{
+						text:this.quotebotNewData?.duration/60 + "mins",
+						value: Number(this.quotebotNewData?.duration)
+					}
+				}
+				location_info.push(tempObj)
+				this.quotebotNewData['location_info'] = location_info
+				console.log("in location->",this.quotebotNewData)
+				localStorage.setItem('quotebot_form',JSON.stringify(this.quotebotNewData))
+			} catch (error) {
+				console.log("error-----_>",error)
+			}
+			this.vehicleDetails = this.vehicleDetails.map(i=> {
+				if(i?.affiliate_company && i?.affiliate_name){
+					i['readMore']=(i?.affiliate_company?.length || i?.affiliate_name?.length) > 8 ? true : false 
+				}
+				else{
+					i['readMore'] = false
+				}
+				return i
+			})
+			console.log('vehicle details-->>>' , this.vehicleDetails)
+			// this.Sort.LowToHigh() // default sort to Low-High
 			this.$spinner.hide()
 		})
 	}
