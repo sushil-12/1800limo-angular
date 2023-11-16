@@ -212,8 +212,8 @@ export class SelectVehicleComponent implements OnInit
 			this.$activatedRoute.queryParams.subscribe((params: any) =>
 			{
 				console.log('paramsa->>>>' , params.booking_id)
-				if(params?.booking_id){
-					this.bookingId = params?.booking_id
+				if(params?.id){
+					this.bookingId = params?.id
 				}
 				if (params?.list == 'master')
 				{
@@ -778,9 +778,15 @@ export class SelectVehicleComponent implements OnInit
 		{
 			if (JSON.parse(localStorage.getItem('currentUser'))['roleName'] == 'admin')
 			{
-				this.$router.navigate(['/admin/new-booking'],
-				{ queryParams: {affiliate_id:vehicle_selected.affiliate_id, vehicle_id:vehicle_selected.id,new : true ,is_master_vehicle:vehicle_selected?.is_master_vehicle}})
-			} else
+				if(this.bookingId){
+					this.$router.navigate(['/admin/new-booking'],
+					{ queryParams: {affiliate_id:vehicle_selected.affiliate_id, vehicle_id:vehicle_selected.id,new : 'reaffiliate' ,is_master_vehicle:vehicle_selected?.is_master_vehicle,updateType:'reaffiliate',reaffiliate_book_id:this.bookingId}})
+				}
+				else{
+					this.$router.navigate(['/admin/new-booking'],
+					{ queryParams: {affiliate_id:vehicle_selected.affiliate_id, vehicle_id:vehicle_selected.id,new : true ,is_master_vehicle:vehicle_selected?.is_master_vehicle}})
+				}
+			}  else
 			{
 				let user = JSON.parse(localStorage.getItem('currentUser'))['roleName']
 				user = user == 'driver' ? 'affiliate' : user	// roleName of driver has to be directed to affiliate/..

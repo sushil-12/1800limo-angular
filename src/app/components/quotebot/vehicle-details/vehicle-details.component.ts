@@ -20,6 +20,7 @@ export class VehicleDetailsComponent implements OnInit {
 	round_trip_rates: any
 	distance:any = 0
 	duration:any = 0
+	bookingId:any=null
 
 	driver_info_display_keys: Array<string> = ['gender', 'dress', 'experience', 'languages', 'insurance_limit']
 
@@ -75,6 +76,17 @@ export class VehicleDetailsComponent implements OnInit {
 
 			console.log(this.selected_vehicle)
 		}
+
+		this._activatedRoute.queryParams.subscribe((params: any) =>
+		{
+			console.log('paramsa->>>>' , params.booking_id)
+			if(params?.id){
+				this.bookingId = params?.id
+			}
+			
+
+			
+		})
 
 		// initialize Map
 		this.initMap()
@@ -295,9 +307,15 @@ export class VehicleDetailsComponent implements OnInit {
 		if (localStorage.getItem('currentUser') != null) {
 			if (JSON.parse(localStorage.getItem('currentUser'))['roleName'] == 'admin') {
 				// this._router.navigate(['/admin/new-booking'])
-				console.log('navigate to new booking----')
-				this._router.navigate(['/admin/new-booking'],
-				{ queryParams: {affiliate_id:vehicle_selected.affiliate_id, vehicle_id:vehicle_selected.id,new : true }})
+				// console.log('navigate to new booking----')
+				if(this.bookingId){
+					this._router.navigate(['/admin/new-booking'],
+					{ queryParams: {affiliate_id:vehicle_selected.affiliate_id, vehicle_id:vehicle_selected.id,new : 'reaffiliate' ,updateType:'reaffiliate',reaffiliate_book_id:this.bookingId}})
+				}else{
+
+					this._router.navigate(['/admin/new-booking'],
+					{ queryParams: {affiliate_id:vehicle_selected.affiliate_id, vehicle_id:vehicle_selected.id,new : true }})
+				}
 			} else {
 				let user = JSON.parse(localStorage.getItem('currentUser'))['roleName']
 				let vehicle_selected:any = JSON.parse(sessionStorage.getItem('selected_vehicle'))
