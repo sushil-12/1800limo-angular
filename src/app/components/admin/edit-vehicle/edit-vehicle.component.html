@@ -22,7 +22,8 @@
 						placeholder="Vehicle Type" formControlName="vehicleType" id="vehicleTypeField">
 					</ng-select>
 					<div *ngIf="(errorMsg && f.vehicleType.errors) || (submittedForm && f.vehicleType.errors)"
-						class="text-danger margin-bottom-thin my-mat-hint">
+						class="text-danger margin-bottom-thin my-mat-hint"
+						style="margin-top: -20px; margin-bottom: 10px;">
 						<div *ngIf="f.vehicleType.errors.required">The Vehicle Type is required</div>
 					</div>
 				</div>
@@ -44,7 +45,8 @@
 						id="makeField">
 					</ng-select>
 					<div *ngIf="(errorMsg1 && f.make.errors) || (submittedForm && f.make.errors)"
-						class="text-danger margin-bottom-thin my-mat-hint">
+						class="text-danger margin-bottom-thin my-mat-hint"
+						style="margin-top: -20px; margin-bottom: 20px;">
 						<div *ngIf="f.make.errors.required">The Make and Model is required</div>
 					</div>
 				</div>
@@ -66,7 +68,8 @@
 						formControlName="model" id="modelField">
 					</ng-select>
 					<div *ngIf="(errorMsg2 && f.model.errors) || (submittedForm && f.model.errors)"
-						class="text-danger margin-bottom-thin my-mat-hint">
+						class="text-danger margin-bottom-thin my-mat-hint"
+						style="margin-top: -20px; margin-bottom: 20px;">
 						<div *ngIf="f.model.errors.required">The Make and Model is required</div>
 					</div>
 				</div>
@@ -104,7 +107,8 @@
 						</mat-autocomplete>
 					</mat-form-field>
 					<div *ngIf="(errorMsg3 && f.year.errors) || (submittedForm && f.year.errors)"
-						class="text-danger margin-bottom-thin my-mat-hint">
+						class="text-danger margin-bottom-thin my-mat-hint"
+						style="margin-top: -20px; margin-bottom: 3px;">
 						<div *ngIf="f.year.errors.required">The Year is required</div>
 					</div>
 				</div>
