@@ -130,12 +130,18 @@ export class SelectVehicleComponent implements OnInit
 	master_vehicles: Array<any> = []
 
 	// Filters
+	
 	filters: Filters = {
-		original: JSON.parse(sessionStorage.getItem('filters'))?.original,
-		copy: JSON.parse(sessionStorage.getItem('filters'))?.copy,
-		request:JSON.parse(sessionStorage.getItem('filters'))?.request,
-		selections: JSON.parse(sessionStorage.getItem('filters'))?.selections,
+		original: JSON.parse(sessionStorage.getItem('filters'))?.original ,
+		copy: JSON.parse(sessionStorage.getItem('filters'))?.copy ,
+		request:JSON.parse(sessionStorage.getItem('filters'))?.request ,
+		selections: JSON.parse(sessionStorage.getItem('filters'))?.selections ,
 		vars: JSON.parse(sessionStorage.getItem('filters'))?.vars
+		// original:"" ,
+		// copy: "",
+		// request:"",
+		// selections: [],
+		// vars: ""
 	}
 
 	min_length: number = 12 	// number of filters to show in one column and on the filters sidebar
@@ -164,7 +170,9 @@ export class SelectVehicleComponent implements OnInit
 		private $state: StateManagementService,
 		private $activatedRoute: ActivatedRoute,
 		private $globals: SharedModule
-	) { }
+	) { 
+		console.log('in constructor select vehicle')
+	}
 
 	/**
 	 * make sure the quote has been filled before doing anything on this page, else navigate back to home for quote filling
@@ -176,57 +184,66 @@ export class SelectVehicleComponent implements OnInit
 	ngOnInit(): void
 	{
 		window.scrollTo(0, 0)
-		if(!JSON.parse(sessionStorage.getItem('filters'))){
-			this.$router.navigateByUrl('/home')
-		}
-		this.$spinner.show()
-		sessionStorage.removeItem('selected_vehicle')
-		// Note: Do not add anything here or before below conditional logic. This should be the first step
-		if (localStorage.getItem('quotebot_form') == null)
-		{
-			this.$errorDialog.openDialog({
-				errors: {
-					error: "Please request a Quote before selecting a vehicle. "
-				}
-			})
-			this.$router.navigateByUrl('/')
-
-		} else
-		{
-			// fetch the user's travelling quote
-			this.quotebot_form = JSON.parse(localStorage.getItem('quotebot_form'))
-		}
-
-		this.$activatedRoute.queryParams.subscribe((params: any) =>
-		{
-			console.log('paramsa->>>>' , params.booking_id)
-			if(params?.booking_id){
-				this.bookingId = params?.booking_id
-			}
-			if (params?.list == 'master')
-			{
-				this.vehicleDetails = []
-			}
-			if (params?.sort == 'plh')
-			{
-				this.Sort.LowToHigh()
-			} else
-			{
-				this.Sort.HighToLow()
-			}
+		try {
+			console.log('in component select vehicle->>', JSON.parse(sessionStorage.getItem('filters')))
 
 			
-		})
+			if(!JSON.parse(sessionStorage.getItem('filters'))){
+				this.$router.navigateByUrl('/home')
+			}
+			this.$spinner.show()
+			sessionStorage.getItem('selected_vehicle') ? sessionStorage.removeItem('selected_vehicle') : ''
+			// Note: Do not add anything here or before below conditional logic. This should be the first step
+			if (!localStorage.getItem('quotebot_form'))
+			{
+				this.$errorDialog.openDialog({
+					errors: {
+						error: "Please request a Quote before selecting a vehicle. "
+					}
+				})
+				this.$router.navigateByUrl('/')
+	
+			} else
+			{
+				// fetch the user's travelling quote
+				this.quotebot_form = JSON.parse(localStorage.getItem('quotebot_form'))
+			}
 
-		this.fetchMasterVehicles()	// fetches 16 vehicle categories
-		this.getAllFilters()	// fetch filters from database
-		console.log('booking data' , this.bookingId)
-		if(this.bookingId){
-			console.log('booking data-->>>>>>' , this.bookingId)
-			this.getQuoteDetails(this.bookingId)
-		}
-		else{
-			this.getVehicleDetails()
+			this.$activatedRoute.queryParams.subscribe((params: any) =>
+			{
+				console.log('paramsa->>>>' , params.booking_id)
+				if(params?.booking_id){
+					this.bookingId = params?.booking_id
+				}
+				if (params?.list == 'master')
+				{
+					this.vehicleDetails = []
+				}
+				if (params?.sort == 'plh')
+				{
+					this.Sort.LowToHigh()
+				} else
+				{
+					this.Sort.HighToLow()
+				}
+	
+				
+			})
+	
+			this.fetchMasterVehicles()	// fetches 16 vehicle categories
+			this.getAllFilters()	// fetch filters from database
+			console.log('booking data' , this.bookingId)
+			if(this.bookingId){
+				console.log('booking data-->>>>>>' , this.bookingId)
+				this.getQuoteDetails(this.bookingId)
+			}
+			else{
+				this.getVehicleDetails()
+			}
+	
+			
+		} catch (error) {
+			console.log('errr----->>' , error)
 		}
 	}
 	// ngOnInit ends
