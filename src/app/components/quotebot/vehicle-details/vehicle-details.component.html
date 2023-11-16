@@ -114,7 +114,8 @@
 							<button type="button" class="custom-btn" data-toggle="modal" data-target="#ModalAmenities">
 								Amenities
 							</button>
-							<button type="button" class="custom-filled-button text-dark rounded-pill" (click)="bookNow()">
+							<button type="button" class="custom-filled-button text-dark rounded-pill"
+								(click)="bookNow()">
 								Book Now
 							</button>
 						</div>
@@ -132,10 +133,10 @@
 									<div id="map"></div>
 									<div class="row">
 										<h6 class="mx-2">
-											Total Distance:  {{convertToMi(distance)}} mi /  {{convertToKm(distance)}} km
+											Total Distance: {{convertToMi(distance)}} mi / {{convertToKm(distance)}} km
 										</h6>
 										<h6 class="mx-2">
-											Estimated time:  {{convertToMinutes(duration)}} mins
+											Estimated time: {{convertToMinutes(duration)}} mins
 										</h6>
 									</div>
 								</div>
@@ -310,9 +311,11 @@
 			</div>
 			<div class="col-auto">
 				<p class="pv-title-value">
-					{{ quotebot_form.location_info[0].duration.text }}
+					<!-- {{ quotebot_form.location_info[0].duration.text }} -->
+					{{convertToMinutes(duration)}} mins
 					/
-					{{ ((quotebot_form.location_info[0].distance.value)/1609).toFixed(2) }} miles
+					<!-- {{ ((quotebot_form.location_info[0].distance.value)/1609).toFixed(2) }} miles -->
+					{{convertToMi(distance)}} miles
 				</p>
 			</div>
 		</div>
@@ -442,10 +445,10 @@
 		</div>
 		<!-- Return Details Ends -->
 		<div>
-			
+
 		</div>
 		<div class="row my-3" *ngIf="selected_vehicle?.vehicle_details.year">
-			<div class="col-sm-6 col-md-5" >
+			<div class="col-sm-6 col-md-5">
 				<p class="pv-title pv-details text-orange">
 					Vehicle Details
 				</p>
@@ -478,7 +481,7 @@
 		<div class="row my-3" *ngIf="selected_vehicle?.vehicle_details.model">
 			<div class="col-md-5 ml-4">
 				<p class="pv-title">
-					<i class="bi bi-boxes  text-orange"></i>  Model
+					<i class="bi bi-boxes  text-orange"></i> Model
 				</p>
 			</div>
 			<div class="col-auto">
@@ -532,7 +535,8 @@
 						<th> Rate </th>
 						<th> Amount </th>
 					</thead>
-					<tbody *ngIf="quotebot_form.service_type == 'one_way' || quotebot_form.service_type == 'charter_tour'">
+					<tbody
+						*ngIf="quotebot_form.service_type == 'one_way' || quotebot_form.service_type == 'charter_tour'">
 						<tr
 							*ngFor="let rate of one_way_rates?.rateArray?.all_inclusive_rates | keyvalue; index as rate_index">
 							<td>

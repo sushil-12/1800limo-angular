@@ -47,7 +47,7 @@ export class DailyBookingsComponent implements OnInit {
 	public bookingStatusColor: string;
 	public startDate: string;
 	public endDate: string;
-	public orderBy:string = 'pickup_date_desc';
+	public orderBy:string = '';
 	// public returnRepeatForm: FormGroup;
 	public changeStatusForm: FormGroup;
 	public sendEmailForm: FormGroup;

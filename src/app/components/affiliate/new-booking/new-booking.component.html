@@ -221,7 +221,8 @@
 										class="mat-form-field-label required-field mat-empty mat-form-field-empty labelClass">Phone
 									</label>
 									<input matInput formControlName="phone" ng2TelInput [ng2TelInputOptions]="{
-											preferredCountries: ['us', 'ca', 'mx', 'gb'] }"  placeholder="1234567890" class="phoneNumberClass" (intlTelInputObject)="LCTelInputObject($event)"
+											preferredCountries: ['us', 'ca', 'mx', 'gb'] }" placeholder="1234567890" class="phoneNumberClass"
+										(intlTelInputObject)="LCTelInputObject($event)"
 										(countryChange)="SetFormValue('loose_customer>phone_isd', $event.dialCode); SetFormValue('loose_customer>phone_country', $event.iso2)"
 										(focus)="$event.target.select()" />
 								</mat-form-field>
@@ -995,7 +996,7 @@
 						Special Instructions
 					</mat-label>
 					<textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize"
-						formControlName="booking_instructions" (focus)="$event.target.select()" rows="5"></textarea>
+						formControlName="booking_instructions" rows="5"></textarea>
 				</mat-form-field>
 			</div>
 			<div class="row m-2">
