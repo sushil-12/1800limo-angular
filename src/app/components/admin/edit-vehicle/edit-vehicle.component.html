@@ -19,11 +19,12 @@
 					</mat-form-field> -->
 					<ng-select appearance="outline" [items]="filteredVehicleTypes" dropdownPosition="bottom"
 						[markFirst]="true" [virtualScroll]="true" bindLabel="name" bindValue="ID"
-						placeholder="Vehicle Type" formControlName="vehicleType" id="vehicleTypeField">
+						placeholder="Vehicle Type" formControlName="vehicleType" id="vehicleTypeField"
+						(change)="handleChangeVehicleType($event)"
+						[ngClass]="{ 'border-red': (errorMsg && f.vehicleType.errors) || (submittedForm && f.vehicleType.errors) || !isVehicleTypeSelected }">
 					</ng-select>
 					<div *ngIf="(errorMsg && f.vehicleType.errors) || (submittedForm && f.vehicleType.errors)"
-						class="text-danger margin-bottom-thin my-mat-hint"
-						style="margin-top: -20px; margin-bottom: 10px;">
+						class="text-danger margin-bottom-thin my-mat-hint" style="margin-bottom: 10px;">
 						<div *ngIf="f.vehicleType.errors.required">The Vehicle Type is required</div>
 					</div>
 				</div>

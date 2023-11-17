@@ -89,6 +89,7 @@ export class EditVehicleComponent implements OnInit {
 	public charterCancelOptions: Array<Object>;
 	public nonCharterCancelOptions: Array<Object>;
 	public serviceType: string;
+	isVehicleTypeSelected:boolean=true;
 
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
 	errorMsg: boolean;
@@ -714,6 +715,11 @@ export class EditVehicleComponent implements OnInit {
 		for (j = 0; j < selectedInterior.length; j++) {
 			interiors.push(new FormControl(selectedInterior[j]));
 		}
+	}
+	handleChangeVehicleType(value){
+		console.log('Selected Value:', value);
+		
+		this.isVehicleTypeSelected = value ? true : false
 	}
 
 	onAmenitiesCheckboxChange(val, ischecked) {
