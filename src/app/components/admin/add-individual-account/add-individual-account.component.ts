@@ -163,7 +163,7 @@ export class AddIndividualAccountComponent implements OnInit
 			work: [''],
 			workIsd: ['+1', Validators.required],
 			workCountry: ['us'],
-			email: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.]+\.[a-zA-Z]{2,}$/i)]],
+			email: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9.]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]],
 			address: ['', Validators.required],
 			city: ['', Validators.required],
 			state: ['', Validators.required],

@@ -86,7 +86,7 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 	public charterCancelOptions: Array<Object>;
 	public nonCharterCancelOptions: Array<Object>;
 	public serviceType: string;
-	isVehicleTypeSelected: boolean = false
+	isVehicleTypeSelected: boolean=true;
 	changeNonCharterCancelPolicy : boolean = false
 	changeCharterCancelPolicy : boolean = false
 

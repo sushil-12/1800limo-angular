@@ -23,6 +23,7 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 	public affiliateId: string;
 	public affiliateType: string;
 	public paramResponse: any;
+	isVehicleTypeSelected: boolean=true;
 	public vehicleTypeId: string;
 	public vehicleId: string;
 	public imageSrc: string;
@@ -516,7 +517,11 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 				return -1;
 		}
 	}
-
+	handleChangeVehicleType(value){
+		console.log('Selected Value:', value);
+		
+		this.isVehicleTypeSelected = value ? true : false
+	}
 	searchVehicleType(keyword)
 	{
 		this.addVehicleForm.patchValue({
