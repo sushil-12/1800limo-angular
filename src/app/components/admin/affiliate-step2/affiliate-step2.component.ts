@@ -338,7 +338,14 @@ this.loadCards(this.affiliateId)
 		this.spinner.hide()
 		});
 	}
-
+	showOnlyLast4Digit(value){
+		if(value){
+			value = value.toString()
+			return '*'.repeat(value.length - 4) + value.slice(-4)
+		}else{
+			return ''
+		}
+	}
 	
 	get f() {
 		return this.addBankForm.controls;
