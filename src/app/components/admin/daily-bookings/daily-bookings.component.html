@@ -213,7 +213,7 @@
 												Audit Trial
 											</a>
 											<a class="dropdown-item" (click)="reAffiliate(booking.booking_id)"
-												*ngIf="currentUser?.RoleName == 'admin' || subModules.includes('reAffiliate')">
+												*ngIf="(currentUser?.RoleName == 'admin' && booking.booking_status == 'rejected')">
 												<div class="dropdown-item-icon"></div>
 												ReAffiliate
 											</a>
