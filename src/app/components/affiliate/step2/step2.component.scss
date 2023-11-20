@@ -18,7 +18,9 @@ agm-map {
 .vehtype_extint .emptyImage {
 	height: 225px;
 }
-
+.disableSsn{
+	pointer-events: none;
+}
 .vehtype_extint .emptyImage img {
 	height: 220px;
 }

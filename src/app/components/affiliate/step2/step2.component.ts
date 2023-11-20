@@ -58,6 +58,9 @@ export class Step2Component implements OnInit {
 	public showProgressBar: boolean = false;
 	public haveEinNo: boolean = true;
 	public isBadgeCity : boolean = false;
+	enableSsnField:boolean=false;
+	ssn_copy:any;
+
 
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
 	selectedCountryName: any;
@@ -276,6 +279,14 @@ export class Step2Component implements OnInit {
 								id_front_image: this.response.data?.bankinfo?.id_front_image?.ID,
 								id_back_image: this.response.data?.bankinfo?.id_back_image?.ID,
 							});
+							this.ssn_copy=this.response?.data?.bankinfo?.ssn
+							if(this.response?.error_fields?.find(val => val?.field == 'ssn')){
+								this.enableSsnField=false
+                                        console.log("in if ssn error",this.enableSsnField)
+							}
+							else{
+								this.enableSsnField=true
+							}
 							this.changeCountry(this.response.data?.bankinfo?.country);//for selected country
 							this.badgeOptions.map((i:any)=>{
 								if(i.id==this.response?.data?.bankinfo?.badge_city){
@@ -862,6 +873,14 @@ export class Step2Component implements OnInit {
 				this.spinner.hide();
 			})
 	}
+	handleSsnInput(value:any){
+		
+		console.log("prev--->",this.ssn_copy,this.addBankForm.get('ssn').value)
+		value.includes("*") ? "" :this.ssn_copy=value
+		console.log("after--->",this.ssn_copy)
+
+	}
+
 	submitForm() {
 		console.log(this.addBankForm);
 		this.submittedForm = true;
@@ -870,7 +889,9 @@ export class Step2Component implements OnInit {
 			return;
 		}
 		this.addBankForm.value.stepCompleted = this.affiliateService.getUpdatedStepsLocal('2');
-
+		this.addBankForm.patchValue({
+			ssn:this.ssn_copy
+		})
 		console.log(this.addBankForm.value);
 		this.spinner.show();//show spinner
 		// this.stateManagementService.setprogressBar(true);

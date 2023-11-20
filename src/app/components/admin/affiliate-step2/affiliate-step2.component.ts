@@ -53,6 +53,8 @@ export class AffiliateStep2Component implements OnInit {
 	public showProgressBar: boolean = false;
 	public haveEinNo: boolean = true;
 	public cardsRes:any;
+	enableSsnField:boolean=false;
+	ssn_copy:any;
 
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
 	stepsObj: any;
@@ -115,7 +117,7 @@ export class AffiliateStep2Component implements OnInit {
 			AccountNumber: ['', [Validators.required, this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
 			Routing: ['', [Validators.required]],
 			AccountType: ['company', Validators.required],
-			ssn: ['', [Validators.required, Validators.pattern("^[0-9]*$"), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
+			ssn: ['', [Validators.required, Validators.pattern("^[0-9*]*$"), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
 			haveEin: ['yesEin'],
 			ein: ['', []],
 			currency: ['', Validators.required],
@@ -216,7 +218,7 @@ export class AffiliateStep2Component implements OnInit {
 								Routing: this.response.data.bankinfo.Routing,
 								AccountType: this.response.data.bankinfo.AccountType,
 								currency: this.response.data.bankinfo.currency,
-								ssn: this.response.data.bankinfo.ssn,
+								ssn: this.showOnlyLast4Digit(this.response.data.bankinfo.ssn),
 								haveEin: this.response.data.bankinfo.ein ? 'yesEin' : 'noEin',
 								ein: this.response.data.bankinfo.ein,
 								address: this.response.data.bankinfo.address,
@@ -234,6 +236,15 @@ export class AffiliateStep2Component implements OnInit {
 								id_front_image: this.response.data.bankinfo.id_front_image.ID,
 								id_back_image: this.response.data.bankinfo.id_back_image.ID,
 							});
+							this.ssn_copy=this.response?.data?.bankinfo?.ssn
+							if(this.response?.error_fields?.find(val => val?.field == 'ssn')){
+								this.enableSsnField=false
+                                        console.log("in if ssn error",this.enableSsnField)
+							}
+							else{
+								this.enableSsnField=true
+							}
+							console.log("enableSsnField",this.enableSsnField,this.ssn_copy)
 							this.currencySelection(this.response.data.bankinfo.currency)
 							this.haveEin(this.response.data.bankinfo.ein ? 'yesEin' : 'noEin');
 							this.changeCountry(this.response.data.bankinfo.country);//for selected country
@@ -246,9 +257,12 @@ export class AffiliateStep2Component implements OnInit {
 									})
 								}
 							})
+							
+						
 						});
 				}
 				else {
+					
 					this.canChangeDocument = true;//can add or change documents
 					// this.canChangeAddress = true;//can add or change address
 
@@ -647,6 +661,14 @@ this.loadCards(this.affiliateId)
 		const labelOffset = 110;
 		return controlEl.getBoundingClientRect().top + window.scrollY - labelOffset;
 	}
+	handleSsnInput(value:any){
+		
+		console.log("prev--->",this.ssn_copy,this.addBankForm.get('ssn').value)
+		value.includes("*") ? "" :this.ssn_copy=value
+		console.log("after--->",this.ssn_copy)
+
+	}
+
 	submitForm() {
 		console.log(this.addBankForm);
 		// console.log(JSON.stringify(this.addVehicleRatesForm.value));
@@ -655,6 +677,9 @@ this.loadCards(this.affiliateId)
 		if (this.addBankForm.invalid) {
 			return;
 		}
+		this.addBankForm.patchValue({
+			ssn:this.ssn_copy
+		})
 		this.addBankForm.value.stepCompleted = this.adminService.getUpdatedStepsLocal('2');
 		console.log(this.addBankForm.value);
 		// console.log(JSON.stringify(this.addVehicleRatesForm.value));
