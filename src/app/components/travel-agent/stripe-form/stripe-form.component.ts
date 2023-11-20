@@ -692,8 +692,12 @@ export class StripeFormComponent implements OnInit {
 		this.travelService.addBankOfAffiliate(this.addBankForm.value,this.travelAgentId)
 			.pipe(
 				catchError(err => {
+					this.addBankForm.patchValue({
+						ssn:this.showOnlyLast4Digit(this.ssn_copy)
+					})
 					this.spinner.hide();//hide spinner
 					this.disableSubmitButton = false; //enable submit button
+					
 					return throwError(err);
 				})
 			)
@@ -726,6 +730,7 @@ export class StripeFormComponent implements OnInit {
 			// this.addBankForm.controls.mobile.value,
 			this.addBankForm.controls.id.value,
 			this.addBankForm.controls.acc_id.value,
+			this.addBankForm.controls.ssn.value
 			// this.addBankForm.controls.mobileIsd.value,
 			// this.addBankForm.controls.mobileCountry.value
 			
@@ -737,6 +742,8 @@ export class StripeFormComponent implements OnInit {
 		//  this.addBankForm.controls.mobile.patchValue(keepValues[0]);
 		 this.addBankForm.controls.id.patchValue(keepValues[0]);
 		 this.addBankForm.controls.acc_id.patchValue(keepValues[1]);
+		 this.addBankForm.controls.ssn.patchValue(keepValues[2]);
+
 		//  this.addBankForm.controls.mobileIsd.patchValue(keepValues[3]);
 		//  this.addBankForm.controls.mobileCountry.patchValue(keepValues[4]);
 		

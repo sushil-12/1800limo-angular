@@ -908,13 +908,18 @@ export class Step2Component implements OnInit {
 		this.affiliateService.addBankOfAffiliate(this.addBankForm.value)
 			.pipe(
 				catchError(err => {
+					this.addBankForm.patchValue({
+						ssn:this.showOnlyLast4Digit(this.ssn_copy)
+					})
+					console.log(this.addBankForm?.get('ssn').value,"valueeeeee")
 					console.log(err)
-					if (err.otherParams.formcontrolname) {
+					if (err?.otherParams?.formcontrolname) {
 						this.scrollToErrorFormControlName(err.otherParams.formcontrolname)
 					}
 					this.spinner.hide();//hide spinner
 					// this.stateManagementService.setprogressBar(false);
 					this.disableSubmitButton = false; //enable submit button
+					
 					return throwError(err);
 				})
 			)
@@ -946,6 +951,10 @@ export class Step2Component implements OnInit {
 	}
 
 	resetForm() {
+		const keepValues = [
+			this.addBankForm.controls.ssn.value,
+		]
+	
 		this.addBankForm.patchValue({//affiliate account id
 			BankName: '',
 			BankAddress: '',
@@ -955,7 +964,6 @@ export class Step2Component implements OnInit {
 			AccountNumber: '',
 			Routing: '',
 			AccountType: 'company',
-			ssn: '',
 			haveEin: 'yesEin',
 			ein: '',
 			currency: '',
@@ -965,6 +973,8 @@ export class Step2Component implements OnInit {
 			id_front_image: '',
 			id_back_image: '',
 		});
+	 this.addBankForm.controls.ssn.patchValue(keepValues[0]);
+
 		this.id_front_image = "";
 		this.id_back_image = "";
 		this.canChangeDocument = true;
