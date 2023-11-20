@@ -343,7 +343,7 @@
 									</mat-label>
 									<input type="text" matInput placeholder="Type your address"
 										matGoogleMapsAutocomplete
-										(onAutocompleteSelected)="fillLooseCustomerAddress($event.formatted_address)"
+										(onAutocompleteSelected)="fillLooseCustomerAddress($event)"
 										(focus)="$event.target.select()" />
 								</mat-form-field>
 							</div>

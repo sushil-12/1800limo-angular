@@ -133,7 +133,7 @@ export class AffiliateStep2Component implements OnInit {
 			badge_city :[''],
 			badge_city_name:[''],
 			street: [''],
-			city: ['', Validators.required],
+			city: [''],
 			state: ['', Validators.required],
 			country: ['', Validators.required],
 			zipCode: ['', Validators.required],
@@ -309,20 +309,20 @@ this.loadCards(this.affiliateId)
 						return;
 					}
 					console.log('---->> place',place)
-					// for (var i = 0; i < place.address_components.length; i++) {
+					// 	for (var i = 0; i < place.address_components.length; i++) {
 					// 	for (var j = 0; j < place.address_components[i].types.length; j++) {
 					// 		if (place.address_components[i].types[j] == "country") {
 					// 			this.addBankForm.patchValue({
 					// 				country: place.address_components[i].short_name
 					// 			});
-					// 			this.changeCountry(place.address_components[i].short_name)
+					// 			// this.changeCountry(place.address_components[i].short_name)
 					// 		}
 					// 		else if (place.address_components[i].types[j] == "administrative_area_level_1") {
 					// 			this.addBankForm.patchValue({
-					// 				state: place.address_components[i].short_name
+					// 				state: place.address_components[i].long_name
 					// 			});
 					// 		}
-					// 		else if (place.address_components[i].types[j] == "administrative_area_level_2") {
+					// 		else if (place.address_components[i].types[j] == "administrative_area_level_3") {
 					// 			this.addBankForm.patchValue({
 					// 				city: place.address_components[i].long_name
 					// 			});
@@ -332,13 +332,29 @@ this.loadCards(this.affiliateId)
 					// 				zipCode: place.address_components[i].long_name
 					// 			});
 					// 		}
-					// 		else if (place.address_components[i].types[j] == "street_number") {
-					// 			this.addBankForm.patchValue({
-					// 				street: place.address_components[i].long_name
-					// 			});
-					// 		}
 					// 	}
 					// }
+					place.address_components.forEach(component => {
+						const types = component.types;
+				
+						if (types.includes('postal_code')) {
+							this.addBankForm.patchValue({
+								zipCode: component.long_name
+							});
+						} else if (types.includes('locality')) {
+							this.addBankForm.patchValue({
+								city: component.long_name
+							});
+						} else if (types.includes('administrative_area_level_1')) {
+							this.addBankForm.patchValue({
+								state: component.short_name
+							});
+						} else if (types.includes('country')) {
+							this.addBankForm.patchValue({
+								country: component.short_name
+							});
+						}
+					  });
 					this.addBankForm.patchValue({
 						address: place.formatted_address,
 						latitude: place.geometry.location.lat(),
