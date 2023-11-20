@@ -22,6 +22,9 @@ agm-map {
 .vehtype_extint .emptyImage img {
 	height: 220px;
 }
+.disableSsn{
+	pointer-events: none;
+}
 
 .birthMonth {
 	padding-right: 5px;

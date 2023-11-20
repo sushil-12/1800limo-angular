@@ -47,7 +47,7 @@ export class DailyBookingsComponent implements OnInit {
 	public bookingStatusColor: string;
 	public startDate: string;
 	public endDate: string;
-	public orderBy: string = "";
+	public orderBy: string = "pickup_date_desc";
 	// public returnRepeatForm: FormGroup;
 	public changeStatusForm: FormGroup;
 	public sendEmailForm: FormGroup;
@@ -192,7 +192,7 @@ export class DailyBookingsComponent implements OnInit {
 			this.orderBy = "created_at_desc";
 		}
 		if (!this.use_created_at && !this.use_pickup_date) {
-			this.orderBy = "";
+			this.orderBy = "pickup_date_desc";
 		}
 		this.loadBookings(null, this.startDate, this.endDate, this.searchText);
 		// this.useDateFilter = value
