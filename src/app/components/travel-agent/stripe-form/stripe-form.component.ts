@@ -53,6 +53,8 @@ export class StripeFormComponent implements OnInit {
 	public disableSubmitRequestAddressChangeButton: boolean = false;
 	public showProgressBar: boolean = false;
 	public haveEinNo: boolean = true;
+	enableSsnField:boolean=false;
+	ssn_copy:any;
 
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
 	stepsObj: any;
@@ -329,7 +331,14 @@ export class StripeFormComponent implements OnInit {
 						id_front_image: this.response.data.bankinfo.id_front_image.ID,
 						id_back_image: this.response.data.bankinfo.id_back_image.ID,
 					});
-
+					this.ssn_copy=this.response?.data?.bankinfo?.ssn
+					if(this.response?.error_fields?.find(val => val?.field == 'ssn')){
+						this.enableSsnField=false
+								console.log("in if ssn error",this.enableSsnField)
+					}
+					else{
+						this.enableSsnField=true
+					}
 					this.currencySelection(this.response.data.bankinfo.currency)
 					this.haveEin(this.response.data.bankinfo.ein ? 'yesEin' : 'noEin');
 					this.changeCountry(this.response.data.bankinfo.country);//for selected country
@@ -650,6 +659,13 @@ export class StripeFormComponent implements OnInit {
 			}
 		}
 	}
+	handleSsnInput(value:any){
+		
+		console.log("prev--->",this.ssn_copy,this.addBankForm.get('ssn').value)
+		value.includes("*") ? "" :this.ssn_copy=value
+		console.log("after--->",this.ssn_copy)
+
+	}
 	submitForm() {
 		console.log(this.addBankForm);
 		// console.log(JSON.stringify(this.addVehicleRatesForm.value));
@@ -659,6 +675,9 @@ export class StripeFormComponent implements OnInit {
 			return;
 		}
 		// this.addBankForm.value.stepCompleted = this.adminService.getUpdatedStepsLocal('2');
+		this.addBankForm.patchValue({
+			ssn:this.ssn_copy
+		})
 		console.log(this.addBankForm.value);
 		// console.log(JSON.stringify(this.addVehicleRatesForm.value));
 		this.disableSubmitButton = true; //disable submit button

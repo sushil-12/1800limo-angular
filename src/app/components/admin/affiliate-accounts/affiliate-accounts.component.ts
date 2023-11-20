@@ -297,7 +297,7 @@ export class AffiliateAccountsComponent implements OnInit {
 	}
 
 	teset(args: any) {
-		if (!this.searchText) { return args ? args.toString().replaceAll("," , ", ") : "N/A"; }
+		if (!this.searchText) { return args?.length > 0 ? args.toString().replaceAll("," , ", ") : "N/A"; }
 		if (args) {
 			args = args.toString().replaceAll("," , ", ")
 			var re = new RegExp(this.searchText, 'gi'); //'gi' for case insensitive and can use 'g' if you want the search to be case sensitive.
