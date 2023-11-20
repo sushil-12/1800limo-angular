@@ -130,7 +130,7 @@ export class StripeFormComponent implements OnInit {
 			AccountNumber: ['', [Validators.required, this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
 			Routing: ['', [Validators.required]],
 			AccountType: ['company', Validators.required],
-			ssn: ['', [Validators.required, Validators.pattern("^[0-9]*$"), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
+			ssn: ['', [Validators.required, Validators.pattern("^[0-9*]*$"), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
 			haveEin: ['yesEin'],
 			ein: ['', []],
 			currency: ['', Validators.required],
@@ -313,7 +313,7 @@ export class StripeFormComponent implements OnInit {
 						Routing: this.response.data.bankinfo.Routing,
 						AccountType: this.response.data.bankinfo.AccountType,
 						currency: this.response.data.bankinfo.currency,
-						ssn: this.response.data.bankinfo.ssn,
+						ssn: this.showOnlyLast4Digit(this.response.data.bankinfo.ssn),
 						haveEin: this.response.data.bankinfo.ein ? 'yesEin' : 'noEin',
 						ein: this.response.data.bankinfo.ein,
 						address: this.response.data.bankinfo.address,
@@ -503,7 +503,14 @@ export class StripeFormComponent implements OnInit {
 		$("#imageModal").addClass("showImage");
 		$("#imageModal").removeClass("d-none");
 	}
-
+	showOnlyLast4Digit(value){
+		if(value){
+			value = value.toString()
+			return '*'.repeat(value.length - 4) + value.slice(-4)
+		}else{
+			return ''
+		}
+	}
 	fetchImageBlob(url, key, id) {
 		this.stateManagementService.setprogressBar(true);
 
