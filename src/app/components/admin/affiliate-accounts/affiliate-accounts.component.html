@@ -214,7 +214,12 @@
 								<!-- <td><span [innerHTML]="highlighText(blackCarLimoBus.Associations)"></span></td> -->
 								<td><span [innerHTML]="highlighText(blackCarLimoBus.Address)"></span></td>
 								<td>
-									<span [innerHTML]="teset(blackCarLimoBus?.vehicles)"></span>
+									<ul
+										style="flex-direction: column !important; padding: 0px !important; margin: 0px !important;">
+										<li *ngFor="let vehcile of blackCarLimoBus?.vehicles"><span
+												[innerHTML]="teset(vehcile)"></span></li>
+									</ul>
+
 								</td>
 								<!-- <td><span [innerHTML]="highlighText(blackCarLimoBus.City)"></span></td> -->
 								<!-- <td>{{blackCarLimoBus.State}}</td>

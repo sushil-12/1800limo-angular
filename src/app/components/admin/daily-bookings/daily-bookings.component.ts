@@ -65,7 +65,6 @@ export class DailyBookingsComponent implements OnInit {
 	currentUser: any = JSON.parse(localStorage.getItem("userData")) || "";
 	subModules: any = localStorage.getItem("sub_modules") || "";
 	useDateFilter: boolean = true;
-	use_pickup_date: boolean = true;
 	use_created_at: boolean = false;
 	rates_preview: any;
 	quotebotNewData: any;
@@ -112,6 +111,9 @@ export class DailyBookingsComponent implements OnInit {
 				: false
 			: true;
 		console.log("useDateFilter-->", this.useDateFilter);
+		this.orderBy = localStorage.getItem("orderByCreatedAt") ? localStorage.getItem("orderByCreatedAt") : "pickup_date_desc"
+		this.use_created_at = localStorage.getItem("orderByCreatedAt") ? true : false
+		
 
 		this.adminService
 			.getStatusList()
@@ -180,20 +182,15 @@ export class DailyBookingsComponent implements OnInit {
 		this.saveCookie("useDateFilter", value);
 		this.loadBookings(null, this.startDate, this.endDate, this.searchText);
 	}
-	handleCheckboxSort(value: any, type: string) {
-		console.log("event---->> ", value, type);
-		this[type] = value;
-		if (value && type == "use_pickup_date") {
-			this.use_created_at = false;
-			this.orderBy = "pickup_date_desc";
-		}
-		if (value && type == "use_created_at") {
-			this.use_pickup_date = false;
+	handleCheckboxSort(value: any) {
+		if (value) {
 			this.orderBy = "created_at_desc";
+			localStorage.setItem('orderByCreatedAt','created_at_desc')
 		}
-		if (!this.use_created_at && !this.use_pickup_date) {
+		else{
 			this.orderBy = "pickup_date_desc";
-		}
+			localStorage.removeItem('orderByCreatedAt')
+		} 
 		this.loadBookings(null, this.startDate, this.endDate, this.searchText);
 		// this.useDateFilter = value
 		// this.saveCookie('useDateFilter',value)

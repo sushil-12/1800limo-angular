@@ -694,8 +694,12 @@ export class TravelAgentStripeFormComponent implements OnInit {
 		this.adminService.addBankOfTravelAgent(this.addBankForm.value,this.travelAgentId)
 			.pipe(
 				catchError(err => {
+					this.addBankForm.patchValue({
+						ssn:this.showOnlyLast4Digit(this.ssn_copy)
+					})
 					this.spinner.hide();//hide spinner
 					this.disableSubmitButton = false; //enable submit button
+					
 					return throwError(err);
 				})
 			)
@@ -724,7 +728,13 @@ export class TravelAgentStripeFormComponent implements OnInit {
 		this.closeTab.emit();
 	}
 	resetForm() {
+		const keepValues = [
+			this.addBankForm.controls.ssn.value,
+		]
+	
 		this.buildBankForm();
+	 this.addBankForm.controls.ssn.patchValue(keepValues[0]);
+		
 		this.id_front_image = "";
 		this.id_back_image = "";
 		window.scrollTo({ top: 0, behavior: 'smooth' });
