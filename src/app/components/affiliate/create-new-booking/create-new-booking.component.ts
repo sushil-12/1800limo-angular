@@ -255,6 +255,10 @@ export class CreateNewBookingComponent implements OnInit {
 				phone_country: ['us'],
 				email: [''],
 				address: [''],
+				country: [''],
+				state: [''],
+				city: [''],
+				zipCode: [''],
 				card_details: this.$form.group({
 					name: [''],
 					card_number: [''],
@@ -2053,7 +2057,20 @@ addExtraStop(is_return: boolean = false) {
 	}
 
 	fillLooseCustomerAddress(value: any) {
-		(<FormGroup>this.BookingForm.get('loose_customer')).get('address').setValue(value);
+		console.log('Addresss-->>>' , value);
+		(<FormGroup>this.BookingForm.get('loose_customer')).get('address').setValue(value?.formatted_address);
+		value.address_components.forEach(component => {
+			const types = component.types;
+			if (types.includes('postal_code')) {
+				(<FormGroup>this.BookingForm.get('loose_customer')).get('zipCode').setValue(component.long_name);
+			} else if (types.includes('locality')) {
+				(<FormGroup>this.BookingForm.get('loose_customer')).get('city').setValue(component.long_name);
+			} else if (types.includes('administrative_area_level_1')) {
+				(<FormGroup>this.BookingForm.get('loose_customer')).get('state').setValue(component.long_name);
+			} else if (types.includes('country')) {
+				(<FormGroup>this.BookingForm.get('loose_customer')).get('country').setValue(component.long_name);
+			}
+		  });
 		(<FormGroup>this.BookingForm.get('loose_customer')).updateValueAndValidity();
 		this.BookingForm.updateValueAndValidity();
 	}
