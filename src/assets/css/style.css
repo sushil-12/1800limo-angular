@@ -305,7 +305,7 @@ header a.nav-link.active {
 	color: #fff;
 	font-size: 20px;
 	font-weight: 400;
-	padding: 10px 0px 20px 0px;
+	padding: 0px 0px 5px 0px;
 	margin: 0;
 	word-spacing: 4px;
 	text-transform: uppercase;
@@ -337,7 +337,7 @@ header a.nav-link.active {
 
 .bannerform_wrapper .quoteform_homewrapper .tab_innerform {
 	border-bottom: 1px solid #646464;
-	padding: 15px 25px 0px 25px;
+	padding: 5px 25px 0px 25px;
 }
 
 .bannerform_wrapper .quoteform_homewrapper select {
@@ -3514,7 +3514,7 @@ header .navbar-toggler {
 	}
 
 	.bannerform_wrapper .quoteform_homewrapper .tab_innerform {
-		padding: 20px 0px 0px 0px;
+		padding: 5px 0px 0px 0px;
 	}
 
 	.bannerform_wrapper .quoteform_homewrapper h3,
