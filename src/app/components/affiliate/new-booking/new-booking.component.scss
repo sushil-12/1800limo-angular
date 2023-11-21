@@ -20,6 +20,16 @@ hr{
 	box-shadow: 3px 3px 20px -6px rgba(40, 40, 40, 0.5);
 }
 
+.preview_button_edit{
+	justify-content: end !important;
+}
+
+@media  (max-width:767px) {
+	.preview_button_edit{
+		justify-content: center !important;
+	}
+}
+
 mat-form-field {
 	margin: 1rem 0 !important;
 }
