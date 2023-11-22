@@ -370,11 +370,23 @@
 		[reservation_id]="finalize_params.booking_id" [reset]="false" [hours]="hours"
 		[vehicles]="finalize_params.number_of_vehicles" (returnNumberOfHr)="HandleReturnNumberOfHr($event)">
 	</app-affiliate-finalize-rates>
-	<div class="row mb-3" id="submitForm" *ngIf="BookingDetail?.payment_status=='unpaid'">
+	<div class="row mb-3" id="submitForm" *ngIf="BookingDetail?.payment_status=='unpaid' && !editRate">
 		<div class="col-md-12 text-right">
 			<button type="button" class="custom-filled-button ratesButton m-3"
 				[ngClass]="finalize_btn=='Finalized'? 'color-grey':''" (click)="submitForm()">
 				{{finalize_btn}}
+			</button>
+		</div>
+	</div>
+	<div class="row mb-3" *ngIf="BookingDetail?.payment_status=='unpaid' && editRate">
+		<div class="col-md-12 accpt_reject_div">
+			<button type="button" class="custom-filled-button green-button accpt_reject_button"
+				(click)="acceptRejectButton('accept')">
+				Accept
+			</button>
+			<button type="button" class="custom-filled-button red-button accpt_reject_button"
+				(click)="acceptRejectButton('reject')">
+				Reject
 			</button>
 		</div>
 	</div>
@@ -415,7 +427,7 @@
 	</table>
 </section>
 <!-- payment section -->
-<section class="section-container mt-2" *ngIf="BookingDetail?.payment_status=='unpaid'">
+<!-- <section class="section-container mt-2" *ngIf="BookingDetail?.payment_status=='unpaid'">
 	<div class="col-md-12 p-0" (click)="handlePaymentSection()">
 		<h4 class="section-dropdown-header mb-0">
 			Payment
@@ -424,7 +436,7 @@
 	</div>
 	<div class="row" *ngIf="paymentSection">
 
-		<!-- RADIO BUTTONS -->
+
 		<div class="col-md-12 cardSection">
 			<div class="radio">
 				<input id="card" name="paymentMethod" type="radio" checked (click)="changeDetection('card')">
@@ -451,8 +463,7 @@
 							<td>{{item?.name}}</td>
 							<td>{{item?.last4}}</td>
 							<td>{{item?.exp_month}}/{{item?.exp_year}}</td>
-							<!-- <td (click)="deleteCardClicked(item)" 
-							data-toggle="modal" data-target="#warnDeleteCard"><i class="bi bi-trash3-fill m-0"></i></td> -->
+				
 						</tr>
 					</tbody>
 					<ng-template #noData>
@@ -467,13 +478,13 @@
 					<img src="../../../../assets/images/credit-card.png" alt="">
 					Add a credit or debit card</a>
 			</div>
-			<!-- Credit Card Details -->
+		
 
 			<form class="container-fluid" [formGroup]="cardForm" appInvalidControlScroll>
 
 				<div id="credit-card-details" class="px-4" *ngIf="paymentMethod=='card' && isCardFormOpen">
 					<div class="row">
-						<!-- Card Holder Name -->
+					
 						<div class="col-md-4 my-2">
 							<mat-form-field appearance="outline" class="m-0">
 								<mat-label class="required-field">
@@ -492,7 +503,7 @@
 								</div>
 							</div>
 						</div>
-						<!-- Card Number -->
+						
 						<div class="col-md-4 my-2">
 							<mat-form-field appearance="outline" class="m-0">
 								<mat-label class="required-field">
@@ -513,15 +524,15 @@
 								<div class="text-danger text-lg m-0"
 									*ngIf="cardForm.controls.card_number?.errors?.maxlength">Exceeded max limit
 								</div>
-								<!-- <ng-template #invalidPattern > -->
+						
 								<div class="text-danger text-lg m-0"
 									*ngIf="cardForm.controls.card_number?.errors?.pattern;">Invalid card number
 								</div>
-								<!-- </ng-template> -->
+						
 							</div>
 						</div>
 
-						<!-- Expiry Month -->
+				
 						<div class="col-md-4 my-2">
 							<mat-form-field appearance="outline" class="m-0">
 								<mat-label class="required-field">
@@ -550,7 +561,7 @@
 							</div>
 						</div>
 
-						<!-- Expiry Year -->
+				
 						<div class="col-md-4 my-2">
 							<mat-form-field appearance="outline" class="m-0">
 								<mat-label class="required-field">
@@ -570,7 +581,7 @@
 							</div>
 						</div>
 
-						<!-- CVV -->
+					
 						<div class="col-md-4 my-2">
 							<mat-form-field appearance="outline" class="m-0">
 								<mat-label class="required-field">
@@ -608,15 +619,15 @@
 			</div>
 		</div>
 
-		<div class="col-md-12 text-right mr-4">
-			<button type="button" class="custom-filled-button m-3 mr-4"
-				[ngClass]="finalize_btn=='Finalized'? '':'color-grey'" (click)="makePayment()">
-				Charge
-			</button>
-		</div>
+		
 	</div>
-</section>
-
+</section> -->
+<div class="col-md-12 text-right mr-4">
+	<button type="button" class="custom-filled-button m-3 mr-4" [ngClass]="finalize_btn=='Finalized'? '':'color-grey'"
+		(click)="makePayment()">
+		Charge
+	</button>
+</div>
 <!-- modal -->
 
 

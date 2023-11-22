@@ -520,6 +520,17 @@ tbody {
     right   : 10px;
     top     : -80px;
 }
+.accpt_reject_button {
+    // position: absolute;
+    right   : 10px;
+    top     : -80px;
+}
+.accpt_reject_div{
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    
+}
 
 
 :host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-outline-gap{

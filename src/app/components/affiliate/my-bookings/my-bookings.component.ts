@@ -469,6 +469,9 @@ export class MyBookingsComponent implements OnInit {
 		this.router.navigate(['/affiliate/finalize-booking'], { queryParams: { bookingId: bookingId } });
 	}
 
+	previewRate(bookingId) {
+		this.router.navigate(['/affiliate/finalize-booking'], { queryParams: { bookingId: bookingId , editRate:true} });
+	}
 	returnRepeatAction(actionType, bookingId, serviceType) {
 		console.log(actionType, bookingId, serviceType);
 

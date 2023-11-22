@@ -309,7 +309,10 @@ export class FarmOutComponent implements OnInit
 			this.$router.navigate(['/affiliate/new-booking'], { queryParams: { bookingId: bookingId, updateType: updateType , nav : 'false' } });
 	}
 	finalizeAction(bookingId) {
-		this.$router.navigate(['/affiliate/finalize-booking'], { queryParams: { bookingId: bookingId } });
+		this.$router.navigate(['/affiliate/finalize-booking'], { queryParams: { bookingId: bookingId} });
+	}
+	previewRate(bookingId) {
+		this.$router.navigate(['/affiliate/finalize-booking'], { queryParams: { bookingId: bookingId, editRate:true} });
 	}
 	sendEmailClicked(bookingId, emailTarget) {
 		this.sendEmailForm.patchValue({

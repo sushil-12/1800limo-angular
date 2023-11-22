@@ -132,7 +132,10 @@ button.custom-filled-reset-button {
     background-color: var(--orange);
     border-color: var(--orange);
 }
-
+.custom-filled-button.red-button {
+    border-color: var(--red);
+    background-color: var(--red);
+}
 .custom-confirm-button{
     position: sticky;
     left: 50px;
