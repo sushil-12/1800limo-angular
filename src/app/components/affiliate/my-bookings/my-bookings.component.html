@@ -116,9 +116,10 @@
 												<div class="dropdown-item-icon"></div>
 												Finalize
 											</a>
-											<a class="dropdown-item" (click)="previewRate(booking?.booking_id)">
-												<div class="dropdown-item-icon"></div>
-												Preview Rate
+											<a class="dropdown-item" (click)="previewRate(booking?.booking_id)"
+											*ngIf="booking?.booking_status =='pending'">
+												<div class="dropdown-item-icon" ></div>
+												Confirm/Deny
 											</a>
 											<a class="dropdown-item" routerLink="/affiliate/invoice-summary"
 												[queryParams]="{bookingId: booking?.booking_id}"

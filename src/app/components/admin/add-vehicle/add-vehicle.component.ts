@@ -775,7 +775,7 @@ vehicleOfficialImagesChange(event, imageType, imageId) {
 	}
 
 	onFileChange(event, imageId, imageNumber) {
-		// this.stateManagementService.setprogressBar(true);
+		this.stateManagementService.setprogressBar(true);
 		const reader = new FileReader();
 		if (event.target.files && event.target.files.length) {
 			const [file] = event.target.files;
@@ -785,7 +785,7 @@ vehicleOfficialImagesChange(event, imageType, imageId) {
 				this.adminService.uploadVehicleImage(this.imageSrc)
 					.pipe(
 						catchError(err => {
-							// this.stateManagementService.setprogressBar(false);
+							this.stateManagementService.setprogressBar(false);
 							return throwError(err);
 						})
 					)
@@ -796,7 +796,7 @@ vehicleOfficialImagesChange(event, imageType, imageId) {
 						});
 						this["vehicleImage" + imageNumber] = this.response.data.image;
 
-						// this.stateManagementService.setprogressBar(false);
+						this.stateManagementService.setprogressBar(false);
 					});
 			};
 		}
