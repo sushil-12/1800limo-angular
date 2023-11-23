@@ -123,6 +123,10 @@ export class AffiliateStep1Component implements OnInit {
 			{
 				this.startBusinessYears = data;
 			});
+			window.scrollTo({
+				top :0,
+				behavior:'smooth'
+			})
 		this.adminService.getAssicationsLanguages()
 			.pipe(
 				catchError(err => {
@@ -278,10 +282,7 @@ export class AffiliateStep1Component implements OnInit {
 							console.log('associations');
 							//
 							// this.stateManagementService.setprogressBar(false);
-							window.scrollTo({
-								top :0,
-								behavior:'smooth'
-							})
+						
 						});
 				} else {
 					this.addAffiliateAccountForm.patchValue({
@@ -290,10 +291,7 @@ export class AffiliateStep1Component implements OnInit {
 					// this.stateManagementService.setprogressBar(false);
 
 					this.onLanguageChange('1', true);//set english as default language
-					window.scrollTo({
-						top :0,
-						behavior:'smooth'
-					})
+				
 				}
 
 		this.spinner.hide()
