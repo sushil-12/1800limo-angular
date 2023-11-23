@@ -121,6 +121,8 @@ export class NewBookingComponent implements OnInit {
 	travelStaffAccounts: any;
 	isCreatedByAdmin: boolean = true;
 	shareArray: any;
+	r_shareArray: any;
+	adminSharePercent: number = 25;
 
 	constructor(
 		private $form: FormBuilder,
@@ -839,7 +841,8 @@ export class NewBookingComponent implements OnInit {
 
 	fetchAirportsAndBigData(): void {
 		let s = setInterval(() => {
-			if (this.$api.getAirportsAndBigData()) {
+			// this.$api.getAirportsAndBigData()
+			if (true) {
 				this.$spinner.hide('fetchspinner');
 				this.BigData = JSON.parse(JSON.stringify(this.$api.getAirportsAndBigData()));
 				this.BigData_COPY = JSON.parse(JSON.stringify(this.BigData));
@@ -1609,9 +1612,12 @@ export class NewBookingComponent implements OnInit {
 		for (const key of Object.keys(this.RatesForm.all_inclusive_rates)) {
 			base_rate += this.RatesForm.all_inclusive_rates[key].baserate;
 		}
+		for (const key of Object.keys(this.RatesForm.amenities)) {
+			base_rate += this.RatesForm.amenities[key].baserate;
+		}
 			let grandTotal = this.BookingForm.value.rateArray.grand_total
-			let stripeFee = grandTotal * 0.029 + 0.30
-			let adminShare = base_rate * 0.25 
+			let stripeFee = grandTotal * 0.05 + 0.30
+			let adminShare = (base_rate * this.adminSharePercent) / 100 
 			let deducted_admin_share = adminShare-stripeFee
 			let shareArray = {
 				baseRate : base_rate,
@@ -1622,8 +1628,9 @@ export class NewBookingComponent implements OnInit {
 				affiliateShare : (grandTotal - adminShare)
 			}
 			// travelAgentShare : 
-			if(this.BookingForm.value?.account_type == 'travel_planner' && this.BookingForm.value?.affiliate_type == 'affiliate'){
-				shareArray['adminShare'] = base_rate * 0.15 
+			if(this.BookingForm.value?.account_type == 'travel_planner' && !this.isCreatedByAdmin){
+				this.adminSharePercent = 15
+				shareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100 
 				shareArray['deducted_admin_share'] = shareArray['adminShare']- shareArray['stripeFee']
 				shareArray['travelAgentShare'] = base_rate * 0.10  
 			}
@@ -1641,9 +1648,12 @@ export class NewBookingComponent implements OnInit {
 		for (const key of Object.keys(this.ReturnRatesForm.all_inclusive_rates)) {
 			base_rate += this.ReturnRatesForm.all_inclusive_rates[key].baserate;
 		}
+		for (const key of Object.keys(this.ReturnRatesForm.amenities)) {
+			base_rate += this.ReturnRatesForm.amenities[key].baserate;
+		}
 			let returnGrandTotal = this.BookingForm.value.returnRateArray.r_grandtotal
-			let stripeFee = returnGrandTotal * 0.029 + 0.30
-			let adminShare = base_rate * 0.25 + stripeFee
+			let stripeFee = returnGrandTotal * 0.05 + 0.30
+			let adminShare = (base_rate * this.adminSharePercent) / 100  
 			let returnShareArray = {
 				baseRate : base_rate,
 				returnGrandTotal : returnGrandTotal,
@@ -1653,9 +1663,12 @@ export class NewBookingComponent implements OnInit {
 			}
 			// travelAgentShare : 
 			if(this.BookingForm.value?.account_type == 'travel_planner' && this.BookingForm.value?.affiliate_type == 'affiliate'){
-				returnShareArray['adminShare'] = base_rate * 0.15 + stripeFee
+				returnShareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100 
+				returnShareArray['deducted_admin_share'] = returnShareArray['adminShare']- returnShareArray['stripeFee']
 				returnShareArray['travelAgentShare'] = base_rate * 0.10  
 			}
+
+			this.r_shareArray = returnShareArray
 			
 			console.log('in function createReservationreturnShareArray-->>>' , base_rate, returnShareArray )
 			return returnShareArray;
