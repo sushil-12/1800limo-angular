@@ -124,8 +124,7 @@ export class AffiliateStep1Component implements OnInit {
 				this.startBusinessYears = data;
 			});
 			window.scrollTo({
-				top :0,
-				behavior:'smooth'
+				top :0
 			})
 		this.adminService.getAssicationsLanguages()
 			.pipe(

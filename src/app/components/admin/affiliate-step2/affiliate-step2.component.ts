@@ -237,7 +237,7 @@ export class AffiliateStep2Component implements OnInit {
 								id_back_image: this.response.data.bankinfo.id_back_image.ID,
 							});
 							this.ssn_copy = this.response?.data?.bankinfo?.ssn
-							if (this.response?.error_fields?.find(val => val?.field == 'ssn')) {
+							if (this.response?.data?.error_fields?.find(val => val?.field == 'ssn')) {
 								this.enableSsnField = false
 								console.log("in if ssn error", this.enableSsnField)
 							}
