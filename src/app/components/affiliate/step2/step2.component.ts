@@ -236,12 +236,12 @@ export class Step2Component implements OnInit {
 							this.id_front_image_id = this.response.data.bankinfo?.id_front_image?.ID;
 							this.id_back_image_id = this.response.data?.bankinfo?.id_back_image?.ID;
 							//Documents changable or not.
-							if (this.response.data?.stripeDetail?.additional_doc_verification_status == 'unverified') {
-								this.canChangeDocument = true;
-							}
-							else {
-								this.canChangeDocument = false;
-							}
+							// if (this.response?.data?.stripeDetail?.additional_doc_verification_status == 'unverified') {
+							// 	this.canChangeDocument = true;
+							// }
+							// else {
+							// 	this.canChangeDocument = false;
+							// }
 							//Documents changable or not
 							if (this.response.data?.stripeDetail?.stripe_address_status == 'invalid') {
 								this.canChangeAddress = true;
@@ -897,20 +897,22 @@ export class Step2Component implements OnInit {
 			return;
 		}
 		this.addBankForm.value.stepCompleted = this.affiliateService.getUpdatedStepsLocal('2');
+		let payload = this.addBankForm.value
+		payload['stepCompleted'] = this.affiliateService.getUpdatedStepsLocal('2');
 		this.addBankForm.patchValue({
 			ssn:this.ssn_copy
 		})
-		console.log(this.addBankForm.value);
+		console.log(this.addBankForm.value , payload);
 		this.spinner.show();//show spinner
 		// this.stateManagementService.setprogressBar(true);
 		this.disableSubmitButton = true; //disable submit button
 		localStorage.setItem("driverFrontLicense", this.id_front_image);
-		this.affiliateService.addBankOfAffiliate(this.addBankForm.value)
+		this.affiliateService.addBankOfAffiliate(payload)
 			.pipe(
 				catchError(err => {
-					this.addBankForm.patchValue({
-						ssn:this.showOnlyLast4Digit(this.ssn_copy)
-					})
+					// this.addBankForm.patchValue({
+					// 	ssn:this.showOnlyLast4Digit(this.ssn_copy)
+					// })
 					console.log(this.addBankForm?.get('ssn').value,"valueeeeee")
 					console.log(err)
 					if (err?.otherParams?.formcontrolname) {
