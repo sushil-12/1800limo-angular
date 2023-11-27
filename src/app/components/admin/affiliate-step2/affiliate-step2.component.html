@@ -6,6 +6,9 @@
 			<div class="col-md-12" *ngIf="response.data.stripeDetail.transfer_status!='active'">
 				<p class="text-danger margin-bottom-thin my-mat-hint">Stripe Activation can take upto 24 Hours.</p>
 			</div>
+			<div class="col-md-12" *ngIf="response.data?.stripeDetail?.stripe_errors">
+				<p class="text-danger margin-bottom-thin my-mat-hint">{{TaxIdMatch}}</p>
+			</div>
 			<div class="col-md-4">
 				<p [className]="'defaultStatus ' + response.data.stripeDetail.additional_doc_verification_status">
 					<strong>Stripe Doc Verification Status:</strong> <span class="text-capitalize">
@@ -89,7 +92,7 @@
 				</div>
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
-						<mat-label>Account # / IBAN Number<span class="asterisk">*</span></mat-label>
+						<mat-label>Bank Account / IBAN<span class="asterisk">*</span></mat-label>
 						<input matInput placeholder="Account Number*" formControlName="AccountNumber"
 							(focus)="$event.target.select()">
 					</mat-form-field>
@@ -126,9 +129,9 @@
 					</div>
 				</div>
 				<div class="col-md-2 col-4 birthMonth">
-					<mat-form-field appearance="outline">
+					<mat-form-field appearance="outline" [ngClass]="{ 'border-red': dobErrorMessage }">
 						<mat-label>Month of Birth <span class="asterisk">*</span></mat-label>
-						<mat-select formControlName="dobMonth">
+						<mat-select formControlName="dobMonth" (selectionChange)="removeDobError()">
 							<mat-option value="">Month</mat-option>
 							<mat-option value='01'>01</mat-option>
 							<mat-option value='02'>02</mat-option>
@@ -144,30 +147,39 @@
 							<mat-option value='12'>12</mat-option>
 						</mat-select>
 					</mat-form-field>
+					<div *ngIf="dobErrorMessage" class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="dobErrorMessage" style="font-weight: 550;">{{dobErrorMessage}}</div>
+					</div>
 					<div *ngIf="submittedForm && f.dobMonth.errors" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.dobMonth.errors.required">This field is required</div>
 					</div>
 				</div>
 				<div class="col-md-2 col-4 birthDay">
-					<mat-form-field appearance="outline">
+					<mat-form-field appearance="outline" [ngClass]="{ 'border-red': dobErrorMessage }">
 						<mat-label>Day of Birth <span class="asterisk">*</span></mat-label>
-						<mat-select formControlName="dobDay">
+						<mat-select formControlName="dobDay" (selectionChange)="removeDobError()">
 							<mat-option value="">Day</mat-option>
 							<mat-option *ngFor="let day of dobDay" value="{{day}}">{{day}}</mat-option>
 						</mat-select>
 					</mat-form-field>
+					<div *ngIf="dobErrorMessage" class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="dobErrorMessage" style="font-weight: 550;">{{dobErrorMessage}}</div>
+					</div>
 					<div *ngIf="submittedForm && f.dobDay.errors" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.dobDay.errors.required">This field is required</div>
 					</div>
 				</div>
 				<div class="col-md-2 col-4 birthYear">
-					<mat-form-field appearance="outline">
+					<mat-form-field appearance="outline" [ngClass]="{ 'border-red': dobErrorMessage }">
 						<mat-label>Year of Birth <span class="asterisk">*</span></mat-label>
-						<mat-select formControlName="dobYear">
+						<mat-select formControlName="dobYear" (selectionChange)="removeDobError()">
 							<mat-option value="">Year</mat-option>
 							<mat-option *ngFor="let year of dobYear" value="{{year}}">{{year}}</mat-option>
 						</mat-select>
 					</mat-form-field>
+					<div *ngIf="dobErrorMessage" class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="dobErrorMessage" style="font-weight: 550;">{{dobErrorMessage}}</div>
+					</div>
 					<div *ngIf="submittedForm && f.dobYear.errors" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.dobYear.errors.required">This field is required</div>
 					</div>
@@ -211,7 +223,7 @@
 						<input matInput placeholder="SSN (USA required by STRIPE / Government ID for other countries)"
 							formControlName="ssn" tabindex="1" (focus)="$event.target.select()"
 							(change)="handleSsnInput($event.target.value)"
-							(keyup)="removeErrorSsn($event.target.value)">
+							(keyup)="removeErrorSsn($event.target.value,'ssn')">
 					</mat-form-field>
 					<div *ngIf="ssnErrorMessage" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="ssnErrorMessage" style="font-weight: 550;">{{ssnErrorMessage}}</div>
@@ -437,11 +449,15 @@
 			</div>
 			<div class="row">
 				<div class="col-md-6">
-					<mat-form-field appearance="outline">
+					<mat-form-field appearance="outline" [ngClass]="{ 'border-red': addressErrorMessage }">
 						<mat-label>Enter Business/Base Address</mat-label>
 						<input matInput placeholder="Search Here and Set Location Pin" formControlName="address"
-							#search1 tabindex="1" (focus)="$event.target.select()">
+							#search1 tabindex="1" (focus)="$event.target.select()"
+							(keyup)="removeErrorSsn($event.target.value,'address')">
 					</mat-form-field>
+					<div *ngIf="addressErrorMessage" class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="addressErrorMessage" style="font-weight: 550;">{{addressErrorMessage}}</div>
+					</div>
 					<div *ngIf="submittedForm && f.address.errors || f.address.touched && f.address.errors; else latLongError"
 						class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.address.errors.required">This field is required</div>
