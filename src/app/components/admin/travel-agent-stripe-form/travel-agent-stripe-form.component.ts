@@ -55,6 +55,7 @@ export class TravelAgentStripeFormComponent implements OnInit {
 	public haveEinNo: boolean = true;
 	enableSsnField:boolean=false;
 	ssn_copy:any;
+	ssnErrorMessage:string;
 
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
 	stepsObj: any;
@@ -335,6 +336,7 @@ export class TravelAgentStripeFormComponent implements OnInit {
 					});
 					this.ssn_copy=this.response?.data?.bankinfo?.ssn
 					if(this.response?.data?.error_fields?.find(val => val?.field == 'ssn')){
+						this.ssnErrorMessage = this.response?.data?.error_fields?.find(val => val?.field == 'ssn')?.message
 						this.enableSsnField=false
 								console.log("in if ssn error",this.enableSsnField)
 					}
@@ -674,6 +676,9 @@ export class TravelAgentStripeFormComponent implements OnInit {
 		value.includes("*") ? "" :this.ssn_copy=value
 		console.log("after--->",this.ssn_copy)
 
+	}
+	removeErrorSsn(value:any){
+		this.ssnErrorMessage =""
 	}
 	submitForm() {
 		console.log(this.addBankForm);

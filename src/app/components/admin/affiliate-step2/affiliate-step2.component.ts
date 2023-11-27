@@ -55,6 +55,7 @@ export class AffiliateStep2Component implements OnInit {
 	public cardsRes: any;
 	enableSsnField: boolean = false;
 	ssn_copy: any;
+	ssnErrorMessage:string;
 
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
 	stepsObj: any;
@@ -238,8 +239,9 @@ export class AffiliateStep2Component implements OnInit {
 							});
 							this.ssn_copy = this.response?.data?.bankinfo?.ssn
 							if (this.response?.data?.error_fields?.find(val => val?.field == 'ssn')) {
+								this.ssnErrorMessage = this.response?.data?.error_fields?.find(val => val?.field == 'ssn')?.message
 								this.enableSsnField = false
-								console.log("in if ssn error", this.enableSsnField)
+								console.log("in if ssn error", this.response?.data?.error_fields?.find(val => val?.field == 'ssn')?.message)
 							}
 							else {
 								this.enableSsnField = true
@@ -683,7 +685,9 @@ export class AffiliateStep2Component implements OnInit {
 		console.log("after--->", this.ssn_copy)
 
 	}
-
+	removeErrorSsn(value:any){
+		this.ssnErrorMessage =""
+	}
 	submitForm() {
 		console.log(this.addBankForm);
 		// console.log(JSON.stringify(this.addVehicleRatesForm.value));
