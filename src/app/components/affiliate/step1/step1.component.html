@@ -383,7 +383,7 @@
 					</div>
 				</div>
 				<div class="col-md-6" *ngIf="!affiliateId; else showEditDispatchEmailButton">
-					<mat-form-field appearance="outline" style="border: 3px solid red;border-radius: 10px;">
+					<mat-form-field appearance="outline" [ngClass]="{ 'border-red': f.dispatchEmail?.value == '' }">
 						<mat-label>24 Hr Dispatch E-mail
 							<span class="asterisk">*</span>
 						</mat-label>
@@ -406,8 +406,9 @@
 				</div>
 				<ng-template #showEditDispatchEmailButton>
 					<div class="col-md-6" id="email_Text">
-						<mat-form-field appearance="outline" [class.read-only]="dispatchEmailReadonly == true" style="border: 3px solid red;border-radius: 10px;">
-							<mat-label>24 Hr Dispatch E-mail 
+						<mat-form-field appearance="outline" [class.read-only]="dispatchEmailReadonly == true"
+							[ngClass]="{ 'border-red': f.dispatchEmail?.value == '' }">
+							<mat-label>24 Hr Dispatch E-mail
 								<span class="asterisk">*</span>
 							</mat-label>
 							<input [class.errorColor]="dispatchEmailStatus == 'no'" matInput

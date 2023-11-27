@@ -9,6 +9,9 @@
 					Stripe Activation can take upto 24 Hours?.
 				</p>
 			</div>
+			<div class="col-md-12" *ngIf="response.data?.stripeDetail?.stripe_errors">
+				<p class="text-danger margin-bottom-thin my-mat-hint">{{TaxIdMatch}}</p>
+			</div>
 			<div class="col-md-4">
 				<p [className]="
 						'defaultStatus ' +
@@ -144,7 +147,7 @@
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
 						<mat-label>
-							Account # / IBAN Number
+							Bank Account / IBAN
 							<span class="asterisk">*</span>
 						</mat-label>
 						<input matInput placeholder="Account Number" (focus)="$event?.target?.select()"
@@ -230,7 +233,7 @@
 				</div>
 				<div class="col-md-2 col-4 birthMonth">
 					<label class="select-month-label">Month of Birth <span class="asterisk1">*</span></label>
-					<div class="selectStyle">
+					<div class="selectStyle" [ngClass]="{ 'border-red': dobErrorMessage }">
 						<select class="selectInputStyle" (click)="selectDropdownMonth()" formControlName="dobMonth"
 							tabindex="1" id="selectDropdown">
 							<option value="">Month</option>
@@ -261,6 +264,9 @@
 							</g>
 						</svg>
 					</div>
+					<div *ngIf="dobErrorMessage" class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="dobErrorMessage" style="font-weight: 550;">{{dobErrorMessage}}</div>
+					</div>
 					<div *ngIf="
 							(submittedForm && f?.dobMonth?.errors) ||
 							(f?.dobMonth?.touched && f?.dobMonth?.errors)
@@ -272,7 +278,7 @@
 				</div>
 				<div class="col-md-2 col-4 birthDay">
 					<label class="select-day-label">Day of Birth <span class="asterisk1">*</span></label>
-					<div class="selectStyle">
+					<div class="selectStyle" [ngClass]="{ 'border-red': dobErrorMessage }">
 						<select class="selectInputStyle" (click)="selectDropdownDay()" formControlName="dobDay"
 							tabindex="1" id="selectDropdown">
 							<option value="">Day</option>
@@ -294,6 +300,9 @@
 							</g>
 						</svg>
 					</div>
+					<div *ngIf="dobErrorMessage" class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="dobErrorMessage" style="font-weight: 550;">{{dobErrorMessage}}</div>
+					</div>
 					<div *ngIf="
 							(submittedForm && f?.dobDay?.errors) ||
 							(f?.dobDay?.touched && f?.dobDay?.errors)
@@ -305,7 +314,7 @@
 				</div>
 				<div class="col-md-2 col-4 birthYear">
 					<label class="select-year-label">Year of Birth <span class="asterisk1">*</span></label>
-					<div class="selectStyle">
+					<div class="selectStyle" [ngClass]="{ 'border-red': dobErrorMessage }">
 						<select class="selectInputStyle" (click)="selectDropdownYear()" formControlName="dobYear"
 							tabindex="1" id="selectDropdown">
 							<option value="">Year</option>
@@ -326,6 +335,9 @@
 								<polygon class="sty0" points="61.44,63.9 122.88,0 0,0 61.44,63.9" />
 							</g>
 						</svg>
+					</div>
+					<div *ngIf="dobErrorMessage" class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="dobErrorMessage" style="font-weight: 550;">{{dobErrorMessage}}</div>
 					</div>
 					<div *ngIf="
 							(submittedForm && f?.dobYear?.errors) ||
@@ -382,7 +394,7 @@
 						<input matInput placeholder="SSN (USA required by STRIPE / Government ID for other countries)"
 							(focus)="$event?.target?.select()" formControlName="ssn" tabindex="1"
 							(change)="handleSsnInput($event.target.value)"
-							(keyup)="removeErrorSsn($event.target.value)" />
+							(keyup)="removeErrorSsn($event.target.value,'ssn')" />
 					</mat-form-field>
 					<div *ngIf="ssnErrorMessage" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="ssnErrorMessage" style="font-weight: 550;">{{ssnErrorMessage}}</div>
@@ -719,11 +731,16 @@
 			</div>
 			<div class="row">
 				<div class="col-md-6">
-					<mat-form-field appearance="outline" [class.read-only]="!canChangeAddress">
+					<mat-form-field appearance="outline" [class.read-only]="!canChangeAddress"
+						[ngClass]="{ 'border-red': addressErrorMessage }">
 						<mat-label>Enter Business/Base Address</mat-label>
 						<input matInput placeholder="Search Here and Set Location Pin" (focus)="$event.target.select()"
-							[readonly]="!canChangeAddress" formControlName="address" #search1 tabindex="1" />
+							[readonly]="!canChangeAddress" formControlName="address" #search1 tabindex="1"
+							(keyup)="removeErrorSsn($event.target.value,'address')" />
 					</mat-form-field>
+					<div *ngIf="addressErrorMessage" class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="addressErrorMessage" style="font-weight: 550;">{{addressErrorMessage}}</div>
+					</div>
 					<div *ngIf="
 							(submittedForm && f?.address?.errors) ||
 								(f?.address?.touched && f?.address?.errors);

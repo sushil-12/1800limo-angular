@@ -56,12 +56,15 @@ export class AffiliateStep2Component implements OnInit {
 	enableSsnField: boolean = false;
 	ssn_copy: any;
 	ssnErrorMessage:string;
+	addressErrorMessage:string;
+	dobErrorMessage:string;
 
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
 	stepsObj: any;
 	filteredOptions: any;
 	badgeOptions: any;
 	cards: any;
+	TaxIdMatch: string;
 
 	constructor(
 		private adminService: AdminService,
@@ -238,13 +241,42 @@ export class AffiliateStep2Component implements OnInit {
 								id_back_image: this.response.data.bankinfo.id_back_image.ID,
 							});
 							this.ssn_copy = this.response?.data?.bankinfo?.ssn
-							if (this.response?.data?.error_fields?.find(val => val?.field == 'ssn')) {
-								this.ssnErrorMessage = this.response?.data?.error_fields?.find(val => val?.field == 'ssn')?.message
-								this.enableSsnField = false
-								console.log("in if ssn error", this.response?.data?.error_fields?.find(val => val?.field == 'ssn')?.message)
+							//to check ssn error
+							// if (this.response?.data?.error_fields?.find(val => val?.field == 'ssn')) {
+							// 	this.ssnErrorMessage = this.response?.data?.error_fields?.find(val => val?.field == 'ssn')?.message
+							// 	this.enableSsnField = false
+							// 	console.log("in if ssn error", this.response?.data?.error_fields?.find(val => val?.field == 'ssn')?.message)
+							// }
+							// else {
+							// 	this.enableSsnField = true
+							// }
+
+                            if(this.response?.data?.error_fields?.length > 0){
+								this.response?.data?.error_fields?.forEach(item=>{
+									if(item.field == 'ssn'){
+										this.enableSsnField = false
+										this.ssnErrorMessage = item?.message
+										console.log('error mesage---->',this.ssnErrorMessage)
+									}
+									 if(item.field == 'address'){
+										this.addressErrorMessage = item?.message
+										console.log('error mesage---->',this.addressErrorMessage)
+										// this.enableSsnField = true
+
+									}
+									if(item?.field == 'dob'){
+										this.dobErrorMessage = item?.message
+										console.log('error mesage---->',this.dobErrorMessage)
+										// this.enableSsnField = true
+									}
+									
+							  })
+							  console.log("trueeee===>",this.enableSsnField)
 							}
-							else {
-								this.enableSsnField = true
+
+							//to check varificatiom failed tax id error only
+							if(this.response?.data?.stripeDetail?.stripe_errors?.find(err => err?.error_code == 'verification_failed_tax_id_match')){
+								this.TaxIdMatch = 'NOTE - Please verify your SSN  number and Buisness/Tax ID number'
 							}
 							console.log("enableSsnField", this.enableSsnField, this.ssn_copy)
 							this.currencySelection(this.response.data.bankinfo.currency)
@@ -685,8 +717,22 @@ export class AffiliateStep2Component implements OnInit {
 		console.log("after--->", this.ssn_copy)
 
 	}
-	removeErrorSsn(value:any){
-		this.ssnErrorMessage =""
+	removeErrorSsn(value:any,type:string){
+		console.log("TYPE----->",type)
+		if(type == 'ssn'){
+			this.ssnErrorMessage = ""
+		}
+		else if(type == 'address'){
+			this.addressErrorMessage = ""
+		}
+		// else if(type == 'dob'){
+		// 	console.log("in dobbbbhbbb")
+		// 	this.dobErrorMessage = ""
+		// }
+	}
+	removeDobError(){
+		console.log("in dobbbbhbbb")
+		this.dobErrorMessage = ""
 	}
 	submitForm() {
 		console.log(this.addBankForm);
