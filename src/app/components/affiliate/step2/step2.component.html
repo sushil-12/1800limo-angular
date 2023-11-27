@@ -374,14 +374,19 @@
 					</div>
 				</div>
 				<div class="col-md-6">
-					<mat-form-field appearance="outline" [ngClass]="{ 'disableSsn': enableSsnField }">
+					<mat-form-field appearance="outline"
+						[ngClass]="{ 'disableSsn': enableSsnField, 'border-red1': ssnErrorMessage }">
 						<mat-label>SSN (USA required by STRIPE / Government ID for other countries)
 							<span class="asterisk">*</span>
 						</mat-label>
 						<input matInput placeholder="SSN (USA required by STRIPE / Government ID for other countries)"
 							(focus)="$event?.target?.select()" formControlName="ssn" tabindex="1"
-							(change)="handleSsnInput($event.target.value)" />
+							(change)="handleSsnInput($event.target.value)"
+							(keyup)="removeErrorSsn($event.target.value)" />
 					</mat-form-field>
+					<div *ngIf="ssnErrorMessage" class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="ssnErrorMessage" style="font-weight: 550;">{{ssnErrorMessage}}</div>
+					</div>
 					<div *ngIf="
 							(submittedForm && f?.ssn?.errors) ||
 							(f?.ssn?.touched && f?.ssn?.errors)
