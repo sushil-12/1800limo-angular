@@ -41,7 +41,7 @@ export class Step0Component implements OnInit {
 
 	public why1800limo: Array<String> = [
 		"Enter your wholesale, all-inclusive rates for each vehicle type so travel agents and fellow operators can easily search, compare, book and share revenue",
-		"Farm-outs and travel planners earn a minimum 10% commission",
+		"Farm-outs and travel Agent earn a minimum 10% commission",
 		"Reduce deadheading and share rides going in the same direction to/from large crowd gatherings – airports, sports arenas and special events",
 		"We are totally transparent with riders, drivers and local governments",
 		"We do not share personal data with any third parties",
@@ -52,7 +52,7 @@ export class Step0Component implements OnInit {
 		"Our clients know value and may hand-tip or add an additional tip when finalizing",
 		"Raise or lower rates in real time depending on the season or market conditions",
 		"We sell your excess capacity so you can work more efficiently",
-		"We earn a 25% commission on each booking. We pay the charge card fee and the 10% on farm-outs and commission to travel planners",
+		"We earn a 25% commission on each booking. We pay the charge card fee and the 10% on farm-outs and commission to travel Agent",
 		"Get paid with direct deposit in 3 to 5 business days"
 	];
 	public why1800limo1: Array<String>;
