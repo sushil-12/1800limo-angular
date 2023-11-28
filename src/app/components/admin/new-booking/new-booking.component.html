@@ -578,7 +578,8 @@
 								<mat-form-field appearance="outline" class="m-0">
 									<mat-label class="required-field">Expiry Month</mat-label>
 									<input type="number" matInput formControlName="exp_month" [matAutocomplete]="auto"
-										(keyup)="handleChangeMonth($event.target.value)">
+										(keyup)="handleChangeMonth($event.target.value)"
+										(focus)="$event.target.select()">
 									<mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
 										<mat-option *ngFor="let m of monthOptions" [value]="m.value">
 											{{m.value}}

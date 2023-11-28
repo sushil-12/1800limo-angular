@@ -58,6 +58,7 @@ export class AffiliateStep2Component implements OnInit {
 	ssnErrorMessage:string;
 	addressErrorMessage:string;
 	dobErrorMessage:string;
+	public AddressCheckStripe = ['address','street','city','country']
 
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
 	stepsObj: any;
@@ -258,7 +259,9 @@ export class AffiliateStep2Component implements OnInit {
 										this.ssnErrorMessage = 'Please enter a valid ssn id'
 										console.log('error mesage---->',this.ssnErrorMessage)
 									}
-									 if(item.field == 'address'){
+									
+									 if(this.AddressCheckStripe?.includes(item?.field)){
+										console.log("in if addressssssssss-->")
 										this.addressErrorMessage = 'Please enter a valid address'
 										console.log('error mesage---->',this.addressErrorMessage)
 										// this.enableSsnField = true
