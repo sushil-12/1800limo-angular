@@ -1906,7 +1906,7 @@
 
 
 			<div class="row">
-				<div class="col-md-12 d-flex justify-content-end">
+				<div class="col-md-12 d-flex preview_button_edit">
 					<!-- <button type="button" class="custom-filled-reset-button m-3" (click)="resetFields()">
 						Reset
 					</button> -->
@@ -2217,64 +2217,8 @@
 						</div>
 					</div>
 					<hr>
-					<div class="mx-2" *ngIf="Form?.meet_greet_choices_name.value">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Meet and Greet
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder" style="white-space: pre-wrap;">
-									{{Form?.meet_greet_choices_name.value}}
-								</span>
-							</div>
-						</div>
-					</div>
-					<div class="mx-2" *ngIf="Form.service_type.value == 'round_trip'">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Return Meet and Greet
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder" style="white-space: pre-wrap;">
-									{{Form?.return_meet_greet_choices_name.value}}
-								</span>
-							</div>
-						</div>
-					</div>
-					<hr>
-					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Special Instruction
-								</span>
-							</div>
-							<div class="col-md-8 value box-special-instruction">
-								<span class="font-weight-bolder" style="white-space: pre-wrap;">
-									{{Form?.booking_instructions.value}}
-								</span>
-							</div>
-						</div>
-					</div>
-					<div class="mx-2" *ngIf="Form.service_type.value == 'round_trip'">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Return Special Instruction
-								</span>
-							</div>
-							<div class="col-md-8 value box-special-instruction">
-								<span class="font-weight-bolder" style="white-space: pre-wrap;">
-									{{Form?.return_booking_instructions.value}}
-								</span>
-							</div>
-						</div>
-					</div>
-					<hr>
+
+
 					<!-- Travel Information -->
 					<h4 class="font-weight-bolder m-0 mt-3">
 						Travel Information
@@ -2597,6 +2541,36 @@
 						</div>
 						<!-- Cruise Time -->
 					</div>
+					<hr>
+					<div class="mx-2" *ngIf="Form?.meet_greet_choices_name.value">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Meet and Greet
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder" style="white-space: pre-wrap;">
+									{{Form?.meet_greet_choices_name.value}}
+								</span>
+							</div>
+						</div>
+						<hr>
+					</div>
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Special Instruction
+								</span>
+							</div>
+							<div class="col-md-8 value box-special-instruction">
+								<span class="font-weight-bolder" style="white-space: pre-wrap;">
+									{{Form?.booking_instructions.value}}
+								</span>
+							</div>
+						</div>
+					</div>
 
 
 					<!-- Return Information -->
@@ -2908,6 +2882,40 @@
 								</div>
 							</div>
 						</div>
+						<hr>
+					</div>
+
+					<div class="mx-2" *ngIf="Form.service_type.value == 'round_trip'">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Return Meet and Greet
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder" style="white-space: pre-wrap;">
+									{{Form?.return_meet_greet_choices_name.value}}
+								</span>
+							</div>
+						</div>
+						<hr>
+
+					</div>
+
+					<div class="mx-2" *ngIf="Form.service_type.value == 'round_trip'">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Return Special Instruction
+								</span>
+							</div>
+							<div class="col-md-8 value box-special-instruction">
+								<span class="font-weight-bolder" style="white-space: pre-wrap;">
+									{{Form?.return_booking_instructions.value}}
+								</span>
+							</div>
+						</div>
+						<hr>
 					</div>
 				</div>
 			</div>
