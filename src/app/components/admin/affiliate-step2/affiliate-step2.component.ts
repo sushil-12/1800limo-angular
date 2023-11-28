@@ -255,17 +255,17 @@ export class AffiliateStep2Component implements OnInit {
 								this.response?.data?.error_fields?.forEach(item=>{
 									if(item.field == 'ssn'){
 										this.enableSsnField = false
-										this.ssnErrorMessage = item?.message
+										this.ssnErrorMessage = 'Please enter a valid ssn id'
 										console.log('error mesage---->',this.ssnErrorMessage)
 									}
 									 if(item.field == 'address'){
-										this.addressErrorMessage = item?.message
+										this.addressErrorMessage = 'Please enter a valid address'
 										console.log('error mesage---->',this.addressErrorMessage)
 										// this.enableSsnField = true
 
 									}
 									if(item?.field == 'dob'){
-										this.dobErrorMessage = item?.message
+										this.dobErrorMessage = 'Please enter a valid dob'
 										console.log('error mesage---->',this.dobErrorMessage)
 										// this.enableSsnField = true
 									}

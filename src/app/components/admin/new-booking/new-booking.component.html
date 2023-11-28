@@ -782,7 +782,7 @@
 						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>No. of Passengers <span class="asterisk"></span></mat-label>
 							<input type="number" matInput formControlName="total_passengers" [matAutocomplete]="auto"
-								(keyup)="handleChangeNoPasengers($event.target.value)">
+								(keyup)="handleChangeNoPasengers($event.target.value)" (focus)="$event.target.select()">
 							<mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
 								<mat-option *ngFor="let option of booking_params.numbers" [value]="option">
 									{{option}}
@@ -796,7 +796,7 @@
 						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>Luggage Count <span class="asterisk"></span></mat-label>
 							<input type="number" matInput formControlName="luggage_count" [matAutocomplete]="auto"
-								(keyup)="handleChangeLuggaeCOunt($event.target.value)">
+								(keyup)="handleChangeLuggaeCOunt($event.target.value)" (focus)="$event.target.select()">
 							<mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
 								<mat-option *ngFor="let option of booking_params.numbers" [value]="option">
 									{{option}}

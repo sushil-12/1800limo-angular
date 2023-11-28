@@ -573,7 +573,7 @@ mat-progress-bar.my-color .mat-progress-bar-fill::after {
     top: calc(100% + 0.5rem + 0.5rem) !important;
     margin-top: -5px;
     font-size: 0.9rem;
-    left: -135px;
+    left: -81px;
 }
 
 .navbar .logInDropdown {
