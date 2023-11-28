@@ -38,6 +38,7 @@ export class RecoverAccountsComponent implements OnInit {
   isDeletedAcc: boolean = false;
   showActionColumn: boolean = true;
   title: string = 'All';
+  accounts_count: any;
 
   constructor(
     private adminService:AdminService,
@@ -77,7 +78,8 @@ export class RecoverAccountsComponent implements OnInit {
       // Load Our travelPlanners using API
       this.adminService.getAccounts(pageUrl,this.isDeletedAcc , keyword).then((result:any)=>{
         let response = result
-        this.accounts= result?.data?.data;
+        this.accounts= result?.data?.users?.data;
+        this.accounts_count = result?.data?.account_counts;
 
         this.firstPage=1;
         this.lastPage=result.data.last_page;

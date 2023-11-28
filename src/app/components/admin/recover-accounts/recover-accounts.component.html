@@ -37,11 +37,17 @@
         </div>
 
         <div class="row m-2">
-            <div class="custom-control custom-checkbox">
+            <div class="col-md-4 col-sm-12 custom-control custom-checkbox">
                 <mat-slide-toggle id="deleted_accounts" class="example-margin" [color]="color" [checked]="isDeletedAcc"
                     (change)="handleChangeToggle();loadAccounts()" tabindex="1">
                 </mat-slide-toggle>
                 <label class="ml-3" for="deleted_accounts">Show Deleted accounts</label>
+            </div>
+            <div class="col-md-8 col-sm-12 d-flex justify-content-end" style="gap: 15px;" *ngIf="showActionColumn">
+                <h3 class="headingAccepted">Individual: {{accounts_count?.individual_count}}</h3>
+                <h3 class="headingInProgress">Driver: {{accounts_count?.driver_count}}</h3>
+                <h3 class="headingRejected">Travel Agent: {{accounts_count?.tarvel_agent_count}}</h3>
+                <h3 class="headingStripe">Sub Admin: {{accounts_count?.subadmin_count}}</h3>
             </div>
         </div>
         <div class="containeredd driverside_table">
@@ -130,8 +136,9 @@
                                 <span class="sr-only">Next</span>
                             </a>
                         </li>
-                        <li *ngIf="currentPage!=lastPage" class="page-item" (click)="loadAccounts(lastPageUrl)"><a
-                                class="page-link">Last</a></li>
+                        <li *ngIf="currentPage!=lastPage" class="page-item" (click)="loadAccounts(lastPageUrl)">
+                            <a class="page-link">Last</a>
+                        </li>
                     </ul>
                 </nav>
             </div>
