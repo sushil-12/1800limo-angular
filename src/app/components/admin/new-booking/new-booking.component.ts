@@ -1635,7 +1635,7 @@ export class NewBookingComponent implements OnInit {
 				shareArray['travelAgentShare'] = base_rate * 0.10  
 			}
 			this.shareArray = shareArray
-			console.log('in function createReservationShareArray-->>>' , base_rate, shareArray )
+			// console.log('in function createReservationShareArray-->>>' , base_rate, shareArray )
 			return shareArray;
 			// value['rateArray'] = JSON.parse(JSON.stringify(this.RatesForm))
 		}
@@ -1669,8 +1669,7 @@ export class NewBookingComponent implements OnInit {
 			}
 
 			this.r_shareArray = returnShareArray
-			
-			console.log('in function createReservationreturnShareArray-->>>' , base_rate, returnShareArray )
+			// console.log('in function createReservationreturnShareArray-->>>' , base_rate, returnShareArray )
 			return returnShareArray;
 			// value['returnRateArray'] = JSON.parse(JSON.stringify(this.ReturnRatesForm))
 			}
