@@ -63,6 +63,7 @@
 		.cancel-policy{
 			font-size: 13px;
 		}
+		
 }
 #fixed-section-container {
 	cursor: pointer;
@@ -279,7 +280,7 @@ section#vehicle-listing-container {
 	margin: 0;
 	padding: 0;
 	font-weight: bold;
-	font-size: 18px;
+	font-size: 19px;
 	color: #000;
 }
 
@@ -651,7 +652,7 @@ img.img-cir {
 		top: 0;
 		bottom: 0;
 		left: -25rem;
-		max-width: 380px;
+		max-width: 355px;
 		background-color: #fff;
 		z-index: 9999;
 		right: auto;
@@ -864,3 +865,15 @@ button.link {
 	background:none;
 	border:none;
  }
+
+ @media only screen and (max-width: 767px) {
+	
+	.filter-list .accordion .card-header h2 .btn {
+	
+		font-size: 22px;
+	
+	}
+	.custom-control .custom-control-label{
+		font-size: 1.48rem;
+	}
+}

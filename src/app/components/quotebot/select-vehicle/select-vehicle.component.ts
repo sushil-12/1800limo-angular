@@ -56,35 +56,26 @@ export class SelectVehicleComponent implements OnInit
 			rp: 'vehicle-type'
 		},
 		{
-			dp: 'make-model',
-			rp: [
-				{
-					dp: 'make',
-					rp: 'make'
-				},
-				{
-					dp: 'model',
-					rp: 'model'
-				},
-			],
+			dp: 'make',
+			rp: 'make'
 		},
 		{
-			dp: 'year-color-interior',
-			rp: [
-				{
-					dp: 'year',
-					rp: 'years'
-				},
-				{
-					dp: 'color',
-					rp: 'colors'
-				},
-				{
-					dp: 'interior',
-					rp: 'interiors'
-				}
-			]
+			dp: 'model',
+			rp: 'model'
 		},
+		{
+			dp: 'year',
+			rp: 'years'
+		},
+		{
+			dp: 'color',
+			rp: 'colors'
+		},
+		{
+			dp: 'interior',
+			rp: 'interiors'
+		}
+		,
 		{
 			dp: 'amenities',
 			rp: 'amenities'
@@ -123,6 +114,80 @@ export class SelectVehicleComponent implements OnInit
 			rp: 'affiliate-preferences',
 		}
 	]
+
+	// FILTERS_ORDER = [
+	// 	{
+	// 		dp: 'vehicle-type-preferences',
+	// 		rp: 'vehicle-type'
+	// 	},
+	// 	{
+	// 		dp: 'make-model',
+	// 		rp: [
+	// 			{
+	// 				dp: 'make',
+	// 				rp: 'make'
+	// 			},
+	// 			{
+	// 				dp: 'model',
+	// 				rp: 'model'
+	// 			},
+	// 		],
+	// 	},
+	// 	{
+	// 		dp: 'year-color-interior',
+	// 		rp: [
+	// 			{
+	// 				dp: 'year',
+	// 				rp: 'years'
+	// 			},
+	// 			{
+	// 				dp: 'color',
+	// 				rp: 'colors'
+	// 			},
+	// 			{
+	// 				dp: 'interior',
+	// 				rp: 'interiors'
+	// 			}
+	// 		]
+	// 	},
+	// 	{
+	// 		dp: 'amenities',
+	// 		rp: 'amenities'
+	// 	},
+	// 	{
+	// 		dp: 'extra-$-amenities',
+	// 		rp: 'special-amenities'
+	// 	},
+	// 	{
+	// 		dp: 'driver-preferences',
+	// 		rp: [
+	// 			{
+	// 				dp: 'dresses',
+	// 				rp: 'driver-dresses'
+	// 			},
+	// 			{
+	// 				dp: 'languages',
+	// 				rp: 'driver-languages'
+	// 			},
+	// 			{
+	// 				dp: 'gender',
+	// 				rp: 'driver-gender'
+	// 			},
+	// 			{
+	// 				dp: 'background',
+	// 				rp: 'driver-background'
+	// 			}
+	// 		]
+	// 	},
+	// 	{
+	// 		dp: 'vehicle-service-area',
+	// 		rp: 'vehicle-service-area'
+	// 	},
+	// 	{
+	// 		dp: 'operator-preferences',
+	// 		rp: 'affiliate-preferences',
+	// 	}
+	// ]
 
 	modal_driver_info_labels: Array<String> = ['name', 'gender', 'phone', 'languages', 'experience', 'dress', 'background', 'starRating']
 	vehicleDetails: Array<any> = []
