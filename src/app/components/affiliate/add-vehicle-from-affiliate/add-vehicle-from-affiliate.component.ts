@@ -239,12 +239,15 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 		this.stateManagementService.getNumberOfVehicles().subscribe(numberOfVehicles =>
 		{
 			let numberOfVehiclesCanBeAdded;
+			console.log("IN BLACK CAR LIMO",this.affiliateType,numberOfVehicles)
+			
 			if (this.affiliateType == 'fleet_operator')
 			{
 				this.addVehicleForm.controls['numberOfVehicles'].setValidators([Validators.required, Validators.pattern("^[0-9]*$")]);
 			}
-			else if (this.affiliateType == 'black_limo_operator')
+			else if (this.affiliateType == 'black_limo_operator' || this.affiliateType == 'Black Car/Limo Owner Operator')
 			{
+				console.log("IN BLACK CAR LIMO",numberOfVehicles)
 				numberOfVehiclesCanBeAdded = 2 - numberOfVehicles;
 				this.addVehicleForm.controls['numberOfVehicles'].setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.min(1), Validators.max(numberOfVehiclesCanBeAdded)]);
 			}
