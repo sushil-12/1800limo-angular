@@ -499,7 +499,7 @@
 												[class.errorValid]="submitted && QBForm?.pickup_address?.errors">
 												<!-- <img src="../../../../assets/images/start_location.png" alt="start_location"> -->
 												<div class="input-box">
-													<input type="text" style="height:38px !important;"
+													<input type="text" style="height:42px !important;"
 														[attr.placeholder]="QBForm?.pickup_type?.value == 'city' ? 'City - Pickup Address?' : 'Cruise Port Name / Address?'"
 														id="pickup_address" #addressinput
 														[value]="QBForm?.pickup_address?.value"
@@ -545,7 +545,7 @@
 											*ngIf="QBForm.dropoff_type.value == 'airport'">
 											<div class="input-contain d-flex align-items-center">
 												<div class="input-box">
-													<input type="text" style="height:38px !important;"
+													<input type="text" style="height:42px !important;"
 														placeholder="Drop off Airport Code / Name?" id="dropoff_airport"
 														#dropairportinput class="input-f font-weight-bolder"
 														(focus)="$event.target.select()" tabindex="1"
@@ -587,7 +587,7 @@
 											*ngIf="QBForm?.dropoff_type?.value != 'airport'">
 											<div class="input-contain d-flex align-items-center">
 												<div class="input-box">
-													<input type="text" style="height:38px !important;"
+													<input type="text" style="height:42px !important;"
 														[attr.placeholder]="QBForm?.dropoff_type?.value == 'city' ? 'City - Dropoff Address?': 'Cruise Port Name / Address?'"
 														id="dropoff_address" #dropaddressinput
 														[value]="QBForm?.dropoff_address?.value"
@@ -755,7 +755,7 @@
 											<div class="input-contain d-flex align-items-center">
 												<div class="input-box">
 													<input type="text" placeholder="Return Airport Code / Name?"
-														style="height:38px !important;" #retairportinput
+														style="height:42px !important;" #retairportinput
 														id="return_pickup_airport" class="input-f font-weight-bolder"
 														tabindex="1" (focus)="$event.target.select()"
 														(keyup)="searchAirport($event.target.value, 'return_pickup_airport')"
@@ -797,7 +797,7 @@
 											<div class="input-contain d-flex align-items-center"
 												[class.errorValid]="submitted && QBForm?.return_pickup_address?.errors">
 												<div class="input-box">
-													<input type="text" style="height:38px !important;"
+													<input type="text" style="height:42px !important;"
 														[attr.placeholder]="QBForm?.dropoff_type?.value == 'city' ? 'City - Return Pickup Address' : 'Cruise Port Name / Address'"
 														id="return_pickup_address" #retaddressinput
 														matGoogleMapsAutocomplete tabindex="1"
@@ -846,7 +846,7 @@
 											<div class="input-contain d-flex align-items-center">
 												<div class="input-box">
 													<input type="text" placeholder="Return Airport Code / Name?"
-														style="height:38px !important;" #retdropairportinput
+														style="height:42px !important;" #retdropairportinput
 														id="return_dropoff_airport" class="input-f font-weight-bolder"
 														tabindex="1" (focus)="$event.target.select()"
 														(keyup)="searchAirport($event.target.value, 'return_dropoff_airport')"
@@ -881,7 +881,7 @@
 											<div class="input-contain d-flex align-items-center"
 												[class.errorValid]="submitted && QBForm?.return_dropoff_address?.errors">
 												<div class="input-box">
-													<input type="text" style="height:38px !important;"
+													<input type="text" style="height:42px !important;"
 														[attr.placeholder]="QBForm?.pickup_type?.value == 'city' ? 'City - Return Dropoff Address' : 'Cruise Port Name / Address'"
 														matGoogleMapsAutocomplete id="return_dropoff_address"
 														#retdropaddressinput formControlName="return_dropoff_address"
