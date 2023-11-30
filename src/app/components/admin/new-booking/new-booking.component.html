@@ -796,10 +796,11 @@
 					<div class="col-md-3 mb-4 looseError">
 						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>Luggage Count <span class="asterisk"></span></mat-label>
-							<input type="number" matInput formControlName="luggage_count" [matAutocomplete]="auto"
-								(keyup)="handleChangeLuggaeCOunt($event.target.value)" (focus)="$event.target.select()">
-							<mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-								<mat-option *ngFor="let option of booking_params.numbers" [value]="option">
+							<input type="number" matInput formControlName="luggage_count"
+								[matAutocomplete]="luggage_auto" (keyup)="handleChangeLuggaeCOunt($event.target.value)"
+								(focus)="$event.target.select()">
+							<mat-autocomplete autoActiveFirstOption #luggage_auto="matAutocomplete">
+								<mat-option *ngFor="let option of luggage_options" [value]="option">
 									{{option}}
 								</mat-option>
 							</mat-autocomplete>
