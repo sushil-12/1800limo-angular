@@ -212,8 +212,8 @@ export class EditVehicleComponent implements OnInit {
 
 		this.affiliateType = sessionStorage.getItem("affiliateType");
 		if (this.affiliateType != 'fleet_operator') {
-			this.addVehicleForm.controls['licensePlate'].setValidators([Validators.required])
-			this.addVehicleForm.controls['licensePlate'].updateValueAndValidity()
+			// this.addVehicleForm.controls['licensePlate'].setValidators([Validators.required])
+			// this.addVehicleForm.controls['licensePlate'].updateValueAndValidity()
 			// this.addVehicleForm.controls['rearPlateImage'].setValidators([Validators.required]);
 			// this.addVehicleForm.controls['rearPlateImage'].updateValueAndValidity();
 		}
