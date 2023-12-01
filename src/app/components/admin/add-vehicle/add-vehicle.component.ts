@@ -213,10 +213,11 @@ export class AddVehicleComponent implements OnInit {
 
 		this.affiliateType = sessionStorage.getItem("affiliateType");
 		if (this.affiliateType != 'fleet_operator') {
-			this.addVehicleForm.controls['licensePlate'].setValidators([Validators.required]);
-			this.addVehicleForm.controls['licensePlate'].updateValueAndValidity();
-			this.addVehicleForm.controls['rearPlateImage'].setValidators([Validators.required]);
-			this.addVehicleForm.controls['rearPlateImage'].updateValueAndValidity();
+			console.log("in if setting lecesne plate")
+			// this.addVehicleForm.controls['licensePlate'].setValidators([Validators.required]);
+			// this.addVehicleForm.controls['licensePlate'].updateValueAndValidity();
+			// this.addVehicleForm.controls['rearPlateImage'].setValidators([Validators.required]);
+			// this.addVehicleForm.controls['rearPlateImage'].updateValueAndValidity();
 		}
 
 		this.stateManagementService.getNumberOfVehicles().subscribe(numberOfVehicles => {
