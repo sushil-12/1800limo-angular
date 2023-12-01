@@ -304,12 +304,22 @@ export class Step2Component implements OnInit {
 							// }
 
                             if(this.response?.data?.error_fields?.length > 0){
-								this.response?.data?.error_fields?.forEach(item=>{
-									if(item.field == 'ssn'){
-										this.enableSsnField = false
-										this.ssnErrorMessage = 'Please enter a valid ssn id'
-										console.log('error mesage---->',this.ssnErrorMessage)
-									}
+								const hasNonEmptyObjects = this.response?.data?.error_fields?.filter(obj => Object.keys(obj).length > 0).length > 0;
+								console.log(hasNonEmptyObjects,"hasnonnonono")
+								if(!hasNonEmptyObjects){
+									this.enableSsnField = true
+								}
+								else{
+
+									this.response?.data?.error_fields?.forEach(item=>{
+										if(item.field == 'ssn'){
+											this.enableSsnField = false
+											this.ssnErrorMessage = 'PLEASE ENTER A VALID SSN'
+											console.log('error mesage---->',this.ssnErrorMessage)
+										}
+										else{
+											this.enableSsnField = true
+										}
 									if(this.AddressCheckStripe?.includes(item?.field)){
 										this.addressErrorMessage = 'Please enter a valid address'
 										console.log('error mesage---->',this.addressErrorMessage)
@@ -323,13 +333,20 @@ export class Step2Component implements OnInit {
 									}
 									
 							  })
-							  console.log("trueeee===>",this.enableSsnField)
 							}
+							}
+							else{
+								this.enableSsnField = true
+
+							}
+							console.log("trueeee===>",this.enableSsnField)
 
 							//to check varificatiom failed tax id error only
 							if(this.response?.data?.stripeDetail?.stripe_errors?.find(err => err?.error_code == 'verification_failed_tax_id_match')){
+								this.enableSsnField = false
 								this.TaxIdMatch = 'NOTE - Please verify your SSN  number and Buisness/Tax ID number'
 							}
+							
 							this.changeCountry(this.response.data?.bankinfo?.country);//for selected country
 							this.badgeOptions.map((i:any)=>{
 								if(i.id==this.response?.data?.bankinfo?.badge_city){

@@ -253,32 +253,46 @@ export class AffiliateStep2Component implements OnInit {
 							// }
 
                             if(this.response?.data?.error_fields?.length > 0){
-								this.response?.data?.error_fields?.forEach(item=>{
-									if(item.field == 'ssn'){
-										this.enableSsnField = false
-										this.ssnErrorMessage = 'Please enter a valid ssn id'
-										console.log('error mesage---->',this.ssnErrorMessage)
-									}
-									
-									 if(this.AddressCheckStripe?.includes(item?.field)){
-										console.log("in if addressssssssss-->")
-										this.addressErrorMessage = 'Please enter a valid address'
-										console.log('error mesage---->',this.addressErrorMessage)
-										// this.enableSsnField = true
+								const hasNonEmptyObjects = this.response?.data?.error_fields?.filter(obj => Object.keys(obj).length > 0).length > 0;
+								console.log(hasNonEmptyObjects,"hasnonnonono")
+								if(!hasNonEmptyObjects){
+									this.enableSsnField = true
+								}
+								else{
 
-									}
-									if(item?.field == 'dob'){
-										this.dobErrorMessage = 'Please enter a valid dob'
-										console.log('error mesage---->',this.dobErrorMessage)
-										// this.enableSsnField = true
-									}
-									
-							  })
-							  console.log("trueeee===>",this.enableSsnField)
+									this.response?.data?.error_fields?.forEach(item=>{
+										if(item.field == 'ssn'){
+											this.enableSsnField = false
+											this.ssnErrorMessage = 'PLEASE ENTER A VALID SSN'
+											console.log('error mesage---->',this.ssnErrorMessage)
+										}
+										else{
+											this.enableSsnField = true
+										}
+										 if(this.AddressCheckStripe?.includes(item?.field)){
+											console.log("in if addressssssssss-->")
+											this.addressErrorMessage = 'Please enter a valid address'
+											console.log('error mesage---->',this.addressErrorMessage)
+											// this.enableSsnField = true
+	
+										}
+										if(item?.field == 'dob'){
+											this.dobErrorMessage = 'Please enter a valid dob'
+											console.log('error mesage---->',this.dobErrorMessage)
+											// this.enableSsnField = true
+										}									
+								  })
+								}
+							
 							}
+							else{
+								this.enableSsnField = true
 
+							}
+							console.log("trueeee===>",this.enableSsnField)
 							//to check varificatiom failed tax id error only
 							if(this.response?.data?.stripeDetail?.stripe_errors?.find(err => err?.error_code == 'verification_failed_tax_id_match')){
+								this.enableSsnField = false
 								this.TaxIdMatch = 'NOTE - Please verify your SSN  number and Buisness/Tax ID number'
 							}
 							console.log("enableSsnField", this.enableSsnField, this.ssn_copy)

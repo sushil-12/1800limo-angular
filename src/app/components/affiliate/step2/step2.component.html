@@ -5,12 +5,13 @@
 	<div class="container">
 		<div class="row" *ngIf="response">
 			<div class="col-md-12" *ngIf="response?.data?.stripeDetail?.transfer_status != 'active'">
-				<p class="text-danger margin-bottom-thin my-mat-hint">
+				<p class="text-danger margin-bottom-thin my-mat-hint" style="font-size: 17px; font-weight: 800;">
 					Stripe Activation can take upto 24 Hours?.
 				</p>
 			</div>
 			<div class="col-md-12" *ngIf="response.data?.stripeDetail?.stripe_errors">
-				<p class="text-danger margin-bottom-thin my-mat-hint">{{TaxIdMatch}}</p>
+				<p class="text-danger margin-bottom-thin my-mat-hint" style="font-size: 17px; font-weight: 800;">
+					{{TaxIdMatch}}</p>
 			</div>
 			<div class="col-md-4">
 				<p [className]="
@@ -53,7 +54,7 @@
 					Please fix these errors for the Payouts:
 				</h5>
 				<ul>
-					<li *ngFor="let error of stripeErrors" tabindex="-1">
+					<li *ngFor="let error of stripeErrors" tabindex="-1" style="color: red; font-weight: 400;">
 						{{ error?.error_message }}
 					</li>
 				</ul>
