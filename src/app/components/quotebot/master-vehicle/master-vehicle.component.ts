@@ -54,23 +54,23 @@ export class MasterVehicleComponent implements OnInit {
 			rp: 'vehicle-type'
 		},
 		{
-			dp: 'make',
+			dp: 'makes',
 			rp: 'make'
 		},
 		{
-			dp: 'model',
+			dp: 'models',
 			rp: 'model'
 		},
 		{
-			dp: 'year',
+			dp: 'years',
 			rp: 'years'
 		},
 		{
-			dp: 'color',
+			dp: 'colors',
 			rp: 'colors'
 		},
 		{
-			dp: 'interior',
+			dp: 'interiors',
 			rp: 'interiors'
 		}
 		,
