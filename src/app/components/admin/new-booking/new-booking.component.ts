@@ -123,6 +123,7 @@ export class NewBookingComponent implements OnInit {
 	is_master_vehicle: boolean = JSON.parse(sessionStorage.getItem('selected_vehicle'))?.is_master_vehicle || false
 	isTravelShare:boolean = false
 	travelStaffAccounts: any;
+	manual_change_aff_veh: boolean = false;
 	constructor(
 		private $form: FormBuilder,
 		private $api: AdminService,
@@ -186,7 +187,8 @@ export class NewBookingComponent implements OnInit {
 			no_of_hours : this.number_of_hours,
 			is_master_vehicle : this.is_master_vehicle,
 			extra_stops: this.BookingForm.get('extra_stops').value,
-			return_extra_stops : this.BookingForm.get('return_extra_stops').value
+			return_extra_stops : this.BookingForm.get('return_extra_stops').value,
+			manual_change_aff_veh: this.manual_change_aff_veh
 		}
 	}
 	ngAfterViewInit(): void {
@@ -1093,6 +1095,9 @@ export class NewBookingComponent implements OnInit {
 		// Every method will return true if all values are true in isWordThere.
 		return isWordThere.every(all_words);
 	}
+	handleAffiliateChange(value){
+		console.log('in function handleAffiliateChange-->>' , value)
+	}
 	chooseAffiliate() {
 		// console.warn('Fetching Affiliate vehicles and drivers')
 		this.fetchAffiliateVehicles(this.BookingForm.get('affiliate_id').value)
@@ -1801,7 +1806,6 @@ export class NewBookingComponent implements OnInit {
 	handleChangeVehicleType(event) {
 		console.log('in function handle change vehicle type', event.unique_key)
 		this.VehicleList.map(i => (i.unique_key == event.unique_key) ? this.handleSelectVehicleType(i) : '')
-
 	}
 
 	Subscriptions() {
