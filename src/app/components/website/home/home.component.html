@@ -78,17 +78,23 @@
 										</div>
 										<div *ngIf="currentUser?.roleName=='driver' && accountStatus; else adminRole"
 											class="dropdown-item" (click)="dashboard('affiliate')">
-											<div class="dropdown-item-icon settingsvg">
-												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-													viewBox="0 0 24 24" fill="none" stroke="currentColor"
-													stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-													class="feather feather-settings">
-													<circle cx="12" cy="12" r="3"></circle>
-													<path
-														d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
-													</path>
-												</svg>
-											</div>{{ value }}
+											<div class="dropdown-item-icon d-flex align-items-center"
+												style="margin-left: -21px !important;">
+												<div class="settingsvg">
+													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+														viewBox="0 0 24 24" fill="none" stroke="currentColor"
+														stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+														class="feather feather-settings">
+														<circle cx="12" cy="12" r="3"></circle>
+														<path
+															d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+														</path>
+													</svg>
+												</div>
+												<div style="font-size: 14px; font-weight: 600;">
+													{{value}}
+												</div>
+											</div>
 										</div>
 										<ng-template #adminRole>
 											<div *ngIf="currentUser?.roleName=='admin'" class="dropdown-item"
@@ -456,9 +462,9 @@
 											*ngIf="QBForm?.pickup_type?.value == 'airport'">
 											<div class="input-contain d-flex align-items-center">
 												<div class="input-box">
-													<input type="text" placeholder="Airport Code / Name?"
-														id="pickup_airport" #airportinput
-														class="input-f font-weight-bolder"
+													<input type="text" style="height:42px !important;"
+														placeholder="Airport Code / Name?" id="pickup_airport"
+														#airportinput class="input-f font-weight-bolder"
 														(focus)="$event.target.select()" tabindex="1"
 														(keyup)="searchAirport($event.target.value, 'pickup_airport')"
 														[matAutocomplete]="airportautocomplete"

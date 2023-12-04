@@ -82,16 +82,16 @@ export class RecoverAccountsComponent implements OnInit {
         this.accounts_count = result?.data?.account_counts;
 
         this.firstPage=1;
-        this.lastPage=result.data.last_page;
-        this.totalPage=result.data.last_page;
-        this.currentPage=result.data.current_page;
-        this.from=result.data.from;
-        this.to=result.data.to;
-        this.path=result.data.path;
-        this.firstPageUrl=result.data.first_page_url;
-        this.lastPageUrl=result.data.last_page_url;
-        this.prevPageUrl=result.data.prev_page_url;
-        this.nextPageUrl=result.data.next_page_url;
+        this.lastPage=result.data?.users?.last_page;
+        this.totalPage=result.data?.users?.last_page;
+        this.currentPage=result.data?.users?.current_page;
+        this.from=result.data?.users?.from;
+        this.to=result.data?.users?.to;
+        this.path=result.data?.users?.path;
+        this.firstPageUrl=result.data?.users?.first_page_url;
+        this.lastPageUrl=result.data?.users?.last_page_url;
+        this.prevPageUrl=result.data?.users?.prev_page_url;
+        this.nextPageUrl=result.data?.users?.next_page_url;
         // sessionStorage.setItem('travelPlanners',JSON.stringify(this.travelPlanners));
         //hide action column
        
@@ -140,7 +140,7 @@ export class RecoverAccountsComponent implements OnInit {
       })
     ).subscribe(result => {
       this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
-        this.router.navigate(['/admin/recover-accounts']);
+        this.router.navigate(['/admin/all-accounts']);
       });
       this.loadAccounts()
       });

@@ -463,7 +463,7 @@ const routes: Routes = [
 		component: StaffPermissionsComponent
 	},
 	{
-		path: 'recover-accounts',
+		path: 'all-accounts',
 		canActivate: [AdminGuardGuard],
 		component: RecoverAccountsComponent
 	},

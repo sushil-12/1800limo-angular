@@ -529,7 +529,7 @@ export class AdminService {
 	getAccounts(url, isDeletedAcc, keyword) {
 		var path;
 		if (url) {
-			path = url + '?deleted=' + isDeletedAcc + '&search=' + keyword;;
+			path = url + '&deleted=' + isDeletedAcc + '&search=' + keyword;;
 		}
 		else {
 			path = this.serverUrl + 'admin/all-user' + '?deleted=' + isDeletedAcc  + '&search=' + keyword;

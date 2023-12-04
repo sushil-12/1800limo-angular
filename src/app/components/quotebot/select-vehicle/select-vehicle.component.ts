@@ -56,12 +56,17 @@ export class SelectVehicleComponent implements OnInit
 			rp: 'vehicle-type'
 		},
 		{
-			dp: 'makes',
-			rp: 'make'
-		},
-		{
-			dp: 'models',
-			rp: 'model'
+			dp: 'make-model',
+			rp: [
+				{
+					dp: 'make',
+					rp: 'make'
+				},
+				{
+					dp: 'model',
+					rp: 'model'
+				},
+			],
 		},
 		{
 			dp: 'years',

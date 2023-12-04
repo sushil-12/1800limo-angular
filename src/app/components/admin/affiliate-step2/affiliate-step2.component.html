@@ -31,7 +31,9 @@
 			</div>
 			<div class="col-md-12" *ngIf="stripeErrors.length>0">
 				<h5 class="stripeErrorHeading">
-					Please fix these errors for the Payouts:
+					Please fix these errors for the Payouts: <span *ngIf="ssnErrorMessage"
+						class="stripeErrorHeading">(SSN / ID
+						NUMBER)</span>
 				</h5>
 				<ul>
 					<li *ngFor="let error of stripeErrors" tabindex="-1" style="color: red; font-weight: 400;">
