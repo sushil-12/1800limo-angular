@@ -841,8 +841,8 @@ export class NewBookingComponent implements OnInit {
 
 	fetchAirportsAndBigData(): void {
 		let s = setInterval(() => {
-			// this.$api.getAirportsAndBigData()
-			if (true) {
+			
+			if (this.$api.getAirportsAndBigData()) {
 				this.$spinner.hide('fetchspinner');
 				this.BigData = JSON.parse(JSON.stringify(this.$api.getAirportsAndBigData()));
 				this.BigData_COPY = JSON.parse(JSON.stringify(this.BigData));
