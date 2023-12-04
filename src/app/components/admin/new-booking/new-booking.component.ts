@@ -1646,9 +1646,15 @@ export class NewBookingComponent implements OnInit {
 		console.log('in function createReservationShareArray')
 		if (this.RatesForm) {
 		let base_rate = 0
-		for (const key of Object.keys(this.RatesForm.all_inclusive_rates)) {
-			base_rate += this.RatesForm.all_inclusive_rates[key].baserate;
+		if(this.BookingForm.value?.service_type == 'charter_tour'){
+			base_rate +=  this.RatesForm.all_inclusive_rates["Base_Rate"].baserate * this.number_of_hours
 		}
+		else{
+			base_rate +=  this.RatesForm.all_inclusive_rates["Base_Rate"].baserate
+		}
+		['ELH_Charges', 'Stops', 'Wait'].map((key) => {
+			base_rate += this.RatesForm.all_inclusive_rates[key].baserate
+		});
 		for (const key of Object.keys(this.RatesForm.amenities)) {
 			base_rate += this.RatesForm.amenities[key].baserate;
 		}
