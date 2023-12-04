@@ -68,6 +68,7 @@ export class DailyBookingsComponent implements OnInit {
 	use_created_at: boolean = false;
 	rates_preview: any;
 	quotebotNewData: any;
+	shareArray: any;
 
 	constructor(
 		private adminService: AdminService,
@@ -716,13 +717,16 @@ export class DailyBookingsComponent implements OnInit {
 
 	bookingPreview: any;
 	showBookingPreviewModal(booking_id: number) {
-		this.spinner.show();
+		// this.spinner.show();
 		this.adminService
 			.getBookingPreview(booking_id)
 			.subscribe((response: any) => {
 				this.spinner.hide();
 				this.bookingPreview = response.data;
 				if (this.bookingPreview?.payment_status == "unpaid") {
+					if(this.bookingPreview?.share_array?.length != 0){
+						this.shareArray = this?.bookingPreview?.share_array
+					}
 					this.rates_preview = this.bookingPreview?.rates_preview;
 				}
 				// for(let i in this.bookingPreview?.rates_preview){
