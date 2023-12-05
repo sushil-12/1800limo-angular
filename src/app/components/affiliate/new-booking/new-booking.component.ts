@@ -101,6 +101,10 @@ export class NewBookingComponent implements OnInit {
 	number_of_hours: any = '2';
 	is_master_vehicle: boolean = JSON.parse(sessionStorage.getItem('selected_vehicle'))?.is_master_vehicle || false
 	isTravelShare: boolean;
+	isCreatedByAdmin: boolean = true;
+	adminSharePercent: number = 25;
+	shareArray: any;
+    r_shareArray: any;
 
 
 
@@ -440,6 +444,7 @@ export class NewBookingComponent implements OnInit {
 			this.SetFormValue('account_type', response?.data?.account_type)
 			response.data.booking_instructions =  response?.data?.booking_instructions?.replaceAll('<br />' , '')
 			this.isTravelShare =  response?.data?.account_type=='travel_planner' ? true : false
+			this.isCreatedByAdmin = response?.data?.created_by==1 ? true : false
 			let editing_data = response?.data
 			this.autofillData('cruise', editing_data);
 			console.log(editing_data, "check big data")
@@ -1301,6 +1306,82 @@ export class NewBookingComponent implements OnInit {
 		}
 	}
 
+	createReservationShareArray(){
+		console.log('in function createReservationShareArray')
+		if (this.RatesForm) {
+		let base_rate = 0
+		if(this.BookingForm.value?.service_type == 'charter_tour'){
+			base_rate +=  this.RatesForm.all_inclusive_rates["Base_Rate"].baserate * this.number_of_hours
+		}
+		else{
+			base_rate +=  this.RatesForm.all_inclusive_rates["Base_Rate"].baserate
+		}
+		['ELH_Charges', 'Stops', 'Wait'].map((key) => {
+			base_rate += this.RatesForm.all_inclusive_rates[key].baserate
+		});
+		for (const key of Object.keys(this.RatesForm.amenities)) {
+			base_rate += this.RatesForm.amenities[key].baserate;
+		}
+			let grandTotal = this.BookingForm.value.rateArray.grand_total
+			let stripeFee = grandTotal * 0.05 + 0.30
+			let adminShare = (base_rate * this.adminSharePercent) / 100 
+			let deducted_admin_share = adminShare-stripeFee
+			let shareArray = {
+				baseRate : base_rate,
+				grandTotal : grandTotal,
+				stripeFee : stripeFee,
+				adminShare : adminShare,
+				deducted_admin_share: deducted_admin_share,  // Admin will get this amount only
+				affiliateShare : (grandTotal - adminShare)
+			}
+			// travelAgentShare : 
+			if(this.BookingForm.value?.account_type == 'travel_planner' && !this.isCreatedByAdmin){
+				this.adminSharePercent = 15
+				shareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100 
+				shareArray['deducted_admin_share'] = shareArray['adminShare']- shareArray['stripeFee']
+				shareArray['travelAgentShare'] = base_rate * 0.10  
+			}
+			this.shareArray = shareArray
+			// console.log('in function createReservationShareArray-->>>' , base_rate, shareArray )
+			return shareArray;
+			// value['rateArray'] = JSON.parse(JSON.stringify(this.RatesForm))
+		}
+	}
+	createReservationReturnShareArray(){
+		console.log('createReservationReturnShareArray', this.BookingForm.value.return_grand_total)
+		if (this.Form.service_type.value == 'round_trip' && this.ReturnRatesForm) {
+			
+			let base_rate = 0
+		for (const key of Object.keys(this.ReturnRatesForm.all_inclusive_rates)) {
+			base_rate += this.ReturnRatesForm.all_inclusive_rates[key].baserate;
+		}
+		for (const key of Object.keys(this.ReturnRatesForm.amenities)) {
+			base_rate += this.ReturnRatesForm.amenities[key].baserate;
+		}
+			let returnGrandTotal = this.BookingForm.value.return_grand_total
+			let stripeFee = returnGrandTotal * 0.05 + 0.30
+			let adminShare = (base_rate * this.adminSharePercent) / 100  
+			let returnShareArray = {
+				baseRate : base_rate,
+				returnGrandTotal : returnGrandTotal,
+				stripeFee : stripeFee,
+				adminShare : adminShare,
+				affiliateShare : returnGrandTotal - adminShare
+			}
+			// travelAgentShare : 
+			if(this.BookingForm.value?.account_type == 'travel_planner' && this.BookingForm.value?.affiliate_type == 'affiliate'){
+				returnShareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100 
+				returnShareArray['deducted_admin_share'] = returnShareArray['adminShare']- returnShareArray['stripeFee']
+				returnShareArray['travelAgentShare'] = base_rate * 0.10  
+			}
+
+			this.r_shareArray = returnShareArray
+			// console.log('in function createReservationreturnShareArray-->>>' , base_rate, returnShareArray )
+			return returnShareArray;
+			// value['returnRateArray'] = JSON.parse(JSON.stringify(this.ReturnRatesForm))
+			}
+	}
+
 
 	submitForm(preview: boolean) {
 		this.submitBookingForm = true
@@ -1311,26 +1392,28 @@ export class NewBookingComponent implements OnInit {
 			return;
 		}
 
-		if (preview) {
-			let value = this.BookingForm.value
-			if (this.RatesForm) {
-				value['rateArray'] = JSON.parse(JSON.stringify(this.RatesForm))
-				value['grand_total'] = value['rateArray']['grand_total']
-				value['sub_total'] = value['rateArray']['sub_total']
-				value['min_rate_involved'] = value['rateArray']['min_rate_involved']
-				delete value['rateArray']['grand_total']
-				delete value['rateArray']['sub_total']
-				delete value['rateArray']['min_rate_involved']
-				// Return Rates Form
-				if (this.Form.service_type.value == 'round_trip' && this.ReturnRatesForm) {
-					value['returnRateArray'] = JSON.parse(JSON.stringify(this.ReturnRatesForm))
-					value['return_grand_total'] = value['returnRateArray']['r_grandtotal']
-					value['return_sub_total'] = value['returnRateArray']['r_subtotal']
-					delete value['returnRateArray']['r_grandtotal']
-					delete value['returnRateArray']['r_subtotal']
-				}
+		let value = this.BookingForm.value
+		if (this.RatesForm) {
+			value['rateArray'] = JSON.parse(JSON.stringify(this.RatesForm))
+			value['grand_total'] = value['rateArray']['grand_total']
+			value['sub_total'] = value['rateArray']['sub_total']
+			value['min_rate_involved'] = value['rateArray']['min_rate_involved']
+			value['shares_array'] = this.createReservationShareArray()
+			delete value['rateArray']['grand_total']
+			delete value['rateArray']['sub_total']
+			delete value['rateArray']['min_rate_involved']
+			// Return Rates Form
+			if (this.Form.service_type.value == 'round_trip' && this.ReturnRatesForm) {
+				value['returnRateArray'] = JSON.parse(JSON.stringify(this.ReturnRatesForm))
+				value['return_grand_total'] = value['returnRateArray']['r_grandtotal']
+				value['return_sub_total'] = value['returnRateArray']['r_subtotal']
+				delete value['returnRateArray']['r_grandtotal']
+				delete value['returnRateArray']['r_subtotal']
+				value['return_shares_array'] = this.createReservationReturnShareArray()
 			}
-
+		}
+		
+		if (preview) {
 			this.$spinner.show()
 			this.affiliateService.createBooking(value).subscribe((response: any) => {
 				// this.$errors.openDialog({
