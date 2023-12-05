@@ -4,7 +4,7 @@
 	<section class="user_information">
 		<h2 class="headinginfo"> Client Accounts </h2>
 		<div class="containeredd">
-			<div class="row">
+			<!-- <div class="row">
 				<div class="col-md-12">
 					<button class="custom-btn add-button" (click)="addTravelPlannerClick(clientId)">
 						<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-plus-circle"
@@ -15,7 +15,7 @@
 						</svg> Add Client
 					</button>
 				</div>
-			</div>
+			</div> -->
 			<!-- <div class="row">
 				<div class="col-md-12">
 					<label class="alert alert-danger">Note: Add each different Travel Planner first. Enter rates and
@@ -80,14 +80,19 @@
 									</mat-slide-toggle>
 								</td>
 								<td *ngIf="travelPlanner.middle_name==null;else middleName">
-									<span [innerHTML]="highlighText(travelPlanner.first_name+' '+travelPlanner.last_name)"></span>
-									</td>
+									<span
+										[innerHTML]="highlighText(travelPlanner.first_name+' '+travelPlanner.last_name)"></span>
+								</td>
 								<ng-template #middleName>
 									<td>
-										<span [innerHTML]="highlighText(travelPlanner.first_name+' '+travelPlanner.middle_name+' '+travelPlanner.last_name)"></span></td>
+										<span
+											[innerHTML]="highlighText(travelPlanner.first_name+' '+travelPlanner.middle_name+' '+travelPlanner.last_name)"></span>
+									</td>
 								</ng-template>
 								<td><span [innerHTML]="highlighText(travelPlanner.email)"></span></td>
-								<td><span [innerHTML]="highlighText(travelPlanner.mobileIsd+travelPlanner.mobile)"></span></td>
+								<td><span
+										[innerHTML]="highlighText(travelPlanner.mobileIsd+travelPlanner.mobile)"></span>
+								</td>
 								<td><span [innerHTML]="highlighText(travelPlanner.address)"></span></td>
 								<td><span [innerHTML]="highlighText(travelPlanner.country)"></span></td>
 							</tr>
