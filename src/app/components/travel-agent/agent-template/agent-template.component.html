@@ -168,9 +168,15 @@
 								<div class="py-2 collapse-inner rounded">
 									<a class="collapse-item" [routerLinkActive]="['active']"
 										routerLink="/travel_agent/staff-account-list"
-										(click)="closeSidebarFunc(false)">Clients</a>
+										(click)="closeSidebarFunc(false)">Active Clients</a>
+								</div>
+								<div class="py-2 collapse-inner rounded">
+									<a class="collapse-item" [routerLinkActive]="['active']"
+										routerLink="/travel_agent/add-client-account"
+										(click)="closeSidebarFunc(false)">Create new client</a>
 								</div>
 							</div>
+
 						</li>
 						<!--4th -->
 						<li class="nav-item">
