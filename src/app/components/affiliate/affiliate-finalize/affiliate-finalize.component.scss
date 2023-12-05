@@ -15,6 +15,12 @@ p {
     border: 2px solid #a2a3a2;
     background-color: #a2a3a2;
     color: #fff;
+    pointer-events: none;
+}
+.color-green{
+    border: 2px solid #a2a3a2;
+    background-color: var(--green-color);
+    color: #fff;
 }
 
 .container {
