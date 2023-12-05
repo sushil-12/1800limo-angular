@@ -426,7 +426,7 @@ export class CreateBookingComponent implements OnInit {
 			this.number_of_hours = response?.data?.number_of_hours
 			this.vehicleImgUrl = response?.data?.vehicle_images[0]
 			this.driverImgUrl = response?.data?.driver_image
-			this.isCreatedByAdmin = response?.data?.account_type == 'travel_planner' ? false : true;
+			this.isCreatedByAdmin = response?.data?.created_by ==1 ? true : false;
 			this.SetFormValue('affiliate_type', response.data.affiliate_type)
 			this.autofillData('cruise', editing_data);
 			this.fillDriverInfo(editing_data);
