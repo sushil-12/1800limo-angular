@@ -399,7 +399,7 @@
 			</div>
 		</div>
 
-		<div class="col-md-12 text-right mr-4">
+		<div class="col-md-12 text-right mr-4" *ngIf="CardsInformation?.length">
 			<button type="button" class="custom-filled-button m-3 mr-4"
 				[ngClass]="BookingDetail?.booking_status == 'finalized' ? 'color-green' : 'color-grey' "
 				data-toggle="modal" data-target="#paymentModal">

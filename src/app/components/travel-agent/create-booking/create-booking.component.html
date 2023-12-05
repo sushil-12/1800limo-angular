@@ -2268,7 +2268,7 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										${{shareArray?.travelAgentShare.toFixed(2) }}
+										${{shareArray?.travelAgentShare ? shareArray?.travelAgentShare.toFixed(2) : 0}}
 									</span>
 									(10% of Base Rate)
 								</div>
@@ -2677,7 +2677,8 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										${{r_shareArray?.travelAgentShare.toFixed(2) }}
+										${{r_shareArray?.travelAgentShare ? r_shareArray?.travelAgentShare.toFixed(2) :
+										0}}
 									</span>
 									(10% of Base Rate)
 								</div>
