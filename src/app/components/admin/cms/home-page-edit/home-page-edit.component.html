@@ -42,34 +42,43 @@
 
 									<h2 class="headinginfo">Client's Logo</h2>
 									<div class="p-3 mt-3 d-flex" style="flex-wrap: wrap;">
-										<div class="col-md-4" *ngFor="let imagesData of multipleImages.controls; let k = index">
+										<div class="col-md-4"
+											*ngFor="let imagesData of multipleImages.controls; let k = index">
 											<div class="mt-4" [formGroupName]="k">
 												<div class="vehtype_extint">
 													<span *ngIf="imagesRecords[k] != null;">
-														<img src="{{imagesRecords[k]}}" (click)="showImageInModal(clientImage)">
+														<img src="{{imagesRecords[k]}}"
+															(click)="showImageInModal(clientImage)">
 													</span>
 													<div *ngIf="imagesRecords[k] == null;" class="emptyImage">
 														<img src="../../../../assets/images/empty-image.png">
 													</div>
 													<ul class="mt-4 list-unstyled">
 														<li class="text-center">
-															<button class="adduploaded" *ngIf="imagesRecords[k] != null">
+															<button class="adduploaded"
+																*ngIf="imagesRecords[k] != null">
 																<input type="file"
-																	   (change)="DynamicImageChange($event, 'clientLogo', k, imagesRecords[k].id)">
-																<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+																	(change)="DynamicImageChange($event, 'clientLogo', k, imagesRecords[k].id)"
+																	accept="image/jpeg, image/png">
+																<svg xmlns="http://www.w3.org/2000/svg"
+																	viewBox="0 0 24 24">
 																	<path fill="none" d="M0 0h24v24H0V0z" />
 																	<circle cx="12" cy="12" r="3" />
 																	<path
-																		  d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+																		d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
 																</svg> Change
 															</button>
-															<button class="adduploaded" *ngIf="imagesRecords[k] == null">
-																<input type="file" (change)="DynamicImageChange($event, 'clientLogo', k)">
-																<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+															<button class="adduploaded"
+																*ngIf="imagesRecords[k] == null">
+																<input type="file"
+																	(change)="DynamicImageChange($event, 'clientLogo', k)"
+																	accept="image/jpeg, image/png">
+																<svg xmlns="http://www.w3.org/2000/svg"
+																	viewBox="0 0 24 24">
 																	<path fill="none" d="M0 0h24v24H0V0z" />
 																	<circle cx="12" cy="12" r="3" />
 																	<path
-																		  d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+																		d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
 																</svg> Add
 															</button>
 
@@ -81,7 +90,8 @@
 									</div>
 									<div class="row mt-4">
 										<div class="col-12 d-flex justify-content-center">
-											<button class="custom-btn savebutton" type="button" (click)="addImageValue()">Add More Logo</button>
+											<button class="custom-btn savebutton" type="button"
+												(click)="addImageValue()">Add More Logo</button>
 										</div>
 									</div>
 								</div>
@@ -96,7 +106,8 @@
 							<div class="col-md-12">
 								<div class="p-3 border mt-3" formArrayName="other_listing_arr">
 									<h3 class="headinginfoH3">List Content</h3>
-									<div class="col-md-12" *ngFor="let listObj of other_listing_list.controls; let i = index">
+									<div class="col-md-12"
+										*ngFor="let listObj of other_listing_list.controls; let i = index">
 										<div class="row mt-4">
 											<div class="col-md-9" [formGroupName]="i">
 												<mat-form-field appearance="outline" class="mt-0">
@@ -105,14 +116,16 @@
 												</mat-form-field>
 											</div>
 											<div class="col-md-3  d-flex justify-content-end" *ngIf="i != '0'">
-												<button class="custom-btn savebutton" type="button" (click)="deleteFieldValue(i)">Delete</button>
+												<button class="custom-btn savebutton" type="button"
+													(click)="deleteFieldValue(i)">Delete</button>
 											</div>
 										</div>
 									</div>
 									<div class="col-md-12">
 										<div class="row mt-4">
 											<div class="col-md-5  d-flex justify-content-end">
-												<button class="custom-btn savebutton" type="button" (click)="addFieldValue()">Add</button>
+												<button class="custom-btn savebutton" type="button"
+													(click)="addFieldValue()">Add</button>
 											</div>
 										</div>
 									</div>
@@ -125,7 +138,8 @@
 							<div class="col-md-12">
 								<div class="p-3 border mt-3" formArrayName="title_content_list_arr">
 									<h3 class="headinginfoH3">List Content</h3>
-									<div class="col-md-12" *ngFor="let titleContent of title_content_list_list.controls; let m = index">
+									<div class="col-md-12"
+										*ngFor="let titleContent of title_content_list_list.controls; let m = index">
 										<div class="row mt-4">
 											<div class="p-3 border mt-3 col-md-12">
 												<div class="col-md-12 mt-4" [formGroupName]="m">
@@ -137,12 +151,14 @@
 												<div class="col-md-12 mt-4" [formGroupName]="m">
 													<mat-form-field appearance="outline" class="mt-0">
 														<mat-label>Content</mat-label>
-														<textarea matInput placeholder="Content" formControlName="content"></textarea>
+														<textarea matInput placeholder="Content"
+															formControlName="content"></textarea>
 													</mat-form-field>
 												</div>
-												<div class="col-md-12 mt-4  d-flex justify-content-center" *ngIf="m != '0'">
+												<div class="col-md-12 mt-4  d-flex justify-content-center"
+													*ngIf="m != '0'">
 													<button class="custom-btn savebutton" type="button"
-															(click)="deleteTitleContentValue(m)">Delete</button>
+														(click)="deleteTitleContentValue(m)">Delete</button>
 												</div>
 											</div>
 										</div>
@@ -150,7 +166,8 @@
 									<div class="col-md-12">
 										<div class="row mt-4">
 											<div class="col-md-12  d-flex justify-content-center">
-												<button class="custom-btn savebutton" type="button" (click)="addTitleContentValue()">Add</button>
+												<button class="custom-btn savebutton" type="button"
+													(click)="addTitleContentValue()">Add</button>
 											</div>
 										</div>
 									</div>
@@ -168,7 +185,8 @@
 							<div class="col-md-12">
 								<div class="p-3 border mt-3" formArrayName="slider_type_content">
 									<h3 class="headinginfoH3">Slides List</h3>
-									<div class="col-md-12" *ngFor="let listObj of slider_type_content_list.controls; let j = index">
+									<div class="col-md-12"
+										*ngFor="let listObj of slider_type_content_list.controls; let j = index">
 										<div class="row mt-4">
 											<div class="p-3 border mt-3 col-md-12">
 												<div class="col-md-12 mt-4" [formGroupName]="j">
@@ -189,30 +207,38 @@
 														<div class="col-md-7">
 															<div class="">
 																<div>
-																	<p *ngIf="imageArray[j] != null">Slider Image <span class="asterisk">*</span></p>
-																	<img src="{{imageArray[j]}}" (click)="showImageInModal(clientImage)"
-																		 *ngIf="imageArray[j] != null">
+																	<p *ngIf="imageArray[j] != null">Slider Image <span
+																			class="asterisk">*</span></p>
+																	<img src="{{imageArray[j]}}"
+																		(click)="showImageInModal(clientImage)"
+																		*ngIf="imageArray[j] != null">
 																</div>
 																<ul class="mt-4 list-unstyled text-center">
 																	<li>
-																		<button class="adduploaded" *ngIf="imageArray[j] != null">
+																		<button class="adduploaded"
+																			*ngIf="imageArray[j] != null">
 																			<input type="file"
-																				   (change)="DynamicImageChange($event, 'sliderImages', j, slider_type_content[j].image.id)">
-																			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+																				(change)="DynamicImageChange($event, 'sliderImages', j, slider_type_content[j].image.id)"
+																				accept="image/jpeg, image/png">
+																			<svg xmlns="http://www.w3.org/2000/svg"
+																				viewBox="0 0 24 24">
 																				<path fill="none" d="M0 0h24v24H0V0z" />
 																				<circle cx="12" cy="12" r="3" />
 																				<path
-																					  d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+																					d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
 																			</svg> Change
 																		</button>
-																		<button class="adduploaded" *ngIf="imageArray[j] == null">
+																		<button class="adduploaded"
+																			*ngIf="imageArray[j] == null">
 																			<input type="file"
-																				   (change)="DynamicImageChange($event, 'sliderImages', j, null)">
-																			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+																				(change)="DynamicImageChange($event, 'sliderImages', j, null)"
+																				accept="image/jpeg, image/png">
+																			<svg xmlns="http://www.w3.org/2000/svg"
+																				viewBox="0 0 24 24">
 																				<path fill="none" d="M0 0h24v24H0V0z" />
 																				<circle cx="12" cy="12" r="3" />
 																				<path
-																					  d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+																					d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
 																			</svg> Add
 																		</button>
 																	</li>
@@ -223,12 +249,14 @@
 												</div>
 
 												<!--end image upload-->
-												<div class="col-3 d-flex justify-content-end" *ngIf="j == '0'; else elseBlock">
+												<div class="col-3 d-flex justify-content-end"
+													*ngIf="j == '0'; else elseBlock">
 													<!-- <button class="custom-btn savebutton" type="button" (click)="addSliderContentFieldValue()">Add</button> -->
 												</div>
 												<ng-template #elseBlock>
 													<div class="col-md-12  d-flex justify-content-center mt-4">
-														<button class="custom-btn savebutton" type="button" (click)="deleteSlide(j)">Delete</button>
+														<button class="custom-btn savebutton" type="button"
+															(click)="deleteSlide(j)">Delete</button>
 													</div>
 												</ng-template>
 											</div>
@@ -236,7 +264,8 @@
 									</div>
 									<div class="row mt-4">
 										<div class="col-12 d-flex justify-content-center">
-											<button class="custom-btn savebutton" type="button" (click)="addSliderContentFieldValue()">Add</button>
+											<button class="custom-btn savebutton" type="button"
+												(click)="addSliderContentFieldValue()">Add</button>
 										</div>
 									</div>
 								</div>
@@ -251,7 +280,8 @@
 								<div class="p-3 border mt-3" formArrayName="other_group_listing_arr">
 									<h3 class="headinginfoH3">List Group Content</h3>
 
-									<div class="col-md-12" *ngFor="let listGroupObj of other_group_listing_list.controls; let i = index">
+									<div class="col-md-12"
+										*ngFor="let listGroupObj of other_group_listing_list.controls; let i = index">
 										<div class="row mt-4">
 											<div class="col-md-9" [formGroupName]="i">
 												<mat-form-field appearance="outline" class="mt-0">
