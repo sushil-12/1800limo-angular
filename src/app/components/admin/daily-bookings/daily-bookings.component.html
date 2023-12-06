@@ -1576,7 +1576,7 @@
 
 					<!-- Rate Distribution Information -->
 					<div class="distribution_rate"
-						*ngIf="bookingPreview.affiliate_type === 'affiliate' && bookingPreview.payment_status=='unpaid' && this.bookingPreview?.share_array?.length == 0">
+						*ngIf="bookingPreview?.affiliate_type === 'affiliate' && bookingPreview?.payment_status=='unpaid' && bookingPreview?.share_array?.length == 0">
 						<h4 class="font-weight-bolder m-0 my-3">
 							Rates Distribution {{bookingPreview.loose_affiliate}}
 						</h4>
@@ -1608,7 +1608,7 @@
 									<span class="font-weight-bolder preview-output-feild">
 										${{rates_preview?.admin_share.toFixed(2) }}
 									</span>
-									(25% of Base Rate)
+									({{adminSharePercent}} of Base Rate)
 								</div>
 							</div>
 						</div>
@@ -1691,7 +1691,7 @@
 						</div>
 					</div>
 					<div class="distribution_rate"
-						*ngIf="bookingPreview.affiliate_type === 'affiliate' && bookingPreview.payment_status=='unpaid' && this.bookingPreview?.share_array?.length != 0">
+						*ngIf="bookingPreview?.affiliate_type === 'affiliate' && bookingPreview?.payment_status=='unpaid' && bookingPreview?.share_array?.length != 0">
 						<h4 class="font-weight-bolder m-0 my-3">
 							Rates Distribution
 						</h4>
@@ -1735,7 +1735,8 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										${{shareArray?.grandTotal.toFixed(2)}}
+										${{shareArray?.grandTotal ? shareArray?.grandTotal.toFixed(2) :
+										shareArray?.returnGrandTotal.toFixed(2)}}
 									</span>
 									(Actual Cost to Customer)
 								</div>

@@ -571,6 +571,12 @@ export class CreateBookingComponent implements OnInit {
 				this.subtotal += adminShare + this.agentShare
 				console.log("in if created by ta",this.subtotal)
 			}
+			else if(this.updateType == 'repeat' || this.updateType == 'return'){
+                let adminShare = (base_rate * 15) / 100
+				this.agentShare = base_rate * 0.10
+				this.subtotal += adminShare + this.agentShare
+				console.log("in if created by ta in repeat or return",this.subtotal)
+			}
 			else{
               let adminShare = (base_rate * 25) / 100
 			  this.subtotal += adminShare
@@ -624,6 +630,12 @@ export class CreateBookingComponent implements OnInit {
 				this.r_agentShare = base_rate * 0.10
 				this.r_subtotal += adminShare + this.r_agentShare
 				console.log("in if created by ta",this.r_subtotal)
+			}
+			else if(this.updateType == 'repeat' || this.updateType == 'return'){
+                let adminShare = (base_rate * 15) / 100
+				this.r_agentShare = base_rate * 0.10
+				this.r_subtotal += adminShare + this.r_agentShare
+				console.log("in if created by ta in repeat or return",this.subtotal)
 			}
 			else{
               let adminShare = (base_rate * 25) / 100
@@ -2058,6 +2070,12 @@ export class CreateBookingComponent implements OnInit {
 			}
 			// travelAgentShare : 
 			if (this.BookingForm.value?.account_type == 'travel_planner' && !this.isCreatedByAdmin) {
+				this.adminSharePercent = 15
+				shareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100
+				shareArray['deducted_admin_share'] = shareArray['adminShare'] - shareArray['stripeFee']
+				shareArray['travelAgentShare'] = base_rate * 0.10
+			}
+			if(this.updateType == 'repeat' || this.updateType == 'return'){
 				this.adminSharePercent = 15
 				shareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100
 				shareArray['deducted_admin_share'] = shareArray['adminShare'] - shareArray['stripeFee']
