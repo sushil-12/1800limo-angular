@@ -98,7 +98,7 @@ export class NewBookingComponent implements OnInit {
 	booking_data: any = {};
 	service_type: any = 'one_way';
 	transfer_type: any = 'city_to_city'
-	number_of_hours: any = '2';
+	number_of_hours: any = '0';
 	is_master_vehicle: boolean = JSON.parse(sessionStorage.getItem('selected_vehicle'))?.is_master_vehicle || false
 	isTravelShare: boolean;
 	isCreatedByAdmin: boolean = true;
@@ -448,6 +448,7 @@ export class NewBookingComponent implements OnInit {
 			this.isCreatedByAdmin = response?.data?.created_by==1 ? true : false
 			this.isFarmoutBooking = response?.data?.reservation_type=='farmout' ? true : false
 			let editing_data = response?.data
+			this.number_of_hours = response?.data?.number_of_hours
 			this.autofillData('cruise', editing_data);
 			console.log(editing_data, "check big data")
 			for (let item in editing_data) {
