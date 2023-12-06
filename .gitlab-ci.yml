@@ -24,6 +24,9 @@ deploy:
     - apt-get update -qy
     - apt-get install -y sshpass
 
+    # Create the ~/.ssh directory if it doesn't exist
+    - mkdir -p ~/.ssh
+
     # Create an SSH key file from the provided private key variable
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
     - chmod 600 ~/.ssh/id_rsa
