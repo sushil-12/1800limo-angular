@@ -38,7 +38,7 @@ export class CreateNewBookingComponent implements OnInit {
 
 	booking_params: any = {
 		transfer_types: ["airport_to_city", "airport_to_airport", "airport_to_cruise", "city_to_city", "city_to_airport", "city_to_cruise", "cruise_to_airport", "cruise_to_city"],
-		client_account_types: ['individual', 'corporate', 'travel_planner', 'loose_customer'],
+		client_account_types: ['individual', 'corporate', 'loose_customer'],
 		affiliate_accounts: ['affiliate'],
 		numbers: (() => {
 			let arr = []
@@ -127,7 +127,7 @@ export class CreateNewBookingComponent implements OnInit {
 	is_master_vehicle: boolean = JSON.parse(sessionStorage.getItem('selected_vehicle'))?.is_master_vehicle || false
 	extraStops_rate:any = 0
 	isTravelShare: boolean;
-	isCreatedByAdmin: boolean = false;
+	isCreatedByAdmin: boolean = true;
 	adminSharePercent: number = 25;
 	shareArray:any;
 	r_shareArray:any;
@@ -1515,13 +1515,12 @@ addExtraStop(is_return: boolean = false) {
 				deducted_admin_share: deducted_admin_share,  // Admin will get this amount only
 				affiliateShare : (grandTotal - adminShare)
 			}
-			// travelAgentShare : 
-			if(this.BookingForm.value?.account_type == 'travel_planner' && !this.isCreatedByAdmin){
-				this.adminSharePercent = 15
-				shareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100 
-				shareArray['deducted_admin_share'] = shareArray['adminShare']- shareArray['stripeFee']
-				shareArray['travelAgentShare'] = base_rate * 0.10  
-			}
+
+			// add conditions here to change share percentage
+			this.adminSharePercent = 15
+			shareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100 
+			shareArray['deducted_admin_share'] = shareArray['adminShare']- shareArray['stripeFee']
+			shareArray['farmoutShare'] = base_rate * 0.10  
 			this.shareArray = shareArray
 			// console.log('in function createReservationShareArray-->>>' , base_rate, shareArray )
 			return shareArray;
@@ -1550,11 +1549,10 @@ addExtraStop(is_return: boolean = false) {
 				affiliateShare : returnGrandTotal - adminShare
 			}
 			// travelAgentShare : 
-			if(this.BookingForm.value?.account_type == 'travel_planner' && this.BookingForm.value?.affiliate_type == 'affiliate'){
-				returnShareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100 
-				returnShareArray['deducted_admin_share'] = returnShareArray['adminShare']- returnShareArray['stripeFee']
-				returnShareArray['travelAgentShare'] = base_rate * 0.10  
-			}
+			this.adminSharePercent = 15
+			returnShareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100 
+			returnShareArray['deducted_admin_share'] = returnShareArray['adminShare']- returnShareArray['stripeFee']
+			returnShareArray['farmoutShare'] = base_rate * 0.10  
 
 			this.r_shareArray = returnShareArray
 			// console.log('in function createReservationreturnShareArray-->>>' , base_rate, returnShareArray )

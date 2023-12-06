@@ -128,6 +128,7 @@ export class NewBookingComponent implements OnInit {
     shareArray: any;
     r_shareArray: any;
     adminSharePercent: number = 25;
+	isFarmoutBooking: boolean = false;
 	constructor(
 		private $form: FormBuilder,
 		private $api: AdminService,
@@ -518,6 +519,7 @@ export class NewBookingComponent implements OnInit {
 			this.firstLoadAffiliateId = response.data.affiliate_id
 			this.number_of_hours = response?.data?.number_of_hours
 			this.isTravelShare =  response?.data?.account_type=='travel_planner' ? true : false
+			this.isFarmoutBooking = response?.data?.reservation_type=='farmout' ? true : false
 			this.isCreatedByAdmin = response?.data?.created_by==1 ? true : false
 			if(response?.data?.account_type=='travel_planner'){
 				this.getTravelClientAccounts(response?.data?.acc_id)
@@ -1677,6 +1679,12 @@ export class NewBookingComponent implements OnInit {
 				shareArray['deducted_admin_share'] = shareArray['adminShare']- shareArray['stripeFee']
 				shareArray['travelAgentShare'] = base_rate * 0.10  
 			}
+			else if(this.isFarmoutBooking){
+				this.adminSharePercent = 15
+				shareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100 
+				shareArray['deducted_admin_share'] = shareArray['adminShare']- shareArray['stripeFee']
+				shareArray['farmoutShare'] = base_rate * 0.10  
+			}
 			this.shareArray = shareArray
 			// console.log('in function createReservationShareArray-->>>' , base_rate, shareArray )
 			return shareArray;
@@ -1709,6 +1717,12 @@ export class NewBookingComponent implements OnInit {
 				returnShareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100 
 				returnShareArray['deducted_admin_share'] = returnShareArray['adminShare']- returnShareArray['stripeFee']
 				returnShareArray['travelAgentShare'] = base_rate * 0.10  
+			}
+			else if(this.isFarmoutBooking){
+				this.adminSharePercent = 15
+				returnShareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100 
+				returnShareArray['deducted_admin_share'] = returnShareArray['adminShare']- returnShareArray['stripeFee']
+				returnShareArray['farmoutShare'] = base_rate * 0.10  
 			}
 
 			this.r_shareArray = returnShareArray

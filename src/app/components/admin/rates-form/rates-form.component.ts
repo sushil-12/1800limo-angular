@@ -24,6 +24,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 	@Input('isTravelShare') isTravelShare: boolean = false;
 	@Input('book_data') book_data: any = {};
 	@Input('isCreatedByAdmin') isCreatedByAdmin: boolean = true;
+	@Input('isFarmoutBooking') isFarmoutBooking: boolean = false;
 	
 	
 	// Throw Events.
@@ -84,6 +85,8 @@ export class RatesFormComponent implements OnInit, OnChanges {
 	travel_agent_share : any = 0;
 	r_travel_agent_share : any = 0;
 	emptyRateArray: any;
+	farmoutShare: any = 0;
+	r_farmoutShare: any = 0;
 
 	constructor(
 		private $form: FormBuilder,
@@ -663,8 +666,9 @@ export class RatesFormComponent implements OnInit, OnChanges {
 	}
 	calculateReturnAdminShare() {
 		let baseRate = this.calculateReturnBaseRateShare()
-		this.admin_share = (this.isTravelShare && !this.isCreatedByAdmin) ? 15 : 25
+		this.admin_share = (this.isTravelShare && !this.isCreatedByAdmin || this.isFarmoutBooking) ? 15 : 25
 		this.r_calc_admin_share = baseRate * this.admin_share / 100
+		this.isFarmoutBooking ? this.r_farmoutShare = baseRate * 0.10 : ''
 		console.log('in function caculate admin share-->>', this.r_calc_admin_share)
 	}
 	calculateReturnTravelShare() {
@@ -705,8 +709,9 @@ export class RatesFormComponent implements OnInit, OnChanges {
 		console.log('in function calculateAdminShare')
 
 		let baseRate = this.calculateBaseRateShare()
-		this.admin_share = (this.isTravelShare && !this.isCreatedByAdmin) ? 15 : 25
+		this.admin_share = (this.isTravelShare && !this.isCreatedByAdmin || this.isFarmoutBooking) ? 15 : 25
 		this.calc_admin_share = baseRate * this.admin_share / 100
+		this.isFarmoutBooking ? this.farmoutShare = baseRate * 0.10 : ''
 		console.log('in function caculate admin share-->>', this.calc_admin_share)
 	}
 	calculateTravelShare() {

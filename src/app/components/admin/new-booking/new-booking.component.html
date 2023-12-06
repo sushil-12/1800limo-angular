@@ -2664,7 +2664,7 @@
 			[distance]="distance" [reservation_id]="booking_id" [reset]="reset_button" [reset]="reset_button"
 			[isTravelShare]="isTravelShare" [initReturnRates]="init_return_rates" (formvalue)="RateFormValue($event)"
 			[vehicle_id]="QB_vehicle_id" [hours]="Form.number_of_hours?.value" [isCreatedByAdmin]="isCreatedByAdmin"
-			[vehicles]="Form.number_of_vehicles?.value" [book_data]="booking_data"
+			[vehicles]="Form.number_of_vehicles?.value" [book_data]="booking_data" [isFarmoutBooking]="isFarmoutBooking"
 			(returnformvalue)="ReturnRateFormValue($event)" (returnNumberOfHr)="HandleReturnNumberOfHr($event)">
 		</app-rates-form>
 
@@ -3669,6 +3669,21 @@
 								</div>
 							</div>
 						</div>
+						<div class="mx-2" *ngIf="isFarmoutBooking">
+							<div class="row m-0">
+								<div class="col-md-4 key d-flex align-items-center">
+									<span class="">
+										Affliate Farmout share
+									</span>
+								</div>
+								<div class="col-md-8 value preview-airport-color">
+									<span class="font-weight-bolder preview-output-feild">
+										${{shareArray?.farmoutShare.toFixed(2)}}
+									</span>
+									( 10 % of Base Rate)
+								</div>
+							</div>
+						</div>
 					</div>
 
 
@@ -4095,6 +4110,21 @@
 										${{r_shareArray?.affiliateShare.toFixed(2)}}
 									</span>
 									( Total Price - (Ride Base Rate + Other Taxes) )
+								</div>
+							</div>
+						</div>
+						<div class="mx-2" *ngIf="isFarmoutBooking">
+							<div class="row m-0">
+								<div class="col-md-4 key d-flex align-items-center">
+									<span class="">
+										Affliate Farmout share
+									</span>
+								</div>
+								<div class="col-md-8 value preview-airport-color">
+									<span class="font-weight-bolder preview-output-feild">
+										${{r_shareArray?.farmoutShare.toFixed(2)}}
+									</span>
+									( 10 % of Base Rate)
 								</div>
 							</div>
 						</div>

@@ -105,6 +105,7 @@ export class NewBookingComponent implements OnInit {
 	adminSharePercent: number = 25;
 	shareArray: any;
     r_shareArray: any;
+	isFarmoutBooking: boolean = false;
 
 
 
@@ -445,6 +446,7 @@ export class NewBookingComponent implements OnInit {
 			response.data.booking_instructions =  response?.data?.booking_instructions?.replaceAll('<br />' , '')
 			this.isTravelShare =  response?.data?.account_type=='travel_planner' ? true : false
 			this.isCreatedByAdmin = response?.data?.created_by==1 ? true : false
+			this.isFarmoutBooking = response?.data?.reservation_type=='farmout' ? true : false
 			let editing_data = response?.data
 			this.autofillData('cruise', editing_data);
 			console.log(editing_data, "check big data")
@@ -1341,6 +1343,12 @@ export class NewBookingComponent implements OnInit {
 				shareArray['deducted_admin_share'] = shareArray['adminShare']- shareArray['stripeFee']
 				shareArray['travelAgentShare'] = base_rate * 0.10  
 			}
+			else if(this.isFarmoutBooking){
+				this.adminSharePercent = 15
+				shareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100 
+				shareArray['deducted_admin_share'] = shareArray['adminShare']- shareArray['stripeFee']
+				shareArray['farmoutShare'] = base_rate * 0.10  
+			}
 			this.shareArray = shareArray
 			// console.log('in function createReservationShareArray-->>>' , base_rate, shareArray )
 			return shareArray;
@@ -1373,6 +1381,12 @@ export class NewBookingComponent implements OnInit {
 				returnShareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100 
 				returnShareArray['deducted_admin_share'] = returnShareArray['adminShare']- returnShareArray['stripeFee']
 				returnShareArray['travelAgentShare'] = base_rate * 0.10  
+			}
+			else if(this.isFarmoutBooking){
+				this.adminSharePercent = 15
+				returnShareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100 
+				returnShareArray['deducted_admin_share'] = returnShareArray['adminShare']- returnShareArray['stripeFee']
+				returnShareArray['farmoutShare'] = base_rate * 0.10  
 			}
 
 			this.r_shareArray = returnShareArray
