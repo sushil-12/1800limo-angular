@@ -202,8 +202,8 @@
 											<span class="font-weight-bolder" *ngIf="booking?.driver_name"
 												[innerHTML]="highlighText(booking?.driver_name)"></span>&nbsp;
 											|
-											<span *ngif="booking?.driver_cell_isd"
-												[innerHTML]="highlighText(booking?.driver_cell_isd + booking?.driver_tel)"></span>
+											<span *ngIf="booking?.driver_cell_isd"
+												[innerHTML]="highlighText(booking?.driver_cell_isd + booking?.driver_cell_number)"></span>
 										</p>
 
 										<span class="text-underline cursor-pointer">

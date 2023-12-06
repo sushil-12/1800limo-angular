@@ -110,7 +110,7 @@ export class AffiliateFinalizeComponent implements OnInit {
 				console.log('response getBookingData Affiliate--->>>>', data)
 				this.BookingDetail = data?.booking_detail
 				this.transferType = this.BookingDetail?.transfer_type
-				this.isTravelShare = data?.booking_detail?.account_type == 'Travel Agent' ? true : false
+				this.isTravelShare = data?.booking_detail?.account_type == 'travel_planner' ? true : false
 				this.finalize_params.number_of_vehicles = data?.booking_detail?.number_of_vehicles
 				this.init_rates = true;
 				this.hours = data?.booking_detail?.number_of_hours
@@ -270,6 +270,7 @@ export class AffiliateFinalizeComponent implements OnInit {
 			}
 			// travelAgentShare : 
 			if(this.BookingDetail?.account_type == 'travel_planner' && !this.isCreatedByAdmin){
+				console.log("in if travel planner")
 				this.adminSharePercent = 15
 				shareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100 
 				shareArray['deducted_admin_share'] = shareArray['adminShare']- shareArray['stripeFee']

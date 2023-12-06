@@ -458,8 +458,8 @@ export class NewBookingComponent implements OnInit {
 		this.SetFormValue('pickup_date', full_date.slice(0, full_date.indexOf('T')))
 		this.SetFormValue('return_pickup_date', future_full_date.slice(0, future_full_date.indexOf('T')))
 		this.SetFormValue('number_of_vehicles', 1)
-		this.SetFormValue('booking_instructions', 'Text client day before each booking to confirm driver name and cell #');
-		this.SetFormValue('return_booking_instructions', 'Text client day before each booking to confirm driver name and cell #');
+		this.SetFormValue('booking_instructions', "Text the client the day before each booking, and confirm the driver's name and cell number");
+		this.SetFormValue('return_booking_instructions', "Text the client the day before each booking, and confirm the driver's name and cell number");
 
 		if (this.BookingForm.value.transfer_type.includes('city_')) {
 			this.SetFormValue('meet_greet_choices', 1)
