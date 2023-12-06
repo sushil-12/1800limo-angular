@@ -727,6 +727,9 @@ export class DailyBookingsComponent implements OnInit {
 				if(this.bookingPreview?.account_type == 'travel_planner' && this.bookingPreview?.created_by !=1){
 					this.adminSharePercent = 15
 				}
+				else if(this.bookingPreview?.share_array?.farmoutShare){
+					this.adminSharePercent = 15
+				}
 				else{
 					this.adminSharePercent = 25
 				}

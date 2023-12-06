@@ -357,6 +357,9 @@ export class FarmOutComponent implements OnInit
 					console.log("in if created by ta")
 					this.adminSharePercent = 15
 				}
+				else if(this.bookingPreview?.share_array?.farmoutShare){
+					this.adminSharePercent = 15
+				}
 				else{
 					console.log("in if created by admin")
 					this.adminSharePercent = 25

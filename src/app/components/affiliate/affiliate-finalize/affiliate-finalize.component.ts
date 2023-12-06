@@ -61,6 +61,7 @@ export class AffiliateFinalizeComponent implements OnInit {
     r_shareArray: any;
     adminSharePercent: number = 25;
 	service_type: any;
+	isFarmoutBooking:boolean =false;
 
 	constructor(
 		private $api: AdminService,
@@ -111,6 +112,7 @@ export class AffiliateFinalizeComponent implements OnInit {
 				this.BookingDetail = data?.booking_detail
 				this.transferType = this.BookingDetail?.transfer_type
 				this.isTravelShare = data?.booking_detail?.account_type == 'travel_planner' ? true : false
+				this.isFarmoutBooking = data?.booking_detail?.reservation_type=='farmout' ? true : false
 				this.finalize_params.number_of_vehicles = data?.booking_detail?.number_of_vehicles
 				this.init_rates = true;
 				this.hours = data?.booking_detail?.number_of_hours
@@ -276,6 +278,12 @@ export class AffiliateFinalizeComponent implements OnInit {
 				shareArray['deducted_admin_share'] = shareArray['adminShare']- shareArray['stripeFee']
 				shareArray['travelAgentShare'] = base_rate * 0.10  
 			}
+			else if(this.isFarmoutBooking){
+				this.adminSharePercent = 15
+				shareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100 
+				shareArray['deducted_admin_share'] = shareArray['adminShare']- shareArray['stripeFee']
+				shareArray['farmoutShare'] = base_rate * 0.10  
+			}
 			this.shareArray = shareArray
 			// console.log('in function createReservationShareArray-->>>' , base_rate, shareArray )
 			return shareArray;
@@ -291,6 +299,7 @@ export class AffiliateFinalizeComponent implements OnInit {
 		}
 		delete rateArray.sub_total
 		delete rateArray.grand_total
+		this.createReservationShareArray()
 		let body = {
 			reservation_id: this.bookingId,
 			rateArray: rateArray,

@@ -734,6 +734,9 @@ export class RatesFormsComponent implements OnInit , OnChanges {
 				if (this.isTravelShare && !this.isCreatedByAdmin) {
 					baseRateAmount = baseRateAmount + this.travel_agent_share;
 				}
+				else if(this.isFarmoutBooking){
+                    baseRateAmount = baseRateAmount + this.farmoutShare;
+                }
 				// (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates')).get('Base_Rate'))).get("amount").setValue(baseRateAmount);
 				this.total['Base_Rate'] = Number(Number(baseRateAmount).toFixed(2));
 			}
@@ -836,6 +839,9 @@ export class RatesFormsComponent implements OnInit , OnChanges {
 				if (this.isTravelShare && !this.isCreatedByAdmin) {
 					baseRateAmount = baseRateAmount + this.r_travel_agent_share;
 				}
+				else if(this.isFarmoutBooking){
+                    baseRateAmount = baseRateAmount + this.r_farmoutShare;
+                }
 				// (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates')).get('Base_Rate'))).get("amount").setValue(baseRateAmount);
 				this.r_total['Base_Rate'] = Number(Number(baseRateAmount).toFixed(2));
 			}
