@@ -1,10 +1,12 @@
 stages:
   - build
   - deploy
+
 variables:
   # Define the SSH_PRIVATE_KEY variable as a CI/CD secret variable in GitLab.
   # The value should be your private SSH key.
   SSH_PRIVATE_KEY: "$SSH_PRIVATE_KEY"
+
 build:
   stage: build
   image: node:13  # Use an official Node.js image with npm pre-installed
@@ -15,14 +17,21 @@ build:
   artifacts:
     paths:
       - dist/
+
 deploy:
   stage: deploy
   script:
     - apt-get update -qy
     - apt-get install -y sshpass
-    # Use the SSH private key for authentication, and adjust the command accordingly.
-    # Make sure your SSH private key is set as a CI/CD secret variable named SSH_PRIVATE_KEY.
-    - echo "$SSH_PRIVATE_KEY" > id_rsa  # Save the SSH private key to a temporary file
-    - chmod 600 id_rsa  # Set appropriate permissions for the SSH private key
-    # Use the -P option to specify the custom SSH port (2224 in this example).
-    - scp -i id_rsa -o StrictHostKeyChecking=no -r dist/* jenkins@20.64.155.18:/var/www/html/1800-limo
+
+    # Create an SSH key file from the provided private key variable
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+
+    # Enable SSH agent and add the SSH key
+    - eval $(ssh-agent -s)
+    - ssh-add ~/.ssh/id_rsa
+
+    # Use the SSH key for authentication and adjust the command accordingly.
+    # Make sure your SSH public key is added to the authorized_keys file on the server.
+    - scp -o StrictHostKeyChecking=no -r dist/* jenkins@20.64.155.18:/var/www/html/1800-limo
