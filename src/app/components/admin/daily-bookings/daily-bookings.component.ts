@@ -69,6 +69,7 @@ export class DailyBookingsComponent implements OnInit {
 	rates_preview: any;
 	quotebotNewData: any;
 	shareArray: any;
+	adminSharePercent:any;
 
 	constructor(
 		private adminService: AdminService,
@@ -723,6 +724,12 @@ export class DailyBookingsComponent implements OnInit {
 			.subscribe((response: any) => {
 				this.spinner.hide();
 				this.bookingPreview = response.data;
+				if(this.bookingPreview?.account_type == 'travel_planner' && this.bookingPreview?.created_by !=1){
+					this.adminSharePercent = 15
+				}
+				else{
+					this.adminSharePercent = 25
+				}
 				if (this.bookingPreview?.payment_status == "unpaid") {
 					if(this.bookingPreview?.share_array?.length != 0){
 						this.shareArray = this?.bookingPreview?.share_array

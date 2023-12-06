@@ -59,6 +59,9 @@ export class BookingComponent implements OnInit {
 	company_name: any = JSON.parse(localStorage.getItem('currentUser'))?.affiliate_company || ''
 	cancelBookingId: any = null
 	useDateFilter:boolean=true;
+	shareArray: any;
+	rates_preview: any;
+	adminSharePercent: number;
 
 	constructor(
 		private affiliateService: AffiliateService,
@@ -240,6 +243,21 @@ export class BookingComponent implements OnInit {
 			).subscribe((response: any) => {
 				console.log("respinse", response.data)
 				this.bookingPreview = response.data;
+				if(this.bookingPreview?.account_type == 'travel_planner' && this.bookingPreview?.created_by !=1){
+					console.log("in if created by ta")
+					this.adminSharePercent = 15
+				}
+				else{
+					console.log("in if created by admin")
+					this.adminSharePercent = 25
+				}
+				if (this.bookingPreview?.payment_status == "unpaid") {
+					if(this.bookingPreview?.share_array?.length != 0){
+						console.log("in if share array",this.bookingPreview.affiliate_type === 'affiliate' && this.bookingPreview.payment_status=='unpaid' && this.bookingPreview?.share_array?.length != 0)
+						this.shareArray = this?.bookingPreview?.share_array
+					}
+					this.rates_preview = this.bookingPreview?.rates_preview;
+				}
 				this.isAffiliate = this.bookingPreview.affiliate_type == "affiliate" ? true : false;
 				this.isLooseAffiliate = this.bookingPreview.affiliate_type == "loose_affiliate" ? true : false;
 				this.bookingPreview['booking_instructions'] = this.bookingPreview?.booking_instructions.replaceAll('<br />', ' ')
