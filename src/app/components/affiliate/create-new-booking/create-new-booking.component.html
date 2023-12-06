@@ -2259,9 +2259,10 @@
 
 
 		<app-rates-forms class="d-flex flex-wrap" [initRates]="init_rates" [affiliate_type]="Form.affiliate_type.value"
-			[distance]="distance_for_rates" [book_data]="booking_data" [reservation_id]="booking_id" [isCreatedByAdmin]="isCreatedByAdmin"
-			[reset]="reset_button" [initReturnRates]="init_return_rates" (formvalue)="RateFormValue($event)" [isFarmoutBooking]="true"
-			[isTravelShare]="isTravelShare" [vehicle_id]="params_QB_vehicle_id" [hours]="Form.number_of_hours?.value"
+			[distance]="distance_for_rates" [book_data]="booking_data" [reservation_id]="booking_id"
+			[isCreatedByAdmin]="isCreatedByAdmin" [reset]="reset_button" [initReturnRates]="init_return_rates"
+			(formvalue)="RateFormValue($event)" [isFarmoutBooking]="true" [isTravelShare]="isTravelShare"
+			[vehicle_id]="params_QB_vehicle_id" [hours]="Form.number_of_hours?.value"
 			[vehicles]="Form.number_of_vehicles?.value" (returnformvalue)="ReturnRateFormValue($event)"
 			(returnNumberOfHr)="HandleReturnNumberOfHr($event)">
 		</app-rates-forms>
@@ -3526,7 +3527,7 @@
 						<h4 class="font-weight-bolder m-0 my-3">
 							Rates Distribution
 						</h4>
-	
+
 						<div class="mx-2">
 							<div class="row m-0">
 								<div class="col-md-4 key d-flex align-items-center">
@@ -3587,7 +3588,7 @@
 								</div>
 							</div>
 						</div>
-	
+
 						<div class="mx-2">
 							<div class="row m-0">
 								<div class="col-md-4 key d-flex align-items-center">
@@ -3600,6 +3601,21 @@
 										${{r_shareArray?.affiliateShare.toFixed(2)}}
 									</span>
 									( Total Price - (Ride Base Rate + Other Taxes) )
+								</div>
+							</div>
+						</div>
+						<div class="mx-2" *ngIf="isFarmoutBooking">
+							<div class="row m-0">
+								<div class="col-md-4 key d-flex align-items-center">
+									<span class="">
+										Affliate Farmout share
+									</span>
+								</div>
+								<div class="col-md-8 value preview-airport-color">
+									<span class="font-weight-bolder preview-output-feild">
+										${{r_shareArray?.farmoutShare.toFixed(2)}}
+									</span>
+									( 10 % of Base Rate)
 								</div>
 							</div>
 						</div>
