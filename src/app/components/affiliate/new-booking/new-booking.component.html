@@ -1738,7 +1738,7 @@
 
 		<app-rates-forms class="d-flex flex-wrap" [initRates]="true" [affiliate_type]="Form.affiliate_type.value"
 			[reservation_id]="booking_id" [reset]="reset_button" (formvalue)="RateFormValue($event)"
-			[distance]="distance_for_rates" [book_data]="booking_data" [isTravelShare]="isTravelShare"
+			[distance]="distance_for_rates" [book_data]="booking_data" [isTravelShare]="isTravelShare" [isFarmoutBooking]="isFarmoutBooking"
 			[hours]="Form.number_of_hours?.value" [vehicles]="Form.number_of_vehicles?.value" [isCreatedByAdmin]="isCreatedByAdmin"
 			[initReturnRates]="init_return_rates" (returnNumberOfHr)="HandleReturnNumberOfHr($event)"
 			(returnformvalue)="ReturnRateFormValue($event)">
@@ -2427,6 +2427,21 @@
 								</div>
 							</div>
 						</div>
+						<div class="mx-2" *ngIf="isFarmoutBooking">
+							<div class="row m-0">
+								<div class="col-md-4 key d-flex align-items-center">
+									<span class="">
+										Affliate Farmout share
+									</span>
+								</div>
+								<div class="col-md-8 value preview-airport-color">
+									<span class="font-weight-bolder preview-output-feild">
+										${{shareArray?.farmoutShare.toFixed(2)}}
+									</span>
+									( 10 % of Base Rate)
+								</div>
+							</div>
+						</div>
 					</div>
 					<!-- Return Information -->
 					<div *ngIf="Form.service_type.value == 'round_trip'">
@@ -2844,6 +2859,21 @@
 										${{r_shareArray?.affiliateShare.toFixed(2)}}
 									</span>
 									( Total Price - (Ride Base Rate + Other Taxes) )
+								</div>
+							</div>
+						</div>
+						<div class="mx-2" *ngIf="isFarmoutBooking">
+							<div class="row m-0">
+								<div class="col-md-4 key d-flex align-items-center">
+									<span class="">
+										Affliate Farmout share
+									</span>
+								</div>
+								<div class="col-md-8 value preview-airport-color">
+									<span class="font-weight-bolder preview-output-feild">
+										${{r_shareArray?.farmoutShare.toFixed(2)}}
+									</span>
+									( 10 % of Base Rate)
 								</div>
 							</div>
 						</div>
