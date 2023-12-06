@@ -103,7 +103,7 @@
 			</div>
 
 			<!-- Admin Share -->
-			<div class="col-3 col-sm-3 col-md-3" *ngIf="sub_item.key == 'Base_Rate' ">
+			<!-- <div class="col-3 col-sm-3 col-md-3" *ngIf="sub_item.key == 'Base_Rate' ">
 				<div>
 					<mat-form-field appearance="outline" class="m-0">
 						<mat-label>
@@ -126,7 +126,7 @@
 							readonly />
 					</mat-form-field>
 				</div>
-			</div>
+			</div> -->
 
 			<!-- Flat | Percent -->
 			<div class="col-2" *ngIf="item.key === 'taxes' || item.key == 'others'">
@@ -159,7 +159,28 @@
 	</div>
 
 	<hr style="border-top: 2.5px solid #000000; " />
-
+	<div class="row px-2 justify-content-between align-items-center">
+		<div class="col-md-6">
+			<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
+				Admin Share
+			</p>
+		</div>
+		<div class="col-md-4 text-3xl text-right">
+			<i class="bi bi-currency-dollar" style="color: #dc3545!important;"></i>
+			{{ calc_admin_share.toFixed(2) }}
+		</div>
+	</div>
+	<div class="row px-2 justify-content-between align-items-center" *ngIf="isTravelShare && !isCreatedByAdmin">
+		<div class="col-md-6">
+			<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
+				Travel Share
+			</p>
+		</div>
+		<div class="col-md-4 text-3xl text-right">
+			<i class="bi bi-currency-dollar" style="color: #dc3545!important;"></i>
+			{{ travel_agent_share.toFixed(2) }}
+		</div>
+	</div>
 	<div class="row px-2 justify-content-between align-items-center">
 		<div class="col-md-6">
 			<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">

@@ -56,6 +56,12 @@ export class AffiliateFinalizeComponent implements OnInit {
 	paymentDetailByCard: any;
 	isTravelShare: boolean;
 	editRate: any;
+	isCreatedByAdmin: boolean = true;
+	shareArray: any;
+    r_shareArray: any;
+    adminSharePercent: number = 25;
+	service_type: any;
+
 	constructor(
 		private $api: AdminService,
 		private affiliateService: AffiliateService,
@@ -109,6 +115,8 @@ export class AffiliateFinalizeComponent implements OnInit {
 				this.init_rates = true;
 				this.hours = data?.booking_detail?.number_of_hours
 				this.finalize_params['number_of_hours'] = this.BookingDetail.number_of_hours
+				this.isCreatedByAdmin = data?.booking_detail?.created_by==1 ? true : false
+				this.service_type = data?.booking_detail?.service_type
 				this.quoteAmount = data?.grand_total
 				this.CardsInformation = data?.CreditCardsDetail
 				this.primaryCards = this.CardsInformation.filter(i => i.cc_prority == 'Primary')
@@ -238,7 +246,41 @@ export class AffiliateFinalizeComponent implements OnInit {
 				});
 		}
 	}
-
+	createReservationShareArray(){
+		console.log('in function createReservationShareArray')
+		if (this.edit_rates_value) {
+		let base_rate = 0
+		for (const key of Object.keys(this.edit_rates_value.all_inclusive_rates)) {
+			base_rate += this.edit_rates_value.all_inclusive_rates[key].baserate;
+		}
+		for (const key of Object.keys(this.edit_rates_value.amenities)) {
+			base_rate += this.edit_rates_value.amenities[key].baserate;
+		}
+			let grandTotal = this.edit_rates_value.grand_total
+			let stripeFee = grandTotal * 0.05 + 0.30
+			let adminShare = (base_rate * this.adminSharePercent) / 100 
+			let deducted_admin_share = adminShare-stripeFee
+			let shareArray = {
+				baseRate : base_rate,
+				grandTotal : grandTotal,
+				stripeFee : stripeFee,
+				adminShare : adminShare,
+				deducted_admin_share: deducted_admin_share,  // Admin will get this amount only
+				affiliateShare : (grandTotal - adminShare)
+			}
+			// travelAgentShare : 
+			if(this.BookingDetail?.account_type == 'travel_planner' && !this.isCreatedByAdmin){
+				this.adminSharePercent = 15
+				shareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100 
+				shareArray['deducted_admin_share'] = shareArray['adminShare']- shareArray['stripeFee']
+				shareArray['travelAgentShare'] = base_rate * 0.10  
+			}
+			this.shareArray = shareArray
+			// console.log('in function createReservationShareArray-->>>' , base_rate, shareArray )
+			return shareArray;
+			// value['rateArray'] = JSON.parse(JSON.stringify(this.edit_rates_value))
+		}
+	}
 	submitForm() {
 		this.spinner.show();
 		this.finalize_btn = 'Finalized'
@@ -253,7 +295,8 @@ export class AffiliateFinalizeComponent implements OnInit {
 			rateArray: rateArray,
 			sub_total: this.edit_rates_value.sub_total,
 			grand_total: this.edit_rates_value.grand_total,
-			number_of_hours: this.finalize_params['number_of_hours']
+			number_of_hours: this.finalize_params['number_of_hours'],
+			shareArray:this.shareArray
 		}
 		console.log('final obj -------------->>>>>>>', body)
 		console.log('\n\n Submitting Form', body);
@@ -266,7 +309,9 @@ export class AffiliateFinalizeComponent implements OnInit {
 			// })
 			// this.$router.navigate(['/admin/daily-bookings-admin'])
 			console.log('response-->>', response)
+			
 		})
+		this.getBookingData()
 
 	}
 	
