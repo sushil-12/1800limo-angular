@@ -368,7 +368,8 @@
 	<app-affiliate-finalize-rates *ngIf="init_rates" class="d-flex flex-wrap finalize-rates" [initRates]="init_rates"
 		(formvalue)="RateFormValue($event)" [distance]="finalize_params.distance" [isTravelShare]="isTravelShare"
 		[reservation_id]="finalize_params.booking_id" [reset]="false" [hours]="hours"
-		[vehicles]="finalize_params.number_of_vehicles" (returnNumberOfHr)="HandleReturnNumberOfHr($event)">
+		[vehicles]="finalize_params.number_of_vehicles" (returnNumberOfHr)="HandleReturnNumberOfHr($event)"
+		[isCreatedByAdmin]="isCreatedByAdmin">
 	</app-affiliate-finalize-rates>
 	<div class="row mb-3" id="submitForm" *ngIf="BookingDetail?.payment_status=='unpaid' && !editRate">
 		<div class="col-md-12 text-right">
