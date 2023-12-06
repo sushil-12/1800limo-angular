@@ -74,6 +74,7 @@ export class FinalizeBookingComponent implements OnInit {
     r_shareArray: any;
     adminSharePercent: number = 25;
 	service_type: any;
+	isFarmoutBooking: boolean = false;
 
 	constructor(
 		private $form: FormBuilder,
@@ -175,6 +176,7 @@ export class FinalizeBookingComponent implements OnInit {
 				console.log(response.data, "check response");
 				this.isTravelShare =  response?.data?.account_type=='travel_planner' ? true : false
 				this.isCreatedByAdmin = response?.data?.created_by==1 ? true : false
+				this.isFarmoutBooking = response?.data?.reservation_type=='farmout' ? true : false
 				this.BookingDetail = response.data
 				this.transferType = this.BookingDetail.transfer_type
 				this.init_rates = true;
@@ -288,6 +290,12 @@ export class FinalizeBookingComponent implements OnInit {
 				shareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100 
 				shareArray['deducted_admin_share'] = shareArray['adminShare']- shareArray['stripeFee']
 				shareArray['travelAgentShare'] = base_rate * 0.10  
+			}
+			else if(this.isFarmoutBooking){
+				this.adminSharePercent = 15
+				shareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100 
+				shareArray['deducted_admin_share'] = shareArray['adminShare']- shareArray['stripeFee']
+				shareArray['farmoutShare'] = base_rate * 0.10  
 			}
 			this.shareArray = shareArray
 			// console.log('in function createReservationShareArray-->>>' , base_rate, shareArray )

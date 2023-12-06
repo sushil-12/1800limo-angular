@@ -23,6 +23,7 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 	@Input('reset') reset: boolean = false;
 	@Input('isCreatedByAdmin') isCreatedByAdmin: boolean = true;
 	@Input ('service_type') service_type:any;
+	@Input('isFarmoutBooking') isFarmoutBooking: boolean = false;
 
 	// Throw Events.
 	@Output("formvalue") formvalue = new EventEmitter<Record<string, any>>();
@@ -75,6 +76,7 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 	is_readonly_min_rate: boolean = false;
 	travel_share :number = 10
 	travel_agent_share : any = 0;
+	farmoutShare: any;
 	
 	constructor(
 		private $form: FormBuilder,
@@ -501,8 +503,9 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 		console.log('in function calculateAdminShare')
 
 		let baseRate = this.calculateBaseRateShare()
-		this.admin_share = (this.isTravelShare && !this.isCreatedByAdmin) ? 15 : 25
+		this.admin_share = (this.isTravelShare && !this.isCreatedByAdmin || this.isFarmoutBooking) ? 15 : 25
 		this.calc_admin_share = baseRate * this.admin_share / 100
+		this.isFarmoutBooking ? this.farmoutShare = baseRate * 0.10 : ''
 		console.log('in function caculate admin share-->>', this.calc_admin_share)
 	}
 	calculateTravelShare() {
@@ -599,6 +602,9 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 				if (this.isTravelShare && !this.isCreatedByAdmin) {
 					baseRateAmount = baseRateAmount + this.travel_agent_share;
 				}
+				else if(this.isFarmoutBooking){
+                    baseRateAmount = baseRateAmount + this.farmoutShare;
+                }
 				// (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates')).get('Base_Rate'))).get("amount").setValue(baseRateAmount);
 				this.total['Base_Rate'] = Number(Number(baseRateAmount).toFixed(2));
 			}

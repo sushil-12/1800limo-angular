@@ -1445,6 +1445,21 @@
 							</div>
 						</div>
 					</div>
+					<div class="mx-2" *ngIf="shareArray?.farmoutShare">
+						<div class="row m-0">
+							<div class="col-md-4 key d-flex align-items-center">
+								<span class="">
+									Affliate Farmout share
+								</span>
+							</div>
+							<div class="col-md-8 value preview-airport-color">
+								<span class="font-weight-bolder preview-output-feild">
+									${{shareArray?.farmoutShare.toFixed(2)}}
+								</span>
+								( 10 % of Base Rate)
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 
