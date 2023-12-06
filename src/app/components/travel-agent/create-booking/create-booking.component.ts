@@ -531,14 +531,26 @@ export class CreateBookingComponent implements OnInit {
 			for (let outerKey in response?.data?.rateArray) {
 				if (response?.data?.rateArray.hasOwnProperty(outerKey)) {
 					const innerObject = response?.data?.rateArray[outerKey];
-					for (let innerKey in innerObject) {
-						if (innerObject.hasOwnProperty(innerKey)) {
-							this.subtotal += innerObject[innerKey].amount
-
+					if(outerKey == 'all_inclusive_rates'){
+						
+						for (let innerKey in innerObject) {
+							if (innerObject.hasOwnProperty(innerKey)) {
+								this.subtotal += innerObject[innerKey].baserate
+								console.log("in if allinclusive",this.subtotal)
+							}
+						}
+					}
+					else{
+						for (let innerKey in innerObject) {
+							if (innerObject.hasOwnProperty(innerKey)) {
+								this.subtotal += innerObject[innerKey].amount
+	
+							}
 						}
 					}
 				}
 			}
+		
 			let base_rate = 0
 			if (this.BookingForm.value?.service_type == 'charter_tour') {
 				base_rate += this.rateArray.all_inclusive_rates["Base_Rate"].baserate * this.number_of_hours
@@ -552,22 +564,47 @@ export class CreateBookingComponent implements OnInit {
 			for (const key of Object.keys(this.rateArray.amenities)) {
 				base_rate += this.rateArray.amenities[key].baserate;
 			}
+			//calculating subtotal and share of sdmin adn ta if created by TA
 			if (this.BookingForm.value?.account_type == 'travel_planner' && !this.isCreatedByAdmin) {
+				let adminShare = (base_rate * 15) / 100
 				this.agentShare = base_rate * 0.10
+				this.subtotal += adminShare + this.agentShare
+				console.log("in if created by ta",this.subtotal)
 			}
+			else{
+              let adminShare = (base_rate * 25) / 100
+			  this.subtotal += adminShare
+			  console.log("in if created by admin",this.subtotal)
+			}
+			
 			this.grandtotal = (parseFloat(this.subtotal))
 			console.log('grandtotal->', this.grandtotal)
+
+			//in case of round trip
 			if (this.booking_data?.service_type == 'round_trip') {
 				for (let outerKey in response?.data?.retrunRateArray) {
 					if (response?.data?.retrunRateArray.hasOwnProperty(outerKey)) {
 						const innerObject = response?.data?.retrunRateArray[outerKey];
-						for (let innerKey in innerObject) {
-							if (innerObject.hasOwnProperty(innerKey)) {
-								this.r_subtotal += innerObject[innerKey].amount
+						if(outerKey == 'all_inclusive_rates'){
+							
+							for (let innerKey in innerObject) {
+								if (innerObject.hasOwnProperty(innerKey)) {
+									this.r_subtotal += innerObject[innerKey].baserate
+									console.log("in if allinclusive",this.r_subtotal)
+								}
+							}
+						}
+						else{
+							for (let innerKey in innerObject) {
+								if (innerObject.hasOwnProperty(innerKey)) {
+									this.subtotal += innerObject[innerKey].amount
+		
+								}
 							}
 						}
 					}
 				}
+			
 				let base_rate = 0
 				if (this.BookingForm.value?.service_type == 'charter_tour') {
 					base_rate += this.returnRateArray.all_inclusive_rates["Base_Rate"].baserate * this.number_of_hours
@@ -581,9 +618,18 @@ export class CreateBookingComponent implements OnInit {
 				for (const key of Object.keys(this.returnRateArray.amenities)) {
 					base_rate += this.returnRateArray.amenities[key].baserate;
 				}
-				if (this.BookingForm.value?.account_type == 'travel_planner' && !this.isCreatedByAdmin) {
-					this.r_agentShare = base_rate * 0.10
-				}
+				//calculating subtotal and share of sdmin adn ta if created by TA
+			if (this.BookingForm.value?.account_type == 'travel_planner' && !this.isCreatedByAdmin) {
+				let adminShare = (base_rate * 15) / 100
+				this.r_agentShare = base_rate * 0.10
+				this.r_subtotal += adminShare + this.r_agentShare
+				console.log("in if created by ta",this.r_subtotal)
+			}
+			else{
+              let adminShare = (base_rate * 25) / 100
+			  this.r_subtotal += adminShare
+			  console.log("in if created by admin",this.r_subtotal)
+			}
 				this.r_grandtotal = (parseFloat(this.r_subtotal))
 			}
 		});
