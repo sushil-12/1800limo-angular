@@ -33,18 +33,17 @@
 						d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
 				</svg>
 			</ng-template> -->
-			<svg *ngIf="showSidebar===true" xmlns="http://www.w3.org/2000/svg"
-				(click)="showSidebarFunc(false)" width="24" height="24" fill="currentColor" class="bi bi-chevron-left"
-				viewBox="0 0 16 16">
+			<svg *ngIf="showSidebar===true" xmlns="http://www.w3.org/2000/svg" (click)="showSidebarFunc(false)"
+				width="24" height="24" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
 				<path fill-rule="evenodd"
 					d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
 			</svg>
-		
+
 			<svg (click)="showSidebarFunc(true)" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-					fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16" *ngIf="showSidebar===false">
-					<path fill-rule="evenodd"
-						d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
-				</svg>
+				fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16" *ngIf="showSidebar===false">
+				<path fill-rule="evenodd"
+					d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+			</svg>
 		</button>
 		<ul class="navbar-nav align-items-center ml-auto">
 			<li class="hideMobile">
@@ -54,9 +53,9 @@
 				<div id="google_translate_element_desktop"></div>
 			</li>
 			<li class="nav-item dropdown no-caret dropdown-user">
-				<a class="user-profile btn btn-icon btn-transparent-dark dropdown-toggle"
-					id="navbarDropdownUserImage" href="javascript:void(0);" role="button"
-					data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" tabindex="-1">
+				<a class="user-profile btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownUserImage"
+					href="javascript:void(0);" role="button" data-toggle="dropdown" aria-haspopup="true"
+					aria-expanded="false" tabindex="-1">
 					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" *ngIf="!profile_pic_url">
 						<path fill="#000" fill-rule="evenodd"
 							d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22ZM15 10C15 11.6569 13.6569 13 12 13C10.3431 13 9 11.6569 9 10C9 8.34315 10.3431 7 12 7C13.6569 7 15 8.34315 15 10ZM5.99927 17C7.36758 15.1783 9.54609 14 11.9998 14C14.4535 14 16.6321 15.1783 18.0004 17C16.6321 18.8217 14.4535 20 11.9998 20C9.54609 20 7.36758 18.8217 5.99927 17Z"
@@ -71,12 +70,13 @@
 				<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
 					aria-labelledby="navbarDropdownUserImage">
 					<h6 class="user-profile dropdown-header d-flex align-items-center">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" *ngIf="!profile_pic_url">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+							*ngIf="!profile_pic_url">
 							<path fill="#000" fill-rule="evenodd"
 								d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22ZM15 10C15 11.6569 13.6569 13 12 13C10.3431 13 9 11.6569 9 10C9 8.34315 10.3431 7 12 7C13.6569 7 15 8.34315 15 10ZM5.99927 17C7.36758 15.1783 9.54609 14 11.9998 14C14.4535 14 16.6321 15.1783 18.0004 17C16.6321 18.8217 14.4535 20 11.9998 20C9.54609 20 7.36758 18.8217 5.99927 17Z"
 								clip-rule="evenodd" />
 						</svg>
-					<img src="{{profile_pic_url}}" height="24px" width="24px" *ngIf="profile_pic_url">
+						<img src="{{profile_pic_url}}" height="24px" width="24px" *ngIf="profile_pic_url">
 
 						<div class="dropdown-user-details">
 							<div class="dropdown-user-details-name font-weight-bold">
@@ -86,13 +86,12 @@
 						</div>
 					</h6>
 					<div class="dropdown-divider"></div>
-					<a class="dropdown-item" [routerLinkActive]="['active']"
-						routerLink="/affiliate/profile" tabindex="-1" *ngIf="affiliateAccountStatus!='in-progress' && affiliateAccountStatus.length">
+					<a class="dropdown-item" [routerLinkActive]="['active']" routerLink="/affiliate/profile"
+						tabindex="-1" *ngIf="affiliateAccountStatus!='in-progress' && affiliateAccountStatus.length">
 						<div class="dropdown-item-icon">
 							<svg width="24" height="24" viewBox="0 0 24 24" class=" profileSvg">
-								<g fill="none" fill-rule="evenodd" stroke="#5dbd8a"
-									stroke-linecap="round" stroke-linejoin="round"
-									stroke-width="1.5" transform="translate(4 2.5)">
+								<g fill="none" fill-rule="evenodd" stroke="#5dbd8a" stroke-linecap="round"
+									stroke-linejoin="round" stroke-width="1.5" transform="translate(4 2.5)">
 									<circle cx="7.579" cy="4.778" r="4.778" />
 									<path
 										d="M5.32907052e-15,16.2013731 C-0.00126760558,15.8654831 0.0738531734,15.5336997 0.219695816,15.2311214 C0.677361723,14.3157895 1.96797958,13.8306637 3.0389178,13.610984 C3.81127745,13.4461621 4.59430539,13.3360488 5.38216724,13.2814646 C6.84083861,13.1533327 8.30793524,13.1533327 9.76660662,13.2814646 C10.5544024,13.3366774 11.3373865,13.4467845 12.1098561,13.610984 C13.1807943,13.8306637 14.4714121,14.270023 14.929078,15.2311214 C15.2223724,15.8479159 15.2223724,16.5639836 14.929078,17.1807781 C14.4714121,18.1418765 13.1807943,18.5812358 12.1098561,18.7917621 C11.3383994,18.9634099 10.5550941,19.0766219 9.76660662,19.1304349 C8.57936754,19.2310812 7.38658584,19.2494317 6.19681255,19.1853548 C5.92221301,19.1853548 5.65676678,19.1853548 5.38216724,19.1304349 C4.59663136,19.077285 3.8163184,18.9640631 3.04807112,18.7917621 C1.96797958,18.5812358 0.686515041,18.1418765 0.219695816,17.1807781 C0.0745982583,16.8746908 -0.000447947969,16.5401098 5.32907052e-15,16.2013731 Z" />
@@ -104,10 +103,9 @@
 					</a>
 					<a class="dropdown-item" (click)="logout()" tabindex="-1">
 						<div class="dropdown-item-icon">
-							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-								viewBox="0 0 24 24" fill="none" stroke="currentColor"
-								stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-								class="feather feather-log-out">
+							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+								fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+								stroke-linejoin="round" class="feather feather-log-out">
 								<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
 								<polyline points="16 17 21 12 16 7"></polyline>
 								<line x1="21" y1="12" x2="9" y2="12"></line>
@@ -125,18 +123,16 @@
 		<div id="layoutSidenav_nav">
 			<nav class="sidenav shadow-right">
 				<div class="sidenav-menu">
-					<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion"
-						id="accordionSidebar">
+					<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 						<!---1st--->
 						<li class="nav-item"
 							[hidden]="affiliateAccountStatus=='accepted' || affiliateAccountStatus=='in-progress'">
 							<a class="nav-link collapsed" [routerLinkActive]="['active']"
-								[routerLink]="['/affiliate/account-status']"
-								(click)="closeSidebarFunc(false)" tabindex="-1">
+								[routerLink]="['/affiliate/account-status']" (click)="closeSidebarFunc(false)"
+								tabindex="-1">
 								<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
 									xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-									viewBox="0 0 113.39 122.88"
-									style="enable-background:new 0 0 113.39 122.88"
+									viewBox="0 0 113.39 122.88" style="enable-background:new 0 0 113.39 122.88"
 									xml:space="preserve">
 									<g>
 										<path
@@ -147,10 +143,9 @@
 						</li>
 						<li class="nav-item" [hidden]="affiliateAccountStatus!='accepted'">
 							<a class="nav-link collapsed" [routerLinkActive]="['active']"
-								routerLink="/affiliate/my-bookings"
-								(click)="closeSidebarFunc(false)" tabindex="-1">
-								<svg id="Layer_1" data-name="Layer 1"
-									xmlns="http://www.w3.org/2000/svg" viewBox="0 0 117.78 122.88">
+								routerLink="/affiliate/my-bookings" (click)="closeSidebarFunc(false)" tabindex="-1">
+								<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"
+									viewBox="0 0 117.78 122.88">
 									<title>timecard</title>
 									<path
 										d="M57.35,116.3H7.46a7.48,7.48,0,0,1-5.27-2.19L2,113.87a7.43,7.43,0,0,1-2-5V7.46A7.45,7.45,0,0,1,2.19,2.19L2.42,2a7.42,7.42,0,0,1,5-2H91.88a7.48,7.48,0,0,1,7.46,7.46v49.4a37.78,37.78,0,0,0-6.41-1.2V7.46a1.1,1.1,0,0,0-1.05-1H7.46a1.08,1.08,0,0,0-.66.23l-.08.08a1.06,1.06,0,0,0-.31.74V108.84a1,1,0,0,0,.23.65l.09.08a1,1,0,0,0,.73.32H53.71a38.12,38.12,0,0,0,3.64,6.41ZM85.18,82.12h2.89a2,2,0,0,1,1.43.59,2.06,2.06,0,0,1,.6,1.44V94.77h9.59a2,2,0,0,1,2,2v3a2.12,2.12,0,0,1-.6,1.44l-.08.07a2,2,0,0,1-1.35.52H84a1,1,0,0,1-1-1V84a2,2,0,0,1,.59-1.29,2,2,0,0,1,1.43-.6ZM89,65.38A28.75,28.75,0,1,1,68.7,73.8,28.67,28.67,0,0,1,89,65.38Zm16.26,12.49A23,23,0,1,0,112,94.13a22.92,22.92,0,0,0-6.73-16.26Zm-62.55,5.5a3.65,3.65,0,0,1,0-7.18h9.58a3.65,3.65,0,0,1,0,7.18Zm-22-9.28h9A1.18,1.18,0,0,1,31,75.27v9a1.18,1.18,0,0,1-1.18,1.18h-9a1.18,1.18,0,0,1-1.18-1.18v-9a1.18,1.18,0,0,1,1.18-1.18Zm0-51.94h9A1.18,1.18,0,0,1,31,23.33v9a1.18,1.18,0,0,1-1.18,1.18h-9a1.18,1.18,0,0,1-1.18-1.18v-9a1.18,1.18,0,0,1,1.18-1.18Zm22,9.27a3.33,3.33,0,0,1-3-3.58,3.34,3.34,0,0,1,3-3.59H78.25a3.34,3.34,0,0,1,3,3.59,3.33,3.33,0,0,1-3,3.58ZM18.34,54.1a2,2,0,0,1,.38-2.82,2.23,2.23,0,0,1,3-.09l2.1,2.17L29.07,48a1.93,1.93,0,0,1,2.82.3,2.23,2.23,0,0,1,.18,3l-7,7.14a1.94,1.94,0,0,1-2.82-.3l-.16-.19a1.94,1.94,0,0,1-.31-.26L18.34,54.1Zm24.4,2.69a3.34,3.34,0,0,1-3-3.59,3.34,3.34,0,0,1,3-3.59H78.25a3.34,3.34,0,0,1,3,3.59,3.34,3.34,0,0,1-3,3.59Z" />
@@ -161,19 +156,33 @@
 						<!-- FARM OUT BOOKING -->
 						<li class="nav-item" [hidden]="affiliateAccountStatus!='accepted'">
 							<a class="nav-link collapsed" [routerLinkActive]="['active']"
-								[routerLink]="['/affiliate/farm-out']"
-								(click)="closeSidebarFunc(false)" tabindex="-1">
+								[routerLink]="['/affiliate/farm-out']" (click)="closeSidebarFunc(false)" tabindex="-1">
 								<!-- SVG ICON -->
-								<svg id="Layer_1" data-name="Layer 1"
-									xmlns="http://www.w3.org/2000/svg" viewBox="0 0 117.78 122.88">
+								<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"
+									viewBox="0 0 117.78 122.88">
 									<title>timecard</title>
 									<path
 										d="M57.35,116.3H7.46a7.48,7.48,0,0,1-5.27-2.19L2,113.87a7.43,7.43,0,0,1-2-5V7.46A7.45,7.45,0,0,1,2.19,2.19L2.42,2a7.42,7.42,0,0,1,5-2H91.88a7.48,7.48,0,0,1,7.46,7.46v49.4a37.78,37.78,0,0,0-6.41-1.2V7.46a1.1,1.1,0,0,0-1.05-1H7.46a1.08,1.08,0,0,0-.66.23l-.08.08a1.06,1.06,0,0,0-.31.74V108.84a1,1,0,0,0,.23.65l.09.08a1,1,0,0,0,.73.32H53.71a38.12,38.12,0,0,0,3.64,6.41ZM85.18,82.12h2.89a2,2,0,0,1,1.43.59,2.06,2.06,0,0,1,.6,1.44V94.77h9.59a2,2,0,0,1,2,2v3a2.12,2.12,0,0,1-.6,1.44l-.08.07a2,2,0,0,1-1.35.52H84a1,1,0,0,1-1-1V84a2,2,0,0,1,.59-1.29,2,2,0,0,1,1.43-.6ZM89,65.38A28.75,28.75,0,1,1,68.7,73.8,28.67,28.67,0,0,1,89,65.38Zm16.26,12.49A23,23,0,1,0,112,94.13a22.92,22.92,0,0,0-6.73-16.26Zm-62.55,5.5a3.65,3.65,0,0,1,0-7.18h9.58a3.65,3.65,0,0,1,0,7.18Zm-22-9.28h9A1.18,1.18,0,0,1,31,75.27v9a1.18,1.18,0,0,1-1.18,1.18h-9a1.18,1.18,0,0,1-1.18-1.18v-9a1.18,1.18,0,0,1,1.18-1.18Zm0-51.94h9A1.18,1.18,0,0,1,31,23.33v9a1.18,1.18,0,0,1-1.18,1.18h-9a1.18,1.18,0,0,1-1.18-1.18v-9a1.18,1.18,0,0,1,1.18-1.18Zm22,9.27a3.33,3.33,0,0,1-3-3.58,3.34,3.34,0,0,1,3-3.59H78.25a3.34,3.34,0,0,1,3,3.59,3.33,3.33,0,0,1-3,3.58ZM18.34,54.1a2,2,0,0,1,.38-2.82,2.23,2.23,0,0,1,3-.09l2.1,2.17L29.07,48a1.93,1.93,0,0,1,2.82.3,2.23,2.23,0,0,1,.18,3l-7,7.14a1.94,1.94,0,0,1-2.82-.3l-.16-.19a1.94,1.94,0,0,1-.31-.26L18.34,54.1Zm24.4,2.69a3.34,3.34,0,0,1-3-3.59,3.34,3.34,0,0,1,3-3.59H78.25a3.34,3.34,0,0,1,3,3.59,3.34,3.34,0,0,1-3,3.59Z" />
 								</svg>
-								<span> Create/View Farm-Out Bookings </span>
+								<span>View Farm-Out Bookings </span>
 							</a>
 						</li>
 						<!-- FARM OUT BOOKING ENDS -->
+						<!-- Create new farmout -->
+						<li class="nav-item" [hidden]="affiliateAccountStatus!='accepted'">
+							<a class="nav-link collapsed" [routerLinkActive]="['active']" routerLink="/home"
+								(click)="closeSidebarFunc(false)" tabIndex="-1">
+								<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+									xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+									viewBox="0 0 110.74 122.88" style="enable-background:new 0 0 110.74 122.88"
+									xml:space="preserve">
+									<g>
+										<path
+											d="M48.47,116.35c1.8,0,3.27,1.46,3.27,3.26c0,1.8-1.46,3.26-3.27,3.26H7.6c-2.09,0-3.99-0.85-5.37-2.23 C0.85,119.27,0,117.38,0,115.28V7.6C0,5.5,0.85,3.61,2.23,2.23C3.61,0.85,5.5,0,7.6,0h93.3c2.09,0,3.99,0.86,5.37,2.23 c1.38,1.38,2.23,3.27,2.23,5.37v53.95c0,1.8-1.46,3.26-3.26,3.26c-1.8,0-3.26-1.46-3.26-3.26V7.6c0-0.29-0.12-0.56-0.32-0.75 c-0.2-0.2-0.47-0.32-0.75-0.32H7.6c-0.29,0-0.56,0.12-0.76,0.31C6.65,7.05,6.53,7.31,6.53,7.6v107.68c0,0.29,0.12,0.56,0.32,0.75 c0.2,0.2,0.47,0.32,0.76,0.32L48.47,116.35L48.47,116.35L48.47,116.35z M33.94,57.92c-0.62-1.07-0.17-4.13,1.16-5.21 c3.8-2.22,9.04-1.53,12.7-4.09c0.21-0.32,0.44-0.78,0.67-1.29c0.33-0.76,0.64-1.59,0.83-2.16c-0.81-0.96-1.51-2.04-2.17-3.1 l-2.2-3.5c-0.8-1.2-1.22-2.3-1.25-3.2c-0.01-0.42,0.06-0.81,0.22-1.15c0.16-0.36,0.41-0.65,0.76-0.88c0.16-0.11,0.34-0.2,0.53-0.27 c-0.15-1.9-0.2-4.29-0.1-6.3c0.05-0.47,0.14-0.95,0.27-1.43c0.56-2.01,1.97-3.63,3.72-4.74c0.96-0.61,2.02-1.08,3.12-1.39 c0.7-0.2-0.6-2.43,0.13-2.51c3.5-0.36,9.15,2.83,11.59,5.47c1.22,1.32,1.99,3.08,2.16,5.4l-0.14,5.71l0,0 c0.61,0.19,1,0.57,1.16,1.2c0.18,0.7-0.01,1.67-0.61,3.01l0,0c-0.01,0.02-0.02,0.05-0.04,0.07l-2.51,4.13 c-0.92,1.52-1.86,3.04-3.08,4.24c0.11,0.16,0.23,0.32,0.34,0.48c0.5,0.73,1,1.46,1.64,2.11c0.02,0.02,0.04,0.05,0.05,0.07 c2.89,2.04,9.92,2.54,12.62,4.04l0.11,0.06c1.39,1.07,1.82,4.13,1.18,5.2H33.94L33.94,57.92z M102.29,79.04 c-0.53-0.51-1.14-0.75-1.84-0.74c-0.71,0.01-1.31,0.29-1.8,0.81l-4.05,4.22l11.37,10.98l4.09-4.26c0.49-0.5,0.69-1.14,0.68-1.84 c-0.01-0.69-0.26-1.33-0.76-1.8L102.29,79.04L102.29,79.04L102.29,79.04z M84.54,116.17c-1.5,0.48-3,0.97-4.49,1.46 c-1.5,0.5-3,1-4.49,1.5c-3.53,1.16-5.51,1.8-5.93,1.92c-0.4,0.12-0.17-1.53,0.73-4.99l2.81-10.83l0,0l17.82-18.18l11.36,10.93 L84.54,116.17L84.54,116.17L84.54,116.17z M31.74,95.36c-1.8,0-3.27-1.48-3.27-3.31s1.46-3.31,3.27-3.31h22.21 c1.8,0,3.27,1.48,3.27,3.31s-1.46,3.31-3.27,3.31H31.74L31.74,95.36L31.74,95.36z M31.74,74.67c-1.8,0-3.26-1.46-3.26-3.27 c0-1.8,1.46-3.26,3.26-3.26h44.05c1.8,0,3.26,1.46,3.26,3.26c0,1.8-1.46,3.27-3.26,3.27H31.74L31.74,74.67L31.74,74.67z" />
+									</g>
+								</svg> <span>Create New Booking</span>
+							</a>
+						</li>
 						<li>
 							<!-- <div id="google-translate">
 								<div id="google_translate_element_mobile"></div>
@@ -181,18 +190,15 @@
 							<div id="google_translate_element_mobile"></div>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link dropdwn position-relative"
-								[routerLinkActive]="['active']" data-toggle="collapse"
-								data-target="#collapse5" aria-expanded="true"
-								aria-controls="collapseUtilities" tabindex="-1"
-								(click)="toggleChevron()">
+							<a class="nav-link dropdwn position-relative" [routerLinkActive]="['active']"
+								data-toggle="collapse" data-target="#collapse5" aria-expanded="true"
+								aria-controls="collapseUtilities" tabindex="-1" (click)="toggleChevron()">
 								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 									<path fill="none" d="M0 0h24v24H0V0z" />
 									<path
 										d="M7 3v3h2V4h10v16H9v-2H7v3c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2zm2.5 12.5c.29-.12.55-.29.8-.48l-.02.03 1.01.39c.23.09.49 0 .61-.22l.84-1.46c.12-.21.07-.49-.12-.64l-.85-.68-.02.03c.02-.16.05-.32.05-.48s-.03-.32-.05-.48l.02.03.85-.68c.19-.15.24-.43.12-.64l-.84-1.46c-.12-.21-.38-.31-.61-.22l-1.01.39.02.03c-.25-.17-.51-.34-.8-.46l-.17-1.08C9.3 7.18 9.09 7 8.84 7H7.16c-.25 0-.46.18-.49.42L6.5 8.5c-.29.12-.55.29-.8.48l.02-.03-1.02-.39c-.23-.09-.49 0-.61.22l-.84 1.46c-.12.21-.07.49.12.64l.85.68.02-.03c-.02.15-.05.31-.05.47s.03.32.05.48l-.02-.03-.85.68c-.19.15-.24.43-.12.64l.84 1.46c.12.21.38.31.61.22l1.01-.39-.01-.04c.25.19.51.36.8.48l.17 1.07c.03.25.24.43.49.43h1.68c.25 0 .46-.18.49-.42l.17-1.08zM6 12c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2z" />
 								</svg>
-								<span
-									[ngClass]="chevron_up ? 'bi bi-chevron-up' : 'bi bi-chevron-down'">
+								<span [ngClass]="chevron_up ? 'bi bi-chevron-up' : 'bi bi-chevron-down'">
 									Initial Setup / Profile
 								</span>
 							</a>
@@ -201,10 +207,8 @@
 								[ngClass]="affiliateAccountStatus == 'accepted' ? '' : 'show'">
 								<div class="py-2 collapse-inner rounded">
 									<a class="collapse-item" [className]="step_0_class"
-										(click)="stepClick(0); closeSidebarFunc(false)"
-										tabindex="-1">
-										<svg xmlns="http://www.w3.org/2000/svg"
-											viewBox="0 0 256 256">
+										(click)="stepClick(0); closeSidebarFunc(false)" tabindex="-1">
+										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
 											<rect fill="none" />
 											<ellipse cx="128" cy="128" rx="24" ry="40" />
 											<path
@@ -212,42 +216,33 @@
 										</svg>
 										<span>Agreement</span>
 									</a>
-									<a class="collapse-item align-items-center"
-										[className]="step_1_class"
-										(click)="stepClick(1); closeSidebarFunc(false)"
-										tabindex="-1">
-										<svg xmlns="http://www.w3.org/2000/svg"
-											viewBox="0 0 256 256">
+									<a class="collapse-item align-items-center" [className]="step_1_class"
+										(click)="stepClick(1); closeSidebarFunc(false)" tabindex="-1">
+										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
 											<rect width="256" height="256" fill="none" />
 											<path
 												d="M128,24A104,104,0,1,0,232,128,104.11791,104.11791,0,0,0,128,24Zm12,152a8,8,0,0,1-16,0V98.94434l-11.56348,7.70605a8.00008,8.00008,0,1,1-8.873-13.31445l24-15.99317A8.00039,8.00039,0,0,1,140,84Z" />
 										</svg>
 										<span>Affiliate Settings</span>
-										<span
-											*ngIf="!is_email_verified && is_show_verification_icon">
+										<span *ngIf="!is_email_verified && is_show_verification_icon">
 											<i class="bi bi-hourglass-split text-secondary"></i>
 										</span>
 									</a>
 									<a class="collapse-item" [className]="step_2_class"
-										(click)="stepClick(2); closeSidebarFunc(false)"
-										tabindex="-1">
-										<svg xmlns="http://www.w3.org/2000/svg"
-											viewBox="0 0 256 256">
+										(click)="stepClick(2); closeSidebarFunc(false)" tabindex="-1">
+										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
 											<rect width="256" height="256" fill="none" />
 											<path
 												d="M128,24A104,104,0,1,0,232,128,104.11791,104.11791,0,0,0,128,24Zm24,143.99414a8,8,0,0,1,0,16H104.31738c-.10644.00391-.21289.00684-.31836.00684a8.00343,8.00343,0,0,1-6.30175-12.93164L141.37012,112.794a16.00416,16.00416,0,1,0-28.11621-15.01954A8,8,0,1,1,98.51758,91.542a32.00411,32.00411,0,1,1,56.01269,30.35547c-.07324.1084-.14843.21484-.22754.31934l-34.30566,45.77734Z" />
 										</svg>
 										<span>Stripe Banking / Map Fix</span>
-										<span
-											*ngIf="!is_bank_verified && is_show_verification_icon">
+										<span *ngIf="!is_bank_verified && is_show_verification_icon">
 											<i class="bi bi-hourglass-split text-secondary"></i>
 										</span>
 									</a>
 									<a class="collapse-item" [className]="step_3_class"
-										(click)="stepClick(3); closeSidebarFunc(false)"
-										tabindex="-1">
-										<svg xmlns="http://www.w3.org/2000/svg"
-											viewBox="0 0 256 256">
+										(click)="stepClick(3); closeSidebarFunc(false)" tabindex="-1">
+										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
 											<rect width="256" height="256" fill="none" />
 											<path
 												d="M128,24A104,104,0,1,0,232,128,104.11791,104.11791,0,0,0,128,24Zm21.458,153.45605a35.99982,35.99982,0,0,1-50.91113,0,8.00052,8.00052,0,0,1,11.31445-11.31445A19.99959,19.99959,0,1,0,124.00293,132a8,8,0,0,1-6.55469-12.58691l19.1875-27.4209H103.99707a8,8,0,0,1,0-16h48a8,8,0,0,1,6.55469,12.58691L137.5332,118.61816A36.019,36.019,0,0,1,149.458,177.45605Z" />
@@ -255,10 +250,8 @@
 										<span>Insurance Settings</span>
 									</a>
 									<a class="collapse-item" [className]="step_4_class"
-										(click)="stepClick(4); closeSidebarFunc(false)"
-										tabindex="-1">
-										<svg xmlns="http://www.w3.org/2000/svg"
-											viewBox="0 0 256 256">
+										(click)="stepClick(4); closeSidebarFunc(false)" tabindex="-1">
+										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
 											<rect width="256" height="256" fill="none" />
 											<path
 												d="M128,24A104,104,0,1,0,232,128,104.11791,104.11791,0,0,0,128,24Zm28,152a8,8,0,0,1-16,0V152H100a7.99995,7.99995,0,0,1-7.54395-10.66211l23.998-68A7.99987,7.99987,0,1,1,131.542,78.66211L111.30664,136H140V112a8,8,0,0,1,16,0Z" />
@@ -266,10 +259,8 @@
 										<span>Driver Settings</span>
 									</a>
 									<a class="collapse-item" [className]="step_5_class"
-										(click)="stepClick(5); closeSidebarFunc(false)"
-										tabindex="-1">
-										<svg xmlns="http://www.w3.org/2000/svg"
-											viewBox="0 0 256 256">
+										(click)="stepClick(5); closeSidebarFunc(false)" tabindex="-1">
+										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
 											<rect width="256" height="256" fill="none" />
 											<path
 												d="M128,24A104,104,0,1,0,232,128,104.11791,104.11791,0,0,0,128,24ZM123.88184,116.002A35.99912,35.99912,0,1,1,98.35449,177.4668a7.99985,7.99985,0,1,1,11.291-11.33594,20.20173,20.20173,0,0,0,28.47461-.001,19.91646,19.91646,0,0,0-.001-28.25976,20.20412,20.20412,0,0,0-28.47461.001,7.99971,7.99971,0,0,1-13.541-6.95214l7.835-48.20215A8.00076,8.00076,0,0,1,111.835,76H152a8,8,0,0,1,0,16H118.63965L114.542,117.21094A36.413,36.413,0,0,1,123.88184,116.002Z" />
@@ -277,11 +268,9 @@
 										<span>Vehicle Settings/Rates</span>
 									</a>
 									<a class="collapse-item" [className]="step_6_class"
-										(click)="stepClick(6); closeSidebarFunc(false)"
-										tabindex="-1">
-										<svg xmlns="http://www.w3.org/2000/svg"
-											viewBox="0 0 256 256">
-										 	<rect width="256" height="256" fill="none" />
+										(click)="stepClick(6); closeSidebarFunc(false)" tabindex="-1">
+										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+											<rect width="256" height="256" fill="none" />
 											<path
 												d="M148,144a20,20,0,1,1-20-20A20.02229,20.02229,0,0,1,148,144Zm84-16A104,104,0,1,1,128,24,104.11791,104.11791,0,0,1,232,128Zm-68,16a36.04061,36.04061,0,0,0-36-36q-.917,0-1.82324.04639l16.6914-27.94385a8.00015,8.00015,0,0,0-13.73632-8.20508l-32.249,53.98926c-.11157.18652-.20776.37793-.30224.56982A35.99384,35.99384,0,1,0,164,144Z" />
 										</svg>
@@ -292,8 +281,7 @@
 						</li>
 						<hr class="sidebar-divider d-none d-md-block">
 						<div class="text-center d-none d-md-inline">
-							<button class="rounded-circle border-0" id="sidebarToggle"
-								tabindex="-1"></button>
+							<button class="rounded-circle border-0" id="sidebarToggle" tabindex="-1"></button>
 						</div>
 					</ul>
 				</div>
@@ -302,7 +290,7 @@
 
 
 
-		<div id="layoutSidenav_content"   (click)="handleDivClick($event)">
+		<div id="layoutSidenav_content" (click)="handleDivClick($event)">
 			<main style="padding: inherit;">
 				<h1 class="HeadingH1" *ngIf="currentStep=='0'">
 					<div [className]="step_0_class">

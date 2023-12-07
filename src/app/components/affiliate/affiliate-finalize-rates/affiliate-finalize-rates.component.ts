@@ -22,7 +22,7 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 	@Input('isTravelShare') isTravelShare: boolean = false;
 	@Input('reset') reset: boolean = false;
 	@Input('isCreatedByAdmin') isCreatedByAdmin: boolean = true;
-	@Input ('service_type') service_type:any;
+	@Input('service_type') service_type: any;
 	@Input('isFarmoutBooking') isFarmoutBooking: boolean = false;
 
 	// Throw Events.
@@ -74,10 +74,10 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 	vehicles: number = 1;
 	hours: number = 0;
 	is_readonly_min_rate: boolean = false;
-	travel_share :number = 10
-	travel_agent_share : any = 0;
+	travel_share: number = 10
+	travel_agent_share: any = 0;
 	farmoutShare: any;
-	
+
 	constructor(
 		private $form: FormBuilder,
 		// private $api: AdminService,
@@ -92,7 +92,7 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 		});
 
 	}
-	ngAfterViewInit(){
+	ngAfterViewInit() {
 		this.scroll('grandTotal')
 	}
 
@@ -137,7 +137,7 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 			console.log('Resetting Number of Vehicles ');
 			this.vehicles = 1;
 		}
-		if(changes.isTravelShare){
+		if (changes.isTravelShare) {
 			this.initRates();
 			if (this.ReturnRatesForm) {
 				this.initReturnRates
@@ -179,11 +179,11 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 			}
 		}
 	}
-	handleNegtiveValue(formgroup,subform,formcontrol,value){
+	handleNegtiveValue(formgroup, subform, formcontrol, value) {
 		let v = parseFloat((Math.abs(Number(value))).toFixed(2));
 		(<FormGroup>(<FormGroup>this.RatesForm.get(formgroup)).get(subform)).get(formcontrol).setValue(v);
 		this.RatesForm.updateValueAndValidity();
-		console.log('handleNegtiveValue-->>' , formgroup,subform,formcontrol,parseFloat((Math.abs(Number(value))).toFixed(2))) 
+		console.log('handleNegtiveValue-->>', formgroup, subform, formcontrol, parseFloat((Math.abs(Number(value))).toFixed(2)))
 	}
 
 	scroll(id) {
@@ -191,14 +191,14 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 		let elementRect = el.getBoundingClientRect();
 		let absoluteElementTop = elementRect.top + window.pageYOffset;
 		let topElement = absoluteElementTop - 200;
-		
-		console.log(`scrolling to ${id}`, el , absoluteElementTop ,window.innerHeight);
+
+		console.log(`scrolling to ${id}`, el, absoluteElementTop, window.innerHeight);
 		window.scrollTo({
 			top: topElement,
 			behavior: 'smooth'
 		});
 		// el.scrollIntoView();
-	  }
+	}
 	returnZero() {
 		return 0;
 	}
@@ -314,36 +314,42 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 			this.ReturnRatesForm.updateValueAndValidity();
 		}
 	}
-	changeInHours(hours:any){
-		console.log('in function change in hours-->>>',hours)
-		this.hours = Number(hours)
-			if (this.RateForm.all_inclusive_rates.controls.Base_Rate) {
-				this.hours > 0 && this.RatesForm && this.calculateAmount('RatesForm', 'all_inclusive_rates', 'Base_Rate');
-			}
-			else {
-				if (this.RateForm.all_inclusive_rates.controls.Milage_Rate) {
-					this.hours > 0 && this.RatesForm && this.calculateAmount('RatesForm', 'all_inclusive_rates', 'Milage_Rate');
-				}
-				if (this.RateForm.all_inclusive_rates.controls.Kilometer_Rate) {
-					this.hours > 0 && this.RatesForm && this.calculateAmount('RatesForm', 'all_inclusive_rates', 'Kilometer_Rate');
-				}
+	changeInHours(hours: any) {
+		console.log('in function change in hours-->>>', hours)
+		if (!Number(hours)) {
+			return
 
+		}
+		this.hours = Number(hours)
+		if (this.RateForm.all_inclusive_rates.controls.Base_Rate) {
+			this.hours > 0 && this.RatesForm && this.calculateAmount('RatesForm', 'all_inclusive_rates', 'Base_Rate');
+		}
+		else {
+			if (this.RateForm.all_inclusive_rates.controls.Milage_Rate) {
+				this.hours > 0 && this.RatesForm && this.calculateAmount('RatesForm', 'all_inclusive_rates', 'Milage_Rate');
 			}
+			if (this.RateForm.all_inclusive_rates.controls.Kilometer_Rate) {
+				this.hours > 0 && this.RatesForm && this.calculateAmount('RatesForm', 'all_inclusive_rates', 'Kilometer_Rate');
+			}
+
+		}
 
 		this.returnNumberOfHr.emit(hours)
+		console.log("in change in hours rates",this.hours)
 	}
 	fetchRates(affiliate: string, bookingId: number = 0) {
 		this.$spinner.show()
 		this.affiliateService.finalizeRates(bookingId).subscribe((response: any) => {
 			this.$spinner.hide()
 			if (response?.success && response?.data?.rateArray) {
-				if(Object.keys(response.data.rateArray).length){
+				if (Object.keys(response.data.rateArray).length) {
 					this.ratesdata.next(response.data.rateArray);
 				}
-				else{
-					this.fetchRates(affiliate , null)
+				else {
+					this.fetchRates(affiliate, null)
 				}
 			}
+			console.log("in fetch rates",response?.data?.rateArray)
 		});
 	}
 
@@ -373,11 +379,12 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 						(<FormGroup>((<FormGroup>this.RatesForm.get(key)).get(item))).get("baserate").valueChanges.subscribe((value: number) => {
 							this.calculateAmount("RatesForm", key, item);
 						});
-						this.calculateAmount("RatesForm", key, item);
+						// this.calculateAmount("RatesForm", key, item);
 					}
-					
+
 				}
 			}
+			console.log('in function build rates form-->>>', data)
 		}
 	}
 
@@ -387,8 +394,10 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 			this.subtotal = 0;
 			for (let item in this.total) {
 				this.subtotal = Number(this.subtotal.toFixed(2)) + Number(this.total[item].toFixed(2));
+				console.log("in total checkk---->",this.subtotal,Number(this.subtotal.toFixed(2)),'--->',Number(this.total[item].toFixed(2)))
 			}
 		}
+		console.log('in function calcultae total-->>>', this.subtotal)
 
 		if (form === "ReturnRatesForm") {
 			this.r_subtotal = 0;
@@ -396,6 +405,8 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 				this.r_subtotal = Number(this.r_subtotal.toFixed(2)) + Number(this.r_total[item].toFixed(2));
 			}
 		}
+console.log("in function calculate total",this.grandtotal,this.subtotal)
+
 	}
 
 	calculateBaseRate(form: string): number {
@@ -405,6 +416,7 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 				let amount = (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates')).get(subform))).get("amount").value
 				temp += amount
 			}
+			console.log('in function calc base rate-->>>', temp)
 			return temp
 		}
 		if (form === 'ReturnRatesForm') {
@@ -427,6 +439,8 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 			value["sub_total"] = this.subtotal;
 
 			this.formvalue.emit(value);
+			console.log('in function calc g total-->>>', this.grandtotal)
+
 		}
 		if (form == 'ReturnRatesForm' && this.ReturnRatesForm) {
 			if (this.vehicles !== 0) {
@@ -438,6 +452,7 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 
 			this.returnformvalue.emit(value);
 		}
+		console.log("in function calculate total",this.grandtotal,this.subtotal)
 	}
 
 	toggleDropdown(section: string) {
@@ -448,40 +463,44 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 		console.log(items, "check items")
 		this.rate_params["chevrons"][items] = !this.rate_params["chevrons"][items];
 	}
-	getTabIndex(item:any){
+	getTabIndex(item: any) {
 		return this.rate_params["chevrons"][item] ? 0 : 1
 	}
 
-	handleSubHeadingScroll(items: string , id:any) {
+	handleSubHeadingScroll(items: string, id: any) {
 		this.rate_params["chevrons"][items] = !this.rate_params["chevrons"][items];
 		let el = document.getElementById(id);
-		console.log(`scrolling to ${id}` , el);
-		setTimeout(()=>{
+		console.log(`scrolling to ${id}`, el);
+		setTimeout(() => {
 			el.scrollIntoView();
-		},600)
+		}, 600)
 	}
-	closeAllChevrons(){
-		this.rate_params["chevrons"]['section']=false
-		this.rate_params["chevrons"]['all_inclusive_rates']=false
-		this.rate_params["chevrons"]['others']=false
-		this.rate_params["chevrons"]['direct_taxes']=false
-		this.rate_params["chevrons"]['taxes']=false
-		this.rate_params["chevrons"]['amenities']=false
-		this.rate_params["chevrons"]['misc']=false
-		setTimeout(()=>{
+	closeAllChevrons() {
+		this.rate_params["chevrons"]['section'] = false
+		this.rate_params["chevrons"]['all_inclusive_rates'] = false
+		this.rate_params["chevrons"]['others'] = false
+		this.rate_params["chevrons"]['direct_taxes'] = false
+		this.rate_params["chevrons"]['taxes'] = false
+		this.rate_params["chevrons"]['amenities'] = false
+		this.rate_params["chevrons"]['misc'] = false
+		setTimeout(() => {
 			this.scroll('rate-heading')
-		},300)
+		}, 300)
 	}
 
-	calculateBaseRateShare(){
+	calculateBaseRateShare() {
 		try {
 			let baseRate = 0;
 			console.log('in function calculateBaseRateShare',this.RatesForm )
 			if(this?.service_type == 'charter_tour'){
 				baseRate += (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates'))?.get('Base_Rate')))?.get("baserate").value * this.nums
+			console.log('in function if charter-->>>', baseRate)
+
 			}
-			else{
+			else {
 				baseRate += (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates'))?.get('Base_Rate')))?.get("baserate").value || 0
+			console.log('in function else charter-->>>', baseRate)
+
 			}
 			['ELH_Charges', 'Stops', 'Wait'].map((i) => {
 				baseRate += (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates'))?.get(i)))?.get("baserate").value || 0
@@ -491,12 +510,12 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 				'Tour_Guide', 'Wedding_Package'].map((j) => {
 					baseRate += (<FormGroup>((<FormGroup>this.RatesForm.get('amenities'))?.get(j)))?.get("baserate").value || 0
 				})
-	
+
 			console.log('in function calculateBaseRateShare', baseRate)
-			
+
 			return baseRate;
 		} catch (error) {
-			console.log('error---------------->>>>>>' , error)
+			console.log('error---------------->>>>>>', error)
 		}
 	}
 	calculateAdminShare() {
@@ -578,7 +597,7 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 				if (type === "percent") {
 					// let kmrate = (<FormGroup>((<FormGroup>(this.RatesForm.get("all_inclusive_rates"))).get("Base_Rate"))).get("amount").value;
 					// - this.calc_admin_share - this.travel_agent_share;
-					let kmrate = await this.calculateBaseRate('RatesForm') ;
+					let kmrate = await this.calculateBaseRate('RatesForm');
 					let taxvalue = (<FormGroup>((<FormGroup>this.RatesForm.get("taxes")).get(subform))).get("baserate").value;
 
 					let amount = Number(Number((taxvalue / 100) * kmrate).toFixed(2));
@@ -602,16 +621,16 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 				if (this.isTravelShare && !this.isCreatedByAdmin) {
 					baseRateAmount = baseRateAmount + this.travel_agent_share;
 				}
-				else if(this.isFarmoutBooking){
-                    baseRateAmount = baseRateAmount + this.farmoutShare;
-                }
+				else if (this.isFarmoutBooking) {
+					baseRateAmount = baseRateAmount + this.farmoutShare;
+				}
 				// (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates')).get('Base_Rate'))).get("amount").setValue(baseRateAmount);
 				this.total['Base_Rate'] = Number(Number(baseRateAmount).toFixed(2));
 			}
 			this.RatesForm.updateValueAndValidity();
 		}
 
-	
+
 	}
 
 }

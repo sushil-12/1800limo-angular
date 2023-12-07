@@ -109,7 +109,7 @@
 							<div class="dropdown-divider"></div>
 							<div *ngIf="currentUser.roleName=='driver' && accountStatus; else adminRole"
 								class="dropdown-item" (click)="dashboard('affiliate')">
-								<div class="d-inline dropdown-item-icon settingsvg">
+								<div class="d-inline dropdown-item-icon gear-bg-black settingsvg">
 									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
 										fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
 										stroke-linejoin="round" class="feather feather-settings">
@@ -123,7 +123,7 @@
 							<ng-template #adminRole>
 								<div *ngIf="currentUser.roleName=='admin' || currentUser.roleName=='sub_admin';else otherRole"
 									class="dropdown-item nav-item-bt-1" (click)="dashboard('admin')">
-									<div class="d-inline dropdown-item-icon gear-bg settingsvg ">
+									<div class="d-inline dropdown-item-icon gear-bg-black settingsvg ">
 										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
 											viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
 											stroke-linecap="round" stroke-linejoin="round"
@@ -139,7 +139,7 @@
 							<ng-template #otherRole>
 								<div *ngIf="currentUser?.is_profile_complete==true; else completeProfile"
 									class="dropdown-item" (click)="dashboard(currentUser?.roleName)">
-									<div class="d-inline dropdown-item-icon settingsvg">
+									<div class="d-inline dropdown-item-icon gear-bg-black settingsvg">
 										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
 											viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
 											stroke-linecap="round" stroke-linejoin="round"
@@ -154,7 +154,7 @@
 							</ng-template>
 							<ng-template #completeProfile>
 								<div class="dropdown-item" (click)="redirectCompleteProfile(currentUser?.roleName)">
-									<div class="d-inline dropdown-item-icon settingsvg">
+									<div class="d-inline dropdown-item-icon gear-bg-black settingsvg">
 										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
 											viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
 											stroke-linecap="round" stroke-linejoin="round"

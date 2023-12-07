@@ -210,8 +210,17 @@ section {
 		display: none;
 	}
 }
+.gear-bg-black {
+	color: #000 !important;
+}
 
 @media only screen and (max-width: 767px) {
+	.gear-bg {
+		color: #000 !important;
+	}
+	.gear-bg-black {
+		color: #000 !important;
+	}
 	#showCountriesModal .modal-content hr {
 		border: 2px solid #000;
 		width: 150px;
