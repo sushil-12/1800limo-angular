@@ -6,6 +6,7 @@ import { throwError } from 'rxjs';
 import { FormBuilder, FormGroup, FormArray, FormControl, Validator, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { CommonService } from 'src/app/services/common.service';
 
 @Component({
 	selector: 'app-home-page-edit',
@@ -37,6 +38,7 @@ export class HomePageEditComponent implements OnInit
 		private fb: FormBuilder,
 		private router: Router,
 		private adminServices: AdminService,
+		private commonServices: CommonService,
 		private spinner: NgxSpinnerService
 	) { }
 
@@ -303,8 +305,11 @@ export class HomePageEditComponent implements OnInit
 		return this.editHomePageContentForm.controls;
 	}
 
-	DynamicImageChange(event, section, imageArrayIndex, imageId = null)
+	async DynamicImageChange(event, section, imageArrayIndex, imageId = null)
 	{
+		if(!await this.commonServices.handleFile(event)) {
+			return;
+		}
 		this.spinner.show();
 		const reader = new FileReader();
 		if (event.target.files && event.target.files.length)

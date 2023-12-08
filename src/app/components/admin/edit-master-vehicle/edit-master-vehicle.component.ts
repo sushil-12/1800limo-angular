@@ -7,6 +7,7 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { HttpClient } from "@angular/common/http";
+import { CommonService } from 'src/app/services/common.service';
 declare var $: any;
 
 @Component({
@@ -103,6 +104,7 @@ export class EditMasterVehicleComponent implements OnInit
 		private router: Router,
 		private formBuilder: FormBuilder,
 		private spinner: NgxSpinnerService,
+		private commonServices: CommonService,
 		private activatedroute: ActivatedRoute,
 		private httpClient: HttpClient) { }
 
@@ -818,8 +820,11 @@ export class EditMasterVehicleComponent implements OnInit
 			vehicleInterior.removeAt(index);
 		}
 	}
-	onFileChange(event, imageId, imageNumber)
+	async onFileChange(event, imageId, imageNumber)
 	{
+		if(!await this.commonServices.handleFile(event)) {
+			return;
+		}
 		this.stateManagementService.setprogressBar(true);
 		const reader = new FileReader();
 		if (event.target.files && event.target.files.length)
@@ -851,8 +856,11 @@ export class EditMasterVehicleComponent implements OnInit
 		}
 	}
 
-	vehicleOfficialImagesChange(event, imageType, imageId)
+	async vehicleOfficialImagesChange(event, imageType, imageId)
 	{
+		if(!await this.commonServices.handleFile(event)) {
+			return;
+		}
 		this.stateManagementService.setprogressBar(true);
 		const reader = new FileReader();
 		if (event.target.files && event.target.files.length)

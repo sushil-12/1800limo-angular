@@ -12,6 +12,7 @@ import { StateManagementService } from 'src/app/services/statemanagement.service
 import { TravelAgentService } from 'src/app/services/travel-agent.service';
 import { SharedModule } from '../../shared/shared.module';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
+import { CommonService } from 'src/app/services/common.service';
 
 @Component({
   selector: 'app-travel-agent-stripe-form',
@@ -75,6 +76,7 @@ export class TravelAgentStripeFormComponent implements OnInit {
 		private mapsAPILoader: MapsAPILoader,
 		private ngZone: NgZone,
 		private el: ElementRef,
+		private commonServices: CommonService,
 		private customValidator: CustomvalidationService,
 		private globalFunctions: SharedModule,
 		private errordialog: ErrorDialogService,
@@ -565,7 +567,10 @@ export class TravelAgentStripeFormComponent implements OnInit {
 		};
 	}
 
-	idCardImageChange1(dataUrl, imageType, imageId = null) {
+	async idCardImageChange1(dataUrl, imageType, imageId = null) {
+		if(!await this.commonServices.handleFile(event)) {
+			return;
+		}
 		this.stateManagementService.setprogressBar(true);
 		this.imageSrc = dataUrl;
 		this.adminService.uploadVehicleImage(this.imageSrc)
@@ -602,7 +607,10 @@ export class TravelAgentStripeFormComponent implements OnInit {
 			});
 	}
 
-	idCardImageChange(event, imageType, imageId = null) {
+	async idCardImageChange(event, imageType, imageId = null) {
+		if(!await this.commonServices.handleFile(event)) {
+			return;
+		}
 		this.stateManagementService.setprogressBar(true);
 		const reader = new FileReader();
 		if (event.target.files && event.target.files.length)
