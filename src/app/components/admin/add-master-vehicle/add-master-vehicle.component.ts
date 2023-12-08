@@ -7,6 +7,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { HttpClient } from "@angular/common/http";
+import {CommonService} from 'src/app/services/common.service'
 declare var $: any;
 
 @Component({
@@ -99,6 +100,7 @@ export class AddMasterVehicleComponent implements OnInit
 		private formBuilder: FormBuilder,
 		private spinner: NgxSpinnerService,
 		private activatedroute: ActivatedRoute,
+		private commonServices: CommonService,
 		private httpClient: HttpClient) { }
 
 	ngAfterViewChecked()
@@ -588,8 +590,11 @@ export class AddMasterVehicleComponent implements OnInit
 		}
 	}
 
-	onFileChange(event, imageId, imageNumber)
+	async onFileChange(event, imageId, imageNumber)
 	{
+		if(!await this.commonServices.handleFile(event)) {
+			return;
+		}
 		this.stateManagementService.setprogressBar(true);
 		const reader = new FileReader();
 		if (event.target.files && event.target.files.length)
@@ -621,8 +626,11 @@ export class AddMasterVehicleComponent implements OnInit
 		}
 	}
 
-	vehicleOfficialImagesChange(event, imageType, imageId)
+	async vehicleOfficialImagesChange(event, imageType, imageId)
 	{
+		if(!await this.commonServices.handleFile(event)) {
+			return;
+		}
 		this.stateManagementService.setprogressBar(true);
 		const reader = new FileReader();
 		if (event.target.files && event.target.files.length)

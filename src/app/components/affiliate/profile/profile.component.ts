@@ -6,6 +6,7 @@ import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { AdminService } from 'src/app/services/admin.service';
+import { CommonService } from 'src/app/services/common.service';
 
 @Component({
   selector: 'app-profile',
@@ -28,6 +29,7 @@ export class ProfileComponent implements OnInit {
     private stateManagementService:StateManagementService,
     private router: Router,
     private fb: FormBuilder,
+    private commonServices: CommonService,
 		private $api: AdminService,
   ) {  }
 
@@ -74,7 +76,10 @@ export class ProfileComponent implements OnInit {
   telInputObjectCell(obj) {
     this.AffiliatePhoneObject = obj;
   }
-  profile_pic_change(event) {
+  async profile_pic_change(event) {
+    if(!await this.commonServices.handleFile(event)) {
+			return;
+		}
     this.stateManagementService.setprogressBar(true);//show progressbar
     const reader = new FileReader();
     if (event.target.files && event.target.files.length) {

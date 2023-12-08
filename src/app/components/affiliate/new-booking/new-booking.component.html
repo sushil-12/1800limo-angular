@@ -1054,7 +1054,7 @@
 								}} Km
 							</h6>
 							<h6 class="mx-2">
-								Estimated time: {{convertToMinutes(Form.journeyTime.value)}} mins
+								Estimated time: {{convertToMinutes(Form.journeyTime.value)}}
 							</h6>
 						</div>
 
@@ -1716,7 +1716,7 @@
 								mToKm(return_distance) }} Km
 							</h6>
 							<h6 class="mx-2">
-								Estimated time: {{convertToMinutes(Form.returnJourneyTime.value)}} mins
+								Estimated time: {{convertToMinutes(Form.returnJourneyTime.value)}}
 							</h6>
 						</div>
 
@@ -1738,8 +1738,9 @@
 
 		<app-rates-forms class="d-flex flex-wrap" [initRates]="true" [affiliate_type]="Form.affiliate_type.value"
 			[reservation_id]="booking_id" [reset]="reset_button" (formvalue)="RateFormValue($event)"
-			[distance]="distance_for_rates" [book_data]="booking_data" [isTravelShare]="isTravelShare" [isFarmoutBooking]="isFarmoutBooking"
-			[hours]="Form.number_of_hours?.value" [vehicles]="Form.number_of_vehicles?.value" [isCreatedByAdmin]="isCreatedByAdmin"
+			[distance]="distance_for_rates" [book_data]="booking_data" [isTravelShare]="isTravelShare"
+			[isFarmoutBooking]="isFarmoutBooking" [hours]="Form.number_of_hours?.value"
+			[vehicles]="Form.number_of_vehicles?.value" [isCreatedByAdmin]="isCreatedByAdmin"
 			[initReturnRates]="init_return_rates" (returnNumberOfHr)="HandleReturnNumberOfHr($event)"
 			(returnformvalue)="ReturnRateFormValue($event)">
 		</app-rates-forms>
@@ -2781,103 +2782,103 @@
 					</div>
 					<hr>
 				</div>
-					<div class="distribution_rate" *ngIf="Form.service_type.value == 'round_trip'">
-						<h4 class="font-weight-bolder m-0 my-3">
-							Rates Distribution
-						</h4>
-	
-						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key d-flex align-items-center">
-									<span class="">
-										Base Rate
-									</span>
-								</div>
-								<div class="col-md-8 value preview-airport-color">
-									<span class="font-weight-bolder preview-output-feild">
-										${{r_shareArray?.baseRate.toFixed(2)}}
-									</span>
-									(Fare Base Rate)
-								</div>
+				<div class="distribution_rate" *ngIf="Form.service_type.value == 'round_trip'">
+					<h4 class="font-weight-bolder m-0 my-3">
+						Rates Distribution
+					</h4>
+
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key d-flex align-items-center">
+								<span class="">
+									Base Rate
+								</span>
 							</div>
-						</div>
-						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key d-flex align-items-center">
-									<span class="">
-										Admin Share
-									</span>
-								</div>
-								<div class="col-md-8 value preview-airport-color">
-									<span class="font-weight-bolder preview-output-feild">
-										${{r_shareArray?.adminShare.toFixed(2) }}
-									</span>
-									({{adminSharePercent}}% of Base Rate)
-								</div>
-							</div>
-						</div>
-						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key d-flex align-items-center">
-									<span class="">
-										Total Cost
-									</span>
-								</div>
-								<div class="col-md-8 value preview-airport-color">
-									<span class="font-weight-bolder preview-output-feild">
-										${{r_shareArray?.returnGrandTotal.toFixed(2)}}
-									</span>
-									(Actual Cost to Customer)
-								</div>
-							</div>
-						</div>
-						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key d-flex align-items-center">
-									<span class="">
-										Stripe fees
-									</span>
-								</div>
-								<div class="col-md-8 value preview-airport-color">
-									<span class="font-weight-bolder preview-output-feild">
-										${{r_shareArray?.stripeFee.toFixed(2)}}
-									</span>
-									(Platform fee 5% + 30 cents - <b>Paid from Admin share</b>)
-								</div>
-							</div>
-						</div>
-	
-						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key d-flex align-items-center">
-									<span class="">
-										Affliate Payout
-									</span>
-								</div>
-								<div class="col-md-8 value preview-airport-color">
-									<span class="font-weight-bolder preview-output-feild">
-										${{r_shareArray?.affiliateShare.toFixed(2)}}
-									</span>
-									( Total Price - (Ride Base Rate + Other Taxes) )
-								</div>
-							</div>
-						</div>
-						<div class="mx-2" *ngIf="isFarmoutBooking">
-							<div class="row m-0">
-								<div class="col-md-4 key d-flex align-items-center">
-									<span class="">
-										Affliate Farmout share
-									</span>
-								</div>
-								<div class="col-md-8 value preview-airport-color">
-									<span class="font-weight-bolder preview-output-feild">
-										${{r_shareArray?.farmoutShare.toFixed(2)}}
-									</span>
-									( 10 % of Base Rate)
-								</div>
+							<div class="col-md-8 value preview-airport-color">
+								<span class="font-weight-bolder preview-output-feild">
+									${{r_shareArray?.baseRate.toFixed(2)}}
+								</span>
+								(Fare Base Rate)
 							</div>
 						</div>
 					</div>
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key d-flex align-items-center">
+								<span class="">
+									Admin Share
+								</span>
+							</div>
+							<div class="col-md-8 value preview-airport-color">
+								<span class="font-weight-bolder preview-output-feild">
+									${{r_shareArray?.adminShare.toFixed(2) }}
+								</span>
+								({{adminSharePercent}}% of Base Rate)
+							</div>
+						</div>
+					</div>
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key d-flex align-items-center">
+								<span class="">
+									Total Cost
+								</span>
+							</div>
+							<div class="col-md-8 value preview-airport-color">
+								<span class="font-weight-bolder preview-output-feild">
+									${{r_shareArray?.returnGrandTotal.toFixed(2)}}
+								</span>
+								(Actual Cost to Customer)
+							</div>
+						</div>
+					</div>
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key d-flex align-items-center">
+								<span class="">
+									Stripe fees
+								</span>
+							</div>
+							<div class="col-md-8 value preview-airport-color">
+								<span class="font-weight-bolder preview-output-feild">
+									${{r_shareArray?.stripeFee.toFixed(2)}}
+								</span>
+								(Platform fee 5% + 30 cents - <b>Paid from Admin share</b>)
+							</div>
+						</div>
+					</div>
+
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key d-flex align-items-center">
+								<span class="">
+									Affliate Payout
+								</span>
+							</div>
+							<div class="col-md-8 value preview-airport-color">
+								<span class="font-weight-bolder preview-output-feild">
+									${{r_shareArray?.affiliateShare.toFixed(2)}}
+								</span>
+								( Total Price - (Ride Base Rate + Other Taxes) )
+							</div>
+						</div>
+					</div>
+					<div class="mx-2" *ngIf="isFarmoutBooking">
+						<div class="row m-0">
+							<div class="col-md-4 key d-flex align-items-center">
+								<span class="">
+									Affliate Farmout share
+								</span>
+							</div>
+							<div class="col-md-8 value preview-airport-color">
+								<span class="font-weight-bolder preview-output-feild">
+									${{r_shareArray?.farmoutShare.toFixed(2)}}
+								</span>
+								( 10 % of Base Rate)
+							</div>
+						</div>
+					</div>
+				</div>
 
 
 			</div>

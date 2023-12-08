@@ -582,7 +582,24 @@ export class MyBookingsComponent implements OnInit {
 	}
 
 	convertToMinutes(value){
-		return (value/60).toFixed(2)
+		const days = Math.floor(value / (24 * 60 * 60));
+		const remainingSeconds = value % (24 * 60 * 60);
+		const hours = Math.floor(remainingSeconds / (60 * 60));
+		const remainingMinutes = Math.floor((remainingSeconds % (60 * 60)) / 60);
+	
+		let result = "";
+
+		if (days > 0) {
+			result += `${days} days, `;
+		}
+	
+		if (hours > 0 || (days === 0 && hours === 0)) {
+			result += `${hours} hours, `;
+		}
+	
+		result += `${remainingMinutes} minutes`;
+	
+		return result;
 	}
 	mToMi(distance: number): string {
 		return (distance / 1609).toFixed(2)

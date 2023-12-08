@@ -6,6 +6,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
+import { CommonService } from 'src/app/services/common.service';
 
 
 @Component({
@@ -52,6 +53,7 @@ export class EditStep0Component implements OnInit
 		private affiliateService: AffiliateService,
 		private router: Router,
 		private spinner: NgxSpinnerService,
+		private commonServices: CommonService,
 		private formBuilder: FormBuilder
 	)
 	{
@@ -331,8 +333,11 @@ export class EditStep0Component implements OnInit
 		this.other_group_listing_list.removeAt(index);
 	}
 
-	imageChangefun(event, section, imageArrayIndex, imageId = null)
+	async imageChangefun(event, section, imageArrayIndex, imageId = null)
 	{
+		if(!await this.commonServices.handleFile(event)) {
+			return;
+		}
 		this.spinner.show();
 		const reader = new FileReader();
 		if (event.target.files && event.target.files.length)

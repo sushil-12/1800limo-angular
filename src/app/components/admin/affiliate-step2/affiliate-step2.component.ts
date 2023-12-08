@@ -10,6 +10,7 @@ import { throwError } from 'rxjs';
 import { HttpClient } from "@angular/common/http";
 import { CustomvalidationService } from '../../../services/customvalidation.service';
 import { SharedModule } from '../../shared/shared.module';
+import { CommonService } from 'src/app/services/common.service';
 declare var $: any;
 
 @Component({
@@ -79,6 +80,7 @@ export class AffiliateStep2Component implements OnInit {
 		private ngZone: NgZone,
 		private el: ElementRef,
 		private customValidator: CustomvalidationService,
+		private commonServices: CommonService,
 		private globalFunctions: SharedModule
 	) { }
 
@@ -577,7 +579,10 @@ export class AffiliateStep2Component implements OnInit {
 			this.idCardImageChange1(dataUrl, key, id);
 		};
 	}
-	idCardImageChange1(dataUrl, imageType, imageId = null) {
+	async idCardImageChange1(dataUrl, imageType, imageId = null) {
+		if(!await this.commonServices.handleFile(event)) {
+			return;
+		}
 		this.stateManagementService.setprogressBar(true);
 		this.imageSrc = dataUrl;
 		this.adminService.uploadVehicleImage(this.imageSrc)
@@ -613,7 +618,10 @@ export class AffiliateStep2Component implements OnInit {
 				this.stateManagementService.setprogressBar(false);
 			});
 	}
-	idCardImageChange(event, imageType, imageId = null) {
+	async idCardImageChange(event, imageType, imageId = null) {
+		if(!await this.commonServices.handleFile(event)) {
+			return;
+		}
 		// this.stateManagementService.setprogressBar(true);
 		const reader = new FileReader();
 		if (event.target.files && event.target.files.length)
