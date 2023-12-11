@@ -282,6 +282,20 @@ const routes: Routes = [
 		]
 	},
 	{
+		path: 'sub_travel_agent',
+		component: AgentTemplateComponent,
+		// canActivate: [AdminGuardGuard],
+		data: {
+			title: 'agent'
+		},
+		children: [
+			{
+				path: '',
+				loadChildren: () => import('./components/sub-travel-agent/sub-travel-agent.module').then(m => m.SubTravelAgentModule)
+			}
+		]
+	},
+	{
 		path: 'locate-map',
 		component: LocateMapComponent
 	},
