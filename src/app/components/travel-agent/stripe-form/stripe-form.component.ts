@@ -11,6 +11,7 @@ import { CustomvalidationService } from 'src/app/services/customvalidation.servi
 import { StateManagementService } from 'src/app/services/statemanagement.service';
 import { TravelAgentService } from 'src/app/services/travel-agent.service';
 import { SharedModule } from '../../shared/shared.module';
+import { CommonService } from 'src/app/services/common.service';
 declare var $: any;
 @Component({
 	selector: 'app-stripe-form',
@@ -76,6 +77,7 @@ export class StripeFormComponent implements OnInit {
 		private mapsAPILoader: MapsAPILoader,
 		private ngZone: NgZone,
 		private el: ElementRef,
+		private commonServices: CommonService,
 		private customValidator: CustomvalidationService,
 		private globalFunctions: SharedModule
 	) { }
@@ -564,7 +566,10 @@ export class StripeFormComponent implements OnInit {
 		};
 	}
 
-	idCardImageChange1(dataUrl, imageType, imageId = null) {
+	async idCardImageChange1(dataUrl, imageType, imageId = null) {
+		if(!await this.commonServices.handleFile(event)) {
+			return;
+		}
 		this.stateManagementService.setprogressBar(true);
 		this.imageSrc = dataUrl;
 		this.adminService.uploadVehicleImage(this.imageSrc)
@@ -601,7 +606,10 @@ export class StripeFormComponent implements OnInit {
 			});
 	}
 
-	idCardImageChange(event, imageType, imageId = null) {
+	async idCardImageChange(event, imageType, imageId = null) {
+		if(!await this.commonServices.handleFile(event)) {
+			return;
+		}
 		this.stateManagementService.setprogressBar(true);
 		const reader = new FileReader();
 		if (event.target.files && event.target.files.length)

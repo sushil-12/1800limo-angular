@@ -8,6 +8,7 @@ import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { HttpClient } from "@angular/common/http";
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
+import { CommonService } from 'src/app/services/common.service';
 
 declare var $: any;
 
@@ -106,6 +107,7 @@ export class AddVehicleComponent implements OnInit {
 		private spinner: NgxSpinnerService,
 		private activatedroute: ActivatedRoute,
 		private httpClient: HttpClient,
+		private commonServices: CommonService,
 		private errorModal: ErrorDialogService) { }
 
 	ngAfterViewChecked() {
@@ -608,8 +610,11 @@ export class AddVehicleComponent implements OnInit {
 			isNaN(parseInt(key)) ? this.vehicleOfficialImagesChange1(dataUrl, key,id) :this.onFileChange1(dataUrl, key,id);
 		};
 	}
-	onFileChange1(dataUrl, imageNumber,imageId)
+ 	async onFileChange1(dataUrl, imageNumber,imageId)
 	{
+		if(!await this.commonServices.handleFile(event)) {
+			return;
+		}
 		this.stateManagementService.setprogressBar(true);
 				this.imageSrc = dataUrl;
 				this.adminService.uploadVehicleImage(this.imageSrc)
@@ -631,8 +636,11 @@ export class AddVehicleComponent implements OnInit {
 						this.stateManagementService.setprogressBar(false);
 					});
 	}
-	vehicleOfficialImagesChange1(url, imageType, imageId)
+	async vehicleOfficialImagesChange1(url, imageType, imageId)
 	{
+		if(!await this.commonServices.handleFile(event)) {
+			return;
+		}
 		this.stateManagementService.setprogressBar(true);
 				this.imageSrc = url;
 				this.adminService.uploadVehicleImage(this.imageSrc)
@@ -701,7 +709,10 @@ export class AddVehicleComponent implements OnInit {
 						this.stateManagementService.setprogressBar(false);
 					});
 	}
-vehicleOfficialImagesChange(event, imageType, imageId) {
+async vehicleOfficialImagesChange(event, imageType, imageId) {
+	if(!await this.commonServices.handleFile(event)) {
+		return;
+	}
 		// this.stateManagementService.setprogressBar(true);
 		const reader = new FileReader();
 		if (event.target.files && event.target.files.length) {
@@ -775,7 +786,10 @@ vehicleOfficialImagesChange(event, imageType, imageId) {
 		}
 	}
 
-	onFileChange(event, imageId, imageNumber) {
+	async onFileChange(event, imageId, imageNumber) {
+		if(!await this.commonServices.handleFile(event)) {
+			return;
+		}
 		this.stateManagementService.setprogressBar(true);
 		const reader = new FileReader();
 		if (event.target.files && event.target.files.length) {

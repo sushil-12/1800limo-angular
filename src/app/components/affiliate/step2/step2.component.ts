@@ -10,6 +10,7 @@ import { CustomvalidationService } from '../../../services/customvalidation.serv
 import { SharedModule } from '../../shared/shared.module';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { AdminService } from 'src/app/services/admin.service';
+import { CommonService } from 'src/app/services/common.service';
 declare var $: any;
 
 @Component({
@@ -85,6 +86,7 @@ export class Step2Component implements OnInit {
 		private ngZone: NgZone,
 		private el: ElementRef,
 		private spinner: NgxSpinnerService,
+		private commonServices: CommonService,
 		private customValidator: CustomvalidationService,
 		private globalFunctions: SharedModule
 	) { }
@@ -630,7 +632,10 @@ export class Step2Component implements OnInit {
 			});
 	}
 
-	idCardImageChange1(imageUrl, imageType, imageId = null) {
+	async idCardImageChange1(imageUrl, imageType, imageId = null) {
+		if(!await this.commonServices.handleFile(event)) {
+			return;
+		}
 		this.stateManagementService.setprogressBar(true);
 		this.imageSrc = imageUrl;
 		this.affiliateService
@@ -670,7 +675,10 @@ export class Step2Component implements OnInit {
 
 
 
-	idCardImageChange(event, imageType, imageId = null) {
+	async idCardImageChange(event, imageType, imageId = null) {
+		if(!await this.commonServices.handleFile(event)) {
+			return;
+		}
 		this.stateManagementService.setprogressBar(true);
 		const reader = new FileReader();
 		if (event.target.files && event.target.files.length) {

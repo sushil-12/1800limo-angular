@@ -23,6 +23,7 @@ import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import * as moment from 'moment';
 import { CustomvalidationService } from 'src/app/services/customvalidation.service';
 import { AdminService } from 'src/app/services/admin.service';
+import { CommonService } from 'src/app/services/common.service';
 declare var $: any
 
 
@@ -143,6 +144,7 @@ export class CreateNewBookingComponent implements OnInit {
 		private $errors: ErrorDialogService,
 		private $router: Router,
 		private $routeurl: ActivatedRoute,
+		private commonServices: CommonService,
 		private customValidator: CustomvalidationService,
 		private el: ElementRef
 	) { }
@@ -762,7 +764,24 @@ export class CreateNewBookingComponent implements OnInit {
 	}
 
 	convertToMinutes(value){
-		return (value/60).toFixed(2)
+		const days = Math.floor(value / (24 * 60 * 60));
+		const remainingSeconds = value % (24 * 60 * 60);
+		const hours = Math.floor(remainingSeconds / (60 * 60));
+		const remainingMinutes = Math.floor((remainingSeconds % (60 * 60)) / 60);
+	
+		let result = "";
+
+		if (days > 0) {
+			result += `${days} days, `;
+		}
+	
+		if (hours > 0 || (days === 0 && hours === 0)) {
+			result += `${hours} hours, `;
+		}
+	
+		result += `${remainingMinutes} minutes`;
+	
+		return result;
 	}
 
 	fillAddress(form_control: string, address: any) {
@@ -1633,7 +1652,10 @@ addExtraStop(is_return: boolean = false) {
 	* @param image_type String [Required] type of the image being uploaded
 	* @param image_id [Optional] id of the image to be edited
 	*/
-	uploadImage(event: any, image_type: string) {
+	async uploadImage(event: any, image_type: string) {
+		if(!await this.commonServices.handleFile(event)) {
+			return;
+		}
 		let image: any
 		console.log(event.target.files)
 		if (event.target.files && event.target.files.length > 0) {
