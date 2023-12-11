@@ -4609,3 +4609,8 @@ header .navbar-toggler {
     font-size: 1.65rem;
     margin-left: 6px;
   } */
+
+.disabled-input-field {
+	pointer-events: none;
+	cursor: not-allowed;
+}

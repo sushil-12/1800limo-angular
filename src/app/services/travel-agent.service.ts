@@ -118,7 +118,9 @@ export class TravelAgentService {
   getBookingPreview(reservation_id: number) {
 		return this.httpClient.get(`${this.serverUrl}get-booking-preview/${reservation_id}`);
 	}
-
+  sendTravelAgentInviteCode(data){
+	return this.httpClient.post(this.serverUrl + 'send-an-invite-code', data);
+   }
   travelAgentNotification(data) {
 		return this.httpClient.post(this.serverUrl + 'notification-daily-booking', data);
 	}

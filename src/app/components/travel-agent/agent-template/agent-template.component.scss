@@ -20,6 +20,9 @@ a.dropdown-item.active {
 	background-color: transparent !important;
 	color: #000 !important;
 }
+.referral_code{
+	padding-top: 7px;
+}
 
 a.dropdown-item:hover {
 	color: var(--orange-color) !important;
@@ -27,6 +30,12 @@ a.dropdown-item:hover {
 
 .HeadingH1 svg {
 	height: 50px;
+}
+
+@media only screen and (max-width:767px) {
+	.referral_code{
+		display: none;
+	}
 }
 
 @media only screen and (max-width:320px) {
