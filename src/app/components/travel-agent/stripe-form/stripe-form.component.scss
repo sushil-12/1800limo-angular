@@ -25,6 +25,10 @@ agm-map {
 .disableSsn{
 	pointer-events: none;
 }
+.border-red{
+	border: 2px solid red;
+	border-radius: 6px;
+}
 
 .birthMonth {
 	padding-right: 5px;
@@ -50,9 +54,7 @@ agm-map {
 	width: 100%;
 	padding: 10px 40px !important;
 }
-.border-red{
-	border: 2px solid red;
-}
+
 .verifyDocButton svg,
 .adressChangeButton svg {
 	margin-bottom: 10px;
