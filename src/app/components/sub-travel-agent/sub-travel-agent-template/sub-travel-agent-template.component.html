@@ -1,7 +1,8 @@
-<div class="affilate-wrapper admin-wrapper">
+<div class="affilate-wrapper admin-wrapper" style="height: 100vh;">
 	<ngx-spinner></ngx-spinner>
 	<nav id="sidenavAccordion" class="topnav navbar navbar-expand">
-		<a class="navbar-brand active" routerLink="/" tabindex="-1">
+		<a class="navbar-brand active" routerLink="/" tabindex="-1"
+			[ngClass]="currentUser?.is_profile_complete ? '': 'disabled-input-field' ">
 			<img src="assets/admin/images/new_logo.png">
 		</a>
 		<button class="btn btn-icon btn-transparent-dark mr-lg-2" id="sidebarToggle" tabindex="-1">
@@ -17,25 +18,6 @@
 					d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
 			</svg>
 		</button>
-		<div class="btn btn-icon btn-transparent-dark referral_code">
-			<span class="badge badge-success" style="font-size: 19px; font-weight: 500; padding: 0.35em 0.4em;">
-				{{referral_code}}
-			</span>
-			<textarea id="clipboard-example-textarea" cols="30" rows="10" [(ngModel)]="referral_code" hidden></textarea>
-			<button type="button" class="close x-copy-btn" [cdkCopyToClipboard]="referral_code"
-				(click)="copyInviteLink()">
-				<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#000" class="bi bi-check2"
-					viewBox="0 0 16 16" *ngIf="showCopyIcon">
-					<path
-						d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z" />
-				</svg>
-				<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#000" class="bi bi-copy"
-					viewBox="0 0 16 16" *ngIf="!showCopyIcon">
-					<path fill-rule="evenodd"
-						d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z" />
-				</svg>
-			</button>
-		</div>
 		<ul class="navbar-nav align-items-center ml-auto">
 			<li class="hideMobile">
 				<!-- <div id="google-translate">
@@ -79,8 +61,8 @@
 						</div>
 					</h6>
 					<div class="dropdown-divider"></div>
-					<a class="dropdown-item" [routerLinkActive]="['active']" routerLink="/travel_agent/profile"
-						tabindex="-1">
+					<a class="dropdown-item" [routerLinkActive]="['active']" routerLink="/sub_travel_agent/profile"
+						tabindex="-1" *ngIf="currentUser?.is_profile_complete">
 						<div class="dropdown-item-icon">
 							<svg width="24" height="24" viewBox="0 0 24 24" class=" profileSvg">
 								<g fill="none" fill-rule="evenodd" stroke="#5dbd8a" stroke-linecap="round"
@@ -112,7 +94,7 @@
 	</nav>
 	<mat-progress-bar class="mb-3 my-color" mode="indeterminate" *ngIf="progressBar">
 	</mat-progress-bar>
-	<div id="layoutSidenav">
+	<div id="layoutSidenav" *ngIf="currentUser?.is_profile_complete">
 		<div id="layoutSidenav_nav">
 			<nav class="sidenav shadow-right">
 				<div class="sidenav-menu">
@@ -136,21 +118,6 @@
 								<span>My bookings</span>
 							</a>
 						</li>
-						<!--2nd -->
-						<!-- <li class="nav-item">
-							<a class="nav-link collapsed" [routerLinkActive]="['active']"
-								routerLink="/travel_agent/create-booking" (click)="closeSidebarFunc(false)" tabIndex="-1">
-								<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-									xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-									viewBox="0 0 110.74 122.88" style="enable-background:new 0 0 110.74 122.88"
-									xml:space="preserve">
-									<g>
-										<path
-											d="M48.47,116.35c1.8,0,3.27,1.46,3.27,3.26c0,1.8-1.46,3.26-3.27,3.26H7.6c-2.09,0-3.99-0.85-5.37-2.23 C0.85,119.27,0,117.38,0,115.28V7.6C0,5.5,0.85,3.61,2.23,2.23C3.61,0.85,5.5,0,7.6,0h93.3c2.09,0,3.99,0.86,5.37,2.23 c1.38,1.38,2.23,3.27,2.23,5.37v53.95c0,1.8-1.46,3.26-3.26,3.26c-1.8,0-3.26-1.46-3.26-3.26V7.6c0-0.29-0.12-0.56-0.32-0.75 c-0.2-0.2-0.47-0.32-0.75-0.32H7.6c-0.29,0-0.56,0.12-0.76,0.31C6.65,7.05,6.53,7.31,6.53,7.6v107.68c0,0.29,0.12,0.56,0.32,0.75 c0.2,0.2,0.47,0.32,0.76,0.32L48.47,116.35L48.47,116.35L48.47,116.35z M33.94,57.92c-0.62-1.07-0.17-4.13,1.16-5.21 c3.8-2.22,9.04-1.53,12.7-4.09c0.21-0.32,0.44-0.78,0.67-1.29c0.33-0.76,0.64-1.59,0.83-2.16c-0.81-0.96-1.51-2.04-2.17-3.1 l-2.2-3.5c-0.8-1.2-1.22-2.3-1.25-3.2c-0.01-0.42,0.06-0.81,0.22-1.15c0.16-0.36,0.41-0.65,0.76-0.88c0.16-0.11,0.34-0.2,0.53-0.27 c-0.15-1.9-0.2-4.29-0.1-6.3c0.05-0.47,0.14-0.95,0.27-1.43c0.56-2.01,1.97-3.63,3.72-4.74c0.96-0.61,2.02-1.08,3.12-1.39 c0.7-0.2-0.6-2.43,0.13-2.51c3.5-0.36,9.15,2.83,11.59,5.47c1.22,1.32,1.99,3.08,2.16,5.4l-0.14,5.71l0,0 c0.61,0.19,1,0.57,1.16,1.2c0.18,0.7-0.01,1.67-0.61,3.01l0,0c-0.01,0.02-0.02,0.05-0.04,0.07l-2.51,4.13 c-0.92,1.52-1.86,3.04-3.08,4.24c0.11,0.16,0.23,0.32,0.34,0.48c0.5,0.73,1,1.46,1.64,2.11c0.02,0.02,0.04,0.05,0.05,0.07 c2.89,2.04,9.92,2.54,12.62,4.04l0.11,0.06c1.39,1.07,1.82,4.13,1.18,5.2H33.94L33.94,57.92z M102.29,79.04 c-0.53-0.51-1.14-0.75-1.84-0.74c-0.71,0.01-1.31,0.29-1.8,0.81l-4.05,4.22l11.37,10.98l4.09-4.26c0.49-0.5,0.69-1.14,0.68-1.84 c-0.01-0.69-0.26-1.33-0.76-1.8L102.29,79.04L102.29,79.04L102.29,79.04z M84.54,116.17c-1.5,0.48-3,0.97-4.49,1.46 c-1.5,0.5-3,1-4.49,1.5c-3.53,1.16-5.51,1.8-5.93,1.92c-0.4,0.12-0.17-1.53,0.73-4.99l2.81-10.83l0,0l17.82-18.18l11.36,10.93 L84.54,116.17L84.54,116.17L84.54,116.17z M31.74,95.36c-1.8,0-3.27-1.48-3.27-3.31s1.46-3.31,3.27-3.31h22.21 c1.8,0,3.27,1.48,3.27,3.31s-1.46,3.31-3.27,3.31H31.74L31.74,95.36L31.74,95.36z M31.74,74.67c-1.8,0-3.26-1.46-3.26-3.27 c0-1.8,1.46-3.26,3.26-3.26h44.05c1.8,0,3.26,1.46,3.26,3.26c0,1.8-1.46,3.27-3.26,3.27H31.74L31.74,74.67L31.74,74.67z" />
-									</g>
-								</svg> <span>Create New Booking</span>
-							</a>
-						</li> -->
 						<li class="nav-item">
 							<a class="nav-link collapsed" [routerLinkActive]="['active']" routerLink="/quotebot_section"
 								tabIndex="-1" (click)="closeSidebarFunc(false)">
@@ -162,7 +129,7 @@
 								</svg> <span>Quote</span>
 							</a>
 						</li>
-						<!-- 3rd -->
+
 						<li class="nav-item">
 							<a class="nav-link collapsed dropdwn" [routerLinkActive]="['active']" data-toggle="collapse"
 								data-target="#collapse4" aria-expanded="true" aria-controls="collapseUtilities"
@@ -196,19 +163,12 @@
 										routerLink="/travel_agent/add-client-account"
 										(click)="closeSidebarFunc(false)">Create new client</a>
 								</div>
-								<div class="collapse-inner rounded">
-									<a class="collapse-item" [routerLinkActive]="['active']"
-										routerLink="/travel_agent/sub-agent-accounts"
-										(click)="closeSidebarFunc(false)">Sub Agent Accounts</a>
-								</div>
 							</div>
 
 						</li>
-						<!--4th -->
+
 						<li class="nav-item">
-							<!-- <a class="nav-link collapsed dropdwn" [routerLinkActive]="['active']" data-toggle="collapse"
-								data-target="#collapse5" aria-expanded="true" aria-controls="collapseUtilities"
-								tabIndex="-1" > -->
+
 							<a class="nav-link collapsed" [routerLinkActive]="['active']"
 								routerLink="/travel_agent/invoices" tabIndex="-1" (click)="closeSidebarFunc(false)">
 								<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
@@ -221,18 +181,11 @@
 									</g>
 								</svg>
 								<span class="ml-3" style="width: 65%" (click)="invoiceFunc(false)">Invoices</span>
-								<!-- <i class="bi" [ngClass]="chevron ? 'bi-chevron-up' : 'bi-chevron-down'"></i> -->
+
 							</a>
-							<!-- <div id="collapse5" class="collapse" aria-labelledby="headingUtilities"
-								data-parent="#accordionSidebar" tabindex="-1">
-								<div class="py-2 collapse-inner rounded">
-									<a class="collapse-item" [routerLinkActive]="['active']"
-										routerLink="/travel_agent/invoices"
-										(click)="closeSidebarFunc(false)">Invoices</a>
-								</div>
-							</div> -->
+
 						</li>
-						<!-- 5th -->
+						<!-- 
 						<li class="nav-item">
 							<a class="nav-link collapsed" [routerLinkActive]="['active']"
 								routerLink="/travel_agent/debit-cc-card" tabIndex="-1"
@@ -244,11 +197,11 @@
 									<path d="M2 10a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-1z" />
 								</svg> <span>Add/Change - debit cc card</span>
 							</a>
-						</li>
+						</li> -->
 
-						<!-- stripe form -->
 
-						<li class="nav-item">
+
+						<!-- <li class="nav-item">
 							<a class="nav-link collapsed" [routerLinkActive]="['active']"
 								routerLink="/travel_agent/stripe-form" tabIndex="-1" (click)="closeSidebarFunc(false)">
 								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -258,9 +211,9 @@
 									<path d="M2 10a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-1z" />
 								</svg> <span>Travel Agent Bank settings</span>
 							</a>
-						</li>
+						</li> -->
 
-						<!-- FARM OUT BOOKING ENDS -->
+
 						<li>
 							<div id="google_translate_element_mobile"></div>
 						</li>
@@ -272,8 +225,6 @@
 				</div>
 			</nav>
 		</div>
-
-
 
 		<div id="layoutSidenav_content" (click)="handleDivClick($event)">
 			<main style="padding: inherit;">
@@ -298,6 +249,31 @@
 				</div>
 			</footer>
 		</div>
+
+
+	</div>
+	<div id="layoutSidenav_content" (click)="handleDivClick($event)" *ngIf="!currentUser?.is_profile_complete">
+		<main style="padding: inherit;">
+			<!-- <h1 class="HeadingH1">
+				<div>
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+						<rect fill="none" />
+						<ellipse cx="128" cy="128" rx="24" ry="40" />
+						<path
+							d="M128,24A104,104,0,1,0,232,128,104.12041,104.12041,0,0,0,128,24Zm0,160c-27.63281,0-40-28.125-40-56s12.36719-56,40-56,40,28.125,40,56S155.63281,184,128,184Z" />
+					</svg>
+					Agreement
+				</div>
+			</h1> -->
+			<router-outlet></router-outlet>
+		</main>
+		<footer class="admin-footer">
+			<div class="col-9 pl-0 mt-5">
+				<p>Copyright © 2001-{{currentYear}} 1-800-LIMO.COM</p>
+			</div>
+			<div class="col-3">
+			</div>
+		</footer>
 	</div>
 </div>
 <app-scroll-to-top></app-scroll-to-top>

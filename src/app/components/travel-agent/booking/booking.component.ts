@@ -66,6 +66,8 @@ export class BookingComponent implements OnInit {
 	adminSharePercent: number;
 	public invite_link:any;
 	public referral_code:any;
+	showCopyIcon:boolean = false
+
 
 	constructor(
 		private affiliateService: AffiliateService,
@@ -296,8 +298,11 @@ export class BookingComponent implements OnInit {
 		return this.inviteAgentForm.controls;
 	}
 	copyInviteLink(){
+		this.showCopyIcon = true
 		  console.log("in function copy link to clipboard")
-			
+			setTimeout(()=>{
+				this.showCopyIcon = false
+			},2500)
 	}
 
 	//close email modal

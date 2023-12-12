@@ -116,6 +116,7 @@ import { AffiliateBookingComponent } from './affiliate-booking/affiliate-booking
 import { TravelAgentStepsComponent } from './travel-agent-steps/travel-agent-steps.component';
 import { TravelAgentStripeFormComponent } from './travel-agent-stripe-form/travel-agent-stripe-form.component';
 import { RecoverAccountsComponent } from './recover-accounts/recover-accounts.component';
+import { ClipboardModule } from '@angular/cdk/clipboard';
 
 
 @NgModule({
@@ -231,7 +232,8 @@ import { RecoverAccountsComponent } from './recover-accounts/recover-accounts.co
 		MatTabsModule,
 		MatTableModule,
 		MatExpansionModule,
-		MatIconModule
+		MatIconModule,
+		ClipboardModule
 	],
 	exports: [BookingStatusTextReplacePipe,MatIconModule]
 })

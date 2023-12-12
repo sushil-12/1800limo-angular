@@ -69,6 +69,8 @@ export class StateManagementService
 		localStorage.removeItem('step_completed_obj');
 		localStorage.removeItem('userData');
 		localStorage.removeItem('invite_link')
+		localStorage.removeItem('agency_name')
+		localStorage.removeItem('invite_code')
 	}
 
 

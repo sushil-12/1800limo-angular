@@ -24,7 +24,6 @@ a.dropdown-item.active {
 	padding-top: 7px;
 }
 
-
 a.dropdown-item:hover {
 	color: var(--orange-color) !important;
 }
@@ -128,13 +127,4 @@ mat-progress-bar {
 
 .affilate-wrapper .sidenav-menu .nav-item:nth-child(2) a {
 	padding-left: 15px !important;
-}
-.x-copy-btn{
-	margin-top: -5px;
-	margin-left: 10px !important;
-	opacity: 1;
-    color: black !important;
-    font-size: xx-large;
-    width: max-content;
-	background: none !important;
 }

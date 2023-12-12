@@ -40,6 +40,7 @@ import { CheckProfileCompleteGuard } from './guards/check-profile-complete.guard
 import { CreateBookingComponent } from './components/travel-agent/create-booking/create-booking.component';
 import { IndividualConfirmationComponent } from './components/email-pages/individual-confirmation/individual-confirmation.component';
 import { ModifyBookingComponent } from './components/email-pages/modify-booking/modify-booking.component';
+import { SubTravelAgentTemplateComponent } from './components/sub-travel-agent/sub-travel-agent-template/sub-travel-agent-template.component';
 
 
 const routes: Routes = [
@@ -283,10 +284,10 @@ const routes: Routes = [
 	},
 	{
 		path: 'sub_travel_agent',
-		component: AgentTemplateComponent,
+		component: SubTravelAgentTemplateComponent,
 		// canActivate: [AdminGuardGuard],
 		data: {
-			title: 'agent'
+			title: 'subagent'
 		},
 		children: [
 			{

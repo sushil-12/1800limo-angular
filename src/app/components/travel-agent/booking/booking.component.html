@@ -6,7 +6,22 @@
 			<div class="col-md-6">
 				<h2 class="headinginfo">My Bookings</h2>
 			</div>
-			<div class="col-md-6 d-flex justify-content-end">
+			<div class="col-md-6 d-flex justify-content-end" style="gap: 10px;">
+				<textarea id="clipboard-example-textarea" cols="30" rows="10" [(ngModel)]="invite_link"
+					hidden></textarea>
+				<button type="button" class="close x-copy-btn" style="float: left" [cdkCopyToClipboard]="invite_link"
+					(click)="copyInviteLink()">
+					<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
+						class="bi bi-check2" viewBox="0 0 16 16" *ngIf="showCopyIcon">
+						<path
+							d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z" />
+					</svg>
+					<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
+						class="bi bi-copy" viewBox="0 0 16 16" *ngIf="!showCopyIcon">
+						<path fill-rule="evenodd"
+							d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z" />
+					</svg>
+				</button>
 				<button class="custom-filled-button green-button" style="color:#fff;padding: 2px 12px !important;"
 					data-target="#inviteAgentModal" data-toggle="modal">
 					Invite Agent
@@ -1601,9 +1616,7 @@
 	<div class="modal-dialog invite-agent-modal-dialog modal-dialog-centered">
 		<div class="modal-content" style="padding: 0px;">
 			<div class="p-2 justify-content-end">
-				<button type="button" class="close x-circle-btn" style="float: left" (click)="copyInviteLink()">
-					<span aria-hidden="true" class="bi bi-clipboard" title="Copy link"></span>
-				</button>
+
 				<button type="button" class="close x-circle-btn" data-dismiss="modal" aria-label="Close"
 					(click)="closeInviteModal()">
 					<span aria-hidden="true" class="bi bi-x-circle"></span>

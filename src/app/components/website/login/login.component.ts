@@ -91,6 +91,10 @@ export class LoginComponent implements OnInit, AfterViewInit
 					this.router.navigateByUrl('/agent');
 					break;
 				}
+				case 'sub_travel_agent':{
+					this.router.navigateByUrl('/subagent')
+					break;
+				}
 				default: {
 					break;
 				}
@@ -135,6 +139,8 @@ export class LoginComponent implements OnInit, AfterViewInit
 
 		this.route.queryParams.subscribe((params:any)=>{
 			this.referralCode = atob(params?.refferal_code)
+			localStorage.setItem('agency_name',params?.agency_name)
+			localStorage.setItem('invite_code',this.referralCode)
 			console.log('Referral code->:', this.referralCode);
 			this.loginForm.patchValue({
 				invite_code:this.referralCode
