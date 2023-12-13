@@ -59,6 +59,7 @@ export class AccountStatusComponent implements OnInit {
         this.status_title = "Stripe-Error ..."
         this.status_color = "text-danger"
         this.reasons = 'Please check Step 2 to fix the stripe errors!'
+        localStorage.setItem('account_approval', 'stripe_error')
       }else {
         // do in case of IN-PROGRESS || REJECTED
 
