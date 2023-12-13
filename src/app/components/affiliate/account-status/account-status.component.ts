@@ -12,8 +12,7 @@ declare var $: any;
   templateUrl: './account-status.component.html',
   styleUrls: ['./account-status.component.scss']
 })
-export class AccountStatusComponent implements OnInit
-{
+export class AccountStatusComponent implements OnInit {
 
   account_approval_status!: string
   status_message!: string
@@ -24,35 +23,46 @@ export class AccountStatusComponent implements OnInit
   constructor(
     private $router: Router,
     private affiliateService: AffiliateService,
-  )
-  { }
+  ) { }
 
-  ngOnInit(): void
-  {
+  ngOnInit(): void {
     this.checkAffiliateAccountStatus()
   }
 
-  checkAffiliateAccountStatus()
-  {
+  checkAffiliateAccountStatus() {
     this.status_message = ""
     this.status_title = "loading ..."
     this.status_color = "text-secondary"
     this.reasons = ""
 
-    this.affiliateService.checkAffiliateAccountStatus().subscribe(({ data, message }: any) =>
-    {
-
-      this.account_approval_status = data.status;
-      this.reasons = data.comment.replace('/\n+/g', 'br/>')
-      if (data.status == 'accepted')
-      {
+    this.affiliateService.checkAffiliateAccountStatus().subscribe(({ data, message }: any) => {
+      console.log("status",data?.status,message)
+      this.account_approval_status = data?.status;
+      // this.reasons = data.comment.replace('/\n+/g', 'br/>')
+    
+      if (this.account_approval_status == 'accepted') {
         localStorage.setItem('account_approval', 'accepted')
         this.$router.navigate(['/affiliate/my-bookings'])
-      } else
-      {
+      } else if (this.account_approval_status == 'completed') {
+        this.status_message = ""
+        this.status_title = "In Review ..."
+        this.status_color = "text-primary"
+        this.reasons = ""
+      }
+      else if (this.account_approval_status == 'rejected') {
+        this.status_message = ""
+        this.status_title = "Rejected ..."
+        this.status_color = "text-danger"
+        this.reasons = message
+      } else if(this.account_approval_status == 'stripe_error'){
+        this.status_message = ""
+        this.status_title = "Stripe-Error ..."
+        this.status_color = "text-danger"
+        this.reasons = 'Please check Step 2 to fix the stripe errors!'
+      }else {
         // do in case of IN-PROGRESS || REJECTED
-        [this.status_color, this.status_title, this.status_message] = (function (status: string)
-        {
+
+        [this.status_color, this.status_title, this.status_message] = (function (status: string) {
           return status == 'completed' ?
             ['text-primary', 'In Review', 'Your application is still under processing ...'] :
             ['text-danger', 'Rejected', 'Your application has been rejected by the Admin due to the following reasons: ']

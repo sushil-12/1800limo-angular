@@ -201,6 +201,15 @@ export class NewBookingComponent implements OnInit {
 			return text
 		}
 	}
+	textFormatterClientAccounts(text:string){
+		try {
+			return text == 'travel_planner' ? 'Travel Agent' : text.replace(/[\\\_$]+/g, ' ')
+		}
+		catch
+		{
+			return text
+		}
+	}
 
 	mToMi(distance: number): string {
 		return (distance / 1609).toFixed(2)

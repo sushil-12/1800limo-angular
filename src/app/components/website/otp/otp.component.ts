@@ -29,6 +29,7 @@ export class OtpComponent implements OnInit, OnDestroy {
 	public dDay = new Date().getTime() + 16 * 1000;
 	public timeDifference;
 	public secondsToDday;
+	Role:any;
 	@ViewChild(NgOtpInputComponent, { static: false }) ngOtpInput: NgOtpInputComponent;
 	@ViewChild('otpInput') otpInput: ElementRef;
 	email: any = null;
@@ -112,15 +113,18 @@ export class OtpComponent implements OnInit, OnDestroy {
 		this.$route.queryParams.subscribe((params: any) => {
 			if (params.otp) {
 				setTimeout(() => {
-					this.ngOtpInput.setValue(params.otp);
-					this.otpForm.get('otp').setValue(params.otp)
-					this.otpForm.updateValueAndValidity()
+					// this.ngOtpInput.setValue(params.otp);
+					// this.otpForm.get('otp').setValue(params.otp)
+					// this.otpForm.updateValueAndValidity()
 					// this.ngOtpInput.focusTo(this.otpInput)
 					// this.otpCheck()
 				}, 2000)
 			}
 			if(params.email){
 				this.email = params.email
+			}
+			if(params?.role){
+				this.Role = params?.role
 			}
 		})
 		document.querySelectorAll('.otp-input').forEach(occurence => {
@@ -156,9 +160,9 @@ export class OtpComponent implements OnInit, OnDestroy {
 	onOtpChange(value) {
 		this.otpForm.get('otp').setValue(value)
 		this.otpForm.updateValueAndValidity()
-		if(value.length >=6){
-			this.otpCheck()
-		}
+		// if(value.length >=6){
+		// 	this.otpCheck()
+		// }
 	}
 
 	resendOtp() {
@@ -166,7 +170,7 @@ export class OtpComponent implements OnInit, OnDestroy {
 		this.showProgressBar = true; //show progressbar
 
 		let userId = sessionStorage.getItem('userId');
-		this.authService.resendOtp({ "userId": userId })
+		this.authService.resendOtp({ "userId": userId ,"role":this.Role})
 			.pipe(
 				catchError(err => {
 					this.disableSubmit = false; //enable submit button

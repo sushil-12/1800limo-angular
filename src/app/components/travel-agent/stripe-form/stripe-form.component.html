@@ -1,6 +1,6 @@
 <form [formGroup]="addBankForm" class="step_form_wrapper" appInvalidControlScroll>
 	<section class="user_information">
-		<h2 class="headinginfo adminbox_shadow">Bank Account Status</h2>
+		<h2 class="headinginfo adminbox_shadow" *ngIf="response">Bank Account Status</h2>
 		<div class="container">
 			<div class="row" *ngIf="response">
 				<div class="col-md-12" *ngIf="response.data.stripeDetail.transfer_status!='active'">

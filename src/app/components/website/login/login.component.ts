@@ -151,8 +151,10 @@ export class LoginComponent implements OnInit, AfterViewInit
 			const role = params['role'];
 			console.log('Role:', role,params);
 			
-			const existRoles = ['admin' , 'driver' , 'sub_admin' , 'travel_agent','sub_travel_agent']
+			const existRoles = ['admin' , 'driver' , 'sub_admin' , 'travel_agent','master_user','sub_travel_agent']
 		
+			console.log('Role:', role);
+			// const existRoles = ['admin' , 'driver' , 'sub_admin' , 'travel_agent',]
 			if(!existRoles.includes(role)){
 				this.router.navigate(['/login/driver']).then(()=>{
 					window.location.reload()
@@ -282,10 +284,11 @@ export class LoginComponent implements OnInit, AfterViewInit
 				let email = this.response?.data?.email
 				if (environment['environmentName'] !== 'Production')
 				{
-					this.router.navigateByUrl('/otp' + `?otp=${result.data.otp}?email=${email}`);
+					console.log('role',this.Role)
+					this.router.navigateByUrl('/otp' + `?otp=${result.data.otp}`+ `&role=${this.Role}` + `&email=${email}`);
 				} else
 				{
-					this.router.navigateByUrl('/otp');
+					this.router.navigateByUrl('/otp'+ `?role=${this.Role}`);
 				}
 			});
 	}
