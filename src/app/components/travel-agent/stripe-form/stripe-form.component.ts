@@ -57,6 +57,9 @@ export class StripeFormComponent implements OnInit {
 	enableSsnField:boolean=false;
 	ssn_copy:any;
 	ssnErrorMessage:string;
+	addressErrorMessage:string;
+	dobErrorMessage:string;
+	public AddressCheckStripe = ['address','street','city','country']
 
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
 	stepsObj: any;
@@ -212,6 +215,7 @@ export class StripeFormComponent implements OnInit {
 	requestLongitude: number;
 	@ViewChild('search1')
 	public searchElementRef: ElementRef;
+	TaxIdMatch: string;
 
 	mapFunction() {
 		this.mapsAPILoader.load().then(() => {
@@ -335,19 +339,64 @@ export class StripeFormComponent implements OnInit {
 						id_back_image: this.response.data.bankinfo.id_back_image.ID,
 					});
 					this.ssn_copy=this.response?.data?.bankinfo?.ssn
-					if(this.response?.data?.error_fields?.find(val => val?.field == 'ssn')){
-						this.ssnErrorMessage = this.response?.data?.error_fields?.find(val => val?.field == 'ssn')?.message
+					if(this.response?.data?.error_fields?.length > 0){
+						const hasNonEmptyObjects = this.response?.data?.error_fields?.filter(obj => Object.keys(obj).length > 0).length > 0;
+						console.log(hasNonEmptyObjects,"hasnonnonono")
+						if(!hasNonEmptyObjects){
+							this.enableSsnField = true
+						}
+						else{
 
-						this.enableSsnField=false
-								console.log("in if ssn error",this.enableSsnField)
+							this.response?.data?.error_fields?.forEach(item=>{
+								if(item.field == 'ssn'){
+									this.enableSsnField = false
+									this.ssnErrorMessage = 'PLEASE ENTER A VALID SSN'
+									console.log('error mesage---->',this.ssnErrorMessage)
+								}
+								else{
+									this.enableSsnField = true
+								}
+								 if(this.AddressCheckStripe?.includes(item?.field)){
+									console.log("in if addressssssssss-->")
+									this.addressErrorMessage = 'Please enter a valid address'
+									console.log('error mesage---->',this.addressErrorMessage)
+									// this.enableSsnField = true
+
+								}
+								if(item?.field == 'dob'){
+									this.dobErrorMessage = 'Please enter a valid dob'
+									console.log('error mesage---->',this.dobErrorMessage)
+									// this.enableSsnField = true
+								}									
+						  })
+						}
+					
 					}
 					else{
-						this.enableSsnField=true
+						this.enableSsnField = true
+
 					}
+					console.log("trueeee===>",this.enableSsnField)
+					//to check varificatiom failed tax id error only
+					if(this.response?.data?.stripeDetail?.stripe_errors?.find(err => err?.error_code == 'verification_failed_tax_id_match')){
+						this.enableSsnField = false
+						this.TaxIdMatch = 'NOTE - Please verify your SSN  number and Buisness/Tax ID number'
+					}
+					console.log("enableSsnField", this.enableSsnField, this.ssn_copy)
 					this.currencySelection(this.response.data.bankinfo.currency)
 					this.haveEin(this.response.data.bankinfo.ein ? 'yesEin' : 'noEin');
 					this.changeCountry(this.response.data.bankinfo.country);//for selected country
-					this.stateManagementService.setprogressBar(false);
+					// this.stateManagementService.setprogressBar(false);
+					this.badgeOptions.map((i: any) => {
+						if (i.id == this.response?.data?.bankinfo?.badge_city) {
+							this.addBankForm.patchValue({
+								badge_city: i?.id,
+								badge_city_name: i?.name
+							})
+						}
+					})
+
+
 				});
 		}
 		else {
@@ -677,15 +726,29 @@ export class StripeFormComponent implements OnInit {
 			}
 		}
 	}
-	handleSsnInput(value:any){
-		
-		console.log("prev--->",this.ssn_copy,this.addBankForm.get('ssn').value)
-		value.includes("*") ? "" :this.ssn_copy=value
-		console.log("after--->",this.ssn_copy)
+	handleSsnInput(value: any) {
+
+		console.log("prev--->", this.ssn_copy, this.addBankForm.get('ssn').value)
+		value.includes("*") ? "" : this.ssn_copy = value
+		console.log("after--->", this.ssn_copy)
 
 	}
-	removeErrorSsn(value:any){
-		this.ssnErrorMessage =""
+	removeErrorSsn(value:any,type:string){
+		console.log("TYPE----->",type)
+		if(type == 'ssn'){
+			this.ssnErrorMessage = ""
+		}
+		else if(type == 'address'){
+			this.addressErrorMessage = ""
+		}
+		// else if(type == 'dob'){
+		// 	console.log("in dobbbbhbbb")
+		// 	this.dobErrorMessage = ""
+		// }
+	}
+	removeDobError(){
+		console.log("in dobbbbhbbb")
+		this.dobErrorMessage = ""
 	}
 	submitForm() {
 		console.log(this.addBankForm);
