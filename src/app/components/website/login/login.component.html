@@ -12,28 +12,33 @@
 					<h2>Welcome {{format(Role) | titlecase}}, Create an Account or Sign In.</h2>
 				</ng-template>
 			</div>
-			<div class="row" *ngIf="Role != 'admin' && Role !='sub_admin' && Role !='driver' && Role !='travel_agent'">
+			<div class="row"
+				*ngIf="Role != 'admin' && Role !='sub_admin' && Role !='driver' && Role !='travel_agent' && Role != 'master_user' ">
 				<div class="col-md-12 mt-3">
-					<div class="radio-group role" style="box-shadow: 0 5px 12px -6px rgb(0 0 0);" (click)="alert_individual=!alert_individual;clearAlert()">
+					<div class="radio-group role" style="box-shadow: 0 5px 12px -6px rgb(0 0 0);"
+						(click)="alert_individual=!alert_individual;clearAlert()">
 						<input type="radio" id="individual" name="role" checked="" value="individual" disabled
 							formControlName="role" (click)="loginButtons('individual');">
 						<label for="individual" class="text-center text-secondary"
 							style="cursor: default">Individual</label>
-						</div>
-						<div class="radio-group role" style="box-shadow: 0 5px 12px -6px rgb(0 0 0);" (click)="alert_corporate=!alert_corporate;clearAlert()">
-							<input type="radio" id="corporate" name="role" checked="" value="corporate" disabled
+					</div>
+					<div class="radio-group role" style="box-shadow: 0 5px 12px -6px rgb(0 0 0);"
+						(click)="alert_corporate=!alert_corporate;clearAlert()">
+						<input type="radio" id="corporate" name="role" checked="" value="corporate" disabled
 							formControlName="role" (click)="loginButtons('corporate');">
-						<label for="corporate" class="text-center text-secondary" style="cursor: default;">Corporate</label>
+						<label for="corporate" class="text-center text-secondary"
+							style="cursor: default;">Corporate</label>
 					</div>
 					<!-- (click)="alert_travel_agent=!alert_travel_agent;clearAlert()" -->
-					<div class="radio-group role" style="box-shadow: 0 5px 12px -6px rgb(0 0 0);" >
+					<div class="radio-group role" style="box-shadow: 0 5px 12px -6px rgb(0 0 0);">
 						<input type="radio" id="travel_agent" name="role" checked="" value="travel_agent"
 							formControlName="role" disabled (click)="loginButtons('travel_agent');">
-						<label for="travel_agent" class="text-center text-secondary" style="cursor: default;">Travel Agent</label>
+						<label for="travel_agent" class="text-center text-secondary" style="cursor: default;">Travel
+							Agent</label>
 					</div>
 					<div class="radio-group role" style="box-shadow: 0 5px 12px -6px rgb(0 0 0);">
 						<input type="radio" id="driver/fleet" name="role" checked="" value="driver"
-						formControlName="role" (click)="loginButtons('driver')">
+							formControlName="role" (click)="loginButtons('driver')">
 						<label for="driver/fleet" class="text-center">Driver / Chauffeur / Fleet - To Drive</label>
 					</div>
 					<!-- <div class="radio-group role" style="box-shadow: 0 5px 12px -6px rgb(0 0 0);">
@@ -43,45 +48,45 @@
 					</div> -->
 				</div>
 				<p class="text-danger margin-bottom-thin my-mat-hint"
-				[ngClass]="(alert_individual || alert_corporate || alert_travel_agent)? '':'hide-alert'">
-				 Currently only Drivers are allowed to Sign In</p>
-	</div>
-
-	<h3 class="mt-3" style="margin: 4px auto !important;">Choose Country Flag and Enter Your Phone Number</h3>
-	<h3 class="mb-2 mt-0">(Once Logged In, Always In, or Log Out)</h3>
-	<!-- progress bar -->
-	<mat-progress-bar class="my-color my-4" mode="indeterminate" *ngIf="showProgressBar"></mat-progress-bar>
-	<mat-form-field appearance="outline" class="mat-custom-phone topLabelClass">
-		<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Phone Number</label>
-		<input matInput placeholder="1234567890" formControlName="phone" ng2TelInput
-			[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
-			(countryChange)="onCountryChange($event)" class="phoneNumberClass" tabIndex="1"
-			(intlTelInputObject)="telInputObjectCell($event)" id="phn-input" autofocus/>
-	</mat-form-field>
-	<div *ngIf="submitted && f.phone.errors" class="text-danger margin-bottom-thin my-mat-hint">
-		<div *ngIf="f.phone.errors.required">The Phone Number is required</div>
-		<div *ngIf="f.phone.errors?.invalid_Pattern;else plusError">Do not add Dashes with
-			numbers</div>
-		<ng-template #plusError>
-			<div *ngIf="f.phone.errors?.invalidPattern;else allErrors">Do not enter + sign
+					[ngClass]="(alert_individual || alert_corporate || alert_travel_agent)? '':'hide-alert'">
+					Currently only Drivers are allowed to Sign In</p>
 			</div>
-			<ng-template #allErrors>
-				<div *ngIf="f.phone.errors?.pattern">Enter Numbers Only</div>
-				<div *ngIf="f.phone.errors.minlength">Minimum length should be 4</div>
-				<div *ngIf="f.phone.errors.maxlength">Maximum length should be 15</div>
-			</ng-template>
-		</ng-template>
-	</div>
-	<button class="custom-filled-button my-3" (click)="loginCheck()" [disabled]="disableSubmit">Sign In</button>
-</form>
 
-	<!-- Remind Passowrd -->
-	<div id="formFooter">
-		<p class="firebaseui-tos firebaseui-phone-tos">By tapping Verify, you are indicating that you accept our <a
-				routerLink="/client-terms-condition" class="common-anchor" target="_blank">Terms of Service</a> and
-			<a routerLink="/privacy-policy" class="common-anchor" target="_blank">Privacy Policy</a>. An SMS may be
-			sent. Message &amp; data rates may apply.
-		</p>
+			<h3 class="mt-3" style="margin: 4px auto !important;">Choose Country Flag and Enter Your Phone Number</h3>
+			<h3 class="mb-2 mt-0">(Once Logged In, Always In, or Log Out)</h3>
+			<!-- progress bar -->
+			<mat-progress-bar class="my-color my-4" mode="indeterminate" *ngIf="showProgressBar"></mat-progress-bar>
+			<mat-form-field appearance="outline" class="mat-custom-phone topLabelClass">
+				<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Phone Number</label>
+				<input matInput placeholder="1234567890" formControlName="phone" ng2TelInput
+					[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
+					(countryChange)="onCountryChange($event)" class="phoneNumberClass" tabIndex="1"
+					(intlTelInputObject)="telInputObjectCell($event)" id="phn-input" autofocus />
+			</mat-form-field>
+			<div *ngIf="submitted && f.phone.errors" class="text-danger margin-bottom-thin my-mat-hint">
+				<div *ngIf="f.phone.errors.required">The Phone Number is required</div>
+				<div *ngIf="f.phone.errors?.invalid_Pattern;else plusError">Do not add Dashes with
+					numbers</div>
+				<ng-template #plusError>
+					<div *ngIf="f.phone.errors?.invalidPattern;else allErrors">Do not enter + sign
+					</div>
+					<ng-template #allErrors>
+						<div *ngIf="f.phone.errors?.pattern">Enter Numbers Only</div>
+						<div *ngIf="f.phone.errors.minlength">Minimum length should be 4</div>
+						<div *ngIf="f.phone.errors.maxlength">Maximum length should be 15</div>
+					</ng-template>
+				</ng-template>
+			</div>
+			<button class="custom-filled-button my-3" (click)="loginCheck()" [disabled]="disableSubmit">Sign In</button>
+		</form>
+
+		<!-- Remind Passowrd -->
+		<div id="formFooter">
+			<p class="firebaseui-tos firebaseui-phone-tos">By tapping Verify, you are indicating that you accept our <a
+					routerLink="/client-terms-condition" class="common-anchor" target="_blank">Terms of Service</a> and
+				<a routerLink="/privacy-policy" class="common-anchor" target="_blank">Privacy Policy</a>. An SMS may be
+				sent. Message &amp; data rates may apply.
+			</p>
+		</div>
 	</div>
-</div>
 </div>
