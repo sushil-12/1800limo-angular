@@ -16,7 +16,7 @@
 				</ng-template>
 			</div>
 			<div class="row"
-				*ngIf="Role != 'admin' && Role !='sub_admin' && Role !='driver' && Role !='travel_agent' && Role != 'master_user' ">
+				*ngIf="Role != 'admin' && Role !='sub_admin' && Role !='driver' && Role !='travel_agent' && Role != 'master_user' && Role != 'sub_travel_agent'  ">
 				<div class="col-md-12 mt-3">
 					<div class="radio-group role" style="box-shadow: 0 5px 12px -6px rgb(0 0 0);"
 						(click)="alert_individual=!alert_individual;clearAlert()">
