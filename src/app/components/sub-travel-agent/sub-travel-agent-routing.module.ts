@@ -18,7 +18,7 @@ const routes: Routes = [
   {
     path:'profile',
     component:ProfileComponent,
-    canActivate: [SubTravelAgentGuardGuard],
+    // canActivate: [SubTravelAgentGuardGuard],
   },
   {
     path:'bookings',

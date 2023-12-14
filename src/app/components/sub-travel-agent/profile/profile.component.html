@@ -123,8 +123,7 @@
                     <div class="col-md-4">
                         <mat-form-field appearance="outline">
                             <mat-label>Agency Name <span class="asterisk">*</span></mat-label>
-                            <input formControlName="agency_name" type="text" matInput placeholder="Agency Name"
-                                readonly>
+                            <input formControlName="agency_name" type="text" matInput placeholder="Agency Name">
                         </mat-form-field>
                         <div *ngIf="submittedForm && f?.agency_name?.errors" class="text-danger">
                             <div *ngIf="f?.agency_name?.errors?.required">This field is required</div>
