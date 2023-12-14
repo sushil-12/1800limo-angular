@@ -35,12 +35,13 @@ export class InvoiceDashComponent implements OnInit {
   audit_Trail: any;
   searchText:any='';
 	useDateFilter:boolean=true;
+  currentUser:any;
   
   constructor(private TravelService: TravelAgentService,private adminService: AdminService, private router: Router,
     private spinner: NgxSpinnerService) { }
 
   ngOnInit(): void {
-
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser'))
     let date = new Date();
 		let timestamp = date.getTime()
 		//     const options:any = {
@@ -111,7 +112,7 @@ export class InvoiceDashComponent implements OnInit {
   //view invoice summary
   clicViewInvoice(bookingId)
   {
-    this.router.navigate(['/travel_agent/invoice-summary'],{queryParams:{bookingId:bookingId}});
+    this.router.navigate([`/${this.currentUser?.roleName}/invoice-summary`],{queryParams:{bookingId:bookingId}});
   }
 
 

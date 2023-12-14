@@ -47,7 +47,7 @@ export class InvoiceDashSummaryComponent implements OnInit {
 		private httpClient: HttpClient) { }
 
     ngOnInit(): void {
-
+	this.currentUser = JSON.parse(localStorage.getItem('currentUser'))
       this.spinner.show();
       this.getCurrencyData();
       this.activatedroute.queryParamMap
@@ -56,7 +56,7 @@ export class InvoiceDashSummaryComponent implements OnInit {
           this.bookingId = this.paramResponse.params.bookingId;
   
           if (!this.bookingId) {
-            this.router.navigate(['/travel_agent/bookings']);
+            this.router.navigate([`/${this.currentUser?.roleName}/bookings`]);
           }
           else {
             this.getInvoiceData()
@@ -66,7 +66,7 @@ export class InvoiceDashSummaryComponent implements OnInit {
     }
 
     backButton() {
-      this.router.navigate(['/travel_agent/invoices']);
+      this.router.navigate([`/${this.currentUser?.roleName}/invoices`]);
     }
 
   getCurrencyData() {
