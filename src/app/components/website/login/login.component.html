@@ -7,6 +7,7 @@
 			<div class="fadeIn first">
 				<img src="assets/admin/images/login_logo.png" class="cursor-pointer" id="icon" alt="User Icon"
 					[routerLink]="['/home']" />
+
 				<h2 *ngIf=" Role == 'admin'; else userLogin ">Welcome Admin</h2>
 				<ng-template #userLogin>
 					<h2 *ngIf=" Role == 'master_user'; else userLogin1 ">Welcome Joe, Please Sign In as Super Admin</h2>
@@ -14,6 +15,12 @@
 				<ng-template #userLogin1>
 					<h2>Welcome {{format(Role) | titlecase}}, Create an Account or Sign In.</h2>
 				</ng-template>
+			</div>
+			<div class="d-flex justify-content-center" *ngIf="Role == 'travel_agent' ">
+				<button class="custom-filled-button my-3" (click)="loginSubTravelAgent()" style="padding: 1px 7px;">Sign
+					In as
+					Sub
+					Agent</button>
 			</div>
 			<div class="row"
 				*ngIf="Role != 'admin' && Role !='sub_admin' && Role !='driver' && Role !='travel_agent' && Role != 'master_user' && Role != 'sub_travel_agent'  ">
@@ -92,6 +99,7 @@
 				</div>
 			</div>
 			<button class="custom-filled-button my-3" (click)="loginCheck()" [disabled]="disableSubmit">Sign In</button>
+
 		</form>
 
 		<!-- Remind Passowrd -->

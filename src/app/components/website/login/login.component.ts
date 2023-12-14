@@ -183,6 +183,13 @@ export class LoginComponent implements OnInit, AfterViewInit
 			}
 		}
 	}
+
+	loginSubTravelAgent(){
+		this.router.navigate(['/login/sub_travel_agent']).then(()=>{
+			window.location.reload()
+		})
+		
+	}
 	// loginbuttons
 	loginButtons(role: string)
 	{
