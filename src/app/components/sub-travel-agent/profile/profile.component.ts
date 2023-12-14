@@ -268,29 +268,32 @@ export class ProfileComponent implements OnInit {
       this.response = result;
       this.spinner.hide();//hide spinner
      console.log("profile created",this.response)
-     $("#redirectModal").modal("show");
+     if(!this.currentUser?.is_profile_complete){
+       $("#redirectModal").modal("show");
+       setTimeout(()=>{
+        console.log("in timeout")
+        this.spinner.show('logoutspinner')
+        $("#redirectModal").modal("hide");
+        this.authService.logout()
+        .pipe(
+          catchError(err =>
+          {
+            this.spinner.hide('logoutspinner');//hide spinner
+            return throwError(err);
+          })
+        ).subscribe(({ success }: any) =>
+        {
+          this.spinner.hide('logoutspinner');//hide spinner
+          if (success == true)
+          {
+            this.stateManagementService.removeUser();
+          }
+          this.router.navigate(['/']);
+        });
+       },10000)
+     }
 
-     setTimeout(()=>{
-      console.log("in timeout")
-      this.spinner.show('logoutspinner')
-      $("#redirectModal").modal("hide");
-      this.authService.logout()
-			.pipe(
-				catchError(err =>
-				{
-					this.spinner.hide('logoutspinner');//hide spinner
-					return throwError(err);
-				})
-			).subscribe(({ success }: any) =>
-			{
-				this.spinner.hide('logoutspinner');//hide spinner
-				if (success == true)
-				{
-					this.stateManagementService.removeUser();
-				}
-				this.router.navigate(['/']);
-			});
-     },10000)
+    
 
     });
 

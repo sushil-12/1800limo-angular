@@ -430,7 +430,7 @@
 	</table>
 </section>
 <!-- payment section -->
-<!-- <section class="section-container mt-2" *ngIf="BookingDetail?.payment_status=='unpaid'">
+<section class="section-container mt-2" *ngIf="BookingDetail?.payment_status=='unpaid'">
 	<div class="col-md-12 p-0" (click)="handlePaymentSection()">
 		<h4 class="section-dropdown-header mb-0">
 			Payment
@@ -440,12 +440,20 @@
 	<div class="row" *ngIf="paymentSection">
 
 
-		<div class="col-md-12 cardSection">
-			<div class="radio">
-				<input id="card" name="paymentMethod" type="radio" checked (click)="changeDetection('card')">
-				<label for="card" class="radio-label">Payment with Card</label>
+		<div class="col-md-12 d-flex cardSection">
+			<div class="col-md-6">
+				<div class="radio">
+					<input id="card" name="paymentMethod" type="radio" checked (click)="changeDetection('card')">
+					<label for="card" class="radio-label">Payment with Card</label>
+				</div>
 			</div>
-			<div class="methodCard" *ngIf="paymentMethod=='card'">
+			<div class="col-md-6">
+				<div class="radio">
+					<input id="cash" name="paymentMethod" type="radio" (click)="changeDetection('cash')">
+					<label for="cash" class="radio-label">Payment with Cash</label>
+				</div>
+			</div>
+			<!-- <div class="methodCard" *ngIf="paymentMethod=='card'">
 				<table class="table table-borderless">
 					<thead class="bg-transparent">
 						<tr>
@@ -612,19 +620,14 @@
 						</div>
 					</div>
 				</div>
-			</form>
+			</form> -->
 
 		</div>
-		<div class="col-md-12 my-3 cardSection">
-			<div class="radio">
-				<input id="cash" name="paymentMethod" type="radio" (click)="changeDetection('cash')">
-				<label for="cash" class="radio-label">Payment with Cash</label>
-			</div>
-		</div>
 
-		
+
+
 	</div>
-</section> -->
+</section>
 <div class="col-md-12 text-right mr-4" *ngIf="CardsInformation?.length">
 	<button type="button" class="custom-filled-button m-3 mr-4"
 		[ngClass]="BookingDetail?.booking_status == 'finalized' ? 'color-green' : 'color-grey' "
