@@ -265,7 +265,7 @@ export class AffiliateStep2Component implements OnInit {
 									this.response?.data?.error_fields?.forEach(item=>{
 										if(item.field == 'ssn'){
 											this.enableSsnField = false
-											this.ssnErrorMessage = 'PLEASE ENTER A VALID SSN'
+											this.ssnErrorMessage = 'PLEASE ENTER A VALID SSN / GOVERNMENT ID'
 											console.log('error mesage---->',this.ssnErrorMessage)
 										}
 										else{

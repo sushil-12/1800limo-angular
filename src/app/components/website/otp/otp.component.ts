@@ -227,8 +227,9 @@ export class OtpComponent implements OnInit, OnDestroy {
 
 				//set profile pic link here
 				localStorage.setItem('userData', JSON.stringify(loginUserDetail))
-				localStorage.setItem('currentUser', JSON.stringify(this.response.data.user));
-				localStorage.setItem('access_token', this.response.data.access_token);
+				localStorage.setItem('currentUser', JSON.stringify(this.response?.data?.user));
+				localStorage.setItem('access_token', this.response?.data?.access_token);
+				localStorage.setItem('invite_link',this.response?.data?.invite_link)
 
 				let QB_redirectUrl = localStorage.getItem('QB_redirectUrl') || ''
 				let vehicle_selected = JSON.parse(sessionStorage.getItem('selected_vehicle'))
@@ -316,6 +317,9 @@ export class OtpComponent implements OnInit, OnDestroy {
 							this.router.navigateByUrl('/travel_agent/profile/step1');
 						
 						break;
+					}
+					case 'sub_travel_agent':{
+						this.router.navigateByUrl('/sub_travel_agent/profile')
 					}
 					default: {
 						return false;

@@ -8,13 +8,13 @@ import { StateManagementService } from 'src/app/services/statemanagement.service
 declare var $: any;
 
 @Component({
-	selector: 'app-agent-template',
-	templateUrl: './agent-template.component.html',
-	styleUrls: ['./agent-template.component.scss']
+  selector: 'app-sub-travel-agent-template',
+  templateUrl: './sub-travel-agent-template.component.html',
+  styleUrls: ['./sub-travel-agent-template.component.scss']
 })
-export class AgentTemplateComponent implements OnInit {
+export class SubTravelAgentTemplateComponent implements OnInit {
 
-	public userImage: string = 'assets/images/user.png';
+  public userImage: string = 'assets/images/user.png';
 	public showSidebar: boolean = true;
 	public currentUser: any;
 	public screenWidth: any;
@@ -25,9 +25,6 @@ export class AgentTemplateComponent implements OnInit {
 	chevron_up: boolean = false;
 	chevron: boolean = false;
 	chevron1: boolean = false;
-	public invite_link: string;
-	public referral_code: any;
-	showCopyIcon:boolean;
 
 	constructor(
 		private router: Router,
@@ -40,10 +37,9 @@ export class AgentTemplateComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
-		this.invite_link = localStorage.getItem('invite_link')
-		var referralCode = (new URL(this.invite_link)).searchParams.get("refferal_code");
-		this.referral_code = atob(referralCode);
-		console.log("decodedReferralCode", this.referral_code);
+			//Get logged in user name
+			this.currentUser = JSON.parse(localStorage.getItem('currentUser'))
+			console.log('is_profile',this.currentUser?.is_profile_complete)
 
 
 		$(".collapsed").click(function () {
@@ -54,9 +50,7 @@ export class AgentTemplateComponent implements OnInit {
 		this.spinner.hide();//hide running spinner when came from 
 
 		this.screenWidth = window.innerWidth;
-		//Get logged in user name
-		this.currentUser = this.stateManagementService.getUser()
-
+	
 		//Get ProgressBar
 		this.stateManagementService.getprogressBar().subscribe(commonProgressBar => {
 			setTimeout(() => {
@@ -144,14 +138,6 @@ export class AgentTemplateComponent implements OnInit {
 	}
 	userAccountFunc(status) {
 		this.chevron1 = !this.chevron1
-	}
-
-	copyInviteLink(){
-		this.showCopyIcon = true
-		  console.log("in function copy link to clipboard")
-			setTimeout(()=>{
-				this.showCopyIcon = false
-			},2500)
 	}
 
 	showSidebarFunc(status) {

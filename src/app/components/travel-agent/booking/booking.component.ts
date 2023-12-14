@@ -13,9 +13,9 @@ import { DatePickerComponent } from '../../shared/date-picker/date-picker.compon
 declare var $: any;
 
 @Component({
-  selector: 'app-booking',
-  templateUrl: './booking.component.html',
-  styleUrls: ['./booking.component.scss']
+	selector: 'app-booking',
+	templateUrl: './booking.component.html',
+	styleUrls: ['./booking.component.scss']
 })
 export class BookingComponent implements OnInit {
 	@ViewChild('inputmsg', { static: false }) message: ElementRef;
@@ -29,6 +29,7 @@ export class BookingComponent implements OnInit {
 	public lastPage: Number;
 	public totalPage: Number;
 	public currentPage: any;
+	submittedForm: boolean;
 	public from: Number;
 	public to: Number;
 	public path: string;
@@ -43,6 +44,7 @@ export class BookingComponent implements OnInit {
 	public endDate: string;
 	public date: Date;
 	public changeStatusForm: FormGroup;
+	inviteAgentForm: FormGroup;
 	public sendEmailForm: FormGroup;
 	public submitted: boolean = false;
 	passengerDetails: any;
@@ -58,10 +60,14 @@ export class BookingComponent implements OnInit {
 	audit_Trail: any;
 	company_name: any = JSON.parse(localStorage.getItem('currentUser'))?.affiliate_company || ''
 	cancelBookingId: any = null
-	useDateFilter:boolean=true;
+	useDateFilter: boolean = true;
 	shareArray: any;
 	rates_preview: any;
 	adminSharePercent: number;
+	public invite_link:any;
+	public referral_code:any;
+	showCopyIcon:boolean = false
+
 
 	constructor(
 		private affiliateService: AffiliateService,
@@ -73,6 +79,14 @@ export class BookingComponent implements OnInit {
 
 	ngOnInit(): void {
 
+	    this.invite_link = localStorage.getItem('invite_link')
+		let referralCode = (new URL(this.invite_link)).searchParams.get("refferal_code");
+		this.referral_code = atob(referralCode);
+
+		// Output the decoded referral code
+		console.log("decodedReferralCode", this.referral_code);
+
+		this.buildInviteAgentForm();
 		let date = new Date();
 		// Set Search Filters According to cookies or the intial state
 		this.startDate = this.affiliateService.checkCookie('ta_startDate') ?
@@ -89,9 +103,9 @@ export class BookingComponent implements OnInit {
 			: "";
 
 		this.useDateFilter = localStorage.getItem('traveluseDateFilter') ?
-			(localStorage.getItem('traveluseDateFilter')=='true' ? true : false)
+			(localStorage.getItem('traveluseDateFilter') == 'true' ? true : false)
 			: true;
-			console.log('traveluseDateFilter-->' , this.useDateFilter)
+		console.log('traveluseDateFilter-->', this.useDateFilter)
 
 		this.loadBookings();
 
@@ -196,11 +210,11 @@ export class BookingComponent implements OnInit {
 		console.log('Reset Successfully. ');
 	}
 
-	handleChangeCheckbox(value:any){
-		console.log('event---->> ' ,value)
+	handleChangeCheckbox(value: any) {
+		console.log('event---->> ', value)
 		this.useDateFilter = value
 		// this.saveCookie('useDateFilter',value)
-		localStorage.setItem('traveluseDateFilter',value)
+		localStorage.setItem('traveluseDateFilter', value)
 		this.loadBookings();
 	}
 
@@ -243,17 +257,17 @@ export class BookingComponent implements OnInit {
 			).subscribe((response: any) => {
 				console.log("respinse", response.data)
 				this.bookingPreview = response.data;
-				if(this.bookingPreview?.account_type == 'travel_planner' && this.bookingPreview?.created_by !=1){
+				if (this.bookingPreview?.account_type == 'travel_planner' && this.bookingPreview?.created_by != 1) {
 					console.log("in if created by ta")
 					this.adminSharePercent = 15
 				}
-				else{
+				else {
 					console.log("in if created by admin")
 					this.adminSharePercent = 25
 				}
 				if (this.bookingPreview?.payment_status == "unpaid") {
-					if(this.bookingPreview?.share_array?.length != 0){
-						console.log("in if share array",this.bookingPreview.affiliate_type === 'affiliate' && this.bookingPreview.payment_status=='unpaid' && this.bookingPreview?.share_array?.length != 0)
+					if (this.bookingPreview?.share_array?.length != 0) {
+						console.log("in if share array", this.bookingPreview.affiliate_type === 'affiliate' && this.bookingPreview.payment_status == 'unpaid' && this.bookingPreview?.share_array?.length != 0)
 						this.shareArray = this?.bookingPreview?.share_array
 					}
 					this.rates_preview = this.bookingPreview?.rates_preview;
@@ -270,6 +284,56 @@ export class BookingComponent implements OnInit {
 
 	handleKeypressEvents() {
 		clearTimeout(this.timer)
+	}
+
+
+	//build email modal
+	buildInviteAgentForm() {
+		this.inviteAgentForm = this.formBuilder.group({
+			email_address: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9.]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]],
+		})
+	}
+
+	get f() {
+		return this.inviteAgentForm.controls;
+	}
+	copyInviteLink(){
+		this.showCopyIcon = true
+		  console.log("in function copy link to clipboard")
+			setTimeout(()=>{
+				this.showCopyIcon = false
+			},2500)
+	}
+
+	//close email modal
+	closeInviteModal() {
+		this.inviteAgentForm.patchValue({
+			email_address: ""
+		})
+		this.show = false
+		$("#inviteAgentModal").modal("hide");
+	}
+
+	//send invite function
+	sendInvite() {
+		this.submittedForm = true;
+		// stop here if form is invalid
+		if (this.inviteAgentForm.invalid) {
+			return;
+		}
+		this.spinner.show();
+		this.travelAgentService.sendTravelAgentInviteCode(this.inviteAgentForm.value)
+			.pipe(
+				catchError((err) => {
+					this.spinner.hide();
+					return throwError(err);
+				})
+			)
+			.subscribe((response: any) => {
+				console.log('response--------->>>>>>>>', response)
+				this.spinner.hide()
+				$("#inviteAgentModal").modal("hide");
+			});
 	}
 
 
@@ -413,13 +477,13 @@ export class BookingComponent implements OnInit {
 	show = false
 	openModal(booking: any, selection_button: string) {
 		try {
-			setTimeout(()=>{
+			setTimeout(() => {
 				// $('textarea').attr('autofocus', 'autofocus');
 				this.sendEmailModalFocus.nativeElement.querySelector('textarea').focus();
-			},1000)
+			}, 1000)
 		} catch (error) {
-		console.log('----------error------->>>>>> ' ,error )
-			
+			console.log('----------error------->>>>>> ', error)
+
 		}
 		console.log('open modal-->>>>>>>', booking, selection_button)
 		this.passengerDetails = booking;
@@ -469,13 +533,13 @@ export class BookingComponent implements OnInit {
 
 
 	editAction(bookingId, updateType) {
-        if (updateType == 'change') {
-            this.router.navigate(['/travel_agent/new-booking'], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'true' } });
-        }
-        else {
-            this.router.navigate(['/travel_agent/new-booking'], { queryParams: { bookingId: bookingId, updateType: updateType,nav: 'true' } });
-        }
-    }
+		if (updateType == 'change') {
+			this.router.navigate(['/travel_agent/new-booking'], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'true' } });
+		}
+		else {
+			this.router.navigate(['/travel_agent/new-booking'], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'true' } });
+		}
+	}
 
 	finalizeAction(bookingId) {
 		this.router.navigate(['/affiliate/finalize-booking'], { queryParams: { bookingId: bookingId } });
