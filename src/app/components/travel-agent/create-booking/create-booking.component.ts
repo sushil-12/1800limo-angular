@@ -130,6 +130,7 @@ export class CreateBookingComponent implements OnInit {
 	shareArray: any;
 	r_shareArray: any;
 	adminSharePercent: number = 25;
+	currentUser:any;
 
 	constructor(
 		private $form: FormBuilder,
@@ -145,6 +146,9 @@ export class CreateBookingComponent implements OnInit {
 	) { }
 
 	ngOnInit(): void {
+
+		this.currentUser = JSON.parse(localStorage.getItem('currentUser'))
+
 		this.buildBookingForm()
 		// this.$spinner.show();
 		this.$routeurl.queryParams.subscribe((params: any) => {
@@ -2147,6 +2151,12 @@ export class CreateBookingComponent implements OnInit {
 		console.log(this.BookingForm.status);
 		if (this.BookingForm.invalid) {
 			return;
+		}
+
+		if(this.currentUser?.roleName == 'sub_travel_agent'){
+			this.BookingForm.patchValue({
+				acc_id : this.currentUser?.agency_id
+			})
 		}
 
 		let value = this.BookingForm.value
