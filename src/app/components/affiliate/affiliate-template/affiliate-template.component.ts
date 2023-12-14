@@ -327,10 +327,15 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 						this.affiliateService.updateStepsCompletedObject(stepCompletedObj);
 						this.stepCompletionTick();
 					}
+					let status = data.account_approval
 					localStorage.setItem("account_approval", data.account_approval);
+					if(this.checkIsStepContainError(stepCompletedObj)){
+						status = 'stripe_error'
+						localStorage.setItem("account_approval", 'stripe_error');
+					}
 					localStorage.setItem("recject_cause_message", data.recject_cause_message);
 
-					switch (data.account_approval)
+					switch (status)
 					{
 						case 'completed': {
 							if (this.secondPartUrl != 'account-status')
@@ -338,6 +343,31 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 								//redirect user to account status if trying to access any URL in case of "account status=completed"
 								this.router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
 									this.router.navigate(['/affiliate/account-status'])
+								);
+							}
+							break;
+						}
+						case 'stripe-error' :{
+							let nextStep: number;
+							if (this.stepCompleted)
+							{
+								if (this.stepCompleted.includes('0'))
+								{//if step 0 is completed
+									nextStep = 1;
+								}
+								else
+								{//if no step is completed
+									nextStep = 0;
+								}
+							}
+							else
+							{//if no step is completed
+								nextStep = 0;
+							}
+							if (this.secondPartUrl.substr(0, 4) != 'step')
+							{
+								this.router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
+									this.router.navigate(['/affiliate/step' + nextStep])
 								);
 							}
 							break;
@@ -386,7 +416,13 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 				// },300)
 			});
 	}
-
+	checkIsStepContainError(object){
+		for (const key in object) {
+			if (object[key]== 'error' ) {
+				return true
+			}
+		}
+	}
 	stepCompletionTick()
 	{
 		for (let [key, value] of Object.entries(this.stepCompletedObj))
