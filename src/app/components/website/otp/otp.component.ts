@@ -229,7 +229,12 @@ export class OtpComponent implements OnInit, OnDestroy {
 				localStorage.setItem('userData', JSON.stringify(loginUserDetail))
 				localStorage.setItem('currentUser', JSON.stringify(this.response?.data?.user));
 				localStorage.setItem('access_token', this.response?.data?.access_token);
-				localStorage.setItem('invite_link',this.response?.data?.invite_link)
+				if(this.response?.data?.invite_link){
+					localStorage.setItem('invite_link',this.response?.data?.invite_link)
+				}
+				else{
+					localStorage.removeItem('invite_link')
+				}
 
 				let QB_redirectUrl = localStorage.getItem('QB_redirectUrl') || ''
 				let vehicle_selected = JSON.parse(sessionStorage.getItem('selected_vehicle'))
@@ -319,7 +324,13 @@ export class OtpComponent implements OnInit, OnDestroy {
 						break;
 					}
 					case 'sub_travel_agent':{
-						this.router.navigateByUrl('/sub_travel_agent/profile')
+						if(this.response?.data?.user?.is_profile_complete){
+							this.router.navigateByUrl('/sub_travel_agent/bookings');
+						}
+						else{
+							this.router.navigateByUrl('/sub_travel_agent/profile')
+						}
+						break;
 					}
 					default: {
 						return false;

@@ -56,6 +56,7 @@ export class AgentTemplateComponent implements OnInit {
 		this.screenWidth = window.innerWidth;
 		//Get logged in user name
 		this.currentUser = this.stateManagementService.getUser()
+		console.log(this.currentUser?.is_profile_complete,"is profile")
 
 		//Get ProgressBar
 		this.stateManagementService.getprogressBar().subscribe(commonProgressBar => {

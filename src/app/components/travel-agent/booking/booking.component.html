@@ -6,7 +6,7 @@
 			<div class="col-md-6">
 				<h2 class="headinginfo">My Bookings</h2>
 			</div>
-			<div class="col-md-6 d-flex justify-content-end" style="gap: 10px;">
+			<div class="col-md-6 d-flex justify-content-end" style="gap: 10px;" *ngIf="invite_link">
 				<textarea id="clipboard-example-textarea" cols="30" rows="10" [(ngModel)]="invite_link"
 					hidden></textarea>
 				<button type="button" class="close x-copy-btn" style="float: left" [cdkCopyToClipboard]="invite_link"

@@ -78,9 +78,8 @@ export class BookingComponent implements OnInit {
 		private formBuilder: FormBuilder) { }
 
 	ngOnInit(): void {
-
-	    this.invite_link = localStorage.getItem('invite_link')
-		let referralCode = (new URL(this.invite_link)).searchParams.get("refferal_code");
+	    this.invite_link = localStorage.getItem('invite_link') ? localStorage.getItem('invite_link') : null
+		let referralCode =  this.invite_link ? (new URL(this.invite_link)).searchParams.get("refferal_code") : ''
 		this.referral_code = atob(referralCode);
 
 		// Output the decoded referral code
