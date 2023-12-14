@@ -183,12 +183,14 @@
 					<ng-select appearance="outline" [items]="travelStaffAccounts" bindLabel="name" bindValue="id"
 						placeholder="Select Client Account" dropdownPosition="bottom" [markFirst]="true"
 						[virtualScroll]="true" formControlName="travel_client_id"
-						(change)="handleTravelStaffAccounts($event)">
+						(change)="handleTravelStaffAccounts($event)" style="padding-bottom: 0px;"
+						[ngClass]="{ 'border-red': (submitBookingForm && Form.travel_client_id.invalid) || (Form.travel_client_id.touched && Form.travel_client_id.dirty) }">
 					</ng-select>
-					<!-- <div *ngIf="(submitBookingForm && Form.travel_client_id.invalid) || (Form.travel_client_id.touched && Form.travel_client_id.dirty)"
+					<div *ngIf="(submitBookingForm && Form.travel_client_id.invalid) || (Form.travel_client_id.touched && Form.travel_client_id.dirty)"
 						class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="Form.travel_client_id.errors.required">Select an Individual</div>
-					</div> -->
+						<div *ngIf="Form.travel_client_id.errors.required">Select a client
+							account</div>
+					</div>
 				</div>
 			</div>
 			<ng-container

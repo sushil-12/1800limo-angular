@@ -189,7 +189,7 @@ export class CreateBookingComponent implements OnInit {
 			number_of_hours: ['0'],
 			acc_id: [''],
 			account_type: ['travel_planner'],
-			travel_client_id: [''],
+			travel_client_id: ['',[Validators.required]],
 			travel_client_acc: ['travel_individual'],
 			change_individual_data: [false],
 			loose_customer: this.$form.group({

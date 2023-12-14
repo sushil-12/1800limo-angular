@@ -149,7 +149,7 @@ export class ProfileComponent implements OnInit {
       latitude: [''],
       longitude: [''],
       timezone : [''],
-      agency_name: ['', Validators.required],
+      agency_name: [''],
       invite_code: [this.invite_code]
 
     });
