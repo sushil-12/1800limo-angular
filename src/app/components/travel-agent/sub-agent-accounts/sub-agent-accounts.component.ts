@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ThemePalette } from '@angular/material/core';
 import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -6,6 +7,7 @@ import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { AdminService } from 'src/app/services/admin.service';
 import { TravelAgentService } from 'src/app/services/travel-agent.service';
+declare var $:any;
 
 @Component({
   selector: 'app-sub-agent-accounts',
@@ -35,16 +37,24 @@ export class SubAgentAccountsComponent implements OnInit {
   public prevPageUrl:string;
   public nextPageUrl:string;
   searchText: any;
+  public rejectCauseForm: FormGroup;
+  public submitted: boolean = false;
 
   constructor(
 		private travelService: TravelAgentService,
     private adminService:AdminService,
     private router: Router,
+    private $form: FormBuilder,
     private spinner: NgxSpinnerService) { }
 
   ngOnInit(): void {
 		this.searchText = localStorage.getItem('subAgentAccountSearch') ? localStorage.getItem('subAgentAccountSearch') : '' 
       this.loadClientAccounts();//load clients
+
+      // this.rejectCauseForm = this.$form.group({
+      //   acc_id: ['', Validators.required],
+      //   reject_cause: ['', Validators.required],
+      // });
   }
 
 	timer: any
@@ -61,6 +71,63 @@ export class SubAgentAccountsComponent implements OnInit {
 		clearTimeout(this.timer)
 	}
 
+  // get rejectCauseF() {
+	// 	return this.rejectCauseForm.controls;
+	// }
+
+  // rejectAffiliateClick(acc_id) {
+	// 	this.rejectCauseForm.patchValue({
+	// 		acc_id: acc_id
+	// 	});
+	// }
+
+  // rejectAffiliate() {
+	// 	this.submitted = true;
+	// 	console.log(this.rejectCauseForm);
+	// 	// stop here if form is invalid
+	// 	if (this.rejectCauseForm.invalid) {
+	// 		return;
+	// 	}
+
+	// 	this.spinner.show();
+	// 	// this.disableSubmitButton=true; //disable submit button
+
+	// 	this.adminService.rejectAffiliate(this.rejectCauseForm.value)
+	// 		.pipe(
+	// 			catchError(err => {
+	// 				this.spinner.hide();//hide spinner
+	// 				$('#rejectCauseModal').modal('hide');
+	// 				return throwError(err);
+	// 			})
+	// 		)
+	// 		.subscribe(({ data, success, message }: any) => {
+	// 			if (success == true) {
+	// 				this.spinner.hide()
+	// 				$('#rejectCauseModal').modal('hide');
+	// 				this.loadClientAccounts()
+	// 			}
+	// 		});
+	// }
+
+  acceptRejectAffiliate(acc_id,status) {
+		this.spinner.show();
+		// this.disableSubmitButton=true; //disable submit button
+		console.log('acc_id', acc_id,'status',status)
+
+		this.travelService.acceptRejectAffiliate(acc_id,status)
+			.pipe(
+				catchError(err => {
+					this.spinner.hide();//hide spinner
+					return throwError(err);
+				})
+			)
+			.subscribe(({ data, success, message }: any) => {
+				if (success == true) {
+					this.spinner.hide();//hide spinner
+					this.loadClientAccounts()
+				}
+			});
+	}
 
   loadClientAccounts(pageUrl=null)
   {
@@ -72,7 +139,7 @@ export class SubAgentAccountsComponent implements OnInit {
       // Load Our clients using API
       this.travelService.getSubAgentAccounts(pageUrl,keyword).then(result=>{
         this.clientRes=result;
-        this.clients=this.clientRes.data;
+        this.clients=this.clientRes?.data?.data;
 
         this.firstPage=1;
         this.lastPage=this.clientRes.data.last_page;
@@ -93,20 +160,6 @@ export class SubAgentAccountsComponent implements OnInit {
       });
   }
 
-  addTravelPlannerClick(clientId)
-  {
-    this.router.navigate(['/travel_agent/add-client-account'],{queryParams:{clientId:clientId}});
-  }
-
-  clickEditTravelPlanner(clientId)
-  {
-    this.router.navigate(['/travel_agent/edit-client-account'],{queryParams:{clientId:clientId , type:'edit'}});
-  }
-
-  clickTravelPlannerCards(clientId)
-  {
-    this.router.navigate(['/travel_agent/debit-cc-card'],{queryParams:{accountType:'travelPlanner',accountId:clientId.id , name:clientId.first_name}});
-  }
 
   highlighText(args: string) {
 		if (!this.searchText) { return args; }
@@ -129,7 +182,7 @@ export class SubAgentAccountsComponent implements OnInit {
     {
       var status='disable';
     }
-    this.adminService.travelPlannerAccountStatus(id,status)
+    this.travelService.subTavelPlannerAccountStatus(id,status)
     .pipe(
         catchError(err => {
           this.spinner.hide();//hide spinner

@@ -4,24 +4,6 @@
     <section class="user_information">
         <h2 class="headinginfo">Sub Agent Accounts </h2>
         <div class="containeredd">
-            <!-- <div class="row">
-				<div class="col-md-12">
-					<button class="custom-btn add-button" (click)="addTravelPlannerClick(clientId)">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-plus-circle"
-							viewBox="0 0 16 16">
-							<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
-							<path
-								d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
-						</svg> Add Client
-					</button>
-				</div>
-			</div> -->
-            <!-- <div class="row">
-				<div class="col-md-12">
-					<label class="alert alert-danger">Note: Add each different Travel Planner first. Enter rates and
-						taxes for each Travel Planner.</label>
-				</div>
-			</div> -->
 
             <div class="row">
                 <div class="col-md-12 mt-3 mb-3">
@@ -45,6 +27,7 @@
                         <thead style="background: #f3933d;">
                             <tr role="row">
                                 <th style="width: 11%;">Actions</th>
+                                <th>Approval Status</th>
                                 <th>Status</th>
                                 <th>Name</th>
                                 <th>Email</th>
@@ -58,8 +41,7 @@
                                 <td>
                                     <a class="user-profileded btn btn-icon btn-transparent-dark dropdown-toggle"
                                         id="navbarDropdownUserImage" href="javascript:void(0);" role="button"
-                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                                        *ngIf="travelPlanner.account_approval!='pending'; else notCompleted">
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <span>View</span>
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
@@ -70,17 +52,26 @@
                                         </a>
                                     </div>
 
+
+                                </td>
+                                <td>
+                                    <div *ngIf="travelPlanner.account_approval!='pending'; else notCompleted"
+                                        [className]="'badge badge-pill approval_status ' + travelPlanner.account_approval">
+                                        {{travelPlanner.account_approval | titlecase}}</div>
                                     <ng-template #notCompleted>
                                         <div class="accpet_reject_div">
-                                            <button class="acceptButton">Accept</button>
-                                            <button class="rejectButton">Reject</button>
+                                            <button class="acceptButton"
+                                                (click)="acceptRejectAffiliate(travelPlanner.acc_id,'accepted')">Accept</button>
+                                            <button class="rejectButton"
+                                                (click)="acceptRejectAffiliate(travelPlanner.acc_id,'rejected')"
+                                                data-toggle="modal" data-target="#rejectCauseModal">Reject</button>
                                         </div>
                                     </ng-template>
                                 </td>
                                 <td>
                                     <mat-slide-toggle class="example-margin" [color]="color"
                                         [checked]="travelPlanner.status" [disabled]="disabled"
-                                        (change)="enableDisableClicked($event,travelPlanner.id)">
+                                        (change)="enableDisableClicked($event,travelPlanner.acc_id)">
                                     </mat-slide-toggle>
                                 </td>
                                 <td *ngIf="travelPlanner.middle_name==null;else middleName">
@@ -134,3 +125,36 @@
         </div>
     </section>
 </main>
+
+<!-- reject modal -->
+<!-- <div class="modal fade" id="rejectCauseModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content user_inforamtion">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Please enter the cause of Rejection.
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="rejectCauseForm">
+                    <div class="form-group">
+                        <div class="col-md-12 d-flex" style="gap: 10px;">
+                            <label class="d-flex align-items-center">Rejection Cause</label>
+                            <textarea formControlName="reject_cause"></textarea>
+                            <div *ngIf="submitted && rejectCauseF.reject_cause.errors" class="text-danger">
+                                <div *ngIf="rejectCauseF.reject_cause.errors.required">This field is
+                                    required</div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="rejectButton" (click)="acceptRejectAffiliate('reject')">Reject</button>
+            </div>
+        </div>
+    </div>
+</div> -->

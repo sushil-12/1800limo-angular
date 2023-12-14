@@ -113,9 +113,11 @@ export class TravelAgentService {
 	getBookingPreview(reservation_id: number) {
 		return this.httpClient.get(`${this.serverUrl}get-booking-preview/${reservation_id}`);
 	}
+	//send invite code for sub ta
 	sendTravelAgentInviteCode(data) {
 		return this.httpClient.post(this.serverUrl + 'send-an-invite-code', data);
 	}
+
 	travelAgentNotification(data) {
 		return this.httpClient.post(this.serverUrl + 'notification-daily-booking', data);
 	}
@@ -162,6 +164,7 @@ export class TravelAgentService {
 		return this.httpClient.get(path).toPromise();;
 	}
 
+	//get sub ta accounts list
 	getSubAgentAccounts(url, keyword) {
 		var path;
 		if (url) {
@@ -172,8 +175,17 @@ export class TravelAgentService {
 		}
 		return this.httpClient.get(path).toPromise();;
 	}
+	//get sub ta account details by id
 	getSubAgentAccountDetails(id) {
 		return this.httpClient.get(this.serverUrl + `sub-travel-agent-profile/${id}`).toPromise();
+	}
+	//chnage sub ta account status
+	subTavelPlannerAccountStatus(id, status) {
+		return this.httpClient.put(this.serverUrl + 'change-account-status', { 'acc_id': id, 'status': status });
+	}
+	// accept or reject sub ta
+	acceptRejectAffiliate(acc_id,status) {
+		return this.httpClient.put(this.serverUrl + 'account-approval', { 'acc_id': acc_id ,'status':status});
 	}
 	getProfileSubAgent() {
 		return this.httpClient.get(environment.serverUrl + 'sub-travel-planner/' + 'get-profile').toPromise();
