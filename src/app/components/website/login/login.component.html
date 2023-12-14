@@ -17,10 +17,10 @@
 				</ng-template>
 			</div>
 			<div class="d-flex justify-content-center" *ngIf="Role == 'travel_agent' ">
-				<button class="custom-filled-button my-3" (click)="loginSubTravelAgent()" style="padding: 1px 7px;">Sign
+				<a class="sign-in-sub-ta-button my-3" (click)="loginSubTravelAgent()">Sign
 					In as
 					Sub
-					Agent</button>
+					Agent</a>
 			</div>
 			<div class="row"
 				*ngIf="Role != 'admin' && Role !='sub_admin' && Role !='driver' && Role !='travel_agent' && Role != 'master_user' && Role != 'sub_travel_agent'  ">
