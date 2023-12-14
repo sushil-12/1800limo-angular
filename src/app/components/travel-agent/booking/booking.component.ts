@@ -67,6 +67,7 @@ export class BookingComponent implements OnInit {
 	public invite_link:any;
 	public referral_code:any;
 	showCopyIcon:boolean = false
+	currentUser:any;
 
 
 	constructor(
@@ -84,7 +85,7 @@ export class BookingComponent implements OnInit {
 
 		// Output the decoded referral code
 		console.log("decodedReferralCode", this.referral_code);
-
+		this.currentUser = JSON.parse(localStorage.getItem('currentUser'))
 		this.buildInviteAgentForm();
 		let date = new Date();
 		// Set Search Filters According to cookies or the intial state
@@ -533,10 +534,10 @@ export class BookingComponent implements OnInit {
 
 	editAction(bookingId, updateType) {
 		if (updateType == 'change') {
-			this.router.navigate(['/travel_agent/new-booking'], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'true' } });
+			this.router.navigate([`/${this.currentUser?.roleName}/new-booking`], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'true' } });
 		}
 		else {
-			this.router.navigate(['/travel_agent/new-booking'], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'true' } });
+			this.router.navigate([`/${this.currentUser?.roleName}/new-booking`], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'true' } });
 		}
 	}
 

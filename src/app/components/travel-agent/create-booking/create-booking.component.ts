@@ -2194,7 +2194,7 @@ export class CreateBookingComponent implements OnInit {
 					$('#confirmationModal').modal('show')
 				}
 				else {
-					this.$router.navigate(['/travel_agent/bookings'])
+					this.$router.navigate([`/${this.currentUser?.roleName}/bookings`])
 				}
 			})
 		}

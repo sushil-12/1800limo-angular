@@ -47,9 +47,11 @@ export class AddClientAccountComponent implements OnInit {
 	private geoCoder;
 	@ViewChild('search1')
 	public searchElementRef: ElementRef;
+	currentUser:any;
 
 	ngOnInit(): void
 	{
+		this.currentUser = JSON.parse(localStorage.getItem('currentUser'))
 		this.buildAddIndividualForm();
     this.$routeurl.queryParams.subscribe((params: any) => {
       console.log('params---->>>>>', params)
@@ -297,7 +299,7 @@ export class AddClientAccountComponent implements OnInit {
 				this.spinner.hide();//hide spinner
 				this.disableSubmitButton = false; //enable submit button
 
-				this.router.navigate(['/travel_agent/staff-account-list']);
+				this.router.navigate([`/${this.currentUser?.roleName}/staff-account-list`]);
 			});
 	}
 
