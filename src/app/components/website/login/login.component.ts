@@ -267,7 +267,9 @@ export class LoginComponent implements OnInit, AfterViewInit
 		{
 			return;
 		}
-
+		if(this.loginForm?.get('invite_code').value){
+			localStorage.setItem('invite_code',this.loginForm?.get('invite_code').value)
+		}
 		this.disableSubmit = true; //disable submit button
 		this.showProgressBar = true; //show progressbar
 
