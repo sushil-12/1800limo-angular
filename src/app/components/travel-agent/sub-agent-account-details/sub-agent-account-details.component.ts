@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { AdminService } from 'src/app/services/admin.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { CustomvalidationService } from 'src/app/services/customvalidation.service';
 import { StateManagementService } from 'src/app/services/statemanagement.service';
@@ -27,6 +28,8 @@ export class SubAgentAccountDetailsComponent implements OnInit {
   agency_name:any;
   invite_code:any;
   userId:any;
+  getProfileResponseData:any;
+  timezoneForm: FormGroup;
 
    	//google map autocomplete
      title: string = 'AGM project';
@@ -52,6 +55,7 @@ export class SubAgentAccountDetailsComponent implements OnInit {
     private route: ActivatedRoute,
     private authService:AuthService,
     private travelAgentService: TravelAgentService,
+    private adminService: AdminService,
   ) { }
 
   ngOnInit(): void {
@@ -61,6 +65,9 @@ export class SubAgentAccountDetailsComponent implements OnInit {
 		})
 
     this.buildProfileForm()
+    this.timezoneForm = this.formBuilder.group({
+      timezone: [''],
+    });
     this.getProfile()
     this.mapsAPILoader.load().then(() => {
       // this.setCurrentLocation();
@@ -136,7 +143,6 @@ export class SubAgentAccountDetailsComponent implements OnInit {
       zip: ['',[Validators.required,Validators.pattern("^[0-9]*$")]],
       latitude: [''],
       longitude: [''],
-      timezone : [''],
       agency_name: ['', Validators.required],
       invite_code: [this.invite_code]
 
@@ -152,6 +158,10 @@ export class SubAgentAccountDetailsComponent implements OnInit {
     this.travelAgentService.getSubAgentAccountDetails(this.userId)
      .then(({ data }: any) => {
       this.spinner.hide();//hide spinner
+      this.getProfileResponseData = data
+      this.timezoneForm.patchValue({
+        timezone : data?.timezone
+      })
         this.profileForm.patchValue({
           acc_id: data?.acc_id,
           tp_id : data?.tp_id,
@@ -286,27 +296,27 @@ export class SubAgentAccountDetailsComponent implements OnInit {
 
 	}
 
-  redirectToHome()
-  {
-    this.spinner.show()
-    $("#redirectModal").modal("hide");
-      this.authService.logout()
+  
+  acceptRejectAffiliate(status) {
+		this.spinner.show();
+		// this.disableSubmitButton=true; //disable submit button
+		console.log('acc_id', this.getProfileResponseData?.acc_id,status,'status')
+
+		this.travelAgentService.acceptRejectAffiliate(this.getProfileResponseData?.acc_id,status)
 			.pipe(
-				catchError(err =>
-				{
+				catchError(err => {
 					this.spinner.hide();//hide spinner
 					return throwError(err);
 				})
-			).subscribe(({ success }: any) =>
-			{
-				this.spinner.hide();//hide spinner
-				if (success == true)
-				{
-					this.stateManagementService.removeUser();
+			)
+			.subscribe(({ data, success, message }: any) => {
+				if (success == true) {
+					this.spinner.hide();//hide spinner
+          this.router.navigate(['/travel_agent/sub-'])
+					// this.loadClientAccounts()
 				}
-				this.router.navigate(['/']);
-			})
-  }
+			});
+	}
 
 
 	resetForm()
@@ -333,5 +343,15 @@ export class SubAgentAccountDetailsComponent implements OnInit {
 	{
 		this.router.navigate(['/travel_agent/sub-agent-accounts']);
 	}
+  onTimezoneChange(event: any): void {
+    const selectedValue = event.value;
+    console.log('Selected Timezone:', selectedValue);
+    this.adminService
+			.changeTimezone(selectedValue)
+			.pipe()
+			.subscribe((response: any) => {
+				console.log(response,'timezone changed success');
+			});
 
+  }
 }

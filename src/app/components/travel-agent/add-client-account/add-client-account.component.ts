@@ -323,7 +323,7 @@ export class AddClientAccountComponent implements OnInit {
 	}
 	backButton()
 	{
-		this.router.navigate(['/admin/individual-account-admin']);
+		this.router.navigate([`${this.currentUser?.roleName}/individual-account-admin`]);
 	}
 
 }
