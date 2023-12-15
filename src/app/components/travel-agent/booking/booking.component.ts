@@ -542,7 +542,7 @@ export class BookingComponent implements OnInit {
 	}
 
 	finalizeAction(bookingId) {
-		this.router.navigate(['/affiliate/finalize-booking'], { queryParams: { bookingId: bookingId } });
+		this.router.navigate([`/${this.currentUser?.roleName}/finalize-booking`], { queryParams: { bookingId: bookingId } });
 	}
 
 	emailPassenger() {
@@ -586,10 +586,10 @@ export class BookingComponent implements OnInit {
 		console.log(actionType, bookingId, serviceType);
 
 		if (actionType == 'return') {
-			this.router.navigate(['/affiliate/create-new-booking'], { queryParams: { bookingId: bookingId, bookingType: 'return' } });
+			this.router.navigate([`/${this.currentUser?.roleName}/create-new-booking`], { queryParams: { bookingId: bookingId, bookingType: 'return' } });
 		}
 		else {
-			this.router.navigate(['/affiliate/create-new-booking'], { queryParams: { bookingId: bookingId, bookingType: 'repeat' } });
+			this.router.navigate([`/${this.currentUser?.roleName}/create-new-booking`], { queryParams: { bookingId: bookingId, bookingType: 'repeat' } });
 		}
 	}
 
@@ -627,7 +627,7 @@ export class BookingComponent implements OnInit {
 					this.spinner.hide();//hide spinner
 					$('#change_status_booking_Modal').modal('hide');
 					this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
-						this.router.navigate(['/affiliate/my-bookings']);
+						this.router.navigate([`/${this.currentUser?.roleName}/bookings`]);
 					});
 				}
 			});
@@ -664,7 +664,7 @@ export class BookingComponent implements OnInit {
 					this.spinner.hide();//hide spinner
 					$('#emailModal').modal('hide');
 					this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
-						this.router.navigate(['/affiliate/my-bookings']);
+						this.router.navigate([`/${this.currentUser?.roleName}/bookings`]);
 					});
 				}
 			});

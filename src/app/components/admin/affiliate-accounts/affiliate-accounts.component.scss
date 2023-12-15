@@ -126,3 +126,11 @@ color: #00bd1f;
     flex-direction: column;
     gap: 10px;
   }
+
+  .showMoreButton{
+    background: transparent;
+    border: none;
+    color: orange;
+    text-decoration: underline;
+    font-weight: 600;
+  }

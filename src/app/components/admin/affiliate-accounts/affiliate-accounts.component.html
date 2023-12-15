@@ -211,7 +211,21 @@
 								<td><span [innerHTML]="highlighText(blackCarLimoBus.CompanyName)"></span></td>
 								<td><span [innerHTML]="highlighText(blackCarLimoBus.DBA)"></span></td>
 
-								<td><span [innerHTML]="teset(blackCarLimoBus.LanguagesSpoken)"></span></td>
+								<td>
+									<div *ngIf="blackCarLimoBus?.readMore">
+										<span
+											[innerHTML]="teset(blackCarLimoBus.LanguagesSpoken?.toString().slice(0,20))">
+										</span>
+										<button class="showMoreButton"
+											(click)="toggleShowMore(blackCarLimoBus , false)">...more</button>
+									</div>
+									<div *ngIf="!blackCarLimoBus?.readMore">
+										<span [innerHTML]="teset(blackCarLimoBus.LanguagesSpoken)"></span>
+										<button class="showMoreButton"
+											*ngIf="blackCarLimoBus?.LanguagesSpoken?.length > 2"
+											(click)="toggleShowMore(blackCarLimoBus , true)">...less</button>
+									</div>
+								</td>
 								<!-- <td><span [innerHTML]="highlighText(blackCarLimoBus.Associations)"></span></td> -->
 								<td><span [innerHTML]="highlighText(blackCarLimoBus.Address)"></span></td>
 								<td>
