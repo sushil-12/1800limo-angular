@@ -8,6 +8,8 @@ import { InvoiceDashSummaryComponent } from '../travel-agent/invoice-dash-summar
 import { TravelClientAccountsComponent } from '../travel-agent/travel-client-accounts/travel-client-accounts.component';
 import { AddClientAccountComponent } from '../travel-agent/add-client-account/add-client-account.component';
 import { SubTravelAgentGuardGuard } from '../../guards/sub-travel-agent-guard.guard'
+import { CardsComponent } from '../travel-agent/cards/cards.component';
+import { AddCardComponent } from '../travel-agent/add-card/add-card.component';
 
 const routes: Routes = [
   {
@@ -58,6 +60,16 @@ const routes: Routes = [
   {
     path:'edit-client-account',
     component:AddClientAccountComponent,
+    canActivate: [SubTravelAgentGuardGuard],
+  },
+  {
+    path:'debit-cc-card',
+    component:CardsComponent,
+    canActivate: [SubTravelAgentGuardGuard],
+  },
+  {
+    path:'add-card',
+    component:AddCardComponent,
     canActivate: [SubTravelAgentGuardGuard],
   },
 ];

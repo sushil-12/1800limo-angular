@@ -20,6 +20,7 @@ export class CardsComponent implements OnInit {
 	public cardToDelete: any;
 	clientId: any= null;
 	name :any = 'Agent'
+	currentUser:any;
 
 
   constructor(
@@ -33,6 +34,7 @@ export class CardsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+	this.currentUser = JSON.parse(localStorage.getItem('currentUser'))
 	this.activatedroute.queryParams.subscribe((params: any) => {
 		console.log('params---->>>>>', params)
 		if(params && params.accountId){
@@ -66,7 +68,7 @@ export class CardsComponent implements OnInit {
 
   addCardClick() {
     // { queryParams: { accountType: this.accountType, accountId: accountId } }
-		this.router.navigate(['/travel_agent/add-card']);
+		this.router.navigate([`/${this.currentUser?.roleName}/add-card`]);
 	}
   backButtonClick() {
 	}

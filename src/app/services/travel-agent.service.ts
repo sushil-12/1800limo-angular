@@ -219,8 +219,13 @@ export class TravelAgentService {
 		return this.httpClient.post(this.serverUrl + 'send-reservation-detail-email-to-all', data)
 	}
 
-	createNewSubAgent(data) {
-		return this.httpClient.post(this.serverUrl + 'create-a-new-travel-agent', data)
+	createNewSubAgent(data,updateBasicInfo) {
+		if (updateBasicInfo) {
+			return this.httpClient.post(this.serverUrl + 'update-a-new-travel-agent', data);
+		}
+		else {
+			return this.httpClient.post(this.serverUrl + 'create-a-new-travel-agent', data);
+		}
 	}
 
 }

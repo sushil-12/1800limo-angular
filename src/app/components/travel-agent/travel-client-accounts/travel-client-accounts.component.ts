@@ -35,6 +35,7 @@ export class TravelClientAccountsComponent implements OnInit {
   public prevPageUrl:string;
   public nextPageUrl:string;
   searchText: any;
+  currentUser:any;
 
   constructor(
 		private travelService: TravelAgentService,
@@ -45,6 +46,8 @@ export class TravelClientAccountsComponent implements OnInit {
   ngOnInit(): void {
 		this.searchText = localStorage.getItem('ClientSearch') ? localStorage.getItem('ClientSearch') : '' 
       this.loadClientAccounts();//load clients
+
+      this.currentUser = JSON.parse(localStorage.getItem('currentUser'))
   }
 
 	timer: any
@@ -95,17 +98,17 @@ export class TravelClientAccountsComponent implements OnInit {
 
   addTravelPlannerClick(clientId)
   {
-    this.router.navigate(['/travel_agent/add-client-account'],{queryParams:{clientId:clientId}});
+    this.router.navigate([`/${this.currentUser?.roleName}/add-client-account`],{queryParams:{clientId:clientId}});
   }
 
   clickEditTravelPlanner(clientId)
   {
-    this.router.navigate(['/travel_agent/edit-client-account'],{queryParams:{clientId:clientId , type:'edit'}});
+    this.router.navigate([`/${this.currentUser?.roleName}/edit-client-account`],{queryParams:{clientId:clientId , type:'edit'}});
   }
 
   clickTravelPlannerCards(clientId)
   {
-    this.router.navigate(['/travel_agent/debit-cc-card'],{queryParams:{accountType:'travelPlanner',accountId:clientId.id , name:clientId.first_name}});
+    this.router.navigate([`/${this.currentUser?.roleName}/debit-cc-card`],{queryParams:{accountType:'travelPlanner',accountId:clientId.id , name:clientId.first_name}});
   }
 
   highlighText(args: string) {

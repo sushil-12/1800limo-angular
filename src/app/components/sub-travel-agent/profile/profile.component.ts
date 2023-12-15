@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { AdminService } from 'src/app/services/admin.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { CustomvalidationService } from 'src/app/services/customvalidation.service';
 import { StateManagementService } from 'src/app/services/statemanagement.service';
@@ -25,6 +26,7 @@ export class ProfileComponent implements OnInit {
   currentUser:any;
   agency_name:any;
   invite_code:any;
+  timezoneForm: FormGroup;
 
    	//google map autocomplete
      title: string = 'AGM project';
@@ -50,6 +52,7 @@ export class ProfileComponent implements OnInit {
     private route: ActivatedRoute,
     private authService:AuthService,
     private travelAgentService: TravelAgentService,
+    private adminService :AdminService,
   ) { }
 
   ngOnInit(): void {
@@ -59,6 +62,9 @@ export class ProfileComponent implements OnInit {
     this.agency_name = localStorage.getItem('agency_name')
     this.invite_code = localStorage.getItem('invite_code')
     this.buildProfileForm()
+    this.timezoneForm = this.formBuilder.group({
+      timezone: [''],
+    });
 
     this.mapsAPILoader.load().then(() => {
       // this.setCurrentLocation();
@@ -148,7 +154,6 @@ export class ProfileComponent implements OnInit {
       zip: ['',[Validators.required,Validators.pattern("^[0-9]*$")]],
       latitude: [''],
       longitude: [''],
-      timezone : [''],
       agency_name: [''],
       invite_code: [this.invite_code]
 
@@ -206,6 +211,9 @@ export class ProfileComponent implements OnInit {
     this.travelAgentService.getProfileSubAgent()
      .then(({ data }: any) => {
       this.spinner.hide();//hide spinner
+      this.timezoneForm.patchValue({
+        timezone : data?.timezone
+      })
         this.profileForm.patchValue({
           acc_id: data?.acc_id,
           tp_id : data?.tp_id,
@@ -257,7 +265,7 @@ export class ProfileComponent implements OnInit {
     console.log(this.profileForm.value);
     this.spinner.show();
 
-    this.travelAgentService.createNewSubAgent(this.profileForm.value)
+    this.travelAgentService.createNewSubAgent(this.profileForm.value, this.currentUser?.is_profile_complete)
     .pipe(
       catchError(err => {
         this.spinner.hide();//hide spinner
@@ -345,6 +353,17 @@ export class ProfileComponent implements OnInit {
   
       window.scrollTo({ top: 0, behavior: 'smooth' });
 	}
+  onTimezoneChange(event: any): void {
+    const selectedValue = event.value;
+    console.log('Selected Timezone:', selectedValue);
+    this.adminService
+			.changeTimezone(selectedValue)
+			.pipe()
+			.subscribe((response: any) => {
+				console.log(response,'timezone changed success');
+			});
+
+  }
 	// backButton()
 	// {
 	// 	this.router.navigate(['/login/sub_travel_agent']);

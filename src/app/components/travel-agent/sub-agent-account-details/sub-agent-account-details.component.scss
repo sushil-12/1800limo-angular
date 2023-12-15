@@ -146,3 +146,45 @@ top:2.05em}
 	font-weight: 500;
 }
 
+button.custom-filled-reject-button {
+    padding: 7px 20px;
+    border-radius: 0.895rem;
+    border: 2px solid #a2a3a2;
+    background-color: #fc0404;
+    color: #FFF;
+    letter-spacing: 1px;
+    font-size: 0.98rem;
+    display: inline-block;
+    font-family: "Roboto", sans-serif;
+    font-weight: 700;
+    appearance: button;
+    -moz-appearance: button;
+    -webkit-appearance: button;
+    transition: box-shadow 0.1s ease-in-out;
+    box-shadow: 0px 5px 10px 1px rgba(0, 0, 0, 0.4);
+
+    &:active {
+        box-shadow: 0px 5px 10px -1px rgb(0 0 0 / 30%);
+    }
+}
+button.custom-filled-accept-button {
+    padding: 7px 20px;
+    border-radius: 0.895rem;
+    border: 2px solid #a2a3a2;
+    background-color: #00bd1f;
+    color: #FFF;
+    letter-spacing: 1px;
+    font-size: 0.98rem;
+    display: inline-block;
+    font-family: "Roboto", sans-serif;
+    font-weight: 700;
+    appearance: button;
+    -moz-appearance: button;
+    -webkit-appearance: button;
+    transition: box-shadow 0.1s ease-in-out;
+    box-shadow: 0px 5px 10px 1px rgba(0, 0, 0, 0.4);
+
+    &:active {
+        box-shadow: 0px 5px 10px -1px rgb(0 0 0 / 30%);
+    }
+}
