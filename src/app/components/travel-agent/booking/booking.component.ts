@@ -582,14 +582,14 @@ export class BookingComponent implements OnInit {
 			});
 	}
 
-	returnRepeatAction(actionType, bookingId, serviceType) {
-		console.log(actionType, bookingId, serviceType);
+	returnRepeatAction( bookingId,actionType) {
+		console.log(actionType, bookingId,);
 
 		if (actionType == 'return') {
-			this.router.navigate([`/${this.currentUser?.roleName}/create-new-booking`], { queryParams: { bookingId: bookingId, bookingType: 'return' } });
+			this.router.navigate([`/${this.currentUser?.roleName}/new-booking`], { queryParams: { bookingId: bookingId, bookingType: 'return' } });
 		}
 		else {
-			this.router.navigate([`/${this.currentUser?.roleName}/create-new-booking`], { queryParams: { bookingId: bookingId, bookingType: 'repeat' } });
+			this.router.navigate([`/${this.currentUser?.roleName}/new-booking`], { queryParams: { bookingId: bookingId, bookingType: 'repeat' } });
 		}
 	}
 

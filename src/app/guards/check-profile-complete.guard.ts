@@ -23,7 +23,7 @@ export class CheckProfileCompleteGuard implements CanActivate {
     const currentUser: any = JSON.parse(localStorage.getItem('userData'))
     if (currentUser?.RoleName != 'travel_agent') {
       localStorage.setItem('review_referral_url',this.location.path(true))
-      this.router.navigate(['/home']);
+      this.router.navigate(['/login_travel_agent']);
       return false;
     }
     if (this.authService.getStepCompletedObj()) {
