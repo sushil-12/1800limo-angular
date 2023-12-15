@@ -586,10 +586,10 @@ export class BookingComponent implements OnInit {
 		console.log(actionType, bookingId,);
 
 		if (actionType == 'return') {
-			this.router.navigate([`/${this.currentUser?.roleName}/new-booking`], { queryParams: { bookingId: bookingId, bookingType: 'return' } });
+			this.router.navigate([`/${this.currentUser?.roleName}/new-booking`], { queryParams: { bookingId: bookingId, updateType: 'return' } });
 		}
 		else {
-			this.router.navigate([`/${this.currentUser?.roleName}/new-booking`], { queryParams: { bookingId: bookingId, bookingType: 'repeat' } });
+			this.router.navigate([`/${this.currentUser?.roleName}/new-booking`], { queryParams: { bookingId: bookingId, updateType: 'repeat' } });
 		}
 	}
 
