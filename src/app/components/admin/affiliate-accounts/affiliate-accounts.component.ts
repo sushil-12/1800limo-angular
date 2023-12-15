@@ -177,6 +177,17 @@ export class AffiliateAccountsComponent implements OnInit {
 		// Load Our blackCarLimoBus using API
 		this.adminService.blackCarLimoBusAccounts(pageUrl, this.affiliateType, this.filter_type, keyword).then((result: any) => {
 			this.affiliate_accounts = result.data.data;
+			this.affiliate_accounts = this.affiliate_accounts.map(i=> {
+				if(i?.LanguagesSpoken){
+					console.log("in language iffff")
+					i['readMore']=(i?.LanguagesSpoken?.length) > 2 ? true : false 
+				}
+				else{
+					console.log("in language elase")
+					i['readMore'] = false
+				}
+				return i
+			})
 			this.affiliate_count = result.data.account_counts;
 			this.firstPage = 1;
 			this.lastPage = result.data.last_page;
@@ -425,5 +436,17 @@ export class AffiliateAccountsComponent implements OnInit {
 		this.emails.setValue('');
 		$("#sendEmailModal").modal("hide");
 	}
+
+	toggleShowMore(vehinfo : any,check:boolean) {
+		console.log('vehInfo',vehinfo,'check',check)
+		this.affiliate_accounts = this.affiliate_accounts.map(i=> {
+			if(i.id== vehinfo.id){
+				i['readMore'] = check
+				console.log('readMore',i?.readMore)
+			}
+			return i;
+		})
+		
+	  }
 
 }
