@@ -29,6 +29,7 @@ export class OtpComponent implements OnInit, OnDestroy {
 	public dDay = new Date().getTime() + 16 * 1000;
 	public timeDifference;
 	public secondsToDday;
+	review_referral_url:any;
 	Role:any;
 	@ViewChild(NgOtpInputComponent, { static: false }) ngOtpInput: NgOtpInputComponent;
 	@ViewChild('otpInput') otpInput: ElementRef;
@@ -105,6 +106,8 @@ export class OtpComponent implements OnInit, OnDestroy {
 		this.otpForm = this.formBuilder.group({
 			otp: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(6), Validators.pattern("^[0-9]*$")]],
 		});
+
+		this.review_referral_url = localStorage.getItem('review_referral_url')
 
 		this.subscription = interval(1000)
 			.subscribe(x => { this.countdownTimer(); });
@@ -316,10 +319,18 @@ export class OtpComponent implements OnInit, OnDestroy {
 					case 'travel_agent': {
 						sessionStorage.setItem('step_completed', JSON.stringify(this.response.data?.travel_planner.step_completed))
 						sessionStorage.setItem('step_completed_obj', JSON.stringify(this.response.data?.travel_planner.step_completed_obj))
-						if(this.response.data.user?.is_profile_complete)
-							this.router.navigateByUrl('/travel_agent/bookings');
-						else
+						if(this.response.data.user?.is_profile_complete){
+                               if(this.review_referral_url){
+								this.router.navigateByUrl(this.review_referral_url);
+							   }
+							   else{
+								   this.router.navigateByUrl('/travel_agent/bookings');
+							   }
+						}
+						else{
 							this.router.navigateByUrl('/travel_agent/profile/step1');
+						}
+							
 						
 						break;
 					}

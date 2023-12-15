@@ -60,6 +60,7 @@ export class SubAgentAccountDetailsComponent implements OnInit {
 
   ngOnInit(): void {
 
+    localStorage.removeItem('review_referral_url')
     this.route.queryParams.subscribe((params:any)=>{
 			this.userId = params?.id
 		})
@@ -312,7 +313,7 @@ export class SubAgentAccountDetailsComponent implements OnInit {
 			.subscribe(({ data, success, message }: any) => {
 				if (success == true) {
 					this.spinner.hide();//hide spinner
-          this.router.navigate(['/travel_agent/sub-'])
+          this.router.navigate(['/travel_agent/sub-agent-accounts'])
 					// this.loadClientAccounts()
 				}
 			});
