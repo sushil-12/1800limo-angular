@@ -137,6 +137,7 @@ export class ProfileComponent implements OnInit {
 
   buildProfileForm() {
     this.profileForm = this.formBuilder.group({
+      acc_id:[''],
       firstName: ['', Validators.required],
       middleName: [''],
       lastName: ['', Validators.required],
