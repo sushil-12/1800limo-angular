@@ -221,7 +221,7 @@ export class TravelAgentService {
 
 	createNewSubAgent(data,updateBasicInfo) {
 		if (updateBasicInfo) {
-			return this.httpClient.post(this.serverUrl + 'update-a-new-travel-agent', data);
+			return this.httpClient.post(this.serverUrl + 'update-a-travel-agent', data);
 		}
 		else {
 			return this.httpClient.post(this.serverUrl + 'create-a-new-travel-agent', data);
