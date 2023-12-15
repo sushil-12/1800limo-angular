@@ -3,6 +3,7 @@ import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Rout
 import { Observable } from 'rxjs';
 import { TravelAgentService } from '../services/travel-agent.service';
 import { ErrorDialogService } from '../services/error-dialog/errordialog.service';
+import { Location } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
@@ -11,13 +12,17 @@ export class CheckProfileCompleteGuard implements CanActivate {
   constructor(
     private router: Router,
     private authService: TravelAgentService,
-    private errorDialog: ErrorDialogService
+    private errorDialog: ErrorDialogService,
+    private location: Location
   ) { }
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot) {
+      var referringURL = document.referrer;
+      console.log('referringURL',this.location.path(true))
     const currentUser: any = JSON.parse(localStorage.getItem('userData'))
     if (currentUser?.RoleName != 'travel_agent') {
+      localStorage.setItem('review_referral_url',this.location.path(true))
       this.router.navigate(['/home']);
       return false;
     }

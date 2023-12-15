@@ -1726,6 +1726,21 @@
 								</div>
 							</div>
 						</div>
+						<div class="mx-2" *ngIf="shareArray?.travelAgentShare">
+							<div class="row m-0">
+								<div class="col-md-4 key d-flex align-items-center">
+									<span class="">
+										Agent Share
+									</span>
+								</div>
+								<div class="col-md-8 value preview-airport-color">
+									<span class="font-weight-bolder preview-output-feild">
+										${{shareArray?.travelAgentShare.toFixed(2) }}
+									</span>
+									(10% of Base Rate)
+								</div>
+							</div>
+						</div>
 						<div class="mx-2">
 							<div class="row m-0">
 								<div class="col-md-4 key d-flex align-items-center">
