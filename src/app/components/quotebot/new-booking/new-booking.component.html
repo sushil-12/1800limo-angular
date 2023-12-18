@@ -19,7 +19,7 @@
 			<!-- Section - Booking Type -->
 			<div class="section-container mt-0 px-4">
 				<h2 class="border-secondary">
-					Booking Type
+					{{updateType =='reaffiliate' ? 'edit' : updateType | titlecase}} a booking
 				</h2>
 				<div class="row px-4">
 					<!-- Service Type -->
@@ -31,9 +31,9 @@
 								</mat-label>
 								<mat-select formControlName="service_type"
 									(selectionChange)="onSelectionChangeServiceType($event)">
-									<mat-option value="one_way">One Way</mat-option>
-									<mat-option value="round_trip">Round Trip</mat-option>
-									<mat-option value="charter_tour">Charter/Tour</mat-option>
+									<mat-option value="one_way">One Way?</mat-option>
+									<mat-option value="round_trip">Round Trip?</mat-option>
+									<mat-option value="charter_tour">Charter/Tour?</mat-option>
 								</mat-select>
 							</mat-form-field>
 						</div>

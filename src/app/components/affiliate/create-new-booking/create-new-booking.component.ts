@@ -116,7 +116,7 @@ export class CreateNewBookingComponent implements OnInit {
 	newBooking: boolean = false;
 	QB_vehicle_id: any = null;
 	params_QB_vehicle_id :any = null
-	updateType: any;
+	updateType: any='create';
 	bookingResponse: any;
 	unique_key: any;
 	firstLoadAffiliateId: any;

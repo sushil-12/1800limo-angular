@@ -19,7 +19,7 @@
 		<!-- Section - Booking Type -->
 		<div class="section-container mt-0">
 			<h4 class="border-secondary">
-				Booking Type
+				{{updateType =='reaffiliate' ? 'edit' : updateType | titlecase}} a Booking
 			</h4>
 			<div class="row px-4">
 				<!-- Service Type -->
@@ -32,9 +32,9 @@
 							<mat-select formControlName="service_type"
 								(selectionChange)="onSelectionChangeServiceType($event)"
 								[ngStyle]="{'cursor': Form.updateType.value == 'edit' ? 'not-allowed' : 'default'}">
-								<mat-option value="one_way">One Way</mat-option>
-								<mat-option value="round_trip">Round Trip</mat-option>
-								<mat-option value="charter_tour">Charter/Tour</mat-option>
+								<mat-option value="one_way">One Way?</mat-option>
+								<mat-option value="round_trip">Round Trip?</mat-option>
+								<mat-option value="charter_tour">Charter/Tour?</mat-option>
 							</mat-select>
 						</mat-form-field>
 					</div>
@@ -1510,18 +1510,8 @@
 	<div class="row">
 		<div class="section-container finalizeRates"
 			[ngClass]="{'w-100': service_type!='round_trip', 'w-50': service_type=='round_trip'}">
-			<div class="row px-2 justify-content-between align-items-center">
-				<div class="col-md-6">
-					<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
-						Agent share
-					</p>
-				</div>
-				<div class="col-md-4 text-3xl text-right">
-					<i class="bi bi-currency-dollar text-danger"></i>
-					{{ agentShare.toFixed(2) }}
-				</div>
-			</div>
-			<div class="row px-2 justify-content-between align-items-center">
+
+			<div class="row px-2 justify-content-between align-items-center flex-nowrap">
 				<div class="col-md-6">
 					<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
 						Sub Total
@@ -1533,7 +1523,7 @@
 				</div>
 			</div>
 			<!-- Number of Vehicles/Hours -->
-			<div class="row px-2 justify-content-between align-items-center">
+			<div class="row px-2 justify-content-between align-items-center flex-nowrap">
 				<div class="col-md-6 col-xl-7">
 					<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
 						Number of Vehicles
@@ -1546,7 +1536,7 @@
 			</div>
 
 			<!-- Total -->
-			<div class="row px-2 justify-content-between align-items-center">
+			<div class="row px-2 justify-content-between align-items-center flex-nowrap">
 				<div class="col-md-6 col-xl-7">
 					<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
 						Grand Total
@@ -1557,10 +1547,7 @@
 					{{ grandtotal.toFixed(2) * Form.number_of_vehicles.value }}
 				</div>
 			</div>
-		</div>
-		<div class="section-container finalizeRates" *ngIf="service_type=='round_trip'"
-			[ngClass]="{'w-50': service_type=='round_trip'}">
-			<div class="row px-2 justify-content-between align-items-center">
+			<div class="row px-2 justify-content-between align-items-center flex-nowrap">
 				<div class="col-md-6">
 					<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
 						Agent share
@@ -1568,10 +1555,14 @@
 				</div>
 				<div class="col-md-4 text-3xl text-right">
 					<i class="bi bi-currency-dollar text-danger"></i>
-					{{ r_agentShare.toFixed(2) }}
+					{{ agentShare.toFixed(2) }}
 				</div>
 			</div>
-			<div class="row px-2 justify-content-between align-items-center">
+		</div>
+		<div class="section-container finalizeRates" *ngIf="service_type=='round_trip'"
+			[ngClass]="{'w-50': service_type=='round_trip'}">
+
+			<div class="row px-2 justify-content-between align-items-center flex-nowrap">
 				<div class="col-md-6">
 					<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
 						Sub Total
@@ -1582,7 +1573,7 @@
 					{{ r_subtotal.toFixed(2) }}
 				</div>
 			</div>
-			<div class="row px-2 justify-content-between align-items-center">
+			<div class="row px-2 justify-content-between align-items-center flex-nowrap">
 				<div class="col-md-6 col-xl-7">
 					<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
 						Number of Vehicles
@@ -1593,7 +1584,7 @@
 					{{ Form.number_of_vehicles.value }}
 				</div>
 			</div>
-			<div class="row px-2 justify-content-between align-items-center">
+			<div class="row px-2 justify-content-between align-items-center flex-nowrap">
 				<div class="col-md-6 col-xl-7">
 					<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
 						Grand Total
@@ -1602,6 +1593,17 @@
 				<div class="col-md-4 col-xl-5 text-3xl text-right">
 					<i class="bi bi-currency-dollar text-danger"></i>
 					{{ r_grandtotal.toFixed(2) }}
+				</div>
+			</div>
+			<div class="row px-2 justify-content-between align-items-center flex-nowrap">
+				<div class="col-md-6">
+					<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
+						Agent share
+					</p>
+				</div>
+				<div class="col-md-4 text-3xl text-right">
+					<i class="bi bi-currency-dollar text-danger"></i>
+					{{ r_agentShare.toFixed(2) }}
 				</div>
 			</div>
 		</div>

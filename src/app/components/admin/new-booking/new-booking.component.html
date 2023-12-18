@@ -19,7 +19,7 @@
 		<!-- Section - Booking Type -->
 		<div class="section-container mt-0">
 			<h4 class="border-secondary">
-				Booking Type
+				{{updateType =='reaffiliate' ? 'edit' : updateType | titlecase}} a Booking
 			</h4>
 			<div class="row px-4">
 				<!-- Service Type -->
@@ -32,9 +32,9 @@
 							<mat-select formControlName="service_type" [(ngModel)]="service_type"
 								(selectionChange)="onSelectionChangeServiceType($event)"
 								[ngStyle]="{'cursor': Form.updateType.value == 'edit' ? 'not-allowed' : 'default'}">
-								<mat-option value="one_way">One Way</mat-option>
-								<mat-option value="round_trip">Round Trip</mat-option>
-								<mat-option value="charter_tour">Charter/Tour</mat-option>
+								<mat-option value="one_way">One Way?</mat-option>
+								<mat-option value="round_trip">Round Trip?</mat-option>
+								<mat-option value="charter_tour">Charter/Tour?</mat-option>
 							</mat-select>
 						</mat-form-field>
 					</div>

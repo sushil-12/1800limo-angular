@@ -360,9 +360,16 @@ export class AffiliateFinalizeComponent implements OnInit {
 			this.isCardFormOpen = false
 		}
 	}
-	makePayment() {
+	makePayment(method:string) {
 
-		console.log('In function make payment')
+		console.log('In function make payment',method)
+		if (method == 'new_card') {
+			this.isCardFormOpen = true
+			this.paymentMethod = 'card'
+		} else {
+			this.paymentMethod = method
+			this.isCardFormOpen = false
+		}
 		// /affiliate/finalize-rate-edit'
 		console.log('<<<<-----handle valid---->>>>> ', this.cardForm.valid, 'is card form open--->>>>', this.isCardFormOpen)
 		console.log('-----=====?>>>>>', this.isCardFormOpen ? this.cardForm.valid : (this.CardsInformation.length > 0))
