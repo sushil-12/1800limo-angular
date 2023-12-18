@@ -709,7 +709,7 @@
 				<!-- Pickup - Address Field -->
 				<div *ngIf="!searchSubstring(Form.transfer_type.value, 'airport_')">
 					<div class="row px-2">
-						<div class="col-md-12 ml-2">
+						<div class="col-md-12 ml-2" id="pickup_address">
 							<mat-form-field appearance="outline">
 								<mat-label> Pickup Address </mat-label>
 								<input type="text" matInput placeholder="Type your address" matGoogleMapsAutocomplete
@@ -726,7 +726,7 @@
 				<div *ngIf="searchSubstring(Form.transfer_type.value, 'airport_')">
 					<div class="row px-2 ml-2">
 						<!-- Airport -->
-						<div class="col-md-6">
+						<div class="col-md-6" id="pickup_address">
 							<!-- <mat-form-field appearance="outline">
 								<mat-label>
 									Airport
@@ -1744,7 +1744,7 @@
 							Special Instructions
 						</mat-label>
 						<textarea matInput style="white-space: pre-wrap;" formControlName="return_booking_instructions"
-							(focus)="$event.target.select()" rows="5"></textarea>
+							rows="5"></textarea>
 					</mat-form-field>
 				</div>
 				<div class="row m-2">

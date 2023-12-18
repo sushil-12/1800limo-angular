@@ -238,7 +238,7 @@ export class NewBookingComponent implements OnInit {
 	ngAfterViewInit(): void {
 		console.log('<<<<<<<<<<<<<<<<<<<<<-----------ng after view init--------------->>>>>>>>>>>>>')
 		if (this.updateType == 'repeat' || this.updateType == 'return' || this.updateType == 'edit') {
-			this.scroll('travel_time')
+			this.scroll('id="pickup_address"')
 			this.SetFormValue('pickup_date', moment().format('YYYY-MM-DD'))
 		}
 	}

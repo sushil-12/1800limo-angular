@@ -519,7 +519,7 @@ export class CreateBookingComponent implements OnInit {
 			this.$spinner.hide('normalspinner')
 			console.log('<<<<<<<<<<<-----------set pickup date------->>>>', moment().format('YYYY-MM-DD'), this.updateType)
 			if (this.updateType == 'repeat' || this.updateType == 'return') {
-				this.scroll('travel_time')
+				this.scroll('pickup_address')
 				this.SetFormValue('pickup_date', moment().format('YYYY-MM-DD'))
 			}
 		})

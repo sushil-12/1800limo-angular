@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, Input, EventEmitter, ViewChild, ElementRef, NgZone } from '@angular/core';
+import { Component, OnInit, AfterViewInit, Input, EventEmitter, ViewChild, ElementRef, NgZone} from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
 import { StateManagementService } from '../../../services/statemanagement.service';
 import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
@@ -78,10 +78,10 @@ export class AffiliateStep1Component implements OnInit {
 		private httpClient: HttpClient,
 		private customValidator: CustomvalidationService,
 		private errorModal: ErrorDialogService,
-		private commonServices: CommonService
+		private commonServices: CommonService,
 	) { }
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
-
+	// @ViewChild('targetDiv', { static: false }) targetDiv: ElementRef;
 
 	//google map autocomplete
 	latitude: number;
@@ -101,6 +101,7 @@ export class AffiliateStep1Component implements OnInit {
 	}
 
 	ngOnInit(): void {
+		
 		this.currentUser = this.authService.currentUserValue;
 		//add amenity form validation
 		this.buildAffiliateAccountForm();
@@ -345,7 +346,7 @@ export class AffiliateStep1Component implements OnInit {
 	}
 
 	affiliateTypeSwitch(affiliateType) {
-		$('#FirstName').focus();
+		// $('#FirstName').focus();
 		switch (affiliateType) {
 			case 'fleet_operator': {
 				this.showCompanyInformation = true;
