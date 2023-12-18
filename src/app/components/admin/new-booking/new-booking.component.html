@@ -1550,14 +1550,14 @@
 			</div>
 
 
-			<h4 class="border-secondary pl-2 mt-2" id="pickup_details">
+			<h4 class="border-secondary pl-2 mt-2" id="pickup_adress">
 				Pickup
 			</h4>
 
 			<!-- Pickup - Address Field -->
 			<div *ngIf="!searchSubstring(Form.transfer_type.value, 'airport_')">
 				<div class="row px-3">
-					<div class="col-md-12">
+					<div class="col-md-12" id="pickup_address">
 						<mat-form-field appearance="outline">
 							<mat-label> Pickup Address </mat-label>
 							<input type="text" matInput placeholder="Type your address" matGoogleMapsAutocomplete
@@ -2593,7 +2593,7 @@
 						Special Instructions
 					</mat-label>
 					<textarea matInput style="white-space: pre-wrap;" formControlName="return_booking_instructions"
-						(focus)="$event.target.select()" rows="5"></textarea>
+						rows="5"></textarea>
 				</mat-form-field>
 			</div>
 			<div class="row m-2">

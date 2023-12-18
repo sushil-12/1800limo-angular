@@ -201,7 +201,7 @@ export class NewBookingComponent implements OnInit {
 	ngAfterViewInit(): void {
 		console.log('<<<<<<<<<<<<<<<<<<<<<-----------ng after view init--------------->>>>>>>>>>>>>')
 		if (this.updateType == 'repeat' || this.updateType == 'return' || this.updateType == 'edit') {
-			this.scroll('travel_time')
+			this.scroll('pickup_adress')
 			this.SetFormValue('pickup_date', moment().format('YYYY-MM-DD'))
 		}
 	}
@@ -646,7 +646,7 @@ export class NewBookingComponent implements OnInit {
 			this.$spinner.hide('normalspinner')
 			console.log('<<<<<<<<<<<-----------set pickup date------->>>>', moment().format('YYYY-MM-DD'), this.updateType)
 			if ( this.updateType == 'edit') {
-				this.scroll('travel_date')
+				this.scroll('pickup_adress')
 				// this.SetFormValue('pickup_date', moment().format('YYYY-MM-DD'))
 				this.SetFormValue('pickup_date', this.bookingResponse?.pickup_date)
 			}
@@ -2639,7 +2639,7 @@ export class NewBookingComponent implements OnInit {
 				this.$spinner.hide('normalspinner')
 				console.log('<<<<<<<<<<<-----------set pickup date------->>>>', moment().format('YYYY-MM-DD'), this.updateType)
 				if ( this.updateType == 'edit') {
-					this.scroll('travel_date')
+					this.scroll('pickup_adress')
 					// this.SetFormValue('pickup_date', moment().format('YYYY-MM-DD'))
 					this.SetFormValue('pickup_date', editing_data?.pickup_date)
 				}
