@@ -430,16 +430,14 @@
 	</table>
 </section>
 <!-- payment section -->
-<section class="section-container mt-2" *ngIf="BookingDetail?.payment_status=='unpaid'">
+<!-- <section class="section-container mt-2" *ngIf="BookingDetail?.payment_status=='unpaid'">
 	<div class="col-md-12 p-0" (click)="handlePaymentSection()">
 		<h4 class="section-dropdown-header mb-0">
-			Payment
+			Payment Options
 		</h4>
 		<p [ngClass]="chevron ? 'bi bi-chevron-down' : 'bi bi-chevron-up'"></p>
 	</div>
 	<div class="row" *ngIf="paymentSection">
-
-
 		<div class="col-md-12 d-flex cardSection">
 			<div class="col-md-6">
 				<div class="radio">
@@ -452,8 +450,8 @@
 					<input id="cash" name="paymentMethod" type="radio" (click)="changeDetection('cash')">
 					<label for="cash" class="radio-label">Payment with Cash</label>
 				</div>
-			</div>
-			<!-- <div class="methodCard" *ngIf="paymentMethod=='card'">
+			</div> -->
+<!-- <div class="methodCard" *ngIf="paymentMethod=='card'">
 				<table class="table table-borderless">
 					<thead class="bg-transparent">
 						<tr>
@@ -622,19 +620,32 @@
 				</div>
 			</form> -->
 
-		</div>
+<!-- </div>
 
 
 
 	</div>
+</section> -->
+<section class="section-container mt-2" *ngIf="BookingDetail?.payment_status=='unpaid'" style="padding: 0;">
+	<div class="col-md-12 paymentOptionsDiv mr-4" *ngIf="CardsInformation?.length">
+		<h4 class="section-dropdown-header mb-0">
+			Payment Options
+		</h4>
+		<div class="d-flex align-items-center mr-4">
+			<button type="button" class="custom-filled-button m-3 mr-4"
+				[ngClass]="BookingDetail?.booking_status == 'finalized' ? 'color-green' : 'color-grey' "
+				(click)="makePayment('cash')">
+				Pay with cash
+			</button>
+			<button type="button" class="custom-filled-button m-3 mr-4"
+				[ngClass]="BookingDetail?.booking_status == 'finalized' ? 'color-green' : 'color-grey' "
+				(click)="makePayment('card')">
+				Charge
+			</button>
+		</div>
+	</div>
 </section>
-<div class="col-md-12 text-right mr-4" *ngIf="CardsInformation?.length">
-	<button type="button" class="custom-filled-button m-3 mr-4"
-		[ngClass]="BookingDetail?.booking_status == 'finalized' ? 'color-green' : 'color-grey' "
-		(click)="makePayment()">
-		Charge
-	</button>
-</div>
+
 <!-- modal -->
 
 

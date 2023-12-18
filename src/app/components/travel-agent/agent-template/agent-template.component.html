@@ -18,7 +18,7 @@
 			</svg>
 		</button>
 		<div class="btn btn-icon btn-transparent-dark referral_code" *ngIf="this.currentUser?.is_profile_complete">
-			<span class="badge badge-success" style="font-size: 19px; font-weight: 500; padding: 0.35em 0.4em;">
+			<span class="badge badge-warning" style="font-size: 19px; font-weight: 500; padding: 0.35em 0.4em;">
 				{{referral_code}}
 			</span>
 			<textarea id="clipboard-example-textarea" cols="30" rows="10" [(ngModel)]="referral_code" hidden></textarea>

@@ -111,7 +111,7 @@ export class NewBookingComponent implements OnInit {
 	QB_vehicle_id: any = null;
 	unique_key: any;
 	firstLoadAffiliateId: void;
-	updateType: any;
+	updateType: any = 'create';
 	bookingResponse: any;
 	service_type: any = 'one_way';
 	transfer_type: any = 'city_to_city'
@@ -141,7 +141,7 @@ export class NewBookingComponent implements OnInit {
 		private $routeurl: ActivatedRoute,
 		private commonServices: CommonService,
 		private customValidator: CustomvalidationService,
-		private el: ElementRef
+		private el: ElementRef,
 	) { }
 
 	openAutoCompletePanel() {

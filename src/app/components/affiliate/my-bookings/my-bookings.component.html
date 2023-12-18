@@ -146,16 +146,17 @@
 											</a>
 											<a class="dropdown-item" (click)="cancelBookingId=booking.booking_id"
 												*ngIf="booking?.booking_status !='refund' && booking?.booking_status !='paid' && booking?.booking_status !='partial_paid'  && booking?.booking_status !='cancelled'"
-												data-toggle="modal" data-target="#cancelBooking">
-												<div class="dropdown-item-icon"></div>
-												Reject
-											</a>
-											<a class="dropdown-item" (click)="cancelBookingId=booking.booking_id"
-												*ngIf="booking?.booking_status !='refund' && booking?.booking_status !='paid' && booking?.booking_status !='partial_paid'  && booking?.booking_status !='cancelled'"
 												data-toggle="modal" data-target="#acceptBooking">
 												<div class="dropdown-item-icon"></div>
 												Accept
 											</a>
+											<a class="dropdown-item" (click)="cancelBookingId=booking.booking_id"
+												*ngIf="booking?.booking_status !='refund' && booking?.booking_status !='paid' && booking?.booking_status !='partial_paid'  && booking?.booking_status !='cancelled'"
+												data-toggle="modal" data-target="#cancelBooking">
+												<div class="dropdown-item-icon"></div>
+												Reject
+											</a>
+
 										</div>
 									</td>
 
