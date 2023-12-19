@@ -5,8 +5,8 @@
 export const environment = {
 	production: false,
 	environmentName: 'Development',
-	serverUrl: "http://10.20.20.79:8000/api/"
-	// serverUrl: "https://1800limoapi.infodevbox.com/api/"
+	// serverUrl: "http://10.20.20.79:8000/api/"
+	serverUrl: "https://1800limoapi.infodevbox.com/api/"
 };
 
 /*

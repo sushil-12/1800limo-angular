@@ -71,6 +71,7 @@ export class StateManagementService
 		localStorage.removeItem('invite_link')
 		localStorage.removeItem('agency_name')
 		localStorage.removeItem('invite_code')
+		localStorage.removeItem('agentAccountStatus')
 	}
 
 
