@@ -651,6 +651,7 @@ export class NewBookingComponent implements OnInit {
 				this.SetFormValue('pickup_date', this.bookingResponse?.pickup_date)
 			}
 			if(this.updateType == 'repeat' || this.updateType == 'return' ){
+				this.scroll('pickup_adress')
 				if(new Date(this.bookingResponse?.pickup_date).getTime() < new Date().getTime()){
 					this.SetFormValue('pickup_date', moment().format('YYYY-MM-DD'))
 				}
@@ -2644,6 +2645,7 @@ export class NewBookingComponent implements OnInit {
 					this.SetFormValue('pickup_date', editing_data?.pickup_date)
 				}
 				if(this.updateType == 'repeat' || this.updateType == 'return' ){
+					this.scroll('pickup_adress')
 					if(new Date(editing_data?.pickup_date).getTime() < new Date().getTime()){
 						this.SetFormValue('pickup_date', moment().format('YYYY-MM-DD'))
 					}
