@@ -17,7 +17,7 @@
 					d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
 			</svg>
 		</button>
-		<div class="btn btn-icon btn-transparent-dark referral_code" *ngIf="this.currentUser?.is_profile_complete">
+		<div class="btn btn-icon btn-transparent-dark referral_code" *ngIf="this.currentUser?.is_profile_complete && accountStatus == 'accepted' ">
 			<span class="badge badge-warning" style="font-size: 19px; font-weight: 500; padding: 0.35em 0.4em;">
 				{{referral_code}}
 			</span>
