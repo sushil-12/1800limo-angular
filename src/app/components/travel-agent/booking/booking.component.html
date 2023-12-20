@@ -1637,9 +1637,9 @@
 			<form [formGroup]="inviteAgentForm" enctype="multipart/form-data" style="margin-top: -15px;">
 				<div class="form-group">
 					<div class="col-md-12 d-flex justify-content-center mt-3">
-						<button class="uploadExcelFile" tabIndex="1" *ngIf="!emailFileName; else noEmailFile ">
+						<button class="uploadExcelFile" tabIndex="1" *ngIf="!emailFileName; else noEmailFile">
 							<input type="file" (change)="inviteEmailFileChange($event)" tabIndex="-1" multiple="false"
-								accept=".xlsx , .xls , .csv">
+								accept=".xlsx , .xls , .csv" name="xlx_file">
 							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 								<path fill="none" d="M0 0h24v24H0V0z" />
 								<circle cx="12" cy="12" r="3" />

@@ -10,6 +10,8 @@ import { AffiliateService } from 'src/app/services/affiliate.service';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 import { TravelAgentService } from 'src/app/services/travel-agent.service';
 import { DatePickerComponent } from '../../shared/date-picker/date-picker.component';
+import { environment } from 'src/environments/environment';
+import { HttpClient } from '@angular/common/http';
 declare var $: any;
 
 @Component({
@@ -69,6 +71,7 @@ export class BookingComponent implements OnInit {
 	showCopyIcon: boolean = false
 	currentUser: any;
 	emailFileName: string = '';
+	fileToUpload: File;
 
 
 	constructor(
@@ -77,7 +80,8 @@ export class BookingComponent implements OnInit {
 		private router: Router,
 		private spinner: NgxSpinnerService,
 		private $errors: ErrorDialogService,
-		private formBuilder: FormBuilder) { }
+		private formBuilder: FormBuilder,
+		private http: HttpClient) { }
 
 	ngOnInit(): void {
 		this.invite_link = localStorage.getItem('invite_link') ? localStorage.getItem('invite_link') : null
@@ -325,14 +329,18 @@ export class BookingComponent implements OnInit {
 	// 	}
 	// }
 
-	inviteEmailFileChange(event) {
-		if (event.target.files && event.target.files.length) {
-				console.log("in email file", event.target.files)
-				this.emailFileName = event.target.files[0].name
-				this.inviteAgentForm.patchValue({
-					email_file:event.target.files[0]
-				})
-			}
+	inviteEmailFileChange(event:any) {
+		// if (event.target.files && event.target.files.length) {
+		// 		console.log("in email file", event.target.files)
+		// 		this.emailFileName = event.target.files[0].name
+		// 		this.inviteAgentForm.patchValue({
+		// 			email_file:event.target.files[0]
+		// 		})
+		// 	}
+		console.log('fileeeeeee', event.target.files[0])
+		// this.fileToUpload = files.item(0);
+		this.emailFileName = event.target.files[0].name
+		this.fileToUpload = event.target.files[0];
 	}
 		//close email modal
 		closeInviteModal() {
@@ -352,25 +360,19 @@ export class BookingComponent implements OnInit {
 			if (this.inviteAgentForm.invalid) {
 				return;
 			}
-			console.log("formmmm", this.inviteAgentForm)
-			this.spinner.show();
-			this.travelAgentService.sendTravelAgentInviteCode(this.inviteAgentForm.value)
-				.pipe(
-					catchError((err) => {
-						this.spinner.hide();
-						return throwError(err);
-					})
-				)
-				.subscribe((response: any) => {
-					console.log('response--------->>>>>>>>', response)
-					this.spinner.hide()
-					this.inviteAgentForm.patchValue({
-						email_address: "",
-						email_file: [null]
-					})
-					this.emailFileName = ''
-					$("#inviteAgentModal").modal("hide");
-				});
+			console.log("formmmm", this.inviteAgentForm, this.fileToUpload)
+			// this.spinner.show();
+			// console.log(this.http
+      		// .post('http://10.20.20.79:8000/api/travel-planner/send-an-invite-code',this.fileToUpload ))
+			  const formData = new FormData();
+			  
+			  // Store form name as "file" with file data
+			  formData.append("email_file", this.fileToUpload);
+			  formData.append("email_address", this.inviteAgentForm.get("email_address").value);
+			
+			
+			const test =this.travelAgentService.sendTravelAgentInviteCode(formData)
+			console.log('tes',test)
 		}
 
 

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { AuthService } from './auth.service';
 
 @Injectable({
 	providedIn: 'root'
@@ -10,7 +11,8 @@ export class TravelAgentService {
 
 	private environmentServerUrl = environment.serverUrl;
 	private serverUrl = environment.serverUrl + 'travel-planner/';
-	constructor(private httpClient: HttpClient) { }
+	constructor(private httpClient: HttpClient,
+		private authService: AuthService) { }
 
 	checkIsProfileCompleted() {
 		let loggedInUserData = JSON.parse(localStorage.getItem('currentUser'))
@@ -114,8 +116,29 @@ export class TravelAgentService {
 		return this.httpClient.get(`${this.serverUrl}get-booking-preview/${reservation_id}`);
 	}
 	//send invite code for sub ta
-	sendTravelAgentInviteCode(data) {
-		return this.httpClient.post(this.serverUrl + 'send-an-invite-code', data);
+	sendTravelAgentInviteCode(data:any) {
+		// return this.httpClient.post(this.serverUrl + 'send-an-invite-code', data);
+		const accessToken = this.authService.getAccessToken();
+		fetch(this.serverUrl + 'send-an-invite-code', {
+			method: 'POST',
+			body: data,
+			headers: {
+				Authorization: `Bearer ${accessToken}`
+			  }
+		})
+		.then(response => {
+			if (!response.ok) {
+				throw new Error('Network response was not ok');
+			}
+			return response.json();
+		})
+		.then(data => {
+			console.log('File uploaded successfully:', data);
+			return data
+		})
+		.catch(error => {
+			console.error('Error uploading file:', error);
+		});
 	}
 
 	travelAgentNotification(data) {
