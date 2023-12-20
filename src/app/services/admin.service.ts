@@ -1202,7 +1202,10 @@ export class AdminService {
 updateStepsArrayLocalTravelAgent(stepArray) {
 	sessionStorage.setItem('stepCompleted', stepArray.toString())
 }
-
+// accept or reject sub ta
+acceptRejectAffiliate(acc_id,status) {
+	return this.httpClient.put(this.serverUrl + 'admin/travel-planner/account-approval', { 'acc_id': acc_id ,'status':status});
+}
 updateStepsCompletedObjTravelAgent(stepObject) {
 	sessionStorage.setItem('step_completed_obj', JSON.stringify(stepObject))
 }

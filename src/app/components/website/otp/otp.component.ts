@@ -319,6 +319,7 @@ export class OtpComponent implements OnInit, OnDestroy {
 					case 'travel_agent': {
 						sessionStorage.setItem('step_completed', JSON.stringify(this.response.data?.travel_planner.step_completed))
 						sessionStorage.setItem('step_completed_obj', JSON.stringify(this.response.data?.travel_planner.step_completed_obj))
+						localStorage.setItem('agentAccountStatus',this.response?.data?.travel_planner?.account_approval)
 						if(this.response.data.user?.is_profile_complete){
                                if(this.review_referral_url){
 								this.router.navigateByUrl(this.review_referral_url);

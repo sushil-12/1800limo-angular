@@ -46,6 +46,7 @@
 						<thead style="background: #f3933d;">
 							<tr role="row">
 								<th>Actions</th>
+								<th>Approval Status</th>
 								<th>Status</th>
 								<th>Name</th>
 								<th>Email</th>
@@ -80,6 +81,20 @@
 											View Staff
 										</a> -->
 									</div>
+								</td>
+								<td>
+									<div *ngIf="!travelPlanner?.is_complete; else notCompleted"
+										[className]="'badge badge-pill approval_status ' + travelPlanner?.account_approval">
+										{{travelPlanner?.account_approval | titlecase}}</div>
+									<ng-template #notCompleted>
+										<div class="accpet_reject_div">
+											<button class="acceptButton"
+												(click)="acceptRejectAffiliate(travelPlanner?.id,'accepted')">Accept</button>
+											<button class="rejectButton"
+												(click)="acceptRejectAffiliate(travelPlanner?.id,'rejected')"
+												data-toggle="modal" data-target="#rejectCauseModal">Reject</button>
+										</div>
+									</ng-template>
 								</td>
 								<td>
 									<mat-slide-toggle class="example-margin" [color]="color"

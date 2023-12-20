@@ -43,6 +43,9 @@ export class TravelAgentStepsComponent implements OnInit {
 	ngOnInit() {
 		this.currentStep = this.router.url.substring(this.router.url.indexOf('step'));
 		this.travelAgentId = localStorage.getItem('travelAgent_id')
+		console.log("traaaa id-<>",this.travelAgentId)
+		if(this.travelAgentId)
+		{	
 			this.adminService.getStepsCompletedTravelAgent(this.travelAgentId)
 				.pipe(
 					catchError(err => {
@@ -66,6 +69,7 @@ export class TravelAgentStepsComponent implements OnInit {
 						}
 					}
 				});
+			}
 		
 		if (!this.travelAgentId) {
 			this.stepsObj = JSON.parse(sessionStorage.getItem('step_completed_obj'));

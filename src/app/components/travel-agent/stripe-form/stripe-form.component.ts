@@ -12,6 +12,7 @@ import { StateManagementService } from 'src/app/services/statemanagement.service
 import { TravelAgentService } from 'src/app/services/travel-agent.service';
 import { SharedModule } from '../../shared/shared.module';
 import { CommonService } from 'src/app/services/common.service';
+import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 declare var $: any;
 @Component({
 	selector: 'app-stripe-form',
@@ -67,6 +68,7 @@ export class StripeFormComponent implements OnInit {
 	badgeOptions: any;
 	travelAgentId: any;
 	acc_id1:any;
+	agentAccountStatus: any;
 
 	constructor(
 		private adminService: AdminService,
@@ -82,7 +84,8 @@ export class StripeFormComponent implements OnInit {
 		private el: ElementRef,
 		private commonServices: CommonService,
 		private customValidator: CustomvalidationService,
-		private globalFunctions: SharedModule
+		private globalFunctions: SharedModule,
+		private error: ErrorDialogService,
 	) { }
 
 	ngOnInit(): void {
@@ -792,10 +795,22 @@ export class StripeFormComponent implements OnInit {
 						const stepCompleted = data.step_completed;
 						const stepCompletedObj = data.step_completed_obj;
 						sessionStorage.setItem('step_completed_obj',JSON.stringify(stepCompletedObj))
+					this.agentAccountStatus =localStorage.setItem('agentAccountStatus',data?.account_approval)
 					}
-					this.router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
-					this.router.navigate(['/travel_agent/bookings'])
-				);
+					if(this.agentAccountStatus == 'pending' || this.agentAccountStatus == 'rejected'){
+						this.error.openDialog({
+							errors: {
+							  error: `Please wait!As your account is under approval from admin.We'll notify you once approved.`
+							}
+						  })
+						  this.router.navigate([`/travel_agent/profile/step1`]);
+					}
+					else{
+						this.router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
+						this.router.navigate(['/travel_agent/bookings'])
+					);
+					}
+				
 				});				
 			});
 	}

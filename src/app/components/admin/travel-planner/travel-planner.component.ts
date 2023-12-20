@@ -95,6 +95,26 @@ export class TravelPlannerComponent implements OnInit {
       });
   }
 
+  acceptRejectAffiliate(acc_id,status) {
+		this.spinner.show();
+		// this.disableSubmitButton=true; //disable submit button
+		console.log('acc_id', acc_id,'status',status)
+
+		this.adminService.acceptRejectAffiliate(acc_id,status)
+			.pipe(
+				catchError(err => {
+					this.spinner.hide();//hide spinner
+					return throwError(err);
+				})
+			)
+			.subscribe(({ data, success, message }: any) => {
+				if (success == true) {
+					this.spinner.hide();//hide spinner
+					this.loadTravelPlanners()
+				}
+			});
+	}
+
   addTravelPlannerClick(travelPlannerId)
   {
     this.router.navigate(['/admin/travel-planner-account/step1'],{queryParams:{travelPlannerId:travelPlannerId}});

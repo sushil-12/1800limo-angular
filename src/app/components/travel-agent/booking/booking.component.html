@@ -1627,16 +1627,39 @@
 				</button>
 			</div>
 
-			<div class="invite-agent-modal-header">
-				<h4 style="font-size:17px;">Enter agent's email and we'll send an invite with the travel agency code.
-				</h4>
+			<div class="invite-agent-modal-header d-flex justify-content-center mb-1">
+				<h4 style="font-size:20px;">Invite agents under your company name!</h4>
+				<!-- <h4 style="font-size:17px;">Upload an excel file with name of agents & their email or Enter agent's
+					email and we'll send an invite with the travel agency code.
+				</h4> -->
 			</div>
 
-			<form [formGroup]="inviteAgentForm" appInvalidControlScroll style="margin-top: -15px;">
+			<form [formGroup]="inviteAgentForm" enctype="multipart/form-data" style="margin-top: -15px;">
 				<div class="form-group">
-					<div class="col-md-12">
+					<div class="col-md-12 d-flex justify-content-center mt-3">
+						<button class="uploadExcelFile" tabIndex="1" *ngIf="!emailFileName; else noEmailFile">
+							<input type="file" (change)="inviteEmailFileChange($event)" tabIndex="-1" multiple="false"
+								accept=".xlsx , .xls , .csv" name="xlx_file">
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+								<path fill="none" d="M0 0h24v24H0V0z" />
+								<circle cx="12" cy="12" r="3" />
+								<path
+									d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+							</svg>
+							Upload file
+						</button>
+						<ng-template #noEmailFile>
+							<h4 style="color:blue ;font-size:20px;">File uploaded: {{emailFileName}}</h4>
+						</ng-template>
+					</div>
+					<div class="col-md-12 d-flex justify-content-center mt-3" *ngIf="!emailFileName">
+						<h4>
+							OR
+						</h4>
+					</div>
+					<div class="col-md-12" style="margin-top:-18px;" *ngIf="!emailFileName">
 						<mat-form-field appearance="outline">
-							<mat-label>Enter email <span class="asterisk">*</span></mat-label>
+							<mat-label>Enter indiviudal agent's email <span class="asterisk">*</span></mat-label>
 							<input matInput type="text" formControlName="email_address">
 						</mat-form-field>
 						<div *ngIf="(submittedForm && f.email_address.errors) ||(f.email_address.touched && f.email_address.errors)"
@@ -1653,13 +1676,13 @@
 					</div>
 				</div>
 
+				<div class="modal-footer justify-content-center">
+					<button type="submit" class="custom-filled-button" (click)="sendInvite()">
+						Submit
+					</button>
+				</div>
 			</form>
 
-			<div class="modal-footer justify-content-center">
-				<button class="custom-filled-button" (click)="sendInvite()">
-					Submit
-				</button>
-			</div>
 		</div>
 	</div>
 </div>

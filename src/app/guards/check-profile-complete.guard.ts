@@ -21,6 +21,7 @@ export class CheckProfileCompleteGuard implements CanActivate {
       var referringURL = document.referrer;
       console.log('referringURL',this.location.path(true))
     const currentUser: any = JSON.parse(localStorage.getItem('userData'))
+    const accountStatus: any=localStorage.getItem('agentAccountStatus')
     if (currentUser?.RoleName != 'travel_agent') {
       localStorage.setItem('review_referral_url',this.location.path(true))
       this.router.navigate(['/home']);
@@ -36,6 +37,14 @@ export class CheckProfileCompleteGuard implements CanActivate {
             }
           })
           this.router.navigate([`/travel_agent/profile/${key}`]);
+        }
+        if(value =='completed' && (accountStatus == 'pending' || accountStatus == 'rejected')){
+          this.errorDialog.openDialog({
+            errors: {
+              error: `Please wait! As your account status is ${accountStatus} from admin.`
+            }
+          })
+          this.router.navigate([`/travel_agent/profile/step1`]);
         }
       }
     }

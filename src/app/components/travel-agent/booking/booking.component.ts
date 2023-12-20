@@ -10,6 +10,8 @@ import { AffiliateService } from 'src/app/services/affiliate.service';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 import { TravelAgentService } from 'src/app/services/travel-agent.service';
 import { DatePickerComponent } from '../../shared/date-picker/date-picker.component';
+import { environment } from 'src/environments/environment';
+import { HttpClient } from '@angular/common/http';
 declare var $: any;
 
 @Component({
@@ -64,10 +66,12 @@ export class BookingComponent implements OnInit {
 	shareArray: any;
 	rates_preview: any;
 	adminSharePercent: number;
-	public invite_link:any;
-	public referral_code:any;
-	showCopyIcon:boolean = false
-	currentUser:any;
+	public invite_link: any;
+	public referral_code: any;
+	showCopyIcon: boolean = false
+	currentUser: any;
+	emailFileName: string = '';
+	fileToUpload: File;
 
 
 	constructor(
@@ -76,11 +80,12 @@ export class BookingComponent implements OnInit {
 		private router: Router,
 		private spinner: NgxSpinnerService,
 		private $errors: ErrorDialogService,
-		private formBuilder: FormBuilder) { }
+		private formBuilder: FormBuilder,
+		private http: HttpClient) { }
 
 	ngOnInit(): void {
-	    this.invite_link = localStorage.getItem('invite_link') ? localStorage.getItem('invite_link') : null
-		let referralCode =  this.invite_link ? (new URL(this.invite_link)).searchParams.get("refferal_code") : ''
+		this.invite_link = localStorage.getItem('invite_link') ? localStorage.getItem('invite_link') : null
+		let referralCode = this.invite_link ? (new URL(this.invite_link)).searchParams.get("refferal_code") : ''
 		this.referral_code = atob(referralCode);
 
 		// Output the decoded referral code
@@ -290,466 +295,500 @@ export class BookingComponent implements OnInit {
 	//build email modal
 	buildInviteAgentForm() {
 		this.inviteAgentForm = this.formBuilder.group({
-			email_address: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9.]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]],
+			email_address: ['', [Validators.pattern("^[a-zA-Z0-9.]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]],
+			email_file: [null]
 		})
 	}
 
 	get f() {
 		return this.inviteAgentForm.controls;
 	}
-	copyInviteLink(){
+	copyInviteLink() {
 		this.showCopyIcon = true
-		  console.log("in function copy link to clipboard")
-			setTimeout(()=>{
-				this.showCopyIcon = false
-			},2500)
+		console.log("in function copy link to clipboard")
+		setTimeout(() => {
+			this.showCopyIcon = false
+		}, 2500)
 	}
 
-	//close email modal
-	closeInviteModal() {
-		this.inviteAgentForm.patchValue({
-			email_address: ""
-		})
-		this.show = false
-		$("#inviteAgentModal").modal("hide");
-	}
-
-	//send invite function
-	sendInvite() {
-		this.submittedForm = true;
-		// stop here if form is invalid
-		if (this.inviteAgentForm.invalid) {
-			return;
-		}
-		this.spinner.show();
-		this.travelAgentService.sendTravelAgentInviteCode(this.inviteAgentForm.value)
-			.pipe(
-				catchError((err) => {
-					this.spinner.hide();
-					return throwError(err);
-				})
-			)
-			.subscribe((response: any) => {
-				console.log('response--------->>>>>>>>', response)
-				this.spinner.hide()
-				$("#inviteAgentModal").modal("hide");
-			});
-	}
-
-
-	closeModal() {
-		this.message.nativeElement.value = ""
-		this.show = false
-	}
-	messageField(format) {
-		this.show = true;
-		switch (format) {
-			case "Phone": {
-				this.sendMessageField = true;
-				break;
-			}
-			case "Email": {
-				this.sendMessageField = false;
-				break;
-			}
-		}
-	}
-
-
-
-	submit(message, format) {
-		console.log('format', format, this.passengerDetails)
-		if (this.passengerDetails.selection_button == "Passenger") {
-			this.sendInformation = format
-				? this.passengerDetails.pax_tel
-				: this.passengerDetails.passenger_email;
-			this.reciptentName = this.passengerDetails.passenger_name;
-		} else if (this.passengerDetails.selection_button == "Driver") {
-			console.log('driver')
-			this.sendInformation = format
-				? this.passengerDetails?.driver_cell_isd +
-				this.passengerDetails?.driver_cell_number
-				: this.passengerDetails?.driver_email;
-			this.reciptentName = this.passengerDetails?.driver_name;
-		}
-		else {
-			this.sendInformation = format
-				? this.passengerDetails.loose_affiliate_phone_isd +
-				this.passengerDetails.loose_affiliate_phone
-				: this.passengerDetails.loose_affiliate_email;
-			this.reciptentName = this.passengerDetails.loose_affiliate_name;
-		}
-		let obj = {
-			bookingId: this.passengerDetails.booking_id,
-			reciptentName: this.reciptentName,
-			sendTo: this.passengerDetails.selection_button,
-			sendThrough: format ? "Phone" : "Email",
-			sendValue: this.sendInformation,
-			sendContent: message,
-		};
-		console.log('submit modal values---->>', obj)
-		this.travelAgentService.travelAgentNotification(obj)
-			.pipe(
-				catchError((err: any) => {
-					console.log('err------->>>>>>>', err)
-					return throwError(err)
-				})
-			).subscribe(({ message }: any) => {
-				this.notification_msg = message;
-				$("#notificationModal").modal("show");
-				$("textarea").val("");
-			})
-		$("#closeModal").click(() => {
-			$("#notificationModal").modal("hide");
-		});
-		$("#closeModal1").click(() => {
-			$("#notificationModal").modal("hide");
-		});
-		this.message.nativeElement.value = ""
-		this.show = false
-	}
-
-
-	//for pagination
-	counter() {
-		var currentPage;
-		var startFrom;
-		var endTo;
-
-		if (this.currentPage < 5) {
-			startFrom = 0;
-			endTo = this.totalPage;
-		}
-		else if (this.currentPage < this.totalPage) {
-			currentPage = this.currentPage
-			endTo = currentPage + 1;
-			startFrom = endTo - 5;
-		}
-		else {
-			endTo = this.totalPage;
-			startFrom = endTo - 5;
-		}
-
-		var i;
-		var udpArr = new Array();
-		for (i = startFrom; i < endTo; i++) {
-			udpArr.push(i + 1);
-		}
-		return udpArr;
-	}
-
-	changeDate(dateType, date) {
-		if (dateType == 'startDate') {
-			this.startDate = date;
-		}
-		else {
-			this.endDate = date;
-		}
-	}
-	dateFormat(value: any) {
-		return moment(value, 'YYYY-MM-DD').format('ll')
-	}
-
-	dateFormat2(value: any) {
-		return moment(value, 'YYYY-MM-DD').format('L')
-	}
-	FormatTime(time: string) {
-		return moment(time, "HH:mm:ss").format("LT");
-	}
-	timeFormat(value: any) {
-		if (value.toUpperCase() == '12:00 AM') {
-			return '0000 h'
-		}
-		let hours = moment(moment(value, 'hh:mm a').format('HH'), 'HH').hours();
-		let mins = moment(value, 'hh:mm a').minutes().toString();
-		if (Number(mins) == 0 || Number(mins) < 10) {
-			mins = '0' + mins.toString();
-		}
-
-		return hours < 10 ? '0' + hours.toString() + mins.toString() + ' h' : hours.toString() + mins.toString() + ' h'
-		//return value.replace(':', '').substring(0, 5) + 'h';
-	}
-
-	timeFormat2(value: string) {
-		return moment(value, 'HH:mm a').format('h:mm a');
-	}
-
-	show = false
-	openModal(booking: any, selection_button: string) {
-		try {
-			setTimeout(() => {
-				// $('textarea').attr('autofocus', 'autofocus');
-				this.sendEmailModalFocus.nativeElement.querySelector('textarea').focus();
-			}, 1000)
-		} catch (error) {
-			console.log('----------error------->>>>>> ', error)
-
-		}
-		console.log('open modal-->>>>>>>', booking, selection_button)
-		this.passengerDetails = booking;
-		this.passengerDetails['selection_button'] = selection_button
-	}
-	cancelBooking() {
-		console.log('in function cancel booking')
-		this.spinner.show();
-
-		this.affiliateService.cancelBooking(this.cancelBookingId)
-			.pipe(
-				catchError(err => {
-					this.spinner.hide();//hide spinner
-					$('#cancelBooking').modal('hide');
-					return throwError(err);
-				})
-			)
-			.subscribe(({ data, success, message }: any) => {
-				if (success == true) {
-					this.spinner.hide();//hide spinner
-					this.loadBookings()
-					$('#cancelBooking').modal('hide');
-					// this.$errors.openDialog({
-					// 	errors: {
-					// 		error: `<span class='text-success'>${message}</span>`
-					// 	}
-					// })
-				}
-			});
-	}
-
-	// messageField(format)
-	// {
-	// 	this.show = true;
-	// 	switch (format)
-	// 	{
-	// 		case 'Phone': {
-	// 			this.sendMessageField = true;
-	// 			break;
-	// 		}
-	// 		case 'Email': {
-	// 			this.sendMessageField = false;
-	// 			break;
-	// 		}
+	// handleFile(event) {
+	// console.log("in function handle file", event)
+	// 	const [file] = event.target.files
+	// 	const fileType = file.type // image/jpeg
+	// 	console.log("fileType", fileType)
+	// 	const acceptedFiles: any = ["application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"];
+	// 	console.log(!acceptedFiles.includes(fileType))
+	// 	if (!acceptedFiles.includes(fileType)) {
+	// 		return this.$errors.openDialog({
+	// 			errors: {
+	// 				error: 'Please upload only an excel or csv file!'
+	// 			}
+	// 		})
+	// 	} else {
+	// 		return true
 	// 	}
 	// }
 
-
-	editAction(bookingId, updateType) {
-		if (updateType == 'change') {
-			this.router.navigate([`/${this.currentUser?.roleName}/new-booking`], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'true' } });
-		}
-		else {
-			this.router.navigate([`/${this.currentUser?.roleName}/new-booking`], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'true' } });
-		}
+	inviteEmailFileChange(event:any) {
+		// if (event.target.files && event.target.files.length) {
+		// 		console.log("in email file", event.target.files)
+		// 		this.emailFileName = event.target.files[0].name
+		// 		this.inviteAgentForm.patchValue({
+		// 			email_file:event.target.files[0]
+		// 		})
+		// 	}
+		console.log('fileeeeeee', event.target.files[0])
+		// this.fileToUpload = files.item(0);
+		this.emailFileName = event.target.files[0].name
+		this.fileToUpload = event.target.files[0];
 	}
-
-	finalizeAction(bookingId) {
-		this.router.navigate([`/${this.currentUser?.roleName}/finalize-booking`], { queryParams: { bookingId: bookingId } });
-	}
-
-	emailPassenger() {
-		console.log('In function email passenger', this.sendEmailForm.value.reservation_id)
-		let data = {
-			reservation_id: this.sendEmailForm.value.reservation_id
+		//close email modal
+		closeInviteModal() {
+			this.inviteAgentForm.patchValue({
+				email_address: "",
+				email_file: [null]
+			})
+			this.emailFileName = ''
+			this.show = false
+			$("#inviteAgentModal").modal("hide");
 		}
-		this.spinner.show()
-		this.travelAgentService.passengerBooking(data)
-			.pipe(
-				catchError((err) => {
-					return throwError(err);
+
+		//send invite function
+		sendInvite() {
+			this.submittedForm = true;
+			// stop here if form is invalid
+			if (this.inviteAgentForm.invalid) {
+				return;
+			}
+			console.log("formmmm", this.inviteAgentForm, this.fileToUpload)
+			// this.spinner.show();
+			// console.log(this.http
+      		// .post('http://10.20.20.79:8000/api/travel-planner/send-an-invite-code',this.fileToUpload ))
+			  const formData = new FormData();
+			  
+			  // Store form name as "file" with file data
+			  formData.append("email_file", this.fileToUpload);
+			  formData.append("email_address", this.inviteAgentForm.get("email_address").value);
+			
+			
+			const test =this.travelAgentService.sendTravelAgentInviteCode(formData)
+			console.log('tes',test)
+		}
+
+
+		closeModal() {
+			this.message.nativeElement.value = ""
+			this.show = false
+		}
+		messageField(format) {
+			this.show = true;
+			switch (format) {
+				case "Phone": {
+					this.sendMessageField = true;
+					break;
+				}
+				case "Email": {
+					this.sendMessageField = false;
+					break;
+				}
+			}
+		}
+
+
+
+		submit(message, format) {
+			console.log('format', format, this.passengerDetails)
+			if (this.passengerDetails.selection_button == "Passenger") {
+				this.sendInformation = format
+					? this.passengerDetails.pax_tel
+					: this.passengerDetails.passenger_email;
+				this.reciptentName = this.passengerDetails.passenger_name;
+			} else if (this.passengerDetails.selection_button == "Driver") {
+				console.log('driver')
+				this.sendInformation = format
+					? this.passengerDetails?.driver_cell_isd +
+					this.passengerDetails?.driver_cell_number
+					: this.passengerDetails?.driver_email;
+				this.reciptentName = this.passengerDetails?.driver_name;
+			}
+			else {
+				this.sendInformation = format
+					? this.passengerDetails.loose_affiliate_phone_isd +
+					this.passengerDetails.loose_affiliate_phone
+					: this.passengerDetails.loose_affiliate_email;
+				this.reciptentName = this.passengerDetails.loose_affiliate_name;
+			}
+			let obj = {
+				bookingId: this.passengerDetails.booking_id,
+				reciptentName: this.reciptentName,
+				sendTo: this.passengerDetails.selection_button,
+				sendThrough: format ? "Phone" : "Email",
+				sendValue: this.sendInformation,
+				sendContent: message,
+			};
+			console.log('submit modal values---->>', obj)
+			this.travelAgentService.travelAgentNotification(obj)
+				.pipe(
+					catchError((err: any) => {
+						console.log('err------->>>>>>>', err)
+						return throwError(err)
+					})
+				).subscribe(({ message }: any) => {
+					this.notification_msg = message;
+					$("#notificationModal").modal("show");
+					$("textarea").val("");
 				})
-			)
-			.subscribe((response: any) => {
-				console.log('response--------->>>>>>>>', response)
-				this.spinner.hide()
-				$("#emailPassenger").modal("hide");
+			$("#closeModal").click(() => {
+				$("#notificationModal").modal("hide");
 			});
-	}
-	emailAll() {
-		console.log('In function email all', this.sendEmailForm.value.reservation_id, this.sendEmailForm.value.emailTarget)
-		let data = {
-			reservation_id: this.sendEmailForm.value.reservation_id
-		}
-		this.spinner.show()
-		this.travelAgentService.bookingEmailAll(data)
-			.pipe(
-				catchError((err) => {
-					return throwError(err);
-				})
-			)
-			.subscribe((response: any) => {
-				console.log('response--------->>>>>>>>', response)
-				this.spinner.hide()
-				$("#emailAll").modal("hide");
+			$("#closeModal1").click(() => {
+				$("#notificationModal").modal("hide");
 			});
-	}
-
-	returnRepeatAction( bookingId,actionType) {
-		console.log(actionType, bookingId,);
-
-		if (actionType == 'return') {
-			this.router.navigate([`/${this.currentUser?.roleName}/new-booking`], { queryParams: { bookingId: bookingId, updateType: 'return' } });
+			this.message.nativeElement.value = ""
+			this.show = false
 		}
-		else {
-			this.router.navigate([`/${this.currentUser?.roleName}/new-booking`], { queryParams: { bookingId: bookingId, updateType: 'repeat' } });
+
+
+		//for pagination
+		counter() {
+			var currentPage;
+			var startFrom;
+			var endTo;
+
+			if (this.currentPage < 5) {
+				startFrom = 0;
+				endTo = this.totalPage;
+			}
+			else if (this.currentPage < this.totalPage) {
+				currentPage = this.currentPage
+				endTo = currentPage + 1;
+				startFrom = endTo - 5;
+			}
+			else {
+				endTo = this.totalPage;
+				startFrom = endTo - 5;
+			}
+
+			var i;
+			var udpArr = new Array();
+			for (i = startFrom; i < endTo; i++) {
+				udpArr.push(i + 1);
+			}
+			return udpArr;
 		}
-	}
+
+		changeDate(dateType, date) {
+			if (dateType == 'startDate') {
+				this.startDate = date;
+			}
+			else {
+				this.endDate = date;
+			}
+		}
+		dateFormat(value: any) {
+			return moment(value, 'YYYY-MM-DD').format('ll')
+		}
+
+		dateFormat2(value: any) {
+			return moment(value, 'YYYY-MM-DD').format('L')
+		}
+		FormatTime(time: string) {
+			return moment(time, "HH:mm:ss").format("LT");
+		}
+		timeFormat(value: any) {
+			if (value.toUpperCase() == '12:00 AM') {
+				return '0000 h'
+			}
+			let hours = moment(moment(value, 'hh:mm a').format('HH'), 'HH').hours();
+			let mins = moment(value, 'hh:mm a').minutes().toString();
+			if (Number(mins) == 0 || Number(mins) < 10) {
+				mins = '0' + mins.toString();
+			}
+
+			return hours < 10 ? '0' + hours.toString() + mins.toString() + ' h' : hours.toString() + mins.toString() + ' h'
+			//return value.replace(':', '').substring(0, 5) + 'h';
+		}
+
+		timeFormat2(value: string) {
+			return moment(value, 'HH:mm a').format('h:mm a');
+		}
+
+		show = false
+		openModal(booking: any, selection_button: string) {
+			try {
+				setTimeout(() => {
+					// $('textarea').attr('autofocus', 'autofocus');
+					this.sendEmailModalFocus.nativeElement.querySelector('textarea').focus();
+				}, 1000)
+			} catch (error) {
+				console.log('----------error------->>>>>> ', error)
+
+			}
+			console.log('open modal-->>>>>>>', booking, selection_button)
+			this.passengerDetails = booking;
+			this.passengerDetails['selection_button'] = selection_button
+		}
+		cancelBooking() {
+			console.log('in function cancel booking')
+			this.spinner.show();
+
+			this.affiliateService.cancelBooking(this.cancelBookingId)
+				.pipe(
+					catchError(err => {
+						this.spinner.hide();//hide spinner
+						$('#cancelBooking').modal('hide');
+						return throwError(err);
+					})
+				)
+				.subscribe(({ data, success, message }: any) => {
+					if (success == true) {
+						this.spinner.hide();//hide spinner
+						this.loadBookings()
+						$('#cancelBooking').modal('hide');
+						// this.$errors.openDialog({
+						// 	errors: {
+						// 		error: `<span class='text-success'>${message}</span>`
+						// 	}
+						// })
+					}
+				});
+		}
+
+		// messageField(format)
+		// {
+		// 	this.show = true;
+		// 	switch (format)
+		// 	{
+		// 		case 'Phone': {
+		// 			this.sendMessageField = true;
+		// 			break;
+		// 		}
+		// 		case 'Email': {
+		// 			this.sendMessageField = false;
+		// 			break;
+		// 		}
+		// 	}
+		// }
+
+
+		editAction(bookingId, updateType) {
+			if (updateType == 'change') {
+				this.router.navigate([`/${this.currentUser?.roleName}/new-booking`], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'true' } });
+			}
+			else {
+				this.router.navigate([`/${this.currentUser?.roleName}/new-booking`], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'true' } });
+			}
+		}
+
+		finalizeAction(bookingId) {
+			this.router.navigate([`/${this.currentUser?.roleName}/finalize-booking`], { queryParams: { bookingId: bookingId } });
+		}
+
+		emailPassenger() {
+			console.log('In function email passenger', this.sendEmailForm.value.reservation_id)
+			let data = {
+				reservation_id: this.sendEmailForm.value.reservation_id
+			}
+			this.spinner.show()
+			this.travelAgentService.passengerBooking(data)
+				.pipe(
+					catchError((err) => {
+						return throwError(err);
+					})
+				)
+				.subscribe((response: any) => {
+					console.log('response--------->>>>>>>>', response)
+					this.spinner.hide()
+					$("#emailPassenger").modal("hide");
+				});
+		}
+		emailAll() {
+			console.log('In function email all', this.sendEmailForm.value.reservation_id, this.sendEmailForm.value.emailTarget)
+			let data = {
+				reservation_id: this.sendEmailForm.value.reservation_id
+			}
+			this.spinner.show()
+			this.travelAgentService.bookingEmailAll(data)
+				.pipe(
+					catchError((err) => {
+						return throwError(err);
+					})
+				)
+				.subscribe((response: any) => {
+					console.log('response--------->>>>>>>>', response)
+					this.spinner.hide()
+					$("#emailAll").modal("hide");
+				});
+		}
+
+		returnRepeatAction(bookingId, actionType) {
+			console.log(actionType, bookingId,);
+
+			if (actionType == 'return') {
+				this.router.navigate([`/${this.currentUser?.roleName}/new-booking`], { queryParams: { bookingId: bookingId, updateType: 'return' } });
+			}
+			else {
+				this.router.navigate([`/${this.currentUser?.roleName}/new-booking`], { queryParams: { bookingId: bookingId, updateType: 'repeat' } });
+			}
+		}
 
 	get changeStatusF() {
-		return this.changeStatusForm.controls;
-	}
-
-	// changeBookingStatus(bookingId)
-	// {
-	// 	this.changeStatusForm.patchValue({
-	// 		reservation_id: bookingId
-	// 	});
-	// }
-
-	submitChangeStatusForm() {
-		this.submitted = true;
-		console.log(this.changeStatusForm);
-		// stop here if form is invalid
-		if (this.changeStatusForm.invalid) {
-			return;
+			return this.changeStatusForm.controls;
 		}
 
-		this.spinner.show();
+		// changeBookingStatus(bookingId)
+		// {
+		// 	this.changeStatusForm.patchValue({
+		// 		reservation_id: bookingId
+		// 	});
+		// }
 
-		this.affiliateService.changeStatusBooking(this.changeStatusForm.value)
-			.pipe(
-				catchError(err => {
-					this.spinner.hide();//hide spinner
-					$('#change_status_booking_Modal').modal('hide');
-					return throwError(err);
-				})
-			)
-			.subscribe(({ data, success, message }: any) => {
-				if (success == true) {
-					this.spinner.hide();//hide spinner
-					$('#change_status_booking_Modal').modal('hide');
-					this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
-						this.router.navigate([`/${this.currentUser?.roleName}/bookings`]);
-					});
-				}
-			});
-	}
+		submitChangeStatusForm() {
+			this.submitted = true;
+			console.log(this.changeStatusForm);
+			// stop here if form is invalid
+			if (this.changeStatusForm.invalid) {
+				return;
+			}
 
+			this.spinner.show();
 
-	sendEmailClicked(bookingId, emailTarget) {
-		this.sendEmailForm.patchValue({
-			reservation_id: bookingId,
-			emailTarget: emailTarget
-		});
-	}
-
-	emailForm() {
-		this.submitted = true;
-		console.log(this.sendEmailForm);
-		// stop here if form is invalid
-		if (this.sendEmailForm.invalid) {
-			return;
+			this.affiliateService.changeStatusBooking(this.changeStatusForm.value)
+				.pipe(
+					catchError(err => {
+						this.spinner.hide();//hide spinner
+						$('#change_status_booking_Modal').modal('hide');
+						return throwError(err);
+					})
+				)
+				.subscribe(({ data, success, message }: any) => {
+					if (success == true) {
+						this.spinner.hide();//hide spinner
+						$('#change_status_booking_Modal').modal('hide');
+						this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
+							this.router.navigate([`/${this.currentUser?.roleName}/bookings`]);
+						});
+					}
+				});
 		}
 
-		this.spinner.show();
 
-		this.travelAgentService.sendEmail(this.sendEmailForm.value)
-			.pipe(
-				catchError(err => {
-					this.spinner.hide();//hide spinner
-					$('#emailModal').modal('hide');
-					return throwError(err);
-				})
-			)
-			.subscribe(({ data, success, message }: any) => {
-				if (success == true) {
-					this.spinner.hide();//hide spinner
-					$('#emailModal').modal('hide');
-					this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
-						this.router.navigate([`/${this.currentUser?.roleName}/bookings`]);
-					});
-				}
+		sendEmailClicked(bookingId, emailTarget) {
+			this.sendEmailForm.patchValue({
+				reservation_id: bookingId,
+				emailTarget: emailTarget
 			});
-	}
+		}
 
+		emailForm() {
+			this.submitted = true;
+			console.log(this.sendEmailForm);
+			// stop here if form is invalid
+			if (this.sendEmailForm.invalid) {
+				return;
+			}
 
-	iOS() {
-		return [
-			'iPad Simulator',
-			'iPhone Simulator',
-			'iPod Simulator',
-			'iPad',
-			'iPhone',
-			'iPod'
-		].includes(navigator.platform)
-			// iPad on iOS 13 detection
-			|| (navigator.userAgent.includes("Mac") && "ontouchend" in document)
-	}
+			this.spinner.show();
 
-	showLocationPointOnMap(booking_id: number, type: string) {
-
-		let isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-		console.log('isSafari', isSafari)
-		// this.spinner.show()
-		this.travelAgentService.getLocationPoints(booking_id).subscribe((response: any) => {
-			this.spinner.hide();
-			if ("lat" in response?.data?.pickupDetail && "long" in response?.data?.pickupDetail && "lat" in response?.data?.dropoffDetail && "long" in response?.data?.dropoffDetail) {
-				sessionStorage.setItem('pickup', JSON.stringify(response?.data?.pickupDetail.address));
-				sessionStorage.setItem('dropoff', JSON.stringify(response?.data?.dropoffDetail.address));
-				if (type == 'pickup') {
-					const googleDirectionUrl = 'https://www.google.com/maps/dir/?api=1' + '&destination=' +
-						encodeURIComponent(response?.data?.pickupDetail.address) + '&travelmode=driving'
-					const iosDirectionUrl = 'http://maps.apple.com/?daddr=' +
-						encodeURIComponent(response?.data?.pickupDetail.address)
-					if (this.iOS()) {
-						setTimeout(() => {
-							window.location.href = iosDirectionUrl;
-						})
+			this.travelAgentService.sendEmail(this.sendEmailForm.value)
+				.pipe(
+					catchError(err => {
+						this.spinner.hide();//hide spinner
+						$('#emailModal').modal('hide');
+						return throwError(err);
+					})
+				)
+				.subscribe(({ data, success, message }: any) => {
+					if (success == true) {
+						this.spinner.hide();//hide spinner
+						$('#emailModal').modal('hide');
+						this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
+							this.router.navigate([`/${this.currentUser?.roleName}/bookings`]);
+						});
 					}
-					else {
-						window.open(googleDirectionUrl, '_blank');
+				});
+		}
+
+
+		iOS() {
+			return [
+				'iPad Simulator',
+				'iPhone Simulator',
+				'iPod Simulator',
+				'iPad',
+				'iPhone',
+				'iPod'
+			].includes(navigator.platform)
+				// iPad on iOS 13 detection
+				|| (navigator.userAgent.includes("Mac") && "ontouchend" in document)
+		}
+
+		showLocationPointOnMap(booking_id: number, type: string) {
+
+			let isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+			console.log('isSafari', isSafari)
+			// this.spinner.show()
+			this.travelAgentService.getLocationPoints(booking_id).subscribe((response: any) => {
+				this.spinner.hide();
+				if ("lat" in response?.data?.pickupDetail && "long" in response?.data?.pickupDetail && "lat" in response?.data?.dropoffDetail && "long" in response?.data?.dropoffDetail) {
+					sessionStorage.setItem('pickup', JSON.stringify(response?.data?.pickupDetail.address));
+					sessionStorage.setItem('dropoff', JSON.stringify(response?.data?.dropoffDetail.address));
+					if (type == 'pickup') {
+						const googleDirectionUrl = 'https://www.google.com/maps/dir/?api=1' + '&destination=' +
+							encodeURIComponent(response?.data?.pickupDetail.address) + '&travelmode=driving'
+						const iosDirectionUrl = 'http://maps.apple.com/?daddr=' +
+							encodeURIComponent(response?.data?.pickupDetail.address)
+						if (this.iOS()) {
+							setTimeout(() => {
+								window.location.href = iosDirectionUrl;
+							})
+						}
+						else {
+							window.open(googleDirectionUrl, '_blank');
+						}
 					}
+					else if (type == 'dropoff') {
+						const googleDirectionUrl = 'https://www.google.com/maps/dir/?api=1' + '&destination=' +
+							encodeURIComponent(response?.data?.dropoffDetail.address) + '&travelmode=driving'
+						const iosDirectionUrl = 'http://maps.apple.com/?daddr=' +
+							encodeURIComponent(response?.data?.dropoffDetail.address)
+						if (this.iOS()) {
+							setTimeout(() => {
+								window.location.href = iosDirectionUrl;
+							})
+						}
+						else {
+							window.open(googleDirectionUrl, '_blank');
+						}
+					}
+
+				} else {
+					throw new Error('Error: Location Points Not Specified Properly. ');
 				}
-				else if (type == 'dropoff') {
-					const googleDirectionUrl = 'https://www.google.com/maps/dir/?api=1' + '&destination=' +
-						encodeURIComponent(response?.data?.dropoffDetail.address) + '&travelmode=driving'
-					const iosDirectionUrl = 'http://maps.apple.com/?daddr=' +
-						encodeURIComponent(response?.data?.dropoffDetail.address)
-					if (this.iOS()) {
-						setTimeout(() => {
-							window.location.href = iosDirectionUrl;
-						})
-					}
-					else {
-						window.open(googleDirectionUrl, '_blank');
-					}
+			})
+		}
+		showLocationPointOnMapByAddress(address: any) {
+			let isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+			console.log('isSafari', isSafari)
+			if (address) {
+				let googleDirectionUrl;
+				let iosDirectionUrl;
+				googleDirectionUrl = 'https://www.google.com/maps/dir/?api=1' + '&destination=' +
+					encodeURIComponent(address) + '&travelmode=driving'
+				iosDirectionUrl = 'http://maps.apple.com/?daddr=' +
+					encodeURIComponent(address)
+				if (this.iOS()) {
+					setTimeout(() => {
+						window.location.href = iosDirectionUrl;
+					})
 				}
-
+				else {
+					window.open(googleDirectionUrl, '_blank');
+				}
 			} else {
 				throw new Error('Error: Location Points Not Specified Properly. ');
 			}
-		})
-	}
-	showLocationPointOnMapByAddress(address: any) {
-		let isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-		console.log('isSafari', isSafari)
-		if (address) {
-			let googleDirectionUrl;
-			let iosDirectionUrl;
-			googleDirectionUrl = 'https://www.google.com/maps/dir/?api=1' + '&destination=' +
-				encodeURIComponent(address) + '&travelmode=driving'
-			iosDirectionUrl = 'http://maps.apple.com/?daddr=' +
-				encodeURIComponent(address)
-			if (this.iOS()) {
-				setTimeout(() => {
-					window.location.href = iosDirectionUrl;
-				})
-			}
-			else {
-				window.open(googleDirectionUrl, '_blank');
-			}
-		} else {
-			throw new Error('Error: Location Points Not Specified Properly. ');
 		}
 	}
-}
 
 
