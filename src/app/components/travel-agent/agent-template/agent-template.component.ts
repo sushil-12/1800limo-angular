@@ -28,6 +28,7 @@ export class AgentTemplateComponent implements OnInit {
 	public invite_link: string;
 	public referral_code: any;
 	showCopyIcon:boolean;
+	accountStatus:any;
 
 	constructor(
 		private router: Router,
@@ -56,6 +57,7 @@ export class AgentTemplateComponent implements OnInit {
 		this.screenWidth = window.innerWidth;
 		//Get logged in user name
 		this.currentUser = this.stateManagementService.getUser()
+		this.accountStatus = localStorage.getItem('agentAccountStatus')
 		console.log(this.currentUser?.is_profile_complete,"is profile")
 
 		//Get ProgressBar
