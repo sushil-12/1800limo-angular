@@ -354,7 +354,7 @@ export class BookingComponent implements OnInit {
 		}
 
 		//send invite function
-		sendInvite() {
+	 sendInvite() {
 			this.submittedForm = true;
 			// stop here if form is invalid
 			if (this.inviteAgentForm.invalid) {
@@ -370,9 +370,44 @@ export class BookingComponent implements OnInit {
 			  formData.append("email_file", this.fileToUpload);
 			  formData.append("email_address", this.inviteAgentForm.get("email_address").value);
 			
-			
-			const test =this.travelAgentService.sendTravelAgentInviteCode(formData)
-			console.log('tes',test)
+			this.spinner.show()
+			this.travelAgentService.sendTravelAgentInviteCode(formData).then(response => {
+				this.closeInviteModal()
+				this.spinner.hide()
+				if (!response.ok) {
+					if (response.status === 422) {
+						// Parse the JSON response
+						response.json().then(errorData => {
+						  // Handle validation errors or other specific errors
+						  console.error('Validation errors:', errorData?.message);
+						  this.$errors.openDialog({
+							errors: {
+							  error: errorData?.message
+							}
+						  })
+						});
+					  }
+				throw new Error('Network response was not ok');
+				}
+				return response.json();
+			})
+			.then(data => {
+				console.log('File uploaded successfully:', data);
+				this.$errors.openDialog({
+					errors: {
+					  error: `<span class='text-success'>${data?.message}</span>`
+					}
+				  })
+				
+			})
+			.catch(error => {
+				console.error('Error uploading file:', error);
+				this.$errors.openDialog({
+					errors: {
+					  error: 'Server Error'
+					}
+				  })
+			});
 		}
 
 
