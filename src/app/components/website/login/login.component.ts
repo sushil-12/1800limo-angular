@@ -88,7 +88,7 @@ export class LoginComponent implements OnInit, AfterViewInit
 					break;
 				}
 				case 'travel_agent': {
-					this.router.navigateByUrl('/agent');
+					this.router.navigateByUrl('/travel_agent');
 					break;
 				}
 				case 'sub_travel_agent':{

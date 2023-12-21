@@ -858,8 +858,8 @@
 					</mat-form-field> -->
 
 					<!-- Ng-Select -->
-					<ng-select appearance="outline" [items]="AffiliateAccounts" bindLabel="name" bindValue="id"
-						placeholder="Select Affiliate" dropdownPosition="bottom" [markFirst]="true"
+					<ng-select appearance="outline" [items]="AffiliateAccounts" bindLabel="bindNameAffiliate"
+						bindValue="id" placeholder="Select Affiliate" dropdownPosition="bottom" [markFirst]="true"
 						[virtualScroll]="true" formControlName="affiliate_id" (change)="handleAffiliateChange($event)">
 					</ng-select>
 				</div>

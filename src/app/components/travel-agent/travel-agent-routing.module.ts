@@ -17,7 +17,7 @@ import { SubAgentAccountDetailsComponent } from './sub-agent-account-details/sub
 const routes: Routes = [
   {
 		path: '',
-		redirectTo: '/home',
+		redirectTo: 'bookings',
 		pathMatch: 'full'
 	},
   {
