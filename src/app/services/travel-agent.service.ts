@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { AuthService } from './auth.service';
+import { ErrorDialogService } from './error-dialog/errordialog.service';
 
 @Injectable({
 	providedIn: 'root'
@@ -12,6 +13,7 @@ export class TravelAgentService {
 	private environmentServerUrl = environment.serverUrl;
 	private serverUrl = environment.serverUrl + 'travel-planner/';
 	constructor(private httpClient: HttpClient,
+		private $errors: ErrorDialogService,
 		private authService: AuthService) { }
 
 	checkIsProfileCompleted() {
@@ -118,27 +120,17 @@ export class TravelAgentService {
 	//send invite code for sub ta
 	sendTravelAgentInviteCode(data:any) {
 		// return this.httpClient.post(this.serverUrl + 'send-an-invite-code', data);
+		let resp:any
 		const accessToken = this.authService.getAccessToken();
-		fetch(this.serverUrl + 'send-an-invite-code', {
+		resp = fetch(this.serverUrl + 'send-an-invite-code', {
 			method: 'POST',
 			body: data,
 			headers: {
 				Authorization: `Bearer ${accessToken}`
 			  }
 		})
-		.then(response => {
-			if (!response.ok) {
-				throw new Error('Network response was not ok');
-			}
-			return response.json();
-		})
-		.then(data => {
-			console.log('File uploaded successfully:', data);
-			return data
-		})
-		.catch(error => {
-			console.error('Error uploading file:', error);
-		});
+		
+		return resp;
 	}
 
 	travelAgentNotification(data) {
