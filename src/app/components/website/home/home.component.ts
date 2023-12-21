@@ -191,7 +191,7 @@ export class HomeComponent implements OnInit {
 		//Get In Touch Form
 		this.getInTouchForm = this.formBuilder.group({
 			getInTouchName: ['', Validators.required],
-			getInTouchEmail: ['', [Validators.required, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
+			getInTouchEmail: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)]],
 			getInTouchMessage: ['', Validators.required]
 		});
 
