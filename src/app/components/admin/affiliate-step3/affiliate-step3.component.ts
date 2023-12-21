@@ -100,7 +100,7 @@ export class AffiliateStep3Component implements OnInit {
 			policyExpiredMonth: ['', Validators.required],
 			policyExpiredYear: ['', Validators.required],
 			insuranceLimits: ['', Validators.required],
-			AgentEmail: ['', [Validators.pattern("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")]],
+			AgentEmail: ['', [Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)]],
 			insCertificate: ['', Validators.required],
 			insuranceCard: ['', Validators.required],
 		});

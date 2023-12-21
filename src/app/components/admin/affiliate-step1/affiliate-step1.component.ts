@@ -314,7 +314,7 @@ export class AffiliateStep1Component implements OnInit {
 			Gender: ['male', Validators.required],
 			CellNumber: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
 			CellIsd: ['+1', Validators.required],
-			Email: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9.]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]],
+			Email: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)]],
 			badge_city: [''],
 			badge_city_name: [''],
 			latitude: [''],
@@ -323,7 +323,7 @@ export class AffiliateStep1Component implements OnInit {
 			CellNumberCountry: ['us', Validators.required],
 			CompanyName: ['', Validators.required],
 			DBA: [''],
-			dispatchEmail: ['', [Validators.pattern("^[a-zA-Z0-9.]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]],
+			dispatchEmail: ['', [Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)]],
 			Dispatch: [''],
 			DispatchIsd: ['+1'],
 			DispatchCountry: ['us'],
@@ -677,7 +677,7 @@ export class AffiliateStep1Component implements OnInit {
 	conditionalValidations(affiliateType) {
 		if (affiliateType != 'gig_operator') {
 			this.addAffiliateAccountForm.controls['CompanyName'].setValidators([Validators.required]);
-			this.addAffiliateAccountForm.controls['dispatchEmail'].setValidators([Validators.required, Validators.pattern("^[a-zA-Z0-9.]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]);
+			this.addAffiliateAccountForm.controls['dispatchEmail'].setValidators([Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)]);
 			this.addAffiliateAccountForm.controls['Dispatch'].setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15), this.customValidator.dashValidator(), this.customValidator.plusValidator()]);
 			this.addAffiliateAccountForm.controls['DispatchIsd'].setValidators([Validators.required]);
 			this.addAffiliateAccountForm.controls['DispatchCountry'].setValidators([Validators.required]);
@@ -685,7 +685,7 @@ export class AffiliateStep1Component implements OnInit {
 		}
 		else {
 			this.addAffiliateAccountForm.controls['CompanyName'].clearValidators();
-			this.addAffiliateAccountForm.controls['dispatchEmail'].setValidators([Validators.pattern("^[a-zA-Z0-9.]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]);
+			this.addAffiliateAccountForm.controls['dispatchEmail'].setValidators([Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)]);
 			this.addAffiliateAccountForm.controls['Dispatch'].clearValidators();
 			this.addAffiliateAccountForm.controls['DispatchIsd'].clearValidators();
 			this.addAffiliateAccountForm.controls['DispatchCountry'].clearValidators();

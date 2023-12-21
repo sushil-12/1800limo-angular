@@ -29,7 +29,7 @@ export class ContactUsComponent implements OnInit {
     //validations
     this.getInTouchForm = this.formBuilder.group({
       name: ['', Validators.required],
-      email: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9.]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]],
+      email: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)]],
       phone:['', [Validators.required, Validators.pattern("^[0-9]*$")]],
       message: ['', Validators.required]
     });

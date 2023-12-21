@@ -295,7 +295,7 @@ export class BookingComponent implements OnInit {
 	//build email modal
 	buildInviteAgentForm() {
 		this.inviteAgentForm = this.formBuilder.group({
-			email_address: ['', [Validators.pattern("^[a-zA-Z0-9.]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]],
+			email_address: ['', [Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)]],
 			email_file: [null]
 		})
 	}

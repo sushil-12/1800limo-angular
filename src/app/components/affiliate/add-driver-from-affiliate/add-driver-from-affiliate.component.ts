@@ -179,7 +179,7 @@ export class AddDriverFromAffiliateComponent
 			CellNumberCountry: ["us", Validators.required],
 			Email: [
 				"",
-				[Validators.pattern("^[a-zA-Z0-9.]+@[a-z0-9.-]+\\.[a-z]{2,4}$")],
+				[Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)],
 			],
 			Dress: [1, Validators.required],
 			StartDate: ["", [Validators.required]],
