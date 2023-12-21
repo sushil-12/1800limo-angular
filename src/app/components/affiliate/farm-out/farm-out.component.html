@@ -112,7 +112,8 @@
 									</a>
 									<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
 										aria-labelledby="navbarDropdownUserImage">
-										<a class="dropdown-item" (click)="editAction(booking?.booking_id,'edit')">
+										<a class="dropdown-item" (click)="editAction(booking?.booking_id,'edit')"
+											*ngIf="booking?.booking_status !='paid'">
 											<div class="dropdown-item-icon"></div>
 											Edit
 										</a>
@@ -128,8 +129,10 @@
 												<div class="dropdown-item-icon"></div>
 												Return
 											</a> -->
-										<a class="dropdown-item" (click)="finalizeAction(booking?.booking_id)">
-											<div class="dropdown-item-icon"></div>
+										<a class="dropdown-item" (click)="finalizeAction(booking?.booking_id)"
+											*ngIf="booking?.booking_status !='paid'">
+											<div class=" dropdown-item-icon">
+											</div>
 											Finalize
 										</a>
 										<a class="dropdown-item" (click)="previewRate(booking?.booking_id)"
