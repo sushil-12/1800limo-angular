@@ -307,7 +307,7 @@ export class NewBookingComponent implements OnInit {
 				})
 			}),
 			passenger_name: ['', [Validators.required, this.customValidator.whitespace()]],
-			passenger_email: ['', [Validators.email]],
+			passenger_email: ['', [Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)]],
 			passenger_cell: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
 			passenger_cell_isd: ['+1'],
 			passenger_cell_country: ['us'],
@@ -341,7 +341,7 @@ export class NewBookingComponent implements OnInit {
 			driver_cell: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
 			driver_cell_isd: ['+1'],
 			driver_cell_country: ['us'],
-			driver_email: ['', Validators.email],
+			driver_email: ['', Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)],
 			driver_phone_type: [''],
 			driver_image_id: [''],
 			vehicle_image_id: [''],
@@ -567,7 +567,7 @@ export class NewBookingComponent implements OnInit {
 			// 		this.SetLCFormValue('phone' ,editing_data?.loose_customer?.mobile )
 			// 		this.fillLooseCustomerAddress(editing_data?.loose_customer?.address)
 			// 		const loose_customer = (this.BookingForm.get('loose_customer') as FormGroup)
-			// 		loose_customer.get('email').setValidators([Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.]+\.[a-zA-Z]{2,}$/i)])
+			// 		loose_customer.get('email').setValidators([Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)])
 			// 		loose_customer.get('phone').setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)])
 			// 		loose_customer.get('first_name').setValidators([Validators.required])
 			// 		// loose_customer.get('middle_name').setValidators(this.customValidator.whitespace())
@@ -1989,7 +1989,7 @@ export class NewBookingComponent implements OnInit {
 				(<FormGroup>loose_customer.get('card_details')).get('card_number').setValidators([Validators.required, Validators.pattern("^[0-9]*$"), , Validators.minLength(12), Validators.maxLength(20),]);
 				(<FormGroup>loose_customer.get('card_details')).get('name').setValidators([Validators.required]);
 				(<FormGroup>loose_customer.get('card_details')).get('cvv').setValidators([Validators.required, Validators.pattern("^[0-9]*$")]);
-				loose_customer.get('email').setValidators([Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.]+\.[a-zA-Z]{2,}$/i)])
+				loose_customer.get('email').setValidators([Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)])
 				loose_customer.get('phone').setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)])
 				loose_customer.get('first_name').setValidators([Validators.required])
 				// loose_customer.get('middle_name').setValidators(this.customValidator.whitespace())
@@ -2055,7 +2055,7 @@ export class NewBookingComponent implements OnInit {
 				(<FormGroup>loose_customer.get('card_details')).get('card_number').setValidators([Validators.required, Validators.pattern("^[0-9]*$"), , Validators.minLength(12), Validators.maxLength(20),]);
 				(<FormGroup>loose_customer.get('card_details')).get('name').setValidators([Validators.required]);
 				(<FormGroup>loose_customer.get('card_details')).get('cvv').setValidators([Validators.required, Validators.pattern("^[0-9]*$")]);
-				loose_customer.get('email').setValidators([Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.]+\.[a-zA-Z]{2,}$/i)])
+				loose_customer.get('email').setValidators([Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)])
 				loose_customer.get('phone').setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)])
 				loose_customer.get('first_name').setValidators([Validators.required])
 				// loose_customer.get('middle_name').setValidators(this.customValidator.whitespace())
@@ -2090,7 +2090,7 @@ export class NewBookingComponent implements OnInit {
 				this.toggleDropdown(null)
 				this.BookingForm.get('lose_affiliate_name').setValidators([Validators.required])
 				this.BookingForm.get('lose_affiliate_phone').setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)])
-				this.BookingForm.get('lose_affiliate_email').setValidators([Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.]+\.[a-zA-Z]{2,}$/i)])
+				this.BookingForm.get('lose_affiliate_email').setValidators([Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)])
 				this.BookingForm.updateValueAndValidity()
 				this.init_rates = true
 				if (this.Form.service_type.value === 'round_trip') {

@@ -73,7 +73,7 @@ export class AddStaffComponent implements OnInit
 			firstName: ['', Validators.required],
 			middleName: [''],
 			lastName: ['', Validators.required],
-			email: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9.]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]],
+			email: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)]],
 			deptTelIsd: ['+1', Validators.required],
 			deptTel: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(10), Validators.maxLength(10)]],
 			cellNumberIsd: ['+1', Validators.required],
