@@ -60,7 +60,7 @@ export class NewBookingComponent implements OnInit {
 
 	months: any = [{ value: '01' }, { value: '02' }, { value: '03' }, { value: '04' }, { value: '05' }, { value: '06' }, { value: '07' }, { value: '08' }, { value: '09' }, { value: '10' }, { value: '11' }, { value: '12' }]
 	monthOptions: any = [...this.months]
-	numbers:any = [...this.booking_params.numbers];
+	numbers: any = [...this.booking_params.numbers];
 	luggage_options: any = [...this.booking_params.numbers];
 
 	//[{value:'01'},{value:'02'},{value:'03'},{value:'04'},{value:'05'},{value:'06'},{value:'07'},{value:'08'},{value:'09'},{value:'10'},{value:'11'},{value:'12'}]
@@ -92,7 +92,7 @@ export class NewBookingComponent implements OnInit {
 	vehicleYear_arr: any;
 	vehicleColor_arr: any;
 	firstLoadVehicleId: any;
-	proceed:boolean = true
+	proceed: boolean = true
 	chosen_user: Record<string, any>
 
 	distance: number = 0
@@ -118,18 +118,19 @@ export class NewBookingComponent implements OnInit {
 	return_transfer_type: any = 'city_to_city'
 	number_of_hours: any = '2';
 	confirmMsg: any;
-	booking_data:any;
-	extraStops_rate:any = 0
+	booking_data: any;
+	extraStops_rate: any = 0
 	selectedVehicle: any;
 	is_master_vehicle: boolean = JSON.parse(sessionStorage.getItem('selected_vehicle'))?.is_master_vehicle || false
-	isTravelShare:boolean = false
+	isTravelShare: boolean = false
 	travelStaffAccounts: any;
 	manual_change_aff_veh: boolean = false;
 	isCreatedByAdmin: boolean = true;
-    shareArray: any;
-    r_shareArray: any;
-    adminSharePercent: number = 25;
+	shareArray: any;
+	r_shareArray: any;
+	adminSharePercent: number = 25;
 	isFarmoutBooking: boolean = false;
+	AffiliateAccounts_copy: any;
 	constructor(
 		private $form: FormBuilder,
 		private $api: AdminService,
@@ -162,13 +163,13 @@ export class NewBookingComponent implements OnInit {
 				this.newBooking = params.new == 'true'
 				this.affiliate_id = parseInt(params.affiliate_id)
 			}
-			else if(params?.reaffiliate_book_id ){
-				this.updateType=params?.updateType
+			else if (params?.reaffiliate_book_id) {
+				this.updateType = params?.updateType
 				this.newBooking = true
-				console.log("in reaffiliate update type book id",params?.reaffiliate_book_id)
+				console.log("in reaffiliate update type book id", params?.reaffiliate_book_id)
 				this.SetFormValue('reservation_id', params.reaffiliate_book_id)
 			}
-			else{
+			else {
 				this.resetFields()
 			}
 			// place in query params to reinitialise things when modes of new and edit are toggled
@@ -182,19 +183,19 @@ export class NewBookingComponent implements OnInit {
 		this.fetchAirportsAndBigData()
 
 	}
-	buildBookingData(){
+	buildBookingData() {
 		console.log('rebuild booking data')
 		this.booking_data = {
 			vehicle_id: this.BookingForm.get('vehicle_id').value,
 			transfer_type: this.transfer_type,
-			service_type :this.service_type,
-			numberOfVehicles :1,
-			distance : this.distance, 
-			return_distance : this.return_distance,
-			no_of_hours : this.number_of_hours,
-			is_master_vehicle : this.is_master_vehicle,
+			service_type: this.service_type,
+			numberOfVehicles: 1,
+			distance: this.distance,
+			return_distance: this.return_distance,
+			no_of_hours: this.number_of_hours,
+			is_master_vehicle: this.is_master_vehicle,
 			extra_stops: this.BookingForm.get('extra_stops').value,
-			return_extra_stops : this.BookingForm.get('return_extra_stops').value,
+			return_extra_stops: this.BookingForm.get('return_extra_stops').value,
 			manual_change_aff_veh: this.manual_change_aff_veh
 		}
 	}
@@ -241,7 +242,7 @@ export class NewBookingComponent implements OnInit {
 			return text
 		}
 	}
-	textFormatterClientAccounts(text:string){
+	textFormatterClientAccounts(text: string) {
 		try {
 			return text == 'travel_planner' ? 'Travel Agent' : text.replace(/[\\\_$]+/g, ' ')
 		}
@@ -282,8 +283,8 @@ export class NewBookingComponent implements OnInit {
 			number_of_hours: ['0'],
 			acc_id: [''],
 			account_type: ['individual'],
-			travel_client_id:[''],
-			travel_client_acc:['travel_individual'],
+			travel_client_id: [''],
+			travel_client_acc: ['travel_individual'],
 			change_individual_data: [false],
 			loose_customer: this.$form.group({
 				first_name: [''],
@@ -483,7 +484,7 @@ export class NewBookingComponent implements OnInit {
 		if (value) {
 			this.booking_params.numbers = this.numbers.filter(i => i.toString().includes(value))
 		}
-		else{
+		else {
 			this.booking_params.numbers = this.numbers
 		}
 		console.log('passenger options---->', this.booking_params?.numbers)
@@ -493,7 +494,7 @@ export class NewBookingComponent implements OnInit {
 		if (value) {
 			this.luggage_options = this.numbers.filter(i => i.toString().includes(value))
 		}
-		else{
+		else {
 			this.luggage_options = this.numbers
 		}
 		console.log('luggage options---->', this.booking_params?.numbers)
@@ -514,9 +515,9 @@ export class NewBookingComponent implements OnInit {
 	}
 	handleNoOfHours(value) {
 		this.number_of_hours = value
-		console.log('in function handle no of hours->' , value , value > 0)
+		console.log('in function handle no of hours->', value, value > 0)
 		this.number_of_hours > 0 ? this.buildBookingData() : ''
-		
+
 	}
 	prefillViaBookingID(booking_id: number) {
 		// console.warn('Prefilling via Booking Id')
@@ -529,10 +530,10 @@ export class NewBookingComponent implements OnInit {
 			this.firstLoadVehicleId = response.data.vehicle_id
 			this.firstLoadAffiliateId = response.data.affiliate_id
 			this.number_of_hours = response?.data?.number_of_hours
-			this.isTravelShare =  response?.data?.account_type=='travel_planner' ? true : false
-			this.isFarmoutBooking = response?.data?.reservation_type=='farmout' ? true : false
-			this.isCreatedByAdmin = response?.data?.created_by==1 ? true : false
-			if(response?.data?.account_type=='travel_planner'){
+			this.isTravelShare = response?.data?.account_type == 'travel_planner' ? true : false
+			this.isFarmoutBooking = response?.data?.reservation_type == 'farmout' ? true : false
+			this.isCreatedByAdmin = response?.data?.created_by == 1 ? true : false
+			if (response?.data?.account_type == 'travel_planner') {
 				this.getTravelClientAccounts(response?.data?.acc_id)
 			}
 			this.SetFormValue('affiliate_type', response.data.affiliate_type)
@@ -645,17 +646,17 @@ export class NewBookingComponent implements OnInit {
 
 			this.$spinner.hide('normalspinner')
 			console.log('<<<<<<<<<<<-----------set pickup date------->>>>', moment().format('YYYY-MM-DD'), this.updateType)
-			if ( this.updateType == 'edit') {
+			if (this.updateType == 'edit') {
 				this.scroll('pickup_adress')
 				// this.SetFormValue('pickup_date', moment().format('YYYY-MM-DD'))
 				this.SetFormValue('pickup_date', this.bookingResponse?.pickup_date)
 			}
-			if(this.updateType == 'repeat' || this.updateType == 'return' ){
+			if (this.updateType == 'repeat' || this.updateType == 'return') {
 				this.scroll('pickup_adress')
-				if(new Date(this.bookingResponse?.pickup_date).getTime() < new Date().getTime()){
+				if (new Date(this.bookingResponse?.pickup_date).getTime() < new Date().getTime()) {
 					this.SetFormValue('pickup_date', moment().format('YYYY-MM-DD'))
 				}
-				else{
+				else {
 					this.SetFormValue('pickup_date', this.bookingResponse?.pickup_date)
 				}
 			}
@@ -667,13 +668,13 @@ export class NewBookingComponent implements OnInit {
 		// let elementRect = el.getBoundingClientRect();
 		// let absoluteElementTop = elementRect.top + window.pageYOffset;
 		// let topElement = absoluteElementTop - 200;
-		
+
 		// console.log(`scrolling to ${id}`, el , absoluteElementTop ,window.innerHeight);
 		// window.scrollTo({
 		// 	top: topElement,
 		// 	behavior: 'smooth'
 		// });
-		
+
 		let el = document.getElementById(id);
 		console.log(`scrolling to ${id}`, el);
 		el.scrollIntoView({ behavior: 'smooth' });
@@ -713,24 +714,24 @@ export class NewBookingComponent implements OnInit {
 		}
 	}
 
-	convertToMinutes(value){
+	convertToMinutes(value) {
 		const days = Math.floor(value / (24 * 60 * 60));
 		const remainingSeconds = value % (24 * 60 * 60);
 		const hours = Math.floor(remainingSeconds / (60 * 60));
 		const remainingMinutes = Math.floor((remainingSeconds % (60 * 60)) / 60);
-	
+
 		let result = "";
 
 		if (days > 0) {
 			result += `${days} days, `;
 		}
-	
+
 		if (hours > 0 || (days === 0 && hours === 0)) {
 			result += `${hours} hours, `;
 		}
-	
+
 		result += `${remainingMinutes} minutes`;
-	
+
 		return result;
 	}
 
@@ -844,24 +845,24 @@ export class NewBookingComponent implements OnInit {
 					this.fetchDistanceAndTime(response).then((response: { distance: number, time: number }) => {
 						if (is_return) {
 							this.return_distance = response.distance
-							if(!this.BookingForm.get('return_extra_stops')?.value?.length || this.BookingForm.get('return_extra_stops')?.value[0]['rate']?.length){
+							if (!this.BookingForm.get('return_extra_stops')?.value?.length || this.BookingForm.get('return_extra_stops')?.value[0]['rate']?.length) {
 								this.buildBookingData()
 							}
 							this.BookingForm.patchValue({
 								returnJourneyDistance: response.distance,
 								returnJourneyTime: response.time
 							})
-							console.log("returnJourneyTime=========>",this.BookingForm.get('returnJourneyTime').value)
+							console.log("returnJourneyTime=========>", this.BookingForm.get('returnJourneyTime').value)
 						} else {
 							this.distance = response.distance
-							if(!this.BookingForm.get('extra_stops')?.value?.length || this.BookingForm.get('extra_stops')?.value[0]['rate']?.length){
+							if (!this.BookingForm.get('extra_stops')?.value?.length || this.BookingForm.get('extra_stops')?.value[0]['rate']?.length) {
 								this.buildBookingData()
 							}
 							this.BookingForm.patchValue({
 								journeyDistance: response.distance,
 								journeyTime: response.time
 							})
-							console.log("returnJourneyTime=========>",this.BookingForm.get('journeyTime').value)
+							console.log("returnJourneyTime=========>", this.BookingForm.get('journeyTime').value)
 						}
 						// this.distance_for_rates = ((): string =>
 						// {
@@ -986,19 +987,19 @@ export class NewBookingComponent implements OnInit {
 		this.SetLCFormValue('email', choose_user?.email)
 		this.SetLCFormValue('phone', choose_user?.mobile)
 	}
-	getTravelClientAccounts(id){
+	getTravelClientAccounts(id) {
 		this.$api.getTravelClientAccount(id).subscribe((response: any) => {
-			console.log("accounts->>>>>>>>>>",response)
+			console.log("accounts->>>>>>>>>>", response)
 			this.travelStaffAccounts = response?.data
 		})
 	}
-	handleClientAccChange(selectedAcc){
-		this.isTravelShare =  selectedAcc=='travel_planner' ? true : false
+	handleClientAccChange(selectedAcc) {
+		this.isTravelShare = selectedAcc == 'travel_planner' ? true : false
 		this.BookingForm.get('acc_id').setValue(null);
 		this.chosen_user = null
 		this.BookingForm.patchValue({
 			passenger_name: '',
-			passenger_email:'',
+			passenger_email: '',
 			passenger_cell: '',
 			passenger_cell_isd: '+1',
 			passenger_cell_country: 'us',
@@ -1008,52 +1009,53 @@ export class NewBookingComponent implements OnInit {
 	handleClientAccount(value: any) {
 		console.log('---------------------_>>>>>>>>>>>>>> client acc value', value)
 		this.chooseUser(value.id)
-		if(this.BookingForm.get('account_type').value == 'travel_planner'){
+		if (this.BookingForm.get('account_type').value == 'travel_planner') {
 			this.BookingForm.patchValue({
-				travel_client_id : ''
+				travel_client_id: ''
 			})
 			this.getTravelClientAccounts(value.id)
 		}
-		
+
 	}
 
-	handleChangeTravelAccounts(selectedAcc){
-		console.log('handleChangeTravelAccounts-->>',selectedAcc )
+	handleChangeTravelAccounts(selectedAcc) {
+		console.log('handleChangeTravelAccounts-->>', selectedAcc)
 	}
-	handleTravelStaffAccounts(value: any){
-		console.log('handleTravelStaffAccounts--->>>' , value)
+	handleTravelStaffAccounts(value: any) {
+		console.log('handleTravelStaffAccounts--->>>', value)
 		this.$api.getTravelClientDetailById(value.id).subscribe((response: any) => {
-			console.log("detail ->>>>>>>",response)
+			console.log("detail ->>>>>>>", response)
 			this.autofillData('passenger', response?.data);
 		})
 
 	}
 
-	handleLooseCustomerPhone(event){
+	handleLooseCustomerPhone(event) {
 		console.log('handleLooseCustomerPhone->>', event, event.target.value)
 		this.BookingForm.patchValue({
-			passenger_cell : event.target.value
+			passenger_cell: event.target.value
 		})
 	}
-	handleLooseCustomerName(event){
+	handleLooseCustomerName(event) {
 		const loose_customer = (this.BookingForm.get('loose_customer') as FormGroup)
 		this.BookingForm.patchValue({
-			passenger_name : loose_customer.get('first_name').value + ' ' + loose_customer.get('last_name').value
+			passenger_name: loose_customer.get('first_name').value + ' ' + loose_customer.get('last_name').value
 		})
 	}
 
-	handleLooseAffiliateName(){
+	handleLooseAffiliateName() {
 		this.BookingForm.patchValue({
-			driver_name : this.BookingForm.get('lose_affiliate_name').value
+			driver_name: this.BookingForm.get('lose_affiliate_name').value
 		})
-		 
+
 	}
 
-	handleLooseAffiliatePhone(){
+	handleLooseAffiliatePhone() {
 		this.BookingForm.patchValue({
-			driver_cell : this.BookingForm.get('lose_affiliate_phone').value
+			driver_cell: this.BookingForm.get('lose_affiliate_phone').value
 		})
 	}
+
 
 	fetchAffiliates(affiliate_type: 'affiliate' | 'loose_affiliate') {
 		if (affiliate_type == 'loose_affiliate') {
@@ -1064,8 +1066,12 @@ export class NewBookingComponent implements OnInit {
 			this.$spinner.show()
 			this.$api.getAccountBytype('driver').subscribe((response: any) => {
 				if (response.success && response.data.length > 0) {
-					this.AffiliateAccounts = response.data
-
+					this.AffiliateAccounts = response.data.map((item)=>{
+						item.bindNameAffiliate = item.name + ' / ' + item.driver_name
+						return item
+					})
+					console.log('affiliate accounts',this.AffiliateAccounts)
+					this.AffiliateAccounts_copy = [...this.AffiliateAccounts]
 					//lose all affiliate vehicle and driver data on change of affiliate type
 					// for (let key in this.Form)
 					// {
@@ -1078,6 +1084,15 @@ export class NewBookingComponent implements OnInit {
 				this.$spinner.hide()
 			})
 		}
+	}
+	changeAffiliateAccount(event) {
+		console.log('in change aff acc', event)
+		this.AffiliateAccounts = this.AffiliateAccounts_copy.filter((item) =>
+			item.name.toLowerCase().includes(event.target.value.toLowerCase()) ||
+			item.driver_name.toLowerCase().includes(event.target.value.toLowerCase())
+		)
+		console.log('in change aff acc', this.AffiliateAccounts)
+
 	}
 	// custom search function
 	airportSearchFunction(term: string, item: any) {
@@ -1131,8 +1146,8 @@ export class NewBookingComponent implements OnInit {
 		// Every method will return true if all values are true in isWordThere.
 		return isWordThere.every(all_words);
 	}
-	handleAffiliateChange(value){
-		console.log('in function handleAffiliateChange-->>' , value)
+	handleAffiliateChange(value) {
+		console.log('in function handleAffiliateChange-->>', value)
 	}
 	chooseAffiliate() {
 		// console.warn('Fetching Affiliate vehicles and drivers')
@@ -1172,7 +1187,7 @@ export class NewBookingComponent implements OnInit {
 			return
 		}
 		this.$spinner.show()
-		this.$api.adminAffiliateVehicleList(affiliate_id,false).then((response: any) => {
+		this.$api.adminAffiliateVehicleList(affiliate_id, false).then((response: any) => {
 			console.log('get affiliate vehicle data----->>>>>>>>>', response.data)
 			if (response.success && response.data.vehicleList.length > 0) {
 				this.VehicleList = response.data.vehicleList
@@ -1232,7 +1247,7 @@ export class NewBookingComponent implements OnInit {
 			return
 		}
 		this.$spinner.show()
-		this.$api.adminAffiliateVehicleList(affiliate_id,false).then((response: any) => {
+		this.$api.adminAffiliateVehicleList(affiliate_id, false).then((response: any) => {
 			console.log('get affiliate vehicle data----->>>>>>>>>', response.data)
 			if (response.success && response.data.vehicleList.length > 0) {
 				this.VehicleList = response.data.vehicleList
@@ -1486,7 +1501,7 @@ export class NewBookingComponent implements OnInit {
 				address: new FormControl(''),
 				latitude: new FormControl(''),
 				longitude: new FormControl(''),
-				rate:  new FormControl(''),
+				rate: new FormControl(''),
 				booking_instructions: new FormControl('')
 			}))
 		}
@@ -1496,7 +1511,7 @@ export class NewBookingComponent implements OnInit {
 				address: new FormControl(''),
 				latitude: new FormControl(''),
 				longitude: new FormControl(''),
-				rate:  new FormControl(''),
+				rate: new FormControl(''),
 				booking_instructions: new FormControl('')
 			}))
 		}
@@ -1527,7 +1542,7 @@ export class NewBookingComponent implements OnInit {
 				if (this.Form.transfer_type.value.includes('_airport')) {
 					return_pickup_location = this.Form.return_pickup_airport_name?.value
 				}
-				this.checkExtraStopInTown(return_pickup_location,address.formatted_address ,'return_extra_stops',index )
+				this.checkExtraStopInTown(return_pickup_location, address.formatted_address, 'return_extra_stops', index)
 			}
 			if (location) {
 				(<FormArray>this.BookingForm.get('return_extra_stops')).at(index).patchValue({
@@ -1539,7 +1554,7 @@ export class NewBookingComponent implements OnInit {
 			this.MapController(true)
 		}
 		else {
-			
+
 			if (address) {
 				(<FormArray>this.BookingForm.get('extra_stops')).at(index).patchValue({
 					address: address.formatted_address,
@@ -1548,7 +1563,7 @@ export class NewBookingComponent implements OnInit {
 				if (this.Form.transfer_type.value.includes('airport_')) {
 					pickup_location = this.Form.pickup_airport_name.value
 				}
-				this.checkExtraStopInTown(pickup_location,address.formatted_address ,'extra_stops',index )
+				this.checkExtraStopInTown(pickup_location, address.formatted_address, 'extra_stops', index)
 			}
 
 			if (location) {
@@ -1561,7 +1576,7 @@ export class NewBookingComponent implements OnInit {
 			this.MapController()
 		}
 	}
-	
+
 	// recalculateExtraStopRates(){
 	// 	this.extraStops_rate = 0
 	// 	if (this.ExtraStops.length > 0) {
@@ -1589,42 +1604,42 @@ export class NewBookingComponent implements OnInit {
 		}
 		return null;
 	}
-	checkExtraStopInTown(location1: string, location2: string,formKey:string,index:any) {
-		console.log('in function check extra stop in town' , location1 , location2)
+	checkExtraStopInTown(location1: string, location2: string, formKey: string, index: any) {
+		console.log('in function check extra stop in town', location1, location2)
 		const geocoder = new google.maps.Geocoder();
 		geocoder.geocode({ address: location1 }, (results1, status1) => {
-		  if (status1 === 'OK' && results1.length > 0) {
-			const town1 = this.getTown(results1);
-			geocoder.geocode({ address: location2 },async (results2, status2) => {
-			  if (status2 === 'OK' && results2.length > 0) {
-				const town2 = this.getTown(results2);
-	  
-				if (town1 === town2) {
-					console.log('Both locations are in the same town/city.',this.extraStops_rate);
-					await (<FormArray>this.BookingForm.get([formKey])).at(index).patchValue({
-						rate : 'in_town'
-					});
-				} else {
-					console.log('Locations are in different towns/cities.',this.extraStops_rate);
-					(<FormArray>this.BookingForm.get([formKey])).at(index).patchValue({
-						rate : 'out_town'
-					});
-				}
-				setTimeout(()=>{
-					this.buildBookingData()
-				},300)
-			  } else {
-				console.error('Geocoding for Location 2 failed:', status2);
-			  }
-			});
-		  } else {
-			console.error('Geocoding for Location 1 failed:', status1);
-		  }
+			if (status1 === 'OK' && results1.length > 0) {
+				const town1 = this.getTown(results1);
+				geocoder.geocode({ address: location2 }, async (results2, status2) => {
+					if (status2 === 'OK' && results2.length > 0) {
+						const town2 = this.getTown(results2);
+
+						if (town1 === town2) {
+							console.log('Both locations are in the same town/city.', this.extraStops_rate);
+							await (<FormArray>this.BookingForm.get([formKey])).at(index).patchValue({
+								rate: 'in_town'
+							});
+						} else {
+							console.log('Locations are in different towns/cities.', this.extraStops_rate);
+							(<FormArray>this.BookingForm.get([formKey])).at(index).patchValue({
+								rate: 'out_town'
+							});
+						}
+						setTimeout(() => {
+							this.buildBookingData()
+						}, 300)
+					} else {
+						console.error('Geocoding for Location 2 failed:', status2);
+					}
+				});
+			} else {
+				console.error('Geocoding for Location 1 failed:', status1);
+			}
 		});
-	  }
+	}
 
 
-	
+
 
 	fillExtraStopInstruction(is_return: boolean, index: number, event: any) {
 		console.log(is_return, index, event.target.value);
@@ -1658,7 +1673,7 @@ export class NewBookingComponent implements OnInit {
 	}
 
 
-	navigateToDailyBooking(){
+	navigateToDailyBooking() {
 		this.$router.navigate(['/admin/daily-bookings-admin'])
 	}
 
@@ -1673,46 +1688,46 @@ export class NewBookingComponent implements OnInit {
 		const labelOffset = 90;
 		return controlEl.getBoundingClientRect().top + window.scrollY - labelOffset;
 	}
-	createReservationShareArray(){
+	createReservationShareArray() {
 		console.log('in function createReservationShareArray')
 		if (this.RatesForm) {
-		let base_rate = 0
-		if(this.BookingForm.value?.service_type == 'charter_tour'){
-			base_rate +=  this.RatesForm.all_inclusive_rates["Base_Rate"].baserate * this.number_of_hours
-		}
-		else{
-			base_rate +=  this.RatesForm.all_inclusive_rates["Base_Rate"].baserate
-		}
-		['ELH_Charges', 'Stops', 'Wait'].map((key) => {
-			base_rate += this.RatesForm.all_inclusive_rates[key].baserate
-		});
-		for (const key of Object.keys(this.RatesForm.amenities)) {
-			base_rate += this.RatesForm.amenities[key].baserate;
-		}
+			let base_rate = 0
+			if (this.BookingForm.value?.service_type == 'charter_tour') {
+				base_rate += this.RatesForm.all_inclusive_rates["Base_Rate"].baserate * this.number_of_hours
+			}
+			else {
+				base_rate += this.RatesForm.all_inclusive_rates["Base_Rate"].baserate
+			}
+			['ELH_Charges', 'Stops', 'Wait'].map((key) => {
+				base_rate += this.RatesForm.all_inclusive_rates[key].baserate
+			});
+			for (const key of Object.keys(this.RatesForm.amenities)) {
+				base_rate += this.RatesForm.amenities[key].baserate;
+			}
 			let grandTotal = this.BookingForm.value.rateArray.grand_total
 			let stripeFee = grandTotal * 0.05 + 0.30
-			let adminShare = (base_rate * this.adminSharePercent) / 100 
-			let deducted_admin_share = adminShare-stripeFee
+			let adminShare = (base_rate * this.adminSharePercent) / 100
+			let deducted_admin_share = adminShare - stripeFee
 			let shareArray = {
-				baseRate : base_rate,
-				grandTotal : grandTotal,
-				stripeFee : stripeFee,
-				adminShare : adminShare,
+				baseRate: base_rate,
+				grandTotal: grandTotal,
+				stripeFee: stripeFee,
+				adminShare: adminShare,
 				deducted_admin_share: deducted_admin_share,  // Admin will get this amount only
-				affiliateShare : (grandTotal - adminShare)
+				affiliateShare: (grandTotal - adminShare)
 			}
 			// travelAgentShare : 
-			if(this.BookingForm.value?.account_type == 'travel_planner' && !this.isCreatedByAdmin){
+			if (this.BookingForm.value?.account_type == 'travel_planner' && !this.isCreatedByAdmin) {
 				this.adminSharePercent = 15
-				shareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100 
-				shareArray['deducted_admin_share'] = shareArray['adminShare']- shareArray['stripeFee']
-				shareArray['travelAgentShare'] = base_rate * 0.10  
+				shareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100
+				shareArray['deducted_admin_share'] = shareArray['adminShare'] - shareArray['stripeFee']
+				shareArray['travelAgentShare'] = base_rate * 0.10
 			}
-			else if(this.isFarmoutBooking){
+			else if (this.isFarmoutBooking) {
 				this.adminSharePercent = 15
-				shareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100 
-				shareArray['deducted_admin_share'] = shareArray['adminShare']- shareArray['stripeFee']
-				shareArray['farmoutShare'] = base_rate * 0.10  
+				shareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100
+				shareArray['deducted_admin_share'] = shareArray['adminShare'] - shareArray['stripeFee']
+				shareArray['farmoutShare'] = base_rate * 0.10
 			}
 			this.shareArray = shareArray
 			// console.log('in function createReservationShareArray-->>>' , base_rate, shareArray )
@@ -1720,45 +1735,45 @@ export class NewBookingComponent implements OnInit {
 			// value['rateArray'] = JSON.parse(JSON.stringify(this.RatesForm))
 		}
 	}
-	createReservationReturnShareArray(){
+	createReservationReturnShareArray() {
 		console.log('createReservationReturnShareArray', this.BookingForm.value.return_grand_total)
 		if (this.Form.service_type.value == 'round_trip' && this.ReturnRatesForm) {
-			
+
 			let base_rate = 0
-		for (const key of Object.keys(this.ReturnRatesForm.all_inclusive_rates)) {
-			base_rate += this.ReturnRatesForm.all_inclusive_rates[key].baserate;
-		}
-		for (const key of Object.keys(this.ReturnRatesForm.amenities)) {
-			base_rate += this.ReturnRatesForm.amenities[key].baserate;
-		}
+			for (const key of Object.keys(this.ReturnRatesForm.all_inclusive_rates)) {
+				base_rate += this.ReturnRatesForm.all_inclusive_rates[key].baserate;
+			}
+			for (const key of Object.keys(this.ReturnRatesForm.amenities)) {
+				base_rate += this.ReturnRatesForm.amenities[key].baserate;
+			}
 			let returnGrandTotal = this.BookingForm.value.return_grand_total
 			let stripeFee = returnGrandTotal * 0.05 + 0.30
-			let adminShare = (base_rate * this.adminSharePercent) / 100  
+			let adminShare = (base_rate * this.adminSharePercent) / 100
 			let returnShareArray = {
-				baseRate : base_rate,
-				returnGrandTotal : returnGrandTotal,
-				stripeFee : stripeFee,
-				adminShare : adminShare,
-				affiliateShare : returnGrandTotal - adminShare
+				baseRate: base_rate,
+				returnGrandTotal: returnGrandTotal,
+				stripeFee: stripeFee,
+				adminShare: adminShare,
+				affiliateShare: returnGrandTotal - adminShare
 			}
 			// travelAgentShare : 
-			if(this.BookingForm.value?.account_type == 'travel_planner' && this.BookingForm.value?.affiliate_type == 'affiliate'){
-				returnShareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100 
-				returnShareArray['deducted_admin_share'] = returnShareArray['adminShare']- returnShareArray['stripeFee']
-				returnShareArray['travelAgentShare'] = base_rate * 0.10  
+			if (this.BookingForm.value?.account_type == 'travel_planner' && this.BookingForm.value?.affiliate_type == 'affiliate') {
+				returnShareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100
+				returnShareArray['deducted_admin_share'] = returnShareArray['adminShare'] - returnShareArray['stripeFee']
+				returnShareArray['travelAgentShare'] = base_rate * 0.10
 			}
-			else if(this.isFarmoutBooking){
+			else if (this.isFarmoutBooking) {
 				this.adminSharePercent = 15
-				returnShareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100 
-				returnShareArray['deducted_admin_share'] = returnShareArray['adminShare']- returnShareArray['stripeFee']
-				returnShareArray['farmoutShare'] = base_rate * 0.10  
+				returnShareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100
+				returnShareArray['deducted_admin_share'] = returnShareArray['adminShare'] - returnShareArray['stripeFee']
+				returnShareArray['farmoutShare'] = base_rate * 0.10
 			}
 
 			this.r_shareArray = returnShareArray
 			// console.log('in function createReservationreturnShareArray-->>>' , base_rate, returnShareArray )
 			return returnShareArray;
 			// value['returnRateArray'] = JSON.parse(JSON.stringify(this.ReturnRatesForm))
-			}
+		}
 	}
 
 
@@ -1783,27 +1798,27 @@ export class NewBookingComponent implements OnInit {
 
 		let value = this.BookingForm.value
 		value['proceed'] = this.proceed
-			if (this.RatesForm) {
-				value['rateArray'] = JSON.parse(JSON.stringify(this.RatesForm))
-				value['grand_total'] = value['rateArray']['grand_total']
-				value['sub_total'] = value['rateArray']['sub_total']
-				value['min_rate_involved'] = value['rateArray']['min_rate_involved']
-				value['shares_array'] = this.createReservationShareArray()
-				delete value['rateArray']['grand_total']
-				delete value['rateArray']['sub_total']
-				delete value['rateArray']['min_rate_involved']
-				// Return Rates Form
-				if (this.Form.service_type.value == 'round_trip' && this.ReturnRatesForm) {
-					value['returnRateArray'] = JSON.parse(JSON.stringify(this.ReturnRatesForm))
-					value['return_grand_total'] = value['returnRateArray']['r_grandtotal']
-					value['return_sub_total'] = value['returnRateArray']['r_subtotal']
-					delete value['returnRateArray']['r_grandtotal']
-					delete value['returnRateArray']['r_subtotal']
-					value['return_shares_array'] = this.createReservationReturnShareArray()
-				}
+		if (this.RatesForm) {
+			value['rateArray'] = JSON.parse(JSON.stringify(this.RatesForm))
+			value['grand_total'] = value['rateArray']['grand_total']
+			value['sub_total'] = value['rateArray']['sub_total']
+			value['min_rate_involved'] = value['rateArray']['min_rate_involved']
+			value['shares_array'] = this.createReservationShareArray()
+			delete value['rateArray']['grand_total']
+			delete value['rateArray']['sub_total']
+			delete value['rateArray']['min_rate_involved']
+			// Return Rates Form
+			if (this.Form.service_type.value == 'round_trip' && this.ReturnRatesForm) {
+				value['returnRateArray'] = JSON.parse(JSON.stringify(this.ReturnRatesForm))
+				value['return_grand_total'] = value['returnRateArray']['r_grandtotal']
+				value['return_sub_total'] = value['returnRateArray']['r_subtotal']
+				delete value['returnRateArray']['r_grandtotal']
+				delete value['returnRateArray']['r_subtotal']
+				value['return_shares_array'] = this.createReservationReturnShareArray()
 			}
-			
-			if (preview) {
+		}
+
+		if (preview) {
 			this.$spinner.show()
 			this.$api.createBooking(value, this.Form.updateType.value).subscribe((response: any) => {
 				// this.$errors.openDialog({
@@ -1811,12 +1826,12 @@ export class NewBookingComponent implements OnInit {
 				// 		error: `<span class='text-success'>${response.message}</span>`
 				// 	}
 				// })
-				if(response.data?.is_confirm==false){
+				if (response.data?.is_confirm == false) {
 					this.confirmMsg = response?.message
 					this.$spinner.hide()
 					$('#confirmationModal').modal('show')
 				}
-				else{
+				else {
 					this.$router.navigate(['/admin/daily-bookings-admin'])
 				}
 			})
@@ -1855,7 +1870,7 @@ export class NewBookingComponent implements OnInit {
 	* @param image_id [Optional] id of the image to be edited
 	*/
 	async uploadImage(event: any, image_type: string) {
-		if(!await this.commonServices.handleFile(event)) {
+		if (!await this.commonServices.handleFile(event)) {
 			return;
 		}
 		let image: any
@@ -2027,7 +2042,7 @@ export class NewBookingComponent implements OnInit {
 
 		this.BookingForm.get('travel_client_id').valueChanges.subscribe((value: number) => {
 			if (value && this.updateType == 'repeat' && this.updateType == 'return' && this.updateType == 'edit') {
-				this.handleTravelStaffAccounts({id:value})
+				this.handleTravelStaffAccounts({ id: value })
 			}
 		})
 		this.BookingForm.get('travel_client_acc').valueChanges.subscribe((value: any) => {
@@ -2082,7 +2097,7 @@ export class NewBookingComponent implements OnInit {
 				}
 			}
 		})
-		
+
 
 		// Affiliate Type
 		this.BookingForm.get('affiliate_type').valueChanges.subscribe((value: string) => {
@@ -2435,7 +2450,7 @@ export class NewBookingComponent implements OnInit {
 	}
 
 	fillLooseCustomerAddress(value: any) {
-		console.log('Addresss-->>>' , value);
+		console.log('Addresss-->>>', value);
 		(<FormGroup>this.BookingForm.get('loose_customer')).get('address').setValue(value?.formatted_address);
 		value.address_components.forEach(component => {
 			const types = component.types;
@@ -2448,7 +2463,7 @@ export class NewBookingComponent implements OnInit {
 			} else if (types.includes('country')) {
 				(<FormGroup>this.BookingForm.get('loose_customer')).get('country').setValue(component.long_name);
 			}
-		  });
+		});
 		(<FormGroup>this.BookingForm.get('loose_customer')).updateValueAndValidity();
 		this.BookingForm.updateValueAndValidity();
 	}
@@ -2567,7 +2582,7 @@ export class NewBookingComponent implements OnInit {
 	}
 
 	setValueByBookNow() {
-        if(this.updateType == 'reaffiliate'){
+		if (this.updateType == 'reaffiliate') {
 			console.log("in reaffiliate update type")
 			this.$api.getBookingDataForEdit(this.Form.reservation_id.value, this.updateType).subscribe((response: any) => {
 				response.data.booking_instructions = response.data.booking_instructions.replaceAll('<br />', '')
@@ -2575,8 +2590,8 @@ export class NewBookingComponent implements OnInit {
 				let editing_data = response.data
 				delete editing_data.affiliate_id
 				this.number_of_hours = response?.data?.number_of_hours
-				this.isTravelShare =  response?.data?.account_type=='travel_planner' ? true : false
-				if(response?.data?.account_type=='travel_planner'){
+				this.isTravelShare = response?.data?.account_type == 'travel_planner' ? true : false
+				if (response?.data?.account_type == 'travel_planner') {
 					this.getTravelClientAccounts(response?.data?.acc_id)
 				}
 				this.autofillData('cruise', editing_data);
@@ -2599,7 +2614,7 @@ export class NewBookingComponent implements OnInit {
 					}
 				}
 
-	
+
 				if (editing_data.driver_image) {
 					this.SetFormValue('driver_image_id', editing_data.driver_image.id);
 					this.driver_image['image'] = editing_data.driver_image.image;
@@ -2608,8 +2623,8 @@ export class NewBookingComponent implements OnInit {
 					this.SetFormValue('vehicle_image_id', editing_data.vehicle_image.id);
 					this.vehicle_image['image'] = editing_data.vehicle_image.image;
 				}
-	
-	
+
+
 				if (editing_data.extra_stops && editing_data.extra_stops.length > 0) {
 					editing_data.extra_stops.forEach((item: any, index: number) => {
 						if (item.hasOwnProperty('address')) {
@@ -2624,32 +2639,32 @@ export class NewBookingComponent implements OnInit {
 					console.error('No Extra Stops found.')
 				}
 				this.BookingForm.updateValueAndValidity()
-	
+
 				// override specific value
 				this.BookingForm.patchValue({
 					service_type: response.data.service_type == 'oneway' ? 'one_way' : response.data['service_type'] == 'roundtrip' ? 'round_trip' : 'charter_tour',
 				})
-	
+
 				try {
 					this.PaxTelObject.setCountry(this.BookingForm.get('passenger_cell_country').value);
 				} catch
 				{
 					console.error('Set Country Value is null.')
 				}
-	
+
 				this.$spinner.hide('normalspinner')
 				console.log('<<<<<<<<<<<-----------set pickup date------->>>>', moment().format('YYYY-MM-DD'), this.updateType)
-				if ( this.updateType == 'edit') {
+				if (this.updateType == 'edit') {
 					this.scroll('pickup_adress')
 					// this.SetFormValue('pickup_date', moment().format('YYYY-MM-DD'))
 					this.SetFormValue('pickup_date', editing_data?.pickup_date)
 				}
-				if(this.updateType == 'repeat' || this.updateType == 'return' ){
+				if (this.updateType == 'repeat' || this.updateType == 'return') {
 					this.scroll('pickup_adress')
-					if(new Date(editing_data?.pickup_date).getTime() < new Date().getTime()){
+					if (new Date(editing_data?.pickup_date).getTime() < new Date().getTime()) {
 						this.SetFormValue('pickup_date', moment().format('YYYY-MM-DD'))
 					}
-					else{
+					else {
 						this.SetFormValue('pickup_date', editing_data?.pickup_date)
 					}
 				}
