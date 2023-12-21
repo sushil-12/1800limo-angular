@@ -167,12 +167,16 @@ export class AddTravelPlannerAccountComponent implements OnInit
 	
 		this.activatedroute.queryParams.subscribe((params: any) =>
 		{
-			// if (params.travelPlannerId )
-			// {
-			// 	this.travelPlannerId = params.travelPlannerId
-			// 	this.getTravelAgentData()
-			// } 
-			if(localStorage.getItem('travelAgent_id')){
+			if (params.travelPlannerId )
+			{
+				this.travelPlannerId = params.travelPlannerId
+				localStorage.setItem('travelAgent_id',this.travelPlannerId)
+				this.addTravelPlannerAccountForm.patchValue({
+					acc_id:this.travelPlannerId
+					})
+				this.getTravelAgentData()
+			} 
+			else if(localStorage.getItem('travelAgent_id')){
 				this.travelPlannerId = localStorage.getItem('travelAgent_id')
 				this.addTravelPlannerAccountForm.patchValue({
 				acc_id:this.travelPlannerId
