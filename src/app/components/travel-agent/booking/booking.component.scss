@@ -387,11 +387,11 @@ a.dropdown-item {
 .uploadExcelFile {
     position: sticky;
     left: 50px;
-    color: #fff;
+    color: #000;
     text-transform: uppercase;
     padding: 0.5rem 0.8rem;
     border-radius: 10px;
-    font-size: 0.855rem;
+    font-size: 0.955rem;
     margin: 0 10px;
     font-weight: 600;
     display: inline-block;
@@ -426,7 +426,7 @@ a.dropdown-item {
 }
 
 .uploadExcelFile svg {
-    height: 13px;
-    fill: #fff;
+    height: 17px;
+    fill: #000;
     margin-bottom: 2px;
 }
