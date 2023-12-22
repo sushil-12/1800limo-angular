@@ -34,6 +34,7 @@ export class TravelPlannerComponent implements OnInit {
   public prevPageUrl:string;
   public nextPageUrl:string;
   searchText: any;
+  travelAccountCount: any;
 
   constructor(
     private adminService:AdminService,
@@ -77,6 +78,7 @@ export class TravelPlannerComponent implements OnInit {
         this.travelPlanners=this.travelPlannersRes.data.data;
 
         this.firstPage=1;
+        this.travelAccountCount = this.travelPlannersRes?.data?.account_counts
         this.lastPage=this.travelPlannersRes.data.last_page;
         this.totalPage=this.travelPlannersRes.data.last_page;
         this.currentPage=this.travelPlannersRes.data.current_page;
