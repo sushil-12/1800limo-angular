@@ -492,7 +492,7 @@ console.log("in function calculate total",this.grandtotal,this.subtotal)
 		try {
 			let baseRate = 0;
 			console.log('in function calculateBaseRateShare',this.RatesForm )
-			if(this?.service_type == 'charter_tour'){
+			if(this?.service_type == 'charter_tour' && !this.is_readonly_min_rate){
 				baseRate += (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates'))?.get('Base_Rate')))?.get("baserate").value * this.nums
 			console.log('in function if charter-->>>', baseRate)
 
@@ -614,7 +614,7 @@ console.log("in function calculate total",this.grandtotal,this.subtotal)
 			this.total[subform] = Number(Number(amount).toFixed(2));
 			if (formgroup == 'amenities' || formgroup == "all_inclusive_rates") {
 				let baseRateAmount = (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates')).get('Base_Rate'))).get("baserate").value;
-				if(this.service_type == 'charter_tour'){
+				if(this.service_type == 'charter_tour' && !this.is_readonly_min_rate){
 					baseRateAmount = (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates')).get('Base_Rate'))).get("baserate").value * this.nums
 				}
 				baseRateAmount += this.calc_admin_share

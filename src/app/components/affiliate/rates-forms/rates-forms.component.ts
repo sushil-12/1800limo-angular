@@ -571,7 +571,7 @@ export class RatesFormsComponent implements OnInit , OnChanges {
 	calculateReturnBaseRateShare(){
 		try {
 			let baseRate = 0;
-			if(this.book_data.service_type == 'charter_tour'){
+			if(this.book_data.service_type == 'charter_tour' && !this.is_readonly_min_rate){
 				baseRate += (<FormGroup>((<FormGroup>this.ReturnRatesForm.get('all_inclusive_rates'))?.get('Base_Rate')))?.get("baserate").value * this.nums
 			}
 			else{
@@ -609,7 +609,7 @@ export class RatesFormsComponent implements OnInit , OnChanges {
 		try {
 			let baseRate = 0;
 			console.log('in function calculateBaseRateShare',this.RatesForm )
-			if(this.book_data?.service_type == 'charter_tour'){
+			if(this.book_data?.service_type == 'charter_tour' && !this.is_readonly_min_rate){
 				baseRate += (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates'))?.get('Base_Rate')))?.get("baserate").value * this.nums
 			}
 			else{
@@ -727,7 +727,7 @@ export class RatesFormsComponent implements OnInit , OnChanges {
 			this.total[subform] = Number(Number(amount).toFixed(2));
 			if (formgroup == 'amenities' || formgroup == "all_inclusive_rates") {
 				let baseRateAmount = (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates')).get('Base_Rate'))).get("baserate").value;
-				if(this.book_data.service_type == 'charter_tour'){
+				if(this.book_data.service_type == 'charter_tour' && !this.is_readonly_min_rate){
 					baseRateAmount = (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates')).get('Base_Rate'))).get("baserate").value * this.nums
 				}
 				baseRateAmount += this.calc_admin_share
@@ -832,7 +832,7 @@ export class RatesFormsComponent implements OnInit , OnChanges {
 			this.r_total[subform] = Number(Number(amount).toFixed(2));
 			if (formgroup == 'amenities' || formgroup == "all_inclusive_rates") {
 				let baseRateAmount = (<FormGroup>((<FormGroup>this.ReturnRatesForm.get('all_inclusive_rates')).get('Base_Rate'))).get("baserate").value;
-				if(this.book_data.service_type == 'charter_tour'){
+				if(this.book_data.service_type == 'charter_tour' && !this.is_readonly_min_rate){
 					baseRateAmount = (<FormGroup>((<FormGroup>this.ReturnRatesForm.get('all_inclusive_rates')).get('Base_Rate'))).get("baserate").value * this.nums
 				}
 				baseRateAmount += this.r_calc_admin_share
