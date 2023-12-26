@@ -483,7 +483,6 @@ export class RatesFormComponent implements OnInit, OnChanges {
 
 	fillReturnRateForm(data){
 		this.returnRatesdata.next({})
-		console.log('in function fill return rate form' , data)
 		this.$api.fetchRatesByAffiliateVeh(data.vehicle_id, data).subscribe((response: any) => {
 			this.is_readonly_min_rate = response?.data?.min_rate_involved ? true : false
 				this.returnRatesdata.next(response?.data?.retrunRateArray)
@@ -669,7 +668,6 @@ export class RatesFormComponent implements OnInit, OnChanges {
 		this.admin_share = (this.isTravelShare && !this.isCreatedByAdmin || this.isFarmoutBooking) ? 15 : 25
 		this.r_calc_admin_share = baseRate * this.admin_share / 100
 		this.isFarmoutBooking ? this.r_farmoutShare = baseRate * 0.10 : ''
-		console.log('in function caculate admin share-->>', this.r_calc_admin_share)
 	}
 	calculateReturnTravelShare() {
 		if (!this.isTravelShare && this.isCreatedByAdmin) {
@@ -682,8 +680,8 @@ export class RatesFormComponent implements OnInit, OnChanges {
 	calculateBaseRateShare(){
 		try {
 			let baseRate = 0;
-			console.log('in function calculateBaseRateShare',this.RatesForm )
-			if(this.book_data?.service_type == 'charter_tour'){
+
+			if(this.book_data?.service_type == 'charter_tour' && !this.is_readonly_min_rate){
 				baseRate += (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates'))?.get('Base_Rate')))?.get("baserate").value * this.nums
 			}
 			else{
@@ -698,7 +696,6 @@ export class RatesFormComponent implements OnInit, OnChanges {
 					baseRate += (<FormGroup>((<FormGroup>this.RatesForm.get('amenities'))?.get(j)))?.get("baserate").value || 0
 				})
 	
-			console.log('in function calculateBaseRateShare', baseRate)
 			
 			return baseRate;
 		} catch (error) {
@@ -706,16 +703,13 @@ export class RatesFormComponent implements OnInit, OnChanges {
 		}
 	}
 	calculateAdminShare() {
-		console.log('in function calculateAdminShare')
 
 		let baseRate = this.calculateBaseRateShare()
 		this.admin_share = (this.isTravelShare && !this.isCreatedByAdmin || this.isFarmoutBooking) ? 15 : 25
 		this.calc_admin_share = baseRate * this.admin_share / 100
 		this.isFarmoutBooking ? this.farmoutShare = baseRate * 0.10 : ''
-		console.log('in function caculate admin share-->>', this.calc_admin_share)
 	}
 	calculateTravelShare() {
-		console.log('in function calculateTravelShare')
 		if (!this.isTravelShare && this.isCreatedByAdmin) {
 			return 0
 		}
@@ -724,7 +718,6 @@ export class RatesFormComponent implements OnInit, OnChanges {
 	}
 
 	async calculateAmount(form: string, formgroup: string, subform: string) {
-		console.log('in function calculateAmount')
 		await this.calculateAdminShare()
 		await this.calculateTravelShare()
 		if (form === "RatesForm") {
@@ -801,7 +794,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 			this.total[subform] = Number(Number(amount).toFixed(2));
 			if (formgroup == 'amenities' || formgroup == "all_inclusive_rates") {
 				let baseRateAmount = (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates')).get('Base_Rate'))).get("baserate").value;
-				if(this.book_data.service_type == 'charter_tour'){
+				if(this.book_data.service_type == 'charter_tour' && !this.is_readonly_min_rate){
 					baseRateAmount = (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates')).get('Base_Rate'))).get("baserate").value * this.nums
 				}
 				baseRateAmount += this.calc_admin_share
