@@ -27,7 +27,7 @@ export class CheckProfileCompleteGuard implements CanActivate {
       console.log('referringURL',this.location.path(true))
     const currentUser: any = JSON.parse(localStorage.getItem('userData'))
     const accountStatus: any=localStorage.getItem('agentAccountStatus')
-    if (currentUser?.RoleName != 'travel_agent') {
+    if (currentUser?.RoleName != 'travel_agent' && currentUser?.RoleName != 'admin') {
       localStorage.setItem('review_referral_url',this.location.path(true))
       this.router.navigate(['/home']);
       return false;

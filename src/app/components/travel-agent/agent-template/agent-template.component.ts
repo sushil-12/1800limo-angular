@@ -29,6 +29,7 @@ export class AgentTemplateComponent implements OnInit {
 	public referral_code: any;
 	showCopyIcon:boolean;
 	accountStatus:any;
+	bkpData:any='';
 
 	constructor(
 		private router: Router,
@@ -41,6 +42,7 @@ export class AgentTemplateComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
+		this.bkpData = JSON.parse(localStorage.getItem('bkp_crnt_dt')) ?  JSON.parse(localStorage.getItem('bkp_crnt_dt')) : ''
 		this.invite_link = localStorage.getItem('invite_link')
 		var referralCode = (new URL(this.invite_link)).searchParams.get("refferal_code");
 		this.referral_code = atob(referralCode);
@@ -191,6 +193,24 @@ export class AgentTemplateComponent implements OnInit {
 				}
 				this.router.navigate(['/']);
 			});
+	}
+
+	backToAdmin(){
+		let bkp_a_token = localStorage.getItem('bkp_a_token')
+		let bkp_crnt_dt = localStorage.getItem('bkp_crnt_dt')
+		let bkp_u_dt = localStorage.getItem('bkp_u_dt')
+		localStorage.setItem('access_token', bkp_a_token)
+		localStorage.setItem('currentUser', bkp_crnt_dt)
+		localStorage.setItem('userData', bkp_u_dt)
+		sessionStorage.removeItem('step_completed')
+		sessionStorage.removeItem('step_completed_obj')
+		localStorage.removeItem('bkp_a_token')
+		localStorage.removeItem('bkp_crnt_dt')
+		localStorage.removeItem('bkp_u_dt')
+		localStorage.removeItem('agentAccountStatus')
+		  this.router.navigateByUrl('/admin/daily-bookings-admin');
+		
+		
 	}
 
 
