@@ -208,6 +208,7 @@ export class AgentTemplateComponent implements OnInit {
 		localStorage.removeItem('bkp_crnt_dt')
 		localStorage.removeItem('bkp_u_dt')
 		localStorage.removeItem('agentAccountStatus')
+		localStorage.removeItem('invite_link')
 		  this.router.navigateByUrl('/admin/daily-bookings-admin');
 		
 		

@@ -511,7 +511,7 @@
 				<div class="col-md-4">
 					<div class="input-checkbox">
 						<div class="checkbox" [ngClass]="
-								service.includes('over_the_road')
+								service.includes('over_the_road') || service.includes('longDistance')
 									? 'active'
 									: ''
 							" (click)="onServiceChange('over_the_road')">
