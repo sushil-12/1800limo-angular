@@ -40,6 +40,7 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 	public currentYear: number = new Date().getFullYear();
 	public progressBar: boolean;
 	chevron_up: boolean = false;
+	bkpData:any='';
 
 
 	@Input() router1: any;
@@ -75,6 +76,7 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 
 	ngOnInit(): void
 	{
+		this.bkpData = JSON.parse(localStorage.getItem('bkp_crnt_dt')) ?  JSON.parse(localStorage.getItem('bkp_crnt_dt')) : ''
 		// document.addEventListener("click", 
 		// (()=>{
 		// 	if(document.body.classList.contains('sidenav-toggled')){
@@ -563,4 +565,24 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 	{
 		this.chevron_up = !this.chevron_up
 	}
+
+	backToAdmin(){
+		let bkp_a_token = localStorage.getItem('bkp_a_token')
+		let bkp_crnt_dt = localStorage.getItem('bkp_crnt_dt')
+		let bkp_u_dt = localStorage.getItem('bkp_u_dt')
+		localStorage.setItem('access_token', bkp_a_token)
+		localStorage.setItem('currentUser', bkp_crnt_dt)
+		localStorage.setItem('userData', bkp_u_dt)
+		localStorage.removeItem("account_approval");
+		localStorage.removeItem("recject_cause_message");
+		localStorage.removeItem('stepCompleted')
+		localStorage.removeItem('step_completed_obj')
+		localStorage.removeItem('bkp_a_token')
+		localStorage.removeItem('bkp_crnt_dt')
+		localStorage.removeItem('bkp_u_dt')
+		this.router.navigateByUrl('/admin/daily-bookings-admin');
+		
+		
+	}
+
 }
