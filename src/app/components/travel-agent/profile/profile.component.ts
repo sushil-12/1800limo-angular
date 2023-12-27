@@ -90,13 +90,13 @@ export class ProfileComponent implements OnInit {
         });
        },15000)
     }
-   else if(this.accountStatus == 'pending'){
-      this.errorDialog.openDialog({
-        errors: {
-          error: `Please wait! As your account status is ${this.accountStatus} from admin.`
-        }
-      }) 
-    }
+  //  else if(this.accountStatus == 'pending'){
+  //     this.errorDialog.openDialog({
+  //       errors: {
+  //         error: `Please wait! As your account status is ${this.accountStatus} from admin.`
+  //       }
+  //     }) 
+  //   }
     this.route.url.subscribe(segments => {
       // The "step" part is in the last segment
       const lastSegment = segments[segments.length - 1];

@@ -526,6 +526,11 @@ export class AdminService {
 		}
 		return this.httpClient.get(path).toPromise();;
 	}
+
+	loginAsUser(id){
+		return this.httpClient.get(this.serverUrl + 'admin/login-as-user/' + id);
+	}
+
 	getAccounts(url, isDeletedAcc, keyword) {
 		var path;
 		if (url) {
