@@ -982,11 +982,11 @@ export class Step2Component implements OnInit {
 			return;
 		}
 		this.addBankForm.value.stepCompleted = this.affiliateService.getUpdatedStepsLocal('2');
-		let payload = this.addBankForm.value
-		payload['stepCompleted'] = this.affiliateService.getUpdatedStepsLocal('2');
 		this.addBankForm.patchValue({
 			ssn:this.ssn_copy
 		})
+		let payload = this.addBankForm.value
+		payload['stepCompleted'] = this.affiliateService.getUpdatedStepsLocal('2');
 		console.log(this.addBankForm.value , payload);
 		this.spinner.show();//show spinner
 		// this.stateManagementService.setprogressBar(true);

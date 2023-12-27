@@ -207,7 +207,7 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 			luggage: ['', [Validators.required, Validators.pattern("^[0-9]*$")]],
 			charterCancelPolicy: ['2', Validators.required],
 			nonCharterCancelPolicy: ['2', Validators.required],
-			typeOfService: this.formBuilder.array([], [Validators.required]),
+			typeOfService: this.formBuilder.array([]),
 			amenities: this.formBuilder.array([], [Validators.required]),
 			specialAmenitiesGet: this.formBuilder.array([]),
 			specialAmenities: this.formBuilder.array([]),
@@ -445,6 +445,7 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 							luggage: this.response2?.data?.luggage,
 							charterCancelPolicy: this.response2?.data?.charterCancelPolicy,
 							nonCharterCancelPolicy: this.response2?.data?.nonCharterCancelPolicy,
+							typeOfService: this.response2.data.typeOfService
 						});
 
 						
@@ -1329,6 +1330,7 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 
 	pushValuesTypeOfService(value: Array<any>)
 	{
+		console.log('type of srvicer',value)
 		this.typeOfService.clear()
 		if (value.length == 0)
 		{
