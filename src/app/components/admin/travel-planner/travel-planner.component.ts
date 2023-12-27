@@ -5,6 +5,7 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { ThemePalette } from '@angular/material/core';
+import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 declare var $: any;
 @Component({
   selector: 'app-travel-planner',
@@ -40,6 +41,7 @@ export class TravelPlannerComponent implements OnInit {
   constructor(
     private adminService: AdminService,
     private router: Router,
+    private errorDialog: ErrorDialogService,
     private spinner: NgxSpinnerService) { }
 
   ngOnInit(): void {
@@ -216,6 +218,15 @@ export class TravelPlannerComponent implements OnInit {
       })
     ).subscribe(response => {
       this.spinner.hide()
+      this.loginAsUserResponse = response
+      if (this.loginAsUserResponse.data.user?.is_profile_complete && this.loginAsUserResponse?.data?.travel_planner?.account_approval == 'rejected') {
+        this.errorDialog.openDialog({
+          errors: {
+            error: `This account is being rejected by admin. So, you can't log into this account!`
+          }
+        })
+        return;
+      }
       let bkp_a_token = localStorage.getItem('access_token')
       let bkp_crnt_dt = localStorage.getItem('currentUser')
       let bkp_u_dt = localStorage.getItem('userData')
@@ -223,10 +234,10 @@ export class TravelPlannerComponent implements OnInit {
       localStorage.setItem('bkp_crnt_dt', bkp_crnt_dt)
       localStorage.setItem('bkp_u_dt', bkp_u_dt)
       console.log("response", response)
-      this.loginAsUserResponse = response
       sessionStorage.setItem('step_completed', JSON.stringify(this.loginAsUserResponse.data?.travel_planner.step_completed))
       sessionStorage.setItem('step_completed_obj', JSON.stringify(this.loginAsUserResponse.data?.travel_planner.step_completed_obj))
       localStorage.setItem('agentAccountStatus', this.loginAsUserResponse?.data?.travel_planner?.account_approval)
+      localStorage.setItem('invite_link', this.loginAsUserResponse?.data?.invite_link)
       localStorage.setItem('access_token', this.loginAsUserResponse.data?.access_token)
       localStorage.setItem('currentUser', JSON.stringify(this.loginAsUserResponse.data?.user))
       // localStorage.setItem('userData', bkp_u_dt)
