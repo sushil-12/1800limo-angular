@@ -697,327 +697,6 @@
 						</div>
 					</div>
 					<hr>
-					<!-- Grand Total -->
-					<h4 class="font-weight-bolder m-0">
-						Vehicle Preferences
-					</h4>
-					<div class="row p-2">
-						<div class="col-md-4 key">
-							<span>
-								Vehicle Type
-							</span>
-						</div>
-						<div class="col-md-8 value">
-							<span class="font-weight-bolder preview-output-feild">
-								{{ bookingPreview?.vehicle_type_name}}
-							</span>
-						</div>
-					</div>
-					<div class="row p-2">
-						<div class="col-md-4 key">
-							<span>
-								Vehicle Make
-							</span>
-						</div>
-						<div class="col-md-8 value">
-							<span class="font-weight-bolder preview-output-feild">
-								{{ bookingPreview?.vehicle_make}}
-							</span>
-						</div>
-					</div>
-					<div class="row p-2">
-						<div class="col-md-4 key">
-							<span>
-								Vehicle Model
-							</span>
-						</div>
-						<div class="col-md-8 value">
-							<span class="font-weight-bolder preview-output-feild">
-								{{ bookingPreview?.vehicle_model}}
-							</span>
-						</div>
-					</div>
-					<div class="row p-2">
-						<div class="col-md-4 key">
-							<span>
-								Vehicle Year
-							</span>
-						</div>
-						<div class="col-md-8 value">
-							<span class="font-weight-bolder preview-output-feild">
-								{{ bookingPreview?.vehicle_year}}
-							</span>
-						</div>
-					</div>
-					<div class="row p-2">
-						<div class="col-md-4 key">
-							<span>
-								Vehicle Color
-							</span>
-						</div>
-						<div class="col-md-8 value">
-							<span class="font-weight-bolder preview-output-feild">
-								{{ bookingPreview?.vehicle_color}}
-							</span>
-						</div>
-					</div>
-					<div class="row p-2">
-						<div class="col-md-4 key">
-							<span>
-								Licence plate
-							</span>
-						</div>
-						<div class="col-md-8 value">
-							<span class="font-weight-bolder preview-output-feild">
-								{{ bookingPreview?.vehicle_license_plate}}
-							</span>
-						</div>
-					</div>
-					<div class="row p-2">
-						<div class="col-md-4 key">
-							<span>
-								No. of seats
-							</span>
-						</div>
-						<div class="col-md-8 value">
-							<span class="font-weight-bolder preview-output-feild">
-								{{ bookingPreview?.vehicle_seats}}
-							</span>
-						</div>
-					</div>
-					<hr>
-					<!-- Driver Information -->
-					<h4 class="font-weight-bolder m-0 mt-3">
-						Driver Information
-					</h4>
-					<!-- Driver Name -->
-					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Name
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
-									{{ textFormatter(bookingPreview?.driver_name) | titlecase }}
-								</span>
-							</div>
-						</div>
-					</div>
-
-					<!-- Driver Email -->
-					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Email
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
-									{{ textFormatter(bookingPreview?.driver_email) }}
-								</span>
-							</div>
-						</div>
-					</div>
-
-					<!-- Driver Cell -->
-					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Phone
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
-									({{ bookingPreview?.driver_cell_isd }}) {{
-									bookingPreview?.driver_cell }}
-								</span>
-							</div>
-						</div>
-					</div>
-					<hr>
-					<!-- Affiliate -->
-					<div>
-						<h4 class="font-weight-bolder m-0 mt-3">
-							{{bookingPreview?.affiliate_type == 'affiliate' ? 'Affiliate Information' : 'LOose'}}
-						</h4>
-
-						<!-- Affiliate > Name -->
-						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key">
-									<span>
-										Name
-									</span>
-								</div>
-								<div class="col-md-8 value">
-									<span class="font-weight-bolder preview-output-feild">
-										{{isAffiliate ? bookingPreview?.affiliate_name :
-										bookingPreview?.lose_affiliate_name }}
-									</span>
-								</div>
-							</div>
-						</div>
-
-						<!-- Affiliate > Email -->
-						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key">
-									<span>
-										Email
-									</span>
-								</div>
-								<div class="col-md-8 value">
-									<span class="font-weight-bolder preview-output-feild">
-										{{isAffiliate ? bookingPreview?.affiliate_email :
-										bookingPreview?.lose_affiliate_email }}
-									</span>
-								</div>
-							</div>
-						</div>
-
-						<!-- Affiliate > Phone -->
-						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key">
-									<span>
-										Phone
-									</span>
-								</div>
-								<div class="col-md-8 value">
-									<span class="font-weight-bolder preview-output-feild">
-										{{isAffiliate ? bookingPreview?.affiliate_phone :
-										bookingPreview?.lose_affiliate_phone }}
-
-									</span>
-								</div>
-							</div>
-						</div>
-						<hr>
-					</div>
-
-					<!-- Passenger Information -->
-					<h4 class="font-weight-bolder m-0 mt-3">
-						Passenger Information
-					</h4>
-
-					<!-- Passenger > Name -->
-					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Name
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
-									{{ textFormatter(bookingPreview?.passenger_name) }}
-								</span>
-							</div>
-						</div>
-					</div>
-
-					<!-- Passenger > Email -->
-					<!-- <div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Email
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
-									{{ textFormatter(bookingPreview?.passenger_email) }}
-								</span>
-							</div>
-						</div>
-					</div> -->
-
-					<!-- Passenger > Phone -->
-					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Phone
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
-									({{ bookingPreview?.passenger_cell_isd }})
-									{{ textFormatter(bookingPreview?.passenger_cell) }}
-								</span>
-							</div>
-						</div>
-					</div>
-					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									No. of passenger
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
-									{{ bookingPreview?.total_passengers }}
-								</span>
-							</div>
-						</div>
-					</div>
-					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Luggage count
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
-									{{ bookingPreview?.luggage_count }}
-								</span>
-							</div>
-						</div>
-					</div>
-					<!-- Travel Information -->
-					<!-- <h4 class="font-weight m-0 mt-3">
-						Travel Information
-					</h4> -->
-
-					<!-- Number of Hours -->
-					<div class="mx-2" *ngIf="bookingPreview?.service_type == 'charter_tour'">
-						<div class="row">
-							<div class="col-md-4 key">
-								<span>
-									Booking Hours
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
-									{{ bookingPreview?.number_of_hours }}
-								</span>
-							</div>
-						</div>
-					</div>
-					<hr>
-
-
-
-
-					<!-- Booking Information - Ends -->
-
-					<!-- affiliate details -->
-					<!-- <div *ngIf="bookingPreview?.affiliate_type == 'affiliate'; then affiliateUser else looseAffiliate">
-					</div> -->
-
-
-
-
-
-					<!-- Grand Total -->
-
-
 					<!-- Travel Information -->
 					<h4 class="font-weight-bolder m-0 mt-3">
 						Travel Information
@@ -1365,6 +1044,328 @@
 					</div>
 				</div>
 				<hr>
+				<!-- Grand Total -->
+				<h4 class="font-weight-bolder m-0">
+					Vehicle Preferences
+				</h4>
+				<div class="row p-2">
+					<div class="col-md-4 key">
+						<span>
+							Vehicle Type
+						</span>
+					</div>
+					<div class="col-md-8 value">
+						<span class="font-weight-bolder preview-output-feild">
+							{{ bookingPreview?.vehicle_type_name}}
+						</span>
+					</div>
+				</div>
+				<div class="row p-2">
+					<div class="col-md-4 key">
+						<span>
+							Vehicle Make
+						</span>
+					</div>
+					<div class="col-md-8 value">
+						<span class="font-weight-bolder preview-output-feild">
+							{{ bookingPreview?.vehicle_make}}
+						</span>
+					</div>
+				</div>
+				<div class="row p-2">
+					<div class="col-md-4 key">
+						<span>
+							Vehicle Model
+						</span>
+					</div>
+					<div class="col-md-8 value">
+						<span class="font-weight-bolder preview-output-feild">
+							{{ bookingPreview?.vehicle_model}}
+						</span>
+					</div>
+				</div>
+				<div class="row p-2">
+					<div class="col-md-4 key">
+						<span>
+							Vehicle Year
+						</span>
+					</div>
+					<div class="col-md-8 value">
+						<span class="font-weight-bolder preview-output-feild">
+							{{ bookingPreview?.vehicle_year}}
+						</span>
+					</div>
+				</div>
+				<div class="row p-2">
+					<div class="col-md-4 key">
+						<span>
+							Vehicle Color
+						</span>
+					</div>
+					<div class="col-md-8 value">
+						<span class="font-weight-bolder preview-output-feild">
+							{{ bookingPreview?.vehicle_color}}
+						</span>
+					</div>
+				</div>
+				<div class="row p-2">
+					<div class="col-md-4 key">
+						<span>
+							Licence plate
+						</span>
+					</div>
+					<div class="col-md-8 value">
+						<span class="font-weight-bolder preview-output-feild">
+							{{ bookingPreview?.vehicle_license_plate}}
+						</span>
+					</div>
+				</div>
+				<div class="row p-2">
+					<div class="col-md-4 key">
+						<span>
+							No. of seats
+						</span>
+					</div>
+					<div class="col-md-8 value">
+						<span class="font-weight-bolder preview-output-feild">
+							{{ bookingPreview?.vehicle_seats}}
+						</span>
+					</div>
+				</div>
+				<hr>
+				<!-- Driver Information -->
+				<h4 class="font-weight-bolder m-0 mt-3">
+					Driver Information
+				</h4>
+				<!-- Driver Name -->
+				<div class="mx-2">
+					<div class="row m-0">
+						<div class="col-md-4 key">
+							<span>
+								Name
+							</span>
+						</div>
+						<div class="col-md-8 value">
+							<span class="font-weight-bolder preview-output-feild">
+								{{ textFormatter(bookingPreview?.driver_name) | titlecase }}
+							</span>
+						</div>
+					</div>
+				</div>
+
+				<!-- Driver Email -->
+				<div class="mx-2">
+					<div class="row m-0">
+						<div class="col-md-4 key">
+							<span>
+								Email
+							</span>
+						</div>
+						<div class="col-md-8 value">
+							<span class="font-weight-bolder preview-output-feild">
+								{{ textFormatter(bookingPreview?.driver_email) }}
+							</span>
+						</div>
+					</div>
+				</div>
+
+				<!-- Driver Cell -->
+				<div class="mx-2">
+					<div class="row m-0">
+						<div class="col-md-4 key">
+							<span>
+								Phone
+							</span>
+						</div>
+						<div class="col-md-8 value">
+							<span class="font-weight-bolder preview-output-feild">
+								({{ bookingPreview?.driver_cell_isd }}) {{
+								bookingPreview?.driver_cell }}
+							</span>
+						</div>
+					</div>
+				</div>
+				<hr>
+				<!-- Affiliate -->
+				<div>
+					<h4 class="font-weight-bolder m-0 mt-3">
+						{{bookingPreview?.affiliate_type == 'affiliate' ? 'Affiliate Information' : 'LOose'}}
+					</h4>
+
+					<!-- Affiliate > Name -->
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Name
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder preview-output-feild">
+									{{isAffiliate ? bookingPreview?.affiliate_name :
+									bookingPreview?.lose_affiliate_name }}
+								</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Affiliate > Email -->
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Email
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder preview-output-feild">
+									{{isAffiliate ? bookingPreview?.affiliate_email :
+									bookingPreview?.lose_affiliate_email }}
+								</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Affiliate > Phone -->
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Phone
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder preview-output-feild">
+									{{isAffiliate ? bookingPreview?.affiliate_phone :
+									bookingPreview?.lose_affiliate_phone }}
+
+								</span>
+							</div>
+						</div>
+					</div>
+					<hr>
+				</div>
+
+				<!-- Passenger Information -->
+				<h4 class="font-weight-bolder m-0 mt-3">
+					Passenger Information
+				</h4>
+
+				<!-- Passenger > Name -->
+				<div class="mx-2">
+					<div class="row m-0">
+						<div class="col-md-4 key">
+							<span>
+								Name
+							</span>
+						</div>
+						<div class="col-md-8 value">
+							<span class="font-weight-bolder preview-output-feild">
+								{{ textFormatter(bookingPreview?.passenger_name) }}
+							</span>
+						</div>
+					</div>
+				</div>
+
+				<!-- Passenger > Email -->
+				<!-- <div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Email
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder preview-output-feild">
+									{{ textFormatter(bookingPreview?.passenger_email) }}
+								</span>
+							</div>
+						</div>
+					</div> -->
+
+				<!-- Passenger > Phone -->
+				<div class="mx-2">
+					<div class="row m-0">
+						<div class="col-md-4 key">
+							<span>
+								Phone
+							</span>
+						</div>
+						<div class="col-md-8 value">
+							<span class="font-weight-bolder preview-output-feild">
+								({{ bookingPreview?.passenger_cell_isd }})
+								{{ textFormatter(bookingPreview?.passenger_cell) }}
+							</span>
+						</div>
+					</div>
+				</div>
+				<div class="mx-2">
+					<div class="row m-0">
+						<div class="col-md-4 key">
+							<span>
+								No. of passenger
+							</span>
+						</div>
+						<div class="col-md-8 value">
+							<span class="font-weight-bolder preview-output-feild">
+								{{ bookingPreview?.total_passengers }}
+							</span>
+						</div>
+					</div>
+				</div>
+				<div class="mx-2">
+					<div class="row m-0">
+						<div class="col-md-4 key">
+							<span>
+								Luggage count
+							</span>
+						</div>
+						<div class="col-md-8 value">
+							<span class="font-weight-bolder preview-output-feild">
+								{{ bookingPreview?.luggage_count }}
+							</span>
+						</div>
+					</div>
+				</div>
+				<!-- Travel Information -->
+				<!-- <h4 class="font-weight m-0 mt-3">
+						Travel Information
+					</h4> -->
+
+				<!-- Number of Hours -->
+				<div class="mx-2" *ngIf="bookingPreview?.service_type == 'charter_tour'">
+					<div class="row">
+						<div class="col-md-4 key">
+							<span>
+								Booking Hours
+							</span>
+						</div>
+						<div class="col-md-8 value">
+							<span class="font-weight-bolder preview-output-feild">
+								{{ bookingPreview?.number_of_hours }}
+							</span>
+						</div>
+					</div>
+				</div>
+				<hr>
+
+
+
+
+				<!-- Booking Information - Ends -->
+
+				<!-- affiliate details -->
+				<!-- <div *ngIf="bookingPreview?.affiliate_type == 'affiliate'; then affiliateUser else looseAffiliate">
+					</div> -->
+
+
+
+
+
+				<!-- Grand Total -->
+
+
+
 				<div class="distribution_rate"
 					*ngIf="bookingPreview?.affiliate_type === 'affiliate' && bookingPreview?.payment_status=='unpaid' && bookingPreview?.share_array?.length != 0">
 					<h4 class="font-weight-bolder m-0 my-3">

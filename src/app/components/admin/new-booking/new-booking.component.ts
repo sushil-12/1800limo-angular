@@ -455,6 +455,7 @@ export class NewBookingComponent implements OnInit {
 		}
 	}
 	changeTransferType(type: string) {
+		console.log("transfer type",type)
 		this.transfer_type = type
 		if (type.includes('city_')) {
 			this.SetFormValue('meet_greet_choices', 1)

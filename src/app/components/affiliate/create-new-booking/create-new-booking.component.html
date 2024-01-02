@@ -2373,6 +2373,343 @@
 						</div>
 					</div>
 					<hr>
+					<!-- Travel Information -->
+					<h4 class="font-weight-bolder m-0 mt-3">
+						Travel Information
+					</h4>
+
+					<!-- Number of Hours -->
+					<div class="mx-2" *ngIf="Form.service_type.value == 'charter_tour'">
+						<div class="row">
+							<div class="col-md-4 key">
+								<span>
+									Booking Hours
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ Form.number_of_hours.value }}
+								</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- ################ Pickup ################### -->
+					<h5 class="p-2 m-0 text-xl preview-pickup-color">
+						Pickup Details
+					</h5>
+					<!-- Pickup > Date -->
+					<div class="mx-2 preview-pickup-color">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Date
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ dateFormat2(Form.pickup_date.value) }}
+									|
+									{{ dateFormat(Form.pickup_date.value) }}
+								</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Pickup > Time -->
+					<div class="mx-2 preview-pickup-color">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Time
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ timeFormat2(Form.pickup_time.value) }}
+									|
+									{{ timeFormat(Form.pickup_time.value) }}
+								</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Pickup > City Details -->
+					<div class="mx-2 preview-pickup-color"
+						*ngIf="Form.transfer_type.value.includes('city_') || Form.transfer_type.value.includes('cruise_')">
+						<div class="row m-0">
+							<div class="col-md-4">
+								<span>
+									Address
+								</span>
+							</div>
+							<div class="col-md-8">
+								<span class="font-weight-bolder">
+									{{ textFormatter(Form.pickup.value) }}
+								</span>
+								<span (click)="showLocationPointOnMap(Form.pickup.value)"><i class="bi bi-geo-alt-fill"
+										style="font-size:24px"></i></span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Pickup > Airline Details -->
+					<div class="mx-2 preview-pickup-color" *ngIf="Form.transfer_type.value.includes('airport_')">
+						<!-- Airport -->
+						<div class="row m-0">
+							<div class="col-md-4 key preview-airport-color">
+								<span>
+									Airport
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder preview-airport-color">
+									{{ textFormatter(Form.pickup_airport_name.value) }}
+								</span>
+								<span (click)="showLocationPointOnMap(Form.pickup_airport_name.value)">
+									<i class="bi bi-geo-alt-fill" style="font-size:24px"></i></span>
+
+							</div>
+						</div>
+						<!-- Airport -->
+						<!-- Airline -->
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Airline
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ textFormatter(Form.pickup_airline_name.value) }}
+								</span>
+							</div>
+						</div>
+						<!-- Airline -->
+						<!-- Flight / Tail # -->
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Flight / Tail #
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ textFormatter(Form.pickup_flight.value) }}
+								</span>
+							</div>
+						</div>
+						<!-- Flight / Tail # -->
+					</div>
+
+					<!-- Pickup > Cruise Details -->
+					<div class="mx-2 preview-pickup-color" *ngIf="Form.transfer_type.value.includes('cruise_')">
+						<!-- Cruise Port -->
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Cruise Port
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ textFormatter(Form.cruise_port.value) | titlecase }}
+								</span>
+							</div>
+						</div>
+						<!-- Cruise Port -->
+						<!-- Cruise Name -->
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Cruise Name
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ textFormatter(Form.cruise_name.value) | titlecase }}
+								</span>
+							</div>
+						</div>
+						<!-- Cruise Name -->
+						<!-- Cruise Time -->
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Cruise Time
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ timeFormat2(Form.cruise_time.value) }}
+									|
+									{{ timeFormat(Form.cruise_time.value) }}
+								</span>
+							</div>
+						</div>
+					</div>
+
+					<hr *ngIf="Form.extra_stops.value.length > 0">
+					<!-- Extra Stops -->
+					<div *ngIf="Form.extra_stops.value.length > 0">
+						<h5 class="p-2 m-0 text-xl">
+							Extra Stops
+						</h5>
+						<div class="mx-2" *ngFor="let stop of Form.extra_stops.value; index as stop_index">
+							<div class="row m-0 mx-2">
+								<div class="col-md-4 key">
+									<span>
+										Stop {{ stop_index + 1 }}
+									</span>
+								</div>
+								<div class="col-md-8 value">
+									<span class="font-weight-bolder">
+										{{ stop.address }}
+									</span>
+									<span (click)="showLocationPointOnMap(stop.address)"><i class="bi bi-geo-alt-fill"
+											style="font-size:24px"></i></span>
+								</div>
+							</div>
+							<hr>
+						</div>
+					</div>
+
+					<hr *ngIf="Form.extra_stops.value.length == 0" />
+
+					<!-- ############# Dropoff ################# -->
+					<h5 class="px-2 m-1 text-xl preview-dropoff-color">
+						Drop Off Details
+					</h5>
+					<!-- Dropoff > City Details -->
+					<div class="mx-2 preview-dropoff-color"
+						*ngIf="Form.transfer_type.value.includes('_city') || Form.transfer_type.value.includes('_cruise')">
+						<div class="row p-2">
+							<div class="col-md-4 key">
+								<span>
+									Address
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ textFormatter(Form.dropoff.value) }}
+								</span>
+								<span (click)="showLocationPointOnMap(Form.dropoff.value)"><i class="bi bi-geo-alt-fill"
+										style="font-size:24px"></i></span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Dropoff > Airline Details -->
+					<div class="mx-2 preview-dropoff-color" *ngIf="Form.transfer_type.value.includes('_airport')">
+						<!-- Airport -->
+						<div class="row p-2">
+							<div class="col-md-4 key ">
+								<span>
+									Airport
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder preview-airport-color">
+									{{ textFormatter(Form.dropoff_airport_name.value ) }}
+								</span>
+								<span (click)="showLocationPointOnMap(Form.dropoff_airport_name.value)">
+									<i class="bi bi-geo-alt-fill" style="font-size:24px"></i></span>
+							</div>
+						</div>
+						<!-- Airport -->
+						<!-- Airline -->
+						<div class="row p-2">
+							<div class="col-md-4 key">
+								<span>
+									Airline
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ textFormatter(Form.dropoff_airline_name.value) }}
+								</span>
+							</div>
+						</div>
+						<!-- Airline -->
+						<!-- Flight / Tail # -->
+						<div class="row p-2">
+							<div class="col-md-4 key">
+								<span>
+									Flight / Tail #
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ textFormatter(Form.dropoff_flight.value) }}
+								</span>
+							</div>
+						</div>
+						<!-- Flight / Tail # -->
+					</div>
+
+					<!-- Dropoff > Cruise Details -->
+					<div class="mx-2 preview-dropoff-color" *ngIf="Form.transfer_type.value.includes('_cruise')">
+						<!-- Cruise Port -->
+						<div class="row p-2">
+							<div class="col-md-4 key">
+								<span>
+									Cruise Port
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ textFormatter(Form.cruise_port.value) | titlecase }}
+								</span>
+							</div>
+						</div>
+						<!-- Cruise Port -->
+						<!-- Cruise Name -->
+						<div class="row p-2">
+							<div class="col-md-4 key">
+								<span>
+									Cruise Name
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ textFormatter(Form.cruise_name.value) | titlecase }}
+								</span>
+							</div>
+						</div>
+						<!-- Cruise Name -->
+						<!-- Cruise Time -->
+						<div class="row p-2">
+							<div class="col-md-4 key">
+								<span>
+									Cruise Time
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ timeFormat2(Form.cruise_time.value) }}
+									|
+									{{ timeFormat(Form.cruise_time.value) }}
+								</span>
+							</div>
+						</div>
+						<!-- Cruise Time -->
+					</div>
+					<hr>
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Special Instruction
+								</span>
+							</div>
+							<div class="col-md-8 value box-special-instruction">
+								<span class="font-weight-bolder" style="white-space: pre-wrap;">
+									{{Form?.booking_instructions.value}}
+								</span>
+							</div>
+						</div>
+					</div>
+					<hr>
 					<h4 class="font-weight-bolder m-0">
 						Vehicle Preferences
 					</h4>
@@ -2763,343 +3100,7 @@
 					<hr>
 
 
-					<!-- Travel Information -->
-					<h4 class="font-weight-bolder m-0 mt-3">
-						Travel Information
-					</h4>
 
-					<!-- Number of Hours -->
-					<div class="mx-2" *ngIf="Form.service_type.value == 'charter_tour'">
-						<div class="row">
-							<div class="col-md-4 key">
-								<span>
-									Booking Hours
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder">
-									{{ Form.number_of_hours.value }}
-								</span>
-							</div>
-						</div>
-					</div>
-
-					<!-- ################ Pickup ################### -->
-					<h5 class="p-2 m-0 text-xl preview-pickup-color">
-						Pickup Details
-					</h5>
-					<!-- Pickup > Date -->
-					<div class="mx-2 preview-pickup-color">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Date
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder">
-									{{ dateFormat2(Form.pickup_date.value) }}
-									|
-									{{ dateFormat(Form.pickup_date.value) }}
-								</span>
-							</div>
-						</div>
-					</div>
-
-					<!-- Pickup > Time -->
-					<div class="mx-2 preview-pickup-color">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Time
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder">
-									{{ timeFormat2(Form.pickup_time.value) }}
-									|
-									{{ timeFormat(Form.pickup_time.value) }}
-								</span>
-							</div>
-						</div>
-					</div>
-
-					<!-- Pickup > City Details -->
-					<div class="mx-2 preview-pickup-color"
-						*ngIf="Form.transfer_type.value.includes('city_') || Form.transfer_type.value.includes('cruise_')">
-						<div class="row m-0">
-							<div class="col-md-4">
-								<span>
-									Address
-								</span>
-							</div>
-							<div class="col-md-8">
-								<span class="font-weight-bolder">
-									{{ textFormatter(Form.pickup.value) }}
-								</span>
-								<span (click)="showLocationPointOnMap(Form.pickup.value)"><i class="bi bi-geo-alt-fill"
-										style="font-size:24px"></i></span>
-							</div>
-						</div>
-					</div>
-
-					<!-- Pickup > Airline Details -->
-					<div class="mx-2 preview-pickup-color" *ngIf="Form.transfer_type.value.includes('airport_')">
-						<!-- Airport -->
-						<div class="row m-0">
-							<div class="col-md-4 key preview-airport-color">
-								<span>
-									Airport
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-airport-color">
-									{{ textFormatter(Form.pickup_airport_name.value) }}
-								</span>
-								<span (click)="showLocationPointOnMap(Form.pickup_airport_name.value)">
-									<i class="bi bi-geo-alt-fill" style="font-size:24px"></i></span>
-
-							</div>
-						</div>
-						<!-- Airport -->
-						<!-- Airline -->
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Airline
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder">
-									{{ textFormatter(Form.pickup_airline_name.value) }}
-								</span>
-							</div>
-						</div>
-						<!-- Airline -->
-						<!-- Flight / Tail # -->
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Flight / Tail #
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder">
-									{{ textFormatter(Form.pickup_flight.value) }}
-								</span>
-							</div>
-						</div>
-						<!-- Flight / Tail # -->
-					</div>
-
-					<!-- Pickup > Cruise Details -->
-					<div class="mx-2 preview-pickup-color" *ngIf="Form.transfer_type.value.includes('cruise_')">
-						<!-- Cruise Port -->
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Cruise Port
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder">
-									{{ textFormatter(Form.cruise_port.value) | titlecase }}
-								</span>
-							</div>
-						</div>
-						<!-- Cruise Port -->
-						<!-- Cruise Name -->
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Cruise Name
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder">
-									{{ textFormatter(Form.cruise_name.value) | titlecase }}
-								</span>
-							</div>
-						</div>
-						<!-- Cruise Name -->
-						<!-- Cruise Time -->
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Cruise Time
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder">
-									{{ timeFormat2(Form.cruise_time.value) }}
-									|
-									{{ timeFormat(Form.cruise_time.value) }}
-								</span>
-							</div>
-						</div>
-					</div>
-
-					<hr *ngIf="Form.extra_stops.value.length > 0">
-					<!-- Extra Stops -->
-					<div *ngIf="Form.extra_stops.value.length > 0">
-						<h5 class="p-2 m-0 text-xl">
-							Extra Stops
-						</h5>
-						<div class="mx-2" *ngFor="let stop of Form.extra_stops.value; index as stop_index">
-							<div class="row m-0 mx-2">
-								<div class="col-md-4 key">
-									<span>
-										Stop {{ stop_index + 1 }}
-									</span>
-								</div>
-								<div class="col-md-8 value">
-									<span class="font-weight-bolder">
-										{{ stop.address }}
-									</span>
-									<span (click)="showLocationPointOnMap(stop.address)"><i class="bi bi-geo-alt-fill"
-											style="font-size:24px"></i></span>
-								</div>
-							</div>
-							<hr>
-						</div>
-					</div>
-
-					<hr *ngIf="Form.extra_stops.value.length == 0" />
-
-					<!-- ############# Dropoff ################# -->
-					<h5 class="px-2 m-1 text-xl preview-dropoff-color">
-						Drop Off Details
-					</h5>
-					<!-- Dropoff > City Details -->
-					<div class="mx-2 preview-dropoff-color"
-						*ngIf="Form.transfer_type.value.includes('_city') || Form.transfer_type.value.includes('_cruise')">
-						<div class="row p-2">
-							<div class="col-md-4 key">
-								<span>
-									Address
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder">
-									{{ textFormatter(Form.dropoff.value) }}
-								</span>
-								<span (click)="showLocationPointOnMap(Form.dropoff.value)"><i class="bi bi-geo-alt-fill"
-										style="font-size:24px"></i></span>
-							</div>
-						</div>
-					</div>
-
-					<!-- Dropoff > Airline Details -->
-					<div class="mx-2 preview-dropoff-color" *ngIf="Form.transfer_type.value.includes('_airport')">
-						<!-- Airport -->
-						<div class="row p-2">
-							<div class="col-md-4 key ">
-								<span>
-									Airport
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-airport-color">
-									{{ textFormatter(Form.dropoff_airport_name.value ) }}
-								</span>
-								<span (click)="showLocationPointOnMap(Form.dropoff_airport_name.value)">
-									<i class="bi bi-geo-alt-fill" style="font-size:24px"></i></span>
-							</div>
-						</div>
-						<!-- Airport -->
-						<!-- Airline -->
-						<div class="row p-2">
-							<div class="col-md-4 key">
-								<span>
-									Airline
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder">
-									{{ textFormatter(Form.dropoff_airline_name.value) }}
-								</span>
-							</div>
-						</div>
-						<!-- Airline -->
-						<!-- Flight / Tail # -->
-						<div class="row p-2">
-							<div class="col-md-4 key">
-								<span>
-									Flight / Tail #
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder">
-									{{ textFormatter(Form.dropoff_flight.value) }}
-								</span>
-							</div>
-						</div>
-						<!-- Flight / Tail # -->
-					</div>
-
-					<!-- Dropoff > Cruise Details -->
-					<div class="mx-2 preview-dropoff-color" *ngIf="Form.transfer_type.value.includes('_cruise')">
-						<!-- Cruise Port -->
-						<div class="row p-2">
-							<div class="col-md-4 key">
-								<span>
-									Cruise Port
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder">
-									{{ textFormatter(Form.cruise_port.value) | titlecase }}
-								</span>
-							</div>
-						</div>
-						<!-- Cruise Port -->
-						<!-- Cruise Name -->
-						<div class="row p-2">
-							<div class="col-md-4 key">
-								<span>
-									Cruise Name
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder">
-									{{ textFormatter(Form.cruise_name.value) | titlecase }}
-								</span>
-							</div>
-						</div>
-						<!-- Cruise Name -->
-						<!-- Cruise Time -->
-						<div class="row p-2">
-							<div class="col-md-4 key">
-								<span>
-									Cruise Time
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder">
-									{{ timeFormat2(Form.cruise_time.value) }}
-									|
-									{{ timeFormat(Form.cruise_time.value) }}
-								</span>
-							</div>
-						</div>
-						<!-- Cruise Time -->
-					</div>
-					<hr>
-					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Special Instruction
-								</span>
-							</div>
-							<div class="col-md-8 value box-special-instruction">
-								<span class="font-weight-bolder" style="white-space: pre-wrap;">
-									{{Form?.booking_instructions.value}}
-								</span>
-							</div>
-						</div>
-					</div>
-					<hr>
 					<div class="distribution_rate">
 						<h4 class="font-weight-bolder m-0 my-3">
 							Rates Distribution
