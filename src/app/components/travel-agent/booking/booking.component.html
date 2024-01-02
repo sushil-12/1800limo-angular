@@ -3,12 +3,15 @@
 	<!-- Main page content-->
 	<section class="adminbox_shadow user_information">
 		<div class="row">
-			<div class="col-md-6">
-				<h2 class="headinginfo" *ngIf="currentUser?.roleName == 'travel_agent'">Super Travel Agent Bookings</h2>
+			<div class="col-md-7">
+				<h2 class="headinginfo" *ngIf="currentUser?.roleName == 'travel_agent'">Super Travel Agent Bookings
+					<span style="text-transform: capitalize; font-weight: 600;"
+						*ngIf="agency_name">({{agency_name}})</span>
+				</h2>
 				<h2 class="headinginfo" *ngIf="currentUser?.roleName == 'sub_travel_agent'">Sub Travel Agent Bookings
 				</h2>
 			</div>
-			<div class="col-md-6 d-flex justify-content-end" style="gap: 10px;" *ngIf="invite_link">
+			<div class="col-md-5 d-flex justify-content-end" style="gap: 10px;" *ngIf="invite_link">
 				<textarea id="clipboard-example-textarea" cols="30" rows="10" [(ngModel)]="invite_link"
 					hidden></textarea>
 				<button type="button" class="close x-copy-btn" style="float: left" [cdkCopyToClipboard]="invite_link"
@@ -1686,7 +1689,8 @@
 				</div>
 
 				<div class="modal-footer justify-content-center">
-					<button type="submit" class="custom-filled-button" (click)="sendInvite()">
+					<button type="submit" class="custom-filled-button" (click)="sendInvite()"
+						style="font-size: 1.10rem; font-weight:700; text-transform: uppercase;">
 						Submit
 					</button>
 				</div>

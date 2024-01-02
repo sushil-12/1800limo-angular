@@ -95,9 +95,8 @@
 				<div class="col-md-12">
 					<h3 class="addveh_top d-md-flex justify-content-between align-items-center mb-0 ml-1 mt-2">
 						<label class="alert alert-danger" style="padding :0.25rem 1.25rem; color: red !important;">The
-							operator name should
-							match the name in the driver
-							license/document.</label>
+							Driver's license document should
+							match the Bank Account Holder first and last name.</label>
 						<!-- <label class="alert alert-danger my-2 mx-2">Choose nearest major city or airport
 									location</label> -->
 
@@ -114,10 +113,10 @@
 				</div>
 				<div class="col-md-4">
 					<mat-form-field appearance="outline">
-						<mat-label>First Name
+						<mat-label>Bank Account Holder First Name
 							<span class="asterisk">*</span>
 						</mat-label>
-						<input matInput placeholder="First Name" (focus)="$event?.target?.select()"
+						<input matInput placeholder="Bank Account Holder First Name" (focus)="$event?.target?.select()"
 							formControlName="AccountHolderFirstName" tabindex="1" />
 					</mat-form-field>
 					<div *ngIf="
@@ -133,17 +132,17 @@
 				</div>
 				<div class="col-md-4">
 					<mat-form-field appearance="outline">
-						<mat-label>Middle Name</mat-label>
-						<input matInput placeholder="Middle Name" (focus)="$event?.target?.select()"
+						<mat-label>Bank Account Holder Middle Name</mat-label>
+						<input matInput placeholder="Bank Account Holder Middle Name" (focus)="$event?.target?.select()"
 							formControlName="AccountHolderMiddleName" tabindex="1" />
 					</mat-form-field>
 				</div>
 				<div class="col-md-4">
 					<mat-form-field appearance="outline">
-						<mat-label>Last Name
+						<mat-label>Bank Account Holder Last Name
 							<span class="asterisk">*</span>
 						</mat-label>
-						<input matInput placeholder="Last Name" (focus)="$event?.target?.select()"
+						<input matInput placeholder="Bank Account Holder Last Name" (focus)="$event?.target?.select()"
 							formControlName="AccountHolderLastName" tabindex="1" />
 					</mat-form-field>
 					<div *ngIf="
@@ -399,7 +398,7 @@
 				</div>
 				<div class="col-md-6">
 					<mat-form-field appearance="outline"
-						[ngClass]="{ 'disableSsn': enableSsnField, 'border-red1': ssnErrorMessage }">
+						[ngClass]="{ 'disableSsn': enableSsnField, 'border-red1': ssnErrorMessage || !isSsnSelected }">
 						<mat-label>SSN (USA required by STRIPE / Government ID for other countries)
 							<span class="asterisk">*</span>
 						</mat-label>
@@ -475,25 +474,23 @@
 		<div class="container">
 			<div class="vehtype_extintwrap">
 				<div class="row justify-content-between mb-5">
-					<div class="col-auto">
+					<div class="col-md-12">
 						<h2 class="headinginfo adminbox_shadow">
 							Owner/Company Identification
 						</h2>
 					</div>
-					<div class="col-md-12">
+					<div class="col-md-6">
 						<h3 class="addveh_top d-md-flex justify-content-between align-items-center mb-0 ml-1 mt-2">
 							<label class="alert alert-danger"
 								style="padding :0.25rem 1.25rem; color: red !important;">The
-								name in the driver
-								license/document.
-								should
-								match the operator name</label>
+								Driver's license document should
+								match the Bank Account Holder first and last name.</label>
 							<!-- <label class="alert alert-danger my-2 mx-2">Choose nearest major city or airport
 											location</label> -->
 
 						</h3>
 					</div>
-					<div class="col-auto text-right">
+					<div class="col-md-6 text-right">
 						<button id="btn-country-verify-docs" class="custom-filled-button orange-button text-center"
 							data-toggle="modal" data-target="#verificationDocumentModal" tabindex="1">
 							Acceptable Country Owner Verification Document
@@ -758,7 +755,7 @@
 			<div class="row">
 				<div class="col-md-6">
 					<mat-form-field appearance="outline" [class.read-only]="!canChangeAddress"
-						[ngClass]="{ 'border-red': addressErrorMessage }">
+						[ngClass]="{ 'border-red': addressErrorMessage || !isAddressSelected }">
 						<mat-label>Enter Business/Base Address</mat-label>
 						<input matInput placeholder="Search Here and Set Location Pin" (focus)="$event.target.select()"
 							[readonly]="!canChangeAddress" formControlName="address" #search1 tabindex="1"

@@ -85,18 +85,7 @@ export class FinalizeBookingComponent implements OnInit {
 		private $spinner: NgxSpinnerService,
 		private customValidator: CustomvalidationService
 	) {
-		this.$route.queryParams.subscribe((params: any) => {
-			this.$spinner.show()
-			isDevMode && console.log("Params Found: ", params);
-			if (params.bookingId) {
-				this.bookingId = params.bookingId;
-				this.getReservationDetails(this.bookingId);
-				this.paymentDetail(this.bookingId)
-			} else {
-				// navigate back to dashboard in case of no booking Id specified.
-				this.$router.navigate(["/admin/daily-bookings-admin"]);
-			}
-		});
+		
 	}
 
 	ngOnInit(): void {
@@ -107,6 +96,18 @@ export class FinalizeBookingComponent implements OnInit {
 		this.deleteCardForm = this.$form.group({
 			cardId: ["", Validators.required],
 			accId: ["", Validators.required],
+		});
+		this.$route.queryParams.subscribe((params: any) => {
+			this.$spinner.show()
+			isDevMode() && console.log("Params Found: ", params);
+			if (params.bookingId) {
+				this.bookingId = params.bookingId;
+				this.getReservationDetails(this.bookingId);
+				this.paymentDetail(this.bookingId)
+			} else {
+				// navigate back to dashboard in case of no booking Id specified.
+				this.$router.navigate(["/admin/daily-bookings-admin"]);
+			}
 		});
 	}
 
@@ -181,7 +182,7 @@ export class FinalizeBookingComponent implements OnInit {
 				this.transferType = this.BookingDetail.transfer_type
 				this.init_rates = true;
 				this.service_type = response?.data?.service_type
-				this.CardsInformation = response.data.cards
+				this.CardsInformation = response?.data?.cards
 				this.primaryCards = this.CardsInformation.filter(i => i.cc_prority == 'Primary')
 				this.selectedCard = this.primaryCards[this.primaryCards.length - 1]
 				this.finalize_params['distance'] = this.BookingDetail.distance

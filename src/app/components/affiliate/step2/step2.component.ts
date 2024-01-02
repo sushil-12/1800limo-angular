@@ -64,7 +64,9 @@ export class Step2Component implements OnInit {
 	ssnErrorMessage:string;
 	addressErrorMessage:string;
 	dobErrorMessage:string;
-	public AddressCheckStripe = ['address','street','city','country']
+	public AddressCheckStripe = ['address','street','city','country'];
+	isSsnSelected:boolean=false;
+	isAddressSelected:boolean=false;
 
 
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
@@ -287,6 +289,8 @@ export class Step2Component implements OnInit {
 								id_back_image: this.response.data?.bankinfo?.id_back_image?.ID,
 							});
 							this.ssn_copy=this.response?.data?.bankinfo?.ssn
+							this.isSsnSelected = true
+							this.isAddressSelected=true
 							// if(this.response?.data?.error_fields?.find(val => val?.field == 'ssn')){
 							// 	this.ssnErrorMessage = this.response?.data?.error_fields?.find(val => val?.field == 'ssn')?.message
 							// 	this.enableSsnField=false
@@ -961,9 +965,11 @@ export class Step2Component implements OnInit {
 		console.log("TYPE----->",type)
 		if(type == 'ssn'){
 			this.ssnErrorMessage = ""
+			this.isSsnSelected = value ? true :false;
 		}
 		else if(type == 'address'){
 			this.addressErrorMessage = ""
+			this.isAddressSelected = value ? true:false;
 		}
 		// else if(type == 'dob'){
 		// 	console.log("in dobbbbhbbb")

@@ -100,7 +100,7 @@ export class AffiliateFinalizeComponent implements OnInit {
 	}
 
 
-	getBookingData() {
+	getBookingData(booking_id: number = 0) {
 		this.affiliateService.getBookingData(this.bookingId)
 			.pipe(
 				catchError(err => {
@@ -292,7 +292,7 @@ export class AffiliateFinalizeComponent implements OnInit {
 	}
 	submitForm() {
 		this.spinner.show();
-		this.finalize_btn = 'Finalized'
+		
 		let rateArray = JSON.parse(JSON.stringify(this.edit_rates_value))
 		if (rateArray.all_inclusive_rates.Base_Rate.rate_label == "Minimum Rate") {
 			rateArray.all_inclusive_rates.Base_Rate.rate_label = "Base Rate"
@@ -319,9 +319,11 @@ export class AffiliateFinalizeComponent implements OnInit {
 			// })
 			// this.$router.navigate(['/admin/daily-bookings-admin'])
 			console.log('response-->>', response)
+			this.finalize_btn = "Finalized"
+			this.getBookingData(this.bookingId)
 			
 		})
-		this.getBookingData()
+		
 
 	}
 	

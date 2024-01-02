@@ -72,7 +72,7 @@ export class BookingComponent implements OnInit {
 	currentUser: any;
 	emailFileName: string = '';
 	fileToUpload: File;
-
+	agency_name:string='';
 
 	constructor(
 		private affiliateService: AffiliateService,
@@ -87,6 +87,7 @@ export class BookingComponent implements OnInit {
 		this.invite_link = localStorage.getItem('invite_link') ? localStorage.getItem('invite_link') : null
 		let referralCode = this.invite_link ? (new URL(this.invite_link)).searchParams.get("refferal_code") : ''
 		this.referral_code = atob(referralCode);
+		this.agency_name = this.invite_link ? (new URL(this.invite_link)).searchParams.get("agency_name") : ''
 
 		// Output the decoded referral code
 		console.log("decodedReferralCode", this.referral_code);
