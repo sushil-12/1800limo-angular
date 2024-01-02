@@ -58,6 +58,7 @@
                         <thead style="background: #f3933d;">
                             <tr role="row">
                                 <th *ngIf="showActionColumn" style="width: 20px;">Actions</th>
+                                <th>Name</th>
                                 <th>Mobile</th>
                                 <th>Email</th>
                                 <th>Role</th>
@@ -84,6 +85,9 @@
                                         <!-- <span>View</span> -->
                                         <i class="fa fa-trash" aria-hidden="true" style="color: white;"></i>
                                     </a>
+                                </td>
+                                <td>
+                                    <span [innerHTML]="highlighText(account.name)"></span>
                                 </td>
                                 <td class="clickable" (click)="sendMessage('sms', account)" data-messagetype="sms"><span
                                         [innerHTML]="highlighText(account.isd+account.phone+' '+'('+account?.phoneCountry.toUpperCase()+')')"></span>

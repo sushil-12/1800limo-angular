@@ -59,7 +59,9 @@ export class AffiliateStep2Component implements OnInit {
 	ssnErrorMessage:string;
 	addressErrorMessage:string;
 	dobErrorMessage:string;
-	public AddressCheckStripe = ['address','street','city','country']
+	public AddressCheckStripe = ['address','street','city','country'];
+	isSsnSelected:boolean=false;
+	isAddressSelected:boolean=false;
 
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
 	stepsObj: any;
@@ -244,6 +246,8 @@ export class AffiliateStep2Component implements OnInit {
 								id_back_image: this.response.data.bankinfo.id_back_image.ID,
 							});
 							this.ssn_copy = this.response?.data?.bankinfo?.ssn
+							this.isSsnSelected = true
+							this.isAddressSelected=true
 							//to check ssn error
 							// if (this.response?.data?.error_fields?.find(val => val?.field == 'ssn')) {
 							// 	this.ssnErrorMessage = this.response?.data?.error_fields?.find(val => val?.field == 'ssn')?.message
@@ -736,7 +740,7 @@ export class AffiliateStep2Component implements OnInit {
 		return controlEl.getBoundingClientRect().top + window.scrollY - labelOffset;
 	}
 	handleSsnInput(value: any) {
-
+		
 		console.log("prev--->", this.ssn_copy, this.addBankForm.get('ssn').value)
 		value.includes("*") ? "" : this.ssn_copy = value
 		console.log("after--->", this.ssn_copy)
@@ -746,9 +750,11 @@ export class AffiliateStep2Component implements OnInit {
 		console.log("TYPE----->",type)
 		if(type == 'ssn'){
 			this.ssnErrorMessage = ""
+			this.isSsnSelected = value ? true :false;
 		}
 		else if(type == 'address'){
 			this.addressErrorMessage = ""
+			this.isAddressSelected = value ? true :false;
 		}
 		// else if(type == 'dob'){
 		// 	console.log("in dobbbbhbbb")

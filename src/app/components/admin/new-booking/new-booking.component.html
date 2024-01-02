@@ -518,7 +518,7 @@
 							<!-- Card Holder Name -->
 							<div class="col-md-6">
 								<mat-form-field appearance="outline" class="m-0">
-									<mat-label class="required-field">
+									<mat-label>
 										First & Last Name
 									</mat-label>
 									<input matInput placeholder="First & Last Name" type="text" formControlName="name"
@@ -541,7 +541,7 @@
 							<!-- Card Number -->
 							<div class="col-md-6">
 								<mat-form-field appearance="outline" class="m-0">
-									<mat-label class="required-field">
+									<mat-label>
 										Card Number
 									</mat-label>
 									<input matInput placeholder="xxxxxxxxxxxxxxxx" type="text"
@@ -576,7 +576,7 @@
 							<!-- Expiry Month -->
 							<div class="col-md-4">
 								<mat-form-field appearance="outline" class="m-0">
-									<mat-label class="required-field">Expiry Month</mat-label>
+									<mat-label>Expiry Month</mat-label>
 									<input type="number" matInput formControlName="exp_month" [matAutocomplete]="auto"
 										(keyup)="handleChangeMonth($event.target.value)"
 										(focus)="$event.target.select()">
@@ -619,7 +619,7 @@
 							<!-- Expiry Year -->
 							<div class="col-md-4">
 								<mat-form-field appearance="outline" class="m-0">
-									<mat-label class="required-field">
+									<mat-label>
 										Expiry Year
 									</mat-label>
 									<mat-select formControlName="exp_year">
@@ -642,7 +642,7 @@
 							<!-- CVV -->
 							<div class="col-md-4">
 								<mat-form-field appearance="outline" class="m-0">
-									<mat-label class="required-field">
+									<mat-label>
 										CVV
 									</mat-label>
 									<input matInput placeholder="0000" type="text" (focus)="$event.target.select()"
