@@ -77,10 +77,14 @@
 							</mat-label>
 							<mat-select formControlName="return_transfer_type" [(ngModel)]="return_transfer_type"
 								(selectionChange)="changeReturnTransferType($event.value)">
-								<mat-option [value]="tf_type" class="font-weight-bolder"
-									*ngFor="let tf_type of booking_params.transfer_types">
-									{{ textFormatterTransferType(tf_type) | titlecase }}
-								</mat-option>
+								<mat-option value="airport_to_city">Airport To City?</mat-option>
+								<mat-option value="airport_to_airport">Airport To Airport?</mat-option>
+								<mat-option value="airport_to_cruise">Airport To Cruise Port?</mat-option>
+								<mat-option value="city_to_city">City To City?</mat-option>
+								<mat-option value="city_to_airport">City To Airport?</mat-option>
+								<mat-option value="city_to_cruise">City To Cruise Port?</mat-option>
+								<mat-option value="cruise_to_airport">Cruise Port To Airport?</mat-option>
+								<mat-option value="cruise_to_city">Cruise Port to City?</mat-option>
 							</mat-select>
 						</mat-form-field>
 					</div>
@@ -3181,537 +3185,6 @@
 							</div>
 						</div>
 					</div>
-					<hr>
-					<h4 class="font-weight-bolder m-0">
-						Vehicle Preferences
-					</h4>
-					<div class="row p-2">
-						<div class="col-md-4 key">
-							<span>
-								Vehicle Type
-							</span>
-						</div>
-						<div class="col-md-8 value">
-							<span class="font-weight-bolder">
-								{{ Form.vehicle_type_name.value}}
-							</span>
-						</div>
-					</div>
-					<div class="row p-2">
-						<div class="col-md-4 key">
-							<span>
-								Vehicle Make
-							</span>
-						</div>
-						<div class="col-md-8 value">
-							<span class="font-weight-bolder">
-								{{ Form.vehicle_make_name.value}}
-							</span>
-						</div>
-					</div>
-					<div class="row p-2">
-						<div class="col-md-4 key">
-							<span>
-								Vehicle Model
-							</span>
-						</div>
-						<div class="col-md-8 value">
-							<span class="font-weight-bolder">
-								{{ Form.vehicle_model_name.value}}
-							</span>
-						</div>
-					</div>
-					<div class="row p-2">
-						<div class="col-md-4 key">
-							<span>
-								Vehicle Year
-							</span>
-						</div>
-						<div class="col-md-8 value">
-							<span class="font-weight-bolder">
-								{{ Form.vehicle_year_name.value}}
-							</span>
-						</div>
-					</div>
-					<div class="row p-2">
-						<div class="col-md-4 key">
-							<span>
-								Vehicle Color
-							</span>
-						</div>
-						<div class="col-md-8 value">
-							<span class="font-weight-bolder">
-								{{ Form.vehicle_color_name.value}}
-							</span>
-						</div>
-					</div>
-					<div class="row p-2">
-						<div class="col-md-4 key">
-							<span>
-								Licence plate
-							</span>
-						</div>
-						<div class="col-md-8 value">
-							<span class="font-weight-bolder">
-								{{ Form.vehicle_license_plate.value}}
-							</span>
-						</div>
-					</div>
-					<div class="row p-2">
-						<div class="col-md-4 key">
-							<span>
-								No. of seats
-							</span>
-						</div>
-						<div class="col-md-8 value">
-							<span class="font-weight-bolder">
-								{{ Form.vehicle_seats.value}}
-							</span>
-						</div>
-					</div>
-
-					<hr>
-					<!-- Affiliate Information -->
-					<ng-container *ngIf="Form.affiliate_type.value == 'affiliate' then affiliateUser">
-					</ng-container>
-
-					<!-- Affiliate -->
-					<ng-template #affiliateUser>
-						<h4 class="font-weight-bolder m-0 mt-3">
-							Affiliate Information
-						</h4>
-
-						<!-- Affiliate > Name -->
-						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key">
-									<span>
-										Name
-									</span>
-								</div>
-								<div class="col-md-8 value">
-									<span class="font-weight-bolder"
-										*ngIf="AffiliateInformation.MiddleName == null;else affiliateMiddleName">
-										{{ textFormatter(AffiliateInformation.FirstName) }} {{
-										textFormatter(AffiliateInformation.LastName) }}
-									</span>
-									<ng-template #affiliateMiddleName>
-										<span class="font-weight-bolder">
-											{{ textFormatter(AffiliateInformation.FirstName) }} {{
-											textFormatter(AffiliateInformation.MiddleName) }} {{
-											textFormatter(AffiliateInformation.LastName) }}
-										</span>
-									</ng-template>
-								</div>
-							</div>
-						</div>
-
-						<!-- Affiliate > Email -->
-						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key">
-									<span>
-										Email
-									</span>
-								</div>
-								<div class="col-md-8 value">
-									<span class="font-weight-bolder">
-										{{ textFormatter(AffiliateInformation.Email) }}
-									</span>
-								</div>
-							</div>
-						</div>
-
-						<!-- Affiliate > Phone -->
-						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key">
-									<span>
-										Phone
-									</span>
-								</div>
-								<div class="col-md-8 value">
-									<span class="font-weight-bolder">
-										({{ AffiliateInformation.CellIsd }})
-										{{ textFormatter(AffiliateInformation.CellNumber) }}
-									</span>
-								</div>
-							</div>
-						</div>
-					</ng-template>
-
-					<!-- Loose Affiliate Information -->
-					<ng-container *ngIf="Form.affiliate_type.value == 'loose_affiliate' then looseAffiliate">
-					</ng-container>
-
-					<!-- Loose Affiliate -->
-					<ng-template #looseAffiliate>
-						<h4 class="font-weight-bolder m-0 mt-3">
-							Loose Affiliate Information
-						</h4>
-
-						<!-- Loose Affiliate > Name -->
-						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key">
-									<span>
-										Name
-									</span>
-								</div>
-								<div class="col-md-8 value">
-									<span class="font-weight-bolder">
-										{{ textFormatter(Form.lose_affiliate_name.value) }}
-									</span>
-								</div>
-							</div>
-						</div>
-
-						<!-- Loose Affiliate > Email -->
-						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key">
-									<span>
-										Email
-									</span>
-								</div>
-								<div class="col-md-8 value">
-									<span class="font-weight-bolder">
-										{{ textFormatter(Form.lose_affiliate_email.value) }}
-									</span>
-								</div>
-							</div>
-						</div>
-
-						<!-- Loose Affiliate > Phone -->
-						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key">
-									<span>
-										Phone
-									</span>
-								</div>
-								<div class="col-md-8 value">
-									<span class="font-weight-bolder">
-										({{ Form.lose_affiliate_phone_isd.value }})
-										{{ textFormatter(Form.lose_affiliate_phone.value) }}
-									</span>
-								</div>
-							</div>
-						</div>
-					</ng-template>
-					<hr>
-					<!-- Driver Information -->
-					<h4 class="font-weight-bolder m-0 mt-3">
-						Driver Information
-					</h4>
-					<!-- Driver Name -->
-					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Name
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder">
-									{{ textFormatter(Form.driver_name.value) | titlecase }}
-								</span>
-							</div>
-						</div>
-					</div>
-
-					<!-- Driver Email -->
-					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Email
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder">
-									{{ textFormatter(Form.driver_email.value) }}
-								</span>
-							</div>
-						</div>
-					</div>
-
-					<!-- Driver Cell -->
-					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Phone
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder">
-									({{ Form.driver_cell_isd.value }}) {{
-									Form.driver_cell.value }}
-								</span>
-							</div>
-						</div>
-					</div>
-					<hr>
-
-					<!-- Loose Customer Information -->
-					<ng-container *ngIf="Form['account_type'].value == 'loose_customer' then LooseCustomerSec">
-					</ng-container>
-
-					<!-- Loose Customer -->
-					<ng-template #LooseCustomerSec>
-						<h4 class="font-weight-bolder m-0 mt-3">
-							Loose Customer Information
-						</h4>
-
-						<!-- Loose Customer > Name -->
-						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key">
-									<span>
-										Name
-									</span>
-								</div>
-								<div class="col-md-8 value">
-									<span class="font-weight-bolder">
-										{{ textFormatter(LooseCustomer.first_name.value) }} {{
-										textFormatter(LooseCustomer.middle_name.value) }} {{
-										textFormatter(LooseCustomer.last_name.value) }}
-									</span>
-								</div>
-							</div>
-						</div>
-
-						<!-- Loose Customer > Email -->
-						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key">
-									<span>
-										Email
-									</span>
-								</div>
-								<div class="col-md-8 value">
-									<span class="font-weight-bolder">
-										{{ textFormatter(LooseCustomer.email.value) }}
-									</span>
-								</div>
-							</div>
-						</div>
-
-						<!-- Loose Customer > Phone -->
-						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key">
-									<span>
-										Phone
-									</span>
-								</div>
-								<div class="col-md-8 value">
-									<span class="font-weight-bolder">
-										({{ LooseCustomer.phone_isd.value }})
-										{{ textFormatter(LooseCustomer.phone.value) }}
-									</span>
-								</div>
-							</div>
-						</div>
-						<hr>
-					</ng-template>
-					<!-- Passenger Information -->
-					<h4 class="font-weight-bolder m-0 mt-3">
-						Passenger Information
-					</h4>
-
-					<!-- Passenger > Name -->
-					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Name
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder">
-									{{ textFormatter(Form.passenger_name.value) }}
-								</span>
-							</div>
-						</div>
-					</div>
-
-					<!-- Passenger > Email -->
-					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Email
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder">
-									{{ textFormatter(Form.passenger_email.value) }}
-								</span>
-							</div>
-						</div>
-					</div>
-
-					<!-- Passenger > Phone -->
-					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Phone
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder">
-									({{ Form.passenger_cell_isd.value }})
-									{{ textFormatter(Form.passenger_cell.value) }}
-								</span>
-							</div>
-						</div>
-					</div>
-					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									No. of passenger
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder">
-									{{ Form.total_passengers.value }}
-								</span>
-							</div>
-						</div>
-					</div>
-					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Luggage count
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder">
-									{{ Form.luggage_count.value }}
-								</span>
-							</div>
-						</div>
-					</div>
-
-					<hr>
-					<div class="distribution_rate">
-						<h4 class="font-weight-bolder m-0 my-3">
-							Rates Distribution
-						</h4>
-
-						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key d-flex align-items-center">
-									<span class="">
-										Base Rate
-									</span>
-								</div>
-								<div class="col-md-8 value preview-airport-color">
-									<span class="font-weight-bolder preview-output-feild">
-										${{shareArray?.baseRate.toFixed(2)}}
-									</span>
-									(Fare Base Rate)
-								</div>
-							</div>
-						</div>
-						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key d-flex align-items-center">
-									<span class="">
-										Admin Share
-									</span>
-								</div>
-								<div class="col-md-8 value preview-airport-color">
-									<span class="font-weight-bolder preview-output-feild">
-										${{shareArray?.adminShare.toFixed(2) }}
-									</span>
-									({{adminSharePercent}}% of Base Rate)
-								</div>
-							</div>
-						</div>
-						<div class="mx-2" *ngIf="shareArray?.travelAgentShare">
-							<div class="row m-0">
-								<div class="col-md-4 key d-flex align-items-center">
-									<span class="">
-										Agent Share
-									</span>
-								</div>
-								<div class="col-md-8 value preview-airport-color">
-									<span class="font-weight-bolder preview-output-feild">
-										${{shareArray?.travelAgentShare.toFixed(2) }}
-									</span>
-									(10% of Base Rate)
-								</div>
-							</div>
-						</div>
-						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key d-flex align-items-center">
-									<span class="">
-										Total Cost
-									</span>
-								</div>
-								<div class="col-md-8 value preview-airport-color">
-									<span class="font-weight-bolder preview-output-feild">
-										${{shareArray?.grandTotal.toFixed(2)}}
-									</span>
-									(Actual Cost to Customer)
-								</div>
-							</div>
-						</div>
-						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key d-flex align-items-center">
-									<span class="">
-										Stripe fees
-									</span>
-								</div>
-								<div class="col-md-8 value preview-airport-color">
-									<span class="font-weight-bolder preview-output-feild">
-										${{shareArray?.stripeFee.toFixed(2)}}
-									</span>
-									(Platform fee 5% + 30 cents - <b>Paid from Admin share</b>)
-								</div>
-							</div>
-						</div>
-
-						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key d-flex align-items-center">
-									<span class="">
-										Affliate Payout
-									</span>
-								</div>
-								<div class="col-md-8 value preview-airport-color">
-									<span class="font-weight-bolder preview-output-feild">
-										${{shareArray?.affiliateShare.toFixed(2)}}
-									</span>
-									( Total Price - (Ride Base Rate + Other Taxes) )
-								</div>
-							</div>
-						</div>
-						<div class="mx-2" *ngIf="isFarmoutBooking">
-							<div class="row m-0">
-								<div class="col-md-4 key d-flex align-items-center">
-									<span class="">
-										Affliate Farmout share
-									</span>
-								</div>
-								<div class="col-md-8 value preview-airport-color">
-									<span class="font-weight-bolder preview-output-feild">
-										${{shareArray?.farmoutShare.toFixed(2)}}
-									</span>
-									( 10 % of Base Rate)
-								</div>
-							</div>
-						</div>
-					</div>
-
 
 					<!-- Return Information -->
 					<!-- style="width: 75%; margin: 1.6rem auto; border: 1.2px solid #000;" / -->
@@ -4171,6 +3644,538 @@
 						</div>
 					</div>
 				</div>
+				<h4 class="font-weight-bolder m-0">
+					Vehicle Preferences
+				</h4>
+				<div class="row p-2">
+					<div class="col-md-4 key">
+						<span>
+							Vehicle Type
+						</span>
+					</div>
+					<div class="col-md-8 value">
+						<span class="font-weight-bolder">
+							{{ Form.vehicle_type_name.value}}
+						</span>
+					</div>
+				</div>
+				<div class="row p-2">
+					<div class="col-md-4 key">
+						<span>
+							Vehicle Make
+						</span>
+					</div>
+					<div class="col-md-8 value">
+						<span class="font-weight-bolder">
+							{{ Form.vehicle_make_name.value}}
+						</span>
+					</div>
+				</div>
+				<div class="row p-2">
+					<div class="col-md-4 key">
+						<span>
+							Vehicle Model
+						</span>
+					</div>
+					<div class="col-md-8 value">
+						<span class="font-weight-bolder">
+							{{ Form.vehicle_model_name.value}}
+						</span>
+					</div>
+				</div>
+				<div class="row p-2">
+					<div class="col-md-4 key">
+						<span>
+							Vehicle Year
+						</span>
+					</div>
+					<div class="col-md-8 value">
+						<span class="font-weight-bolder">
+							{{ Form.vehicle_year_name.value}}
+						</span>
+					</div>
+				</div>
+				<div class="row p-2">
+					<div class="col-md-4 key">
+						<span>
+							Vehicle Color
+						</span>
+					</div>
+					<div class="col-md-8 value">
+						<span class="font-weight-bolder">
+							{{ Form.vehicle_color_name.value}}
+						</span>
+					</div>
+				</div>
+				<div class="row p-2">
+					<div class="col-md-4 key">
+						<span>
+							Licence plate
+						</span>
+					</div>
+					<div class="col-md-8 value">
+						<span class="font-weight-bolder">
+							{{ Form.vehicle_license_plate.value}}
+						</span>
+					</div>
+				</div>
+				<div class="row p-2">
+					<div class="col-md-4 key">
+						<span>
+							No. of seats
+						</span>
+					</div>
+					<div class="col-md-8 value">
+						<span class="font-weight-bolder">
+							{{ Form.vehicle_seats.value}}
+						</span>
+					</div>
+				</div>
+
+				<hr>
+				<!-- Affiliate Information -->
+				<ng-container *ngIf="Form.affiliate_type.value == 'affiliate' then affiliateUser">
+				</ng-container>
+
+				<!-- Affiliate -->
+				<ng-template #affiliateUser>
+					<h4 class="font-weight-bolder m-0 mt-3">
+						Affiliate Information
+					</h4>
+
+					<!-- Affiliate > Name -->
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Name
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder"
+									*ngIf="AffiliateInformation.MiddleName == null;else affiliateMiddleName">
+									{{ textFormatter(AffiliateInformation.FirstName) }} {{
+									textFormatter(AffiliateInformation.LastName) }}
+								</span>
+								<ng-template #affiliateMiddleName>
+									<span class="font-weight-bolder">
+										{{ textFormatter(AffiliateInformation.FirstName) }} {{
+										textFormatter(AffiliateInformation.MiddleName) }} {{
+										textFormatter(AffiliateInformation.LastName) }}
+									</span>
+								</ng-template>
+							</div>
+						</div>
+					</div>
+
+					<!-- Affiliate > Email -->
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Email
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ textFormatter(AffiliateInformation.Email) }}
+								</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Affiliate > Phone -->
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Phone
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									({{ AffiliateInformation.CellIsd }})
+									{{ textFormatter(AffiliateInformation.CellNumber) }}
+								</span>
+							</div>
+						</div>
+					</div>
+				</ng-template>
+
+				<!-- Loose Affiliate Information -->
+				<ng-container *ngIf="Form.affiliate_type.value == 'loose_affiliate' then looseAffiliate">
+				</ng-container>
+
+				<!-- Loose Affiliate -->
+				<ng-template #looseAffiliate>
+					<h4 class="font-weight-bolder m-0 mt-3">
+						Loose Affiliate Information
+					</h4>
+
+					<!-- Loose Affiliate > Name -->
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Name
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ textFormatter(Form.lose_affiliate_name.value) }}
+								</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Loose Affiliate > Email -->
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Email
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ textFormatter(Form.lose_affiliate_email.value) }}
+								</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Loose Affiliate > Phone -->
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Phone
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									({{ Form.lose_affiliate_phone_isd.value }})
+									{{ textFormatter(Form.lose_affiliate_phone.value) }}
+								</span>
+							</div>
+						</div>
+					</div>
+				</ng-template>
+				<hr>
+				<!-- Driver Information -->
+				<h4 class="font-weight-bolder m-0 mt-3">
+					Driver Information
+				</h4>
+				<!-- Driver Name -->
+				<div class="mx-2">
+					<div class="row m-0">
+						<div class="col-md-4 key">
+							<span>
+								Name
+							</span>
+						</div>
+						<div class="col-md-8 value">
+							<span class="font-weight-bolder">
+								{{ textFormatter(Form.driver_name.value) | titlecase }}
+							</span>
+						</div>
+					</div>
+				</div>
+
+				<!-- Driver Email -->
+				<div class="mx-2">
+					<div class="row m-0">
+						<div class="col-md-4 key">
+							<span>
+								Email
+							</span>
+						</div>
+						<div class="col-md-8 value">
+							<span class="font-weight-bolder">
+								{{ textFormatter(Form.driver_email.value) }}
+							</span>
+						</div>
+					</div>
+				</div>
+
+				<!-- Driver Cell -->
+				<div class="mx-2">
+					<div class="row m-0">
+						<div class="col-md-4 key">
+							<span>
+								Phone
+							</span>
+						</div>
+						<div class="col-md-8 value">
+							<span class="font-weight-bolder">
+								({{ Form.driver_cell_isd.value }}) {{
+								Form.driver_cell.value }}
+							</span>
+						</div>
+					</div>
+				</div>
+				<hr>
+
+				<!-- Loose Customer Information -->
+				<ng-container *ngIf="Form['account_type'].value == 'loose_customer' then LooseCustomerSec">
+				</ng-container>
+
+				<!-- Loose Customer -->
+				<ng-template #LooseCustomerSec>
+					<h4 class="font-weight-bolder m-0 mt-3">
+						Loose Customer Information
+					</h4>
+
+					<!-- Loose Customer > Name -->
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Name
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ textFormatter(LooseCustomer.first_name.value) }} {{
+									textFormatter(LooseCustomer.middle_name.value) }} {{
+									textFormatter(LooseCustomer.last_name.value) }}
+								</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Loose Customer > Email -->
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Email
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ textFormatter(LooseCustomer.email.value) }}
+								</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Loose Customer > Phone -->
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Phone
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									({{ LooseCustomer.phone_isd.value }})
+									{{ textFormatter(LooseCustomer.phone.value) }}
+								</span>
+							</div>
+						</div>
+					</div>
+					<hr>
+				</ng-template>
+				<!-- Passenger Information -->
+				<h4 class="font-weight-bolder m-0 mt-3">
+					Passenger Information
+				</h4>
+
+				<!-- Passenger > Name -->
+				<div class="mx-2">
+					<div class="row m-0">
+						<div class="col-md-4 key">
+							<span>
+								Name
+							</span>
+						</div>
+						<div class="col-md-8 value">
+							<span class="font-weight-bolder">
+								{{ textFormatter(Form.passenger_name.value) }}
+							</span>
+						</div>
+					</div>
+				</div>
+
+				<!-- Passenger > Email -->
+				<div class="mx-2">
+					<div class="row m-0">
+						<div class="col-md-4 key">
+							<span>
+								Email
+							</span>
+						</div>
+						<div class="col-md-8 value">
+							<span class="font-weight-bolder">
+								{{ textFormatter(Form.passenger_email.value) }}
+							</span>
+						</div>
+					</div>
+				</div>
+
+				<!-- Passenger > Phone -->
+				<div class="mx-2">
+					<div class="row m-0">
+						<div class="col-md-4 key">
+							<span>
+								Phone
+							</span>
+						</div>
+						<div class="col-md-8 value">
+							<span class="font-weight-bolder">
+								({{ Form.passenger_cell_isd.value }})
+								{{ textFormatter(Form.passenger_cell.value) }}
+							</span>
+						</div>
+					</div>
+				</div>
+				<div class="mx-2">
+					<div class="row m-0">
+						<div class="col-md-4 key">
+							<span>
+								No. of passenger
+							</span>
+						</div>
+						<div class="col-md-8 value">
+							<span class="font-weight-bolder">
+								{{ Form.total_passengers.value }}
+							</span>
+						</div>
+					</div>
+				</div>
+				<div class="mx-2">
+					<div class="row m-0">
+						<div class="col-md-4 key">
+							<span>
+								Luggage count
+							</span>
+						</div>
+						<div class="col-md-8 value">
+							<span class="font-weight-bolder">
+								{{ Form.luggage_count.value }}
+							</span>
+						</div>
+					</div>
+				</div>
+
+				<hr>
+				<div class="distribution_rate">
+					<h4 class="font-weight-bolder m-0 my-3">
+						Rates Distribution
+					</h4>
+
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key d-flex align-items-center">
+								<span class="">
+									Base Rate
+								</span>
+							</div>
+							<div class="col-md-8 value preview-airport-color">
+								<span class="font-weight-bolder preview-output-feild">
+									${{shareArray?.baseRate.toFixed(2)}}
+								</span>
+								(Fare Base Rate)
+							</div>
+						</div>
+					</div>
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key d-flex align-items-center">
+								<span class="">
+									Admin Share
+								</span>
+							</div>
+							<div class="col-md-8 value preview-airport-color">
+								<span class="font-weight-bolder preview-output-feild">
+									${{shareArray?.adminShare.toFixed(2) }}
+								</span>
+								({{adminSharePercent}}% of Base Rate)
+							</div>
+						</div>
+					</div>
+					<div class="mx-2" *ngIf="shareArray?.travelAgentShare">
+						<div class="row m-0">
+							<div class="col-md-4 key d-flex align-items-center">
+								<span class="">
+									Agent Share
+								</span>
+							</div>
+							<div class="col-md-8 value preview-airport-color">
+								<span class="font-weight-bolder preview-output-feild">
+									${{shareArray?.travelAgentShare.toFixed(2) }}
+								</span>
+								(10% of Base Rate)
+							</div>
+						</div>
+					</div>
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key d-flex align-items-center">
+								<span class="">
+									Total Cost
+								</span>
+							</div>
+							<div class="col-md-8 value preview-airport-color">
+								<span class="font-weight-bolder preview-output-feild">
+									${{shareArray?.grandTotal.toFixed(2)}}
+								</span>
+								(Actual Cost to Customer)
+							</div>
+						</div>
+					</div>
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key d-flex align-items-center">
+								<span class="">
+									Stripe fees
+								</span>
+							</div>
+							<div class="col-md-8 value preview-airport-color">
+								<span class="font-weight-bolder preview-output-feild">
+									${{shareArray?.stripeFee.toFixed(2)}}
+								</span>
+								(Platform fee 5% + 30 cents - <b>Paid from Admin share</b>)
+							</div>
+						</div>
+					</div>
+
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key d-flex align-items-center">
+								<span class="">
+									Affliate Payout
+								</span>
+							</div>
+							<div class="col-md-8 value preview-airport-color">
+								<span class="font-weight-bolder preview-output-feild">
+									${{shareArray?.affiliateShare.toFixed(2)}}
+								</span>
+								( Total Price - (Ride Base Rate + Other Taxes) )
+							</div>
+						</div>
+					</div>
+					<div class="mx-2" *ngIf="isFarmoutBooking">
+						<div class="row m-0">
+							<div class="col-md-4 key d-flex align-items-center">
+								<span class="">
+									Affliate Farmout share
+								</span>
+							</div>
+							<div class="col-md-8 value preview-airport-color">
+								<span class="font-weight-bolder preview-output-feild">
+									${{shareArray?.farmoutShare.toFixed(2)}}
+								</span>
+								( 10 % of Base Rate)
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+
 				<!-- *ngIf="Form.affiliate_type.value === 'affiliate'" -->
 
 			</div>
