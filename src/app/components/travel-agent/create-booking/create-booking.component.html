@@ -164,7 +164,31 @@
 			<h4 class=" border-secondary">
 				Accounts Information
 			</h4>
+
+			<div class="row" *ngIf="currentUser?.roleName != 'sub_travel_agent'">
+				<div class="col-md-12 col-lg-10 ml-1 d-flex justify-content-center">
+					<mat-radio-group aria-label="Select an option" formControlName="sub_account_type">
+						<mat-radio-button [value]="'travel_agent'" class="my-2 ml-4 mr-3"
+							(change)="handleChangeWithAgent('travel_agent')">
+							Without Sub Agent
+						</mat-radio-button>
+						<mat-radio-button [value]="'sub_travel_agent'" class="my-2 ml-4 mr-3"
+							(change)="handleChangeWithAgent('sub_travel_agent')">
+							With Sub Agent
+						</mat-radio-button>
+					</mat-radio-group>
+				</div>
+				<div class="col-md-10 ml-3 mb-1" *ngIf="Form['sub_account_type'].value != 'travel_agent'">
+					<ng-select appearance="outline" [items]="subAgentAccounts" bindLabel="name" bindValue="id"
+						placeholder="Select Sub Agent Account" dropdownPosition="bottom" [markFirst]="true"
+						[virtualScroll]="true" formControlName="sub_account_id"
+						(change)="handleSubAgentAccounts($event)" style="padding-bottom: 0px;">
+					</ng-select>
+
+				</div>
+			</div>
 			<div *ngIf="Form['account_type'].value == 'travel_planner'">
+
 				<div class="row">
 					<div class="col-md-12 col-lg-10 d-flex justify-content-center">
 						<mat-radio-group aria-label="Select an option" formControlName="travel_client_acc">

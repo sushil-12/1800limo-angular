@@ -118,18 +118,18 @@ export class TravelAgentService {
 		return this.httpClient.get(`${this.serverUrl}get-booking-preview/${reservation_id}`);
 	}
 	//send invite code for sub ta
-	sendTravelAgentInviteCode(data:any) {
+	sendTravelAgentInviteCode(data: any) {
 		// return this.httpClient.post(this.serverUrl + 'send-an-invite-code', data);
-		let resp:any
+		let resp: any
 		const accessToken = this.authService.getAccessToken();
 		resp = fetch(this.serverUrl + 'send-an-invite-code', {
 			method: 'POST',
 			body: data,
 			headers: {
 				Authorization: `Bearer ${accessToken}`
-			  }
+			}
 		})
-		
+
 		return resp;
 	}
 
@@ -199,8 +199,8 @@ export class TravelAgentService {
 		return this.httpClient.put(this.serverUrl + 'change-account-status', { 'acc_id': id, 'status': status });
 	}
 	// accept or reject sub ta
-	acceptRejectAffiliate(acc_id,status) {
-		return this.httpClient.put(this.serverUrl + 'account-approval', { 'acc_id': acc_id ,'status':status});
+	acceptRejectAffiliate(acc_id, status) {
+		return this.httpClient.put(this.serverUrl + 'account-approval', { 'acc_id': acc_id, 'status': status });
 	}
 	getProfileSubAgent() {
 		return this.httpClient.get(environment.serverUrl + 'sub-travel-planner/' + 'get-profile').toPromise();
@@ -217,8 +217,16 @@ export class TravelAgentService {
 	getClientAccount(id) {
 		return this.httpClient.get(this.serverUrl + `get-an-account/${id}`);
 	}
-	getAllTravelClientAccountList(type) {
-		return this.httpClient.get(this.serverUrl + `get-account-by-type/${type}`).toPromise();;
+	getAllTravelClientAccountList(type,value=null) {
+		console.log("in api---->",value)
+		if(value){
+			return this.httpClient.get(this.serverUrl + `get-account-by-type/${type}/` + value).toPromise();;
+
+		}
+		else{
+
+			return this.httpClient.get(this.serverUrl + `get-account-by-type/${type}`).toPromise();;
+		}
 	}
 	getTravelClientDetailById(id) {
 		return this.httpClient.get(this.serverUrl + 'get-an-account/' + id);
@@ -234,7 +242,7 @@ export class TravelAgentService {
 		return this.httpClient.post(this.serverUrl + 'send-reservation-detail-email-to-all', data)
 	}
 
-	createNewSubAgent(data,updateBasicInfo) {
+	createNewSubAgent(data, updateBasicInfo) {
 		if (updateBasicInfo) {
 			return this.httpClient.post(this.serverUrl + 'update-a-travel-agent', data);
 		}

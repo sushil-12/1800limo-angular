@@ -23,7 +23,7 @@ export class CreateBookingComponent implements OnInit {
 	todays_date: string = moment().format('YYYY-MM-DD');
 	months: any = [{ value: '01' }, { value: '02' }, { value: '03' }, { value: '04' }, { value: '05' }, { value: '06' }, { value: '07' }, { value: '08' }, { value: '09' }, { value: '10' }, { value: '11' }, { value: '12' }]
 	monthOptions: any = [...this.months]
-	updateType: any='create';
+	updateType: any = 'create';
 
 	booking_params: any = {
 		transfer_types: ["airport_to_city", "airport_to_airport", "airport_to_cruise", "city_to_city", "city_to_airport", "city_to_cruise", "cruise_to_airport", "cruise_to_city"],
@@ -126,11 +126,12 @@ export class CreateBookingComponent implements OnInit {
 	returnRateArray: any;
 	rateArray: any;
 	travelStaffAccounts: any;
+	subAgentAccounts: any;
 	isCreatedByAdmin: boolean = false;
 	shareArray: any;
 	r_shareArray: any;
 	adminSharePercent: number = 25;
-	currentUser:any;
+	currentUser: any;
 
 	constructor(
 		private $form: FormBuilder,
@@ -193,8 +194,10 @@ export class CreateBookingComponent implements OnInit {
 			number_of_hours: ['0'],
 			acc_id: [''],
 			account_type: ['travel_planner'],
-			travel_client_id: ['',[Validators.required]],
+			travel_client_id: ['', [Validators.required]],
+			sub_account_id: [''],
 			travel_client_acc: ['travel_individual'],
+			sub_account_type: ['travel_agent'],
 			change_individual_data: [false],
 			loose_customer: this.$form.group({
 				first_name: [''],
@@ -430,7 +433,7 @@ export class CreateBookingComponent implements OnInit {
 			this.number_of_hours = response?.data?.number_of_hours
 			this.vehicleImgUrl = response?.data?.vehicle_images[0]
 			this.driverImgUrl = response?.data?.driver_image
-			this.isCreatedByAdmin = response?.data?.created_by ==1 ? true : false;
+			this.isCreatedByAdmin = response?.data?.created_by == 1 ? true : false;
 			this.SetFormValue('affiliate_type', response.data.affiliate_type)
 			this.autofillData('cruise', editing_data);
 			this.fillDriverInfo(editing_data);
@@ -535,26 +538,26 @@ export class CreateBookingComponent implements OnInit {
 			for (let outerKey in response?.data?.rateArray) {
 				if (response?.data?.rateArray.hasOwnProperty(outerKey)) {
 					const innerObject = response?.data?.rateArray[outerKey];
-					if(outerKey == 'all_inclusive_rates'){
-						
+					if (outerKey == 'all_inclusive_rates') {
+
 						for (let innerKey in innerObject) {
 							if (innerObject.hasOwnProperty(innerKey)) {
 								this.subtotal += innerObject[innerKey].baserate
-								console.log("in if allinclusive",this.subtotal)
+								console.log("in if allinclusive", this.subtotal)
 							}
 						}
 					}
-					else{
+					else {
 						for (let innerKey in innerObject) {
 							if (innerObject.hasOwnProperty(innerKey)) {
 								this.subtotal += innerObject[innerKey].amount
-	
+
 							}
 						}
 					}
 				}
 			}
-		
+
 			let base_rate = 0
 			if (this.BookingForm.value?.service_type == 'charter_tour') {
 				base_rate += this.rateArray.all_inclusive_rates["Base_Rate"].baserate * this.number_of_hours
@@ -573,20 +576,20 @@ export class CreateBookingComponent implements OnInit {
 				let adminShare = (base_rate * 15) / 100
 				this.agentShare = base_rate * 0.10
 				this.subtotal += adminShare + this.agentShare
-				console.log("in if created by ta",this.subtotal)
+				console.log("in if created by ta", this.subtotal)
 			}
-			else if(this.updateType == 'repeat' || this.updateType == 'return'){
-                let adminShare = (base_rate * 15) / 100
+			else if (this.updateType == 'repeat' || this.updateType == 'return') {
+				let adminShare = (base_rate * 15) / 100
 				this.agentShare = base_rate * 0.10
 				this.subtotal += adminShare + this.agentShare
-				console.log("in if created by ta in repeat or return",this.subtotal)
+				console.log("in if created by ta in repeat or return", this.subtotal)
 			}
-			else{
-              let adminShare = (base_rate * 25) / 100
-			  this.subtotal += adminShare
-			  console.log("in if created by admin",this.subtotal)
+			else {
+				let adminShare = (base_rate * 25) / 100
+				this.subtotal += adminShare
+				console.log("in if created by admin", this.subtotal)
 			}
-			
+
 			this.grandtotal = (parseFloat(this.subtotal))
 			console.log('grandtotal->', this.grandtotal)
 
@@ -595,26 +598,26 @@ export class CreateBookingComponent implements OnInit {
 				for (let outerKey in response?.data?.retrunRateArray) {
 					if (response?.data?.retrunRateArray.hasOwnProperty(outerKey)) {
 						const innerObject = response?.data?.retrunRateArray[outerKey];
-						if(outerKey == 'all_inclusive_rates'){
-							
+						if (outerKey == 'all_inclusive_rates') {
+
 							for (let innerKey in innerObject) {
 								if (innerObject.hasOwnProperty(innerKey)) {
 									this.r_subtotal += innerObject[innerKey].baserate
-									console.log("in if allinclusive",this.r_subtotal)
+									console.log("in if allinclusive", this.r_subtotal)
 								}
 							}
 						}
-						else{
+						else {
 							for (let innerKey in innerObject) {
 								if (innerObject.hasOwnProperty(innerKey)) {
 									this.subtotal += innerObject[innerKey].amount
-		
+
 								}
 							}
 						}
 					}
 				}
-			
+
 				let base_rate = 0
 				if (this.BookingForm.value?.service_type == 'charter_tour') {
 					base_rate += this.returnRateArray.all_inclusive_rates["Base_Rate"].baserate * this.number_of_hours
@@ -629,23 +632,23 @@ export class CreateBookingComponent implements OnInit {
 					base_rate += this.returnRateArray.amenities[key].baserate;
 				}
 				//calculating subtotal and share of sdmin adn ta if created by TA
-			if (this.BookingForm.value?.account_type == 'travel_planner' && !this.isCreatedByAdmin) {
-				let adminShare = (base_rate * 15) / 100
-				this.r_agentShare = base_rate * 0.10
-				this.r_subtotal += adminShare + this.r_agentShare
-				console.log("in if created by ta",this.r_subtotal)
-			}
-			else if(this.updateType == 'repeat' || this.updateType == 'return'){
-                let adminShare = (base_rate * 15) / 100
-				this.r_agentShare = base_rate * 0.10
-				this.r_subtotal += adminShare + this.r_agentShare
-				console.log("in if created by ta in repeat or return",this.subtotal)
-			}
-			else{
-              let adminShare = (base_rate * 25) / 100
-			  this.r_subtotal += adminShare
-			  console.log("in if created by admin",this.r_subtotal)
-			}
+				if (this.BookingForm.value?.account_type == 'travel_planner' && !this.isCreatedByAdmin) {
+					let adminShare = (base_rate * 15) / 100
+					this.r_agentShare = base_rate * 0.10
+					this.r_subtotal += adminShare + this.r_agentShare
+					console.log("in if created by ta", this.r_subtotal)
+				}
+				else if (this.updateType == 'repeat' || this.updateType == 'return') {
+					let adminShare = (base_rate * 15) / 100
+					this.r_agentShare = base_rate * 0.10
+					this.r_subtotal += adminShare + this.r_agentShare
+					console.log("in if created by ta in repeat or return", this.subtotal)
+				}
+				else {
+					let adminShare = (base_rate * 25) / 100
+					this.r_subtotal += adminShare
+					console.log("in if created by admin", this.r_subtotal)
+				}
 				this.r_grandtotal = (parseFloat(this.r_subtotal))
 			}
 		});
@@ -792,33 +795,26 @@ export class CreateBookingComponent implements OnInit {
 		this.return_transfer_type = event
 	}
 
-	getTravelClientAccounts() {
-		this.TravelAgentService.getAllTravelClientAccountList('individual').then((result: any) => {
-			console.log("accounts->>>>>>>>>>", result)
-			this.travelStaffAccounts = result?.data
-		})
-			.catch(err => {
-				this.$spinner.hide();//hide spinner
-			});
-	}
+
+
 	convertToMinutes(value) {
 		const days = Math.floor(value / (24 * 60 * 60));
 		const remainingSeconds = value % (24 * 60 * 60);
 		const hours = Math.floor(remainingSeconds / (60 * 60));
 		const remainingMinutes = Math.floor((remainingSeconds % (60 * 60)) / 60);
-	
+
 		let result = "";
 
 		if (days > 0) {
 			result += `${days} days, `;
 		}
-	
+
 		if (hours > 0 || (days === 0 && hours === 0)) {
 			result += `${hours} hours, `;
 		}
-	
+
 		result += `${remainingMinutes} minutes`;
-	
+
 		return result;
 	}
 	handleClientAccount(value: any) {
@@ -831,6 +827,18 @@ export class CreateBookingComponent implements OnInit {
 			this.getTravelClientAccounts()
 		}
 
+	}
+
+	handleChangeWithAgent(selectedAcc) {
+		console.log('handleChangeWithAgent-->>', selectedAcc)
+		// if (selectedAcc == 'travel_individual') {
+		// 	this.BookingForm.get('sub_account_id').setValidators([Validators.required]);
+		// 	this.BookingForm.get('sub_account_id').updateValueAndValidity();
+		// }
+		// else {
+		// 	this.BookingForm.get('sub_account_id').clearValidators();
+		// 	this.BookingForm.get('sub_account_id').updateValueAndValidity();
+		// }
 	}
 
 	handleChangeTravelAccounts(selectedAcc) {
@@ -856,6 +864,12 @@ export class CreateBookingComponent implements OnInit {
 		}
 
 	}
+	handleSubAgentAccounts(value: any) {
+
+		console.log('handleSubAgentAccounts--->>>', value)
+	}
+
+
 	PaxTelInputObject(event: any) {
 		this.PaxTelObject = event;
 	}
@@ -2034,6 +2048,47 @@ export class CreateBookingComponent implements OnInit {
 				}, 2000)
 			}
 		})
+
+		this.BookingForm.get('sub_account_type').valueChanges.subscribe((value: string) => {
+			if (value == 'sub_travel_agent') {
+				this.TravelAgentService.getAllTravelClientAccountList('sub_travel').then((result: any) => {
+					console.log("accounts->>>>>>>>>>", result)
+					this.subAgentAccounts = result?.data
+				})
+					.catch(err => {
+						this.$spinner.hide();//hide spinner
+					});
+					this.BookingForm.get('sub_account_id').valueChanges.subscribe((value: string) => {
+						console.log('valueeeee->', value)
+						this.TravelAgentService.getAllTravelClientAccountList('individual',value).then((result: any) => {
+							console.log("accounts->>>>>>>>>>", result)
+							this.travelStaffAccounts = result?.data
+						})
+							.catch(err => {
+								this.$spinner.hide();//hide spinner
+							});
+			
+					})
+			}
+			else{
+				this.BookingForm.patchValue({
+					sub_account_id:''
+				})
+				this.getTravelClientAccounts()
+			}
+
+		})
+
+		
+	}
+	getTravelClientAccounts() {
+		this.TravelAgentService.getAllTravelClientAccountList('individual').then((result: any) => {
+			console.log("accounts->>>>>>>>>>", result)
+			this.travelStaffAccounts = result?.data
+		})
+			.catch(err => {
+				this.$spinner.hide();//hide spinner
+			});
 	}
 
 	resetDriverAndVehicle(affiliate_type: string) {
@@ -2096,7 +2151,7 @@ export class CreateBookingComponent implements OnInit {
 				shareArray['deducted_admin_share'] = shareArray['adminShare'] - shareArray['stripeFee']
 				shareArray['travelAgentShare'] = base_rate * 0.10
 			}
-			if(this.updateType == 'repeat' || this.updateType == 'return'){
+			if (this.updateType == 'repeat' || this.updateType == 'return') {
 				this.adminSharePercent = 15
 				shareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100
 				shareArray['deducted_admin_share'] = shareArray['adminShare'] - shareArray['stripeFee']
@@ -2153,9 +2208,11 @@ export class CreateBookingComponent implements OnInit {
 			return;
 		}
 
-		if(this.currentUser?.roleName == 'sub_travel_agent'){
+		if (this.currentUser?.roleName == 'sub_travel_agent') {
 			this.BookingForm.patchValue({
-				acc_id : this.currentUser?.agency_id
+				acc_id: this.currentUser?.agency_id,
+				sub_account_id:this.currentUser?.account_id,
+				sub_account_type:'sub_travel_agent'
 			})
 		}
 
@@ -2331,7 +2388,7 @@ export class CreateBookingComponent implements OnInit {
 			}
 			if (booking_data.service_type == 'round_trip') {
 				this.returnRateArray = response?.data?.retrunRateArray
-				this.returnRateArray.all_inclusive_rates.Base_Rate.amount = response?.data?.retrunRateArray?.all_inclusive_rates?.Base_Rate.amount 
+				this.returnRateArray.all_inclusive_rates.Base_Rate.amount = response?.data?.retrunRateArray?.all_inclusive_rates?.Base_Rate.amount
 				for (let outerKey in this.returnRateArray) {
 					if (this.returnRateArray.hasOwnProperty(outerKey)) {
 						const innerObject = this.returnRateArray[outerKey];
