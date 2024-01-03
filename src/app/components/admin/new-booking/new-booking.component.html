@@ -351,13 +351,20 @@
 							</mat-radio-group>
 						</div>
 					</div>
-					<div class="col-md-10 margin-left-10"
+					<div class="col-md-10 margin-left-10" style="padding-bottom:3px;"
 						*ngIf="Form['travel_client_acc'].value != 'travel_loose_customer'">
 						<ng-select appearance="outline" [items]="travelStaffAccounts" bindLabel="name" bindValue="id"
 							placeholder="Select Client Account" dropdownPosition="bottom" [markFirst]="true"
 							[virtualScroll]="true" formControlName="travel_client_id"
-							(change)="handleTravelStaffAccounts($event)">
+							(change)="handleTravelStaffAccounts($event)"
+							[ngClass]="{ 'border-red': (submitBookingForm && Form.travel_client_id.invalid) }"
+							style="height:66px;">
 						</ng-select>
+						<div *ngIf="(submitBookingForm && Form.travel_client_id.invalid) "
+							class="text-danger margin-bottom-thin my-mat-hint">
+							<div *ngIf="Form.travel_client_id.errors.required">Select a client
+								account</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -3570,7 +3577,7 @@
 							<div class="row m-0">
 								<div class="col-md-4 key d-flex align-items-center">
 									<span class="">
-										Agent Share
+										Travel Agent Share
 									</span>
 								</div>
 								<div class="col-md-8 value preview-airport-color">
@@ -4100,7 +4107,7 @@
 						<div class="row m-0">
 							<div class="col-md-4 key d-flex align-items-center">
 								<span class="">
-									Agent Share
+									Travel Agent Share
 								</span>
 							</div>
 							<div class="col-md-8 value preview-airport-color">
