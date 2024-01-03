@@ -1005,6 +1005,14 @@ export class NewBookingComponent implements OnInit {
 			passenger_cell_isd: '+1',
 			passenger_cell_country: 'us',
 		})
+		if (selectedAcc == 'travel_planner') {
+			this.BookingForm.get('travel_client_id').setValidators([Validators.required]);
+			this.BookingForm.get('travel_client_id').updateValueAndValidity();
+		}
+		else {
+			this.BookingForm.get('travel_client_id').clearValidators();
+			this.BookingForm.get('travel_client_id').updateValueAndValidity();
+		}
 	}
 
 	handleClientAccount(value: any) {
@@ -1021,6 +1029,15 @@ export class NewBookingComponent implements OnInit {
 
 	handleChangeTravelAccounts(selectedAcc) {
 		console.log('handleChangeTravelAccounts-->>', selectedAcc)
+		if (selectedAcc == 'travel_individual') {
+			this.BookingForm.get('travel_client_id').setValidators([Validators.required]);
+			this.BookingForm.get('travel_client_id').updateValueAndValidity();
+		}
+		else {
+			this.BookingForm.get('travel_client_id').clearValidators();
+			this.BookingForm.get('travel_client_id').updateValueAndValidity();
+		}
+
 	}
 	handleTravelStaffAccounts(value: any) {
 		console.log('handleTravelStaffAccounts--->>>', value)
