@@ -365,10 +365,10 @@ export class FarmOutComponent implements OnInit
 					this.adminSharePercent = 25
 				}
 				if (this.bookingPreview?.payment_status == "unpaid") {
-					if(this.bookingPreview?.share_array?.length != 0){
+					
 						console.log("in if share array",this.bookingPreview.affiliate_type === 'affiliate' && this.bookingPreview.payment_status=='unpaid' && this.bookingPreview?.share_array?.length != 0)
 						this.shareArray = this?.bookingPreview?.share_array
-					}
+					
 					this.rates_preview = this.bookingPreview?.rates_preview;
 				}
 				this.isAffiliate = this.bookingPreview.affiliate_type == "affiliate" ? true : false;
