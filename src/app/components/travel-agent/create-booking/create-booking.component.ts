@@ -2051,6 +2051,8 @@ export class CreateBookingComponent implements OnInit {
 
 		this.BookingForm.get('sub_account_type').valueChanges.subscribe((value: string) => {
 			if (value == 'sub_travel_agent') {
+				this.BookingForm.get('sub_account_id').setValidators([Validators.required]);
+				this.BookingForm.get('sub_account_id').updateValueAndValidity();
 				this.TravelAgentService.getAllTravelClientAccountList('sub_travel').then((result: any) => {
 					console.log("accounts->>>>>>>>>>", result)
 					this.subAgentAccounts = result?.data
@@ -2058,28 +2060,30 @@ export class CreateBookingComponent implements OnInit {
 					.catch(err => {
 						this.$spinner.hide();//hide spinner
 					});
-					this.BookingForm.get('sub_account_id').valueChanges.subscribe((value: string) => {
-						console.log('valueeeee->', value)
-						this.TravelAgentService.getAllTravelClientAccountList('individual',value).then((result: any) => {
-							console.log("accounts->>>>>>>>>>", result)
-							this.travelStaffAccounts = result?.data
-						})
-							.catch(err => {
-								this.$spinner.hide();//hide spinner
-							});
-			
+				this.BookingForm.get('sub_account_id').valueChanges.subscribe((value: string) => {
+					console.log('valueeeee->', value)
+					this.TravelAgentService.getAllTravelClientAccountList('individual', value).then((result: any) => {
+						console.log("accounts->>>>>>>>>>", result)
+						this.travelStaffAccounts = result?.data
 					})
+						.catch(err => {
+							this.$spinner.hide();//hide spinner
+						});
+
+				})
 			}
-			else{
+			else {
+				this.BookingForm.get('sub_account_id').clearValidators()
+				this.BookingForm.get('sub_account_id').updateValueAndValidity();
 				this.BookingForm.patchValue({
-					sub_account_id:''
+					sub_account_id: ''
 				})
 				this.getTravelClientAccounts()
 			}
 
 		})
 
-		
+
 	}
 	getTravelClientAccounts() {
 		this.TravelAgentService.getAllTravelClientAccountList('individual').then((result: any) => {
@@ -2211,8 +2215,8 @@ export class CreateBookingComponent implements OnInit {
 		if (this.currentUser?.roleName == 'sub_travel_agent') {
 			this.BookingForm.patchValue({
 				acc_id: this.currentUser?.agency_id,
-				sub_account_id:this.currentUser?.account_id,
-				sub_account_type:'sub_travel_agent'
+				sub_account_id: this.currentUser?.account_id,
+				sub_account_type: 'sub_travel_agent'
 			})
 		}
 

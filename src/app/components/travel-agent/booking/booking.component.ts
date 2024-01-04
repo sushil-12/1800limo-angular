@@ -825,6 +825,13 @@ export class BookingComponent implements OnInit {
 				throw new Error('Error: Location Points Not Specified Properly. ');
 			}
 		}
+		showAccountType(value) {
+			if (value == "travel_agent") {
+				return "(TA)";
+			} else if (value == "sub_travel_agent") {
+				return "(SUB TA)";
+			}
+		}
 	}
 
 

@@ -192,21 +192,23 @@ export class FinalizeBookingComponent implements OnInit {
 				this.affiliate_type = response.data.affiliate_type
 				this.visibility = response.data.payment_status == 'paid' ? false : true
 				this.paidAmount = response.data?.paid_amount ? parseFloat(response.data?.paid_amount) : 0
+				this.subModules = localStorage.getItem('sub_modules') || [];
+				this.currentUser = JSON.parse(localStorage.getItem('userData')) || "";
 				setTimeout(() => {
 					this.scroll('NumVehicles')
 
-					this.subModules = localStorage.getItem('sub_modules') || [];
-					this.currentUser = JSON.parse(localStorage.getItem('userData')) || "";
 				}, 600)
 			});
 		// api for card detailss
 		// getFinalizeDetails 
 	}
 	paymentDetail(bookingId) {
+		// this.$spinner.show();
 		this.$api
 			.getPaymentDetailFinalize(bookingId)
 			.pipe()
 			.subscribe((response: any) => {
+				this.$spinner.hide();
 				console.log(response.data, "check response paymentDetail");
 				if (response.data) {
 					this.main_receipt_url = response?.data?.main_receipt_url
