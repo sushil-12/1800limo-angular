@@ -1418,7 +1418,7 @@
 
 
 					<div class="distribution_rate"
-						*ngIf="bookingPreview?.affiliate_type === 'affiliate' && bookingPreview?.payment_status=='unpaid' && bookingPreview?.share_array?.length != 0">
+						*ngIf="bookingPreview?.affiliate_type === 'affiliate' && bookingPreview?.payment_status=='unpaid'">
 						<h4 class="font-weight-bolder m-0 my-3">
 							Rates Distribution
 						</h4>
@@ -1432,7 +1432,7 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										${{shareArray?.baseRate.toFixed(2)}}
+										${{rates_preview?.baseRate.toFixed(2)}}
 									</span>
 									(Fare Base Rate)
 								</div>
@@ -1447,7 +1447,7 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										${{shareArray?.adminShare.toFixed(2) }}
+										${{rates_preview?.adminShare.toFixed(2) }}
 									</span>
 									({{adminSharePercent}}% of Base Rate)
 								</div>
@@ -1462,8 +1462,8 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										${{shareArray?.grandTotal ? shareArray?.grandTotal.toFixed(2) :
-										shareArray?.returnGrandTotal.toFixed(2)}}
+										${{rates_preview?.grandTotal ? rates_preview?.grandTotal.toFixed(2) :
+										rates_preview?.returnGrandTotal.toFixed(2)}}
 									</span>
 									(Actual Cost to Customer)
 								</div>
@@ -1478,7 +1478,7 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										${{shareArray?.stripeFee.toFixed(2)}}
+										${{rates_preview?.stripeFee.toFixed(2)}}
 									</span>
 									(Platform fee 5% + 30 cents - <b>Paid from Admin share</b>)
 								</div>
@@ -1494,13 +1494,13 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										${{shareArray?.affiliateShare.toFixed(2)}}
+										${{rates_preview?.affiliateShare.toFixed(2)}}
 									</span>
 									( Total Price - (Ride Base Rate + Other Taxes) )
 								</div>
 							</div>
 						</div>
-						<div class="mx-2" *ngIf="shareArray?.farmoutShare">
+						<div class="mx-2" *ngIf="rates_preview?.farmoutShare">
 							<div class="row m-0">
 								<div class="col-md-4 key d-flex align-items-center">
 									<span class="">
@@ -1509,7 +1509,7 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										${{shareArray?.farmoutShare.toFixed(2)}}
+										${{rates_preview?.farmoutShare.toFixed(2)}}
 									</span>
 									( 10 % of Base Rate)
 								</div>
