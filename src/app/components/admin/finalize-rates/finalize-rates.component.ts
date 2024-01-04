@@ -413,7 +413,7 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 			this.subtotal = 0;
 			for (let item in this.total) {
 				this.subtotal = Number(this.subtotal.toFixed(2)) + Number(this.total[item].toFixed(2));
-				console.log("in total checkk---->",this.subtotal,Number(this.subtotal.toFixed(2)),'--->',Number(this.total[item].toFixed(2)))
+				// console.log("in total checkk---->",this.subtotal,Number(this.subtotal.toFixed(2)),'--->',Number(this.total[item].toFixed(2)))
 			}
 		}
 
@@ -467,7 +467,7 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 
 			this.returnformvalue.emit(value);
 		}
-		console.log("in function calculate total",this.grandtotal,this.subtotal)
+		// console.log("in function calculate total",this.grandtotal,this.subtotal)
 	}
 
 	toggleDropdown(section: string) {

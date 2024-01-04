@@ -182,8 +182,14 @@
 					<ng-select appearance="outline" [items]="subAgentAccounts" bindLabel="name" bindValue="id"
 						placeholder="Select Sub Agent Account" dropdownPosition="bottom" [markFirst]="true"
 						[virtualScroll]="true" formControlName="sub_account_id"
-						(change)="handleSubAgentAccounts($event)" style="padding-bottom: 0px;">
+						(change)="handleSubAgentAccounts($event)" style="padding-bottom: 0px;"
+						[ngClass]="{ 'border-red': (submitBookingForm && Form.sub_account_id.invalid) }">
 					</ng-select>
+					<div *ngIf="(submitBookingForm && Form.sub_account_id.invalid) "
+						class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="Form.sub_account_id.errors.required">Select a sub agent
+							account</div>
+					</div>
 
 				</div>
 			</div>
