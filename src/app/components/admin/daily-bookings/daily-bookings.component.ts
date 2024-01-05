@@ -751,7 +751,9 @@ export class DailyBookingsComponent implements OnInit {
 					this.adminSharePercent = 25
 				}
 				if (this.bookingPreview?.payment_status == "unpaid") {
+					console.log("in shre array",this.bookingPreview?.share_array?.length != 0,this.bookingPreview?.share_array?.length)
 					if(this.bookingPreview?.share_array?.length != 0){
+						console.log("in shre array")
 						this.shareArray = this?.bookingPreview?.share_array
 					}
 					this.rates_preview = this.bookingPreview?.rates_preview;
