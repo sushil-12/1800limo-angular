@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { bindCallback, Observable, throwError } from 'rxjs';
@@ -7,6 +7,7 @@ import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.se
 import { StateManagementService } from 'src/app/services/statemanagement.service';
 import { QuotebotService } from '../../../services/quotebot.service';
 import { SharedModule } from '../../shared/shared.module';
+import { AdminService } from 'src/app/services/admin.service';
 
 declare let $: any
 
@@ -27,6 +28,8 @@ interface Filters
 })
 export class SelectVehicleComponent implements OnInit
 {
+	@ViewChild("inputmsg", { static: false }) message: ElementRef;
+	@ViewChild("sendEmailModalFocus") sendEmailModalFocus: any;
 	/**
 	 * 
 	 * Please DO NOT CHANGE any conditions in this file.
@@ -195,7 +198,7 @@ export class SelectVehicleComponent implements OnInit
 	// ]
 
 	modal_driver_info_labels: Array<String> = ['name', 'gender', 'phone', 'languages', 'experience', 'dress', 'background', 'starRating']
-	vehicleDetails: Array<any> = []
+	vehicleDetails:any;
 	vehicleImages: Array<any> = []
 	master_vehicles: Array<any> = []
 
@@ -230,6 +233,9 @@ export class SelectVehicleComponent implements OnInit
 	changeText:boolean = false
 	bookingId: any = null;
 	quotebotNewData: any;
+	show = false;
+	notification_msg:any;
+	passengerDetails: any;
 
 
 	constructor(
@@ -239,7 +245,8 @@ export class SelectVehicleComponent implements OnInit
 		private $errorDialog: ErrorDialogService,
 		private $state: StateManagementService,
 		private $activatedRoute: ActivatedRoute,
-		private $globals: SharedModule
+		private $globals: SharedModule,
+		private adminService:AdminService,
 	) { 
 		console.log('in constructor select vehicle')
 	}
@@ -1009,6 +1016,85 @@ export class SelectVehicleComponent implements OnInit
 			return i;
 		})
 	}
+
+	openModal(vehinfo) {
+		try {
+			setTimeout(() => {
+				// $('textarea').attr('autofocus', 'autofocus');
+				this.sendEmailModalFocus.nativeElement
+					.querySelector("textarea")
+					.focus();
+			}, 1000);
+		} catch (error) {
+			console.log("----------error------->>>>>> ", error);
+		}
+		this.passengerDetails = vehinfo;
+		// this.passengerDetails["selection_button"] = selection_button;
+	}
+
+
+	messageField(format) {
+		setTimeout(() => {
+			this.sendEmailModalFocus.nativeElement
+				.querySelector("textarea")
+				.focus();
+		}, 1000);
+		this.show = true;
+		// switch (format) {
+		// 	case "Phone": {
+		// 		this.sendMessageField = true;
+		// 		break;
+		// 	}
+		// 	case "Email": {
+		// 		this.sendMessageField = false;
+		// 		break;
+		// 	}
+		// }
+	}
+
+	closeModal() {
+		// this.sendEmailModal.nativeElement.querySelector('textarea').blur();
+		$("#sendEmailModal").modal("hide");
+		this.message.nativeElement.value = "";
+		this.show = false;
+		// this.sendEmailModal.nativeElement.querySelector('textarea').focus();
+	}
+
+	submit(message,vehicleDetails) {
+		
+		console.log("in submit---->",vehicleDetails)
+		let obj = {
+			reciptentName: this.passengerDetails?.affiliate_name,
+			sendTo:'Affiliate',
+			sendThrough: "Phone" ,
+			sendValue: this.passengerDetails?.affiliate_phone,
+			sendContent: message,
+		};
+		console.log("in submit obj---->",obj)
+		this.adminService
+			.adminNotification(obj)
+			.pipe(
+				catchError((err) => {
+					return throwError(err);
+				})
+			)
+			.subscribe(({ message }: any) => {
+				this.notification_msg = message;
+				$("#notificationModal").modal("show");
+				console.log(message);
+				$("textarea").val("");
+			});
+		$("#closeModal").click(() => {
+			$("#notificationModal").modal("hide");
+		});
+		$("#closeModal1").click(() => {
+			$("#notificationModal").modal("hide");
+		});
+		$("#sendEmailModal").modal("hide");
+		this.message.nativeElement.value = "";
+		this.show = false;
+	}
+
 
 
 }
