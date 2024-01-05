@@ -319,7 +319,7 @@
 								</span>|<br>
 								<span>
 									<p data-target="#sendEmailModal" style="white-space: pre" data-toggle="modal"
-										(click)="openModal()" id="box">
+										(click)="openModal(vehinfo)" id="box">
 										<span>{{vehinfo?.affiliate_phone}}</span>
 									</p>
 									<!-- <a href="tel:{{vehinfo?.affiliate_phone}}">
@@ -666,11 +666,11 @@
 				<i class="bi bi-x-circle"></i>
 			</button>
 			<hr>
-			<div class="text-center iconStyle" *ngFor="let vehinfo of vehicleDetails">
+			<div class="text-center iconStyle">
 				<div class="row">
 					<div class="col-md-12">
 						<h5 class="mb-5">
-							Connect with {{ vehinfo?.affiliate_name }} Via</h5>
+							Connect with {{ passengerDetails?.affiliate_name }} Via</h5>
 					</div>
 					<div class="d-flex" style="width: -webkit-fill-available;">
 						<div class="col-md-4" (click)="messageField('Phone')">
@@ -713,7 +713,7 @@
 							<h6 class="headingStyle">Send SMS</h6>
 						</div>
 						<div class="col-md-4">
-							<a href="tel:{{vehinfo?.affiliate_phone}}">
+							<a href="tel:{{passengerDetails?.affiliate_phone}}">
 								<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"
 									viewBox="0 0 122.88 122.88">
 									<defs>
@@ -748,7 +748,7 @@
 						<div class="d-flex justify-content-center mt-2">
 							<!-- <button type="button" data-dismiss="modal" (click)="closeModal()"
 								class="btn btnStyle">Close</button> -->
-							<button class="btn saveButtonModal" (click)="submit(inputmsg.value,vehinfo)"
+							<button class="btn saveButtonModal" (click)="submit(inputmsg.value,passengerDetails)"
 								data-dismiss="modal">Send</button>
 						</div>
 					</div>

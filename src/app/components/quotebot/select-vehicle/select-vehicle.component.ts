@@ -235,6 +235,7 @@ export class SelectVehicleComponent implements OnInit
 	quotebotNewData: any;
 	show = false;
 	notification_msg:any;
+	passengerDetails: any;
 
 
 	constructor(
@@ -1016,7 +1017,7 @@ export class SelectVehicleComponent implements OnInit
 		})
 	}
 
-	openModal() {
+	openModal(vehinfo) {
 		try {
 			setTimeout(() => {
 				// $('textarea').attr('autofocus', 'autofocus');
@@ -1027,7 +1028,7 @@ export class SelectVehicleComponent implements OnInit
 		} catch (error) {
 			console.log("----------error------->>>>>> ", error);
 		}
-		// this.passengerDetails = booking;
+		this.passengerDetails = vehinfo;
 		// this.passengerDetails["selection_button"] = selection_button;
 	}
 
@@ -1063,10 +1064,10 @@ export class SelectVehicleComponent implements OnInit
 		
 		console.log("in submit---->",vehicleDetails)
 		let obj = {
-			reciptentName: vehicleDetails?.affiliate_name,
+			reciptentName: this.passengerDetails?.affiliate_name,
 			sendTo:'Affiliate',
 			sendThrough: "Phone" ,
-			sendValue: vehicleDetails?.affiliate_phone,
+			sendValue: this.passengerDetails?.affiliate_phone,
 			sendContent: message,
 		};
 		console.log("in submit obj---->",obj)
