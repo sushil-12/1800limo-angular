@@ -2056,6 +2056,12 @@ export class CreateBookingComponent implements OnInit {
 				this.TravelAgentService.getAllTravelClientAccountList('sub_travel').then((result: any) => {
 					console.log("accounts->>>>>>>>>>", result)
 					this.subAgentAccounts = result?.data
+					console.log('in if sub ta----->',this.BookingForm?.get('sub_account_id').value == '')
+					if(this.BookingForm?.get('sub_account_id').value == ''){
+						this.BookingForm.patchValue({
+							travel_client_id:''
+						})
+					}
 				})
 					.catch(err => {
 						this.$spinner.hide();//hide spinner
