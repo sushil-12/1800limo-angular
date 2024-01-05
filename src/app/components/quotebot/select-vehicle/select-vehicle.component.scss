@@ -877,3 +877,68 @@ button.link {
 		font-size: 1.48rem;
 	}
 }
+#sendEmailModal .modal-content hr {
+	border: 2px solid var(--orange-color);
+	width: 180px;
+	background-color: var(--orange-color);
+	// margin          : 10px 347px 20px 347px;
+	display: block;
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+.modal-header {
+	justify-content: center;
+}
+#Layer_1 {
+	height: 48px;
+	width: 48px;
+}
+
+.mailBoxStyle svg {
+	width: 60px;
+	height: 60px;
+	margin-top: -5px;
+}
+
+.iconStyle {
+	margin: 20px 20px 10px 20px;
+	cursor: pointer;
+}
+
+.iconStyle a {
+	text-decoration: none;
+	color: #000;
+}
+
+.headingStyle {
+	margin-top: 7px;
+}
+
+.saveButton {
+	color: #fff !important;
+	background-color: #5dbd8a;
+	border-color: #5dbd8a;
+	padding: 10px 40px;
+	position: absolute;
+	bottom: -60px;
+	left: 15px;
+	transition: box-shadow 0.1s ease-in-out;
+    box-shadow: 0px 5px 10px 1px rgb(0 0 0 / 40%);
+}
+
+.saveButtonModal {
+	color: #fff !important;
+	background-color: #5dbd8a;
+	border-color: #5dbd8a;
+	padding: 10px 40px;
+	bottom: -60px;
+	left: 15px;
+	transition: box-shadow 0.1s ease-in-out;
+    box-shadow: 0px 5px 10px 1px rgb(0 0 0 / 40%);
+}
+
+.box-special-instruction{
+	overflow-y: auto;
+	max-height: 200px;
+}
