@@ -4,8 +4,8 @@
 	<section class="adminbox_shadow user_information">
 		<div class="row">
 			<div class="col-md-7">
-				<h2 class="headinginfo" *ngIf="currentUser?.roleName == 'travel_agent'">Super Travel Agent Bookings
-					<span style="text-transform: capitalize; font-weight: 600;"
+				<h2 class="headinginfo" *ngIf="currentUser?.roleName == 'travel_agent'" style="font-weight: 600 !important; font-size: 22px !important;">Super Travel Agent Bookings
+					<span style="text-transform: capitalize; font-weight: 400;"
 						*ngIf="agency_name">({{agency_name}})</span>
 				</h2>
 				<h2 class="headinginfo" *ngIf="currentUser?.roleName == 'sub_travel_agent'">Sub Travel Agent Bookings
@@ -49,9 +49,9 @@
 		</div>
 		<div class="containeredd mt-1 ">
 			<div class="row my-2 align-items-center">
-				<!-- Start-Date -->
-				<div class="col-sm-4 col-md-4 my-2">
-					<mat-form-field appearance="outline" class="m-0 text-xl">
+				<!-- Start-Date --> 
+				<div class="col-sm-4 col-md-4" style="margin-top: 0.4rem !important; margin: bottom 0.4rem !important;">
+					<mat-form-field appearance="outline" class="m-0" style="font-size:0.86rem !important;">
 						<mat-label>
 							Start Date <span class="asterisk"> * </span>
 						</mat-label>
@@ -64,8 +64,8 @@
 				</div>
 
 				<!-- End-Date -->
-				<div class="col-sm-4 col-md-4 my-2">
-					<mat-form-field appearance="outline" class="m-0 text-xl">
+				<div class="col-sm-4 col-md-4"  style="margin-top: 0.4rem !important; margin: bottom 0.4rem !important;">
+					<mat-form-field appearance="outline" class="m-0 " style="font-size:0.86rem !important;">
 						<mat-label>
 							End Date <span class="asterisk"> * </span>
 						</mat-label>

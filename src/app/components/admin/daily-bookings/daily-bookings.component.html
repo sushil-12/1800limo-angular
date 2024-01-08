@@ -206,6 +206,13 @@
 												<div class="dropdown-item-icon"></div>
 												Email All
 											</a>
+											<a class="dropdown-item"
+												(click)="sendEmailClicked(booking.booking_id,'updatedEmailAll')"
+												data-toggle="modal" data-target="#updatedEmailAll"
+												*ngIf="currentUser?.RoleName == 'admin' && booking?.show_changed_fields">
+												<div class="dropdown-item-icon"></div>
+												Send Updated Email
+											</a>
 											<a class="dropdown-item" (click)="auditTrail(booking.booking_id)"
 												data-toggle="modal" data-target="#AuditTrailModal"
 												*ngIf="currentUser?.RoleName == 'admin' || subModules.includes('audit_trial')">
@@ -213,7 +220,7 @@
 												Audit Trial
 											</a>
 											<a class="dropdown-item" (click)="reAffiliate(booking.booking_id)"
-												*ngIf="(currentUser?.RoleName == 'admin' && booking.booking_status == 'rejected')">
+												*ngIf="(currentUser?.RoleName == 'admin' &&( booking.booking_status == 'rejected' || booking?.booking_status == 'pending' || booking?.booking_status == 'driver_unassigned') )">
 												<div class="dropdown-item-icon"></div>
 												ReAffiliate
 											</a>
@@ -468,13 +475,33 @@
 				<p>Are you sure, You want to send email?</p>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="custom-btn savebutton" (click)="emailAll()">Send
+				<button type="button" class="custom-btn savebutton"  (click)="emailAll()">Send
 					Email</button>
 				<button type="button" class="custom-btn resetbutton" data-dismiss="modal">Close</button>
 			</div>
 		</div>
 	</div>
+
 </div>
+<div class="modal fade" id="updatedEmailAll" tabindex="-1" role="dialog" aria-labelledby="updatedEmailAll" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header pb-0">
+				<h3 class="mb-0">Email</h3>
+			</div>
+			<div class="modal-body text-center">
+				<p>Are you sure, You want to send email?</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="custom-btn savebutton"  (click)="updatedEmailAll()">Send
+					Email</button>
+				<button type="button" class="custom-btn resetbutton" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+
+</div>
+
 
 <!-- Audit trail Modal -->
 <div class="modal fade bd-example-modal-lg" id="AuditTrailModal" tabindex="-1" role="dialog"
