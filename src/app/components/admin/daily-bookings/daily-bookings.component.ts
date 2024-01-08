@@ -254,6 +254,30 @@ export class DailyBookingsComponent implements OnInit {
 			return args.replace(re, '<mark class="font-weight-bold">$&</mark>');
 		}
 	}
+	updatedEmailAll() {
+		console.log(
+			"In function updatedEmailAll all",
+			this.sendEmailForm.value.reservation_id,
+			this.sendEmailForm.value.emailTarget
+		);
+		let data = {
+			reservation_id: this.sendEmailForm.value.reservation_id,
+		};
+		this.spinner.show();
+		this.adminService
+			.bookingEmailAllUpdated(this.sendEmailForm.value.reservation_id)
+			.pipe(
+				catchError((err) => {
+					return throwError(err);
+				})
+			)
+			.subscribe((response: any) => {
+				console.log("response--------->>>>>>>>", response);
+				this.spinner.hide();
+				$("#updatedEmailAll").modal("hide");
+			});
+	}
+
 	emailAll() {
 		console.log(
 			"In function email all",
@@ -629,11 +653,13 @@ export class DailyBookingsComponent implements OnInit {
 	}
 
 	sendEmailClicked(bookingId, emailTarget) {
+		console.log('in func send email click',bookingId,emailTarget)
 		this.sendEmailForm.patchValue({
 			reservation_id: bookingId,
 			emailTarget: emailTarget,
 		});
 	}
+	
 
 	emailForm() {
 		this.submitted = true;

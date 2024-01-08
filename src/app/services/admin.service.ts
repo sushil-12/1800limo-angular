@@ -899,6 +899,9 @@ export class AdminService {
 	bookingEmailAll(data) {
 		return this.httpClient.post(this.serverUrl + 'send-reservation-detail-email-to-all', data)
 	}
+	bookingEmailAllUpdated(bookingId) {
+		return this.httpClient.get(this.serverUrl + `send-updated-email/${bookingId}`)
+	}
 	auditTrailInfo(bookingId) {
 		return this.httpClient.get(this.serverUrl + `admin/booking-audit-records/${bookingId}`)
 	}
