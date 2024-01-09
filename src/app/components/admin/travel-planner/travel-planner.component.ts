@@ -128,6 +128,10 @@ export class TravelPlannerComponent implements OnInit {
     this.router.navigate(['/admin/travel-planner-account/step1'], { queryParams: { travelPlannerId: travelPlannerId } });
   }
 
+  viewSubAgents(travelPlannerId) {
+    this.router.navigate(['/admin/sub-travel-planner-account'], { queryParams: { travelPlannerId: travelPlannerId } });
+  }
+
   clickTravelPlannerCards(travelPlannerId) {
     this.router.navigate(['/admin/cards'], { queryParams: { accountType: 'travelPlanner', accountId: travelPlannerId } });
   }

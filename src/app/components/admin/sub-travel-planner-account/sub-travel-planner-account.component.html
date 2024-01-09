@@ -2,9 +2,9 @@
 <main>
 	<!-- Main page content-->
 	<section class="user_information">
-		<h2 class="headinginfo"> Travel Agent Accounts </h2>
+		<h2 class="headinginfo">Sub Travel Agent Accounts </h2>
 		<div class="containeredd">
-			<div class="row">
+			<!-- <div class="row">
 				<div class="col-md-12">
 					<button class="custom-btn add-button" (click)="addTravelPlannerClick(travelPlannerId)">
 						<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-plus-circle"
@@ -15,8 +15,8 @@
 						</svg> Add Travel Agent
 					</button>
 				</div>
-			</div>
-			<div class="row">
+			</div> -->
+			<!-- <div class="row">
 				<div class="col-md-6">
 					<label class="alert alert-danger">Note: Add each different Travel Agent first. Enter rates and
 						taxes for each Travel Agent.</label>
@@ -27,7 +27,7 @@
 					<h3 class="headingRejected">Rejected: {{travelAccountCount?.rejected}}</h3>
 					<h3 class="headingStripe">Waiting for approval: {{travelAccountCount?.waiting_for_approval}}</h3>
 				</div>
-			</div>
+			</div> -->
 
 			<div class="row">
 				<div class="col-md-12 mt-3 mb-3">
@@ -39,7 +39,7 @@
 					</mat-form-field>
 				</div>
 				<!-- <div class="col-md-2  mt-3 mb-3">
-					<button class="custom-btn button2 btnclass" (click)="loadTravelPlanners()">Search</button>
+					<button class="custom-btn button2 btnclass" (click)="loadSubTravelPlanners()">Search</button>
 				</div> -->
 			</div>
 		</div>
@@ -54,13 +54,13 @@
 							<tr role="row">
 								<th>Actions</th>
 								<th>Approval Status</th>
-								<th>Status</th>
+								<!-- <th>Status</th> -->
 								<th>Name</th>
 								<th>Email</th>
 								<th>Mobile</th>
 								<th>Agency Name</th>
-								<th>Payee Name</th>
-								<th>IATA</th>
+								<!-- <th>Payee Name</th>
+								<th>IATA</th> -->
 								<th>Address</th>
 								<th>Country</th>
 							</tr>
@@ -75,33 +75,18 @@
 									</a>
 									<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
 										aria-labelledby="navbarDropdownUserImage">
-										<a class="dropdown-item" (click)="clickEditTravelPlanner(travelPlanner.id)">
-											<div class="dropdown-item-icon"></div>
-											Edit Travel Agent Account
-										</a>
-										<a class="dropdown-item" (click)="clickTravelPlannerCards(travelPlanner.id)">
-											<div class="dropdown-item-icon"></div>
-											View Cards
-										</a>
-										<!-- <a class="dropdown-item" (click)="clickTravelPlannerStaff(travelPlanner.id)">
-											<div class="dropdown-item-icon"></div>
-											View Staff
-										</a> -->
-										<a class="dropdown-item" (click)="loginAsUser(travelPlanner.user_id)">
+										
+										<a class="dropdown-item" (click)="loginAsUser(travelPlanner)">
 											<div class="dropdown-item-icon"></div>
 											Log into this account
 										</a>
-										<a class="dropdown-item" (click)="viewSubAgents(travelPlanner.id)">
-											<div class="dropdown-item-icon"></div>
-											View Sub Agents
-										</a>
+										
 									</div>
 								</td>
 								<td>
-									<div *ngIf="!travelPlanner?.is_complete; else notCompleted"
-										[className]="'badge badge-pill approval_status ' + travelPlanner?.account_approval">
+									<div [className]="'badge badge-pill approval_status ' + travelPlanner?.account_approval">
 										{{travelPlanner?.account_approval | titlecase}}</div>
-									<ng-template #notCompleted>
+									<!-- <ng-template #notCompleted>
 										<div class="accpet_reject_div">
 											<button class="acceptButton"
 												(click)="acceptRejectAffiliate(travelPlanner?.id,'accepted')">Accept</button>
@@ -109,14 +94,14 @@
 												(click)="acceptRejectAffiliate(travelPlanner?.id,'rejected')"
 												data-toggle="modal" data-target="#rejectCauseModal">Reject</button>
 										</div>
-									</ng-template>
+									</ng-template> -->
 								</td>
-								<td>
+								<!-- <td>
 									<mat-slide-toggle class="example-margin" [color]="color"
 										[checked]="travelPlanner.status" [disabled]="disabled"
 										(change)="enableDisableClicked($event,travelPlanner.id)">
 									</mat-slide-toggle>
-								</td>
+								</td> -->
 								<td *ngIf="travelPlanner.middle_name==null;else middleName">
 									<span
 										[innerHTML]="highlighText(travelPlanner.first_name+' '+travelPlanner.last_name)"></span>
@@ -127,16 +112,14 @@
 											[innerHTML]="highlighText(travelPlanner.first_name+' '+travelPlanner.middle_name+' '+travelPlanner.last_name)"></span>
 									</td>
 								</ng-template>
-								<td class="clickable" (click)="sendMessage('email', travelPlanner)"
-									data-messagetype="email"><span
+								<td><span
 										[innerHTML]="highlighText(travelPlanner.email)"></span></td>
-								<td class="clickable" (click)="sendMessage('sms', travelPlanner)"
-									data-messagetype="sms"><span
+								<td><span
 										[innerHTML]="highlighText(travelPlanner.mobileIsd+travelPlanner.mobile+' '+'('+travelPlanner?.mobileCountry.toUpperCase()+')')"></span>
 								</td>
 								<td><span [innerHTML]="highlighText(travelPlanner.agency_name)"></span></td>
-								<td><span [innerHTML]="highlighText(travelPlanner.payee)"></span></td>
-								<td><span [innerHTML]="highlighText(travelPlanner.iata)"></span></td>
+								<!-- <td><span [innerHTML]="highlighText(travelPlanner.payee)"></span></td>
+								<td><span [innerHTML]="highlighText(travelPlanner.iata)"></span></td> -->
 								<td><span [innerHTML]="highlighText(travelPlanner.Address)"></span></td>
 								<td><span [innerHTML]="highlighText(travelPlanner?.country)"></span></td>
 							</tr>
@@ -148,8 +131,8 @@
 				<nav aria-label="Page navigation example">
 					<ul class="pagination pagination-circle pg-blue">
 						<li *ngIf="currentPage!=1" class="page-item disabled"
-							(click)="loadTravelPlanners(firstPageUrl)"><a class="page-link">First</a></li>
-						<li *ngIf="currentPage!=1" class="page-item disabled" (click)="loadTravelPlanners(prevPageUrl)">
+							(click)="loadSubTravelPlanners(firstPageUrl)"><a class="page-link">First</a></li>
+						<li *ngIf="currentPage!=1" class="page-item disabled" (click)="loadSubTravelPlanners(prevPageUrl)">
 							<a class="page-link" aria-label="Previous">
 								<span aria-hidden="true">&laquo;</span>
 								<span class="sr-only">Previous</span>
@@ -157,16 +140,16 @@
 						</li>
 						<li *ngFor="let in of counter() ;let i = index"
 							[ngClass]="(in==currentPage)?'page-item active':'page-item'"
-							(click)="loadTravelPlanners(path+'?page='+in)" [disabled]="(in==currentPage)?true:false">
+							(click)="loadSubTravelPlanners(path+'?page='+in)" [disabled]="(in==currentPage)?true:false">
 							<a class="page-link">{{in}}</a>
 						</li>
-						<li *ngIf="currentPage!=lastPage" class="page-item" (click)="loadTravelPlanners(nextPageUrl)">
+						<li *ngIf="currentPage!=lastPage" class="page-item" (click)="loadSubTravelPlanners(nextPageUrl)">
 							<a class="page-link" aria-label="Next">
 								<span aria-hidden="true">&raquo;</span>
 								<span class="sr-only">Next</span>
 							</a>
 						</li>
-						<li *ngIf="currentPage!=lastPage" class="page-item" (click)="loadTravelPlanners(lastPageUrl)"><a
+						<li *ngIf="currentPage!=lastPage" class="page-item" (click)="loadSubTravelPlanners(lastPageUrl)"><a
 								class="page-link">Last</a></li>
 					</ul>
 				</nav>
@@ -176,7 +159,7 @@
 </main>
 
 <!-- Message modal -->
-<div class="modal fade" tabindex="-1" id="messageModal" aria-labelledby="messageModal" aria-hidden="true">
+<!-- <div class="modal fade" tabindex="-1" id="messageModal" aria-labelledby="messageModal" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -205,4 +188,4 @@
 			</div>
 		</div>
 	</div>
-</div>
+</div> -->

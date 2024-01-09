@@ -83,6 +83,7 @@ import { AffiliateBookingComponent } from './affiliate-booking/affiliate-booking
 import { TravelAgentStepsComponent } from './travel-agent-steps/travel-agent-steps.component';
 import { TravelAgentStripeFormComponent } from './travel-agent-stripe-form/travel-agent-stripe-form.component';
 import { RecoverAccountsComponent } from './recover-accounts/recover-accounts.component';
+import { SubTravelPlannerAccountComponent } from './sub-travel-planner-account/sub-travel-planner-account.component';
 
 
 const routes: Routes = [
@@ -386,6 +387,11 @@ const routes: Routes = [
 			},
 		]
 	}, 
+	{
+		path: 'sub-travel-planner-account',
+		canActivate: [SubAdminGuard],
+		component: SubTravelPlannerAccountComponent
+	},
 	// {
 	// 	path: 'add-travel-planner-account',
 	// 	canActivate: [SubAdminGuard],

@@ -25,6 +25,7 @@ export class SubTravelAgentTemplateComponent implements OnInit {
 	chevron_up: boolean = false;
 	chevron: boolean = false;
 	chevron1: boolean = false;
+	bkpData:any='';
 
 	constructor(
 		private router: Router,
@@ -37,6 +38,7 @@ export class SubTravelAgentTemplateComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
+		this.bkpData = JSON.parse(localStorage.getItem('bkp_crnt_dt')) ?  JSON.parse(localStorage.getItem('bkp_crnt_dt')) : ''
 			//Get logged in user name
 			this.currentUser = JSON.parse(localStorage.getItem('currentUser'))
 			console.log('is_profile',this.currentUser?.is_profile_complete)
@@ -176,5 +178,19 @@ export class SubTravelAgentTemplateComponent implements OnInit {
 			});
 	}
 
+	backToAdmin(){
+		let bkp_a_token = localStorage.getItem('bkp_a_token')
+		let bkp_crnt_dt = localStorage.getItem('bkp_crnt_dt')
+		let bkp_u_dt = localStorage.getItem('bkp_u_dt')
+		localStorage.setItem('access_token', bkp_a_token)
+		localStorage.setItem('currentUser', bkp_crnt_dt)
+		localStorage.setItem('userData', bkp_u_dt)
+		localStorage.removeItem('bkp_a_token')
+		localStorage.removeItem('bkp_crnt_dt')
+		localStorage.removeItem('bkp_u_dt')
+		  this.router.navigateByUrl('/admin/daily-bookings-admin');
+		
+		
+	}
 
 }
