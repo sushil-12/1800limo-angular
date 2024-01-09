@@ -527,6 +527,17 @@ export class AdminService {
 		return this.httpClient.get(path).toPromise();;
 	}
 
+	subTravelPlannerAccountsbyId(url, keyword,id) {
+		var path;
+		if (url) {
+			path = url + '&search=' + keyword;
+		}
+		else {
+			path = this.serverUrl + `sub-agent-list/${id}` + '?search=' + keyword;
+		}
+		return this.httpClient.get(path).toPromise();;
+	}
+
 	loginAsUser(id){
 		return this.httpClient.get(this.serverUrl + 'admin/login-as-user/' + id);
 	}

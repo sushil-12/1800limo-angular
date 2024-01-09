@@ -14,7 +14,7 @@ export class SubTravelAgentGuardGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot){
       const currentUser: any = JSON.parse(localStorage.getItem('userData'))
-      if (currentUser?.RoleName != 'sub_travel_agent') {
+      if (currentUser?.RoleName != 'sub_travel_agent'  && currentUser?.RoleName != 'admin') {
         this.router.navigate(['/home']);
         return false;
       }
