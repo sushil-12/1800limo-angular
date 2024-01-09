@@ -92,7 +92,7 @@ export class LoginComponent implements OnInit, AfterViewInit
 					break;
 				}
 				case 'sub_travel_agent':{
-					this.router.navigateByUrl('/subagent')
+					this.router.navigateByUrl('/sub_travel_agent')
 					break;
 				}
 				default: {
