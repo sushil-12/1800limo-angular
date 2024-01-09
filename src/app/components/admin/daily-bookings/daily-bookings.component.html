@@ -282,9 +282,9 @@
 											[ngClass]="currentUser?.RoleName == 'admin' || subModules.includes('can_send_notifications') ? '' : 'disabled-btn'"
 											*ngIf="booking.affiliate_type == null; else otherAffiliate">
 											<span class="font-weight-bolder"
-												[innerHTML]="highlighText(booking.loose_affiliate_name+ ' '+'(L)')"></span>|
-											<span [innerHTML]="highlighText(booking.loose_affiliate_phone_isd)"></span>
-											<span [innerHTML]="highlighText(booking.loose_affiliate_phone)"></span>
+												[innerHTML]="highlighText(booking.loose_affiliate_name ? booking.loose_affiliate_name + ' '+'(L)' : '1800Limo Chauffeurs ')"></span>|
+											<span [innerHTML]="highlighText(booking.loose_affiliate_phone_isd ? booking.loose_affiliate_phone_isd : '+1')"></span>
+											<span [innerHTML]="highlighText(booking.loose_affiliate_phone ? booking.loose_affiliate_phone : '8005466266')"></span>
 										</p>
 										<ng-template #otherAffiliate>
 											<p data-target="#sendEmailModal" data-toggle="modal"
