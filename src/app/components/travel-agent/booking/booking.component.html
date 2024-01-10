@@ -3,12 +3,17 @@
 	<!-- Main page content-->
 	<section class="adminbox_shadow user_information">
 		<div class="row">
-			<div class="col-md-7">
-				<h2 class="headinginfo" *ngIf="currentUser?.roleName == 'travel_agent'" style="font-weight: 600 !important; font-size: 22px !important;">Super Travel Agent Bookings
+			<div class="col-md-7" *ngIf="currentUser?.roleName == 'travel_agent'">
+				<h2 class="headinginfo"  style="font-weight: 600 !important; font-size: 22px !important;">Super Travel Agent Bookings
 					<span style="text-transform: capitalize; font-weight: 400;"
 						*ngIf="agency_name">({{agency_name}})</span>
 				</h2>
-				<h2 class="headinginfo" *ngIf="currentUser?.roleName == 'sub_travel_agent'">Sub Travel Agent Bookings
+				
+			</div>
+			<div class="col-md-12" *ngIf="currentUser?.roleName == 'sub_travel_agent'">
+				<h2 class="headinginfo"  style="font-weight: 600 !important; font-size: 22px !important;">Sub Travel Agent Bookings
+					<span style="text-transform: capitalize; font-weight: 400;"
+						*ngIf="currentUser?.name">({{currentUser?.name}})</span>
 				</h2>
 			</div>
 			<div class="col-md-5 d-flex justify-content-end" style="gap: 10px;" *ngIf="invite_link">
