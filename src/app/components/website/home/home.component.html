@@ -364,7 +364,7 @@
 															max="1000" step="1" inputmode="decimal"
 															style="text-align: center" class="form-control"
 															placeholder="" id="no_of_passenger" tabindex="1"
-															[class.errorValid]="submitted && QBForm?.no_of_passenger?.errors">
+															[class.errorValid]="submitted && QBForm?.no_of_passenger?.errors" (focus)="$event.target.select()">
 														<div class="input-group-append">
 															<button style="min-width: 2.5rem"
 																class="btn btn-increment btn-outline-secondary highlightButton"
@@ -411,7 +411,7 @@
 															max="2000" step="1" inputmode="decimal"
 															style="text-align: center" class="form-control "
 															placeholder="" id="no_of_luggage" tabindex="1"
-															[class.errorValid]="submitted && QBForm?.no_of_luggage?.errors">
+															[class.errorValid]="submitted && QBForm?.no_of_luggage?.errors" (focus)="$event.target.select()">
 														<div class="input-group-append">
 															<button style="min-width: 2.5rem"
 																class="btn btn-increment btn-outline-secondary"
