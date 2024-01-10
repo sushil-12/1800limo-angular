@@ -95,7 +95,7 @@
 						<input type="number" matInput placeholder="0" [value]="hours"
 							[ngClass]="is_readonly_min_rate ? 'block-cursor' : ''"
 							class="font-weight-bolder rate-input-field text-right"
-							(change)="changeInHours($event.target.value)" [readonly]="is_readonly_min_rate" />
+							(keyup)="changeInHours($event.target.value)" [readonly]="is_readonly_min_rate" />
 					</mat-form-field>
 					<span *ngIf="is_readonly_min_rate">Hours cannot be edited as these are the minimum rates
 						issued</span>
