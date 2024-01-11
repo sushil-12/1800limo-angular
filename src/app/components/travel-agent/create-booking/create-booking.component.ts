@@ -551,6 +551,7 @@ export class CreateBookingComponent implements OnInit {
 						for (let innerKey in innerObject) {
 							if (innerObject.hasOwnProperty(innerKey)) {
 								this.subtotal += innerObject[innerKey].amount
+								console.log("in else allinclusive", this.subtotal)
 
 							}
 						}
@@ -560,7 +561,10 @@ export class CreateBookingComponent implements OnInit {
 
 			let base_rate = 0
 			if (this.BookingForm.value?.service_type == 'charter_tour') {
+			
 				base_rate += this.rateArray.all_inclusive_rates["Base_Rate"].baserate * this.number_of_hours
+				this.subtotal += this.rateArray.all_inclusive_rates["Base_Rate"].baserate * (this.number_of_hours - 1)
+				console.log("in if charter tour",base_rate)
 			}
 			else {
 				base_rate += this.rateArray.all_inclusive_rates["Base_Rate"].baserate
@@ -587,7 +591,8 @@ export class CreateBookingComponent implements OnInit {
 			else {
 				let adminShare = (base_rate * 25) / 100
 				this.subtotal += adminShare
-				console.log("in if created by admin", this.subtotal)
+				console.log("in if created by admin", this.subtotal,base_rate,adminShare)
+				// this.subtotal = (base_rate + this.subtotal) - adminShare
 			}
 
 			this.grandtotal = (parseFloat(this.subtotal))
@@ -610,7 +615,7 @@ export class CreateBookingComponent implements OnInit {
 						else {
 							for (let innerKey in innerObject) {
 								if (innerObject.hasOwnProperty(innerKey)) {
-									this.subtotal += innerObject[innerKey].amount
+									this.r_subtotal += innerObject[innerKey].amount
 
 								}
 							}
@@ -621,6 +626,7 @@ export class CreateBookingComponent implements OnInit {
 				let base_rate = 0
 				if (this.BookingForm.value?.service_type == 'charter_tour') {
 					base_rate += this.returnRateArray.all_inclusive_rates["Base_Rate"].baserate * this.number_of_hours
+					this.r_subtotal += this.returnRateArray.all_inclusive_rates["Base_Rate"].baserate * (this.number_of_hours - 1)
 				}
 				else {
 					base_rate += this.returnRateArray.all_inclusive_rates["Base_Rate"].baserate
