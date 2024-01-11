@@ -137,7 +137,7 @@
 										<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
 											aria-labelledby="navbarDropdownUserImage">
 											<a class="dropdown-item" [routerLink]="['/admin/new-booking']"
-												*ngIf="((currentUser?.RoleName == 'admin' || subModules.includes('edit_booking')) && (booking?.booking_status != 'paid' || booking?.booking_status != 'paid_cash'))"
+												*ngIf="((currentUser?.RoleName == 'admin' || subModules.includes('edit_booking')) && (booking?.booking_status != 'paid' && booking?.booking_status != 'paid_cash'))"
 												[queryParams]="{bookingId: booking.booking_id, updateType: 'edit'}">
 
 												<div class="dropdown-item-icon"></div>
@@ -161,7 +161,7 @@
 											</a>
 											<a class="dropdown-item" [routerLink]="['/admin/finalize-booking']"
 												[queryParams]="{bookingId: booking.booking_id}"
-												*ngIf="((currentUser?.RoleName == 'admin' || subModules.includes('edit_booking')) && (booking?.booking_status != 'paid' || booking?.booking_status != 'paid_cash'))">
+												*ngIf="((currentUser?.RoleName == 'admin' || subModules.includes('edit_booking')) && (booking?.booking_status != 'paid' && booking?.booking_status != 'paid_cash'))">
 												<!-- *ngIf="booking.payment_status!='paid'" -->
 												<div class="dropdown-item-icon"></div>
 												Finalize
@@ -283,8 +283,10 @@
 											*ngIf="booking.affiliate_type == null; else otherAffiliate">
 											<span class="font-weight-bolder"
 												[innerHTML]="highlighText(booking.loose_affiliate_name ? booking.loose_affiliate_name + ' '+'(L)' : '1800Limo Chauffeurs ')"></span>|
-											<span [innerHTML]="highlighText(booking.loose_affiliate_phone_isd ? booking.loose_affiliate_phone_isd : '+1')"></span>
-											<span [innerHTML]="highlighText(booking.loose_affiliate_phone ? booking.loose_affiliate_phone : '8005466266')"></span>
+											<span
+												[innerHTML]="highlighText(booking.loose_affiliate_phone_isd ? booking.loose_affiliate_phone_isd : '+1')"></span>
+											<span
+												[innerHTML]="highlighText(booking.loose_affiliate_phone ? booking.loose_affiliate_phone : '8005466266')"></span>
 										</p>
 										<ng-template #otherAffiliate>
 											<p data-target="#sendEmailModal" data-toggle="modal"
@@ -475,7 +477,7 @@
 				<p>Are you sure, You want to send email?</p>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="custom-btn savebutton"  (click)="emailAll()">Send
+				<button type="button" class="custom-btn savebutton" (click)="emailAll()">Send
 					Email</button>
 				<button type="button" class="custom-btn resetbutton" data-dismiss="modal">Close</button>
 			</div>
@@ -483,7 +485,8 @@
 	</div>
 
 </div>
-<div class="modal fade" id="updatedEmailAll" tabindex="-1" role="dialog" aria-labelledby="updatedEmailAll" aria-hidden="true">
+<div class="modal fade" id="updatedEmailAll" tabindex="-1" role="dialog" aria-labelledby="updatedEmailAll"
+	aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content">
 			<div class="modal-header pb-0">
@@ -493,7 +496,7 @@
 				<p>Are you sure, You want to send email?</p>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="custom-btn savebutton"  (click)="updatedEmailAll()">Send
+				<button type="button" class="custom-btn savebutton" (click)="updatedEmailAll()">Send
 					Email</button>
 				<button type="button" class="custom-btn resetbutton" data-dismiss="modal">Close</button>
 			</div>

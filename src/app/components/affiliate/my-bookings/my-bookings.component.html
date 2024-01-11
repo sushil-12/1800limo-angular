@@ -97,7 +97,7 @@
 										<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
 											aria-labelledby="navbarDropdownUserImage">
 											<a class="dropdown-item" (click)="editAction(booking?.booking_id,'edit')"
-												*ngIf="(booking?.booking_status !='paid' || booking?.booking_status != 'paid_cash')">
+												*ngIf="(booking?.booking_status != 'paid' && booking?.booking_status != 'paid_cash')">
 												<div class="dropdown-item-icon"></div>
 												Edit
 											</a>
@@ -114,7 +114,7 @@
 													Return
 												</a> -->
 											<a class="dropdown-item" (click)="finalizeAction(booking?.booking_id)"
-											*ngIf="(booking?.booking_status !='paid' || booking?.booking_status != 'paid_cash')">
+												*ngIf="(booking?.booking_status != 'paid' && booking?.booking_status != 'paid_cash')">
 												<div class="dropdown-item-icon"></div>
 												Finalize
 											</a>
