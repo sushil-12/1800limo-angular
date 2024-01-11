@@ -4,14 +4,16 @@
 	<section class="adminbox_shadow user_information">
 		<div class="row">
 			<div class="col-md-7" *ngIf="currentUser?.roleName == 'travel_agent'">
-				<h2 class="headinginfo"  style="font-weight: 600 !important; font-size: 22px !important;">Super Travel Agent Bookings
+				<h2 class="headinginfo" style="font-weight: 600 !important; font-size: 22px !important;">Super Travel
+					Agent Bookings
 					<span style="text-transform: capitalize; font-weight: 400;"
 						*ngIf="agency_name">({{agency_name}})</span>
 				</h2>
-				
+
 			</div>
 			<div class="col-md-12" *ngIf="currentUser?.roleName == 'sub_travel_agent'">
-				<h2 class="headinginfo"  style="font-weight: 600 !important; font-size: 22px !important;">Sub Travel Agent Bookings
+				<h2 class="headinginfo" style="font-weight: 600 !important; font-size: 22px !important;">Sub Travel
+					Agent Bookings
 					<span style="text-transform: capitalize; font-weight: 400;"
 						*ngIf="currentUser?.name">({{currentUser?.name}})</span>
 				</h2>
@@ -54,7 +56,7 @@
 		</div>
 		<div class="containeredd mt-1 ">
 			<div class="row my-2 align-items-center">
-				<!-- Start-Date --> 
+				<!-- Start-Date -->
 				<div class="col-sm-4 col-md-4" style="margin-top: 0.4rem !important; margin: bottom 0.4rem !important;">
 					<mat-form-field appearance="outline" class="m-0" style="font-size:0.86rem !important;">
 						<mat-label>
@@ -69,7 +71,7 @@
 				</div>
 
 				<!-- End-Date -->
-				<div class="col-sm-4 col-md-4"  style="margin-top: 0.4rem !important; margin: bottom 0.4rem !important;">
+				<div class="col-sm-4 col-md-4" style="margin-top: 0.4rem !important; margin: bottom 0.4rem !important;">
 					<mat-form-field appearance="outline" class="m-0 " style="font-size:0.86rem !important;">
 						<mat-label>
 							End Date <span class="asterisk"> * </span>
@@ -145,7 +147,7 @@
 										<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
 											aria-labelledby="navbarDropdownUserImage">
 											<a class="dropdown-item" (click)="editAction(booking?.booking_id,'edit')"
-											*ngIf="(booking?.payment_status=='paid' || booking?.payment_status=='paid_cash')">
+												*ngIf="(booking?.booking_status != 'paid' && booking?.booking_status != 'paid_cash')">
 												<div class="dropdown-item-icon"></div>
 												Edit
 											</a>
