@@ -2702,7 +2702,8 @@
 			[isTravelShare]="isTravelShare" [initReturnRates]="init_return_rates" (formvalue)="RateFormValue($event)"
 			[vehicle_id]="QB_vehicle_id" [hours]="Form.number_of_hours?.value" [isCreatedByAdmin]="isCreatedByAdmin"
 			[vehicles]="Form.number_of_vehicles?.value" [book_data]="booking_data" [isFarmoutBooking]="isFarmoutBooking"
-			(returnformvalue)="ReturnRateFormValue($event)" (returnNumberOfHr)="HandleReturnNumberOfHr($event)">
+			[service_type]="service_type" (returnformvalue)="ReturnRateFormValue($event)"
+			(returnNumberOfHr)="HandleReturnNumberOfHr($event)">
 		</app-rates-form>
 
 

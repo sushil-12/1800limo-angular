@@ -25,6 +25,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 	@Input('book_data') book_data: any = {};
 	@Input('isCreatedByAdmin') isCreatedByAdmin: boolean = true;
 	@Input('isFarmoutBooking') isFarmoutBooking: boolean = false;
+	@Input("service_type") service_type: string = "";
 	
 	
 	// Throw Events.
@@ -644,7 +645,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 	calculateReturnBaseRateShare(){
 		try {
 			let baseRate = 0;
-			if(this.book_data.service_type == 'charter_tour'){
+			if(this.service_type == 'charter_tour'){
 				baseRate += (<FormGroup>((<FormGroup>this.ReturnRatesForm.get('all_inclusive_rates'))?.get('Base_Rate')))?.get("baserate").value * this.nums
 			}
 			else{
@@ -681,7 +682,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 		try {
 			let baseRate = 0;
 
-			if(this.book_data?.service_type == 'charter_tour' && !this.is_readonly_min_rate){
+			if(this.service_type == 'charter_tour' && !this.is_readonly_min_rate){
 				baseRate += (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates'))?.get('Base_Rate')))?.get("baserate").value * this.nums
 			}
 			else{
@@ -794,7 +795,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 			this.total[subform] = Number(Number(amount).toFixed(2));
 			if (formgroup == 'amenities' || formgroup == "all_inclusive_rates") {
 				let baseRateAmount = (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates')).get('Base_Rate'))).get("baserate").value;
-				if(this.book_data.service_type == 'charter_tour' && !this.is_readonly_min_rate){
+				if(this.service_type == 'charter_tour' && !this.is_readonly_min_rate){
 					baseRateAmount = (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates')).get('Base_Rate'))).get("baserate").value * this.nums
 				}
 				baseRateAmount += this.calc_admin_share
@@ -899,7 +900,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 			this.r_total[subform] = Number(Number(amount).toFixed(2));
 			if (formgroup == 'amenities' || formgroup == "all_inclusive_rates") {
 				let baseRateAmount = (<FormGroup>((<FormGroup>this.ReturnRatesForm.get('all_inclusive_rates')).get('Base_Rate'))).get("baserate").value;
-				if(this.book_data.service_type == 'charter_tour'){
+				if(this.service_type == 'charter_tour'){
 					baseRateAmount = (<FormGroup>((<FormGroup>this.ReturnRatesForm.get('all_inclusive_rates')).get('Base_Rate'))).get("baserate").value * this.nums
 				}
 				baseRateAmount += this.r_calc_admin_share
