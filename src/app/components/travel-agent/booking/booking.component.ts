@@ -111,6 +111,10 @@ export class BookingComponent implements OnInit {
 		this.useDateFilter = localStorage.getItem('traveluseDateFilter') ?
 			(localStorage.getItem('traveluseDateFilter') == 'true' ? true : false)
 			: true;
+			if(this.currentUser?.roleName == 'sub_travel_agent'){
+				this.useDateFilter = false;
+				localStorage.setItem('traveluseDateFilter', 'false')
+			}
 		console.log('traveluseDateFilter-->', this.useDateFilter)
 
 		this.loadBookings();
