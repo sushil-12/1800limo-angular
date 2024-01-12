@@ -225,9 +225,9 @@
 											<select formControlName="pickup_type" class="font-weight-bolder"
 												tabindex="1"
 												[class.errorValid]="submitted && QBForm?.pickup_type?.errors">
-												<option value="airport">Airport?</option>
-												<option value="cruise">Cruise Port?</option>
-												<option value="city">City?</option>
+												<option value="airport">Airport ?</option>
+												<option value="cruise">Cruise Port ?</option>
+												<option value="city">City ?</option>
 											</select>
 											<i class="fa fa-angle-down" aria-hidden="true"></i>
 										</div>
@@ -245,9 +245,9 @@
 											<select formControlName="dropoff_type" class="font-weight-bolder"
 												tabindex="1"
 												[class.errorValid]="submitted && QBForm?.dropoff_type?.errors">
-												<option Value="airport">Airport?</option>
-												<option Value="cruise">Cruise Port?</option>
-												<option Value="city">City?</option>
+												<option Value="airport">Airport ?</option>
+												<option Value="cruise">Cruise Port ?</option>
+												<option Value="city">City ?</option>
 											</select>
 											<i class="fa fa-angle-down" aria-hidden="true"></i>
 										</div>
@@ -364,7 +364,8 @@
 															max="1000" step="1" inputmode="decimal"
 															style="text-align: center" class="form-control"
 															placeholder="" id="no_of_passenger" tabindex="1"
-															[class.errorValid]="submitted && QBForm?.no_of_passenger?.errors" (focus)="$event.target.select()">
+															[class.errorValid]="submitted && QBForm?.no_of_passenger?.errors"
+															(focus)="$event.target.select()">
 														<div class="input-group-append">
 															<button style="min-width: 2.5rem"
 																class="btn btn-increment btn-outline-secondary highlightButton"
@@ -411,7 +412,8 @@
 															max="2000" step="1" inputmode="decimal"
 															style="text-align: center" class="form-control "
 															placeholder="" id="no_of_luggage" tabindex="1"
-															[class.errorValid]="submitted && QBForm?.no_of_luggage?.errors" (focus)="$event.target.select()">
+															[class.errorValid]="submitted && QBForm?.no_of_luggage?.errors"
+															(focus)="$event.target.select()">
 														<div class="input-group-append">
 															<button style="min-width: 2.5rem"
 																class="btn btn-increment btn-outline-secondary"

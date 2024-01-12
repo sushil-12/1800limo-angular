@@ -6,16 +6,17 @@
 			<div class="col-md-7" *ngIf="currentUser?.roleName == 'travel_agent'">
 				<h2 class="headinginfo" style="font-weight: 600 !important; font-size: 22px !important;">Super Travel
 					Agent Bookings
-					<span style="text-transform: capitalize; font-weight: 400;"
-						*ngIf="agency_name">({{agency_name}})</span>
+					<!-- <span style="text-transform: capitalize; font-weight: 400;"
+						*ngIf="agency_name">({{agency_name}})</span> -->
 				</h2>
 
 			</div>
 			<div class="col-md-12" *ngIf="currentUser?.roleName == 'sub_travel_agent'">
 				<h2 class="headinginfo" style="font-weight: 600 !important; font-size: 22px !important;">Sub Travel
 					Agent Bookings
-					<span style="text-transform: capitalize; font-weight: 400;"
-						*ngIf="currentUser?.name">({{currentUser?.name}})</span>
+					<span style="text-transform: capitalize; font-weight: 400;">
+						({{currentUser?.agency_name + ' / ' + currentUser?.name}})
+					</span>
 				</h2>
 			</div>
 			<div class="col-md-5 d-flex justify-content-end" style="gap: 10px;" *ngIf="invite_link">
@@ -38,10 +39,17 @@
 							d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z" />
 					</svg> -->
 				</button>
-				<button class="custom-filled-button green-button" style="color:#fff;padding: 2px 12px !important;"
-					data-target="#inviteAgentModal" data-toggle="modal">
+				<button class="custom-filled-button green-button invite-agent-button" data-target="#inviteAgentModal"
+					data-toggle="modal">
 					Invite Agent
 				</button>
+			</div>
+			<div class="col-md-7" *ngIf="currentUser?.roleName == 'travel_agent'">
+				<h2 class="headinginfo">
+					<span style="text-transform: capitalize; font-weight: 400; font-size: 19px;">
+						({{agency_name + ' / ' + currentUser?.name}})
+					</span>
+				</h2>
 			</div>
 			<div class="col-md-12" *ngIf="currentUser?.roleName == 'travel_agent'">
 				<h3 class="addveh_top d-md-flex mt-2 justify-content-between align-items-center mb-0">
@@ -1684,7 +1692,7 @@
 					<div class="col-md-12" style="margin-top:-18px;" *ngIf="!emailFileName">
 						<mat-form-field appearance="outline">
 							<mat-label>Enter indiviudal agent's email <span class="asterisk">*</span></mat-label>
-							<input matInput type="text" formControlName="email_address">
+							<input matInput type="text" formControlName="email_address" style="font-weight: 500;">
 						</mat-form-field>
 						<div *ngIf="(submittedForm && f.email_address.errors) ||(f.email_address.touched && f.email_address.errors)"
 							class="text-danger margin-bottom-thin my-mat-hint">

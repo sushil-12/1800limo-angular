@@ -30,9 +30,9 @@
 							<mat-select formControlName="service_type"
 								(selectionChange)="onSelectionChangeServiceType($event)"
 								[ngStyle]="{'cursor': Form.updateType.value == 'edit' ? 'not-allowed' : 'default'}">
-								<mat-option value="one_way">One Way?</mat-option>
-								<mat-option value="round_trip">Round Trip?</mat-option>
-								<mat-option value="charter_tour">Charter/Tour/</mat-option>
+								<mat-option value="one_way">One Way ?</mat-option>
+								<mat-option value="round_trip">Round Trip ?</mat-option>
+								<mat-option value="charter_tour">Charter/Tour ?</mat-option>
 							</mat-select>
 						</mat-form-field>
 					</div>
@@ -47,14 +47,14 @@
 							</mat-label>
 							<mat-select formControlName="transfer_type" class="font-weight-bolder"
 								(selectionChange)="changeTransferType($event.value)">
-								<mat-option value="airport_to_city">Airport To City?</mat-option>
-								<mat-option value="airport_to_airport">Airport To Airport?</mat-option>
-								<mat-option value="airport_to_cruise">Airport To Cruise Port?</mat-option>
-								<mat-option value="city_to_city">City To City?</mat-option>
-								<mat-option value="city_to_airport">City To Airport?</mat-option>
-								<mat-option value="city_to_cruise">City To Cruise Port?</mat-option>
-								<mat-option value="cruise_to_airport">Cruise Port To Airport?</mat-option>
-								<mat-option value="cruise_to_city">Cruise Port to City?</mat-option>
+								<mat-option value="airport_to_city">Airport To City ?</mat-option>
+								<mat-option value="airport_to_airport">Airport To Airport ?</mat-option>
+								<mat-option value="airport_to_cruise">Airport To Cruise Port ?</mat-option>
+								<mat-option value="city_to_city">City To City ?</mat-option>
+								<mat-option value="city_to_airport">City To Airport ?</mat-option>
+								<mat-option value="city_to_cruise">City To Cruise Port ?</mat-option>
+								<mat-option value="cruise_to_airport">Cruise Port To Airport ?</mat-option>
+								<mat-option value="cruise_to_city">Cruise Port to City ?</mat-option>
 								<!-- <mat-option [value]="tf_type" class="font-weight-bolder"
 									*ngFor="let tf_type of booking_params.transfer_types">
 									{{ textFormatterTransferType(tf_type) | titlecase }}
@@ -72,14 +72,14 @@
 								Return Transfer Type
 							</mat-label>
 							<mat-select formControlName="return_transfer_type">
-								<mat-option value="airport_to_city">Airport To City?</mat-option>
-								<mat-option value="airport_to_airport">Airport To Airport?</mat-option>
-								<mat-option value="airport_to_cruise">Airport To Cruise Port?</mat-option>
-								<mat-option value="city_to_city">City To City?</mat-option>
-								<mat-option value="city_to_airport">City To Airport?</mat-option>
-								<mat-option value="city_to_cruise">City To Cruise Port?</mat-option>
-								<mat-option value="cruise_to_airport">Cruise Port To Airport?</mat-option>
-								<mat-option value="cruise_to_city">Cruise Port to City?</mat-option>
+								<mat-option value="airport_to_city">Airport To City ?</mat-option>
+								<mat-option value="airport_to_airport">Airport To Airport ?</mat-option>
+								<mat-option value="airport_to_cruise">Airport To Cruise Port ?</mat-option>
+								<mat-option value="city_to_city">City To City ?</mat-option>
+								<mat-option value="city_to_airport">City To Airport ?</mat-option>
+								<mat-option value="city_to_cruise">City To Cruise Port ?</mat-option>
+								<mat-option value="cruise_to_airport">Cruise Port To Airport ?</mat-option>
+								<mat-option value="cruise_to_city">Cruise Port to City ?</mat-option>
 								<!-- <mat-option [value]="tf_type" class="font-weight-bolder"
 									*ngFor="let tf_type of booking_params.transfer_types">
 									{{ textFormatterTransferType(tf_type) | titlecase }}
