@@ -75,6 +75,7 @@ export class FinalizeBookingComponent implements OnInit {
     adminSharePercent: number = 25;
 	service_type: any;
 	isFarmoutBooking: boolean = false;
+	isFinalizeButton: boolean =false;
 
 	constructor(
 		private $form: FormBuilder,
@@ -179,6 +180,7 @@ export class FinalizeBookingComponent implements OnInit {
 				this.isCreatedByAdmin = response?.data?.created_by==1 ? true : false
 				this.isFarmoutBooking = response?.data?.reservation_type=='farmout' ? true : false
 				this.BookingDetail = response.data
+				this.isFinalizeButton = this.BookingDetail?.booking_status == 'finalized' ? true : false,
 				this.transferType = this.BookingDetail.transfer_type
 				this.init_rates = true;
 				this.service_type = response?.data?.service_type
@@ -468,10 +470,12 @@ export class FinalizeBookingComponent implements OnInit {
 		this.edit_rates_value = form
 		console.log("edit_rates_value",this.edit_rates_value)
 		this.payableAmount = this.edit_rates_value.grand_total - this.paidAmount
+		this.isFinalizeButton = false
 
 	}
 	ReturnRateFormValue(form: any) {
 		this.return_edit_rates_value = form
+		this.isFinalizeButton = false
 	}
 	HandleReturnNumberOfHr(data: any) {
 		console.log('____<><><><><><><><>', data)
