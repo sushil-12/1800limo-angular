@@ -470,12 +470,22 @@ export class FinalizeBookingComponent implements OnInit {
 		this.edit_rates_value = form
 		console.log("edit_rates_value",this.edit_rates_value)
 		this.payableAmount = this.edit_rates_value.grand_total - this.paidAmount
-		this.isFinalizeButton = false
+		if(this.edit_rates_value.grand_total != this.BookingDetail?.grand_total){
+			this.isFinalizeButton = false
+		}
+		else{
+			this.isFinalizeButton = true
+		}
 
 	}
 	ReturnRateFormValue(form: any) {
 		this.return_edit_rates_value = form
-		this.isFinalizeButton = false
+		if(this.return_edit_rates_value.grand_total != this.BookingDetail?.r_grand_total){
+			this.isFinalizeButton = false
+		}
+		else{
+			this.isFinalizeButton = true
+		}
 	}
 	HandleReturnNumberOfHr(data: any) {
 		console.log('____<><><><><><><><>', data)

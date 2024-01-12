@@ -179,7 +179,12 @@ export class AffiliateFinalizeComponent implements OnInit {
 	RateFormValue(form: any) {
 		console.log('rate form value ------>>>>', form)
 		this.edit_rates_value = form
-		this.isFinalizeButton = false;
+		if(this.edit_rates_value.grand_total != this.BookingDetail?.grand_total){
+			this.isFinalizeButton = false
+		}
+		else{
+			this.isFinalizeButton = true
+		}
 	}
 	paymentDetail(bookingId) {
 		this.$api
