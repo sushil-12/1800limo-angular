@@ -159,9 +159,8 @@
 <div class="row mb-3" id="submitForm">
 	<div class="col-md-12 text-right">
 		<button type="button" class="custom-filled-button ratesButton m-3"
-			[ngClass]="BookingDetail?.booking_status == 'finalized' ? 'color-grey':'color-green'"
-			(click)="submitForm()">
-			{{finalize_btn}}
+			[ngClass]="isFinalizeButton ? 'color-grey':'color-green'" (click)="submitForm()">
+			{{isFinalizeButton ? 'Finalized' :'Finalize'}}
 		</button>
 	</div>
 </div>
@@ -401,8 +400,8 @@
 
 		<div class="col-md-12 text-right mr-4">
 			<button type="button" class="custom-filled-button m-3 mr-4"
-				[ngClass]="BookingDetail?.booking_status == 'finalized' ? 'color-green' : 'color-grey' "
-				data-toggle="modal" data-target="#paymentModal">
+				[ngClass]="isFinalizeButton ? 'color-green' : 'color-grey' " data-toggle="modal"
+				data-target="#paymentModal">
 				Charge
 			</button>
 		</div>

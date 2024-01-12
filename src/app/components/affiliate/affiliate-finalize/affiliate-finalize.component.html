@@ -374,9 +374,8 @@
 	<div class="row mb-3" id="submitForm" *ngIf="BookingDetail?.payment_status=='unpaid' && !editRate">
 		<div class="col-md-12 text-right">
 			<button type="button" class="custom-filled-button ratesButton m-3"
-				[ngClass]="BookingDetail?.booking_status == 'finalized' ? 'color-grey':'color-green'"
-				(click)="submitForm()">
-				{{finalize_btn}}
+				[ngClass]="isFinalizeButton ? 'color-grey':'color-green'" (click)="submitForm()">
+				{{isFinalizeButton ? 'Finalized' :'Finalize'}}
 			</button>
 		</div>
 	</div>
@@ -633,13 +632,11 @@
 		</h4>
 		<div class="d-flex align-items-center mr-4">
 			<button type="button" class="custom-filled-button m-3 mr-4"
-				[ngClass]="BookingDetail?.booking_status == 'finalized' ? 'color-green' : 'color-grey' "
-				(click)="makePayment('cash')">
+				[ngClass]="isFinalizeButton ? 'color-green' : 'color-grey' " (click)="makePayment('cash')">
 				Pay with cash
 			</button>
 			<button type="button" class="custom-filled-button m-3 mr-4"
-				[ngClass]="BookingDetail?.booking_status == 'finalized' ? 'color-green' : 'color-grey' "
-				(click)="makePayment('card')">
+				[ngClass]="isFinalizeButton ? 'color-green' : 'color-grey' " (click)="makePayment('card')">
 				Charge
 			</button>
 		</div>

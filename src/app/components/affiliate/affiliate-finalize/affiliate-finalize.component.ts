@@ -62,6 +62,7 @@ export class AffiliateFinalizeComponent implements OnInit {
     adminSharePercent: number = 25;
 	service_type: any;
 	isFarmoutBooking:boolean =false;
+	isFinalizeButton: boolean =false;
 
 	constructor(
 		private $api: AdminService,
@@ -110,6 +111,7 @@ export class AffiliateFinalizeComponent implements OnInit {
 			).subscribe(({ data }: any) => {
 				console.log('response getBookingData Affiliate--->>>>', data)
 				this.BookingDetail = data?.booking_detail
+				this.isFinalizeButton = this.BookingDetail?.booking_status == 'finalized' ? true : false,
 				this.transferType = this.BookingDetail?.transfer_type
 				this.isTravelShare = data?.booking_detail?.account_type == 'travel_planner' ? true : false
 				this.isFarmoutBooking = data?.booking_detail?.reservation_type=='farmout' ? true : false
@@ -177,6 +179,7 @@ export class AffiliateFinalizeComponent implements OnInit {
 	RateFormValue(form: any) {
 		console.log('rate form value ------>>>>', form)
 		this.edit_rates_value = form
+		this.isFinalizeButton = false;
 	}
 	paymentDetail(bookingId) {
 		this.$api
