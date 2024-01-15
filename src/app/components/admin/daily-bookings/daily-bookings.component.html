@@ -233,8 +233,8 @@
 										data-target="#previewBookingOnID"
 										(click)="showBookingPreviewModal(booking.booking_id)">
 										<p class="booking-id-font font-weight-bolder cursor-pointer">
-											<span class="text-underline"
-												[innerHTML]="highlighText(booking.booking_id )"></span>
+											<span class="text-underline" [innerHTML]="highlighText(booking.booking_id )"
+												style="font-weight: 600;"></span>
 											<span
 												style="text-decoration: none;">&nbsp;{{showAccountType(booking?.account_type)}}</span>
 										</p>
