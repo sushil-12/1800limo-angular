@@ -143,7 +143,7 @@ export class HeaderComponent implements OnInit {
 	}
 
 	loginButtons(role: string) {
-		if (role != 'driver' && role!='sub_admin' && role!='travel_agent') {
+		if (role != 'driver' && role!='sub_admin' && role!='travel_agent'  && role!='individual') {
 			this.errorDialogService.openDialog({
 				errors: {
 					error: 'Currently only Drivers are allowed to Sign In. User accounts coming soon! Recruiting quality vetted drivers, and chauffeurs, only at this time. Refer a trusted driver/ chauffeur to 1-800 - LIMO.COM now! You deserve the best.'

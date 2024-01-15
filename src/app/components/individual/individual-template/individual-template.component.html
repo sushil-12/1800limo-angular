@@ -1,0 +1,208 @@
+<div class="affilate-wrapper admin-wrapper">
+    <ngx-spinner></ngx-spinner>
+    <nav id="sidenavAccordion" class="topnav navbar navbar-expand">
+        <a class="navbar-brand active" routerLink="/" tabindex="-1">
+            <img src="assets/admin/images/new_logo.png">
+        </a>
+        <button class="btn btn-icon btn-transparent-dark mr-lg-2" id="sidebarToggle" tabindex="-1">
+            <svg *ngIf="showSidebar===true" xmlns="http://www.w3.org/2000/svg" (click)="showSidebarFunc(false)"
+                width="24" height="24" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                <path fill-rule="evenodd"
+                    d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+            </svg>
+
+            <svg (click)="showSidebarFunc(true)" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16" *ngIf="showSidebar===false">
+                <path fill-rule="evenodd"
+                    d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+        </button>
+        <ul class="navbar-nav align-items-center ml-auto">
+            <li *ngIf="bkpData">
+                <button class="custom-filled-button orange-button hideDesktop"
+                    style="color:#fff;padding: 5px 12px !important; border:2px solid #c6d8db !important;"
+                    (click)="backToAdmin()">
+                    Go back
+                </button>
+                <button class="custom-filled-button orange-button hideMobile"
+                    style="color:#fff;padding: 5px 12px !important; border:2px solid #c6d8db !important;"
+                    (click)="backToAdmin()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" fill="currentColor"
+                        class="bi bi-arrow-left-square" viewBox="0 0 16 16" style="margin-right: 5px;">
+                        <path fill-rule="evenodd"
+                            d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm11.5 5.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5z" />
+                    </svg>
+                    Back to admin
+                </button>
+            </li>
+            <li class="hideMobile" *ngIf="!bkpData">
+                <!-- <div id="google-translate">
+					<div id="google_translate_element_desktop"></div>
+				  </div> -->
+                <div id="google_translate_element_desktop"></div>
+            </li>
+            <li class="nav-item dropdown no-caret dropdown-user" *ngIf="!bkpData">
+                <a class="user-profile btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownUserImage"
+                    href="javascript:void(0);" role="button" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false" tabindex="-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" *ngIf="!profile_pic_url">
+                        <path fill="#000" fill-rule="evenodd"
+                            d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22ZM15 10C15 11.6569 13.6569 13 12 13C10.3431 13 9 11.6569 9 10C9 8.34315 10.3431 7 12 7C13.6569 7 15 8.34315 15 10ZM5.99927 17C7.36758 15.1783 9.54609 14 11.9998 14C14.4535 14 16.6321 15.1783 18.0004 17C16.6321 18.8217 14.4535 20 11.9998 20C9.54609 20 7.36758 18.8217 5.99927 17Z"
+                            clip-rule="evenodd" />
+                    </svg>
+                    <img src="{{profile_pic_url}}" height="24px" width="24px" *ngIf="profile_pic_url"
+                        style="object-fit: contain;">
+                    <span class="font-weight-bold">
+                        {{ currentUser?.affiliate_company ? currentUser?.affiliate_company :
+                        currentUser?.name }}
+                    </span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
+                    aria-labelledby="navbarDropdownUserImage">
+                    <h6 class="user-profile dropdown-header d-flex align-items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            *ngIf="!profile_pic_url">
+                            <path fill="#000" fill-rule="evenodd"
+                                d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22ZM15 10C15 11.6569 13.6569 13 12 13C10.3431 13 9 11.6569 9 10C9 8.34315 10.3431 7 12 7C13.6569 7 15 8.34315 15 10ZM5.99927 17C7.36758 15.1783 9.54609 14 11.9998 14C14.4535 14 16.6321 15.1783 18.0004 17C16.6321 18.8217 14.4535 20 11.9998 20C9.54609 20 7.36758 18.8217 5.99927 17Z"
+                                clip-rule="evenodd" />
+                        </svg>
+                        <img src="{{profile_pic_url}}" height="24px" width="24px" *ngIf="profile_pic_url"
+                            style="object-fit: contain;">
+
+                        <div class="dropdown-user-details">
+                            <div class="dropdown-user-details-name font-weight-bold">
+                                {{ currentUser?.affiliate_company ? currentUser?.affiliate_company :
+                                currentUser?.name }}
+                            </div>
+                        </div>
+                    </h6>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" [routerLinkActive]="['active']" routerLink="/travel_agent/profile"
+                        tabindex="-1">
+                        <div class="dropdown-item-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" class=" profileSvg">
+                                <g fill="none" fill-rule="evenodd" stroke="#5dbd8a" stroke-linecap="round"
+                                    stroke-linejoin="round" stroke-width="1.5" transform="translate(4 2.5)">
+                                    <circle cx="7.579" cy="4.778" r="4.778" />
+                                    <path
+                                        d="M5.32907052e-15,16.2013731 C-0.00126760558,15.8654831 0.0738531734,15.5336997 0.219695816,15.2311214 C0.677361723,14.3157895 1.96797958,13.8306637 3.0389178,13.610984 C3.81127745,13.4461621 4.59430539,13.3360488 5.38216724,13.2814646 C6.84083861,13.1533327 8.30793524,13.1533327 9.76660662,13.2814646 C10.5544024,13.3366774 11.3373865,13.4467845 12.1098561,13.610984 C13.1807943,13.8306637 14.4714121,14.270023 14.929078,15.2311214 C15.2223724,15.8479159 15.2223724,16.5639836 14.929078,17.1807781 C14.4714121,18.1418765 13.1807943,18.5812358 12.1098561,18.7917621 C11.3383994,18.9634099 10.5550941,19.0766219 9.76660662,19.1304349 C8.57936754,19.2310812 7.38658584,19.2494317 6.19681255,19.1853548 C5.92221301,19.1853548 5.65676678,19.1853548 5.38216724,19.1304349 C4.59663136,19.077285 3.8163184,18.9640631 3.04807112,18.7917621 C1.96797958,18.5812358 0.686515041,18.1418765 0.219695816,17.1807781 C0.0745982583,16.8746908 -0.000447947969,16.5401098 5.32907052e-15,16.2013731 Z" />
+                                </g>
+                            </svg>
+                            <!-- <img src="{{profile_pic_url}}" height="24px" width="24px"> -->
+                        </div>
+                        My Profile
+                    </a>
+                    <a class="dropdown-item" (click)="logout()" tabindex="-1">
+                        <div class="dropdown-item-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="feather feather-log-out">
+                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                <polyline points="16 17 21 12 16 7"></polyline>
+                                <line x1="21" y1="12" x2="9" y2="12"></line>
+                            </svg>
+                        </div>
+                        Logout
+                    </a>
+                </div>
+            </li>
+        </ul>
+    </nav>
+    <mat-progress-bar class="mb-3 my-color" mode="indeterminate" *ngIf="progressBar">
+    </mat-progress-bar>
+    <div id="layoutSidenav">
+        <div id="layoutSidenav_nav">
+            <nav class="sidenav shadow-right">
+                <div class="sidenav-menu">
+                    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+                        <li class="nav-item">
+                            <a class="nav-link collapsed" [routerLinkActive]="['active']"
+                                routerLink="/individual/bookings" (click)="closeSidebarFunc(false)" tabIndex="-1">
+                                <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 122.88 118.34">
+                                    <defs>
+                                        <style>
+                                            .cls-1 {
+                                                fill-rule: evenodd;
+                                            }
+                                        </style>
+                                    </defs>
+                                    <title>work-schedule</title>
+                                    <path
+                                        d="M95.53,63.65A27.35,27.35,0,1,1,68.19,91,27.35,27.35,0,0,1,95.53,63.65ZM71.59,4.05c0-2.23,2.21-4,4.94-4s4.94,1.82,4.94,4.05V22.9c0,2.24-2.21,4.05-4.94,4.05s-4.94-1.81-4.94-4.05V4.05Zm-44.26,0c0-2.23,2.21-4,4.94-4s4.95,1.82,4.95,4.05V22.9C37.22,25.14,35,27,32.27,27s-4.94-1.81-4.94-4.05V4.05ZM63.91,111.92H10.24A10.28,10.28,0,0,1,0,101.68V20.54A10.29,10.29,0,0,1,10.24,10.3h9.44V22.9a11.24,11.24,0,0,0,4.26,8.75,13.25,13.25,0,0,0,16.67,0,11.24,11.24,0,0,0,4.26-8.75V10.3H63.94V22.9a11.23,11.23,0,0,0,4.25,8.75,13.26,13.26,0,0,0,16.68,0,11.26,11.26,0,0,0,4.25-8.75V10.3H99a10.28,10.28,0,0,1,10.24,10.24V55.63a38.34,38.34,0,0,0-4.37-1.4V39.94H4.37V99.5a8.08,8.08,0,0,0,8.05,8h49a40.11,40.11,0,0,0,2.5,4.37ZM19.68,56.24l3.46,3.25,7.09-7.21c.73-.75,1.2-1.35,2.11-.41l3,3c1,1,.91,1.52,0,2.42L24.82,67.58c-1.92,1.89-1.59,2-3.55.07l-6.56-6.53a.85.85,0,0,1,.08-1.33l3.43-3.55c.51-.54.93-.51,1.46,0ZM48,51.71H62.68a1.87,1.87,0,0,1,1.87,1.86V65.78a1.89,1.89,0,0,1-1.87,1.87H48a1.88,1.88,0,0,1-1.87-1.87V53.57A1.88,1.88,0,0,1,48,51.71Zm29.59,0H92.27a1.89,1.89,0,0,1,1.81,1.4,37.79,37.79,0,0,0-18.35,5.55V53.57a1.87,1.87,0,0,1,1.87-1.86ZM48,77.66H60A37.81,37.81,0,0,0,57.62,91c0,.87,0,1.74.09,2.6H48a1.88,1.88,0,0,1-1.87-1.87V79.53A1.88,1.88,0,0,1,48,77.66Zm-29.58,0H33.1A1.87,1.87,0,0,1,35,79.53v12.2A1.89,1.89,0,0,1,33.1,93.6H18.43a1.87,1.87,0,0,1-1.87-1.87V79.53a1.87,1.87,0,0,1,1.87-1.87Zm73.31-.43h3.34a1.12,1.12,0,0,1,1.12,1.12V91.23H108a1.12,1.12,0,0,1,1.12,1.11v3.35A1.12,1.12,0,0,1,108,96.8H90.63V78.35a1.12,1.12,0,0,1,1.11-1.12Zm3.79-7.37A21.14,21.14,0,1,1,74.4,91,21.13,21.13,0,0,1,95.53,69.86Z" />
+                                </svg>
+                                <span>My bookings</span>
+                            </a>
+                        </li>
+                        <!--2nd -->
+                        <!-- <li class="nav-item">
+							<a class="nav-link collapsed" [routerLinkActive]="['active']"
+								routerLink="/travel_agent/create-booking" (click)="closeSidebarFunc(false)" tabIndex="-1">
+								<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+									xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+									viewBox="0 0 110.74 122.88" style="enable-background:new 0 0 110.74 122.88"
+									xml:space="preserve">
+									<g>
+										<path
+											d="M48.47,116.35c1.8,0,3.27,1.46,3.27,3.26c0,1.8-1.46,3.26-3.27,3.26H7.6c-2.09,0-3.99-0.85-5.37-2.23 C0.85,119.27,0,117.38,0,115.28V7.6C0,5.5,0.85,3.61,2.23,2.23C3.61,0.85,5.5,0,7.6,0h93.3c2.09,0,3.99,0.86,5.37,2.23 c1.38,1.38,2.23,3.27,2.23,5.37v53.95c0,1.8-1.46,3.26-3.26,3.26c-1.8,0-3.26-1.46-3.26-3.26V7.6c0-0.29-0.12-0.56-0.32-0.75 c-0.2-0.2-0.47-0.32-0.75-0.32H7.6c-0.29,0-0.56,0.12-0.76,0.31C6.65,7.05,6.53,7.31,6.53,7.6v107.68c0,0.29,0.12,0.56,0.32,0.75 c0.2,0.2,0.47,0.32,0.76,0.32L48.47,116.35L48.47,116.35L48.47,116.35z M33.94,57.92c-0.62-1.07-0.17-4.13,1.16-5.21 c3.8-2.22,9.04-1.53,12.7-4.09c0.21-0.32,0.44-0.78,0.67-1.29c0.33-0.76,0.64-1.59,0.83-2.16c-0.81-0.96-1.51-2.04-2.17-3.1 l-2.2-3.5c-0.8-1.2-1.22-2.3-1.25-3.2c-0.01-0.42,0.06-0.81,0.22-1.15c0.16-0.36,0.41-0.65,0.76-0.88c0.16-0.11,0.34-0.2,0.53-0.27 c-0.15-1.9-0.2-4.29-0.1-6.3c0.05-0.47,0.14-0.95,0.27-1.43c0.56-2.01,1.97-3.63,3.72-4.74c0.96-0.61,2.02-1.08,3.12-1.39 c0.7-0.2-0.6-2.43,0.13-2.51c3.5-0.36,9.15,2.83,11.59,5.47c1.22,1.32,1.99,3.08,2.16,5.4l-0.14,5.71l0,0 c0.61,0.19,1,0.57,1.16,1.2c0.18,0.7-0.01,1.67-0.61,3.01l0,0c-0.01,0.02-0.02,0.05-0.04,0.07l-2.51,4.13 c-0.92,1.52-1.86,3.04-3.08,4.24c0.11,0.16,0.23,0.32,0.34,0.48c0.5,0.73,1,1.46,1.64,2.11c0.02,0.02,0.04,0.05,0.05,0.07 c2.89,2.04,9.92,2.54,12.62,4.04l0.11,0.06c1.39,1.07,1.82,4.13,1.18,5.2H33.94L33.94,57.92z M102.29,79.04 c-0.53-0.51-1.14-0.75-1.84-0.74c-0.71,0.01-1.31,0.29-1.8,0.81l-4.05,4.22l11.37,10.98l4.09-4.26c0.49-0.5,0.69-1.14,0.68-1.84 c-0.01-0.69-0.26-1.33-0.76-1.8L102.29,79.04L102.29,79.04L102.29,79.04z M84.54,116.17c-1.5,0.48-3,0.97-4.49,1.46 c-1.5,0.5-3,1-4.49,1.5c-3.53,1.16-5.51,1.8-5.93,1.92c-0.4,0.12-0.17-1.53,0.73-4.99l2.81-10.83l0,0l17.82-18.18l11.36,10.93 L84.54,116.17L84.54,116.17L84.54,116.17z M31.74,95.36c-1.8,0-3.27-1.48-3.27-3.31s1.46-3.31,3.27-3.31h22.21 c1.8,0,3.27,1.48,3.27,3.31s-1.46,3.31-3.27,3.31H31.74L31.74,95.36L31.74,95.36z M31.74,74.67c-1.8,0-3.26-1.46-3.26-3.27 c0-1.8,1.46-3.26,3.26-3.26h44.05c1.8,0,3.26,1.46,3.26,3.26c0,1.8-1.46,3.27-3.26,3.27H31.74L31.74,74.67L31.74,74.67z" />
+									</g>
+								</svg> <span>Create New Booking</span>
+							</a>
+						</li> -->
+                        <li class="nav-item">
+                            <a class="nav-link collapsed" [routerLinkActive]="['active']" routerLink="/quotebot_section"
+                                tabIndex="-1" (click)="closeSidebarFunc(false)">
+                                <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 122.88 108.51">
+                                    <title>quote</title>
+                                    <path
+                                        d="M63.09,0h.07C79.87.55,94.88,6.5,105.63,15.71c11,9.46,17.65,22.35,17.23,36.44v0a43.29,43.29,0,0,1-7.66,23.16A55.15,55.15,0,0,1,95.63,92.62a72.81,72.81,0,0,1-28.39,8.64,62.2,62.2,0,0,1-26.46-3.42L5.31,108.51,15.49,82.85a49,49,0,0,1-10-12.29A40.8,40.8,0,0,1,.24,45.81,45.39,45.39,0,0,1,10,22.61,55.78,55.78,0,0,1,26.33,8.8,67.06,67.06,0,0,1,43.85,2,73.89,73.89,0,0,1,63.07,0ZM44,35.19h8.11a5.68,5.68,0,0,1,5.67,5.67c0,11.67,3,24.49-11.32,28.15-6.48,1.66-8.17-5.48-1.28-6,4.2-.3,5-3,5.16-7.12H43.79a5.68,5.68,0,0,1-5.67-5.67V41A5.86,5.86,0,0,1,44,35.19Zm26.77,0h8.1a5.69,5.69,0,0,1,5.68,5.67c0,11.67,3,24.49-11.33,28.15-6.48,1.66-8.17-5.48-1.27-6,4.2-.3,5-3,5.15-7.12h-6.5a5.68,5.68,0,0,1-5.67-5.67V41a5.85,5.85,0,0,1,5.84-5.84ZM62.86,9.4H62.8A64.24,64.24,0,0,0,46,11.1,57.64,57.64,0,0,0,31,17,46.7,46.7,0,0,0,17.38,28.41a35.94,35.94,0,0,0-7.81,18.4,31.49,31.49,0,0,0,4,19.12A41.23,41.23,0,0,0,24,77.77l2.73,2.16-5.55,14,20-6,1.5.59A52.84,52.84,0,0,0,66.47,91.9a63.56,63.56,0,0,0,24.72-7.54,45.76,45.76,0,0,0,16.26-14.27,34,34,0,0,0,6-18.17v0c.32-11.11-5-21.4-14-29-9.21-7.9-22.15-13-36.65-13.44Z" />
+                                </svg> <span>Quote</span>
+                            </a>
+                        </li>
+
+
+
+
+                        <li>
+                            <div id="google_translate_element_mobile"></div>
+                        </li>
+                        <hr class="sidebar-divider d-none d-md-block">
+                        <div class="text-center d-none d-md-inline">
+                            <button class="rounded-circle border-0" id="sidebarToggle" tabindex="-1"></button>
+                        </div>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+
+
+
+        <div id="layoutSidenav_content" (click)="handleDivClick($event)">
+            <main style="padding: inherit;">
+                <!-- <h1 class="HeadingH1">
+					<div>
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+							<rect fill="none" />
+							<ellipse cx="128" cy="128" rx="24" ry="40" />
+							<path
+								d="M128,24A104,104,0,1,0,232,128,104.12041,104.12041,0,0,0,128,24Zm0,160c-27.63281,0-40-28.125-40-56s12.36719-56,40-56,40,28.125,40,56S155.63281,184,128,184Z" />
+						</svg>
+						Agreement
+					</div>
+				</h1> -->
+                <router-outlet></router-outlet>
+            </main>
+            <footer class="admin-footer">
+                <div class="col-9 pl-0 mt-5">
+                    <p>Copyright © 2001-{{currentYear}} 1-800-LIMO.COM</p>
+                </div>
+                <div class="col-3">
+                </div>
+            </footer>
+        </div>
+    </div>
+</div>
+<app-scroll-to-top></app-scroll-to-top>
+
+<!-- <app-float-icons></app-float-icons> -->

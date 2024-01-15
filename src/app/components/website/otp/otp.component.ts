@@ -54,7 +54,7 @@ export class OtpComponent implements OnInit, OnDestroy {
 					break;
 				}
 				case 'individual': {
-					this.router.navigateByUrl('/user');
+					this.router.navigateByUrl('/individual');
 					break;
 				}
 				case 'driver': {
@@ -254,7 +254,7 @@ export class OtpComponent implements OnInit, OnDestroy {
 						break;
 					}
 					case 'individual': {
-						this.router.navigateByUrl('/user');
+						this.router.navigateByUrl('/individual');
 						break;
 					}
 					case 'driver': {
