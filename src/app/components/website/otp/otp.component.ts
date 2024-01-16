@@ -254,7 +254,12 @@ export class OtpComponent implements OnInit, OnDestroy {
 						break;
 					}
 					case 'individual': {
-						this.router.navigateByUrl('/individual');
+						if(this.response?.data.user?.is_profile_complete){
+							this.router.navigateByUrl('/individual/bookings');
+						}
+						else{
+							this.router.navigateByUrl('/individual/profile');
+						}
 						break;
 					}
 					case 'driver': {

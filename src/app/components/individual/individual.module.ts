@@ -29,12 +29,15 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { BookingsComponent } from './bookings/bookings.component';
+import { ProfileComponent } from './profile/profile.component';
+import { CreateNewBookingComponent } from './create-new-booking/create-new-booking.component';
+import { InvoiceComponent } from './invoice/invoice.component';
 
 
 
 
 @NgModule({
-  declarations: [IndividualTemplateComponent, IndividualComponent, BookingsComponent],
+  declarations: [IndividualTemplateComponent, IndividualComponent, BookingsComponent, ProfileComponent, CreateNewBookingComponent, InvoiceComponent],
   imports: [
     CommonModule,
     IndividualRoutingModule,
