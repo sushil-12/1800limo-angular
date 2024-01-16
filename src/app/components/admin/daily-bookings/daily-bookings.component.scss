@@ -377,10 +377,19 @@ a.dropdown-item {
 	justify-content: flex-end;
 	gap: 10px;
 }
+
+.pin-icon-preview{
+	font-size: 26px;
+}
+
 @media only screen and (max-width: 768px){
 	.sortCheckBox{
 		display: flex;
 		flex-direction: column;
 		gap: 4px;
 	}
+	.pin-icon-preview{
+		font-size: 34px;
+	}
 }
+
