@@ -1,386 +1,386 @@
 const time_values = [
 	{
-		display_value: "h 0000 - 12:00 AM",
+		display_value: "12:00 AM - 0000 h",
 		return_value: "00:00:00",
 	},
 	{
-		display_value: "h 0015 - 12:15 AM",
+		display_value: "12:15 AM - 0015 h",
 		return_value: "00:15:00",
 	},
 	{
-		display_value: "h 0030 - 12:30 AM",
+		display_value: "12:30 AM - 0030 h",
 		return_value: "00:30:00",
 	},
 	{
-		display_value: "h 0045 - 12:45 AM",
+		display_value: "12:45 AM - 0045 h",
 		return_value: "00:45:00",
 	},
 	{
-		display_value: "h 0100 - 1:00 AM",
+		display_value: "1:00 AM - 0100 h",
 		return_value: "1:00:00",
 	},
 	{
-		display_value: "h 0115 - 1:15 AM",
+		display_value: "1:15 AM - 0115 h",
 		return_value: "1:15:00",
 	},
 	{
-		display_value: "h 0130 - 1:30 AM",
+		display_value: "1:30 AM - 0130 h",
 		return_value: "1:30:00",
 	},
 	{
-		display_value: "h 0145 - 1:45 AM",
+		display_value: "1:45 AM - 0145 h",
 		return_value: "1:45:00",
 	},
 	{
-		display_value: "h 0200 - 2:00 AM",
+		display_value: "2:00 AM - 0200 h",
 		return_value: "2:00:00",
 	},
 	{
-		display_value: "h 0215 - 2:15 AM",
+		display_value: "2:15 AM - 0215 h",
 		return_value: "2:15:00",
 	},
 	{
-		display_value: "h 0230 - 2:30 AM",
+		display_value: "2:30 AM - 0230 h",
 		return_value: "2:30:00",
 	},
 	{
-		display_value: "h 0245 - 2:45 AM",
+		display_value: "2:45 AM - 0245 h",
 		return_value: "2:45:00",
 	},
 	{
-		display_value: "h 0300 - 3:00 AM",
+		display_value: "3:00 AM - 0300 h",
 		return_value: "3:00:00",
 	},
 	{
-		display_value: "h 0315 - 3:15 AM",
+		display_value: "3:15 AM - 0315 h",
 		return_value: "3:15:00",
 	},
 	{
-		display_value: "h 0330 - 3:30 AM",
+		display_value: "3:30 AM - 0330 h",
 		return_value: "3:30:00",
 	},
 	{
-		display_value: "h 0345 - 3:45 AM",
+		display_value: "3:45 AM - 0345 h",
 		return_value: "3:45:00",
 	},
 	{
-		display_value: "h 0400 - 4:00 AM",
+		display_value: "4:00 AM - 0400 h",
 		return_value: "4:00:00",
 	},
 	{
-		display_value: "h 0415 - 4:15 AM",
+		display_value: "4:15 AM - 0415 h",
 		return_value: "4:15:00",
 	},
 	{
-		display_value: "h 0430 - 4:30 AM",
+		display_value: "4:30 AM - 0430 h",
 		return_value: "4:30:00",
 	},
 	{
-		display_value: "h 0445 - 4:45 AM",
+		display_value: "4:45 AM - 0445 h",
 		return_value: "4:45:00",
 	},
 	{
-		display_value: "h 0500 - 5:00 AM",
+		display_value: "5:00 AM - 0500 h",
 		return_value: "5:00:00",
 	},
 	{
-		display_value: "h 0515 - 5:15 AM",
+		display_value: "5:15 AM - 0515 h",
 		return_value: "5:15:00",
 	},
 	{
-		display_value: "h 0530 - 5:30 AM",
+		display_value: "5:30 AM - 0530 h",
 		return_value: "5:30:00",
 	},
 	{
-		display_value: "h 0545 - 5:45 AM",
+		display_value: "5:45 AM - 0545 h",
 		return_value: "5:45:00",
 	},
 	{
-		display_value: "h 0600 - 6:00 AM",
+		display_value: "6:00 AM - 0600 h",
 		return_value: "6:00:00",
 	},
 	{
-		display_value: "h 0615 - 6:15 AM",
+		display_value: "6:15 AM - 0615 h",
 		return_value: "6:15:00",
 	},
 	{
-		display_value: "h 0630 - 6:30 AM",
+		display_value: "6:30 AM - 0630 h",
 		return_value: "6:30:00",
 	},
 	{
-		display_value: "h 0645 - 6:45 AM",
+		display_value: "6:45 AM - 0645 h",
 		return_value: "6:45:00",
 	},
 	{
-		display_value: "h 0700 - 7:00 AM",
+		display_value: "7:00 AM - 0700 h",
 		return_value: "7:00:00",
 	},
 	{
-		display_value: "h 0715 - 7:15 AM",
+		display_value: "7:15 AM - 0715 h",
 		return_value: "7:15:00",
 	},
 	{
-		display_value: "h 0730 - 7:30 AM",
+		display_value: "7:30 AM - 0730 h",
 		return_value: "7:30:00",
 	},
 	{
-		display_value: "h 0745 - 7:45 AM",
+		display_value: "7:45 AM - 0745 h",
 		return_value: "7:45:00",
 	},
 	{
-		display_value: "h 0800 - 8:00 AM",
+		display_value: "8:00 AM - 0800 h",
 		return_value: "8:00:00",
 	},
 	{
-		display_value: "h 0815 - 8:15 AM",
+		display_value: "8:15 AM - 0815 h",
 		return_value: "8:15:00",
 	},
 	{
-		display_value: "h 0830 - 8:30 AM",
+		display_value: "8:30 AM - 0830 h",
 		return_value: "8:30:00",
 	},
 	{
-		display_value: "h 0845 - 8:45 AM",
+		display_value: " 8:45 AM - 0845 h",
 		return_value: "8:45:00",
 	},
 	{
-		display_value: "h 0900 - 9:00 AM",
+		display_value: "9:00 AM - 0900 h",
 		return_value: "9:00:00",
 	},
 	{
-		display_value: "h 0915 - 9:15 AM",
+		display_value: "9:15 AM - 0915 h",
 		return_value: "9:15:00",
 	},
 	{
-		display_value: "h 0930 - 9:30 AM",
+		display_value: "9:30 AM - 0930 h",
 		return_value: "9:30:00",
 	},
 	{
-		display_value: "h 0945 - 9:45 AM",
+		display_value: "9:45 AM - 0945 h",
 		return_value: "9:45:00",
 	},
 	{
-		display_value: "h 1000 - 10:00 AM",
+		display_value: "10:00 AM - 1000 h",
 		return_value: "10:00:00",
 	},
 	{
-		display_value: "h 1015 - 10:15 AM",
+		display_value: "10:15 AM - 1015 h",
 		return_value: "10:15:00",
 	},
 	{
-		display_value: "h 1030 - 10:30 AM",
+		display_value: "10:30 AM - 1030 h",
 		return_value: "10:30:00",
 	},
 	{
-		display_value: "h 1045 - 10:45 AM",
+		display_value: "10:45 AM - 1045 h",
 		return_value: "10:45:00",
 	},
 	{
-		display_value: "h 1100 - 11:00 AM",
+		display_value: "11:00 AM - 1100 h",
 		return_value: "11:00:00",
 	},
 	{
-		display_value: "h 1115 - 11:15 AM",
+		display_value: "11:15 AM - 1115 h",
 		return_value: "11:15:00",
 	},
 	{
-		display_value: "h 1130 - 11:30 AM",
+		display_value: "11:30 AM - 1130 h",
 		return_value: "11:30:00",
 	},
 	{
-		display_value: "h 1145 - 11:45 AM",
+		display_value: "11:45 AM - 1145 h",
 		return_value: "11:45:00",
 	},
 	{
-		display_value: "12:00 PM - h 1200",
+		display_value: "12:00 PM - 1200 h",
 		return_value: "12:00:00",
 	},
 	{
-		display_value: "12:15 PM - h 1215",
+		display_value: "12:15 PM - 1215 h",
 		return_value: "12:15:00",
 	},
 	{
-		display_value: "12:30 PM - h 1230",
+		display_value: "12:30 PM - 1230 h",
 		return_value: "12:30:00",
 	},
 	{
-		display_value: "12:45 PM - h 1245",
+		display_value: "12:45 PM - 1245 h",
 		return_value: "12:45:00",
 	},
 	{
-		display_value: "1:00 PM - h 1300",
+		display_value: "1:00 PM - 1300 h",
 		return_value: "13:00:00",
 	},
 	{
-		display_value: "1:15 PM - h 1315",
+		display_value: "1:15 PM - 1315 h",
 		return_value: "13:15:00",
 	},
 	{
-		display_value: "1:30 PM - h 1330",
+		display_value: "1:30 PM - 1330 h",
 		return_value: "13:30:00",
 	},
 	{
-		display_value: "1:45 PM - h 1345",
+		display_value: "1:45 PM - 1345 h",
 		return_value: "13:45:00",
 	},
 	{
-		display_value: "2:00 PM - h 1400",
+		display_value: "2:00 PM - 1400 h",
 		return_value: "14:00:00",
 	},
 	{
-		display_value: "2:15 PM - h 1415",
+		display_value: "2:15 PM - 1415 h",
 		return_value: "14:15:00",
 	},
 	{
-		display_value: "2:30 PM - h 1430",
+		display_value: "2:30 PM - 1430 h",
 		return_value: "14:30:00",
 	},
 	{
-		display_value: "2:45 PM - h 1445",
+		display_value: "2:45 PM - 1445 h",
 		return_value: "14:45:00",
 	},
 	{
-		display_value: "3:00 PM - h 1500",
+		display_value: "3:00 PM - 1500 h",
 		return_value: "15:00:00",
 	},
 	{
-		display_value: "3:15 PM - h 1515",
+		display_value: "3:15 PM - 1515 h",
 		return_value: "15:15:00",
 	},
 	{
-		display_value: "3:30 PM - h 1530",
+		display_value: "3:30 PM - 1530 h",
 		return_value: "15:30:00",
 	},
 	{
-		display_value: "3:45 PM - h 1545",
+		display_value: "3:45 PM - 1545 h",
 		return_value: "15:45:00",
 	},
 	{
-		display_value: "4:00 PM - h 1600",
+		display_value: "4:00 PM - 1600 h",
 		return_value: "16:00:00",
 	},
 	{
-		display_value: "4:15 PM - h 1615",
+		display_value: "4:15 PM - 1615 h",
 		return_value: "16:15:00",
 	},
 	{
-		display_value: "4:30 PM - h 1630",
+		display_value: "4:30 PM - 1630 h",
 		return_value: "16:30:00",
 	},
 	{
-		display_value: "4:45 PM - h 1645",
+		display_value: "4:45 PM - 1645 h",
 		return_value: "16:45:00",
 	},
 	{
-		display_value: "5:00 PM - h 1700",
+		display_value: "5:00 PM - 1700 h",
 		return_value: "17:00:00",
 	},
 	{
-		display_value: "5:15 PM - h 1715",
+		display_value: "5:15 PM - 1715 h",
 		return_value: "17:15:00",
 	},
 	{
-		display_value: "5:30 PM - h 1730",
+		display_value: "5:30 PM - 1730 h",
 		return_value: "17:30:00",
 	},
 	{
-		display_value: "5:45 PM - h 1745",
+		display_value: "5:45 PM - 1745 h",
 		return_value: "17:45:00",
 	},
 	{
-		display_value: "6:00 PM - h 1800",
+		display_value: "6:00 PM - 1800 h",
 		return_value: "18:00:00",
 	},
 	{
-		display_value: "6:15 PM - h 1815",
+		display_value: "6:15 PM - 1815 h",
 		return_value: "18:15:00",
 	},
 	{
-		display_value: "6:30 PM - h 1830",
+		display_value: "6:30 PM - 1830 h",
 		return_value: "18:30:00",
 	},
 	{
-		display_value: "6:45 PM - h 1845",
+		display_value: "6:45 PM - 1845 h",
 		return_value: "18:45:00",
 	},
 	{
-		display_value: "7:00 PM - h 1900",
+		display_value: "7:00 PM - 1900 h",
 		return_value: "19:00:00",
 	},
 	{
-		display_value: "7:15 PM - h 1915",
+		display_value: "7:15 PM - 1915 h",
 		return_value: "19:15:00",
 	},
 	{
-		display_value: "7:30 PM - h 1930",
+		display_value: "7:30 PM - 1930 h",
 		return_value: "19:30:00",
 	},
 	{
-		display_value: "7:45 PM - h 1945",
+		display_value: "7:45 PM - 1945 h",
 		return_value: "19:45:00",
 	},
 	{
-		display_value: "8:00 PM - h 2000",
+		display_value: "8:00 PM - 2000 h",
 		return_value: "20:00:00",
 	},
 	{
-		display_value: "8:15 PM - h 2015",
+		display_value: "8:15 PM - 2015 h",
 		return_value: "20:15:00",
 	},
 	{
-		display_value: "8:30 PM - h 2030",
+		display_value: "8:30 PM - 2030 h",
 		return_value: "20:30:00",
 	},
 	{
-		display_value: "8:45 PM - h 2045",
+		display_value: "8:45 PM - 2045 h",
 		return_value: "20:45:00",
 	},
 	{
-		display_value: "9:00 PM - h 2100",
+		display_value: "9:00 PM - 2100 h",
 		return_value: "21:00:00",
 	},
 	{
-		display_value: "9:15 PM - h 2115",
+		display_value: "9:15 PM - 2115 h",
 		return_value: "21:15:00",
 	},
 	{
-		display_value: "9:30 PM - h 2130",
+		display_value: "9:30 PM - 2130 h",
 		return_value: "21:30:00",
 	},
 	{
-		display_value: "9:45 PM - h 2145",
+		display_value: "9:45 PM - 2145 h",
 		return_value: "21:45:00",
 	},
 	{
-		display_value: "10:00 PM - h 2200",
+		display_value: "10:00 PM - 2200 h",
 		return_value: "22:00:00",
 	},
 	{
-		display_value: "10:15 PM - h 2215",
+		display_value: "10:15 PM - 2215 h",
 		return_value: "22:15:00",
 	},
 	{
-		display_value: "10:30 PM - h 2230",
+		display_value: "10:30 PM - 2230 h",
 		return_value: "22:30:00",
 	},
 	{
-		display_value: "10:45 PM - h 2245",
+		display_value: "10:45 PM - 2245 h",
 		return_value: "22:45:00",
 	},
 	{
-		display_value: "11:00 PM - h 2300",
+		display_value: "11:00 PM - 2300 h",
 		return_value: "23:00:00",
 	},
 	{
-		display_value: "11:15 PM - h 2315",
+		display_value: "11:15 PM - 2315 h",
 		return_value: "23:15:00",
 	},
 	{
-		display_value: "11:30 PM - h 2330",
+		display_value: "11:30 PM - 2330 h",
 		return_value: "23:30:00",
 	},
 	{
-		display_value: "11:45 PM - h 2345",
+		display_value: "11:45 PM - 2345 h",
 		return_value: "23:45:00",
 	}
 ];
