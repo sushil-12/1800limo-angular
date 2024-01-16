@@ -334,3 +334,18 @@ top:2.05em}
 .required-field:after{
 	font-size: 21px !important;
 }
+
+.pin-icon-preview{
+	font-size: 26px;
+}
+
+@media only screen and (max-width: 768px){
+	.sortCheckBox{
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+	}
+	.pin-icon-preview{
+		font-size: 34px;
+	}
+}
