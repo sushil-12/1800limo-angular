@@ -67,9 +67,26 @@ export class RecoverAccountsComponent implements OnInit {
 		clearTimeout(this.timer)
 	}
 
+  scroll(id) {
+		// let el = document.getElementById(id);
+		// let elementRect = el.getBoundingClientRect();
+		// let absoluteElementTop = elementRect.top + window.pageYOffset;
+		// let topElement = absoluteElementTop - 200;
+
+		// console.log(`scrolling to ${id}`, el , absoluteElementTop ,window.innerHeight);
+		// window.scrollTo({
+		// 	top: topElement,
+		// 	behavior: 'smooth'
+		// });
+
+		let el = document.getElementById(id);
+		console.log(`scrolling to ${id}`, el);
+		el.scrollIntoView({ behavior: 'smooth' });
+	}
 
   loadAccounts(pageUrl=null)
   {
+    this.scroll('all_accounts_table')
       /** spinner starts on init */
       this.spinner.show();
 

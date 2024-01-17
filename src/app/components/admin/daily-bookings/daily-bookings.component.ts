@@ -69,7 +69,7 @@ export class DailyBookingsComponent implements OnInit {
 	rates_preview: any;
 	quotebotNewData: any;
 	shareArray: any;
-	adminSharePercent:any;
+	adminSharePercent: any;
 
 	constructor(
 		private adminService: AdminService,
@@ -77,7 +77,7 @@ export class DailyBookingsComponent implements OnInit {
 		private spinner: NgxSpinnerService,
 		private formBuilder: FormBuilder,
 		private $errorDialog: ErrorDialogService
-	) {}
+	) { }
 
 	ngOnInit(): void {
 		let date = new Date();
@@ -115,7 +115,7 @@ export class DailyBookingsComponent implements OnInit {
 		console.log("useDateFilter-->", this.useDateFilter);
 		this.orderBy = localStorage.getItem("orderByCreatedAt") ? localStorage.getItem("orderByCreatedAt") : "pickup_date_desc"
 		this.use_created_at = localStorage.getItem("orderByCreatedAt") ? true : false
-		
+
 
 		this.adminService
 			.getStatusList()
@@ -187,12 +187,12 @@ export class DailyBookingsComponent implements OnInit {
 	handleCheckboxSort(value: any) {
 		if (value) {
 			this.orderBy = "created_at_desc";
-			localStorage.setItem('orderByCreatedAt','created_at_desc')
+			localStorage.setItem('orderByCreatedAt', 'created_at_desc')
 		}
-		else{
+		else {
 			this.orderBy = "pickup_date_desc";
 			localStorage.removeItem('orderByCreatedAt')
-		} 
+		}
 		this.loadBookings(null, this.startDate, this.endDate, this.searchText);
 		// this.useDateFilter = value
 		// this.saveCookie('useDateFilter',value)
@@ -346,13 +346,13 @@ export class DailyBookingsComponent implements OnInit {
 		if (this.passengerDetails.selection_button == "Passenger") {
 			this.sendInformation = format
 				? this.passengerDetails.passenger_cell_isd +
-				  this.passengerDetails.passenger_cell
+				this.passengerDetails.passenger_cell
 				: this.passengerDetails.passenger_email;
 			this.reciptentName = this.passengerDetails.passenger_name;
 		} else if (this.passengerDetails.selection_button == "Affiliate") {
 			this.sendInformation = format
 				? this.passengerDetails.affiliate_dispatch_isd +
-				  this.passengerDetails.affiliate_dispatch_number
+				this.passengerDetails.affiliate_dispatch_number
 				: this.passengerDetails.dispatchEmail;
 			this.reciptentName =
 				this.passengerDetails.driver_first_name +
@@ -360,7 +360,7 @@ export class DailyBookingsComponent implements OnInit {
 		} else {
 			this.sendInformation = format
 				? this.passengerDetails.loose_affiliate_phone_isd +
-				  this.passengerDetails.loose_affiliate_phone
+				this.passengerDetails.loose_affiliate_phone
 				: this.passengerDetails.loose_affiliate_email;
 			this.reciptentName = this.passengerDetails.loose_affiliate_name;
 		}
@@ -405,6 +405,23 @@ export class DailyBookingsComponent implements OnInit {
 		// this.sendEmailModal.nativeElement.querySelector('textarea').focus();
 	}
 
+	scroll(id) {
+		// let el = document.getElementById(id);
+		// let elementRect = el.getBoundingClientRect();
+		// let absoluteElementTop = elementRect.top + window.pageYOffset;
+		// let topElement = absoluteElementTop - 200;
+
+		// console.log(`scrolling to ${id}`, el , absoluteElementTop ,window.innerHeight);
+		// window.scrollTo({
+		// 	top: topElement,
+		// 	behavior: 'smooth'
+		// });
+
+		let el = document.getElementById(id);
+		console.log(`scrolling to ${id}`, el);
+		el.scrollIntoView({ behavior: 'smooth' });
+	}
+
 	noError: boolean = false;
 	loadBookings(
 		pageUrl = null,
@@ -412,6 +429,7 @@ export class DailyBookingsComponent implements OnInit {
 		end_date: string,
 		search_value: string = ""
 	) {
+		this.scroll('daily _bookings_table')
 		search_value == "" && this.spinner.show();
 		this.noError = false;
 		// Load Our bookings using API
@@ -512,19 +530,19 @@ export class DailyBookingsComponent implements OnInit {
 		const remainingSeconds = value % (24 * 60 * 60);
 		const hours = Math.floor(remainingSeconds / (60 * 60));
 		const remainingMinutes = Math.floor((remainingSeconds % (60 * 60)) / 60);
-	
+
 		let result = "";
 
 		if (days > 0) {
 			result += `${days} days, `;
 		}
-	
+
 		if (hours > 0 || (days === 0 && hours === 0)) {
 			result += `${hours} hours, `;
 		}
-	
+
 		result += `${remainingMinutes} minutes`;
-	
+
 		return result;
 	}
 	mToMi(distance: number): string {
@@ -653,13 +671,13 @@ export class DailyBookingsComponent implements OnInit {
 	}
 
 	sendEmailClicked(bookingId, emailTarget) {
-		console.log('in func send email click',bookingId,emailTarget)
+		console.log('in func send email click', bookingId, emailTarget)
 		this.sendEmailForm.patchValue({
 			reservation_id: bookingId,
 			emailTarget: emailTarget,
 		});
 	}
-	
+
 
 	emailForm() {
 		this.submitted = true;
@@ -767,18 +785,18 @@ export class DailyBookingsComponent implements OnInit {
 			.subscribe((response: any) => {
 				this.spinner.hide();
 				this.bookingPreview = response.data;
-				if(this.bookingPreview?.account_type == 'travel_planner' && this.bookingPreview?.created_by !=1){
+				if (this.bookingPreview?.account_type == 'travel_planner' && this.bookingPreview?.created_by != 1) {
 					this.adminSharePercent = 15
 				}
-				else if(this.bookingPreview?.share_array?.farmoutShare){
+				else if (this.bookingPreview?.share_array?.farmoutShare) {
 					this.adminSharePercent = 15
 				}
-				else{
+				else {
 					this.adminSharePercent = 25
 				}
 				if (this.bookingPreview?.payment_status == "unpaid") {
-					console.log("in shre array",this.bookingPreview?.share_array?.length != 0,this.bookingPreview?.share_array?.length)
-					if(this.bookingPreview?.share_array?.length != 0){
+					console.log("in shre array", this.bookingPreview?.share_array?.length != 0, this.bookingPreview?.share_array?.length)
+					if (this.bookingPreview?.share_array?.length != 0) {
 						console.log("in shre array")
 						this.shareArray = this?.bookingPreview?.share_array
 					}
