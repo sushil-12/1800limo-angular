@@ -429,7 +429,7 @@ export class DailyBookingsComponent implements OnInit {
 		end_date: string,
 		search_value: string = ""
 	) {
-		this.scroll('daily _bookings_table')
+		this.scroll('daily_bookings_table')
 		search_value == "" && this.spinner.show();
 		this.noError = false;
 		// Load Our bookings using API
