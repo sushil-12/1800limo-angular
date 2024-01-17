@@ -1,7 +1,7 @@
 <ngx-spinner></ngx-spinner>
 <main>
 	<!-- Main page content-->
-	<section class="adminbox_shadow user_information">
+	<section class="adminbox_shadow user_information" id="ta_bookings_table">
 		<div class="row">
 			<div class="col-md-7" *ngIf="currentUser?.roleName == 'travel_agent'">
 				<h2 class="headinginfo" style="font-weight: 600 !important; font-size: 22px !important;">Super Travel
@@ -255,8 +255,7 @@
 										</span>
 										<span class="loc-logo"
 											(click)="showLocationPointOnMap(booking.booking_id, 'pickup')">
-											&nbsp;&nbsp;&nbsp;<i class="bi bi-geo-alt-fill"
-												style="font-size:24px"></i></span>
+											&nbsp;&nbsp;&nbsp;<i class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
 									</td>
 									<td>
 										<p data-target="#sendEmailModal" data-toggle="modal"
@@ -279,8 +278,7 @@
 										</span>
 										<span class="loc-logo"
 											(click)="showLocationPointOnMap(booking.booking_id, 'dropoff')">
-											&nbsp;&nbsp;&nbsp;<i class="bi bi-geo-alt-fill"
-												style="font-size:24px"></i></span>
+											&nbsp;&nbsp;&nbsp;<i class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
 									</td>
 									<td>
 										<span [innerHTML]="highlighText(booking?.vehicle_cat_name)"></span>
@@ -861,7 +859,7 @@
 									{{ textFormatter(bookingPreview.pickup) }}
 								</span>
 								<span (click)="showLocationPointOnMapByAddress(bookingPreview.pickup)"><i
-										class="bi bi-geo-alt-fill" style="font-size:24px"></i></span>
+										class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
 							</div>
 						</div>
 					</div>
@@ -880,7 +878,7 @@
 									{{ textFormatter(bookingPreview.pickup_airport_name) }}
 								</span>
 								<span (click)="showLocationPointOnMapByAddress(bookingPreview.pickup_airport_name)"><i
-										class="bi bi-geo-alt-fill" style="font-size:24px"></i></span>
+										class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
 							</div>
 						</div>
 						<!-- Airport -->
@@ -977,7 +975,7 @@
 										{{ stop.address }}
 									</span>
 									<span (click)="showLocationPointOnMapByAddress(stop.address)"><i
-											class="bi bi-geo-alt-fill" style="font-size:24px"></i></span>
+											class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
 								</div>
 							</div>
 						</div>
@@ -1005,7 +1003,7 @@
 									{{ textFormatter(bookingPreview.dropoff) }}
 								</span>
 								<span (click)="showLocationPointOnMapByAddress(bookingPreview.dropoff)"><i
-										class="bi bi-geo-alt-fill" style="font-size:24px"></i></span>
+										class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
 							</div>
 						</div>
 					</div>
@@ -1024,7 +1022,7 @@
 									{{ textFormatter(bookingPreview.dropoff_airport_name ) }}
 								</span>
 								<span (click)="showLocationPointOnMapByAddress(bookingPreview.dropoff_airport_name)"><i
-										class="bi bi-geo-alt-fill" style="font-size:24px"></i></span>
+										class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
 							</div>
 						</div>
 						<!-- Airport -->

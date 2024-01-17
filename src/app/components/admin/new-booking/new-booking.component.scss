@@ -376,3 +376,13 @@ ul {
 	border: 3px solid red;
 	border-radius: 12px;
 }
+
+.pin-icon-preview{
+	font-size: 26px;
+}
+
+@media only screen and (max-width: 768px){
+.pin-icon-preview{
+		font-size: 34px;
+	}
+}

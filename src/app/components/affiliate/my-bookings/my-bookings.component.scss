@@ -349,6 +349,11 @@ input::-webkit-input-placeholder {
 	// 	bottom: 10px
 	// }
 }
+
+.pin-icon-preview{
+	font-size: 26px;
+}
+
 @media only screen and (max-width: 767px){
 	main {
 		padding: inherit !important;
@@ -356,7 +361,14 @@ input::-webkit-input-placeholder {
 	#layoutSidenav_content{
     padding: 0px !important;
 	}
+	.pin-icon-preview{
+		font-size: 34px;
+	}
 }
 .asterisk{
 	font-size: 24px;
 }
+
+
+
+
