@@ -67,11 +67,28 @@ export class TravelPlannerComponent implements OnInit {
     clearTimeout(this.timer)
   }
 
+  scroll(id) {
+    // let el = document.getElementById(id);
+    // let elementRect = el.getBoundingClientRect();
+    // let absoluteElementTop = elementRect.top + window.pageYOffset;
+    // let topElement = absoluteElementTop - 200;
+
+    // console.log(`scrolling to ${id}`, el , absoluteElementTop ,window.innerHeight);
+    // window.scrollTo({
+    // 	top: topElement,
+    // 	behavior: 'smooth'
+    // });
+
+    let el = document.getElementById(id);
+    console.log(`scrolling to ${id}`, el);
+    el.scrollIntoView({ behavior: 'smooth' });
+  }
+
 
   loadTravelPlanners(pageUrl = null) {
     /** spinner starts on init */
     this.spinner.show();
-
+    this.scroll('travel_agent_table')
     var keyword = this.searchText;
 
     // Load Our travelPlanners using API

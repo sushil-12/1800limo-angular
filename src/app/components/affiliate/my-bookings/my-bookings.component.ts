@@ -107,10 +107,26 @@ export class MyBookingsComponent implements OnInit {
 		$("#search-field-my-booking").addClass("box-outline")
 	}
 
+	scroll(id) {
+		// let el = document.getElementById(id);
+		// let elementRect = el.getBoundingClientRect();
+		// let absoluteElementTop = elementRect.top + window.pageYOffset;
+		// let topElement = absoluteElementTop - 200;
 
+		// console.log(`scrolling to ${id}`, el , absoluteElementTop ,window.innerHeight);
+		// window.scrollTo({
+		// 	top: topElement,
+		// 	behavior: 'smooth'
+		// });
+
+		let el = document.getElementById(id);
+		console.log(`scrolling to ${id}`, el);
+		el.scrollIntoView({ behavior: 'smooth' });
+	}
 
 	loadBookings(pageUrl = null) {
 		$('.HeadingH1').css({ display: "none" })
+		this.scroll('bookings_affiliate')
 		/** spinner starts on init */
 		this.spinner.show();
 

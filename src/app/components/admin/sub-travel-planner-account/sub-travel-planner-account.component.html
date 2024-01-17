@@ -1,7 +1,7 @@
 <ngx-spinner></ngx-spinner>
 <main>
 	<!-- Main page content-->
-	<section class="user_information">
+	<section class="user_information" id="sub_ta_table">
 		<h2 class="headinginfo">Sub Travel Agent Accounts </h2>
 		<div class="containeredd">
 			<!-- <div class="row">
@@ -75,16 +75,17 @@
 									</a>
 									<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
 										aria-labelledby="navbarDropdownUserImage">
-										
+
 										<a class="dropdown-item" (click)="loginAsUser(travelPlanner)">
 											<div class="dropdown-item-icon"></div>
 											Log into this account
 										</a>
-										
+
 									</div>
 								</td>
 								<td>
-									<div [className]="'badge badge-pill approval_status ' + travelPlanner?.account_approval">
+									<div
+										[className]="'badge badge-pill approval_status ' + travelPlanner?.account_approval">
 										{{travelPlanner?.account_approval | titlecase}}</div>
 									<!-- <ng-template #notCompleted>
 										<div class="accpet_reject_div">
@@ -112,8 +113,7 @@
 											[innerHTML]="highlighText(travelPlanner.first_name+' '+travelPlanner.middle_name+' '+travelPlanner.last_name)"></span>
 									</td>
 								</ng-template>
-								<td><span
-										[innerHTML]="highlighText(travelPlanner.email)"></span></td>
+								<td><span [innerHTML]="highlighText(travelPlanner.email)"></span></td>
 								<td><span
 										[innerHTML]="highlighText(travelPlanner.mobileIsd+travelPlanner.mobile+' '+'('+travelPlanner?.mobileCountry.toUpperCase()+')')"></span>
 								</td>
@@ -132,7 +132,8 @@
 					<ul class="pagination pagination-circle pg-blue">
 						<li *ngIf="currentPage!=1" class="page-item disabled"
 							(click)="loadSubTravelPlanners(firstPageUrl)"><a class="page-link">First</a></li>
-						<li *ngIf="currentPage!=1" class="page-item disabled" (click)="loadSubTravelPlanners(prevPageUrl)">
+						<li *ngIf="currentPage!=1" class="page-item disabled"
+							(click)="loadSubTravelPlanners(prevPageUrl)">
 							<a class="page-link" aria-label="Previous">
 								<span aria-hidden="true">&laquo;</span>
 								<span class="sr-only">Previous</span>
@@ -143,14 +144,15 @@
 							(click)="loadSubTravelPlanners(path+'?page='+in)" [disabled]="(in==currentPage)?true:false">
 							<a class="page-link">{{in}}</a>
 						</li>
-						<li *ngIf="currentPage!=lastPage" class="page-item" (click)="loadSubTravelPlanners(nextPageUrl)">
+						<li *ngIf="currentPage!=lastPage" class="page-item"
+							(click)="loadSubTravelPlanners(nextPageUrl)">
 							<a class="page-link" aria-label="Next">
 								<span aria-hidden="true">&raquo;</span>
 								<span class="sr-only">Next</span>
 							</a>
 						</li>
-						<li *ngIf="currentPage!=lastPage" class="page-item" (click)="loadSubTravelPlanners(lastPageUrl)"><a
-								class="page-link">Last</a></li>
+						<li *ngIf="currentPage!=lastPage" class="page-item"
+							(click)="loadSubTravelPlanners(lastPageUrl)"><a class="page-link">Last</a></li>
 					</ul>
 				</nav>
 			</div>

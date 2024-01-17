@@ -167,6 +167,23 @@ export class AffiliateAccountsComponent implements OnInit {
 		clearTimeout(this.timer)
 	}
 
+	scroll(id) {
+		// let el = document.getElementById(id);
+		// let elementRect = el.getBoundingClientRect();
+		// let absoluteElementTop = elementRect.top + window.pageYOffset;
+		// let topElement = absoluteElementTop - 200;
+	
+		// console.log(`scrolling to ${id}`, el , absoluteElementTop ,window.innerHeight);
+		// window.scrollTo({
+		// 	top: topElement,
+		// 	behavior: 'smooth'
+		// });
+	
+		let el = document.getElementById(id);
+		console.log(`scrolling to ${id}`, el);
+		el.scrollIntoView({ behavior: 'smooth' });
+	  }
+
 	loadAffiliateOperators(pageUrl = null) {
 		/** spinner starts on init */
 		var keyword = this.searchText
@@ -174,6 +191,7 @@ export class AffiliateAccountsComponent implements OnInit {
 			this.filter_type = 'all'
 			console.log('keyword--->>>', keyword, this.filter_type)
 		}
+		this.scroll('affiliates_table')
 		this.spinner.show();
 
 		// console.log(keyword);
