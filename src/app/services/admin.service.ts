@@ -526,6 +526,32 @@ export class AdminService {
 		}
 		return this.httpClient.get(path).toPromise();;
 	}
+
+	subTravelPlannerAccountsbyId(url, keyword,id) {
+		var path;
+		if (url) {
+			path = url + '&search=' + keyword;
+		}
+		else {
+			path = this.serverUrl + `sub-agent-list/${id}` + '?search=' + keyword;
+		}
+		return this.httpClient.get(path).toPromise();;
+	}
+
+	loginAsUser(id){
+		return this.httpClient.get(this.serverUrl + 'admin/login-as-user/' + id);
+	}
+
+	getAccounts(url, isDeletedAcc, keyword) {
+		var path;
+		if (url) {
+			path = url + '&deleted=' + isDeletedAcc + '&search=' + keyword;;
+		}
+		else {
+			path = this.serverUrl + 'admin/all-user' + '?deleted=' + isDeletedAcc  + '&search=' + keyword;
+		}
+		return this.httpClient.get(path).toPromise();;
+	}
 	getTravelPlannerAccount(id) {
 		return this.httpClient.get(this.serverUrl + 'get-travel-planner-account/' + id);
 	}
@@ -558,6 +584,10 @@ export class AdminService {
 	}
 	deleteCard(id, acc_id) {
 		return this.httpClient.delete(this.serverUrl + 'delete-credit-card/' + acc_id + '/' + id);
+	}
+
+	deleteAccount(id) {
+		return this.httpClient.delete(this.serverUrl + 'admin/delete-user/' + id);
 	}
 
 
@@ -880,6 +910,9 @@ export class AdminService {
 	bookingEmailAll(data) {
 		return this.httpClient.post(this.serverUrl + 'send-reservation-detail-email-to-all', data)
 	}
+	bookingEmailAllUpdated(bookingId) {
+		return this.httpClient.get(this.serverUrl + `send-updated-email/${bookingId}`)
+	}
 	auditTrailInfo(bookingId) {
 		return this.httpClient.get(this.serverUrl + `admin/booking-audit-records/${bookingId}`)
 	}
@@ -896,13 +929,13 @@ export class AdminService {
 		}
 		return this.httpClient.get(path).toPromise();
 	}
-	loadBookings(url, startDate, endDate, useDateFilter,keyword = '') {
+	loadBookings(url, startDate, endDate, useDateFilter,keyword = '',orderBy) {
 		var path;
 		if (url) {
-			path = url + '&from=' + startDate + '&to=' + endDate + '&search=' + keyword +'&useDateFilter='+useDateFilter;
+			path = url + '&from=' + startDate + '&to=' + endDate + '&search=' + keyword +'&useDateFilter='+useDateFilter +'&orderBy='+orderBy;
 		}
 		else {
-			path = this.serverUrl + 'reservations' + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword+'&useDateFilter='+useDateFilter;
+			path = this.serverUrl + 'reservations' + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword+'&useDateFilter='+useDateFilter+'&order_by='+orderBy;
 		}
 		return this.httpClient.get(path).toPromise();
 	}
@@ -915,6 +948,17 @@ export class AdminService {
 	paymentProcessing(data) {
 		return this.httpClient.post(this.serverUrl + 'payment-processing', data);
 	}
+
+	getQuoteData(id:any)
+	{
+		return this.httpClient.get(`${this.serverUrl}quote/copy/${id}`)
+	}
+
+	getFilterData(id:any)
+	{
+		return this.httpClient.get(`${this.serverUrl}quote/static_filter/${id}`)
+	}
+
 
 	//booking actions
 	returnRepeatBooking(data) {
@@ -1177,7 +1221,10 @@ export class AdminService {
 updateStepsArrayLocalTravelAgent(stepArray) {
 	sessionStorage.setItem('stepCompleted', stepArray.toString())
 }
-
+// accept or reject sub ta
+acceptRejectAffiliate(acc_id,status) {
+	return this.httpClient.put(this.serverUrl + 'admin/travel-planner/account-approval', { 'acc_id': acc_id ,'status':status});
+}
 updateStepsCompletedObjTravelAgent(stepObject) {
 	sessionStorage.setItem('step_completed_obj', JSON.stringify(stepObject))
 }

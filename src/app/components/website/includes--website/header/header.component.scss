@@ -9,7 +9,7 @@
 	color: #000 !important;
 }
 .ta-btn{
-	background-color: teal;
+	background-color: #0766cc;
     font-weight: 500;
     box-shadow: 0 5px 10px -6px rgb(0 0 0);
     color: #fff !important;	
@@ -21,6 +21,9 @@
 
 .gear-bg {
 	color: aliceblue !important;
+}
+.gear-bg-black{
+	color: #000 !important;
 }
 
 .nav-item-bt-1 {
@@ -114,6 +117,7 @@ ul {
 	ul {
 		background-color: transparent;
 	}
+	
 }
 
 @media only screen and (max-width:991px) {
@@ -126,6 +130,12 @@ ul {
 	.navbar-dark .navbar-nav .nav-link {
 		color: var(--orange-color) !important;
 	}
+	.gear-bg-black{
+		color: #000 !important;
+	}
+	.gear-bg{
+		color: #000 !important;
+	}
 
 	// .dropdown.button-signin a {
 	// 	color: var(--orange-color) !important;
@@ -134,7 +144,7 @@ ul {
 	color: var(--orange-color) !important;
 }
 .dropdown-menu .dropdown-item{
-	color: #fff !important;
+	color: #000 !important;
 }
 
 	.allinner_wrapper header nav .navbar-nav li a {

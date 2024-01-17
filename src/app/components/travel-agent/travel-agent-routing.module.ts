@@ -12,10 +12,12 @@ import { StripeFormComponent } from './stripe-form/stripe-form.component';
 import { TravelAgentStepsTemplateComponent } from './travel-agent-steps-template/travel-agent-steps-template.component';
 import { TravelClientAccountsComponent } from './travel-client-accounts/travel-client-accounts.component';
 import { AddClientAccountComponent } from './add-client-account/add-client-account.component';
+import { SubAgentAccountsComponent } from './sub-agent-accounts/sub-agent-accounts.component';
+import { SubAgentAccountDetailsComponent } from './sub-agent-account-details/sub-agent-account-details.component';
 const routes: Routes = [
   {
 		path: '',
-		redirectTo: '/home',
+		redirectTo: 'bookings',
 		pathMatch: 'full'
 	},
   {
@@ -100,6 +102,16 @@ const routes: Routes = [
   {
     path:'edit-client-account',
     component:AddClientAccountComponent,
+    canActivate: [CheckProfileCompleteGuard],
+  },
+  {
+    path:'sub-agent-accounts',
+    component:SubAgentAccountsComponent,
+    canActivate: [CheckProfileCompleteGuard],
+  },
+  {
+    path:'sub-agent-account-details',
+    component:SubAgentAccountDetailsComponent,
     canActivate: [CheckProfileCompleteGuard],
   },
   

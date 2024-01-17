@@ -115,6 +115,9 @@ import { DemoAddIndividualComponent } from './demo-add-individual/demo-add-indiv
 import { AffiliateBookingComponent } from './affiliate-booking/affiliate-booking.component';
 import { TravelAgentStepsComponent } from './travel-agent-steps/travel-agent-steps.component';
 import { TravelAgentStripeFormComponent } from './travel-agent-stripe-form/travel-agent-stripe-form.component';
+import { RecoverAccountsComponent } from './recover-accounts/recover-accounts.component';
+import { ClipboardModule } from '@angular/cdk/clipboard';
+import { SubTravelPlannerAccountComponent } from './sub-travel-planner-account/sub-travel-planner-account.component';
 
 
 @NgModule({
@@ -203,7 +206,9 @@ import { TravelAgentStripeFormComponent } from './travel-agent-stripe-form/trave
 		DemoAddIndividualComponent,
 		AffiliateBookingComponent,
 		TravelAgentStepsComponent,
-		TravelAgentStripeFormComponent
+		TravelAgentStripeFormComponent,
+		RecoverAccountsComponent,
+		SubTravelPlannerAccountComponent
 	],
 	imports: [
 		CommonModule,
@@ -229,7 +234,8 @@ import { TravelAgentStripeFormComponent } from './travel-agent-stripe-form/trave
 		MatTabsModule,
 		MatTableModule,
 		MatExpansionModule,
-		MatIconModule
+		MatIconModule,
+		ClipboardModule
 	],
 	exports: [BookingStatusTextReplacePipe,MatIconModule]
 })

@@ -54,6 +54,9 @@ export class MyBookingsComponent implements OnInit {
 	company_name: any = JSON.parse(localStorage.getItem('currentUser'))?.affiliate_company || ''
 	cancelBookingId: any = null
 	useDateFilter:boolean=true;
+	adminSharePercent: number;
+	shareArray: any;
+	rates_preview: any;
 
 	constructor(
 		private affiliateService: AffiliateService,
@@ -104,10 +107,26 @@ export class MyBookingsComponent implements OnInit {
 		$("#search-field-my-booking").addClass("box-outline")
 	}
 
+	scroll(id) {
+		// let el = document.getElementById(id);
+		// let elementRect = el.getBoundingClientRect();
+		// let absoluteElementTop = elementRect.top + window.pageYOffset;
+		// let topElement = absoluteElementTop - 200;
 
+		// console.log(`scrolling to ${id}`, el , absoluteElementTop ,window.innerHeight);
+		// window.scrollTo({
+		// 	top: topElement,
+		// 	behavior: 'smooth'
+		// });
+
+		let el = document.getElementById(id);
+		console.log(`scrolling to ${id}`, el);
+		el.scrollIntoView({ behavior: 'smooth' });
+	}
 
 	loadBookings(pageUrl = null) {
 		$('.HeadingH1').css({ display: "none" })
+		this.scroll('bookings_affiliate')
 		/** spinner starts on init */
 		this.spinner.show();
 
@@ -234,6 +253,24 @@ export class MyBookingsComponent implements OnInit {
 			).subscribe((response: any) => {
 				console.log("respinse", response.data)
 				this.bookingPreview = response.data;
+				if(this.bookingPreview?.account_type == 'travel_planner' && this.bookingPreview?.created_by !=1){
+					console.log("in if created by ta")
+					this.adminSharePercent = 15
+				}
+				else if(this.bookingPreview?.share_array?.farmoutShare){
+					this.adminSharePercent = 15
+				}
+				else{
+					console.log("in if created by admin")
+					this.adminSharePercent = 25
+				}
+				if (this.bookingPreview?.payment_status == "unpaid") {
+					
+						console.log("in if share array",this.bookingPreview.affiliate_type === 'affiliate' && this.bookingPreview.payment_status=='unpaid' && this.bookingPreview?.share_array?.length != 0)
+						this.shareArray = this?.bookingPreview?.share_array
+				
+					this.rates_preview = this.bookingPreview?.rates_preview;
+				}
 				this.isAffiliate = this.bookingPreview.affiliate_type == "affiliate" ? true : false;
 				this.isLooseAffiliate = this.bookingPreview.affiliate_type == "loose_affiliate" ? true : false;
 				this.bookingPreview['booking_instructions'] = this.bookingPreview?.booking_instructions.replaceAll('<br />', ' ')
@@ -469,6 +506,9 @@ export class MyBookingsComponent implements OnInit {
 		this.router.navigate(['/affiliate/finalize-booking'], { queryParams: { bookingId: bookingId } });
 	}
 
+	previewRate(bookingId) {
+		this.router.navigate(['/affiliate/finalize-booking'], { queryParams: { bookingId: bookingId , editRate:true} });
+	}
 	returnRepeatAction(actionType, bookingId, serviceType) {
 		console.log(actionType, bookingId, serviceType);
 
@@ -555,6 +595,34 @@ export class MyBookingsComponent implements OnInit {
 					});
 				}
 			});
+	}
+
+	convertToMinutes(value){
+		const days = Math.floor(value / (24 * 60 * 60));
+		const remainingSeconds = value % (24 * 60 * 60);
+		const hours = Math.floor(remainingSeconds / (60 * 60));
+		const remainingMinutes = Math.floor((remainingSeconds % (60 * 60)) / 60);
+	
+		let result = "";
+
+		if (days > 0) {
+			result += `${days} days, `;
+		}
+	
+		if (hours > 0 || (days === 0 && hours === 0)) {
+			result += `${hours} hours, `;
+		}
+	
+		result += `${remainingMinutes} minutes`;
+	
+		return result;
+	}
+	mToMi(distance: number): string {
+		return (distance / 1609).toFixed(2)
+	}
+
+	mToKm(distance: number): string {
+		return (distance / 1000).toFixed(2)
 	}
 
 

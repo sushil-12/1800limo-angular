@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { bindCallback, Observable, throwError } from 'rxjs';
@@ -7,6 +7,7 @@ import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.se
 import { StateManagementService } from 'src/app/services/statemanagement.service';
 import { QuotebotService } from '../../../services/quotebot.service';
 import { SharedModule } from '../../shared/shared.module';
+import { AdminService } from 'src/app/services/admin.service';
 
 declare let $: any
 
@@ -27,6 +28,8 @@ interface Filters
 })
 export class SelectVehicleComponent implements OnInit
 {
+	@ViewChild("inputmsg", { static: false }) message: ElementRef;
+	@ViewChild("sendEmailModalFocus") sendEmailModalFocus: any;
 	/**
 	 * 
 	 * Please DO NOT CHANGE any conditions in this file.
@@ -69,22 +72,18 @@ export class SelectVehicleComponent implements OnInit
 			],
 		},
 		{
-			dp: 'year-color-interior',
-			rp: [
-				{
-					dp: 'year',
-					rp: 'years'
-				},
-				{
-					dp: 'color',
-					rp: 'colors'
-				},
-				{
-					dp: 'interior',
-					rp: 'interiors'
-				}
-			]
+			dp: 'years',
+			rp: 'years'
 		},
+		{
+			dp: 'colors',
+			rp: 'colors'
+		},
+		{
+			dp: 'interiors',
+			rp: 'interiors'
+		}
+		,
 		{
 			dp: 'amenities',
 			rp: 'amenities'
@@ -124,18 +123,98 @@ export class SelectVehicleComponent implements OnInit
 		}
 	]
 
+	// FILTERS_ORDER = [
+	// 	{
+	// 		dp: 'vehicle-type-preferences',
+	// 		rp: 'vehicle-type'
+	// 	},
+	// 	{
+	// 		dp: 'make-model',
+	// 		rp: [
+	// 			{
+	// 				dp: 'make',
+	// 				rp: 'make'
+	// 			},
+	// 			{
+	// 				dp: 'model',
+	// 				rp: 'model'
+	// 			},
+	// 		],
+	// 	},
+	// 	{
+	// 		dp: 'year-color-interior',
+	// 		rp: [
+	// 			{
+	// 				dp: 'year',
+	// 				rp: 'years'
+	// 			},
+	// 			{
+	// 				dp: 'color',
+	// 				rp: 'colors'
+	// 			},
+	// 			{
+	// 				dp: 'interior',
+	// 				rp: 'interiors'
+	// 			}
+	// 		]
+	// 	},
+	// 	{
+	// 		dp: 'amenities',
+	// 		rp: 'amenities'
+	// 	},
+	// 	{
+	// 		dp: 'extra-$-amenities',
+	// 		rp: 'special-amenities'
+	// 	},
+	// 	{
+	// 		dp: 'driver-preferences',
+	// 		rp: [
+	// 			{
+	// 				dp: 'dresses',
+	// 				rp: 'driver-dresses'
+	// 			},
+	// 			{
+	// 				dp: 'languages',
+	// 				rp: 'driver-languages'
+	// 			},
+	// 			{
+	// 				dp: 'gender',
+	// 				rp: 'driver-gender'
+	// 			},
+	// 			{
+	// 				dp: 'background',
+	// 				rp: 'driver-background'
+	// 			}
+	// 		]
+	// 	},
+	// 	{
+	// 		dp: 'vehicle-service-area',
+	// 		rp: 'vehicle-service-area'
+	// 	},
+	// 	{
+	// 		dp: 'operator-preferences',
+	// 		rp: 'affiliate-preferences',
+	// 	}
+	// ]
+
 	modal_driver_info_labels: Array<String> = ['name', 'gender', 'phone', 'languages', 'experience', 'dress', 'background', 'starRating']
-	vehicleDetails: Array<any> = []
+	vehicleDetails:any;
 	vehicleImages: Array<any> = []
 	master_vehicles: Array<any> = []
 
 	// Filters
+	
 	filters: Filters = {
-		original: JSON.parse(sessionStorage.getItem('filters'))?.original,
-		copy: JSON.parse(sessionStorage.getItem('filters'))?.copy,
-		request:JSON.parse(sessionStorage.getItem('filters'))?.request,
-		selections: JSON.parse(sessionStorage.getItem('filters'))?.selections,
+		original: JSON.parse(sessionStorage.getItem('filters'))?.original ,
+		copy: JSON.parse(sessionStorage.getItem('filters'))?.copy ,
+		request:JSON.parse(sessionStorage.getItem('filters'))?.request ,
+		selections: JSON.parse(sessionStorage.getItem('filters'))?.selections ,
 		vars: JSON.parse(sessionStorage.getItem('filters'))?.vars
+		// original:"" ,
+		// copy: "",
+		// request:"",
+		// selections: [],
+		// vars: ""
 	}
 
 	min_length: number = 12 	// number of filters to show in one column and on the filters sidebar
@@ -152,6 +231,11 @@ export class SelectVehicleComponent implements OnInit
 	role:number = JSON.parse(localStorage.getItem("currentUser"))?.role 
 	openfilters: boolean = false
 	changeText:boolean = false
+	bookingId: any = null;
+	quotebotNewData: any;
+	show = false;
+	notification_msg:any;
+	passengerDetails: any;
 
 
 	constructor(
@@ -161,8 +245,11 @@ export class SelectVehicleComponent implements OnInit
 		private $errorDialog: ErrorDialogService,
 		private $state: StateManagementService,
 		private $activatedRoute: ActivatedRoute,
-		private $globals: SharedModule
-	) { }
+		private $globals: SharedModule,
+		private adminService:AdminService,
+	) { 
+		console.log('in constructor select vehicle')
+	}
 
 	/**
 	 * make sure the quote has been filled before doing anything on this page, else navigate back to home for quote filling
@@ -174,45 +261,67 @@ export class SelectVehicleComponent implements OnInit
 	ngOnInit(): void
 	{
 		window.scrollTo(0, 0)
-		if(!JSON.parse(sessionStorage.getItem('filters'))){
-			this.$router.navigateByUrl('/home')
-		}
-		this.$spinner.show()
-		sessionStorage.removeItem('selected_vehicle')
-		// Note: Do not add anything here or before below conditional logic. This should be the first step
-		if (localStorage.getItem('quotebot_form') == null)
-		{
-			this.$errorDialog.openDialog({
-				errors: {
-					error: "Please request a Quote before selecting a vehicle. "
-				}
-			})
-			this.$router.navigateByUrl('/')
-			return
-		} else
-		{
-			// fetch the user's travelling quote
-			this.quotebot_form = JSON.parse(localStorage.getItem('quotebot_form'))
-		}
+		try {
+			console.log('in component select vehicle->>', JSON.parse(sessionStorage.getItem('filters')))
 
-		this.$activatedRoute.queryParams.subscribe((params: any) =>
-		{
-			if (params?.list == 'master')
-			{
-				this.vehicleDetails = []
+			
+			if(!JSON.parse(sessionStorage.getItem('filters'))){
+				this.$router.navigateByUrl('/home')
 			}
-			if (params?.sort == 'plh')
+			this.$spinner.show()
+			sessionStorage.getItem('selected_vehicle') ? sessionStorage.removeItem('selected_vehicle') : ''
+			// Note: Do not add anything here or before below conditional logic. This should be the first step
+			if (!localStorage.getItem('quotebot_form'))
 			{
-				this.Sort.LowToHigh()
+				this.$errorDialog.openDialog({
+					errors: {
+						error: "Please request a Quote before selecting a vehicle. "
+					}
+				})
+				this.$router.navigateByUrl('/')
+	
 			} else
 			{
-				this.Sort.HighToLow()
+				// fetch the user's travelling quote
+				this.quotebot_form = JSON.parse(localStorage.getItem('quotebot_form'))
 			}
-		})
 
-		this.fetchMasterVehicles()	// fetches 16 vehicle categories
-		this.getAllFilters()	// fetch filters from database
-		this.getVehicleDetails()
+			this.$activatedRoute.queryParams.subscribe((params: any) =>
+			{
+				console.log('paramsa->>>>' , params.booking_id)
+				if(params?.id){
+					this.bookingId = params?.id
+				}
+				if (params?.list == 'master')
+				{
+					this.vehicleDetails = []
+				}
+				if (params?.sort == 'plh')
+				{
+					this.Sort.LowToHigh()
+				} else
+				{
+					this.Sort.HighToLow()
+				}
+	
+				
+			})
+	
+			this.fetchMasterVehicles()	// fetches 16 vehicle categories
+			this.getAllFilters()	// fetch filters from database
+			console.log('booking data' , this.bookingId)
+			if(this.bookingId){
+				console.log('booking data-->>>>>>' , this.bookingId)
+				this.getQuoteDetails(this.bookingId)
+			}
+			else{
+				this.getVehicleDetails()
+			}
+	
+			
+		} catch (error) {
+			console.log('errr----->>' , error)
+		}
 	}
 	// ngOnInit ends
 	// documentgetElementById('affiliate-info')
@@ -319,7 +428,6 @@ export class SelectVehicleComponent implements OnInit
 			this.$spinner.hide()
 			// format every filter name from response
 			this.filters.original = JSON.parse(JSON.stringify(response.data)) // create a deep copy of the response object
-
 			for (let catg in this.filters.original)
 			{
 				// changing the name here? Do not forget to change in the includes and selected filters function.
@@ -518,6 +626,52 @@ export class SelectVehicleComponent implements OnInit
 		})
 	}
 
+	getQuoteDetails(id){
+		this.$quotebotService.getQuoteData(id).subscribe((response: any) =>
+		{
+			try {
+			console.log('in function get quote data' , response)
+			if (response.data.vehicleData.length == 0)
+			{
+				this.no_vehicle_msg = 'No Vehicle found with the applied filter.'
+			}
+			
+			this.vehicleDetails = [...response.data?.vehicleData]
+			this.quotebotNewData = response.data?.quote
+						
+				let location_info=[]
+				let tempObj={
+					distance:{
+						text:this.quotebotNewData?.distance/1000 + "km",
+						value:Number(this.quotebotNewData?.distance)
+					},
+					duration:{
+						text:this.quotebotNewData?.duration/60 + "mins",
+						value: Number(this.quotebotNewData?.duration)
+					}
+				}
+				location_info.push(tempObj)
+				this.quotebotNewData['location_info'] = location_info
+				console.log("in location->",this.quotebotNewData)
+				localStorage.setItem('quotebot_form',JSON.stringify(this.quotebotNewData))
+			} catch (error) {
+				console.log("error-----_>",error)
+			}
+			this.vehicleDetails = this.vehicleDetails.map(i=> {
+				if(i?.affiliate_company && i?.affiliate_name){
+					i['readMore']=(i?.affiliate_company?.length || i?.affiliate_name?.length) > 8 ? true : false 
+				}
+				else{
+					i['readMore'] = false
+				}
+				return i
+			})
+			console.log('vehicle details-->>>' , this.vehicleDetails)
+			// this.Sort.LowToHigh() // default sort to Low-High
+			this.$spinner.hide()
+		})
+	}
+
 
 
 
@@ -701,9 +855,15 @@ export class SelectVehicleComponent implements OnInit
 		{
 			if (JSON.parse(localStorage.getItem('currentUser'))['roleName'] == 'admin')
 			{
-				this.$router.navigate(['/admin/new-booking'],
-				{ queryParams: {affiliate_id:vehicle_selected.affiliate_id, vehicle_id:vehicle_selected.id,new : true ,is_master_vehicle:vehicle_selected?.is_master_vehicle}})
-			} else
+				if(this.bookingId){
+					this.$router.navigate(['/admin/new-booking'],
+					{ queryParams: {affiliate_id:vehicle_selected.affiliate_id, vehicle_id:vehicle_selected.id,new : 'reaffiliate' ,is_master_vehicle:vehicle_selected?.is_master_vehicle,updateType:'reaffiliate',reaffiliate_book_id:this.bookingId}})
+				}
+				else{
+					this.$router.navigate(['/admin/new-booking'],
+					{ queryParams: {affiliate_id:vehicle_selected.affiliate_id, vehicle_id:vehicle_selected.id,new : true ,is_master_vehicle:vehicle_selected?.is_master_vehicle}})
+				}
+			}  else
 			{
 				let user = JSON.parse(localStorage.getItem('currentUser'))['roleName']
 				user = user == 'driver' ? 'affiliate' : user	// roleName of driver has to be directed to affiliate/..
@@ -856,6 +1016,85 @@ export class SelectVehicleComponent implements OnInit
 			return i;
 		})
 	}
+
+	openModal(vehinfo) {
+		try {
+			setTimeout(() => {
+				// $('textarea').attr('autofocus', 'autofocus');
+				this.sendEmailModalFocus.nativeElement
+					.querySelector("textarea")
+					.focus();
+			}, 1000);
+		} catch (error) {
+			console.log("----------error------->>>>>> ", error);
+		}
+		this.passengerDetails = vehinfo;
+		// this.passengerDetails["selection_button"] = selection_button;
+	}
+
+
+	messageField(format) {
+		setTimeout(() => {
+			this.sendEmailModalFocus.nativeElement
+				.querySelector("textarea")
+				.focus();
+		}, 1000);
+		this.show = true;
+		// switch (format) {
+		// 	case "Phone": {
+		// 		this.sendMessageField = true;
+		// 		break;
+		// 	}
+		// 	case "Email": {
+		// 		this.sendMessageField = false;
+		// 		break;
+		// 	}
+		// }
+	}
+
+	closeModal() {
+		// this.sendEmailModal.nativeElement.querySelector('textarea').blur();
+		$("#sendEmailModal").modal("hide");
+		this.message.nativeElement.value = "";
+		this.show = false;
+		// this.sendEmailModal.nativeElement.querySelector('textarea').focus();
+	}
+
+	submit(message,vehicleDetails) {
+		
+		console.log("in submit---->",vehicleDetails)
+		let obj = {
+			reciptentName: this.passengerDetails?.affiliate_name,
+			sendTo:'Affiliate',
+			sendThrough: "Phone" ,
+			sendValue: this.passengerDetails?.affiliate_phone,
+			sendContent: message,
+		};
+		console.log("in submit obj---->",obj)
+		this.adminService
+			.adminNotification(obj)
+			.pipe(
+				catchError((err) => {
+					return throwError(err);
+				})
+			)
+			.subscribe(({ message }: any) => {
+				this.notification_msg = message;
+				$("#notificationModal").modal("show");
+				console.log(message);
+				$("textarea").val("");
+			});
+		$("#closeModal").click(() => {
+			$("#notificationModal").modal("hide");
+		});
+		$("#closeModal1").click(() => {
+			$("#notificationModal").modal("hide");
+		});
+		$("#sendEmailModal").modal("hide");
+		this.message.nativeElement.value = "";
+		this.show = false;
+	}
+
 
 
 }

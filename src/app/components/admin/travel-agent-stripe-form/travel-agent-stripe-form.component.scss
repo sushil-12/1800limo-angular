@@ -18,7 +18,9 @@ agm-map {
 .vehtype_extint .emptyImage {
 	height: 225px;
 }
-
+.disableSsn{
+	pointer-events: none;
+}
 .vehtype_extint .emptyImage img {
 	height: 220px;
 }
@@ -47,7 +49,10 @@ agm-map {
 	width: 100%;
 	padding: 10px 40px !important;
 }
-
+.border-red{
+	border: 2px solid red;
+	border-radius: 6px;
+}
 .verifyDocButton svg,
 .adressChangeButton svg {
 	margin-bottom: 10px;

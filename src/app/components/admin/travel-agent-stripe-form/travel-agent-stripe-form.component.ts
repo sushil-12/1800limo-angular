@@ -12,6 +12,7 @@ import { StateManagementService } from 'src/app/services/statemanagement.service
 import { TravelAgentService } from 'src/app/services/travel-agent.service';
 import { SharedModule } from '../../shared/shared.module';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
+import { CommonService } from 'src/app/services/common.service';
 
 @Component({
   selector: 'app-travel-agent-stripe-form',
@@ -53,12 +54,19 @@ export class TravelAgentStripeFormComponent implements OnInit {
 	public disableSubmitRequestAddressChangeButton: boolean = false;
 	public showProgressBar: boolean = false;
 	public haveEinNo: boolean = true;
+	enableSsnField:boolean=false;
+	ssn_copy:any;
+	ssnErrorMessage:string;
+	addressErrorMessage:string;
+	dobErrorMessage:string;
+	public AddressCheckStripe = ['address','street','city','country']
 
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
 	stepsObj: any;
 	filteredOptions: any;
 	badgeOptions: any;
 	travelAgentId: any;
+	TaxIdMatch: string;
 
 	constructor(
 		private adminService: AdminService,
@@ -72,6 +80,7 @@ export class TravelAgentStripeFormComponent implements OnInit {
 		private mapsAPILoader: MapsAPILoader,
 		private ngZone: NgZone,
 		private el: ElementRef,
+		private commonServices: CommonService,
 		private customValidator: CustomvalidationService,
 		private globalFunctions: SharedModule,
 		private errordialog: ErrorDialogService,
@@ -173,7 +182,7 @@ export class TravelAgentStripeFormComponent implements OnInit {
 			AccountNumber: ['', [Validators.required, this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
 			Routing: ['', [Validators.required]],
 			AccountType: ['company', Validators.required],
-			ssn: ['', [Validators.required, Validators.pattern("^[0-9]*$"), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
+			ssn: ['', [Validators.required, Validators.pattern("^[0-9*]*$"), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
 			haveEin: ['yesEin'],
 			ein: ['', []],
 			currency: ['', Validators.required],
@@ -313,7 +322,7 @@ export class TravelAgentStripeFormComponent implements OnInit {
 						Routing: this.response.data.bankinfo.Routing,
 						AccountType: this.response.data.bankinfo.AccountType,
 						currency: this.response.data.bankinfo.currency,
-						ssn: this.response.data.bankinfo.ssn,
+						ssn: this.showOnlyLast4Digit(this.response.data.bankinfo.ssn),
 						haveEin: this.response.data.bankinfo.ein ? 'yesEin' : 'noEin',
 						ein: this.response.data.bankinfo.ein,
 						address: this.response.data.bankinfo.address,
@@ -331,7 +340,54 @@ export class TravelAgentStripeFormComponent implements OnInit {
 						id_front_image: this.response.data.bankinfo.id_front_image.ID,
 						id_back_image: this.response.data.bankinfo.id_back_image.ID,
 					});
+					this.ssn_copy=this.response?.data?.bankinfo?.ssn
+					// if(this.response?.data?.error_fields?.find(val => val?.field == 'ssn')){
+					// 	this.ssnErrorMessage = this.response?.data?.error_fields?.find(val => val?.field == 'ssn')?.message
+					// 	this.enableSsnField=false
+					// 			console.log("in if ssn error",this.enableSsnField)
+					// }
+					if(this.response?.data?.error_fields?.length > 0){
+						const hasNonEmptyObjects = this.response?.data?.error_fields?.filter(obj => Object.keys(obj).length > 0).length > 0;
+						console.log(hasNonEmptyObjects,"hasnonnonono")
+						if(!hasNonEmptyObjects){
+							this.enableSsnField = true
+						}
+						else{
 
+							this.response?.data?.error_fields?.forEach(item=>{
+								if(item.field == 'ssn'){
+									this.enableSsnField = false
+									this.ssnErrorMessage = 'PLEASE ENTER A VALID SSN / GOVERNMENT ID'
+									console.log('error mesage---->',this.ssnErrorMessage)
+								}
+								else{
+									this.enableSsnField = true
+								}
+								 if(this.AddressCheckStripe?.includes(item?.field)){
+									console.log("in if addressssssssss-->")
+									this.addressErrorMessage = 'Please enter a valid address'
+									console.log('error mesage---->',this.addressErrorMessage)
+									// this.enableSsnField = true
+
+								}
+								if(item?.field == 'dob'){
+									this.dobErrorMessage = 'Please enter a valid dob'
+									console.log('error mesage---->',this.dobErrorMessage)
+									// this.enableSsnField = true
+								}									
+						  })
+						}
+					
+					}
+					else{
+						this.enableSsnField=true
+					}
+					console.log("trueeee===>",this.enableSsnField)
+					//to check varificatiom failed tax id error only
+					if(this.response?.data?.stripeDetail?.stripe_errors?.find(err => err?.error_code == 'verification_failed_tax_id_match')){
+						this.enableSsnField = false
+						this.TaxIdMatch = 'NOTE - Please verify your SSN  number and Buisness/Tax ID number'
+					}
 					this.currencySelection(this.response.data.bankinfo.currency)
 					this.haveEin(this.response.data.bankinfo.ein ? 'yesEin' : 'noEin');
 					this.changeCountry(this.response.data.bankinfo.country);//for selected country
@@ -460,7 +516,14 @@ export class TravelAgentStripeFormComponent implements OnInit {
 		}
 
 	}
-
+	showOnlyLast4Digit(value){
+		if(value){
+			value = value.toString()
+			return '*'.repeat(value.length - 4) + value.slice(-4)
+		}else{
+			return ''
+		}
+	}
 	get f() {
 		return this.addBankForm.controls;
 	}
@@ -547,7 +610,10 @@ export class TravelAgentStripeFormComponent implements OnInit {
 		};
 	}
 
-	idCardImageChange1(dataUrl, imageType, imageId = null) {
+	async idCardImageChange1(dataUrl, imageType, imageId = null) {
+		if(!await this.commonServices.handleFile(event)) {
+			return;
+		}
 		this.stateManagementService.setprogressBar(true);
 		this.imageSrc = dataUrl;
 		this.adminService.uploadVehicleImage(this.imageSrc)
@@ -584,7 +650,10 @@ export class TravelAgentStripeFormComponent implements OnInit {
 			});
 	}
 
-	idCardImageChange(event, imageType, imageId = null) {
+	async idCardImageChange(event, imageType, imageId = null) {
+		if(!await this.commonServices.handleFile(event)) {
+			return;
+		}
 		this.stateManagementService.setprogressBar(true);
 		const reader = new FileReader();
 		if (event.target.files && event.target.files.length)
@@ -652,6 +721,30 @@ export class TravelAgentStripeFormComponent implements OnInit {
 			}
 		}
 	}
+	handleSsnInput(value: any) {
+
+		console.log("prev--->", this.ssn_copy, this.addBankForm.get('ssn').value)
+		value.includes("*") ? "" : this.ssn_copy = value
+		console.log("after--->", this.ssn_copy)
+
+	}
+	removeErrorSsn(value:any,type:string){
+		console.log("TYPE----->",type)
+		if(type == 'ssn'){
+			this.ssnErrorMessage = ""
+		}
+		else if(type == 'address'){
+			this.addressErrorMessage = ""
+		}
+		// else if(type == 'dob'){
+		// 	console.log("in dobbbbhbbb")
+		// 	this.dobErrorMessage = ""
+		// }
+	}
+	removeDobError(){
+		console.log("in dobbbbhbbb")
+		this.dobErrorMessage = ""
+	}
 	submitForm() {
 		console.log(this.addBankForm);
 		// console.log(JSON.stringify(this.addVehicleRatesForm.value));
@@ -661,6 +754,9 @@ export class TravelAgentStripeFormComponent implements OnInit {
 			return;
 		}
 		// this.addBankForm.value.stepCompleted = this.adminService.getUpdatedStepsLocal('2');
+		this.addBankForm.patchValue({
+			ssn:this.ssn_copy
+		})
 		console.log(this.addBankForm.value);
 		// console.log(JSON.stringify(this.addVehicleRatesForm.value));
 		this.disableSubmitButton = true; //disable submit button
@@ -668,8 +764,12 @@ export class TravelAgentStripeFormComponent implements OnInit {
 		this.adminService.addBankOfTravelAgent(this.addBankForm.value,this.travelAgentId)
 			.pipe(
 				catchError(err => {
+					this.addBankForm.patchValue({
+						ssn:this.showOnlyLast4Digit(this.ssn_copy)
+					})
 					this.spinner.hide();//hide spinner
 					this.disableSubmitButton = false; //enable submit button
+					
 					return throwError(err);
 				})
 			)
@@ -698,7 +798,13 @@ export class TravelAgentStripeFormComponent implements OnInit {
 		this.closeTab.emit();
 	}
 	resetForm() {
+		const keepValues = [
+			this.addBankForm.controls.ssn.value,
+		]
+	
 		this.buildBankForm();
+	 this.addBankForm.controls.ssn.patchValue(keepValues[0]);
+		
 		this.id_front_image = "";
 		this.id_back_image = "";
 		window.scrollTo({ top: 0, behavior: 'smooth' });

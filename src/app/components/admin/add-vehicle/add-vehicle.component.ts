@@ -8,6 +8,7 @@ import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { HttpClient } from "@angular/common/http";
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
+import { CommonService } from 'src/app/services/common.service';
 
 declare var $: any;
 
@@ -106,6 +107,7 @@ export class AddVehicleComponent implements OnInit {
 		private spinner: NgxSpinnerService,
 		private activatedroute: ActivatedRoute,
 		private httpClient: HttpClient,
+		private commonServices: CommonService,
 		private errorModal: ErrorDialogService) { }
 
 	ngAfterViewChecked() {
@@ -213,10 +215,11 @@ export class AddVehicleComponent implements OnInit {
 
 		this.affiliateType = sessionStorage.getItem("affiliateType");
 		if (this.affiliateType != 'fleet_operator') {
-			this.addVehicleForm.controls['licensePlate'].setValidators([Validators.required]);
-			this.addVehicleForm.controls['licensePlate'].updateValueAndValidity();
-			this.addVehicleForm.controls['rearPlateImage'].setValidators([Validators.required]);
-			this.addVehicleForm.controls['rearPlateImage'].updateValueAndValidity();
+			console.log("in if setting lecesne plate")
+			// this.addVehicleForm.controls['licensePlate'].setValidators([Validators.required]);
+			// this.addVehicleForm.controls['licensePlate'].updateValueAndValidity();
+			// this.addVehicleForm.controls['rearPlateImage'].setValidators([Validators.required]);
+			// this.addVehicleForm.controls['rearPlateImage'].updateValueAndValidity();
 		}
 
 		this.stateManagementService.getNumberOfVehicles().subscribe(numberOfVehicles => {
@@ -607,8 +610,11 @@ export class AddVehicleComponent implements OnInit {
 			isNaN(parseInt(key)) ? this.vehicleOfficialImagesChange1(dataUrl, key,id) :this.onFileChange1(dataUrl, key,id);
 		};
 	}
-	onFileChange1(dataUrl, imageNumber,imageId)
+ 	async onFileChange1(dataUrl, imageNumber,imageId)
 	{
+		if(!await this.commonServices.handleFile(event)) {
+			return;
+		}
 		this.stateManagementService.setprogressBar(true);
 				this.imageSrc = dataUrl;
 				this.adminService.uploadVehicleImage(this.imageSrc)
@@ -630,8 +636,11 @@ export class AddVehicleComponent implements OnInit {
 						this.stateManagementService.setprogressBar(false);
 					});
 	}
-	vehicleOfficialImagesChange1(url, imageType, imageId)
+	async vehicleOfficialImagesChange1(url, imageType, imageId)
 	{
+		if(!await this.commonServices.handleFile(event)) {
+			return;
+		}
 		this.stateManagementService.setprogressBar(true);
 				this.imageSrc = url;
 				this.adminService.uploadVehicleImage(this.imageSrc)
@@ -700,7 +709,10 @@ export class AddVehicleComponent implements OnInit {
 						this.stateManagementService.setprogressBar(false);
 					});
 	}
-vehicleOfficialImagesChange(event, imageType, imageId) {
+async vehicleOfficialImagesChange(event, imageType, imageId) {
+	if(!await this.commonServices.handleFile(event)) {
+		return;
+	}
 		// this.stateManagementService.setprogressBar(true);
 		const reader = new FileReader();
 		if (event.target.files && event.target.files.length) {
@@ -774,8 +786,11 @@ vehicleOfficialImagesChange(event, imageType, imageId) {
 		}
 	}
 
-	onFileChange(event, imageId, imageNumber) {
-		// this.stateManagementService.setprogressBar(true);
+	async onFileChange(event, imageId, imageNumber) {
+		if(!await this.commonServices.handleFile(event)) {
+			return;
+		}
+		this.stateManagementService.setprogressBar(true);
 		const reader = new FileReader();
 		if (event.target.files && event.target.files.length) {
 			const [file] = event.target.files;
@@ -785,7 +800,7 @@ vehicleOfficialImagesChange(event, imageType, imageId) {
 				this.adminService.uploadVehicleImage(this.imageSrc)
 					.pipe(
 						catchError(err => {
-							// this.stateManagementService.setprogressBar(false);
+							this.stateManagementService.setprogressBar(false);
 							return throwError(err);
 						})
 					)
@@ -796,7 +811,7 @@ vehicleOfficialImagesChange(event, imageType, imageId) {
 						});
 						this["vehicleImage" + imageNumber] = this.response.data.image;
 
-						// this.stateManagementService.setprogressBar(false);
+						this.stateManagementService.setprogressBar(false);
 					});
 			};
 		}

@@ -21,14 +21,14 @@ export class AffiliateFinalizeComponent implements OnInit {
 	public transferType: any;
 	public deleteCardForm: FormGroup;
 	cardForm: FormGroup
-	init_rates: boolean=false;
+	init_rates: boolean = false;
 	edit_rates_value: any;
 	finalize_btn: any = 'Finalize'
 	isCardFormOpen: boolean = false
 	paymentMethod: string = 'card';
-	CardsInformation: any=[];
-	primaryCards:any= []
-	selectedCard:any;
+	CardsInformation: any = [];
+	primaryCards: any = []
+	selectedCard: any;
 	paymentSection: boolean = true;
 	chevron: boolean = true
 	card_params = {
@@ -55,6 +55,16 @@ export class AffiliateFinalizeComponent implements OnInit {
 	main_receipt_url: any;
 	paymentDetailByCard: any;
 	isTravelShare: boolean;
+	editRate: any;
+	isCreatedByAdmin: boolean = true;
+	shareArray: any;
+    r_shareArray: any;
+    adminSharePercent: number = 25;
+	service_type: any;
+	isFarmoutBooking:boolean =false;
+	isFinalizeButton: boolean =false;
+	bookdataresp: any;
+
 	constructor(
 		private $api: AdminService,
 		private affiliateService: AffiliateService,
@@ -72,6 +82,7 @@ export class AffiliateFinalizeComponent implements OnInit {
 		this.activatedroute.queryParams
 			.subscribe((params) => {
 				this.bookingId = params?.bookingId
+				this.editRate = params?.editRate
 				console.log("booking id---->>>>>>", this.bookingId,)
 
 				if (!this.bookingId) {
@@ -84,14 +95,14 @@ export class AffiliateFinalizeComponent implements OnInit {
 					this.paymentDetail(this.bookingId)
 				}
 			});
-			this.deleteCardForm = this.$form.group({
-				cardId: ["", Validators.required],
-				accId: ["", Validators.required],
-			});
+		this.deleteCardForm = this.$form.group({
+			cardId: ["", Validators.required],
+			accId: ["", Validators.required],
+		});
 	}
 
 
-	getBookingData() {
+	getBookingData(booking_id: number = 0) {
 		this.affiliateService.getBookingData(this.bookingId)
 			.pipe(
 				catchError(err => {
@@ -100,19 +111,24 @@ export class AffiliateFinalizeComponent implements OnInit {
 				})
 			).subscribe(({ data }: any) => {
 				console.log('response getBookingData Affiliate--->>>>', data)
+				this.bookdataresp = data
 				this.BookingDetail = data?.booking_detail
+				this.isFinalizeButton = this.BookingDetail?.booking_status == 'finalized' ? true : false,
 				this.transferType = this.BookingDetail?.transfer_type
-				this.isTravelShare =  data?.booking_detail?.account_type=='Travel Agent' ? true : false
+				this.isTravelShare = data?.booking_detail?.account_type == 'travel_planner' ? true : false
+				this.isFarmoutBooking = data?.booking_detail?.reservation_type=='farmout' ? true : false
 				this.finalize_params.number_of_vehicles = data?.booking_detail?.number_of_vehicles
 				this.init_rates = true;
-				this.hours =  data?.booking_detail?.number_of_hours
+				this.hours = data?.booking_detail?.number_of_hours
 				this.finalize_params['number_of_hours'] = this.BookingDetail.number_of_hours
+				this.isCreatedByAdmin = data?.booking_detail?.created_by==1 ? true : false
+				this.service_type = data?.booking_detail?.service_type
 				this.quoteAmount = data?.grand_total
 				this.CardsInformation = data?.CreditCardsDetail
-				this.primaryCards = this.CardsInformation.filter(i=> i.cc_prority == 'Primary')
-				console.log('primary cards--->>>>' , this.primaryCards , this.primaryCards.length)
-				this.selectedCard = this.primaryCards[this.primaryCards.length-1]
-				console.log('selected cards ----->>>' , this.selectedCard)
+				this.primaryCards = this.CardsInformation.filter(i => i.cc_prority == 'Primary')
+				console.log('primary cards--->>>>', this.primaryCards, this.primaryCards.length)
+				this.selectedCard = this.primaryCards[this.primaryCards.length - 1]
+				console.log('selected cards ----->>>', this.selectedCard)
 			})
 	}
 
@@ -129,7 +145,7 @@ export class AffiliateFinalizeComponent implements OnInit {
 
 	HandleReturnNumberOfHr(data: any) {
 		console.log('____<><><><><><><><>', data)
-		this.finalize_params['number_of_hours']  = data
+		this.finalize_params['number_of_hours'] = data
 	}
 	dateFormat(value: any) {
 		if (value) {
@@ -165,6 +181,17 @@ export class AffiliateFinalizeComponent implements OnInit {
 	RateFormValue(form: any) {
 		console.log('rate form value ------>>>>', form)
 		this.edit_rates_value = form
+		if(this.BookingDetail?.booking_status == 'finalized'){
+			if(this.edit_rates_value.grand_total != this.bookdataresp?.grand_total){
+				this.isFinalizeButton = false
+			}
+			else{
+				this.isFinalizeButton = true
+			}
+		}
+		else{
+			this.isFinalizeButton = false
+		}
 	}
 	paymentDetail(bookingId) {
 		this.$api
@@ -178,23 +205,123 @@ export class AffiliateFinalizeComponent implements OnInit {
 				}
 			});
 	}
+	acceptRejectButton(type: string) {
+		console.log("in func accpe and reject",type)
+		if (type == 'reject') {
+			console.log('in function cancel booking', this.bookingId)
+			this.spinner.show();
 
+			this.affiliateService.cancelBooking(this.bookingId)
+				.pipe(
+					catchError(err => {
+						this.spinner.hide();//hide spinner
+						// $('#cancelBooking').modal('hide');
+						return throwError(err);
+					})
+				)
+				.subscribe(({ data, success, message }: any) => {
+					if (success == true) {
+						this.spinner.hide();//hide spinner
+						this.router.navigate(['/affiliate/my-bookings']);
 
+						// this.loadBookings()
+						// $('#cancelBooking').modal('hide');
+						// this.$errors.openDialog({
+						// 	errors: {
+						// 		error: `<span class='text-success'>${message}</span>`
+						// 	}
+						// })
+					}
+				});
+
+		}
+		else {
+			console.log('in function accept booking', this.bookingId)
+			this.spinner.show();
+
+			this.affiliateService.acceptBooking(this.bookingId)
+				.pipe(
+					catchError(err => {
+						this.spinner.hide();//hide spinner
+						// $('#acceptBooking').modal('hide');
+						return throwError(err);
+					})
+				)
+				.subscribe(({ data, success, message }: any) => {
+					if (success == true) {
+						this.spinner.hide();//hide spinner
+					this.router.navigate(['/affiliate/my-bookings']);
+
+						// this.loadBookings()
+						// $('#acceptBooking').modal('hide');
+						// this.$errors.openDialog({
+						// 	errors: {
+						// 		error: `<span class='text-success'>${message}</span>`
+						// 	}
+						// })
+					}
+				});
+		}
+	}
+	createReservationShareArray(){
+		console.log('in function createReservationShareArray')
+		if (this.edit_rates_value) {
+		let base_rate = 0
+		for (const key of Object.keys(this.edit_rates_value.all_inclusive_rates)) {
+			base_rate += this.edit_rates_value.all_inclusive_rates[key].baserate;
+		}
+		for (const key of Object.keys(this.edit_rates_value.amenities)) {
+			base_rate += this.edit_rates_value.amenities[key].baserate;
+		}
+			let grandTotal = this.edit_rates_value.grand_total
+			let stripeFee = grandTotal * 0.05 + 0.30
+			let adminShare = (base_rate * this.adminSharePercent) / 100 
+			let deducted_admin_share = adminShare-stripeFee
+			let shareArray = {
+				baseRate : base_rate,
+				grandTotal : grandTotal,
+				stripeFee : stripeFee,
+				adminShare : adminShare,
+				deducted_admin_share: deducted_admin_share,  // Admin will get this amount only
+				affiliateShare : (grandTotal - adminShare)
+			}
+			// travelAgentShare : 
+			if(this.BookingDetail?.account_type == 'travel_planner' && !this.isCreatedByAdmin){
+				console.log("in if travel planner")
+				this.adminSharePercent = 15
+				shareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100 
+				shareArray['deducted_admin_share'] = shareArray['adminShare']- shareArray['stripeFee']
+				shareArray['travelAgentShare'] = base_rate * 0.10  
+			}
+			else if(this.isFarmoutBooking){
+				this.adminSharePercent = 15
+				shareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100 
+				shareArray['deducted_admin_share'] = shareArray['adminShare']- shareArray['stripeFee']
+				shareArray['farmoutShare'] = base_rate * 0.10  
+			}
+			this.shareArray = shareArray
+			// console.log('in function createReservationShareArray-->>>' , base_rate, shareArray )
+			return shareArray;
+			// value['rateArray'] = JSON.parse(JSON.stringify(this.edit_rates_value))
+		}
+	}
 	submitForm() {
 		this.spinner.show();
-		this.finalize_btn = 'Finalized'
+		
 		let rateArray = JSON.parse(JSON.stringify(this.edit_rates_value))
-		if(rateArray.all_inclusive_rates.Base_Rate.rate_label == "Minimum Rate"){
+		if (rateArray.all_inclusive_rates.Base_Rate.rate_label == "Minimum Rate") {
 			rateArray.all_inclusive_rates.Base_Rate.rate_label = "Base Rate"
 		}
 		delete rateArray.sub_total
 		delete rateArray.grand_total
+		this.createReservationShareArray()
 		let body = {
 			reservation_id: this.bookingId,
 			rateArray: rateArray,
 			sub_total: this.edit_rates_value.sub_total,
 			grand_total: this.edit_rates_value.grand_total,
-			number_of_hours :this.finalize_params['number_of_hours']
+			number_of_hours: this.finalize_params['number_of_hours'],
+			shareArray:this.shareArray
 		}
 		console.log('final obj -------------->>>>>>>', body)
 		console.log('\n\n Submitting Form', body);
@@ -207,19 +334,24 @@ export class AffiliateFinalizeComponent implements OnInit {
 			// })
 			// this.$router.navigate(['/admin/daily-bookings-admin'])
 			console.log('response-->>', response)
+			this.finalize_btn = "Finalized"
+			this.getBookingData(this.bookingId)
+			
 		})
+		
 
 	}
+	
 	resetCardForm() {
 		this.cardForm.reset()
 	}
-	deleteCardClicked(item:any) {
+	deleteCardClicked(item: any) {
 		this.deleteCardForm.patchValue({
 			cardId: item.ID,
 			accId: this.BookingDetail.acc_id,
 		});
 	}
-	handleChangeCard(card:any){
+	handleChangeCard(card: any) {
 		this.selectedCard = card
 	}
 	handlePaymentSection() {
@@ -228,12 +360,12 @@ export class AffiliateFinalizeComponent implements OnInit {
 	}
 	buildingCardForm() {
 		this.cardForm = this.$form.group({
-			name: ['', [Validators.required ]],
-			card_number: ['', [Validators.required ,Validators.pattern("^[0-9]*$"), Validators.minLength(12) , Validators.maxLength(20)]],
+			name: ['', [Validators.required]],
+			card_number: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(12), Validators.maxLength(20)]],
 			exp_month: ['', Validators.required],
 			exp_year: ['', Validators.required],
-			cvv: ['', [Validators.required , Validators.pattern("^[0-9]*$")]],
-			save_card_detail :[false]
+			cvv: ['', [Validators.required, Validators.pattern("^[0-9]*$")]],
+			save_card_detail: [false]
 		})
 	}
 	changeDetection(method: string) {
@@ -245,96 +377,103 @@ export class AffiliateFinalizeComponent implements OnInit {
 			this.isCardFormOpen = false
 		}
 	}
-	makePayment() {
+	makePayment(method:string) {
 
-		console.log('In function make payment')
+		console.log('In function make payment',method)
+		if (method == 'new_card') {
+			this.isCardFormOpen = true
+			this.paymentMethod = 'card'
+		} else {
+			this.paymentMethod = method
+			this.isCardFormOpen = false
+		}
 		// /affiliate/finalize-rate-edit'
-		console.log('<<<<-----handle valid---->>>>> ' , this.cardForm.valid, 'is card form open--->>>>',this.isCardFormOpen )
-		console.log('-----=====?>>>>>',this.isCardFormOpen ? this.cardForm.valid : (this.CardsInformation.length>0))
-		let dataToSend :any
-		if(this.paymentMethod=='cash'){
+		console.log('<<<<-----handle valid---->>>>> ', this.cardForm.valid, 'is card form open--->>>>', this.isCardFormOpen)
+		console.log('-----=====?>>>>>', this.isCardFormOpen ? this.cardForm.valid : (this.CardsInformation.length > 0))
+		let dataToSend: any
+		if (this.paymentMethod == 'cash') {
 			console.log('<<<<<----payment through cash-->>>>')
 			dataToSend = {
-				reservation_id : this.bookingId,
-				grand_total : this.edit_rates_value?.grand_total,
-				payment_method : 'cash'
+				reservation_id: this.bookingId,
+				grand_total: this.edit_rates_value?.grand_total,
+				payment_method: 'cash'
 			}
 			this.spinner.show()
-					this.affiliateService.paymentProcessing(dataToSend).subscribe((response: any) => {
-						// this.$errors.openDialog({
-						// 	errors: {
-						// 		error: `<span class='text-success'>${response.message}</span>`
-						// 	}
-						// })
-						this.router.navigate(['/affiliate/invoice-summary'] ,{ queryParams: { bookingId: this.bookingId } })
-						console.log('response---------------------->>' , response)
-						this.spinner.hide()
-					})
+			this.affiliateService.paymentProcessing(dataToSend).subscribe((response: any) => {
+				// this.$errors.openDialog({
+				// 	errors: {
+				// 		error: `<span class='text-success'>${response.message}</span>`
+				// 	}
+				// })
+				this.router.navigate(['/affiliate/invoice-summary'], { queryParams: { bookingId: this.bookingId } })
+				console.log('response---------------------->>', response)
+				this.spinner.hide()
+			})
 		}
-		else{
+		else {
 			console.log('in else----->>>>>>>>..')
-			if(this.isCardFormOpen ? this.cardForm.valid : (this.CardsInformation.length>0) ){
+			if (this.isCardFormOpen ? this.cardForm.valid : (this.CardsInformation.length > 0)) {
 				console.log('validation clear-_>>>>>>>>>>')
-				if(this.paymentMethod=='cash'){
+				if (this.paymentMethod == 'cash') {
 					console.log('<<<<<----payment through cash-->>>>')
 					dataToSend = {
-						reservation_id : this.bookingId,
-						grand_total : this.edit_rates_value.grand_total,
-						payment_method : 'cash'
+						reservation_id: this.bookingId,
+						grand_total: this.edit_rates_value.grand_total,
+						payment_method: 'cash'
 					}
 				}
-				else{
-					if(this.isCardFormOpen){
+				else {
+					if (this.isCardFormOpen) {
 						dataToSend = {
-							CreditCardsDetail : {...this.cardForm.value},
-							isExistingCard : false,
-							payment_method : 'credit_card',
-							reservation_id : this.bookingId,
-							grand_total : this.edit_rates_value.grand_total
+							CreditCardsDetail: { ...this.cardForm.value },
+							isExistingCard: false,
+							payment_method: 'credit_card',
+							reservation_id: this.bookingId,
+							grand_total: this.edit_rates_value.grand_total
 						}
 						console.log('<<<<--card form detail-->>>')
 					}
-					else{
+					else {
 						dataToSend = {
-							isExistingCard :true,
-							payment_method : 'credit_card',
-							CreditCardsDetail:{
-								cardID:	this.selectedCard?.ID
+							isExistingCard: true,
+							payment_method: 'credit_card',
+							CreditCardsDetail: {
+								cardID: this.selectedCard?.ID
 							},
-							reservation_id : this.bookingId,
-							grand_total : this.edit_rates_value.grand_total
+							reservation_id: this.bookingId,
+							grand_total: this.edit_rates_value.grand_total
 						}
-						console.log('selected card-->>>',this.selectedCard)
+						console.log('selected card-->>>', this.selectedCard)
 					}
 				}
-				console.log('<<<<<<<<---- data to send --->>>>>',dataToSend)
+				console.log('<<<<<<<<---- data to send --->>>>>', dataToSend)
 				this.spinner.show()
-					this.affiliateService.paymentProcessing(dataToSend).subscribe((response: any) => {
-						// this.$errors.openDialog({
-						// 	errors: {
-						// 		error: `<span class='text-success'>${response.message}</span>`
-						// 	}
-						// })
-						this.router.navigate(['/affiliate/invoice-summary'] ,{ queryParams: { bookingId: this.bookingId } })
-						console.log('response---------------------->>' , response)
-						this.spinner.hide()
-					})
+				this.affiliateService.paymentProcessing(dataToSend).subscribe((response: any) => {
+					// this.$errors.openDialog({
+					// 	errors: {
+					// 		error: `<span class='text-success'>${response.message}</span>`
+					// 	}
+					// })
+					this.router.navigate(['/affiliate/invoice-summary'], { queryParams: { bookingId: this.bookingId } })
+					console.log('response---------------------->>', response)
+					this.spinner.hide()
+				})
 			}
-			else{
-				console.log('<<<<-----handle valid---->>>>> ' , this.cardForm.valid)
-				if(!this.CardsInformation.length && !this.isCardFormOpen){
+			else {
+				console.log('<<<<-----handle valid---->>>>> ', this.cardForm.valid)
+				if (!this.CardsInformation.length && !this.isCardFormOpen) {
 					this.$errors.openDialog({
 						errors: {
 							error: `<span class='text-danger'> No card selected</span>`
 						}
 					})
 				}
-				else{
+				else {
 					this.$errors.openDialog({
-					errors: {
-						error: `<span class='text-danger'>Please Enter correct card details</span>`
-					}
-				})
+						errors: {
+							error: `<span class='text-danger'>Please Enter correct card details</span>`
+						}
+					})
 				}
 			}
 		}

@@ -34,6 +34,8 @@ mat-form-field input {
 	font-weight: 600 !important;
 	background-color: #d0d8ff !important ;
     color: #1a071a !important;
+	padding-left: 29px;
+	font-size: 15px;
 }
 
 .focus-border {
@@ -83,7 +85,7 @@ section {
 	color: #000 !important;
 }
 .ta-btn{
-	background-color: teal !important;
+	background-color: #0766cc !important;
     font-weight: 500;
     box-shadow: 0 5px 10px -6px rgb(0 0 0);
     color: #fff !important;	
@@ -123,7 +125,7 @@ section {
 }
 
 .font-weight-bolder {
-	font-size: 16px !important;
+	font-size: 19px !important;
 }
 .swap_btn{
 	margin-top: 36px;
@@ -208,8 +210,17 @@ section {
 		display: none;
 	}
 }
+.gear-bg-black {
+	color: #000 !important;
+}
 
 @media only screen and (max-width: 767px) {
+	.gear-bg {
+		color: #000 !important;
+	}
+	.gear-bg-black {
+		color: #000 !important;
+	}
 	#showCountriesModal .modal-content hr {
 		border: 2px solid #000;
 		width: 150px;
@@ -416,7 +427,7 @@ a.user-profile:active::after {
 }
 
 .bannertext .dropdown-menu {
-	max-width: 80%;
+	max-width: 67%;
 	right: 0;
 	margin: auto;
 	color: #fff !important;
@@ -909,9 +920,9 @@ a.user-profile:active::after {
 }
 .span-term-to{
 	color: #FFF;
-	font-size: 14px !important;
+	font-size: 17px !important;
     font-weight: 900;
-	margin-top: -2px;
+	margin-top: -10px;
 }
 
 // .bannerform_wrapper .quoteform_homewrapper .input-group .input-group-addon {

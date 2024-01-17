@@ -9,6 +9,7 @@ import { throwError } from 'rxjs';
 import { HttpClient } from "@angular/common/http";
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 import { AdminService } from 'src/app/services/admin.service';
+import { CommonService } from 'src/app/services/common.service';
 declare var $: any;
 
 @Component({
@@ -86,7 +87,7 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 	public charterCancelOptions: Array<Object>;
 	public nonCharterCancelOptions: Array<Object>;
 	public serviceType: string;
-	isVehicleTypeSelected: boolean = false
+	isVehicleTypeSelected: boolean=true;
 	changeNonCharterCancelPolicy : boolean = false
 	changeCharterCancelPolicy : boolean = false
 
@@ -107,6 +108,7 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 		private spinner: NgxSpinnerService,
 		private activatedroute: ActivatedRoute,
 		private httpClient: HttpClient,
+		private commonServices: CommonService,
 		private errorModal: ErrorDialogService
 	) { }
 
@@ -239,12 +241,15 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 		this.stateManagementService.getNumberOfVehicles().subscribe(numberOfVehicles =>
 		{
 			let numberOfVehiclesCanBeAdded;
+			console.log("IN BLACK CAR LIMO",this.affiliateType,numberOfVehicles)
+			
 			if (this.affiliateType == 'fleet_operator')
 			{
 				this.addVehicleForm.controls['numberOfVehicles'].setValidators([Validators.required, Validators.pattern("^[0-9]*$")]);
 			}
-			else if (this.affiliateType == 'black_limo_operator')
+			else if (this.affiliateType == 'black_limo_operator' || this.affiliateType == 'Black Car/Limo Owner Operator')
 			{
+				console.log("IN BLACK CAR LIMO",numberOfVehicles)
 				numberOfVehiclesCanBeAdded = 2 - numberOfVehicles;
 				this.addVehicleForm.controls['numberOfVehicles'].setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.min(1), Validators.max(numberOfVehiclesCanBeAdded)]);
 			}
@@ -680,8 +685,11 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 			isNaN(parseInt(key)) ? this.vehicleOfficialImagesChange1(dataUrl, key,id) :this.onFileChange1(dataUrl, key,id);
 		};
 	}
-	onFileChange1(dataUrl, imageNumber,imageId)
+	async onFileChange1(dataUrl, imageNumber,imageId)
 	{
+		if(!await this.commonServices.handleFile(event)) {
+			return;
+		}
 		this.stateManagementService.setprogressBar(true);
 				this.imageSrc = dataUrl;
 				this.affiliateService.uploadVehicleImage(this.imageSrc)
@@ -705,8 +713,11 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 	}
 
 
-	onFileChange(event, imageId, imageNumber)
+	async onFileChange(event, imageId, imageNumber)
 	{
+		if(!await this.commonServices.handleFile(event)) {
+			return;
+		}
 		this.stateManagementService.setprogressBar(true);
 		const reader = new FileReader();
 		if (event.target.files && event.target.files.length)
@@ -738,8 +749,11 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 		}
 	}
 
-	vehicleOfficialImagesChange1(url, imageType, imageId)
+	async vehicleOfficialImagesChange1(url, imageType, imageId)
 	{
+		if(!await this.commonServices.handleFile(event)) {
+			return;
+		}
 		this.stateManagementService.setprogressBar(true);
 				this.imageSrc = url;
 				this.affiliateService.uploadVehicleImage(this.imageSrc)
@@ -809,8 +823,11 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 					});
 	}
 
-	vehicleOfficialImagesChange(event, imageType, imageId)
+	async vehicleOfficialImagesChange(event, imageType, imageId)
 	{
+		if(!await this.commonServices.handleFile(event)) {
+			return;
+		}
 		this.stateManagementService.setprogressBar(true);
 		const reader = new FileReader();
 		if (event.target.files && event.target.files.length)

@@ -11,6 +11,8 @@ import { CustomvalidationService } from 'src/app/services/customvalidation.servi
 import { StateManagementService } from 'src/app/services/statemanagement.service';
 import { TravelAgentService } from 'src/app/services/travel-agent.service';
 import { SharedModule } from '../../shared/shared.module';
+import { CommonService } from 'src/app/services/common.service';
+import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 declare var $: any;
 @Component({
 	selector: 'app-stripe-form',
@@ -53,6 +55,12 @@ export class StripeFormComponent implements OnInit {
 	public disableSubmitRequestAddressChangeButton: boolean = false;
 	public showProgressBar: boolean = false;
 	public haveEinNo: boolean = true;
+	enableSsnField:boolean=false;
+	ssn_copy:any;
+	ssnErrorMessage:string;
+	addressErrorMessage:string;
+	dobErrorMessage:string;
+	public AddressCheckStripe = ['address','street','city','country']
 
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
 	stepsObj: any;
@@ -60,6 +68,7 @@ export class StripeFormComponent implements OnInit {
 	badgeOptions: any;
 	travelAgentId: any;
 	acc_id1:any;
+	agentAccountStatus: any;
 
 	constructor(
 		private adminService: AdminService,
@@ -73,8 +82,10 @@ export class StripeFormComponent implements OnInit {
 		private mapsAPILoader: MapsAPILoader,
 		private ngZone: NgZone,
 		private el: ElementRef,
+		private commonServices: CommonService,
 		private customValidator: CustomvalidationService,
-		private globalFunctions: SharedModule
+		private globalFunctions: SharedModule,
+		private error: ErrorDialogService,
 	) { }
 
 	ngOnInit(): void {
@@ -128,7 +139,7 @@ export class StripeFormComponent implements OnInit {
 			AccountNumber: ['', [Validators.required, this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
 			Routing: ['', [Validators.required]],
 			AccountType: ['company', Validators.required],
-			ssn: ['', [Validators.required, Validators.pattern("^[0-9]*$"), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
+			ssn: ['', [Validators.required, Validators.pattern("^[0-9*]*$"), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
 			haveEin: ['yesEin'],
 			ein: ['', []],
 			currency: ['', Validators.required],
@@ -207,6 +218,7 @@ export class StripeFormComponent implements OnInit {
 	requestLongitude: number;
 	@ViewChild('search1')
 	public searchElementRef: ElementRef;
+	TaxIdMatch: string;
 
 	mapFunction() {
 		this.mapsAPILoader.load().then(() => {
@@ -311,7 +323,7 @@ export class StripeFormComponent implements OnInit {
 						Routing: this.response.data.bankinfo.Routing,
 						AccountType: this.response.data.bankinfo.AccountType,
 						currency: this.response.data.bankinfo.currency,
-						ssn: this.response.data.bankinfo.ssn,
+						ssn: this.showOnlyLast4Digit(this.response.data.bankinfo.ssn),
 						haveEin: this.response.data.bankinfo.ein ? 'yesEin' : 'noEin',
 						ein: this.response.data.bankinfo.ein,
 						address: this.response.data.bankinfo.address,
@@ -329,11 +341,65 @@ export class StripeFormComponent implements OnInit {
 						id_front_image: this.response.data.bankinfo.id_front_image.ID,
 						id_back_image: this.response.data.bankinfo.id_back_image.ID,
 					});
+					this.ssn_copy=this.response?.data?.bankinfo?.ssn
+					if(this.response?.data?.error_fields?.length > 0){
+						const hasNonEmptyObjects = this.response?.data?.error_fields?.filter(obj => Object.keys(obj).length > 0).length > 0;
+						console.log(hasNonEmptyObjects,"hasnonnonono")
+						if(!hasNonEmptyObjects){
+							this.enableSsnField = true
+						}
+						else{
 
+							this.response?.data?.error_fields?.forEach(item=>{
+								if(item.field == 'ssn'){
+									this.enableSsnField = false
+									this.ssnErrorMessage = 'PLEASE ENTER A VALID SSN / GOVERNMENT ID'
+									console.log('error mesage---->',this.ssnErrorMessage)
+								}
+								else{
+									this.enableSsnField = true
+								}
+								 if(this.AddressCheckStripe?.includes(item?.field)){
+									console.log("in if addressssssssss-->")
+									this.addressErrorMessage = 'Please enter a valid address'
+									console.log('error mesage---->',this.addressErrorMessage)
+									// this.enableSsnField = true
+
+								}
+								if(item?.field == 'dob'){
+									this.dobErrorMessage = 'Please enter a valid dob'
+									console.log('error mesage---->',this.dobErrorMessage)
+									// this.enableSsnField = true
+								}									
+						  })
+						}
+					
+					}
+					else{
+						this.enableSsnField = true
+
+					}
+					console.log("trueeee===>",this.enableSsnField)
+					//to check varificatiom failed tax id error only
+					if(this.response?.data?.stripeDetail?.stripe_errors?.find(err => err?.error_code == 'verification_failed_tax_id_match')){
+						this.enableSsnField = false
+						this.TaxIdMatch = 'NOTE - Please verify your SSN  number and Buisness/Tax ID number'
+					}
+					console.log("enableSsnField", this.enableSsnField, this.ssn_copy)
 					this.currencySelection(this.response.data.bankinfo.currency)
 					this.haveEin(this.response.data.bankinfo.ein ? 'yesEin' : 'noEin');
 					this.changeCountry(this.response.data.bankinfo.country);//for selected country
-					this.stateManagementService.setprogressBar(false);
+					// this.stateManagementService.setprogressBar(false);
+					this.badgeOptions.map((i: any) => {
+						if (i.id == this.response?.data?.bankinfo?.badge_city) {
+							this.addBankForm.patchValue({
+								badge_city: i?.id,
+								badge_city_name: i?.name
+							})
+						}
+					})
+
+
 				});
 		}
 		else {
@@ -494,7 +560,14 @@ export class StripeFormComponent implements OnInit {
 		$("#imageModal").addClass("showImage");
 		$("#imageModal").removeClass("d-none");
 	}
-
+	showOnlyLast4Digit(value){
+		if(value){
+			value = value.toString()
+			return '*'.repeat(value.length - 4) + value.slice(-4)
+		}else{
+			return ''
+		}
+	}
 	fetchImageBlob(url, key, id) {
 		this.stateManagementService.setprogressBar(true);
 
@@ -545,7 +618,10 @@ export class StripeFormComponent implements OnInit {
 		};
 	}
 
-	idCardImageChange1(dataUrl, imageType, imageId = null) {
+	async idCardImageChange1(dataUrl, imageType, imageId = null) {
+		if(!await this.commonServices.handleFile(event)) {
+			return;
+		}
 		this.stateManagementService.setprogressBar(true);
 		this.imageSrc = dataUrl;
 		this.adminService.uploadVehicleImage(this.imageSrc)
@@ -582,7 +658,10 @@ export class StripeFormComponent implements OnInit {
 			});
 	}
 
-	idCardImageChange(event, imageType, imageId = null) {
+	async idCardImageChange(event, imageType, imageId = null) {
+		if(!await this.commonServices.handleFile(event)) {
+			return;
+		}
 		this.stateManagementService.setprogressBar(true);
 		const reader = new FileReader();
 		if (event.target.files && event.target.files.length)
@@ -650,6 +729,30 @@ export class StripeFormComponent implements OnInit {
 			}
 		}
 	}
+	handleSsnInput(value: any) {
+
+		console.log("prev--->", this.ssn_copy, this.addBankForm.get('ssn').value)
+		value.includes("*") ? "" : this.ssn_copy = value
+		console.log("after--->", this.ssn_copy)
+
+	}
+	removeErrorSsn(value:any,type:string){
+		console.log("TYPE----->",type)
+		if(type == 'ssn'){
+			this.ssnErrorMessage = ""
+		}
+		else if(type == 'address'){
+			this.addressErrorMessage = ""
+		}
+		// else if(type == 'dob'){
+		// 	console.log("in dobbbbhbbb")
+		// 	this.dobErrorMessage = ""
+		// }
+	}
+	removeDobError(){
+		console.log("in dobbbbhbbb")
+		this.dobErrorMessage = ""
+	}
 	submitForm() {
 		console.log(this.addBankForm);
 		// console.log(JSON.stringify(this.addVehicleRatesForm.value));
@@ -659,6 +762,9 @@ export class StripeFormComponent implements OnInit {
 			return;
 		}
 		// this.addBankForm.value.stepCompleted = this.adminService.getUpdatedStepsLocal('2');
+		this.addBankForm.patchValue({
+			ssn:this.ssn_copy
+		})
 		console.log(this.addBankForm.value);
 		// console.log(JSON.stringify(this.addVehicleRatesForm.value));
 		this.disableSubmitButton = true; //disable submit button
@@ -666,8 +772,12 @@ export class StripeFormComponent implements OnInit {
 		this.travelService.addBankOfAffiliate(this.addBankForm.value,this.travelAgentId)
 			.pipe(
 				catchError(err => {
+					this.addBankForm.patchValue({
+						ssn:this.showOnlyLast4Digit(this.ssn_copy)
+					})
 					this.spinner.hide();//hide spinner
 					this.disableSubmitButton = false; //enable submit button
+					
 					return throwError(err);
 				})
 			)
@@ -685,10 +795,22 @@ export class StripeFormComponent implements OnInit {
 						const stepCompleted = data.step_completed;
 						const stepCompletedObj = data.step_completed_obj;
 						sessionStorage.setItem('step_completed_obj',JSON.stringify(stepCompletedObj))
+					this.agentAccountStatus =localStorage.setItem('agentAccountStatus',data?.account_approval)
 					}
-					this.router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
-					this.router.navigate(['/travel_agent/bookings'])
-				);
+					if(this.agentAccountStatus == 'pending' || this.agentAccountStatus == 'rejected'){
+						this.error.openDialog({
+							errors: {
+							  error: `Please wait!As your account is under approval from admin.We'll notify you once approved.`
+							}
+						  })
+						  this.router.navigate([`/travel_agent/profile/step1`]);
+					}
+					else{
+						this.router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
+						this.router.navigate(['/travel_agent/bookings'])
+					);
+					}
+				
 				});				
 			});
 	}
@@ -696,7 +818,27 @@ export class StripeFormComponent implements OnInit {
 		this.closeTab.emit();
 	}
 	resetForm() {
-		this.addBankForm.reset();
+		const keepValues = [
+			// this.addBankForm.controls.mobile.value,
+			this.addBankForm.controls.id.value,
+			this.addBankForm.controls.acc_id.value,
+			this.addBankForm.controls.ssn.value
+			// this.addBankForm.controls.mobileIsd.value,
+			// this.addBankForm.controls.mobileCountry.value
+			
+		 ];
+	
+		 
+		 // this.addBankForm.reset();
+		 this.addBankForm.reset();
+		//  this.addBankForm.controls.mobile.patchValue(keepValues[0]);
+		 this.addBankForm.controls.id.patchValue(keepValues[0]);
+		 this.addBankForm.controls.acc_id.patchValue(keepValues[1]);
+		 this.addBankForm.controls.ssn.patchValue(keepValues[2]);
+
+		//  this.addBankForm.controls.mobileIsd.patchValue(keepValues[3]);
+		//  this.addBankForm.controls.mobileCountry.patchValue(keepValues[4]);
+		
 		this.id_front_image = "";
 		this.id_back_image = "";
 	}

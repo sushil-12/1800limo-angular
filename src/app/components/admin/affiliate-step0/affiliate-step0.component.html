@@ -438,7 +438,7 @@
         </div>
         <div class="custom-control custom-checkbox mt-4">
             <input type="checkbox" class="custom-control-input" id="agreement" [checked]="agreement"
-                (change)="onCheckboxChange($event)" tabindex="1">
+                [class]="agreement ? 'border-red' : ''" (change)="onCheckboxChange($event)" tabindex="1">
             <label class="custom-control-label" for="agreement">I AGREE (clicking AGREE allows you to begin the
                 registering process.) Please follow the simple 7 step process and enter Company Profile, Document
                 Images and One Drive Profile, Vehicle Profile and Rate/Taxes for Network Approval</label>

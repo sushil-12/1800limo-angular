@@ -10,6 +10,7 @@ import { throwError } from 'rxjs';
 import { HttpClient } from "@angular/common/http";
 import { CustomvalidationService } from '../../../services/customvalidation.service';
 import { SharedModule } from '../../shared/shared.module';
+import { CommonService } from 'src/app/services/common.service';
 declare var $: any;
 
 @Component({
@@ -52,13 +53,22 @@ export class AffiliateStep2Component implements OnInit {
 	public disableSubmitRequestAddressChangeButton: boolean = false;
 	public showProgressBar: boolean = false;
 	public haveEinNo: boolean = true;
-	public cardsRes:any;
+	public cardsRes: any;
+	enableSsnField: boolean = false;
+	ssn_copy: any;
+	ssnErrorMessage:string;
+	addressErrorMessage:string;
+	dobErrorMessage:string;
+	public AddressCheckStripe = ['address','street','city','country'];
+	isSsnSelected:boolean=false;
+	isAddressSelected:boolean=false;
 
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
 	stepsObj: any;
 	filteredOptions: any;
 	badgeOptions: any;
 	cards: any;
+	TaxIdMatch: string;
 
 	constructor(
 		private adminService: AdminService,
@@ -72,12 +82,13 @@ export class AffiliateStep2Component implements OnInit {
 		private ngZone: NgZone,
 		private el: ElementRef,
 		private customValidator: CustomvalidationService,
+		private commonServices: CommonService,
 		private globalFunctions: SharedModule
 	) { }
 
 	ngOnInit(): void {
 
-		
+
 
 		//code related to autocomplete and map
 		this.spinner.show()
@@ -115,11 +126,11 @@ export class AffiliateStep2Component implements OnInit {
 			AccountNumber: ['', [Validators.required, this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
 			Routing: ['', [Validators.required]],
 			AccountType: ['company', Validators.required],
-			ssn: ['', [Validators.required, Validators.pattern("^[0-9]*$"), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
+			ssn: ['', [Validators.required, Validators.pattern("^[0-9*]*$"), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
 			haveEin: ['yesEin'],
 			ein: ['', []],
 			currency: ['', Validators.required],
-			currencyShow : [''],
+			currencyShow: [''],
 			dobDay: ['', Validators.required],
 			dobMonth: ['', Validators.required],
 			dobYear: ['', Validators.required],
@@ -128,10 +139,10 @@ export class AffiliateStep2Component implements OnInit {
 			address: ['', Validators.required],
 			latitude: ['', Validators.required],
 			longitude: ['', Validators.required],
-			badge_city :[''],
-			badge_city_name:[''],
+			badge_city: [''],
+			badge_city_name: [''],
 			street: [''],
-			city: ['', Validators.required],
+			city: [''],
 			state: ['', Validators.required],
 			country: ['', Validators.required],
 			zipCode: ['', Validators.required],
@@ -168,7 +179,7 @@ export class AffiliateStep2Component implements OnInit {
 			catchError(err => {
 				return throwError(err)
 			})
-		).subscribe((res:any)=> {
+		).subscribe((res: any) => {
 			this.badgeOptions = res?.data
 			this.filteredOptions = res?.data
 		})
@@ -193,7 +204,7 @@ export class AffiliateStep2Component implements OnInit {
 								this.stripeErrors = this.response.data.stripeDetail.stripe_errors;
 							}
 							//set images and their ID
-							
+
 							this.id_front_image = this.response.data.bankinfo.id_front_image.image;
 							this.id_back_image = this.response.data.bankinfo.id_back_image.image;
 							this.id_front_image_id = this.response.data.bankinfo.id_front_image.ID;
@@ -216,7 +227,7 @@ export class AffiliateStep2Component implements OnInit {
 								Routing: this.response.data.bankinfo.Routing,
 								AccountType: this.response.data.bankinfo.AccountType,
 								currency: this.response.data.bankinfo.currency,
-								ssn: this.response.data.bankinfo.ssn,
+								ssn: this.showOnlyLast4Digit(this.response.data.bankinfo.ssn),
 								haveEin: this.response.data.bankinfo.ein ? 'yesEin' : 'noEin',
 								ein: this.response.data.bankinfo.ein,
 								address: this.response.data.bankinfo.address,
@@ -234,28 +245,88 @@ export class AffiliateStep2Component implements OnInit {
 								id_front_image: this.response.data.bankinfo.id_front_image.ID,
 								id_back_image: this.response.data.bankinfo.id_back_image.ID,
 							});
+							this.ssn_copy = this.response?.data?.bankinfo?.ssn
+							this.isSsnSelected = true
+							this.isAddressSelected=true
+							//to check ssn error
+							// if (this.response?.data?.error_fields?.find(val => val?.field == 'ssn')) {
+							// 	this.ssnErrorMessage = this.response?.data?.error_fields?.find(val => val?.field == 'ssn')?.message
+							// 	this.enableSsnField = false
+							// 	console.log("in if ssn error", this.response?.data?.error_fields?.find(val => val?.field == 'ssn')?.message)
+							// }
+							// else {
+							// 	this.enableSsnField = true
+							// }
+
+                            if(this.response?.data?.error_fields?.length > 0){
+								const hasNonEmptyObjects = this.response?.data?.error_fields?.filter(obj => Object.keys(obj).length > 0).length > 0;
+								console.log(hasNonEmptyObjects,"hasnonnonono")
+								if(!hasNonEmptyObjects){
+									this.enableSsnField = true
+								}
+								else{
+
+									this.response?.data?.error_fields?.forEach(item=>{
+										if(item.field == 'ssn'){
+											this.enableSsnField = false
+											this.ssnErrorMessage = 'PLEASE ENTER A VALID SSN / GOVERNMENT ID'
+											console.log('error mesage---->',this.ssnErrorMessage)
+										}
+										else{
+											this.enableSsnField = true
+										}
+										 if(this.AddressCheckStripe?.includes(item?.field)){
+											console.log("in if addressssssssss-->")
+											this.addressErrorMessage = 'Please enter a valid address'
+											console.log('error mesage---->',this.addressErrorMessage)
+											// this.enableSsnField = true
+	
+										}
+										if(item?.field == 'dob'){
+											this.dobErrorMessage = 'Please enter a valid dob'
+											console.log('error mesage---->',this.dobErrorMessage)
+											// this.enableSsnField = true
+										}									
+								  })
+								}
+							
+							}
+							else{
+								this.enableSsnField = true
+
+							}
+							console.log("trueeee===>",this.enableSsnField)
+							//to check varificatiom failed tax id error only
+							if(this.response?.data?.stripeDetail?.stripe_errors?.find(err => err?.error_code == 'verification_failed_tax_id_match')){
+								this.enableSsnField = false
+								this.TaxIdMatch = 'NOTE - Please verify your SSN  number and Buisness/Tax ID number'
+							}
+							console.log("enableSsnField", this.enableSsnField, this.ssn_copy)
 							this.currencySelection(this.response.data.bankinfo.currency)
 							this.haveEin(this.response.data.bankinfo.ein ? 'yesEin' : 'noEin');
 							this.changeCountry(this.response.data.bankinfo.country);//for selected country
 							// this.stateManagementService.setprogressBar(false);
-							this.badgeOptions.map((i:any)=>{
-								if(i.id==this.response?.data?.bankinfo?.badge_city){
+							this.badgeOptions.map((i: any) => {
+								if (i.id == this.response?.data?.bankinfo?.badge_city) {
 									this.addBankForm.patchValue({
-										badge_city:i?.id,
-										badge_city_name:i?.name
+										badge_city: i?.id,
+										badge_city_name: i?.name
 									})
 								}
 							})
+
+
 						});
 				}
 				else {
+
 					this.canChangeDocument = true;//can add or change documents
 					// this.canChangeAddress = true;//can add or change address
 
 					//for selected country
 					this.changeCountry(currentUser.CellNumberCountry.toUpperCase());
 					this.addBankForm.patchValue({
-						country: currentUser.CellNumberCountry.toUpperCase(),AccountHolderFirstName: currentUser?.FirstName,
+						country: currentUser.CellNumberCountry.toUpperCase(), AccountHolderFirstName: currentUser?.FirstName,
 						AccountHolderMiddleName: currentUser?.MiddleName,
 						AccountHolderLastName: currentUser?.LastName
 					});
@@ -270,7 +341,7 @@ export class AffiliateStep2Component implements OnInit {
 			}
 		})
 
-this.loadCards(this.affiliateId)
+		this.loadCards(this.affiliateId)
 
 	}//google map autocomplete
 	latitude: number;
@@ -283,7 +354,7 @@ this.loadCards(this.affiliateId)
 	mapFunction() {
 		this.mapsAPILoader.load().then(() => {
 			//For Address field
-			console.log('---search ref element-->>>>>>',this.searchElementRef.nativeElement.value)
+			console.log('---search ref element-->>>>>>', this.searchElementRef.nativeElement.value)
 			let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement);
 			autocomplete.addListener("place_changed", () => {
 				this.ngZone.run(() => {
@@ -294,21 +365,21 @@ this.loadCards(this.affiliateId)
 					if (place.geometry === undefined || place.geometry === null) {
 						return;
 					}
-					console.log('---->> place',place)
-					// for (var i = 0; i < place.address_components.length; i++) {
+					console.log('---->> place', place)
+					// 	for (var i = 0; i < place.address_components.length; i++) {
 					// 	for (var j = 0; j < place.address_components[i].types.length; j++) {
 					// 		if (place.address_components[i].types[j] == "country") {
 					// 			this.addBankForm.patchValue({
 					// 				country: place.address_components[i].short_name
 					// 			});
-					// 			this.changeCountry(place.address_components[i].short_name)
+					// 			// this.changeCountry(place.address_components[i].short_name)
 					// 		}
 					// 		else if (place.address_components[i].types[j] == "administrative_area_level_1") {
 					// 			this.addBankForm.patchValue({
-					// 				state: place.address_components[i].short_name
+					// 				state: place.address_components[i].long_name
 					// 			});
 					// 		}
-					// 		else if (place.address_components[i].types[j] == "administrative_area_level_2") {
+					// 		else if (place.address_components[i].types[j] == "administrative_area_level_3") {
 					// 			this.addBankForm.patchValue({
 					// 				city: place.address_components[i].long_name
 					// 			});
@@ -318,13 +389,29 @@ this.loadCards(this.affiliateId)
 					// 				zipCode: place.address_components[i].long_name
 					// 			});
 					// 		}
-					// 		else if (place.address_components[i].types[j] == "street_number") {
-					// 			this.addBankForm.patchValue({
-					// 				street: place.address_components[i].long_name
-					// 			});
-					// 		}
 					// 	}
 					// }
+					place.address_components.forEach(component => {
+						const types = component.types;
+
+						if (types.includes('postal_code')) {
+							this.addBankForm.patchValue({
+								zipCode: component.long_name
+							});
+						} else if (types.includes('locality')) {
+							this.addBankForm.patchValue({
+								city: component.long_name
+							});
+						} else if (types.includes('administrative_area_level_1')) {
+							this.addBankForm.patchValue({
+								state: component.short_name
+							});
+						} else if (types.includes('country')) {
+							this.addBankForm.patchValue({
+								country: component.short_name
+							});
+						}
+					});
 					this.addBankForm.patchValue({
 						address: place.formatted_address,
 						latitude: place.geometry.location.lat(),
@@ -335,11 +422,18 @@ this.loadCards(this.affiliateId)
 				});
 			});
 			// }  
-		this.spinner.hide()
+			this.spinner.hide()
 		});
 	}
+	showOnlyLast4Digit(value) {
+		if (value) {
+			value = value.toString()
+			return '*'.repeat(value.length - 4) + value.slice(-4)
+		} else {
+			return ''
+		}
+	}
 
-	
 	get f() {
 		return this.addBankForm.controls;
 	}
@@ -348,7 +442,7 @@ this.loadCards(this.affiliateId)
 			case 'noEin': {
 				this.haveEinNo = false;
 				this.addBankForm.patchValue({
-					haveEin : false
+					haveEin: false
 				})
 				break;
 			}
@@ -356,7 +450,7 @@ this.loadCards(this.affiliateId)
 				this.haveEinNo = true;
 				console.log('validation updated')
 				this.addBankForm.patchValue({
-					haveEin : true
+					haveEin: true
 				})
 				this.addBankForm.controls['ein'].setValidators([Validators.required])
 				this.addBankForm.controls['ein'].updateValueAndValidity()
@@ -371,7 +465,7 @@ this.loadCards(this.affiliateId)
 			this.addBankForm.controls['ein'].setValidators([Validators.required])
 			this.addBankForm.controls['ein'].updateValueAndValidity()
 		}
-		else{
+		else {
 			this.addBankForm.controls['ein'].setValidators([])
 			this.addBankForm.controls['ein'].updateValueAndValidity()
 		}
@@ -387,48 +481,48 @@ this.loadCards(this.affiliateId)
 			this.stateOptions = selectedCountryData[0].regions;
 		}
 	}
-	
-	handleBadgeCity(value:any){
-		this.filteredOptions = this.badgeOptions.filter((i:any)=> i.name.toLowerCase().includes(value.toLowerCase()))
-		console.log(value , this.filteredOptions)
+
+	handleBadgeCity(value: any) {
+		this.filteredOptions = this.badgeOptions.filter((i: any) => i.name.toLowerCase().includes(value.toLowerCase()))
+		console.log(value, this.filteredOptions)
 	}
-	selectBadgeCity(option:any,isUserInput){
-		console.log('in function selectBadgeCity-->>>' ,isUserInput)
-		if(isUserInput){
+	selectBadgeCity(option: any, isUserInput) {
+		console.log('in function selectBadgeCity-->>>', isUserInput)
+		if (isUserInput) {
 			this.addBankForm.patchValue({
-				badge_city:option.id
+				badge_city: option.id
 			})
 			// this.addAffiliateAccountForm.updateValueAndValidity()
 		}
 	}
 
-	handleCurrency(value:any){
-		console.log(value , this.currencyOptions)
-		this.currencyOptions = this.currencyOptions_copy.filter((i:any)=> i.countryName.toLowerCase().includes(value.toLowerCase()))
+	handleCurrency(value: any) {
+		console.log(value, this.currencyOptions)
+		this.currencyOptions = this.currencyOptions_copy.filter((i: any) => i.countryName.toLowerCase().includes(value.toLowerCase()))
 	}
-	selectCurrency(option:any,isUserInput){
-		console.log('in function selectBadgeCity-->>>' ,isUserInput,option)
-		if(isUserInput){
+	selectCurrency(option: any, isUserInput) {
+		console.log('in function selectBadgeCity-->>>', isUserInput, option)
+		if (isUserInput) {
 			this.addBankForm.patchValue({
-				currency:option.currency + '-' + option.currencyCountry
+				currency: option.currency + '-' + option.currencyCountry
 			})
 			// this.addAffiliateAccountForm.updateValueAndValidity()
 		}
 	}
-	onSelectionChange(event){
-		console.log('event-sdfksjfsldkfhsdflkdshf>>',event.option, event.option.value,event.option.viewValue)
+	onSelectionChange(event) {
+		console.log('event-sdfksjfsldkfhsdflkdshf>>', event.option, event.option.value, event.option.viewValue)
 		this.addBankForm.patchValue({
-			currency:event.option.value,
-			currencyShow : event.option.viewValue
+			currency: event.option.value,
+			currencyShow: event.option.viewValue
 		})
 	}
-	currencySelection(value){
-		this.currencyOptions_copy.map(i=>{
-			let concatValue = i.currency+'-'+i.currencyCountry
-			if(value == concatValue){
+	currencySelection(value) {
+		this.currencyOptions_copy.map(i => {
+			let concatValue = i.currency + '-' + i.currencyCountry
+			if (value == concatValue) {
 				console.log('select option-->>', value)
 				this.addBankForm.patchValue({
-					currencyShow : i.countryName + '-' + i.symbol
+					currencyShow: i.countryName + '-' + i.symbol
 				})
 			}
 		})
@@ -441,91 +535,97 @@ this.loadCards(this.affiliateId)
 			this.countryDocumentsArray = selectedCountryData[0].value[1].value.value;
 		})
 	}
-	fetchImageBlob(url ,key ,id){
+	fetchImageBlob(url, key, id) {
 		this.stateManagementService.setprogressBar(true);
-		
+
 		this.adminService.fetchImageBlob(url)
-		.pipe(
-			catchError(err => {
+			.pipe(
+				catchError(err => {
+					this.stateManagementService.setprogressBar(false);
+					return throwError(err);
+				})
+			)
+			.subscribe(async ({ data }: any) => {
 				this.stateManagementService.setprogressBar(false);
-				return throwError(err);
+				const response = await fetch(data);
+				const imageBlob = await response.blob()
+				console.log('imageBlob', imageBlob)
+				const canvas = document.createElement("canvas");
+				const ctx = canvas.getContext("2d");
+				const img = new Image();
+				img.src = URL.createObjectURL(imageBlob);
+				console.log('img-->', img)
+				img.onload = () => {
+					// Rotate the image by 90 degrees (or your desired angle)
+					canvas.width = img.width;
+					canvas.height = img.height;
+					ctx.translate(canvas.width / 2, canvas.height / 2);
+					ctx.rotate(Math.PI); // Rotate by 180 degrees
+					ctx.drawImage(img, -img.width / 2, -img.height / 2);
+					// ctx.drawImage(img, 0, -canvas.width);
+
+					// Convert the canvas to a Blob (JPEG format)
+					canvas.toBlob((blob) => {
+						console.log(blob);
+
+						this.blobToDataURL(blob, key, id);
+						// });
+					}, "image/jpeg");
+				}
 			})
-		)
-		.subscribe(async({ data }: any) => {
-			this.stateManagementService.setprogressBar(false);
-			const response = await fetch(data);
-			const imageBlob = await response.blob()
-			console.log('imageBlob',imageBlob)
-		const canvas = document.createElement("canvas");
-		const ctx = canvas.getContext("2d");
-		const img = new Image();
-		img.src = URL.createObjectURL(imageBlob);
-		console.log('img-->' , img)
-		img.onload = () => {
-			// Rotate the image by 90 degrees (or your desired angle)
-			canvas.width = img.width; 
-			canvas.height = img.height;
-			ctx.translate(canvas.width / 2, canvas.height / 2);
-			ctx.rotate(Math.PI); // Rotate by 180 degrees
-			ctx.drawImage(img, -img.width / 2, -img.height / 2);
-			// ctx.drawImage(img, 0, -canvas.width);
-
-			// Convert the canvas to a Blob (JPEG format)
-			canvas.toBlob((blob) => {
-				console.log(blob);
-
-				this.blobToDataURL(blob, key ,id);
-				// });
-			}, "image/jpeg");
-		}
-		})
 	}
-	blobToDataURL(blob: Blob , key , id) {
+	blobToDataURL(blob: Blob, key, id) {
 		var reader = new FileReader();
 		reader.readAsDataURL(blob);
 		reader.onload = () => {
 			let dataUrl = reader.result;
 			console.log(dataUrl); //DataURL
-			this.idCardImageChange1(dataUrl, key,id);
+			this.idCardImageChange1(dataUrl, key, id);
 		};
 	}
-	idCardImageChange1(dataUrl, imageType, imageId = null) {
+	async idCardImageChange1(dataUrl, imageType, imageId = null) {
+		if(!await this.commonServices.handleFile(event)) {
+			return;
+		}
 		this.stateManagementService.setprogressBar(true);
-				this.imageSrc = dataUrl;
-				this.adminService.uploadVehicleImage(this.imageSrc)
-					.pipe(
-						catchError(err => {
-							this.stateManagementService.setprogressBar(false);
-							return throwError(err);
-						})
-					)
-					.subscribe(({ data }: any) => {
+		this.imageSrc = dataUrl;
+		this.adminService.uploadVehicleImage(this.imageSrc)
+			.pipe(
+				catchError(err => {
+					this.stateManagementService.setprogressBar(false);
+					return throwError(err);
+				})
+			)
+			.subscribe(({ data }: any) => {
 
-						switch (imageType) {
-							case 'id_front_image': {
-								this.addBankForm.patchValue({
-									id_front_image: data.id,
-								});
-								this.id_front_image = data.image;
-								this.id_front_image_id = data.id;
-								break;
-							}
-							case 'id_back_image': {
-								this.addBankForm.patchValue({
-									id_back_image: data.id,
-								});
-								this.id_back_image = data.image;
-								this.id_back_image_id = data.id;
-								break;
-							}
-							default: {
-								break;
-							}
-						}
-						this.stateManagementService.setprogressBar(false);
-					});
+				switch (imageType) {
+					case 'id_front_image': {
+						this.addBankForm.patchValue({
+							id_front_image: data.id,
+						});
+						this.id_front_image = data.image;
+						this.id_front_image_id = data.id;
+						break;
+					}
+					case 'id_back_image': {
+						this.addBankForm.patchValue({
+							id_back_image: data.id,
+						});
+						this.id_back_image = data.image;
+						this.id_back_image_id = data.id;
+						break;
+					}
+					default: {
+						break;
+					}
+				}
+				this.stateManagementService.setprogressBar(false);
+			});
 	}
-	idCardImageChange(event, imageType, imageId = null) {
+	async idCardImageChange(event, imageType, imageId = null) {
+		if(!await this.commonServices.handleFile(event)) {
+			return;
+		}
 		// this.stateManagementService.setprogressBar(true);
 		const reader = new FileReader();
 		if (event.target.files && event.target.files.length)
@@ -571,9 +671,8 @@ this.loadCards(this.affiliateId)
 		}
 	}
 
-	addCardClick(accountId)
-	{
-		this.router.navigate(['/admin/add-card'], { queryParams: { accountType: 'blackCarLimoBus', accountId: this.affiliateId , for: 'affiliate' } })
+	addCardClick(accountId) {
+		this.router.navigate(['/admin/add-card'], { queryParams: { accountType: 'blackCarLimoBus', accountId: this.affiliateId, for: 'affiliate' } })
 	}
 	enableDisableClicked(id) {
 		this.cardToDelete = id;
@@ -640,6 +739,32 @@ this.loadCards(this.affiliateId)
 		const labelOffset = 110;
 		return controlEl.getBoundingClientRect().top + window.scrollY - labelOffset;
 	}
+	handleSsnInput(value: any) {
+		
+		console.log("prev--->", this.ssn_copy, this.addBankForm.get('ssn').value)
+		value.includes("*") ? "" : this.ssn_copy = value
+		console.log("after--->", this.ssn_copy)
+
+	}
+	removeErrorSsn(value:any,type:string){
+		console.log("TYPE----->",type)
+		if(type == 'ssn'){
+			this.ssnErrorMessage = ""
+			this.isSsnSelected = value ? true :false;
+		}
+		else if(type == 'address'){
+			this.addressErrorMessage = ""
+			this.isAddressSelected = value ? true :false;
+		}
+		// else if(type == 'dob'){
+		// 	console.log("in dobbbbhbbb")
+		// 	this.dobErrorMessage = ""
+		// }
+	}
+	removeDobError(){
+		console.log("in dobbbbhbbb")
+		this.dobErrorMessage = ""
+	}
 	submitForm() {
 		console.log(this.addBankForm);
 		// console.log(JSON.stringify(this.addVehicleRatesForm.value));
@@ -648,6 +773,9 @@ this.loadCards(this.affiliateId)
 		if (this.addBankForm.invalid) {
 			return;
 		}
+		this.addBankForm.patchValue({
+			ssn: this.ssn_copy
+		})
 		this.addBankForm.value.stepCompleted = this.adminService.getUpdatedStepsLocal('2');
 		console.log(this.addBankForm.value);
 		// console.log(JSON.stringify(this.addVehicleRatesForm.value));
@@ -656,8 +784,12 @@ this.loadCards(this.affiliateId)
 		this.adminService.addBankOfAffiliate(this.addBankForm.value)
 			.pipe(
 				catchError(err => {
+					this.addBankForm.patchValue({
+						ssn: this.showOnlyLast4Digit(this.ssn_copy)
+					})
 					this.spinner.hide();//hide spinner
 					this.disableSubmitButton = false; //enable submit button
+
 					return throwError(err);
 				})
 			)
@@ -674,7 +806,7 @@ this.loadCards(this.affiliateId)
 				}
 				else {
 					this.router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
-					this.router.navigate(['/admin/affiliate/step3'])
+						this.router.navigate(['/admin/affiliate/step3'])
 					);
 				}
 				// this.router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
@@ -686,20 +818,25 @@ this.loadCards(this.affiliateId)
 		this.closeTab.emit();
 	}
 
-     loadCards(accountId) {
-	// Load Our cards using API
-	this.adminService.cardsList(accountId).then(result => {
-		this.cardsRes = result;
-		this.cards = this.cardsRes.data;
-		console.log("<><><>><>><>><><><<><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<", JSON.stringify(this.cards))
-		
-		this.stateManagementService.setprogressBar(false);
-	});
-}
+	loadCards(accountId) {
+		// Load Our cards using API
+		this.adminService.cardsList(accountId).then(result => {
+			this.cardsRes = result;
+			this.cards = this.cardsRes.data;
+			console.log("<><><>><>><>><><><<><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<", JSON.stringify(this.cards))
+
+			this.stateManagementService.setprogressBar(false);
+		});
+	}
 
 
 	resetForm() {
-		this.addBankForm.reset();
+		const keepValues = [
+			this.addBankForm.controls.ssn.value,
+		]
+	
+	 this.addBankForm.reset();
+	 this.addBankForm.controls.ssn.patchValue(keepValues[0]);
 		this.id_front_image = "";
 		this.id_back_image = "";
 	}

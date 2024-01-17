@@ -112,6 +112,15 @@ ul {
 	height: 220px !important;
 	border-radius: 15px !important;
 }
+.preview_button_edit {
+	justify-content: end !important;
+}
+@media (max-width:767px) {
+	.preview_button_edit {
+		justify-content: center !important;
+	}
+}
+
 
 .emptyImage {
 	position: relative;

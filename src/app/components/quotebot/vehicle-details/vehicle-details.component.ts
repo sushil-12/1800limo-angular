@@ -20,6 +20,7 @@ export class VehicleDetailsComponent implements OnInit {
 	round_trip_rates: any
 	distance:any = 0
 	duration:any = 0
+	bookingId:any=null
 
 	driver_info_display_keys: Array<string> = ['gender', 'dress', 'experience', 'languages', 'insurance_limit']
 
@@ -75,6 +76,17 @@ export class VehicleDetailsComponent implements OnInit {
 
 			console.log(this.selected_vehicle)
 		}
+
+		this._activatedRoute.queryParams.subscribe((params: any) =>
+		{
+			console.log('paramsa->>>>' , params.booking_id)
+			if(params?.id){
+				this.bookingId = params?.id
+			}
+			
+
+			
+		})
 
 		// initialize Map
 		this.initMap()
@@ -189,32 +201,32 @@ export class VehicleDetailsComponent implements OnInit {
 			switch (this.quotebot_form.pickup_type) {
 				case 'airport':
 					obj['origin'] = {
-						lat: this.quotebot_form.pickup_airport_lat,
-						lng: this.quotebot_form.pickup_airport_long
+						lat: Number(this.quotebot_form.pickup_airport_lat),
+						lng: Number(this.quotebot_form.pickup_airport_long)
 					}
 					break
 				case 'city':
 				case 'cruise':
 				case 'cruise_port':
 					obj['origin'] = {
-						lat: this.quotebot_form.pickup_address_lat,
-						lng: this.quotebot_form.pickup_address_long
+						lat: Number(this.quotebot_form.pickup_address_lat),
+						lng: Number(this.quotebot_form.pickup_address_long)
 					}
 					break
 			}
 			switch (this.quotebot_form.dropoff_type) {
 				case 'airport':
 					obj['destination'] = {
-						lat: this.quotebot_form.dropoff_airport_lat,
-						lng: this.quotebot_form.dropoff_airport_long
+						lat: Number(this.quotebot_form.dropoff_airport_lat),
+						lng: Number(this.quotebot_form.dropoff_airport_long)
 					}
 					break
 				case 'city':
 				case 'cruise':
 				case 'cruise_port':
 					obj['destination'] = {
-						lat: this.quotebot_form.dropoff_address_lat,
-						lng: this.quotebot_form.dropoff_address_long
+						lat: Number(this.quotebot_form.dropoff_address_lat),
+						lng: Number(this.quotebot_form.dropoff_address_long)
 					}
 					break
 			}
@@ -253,7 +265,25 @@ export class VehicleDetailsComponent implements OnInit {
 		return (value * 0.001).toFixed(2)
 	}
 	convertToMinutes(value){
-		return (value/60).toFixed(2)
+		const days = Math.floor(value / (24 * 60 * 60));
+		const remainingSeconds = value % (24 * 60 * 60);
+		const hours = Math.floor(remainingSeconds / (60 * 60));
+		const remainingMinutes = Math.floor((remainingSeconds % (60 * 60)) / 60);
+	
+		let result = "";
+
+		if (days > 0) {
+			result += `${days} days, `;
+		}
+	
+		if (hours > 0 || (days === 0 && hours === 0)) {
+			result += `${hours} hours, `;
+		}
+	
+		result += `${remainingMinutes} minutes`;
+	
+		return result;
+		// return (value/60).toFixed(2)
 	}
 
 	/**
@@ -295,9 +325,15 @@ export class VehicleDetailsComponent implements OnInit {
 		if (localStorage.getItem('currentUser') != null) {
 			if (JSON.parse(localStorage.getItem('currentUser'))['roleName'] == 'admin') {
 				// this._router.navigate(['/admin/new-booking'])
-				console.log('navigate to new booking----')
-				this._router.navigate(['/admin/new-booking'],
-				{ queryParams: {affiliate_id:vehicle_selected.affiliate_id, vehicle_id:vehicle_selected.id,new : true }})
+				// console.log('navigate to new booking----')
+				if(this.bookingId){
+					this._router.navigate(['/admin/new-booking'],
+					{ queryParams: {affiliate_id:vehicle_selected.affiliate_id, vehicle_id:vehicle_selected.id,new : 'reaffiliate' ,updateType:'reaffiliate',reaffiliate_book_id:this.bookingId}})
+				}else{
+
+					this._router.navigate(['/admin/new-booking'],
+					{ queryParams: {affiliate_id:vehicle_selected.affiliate_id, vehicle_id:vehicle_selected.id,new : true }})
+				}
 			} else {
 				let user = JSON.parse(localStorage.getItem('currentUser'))['roleName']
 				let vehicle_selected:any = JSON.parse(sessionStorage.getItem('selected_vehicle'))
@@ -317,9 +353,14 @@ export class VehicleDetailsComponent implements OnInit {
 			// 		error: 'Please open an account or login to proceed.'
 			// 	}
 			// })
-			this._router.navigate(['/login/driver'], {
-				skipLocationChange: true
-			})
+			// this._router.navigate(['/login/driver'], {
+			// 	skipLocationChange: true
+			// })
+			console.log("TESTTTTTT1")
+			this._router.navigate([
+				'/quotebot/new-booking'
+			],
+			{ queryParams: {affiliate_id:vehicle_selected.affiliate_id, vehicle_id:vehicle_selected.id,new : true , is_master_vehicle:vehicle_selected?.is_master_vehicle} })
 		}
 	}
 
@@ -329,36 +370,47 @@ export class VehicleDetailsComponent implements OnInit {
 		switch (type) {
 			case 'round_trip':
 				obj = {
-					return_pickup_date: this.quotebot_form.pickup_date,
-					return_pickup_time: this.quotebot_form.pickup_time,
-					return_pickup_type: this.quotebot_form.dropoff_type,
-					return_dropoff_type: this.quotebot_form.pickup_type,
-					return_pickup_airport: this.quotebot_form.dropoff_airport,
-					return_pickup_airport_lat: this.quotebot_form.dropoff_airport_lat,
-					return_pickup_airport_long: this.quotebot_form.dropoff_airport_long,
-					return_dropoff_airport: this.quotebot_form.pickup_airport,
-					return_dropoff_airport_lat: this.quotebot_form.pickup_airport_lat,
-					return_dropoff_airport_long: this.quotebot_form.pickup_airport_long,
-					return_pickup_address: this.quotebot_form.dropoff_address,
-					return_dropoff_address: this.quotebot_form.pickup_address,
-					return_pickup_address_lat: this.quotebot_form.dropoff_address_lat,
-					return_pickup_address_long: this.quotebot_form.dropoff_address_long,
-					return_dropoff_address_lat: this.quotebot_form.pickup_address_lat,
-					return_dropoff_address_long: this.quotebot_form.pickup_address_long,
-					other_details: this.quotebot_form.other_details
+					return_pickup_date: this.quotebot_form?.pickup_date,
+					return_pickup_time: this.quotebot_form?.pickup_time,
+					return_pickup_type: this.quotebot_form?.dropoff_type,
+					return_dropoff_type: this.quotebot_form?.pickup_type,
+					return_pickup_airport: this.quotebot_form?.dropoff_airport,
+					return_pickup_airport_lat: Number(this.quotebot_form?.dropoff_airport_lat),
+					return_pickup_airport_long: Number(this.quotebot_form?.dropoff_airport_long),
+					return_dropoff_airport: this.quotebot_form?.pickup_airport,
+					return_dropoff_airport_lat: Number(this.quotebot_form?.pickup_airport_lat),
+					return_dropoff_airport_long: Number(this.quotebot_form?.pickup_airport_long),
+					return_pickup_address: this.quotebot_form?.dropoff_address,
+					return_dropoff_address: this.quotebot_form?.pickup_address,
+					return_pickup_address_lat: Number(this.quotebot_form?.dropoff_address_lat),
+					return_pickup_address_long: Number(this.quotebot_form?.dropoff_address_long),
+					return_dropoff_address_lat: Number(this.quotebot_form?.pickup_address_lat),
+					return_dropoff_address_long: Number(this.quotebot_form?.pickup_address_long),
+					other_details: this.quotebot_form?.other_details
 				}
 
 				Object.assign(obj, this.quotebot_form, obj) // assign the new object to old quote
 
 				sessionStorage.setItem('quotebot_original_distance_data', JSON.stringify(this.quotebot_form['location_info']))
-				if (obj['location_info'].length == 1) {
+				if (obj['location_info']?.length == 1) {
 					obj['location_info'].push(obj['location_info'][0])
 				}
 				break
 			case 'one_way':
+				obj = { ...this.quotebot_form }
+				obj['pickup_airport_lat'] = Number(this.quotebot_form?.pickup_airport_lat)
+				obj['pickup_airport_long'] = Number(this.quotebot_form?.pickup_airport_long)
+				obj['dropoff_airport_lat'] = Number(this.quotebot_form?.dropoff_airport_lat)
+				obj['dropoff_airport_long'] = Number(this.quotebot_form?.dropoff_airport_long)
+				obj['pickup_address_lat'] = Number(this.quotebot_form?.pickup_address_lat)
+				obj['pickup_address_long'] = Number(this.quotebot_form?.pickup_address_long)
+				obj['dropoff_address_lat'] = Number(this.quotebot_form?.dropoff_address_lat)
+				obj['dropoff_address_long'] = Number(this.quotebot_form?.dropoff_address_long)
+			case 'oneway':
+				obj = { ...this.quotebot_form }
 			case 'charter_tour':
 				obj = { ...this.quotebot_form }
-				if (this.quotebot_form.location_info.length > 1) {
+				if (this.quotebot_form?.location_info?.length > 1) {
 					obj['location_info'].pop()
 				}
 				for (let item in obj) {

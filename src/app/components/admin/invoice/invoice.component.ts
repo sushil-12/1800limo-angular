@@ -92,7 +92,7 @@ export class InvoiceComponent implements OnInit {
       var keyword = ((document.getElementById("keyword2") as HTMLInputElement).value);
       // console.log(keyword);
       // Load Our invoices using API
-      this.adminService.invoiceList(pageUrl,this.startDate,this.endDate,this.useDateFilter,keyword).then(result=>{
+      this.adminService.invoiceList(pageUrl,this.startDate,this.endDate,this.useDateFilter,this.searchText).then(result=>{
         this.spinner.hide()
         this.invoiceRes=result;
         this.invoices=this.invoiceRes.data.data;

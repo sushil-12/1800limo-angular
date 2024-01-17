@@ -78,7 +78,7 @@ hr{
 }
 
 .finalized {
-	background-color: #fcac04;
+	background-color: #71c5e8;
 }
 
 .non_payable {
@@ -395,4 +395,16 @@ input::-webkit-input-placeholder {
 }
 .asterisk{
 	font-size: 24px;
+}
+
+
+.pin-icon-preview{
+	font-size: 26px;
+}
+
+@media only screen and (max-width: 768px){
+	
+	.pin-icon-preview{
+		font-size: 34px;
+	}
 }

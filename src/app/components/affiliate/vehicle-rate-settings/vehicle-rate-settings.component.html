@@ -95,7 +95,7 @@
 			<!-- RATE BUCKET: MILEAGE RATE -->
 			<div class="col-md-6" *ngIf="form.km_mile.value == 'mile'; else kilometer_rate">
 				<mat-form-field class="mat-form-field-rates m-0" appearance="outline">
-					<mat-label>Milage Rate <span class="asterisk">*</span></mat-label>
+					<mat-label>{{ currency_symbol }} per mile<span class="asterisk">*</span></mat-label>
 					<span matPrefix>{{ currency_symbol }} &nbsp;</span>
 					<input matInput placeholder="Milage Rate" type="number" formControlName="milage_rate" tabindex="1"
 						value="0" (focus)="$event.target.select()" (change)="updateRateRangeObject()" />
@@ -122,7 +122,7 @@
 			<ng-template #kilometer_rate>
 				<div class="col-md-6">
 					<mat-form-field class="mat-form-field-rates m-0" appearance="outline">
-						<mat-label>Kilometer Rate
+						<mat-label>{{ currency_symbol }} per km
 							<span class="asterisk">*</span>
 						</mat-label>
 						<span matPrefix>{{ currency_symbol }} &nbsp;</span>
@@ -490,6 +490,62 @@
 					</div>
 				</div>
 			</div>
+			<div class="col-md-6">
+				<mat-form-field class="mat-form-field-rates" appearance="outline">
+					<mat-label> Early AM / Late PM Surge Rate </mat-label>
+					<span matPrefix>{{ currency_symbol }} &nbsp;</span>
+					<input type="number" matInput placeholder="Early AM / Late PM Surge Rate"
+						formControlName="early_late_charges" (focus)="$event.target.select()"
+						(change)="updateRateRangeObject()" tabindex="1" />
+				</mat-form-field>
+				<div *ngIf="
+						(is_form_submitted &&
+							form.early_late_charges.errors) ||
+						(form.early_late_charges.touched &&
+							form.early_late_charges.errors)
+					" class="text-danger margin-bottom-thin my-mat-hint">
+					<div *ngIf="form.early_late_charges.errors.pattern">
+						Enter Numbers only
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<mat-form-field class="mat-form-field-rates" appearance="outline">
+					<mat-label> Holiday Surge Rate </mat-label>
+					<span matPrefix>{{ currency_symbol }} &nbsp;</span>
+					<input type="number" matInput placeholder="Holiday Surge Rate" formControlName="holiday_charges"
+						(focus)="$event.target.select()" (change)="updateRateRangeObject()" tabindex="1" />
+				</mat-form-field>
+				<div *ngIf="
+						(is_form_submitted &&
+							form.holiday_charges.errors) ||
+						(form.holiday_charges.touched &&
+							form.holiday_charges.errors)
+					" class="text-danger margin-bottom-thin my-mat-hint">
+					<div *ngIf="form.holiday_charges.errors.pattern">
+						Enter Numbers only
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<mat-form-field class="mat-form-field-rates" appearance="outline">
+					<mat-label> Friday/Saturday Night Surge Rate </mat-label>
+					<span matPrefix>{{ currency_symbol }} &nbsp;</span>
+					<input type="number" matInput placeholder="Friday/Saturday Night Surge Rate"
+						formControlName="friday_saturday_charges" (focus)="$event.target.select()"
+						(change)="updateRateRangeObject()" tabindex="1" />
+				</mat-form-field>
+				<div *ngIf="
+						(is_form_submitted &&
+							form.friday_saturday_charges.errors) ||
+						(form.friday_saturday_charges.touched &&
+							form.friday_saturday_charges.errors)
+					" class="text-danger margin-bottom-thin my-mat-hint">
+					<div *ngIf="form.friday_saturday_charges.errors.pattern">
+						Enter Numbers only
+					</div>
+				</div>
+			</div>
 			<div class="col-md-3">
 				<mat-form-field class="mat-form-field-rates" appearance="outline">
 					<mat-label>Extra stop - same town</mat-label>
@@ -670,7 +726,7 @@
 						" tabindex="1">
 					</mat-slide-toggle>
 					<label class="text-orange ml-2" style="font-weight: 700!important; color: red !important;">
-						Turn on 20% surge pricing for high demand events.
+						Turn on 20% surge pricing only for high demand temporary events.
 					</label>
 				</div>
 			</div>

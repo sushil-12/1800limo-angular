@@ -23,6 +23,7 @@ import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import * as moment from 'moment';
 import { CustomvalidationService } from 'src/app/services/customvalidation.service';
 import { AdminService } from 'src/app/services/admin.service';
+import { CommonService } from 'src/app/services/common.service';
 declare var $: any
 
 
@@ -38,7 +39,7 @@ export class CreateNewBookingComponent implements OnInit {
 
 	booking_params: any = {
 		transfer_types: ["airport_to_city", "airport_to_airport", "airport_to_cruise", "city_to_city", "city_to_airport", "city_to_cruise", "cruise_to_airport", "cruise_to_city"],
-		client_account_types: ['individual', 'corporate', 'travel_planner', 'loose_customer'],
+		client_account_types: ['individual', 'corporate', 'loose_customer'],
 		affiliate_accounts: ['affiliate'],
 		numbers: (() => {
 			let arr = []
@@ -115,7 +116,7 @@ export class CreateNewBookingComponent implements OnInit {
 	newBooking: boolean = false;
 	QB_vehicle_id: any = null;
 	params_QB_vehicle_id :any = null
-	updateType: any;
+	updateType: any='create';
 	bookingResponse: any;
 	unique_key: any;
 	firstLoadAffiliateId: any;
@@ -127,6 +128,10 @@ export class CreateNewBookingComponent implements OnInit {
 	is_master_vehicle: boolean = JSON.parse(sessionStorage.getItem('selected_vehicle'))?.is_master_vehicle || false
 	extraStops_rate:any = 0
 	isTravelShare: boolean;
+	isCreatedByAdmin: boolean = true;
+	adminSharePercent: number = 25;
+	shareArray:any;
+	r_shareArray:any;
 
 
 	constructor(
@@ -139,6 +144,7 @@ export class CreateNewBookingComponent implements OnInit {
 		private $errors: ErrorDialogService,
 		private $router: Router,
 		private $routeurl: ActivatedRoute,
+		private commonServices: CommonService,
 		private customValidator: CustomvalidationService,
 		private el: ElementRef
 	) { }
@@ -255,6 +261,10 @@ export class CreateNewBookingComponent implements OnInit {
 				phone_country: ['us'],
 				email: [''],
 				address: [''],
+				country: [''],
+				state: [''],
+				city: [''],
+				zipCode: [''],
 				card_details: this.$form.group({
 					name: [''],
 					card_number: [''],
@@ -264,7 +274,7 @@ export class CreateNewBookingComponent implements OnInit {
 				})
 			}),
 			passenger_name: ['', this.customValidator.whitespace()],
-			passenger_email: ['', Validators.email],
+			passenger_email: ['', Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)],
 			passenger_cell: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
 			passenger_cell_isd: ['+1'],
 			passenger_cell_country: ['us'],
@@ -298,7 +308,7 @@ export class CreateNewBookingComponent implements OnInit {
 			driver_cell: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
 			driver_cell_isd: ['+1'],
 			driver_cell_country: ['us'],
-			driver_email: ['', Validators.email],
+			driver_email: ['', Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)],
 			driver_phone_type: [''],
 			driver_image_id: [''],
 			vehicle_image_id: [''],
@@ -391,8 +401,6 @@ export class CreateNewBookingComponent implements OnInit {
 		this.SetFormValue('pickup_date', full_date.slice(0, full_date.indexOf('T')))
 		this.SetFormValue('return_pickup_date', future_full_date.slice(0, future_full_date.indexOf('T')))
 		this.SetFormValue('number_of_vehicles', 1)
-		this.SetFormValue('booking_instructions', 'Text client day before each booking to confirm driver name and cell #');
-		this.SetFormValue('return_booking_instructions', 'Text client day before each booking to confirm driver name and cell #');
 
 
 		if (this.BookingForm.value.transfer_type.includes('city_')) {
@@ -468,6 +476,7 @@ export class CreateNewBookingComponent implements OnInit {
 		this.$api.getBookingDataForEdit(booking_id, this.Form.updateType.value).subscribe((response: any) => {
 			response.data.booking_instructions = response.data.booking_instructions.replaceAll('<br />', '')
 			this.isTravelShare =  response?.data?.account_type=='travel_planner' ? true : false
+			this.isCreatedByAdmin = response?.data?.created_by==1 ? true : false
 			console.log('response <><><><><', response.data)
 			let editing_data = response.data
 			this.bookingResponse = response.data
@@ -755,7 +764,24 @@ export class CreateNewBookingComponent implements OnInit {
 	}
 
 	convertToMinutes(value){
-		return (value/60).toFixed(2)
+		const days = Math.floor(value / (24 * 60 * 60));
+		const remainingSeconds = value % (24 * 60 * 60);
+		const hours = Math.floor(remainingSeconds / (60 * 60));
+		const remainingMinutes = Math.floor((remainingSeconds % (60 * 60)) / 60);
+	
+		let result = "";
+
+		if (days > 0) {
+			result += `${days} days, `;
+		}
+	
+		if (hours > 0 || (days === 0 && hours === 0)) {
+			result += `${hours} hours, `;
+		}
+	
+		result += `${remainingMinutes} minutes`;
+	
+		return result;
 	}
 
 	fillAddress(form_control: string, address: any) {
@@ -1478,7 +1504,79 @@ addExtraStop(is_return: boolean = false) {
 		const labelOffset = 90;
 		return controlEl.getBoundingClientRect().top + window.scrollY - labelOffset;
 	}
+	createReservationShareArray(){
+		console.log('in function createReservationShareArray')
+		if (this.RatesForm) {
+		let base_rate = 0
+		if(this.BookingForm.value?.service_type == 'charter_tour'){
+			base_rate +=  this.RatesForm.all_inclusive_rates["Base_Rate"].baserate * this.number_of_hours
+		}
+		else{
+			base_rate +=  this.RatesForm.all_inclusive_rates["Base_Rate"].baserate
+		}
+		['ELH_Charges', 'Stops', 'Wait'].map((key) => {
+			base_rate += this.RatesForm.all_inclusive_rates[key].baserate
+		});
+		for (const key of Object.keys(this.RatesForm.amenities)) {
+			base_rate += this.RatesForm.amenities[key].baserate;
+		}
+			let grandTotal = this.BookingForm.value.rateArray.grand_total
+			let stripeFee = grandTotal * 0.05 + 0.30
+			let adminShare = (base_rate * this.adminSharePercent) / 100 
+			let deducted_admin_share = adminShare-stripeFee
+			let shareArray = {
+				baseRate : base_rate,
+				grandTotal : grandTotal,
+				stripeFee : stripeFee,
+				adminShare : adminShare,
+				deducted_admin_share: deducted_admin_share,  // Admin will get this amount only
+				affiliateShare : (grandTotal - adminShare)
+			}
 
+			// add conditions here to change share percentage
+			this.adminSharePercent = 15
+			shareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100 
+			shareArray['deducted_admin_share'] = shareArray['adminShare']- shareArray['stripeFee']
+			shareArray['farmoutShare'] = base_rate * 0.10  
+			this.shareArray = shareArray
+			// console.log('in function createReservationShareArray-->>>' , base_rate, shareArray )
+			return shareArray;
+			// value['rateArray'] = JSON.parse(JSON.stringify(this.RatesForm))
+		}
+	}
+	createReservationReturnShareArray(){
+		console.log('createReservationReturnShareArray', this.BookingForm.value.return_grand_total)
+		if (this.Form.service_type.value == 'round_trip' && this.ReturnRatesForm) {
+			
+			let base_rate = 0
+		for (const key of Object.keys(this.ReturnRatesForm.all_inclusive_rates)) {
+			base_rate += this.ReturnRatesForm.all_inclusive_rates[key].baserate;
+		}
+		for (const key of Object.keys(this.ReturnRatesForm.amenities)) {
+			base_rate += this.ReturnRatesForm.amenities[key].baserate;
+		}
+			let returnGrandTotal = this.BookingForm.value.return_grand_total
+			let stripeFee = returnGrandTotal * 0.05 + 0.30
+			let adminShare = (base_rate * this.adminSharePercent) / 100  
+			let returnShareArray = {
+				baseRate : base_rate,
+				returnGrandTotal : returnGrandTotal,
+				stripeFee : stripeFee,
+				adminShare : adminShare,
+				affiliateShare : returnGrandTotal - adminShare
+			}
+			// travelAgentShare : 
+			this.adminSharePercent = 15
+			returnShareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100 
+			returnShareArray['deducted_admin_share'] = returnShareArray['adminShare']- returnShareArray['stripeFee']
+			returnShareArray['farmoutShare'] = base_rate * 0.10  
+
+			this.r_shareArray = returnShareArray
+			// console.log('in function createReservationreturnShareArray-->>>' , base_rate, returnShareArray )
+			return returnShareArray;
+			// value['returnRateArray'] = JSON.parse(JSON.stringify(this.ReturnRatesForm))
+			}
+	}
 
 	submitForm(preview: boolean) {
 		this.submitBookingForm = true
@@ -1489,24 +1587,27 @@ addExtraStop(is_return: boolean = false) {
 			return;
 		}
 
-		if (preview) {
-			let value = this.BookingForm.value
-			if (this.RatesForm) {
+		let value = this.BookingForm.value
+		if (this.RatesForm) {
 				value['rateArray'] = JSON.parse(JSON.stringify(this.RatesForm))
 				value['grand_total'] = value['rateArray']['grand_total']
 				value['sub_total'] = value['rateArray']['sub_total']
+				value['shares_array'] = this.createReservationShareArray()
 				delete value['rateArray']['grand_total']
 				delete value['rateArray']['sub_total']
+
 				// Return Rates Form
 				if (this.Form.service_type.value == 'round_trip' && this.ReturnRatesForm) {
 					value['returnRateArray'] = JSON.parse(JSON.stringify(this.ReturnRatesForm))
 					value['return_grand_total'] = value['returnRateArray']['r_grandtotal']
 					value['return_sub_total'] = value['returnRateArray']['r_subtotal']
+					value['return_shares_array'] = this.createReservationReturnShareArray()
 					delete value['returnRateArray']['r_grandtotal']
 					delete value['returnRateArray']['r_subtotal']
 				}
 			}
-
+			
+			if (preview) {
 			this.$spinner.show()
 			this.affiliateService.createBooking(value).subscribe((response: any) => {
 				// this.$errors.openDialog({
@@ -1551,7 +1652,10 @@ addExtraStop(is_return: boolean = false) {
 	* @param image_type String [Required] type of the image being uploaded
 	* @param image_id [Optional] id of the image to be edited
 	*/
-	uploadImage(event: any, image_type: string) {
+	async uploadImage(event: any, image_type: string) {
+		if(!await this.commonServices.handleFile(event)) {
+			return;
+		}
 		let image: any
 		console.log(event.target.files)
 		if (event.target.files && event.target.files.length > 0) {
@@ -1683,7 +1787,7 @@ addExtraStop(is_return: boolean = false) {
 				(<FormGroup>loose_customer.get('card_details')).get('card_number').setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(16), Validators.maxLength(20)]);
 				(<FormGroup>loose_customer.get('card_details')).get('name').setValidators([Validators.required]);
 				(<FormGroup>loose_customer.get('card_details')).get('cvv').setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(3), Validators.maxLength(5)]);
-				loose_customer.get('email').setValidators([Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.]+\.[a-zA-Z]{2,}$/i)])
+				loose_customer.get('email').setValidators([Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)])
 				loose_customer.get('phone').setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)])
 				loose_customer.get('first_name').setValidators([Validators.required])
 				// loose_customer.get('middle_name').setValidators()
@@ -1724,7 +1828,7 @@ addExtraStop(is_return: boolean = false) {
 				this.toggleDropdown(null)
 				this.BookingForm.get('lose_affiliate_name').setValidators([Validators.required])
 				this.BookingForm.get('lose_affiliate_phone').setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)])
-				this.BookingForm.get('lose_affiliate_email').setValidators([Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.]+\.[a-zA-Z]{2,}$/i)])
+				this.BookingForm.get('lose_affiliate_email').setValidators([Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)])
 				this.BookingForm.updateValueAndValidity()
 				this.init_rates = true
 				if (this.Form.service_type.value === 'round_trip') {
@@ -2053,7 +2157,20 @@ addExtraStop(is_return: boolean = false) {
 	}
 
 	fillLooseCustomerAddress(value: any) {
-		(<FormGroup>this.BookingForm.get('loose_customer')).get('address').setValue(value);
+		console.log('Addresss-->>>' , value);
+		(<FormGroup>this.BookingForm.get('loose_customer')).get('address').setValue(value?.formatted_address);
+		value.address_components.forEach(component => {
+			const types = component.types;
+			if (types.includes('postal_code')) {
+				(<FormGroup>this.BookingForm.get('loose_customer')).get('zipCode').setValue(component.long_name);
+			} else if (types.includes('locality')) {
+				(<FormGroup>this.BookingForm.get('loose_customer')).get('city').setValue(component.long_name);
+			} else if (types.includes('administrative_area_level_1')) {
+				(<FormGroup>this.BookingForm.get('loose_customer')).get('state').setValue(component.long_name);
+			} else if (types.includes('country')) {
+				(<FormGroup>this.BookingForm.get('loose_customer')).get('country').setValue(component.long_name);
+			}
+		  });
 		(<FormGroup>this.BookingForm.get('loose_customer')).updateValueAndValidity();
 		this.BookingForm.updateValueAndValidity();
 	}

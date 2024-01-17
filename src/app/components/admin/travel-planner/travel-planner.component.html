@@ -1,8 +1,8 @@
 <ngx-spinner></ngx-spinner>
 <main>
 	<!-- Main page content-->
-	<section class="user_information">
-		<h2 class="headinginfo"> Travel Planner Accounts </h2>
+	<section class="user_information" id="travel_agent_table">
+		<h2 class="headinginfo"> Travel Agent Accounts </h2>
 		<div class="containeredd">
 			<div class="row">
 				<div class="col-md-12">
@@ -12,14 +12,20 @@
 							<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
 							<path
 								d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
-						</svg> Add Travel Planner
+						</svg> Add Travel Agent
 					</button>
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-md-12">
-					<label class="alert alert-danger">Note: Add each different Travel Planner first. Enter rates and
-						taxes for each Travel Planner.</label>
+				<div class="col-md-6">
+					<label class="alert alert-danger">Note: Add each different Travel Agent first. Enter rates and
+						taxes for each Travel Agent.</label>
+				</div>
+				<div class="col-md-6 d-flex justify-content-end" style="gap: 20px;">
+					<h3 class="headingAccepted">Accepted: {{travelAccountCount?.accepted}}</h3>
+					<h3 class="headingInProgress">Pending: {{travelAccountCount?.pending_count}}</h3>
+					<h3 class="headingRejected">Rejected: {{travelAccountCount?.rejected}}</h3>
+					<h3 class="headingStripe">Waiting for approval: {{travelAccountCount?.waiting_for_approval}}</h3>
 				</div>
 			</div>
 
@@ -42,10 +48,12 @@
 			<div class="row">
 				<div class="col-md-12 table-responsive">
 					<table class="table table-striped table-bordered dataTable dt-responsive" id="dataTable" role="grid"
-						aria-describedby="dataTable_info" style="width: 150%;" width="150%" cellspacing="0">
+						aria-describedby="dataTable_info" style="width: 150%; min-height: 30vh;" width="150%"
+						cellspacing="0">
 						<thead style="background: #f3933d;">
 							<tr role="row">
 								<th>Actions</th>
+								<th>Approval Status</th>
 								<th>Status</th>
 								<th>Name</th>
 								<th>Email</th>
@@ -69,7 +77,7 @@
 										aria-labelledby="navbarDropdownUserImage">
 										<a class="dropdown-item" (click)="clickEditTravelPlanner(travelPlanner.id)">
 											<div class="dropdown-item-icon"></div>
-											Edit Travel Planner Account
+											Edit Travel Agent Account
 										</a>
 										<a class="dropdown-item" (click)="clickTravelPlannerCards(travelPlanner.id)">
 											<div class="dropdown-item-icon"></div>
@@ -79,7 +87,29 @@
 											<div class="dropdown-item-icon"></div>
 											View Staff
 										</a> -->
+										<a class="dropdown-item" (click)="loginAsUser(travelPlanner.user_id)">
+											<div class="dropdown-item-icon"></div>
+											Log into this account
+										</a>
+										<a class="dropdown-item" (click)="viewSubAgents(travelPlanner.id)">
+											<div class="dropdown-item-icon"></div>
+											View Sub Agents
+										</a>
 									</div>
+								</td>
+								<td>
+									<div *ngIf="!travelPlanner?.is_complete; else notCompleted"
+										[className]="'badge badge-pill approval_status ' + travelPlanner?.account_approval">
+										{{travelPlanner?.account_approval | titlecase}}</div>
+									<ng-template #notCompleted>
+										<div class="accpet_reject_div">
+											<button class="acceptButton"
+												(click)="acceptRejectAffiliate(travelPlanner?.id,'accepted')">Accept</button>
+											<button class="rejectButton"
+												(click)="acceptRejectAffiliate(travelPlanner?.id,'rejected')"
+												data-toggle="modal" data-target="#rejectCauseModal">Reject</button>
+										</div>
+									</ng-template>
 								</td>
 								<td>
 									<mat-slide-toggle class="example-margin" [color]="color"
@@ -107,8 +137,8 @@
 								<td><span [innerHTML]="highlighText(travelPlanner.agency_name)"></span></td>
 								<td><span [innerHTML]="highlighText(travelPlanner.payee)"></span></td>
 								<td><span [innerHTML]="highlighText(travelPlanner.iata)"></span></td>
-								<td><span [innerHTML]="highlighText(travelPlanner.address)"></span></td>
-								<td><span [innerHTML]="highlighText(travelPlanner.country)"></span></td>
+								<td><span [innerHTML]="highlighText(travelPlanner.Address)"></span></td>
+								<td><span [innerHTML]="highlighText(travelPlanner?.country)"></span></td>
 							</tr>
 
 						</tbody>
@@ -163,7 +193,8 @@
 						<p id="label">
 							Message:
 						</p>
-						<textarea id="message" rows="7" placeholder="Your Message" #message></textarea>
+						<textarea id="message" rows="7" placeholder="Your Message" #message
+							style="font-weight: 700;"></textarea>
 					</div>
 				</div>
 			</div>

@@ -79,7 +79,7 @@ button {
 	background-color: #D1B000;
 }
 .driver_unassigned{
-	background-color: #00CCCC;
+	background-color:#dc3545;
 }
 
 .assigned {
@@ -111,7 +111,7 @@ button {
 }
 
 .finalized {
-	background-color: #fcac04;
+	background-color: #71c5e8;
 }
 
 .non_payable {
@@ -371,4 +371,25 @@ a.dropdown-item {
 	font-size: 1.5rem;
 }
 
+
+.sortCheckBox{
+	display: flex;
+	justify-content: flex-end;
+	gap: 10px;
+}
+
+.pin-icon-preview{
+	font-size: 26px;
+}
+
+@media only screen and (max-width: 768px){
+	.sortCheckBox{
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+	}
+	.pin-icon-preview{
+		font-size: 34px;
+	}
+}
 

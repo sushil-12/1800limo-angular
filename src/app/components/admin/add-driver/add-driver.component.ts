@@ -11,6 +11,7 @@ import { ThemePalette } from '@angular/material/core';
 import { HttpClient } from "@angular/common/http";
 import { CustomvalidationService } from '../../../services/customvalidation.service';
 import { SharedModule } from '../../shared/shared.module';
+import { CommonService } from 'src/app/services/common.service';
 declare var $: any;
 
 @Component({
@@ -83,6 +84,7 @@ export class AddDriverComponent implements OnInit {
 		private stateManagementService: StateManagementService,
 		private activatedroute: ActivatedRoute,
 		private httpClient: HttpClient,
+		private commonServices: CommonService,
 		private customValidator: CustomvalidationService,
 		private globals: SharedModule) { }
 
@@ -140,7 +142,7 @@ export class AddDriverComponent implements OnInit {
 			CellNumber: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
 			CellIsd: ['+1', Validators.required],
 			CellNumberCountry: ['us', Validators.required],
-			Email: ['', [Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
+			Email: ['', [Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)]],
 			Dress: ['', Validators.required],
 			StartDate: ['',Validators.required],
 			FluentLanguages: this.formBuilder.array([], [Validators.required]),
@@ -501,7 +503,10 @@ export class AddDriverComponent implements OnInit {
 		};
 	}
 
-	vehicleOfficialImagesChange1(imgUrl, imageType, imageId) {
+	async vehicleOfficialImagesChange1(imgUrl, imageType, imageId) {
+		if(!await this.commonServices.handleFile(event)) {
+			return;
+		}
 		this.stateManagementService.setprogressBar(true);
 				this.imageSrc = imgUrl
 				this.adminService
@@ -587,7 +592,10 @@ export class AddDriverComponent implements OnInit {
 	}
 
 
-	vehicleOfficialImagesChange(event, imageType, imageId) {
+	async vehicleOfficialImagesChange(event, imageType, imageId) {
+		if(!await this.commonServices.handleFile(event)) {
+			return;
+		}
 		// this.stateManagementService.setprogressBar(true);
 		const reader = new FileReader();
 		if (event.target.files && event.target.files.length) {

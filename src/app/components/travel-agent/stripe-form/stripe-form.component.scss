@@ -22,6 +22,13 @@ agm-map {
 .vehtype_extint .emptyImage img {
 	height: 220px;
 }
+.disableSsn{
+	pointer-events: none;
+}
+.border-red{
+	border: 2px solid red;
+	border-radius: 6px;
+}
 
 .birthMonth {
 	padding-right: 5px;

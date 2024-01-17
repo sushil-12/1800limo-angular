@@ -7,6 +7,7 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { HttpClient } from "@angular/common/http";
+import { CommonService } from 'src/app/services/common.service';
 declare var $: any;
 
 @Component({
@@ -89,6 +90,7 @@ export class EditVehicleComponent implements OnInit {
 	public charterCancelOptions: Array<Object>;
 	public nonCharterCancelOptions: Array<Object>;
 	public serviceType: string;
+	isVehicleTypeSelected:boolean=true;
 
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
 	errorMsg: boolean;
@@ -105,6 +107,7 @@ export class EditVehicleComponent implements OnInit {
 		private formBuilder: FormBuilder,
 		private spinner: NgxSpinnerService,
 		private activatedroute: ActivatedRoute,
+		private commonServices: CommonService,
 		private httpClient: HttpClient) { }
 
 	ngAfterViewChecked() {
@@ -211,10 +214,10 @@ export class EditVehicleComponent implements OnInit {
 
 		this.affiliateType = sessionStorage.getItem("affiliateType");
 		if (this.affiliateType != 'fleet_operator') {
-			this.addVehicleForm.controls['licensePlate'].setValidators([Validators.required])
-			this.addVehicleForm.controls['licensePlate'].updateValueAndValidity()
-			this.addVehicleForm.controls['rearPlateImage'].setValidators([Validators.required]);
-			this.addVehicleForm.controls['rearPlateImage'].updateValueAndValidity();
+			// this.addVehicleForm.controls['licensePlate'].setValidators([Validators.required])
+			// this.addVehicleForm.controls['licensePlate'].updateValueAndValidity()
+			// this.addVehicleForm.controls['rearPlateImage'].setValidators([Validators.required]);
+			// this.addVehicleForm.controls['rearPlateImage'].updateValueAndValidity();
 		}
 
 		/** progress bar starts on init */
@@ -715,6 +718,11 @@ export class EditVehicleComponent implements OnInit {
 			interiors.push(new FormControl(selectedInterior[j]));
 		}
 	}
+	handleChangeVehicleType(value){
+		console.log('Selected Value:', value);
+		
+		this.isVehicleTypeSelected = value ? true : false
+	}
 
 	onAmenitiesCheckboxChange(val, ischecked) {
 		const amenities: FormArray = this.addVehicleForm.get('amenities') as FormArray;
@@ -791,8 +799,11 @@ export class EditVehicleComponent implements OnInit {
 			isNaN(parseInt(key)) ? this.vehicleOfficialImagesChange1(dataUrl, key,id) :this.onFileChange1(dataUrl, key,id);
 		};
 	}
-	onFileChange1(dataUrl, imageNumber,imageId)
+	async onFileChange1(dataUrl, imageNumber,imageId)
 	{
+		if(!await this.commonServices.handleFile(event)) {
+			return;
+		}
 		this.stateManagementService.setprogressBar(true);
 				this.imageSrc = dataUrl;
 				this.adminService.uploadVehicleImage(this.imageSrc)
@@ -817,8 +828,11 @@ export class EditVehicleComponent implements OnInit {
 
 
 
-	vehicleOfficialImagesChange1(url, imageType, imageId)
+	async vehicleOfficialImagesChange1(url, imageType, imageId)
 	{
+		if(!await this.commonServices.handleFile(event)) {
+			return;
+		}
 		this.stateManagementService.setprogressBar(true);
 				this.imageSrc = url;
 				this.adminService.uploadVehicleImage(this.imageSrc)
@@ -888,8 +902,11 @@ export class EditVehicleComponent implements OnInit {
 					});
 	}
 
-	onFileChange(event, imageId, imageNumber) {
-		// this.stateManagementService.setprogressBar(true);
+	async onFileChange(event, imageId, imageNumber) {
+		if(!await this.commonServices.handleFile(event)) {
+			return;
+		}
+		this.stateManagementService.setprogressBar(true);
 		const reader = new FileReader();
 		if (event.target.files && event.target.files.length) {
 			const [file] = event.target.files;
@@ -899,7 +916,7 @@ export class EditVehicleComponent implements OnInit {
 				this.adminService.uploadVehicleImage(this.imageSrc)
 					.pipe(
 						catchError(err => {
-							// this.stateManagementService.setprogressBar(false);
+							this.stateManagementService.setprogressBar(false);
 							return throwError(err);
 						})
 					)
@@ -910,7 +927,7 @@ export class EditVehicleComponent implements OnInit {
 						});
 						this["vehicleImage" + imageNumber] = this.response.data.image;
 
-						// this.stateManagementService.setprogressBar(false);
+						this.stateManagementService.setprogressBar(false);
 					});
 			};
 		}
@@ -984,7 +1001,10 @@ export class EditVehicleComponent implements OnInit {
 		}
 	}
 
-	vehicleOfficialImagesChange(event, imageType, imageId) {
+	async vehicleOfficialImagesChange(event, imageType, imageId) {
+		if(!await this.commonServices.handleFile(event)) {
+			return;
+		}
 		// this.stateManagementService.setprogressBar(true);
 		const reader = new FileReader();
 		if (event.target.files && event.target.files.length) {

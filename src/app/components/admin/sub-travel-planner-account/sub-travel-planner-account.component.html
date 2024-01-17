@@ -1,0 +1,193 @@
+<ngx-spinner></ngx-spinner>
+<main>
+	<!-- Main page content-->
+	<section class="user_information" id="sub_ta_table">
+		<h2 class="headinginfo">Sub Travel Agent Accounts </h2>
+		<div class="containeredd">
+			<!-- <div class="row">
+				<div class="col-md-12">
+					<button class="custom-btn add-button" (click)="addTravelPlannerClick(travelPlannerId)">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-plus-circle"
+							viewBox="0 0 16 16">
+							<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+							<path
+								d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+						</svg> Add Travel Agent
+					</button>
+				</div>
+			</div> -->
+			<!-- <div class="row">
+				<div class="col-md-6">
+					<label class="alert alert-danger">Note: Add each different Travel Agent first. Enter rates and
+						taxes for each Travel Agent.</label>
+				</div>
+				<div class="col-md-6 d-flex justify-content-end" style="gap: 20px;">
+					<h3 class="headingAccepted">Accepted: {{travelAccountCount?.accepted}}</h3>
+					<h3 class="headingInProgress">Pending: {{travelAccountCount?.pending_count}}</h3>
+					<h3 class="headingRejected">Rejected: {{travelAccountCount?.rejected}}</h3>
+					<h3 class="headingStripe">Waiting for approval: {{travelAccountCount?.waiting_for_approval}}</h3>
+				</div>
+			</div> -->
+
+			<div class="row">
+				<div class="col-md-12 mt-3 mb-3">
+					<mat-form-field appearance="outline">
+						<mat-label>Search Filter by Key word</mat-label>
+						<input type="text" matInput (keyup)="handleSearchKeyword($event.target.value)"
+							(focus)="$event.target.select()" [value]="searchText"
+							placeholder="Search Filter by Key word" id="keyword">
+					</mat-form-field>
+				</div>
+				<!-- <div class="col-md-2  mt-3 mb-3">
+					<button class="custom-btn button2 btnclass" (click)="loadSubTravelPlanners()">Search</button>
+				</div> -->
+			</div>
+		</div>
+
+		<div class="containeredd driverside_table">
+			<div class="row">
+				<div class="col-md-12 table-responsive">
+					<table class="table table-striped table-bordered dataTable dt-responsive" id="dataTable" role="grid"
+						aria-describedby="dataTable_info" style="width: 150%; min-height: 30vh;" width="150%"
+						cellspacing="0">
+						<thead style="background: #f3933d;">
+							<tr role="row">
+								<th>Actions</th>
+								<th>Approval Status</th>
+								<!-- <th>Status</th> -->
+								<th>Name</th>
+								<th>Email</th>
+								<th>Mobile</th>
+								<th>Agency Name</th>
+								<!-- <th>Payee Name</th>
+								<th>IATA</th> -->
+								<th>Address</th>
+								<th>Country</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr role="row" class="odd" *ngFor="let travelPlanner of travelPlanners">
+								<td>
+									<a class="user-profileded btn btn-icon btn-transparent-dark dropdown-toggle"
+										id="navbarDropdownUserImage" href="javascript:void(0);" role="button"
+										data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+										<span>View</span>
+									</a>
+									<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
+										aria-labelledby="navbarDropdownUserImage">
+
+										<a class="dropdown-item" (click)="loginAsUser(travelPlanner)">
+											<div class="dropdown-item-icon"></div>
+											Log into this account
+										</a>
+
+									</div>
+								</td>
+								<td>
+									<div
+										[className]="'badge badge-pill approval_status ' + travelPlanner?.account_approval">
+										{{travelPlanner?.account_approval | titlecase}}</div>
+									<!-- <ng-template #notCompleted>
+										<div class="accpet_reject_div">
+											<button class="acceptButton"
+												(click)="acceptRejectAffiliate(travelPlanner?.id,'accepted')">Accept</button>
+											<button class="rejectButton"
+												(click)="acceptRejectAffiliate(travelPlanner?.id,'rejected')"
+												data-toggle="modal" data-target="#rejectCauseModal">Reject</button>
+										</div>
+									</ng-template> -->
+								</td>
+								<!-- <td>
+									<mat-slide-toggle class="example-margin" [color]="color"
+										[checked]="travelPlanner.status" [disabled]="disabled"
+										(change)="enableDisableClicked($event,travelPlanner.id)">
+									</mat-slide-toggle>
+								</td> -->
+								<td *ngIf="travelPlanner.middle_name==null;else middleName">
+									<span
+										[innerHTML]="highlighText(travelPlanner.first_name+' '+travelPlanner.last_name)"></span>
+								</td>
+								<ng-template #middleName>
+									<td>
+										<span
+											[innerHTML]="highlighText(travelPlanner.first_name+' '+travelPlanner.middle_name+' '+travelPlanner.last_name)"></span>
+									</td>
+								</ng-template>
+								<td><span [innerHTML]="highlighText(travelPlanner.email)"></span></td>
+								<td><span
+										[innerHTML]="highlighText(travelPlanner.mobileIsd+travelPlanner.mobile+' '+'('+travelPlanner?.mobileCountry.toUpperCase()+')')"></span>
+								</td>
+								<td><span [innerHTML]="highlighText(travelPlanner.agency_name)"></span></td>
+								<!-- <td><span [innerHTML]="highlighText(travelPlanner.payee)"></span></td>
+								<td><span [innerHTML]="highlighText(travelPlanner.iata)"></span></td> -->
+								<td><span [innerHTML]="highlighText(travelPlanner.Address)"></span></td>
+								<td><span [innerHTML]="highlighText(travelPlanner?.country)"></span></td>
+							</tr>
+
+						</tbody>
+					</table>
+				</div>
+				<!----BACK BTN---->
+				<nav aria-label="Page navigation example">
+					<ul class="pagination pagination-circle pg-blue">
+						<li *ngIf="currentPage!=1" class="page-item disabled"
+							(click)="loadSubTravelPlanners(firstPageUrl)"><a class="page-link">First</a></li>
+						<li *ngIf="currentPage!=1" class="page-item disabled"
+							(click)="loadSubTravelPlanners(prevPageUrl)">
+							<a class="page-link" aria-label="Previous">
+								<span aria-hidden="true">&laquo;</span>
+								<span class="sr-only">Previous</span>
+							</a>
+						</li>
+						<li *ngFor="let in of counter() ;let i = index"
+							[ngClass]="(in==currentPage)?'page-item active':'page-item'"
+							(click)="loadSubTravelPlanners(path+'?page='+in)" [disabled]="(in==currentPage)?true:false">
+							<a class="page-link">{{in}}</a>
+						</li>
+						<li *ngIf="currentPage!=lastPage" class="page-item"
+							(click)="loadSubTravelPlanners(nextPageUrl)">
+							<a class="page-link" aria-label="Next">
+								<span aria-hidden="true">&raquo;</span>
+								<span class="sr-only">Next</span>
+							</a>
+						</li>
+						<li *ngIf="currentPage!=lastPage" class="page-item"
+							(click)="loadSubTravelPlanners(lastPageUrl)"><a class="page-link">Last</a></li>
+					</ul>
+				</nav>
+			</div>
+		</div>
+	</section>
+</main>
+
+<!-- Message modal -->
+<!-- <div class="modal fade" tabindex="-1" id="messageModal" aria-labelledby="messageModal" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4></h4>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-md-12">
+						<p id="affiliate-details"></p>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<p id="label">
+							Message:
+						</p>
+						<textarea id="message" rows="7" placeholder="Your Message" #message></textarea>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer justify-content-end">
+				<button class="custom-filled-button" data-dismiss="modal"
+					(click)="sendMessage(messagetype?.type, messagetype?.travelPlanner, message.value)">
+					Send {{ messagetype?.type | titlecase }}
+				</button>
+			</div>
+		</div>
+	</div>
+</div> -->

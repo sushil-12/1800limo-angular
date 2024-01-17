@@ -29,9 +29,11 @@ div#goog-gt-tt {
 .goog-logo-link {
     display: none !important;
 }
+
 .goog-te-gadget {
     color: transparent !important;
 }
+
 .goog-te-gadget .goog-te-combo {
     margin: 15px 0 0 15px !important;
     cursor: pointer !important;
@@ -227,6 +229,7 @@ mat-progress-bar.my-color .mat-progress-bar-fill::after {
 }
 
 @media (max-width: 575.98px) {
+
     .navbar-expand-sm>.container,
     .navbar-expand-sm>.container-fluid,
     .navbar-expand-sm>.container-sm,
@@ -237,24 +240,30 @@ mat-progress-bar.my-color .mat-progress-bar-fill::after {
         padding-right: 0;
         padding-left: 0;
     }
+
     a.user-profile span {
         display: none;
     }
+
     .dropdown .dropdown-toggle svg,
     .dropdown-menu svg {
         margin-right: 10px !important;
     }
+
     a.user-profile::after {
         margin-left: 5px !important;
     }
+
     #sidebarToggle {
         padding: 0;
     }
+
     .dropdown .dropdown-toggle svg,
     .dropdown-menu svg {
         height: 2rem !important;
         width: 2rem !important;
     }
+
     .topnav .navbar-brand img {
         height: 3rem !important;
     }
@@ -271,16 +280,20 @@ mat-progress-bar.my-color .mat-progress-bar-fill::after {
         flex-flow: row nowrap;
         justify-content: flex-start;
     }
+
     .navbar-expand-sm .navbar-nav {
         flex-direction: row;
     }
+
     .navbar-expand-sm .navbar-nav .dropdown-menu {
         position: absolute;
     }
+
     .navbar-expand-sm .navbar-nav .nav-link {
         padding-right: 0.5rem;
         padding-left: 0.5rem;
     }
+
     .navbar-expand-sm>.container,
     .navbar-expand-sm>.container-fluid,
     .navbar-expand-sm>.container-sm,
@@ -290,16 +303,19 @@ mat-progress-bar.my-color .mat-progress-bar-fill::after {
     .navbar-expand-sm>.container-xxl {
         flex-wrap: nowrap;
     }
+
     .navbar-expand-sm .navbar-collapse {
         display: flex !important;
         flex-basis: auto;
     }
+
     .navbar-expand-sm .navbar-toggler {
         display: none;
     }
 }
 
 @media (max-width: 767.98px) {
+
     .navbar-expand-md>.container,
     .navbar-expand-md>.container-fluid,
     .navbar-expand-md>.container-sm,
@@ -317,16 +333,20 @@ mat-progress-bar.my-color .mat-progress-bar-fill::after {
         flex-flow: row nowrap;
         justify-content: flex-start;
     }
+
     .navbar-expand-md .navbar-nav {
         flex-direction: row;
     }
+
     .navbar-expand-md .navbar-nav .dropdown-menu {
         position: absolute;
     }
+
     .navbar-expand-md .navbar-nav .nav-link {
         padding-right: 0.5rem;
         padding-left: 0.5rem;
     }
+
     .navbar-expand-md>.container,
     .navbar-expand-md>.container-fluid,
     .navbar-expand-md>.container-sm,
@@ -336,16 +356,19 @@ mat-progress-bar.my-color .mat-progress-bar-fill::after {
     .navbar-expand-md>.container-xxl {
         flex-wrap: nowrap;
     }
+
     .navbar-expand-md .navbar-collapse {
         display: flex !important;
         flex-basis: auto;
     }
+
     .navbar-expand-md .navbar-toggler {
         display: none;
     }
 }
 
 @media (max-width: 991.98px) {
+
     .navbar-expand-lg>.container,
     .navbar-expand-lg>.container-fluid,
     .navbar-expand-lg>.container-sm,
@@ -356,6 +379,7 @@ mat-progress-bar.my-color .mat-progress-bar-fill::after {
         padding-right: 0;
         padding-left: 0;
     }
+
     #layoutSidenav_nav {
         background-color: #e9e9e9;
     }
@@ -365,10 +389,12 @@ mat-progress-bar.my-color .mat-progress-bar-fill::after {
     .navbar-expand-lg .navbar-nav .dropdown-menu {
         position: absolute;
     }
+
     .navbar-expand-lg .navbar-nav .nav-link {
         padding-right: 0.5rem;
         padding-left: 0.5rem;
     }
+
     .navbar-expand-lg>.container,
     .navbar-expand-lg>.container-fluid,
     .navbar-expand-lg>.container-sm,
@@ -378,16 +404,19 @@ mat-progress-bar.my-color .mat-progress-bar-fill::after {
     .navbar-expand-lg>.container-xxl {
         flex-wrap: nowrap;
     }
+
     .navbar-expand-lg .navbar-collapse {
         display: flex !important;
         flex-basis: auto;
     }
+
     .navbar-expand-lg .navbar-toggler {
         display: none;
     }
 }
 
 @media (max-width: 1199.98px) {
+
     .navbar-expand-xl>.container,
     .navbar-expand-xl>.container-fluid,
     .navbar-expand-xl>.container-sm,
@@ -405,16 +434,20 @@ mat-progress-bar.my-color .mat-progress-bar-fill::after {
         flex-flow: row nowrap;
         justify-content: flex-start;
     }
+
     .navbar-expand-xl .navbar-nav {
         flex-direction: row;
     }
+
     .navbar-expand-xl .navbar-nav .dropdown-menu {
         position: absolute;
     }
+
     .navbar-expand-xl .navbar-nav .nav-link {
         padding-right: 0.5rem;
         padding-left: 0.5rem;
     }
+
     .navbar-expand-xl>.container,
     .navbar-expand-xl>.container-fluid,
     .navbar-expand-xl>.container-sm,
@@ -424,16 +457,19 @@ mat-progress-bar.my-color .mat-progress-bar-fill::after {
     .navbar-expand-xl>.container-xxl {
         flex-wrap: nowrap;
     }
+
     .navbar-expand-xl .navbar-collapse {
         display: flex !important;
         flex-basis: auto;
     }
+
     .navbar-expand-xl .navbar-toggler {
         display: none;
     }
 }
 
 @media (max-width: 1499.98px) {
+
     .navbar-expand-xxl>.container,
     .navbar-expand-xxl>.container-fluid,
     .navbar-expand-xxl>.container-sm,
@@ -451,16 +487,20 @@ mat-progress-bar.my-color .mat-progress-bar-fill::after {
         flex-flow: row nowrap;
         justify-content: flex-start;
     }
+
     .navbar-expand-xxl .navbar-nav {
         flex-direction: row;
     }
+
     .navbar-expand-xxl .navbar-nav .dropdown-menu {
         position: absolute;
     }
+
     .navbar-expand-xxl .navbar-nav .nav-link {
         padding-right: 0.5rem;
         padding-left: 0.5rem;
     }
+
     .navbar-expand-xxl>.container,
     .navbar-expand-xxl>.container-fluid,
     .navbar-expand-xxl>.container-sm,
@@ -470,10 +510,12 @@ mat-progress-bar.my-color .mat-progress-bar-fill::after {
     .navbar-expand-xxl>.container-xxl {
         flex-wrap: nowrap;
     }
+
     .navbar-expand-xxl .navbar-collapse {
         display: flex !important;
         flex-basis: auto;
     }
+
     .navbar-expand-xxl .navbar-toggler {
         display: none;
     }
@@ -531,7 +573,7 @@ mat-progress-bar.my-color .mat-progress-bar-fill::after {
     top: calc(100% + 0.5rem + 0.5rem) !important;
     margin-top: -5px;
     font-size: 0.9rem;
-    left: -135px;
+    left: -81px;
 }
 
 .navbar .logInDropdown {
@@ -606,6 +648,7 @@ mat-progress-bar.my-color .mat-progress-bar-fill::after {
     .topnav .dropdown {
         position: relative;
     }
+
     .topnav .dropdown .dropdown-menu {
         width: auto;
         min-width: 15rem;
@@ -640,9 +683,11 @@ mat-progress-bar.my-color .mat-progress-bar-fill::after {
     .table-responsive::-webkit-scrollbar {
         height: 5px;
     }
+
     .table-responsive::-webkit-scrollbar-track {
         background: transparent;
     }
+
     .table-responsive::-webkit-scrollbar-thumb {
         background: rgb(162, 167, 162);
         border-radius: 100px;
@@ -776,7 +821,7 @@ mat-progress-bar.my-color .mat-progress-bar-fill::after {
 }
 
 #layoutSidenav #layoutSidenav_nav {
-    flex-basis: 20rem;
+    flex-basis: 18rem;
     flex-shrink: 0;
     transition: transform 0.15s ease-in-out;
     z-index: 1038;
@@ -829,16 +874,20 @@ mat-progress-bar.my-color .mat-progress-bar-fill::after {
     #layoutSidenav #layoutSidenav_nav {
         transform: translateX(0);
     }
+
     #layoutSidenav #layoutSidenav_content {
         margin-left: 0;
         transition: margin 0.15s ease-in-out;
     }
+
     .sidenav-toggled #layoutSidenav #layoutSidenav_nav {
         transform: translateX(0rem);
     }
+
     .sidenav-toggled #layoutSidenav #layoutSidenav_content {
         margin-left: 0rem;
     }
+
     .sidenav-toggled #layoutSidenav #layoutSidenav_content:before {
         display: none;
     }
@@ -927,13 +976,16 @@ mat-progress-bar.my-color .mat-progress-bar-fill::after {
     .layout-rtl #layoutSidenav #layoutSidenav_nav {
         transform: translateX(0);
     }
+
     .layout-rtl #layoutSidenav #layoutSidenav_content {
         margin-right: 0;
         transition: margin 0.15s ease-in-out;
     }
+
     .layout-rtl.sidenav-toggled #layoutSidenav #layoutSidenav_nav {
         transform: translateX(15rem);
     }
+
     .layout-rtl.sidenav-toggled #layoutSidenav #layoutSidenav_content {
         margin-right: -15rem;
     }
@@ -977,6 +1029,7 @@ mat-progress-bar.my-color .mat-progress-bar-fill::after {
     #layoutSidenav {
         margin-top: 0rem
     }
+
     #layoutSidenav #layoutSidenav_nav {
         flex-basis: 22rem;
         flex-shrink: 0;
@@ -987,14 +1040,17 @@ mat-progress-bar.my-color .mat-progress-bar-fill::after {
         visibility: hidden;
         opacity: 0;
     }
+
     .sidenav-toggled #layoutSidenav #layoutSidenav_nav {
         flex-basis: 20rem;
         visibility: visible;
         opacity: 1;
     }
+
     .sidenav-toggled .sidenav-menu .nav-item a span {
         display: inline-block;
     }
+
     .sidenav-toggled .accordion .nav-link.dropdwn.collapsed:after {
         display: block;
     }
@@ -1339,7 +1395,8 @@ h2.headinginfo .orangeHeading {
 .affilate-wrapper .sidenav-menu .nav-item:nth-child(2) a {
     padding-left: 22px !important;
 }
-.box-shadow{
+
+.box-shadow {
     box-shadow: 0px 5px 20px -6px rgb(0 0 0 / 60%);
 }
 
@@ -1445,6 +1502,7 @@ h2.headinginfo .orangeHeading {
         padding-left: 10px !important;
         padding-right: 10px !important;
     }
+
     .sidenav-toggled .affilate-wrapper .sidenav-menu .nav-item .collapse-inner a {
         padding: 8px 10px 8px 10px !important;
     }
@@ -1747,6 +1805,7 @@ h2.headinginfo .orangeHeading {
         color: #fff;
         text-decoration: none;
     }
+
     .delete-btn:focus {
         transform: scale(1.2, 1.2);
         background-color: #d12c20;
@@ -1758,6 +1817,7 @@ h2.headinginfo .orangeHeading {
         margin-top: 30px;
         flex-wrap: wrap;
     }
+
     .driverside_table ul li {
         margin-top: 10px;
     }
@@ -1846,6 +1906,7 @@ h2.headinginfo .orangeHeading {
     .changeuploaded:hover {
         background-color: #28b24b;
     }
+
     .changeuploaded:focus {
         transform: scale(1.2, 1.2);
         background-color: #28b24b;
@@ -1892,6 +1953,7 @@ h2.headinginfo .orangeHeading {
     .adduploaded:hover {
         background-color: #28b24b;
     }
+
     .adduploaded:focus {
         transform: scale(1.2, 1.2);
         background-color: #28b24b;
@@ -2281,6 +2343,7 @@ mat-dialog-container {
         bottom: 0;
         opacity: 0;
     }
+
     to {
         bottom: 30px;
         opacity: 1;
@@ -2292,6 +2355,7 @@ mat-dialog-container {
         bottom: 0;
         opacity: 0;
     }
+
     to {
         bottom: 30px;
         opacity: 1;
@@ -2303,6 +2367,7 @@ mat-dialog-container {
         bottom: 30px;
         opacity: 1;
     }
+
     to {
         bottom: 0;
         opacity: 0;
@@ -2314,6 +2379,7 @@ mat-dialog-container {
         bottom: 30px;
         opacity: 1;
     }
+
     to {
         bottom: 0;
         opacity: 0;
@@ -2413,6 +2479,7 @@ table #navbarDropdownUserImage {
     table #navbarDropdownUserImage:hover {
         background-color: #28b24b;
     }
+
     table #navbarDropdownUserImage:focus {
         transform: scale(1.1, 1.1);
         background-color: #28b24b;
@@ -2464,6 +2531,7 @@ table #navbarDropdownUserImage {
     .button2:hover {
         background-color: #28b24b;
     }
+
     .button2:focus {
         transform: scale(1.1, 1.1);
         background-color: #28b24b;
@@ -2482,6 +2550,7 @@ table #navbarDropdownUserImage {
         background-color: #28b24b;
         border-color: #28b24b;
     }
+
     .savebutton:focus {
         transform: scale(1.1, 1.1);
         background-color: #28b24b;
@@ -2490,7 +2559,7 @@ table #navbarDropdownUserImage {
 
 .resetbutton {
     padding: 15px 40px;
-    background-color: #808080;
+    background-color: #000;
     border-color: #808080;
     color: #fff;
 }
@@ -2500,6 +2569,7 @@ table #navbarDropdownUserImage {
         background-color: #717070;
         border-color: #717070;
     }
+
     .resetbutton:focus {
         transform: scale(1.1, 1.1);
         background-color: #717070;
@@ -2509,18 +2579,19 @@ table #navbarDropdownUserImage {
 
 .backbutton {
     padding: 15px 40px;
-    background-color: #66b3ff;
+    background-color: #366bc1;
     border-color: #66b3ff;
     color: #fff;
 }
 
 @media only screen and (min-width: 1199px) {
     .backbutton:hover {
-        background-color: #2d89e6;
+        background-color: #366bc1;
         border-color: #2d89e6;
     }
+
     .backbutton:focus {
-        background-color: #2d89e6;
+        background-color: #366bc1;
         transform: scale(1.1, 1.1);
     }
 }
@@ -2549,6 +2620,7 @@ table #navbarDropdownUserImage {
         background-color: #28b24b;
         border-color: #28b24b;
     }
+
     .add-button:focus {
         transform: scale(1.1, 1.1);
         background-color: #28b24b;
@@ -2618,10 +2690,12 @@ table #navbarDropdownUserImage {
     .vehtype_extintwrap {
         max-width: 100%;
     }
+
     .vehtype_extintwrap .col-md-3 {
         flex: 0 0 32%;
         max-width: 32%;
     }
+
     .choose_ameniteslist .custom-control {
         width: 33%;
     }
@@ -2631,52 +2705,67 @@ table #navbarDropdownUserImage {
     .drivesidetax_btmbtn {
         flex-wrap: wrap;
     }
+
     .vehtype_extintwrap ul {
         flex-wrap: wrap;
     }
+
     .vehtype_extintwrap ul {
         justify-content: center;
     }
+
     .vehtype_extintwrap .col-md-3 {
         flex: 0 0 100%;
         max-width: 100%;
     }
+
     .choose_ameniteslist .custom-control {
         width: 100%;
     }
+
     .choose_ameniteslist .custom-control label {
         font-size: 17px;
         font-weight: 600 !important;
     }
+
     #layoutSidenav_content main {
         padding: 15px;
     }
+
     .billing_inforamtion ul {
         flex-wrap: wrap;
         justify-content: center;
     }
+
     .billing_inforamtion ul li {
         margin: 10px 5px;
     }
+
     .admin_header1 .navbar-brand img {
         max-width: 200px;
     }
+
     .user_profile1 {
         font-size: 0;
     }
+
     .select_vehfilterlft h2 {
         text-align: center;
     }
+
     .selectveh_wrapper {
         flex-wrap: wrap;
     }
+
     .selectveh_wrapper {
         max-width: 400px;
         margin: auto;
     }
+
     .select_vehfilterrgt {
         margin-left: 0;
     }
+
     .select_vehfilterlft {
         width: 100%;
         margin-bottom: 25px;
@@ -2770,6 +2859,7 @@ table #navbarDropdownUserImage {
         height: 60px !important;
         padding: 15px 0px 0px 0px !important;
     }
+
     .innerpage_topbanner {
         height: 70px !important;
     }
@@ -2807,9 +2897,9 @@ table #navbarDropdownUserImage {
     background-color: var(--orange-color) !important;
 }
 
-@media (min-width : 570px)  and (max-width: 1023px){
+@media (min-width : 570px) and (max-width: 1023px) {
     .timepicker__header {
-        height:303px !important
+        height: 303px !important
     }
 }
 

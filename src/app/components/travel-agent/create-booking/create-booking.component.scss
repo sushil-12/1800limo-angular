@@ -19,6 +19,18 @@ hr{
 	margin: 1.2rem auto;
 	box-shadow: 3px 3px 20px -6px rgba(40, 40, 40, 0.5);
 }
+.preview_button_edit {
+	justify-content: end !important;
+}
+@media (max-width:767px) {
+	.preview_button_edit {
+		justify-content: center !important;
+	}
+}
+.border-red{
+	border: 3px solid red;
+	border-radius: 12px;
+}
 .margin-top-minus-20{
 	margin-top: -20px !important;
 }
@@ -321,4 +333,19 @@ top:2.05em}
 }
 .required-field:after{
 	font-size: 21px !important;
+}
+
+.pin-icon-preview{
+	font-size: 26px;
+}
+
+@media only screen and (max-width: 768px){
+	.sortCheckBox{
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+	}
+	.pin-icon-preview{
+		font-size: 34px;
+	}
 }

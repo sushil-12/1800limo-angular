@@ -83,7 +83,7 @@ button.custom-filled-back-button {
     padding: 7px 20px;
     border-radius: 0.895rem;
     border: 2px solid #a2a3a2;
-    background-color: #a2a3a2;
+    background-color: #366bc1;
     color: #FFF;
     letter-spacing: 1px;
     font-size: 0.98rem;
@@ -105,7 +105,7 @@ button.custom-filled-reset-button {
     padding: 7px 20px;
     border-radius: 0.895rem;
     border: 2px solid #a2a3a2;
-    background-color: #a2a3a2;
+    background-color: #000;
     color: #FFF;
     letter-spacing: 1.3px;
     font-size: 0.98rem;
@@ -132,7 +132,10 @@ button.custom-filled-reset-button {
     background-color: var(--orange);
     border-color: var(--orange);
 }
-
+.custom-filled-button.red-button {
+    border-color: var(--red);
+    background-color: var(--red);
+}
 .custom-confirm-button{
     position: sticky;
     left: 50px;

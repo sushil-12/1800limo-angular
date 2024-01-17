@@ -25,6 +25,7 @@ import { HttpClient } from "@angular/common/http";
 import { CustomvalidationService } from "../../../services/customvalidation.service";
 import { SharedModule } from "../../shared/shared.module";
 import { AdminService } from "src/app/services/admin.service";
+import { CommonService } from "src/app/services/common.service";
 declare var $: any;
 
 @Component({
@@ -100,6 +101,7 @@ export class AddDriverFromAffiliateComponent
 		private stateManagementService: StateManagementService,
 		private activatedroute: ActivatedRoute,
 		private httpClient: HttpClient,
+		private commonServices: CommonService,
 		private customValidator: CustomvalidationService,
 		private globals: SharedModule
 	) { }
@@ -177,7 +179,7 @@ export class AddDriverFromAffiliateComponent
 			CellNumberCountry: ["us", Validators.required],
 			Email: [
 				"",
-				[Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$")],
+				[Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)],
 			],
 			Dress: [1, Validators.required],
 			StartDate: ["", [Validators.required]],
@@ -631,7 +633,10 @@ export class AddDriverFromAffiliateComponent
 		};
 	}
 
-	vehicleOfficialImagesChange1(imgUrl, imageType, imageId) {
+	async vehicleOfficialImagesChange1(imgUrl, imageType, imageId) {
+		if(!await this.commonServices.handleFile(event)) {
+			return;
+		}
 		this.stateManagementService.setprogressBar(true);
 				this.imageSrc = imgUrl
 				this.affiliateService
@@ -717,7 +722,10 @@ export class AddDriverFromAffiliateComponent
 	}
 
 
-	vehicleOfficialImagesChange(event, imageType, imageId) {
+	async vehicleOfficialImagesChange(event, imageType, imageId) {
+		if(!await this.commonServices.handleFile(event)) {
+			return;
+		}
 		this.stateManagementService.setprogressBar(true);
 		const reader = new FileReader();
 		if (event.target.files && event.target.files.length) {

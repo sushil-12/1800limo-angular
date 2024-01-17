@@ -67,7 +67,16 @@ export class StateManagementService
 		localStorage.removeItem('recject_cause_message');
 		localStorage.removeItem('stepCompleted');
 		localStorage.removeItem('step_completed_obj');
-		localStorage.removeItem('userData')
+		localStorage.removeItem('userData');
+		localStorage.removeItem('invite_link')
+		localStorage.removeItem('agency_name')
+		localStorage.removeItem('invite_code')
+		localStorage.removeItem('agentAccountStatus')
+		localStorage.removeItem('bkp_u_dt')
+		localStorage.removeItem('bkp_a_token')
+		localStorage.removeItem('bkp_crnt_dt')
+
+
 	}
 
 

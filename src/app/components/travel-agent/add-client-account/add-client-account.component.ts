@@ -47,9 +47,11 @@ export class AddClientAccountComponent implements OnInit {
 	private geoCoder;
 	@ViewChild('search1')
 	public searchElementRef: ElementRef;
+	currentUser:any;
 
 	ngOnInit(): void
 	{
+		this.currentUser = JSON.parse(localStorage.getItem('currentUser'))
 		this.buildAddIndividualForm();
     this.$routeurl.queryParams.subscribe((params: any) => {
       console.log('params---->>>>>', params)
@@ -216,7 +218,7 @@ export class AddClientAccountComponent implements OnInit {
 			work: [''],
 			workIsd: ['+1', Validators.required],
 			workCountry: ['us'],
-			email: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.]+\.[a-zA-Z]{2,}$/i)]],
+			email: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)]],
 			address: ['', Validators.required],
 			city: [''],
 			state: [''],
@@ -297,7 +299,7 @@ export class AddClientAccountComponent implements OnInit {
 				this.spinner.hide();//hide spinner
 				this.disableSubmitButton = false; //enable submit button
 
-				this.router.navigate(['/travel_agent/staff-account-list']);
+				this.router.navigate([`/${this.currentUser?.roleName}/staff-account-list`]);
 			});
 	}
 
@@ -306,17 +308,22 @@ export class AddClientAccountComponent implements OnInit {
 		const keepValues = [
 			this.addIndividualAccountForm.controls.mobile.value,
 			this.addIndividualAccountForm.controls.id.value,
+			this.addIndividualAccountForm.controls.mobileIsd.value,
+			this.addIndividualAccountForm.controls.mobileCountry.value,
 			
 		 ];
 
 		this.buildAddIndividualForm()
 		this.addIndividualAccountForm.controls.mobile.patchValue(keepValues[0]);
 		this.addIndividualAccountForm.controls.id.patchValue(keepValues[1]);
+		this.addIndividualAccountForm.controls.mobileIsd.patchValue(keepValues[2]);
+		this.addIndividualAccountForm.controls.mobileCountry.patchValue(keepValues[3]);
+
 		console.log(this.addIndividualAccountForm.value)
 	}
 	backButton()
 	{
-		this.router.navigate(['/admin/individual-account-admin']);
+		this.router.navigate([`${this.currentUser?.roleName}/individual-account-admin`]);
 	}
 
 }

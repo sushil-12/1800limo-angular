@@ -9,6 +9,7 @@ import { throwError } from 'rxjs';
 import { HttpClient } from "@angular/common/http";
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 import { AdminService } from 'src/app/services/admin.service';
+import { CommonService } from 'src/app/services/common.service';
 declare var $: any;
 
 @Component({
@@ -23,6 +24,7 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 	public affiliateId: string;
 	public affiliateType: string;
 	public paramResponse: any;
+	isVehicleTypeSelected: boolean=true;
 	public vehicleTypeId: string;
 	public vehicleId: string;
 	public imageSrc: string;
@@ -111,6 +113,7 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 		private spinner: NgxSpinnerService,
 		private activatedroute: ActivatedRoute,
 		private httpClient: HttpClient,
+		private commonServices: CommonService,
 		private errorModal: ErrorDialogService
 	) { }
 
@@ -204,7 +207,7 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 			luggage: ['', [Validators.required, Validators.pattern("^[0-9]*$")]],
 			charterCancelPolicy: ['2', Validators.required],
 			nonCharterCancelPolicy: ['2', Validators.required],
-			typeOfService: this.formBuilder.array([], [Validators.required]),
+			typeOfService: this.formBuilder.array([]),
 			amenities: this.formBuilder.array([], [Validators.required]),
 			specialAmenitiesGet: this.formBuilder.array([]),
 			specialAmenities: this.formBuilder.array([]),
@@ -442,6 +445,7 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 							luggage: this.response2?.data?.luggage,
 							charterCancelPolicy: this.response2?.data?.charterCancelPolicy,
 							nonCharterCancelPolicy: this.response2?.data?.nonCharterCancelPolicy,
+							typeOfService: this.response2.data.typeOfService
 						});
 
 						
@@ -516,7 +520,11 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 				return -1;
 		}
 	}
-
+	handleChangeVehicleType(value){
+		console.log('Selected Value:', value);
+		
+		this.isVehicleTypeSelected = value ? true : false
+	}
 	searchVehicleType(keyword)
 	{
 		this.addVehicleForm.patchValue({
@@ -865,8 +873,11 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 	// 	vehicleInteriorList.map(i=> vehicleInterior.push(new FormControl(parseInt(i))))
 	// }
 
-	onFileChange(event, imageId, imageNumber)
+	async onFileChange(event, imageId, imageNumber)
 	{
+		if(!await this.commonServices.handleFile(event)) {
+			return;
+		}
 		this.stateManagementService.setprogressBar(true);
 		const reader = new FileReader();
 		if (event.target.files && event.target.files.length)
@@ -945,8 +956,11 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 			isNaN(parseInt(key)) ? this.vehicleOfficialImagesChange1(dataUrl, key,id) :this.onFileChange1(dataUrl, key,id);
 		};
 	}
-	onFileChange1(dataUrl, imageNumber,imageId)
+	async onFileChange1(dataUrl, imageNumber,imageId)
 	{
+		if(!await this.commonServices.handleFile(event)) {
+			return;
+		}
 		this.stateManagementService.setprogressBar(true);
 				this.imageSrc = dataUrl;
 				this.affiliateService.uploadVehicleImage(this.imageSrc)
@@ -970,8 +984,11 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 	}
 
 
-	vehicleOfficialImagesChange1(url, imageType, imageId)
+	async vehicleOfficialImagesChange1(url, imageType, imageId)
 	{
+		if(!await this.commonServices.handleFile(event)) {
+			return;
+		}
 		this.stateManagementService.setprogressBar(true);
 				this.imageSrc = url;
 				this.affiliateService.uploadVehicleImage(this.imageSrc)
@@ -1042,8 +1059,11 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 	}
 
 
-	vehicleOfficialImagesChange(event, imageType, imageId)
+	async vehicleOfficialImagesChange(event, imageType, imageId)
 	{
+		if(!await this.commonServices.handleFile(event)) {
+			return;
+		}
 		this.stateManagementService.setprogressBar(true);
 		const reader = new FileReader();
 		if (event.target.files && event.target.files.length)
@@ -1310,6 +1330,7 @@ export class EditVehicleFromAffiliateComponent implements OnInit, AfterViewCheck
 
 	pushValuesTypeOfService(value: Array<any>)
 	{
+		console.log('type of srvicer',value)
 		this.typeOfService.clear()
 		if (value.length == 0)
 		{

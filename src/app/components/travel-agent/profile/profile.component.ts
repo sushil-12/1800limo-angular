@@ -9,6 +9,8 @@ import { MapsAPILoader } from '@agm/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AffiliateService } from 'src/app/services/affiliate.service';
+import { AuthService } from 'src/app/services/auth.service';
+import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 
 @Component({
   selector: 'app-profile',
@@ -42,6 +44,7 @@ export class ProfileComponent implements OnInit {
   response: any;
   defaultCountryCode: string;
   lastSegment: string;
+  accountStatus:any;
 
   constructor(
     private affiliateService: AffiliateService,
@@ -54,9 +57,46 @@ export class ProfileComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private travelAgentService: TravelAgentService,
+    private authService: AuthService,
+    private errorDialog: ErrorDialogService,
   ) { }
 
   ngOnInit(): void {
+    this.accountStatus = localStorage.getItem('agentAccountStatus')
+     if(this.accountStatus == 'rejected'){
+      this.errorDialog.openDialog({
+        errors: {
+          error: `Your account is being rejected by admin. Currently we are logging you out. Please contact admin!`
+        }
+      })
+      setTimeout(()=>{
+        console.log("in timeout")
+        // this.spinner.show('logoutspinner')
+        this.authService.logout()
+        .pipe(
+          catchError(err =>
+          {
+            // this.spinner.hide('logoutspinner');//hide spinner
+            return throwError(err);
+          })
+        ).subscribe(({ success }: any) =>
+        {
+          // this.spinner.hide('logoutspinner');//hide spinner
+          if (success == true)
+          {
+            this.stateManagementService.removeUser();
+          }
+          this.router.navigate(['/']);
+        });
+       },15000)
+    }
+  //  else if(this.accountStatus == 'pending'){
+  //     this.errorDialog.openDialog({
+  //       errors: {
+  //         error: `Please wait! As your account status is ${this.accountStatus} from admin.`
+  //       }
+  //     }) 
+  //   }
     this.route.url.subscribe(segments => {
       // The "step" part is in the last segment
       const lastSegment = segments[segments.length - 1];
@@ -160,7 +200,7 @@ export class ProfileComponent implements OnInit {
       mobile: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
       mobileIsd: ['+1', Validators.required],
       mobileCountry: ['us'],
-      email: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.]+\.[a-zA-Z]{2,}$/i)]],
+      email: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)]],
       address: ['', Validators.required],
       city: [''],
       state: [''],

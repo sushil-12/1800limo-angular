@@ -5,9 +5,13 @@
 	<div class="container">
 		<div class="row" *ngIf="response">
 			<div class="col-md-12" *ngIf="response?.data?.stripeDetail?.transfer_status != 'active'">
-				<p class="text-danger margin-bottom-thin my-mat-hint">
+				<p class="text-danger margin-bottom-thin my-mat-hint" style="font-size: 17px; font-weight: 800;">
 					Stripe Activation can take upto 24 Hours?.
 				</p>
+			</div>
+			<div class="col-md-12" *ngIf="response.data?.stripeDetail?.stripe_errors">
+				<p class="text-danger margin-bottom-thin my-mat-hint" style="font-size: 17px; font-weight: 800;">
+					{{TaxIdMatch}}</p>
 			</div>
 			<div class="col-md-4">
 				<p [className]="
@@ -50,7 +54,7 @@
 					Please fix these errors for the Payouts:
 				</h5>
 				<ul>
-					<li *ngFor="let error of stripeErrors" tabindex="-1">
+					<li *ngFor="let error of stripeErrors" tabindex="-1" style="color: red; font-weight: 400;">
 						{{ error?.error_message }}
 					</li>
 				</ul>
@@ -88,6 +92,7 @@
 							formControlName="BankName" tabindex="1" />
 					</mat-form-field>
 				</div>
+
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
 						<mat-label>Bank Address
@@ -97,12 +102,22 @@
 							formControlName="BankAddress" tabindex="1" />
 					</mat-form-field>
 				</div>
+				<div class="col-md-12">
+					<h3 class="addveh_top d-md-flex justify-content-between align-items-center mb-0 ml-1 mt-2">
+						<label class="alert alert-danger" style="padding :0.25rem 1.25rem; color: red !important;">The
+							Driver's license document should
+							match the Bank Account Holder first and last name.</label>
+						<!-- <label class="alert alert-danger my-2 mx-2">Choose nearest major city or airport
+									location</label> -->
+
+					</h3>
+				</div>
 				<div class="col-md-4">
 					<mat-form-field appearance="outline">
-						<mat-label>First Name
+						<mat-label>Bank Account Holder First Name
 							<span class="asterisk">*</span>
 						</mat-label>
-						<input matInput placeholder="First Name" (focus)="$event?.target?.select()"
+						<input matInput placeholder="Bank Account Holder First Name" (focus)="$event?.target?.select()"
 							formControlName="AccountHolderFirstName" tabindex="1" />
 					</mat-form-field>
 					<div *ngIf="
@@ -118,17 +133,17 @@
 				</div>
 				<div class="col-md-4">
 					<mat-form-field appearance="outline">
-						<mat-label>Middle Name</mat-label>
-						<input matInput placeholder="Middle Name" (focus)="$event?.target?.select()"
+						<mat-label>Bank Account Holder Middle Name</mat-label>
+						<input matInput placeholder="Bank Account Holder Middle Name" (focus)="$event?.target?.select()"
 							formControlName="AccountHolderMiddleName" tabindex="1" />
 					</mat-form-field>
 				</div>
 				<div class="col-md-4">
 					<mat-form-field appearance="outline">
-						<mat-label>Last Name
+						<mat-label>Bank Account Holder Last Name
 							<span class="asterisk">*</span>
 						</mat-label>
-						<input matInput placeholder="Last Name" (focus)="$event?.target?.select()"
+						<input matInput placeholder="Bank Account Holder Last Name" (focus)="$event?.target?.select()"
 							formControlName="AccountHolderLastName" tabindex="1" />
 					</mat-form-field>
 					<div *ngIf="
@@ -144,7 +159,7 @@
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
 						<mat-label>
-							Account # / IBAN Number
+							Bank Account / IBAN
 							<span class="asterisk">*</span>
 						</mat-label>
 						<input matInput placeholder="Account Number" (focus)="$event?.target?.select()"
@@ -230,7 +245,7 @@
 				</div>
 				<div class="col-md-2 col-4 birthMonth">
 					<label class="select-month-label">Month of Birth <span class="asterisk1">*</span></label>
-					<div class="selectStyle">
+					<div class="selectStyle" [ngClass]="{ 'border-red': dobErrorMessage }">
 						<select class="selectInputStyle" (click)="selectDropdownMonth()" formControlName="dobMonth"
 							tabindex="1" id="selectDropdown">
 							<option value="">Month</option>
@@ -261,6 +276,9 @@
 							</g>
 						</svg>
 					</div>
+					<div *ngIf="dobErrorMessage" class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="dobErrorMessage" style="font-weight: 550;">{{dobErrorMessage}}</div>
+					</div>
 					<div *ngIf="
 							(submittedForm && f?.dobMonth?.errors) ||
 							(f?.dobMonth?.touched && f?.dobMonth?.errors)
@@ -272,7 +290,7 @@
 				</div>
 				<div class="col-md-2 col-4 birthDay">
 					<label class="select-day-label">Day of Birth <span class="asterisk1">*</span></label>
-					<div class="selectStyle">
+					<div class="selectStyle" [ngClass]="{ 'border-red': dobErrorMessage }">
 						<select class="selectInputStyle" (click)="selectDropdownDay()" formControlName="dobDay"
 							tabindex="1" id="selectDropdown">
 							<option value="">Day</option>
@@ -294,6 +312,9 @@
 							</g>
 						</svg>
 					</div>
+					<div *ngIf="dobErrorMessage" class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="dobErrorMessage" style="font-weight: 550;">{{dobErrorMessage}}</div>
+					</div>
 					<div *ngIf="
 							(submittedForm && f?.dobDay?.errors) ||
 							(f?.dobDay?.touched && f?.dobDay?.errors)
@@ -305,7 +326,7 @@
 				</div>
 				<div class="col-md-2 col-4 birthYear">
 					<label class="select-year-label">Year of Birth <span class="asterisk1">*</span></label>
-					<div class="selectStyle">
+					<div class="selectStyle" [ngClass]="{ 'border-red': dobErrorMessage }">
 						<select class="selectInputStyle" (click)="selectDropdownYear()" formControlName="dobYear"
 							tabindex="1" id="selectDropdown">
 							<option value="">Year</option>
@@ -326,6 +347,9 @@
 								<polygon class="sty0" points="61.44,63.9 122.88,0 0,0 61.44,63.9" />
 							</g>
 						</svg>
+					</div>
+					<div *ngIf="dobErrorMessage" class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="dobErrorMessage" style="font-weight: 550;">{{dobErrorMessage}}</div>
 					</div>
 					<div *ngIf="
 							(submittedForm && f?.dobYear?.errors) ||
@@ -374,13 +398,19 @@
 					</div>
 				</div>
 				<div class="col-md-6">
-					<mat-form-field appearance="outline">
+					<mat-form-field appearance="outline"
+						[ngClass]="{ 'disableSsn': enableSsnField, 'border-red1': ssnErrorMessage || !isSsnSelected }">
 						<mat-label>SSN (USA required by STRIPE / Government ID for other countries)
 							<span class="asterisk">*</span>
 						</mat-label>
 						<input matInput placeholder="SSN (USA required by STRIPE / Government ID for other countries)"
-							(focus)="$event?.target?.select()" formControlName="ssn" tabindex="1" />
+							(focus)="$event?.target?.select()" formControlName="ssn" tabindex="1"
+							(change)="handleSsnInput($event.target.value)"
+							(keyup)="removeErrorSsn($event.target.value,'ssn')" />
 					</mat-form-field>
+					<div *ngIf="ssnErrorMessage" class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="ssnErrorMessage" style="font-weight: 550;">{{ssnErrorMessage}}</div>
+					</div>
 					<div *ngIf="
 							(submittedForm && f?.ssn?.errors) ||
 							(f?.ssn?.touched && f?.ssn?.errors)
@@ -445,12 +475,24 @@
 		<div class="container">
 			<div class="vehtype_extintwrap">
 				<div class="row justify-content-between mb-5">
-					<div class="col-auto">
+					<div class="col-md-12">
 						<h2 class="headinginfo adminbox_shadow">
 							Owner/Company Identification
 						</h2>
 					</div>
-					<div class="col-auto text-right">
+					<div class="col-md-6">
+						<h3 class="addveh_top d-md-flex justify-content-between align-items-center mb-0 ml-1 mt-2">
+							<label class="alert alert-danger"
+								style="padding :0.25rem 1.25rem; color: red !important;">The
+								Driver's license document should
+								match the Bank Account Holder first and last name. Image to be uploaded needs to be
+								clear.</label>
+							<!-- <label class="alert alert-danger my-2 mx-2">Choose nearest major city or airport
+											location</label> -->
+
+						</h3>
+					</div>
+					<div class="col-md-6 text-right">
 						<button id="btn-country-verify-docs" class="custom-filled-button orange-button text-center"
 							data-toggle="modal" data-target="#verificationDocumentModal" tabindex="1">
 							Acceptable Country Owner Verification Document
@@ -486,7 +528,7 @@
 														'id_front_image',
 														id_front_image_id
 													)
-												" tabindex="-1" />
+												" tabindex="-1" accept="image/jpeg, image/png" />
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -556,7 +598,7 @@
 															$event,
 															'id_front_image'
 														)
-													" tabindex="-1" />
+													" tabindex="-1" accept="image/jpeg, image/png" />
 												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 													<path fill="none" d="M0 0h24v24H0V0z" />
 													<circle cx="12" cy="12" r="3" />
@@ -603,7 +645,7 @@
 														'id_back_image',
 														id_back_image_id
 													)
-												" tabindex="-1" />
+												" tabindex="-1" accept="image/jpeg, image/png" />
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -668,7 +710,7 @@
 															'id_back_image',
 															id_back_image_id
 														)
-													" tabindex="-1" />
+													" tabindex="-1" accept="image/jpeg, image/png" />
 												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 													<path fill="none" d="M0 0h24v24H0V0z" />
 													<circle cx="12" cy="12" r="3" />
@@ -704,7 +746,8 @@
 			<div class="row">
 				<div class="col-md-10">
 					<h3 class="addveh_top d-md-flex justify-content-between align-items-center mb-0">
-						<label class="alert alert-danger mr-2">Enter Address and Choose From Drop
+						<label class="alert alert-danger mr-2" style="color: red !important;">Enter Business Address and
+							Choose From Drop
 							Down.</label>
 						<!-- <label class="alert alert-danger my-2">Choose nearest major city or airport location</label> -->
 					</h3>
@@ -713,11 +756,16 @@
 			</div>
 			<div class="row">
 				<div class="col-md-6">
-					<mat-form-field appearance="outline" [class.read-only]="!canChangeAddress">
+					<mat-form-field appearance="outline" [class.read-only]="!canChangeAddress"
+						[ngClass]="{ 'border-red': addressErrorMessage || !isAddressSelected }">
 						<mat-label>Enter Business/Base Address</mat-label>
 						<input matInput placeholder="Search Here and Set Location Pin" (focus)="$event.target.select()"
-							[readonly]="!canChangeAddress" formControlName="address" #search1 tabindex="1" />
+							[readonly]="!canChangeAddress" formControlName="address" #search1 tabindex="1"
+							(keyup)="removeErrorSsn($event.target.value,'address')" />
 					</mat-form-field>
+					<div *ngIf="addressErrorMessage" class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="addressErrorMessage" style="font-weight: 550;">{{addressErrorMessage}}</div>
+					</div>
 					<div *ngIf="
 							(submittedForm && f?.address?.errors) ||
 								(f?.address?.touched && f?.address?.errors);
@@ -889,8 +937,8 @@
 				</div>
 				<div class="col-md-6">
 					<mat-form-field appearance="outline" [class.read-only]="!canChangeAddress">
-						<mat-label>Zip Code <span class="asterisk">*</span></mat-label>
-						<input matInput placeholder="Zip Code" (focus)="$event.target.select()"
+						<mat-label>Zip Code / Country Address Code <span class="asterisk">*</span></mat-label>
+						<input matInput placeholder="Zip Code / Country Address Code" (focus)="$event.target.select()"
 							formControlName="zipCode" [readonly]="!canChangeAddress" tabindex="1" />
 					</mat-form-field>
 					<div *ngIf="
@@ -1592,10 +1640,11 @@
 							</div>
 							<div class="col-md-6">
 								<mat-form-field appearance="outline">
-									<mat-label>Zip Code
+									<mat-label>Zip Code / Country Address Code
 										<span class="asterisk">*</span>
 									</mat-label>
-									<input matInput placeholder="Zip Code" formControlName="requestZipCode" />
+									<input matInput placeholder="Zip Code / Country Address Code"
+										formControlName="requestZipCode" />
 								</mat-form-field>
 								<div *ngIf="
 										(submittedRequestAddressChangeForm &&

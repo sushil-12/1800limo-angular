@@ -11,6 +11,7 @@ import { CustomvalidationService } from 'src/app/services/customvalidation.servi
 import { pluck } from 'rxjs/operators';
 import { AdminService } from 'src/app/services/admin.service';
 import { QuotebotService } from 'src/app/services/quotebot.service';
+import { CommonService } from 'src/app/services/common.service';
 
 declare var $: any
 @Component({
@@ -107,7 +108,7 @@ export class NewBookingComponent implements OnInit {
 	QB_vehicle_id: any = null;
 	unique_key: any;
 	firstLoadAffiliateId: void;
-	updateType: any;
+	updateType: any='create';
 	bookingResponse: any;
 	service_type: any = 'one_way';
 	transfer_type: any = 'city_to_city'
@@ -139,6 +140,7 @@ export class NewBookingComponent implements OnInit {
 		private $router: Router,
 		private $routeurl: ActivatedRoute,
 		private customValidator: CustomvalidationService,
+		private commonServices: CommonService,
 		private el: ElementRef
 	) { 
 		console.log('hi---->> in constructor')
@@ -236,7 +238,7 @@ export class NewBookingComponent implements OnInit {
 	ngAfterViewInit(): void {
 		console.log('<<<<<<<<<<<<<<<<<<<<<-----------ng after view init--------------->>>>>>>>>>>>>')
 		if (this.updateType == 'repeat' || this.updateType == 'return' || this.updateType == 'edit') {
-			this.scroll('travel_time')
+			this.scroll('id="pickup_address"')
 			this.SetFormValue('pickup_date', moment().format('YYYY-MM-DD'))
 		}
 	}
@@ -316,8 +318,12 @@ export class NewBookingComponent implements OnInit {
 				phone: ['',[Validators.required]],
 				phone_isd: ['+1'],
 				phone_country: ['us'],
-				email: ['',[Validators.required ,Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
+				email: ['',[Validators.required ,Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)]],
 				address: [''],
+				country: [''],
+				state: [''],
+				city: [''],
+				zipCode: [''],
 				card_details: this.$form.group({
 					name: ['',[Validators.required]],
 					card_number: ['',[Validators.required, Validators.pattern("^[0-9]*$"), , Validators.minLength(16), Validators.maxLength(20)]],
@@ -327,7 +333,7 @@ export class NewBookingComponent implements OnInit {
 				})
 			}),
 			passenger_name: ['', [, this.customValidator.whitespace()]],
-			passenger_email: ['', [Validators.email]],
+			passenger_email: ['', [Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)]],
 			passenger_cell: ['', [, Validators.pattern("^[0-9]*$")]],
 			passenger_cell_isd: ['+1'],
 			passenger_cell_country: ['us'],
@@ -361,7 +367,7 @@ export class NewBookingComponent implements OnInit {
 			driver_cell: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
 			driver_cell_isd: ['+1'],
 			driver_cell_country: ['us'],
-			driver_email: ['', Validators.email],
+			driver_email: ['', Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)],
 			driver_phone_type: [''],
 			driver_image_id: [''],
 			vehicle_image_id: [''],
@@ -454,8 +460,8 @@ export class NewBookingComponent implements OnInit {
 		this.SetFormValue('pickup_date', full_date.slice(0, full_date.indexOf('T')))
 		this.SetFormValue('return_pickup_date', future_full_date.slice(0, future_full_date.indexOf('T')))
 		this.SetFormValue('number_of_vehicles', 1)
-		this.SetFormValue('booking_instructions', 'Text client day before each booking to confirm driver name and cell #');
-		this.SetFormValue('return_booking_instructions', 'Text client day before each booking to confirm driver name and cell #');
+		this.SetFormValue('booking_instructions', "Text the client the day before each booking, and confirm the driver's name and cell number");
+		this.SetFormValue('return_booking_instructions', "Text the client the day before each booking, and confirm the driver's name and cell number");
 
 		if (this.BookingForm.value.transfer_type.includes('city_')) {
 			this.SetFormValue('meet_greet_choices', 1)
@@ -668,7 +674,24 @@ export class NewBookingComponent implements OnInit {
 		}
 	}
 	convertToMinutes(value){
-		return (value/60).toFixed(2)
+		const days = Math.floor(value / (24 * 60 * 60));
+		const remainingSeconds = value % (24 * 60 * 60);
+		const hours = Math.floor(remainingSeconds / (60 * 60));
+		const remainingMinutes = Math.floor((remainingSeconds % (60 * 60)) / 60);
+	
+		let result = "";
+
+		if (days > 0) {
+			result += `${days} days, `;
+		}
+	
+		if (hours > 0 || (days === 0 && hours === 0)) {
+			result += `${hours} hours, `;
+		}
+	
+		result += `${remainingMinutes} minutes`;
+	
+		return result;
 	}
 
 
@@ -1655,7 +1678,10 @@ export class NewBookingComponent implements OnInit {
 	* @param image_type String [Required] type of the image being uploaded
 	* @param image_id [Optional] id of the image to be edited
 	*/
-	uploadImage(event: any, image_type: string) {
+	async uploadImage(event: any, image_type: string) {
+		if(!await this.commonServices.handleFile(event)) {
+			return;
+		}
 		let image: any
 		console.log(event.target.files)
 		if (event.target.files && event.target.files.length > 0) {
@@ -1788,7 +1814,7 @@ export class NewBookingComponent implements OnInit {
 				(<FormGroup>loose_customer.get('card_details')).get('card_number').setValidators([Validators.required, Validators.pattern("^[0-9]*$"), , Validators.minLength(12), Validators.maxLength(20),]);
 				(<FormGroup>loose_customer.get('card_details')).get('name').setValidators([Validators.required]);
 				(<FormGroup>loose_customer.get('card_details')).get('cvv').setValidators([Validators.required, Validators.pattern("^[0-9]*$")]);
-				loose_customer.get('email').setValidators([Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.]+\.[a-zA-Z]{2,}$/i)])
+				loose_customer.get('email').setValidators([Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)])
 				loose_customer.get('phone').setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)])
 				loose_customer.get('first_name').setValidators([Validators.required])
 				// loose_customer.get('middle_name').setValidators(this.customValidator.whitespace())
@@ -1830,7 +1856,7 @@ export class NewBookingComponent implements OnInit {
 				this.toggleDropdown(null)
 				this.BookingForm.get('lose_affiliate_name').setValidators([Validators.required])
 				this.BookingForm.get('lose_affiliate_phone').setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)])
-				this.BookingForm.get('lose_affiliate_email').setValidators([Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.]+\.[a-zA-Z]{2,}$/i)])
+				this.BookingForm.get('lose_affiliate_email').setValidators([Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)])
 				this.BookingForm.updateValueAndValidity()
 				this.init_rates = true
 				if (this.Form.service_type.value === 'round_trip') {
@@ -2175,7 +2201,20 @@ export class NewBookingComponent implements OnInit {
 	}
 
 	fillLooseCustomerAddress(value: any) {
-		(<FormGroup>this.BookingForm.get('loose_customer')).get('address').setValue(value);
+		console.log('Addresss-->>>' , value);
+		(<FormGroup>this.BookingForm.get('loose_customer')).get('address').setValue(value?.formatted_address);
+		value.address_components.forEach(component => {
+			const types = component.types;
+			if (types.includes('postal_code')) {
+				(<FormGroup>this.BookingForm.get('loose_customer')).get('zipCode').setValue(component.long_name);
+			} else if (types.includes('locality')) {
+				(<FormGroup>this.BookingForm.get('loose_customer')).get('city').setValue(component.long_name);
+			} else if (types.includes('administrative_area_level_1')) {
+				(<FormGroup>this.BookingForm.get('loose_customer')).get('state').setValue(component.long_name);
+			} else if (types.includes('country')) {
+				(<FormGroup>this.BookingForm.get('loose_customer')).get('country').setValue(component.long_name);
+			}
+		  });
 		(<FormGroup>this.BookingForm.get('loose_customer')).updateValueAndValidity();
 		this.BookingForm.updateValueAndValidity();
 	}

@@ -211,3 +211,23 @@
 <!- Image modal ->
 <app-image-modal (closeTab)="closeButton()" [modalImage]="modalImage"></app-image-modal>
 -->
+		<div class="modal fade" tabindex="-1" id="thankYouModal" aria-labelledby="thankYouModal" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4>Thanks for registering!</h4>
+					</div>
+					<div class="modal-header">
+						<h4 style="font-size:17px;">Please wait for approval. Once approved you can enter more vehicles.
+							Also, Please use quote to check your rates.
+						</h4>
+					</div>
+
+					<div class="modal-footer justify-content-end">
+						<button class="custom-filled-button" data-dismiss="modal" (click)="thankYouModalButton()">
+							OKAY
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>

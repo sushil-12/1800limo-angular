@@ -30,6 +30,8 @@ export class LoginComponent implements OnInit, AfterViewInit
 	alert_individual:boolean=false;
 	alert_corporate:boolean=false;
 	alert_travel_agent:boolean=false;
+    referralCode:string=null; 
+
 	constructor(private formBuilder: FormBuilder,
 		private router: Router,
 		private authService: AuthService,
@@ -86,7 +88,11 @@ export class LoginComponent implements OnInit, AfterViewInit
 					break;
 				}
 				case 'travel_agent': {
-					this.router.navigateByUrl('/agent');
+					this.router.navigateByUrl('/travel_agent');
+					break;
+				}
+				case 'sub_travel_agent':{
+					this.router.navigateByUrl('/sub_travel_agent')
 					break;
 				}
 				default: {
@@ -115,7 +121,8 @@ export class LoginComponent implements OnInit, AfterViewInit
 	{
 		this.loginForm = this.formBuilder.group({
 			phone: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(15), Validators.pattern("^[0-9]*$"), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
-			role: ['', Validators.required]
+			role: ['', Validators.required],
+			invite_code: ['']
 		});
 
 		if (this.router.url === '/admin-login')
@@ -129,17 +136,32 @@ export class LoginComponent implements OnInit, AfterViewInit
 		// else if (!sessionStorage.getItem('clicked_login_role')) {
 		//   sessionStorage.setItem('clicked_login_role', 'individual');
 		// }
+
+		this.route.queryParams.subscribe((params:any)=>{
+			this.referralCode = atob(params?.refferal_code)
+			localStorage.setItem('agency_name',params?.agency_name)
+			localStorage.setItem('invite_code',this.referralCode)
+			console.log('Referral code->:', this.referralCode);
+			this.loginForm.patchValue({
+				invite_code:this.referralCode
+			})
+		})
+
 		this.route.params.subscribe((params: Params) => {
 			const role = params['role'];
+			console.log('Role:', role,params);
+			
+			const existRoles = ['admin' , 'driver' , 'sub_admin' , 'travel_agent','master_user','sub_travel_agent']
+		
 			console.log('Role:', role);
-			const existRoles = ['admin' , 'driver' , 'sub_admin' , 'travel_agent']
+			// const existRoles = ['admin' , 'driver' , 'sub_admin' , 'travel_agent',]
 			if(!existRoles.includes(role)){
 				this.router.navigate(['/login/driver']).then(()=>{
 					window.location.reload()
 				});
 			}
 		  });
-
+		  console.log('LOGIN fORM VALUE->:', this.loginForm.value);
 
 		const pageUrl = this.router.parseUrl(this.router.url);
 		try
@@ -160,6 +182,13 @@ export class LoginComponent implements OnInit, AfterViewInit
 				this.router.navigateByUrl('/login/driver')
 			}
 		}
+	}
+
+	loginSubTravelAgent(){
+		this.router.navigate(['/login/sub_travel_agent']).then(()=>{
+			window.location.reload()
+		})
+		
 	}
 	// loginbuttons
 	loginButtons(role: string)
@@ -238,7 +267,9 @@ export class LoginComponent implements OnInit, AfterViewInit
 		{
 			return;
 		}
-
+		if(this.loginForm?.get('invite_code').value){
+			localStorage.setItem('invite_code',this.loginForm?.get('invite_code').value)
+		}
 		this.disableSubmit = true; //disable submit button
 		this.showProgressBar = true; //show progressbar
 
@@ -262,10 +293,11 @@ export class LoginComponent implements OnInit, AfterViewInit
 				let email = this.response?.data?.email
 				if (environment['environmentName'] !== 'Production')
 				{
-					this.router.navigateByUrl('/otp' + `?otp=${result.data.otp}?email=${email}`);
+					console.log('role',this.Role)
+					this.router.navigateByUrl('/otp' + `?otp=${result.data.otp}`+ `&role=${this.Role}` + `&email=${email}`);
 				} else
 				{
-					this.router.navigateByUrl('/otp');
+					this.router.navigateByUrl('/otp'+ `?role=${this.Role}`);
 				}
 			});
 	}

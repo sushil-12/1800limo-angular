@@ -4,7 +4,12 @@
 	<div class="container">
 		<div class="row" *ngIf="response">
 			<div class="col-md-12" *ngIf="response.data.stripeDetail.transfer_status!='active'">
-				<p class="text-danger margin-bottom-thin my-mat-hint">Stripe Activation can take upto 24 Hours.</p>
+				<p class="text-danger margin-bottom-thin my-mat-hint" style="font-size: 17px; font-weight: 800;">Stripe
+					Activation can take upto 24 Hours.</p>
+			</div>
+			<div class="col-md-12" *ngIf="response.data?.stripeDetail?.stripe_errors">
+				<p class="text-danger margin-bottom-thin my-mat-hint" style="font-size: 17px; font-weight: 800;">
+					{{TaxIdMatch}}</p>
 			</div>
 			<div class="col-md-4">
 				<p [className]="'defaultStatus ' + response.data.stripeDetail.additional_doc_verification_status">
@@ -26,10 +31,13 @@
 			</div>
 			<div class="col-md-12" *ngIf="stripeErrors.length>0">
 				<h5 class="stripeErrorHeading">
-					Please fix these errors for the Payouts:
+					Please fix these errors for the Payouts: <span *ngIf="ssnErrorMessage"
+						class="stripeErrorHeading">(SSN / ID
+						NUMBER)</span>
 				</h5>
 				<ul>
-					<li *ngFor="let error of stripeErrors" tabindex="-1">{{error.error_message}}</li>
+					<li *ngFor="let error of stripeErrors" tabindex="-1" style="color: red; font-weight: 400;">
+						{{error.error_message}}</li>
 				</ul>
 			</div>
 			<div class="col-12" *ngIf="response.data.bankinfo.stripe_account_type=='standard'">
@@ -48,26 +56,41 @@
 	<section class="user_information">
 		<h2 class="headinginfo adminbox_shadow">Company Bank Settings <span>(Per STRIPE For Identification & Direct
 				Deposits)</span></h2>
+
 		<div class="mt-1 container">
 			<div class="row">
 				<div class="col-md-6">
 					<!-- <mat-label>Bank Name <span class="asterisk">*</span></mat-label> -->
 					<mat-form-field appearance="outline">
 						<mat-label>Bank Name </mat-label>
-						<input matInput placeholder="Bank Name" id="BankName" formControlName="BankName">
+						<input matInput placeholder="Bank Name" id="BankName" formControlName="BankName"
+							(focus)="$event.target.select()">
 					</mat-form-field>
 				</div>
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
 						<mat-label>Bank Address </mat-label>
-						<input matInput placeholder="Bank Address" formControlName="BankAddress">
+						<input matInput placeholder="Bank Address" formControlName="BankAddress"
+							(focus)="$event.target.select()">
 					</mat-form-field>
 				</div>
+
+				<div class="col-md-12">
+					<h3 class="addveh_top d-md-flex justify-content-between align-items-center mb-0 ml-1 mt-2">
+						<label class="alert alert-danger" style="padding :0.25rem 1.25rem; color: red !important;">The
+							Driver's license document should
+							match the Bank Account Holder first and last name.</label>
+						<!-- <label class="alert alert-danger my-2 mx-2">Choose nearest major city or airport
+										location</label> -->
+
+					</h3>
+				</div>
+
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
-						<mat-label>Account Holder First Name<span class="asterisk">*</span></mat-label>
-						<input matInput placeholder="Account Holder First Name*"
-							formControlName="AccountHolderFirstName">
+						<mat-label>Bank Account Holder First Name<span class="asterisk">*</span></mat-label>
+						<input matInput placeholder="Bank Account Holder First Name*"
+							formControlName="AccountHolderFirstName" (focus)="$event.target.select()">
 					</mat-form-field>
 					<div *ngIf="f.AccountHolderFirstName.errors && (f.AccountHolderFirstName.touched || f.AccountHolderFirstName.dirty )"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -76,8 +99,9 @@
 				</div>
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
-						<mat-label>Account Holder Last Name<span class="asterisk">*</span></mat-label>
-						<input matInput placeholder="Account Holder Last Name*" formControlName="AccountHolderLastName">
+						<mat-label>Bank Account Holder Last Name<span class="asterisk">*</span></mat-label>
+						<input matInput placeholder="Bank Account Holder Last Name*"
+							formControlName="AccountHolderLastName" (focus)="$event.target.select()">
 					</mat-form-field>
 					<div *ngIf="f.AccountHolderLastName.errors && (f.AccountHolderLastName.touched || f.AccountHolderLastName.dirty )"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -86,8 +110,9 @@
 				</div>
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
-						<mat-label>Account # / IBAN Number<span class="asterisk">*</span></mat-label>
-						<input matInput placeholder="Account Number*" formControlName="AccountNumber">
+						<mat-label>Bank Account / IBAN<span class="asterisk">*</span></mat-label>
+						<input matInput placeholder="Account Number*" formControlName="AccountNumber"
+							(focus)="$event.target.select()">
 					</mat-form-field>
 					<div *ngIf="f.AccountNumber.errors && (f.AccountNumber.touched || f.AccountNumber.dirty )"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -98,7 +123,8 @@
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
 						<mat-label>Checking Routing Number<span class="asterisk">*</span></mat-label>
-						<input matInput placeholder="Checking Routing Number*" formControlName="Routing">
+						<input matInput placeholder="Checking Routing Number*" formControlName="Routing"
+							(focus)="$event.target.select()">
 					</mat-form-field>
 					<div *ngIf="f.Routing.errors && (f.Routing.touched || f.Routing.dirty )"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -121,9 +147,9 @@
 					</div>
 				</div>
 				<div class="col-md-2 col-4 birthMonth">
-					<mat-form-field appearance="outline">
+					<mat-form-field appearance="outline" [ngClass]="{ 'border-red': dobErrorMessage }">
 						<mat-label>Month of Birth <span class="asterisk">*</span></mat-label>
-						<mat-select formControlName="dobMonth">
+						<mat-select formControlName="dobMonth" (selectionChange)="removeDobError()">
 							<mat-option value="">Month</mat-option>
 							<mat-option value='01'>01</mat-option>
 							<mat-option value='02'>02</mat-option>
@@ -139,30 +165,39 @@
 							<mat-option value='12'>12</mat-option>
 						</mat-select>
 					</mat-form-field>
+					<div *ngIf="dobErrorMessage" class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="dobErrorMessage" style="font-weight: 550;">{{dobErrorMessage}}</div>
+					</div>
 					<div *ngIf="submittedForm && f.dobMonth.errors" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.dobMonth.errors.required">This field is required</div>
 					</div>
 				</div>
 				<div class="col-md-2 col-4 birthDay">
-					<mat-form-field appearance="outline">
+					<mat-form-field appearance="outline" [ngClass]="{ 'border-red': dobErrorMessage }">
 						<mat-label>Day of Birth <span class="asterisk">*</span></mat-label>
-						<mat-select formControlName="dobDay">
+						<mat-select formControlName="dobDay" (selectionChange)="removeDobError()">
 							<mat-option value="">Day</mat-option>
 							<mat-option *ngFor="let day of dobDay" value="{{day}}">{{day}}</mat-option>
 						</mat-select>
 					</mat-form-field>
+					<div *ngIf="dobErrorMessage" class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="dobErrorMessage" style="font-weight: 550;">{{dobErrorMessage}}</div>
+					</div>
 					<div *ngIf="submittedForm && f.dobDay.errors" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.dobDay.errors.required">This field is required</div>
 					</div>
 				</div>
 				<div class="col-md-2 col-4 birthYear">
-					<mat-form-field appearance="outline">
+					<mat-form-field appearance="outline" [ngClass]="{ 'border-red': dobErrorMessage }">
 						<mat-label>Year of Birth <span class="asterisk">*</span></mat-label>
-						<mat-select formControlName="dobYear">
+						<mat-select formControlName="dobYear" (selectionChange)="removeDobError()">
 							<mat-option value="">Year</mat-option>
 							<mat-option *ngFor="let year of dobYear" value="{{year}}">{{year}}</mat-option>
 						</mat-select>
 					</mat-form-field>
+					<div *ngIf="dobErrorMessage" class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="dobErrorMessage" style="font-weight: 550;">{{dobErrorMessage}}</div>
+					</div>
 					<div *ngIf="submittedForm && f.dobYear.errors" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.dobYear.errors.required">This field is required</div>
 					</div>
@@ -172,7 +207,7 @@
 						<mat-label>Currency <span class="asterisk">*</span></mat-label>
 						<input type="text" placeholder="Pick one" aria-label="Number" matInput
 							formControlName="currencyShow" [matAutocomplete]="auto"
-							(keyup)="handleCurrency($event.target.value)">
+							(keyup)="handleCurrency($event.target.value)" (focus)="$event.target.select()">
 						<mat-autocomplete autoActiveFirstOption #auto="matAutocomplete"
 							(optionSelected)="onSelectionChange($event)">
 							<mat-option *ngFor="let currencyOption of currencyOptions"
@@ -199,12 +234,18 @@
 					</div>
 				</div>
 				<div class="col-md-6">
-					<mat-form-field appearance="outline">
+					<mat-form-field appearance="outline"
+						[ngClass]="{ 'disableSsn': enableSsnField, 'border-red': ssnErrorMessage || !isSsnSelected }">
 						<mat-label>SSN (USA required by STRIPE / Government ID for other countries)<span
 								class="asterisk">*</span></mat-label>
 						<input matInput placeholder="SSN (USA required by STRIPE / Government ID for other countries)"
-							formControlName="ssn" tabindex="1">
+							formControlName="ssn" tabindex="1" (focus)="$event.target.select()"
+							(change)="handleSsnInput($event.target.value)"
+							(keyup)="removeErrorSsn($event.target.value,'ssn')">
 					</mat-form-field>
+					<div *ngIf="ssnErrorMessage" class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="ssnErrorMessage" style="font-weight: 550;">{{ssnErrorMessage}}</div>
+					</div>
 					<div *ngIf="submittedForm && f.ssn.errors || f.ssn.touched && f.ssn.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.ssn.errors.required">This field is required</div>
@@ -254,15 +295,36 @@
 	</section>
 
 	<section class="user_information">
-		<h2 class="headinginfo adminbox_shadow">Owner Company Identity Information</h2>
+
 		<div class="container">
 			<div class="vehtype_extintwrap">
-				<div class="row">
-					<div class="col-md-12 text-center">
-						<button type="button" class="verifyDocButton box-shadow" data-toggle="modal"
-							data-target="#verificationDocumentModal" tabindex="1">Acceptable Country Owner
-							Verification Document</button>
+
+				<div class="row justify-content-between mb-5">
+					<div class="col-md-12">
+						<h2 class="headinginfo adminbox_shadow">
+							Owner/Company Identification
+						</h2>
 					</div>
+					<div class="col-md-6">
+						<h3 class="addveh_top d-md-flex justify-content-between align-items-center mb-0 ml-1 mt-2">
+							<label class="alert alert-danger"
+								style="padding :0.25rem 1.25rem; color: red !important;">The
+								Driver's license document should
+								match the Bank Account Holder first and last name. Image to be uploaded needs to be
+								clear.</label>
+							<!-- <label class="alert alert-danger my-2 mx-2">Choose nearest major city or airport
+												location</label> -->
+
+						</h3>
+					</div>
+					<div class="col-md-6 text-right">
+						<button id="btn-country-verify-docs" class="custom-filled-button orange-button text-center"
+							data-toggle="modal" data-target="#verificationDocumentModal" tabindex="1">
+							Acceptable Country Owner Verification Document
+						</button>
+					</div>
+				</div>
+				<div class="row">
 					<div class="col-md-5" *ngIf="id_front_image; else no_id_front_image">
 						<div class="vehtype_extint">
 							<div>
@@ -280,7 +342,7 @@
 										<button class="changeuploaded" tabindex="1">
 											<input type="file"
 												(change)="idCardImageChange($event,'id_front_image',id_front_image_id)"
-												tabindex="-1">
+												tabindex="-1" accept="image/jpeg, image/png">
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -318,7 +380,7 @@
 										<li>
 											<button class="adduploaded" tabindex="1">
 												<input type="file" (change)="idCardImageChange($event,'id_front_image')"
-													tabindex="-1">
+													tabindex="-1" accept="image/jpeg, image/png">
 												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 													<path fill="none" d="M0 0h24v24H0V0z" />
 													<circle cx="12" cy="12" r="3" />
@@ -354,7 +416,7 @@
 										<button class="changeuploaded" tabindex="1">
 											<input type="file"
 												(change)="idCardImageChange($event,'id_back_image',id_back_image_id)"
-												tabindex="-1">
+												tabindex="-1" accept="image/jpeg, image/png">
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -391,7 +453,7 @@
 											<button class="adduploaded" tabindex="1">
 												<input type="file"
 													(change)="idCardImageChange($event,'id_back_image',id_back_image_id)"
-													tabindex="-1">
+													tabindex="-1" accept="image/jpeg, image/png">
 												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 													<path fill="none" d="M0 0h24v24H0V0z" />
 													<circle cx="12" cy="12" r="3" />
@@ -417,20 +479,26 @@
 			<div class="row">
 				<div class="col-md-12">
 					<h3 class="addveh_top d-md-flex justify-content-between align-items-center mb-0">
-						<label class="alert alert-danger">Enter Address and Choose From Drop Down.</label>
-						<label class="alert alert-danger my-2 mx-2">Choose nearest major city or airport
-							location</label>
+						<label class="alert alert-danger" style="color: red !important;">Enter Business Address and
+							Choose From Drop Down.</label>
+						<!-- <label class="alert alert-danger my-2 mx-2">Choose nearest major city or airport
+							location</label> -->
 						<label></label>
 					</h3>
 				</div>
 			</div>
 			<div class="row">
 				<div class="col-md-6">
-					<mat-form-field appearance="outline">
+					<mat-form-field appearance="outline"
+						[ngClass]="{ 'border-red': addressErrorMessage || !isAddressSelected }">
 						<mat-label>Enter Business/Base Address</mat-label>
 						<input matInput placeholder="Search Here and Set Location Pin" formControlName="address"
-							#search1 tabindex="1">
+							#search1 tabindex="1" (focus)="$event.target.select()"
+							(keyup)="removeErrorSsn($event.target.value,'address')">
 					</mat-form-field>
+					<div *ngIf="addressErrorMessage" class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="addressErrorMessage" style="font-weight: 550;">{{addressErrorMessage}}</div>
+					</div>
 					<div *ngIf="submittedForm && f.address.errors || f.address.touched && f.address.errors; else latLongError"
 						class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.address.errors.required">This field is required</div>
@@ -494,6 +562,8 @@
 							<mat-option *ngFor="let stateOption of stateOptions" [value]="stateOption.shortCode">
 								{{stateOption.name}}</mat-option>
 						</mat-select>
+						<!-- <input matInput placeholder="State" formControlName="state" disabled tabindex="1"
+							(focus)="$event.target.select()"> -->
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.state.errors || f.state.touched && f.state.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -510,20 +580,22 @@
 						<div *ngIf="f.street.errors.required">This field is required</div>
 					</div>
 				</div> -->
-				<div class="col-md-6">
+				<!-- <div class="col-md-6">
 					<mat-form-field appearance="outline">
 						<mat-label>City <span class="asterisk">*</span></mat-label>
-						<input matInput placeholder="City" formControlName="city" disabled tabindex="1">
+						<input matInput placeholder="City" formControlName="city" disabled tabindex="1"
+							(focus)="$event.target.select()">
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.city.errors || f.city.touched && f.city.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.city.errors.required">This field is required</div>
 					</div>
-				</div>
+				</div> -->
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
 						<mat-label>Unit#</mat-label>
-						<input matInput placeholder="Unit" formControlName="unit" tabindex="1">
+						<input matInput placeholder="Unit" formControlName="unit" tabindex="1"
+							(focus)="$event.target.select()">
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.unit.errors || f.unit.touched && f.unit.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -532,8 +604,9 @@
 				</div>
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
-						<mat-label>Zip Code <span class="asterisk">*</span></mat-label>
-						<input matInput placeholder="Zip Code" formControlName="zipCode" tabindex="1">
+						<mat-label>Zip Code / Country Address Code <span class="asterisk">*</span></mat-label>
+						<input matInput placeholder="Zip Code / Country Address Code" formControlName="zipCode"
+							tabindex="1" (focus)="$event.target.select()">
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.zipCode.errors || f.zipCode.touched && f.zipCode.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">

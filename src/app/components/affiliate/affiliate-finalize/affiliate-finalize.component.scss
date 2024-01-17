@@ -15,6 +15,12 @@ p {
     border: 2px solid #a2a3a2;
     background-color: #a2a3a2;
     color: #fff;
+    pointer-events: none;
+}
+.color-green{
+    border: 2px solid #a2a3a2;
+    background-color: var(--green-color);
+    color: #fff;
 }
 
 .container {
@@ -520,6 +526,17 @@ tbody {
     right   : 10px;
     top     : -80px;
 }
+.accpt_reject_button {
+    // position: absolute;
+    right   : 10px;
+    top     : -80px;
+}
+.accpt_reject_div{
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    
+}
 
 
 :host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-outline-gap{
@@ -636,4 +653,15 @@ top:2.05em}
 
 :host ::ng-deep #vehicleTypeField .ng-select-container.ng-appearance-outline{
 	border: 3px solid red;
+}
+.paymentOptionsDiv{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+@media only screen and (max-width:767px) {
+    .paymentOptionsDiv{
+        display: flex;
+        flex-direction: column;
+    }
 }

@@ -20,16 +20,18 @@
 							<div class="dropdown-menu" aria-labelledby="dropdown05">
 								<a class="dropdown-item box-shadow" style="background-color: #fff;"
 									(click)="loginButtons('individual')">Individual</a>
-								<a class="dropdown-item box-shadow" style="background-color: #fff;"
-									(click)="loginButtons('corporate')">Corporate</a>
 								<a class="dropdown-item ta-btn" style="color: #fff !important;"
 									(click)="loginButtons('travel_agent')">Travel
 									Agent</a>
-								<hr>
+								<a class="dropdown-item box-shadow" style="background-color: #fff;"
+									(click)="loginButtons('corporate')">Corporate</a>
+
+								<!-- <hr> -->
 								<a class="dropdown-item driver-dropdown box-shadow" style="color: #fff !important;"
 									(click)="loginButtons('driver')">
-									Blk Car | Fleet | Taxi | Gig
+									Driver / Chauffeur
 								</a>
+								<hr>
 								<a class="dropdown-item sub-admin-dropdown box-shadow" style="color: #fff !important;"
 									(click)="loginButtons('sub_admin')">
 									Sub Admin
@@ -63,7 +65,7 @@
 										<div class="dropdown-divider"></div>
 										<div class="dropdown-item" *ngIf="currentUser?.roleName=='travel_agent'"
 											(click)="dashboard(currentUser?.roleName)">
-											<div class="dropdown-item-icon gear-bg settingsvg font-weight-bolder">
+											<div class="dropdown-item-icon gear-bg-black settingsvg font-weight-bolder">
 												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
 													viewBox="0 0 24 24" fill="none" stroke="currentColor"
 													stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -77,22 +79,9 @@
 										</div>
 										<div *ngIf="currentUser?.roleName=='driver' && accountStatus; else adminRole"
 											class="dropdown-item" (click)="dashboard('affiliate')">
-											<div class="dropdown-item-icon settingsvg">
-												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-													viewBox="0 0 24 24" fill="none" stroke="currentColor"
-													stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-													class="feather feather-settings">
-													<circle cx="12" cy="12" r="3"></circle>
-													<path
-														d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
-													</path>
-												</svg>
-											</div>{{ value }}
-										</div>
-										<ng-template #adminRole>
-											<div *ngIf="currentUser?.roleName=='admin'" class="dropdown-item"
-												(click)="dashboard('admin')">
-												<div class="dropdown-item-icon gear-bg settingsvg font-weight-bolder">
+											<div class="dropdown-item-icon d-flex align-items-center"
+												style="margin-left: -21px !important;">
+												<div class="settingsvg gear-bg-black ">
 													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
 														viewBox="0 0 24 24" fill="none" stroke="currentColor"
 														stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -102,7 +91,32 @@
 															d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
 														</path>
 													</svg>
-												</div>Admin Dashboard
+												</div>
+												<div style="font-size: 14px; font-weight: 700; color: black;">
+													{{value}}
+												</div>
+											</div>
+										</div>
+										<ng-template #adminRole>
+											<div *ngIf="currentUser?.roleName=='admin'" class="dropdown-item"
+												(click)="dashboard('admin')">
+												<div class="dropdown-item-icon gear-bg-black font-weight-bolder d-flex
+													align-items-center" style="margin-left: -21px !important;">
+													<div class="settingsvg gear-bg-black">
+														<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+															viewBox="0 0 24 24" fill="none" stroke="currentColor"
+															stroke-width="2" stroke-linecap="round"
+															stroke-linejoin="round" class="feather feather-settings">
+															<circle cx="12" cy="12" r="3"></circle>
+															<path
+																d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+															</path>
+														</svg>
+													</div>
+													<div style="font-size: 14px; font-weight: 700; color: black;">
+														Admin Dashboard
+													</div>
+												</div>
 											</div>
 										</ng-template>
 										<div class="dropdown-item logout-background font-weight-bolder"
@@ -144,7 +158,7 @@
 				<div class="g-translator d-flex justify-content-center">
 					<div id="google_translate_element_home_desktop"></div>
 				</div>
-				<h3>FREE Prearranged Quotes<br> in Over <span data-toggle="modal" id="countriestooltip"
+				<h3>FREE Prearranged Quotes in Over <span data-toggle="modal" id="countriestooltip"
 						class="showCountries p-0" data-placement="top" title="Click to check list of Countries"
 						data-target="#showCountriesModal" id="quotebot_redirect">40 Countries</span>
 				</h3>
@@ -211,9 +225,9 @@
 											<select formControlName="pickup_type" class="font-weight-bolder"
 												tabindex="1"
 												[class.errorValid]="submitted && QBForm?.pickup_type?.errors">
-												<option value="airport">Airport?</option>
-												<option value="cruise">Cruise Port?</option>
-												<option value="city">City?</option>
+												<option value="airport">Airport ?</option>
+												<option value="cruise">Cruise Port ?</option>
+												<option value="city">City ?</option>
 											</select>
 											<i class="fa fa-angle-down" aria-hidden="true"></i>
 										</div>
@@ -231,9 +245,9 @@
 											<select formControlName="dropoff_type" class="font-weight-bolder"
 												tabindex="1"
 												[class.errorValid]="submitted && QBForm?.dropoff_type?.errors">
-												<option Value="airport">Airport?</option>
-												<option Value="cruise">Cruise Port?</option>
-												<option Value="city">City?</option>
+												<option Value="airport">Airport ?</option>
+												<option Value="cruise">Cruise Port ?</option>
+												<option Value="city">City ?</option>
 											</select>
 											<i class="fa fa-angle-down" aria-hidden="true"></i>
 										</div>
@@ -350,7 +364,8 @@
 															max="1000" step="1" inputmode="decimal"
 															style="text-align: center" class="form-control"
 															placeholder="" id="no_of_passenger" tabindex="1"
-															[class.errorValid]="submitted && QBForm?.no_of_passenger?.errors">
+															[class.errorValid]="submitted && QBForm?.no_of_passenger?.errors"
+															(focus)="$event.target.select()">
 														<div class="input-group-append">
 															<button style="min-width: 2.5rem"
 																class="btn btn-increment btn-outline-secondary highlightButton"
@@ -397,7 +412,8 @@
 															max="2000" step="1" inputmode="decimal"
 															style="text-align: center" class="form-control "
 															placeholder="" id="no_of_luggage" tabindex="1"
-															[class.errorValid]="submitted && QBForm?.no_of_luggage?.errors">
+															[class.errorValid]="submitted && QBForm?.no_of_luggage?.errors"
+															(focus)="$event.target.select()">
 														<div class="input-group-append">
 															<button style="min-width: 2.5rem"
 																class="btn btn-increment btn-outline-secondary"
@@ -455,9 +471,9 @@
 											*ngIf="QBForm?.pickup_type?.value == 'airport'">
 											<div class="input-contain d-flex align-items-center">
 												<div class="input-box">
-													<input type="text" placeholder="Airport Code / Name?"
-														id="pickup_airport" #airportinput
-														class="input-f font-weight-bolder"
+													<input type="text" style="height:42px !important;"
+														placeholder="Airport Code / Name?" id="pickup_airport"
+														#airportinput class="input-f font-weight-bolder"
 														(focus)="$event.target.select()" tabindex="1"
 														(keyup)="searchAirport($event.target.value, 'pickup_airport')"
 														[matAutocomplete]="airportautocomplete"
@@ -498,7 +514,7 @@
 												[class.errorValid]="submitted && QBForm?.pickup_address?.errors">
 												<!-- <img src="../../../../assets/images/start_location.png" alt="start_location"> -->
 												<div class="input-box">
-													<input type="text"
+													<input type="text" style="height:42px !important;"
 														[attr.placeholder]="QBForm?.pickup_type?.value == 'city' ? 'City - Pickup Address?' : 'Cruise Port Name / Address?'"
 														id="pickup_address" #addressinput
 														[value]="QBForm?.pickup_address?.value"
@@ -544,9 +560,9 @@
 											*ngIf="QBForm.dropoff_type.value == 'airport'">
 											<div class="input-contain d-flex align-items-center">
 												<div class="input-box">
-													<input type="text" placeholder="Drop off Airport Code / Name?"
-														id="dropoff_airport" #dropairportinput
-														class="input-f font-weight-bolder"
+													<input type="text" style="height:42px !important;"
+														placeholder="Drop off Airport Code / Name?" id="dropoff_airport"
+														#dropairportinput class="input-f font-weight-bolder"
 														(focus)="$event.target.select()" tabindex="1"
 														(keyup)="searchAirport($event.target.value, 'dropoff_airport')"
 														[matAutocomplete]="dropoffairportautocomplete"
@@ -586,7 +602,7 @@
 											*ngIf="QBForm?.dropoff_type?.value != 'airport'">
 											<div class="input-contain d-flex align-items-center">
 												<div class="input-box">
-													<input type="text"
+													<input type="text" style="height:42px !important;"
 														[attr.placeholder]="QBForm?.dropoff_type?.value == 'city' ? 'City - Dropoff Address?': 'Cruise Port Name / Address?'"
 														id="dropoff_address" #dropaddressinput
 														[value]="QBForm?.dropoff_address?.value"
@@ -754,9 +770,9 @@
 											<div class="input-contain d-flex align-items-center">
 												<div class="input-box">
 													<input type="text" placeholder="Return Airport Code / Name?"
-														#retairportinput id="return_pickup_airport"
-														class="input-f font-weight-bolder" tabindex="1"
-														(focus)="$event.target.select()"
+														style="height:42px !important;" #retairportinput
+														id="return_pickup_airport" class="input-f font-weight-bolder"
+														tabindex="1" (focus)="$event.target.select()"
 														(keyup)="searchAirport($event.target.value, 'return_pickup_airport')"
 														[matAutocomplete]="returnpickupairportautocomplete"
 														formControlName="return_pickup_airport_name">
@@ -796,7 +812,7 @@
 											<div class="input-contain d-flex align-items-center"
 												[class.errorValid]="submitted && QBForm?.return_pickup_address?.errors">
 												<div class="input-box">
-													<input type="text"
+													<input type="text" style="height:42px !important;"
 														[attr.placeholder]="QBForm?.dropoff_type?.value == 'city' ? 'City - Return Pickup Address' : 'Cruise Port Name / Address'"
 														id="return_pickup_address" #retaddressinput
 														matGoogleMapsAutocomplete tabindex="1"
@@ -845,9 +861,9 @@
 											<div class="input-contain d-flex align-items-center">
 												<div class="input-box">
 													<input type="text" placeholder="Return Airport Code / Name?"
-														#retdropairportinput id="return_dropoff_airport"
-														class="input-f font-weight-bolder" tabindex="1"
-														(focus)="$event.target.select()"
+														style="height:42px !important;" #retdropairportinput
+														id="return_dropoff_airport" class="input-f font-weight-bolder"
+														tabindex="1" (focus)="$event.target.select()"
 														(keyup)="searchAirport($event.target.value, 'return_dropoff_airport')"
 														[matAutocomplete]="returndropoffairportautocomplete"
 														formControlName="return_dropoff_airport_name">
@@ -880,7 +896,7 @@
 											<div class="input-contain d-flex align-items-center"
 												[class.errorValid]="submitted && QBForm?.return_dropoff_address?.errors">
 												<div class="input-box">
-													<input type="text"
+													<input type="text" style="height:42px !important;"
 														[attr.placeholder]="QBForm?.pickup_type?.value == 'city' ? 'City - Return Dropoff Address' : 'Cruise Port Name / Address'"
 														matGoogleMapsAutocomplete id="return_dropoff_address"
 														#retdropaddressinput formControlName="return_dropoff_address"

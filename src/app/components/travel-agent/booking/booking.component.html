@@ -1,13 +1,72 @@
 <ngx-spinner></ngx-spinner>
 <main>
 	<!-- Main page content-->
-	<section class="adminbox_shadow user_information">
-		<h2 class="headinginfo">My Bookings</h2>
+	<section class="adminbox_shadow user_information" id="ta_bookings_table">
+		<div class="row">
+			<div class="col-md-7" *ngIf="currentUser?.roleName == 'travel_agent'">
+				<h2 class="headinginfo" style="font-weight: 600 !important; font-size: 22px !important;">Super Travel
+					Agent Bookings
+					<!-- <span style="text-transform: capitalize; font-weight: 400;"
+						*ngIf="agency_name">({{agency_name}})</span> -->
+				</h2>
+
+			</div>
+			<div class="col-md-12" *ngIf="currentUser?.roleName == 'sub_travel_agent'">
+				<h2 class="headinginfo" style="font-weight: 600 !important; font-size: 22px !important;">Sub Travel
+					Agent Bookings
+					<span style="text-transform: capitalize; font-weight: 400;">
+						({{currentUser?.agency_name + ' / ' + currentUser?.name}})
+					</span>
+				</h2>
+			</div>
+			<div class="col-md-5 d-flex justify-content-end" style="gap: 10px;" *ngIf="invite_link">
+				<textarea id="clipboard-example-textarea" cols="30" rows="10" [(ngModel)]="invite_link"
+					hidden></textarea>
+				<button type="button" class="close x-copy-btn" style="float: left" [cdkCopyToClipboard]="invite_link"
+					(click)="copyInviteLink()">
+					<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
+						class="bi bi-check2" viewBox="0 0 16 16" *ngIf="showCopyIcon">
+						<path
+							d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z" />
+					</svg>
+					<i class="bi bi-clipboard2-check" data-bs-toggle="tooltip" *ngIf="!showCopyIcon"
+						data-bs-placement="top" title="Invite Individual agent"></i>
+
+					<!-- <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
+						class="bi bi-copy" viewBox="0 0 16 16" data-bs-toggle="tooltip" *ngIf="!showCopyIcon"
+						data-bs-placement="top" title="Invite Individual agent">
+						<path fill-rule="evenodd"
+							d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z" />
+					</svg> -->
+				</button>
+				<button class="custom-filled-button green-button invite-agent-button" data-target="#inviteAgentModal"
+					data-toggle="modal">
+					Invite Agent
+				</button>
+			</div>
+			<div class="col-md-7" *ngIf="currentUser?.roleName == 'travel_agent'">
+				<h2 class="headinginfo">
+					<span style="text-transform: capitalize; font-weight: 400; font-size: 19px;">
+						({{agency_name + ' / ' + currentUser?.name}})
+					</span>
+				</h2>
+			</div>
+			<div class="col-md-12" *ngIf="currentUser?.roleName == 'travel_agent'">
+				<h3 class="addveh_top d-md-flex mt-2 justify-content-between align-items-center mb-0">
+					<label class="alert alert-danger" style="padding :0.25rem 1.25rem; ">NOTE: To invite
+						agents, Click on Invite agent and then click on upload
+						file button and upload the spreadsheet!</label>
+					<!-- <label class="alert alert-danger my-2 mx-2">Choose nearest major city or airport
+						location</label> -->
+					<label></label>
+				</h3>
+			</div>
+		</div>
 		<div class="containeredd mt-1 ">
 			<div class="row my-2 align-items-center">
 				<!-- Start-Date -->
-				<div class="col-sm-4 col-md-4 my-2">
-					<mat-form-field appearance="outline" class="m-0 text-xl">
+				<div class="col-sm-4 col-md-4" style="margin-top: 0.4rem !important; margin: bottom 0.4rem !important;">
+					<mat-form-field appearance="outline" class="m-0" style="font-size:0.86rem !important;">
 						<mat-label>
 							Start Date <span class="asterisk"> * </span>
 						</mat-label>
@@ -20,8 +79,8 @@
 				</div>
 
 				<!-- End-Date -->
-				<div class="col-sm-4 col-md-4 my-2">
-					<mat-form-field appearance="outline" class="m-0 text-xl">
+				<div class="col-sm-4 col-md-4" style="margin-top: 0.4rem !important; margin: bottom 0.4rem !important;">
+					<mat-form-field appearance="outline" class="m-0 " style="font-size:0.86rem !important;">
 						<mat-label>
 							End Date <span class="asterisk"> * </span>
 						</mat-label>
@@ -44,7 +103,7 @@
 					</div>
 					<div class="col-sm-2">
 						<button class="custom-filled-back-button"
-							style="white-space: nowrap;color:#fff;padding: 5px 12px !important;"
+							style="white-space: nowrap;color:#fff;padding: 5px 12px !important;  background-color: #000 !important;"
 							(click)=" reset();loadBookings()">
 							Reset
 						</button>
@@ -55,16 +114,21 @@
 				<div class="col-md-12">
 					<div id="search-field-my-booking">
 						<mat-form-field appearance="outline" class="m-0">
-							<input matInput type="text" (keypress)="handleKeypressEvents()" (focus)="$event.target.select()"
-								(keyup)="searchInBookings($event.target.value)" [value]="searchText"
-								placeholder="Search" id="keyword" autofocus>
+							<input matInput type="text" (keypress)="handleKeypressEvents()"
+								(focus)="$event.target.select()" (keyup)="searchInBookings($event.target.value)"
+								[value]="searchText" placeholder="Search" id="keyword" autofocus>
 						</mat-form-field>
 					</div>
 				</div>
 			</div>
 			<div>
-				<p><mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">Uncheck this
-						box to view all bookings</mat-checkbox></p>
+				<p><mat-checkbox *ngIf="currentUser?.roleName == 'travel_agent'"
+						(change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">Uncheck this
+						box to view all bookings</mat-checkbox>
+					<mat-checkbox *ngIf="currentUser?.roleName == 'sub_travel_agent'"
+						(change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter"> Check this box to see
+						current week’s bookings or change the dates.</mat-checkbox>
+				</p>
 			</div>
 		</div>
 		<div class="containeredd driverside_table">
@@ -95,27 +159,26 @@
 										</a>
 										<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
 											aria-labelledby="navbarDropdownUserImage">
-											<a class="dropdown-item" (click)="editAction(booking?.booking_id,'edit')">
+											<a class="dropdown-item" (click)="editAction(booking?.booking_id,'edit')"
+												*ngIf="(booking?.booking_status != 'paid' && booking?.booking_status != 'paid_cash')">
 												<div class="dropdown-item-icon"></div>
 												Edit
 											</a>
 											<a class="dropdown-item" data-toggle="modal"
 												data-target="#return_repeat_booking_Modal"
-												[routerLink]="['/travel_agent/new-booking']"
-												[queryParams]="{bookingId: booking.booking_id, updateType: 'repeat'}">
-												<div class="dropdown-item-icon" *></div>
+												(click)="returnRepeatAction(booking?.booking_id,'repeat')">
+												<div class="dropdown-item-icon"></div>
 												Repeat
 											</a>
 											<a *ngIf="booking.service_type=='oneway'" class="dropdown-item"
 												data-toggle="modal" data-target="#return_repeat_booking_Modal"
-												[routerLink]="['/travel_agent/new-booking']"
-												[queryParams]="{bookingId: booking.booking_id, updateType: 'return'}">
+												(click)="returnRepeatAction(booking?.booking_id,'return')">
 												<div class="dropdown-item-icon"></div>
 												Return
 											</a>
 											<a class="dropdown-item" routerLink="/travel_agent/invoice-summary"
 												[queryParams]="{bookingId: booking?.booking_id}"
-												*ngIf="booking?.payment_status=='paid'">
+												*ngIf="(booking?.payment_status=='paid' || booking?.payment_status=='paid_cash')">
 												<div class="dropdown-item-icon"></div>
 												Invoice
 											</a>
@@ -156,7 +219,10 @@
 										data-toggle="modal" data-target="#previewBookingOnID"
 										(click)="showBookingPreviewModal(booking?.booking_id)">
 										<p class="booking-id-font font-weight-bolder cursor-pointer text-underline">
-											<span [innerHTML]="highlighText(booking?.booking_id )"></span>
+											<span [innerHTML]="highlighText(booking?.booking_id )"
+												style="font-weight: 600;"></span>
+											<span
+												style="text-decoration: none;">&nbsp;{{showAccountType(booking?.agent_type)}}</span>
 										</p>
 									</td>
 									<td class="text-center font-weight-bolder cursor-pointer">
@@ -189,17 +255,22 @@
 										</span>
 										<span class="loc-logo"
 											(click)="showLocationPointOnMap(booking.booking_id, 'pickup')">
-											&nbsp;&nbsp;&nbsp;<i class="bi bi-geo-alt-fill"
-												style="font-size:24px"></i></span>
+											&nbsp;&nbsp;&nbsp;<i class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
 									</td>
 									<td>
 										<p data-target="#sendEmailModal" data-toggle="modal"
 											(click)="openModal(booking, 'Driver')">
-											<span class="font-weight-bolder"
+											<span class="font-weight-bolder" *ngIf="!booking?.driver_name">1800Limo
+												Chauffeurs</span>
+
+
+											<span class="font-weight-bolder" *ngIf="booking?.driver_name"
 												[innerHTML]="highlighText(booking?.driver_name)"></span>&nbsp;
 											|
-											<span
-												[innerHTML]="highlighText(booking?.driver_cell_isd + booking?.driver_tel)"></span>
+											<span *ngIf="booking?.driver_cell_isd"
+												[innerHTML]="highlighText(booking?.driver_cell_isd + booking?.driver_cell_number)"></span>
+											<span *ngIf="booking?.loose_affiliate_phone"
+												[innerHTML]="highlighText(booking?.loose_affiliate_phone_isd + booking?.loose_affiliate_phone)"></span>
 										</p>
 
 										<span class="text-underline cursor-pointer">
@@ -207,8 +278,7 @@
 										</span>
 										<span class="loc-logo"
 											(click)="showLocationPointOnMap(booking.booking_id, 'dropoff')">
-											&nbsp;&nbsp;&nbsp;<i class="bi bi-geo-alt-fill"
-												style="font-size:24px"></i></span>
+											&nbsp;&nbsp;&nbsp;<i class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
 									</td>
 									<td>
 										<span [innerHTML]="highlighText(booking?.vehicle_cat_name)"></span>
@@ -712,50 +782,8 @@
 						</div>
 					</div>
 					<hr>
-					<div class="mx-2" *ngIf="bookingPreview?.meet_greet_choice_name">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Meet and Greet
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
-									{{ textFormatter(bookingPreview?.meet_greet_choice_name)| titlecase }}
-								</span>
-							</div>
-						</div>
-					</div>
-					<div class="mx-2">
-						<div class="row m-0" *ngIf="bookingPreview?.return_meet_greet_choice_name">
-							<div class="col-md-4 key">
-								<span>
-									Return Meet and Greet
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
-									{{ textFormatter(bookingPreview?.return_meet_greet_choice_name)| titlecase }}
-								</span>
-							</div>
-						</div>
-					</div>
-					<hr>
-					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Special Instruction
-								</span>
-							</div>
-							<div class="col-md-8 value box-special-instruction">
-								<span class="font-weight-bolder preview-output-feild" style="white-space: pre-wrap;">
-									{{ textFormatter(bookingPreview?.booking_instructions)| titlecase }}
-								</span>
-							</div>
-						</div>
-					</div>
-					<hr>
+
+
 					<!-- Travel Information -->
 					<!-- <h4 class="font-weight m-0 mt-3">
 						Travel Information
@@ -831,7 +859,7 @@
 									{{ textFormatter(bookingPreview.pickup) }}
 								</span>
 								<span (click)="showLocationPointOnMapByAddress(bookingPreview.pickup)"><i
-										class="bi bi-geo-alt-fill" style="font-size:24px"></i></span>
+										class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
 							</div>
 						</div>
 					</div>
@@ -850,7 +878,7 @@
 									{{ textFormatter(bookingPreview.pickup_airport_name) }}
 								</span>
 								<span (click)="showLocationPointOnMapByAddress(bookingPreview.pickup_airport_name)"><i
-										class="bi bi-geo-alt-fill" style="font-size:24px"></i></span>
+										class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
 							</div>
 						</div>
 						<!-- Airport -->
@@ -947,7 +975,7 @@
 										{{ stop.address }}
 									</span>
 									<span (click)="showLocationPointOnMapByAddress(stop.address)"><i
-											class="bi bi-geo-alt-fill" style="font-size:24px"></i></span>
+											class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
 								</div>
 							</div>
 						</div>
@@ -975,7 +1003,7 @@
 									{{ textFormatter(bookingPreview.dropoff) }}
 								</span>
 								<span (click)="showLocationPointOnMapByAddress(bookingPreview.dropoff)"><i
-										class="bi bi-geo-alt-fill" style="font-size:24px"></i></span>
+										class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
 							</div>
 						</div>
 					</div>
@@ -994,7 +1022,7 @@
 									{{ textFormatter(bookingPreview.dropoff_airport_name ) }}
 								</span>
 								<span (click)="showLocationPointOnMapByAddress(bookingPreview.dropoff_airport_name)"><i
-										class="bi bi-geo-alt-fill" style="font-size:24px"></i></span>
+										class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
 							</div>
 						</div>
 						<!-- Airport -->
@@ -1198,7 +1226,138 @@
 						</div>
 					</div> -->
 				</div>
+				<div class="mx-2" *ngIf="bookingPreview?.meet_greet_choice_name">
+					<div class="row m-0">
+						<div class="col-md-4 key">
+							<span>
+								Meet and Greet
+							</span>
+						</div>
+						<div class="col-md-8 value">
+							<span class="font-weight-bolder preview-output-feild">
+								{{ textFormatter(bookingPreview?.meet_greet_choice_name)| titlecase }}
+							</span>
+						</div>
+					</div>
+					<hr>
+				</div>
+				<div class="mx-2">
+					<div class="row m-0" *ngIf="bookingPreview?.return_meet_greet_choice_name">
+						<div class="col-md-4 key">
+							<span>
+								Return Meet and Greet
+							</span>
+						</div>
+						<div class="col-md-8 value">
+							<span class="font-weight-bolder preview-output-feild">
+								{{ textFormatter(bookingPreview?.return_meet_greet_choice_name)| titlecase }}
+							</span>
+						</div>
+						<hr>
+					</div>
 
+				</div>
+
+				<div class="mx-2">
+					<div class="row m-0">
+						<div class="col-md-4 key">
+							<span>
+								Special Instruction
+							</span>
+						</div>
+						<div class="col-md-8 value box-special-instruction">
+							<span class="font-weight-bolder preview-output-feild" style="white-space: pre-wrap;">
+								{{ textFormatter(bookingPreview?.booking_instructions)| titlecase }}
+							</span>
+						</div>
+					</div>
+					<hr>
+					<div class="distribution_rate"
+						*ngIf="bookingPreview?.affiliate_type === 'affiliate' && bookingPreview?.payment_status=='unpaid' ">
+						<h4 class="font-weight-bolder m-0 my-3">
+							Rates Distribution
+						</h4>
+
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key d-flex align-items-center">
+									<span class="">
+										Base Rate
+									</span>
+								</div>
+								<div class="col-md-8 value preview-airport-color">
+									<span class="font-weight-bolder preview-output-feild">
+										${{shareArray?.baseRate.toFixed(2)}}
+									</span>
+									(Fare Base Rate)
+								</div>
+							</div>
+						</div>
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key d-flex align-items-center">
+									<span class="">
+										Admin Share
+									</span>
+								</div>
+								<div class="col-md-8 value preview-airport-color">
+									<span class="font-weight-bolder preview-output-feild">
+										${{shareArray?.adminShare.toFixed(2) }}
+									</span>
+									({{adminSharePercent}}% of Base Rate)
+								</div>
+							</div>
+						</div>
+						<div class="mx-2" *ngIf="shareArray?.travelAgentShare">
+							<div class="row m-0">
+								<div class="col-md-4 key d-flex align-items-center">
+									<span class="">
+										Travel Agent Share
+									</span>
+								</div>
+								<div class="col-md-8 value preview-airport-color">
+									<span class="font-weight-bolder preview-output-feild">
+										${{shareArray?.travelAgentShare.toFixed(2)}}
+									</span>
+									(10% of base rate )
+								</div>
+							</div>
+						</div>
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key d-flex align-items-center">
+									<span class="">
+										Total Cost
+									</span>
+								</div>
+								<div class="col-md-8 value preview-airport-color">
+									<span class="font-weight-bolder preview-output-feild">
+										${{shareArray?.grandTotal ? shareArray?.grandTotal.toFixed(2) :
+										shareArray?.returnGrandTotal.toFixed(2)}}
+									</span>
+									(Actual Cost to Customer)
+								</div>
+							</div>
+						</div>
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key d-flex align-items-center">
+									<span class="">
+										Stripe fees
+									</span>
+								</div>
+								<div class="col-md-8 value preview-airport-color">
+									<span class="font-weight-bolder preview-output-feild">
+										${{shareArray?.stripeFee.toFixed(2)}}
+									</span>
+									(Platform fee 5% + 30 cents - <b>Paid from Admin share</b>)
+								</div>
+							</div>
+						</div>
+
+
+					</div>
+				</div>
 			</div>
 
 
@@ -1489,6 +1648,78 @@
 					Email</button>
 				<button type="button" class="custom-btn resetbutton" data-dismiss="modal">Close</button>
 			</div>
+		</div>
+	</div>
+</div>
+
+<!-- invite agent modal -->
+<div class="modal fade" tabindex="-1" id="inviteAgentModal" aria-labelledby="inviteAgentModal" aria-hidden="true">
+	<div class="modal-dialog invite-agent-modal-dialog modal-dialog-centered">
+		<div class="modal-content" style="padding: 0px;">
+			<div class="p-2 justify-content-end">
+
+				<button type="button" class="close x-circle-btn" data-dismiss="modal" aria-label="Close"
+					(click)="closeInviteModal()">
+					<span aria-hidden="true" class="bi bi-x-circle"></span>
+				</button>
+			</div>
+
+			<div class="invite-agent-modal-header d-flex flex-column align-items-center justify-content-center mb-1">
+				<h4 style="font-size:20px;">Invite agents under your company name!</h4>
+				<h4 style="font-size:17px; color: red;">Note: File must contain emails with column header 'Email'
+				</h4>
+			</div>
+
+			<form [formGroup]="inviteAgentForm" enctype="multipart/form-data" style="margin-top: -15px;">
+				<div class="form-group">
+					<div class="col-md-12 d-flex justify-content-center mt-3">
+						<button class="uploadExcelFile" tabIndex="1" *ngIf="!emailFileName; else noEmailFile">
+							<input type="file" (change)="inviteEmailFileChange($event)" tabIndex="-1" multiple="false"
+								accept=".xlsx , .xls , .csv" name="xlx_file">
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+								<path fill="none" d="M0 0h24v24H0V0z" />
+								<circle cx="12" cy="12" r="3" />
+								<path
+									d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+							</svg>
+							Upload file
+						</button>
+						<ng-template #noEmailFile>
+							<h4 style="color:blue ;font-size:20px;">File uploaded: {{emailFileName}}</h4>
+						</ng-template>
+					</div>
+					<div class="col-md-12 d-flex justify-content-center mt-3" *ngIf="!emailFileName">
+						<h4>
+							OR
+						</h4>
+					</div>
+					<div class="col-md-12" style="margin-top:-18px;" *ngIf="!emailFileName">
+						<mat-form-field appearance="outline">
+							<mat-label>Enter indiviudal agent's email <span class="asterisk">*</span></mat-label>
+							<input matInput type="text" formControlName="email_address" style="font-weight: 500;">
+						</mat-form-field>
+						<div *ngIf="(submittedForm && f.email_address.errors) ||(f.email_address.touched && f.email_address.errors)"
+							class="text-danger margin-bottom-thin my-mat-hint">
+							<div *ngIf="f.email_address.errors.required">
+								This field is required
+							</div>
+						</div>
+						<div *ngIf="f.email_address.errors" class="text-danger margin-bottom-thin my-mat-hint">
+							<div *ngIf="f.email_address.errors.pattern">
+								Email format should be valid
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="modal-footer justify-content-center">
+					<button type="submit" class="custom-filled-button" (click)="sendInvite()"
+						style="font-size: 1.10rem; font-weight:700; text-transform: uppercase;">
+						Submit
+					</button>
+				</div>
+			</form>
+
 		</div>
 	</div>
 </div>

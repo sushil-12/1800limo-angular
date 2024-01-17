@@ -10,6 +10,7 @@ import { throwError, from, Subscription } from "rxjs";
 import { CustomvalidationService } from "../../../services/customvalidation.service";
 import { HttpClient } from "@angular/common/http";
 import { AdminService } from "src/app/services/admin.service";
+import { CommonService } from "src/app/services/common.service";
 declare var $: any;
 
 @Component({
@@ -96,6 +97,7 @@ export class Step1Component implements OnInit, AfterViewInit
 		private router: Router,
 		private spinner: NgxSpinnerService,
 		private formBuilder: FormBuilder,
+		private commonServices: CommonService,
 		private customValidator: CustomvalidationService
 	) { }
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
@@ -159,7 +161,7 @@ export class Step1Component implements OnInit, AfterViewInit
 				"",
 				[
 					Validators.required,
-					Validators.pattern("^[a-zA-Z0-9.]+@[a-z0-9.-]+\\.[a-z]{2,4}$"),
+					Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i),
 				],
 			],
 			FirstYearBusiness: ["2022", [Validators.required]],
@@ -181,7 +183,7 @@ export class Step1Component implements OnInit, AfterViewInit
 				"",
 				[
 					Validators.pattern(
-						"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,4}$"
+						/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i
 					),
 				],
 			],
@@ -1161,8 +1163,11 @@ export class Step1Component implements OnInit, AfterViewInit
 		}, 5000);
 	}
 
-	businessCardImageChange(event, imageType, imageId = null)
+	async businessCardImageChange(event, imageType, imageId = null)
 	{
+		if(!await this.commonServices.handleFile(event)) {
+			return;
+		}
 		this.stateManagementService.setprogressBar(true); //show progressBar
 		const reader = new FileReader();
 		if (event.target.files && event.target.files.length)
@@ -1361,8 +1366,11 @@ export class Step1Component implements OnInit, AfterViewInit
 		};
 	}
 
-	businessCardImageChange1(imageUrl, imageType, imageId = null)
+	async businessCardImageChange1(imageUrl, imageType, imageId = null)
 	{
+		if(!await this.commonServices.handleFile(event)) {
+			return;
+		}
 		this.stateManagementService.setprogressBar(true); //show progressBar
 				this.imageSrc = imageUrl;
 				this.affiliateService
@@ -1477,7 +1485,7 @@ export class Step1Component implements OnInit, AfterViewInit
 				"",
 				[
 					Validators.required,
-					Validators.pattern("^[a-zA-Z0-9.]+@[a-z0-9.-]+\\.[a-z]{2,4}$"),
+					Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i),
 				],
 			],
 			FirstYearBusiness: ["", [Validators.required]],
@@ -1500,7 +1508,7 @@ export class Step1Component implements OnInit, AfterViewInit
 				"",
 				[
 					Validators.pattern(
-						"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,4}$"
+						/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i
 					),
 				],
 			],

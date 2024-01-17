@@ -100,7 +100,7 @@
 			</div>
 
 			<!-- Admin Share -->
-			<div class="col-3" *ngIf="sub_item.key === 'Base_Rate'">
+			<!-- <div class="col-3" *ngIf="sub_item.key === 'Base_Rate'">
 				<div>
 					<mat-form-field appearance="outline" class="m-0">
 						<mat-label>
@@ -123,7 +123,7 @@
 							readonly />
 					</mat-form-field>
 				</div>
-			</div>
+			</div> -->
 			<!-- Flat | Percent -->
 			<div class="col-2" *ngIf="item.key === 'taxes' || item.key == 'others'">
 				<!-- Matslide Toggle -->
@@ -155,7 +155,7 @@
 	</div>
 	<hr style="border-top: 2.5px solid #000000; " />
 
-	<div class="row px-2 justify-content-between align-items-center">
+	<div class="row px-2 justify-content-between align-items-center flex-nowrap">
 		<div class="col-md-6">
 			<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
 				Sub Total
@@ -167,7 +167,7 @@
 		</div>
 	</div>
 	<!-- Number of Vehicles/Hours -->
-	<div class="row px-2 justify-content-between align-items-center" *ngIf="vehicles !== 0">
+	<div class="row px-2 justify-content-between align-items-center flex-nowrap" *ngIf="vehicles !== 0">
 		<div class="col-md-6 col-xl-7">
 			<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
 				Number of Vehicles
@@ -180,7 +180,7 @@
 	</div>
 
 	<!-- Total -->
-	<div class="row px-2 justify-content-between align-items-center">
+	<div class="row px-2 justify-content-between align-items-center flex-nowrap">
 		<div class="col-md-6 col-xl-7">
 			<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
 				Grand Total
@@ -189,6 +189,40 @@
 		<div class="col-md-4 col-xl-5 text-3xl text-right">
 			<i class="bi bi-currency-dollar" style="color: #dc3545!important;"></i>
 			{{ grandtotal.toFixed(2) }}
+		</div>
+	</div>
+	<div class="row px-2 justify-content-between align-items-center flex-nowrap">
+		<div class="col-md-6">
+			<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
+				Admin Share
+			</p>
+		</div>
+		<div class="col-md-4 text-3xl text-right">
+			<i class="bi bi-currency-dollar" style="color: #dc3545!important;"></i>
+			{{ calc_admin_share.toFixed(2) }}
+		</div>
+	</div>
+	<div class="row px-2 justify-content-between align-items-center flex-nowrap"
+		*ngIf="isTravelShare && !isCreatedByAdmin">
+		<div class="col-md-6">
+			<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
+				Travel Agent Share
+			</p>
+		</div>
+		<div class="col-md-4 text-3xl text-right">
+			<i class="bi bi-currency-dollar" style="color: #dc3545!important;"></i>
+			{{ travel_agent_share.toFixed(2) }}
+		</div>
+	</div>
+	<div class="row px-2 justify-content-between align-items-center flex-nowrap" *ngIf="isFarmoutBooking">
+		<div class="col-md-6">
+			<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
+				Farmout Share
+			</p>
+		</div>
+		<div class="col-md-4 text-3xl text-right">
+			<i class="bi bi-currency-dollar" style="color: #dc3545!important;"></i>
+			{{ farmoutShare.toFixed(2) }}
 		</div>
 	</div>
 </div>
@@ -277,7 +311,7 @@
 			</div>
 
 			<!-- Admin Share -->
-			<div class="col-3" *ngIf="sub_item.key === 'Base_Rate'">
+			<!-- <div class="col-3" *ngIf="sub_item.key === 'Base_Rate'">
 				<div>
 					<mat-form-field appearance="outline" class="m-0">
 						<mat-label>
@@ -300,7 +334,7 @@
 							readonly />
 					</mat-form-field>
 				</div>
-			</div>
+			</div> -->
 
 			<!-- Distance Value -->
 			<div class="col-auto" *ngIf="sub_item.key === 'Kilometer_Rate' || sub_item.key === 'Milage_Rate'">
@@ -346,7 +380,7 @@
 
 	<hr style="border-top: 2.5px solid #000000; " />
 
-	<div class="row px-2 justify-content-between align-items-center">
+	<div class="row px-2 justify-content-between align-items-center flex-nowrap">
 		<div class="col-md-6">
 			<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
 				Sub Total
@@ -358,7 +392,7 @@
 		</div>
 	</div>
 	<!-- Number of Vehicles/Hours -->
-	<div class="row px-2 justify-content-between align-items-center" *ngIf="vehicles !== 0">
+	<div class="row px-2 justify-content-between align-items-center flex-nowrap" *ngIf="vehicles !== 0">
 		<div class="col-md-6 col-xl-7">
 			<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
 				Number of Vehicles
@@ -371,7 +405,7 @@
 	</div>
 
 	<!-- Total -->
-	<div class="row px-2 justify-content-between align-items-center">
+	<div class="row px-2 justify-content-between align-items-center flex-nowrap">
 		<div class="col-md-6 col-xl-7">
 			<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
 				Grand Total
@@ -380,6 +414,40 @@
 		<div class="col-md-4 col-xl-5 text-3xl text-right">
 			<i class="bi bi-currency-dollar" style="color: #dc3545!important;"></i>
 			{{ r_grandtotal.toFixed(2) }}
+		</div>
+	</div>
+	<div class="row px-2 justify-content-between align-items-center flex-nowrap">
+		<div class="col-md-6">
+			<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
+				Admin Share
+			</p>
+		</div>
+		<div class="col-md-4 text-3xl text-right">
+			<i class="bi bi-currency-dollar" style="color: #dc3545!important;"></i>
+			{{ r_calc_admin_share.toFixed(2) }}
+		</div>
+	</div>
+	<div class="row px-2 justify-content-between align-items-center flex-nowrap"
+		*ngIf="isTravelShare && !isCreatedByAdmin">
+		<div class="col-md-6">
+			<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
+				Travel Agent Share
+			</p>
+		</div>
+		<div class="col-md-4 text-3xl text-right">
+			<i class="bi bi-currency-dollar" style="color: #dc3545!important;"></i>
+			{{ r_travel_agent_share.toFixed(2) }}
+		</div>
+	</div>
+	<div class="row px-2 justify-content-between align-items-center flex-nowrap" *ngIf="isFarmoutBooking">
+		<div class="col-md-6">
+			<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
+				Farmout Share
+			</p>
+		</div>
+		<div class="col-md-4 text-3xl text-right">
+			<i class="bi bi-currency-dollar" style="color: #dc3545!important;"></i>
+			{{ r_farmoutShare.toFixed(2) }}
 		</div>
 	</div>
 </div>

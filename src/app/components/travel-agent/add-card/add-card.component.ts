@@ -25,6 +25,7 @@ export class AddCardComponent implements OnInit
 	public accountId: string;
 	public accountType: string;
 	public yearOptions: any = [];
+	currentUser:any;
 
 
 	constructor(
@@ -41,6 +42,8 @@ export class AddCardComponent implements OnInit
 
 	ngOnInit(): void
 	{
+		this.currentUser = JSON.parse(localStorage.getItem('currentUser'))
+
 		this.activatedroute.queryParamMap
 			.subscribe((params) =>
 			{
@@ -135,7 +138,7 @@ export class AddCardComponent implements OnInit
 				this.spinner.hide();
 				this.disableSubmitButton = false; //enable submit button
 
-				this.router.navigate(['/travel_agent/debit-cc-card']);
+				this.router.navigate([`${this.currentUser?.roleName}/debit-cc-card`]);
 			});
 	}
 

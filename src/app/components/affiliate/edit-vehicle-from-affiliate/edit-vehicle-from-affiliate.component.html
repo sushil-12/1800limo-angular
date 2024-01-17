@@ -47,7 +47,9 @@
 					</mat-form-field> -->
 					<ng-select appearance="outline" [items]="filteredVehicleTypes" dropdownPosition="bottom"
 						[markFirst]="true" [virtualScroll]="true" bindLabel="name" bindValue="ID"
-						placeholder="Vehicle Type" formControlName="vehicleType" id="vehicleTypeField">
+						placeholder="Vehicle Type" formControlName="vehicleType" id="vehicleTypeField"
+						(change)="handleChangeVehicleType($event)"
+						[ngClass]="{ 'border-red': (errorMsg && f.vehicleType.errors) || (submittedForm && f.vehicleType.errors) || !isVehicleTypeSelected }">
 						<ng-template ng-label-tmp let-item="item">
 							<span style="font-weight: 500;">{{ item.name }}</span>
 						</ng-template>
@@ -55,9 +57,9 @@
 					<div *ngIf="
 							(errorMsg && f.vehicleType.errors) ||
 							(submittedForm && f.vehicleType.errors)
-						" class="text-danger margin-bottom-thin my-mat-hint">
+						" class="text-danger margin-bottom-thin my-mat-hint" style="margin-bottom: 10px;">
 						<div *ngIf="f.vehicleType.errors.required">
-							The Vehicle Type is required
+							Please choose the correct vehicle type!
 						</div>
 					</div>
 				</div>
@@ -105,7 +107,7 @@
 					<div *ngIf="
 							(errorMsg1 && f.make.errors) ||
 							(submittedForm && f.make.errors)
-						" class="text-danger margin-bottom-thin my-mat-hint">
+						" class="text-danger margin-bottom-thin my-mat-hint" style="margin-top: -20px; margin-bottom: 20px;">
 						<div *ngIf="f.make.errors.required">
 							The Make and Model is required
 						</div>
@@ -153,7 +155,7 @@
 					<div *ngIf="
 							(errorMsg2 && f.model.errors) ||
 							(submittedForm && f.model.errors)
-						" class="text-danger margin-bottom-thin my-mat-hint">
+						" class="text-danger margin-bottom-thin my-mat-hint" style="margin-top: -20px; margin-bottom: 20px;">
 						<div *ngIf="f.model.errors.required">
 							The Make and Model is required
 						</div>
@@ -231,7 +233,7 @@
 					<div *ngIf="
 							(errorMsg3 && f?.year?.errors) ||
 							(submittedForm && f?.year?.errors)
-						" class="text-danger margin-bottom-thin my-mat-hint">
+						" class="text-danger margin-bottom-thin my-mat-hint" style="margin-top: -20px; margin-bottom: 3px;">
 						<div *ngIf="f?.year?.errors?.required">
 							The Year is required
 						</div>
@@ -509,7 +511,7 @@
 				<div class="col-md-4">
 					<div class="input-checkbox">
 						<div class="checkbox" [ngClass]="
-								service.includes('over_the_road')
+								service.includes('over_the_road') || service.includes('longDistance')
 									? 'active'
 									: ''
 							" (click)="onServiceChange('over_the_road')">
@@ -748,7 +750,7 @@
 													vehicleImageId1,
 													'1'
 												)
-											" tabindex="-1" />
+											" tabindex="-1" accept="image/jpeg, image/png" />
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 											<path fill="none" d="M0 0h24v24H0V0z" />
 											<circle cx="12" cy="12" r="3" />
@@ -780,7 +782,7 @@
 													vehicleImageId2,
 													'2'
 												)
-											" tabindex="-1" />
+											" tabindex="-1" accept="image/jpeg, image/png" />
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 											<path fill="none" d="M0 0h24v24H0V0z" />
 											<circle cx="12" cy="12" r="3" />
@@ -823,7 +825,7 @@
 														vehicleImageId2,
 														'2'
 													)
-												" tabindex="-1" />
+												" tabindex="-1" accept="image/jpeg, image/png" />
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -856,7 +858,7 @@
 													vehicleImageId3,
 													'3'
 												)
-											" tabindex="-1" />
+											" tabindex="-1" accept="image/jpeg, image/png" />
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 											<path fill="none" d="M0 0h24v24H0V0z" />
 											<circle cx="12" cy="12" r="3" />
@@ -899,7 +901,7 @@
 														vehicleImageId3,
 														'3'
 													)
-												" tabindex="-1" />
+												" tabindex="-1" accept="image/jpeg, image/png" />
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -932,7 +934,7 @@
 													vehicleImageId4,
 													'4'
 												)
-											" tabindex="-1" />
+											" tabindex="-1" accept="image/jpeg, image/png" />
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 											<path fill="none" d="M0 0h24v24H0V0z" />
 											<circle cx="12" cy="12" r="3" />
@@ -975,7 +977,7 @@
 														vehicleImageId4,
 														'4'
 													)
-												" tabindex="-1" />
+												" tabindex="-1" accept="image/jpeg, image/png" />
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -1008,7 +1010,7 @@
 													vehicleImageId5,
 													'5'
 												)
-											" tabindex="-1" />
+											" tabindex="-1" accept="image/jpeg, image/png" />
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 											<path fill="none" d="M0 0h24v24H0V0z" />
 											<circle cx="12" cy="12" r="3" />
@@ -1051,7 +1053,7 @@
 														vehicleImageId5,
 														'5'
 													)
-												" tabindex="-1" />
+												" tabindex="-1" accept="image/jpeg, image/png" />
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -1084,7 +1086,7 @@
 													vehicleImageId6,
 													'6'
 												)
-											" tabindex="-1" />
+											" tabindex="-1" accept="image/jpeg, image/png" />
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 											<path fill="none" d="M0 0h24v24H0V0z" />
 											<circle cx="12" cy="12" r="3" />
@@ -1127,7 +1129,7 @@
 														vehicleImageId6,
 														'6'
 													)
-												" tabindex="-1" />
+												" tabindex="-1" accept="image/jpeg, image/png" />
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -1160,7 +1162,7 @@
 													vehicleImageId7,
 													'7'
 												)
-											" tabindex="-1" />
+											" tabindex="-1" accept="image/jpeg, image/png" />
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 											<path fill="none" d="M0 0h24v24H0V0z" />
 											<circle cx="12" cy="12" r="3" />
@@ -1203,7 +1205,7 @@
 														vehicleImageId7,
 														'7'
 													)
-												" tabindex="-1" />
+												" tabindex="-1" accept="image/jpeg, image/png" />
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -1236,7 +1238,7 @@
 													vehicleImageId8,
 													'8'
 												)
-											" tabindex="-1" />
+											" tabindex="-1" accept="image/jpeg, image/png" />
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 											<path fill="none" d="M0 0h24v24H0V0z" />
 											<circle cx="12" cy="12" r="3" />
@@ -1279,7 +1281,7 @@
 														vehicleImageId8,
 														'8'
 													)
-												" tabindex="-1" />
+												" tabindex="-1" accept="image/jpeg, image/png" />
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -1312,7 +1314,7 @@
 													vehicleImageId9,
 													'9'
 												)
-											" tabindex="-1" />
+											" tabindex="-1" accept="image/jpeg, image/png" />
 										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 											<path fill="none" d="M0 0h24v24H0V0z" />
 											<circle cx="12" cy="12" r="3" />
@@ -1355,7 +1357,7 @@
 														vehicleImageId9,
 														'9'
 													)
-												" tabindex="-1" />
+												" tabindex="-1" accept="image/jpeg, image/png" />
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -1378,7 +1380,8 @@
 						<div class="vehtype_extint">
 							<div>
 								<p>
-									Rear Plate <span class="asterisk">* </span>
+									Rear vehicle license plate
+									<!-- <span class="asterisk">* </span> -->
 									<span class="optionalTextStyle">(w/exp decal)
 									</span>
 								</p>
@@ -1398,7 +1401,7 @@
 														'rearPlate',
 														rearPlateId
 													)
-												" tabindex="-1" />
+												" tabindex="-1" accept="image/jpeg, image/png" />
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -1429,7 +1432,7 @@
 						<div *ngIf="submittedForm && f.rearPlateImage.errors"
 							class="text-danger margin-bottom-thin my-mat-hint">
 							<div *ngIf="f.rearPlateImage.errors.required">
-								The Rear Plate Image is required
+								The Rear vehicle license plate is required
 							</div>
 						</div>
 					</div>
@@ -1438,8 +1441,8 @@
 							<div class="vehtype_extint">
 								<div>
 									<p>
-										Rear Plate Image
-										<span class="asterisk">*</span>
+										Rear vehicle license plate
+										<!-- <span class="asterisk">*</span> -->
 									</p>
 									<div class="emptyImage">
 										<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
@@ -1453,7 +1456,7 @@
 															'rearPlate',
 															rearPlateId
 														)
-													" tabindex="-1" />
+													" tabindex="-1" accept="image/jpeg, image/png" />
 												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 													<path fill="none" d="M0 0h24v24H0V0z" />
 													<circle cx="12" cy="12" r="3" />
@@ -1493,7 +1496,7 @@
 														'windowPermit',
 														windowPermitId
 													)
-												" tabindex="-1" />
+												" tabindex="-1" accept="image/jpeg, image/png" />
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -1540,7 +1543,7 @@
 															'windowPermit',
 															windowPermitId
 														)
-													" tabindex="-1" />
+													" tabindex="-1" accept="image/jpeg, image/png" />
 												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 													<path fill="none" d="M0 0h24v24H0V0z" />
 													<circle cx="12" cy="12" r="3" />
@@ -1586,7 +1589,7 @@
 														'windowPermit2',
 														windowPermit2Id
 													)
-												" tabindex="-1" />
+												" tabindex="-1" accept="image/jpeg, image/png" />
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -1640,7 +1643,7 @@
 															'windowPermit2',
 															windowPermit2Id
 														)
-													" tabindex="-1" />
+													" tabindex="-1" accept="image/jpeg, image/png" />
 												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 													<path fill="none" d="M0 0h24v24H0V0z" />
 													<circle cx="12" cy="12" r="3" />
@@ -1687,7 +1690,7 @@
 														'usdotPermit',
 														usdotPermitId
 													)
-												" tabindex="-1" />
+												" tabindex="-1" accept="image/jpeg, image/png" />
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -1741,7 +1744,7 @@
 															'usdotPermit',
 															usdotPermitId
 														)
-													" tabindex="-1" />
+													" tabindex="-1" accept="image/jpeg, image/png" />
 												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 													<path fill="none" d="M0 0h24v24H0V0z" />
 													<circle cx="12" cy="12" r="3" />
@@ -1785,7 +1788,7 @@
 														'mc',
 														mcId
 													)
-												" tabindex="-1" />
+												" tabindex="-1" accept="image/jpeg, image/png" />
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -1834,7 +1837,7 @@
 															'mc',
 															mcId
 														)
-													" tabindex="-1" />
+													" tabindex="-1" accept="image/jpeg, image/png" />
 												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 													<path fill="none" d="M0 0h24v24H0V0z" />
 													<circle cx="12" cy="12" r="3" />

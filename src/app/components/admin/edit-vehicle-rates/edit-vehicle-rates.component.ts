@@ -204,6 +204,9 @@ export class EditVehicleRatesComponent implements OnInit {
 							booster_seat: this.response.data.booster_seat,
 							bike_rack: this.response.data.bike_rack,
 							per_diem: this.response.data.per_diem,
+							early_late_charges: this.response.data.early_late_charges,
+							friday_saturday_charges: this.response.data.friday_saturday_charges,
+							holiday_charges: this.response.data.holiday_charges,
 							in_town_extra_stop : this.response.data?.in_town_extra_stop,
 							outside_town_extra_stop : this.response.data?.outside_town_extra_stop
 						});
@@ -257,7 +260,10 @@ export class EditVehicleRatesComponent implements OnInit {
 			state_tax: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
 			vat: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
 			workmans_comp: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
-			other_transportation_tax: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]]
+			other_transportation_tax: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
+			early_late_charges:[0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
+			holiday_charges:[0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
+			friday_saturday_charges:[0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 		});
 		this.initRateRangeObject();
 		this.km_mile_switch('mile')

@@ -38,6 +38,9 @@ import { TravelAgentStepsTemplateComponent } from './travel-agent-steps-template
 import { RatesFormTaComponent } from './rates-form-ta/rates-form-ta.component';
 import { TravelClientAccountsComponent } from './travel-client-accounts/travel-client-accounts.component';
 import { AddClientAccountComponent } from './add-client-account/add-client-account.component';
+import { ClipboardModule } from '@angular/cdk/clipboard';
+import { SubAgentAccountsComponent } from './sub-agent-accounts/sub-agent-accounts.component';
+import { SubAgentAccountDetailsComponent } from './sub-agent-account-details/sub-agent-account-details.component';
 
 
 @NgModule({
@@ -55,7 +58,9 @@ import { AddClientAccountComponent } from './add-client-account/add-client-accou
 		TravelAgentStepsTemplateComponent,
 		RatesFormTaComponent,
 		TravelClientAccountsComponent,
-		AddClientAccountComponent],
+		AddClientAccountComponent,
+		SubAgentAccountsComponent,
+		SubAgentAccountDetailsComponent],
 	imports: [
 		CommonModule,
 		TravelAgentRoutingModule,
@@ -81,7 +86,8 @@ import { AddClientAccountComponent } from './add-client-account/add-client-accou
 		MatTabsModule,
 		MatTableModule,
 		MatExpansionModule,
-		MatIconModule
+		MatIconModule,
+		ClipboardModule
 	]
 })
 export class TravelAgentModule { }

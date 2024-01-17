@@ -191,7 +191,7 @@ export class HomeComponent implements OnInit {
 		//Get In Touch Form
 		this.getInTouchForm = this.formBuilder.group({
 			getInTouchName: ['', Validators.required],
-			getInTouchEmail: ['', [Validators.required, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
+			getInTouchEmail: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)]],
 			getInTouchMessage: ['', Validators.required]
 		});
 
@@ -566,34 +566,34 @@ export class HomeComponent implements OnInit {
 				pickup_time: previous_quotebot.pickup_time ? this.validateTimeHHMMSS(previous_quotebot.pickup_time) : "12:00:00",
 				pickup_airport: previous_quotebot?.pickup_airport,
 				pickup_airport_name: previous_quotebot?.other_details?.pickup_airport_name,
-				pickup_airport_lat: previous_quotebot?.pickup_airport_lat,
-				pickup_airport_long: previous_quotebot?.pickup_airport_long,
+				pickup_airport_lat: Number(previous_quotebot?.pickup_airport_lat),
+				pickup_airport_long: Number(previous_quotebot?.pickup_airport_long),
 				pickup_address: previous_quotebot?.pickup_address,
-				pickup_address_lat: previous_quotebot?.pickup_address_lat,
-				pickup_address_long: previous_quotebot?.pickup_address_long,
+				pickup_address_lat: Number(previous_quotebot?.pickup_address_lat),
+				pickup_address_long: Number(previous_quotebot?.pickup_address_long),
 				dropoff_airport: previous_quotebot?.dropoff_airport,
 				dropoff_airport_name: previous_quotebot?.other_details?.dropoff_airport_name,
-				dropoff_airport_lat: previous_quotebot?.dropoff_airport_lat,
-				dropoff_airport_long: previous_quotebot?.dropoff_airport_long,
+				dropoff_airport_lat: Number(previous_quotebot?.dropoff_airport_lat),
+				dropoff_airport_long: Number(previous_quotebot?.dropoff_airport_long),
 				dropoff_address: previous_quotebot?.dropoff_address,
-				dropoff_address_lat: previous_quotebot?.dropoff_address_lat,
-				dropoff_address_long: previous_quotebot?.dropoff_address_long,
+				dropoff_address_lat: Number(previous_quotebot?.dropoff_address_lat),
+				dropoff_address_long: Number(previous_quotebot?.dropoff_address_long),
 				return_pickup_date: this.returnValidDate(previous_quotebot?.return_pickup_date),
 				return_pickup_time: previous_quotebot?.return_pickup_time ?? '12:00:00',
 				return_pickup_airport: previous_quotebot?.return_pickup_airport,
 				return_pickup_airport_name: previous_quotebot?.other_details?.return_pickup_airport_name,
-				return_pickup_airport_lat: previous_quotebot?.return_pickup_airport_lat,
-				return_pickup_airport_long: previous_quotebot?.return_pickup_airport_long,
+				return_pickup_airport_lat: Number(previous_quotebot?.return_pickup_airport_lat),
+				return_pickup_airport_long: Number(previous_quotebot?.return_pickup_airport_long),
 				return_pickup_address: previous_quotebot?.return_pickup_address ?? previous_quotebot?.dropoff_address,
-				return_pickup_address_lat: previous_quotebot?.return_pickup_address_lat,
-				return_pickup_address_long: previous_quotebot?.return_pickup_address_long,
+				return_pickup_address_lat: Number(previous_quotebot?.return_pickup_address_lat),
+				return_pickup_address_long: Number(previous_quotebot?.return_pickup_address_long),
 				return_dropoff_airport: previous_quotebot?.return_dropoff_airport,
 				return_dropoff_airport_name: previous_quotebot?.other_details?.return_dropoff_airport_name,
-				return_dropoff_airport_lat: previous_quotebot?.return_dropoff_airport_lat,
-				return_dropoff_airport_long: previous_quotebot?.return_dropoff_airport_long,
+				return_dropoff_airport_lat: Number(previous_quotebot?.return_dropoff_airport_lat),
+				return_dropoff_airport_long: Number(previous_quotebot?.return_dropoff_airport_long),
 				return_dropoff_address: previous_quotebot?.return_dropoff_address ?? previous_quotebot?.pickup_address,
-				return_dropoff_address_lat: previous_quotebot?.return_dropoff_address_lat,
-				return_dropoff_address_long: previous_quotebot?.return_dropoff_address_long,
+				return_dropoff_address_lat: Number(previous_quotebot?.return_dropoff_address_lat),
+				return_dropoff_address_long: Number(previous_quotebot?.return_dropoff_address_long),
 				no_of_passenger: previous_quotebot?.no_of_passenger || 1,
 				no_of_luggage: previous_quotebot?.no_of_luggage || 1,
 				location_info: previous_quotebot?.location_info
@@ -1022,12 +1022,15 @@ export class HomeComponent implements OnInit {
 				console.log('clear validator for 2')
 				this.clearValidatorsAndReset(['dropoff_address', 'dropoff_address_lat', 'dropoff_address_long'])
 				this.addRequiredValidators(['dropoff_airport', 'dropoff_airport_lat', 'dropoff_airport_long'])
-
 			}
 			if (this.QBForm.pickup_type.value != 'airport') {
 				console.log('clear validator for 3')
 				this.clearValidatorsAndReset(['pickup_airport', 'pickup_airport_lat', 'pickup_airport_long'])
 				this.addRequiredValidators(['pickup_address', 'pickup_address_lat', 'pickup_address_long'])
+			}
+			if (this.QBForm.dropoff_type.value == 'city') {
+				console.log('clear validator for 4')
+				this.clearValidatorsAndReset(['dropoff_airport', 'dropoff_airport_lat', 'dropoff_airport_long'])
 			}
 			// else {
 			// 	this.clearValidatorsAndReset(['dropoff_airport', 'dropoff_airport_lat', 'dropoff_airport_long'])
@@ -1055,7 +1058,7 @@ export class HomeComponent implements OnInit {
 		this.submitted = true
 		this.ValidateForm(this.quoteBotForm)
 
-		console.log('checking form valid', this.quoteBotForm.valid, this.QBForm.location_info.valid);
+		console.log('checking form valid', this.quoteBotForm.valid, this.quoteBotForm,this.QBForm.location_info.valid);
 
 		// enter only if values excluding location_info presents invalid status
 		if (!this.quoteBotForm.valid && !this.QBForm.location_info.valid) {

@@ -16,6 +16,7 @@ import { throwError } from "rxjs";
 import { formatDate } from "@angular/common";
 import { CustomvalidationService } from "../../../services/customvalidation.service";
 import { AdminService } from "src/app/services/admin.service";
+import { CommonService } from "src/app/services/common.service";
 declare var $: any;
 
 @Component({
@@ -52,6 +53,7 @@ export class Step3Component implements OnInit, AfterViewInit
 		private spinner: NgxSpinnerService,
 		private stateManagementService: StateManagementService,
 		private formBuilder: FormBuilder,
+		private commonServices: CommonService,
 		private customValidator: CustomvalidationService
 	) { }
 
@@ -111,7 +113,7 @@ export class Step3Component implements OnInit, AfterViewInit
 			policyExpiredMonth: ['', Validators.required],
 			policyExpiredYear: ['', Validators.required],
 			insuranceLimits: ['500000', Validators.required],
-			AgentEmail: ['', [Validators.pattern("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")]],
+			AgentEmail: ['', [Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)]],
 			insCertificate: ['', Validators.required],
 			insuranceCard: ['', Validators.required],
 		});
@@ -277,8 +279,11 @@ export class Step3Component implements OnInit, AfterViewInit
 	}
 
 
-	vehicleOfficialImagesChange1(imageUrl, imageType, imageId)
+	async vehicleOfficialImagesChange1(imageUrl, imageType, imageId)
 	{
+		if(!await this.commonServices.handleFile(event)) {
+			return;
+		}
 		this.stateManagementService.setprogressBar(true);
 		
 				this.imageSrc = imageUrl;
@@ -319,8 +324,11 @@ export class Step3Component implements OnInit, AfterViewInit
 					});
 	}
 
-	vehicleOfficialImagesChange(event, imageType, imageId)
+	async vehicleOfficialImagesChange(event, imageType, imageId)
 	{
+		if(!await this.commonServices.handleFile(event)) {
+			return;
+		}
 		this.stateManagementService.setprogressBar(true);
 		const reader = new FileReader();
 		if (event.target.files && event.target.files.length)

@@ -80,6 +80,14 @@
 							<div *ngIf="fGetInTouch.email.errors.pattern">Email must be a valid email address</div>
 						</div>
 						<div class="form-group">
+							<input type="text" id="contactPhone" class="form-control"
+								placeholder="Enter Your Mobile Number" formControlName="phone">
+						</div>
+						<div *ngIf="submitted && fGetInTouch.phone.errors" class="text-danger">
+							<div *ngIf="fGetInTouch.phone.errors.required">Phone is required</div>
+							<div *ngIf="fGetInTouch.phone.errors.pattern">Only Numbers are Allowed</div>
+						</div>
+						<div class="form-group">
 							<textarea id="contactMessage" placeholder="Enter Your Message"
 								formControlName="message"></textarea>
 						</div>

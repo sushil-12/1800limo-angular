@@ -152,14 +152,15 @@
 <app-finalize-rates class="d-flex flex-wrap finalize-rates" [initRates]="init_rates" [isTravelShare]="isTravelShare"
 	[affiliate_type]="'loose_affiliate'" (formvalue)="RateFormValue($event)" [distance]="finalize_params.distance"
 	[reservation_id]="finalize_params.booking_id" [reset]="false" [hours]="finalize_params.number_of_hours"
-	[vehicles]="finalize_params.number_of_vehicles" (returnformvalue)="ReturnRateFormValue($event)"
-	(returnNumberOfHr)="HandleReturnNumberOfHr($event)">
+	[vehicles]="finalize_params.number_of_vehicles" [isFarmoutBooking]="isFarmoutBooking"
+	(returnformvalue)="ReturnRateFormValue($event)" (returnNumberOfHr)="HandleReturnNumberOfHr($event)"
+	[isCreatedByAdmin]="isCreatedByAdmin" [service_type]="service_type">
 </app-finalize-rates>
 <div class="row mb-3" id="submitForm">
 	<div class="col-md-12 text-right">
 		<button type="button" class="custom-filled-button ratesButton m-3"
-			[ngClass]="finalize_btn=='Finalized'? 'color-grey':''" (click)="submitForm()">
-			{{finalize_btn}}
+			[ngClass]="isFinalizeButton ? 'color-grey':'color-green'" (click)="submitForm()">
+			{{isFinalizeButton ? 'Finalized' :'Finalize'}}
 		</button>
 	</div>
 </div>
@@ -399,7 +400,8 @@
 
 		<div class="col-md-12 text-right mr-4">
 			<button type="button" class="custom-filled-button m-3 mr-4"
-				[ngClass]="finalize_btn=='Finalized'? '':'color-grey'" data-toggle="modal" data-target="#paymentModal">
+				[ngClass]="isFinalizeButton ? 'color-green' : 'color-grey' " data-toggle="modal"
+				data-target="#paymentModal">
 				Charge
 			</button>
 		</div>

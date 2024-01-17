@@ -1,4 +1,4 @@
-.adminbox_shadow.user_information{
+.adminbox_shadow.user_information {
 	font-family: "PT Serif", serif !important;
 	background-color: #f5f4fe;
 }
@@ -6,50 +6,55 @@
 :host ::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-ripple .mat-ripple-element {
 	opacity: 0.03 !important;
 	background-color: #f3933d !important;
-  }
-  
-  :host ::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background,
-  .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
-	background-color: #f3933d !important;
-  }
-  :host ::ng-deep .mat-checkbox-ripple .mat-ripple-element,
-  .mat-checkbox-checked.mat-accent .mat-checkbox-background {
-	background-color: #f3933d !important;
-  }
+}
 
-  textarea.mat-input-element.cdk-textarea-autosize{
+:host ::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background,
+.mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
+	background-color: #f3933d !important;
+}
+
+:host ::ng-deep .mat-checkbox-ripple .mat-ripple-element,
+.mat-checkbox-checked.mat-accent .mat-checkbox-background {
+	background-color: #f3933d !important;
+}
+
+textarea.mat-input-element.cdk-textarea-autosize {
 	font-size: 22px;
 	font-weight: bold;
-  }
+}
 
 .adminbox_shadow.user_information .mat-form-field,
 .mat-calendar {
 	font-family: "PT Serif", serif !important;
 }
+
 .box-outline {
 	border: solid 3px;
-    border-radius: 4px;
+	border-radius: 4px;
 }
-.layout_shadow{
+
+.layout_shadow {
 	box-shadow: 3px 3px 20px -6px rgb(40 40 40 / 50%);
-    border-radius: 12px;
+	border-radius: 12px;
 }
 
-section{
-    color: #000;
-    border-radius: 12px;
-    padding: 12px;
-    margin: 0.6rem auto;
-    box-shadow: 3px 3px 20px -6px rgb(40 40 40 / 50%);
+section {
+	color: #000;
+	border-radius: 12px;
+	padding: 12px;
+	margin: 0.6rem auto;
+	box-shadow: 3px 3px 20px -6px rgb(40 40 40 / 50%);
 }
 
-hr{
+hr {
 	border-top: 1px solid black
 }
+
 button {
 	font-family: "PT Serif", serif !important;
 }
-.none-display{
+
+.none-display {
 	display: none;
 }
 
@@ -57,12 +62,14 @@ button {
 	font-size: medium;
 	color: #fff;
 }
-.x-circle-btn{
+
+.x-circle-btn {
 	opacity: 1;
 	color: red;
 	font-size: xx-large;
 	width: max-content;
 }
+
 .pending {
 	background-color: #0474fc;
 }
@@ -74,12 +81,17 @@ button {
 .paid_cash {
 	background-color: #D1B000;
 }
+
 .paid {
 	background-color: #D1B000;
 }
 
 .assigned {
 	background-color: var(--green-color);
+}
+
+.driver_unassigned {
+	background-color: #dc3545;
 }
 
 .rejected {
@@ -107,7 +119,7 @@ button {
 }
 
 .finalized {
-	background-color: #fcac04;
+	background-color: #71c5e8;
 }
 
 .non_payable {
@@ -118,8 +130,8 @@ button {
 	background-color: #C4A484;
 }
 
-.refund{
-	background-color:#A020F0;
+.refund {
+	background-color: #A020F0;
 }
 
 .btnclass {
@@ -127,7 +139,8 @@ button {
 	height: 60px;
 	width: 100%;
 }
-.loc-logo{
+
+.loc-logo {
 	font-size: 18px;
 }
 
@@ -140,10 +153,11 @@ button {
 	color: #fff !important;
 	background-color: var(--orange-color) !important;
 	border-color: var(--orange-color) !important;
-	padding: 10px 40px;	
+	padding: 10px 40px;
 	transition: box-shadow 0.1s ease-in-out;
-    box-shadow: 0px 5px 10px 1px rgb(0 0 0 / 40%);
+	box-shadow: 0px 5px 10px 1px rgb(0 0 0 / 40%);
 }
+
 // .currency{
 // 	color: green;
 //     font-weight: bold;
@@ -152,6 +166,19 @@ button {
 .modal-header {
 	justify-content: center;
 }
+
+.invite-agent-modal-header {
+	padding: 0.5rem 1rem 0rem 1rem !important;
+}
+
+@media (min-width: 576px) {
+	.invite-agent-modal-dialog {
+		max-width: 500px !important;
+		// margin: 1.75rem auto;
+	}
+}
+
+
 // .modal-content {
 //     padding: 0 !important;
 // }
@@ -200,7 +227,7 @@ button {
 	bottom: -60px;
 	left: 15px;
 	transition: box-shadow 0.1s ease-in-out;
-    box-shadow: 0px 5px 10px 1px rgb(0 0 0 / 40%);
+	box-shadow: 0px 5px 10px 1px rgb(0 0 0 / 40%);
 }
 
 .saveButtonModal {
@@ -211,13 +238,14 @@ button {
 	bottom: -60px;
 	left: 15px;
 	transition: box-shadow 0.1s ease-in-out;
-    box-shadow: 0px 5px 10px 1px rgb(0 0 0 / 40%);
+	box-shadow: 0px 5px 10px 1px rgb(0 0 0 / 40%);
 }
 
-.box-special-instruction{
+.box-special-instruction {
 	overflow-y: auto;
 	max-height: 200px;
 }
+
 table {
 	width: 100;
 	white-space: break-spaces;
@@ -246,40 +274,41 @@ input::-webkit-input-placeholder {
 }
 
 
-.booking-id-font{
+.booking-id-font {
 	font-size: large;
 }
 
-.preview-output-feild{
+.preview-output-feild {
 	font-size: x-large;
 }
 
-.view-button{
+.view-button {
 	background-color: #5373aa !important;
 	color: #fff !important;
 	padding: 5px 8px !important;
 	border-radius: 3rem !important;
 }
 
-.x-cross-btn{
+.x-cross-btn {
 	background: #fff !important;
-    color: #ff0000 !important;
-    /* position: absolute; */
-    top: 5px;
-    right: 15px;
-    border-radius: 20px;
-    width: 25px;
-    opacity: 1 !important;
+	color: #ff0000 !important;
+	/* position: absolute; */
+	top: 5px;
+	right: 15px;
+	border-radius: 20px;
+	width: 25px;
+	opacity: 1 !important;
 }
 
-.x-close-btn{
+.x-close-btn {
 	float: right;
-    font-size: 1.8rem;
-    font-weight: 700;
-    line-height: 1;
+	font-size: 1.8rem;
+	font-weight: 700;
+	line-height: 1;
 	border: none;
 	z-index: 10;
 }
+
 .center {
 	margin: 0;
 	position: absolute;
@@ -287,24 +316,29 @@ input::-webkit-input-placeholder {
 	left: 50%;
 	-ms-transform: translate(-50%, -50%);
 	transform: translate(-50%, -50%);
-  }
+}
 
-  .preview-pickup-color{
+.preview-pickup-color {
 	color: #007500;
-  }
-  .preview-dropoff-color{
-	color:  #FF0000 ;
-  }
-  .preview-airport-color{
-	color:  #00008B ;
-  }
-  .preview-extra-stop-color{
+}
+
+.preview-dropoff-color {
+	color: #FF0000;
+}
+
+.preview-airport-color {
+	color: #00008B;
+}
+
+.preview-extra-stop-color {
 	color: #000000;
-  }
-  .disabled-btn{
+}
+
+.disabled-btn {
 	pointer-events: none;
 	cursor: not-allowed !important;
-  }
+}
+
 @media only screen and (min-width: 768px) and (max-width: 1200px) {
 	.startdate {
 		padding-right: 5px;
@@ -325,28 +359,28 @@ input::-webkit-input-placeholder {
 	}
 }
 
-@media only screen and (max-width: 575px)
-{
-	#AuditTrailModal
-	{
-		.modal-body
-		{
+@media only screen and (max-width: 575px) {
+	#AuditTrailModal {
+		.modal-body {
 			overflow: auto;
+
 			table {
 				width: 450px;
-				thead tr th#date
-				{
+
+				thead tr th#date {
 					width: 115px
 				}
 			}
 		}
 	}
-	.align-btn{
+
+	.align-btn {
 		flex-direction: row-reverse;
-		align-items:end;
+		align-items: end;
 		width: 100%;
 		margin: 1rem;
 	}
+
 	// .bottom-container{
 	// 	border:1px solid green !important;
 
@@ -360,9 +394,88 @@ input::-webkit-input-placeholder {
 }
 
 a.dropdown-item {
-    padding: 0.4rem 1.4rem !important;
-    font-size: 16px;
+	padding: 0.4rem 1.4rem !important;
+	font-size: 16px;
 }
 
+.x-copy-btn {
+	opacity: 1;
+	color: black;
+	font-size: xx-large;
+	width: max-content;
+}
 
+.uploadExcelFile {
+	position: sticky;
+	left: 50px;
+	color: #000;
+	text-transform: uppercase;
+	padding: 0.5rem 0.8rem;
+	border-radius: 10px;
+	font-size: 1.10rem;
+	margin: 0 10px;
+	font-weight: 700;
+	display: inline-block;
+	text-align: center;
+	border: 0;
+	overflow: hidden;
+	background-color: var(--green-color);
+	cursor: pointer;
+	box-shadow: 0px 5px 10px -1px rgba(0, 0, 0, 0.4);
+}
 
+@media only screen and (min-width: 1199px) {
+	.uploadExcelFile:hover {
+		background-color: #28b24b;
+	}
+
+	.uploadExcelFile:focus {
+		transform: scale(1.2, 1.2);
+		background-color: #28b24b;
+	}
+}
+
+.uploadExcelFile input[type="file"] {
+	position: absolute;
+	opacity: 0;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	font-size: 0;
+	cursor: pointer;
+}
+
+.uploadExcelFile svg {
+	height: 17px;
+	fill: #000;
+	margin-bottom: 2px;
+}
+
+.invite-agent-button {
+	color: #fff !important;
+	padding: 2px 12px !important;
+}
+
+.invite-agent-button:active {
+	background: yellow;
+	font-weight: 800 !important;
+	color: #000 !important;
+	border: 2px solid yellow;
+	text-transform: uppercase;
+}
+
+.pin-icon-preview{
+	font-size: 26px;
+}
+
+@media only screen and (max-width: 768px){
+	.sortCheckBox{
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+	}
+	.pin-icon-preview{
+		font-size: 34px;
+	}
+}

@@ -6,6 +6,7 @@ import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { FormGroup } from '@angular/forms';
 import { StateManagementService } from '../../../services/statemanagement.service';
+declare var $:any;
 
 @Component({
 	selector: 'app-step6',
@@ -282,13 +283,20 @@ export class Step6Component implements OnInit {
 				if (success == true) {
 					this.affiliateService.updateStepsLocal('6');
 					localStorage.setItem('account_approval', 'completed');
+					
 				}
-				this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() =>
+				
+				// this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() =>
+				// 	this.router.navigate(['/affiliate/account-status'])
+				// );
+			});
+			$('#thankYouModal').modal('show')
+	}
+	thankYouModalButton(){
+		this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() =>
 					this.router.navigate(['/affiliate/account-status'])
 				);
-			});
 	}
-
 
 
 	generateStep6Content(data: any) {

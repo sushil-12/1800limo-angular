@@ -28,6 +28,8 @@ export class AddTravelPlannerAccountComponent implements OnInit
 	public OfficePhoneObject: any;
 	travelPlannerId: any = null;
 	public countryCodeName:any="United States" ;
+	countryOptions: any;
+	stateOptions: any;
 
 
 	constructor(
@@ -60,7 +62,9 @@ export class AddTravelPlannerAccountComponent implements OnInit
 		{
 			this.yearOptions.push(currentYear + i);
 		}
-		
+		this.httpClient.get("assets/json/countryStateList.json").subscribe(data => {
+			this.countryOptions = data;
+		})
 		//google map autocomplete
 		this.mapsAPILoader.load().then(() =>
 		{
@@ -88,7 +92,7 @@ export class AddTravelPlannerAccountComponent implements OnInit
 						for (var j = 0; j < place.address_components[i].types.length; j++) {
 							if (place.address_components[i].types[j] == "country") {
 								this.addTravelPlannerAccountForm.patchValue({
-									country: place.address_components[i].long_name
+									country: place.address_components[i].short_name
 								});
 								// this.changeCountry(place.address_components[i].short_name)
 							}
@@ -163,12 +167,16 @@ export class AddTravelPlannerAccountComponent implements OnInit
 	
 		this.activatedroute.queryParams.subscribe((params: any) =>
 		{
-			// if (params.travelPlannerId )
-			// {
-			// 	this.travelPlannerId = params.travelPlannerId
-			// 	this.getTravelAgentData()
-			// } 
-			if(localStorage.getItem('travelAgent_id')){
+			if (params.travelPlannerId )
+			{
+				this.travelPlannerId = params.travelPlannerId
+				localStorage.setItem('travelAgent_id',this.travelPlannerId)
+				this.addTravelPlannerAccountForm.patchValue({
+					acc_id:this.travelPlannerId
+					})
+				this.getTravelAgentData()
+			} 
+			else if(localStorage.getItem('travelAgent_id')){
 				this.travelPlannerId = localStorage.getItem('travelAgent_id')
 				this.addTravelPlannerAccountForm.patchValue({
 				acc_id:this.travelPlannerId
@@ -193,7 +201,7 @@ export class AddTravelPlannerAccountComponent implements OnInit
 			mobile: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
 			mobileIsd: ['+1', Validators.required],
 			mobileCountry: ['us'],
-			email: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.]+\.[a-zA-Z]{2,}$/i)]],
+			email: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)]],
 			address: ['', Validators.required],
 			city: [''],
 			state: [''],
@@ -220,7 +228,16 @@ export class AddTravelPlannerAccountComponent implements OnInit
 	}
 
 
+	changeCountry(selectedCountryCode) {
+		let selectedCountryData: any;
 
+		selectedCountryData = this.countryOptions.filter(function (countryOption) {
+			return countryOption.countryShortCode == selectedCountryCode;
+		});
+		if (selectedCountryData) {
+			this.stateOptions = selectedCountryData[0].regions;
+		}
+	}
 
 	telInputObjectOffice(obj)
 	{
@@ -382,7 +399,9 @@ export class AddTravelPlannerAccountComponent implements OnInit
 		const keepValues = [
 		this.addTravelPlannerAccountForm.controls.mobile.value,
 		this.addTravelPlannerAccountForm.controls.id.value,
-		this.addTravelPlannerAccountForm.controls.acc_id.value
+		this.addTravelPlannerAccountForm.controls.acc_id.value,
+		this.addTravelPlannerAccountForm.controls.mobileIsd.value,
+		this.addTravelPlannerAccountForm.controls.mobileCountry.value
 		
 	 ];
 
@@ -392,6 +411,9 @@ export class AddTravelPlannerAccountComponent implements OnInit
 	 this.addTravelPlannerAccountForm.controls.mobile.patchValue(keepValues[0]);
 	 this.addTravelPlannerAccountForm.controls.id.patchValue(keepValues[1]);
 	 this.addTravelPlannerAccountForm.controls.acc_id.patchValue(keepValues[2]);
+	 this.addTravelPlannerAccountForm.controls.mobileIsd.patchValue(keepValues[3]);
+	 this.addTravelPlannerAccountForm.controls.mobileCountry.patchValue(keepValues[4]);
+
 		window.scrollTo({ top: 0, behavior: 'smooth' });
 	}
 	backButton()

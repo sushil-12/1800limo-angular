@@ -59,7 +59,7 @@
 						<input type="number" matInput placeholder="0" formControlName="baserate"
 							[tabIndex]="getTabIndex(item.key)" class="font-weight-bolder rate-input-field text-right"
 							(focus)="$event.target.select()"
-							(change)="handleNegtiveValue(item.key,sub_item.key,'baserate',$event.target.value)" />
+							(keyup)="handleNegtiveValue(item.key,sub_item.key,'baserate',$event.target.value)" />
 					</mat-form-field>
 					<div class="errors" *ngIf="sub_item.key === 'Kilometer_Rate' && trigger_error">
 						<div class="error-field">
@@ -95,7 +95,7 @@
 						<input type="number" matInput placeholder="0" [value]="hours"
 							[ngClass]="is_readonly_min_rate ? 'block-cursor' : ''"
 							class="font-weight-bolder rate-input-field text-right"
-							(change)="changeInHours($event.target.value)" [readonly]="is_readonly_min_rate" />
+							(keyup)="changeInHours($event.target.value)" [readonly]="is_readonly_min_rate" />
 					</mat-form-field>
 					<span *ngIf="is_readonly_min_rate">Hours cannot be edited as these are the minimum rates
 						issued</span>
@@ -103,7 +103,7 @@
 			</div>
 
 			<!-- Admin Share -->
-			<div class="col-3 col-sm-3 col-md-3" *ngIf="sub_item.key == 'Base_Rate' ">
+			<!-- <div class="col-3 col-sm-3 col-md-3" *ngIf="sub_item.key == 'Base_Rate' ">
 				<div>
 					<mat-form-field appearance="outline" class="m-0">
 						<mat-label>
@@ -114,8 +114,8 @@
 							readonly />
 					</mat-form-field>
 				</div>
-			</div>
-			<div class="col-3" *ngIf="sub_item.key === 'Base_Rate' && isTravelShare">
+			</div> -->
+			<!-- <div class="col-3" *ngIf="sub_item.key === 'Base_Rate' && isTravelShare">
 				<div>
 					<mat-form-field appearance="outline" class="m-0">
 						<mat-label>
@@ -126,7 +126,7 @@
 							readonly />
 					</mat-form-field>
 				</div>
-			</div>
+			</div> -->
 
 			<!-- Flat | Percent -->
 			<div class="col-2" *ngIf="item.key === 'taxes' || item.key == 'others'">
@@ -160,7 +160,7 @@
 
 	<hr style="border-top: 2.5px solid #000000; " />
 
-	<div class="row px-2 justify-content-between align-items-center">
+	<div class="row px-2 justify-content-between align-items-center flex-nowrap">
 		<div class="col-md-6">
 			<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
 				Sub Total
@@ -172,7 +172,7 @@
 		</div>
 	</div>
 	<!-- Number of Vehicles/Hours -->
-	<div class="row px-2 justify-content-between align-items-center" *ngIf="vehicles !== 0">
+	<div class="row px-2 justify-content-between align-items-center flex-nowrap" *ngIf="vehicles !== 0">
 		<div class="col-md-6 col-xl-7">
 			<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
 				Number of Vehicles
@@ -185,7 +185,7 @@
 	</div>
 
 	<!-- Total -->
-	<div class="row px-2 justify-content-between align-items-center">
+	<div class="row px-2 justify-content-between align-items-center flex-nowrap">
 		<div class="col-md-6 col-xl-7">
 			<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
 				Grand Total
@@ -194,6 +194,40 @@
 		<div class="col-md-4 col-xl-5 text-3xl text-right">
 			<i class="bi bi-currency-dollar text-danger"></i>
 			{{ grandtotal.toFixed(2) }}
+		</div>
+	</div>
+	<div class="row px-2 justify-content-between align-items-center flex-nowrap">
+		<div class="col-md-6">
+			<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
+				Admin Share
+			</p>
+		</div>
+		<div class="col-md-4 text-3xl text-right">
+			<i class="bi bi-currency-dollar" style="color: #dc3545!important;"></i>
+			{{ calc_admin_share.toFixed(2) }}
+		</div>
+	</div>
+	<div class="row px-2 justify-content-between align-items-center flex-nowrap"
+		*ngIf="isTravelShare && !isCreatedByAdmin">
+		<div class="col-md-6">
+			<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
+				Travel Agent Share
+			</p>
+		</div>
+		<div class="col-md-4 text-3xl text-right">
+			<i class="bi bi-currency-dollar" style="color: #dc3545!important;"></i>
+			{{ travel_agent_share.toFixed(2) }}
+		</div>
+	</div>
+	<div class="row px-2 justify-content-between align-items-center flex-nowrap" *ngIf="isFarmoutBooking">
+		<div class="col-md-6">
+			<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
+				Farmout Share
+			</p>
+		</div>
+		<div class="col-md-4 text-3xl text-right">
+			<i class="bi bi-currency-dollar" style="color: #dc3545!important;"></i>
+			{{ farmoutShare.toFixed(2) }}
 		</div>
 	</div>
 </div>
@@ -259,7 +293,7 @@
 			</div>
 
 			<!-- Admin Share -->
-			<div class="col-3 col-md-3" *ngIf="sub_item.key === 'Base_Rate'">
+			<!-- <div class="col-3 col-md-3" *ngIf="sub_item.key === 'Base_Rate'">
 				<div>
 					<mat-form-field appearance="outline" class="m-0">
 						<mat-label>
@@ -282,7 +316,7 @@
 							readonly />
 					</mat-form-field>
 				</div>
-			</div>
+			</div> -->
 
 			<!-- Distance Value -->
 			<div class="col-auto" *ngIf="sub_item.key === 'Kilometer_Rate' || sub_item.key === 'Milage_Rate'">
@@ -320,7 +354,7 @@
 
 	<hr style="border-top: 2.5px solid #000000; " />
 
-	<div class="row px-2 justify-content-between align-items-center">
+	<div class="row px-2 justify-content-between align-items-center flex-nowrap">
 		<div class="col-md-6">
 			<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
 				Sub Total
@@ -332,7 +366,7 @@
 		</div>
 	</div>
 	<!-- Number of Vehicles/Hours -->
-	<div class="row px-2 justify-content-between align-items-center" *ngIf="vehicles !== 0">
+	<div class="row px-2 justify-content-between align-items-center flex-nowrap" *ngIf="vehicles !== 0">
 		<div class="col-md-6 col-xl-7">
 			<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
 				Number of Vehicles
@@ -345,7 +379,7 @@
 	</div>
 
 	<!-- Total -->
-	<div class="row px-2 justify-content-between align-items-center" id="grandTotal">
+	<div class="row px-2 justify-content-between align-items-center flex-nowrap" id="grandTotal">
 		<div class="col-md-6 col-xl-7">
 			<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
 				Grand Total
@@ -354,6 +388,40 @@
 		<div class="col-md-4 col-xl-5 text-3xl text-right">
 			<i class="bi bi-currency-dollar text-danger"></i>
 			{{ r_grandtotal.toFixed(2) }}
+		</div>
+	</div>
+	<div class="row px-2 justify-content-between align-items-center flex-nowrap">
+		<div class="col-md-6">
+			<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
+				Admin Share
+			</p>
+		</div>
+		<div class="col-md-4 text-3xl text-right">
+			<i class="bi bi-currency-dollar" style="color: #dc3545!important;"></i>
+			{{ r_calc_admin_share.toFixed(2) }}
+		</div>
+	</div>
+	<div class="row px-2 justify-content-between align-items-center flex-nowrap"
+		*ngIf="isTravelShare && !isCreatedByAdmin">
+		<div class="col-md-6">
+			<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
+				Travel Agent Share
+			</p>
+		</div>
+		<div class="col-md-4 text-3xl text-right">
+			<i class="bi bi-currency-dollar" style="color: #dc3545!important;"></i>
+			{{ r_travel_agent_share.toFixed(2) }}
+		</div>
+	</div>
+	<div class="row px-2 justify-content-between align-items-center flex-nowrap" *ngIf="isFarmoutBooking">
+		<div class="col-md-6">
+			<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
+				Farmout Share
+			</p>
+		</div>
+		<div class="col-md-4 text-3xl text-right">
+			<i class="bi bi-currency-dollar" style="color: #dc3545!important;"></i>
+			{{ farmoutShare.toFixed(2) }}
 		</div>
 	</div>
 </div>

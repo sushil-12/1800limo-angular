@@ -106,10 +106,18 @@ p {
     font-size: 18px;
 }
 
+.border-red{
+    border: solid red 3px;
+    height: 36px;
+    width: 36px;
+    transform: translate(-2px, -2px);
+}
+
 .custom-control-label::before {
     width : 2rem;
     height: 2rem;
     left  : -3rem;
+    border: 3px solid red !important;
 }
 
 .custom-control-label::after {

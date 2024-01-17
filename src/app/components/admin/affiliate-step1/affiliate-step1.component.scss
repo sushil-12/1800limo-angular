@@ -55,7 +55,10 @@ $primary-color: #5dbd8a;
   padding        : 1rem;
   transition     : transform 300ms ease;
 }
-
+.border-red{
+  border: 3px solid red;
+  border-radius: 6px;
+}
 .radio-tile-label {
   text-align    : center;
   font-size     : 0.75rem;

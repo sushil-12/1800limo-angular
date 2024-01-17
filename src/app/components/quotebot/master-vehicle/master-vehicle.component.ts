@@ -11,8 +11,7 @@ import { SharedModule } from '../../shared/shared.module';
 declare let $: any
 
 
-interface Filters
-{
+interface Filters {
 	original: Object,
 	copy: Object,
 	request: Object,	// request for the response of selected filters from backend
@@ -21,9 +20,9 @@ interface Filters
 }
 
 @Component({
-  selector: 'app-master-vehicle',
-  templateUrl: './master-vehicle.component.html',
-  styleUrls: ['./master-vehicle.component.scss']
+	selector: 'app-master-vehicle',
+	templateUrl: './master-vehicle.component.html',
+	styleUrls: ['./master-vehicle.component.scss']
 })
 export class MasterVehicleComponent implements OnInit {
 
@@ -49,7 +48,6 @@ export class MasterVehicleComponent implements OnInit {
 	innerWidth = window.innerWidth
 	currentUser = JSON.parse(localStorage.getItem('currentUser'))
 
-
 	FILTERS_ORDER = [
 		{
 			dp: 'vehicle-type-preferences',
@@ -69,22 +67,18 @@ export class MasterVehicleComponent implements OnInit {
 			],
 		},
 		{
-			dp: 'year-color-interior',
-			rp: [
-				{
-					dp: 'year',
-					rp: 'years'
-				},
-				{
-					dp: 'color',
-					rp: 'colors'
-				},
-				{
-					dp: 'interior',
-					rp: 'interiors'
-				}
-			]
+			dp: 'years',
+			rp: 'years'
 		},
+		{
+			dp: 'colors',
+			rp: 'colors'
+		},
+		{
+			dp: 'interiors',
+			rp: 'interiors'
+		}
+		,
 		{
 			dp: 'amenities',
 			rp: 'amenities'
@@ -124,6 +118,80 @@ export class MasterVehicleComponent implements OnInit {
 		}
 	]
 
+	// FILTERS_ORDER = [
+	// 	{
+	// 		dp: 'vehicle-type-preferences',
+	// 		rp: 'vehicle-type'
+	// 	},
+	// 	{
+	// 		dp: 'make-model',
+	// 		rp: [
+	// 			{
+	// 				dp: 'make',
+	// 				rp: 'make'
+	// 			},
+	// 			{
+	// 				dp: 'model',
+	// 				rp: 'model'
+	// 			},
+	// 		],
+	// 	},
+	// 	{
+	// 		dp: 'year-color-interior',
+	// 		rp: [
+	// 			{
+	// 				dp: 'year',
+	// 				rp: 'years'
+	// 			},
+	// 			{
+	// 				dp: 'color',
+	// 				rp: 'colors'
+	// 			},
+	// 			{
+	// 				dp: 'interior',
+	// 				rp: 'interiors'
+	// 			}
+	// 		]
+	// 	},
+	// 	{
+	// 		dp: 'amenities',
+	// 		rp: 'amenities'
+	// 	},
+	// 	{
+	// 		dp: 'extra-$-amenities',
+	// 		rp: 'special-amenities'
+	// 	},
+	// 	{
+	// 		dp: 'driver-preferences',
+	// 		rp: [
+	// 			{
+	// 				dp: 'dresses',
+	// 				rp: 'driver-dresses'
+	// 			},
+	// 			{
+	// 				dp: 'languages',
+	// 				rp: 'driver-languages'
+	// 			},
+	// 			{
+	// 				dp: 'gender',
+	// 				rp: 'driver-gender'
+	// 			},
+	// 			{
+	// 				dp: 'background',
+	// 				rp: 'driver-background'
+	// 			}
+	// 		]
+	// 	},
+	// 	{
+	// 		dp: 'vehicle-service-area',
+	// 		rp: 'vehicle-service-area'
+	// 	},
+	// 	{
+	// 		dp: 'operator-preferences',
+	// 		rp: 'affiliate-preferences',
+	// 	}
+	// ]
+
 	modal_driver_info_labels: Array<String> = ['name', 'gender', 'phone', 'languages', 'experience', 'dress', 'background', 'starRating']
 	vehicleDetails: Array<any> = []
 	vehicleImages: Array<any> = []
@@ -149,9 +217,9 @@ export class MasterVehicleComponent implements OnInit {
 	category_selected: any
 	vehicle_selected: any
 	quotebot_form: any
-	role:number = JSON.parse(localStorage.getItem("currentUser"))?.role 
+	role: number = JSON.parse(localStorage.getItem("currentUser"))?.role
 	openfilters: boolean = false
-	changeText:boolean = false
+	changeText: boolean = false
 
 
 	constructor(
@@ -171,16 +239,14 @@ export class MasterVehicleComponent implements OnInit {
 	 * Building fiters array for selected ones and to be sent to backend
 	 * Fetching vehicle details based on filters data
 	 */
-	ngOnInit(): void
-	{
+	ngOnInit(): void {
 		window.scrollTo(0, 0)
 		// sessionStorage.removeItem('selected_vehicle')
 		sessionStorage.removeItem('filters')
 		console.log('filter removed from session storage')
 		this.$spinner.show()
 		// Note: Do not add anything here or before below conditional logic. This should be the first step
-		if (localStorage.getItem('quotebot_form') == null)
-		{
+		if (localStorage.getItem('quotebot_form') == null) {
 			this.$errorDialog.openDialog({
 				errors: {
 					error: "Please request a Quote before selecting a vehicle. "
@@ -188,23 +254,18 @@ export class MasterVehicleComponent implements OnInit {
 			})
 			this.$router.navigateByUrl('/')
 			return
-		} else
-		{
+		} else {
 			// fetch the user's travelling quote
 			this.quotebot_form = JSON.parse(localStorage.getItem('quotebot_form'))
 		}
 
-		this.$activatedRoute.queryParams.subscribe((params: any) =>
-		{
-			if (params?.list == 'master')
-			{
+		this.$activatedRoute.queryParams.subscribe((params: any) => {
+			if (params?.list == 'master') {
 				this.vehicleDetails = []
 			}
-			if (params?.sort == 'plh')
-			{
+			if (params?.sort == 'plh') {
 				this.Sort.LowToHigh()
-			} else
-			{
+			} else {
 				this.Sort.HighToLow()
 			}
 		})
@@ -214,35 +275,27 @@ export class MasterVehicleComponent implements OnInit {
 	}
 	// ngOnInit ends
 	// documentgetElementById('affiliate-info')
-	isArray(value: any): boolean
-	{
+	isArray(value: any): boolean {
 		return Array.isArray(value)
 	}
 
 
 	//increment/decrement in ONE WAY form
-	change(changeType: 'i' | 'd', fieldName: 'l' | 'p')
-	{
+	change(changeType: 'i' | 'd', fieldName: 'l' | 'p') {
 		// console.log(changeType, fieldName)
 		let max_length = 75
-		if (fieldName == 'p')
-		{
+		if (fieldName == 'p') {
 			// for passenger
-			if (changeType == 'i' && this.quotebot_form.no_of_passenger < max_length)
-			{
+			if (changeType == 'i' && this.quotebot_form.no_of_passenger < max_length) {
 				this.quotebot_form['no_of_passenger'] = this.quotebot_form.no_of_passenger + 1
-			} else if (changeType == 'd' && this.quotebot_form.no_of_passenger > 1)
-			{
+			} else if (changeType == 'd' && this.quotebot_form.no_of_passenger > 1) {
 				this.quotebot_form['no_of_passenger'] = this.quotebot_form.no_of_passenger - 1
 			}
-		} else
-		{
+		} else {
 			// for luggage
-			if (changeType == 'i' && this.quotebot_form.no_of_luggage < max_length)
-			{
+			if (changeType == 'i' && this.quotebot_form.no_of_luggage < max_length) {
 				this.quotebot_form['no_of_luggage'] = this.quotebot_form.no_of_luggage + 1
-			} else if (changeType == 'd' && this.quotebot_form.no_of_luggage >= 1)
-			{
+			} else if (changeType == 'd' && this.quotebot_form.no_of_luggage >= 1) {
 				this.quotebot_form['no_of_luggage'] = this.quotebot_form.no_of_luggage - 1
 			}
 		}
@@ -251,8 +304,8 @@ export class MasterVehicleComponent implements OnInit {
 
 
 
-	editAffiliateAccount(vehInfo:any) {
-		console.log('valueee--->>>>' , vehInfo)
+	editAffiliateAccount(vehInfo: any) {
+		console.log('valueee--->>>>', vehInfo)
 		// this.affiliateService.updateStepsArrayLocal(this.response.data.affiliateParmas.step_completed);
 		// this.affiliateService.updateStepsCompletedObject(this.response.data.affiliateParmas.step_completed_obj);
 		sessionStorage.setItem('affiliateId', JSON.stringify(vehInfo.affiliate_id))
@@ -262,24 +315,20 @@ export class MasterVehicleComponent implements OnInit {
 		// });
 		const url = this.$router.serializeUrl(
 			this.$router.createUrlTree(['/admin/affiliate/step0'])
-		  );
-		
-		  window.open(url, '_blank');
+		);
+
+		window.open(url, '_blank');
 		// affiliate_id: number, affiliate_type: string
 
 	}
 
 
-	fetchMasterVehicles(): Promise<Array<any> | string>
-	{
-		return new Promise((resolve, reject) =>
-		{
+	fetchMasterVehicles(): Promise<Array<any> | string> {
+		return new Promise((resolve, reject) => {
 			this.$quotebotService.getMasterVehicleTypes(this.quotebot_form).pipe(
 				catchError(err => throwError(err))
-			).subscribe((response: any) =>
-			{
-				if (response.data.length == 0)
-				{
+			).subscribe((response: any) => {
+				if (response.data.length == 0) {
 					this.no_vehicle_msg = "No Vehicle Categories Found. "
 					reject('No Master Vehicle Found.')
 					return
@@ -297,8 +346,7 @@ export class MasterVehicleComponent implements OnInit {
 	 *
 	 * @param vehicle selected vehicle
 	 */
-	selectCategory(vehicle_name: string)
-	{
+	selectCategory(vehicle_name: string) {
 		let vehicle_index = this.filters.original['vehicle-type'].findIndex(item => item['name'] == vehicle_name)
 		this.filterSelection(true, 'vehicle-type', this.filters.original['vehicle-type'][vehicle_index])
 		this.getVehicleDetails()
@@ -309,17 +357,14 @@ export class MasterVehicleComponent implements OnInit {
 	/**
 	 * Logic to fetch all filters from backend
 	 */
-	getAllFilters(): void
-	{
+	getAllFilters(): void {
 		this.$spinner.show()
-		this.$quotebotService.getAllFilters().subscribe((response: any) =>
-		{
+		this.$quotebotService.getAllFilters().subscribe((response: any) => {
 			this.$spinner.hide()
 			// format every filter name from response
 			this.filters.original = JSON.parse(JSON.stringify(response.data)) // create a deep copy of the response object
 
-			for (let catg in this.filters.original)
-			{
+			for (let catg in this.filters.original) {
 				// changing the name here? Do not forget to change in the includes and selected filters function.
 				this.filters.original[catg].unshift({ id: 0, name: 'any or all', checked: true })
 			}
@@ -351,17 +396,13 @@ export class MasterVehicleComponent implements OnInit {
 	}
 
 
-	cutTillMinimum(min_length: number)
-	{
+	cutTillMinimum(min_length: number) {
 		// showing only till min_length
-		for (let filter in this.filters.original)
-		{
-			if (Array.isArray(this.filters.original[filter]) && this.filters.original[filter].length > min_length)
-			{
+		for (let filter in this.filters.original) {
+			if (Array.isArray(this.filters.original[filter]) && this.filters.original[filter].length > min_length) {
 				// assign the filter with specified length into a new object
 				this.filters.copy[filter] = this.filters.original[filter].slice(0, min_length)
-			} else
-			{
+			} else {
 				// else, assign the filter into the new object
 				this.filters.copy[filter] = this.filters.original[filter]
 			}
@@ -376,47 +417,38 @@ export class MasterVehicleComponent implements OnInit {
 	 * @param value text to replace
 	 * @returns replaced text
 	 */
-	formatter(value: string): string
-	{
+	formatter(value: string): string {
 		if (value == null) { return }
-		if (typeof (value) == 'number' || !isNaN(parseInt(value)))
-		{
+		if (typeof (value) == 'number' || !isNaN(parseInt(value))) {
 			return value
 		}
-		if (value == 'starRating')
-		{
+		if (value == 'starRating') {
 			value = 'star-rating'
 		}
-		if (typeof (value) == 'string' && /[a-z]/.test(value.charAt(0)))
-		{
+		if (typeof (value) == 'string' && /[a-z]/.test(value.charAt(0))) {
 			value = value.replace(value.charAt(0), value.charAt(0).toUpperCase())
 		}
 		return value.replace(/[-|_]/g, ' ')
 	}
 
-	halfText(text: string)
-	{
+	halfText(text: string) {
 		return (text.length > 15 && text.substring(0, 15) + '...') || text
 	}
 
-	searchIn(card_header: string, text: string)
-	{
+	searchIn(card_header: string, text: string) {
 		console.log(card_header, text)
-		if (text == '')
-		{
+		if (text == '') {
 			this.filters.vars[card_header] = true
 			this.filters.copy[card_header] = this.filters.original[card_header].slice(0, this.min_length)
 			return
-		} else
-		{
+		} else {
 			this.filters.vars[card_header] = false
 			this.filters.copy[card_header] = this.$globals.ListSearch('filter', this.filters.original[card_header], text, 'name')
 		}
 	}
 
 
-	getKeyName(): string
-	{
+	getKeyName(): string {
 		return this.quotebot_form?.service_type
 	}
 
@@ -425,31 +457,24 @@ export class MasterVehicleComponent implements OnInit {
 	 * @param filter_name name of the filter category to populate
 	 */
 	add: number = this.min_length
-	showMore(button_name: string, filter_name: string, addmore: boolean = true): void
-	{
-		if (!this.filters.vars[button_name])
-		{
+	showMore(button_name: string, filter_name: string, addmore: boolean = true): void {
+		if (!this.filters.vars[button_name]) {
 			this.add += this.min_length
-		} else
-		{
+		} else {
 			this.add = this.min_length
 		}
-		if (addmore)
-		{
+		if (addmore) {
 			// populate filters list
 			this.filters.copy[filter_name] = this.filters.original[filter_name].slice(0, this.add)
 		}
-		else
-		{
+		else {
 			this.filters.copy[filter_name] = this.filters.original[filter_name].slice(0, this.min_length)
 		}
 
-		if (this.filters.copy[filter_name].length == this.filters.original[filter_name].length)
-		{
+		if (this.filters.copy[filter_name].length == this.filters.original[filter_name].length) {
 			this.filters.vars[button_name] = true
 		}
-		else
-		{
+		else {
 			this.filters.vars[button_name] = false
 		}
 
@@ -462,10 +487,9 @@ export class MasterVehicleComponent implements OnInit {
 	 * @param filters_data [Required] the data to be sent to backend
 	 * @returns void
 	 */
-	getVehicleDetails()
-	{
-    sessionStorage.setItem('filters' ,JSON.stringify(this.filters))
-	console.log('===============================>> navigate to select vehicle')
+	getVehicleDetails() {
+		sessionStorage.setItem('filters', JSON.stringify(this.filters))
+		console.log('===============================>> navigate to select vehicle')
 		this.$router.navigateByUrl('/quotebot/select-vehicle')
 		// console.log('Fetching Vehicle Details. ')
 		// let data = {}
@@ -506,24 +530,19 @@ export class MasterVehicleComponent implements OnInit {
 	   * @param selection_category: String [Required] category of the filter that is selected
 	 * @param selector: Object [Required] selection object
 	 */
-	filterSelection(is_checked: boolean, sel_category: string, selector: object)
-	{
+	filterSelection(is_checked: boolean, sel_category: string, selector: object) {
 		let sel_index: number = 0
-		if (selector.hasOwnProperty('slug'))
-		{
+		if (selector.hasOwnProperty('slug')) {
 			sel_index = this.filters.original[sel_category].findIndex((item: any) => item.slug == selector['slug'])
-		} else
-		{
+		} else {
 			sel_index = this.filters.original[sel_category].findIndex((item: any) => item.id == selector['id'])
 		}
 		console.log(`\nChecked: ${is_checked}\nCategory: ${sel_category}\nSelector | Index: ${selector} | ${sel_index}\n`)
 
 		// ---------------------------------- Selection Part ------------------------
-		if (is_checked)
-		{
+		if (is_checked) {
 			// if 'any or all' filter gets selected directly
-			if (sel_index == 0)
-			{
+			if (sel_index == 0) {
 				// remove all the filters of that category
 				this.filters.selections = this.filters.selections.filter((item: Object) => item['catg_name'] != sel_category)
 				// check the 'any or all' filter
@@ -543,20 +562,16 @@ export class MasterVehicleComponent implements OnInit {
 
 
 			// refill the models according to selected make else with the default value.
-			if (sel_category == 'make')
-			{
-				if (this.filters.selections.findIndex(item => item['catg_name'] == sel_category) == -1)
-				{
+			if (sel_category == 'make') {
+				if (this.filters.selections.findIndex(item => item['catg_name'] == sel_category) == -1) {
 					// default value
 					this.filters.vars['model'] = true
 					this.filters.copy['model'] = this.filters.original['model'].slice(0, this.min_length)
-				} else
-				{
+				} else {
 					this.filters.vars['model'] = false 	// hide the Show More button
 					let make_filters = this.filters.selections.filter((item) => item['catg_name'] == 'make')
 					let array = []
-					make_filters.forEach((item: any) =>
-					{
+					make_filters.forEach((item: any) => {
 						array.push(item.id)
 					})
 					// refill the models
@@ -565,14 +580,12 @@ export class MasterVehicleComponent implements OnInit {
 			}
 
 
-			if (this.filters.request[sel_category] === undefined)
-			{
+			if (this.filters.request[sel_category] === undefined) {
 				// push into a new category
 				this.filters.request[sel_category] = []
 				this.filters.request[sel_category].push(this.filters.original[sel_category][sel_index]['id'])
 			}
-			else
-			{
+			else {
 				// push into existing category, after duplicacy values check
 				this.filters.request[sel_category].findIndex(item => item == this.filters.original[sel_category][sel_index]['id']) == -1 &&
 					this.filters.request[sel_category].push(this.filters.original[sel_category][sel_index]['id'])
@@ -580,8 +593,7 @@ export class MasterVehicleComponent implements OnInit {
 		}
 
 		// ------------------------ Deselection -----------------------------
-		if (!is_checked)
-		{
+		if (!is_checked) {
 			// removing from selections
 			const index = this.filters.selections.findIndex(item => item['catg_name'] == sel_category && item['sel_index'] == sel_index)
 			this.filters.selections.splice(index, 1)	// remove operation
@@ -592,22 +604,18 @@ export class MasterVehicleComponent implements OnInit {
 			// remove the key if list is empty
 			this.filters.request[sel_category].length == 0 && delete this.filters.request[sel_category]
 
-			if (sel_category == 'make')
-			{
+			if (sel_category == 'make') {
 				// populate with all models if no selection of make exists
-				if (this.filters.selections.findIndex(item => item['catg_name'] == sel_category) == -1)
-				{
+				if (this.filters.selections.findIndex(item => item['catg_name'] == sel_category) == -1) {
 					this.filters.vars['model'] = true		// hide the Show More button
 					// default sliced value
 					this.filters.copy['model'] = this.filters.original['model'].slice(0, this.min_length)
 				}
-				else
-				{
+				else {
 					this.filters.vars['model'] = false
 					let make_filters = this.filters.selections.filter((item) => item['catg_name'] == 'make')
 					let array = []
-					make_filters.forEach((item: any) =>
-					{
+					make_filters.forEach((item: any) => {
 						array.push(item.id)
 					})
 					this.filters.copy['model'] = this.filters.original['model'].filter((item: any) => array.includes(item['make_id']))
@@ -617,12 +625,10 @@ export class MasterVehicleComponent implements OnInit {
 		}
 
 		// no filter of that category exists in selections, then make any or all active.
-		if (this.filters.selections.findIndex(item => item['catg_name'] == sel_category) == -1)
-		{
+		if (this.filters.selections.findIndex(item => item['catg_name'] == sel_category) == -1) {
 			this.filters.copy[sel_category][0]['checked'] = true		// checked operation
 		}
-		else
-		{
+		else {
 			this.filters.copy[sel_category][0]['checked'] = false		// unchecked operation
 		}
 
@@ -632,26 +638,22 @@ export class MasterVehicleComponent implements OnInit {
 
 
 
-	isFilterAlreadySelected(catg_name: string, fil: object): boolean
-	{
+	isFilterAlreadySelected(catg_name: string, fil: object): boolean {
 		// return for all 'any or all' filters
-		if (fil['id'] == 0)
-		{
+		if (fil['id'] == 0) {
 			return this.filters.copy[catg_name][0]['checked']
 		}
 
 		return !(this.filters.selections.findIndex(item => item['catg_name'] == catg_name && item['name'] == fil['name']) == -1)
 	}
 
-	showModal(vehicle_selected: any, selection_button: string)
-	{
+	showModal(vehicle_selected: any, selection_button: string) {
 		this.vehicle_selected = vehicle_selected
 		this.vehicle_selected['selection_button'] = selection_button
 		$('#filtersModal').modal('toggle')
 	}
 
-	viewDetails(vehicle_selected: any)
-	{
+	viewDetails(vehicle_selected: any) {
 		sessionStorage.setItem('selected_vehicle', JSON.stringify(vehicle_selected))
 		this.$state.set({
 			selected_filters: this.filters.selections
@@ -661,7 +663,7 @@ export class MasterVehicleComponent implements OnInit {
 		})
 	}
 
-	closeAllAccordian(){
+	closeAllAccordian() {
 		$('.collapse').collapse('hide');
 	}
 
@@ -672,59 +674,49 @@ export class MasterVehicleComponent implements OnInit {
 	 *
 	 * @returns void
 	 */
-	bookNow(vehicle_selected: any)
-	{
+	bookNow(vehicle_selected: any) {
 		// // console.log('Will navigate to Book Now Page ...')
 		sessionStorage.setItem('selected_vehicle', JSON.stringify(vehicle_selected))
-		if (localStorage.getItem('currentUser') != null)
-		{
-			if (JSON.parse(localStorage.getItem('currentUser'))['roleName'] == 'admin')
-			{
+		if (localStorage.getItem('currentUser') != null) {
+			if (JSON.parse(localStorage.getItem('currentUser'))['roleName'] == 'admin') {
 				this.$router.navigate(['/admin/new-booking'],
-				{ queryParams: {affiliate_id:vehicle_selected.affiliate_id, vehicle_id:vehicle_selected.id,new : true }})
-			} else
-			{
+					{ queryParams: { affiliate_id: vehicle_selected.affiliate_id, vehicle_id: vehicle_selected.id, new: true } })
+			} else {
 				let user = JSON.parse(localStorage.getItem('currentUser'))['roleName']
 				user = user == 'driver' ? 'affiliate' : user	// roleName of driver has to be directed to affiliate/..
 
 				this.$router.navigate([
 					'/' + user + '/create-new-booking'
 				],
-				{ queryParams: {affiliate_id:vehicle_selected.affiliate_id, vehicle_id:vehicle_selected.id,new : true } })
+					{ queryParams: { affiliate_id: vehicle_selected.affiliate_id, vehicle_id: vehicle_selected.id, new: true } })
 			}
-		} else
-		{
+		} else {
 			// this.$errorDialog.openDialog({
 			// 	errors: {
 			// 		error: 'Please open an account or login to proceed.'
 			// 	}
 			// })
-			localStorage.setItem('QB_redirectUrl','true')
+			localStorage.setItem('QB_redirectUrl', 'true')
 			this.$router.navigate(['/login/driver'], {
 				skipLocationChange: true
 			})
 		}
 	}
 
-	clearFilters(filter: Filters['selections'])
-	{
+	clearFilters(filter: Filters['selections']) {
 		if (this.filters.selections.length == 0) return // don't do anything if no filter is selected
 
-		if (filter !== null && this.filters.selections.length > 1)
-		{
+		if (filter !== null && this.filters.selections.length > 1) {
 			// deselecting the filter will remove from selections and request
 			this.filterSelection(false, filter['catg_name'], filter)
-		} else
-		{
+		} else {
 			this.$spinner.show()
 			// empty the whole
 			this.filters.selections = []
 			this.filters.request = {}
 			this.vehicleDetails = []
-			Object.keys(this.filters.copy).forEach((item: string) =>
-			{
-				if (!this.filters.copy[item][0]['checked'])
-				{
+			Object.keys(this.filters.copy).forEach((item: string) => {
+				if (!this.filters.copy[item][0]['checked']) {
 					this.filters.copy[item][0]['checked'] = true
 				}
 			})
@@ -738,17 +730,13 @@ export class MasterVehicleComponent implements OnInit {
 	Sort = {
 		// fetch the service_type from quotebot 
 		getkey: 'rate_breakdown_' + JSON.parse(localStorage.getItem('quotebot_form'))['service_type'], // modify the key
-		LowToHigh: () =>
-		{
+		LowToHigh: () => {
 			let getKeyName = this.Sort.getkey
 			console.log(getKeyName)
 			// for Master Vehicles
-			if (this.vehicleDetails.length == 0 && this.filters.selections.length == 0)
-			{
-				this.master_vehicles.length > 1 && this.master_vehicles.sort((a, b) =>
-				{
-					if (a[getKeyName].length == 0 && b[getKeyName].length == 0)
-					{
+			if (this.vehicleDetails.length == 0 && this.filters.selections.length == 0) {
+				this.master_vehicles.length > 1 && this.master_vehicles.sort((a, b) => {
+					if (a[getKeyName].length == 0 && b[getKeyName].length == 0) {
 						a[getKeyName].grand_total = 0
 						b[getKeyName].grand_total = 0
 					}
@@ -758,26 +746,20 @@ export class MasterVehicleComponent implements OnInit {
 			}
 
 			// for vehicles
-			this.vehicleDetails.length > 0 && this.vehicleDetails.sort((a, b) =>
-			{
-				if (a[getKeyName].length == 0 && b[getKeyName].length == 0)
-				{
+			this.vehicleDetails.length > 0 && this.vehicleDetails.sort((a, b) => {
+				if (a[getKeyName].length == 0 && b[getKeyName].length == 0) {
 					a[getKeyName].grand_total = 0
 					b[getKeyName].grand_total = 0
 				}
 				return a[getKeyName].grand_total - b[getKeyName].grand_total
 			})
 		},
-		HighToLow: () =>
-		{
+		HighToLow: () => {
 			let getKeyName = this.Sort.getkey
 			// for master vehicles
-			if (this.vehicleDetails.length == 0 && this.filters.selections.length == 0)
-			{
-				this.master_vehicles.length > 1 && this.master_vehicles.sort((a, b) =>
-				{
-					if (a[getKeyName].length == 0 && b[getKeyName].length == 0)
-					{
+			if (this.vehicleDetails.length == 0 && this.filters.selections.length == 0) {
+				this.master_vehicles.length > 1 && this.master_vehicles.sort((a, b) => {
+					if (a[getKeyName].length == 0 && b[getKeyName].length == 0) {
 						a[getKeyName].grand_total = 0
 						b[getKeyName].grand_total = 0
 					}
@@ -787,10 +769,8 @@ export class MasterVehicleComponent implements OnInit {
 			}
 
 			// for vehicles
-			this.vehicleDetails.length > 0 && this.vehicleDetails.sort((a, b) =>
-			{
-				if (a[getKeyName].length == 0 && b[getKeyName].length == 0)
-				{
+			this.vehicleDetails.length > 0 && this.vehicleDetails.sort((a, b) => {
+				if (a[getKeyName].length == 0 && b[getKeyName].length == 0) {
 					a[getKeyName].grand_total = 0
 					b[getKeyName].grand_total = 0
 				}
@@ -799,11 +779,10 @@ export class MasterVehicleComponent implements OnInit {
 		}
 	}
 
-	backButton()
-	{
-	
-			this.$router.navigateByUrl('/home')
-		
+	backButton() {
+
+		this.$router.navigateByUrl('/home')
+
 
 		// remove all selections
 		// while (this.filters.selections.length > 0)
@@ -814,9 +793,9 @@ export class MasterVehicleComponent implements OnInit {
 		// this.vehicleDetails = []
 	}
 
-	handleReadMore(vehinfo : any,check:boolean){
-		this.vehicleDetails = this.vehicleDetails.map(i=> {
-			if(i.id== vehinfo.id){
+	handleReadMore(vehinfo: any, check: boolean) {
+		this.vehicleDetails = this.vehicleDetails.map(i => {
+			if (i.id == vehinfo.id) {
 				i['readMore'] = check
 			}
 			return i;

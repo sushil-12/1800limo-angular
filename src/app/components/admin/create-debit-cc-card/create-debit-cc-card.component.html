@@ -1,152 +1,158 @@
 <ngx-spinner></ngx-spinner>
 <main>
     <!-- Main page content-->
-    <form  [formGroup]="createCCDebitCardForm">
+    <form [formGroup]="createCCDebitCardForm">
         <!-----BILLING INFO-------------->
         <section class="user_information">
-            <h2 class="headinginfo"> Billing Information  </h2>
+            <h2 class="headinginfo"> Billing Information </h2>
             <div class="" id="accordionSidebar1">
                 <div class="container py-2">
                     <h3 class="headinginfoH3 mt-3">Credit Card <img class="creditcard_pay"
-                        src="assets/admin/images/creditcard_pay.png"></h3>
-                        <div class="row">
-                                <div class="col-md-6">
-                                    <mat-form-field appearance="outline">
-                                        <mat-label>Booking No# <span class="asterisk">*</span></mat-label>
-                                        <input matInput placeholder="Booking No#" formControlName="reservation_id">
-                                    </mat-form-field>                                    
-                                    <div *ngIf="submittedForm && f.reservation_id.errors" class="text-danger">
-                                       <div *ngIf="f.reservation_id.errors.required">This field is required</div>
-                                       <div *ngIf="f.reservation_id.errors.pattern">This field should be a number</div>
-                                       <div *ngIf="f.reservation_id.errors.minlength">Minimum length should be 16</div>
-                                       <div *ngIf="f.reservation_id.errors.maxlength">Maximum length should be 16</div>
-                                    </div>
-                                </div>                              
-                                <div class="col-md-6">
-                                    <mat-form-field appearance="outline">
-                                        <mat-label>Card No# <span class="asterisk">*</span></mat-label>
-                                        <input matInput placeholder="Card No#" formControlName="cc_number">
-                                    </mat-form-field>                                    
-                                    <div *ngIf="submittedForm && f.cc_number.errors" class="text-danger">
-                                       <div *ngIf="f.cc_number.errors.required">This field is required</div>
-                                       <div *ngIf="f.cc_number.errors.pattern">This field should be a number</div>
-                                       <div *ngIf="f.cc_number.errors.minlength">Minimum length should be 16</div>
-                                       <div *ngIf="f.cc_number.errors.maxlength">Maximum length should be 16</div>
-                                    </div>
+                            src="assets/admin/images/creditcard_pay.png"></h3>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Booking No# <span class="asterisk">*</span></mat-label>
+                                <input matInput placeholder="Booking No#" formControlName="reservation_id">
+                            </mat-form-field>
+                            <div *ngIf="submittedForm && f.reservation_id.errors" class="text-danger">
+                                <div *ngIf="f.reservation_id.errors.required">This field is required</div>
+                                <div *ngIf="f.reservation_id.errors.pattern">This field should be a number</div>
+                                <div *ngIf="f.reservation_id.errors.minlength">Minimum length should be 16</div>
+                                <div *ngIf="f.reservation_id.errors.maxlength">Maximum length should be 16</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Card No# <span class="asterisk">*</span></mat-label>
+                                <input matInput placeholder="Card No#" formControlName="cc_number">
+                            </mat-form-field>
+                            <div *ngIf="submittedForm && f.cc_number.errors" class="text-danger">
+                                <div *ngIf="f.cc_number.errors.required">This field is required</div>
+                                <div *ngIf="f.cc_number.errors.pattern">This field should be a number</div>
+                                <div *ngIf="f.cc_number.errors.minlength">Minimum length should be 16</div>
+                                <div *ngIf="f.cc_number.errors.maxlength">Maximum length should be 16</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Country of Region Residence<span class="asterisk">*</span></mat-label>
+                                <input matInput placeholder="Country of Region Residence"
+                                    formControlName="otherCountryOfRegionResidence">
+                            </mat-form-field>
+                            <div *ngIf="submittedForm && f.otherCountryOfRegionResidence.errors" class="text-danger">
+                                <div *ngIf="f.otherCountryOfRegionResidence.errors.required">This field is required
                                 </div>
-                                <div class="col-md-6">
-                                    <mat-form-field appearance="outline">
-                                        <mat-label>Country of Region Residence<span class="asterisk">*</span></mat-label>
-                                        <input matInput placeholder="Country of Region Residence" formControlName="otherCountryOfRegionResidence">
-                                    </mat-form-field>                                    
-                                    <div *ngIf="submittedForm && f.otherCountryOfRegionResidence.errors" class="text-danger">
-                                       <div *ngIf="f.otherCountryOfRegionResidence.errors.required">This field is required</div>
-                                       <div *ngIf="f.otherCountryOfRegionResidence.errors.pattern">This field should be a number</div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <mat-form-field appearance="outline">
-                                        <mat-label>CVC<span class="asterisk">*</span></mat-label>
-                                        <input matInput placeholder="CVC" formControlName="cvc">
-                                    </mat-form-field>                                     
-                                    <div *ngIf="submittedForm && f.cvc.errors" class="text-danger">
-                                       <div *ngIf="f.cvc.errors.required">This field is required</div>
-                                       <div *ngIf="f.cvc.errors.pattern">This field should be a number</div>
-                                       <div *ngIf="f.cvc.errors.minlength">Minimum length should be 3</div>
-                                       <div *ngIf="f.cvc.errors.maxlength">Maximum length should be 3</div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <mat-form-field appearance="outline">
-                                        <mat-label>MM/YY<span class="asterisk">*</span></mat-label>
-                                        <input matInput placeholder="MM/YY" formControlName="otherMMYY">
-                                    </mat-form-field> 
-                                    <div *ngIf="submittedForm && f.otherMMYY.errors" class="text-danger">
-                                       <div *ngIf="f.otherMMYY.errors.required">This field is required</div>
-                                       <div *ngIf="f.otherMMYY.errors.pattern">Please enter valid MM/YY</div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <mat-form-field appearance="outline">
-                                        <mat-label>First Name<span class="asterisk">*</span></mat-label>
-                                        <input matInput placeholder="First Name" formControlName="otherFirstName">
-                                    </mat-form-field>                                    
-                                    <div *ngIf="submittedForm && f.otherFirstName.errors" class="text-danger">
-                                       <div *ngIf="f.otherFirstName.errors.required">This field is required</div>
-                                       <div *ngIf="f.otherFirstName.errors.pattern">This field should be a number</div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <mat-form-field appearance="outline">
-                                        <mat-label>Last Name<span class="asterisk">*</span></mat-label>
-                                        <input matInput placeholder="Last Name" formControlName="otherLastName">
-                                    </mat-form-field>                                    
-                                    <div *ngIf="submittedForm && f.otherLastName.errors" class="text-danger">
-                                       <div *ngIf="f.otherLastName.errors.required">This field is required</div>
-                                       <div *ngIf="f.otherLastName.errors.pattern">This field should be a number</div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <mat-form-field appearance="outline">
-                                        <mat-label>Phone Number<span class="asterisk">*</span></mat-label>
-                                        <input matInput placeholder="Phone Number" formControlName="otherPhone">
-                                    </mat-form-field>                                   
-                                    <div *ngIf="submittedForm && f.otherPhone.errors" class="text-danger">
-                                       <div *ngIf="f.otherPhone.errors.required">This field is required</div>
-                                       <div *ngIf="f.otherPhone.errors.pattern">This field should be a number</div>
-                                       <div *ngIf="f.otherPhone.errors.minlength">Minimum length should be 10</div>
-                                       <div *ngIf="f.otherPhone.errors.maxlength">Maximum length should be 10</div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <mat-form-field appearance="outline">
-                                        <mat-label>Street Address<span class="asterisk">*</span></mat-label>
-                                        <input matInput placeholder="Street Address" formControlName="otherStreetAddress"  #search1>
-                                    </mat-form-field>                                     
-                                    <div *ngIf="submittedForm && f.otherStreetAddress.errors" class="text-danger">
-                                       <div *ngIf="f.otherStreetAddress.errors.required">This field is required</div>
-                                       <div *ngIf="f.otherStreetAddress.errors.pattern">This field should be a number</div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <mat-form-field appearance="outline">
-                                        <mat-label>City<span class="asterisk">*</span></mat-label>
-                                        <input matInput placeholder="City" formControlName="otherCity">
-                                    </mat-form-field>                                      
-                                    <div *ngIf="submittedForm && f.otherCity.errors" class="text-danger">
-                                       <div *ngIf="f.otherCity.errors.required">This field is required</div>
-                                       <div *ngIf="f.otherCity.errors.pattern">This field should be a number</div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <mat-form-field appearance="outline">
-                                        <mat-label>State<span class="asterisk">*</span></mat-label>
-                                        <input matInput placeholder="State" formControlName="otherState">
-                                    </mat-form-field>                                    
-                                    <div *ngIf="submittedForm && f.otherState.errors" class="text-danger">
-                                       <div *ngIf="f.otherState.errors.required">This field is required</div>
-                                       <div *ngIf="f.otherState.errors.pattern">This field should be a number</div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <mat-form-field appearance="outline">
-                                        <mat-label>Zip Code<span class="asterisk">*</span></mat-label>
-                                        <input matInput placeholder="Zip Code" formControlName="otherZip">
-                                    </mat-form-field>                                     
-                                    <div *ngIf="submittedForm && f.otherZip.errors" class="text-danger">
-                                       <div *ngIf="f.otherZip.errors.required">This field is required</div>
-                                       <div *ngIf="f.otherZip.errors.pattern">This field should be a number</div>
-                                    </div>
-                                </div>
+                                <div *ngIf="f.otherCountryOfRegionResidence.errors.pattern">This field should be a
+                                    number</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <mat-form-field appearance="outline">
+                                <mat-label>CVC<span class="asterisk">*</span></mat-label>
+                                <input matInput placeholder="CVC" formControlName="cvc">
+                            </mat-form-field>
+                            <div *ngIf="submittedForm && f.cvc.errors" class="text-danger">
+                                <div *ngIf="f.cvc.errors.required">This field is required</div>
+                                <div *ngIf="f.cvc.errors.pattern">This field should be a number</div>
+                                <div *ngIf="f.cvc.errors.minlength">Minimum length should be 3</div>
+                                <div *ngIf="f.cvc.errors.maxlength">Maximum length should be 3</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <mat-form-field appearance="outline">
+                                <mat-label>MM/YY<span class="asterisk">*</span></mat-label>
+                                <input matInput placeholder="MM/YY" formControlName="otherMMYY">
+                            </mat-form-field>
+                            <div *ngIf="submittedForm && f.otherMMYY.errors" class="text-danger">
+                                <div *ngIf="f.otherMMYY.errors.required">This field is required</div>
+                                <div *ngIf="f.otherMMYY.errors.pattern">Please enter valid MM/YY</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <mat-form-field appearance="outline">
+                                <mat-label>First Name<span class="asterisk">*</span></mat-label>
+                                <input matInput placeholder="First Name" formControlName="otherFirstName">
+                            </mat-form-field>
+                            <div *ngIf="submittedForm && f.otherFirstName.errors" class="text-danger">
+                                <div *ngIf="f.otherFirstName.errors.required">This field is required</div>
+                                <div *ngIf="f.otherFirstName.errors.pattern">This field should be a number</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Last Name<span class="asterisk">*</span></mat-label>
+                                <input matInput placeholder="Last Name" formControlName="otherLastName">
+                            </mat-form-field>
+                            <div *ngIf="submittedForm && f.otherLastName.errors" class="text-danger">
+                                <div *ngIf="f.otherLastName.errors.required">This field is required</div>
+                                <div *ngIf="f.otherLastName.errors.pattern">This field should be a number</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Phone Number<span class="asterisk">*</span></mat-label>
+                                <input matInput placeholder="Phone Number" formControlName="otherPhone">
+                            </mat-form-field>
+                            <div *ngIf="submittedForm && f.otherPhone.errors" class="text-danger">
+                                <div *ngIf="f.otherPhone.errors.required">This field is required</div>
+                                <div *ngIf="f.otherPhone.errors.pattern">This field should be a number</div>
+                                <div *ngIf="f.otherPhone.errors.minlength">Minimum length should be 10</div>
+                                <div *ngIf="f.otherPhone.errors.maxlength">Maximum length should be 10</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Street Address<span class="asterisk">*</span></mat-label>
+                                <input matInput placeholder="Street Address" formControlName="otherStreetAddress"
+                                    #search1>
+                            </mat-form-field>
+                            <div *ngIf="submittedForm && f.otherStreetAddress.errors" class="text-danger">
+                                <div *ngIf="f.otherStreetAddress.errors.required">This field is required</div>
+                                <div *ngIf="f.otherStreetAddress.errors.pattern">This field should be a number</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <mat-form-field appearance="outline">
+                                <mat-label>City<span class="asterisk">*</span></mat-label>
+                                <input matInput placeholder="City" formControlName="otherCity">
+                            </mat-form-field>
+                            <div *ngIf="submittedForm && f.otherCity.errors" class="text-danger">
+                                <div *ngIf="f.otherCity.errors.required">This field is required</div>
+                                <div *ngIf="f.otherCity.errors.pattern">This field should be a number</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <mat-form-field appearance="outline">
+                                <mat-label>State<span class="asterisk">*</span></mat-label>
+                                <input matInput placeholder="State" formControlName="otherState">
+                            </mat-form-field>
+                            <div *ngIf="submittedForm && f.otherState.errors" class="text-danger">
+                                <div *ngIf="f.otherState.errors.required">This field is required</div>
+                                <div *ngIf="f.otherState.errors.pattern">This field should be a number</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Zip Code / Country Address Code<span class="asterisk">*</span></mat-label>
+                                <input matInput placeholder="Zip Code / Country Address Code"
+                                    formControlName="otherZip">
+                            </mat-form-field>
+                            <div *ngIf="submittedForm && f.otherZip.errors" class="text-danger">
+                                <div *ngIf="f.otherZip.errors.required">This field is required</div>
+                                <div *ngIf="f.otherZip.errors.pattern">This field should be a number</div>
                             </div>
                         </div>
                     </div>
-            </section>
-            <div class="billing_inforamtion mr-3 d-flex justify-content-end">
-                <ul>
-                    <li><button class="custom-btn savebutton box-shadow" (click)="submitForm()" [disabled]="disableSubmitButton">SAVE</button> </li>
-                    <li><button class="custom-btn resetbutton box-shadow" (click)="resetForm()">RESET</button> </li>
-                </ul>
+                </div>
             </div>
-          </form>
+        </section>
+        <div class="billing_inforamtion mr-3 d-flex justify-content-end">
+            <ul>
+                <li><button class="custom-btn savebutton box-shadow" (click)="submitForm()"
+                        [disabled]="disableSubmitButton">SAVE</button> </li>
+                <li><button class="custom-btn resetbutton box-shadow" (click)="resetForm()">RESET</button> </li>
+            </ul>
+        </div>
+    </form>
 </main>

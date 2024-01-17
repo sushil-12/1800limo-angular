@@ -383,7 +383,7 @@
 					</div>
 				</div>
 				<div class="col-md-6" *ngIf="!affiliateId; else showEditDispatchEmailButton">
-					<mat-form-field appearance="outline">
+					<mat-form-field appearance="outline" [ngClass]="{ 'border-red': f.dispatchEmail?.value == '' }">
 						<mat-label>24 Hr Dispatch E-mail
 							<span class="asterisk">*</span>
 						</mat-label>
@@ -406,7 +406,8 @@
 				</div>
 				<ng-template #showEditDispatchEmailButton>
 					<div class="col-md-6" id="email_Text">
-						<mat-form-field appearance="outline" [class.read-only]="dispatchEmailReadonly == true">
+						<mat-form-field appearance="outline" [class.read-only]="dispatchEmailReadonly == true"
+							[ngClass]="{ 'border-red': f.dispatchEmail?.value == '' }">
 							<mat-label>24 Hr Dispatch E-mail
 								<span class="asterisk">*</span>
 							</mat-label>
@@ -479,7 +480,8 @@
 					</div>
 				</ng-template>
 				<div class="col-md-6">
-					<mat-form-field appearance="outline" class="mat-custom-phone topLabelClass">
+					<mat-form-field appearance="outline" class="mat-custom-phone topLabelClass"
+						[ngClass]="{ 'border-red': f.Dispatch?.value == '' }">
 						<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">24 Hr Cell
 							Dispatch
 							<span class="asterisk"> *</span></label>
@@ -687,7 +689,7 @@
 														'BusinessFrontPhoto',
 														BusinessFrontPhotoId
 													)
-												" tabIndex="-1" />
+												" tabIndex="-1" accept="image/jpeg, image/png" />
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -736,7 +738,7 @@
 															$event,
 															'BusinessFrontPhoto'
 														)
-													" tabIndex="-1" />
+													" tabIndex="-1" accept="image/jpeg, image/png" />
 												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 													<path fill="none" d="M0 0h24v24H0V0z" />
 													<circle cx="12" cy="12" r="3" />
@@ -787,7 +789,7 @@
 														'BusinessBackPhoto',
 														BusinessBackPhotoId
 													)
-												" tabIndex="-1" />
+												" tabIndex="-1" accept="image/jpeg, image/png" />
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -834,7 +836,7 @@
 															'BusinessBackPhoto',
 															BusinessBackPhotoId
 														)
-													" tabIndex="-1" />
+													" tabIndex="-1" accept="image/jpeg, image/png" />
 												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 													<path fill="none" d="M0 0h24v24H0V0z" />
 													<circle cx="12" cy="12" r="3" />

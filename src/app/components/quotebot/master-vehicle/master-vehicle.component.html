@@ -100,11 +100,12 @@
 								<!-- OUTER CARD -->
 								<div class="card" *ngFor="let filter_text of FILTERS_ORDER; index as filter_text_index">
 									<!-- FILTER TITLE -->
+									<!-- [ngClass]="filter_text_index > 0 ? 'collapsed' : ''" -->
+
 									<div class="card-header" [attr.id]="'card_' + filter_text_index">
 										<h2 class="mb-0">
 											<button type="button"
-												class="btn-custom-btn btn btn-link btn-block text-left"
-												[ngClass]="filter_text_index > 0 ? 'collapsed' : ''"
+												class="btn-custom-btn btn btn-link btn-block text-left collapsed"
 												[attr.aria-controls]="'filter_' + filter_text_index"
 												[attr.data-target]="'#filter_' + filter_text_index" aria-expanded="true"
 												data-toggle="collapse">
@@ -115,10 +116,10 @@
 									<!-- FILTER TITLE ENDS -->
 
 									<!-- FILTER COLLAPSIBLE CARD - uncollapsed for first card-->
+									<!-- [ngClass]="filter_text_index == 0 ? 'show' : ''" -->
 									<div class="collapse" data-parent="#accordionExample"
 										[attr.aria-labelledby]="'card_' + filter_text_index"
-										[attr.id]="'filter_' + filter_text_index"
-										[ngClass]="filter_text_index == 0 ? 'show' : ''">
+										[attr.id]="'filter_' + filter_text_index">
 										<!-- IF RP IS A STRING -->
 										<div class="card-body pt-0" *ngIf="!isArray(filter_text.rp)">
 											<!-- Search Field -->

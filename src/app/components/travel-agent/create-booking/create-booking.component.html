@@ -19,7 +19,7 @@
 		<!-- Section - Booking Type -->
 		<div class="section-container mt-0">
 			<h4 class="border-secondary">
-				Booking Type
+				{{updateType =='reaffiliate' ? 'edit' : updateType | titlecase}} a Booking
 			</h4>
 			<div class="row px-4">
 				<!-- Service Type -->
@@ -32,9 +32,9 @@
 							<mat-select formControlName="service_type"
 								(selectionChange)="onSelectionChangeServiceType($event)"
 								[ngStyle]="{'cursor': Form.updateType.value == 'edit' ? 'not-allowed' : 'default'}">
-								<mat-option value="one_way">One Way</mat-option>
-								<mat-option value="round_trip">Round Trip</mat-option>
-								<mat-option value="charter_tour">Charter/Tour</mat-option>
+								<mat-option value="one_way">One Way ?</mat-option>
+								<mat-option value="round_trip">Round Trip ?</mat-option>
+								<mat-option value="charter_tour">Charter/Tour ?</mat-option>
 							</mat-select>
 						</mat-form-field>
 					</div>
@@ -49,10 +49,18 @@
 							</mat-label>
 							<mat-select formControlName="transfer_type" class="font-weight-bolder"
 								(selectionChange)="changeTransferType($event.value)">
-								<mat-option [value]="tf_type" class="font-weight-bolder"
+								<mat-option value="airport_to_city">Airport To City ?</mat-option>
+								<mat-option value="airport_to_airport">Airport To Airport ?</mat-option>
+								<mat-option value="airport_to_cruise">Airport To Cruise Port ?</mat-option>
+								<mat-option value="city_to_city">City To City ?</mat-option>
+								<mat-option value="city_to_airport">City To Airport ?</mat-option>
+								<mat-option value="city_to_cruise">City To Cruise Port ?</mat-option>
+								<mat-option value="cruise_to_airport">Cruise Port To Airport ?</mat-option>
+								<mat-option value="cruise_to_city">Cruise Port to City ?</mat-option>
+								<!-- <mat-option [value]="tf_type" class="font-weight-bolder"
 									*ngFor="let tf_type of booking_params.transfer_types">
 									{{ textFormatterTransferType(tf_type) | titlecase }}
-								</mat-option>
+								</mat-option> -->
 							</mat-select>
 						</mat-form-field>
 					</div>
@@ -67,10 +75,18 @@
 							</mat-label>
 							<mat-select formControlName="return_transfer_type"
 								(selectionChange)="changeReturnTransferType($event.value)">
-								<mat-option [value]="tf_type" class="font-weight-bolder"
+								<mat-option value="airport_to_city">Airport To City ?</mat-option>
+								<mat-option value="airport_to_airport">Airport To Airport ?</mat-option>
+								<mat-option value="airport_to_cruise">Airport To Cruise Port ?</mat-option>
+								<mat-option value="city_to_city">City To City ?</mat-option>
+								<mat-option value="city_to_airport">City To Airport ?</mat-option>
+								<mat-option value="city_to_cruise">City To Cruise Port ?</mat-option>
+								<mat-option value="cruise_to_airport">Cruise Port To Airport ?</mat-option>
+								<mat-option value="cruise_to_city">Cruise Port to City ?</mat-option>
+								<!-- <mat-option [value]="tf_type" class="font-weight-bolder"
 									*ngFor="let tf_type of booking_params.transfer_types">
 									{{ textFormatterTransferType(tf_type) | titlecase }}
-								</mat-option>
+								</mat-option> -->
 							</mat-select>
 						</mat-form-field>
 					</div>
@@ -164,17 +180,47 @@
 			<h4 class=" border-secondary">
 				Accounts Information
 			</h4>
+
+			<div class="row" *ngIf="currentUser?.roleName != 'sub_travel_agent'">
+				<div class="col-md-12 col-lg-10 ml-1 d-flex justify-content-center">
+					<mat-radio-group aria-label="Select an option" formControlName="sub_account_type">
+						<mat-radio-button [value]="'travel_agent'" class="my-2 ml-4 mr-3"
+							(change)="handleChangeWithAgent('travel_agent')">
+							Super Agent
+						</mat-radio-button>
+						<mat-radio-button [value]="'sub_travel_agent'" class="my-2 ml-4 mr-3"
+							(change)="handleChangeWithAgent('sub_travel_agent')">
+							Sub Agent
+						</mat-radio-button>
+					</mat-radio-group>
+				</div>
+				<div class="col-md-10 ml-3 mb-1" *ngIf="Form['sub_account_type'].value != 'travel_agent'">
+					<ng-select appearance="outline" [items]="subAgentAccounts" bindLabel="name" bindValue="id"
+						placeholder="Select Sub Agent Account" dropdownPosition="bottom" [markFirst]="true"
+						[virtualScroll]="true" formControlName="sub_account_id"
+						(change)="handleSubAgentAccounts($event)" style="padding-bottom: 0px;"
+						[ngClass]="{ 'border-red': (submitBookingForm && Form.sub_account_id.invalid) }">
+					</ng-select>
+					<div *ngIf="(submitBookingForm && Form.sub_account_id.invalid) "
+						class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="Form.sub_account_id.errors.required">Select a sub agent
+							account</div>
+					</div>
+
+				</div>
+			</div>
 			<div *ngIf="Form['account_type'].value == 'travel_planner'">
+
 				<div class="row">
 					<div class="col-md-12 col-lg-10 d-flex justify-content-center">
 						<mat-radio-group aria-label="Select an option" formControlName="travel_client_acc">
 							<mat-radio-button [value]="'travel_individual'" class="my-2 ml-4 mr-3"
 								(change)="handleChangeTravelAccounts('travel_individual')">
-								Individual
+								Active Clients
 							</mat-radio-button>
 							<mat-radio-button [value]="'travel_loose_customer'" class="my-2 ml-4 mr-3"
 								(change)="handleChangeTravelAccounts('travel_loose_customer')">
-								Loose customer
+								Create new client
 							</mat-radio-button>
 						</mat-radio-group>
 					</div>
@@ -183,12 +229,14 @@
 					<ng-select appearance="outline" [items]="travelStaffAccounts" bindLabel="name" bindValue="id"
 						placeholder="Select Client Account" dropdownPosition="bottom" [markFirst]="true"
 						[virtualScroll]="true" formControlName="travel_client_id"
-						(change)="handleTravelStaffAccounts($event)">
+						(change)="handleTravelStaffAccounts($event)" style="padding-bottom: 0px;"
+						[ngClass]="{ 'border-red': (submitBookingForm && Form.travel_client_id.invalid) }">
 					</ng-select>
-					<!-- <div *ngIf="(submitBookingForm && Form.travel_client_id.invalid) || (Form.travel_client_id.touched && Form.travel_client_id.dirty)"
+					<div *ngIf="(submitBookingForm && Form.travel_client_id.invalid) "
 						class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="Form.travel_client_id.errors.required">Select an Individual</div>
-					</div> -->
+						<div *ngIf="Form.travel_client_id.errors.required">Select a client
+							account</div>
+					</div>
 				</div>
 			</div>
 			<ng-container
@@ -343,7 +391,7 @@
 									</mat-label>
 									<input type="text" matInput placeholder="Type your address"
 										matGoogleMapsAutocomplete
-										(onAutocompleteSelected)="fillLooseCustomerAddress($event.formatted_address)"
+										(onAutocompleteSelected)="fillLooseCustomerAddress($event)"
 										(focus)="$event.target.select()" />
 								</mat-form-field>
 							</div>
@@ -712,10 +760,14 @@
 							</mat-label>
 							<mat-select formControlName="transfer_type" class="font-weight-bolder"
 								(selectionChange)="changeTransferType($event.value)">
-								<mat-option [value]="tf_type" class="font-weight-bolder"
-									*ngFor="let tf_type of booking_params.transfer_types">
-									{{ textFormatterTransferType(tf_type) | titlecase }}
-								</mat-option>
+								<mat-option value="airport_to_city">Airport To City ?</mat-option>
+								<mat-option value="airport_to_airport">Airport To Airport ?</mat-option>
+								<mat-option value="airport_to_cruise">Airport To Cruise Port ?</mat-option>
+								<mat-option value="city_to_city">City To City ?</mat-option>
+								<mat-option value="city_to_airport">City To Airport ?</mat-option>
+								<mat-option value="city_to_cruise">City To Cruise Port ?</mat-option>
+								<mat-option value="cruise_to_airport">Cruise Port To Airport ?</mat-option>
+								<mat-option value="cruise_to_city">Cruise Port to City ?</mat-option>
 							</mat-select>
 						</mat-form-field>
 					</div>
@@ -730,10 +782,14 @@
 							</mat-label>
 							<mat-select formControlName="return_transfer_type" [(ngModel)]="return_transfer_type"
 								(selectionChange)="changeReturnTransferType($event.value)">
-								<mat-option [value]="tf_type" class="font-weight-bolder"
-									*ngFor="let tf_type of booking_params.transfer_types">
-									{{ textFormatterTransferType(tf_type) | titlecase }}
-								</mat-option>
+								<mat-option value="airport_to_city">Airport To City ?</mat-option>
+								<mat-option value="airport_to_airport">Airport To Airport ?</mat-option>
+								<mat-option value="airport_to_cruise">Airport To Cruise Port ?</mat-option>
+								<mat-option value="city_to_city">City To City ?</mat-option>
+								<mat-option value="city_to_airport">City To Airport ?</mat-option>
+								<mat-option value="city_to_cruise">City To Cruise Port ?</mat-option>
+								<mat-option value="cruise_to_airport">Cruise Port To Airport ?</mat-option>
+								<mat-option value="cruise_to_city">Cruise Port to City ?</mat-option>
 							</mat-select>
 						</mat-form-field>
 					</div>
@@ -810,13 +866,13 @@
 					<ngx-material-timepicker #onwy_tm [defaultTime]="Form.pickup_time.value"></ngx-material-timepicker>
 				</div>
 			</div>
-			<h4 class="pl-2 mt-3" id="pickup_details">
+			<h4 class="pl-2 mt-3">
 				Pickup
 			</h4>
 			<!-- Pickup - Address Field -->
 			<div *ngIf="!searchSubstring(Form.transfer_type.value, 'airport_')">
 				<div class="row px-3">
-					<div class="col-md-12">
+					<div class="col-md-12" id="pickup_address">
 						<mat-form-field appearance="outline">
 							<mat-label> Pickup Address </mat-label>
 							<input type="text" matInput placeholder="Type your address" matGoogleMapsAutocomplete
@@ -831,7 +887,7 @@
 			<div *ngIf="searchSubstring(Form.transfer_type.value, 'airport_')">
 				<div class="row px-2">
 					<!-- Airport -->
-					<div class="col-md-6 col-lg-3">
+					<div class="col-md-6 col-lg-3" id="pickup_address">
 
 						<!-- Ng-Select - Pickup > Airport -->
 						<ng-select appearance="outline" [items]="BigData?.airportsData"
@@ -860,14 +916,14 @@
 						</ng-select>
 					</div>
 
-					<!-- Flight Number -->
+					<!-- Flight / Tail # -->
 					<div class="col-md-6 col-lg-3">
 						<mat-form-field appearance="outline" class="vehicleLable mt-0"
 							style="margin-top: 0px !important;">
 							<mat-label>
-								Flight Number
+								Flight / Tail #
 							</mat-label>
-							<input type="text" matInput placeholder="Flight Number" aria-label="Flight"
+							<input type="text" matInput placeholder="Flight / Tail #" aria-label="Flight"
 								formControlName="pickup_flight" (focus)="$event.target.select()" />
 						</mat-form-field>
 					</div>
@@ -972,14 +1028,14 @@
 						</ng-select>
 					</div>
 
-					<!-- Flight Number -->
+					<!-- Flight / Tail # -->
 					<div class="col-md-5 col-lg-3">
 						<mat-form-field appearance="outline" class="vehicleLable mt-0"
 							style="margin-top: 0px !important;">
 							<mat-label>
-								Flight Number
+								Flight / Tail #
 							</mat-label>
-							<input type="text" matInput placeholder="Flight Number" aria-label="Flight"
+							<input type="text" matInput placeholder="Flight / Tail #" aria-label="Flight"
 								formControlName="dropoff_flight" (focus)="$event.target.select()" />
 						</mat-form-field>
 					</div>
@@ -1031,7 +1087,7 @@
 						Special Instructions
 					</mat-label>
 					<textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize"
-						formControlName="booking_instructions" (focus)="$event.target.select()" rows="5"></textarea>
+						formControlName="booking_instructions" rows="5"></textarea>
 				</mat-form-field>
 			</div>
 			<div class="row m-2">
@@ -1086,7 +1142,7 @@
 								}} Km
 							</h6>
 							<h6 class="mx-2">
-								Estimated time: {{convertToMinutes(Form.journeyTime.value)}} mins
+								Estimated time: {{convertToMinutes(Form.journeyTime.value)}}
 							</h6>
 						</div>
 					</div>
@@ -1131,10 +1187,14 @@
 							<mat-select formControlName="transfer_type" class="font-weight-bolder"
 								(selectionChange)="changeTransferType($event.value)"
 								[(ngModel)]="Form.transfer_type.value">
-								<mat-option [value]="tf_type" class="font-weight-bolder"
-									*ngFor="let tf_type of booking_params.transfer_types">
-									{{ textFormatterTransferType(tf_type) | titlecase }}
-								</mat-option>
+								<mat-option value="airport_to_city">Airport To City ?</mat-option>
+								<mat-option value="airport_to_airport">Airport To Airport ?</mat-option>
+								<mat-option value="airport_to_cruise">Airport To Cruise Port ?</mat-option>
+								<mat-option value="city_to_city">City To City ?</mat-option>
+								<mat-option value="city_to_airport">City To Airport ?</mat-option>
+								<mat-option value="city_to_cruise">City To Cruise Port ?</mat-option>
+								<mat-option value="cruise_to_airport">Cruise Port To Airport ?</mat-option>
+								<mat-option value="cruise_to_city">Cruise Port to City ?</mat-option>
 							</mat-select>
 						</mat-form-field>
 					</div>
@@ -1149,10 +1209,14 @@
 							</mat-label>
 							<mat-select formControlName="return_transfer_type" [(ngModel)]="return_transfer_type"
 								(selectionChange)="changeReturnTransferType($event.value)">
-								<mat-option [value]="tf_type" class="font-weight-bolder"
-									*ngFor="let tf_type of booking_params.transfer_types">
-									{{ textFormatterTransferType(tf_type) | titlecase }}
-								</mat-option>
+								<mat-option value="airport_to_city">Airport To City ?</mat-option>
+								<mat-option value="airport_to_airport">Airport To Airport ?</mat-option>
+								<mat-option value="airport_to_cruise">Airport To Cruise Port ?</mat-option>
+								<mat-option value="city_to_city">City To City ?</mat-option>
+								<mat-option value="city_to_airport">City To Airport ?</mat-option>
+								<mat-option value="city_to_cruise">City To Cruise Port ?</mat-option>
+								<mat-option value="cruise_to_airport">Cruise Port To Airport ?</mat-option>
+								<mat-option value="cruise_to_city">Cruise Port to City ?</mat-option>
 							</mat-select>
 						</mat-form-field>
 					</div>
@@ -1271,14 +1335,14 @@
 						</ng-select>
 					</div>
 
-					<!-- Flight Number -->
+					<!-- Flight / Tail # -->
 					<div class="col-md-6 col-lg-3">
 						<mat-form-field appearance="outline" class="vehicleLable mt-0"
 							style="margin-top: 0px !important;">
 							<mat-label>
-								Flight Number
+								Flight / Tail #
 							</mat-label>
-							<input type="text" matInput placeholder="Flight Number" aria-label="Flight"
+							<input type="text" matInput placeholder="Flight / Tail #" aria-label="Flight"
 								formControlName="return_pickup_flight" (focus)="$event.target.select()" />
 						</mat-form-field>
 					</div>
@@ -1379,14 +1443,14 @@
 						</ng-select>
 					</div>
 
-					<!-- Flight Number -->
+					<!-- Flight / Tail # -->
 					<div class="col-md-5 col-lg-3">
 						<mat-form-field appearance="outline" class="vehicleLable mt-0"
 							style="margin-top: 0px !important;">
 							<mat-label>
-								Flight Number
+								Flight / Tail #
 							</mat-label>
-							<input type="text" matInput placeholder="Flight Number" aria-label="Flight"
+							<input type="text" matInput placeholder="Flight / Tail #" aria-label="Flight"
 								formControlName="return_dropoff_flight" (focus)="$event.target.select()" />
 						</mat-form-field>
 					</div>
@@ -1440,7 +1504,7 @@
 						Special Instructions
 					</mat-label>
 					<textarea matInput style="white-space: pre-wrap;" formControlName="return_booking_instructions"
-						(focus)="$event.target.select()" rows="5"></textarea>
+						rows="5"></textarea>
 				</mat-form-field>
 			</div>
 
@@ -1495,7 +1559,7 @@
 								}} Km
 							</h6>
 							<h6 class="mx-2">
-								Estimated time: {{convertToMinutes(Form.journeyTime.value)}} mins
+								Estimated time: {{convertToMinutes(Form.journeyTime.value)}}
 							</h6>
 						</div>
 					</div>
@@ -1508,18 +1572,8 @@
 	<div class="row">
 		<div class="section-container finalizeRates"
 			[ngClass]="{'w-100': service_type!='round_trip', 'w-50': service_type=='round_trip'}">
-			<div class="row px-2 justify-content-between align-items-center">
-				<div class="col-md-6">
-					<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
-						Agent share
-					</p>
-				</div>
-				<div class="col-md-4 text-3xl text-right">
-					<i class="bi bi-currency-dollar text-danger"></i>
-					{{ agentShare.toFixed(2) }}
-				</div>
-			</div>
-			<div class="row px-2 justify-content-between align-items-center">
+
+			<div class="row px-2 justify-content-between align-items-center flex-nowrap">
 				<div class="col-md-6">
 					<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
 						Sub Total
@@ -1531,7 +1585,7 @@
 				</div>
 			</div>
 			<!-- Number of Vehicles/Hours -->
-			<div class="row px-2 justify-content-between align-items-center">
+			<div class="row px-2 justify-content-between align-items-center flex-nowrap">
 				<div class="col-md-6 col-xl-7">
 					<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
 						Number of Vehicles
@@ -1544,7 +1598,7 @@
 			</div>
 
 			<!-- Total -->
-			<div class="row px-2 justify-content-between align-items-center">
+			<div class="row px-2 justify-content-between align-items-center flex-nowrap">
 				<div class="col-md-6 col-xl-7">
 					<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
 						Grand Total
@@ -1555,21 +1609,22 @@
 					{{ grandtotal.toFixed(2) * Form.number_of_vehicles.value }}
 				</div>
 			</div>
-		</div>
-		<div class="section-container finalizeRates" *ngIf="service_type=='round_trip'"
-			[ngClass]="{'w-50': service_type=='round_trip'}">
-			<div class="row px-2 justify-content-between align-items-center">
+			<div class="row px-2 justify-content-between align-items-center flex-nowrap">
 				<div class="col-md-6">
 					<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
-						Agent share
+						Travel Agent share
 					</p>
 				</div>
 				<div class="col-md-4 text-3xl text-right">
 					<i class="bi bi-currency-dollar text-danger"></i>
-					{{ r_agentShare.toFixed(2) }}
+					{{ agentShare.toFixed(2) }}
 				</div>
 			</div>
-			<div class="row px-2 justify-content-between align-items-center">
+		</div>
+		<div class="section-container finalizeRates" *ngIf="service_type=='round_trip'"
+			[ngClass]="{'w-50': service_type=='round_trip'}">
+
+			<div class="row px-2 justify-content-between align-items-center flex-nowrap">
 				<div class="col-md-6">
 					<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
 						Sub Total
@@ -1580,7 +1635,7 @@
 					{{ r_subtotal.toFixed(2) }}
 				</div>
 			</div>
-			<div class="row px-2 justify-content-between align-items-center">
+			<div class="row px-2 justify-content-between align-items-center flex-nowrap">
 				<div class="col-md-6 col-xl-7">
 					<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
 						Number of Vehicles
@@ -1591,7 +1646,7 @@
 					{{ Form.number_of_vehicles.value }}
 				</div>
 			</div>
-			<div class="row px-2 justify-content-between align-items-center">
+			<div class="row px-2 justify-content-between align-items-center flex-nowrap">
 				<div class="col-md-6 col-xl-7">
 					<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
 						Grand Total
@@ -1602,10 +1657,21 @@
 					{{ r_grandtotal.toFixed(2) }}
 				</div>
 			</div>
+			<div class="row px-2 justify-content-between align-items-center flex-nowrap">
+				<div class="col-md-6">
+					<p class="font-weight-bolder text-uppercase m-0" style="font-size: 1.3rem;">
+						Travel Agent share
+					</p>
+				</div>
+				<div class="col-md-4 text-3xl text-right">
+					<i class="bi bi-currency-dollar text-danger"></i>
+					{{ r_agentShare.toFixed(2) }}
+				</div>
+			</div>
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-md-12 d-flex justify-content-end">
+		<div class="col-md-12 d-flex preview_button_edit">
 			<!-- <button type="button" class="custom-filled-reset-button m-3" (click)="resetFields()">
 					Reset
 				</button> -->
@@ -1882,64 +1948,9 @@
 						</div>
 					</div>
 					<hr>
-					<div class="mx-2" *ngIf="Form?.meet_greet_choices_name.value">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Meet and Greet
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder" style="white-space: pre-wrap;">
-									{{Form?.meet_greet_choices_name.value}}
-								</span>
-							</div>
-						</div>
-					</div>
-					<div class="mx-2" *ngIf="Form.service_type.value == 'round_trip'">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Return Meet and Greet
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder" style="white-space: pre-wrap;">
-									{{Form?.return_meet_greet_choices_name.value}}
-								</span>
-							</div>
-						</div>
-					</div>
-					<hr>
-					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Special Instruction
-								</span>
-							</div>
-							<div class="col-md-8 value box-special-instruction">
-								<span class="font-weight-bolder" style="white-space: pre-wrap;">
-									{{Form?.booking_instructions.value}}
-								</span>
-							</div>
-						</div>
-					</div>
-					<div class="mx-2" *ngIf="Form.service_type.value == 'round_trip'">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Return Special Instruction
-								</span>
-							</div>
-							<div class="col-md-8 value box-special-instruction">
-								<span class="font-weight-bolder" style="white-space: pre-wrap;">
-									{{Form?.return_booking_instructions.value}}
-								</span>
-							</div>
-						</div>
-					</div>
-					<hr>
+
+
+
 					<!-- Travel Information -->
 					<h4 class="font-weight-bolder m-0 mt-3">
 						Travel Information
@@ -2014,8 +2025,8 @@
 								<span class="font-weight-bolder">
 									{{ textFormatter(Form.pickup.value) }}
 								</span>
-								<span (click)="showLocationPointOnMap(Form.pickup.value)"><i class="bi bi-geo-alt-fill"
-										style="font-size:24px"></i></span>
+								<span (click)="showLocationPointOnMap(Form.pickup.value)"><i
+										class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
 							</div>
 						</div>
 					</div>
@@ -2035,7 +2046,7 @@
 								</span>
 								<span class="font-weight-bolder preview-airport-color"
 									(click)="showLocationPointOnMap(Form.pickup_airport_name.value)"><i
-										class="bi bi-geo-alt-fill" style="font-size:24px"></i></span>
+										class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
 							</div>
 						</div>
 						<!-- Airport -->
@@ -2053,11 +2064,11 @@
 							</div>
 						</div>
 						<!-- Airline -->
-						<!-- Flight Number -->
+						<!-- Flight / Tail # -->
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
-									Flight Number
+									Flight / Tail #
 								</span>
 							</div>
 							<div class="col-md-8 value">
@@ -2066,7 +2077,7 @@
 								</span>
 							</div>
 						</div>
-						<!-- Flight Number -->
+						<!-- Flight / Tail # -->
 					</div>
 
 					<!-- Pickup > Cruise Details -->
@@ -2133,8 +2144,8 @@
 									<span class="font-weight-bolder">
 										{{ stop.address }}
 									</span>
-									<span (click)="showLocationPointOnMap(stop.address)"><i class="bi bi-geo-alt-fill"
-											style="font-size:24px"></i></span>
+									<span (click)="showLocationPointOnMap(stop.address)"><i
+											class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
 								</div>
 							</div>
 							<hr>
@@ -2160,8 +2171,8 @@
 								<span class="font-weight-bolder">
 									{{ textFormatter(Form.dropoff.value) }}
 								</span>
-								<span (click)="showLocationPointOnMap(Form.dropoff.value)"><i class="bi bi-geo-alt-fill"
-										style="font-size:24px"></i></span>
+								<span (click)="showLocationPointOnMap(Form.dropoff.value)"><i
+										class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
 							</div>
 						</div>
 					</div>
@@ -2181,7 +2192,7 @@
 								</span>
 								<span class="font-weight-bolder"
 									(click)="showLocationPointOnMap(Form.dropoff_airport_name.value)"><i
-										class="bi bi-geo-alt-fill" style="font-size:24px"></i></span>
+										class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
 							</div>
 						</div>
 						<!-- Airport -->
@@ -2199,11 +2210,11 @@
 							</div>
 						</div>
 						<!-- Airline -->
-						<!-- Flight Number -->
+						<!-- Flight / Tail # -->
 						<div class="row p-2">
 							<div class="col-md-4 key">
 								<span>
-									Flight Number
+									Flight / Tail #
 								</span>
 							</div>
 							<div class="col-md-8 value">
@@ -2212,7 +2223,7 @@
 								</span>
 							</div>
 						</div>
-						<!-- Flight Number -->
+						<!-- Flight / Tail # -->
 					</div>
 
 					<!-- Dropoff > Cruise Details -->
@@ -2262,8 +2273,106 @@
 						</div>
 						<!-- Cruise Time -->
 					</div>
+					<hr>
+					<div class="mx-2" *ngIf="Form?.meet_greet_choices_name.value">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Meet and Greet
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder" style="white-space: pre-wrap;">
+									{{Form?.meet_greet_choices_name.value}}
+								</span>
+							</div>
+						</div>
+					</div>
+					<hr>
+
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Special Instruction
+								</span>
+							</div>
+							<div class="col-md-8 value box-special-instruction">
+								<span class="font-weight-bolder" style="white-space: pre-wrap;">
+									{{Form?.booking_instructions.value}}
+								</span>
+							</div>
+						</div>
+					</div>
+					<hr>
+					<div class="distribution_rate">
+						<h4 class="font-weight-bolder m-0 my-3">
+							Rates Distribution
+						</h4>
+
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key d-flex align-items-center">
+									<span class="">
+										Base Rate
+									</span>
+								</div>
+								<div class="col-md-8 value preview-airport-color">
+									<span class="font-weight-bolder preview-output-feild">
+										${{shareArray?.baseRate.toFixed(2)}}
+									</span>
+									(Fare Base Rate)
+								</div>
+							</div>
+						</div>
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key d-flex align-items-center">
+									<span class="">
+										Travel Agent Share
+									</span>
+								</div>
+								<div class="col-md-8 value preview-airport-color">
+									<span class="font-weight-bolder preview-output-feild">
+										${{shareArray?.travelAgentShare ? shareArray?.travelAgentShare.toFixed(2) : 0}}
+									</span>
+									(10% of Base Rate)
+								</div>
+							</div>
+						</div>
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key d-flex align-items-center">
+									<span class="">
+										Total Cost
+									</span>
+								</div>
+								<div class="col-md-8 value preview-airport-color">
+									<span class="font-weight-bolder preview-output-feild">
+										${{shareArray?.grandTotal.toFixed(2)}}
+									</span>
+									(Actual Cost to Customer)
+								</div>
+							</div>
+						</div>
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key d-flex align-items-center">
+									<span class="">
+										Stripe fees
+									</span>
+								</div>
+								<div class="col-md-8 value preview-airport-color">
+									<span class="font-weight-bolder preview-output-feild">
+										${{shareArray?.stripeFee.toFixed(2)}}
+									</span>
+									(Platform fee 5% + 30 cents - <b>Paid from Admin share</b>)
+								</div>
+							</div>
+						</div>
 
 
+					</div>
 					<!-- Return Information -->
 					<!-- style="width: 75%; margin: 1.6rem auto; border: 1.2px solid #000;" / -->
 					<div *ngIf="Form.service_type.value == 'round_trip'">
@@ -2325,7 +2434,7 @@
 										{{ textFormatter(Form.return_pickup.value) | titlecase }}
 									</span>
 									<span (click)="showLocationPointOnMap(Form.return_pickup.value)"><i
-											class="bi bi-geo-alt-fill" style="font-size:24px"></i></span>
+											class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
 								</div>
 							</div>
 						</div>
@@ -2346,7 +2455,7 @@
 									</span>
 									<span class="font-weight-bolder preview-airport-color"
 										(click)="showLocationPointOnMap(Form.return_pickup_airport_name.value)"><i
-											class="bi bi-geo-alt-fill" style="font-size:24px"></i></span>
+											class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
 								</div>
 							</div>
 							<!-- Airline -->
@@ -2363,11 +2472,11 @@
 								</div>
 							</div>
 
-							<!-- Flight Number -->
+							<!-- Flight / Tail # -->
 							<div class="row p-2">
 								<div class="col-md-4 key">
 									<span>
-										Flight Number
+										Flight / Tail #
 									</span>
 								</div>
 								<div class="col-md-8 value">
@@ -2443,7 +2552,7 @@
 											{{ stop.address }}
 										</span>
 										<span (click)="showLocationPointOnMap(stop.address)"><i
-												class="bi bi-geo-alt-fill" style="font-size:24px"></i></span>
+												class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
 									</div>
 								</div>
 								<hr>
@@ -2470,7 +2579,7 @@
 										{{ textFormatter(Form.return_dropoff.value) | titlecase }}
 									</span>
 									<span (click)="showLocationPointOnMap(Form.return_dropff.value)"><i
-											class="bi bi-geo-alt-fill" style="font-size:24px"></i></span>
+											class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
 								</div>
 							</div>
 						</div>
@@ -2491,7 +2600,7 @@
 									</span>
 									<span class="font-weight-bolder preview-airport-color"
 										(click)="showLocationPointOnMap(Form.return_dropoff_airport_name.value)"><i
-											class="bi bi-geo-alt-fill" style="font-size:24px"></i></span>
+											class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
 								</div>
 							</div>
 
@@ -2509,11 +2618,11 @@
 								</div>
 							</div>
 
-							<!-- Flight Number -->
+							<!-- Flight / Tail # -->
 							<div class="row p-2">
 								<div class="col-md-4 key">
 									<span>
-										Flight Number
+										Flight / Tail #
 									</span>
 								</div>
 								<div class="col-md-8 value">
@@ -2573,6 +2682,106 @@
 								</div>
 							</div>
 						</div>
+					</div>
+					<hr>
+					<div class="mx-2" *ngIf="Form.service_type.value == 'round_trip'">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Return Meet and Greet
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder" style="white-space: pre-wrap;">
+									{{Form?.return_meet_greet_choices_name.value}}
+								</span>
+							</div>
+						</div>
+						<hr>
+					</div>
+					<div class="mx-2" *ngIf="Form.service_type.value == 'round_trip'">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Return Special Instruction
+								</span>
+							</div>
+							<div class="col-md-8 value box-special-instruction">
+								<span class="font-weight-bolder" style="white-space: pre-wrap;">
+									{{Form?.return_booking_instructions.value}}
+								</span>
+							</div>
+						</div>
+						<hr *ngIf="Form.service_type.value == 'round_trip'">
+					</div>
+					<div class="distribution_rate" *ngIf="Form.service_type.value == 'round_trip'">
+						<h4 class="font-weight-bolder m-0 my-3">
+							Rates Distribution
+						</h4>
+
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key d-flex align-items-center">
+									<span class="">
+										Base Rate
+									</span>
+								</div>
+								<div class="col-md-8 value preview-airport-color">
+									<span class="font-weight-bolder preview-output-feild">
+										${{r_shareArray?.baseRate.toFixed(2)}}
+									</span>
+									(Fare Base Rate)
+								</div>
+							</div>
+						</div>
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key d-flex align-items-center">
+									<span class="">
+										Travel Agent Share
+									</span>
+								</div>
+								<div class="col-md-8 value preview-airport-color">
+									<span class="font-weight-bolder preview-output-feild">
+										${{r_shareArray?.travelAgentShare ? r_shareArray?.travelAgentShare.toFixed(2) :
+										0}}
+									</span>
+									(10% of Base Rate)
+								</div>
+							</div>
+						</div>
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key d-flex align-items-center">
+									<span class="">
+										Total Cost
+									</span>
+								</div>
+								<div class="col-md-8 value preview-airport-color">
+									<span class="font-weight-bolder preview-output-feild">
+										${{r_shareArray?.returnGrandTotal.toFixed(2)}}
+									</span>
+									(Actual Cost to Customer)
+								</div>
+							</div>
+						</div>
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key d-flex align-items-center">
+									<span class="">
+										Stripe fees
+									</span>
+								</div>
+								<div class="col-md-8 value preview-airport-color">
+									<span class="font-weight-bolder preview-output-feild">
+										${{r_shareArray?.stripeFee.toFixed(2)}}
+									</span>
+									(Platform fee 5% + 30 cents - <b>Paid from Admin share</b>)
+								</div>
+							</div>
+						</div>
+
+
 					</div>
 				</div>
 			</div>

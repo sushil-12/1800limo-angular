@@ -1,5 +1,56 @@
 <form [formGroup]="addBankForm" class="step_form_wrapper" appInvalidControlScroll>
 	<section class="user_information">
+		<h2 class="headinginfo adminbox_shadow" *ngIf="response">Bank Account Status</h2>
+		<div class="container">
+			<div class="row" *ngIf="response">
+				<div class="col-md-12" *ngIf="response.data.stripeDetail.transfer_status!='active'">
+					<p class="text-danger margin-bottom-thin my-mat-hint" style="font-size: 17px; font-weight: 800;">
+						Stripe
+						Activation can take upto 24 Hours.</p>
+				</div>
+				<div class="col-md-12" *ngIf="response.data?.stripeDetail?.stripe_errors">
+					<p class="text-danger margin-bottom-thin my-mat-hint" style="font-size: 17px; font-weight: 800;">
+						{{TaxIdMatch}}</p>
+				</div>
+				<div class="col-md-4">
+					<p [className]="'defaultStatus ' + response.data.stripeDetail.additional_doc_verification_status">
+						<strong>Stripe Doc Verification Status:</strong> <span class="text-capitalize">
+							{{response.data.stripeDetail.additional_doc_verification_status}}</span>
+					</p>
+				</div>
+				<div class="col-md-4">
+					<p [className]="'defaultStatus ' + response.data.stripeDetail.stripe_address_status">
+						<strong>Stripe Address Status:</strong> <span class="text-capitalize">
+							{{response.data.stripeDetail.stripe_address_status}}</span>
+					</p>
+				</div>
+				<div class="col-md-4">
+					<p [className]="'defaultStatus ' + response.data.stripeDetail.transfer_status">
+						<strong>Stripe Transfer Type:</strong> <span class="text-capitalize">
+							{{response.data.stripeDetail.transfer_status}}</span>
+					</p>
+				</div>
+				<div class="col-md-12" *ngIf="stripeErrors.length>0">
+					<h5 class="stripeErrorHeading">
+						Please fix these errors for the Payouts: <span *ngIf="ssnErrorMessage"
+							class="stripeErrorHeading">(SSN /
+							ID
+							NUMBER)</span>
+					</h5>
+					<ul>
+						<li *ngFor="let error of stripeErrors" tabindex="-1" style="color: red; font-weight: 400;">
+							{{error.error_message}}</li>
+					</ul>
+				</div>
+				<div class="col-12" *ngIf="response.data.bankinfo.stripe_account_type=='standard'">
+					<button class="forstep_nextveh" data-toggle="modal" data-target="#verificationDocumentModal"
+						(click)="stripeRefreshAccountLink()" tabindex="-1"><i class="fa fa-pencil-square-o"
+							aria-hidden="true"></i>
+						Edit Bank Information on Stripe
+					</button>
+				</div>
+			</div>
+		</div>
 		<h2 class="headinginfo adminbox_shadow">
 			Company Bank Settings
 			<span>(Per Stripe For Identification & Direct Deposits)</span>
@@ -103,10 +154,10 @@
 					</div>
 				</div>
 				<div class="col-md-2 col-4 birthMonth">
-					<mat-form-field appearance="outline">
+					<mat-form-field appearance="outline" [ngClass]="{ 'border-red': dobErrorMessage }">
 						<mat-label>Month of Birth
 							<span class="asterisk">*</span></mat-label>
-						<mat-select formControlName="dobMonth">
+						<mat-select formControlName="dobMonth" (selectionChange)="removeDobError()">
 							<mat-option value="">Month</mat-option>
 							<mat-option value="01">01</mat-option>
 							<mat-option value="02">02</mat-option>
@@ -122,6 +173,9 @@
 							<mat-option value="12">12</mat-option>
 						</mat-select>
 					</mat-form-field>
+					<div *ngIf="dobErrorMessage" class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="dobErrorMessage" style="font-weight: 550;">{{dobErrorMessage}}</div>
+					</div>
 					<div *ngIf="submittedForm && f.dobMonth.errors" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.dobMonth.errors.required">
 							This field is required
@@ -129,14 +183,17 @@
 					</div>
 				</div>
 				<div class="col-md-2 col-4 birthDay">
-					<mat-form-field appearance="outline">
+					<mat-form-field appearance="outline" [ngClass]="{ 'border-red': dobErrorMessage }">
 						<mat-label>Day of Birth
 							<span class="asterisk">*</span></mat-label>
-						<mat-select formControlName="dobDay">
+						<mat-select formControlName="dobDay" (selectionChange)="removeDobError()">
 							<mat-option value="">Day</mat-option>
 							<mat-option *ngFor="let day of dobDay" value="{{ day }}">{{ day }}</mat-option>
 						</mat-select>
 					</mat-form-field>
+					<div *ngIf="dobErrorMessage" class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="dobErrorMessage" style="font-weight: 550;">{{dobErrorMessage}}</div>
+					</div>
 					<div *ngIf="submittedForm && f.dobDay.errors" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.dobDay.errors.required">
 							This field is required
@@ -144,14 +201,17 @@
 					</div>
 				</div>
 				<div class="col-md-2 col-4 birthYear">
-					<mat-form-field appearance="outline">
+					<mat-form-field appearance="outline" [ngClass]="{ 'border-red': dobErrorMessage }">
 						<mat-label>Year of Birth
 							<span class="asterisk">*</span></mat-label>
-						<mat-select formControlName="dobYear">
+						<mat-select formControlName="dobYear" (selectionChange)="removeDobError()">
 							<mat-option value="">Year</mat-option>
 							<mat-option *ngFor="let year of dobYear" value="{{ year }}">{{ year }}</mat-option>
 						</mat-select>
 					</mat-form-field>
+					<div *ngIf="dobErrorMessage" class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="dobErrorMessage" style="font-weight: 550;">{{dobErrorMessage}}</div>
+					</div>
 					<div *ngIf="submittedForm && f.dobYear.errors" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.dobYear.errors.required">
 							This field is required
@@ -191,12 +251,17 @@
 					</div>
 				</div>
 				<div class="col-md-6">
-					<mat-form-field appearance="outline">
+					<mat-form-field appearance="outline"
+						[ngClass]="{ 'disableSsn': enableSsnField, 'border-red': ssnErrorMessage }">
 						<mat-label>SSN(USA required by stripe/GOVT ID for other countries)
 							<span class="asterisk">*</span></mat-label>
 						<input matInput placeholder="SSN(USA required by stripe/GOVT ID for other countries)"
-							formControlName="ssn" tabindex="1" />
+							formControlName="ssn" tabindex="1" (change)="handleSsnInput($event.target.value)"
+							(keyup)="removeErrorSsn($event.target.value,'ssn')" />
 					</mat-form-field>
+					<div *ngIf="ssnErrorMessage" class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="ssnErrorMessage" style="font-weight: 550;">{{ssnErrorMessage}}</div>
+					</div>
 					<div *ngIf="
 							(submittedForm && f.ssn.errors) ||
 							(f.ssn.touched && f.ssn.errors)
@@ -302,7 +367,7 @@
 														'id_front_image',
 														id_front_image_id
 													)
-												" tabindex="-1" />
+												" tabindex="-1" accept="image/jpeg, image/png" />
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -354,7 +419,7 @@
 															$event,
 															'id_front_image'
 														)
-													" tabindex="-1" />
+													" tabindex="-1" accept="image/jpeg, image/png" />
 												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 													<path fill="none" d="M0 0h24v24H0V0z" />
 													<circle cx="12" cy="12" r="3" />
@@ -406,7 +471,7 @@
 														'id_back_image',
 														id_back_image_id
 													)
-												" tabindex="-1" />
+												" tabindex="-1" accept="image/jpeg, image/png" />
 											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 												<path fill="none" d="M0 0h24v24H0V0z" />
 												<circle cx="12" cy="12" r="3" />
@@ -455,7 +520,7 @@
 															'id_back_image',
 															id_back_image_id
 														)
-													" tabindex="-1" />
+													" tabindex="-1" accept="image/jpeg, image/png" />
 												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 													<path fill="none" d="M0 0h24v24H0V0z" />
 													<circle cx="12" cy="12" r="3" />
@@ -481,7 +546,8 @@
 			<div class="row">
 				<div class="col-md-12">
 					<h3 class="addveh_top d-md-flex justify-content-between align-items-center mb-0">
-						<label class="alert alert-danger">Enter Address and Choose From Drop Down.</label>
+						<label class="alert alert-danger" style="color: red !important;">Enter Business Address and
+							Choose From Drop Down.</label>
 						<!-- <label class="alert alert-danger my-2 mx-2">Choose nearest major city or airport
 							location</label> -->
 						<label></label>
@@ -490,11 +556,14 @@
 			</div>
 			<div class="row">
 				<div class="col-md-6">
-					<mat-form-field appearance="outline">
+					<mat-form-field appearance="outline" [ngClass]="{ 'border-red': addressErrorMessage }">
 						<mat-label>Enter Business/Base Address</mat-label>
 						<input matInput placeholder="Search Here and Set Location Pin" formControlName="address"
-							#search1 tabindex="1" />
+							#search1 tabindex="1" (keyup)="removeErrorSsn($event.target.value,'address')" />
 					</mat-form-field>
+					<div *ngIf="addressErrorMessage" class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="addressErrorMessage" style="font-weight: 550;">{{addressErrorMessage}}</div>
+					</div>
 					<div *ngIf="
 							(submittedForm && f.address.errors) ||
 								(f.address.touched && f.address.errors);
@@ -538,7 +607,8 @@
 				</div>
 				<div class="col-md-12 mt-3">
 					<h3 class="addveh_top d-md-flex justify-content-between align-items-center mb-0">
-						<label class="alert alert-danger">Verify All Fields Under the Map - Especially -
+						<label class="alert alert-danger" style="color: red !important;">Verify All Fields Under the Map
+							- Especially -
 							Complete Address and City.</label>
 					</h3>
 				</div>

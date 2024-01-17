@@ -7,6 +7,7 @@ import { throwError } from 'rxjs';
 import { ThemePalette } from '@angular/material/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
+import { AffiliateService } from 'src/app/services/affiliate.service';
 declare var $: any;
 
 @Component({
@@ -16,14 +17,14 @@ declare var $: any;
 })
 export class AffiliateAccountsComponent implements OnInit {
 	emails = new FormControl('');
-    emailList: string[] = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato'];
+	emailList: string[] = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato'];
 	color: ThemePalette = 'primary';
 	checked = false;
 	disabled = false;
 	show: boolean;
 	public paramResponse: any;
 	public affiliate_accounts: any;
-	public affiliate_accounts_emails:any=[];
+	public affiliate_accounts_emails: any = [];
 	public affiliateType: string;
 	public heading: string;
 	public addButton: string;
@@ -58,6 +59,8 @@ export class AffiliateAccountsComponent implements OnInit {
 	}
 	affiliateId: string = '';
 	searchText: any = '';
+	affiliate_count: any;
+	loginAsUserResponse: any;
 
 	constructor(
 		private adminService: AdminService,
@@ -66,6 +69,7 @@ export class AffiliateAccountsComponent implements OnInit {
 		private spinner: NgxSpinnerService,
 		private $errors: ErrorDialogService,
 		private formBuilder: FormBuilder,
+		private affiliateService: AffiliateService,
 		private activatedRoute: ActivatedRoute) { }
 
 	ngOnInit(): void {
@@ -90,10 +94,10 @@ export class AffiliateAccountsComponent implements OnInit {
 				})
 			)
 			.subscribe(({ data, success, message }: any) => {
-					this.affiliate_accounts_emails = data
+				this.affiliate_accounts_emails = data
 			});
 
-			
+
 
 	}
 
@@ -150,12 +154,12 @@ export class AffiliateAccountsComponent implements OnInit {
 	}
 
 	timer: any
-	handleSearchKeyword(text:any){
-		console.log('on change search text-->>' , text)
+	handleSearchKeyword(text: any) {
+		console.log('on change search text-->>', text)
 		this.searchText = text
 		clearTimeout(this.timer);
 		this.timer = setTimeout(() => {
-			localStorage.setItem('affiliateSearch' , text)
+			localStorage.setItem('affiliateSearch', text)
 			this.loadAffiliateOperators()
 		}, 700)
 	}
@@ -163,20 +167,49 @@ export class AffiliateAccountsComponent implements OnInit {
 		clearTimeout(this.timer)
 	}
 
+	scroll(id) {
+		// let el = document.getElementById(id);
+		// let elementRect = el.getBoundingClientRect();
+		// let absoluteElementTop = elementRect.top + window.pageYOffset;
+		// let topElement = absoluteElementTop - 200;
+	
+		// console.log(`scrolling to ${id}`, el , absoluteElementTop ,window.innerHeight);
+		// window.scrollTo({
+		// 	top: topElement,
+		// 	behavior: 'smooth'
+		// });
+	
+		let el = document.getElementById(id);
+		console.log(`scrolling to ${id}`, el);
+		el.scrollIntoView({ behavior: 'smooth' });
+	  }
+
 	loadAffiliateOperators(pageUrl = null) {
 		/** spinner starts on init */
 		var keyword = this.searchText
-		if(keyword.length>0){
+		if (keyword.length > 0) {
 			this.filter_type = 'all'
-			console.log('keyword--->>>' , keyword , this.filter_type)
+			console.log('keyword--->>>', keyword, this.filter_type)
 		}
+		this.scroll('affiliates_table')
 		this.spinner.show();
 
 		// console.log(keyword);
 		// Load Our blackCarLimoBus using API
 		this.adminService.blackCarLimoBusAccounts(pageUrl, this.affiliateType, this.filter_type, keyword).then((result: any) => {
 			this.affiliate_accounts = result.data.data;
-
+			this.affiliate_accounts = this.affiliate_accounts.map(i => {
+				if (i?.LanguagesSpoken) {
+					console.log("in language iffff")
+					i['readMore'] = (i?.LanguagesSpoken?.length) > 2 ? true : false
+				}
+				else {
+					console.log("in language elase")
+					i['readMore'] = false
+				}
+				return i
+			})
+			this.affiliate_count = result.data.account_counts;
 			this.firstPage = 1;
 			this.lastPage = result.data.last_page;
 			this.totalPage = result.data.last_page;
@@ -201,23 +234,23 @@ export class AffiliateAccountsComponent implements OnInit {
 		this.router.navigate(['/admin/affiliate/step0']);
 	}
 
-	editAffiliateAccount(affiliate_id: number, affiliate_type: string , affiliateUserData) {
+	editAffiliateAccount(affiliate_id: number, affiliate_type: string, affiliateUserData) {
 		// this.affiliateService.updateStepsArrayLocal(this.response.data.affiliateParmas.step_completed);
 		// this.affiliateService.updateStepsCompletedObject(this.response.data.affiliateParmas.step_completed_obj);
 		sessionStorage.setItem('affiliateId', JSON.stringify(affiliate_id))
 		sessionStorage.setItem("affiliateType", affiliate_type);
-		sessionStorage.setItem('affiliateName' , affiliateUserData.FirstName +' '+ affiliateUserData.LastName)
+		sessionStorage.setItem('affiliateName', affiliateUserData.FirstName + ' ' + affiliateUserData.LastName)
 		this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
 			this.router.navigate(['/admin/affiliate/step0']);
 		});
 
 	}
-	navigateToStep0Inprogress(affiliate_id: number, affiliate_type: string , affiliateUserData){
+	navigateToStep0Inprogress(affiliate_id: number, affiliate_type: string, affiliateUserData) {
 		console.log('in function navigate to step 0 in case status in-progesas', affiliateUserData)
-		if(affiliateUserData?.account_approval=="in-progress"){
+		if (affiliateUserData?.account_approval == "in-progress") {
 			sessionStorage.setItem('affiliateId', JSON.stringify(affiliate_id))
 			sessionStorage.setItem("affiliateType", affiliate_type);
-			sessionStorage.setItem('affiliateName' , affiliateUserData.FirstName +' '+ affiliateUserData.LastName)
+			sessionStorage.setItem('affiliateName', affiliateUserData.FirstName + ' ' + affiliateUserData.LastName)
 			this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
 				this.router.navigate(['/admin/affiliate/step0']);
 			});
@@ -286,13 +319,25 @@ export class AffiliateAccountsComponent implements OnInit {
 			});
 	}
 	highlighText(args: string) {
-		if (!this.searchText) { return args; }
+		if (!this.searchText) { return args ? args : "N/A"; }
 		if (args) {
 			args = args.toString()
 			var re = new RegExp(this.searchText, 'gi'); //'gi' for case insensitive and can use 'g' if you want the search to be case sensitive.
 			return args.replace(re, '<mark class="font-weight-bold">$&</mark>');
 		}
+
 	}
+
+	teset(args: any) {
+		if (!this.searchText) { return args?.length > 0 ? args.toString().replaceAll(",", ", ") : "N/A"; }
+		if (args) {
+			args = args.toString().replaceAll(",", ", ")
+			var re = new RegExp(this.searchText, 'gi'); //'gi' for case insensitive and can use 'g' if you want the search to be case sensitive.
+			return args.replace(re, '<mark class="font-weight-bold">$&</mark>');
+		}
+
+	}
+
 
 	enableDisableClicked(event, id) {
 		this.spinner.show();//show spinner
@@ -393,17 +438,17 @@ export class AffiliateAccountsComponent implements OnInit {
 			message: this.sendEmailForm.get('text_message').value,
 			recipents: this.emails.value
 		}
-		console.log("body-------->",body)
+		console.log("body-------->", body)
 		this.adminService.sendEmailAffiliate(body).subscribe((response: any) => {
 			this.$errors.openDialog({
-			  errors: {
-				error: `<span class='text-success'>${response.message}</span>`
-			  }
+				errors: {
+					error: `<span class='text-success'>${response.message}</span>`
+				}
 			})
 			this.spinner.hide()
-			console.log("response-------->",response)
-		  })
-		
+			console.log("response-------->", response)
+		})
+
 		this.show = false
 		this.sendEmailForm.patchValue({
 			subject: "",
@@ -411,6 +456,109 @@ export class AffiliateAccountsComponent implements OnInit {
 		})
 		this.emails.setValue('');
 		$("#sendEmailModal").modal("hide");
+	}
+
+	toggleShowMore(vehinfo: any, check: boolean) {
+		console.log('vehInfo', vehinfo, 'check', check)
+		this.affiliate_accounts = this.affiliate_accounts.map(i => {
+			if (i.id == vehinfo.id) {
+				i['readMore'] = check
+				console.log('readMore', i?.readMore)
+			}
+			return i;
+		})
+
+	}
+	fetchHighestNumber(array: Array<number | string>): number {
+		let highest = 0
+		for (let i = 0; i < array.length; i++) {
+			try {
+				if (highest < parseInt((array[i]).toString())) {
+					highest = parseInt((array[i]).toString())
+				}
+			} catch (err) {
+				console.log('Error Fetching Highest Number: ', err)
+				return
+			}
+		}
+		console.log('Highest: ', highest)
+		return highest
+	}
+
+	loginAsUser(id) {
+		this.spinner.show()
+		this.adminService.loginAsUser(id).pipe(
+			catchError(err => {
+				this.spinner.hide()
+				return throwError(err);
+			})
+		).subscribe(response => {
+			this.spinner.hide()
+			let bkp_a_token = localStorage.getItem('access_token')
+			let bkp_crnt_dt = localStorage.getItem('currentUser')
+			let bkp_u_dt = localStorage.getItem('userData')
+			localStorage.setItem('bkp_a_token', bkp_a_token)
+			localStorage.setItem('bkp_crnt_dt', bkp_crnt_dt)
+			localStorage.setItem('bkp_u_dt', bkp_u_dt)
+			console.log("response", response)
+			this.loginAsUserResponse = response
+			let QB_redirectUrl = localStorage.getItem('QB_redirectUrl') || ''
+			let vehicle_selected = JSON.parse(sessionStorage.getItem('selected_vehicle'))
+			localStorage.setItem("account_approval", this.loginAsUserResponse.data.affiliateParmas.account_approval);
+			localStorage.setItem("recject_cause_message", this.loginAsUserResponse.data.affiliateParmas.recject_cause_message);
+			this.affiliateService.updateStepsArrayLocal(this.loginAsUserResponse.data.affiliateParmas.step_completed);
+			this.affiliateService.updateStepsCompletedObject(this.loginAsUserResponse.data.affiliateParmas.step_completed_obj);
+			localStorage.setItem('access_token', this.loginAsUserResponse.data?.access_token)
+			localStorage.setItem('currentUser', JSON.stringify(this.loginAsUserResponse.data?.user))
+			switch (this.loginAsUserResponse.data.affiliateParmas.account_approval) {
+				case 'accepted': {
+					if (QB_redirectUrl == 'true' && vehicle_selected) {
+						this.router.navigate([
+							'/affiliate/create-new-booking'
+						],
+							{ queryParams: { affiliate_id: vehicle_selected.affiliate_id, vehicle_id: vehicle_selected.id, new: true } })
+					}
+					else {
+						this.router.navigateByUrl('/affiliate/my-bookings');
+					}
+					break;
+				}
+				case 'completed': {
+					this.router.navigateByUrl('/affiliate/account-status');
+					if (QB_redirectUrl.length) {
+						this.$errors.openDialog({
+							errors: {
+								error: `<span class='text-danger'>Not able to create booking</span>`
+							}
+						})
+					}
+					break;
+				}
+				case 'rejected': {
+					this.router.navigateByUrl('/affiliate/account-status');
+					break;
+				}
+				case 'in-progress': {
+					let nextStep: number;
+					if (this.loginAsUserResponse.data.affiliateParmas.step_completed.length > 0) {//if step 0 is completed
+						nextStep = this.fetchHighestNumber(this.loginAsUserResponse.data.affiliateParmas.step_completed);
+						if (QB_redirectUrl.length) {
+							this.$errors.openDialog({
+								errors: {
+									error: `<span class='text-danger'>You need to complete registration steps</span>`
+								}
+							})
+						}
+						this.router.navigateByUrl('/affiliate/step' + nextStep.toString());
+						break;
+					}
+				}
+				default: {
+					this.router.navigateByUrl('/affiliate');
+					break;
+				}
+			}
+		});
 	}
 
 }

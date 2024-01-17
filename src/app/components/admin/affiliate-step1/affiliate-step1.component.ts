@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, Input, EventEmitter, ViewChild, ElementRef, NgZone } from '@angular/core';
+import { Component, OnInit, AfterViewInit, Input, EventEmitter, ViewChild, ElementRef, NgZone} from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
 import { StateManagementService } from '../../../services/statemanagement.service';
 import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
@@ -11,6 +11,8 @@ import { MapsAPILoader } from '@agm/core';
 import { data } from 'jquery';
 import { AdminService } from 'src/app/services/admin.service';
 import { HttpClient } from '@angular/common/http';
+import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
+import {CommonService} from 'src/app/services/common.service'
 declare var $: any;
 
 @Component({
@@ -59,7 +61,7 @@ export class AffiliateStep1Component implements OnInit {
 	public notify_sms: boolean;
 	public notify_email: boolean;
 	badgeOptions: string[] = [];
-    filteredOptions: any;
+	filteredOptions: any;
 	public startBusinessYears: Array<Object>;
 	// stateManagementService: any;
 
@@ -74,10 +76,12 @@ export class AffiliateStep1Component implements OnInit {
 		private stateManagementService: StateManagementService,
 		private ngZone: NgZone,
 		private httpClient: HttpClient,
-		private customValidator: CustomvalidationService
+		private customValidator: CustomvalidationService,
+		private errorModal: ErrorDialogService,
+		private commonServices: CommonService,
 	) { }
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
-
+	// @ViewChild('targetDiv', { static: false }) targetDiv: ElementRef;
 
 	//google map autocomplete
 	latitude: number;
@@ -97,12 +101,13 @@ export class AffiliateStep1Component implements OnInit {
 	}
 
 	ngOnInit(): void {
+		
 		this.currentUser = this.authService.currentUserValue;
 		//add amenity form validation
 		this.buildAffiliateAccountForm();
-	
-	
-		this.addAffiliateAccountForm.patchValue({AffiliateType:'black_limo_operator'})
+
+
+		this.addAffiliateAccountForm.patchValue({ AffiliateType: 'black_limo_operator' })
 		this.affiliateTypeSwitch("black_limo_operator");
 
 		this.spinner.show()
@@ -112,17 +117,19 @@ export class AffiliateStep1Component implements OnInit {
 			catchError(err => {
 				return throwError(err)
 			})
-		).subscribe((res:any)=> {
+		).subscribe((res: any) => {
 			this.badgeOptions = res?.data
 			this.filteredOptions = res?.data
 		})
 
 		this.httpClient
 			.get("assets/json/businessYear.json")
-			.subscribe((data: any) =>
-			{
+			.subscribe((data: any) => {
 				this.startBusinessYears = data;
 			});
+		window.scrollTo({
+			top: 0
+		})
 		this.adminService.getAssicationsLanguages()
 			.pipe(
 				catchError(err => {
@@ -135,7 +142,7 @@ export class AffiliateStep1Component implements OnInit {
 				this.associations = this.response.data.associations;
 
 				this.affiliateId = sessionStorage.getItem("affiliateId");
-				this.affiliateType = sessionStorage.getItem("affiliateType")!='all-operators' ? sessionStorage.getItem("affiliateType") : 'black_limo_operator' ;
+				this.affiliateType = sessionStorage.getItem("affiliateType") != 'all-operators' ? sessionStorage.getItem("affiliateType") : 'black_limo_operator';
 				this.addAffiliateAccountForm.patchValue({
 					AffiliateType: this.affiliateType
 				});
@@ -148,11 +155,11 @@ export class AffiliateStep1Component implements OnInit {
 							})
 						).subscribe(result2 => {
 							this.response2 = result2;
-							this.badgeOptions.map((i:any)=>{
-								if(i.id==this.response2.data.badge_city){
+							this.badgeOptions.map((i: any) => {
+								if (i.id == this.response2.data.badge_city) {
 									this.addAffiliateAccountForm.patchValue({
-										badge_city:i.id,
-										badge_city_name:i.name
+										badge_city: i.id,
+										badge_city_name: i.name
 									})
 								}
 							})
@@ -170,24 +177,20 @@ export class AffiliateStep1Component implements OnInit {
 							this.affiliateTypeSwitch(this.response2.data.AffiliateType)
 
 							this.affiliateEmailStatus = this.response2.data.is_email_verified;
-							if (this.affiliateEmailStatus == "yes")
-							{
+							if (this.affiliateEmailStatus == "yes") {
 								this.affiliateEmailButton = "edit";
 								this.affiliateEmailReadonly = true;
-							} else
-							{
+							} else {
 								this.affiliateEmailButton =
 									"resend_verification";
 								this.affiliateEmailReadonly = false;
 							}
 
 							this.dispatchEmailStatus = this.response2.data.dispatch_is_email_verified;
-							if (this.dispatchEmailStatus == "yes")
-							{
+							if (this.dispatchEmailStatus == "yes") {
 								this.dispatchEmailButton = "edit";
 								this.dispatchEmailReadonly = true;
-							} else
-							{
+							} else {
 								this.dispatchEmailButton =
 									"resend_verification";
 								this.dispatchEmailReadonly = false;
@@ -278,6 +281,7 @@ export class AffiliateStep1Component implements OnInit {
 							console.log('associations');
 							//
 							// this.stateManagementService.setprogressBar(false);
+
 						});
 				} else {
 					this.addAffiliateAccountForm.patchValue({
@@ -286,19 +290,20 @@ export class AffiliateStep1Component implements OnInit {
 					// this.stateManagementService.setprogressBar(false);
 
 					this.onLanguageChange('1', true);//set english as default language
+
 				}
 
-		this.spinner.hide()
+				this.spinner.hide()
 				// this.stateManagementService.setprogressBar(false);
 			});
-		
-			if (sessionStorage.getItem("affiliateType") != "all-operators") {
+
+		if (sessionStorage.getItem("affiliateType") != "all-operators") {
 			this.affiliateTypeSwitch(sessionStorage.getItem("affiliateType"))
 		}
-		window.scrollTo(0,0);
+		window.scrollTo(0, 0);
 	}
 
-	buildAffiliateAccountForm(){
+	buildAffiliateAccountForm() {
 		this.addAffiliateAccountForm = this.formBuilder.group({
 			id: [''],
 			AffiliateType: ['', Validators.required],
@@ -309,16 +314,16 @@ export class AffiliateStep1Component implements OnInit {
 			Gender: ['male', Validators.required],
 			CellNumber: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
 			CellIsd: ['+1', Validators.required],
-			Email: ['', [Validators.required,Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.]+\.[a-zA-Z]{2,}$/i)]],
-			badge_city :[''],
-			badge_city_name:[''],
+			Email: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)]],
+			badge_city: [''],
+			badge_city_name: [''],
 			latitude: [''],
 			longitude: [''],
-			FirstYearBusiness: ['', [Validators.required ,Validators.pattern("^[0-9]*$")]],
+			FirstYearBusiness: ['', [Validators.required, Validators.pattern("^[0-9]*$")]],
 			CellNumberCountry: ['us', Validators.required],
 			CompanyName: ['', Validators.required],
 			DBA: [''],
-			dispatchEmail: ['', [Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.]+\.[a-zA-Z]{2,}$/i)]],
+			dispatchEmail: ['', [Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)]],
 			Dispatch: [''],
 			DispatchIsd: ['+1'],
 			DispatchCountry: ['us'],
@@ -341,7 +346,7 @@ export class AffiliateStep1Component implements OnInit {
 	}
 
 	affiliateTypeSwitch(affiliateType) {
-		$('#FirstName').focus();
+		// $('#FirstName').focus();
 		switch (affiliateType) {
 			case 'fleet_operator': {
 				this.showCompanyInformation = true;
@@ -466,148 +471,172 @@ export class AffiliateStep1Component implements OnInit {
 	// 			});
 	// 	}
 	// }
-	handleBadgeCity(value:any){
-		console.log(value , this.filteredOptions)
-		this.filteredOptions = this.badgeOptions.filter((i:any)=> i.name.toLowerCase().includes(value.toLowerCase()))
+	handleBadgeCity(value: any) {
+		console.log(value, this.filteredOptions)
+		this.filteredOptions = this.badgeOptions.filter((i: any) => i.name.toLowerCase().includes(value.toLowerCase()))
 	}
-	selectBadgeCity(option:any,isUserInput){
-		console.log('in function selectBadgeCity-->>>' ,isUserInput)
-		if(isUserInput){
+	selectBadgeCity(option: any, isUserInput) {
+		console.log('in function selectBadgeCity-->>>', isUserInput)
+		if (isUserInput) {
 			this.addAffiliateAccountForm.patchValue({
-				badge_city:option.id
+				badge_city: option.id
 			})
 			// this.addAffiliateAccountForm.updateValueAndValidity()
 		}
 
 	}
-	fetchImageBlob(url ,key ,id){
+	fetchImageBlob(url, key, id) {
 		this.stateManagementService.setprogressBar(true);
-		
+
 		this.adminService.fetchImageBlob(url)
-		.pipe(
-			catchError(err => {
+			.pipe(
+				catchError(err => {
+					this.stateManagementService.setprogressBar(false);
+					return throwError(err);
+				})
+			)
+			.subscribe(async ({ data }: any) => {
 				this.stateManagementService.setprogressBar(false);
-				return throwError(err);
+				const response = await fetch(data);
+				const imageBlob = await response.blob()
+				console.log('imageBlob', imageBlob)
+				const canvas = document.createElement("canvas");
+				const ctx = canvas.getContext("2d");
+				const img = new Image();
+				img.src = URL.createObjectURL(imageBlob);
+				console.log('img-->', img)
+				img.onload = () => {
+					// Rotate the image by 90 degrees (or your desired angle)
+					canvas.width = img.width;
+					canvas.height = img.height;
+					ctx.translate(canvas.width / 2, canvas.height / 2);
+					ctx.rotate(Math.PI); // Rotate by 180 degrees
+					ctx.drawImage(img, -img.width / 2, -img.height / 2);
+					// ctx.drawImage(img, 0, -canvas.width);
+
+					// Convert the canvas to a Blob (JPEG format)
+					canvas.toBlob((blob) => {
+						console.log(blob);
+
+						this.blobToDataURL(blob, key, id);
+						// });
+					}, "image/jpeg");
+				}
 			})
-		)
-		.subscribe(async({ data }: any) => {
-			this.stateManagementService.setprogressBar(false);
-			const response = await fetch(data);
-			const imageBlob = await response.blob()
-			console.log('imageBlob',imageBlob)
-		const canvas = document.createElement("canvas");
-		const ctx = canvas.getContext("2d");
-		const img = new Image();
-		img.src = URL.createObjectURL(imageBlob);
-		console.log('img-->' , img)
-		img.onload = () => {
-			// Rotate the image by 90 degrees (or your desired angle)
-			canvas.width = img.width; 
-			canvas.height = img.height;
-			ctx.translate(canvas.width / 2, canvas.height / 2);
-			ctx.rotate(Math.PI); // Rotate by 180 degrees
-			ctx.drawImage(img, -img.width / 2, -img.height / 2);
-			// ctx.drawImage(img, 0, -canvas.width);
-
-			// Convert the canvas to a Blob (JPEG format)
-			canvas.toBlob((blob) => {
-				console.log(blob);
-
-				this.blobToDataURL(blob, key ,id);
-				// });
-			}, "image/jpeg");
-		}
-		})
 	}
-	blobToDataURL(blob: Blob , key , id) {
+	blobToDataURL(blob: Blob, key, id) {
 		var reader = new FileReader();
 		reader.readAsDataURL(blob);
 		reader.onload = () => {
 			let dataUrl = reader.result;
 			console.log(dataUrl); //DataURL
-			this.businessCardImageChange1(dataUrl, key,id);
+			this.businessCardImageChange1(dataUrl, key, id);
 		};
 	}
 
-	businessCardImageChange1(imageUrl, imageType, imageId = null)
-	{
+	async businessCardImageChange1(imageUrl, imageType, imageId = null) {
+		if(!await this.commonServices.handleFile(event)) {
+			return;
+		}
 		this.stateManagementService.setprogressBar(true); //show progressBar
-				this.imageSrc = imageUrl;
-				this.adminService.uploadVehicleImage(this.imageSrc)
-					.pipe(
-						catchError(err => {
-							this.stateManagementService.setprogressBar(false); // hide progressBar
-							return throwError(err);
-						})
-					)
-					.subscribe(({ data }: any) => {
-						switch (imageType) {
-							case 'BusinessFrontPhoto': {
-								this.addAffiliateAccountForm.patchValue({
-									BusinessFrontPhoto: data.id,
-								});
-								this.BusinessFrontPhoto = data.image;
-								this.BusinessFrontPhotoId = data.id;
-								break;
-							}
-							case 'BusinessBackPhoto': {
-								this.addAffiliateAccountForm.patchValue({
-									BusinessBackPhoto: data.id,
-								});
-								this.BusinessBackPhoto = data.image;
-								this.BusinessBackPhotoId = data.id;
-								break;
-							}
-							default: {
-								break;
-							}
-						}
-						this.stateManagementService.setprogressBar(false); // hide progressBar
-					});
+		this.imageSrc = imageUrl;
+		this.adminService.uploadVehicleImage(this.imageSrc)
+			.pipe(
+				catchError(err => {
+					this.stateManagementService.setprogressBar(false); // hide progressBar
+					return throwError(err);
+				})
+			)
+			.subscribe(({ data }: any) => {
+				switch (imageType) {
+					case 'BusinessFrontPhoto': {
+						this.addAffiliateAccountForm.patchValue({
+							BusinessFrontPhoto: data.id,
+						});
+						this.BusinessFrontPhoto = data.image;
+						this.BusinessFrontPhotoId = data.id;
+						break;
+					}
+					case 'BusinessBackPhoto': {
+						this.addAffiliateAccountForm.patchValue({
+							BusinessBackPhoto: data.id,
+						});
+						this.BusinessBackPhoto = data.image;
+						this.BusinessBackPhotoId = data.id;
+						break;
+					}
+					default: {
+						break;
+					}
+				}
+				this.stateManagementService.setprogressBar(false); // hide progressBar
+			});
 		// console.log(this.addInsuranceForm.value);
 	}
 
-	businessCardImageChange(event, imageType, imageId = null) {
-		// this.stateManagementService.setprogressBar(true); //show progressBar
-		const reader = new FileReader();
-		if (event.target.files && event.target.files.length) {
-			const [file] = event.target.files;
-			reader.readAsDataURL(file);
-			reader.onload = () => {
-				this.imageSrc = reader.result as string;
-				this.adminService.uploadVehicleImage(this.imageSrc)
-					.pipe(
-						catchError(err => {
-							// this.stateManagementService.setprogressBar(false); // hide progressBar
-							return throwError(err);
-						})
-					)
-					.subscribe(({ data }: any) => {
-						switch (imageType) {
-							case 'BusinessFrontPhoto': {
-								this.addAffiliateAccountForm.patchValue({
-									BusinessFrontPhoto: data.id,
-								});
-								this.BusinessFrontPhoto = data.image;
-								this.BusinessFrontPhotoId = data.id;
-								break;
-							}
-							case 'BusinessBackPhoto': {
-								this.addAffiliateAccountForm.patchValue({
-									BusinessBackPhoto: data.id,
-								});
-								this.BusinessBackPhoto = data.image;
-								this.BusinessBackPhotoId = data.id;
-								break;
-							}
-							default: {
-								break;
-							}
-						}
-						// this.stateManagementService.setprogressBar(false); // hide progressBar
-					});
-			};
+	// handleFile(event) {
+	// 	const [file] = event.target.files
+	// 	const fileType = file.type // image/jpeg
+	// 	console.log("fileType", fileType)
+	// 	const acceptedFiles: any = ["image/jpeg", "image/png"];
+	// 	console.log(!acceptedFiles.includes(fileType))
+	// 	if (!acceptedFiles.includes(fileType)) {
+	// 		return this.errorModal.openDialog({
+	// 			errors: {
+	// 				error: 'Please upload only jpeg or png file type!'
+	// 			}
+	// 		})
+	// 	} else {
+	// 		return true
+	// 	}
+	// }
+   async businessCardImageChange(event, imageType, imageId = null) {
+		if(!await this.commonServices.handleFile(event)) {
+			return;
 		}
+			// this.stateManagementService.setprogressBar(true); //show progressBar
+			const reader = new FileReader();
+			if (event.target.files && event.target.files.length) {
+				const [file] = event.target.files;
+				reader.readAsDataURL(file);
+				reader.onload = () => {
+					this.imageSrc = reader.result as string;
+					this.adminService.uploadVehicleImage(this.imageSrc)
+						.pipe(
+							catchError(err => {
+								// this.stateManagementService.setprogressBar(false); // hide progressBar
+								return throwError(err);
+							})
+						)
+						.subscribe(({ data }: any) => {
+							switch (imageType) {
+								case 'BusinessFrontPhoto': {
+									this.addAffiliateAccountForm.patchValue({
+										BusinessFrontPhoto: data.id,
+									});
+									this.BusinessFrontPhoto = data.image;
+									this.BusinessFrontPhotoId = data.id;
+									break;
+								}
+								case 'BusinessBackPhoto': {
+									this.addAffiliateAccountForm.patchValue({
+										BusinessBackPhoto: data.id,
+									});
+									this.BusinessBackPhoto = data.image;
+									this.BusinessBackPhotoId = data.id;
+									break;
+								}
+								default: {
+									break;
+								}
+							}
+							// this.stateManagementService.setprogressBar(false); // hide progressBar
+						});
+				};
+			}
+		
+
+
 		// console.log(this.addInsuranceForm.value);
 	}
 
@@ -648,7 +677,7 @@ export class AffiliateStep1Component implements OnInit {
 	conditionalValidations(affiliateType) {
 		if (affiliateType != 'gig_operator') {
 			this.addAffiliateAccountForm.controls['CompanyName'].setValidators([Validators.required]);
-			this.addAffiliateAccountForm.controls['dispatchEmail'].setValidators([Validators.required ,Validators.pattern("^[a-zA-Z0-9.]+@[a-z0-9.-]+\\.[a-z]{2,4}$") ]);
+			this.addAffiliateAccountForm.controls['dispatchEmail'].setValidators([Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)]);
 			this.addAffiliateAccountForm.controls['Dispatch'].setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15), this.customValidator.dashValidator(), this.customValidator.plusValidator()]);
 			this.addAffiliateAccountForm.controls['DispatchIsd'].setValidators([Validators.required]);
 			this.addAffiliateAccountForm.controls['DispatchCountry'].setValidators([Validators.required]);
@@ -656,7 +685,7 @@ export class AffiliateStep1Component implements OnInit {
 		}
 		else {
 			this.addAffiliateAccountForm.controls['CompanyName'].clearValidators();
-			this.addAffiliateAccountForm.controls['dispatchEmail'].setValidators([Validators.pattern("^[a-zA-Z0-9.]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]);
+			this.addAffiliateAccountForm.controls['dispatchEmail'].setValidators([Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)]);
 			this.addAffiliateAccountForm.controls['Dispatch'].clearValidators();
 			this.addAffiliateAccountForm.controls['DispatchIsd'].clearValidators();
 			this.addAffiliateAccountForm.controls['DispatchCountry'].clearValidators();
@@ -750,7 +779,7 @@ export class AffiliateStep1Component implements OnInit {
 
 
 	submitForm() {
-		console.log('submit button hited',this.addAffiliateAccountForm);
+		console.log('submit button hited', this.addAffiliateAccountForm);
 		// console.log(JSON.stringify(this.addVehicleRatesForm.value));
 		this.submittedForm = true;
 		// stop here if form is invalid
@@ -785,17 +814,17 @@ export class AffiliateStep1Component implements OnInit {
 						sessionStorage.setItem("affiliateId", this.response.data.acc_id);
 						sessionStorage.setItem("affiliateType", this.addAffiliateAccountForm.value.AffiliateType);
 						console.log("valueset", this.response.data.acc_id)
-						
+
 						console.log('routing to step 2 _-->>')
-						
+
 					}
 					let affiliateName = this.addAffiliateAccountForm.value.FirstName + ' ' + this.addAffiliateAccountForm.value.LastName
-						console.log('------_>>>>>>>>>>> affiliate name' , affiliateName)
-						sessionStorage.setItem("affiliateName" , affiliateName)
+					console.log('------_>>>>>>>>>>> affiliate name', affiliateName)
+					sessionStorage.setItem("affiliateName", affiliateName)
 					// done by Ishpreet
 					this.router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
-							this.router.navigate(['/admin/affiliate/step2'])
-						);
+						this.router.navigate(['/admin/affiliate/step2'])
+					);
 				}
 			});
 	}
@@ -809,17 +838,16 @@ export class AffiliateStep1Component implements OnInit {
 			id: this.response2.data.id,
 			Email: this.response2.data.Email,
 			dispatchEmail: this.response2.data.dispatchEmail,
-			Gender:''
+			Gender: ''
 		});
 		this.BusinessFrontPhoto = "";
 		this.BusinessBackPhoto = "";
 		this.onLanguageChange("1", true);
-		if (this.response2.data.AffiliateType != "gig_operator")
-							{
-								this.addAffiliateAccountForm.patchValue({
-									dispatchEmail: this.response2.data.dispatchEmail,
-								});
-							}
+		if (this.response2.data.AffiliateType != "gig_operator") {
+			this.addAffiliateAccountForm.patchValue({
+				dispatchEmail: this.response2.data.dispatchEmail,
+			});
+		}
 		this.addAffiliateAccountForm.updateValueAndValidity()
 	}
 

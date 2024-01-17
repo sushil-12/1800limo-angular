@@ -5,6 +5,7 @@ import { throwError } from 'rxjs';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, FormArray, FormControl, Validators } from '@angular/forms';
+import { CommonService } from 'src/app/services/common.service';
 @Component({
 	selector: 'app-about-us-edit',
 	templateUrl: './about-us-edit.component.html',
@@ -36,6 +37,7 @@ export class AboutUsEditComponent implements OnInit
 		private fb: FormBuilder,
 		private adminServices: AdminService,
 		private route: Router,
+		private commonServices: CommonService,
 		private spinner: NgxSpinnerService
 	) { }
 
@@ -307,8 +309,11 @@ export class AboutUsEditComponent implements OnInit
 
 
 
-	DynamicImageChange(event: any, section: string, timeline_slide_index: number, image_index: number)
+	async DynamicImageChange(event: any, section: string, timeline_slide_index: number, image_index: number)
 	{
+		if(!await this.commonServices.handleFile(event)) {
+			return;
+		}
 		this.spinner.show();
 		const reader = new FileReader();
 		if (event.target.files && event.target.files.length)

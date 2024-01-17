@@ -1,7 +1,7 @@
 <ngx-spinner></ngx-spinner>
 <main>
 	<!-- Main page content-->
-	<section class="adminbox_shadow user_information">
+	<section class="adminbox_shadow user_information" id="individual_table">
 		<h2 class="headinginfo"> Individual Accounts </h2>
 		<div class="containeredd">
 			<div class="row">
@@ -104,8 +104,11 @@
 												[innerHTML]="highlighText(individual?.first_name+' '+individual?.middle_name+' '+individual?.last_name)"></span>
 										</td>
 									</ng-template>
-									<td><span [innerHTML]="highlighText(individual?.email)"></span></td>
-									<td><span
+									<td class="clickable" (click)="sendMessage('email', individual)"
+										data-messagetype="email"><span
+											[innerHTML]="highlighText(individual?.email)"></span></td>
+									<td class="clickable" (click)="sendMessage('sms', individual)"
+										data-messagetype="sms"><span
 											[innerHTML]="highlighText(individual?.mobileIsd+individual?.mobile+' '+'('+individual?.mobileCountry.toUpperCase()+')')"></span>
 									</td>
 									<td><span [innerHTML]="highlighText(individual?.address)"></span></td>
@@ -214,3 +217,35 @@
 		</div> -->
 	</section>
 </main>
+
+<!-- Message modal -->
+<div class="modal fade" tabindex="-1" id="messageModal" aria-labelledby="messageModal" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4></h4>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-md-12">
+						<p id="affiliate-details"></p>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<p id="label">
+							Message:
+						</p>
+						<textarea id="message" rows="7" placeholder="Your Message" #message></textarea>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer justify-content-end">
+				<button class="custom-filled-button" data-dismiss="modal"
+					(click)="sendMessage(messagetype?.type, messagetype?.individual, message.value)">
+					Send {{ messagetype?.type | titlecase }}
+				</button>
+			</div>
+		</div>
+	</div>
+</div>

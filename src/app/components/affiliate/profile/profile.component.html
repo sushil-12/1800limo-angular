@@ -19,7 +19,8 @@
                                     <ul class="mt-3 d-flex justify-content-left">
                                         <li>
                                             <button tabindex="1" class="changeuploaded">
-                                                <input type="file" (change)="profile_pic_change($event)" tabindex="-1">
+                                                <input type="file" (change)="profile_pic_change($event)" tabindex="-1"
+                                                    accept="image/jpeg, image/png">
                                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                                     <path fill="none" d="M0 0h24v24H0V0z"></path>
                                                     <circle cx="12" cy="12" r="3"></circle>
@@ -78,6 +79,7 @@
                                     <mat-option value='PST'>PST</mat-option>
                                     <mat-option value='EST'>EST</mat-option>
                                     <mat-option value='CST'>CST</mat-option>
+                                    <mat-option value='GMT'>GMT</mat-option>
                                 </mat-select>
                             </mat-form-field>
                         </form>

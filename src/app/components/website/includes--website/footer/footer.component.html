@@ -17,7 +17,7 @@
 				</div>
 				<div class="col-6 block">
 					<ul>
-						<li><a routerLink="group-travel-planner" tabindex="1">Group Travel Planner / Statistics /
+						<li><a routerLink="group-travel-planner" tabindex="1">Group Travel Agent / Statistics /
 								FAQs</a></li>
 						<li><a routerLink="cancellation-policy" tabindex="1">Cancellation Policy</a></li>
 						<li><a routerLink="investors" tabindex="1">Investors</a></li>
@@ -42,7 +42,7 @@
 					<ul>
 						<li><a routerLink="customer-faq" tabindex="1">Customer FAQs</a> </li>
 						<li><a routerLink="driver-faq" tabindex="1">Driver FAQs</a> </li>
-						<li><a routerLink="group-travel-planner" tabindex="1">Group Travel Planner / Statistics /
+						<li><a routerLink="group-travel-planner" tabindex="1">Group Travel Agent / Statistics /
 								FAQs</a></li>
 
 					</ul>
@@ -67,20 +67,21 @@
 							data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">LOGIN / CREATE</button>
 						<div class="dropdown-menu" aria-labelledby="dropdownFooter">
 							<a class="dropdown-item nav-disabled font-weight-bolder"
-								(click)="loginButtons('individual')" style="font-size: 18px;">Individual</a>
-							<a class="dropdown-item nav-disabled font-weight-bolder" (click)="loginButtons('corporate')"
-								style="font-size: 18px;">Corporate</a>
+								(click)="loginButtons('individual')" style="font-size: 21px;">Individual</a>
 							<a class="dropdown-item nav-disabled font-weight-bolder ta-btn"
-								style="color: #fff !important;opacity: 1;font-size: 18px;"
+								style="color: #fff !important;opacity: 1;font-size: 21px;"
 								(click)="loginButtons('travel_agent')">Travel
 								Agent</a>
-							<hr>
+							<a class="dropdown-item nav-disabled font-weight-bolder" (click)="loginButtons('corporate')"
+								style="font-size: 21px;">Corporate</a>
+							<!-- <hr> -->
 							<a class="dropdown-item driver-dropdown font-weight-bolder"
-								style="color: #fff !important;opacity: 1;font-size: 18px;"
+								style="color: #fff !important;opacity: 1;font-size: 21px;"
 								(click)="loginButtons('driver')">
-								Blk Car | Fleet | Taxi | Gig</a>
+								Driver / Chauffeur</a>
+							<hr>
 							<a class="dropdown-item sub-admin-dropdown driver-dropdown font-weight-bolder"
-								style="color: #fff !important;opacity: 1;font-size: 18px;"
+								style="color: #fff !important;opacity: 1;font-size: 21px;"
 								(click)="loginButtons('sub_admin')">
 								Sub Admin</a>
 						</div>
@@ -273,49 +274,20 @@
 				</div>
 			</div>
 
-			<div class="footer row m-0 ">
-				<!-- <div class="col-12 scrollButton">
-					<button type="button" class="btn active" data-toggle="button" aria-pressed="true" (click)="scrollToTop()">
-						<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" x="0px" y="0px"
-							width="40px" height="40px">
-							<defs>
-								<style>
-									.cls-1 {
-										fill: #f69a40;
-									}
-				
-									.cls-2 {
-										fill: #fff;
-									}
-				
-									.cls-3 {
-										opacity: 0;
-									}
-								</style>
-							</defs>
-							<title>arrow-up-flat</title>
-							<path class="cls-1"
-								d="M256,0C114.84,0,0,114.84,0,256S114.84,512,256,512,512,397.16,512,256,397.16,0,256,0Z" />
-							<path class="cls-2"
-								d="M335.08,219.58l-64-64a21.33,21.33,0,0,0-30.17,0l-64,64a21.33,21.33,0,0,0,30.17,30.17l27.58-27.58V384a21.33,21.33,0,1,0,42.67,0V222.17l27.58,27.58a21.33,21.33,0,0,0,30.17-30.17Z" />
-							<g class="cls-3">
-								<path d="M512,256c0,141.12-114.88,256-256,256V0C397.12,0,512,114.88,512,256Z" />
-							</g>
-						</svg>
-					</button>
-				</div> -->
-
-				<div class="col-md-6 footer-left">
+			<div class="footer row m-0">
+				<div class="col-md-12">
+					<a href="mailto:info@1800limo.com">info@1800limo.com</a> &nbsp; | &nbsp;
 					<a routerLink="privacy-policy">Privacy Policy</a> &nbsp; | &nbsp;
 					<a routerLink="delivery-membership-terms-condition">Membership Program Terms
 						&amp;
 						Conditions</a> &nbsp; | &nbsp;<a routerLink="client-terms-condition">Policies,
 						Terms and Conditions</a>
 				</div>
-				<div class="col-md-6 footer-right">Copyright © 2001 - 2021 1-800-LIMO.COM. All
+			</div>
+			<div class="footer row m-0" style="border: none !important;">
+				<div class="col-md-12">Copyright © 2001 - 2021 1-800-LIMO.COM. All
 					rights reserved.
 				</div>
-
 			</div>
 		</div>
 	</div>

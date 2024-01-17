@@ -167,9 +167,11 @@
 							<mat-label>Timezone</mat-label>
 							<mat-select formControlName="timezone">
 								<mat-option value="">Choose timezone</mat-option>
-								<mat-option value='01'>IST</mat-option>
-								<mat-option value='02'>PST</mat-option>
-								<mat-option value='03'>EST</mat-option>
+								<mat-option value='IST'>IST</mat-option>
+								<mat-option value='PST'>PST</mat-option>
+								<mat-option value='EST'>EST</mat-option>
+								<mat-option value='CST'>CST</mat-option>
+								<mat-option value='GMT'>GMT</mat-option>
 							</mat-select>
 						</mat-form-field>
 					</div>
@@ -315,8 +317,9 @@
 					</div>
 					<div class="col-md-6">
 						<mat-form-field appearance="outline">
-							<mat-label>Zip Code <span class="asterisk">*</span></mat-label>
-							<input formControlName="zip" type="text" matInput placeholder="Zip Code">
+							<mat-label>Zip Code / Country Address Code <span class="asterisk">*</span></mat-label>
+							<input formControlName="zip" type="text" matInput
+								placeholder="Zip Code / Country Address Code">
 						</mat-form-field>
 						<div *ngIf="submittedForm && f?.zip?.errors || f.zip.touched && f.zip.errors"
 							class="text-danger">

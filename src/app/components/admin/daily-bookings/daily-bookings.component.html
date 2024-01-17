@@ -1,7 +1,7 @@
 <ngx-spinner></ngx-spinner>
 <main>
 	<!-- Main page content-->
-	<section class="adminbox_shadow user_information">
+	<section class="adminbox_shadow user_information" id="daily_bookings_table">
 		<h2 class="headinginfo">See All booking on all Accounts </h2>
 		<div class="containeredd mt-1 ">
 
@@ -49,23 +49,33 @@
 				<div class="align-btn d-flex justify-content-around">
 					<div class="col-sm-2 ml-n5">
 						<button class="custom-filled-button orange-button"
-							style="color:#fff;padding: 5px 12px !important;" 
+							style="color:#fff;padding: 5px 12px !important;"
 							(click)="loadBookings(null, startDate, endDate, searchText); saveCookie('admin_startDate', startDate); saveCookie('admin_endDate', endDate)">
 							Search
 						</button>
 					</div>
 					<div class="col-sm-2">
 						<button class="custom-filled-back-button"
-							style="white-space: nowrap;color:#fff;padding: 5px 12px !important;"
+							style="white-space: nowrap;color:#fff;padding: 5px 12px !important; background-color: #000 !important;"
 							(click)="reset(); loadBookings(null, startDate, endDate, searchText)">
 							Reset
 						</button>
 					</div>
 				</div>
 			</div>
-			<div>
-				<p><mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">Uncheck this
-						box to view all bookings</mat-checkbox></p>
+			<div class="row d-flex justify-content-between">
+				<div class="col-md-6">
+					<p><mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">Uncheck
+							this
+							box to view all bookings</mat-checkbox></p>
+				</div>
+
+				<div class="col-md-6 sortCheckBox">
+					<!-- <p><mat-checkbox (change)="handleCheckboxSort($event.checked,'use_pickup_date')"
+							[checked]="use_pickup_date">Order by pickup date</mat-checkbox></p> -->
+					<p><mat-checkbox (change)="handleCheckboxSort($event.checked)" [checked]="use_created_at">Order by
+							Booking id</mat-checkbox></p>
+				</div>
 			</div>
 			<div class="row my-2 mb-3">
 				<!-- <div class="col-md-3">
@@ -89,9 +99,9 @@
 				<div class="col-md-12">
 					<div id="search-field">
 						<mat-form-field appearance="outline" class="m-0">
-							<input matInput type="text" (keypress)="handleKeypressEvents()" (focus)="$event.target.select()"
-								(keyup)="searchInBookings($event.target.value)" [value]="searchText"
-								placeholder="Search" id="keyword" autofocus>
+							<input matInput type="text" (keypress)="handleKeypressEvents()"
+								(focus)="$event.target.select()" (keyup)="searchInBookings($event.target.value)"
+								[value]="searchText" placeholder="Search" id="keyword" autofocus>
 						</mat-form-field>
 					</div>
 				</div>
@@ -127,7 +137,7 @@
 										<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
 											aria-labelledby="navbarDropdownUserImage">
 											<a class="dropdown-item" [routerLink]="['/admin/new-booking']"
-												*ngIf="currentUser?.RoleName == 'admin' || subModules.includes('edit_booking')"
+												*ngIf="((currentUser?.RoleName == 'admin' || subModules.includes('edit_booking')) && (booking?.booking_status != 'paid' && booking?.booking_status != 'paid_cash'))"
 												[queryParams]="{bookingId: booking.booking_id, updateType: 'edit'}">
 
 												<div class="dropdown-item-icon"></div>
@@ -151,14 +161,14 @@
 											</a>
 											<a class="dropdown-item" [routerLink]="['/admin/finalize-booking']"
 												[queryParams]="{bookingId: booking.booking_id}"
-												*ngIf="currentUser?.RoleName == 'admin' || subModules.includes('finalize_booking')">
+												*ngIf="((currentUser?.RoleName == 'admin' || subModules.includes('edit_booking')) && (booking?.booking_status != 'paid' && booking?.booking_status != 'paid_cash'))">
 												<!-- *ngIf="booking.payment_status!='paid'" -->
 												<div class="dropdown-item-icon"></div>
 												Finalize
 											</a>
 											<a class="dropdown-item" [routerLink]="['/admin/invoice-summary']"
 												[queryParams]="{bookingId: booking.booking_id}"
-												*ngIf="(booking.payment_status=='paid' || booking.payment_status=='refund' ||  booking.payment_status=='partial_paid') && (currentUser?.RoleName == 'admin' || subModules.includes('invoice_booking'))">
+												*ngIf="(booking.payment_status=='paid' || booking.payment_status=='paid_cash'  || booking.payment_status=='refund' ||  booking.payment_status=='partial_paid') && (currentUser?.RoleName == 'admin' || subModules.includes('invoice_booking'))">
 												<div class="dropdown-item-icon"></div>
 												Invoice
 											</a>
@@ -196,22 +206,37 @@
 												<div class="dropdown-item-icon"></div>
 												Email All
 											</a>
+											<a class="dropdown-item"
+												(click)="sendEmailClicked(booking.booking_id,'updatedEmailAll')"
+												data-toggle="modal" data-target="#updatedEmailAll"
+												*ngIf="currentUser?.RoleName == 'admin' && booking?.show_changed_fields">
+												<div class="dropdown-item-icon"></div>
+												Send Updated Email
+											</a>
 											<a class="dropdown-item" (click)="auditTrail(booking.booking_id)"
 												data-toggle="modal" data-target="#AuditTrailModal"
 												*ngIf="currentUser?.RoleName == 'admin' || subModules.includes('audit_trial')">
 												<div class="dropdown-item-icon"></div>
 												Audit Trial
 											</a>
+											<a class="dropdown-item" (click)="reAffiliate(booking.booking_id)"
+												*ngIf="(currentUser?.RoleName == 'admin' &&( booking.booking_status == 'rejected' || booking?.booking_status == 'pending' || booking?.booking_status == 'driver_unassigned') )">
+												<div class="dropdown-item-icon"></div>
+												ReAffiliate
+											</a>
+
 
 										</div>
 									</td>
 
-									<td class="text-center font-weight-bolder cursor-pointer "
-										data-toggle="modal" data-target="#previewBookingOnID"
+									<td class="text-center font-weight-bolder cursor-pointer " data-toggle="modal"
+										data-target="#previewBookingOnID"
 										(click)="showBookingPreviewModal(booking.booking_id)">
 										<p class="booking-id-font font-weight-bolder cursor-pointer">
-											<span class="text-underline" [innerHTML]="highlighText(booking.booking_id )"></span>
-											<span style="text-decoration: none;">&nbsp;{{showAccountType(booking?.account_type)}}</span>
+											<span class="text-underline" [innerHTML]="highlighText(booking.booking_id )"
+												style="font-weight: 600;"></span>
+											<span
+												style="text-decoration: none;">&nbsp;{{showAccountType(booking?.account_type)}}</span>
 										</p>
 									</td>
 									<td class="text-center font-weight-bolder cursor-pointer">
@@ -248,8 +273,7 @@
 										</span>
 										<span class="loc-logo"
 											(click)="showLocationPointOnMap(booking.booking_id, 'pickup')">
-											&nbsp;&nbsp;&nbsp;<i class="bi bi-geo-alt-fill"
-												style="font-size:24px"></i></span>
+											&nbsp;&nbsp;&nbsp;<i class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
 									</td>
 									<td>
 										<p data-target="#sendEmailModal" data-toggle="modal"
@@ -257,9 +281,11 @@
 											[ngClass]="currentUser?.RoleName == 'admin' || subModules.includes('can_send_notifications') ? '' : 'disabled-btn'"
 											*ngIf="booking.affiliate_type == null; else otherAffiliate">
 											<span class="font-weight-bolder"
-												[innerHTML]="highlighText(booking.loose_affiliate_name)"></span>|
-											<span [innerHTML]="highlighText(booking.loose_affiliate_phone_isd)"></span>
-											<span [innerHTML]="highlighText(booking.loose_affiliate_phone)"></span>
+												[innerHTML]="highlighText(booking.loose_affiliate_name ? booking.loose_affiliate_name + ' '+'(L)' : '1800Limo Chauffeurs ')"></span>|
+											<span
+												[innerHTML]="highlighText(booking.loose_affiliate_phone_isd ? booking.loose_affiliate_phone_isd : '+1')"></span>
+											<span
+												[innerHTML]="highlighText(booking.loose_affiliate_phone ? booking.loose_affiliate_phone : '8005466266')"></span>
 										</p>
 										<ng-template #otherAffiliate>
 											<p data-target="#sendEmailModal" data-toggle="modal"
@@ -297,8 +323,7 @@
 										</span>
 										<span class="loc-logo"
 											(click)="showLocationPointOnMap(booking.booking_id, 'dropoff')">
-											&nbsp;&nbsp;&nbsp;<i class="bi bi-geo-alt-fill"
-												style="font-size:24px"></i></span>
+											&nbsp;&nbsp;&nbsp;<i class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
 									</td>
 									<td>
 										<span [innerHTML]="highlighText(booking.vehicle_cat_name)"></span>
@@ -456,7 +481,28 @@
 			</div>
 		</div>
 	</div>
+
 </div>
+<div class="modal fade" id="updatedEmailAll" tabindex="-1" role="dialog" aria-labelledby="updatedEmailAll"
+	aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header pb-0">
+				<h3 class="mb-0">Email</h3>
+			</div>
+			<div class="modal-body text-center">
+				<p>Are you sure, You want to send email?</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="custom-btn savebutton" (click)="updatedEmailAll()">Send
+					Email</button>
+				<button type="button" class="custom-btn resetbutton" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+
+</div>
+
 
 <!-- Audit trail Modal -->
 <div class="modal fade bd-example-modal-lg" id="AuditTrailModal" tabindex="-1" role="dialog"
@@ -660,7 +706,7 @@
 							</mat-label>
 							<textarea matInput id="myTextarea" placeholder="Write a Message...." id="clearField"
 								cdkTextareaAutosize cdkAutosizeMaxRows="10" #autosize="cdkTextareaAutosize" #inputmsg
-								(focus)="$event.target.select()"></textarea>
+								(focus)="$event.target.select()" style="font-weight: 600;"></textarea>
 						</mat-form-field>
 						<div class="d-flex justify-content-center mt-2">
 							<!-- <button type="button" data-dismiss="modal" (click)="closeModal()"
@@ -773,7 +819,411 @@
 
 
 
+					<!-- Grand Total -->
 
+
+
+					<!-- Travel Information -->
+					<h4 class="font-weight-bolder m-0 mt-3">
+						Travel Information
+					</h4>
+
+					<!-- Number of Hours -->
+					<div class="mx-2" *ngIf="bookingPreview?.service_type == 'Charter Tour'">
+						<div class="row">
+							<div class="col-md-4 key">
+								<span>
+									Booking Hours
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder preview-output-feild">
+									{{ bookingPreview?.number_of_hours }}
+								</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- ################ Pickup ################### -->
+					<h5 class="m-0 my-2 text-xl preview-pickup-color">
+						Pickup Details
+					</h5>
+					<!-- Pickup > Date -->
+					<div class="mx-2 preview-pickup-color">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Date
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder preview-output-feild">
+									{{ dateFormat2(bookingPreview.pickup_date) }}
+									|
+									{{ dateFormat(bookingPreview.pickup_date) }}
+								</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Pickup > Time -->
+					<div class="mx-2 preview-pickup-color">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Time
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder preview-output-feild">
+									{{ timeFormat2(bookingPreview.pickup_time) }}
+									|
+									{{ timeFormat(bookingPreview.pickup_time) }}
+								</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Pickup > City Details -->
+					<div class="mx-2 preview-pickup-color"
+						*ngIf="bookingPreview.transfer_type.includes('city_') || bookingPreview.transfer_type.includes('cruise_')">
+						<div class="row m-0">
+							<div class="col-md-4">
+								<span>
+									Address
+								</span>
+							</div>
+							<div class="col-md-8">
+								<span class="font-weight-bolder preview-output-feild">
+									{{ textFormatter(bookingPreview.pickup) }}
+								</span>
+								<span (click)="showLocationPointOnMapByAddress(bookingPreview.pickup)"><i
+										class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
+							</div>
+						</div>
+					</div>
+					<!-- Distance Details -->
+					<div class="mx-2 preview-pickup-color">
+						<div class="row m-0">
+							<div class="col-md-4">
+								<span>
+									Total Distance
+								</span>
+							</div>
+							<div class="col-md-8 ">
+								<span class="font-weight-bolder preview-output-feild">
+									{{ mToMi(bookingPreview?.distance) }} Miles / {{ mToKm(bookingPreview?.distance)
+									}} Km
+								</span>
+							</div>
+						</div>
+					</div>
+					<div class="mx-2 preview-pickup-color">
+						<div class="row m-0">
+							<div class="col-md-4">
+								<span>
+									Estimated time
+								</span>
+							</div>
+							<div class="col-md-8">
+								<span class="font-weight-bolder preview-output-feild">
+									{{convertToMinutes(bookingPreview.duration)}}
+								</span>
+							</div>
+						</div>
+					</div>
+					<!-- Distance Details -->
+
+					<!-- Pickup > Airline Details -->
+					<div class="mx-2 preview-pickup-color" *ngIf="bookingPreview.transfer_type.includes('airport_')">
+						<!-- Airport -->
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Airport
+								</span>
+							</div>
+							<div class="col-md-8 value preview-airport-color">
+								<span class="font-weight-bolder preview-output-feild">
+									{{ textFormatter(bookingPreview.pickup_airport_name) }}
+								</span>
+								<span (click)="showLocationPointOnMapByAddress(bookingPreview.pickup_airport_name)"><i
+										class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
+							</div>
+						</div>
+						<!-- Airport -->
+						<!-- Airline -->
+						<div class="row m-0 preview-pickup-color">
+							<div class="col-md-4 key">
+								<span>
+									Airline
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder preview-output-feild">
+									{{ textFormatter(bookingPreview.pickup_airline_name) }}
+								</span>
+							</div>
+						</div>
+						<!-- Airline -->
+						<!-- Flight Number -->
+						<div class="row m-0 preview-pickup-color">
+							<div class="col-md-4 key">
+								<span>
+									Flight Number
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder preview-output-feild">
+									{{ textFormatter(bookingPreview.pickup_flight) }}
+								</span>
+							</div>
+						</div>
+						<!-- Flight Number -->
+
+					</div>
+
+					<!-- Pickup > Cruise Details -->
+					<div class="mx-2 preview-pickup-color" *ngIf="bookingPreview.transfer_type.includes('cruise_')">
+						<!-- Cruise Port -->
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Cruise Port
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder preview-output-feild">
+									{{ textFormatter(bookingPreview.cruise_port) | titlecase }}
+								</span>
+							</div>
+						</div>
+						<!-- Cruise Port -->
+						<!-- Cruise Name -->
+						<div class="row m-0 preview-pickup-color">
+							<div class="col-md-4 key">
+								<span>
+									Cruise Name
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder preview-output-feild">
+									{{ textFormatter(bookingPreview.cruise_name) | titlecase }}
+								</span>
+							</div>
+						</div>
+						<!-- Cruise Name -->
+						<!-- Cruise Time -->
+						<div class="row m-0 preview-pickup-color">
+							<div class="col-md-4 key">
+								<span>
+									Cruise Time
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder preview-output-feild">
+									{{ textFormatter(bookingPreview.cruise_time) | titlecase }}
+								</span>
+							</div>
+						</div>
+					</div>
+					<hr>
+					<!-- Extra Stops -->
+					<div *ngIf="bookingPreview.extra_stops && bookingPreview.extra_stops.length > 0">
+						<h5 class="m-0 text-xl preview-extra-stop-color">
+							Extra Stops
+						</h5>
+						<div class="mx-2 preview-extra-stop-color"
+							*ngFor="let stop of bookingPreview.extra_stops; index as stop_index">
+							<div class="row m-0 mx-2">
+								<div class="col-md-4 key">
+									<span>
+										Stop {{ stop_index + 1 }}
+									</span>
+								</div>
+								<div class="col-md-8 value">
+									<span class="font-weight-bolder preview-output-feild">
+										{{ stop.address }}
+									</span>
+									<span (click)="showLocationPointOnMapByAddress(stop.address)"><i
+											class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
+								</div>
+							</div>
+							<hr>
+						</div>
+					</div>
+
+					<hr style="width: 50%; margin: 1rem auto; border: 1.3px solid #aeaeae;"
+						*ngIf="bookingPreview.extra_stops && bookingPreview.extra_stops.length == 0" />
+
+
+					<!-- ############# Dropoff ################# -->
+					<h5 class="px-2 m-0 my-3 text-xl preview-dropoff-color">
+						Drop Off Details
+					</h5>
+					<!-- Dropoff > City Details -->
+					<div class="mx-2 preview-dropoff-color"
+						*ngIf="bookingPreview.transfer_type.includes('_city') || bookingPreview.transfer_type.includes('_cruise')">
+						<div class="row">
+							<div class="col-md-4 key">
+								<span>
+									Address
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder preview-output-feild">
+									{{ textFormatter(bookingPreview.dropoff) }}
+								</span>
+								<span (click)="showLocationPointOnMapByAddress(bookingPreview.dropoff)"><i
+										class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Dropoff > Airline Details -->
+					<div class="mx-2 preview-dropoff-color" *ngIf="bookingPreview.transfer_type.includes('_airport')">
+						<!-- Airport -->
+						<div class="row">
+							<div class="col-md-4 key">
+								<span>
+									Airport
+								</span>
+							</div>
+							<div class="col-md-8 value preview-airport-color">
+								<span class="font-weight-bolder preview-output-feild">
+									{{ textFormatter(bookingPreview.dropoff_airport_name ) }}
+								</span>
+								<span (click)="showLocationPointOnMapByAddress(bookingPreview.dropoff_airport_name)"><i
+										class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
+							</div>
+						</div>
+						<!-- Airport -->
+						<!-- Airline -->
+						<div class="row preview-dropoff-color">
+							<div class="col-md-4 key">
+								<span>
+									Airline
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder preview-output-feild">
+									{{ textFormatter(bookingPreview.dropoff_airline_name) }}
+								</span>
+							</div>
+						</div>
+						<!-- Airline -->
+						<!-- Flight Number -->
+						<div class="row preview-dropoff-color">
+							<div class="col-md-4 key">
+								<span>
+									Flight Number
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder preview-output-feild">
+									{{ textFormatter(bookingPreview.dropoff_flight) }}
+								</span>
+							</div>
+						</div>
+						<!-- Flight Number -->
+					</div>
+
+					<!-- Dropoff > Cruise Details -->
+					<div class="mx-2 preview-dropoff-color" *ngIf="bookingPreview.transfer_type.includes('_cruise')">
+						<!-- Cruise Port -->
+						<div class="row">
+							<div class="col-md-4 key">
+								<span>
+									Cruise Port
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder preview-output-feild">
+									{{ textFormatter(bookingPreview.cruise_port) | titlecase }}
+								</span>
+							</div>
+						</div>
+						<!-- Cruise Port -->
+
+						<!-- Cruise Name -->
+						<div class="row preview-dropoff-color">
+							<div class="col-md-4 key">
+								<span>
+									Cruise Name
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder preview-output-feild">
+									{{ textFormatter(bookingPreview.cruise_name) | titlecase }}
+								</span>
+							</div>
+						</div>
+						<!-- Cruise Name -->
+
+						<!-- Cruise Time -->
+						<div class="row preview-dropoff-color">
+							<div class="col-md-4 key">
+								<span>
+									Cruise Time
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder preview-output-feild">
+									{{ textFormatter(bookingPreview.cruise_time) }}
+								</span>
+							</div>
+						</div>
+						<!-- Cruise Time -->
+					</div>
+					<!-- Dropoff > Cruise Details - Ends -->
+
+					<!-- 2ND p -->
+
+					<hr>
+					<div class="mx-2" *ngIf="bookingPreview?.meet_greet_choice_name">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Meet and Greet
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder preview-output-feild">
+									{{ textFormatter(bookingPreview?.meet_greet_choice_name)| titlecase }}
+								</span>
+							</div>
+						</div>
+					</div>
+					<div class="mx-2">
+						<div class="row m-0" *ngIf="bookingPreview?.return_meet_greet_choice_name">
+							<div class="col-md-4 key">
+								<span>
+									Return Meet and Greet
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder preview-output-feild">
+									{{ textFormatter(bookingPreview?.return_meet_greet_choice_name)| titlecase }}
+								</span>
+							</div>
+						</div>
+					</div>
+					<hr>
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Special Instruction
+								</span>
+							</div>
+							<div class="col-md-8 value box-special-instruction">
+								<span class="font-weight-bolder preview-output-feild" style="white-space: pre-wrap;">
+									{{ textFormatter(bookingPreview?.booking_instructions)| titlecase }}
+								</span>
+							</div>
+						</div>
+					</div>
+					<hr>
 					<!-- Grand Total -->
 					<h4 class="font-weight-bolder m-0">
 						Vehicle Preferences
@@ -1149,382 +1599,12 @@
 							</div>
 						</div>
 					</div>
-					<hr>
-					<!-- Grand Total -->
-					<div class="mx-2" *ngIf="bookingPreview?.meet_greet_choice_name">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Meet and Greet
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
-									{{ textFormatter(bookingPreview?.meet_greet_choice_name)| titlecase }}
-								</span>
-							</div>
-						</div>
-					</div>
-					<div class="mx-2">
-						<div class="row m-0" *ngIf="bookingPreview?.return_meet_greet_choice_name">
-							<div class="col-md-4 key">
-								<span>
-									Return Meet and Greet
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
-									{{ textFormatter(bookingPreview?.return_meet_greet_choice_name)| titlecase }}
-								</span>
-							</div>
-						</div>
-					</div>
-					<hr>
-					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Special Instruction
-								</span>
-							</div>
-							<div class="col-md-8 value box-special-instruction">
-								<span class="font-weight-bolder preview-output-feild" style="white-space: pre-wrap;">
-									{{ textFormatter(bookingPreview?.booking_instructions)| titlecase }}
-								</span>
-							</div>
-						</div>
-					</div>
-
-					<hr>
-					<!-- Travel Information -->
-					<h4 class="font-weight-bolder m-0 mt-3">
-						Travel Information
-					</h4>
-
-					<!-- Number of Hours -->
-					<div class="mx-2" *ngIf="bookingPreview?.service_type == 'Charter Tour'">
-						<div class="row">
-							<div class="col-md-4 key">
-								<span>
-									Booking Hours
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
-									{{ bookingPreview?.number_of_hours }}
-								</span>
-							</div>
-						</div>
-					</div>
-
-					<!-- ################ Pickup ################### -->
-					<h5 class="m-0 my-2 text-xl preview-pickup-color">
-						Pickup Details
-					</h5>
-					<!-- Pickup > Date -->
-					<div class="mx-2 preview-pickup-color">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Date
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
-									{{ dateFormat2(bookingPreview.pickup_date) }}
-									|
-									{{ dateFormat(bookingPreview.pickup_date) }}
-								</span>
-							</div>
-						</div>
-					</div>
-
-					<!-- Pickup > Time -->
-					<div class="mx-2 preview-pickup-color">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Time
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
-									{{ timeFormat2(bookingPreview.pickup_time) }}
-									|
-									{{ timeFormat(bookingPreview.pickup_time) }}
-								</span>
-							</div>
-						</div>
-					</div>
-
-					<!-- Pickup > City Details -->
-					<div class="mx-2 preview-pickup-color"
-						*ngIf="bookingPreview.transfer_type.includes('city_') || bookingPreview.transfer_type.includes('cruise_')">
-						<div class="row m-0">
-							<div class="col-md-4">
-								<span>
-									Address
-								</span>
-							</div>
-							<div class="col-md-8">
-								<span class="font-weight-bolder preview-output-feild">
-									{{ textFormatter(bookingPreview.pickup) }}
-								</span>
-								<span (click)="showLocationPointOnMapByAddress(bookingPreview.pickup)"><i
-										class="bi bi-geo-alt-fill" style="font-size:24px"></i></span>
-							</div>
-						</div>
-					</div>
-
-					<!-- Pickup > Airline Details -->
-					<div class="mx-2 preview-pickup-color" *ngIf="bookingPreview.transfer_type.includes('airport_')">
-						<!-- Airport -->
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Airport
-								</span>
-							</div>
-							<div class="col-md-8 value preview-airport-color">
-								<span class="font-weight-bolder preview-output-feild">
-									{{ textFormatter(bookingPreview.pickup_airport_name) }}
-								</span>
-								<span (click)="showLocationPointOnMapByAddress(bookingPreview.pickup_airport_name)"><i
-										class="bi bi-geo-alt-fill" style="font-size:24px"></i></span>
-							</div>
-						</div>
-						<!-- Airport -->
-						<!-- Airline -->
-						<div class="row m-0 preview-pickup-color">
-							<div class="col-md-4 key">
-								<span>
-									Airline
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
-									{{ textFormatter(bookingPreview.pickup_airline_name) }}
-								</span>
-							</div>
-						</div>
-						<!-- Airline -->
-						<!-- Flight Number -->
-						<div class="row m-0 preview-pickup-color">
-							<div class="col-md-4 key">
-								<span>
-									Flight Number
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
-									{{ textFormatter(bookingPreview.pickup_flight) }}
-								</span>
-							</div>
-						</div>
-						<!-- Flight Number -->
-					</div>
-
-					<!-- Pickup > Cruise Details -->
-					<div class="mx-2 preview-pickup-color" *ngIf="bookingPreview.transfer_type.includes('cruise_')">
-						<!-- Cruise Port -->
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Cruise Port
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
-									{{ textFormatter(bookingPreview.cruise_port) | titlecase }}
-								</span>
-							</div>
-						</div>
-						<!-- Cruise Port -->
-						<!-- Cruise Name -->
-						<div class="row m-0 preview-pickup-color">
-							<div class="col-md-4 key">
-								<span>
-									Cruise Name
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
-									{{ textFormatter(bookingPreview.cruise_name) | titlecase }}
-								</span>
-							</div>
-						</div>
-						<!-- Cruise Name -->
-						<!-- Cruise Time -->
-						<div class="row m-0 preview-pickup-color">
-							<div class="col-md-4 key">
-								<span>
-									Cruise Time
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
-									{{ textFormatter(bookingPreview.cruise_time) | titlecase }}
-								</span>
-							</div>
-						</div>
-					</div>
-					<hr>
-					<!-- Extra Stops -->
-					<div *ngIf="bookingPreview.extra_stops && bookingPreview.extra_stops.length > 0">
-						<h5 class="m-0 text-xl preview-extra-stop-color">
-							Extra Stops
-						</h5>
-						<div class="mx-2 preview-extra-stop-color"
-							*ngFor="let stop of bookingPreview.extra_stops; index as stop_index">
-							<div class="row m-0 mx-2">
-								<div class="col-md-4 key">
-									<span>
-										Stop {{ stop_index + 1 }}
-									</span>
-								</div>
-								<div class="col-md-8 value">
-									<span class="font-weight-bolder preview-output-feild">
-										{{ stop.address }}
-									</span>
-									<span (click)="showLocationPointOnMapByAddress(stop.address)"><i
-											class="bi bi-geo-alt-fill" style="font-size:24px"></i></span>
-								</div>
-							</div>
-							<hr>
-						</div>
-					</div>
-
-					<hr style="width: 50%; margin: 1rem auto; border: 1.3px solid #aeaeae;"
-						*ngIf="bookingPreview.extra_stops && bookingPreview.extra_stops.length == 0" />
-
-
-					<!-- ############# Dropoff ################# -->
-					<h5 class="px-2 m-0 my-3 text-xl preview-dropoff-color">
-						Drop Off Details
-					</h5>
-					<!-- Dropoff > City Details -->
-					<div class="mx-2 preview-dropoff-color"
-						*ngIf="bookingPreview.transfer_type.includes('_city') || bookingPreview.transfer_type.includes('_cruise')">
-						<div class="row">
-							<div class="col-md-4 key">
-								<span>
-									Address
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
-									{{ textFormatter(bookingPreview.dropoff) }}
-								</span>
-								<span (click)="showLocationPointOnMapByAddress(bookingPreview.dropoff)"><i
-										class="bi bi-geo-alt-fill" style="font-size:24px"></i></span>
-							</div>
-						</div>
-					</div>
-
-					<!-- Dropoff > Airline Details -->
-					<div class="mx-2 preview-dropoff-color" *ngIf="bookingPreview.transfer_type.includes('_airport')">
-						<!-- Airport -->
-						<div class="row">
-							<div class="col-md-4 key">
-								<span>
-									Airport
-								</span>
-							</div>
-							<div class="col-md-8 value preview-airport-color">
-								<span class="font-weight-bolder preview-output-feild">
-									{{ textFormatter(bookingPreview.dropoff_airport_name ) }}
-								</span>
-								<span (click)="showLocationPointOnMapByAddress(bookingPreview.dropoff_airport_name)"><i
-										class="bi bi-geo-alt-fill" style="font-size:24px"></i></span>
-							</div>
-						</div>
-						<!-- Airport -->
-						<!-- Airline -->
-						<div class="row preview-dropoff-color">
-							<div class="col-md-4 key">
-								<span>
-									Airline
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
-									{{ textFormatter(bookingPreview.dropoff_airline_name) }}
-								</span>
-							</div>
-						</div>
-						<!-- Airline -->
-						<!-- Flight Number -->
-						<div class="row preview-dropoff-color">
-							<div class="col-md-4 key">
-								<span>
-									Flight Number
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
-									{{ textFormatter(bookingPreview.dropoff_flight) }}
-								</span>
-							</div>
-						</div>
-						<!-- Flight Number -->
-					</div>
-
-					<!-- Dropoff > Cruise Details -->
-					<div class="mx-2 preview-dropoff-color" *ngIf="bookingPreview.transfer_type.includes('_cruise')">
-						<!-- Cruise Port -->
-						<div class="row">
-							<div class="col-md-4 key">
-								<span>
-									Cruise Port
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
-									{{ textFormatter(bookingPreview.cruise_port) | titlecase }}
-								</span>
-							</div>
-						</div>
-						<!-- Cruise Port -->
-
-						<!-- Cruise Name -->
-						<div class="row preview-dropoff-color">
-							<div class="col-md-4 key">
-								<span>
-									Cruise Name
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
-									{{ textFormatter(bookingPreview.cruise_name) | titlecase }}
-								</span>
-							</div>
-						</div>
-						<!-- Cruise Name -->
-
-						<!-- Cruise Time -->
-						<div class="row preview-dropoff-color">
-							<div class="col-md-4 key">
-								<span>
-									Cruise Time
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
-									{{ textFormatter(bookingPreview.cruise_time) }}
-								</span>
-							</div>
-						</div>
-						<!-- Cruise Time -->
-					</div>
-					<!-- Dropoff > Cruise Details - Ends -->
-
-					<!-- 2ND p -->
 
 					<hr>
 
 					<!-- Rate Distribution Information -->
 					<div class="distribution_rate"
-						*ngIf="bookingPreview.affiliate_type === 'affiliate' && bookingPreview.payment_status=='unpaid'">
+						*ngIf="bookingPreview?.affiliate_type === 'affiliate' && bookingPreview?.payment_status=='unpaid' && bookingPreview?.share_array?.length == 0">
 						<h4 class="font-weight-bolder m-0 my-3">
 							Rates Distribution {{bookingPreview.loose_affiliate}}
 						</h4>
@@ -1556,7 +1636,7 @@
 									<span class="font-weight-bolder preview-output-feild">
 										${{rates_preview?.admin_share.toFixed(2) }}
 									</span>
-									(25% of Base Rate)
+									({{adminSharePercent}} of Base Rate)
 								</div>
 							</div>
 						</div>
@@ -1634,6 +1714,120 @@
 										${{rates_preview?.affiliate_share.toFixed(2)}}
 									</span>
 									( Total Price - (Ride Base Rate + Other Taxes) )
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="distribution_rate"
+						*ngIf="bookingPreview?.affiliate_type === 'affiliate' && bookingPreview?.payment_status=='unpaid' && bookingPreview?.share_array?.length != 0">
+						<h4 class="font-weight-bolder m-0 my-3">
+							Rates Distribution
+						</h4>
+
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key d-flex align-items-center">
+									<span class="">
+										Base Rate
+									</span>
+								</div>
+								<div class="col-md-8 value preview-airport-color">
+									<span class="font-weight-bolder preview-output-feild">
+										${{shareArray?.baseRate.toFixed(2)}}
+									</span>
+									(Fare Base Rate)
+								</div>
+							</div>
+						</div>
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key d-flex align-items-center">
+									<span class="">
+										Admin Share
+									</span>
+								</div>
+								<div class="col-md-8 value preview-airport-color">
+									<span class="font-weight-bolder preview-output-feild">
+										${{shareArray?.adminShare.toFixed(2) }}
+									</span>
+									({{adminSharePercent}}% of Base Rate)
+								</div>
+							</div>
+						</div>
+						<div class="mx-2" *ngIf="shareArray?.travelAgentShare">
+							<div class="row m-0">
+								<div class="col-md-4 key d-flex align-items-center">
+									<span class="">
+										Travel Agent Share
+									</span>
+								</div>
+								<div class="col-md-8 value preview-airport-color">
+									<span class="font-weight-bolder preview-output-feild">
+										${{shareArray?.travelAgentShare.toFixed(2) }}
+									</span>
+									(10% of Base Rate)
+								</div>
+							</div>
+						</div>
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key d-flex align-items-center">
+									<span class="">
+										Total Cost
+									</span>
+								</div>
+								<div class="col-md-8 value preview-airport-color">
+									<span class="font-weight-bolder preview-output-feild">
+										${{shareArray?.grandTotal ? shareArray?.grandTotal.toFixed(2) :
+										shareArray?.returnGrandTotal.toFixed(2)}}
+									</span>
+									(Actual Cost to Customer)
+								</div>
+							</div>
+						</div>
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key d-flex align-items-center">
+									<span class="">
+										Stripe fees
+									</span>
+								</div>
+								<div class="col-md-8 value preview-airport-color">
+									<span class="font-weight-bolder preview-output-feild">
+										${{shareArray?.stripeFee.toFixed(2)}}
+									</span>
+									(Platform fee 5% + 30 cents - <b>Paid from Admin share</b>)
+								</div>
+							</div>
+						</div>
+
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key d-flex align-items-center">
+									<span class="">
+										Affliate Payout
+									</span>
+								</div>
+								<div class="col-md-8 value preview-airport-color">
+									<span class="font-weight-bolder preview-output-feild">
+										${{shareArray?.affiliateShare.toFixed(2)}}
+									</span>
+									( Total Price - (Ride Base Rate + Other Taxes) )
+								</div>
+							</div>
+						</div>
+						<div class="mx-2" *ngIf="shareArray?.farmoutShare">
+							<div class="row m-0">
+								<div class="col-md-4 key d-flex align-items-center">
+									<span class="">
+										Affliate Farmout share
+									</span>
+								</div>
+								<div class="col-md-8 value preview-airport-color">
+									<span class="font-weight-bolder preview-output-feild">
+										${{shareArray?.farmoutShare.toFixed(2)}}
+									</span>
+									( 10 % of Base Rate)
 								</div>
 							</div>
 						</div>

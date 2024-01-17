@@ -19,6 +19,7 @@ import PlaceResult = google.maps.places.PlaceResult
 import { isIdentifier } from '@angular/compiler';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 import { EventListenerFocusTrapInertStrategy } from '@angular/cdk/a11y';
+import { CommonService } from 'src/app/services/common.service';
 declare var $: any
 
 
@@ -80,6 +81,7 @@ export class CreateNewBookingComponent implements OnInit
 		private _stateManager: StateManagementService,
 		private mapsAPILoader: MapsAPILoader,
 		private _router: Router,
+		private commonServices: CommonService,
 		private _errorDialog: ErrorDialogService,
 		private globalFunctions: SharedModule
 	) { }
@@ -1389,8 +1391,11 @@ export class CreateNewBookingComponent implements OnInit
 	 * @param image_type String [Required] type of the image being uploaded
 	 * @param image_id [Optional] id of the image to be edited
 	 */
-	uploadImage(event: any, image_type: string)
+	async uploadImage(event: any, image_type: string)
 	{
+		if(!await this.commonServices.handleFile(event)) {
+			return;
+		}
 		let image: any
 		if (event.target.files && event.target.files.length > 0)
 		{

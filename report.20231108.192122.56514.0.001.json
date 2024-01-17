@@ -1,0 +1,390 @@
+
+{
+  "header": {
+    "reportVersion": 1,
+    "event": "Allocation failed - JavaScript heap out of memory",
+    "trigger": "FatalError",
+    "filename": "report.20231108.192122.56514.0.001.json",
+    "dumpEventTime": "2023-11-08T19:21:22Z",
+    "dumpEventTimeStamp": "1699451482136",
+    "processId": 56514,
+    "cwd": "/home/tusharbansal/Desktop/1800-limo",
+    "commandLine": [
+      "/home/tusharbansal/.nvm/versions/node/v12.11.1/bin/node",
+      "/home/tusharbansal/Desktop/1800-limo/node_modules/@ngtools/webpack/src/type_checker_worker.js",
+      "9d93e901-158a-4cf9-ba1b-2f0582ffcfeb"
+    ],
+    "nodejsVersion": "v12.11.1",
+    "glibcVersionRuntime": "2.31",
+    "glibcVersionCompiler": "2.17",
+    "wordSize": 64,
+    "arch": "x64",
+    "platform": "linux",
+    "componentVersions": {
+      "node": "12.11.1",
+      "v8": "7.7.299.11-node.12",
+      "uv": "1.32.0",
+      "zlib": "1.2.11",
+      "brotli": "1.0.7",
+      "ares": "1.15.0",
+      "modules": "72",
+      "nghttp2": "1.39.2",
+      "napi": "5",
+      "llhttp": "1.1.4",
+      "http_parser": "2.8.0",
+      "openssl": "1.1.1c",
+      "cldr": "35.1",
+      "icu": "64.2",
+      "tz": "2019a",
+      "unicode": "12.1"
+    },
+    "release": {
+      "name": "node",
+      "headersUrl": "https://nodejs.org/download/release/v12.11.1/node-v12.11.1-headers.tar.gz",
+      "sourceUrl": "https://nodejs.org/download/release/v12.11.1/node-v12.11.1.tar.gz"
+    },
+    "osName": "Linux",
+    "osRelease": "5.4.0-166-generic",
+    "osVersion": "#183-Ubuntu SMP Mon Oct 2 11:28:33 UTC 2023",
+    "osMachine": "x86_64",
+    "cpus": [
+      {
+        "model": "Intel(R) Core(TM) i3-3210 CPU @ 3.20GHz",
+        "speed": 3192,
+        "user": 199466500,
+        "nice": 780800,
+        "sys": 32902600,
+        "idle": 1724261700,
+        "irq": 0
+      },
+      {
+        "model": "Intel(R) Core(TM) i3-3210 CPU @ 3.20GHz",
+        "speed": 3192,
+        "user": 199999600,
+        "nice": 786000,
+        "sys": 32778200,
+        "idle": 1709028000,
+        "irq": 0
+      },
+      {
+        "model": "Intel(R) Core(TM) i3-3210 CPU @ 3.20GHz",
+        "speed": 3192,
+        "user": 199188200,
+        "nice": 773300,
+        "sys": 33431700,
+        "idle": 1711691100,
+        "irq": 0
+      },
+      {
+        "model": "Intel(R) Core(TM) i3-3210 CPU @ 3.20GHz",
+        "speed": 3192,
+        "user": 198728700,
+        "nice": 809900,
+        "sys": 32830200,
+        "idle": 1720374900,
+        "irq": 0
+      }
+    ],
+    "networkInterfaces": [
+      {
+        "name": "lo",
+        "internal": true,
+        "mac": "00:00:00:00:00:00",
+        "address": "127.0.0.1",
+        "netmask": "255.0.0.0",
+        "family": "IPv4"
+      },
+      {
+        "name": "eth0",
+        "internal": false,
+        "mac": "ec:a8:6b:fb:0a:ce",
+        "address": "10.20.20.52",
+        "netmask": "255.255.255.0",
+        "family": "IPv4"
+      },
+      {
+        "name": "eth0",
+        "internal": false,
+        "mac": "ec:a8:6b:fb:0a:ce",
+        "address": "10.20.20.130",
+        "netmask": "255.255.255.0",
+        "family": "IPv4"
+      },
+      {
+        "name": "lo",
+        "internal": true,
+        "mac": "00:00:00:00:00:00",
+        "address": "::1",
+        "netmask": "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff",
+        "family": "IPv6",
+        "scopeid": 0
+      },
+      {
+        "name": "eth0",
+        "internal": false,
+        "mac": "ec:a8:6b:fb:0a:ce",
+        "address": "fe80::eea8:6bff:fefb:ace",
+        "netmask": "ffff:ffff:ffff:ffff::",
+        "family": "IPv6",
+        "scopeid": 2
+      }
+    ],
+    "host": "MSDT136"
+  },
+  "javascriptStack": {
+    "message": "No stack.",
+    "stack": [
+      "Unavailable."
+    ]
+  },
+  "nativeStack": [
+    {
+      "pc": "0x0000000000afd845",
+      "symbol": "report::TriggerNodeReport(v8::Isolate*, node::Environment*, char const*, char const*, std::string const&, v8::Local<v8::String>) [/home/tusharbansal/.nvm/versions/node/v12.11.1/bin/node]"
+    },
+    {
+      "pc": "0x00000000009d4603",
+      "symbol": "node::OnFatalError(char const*, char const*) [/home/tusharbansal/.nvm/versions/node/v12.11.1/bin/node]"
+    },
+    {
+      "pc": "0x0000000000b32dbe",
+      "symbol": "v8::Utils::ReportOOMFailure(v8::internal::Isolate*, char const*, bool) [/home/tusharbansal/.nvm/versions/node/v12.11.1/bin/node]"
+    },
+    {
+      "pc": "0x0000000000b33139",
+      "symbol": "v8::internal::V8::FatalProcessOutOfMemory(v8::internal::Isolate*, char const*, bool) [/home/tusharbansal/.nvm/versions/node/v12.11.1/bin/node]"
+    },
+    {
+      "pc": "0x0000000000cde455",
+      "symbol": " [/home/tusharbansal/.nvm/versions/node/v12.11.1/bin/node]"
+    },
+    {
+      "pc": "0x0000000000cdeae6",
+      "symbol": "v8::internal::Heap::RecomputeLimits(v8::internal::GarbageCollector) [/home/tusharbansal/.nvm/versions/node/v12.11.1/bin/node]"
+    },
+    {
+      "pc": "0x0000000000cea97a",
+      "symbol": "v8::internal::Heap::PerformGarbageCollection(v8::internal::GarbageCollector, v8::GCCallbackFlags) [/home/tusharbansal/.nvm/versions/node/v12.11.1/bin/node]"
+    },
+    {
+      "pc": "0x0000000000ceb885",
+      "symbol": "v8::internal::Heap::CollectGarbage(v8::internal::AllocationSpace, v8::internal::GarbageCollectionReason, v8::GCCallbackFlags) [/home/tusharbansal/.nvm/versions/node/v12.11.1/bin/node]"
+    },
+    {
+      "pc": "0x0000000000cee298",
+      "symbol": "v8::internal::Heap::AllocateRawWithRetryOrFail(int, v8::internal::AllocationType, v8::internal::AllocationAlignment) [/home/tusharbansal/.nvm/versions/node/v12.11.1/bin/node]"
+    },
+    {
+      "pc": "0x0000000000cb4bc7",
+      "symbol": "v8::internal::Factory::NewFillerObject(int, bool, v8::internal::AllocationType) [/home/tusharbansal/.nvm/versions/node/v12.11.1/bin/node]"
+    },
+    {
+      "pc": "0x0000000000feaafb",
+      "symbol": "v8::internal::Runtime_AllocateInYoungGeneration(int, unsigned long*, v8::internal::Isolate*) [/home/tusharbansal/.nvm/versions/node/v12.11.1/bin/node]"
+    },
+    {
+      "pc": "0x000000000136d539",
+      "symbol": " [/home/tusharbansal/.nvm/versions/node/v12.11.1/bin/node]"
+    }
+  ],
+  "javascriptHeap": {
+    "totalMemory": 2150899712,
+    "totalCommittedMemory": 2149330832,
+    "usedMemory": 2121257536,
+    "availableMemory": 49491664,
+    "memoryLimit": 2197815296,
+    "heapSpaces": {
+      "read_only_space": {
+        "memorySize": 262144,
+        "committedMemory": 32568,
+        "capacity": 261872,
+        "used": 32296,
+        "available": 229576
+      },
+      "new_space": {
+        "memorySize": 2097152,
+        "committedMemory": 1257912,
+        "capacity": 1047488,
+        "used": 208432,
+        "available": 839056
+      },
+      "old_space": {
+        "memorySize": 2022551552,
+        "committedMemory": 2022455440,
+        "capacity": 1997802136,
+        "used": 1997342176,
+        "available": 459960
+      },
+      "code_space": {
+        "memorySize": 6455296,
+        "committedMemory": 6228160,
+        "capacity": 5286816,
+        "used": 5286816,
+        "available": 0
+      },
+      "map_space": {
+        "memorySize": 1576960,
+        "committedMemory": 1400144,
+        "capacity": 1062240,
+        "used": 1062240,
+        "available": 0
+      },
+      "large_object_space": {
+        "memorySize": 117907456,
+        "committedMemory": 117907456,
+        "capacity": 117322024,
+        "used": 117322024,
+        "available": 0
+      },
+      "code_large_object_space": {
+        "memorySize": 49152,
+        "committedMemory": 49152,
+        "capacity": 3552,
+        "used": 3552,
+        "available": 0
+      },
+      "new_large_object_space": {
+        "memorySize": 0,
+        "committedMemory": 0,
+        "capacity": 1047488,
+        "used": 0,
+        "available": 1047488
+      }
+    }
+  },
+  "resourceUsage": {
+    "userCpuSeconds": 4443.81,
+    "kernelCpuSeconds": 71.2027,
+    "cpuConsumptionPercent": 4.76765,
+    "maxRss": 2274816000,
+    "pageFaults": {
+      "IORequired": 23,
+      "IONotRequired": 7507736
+    },
+    "fsActivity": {
+      "reads": 13976,
+      "writes": 0
+    }
+  },
+  "uvthreadResourceUsage": {
+    "userCpuSeconds": 3500.05,
+    "kernelCpuSeconds": 56.1818,
+    "cpuConsumptionPercent": 3.75522,
+    "fsActivity": {
+      "reads": 13776,
+      "writes": 0
+    }
+  },
+  "libuv": [
+  ],
+  "environmentVariables": {
+    "SHELL": "/bin/bash",
+    "SESSION_MANAGER": "local/MSDT136:@/tmp/.ICE-unix/2609,unix/MSDT136:/tmp/.ICE-unix/2609",
+    "QT_ACCESSIBILITY": "1",
+    "COLORTERM": "truecolor",
+    "XDG_CONFIG_DIRS": "/etc/xdg/xdg-ubuntu:/etc/xdg",
+    "NVM_INC": "/home/tusharbansal/.nvm/versions/node/v12.11.1/include/node",
+    "XDG_MENU_PREFIX": "gnome-",
+    "GNOME_DESKTOP_SESSION_ID": "this-is-deprecated",
+    "MANDATORY_PATH": "/usr/share/gconf/ubuntu.mandatory.path",
+    "GNOME_SHELL_SESSION_MODE": "ubuntu",
+    "SSH_AUTH_SOCK": "/run/user/1003/keyring/ssh",
+    "XMODIFIERS": "@im=ibus",
+    "DESKTOP_SESSION": "ubuntu",
+    "SSH_AGENT_PID": "2572",
+    "GTK_MODULES": "gail:atk-bridge",
+    "DBUS_STARTER_BUS_TYPE": "session",
+    "PWD": "/home/tusharbansal/Desktop/1800-limo",
+    "XDG_SESSION_DESKTOP": "ubuntu",
+    "LOGNAME": "tusharbansal",
+    "XDG_SESSION_TYPE": "x11",
+    "GPG_AGENT_INFO": "/run/user/1003/gnupg/S.gpg-agent:0:1",
+    "XAUTHORITY": "/run/user/1003/gdm/Xauthority",
+    "WINDOWPATH": "2",
+    "HOME": "/home/tusharbansal",
+    "USERNAME": "tusharbansal",
+    "IM_CONFIG_PHASE": "1",
+    "LANG": "en_IN",
+    "LS_COLORS": "rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:",
+    "XDG_CURRENT_DESKTOP": "ubuntu:GNOME",
+    "VTE_VERSION": "6003",
+    "GNOME_TERMINAL_SCREEN": "/org/gnome/Terminal/screen/547a29d6_ca71_49db_8d48_f53741afc002",
+    "INVOCATION_ID": "57ae433fd43840509a5956073d5037a8",
+    "MANAGERPID": "2392",
+    "NVM_DIR": "/home/tusharbansal/.nvm",
+    "LESSCLOSE": "/usr/bin/lesspipe %s %s",
+    "XDG_SESSION_CLASS": "user",
+    "TERM": "xterm-256color",
+    "DEFAULTS_PATH": "/usr/share/gconf/ubuntu.default.path",
+    "LESSOPEN": "| /usr/bin/lesspipe %s",
+    "USER": "tusharbansal",
+    "GNOME_TERMINAL_SERVICE": ":1.484",
+    "DISPLAY": ":0",
+    "SHLVL": "1",
+    "NVM_CD_FLAGS": "",
+    "QT_IM_MODULE": "ibus",
+    "DBUS_STARTER_ADDRESS": "unix:path=/run/user/1003/bus,guid=1e71e4cdda1f2972f8f5fe1a65487fa7",
+    "XDG_RUNTIME_DIR": "/run/user/1003",
+    "JOURNAL_STREAM": "9:44435",
+    "XDG_DATA_DIRS": "/usr/share/ubuntu:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop",
+    "PATH": "/home/tusharbansal/.nvm/versions/node/v12.11.1/bin:/home/tusharbansal/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/abhishek/Desktop/Intellij/idea-IC-213.6777.52/bin:/opt/idea-IC/bin:/opt/tableau/tabcmd/bin",
+    "GDMSESSION": "ubuntu",
+    "DBUS_SESSION_BUS_ADDRESS": "unix:path=/run/user/1003/bus,guid=1e71e4cdda1f2972f8f5fe1a65487fa7",
+    "NVM_BIN": "/home/tusharbansal/.nvm/versions/node/v12.11.1/bin",
+    "_": "/usr/local/bin/ng",
+    "WEBPACK_DEV_SERVER": "true"
+  },
+  "userLimits": {
+    "core_file_size_blocks": {
+      "soft": 0,
+      "hard": "unlimited"
+    },
+    "data_seg_size_kbytes": {
+      "soft": "unlimited",
+      "hard": "unlimited"
+    },
+    "file_size_blocks": {
+      "soft": "unlimited",
+      "hard": "unlimited"
+    },
+    "max_locked_memory_bytes": {
+      "soft": 67108864,
+      "hard": 67108864
+    },
+    "max_memory_size_kbytes": {
+      "soft": "unlimited",
+      "hard": "unlimited"
+    },
+    "open_files": {
+      "soft": 1048576,
+      "hard": 1048576
+    },
+    "stack_size_bytes": {
+      "soft": 8388608,
+      "hard": "unlimited"
+    },
+    "cpu_time_seconds": {
+      "soft": "unlimited",
+      "hard": "unlimited"
+    },
+    "max_user_processes": {
+      "soft": 63335,
+      "hard": 63335
+    },
+    "virtual_memory_kbytes": {
+      "soft": "unlimited",
+      "hard": "unlimited"
+    }
+  },
+  "sharedObjects": [
+    "linux-vdso.so.1",
+    "/lib/x86_64-linux-gnu/libdl.so.2",
+    "/lib/x86_64-linux-gnu/librt.so.1",
+    "/usr/lib/x86_64-linux-gnu/libstdc++.so.6",
+    "/lib/x86_64-linux-gnu/libm.so.6",
+    "/lib/x86_64-linux-gnu/libgcc_s.so.1",
+    "/lib/x86_64-linux-gnu/libpthread.so.0",
+    "/lib/x86_64-linux-gnu/libc.so.6",
+    "/lib64/ld-linux-x86-64.so.2"
+  ]
+}

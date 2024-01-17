@@ -17,14 +17,51 @@
 					d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
 			</svg>
 		</button>
+		<div class="btn btn-icon btn-transparent-dark referral_code"
+			*ngIf="this.currentUser?.is_profile_complete && accountStatus == 'accepted' ">
+			<span class="badge badge-warning" style="font-size: 19px; font-weight: 500; padding: 0.35em 0.4em;">
+				{{referral_code}}
+			</span>
+			<textarea id="clipboard-example-textarea" cols="30" rows="10" [(ngModel)]="referral_code" hidden></textarea>
+			<button type="button" class="close x-copy-btn" [cdkCopyToClipboard]="referral_code"
+				(click)="copyInviteLink()">
+				<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#000" class="bi bi-check2"
+					viewBox="0 0 16 16" *ngIf="showCopyIcon">
+					<path
+						d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z" />
+				</svg>
+				<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#000" class="bi bi-copy"
+					viewBox="0 0 16 16" *ngIf="!showCopyIcon">
+					<path fill-rule="evenodd"
+						d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z" />
+				</svg>
+			</button>
+		</div>
 		<ul class="navbar-nav align-items-center ml-auto">
-			<li class="hideMobile">
+			<li *ngIf="bkpData">
+				<button class="custom-filled-button orange-button hideDesktop"
+					style="color:#fff;padding: 5px 12px !important; border:2px solid #c6d8db !important;"
+					(click)="backToAdmin()">
+					Go back
+				</button>
+				<button class="custom-filled-button orange-button hideMobile"
+					style="color:#fff;padding: 5px 12px !important; border:2px solid #c6d8db !important;"
+					(click)="backToAdmin()">
+					<svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" fill="currentColor"
+						class="bi bi-arrow-left-square" viewBox="0 0 16 16" style="margin-right: 5px;">
+						<path fill-rule="evenodd"
+							d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm11.5 5.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5z" />
+					</svg>
+					Back to admin
+				</button>
+			</li>
+			<li class="hideMobile" *ngIf="!bkpData">
 				<!-- <div id="google-translate">
 					<div id="google_translate_element_desktop"></div>
 				  </div> -->
 				<div id="google_translate_element_desktop"></div>
 			</li>
-			<li class="nav-item dropdown no-caret dropdown-user">
+			<li class="nav-item dropdown no-caret dropdown-user" *ngIf="!bkpData">
 				<a class="user-profile btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownUserImage"
 					href="javascript:void(0);" role="button" data-toggle="dropdown" aria-haspopup="true"
 					aria-expanded="false" tabindex="-1">
@@ -33,7 +70,8 @@
 							d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22ZM15 10C15 11.6569 13.6569 13 12 13C10.3431 13 9 11.6569 9 10C9 8.34315 10.3431 7 12 7C13.6569 7 15 8.34315 15 10ZM5.99927 17C7.36758 15.1783 9.54609 14 11.9998 14C14.4535 14 16.6321 15.1783 18.0004 17C16.6321 18.8217 14.4535 20 11.9998 20C9.54609 20 7.36758 18.8217 5.99927 17Z"
 							clip-rule="evenodd" />
 					</svg>
-					<img src="{{profile_pic_url}}" height="24px" width="24px" *ngIf="profile_pic_url">
+					<img src="{{profile_pic_url}}" height="24px" width="24px" *ngIf="profile_pic_url"
+						style="object-fit: contain;">
 					<span class="font-weight-bold">
 						{{ currentUser?.affiliate_company ? currentUser?.affiliate_company :
 						currentUser?.name }}
@@ -48,7 +86,8 @@
 								d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22ZM15 10C15 11.6569 13.6569 13 12 13C10.3431 13 9 11.6569 9 10C9 8.34315 10.3431 7 12 7C13.6569 7 15 8.34315 15 10ZM5.99927 17C7.36758 15.1783 9.54609 14 11.9998 14C14.4535 14 16.6321 15.1783 18.0004 17C16.6321 18.8217 14.4535 20 11.9998 20C9.54609 20 7.36758 18.8217 5.99927 17Z"
 								clip-rule="evenodd" />
 						</svg>
-						<img src="{{profile_pic_url}}" height="24px" width="24px" *ngIf="profile_pic_url">
+						<img src="{{profile_pic_url}}" height="24px" width="24px" *ngIf="profile_pic_url"
+							style="object-fit: contain;">
 
 						<div class="dropdown-user-details">
 							<div class="dropdown-user-details-name font-weight-bold">
@@ -165,12 +204,23 @@
 							</a>
 							<div id="collapse4" class="collapse" aria-labelledby="headingUtilities"
 								data-parent="#accordionSidebar" tabindex="-1">
-								<div class="py-2 collapse-inner rounded">
+								<div class="collapse-inner rounded">
 									<a class="collapse-item" [routerLinkActive]="['active']"
 										routerLink="/travel_agent/staff-account-list"
-										(click)="closeSidebarFunc(false)">Clients</a>
+										(click)="closeSidebarFunc(false)">Active Clients</a>
+								</div>
+								<div class="collapse-inner rounded">
+									<a class="collapse-item" [routerLinkActive]="['active']"
+										routerLink="/travel_agent/add-client-account"
+										(click)="closeSidebarFunc(false)">Create new client</a>
+								</div>
+								<div class="collapse-inner rounded">
+									<a class="collapse-item" [routerLinkActive]="['active']"
+										routerLink="/travel_agent/sub-agent-accounts"
+										(click)="closeSidebarFunc(false)">Sub Agent Accounts</a>
 								</div>
 							</div>
+
 						</li>
 						<!--4th -->
 						<li class="nav-item">

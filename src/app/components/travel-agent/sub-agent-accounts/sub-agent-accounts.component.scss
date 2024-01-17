@@ -1,0 +1,33 @@
+.accpet_reject_div{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .acceptButton{
+    background-color: #00bd1f;
+    color: #fff;
+    border: none;
+    border-radius: 10rem;
+    margin-right: 0.5rem;
+    width: 80px;
+}
+.rejectButton{
+    background-color: #fc0404;
+    color: #fff;
+    border: none;
+    border-radius: 10rem;
+    margin-right: 0.5rem;
+    width: 80px;
+
+}
+.accepted{
+  background-color: #00bd1f;
+}
+.rejected{
+  background-color: #fc0404;
+}
+.approval_status{
+  font-size:medium;
+  color:#fff;
+}

@@ -19,7 +19,7 @@
 		<!-- Section - Booking Type -->
 		<div class="section-container mt-0">
 			<h4 class="border-secondary">
-				Booking Type
+				{{updateType =='reaffiliate' ? 'Edit' : updateType | titlecase}} a Booking
 			</h4>
 			<div class="row px-4">
 				<!-- Service Type -->
@@ -32,9 +32,9 @@
 							<mat-select formControlName="service_type" [(ngModel)]="service_type"
 								(selectionChange)="onSelectionChangeServiceType($event)"
 								[ngStyle]="{'cursor': Form.updateType.value == 'edit' ? 'not-allowed' : 'default'}">
-								<mat-option value="one_way">One Way</mat-option>
-								<mat-option value="round_trip">Round Trip</mat-option>
-								<mat-option value="charter_tour">Charter/Tour</mat-option>
+								<mat-option value="one_way">One Way ?</mat-option>
+								<mat-option value="round_trip">Round Trip ?</mat-option>
+								<mat-option value="charter_tour">Charter/Tour ?</mat-option>
 							</mat-select>
 						</mat-form-field>
 					</div>
@@ -49,10 +49,20 @@
 							</mat-label>
 							<mat-select formControlName="transfer_type" class="font-weight-bolder"
 								(selectionChange)="changeTransferType($event.value)" [(ngModel)]="transfer_type">
-								<mat-option [value]="tf_type" class="font-weight-bolder"
+								<mat-option value="airport_to_city">Airport To City ?</mat-option>
+								<mat-option value="airport_to_airport">Airport To Airport ?</mat-option>
+								<mat-option value="airport_to_cruise">Airport To Cruise Port ?</mat-option>
+								<mat-option value="city_to_city">City To City ?</mat-option>
+								<mat-option value="city_to_airport">City To Airport ?</mat-option>
+								<mat-option value="city_to_cruise">City To Cruise Port ?</mat-option>
+								<mat-option value="cruise_to_airport">Cruise Port To Airport ?</mat-option>
+								<mat-option value="cruise_to_city">Cruise Port to City ?</mat-option>
+
+
+								<!-- <mat-option [value]="tf_type" class="font-weight-bolder"
 									*ngFor="let tf_type of booking_params.transfer_types">
 									{{ textFormatterTransferType(tf_type) | titlecase }}
-								</mat-option>
+								</mat-option> -->
 							</mat-select>
 						</mat-form-field>
 					</div>
@@ -67,10 +77,14 @@
 							</mat-label>
 							<mat-select formControlName="return_transfer_type" [(ngModel)]="return_transfer_type"
 								(selectionChange)="changeReturnTransferType($event.value)">
-								<mat-option [value]="tf_type" class="font-weight-bolder"
-									*ngFor="let tf_type of booking_params.transfer_types">
-									{{ textFormatterTransferType(tf_type) | titlecase }}
-								</mat-option>
+								<mat-option value="airport_to_city">Airport To City ?</mat-option>
+								<mat-option value="airport_to_airport">Airport To Airport ?</mat-option>
+								<mat-option value="airport_to_cruise">Airport To Cruise Port ?</mat-option>
+								<mat-option value="city_to_city">City To City ?</mat-option>
+								<mat-option value="city_to_airport">City To Airport ?</mat-option>
+								<mat-option value="city_to_cruise">City To Cruise Port ?</mat-option>
+								<mat-option value="cruise_to_airport">Cruise Port To Airport ?</mat-option>
+								<mat-option value="cruise_to_city">Cruise Port to City ?</mat-option>
 							</mat-select>
 						</mat-form-field>
 					</div>
@@ -106,7 +120,7 @@
 					<mat-radio-group aria-label="Select an option" formControlName="account_type">
 						<mat-radio-button [value]="ca" class="my-2 ml-4 mr-3" (change)="handleClientAccChange(ca)"
 							*ngFor="let ca of booking_params.client_account_types">
-							{{ textFormatter(ca) | titlecase }}
+							{{ textFormatterClientAccounts(ca) | titlecase }}
 						</mat-radio-button>
 					</mat-radio-group>
 				</div>
@@ -337,13 +351,20 @@
 							</mat-radio-group>
 						</div>
 					</div>
-					<div class="col-md-10 margin-left-10"
+					<div class="col-md-10 margin-left-10" style="padding-bottom:3px;"
 						*ngIf="Form['travel_client_acc'].value != 'travel_loose_customer'">
 						<ng-select appearance="outline" [items]="travelStaffAccounts" bindLabel="name" bindValue="id"
 							placeholder="Select Client Account" dropdownPosition="bottom" [markFirst]="true"
 							[virtualScroll]="true" formControlName="travel_client_id"
-							(change)="handleTravelStaffAccounts($event)">
+							(change)="handleTravelStaffAccounts($event)"
+							[ngClass]="{ 'border-red': (submitBookingForm && Form.travel_client_id.invalid) }"
+							style="height:66px;">
 						</ng-select>
+						<div *ngIf="(submitBookingForm && Form.travel_client_id.invalid) "
+							class="text-danger margin-bottom-thin my-mat-hint">
+							<div *ngIf="Form.travel_client_id.errors.required">Select a client
+								account</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -501,7 +522,7 @@
 									</mat-label>
 									<input type="text" matInput placeholder="Type your address"
 										matGoogleMapsAutocomplete
-										(onAutocompleteSelected)="fillLooseCustomerAddress($event.formatted_address)"
+										(onAutocompleteSelected)="fillLooseCustomerAddress($event)"
 										(focus)="$event.target.select()" />
 								</mat-form-field>
 							</div>
@@ -518,7 +539,7 @@
 							<!-- Card Holder Name -->
 							<div class="col-md-6">
 								<mat-form-field appearance="outline" class="m-0">
-									<mat-label class="required-field">
+									<mat-label>
 										First & Last Name
 									</mat-label>
 									<input matInput placeholder="First & Last Name" type="text" formControlName="name"
@@ -541,7 +562,7 @@
 							<!-- Card Number -->
 							<div class="col-md-6">
 								<mat-form-field appearance="outline" class="m-0">
-									<mat-label class="required-field">
+									<mat-label>
 										Card Number
 									</mat-label>
 									<input matInput placeholder="xxxxxxxxxxxxxxxx" type="text"
@@ -576,9 +597,10 @@
 							<!-- Expiry Month -->
 							<div class="col-md-4">
 								<mat-form-field appearance="outline" class="m-0">
-									<mat-label class="required-field">Expiry Month</mat-label>
+									<mat-label>Expiry Month</mat-label>
 									<input type="number" matInput formControlName="exp_month" [matAutocomplete]="auto"
-										(keyup)="handleChangeMonth($event.target.value)">
+										(keyup)="handleChangeMonth($event.target.value)"
+										(focus)="$event.target.select()">
 									<mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
 										<mat-option *ngFor="let m of monthOptions" [value]="m.value">
 											{{m.value}}
@@ -618,7 +640,7 @@
 							<!-- Expiry Year -->
 							<div class="col-md-4">
 								<mat-form-field appearance="outline" class="m-0">
-									<mat-label class="required-field">
+									<mat-label>
 										Expiry Year
 									</mat-label>
 									<mat-select formControlName="exp_year">
@@ -641,7 +663,7 @@
 							<!-- CVV -->
 							<div class="col-md-4">
 								<mat-form-field appearance="outline" class="m-0">
-									<mat-label class="required-field">
+									<mat-label>
 										CVV
 									</mat-label>
 									<input matInput placeholder="0000" type="text" (focus)="$event.target.select()"
@@ -693,7 +715,7 @@
 					<div class="col-md-4">
 						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>
-								Passenger Name
+								Passenger Name <span class="asterisk">*</span>
 							</mat-label>
 							<input matInput placeholder="Passenger Name" type="text" formControlName="passenger_name"
 								(focus)="$event.target.select()" />
@@ -715,7 +737,7 @@
 					<div class="col-md-4">
 						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>
-								Passenger Email <span class="asterisk">*</span>
+								Passenger Email
 							</mat-label>
 							<input matInput placeholder="Passenger Email" type="text" formControlName="passenger_email"
 								(focus)="$event.target.select()" />
@@ -769,7 +791,7 @@
 
 					<!-- Passenger Count -->
 					<div class="col-md-3 looseError">
-						<mat-form-field appearance="outline" class="m-0">
+						<!-- <mat-form-field appearance="outline" class="m-0">
 							<mat-label>
 								No. of Passengers <span class="asterisk"></span>
 							</mat-label>
@@ -778,12 +800,33 @@
 									{{ option }}
 								</mat-option>
 							</mat-select>
+						</mat-form-field> -->
+						<mat-form-field appearance="outline" class="m-0">
+							<mat-label>No. of Passengers <span class="asterisk"></span></mat-label>
+							<input type="number" matInput formControlName="total_passengers" [matAutocomplete]="auto"
+								(keyup)="handleChangeNoPasengers($event.target.value)" (focus)="$event.target.select()">
+							<mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+								<mat-option *ngFor="let option of booking_params.numbers" [value]="option">
+									{{option}}
+								</mat-option>
+							</mat-autocomplete>
 						</mat-form-field>
 					</div>
 
 					<!-- Luggage Count -->
 					<div class="col-md-3 mb-4 looseError">
 						<mat-form-field appearance="outline" class="m-0">
+							<mat-label>Luggage Count <span class="asterisk"></span></mat-label>
+							<input type="number" matInput formControlName="luggage_count"
+								[matAutocomplete]="luggage_auto" (keyup)="handleChangeLuggaeCOunt($event.target.value)"
+								(focus)="$event.target.select()">
+							<mat-autocomplete autoActiveFirstOption #luggage_auto="matAutocomplete">
+								<mat-option *ngFor="let option of luggage_options" [value]="option">
+									{{option}}
+								</mat-option>
+							</mat-autocomplete>
+						</mat-form-field>
+						<!-- <mat-form-field appearance="outline" class="m-0">
 							<mat-label>
 								Luggage Count <span class="asterisk"></span>
 							</mat-label>
@@ -792,7 +835,7 @@
 									{{ option }}
 								</mat-option>
 							</mat-select>
-						</mat-form-field>
+						</mat-form-field> -->
 					</div>
 
 
@@ -836,9 +879,9 @@
 					</mat-form-field> -->
 
 					<!-- Ng-Select -->
-					<ng-select appearance="outline" [items]="AffiliateAccounts" bindLabel="name" bindValue="id"
-						placeholder="Select Affiliate" dropdownPosition="bottom" [markFirst]="true"
-						[virtualScroll]="true" formControlName="affiliate_id">
+					<ng-select appearance="outline" [items]="AffiliateAccounts" bindLabel="bindNameAffiliate"
+						bindValue="id" placeholder="Select Affiliate" dropdownPosition="bottom" [markFirst]="true"
+						[virtualScroll]="true" formControlName="affiliate_id" (change)="handleAffiliateChange($event)">
 					</ng-select>
 				</div>
 			</div>
@@ -1411,9 +1454,9 @@
 							<mat-select formControlName="service_type" [(ngModel)]="service_type"
 								(selectionChange)="onSelectionChangeServiceType($event)"
 								[ngStyle]="{'cursor': Form.updateType.value == 'edit' ? 'not-allowed' : 'default'}">
-								<mat-option value="one_way">One Way</mat-option>
-								<mat-option value="round_trip">Round Trip</mat-option>
-								<mat-option value="charter_tour">Charter/Tour</mat-option>
+								<mat-option value="one_way">One Way ?</mat-option>
+								<mat-option value="round_trip">Round Trip ?</mat-option>
+								<mat-option value="charter_tour">Charter/Tour ?</mat-option>
 							</mat-select>
 						</mat-form-field>
 					</div>
@@ -1428,10 +1471,14 @@
 							</mat-label>
 							<mat-select formControlName="transfer_type" class="font-weight-bolder"
 								(selectionChange)="changeTransferType($event.value)" [(ngModel)]="transfer_type">
-								<mat-option [value]="tf_type" class="font-weight-bolder"
-									*ngFor="let tf_type of booking_params.transfer_types">
-									{{ textFormatterTransferType(tf_type) | titlecase }}
-								</mat-option>
+								<mat-option value="airport_to_city">Airport To City ?</mat-option>
+								<mat-option value="airport_to_airport">Airport To Airport ?</mat-option>
+								<mat-option value="airport_to_cruise">Airport To Cruise Port ?</mat-option>
+								<mat-option value="city_to_city">City To City ?</mat-option>
+								<mat-option value="city_to_airport">City To Airport ?</mat-option>
+								<mat-option value="city_to_cruise">City To Cruise Port ?</mat-option>
+								<mat-option value="cruise_to_airport">Cruise Port To Airport ?</mat-option>
+								<mat-option value="cruise_to_city">Cruise Port to City ?</mat-option>
 							</mat-select>
 						</mat-form-field>
 					</div>
@@ -1446,10 +1493,14 @@
 							</mat-label>
 							<mat-select formControlName="return_transfer_type" [(ngModel)]="return_transfer_type"
 								(selectionChange)="changeReturnTransferType($event.value)">
-								<mat-option [value]="tf_type" class="font-weight-bolder"
-									*ngFor="let tf_type of booking_params.transfer_types">
-									{{ textFormatterTransferType(tf_type) | titlecase }}
-								</mat-option>
+								<mat-option value="airport_to_city">Airport To City ?</mat-option>
+								<mat-option value="airport_to_airport">Airport To Airport ?</mat-option>
+								<mat-option value="airport_to_cruise">Airport To Cruise Port ?</mat-option>
+								<mat-option value="city_to_city">City To City ?</mat-option>
+								<mat-option value="city_to_airport">City To Airport ?</mat-option>
+								<mat-option value="city_to_cruise">City To Cruise Port ?</mat-option>
+								<mat-option value="cruise_to_airport">Cruise Port To Airport ?</mat-option>
+								<mat-option value="cruise_to_city">Cruise Port to City ?</mat-option>
 							</mat-select>
 						</mat-form-field>
 					</div>
@@ -1528,14 +1579,14 @@
 			</div>
 
 
-			<h4 class="border-secondary pl-2 mt-2" id="pickup_details">
+			<h4 class="border-secondary pl-2 mt-2" id="pickup_adress">
 				Pickup
 			</h4>
 
 			<!-- Pickup - Address Field -->
 			<div *ngIf="!searchSubstring(Form.transfer_type.value, 'airport_')">
 				<div class="row px-3">
-					<div class="col-md-12">
+					<div class="col-md-12" id="pickup_address">
 						<mat-form-field appearance="outline">
 							<mat-label> Pickup Address </mat-label>
 							<input type="text" matInput placeholder="Type your address" matGoogleMapsAutocomplete
@@ -1616,14 +1667,14 @@
 						</ng-select>
 					</div>
 
-					<!-- Flight Number -->
+					<!-- Flight / Tail # -->
 					<div class="col-md-6">
 						<mat-form-field appearance="outline" class="vehicleLable mt-0"
 							style="margin-top: 0px !important;">
 							<mat-label>
-								Flight Number
+								Flight / Tail #
 							</mat-label>
-							<input type="text" matInput placeholder="Flight Number" aria-label="Flight"
+							<input type="text" matInput placeholder="Flight / Tail #" aria-label="Flight"
 								formControlName="pickup_flight" (focus)="$event.target.select()" />
 						</mat-form-field>
 					</div>
@@ -1772,14 +1823,14 @@
 						</ng-select>
 					</div>
 
-					<!-- Flight Number -->
+					<!-- Flight / Tail # -->
 					<div class="col-md-6">
 						<mat-form-field appearance="outline" class="vehicleLable mt-0"
 							style="margin-top: 0px !important;">
 							<mat-label>
-								Flight Number
+								Flight / Tail #
 							</mat-label>
-							<input type="text" matInput placeholder="Flight Number" aria-label="Flight"
+							<input type="text" matInput placeholder="Flight / Tail #" aria-label="Flight"
 								formControlName="dropoff_flight" (focus)="$event.target.select()" />
 						</mat-form-field>
 					</div>
@@ -1833,7 +1884,7 @@
 						Special Instructions
 					</mat-label>
 					<textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize"
-						formControlName="booking_instructions" (focus)="$event.target.select()" rows="5"></textarea>
+						formControlName="booking_instructions" rows="5"></textarea>
 				</mat-form-field>
 			</div>
 			<div class="row m-2">
@@ -1900,7 +1951,7 @@
 								}} Km
 							</h6>
 							<h6 class="mx-2">
-								Estimated time: {{convertToMinutes(Form.journeyTime.value)}} mins
+								Estimated time: {{convertToMinutes(Form.journeyTime.value)}}
 							</h6>
 						</div>
 					</div>
@@ -2172,9 +2223,9 @@
 							<mat-select formControlName="service_type" [(ngModel)]="service_type"
 								(selectionChange)="onSelectionChangeServiceType($event)"
 								[ngStyle]="{'cursor': Form.updateType.value == 'edit' ? 'not-allowed' : 'default'}">
-								<mat-option value="one_way">One Way</mat-option>
-								<mat-option value="round_trip">Round Trip</mat-option>
-								<mat-option value="charter_tour">Charter/Tour</mat-option>
+								<mat-option value="one_way">One Way ?</mat-option>
+								<mat-option value="round_trip">Round Trip ?</mat-option>
+								<mat-option value="charter_tour">Charter/Tour ?</mat-option>
 							</mat-select>
 						</mat-form-field>
 					</div>
@@ -2190,10 +2241,14 @@
 							<mat-select formControlName="transfer_type" class="font-weight-bolder"
 								(selectionChange)="changeTransferType($event.value)"
 								[(ngModel)]="Form.transfer_type.value">
-								<mat-option [value]="tf_type" class="font-weight-bolder"
-									*ngFor="let tf_type of booking_params.transfer_types">
-									{{ textFormatterTransferType(tf_type) | titlecase }}
-								</mat-option>
+								<mat-option value="airport_to_city">Airport To City ?</mat-option>
+								<mat-option value="airport_to_airport">Airport To Airport ?</mat-option>
+								<mat-option value="airport_to_cruise">Airport To Cruise Port ?</mat-option>
+								<mat-option value="city_to_city">City To City ?</mat-option>
+								<mat-option value="city_to_airport">City To Airport ?</mat-option>
+								<mat-option value="city_to_cruise">City To Cruise Port ?</mat-option>
+								<mat-option value="cruise_to_airport">Cruise Port To Airport ?</mat-option>
+								<mat-option value="cruise_to_city">Cruise Port to City ?</mat-option>
 							</mat-select>
 						</mat-form-field>
 					</div>
@@ -2208,10 +2263,14 @@
 							</mat-label>
 							<mat-select formControlName="return_transfer_type" [(ngModel)]="return_transfer_type"
 								(selectionChange)="changeReturnTransferType($event.value)">
-								<mat-option [value]="tf_type" class="font-weight-bolder"
-									*ngFor="let tf_type of booking_params.transfer_types">
-									{{ textFormatterTransferType(tf_type) | titlecase }}
-								</mat-option>
+								<mat-option value="airport_to_city">Airport To City ?</mat-option>
+								<mat-option value="airport_to_airport">Airport To Airport ?</mat-option>
+								<mat-option value="airport_to_cruise">Airport To Cruise Port ?</mat-option>
+								<mat-option value="city_to_city">City To City ?</mat-option>
+								<mat-option value="city_to_airport">City To Airport ?</mat-option>
+								<mat-option value="city_to_cruise">City To Cruise Port ?</mat-option>
+								<mat-option value="cruise_to_airport">Cruise Port To Airport ?</mat-option>
+								<mat-option value="cruise_to_city">Cruise Port to City ?</mat-option>
 							</mat-select>
 						</mat-form-field>
 					</div>
@@ -2365,14 +2424,14 @@
 						</ng-select>
 					</div>
 
-					<!-- Flight Number -->
+					<!-- Flight / Tail # -->
 					<div class="col-md-6 ">
 						<mat-form-field appearance="outline" class="vehicleLable mt-0"
 							style="margin-top: 0px !important;">
 							<mat-label>
-								Flight Number
+								Flight / Tail #
 							</mat-label>
-							<input type="text" matInput placeholder="Flight Number" aria-label="Flight"
+							<input type="text" matInput placeholder="Flight / Tail #" aria-label="Flight"
 								formControlName="return_pickup_flight" (focus)="$event.target.select()" />
 						</mat-form-field>
 					</div>
@@ -2510,14 +2569,14 @@
 						</ng-select>
 					</div>
 
-					<!-- Flight Number -->
+					<!-- Flight / Tail # -->
 					<div class="col-md-6">
 						<mat-form-field appearance="outline" class="vehicleLable mt-0"
 							style="margin-top: 0px !important;">
 							<mat-label>
-								Flight Number
+								Flight / Tail #
 							</mat-label>
-							<input type="text" matInput placeholder="Flight Number" aria-label="Flight"
+							<input type="text" matInput placeholder="Flight / Tail #" aria-label="Flight"
 								formControlName="return_dropoff_flight" (focus)="$event.target.select()" />
 						</mat-form-field>
 					</div>
@@ -2571,7 +2630,7 @@
 						Special Instructions
 					</mat-label>
 					<textarea matInput style="white-space: pre-wrap;" formControlName="return_booking_instructions"
-						(focus)="$event.target.select()" rows="5"></textarea>
+						rows="5"></textarea>
 				</mat-form-field>
 			</div>
 			<div class="row m-2">
@@ -2642,8 +2701,10 @@
 			[distance]="distance" [reservation_id]="booking_id" [reset]="reset_button" [reset]="reset_button"
 			[isTravelShare]="isTravelShare" [initReturnRates]="init_return_rates" (formvalue)="RateFormValue($event)"
 			[vehicle_id]="QB_vehicle_id" [hours]="Form.number_of_hours?.value" [isCreatedByAdmin]="isCreatedByAdmin"
-			[vehicles]="Form.number_of_vehicles?.value" [book_data]="booking_data"
 			(returnformvalue)="ReturnRateFormValue($event)" (returnNumberOfHr)="HandleReturnNumberOfHr($event)">
+			[vehicles]="Form.number_of_vehicles?.value" [book_data]="booking_data" [isFarmoutBooking]="isFarmoutBooking"
+			[service_type]="service_type" (returnformvalue)="ReturnRateFormValue($event)"
+			(returnNumberOfHr)="HandleReturnNumberOfHr($event)">
 		</app-rates-form>
 
 
@@ -2655,7 +2716,7 @@
 
 
 		<div class="row">
-			<div class="col-md-12 d-flex justify-content-end">
+			<div class="col-md-12 d-flex preview_button_edit">
 				<!-- <button type="button" class="custom-filled-reset-button m-3" (click)="resetFields()">
 					Reset
 				</button> -->
@@ -2767,480 +2828,8 @@
 						</div>
 					</div>
 					<hr>
-					<h4 class="font-weight-bolder m-0">
-						Vehicle Preferences
-					</h4>
-					<div class="row p-2">
-						<div class="col-md-4 key">
-							<span>
-								Vehicle Type
-							</span>
-						</div>
-						<div class="col-md-8 value">
-							<span class="font-weight-bolder">
-								{{ Form.vehicle_type_name.value}}
-							</span>
-						</div>
-					</div>
-					<div class="row p-2">
-						<div class="col-md-4 key">
-							<span>
-								Vehicle Make
-							</span>
-						</div>
-						<div class="col-md-8 value">
-							<span class="font-weight-bolder">
-								{{ Form.vehicle_make_name.value}}
-							</span>
-						</div>
-					</div>
-					<div class="row p-2">
-						<div class="col-md-4 key">
-							<span>
-								Vehicle Model
-							</span>
-						</div>
-						<div class="col-md-8 value">
-							<span class="font-weight-bolder">
-								{{ Form.vehicle_model_name.value}}
-							</span>
-						</div>
-					</div>
-					<div class="row p-2">
-						<div class="col-md-4 key">
-							<span>
-								Vehicle Year
-							</span>
-						</div>
-						<div class="col-md-8 value">
-							<span class="font-weight-bolder">
-								{{ Form.vehicle_year_name.value}}
-							</span>
-						</div>
-					</div>
-					<div class="row p-2">
-						<div class="col-md-4 key">
-							<span>
-								Vehicle Color
-							</span>
-						</div>
-						<div class="col-md-8 value">
-							<span class="font-weight-bolder">
-								{{ Form.vehicle_color_name.value}}
-							</span>
-						</div>
-					</div>
-					<div class="row p-2">
-						<div class="col-md-4 key">
-							<span>
-								Licence plate
-							</span>
-						</div>
-						<div class="col-md-8 value">
-							<span class="font-weight-bolder">
-								{{ Form.vehicle_license_plate.value}}
-							</span>
-						</div>
-					</div>
-					<div class="row p-2">
-						<div class="col-md-4 key">
-							<span>
-								No. of seats
-							</span>
-						</div>
-						<div class="col-md-8 value">
-							<span class="font-weight-bolder">
-								{{ Form.vehicle_seats.value}}
-							</span>
-						</div>
-					</div>
 
-					<hr>
-					<!-- Affiliate Information -->
-					<ng-container *ngIf="Form.affiliate_type.value == 'affiliate' then affiliateUser">
-					</ng-container>
 
-					<!-- Affiliate -->
-					<ng-template #affiliateUser>
-						<h4 class="font-weight-bolder m-0 mt-3">
-							Affiliate Information
-						</h4>
-
-						<!-- Affiliate > Name -->
-						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key">
-									<span>
-										Name
-									</span>
-								</div>
-								<div class="col-md-8 value">
-									<span class="font-weight-bolder"
-										*ngIf="AffiliateInformation.MiddleName == null;else affiliateMiddleName">
-										{{ textFormatter(AffiliateInformation.FirstName) }} {{
-										textFormatter(AffiliateInformation.LastName) }}
-									</span>
-									<ng-template #affiliateMiddleName>
-										<span class="font-weight-bolder">
-											{{ textFormatter(AffiliateInformation.FirstName) }} {{
-											textFormatter(AffiliateInformation.MiddleName) }} {{
-											textFormatter(AffiliateInformation.LastName) }}
-										</span>
-									</ng-template>
-								</div>
-							</div>
-						</div>
-
-						<!-- Affiliate > Email -->
-						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key">
-									<span>
-										Email
-									</span>
-								</div>
-								<div class="col-md-8 value">
-									<span class="font-weight-bolder">
-										{{ textFormatter(AffiliateInformation.Email) }}
-									</span>
-								</div>
-							</div>
-						</div>
-
-						<!-- Affiliate > Phone -->
-						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key">
-									<span>
-										Phone
-									</span>
-								</div>
-								<div class="col-md-8 value">
-									<span class="font-weight-bolder">
-										({{ AffiliateInformation.CellIsd }})
-										{{ textFormatter(AffiliateInformation.CellNumber) }}
-									</span>
-								</div>
-							</div>
-						</div>
-					</ng-template>
-
-					<!-- Loose Affiliate Information -->
-					<ng-container *ngIf="Form.affiliate_type.value == 'loose_affiliate' then looseAffiliate">
-					</ng-container>
-
-					<!-- Loose Affiliate -->
-					<ng-template #looseAffiliate>
-						<h4 class="font-weight-bolder m-0 mt-3">
-							Loose Affiliate Information
-						</h4>
-
-						<!-- Loose Affiliate > Name -->
-						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key">
-									<span>
-										Name
-									</span>
-								</div>
-								<div class="col-md-8 value">
-									<span class="font-weight-bolder">
-										{{ textFormatter(Form.lose_affiliate_name.value) }}
-									</span>
-								</div>
-							</div>
-						</div>
-
-						<!-- Loose Affiliate > Email -->
-						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key">
-									<span>
-										Email
-									</span>
-								</div>
-								<div class="col-md-8 value">
-									<span class="font-weight-bolder">
-										{{ textFormatter(Form.lose_affiliate_email.value) }}
-									</span>
-								</div>
-							</div>
-						</div>
-
-						<!-- Loose Affiliate > Phone -->
-						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key">
-									<span>
-										Phone
-									</span>
-								</div>
-								<div class="col-md-8 value">
-									<span class="font-weight-bolder">
-										({{ Form.lose_affiliate_phone_isd.value }})
-										{{ textFormatter(Form.lose_affiliate_phone.value) }}
-									</span>
-								</div>
-							</div>
-						</div>
-					</ng-template>
-					<hr>
-					<!-- Driver Information -->
-					<h4 class="font-weight-bolder m-0 mt-3">
-						Driver Information
-					</h4>
-					<!-- Driver Name -->
-					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Name
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder">
-									{{ textFormatter(Form.driver_name.value) | titlecase }}
-								</span>
-							</div>
-						</div>
-					</div>
-
-					<!-- Driver Email -->
-					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Email
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder">
-									{{ textFormatter(Form.driver_email.value) }}
-								</span>
-							</div>
-						</div>
-					</div>
-
-					<!-- Driver Cell -->
-					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Phone
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder">
-									({{ Form.driver_cell_isd.value }}) {{
-									Form.driver_cell.value }}
-								</span>
-							</div>
-						</div>
-					</div>
-					<hr>
-
-					<!-- Loose Customer Information -->
-					<ng-container *ngIf="Form['account_type'].value == 'loose_customer' then LooseCustomerSec">
-					</ng-container>
-
-					<!-- Loose Customer -->
-					<ng-template #LooseCustomerSec>
-						<h4 class="font-weight-bolder m-0 mt-3">
-							Loose Customer Information
-						</h4>
-
-						<!-- Loose Customer > Name -->
-						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key">
-									<span>
-										Name
-									</span>
-								</div>
-								<div class="col-md-8 value">
-									<span class="font-weight-bolder">
-										{{ textFormatter(LooseCustomer.first_name.value) }} {{
-										textFormatter(LooseCustomer.middle_name.value) }} {{
-										textFormatter(LooseCustomer.last_name.value) }}
-									</span>
-								</div>
-							</div>
-						</div>
-
-						<!-- Loose Customer > Email -->
-						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key">
-									<span>
-										Email
-									</span>
-								</div>
-								<div class="col-md-8 value">
-									<span class="font-weight-bolder">
-										{{ textFormatter(LooseCustomer.email.value) }}
-									</span>
-								</div>
-							</div>
-						</div>
-
-						<!-- Loose Customer > Phone -->
-						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key">
-									<span>
-										Phone
-									</span>
-								</div>
-								<div class="col-md-8 value">
-									<span class="font-weight-bolder">
-										({{ LooseCustomer.phone_isd.value }})
-										{{ textFormatter(LooseCustomer.phone.value) }}
-									</span>
-								</div>
-							</div>
-						</div>
-						<hr>
-					</ng-template>
-					<!-- Passenger Information -->
-					<h4 class="font-weight-bolder m-0 mt-3">
-						Passenger Information
-					</h4>
-
-					<!-- Passenger > Name -->
-					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Name
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder">
-									{{ textFormatter(Form.passenger_name.value) }}
-								</span>
-							</div>
-						</div>
-					</div>
-
-					<!-- Passenger > Email -->
-					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Email
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder">
-									{{ textFormatter(Form.passenger_email.value) }}
-								</span>
-							</div>
-						</div>
-					</div>
-
-					<!-- Passenger > Phone -->
-					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Phone
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder">
-									({{ Form.passenger_cell_isd.value }})
-									{{ textFormatter(Form.passenger_cell.value) }}
-								</span>
-							</div>
-						</div>
-					</div>
-					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									No. of passenger
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder">
-									{{ Form.total_passengers.value }}
-								</span>
-							</div>
-						</div>
-					</div>
-					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Luggage count
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder">
-									{{ Form.luggage_count.value }}
-								</span>
-							</div>
-						</div>
-					</div>
-					<hr>
-					<div class="mx-2" *ngIf="Form?.meet_greet_choices_name.value">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Meet and Greet
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder" style="white-space: pre-wrap;">
-									{{Form?.meet_greet_choices_name.value}}
-								</span>
-							</div>
-						</div>
-					</div>
-					<div class="mx-2" *ngIf="Form.service_type.value == 'round_trip'">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Return Meet and Greet
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder" style="white-space: pre-wrap;">
-									{{Form?.return_meet_greet_choices_name.value}}
-								</span>
-							</div>
-						</div>
-					</div>
-					<hr>
-					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Special Instruction
-								</span>
-							</div>
-							<div class="col-md-8 value box-special-instruction">
-								<span class="font-weight-bolder" style="white-space: pre-wrap;">
-									{{Form?.booking_instructions.value}}
-								</span>
-							</div>
-						</div>
-					</div>
-					<div class="mx-2" *ngIf="Form.service_type.value == 'round_trip'">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Return Special Instruction
-								</span>
-							</div>
-							<div class="col-md-8 value box-special-instruction">
-								<span class="font-weight-bolder" style="white-space: pre-wrap;">
-									{{Form?.return_booking_instructions.value}}
-								</span>
-							</div>
-						</div>
-					</div>
-					<hr>
 					<!-- Travel Information -->
 					<h4 class="font-weight-bolder m-0 mt-3">
 						Travel Information
@@ -3315,8 +2904,8 @@
 								<span class="font-weight-bolder">
 									{{ textFormatter(Form.pickup.value) }}
 								</span>
-								<span (click)="showLocationPointOnMap(Form.pickup.value)"><i class="bi bi-geo-alt-fill"
-										style="font-size:24px"></i></span>
+								<span (click)="showLocationPointOnMap(Form.pickup.value)"><i
+										class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
 							</div>
 						</div>
 					</div>
@@ -3336,7 +2925,7 @@
 								</span>
 								<span class="font-weight-bolder preview-airport-color"
 									(click)="showLocationPointOnMap(Form.pickup_airport_name.value)"><i
-										class="bi bi-geo-alt-fill" style="font-size:24px"></i></span>
+										class="bi bi-geo-alt-fill pin-icon-preview">></i></span>
 							</div>
 						</div>
 						<!-- Airport -->
@@ -3354,11 +2943,11 @@
 							</div>
 						</div>
 						<!-- Airline -->
-						<!-- Flight Number -->
+						<!-- Flight / Tail # -->
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
-									Flight Number
+									Flight / Tail #
 								</span>
 							</div>
 							<div class="col-md-8 value">
@@ -3367,7 +2956,7 @@
 								</span>
 							</div>
 						</div>
-						<!-- Flight Number -->
+						<!-- Flight / Tail # -->
 						<!-- Distance Details -->
 						<div class="row m-0">
 							<div class="col-md-4 key">
@@ -3390,7 +2979,7 @@
 							</div>
 							<div class="col-md-8 value">
 								<span class="font-weight-bolder">
-									{{convertToMinutes(Form.journeyTime.value)}} mins
+									{{convertToMinutes(Form.journeyTime.value)}}
 								</span>
 							</div>
 						</div>
@@ -3461,8 +3050,8 @@
 									<span class="font-weight-bolder">
 										{{ stop.address }}
 									</span>
-									<span (click)="showLocationPointOnMap(stop.address)"><i class="bi bi-geo-alt-fill"
-											style="font-size:24px"></i></span>
+									<span (click)="showLocationPointOnMap(stop.address)"><i
+											class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
 								</div>
 							</div>
 							<hr>
@@ -3488,8 +3077,8 @@
 								<span class="font-weight-bolder">
 									{{ textFormatter(Form.dropoff.value) }}
 								</span>
-								<span (click)="showLocationPointOnMap(Form.dropoff.value)"><i class="bi bi-geo-alt-fill"
-										style="font-size:24px"></i></span>
+								<span (click)="showLocationPointOnMap(Form.dropoff.value)"><i
+										class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
 							</div>
 						</div>
 					</div>
@@ -3509,7 +3098,7 @@
 								</span>
 								<span class="font-weight-bolder"
 									(click)="showLocationPointOnMap(Form.dropoff_airport_name.value)"><i
-										class="bi bi-geo-alt-fill" style="font-size:24px"></i></span>
+										class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
 							</div>
 						</div>
 						<!-- Airport -->
@@ -3527,11 +3116,11 @@
 							</div>
 						</div>
 						<!-- Airline -->
-						<!-- Flight Number -->
+						<!-- Flight / Tail # -->
 						<div class="row p-2">
 							<div class="col-md-4 key">
 								<span>
-									Flight Number
+									Flight / Tail #
 								</span>
 							</div>
 							<div class="col-md-8 value">
@@ -3540,7 +3129,7 @@
 								</span>
 							</div>
 						</div>
-						<!-- Flight Number -->
+						<!-- Flight / Tail # -->
 					</div>
 
 					<!-- Dropoff > Cruise Details -->
@@ -3590,92 +3179,37 @@
 						</div>
 						<!-- Cruise Time -->
 					</div>
-
 					<hr>
-					<!-- *ngIf="Form.affiliate_type.value === 'affiliate'" -->
-					<div class="distribution_rate">
-						<h4 class="font-weight-bolder m-0 my-3">
-							Rates Distribution
-						</h4>
-
-						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key d-flex align-items-center">
-									<span class="">
-										Base Rate
-									</span>
-								</div>
-								<div class="col-md-8 value preview-airport-color">
-									<span class="font-weight-bolder preview-output-feild">
-										${{shareArray?.baseRate.toFixed(2)}}
-									</span>
-									(Fare Base Rate)
-								</div>
+					<div class="mx-2" *ngIf="Form?.meet_greet_choices_name.value">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Meet and Greet
+								</span>
 							</div>
-						</div>
-						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key d-flex align-items-center">
-									<span class="">
-										Admin Share
-									</span>
-								</div>
-								<div class="col-md-8 value preview-airport-color">
-									<span class="font-weight-bolder preview-output-feild">
-										${{shareArray?.adminShare.toFixed(2) }}
-									</span>
-									({{adminSharePercent}}% of Base Rate)
-								</div>
-							</div>
-						</div>
-						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key d-flex align-items-center">
-									<span class="">
-										Total Cost
-									</span>
-								</div>
-								<div class="col-md-8 value preview-airport-color">
-									<span class="font-weight-bolder preview-output-feild">
-										${{shareArray?.grandTotal.toFixed(2)}}
-									</span>
-									(Actual Cost to Customer)
-								</div>
-							</div>
-						</div>
-						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key d-flex align-items-center">
-									<span class="">
-										Stripe fees
-									</span>
-								</div>
-								<div class="col-md-8 value preview-airport-color">
-									<span class="font-weight-bolder preview-output-feild">
-										${{shareArray?.stripeFee.toFixed(2)}}
-									</span>
-									(Platform fee 5% + 30 cents - <b>Paid from Admin share</b>)
-								</div>
-							</div>
-						</div>
-
-						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key d-flex align-items-center">
-									<span class="">
-										Affliate Payout
-									</span>
-								</div>
-								<div class="col-md-8 value preview-airport-color">
-									<span class="font-weight-bolder preview-output-feild">
-										${{shareArray?.affiliateShare.toFixed(2)}}
-									</span>
-									( Total Price - (Ride Base Rate + Other Taxes) )
-								</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder" style="white-space: pre-wrap;">
+									{{Form?.meet_greet_choices_name.value}}
+								</span>
 							</div>
 						</div>
 					</div>
+					<hr>
 
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Special Instruction
+								</span>
+							</div>
+							<div class="col-md-8 value box-special-instruction">
+								<span class="font-weight-bolder" style="white-space: pre-wrap;">
+									{{Form?.booking_instructions.value}}
+								</span>
+							</div>
+						</div>
+					</div>
 
 					<!-- Return Information -->
 					<!-- style="width: 75%; margin: 1.6rem auto; border: 1.2px solid #000;" / -->
@@ -3738,7 +3272,7 @@
 										{{ textFormatter(Form.return_pickup.value) | titlecase }}
 									</span>
 									<span (click)="showLocationPointOnMap(Form.return_pickup.value)"><i
-											class="bi bi-geo-alt-fill" style="font-size:24px"></i></span>
+											class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
 								</div>
 							</div>
 						</div>
@@ -3759,7 +3293,7 @@
 									</span>
 									<span class="font-weight-bolder preview-airport-color"
 										(click)="showLocationPointOnMap(Form.return_pickup_airport_name.value)"><i
-											class="bi bi-geo-alt-fill" style="font-size:24px"></i></span>
+											class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
 								</div>
 							</div>
 							<!-- Airline -->
@@ -3776,11 +3310,11 @@
 								</div>
 							</div>
 
-							<!-- Flight Number -->
+							<!-- Flight / Tail # -->
 							<div class="row p-2">
 								<div class="col-md-4 key">
 									<span>
-										Flight Number
+										Flight / Tail #
 									</span>
 								</div>
 								<div class="col-md-8 value">
@@ -3856,7 +3390,7 @@
 											{{ stop.address }}
 										</span>
 										<span (click)="showLocationPointOnMap(stop.address)"><i
-												class="bi bi-geo-alt-fill" style="font-size:24px"></i></span>
+												class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
 									</div>
 								</div>
 								<hr>
@@ -3883,7 +3417,7 @@
 										{{ textFormatter(Form.return_dropoff.value) | titlecase }}
 									</span>
 									<span (click)="showLocationPointOnMap(Form.return_dropff.value)"><i
-											class="bi bi-geo-alt-fill" style="font-size:24px"></i></span>
+											class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
 								</div>
 							</div>
 						</div>
@@ -3904,7 +3438,7 @@
 									</span>
 									<span class="font-weight-bolder preview-airport-color"
 										(click)="showLocationPointOnMap(Form.return_dropoff_airport_name.value)"><i
-											class="bi bi-geo-alt-fill" style="font-size:24px"></i></span>
+											class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
 								</div>
 							</div>
 
@@ -3922,11 +3456,11 @@
 								</div>
 							</div>
 
-							<!-- Flight Number -->
+							<!-- Flight / Tail # -->
 							<div class="row p-2">
 								<div class="col-md-4 key">
 									<span>
-										Flight Number
+										Flight / Tail #
 									</span>
 								</div>
 								<div class="col-md-8 value">
@@ -3990,6 +3524,123 @@
 
 						<hr>
 						<!-- *ngIf="Form.affiliate_type.value === 'affiliate'" -->
+						<div class="distribution_rate">
+							<h4 class="font-weight-bolder m-0 my-3">
+								Rates Distribution
+							</h4>
+
+							<div class="mx-2">
+								<div class="row m-0">
+									<div class="col-md-4 key d-flex align-items-center">
+										<span class="">
+											Base Rate
+										</span>
+									</div>
+									<div class="col-md-8 value preview-airport-color">
+										<span class="font-weight-bolder preview-output-feild">
+											${{r_shareArray?.baseRate.toFixed(2)}}
+										</span>
+										(Fare Base Rate)
+									</div>
+								</div>
+							</div>
+							<div class="mx-2">
+								<div class="row m-0">
+									<div class="col-md-4 key d-flex align-items-center">
+										<span class="">
+											Admin Share
+										</span>
+									</div>
+									<div class="col-md-8 value preview-airport-color">
+										<span class="font-weight-bolder preview-output-feild">
+											${{r_shareArray?.adminShare.toFixed(2) }}
+										</span>
+										({{adminSharePercent}}% of Base Rate)
+									</div>
+								</div>
+							</div>
+							<div class="mx-2">
+								<div class="row m-0">
+									<div class="col-md-4 key d-flex align-items-center">
+										<span class="">
+											Total Cost
+										</span>
+									</div>
+									<div class="col-md-8 value preview-airport-color">
+										<span class="font-weight-bolder preview-output-feild">
+											${{r_shareArray?.returnGrandTotal.toFixed(2)}}
+										</span>
+										(Actual Cost to Customer)
+									</div>
+								</div>
+							</div>
+							<div class="mx-2">
+								<div class="row m-0">
+									<div class="col-md-4 key d-flex align-items-center">
+										<span class="">
+											Stripe fees
+										</span>
+									</div>
+									<div class="col-md-8 value preview-airport-color">
+										<span class="font-weight-bolder preview-output-feild">
+											${{r_shareArray?.stripeFee.toFixed(2)}}
+										</span>
+										(Platform fee 5% + 30 cents - <b>Paid from Admin share</b>)
+									</div>
+								</div>
+							</div>
+
+							<div class="mx-2">
+								<div class="row m-0">
+									<div class="col-md-4 key d-flex align-items-center">
+										<span class="">
+											Affliate Payout
+										</span>
+									</div>
+									<div class="col-md-8 value preview-airport-color">
+										<span class="font-weight-bolder preview-output-feild">
+											${{r_shareArray?.affiliateShare.toFixed(2)}}
+										</span>
+										( Total Price - (Ride Base Rate + Other Taxes) )
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<hr>
+				<div class="mx-2" *ngIf="Form.service_type.value == 'round_trip'">
+					<div class="row m-0">
+						<div class="col-md-4 key">
+							<span>
+								Return Meet and Greet
+							</span>
+						</div>
+						<div class="col-md-8 value">
+							<span class="font-weight-bolder" style="white-space: pre-wrap;">
+								{{Form?.return_meet_greet_choices_name.value}}
+							</span>
+						</div>
+					</div>
+					<hr>
+				</div>
+
+
+				<div class="mx-2" *ngIf="Form.service_type.value == 'round_trip'">
+					<div class="row m-0">
+						<div class="col-md-4 key">
+							<span>
+								Return Special Instruction
+							</span>
+						</div>
+						<div class="col-md-8 value box-special-instruction">
+							<span class="font-weight-bolder" style="white-space: pre-wrap;">
+								{{Form?.return_booking_instructions.value}}
+							</span>
+						</div>
+					</div>
+
+					<hr>
 					<div class="distribution_rate">
 						<h4 class="font-weight-bolder m-0 my-3">
 							Rates Distribution
@@ -4022,6 +3673,21 @@
 										${{r_shareArray?.adminShare.toFixed(2) }}
 									</span>
 									({{adminSharePercent}}% of Base Rate)
+								</div>
+							</div>
+						</div>
+						<div class="mx-2" *ngIf="r_shareArray?.travelAgentShare">
+							<div class="row m-0">
+								<div class="col-md-4 key d-flex align-items-center">
+									<span class="">
+										Travel Agent Share
+									</span>
+								</div>
+								<div class="col-md-8 value preview-airport-color">
+									<span class="font-weight-bolder preview-output-feild">
+										${{r_shareArray?.travelAgentShare.toFixed(2) }}
+									</span>
+									(10% of Base Rate)
 								</div>
 							</div>
 						</div>
@@ -4071,9 +3737,556 @@
 								</div>
 							</div>
 						</div>
-					</div>
+						<div class="mx-2" *ngIf="isFarmoutBooking">
+							<div class="row m-0">
+								<div class="col-md-4 key d-flex align-items-center">
+									<span class="">
+										Affliate Farmout share
+									</span>
+								</div>
+								<div class="col-md-8 value preview-airport-color">
+									<span class="font-weight-bolder preview-output-feild">
+										${{r_shareArray?.farmoutShare.toFixed(2)}}
+									</span>
+									( 10 % of Base Rate)
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
+				<h4 class="font-weight-bolder m-0">
+					Vehicle Preferences
+				</h4>
+				<div class="row p-2">
+					<div class="col-md-4 key">
+						<span>
+							Vehicle Type
+						</span>
+					</div>
+					<div class="col-md-8 value">
+						<span class="font-weight-bolder">
+							{{ Form.vehicle_type_name.value}}
+						</span>
+					</div>
+				</div>
+				<div class="row p-2">
+					<div class="col-md-4 key">
+						<span>
+							Vehicle Make
+						</span>
+					</div>
+					<div class="col-md-8 value">
+						<span class="font-weight-bolder">
+							{{ Form.vehicle_make_name.value}}
+						</span>
+					</div>
+				</div>
+				<div class="row p-2">
+					<div class="col-md-4 key">
+						<span>
+							Vehicle Model
+						</span>
+					</div>
+					<div class="col-md-8 value">
+						<span class="font-weight-bolder">
+							{{ Form.vehicle_model_name.value}}
+						</span>
+					</div>
+				</div>
+				<div class="row p-2">
+					<div class="col-md-4 key">
+						<span>
+							Vehicle Year
+						</span>
+					</div>
+					<div class="col-md-8 value">
+						<span class="font-weight-bolder">
+							{{ Form.vehicle_year_name.value}}
+						</span>
+					</div>
+				</div>
+				<div class="row p-2">
+					<div class="col-md-4 key">
+						<span>
+							Vehicle Color
+						</span>
+					</div>
+					<div class="col-md-8 value">
+						<span class="font-weight-bolder">
+							{{ Form.vehicle_color_name.value}}
+						</span>
+					</div>
+				</div>
+				<div class="row p-2">
+					<div class="col-md-4 key">
+						<span>
+							Licence plate
+						</span>
+					</div>
+					<div class="col-md-8 value">
+						<span class="font-weight-bolder">
+							{{ Form.vehicle_license_plate.value}}
+						</span>
+					</div>
+				</div>
+				<div class="row p-2">
+					<div class="col-md-4 key">
+						<span>
+							No. of seats
+						</span>
+					</div>
+					<div class="col-md-8 value">
+						<span class="font-weight-bolder">
+							{{ Form.vehicle_seats.value}}
+						</span>
+					</div>
+				</div>
+
+				<hr>
+				<!-- Affiliate Information -->
+				<ng-container *ngIf="Form.affiliate_type.value == 'affiliate' then affiliateUser">
+				</ng-container>
+
+				<!-- Affiliate -->
+				<ng-template #affiliateUser>
+					<h4 class="font-weight-bolder m-0 mt-3">
+						Affiliate Information
+					</h4>
+
+					<!-- Affiliate > Name -->
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Name
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder"
+									*ngIf="AffiliateInformation.MiddleName == null;else affiliateMiddleName">
+									{{ textFormatter(AffiliateInformation.FirstName) }} {{
+									textFormatter(AffiliateInformation.LastName) }}
+								</span>
+								<ng-template #affiliateMiddleName>
+									<span class="font-weight-bolder">
+										{{ textFormatter(AffiliateInformation.FirstName) }} {{
+										textFormatter(AffiliateInformation.MiddleName) }} {{
+										textFormatter(AffiliateInformation.LastName) }}
+									</span>
+								</ng-template>
+							</div>
+						</div>
+					</div>
+
+					<!-- Affiliate > Email -->
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Email
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ textFormatter(AffiliateInformation.Email) }}
+								</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Affiliate > Phone -->
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Phone
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									({{ AffiliateInformation.CellIsd }})
+									{{ textFormatter(AffiliateInformation.CellNumber) }}
+								</span>
+							</div>
+						</div>
+					</div>
+				</ng-template>
+
+				<!-- Loose Affiliate Information -->
+				<ng-container *ngIf="Form.affiliate_type.value == 'loose_affiliate' then looseAffiliate">
+				</ng-container>
+
+				<!-- Loose Affiliate -->
+				<ng-template #looseAffiliate>
+					<h4 class="font-weight-bolder m-0 mt-3">
+						Loose Affiliate Information
+					</h4>
+
+					<!-- Loose Affiliate > Name -->
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Name
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ textFormatter(Form.lose_affiliate_name.value) }}
+								</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Loose Affiliate > Email -->
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Email
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ textFormatter(Form.lose_affiliate_email.value) }}
+								</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Loose Affiliate > Phone -->
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Phone
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									({{ Form.lose_affiliate_phone_isd.value }})
+									{{ textFormatter(Form.lose_affiliate_phone.value) }}
+								</span>
+							</div>
+						</div>
+					</div>
+				</ng-template>
+				<hr>
+				<!-- Driver Information -->
+				<h4 class="font-weight-bolder m-0 mt-3">
+					Driver Information
+				</h4>
+				<!-- Driver Name -->
+				<div class="mx-2">
+					<div class="row m-0">
+						<div class="col-md-4 key">
+							<span>
+								Name
+							</span>
+						</div>
+						<div class="col-md-8 value">
+							<span class="font-weight-bolder">
+								{{ textFormatter(Form.driver_name.value) | titlecase }}
+							</span>
+						</div>
+					</div>
+				</div>
+
+				<!-- Driver Email -->
+				<div class="mx-2">
+					<div class="row m-0">
+						<div class="col-md-4 key">
+							<span>
+								Email
+							</span>
+						</div>
+						<div class="col-md-8 value">
+							<span class="font-weight-bolder">
+								{{ textFormatter(Form.driver_email.value) }}
+							</span>
+						</div>
+					</div>
+				</div>
+
+				<!-- Driver Cell -->
+				<div class="mx-2">
+					<div class="row m-0">
+						<div class="col-md-4 key">
+							<span>
+								Phone
+							</span>
+						</div>
+						<div class="col-md-8 value">
+							<span class="font-weight-bolder">
+								({{ Form.driver_cell_isd.value }}) {{
+								Form.driver_cell.value }}
+							</span>
+						</div>
+					</div>
+				</div>
+				<hr>
+
+				<!-- Loose Customer Information -->
+				<ng-container *ngIf="Form['account_type'].value == 'loose_customer' then LooseCustomerSec">
+				</ng-container>
+
+				<!-- Loose Customer -->
+				<ng-template #LooseCustomerSec>
+					<h4 class="font-weight-bolder m-0 mt-3">
+						Loose Customer Information
+					</h4>
+
+					<!-- Loose Customer > Name -->
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Name
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ textFormatter(LooseCustomer.first_name.value) }} {{
+									textFormatter(LooseCustomer.middle_name.value) }} {{
+									textFormatter(LooseCustomer.last_name.value) }}
+								</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Loose Customer > Email -->
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Email
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ textFormatter(LooseCustomer.email.value) }}
+								</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Loose Customer > Phone -->
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Phone
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									({{ LooseCustomer.phone_isd.value }})
+									{{ textFormatter(LooseCustomer.phone.value) }}
+								</span>
+							</div>
+						</div>
+					</div>
+					<hr>
+				</ng-template>
+				<!-- Passenger Information -->
+				<h4 class="font-weight-bolder m-0 mt-3">
+					Passenger Information
+				</h4>
+
+				<!-- Passenger > Name -->
+				<div class="mx-2">
+					<div class="row m-0">
+						<div class="col-md-4 key">
+							<span>
+								Name
+							</span>
+						</div>
+						<div class="col-md-8 value">
+							<span class="font-weight-bolder">
+								{{ textFormatter(Form.passenger_name.value) }}
+							</span>
+						</div>
+					</div>
+				</div>
+
+				<!-- Passenger > Email -->
+				<div class="mx-2">
+					<div class="row m-0">
+						<div class="col-md-4 key">
+							<span>
+								Email
+							</span>
+						</div>
+						<div class="col-md-8 value">
+							<span class="font-weight-bolder">
+								{{ textFormatter(Form.passenger_email.value) }}
+							</span>
+						</div>
+					</div>
+				</div>
+
+				<!-- Passenger > Phone -->
+				<div class="mx-2">
+					<div class="row m-0">
+						<div class="col-md-4 key">
+							<span>
+								Phone
+							</span>
+						</div>
+						<div class="col-md-8 value">
+							<span class="font-weight-bolder">
+								({{ Form.passenger_cell_isd.value }})
+								{{ textFormatter(Form.passenger_cell.value) }}
+							</span>
+						</div>
+					</div>
+				</div>
+				<div class="mx-2">
+					<div class="row m-0">
+						<div class="col-md-4 key">
+							<span>
+								No. of passenger
+							</span>
+						</div>
+						<div class="col-md-8 value">
+							<span class="font-weight-bolder">
+								{{ Form.total_passengers.value }}
+							</span>
+						</div>
+					</div>
+				</div>
+				<div class="mx-2">
+					<div class="row m-0">
+						<div class="col-md-4 key">
+							<span>
+								Luggage count
+							</span>
+						</div>
+						<div class="col-md-8 value">
+							<span class="font-weight-bolder">
+								{{ Form.luggage_count.value }}
+							</span>
+						</div>
+					</div>
+				</div>
+
+				<hr>
+				<div class="distribution_rate">
+					<h4 class="font-weight-bolder m-0 my-3">
+						Rates Distribution
+					</h4>
+
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key d-flex align-items-center">
+								<span class="">
+									Base Rate
+								</span>
+							</div>
+							<div class="col-md-8 value preview-airport-color">
+								<span class="font-weight-bolder preview-output-feild">
+									${{shareArray?.baseRate.toFixed(2)}}
+								</span>
+								(Fare Base Rate)
+							</div>
+						</div>
+					</div>
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key d-flex align-items-center">
+								<span class="">
+									Admin Share
+								</span>
+							</div>
+							<div class="col-md-8 value preview-airport-color">
+								<span class="font-weight-bolder preview-output-feild">
+									${{shareArray?.adminShare.toFixed(2) }}
+								</span>
+								({{adminSharePercent}}% of Base Rate)
+							</div>
+						</div>
+					</div>
+					<div class="mx-2" *ngIf="shareArray?.travelAgentShare">
+						<div class="row m-0">
+							<div class="col-md-4 key d-flex align-items-center">
+								<span class="">
+									Travel Agent Share
+								</span>
+							</div>
+							<div class="col-md-8 value preview-airport-color">
+								<span class="font-weight-bolder preview-output-feild">
+									${{shareArray?.travelAgentShare.toFixed(2) }}
+								</span>
+								(10% of Base Rate)
+							</div>
+						</div>
+					</div>
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key d-flex align-items-center">
+								<span class="">
+									Total Cost
+								</span>
+							</div>
+							<div class="col-md-8 value preview-airport-color">
+								<span class="font-weight-bolder preview-output-feild">
+									${{shareArray?.grandTotal.toFixed(2)}}
+								</span>
+								(Actual Cost to Customer)
+							</div>
+						</div>
+					</div>
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key d-flex align-items-center">
+								<span class="">
+									Stripe fees
+								</span>
+							</div>
+							<div class="col-md-8 value preview-airport-color">
+								<span class="font-weight-bolder preview-output-feild">
+									${{shareArray?.stripeFee.toFixed(2)}}
+								</span>
+								(Platform fee 5% + 30 cents - <b>Paid from Admin share</b>)
+							</div>
+						</div>
+					</div>
+
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key d-flex align-items-center">
+								<span class="">
+									Affliate Payout
+								</span>
+							</div>
+							<div class="col-md-8 value preview-airport-color">
+								<span class="font-weight-bolder preview-output-feild">
+									${{shareArray?.affiliateShare.toFixed(2)}}
+								</span>
+								( Total Price - (Ride Base Rate + Other Taxes) )
+							</div>
+						</div>
+					</div>
+					<div class="mx-2" *ngIf="isFarmoutBooking">
+						<div class="row m-0">
+							<div class="col-md-4 key d-flex align-items-center">
+								<span class="">
+									Affliate Farmout share
+								</span>
+							</div>
+							<div class="col-md-8 value preview-airport-color">
+								<span class="font-weight-bolder preview-output-feild">
+									${{shareArray?.farmoutShare.toFixed(2)}}
+								</span>
+								( 10 % of Base Rate)
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+
+				<!-- *ngIf="Form.affiliate_type.value === 'affiliate'" -->
 
 			</div>
 

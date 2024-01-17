@@ -29,6 +29,8 @@ export class OtpComponent implements OnInit, OnDestroy {
 	public dDay = new Date().getTime() + 16 * 1000;
 	public timeDifference;
 	public secondsToDday;
+	review_referral_url:any;
+	Role:any;
 	@ViewChild(NgOtpInputComponent, { static: false }) ngOtpInput: NgOtpInputComponent;
 	@ViewChild('otpInput') otpInput: ElementRef;
 	email: any = null;
@@ -105,6 +107,8 @@ export class OtpComponent implements OnInit, OnDestroy {
 			otp: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(6), Validators.pattern("^[0-9]*$")]],
 		});
 
+		this.review_referral_url = localStorage.getItem('review_referral_url')
+
 		this.subscription = interval(1000)
 			.subscribe(x => { this.countdownTimer(); });
 
@@ -121,6 +125,9 @@ export class OtpComponent implements OnInit, OnDestroy {
 			}
 			if(params.email){
 				this.email = params.email
+			}
+			if(params?.role){
+				this.Role = params?.role
 			}
 		})
 		document.querySelectorAll('.otp-input').forEach(occurence => {
@@ -166,7 +173,7 @@ export class OtpComponent implements OnInit, OnDestroy {
 		this.showProgressBar = true; //show progressbar
 
 		let userId = sessionStorage.getItem('userId');
-		this.authService.resendOtp({ "userId": userId })
+		this.authService.resendOtp({ "userId": userId ,"role":this.Role})
 			.pipe(
 				catchError(err => {
 					this.disableSubmit = false; //enable submit button
@@ -223,8 +230,14 @@ export class OtpComponent implements OnInit, OnDestroy {
 
 				//set profile pic link here
 				localStorage.setItem('userData', JSON.stringify(loginUserDetail))
-				localStorage.setItem('currentUser', JSON.stringify(this.response.data.user));
-				localStorage.setItem('access_token', this.response.data.access_token);
+				localStorage.setItem('currentUser', JSON.stringify(this.response?.data?.user));
+				localStorage.setItem('access_token', this.response?.data?.access_token);
+				if(this.response?.data?.invite_link){
+					localStorage.setItem('invite_link',this.response?.data?.invite_link)
+				}
+				else{
+					localStorage.removeItem('invite_link')
+				}
 
 				let QB_redirectUrl = localStorage.getItem('QB_redirectUrl') || ''
 				let vehicle_selected = JSON.parse(sessionStorage.getItem('selected_vehicle'))
@@ -306,11 +319,29 @@ export class OtpComponent implements OnInit, OnDestroy {
 					case 'travel_agent': {
 						sessionStorage.setItem('step_completed', JSON.stringify(this.response.data?.travel_planner.step_completed))
 						sessionStorage.setItem('step_completed_obj', JSON.stringify(this.response.data?.travel_planner.step_completed_obj))
-						if(this.response.data.user?.is_profile_complete)
-							this.router.navigateByUrl('/travel_agent/bookings');
-						else
+						localStorage.setItem('agentAccountStatus',this.response?.data?.travel_planner?.account_approval)
+						if(this.response.data.user?.is_profile_complete && this.response?.data?.travel_planner?.account_approval == 'accepted'){
+                               if(this.review_referral_url){
+								this.router.navigateByUrl(this.review_referral_url);
+							   }
+							   else{
+								   this.router.navigateByUrl('/travel_agent/bookings');
+							   }
+						}
+						else{
 							this.router.navigateByUrl('/travel_agent/profile/step1');
+						}
+							
 						
+						break;
+					}
+					case 'sub_travel_agent':{
+						if(this.response?.data?.user?.is_profile_complete){
+							this.router.navigateByUrl('/sub_travel_agent/bookings');
+						}
+						else{
+							this.router.navigateByUrl('/sub_travel_agent/profile')
+						}
 						break;
 					}
 					default: {

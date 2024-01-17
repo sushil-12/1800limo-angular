@@ -20,6 +20,10 @@ a.dropdown-item.active {
 	background-color: transparent !important;
 	color: #000 !important;
 }
+.referral_code{
+	padding-top: 7px;
+}
+
 
 a.dropdown-item:hover {
 	color: var(--orange-color) !important;
@@ -27,6 +31,12 @@ a.dropdown-item:hover {
 
 .HeadingH1 svg {
 	height: 50px;
+}
+
+@media only screen and (max-width:767px) {
+	.referral_code{
+		display: none;
+	}
 }
 
 @media only screen and (max-width:320px) {
@@ -118,4 +128,13 @@ mat-progress-bar {
 
 .affilate-wrapper .sidenav-menu .nav-item:nth-child(2) a {
 	padding-left: 15px !important;
+}
+.x-copy-btn{
+	margin-top: -5px;
+	margin-left: 10px !important;
+	opacity: 1;
+    color: black !important;
+    font-size: xx-large;
+    width: max-content;
+	background: none !important;
 }

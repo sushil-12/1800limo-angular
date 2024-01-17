@@ -10,6 +10,7 @@ import { CustomvalidationService } from '../../../services/customvalidation.serv
 import { SharedModule } from '../../shared/shared.module';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { AdminService } from 'src/app/services/admin.service';
+import { CommonService } from 'src/app/services/common.service';
 declare var $: any;
 
 @Component({
@@ -58,6 +59,15 @@ export class Step2Component implements OnInit {
 	public showProgressBar: boolean = false;
 	public haveEinNo: boolean = true;
 	public isBadgeCity : boolean = false;
+	enableSsnField:boolean=false;
+	ssn_copy:any;
+	ssnErrorMessage:string;
+	addressErrorMessage:string;
+	dobErrorMessage:string;
+	public AddressCheckStripe = ['address','street','city','country'];
+	isSsnSelected:boolean=false;
+	isAddressSelected:boolean=false;
+
 
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
 	selectedCountryName: any;
@@ -65,6 +75,7 @@ export class Step2Component implements OnInit {
 	filteredOptions: any;
 	rotateDriverLicence:boolean = false;
 	rotateDriverLicenceBack:boolean = false;
+	TaxIdMatch: string;
 	constructor(
 		private affiliateService: AffiliateService,
 		private adminService: AdminService,
@@ -77,6 +88,7 @@ export class Step2Component implements OnInit {
 		private ngZone: NgZone,
 		private el: ElementRef,
 		private spinner: NgxSpinnerService,
+		private commonServices: CommonService,
 		private customValidator: CustomvalidationService,
 		private globalFunctions: SharedModule
 	) { }
@@ -126,7 +138,7 @@ export class Step2Component implements OnInit {
 			AccountNumber: ['', [Validators.required, this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
 			Routing: ['', Validators.required],
 			AccountType: ['company', Validators.required],
-			ssn: ['', [Validators.required, Validators.pattern("^[0-9]*$"), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
+			ssn: ['', [Validators.required, Validators.pattern("^[0-9*]*$"), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
 			haveEin: ['yesEin'],
 			ein: [''],
 			currency: ['', Validators.required],
@@ -139,7 +151,7 @@ export class Step2Component implements OnInit {
 			latitude: ['', Validators.required],
 			longitude: ['', Validators.required],
 			street: [''],
-			city: ['', Validators.required],
+			city: [''],
 			state: ['', Validators.required],
 			badge_city :[''],
 			badge_city_name:[''],
@@ -233,12 +245,12 @@ export class Step2Component implements OnInit {
 							this.id_front_image_id = this.response.data.bankinfo?.id_front_image?.ID;
 							this.id_back_image_id = this.response.data?.bankinfo?.id_back_image?.ID;
 							//Documents changable or not.
-							if (this.response.data?.stripeDetail?.additional_doc_verification_status == 'unverified') {
-								this.canChangeDocument = true;
-							}
-							else {
-								this.canChangeDocument = false;
-							}
+							// if (this.response?.data?.stripeDetail?.additional_doc_verification_status == 'unverified') {
+							// 	this.canChangeDocument = true;
+							// }
+							// else {
+							// 	this.canChangeDocument = false;
+							// }
 							//Documents changable or not
 							if (this.response.data?.stripeDetail?.stripe_address_status == 'invalid') {
 								this.canChangeAddress = true;
@@ -258,7 +270,7 @@ export class Step2Component implements OnInit {
 								Routing: this.response.data?.bankinfo?.Routing,
 								AccountType: this.response.data?.bankinfo?.AccountType,
 								currency: this.response.data?.bankinfo?.currency,
-								ssn: this.response.data?.bankinfo?.ssn,
+								ssn: this.showOnlyLast4Digit(this.response.data.bankinfo.ssn),
 								haveEin: this.response.data?.bankinfo?.ein,
 								ein: this.response.data?.bankinfo?.ein,
 								address: this.response.data?.bankinfo?.address,
@@ -276,6 +288,71 @@ export class Step2Component implements OnInit {
 								id_front_image: this.response.data?.bankinfo?.id_front_image?.ID,
 								id_back_image: this.response.data?.bankinfo?.id_back_image?.ID,
 							});
+							this.ssn_copy=this.response?.data?.bankinfo?.ssn
+							this.isSsnSelected = true
+							this.isAddressSelected=true
+							// if(this.response?.data?.error_fields?.find(val => val?.field == 'ssn')){
+							// 	this.ssnErrorMessage = this.response?.data?.error_fields?.find(val => val?.field == 'ssn')?.message
+							// 	this.enableSsnField=false
+                            //             console.log("in if ssn error",this.enableSsnField)
+							// }
+							// else{
+							// 	this.enableSsnField=true
+							// }
+								//to check ssn error
+							// if (this.response?.data?.error_fields?.find(val => val?.field == 'ssn')) {
+							// 	this.ssnErrorMessage = this.response?.data?.error_fields?.find(val => val?.field == 'ssn')?.message
+							// 	this.enableSsnField = false
+							// 	console.log("in if ssn error", this.response?.data?.error_fields?.find(val => val?.field == 'ssn')?.message)
+							// }
+							// else {
+							// 	this.enableSsnField = true
+							// }
+
+                            if(this.response?.data?.error_fields?.length > 0){
+								const hasNonEmptyObjects = this.response?.data?.error_fields?.filter(obj => Object.keys(obj).length > 0).length > 0;
+								console.log(hasNonEmptyObjects,"hasnonnonono")
+								if(!hasNonEmptyObjects){
+									this.enableSsnField = true
+								}
+								else{
+
+									this.response?.data?.error_fields?.forEach(item=>{
+										if(item.field == 'ssn'){
+											this.enableSsnField = false
+											this.ssnErrorMessage = 'PLEASE ENTER A VALID SSN / GOVERNMENT ID'
+											console.log('error mesage---->',this.ssnErrorMessage)
+										}
+										else{
+											this.enableSsnField = true
+										}
+									if(this.AddressCheckStripe?.includes(item?.field)){
+										this.addressErrorMessage = 'Please enter a valid address'
+										console.log('error mesage---->',this.addressErrorMessage)
+										// this.enableSsnField = true
+
+									}
+									if(item?.field == 'dob'){
+										this.dobErrorMessage = 'Please enter a valid dob'
+										console.log('error mesage---->',this.dobErrorMessage)
+										// this.enableSsnField = true
+									}
+									
+							  })
+							}
+							}
+							else{
+								this.enableSsnField = true
+
+							}
+							console.log("trueeee===>",this.enableSsnField)
+
+							//to check varificatiom failed tax id error only
+							if(this.response?.data?.stripeDetail?.stripe_errors?.find(err => err?.error_code == 'verification_failed_tax_id_match')){
+								this.enableSsnField = false
+								this.TaxIdMatch = 'NOTE - Please verify your SSN  number and Buisness/Tax ID number'
+							}
+							
 							this.changeCountry(this.response.data?.bankinfo?.country);//for selected country
 							this.badgeOptions.map((i:any)=>{
 								if(i.id==this.response?.data?.bankinfo?.badge_city){
@@ -559,7 +636,10 @@ export class Step2Component implements OnInit {
 			});
 	}
 
-	idCardImageChange1(imageUrl, imageType, imageId = null) {
+	async idCardImageChange1(imageUrl, imageType, imageId = null) {
+		if(!await this.commonServices.handleFile(event)) {
+			return;
+		}
 		this.stateManagementService.setprogressBar(true);
 		this.imageSrc = imageUrl;
 		this.affiliateService
@@ -599,7 +679,10 @@ export class Step2Component implements OnInit {
 
 
 
-	idCardImageChange(event, imageType, imageId = null) {
+	async idCardImageChange(event, imageType, imageId = null) {
+		if(!await this.commonServices.handleFile(event)) {
+			return;
+		}
 		this.stateManagementService.setprogressBar(true);
 		const reader = new FileReader();
 		if (event.target.files && event.target.files.length) {
@@ -848,6 +931,14 @@ export class Step2Component implements OnInit {
 	get f() {
 		return this.addBankForm.controls;
 	}
+	showOnlyLast4Digit(value){
+		if(value){
+			value = value.toString()
+			return '*'.repeat(value.length - 4) + value.slice(-4)
+		}else{
+			return ''
+		}
+	}
 	updateStripeURL() {
 		this.spinner.show();
 		this.affiliateService.stripeUpdateUrl(this.affiliateId)
@@ -862,6 +953,33 @@ export class Step2Component implements OnInit {
 				this.spinner.hide();
 			})
 	}
+	handleSsnInput(value:any){
+		
+		console.log("prev--->",this.ssn_copy,this.addBankForm.get('ssn').value)
+		value.includes("*") ? "" :this.ssn_copy=value
+		console.log("after--->",this.ssn_copy)
+		
+
+	}
+	removeErrorSsn(value:any,type:string){
+		console.log("TYPE----->",type)
+		if(type == 'ssn'){
+			this.ssnErrorMessage = ""
+			this.isSsnSelected = value ? true :false;
+		}
+		else if(type == 'address'){
+			this.addressErrorMessage = ""
+			this.isAddressSelected = value ? true:false;
+		}
+		// else if(type == 'dob'){
+		// 	console.log("in dobbbbhbbb")
+		// 	this.dobErrorMessage = ""
+		// }
+	}
+	removeDobError(){
+		console.log("in dobbbbhbbb")
+		this.dobErrorMessage = ""
+	}
 	submitForm() {
 		console.log(this.addBankForm);
 		this.submittedForm = true;
@@ -870,22 +988,31 @@ export class Step2Component implements OnInit {
 			return;
 		}
 		this.addBankForm.value.stepCompleted = this.affiliateService.getUpdatedStepsLocal('2');
-
-		console.log(this.addBankForm.value);
+		this.addBankForm.patchValue({
+			ssn:this.ssn_copy
+		})
+		let payload = this.addBankForm.value
+		payload['stepCompleted'] = this.affiliateService.getUpdatedStepsLocal('2');
+		console.log(this.addBankForm.value , payload);
 		this.spinner.show();//show spinner
 		// this.stateManagementService.setprogressBar(true);
 		this.disableSubmitButton = true; //disable submit button
 		localStorage.setItem("driverFrontLicense", this.id_front_image);
-		this.affiliateService.addBankOfAffiliate(this.addBankForm.value)
+		this.affiliateService.addBankOfAffiliate(payload)
 			.pipe(
 				catchError(err => {
+					// this.addBankForm.patchValue({
+					// 	ssn:this.showOnlyLast4Digit(this.ssn_copy)
+					// })
+					console.log(this.addBankForm?.get('ssn').value,"valueeeeee")
 					console.log(err)
-					if (err.otherParams.formcontrolname) {
+					if (err?.otherParams?.formcontrolname) {
 						this.scrollToErrorFormControlName(err.otherParams.formcontrolname)
 					}
 					this.spinner.hide();//hide spinner
 					// this.stateManagementService.setprogressBar(false);
 					this.disableSubmitButton = false; //enable submit button
+					
 					return throwError(err);
 				})
 			)
@@ -917,6 +1044,10 @@ export class Step2Component implements OnInit {
 	}
 
 	resetForm() {
+		const keepValues = [
+			this.addBankForm.controls.ssn.value,
+		]
+	
 		this.addBankForm.patchValue({//affiliate account id
 			BankName: '',
 			BankAddress: '',
@@ -926,7 +1057,6 @@ export class Step2Component implements OnInit {
 			AccountNumber: '',
 			Routing: '',
 			AccountType: 'company',
-			ssn: '',
 			haveEin: 'yesEin',
 			ein: '',
 			currency: '',
@@ -936,6 +1066,8 @@ export class Step2Component implements OnInit {
 			id_front_image: '',
 			id_back_image: '',
 		});
+	 this.addBankForm.controls.ssn.patchValue(keepValues[0]);
+
 		this.id_front_image = "";
 		this.id_back_image = "";
 		this.canChangeDocument = true;
@@ -1018,12 +1150,18 @@ export class Step2Component implements OnInit {
 
 	selectDropdownDay() {
 		$('.selectDayLabel').removeClass('selectDayLabel ').addClass('select-day-label');
+		console.log("in dobbbbhbbb")
+		this.dobErrorMessage = ""
 	}
 	selectDropdownMonth() {
 		$('.selectMonthLabel').removeClass('selectMonthLabel ').addClass('select-month-label');
+		console.log("in dobbbbhbbb")
+		this.dobErrorMessage = ""
 	}
 	selectDropdownYear() {
 		$('.selectYearLabel').removeClass('selectYearLabel ').addClass('select-year-label');
+		console.log("in dobbbbhbbb")
+		this.dobErrorMessage = ""
 	}
 	selectDropdownCurrency() {
 		$('.selectCurrencyLabel').removeClass('selectCurrencyLabel ').addClass('select-currency-label');
