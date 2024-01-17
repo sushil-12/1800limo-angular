@@ -13,7 +13,7 @@
                             <input formControlName="firstName" type="text" matInput placeholder="First Name"
                                 (focus)="$event.target.select()">
                         </mat-form-field>
-                        <div *ngIf="submittedForm && f.firstName.errors" class="text-danger">
+                        <div *ngIf="submittedForm && f.firstName.errors" class="text-danger text-lg m-0">
                             <div *ngIf="f.firstName.errors.required">This field is required</div>
                         </div>
                     </div>
@@ -30,7 +30,7 @@
                             <input formControlName="lastName" type="text" matInput placeholder="Last Name"
                                 (focus)="$event.target.select()">
                         </mat-form-field>
-                        <div *ngIf="submittedForm && f.lastName.errors" class="text-danger">
+                        <div *ngIf="submittedForm && f.lastName.errors" class="text-danger text-lg m-0">
                             <div *ngIf="f.lastName.errors.required">This field is required</div>
                         </div>
                     </div>
@@ -39,17 +39,17 @@
                             <label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Mobile<span
                                     class="asterisk">
                                     *</span></label>
-                            <input matInput type="number" placeholder="Mobile" formControlName="mobile" ng2TelInput
-                                [ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
-                                placeholder="1234567890" class="phoneNumberClass"
+                            <input matInput placeholder="Mobile" formControlName="mobile" ng2TelInput
+                                [ng2TelInputOptions]="{'initialCountry': defaultCountryCode,'preferredCountries': ['us','in','ca','mx','gb']}"
+                                placeholder="1234567890" class="phoneNumberClass" readonly
                                 (countryChange)="onCountryChange($event,'mobile')"
-                                (intlTelInputObject)="telInputObjectMobile($event)" (focus)="$event.target.select()" />
+                                (intlTelInputObject)="telInputObjectMobile($event)" tabIndex="1" />
                         </mat-form-field>
                         <div *ngIf="submittedForm && f.mobile.errors || f.mobile.touched && f.mobile.errors"
-                            class="text-danger margin-bottom-thin my-mat-hint">
+                            class="text-danger text-lg m-0 margin-bottom-thin my-mat-hint">
                             <div *ngIf="f.mobile.errors.required">This field is required</div>
                         </div>
-                        <div *ngIf="f.mobile.errors" class="text-danger margin-bottom-thin my-mat-hint">
+                        <div *ngIf="f.mobile.errors" class="text-danger text-lg m-0 margin-bottom-thin my-mat-hint">
                             <div *ngIf="f.mobile.errors?.invalid_Pattern;else plusError">Do not add
                                 Dashes
                                 with numbers</div>
@@ -84,10 +84,10 @@
                                 (intlTelInputObject)="telInputObjectWork($event)" (focus)="$event.target.select()" />
                         </mat-form-field>
                         <div *ngIf="submittedForm && f.work.errors || f.work.touched && f.work.errors"
-                            class="text-danger margin-bottom-thin my-mat-hint">
+                            class="text-danger text-lg m-0 margin-bottom-thin my-mat-hint">
                             <div *ngIf="f.work.errors.required">This field is required</div>
                         </div>
-                        <div *ngIf="f.work.errors" class="text-danger margin-bottom-thin my-mat-hint">
+                        <div *ngIf="f.work.errors" class="text-danger text-lg m-0 margin-bottom-thin my-mat-hint">
                             <div *ngIf="f.work.errors?.pattern">Enter only numbers</div>
                             <!-- <div *ngIf="f.work.errors?.invalid_Pattern;else plusError">Do not add
 								Dashes
@@ -117,7 +117,8 @@
                             <input formControlName="email" type="email" matInput placeholder="E-mail"
                                 (focus)="$event.target.select()">
                         </mat-form-field>
-                        <div *ngIf="(f.email.errors && (f.email.touched || f.email.dirty))" class="text-danger">
+                        <div *ngIf="(f.email.errors && (f.email.touched || f.email.dirty))"
+                            class="text-danger text-lg m-0">
                             <div *ngIf="f.email.errors.required">This field is required</div>
                             <div *ngIf="f.email.errors.pattern">Email format should be valid</div>
                         </div>
@@ -129,7 +130,7 @@
                                 (focus)="$event.target.select()">
                         </mat-form-field>
                         <!-- <textarea placeholder="Address" formControlName="address"></textarea> -->
-                        <div *ngIf="submittedForm && f.address.errors" class="text-danger">
+                        <div *ngIf="submittedForm && f.address.errors" class="text-danger text-lg m-0">
                             <div *ngIf="f.address.errors.required">This field is required</div>
                         </div>
                     </div>
@@ -139,7 +140,7 @@
                             <input formControlName="city" type="text" matInput placeholder="City"
                                 (focus)="$event.target.select()">
                         </mat-form-field>
-                        <div *ngIf="submittedForm && f.city.errors" class="text-danger">
+                        <div *ngIf="submittedForm && f.city.errors" class="text-danger text-lg m-0">
                             <div *ngIf="f.city.errors.required">This field is required</div>
                         </div>
                     </div>
@@ -149,7 +150,7 @@
                             <input formControlName="state" type="text" matInput placeholder="State/Province"
                                 (focus)="$event.target.select()">
                         </mat-form-field>
-                        <div *ngIf="submittedForm && f.state.errors" class="text-danger">
+                        <div *ngIf="submittedForm && f.state.errors" class="text-danger text-lg m-0">
                             <div *ngIf="f.state.errors.required">This field is required</div>
                         </div>
                     </div> -->
@@ -159,7 +160,7 @@
                             <input formControlName="country" type="text" matInput placeholder="Country"
                                 (focus)="$event.target.select()">
                         </mat-form-field>
-                        <div *ngIf="submittedForm && f.country.errors" class="text-danger">
+                        <div *ngIf="submittedForm && f.country.errors" class="text-danger text-lg m-0">
                             <div *ngIf="f.country.errors.required">This field is required</div>
                         </div>
                     </div>
@@ -169,7 +170,7 @@
                             <input formControlName="zipCode" type="text" matInput
                                 placeholder="Zip Code / Country Address Code" (focus)="$event.target.select()">
                         </mat-form-field>
-                        <div *ngIf="submittedForm && f.zipCode.errors" class="text-danger">
+                        <div *ngIf="submittedForm && f.zipCode.errors" class="text-danger text-lg m-0">
                             <div *ngIf="f.zipCode.errors.required">This field is required</div>
                             <div *ngIf="f.zipCode.errors.pattern">This field should be a number
                             </div>
@@ -179,8 +180,9 @@
             </div>
         </section>
         <!-----BILLING INFO-------------->
-        <section class="user_information">
-            <h2 class="headinginfo"> Billing Information</h2>
+        <section class="user_information"
+            *ngIf="!response?.data?.cards?.length && !currentUser?.is_profile_complete; else cardsList">
+            <h2 class="headinginfo">Billing Information</h2>
             <div class="container py-2" id="accordionSidebar1">
                 <h3 class="headinginfoH3 mt-3">Credit Card <img class="creditcard_pay"
                         src="assets/admin/images/creditcard_pay.png" tabindex="-1"></h3>
@@ -195,7 +197,7 @@
                                 </div>
                             </div>
                             <div *ngIf="submittedForm && f.card_type.errors || f.card_type.touched && f.card_type.errors"
-                                class="text-danger margin-bottom-thin my-mat-hint">
+                                class="text-danger text-lg m-0 margin-bottom-thin my-mat-hint">
                                 <div *ngIf="f.card_type.errors.required">This field is required
                                 </div>
                             </div>
@@ -334,56 +336,144 @@
                 </div>
             </div>
         </section>
-        <div class="container">
-            <div class="row justify-content-between">
-
-                <div class="billing_inforamtion">
-                    <ul>
-                        <li>
-
-                            <!-- <button class="custom-filled-back-button" (click)="backButton()">
-                                BACK
-                            </button> -->
-                        </li>
-                    </ul>
-                </div>
-
-
-                <div class="billing_inforamtion">
-                    <ul>
-                        <li>
-                            <button class="custom-filled-reset-button" (click)="resetForm()" tabIndex="2">
-                                RESET
+        <ng-template #cardsList>
+            <section class="user_information driverbooking_top adminbox_shadow">
+                <div class="containeredd">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <button class="custom-btn add-button" (click)="addCardClick()" tabindex="-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-plus-circle"
+                                    viewBox="0 0 16 16">
+                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                                    <path
+                                        d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+                                </svg>
+                                Add Debit / Credit card
                             </button>
-                        </li>
-                        <li><button class="custom-filled-button" (click)="submitForm()" tabIndex="1">
-                                SAVE
-                            </button>
-                        </li>
-                    </ul>
+                        </div>
+                    </div>
                 </div>
-
-            </div>
-        </div>
-        <!-- <div class="container">
-			<div class="row py-4">
-				<div class="col-md-6">
-
-				</div>
-				<div class="col-md-6 ">
-					<div class="billing_inforamtion">
-						<ul class="d-flex justify-content-center">
-							<li><button class="custom-btn mr-2 savebutton btn-shadow" (click)="submitForm()"
-									[disabled]="disableSubmitButton">SAVE</button> </li>
-							<li><button class="custom-btn  mr-2 resetbutton btn-shadow"
-									(click)="resetForm()">RESET</button> </li>
-							<li><button class="custom-btn  mr-3 backbutton btn-shadow"
-									(click)="backButton()">BACK</button> </li>
-						</ul>
-					</div>
-				</div>
-			</div>
-		</div> -->
+                <div class="containeredd driverside_table">
+                    <div class="row">
+                        <div class="col-md-12 custom_table table-responsive">
+                            <table class="table table-striped dataTable dt-responsive" id="dataTable" role="grid"
+                                aria-describedby="dataTable_info" style="width: 100%" width="100%" cellspacing="0"
+                                tabindex="-1">
+                                <thead>
+                                    <tr role="row">
+                                        <th>Card Holder First & Last Name</th>
+                                        <th>Card No.</th>
+                                        <th>MM/YYYY</th>
+                                        <th>Card Type</th>
+                                        <th>Delete</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <ng-container *ngIf="response">
+                                        <ng-container *ngIf="response?.data?.cards">
+                                            <tr role="row" class="odd" *ngFor="
+                                                    let card of response?.data
+                                                        ?.cards
+                                                ">
+                                                <td class="text-capitalize">
+                                                    {{ card?.name }}
+                                                </td>
+                                                <td>{{ card?.last4 }}</td>
+                                                <td>
+                                                    {{
+                                                    card?.exp_month +
+                                                    "/" +
+                                                    card?.exp_year
+                                                    }}
+                                                </td>
+                                                <td class="text-capitalize">
+                                                    {{ card?.card_type }}
+                                                </td>
+                                                <td>
+                                                    <i class="fa fa-trash" style="
+                                                            font-size: x-large;
+                                                            color: #d64646;
+                                                        " (click)="
+                                                            enableDisableClicked(
+                                                                card?.ID
+                                                            )
+                                                        " data-toggle="modal"
+                                                        data-target="#deleteConfirmationModal"></i>
+                                                </td>
+                                            </tr>
+                                        </ng-container>
+                                    </ng-container>
+                                    <!-- <ng-container *ngIf="!response?.data?.cards?.length">
+                                        <tr>
+                                            <td colspan="6">No Card found!</td>
+                                        </tr>
+                                    </ng-container> -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </ng-template>
 
     </form>
+    <div class="container">
+        <div class="row justify-content-between">
+
+            <div class="billing_inforamtion">
+                <ul>
+                    <li>
+
+                        <!-- <button class="custom-filled-back-button" (click)="backButton()">
+                            BACK
+                        </button> -->
+                    </li>
+                </ul>
+            </div>
+
+
+            <div class="billing_inforamtion">
+                <ul>
+                    <li>
+                        <button class="custom-filled-reset-button" (click)="resetForm()" tabIndex="2">
+                            RESET
+                        </button>
+                    </li>
+                    <li><button class="custom-filled-button" (click)="submitForm()" tabIndex="1">
+                            SAVE
+                        </button>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
 </main>
+
+<!-- Delete confirmation modal -->
+<div class="modal fade" id="deleteConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <button type="button" class="close closeButton" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <div class="text-center">
+                <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" height="70">
+                    <g data-name="Layer 51" fill="#ea4444" class="color000 svgShape">
+                        <path d="M16,2A14,14,0,1,0,30,16,14,14,0,0,0,16,2Zm0,26A12,12,0,1,1,28,16,12,12,0,0,1,16,28Z"
+                            fill="#ea4444" class="color000 svgShape"></path>
+                        <path
+                            d="M22.71,9.29a1,1,0,0,0-1.42,0L16,14.59l-5.29-5.3a1,1,0,0,0-1.42,1.42L14.59,16l-5.3,5.29a1,1,0,0,0,0,1.42,1,1,0,0,0,1.42,0L16,17.41l5.29,5.3a1,1,0,0,0,1.42,0,1,1,0,0,0,0-1.42L17.41,16l5.3-5.29A1,1,0,0,0,22.71,9.29Z"
+                            fill="#ea4444" class="color000 svgShape"></path>
+                    </g>
+                </svg> -->
+                <h5 class="modal-title my-3" id="exampleModalLabel">{{alertMessage}}</h5>
+            </div>
+            <div class="text-center">
+                <button type="button" class="custom-btn yes-btn mr-2" (click)="deleteCard()">Yes</button>
+                <button type="button" class="custom-btn no-btn" data-dismiss="modal" aria-label="Close">No</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -5,6 +5,7 @@ import { BookingsComponent } from './bookings/bookings.component';
 import { ProfileComponent } from './profile/profile.component';
 import { CreateNewBookingComponent } from './create-new-booking/create-new-booking.component';
 import { InvoiceComponent } from './invoice/invoice.component';
+import { AddCardComponent } from './add-card/add-card.component';
 
 const routes: Routes = [
   {
@@ -20,7 +21,7 @@ const routes: Routes = [
   {
     path:'profile',
     component:ProfileComponent,
-    canActivate: [IndividualGuardGuard],
+    // canActivate: [IndividualGuardGuard],
   },
   {
     path:'create-new-booking',
@@ -30,6 +31,11 @@ const routes: Routes = [
   {
     path:'invoice',
     component:InvoiceComponent,
+    canActivate: [IndividualGuardGuard],
+  },
+  {
+    path:'add-card',
+    component:AddCardComponent,
     canActivate: [IndividualGuardGuard],
   },
   
