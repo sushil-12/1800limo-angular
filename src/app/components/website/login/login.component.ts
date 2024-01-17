@@ -53,7 +53,7 @@ export class LoginComponent implements OnInit, AfterViewInit
 					break;
 				}
 				case 'individual': {
-					this.router.navigateByUrl('/user');
+					this.router.navigateByUrl('/individual');
 					break;
 				}
 				case 'driver': {
@@ -151,7 +151,7 @@ export class LoginComponent implements OnInit, AfterViewInit
 			const role = params['role'];
 			console.log('Role:', role,params);
 			
-			const existRoles = ['admin' , 'driver' , 'sub_admin' , 'travel_agent','master_user','sub_travel_agent']
+			const existRoles = ['admin' , 'driver' , 'sub_admin' , 'travel_agent','master_user','sub_travel_agent','individual']
 		
 			console.log('Role:', role);
 			// const existRoles = ['admin' , 'driver' , 'sub_admin' , 'travel_agent',]

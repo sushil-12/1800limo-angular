@@ -41,6 +41,7 @@ import { CreateBookingComponent } from './components/travel-agent/create-booking
 import { IndividualConfirmationComponent } from './components/email-pages/individual-confirmation/individual-confirmation.component';
 import { ModifyBookingComponent } from './components/email-pages/modify-booking/modify-booking.component';
 import { SubTravelAgentTemplateComponent } from './components/sub-travel-agent/sub-travel-agent-template/sub-travel-agent-template.component';
+import { IndividualTemplateComponent } from './components/individual/individual-template/individual-template.component';
 
 
 const routes: Routes = [
@@ -293,6 +294,20 @@ const routes: Routes = [
 			{
 				path: '',
 				loadChildren: () => import('./components/sub-travel-agent/sub-travel-agent.module').then(m => m.SubTravelAgentModule)
+			}
+		]
+	},
+	{
+		path: 'individual',
+		component: IndividualTemplateComponent,
+		// canActivate: [AdminGuardGuard],
+		data: {
+			title: 'individual'
+		},
+		children: [
+			{
+				path: '',
+				loadChildren: () => import('./components/individual/individual.module').then(m => m.IndividualModule)
 			}
 		]
 	},
