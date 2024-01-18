@@ -86,7 +86,10 @@ export class RecoverAccountsComponent implements OnInit {
 
   loadAccounts(pageUrl=null)
   {
-    this.scroll('all_accounts_table')
+    if(pageUrl){
+			console.log("pageurl",pageUrl)
+      this.scroll('all_accounts_table')
+		}
       /** spinner starts on init */
       this.spinner.show();
 

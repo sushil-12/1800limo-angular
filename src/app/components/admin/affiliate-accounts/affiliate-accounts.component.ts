@@ -191,9 +191,11 @@ export class AffiliateAccountsComponent implements OnInit {
 			this.filter_type = 'all'
 			console.log('keyword--->>>', keyword, this.filter_type)
 		}
-		this.scroll('affiliates_table')
+		if(pageUrl){
+			console.log("pageurl",pageUrl)
+			this.scroll('affiliates_table')
+		}
 		this.spinner.show();
-
 		// console.log(keyword);
 		// Load Our blackCarLimoBus using API
 		this.adminService.blackCarLimoBusAccounts(pageUrl, this.affiliateType, this.filter_type, keyword).then((result: any) => {

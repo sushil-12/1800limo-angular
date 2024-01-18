@@ -362,7 +362,8 @@
 						<div id="vehinfo_{{ vehinfo_index }}" class="vehicle-info">
 							<!-- VEHICLE: NAME -->
 							<p class="name">
-								{{ vehinfo.name }}
+								{{ vehinfo.name }} <span
+									*ngIf="vehinfo?.badge_city != 'N/A'">({{vehinfo?.badge_city}})</span>
 							</p>
 
 							<!-- VEHICLE: PAX/LUG -->

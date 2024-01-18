@@ -126,8 +126,11 @@ export class MyBookingsComponent implements OnInit {
 
 	loadBookings(pageUrl = null) {
 		$('.HeadingH1').css({ display: "none" })
-		this.scroll('bookings_affiliate')
 		/** spinner starts on init */
+		if(pageUrl){
+			console.log("pageurl",pageUrl)
+			this.scroll('bookings_affiliate')
+		}
 		this.spinner.show();
 
 		// var keyword = ((document.getElementById("keyword") as HTMLInputElement).value);

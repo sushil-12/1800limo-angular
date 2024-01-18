@@ -151,7 +151,10 @@ export class SubAgentAccountsComponent implements OnInit {
   loadClientAccounts(pageUrl=null)
   {
       /** spinner starts on init */
-      this.scroll('sub_agrnt_accounts')
+      if(pageUrl){
+        console.log("pageurl",pageUrl)
+        this.scroll('sub_agrnt_accounts')
+      }
       this.spinner.show();
 
       var keyword = this.searchText;
