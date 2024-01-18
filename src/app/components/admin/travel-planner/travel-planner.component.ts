@@ -88,7 +88,10 @@ export class TravelPlannerComponent implements OnInit {
   loadTravelPlanners(pageUrl = null) {
     /** spinner starts on init */
     this.spinner.show();
-    this.scroll('travel_agent_table')
+    if(pageUrl){
+			console.log("pageurl",pageUrl)
+      this.scroll('travel_agent_table')
+		}
     var keyword = this.searchText;
 
     // Load Our travelPlanners using API

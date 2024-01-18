@@ -87,7 +87,10 @@ export class SubTravelPlannerAccountComponent implements OnInit {
 
   loadSubTravelPlanners(pageUrl = null) {
     /** spinner starts on init */
-    this.scroll('sub_ta_table')
+    if(pageUrl){
+			console.log("pageurl",pageUrl)
+      this.scroll('sub_ta_table')
+		}
     this.spinner.show();
 
     var keyword = this.searchText;

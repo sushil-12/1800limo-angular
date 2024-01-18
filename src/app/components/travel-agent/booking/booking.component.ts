@@ -158,7 +158,10 @@ export class BookingComponent implements OnInit {
 	loadBookings(pageUrl = null) {
 		$('.HeadingH1').css({ display: "none" })
 		/** spinner starts on init */
-		this.scroll('ta_bookings_table')
+		if(pageUrl){
+			console.log("pageurl",pageUrl)
+			this.scroll('ta_bookings_table')
+		}
 		this.spinner.show();
 
 		// var keyword = ((document.getElementById("keyword") as HTMLInputElement).value);
