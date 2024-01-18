@@ -150,7 +150,10 @@ export class FarmOutComponent implements OnInit
 	loadBookings(pageUrl = null) {
 		/** spinner starts on init */
 		// this.$spinner.show();
-		this.scroll('farmout_bookings')
+		if(pageUrl){
+			console.log("pageurl",pageUrl)
+	     	this.scroll('farmout_bookings')
+		}
 
 		// var keyword = ((document.getElementById("keyword") as HTMLInputElement).value);
 		// Load Our bookings using API

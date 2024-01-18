@@ -80,7 +80,10 @@ export class IndividualComponent implements OnInit {
 	loadIndividuals(pageUrl = null) {
 		/** spinner starts on init */
 		// this.spinner.show();
-		this.scroll('individual_table')
+		if(pageUrl){
+			console.log("pageurl",pageUrl)
+			this.scroll('individual_table')
+		}
 		// var keyword = ((document.getElementById("keyword") as HTMLInputElement).value);
 		let keyword = this.searchText
 		// console.log(keyword);
