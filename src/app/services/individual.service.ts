@@ -42,7 +42,7 @@ export class IndividualService {
       return this.httpClient.post(`${this.serverUrl}duplicate-reservation`, data)
     }
     if (data.reservation_id) {
-      return this.httpClient.put(this.serverUrl + 'edit-reservation', data);
+      return this.httpClient.post(this.serverUrl + 'edit-reservation', data);
     }
     else {
       return this.httpClient.post(this.serverUrl + 'create-reservation', data);
@@ -52,5 +52,25 @@ export class IndividualService {
   getAccountDetails() {
     return this.httpClient.get(this.serverUrl + `get-account-details`);
   }
+
+  loadBookings(url, keyword, startDate, endDate, useDateFilter) {
+		var path;
+		if (url) {
+			path = url + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword + '&useDateFilter=' + useDateFilter;
+		}
+		else {
+			path = this.serverUrl + 'get-all-reservation' + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword + '&useDateFilter=' + useDateFilter;
+		}
+		return this.httpClient.get(path).toPromise();
+	}
+
+  //get details of the booking
+	getBookingPreview(reservation_id: number) {
+		return this.httpClient.get(`${this.serverUrl}get-booking-preview/${reservation_id}`);
+	}
+
+  getBookingDataForEdit(id, updateType) {
+		return this.httpClient.get(this.serverUrl + `get-reservation/${id}/${updateType}`);
+	}
 
 }
