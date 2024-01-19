@@ -10,7 +10,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CustomvalidationService } from 'src/app/services/customvalidation.service';
 import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { pluck } from 'rxjs/operators';
-import { TravelAgentService } from 'src/app/services/travel-agent.service';
 import { IndividualService } from 'src/app/services/individual.service';
 declare var $: any
 
@@ -138,7 +137,6 @@ export class CreateNewBookingComponent implements OnInit {
 	constructor(
 		private $form: FormBuilder,
 		private $api: AdminService,
-		private TravelAgentService: TravelAgentService,
 		private $shared: SharedModule,
 		private $spinner: NgxSpinnerService,
 		private $mapsapi: MapsAPILoader,
@@ -406,7 +404,7 @@ export class CreateNewBookingComponent implements OnInit {
 	prefillViaBookingID(booking_id: number) {
 		// console.warn('Prefilling via Booking Id')
 		this.$spinner.show('normalspinner');
-		this.TravelAgentService.getBookingDataForEdit(booking_id, this.Form.updateType.value).subscribe((response: any) => {
+		this.individualService.getBookingDataForEdit(booking_id, this.Form.updateType.value).subscribe((response: any) => {
 			response.data.booking_instructions = response.data.booking_instructions.replaceAll('<br />', '')
 			console.log('response <><><><><', response.data)
 			let editing_data = response.data
@@ -1782,15 +1780,7 @@ export class CreateNewBookingComponent implements OnInit {
 
 
 	}
-	// getTravelClientAccounts() {
-	// 	this.TravelAgentService.getAllTravelClientAccountList('individual').then((result: any) => {
-	// 		console.log("accounts->>>>>>>>>>", result)
-	// 		this.travelStaffAccounts = result?.data
-	// 	})
-	// 		.catch(err => {
-	// 			this.$spinner.hide();//hide spinner
-	// 		});
-	// }
+
 
 	handleTravelStaffAccounts() {
 			console.log('handleTravelStaffAccounts--->>>')
