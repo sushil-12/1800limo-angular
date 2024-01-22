@@ -912,6 +912,13 @@
 			<!-- Visible in only Loose Affiliate Section -->
 			<!-- Loose Affiliate Section -->
 			<div class="row px-4 margin-bottom-minus-20" *ngIf="Form.affiliate_type.value == 'loose_affiliate'">
+				<div class="col-md-12">
+					<ng-select appearance="outline" [items]="LooseAffiliateAccounts" bindLabel="name" bindValue="id"
+						placeholder="Select Loose Affiliate" dropdownPosition="bottom" [markFirst]="true"
+						[virtualScroll]="true" formControlName="loose_affiliate_id"
+						(change)="handleLooseAffiliateChange($event)">
+					</ng-select>
+				</div>
 				<div class="col-md-4 col-lg-4">
 					<mat-form-field appearance="outline" class="m-0">
 						<mat-label>

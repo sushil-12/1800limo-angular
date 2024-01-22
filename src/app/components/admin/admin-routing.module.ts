@@ -84,6 +84,7 @@ import { TravelAgentStepsComponent } from './travel-agent-steps/travel-agent-ste
 import { TravelAgentStripeFormComponent } from './travel-agent-stripe-form/travel-agent-stripe-form.component';
 import { RecoverAccountsComponent } from './recover-accounts/recover-accounts.component';
 import { SubTravelPlannerAccountComponent } from './sub-travel-planner-account/sub-travel-planner-account.component';
+import { LooseAffiliateAccountsComponent } from './loose-affiliate-accounts/loose-affiliate-accounts.component';
 
 
 const routes: Routes = [
@@ -473,7 +474,11 @@ const routes: Routes = [
 		canActivate: [AdminGuardGuard],
 		component: RecoverAccountsComponent
 	},
-	
+	{
+		path: 'loose-affiliate-accounts',
+		canActivate: [AdminGuardGuard],
+		component: LooseAffiliateAccountsComponent
+	},
 	{
 		path: 'affiliate',
 		canActivate: [SubAdminGuard],
