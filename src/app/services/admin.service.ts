@@ -1229,5 +1229,16 @@ updateStepsCompletedObjTravelAgent(stepObject) {
 	sessionStorage.setItem('step_completed_obj', JSON.stringify(stepObject))
 }
 
+getLooseAffiliaeAccounts(url, keyword) {
+	var path;
+	if (url) {
+		path = url + '&search=' + keyword;
+	}
+	else {
+		path = this.serverUrl + 'loose-affiliate-accounts' + '?search=' + keyword;
+	}
+	return this.httpClient.get(path).toPromise();;
+}
+
 
 }

@@ -84,6 +84,7 @@ export class NewBookingComponent implements OnInit {
 	AffiliateInformation: Record<string, any> = {}
 	ClientAccounts: Array<Record<string, any>> = []
 	AffiliateAccounts: Array<Record<string, any>> = []
+	LooseAffiliateAccounts: Array<Record<string, any>> = []
 	VehicleList: Array<Record<string, any>> = []
 	DriverList: Array<Record<string, any>> = []
 	vehicleType_arr: any;
@@ -318,6 +319,8 @@ export class NewBookingComponent implements OnInit {
 			return_booking_instructions: [''],
 			affiliate_type: ['affiliate'],
 			affiliate_id: [''],
+			loose_affiliate_id: [''],
+			is_old_loose_affiliate: [false],
 			lose_affiliate_name: ['', [this.customValidator.whitespace()]],
 			lose_affiliate_phone: [''],
 			lose_affiliate_phone_isd: ['+1'],
@@ -337,7 +340,7 @@ export class NewBookingComponent implements OnInit {
 			vehicle_license_plate: ['', this.customValidator.whitespace()],
 			vehicle_seats: ['4', Validators.pattern("^[0-9]*$")],
 			driver_id: [''],
-			driver_name: ['', this.customValidator.whitespace()],
+			driver_name: [''],
 			driver_gender: [''],
 			driver_cell: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
 			driver_cell_isd: ['+1'],
@@ -455,7 +458,7 @@ export class NewBookingComponent implements OnInit {
 		}
 	}
 	changeTransferType(type: string) {
-		console.log("transfer type",type)
+		console.log("transfer type", type)
 		this.transfer_type = type
 		if (type.includes('city_')) {
 			this.SetFormValue('meet_greet_choices', 1)
@@ -1077,18 +1080,22 @@ export class NewBookingComponent implements OnInit {
 
 	fetchAffiliates(affiliate_type: 'affiliate' | 'loose_affiliate') {
 		if (affiliate_type == 'loose_affiliate') {
-			return
+			this.$spinner.show()
+			this.$api.getAccountBytype('loose_affiliate').subscribe((response: any) => {
+				this.LooseAffiliateAccounts = response?.data
+				this.$spinner.hide()
+			})
 		}
 		else {
 			this.AffiliateAccounts = []
 			this.$spinner.show()
 			this.$api.getAccountBytype('driver').subscribe((response: any) => {
 				if (response.success && response.data.length > 0) {
-					this.AffiliateAccounts = response.data.map((item)=>{
+					this.AffiliateAccounts = response.data.map((item) => {
 						item.bindNameAffiliate = item.name + ' / ' + item.driver_name
 						return item
 					})
-					console.log('affiliate accounts',this.AffiliateAccounts)
+					console.log('affiliate accounts', this.AffiliateAccounts)
 					this.AffiliateAccounts_copy = [...this.AffiliateAccounts]
 					//lose all affiliate vehicle and driver data on change of affiliate type
 					// for (let key in this.Form)
@@ -1166,6 +1173,34 @@ export class NewBookingComponent implements OnInit {
 	}
 	handleAffiliateChange(value) {
 		console.log('in function handleAffiliateChange-->>', value)
+	}
+	handleLooseAffiliateChange(looseAffData) {
+		console.log('in function handlelooseAffiliateChange-->>', looseAffData)
+		if(looseAffData){		
+			this.BookingForm.patchValue({
+				driver_name: looseAffData?.driver_name,
+				driver_cell: looseAffData?.driver_phone,
+				driver_email: looseAffData?.driver_email,
+				loose_affiliate_id: looseAffData?.id ,
+				is_old_loose_affiliate: true
+			})
+			this.SetFormValue('lose_affiliate_name', looseAffData?.driver_name)
+			this.SetFormValue('lose_affiliate_phone', looseAffData?.driver_phone)
+			this.SetFormValue('lose_affiliate_email', looseAffData?.driver_email)
+			this.SetFormValue('lose_affiliate_phone_isd', looseAffData?.driver_isd)
+			this.SetFormValue('lose_affiliate_phone_country', looseAffData?.driver_phone_country)
+		}
+		else{
+			this.BookingForm?.patchValue({
+				is_old_loose_affiliate: false
+			})
+			this.SetFormValue('lose_affiliate_name', '')
+			this.SetFormValue('lose_affiliate_phone', '')
+			this.SetFormValue('lose_affiliate_email', '')
+			this.SetFormValue('lose_affiliate_phone_isd', '')
+			this.SetFormValue('lose_affiliate_phone_country', 'us')
+		}
+		console.log('booking form value after selecting loose aff--->',this.BookingForm.value)
 	}
 	chooseAffiliate() {
 		// console.warn('Fetching Affiliate vehicles and drivers')
@@ -2124,6 +2159,7 @@ export class NewBookingComponent implements OnInit {
 		// Affiliate Type
 		this.BookingForm.get('affiliate_type').valueChanges.subscribe((value: string) => {
 			if (value == 'loose_affiliate') {
+				this.fetchAffiliates('loose_affiliate')
 				this.toggleDropdown(null)
 				this.BookingForm.get('lose_affiliate_name').setValidators([Validators.required])
 				this.BookingForm.get('lose_affiliate_phone').setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)])
@@ -2177,6 +2213,7 @@ export class NewBookingComponent implements OnInit {
 				}
 			}
 		})
+
 
 		// this.BookingForm.get('vehicle_id').valueChanges.subscribe((value: any) =>
 		// {
