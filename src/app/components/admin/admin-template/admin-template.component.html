@@ -203,6 +203,10 @@
 										*ngIf="role=='admin' || modules.includes('tour_guide_account')"
 										(click)="closeSidebarFunc(false)">Tour Guide</a>
 									<a class="collapse-item" [routerLinkActive]="['active']"
+										routerLink="/admin/loose-affiliate-accounts"
+										*ngIf="role=='admin' || modules.includes('individual_account')"
+										(click)="closeSidebarFunc(false)">loose Affiliate</a>
+									<a class="collapse-item" [routerLinkActive]="['active']"
 										routerLink="/admin/all-accounts"
 										*ngIf="role=='admin' || modules.includes('individual_account')"
 										(click)="closeSidebarFunc(false)">All Accounts</a>
