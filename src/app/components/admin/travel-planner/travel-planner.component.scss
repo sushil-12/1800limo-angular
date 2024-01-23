@@ -88,7 +88,7 @@ a:hover {
 
 .accpet_reject_div{
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     gap: 10px;
   }
 
@@ -97,16 +97,20 @@ a:hover {
     color: #fff;
     border: none;
     border-radius: 10rem;
-    margin-right: 0.5rem;
+    // margin-right: 0.5rem;
     width: 80px;
+    font-size: 17px;
+    font-weight: 500;
 }
 .rejectButton{
     background-color: #fc0404;
     color: #fff;
     border: none;
     border-radius: 10rem;
-    margin-right: 0.5rem;
+    // margin-right: 0.5rem;
     width: 80px;
+    font-size: 17px;
+    font-weight: 500;
 
 }
 .accepted{
