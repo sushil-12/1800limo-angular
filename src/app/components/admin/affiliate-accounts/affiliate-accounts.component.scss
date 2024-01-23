@@ -29,13 +29,17 @@
     color: #fff;
     border: none;
     border-radius: 10rem;
-    margin-right: 0.5rem;
+    // margin-right: 0.5rem;
+    font-size: 17px;
+    font-weight: 500;
 }
 .rejectButton{
     background-color: #fc0404;
     color: #fff;
     border: none;
     border-radius: 10rem;
+    font-size: 17px;
+    font-weight: 500;
 }
 
 .custom-filled-button
@@ -123,8 +127,8 @@ color: #00bd1f;
   }
   .accpet_reject_div{
     display: flex;
-    flex-direction: column;
-    gap: 10px;
+    flex-direction: row;
+    gap: 5px;
   }
 
   .showMoreButton{
