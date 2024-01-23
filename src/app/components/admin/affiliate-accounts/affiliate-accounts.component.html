@@ -174,10 +174,10 @@
 								<td>
 									<div class="accpet_reject_div"
 										*ngIf="blackCarLimoBus.account_approval=='completed'; else notCompleted">
-										<button class="acceptButton"
-											(click)="acceptAffiliate(blackCarLimoBus.id)">Accept</button>
 										<button class="rejectButton" (click)="rejectAffiliateClick(blackCarLimoBus.id)"
 											data-toggle="modal" data-target="#rejectCauseModal">Reject</button>
+										<button class="acceptButton"
+											(click)="acceptAffiliate(blackCarLimoBus.id)">Accept</button>
 									</div>
 									<ng-template #notCompleted>
 										<div (click)="navigateToStep0Inprogress(blackCarLimoBus.id, blackCarLimoBus.AffiliateType , blackCarLimoBus)"

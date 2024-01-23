@@ -157,6 +157,7 @@ export class CreateBookingComponent implements OnInit {
 			if (params && params.bookingId && !this.booking_id) {
 				this.is_booking_edit_case = true
 				this.updateType = params.updateType
+				console.log("update type",this.updateType)
 				this.SetFormValue('reservation_id', params.bookingId)
 				params.updateType ? this.SetFormValue('updateType', params.updateType) : this.SetFormValue('updateType', 'edit')
 			}
@@ -2134,7 +2135,7 @@ export class CreateBookingComponent implements OnInit {
 	createReservationShareArray() {
 		console.log('in function createReservationShareArray')
 		if (this.rateArray) {
-			console.log('in function createReservationShareArray iffffff')
+			console.log('in function createReservationShareArray iffffff',this.rateArray)
 			let base_rate = 0
 			if (this.BookingForm.value?.service_type == 'charter_tour') {
 				base_rate += this.rateArray.all_inclusive_rates["Base_Rate"].baserate * this.number_of_hours
@@ -2148,6 +2149,7 @@ export class CreateBookingComponent implements OnInit {
 			for (const key of Object.keys(this.rateArray.amenities)) {
 				base_rate += this.rateArray.amenities[key].baserate;
 			}
+			console.log("grand total",this.grandtotal)
 			let grandTotal = this.grandtotal
 			let stripeFee = grandTotal * 0.05 + 0.30
 			let adminShare = (base_rate * this.adminSharePercent) / 100
@@ -2366,7 +2368,7 @@ export class CreateBookingComponent implements OnInit {
 		let vehicle_id = booking_data?.vehicle_id.toString().length ? booking_data?.vehicle_id : this.master_vehicle_id
 		// booking_data['is_master_vehicle'] = booking_data?.vehicle_id.toString().length ? false : true
 		this.$api.fetchRatesByAffiliateVeh(vehicle_id, booking_data).subscribe((response: any) => {
-			if (this.bookingType != 'edit') {
+			if (this.updateType != 'edit' && this.updateType != 'repeat') {
 				this.subtotal = 0
 				this.r_subtotal = 0
 				this.min_rate_involved = response?.data?.min_rate_involved
@@ -2401,6 +2403,7 @@ export class CreateBookingComponent implements OnInit {
 				}
 				// this.agentShare = response?.data?.rateArray?.all_inclusive_rates?.Base_Rate?.baserate * 0.10
 				this.grandtotal = (parseFloat(this.subtotal))
+				console.log("grand total--->",this.grandtotal)
 			}
 			if (booking_data.service_type == 'round_trip') {
 				this.returnRateArray = response?.data?.retrunRateArray
