@@ -103,11 +103,11 @@
 										{{travelPlanner?.account_approval | titlecase}}</div>
 									<ng-template #notCompleted>
 										<div class="accpet_reject_div">
-											<button class="acceptButton"
-												(click)="acceptRejectAffiliate(travelPlanner?.id,'accepted')">Accept</button>
 											<button class="rejectButton"
 												(click)="acceptRejectAffiliate(travelPlanner?.id,'rejected')"
 												data-toggle="modal" data-target="#rejectCauseModal">Reject</button>
+											<button class="acceptButton"
+												(click)="acceptRejectAffiliate(travelPlanner?.id,'accepted')">Accept</button>
 										</div>
 									</ng-template>
 								</td>
