@@ -464,3 +464,46 @@ a.dropdown-item {
 	border: 2px solid yellow;
 	text-transform: uppercase;
 }
+
+.pin-icon-preview{
+	font-size: 26px;
+}
+
+@media only screen and (max-width: 768px){
+	.sortCheckBox{
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+	}
+	.pin-icon-preview{
+		font-size: 34px;
+	}
+}
+
+
+.section-container {
+    background-color: #fff;
+	padding: 10px;
+    color           : #000;
+    border-radius   : 12px;
+    padding         : 12px;
+    width           : 90%;
+    font-size       : 1rem;
+    margin          : 0 auto !important;
+    box-shadow      : 3px 3px 20px -6px rgba(40, 40, 40, 0.5);
+}
+
+.section-container h4 {
+    cursor: pointer;
+}
+.section-dropdown-header {
+    color        : var(--orange);
+    margin-bottom: 20px;
+}
+.cardSection {
+    border       : 1px solid #000;
+    border-radius: 15px;
+    padding      : 10px;
+    max-width    : 90%;
+    margin       : 30px 20px 0px 20px;
+}

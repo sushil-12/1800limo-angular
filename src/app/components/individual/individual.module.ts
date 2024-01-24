@@ -33,12 +33,13 @@ import { ProfileComponent } from './profile/profile.component';
 import { CreateNewBookingComponent } from './create-new-booking/create-new-booking.component';
 import { InvoiceComponent } from './invoice/invoice.component';
 import { AddCardComponent } from './add-card/add-card.component';
+import { InvoiceSummaryComponent } from './invoice-summary/invoice-summary.component';
 
 
 
 
 @NgModule({
-  declarations: [IndividualTemplateComponent, IndividualComponent, BookingsComponent, ProfileComponent, CreateNewBookingComponent, InvoiceComponent, AddCardComponent],
+  declarations: [IndividualTemplateComponent, IndividualComponent, BookingsComponent, ProfileComponent, CreateNewBookingComponent, InvoiceComponent, AddCardComponent, InvoiceSummaryComponent],
   imports: [
     CommonModule,
     IndividualRoutingModule,

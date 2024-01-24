@@ -15,13 +15,13 @@ import { IndividualService } from 'src/app/services/individual.service';
 declare var $: any;
 
 @Component({
-  selector: 'app-bookings',
-  templateUrl: './bookings.component.html',
-  styleUrls: ['./bookings.component.scss']
+	selector: 'app-bookings',
+	templateUrl: './bookings.component.html',
+	styleUrls: ['./bookings.component.scss']
 })
 export class BookingsComponent implements OnInit {
 
-  @ViewChild('inputmsg', { static: false }) message: ElementRef;
+	@ViewChild('inputmsg', { static: false }) message: ElementRef;
 	@ViewChild('sendEmailModalFocus') sendEmailModalFocus: any;
 	exampleHeader = DatePickerComponent
 
@@ -68,6 +68,13 @@ export class BookingsComponent implements OnInit {
 	rates_preview: any;
 	adminSharePercent: number;
 	currentUser: any;
+	cardDetails: any;
+	response: any;
+	paymentMethod: string = 'card';
+	selectedCard: any;
+	bookingId: any;
+	responseRate: any;
+	rateArray: any;
 
 	constructor(
 		private affiliateService: AffiliateService,
@@ -76,7 +83,7 @@ export class BookingsComponent implements OnInit {
 		private spinner: NgxSpinnerService,
 		private $errors: ErrorDialogService,
 		private formBuilder: FormBuilder,
-    private individualService: IndividualService,
+		private individualService: IndividualService,
 		private http: HttpClient) { }
 
 	ngOnInit(): void {
@@ -100,10 +107,10 @@ export class BookingsComponent implements OnInit {
 		this.useDateFilter = localStorage.getItem('indvUseDateFilter') ?
 			(localStorage.getItem('indvUseDateFilter') == 'true' ? true : false)
 			: true;
-			if(this.currentUser?.roleName == 'sub_travel_agent'){
-				this.useDateFilter = false;
-				localStorage.setItem('indvUseDateFilter', 'false')
-			}
+		if (this.currentUser?.roleName == 'sub_travel_agent') {
+			this.useDateFilter = false;
+			localStorage.setItem('indvUseDateFilter', 'false')
+		}
 		console.log('indvUseDateFilter-->', this.useDateFilter)
 
 		this.loadBookings();
@@ -136,8 +143,8 @@ export class BookingsComponent implements OnInit {
 	loadBookings(pageUrl = null) {
 		$('.HeadingH1').css({ display: "none" })
 		/** spinner starts on init */
-		if(pageUrl){
-			console.log("pageurl",pageUrl)
+		if (pageUrl) {
+			console.log("pageurl", pageUrl)
 			this.scroll('indv_bookings_table')
 		}
 		this.spinner.show();
@@ -274,10 +281,10 @@ export class BookingsComponent implements OnInit {
 					this.adminSharePercent = 25
 				}
 				if (this.bookingPreview?.payment_status == "unpaid") {
-					
-						console.log("in if share array", this.bookingPreview.affiliate_type === 'affiliate' && this.bookingPreview.payment_status == 'unpaid' && this.bookingPreview?.share_array?.length != 0)
-						this.shareArray = this?.bookingPreview?.share_array
-					
+
+					console.log("in if share array", this.bookingPreview.affiliate_type === 'affiliate' && this.bookingPreview.payment_status == 'unpaid' && this.bookingPreview?.share_array?.length != 0)
+					this.shareArray = this?.bookingPreview?.share_array
+
 					this.rates_preview = this.bookingPreview?.rates_preview;
 				}
 				this.isAffiliate = this.bookingPreview.affiliate_type == "affiliate" ? true : false;
@@ -295,367 +302,453 @@ export class BookingsComponent implements OnInit {
 	}
 
 
-		closeModal() {
-			this.message.nativeElement.value = ""
-			this.show = false
-		}
-		messageField(format) {
-			this.show = true;
-			switch (format) {
-				case "Phone": {
-					this.sendMessageField = true;
-					break;
-				}
-				case "Email": {
-					this.sendMessageField = false;
-					break;
-				}
+	closeModal() {
+		this.message.nativeElement.value = ""
+		this.show = false
+	}
+	messageField(format) {
+		this.show = true;
+		switch (format) {
+			case "Phone": {
+				this.sendMessageField = true;
+				break;
+			}
+			case "Email": {
+				this.sendMessageField = false;
+				break;
 			}
 		}
+	}
 
 
 
-		submit(message, format) {
-			console.log('format', format, this.passengerDetails)
-			if (this.passengerDetails.selection_button == "Passenger") {
-				this.sendInformation = format
-					? this.passengerDetails.pax_tel
-					: this.passengerDetails.passenger_email;
-				this.reciptentName = this.passengerDetails.passenger_name;
-			} else if (this.passengerDetails.selection_button == "Driver") {
-				console.log('driver')
-				this.sendInformation = format
-					? this.passengerDetails?.driver_cell_isd +
-					this.passengerDetails?.driver_cell_number
-					: this.passengerDetails?.driver_email ? this.passengerDetails?.driver_email:this.passengerDetails?.dispatchEmail ;
-				this.reciptentName = this.passengerDetails?.driver_name;
-			}
-			else {
-				this.sendInformation = format
-					? this.passengerDetails.loose_affiliate_phone_isd +
-					this.passengerDetails.loose_affiliate_phone
-					: this.passengerDetails.loose_affiliate_email;
-				this.reciptentName = this.passengerDetails.loose_affiliate_name;
-			}
-			let obj = {
-				bookingId: this.passengerDetails.booking_id,
-				reciptentName: this.reciptentName,
-				sendTo: this.passengerDetails.selection_button,
-				sendThrough: format ? "Phone" : "Email",
-				sendValue: this.sendInformation,
-				sendContent: message,
-			};
-			console.log('submit modal values---->>', obj)
-			this.travelAgentService.travelAgentNotification(obj)
-				.pipe(
-					catchError((err: any) => {
-						console.log('err------->>>>>>>', err)
-						return throwError(err)
-					})
-				).subscribe(({ message }: any) => {
-					this.notification_msg = message;
-					$("#notificationModal").modal("show");
-					$("textarea").val("");
+	submit(message, format) {
+		console.log('format', format, this.passengerDetails)
+		if (this.passengerDetails.selection_button == "Passenger") {
+			this.sendInformation = format
+				? this.passengerDetails.pax_tel
+				: this.passengerDetails.passenger_email;
+			this.reciptentName = this.passengerDetails.passenger_name;
+		} else if (this.passengerDetails.selection_button == "Driver") {
+			console.log('driver')
+			this.sendInformation = format
+				? this.passengerDetails?.driver_cell_isd +
+				this.passengerDetails?.driver_cell_number
+				: this.passengerDetails?.driver_email ? this.passengerDetails?.driver_email : this.passengerDetails?.dispatchEmail;
+			this.reciptentName = this.passengerDetails?.driver_name;
+		}
+		else {
+			this.sendInformation = format
+				? this.passengerDetails.loose_affiliate_phone_isd +
+				this.passengerDetails.loose_affiliate_phone
+				: this.passengerDetails.loose_affiliate_email;
+			this.reciptentName = this.passengerDetails.loose_affiliate_name;
+		}
+		let obj = {
+			bookingId: this.passengerDetails.booking_id,
+			reciptentName: this.reciptentName,
+			sendTo: this.passengerDetails.selection_button,
+			sendThrough: format ? "Phone" : "Email",
+			sendValue: this.sendInformation,
+			sendContent: message,
+		};
+		console.log('submit modal values---->>', obj)
+		this.travelAgentService.travelAgentNotification(obj)
+			.pipe(
+				catchError((err: any) => {
+					console.log('err------->>>>>>>', err)
+					return throwError(err)
 				})
-			$("#closeModal").click(() => {
-				$("#notificationModal").modal("hide");
+			).subscribe(({ message }: any) => {
+				this.notification_msg = message;
+				$("#notificationModal").modal("show");
+				$("textarea").val("");
+			})
+		$("#closeModal").click(() => {
+			$("#notificationModal").modal("hide");
+		});
+		$("#closeModal1").click(() => {
+			$("#notificationModal").modal("hide");
+		});
+		this.message.nativeElement.value = ""
+		this.show = false
+	}
+
+
+	//for pagination
+	counter() {
+		var currentPage;
+		var startFrom;
+		var endTo;
+
+		if (this.currentPage < 5) {
+			startFrom = 0;
+			endTo = this.totalPage;
+		}
+		else if (this.currentPage < this.totalPage) {
+			currentPage = this.currentPage
+			endTo = currentPage + 1;
+			startFrom = endTo - 5;
+		}
+		else {
+			endTo = this.totalPage;
+			startFrom = endTo - 5;
+		}
+
+		var i;
+		var udpArr = new Array();
+		for (i = startFrom; i < endTo; i++) {
+			udpArr.push(i + 1);
+		}
+		return udpArr;
+	}
+
+	changeDate(dateType, date) {
+		if (dateType == 'startDate') {
+			this.startDate = date;
+		}
+		else {
+			this.endDate = date;
+		}
+	}
+	dateFormat(value: any) {
+		return moment(value, 'YYYY-MM-DD').format('ll')
+	}
+
+	dateFormat2(value: any) {
+		return moment(value, 'YYYY-MM-DD').format('L')
+	}
+	FormatTime(time: string) {
+		return moment(time, "HH:mm:ss").format("LT");
+	}
+	timeFormat(value: any) {
+		if (value.toUpperCase() == '12:00 AM') {
+			return '0000 h'
+		}
+		let hours = moment(moment(value, 'hh:mm a').format('HH'), 'HH').hours();
+		let mins = moment(value, 'hh:mm a').minutes().toString();
+		if (Number(mins) == 0 || Number(mins) < 10) {
+			mins = '0' + mins.toString();
+		}
+
+		return hours < 10 ? '0' + hours.toString() + mins.toString() + ' h' : hours.toString() + mins.toString() + ' h'
+		//return value.replace(':', '').substring(0, 5) + 'h';
+	}
+
+	timeFormat2(value: string) {
+		return moment(value, 'HH:mm a').format('h:mm a');
+	}
+
+	show = false
+	openModal(booking: any, selection_button: string) {
+		try {
+			setTimeout(() => {
+				// $('textarea').attr('autofocus', 'autofocus');
+				this.sendEmailModalFocus.nativeElement.querySelector('textarea').focus();
+			}, 1000)
+		} catch (error) {
+			console.log('----------error------->>>>>> ', error)
+
+		}
+		console.log('open modal-->>>>>>>', booking, selection_button)
+		this.passengerDetails = booking;
+		this.passengerDetails['selection_button'] = selection_button
+	}
+
+
+	editAction(bookingId, updateType) {
+		if (updateType == 'change') {
+			this.router.navigate([`/${this.currentUser?.roleName}/create-new-booking`], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'true' } });
+		}
+		else {
+			this.router.navigate([`/${this.currentUser?.roleName}/create-new-booking`], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'true' } });
+		}
+	}
+
+	emailPassenger() {
+		console.log('In function email passenger', this.sendEmailForm.value.reservation_id)
+		let data = {
+			reservation_id: this.sendEmailForm.value.reservation_id
+		}
+		this.spinner.show()
+		this.travelAgentService.passengerBooking(data)
+			.pipe(
+				catchError((err) => {
+					return throwError(err);
+				})
+			)
+			.subscribe((response: any) => {
+				console.log('response--------->>>>>>>>', response)
+				this.spinner.hide()
+				$("#emailPassenger").modal("hide");
 			});
-			$("#closeModal1").click(() => {
-				$("#notificationModal").modal("hide");
+	}
+	emailAll() {
+		console.log('In function email all', this.sendEmailForm.value.reservation_id, this.sendEmailForm.value.emailTarget)
+		let data = {
+			reservation_id: this.sendEmailForm.value.reservation_id
+		}
+		this.spinner.show()
+		this.travelAgentService.bookingEmailAll(data)
+			.pipe(
+				catchError((err) => {
+					return throwError(err);
+				})
+			)
+			.subscribe((response: any) => {
+				console.log('response--------->>>>>>>>', response)
+				this.spinner.hide()
+				$("#emailAll").modal("hide");
 			});
-			this.message.nativeElement.value = ""
-			this.show = false
+	}
+
+	returnRepeatAction(bookingId, actionType) {
+		console.log(actionType, bookingId,);
+
+		if (actionType == 'return') {
+			this.router.navigate([`/${this.currentUser?.roleName}/create-new-booking`], { queryParams: { bookingId: bookingId, updateType: 'return' } });
 		}
-
-
-		//for pagination
-		counter() {
-			var currentPage;
-			var startFrom;
-			var endTo;
-
-			if (this.currentPage < 5) {
-				startFrom = 0;
-				endTo = this.totalPage;
-			}
-			else if (this.currentPage < this.totalPage) {
-				currentPage = this.currentPage
-				endTo = currentPage + 1;
-				startFrom = endTo - 5;
-			}
-			else {
-				endTo = this.totalPage;
-				startFrom = endTo - 5;
-			}
-
-			var i;
-			var udpArr = new Array();
-			for (i = startFrom; i < endTo; i++) {
-				udpArr.push(i + 1);
-			}
-			return udpArr;
+		else {
+			this.router.navigate([`/${this.currentUser?.roleName}/create-new-booking`], { queryParams: { bookingId: bookingId, updateType: 'repeat' } });
 		}
-
-		changeDate(dateType, date) {
-			if (dateType == 'startDate') {
-				this.startDate = date;
-			}
-			else {
-				this.endDate = date;
-			}
-		}
-		dateFormat(value: any) {
-			return moment(value, 'YYYY-MM-DD').format('ll')
-		}
-
-		dateFormat2(value: any) {
-			return moment(value, 'YYYY-MM-DD').format('L')
-		}
-		FormatTime(time: string) {
-			return moment(time, "HH:mm:ss").format("LT");
-		}
-		timeFormat(value: any) {
-			if (value.toUpperCase() == '12:00 AM') {
-				return '0000 h'
-			}
-			let hours = moment(moment(value, 'hh:mm a').format('HH'), 'HH').hours();
-			let mins = moment(value, 'hh:mm a').minutes().toString();
-			if (Number(mins) == 0 || Number(mins) < 10) {
-				mins = '0' + mins.toString();
-			}
-
-			return hours < 10 ? '0' + hours.toString() + mins.toString() + ' h' : hours.toString() + mins.toString() + ' h'
-			//return value.replace(':', '').substring(0, 5) + 'h';
-		}
-
-		timeFormat2(value: string) {
-			return moment(value, 'HH:mm a').format('h:mm a');
-		}
-
-		show = false
-		openModal(booking: any, selection_button: string) {
-			try {
-				setTimeout(() => {
-					// $('textarea').attr('autofocus', 'autofocus');
-					this.sendEmailModalFocus.nativeElement.querySelector('textarea').focus();
-				}, 1000)
-			} catch (error) {
-				console.log('----------error------->>>>>> ', error)
-
-			}
-			console.log('open modal-->>>>>>>', booking, selection_button)
-			this.passengerDetails = booking;
-			this.passengerDetails['selection_button'] = selection_button
-		}
-		
-
-		editAction(bookingId, updateType) {
-			if (updateType == 'change') {
-				this.router.navigate([`/${this.currentUser?.roleName}/create-new-booking`], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'true' } });
-			}
-			else {
-				this.router.navigate([`/${this.currentUser?.roleName}/create-new-booking`], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'true' } });
-			}
-		}
-
-		emailPassenger() {
-			console.log('In function email passenger', this.sendEmailForm.value.reservation_id)
-			let data = {
-				reservation_id: this.sendEmailForm.value.reservation_id
-			}
-			this.spinner.show()
-			this.travelAgentService.passengerBooking(data)
-				.pipe(
-					catchError((err) => {
-						return throwError(err);
-					})
-				)
-				.subscribe((response: any) => {
-					console.log('response--------->>>>>>>>', response)
-					this.spinner.hide()
-					$("#emailPassenger").modal("hide");
-				});
-		}
-		emailAll() {
-			console.log('In function email all', this.sendEmailForm.value.reservation_id, this.sendEmailForm.value.emailTarget)
-			let data = {
-				reservation_id: this.sendEmailForm.value.reservation_id
-			}
-			this.spinner.show()
-			this.travelAgentService.bookingEmailAll(data)
-				.pipe(
-					catchError((err) => {
-						return throwError(err);
-					})
-				)
-				.subscribe((response: any) => {
-					console.log('response--------->>>>>>>>', response)
-					this.spinner.hide()
-					$("#emailAll").modal("hide");
-				});
-		}
-
-		returnRepeatAction(bookingId, actionType) {
-			console.log(actionType, bookingId,);
-
-			if (actionType == 'return') {
-				this.router.navigate([`/${this.currentUser?.roleName}/create-new-booking`], { queryParams: { bookingId: bookingId, updateType: 'return' } });
-			}
-			else {
-				this.router.navigate([`/${this.currentUser?.roleName}/create-new-booking`], { queryParams: { bookingId: bookingId, updateType: 'repeat' } });
-			}
-		}
+	}
 
 	get changeStatusF() {
-			return this.changeStatusForm.controls;
+		return this.changeStatusForm.controls;
+	}
+
+
+	submitChangeStatusForm() {
+		this.submitted = true;
+		console.log(this.changeStatusForm);
+		// stop here if form is invalid
+		if (this.changeStatusForm.invalid) {
+			return;
 		}
 
+		this.spinner.show();
 
-		submitChangeStatusForm() {
-			this.submitted = true;
-			console.log(this.changeStatusForm);
-			// stop here if form is invalid
-			if (this.changeStatusForm.invalid) {
-				return;
-			}
-
-			this.spinner.show();
-
-			this.affiliateService.changeStatusBooking(this.changeStatusForm.value)
-				.pipe(
-					catchError(err => {
-						this.spinner.hide();//hide spinner
-						$('#change_status_booking_Modal').modal('hide');
-						return throwError(err);
-					})
-				)
-				.subscribe(({ data, success, message }: any) => {
-					if (success == true) {
-						this.spinner.hide();//hide spinner
-						$('#change_status_booking_Modal').modal('hide');
-						this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
-							this.router.navigate([`/${this.currentUser?.roleName}/bookings`]);
-						});
-					}
-				});
-		}
-
-
-		sendEmailClicked(bookingId, emailTarget) {
-			this.sendEmailForm.patchValue({
-				reservation_id: bookingId,
-				emailTarget: emailTarget
+		this.affiliateService.changeStatusBooking(this.changeStatusForm.value)
+			.pipe(
+				catchError(err => {
+					this.spinner.hide();//hide spinner
+					$('#change_status_booking_Modal').modal('hide');
+					return throwError(err);
+				})
+			)
+			.subscribe(({ data, success, message }: any) => {
+				if (success == true) {
+					this.spinner.hide();//hide spinner
+					$('#change_status_booking_Modal').modal('hide');
+					this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
+						this.router.navigate([`/${this.currentUser?.roleName}/bookings`]);
+					});
+				}
 			});
+	}
+
+
+	sendEmailClicked(bookingId, emailTarget) {
+		this.sendEmailForm.patchValue({
+			reservation_id: bookingId,
+			emailTarget: emailTarget
+		});
+	}
+
+	emailForm() {
+		this.submitted = true;
+		console.log(this.sendEmailForm);
+		// stop here if form is invalid
+		if (this.sendEmailForm.invalid) {
+			return;
 		}
 
-		emailForm() {
-			this.submitted = true;
-			console.log(this.sendEmailForm);
-			// stop here if form is invalid
-			if (this.sendEmailForm.invalid) {
-				return;
-			}
+		this.spinner.show();
 
-			this.spinner.show();
-
-			this.travelAgentService.sendEmail(this.sendEmailForm.value)
-				.pipe(
-					catchError(err => {
-						this.spinner.hide();//hide spinner
-						$('#emailModal').modal('hide');
-						return throwError(err);
-					})
-				)
-				.subscribe(({ data, success, message }: any) => {
-					if (success == true) {
-						this.spinner.hide();//hide spinner
-						$('#emailModal').modal('hide');
-						this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
-							this.router.navigate([`/${this.currentUser?.roleName}/bookings`]);
-						});
-					}
-				});
-		}
-
-
-		iOS() {
-			return [
-				'iPad Simulator',
-				'iPhone Simulator',
-				'iPod Simulator',
-				'iPad',
-				'iPhone',
-				'iPod'
-			].includes(navigator.platform)
-				// iPad on iOS 13 detection
-				|| (navigator.userAgent.includes("Mac") && "ontouchend" in document)
-		}
-
-		showLocationPointOnMap(booking_id: number, type: string) {
-
-			let isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-			console.log('isSafari', isSafari)
-			// this.spinner.show()
-			this.travelAgentService.getLocationPoints(booking_id).subscribe((response: any) => {
-				this.spinner.hide();
-				if ("lat" in response?.data?.pickupDetail && "long" in response?.data?.pickupDetail && "lat" in response?.data?.dropoffDetail && "long" in response?.data?.dropoffDetail) {
-					sessionStorage.setItem('pickup', JSON.stringify(response?.data?.pickupDetail.address));
-					sessionStorage.setItem('dropoff', JSON.stringify(response?.data?.dropoffDetail.address));
-					if (type == 'pickup') {
-						const googleDirectionUrl = 'https://www.google.com/maps/dir/?api=1' + '&destination=' +
-							encodeURIComponent(response?.data?.pickupDetail.address) + '&travelmode=driving'
-						const iosDirectionUrl = 'http://maps.apple.com/?daddr=' +
-							encodeURIComponent(response?.data?.pickupDetail.address)
-						if (this.iOS()) {
-							setTimeout(() => {
-								window.location.href = iosDirectionUrl;
-							})
-						}
-						else {
-							window.open(googleDirectionUrl, '_blank');
-						}
-					}
-					else if (type == 'dropoff') {
-						const googleDirectionUrl = 'https://www.google.com/maps/dir/?api=1' + '&destination=' +
-							encodeURIComponent(response?.data?.dropoffDetail.address) + '&travelmode=driving'
-						const iosDirectionUrl = 'http://maps.apple.com/?daddr=' +
-							encodeURIComponent(response?.data?.dropoffDetail.address)
-						if (this.iOS()) {
-							setTimeout(() => {
-								window.location.href = iosDirectionUrl;
-							})
-						}
-						else {
-							window.open(googleDirectionUrl, '_blank');
-						}
-					}
-
-				} else {
-					throw new Error('Error: Location Points Not Specified Properly. ');
+		this.travelAgentService.sendEmail(this.sendEmailForm.value)
+			.pipe(
+				catchError(err => {
+					this.spinner.hide();//hide spinner
+					$('#emailModal').modal('hide');
+					return throwError(err);
+				})
+			)
+			.subscribe(({ data, success, message }: any) => {
+				if (success == true) {
+					this.spinner.hide();//hide spinner
+					$('#emailModal').modal('hide');
+					this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
+						this.router.navigate([`/${this.currentUser?.roleName}/bookings`]);
+					});
 				}
-			})
-		}
-		showLocationPointOnMapByAddress(address: any) {
-			let isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-			console.log('isSafari', isSafari)
-			if (address) {
-				let googleDirectionUrl;
-				let iosDirectionUrl;
-				googleDirectionUrl = 'https://www.google.com/maps/dir/?api=1' + '&destination=' +
-					encodeURIComponent(address) + '&travelmode=driving'
-				iosDirectionUrl = 'http://maps.apple.com/?daddr=' +
-					encodeURIComponent(address)
-				if (this.iOS()) {
-					setTimeout(() => {
-						window.location.href = iosDirectionUrl;
-					})
+			});
+	}
+
+
+	iOS() {
+		return [
+			'iPad Simulator',
+			'iPhone Simulator',
+			'iPod Simulator',
+			'iPad',
+			'iPhone',
+			'iPod'
+		].includes(navigator.platform)
+			// iPad on iOS 13 detection
+			|| (navigator.userAgent.includes("Mac") && "ontouchend" in document)
+	}
+
+	showLocationPointOnMap(booking_id: number, type: string) {
+
+		let isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+		console.log('isSafari', isSafari)
+		// this.spinner.show()
+		this.travelAgentService.getLocationPoints(booking_id).subscribe((response: any) => {
+			this.spinner.hide();
+			if ("lat" in response?.data?.pickupDetail && "long" in response?.data?.pickupDetail && "lat" in response?.data?.dropoffDetail && "long" in response?.data?.dropoffDetail) {
+				sessionStorage.setItem('pickup', JSON.stringify(response?.data?.pickupDetail.address));
+				sessionStorage.setItem('dropoff', JSON.stringify(response?.data?.dropoffDetail.address));
+				if (type == 'pickup') {
+					const googleDirectionUrl = 'https://www.google.com/maps/dir/?api=1' + '&destination=' +
+						encodeURIComponent(response?.data?.pickupDetail.address) + '&travelmode=driving'
+					const iosDirectionUrl = 'http://maps.apple.com/?daddr=' +
+						encodeURIComponent(response?.data?.pickupDetail.address)
+					if (this.iOS()) {
+						setTimeout(() => {
+							window.location.href = iosDirectionUrl;
+						})
+					}
+					else {
+						window.open(googleDirectionUrl, '_blank');
+					}
 				}
-				else {
-					window.open(googleDirectionUrl, '_blank');
+				else if (type == 'dropoff') {
+					const googleDirectionUrl = 'https://www.google.com/maps/dir/?api=1' + '&destination=' +
+						encodeURIComponent(response?.data?.dropoffDetail.address) + '&travelmode=driving'
+					const iosDirectionUrl = 'http://maps.apple.com/?daddr=' +
+						encodeURIComponent(response?.data?.dropoffDetail.address)
+					if (this.iOS()) {
+						setTimeout(() => {
+							window.location.href = iosDirectionUrl;
+						})
+					}
+					else {
+						window.open(googleDirectionUrl, '_blank');
+					}
 				}
+
 			} else {
 				throw new Error('Error: Location Points Not Specified Properly. ');
 			}
+		})
+	}
+	showLocationPointOnMapByAddress(address: any) {
+		let isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+		console.log('isSafari', isSafari)
+		if (address) {
+			let googleDirectionUrl;
+			let iosDirectionUrl;
+			googleDirectionUrl = 'https://www.google.com/maps/dir/?api=1' + '&destination=' +
+				encodeURIComponent(address) + '&travelmode=driving'
+			iosDirectionUrl = 'http://maps.apple.com/?daddr=' +
+				encodeURIComponent(address)
+			if (this.iOS()) {
+				setTimeout(() => {
+					window.location.href = iosDirectionUrl;
+				})
+			}
+			else {
+				window.open(googleDirectionUrl, '_blank');
+			}
+		} else {
+			throw new Error('Error: Location Points Not Specified Properly. ');
 		}
+	}
 
+	getIndividualCardDetails() {
+		this.spinner.show()
+		this.individualService.getIndividualAccountDetails()
+			.pipe(
+				catchError(err => {
+					this.spinner.hide();//hide spinner
+					return throwError(err);
+				})
+			).subscribe(result => {
+				this.response = result
+				this.cardDetails = this.response?.data?.cards
+				this.spinner.hide();//hide spinner
+
+			});
+	}
+	payBooking(id) {
+		this.bookingId = id
+		this.showRatesArray()
+		this.getIndividualCardDetails()
+	}
+	showRatesArray() {
+		this.spinner.show()
+		this.individualService.showRatesArray(this.bookingId)
+			.pipe(
+				catchError(err => {
+					this.spinner.hide();//hide spinner
+					return throwError(err);
+				})
+			).subscribe(result => {
+				this.responseRate = result
+				this.rateArray = this.responseRate?.data
+				this.spinner.hide();//hide spinner
+
+			});
+
+	}
+
+	handleChangeCard(card: any) {
+		console.log("selected card",card)
+
+		this.selectedCard = card
+		console.log("selected card",this.selectedCard)
+	}
+
+	changeDetection(method: string) {
+		this.paymentMethod = method
+	}
+
+
+	makePayment() {
+
+		console.log('-----=====?>>>>>', this.cardDetails.length > 0)
+		let dataToSend: any
+
+		if(this.paymentMethod == 'card'){
+			console.log('<<<<<----payment through card-->>>>',this.selectedCard?.ID,this.cardDetails[0]?.ID,this.bookingId,this.rateArray?.grandTotal)
+			dataToSend = {
+				isExistingCard: true,
+				paymentMethod: 'credit_card',
+				CreditCardsDetail: {
+					cardID: this.selectedCard ? this.selectedCard?.ID : this.cardDetails[0]?.ID
+				},
+				reservation_id: this.bookingId,
+				grand_total: this.rateArray?.grandTotal
+			}
+			console.log('selected card-->>>')
+		}
+		else{
+			console.log('<<<<<----payment through cash-->>>>')
+			dataToSend = {
+				reservation_id: this.bookingId,
+				grand_total: this.rateArray?.grandTotal,
+				paymentMethod: 'cash'
+			}
+		}
+			this.spinner.show()
+			this.individualService.paymentProcessing(dataToSend).subscribe((response: any) => {
+				$('#paymentModal').modal('hide')
+				console.log(response)
+				this.router.navigate(['/individual/invoice'])
+
+				console.log('response---------------------->>', response)
+				this.spinner.hide()
+			})
+	}
 }
+
