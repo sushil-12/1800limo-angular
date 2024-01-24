@@ -6,6 +6,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { CreateNewBookingComponent } from './create-new-booking/create-new-booking.component';
 import { InvoiceComponent } from './invoice/invoice.component';
 import { AddCardComponent } from './add-card/add-card.component';
+import { InvoiceSummaryComponent } from './invoice-summary/invoice-summary.component';
 
 const routes: Routes = [
   {
@@ -31,6 +32,11 @@ const routes: Routes = [
   {
     path:'invoice',
     component:InvoiceComponent,
+    canActivate: [IndividualGuardGuard],
+  },
+  {
+    path:'invoice-summary',
+    component:InvoiceSummaryComponent,
     canActivate: [IndividualGuardGuard],
   },
   {

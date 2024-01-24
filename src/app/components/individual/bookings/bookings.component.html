@@ -123,6 +123,12 @@
                                                 <div class="dropdown-item-icon"></div>
                                                 Return
                                             </a>
+                                            <a *ngIf="booking.booking_status=='finalized'" class="dropdown-item"
+                                                data-toggle="modal" data-target="#paymentModal"
+                                                (click)="payBooking(booking?.booking_id)">
+                                                <div class="dropdown-item-icon"></div>
+                                                Pay Booking
+                                            </a>
                                         </div>
                                     </td>
 
@@ -1430,6 +1436,75 @@
             <div class="modal-footer py-0">
                 <button type="button" class="custom-btn button2" data-dismiss="notificationModal"
                     id="closeModal1">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- confirm payment modal -->
+<div class="modal fade" id="paymentModal" tabindex="-1" role="dialog" aria-labelledby="paymentModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <section class="section-container" style="margin-top: 22px !important;">
+                <div class="col-md-12 p-0">
+                    <h4 class="section-dropdown-header mb-0">
+                        Payment
+                    </h4>
+                </div>
+                <div class="row">
+
+                    <!-- RADIO BUTTONS -->
+                    <div class="col-md-12 cardSection">
+                        <div class="radio">
+                            <input id="card" name="paymentMethod" type="radio" checked (click)="changeDetection('card')"
+                                style="margin-right: 10px;">
+                            <label for="card" class="radio-label">Payment with Card</label>
+                        </div>
+                        <div class="methodCard" *ngIf="paymentMethod=='card'">
+                            <table class="table table-borderless">
+                                <thead class="bg-transparent">
+                                    <tr>
+                                        <th scope="col"></th>
+                                        <th scope="col">Name on Card</th>
+                                        <th scope="col">Card Number</th>
+                                        <th scope="col">Expires on</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of cardDetails">
+                                        <td>
+                                            <input id="selectCard" name="selectCard" type="radio"
+                                                (click)="changeDetection('card'); handleChangeCard(item)"
+                                                [checked]="item.cc_prority=='Primary' ">
+                                        </td>
+                                        <td>{{item.name}}</td>
+                                        <td>{{item.last4}}</td>
+                                        <td>{{item.exp_month}}/{{item.exp_year}}</td>
+                                    </tr>
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+
+
+                    </div>
+                    <div class="col-md-12 my-3 cardSection">
+                        <div class="radio">
+                            <input id="cash" name="paymentMethod" type="radio" (click)="changeDetection('cash')"
+                                style="margin-right: 10px;">
+                            <label for="cash" class="radio-label">Payment with Cash</label>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+            <div class="modal-footer">
+                <button type="button" class="custom-btn resetbutton" data-dismiss="modal">Close</button>
+                <button type="button" class="custom-btn savebutton" (click)="makePayment()">
+                    Pay ${{rateArray?.grandTotal}}</button>
             </div>
         </div>
     </div>
