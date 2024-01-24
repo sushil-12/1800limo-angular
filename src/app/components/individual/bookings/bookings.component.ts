@@ -744,7 +744,7 @@ export class BookingsComponent implements OnInit {
 			this.individualService.paymentProcessing(dataToSend).subscribe((response: any) => {
 				$('#paymentModal').modal('hide')
 				console.log(response)
-				this.router.navigate(['/individual/invoice'])
+				this.router.navigate([`/individual/invoice-summary`],{queryParams:{bookingId:this.bookingId}});
 
 				console.log('response---------------------->>', response)
 				this.spinner.hide()
