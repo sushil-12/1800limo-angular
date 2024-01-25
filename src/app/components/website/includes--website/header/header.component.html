@@ -80,12 +80,18 @@
 					<li class="nav-item dropdown no-caret mr-2 dropdown-user">
 						<a class="user-profile btn btn-icon btn-transparent-dark dropdown-toggle" tabindex="1"
 							id="navbarDropdownUserImage" href="javascript:void(0);" role="button" data-toggle="dropdown"
-							aria-haspopup="true" aria-expanded="false">
+							aria-haspopup="true" aria-expanded="false" *ngIf="(currentUser?.roleName != 'individual')">
 							{{ currentUser?.affiliate_company ? currentUser?.affiliate_company
 							: currentUser?.name
 							?
 							currentUser?.name : currentUser?.FirstName +
 							currentUser?.LastName?.charAt(0)}}
+						</a>
+						<a class="user-profile btn btn-icon btn-transparent-dark dropdown-toggle" tabindex="1"
+							id="navbarDropdownUserImage" href="javascript:void(0);" role="button" data-toggle="dropdown"
+							aria-haspopup="true" aria-expanded="false" *ngIf="(currentUser?.roleName == 'individual')">
+							{{ currentUser?.name ? currentUser?.name : currentUser?.FirstName ? currentUser?.FirstName
+							+ currentUser?.LastName?.charAt(0) : 'Individual'}}
 						</a>
 						<div class="logInDropdown dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
 							aria-labelledby="navbarDropdownUserImage">
@@ -96,12 +102,19 @@
 										clip-rule="evenodd" />
 								</svg>
 								<div class="dropdown-user-details">
-									<div class="dropdown-user-details-name">
+									<div class="dropdown-user-details-name"
+										*ngIf="(currentUser?.roleName != 'individual')">
 										{{currentUser?.affiliate_company ?
 										currentUser?.affiliate_company :
 										currentUser?.name ?
 										currentUser?.name : currentUser?.FirstName +
 										currentUser?.LastName.charAt(0)}}
+									</div>
+									<div class="dropdown-user-details-name"
+										*ngIf="(currentUser?.roleName == 'individual')">
+										{{ currentUser?.name ? currentUser?.name : currentUser?.FirstName ?
+										currentUser?.FirstName
+										+ currentUser?.LastName?.charAt(0) : 'Individual'}}
 									</div>
 								</div>
 							</h6>
