@@ -47,7 +47,7 @@
 			<div class="col-md-7" *ngIf="currentUser?.roleName == 'travel_agent'">
 				<h2 class="headinginfo">
 					<span style="text-transform: capitalize; font-weight: 400; font-size: 19px;">
-						({{agency_name + ' / ' + currentUser?.name}})
+						({{ agency_name ? (agency_name + ' / ' + currentUser?.name) : currentUser?.name }})
 					</span>
 				</h2>
 			</div>

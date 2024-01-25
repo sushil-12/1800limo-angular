@@ -84,9 +84,9 @@ export class AddClientAccountComponent implements OnInit {
             middleName: this.response.data.middle_name,
             lastName: this.response.data.last_name,
             mobile: this.response.data.mobile,
-            mobileIsd: '+44',
+            mobileIsd: this.response.data.mobileIsd,
             work: this.response.data.work_contact_number,
-            workIsd: '+44',
+            workIsd: this.response.data.workIsd,
             email: this.response.data.email,
             address: this.response.data.address,
             city: this.response.data.city,
@@ -239,8 +239,10 @@ export class AddClientAccountComponent implements OnInit {
 
 	onCountryChange(event, type)
 	{
+		console.log(event)
 		if (type == 'mobile')
 		{
+			console.log("in mobile",event.dialCode,event.iso2)
 			this.addIndividualAccountForm.patchValue({
 				mobileIsd: '+' + event.dialCode,
 				mobileCountry: event.iso2
