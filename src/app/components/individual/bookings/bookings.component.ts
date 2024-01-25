@@ -152,6 +152,7 @@ export class BookingsComponent implements OnInit {
 		// var keyword = ((document.getElementById("keyword") as HTMLInputElement).value);
 		// Load Our bookings using API
 		this.individualService.loadBookings(pageUrl, this.searchText, this.startDate, this.endDate, this.useDateFilter).then(result => {
+			this.spinner.hide()
 			this.bookingsRes = result;
 			this.bookings = this.bookingsRes?.data?.data;
 			this.totalRecords = this.bookingsRes?.data?.total;
@@ -168,7 +169,7 @@ export class BookingsComponent implements OnInit {
 			this.prevPageUrl = this.bookingsRes?.data?.prev_page_url;
 			this.nextPageUrl = this.bookingsRes?.data?.next_page_url;
 			console.log('result------------------------->>>', result)
-			this.spinner.hide();//hide spinner
+			
 		})
 			.catch(err => {
 				this.spinner.hide();//hide spinner
@@ -292,8 +293,8 @@ export class BookingsComponent implements OnInit {
 				this.bookingPreview['booking_instructions'] = this.bookingPreview?.booking_instructions.replaceAll('<br />', ' ')
 				console.log('get preview data-->>>', this.bookingPreview.affiliate_type, this.isAffiliate)
 				$('#previewBookingOnID').modal('show');
+				this.spinner.hide();
 			})
-		this.spinner.hide();
 	}
 
 
@@ -474,7 +475,8 @@ export class BookingsComponent implements OnInit {
 		this.travelAgentService.passengerBooking(data)
 			.pipe(
 				catchError((err) => {
-					return throwError(err);
+				this.spinner.hide()
+				return throwError(err);
 				})
 			)
 			.subscribe((response: any) => {
@@ -492,6 +494,7 @@ export class BookingsComponent implements OnInit {
 		this.travelAgentService.bookingEmailAll(data)
 			.pipe(
 				catchError((err) => {
+					this.spinner.hide()
 					return throwError(err);
 				})
 			)
