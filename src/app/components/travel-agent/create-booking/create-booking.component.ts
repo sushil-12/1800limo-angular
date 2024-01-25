@@ -2075,6 +2075,11 @@ export class CreateBookingComponent implements OnInit {
 					});
 				this.BookingForm.get('sub_account_id').valueChanges.subscribe((value: string) => {
 					console.log('valueeeee->', value)
+					if(value != this.bookingResponse?.sub_account_id){
+						this.BookingForm.patchValue({
+							travel_client_id:''
+						})
+					}
 					this.TravelAgentService.getAllTravelClientAccountList('individual', value).then((result: any) => {
 						console.log("accounts->>>>>>>>>>", result)
 						this.travelStaffAccounts = result?.data
