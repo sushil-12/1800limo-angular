@@ -4,7 +4,7 @@
 	max-width       : 70px;
 	text-align      : center;
 	left            : -6px;
-	top             : 28px;
+	top             : 25px;
 }
 
 .btn-shadow{
@@ -38,13 +38,15 @@
 
 :host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-form-field-wrapper .mat-form-field-infix mat-label{
 	font-weight: normal!important;
-	font-size: 14px!important;
+	font-size: 16px!important;
 	color: #191919;
+	font-weight: 400 !important;
 }
 :host ::ng-deep.mat-form-field-appearance-outline .mat-form-field-label{top:1.3675em}
 :host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-form-field-wrapper .mat-form-field-infix .labelClass{font-weight: normal!important;
-	font-size: 14px!important;
+	font-size: 16px!important;
 	color: #191919;
+	font-weight: 400 !important;
 top:2.05em}
 :host ::ng-deep .mat-form-field {
 	.mat-form-field-outline {
