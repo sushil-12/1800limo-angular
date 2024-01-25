@@ -824,17 +824,17 @@ export class CreateBookingComponent implements OnInit {
 
 		return result;
 	}
-	handleClientAccount(value: any) {
-		console.log('---------------------_>>>>>>>>>>>>>> client acc value', value)
-		this.chooseUser(value.id)
-		if (this.BookingForm.get('account_type').value == 'travel_planner') {
-			this.BookingForm.patchValue({
-				travel_client_id: ''
-			})
-			this.getTravelClientAccounts()
-		}
+	// handleClientAccount(value: any) {
+	// 	console.log('---------------------_>>>>>>>>>>>>>> client acc value', value)
+	// 	this.chooseUser(value.id)
+	// 	if (this.BookingForm.get('account_type').value == 'travel_planner') {
+	// 		this.BookingForm.patchValue({
+	// 			travel_client_id: ''
+	// 		})
+	// 		this.getTravelClientAccounts()
+	// 	}
 
-	}
+	// }
 
 	handleChangeWithAgent(selectedAcc) {
 		console.log('handleChangeWithAgent-->>', selectedAcc)
@@ -865,6 +865,7 @@ export class CreateBookingComponent implements OnInit {
 			this.TravelAgentService.getTravelClientDetailById(value.id).subscribe((response: any) => {
 				console.log("detail ->>>>>>>", response)
 				this.autofillData('passenger', response?.data);
+				
 			})
 		} catch (error) {
 			console.log('error--->>>>', error)
@@ -2074,11 +2075,13 @@ export class CreateBookingComponent implements OnInit {
 						this.$spinner.hide();//hide spinner
 					});
 				this.BookingForm.get('sub_account_id').valueChanges.subscribe((value: string) => {
-					console.log('valueeeee->', value)
-					if(value != this.bookingResponse?.sub_account_id){
-						this.BookingForm.patchValue({
-							travel_client_id:''
-						})
+					console.log('valueeeee->', value,this.newBooking)
+					if(!this.newBooking){
+						if(value != this.bookingResponse?.sub_account_id){
+							this.BookingForm.patchValue({
+								travel_client_id:''
+							})
+						}
 					}
 					this.TravelAgentService.getAllTravelClientAccountList('individual', value).then((result: any) => {
 						console.log("accounts->>>>>>>>>>", result)
