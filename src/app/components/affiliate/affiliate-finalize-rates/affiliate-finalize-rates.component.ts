@@ -342,6 +342,7 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 		this.affiliateService.finalizeRates(bookingId).subscribe((response: any) => {
 			this.$spinner.hide()
 			if (response?.success && response?.data?.rateArray) {
+				this.is_readonly_min_rate = response?.data?.min_rate_involved ? true : false
 				if (Object.keys(response.data.rateArray).length) {
 					this.ratesdata.next(response.data.rateArray);
 				}
