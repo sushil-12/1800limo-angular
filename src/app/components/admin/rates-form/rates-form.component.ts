@@ -500,7 +500,8 @@ export class RatesFormComponent implements OnInit, OnChanges {
 				data['is_master_vehicle'] = data?.vehicle_id.toString().length ? false : true
 			}
 			this.$api.fetchRatesByAffiliateVeh(vehicle_id, data).subscribe((response: any) => {
-				if(this.bookingType !='edit'  && this.bookingType !='repeat'){
+				if(this.bookingType !='edit'  && this.bookingType !='repeat' && this.affiliate_type != 'loose_affiliate'){
+					console.log("in this.$api.fetchRatesByAffiliateVeh",response)
 					this.ratesdata.next({})
 					this.calc_admin_share = 0
 					this.travel_agent_share = 0
