@@ -11,7 +11,8 @@
 			</div>
 
 			<div class="row d-flex justify-content-between">
-				<div class="col-md-10" *ngIf="currentUser?.RoleName == 'admin' || subModules.includes('can_add_edit_card')">
+				<div class="col-md-10"
+					*ngIf="currentUser?.RoleName == 'admin' || subModules.includes('can_add_edit_card')">
 					<button class="custom-btn add-button" data-toggle="modal" (click)="addCardClick(accountId)">
 						<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-plus-circle"
 							viewBox="0 0 16 16">
@@ -20,10 +21,10 @@
 								d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
 						</svg> Add Debit / Credit card
 					</button>
-				</div> 
+				</div>
 				<div class="col-md-2">
-				<button class="custom-btn add-button" data-toggle="modal" data-target="#paymentLogs"
-				*ngIf="cards.length>0" (click)="paymentLogs()">Payment logs</button>
+					<button class="custom-btn add-button" data-toggle="modal" data-target="#paymentLogs"
+						*ngIf="cards.length>0" (click)="paymentLogs()">Payment logs</button>
 				</div>
 			</div>
 
@@ -41,7 +42,8 @@
 								<th>Card No.</th>
 								<th>MM/YYYY</th>
 								<th>Card Type</th>
-								<th *ngIf="currentUser?.RoleName == 'admin' || subModules.includes('can_pay_booking')">Payment</th>
+								<th *ngIf="currentUser?.RoleName == 'admin' || subModules.includes('can_pay_booking')">
+									Payment</th>
 								<th>Delete</th>
 							</tr>
 						</thead>
@@ -57,13 +59,14 @@
 											<td>0{{card.exp_month+'/'+card.exp_year}}</td>
 										</ng-template>
 										<td class="text-capitalize">{{card.card_type}}</td>
-										<td *ngIf="currentUser?.RoleName == 'admin' || subModules.includes('can_pay_booking')">
+										<td
+											*ngIf="currentUser?.RoleName == 'admin' || subModules.includes('can_pay_booking')">
 											<button class="custom-filled-button orange-button"
-												style="color:#fff;padding: 5px 12px !important;"
-												data-toggle="modal" data-target="#paymentModal"
-												(click)="show=!show;ID=card.ID">
+												style="color:#fff;padding: 5px 12px !important;" data-toggle="modal"
+												data-target="#paymentModal" (click)="show=!show;ID=card.ID">
 												charge
-											</button></td>
+											</button>
+										</td>
 										<td>
 											<i class="fa fa-trash" style="font-size: x-large; color:#d64646"
 												(click)="enableDisableClicked(card.ID)" data-toggle="modal"
@@ -100,7 +103,7 @@
 
 
 <div class="modal fade" id="paymentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-	aria-hidden="true" data-backdrop="static" data-keyboard="false" *ngIf="show">
+	aria-hidden="true" data-keyboard="false" *ngIf="show">
 	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content user_inforamtion">
 			<button type="button" (click)="closeModal()" class="close closeButton x-circle-btn" data-dismiss="modal"
@@ -117,8 +120,8 @@
 							<mat-form-field appearance="outline">
 								<mat-label>Amount</mat-label>
 								<span class="currencySymbol" matPrefix>$</span>
-								<input matInput type="number" formControlName="amount"
-									value="invoiceData.grand_total" required>
+								<input matInput type="number" formControlName="amount" value="invoiceData.grand_total"
+									required>
 							</mat-form-field>
 							<div class="error-box">
 								<div class="error-message"
@@ -137,8 +140,8 @@
 								<mat-label>
 									Payment Description
 								</mat-label>
-								<textarea matInput style="white-space: pre-wrap;" formControlName="payment_description" (focus)="$event.target.select()"
-									rows="5"></textarea>
+								<textarea matInput style="white-space: pre-wrap;" formControlName="payment_description"
+									(focus)="$event.target.select()" rows="5"></textarea>
 							</mat-form-field>
 						</div>
 					</div>
@@ -147,7 +150,7 @@
 			<div class="modal-footer d-flex justify-content-center">
 				<!-- <button type="button" (click)="closeModal()" class="btn btnStyle">Close</button> -->
 				<button class="btn saveButtonModal" type="submit" (click)="payment() "
-				 [disabled]="Form.amount?.invalid && (Form.amount.touched || Form.amount.dirty)">Submit</button>
+					[disabled]="Form.amount?.invalid && (Form.amount.touched || Form.amount.dirty)">Submit</button>
 			</div>
 		</div>
 	</div>
@@ -181,17 +184,16 @@
 							<th scope="row">{{i+1}}</th>
 							<td style="word-wrap: break-word;">
 								<a href="{{record.receipt_url}}" target="_blank">
-								{{record?.balance_transaction}}</a> 
+									{{record?.balance_transaction}}</a>
 							</td>
 							<td scope="row" style="word-wrap: break-word;">{{record.description}}</td>
 							<td scope="row" style="width: 100px;"><span class="currencySymbol">$</span>
 								{{record?.amount}}</td>
 							<td scope="row"><button class="custom-filled-button orange-button"
-								style="color:#fff;padding: 5px 12px !important;"
-								data-toggle="modal" data-target="#paymentModal"
-								(click)="navigate(record)" >
-								View
-							</button></td>
+									style="color:#fff;padding: 5px 12px !important;" data-toggle="modal"
+									data-target="#paymentModal" (click)="navigate(record)">
+									View
+								</button></td>
 						</tr>
 					</tbody>
 				</table>

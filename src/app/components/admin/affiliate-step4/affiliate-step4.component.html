@@ -66,13 +66,13 @@
 								<td [hidden]="affiliateType!='fleet_operator'">
 									<div class="row">
 										<div class="col-md-12">
-											<a class="status-btn btn-ctn btn-shadow mr-1"  id="Continue_{{driver.id}}"
+											<a class="status-btn btn-ctn btn-shadow mr-1" id="Continue_{{driver.id}}"
 												[ngClass]="driver.status ? 'checkedContinueLabel' : ''"
 												data-toggle="modal" data-target="#suspendModal"
 												(click)="driverAccountStatus(driver.id, 'continue')" role="button"
 												tabindex="1"> <span>Active</span>
 											</a>
-											<a class="status-btn btn-suspend btn-shadow"  id="Suspend_{{driver.id}}"
+											<a class="status-btn btn-suspend btn-shadow" id="Suspend_{{driver.id}}"
 												[ngClass]="!driver.status ? 'checkedSuspendLabel' : ''"
 												data-toggle="modal" data-target="#suspendModal"
 												(click)="driverAccountStatus(driver.id, 'suspend')" role="button"
@@ -106,8 +106,8 @@
 <app-delete-confirmation (deleteRecord)="delete()" [alertMessage]="alertMessage"></app-delete-confirmation>
 
 <!-- Suspend/Continue Confirmation modal -->
-<div class="modal fade" id="suspendModal" data-backdrop="static" tabindex="-1" role="dialog"
-	aria-labelledby="exampleModalLabel" aria-hidden="true"  data-backdrop="true">
+<div class="modal fade" id="suspendModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+	aria-hidden="true" data-backdrop="true">
 	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content">
 			<button type="button" class="close closeButton" data-dismiss="modal" aria-label="Close">
