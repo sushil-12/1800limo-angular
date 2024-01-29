@@ -54,8 +54,8 @@
                                     <div *ngIf="f.number.errors?.pattern;else numberLength">Enter Numbers Only
                                     </div>
                                     <ng-template #numberLength>
-                                        <div *ngIf="f.number.errors.minlength">Minimum length should be 16</div>
-                                        <div *ngIf="f.number.errors.maxlength">Maximum length should be 16</div>
+                                        <div *ngIf="f.number.errors.minlength">Minimum length should be 14</div>
+                                        <div *ngIf="f.number.errors.maxlength">Maximum length should be 20</div>
                                     </ng-template>
                                 </ng-template>
                             </ng-template>
