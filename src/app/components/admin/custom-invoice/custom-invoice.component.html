@@ -216,7 +216,7 @@
 
 <!-- send Invoice to Any -->
 <div class="modal fade" id="sendInvoiceToAny" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-	aria-hidden="true" data-backdrop="static" data-keyboard="false" *ngIf="show_sendInvoiceToAny">
+	aria-hidden="true" data-keyboard="false" *ngIf="show_sendInvoiceToAny">
 	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content user_inforamtion">
 			<button type="button" class="close closeButton x-circle-btn" data-dismiss="modal" aria-label="Close"
@@ -231,8 +231,8 @@
 					<div class="col-md-12">
 						<mat-form-field appearance="outline">
 							<mat-label>Enter email</mat-label>
-							<input matInput 
-							placeholder="eg : xyz@gmail.com, abc@gmail.com" [value]="str_email" (keyup)="handleInputEmail($event)" type="text" required>
+							<input matInput placeholder="eg : xyz@gmail.com, abc@gmail.com" [value]="str_email"
+								(keyup)="handleInputEmail($event)" type="text" required>
 						</mat-form-field>
 						<!-- <mat-form-field class="example-chip-list" appearance="outline">
 							<mat-chip-list #chipList aria-label="Email selection">
