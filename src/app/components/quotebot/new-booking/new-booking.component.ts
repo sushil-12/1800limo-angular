@@ -326,7 +326,7 @@ export class NewBookingComponent implements OnInit {
 				zipCode: [''],
 				card_details: this.$form.group({
 					name: ['',[Validators.required]],
-					card_number: ['',[Validators.required, Validators.pattern("^[0-9]*$"), , Validators.minLength(16), Validators.maxLength(20)]],
+					card_number: ['',[Validators.required, Validators.pattern("^[0-9]*$"), , Validators.minLength(14), Validators.maxLength(20)]],
 					exp_month: ['',[Validators.required]],
 					exp_year: ['',[Validators.required]],
 					cvv: ['',[Validators.required, Validators.pattern("^[0-9]*$"),Validators.minLength(3),Validators.maxLength(5)]]

@@ -67,7 +67,7 @@ export class PaymentByEmailComponent implements OnInit {
       acc_id: [''],
       reservation_id: [''],
       grand_total: [''],
-      cc_number: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(16), Validators.maxLength(16)]],
+      cc_number: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(14), Validators.maxLength(20)]],
       name_on_card: ['', Validators.required],
       cc_expiry_month: ['', Validators.required],
       cc_expiry_year: ['', Validators.required],

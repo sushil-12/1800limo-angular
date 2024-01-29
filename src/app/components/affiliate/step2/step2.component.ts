@@ -159,7 +159,7 @@ export class Step2Component implements OnInit {
 			zipCode: ['', Validators.required],
 			unit: [''],
 			primaryCardType: ['personal'],
-			primaryCardNumber: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(16), Validators.maxLength(16), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
+			primaryCardNumber: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(14), Validators.maxLength(20), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
 			primaryCSC: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(3), Validators.maxLength(3), this.customValidator.dashValidator(), this.customValidator.plusValidator()]],
 			primaryMM: [''],
 			primaryYY: [''],
