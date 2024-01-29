@@ -117,7 +117,7 @@
                             <input formControlName="email" type="email" matInput placeholder="E-mail"
                                 (focus)="$event.target.select()">
                         </mat-form-field>
-                        <div *ngIf="(f.email.errors && (f.email.touched || f.email.dirty))"
+                        <div *ngIf="(submittedForm && f.email.errors) || (f.email.touched || f.email.dirty)"
                             class="text-danger text-lg m-0">
                             <div *ngIf="f.email.errors.required">This field is required</div>
                             <div *ngIf="f.email.errors.pattern">Email format should be valid</div>
