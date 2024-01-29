@@ -255,7 +255,8 @@ export class Step1Component implements OnInit, AfterViewInit
 			)
 			.subscribe(({ data }: any) =>
 			{
-				this.languages = data.languages;
+				let languagesData = data.languages;
+				this.languages = languagesData.sort((a, b) => a.name.localeCompare(b.name));
 				this.associations = data.associations;
 				this.affiliateType = this.currentUser.affiliate_type;
 				this.affiliateId = this.currentUser.account_id;
@@ -1451,7 +1452,7 @@ export class Step1Component implements OnInit, AfterViewInit
 			this.tooltipText = "Taxi can only advertise one vehicle."
 		}
 		else{
-			this.tooltipText = "Gig Driver can only advertise one vehicle."
+			this.tooltipText = "Gig/Uber Black Driver can only advertise one vehicle."
 		}
 	}
 

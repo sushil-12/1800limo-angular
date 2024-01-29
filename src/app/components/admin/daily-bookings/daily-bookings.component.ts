@@ -343,6 +343,7 @@ export class DailyBookingsComponent implements OnInit {
 	}
 
 	submit(message, format) {
+		console.log("format",format)
 		if (this.passengerDetails.selection_button == "Passenger") {
 			this.sendInformation = format
 				? this.passengerDetails.passenger_cell_isd +
