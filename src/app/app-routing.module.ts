@@ -224,19 +224,19 @@ const routes: Routes = [
 			}
 		]
 	},
-	{
-		path: 'user',
-		component: UserTemplateComponent,
-		data: {
-			title: 'user'
-		},
-		children: [
-			{
-				path: '',
-				loadChildren: () => import('./components/user/user.module').then(m => m.UserModule)
-			}
-		]
-	},
+	// {
+	// 	path: 'user',
+	// 	component: UserTemplateComponent,
+	// 	data: {
+	// 		title: 'user'
+	// 	},
+	// 	children: [
+	// 		{
+	// 			path: '',
+	// 			loadChildren: () => import('./components/user/user.module').then(m => m.UserModule)
+	// 		}
+	// 	]
+	// },
 	{
 		path: 'admin',
 		component: AdminTemplateComponent,
