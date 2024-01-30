@@ -11,7 +11,7 @@ import { InvoiceSummaryComponent } from './invoice-summary/invoice-summary.compo
 const routes: Routes = [
   {
 		path: '',
-		redirectTo: 'home',
+		redirectTo: 'bookings',
 		pathMatch: 'full'
 	},
   {
@@ -22,7 +22,7 @@ const routes: Routes = [
   {
     path:'profile',
     component:ProfileComponent,
-    // canActivate: [IndividualGuardGuard],
+    canActivate: [],
   },
   {
     path:'create-new-booking',
