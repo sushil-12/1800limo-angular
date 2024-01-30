@@ -113,12 +113,14 @@
                                             </a>
                                             <a class="dropdown-item" data-toggle="modal"
                                                 data-target="#return_repeat_booking_Modal"
+                                                *ngIf="(booking?.booking_status != 'driver_unassigned')"
                                                 (click)="returnRepeatAction(booking?.booking_id,'repeat')">
                                                 <div class="dropdown-item-icon"></div>
                                                 Repeat
                                             </a>
-                                            <a *ngIf="booking.service_type=='oneway'" class="dropdown-item"
-                                                data-toggle="modal" data-target="#return_repeat_booking_Modal"
+                                            <a *ngIf="booking.service_type=='oneway' && (booking?.booking_status != 'driver_unassigned')"
+                                                class="dropdown-item" data-toggle="modal"
+                                                data-target="#return_repeat_booking_Modal"
                                                 (click)="returnRepeatAction(booking?.booking_id,'return')">
                                                 <div class="dropdown-item-icon"></div>
                                                 Return
@@ -186,6 +188,8 @@
                                                 [innerHTML]="highlighText(booking?.driver_cell_isd + booking?.driver_cell_number)"></span>
                                             <span *ngIf="booking?.loose_affiliate_phone"
                                                 [innerHTML]="highlighText(booking?.loose_affiliate_phone_isd + booking?.loose_affiliate_phone)"></span>
+                                            <span *ngIf="!booking?.loose_affiliate_phone && !booking?.driver_cell_isd"
+                                                [innerHTML]="highlighText('+18005466266')"></span>
                                         </p>
 
                                         <span class="text-underline cursor-pointer">
@@ -560,7 +564,7 @@
                     <!-- Grand Total -->
 
 
-                    <hr>
+                    <hr *ngIf="bookingPreview?.affiliate_type == 'affiliate'">
                     <!-- Driver Information -->
                     <h4 class="font-weight-bolder m-0 mt-3">
                         Driver Information
@@ -575,7 +579,8 @@
                             </div>
                             <div class="col-md-8 value">
                                 <span class="font-weight-bolder preview-output-feild">
-                                    {{ textFormatter(bookingPreview.driver_name) | titlecase }}
+                                    {{bookingPreview?.driver_name ? (textFormatter(bookingPreview.driver_name) |
+                                    titlecase) : '1800Limo Chauffeurs' }}
                                 </span>
                             </div>
                         </div>
@@ -591,7 +596,7 @@
                             </div>
                             <div class="col-md-8 value">
                                 <span class="font-weight-bolder preview-output-feild">
-                                    {{ textFormatter(bookingPreview.driver_email) }}
+                                    {{ textFormatter(bookingPreview?.driver_email) }}
                                 </span>
                             </div>
                         </div>
@@ -607,8 +612,9 @@
                             </div>
                             <div class="col-md-8 value">
                                 <span class="font-weight-bolder preview-output-feild">
-                                    ({{ bookingPreview.driver_cell_isd }}) {{
-                                    bookingPreview.driver_cell }}
+                                    {{ bookingPreview?.driver_cell_isd ? ( bookingPreview.driver_cell_isd ) : '(+1) '
+                                    }}{{
+                                    bookingPreview?.driver_cell ? bookingPreview?.driver_cell : '8005466266' }}
                                 </span>
                             </div>
                         </div>
