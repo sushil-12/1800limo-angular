@@ -72,8 +72,8 @@
                 </div>
             </div>
             <div>
-                <p><mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">Uncheck this
-                        box to view all bookings</mat-checkbox>
+                <p><mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">Check this
+                        box to see current week’s bookings or change the dates.</mat-checkbox>
 
                 </p>
             </div>
@@ -125,12 +125,12 @@
                                                 <div class="dropdown-item-icon"></div>
                                                 Return
                                             </a>
-                                            <a *ngIf="booking.booking_status=='finalized'" class="dropdown-item"
+                                            <!-- <a *ngIf="booking.booking_status=='finalized'" class="dropdown-item"
                                                 data-toggle="modal" data-target="#paymentModal"
                                                 (click)="payBooking(booking?.booking_id)">
                                                 <div class="dropdown-item-icon"></div>
                                                 Pay Booking
-                                            </a>
+                                            </a> -->
                                         </div>
                                     </td>
 

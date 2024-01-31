@@ -5,6 +5,7 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { ThemePalette } from '@angular/material/core';
+import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 declare var $: any;
 @Component({
 	selector: 'app-individual',
@@ -34,10 +35,12 @@ export class IndividualComponent implements OnInit {
 	public prevPageUrl: string;
 	public nextPageUrl: string;
 	searchText: string = '';
+	loginAsUserResponse:any;
 
 	constructor(
 		private adminService: AdminService,
 		private router: Router,
+		private errorDialog: ErrorDialogService,
 		private spinner: NgxSpinnerService) { }
 
 	ngOnInit(): void {
@@ -197,4 +200,38 @@ export class IndividualComponent implements OnInit {
 		}
 		return udpArr;
 	}
+
+	loginAsUser(user_id) {
+		console.log("in login as user indv",user_id)
+   
+		
+		  this.spinner.show()
+		  this.adminService.loginAsUser(user_id).pipe(
+			catchError(err => {
+			  this.spinner.hide()
+			  return throwError(err);
+			})
+		  ).subscribe(response => {
+			this.spinner.hide()
+			this.loginAsUserResponse = response
+			let bkp_a_token = localStorage.getItem('access_token')
+			let bkp_crnt_dt = localStorage.getItem('currentUser')
+			let bkp_u_dt = localStorage.getItem('userData')
+			localStorage.setItem('bkp_a_token', bkp_a_token)
+			localStorage.setItem('bkp_crnt_dt', bkp_crnt_dt)
+			localStorage.setItem('bkp_u_dt', bkp_u_dt)
+			console.log("response", response)
+			localStorage.setItem('access_token', this.loginAsUserResponse.data?.access_token)
+			localStorage.setItem('currentUser', JSON.stringify(this.loginAsUserResponse.data?.user))
+			if(this.loginAsUserResponse?.data?.user?.is_profile_complete){
+			  this.router.navigateByUrl('/individual/bookings');
+			}
+			else{
+			  this.router.navigateByUrl('/individual/profile')
+			}
+	  
+		  });
+		
+	  }
+
 }
