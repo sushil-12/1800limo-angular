@@ -179,13 +179,9 @@ export class IndividualTemplateComponent implements OnInit {
 		localStorage.setItem('access_token', bkp_a_token)
 		localStorage.setItem('currentUser', bkp_crnt_dt)
 		localStorage.setItem('userData', bkp_u_dt)
-		sessionStorage.removeItem('step_completed')
-		sessionStorage.removeItem('step_completed_obj')
 		localStorage.removeItem('bkp_a_token')
 		localStorage.removeItem('bkp_crnt_dt')
 		localStorage.removeItem('bkp_u_dt')
-		localStorage.removeItem('agentAccountStatus')
-		localStorage.removeItem('invite_link')
 		  this.router.navigateByUrl('/admin/daily-bookings-admin');
 		
 		

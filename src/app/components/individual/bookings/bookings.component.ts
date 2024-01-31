@@ -63,7 +63,7 @@ export class BookingsComponent implements OnInit {
 	audit_Trail: any;
 	company_name: any = JSON.parse(localStorage.getItem('currentUser'))?.affiliate_company || ''
 	cancelBookingId: any = null
-	useDateFilter: boolean = true;
+	useDateFilter: boolean = false;
 	shareArray: any;
 	rates_preview: any;
 	adminSharePercent: number;
@@ -106,11 +106,7 @@ export class BookingsComponent implements OnInit {
 
 		this.useDateFilter = localStorage.getItem('indvUseDateFilter') ?
 			(localStorage.getItem('indvUseDateFilter') == 'true' ? true : false)
-			: true;
-		if (this.currentUser?.roleName == 'sub_travel_agent') {
-			this.useDateFilter = false;
-			localStorage.setItem('indvUseDateFilter', 'false')
-		}
+			: false;
 		console.log('indvUseDateFilter-->', this.useDateFilter)
 
 		this.loadBookings();
@@ -220,7 +216,7 @@ export class BookingsComponent implements OnInit {
 		// this.affiliateService.deleteCookie('filtertype')
 		this.searchText = "";
 		localStorage.removeItem('indvUseDateFilter')
-		this.useDateFilter = true
+		this.useDateFilter = false
 		// this.filtertype = 'bookingid';
 
 		console.log('Reset Successfully. ');
