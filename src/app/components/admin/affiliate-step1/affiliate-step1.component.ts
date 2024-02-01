@@ -138,7 +138,8 @@ export class AffiliateStep1Component implements OnInit {
 				})
 			).subscribe(result => {
 				this.response = result;
-				this.languages = this.response.data.languages;
+				let languagesData = this.response.data.languages;
+				this.languages = languagesData.sort((a, b) => a.name.localeCompare(b.name));
 				this.associations = this.response.data.associations;
 
 				this.affiliateId = sessionStorage.getItem("affiliateId");

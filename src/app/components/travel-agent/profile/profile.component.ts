@@ -167,7 +167,7 @@ export class ProfileComponent implements OnInit {
     }
     else {
       // this.profileForm.get('name')?.setValidators([Validators.required]);
-      // this.profileForm.get('number')?.setValidators([Validators.required, Validators.pattern("^[0-9\\s]*$"), Validators.minLength(16), Validators.maxLength(20), this.customValidator.dashValidator(), this.customValidator.plusValidator()]);
+      // this.profileForm.get('number')?.setValidators([Validators.required, Validators.pattern("^[0-9\\s]*$"), Validators.minLength(14), Validators.maxLength(20), this.customValidator.dashValidator(), this.customValidator.plusValidator()]);
       // this.profileForm.get('exp_month')?.setValidators([Validators.required]);
       // this.profileForm.get('exp_year')?.setValidators([Validators.required]);
       // this.profileForm.get('cvc')?.setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(3), Validators.maxLength(4), this.customValidator.dashValidator(), this.customValidator.plusValidator()]);

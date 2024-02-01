@@ -117,7 +117,7 @@
                             <input formControlName="email" type="email" matInput placeholder="E-mail"
                                 (focus)="$event.target.select()">
                         </mat-form-field>
-                        <div *ngIf="(f.email.errors && (f.email.touched || f.email.dirty))"
+                        <div *ngIf="(submittedForm && f.email.errors) || (f.email.touched && f.email.errors)"
                             class="text-danger text-lg m-0">
                             <div *ngIf="f.email.errors.required">This field is required</div>
                             <div *ngIf="f.email.errors.pattern">Email format should be valid</div>
@@ -255,8 +255,8 @@
                                         Numbers Only
                                     </div>
                                     <ng-template #numberLength>
-                                        <!-- <div *ngIf="f.number.errors.minlength">Minimum length should
-											be 16</div> -->
+                                        <div *ngIf="f.number.errors.minlength">Minimum length should
+                                            be 14</div>
                                         <div *ngIf="f.number.errors.maxlength">Maximum length should
                                             be 20</div>
                                     </ng-template>

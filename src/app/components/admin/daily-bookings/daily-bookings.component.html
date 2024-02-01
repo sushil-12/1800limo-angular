@@ -70,12 +70,12 @@
 							box to view all bookings</mat-checkbox></p>
 				</div>
 
-				<div class="col-md-6 sortCheckBox">
-					<!-- <p><mat-checkbox (change)="handleCheckboxSort($event.checked,'use_pickup_date')"
+				<!-- <div class="col-md-6 sortCheckBox"> -->
+				<!-- <p><mat-checkbox (change)="handleCheckboxSort($event.checked,'use_pickup_date')"
 							[checked]="use_pickup_date">Order by pickup date</mat-checkbox></p> -->
-					<p><mat-checkbox (change)="handleCheckboxSort($event.checked)" [checked]="use_created_at">Order by
+				<!-- <p><mat-checkbox (change)="handleCheckboxSort($event.checked)" [checked]="use_created_at">Order by
 							Booking id</mat-checkbox></p>
-				</div>
+				</div> -->
 			</div>
 			<div class="row my-2 mb-3">
 				<!-- <div class="col-md-3">
@@ -1434,7 +1434,7 @@
 						</div>
 
 					</ng-template>
-					<hr>
+					<hr *ngIf="bookingPreview?.affiliate_type == 'affiliate'">
 					<!-- Driver Information -->
 					<h4 class="font-weight-bolder m-0 mt-3">
 						Driver Information
@@ -1449,7 +1449,8 @@
 							</div>
 							<div class="col-md-8 value">
 								<span class="font-weight-bolder preview-output-feild">
-									{{ textFormatter(bookingPreview.driver_name) | titlecase }}
+									{{bookingPreview?.driver_name ? (textFormatter(bookingPreview.driver_name) |
+									titlecase) : '1800Limo Chauffeurs' }}
 								</span>
 							</div>
 						</div>
@@ -1481,8 +1482,9 @@
 							</div>
 							<div class="col-md-8 value">
 								<span class="font-weight-bolder preview-output-feild">
-									({{ bookingPreview.driver_cell_isd }}) {{
-									bookingPreview.driver_cell }}
+									{{ bookingPreview?.driver_cell_isd ? ( bookingPreview.driver_cell_isd ) : '(+1) '
+									}}{{
+									bookingPreview?.driver_cell ? bookingPreview?.driver_cell : '8005466266' }}
 								</span>
 							</div>
 						</div>

@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { IndividualGuardGuard } from '../../guards/individual-guard.guard'
+import { IndvOtherGuardGuard } from '../../guards/indv-other-guard.guard'
 import { BookingsComponent } from './bookings/bookings.component';
 import { ProfileComponent } from './profile/profile.component';
 import { CreateNewBookingComponent } from './create-new-booking/create-new-booking.component';
@@ -11,7 +12,7 @@ import { InvoiceSummaryComponent } from './invoice-summary/invoice-summary.compo
 const routes: Routes = [
   {
 		path: '',
-		redirectTo: 'home',
+		redirectTo: 'bookings',
 		pathMatch: 'full'
 	},
   {
@@ -22,7 +23,7 @@ const routes: Routes = [
   {
     path:'profile',
     component:ProfileComponent,
-    // canActivate: [IndividualGuardGuard],
+    canActivate: [IndvOtherGuardGuard],
   },
   {
     path:'create-new-booking',
