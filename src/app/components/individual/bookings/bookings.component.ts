@@ -75,6 +75,7 @@ export class BookingsComponent implements OnInit {
 	bookingId: any;
 	responseRate: any;
 	rateArray: any;
+	cancelMessage: any;
 
 	constructor(
 		private affiliateService: AffiliateService,
@@ -457,9 +458,31 @@ export class BookingsComponent implements OnInit {
 		if (updateType == 'change') {
 			this.router.navigate([`/${this.currentUser?.roleName}/create-new-booking`], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'true' } });
 		}
-		else {
+		else if(updateType == 'cancel'){
+			this.bookingId = bookingId
+		} 
+		else{
 			this.router.navigate([`/${this.currentUser?.roleName}/create-new-booking`], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'true' } });
 		}
+	}
+
+	cancelBooking(){
+		this.spinner.show()
+		this.individualService.cancelBooking(this.bookingId)
+			.pipe(
+				catchError((err) => {
+				this.spinner.hide()
+				$("#cancel_booking_modal").modal("hide");
+				return throwError(err);
+				})
+			)
+			.subscribe((response: any) => {
+				console.log('response--------->>>>>>>>', response)
+				this.spinner.hide()
+				this.cancelMessage = response?.message
+				this.loadBookings()
+				// $("#cancel_booking_modal").modal("hide");
+			});
 	}
 
 	emailPassenger() {

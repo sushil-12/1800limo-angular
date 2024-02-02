@@ -4,8 +4,8 @@
     <section class="adminbox_shadow user_information" id="indv_bookings_table">
         <div class="row">
             <div class="col-md-7">
-                <h2 class="headinginfo" style="font-weight: 600 !important; font-size: 22px !important;">Individual
-                    Bookings
+                <h2 class="headinginfo" style="font-weight: 600 !important; font-size: 22px !important;">
+                    {{currentUser?.name.charAt(0).toUpperCase() + currentUser?.name.slice(1)}} Bookings
                 </h2>
 
             </div>
@@ -124,6 +124,12 @@
                                                 (click)="returnRepeatAction(booking?.booking_id,'return')">
                                                 <div class="dropdown-item-icon"></div>
                                                 Return
+                                            </a>
+                                            <a class="dropdown-item" (click)="editAction(booking?.booking_id,'cancel')"
+                                                data-toggle="modal" data-target="#cancel_booking_modal"
+                                                *ngIf="(booking?.booking_status != 'paid' && booking?.booking_status != 'paid_cash')">
+                                                <div class="dropdown-item-icon"></div>
+                                                Cancel Booking
                                             </a>
                                             <!-- <a *ngIf="booking.booking_status=='finalized'" class="dropdown-item"
                                                 data-toggle="modal" data-target="#paymentModal"
@@ -1442,6 +1448,32 @@
             <div class="modal-footer py-0">
                 <button type="button" class="custom-btn button2" data-dismiss="notificationModal"
                     id="closeModal1">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- cancel booking modal -->
+<div class="modal fade" id="cancel_booking_modal" tabindex="-1" role="dialog" aria-labelledby="cancel_booking_modal"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <!-- <div class="modal-header pb-0">
+                <h3 class="mb-0">Email</h3>
+            </div> -->
+            <div class="modal-body text-center" *ngIf="cancelMessage">
+                <p style="font-size: 18px; font-weight:400; color:#33a867;">{{cancelMessage}}</p>
+            </div>
+            <div class="modal-footer" *ngIf="cancelMessage">
+                <button type="button" class="custom-btn resetbutton" data-dismiss="modal">OK</button>
+            </div>
+            <div class="modal-body text-center" *ngIf="!cancelMessage">
+                <p style="font-size: 20px; font-weight:500;">Are you sure, You want to cancel the booking?</p>
+            </div>
+            <div class="modal-footer" *ngIf="!cancelMessage">
+                <button type="button" class="custom-btn savebutton" (click)="cancelBooking()">Yes
+                </button>
+                <button type="button" class="custom-btn resetbutton" data-dismiss="modal">No</button>
             </div>
         </div>
     </div>
