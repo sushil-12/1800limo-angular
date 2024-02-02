@@ -149,6 +149,7 @@ export class BookingsComponent implements OnInit {
 		// var keyword = ((document.getElementById("keyword") as HTMLInputElement).value);
 		// Load Our bookings using API
 		this.individualService.loadBookings(pageUrl, this.searchText, this.startDate, this.endDate, this.useDateFilter).then(result => {
+			this.cancelMessage=''
 			this.spinner.hide()
 			this.bookingsRes = result;
 			this.bookings = this.bookingsRes?.data?.data;
@@ -480,8 +481,10 @@ export class BookingsComponent implements OnInit {
 				console.log('response--------->>>>>>>>', response)
 				this.spinner.hide()
 				this.cancelMessage = response?.message
-				this.loadBookings()
-				// $("#cancel_booking_modal").modal("hide");
+				// this.loadBookings()
+				$("#cancel_booking_modal").modal("hide");
+				$("#success_modal").modal("show");
+
 			});
 	}
 

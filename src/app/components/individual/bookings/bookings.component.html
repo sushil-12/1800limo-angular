@@ -1458,19 +1458,10 @@
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-            <!-- <div class="modal-header pb-0">
-                <h3 class="mb-0">Email</h3>
-            </div> -->
-            <div class="modal-body text-center" *ngIf="cancelMessage">
-                <p style="font-size: 18px; font-weight:400; color:#33a867;">{{cancelMessage}}</p>
-            </div>
-            <div class="modal-footer" *ngIf="cancelMessage">
-                <button type="button" class="custom-btn resetbutton" data-dismiss="modal">OK</button>
-            </div>
-            <div class="modal-body text-center" *ngIf="!cancelMessage">
+            <div class="modal-body text-center">
                 <p style="font-size: 20px; font-weight:500;">Are you sure, You want to cancel the booking?</p>
             </div>
-            <div class="modal-footer" *ngIf="!cancelMessage">
+            <div class="modal-footer">
                 <button type="button" class="custom-btn savebutton" (click)="cancelBooking()">Yes
                 </button>
                 <button type="button" class="custom-btn resetbutton" data-dismiss="modal">No</button>
@@ -1478,7 +1469,25 @@
         </div>
     </div>
 </div>
+<!-- success modal -->
+<div class="modal fade" id="success_modal" tabindex="-1" role="dialog" aria-labelledby="success_modal"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <!-- <div class="modal-header pb-0">
+                <h3 class="mb-0">Email</h3>
+            </div> -->
+            <div class="modal-body text-center">
+                <p style="font-size: 18px; font-weight:400; color:#33a867;">{{cancelMessage}}</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="custom-btn savebutton" data-dismiss="modal"
+                    (click)="loadBookings()">OK</button>
+            </div>
 
+        </div>
+    </div>
+</div>
 
 <!-- confirm payment modal -->
 <div class="modal fade" id="paymentModal" tabindex="-1" role="dialog" aria-labelledby="paymentModal" aria-hidden="true">
