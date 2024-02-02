@@ -273,6 +273,7 @@ export class InvoiceSummaryComponent implements OnInit {
 
 	handleInputEmail(event: any) {
 		console.log('in function handle input email', event.target.value)
+		this.str_email = event
 		if (event.target.value) {
 			this.str_email = event.target.value
 		}
