@@ -394,7 +394,7 @@
 						<mat-form-field appearance="outline">
 							<mat-label>Enter email<span class="asterisk">*</span></mat-label>
 							<input matInput placeholder="eg : xyz@gmail.com, abc@gmail.com" [(ngModel)]="str_email"
-								(ngModelChange)="handleInputEmail($event)" type="text">
+								(change)="handleInputEmail($event)" type="text">
 							<!-- <input matInput placeholder="eg : xyz@gmail.com, abc@gmail.com" [value]="str_email"
 								(keyup)="handleInputEmail($event)" type="text"> -->
 						</mat-form-field>
