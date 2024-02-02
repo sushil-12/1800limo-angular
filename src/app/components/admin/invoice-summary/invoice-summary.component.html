@@ -386,15 +386,17 @@
 				<i class="bi bi-x-circle"></i>
 			</button>
 			<div class="modal-header pb-0">
-				<h3 class="mb-0" id="exampleModalLabel">Send Invoice</h3>
+				<h3 class="mb-0" id="exampleModalLabel">Send Invoice{{str_email}}</h3>
 			</div>
 			<div class="modal-body">
 				<div class="form-group">
 					<div class="col-md-12">
 						<mat-form-field appearance="outline">
-							<mat-label>Enter email <span class="asterisk">*</span></mat-label>
-							<input matInput placeholder="eg : xyz@gmail.com, abc@gmail.com" [value]="str_email"
-								(keyup)="handleInputEmail($event)" type="text">
+							<mat-label>Enter email<span class="asterisk">*</span></mat-label>
+							<input matInput placeholder="eg : xyz@gmail.com, abc@gmail.com" [(ngModel)]="str_email"
+								(ngModelChange)="handleInputEmail($event)" type="text">
+							<!-- <input matInput placeholder="eg : xyz@gmail.com, abc@gmail.com" [value]="str_email"
+								(keyup)="handleInputEmail($event)" type="text"> -->
 						</mat-form-field>
 
 						<!-- <mat-form-field class="example-chip-list" appearance="outline">
