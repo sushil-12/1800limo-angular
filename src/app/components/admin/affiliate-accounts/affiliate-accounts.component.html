@@ -116,6 +116,7 @@
 							<tr role="row">
 								<th>Actions</th>
 								<th>Approval Status</th>
+								<th>Step In-Progress</th>
 								<th>Status</th>
 								<th>Affiliate Type</th>
 
@@ -186,6 +187,9 @@
 											bookingStatusTextReplace : '_' : ' '
 											|titlecase}}</div>
 									</ng-template>
+								</td>
+								<td>
+									<span [innerHTML]="highlighTextSteps(blackCarLimoBus?.at_step_nmae)"></span>
 								</td>
 								<td>
 									<mat-slide-toggle class="example-margin" [color]="color"
