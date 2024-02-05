@@ -56,8 +56,8 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4">
-                                        <label>CSC*</label>
-                                        <input type="text" placeholder="CSC" formControlName="cvc">
+                                        <label>CVV (3-4 digit code)*</label>
+                                        <input type="text" placeholder="CVV (3-4 digit code)" formControlName="cvc">
                                         <div *ngIf="submittedForm && f.cvc.errors" class="text-danger">
                                             <div *ngIf="f.cvc.errors.required">This field is required</div>
                                             <div *ngIf="f.cvc.errors.pattern">This field should be a number</div>

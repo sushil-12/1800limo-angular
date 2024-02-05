@@ -446,8 +446,8 @@
 					</div>
 					<div class="col-md-4">
 						<mat-form-field appearance="outline">
-							<mat-label>CVV</mat-label>
-							<input matInput placeholder="CSC" formControlName="cvc" tabindex="1">
+							<mat-label>CVV (3-4 digit code)</mat-label>
+							<input matInput placeholder="CVV (3-4 digit code)" formControlName="cvc" tabindex="1">
 						</mat-form-field>
 						<div *ngIf="submittedForm && f.cvc.errors || f.cvc.touched && f.cvc.errors"
 							class="text-danger margin-bottom-thin my-mat-hint">

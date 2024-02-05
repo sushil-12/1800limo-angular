@@ -243,7 +243,7 @@ export class AffiliateAccountsComponent implements OnInit {
 		sessionStorage.setItem("affiliateType", affiliate_type);
 		sessionStorage.setItem('affiliateName', affiliateUserData.FirstName + ' ' + affiliateUserData.LastName)
 		this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
-			this.router.navigate(['/admin/affiliate/step0']);
+			this.router.navigate(['/admin/affiliate/step1']);
 		});
 
 	}
@@ -334,6 +334,16 @@ export class AffiliateAccountsComponent implements OnInit {
 		if (!this.searchText) { return args?.length > 0 ? args.toString().replaceAll(",", ", ") : "N/A"; }
 		if (args) {
 			args = args.toString().replaceAll(",", ", ")
+			var re = new RegExp(this.searchText, 'gi'); //'gi' for case insensitive and can use 'g' if you want the search to be case sensitive.
+			return args.replace(re, '<mark class="font-weight-bold">$&</mark>');
+		}
+
+	}
+
+	highlighTextSteps(args: string) {
+		if (!this.searchText) { return args ? args.replace("_"," ").toUpperCase() : "N/A"; }
+		if (args) {
+			args = args.replace("_"," ").toUpperCase()
 			var re = new RegExp(this.searchText, 'gi'); //'gi' for case insensitive and can use 'g' if you want the search to be case sensitive.
 			return args.replace(re, '<mark class="font-weight-bold">$&</mark>');
 		}
