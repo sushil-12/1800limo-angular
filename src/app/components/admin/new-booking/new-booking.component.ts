@@ -545,6 +545,7 @@ export class NewBookingComponent implements OnInit {
 			this.isTravelShare = response?.data?.account_type == 'travel_planner' ? true : false
 			this.isFarmoutBooking = response?.data?.reservation_type == 'farmout' ? true : false
 			this.isCreatedByAdmin = response?.data?.created_by == 1 ? true : false
+		
 			if (response?.data?.account_type == 'travel_planner') {
 				this.getTravelClientAccounts(response?.data?.acc_id)
 			}
@@ -637,6 +638,9 @@ export class NewBookingComponent implements OnInit {
 			this.BookingForm.patchValue({
 				service_type: response.data.service_type == 'oneway' ? 'one_way' : response.data['service_type'] == 'roundtrip' ? 'round_trip' : 'charter_tour',
 			})
+			this.BookingForm.patchValue({
+				cancellation_hours: response?.data?.cancellation_hours.toString()
+			})
 
 			// if (this.Form.updateType.value == 'edit') {
 			// 	this.booking_params.client_account_types.pop()
@@ -672,6 +676,7 @@ export class NewBookingComponent implements OnInit {
 					this.SetFormValue('pickup_date', this.bookingResponse?.pickup_date)
 				}
 			}
+			
 		})
 
 	}
