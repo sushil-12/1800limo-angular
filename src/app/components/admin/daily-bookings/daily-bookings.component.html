@@ -773,6 +773,7 @@
 			</div>
 			<div class="modal-body" style="font-family: 'PT Serif', serif;">
 				<div class="container text-lg" *ngIf="bookingPreview">
+
 					<h4 class="font-weight-bolder m-0 mt-1">
 						Rates / Taxes
 					</h4>
@@ -809,6 +810,18 @@
 									titlecase
 									}}
 								</span>
+							</span>
+						</div>
+					</div>
+					<div class="row preview-dropoff-color" *ngIf="bookingPreview?.cancellation_hours">
+						<div class="col-md-4 key">
+							<span>
+								Cancellation Period
+							</span>
+						</div>
+						<div class="col-md-8 value">
+							<span class="font-weight-bolder preview-output-feild">
+								{{ bookingPreview?.cancellation_hours }} hours
 							</span>
 						</div>
 					</div>

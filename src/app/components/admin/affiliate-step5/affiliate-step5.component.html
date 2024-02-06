@@ -72,17 +72,20 @@
 										</ng-template>
 										<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
 											aria-labelledby="navbarDropdownUserImage">
-											<a class="dropdown-item" (click)="clickEditVehicle(vehicle.ID)">
+											<a class="dropdown-item" (click)="clickEditVehicle(vehicle.ID)"
+												style="padding: 0.65rem 1.5rem !important;font-size: 18px !important;">
 												<div class="dropdown-item-icon"></div>
 												Edit Vehicle
 											</a>
 											<a class="dropdown-item"
+												style="padding: 0.65rem 1.5rem !important;font-size: 18px !important;"
 												[ngClass]="{notCompleted: !vehicle.isRatesCompleted}"
 												(click)="clickEditVehicleRates(vehicle.ID)">
 												<div class="dropdown-item-icon"></div>
 												Edit Rates
 											</a>
 											<a class="dropdown-item" *ngIf="canAddVehicle"
+												style="padding: 0.65rem 1.5rem !important;font-size: 18px !important;"
 												(click)="clickedDuplicateVehicle(vehicle.ID)">
 												<div class="dropdown-item-icon"></div>
 												Duplicate Vehicle
