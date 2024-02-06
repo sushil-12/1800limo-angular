@@ -15,6 +15,7 @@ import { Observable, of } from 'rxjs';
 import { CustomvalidationService } from 'src/app/services/customvalidation.service';
 import { param } from 'jquery';
 import { CommonService } from 'src/app/services/common.service';
+import { HttpClient } from '@angular/common/http';
 
 declare var $: any
 @Component({
@@ -132,6 +133,7 @@ export class NewBookingComponent implements OnInit {
 	adminSharePercent: number = 25;
 	isFarmoutBooking: boolean = false;
 	AffiliateAccounts_copy: any;
+	public canceloptions: Array<Object>;
 	constructor(
 		private $form: FormBuilder,
 		private $api: AdminService,
@@ -144,6 +146,7 @@ export class NewBookingComponent implements OnInit {
 		private commonServices: CommonService,
 		private customValidator: CustomvalidationService,
 		private el: ElementRef,
+		private httpClient: HttpClient,
 	) { }
 
 	openAutoCompletePanel() {
@@ -182,6 +185,10 @@ export class NewBookingComponent implements OnInit {
 		})
 		// fetch the big data
 		this.fetchAirportsAndBigData()
+
+		this.httpClient.get("assets/json/charterOptions.json").subscribe((data: any) => {
+			this.canceloptions = data;
+		});
 
 	}
 	buildBookingData() {
@@ -326,6 +333,7 @@ export class NewBookingComponent implements OnInit {
 			lose_affiliate_phone_isd: ['+1'],
 			lose_affiliate_phone_country: ['us'],
 			lose_affiliate_email: [''],
+			cancellation_hours:['24'],
 			vehicle_type: [''],
 			vehicle_type_name: [''],
 			vehicle_id: [''],
@@ -2164,6 +2172,7 @@ export class NewBookingComponent implements OnInit {
 				this.BookingForm.get('lose_affiliate_name').setValidators([Validators.required])
 				this.BookingForm.get('lose_affiliate_phone').setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)])
 				this.BookingForm.get('lose_affiliate_email').setValidators([Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)])
+				this.BookingForm.get('cancellation_hours').setValidators([Validators.required])
 				this.BookingForm.updateValueAndValidity()
 				this.init_rates = true
 				if (this.Form.service_type.value === 'round_trip') {
@@ -2193,6 +2202,10 @@ export class NewBookingComponent implements OnInit {
 
 				this.BookingForm.get('lose_affiliate_email').clearValidators()
 				this.BookingForm.get('lose_affiliate_email').updateValueAndValidity()
+
+				this.BookingForm.get('cancellation_hours').clearValidators()
+				this.BookingForm.get('cancellation_hours').updateValueAndValidity()
+
 
 				console.log('clear validation')
 				this.init_rates = true;

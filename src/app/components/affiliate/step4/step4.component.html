@@ -54,13 +54,15 @@
 									</button>
 								</td>
 								<td><img class="rounded-circle" src="{{driver.DriverImage.image}}"></td>
-								<td>{{driver.FirstName}}
+								<td class="vehicleFontDesign">{{driver.FirstName}}
 									<span *ngIf="driver.MiddleName" style="font-weight: 100;">
 										{{driver.MiddleName}}</span> {{driver.LastName}}
 								</td>
-								<td class="pointer"><a href="tel:{{driver.CellIsd+' '+driver.CellNumber}}"
+								<td class="pointer vehicleFontDesign"><a
+										href="tel:{{driver.CellIsd+' '+driver.CellNumber}}"
 										tabindex="-1">{{driver.CellIsd+' '+driver.CellNumber}}</a></td>
-								<td class="pointer"><a href="mailto:{{driver.Email}}" tabindex="-1">{{driver.Email}}</a>
+								<td class="pointer vehicleFontDesign"><a href="mailto:{{driver.Email}}"
+										tabindex="-1">{{driver.Email}}</a>
 								</td>
 								<td>
 									<i class="fa fa-trash pointer" style="font-size: x-large; color:#d64646"

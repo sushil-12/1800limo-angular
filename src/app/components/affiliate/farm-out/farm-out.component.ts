@@ -231,6 +231,27 @@ export class FarmOutComponent implements OnInit
 		return moment(value, 'YYYY-MM-DD').format('ll')
 	}
 
+	convertToMinutes(value){
+		const days = Math.floor(value / (24 * 60 * 60));
+		const remainingSeconds = value % (24 * 60 * 60);
+		const hours = Math.floor(remainingSeconds / (60 * 60));
+		const remainingMinutes = Math.floor((remainingSeconds % (60 * 60)) / 60);
+	
+		let result = "";
+
+		if (days > 0) {
+			result += `${days} days, `;
+		}
+	
+		if (hours > 0 || (days === 0 && hours === 0)) {
+			result += `${hours} hours, `;
+		}
+	
+		result += `${remainingMinutes} minutes`;
+	
+		return result;
+	}
+
 	dateFormat2(value: any) {
 		return moment(value, 'YYYY-MM-DD').format('L')
 	}
