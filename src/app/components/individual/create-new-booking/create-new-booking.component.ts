@@ -11,16 +11,17 @@ import { CustomvalidationService } from 'src/app/services/customvalidation.servi
 import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { pluck } from 'rxjs/operators';
 import { IndividualService } from 'src/app/services/individual.service';
+import { StateManagementService } from 'src/app/services/statemanagement.service';
 declare var $: any
 
 @Component({
-  selector: 'app-create-new-booking',
-  templateUrl: './create-new-booking.component.html',
-  styleUrls: ['./create-new-booking.component.scss']
+	selector: 'app-create-new-booking',
+	templateUrl: './create-new-booking.component.html',
+	styleUrls: ['./create-new-booking.component.scss']
 })
 export class CreateNewBookingComponent implements OnInit {
 
-  @ViewChild('searchInput', { read: MatAutocompleteTrigger }) triggerAutoCompleteInput: MatAutocompleteTrigger
+	@ViewChild('searchInput', { read: MatAutocompleteTrigger }) triggerAutoCompleteInput: MatAutocompleteTrigger
 
 	todays_date: string = moment().format('YYYY-MM-DD');
 	months: any = [{ value: '01' }, { value: '02' }, { value: '03' }, { value: '04' }, { value: '05' }, { value: '06' }, { value: '07' }, { value: '08' }, { value: '09' }, { value: '10' }, { value: '11' }, { value: '12' }]
@@ -133,6 +134,7 @@ export class CreateNewBookingComponent implements OnInit {
 	r_shareArray: any;
 	adminSharePercent: number = 25;
 	currentUser: any;
+	currencySymbol: any;
 
 	constructor(
 		private $form: FormBuilder,
@@ -145,6 +147,7 @@ export class CreateNewBookingComponent implements OnInit {
 		private $routeurl: ActivatedRoute,
 		private customValidator: CustomvalidationService,
 		private individualService: IndividualService,
+		private stateManagementService: StateManagementService,
 	) { }
 
 	ngOnInit(): void {
@@ -173,6 +176,9 @@ export class CreateNewBookingComponent implements OnInit {
 			if (params && params.updateType) {
 				this.bookingType = params.updateType
 			}
+
+			//save currency symbol
+			this.currencySymbol = this.stateManagementService.getCurrencySymbol();
 			// else {
 			// 	this.resetFields()
 			// }
@@ -202,7 +208,7 @@ export class CreateNewBookingComponent implements OnInit {
 			// sub_account_type: ['travel_agent'],
 			change_individual_data: [false],
 			passenger_name: ['', [Validators.required, this.customValidator.whitespace()]],
-			passenger_email: ['', [Validators.required,Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)]],
+			passenger_email: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)]],
 			passenger_cell: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
 			passenger_cell_isd: ['+1'],
 			passenger_cell_country: ['us'],
@@ -542,10 +548,10 @@ export class CreateNewBookingComponent implements OnInit {
 
 			let base_rate = 0
 			if (this.BookingForm.value?.service_type == 'charter_tour') {
-			
+
 				base_rate += this.rateArray.all_inclusive_rates["Base_Rate"].baserate * this.number_of_hours
 				this.subtotal += this.rateArray.all_inclusive_rates["Base_Rate"].baserate * (this.number_of_hours - 1)
-				console.log("in if charter tour",base_rate)
+				console.log("in if charter tour", base_rate)
 			}
 			else {
 				base_rate += this.rateArray.all_inclusive_rates["Base_Rate"].baserate
@@ -572,7 +578,7 @@ export class CreateNewBookingComponent implements OnInit {
 			else {
 				let adminShare = (base_rate * 25) / 100
 				this.subtotal += adminShare
-				console.log("in if created by admin", this.subtotal,base_rate,adminShare)
+				console.log("in if created by admin", this.subtotal, base_rate, adminShare)
 				// this.subtotal = (base_rate + this.subtotal) - adminShare
 			}
 
@@ -1783,17 +1789,17 @@ export class CreateNewBookingComponent implements OnInit {
 
 
 	handleTravelStaffAccounts() {
-			console.log('handleTravelStaffAccounts--->>>')
-			this.$spinner.show()
-			this.individualService.getAccountDetails().subscribe((response: any) => {
-				this.$spinner.hide();
-				console.log("detail ->>>>>>>", response)
-				this.autofillData('passenger', response?.data);
-		        this.chosen_user = {}
-				this.chosen_user = response?.data
-				this.chosen_user['name'] = `${response.data.first_name} ${response.data.middle_name ?? ''} ${response.data.last_name}`
-		
-			})
+		console.log('handleTravelStaffAccounts--->>>')
+		this.$spinner.show()
+		this.individualService.getAccountDetails().subscribe((response: any) => {
+			this.$spinner.hide();
+			console.log("detail ->>>>>>>", response)
+			this.autofillData('passenger', response?.data);
+			this.chosen_user = {}
+			this.chosen_user = response?.data
+			this.chosen_user['name'] = `${response.data.first_name} ${response.data.middle_name ?? ''} ${response.data.last_name}`
+
+		})
 	}
 
 	resetDriverAndVehicle(affiliate_type: string) {
@@ -1908,7 +1914,7 @@ export class CreateNewBookingComponent implements OnInit {
 	submitForm(preview: boolean) {
 		this.submitBookingForm = true
 		console.log(this.BookingForm);
-		console.log(this.BookingForm.status,this.BookingForm.value);
+		console.log(this.BookingForm.status, this.BookingForm.value);
 		if (this.BookingForm.invalid) {
 			return;
 		}
@@ -2025,7 +2031,7 @@ export class CreateNewBookingComponent implements OnInit {
 		let vehicle_id = booking_data?.vehicle_id.toString().length ? booking_data?.vehicle_id : this.master_vehicle_id
 		// booking_data['is_master_vehicle'] = booking_data?.vehicle_id.toString().length ? false : true
 		this.$api.fetchRatesByAffiliateVeh(vehicle_id, booking_data).subscribe((response: any) => {
-			if (this.bookingType != 'edit' && this.bookingType != 'repeat' &&  this.Form.affiliate_type.value != 'loose_affiliate') {
+			if (this.bookingType != 'edit' && this.bookingType != 'repeat' && this.Form.affiliate_type.value != 'loose_affiliate') {
 				this.subtotal = 0
 				this.r_subtotal = 0
 				this.min_rate_involved = response?.data?.min_rate_involved

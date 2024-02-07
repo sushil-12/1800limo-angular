@@ -64,6 +64,10 @@ export class StateManagementService
 		localStorage.clear();
 
 	}
+	
+	getCurrencySymbol(){
+		return JSON.parse(localStorage.getItem('currencySymbol'))
+	}
 
 
 	private state = new BehaviorSubject({})

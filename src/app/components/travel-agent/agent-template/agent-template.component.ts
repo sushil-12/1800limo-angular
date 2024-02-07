@@ -27,9 +27,9 @@ export class AgentTemplateComponent implements OnInit {
 	chevron1: boolean = false;
 	public invite_link: string;
 	public referral_code: any;
-	showCopyIcon:boolean;
-	accountStatus:any;
-	bkpData:any='';
+	showCopyIcon: boolean;
+	accountStatus: any;
+	bkpData: any = '';
 
 	constructor(
 		private router: Router,
@@ -42,7 +42,7 @@ export class AgentTemplateComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
-		this.bkpData = JSON.parse(localStorage.getItem('bkp_crnt_dt')) ?  JSON.parse(localStorage.getItem('bkp_crnt_dt')) : ''
+		this.bkpData = JSON.parse(localStorage.getItem('bkp_crnt_dt')) ? JSON.parse(localStorage.getItem('bkp_crnt_dt')) : ''
 		this.invite_link = localStorage.getItem('invite_link')
 		var referralCode = (new URL(this.invite_link)).searchParams.get("refferal_code");
 		this.referral_code = atob(referralCode);
@@ -60,7 +60,7 @@ export class AgentTemplateComponent implements OnInit {
 		//Get logged in user name
 		this.currentUser = this.stateManagementService.getUser()
 		this.accountStatus = localStorage.getItem('agentAccountStatus')
-		console.log(this.currentUser?.is_profile_complete,"is profile")
+		console.log(this.currentUser?.is_profile_complete, "is profile")
 
 		//Get ProgressBar
 		this.stateManagementService.getprogressBar().subscribe(commonProgressBar => {
@@ -151,12 +151,12 @@ export class AgentTemplateComponent implements OnInit {
 		this.chevron1 = !this.chevron1
 	}
 
-	copyInviteLink(){
+	copyInviteLink() {
 		this.showCopyIcon = true
-		  console.log("in function copy link to clipboard")
-			setTimeout(()=>{
-				this.showCopyIcon = false
-			},2500)
+		console.log("in function copy link to clipboard")
+		setTimeout(() => {
+			this.showCopyIcon = false
+		}, 2500)
 	}
 
 	showSidebarFunc(status) {
@@ -195,10 +195,12 @@ export class AgentTemplateComponent implements OnInit {
 			});
 	}
 
-	backToAdmin(){
+	backToAdmin() {
 		let bkp_a_token = localStorage.getItem('bkp_a_token')
 		let bkp_crnt_dt = localStorage.getItem('bkp_crnt_dt')
 		let bkp_u_dt = localStorage.getItem('bkp_u_dt')
+		let bkp_currency_symbol = localStorage.getItem('bkp_currency_symbol')
+		localStorage.setItem('currencySymbol', bkp_currency_symbol)
 		localStorage.setItem('access_token', bkp_a_token)
 		localStorage.setItem('currentUser', bkp_crnt_dt)
 		localStorage.setItem('userData', bkp_u_dt)
@@ -209,9 +211,10 @@ export class AgentTemplateComponent implements OnInit {
 		localStorage.removeItem('bkp_u_dt')
 		localStorage.removeItem('agentAccountStatus')
 		localStorage.removeItem('invite_link')
-		  this.router.navigateByUrl('/admin/daily-bookings-admin');
-		
-		
+		localStorage.removeItem('bkp_currency_symbol')
+		this.router.navigateByUrl('/admin/daily-bookings-admin');
+
+
 	}
 
 

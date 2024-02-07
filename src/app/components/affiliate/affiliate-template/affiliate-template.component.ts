@@ -4,7 +4,7 @@ import { AffiliateService } from '../../../services/affiliate.service';
 import { StateManagementService } from '../../../services/statemanagement.service';
 import { ErrorDialogService } from '../../../services/error-dialog/errordialog.service';
 import { NgxSpinnerService } from "ngx-spinner";
-import { Router,Event, NavigationEnd } from '@angular/router';
+import { Router, Event, NavigationEnd } from '@angular/router';
 import { catchError } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
 import { state } from '@angular/animations';
@@ -17,8 +17,7 @@ declare var $: any;
 	templateUrl: './affiliate-template.component.html',
 	styleUrls: ['./affiliate-template.component.scss']
 })
-export class AffiliateTemplateComponent implements OnInit, AfterViewInit
-{
+export class AffiliateTemplateComponent implements OnInit, AfterViewInit {
 
 	public userImage: string = 'assets/images/user.png';
 	public showSidebar: boolean = true;
@@ -40,7 +39,7 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 	public currentYear: number = new Date().getFullYear();
 	public progressBar: boolean;
 	chevron_up: boolean = false;
-	bkpData:any='';
+	bkpData: any = '';
 
 
 	@Input() router1: any;
@@ -60,23 +59,21 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 		private $shared: SharedModule
 	) {
 		this.router.events.subscribe((event: Event) => {
-            if (event instanceof NavigationEnd) {
-				let url =event.urlAfterRedirects.split('/')[2]
+			if (event instanceof NavigationEnd) {
+				let url = event.urlAfterRedirects.split('/')[2]
 				const step = url.charAt(url.length - 1);
-				console.log('step-->>>' , step)
-				if (url.substr(0, 4) == 'step' && event.urlAfterRedirects.split('/').length===3 && url.includes('step'))
-				{
+				console.log('step-->>>', step)
+				if (url.substr(0, 4) == 'step' && event.urlAfterRedirects.split('/').length === 3 && url.includes('step')) {
 					this.stepClick(step, true);
 				}
-            }
-        });
+			}
+		});
 
-   }
-	 
+	}
 
-	ngOnInit(): void
-	{
-		this.bkpData = JSON.parse(localStorage.getItem('bkp_crnt_dt')) ?  JSON.parse(localStorage.getItem('bkp_crnt_dt')) : ''
+
+	ngOnInit(): void {
+		this.bkpData = JSON.parse(localStorage.getItem('bkp_crnt_dt')) ? JSON.parse(localStorage.getItem('bkp_crnt_dt')) : ''
 		// document.addEventListener("click", 
 		// (()=>{
 		// 	if(document.body.classList.contains('sidenav-toggled')){
@@ -86,8 +83,7 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 		// 	}
 		// }));
 
-		$(".collapsed").click(function ()
-		{
+		$(".collapsed").click(function () {
 
 			$(".collapse-item").removeClass("active");
 
@@ -99,10 +95,8 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 		this.currentUser = this.stateManagementService.getUser()
 
 		//Get ProgressBar
-		this.stateManagementService.getprogressBar().subscribe(commonProgressBar =>
-		{
-			setTimeout(() =>
-			{
+		this.stateManagementService.getprogressBar().subscribe(commonProgressBar => {
+			setTimeout(() => {
 				this.progressBar = commonProgressBar;
 			});
 		});
@@ -124,18 +118,16 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 
 
 		const tree = this.router.parseUrl(this.router.url);
-		console.log('---tree ----->>>' ,tree)
+		console.log('---tree ----->>>', tree)
 		this.secondPartUrl = tree.root.children.primary.segments[1].path;
 		const step = this.secondPartUrl.charAt(this.secondPartUrl.length - 1);
-		console.log('step-->>>' , step)
+		console.log('step-->>>', step)
 
 
-		if (this.secondPartUrl.substr(0, 4) == 'step')
-		{
+		if (this.secondPartUrl.substr(0, 4) == 'step') {
 			this.stepClick(step, true);
 		}
-		else
-		{
+		else {
 			this.otherRouteClick();
 		}
 
@@ -144,17 +136,16 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 		console.info(this.$shared.fetchCookies('lastroute'))
 
 	}
-	ngAfterViewInit()
-	{
-		
+	ngAfterViewInit() {
+
 		this.googleTranslateInitFunction();
 		this.profile_pic_url = JSON.parse(localStorage.getItem('userData'))?.profile_picture
 	}
-	ngOnChanges(changes: SimpleChanges): void{
-		console.log('------->>>>>>>>>>>>>>' , changes)
+	ngOnChanges(changes: SimpleChanges): void {
+		console.log('------->>>>>>>>>>>>>>', changes)
 	}
 
-	myFunction(){
+	myFunction() {
 
 	}
 
@@ -164,26 +155,22 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 	 * @param account_id: Number [Required] Logged in user account id
 	 * @returns: Promise of type returned data from api
 	 */
-	checkVerification(account_id: number): Promise<any>
-	{
-		return new Promise((resolve, reject) =>
-		{
+	checkVerification(account_id: number): Promise<any> {
+		return new Promise((resolve, reject) => {
 			this.affiliateService.affiliateVerificationStatus(account_id).pipe(
-				catchError(err =>
-				{
+				catchError(err => {
 					this.spinner.hide(); //hide spinner
 					reject(err)
 					return throwError(err);
 				})
-			).subscribe((response: any) =>
-			{
+			).subscribe((response: any) => {
 				resolve(response.data)
 			})
 		})
 	}
 	handleDivClick(event: MouseEvent | TouchEvent) {
-		console.log('Clicked/touched parent div' ,event,this.showSidebar);
-		if(!this.showSidebar){
+		console.log('Clicked/touched parent div', event, this.showSidebar);
+		if (!this.showSidebar) {
 			$("body").toggleClass("sidenav-toggled");
 			this.showSidebar = true
 		}
@@ -195,71 +182,57 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 
 		// Handle the click/touch event on the parent div here
 	}
-	checkApplicationStatus()
-	{
+	checkApplicationStatus() {
 		console.info('Checking Verification Status')
 		let currentUser = JSON.parse(localStorage.getItem('currentUser'))
 		let C_V: Array<number> = [] 	// state for completed and verified steps
 		// make sure the driver is logged in before checking the verification status
-		if (currentUser && currentUser.roleName == 'driver' && currentUser.account_id)
-		{
-			const interval = setInterval(() =>
-			{
-				if (localStorage.getItem('currentUser') == null)
-				{
+		if (currentUser && currentUser.roleName == 'driver' && currentUser.account_id) {
+			const interval = setInterval(() => {
+				if (localStorage.getItem('currentUser') == null) {
 					console.log('Null Error. Interval Cleared. ')
 					clearInterval(interval)
 					return
 				}
 				let steps_completed = this.affiliateService.getLocalStepCompletedObject()
 				// check for the verification status, api should hit once per interval
-				this.checkVerification(currentUser.account_id).then((data) =>
-				{
+				this.checkVerification(currentUser.account_id).then((data) => {
 					// check for step 1
-					if (steps_completed.hasOwnProperty('step1') && steps_completed.step1 != 'uncompleted')
-					{
+					if (steps_completed.hasOwnProperty('step1') && steps_completed.step1 != 'uncompleted') {
 						// toggle the icon and state for email verification
 						// check for only one email in case of Gig Operator
-						if ((data['affiliate_type'] == 'gig_operator' && data['is_email_verified'] == 'yes') || (data['is_email_verified'] == 'yes' && data['dispatch_is_email_verified'] == 'yes'))
-						{
+						if ((data['affiliate_type'] == 'gig_operator' && data['is_email_verified'] == 'yes') || (data['is_email_verified'] == 'yes' && data['dispatch_is_email_verified'] == 'yes')) {
 							this.is_email_verified = true
 							this.is_show_verification_icon = false
 							this.getStatusData()
 						}
-						else
-						{
+						else {
 							this.is_email_verified = false
 							this.is_show_verification_icon = true
 						}
-					} else
-					{
+					} else {
 						C_V.push(1)
 					}
 
 					// check for step 2
-					if (steps_completed.hasOwnProperty('step2') && steps_completed.step2 != 'uncompleted')
-					{
+					if (steps_completed.hasOwnProperty('step2') && steps_completed.step2 != 'uncompleted') {
 						// toggle the icon and state of bank verification
-						if ((data['stripe_address_status'].toLowerCase() == 'valid' && data['transfer_status'].toLowerCase() == 'active' && data['additional_doc_verification_status'].toLowerCase() == 'verified'))
-						{
+						if ((data['stripe_address_status'].toLowerCase() == 'valid' && data['transfer_status'].toLowerCase() == 'active' && data['additional_doc_verification_status'].toLowerCase() == 'verified')) {
 							this.is_bank_verified = true
 							this.is_show_verification_icon = false
 							this.getStatusData()
 						}
-						else
-						{
+						else {
 							this.is_bank_verified = false
 							this.is_show_verification_icon = true
 						}
 					}
-					else
-					{
+					else {
 						C_V.push(2)
 					}
 
 					// Clear Interval when both steps are completed and verified
-					if (C_V.indexOf(1) != -1 && C_V.indexOf(2) != -1)
-					{
+					if (C_V.indexOf(1) != -1 && C_V.indexOf(2) != -1) {
 						clearInterval(interval)
 						console.log('Cleared for both steps are completed and verified.')
 						return
@@ -269,10 +242,8 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 		}
 	}
 
-	stepClick(step, isComponentRefresh = false)
-	{
-		if (!isComponentRefresh)
-		{
+	stepClick(step, isComponentRefresh = false) {
+		if (!isComponentRefresh) {
 			this.secondPartUrl = 'step' + step;
 		}
 
@@ -286,8 +257,7 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 		this.getStatusData();
 	}
 
-	otherRouteClick()
-	{
+	otherRouteClick() {
 		//set this to hide/show sidebar menu elements in case of new user
 		this.affiliateAccountStatus = localStorage.getItem("account_approval");
 		this.stepCompleted = localStorage.getItem("stepCompleted");//To add step_comp class
@@ -295,18 +265,14 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 		this.getStatusData();
 	}
 
-	getStatusData()
-	{
+	getStatusData() {
 		this.affiliateService.getStepsCompleted()
 			.pipe(
-				catchError(err =>
-				{
+				catchError(err => {
 					return throwError(err);
 				})
-			).subscribe(({ data }: any) =>
-			{
-				if (data)
-				{
+			).subscribe(({ data }: any) => {
+				if (data) {
 					// if (Object.keys(data.step_completed_obj).every((currentValue: string) =>
 					// {
 					// 	if ([0, 1, 2, 3, 4, 5, 6].includes(parseInt(currentValue.charAt(currentValue.length - 1))))
@@ -321,8 +287,7 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 					const stepCompleted = data.step_completed;
 					const stepCompletedObj = data.step_completed_obj;
 					this.affiliateAccountStatus = data.account_approval;
-					if (stepCompleted)
-					{
+					if (stepCompleted) {
 						this.stepCompleted = stepCompleted;
 						this.stepCompletedObj = stepCompletedObj;
 						this.affiliateService.updateStepsArrayLocal(stepCompleted);
@@ -331,17 +296,15 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 					}
 					let status = data.account_approval
 					localStorage.setItem("account_approval", data.account_approval);
-					if(this.checkIsStepContainError(stepCompletedObj)){
+					if (this.checkIsStepContainError(stepCompletedObj)) {
 						status = 'stripe_error'
 						localStorage.setItem("account_approval", 'stripe_error');
 					}
 					localStorage.setItem("recject_cause_message", data.recject_cause_message);
 
-					switch (status)
-					{
+					switch (status) {
 						case 'completed': {
-							if (this.secondPartUrl != 'account-status')
-							{
+							if (this.secondPartUrl != 'account-status') {
 								//redirect user to account status if trying to access any URL in case of "account status=completed"
 								this.router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
 									this.router.navigate(['/affiliate/account-status'])
@@ -349,25 +312,20 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 							}
 							break;
 						}
-						case 'stripe-error' :{
+						case 'stripe-error': {
 							let nextStep: number;
-							if (this.stepCompleted)
-							{
-								if (this.stepCompleted.includes('0'))
-								{//if step 0 is completed
+							if (this.stepCompleted) {
+								if (this.stepCompleted.includes('0')) {//if step 0 is completed
 									nextStep = 1;
 								}
-								else
-								{//if no step is completed
+								else {//if no step is completed
 									nextStep = 0;
 								}
 							}
-							else
-							{//if no step is completed
+							else {//if no step is completed
 								nextStep = 0;
 							}
-							if (this.secondPartUrl.substr(0, 4) != 'step')
-							{
+							if (this.secondPartUrl.substr(0, 4) != 'step') {
 								this.router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
 									this.router.navigate(['/affiliate/step' + nextStep])
 								);
@@ -376,23 +334,18 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 						}
 						case 'in-progress': {
 							let nextStep: number;
-							if (this.stepCompleted)
-							{
-								if (this.stepCompleted.includes('0'))
-								{//if step 0 is completed
+							if (this.stepCompleted) {
+								if (this.stepCompleted.includes('0')) {//if step 0 is completed
 									nextStep = 1;
 								}
-								else
-								{//if no step is completed
+								else {//if no step is completed
 									nextStep = 0;
 								}
 							}
-							else
-							{//if no step is completed
+							else {//if no step is completed
 								nextStep = 0;
 							}
-							if (this.secondPartUrl.substr(0, 4) != 'step')
-							{
+							if (this.secondPartUrl.substr(0, 4) != 'step') {
 								this.router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
 									this.router.navigate(['/affiliate/step' + nextStep])
 								);
@@ -418,47 +371,40 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 				// },300)
 			});
 	}
-	checkIsStepContainError(object){
+	checkIsStepContainError(object) {
 		for (const key in object) {
-			if (object[key]== 'error' ) {
+			if (object[key] == 'error') {
 				return true
 			}
 		}
 	}
-	stepCompletionTick()
-	{
-		for (let [key, value] of Object.entries(this.stepCompletedObj))
-		{
+	stepCompletionTick() {
+		for (let [key, value] of Object.entries(this.stepCompletedObj)) {
 			let stepNumber = key.slice(-1);
 			this['step_' + stepNumber + '_class'] = 'collapse-item ' + value + (this.currentStep == stepNumber ? ' active' : '');
 		}
 	}
 
-	logout()
-	{
+	logout() {
 		this.spinner.show();//show spinner
 		this.authService.logout()
 			.pipe(
-				catchError(err =>
-				{
+				catchError(err => {
 					this.spinner.hide();//hide spinner
 					return throwError(err);
 				})
-			).subscribe(({ success }: any) =>
-			{
+			).subscribe(({ success }: any) => {
 				this.spinner.hide();//hide spinner
-				if (success == true)
-				{
+				if (success == true) {
 					this.stateManagementService.removeUser();
 				}
 				this.router.navigate(['/']);
 			});
 	}
 
-	googleTranslateInitFunction(){
+	googleTranslateInitFunction() {
 		this.desktopWidth = window.innerWidth;
-		if (this.desktopWidth <= '767')
-		{
+		if (this.desktopWidth <= '767') {
 			//google translate
 			console.log('-----google translate element for mobile view-------->>>>')
 			var v = document.createElement("script");
@@ -470,26 +416,25 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 			s.src = "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
 			this.elementRef.nativeElement.appendChild(s);
 
-				$('.goog-te-gadget').html($('.goog-te-gadget').children());
-				$("#google-translate").fadeIn('1000');
-			  
-			  
-				function cleartimer() {     
-					setTimeout(function(){ 
-						window.clearInterval(myVar); 
-					}, 500);             
+			$('.goog-te-gadget').html($('.goog-te-gadget').children());
+			$("#google-translate").fadeIn('1000');
+
+
+			function cleartimer() {
+				setTimeout(function () {
+					window.clearInterval(myVar);
+				}, 500);
+			}
+			function myTimer() {
+				if ($('.goog-te-combo option:first').length) {
+					$('.goog-te-combo option:first').html('Translate');
+					cleartimer();
 				}
-				function myTimer() {
-					if ($('.goog-te-combo option:first').length) {
-						$('.goog-te-combo option:first').html('Translate');
-						cleartimer();
-					}
-				}
-				var myVar = setInterval(function(){ myTimer() }, 0); 
+			}
+			var myVar = setInterval(function () { myTimer() }, 0);
 		}
 
-		if (this.desktopWidth > '767')
-		{
+		if (this.desktopWidth > '767') {
 			//google translate
 			console.log('<<<<<<<-------select language------>>>>>>>>')
 			var v = document.createElement("script");
@@ -500,26 +445,26 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 			s.type = "text/javascript";
 			s.src = "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
 			this.elementRef.nativeElement.appendChild(s);
-				$('.goog-te-gadget').html($('.goog-te-gadget').children());
-				$("#google-translate").fadeIn('1000');
-			  
-			  
-				function cleartimer() {     
-					setTimeout(function(){ 
-						window.clearInterval(myVar); 
-					}, 500);             
+			$('.goog-te-gadget').html($('.goog-te-gadget').children());
+			$("#google-translate").fadeIn('1000');
+
+
+			function cleartimer() {
+				setTimeout(function () {
+					window.clearInterval(myVar);
+				}, 500);
+			}
+			function myTimer() {
+				if ($('.goog-te-combo option:first').length) {
+					$('.goog-te-combo option:first').html('Translate');
+					cleartimer();
 				}
-				function myTimer() {
-					if ($('.goog-te-combo option:first').length) {
-						$('.goog-te-combo option:first').html('Translate');
-						cleartimer();
-					}
-				}
-				var myVar = setInterval(function(){ myTimer() }, 0); 
-			  
+			}
+			var myVar = setInterval(function () { myTimer() }, 0);
+
 		}
 	}
-	
+
 	// scrollToTop()
 	// {
 	// 	(function smoothscroll()
@@ -532,22 +477,17 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 	// 		}
 	// 	})();
 	// }
-	showSidebarFunc(status)
-	{
+	showSidebarFunc(status) {
 		$("body").toggleClass("sidenav-toggled");
-		if (status)
-		{
+		if (status) {
 			this.showSidebar = true;
 		}
-		else
-		{
+		else {
 			this.showSidebar = false;
 		}
 	}
-	closeSidebarFunc(status)
-	{
-		if (this.screenWidth <= '991')
-		{
+	closeSidebarFunc(status) {
+		if (this.screenWidth <= '991') {
 			this.showSidebar = true;
 			$("body").removeClass("sidenav-toggled");
 			// if (status)
@@ -561,15 +501,16 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 	}
 
 
-	toggleChevron()
-	{
+	toggleChevron() {
 		this.chevron_up = !this.chevron_up
 	}
 
-	backToAdmin(){
+	backToAdmin() {
 		let bkp_a_token = localStorage.getItem('bkp_a_token')
 		let bkp_crnt_dt = localStorage.getItem('bkp_crnt_dt')
 		let bkp_u_dt = localStorage.getItem('bkp_u_dt')
+		let bkp_currency_symbol = localStorage.getItem('bkp_currency_symbol')
+		localStorage.setItem('currencySymbol', bkp_currency_symbol)
 		localStorage.setItem('access_token', bkp_a_token)
 		localStorage.setItem('currentUser', bkp_crnt_dt)
 		localStorage.setItem('userData', bkp_u_dt)
@@ -580,9 +521,10 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit
 		localStorage.removeItem('bkp_a_token')
 		localStorage.removeItem('bkp_crnt_dt')
 		localStorage.removeItem('bkp_u_dt')
+		localStorage.removeItem('bkp_currency_symbol')
 		this.router.navigateByUrl('/admin/daily-bookings-admin');
-		
-		
+
+
 	}
 
 }

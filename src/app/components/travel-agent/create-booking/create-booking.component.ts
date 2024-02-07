@@ -11,6 +11,7 @@ import { CustomvalidationService } from 'src/app/services/customvalidation.servi
 import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { pluck } from 'rxjs/operators';
 import { TravelAgentService } from 'src/app/services/travel-agent.service';
+import { StateManagementService } from 'src/app/services/statemanagement.service';
 declare var $: any
 @Component({
 	selector: 'app-create-booking',
@@ -132,6 +133,7 @@ export class CreateBookingComponent implements OnInit {
 	r_shareArray: any;
 	adminSharePercent: number = 25;
 	currentUser: any;
+	currencySymbol: any;
 
 	constructor(
 		private $form: FormBuilder,
@@ -143,6 +145,7 @@ export class CreateBookingComponent implements OnInit {
 		private $errors: ErrorDialogService,
 		private $router: Router,
 		private $routeurl: ActivatedRoute,
+		private stateManagementService: StateManagementService,
 		private customValidator: CustomvalidationService,
 	) { }
 
@@ -157,7 +160,7 @@ export class CreateBookingComponent implements OnInit {
 			if (params && params.bookingId && !this.booking_id) {
 				this.is_booking_edit_case = true
 				this.updateType = params.updateType
-				console.log("update type",this.updateType)
+				console.log("update type", this.updateType)
 				this.SetFormValue('reservation_id', params.bookingId)
 				params.updateType ? this.SetFormValue('updateType', params.updateType) : this.SetFormValue('updateType', 'edit')
 			}
@@ -173,6 +176,9 @@ export class CreateBookingComponent implements OnInit {
 			if (params && params.updateType) {
 				this.bookingType = params.updateType
 			}
+
+			//save currency symbol
+			this.currencySymbol = this.stateManagementService.getCurrencySymbol();
 			// else {
 			// 	this.resetFields()
 			// }
@@ -562,10 +568,10 @@ export class CreateBookingComponent implements OnInit {
 
 			let base_rate = 0
 			if (this.BookingForm.value?.service_type == 'charter_tour') {
-			
+
 				base_rate += this.rateArray.all_inclusive_rates["Base_Rate"].baserate * this.number_of_hours
 				this.subtotal += this.rateArray.all_inclusive_rates["Base_Rate"].baserate * (this.number_of_hours - 1)
-				console.log("in if charter tour",base_rate)
+				console.log("in if charter tour", base_rate)
 			}
 			else {
 				base_rate += this.rateArray.all_inclusive_rates["Base_Rate"].baserate
@@ -592,7 +598,7 @@ export class CreateBookingComponent implements OnInit {
 			else {
 				let adminShare = (base_rate * 25) / 100
 				this.subtotal += adminShare
-				console.log("in if created by admin", this.subtotal,base_rate,adminShare)
+				console.log("in if created by admin", this.subtotal, base_rate, adminShare)
 				// this.subtotal = (base_rate + this.subtotal) - adminShare
 			}
 
@@ -865,7 +871,7 @@ export class CreateBookingComponent implements OnInit {
 			this.TravelAgentService.getTravelClientDetailById(value.id).subscribe((response: any) => {
 				console.log("detail ->>>>>>>", response)
 				this.autofillData('passenger', response?.data);
-				
+
 			})
 		} catch (error) {
 			console.log('error--->>>>', error)
@@ -2064,10 +2070,10 @@ export class CreateBookingComponent implements OnInit {
 				this.TravelAgentService.getAllTravelClientAccountList('sub_travel').then((result: any) => {
 					console.log("accounts->>>>>>>>>>", result)
 					this.subAgentAccounts = result?.data
-					console.log('in if sub ta----->',this.BookingForm?.get('sub_account_id').value == '')
-					if(this.BookingForm?.get('sub_account_id').value == ''){
+					console.log('in if sub ta----->', this.BookingForm?.get('sub_account_id').value == '')
+					if (this.BookingForm?.get('sub_account_id').value == '') {
 						this.BookingForm.patchValue({
-							travel_client_id:''
+							travel_client_id: ''
 						})
 					}
 				})
@@ -2075,11 +2081,11 @@ export class CreateBookingComponent implements OnInit {
 						this.$spinner.hide();//hide spinner
 					});
 				this.BookingForm.get('sub_account_id').valueChanges.subscribe((value: string) => {
-					console.log('valueeeee->', value,this.newBooking)
-					if(!this.newBooking){
-						if(value != this.bookingResponse?.sub_account_id){
+					console.log('valueeeee->', value, this.newBooking)
+					if (!this.newBooking) {
+						if (value != this.bookingResponse?.sub_account_id) {
 							this.BookingForm.patchValue({
-								travel_client_id:''
+								travel_client_id: ''
 							})
 						}
 					}
@@ -2143,7 +2149,7 @@ export class CreateBookingComponent implements OnInit {
 	createReservationShareArray() {
 		console.log('in function createReservationShareArray')
 		if (this.rateArray) {
-			console.log('in function createReservationShareArray iffffff',this.rateArray)
+			console.log('in function createReservationShareArray iffffff', this.rateArray)
 			let base_rate = 0
 			if (this.BookingForm.value?.service_type == 'charter_tour') {
 				base_rate += this.rateArray.all_inclusive_rates["Base_Rate"].baserate * this.number_of_hours
@@ -2157,7 +2163,7 @@ export class CreateBookingComponent implements OnInit {
 			for (const key of Object.keys(this.rateArray.amenities)) {
 				base_rate += this.rateArray.amenities[key].baserate;
 			}
-			console.log("grand total",this.grandtotal)
+			console.log("grand total", this.grandtotal)
 			let grandTotal = this.grandtotal
 			let stripeFee = grandTotal * 0.05 + 0.30
 			let adminShare = (base_rate * this.adminSharePercent) / 100
@@ -2376,7 +2382,7 @@ export class CreateBookingComponent implements OnInit {
 		let vehicle_id = booking_data?.vehicle_id.toString().length ? booking_data?.vehicle_id : this.master_vehicle_id
 		// booking_data['is_master_vehicle'] = booking_data?.vehicle_id.toString().length ? false : true
 		this.$api.fetchRatesByAffiliateVeh(vehicle_id, booking_data).subscribe((response: any) => {
-			if (this.updateType != 'edit' && this.updateType != 'repeat' &&  this.Form.affiliate_type.value != 'loose_affiliate') {
+			if (this.updateType != 'edit' && this.updateType != 'repeat' && this.Form.affiliate_type.value != 'loose_affiliate') {
 				this.subtotal = 0
 				this.r_subtotal = 0
 				this.min_rate_involved = response?.data?.min_rate_involved
@@ -2411,7 +2417,7 @@ export class CreateBookingComponent implements OnInit {
 				}
 				// this.agentShare = response?.data?.rateArray?.all_inclusive_rates?.Base_Rate?.baserate * 0.10
 				this.grandtotal = (parseFloat(this.subtotal))
-				console.log("grand total--->",this.grandtotal)
+				console.log("grand total--->", this.grandtotal)
 			}
 			if (booking_data.service_type == 'round_trip') {
 				this.returnRateArray = response?.data?.retrunRateArray
