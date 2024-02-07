@@ -251,4 +251,8 @@ export class TravelAgentService {
 		}
 	}
 
+	cancelBooking(id) {
+		return this.httpClient.get(this.serverUrl + `cancel-booking/${id}`);
+	}
+
 }

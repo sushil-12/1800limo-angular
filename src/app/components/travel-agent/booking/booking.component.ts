@@ -73,6 +73,7 @@ export class BookingComponent implements OnInit {
 	emailFileName: string = '';
 	fileToUpload: File;
 	agency_name:string='';
+	cancelMessage: any;
 
 	constructor(
 		private affiliateService: AffiliateService,
@@ -167,6 +168,7 @@ export class BookingComponent implements OnInit {
 		// var keyword = ((document.getElementById("keyword") as HTMLInputElement).value);
 		// Load Our bookings using API
 		this.travelAgentService.loadBookings(pageUrl, this.searchText, this.startDate, this.endDate, this.useDateFilter).then(result => {
+			this.cancelMessage=''
 			this.bookingsRes = result;
 			this.bookings = this.bookingsRes?.data?.data;
 			this.totalRecords = this.bookingsRes?.data?.total;
@@ -608,29 +610,24 @@ export class BookingComponent implements OnInit {
 			this.passengerDetails = booking;
 			this.passengerDetails['selection_button'] = selection_button
 		}
-		cancelBooking() {
-			console.log('in function cancel booking')
-			this.spinner.show();
-
-			this.affiliateService.cancelBooking(this.cancelBookingId)
+		cancelBooking(){
+			this.spinner.show()
+			this.travelAgentService.cancelBooking(this.cancelBookingId)
 				.pipe(
-					catchError(err => {
-						this.spinner.hide();//hide spinner
-						$('#cancelBooking').modal('hide');
-						return throwError(err);
+					catchError((err) => {
+					this.spinner.hide()
+					$("#cancel_booking_modal").modal("hide");
+					return throwError(err);
 					})
 				)
-				.subscribe(({ data, success, message }: any) => {
-					if (success == true) {
-						this.spinner.hide();//hide spinner
-						this.loadBookings()
-						$('#cancelBooking').modal('hide');
-						// this.$errors.openDialog({
-						// 	errors: {
-						// 		error: `<span class='text-success'>${message}</span>`
-						// 	}
-						// })
-					}
+				.subscribe((response: any) => {
+					console.log('response--------->>>>>>>>', response)
+					this.spinner.hide()
+					this.cancelMessage = response?.message
+					// this.loadBookings()
+					$("#cancel_booking_modal").modal("hide");
+					$("#success_modal").modal("show");
+	
 				});
 		}
 
@@ -655,6 +652,9 @@ export class BookingComponent implements OnInit {
 			if (updateType == 'change') {
 				this.router.navigate([`/${this.currentUser?.roleName}/new-booking`], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'true' } });
 			}
+			else if(updateType == 'cancel'){
+				this.cancelBookingId = bookingId
+			} 
 			else {
 				this.router.navigate([`/${this.currentUser?.roleName}/new-booking`], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'true' } });
 			}
