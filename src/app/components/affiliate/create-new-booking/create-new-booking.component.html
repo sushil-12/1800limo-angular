@@ -2279,8 +2279,8 @@
 			[isCreatedByAdmin]="isCreatedByAdmin" [reset]="reset_button" [initReturnRates]="init_return_rates"
 			(formvalue)="RateFormValue($event)" [isFarmoutBooking]="true" [isTravelShare]="isTravelShare"
 			[vehicle_id]="params_QB_vehicle_id" [hours]="Form.number_of_hours?.value"
-			[vehicles]="Form.number_of_vehicles?.value" (returnformvalue)="ReturnRateFormValue($event)"
-			(returnNumberOfHr)="HandleReturnNumberOfHr($event)">
+			[vehicles]="Form.number_of_vehicles?.value" [currencyObject]="currencyObj"
+			(returnformvalue)="ReturnRateFormValue($event)" (returnNumberOfHr)="HandleReturnNumberOfHr($event)">
 		</app-rates-forms>
 
 

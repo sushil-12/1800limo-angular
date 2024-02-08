@@ -24,6 +24,7 @@ import * as moment from 'moment';
 import { CustomvalidationService } from 'src/app/services/customvalidation.service';
 import { AdminService } from 'src/app/services/admin.service';
 import { CommonService } from 'src/app/services/common.service';
+import { HttpClient } from '@angular/common/http';
 declare var $: any
 
 
@@ -133,6 +134,7 @@ export class CreateNewBookingComponent implements OnInit {
 	shareArray: any;
 	r_shareArray: any;
 	currencySymbol: any;
+	currencyObj: any;
 
 
 	constructor(
@@ -148,7 +150,8 @@ export class CreateNewBookingComponent implements OnInit {
 		private commonServices: CommonService,
 		private customValidator: CustomvalidationService,
 		private stateManagementService: StateManagementService,
-		private el: ElementRef
+		private el: ElementRef,
+		private httpClient: HttpClient,
 	) { }
 
 	openAutoCompletePanel() {
@@ -176,7 +179,9 @@ export class CreateNewBookingComponent implements OnInit {
 			}
 
 			//save currency symbol
-			this.currencySymbol = this.stateManagementService.getCurrencySymbol();
+			// this.currencySymbol = this.stateManagementService.getCurrencySymbol();
+			this.currencyObj = JSON.parse(sessionStorage.getItem('currencyData'))
+			this.currencySymbol = this.currencyObj?.symbol
 
 			// place in query params to reinitialise things when modes of new and edit are toggled
 			// Subscriptions
@@ -485,6 +490,16 @@ export class CreateNewBookingComponent implements OnInit {
 			this.isCreatedByAdmin = response?.data?.created_by == 1 ? true : false
 			console.log('response <><><><><', response.data)
 			let editing_data = response.data
+			let currency = editing_data?.currency
+			this.httpClient.get("assets/json/currencyOptions.json").subscribe(data => {
+				for (const key of Object.keys(data)) {
+					if (data[key].currency === currency) {
+						this.currencyObj = data[key]
+						this.currencySymbol = data[key].symbol
+					}
+				}
+			})
+			console.log("this.currencyObj?.currency", this.currencyObj)
 			this.bookingResponse = response.data
 			this.firstLoadVehicleId = response.data.vehicle_id
 			this.firstLoadAffiliateId = response.data.affiliate_id
@@ -1594,6 +1609,7 @@ export class CreateNewBookingComponent implements OnInit {
 		}
 
 		let value = this.BookingForm.value
+		value['currency'] = this.currencyObj?.currency
 		if (this.RatesForm) {
 			value['rateArray'] = JSON.parse(JSON.stringify(this.RatesForm))
 			value['grand_total'] = value['rateArray']['grand_total']

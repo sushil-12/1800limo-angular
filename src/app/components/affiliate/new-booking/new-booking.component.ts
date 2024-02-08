@@ -13,6 +13,7 @@ import { AdminService } from 'src/app/services/admin.service';
 import { AffiliateService } from 'src/app/services/affiliate.service';
 import { CommonService } from 'src/app/services/common.service';
 import { StateManagementService } from 'src/app/services/statemanagement.service';
+import { HttpClient } from '@angular/common/http';
 declare var $: any
 @Component({
 	selector: 'app-new-booking',
@@ -109,6 +110,7 @@ export class NewBookingComponent implements OnInit {
 	r_shareArray: any;
 	isFarmoutBooking: boolean = false;
 	currencySymbol: any;
+	currencyObj: any;
 
 
 
@@ -125,7 +127,8 @@ export class NewBookingComponent implements OnInit {
 		private customValidator: CustomvalidationService,
 		private commonServices: CommonService,
 		private stateManagementService: StateManagementService,
-		private el: ElementRef
+		private el: ElementRef,
+		private httpClient: HttpClient,
 	) { }
 
 	openAutoCompletePanel() {
@@ -153,7 +156,9 @@ export class NewBookingComponent implements OnInit {
 			// place in query params to reinitialise things when modes of new and edit are toggled
 			// Subscriptions
 			//save currency symbol
-			this.currencySymbol = this.stateManagementService.getCurrencySymbol();
+			// this.currencySymbol = this.stateManagementService.getCurrencySymbol();
+			this.currencyObj = JSON.parse(sessionStorage.getItem('currencyData'))
+			this.currencySymbol = this.currencyObj?.symbol
 
 			this.Subscriptions()
 			this.fetchClientAccounts('individual')
@@ -461,6 +466,16 @@ export class NewBookingComponent implements OnInit {
 		this.affiliateService.getBookingDataForEdit(booking_id).subscribe((response: any) => {
 			this.SetFormValue('account_type', response?.data?.account_type)
 			response.data.booking_instructions = response?.data?.booking_instructions?.replaceAll('<br />', '')
+			let currency = response?.data?.currency
+			this.httpClient.get("assets/json/currencyOptions.json").subscribe(data => {
+				for (const key of Object.keys(data)) {
+					if (data[key].currency === currency) {
+						this.currencyObj = data[key]
+						this.currencySymbol = data[key].symbol
+					}
+				}
+			})
+			console.log("this.currencyObj?.currency", this.currencyObj)
 			this.isTravelShare = response?.data?.account_type == 'travel_planner' ? true : false
 			this.isCreatedByAdmin = response?.data?.created_by == 1 ? true : false
 			this.isFarmoutBooking = response?.data?.reservation_type == 'farmout' ? true : false
@@ -1442,6 +1457,7 @@ export class NewBookingComponent implements OnInit {
 		}
 
 		let value = this.BookingForm.value
+		value['currency'] = this.currencyObj?.currency
 		if (this.RatesForm) {
 			value['rateArray'] = JSON.parse(JSON.stringify(this.RatesForm))
 			value['grand_total'] = value['rateArray']['grand_total']

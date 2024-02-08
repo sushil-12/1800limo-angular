@@ -1757,8 +1757,8 @@
 			[distance]="distance_for_rates" [book_data]="booking_data" [isTravelShare]="isTravelShare"
 			[isFarmoutBooking]="isFarmoutBooking" [hours]="Form.number_of_hours?.value"
 			[vehicles]="Form.number_of_vehicles?.value" [isCreatedByAdmin]="isCreatedByAdmin"
-			[initReturnRates]="init_return_rates" (returnNumberOfHr)="HandleReturnNumberOfHr($event)"
-			(returnformvalue)="ReturnRateFormValue($event)">
+			[initReturnRates]="init_return_rates" [currencyObject]="currencyObj"
+			(returnNumberOfHr)="HandleReturnNumberOfHr($event)" (returnformvalue)="ReturnRateFormValue($event)">
 		</app-rates-forms>
 		<div class="row">
 			<div class="col-md-12 d-flex preview_button_edit">

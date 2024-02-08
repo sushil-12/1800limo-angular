@@ -25,6 +25,7 @@ export class RatesFormsComponent implements OnInit, OnChanges {
 	@Input('book_data') book_data: any = {};
 	@Input('isCreatedByAdmin') isCreatedByAdmin: boolean = true;
 	@Input('isFarmoutBooking') isFarmoutBooking: boolean = false;
+	@Input("currencyObject") currencyObject: any;
 
 	// Throw Events.
 	@Output("formvalue") formvalue = new EventEmitter<Record<string, any>>();
@@ -122,7 +123,7 @@ export class RatesFormsComponent implements OnInit, OnChanges {
 
 	ngOnChanges(changes: SimpleChanges) {
 		console.warn("Change has been detected: ", changes);
-
+		this.currencySymbol = this.currencyObject?.symbol
 		this.ratesform = true;
 		// changes.init_rates?.currentValue ?? this.ratesform
 		this.returnratesform =

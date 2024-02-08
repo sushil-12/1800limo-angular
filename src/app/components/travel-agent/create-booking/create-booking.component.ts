@@ -12,6 +12,7 @@ import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { pluck } from 'rxjs/operators';
 import { TravelAgentService } from 'src/app/services/travel-agent.service';
 import { StateManagementService } from 'src/app/services/statemanagement.service';
+import { HttpClient } from '@angular/common/http';
 declare var $: any
 @Component({
 	selector: 'app-create-booking',
@@ -134,6 +135,7 @@ export class CreateBookingComponent implements OnInit {
 	adminSharePercent: number = 25;
 	currentUser: any;
 	currencySymbol: any;
+	currencyObj: any;
 
 	constructor(
 		private $form: FormBuilder,
@@ -147,6 +149,7 @@ export class CreateBookingComponent implements OnInit {
 		private $routeurl: ActivatedRoute,
 		private stateManagementService: StateManagementService,
 		private customValidator: CustomvalidationService,
+		private httpClient: HttpClient,
 	) { }
 
 	ngOnInit(): void {
@@ -178,7 +181,9 @@ export class CreateBookingComponent implements OnInit {
 			}
 
 			//save currency symbol
-			this.currencySymbol = this.stateManagementService.getCurrencySymbol();
+			// this.currencySymbol = this.stateManagementService.getCurrencySymbol();
+			this.currencyObj = JSON.parse(sessionStorage.getItem('currencyData'))
+			this.currencySymbol = this.currencyObj?.symbol
 			// else {
 			// 	this.resetFields()
 			// }
@@ -434,6 +439,16 @@ export class CreateBookingComponent implements OnInit {
 			response.data.booking_instructions = response.data.booking_instructions.replaceAll('<br />', '')
 			console.log('response <><><><><', response.data)
 			let editing_data = response.data
+			let currency = editing_data?.currency
+			this.httpClient.get("assets/json/currencyOptions.json").subscribe(data => {
+				for (const key of Object.keys(data)) {
+					if (data[key].currency === currency) {
+						this.currencyObj = data[key]
+						this.currencySymbol = data[key].symbol
+					}
+				}
+			})
+			console.log("this.currencyObj?.currency", this.currencyObj)
 			this.bookingResponse = response.data
 			this.firstLoadVehicleId = response.data.vehicle_id
 			this.firstLoadAffiliateId = response.data.affiliate_id
@@ -2249,6 +2264,7 @@ export class CreateBookingComponent implements OnInit {
 		}
 
 		let value = this.BookingForm.value
+		value['currency'] = this.currencyObj?.currency
 		value['is_master_vehicle'] = this.is_master_vehicle
 		value['proceed'] = this.proceed
 		value['rateArray'] = this.rateArray
