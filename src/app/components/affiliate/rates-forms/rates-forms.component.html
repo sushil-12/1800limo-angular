@@ -131,8 +131,7 @@
 					<mat-slide-toggle [checked]="sub_item?.value?.controls?.type?.value == 'percent'"
 						[tabIndex]="getTabIndex(item.key)"
 						(change)="changeValue('RatesForm', item.key, sub_item.key, 'type', $event.checked ? 'percent' : 'flat')">
-						<i class="bi mx-1 bi-percent"
-							*ngIf="(sub_item?.value?.controls?.type?.value !== 'flat' || sub_item?.value?.controls?.type?.value !== null)"></i>
+						<i class="bi mx-1 bi-percent" *ngIf="sub_item?.value?.controls?.type?.value === 'percent'"></i>
 						<span
 							*ngIf="(sub_item?.value?.controls?.type?.value === 'flat' || sub_item?.value?.controls?.type?.value === null)">
 							{{currencySymbol}}
@@ -353,8 +352,7 @@
 					<mat-slide-toggle [checked]="sub_item?.value?.controls?.type?.value == 'percent'"
 						[tabIndex]="getTabIndex('r_'+item.key)"
 						(change)="changeValue('ReturnRatesForm', item.key, sub_item.key, 'type', $event.checked ? 'percent' : 'flat')">
-						<i class="bi mx-1 bi-percent"
-							*ngIf="(sub_item?.value?.controls?.type?.value !== 'flat' || sub_item?.value?.controls?.type?.value !== null)"></i>
+						<i class="bi mx-1 bi-percent" *ngIf="sub_item?.value?.controls?.type?.value === 'percent'"></i>
 						<span
 							*ngIf="(sub_item?.value?.controls?.type?.value === 'flat' || sub_item?.value?.controls?.type?.value === null)">
 							{{currencySymbol}}
