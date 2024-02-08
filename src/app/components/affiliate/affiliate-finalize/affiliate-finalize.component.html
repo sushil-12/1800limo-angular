@@ -33,7 +33,7 @@
 				<p>Booking Status <strong>{{ textFormatter(BookingDetail?.booking_status) | titlecase }}</strong></p>
 			</div>
 			<div class="col-md-4">
-				<p>Quote Amount <strong>${{ quoteAmount }}</strong></p>
+				<p>Quote Amount <strong>{{currencySymbol}}{{ quoteAmount }}</strong></p>
 			</div>
 
 		</div>

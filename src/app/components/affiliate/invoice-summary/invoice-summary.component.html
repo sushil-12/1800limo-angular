@@ -45,7 +45,8 @@
 						<div class="bd-highlight invoice-p m-3">
 							Paid Amount
 							<p class="invoice-dollar--color display-4">
-								<strong style="font-size: xx-large;">${{invoiceData.grand_total}}</strong>
+								<strong
+									style="font-size: xx-large;">{{currencySymbol}}{{invoiceData.grand_total}}</strong>
 							</p>
 						</div>
 					</div>
@@ -232,7 +233,8 @@
 									<ul style="list-style: none;margin:0;color: #1c1a1a;font-size:15px">
 										<li style="margin-bottom: 8px; " class="invoice-charges-textb "
 											*ngFor="let price of priceObj.value">
-											<span class="font-weight-bold" *ngIf="price.amount">${{price.amount}}</span>
+											<span class="font-weight-bold"
+												*ngIf="price.amount">{{currencySymbol}}{{price.amount}}</span>
 										</li>
 									</ul>
 								</div>
@@ -243,7 +245,7 @@
 										Sub Total
 									</p>
 									<p class="m-0 p-1 text-charges">
-										${{invoiceData?.sub_total}}
+										{{currencySymbol}}{{invoiceData?.sub_total}}
 									</p>
 								</div>
 								<div class="row d-flex justify-content-between">
@@ -259,7 +261,7 @@
 									<p class="m-0 p-1 text-charges">
 										Total-Amount</p>
 									<p class="m-0 p-1 text-charges font-weight-bold">
-										${{invoiceData.grand_total}}
+										{{currencySymbol}}{{invoiceData.grand_total}}
 									</p>
 								</div>
 							</div>
@@ -303,7 +305,7 @@
 						<div class="col-md-12">
 							<mat-form-field appearance="outline">
 								<mat-label>Amount</mat-label>
-								<span matPrefix>$ &nbsp;</span>
+								<span matPrefix>{{currencySymbol}} &nbsp;</span>
 								<input matInput type="number" formControlName="refundAmount"
 									value="invoiceData.grand_total" required readonly>
 							</mat-form-field>
