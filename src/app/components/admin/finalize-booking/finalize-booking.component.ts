@@ -6,6 +6,7 @@ import { AdminService } from "src/app/services/admin.service";
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 import { FormBuilder, FormGroup, Validators, FormControl, FormArray, ValidationErrors, ValidatorFn, AbstractControl } from '@angular/forms';
 import { CustomvalidationService } from "src/app/services/customvalidation.service";
+import { HttpClient } from "@angular/common/http";
 declare var $: any;
 
 @Component({
@@ -71,11 +72,13 @@ export class FinalizeBookingComponent implements OnInit {
 	isTravelShare: boolean;
 	isCreatedByAdmin: boolean = true;
 	shareArray: any;
-    r_shareArray: any;
-    adminSharePercent: number = 25;
+	r_shareArray: any;
+	adminSharePercent: number = 25;
 	service_type: any;
 	isFarmoutBooking: boolean = false;
-	isFinalizeButton: boolean =false;
+	isFinalizeButton: boolean = false;
+	currencyObj: any;
+	currencySymbol: any;
 
 	constructor(
 		private $form: FormBuilder,
@@ -84,9 +87,10 @@ export class FinalizeBookingComponent implements OnInit {
 		private $router: Router,
 		private $errors: ErrorDialogService,
 		private $spinner: NgxSpinnerService,
-		private customValidator: CustomvalidationService
+		private customValidator: CustomvalidationService,
+		private httpClient: HttpClient,
 	) {
-		
+
 	}
 
 	ngOnInit(): void {
@@ -176,12 +180,22 @@ export class FinalizeBookingComponent implements OnInit {
 			.subscribe((response: any) => {
 				this.$spinner.hide();
 				console.log(response.data, "check response");
-				this.isTravelShare =  response?.data?.account_type=='travel_planner' ? true : false
-				this.isCreatedByAdmin = response?.data?.created_by==1 ? true : false
-				this.isFarmoutBooking = response?.data?.reservation_type=='farmout' ? true : false
+				let currency = response?.data?.currency
+				this.httpClient.get("assets/json/currencyOptions.json").subscribe(data => {
+					for (const key of Object.keys(data)) {
+						if (data[key].currency === currency) {
+							this.currencyObj = data[key]
+							this.currencySymbol = data[key].symbol
+						}
+					}
+				})
+				console.log("this.currencyObj?.currency", this.currencyObj)
+				this.isTravelShare = response?.data?.account_type == 'travel_planner' ? true : false
+				this.isCreatedByAdmin = response?.data?.created_by == 1 ? true : false
+				this.isFarmoutBooking = response?.data?.reservation_type == 'farmout' ? true : false
 				this.BookingDetail = response.data
 				this.isFinalizeButton = this.BookingDetail?.booking_status == 'finalized' ? true : false,
-				this.transferType = this.BookingDetail.transfer_type
+					this.transferType = this.BookingDetail.transfer_type
 				this.init_rates = true;
 				this.service_type = response?.data?.service_type
 				this.CardsInformation = response?.data?.cards
@@ -267,40 +281,40 @@ export class FinalizeBookingComponent implements OnInit {
 		return (distance / 1000).toFixed(2)
 	}
 
-	createReservationShareArray(){
+	createReservationShareArray() {
 		console.log('in function createReservationShareArray')
 		if (this.edit_rates_value) {
-		let base_rate = 0
-		for (const key of Object.keys(this.edit_rates_value.all_inclusive_rates)) {
-			base_rate += this.edit_rates_value.all_inclusive_rates[key].baserate;
-		}
-		for (const key of Object.keys(this.edit_rates_value.amenities)) {
-			base_rate += this.edit_rates_value.amenities[key].baserate;
-		}
+			let base_rate = 0
+			for (const key of Object.keys(this.edit_rates_value.all_inclusive_rates)) {
+				base_rate += this.edit_rates_value.all_inclusive_rates[key].baserate;
+			}
+			for (const key of Object.keys(this.edit_rates_value.amenities)) {
+				base_rate += this.edit_rates_value.amenities[key].baserate;
+			}
 			let grandTotal = this.edit_rates_value.grand_total
 			let stripeFee = grandTotal * 0.05 + 0.30
-			let adminShare = (base_rate * this.adminSharePercent) / 100 
-			let deducted_admin_share = adminShare-stripeFee
+			let adminShare = (base_rate * this.adminSharePercent) / 100
+			let deducted_admin_share = adminShare - stripeFee
 			let shareArray = {
-				baseRate : base_rate,
-				grandTotal : grandTotal,
-				stripeFee : stripeFee,
-				adminShare : adminShare,
+				baseRate: base_rate,
+				grandTotal: grandTotal,
+				stripeFee: stripeFee,
+				adminShare: adminShare,
 				deducted_admin_share: deducted_admin_share,  // Admin will get this amount only
-				affiliateShare : (grandTotal - adminShare)
+				affiliateShare: (grandTotal - adminShare)
 			}
 			// travelAgentShare : 
-			if(this.BookingDetail?.account_type == 'travel_planner' && !this.isCreatedByAdmin){
+			if (this.BookingDetail?.account_type == 'travel_planner' && !this.isCreatedByAdmin) {
 				this.adminSharePercent = 15
-				shareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100 
-				shareArray['deducted_admin_share'] = shareArray['adminShare']- shareArray['stripeFee']
-				shareArray['travelAgentShare'] = base_rate * 0.10  
+				shareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100
+				shareArray['deducted_admin_share'] = shareArray['adminShare'] - shareArray['stripeFee']
+				shareArray['travelAgentShare'] = base_rate * 0.10
 			}
-			else if(this.isFarmoutBooking){
+			else if (this.isFarmoutBooking) {
 				this.adminSharePercent = 15
-				shareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100 
-				shareArray['deducted_admin_share'] = shareArray['adminShare']- shareArray['stripeFee']
-				shareArray['farmoutShare'] = base_rate * 0.10  
+				shareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100
+				shareArray['deducted_admin_share'] = shareArray['adminShare'] - shareArray['stripeFee']
+				shareArray['farmoutShare'] = base_rate * 0.10
 			}
 			this.shareArray = shareArray
 			// console.log('in function createReservationShareArray-->>>' , base_rate, shareArray )
@@ -309,7 +323,7 @@ export class FinalizeBookingComponent implements OnInit {
 		}
 	}
 	submitForm() {
-	
+
 		// console.log(this.BookingForm);
 		let rateArray = JSON.parse(JSON.stringify(this.edit_rates_value))
 		if (rateArray.all_inclusive_rates.Base_Rate.rate_label == "Minimum Rate") {
@@ -325,7 +339,7 @@ export class FinalizeBookingComponent implements OnInit {
 			grand_total: this.edit_rates_value.grand_total,
 			affiliate_type: this.affiliate_type,
 			number_of_hours: this.finalize_params['number_of_hours'],
-			shareArray:this.shareArray
+			shareArray: this.shareArray
 		}
 		console.log('\n\n Submitting Form', body);
 		this.$spinner.show()
@@ -394,7 +408,7 @@ export class FinalizeBookingComponent implements OnInit {
 				// this.$router.navigate(['/admin/invoice-summary'], { queryParams: { bookingId: this.bookingId } })
 				// this.$router.navigate(['/admin/invoice-summary'], { queryParams: { bookingId: this.bookingId } })
 				this.$router.navigate(['/admin/daily-bookings-admin'])
-				
+
 				console.log('response---------------------->>', response)
 				this.$spinner.hide()
 			})
@@ -441,7 +455,7 @@ export class FinalizeBookingComponent implements OnInit {
 					// 	}
 					// })
 					// this.$router.navigate(['/admin/invoice-summary'], { queryParams: { bookingId: this.bookingId } })
-				this.$router.navigate(['/admin/daily-bookings-admin'])
+					this.$router.navigate(['/admin/daily-bookings-admin'])
 					console.log('response---------------------->>', response)
 					this.$spinner.hide()
 				})
@@ -468,35 +482,35 @@ export class FinalizeBookingComponent implements OnInit {
 	}
 	RateFormValue(form: any) {
 		this.edit_rates_value = form
-		console.log("edit_rates_value",this.edit_rates_value)
+		console.log("edit_rates_value", this.edit_rates_value)
 		this.payableAmount = this.edit_rates_value.grand_total - this.paidAmount
-		if(this.BookingDetail?.booking_status == 'finalized'){
-			if(this.edit_rates_value.grand_total != this.BookingDetail?.grand_total){
+		if (this.BookingDetail?.booking_status == 'finalized') {
+			if (this.edit_rates_value.grand_total != this.BookingDetail?.grand_total) {
 				this.isFinalizeButton = false
 			}
-			else{
+			else {
 				this.isFinalizeButton = true
 			}
 		}
-		else{
+		else {
 			this.isFinalizeButton = false
 		}
 
 	}
 	ReturnRateFormValue(form: any) {
 		this.return_edit_rates_value = form
-		if(this.BookingDetail?.booking_status == 'finalized'){
-			if(this.return_edit_rates_value.grand_total != this.BookingDetail?.r_grand_total){
+		if (this.BookingDetail?.booking_status == 'finalized') {
+			if (this.return_edit_rates_value.grand_total != this.BookingDetail?.r_grand_total) {
 				this.isFinalizeButton = false
 			}
-			else{
+			else {
 				this.isFinalizeButton = true
 			}
 		}
-		else{
+		else {
 			this.isFinalizeButton = false
 		}
-		
+
 	}
 	HandleReturnNumberOfHr(data: any) {
 		console.log('____<><><><><><><><>', data)
@@ -507,7 +521,7 @@ export class FinalizeBookingComponent implements OnInit {
 		console.log('saving card details')
 		this.$spinner.show()
 		// {
-			
+
 		// }
 		// let dataToSend = {
 		// 	CreditCardsDetail: {
@@ -519,7 +533,7 @@ export class FinalizeBookingComponent implements OnInit {
 		// 		save_card_detail: false
 		// 	},
 		// 	isExistingCard: false,
-			
+
 		// 	paymentMethod: "credit_card",
 		// 	reservation_id: "853",
 		// 	grand_total: 122.5
@@ -541,7 +555,7 @@ export class FinalizeBookingComponent implements OnInit {
 			// 	}
 			// })
 			console.log('response---------------------->>', response)
-			this.$spinner.hide()			
+			this.$spinner.hide()
 			this.getReservationDetails(this.bookingId)
 			this.buildingCardForm()
 			this.changeDetection('card')
