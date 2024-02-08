@@ -469,7 +469,7 @@ export class NewBookingComponent implements OnInit {
 			let currency = response?.data?.currency
 			this.httpClient.get("assets/json/currencyOptions.json").subscribe(data => {
 				for (const key of Object.keys(data)) {
-					if (data[key].currency === currency) {
+					if (data[key].currency === currency.toUpperCase()) {
 						this.currencyObj = data[key]
 						this.currencySymbol = data[key].symbol
 					}
