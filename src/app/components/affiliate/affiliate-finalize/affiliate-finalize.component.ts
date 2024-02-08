@@ -8,6 +8,7 @@ import { catchError } from 'rxjs/operators';
 import { AdminService } from 'src/app/services/admin.service';
 import { AffiliateService } from 'src/app/services/affiliate.service';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
+import { StateManagementService } from 'src/app/services/statemanagement.service';
 
 @Component({
 	selector: 'app-affiliate-finalize',
@@ -58,12 +59,13 @@ export class AffiliateFinalizeComponent implements OnInit {
 	editRate: any;
 	isCreatedByAdmin: boolean = true;
 	shareArray: any;
-    r_shareArray: any;
-    adminSharePercent: number = 25;
+	r_shareArray: any;
+	adminSharePercent: number = 25;
 	service_type: any;
-	isFarmoutBooking:boolean =false;
-	isFinalizeButton: boolean =false;
+	isFarmoutBooking: boolean = false;
+	isFinalizeButton: boolean = false;
 	bookdataresp: any;
+	currencySymbol: any;
 
 	constructor(
 		private $api: AdminService,
@@ -73,7 +75,8 @@ export class AffiliateFinalizeComponent implements OnInit {
 		private spinner: NgxSpinnerService,
 		private $errors: ErrorDialogService,
 		private fb: FormBuilder,
-		private activatedroute: ActivatedRoute
+		private activatedroute: ActivatedRoute,
+		private stateManagementService: StateManagementService,
 	) { }
 
 	ngOnInit(): void {
@@ -99,6 +102,9 @@ export class AffiliateFinalizeComponent implements OnInit {
 			cardId: ["", Validators.required],
 			accId: ["", Validators.required],
 		});
+
+		//save currency symbol
+		this.currencySymbol = this.stateManagementService.getCurrencySymbol();
 	}
 
 
@@ -114,14 +120,14 @@ export class AffiliateFinalizeComponent implements OnInit {
 				this.bookdataresp = data
 				this.BookingDetail = data?.booking_detail
 				this.isFinalizeButton = this.BookingDetail?.booking_status == 'finalized' ? true : false,
-				this.transferType = this.BookingDetail?.transfer_type
+					this.transferType = this.BookingDetail?.transfer_type
 				this.isTravelShare = data?.booking_detail?.account_type == 'travel_planner' ? true : false
-				this.isFarmoutBooking = data?.booking_detail?.reservation_type=='farmout' ? true : false
+				this.isFarmoutBooking = data?.booking_detail?.reservation_type == 'farmout' ? true : false
 				this.finalize_params.number_of_vehicles = data?.booking_detail?.number_of_vehicles
 				this.init_rates = true;
 				this.hours = data?.booking_detail?.number_of_hours
 				this.finalize_params['number_of_hours'] = this.BookingDetail.number_of_hours
-				this.isCreatedByAdmin = data?.booking_detail?.created_by==1 ? true : false
+				this.isCreatedByAdmin = data?.booking_detail?.created_by == 1 ? true : false
 				this.service_type = data?.booking_detail?.service_type
 				this.quoteAmount = data?.grand_total
 				this.CardsInformation = data?.CreditCardsDetail
@@ -181,15 +187,15 @@ export class AffiliateFinalizeComponent implements OnInit {
 	RateFormValue(form: any) {
 		console.log('rate form value ------>>>>', form)
 		this.edit_rates_value = form
-		if(this.BookingDetail?.booking_status == 'finalized'){
-			if(this.edit_rates_value.grand_total != this.bookdataresp?.grand_total){
+		if (this.BookingDetail?.booking_status == 'finalized') {
+			if (this.edit_rates_value.grand_total != this.bookdataresp?.grand_total) {
 				this.isFinalizeButton = false
 			}
-			else{
+			else {
 				this.isFinalizeButton = true
 			}
 		}
-		else{
+		else {
 			this.isFinalizeButton = false
 		}
 	}
@@ -206,7 +212,7 @@ export class AffiliateFinalizeComponent implements OnInit {
 			});
 	}
 	acceptRejectButton(type: string) {
-		console.log("in func accpe and reject",type)
+		console.log("in func accpe and reject", type)
 		if (type == 'reject') {
 			console.log('in function cancel booking', this.bookingId)
 			this.spinner.show();
@@ -250,7 +256,7 @@ export class AffiliateFinalizeComponent implements OnInit {
 				.subscribe(({ data, success, message }: any) => {
 					if (success == true) {
 						this.spinner.hide();//hide spinner
-					this.router.navigate(['/affiliate/my-bookings']);
+						this.router.navigate(['/affiliate/my-bookings']);
 
 						// this.loadBookings()
 						// $('#acceptBooking').modal('hide');
@@ -263,41 +269,41 @@ export class AffiliateFinalizeComponent implements OnInit {
 				});
 		}
 	}
-	createReservationShareArray(){
+	createReservationShareArray() {
 		console.log('in function createReservationShareArray')
 		if (this.edit_rates_value) {
-		let base_rate = 0
-		for (const key of Object.keys(this.edit_rates_value.all_inclusive_rates)) {
-			base_rate += this.edit_rates_value.all_inclusive_rates[key].baserate;
-		}
-		for (const key of Object.keys(this.edit_rates_value.amenities)) {
-			base_rate += this.edit_rates_value.amenities[key].baserate;
-		}
+			let base_rate = 0
+			for (const key of Object.keys(this.edit_rates_value.all_inclusive_rates)) {
+				base_rate += this.edit_rates_value.all_inclusive_rates[key].baserate;
+			}
+			for (const key of Object.keys(this.edit_rates_value.amenities)) {
+				base_rate += this.edit_rates_value.amenities[key].baserate;
+			}
 			let grandTotal = this.edit_rates_value.grand_total
 			let stripeFee = grandTotal * 0.05 + 0.30
-			let adminShare = (base_rate * this.adminSharePercent) / 100 
-			let deducted_admin_share = adminShare-stripeFee
+			let adminShare = (base_rate * this.adminSharePercent) / 100
+			let deducted_admin_share = adminShare - stripeFee
 			let shareArray = {
-				baseRate : base_rate,
-				grandTotal : grandTotal,
-				stripeFee : stripeFee,
-				adminShare : adminShare,
+				baseRate: base_rate,
+				grandTotal: grandTotal,
+				stripeFee: stripeFee,
+				adminShare: adminShare,
 				deducted_admin_share: deducted_admin_share,  // Admin will get this amount only
-				affiliateShare : (grandTotal - adminShare)
+				affiliateShare: (grandTotal - adminShare)
 			}
 			// travelAgentShare : 
-			if(this.BookingDetail?.account_type == 'travel_planner' && !this.isCreatedByAdmin){
+			if (this.BookingDetail?.account_type == 'travel_planner' && !this.isCreatedByAdmin) {
 				console.log("in if travel planner")
 				this.adminSharePercent = 15
-				shareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100 
-				shareArray['deducted_admin_share'] = shareArray['adminShare']- shareArray['stripeFee']
-				shareArray['travelAgentShare'] = base_rate * 0.10  
+				shareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100
+				shareArray['deducted_admin_share'] = shareArray['adminShare'] - shareArray['stripeFee']
+				shareArray['travelAgentShare'] = base_rate * 0.10
 			}
-			else if(this.isFarmoutBooking){
+			else if (this.isFarmoutBooking) {
 				this.adminSharePercent = 15
-				shareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100 
-				shareArray['deducted_admin_share'] = shareArray['adminShare']- shareArray['stripeFee']
-				shareArray['farmoutShare'] = base_rate * 0.10  
+				shareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100
+				shareArray['deducted_admin_share'] = shareArray['adminShare'] - shareArray['stripeFee']
+				shareArray['farmoutShare'] = base_rate * 0.10
 			}
 			this.shareArray = shareArray
 			// console.log('in function createReservationShareArray-->>>' , base_rate, shareArray )
@@ -307,7 +313,7 @@ export class AffiliateFinalizeComponent implements OnInit {
 	}
 	submitForm() {
 		this.spinner.show();
-		
+
 		let rateArray = JSON.parse(JSON.stringify(this.edit_rates_value))
 		if (rateArray.all_inclusive_rates.Base_Rate.rate_label == "Minimum Rate") {
 			rateArray.all_inclusive_rates.Base_Rate.rate_label = "Base Rate"
@@ -321,7 +327,7 @@ export class AffiliateFinalizeComponent implements OnInit {
 			sub_total: this.edit_rates_value.sub_total,
 			grand_total: this.edit_rates_value.grand_total,
 			number_of_hours: this.finalize_params['number_of_hours'],
-			shareArray:this.shareArray
+			shareArray: this.shareArray
 		}
 		console.log('final obj -------------->>>>>>>', body)
 		console.log('\n\n Submitting Form', body);
@@ -336,12 +342,12 @@ export class AffiliateFinalizeComponent implements OnInit {
 			console.log('response-->>', response)
 			this.finalize_btn = "Finalized"
 			this.getBookingData(this.bookingId)
-			
+
 		})
-		
+
 
 	}
-	
+
 	resetCardForm() {
 		this.cardForm.reset()
 	}
@@ -377,9 +383,9 @@ export class AffiliateFinalizeComponent implements OnInit {
 			this.isCardFormOpen = false
 		}
 	}
-	makePayment(method:string) {
+	makePayment(method: string) {
 
-		console.log('In function make payment',method)
+		console.log('In function make payment', method)
 		if (method == 'new_card') {
 			this.isCardFormOpen = true
 			this.paymentMethod = 'card'

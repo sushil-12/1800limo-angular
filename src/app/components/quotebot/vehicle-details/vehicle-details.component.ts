@@ -18,11 +18,12 @@ export class VehicleDetailsComponent implements OnInit {
 	quotebot_form: any	// quotebot details from previous page
 	one_way_rates: any
 	round_trip_rates: any
-	distance:any = 0
-	duration:any = 0
-	bookingId:any=null
+	distance: any = 0
+	duration: any = 0
+	bookingId: any = null
 
 	driver_info_display_keys: Array<string> = ['gender', 'dress', 'experience', 'languages', 'insurance_limit']
+	currencySymbol: any;
 
 	constructor(
 		private _router: Router,
@@ -43,7 +44,7 @@ export class VehicleDetailsComponent implements OnInit {
 					error: 'Please file a quote first, before selecting vehicles.'
 				}
 			})
-			this._router.navigate(['/home' ,  { queryParams: {r:true} }])
+			this._router.navigate(['/home', { queryParams: { r: true } }])
 		} else if (sessionStorage.getItem('selected_vehicle') === null) {
 			this._errorDialogService.openDialog({
 				errors: {
@@ -61,8 +62,8 @@ export class VehicleDetailsComponent implements OnInit {
 			}
 			this.quotebot_form = JSON.parse(localStorage.getItem('quotebot_form'))
 			let rates = this.selected_vehicle[Object.keys(this.selected_vehicle).find(value => /^rate_breakdown_one_way/g.test(value))]
-			this.one_way_rates =  rates ? rates :  this.selected_vehicle[Object.keys(this.selected_vehicle).find(value => /^rate_breakdown_charter_tour/g.test(value))]
-			console.log('rates-->>' , rates ? 'yes' : 'no' , this.one_way_rates)
+			this.one_way_rates = rates ? rates : this.selected_vehicle[Object.keys(this.selected_vehicle).find(value => /^rate_breakdown_charter_tour/g.test(value))]
+			console.log('rates-->>', rates ? 'yes' : 'no', this.one_way_rates)
 
 			this.round_trip_rates = this.selected_vehicle[Object.keys(this.selected_vehicle).find(value => /^rate_breakdown_round_trip/g.test(value))]
 
@@ -77,15 +78,17 @@ export class VehicleDetailsComponent implements OnInit {
 			console.log(this.selected_vehicle)
 		}
 
-		this._activatedRoute.queryParams.subscribe((params: any) =>
-		{
-			console.log('paramsa->>>>' , params.booking_id)
-			if(params?.id){
+		let currency = JSON.parse(sessionStorage.getItem('currencyData'))
+		this.currencySymbol = currency?.symbol
+
+		this._activatedRoute.queryParams.subscribe((params: any) => {
+			console.log('paramsa->>>>', params.booking_id)
+			if (params?.id) {
 				this.bookingId = params?.id
 			}
-			
 
-			
+
+
 		})
 
 		// initialize Map
@@ -236,12 +239,12 @@ export class VehicleDetailsComponent implements OnInit {
 			directionsService.route(obj, (response, error) => {
 				console.log('Directions Service Response: ', response)
 				console.log('Distance-->>>>>', response?.routes)
-				response?.routes?.map((i:any)=>{
-					i?.legs.map((j)=>{
-						this.distance +=  j.distance.value
+				response?.routes?.map((i: any) => {
+					i?.legs.map((j) => {
+						this.distance += j.distance.value
 						this.duration += j.duration.value
-						console.log('--<distance>>' , j.distance.value)
-						console.log('--<duration>>' , j.duration.value)
+						console.log('--<distance>>', j.distance.value)
+						console.log('--<duration>>', j.duration.value)
 
 					})
 				})
@@ -258,30 +261,30 @@ export class VehicleDetailsComponent implements OnInit {
 	textFormat(text: string) {
 		return text.replace(/[_|-]/g, ' ')
 	}
-	convertToMi(value){
-		return (value * 0.000621371 ).toFixed(2)
+	convertToMi(value) {
+		return (value * 0.000621371).toFixed(2)
 	}
-	convertToKm(value){
+	convertToKm(value) {
 		return (value * 0.001).toFixed(2)
 	}
-	convertToMinutes(value){
+	convertToMinutes(value) {
 		const days = Math.floor(value / (24 * 60 * 60));
 		const remainingSeconds = value % (24 * 60 * 60);
 		const hours = Math.floor(remainingSeconds / (60 * 60));
 		const remainingMinutes = Math.floor((remainingSeconds % (60 * 60)) / 60);
-	
+
 		let result = "";
 
 		if (days > 0) {
 			result += `${days} days, `;
 		}
-	
+
 		if (hours > 0 || (days === 0 && hours === 0)) {
 			result += `${hours} hours, `;
 		}
-	
+
 		result += `${remainingMinutes} minutes`;
-	
+
 		return result;
 		// return (value/60).toFixed(2)
 	}
@@ -321,30 +324,30 @@ export class VehicleDetailsComponent implements OnInit {
 	 */
 	bookNow() {
 		console.log('Will navigate to Book Now Page ...')
-		let vehicle_selected = JSON.parse(sessionStorage.getItem('selected_vehicle')) 
+		let vehicle_selected = JSON.parse(sessionStorage.getItem('selected_vehicle'))
 		if (localStorage.getItem('currentUser') != null) {
 			if (JSON.parse(localStorage.getItem('currentUser'))['roleName'] == 'admin') {
 				// this._router.navigate(['/admin/new-booking'])
 				// console.log('navigate to new booking----')
-				if(this.bookingId){
+				if (this.bookingId) {
 					this._router.navigate(['/admin/new-booking'],
-					{ queryParams: {affiliate_id:vehicle_selected.affiliate_id, vehicle_id:vehicle_selected.id,new : 'reaffiliate' ,updateType:'reaffiliate',reaffiliate_book_id:this.bookingId}})
-				}else{
+						{ queryParams: { affiliate_id: vehicle_selected.affiliate_id, vehicle_id: vehicle_selected.id, new: 'reaffiliate', updateType: 'reaffiliate', reaffiliate_book_id: this.bookingId } })
+				} else {
 
 					this._router.navigate(['/admin/new-booking'],
-					{ queryParams: {affiliate_id:vehicle_selected.affiliate_id, vehicle_id:vehicle_selected.id,new : true }})
+						{ queryParams: { affiliate_id: vehicle_selected.affiliate_id, vehicle_id: vehicle_selected.id, new: true } })
 				}
 			} else {
 				let user = JSON.parse(localStorage.getItem('currentUser'))['roleName']
-				let vehicle_selected:any = JSON.parse(sessionStorage.getItem('selected_vehicle'))
-				console.log('vehicle_selected---->>>>>',vehicle_selected)
+				let vehicle_selected: any = JSON.parse(sessionStorage.getItem('selected_vehicle'))
+				console.log('vehicle_selected---->>>>>', vehicle_selected)
 				user = user == 'driver' ? 'affiliate' : user	// roleName of driver has to be directed to affiliate/..
 
 				// navigate to farm in bookings page
 				this._router.navigate([
 					'/' + user + '/create-new-booking'
 				],
-				{ queryParams: {affiliate_id:vehicle_selected.affiliate_id, vehicle_id:vehicle_selected.id,new : true } }
+					{ queryParams: { affiliate_id: vehicle_selected.affiliate_id, vehicle_id: vehicle_selected.id, new: true } }
 				)
 			}
 		} else {
@@ -360,7 +363,7 @@ export class VehicleDetailsComponent implements OnInit {
 			this._router.navigate([
 				'/quotebot/new-booking'
 			],
-			{ queryParams: {affiliate_id:vehicle_selected.affiliate_id, vehicle_id:vehicle_selected.id,new : true , is_master_vehicle:vehicle_selected?.is_master_vehicle} })
+				{ queryParams: { affiliate_id: vehicle_selected.affiliate_id, vehicle_id: vehicle_selected.id, new: true, is_master_vehicle: vehicle_selected?.is_master_vehicle } })
 		}
 	}
 

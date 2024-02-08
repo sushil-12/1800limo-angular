@@ -8,13 +8,13 @@ import { StateManagementService } from 'src/app/services/statemanagement.service
 declare var $: any;
 
 @Component({
-  selector: 'app-sub-travel-agent-template',
-  templateUrl: './sub-travel-agent-template.component.html',
-  styleUrls: ['./sub-travel-agent-template.component.scss']
+	selector: 'app-sub-travel-agent-template',
+	templateUrl: './sub-travel-agent-template.component.html',
+	styleUrls: ['./sub-travel-agent-template.component.scss']
 })
 export class SubTravelAgentTemplateComponent implements OnInit {
 
-  public userImage: string = 'assets/images/user.png';
+	public userImage: string = 'assets/images/user.png';
 	public showSidebar: boolean = true;
 	public currentUser: any;
 	public screenWidth: any;
@@ -25,7 +25,7 @@ export class SubTravelAgentTemplateComponent implements OnInit {
 	chevron_up: boolean = false;
 	chevron: boolean = false;
 	chevron1: boolean = false;
-	bkpData:any='';
+	bkpData: any = '';
 
 	constructor(
 		private router: Router,
@@ -38,10 +38,10 @@ export class SubTravelAgentTemplateComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
-		this.bkpData = JSON.parse(localStorage.getItem('bkp_crnt_dt')) ?  JSON.parse(localStorage.getItem('bkp_crnt_dt')) : ''
-			//Get logged in user name
-			this.currentUser = JSON.parse(localStorage.getItem('currentUser'))
-			console.log('is_profile',this.currentUser?.is_profile_complete)
+		this.bkpData = JSON.parse(localStorage.getItem('bkp_crnt_dt')) ? JSON.parse(localStorage.getItem('bkp_crnt_dt')) : ''
+		//Get logged in user name
+		this.currentUser = JSON.parse(localStorage.getItem('currentUser'))
+		console.log('is_profile', this.currentUser?.is_profile_complete)
 
 
 		$(".collapsed").click(function () {
@@ -52,7 +52,7 @@ export class SubTravelAgentTemplateComponent implements OnInit {
 		this.spinner.hide();//hide running spinner when came from 
 
 		this.screenWidth = window.innerWidth;
-	
+
 		//Get ProgressBar
 		this.stateManagementService.getprogressBar().subscribe(commonProgressBar => {
 			setTimeout(() => {
@@ -178,19 +178,22 @@ export class SubTravelAgentTemplateComponent implements OnInit {
 			});
 	}
 
-	backToAdmin(){
+	backToAdmin() {
 		let bkp_a_token = localStorage.getItem('bkp_a_token')
 		let bkp_crnt_dt = localStorage.getItem('bkp_crnt_dt')
 		let bkp_u_dt = localStorage.getItem('bkp_u_dt')
+		let bkp_currency_symbol = localStorage.getItem('bkp_currency_symbol')
+		localStorage.setItem('currencySymbol', bkp_currency_symbol)
 		localStorage.setItem('access_token', bkp_a_token)
 		localStorage.setItem('currentUser', bkp_crnt_dt)
 		localStorage.setItem('userData', bkp_u_dt)
 		localStorage.removeItem('bkp_a_token')
 		localStorage.removeItem('bkp_crnt_dt')
 		localStorage.removeItem('bkp_u_dt')
-		  this.router.navigateByUrl('/admin/daily-bookings-admin');
-		
-		
+		localStorage.removeItem('bkp_currency_symbol')
+		this.router.navigateByUrl('/admin/daily-bookings-admin');
+
+
 	}
 
 }

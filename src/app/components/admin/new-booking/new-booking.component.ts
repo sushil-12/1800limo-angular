@@ -15,6 +15,7 @@ import { Observable, of } from 'rxjs';
 import { CustomvalidationService } from 'src/app/services/customvalidation.service';
 import { param } from 'jquery';
 import { CommonService } from 'src/app/services/common.service';
+import { HttpClient } from '@angular/common/http';
 
 declare var $: any
 @Component({
@@ -132,6 +133,9 @@ export class NewBookingComponent implements OnInit {
 	adminSharePercent: number = 25;
 	isFarmoutBooking: boolean = false;
 	AffiliateAccounts_copy: any;
+	public canceloptions: Array<Object>;
+	currencySymbol: any;
+	currencyObj: any;
 	constructor(
 		private $form: FormBuilder,
 		private $api: AdminService,
@@ -144,6 +148,7 @@ export class NewBookingComponent implements OnInit {
 		private commonServices: CommonService,
 		private customValidator: CustomvalidationService,
 		private el: ElementRef,
+		private httpClient: HttpClient,
 	) { }
 
 	openAutoCompletePanel() {
@@ -173,6 +178,8 @@ export class NewBookingComponent implements OnInit {
 			else {
 				this.resetFields()
 			}
+			this.currencyObj = JSON.parse(sessionStorage.getItem('currencyData'))
+			this.currencySymbol = this.currencyObj?.symbol
 			// place in query params to reinitialise things when modes of new and edit are toggled
 			// Subscriptions
 			this.Subscriptions()
@@ -182,6 +189,10 @@ export class NewBookingComponent implements OnInit {
 		})
 		// fetch the big data
 		this.fetchAirportsAndBigData()
+
+		this.httpClient.get("assets/json/charterOptions.json").subscribe((data: any) => {
+			this.canceloptions = data;
+		});
 
 	}
 	buildBookingData() {
@@ -326,6 +337,7 @@ export class NewBookingComponent implements OnInit {
 			lose_affiliate_phone_isd: ['+1'],
 			lose_affiliate_phone_country: ['us'],
 			lose_affiliate_email: [''],
+			cancellation_hours: ['24'],
 			vehicle_type: [''],
 			vehicle_type_name: [''],
 			vehicle_id: [''],
@@ -530,6 +542,16 @@ export class NewBookingComponent implements OnInit {
 			response.data.booking_instructions = response.data.booking_instructions.replaceAll('<br />', '')
 			console.log('response <><><><><', response.data)
 			let editing_data = response.data
+			let currency = editing_data?.currency
+			this.httpClient.get("assets/json/currencyOptions.json").subscribe(data => {
+				for (const key of Object.keys(data)) {
+					if (data[key].currency === currency) {
+						this.currencyObj = data[key]
+						this.currencySymbol = data[key].symbol
+					}
+				}
+			})
+			console.log("this.currencyObj?.currency", this.currencyObj)
 			this.bookingResponse = response.data
 			this.firstLoadVehicleId = response.data.vehicle_id
 			this.firstLoadAffiliateId = response.data.affiliate_id
@@ -537,6 +559,7 @@ export class NewBookingComponent implements OnInit {
 			this.isTravelShare = response?.data?.account_type == 'travel_planner' ? true : false
 			this.isFarmoutBooking = response?.data?.reservation_type == 'farmout' ? true : false
 			this.isCreatedByAdmin = response?.data?.created_by == 1 ? true : false
+
 			if (response?.data?.account_type == 'travel_planner') {
 				this.getTravelClientAccounts(response?.data?.acc_id)
 			}
@@ -629,6 +652,9 @@ export class NewBookingComponent implements OnInit {
 			this.BookingForm.patchValue({
 				service_type: response.data.service_type == 'oneway' ? 'one_way' : response.data['service_type'] == 'roundtrip' ? 'round_trip' : 'charter_tour',
 			})
+			this.BookingForm.patchValue({
+				cancellation_hours: response?.data?.cancellation_hours.toString()
+			})
 
 			// if (this.Form.updateType.value == 'edit') {
 			// 	this.booking_params.client_account_types.pop()
@@ -664,6 +690,7 @@ export class NewBookingComponent implements OnInit {
 					this.SetFormValue('pickup_date', this.bookingResponse?.pickup_date)
 				}
 			}
+
 		})
 
 	}
@@ -1176,12 +1203,12 @@ export class NewBookingComponent implements OnInit {
 	}
 	handleLooseAffiliateChange(looseAffData) {
 		console.log('in function handlelooseAffiliateChange-->>', looseAffData)
-		if(looseAffData){		
+		if (looseAffData) {
 			this.BookingForm.patchValue({
 				driver_name: looseAffData?.driver_name,
 				driver_cell: looseAffData?.driver_phone,
 				driver_email: looseAffData?.driver_email,
-				loose_affiliate_id: looseAffData?.id ,
+				loose_affiliate_id: looseAffData?.id,
 				is_old_loose_affiliate: true
 			})
 			this.SetFormValue('lose_affiliate_name', looseAffData?.driver_name)
@@ -1190,7 +1217,7 @@ export class NewBookingComponent implements OnInit {
 			this.SetFormValue('lose_affiliate_phone_isd', looseAffData?.driver_isd)
 			this.SetFormValue('lose_affiliate_phone_country', looseAffData?.driver_phone_country)
 		}
-		else{
+		else {
 			this.BookingForm?.patchValue({
 				is_old_loose_affiliate: false
 			})
@@ -1200,7 +1227,7 @@ export class NewBookingComponent implements OnInit {
 			this.SetFormValue('lose_affiliate_phone_isd', '')
 			this.SetFormValue('lose_affiliate_phone_country', 'us')
 		}
-		console.log('booking form value after selecting loose aff--->',this.BookingForm.value)
+		console.log('booking form value after selecting loose aff--->', this.BookingForm.value)
 	}
 	chooseAffiliate() {
 		// console.warn('Fetching Affiliate vehicles and drivers')
@@ -1832,6 +1859,8 @@ export class NewBookingComponent implements OnInit {
 
 	submitForm(preview: boolean) {
 		this.submitBookingForm = true
+		// this.BookingForm['currency'] = this.currencyObj?.currency
+		console.log("this.currencyObj?.currency", this.currencyObj?.currency)
 		console.log(this.BookingForm);
 		console.log(this.BookingForm.status);
 		// let EditedKeys = []
@@ -1851,6 +1880,7 @@ export class NewBookingComponent implements OnInit {
 
 		let value = this.BookingForm.value
 		value['proceed'] = this.proceed
+		value['currency'] = this.currencyObj?.currency
 		if (this.RatesForm) {
 			value['rateArray'] = JSON.parse(JSON.stringify(this.RatesForm))
 			value['grand_total'] = value['rateArray']['grand_total']
@@ -2164,6 +2194,7 @@ export class NewBookingComponent implements OnInit {
 				this.BookingForm.get('lose_affiliate_name').setValidators([Validators.required])
 				this.BookingForm.get('lose_affiliate_phone').setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)])
 				this.BookingForm.get('lose_affiliate_email').setValidators([Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)])
+				this.BookingForm.get('cancellation_hours').setValidators([Validators.required])
 				this.BookingForm.updateValueAndValidity()
 				this.init_rates = true
 				if (this.Form.service_type.value === 'round_trip') {
@@ -2193,6 +2224,10 @@ export class NewBookingComponent implements OnInit {
 
 				this.BookingForm.get('lose_affiliate_email').clearValidators()
 				this.BookingForm.get('lose_affiliate_email').updateValueAndValidity()
+
+				this.BookingForm.get('cancellation_hours').clearValidators()
+				this.BookingForm.get('cancellation_hours').updateValueAndValidity()
+
 
 				console.log('clear validation')
 				this.init_rates = true;

@@ -4,8 +4,8 @@
     <section class="adminbox_shadow user_information" id="indv_bookings_table">
         <div class="row">
             <div class="col-md-7">
-                <h2 class="headinginfo" style="font-weight: 600 !important; font-size: 22px !important;">Individual
-                    Bookings
+                <h2 class="headinginfo" style="font-weight: 600 !important; font-size: 22px !important;">
+                    {{currentUser?.name.charAt(0).toUpperCase() + currentUser?.name.slice(1)}} Bookings
                 </h2>
 
             </div>
@@ -125,6 +125,12 @@
                                                 <div class="dropdown-item-icon"></div>
                                                 Return
                                             </a>
+                                            <a class="dropdown-item" (click)="editAction(booking?.booking_id,'cancel')"
+                                                data-toggle="modal" data-target="#cancel_booking_modal"
+                                                *ngIf="(booking?.booking_status != 'paid' && booking?.booking_status != 'paid_cash' && booking?.booking_status != 'cancelled')">
+                                                <div class="dropdown-item-icon"></div>
+                                                Cancel Booking
+                                            </a>
                                             <!-- <a *ngIf="booking.booking_status=='finalized'" class="dropdown-item"
                                                 data-toggle="modal" data-target="#paymentModal"
                                                 (click)="payBooking(booking?.booking_id)">
@@ -144,7 +150,7 @@
                                     </td>
                                     <td class="text-center font-weight-bolder cursor-pointer">
                                         <p class="booking-id-font font-weight-bolder cursor-pointer">
-                                            <span class="currency">$</span><span
+                                            <span class="currency">{{currencySymbol}}</span><span
                                                 [innerHTML]="highlighText(booking.grand_total)"></span>
                                         </p>
                                     </td>
@@ -275,7 +281,7 @@
                         </div>
                         <div class="col-md-8 value">
                             <span class="font-weight-bolder preview-output-feild">
-                                $ {{ bookingPreview.grand_total }}
+                                {{currencySymbol}} {{ bookingPreview.grand_total }}
                             </span>
                         </div>
                     </div>
@@ -287,7 +293,7 @@
                         </div>
                         <div class="col-md-8 value">
                             <span class="font-weight-bolder preview-output-feild">
-                                $ {{-(bookingPreview?.total_amount_refunded).toFixed(2) }}
+                                {{currencySymbol}} {{-(bookingPreview?.total_amount_refunded).toFixed(2) }}
                             </span>
                         </div>
                     </div>
@@ -299,7 +305,8 @@
                         </div>
                         <div class="col-md-8 value">
                             <span class="font-weight-bolder preview-output-feild">
-                                $ {{(bookingPreview?.grand_total- bookingPreview?.total_amount_refunded).toFixed(2) }}
+                                {{currencySymbol}} {{(bookingPreview?.grand_total-
+                                bookingPreview?.total_amount_refunded).toFixed(2) }}
                             </span>
                         </div>
                     </div>
@@ -324,6 +331,18 @@
                                     titlecase
                                     }}
                                 </span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row preview-dropoff-color" *ngIf="bookingPreview?.cancellation_hours">
+                        <div class="col-md-4 key">
+                            <span>
+                                Cancellation Period
+                            </span>
+                        </div>
+                        <div class="col-md-8 value">
+                            <span class="font-weight-bolder preview-output-feild">
+                                {{ bookingPreview?.cancellation_hours }} hours
                             </span>
                         </div>
                     </div>
@@ -1076,7 +1095,7 @@
                         </div>
                     </div>
                     <hr>
-                    <div class="distribution_rate"
+                    <!-- <div class="distribution_rate"
                         *ngIf="bookingPreview?.affiliate_type === 'affiliate' && bookingPreview?.payment_status=='unpaid' ">
                         <h4 class="font-weight-bolder m-0 my-3">
                             Rates Distribution
@@ -1130,7 +1149,7 @@
                         </div>
 
 
-                    </div>
+                    </div> -->
                 </div>
             </div>
 
@@ -1447,6 +1466,41 @@
     </div>
 </div>
 
+<!-- cancel booking modal -->
+<div class="modal fade" id="cancel_booking_modal" tabindex="-1" role="dialog" aria-labelledby="cancel_booking_modal"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body text-center">
+                <p style="font-size: 20px; font-weight:500;">Are you sure, You want to cancel the booking?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="custom-btn savebutton" (click)="cancelBooking()">Yes
+                </button>
+                <button type="button" class="custom-btn resetbutton" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- success modal -->
+<div class="modal fade" id="success_modal" tabindex="-1" role="dialog" aria-labelledby="success_modal"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <!-- <div class="modal-header pb-0">
+                <h3 class="mb-0">Email</h3>
+            </div> -->
+            <div class="modal-body text-center">
+                <p style="font-size: 18px; font-weight:400; color:#33a867;">{{cancelMessage}}</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="custom-btn savebutton" data-dismiss="modal"
+                    (click)="loadBookings()">OK</button>
+            </div>
+
+        </div>
+    </div>
+</div>
 
 <!-- confirm payment modal -->
 <div class="modal fade" id="paymentModal" tabindex="-1" role="dialog" aria-labelledby="paymentModal" aria-hidden="true">
@@ -1510,7 +1564,7 @@
             <div class="modal-footer">
                 <button type="button" class="custom-btn resetbutton" data-dismiss="modal">Close</button>
                 <button type="button" class="custom-btn savebutton" (click)="makePayment()">
-                    Pay ${{rateArray?.grandTotal}}</button>
+                    Pay {{currencySymbol}}{{rateArray?.grandTotal}}</button>
             </div>
         </div>
     </div>

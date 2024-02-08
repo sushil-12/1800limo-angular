@@ -14,7 +14,7 @@
 				<label class="alert alert-danger" *ngIf="instructionBasedOnAffiliate">
 					Click the View button and click Duplicate and change Year, Color, Amenities, or Rates.</label>
 			</div>
-			
+
 		</div>
 		<div class="row" *ngIf="canAddVehicle">
 			<div class="col-md-12">
@@ -72,18 +72,20 @@
 										</ng-template>
 										<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
 											aria-labelledby="navbarDropdownUserImage">
-											<a class="dropdown-item" (click)="clickEditVehicle(vehicle.ID)">
+											<a class="dropdown-item" (click)="clickEditVehicle(vehicle.ID)"
+												style="padding: 0.65rem 1.5rem !important;font-size: 18px !important;">
 												<div class="dropdown-item-icon"></div>
 												Edit Vehicle
 											</a>
 											<a class="dropdown-item"
+												style="padding: 0.65rem 1.5rem !important;font-size: 18px !important;"
 												[ngClass]="{notCompleted: !vehicle.isRatesCompleted}"
 												(click)="clickEditVehicleRates(vehicle.ID)">
 												<div class="dropdown-item-icon"></div>
 												Edit Rates
 											</a>
-											<a class="dropdown-item"
-												*ngIf="canAddVehicle"
+											<a class="dropdown-item" *ngIf="canAddVehicle"
+												style="padding: 0.65rem 1.5rem !important;font-size: 18px !important;"
 												(click)="clickedDuplicateVehicle(vehicle.ID)">
 												<div class="dropdown-item-icon"></div>
 												Duplicate Vehicle
@@ -91,16 +93,16 @@
 										</div>
 									</td>
 									<td><img src="{{vehicle.vehicleImage}}"></td>
-									<td>{{vehicle.vehicleType}}</td>
-									<td>{{vehicle.numberOfVehicles}}</td>
-									<td>{{vehicle.seats}}</td>
-									<td>{{vehicle.year}}</td>
-									<td>{{vehicle.make}}</td>
-									<td>{{vehicle.model}}</td>
-									<td>{{vehicle.color}}</td>
-									<td><button (click)="updateAmenityList(vehicle.amenities)" class="button2 box-shadow"
-											tabindex="1">Amenities</button></td>
-									<td>{{vehicle.licensePlate}}</td>
+									<td class="vehicleFontDesign">{{vehicle.vehicleType}}</td>
+									<td class="vehicleFontDesign">{{vehicle.numberOfVehicles}}</td>
+									<td class="vehicleFontDesign">{{vehicle.seats}}</td>
+									<td class="vehicleFontDesign">{{vehicle.year}}</td>
+									<td class="vehicleFontDesign">{{vehicle.make}}</td>
+									<td class="vehicleFontDesign">{{vehicle.model}}</td>
+									<td class="vehicleFontDesign">{{vehicle.color}}</td>
+									<td><button (click)="updateAmenityList(vehicle.amenities)"
+											class="button2 box-shadow" tabindex="1">Amenities</button></td>
+									<td class="vehicleFontDesign">{{vehicle.licensePlate}}</td>
 									<td>
 										<i class="fa fa-trash box-shadow" style="font-size: x-large; color:#d64646"
 											(click)="enableDisableClicked(vehicle.id)" data-toggle="modal"

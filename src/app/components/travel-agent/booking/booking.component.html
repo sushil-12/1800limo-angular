@@ -176,6 +176,12 @@
 												<div class="dropdown-item-icon"></div>
 												Return
 											</a>
+											<a class="dropdown-item" (click)="editAction(booking?.booking_id,'cancel')"
+												data-toggle="modal" data-target="#cancel_booking_modal"
+												*ngIf="(booking?.booking_status != 'paid' && booking?.booking_status != 'paid_cash' && booking?.booking_status != 'cancelled')">
+												<div class="dropdown-item-icon"></div>
+												Cancel Booking
+											</a>
 											<a class="dropdown-item" routerLink="/travel_agent/invoice-summary"
 												[queryParams]="{bookingId: booking?.booking_id}"
 												*ngIf="(booking?.payment_status=='paid' || booking?.payment_status=='paid_cash')">
@@ -227,7 +233,7 @@
 									</td>
 									<td class="text-center font-weight-bolder cursor-pointer">
 										<p class="booking-id-font font-weight-bolder cursor-pointer">
-											<span class="currency">$</span><span
+											<span class="currency">{{currencySymbol}}</span><span
 												[innerHTML]="highlighText(booking.grand_total)"></span>
 										</p>
 									</td>
@@ -359,7 +365,7 @@
 						</div>
 						<div class="col-md-8 value">
 							<span class="font-weight-bolder preview-output-feild">
-								$ {{ bookingPreview.grand_total }}
+								{{currencySymbol}} {{ bookingPreview.grand_total }}
 							</span>
 						</div>
 					</div>
@@ -371,7 +377,7 @@
 						</div>
 						<div class="col-md-8 value">
 							<span class="font-weight-bolder preview-output-feild">
-								$ {{-(bookingPreview?.total_amount_refunded).toFixed(2) }}
+								{{currencySymbol}} {{-(bookingPreview?.total_amount_refunded).toFixed(2) }}
 							</span>
 						</div>
 					</div>
@@ -383,7 +389,8 @@
 						</div>
 						<div class="col-md-8 value">
 							<span class="font-weight-bolder preview-output-feild">
-								$ {{(bookingPreview?.grand_total- bookingPreview?.total_amount_refunded).toFixed(2) }}
+								{{currencySymbol}} {{(bookingPreview?.grand_total-
+								bookingPreview?.total_amount_refunded).toFixed(2) }}
 							</span>
 						</div>
 					</div>
@@ -408,6 +415,18 @@
 									titlecase
 									}}
 								</span>
+							</span>
+						</div>
+					</div>
+					<div class="row preview-dropoff-color" *ngIf="bookingPreview?.cancellation_hours">
+						<div class="col-md-4 key">
+							<span>
+								Cancellation Period
+							</span>
+						</div>
+						<div class="col-md-8 value">
+							<span class="font-weight-bolder preview-output-feild">
+								{{ bookingPreview?.cancellation_hours }} hours
 							</span>
 						</div>
 					</div>
@@ -1292,7 +1311,7 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										${{shareArray?.baseRate.toFixed(2)}}
+										{{currencySymbol}}{{shareArray?.baseRate.toFixed(2)}}
 									</span>
 									(Fare Base Rate)
 								</div>
@@ -1307,7 +1326,7 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										${{shareArray?.adminShare.toFixed(2) }}
+										{{currencySymbol}}{{shareArray?.adminShare.toFixed(2) }}
 									</span>
 									({{adminSharePercent}}% of Base Rate)
 								</div>
@@ -1322,7 +1341,7 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										${{shareArray?.travelAgentShare.toFixed(2)}}
+										{{currencySymbol}}{{shareArray?.travelAgentShare.toFixed(2)}}
 									</span>
 									(10% of base rate )
 								</div>
@@ -1337,7 +1356,7 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										${{shareArray?.grandTotal ? shareArray?.grandTotal.toFixed(2) :
+										{{currencySymbol}}{{shareArray?.grandTotal ? shareArray?.grandTotal.toFixed(2) :
 										shareArray?.returnGrandTotal.toFixed(2)}}
 									</span>
 									(Actual Cost to Customer)
@@ -1353,7 +1372,7 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										${{shareArray?.stripeFee.toFixed(2)}}
+										{{currencySymbol}}{{shareArray?.stripeFee.toFixed(2)}}
 									</span>
 									(Platform fee 5% + 30 cents - <b>Paid from Admin share</b>)
 								</div>
@@ -1653,6 +1672,42 @@
 					Email</button>
 				<button type="button" class="custom-btn resetbutton" data-dismiss="modal">Close</button>
 			</div>
+		</div>
+	</div>
+</div>
+
+<!-- cancel booking modal -->
+<div class="modal fade" id="cancel_booking_modal" tabindex="-1" role="dialog" aria-labelledby="cancel_booking_modal"
+	aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-body text-center">
+				<p style="font-size: 20px; font-weight:500;">Are you sure, You want to cancel the booking?</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="custom-btn savebutton" (click)="cancelBooking()">Yes
+				</button>
+				<button type="button" class="custom-btn resetbutton" data-dismiss="modal">No</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- success modal -->
+<div class="modal fade" id="success_modal" tabindex="-1" role="dialog" aria-labelledby="success_modal"
+	aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<!-- <div class="modal-header pb-0">
+                <h3 class="mb-0">Email</h3>
+            </div> -->
+			<div class="modal-body text-center">
+				<p style="font-size: 18px; font-weight:400; color:#33a867;">{{cancelMessage}}</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="custom-btn savebutton" data-dismiss="modal"
+					(click)="loadBookings()">OK</button>
+			</div>
+
 		</div>
 	</div>
 </div>

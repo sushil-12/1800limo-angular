@@ -88,10 +88,10 @@ export class TravelPlannerComponent implements OnInit {
   loadTravelPlanners(pageUrl = null) {
     /** spinner starts on init */
     this.spinner.show();
-    if(pageUrl){
-			console.log("pageurl",pageUrl)
+    if (pageUrl) {
+      console.log("pageurl", pageUrl)
       this.scroll('travel_agent_table')
-		}
+    }
     var keyword = this.searchText;
 
     // Load Our travelPlanners using API
@@ -254,10 +254,13 @@ export class TravelPlannerComponent implements OnInit {
       let bkp_a_token = localStorage.getItem('access_token')
       let bkp_crnt_dt = localStorage.getItem('currentUser')
       let bkp_u_dt = localStorage.getItem('userData')
+      let bkp_currency_symbol = localStorage.getItem('currencySymbol')
+      localStorage.setItem('bkp_currency_symbol', bkp_currency_symbol)
       localStorage.setItem('bkp_a_token', bkp_a_token)
       localStorage.setItem('bkp_crnt_dt', bkp_crnt_dt)
       localStorage.setItem('bkp_u_dt', bkp_u_dt)
       console.log("response", response)
+      localStorage.setItem('currencySymbol', JSON.stringify(this.loginAsUserResponse?.currency?.symbol))
       sessionStorage.setItem('step_completed', JSON.stringify(this.loginAsUserResponse.data?.travel_planner.step_completed))
       sessionStorage.setItem('step_completed_obj', JSON.stringify(this.loginAsUserResponse.data?.travel_planner.step_completed_obj))
       localStorage.setItem('agentAccountStatus', this.loginAsUserResponse?.data?.travel_planner?.account_approval)

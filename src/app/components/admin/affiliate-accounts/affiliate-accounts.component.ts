@@ -172,17 +172,17 @@ export class AffiliateAccountsComponent implements OnInit {
 		// let elementRect = el.getBoundingClientRect();
 		// let absoluteElementTop = elementRect.top + window.pageYOffset;
 		// let topElement = absoluteElementTop - 200;
-	
+
 		// console.log(`scrolling to ${id}`, el , absoluteElementTop ,window.innerHeight);
 		// window.scrollTo({
 		// 	top: topElement,
 		// 	behavior: 'smooth'
 		// });
-	
+
 		let el = document.getElementById(id);
 		console.log(`scrolling to ${id}`, el);
 		el.scrollIntoView({ behavior: 'smooth' });
-	  }
+	}
 
 	loadAffiliateOperators(pageUrl = null) {
 		/** spinner starts on init */
@@ -191,8 +191,8 @@ export class AffiliateAccountsComponent implements OnInit {
 			this.filter_type = 'all'
 			console.log('keyword--->>>', keyword, this.filter_type)
 		}
-		if(pageUrl){
-			console.log("pageurl",pageUrl)
+		if (pageUrl) {
+			console.log("pageurl", pageUrl)
 			this.scroll('affiliates_table')
 		}
 		this.spinner.show();
@@ -243,7 +243,7 @@ export class AffiliateAccountsComponent implements OnInit {
 		sessionStorage.setItem("affiliateType", affiliate_type);
 		sessionStorage.setItem('affiliateName', affiliateUserData.FirstName + ' ' + affiliateUserData.LastName)
 		this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
-			this.router.navigate(['/admin/affiliate/step0']);
+			this.router.navigate(['/admin/affiliate/step1']);
 		});
 
 	}
@@ -334,6 +334,16 @@ export class AffiliateAccountsComponent implements OnInit {
 		if (!this.searchText) { return args?.length > 0 ? args.toString().replaceAll(",", ", ") : "N/A"; }
 		if (args) {
 			args = args.toString().replaceAll(",", ", ")
+			var re = new RegExp(this.searchText, 'gi'); //'gi' for case insensitive and can use 'g' if you want the search to be case sensitive.
+			return args.replace(re, '<mark class="font-weight-bold">$&</mark>');
+		}
+
+	}
+
+	highlighTextSteps(args: string) {
+		if (!this.searchText) { return args ? args.replace("_", " ").toUpperCase() : "N/A"; }
+		if (args) {
+			args = args.replace("_", " ").toUpperCase()
 			var re = new RegExp(this.searchText, 'gi'); //'gi' for case insensitive and can use 'g' if you want the search to be case sensitive.
 			return args.replace(re, '<mark class="font-weight-bold">$&</mark>');
 		}
@@ -499,6 +509,8 @@ export class AffiliateAccountsComponent implements OnInit {
 			let bkp_a_token = localStorage.getItem('access_token')
 			let bkp_crnt_dt = localStorage.getItem('currentUser')
 			let bkp_u_dt = localStorage.getItem('userData')
+			let bkp_currency_symbol = localStorage.getItem('currencySymbol')
+			localStorage.setItem('bkp_currency_symbol', bkp_currency_symbol)
 			localStorage.setItem('bkp_a_token', bkp_a_token)
 			localStorage.setItem('bkp_crnt_dt', bkp_crnt_dt)
 			localStorage.setItem('bkp_u_dt', bkp_u_dt)
@@ -506,6 +518,7 @@ export class AffiliateAccountsComponent implements OnInit {
 			this.loginAsUserResponse = response
 			let QB_redirectUrl = localStorage.getItem('QB_redirectUrl') || ''
 			let vehicle_selected = JSON.parse(sessionStorage.getItem('selected_vehicle'))
+			localStorage.setItem('currencySymbol', JSON.stringify(this.loginAsUserResponse?.currency?.symbol))
 			localStorage.setItem("account_approval", this.loginAsUserResponse.data.affiliateParmas.account_approval);
 			localStorage.setItem("recject_cause_message", this.loginAsUserResponse.data.affiliateParmas.recject_cause_message);
 			this.affiliateService.updateStepsArrayLocal(this.loginAsUserResponse.data.affiliateParmas.step_completed);

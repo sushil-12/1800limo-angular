@@ -62,7 +62,7 @@
 											<small>
 												One Way
 											</small>
-											${{
+											{{currencySymbol}} {{
 											selected_vehicle['rate_breakdown_one_way']?.grand_total
 											}}
 										</label>
@@ -78,7 +78,7 @@
 											<small>
 												Round Trip
 											</small>
-											${{
+											{{currencySymbol}} {{
 											selected_vehicle['rate_breakdown_round_trip']?.grand_total
 											}}
 										</label>
@@ -87,7 +87,7 @@
 									<!-- Charter Tour -->
 									<div id="charter-price" *ngIf="getKeyName() == 'charter_tour'">
 										<p class="font-weight-bolder">
-											Charter Tour: ${{
+											Charter Tour: {{currencySymbol}} {{
 											selected_vehicle['rate_breakdown_charter_tour']?.grand_total
 											}}
 										</p>
@@ -543,14 +543,15 @@
 								{{ rate.value.rate_label }}
 							</td>
 							<td>
-								${{ rate.value.baserate.toFixed(2) }} {{ (rate.value.multitple != undefined ||
+								{{currencySymbol}} {{ rate.value.baserate.toFixed(2) }} {{ (rate.value.multitple !=
+								undefined ||
 								rate.value.multiple
 								== null )
 								? ' ' : 'x' }} {{ rate.value.multiple !== undefined ?
 								rate.value.multiple : '' }}
 							</td>
 							<td>
-								${{ rate.value.amount }}
+								{{currencySymbol}} {{ rate.value.amount }}
 							</td>
 						</tr>
 						<tr class="total-fields">
@@ -559,7 +560,7 @@
 							</td>
 							<td></td>
 							<td class="font-weight-bolder">
-								${{ one_way_rates?.total }}
+								{{currencySymbol}} {{ one_way_rates?.total }}
 							</td>
 						</tr>
 						<!-- <tr>
@@ -579,14 +580,15 @@
 								{{ rate.value.rate_label }}
 							</td>
 							<td>
-								${{ rate.value.baserate.toFixed(2) }} {{ (rate.value.multitple != undefined ||
+								{{currencySymbol}} {{ rate.value.baserate.toFixed(2) }} {{ (rate.value.multitple !=
+								undefined ||
 								rate.value.multiple
 								== null )
 								? ' ' : 'x' }} {{ rate.value.multiple !== undefined ?
 								rate.value.multiple : '' }}
 							</td>
 							<td>
-								${{ rate.value.amount }}
+								{{currencySymbol}} {{ rate.value.amount }}
 							</td>
 						</tr>
 						<!-- <tr>
@@ -602,7 +604,7 @@
 							</td>
 							<td></td>
 							<td class="font-weight-bolder">
-								${{ round_trip_rates?.total }}
+								{{currencySymbol}} {{ round_trip_rates?.total }}
 							</td>
 						</tr>
 						<!-- <tr>
@@ -708,7 +710,7 @@
 						<ul id="chargeable-amenities" style="list-style-type: 'disc'" class="d-flex flex-wrap">
 							<li [attr.id]="'ul-ch-list-item_' + amenity_index"
 								*ngFor="let amenity of selected_vehicle.amenities['chargeable']; index as amenity_index">
-								<span class="text-orange">$</span>
+								<span class="text-orange">{{currencySymbol}}</span>
 								{{ amenity.name }}
 							</li>
 						</ul>

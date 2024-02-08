@@ -33,11 +33,11 @@
 			<div class="row">
 				<div class="col-md-4 field">
 					<p>Quote Amount </p>
-					<strong>$ {{ BookingDetail?.grand_total }}</strong>
+					<strong>{{currencySymbol}} {{ BookingDetail?.grand_total }}</strong>
 				</div>
 				<div class="col-md-4 field" *ngIf="BookingDetail?.total_amount_refunded>0">
 					<p>Refunded Amount </p>
-					<strong>$ {{ BookingDetail?.total_amount_refunded }}</strong>
+					<strong>{{currencySymbol}} {{ BookingDetail?.total_amount_refunded }}</strong>
 				</div>
 
 				<div class="col-md-4 field">
@@ -152,7 +152,7 @@
 <app-finalize-rates class="d-flex flex-wrap finalize-rates" [initRates]="init_rates" [isTravelShare]="isTravelShare"
 	[affiliate_type]="'loose_affiliate'" (formvalue)="RateFormValue($event)" [distance]="finalize_params.distance"
 	[reservation_id]="finalize_params.booking_id" [reset]="false" [hours]="finalize_params.number_of_hours"
-	[vehicles]="finalize_params.number_of_vehicles" [isFarmoutBooking]="isFarmoutBooking"
+	[vehicles]="finalize_params.number_of_vehicles" [isFarmoutBooking]="isFarmoutBooking" [currencyObject]="currencyObj"
 	(returnformvalue)="ReturnRateFormValue($event)" (returnNumberOfHr)="HandleReturnNumberOfHr($event)"
 	[isCreatedByAdmin]="isCreatedByAdmin" [service_type]="service_type">
 </app-finalize-rates>
@@ -361,7 +361,7 @@
 						<div class="col-md-4 my-2">
 							<mat-form-field appearance="outline" class="m-0">
 								<mat-label class="required-field">
-									CVV
+									CVV (3-4 digit code)
 								</mat-label>
 								<input matInput placeholder="0000" type="text" tabindex="0"
 									(focus)="$event.target.select()" formControlName="cvv">
@@ -444,7 +444,8 @@
 				<h3 class="mb-0 ">Payment</h3>
 			</div>
 			<div class="modal-body text-center">
-				<p>Payable amount is <span class="font-weight-bold">${{payableAmount.toFixed(2)}}</span></p>
+				<p>Payable amount is <span
+						class="font-weight-bold">{{currencySymbol}}{{payableAmount.toFixed(2)}}</span></p>
 				<span *ngIf="payableAmount<= 0" class="text-danger">Amount has been overcharger earlier</span>
 			</div>
 			<div class="modal-footer">

@@ -53,10 +53,13 @@
 									</a>
 								</td>
 								<td><img class="rounded-circle" src="{{driver.DriverImage.image}}"></td>
-								<td>{{driver.FirstName+' '+(driver?.MiddleName||'')+' '+driver.LastName}}</td>
-								<td class="pointer"><a href="tel:{{driver.CellIsd+' '+driver.CellNumber}}"
+								<td class="vehicleFontDesign">{{driver.FirstName+' '+(driver?.MiddleName||'')+'
+									'+driver.LastName}}</td>
+								<td class="pointer vehicleFontDesign"><a
+										href="tel:{{driver.CellIsd+' '+driver.CellNumber}}"
 										tabindex="-1">{{driver.CellIsd+' '+driver.CellNumber}}</a></td>
-								<td class="pointer"><a href="mailto:{{driver.Email}}" tabindex="-1">{{driver.Email}}</a>
+								<td class="pointer vehicleFontDesign"><a href="mailto:{{driver.Email}}"
+										tabindex="-1">{{driver.Email}}</a>
 								</td>
 								<td>
 									<i class="fa fa-trash pointer" style="font-size: x-large; color:#d64646"

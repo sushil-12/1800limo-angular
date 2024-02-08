@@ -12,8 +12,7 @@ import { AdminService } from 'src/app/services/admin.service';
 declare let $: any
 
 
-interface Filters
-{
+interface Filters {
 	original: Object,
 	copy: Object,
 	request: Object,	// request for the response of selected filters from backend
@@ -26,8 +25,7 @@ interface Filters
 	templateUrl: './select-vehicle.component.html',
 	styleUrls: ['./select-vehicle.component.scss']
 })
-export class SelectVehicleComponent implements OnInit
-{
+export class SelectVehicleComponent implements OnInit {
 	@ViewChild("inputmsg", { static: false }) message: ElementRef;
 	@ViewChild("sendEmailModalFocus") sendEmailModalFocus: any;
 	/**
@@ -51,7 +49,7 @@ export class SelectVehicleComponent implements OnInit
 	 */
 	innerWidth = window.innerWidth
 	currentUser = JSON.parse(localStorage.getItem('currentUser'))
-	
+
 
 	FILTERS_ORDER = [
 		{
@@ -198,17 +196,17 @@ export class SelectVehicleComponent implements OnInit
 	// ]
 
 	modal_driver_info_labels: Array<String> = ['name', 'gender', 'phone', 'languages', 'experience', 'dress', 'background', 'starRating']
-	vehicleDetails:any;
+	vehicleDetails: any;
 	vehicleImages: Array<any> = []
 	master_vehicles: Array<any> = []
 
 	// Filters
-	
+
 	filters: Filters = {
-		original: JSON.parse(sessionStorage.getItem('filters'))?.original ,
-		copy: JSON.parse(sessionStorage.getItem('filters'))?.copy ,
-		request:JSON.parse(sessionStorage.getItem('filters'))?.request ,
-		selections: JSON.parse(sessionStorage.getItem('filters'))?.selections ,
+		original: JSON.parse(sessionStorage.getItem('filters'))?.original,
+		copy: JSON.parse(sessionStorage.getItem('filters'))?.copy,
+		request: JSON.parse(sessionStorage.getItem('filters'))?.request,
+		selections: JSON.parse(sessionStorage.getItem('filters'))?.selections,
 		vars: JSON.parse(sessionStorage.getItem('filters'))?.vars
 		// original:"" ,
 		// copy: "",
@@ -228,14 +226,15 @@ export class SelectVehicleComponent implements OnInit
 	category_selected: any
 	vehicle_selected: any
 	quotebot_form: any
-	role:number = JSON.parse(localStorage.getItem("currentUser"))?.role 
+	role: number = JSON.parse(localStorage.getItem("currentUser"))?.role
 	openfilters: boolean = false
-	changeText:boolean = false
+	changeText: boolean = false
 	bookingId: any = null;
 	quotebotNewData: any;
 	show = false;
-	notification_msg:any;
+	notification_msg: any;
 	passengerDetails: any;
+	currencySymbol: any;
 
 
 	constructor(
@@ -246,8 +245,8 @@ export class SelectVehicleComponent implements OnInit
 		private $state: StateManagementService,
 		private $activatedRoute: ActivatedRoute,
 		private $globals: SharedModule,
-		private adminService:AdminService,
-	) { 
+		private adminService: AdminService,
+	) {
 		console.log('in constructor select vehicle')
 	}
 
@@ -258,102 +257,89 @@ export class SelectVehicleComponent implements OnInit
 	 * Building fiters array for selected ones and to be sent to backend
 	 * Fetching vehicle details based on filters data
 	 */
-	ngOnInit(): void
-	{
+	ngOnInit(): void {
 		window.scrollTo(0, 0)
 		try {
 			console.log('in component select vehicle->>', JSON.parse(sessionStorage.getItem('filters')))
 
-			
-			if(!JSON.parse(sessionStorage.getItem('filters'))){
+
+			if (!JSON.parse(sessionStorage.getItem('filters'))) {
 				this.$router.navigateByUrl('/home')
 			}
 			this.$spinner.show()
 			sessionStorage.getItem('selected_vehicle') ? sessionStorage.removeItem('selected_vehicle') : ''
 			// Note: Do not add anything here or before below conditional logic. This should be the first step
-			if (!localStorage.getItem('quotebot_form'))
-			{
+			if (!localStorage.getItem('quotebot_form')) {
 				this.$errorDialog.openDialog({
 					errors: {
 						error: "Please request a Quote before selecting a vehicle. "
 					}
 				})
 				this.$router.navigateByUrl('/')
-	
-			} else
-			{
+
+			} else {
 				// fetch the user's travelling quote
 				this.quotebot_form = JSON.parse(localStorage.getItem('quotebot_form'))
 			}
 
-			this.$activatedRoute.queryParams.subscribe((params: any) =>
-			{
-				console.log('paramsa->>>>' , params.booking_id)
-				if(params?.id){
+			this.$activatedRoute.queryParams.subscribe((params: any) => {
+				console.log('paramsa->>>>', params.booking_id)
+				if (params?.id) {
 					this.bookingId = params?.id
 				}
-				if (params?.list == 'master')
-				{
+				if (params?.list == 'master') {
 					this.vehicleDetails = []
 				}
-				if (params?.sort == 'plh')
-				{
+				if (params?.sort == 'plh') {
 					this.Sort.LowToHigh()
-				} else
-				{
+				} else {
 					this.Sort.HighToLow()
 				}
-	
-				
+
+
 			})
-	
+
 			this.fetchMasterVehicles()	// fetches 16 vehicle categories
 			this.getAllFilters()	// fetch filters from database
-			console.log('booking data' , this.bookingId)
-			if(this.bookingId){
-				console.log('booking data-->>>>>>' , this.bookingId)
+			console.log('booking data', this.bookingId)
+			if (this.bookingId) {
+				console.log('booking data-->>>>>>', this.bookingId)
 				this.getQuoteDetails(this.bookingId)
 			}
-			else{
+			else {
 				this.getVehicleDetails()
 			}
-	
-			
+			let currency = JSON.parse(sessionStorage.getItem('currencyData'))
+			this.currencySymbol = currency?.symbol
+
+
 		} catch (error) {
-			console.log('errr----->>' , error)
+			console.log('errr----->>', error)
 		}
 	}
 	// ngOnInit ends
 	// documentgetElementById('affiliate-info')
-	isArray(value: any): boolean
-	{
+	isArray(value: any): boolean {
 		return Array.isArray(value)
 	}
 
 
 	//increment/decrement in ONE WAY form
-	change(changeType: 'i' | 'd', fieldName: 'l' | 'p')
-	{
+	change(changeType: 'i' | 'd', fieldName: 'l' | 'p') {
 		// console.log(changeType, fieldName)
 		let max_length = 75
-		if (fieldName == 'p')
-		{
+		if (fieldName == 'p') {
 			// for passenger
-			if (changeType == 'i' && this.quotebot_form.no_of_passenger < max_length)
-			{
+			if (changeType == 'i' && this.quotebot_form.no_of_passenger < max_length) {
 				this.quotebot_form['no_of_passenger'] = this.quotebot_form.no_of_passenger + 1
-			} else if (changeType == 'd' && this.quotebot_form.no_of_passenger > 1)
-			{
+			} else if (changeType == 'd' && this.quotebot_form.no_of_passenger > 1) {
 				this.quotebot_form['no_of_passenger'] = this.quotebot_form.no_of_passenger - 1
 			}
-		} else
-		{
+		} else {
 			// for luggage
-			if (changeType == 'i' && this.quotebot_form.no_of_luggage < max_length)
-			{
+			if (changeType == 'i' && this.quotebot_form.no_of_luggage < max_length) {
 				this.quotebot_form['no_of_luggage'] = this.quotebot_form.no_of_luggage + 1
-			} else if (changeType == 'd' && this.quotebot_form.no_of_luggage >= 1)
-			{
+			} else if (changeType == 'd' && this.quotebot_form.no_of_luggage >= 1) {
 				this.quotebot_form['no_of_luggage'] = this.quotebot_form.no_of_luggage - 1
 			}
 		}
@@ -362,8 +348,8 @@ export class SelectVehicleComponent implements OnInit
 
 
 
-	editAffiliateAccount(vehInfo:any) {
-		console.log('valueee--->>>>' , vehInfo)
+	editAffiliateAccount(vehInfo: any) {
+		console.log('valueee--->>>>', vehInfo)
 		// this.affiliateService.updateStepsArrayLocal(this.response.data.affiliateParmas.step_completed);
 		// this.affiliateService.updateStepsCompletedObject(this.response.data.affiliateParmas.step_completed_obj);
 		sessionStorage.setItem('affiliateId', JSON.stringify(vehInfo.affiliate_id))
@@ -373,24 +359,20 @@ export class SelectVehicleComponent implements OnInit
 		// });
 		const url = this.$router.serializeUrl(
 			this.$router.createUrlTree(['/admin/affiliate/step0'])
-		  );
-		
-		  window.open(url, '_blank');
+		);
+
+		window.open(url, '_blank');
 		// affiliate_id: number, affiliate_type: string
 
 	}
 
 
-	fetchMasterVehicles(): Promise<Array<any> | string>
-	{
-		return new Promise((resolve, reject) =>
-		{
+	fetchMasterVehicles(): Promise<Array<any> | string> {
+		return new Promise((resolve, reject) => {
 			this.$quotebotService.getMasterVehicleTypes(this.quotebot_form).pipe(
 				catchError(err => throwError(err))
-			).subscribe((response: any) =>
-			{
-				if (response.data.length == 0)
-				{
+			).subscribe((response: any) => {
+				if (response.data.length == 0) {
 					this.no_vehicle_msg = "No Vehicle Categories Found. "
 					reject('No Master Vehicle Found.')
 					return
@@ -408,8 +390,7 @@ export class SelectVehicleComponent implements OnInit
 	 *
 	 * @param vehicle selected vehicle
 	 */
-	selectCategory(vehicle_name: string)
-	{
+	selectCategory(vehicle_name: string) {
 		let vehicle_index = this.filters.original['vehicle-type'].findIndex(item => item['name'] == vehicle_name)
 		this.filterSelection(true, 'vehicle-type', this.filters.original['vehicle-type'][vehicle_index])
 		this.getVehicleDetails()
@@ -420,21 +401,18 @@ export class SelectVehicleComponent implements OnInit
 	/**
 	 * Logic to fetch all filters from backend
 	 */
-	getAllFilters(): void
-	{
+	getAllFilters(): void {
 		this.$spinner.show()
-		this.$quotebotService.getAllFilters().subscribe((response: any) =>
-		{
+		this.$quotebotService.getAllFilters().subscribe((response: any) => {
 			this.$spinner.hide()
 			// format every filter name from response
 			this.filters.original = JSON.parse(JSON.stringify(response.data)) // create a deep copy of the response object
-			for (let catg in this.filters.original)
-			{
+			for (let catg in this.filters.original) {
 				// changing the name here? Do not forget to change in the includes and selected filters function.
-				if(this.filters?.selections.length){
+				if (this.filters?.selections.length) {
 					this.filters.original[catg].unshift({ id: 0, name: 'any or all', checked: false })
 				}
-				else{
+				else {
 					this.filters.original[catg].unshift({ id: 0, name: 'any or all', checked: true })
 				}
 			}
@@ -466,17 +444,13 @@ export class SelectVehicleComponent implements OnInit
 	}
 
 
-	cutTillMinimum(min_length: number)
-	{
+	cutTillMinimum(min_length: number) {
 		// showing only till min_length
-		for (let filter in this.filters.original)
-		{
-			if (Array.isArray(this.filters.original[filter]) && this.filters.original[filter].length > min_length)
-			{
+		for (let filter in this.filters.original) {
+			if (Array.isArray(this.filters.original[filter]) && this.filters.original[filter].length > min_length) {
 				// assign the filter with specified length into a new object
 				this.filters.copy[filter] = this.filters.original[filter].slice(0, min_length)
-			} else
-			{
+			} else {
 				// else, assign the filter into the new object
 				this.filters.copy[filter] = this.filters.original[filter]
 			}
@@ -491,47 +465,38 @@ export class SelectVehicleComponent implements OnInit
 	 * @param value text to replace
 	 * @returns replaced text
 	 */
-	formatter(value: string): string
-	{
+	formatter(value: string): string {
 		if (value == null) { return }
-		if (typeof (value) == 'number' || !isNaN(parseInt(value)))
-		{
+		if (typeof (value) == 'number' || !isNaN(parseInt(value))) {
 			return value
 		}
-		if (value == 'starRating')
-		{
+		if (value == 'starRating') {
 			value = 'star-rating'
 		}
-		if (typeof (value) == 'string' && /[a-z]/.test(value.charAt(0)))
-		{
+		if (typeof (value) == 'string' && /[a-z]/.test(value.charAt(0))) {
 			value = value.replace(value.charAt(0), value.charAt(0).toUpperCase())
 		}
 		return value.replace(/[-|_]/g, ' ')
 	}
 
-	halfText(text: string)
-	{
+	halfText(text: string) {
 		return (text.length > 15 && text.substring(0, 15) + '...') || text
 	}
 
-	searchIn(card_header: string, text: string)
-	{
+	searchIn(card_header: string, text: string) {
 		console.log(card_header, text)
-		if (text == '')
-		{
+		if (text == '') {
 			this.filters.vars[card_header] = true
 			this.filters.copy[card_header] = this.filters.original[card_header].slice(0, this.min_length)
 			return
-		} else
-		{
+		} else {
 			this.filters.vars[card_header] = false
 			this.filters.copy[card_header] = this.$globals.ListSearch('filter', this.filters.original[card_header], text, 'name')
 		}
 	}
 
 
-	getKeyName(): string
-	{
+	getKeyName(): string {
 		return this.quotebot_form?.service_type
 	}
 
@@ -540,45 +505,38 @@ export class SelectVehicleComponent implements OnInit
 	 * @param filter_name name of the filter category to populate
 	 */
 	add: number = this.min_length
-	showMore(button_name: string, filter_name: string, addmore: boolean = true): void
-	{
-		if (!this.filters.vars[button_name])
-		{
+	showMore(button_name: string, filter_name: string, addmore: boolean = true): void {
+		if (!this.filters.vars[button_name]) {
 			this.add += this.min_length
-		} else
-		{
+		} else {
 			this.add = this.min_length
 		}
-		if (addmore)
-		{
+		if (addmore) {
 			// populate filters list
 			this.filters.copy[filter_name] = this.filters.original[filter_name].slice(0, this.add)
 		}
-		else
-		{
+		else {
 			this.filters.copy[filter_name] = this.filters.original[filter_name].slice(0, this.min_length)
 		}
 
-		if (this.filters.copy[filter_name].length == this.filters.original[filter_name].length)
-		{
+		if (this.filters.copy[filter_name].length == this.filters.original[filter_name].length) {
 			this.filters.vars[button_name] = true
 		}
-		else
-		{
+		else {
 			this.filters.vars[button_name] = false
 		}
 
 	}
-	convertHrIntoDays(hours){
-		let res : any= hours/24
-		if(res<=2){   
+	convertHrIntoDays(hours) {
+		let res: any = hours / 24
+		if (res <= 2) {
 			res = hours + ' hrs'
 		}
-		if(2<res && res<7){
+		if (2 < res && res < 7) {
 			res = res + ' days'
 		}
-		if(7<=res){
-			res = res/7 + ' Wk'
+		if (7 <= res) {
+			res = res / 7 + ' Wk'
 		}
 		return res;
 	}
@@ -590,13 +548,11 @@ export class SelectVehicleComponent implements OnInit
 	 * @param filters_data [Required] the data to be sent to backend
 	 * @returns void
 	 */
-	getVehicleDetails()
-	{
+	getVehicleDetails() {
 		console.log('Fetching Vehicle Details. ')
-		sessionStorage.setItem('filters' , JSON.stringify(this.filters))
+		sessionStorage.setItem('filters', JSON.stringify(this.filters))
 		let data = {}
-		if (this.quotebot_form != null)
-		{
+		if (this.quotebot_form != null) {
 			data = this.quotebot_form
 			data['filters'] = this.filters.request
 		}
@@ -604,69 +560,65 @@ export class SelectVehicleComponent implements OnInit
 		// console.groupEnd()
 		this.$spinner.show()
 		// fetch the vehicle details - API HIT
-		this.$quotebotService.getVehicleDetails(data).subscribe((response: any) =>
-		{
-			if (response.data.length == 0)
-			{
+		this.$quotebotService.getVehicleDetails(data).subscribe((response: any) => {
+			if (response.data.length == 0) {
 				this.no_vehicle_msg = 'No Vehicle found with the applied filter.'
 			}
 			this.vehicleDetails = [...response.data]
-			this.vehicleDetails = this.vehicleDetails.map(i=> {
-				if(i?.affiliate_company && i?.affiliate_name){
-					i['readMore']=(i?.affiliate_company?.length || i?.affiliate_name?.length) > 8 ? true : false 
+			this.vehicleDetails = this.vehicleDetails.map(i => {
+				if (i?.affiliate_company && i?.affiliate_name) {
+					i['readMore'] = (i?.affiliate_company?.length || i?.affiliate_name?.length) > 8 ? true : false
 				}
-				else{
+				else {
 					i['readMore'] = false
 				}
 				return i
 			})
-			console.log('vehicle details-->>>' , this.vehicleDetails)
+			console.log('vehicle details-->>>', this.vehicleDetails)
 			this.Sort.LowToHigh() // default sort to Low-High
 			this.$spinner.hide()
 		})
 	}
 
-	getQuoteDetails(id){
-		this.$quotebotService.getQuoteData(id).subscribe((response: any) =>
-		{
+	getQuoteDetails(id) {
+		this.$quotebotService.getQuoteData(id).subscribe((response: any) => {
 			try {
-			console.log('in function get quote data' , response)
-			if (response.data.vehicleData.length == 0)
-			{
-				this.no_vehicle_msg = 'No Vehicle found with the applied filter.'
-			}
-			
-			this.vehicleDetails = [...response.data?.vehicleData]
-			this.quotebotNewData = response.data?.quote
-						
-				let location_info=[]
-				let tempObj={
-					distance:{
-						text:this.quotebotNewData?.distance/1000 + "km",
-						value:Number(this.quotebotNewData?.distance)
+				console.log('in function get quote data', response)
+				if (response.data.vehicleData.length == 0) {
+					this.no_vehicle_msg = 'No Vehicle found with the applied filter.'
+				}
+
+				this.vehicleDetails = [...response.data?.vehicleData]
+				this.quotebotNewData = response.data?.quote
+
+				let location_info = []
+				let tempObj = {
+					distance: {
+						text: this.quotebotNewData?.distance / 1000 + "km",
+						value: Number(this.quotebotNewData?.distance)
 					},
-					duration:{
-						text:this.quotebotNewData?.duration/60 + "mins",
+					duration: {
+						text: this.quotebotNewData?.duration / 60 + "mins",
 						value: Number(this.quotebotNewData?.duration)
 					}
 				}
 				location_info.push(tempObj)
 				this.quotebotNewData['location_info'] = location_info
-				console.log("in location->",this.quotebotNewData)
-				localStorage.setItem('quotebot_form',JSON.stringify(this.quotebotNewData))
+				console.log("in location->", this.quotebotNewData)
+				localStorage.setItem('quotebot_form', JSON.stringify(this.quotebotNewData))
 			} catch (error) {
-				console.log("error-----_>",error)
+				console.log("error-----_>", error)
 			}
-			this.vehicleDetails = this.vehicleDetails.map(i=> {
-				if(i?.affiliate_company && i?.affiliate_name){
-					i['readMore']=(i?.affiliate_company?.length || i?.affiliate_name?.length) > 8 ? true : false 
+			this.vehicleDetails = this.vehicleDetails.map(i => {
+				if (i?.affiliate_company && i?.affiliate_name) {
+					i['readMore'] = (i?.affiliate_company?.length || i?.affiliate_name?.length) > 8 ? true : false
 				}
-				else{
+				else {
 					i['readMore'] = false
 				}
 				return i
 			})
-			console.log('vehicle details-->>>' , this.vehicleDetails)
+			console.log('vehicle details-->>>', this.vehicleDetails)
 			// this.Sort.LowToHigh() // default sort to Low-High
 			this.$spinner.hide()
 		})
@@ -681,24 +633,19 @@ export class SelectVehicleComponent implements OnInit
 	   * @param selection_category: String [Required] category of the filter that is selected
 	 * @param selector: Object [Required] selection object
 	 */
-	filterSelection(is_checked: boolean, sel_category: string, selector: object)
-	{
+	filterSelection(is_checked: boolean, sel_category: string, selector: object) {
 		let sel_index: number = 0
-		if (selector.hasOwnProperty('slug'))
-		{
+		if (selector.hasOwnProperty('slug')) {
 			sel_index = this.filters.original[sel_category].findIndex((item: any) => item.slug == selector['slug'])
-		} else
-		{
+		} else {
 			sel_index = this.filters.original[sel_category].findIndex((item: any) => item.id == selector['id'])
 		}
 		console.log(`\nChecked: ${is_checked}\nCategory: ${sel_category}\nSelector | Index: ${selector} | ${sel_index}\n`)
 
 		// ---------------------------------- Selection Part ------------------------
-		if (is_checked)
-		{
+		if (is_checked) {
 			// if 'any or all' filter gets selected directly
-			if (sel_index == 0)
-			{
+			if (sel_index == 0) {
 				// remove all the filters of that category
 				this.filters.selections = this.filters.selections.filter((item: Object) => item['catg_name'] != sel_category)
 				// check the 'any or all' filter
@@ -718,20 +665,16 @@ export class SelectVehicleComponent implements OnInit
 
 
 			// refill the models according to selected make else with the default value.
-			if (sel_category == 'make')
-			{
-				if (this.filters.selections.findIndex(item => item['catg_name'] == sel_category) == -1)
-				{
+			if (sel_category == 'make') {
+				if (this.filters.selections.findIndex(item => item['catg_name'] == sel_category) == -1) {
 					// default value
 					this.filters.vars['model'] = true
 					this.filters.copy['model'] = this.filters.original['model'].slice(0, this.min_length)
-				} else
-				{
+				} else {
 					this.filters.vars['model'] = false 	// hide the Show More button
 					let make_filters = this.filters.selections.filter((item) => item['catg_name'] == 'make')
 					let array = []
-					make_filters.forEach((item: any) =>
-					{
+					make_filters.forEach((item: any) => {
 						array.push(item.id)
 					})
 					// refill the models
@@ -740,14 +683,12 @@ export class SelectVehicleComponent implements OnInit
 			}
 
 
-			if (this.filters.request[sel_category] === undefined)
-			{
+			if (this.filters.request[sel_category] === undefined) {
 				// push into a new category
 				this.filters.request[sel_category] = []
 				this.filters.request[sel_category].push(this.filters.original[sel_category][sel_index]['id'])
 			}
-			else
-			{
+			else {
 				// push into existing category, after duplicacy values check
 				this.filters.request[sel_category].findIndex(item => item == this.filters.original[sel_category][sel_index]['id']) == -1 &&
 					this.filters.request[sel_category].push(this.filters.original[sel_category][sel_index]['id'])
@@ -755,8 +696,7 @@ export class SelectVehicleComponent implements OnInit
 		}
 
 		// ------------------------ Deselection -----------------------------
-		if (!is_checked)
-		{
+		if (!is_checked) {
 			// removing from selections
 			const index = this.filters.selections.findIndex(item => item['catg_name'] == sel_category && item['sel_index'] == sel_index)
 			this.filters.selections.splice(index, 1)	// remove operation
@@ -767,22 +707,18 @@ export class SelectVehicleComponent implements OnInit
 			// remove the key if list is empty
 			this.filters.request[sel_category].length == 0 && delete this.filters.request[sel_category]
 
-			if (sel_category == 'make')
-			{
+			if (sel_category == 'make') {
 				// populate with all models if no selection of make exists
-				if (this.filters.selections.findIndex(item => item['catg_name'] == sel_category) == -1)
-				{
+				if (this.filters.selections.findIndex(item => item['catg_name'] == sel_category) == -1) {
 					this.filters.vars['model'] = true		// hide the Show More button
 					// default sliced value
 					this.filters.copy['model'] = this.filters.original['model'].slice(0, this.min_length)
 				}
-				else
-				{
+				else {
 					this.filters.vars['model'] = false
 					let make_filters = this.filters.selections.filter((item) => item['catg_name'] == 'make')
 					let array = []
-					make_filters.forEach((item: any) =>
-					{
+					make_filters.forEach((item: any) => {
 						array.push(item.id)
 					})
 					this.filters.copy['model'] = this.filters.original['model'].filter((item: any) => array.includes(item['make_id']))
@@ -792,12 +728,10 @@ export class SelectVehicleComponent implements OnInit
 		}
 
 		// no filter of that category exists in selections, then make any or all active.
-		if (this.filters.selections.findIndex(item => item['catg_name'] == sel_category) == -1)
-		{
+		if (this.filters.selections.findIndex(item => item['catg_name'] == sel_category) == -1) {
 			this.filters.copy[sel_category][0]['checked'] = true		// checked operation
 		}
-		else
-		{
+		else {
 			this.filters.copy[sel_category][0]['checked'] = false		// unchecked operation
 		}
 
@@ -807,26 +741,22 @@ export class SelectVehicleComponent implements OnInit
 
 
 
-	isFilterAlreadySelected(catg_name: string, fil: object): boolean
-	{
+	isFilterAlreadySelected(catg_name: string, fil: object): boolean {
 		// return for all 'any or all' filters
-		if (fil['id'] == 0)
-		{
+		if (fil['id'] == 0) {
 			return this.filters.copy[catg_name][0]['checked']
 		}
 
 		return !(this.filters.selections.findIndex(item => item['catg_name'] == catg_name && item['name'] == fil['name']) == -1)
 	}
 
-	showModal(vehicle_selected: any, selection_button: string)
-	{
+	showModal(vehicle_selected: any, selection_button: string) {
 		this.vehicle_selected = vehicle_selected
 		this.vehicle_selected['selection_button'] = selection_button
 		$('#filtersModal').modal('toggle')
 	}
 
-	viewDetails(vehicle_selected: any)
-	{
+	viewDetails(vehicle_selected: any) {
 		sessionStorage.setItem('selected_vehicle', JSON.stringify(vehicle_selected))
 		this.$state.set({
 			selected_filters: this.filters.selections
@@ -836,7 +766,7 @@ export class SelectVehicleComponent implements OnInit
 		})
 	}
 
-	closeAllAccordian(){
+	closeAllAccordian() {
 		$('.collapse').collapse('hide');
 	}
 
@@ -847,34 +777,29 @@ export class SelectVehicleComponent implements OnInit
 	 *
 	 * @returns void
 	 */
-	bookNow(vehicle_selected: any)
-	{
+	bookNow(vehicle_selected: any) {
 		// // console.log('Will navigate to Book Now Page ...')
 		sessionStorage.setItem('selected_vehicle', JSON.stringify(vehicle_selected))
-		if (localStorage.getItem('currentUser') != null)
-		{
-			if (JSON.parse(localStorage.getItem('currentUser'))['roleName'] == 'admin')
-			{
-				if(this.bookingId){
+		if (localStorage.getItem('currentUser') != null) {
+			if (JSON.parse(localStorage.getItem('currentUser'))['roleName'] == 'admin') {
+				if (this.bookingId) {
 					this.$router.navigate(['/admin/new-booking'],
-					{ queryParams: {affiliate_id:vehicle_selected.affiliate_id, vehicle_id:vehicle_selected.id,new : 'reaffiliate' ,is_master_vehicle:vehicle_selected?.is_master_vehicle,updateType:'reaffiliate',reaffiliate_book_id:this.bookingId}})
+						{ queryParams: { affiliate_id: vehicle_selected.affiliate_id, vehicle_id: vehicle_selected.id, new: 'reaffiliate', is_master_vehicle: vehicle_selected?.is_master_vehicle, updateType: 'reaffiliate', reaffiliate_book_id: this.bookingId } })
 				}
-				else{
+				else {
 					this.$router.navigate(['/admin/new-booking'],
-					{ queryParams: {affiliate_id:vehicle_selected.affiliate_id, vehicle_id:vehicle_selected.id,new : true ,is_master_vehicle:vehicle_selected?.is_master_vehicle}})
+						{ queryParams: { affiliate_id: vehicle_selected.affiliate_id, vehicle_id: vehicle_selected.id, new: true, is_master_vehicle: vehicle_selected?.is_master_vehicle } })
 				}
-			}  else
-			{
+			} else {
 				let user = JSON.parse(localStorage.getItem('currentUser'))['roleName']
 				user = user == 'driver' ? 'affiliate' : user	// roleName of driver has to be directed to affiliate/..
 
 				this.$router.navigate([
 					'/' + user + '/create-new-booking'
 				],
-				{ queryParams: {affiliate_id:vehicle_selected.affiliate_id, vehicle_id:vehicle_selected.id,new : true , is_master_vehicle:vehicle_selected?.is_master_vehicle} })
+					{ queryParams: { affiliate_id: vehicle_selected.affiliate_id, vehicle_id: vehicle_selected.id, new: true, is_master_vehicle: vehicle_selected?.is_master_vehicle } })
 			}
-		} else
-		{
+		} else {
 			// this.$errorDialog.openDialog({
 			// 	errors: {
 			// 		error: 'Please open an account or login to proceed.'
@@ -884,7 +809,7 @@ export class SelectVehicleComponent implements OnInit
 			this.$router.navigate([
 				'/quotebot/new-booking'
 			],
-			{ queryParams: {affiliate_id:vehicle_selected.affiliate_id, vehicle_id:vehicle_selected.id,new : true , is_master_vehicle:vehicle_selected?.is_master_vehicle} })
+				{ queryParams: { affiliate_id: vehicle_selected.affiliate_id, vehicle_id: vehicle_selected.id, new: true, is_master_vehicle: vehicle_selected?.is_master_vehicle } })
 			//  Redirecting to create new booking without login 
 			// localStorage.setItem('QB_redirectUrl','true')
 			// this.$router.navigate(['/login/driver'], {
@@ -893,29 +818,24 @@ export class SelectVehicleComponent implements OnInit
 		}
 	}
 
-	clearFilters(filter: Filters['selections'])
-	{
-		console.log('filter clear filter clicked--->>' , !filter,this.filters.selections.length)
-		if (this.filters.selections.length <= 1 || !filter){
+	clearFilters(filter: Filters['selections']) {
+		console.log('filter clear filter clicked--->>', !filter, this.filters.selections.length)
+		if (this.filters.selections.length <= 1 || !filter) {
 			this.$router.navigateByUrl('/quotebot/master-vehicle')
 			return
 		}  // don't do anything if no filter is selected
 
-		if (filter !== null && this.filters.selections.length > 1)
-		{
+		if (filter !== null && this.filters.selections.length > 1) {
 			// deselecting the filter will remove from selections and request
 			this.filterSelection(false, filter['catg_name'], filter)
-		} else
-		{
+		} else {
 			this.$spinner.show()
 			// empty the whole
 			this.filters.selections = []
 			this.filters.request = {}
 			this.vehicleDetails = []
-			Object.keys(this.filters.copy).forEach((item: string) =>
-			{
-				if (!this.filters.copy[item][0]['checked'])
-				{
+			Object.keys(this.filters.copy).forEach((item: string) => {
+				if (!this.filters.copy[item][0]['checked']) {
 					this.filters.copy[item][0]['checked'] = true
 				}
 			})
@@ -929,17 +849,13 @@ export class SelectVehicleComponent implements OnInit
 	Sort = {
 		// fetch the service_type from quotebot 
 		getkey: 'rate_breakdown_' + JSON.parse(localStorage.getItem('quotebot_form'))['service_type'], // modify the key
-		LowToHigh: () =>
-		{
+		LowToHigh: () => {
 			let getKeyName = this.Sort.getkey
 			console.log(getKeyName)
 			// for Master Vehicles
-			if (this.vehicleDetails.length == 0 && this.filters.selections.length == 0)
-			{
-				this.master_vehicles.length > 1 && this.master_vehicles.sort((a, b) =>
-				{
-					if (a[getKeyName].length == 0 && b[getKeyName].length == 0)
-					{
+			if (this.vehicleDetails.length == 0 && this.filters.selections.length == 0) {
+				this.master_vehicles.length > 1 && this.master_vehicles.sort((a, b) => {
+					if (a[getKeyName].length == 0 && b[getKeyName].length == 0) {
 						a[getKeyName].grand_total = 0
 						b[getKeyName].grand_total = 0
 					}
@@ -949,26 +865,20 @@ export class SelectVehicleComponent implements OnInit
 			}
 
 			// for vehicles
-			this.vehicleDetails.length > 0 && this.vehicleDetails.sort((a, b) =>
-			{
-				if (a[getKeyName].length == 0 && b[getKeyName].length == 0)
-				{
+			this.vehicleDetails.length > 0 && this.vehicleDetails.sort((a, b) => {
+				if (a[getKeyName].length == 0 && b[getKeyName].length == 0) {
 					a[getKeyName].grand_total = 0
 					b[getKeyName].grand_total = 0
 				}
 				return a[getKeyName].grand_total - b[getKeyName].grand_total
 			})
 		},
-		HighToLow: () =>
-		{
+		HighToLow: () => {
 			let getKeyName = this.Sort.getkey
 			// for master vehicles
-			if (this.vehicleDetails.length == 0 && this.filters.selections.length == 0)
-			{
-				this.master_vehicles.length > 1 && this.master_vehicles.sort((a, b) =>
-				{
-					if (a[getKeyName].length == 0 && b[getKeyName].length == 0)
-					{
+			if (this.vehicleDetails.length == 0 && this.filters.selections.length == 0) {
+				this.master_vehicles.length > 1 && this.master_vehicles.sort((a, b) => {
+					if (a[getKeyName].length == 0 && b[getKeyName].length == 0) {
 						a[getKeyName].grand_total = 0
 						b[getKeyName].grand_total = 0
 					}
@@ -978,10 +888,8 @@ export class SelectVehicleComponent implements OnInit
 			}
 
 			// for vehicles
-			this.vehicleDetails.length > 0 && this.vehicleDetails.sort((a, b) =>
-			{
-				if (a[getKeyName].length == 0 && b[getKeyName].length == 0)
-				{
+			this.vehicleDetails.length > 0 && this.vehicleDetails.sort((a, b) => {
+				if (a[getKeyName].length == 0 && b[getKeyName].length == 0) {
 					a[getKeyName].grand_total = 0
 					b[getKeyName].grand_total = 0
 				}
@@ -990,8 +898,7 @@ export class SelectVehicleComponent implements OnInit
 		}
 	}
 
-	backButton()
-	{
+	backButton() {
 		// when its time to go back to home page
 		// if (this.vehicleDetails.length == 0)
 		// {
@@ -1008,9 +915,9 @@ export class SelectVehicleComponent implements OnInit
 		// this.vehicleDetails = []
 	}
 
-	handleReadMore(vehinfo : any,check:boolean){
-		this.vehicleDetails = this.vehicleDetails.map(i=> {
-			if(i.id== vehinfo.id){
+	handleReadMore(vehinfo: any, check: boolean) {
+		this.vehicleDetails = this.vehicleDetails.map(i => {
+			if (i.id == vehinfo.id) {
 				i['readMore'] = check
 			}
 			return i;
@@ -1060,17 +967,17 @@ export class SelectVehicleComponent implements OnInit
 		// this.sendEmailModal.nativeElement.querySelector('textarea').focus();
 	}
 
-	submit(message,vehicleDetails) {
-		
-		console.log("in submit---->",vehicleDetails)
+	submit(message, vehicleDetails) {
+
+		console.log("in submit---->", vehicleDetails)
 		let obj = {
 			reciptentName: this.passengerDetails?.affiliate_name,
-			sendTo:'Affiliate',
-			sendThrough: "Phone" ,
+			sendTo: 'Affiliate',
+			sendThrough: "Phone",
 			sendValue: this.passengerDetails?.affiliate_phone,
 			sendContent: message,
 		};
-		console.log("in submit obj---->",obj)
+		console.log("in submit obj---->", obj)
 		this.adminService
 			.adminNotification(obj)
 			.pipe(

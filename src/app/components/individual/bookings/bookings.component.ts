@@ -12,6 +12,7 @@ import { TravelAgentService } from 'src/app/services/travel-agent.service';
 import { DatePickerComponent } from '../../shared/date-picker/date-picker.component';
 import { HttpClient } from '@angular/common/http';
 import { IndividualService } from 'src/app/services/individual.service';
+import { StateManagementService } from 'src/app/services/statemanagement.service';
 declare var $: any;
 
 @Component({
@@ -75,6 +76,8 @@ export class BookingsComponent implements OnInit {
 	bookingId: any;
 	responseRate: any;
 	rateArray: any;
+	cancelMessage: any;
+	currencySymbol: any;
 
 	constructor(
 		private affiliateService: AffiliateService,
@@ -83,6 +86,7 @@ export class BookingsComponent implements OnInit {
 		private spinner: NgxSpinnerService,
 		private $errors: ErrorDialogService,
 		private formBuilder: FormBuilder,
+		private stateManagementService: StateManagementService,
 		private individualService: IndividualService,
 		private http: HttpClient) { }
 
@@ -109,7 +113,11 @@ export class BookingsComponent implements OnInit {
 			: false;
 		console.log('indvUseDateFilter-->', this.useDateFilter)
 
+		//save currency symbol
+		this.currencySymbol = this.stateManagementService.getCurrencySymbol();
+
 		this.loadBookings();
+
 
 		this.changeStatusForm = this.formBuilder.group({
 			reservation_id: ['', Validators.required],
@@ -148,6 +156,7 @@ export class BookingsComponent implements OnInit {
 		// var keyword = ((document.getElementById("keyword") as HTMLInputElement).value);
 		// Load Our bookings using API
 		this.individualService.loadBookings(pageUrl, this.searchText, this.startDate, this.endDate, this.useDateFilter).then(result => {
+			this.cancelMessage = ''
 			this.spinner.hide()
 			this.bookingsRes = result;
 			this.bookings = this.bookingsRes?.data?.data;
@@ -165,7 +174,7 @@ export class BookingsComponent implements OnInit {
 			this.prevPageUrl = this.bookingsRes?.data?.prev_page_url;
 			this.nextPageUrl = this.bookingsRes?.data?.next_page_url;
 			console.log('result------------------------->>>', result)
-			
+
 		})
 			.catch(err => {
 				this.spinner.hide();//hide spinner
@@ -316,6 +325,26 @@ export class BookingsComponent implements OnInit {
 			}
 		}
 	}
+	convertToMinutes(value) {
+		const days = Math.floor(value / (24 * 60 * 60));
+		const remainingSeconds = value % (24 * 60 * 60);
+		const hours = Math.floor(remainingSeconds / (60 * 60));
+		const remainingMinutes = Math.floor((remainingSeconds % (60 * 60)) / 60);
+
+		let result = "";
+
+		if (days > 0) {
+			result += `${days} days, `;
+		}
+
+		if (hours > 0 || (days === 0 && hours === 0)) {
+			result += `${hours} hours, `;
+		}
+
+		result += `${remainingMinutes} minutes`;
+
+		return result;
+	}
 
 
 
@@ -457,9 +486,33 @@ export class BookingsComponent implements OnInit {
 		if (updateType == 'change') {
 			this.router.navigate([`/${this.currentUser?.roleName}/create-new-booking`], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'true' } });
 		}
+		else if (updateType == 'cancel') {
+			this.bookingId = bookingId
+		}
 		else {
 			this.router.navigate([`/${this.currentUser?.roleName}/create-new-booking`], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'true' } });
 		}
+	}
+
+	cancelBooking() {
+		this.spinner.show()
+		this.individualService.cancelBooking(this.bookingId)
+			.pipe(
+				catchError((err) => {
+					this.spinner.hide()
+					$("#cancel_booking_modal").modal("hide");
+					return throwError(err);
+				})
+			)
+			.subscribe((response: any) => {
+				console.log('response--------->>>>>>>>', response)
+				this.spinner.hide()
+				this.cancelMessage = response?.message
+				// this.loadBookings()
+				$("#cancel_booking_modal").modal("hide");
+				$("#success_modal").modal("show");
+
+			});
 	}
 
 	emailPassenger() {
@@ -471,8 +524,8 @@ export class BookingsComponent implements OnInit {
 		this.travelAgentService.passengerBooking(data)
 			.pipe(
 				catchError((err) => {
-				this.spinner.hide()
-				return throwError(err);
+					this.spinner.hide()
+					return throwError(err);
 				})
 			)
 			.subscribe((response: any) => {
@@ -702,10 +755,10 @@ export class BookingsComponent implements OnInit {
 	}
 
 	handleChangeCard(card: any) {
-		console.log("selected card",card)
+		console.log("selected card", card)
 
 		this.selectedCard = card
-		console.log("selected card",this.selectedCard)
+		console.log("selected card", this.selectedCard)
 	}
 
 	changeDetection(method: string) {
@@ -718,8 +771,8 @@ export class BookingsComponent implements OnInit {
 		console.log('-----=====?>>>>>', this.cardDetails.length > 0)
 		let dataToSend: any
 
-		if(this.paymentMethod == 'card'){
-			console.log('<<<<<----payment through card-->>>>',this.selectedCard?.ID,this.cardDetails[0]?.ID,this.bookingId,this.rateArray?.grandTotal)
+		if (this.paymentMethod == 'card') {
+			console.log('<<<<<----payment through card-->>>>', this.selectedCard?.ID, this.cardDetails[0]?.ID, this.bookingId, this.rateArray?.grandTotal)
 			dataToSend = {
 				isExistingCard: true,
 				paymentMethod: 'credit_card',
@@ -731,7 +784,7 @@ export class BookingsComponent implements OnInit {
 			}
 			console.log('selected card-->>>')
 		}
-		else{
+		else {
 			console.log('<<<<<----payment through cash-->>>>')
 			dataToSend = {
 				reservation_id: this.bookingId,
@@ -739,15 +792,15 @@ export class BookingsComponent implements OnInit {
 				paymentMethod: 'cash'
 			}
 		}
-			this.spinner.show()
-			this.individualService.paymentProcessing(dataToSend).subscribe((response: any) => {
-				$('#paymentModal').modal('hide')
-				console.log(response)
-				this.router.navigate([`/individual/invoice-summary`],{queryParams:{bookingId:this.bookingId}});
+		this.spinner.show()
+		this.individualService.paymentProcessing(dataToSend).subscribe((response: any) => {
+			$('#paymentModal').modal('hide')
+			console.log(response)
+			this.router.navigate([`/individual/invoice-summary`], { queryParams: { bookingId: this.bookingId } });
 
-				console.log('response---------------------->>', response)
-				this.spinner.hide()
-			})
+			console.log('response---------------------->>', response)
+			this.spinner.hide()
+		})
 	}
 }
 

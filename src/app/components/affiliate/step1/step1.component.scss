@@ -661,3 +661,20 @@ height: 58px !important;
 			display:none !important;
 		}
 	}
+
+	.choose_ameniteslist{
+		flex-direction: column !important;
+		height: 30vh !important;
+	  }
+	  
+	  @media  (min-width: 767px) and (max-width:821px) {
+		.choose_ameniteslist{
+		  height: 38vh !important;
+		}
+	  }
+	  
+	  @media screen and (max-width: 767px){
+		.choose_ameniteslist{
+		  height: auto !important;
+		}
+	  }

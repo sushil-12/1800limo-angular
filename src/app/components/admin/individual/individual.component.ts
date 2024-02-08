@@ -26,7 +26,7 @@ export class IndividualComponent implements OnInit {
 	public firstPage: Number;
 	public lastPage: Number;
 	public totalPage: Number;
-	public currentPage: Number;
+	public currentPage: any;
 	public from: Number;
 	public to: Number;
 	public path: string;
@@ -35,7 +35,7 @@ export class IndividualComponent implements OnInit {
 	public prevPageUrl: string;
 	public nextPageUrl: string;
 	searchText: string = '';
-	loginAsUserResponse:any;
+	loginAsUserResponse: any;
 
 	constructor(
 		private adminService: AdminService,
@@ -83,8 +83,8 @@ export class IndividualComponent implements OnInit {
 	loadIndividuals(pageUrl = null) {
 		/** spinner starts on init */
 		// this.spinner.show();
-		if(pageUrl){
-			console.log("pageurl",pageUrl)
+		if (pageUrl) {
+			console.log("pageurl", pageUrl)
 			this.scroll('individual_table')
 		}
 		// var keyword = ((document.getElementById("keyword") as HTMLInputElement).value);
@@ -202,36 +202,39 @@ export class IndividualComponent implements OnInit {
 	}
 
 	loginAsUser(user_id) {
-		console.log("in login as user indv",user_id)
-   
-		
-		  this.spinner.show()
-		  this.adminService.loginAsUser(user_id).pipe(
+		console.log("in login as user indv", user_id)
+
+
+		this.spinner.show()
+		this.adminService.loginAsUser(user_id).pipe(
 			catchError(err => {
-			  this.spinner.hide()
-			  return throwError(err);
+				this.spinner.hide()
+				return throwError(err);
 			})
-		  ).subscribe(response => {
+		).subscribe(response => {
 			this.spinner.hide()
 			this.loginAsUserResponse = response
 			let bkp_a_token = localStorage.getItem('access_token')
 			let bkp_crnt_dt = localStorage.getItem('currentUser')
 			let bkp_u_dt = localStorage.getItem('userData')
+			let bkp_currency_symbol = localStorage.getItem('currencySymbol')
+			localStorage.setItem('bkp_currency_symbol', bkp_currency_symbol)
 			localStorage.setItem('bkp_a_token', bkp_a_token)
 			localStorage.setItem('bkp_crnt_dt', bkp_crnt_dt)
 			localStorage.setItem('bkp_u_dt', bkp_u_dt)
 			console.log("response", response)
+			localStorage.setItem('currencySymbol', JSON.stringify(this.loginAsUserResponse?.currency?.symbol))
 			localStorage.setItem('access_token', this.loginAsUserResponse.data?.access_token)
 			localStorage.setItem('currentUser', JSON.stringify(this.loginAsUserResponse.data?.user))
-			if(this.loginAsUserResponse?.data?.user?.is_profile_complete){
-			  this.router.navigateByUrl('/individual/bookings');
+			if (this.loginAsUserResponse?.data?.user?.is_profile_complete) {
+				this.router.navigateByUrl('/individual/bookings');
 			}
-			else{
-			  this.router.navigateByUrl('/individual/profile')
+			else {
+				this.router.navigateByUrl('/individual/profile')
 			}
-	  
-		  });
-		
-	  }
+
+		});
+
+	}
 
 }

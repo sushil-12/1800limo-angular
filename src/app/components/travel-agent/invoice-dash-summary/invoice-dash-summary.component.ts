@@ -11,11 +11,12 @@ declare var $: any;
 import { MatChipEvent, MatChipInputEvent } from '@angular/material/chips';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import * as moment from 'moment';
+import { StateManagementService } from 'src/app/services/statemanagement.service';
 
 @Component({
-  selector: 'app-invoice-dash-summary',
-  templateUrl: './invoice-dash-summary.component.html',
-  styleUrls: ['./invoice-dash-summary.component.scss']
+	selector: 'app-invoice-dash-summary',
+	templateUrl: './invoice-dash-summary.component.html',
+	styleUrls: ['./invoice-dash-summary.component.scss']
 })
 export class InvoiceDashSummaryComponent implements OnInit {
 
@@ -38,38 +39,42 @@ export class InvoiceDashSummaryComponent implements OnInit {
 	subModules: any = [];
 	currentUser: any;
 	constructor(
-    private TravelService: TravelAgentService,
+		private TravelService: TravelAgentService,
 		private adminService: AdminService,
 		private router: Router,
 		private spinner: NgxSpinnerService,
 		private $spinner: NgxSpinnerService,
 		private activatedroute: ActivatedRoute,
+		private stateManagementService: StateManagementService,
 		private httpClient: HttpClient) { }
 
-    ngOnInit(): void {
-	this.currentUser = JSON.parse(localStorage.getItem('currentUser'))
-      this.spinner.show();
-      this.getCurrencyData();
-      this.activatedroute.queryParamMap
-        .subscribe((params) => {
-          this.paramResponse = { ...params.keys, ...params };
-          this.bookingId = this.paramResponse.params.bookingId;
-  
-          if (!this.bookingId) {
-            this.router.navigate([`/${this.currentUser?.roleName}/bookings`]);
-          }
-          else {
-            this.getInvoiceData()
-          }
-        });
-  
-    }
+	ngOnInit(): void {
+		this.currentUser = JSON.parse(localStorage.getItem('currentUser'))
+		this.spinner.show();
+		this.getCurrencyData();
+		this.activatedroute.queryParamMap
+			.subscribe((params) => {
+				this.paramResponse = { ...params.keys, ...params };
+				this.bookingId = this.paramResponse.params.bookingId;
 
-    backButton() {
-      this.router.navigate([`/${this.currentUser?.roleName}/invoices`]);
-    }
+				if (!this.bookingId) {
+					this.router.navigate([`/${this.currentUser?.roleName}/bookings`]);
+				}
+				else {
+					this.getInvoiceData()
+				}
+			});
 
-  getCurrencyData() {
+		//save currency symbol
+		this.currencySymbol = this.stateManagementService.getCurrencySymbol();
+
+	}
+
+	backButton() {
+		this.router.navigate([`/${this.currentUser?.roleName}/invoices`]);
+	}
+
+	getCurrencyData() {
 		console.log('in function get currency data')
 		this.httpClient.get("assets/json/currencyOptions1.json").subscribe(data => {
 			console.log('data ', data)
@@ -77,7 +82,7 @@ export class InvoiceDashSummaryComponent implements OnInit {
 		})
 	}
 
-  getInvoiceData() {
+	getInvoiceData() {
 
 		this.TravelService.getInvoiceData(this.bookingId)
 			.pipe(
@@ -96,7 +101,7 @@ export class InvoiceDashSummaryComponent implements OnInit {
 				// this.refundAmountForm.controls['refundAmount'].setValidators([Validators.required, Validators.max(this.amount)])
 				// this.refundAmountForm.controls['refundAmount'].updateValueAndValidity();
 				this.spinner.hide();//hide spinner
-				this.currencySymbol = this.getCurrencySymbol(this.invoiceData.currency)
+				// this.currencySymbol = this.getCurrencySymbol(this.invoiceData.currency)
 				this.subModules = localStorage.getItem('sub_modules') || [];
 				this.currentUser = JSON.parse(localStorage.getItem('userData')) || "";
 			});
@@ -132,7 +137,7 @@ export class InvoiceDashSummaryComponent implements OnInit {
 
 	}
 
-  getCurrencySymbol(currency: any) {
+	getCurrencySymbol(currency: any) {
 		let symbol;
 		for (let i = 0; i < this.currencyOptions.length; i++) {
 			if (this.currencyOptions[i].code == currency.toUpperCase()) {

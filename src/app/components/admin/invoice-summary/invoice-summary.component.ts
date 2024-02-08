@@ -133,7 +133,8 @@ export class InvoiceSummaryComponent implements OnInit {
 				this.refundAmountForm.controls['refundAmount'].setValidators([Validators.required, Validators.max(this.amount)])
 				this.refundAmountForm.controls['refundAmount'].updateValueAndValidity();
 				this.spinner.hide();//hide spinner
-				this.currencySymbol = this.getCurrencySymbol(this.invoiceData.currency)
+				// this.currencySymbol = this.getCurrencySymbol(this.invoiceData.currency)
+				this.currencySymbol = this.invoiceData?.currency_symbol
 				this.subModules = localStorage.getItem('sub_modules') || [];
 				this.currentUser = JSON.parse(localStorage.getItem('userData')) || "";
 			});
@@ -212,8 +213,8 @@ export class InvoiceSummaryComponent implements OnInit {
 			return moment(timestamp * 1000).format('MMMM Do YYYY, h:mm:ss a')
 		}
 	}
-	formatText(value){
-		return value ? value.replaceAll('_' , ' ') : ''
+	formatText(value) {
+		return value ? value.replaceAll('_', ' ') : ''
 	}
 
 	getCurrencyData() {
@@ -273,6 +274,7 @@ export class InvoiceSummaryComponent implements OnInit {
 
 	handleInputEmail(event: any) {
 		console.log('in function handle input email', event.target.value)
+		this.str_email = event
 		if (event.target.value) {
 			this.str_email = event.target.value
 		}

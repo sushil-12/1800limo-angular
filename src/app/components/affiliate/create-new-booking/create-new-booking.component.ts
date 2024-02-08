@@ -24,6 +24,7 @@ import * as moment from 'moment';
 import { CustomvalidationService } from 'src/app/services/customvalidation.service';
 import { AdminService } from 'src/app/services/admin.service';
 import { CommonService } from 'src/app/services/common.service';
+import { HttpClient } from '@angular/common/http';
 declare var $: any
 
 
@@ -115,8 +116,8 @@ export class CreateNewBookingComponent implements OnInit {
 	submitBookingForm: boolean;
 	newBooking: boolean = false;
 	QB_vehicle_id: any = null;
-	params_QB_vehicle_id :any = null
-	updateType: any='create';
+	params_QB_vehicle_id: any = null
+	updateType: any = 'create';
 	bookingResponse: any;
 	unique_key: any;
 	firstLoadAffiliateId: any;
@@ -124,14 +125,16 @@ export class CreateNewBookingComponent implements OnInit {
 	transfer_type: any = 'city_to_city'
 	return_transfer_type: any = 'city_to_city'
 	number_of_hours: any = '0';
-	booking_data:any={}
+	booking_data: any = {}
 	is_master_vehicle: boolean = JSON.parse(sessionStorage.getItem('selected_vehicle'))?.is_master_vehicle || false
-	extraStops_rate:any = 0
+	extraStops_rate: any = 0
 	isTravelShare: boolean;
 	isCreatedByAdmin: boolean = true;
 	adminSharePercent: number = 25;
-	shareArray:any;
-	r_shareArray:any;
+	shareArray: any;
+	r_shareArray: any;
+	currencySymbol: any;
+	currencyObj: any;
 
 
 	constructor(
@@ -146,7 +149,9 @@ export class CreateNewBookingComponent implements OnInit {
 		private $routeurl: ActivatedRoute,
 		private commonServices: CommonService,
 		private customValidator: CustomvalidationService,
-		private el: ElementRef
+		private stateManagementService: StateManagementService,
+		private el: ElementRef,
+		private httpClient: HttpClient,
 	) { }
 
 	openAutoCompletePanel() {
@@ -172,6 +177,12 @@ export class CreateNewBookingComponent implements OnInit {
 			else {
 				this.resetFields()
 			}
+
+			//save currency symbol
+			// this.currencySymbol = this.stateManagementService.getCurrencySymbol();
+			this.currencyObj = JSON.parse(sessionStorage.getItem('currencyData'))
+			this.currencySymbol = this.currencyObj?.symbol
+
 			// place in query params to reinitialise things when modes of new and edit are toggled
 			// Subscriptions
 			this.Subscriptions()
@@ -437,13 +448,13 @@ export class CreateNewBookingComponent implements OnInit {
 			this.SetFormValue('return_meet_greet_choices_name', "Driver -  Airport - Text/call after plane lands with curbside meet location")
 		}
 	}
-	handleClientAccChange(selectedAcc){
-		this.isTravelShare =  selectedAcc=='travel_planner' ? true : false
+	handleClientAccChange(selectedAcc) {
+		this.isTravelShare = selectedAcc == 'travel_planner' ? true : false
 		this.BookingForm.get('acc_id').setValue(null);
 		this.chosen_user = null
 		this.BookingForm.patchValue({
 			passenger_name: '',
-			passenger_email:'',
+			passenger_email: '',
 			passenger_cell: '',
 			passenger_cell_isd: '+1',
 			passenger_cell_country: 'us',
@@ -475,10 +486,20 @@ export class CreateNewBookingComponent implements OnInit {
 		this.$spinner.show('normalspinner');
 		this.$api.getBookingDataForEdit(booking_id, this.Form.updateType.value).subscribe((response: any) => {
 			response.data.booking_instructions = response.data.booking_instructions.replaceAll('<br />', '')
-			this.isTravelShare =  response?.data?.account_type=='travel_planner' ? true : false
-			this.isCreatedByAdmin = response?.data?.created_by==1 ? true : false
+			this.isTravelShare = response?.data?.account_type == 'travel_planner' ? true : false
+			this.isCreatedByAdmin = response?.data?.created_by == 1 ? true : false
 			console.log('response <><><><><', response.data)
 			let editing_data = response.data
+			let currency = editing_data?.currency
+			this.httpClient.get("assets/json/currencyOptions.json").subscribe(data => {
+				for (const key of Object.keys(data)) {
+					if (data[key].currency === currency) {
+						this.currencyObj = data[key]
+						this.currencySymbol = data[key].symbol
+					}
+				}
+			})
+			console.log("this.currencyObj?.currency", this.currencyObj)
 			this.bookingResponse = response.data
 			this.firstLoadVehicleId = response.data.vehicle_id
 			this.firstLoadAffiliateId = response.data.affiliate_id
@@ -719,7 +740,7 @@ export class CreateNewBookingComponent implements OnInit {
 					this.fetchDistanceAndTime(response).then((response: { distance: number, time: number }) => {
 						if (is_return) {
 							this.return_distance = response.distance
-							if(!this.BookingForm.get('return_extra_stops')?.value?.length || this.BookingForm.get('return_extra_stops')?.value[0]['rate']?.length){
+							if (!this.BookingForm.get('return_extra_stops')?.value?.length || this.BookingForm.get('return_extra_stops')?.value[0]['rate']?.length) {
 								this.buildBookingData()
 							}
 							this.BookingForm.patchValue({
@@ -728,7 +749,7 @@ export class CreateNewBookingComponent implements OnInit {
 							})
 						} else {
 							this.distance = response.distance
-							if(!this.BookingForm.get('extra_stops')?.value?.length || this.BookingForm.get('extra_stops')?.value[0]['rate']?.length){
+							if (!this.BookingForm.get('extra_stops')?.value?.length || this.BookingForm.get('extra_stops')?.value[0]['rate']?.length) {
 								this.buildBookingData()
 							}
 							this.BookingForm.patchValue({
@@ -763,24 +784,24 @@ export class CreateNewBookingComponent implements OnInit {
 		return (<FormArray>this.BookingForm.get('return_extra_stops'));
 	}
 
-	convertToMinutes(value){
+	convertToMinutes(value) {
 		const days = Math.floor(value / (24 * 60 * 60));
 		const remainingSeconds = value % (24 * 60 * 60);
 		const hours = Math.floor(remainingSeconds / (60 * 60));
 		const remainingMinutes = Math.floor((remainingSeconds % (60 * 60)) / 60);
-	
+
 		let result = "";
 
 		if (days > 0) {
 			result += `${days} days, `;
 		}
-	
+
 		if (hours > 0 || (days === 0 && hours === 0)) {
 			result += `${hours} hours, `;
 		}
-	
+
 		result += `${remainingMinutes} minutes`;
-	
+
 		return result;
 	}
 
@@ -990,29 +1011,29 @@ export class CreateNewBookingComponent implements OnInit {
 		this.buildBookingData()
 	}
 
-	handleLooseCustomerPhone(event){
+	handleLooseCustomerPhone(event) {
 		console.log('handleLooseCustomerPhone->>', event, event.target.value)
 		this.BookingForm.patchValue({
-			passenger_cell : event.target.value
+			passenger_cell: event.target.value
 		})
 	}
-	handleLooseCustomerName(event){
+	handleLooseCustomerName(event) {
 		const loose_customer = (this.BookingForm.get('loose_customer') as FormGroup)
 		this.BookingForm.patchValue({
-			passenger_name : loose_customer.get('first_name').value + ' ' + loose_customer.get('last_name').value
+			passenger_name: loose_customer.get('first_name').value + ' ' + loose_customer.get('last_name').value
 		})
 	}
 
-	handleLooseAffiliateName(){
+	handleLooseAffiliateName() {
 		this.BookingForm.patchValue({
-			driver_name : this.BookingForm.get('lose_affiliate_name').value
+			driver_name: this.BookingForm.get('lose_affiliate_name').value
 		})
-		 
+
 	}
 
-	handleLooseAffiliatePhone(){
+	handleLooseAffiliatePhone() {
 		this.BookingForm.patchValue({
-			driver_cell : this.BookingForm.get('lose_affiliate_phone').value
+			driver_cell: this.BookingForm.get('lose_affiliate_phone').value
 		})
 	}
 
@@ -1102,7 +1123,7 @@ export class CreateNewBookingComponent implements OnInit {
 		this.$spinner.show()
 		// this.$api.adminAffiliateVehicleList(affiliate_id).then((response: any) => {
 		this.affiliateService.getVehicleDataByAffiliateId(affiliate_id).then((response: any) => {
-			console.log('get affiliate vehicle data----->>>>>>>>>' , response.data)
+			console.log('get affiliate vehicle data----->>>>>>>>>', response.data)
 			if (response.success && response.data.vehicleList.length > 0) {
 				this.VehicleList = response.data.vehicleList
 				// add a key with formatted name to every value
@@ -1111,10 +1132,10 @@ export class CreateNewBookingComponent implements OnInit {
 				// autofill data if isRatesCompleted:true
 				this.vehicleType_arr = this.VehicleList = this.vehicleMake_arr = this.VehicleList = this.vehicleModal_arr = this.VehicleList = this.vehicleYear_arr = this.VehicleList = this.vehicleColor_arr = this.VehicleList
 
-				for(let i=0;i<this.VehicleList.length;i++){
-					if(this.VehicleList[i].isRatesCompleted){
-						if(this.QB_vehicle_id){
-							if(this.VehicleList[i].ID == this.QB_vehicle_id ){
+				for (let i = 0; i < this.VehicleList.length; i++) {
+					if (this.VehicleList[i].isRatesCompleted) {
+						if (this.QB_vehicle_id) {
+							if (this.VehicleList[i].ID == this.QB_vehicle_id) {
 								let vehicle_type_id = this.BigData['vehicleCategories'].find(item => item.name == this.VehicleList[i].vehicleType)['id']
 								this.SetFormValue('vehicle_type', vehicle_type_id)
 								// this.SetFormValue('vehicle_id', this.VehicleList[i].ID);
@@ -1124,7 +1145,7 @@ export class CreateNewBookingComponent implements OnInit {
 							}
 						}
 					}
-					}
+				}
 			}
 			this.$spinner.hide()
 		})
@@ -1142,7 +1163,7 @@ export class CreateNewBookingComponent implements OnInit {
 			if (response.success && response.data?.data.length > 0) {
 				this.DriverList = response.data.data
 				let isValueSet = false
-				for(let i =0;i<this.DriverList.length;i++){
+				for (let i = 0; i < this.DriverList.length; i++) {
 					this.SetFormValue('driver_id', this.DriverList[i].id)
 					console.log('autofill driver info--->>', this.DriverList[i])
 					this.autofillData('driver', this.DriverList[i])
@@ -1344,7 +1365,7 @@ export class CreateNewBookingComponent implements OnInit {
 
 
 
-addExtraStop(is_return: boolean = false) {
+	addExtraStop(is_return: boolean = false) {
 		// console.log('Adding Extra Stop ...')
 		if (is_return) {
 			let index = Object.keys(this.ReturnExtraStops).length + 1;
@@ -1352,7 +1373,7 @@ addExtraStop(is_return: boolean = false) {
 				address: new FormControl(''),
 				latitude: new FormControl(''),
 				longitude: new FormControl(''),
-				rate:  new FormControl(''),
+				rate: new FormControl(''),
 				booking_instructions: new FormControl('')
 			}))
 		}
@@ -1362,7 +1383,7 @@ addExtraStop(is_return: boolean = false) {
 				address: new FormControl(''),
 				latitude: new FormControl(''),
 				longitude: new FormControl(''),
-				rate:  new FormControl(''),
+				rate: new FormControl(''),
 				booking_instructions: new FormControl('')
 			}))
 		}
@@ -1391,7 +1412,7 @@ addExtraStop(is_return: boolean = false) {
 				if (this.Form.transfer_type.value.includes('_airport')) {
 					return_pickup_location = this.Form.return_pickup_airport_name?.value
 				}
-				this.checkExtraStopInTown(return_pickup_location,address.formatted_address ,'return_extra_stops',index )
+				this.checkExtraStopInTown(return_pickup_location, address.formatted_address, 'return_extra_stops', index)
 			}
 			if (location) {
 				(<FormArray>this.BookingForm.get('return_extra_stops')).at(index).patchValue({
@@ -1411,7 +1432,7 @@ addExtraStop(is_return: boolean = false) {
 				if (this.Form.transfer_type.value.includes('airport_')) {
 					pickup_location = this.Form.pickup_airport_name.value
 				}
-				this.checkExtraStopInTown(pickup_location,address.formatted_address ,'extra_stops',index )
+				this.checkExtraStopInTown(pickup_location, address.formatted_address, 'extra_stops', index)
 			}
 
 			if (location) {
@@ -1438,39 +1459,39 @@ addExtraStop(is_return: boolean = false) {
 		return null;
 	}
 
-	checkExtraStopInTown(location1: string, location2: string,formKey:string,index:any) {
-		console.log('in function check extra stop in town' , location1 , location2)
+	checkExtraStopInTown(location1: string, location2: string, formKey: string, index: any) {
+		console.log('in function check extra stop in town', location1, location2)
 		const geocoder = new google.maps.Geocoder();
 		geocoder.geocode({ address: location1 }, (results1, status1) => {
-		  if (status1 === 'OK' && results1.length > 0) {
-			const town1 = this.getTown(results1);
-			geocoder.geocode({ address: location2 },async (results2, status2) => {
-			  if (status2 === 'OK' && results2.length > 0) {
-				const town2 = this.getTown(results2);
-	  
-				if (town1 === town2) {
-					console.log('Both locations are in the same town/city.',this.extraStops_rate);
-					await (<FormArray>this.BookingForm.get([formKey])).at(index).patchValue({
-						rate : 'in_town'
-					});
-				} else {
-					console.log('Locations are in different towns/cities.',this.extraStops_rate);
-					(<FormArray>this.BookingForm.get([formKey])).at(index).patchValue({
-						rate : 'out_town'
-					});
-				}
-				setTimeout(()=>{
-					this.buildBookingData()
-				},300)
-			  } else {
-				console.error('Geocoding for Location 2 failed:', status2);
-			  }
-			});
-		  } else {
-			console.error('Geocoding for Location 1 failed:', status1);
-		  }
+			if (status1 === 'OK' && results1.length > 0) {
+				const town1 = this.getTown(results1);
+				geocoder.geocode({ address: location2 }, async (results2, status2) => {
+					if (status2 === 'OK' && results2.length > 0) {
+						const town2 = this.getTown(results2);
+
+						if (town1 === town2) {
+							console.log('Both locations are in the same town/city.', this.extraStops_rate);
+							await (<FormArray>this.BookingForm.get([formKey])).at(index).patchValue({
+								rate: 'in_town'
+							});
+						} else {
+							console.log('Locations are in different towns/cities.', this.extraStops_rate);
+							(<FormArray>this.BookingForm.get([formKey])).at(index).patchValue({
+								rate: 'out_town'
+							});
+						}
+						setTimeout(() => {
+							this.buildBookingData()
+						}, 300)
+					} else {
+						console.error('Geocoding for Location 2 failed:', status2);
+					}
+				});
+			} else {
+				console.error('Geocoding for Location 1 failed:', status1);
+			}
 		});
-	  }
+	}
 
 
 	select(is_checked: boolean, form_control: string, value: any) {
@@ -1504,78 +1525,78 @@ addExtraStop(is_return: boolean = false) {
 		const labelOffset = 90;
 		return controlEl.getBoundingClientRect().top + window.scrollY - labelOffset;
 	}
-	createReservationShareArray(){
+	createReservationShareArray() {
 		console.log('in function createReservationShareArray')
 		if (this.RatesForm) {
-		let base_rate = 0
-		if(this.BookingForm.value?.service_type == 'charter_tour'){
-			base_rate +=  this.RatesForm.all_inclusive_rates["Base_Rate"].baserate * this.number_of_hours
-		}
-		else{
-			base_rate +=  this.RatesForm.all_inclusive_rates["Base_Rate"].baserate
-		}
-		['ELH_Charges', 'Stops', 'Wait'].map((key) => {
-			base_rate += this.RatesForm.all_inclusive_rates[key].baserate
-		});
-		for (const key of Object.keys(this.RatesForm.amenities)) {
-			base_rate += this.RatesForm.amenities[key].baserate;
-		}
+			let base_rate = 0
+			if (this.BookingForm.value?.service_type == 'charter_tour') {
+				base_rate += this.RatesForm.all_inclusive_rates["Base_Rate"].baserate * this.number_of_hours
+			}
+			else {
+				base_rate += this.RatesForm.all_inclusive_rates["Base_Rate"].baserate
+			}
+			['ELH_Charges', 'Stops', 'Wait'].map((key) => {
+				base_rate += this.RatesForm.all_inclusive_rates[key].baserate
+			});
+			for (const key of Object.keys(this.RatesForm.amenities)) {
+				base_rate += this.RatesForm.amenities[key].baserate;
+			}
 			let grandTotal = this.BookingForm.value.rateArray.grand_total
 			let stripeFee = grandTotal * 0.05 + 0.30
-			let adminShare = (base_rate * this.adminSharePercent) / 100 
-			let deducted_admin_share = adminShare-stripeFee
+			let adminShare = (base_rate * this.adminSharePercent) / 100
+			let deducted_admin_share = adminShare - stripeFee
 			let shareArray = {
-				baseRate : base_rate,
-				grandTotal : grandTotal,
-				stripeFee : stripeFee,
-				adminShare : adminShare,
+				baseRate: base_rate,
+				grandTotal: grandTotal,
+				stripeFee: stripeFee,
+				adminShare: adminShare,
 				deducted_admin_share: deducted_admin_share,  // Admin will get this amount only
-				affiliateShare : (grandTotal - adminShare)
+				affiliateShare: (grandTotal - adminShare)
 			}
 
 			// add conditions here to change share percentage
 			this.adminSharePercent = 15
-			shareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100 
-			shareArray['deducted_admin_share'] = shareArray['adminShare']- shareArray['stripeFee']
-			shareArray['farmoutShare'] = base_rate * 0.10  
+			shareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100
+			shareArray['deducted_admin_share'] = shareArray['adminShare'] - shareArray['stripeFee']
+			shareArray['farmoutShare'] = base_rate * 0.10
 			this.shareArray = shareArray
 			// console.log('in function createReservationShareArray-->>>' , base_rate, shareArray )
 			return shareArray;
 			// value['rateArray'] = JSON.parse(JSON.stringify(this.RatesForm))
 		}
 	}
-	createReservationReturnShareArray(){
+	createReservationReturnShareArray() {
 		console.log('createReservationReturnShareArray', this.BookingForm.value.return_grand_total)
 		if (this.Form.service_type.value == 'round_trip' && this.ReturnRatesForm) {
-			
+
 			let base_rate = 0
-		for (const key of Object.keys(this.ReturnRatesForm.all_inclusive_rates)) {
-			base_rate += this.ReturnRatesForm.all_inclusive_rates[key].baserate;
-		}
-		for (const key of Object.keys(this.ReturnRatesForm.amenities)) {
-			base_rate += this.ReturnRatesForm.amenities[key].baserate;
-		}
+			for (const key of Object.keys(this.ReturnRatesForm.all_inclusive_rates)) {
+				base_rate += this.ReturnRatesForm.all_inclusive_rates[key].baserate;
+			}
+			for (const key of Object.keys(this.ReturnRatesForm.amenities)) {
+				base_rate += this.ReturnRatesForm.amenities[key].baserate;
+			}
 			let returnGrandTotal = this.BookingForm.value.return_grand_total
 			let stripeFee = returnGrandTotal * 0.05 + 0.30
-			let adminShare = (base_rate * this.adminSharePercent) / 100  
+			let adminShare = (base_rate * this.adminSharePercent) / 100
 			let returnShareArray = {
-				baseRate : base_rate,
-				returnGrandTotal : returnGrandTotal,
-				stripeFee : stripeFee,
-				adminShare : adminShare,
-				affiliateShare : returnGrandTotal - adminShare
+				baseRate: base_rate,
+				returnGrandTotal: returnGrandTotal,
+				stripeFee: stripeFee,
+				adminShare: adminShare,
+				affiliateShare: returnGrandTotal - adminShare
 			}
 			// travelAgentShare : 
 			this.adminSharePercent = 15
-			returnShareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100 
-			returnShareArray['deducted_admin_share'] = returnShareArray['adminShare']- returnShareArray['stripeFee']
-			returnShareArray['farmoutShare'] = base_rate * 0.10  
+			returnShareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100
+			returnShareArray['deducted_admin_share'] = returnShareArray['adminShare'] - returnShareArray['stripeFee']
+			returnShareArray['farmoutShare'] = base_rate * 0.10
 
 			this.r_shareArray = returnShareArray
 			// console.log('in function createReservationreturnShareArray-->>>' , base_rate, returnShareArray )
 			return returnShareArray;
 			// value['returnRateArray'] = JSON.parse(JSON.stringify(this.ReturnRatesForm))
-			}
+		}
 	}
 
 	submitForm(preview: boolean) {
@@ -1588,26 +1609,27 @@ addExtraStop(is_return: boolean = false) {
 		}
 
 		let value = this.BookingForm.value
+		value['currency'] = this.currencyObj?.currency
 		if (this.RatesForm) {
-				value['rateArray'] = JSON.parse(JSON.stringify(this.RatesForm))
-				value['grand_total'] = value['rateArray']['grand_total']
-				value['sub_total'] = value['rateArray']['sub_total']
-				value['shares_array'] = this.createReservationShareArray()
-				delete value['rateArray']['grand_total']
-				delete value['rateArray']['sub_total']
+			value['rateArray'] = JSON.parse(JSON.stringify(this.RatesForm))
+			value['grand_total'] = value['rateArray']['grand_total']
+			value['sub_total'] = value['rateArray']['sub_total']
+			value['shares_array'] = this.createReservationShareArray()
+			delete value['rateArray']['grand_total']
+			delete value['rateArray']['sub_total']
 
-				// Return Rates Form
-				if (this.Form.service_type.value == 'round_trip' && this.ReturnRatesForm) {
-					value['returnRateArray'] = JSON.parse(JSON.stringify(this.ReturnRatesForm))
-					value['return_grand_total'] = value['returnRateArray']['r_grandtotal']
-					value['return_sub_total'] = value['returnRateArray']['r_subtotal']
-					value['return_shares_array'] = this.createReservationReturnShareArray()
-					delete value['returnRateArray']['r_grandtotal']
-					delete value['returnRateArray']['r_subtotal']
-				}
+			// Return Rates Form
+			if (this.Form.service_type.value == 'round_trip' && this.ReturnRatesForm) {
+				value['returnRateArray'] = JSON.parse(JSON.stringify(this.ReturnRatesForm))
+				value['return_grand_total'] = value['returnRateArray']['r_grandtotal']
+				value['return_sub_total'] = value['returnRateArray']['r_subtotal']
+				value['return_shares_array'] = this.createReservationReturnShareArray()
+				delete value['returnRateArray']['r_grandtotal']
+				delete value['returnRateArray']['r_subtotal']
 			}
-			
-			if (preview) {
+		}
+
+		if (preview) {
 			this.$spinner.show()
 			this.affiliateService.createBooking(value).subscribe((response: any) => {
 				// this.$errors.openDialog({
@@ -1653,7 +1675,7 @@ addExtraStop(is_return: boolean = false) {
 	* @param image_id [Optional] id of the image to be edited
 	*/
 	async uploadImage(event: any, image_type: string) {
-		if(!await this.commonServices.handleFile(event)) {
+		if (!await this.commonServices.handleFile(event)) {
 			return;
 		}
 		let image: any
@@ -1729,7 +1751,7 @@ addExtraStop(is_return: boolean = false) {
 		this.booking_params['chevrons'][type] = !this.booking_params['chevrons'][type]
 	}
 	handleChangeVehicleType(event) {
-		console.log('in function handle change vehicle type', event,event.unique_key)
+		console.log('in function handle change vehicle type', event, event.unique_key)
 		this.VehicleList.map(i => (i.unique_key == event.unique_key) ? this.handleSelectVehicleType(i) : '')
 
 	}
@@ -1740,7 +1762,7 @@ addExtraStop(is_return: boolean = false) {
 			this.init_return_rates = false;
 			if (value == 'round_trip') {
 				this.init_return_rates = true;
-				console.log('init_return_rates---------->>>>>>>>' , this.init_return_rates)
+				console.log('init_return_rates---------->>>>>>>>', this.init_return_rates)
 				setTimeout(() => {
 					this.MapController(true)
 				}, 2000)
@@ -2157,7 +2179,7 @@ addExtraStop(is_return: boolean = false) {
 	}
 
 	fillLooseCustomerAddress(value: any) {
-		console.log('Addresss-->>>' , value);
+		console.log('Addresss-->>>', value);
 		(<FormGroup>this.BookingForm.get('loose_customer')).get('address').setValue(value?.formatted_address);
 		value.address_components.forEach(component => {
 			const types = component.types;
@@ -2170,7 +2192,7 @@ addExtraStop(is_return: boolean = false) {
 			} else if (types.includes('country')) {
 				(<FormGroup>this.BookingForm.get('loose_customer')).get('country').setValue(component.long_name);
 			}
-		  });
+		});
 		(<FormGroup>this.BookingForm.get('loose_customer')).updateValueAndValidity();
 		this.BookingForm.updateValueAndValidity();
 	}
@@ -2243,29 +2265,29 @@ addExtraStop(is_return: boolean = false) {
 	}
 
 
-	showLocationPointOnMap(address:any) {
+	showLocationPointOnMap(address: any) {
 		let isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 		console.log('isSafari', isSafari)
 		this.$spinner.show()
-			this.$spinner.hide();
-			if(address){
-				let googleDirectionUrl;
-				let iosDirectionUrl;
-					googleDirectionUrl = 'https://www.google.com/maps/dir/?api=1' + '&destination=' +
-						encodeURIComponent(address) + '&travelmode=driving'
-					iosDirectionUrl = 'http://maps.apple.com/?daddr=' +
-						encodeURIComponent(address)
-				if (this.iOS()) {
-					setTimeout(() => {
-						window.location.href = iosDirectionUrl;
-					})
-				}
-				else {
-					window.open(googleDirectionUrl, '_blank');
-				}
-			} else {
-				throw new Error('Error: Location Points Not Specified Properly. ');
+		this.$spinner.hide();
+		if (address) {
+			let googleDirectionUrl;
+			let iosDirectionUrl;
+			googleDirectionUrl = 'https://www.google.com/maps/dir/?api=1' + '&destination=' +
+				encodeURIComponent(address) + '&travelmode=driving'
+			iosDirectionUrl = 'http://maps.apple.com/?daddr=' +
+				encodeURIComponent(address)
+			if (this.iOS()) {
+				setTimeout(() => {
+					window.location.href = iosDirectionUrl;
+				})
 			}
+			else {
+				window.open(googleDirectionUrl, '_blank');
+			}
+		} else {
+			throw new Error('Error: Location Points Not Specified Properly. ');
+		}
 	}
 
 	change(event: any, form_control: string) {
@@ -2273,33 +2295,33 @@ addExtraStop(is_return: boolean = false) {
 		event && this.SetFormValue(form_control, event.id);
 	}
 
-	textFormatterTransferType(text:any){
+	textFormatterTransferType(text: any) {
 		try {
-			return text.replace(/[\\\_$]+/g, ' ')+'?'
+			return text.replace(/[\\\_$]+/g, ' ') + '?'
 		}
 		catch
 		{
 			return text
 		}
 	}
-	buildBookingData(){
+	buildBookingData() {
 		console.log('rebuild booking data')
 		this.booking_data = {
 			vehicle_id: this.BookingForm.get('vehicle_id').value,
 			transfer_type: this.transfer_type,
-			service_type :this.service_type,
-			numberOfVehicles :1,
-			distance : this.distance, 
-			return_distance : this.return_distance,
-			no_of_hours : this.number_of_hours,
-			is_master_vehicle : this.is_master_vehicle,
+			service_type: this.service_type,
+			numberOfVehicles: 1,
+			distance: this.distance,
+			return_distance: this.return_distance,
+			no_of_hours: this.number_of_hours,
+			is_master_vehicle: this.is_master_vehicle,
 			extra_stops: this.BookingForm.get('extra_stops').value,
-			return_extra_stops : this.BookingForm.get('return_extra_stops').value
+			return_extra_stops: this.BookingForm.get('return_extra_stops').value
 		}
 	}
 	handleNoOfHours(value) {
 		this.number_of_hours = value
-		console.log('in function handle no of hours->' , value , value > 0)
+		console.log('in function handle no of hours->', value, value > 0)
 		this.number_of_hours > 0 ? this.buildBookingData() : ''
 	}
 	onSelectionChangeServiceType(event: any) {
@@ -2309,7 +2331,7 @@ addExtraStop(is_return: boolean = false) {
 
 	setValueByBookNow() {
 		let QB: any = JSON.parse(localStorage.getItem('quotebot_form'))
-		let selected_vehicle :any = JSON.parse(sessionStorage.getItem('selected_vehicle'))
+		let selected_vehicle: any = JSON.parse(sessionStorage.getItem('selected_vehicle'))
 		// for (const key in QB) {
 		//   console.log(`QB______${key}: ${QB[key]}`);
 		//   this.SetFormValue(key ,QB[key])
@@ -2319,7 +2341,7 @@ addExtraStop(is_return: boolean = false) {
 
 		//dropOFF
 		this.SetFormValue('service_type', QB?.service_type)
-		if(QB?.service_type == 'charter_tour'){
+		if (QB?.service_type == 'charter_tour') {
 			this.SetFormValue('number_of_hours', QB?.booking_hour)
 			this.number_of_hours = QB?.booking_hour
 		}
@@ -2378,10 +2400,10 @@ addExtraStop(is_return: boolean = false) {
 		this.SetFormValue('return_cruise_time', this.FormatTime(QB?.return_pickup_time))
 		if (QB?.pickup_type == 'airport') {
 			let location = {
-				latitude : QB?.pickup_airport_lat,
-				longitude : QB?.pickup_airport_long
+				latitude: QB?.pickup_airport_lat,
+				longitude: QB?.pickup_airport_long
 			}
-			this.fillLocationPoints('airport',location)
+			this.fillLocationPoints('airport', location)
 		}
 		this.MapController()
 		this.MapController(true)

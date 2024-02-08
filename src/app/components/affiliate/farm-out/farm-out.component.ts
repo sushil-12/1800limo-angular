@@ -9,6 +9,7 @@ import { AffiliateService } from '../../../services/affiliate.service';
 import { ThemePalette } from '@angular/material/core';
 import * as moment from 'moment';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
+import { StateManagementService } from 'src/app/services/statemanagement.service';
 
 declare var $: any
 
@@ -18,8 +19,7 @@ declare var $: any
 	templateUrl: './farm-out.component.html',
 	styleUrls: ['./farm-out.component.scss']
 })
-export class FarmOutComponent implements OnInit
-{
+export class FarmOutComponent implements OnInit {
 	@ViewChild('inputmsg', { static: false }) message: ElementRef;
 	color: ThemePalette = 'primary';
 	outputDateFormat = 'YYYY-MM-DD';
@@ -54,33 +54,33 @@ export class FarmOutComponent implements OnInit
 	timer: any
 	isAffiliate: boolean = false
 	isLooseAffiliate: boolean = false;
-	audit_Trail:any;
+	audit_Trail: any;
 	OUTPUTDATEFORMAT = 'YYYY-MM-DD'
-	show:boolean= false;
+	show: boolean = false;
 	farmout_modal_body: string
-	cancelBookingId:any = null;
+	cancelBookingId: any = null;
 	start_date: string
 	end_date: string
 	bookingPreview: any;
-	useDateFilter:boolean=true;
+	useDateFilter: boolean = true;
 	adminSharePercent: number;
 	rates_preview: any;
-	shareArray:any ;
+	shareArray: any;
+	currencySymbol: any;
 
 	constructor(
 		private $affiliateService: AffiliateService,
 		private $spinner: NgxSpinnerService,
 		private $router: Router,
 		private formBuilder: FormBuilder,
-		private $errors:ErrorDialogService
+		private stateManagementService: StateManagementService,
+		private $errors: ErrorDialogService
 	) { }
 
-	ngOnInit(): void 
-	{
+	ngOnInit(): void {
 		// check for selected vehicle and logged in affiliate
 		console.log(this.$affiliateService.initialiseFarmout())
-		if (!this.$affiliateService.initialiseFarmout())
-		{
+		if (!this.$affiliateService.initialiseFarmout()) {
 			sessionStorage.removeItem('selected_vehicle')
 			this.farmout_modal_body = `
 			You cannot create a booking of this vehicle. <br/><br/>
@@ -88,7 +88,7 @@ export class FarmOutComponent implements OnInit
 			`
 			// $('#farmout-modal').modal('show')
 		}
-		$('.HeadingH1').css({display: "none"})
+		$('.HeadingH1').css({ display: "none" })
 
 		let date = new Date();
 		// Set Search Filters According to cookies or the intial state
@@ -106,9 +106,9 @@ export class FarmOutComponent implements OnInit
 			: "";
 
 		this.useDateFilter = localStorage.getItem('farmOutuseDateFilter') ?
-			(localStorage.getItem('farmOutuseDateFilter')=='true' ? true : false)
+			(localStorage.getItem('farmOutuseDateFilter') == 'true' ? true : false)
 			: true;
-			console.log('farmOutuseDateFilter-->' , this.useDateFilter)
+		console.log('farmOutuseDateFilter-->', this.useDateFilter)
 
 		this.changeStatusForm = this.formBuilder.group({
 			reservation_id: ['', Validators.required],
@@ -120,6 +120,9 @@ export class FarmOutComponent implements OnInit
 			reservation_id: ['', Validators.required],
 			emailTarget: ['', Validators.required]
 		});
+
+		//save currency symbol
+		this.currencySymbol = this.stateManagementService.getCurrencySymbol();
 		this.loadBookings()
 
 		$("#search-field-farmout").addClass("box-outline")
@@ -150,9 +153,9 @@ export class FarmOutComponent implements OnInit
 	loadBookings(pageUrl = null) {
 		/** spinner starts on init */
 		// this.$spinner.show();
-		if(pageUrl){
-			console.log("pageurl",pageUrl)
-	     	this.scroll('farmout_bookings')
+		if (pageUrl) {
+			console.log("pageurl", pageUrl)
+			this.scroll('farmout_bookings')
 		}
 
 		// var keyword = ((document.getElementById("keyword") as HTMLInputElement).value);
@@ -175,7 +178,7 @@ export class FarmOutComponent implements OnInit
 			this.lastPageUrl = this.bookingsRes?.data?.last_page_url;
 			this.prevPageUrl = this.bookingsRes?.data?.prev_page_url;
 			this.nextPageUrl = this.bookingsRes?.data?.next_page_url;
-			if(this.bookingsRes?.data?.data.length == 0){
+			if (this.bookingsRes?.data?.data.length == 0) {
 				this.noError = true
 			}
 		})
@@ -193,13 +196,13 @@ export class FarmOutComponent implements OnInit
 		this.searchText = search_value
 		console.log('--->>>>>', search_value)
 		clearTimeout(this.timer);
-		this.saveCookie('farmout_search',search_value)
+		this.saveCookie('farmout_search', search_value)
 		this.timer = setTimeout(() => {
 			this.loadBookings(null)
 		}, 700)
 	}
 	saveCookie(key: string, value: string) {
-		console.log('in function set cookies for',key,value)
+		console.log('in function set cookies for', key, value)
 		this.$affiliateService.setCookie(key, value, 30);
 	}
 	reset() {
@@ -219,16 +222,37 @@ export class FarmOutComponent implements OnInit
 		console.log('Reset Successfully. ');
 	}
 
-	handleChangeCheckbox(value:any){
-		console.log('event---->> ' ,value)
+	handleChangeCheckbox(value: any) {
+		console.log('event---->> ', value)
 		this.useDateFilter = value
 		// this.saveCookie('useDateFilter',value)
-		localStorage.setItem('farmOutuseDateFilter',value)
+		localStorage.setItem('farmOutuseDateFilter', value)
 		this.loadBookings();
 	}
 
 	dateFormat(value: any) {
 		return moment(value, 'YYYY-MM-DD').format('ll')
+	}
+
+	convertToMinutes(value) {
+		const days = Math.floor(value / (24 * 60 * 60));
+		const remainingSeconds = value % (24 * 60 * 60);
+		const hours = Math.floor(remainingSeconds / (60 * 60));
+		const remainingMinutes = Math.floor((remainingSeconds % (60 * 60)) / 60);
+
+		let result = "";
+
+		if (days > 0) {
+			result += `${days} days, `;
+		}
+
+		if (hours > 0 || (days === 0 && hours === 0)) {
+			result += `${hours} hours, `;
+		}
+
+		result += `${remainingMinutes} minutes`;
+
+		return result;
 	}
 
 	dateFormat2(value: any) {
@@ -289,7 +313,7 @@ export class FarmOutComponent implements OnInit
 			}
 		}
 	}
-	cancelBooking(){
+	cancelBooking() {
 		console.log('in function cancel booking')
 		this.$spinner.show();
 
@@ -330,13 +354,13 @@ export class FarmOutComponent implements OnInit
 	}
 
 	editAction(bookingId, updateType) {
-			this.$router.navigate(['/affiliate/new-booking'], { queryParams: { bookingId: bookingId, updateType: updateType , nav : 'false' } });
+		this.$router.navigate(['/affiliate/new-booking'], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'false' } });
 	}
 	finalizeAction(bookingId) {
-		this.$router.navigate(['/affiliate/finalize-booking'], { queryParams: { bookingId: bookingId} });
+		this.$router.navigate(['/affiliate/finalize-booking'], { queryParams: { bookingId: bookingId } });
 	}
 	previewRate(bookingId) {
-		this.$router.navigate(['/affiliate/finalize-booking'], { queryParams: { bookingId: bookingId, editRate:true} });
+		this.$router.navigate(['/affiliate/finalize-booking'], { queryParams: { bookingId: bookingId, editRate: true } });
 	}
 	sendEmailClicked(bookingId, emailTarget) {
 		this.sendEmailForm.patchValue({
@@ -374,27 +398,27 @@ export class FarmOutComponent implements OnInit
 			).subscribe((response: any) => {
 				console.log("respinse", response.data)
 				this.bookingPreview = response.data;
-				if(this.bookingPreview?.account_type == 'travel_planner' && this.bookingPreview?.created_by !=1){
+				if (this.bookingPreview?.account_type == 'travel_planner' && this.bookingPreview?.created_by != 1) {
 					console.log("in if created by ta")
 					this.adminSharePercent = 15
 				}
-				else if(this.bookingPreview?.share_array?.farmoutShare){
+				else if (this.bookingPreview?.share_array?.farmoutShare) {
 					this.adminSharePercent = 15
 				}
-				else{
+				else {
 					console.log("in if created by admin")
 					this.adminSharePercent = 25
 				}
 				if (this.bookingPreview?.payment_status == "unpaid") {
-					
-						console.log("in if share array",this.bookingPreview.affiliate_type === 'affiliate' && this.bookingPreview.payment_status=='unpaid' && this.bookingPreview?.share_array?.length != 0)
-						this.shareArray = this?.bookingPreview?.share_array
-					
+
+					console.log("in if share array", this.bookingPreview.affiliate_type === 'affiliate' && this.bookingPreview.payment_status == 'unpaid' && this.bookingPreview?.share_array?.length != 0)
+					this.shareArray = this?.bookingPreview?.share_array
+
 					this.rates_preview = this.bookingPreview?.rates_preview;
 				}
 				this.isAffiliate = this.bookingPreview.affiliate_type == "affiliate" ? true : false;
 				this.isLooseAffiliate = this.bookingPreview.affiliate_type == "loose_affiliate" ? true : false;
-				this.bookingPreview.booking_instructions = this.bookingPreview?.booking_instructions.replaceAll('<br />' , '')
+				this.bookingPreview.booking_instructions = this.bookingPreview?.booking_instructions.replaceAll('<br />', '')
 				console.log('get preview data-->>>', this.bookingPreview.affiliate_type, this.isAffiliate)
 				$('#previewBookingOnID').modal('show');
 			})
@@ -458,27 +482,27 @@ export class FarmOutComponent implements OnInit
 		})
 	}
 
-	showLocationPointOnMapByAddress(address:any) {
+	showLocationPointOnMapByAddress(address: any) {
 		let isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 		console.log('isSafari', isSafari)
-			if(address){
-				let googleDirectionUrl;
-				let iosDirectionUrl;
-					googleDirectionUrl = 'https://www.google.com/maps/dir/?api=1' + '&destination=' +
-						encodeURIComponent(address) + '&travelmode=driving'
-					iosDirectionUrl = 'http://maps.apple.com/?daddr=' +
-						encodeURIComponent(address)
-				if (this.iOS()) {
-					setTimeout(() => {
-						window.location.href = iosDirectionUrl;
-					})
-				}
-				else {
-					window.open(googleDirectionUrl, '_blank');
-				}
-			} else {
-				throw new Error('Error: Location Points Not Specified Properly. ');
+		if (address) {
+			let googleDirectionUrl;
+			let iosDirectionUrl;
+			googleDirectionUrl = 'https://www.google.com/maps/dir/?api=1' + '&destination=' +
+				encodeURIComponent(address) + '&travelmode=driving'
+			iosDirectionUrl = 'http://maps.apple.com/?daddr=' +
+				encodeURIComponent(address)
+			if (this.iOS()) {
+				setTimeout(() => {
+					window.location.href = iosDirectionUrl;
+				})
 			}
+			else {
+				window.open(googleDirectionUrl, '_blank');
+			}
+		} else {
+			throw new Error('Error: Location Points Not Specified Properly. ');
+		}
 	}
 
 	submit(message, format) {
@@ -522,12 +546,12 @@ export class FarmOutComponent implements OnInit
 				$("#notificationModal").modal("show");
 				$("textarea").val("");
 			})
-			$("#closeModal").click(() => {
-				$("#notificationModal").modal("hide");
-			});
-			$("#closeModal1").click(() => {
-				$("#notificationModal").modal("hide");
-			});
+		$("#closeModal").click(() => {
+			$("#notificationModal").modal("hide");
+		});
+		$("#closeModal1").click(() => {
+			$("#notificationModal").modal("hide");
+		});
 		this.message.nativeElement.value = ""
 		this.show = false
 	}

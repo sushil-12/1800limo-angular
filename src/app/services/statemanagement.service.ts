@@ -61,22 +61,12 @@ export class StateManagementService
 	removeUser()
 	{
 		// remove user from local storage to logout user
-		localStorage.removeItem('currentUser');
-		localStorage.removeItem('access_token');
-		localStorage.removeItem('account_approval');
-		localStorage.removeItem('recject_cause_message');
-		localStorage.removeItem('stepCompleted');
-		localStorage.removeItem('step_completed_obj');
-		localStorage.removeItem('userData');
-		localStorage.removeItem('invite_link')
-		localStorage.removeItem('agency_name')
-		localStorage.removeItem('invite_code')
-		localStorage.removeItem('agentAccountStatus')
-		localStorage.removeItem('bkp_u_dt')
-		localStorage.removeItem('bkp_a_token')
-		localStorage.removeItem('bkp_crnt_dt')
+		localStorage.clear();
 
-
+	}
+	
+	getCurrencySymbol(){
+		return JSON.parse(localStorage.getItem('currencySymbol'))
 	}
 
 

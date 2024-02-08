@@ -95,6 +95,10 @@ export class IndividualService {
 		return this.httpClient.post(this.serverUrl + 'payment-processing', data);
 	}
 
+  cancelBooking(id) {
+		return this.httpClient.get(this.serverUrl + `cancel-booking/${id}`);
+	}
+
   showRatesArray(id){
     return this.httpClient.get(this.serverUrl + `show-rates-array/${id}`)
   }

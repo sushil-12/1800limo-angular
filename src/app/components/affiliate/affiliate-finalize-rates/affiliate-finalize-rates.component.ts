@@ -5,6 +5,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { BehaviorSubject, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { AffiliateService } from 'src/app/services/affiliate.service';
+import { StateManagementService } from 'src/app/services/statemanagement.service';
 
 @Component({
 	selector: 'app-affiliate-finalize-rates',
@@ -77,6 +78,7 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 	travel_share: number = 10
 	travel_agent_share: any = 0;
 	farmoutShare: any;
+	currencySymbol: any;
 
 	constructor(
 		private $form: FormBuilder,
@@ -84,12 +86,16 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 		private affiliateService: AffiliateService,
 		private $spinner: NgxSpinnerService,
 		private $route: ActivatedRoute,
+		private stateManagementService: StateManagementService,
 	) { }
 
 	ngOnInit(): void {
 		this.$route.queryParams.subscribe((params: any) => {
 			(params.bookingId) ? this.fetchRates('', params.bookingId) : ""
 		});
+
+		//save currency symbol
+		this.currencySymbol = this.stateManagementService.getCurrencySymbol();
 
 	}
 	ngAfterViewInit() {
@@ -335,7 +341,7 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 		}
 
 		this.returnNumberOfHr.emit(hours)
-		console.log("in change in hours rates",this.hours)
+		console.log("in change in hours rates", this.hours)
 	}
 	fetchRates(affiliate: string, bookingId: number = 0) {
 		this.$spinner.show()
@@ -350,7 +356,7 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 					this.fetchRates(affiliate, null)
 				}
 			}
-			console.log("in fetch rates",response?.data?.rateArray)
+			console.log("in fetch rates", response?.data?.rateArray)
 		});
 	}
 
@@ -395,7 +401,7 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 			this.subtotal = 0;
 			for (let item in this.total) {
 				this.subtotal = Number(this.subtotal.toFixed(2)) + Number(this.total[item].toFixed(2));
-				console.log("in total checkk---->",this.subtotal,Number(this.subtotal.toFixed(2)),'--->',Number(this.total[item].toFixed(2)))
+				console.log("in total checkk---->", this.subtotal, Number(this.subtotal.toFixed(2)), '--->', Number(this.total[item].toFixed(2)))
 			}
 		}
 		console.log('in function calcultae total-->>>', this.subtotal)
@@ -406,7 +412,7 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 				this.r_subtotal = Number(this.r_subtotal.toFixed(2)) + Number(this.r_total[item].toFixed(2));
 			}
 		}
-console.log("in function calculate total",this.grandtotal,this.subtotal)
+		console.log("in function calculate total", this.grandtotal, this.subtotal)
 
 	}
 
@@ -453,7 +459,7 @@ console.log("in function calculate total",this.grandtotal,this.subtotal)
 
 			this.returnformvalue.emit(value);
 		}
-		console.log("in function calculate total",this.grandtotal,this.subtotal)
+		console.log("in function calculate total", this.grandtotal, this.subtotal)
 	}
 
 	toggleDropdown(section: string) {
@@ -492,15 +498,15 @@ console.log("in function calculate total",this.grandtotal,this.subtotal)
 	calculateBaseRateShare() {
 		try {
 			let baseRate = 0;
-			console.log('in function calculateBaseRateShare',this.RatesForm )
-			if(this?.service_type == 'charter_tour' && !this.is_readonly_min_rate){
+			console.log('in function calculateBaseRateShare', this.RatesForm)
+			if (this?.service_type == 'charter_tour' && !this.is_readonly_min_rate) {
 				baseRate += (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates'))?.get('Base_Rate')))?.get("baserate").value * this.nums
-			console.log('in function if charter-->>>', baseRate)
+				console.log('in function if charter-->>>', baseRate)
 
 			}
 			else {
 				baseRate += (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates'))?.get('Base_Rate')))?.get("baserate").value || 0
-			console.log('in function else charter-->>>', baseRate)
+				console.log('in function else charter-->>>', baseRate)
 
 			}
 			['ELH_Charges', 'Stops', 'Wait'].map((i) => {
@@ -615,7 +621,7 @@ console.log("in function calculate total",this.grandtotal,this.subtotal)
 			this.total[subform] = Number(Number(amount).toFixed(2));
 			if (formgroup == 'amenities' || formgroup == "all_inclusive_rates") {
 				let baseRateAmount = (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates')).get('Base_Rate'))).get("baserate").value;
-				if(this.service_type == 'charter_tour' && !this.is_readonly_min_rate){
+				if (this.service_type == 'charter_tour' && !this.is_readonly_min_rate) {
 					baseRateAmount = (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates')).get('Base_Rate'))).get("baserate").value * this.nums
 				}
 				baseRateAmount += this.calc_admin_share
