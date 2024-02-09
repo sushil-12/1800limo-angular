@@ -1080,8 +1080,11 @@ export class NewBookingComponent implements OnInit {
 
 	handleLooseCustomerPhone(event) {
 		console.log('handleLooseCustomerPhone->>', event, event.target.value)
+		const loose_customer = this.BookingForm.get('loose_customer') as FormGroup
 		this.BookingForm.patchValue({
-			passenger_cell: event.target.value
+			passenger_cell: event.target.value,
+			passenger_cell_isd: loose_customer.get('phone_isd').value,
+			passenger_cell_country: loose_customer.get('phone_country').value
 		})
 	}
 	handleLooseCustomerName(event) {
@@ -2565,12 +2568,36 @@ export class NewBookingComponent implements OnInit {
 
 
 	onLCTeleCountryChange(event: any) {
+
 		(<FormGroup>this.BookingForm.get('loose_customer')).get('phone_country').setValue(event.iso2);
 		(<FormGroup>this.BookingForm.get('loose_customer')).get('phone_isd').setValue('+' + event.dialCode);
+		console.log("in mobile", event.dialCode, event.iso2)
 		this.BookingForm.updateValueAndValidity()
 	}
 
+	// onCountryChange(event, type)
+	// {
+	// 	console.log(event)
+	// 	if (type == 'mobile')
+	// 	{
+	// 		console.log("in mobile",event.dialCode,event.iso2)
+	// 		this.addIndividualAccountForm.patchValue({
+	// 			mobileIsd: '+' + event.dialCode,
+	// 			mobileCountry: event.iso2
+	// 		});
+	// 	}
+	// 	else
+	// 	{
+	// 		this.addIndividualAccountForm.patchValue({
+	// 			workIsd: '+' + event.dialCode,
+	// 			workCountry: event.iso2
+	// 		});
+	// 	}
+	// 	// console.log(this.countryCode);
+	// }
+
 	LCTelInputObject(event: any) {
+		console.log('LCTelInputObject', event)
 		this.LCTelObject = event;
 	}
 

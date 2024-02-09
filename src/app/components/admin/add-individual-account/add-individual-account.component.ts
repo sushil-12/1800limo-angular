@@ -14,8 +14,7 @@ import { CustomvalidationService } from '../../../services/customvalidation.serv
 	templateUrl: './add-individual-account.component.html',
 	styleUrls: ['./add-individual-account.component.scss']
 })
-export class AddIndividualAccountComponent implements OnInit
-{
+export class AddIndividualAccountComponent implements OnInit {
 
 	public addIndividualAccountForm: FormGroup;
 	public submittedForm: boolean;
@@ -47,38 +46,32 @@ export class AddIndividualAccountComponent implements OnInit
 	@ViewChild('search1')
 	public searchElementRef: ElementRef;
 
-	ngOnInit(): void
-	{
+	ngOnInit(): void {
 		this.buildAddIndividualForm();
 		const currentYear = (new Date()).getFullYear();
-		for (let i = 0; i < 40; i++)
-		{
+		for (let i = 0; i < 40; i++) {
 			this.yearOptions.push(currentYear + i);
 		}
 		//google map autocomplete
-		this.mapsAPILoader.load().then(() =>
-		{
+		this.mapsAPILoader.load().then(() => {
 			// this.setCurrentLocation();
 			this.geoCoder = new google.maps.Geocoder;
 			let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement);
-			autocomplete.addListener("place_changed", () =>
-			{
+			autocomplete.addListener("place_changed", () => {
 				console.log('auto fill address-->>>')
-				this.ngZone.run(() =>
-				{
+				this.ngZone.run(() => {
 					//get the place result
 					let place: google.maps.places.PlaceResult = autocomplete.getPlace();
 					//verify result
-					if (place.geometry === undefined || place.geometry === null)
-					{
+					if (place.geometry === undefined || place.geometry === null) {
 						return;
 					}
 					console.log(place);
 					this.addIndividualAccountForm.patchValue({
 						zipCode: '',
-						city:'',
-						state : '',
-						country:''
+						city: '',
+						state: '',
+						country: ''
 					})
 					this.addIndividualAccountForm.patchValue({
 						address: place.formatted_address
@@ -90,7 +83,7 @@ export class AddIndividualAccountComponent implements OnInit
 					});
 					place.address_components.forEach(component => {
 						const types = component.types;
-				
+
 						if (types.includes('postal_code')) {
 							this.addIndividualAccountForm.patchValue({
 								zipCode: component.long_name
@@ -108,7 +101,7 @@ export class AddIndividualAccountComponent implements OnInit
 								country: component.long_name
 							});
 						}
-					  });
+					});
 					// if (place.address_components[1])
 					// 	this.addIndividualAccountForm.patchValue({
 					// 		city: place.address_components[1].long_name
@@ -130,28 +123,24 @@ export class AddIndividualAccountComponent implements OnInit
 		});
 
 		//add amenity form validation
-		
+
 		/* Card Number Spacing */
 
-		$('#card-number').on('keypress change blur', function ()
-		{
-			$(this).val(function (index, value)
-			{
+		$('#card-number').on('keypress change blur', function () {
+			$(this).val(function (index, value) {
 				return value.replace(/[^a-z0-9]+/gi, '')
 				// .replace(/(.{4})/g, '$1 ')
 			});
 		});
 
-		$('#card-number').on('copy cut paste', function ()
-		{
-			setTimeout(function ()
-			{
+		$('#card-number').on('copy cut paste', function () {
+			setTimeout(function () {
 				$('#card-number').trigger("change");
 			});
 		});
 	}
 
-	buildAddIndividualForm(){
+	buildAddIndividualForm() {
 		this.addIndividualAccountForm = this.formBuilder.group({
 			role: ['5', [Validators.required, Validators.pattern("^[0-9].*$")]],//individual
 			firstName: ['', Validators.required],
@@ -179,20 +168,19 @@ export class AddIndividualAccountComponent implements OnInit
 			name: ['', Validators.required],
 		});
 	}
-	
 
 
-	onCountryChange(event, type)
-	{
-		if (type == 'mobile')
-		{
+
+	onCountryChange(event, type) {
+		console.log(event)
+		if (type == 'mobile') {
+			console.log("in mobile", event.dialCode, event.iso2)
 			this.addIndividualAccountForm.patchValue({
 				mobileIsd: '+' + event.dialCode,
 				mobileCountry: event.iso2
 			});
 		}
-		else
-		{
+		else {
 			this.addIndividualAccountForm.patchValue({
 				workIsd: '+' + event.dialCode,
 				workCountry: event.iso2
@@ -200,27 +188,22 @@ export class AddIndividualAccountComponent implements OnInit
 		}
 		// console.log(this.countryCode);
 	}
-	telInputObjectMobile(obj)
-	{
+	telInputObjectMobile(obj) {
 		this.MobileObject = obj;
 	}
-	telInputObjectWork(obj)
-	{
+	telInputObjectWork(obj) {
 		this.WorkObject = obj;
 	}
-	get f()
-	{
+	get f() {
 		return this.addIndividualAccountForm.controls;
 	}
 
-	submitForm()
-	{
+	submitForm() {
 		console.log(this.addIndividualAccountForm);
 		// console.log(JSON.stringify(this.addVehicleRatesForm.value));
 		this.submittedForm = true;
 		// stop here if form is invalid
-		if (this.addIndividualAccountForm.invalid)
-		{
+		if (this.addIndividualAccountForm.invalid) {
 			return;
 		}
 
@@ -231,15 +214,13 @@ export class AddIndividualAccountComponent implements OnInit
 		console.log(this.addIndividualAccountForm.value)
 		this.adminService.addAccount(this.addIndividualAccountForm.value)
 			.pipe(
-				catchError(err =>
-				{
+				catchError(err => {
 					this.spinner.hide();//hide spinner
 					this.disableSubmitButton = false; //enable submit button
 					return throwError(err);
 				})
 			)
-			.subscribe(result =>
-			{
+			.subscribe(result => {
 				this.response = result;
 				this.spinner.hide();//hide spinner
 				this.disableSubmitButton = false; //enable submit button
@@ -248,12 +229,10 @@ export class AddIndividualAccountComponent implements OnInit
 			});
 	}
 
-	resetForm()
-	{
+	resetForm() {
 		this.buildAddIndividualForm()
 	}
-	backButton()
-	{
+	backButton() {
 		this.router.navigate(['/admin/individual-account-admin']);
 	}
 

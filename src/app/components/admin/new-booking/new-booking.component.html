@@ -483,7 +483,7 @@
 												preferredCountries: ['us', 'ca', 'mx', 'gb']
 											}" placeholder="1234567890" class="phoneNumberClass" (intlTelInputObject)="LCTelInputObject($event)"
 										(keyup)="handleLooseCustomerPhone($event)"
-										(countryChange)="SetFormValue('loose_customer>phone_isd', $event.dialCode); SetFormValue('loose_customer>phone_country', $event.iso2)"
+										(countryChange)="onLCTeleCountryChange($event)"
 										(focus)="$event.target.select()" />
 								</mat-form-field>
 								<div class="error-box">
