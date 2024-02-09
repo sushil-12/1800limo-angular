@@ -12,8 +12,7 @@ import { throwError } from 'rxjs';
 	templateUrl: './edit-individual-account.component.html',
 	styleUrls: ['./edit-individual-account.component.scss']
 })
-export class EditIndividualAccountComponent implements OnInit
-{
+export class EditIndividualAccountComponent implements OnInit {
 
 	public addIndividualAccountForm: FormGroup;
 	public submittedForm: boolean;
@@ -46,15 +45,13 @@ export class EditIndividualAccountComponent implements OnInit
 	@ViewChild('search1')
 	public searchElementRef: ElementRef;
 
-	ngOnInit(): void
-	{
+	ngOnInit(): void {
 		this.currentUser = JSON.parse(sessionStorage.getItem("currentUserData"))
 		this.spinner.show();//hide spinner
 		this.buildAddIndividualForm()
 		//pick vehicle type id from query params
 		this.activatedroute.queryParamMap
-			.subscribe((params) =>
-			{
+			.subscribe((params) => {
 				this.paramResponse = { ...params.keys, ...params };
 				// console.log(this.paramResponse.params.vehicleTypeId);
 				this.individualId = this.paramResponse.params.individualId;
@@ -65,13 +62,11 @@ export class EditIndividualAccountComponent implements OnInit
 		//fetch data to display on edit screen
 		this.adminService.getIndividualAccount(this.individualId)
 			.pipe(
-				catchError(err =>
-				{
+				catchError(err => {
 					this.spinner.hide();//hide spinner
 					return throwError(err);
 				})
-			).subscribe(result =>
-			{
+			).subscribe(result => {
 				this.response = result;
 
 				this.addIndividualAccountForm.patchValue({
@@ -80,9 +75,9 @@ export class EditIndividualAccountComponent implements OnInit
 					middleName: this.response.data.middle_name,
 					lastName: this.response.data.last_name,
 					mobile: this.response.data.mobile,
-					mobileIsd: '+44',
+					mobileIsd: this.response.data.mobileIsd,
 					work: this.response.data.work_contact_number,
-					workIsd: '+44',
+					workIsd: this.response.data.workIsd,
 					email: this.response.data.email,
 					address: this.response.data.address,
 					city: this.response.data.city,
@@ -98,20 +93,16 @@ export class EditIndividualAccountComponent implements OnInit
 			});
 
 		//google map autocomplete
-		this.mapsAPILoader.load().then(() =>
-		{
+		this.mapsAPILoader.load().then(() => {
 			// this.setCurrentLocation();
 			this.geoCoder = new google.maps.Geocoder;
 			let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement);
-			autocomplete.addListener("place_changed", () =>
-			{
-				this.ngZone.run(() =>
-				{
+			autocomplete.addListener("place_changed", () => {
+				this.ngZone.run(() => {
 					//get the place result
 					let place: google.maps.places.PlaceResult = autocomplete.getPlace();
 					//verify result
-					if (place.geometry === undefined || place.geometry === null)
-					{
+					if (place.geometry === undefined || place.geometry === null) {
 						return;
 					}
 					console.log(place);
@@ -140,11 +131,11 @@ export class EditIndividualAccountComponent implements OnInit
 			});
 		});
 
-		
+
 	}
 
 
-	buildAddIndividualForm(){
+	buildAddIndividualForm() {
 		//add amenity form validation
 		this.addIndividualAccountForm = this.formBuilder.group({
 			id: ['5', Validators.required],
@@ -158,7 +149,7 @@ export class EditIndividualAccountComponent implements OnInit
 			work: [''],
 			workIsd: ['+1', Validators.required],
 			workCountry: ['us'],
-			email: ['', [Validators.required ,Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)]],
+			email: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)]],
 			address: ['', Validators.required],
 			city: [''],
 			state: [''],
@@ -168,25 +159,20 @@ export class EditIndividualAccountComponent implements OnInit
 			longitude: [''],
 		});
 	}
-	telInputObjectMobile(obj)
-	{
+	telInputObjectMobile(obj) {
 		this.MobileObject = obj;
 	}
-	telInputObjectWork(obj)
-	{
+	telInputObjectWork(obj) {
 		this.WorkObject = obj;
 	}
-	onCountryChange(event, type)
-	{
-		if (type == 'mobile')
-		{
+	onCountryChange(event, type) {
+		if (type == 'mobile') {
 			this.addIndividualAccountForm.patchValue({
 				mobileIsd: '+' + event.dialCode,
 				mobileCountry: event.iso2
 			});
 		}
-		else
-		{
+		else {
 			this.addIndividualAccountForm.patchValue({
 				workIsd: '+' + event.dialCode,
 				workCountry: event.iso2
@@ -195,20 +181,17 @@ export class EditIndividualAccountComponent implements OnInit
 		// console.log(this.countryCode);
 	}
 
-	get f()
-	{
+	get f() {
 		return this.addIndividualAccountForm.controls;
 	}
 
 
-	submitForm()
-	{
+	submitForm() {
 		console.log(this.addIndividualAccountForm);
 		// console.log(JSON.stringify(this.addVehicleRatesForm.value));
 		this.submittedForm = true;
 		// stop here if form is invalid
-		if (this.addIndividualAccountForm.invalid)
-		{
+		if (this.addIndividualAccountForm.invalid) {
 			return;
 		}
 
@@ -219,15 +202,13 @@ export class EditIndividualAccountComponent implements OnInit
 
 		this.adminService.updateIndividualAccount(this.addIndividualAccountForm.value)
 			.pipe(
-				catchError(err =>
-				{
+				catchError(err => {
 					this.spinner.hide();//hide spinner/
 					this.disableSubmitButton = false; //enable submit button
 					return throwError(err);
 				})
 			)
-			.subscribe(result =>
-			{
+			.subscribe(result => {
 				this.response = result;
 				this.spinner.hide();//hide spinner
 				this.disableSubmitButton = false; //enable submit button
@@ -236,8 +217,7 @@ export class EditIndividualAccountComponent implements OnInit
 			});
 	}
 
-	resetForm()
-	{
+	resetForm() {
 		this.buildAddIndividualForm()
 		this.addIndividualAccountForm.patchValue({
 			id: this.individualId,
@@ -245,8 +225,7 @@ export class EditIndividualAccountComponent implements OnInit
 			mobileIsd: '+44'
 		});
 	}
-	backButton()
-	{
+	backButton() {
 		this.router.navigate(['/admin/individual-account-admin']);
 	}
 
