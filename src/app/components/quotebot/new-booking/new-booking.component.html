@@ -1187,8 +1187,8 @@
 				<!-- Selections -->
 				<div *ngIf="booking_params.chevrons.amenities">
 					<div class="m-3 alert alert-danger">
-						$ Sign Denotes The Amenity Is Tied To A Bucket On The Rate Settings
-						Page. The Rate Is Default At 0$
+						{{currencySymbol}} Sign Denotes The Amenity Is Tied To A Bucket On The Rate Settings
+						Page. The Rate Is Default At 0{{currencySymbol}}
 					</div>
 					<div class="row align-items-center m-0 p-4">
 						<div class="col-md-4" *ngFor="let amenity of BigData?.amenity; index as amenity_index">
@@ -1197,7 +1197,7 @@
 								[checked]="amenity['chargeable'] == 'yes' ? isChecked('chargedAmenities', amenity.id) : isChecked('amenities', amenity.id)">
 								{{ amenity.name }}
 								<span class="text-danger" *ngIf="amenity.chargeable == 'yes'">
-									(<i class="bi bi-currency-dollar"></i>)
+									({{currencySymbol}})
 								</span>
 							</mat-checkbox>
 						</div>
@@ -1845,8 +1845,7 @@
 							</p>
 						</div>
 						<div class="col-md-4 text-3xl text-right">
-							<i class="bi bi-currency-dollar text-danger"></i>
-							{{ subtotal.toFixed(2) }}
+							<span style="color:#dc3545;">{{currencySymbol}}</span> {{ subtotal.toFixed(2) }}
 						</div>
 					</div>
 					<!-- Number of Vehicles/Hours -->
@@ -1870,8 +1869,8 @@
 							</p>
 						</div>
 						<div class="col-md-4 col-xl-5 text-3xl text-right">
-							<i class="bi bi-currency-dollar text-danger"></i>
-							{{ (Form.number_of_vehicles.value*subtotal).toFixed(2) }}
+							<span style="color:#dc3545;">{{currencySymbol}}</span> {{
+							(Form.number_of_vehicles.value*subtotal).toFixed(2) }}
 						</div>
 					</div>
 				</div>
@@ -1884,8 +1883,7 @@
 							</p>
 						</div>
 						<div class="col-md-4 text-3xl text-right">
-							<i class="bi bi-currency-dollar text-danger"></i>
-							{{ r_subtotal.toFixed(2) }}
+							<span style="color:#dc3545;">{{currencySymbol}}</span> {{ r_subtotal.toFixed(2) }}
 						</div>
 					</div>
 					<!-- Number of Vehicles/Hours -->
@@ -1908,8 +1906,8 @@
 							</p>
 						</div>
 						<div class="col-md-4 col-xl-5 text-3xl text-right">
-							<i class="bi bi-currency-dollar text-danger"></i>
-							{{ (Form.number_of_vehicles.value * r_subtotal).toFixed(2) }}
+							<span style="color:#dc3545;">{{currencySymbol}}</span> {{ (Form.number_of_vehicles.value *
+							r_subtotal).toFixed(2) }}
 						</div>
 					</div>
 				</div>
@@ -1996,7 +1994,7 @@
 							</div>
 							<div class="col-md-8 value">
 								<span class="font-weight-bolder">
-									${{ (Form.number_of_vehicles.value * subtotal).toFixed(2) }}
+									{{currencySymbol}}{{ (Form.number_of_vehicles.value * subtotal).toFixed(2) }}
 								</span>
 							</div>
 						</div>
@@ -2011,7 +2009,7 @@
 							</div>
 							<div class="col-md-8 value">
 								<span class="font-weight-bolder">
-									${{ (Form.number_of_vehicles.value * r_subtotal).toFixed(2) }}
+									{{currencySymbol}}{{ (Form.number_of_vehicles.value * r_subtotal).toFixed(2) }}
 								</span>
 							</div>
 						</div>
