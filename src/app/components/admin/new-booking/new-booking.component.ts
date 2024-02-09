@@ -178,8 +178,9 @@ export class NewBookingComponent implements OnInit {
 			else {
 				this.resetFields()
 			}
-			this.currencyObj = JSON.parse(sessionStorage.getItem('currencyData'))
-			this.currencySymbol = this.currencyObj?.symbol
+			// this.currencyObj = JSON.parse(sessionStorage.getItem('currencyData')) ? JSON.parse(sessionStorage.getItem('currencyData')) : null
+			this.currencySymbol = JSON.parse(localStorage.getItem('currencySymbol'))
+
 			// place in query params to reinitialise things when modes of new and edit are toggled
 			// Subscriptions
 			this.Subscriptions()
@@ -924,7 +925,18 @@ export class NewBookingComponent implements OnInit {
 
 
 	fillAddress(form_control: string, address: any) {
-		// console.log('Address: ', address)
+		console.log('Address: ', address)
+		let address_components = address?.address_components
+		// //setting currency based on pickup address country
+		this.httpClient.get("assets/json/currencyOptions.json").subscribe(data => {
+			for (const key of Object.keys(data)) {
+				if (address_components.find(component => component.long_name === data[key].countryName)) {
+					console.log("Address:", data[key])
+					this.currencyObj = data[key]
+					this.currencySymbol = data[key].symbol
+				}
+			}
+		})
 		this.SetFormValue(form_control, address.formatted_address)
 	}
 
@@ -2696,6 +2708,15 @@ export class NewBookingComponent implements OnInit {
 
 	change(event: any, form_control: string) {
 		console.log(event, form_control)
+		//setting currency based on airport country
+		this.httpClient.get("assets/json/currencyOptions.json").subscribe(data => {
+			for (const key of Object.keys(data)) {
+				if (data[key].countryName === event.country) {
+					this.currencyObj = data[key]
+					this.currencySymbol = data[key].symbol
+				}
+			}
+		})
 		event && this.SetFormValue(form_control, event.id);
 	}
 	FormatTime(time: string) {
@@ -2799,7 +2820,8 @@ export class NewBookingComponent implements OnInit {
 		// }    
 		this.affiliate_id = selected_vehicle?.affiliate_id
 
-
+		this.currencyObj = JSON.parse(sessionStorage.getItem('currencyData'))
+		this.currencySymbol = this.currencyObj?.symbol
 		//dropOFF
 		this.SetFormValue('service_type', QB?.service_type)
 		if (QB?.service_type == 'charter_tour') {
