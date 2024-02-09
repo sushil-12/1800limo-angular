@@ -89,7 +89,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 	emptyRateArray: any;
 	farmoutShare: any = 0;
 	r_farmoutShare: any = 0;
-	currencySymbol: any;
+	currencySymbol: any = '$';
 
 	constructor(
 		private $form: FormBuilder,
@@ -128,7 +128,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 
 	ngOnChanges(changes: SimpleChanges) {
 		console.warn("Change has been detected: ", changes);
-		this.currencySymbol = this.currencyObject?.symbol
+		this.currencySymbol = this.currencyObject ? this.currencyObject?.symbol : "$"
 		this.ratesform = true;
 		// changes.init_rates?.currentValue ?? this.ratesform
 		this.returnratesform =
