@@ -378,6 +378,8 @@ export class SelectVehicleComponent implements OnInit {
 					return
 				}
 				this.master_vehicles = response.data
+				sessionStorage.setItem('currencyData', JSON.stringify(response?.currency))
+				this.currencySymbol = response.currency.symbol
 				resolve(this.master_vehicles)
 				return
 			})
