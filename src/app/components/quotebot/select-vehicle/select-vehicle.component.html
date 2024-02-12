@@ -305,6 +305,8 @@
 							<p class="text-left text-secondary m-0 my-md-2" style="color: #007fee !important;">
 								<span (click)="editAffiliateAccount(vehinfo)">
 									{{vehinfo?.affiliate_company.slice(0,7) }}
+									<span *ngIf="vehinfo?.badge_city != 'N/A'"
+										style="text-transform: uppercase;">({{vehinfo?.badge_city}})</span>
 									{{'/ '+vehinfo?.affiliate_name.slice(0,7) }}
 								</span>
 								<span (click)="handleReadMore(vehinfo , false)" style="color: black;">...more</span>
@@ -314,6 +316,8 @@
 							<p class="text-left text-secondary m-0 my-md-2" style="color: #007fee !important;">
 								<span (click)="editAffiliateAccount(vehinfo)">
 									{{vehinfo?.affiliate_company }}
+									<span *ngIf="vehinfo?.badge_city != 'N/A'"
+										style="text-transform: uppercase;">({{vehinfo?.badge_city}})</span>
 									{{'/ '+vehinfo?.affiliate_name }}
 									<!-- {{'/ '+vehinfo?.affiliate_phone}} -->
 								</span>|<br>
@@ -362,8 +366,8 @@
 						<div id="vehinfo_{{ vehinfo_index }}" class="vehicle-info">
 							<!-- VEHICLE: NAME -->
 							<p class="name">
-								{{ vehinfo.name }} <span
-									*ngIf="vehinfo?.badge_city != 'N/A'">({{vehinfo?.badge_city}})</span>
+								<!-- {{ vehinfo.name }} <span
+									*ngIf="vehinfo?.badge_city != 'N/A'">({{vehinfo?.badge_city}})</span> -->
 							</p>
 
 							<!-- VEHICLE: PAX/LUG -->
