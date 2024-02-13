@@ -2228,9 +2228,20 @@ export class NewBookingComponent implements OnInit {
 
 
 	onLCTeleCountryChange(event: any) {
+
 		(<FormGroup>this.BookingForm.get('loose_customer')).get('phone_country').setValue(event.iso2);
 		(<FormGroup>this.BookingForm.get('loose_customer')).get('phone_isd').setValue('+' + event.dialCode);
+		console.log("in mobile", event.dialCode, event.iso2)
 		this.BookingForm.updateValueAndValidity()
+	}
+	handleLooseCustomerPhone(event) {
+		console.log('handleLooseCustomerPhone->>', event, event.target.value)
+		const loose_customer = this.BookingForm.get('loose_customer') as FormGroup
+		this.BookingForm.patchValue({
+			passenger_cell: event.target.value,
+			passenger_cell_isd: loose_customer.get('phone_isd').value,
+			passenger_cell_country: loose_customer.get('phone_country').value
+		})
 	}
 
 	LCTelInputObject(event: any) {
