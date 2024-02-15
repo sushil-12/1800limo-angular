@@ -150,7 +150,7 @@
                                     </td>
                                     <td class="text-center font-weight-bolder cursor-pointer">
                                         <p class="booking-id-font font-weight-bolder cursor-pointer">
-                                            <span class="currency">$</span><span
+                                            <span class="currency">{{currencySymbol}}</span><span
                                                 [innerHTML]="highlighText(booking.grand_total)"></span>
                                         </p>
                                     </td>
@@ -281,7 +281,7 @@
                         </div>
                         <div class="col-md-8 value">
                             <span class="font-weight-bolder preview-output-feild">
-                                $ {{ bookingPreview.grand_total }}
+                                {{currencySymbol}} {{ bookingPreview.grand_total }}
                             </span>
                         </div>
                     </div>
@@ -293,7 +293,7 @@
                         </div>
                         <div class="col-md-8 value">
                             <span class="font-weight-bolder preview-output-feild">
-                                $ {{-(bookingPreview?.total_amount_refunded).toFixed(2) }}
+                                {{currencySymbol}} {{-(bookingPreview?.total_amount_refunded).toFixed(2) }}
                             </span>
                         </div>
                     </div>
@@ -305,7 +305,8 @@
                         </div>
                         <div class="col-md-8 value">
                             <span class="font-weight-bolder preview-output-feild">
-                                $ {{(bookingPreview?.grand_total- bookingPreview?.total_amount_refunded).toFixed(2) }}
+                                {{currencySymbol}} {{(bookingPreview?.grand_total-
+                                bookingPreview?.total_amount_refunded).toFixed(2) }}
                             </span>
                         </div>
                     </div>
@@ -1563,7 +1564,7 @@
             <div class="modal-footer">
                 <button type="button" class="custom-btn resetbutton" data-dismiss="modal">Close</button>
                 <button type="button" class="custom-btn savebutton" (click)="makePayment()">
-                    Pay ${{rateArray?.grandTotal}}</button>
+                    Pay {{currencySymbol}}{{rateArray?.grandTotal}}</button>
             </div>
         </div>
     </div>

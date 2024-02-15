@@ -8,6 +8,7 @@ import { ThemePalette } from '@angular/material/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import * as moment from 'moment';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
+import { StateManagementService } from 'src/app/services/statemanagement.service';
 declare var $: any;
 
 @Component({
@@ -53,16 +54,18 @@ export class MyBookingsComponent implements OnInit {
 	audit_Trail: any;
 	company_name: any = JSON.parse(localStorage.getItem('currentUser'))?.affiliate_company || ''
 	cancelBookingId: any = null
-	useDateFilter:boolean=true;
+	useDateFilter: boolean = true;
 	adminSharePercent: number;
 	shareArray: any;
 	rates_preview: any;
+	currencySymbol: any;
 
 	constructor(
 		private affiliateService: AffiliateService,
 		private router: Router,
 		private spinner: NgxSpinnerService,
 		private $errors: ErrorDialogService,
+		private stateManagementService: StateManagementService,
 		private formBuilder: FormBuilder) { }
 
 	ngOnInit(): void {
@@ -83,9 +86,12 @@ export class MyBookingsComponent implements OnInit {
 			: "";
 
 		this.useDateFilter = localStorage.getItem('farmInuseDateFilter') ?
-			(localStorage.getItem('farmInuseDateFilter')=='true' ? true : false)
+			(localStorage.getItem('farmInuseDateFilter') == 'true' ? true : false)
 			: true;
-			console.log('farmInuseDateFilter-->' , this.useDateFilter)
+		console.log('farmInuseDateFilter-->', this.useDateFilter)
+
+		//save currency symbol
+		this.currencySymbol = this.stateManagementService.getCurrencySymbol();
 
 		this.loadBookings();
 
@@ -127,8 +133,8 @@ export class MyBookingsComponent implements OnInit {
 	loadBookings(pageUrl = null) {
 		$('.HeadingH1').css({ display: "none" })
 		/** spinner starts on init */
-		if(pageUrl){
-			console.log("pageurl",pageUrl)
+		if (pageUrl) {
+			console.log("pageurl", pageUrl)
 			this.scroll('bookings_affiliate')
 		}
 		this.spinner.show();
@@ -153,7 +159,7 @@ export class MyBookingsComponent implements OnInit {
 			this.prevPageUrl = this.bookingsRes?.data?.prev_page_url;
 			this.nextPageUrl = this.bookingsRes?.data?.next_page_url;
 			this.spinner.hide();//hide spinner
-			if(this.bookingsRes?.data?.data.length == 0){
+			if (this.bookingsRes?.data?.data.length == 0) {
 				this.noError = true
 			}
 		})
@@ -193,11 +199,11 @@ export class MyBookingsComponent implements OnInit {
 		}
 		return ph;
 	}
-	handleChangeCheckbox(value:any){
-		console.log('event---->> ' ,value)
+	handleChangeCheckbox(value: any) {
+		console.log('event---->> ', value)
 		this.useDateFilter = value
 		// this.saveCookie('useDateFilter',value)
-		localStorage.setItem('farmInuseDateFilter',value)
+		localStorage.setItem('farmInuseDateFilter', value)
 		this.loadBookings();
 	}
 
@@ -256,22 +262,22 @@ export class MyBookingsComponent implements OnInit {
 			).subscribe((response: any) => {
 				console.log("respinse", response.data)
 				this.bookingPreview = response.data;
-				if(this.bookingPreview?.account_type == 'travel_planner' && this.bookingPreview?.created_by !=1){
+				if (this.bookingPreview?.account_type == 'travel_planner' && this.bookingPreview?.created_by != 1) {
 					console.log("in if created by ta")
 					this.adminSharePercent = 15
 				}
-				else if(this.bookingPreview?.share_array?.farmoutShare){
+				else if (this.bookingPreview?.share_array?.farmoutShare) {
 					this.adminSharePercent = 15
 				}
-				else{
+				else {
 					console.log("in if created by admin")
 					this.adminSharePercent = 25
 				}
 				if (this.bookingPreview?.payment_status == "unpaid") {
-					
-						console.log("in if share array",this.bookingPreview.affiliate_type === 'affiliate' && this.bookingPreview.payment_status=='unpaid' && this.bookingPreview?.share_array?.length != 0)
-						this.shareArray = this?.bookingPreview?.share_array
-				
+
+					console.log("in if share array", this.bookingPreview.affiliate_type === 'affiliate' && this.bookingPreview.payment_status == 'unpaid' && this.bookingPreview?.share_array?.length != 0)
+					this.shareArray = this?.bookingPreview?.share_array
+
 					this.rates_preview = this.bookingPreview?.rates_preview;
 				}
 				this.isAffiliate = this.bookingPreview.affiliate_type == "affiliate" ? true : false;
@@ -502,7 +508,7 @@ export class MyBookingsComponent implements OnInit {
 
 
 	editAction(bookingId, updateType) {
-			this.router.navigate(['/affiliate/new-booking'], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'true' } });
+		this.router.navigate(['/affiliate/new-booking'], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'true' } });
 	}
 
 	finalizeAction(bookingId) {
@@ -510,7 +516,7 @@ export class MyBookingsComponent implements OnInit {
 	}
 
 	previewRate(bookingId) {
-		this.router.navigate(['/affiliate/finalize-booking'], { queryParams: { bookingId: bookingId , editRate:true} });
+		this.router.navigate(['/affiliate/finalize-booking'], { queryParams: { bookingId: bookingId, editRate: true } });
 	}
 	returnRepeatAction(actionType, bookingId, serviceType) {
 		console.log(actionType, bookingId, serviceType);
@@ -600,24 +606,24 @@ export class MyBookingsComponent implements OnInit {
 			});
 	}
 
-	convertToMinutes(value){
+	convertToMinutes(value) {
 		const days = Math.floor(value / (24 * 60 * 60));
 		const remainingSeconds = value % (24 * 60 * 60);
 		const hours = Math.floor(remainingSeconds / (60 * 60));
 		const remainingMinutes = Math.floor((remainingSeconds % (60 * 60)) / 60);
-	
+
 		let result = "";
 
 		if (days > 0) {
 			result += `${days} days, `;
 		}
-	
+
 		if (hours > 0 || (days === 0 && hours === 0)) {
 			result += `${hours} hours, `;
 		}
-	
+
 		result += `${remainingMinutes} minutes`;
-	
+
 		return result;
 	}
 	mToMi(distance: number): string {

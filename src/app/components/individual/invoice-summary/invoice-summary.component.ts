@@ -6,16 +6,17 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { IndividualService } from 'src/app/services/individual.service';
+import { StateManagementService } from 'src/app/services/statemanagement.service';
 declare var $: any;
 
 @Component({
-  selector: 'app-invoice-summary',
-  templateUrl: './invoice-summary.component.html',
-  styleUrls: ['./invoice-summary.component.scss']
+	selector: 'app-invoice-summary',
+	templateUrl: './invoice-summary.component.html',
+	styleUrls: ['./invoice-summary.component.scss']
 })
 export class InvoiceSummaryComponent implements OnInit {
 
-  public response: any;
+	public response: any;
 	public invoiceData: any;
 	public paramResponse: any;
 	public bookingId: any;
@@ -36,35 +37,39 @@ export class InvoiceSummaryComponent implements OnInit {
 	constructor(
 		private router: Router,
 		private spinner: NgxSpinnerService,
-    private individualService: IndividualService,
+		private individualService: IndividualService,
 		private $spinner: NgxSpinnerService,
 		private activatedroute: ActivatedRoute,
+		private stateManagementService: StateManagementService,
 		private httpClient: HttpClient) { }
 
-    ngOnInit(): void {
-	this.currentUser = JSON.parse(localStorage.getItem('currentUser'))
-      this.spinner.show();
-      this.getCurrencyData();
-      this.activatedroute.queryParamMap
-        .subscribe((params) => {
-          this.paramResponse = { ...params.keys, ...params };
-          this.bookingId = this.paramResponse.params.bookingId;
-  
-          if (!this.bookingId) {
-            this.router.navigate([`/individual/bookings`]);
-          }
-          else {
-            this.getInvoiceData()
-          }
-        });
-  
-    }
+	ngOnInit(): void {
+		this.currentUser = JSON.parse(localStorage.getItem('currentUser'))
+		this.spinner.show();
+		this.getCurrencyData();
+		this.activatedroute.queryParamMap
+			.subscribe((params) => {
+				this.paramResponse = { ...params.keys, ...params };
+				this.bookingId = this.paramResponse.params.bookingId;
 
-    backButton() {
-      this.router.navigate([`/individual/invoice`]);
-    }
+				if (!this.bookingId) {
+					this.router.navigate([`/individual/bookings`]);
+				}
+				else {
+					this.getInvoiceData()
+				}
+			});
 
-  getCurrencyData() {
+		//save currency symbol
+		this.currencySymbol = this.stateManagementService.getCurrencySymbol();
+
+	}
+
+	backButton() {
+		this.router.navigate([`/individual/invoice`]);
+	}
+
+	getCurrencyData() {
 		console.log('in function get currency data')
 		this.httpClient.get("assets/json/currencyOptions1.json").subscribe(data => {
 			console.log('data ', data)
@@ -72,7 +77,7 @@ export class InvoiceSummaryComponent implements OnInit {
 		})
 	}
 
-  getInvoiceData() {
+	getInvoiceData() {
 
 		this.individualService.getInvoiceData(this.bookingId)
 			.pipe(
@@ -88,14 +93,14 @@ export class InvoiceSummaryComponent implements OnInit {
 				this.partial_refund_amount = this.invoiceData?.billing_detail?.amount_refunded / 100
 				this.amount = this.invoiceData?.grand_total - this.partial_refund_amount
 				this.spinner.hide();//hide spinner
-				this.currencySymbol = this.getCurrencySymbol(this.invoiceData.currency)
+				// this.currencySymbol = this.getCurrencySymbol(this.invoiceData.currency)
 				this.subModules = localStorage.getItem('sub_modules') || [];
 				this.currentUser = JSON.parse(localStorage.getItem('userData')) || "";
 			});
 
 	}
 
-  getCurrencySymbol(currency: any) {
+	getCurrencySymbol(currency: any) {
 		let symbol;
 		for (let i = 0; i < this.currencyOptions.length; i++) {
 			if (this.currencyOptions[i].code == currency.toUpperCase()) {

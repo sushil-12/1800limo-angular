@@ -134,6 +134,8 @@ export class NewBookingComponent implements OnInit {
 	isFarmoutBooking: boolean = false;
 	AffiliateAccounts_copy: any;
 	public canceloptions: Array<Object>;
+	currencySymbol: any;
+	currencyObj: any;
 	constructor(
 		private $form: FormBuilder,
 		private $api: AdminService,
@@ -176,6 +178,9 @@ export class NewBookingComponent implements OnInit {
 			else {
 				this.resetFields()
 			}
+			// this.currencyObj = JSON.parse(sessionStorage.getItem('currencyData')) ? JSON.parse(sessionStorage.getItem('currencyData')) : null
+			this.currencySymbol = JSON.parse(localStorage.getItem('currencySymbol'))
+
 			// place in query params to reinitialise things when modes of new and edit are toggled
 			// Subscriptions
 			this.Subscriptions()
@@ -333,7 +338,7 @@ export class NewBookingComponent implements OnInit {
 			lose_affiliate_phone_isd: ['+1'],
 			lose_affiliate_phone_country: ['us'],
 			lose_affiliate_email: [''],
-			cancellation_hours:['24'],
+			cancellation_hours: ['24'],
 			vehicle_type: [''],
 			vehicle_type_name: [''],
 			vehicle_id: [''],
@@ -538,6 +543,16 @@ export class NewBookingComponent implements OnInit {
 			response.data.booking_instructions = response.data.booking_instructions.replaceAll('<br />', '')
 			console.log('response <><><><><', response.data)
 			let editing_data = response.data
+			let currency = editing_data?.currency
+			this.httpClient.get("assets/json/currencyOptions.json").subscribe(data => {
+				for (const key of Object.keys(data)) {
+					if (data[key].currency === currency.toUpperCase()) {
+						this.currencyObj = data[key]
+						this.currencySymbol = data[key].symbol
+					}
+				}
+			})
+			console.log("this.currencyObj?.currency", this.currencyObj)
 			this.bookingResponse = response.data
 			this.firstLoadVehicleId = response.data.vehicle_id
 			this.firstLoadAffiliateId = response.data.affiliate_id
@@ -545,7 +560,7 @@ export class NewBookingComponent implements OnInit {
 			this.isTravelShare = response?.data?.account_type == 'travel_planner' ? true : false
 			this.isFarmoutBooking = response?.data?.reservation_type == 'farmout' ? true : false
 			this.isCreatedByAdmin = response?.data?.created_by == 1 ? true : false
-		
+
 			if (response?.data?.account_type == 'travel_planner') {
 				this.getTravelClientAccounts(response?.data?.acc_id)
 			}
@@ -676,7 +691,7 @@ export class NewBookingComponent implements OnInit {
 					this.SetFormValue('pickup_date', this.bookingResponse?.pickup_date)
 				}
 			}
-			
+
 		})
 
 	}
@@ -910,7 +925,18 @@ export class NewBookingComponent implements OnInit {
 
 
 	fillAddress(form_control: string, address: any) {
-		// console.log('Address: ', address)
+		console.log('Address: ', address)
+		let address_components = address?.address_components
+		// //setting currency based on pickup address country
+		this.httpClient.get("assets/json/currencyOptions.json").subscribe(data => {
+			for (const key of Object.keys(data)) {
+				if (address_components.find(component => component.long_name === data[key].countryName)) {
+					console.log("Address:", data[key])
+					this.currencyObj = data[key]
+					this.currencySymbol = data[key].symbol
+				}
+			}
+		})
 		this.SetFormValue(form_control, address.formatted_address)
 	}
 
@@ -1066,8 +1092,11 @@ export class NewBookingComponent implements OnInit {
 
 	handleLooseCustomerPhone(event) {
 		console.log('handleLooseCustomerPhone->>', event, event.target.value)
+		const loose_customer = this.BookingForm.get('loose_customer') as FormGroup
 		this.BookingForm.patchValue({
-			passenger_cell: event.target.value
+			passenger_cell: event.target.value,
+			passenger_cell_isd: loose_customer.get('phone_isd').value,
+			passenger_cell_country: loose_customer.get('phone_country').value
 		})
 	}
 	handleLooseCustomerName(event) {
@@ -1189,12 +1218,12 @@ export class NewBookingComponent implements OnInit {
 	}
 	handleLooseAffiliateChange(looseAffData) {
 		console.log('in function handlelooseAffiliateChange-->>', looseAffData)
-		if(looseAffData){		
+		if (looseAffData) {
 			this.BookingForm.patchValue({
 				driver_name: looseAffData?.driver_name,
 				driver_cell: looseAffData?.driver_phone,
 				driver_email: looseAffData?.driver_email,
-				loose_affiliate_id: looseAffData?.id ,
+				loose_affiliate_id: looseAffData?.id,
 				is_old_loose_affiliate: true
 			})
 			this.SetFormValue('lose_affiliate_name', looseAffData?.driver_name)
@@ -1203,7 +1232,7 @@ export class NewBookingComponent implements OnInit {
 			this.SetFormValue('lose_affiliate_phone_isd', looseAffData?.driver_isd)
 			this.SetFormValue('lose_affiliate_phone_country', looseAffData?.driver_phone_country)
 		}
-		else{
+		else {
 			this.BookingForm?.patchValue({
 				is_old_loose_affiliate: false
 			})
@@ -1213,7 +1242,7 @@ export class NewBookingComponent implements OnInit {
 			this.SetFormValue('lose_affiliate_phone_isd', '')
 			this.SetFormValue('lose_affiliate_phone_country', 'us')
 		}
-		console.log('booking form value after selecting loose aff--->',this.BookingForm.value)
+		console.log('booking form value after selecting loose aff--->', this.BookingForm.value)
 	}
 	chooseAffiliate() {
 		// console.warn('Fetching Affiliate vehicles and drivers')
@@ -1845,6 +1874,8 @@ export class NewBookingComponent implements OnInit {
 
 	submitForm(preview: boolean) {
 		this.submitBookingForm = true
+		// this.BookingForm['currency'] = this.currencyObj?.currency
+		console.log("this.currencyObj?.currency", this.currencyObj?.currency)
 		console.log(this.BookingForm);
 		console.log(this.BookingForm.status);
 		// let EditedKeys = []
@@ -1864,6 +1895,7 @@ export class NewBookingComponent implements OnInit {
 
 		let value = this.BookingForm.value
 		value['proceed'] = this.proceed
+		value['currency'] = this.currencyObj?.currency
 		if (this.RatesForm) {
 			value['rateArray'] = JSON.parse(JSON.stringify(this.RatesForm))
 			value['grand_total'] = value['rateArray']['grand_total']
@@ -2548,12 +2580,36 @@ export class NewBookingComponent implements OnInit {
 
 
 	onLCTeleCountryChange(event: any) {
+
 		(<FormGroup>this.BookingForm.get('loose_customer')).get('phone_country').setValue(event.iso2);
 		(<FormGroup>this.BookingForm.get('loose_customer')).get('phone_isd').setValue('+' + event.dialCode);
+		console.log("in mobile", event.dialCode, event.iso2)
 		this.BookingForm.updateValueAndValidity()
 	}
 
+	// onCountryChange(event, type)
+	// {
+	// 	console.log(event)
+	// 	if (type == 'mobile')
+	// 	{
+	// 		console.log("in mobile",event.dialCode,event.iso2)
+	// 		this.addIndividualAccountForm.patchValue({
+	// 			mobileIsd: '+' + event.dialCode,
+	// 			mobileCountry: event.iso2
+	// 		});
+	// 	}
+	// 	else
+	// 	{
+	// 		this.addIndividualAccountForm.patchValue({
+	// 			workIsd: '+' + event.dialCode,
+	// 			workCountry: event.iso2
+	// 		});
+	// 	}
+	// 	// console.log(this.countryCode);
+	// }
+
 	LCTelInputObject(event: any) {
+		console.log('LCTelInputObject', event)
 		this.LCTelObject = event;
 	}
 
@@ -2652,6 +2708,15 @@ export class NewBookingComponent implements OnInit {
 
 	change(event: any, form_control: string) {
 		console.log(event, form_control)
+		//setting currency based on airport country
+		this.httpClient.get("assets/json/currencyOptions.json").subscribe(data => {
+			for (const key of Object.keys(data)) {
+				if (data[key].countryName === event.country) {
+					this.currencyObj = data[key]
+					this.currencySymbol = data[key].symbol
+				}
+			}
+		})
 		event && this.SetFormValue(form_control, event.id);
 	}
 	FormatTime(time: string) {
@@ -2755,7 +2820,8 @@ export class NewBookingComponent implements OnInit {
 		// }    
 		this.affiliate_id = selected_vehicle?.affiliate_id
 
-
+		this.currencyObj = JSON.parse(sessionStorage.getItem('currencyData'))
+		this.currencySymbol = this.currencyObj?.symbol
 		//dropOFF
 		this.SetFormValue('service_type', QB?.service_type)
 		if (QB?.service_type == 'charter_tour') {

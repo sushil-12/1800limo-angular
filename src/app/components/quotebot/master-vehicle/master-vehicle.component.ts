@@ -220,6 +220,7 @@ export class MasterVehicleComponent implements OnInit {
 	role: number = JSON.parse(localStorage.getItem("currentUser"))?.role
 	openfilters: boolean = false
 	changeText: boolean = false
+	currencySymbol: any;
 
 
 	constructor(
@@ -334,6 +335,8 @@ export class MasterVehicleComponent implements OnInit {
 					return
 				}
 				this.master_vehicles = response.data
+				sessionStorage.setItem('currencyData', JSON.stringify(response?.currency))
+				this.currencySymbol = response.currency.symbol
 				resolve(this.master_vehicles)
 				return
 			})

@@ -232,6 +232,7 @@ export class OtpComponent implements OnInit, OnDestroy {
 				localStorage.setItem('userData', JSON.stringify(loginUserDetail))
 				localStorage.setItem('currentUser', JSON.stringify(this.response?.data?.user));
 				localStorage.setItem('access_token', this.response?.data?.access_token);
+				localStorage.setItem('currencySymbol', JSON.stringify(this.response?.currency?.symbol))
 				if(this.response?.data?.invite_link){
 					localStorage.setItem('invite_link',this.response?.data?.invite_link)
 				}

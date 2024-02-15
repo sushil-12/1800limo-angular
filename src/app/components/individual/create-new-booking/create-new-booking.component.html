@@ -170,7 +170,7 @@
 						<mat-select formControlName="driver_gender" [disabled]="true">
 							<mat-option value="male"> Male </mat-option>
 							<mat-option value="female"> Female </mat-option>
-							<mat-option value="lgbtq+">X (LGBTQAI+)</mat-option>
+							<mat-option value="lgbtq+">X (LGBTQ+)</mat-option>
 						</mat-select>
 					</mat-form-field>
 				</div>
@@ -1620,8 +1620,7 @@
                     </p>
                 </div>
                 <div class="col-md-4 text-3xl text-right">
-                    <i class="bi bi-currency-dollar" style="color: #dc3545!important;"></i>
-                    {{ subtotal.toFixed(2) }}
+                    <span style="color:#dc3545;">{{currencySymbol}}</span> {{ subtotal.toFixed(2) }}
                 </div>
             </div>
             <!-- Number of Vehicles/Hours -->
@@ -1645,8 +1644,9 @@
                     </p>
                 </div>
                 <div class="col-md-4 col-xl-5 text-3xl text-right">
-                    <i class="bi bi-currency-dollar" style="color: #dc3545!important;"></i>
-                    {{ grandtotal.toFixed(2) * Form.number_of_vehicles.value }}
+
+                    <span style="color:#dc3545;">{{currencySymbol}}</span> {{ grandtotal.toFixed(2) *
+                    Form.number_of_vehicles.value }}
                 </div>
             </div>
             <!-- <div class="row px-2 justify-content-between align-items-center flex-nowrap">
@@ -1671,8 +1671,7 @@
                     </p>
                 </div>
                 <div class="col-md-4 text-3xl text-right">
-                    <i class="bi bi-currency-dollar" style="color: #dc3545!important;"></i>
-                    {{ r_subtotal.toFixed(2) }}
+                    <span style="color:#dc3545;">{{currencySymbol}}</span>{{ r_subtotal.toFixed(2) }}
                 </div>
             </div>
             <div class="row px-2 justify-content-between align-items-center flex-nowrap">
@@ -1693,8 +1692,7 @@
                     </p>
                 </div>
                 <div class="col-md-4 col-xl-5 text-3xl text-right">
-                    <i class="bi bi-currency-dollar" style="color: #dc3545!important;"></i>
-                    {{ r_grandtotal.toFixed(2) }}
+                    <span style="color:#dc3545;">{{currencySymbol}}</span> {{ r_grandtotal.toFixed(2) }}
                 </div>
             </div>
             <!-- <div class="row px-2 justify-content-between align-items-center flex-nowrap">
@@ -1752,7 +1750,7 @@
                             </div>
                             <div class="col-md-8 value">
                                 <span class="font-weight-bolder">
-                                    ${{ grandtotal.toFixed(2) * Form.number_of_vehicles.value }}
+                                    {{currencySymbol}}{{ grandtotal.toFixed(2) * Form.number_of_vehicles.value }}
                                 </span>
                             </div>
                         </div>
@@ -1767,7 +1765,7 @@
                             </div>
                             <div class="col-md-8 value">
                                 <span class="font-weight-bolder">
-                                    ${{ r_grandtotal.toFixed(2) * Form.number_of_vehicles.value }}
+                                    {{currencySymbol}}{{ r_grandtotal.toFixed(2) * Form.number_of_vehicles.value }}
                                 </span>
                             </div>
                         </div>

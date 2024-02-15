@@ -170,7 +170,7 @@
 						<mat-select formControlName="driver_gender" [disabled]="true">
 							<mat-option value="male"> Male </mat-option>
 							<mat-option value="female"> Female </mat-option>
-							<mat-option value="lgbtq+">X (LGBTQAI+)</mat-option>
+							<mat-option value="lgbtq+">X (LGBTQ+)</mat-option>
 						</mat-select>
 					</mat-form-field>
 				</div>
@@ -1580,8 +1580,7 @@
 					</p>
 				</div>
 				<div class="col-md-4 text-3xl text-right">
-					<i class="bi bi-currency-dollar" style="color: #dc3545!important;"></i>
-					{{ subtotal.toFixed(2) }}
+					<span style="color: #dc3545!important;">{{currencySymbol}}</span> {{ subtotal.toFixed(2) }}
 				</div>
 			</div>
 			<!-- Number of Vehicles/Hours -->
@@ -1605,8 +1604,8 @@
 					</p>
 				</div>
 				<div class="col-md-4 col-xl-5 text-3xl text-right">
-					<i class="bi bi-currency-dollar" style="color: #dc3545!important;"></i>
-					{{ grandtotal.toFixed(2) * Form.number_of_vehicles.value }}
+					<span style="color: #dc3545!important;">{{currencySymbol}}</span> {{ grandtotal.toFixed(2) *
+					Form.number_of_vehicles.value }}
 				</div>
 			</div>
 			<div class="row px-2 justify-content-between align-items-center flex-nowrap">
@@ -1616,8 +1615,7 @@
 					</p>
 				</div>
 				<div class="col-md-4 text-3xl text-right">
-					<i class="bi bi-currency-dollar" style="color: #dc3545!important;"></i>
-					{{ agentShare.toFixed(2) }}
+					<span style="color: #dc3545!important;">{{currencySymbol}}</span> {{ agentShare.toFixed(2) }}
 				</div>
 			</div>
 		</div>
@@ -1631,8 +1629,7 @@
 					</p>
 				</div>
 				<div class="col-md-4 text-3xl text-right">
-					<i class="bi bi-currency-dollar" style="color: #dc3545!important;"></i>
-					{{ r_subtotal.toFixed(2) }}
+					<span style="color: #dc3545!important;">{{currencySymbol}}</span> {{ r_subtotal.toFixed(2) }}
 				</div>
 			</div>
 			<div class="row px-2 justify-content-between align-items-center flex-nowrap">
@@ -1653,8 +1650,7 @@
 					</p>
 				</div>
 				<div class="col-md-4 col-xl-5 text-3xl text-right">
-					<i class="bi bi-currency-dollar" style="color: #dc3545!important;"></i>
-					{{ r_grandtotal.toFixed(2) }}
+					<span style="color: #dc3545!important;">{{currencySymbol}}</span> {{ r_grandtotal.toFixed(2) }}
 				</div>
 			</div>
 			<div class="row px-2 justify-content-between align-items-center flex-nowrap">
@@ -1664,8 +1660,7 @@
 					</p>
 				</div>
 				<div class="col-md-4 text-3xl text-right">
-					<i class="bi bi-currency-dollar" style="color: #dc3545!important;"></i>
-					{{ r_agentShare.toFixed(2) }}
+					<span style="color: #dc3545!important;">{{currencySymbol}}</span> {{ r_agentShare.toFixed(2) }}
 				</div>
 			</div>
 		</div>
@@ -1712,7 +1707,7 @@
 							</div>
 							<div class="col-md-8 value">
 								<span class="font-weight-bolder">
-									${{ grandtotal.toFixed(2) * Form.number_of_vehicles.value }}
+									{{currencySymbol}}{{ grandtotal.toFixed(2) * Form.number_of_vehicles.value }}
 								</span>
 							</div>
 						</div>
@@ -1727,7 +1722,7 @@
 							</div>
 							<div class="col-md-8 value">
 								<span class="font-weight-bolder">
-									${{ r_grandtotal.toFixed(2) * Form.number_of_vehicles.value }}
+									{{currencySymbol}}{{ r_grandtotal.toFixed(2) * Form.number_of_vehicles.value }}
 								</span>
 							</div>
 						</div>
@@ -2319,7 +2314,7 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										${{shareArray?.baseRate.toFixed(2)}}
+										{{currencySymbol}}{{shareArray?.baseRate.toFixed(2)}}
 									</span>
 									(Fare Base Rate)
 								</div>
@@ -2334,7 +2329,8 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										${{shareArray?.travelAgentShare ? shareArray?.travelAgentShare.toFixed(2) : 0}}
+										{{currencySymbol}}{{shareArray?.travelAgentShare ?
+										shareArray?.travelAgentShare.toFixed(2) : 0}}
 									</span>
 									(10% of Base Rate)
 								</div>
@@ -2349,7 +2345,7 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										${{shareArray?.grandTotal.toFixed(2)}}
+										{{currencySymbol}}{{shareArray?.grandTotal.toFixed(2)}}
 									</span>
 									(Actual Cost to Customer)
 								</div>
@@ -2364,7 +2360,7 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										${{shareArray?.stripeFee.toFixed(2)}}
+										{{currencySymbol}}{{shareArray?.stripeFee.toFixed(2)}}
 									</span>
 									(Platform fee 5% + 30 cents - <b>Paid from Admin share</b>)
 								</div>
@@ -2728,7 +2724,7 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										${{r_shareArray?.baseRate.toFixed(2)}}
+										{{currencySymbol}}{{r_shareArray?.baseRate.toFixed(2)}}
 									</span>
 									(Fare Base Rate)
 								</div>
@@ -2743,7 +2739,8 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										${{r_shareArray?.travelAgentShare ? r_shareArray?.travelAgentShare.toFixed(2) :
+										{{currencySymbol}}{{r_shareArray?.travelAgentShare ?
+										r_shareArray?.travelAgentShare.toFixed(2) :
 										0}}
 									</span>
 									(10% of Base Rate)
@@ -2759,7 +2756,7 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										${{r_shareArray?.returnGrandTotal.toFixed(2)}}
+										{{currencySymbol}}{{r_shareArray?.returnGrandTotal.toFixed(2)}}
 									</span>
 									(Actual Cost to Customer)
 								</div>
@@ -2774,7 +2771,7 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										${{r_shareArray?.stripeFee.toFixed(2)}}
+										{{currencySymbol}}{{r_shareArray?.stripeFee.toFixed(2)}}
 									</span>
 									(Platform fee 5% + 30 cents - <b>Paid from Admin share</b>)
 								</div>

@@ -314,7 +314,9 @@
 							<span style="color: #c94505;font-weight: 700;">
 								From
 							</span>
-							${{ vehicle_obj['rate_breakdown_' + getKeyName()]?.grand_total != undefined ?
+							{{currencySymbol}} {{ vehicle_obj['rate_breakdown_' + getKeyName()]?.grand_total !=
+							undefined
+							?
 							vehicle_obj['rate_breakdown_' + getKeyName()]?.grand_total : '0.00' }}
 						</p>
 						<div id="icons">

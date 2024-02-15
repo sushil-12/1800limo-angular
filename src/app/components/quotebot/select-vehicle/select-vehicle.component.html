@@ -386,7 +386,7 @@
 							<p class="price">
 								{{ formatter(getKeyName()) | titlecase }}:
 								<span>
-									$
+									{{currencySymbol}}
 									{{ vehinfo['rate_breakdown_' + getKeyName()]?.grand_total != undefined ?
 									vehinfo['rate_breakdown_' + getKeyName()]?.grand_total : '0.00' }}
 								</span>

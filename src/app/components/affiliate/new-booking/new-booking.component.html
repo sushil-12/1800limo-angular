@@ -1167,8 +1167,8 @@
 			<!-- Selections -->
 			<div *ngIf="booking_params.chevrons.amenities">
 				<div class="m-3 alert alert-danger">
-					$ Sign Denotes The Amenity Is Tied To A Bucket On The Rate Settings
-					Page. The Rate Is Default At 0$
+					{{currencySymbol}} Sign Denotes The Amenity Is Tied To A Bucket On The Rate Settings
+					Page. The Rate Is Default At 0{{currencySymbol}}
 				</div>
 				<div class="row align-items-center m-0 p-4">
 					<div class="col-md-4" *ngFor="let amenity of BigData?.amenity; index as amenity_index">
@@ -1177,7 +1177,7 @@
 							[checked]="amenity['chargeable'] == 'yes' ? isChecked('chargedAmenities', amenity.id) : isChecked('amenities', amenity.id)">
 							{{ amenity.name }}
 							<span class="text-danger" *ngIf="amenity.chargeable == 'yes'">
-								(<i class="bi bi-currency-dollar"></i>)
+								({{currencySymbol}})
 							</span>
 						</mat-checkbox>
 					</div>
@@ -1757,8 +1757,8 @@
 			[distance]="distance_for_rates" [book_data]="booking_data" [isTravelShare]="isTravelShare"
 			[isFarmoutBooking]="isFarmoutBooking" [hours]="Form.number_of_hours?.value"
 			[vehicles]="Form.number_of_vehicles?.value" [isCreatedByAdmin]="isCreatedByAdmin"
-			[initReturnRates]="init_return_rates" (returnNumberOfHr)="HandleReturnNumberOfHr($event)"
-			(returnformvalue)="ReturnRateFormValue($event)">
+			[initReturnRates]="init_return_rates" [currencyObject]="currencyObj"
+			(returnNumberOfHr)="HandleReturnNumberOfHr($event)" (returnformvalue)="ReturnRateFormValue($event)">
 		</app-rates-forms>
 		<div class="row">
 			<div class="col-md-12 d-flex preview_button_edit">
@@ -1818,7 +1818,7 @@
 							</div>
 							<div class="col-md-8 value">
 								<span class="font-weight-bolder">
-									${{ RatesForm.grand_total.toFixed(2) }}
+									{{currencySymbol}}{{ RatesForm.grand_total.toFixed(2) }}
 								</span>
 							</div>
 						</div>
@@ -1832,7 +1832,7 @@
 							</div>
 							<div class="col-md-8 value">
 								<span class="font-weight-bolder">
-									${{ ReturnRatesForm.r_grandtotal.toFixed(2) }}
+									{{currencySymbol}}{{ ReturnRatesForm.r_grandtotal.toFixed(2) }}
 								</span>
 							</div>
 						</div>
@@ -2377,7 +2377,7 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										${{shareArray?.baseRate.toFixed(2)}}
+										{{currencySymbol}}{{shareArray?.baseRate.toFixed(2)}}
 									</span>
 									(Fare Base Rate)
 								</div>
@@ -2392,7 +2392,7 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										${{shareArray?.adminShare.toFixed(2) }}
+										{{currencySymbol}}{{shareArray?.adminShare.toFixed(2) }}
 									</span>
 									({{adminSharePercent}}% of Base Rate)
 								</div>
@@ -2407,7 +2407,7 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										${{shareArray?.grandTotal.toFixed(2)}}
+										{{currencySymbol}}{{shareArray?.grandTotal.toFixed(2)}}
 									</span>
 									(Actual Cost to Customer)
 								</div>
@@ -2422,7 +2422,7 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										${{shareArray?.stripeFee.toFixed(2)}}
+										{{currencySymbol}}{{shareArray?.stripeFee.toFixed(2)}}
 									</span>
 									(Platform fee 5% + 30 cents - <b>Paid from Admin share</b>)
 								</div>
@@ -2438,7 +2438,7 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										${{shareArray?.affiliateShare.toFixed(2)}}
+										{{currencySymbol}}{{shareArray?.affiliateShare.toFixed(2)}}
 									</span>
 									( Total Price - (Ride Base Rate + Other Taxes) )
 								</div>
@@ -2453,7 +2453,7 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										${{shareArray?.farmoutShare.toFixed(2)}}
+										{{currencySymbol}}{{shareArray?.farmoutShare.toFixed(2)}}
 									</span>
 									( 10 % of Base Rate)
 								</div>
@@ -2812,7 +2812,7 @@
 							</div>
 							<div class="col-md-8 value preview-airport-color">
 								<span class="font-weight-bolder preview-output-feild">
-									${{r_shareArray?.baseRate.toFixed(2)}}
+									{{currencySymbol}}{{r_shareArray?.baseRate.toFixed(2)}}
 								</span>
 								(Fare Base Rate)
 							</div>
@@ -2827,7 +2827,7 @@
 							</div>
 							<div class="col-md-8 value preview-airport-color">
 								<span class="font-weight-bolder preview-output-feild">
-									${{r_shareArray?.adminShare.toFixed(2) }}
+									{{currencySymbol}}{{r_shareArray?.adminShare.toFixed(2) }}
 								</span>
 								({{adminSharePercent}}% of Base Rate)
 							</div>
@@ -2842,7 +2842,7 @@
 							</div>
 							<div class="col-md-8 value preview-airport-color">
 								<span class="font-weight-bolder preview-output-feild">
-									${{r_shareArray?.returnGrandTotal.toFixed(2)}}
+									{{currencySymbol}}{{r_shareArray?.returnGrandTotal.toFixed(2)}}
 								</span>
 								(Actual Cost to Customer)
 							</div>
@@ -2857,7 +2857,7 @@
 							</div>
 							<div class="col-md-8 value preview-airport-color">
 								<span class="font-weight-bolder preview-output-feild">
-									${{r_shareArray?.stripeFee.toFixed(2)}}
+									{{currencySymbol}}{{r_shareArray?.stripeFee.toFixed(2)}}
 								</span>
 								(Platform fee 5% + 30 cents - <b>Paid from Admin share</b>)
 							</div>
@@ -2873,7 +2873,7 @@
 							</div>
 							<div class="col-md-8 value preview-airport-color">
 								<span class="font-weight-bolder preview-output-feild">
-									${{r_shareArray?.affiliateShare.toFixed(2)}}
+									{{currencySymbol}}{{r_shareArray?.affiliateShare.toFixed(2)}}
 								</span>
 								( Total Price - (Ride Base Rate + Other Taxes) )
 							</div>
@@ -2888,7 +2888,7 @@
 							</div>
 							<div class="col-md-8 value preview-airport-color">
 								<span class="font-weight-bolder preview-output-feild">
-									${{r_shareArray?.farmoutShare.toFixed(2)}}
+									{{currencySymbol}}{{r_shareArray?.farmoutShare.toFixed(2)}}
 								</span>
 								( 10 % of Base Rate)
 							</div>
