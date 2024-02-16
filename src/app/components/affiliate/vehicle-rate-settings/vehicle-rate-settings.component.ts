@@ -114,7 +114,7 @@ export class VehicleRateSettingsComponent implements OnInit {
 			this.SetFormValue(form_control, value)
 			if (value == "kilometer") {
 				console.log('set validator for km')
-				this.VehicleRateSettingsForm.get('kilometer_rate')?.setValidators([Validators.required, Validators.pattern("^[0-9]*(\.[0-9]+)?$"), Validators.min(1.8)]); // Set back the validator
+				this.VehicleRateSettingsForm.get('kilometer_rate')?.setValidators([Validators.required, Validators.pattern("^[0-9]*(\.[0-9]+)?$"), Validators.min(1.72)]); // Set back the validator
 				this.VehicleRateSettingsForm.get('milage_rate')?.clearValidators(); // Clear the validator
 				this.VehicleRateSettingsForm.get('kilometer_rate')?.updateValueAndValidity();
 				this.VehicleRateSettingsForm.get('milage_rate')?.updateValueAndValidity();
@@ -155,8 +155,8 @@ export class VehicleRateSettingsComponent implements OnInit {
 			hours_day_rate: [8, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			day_rate: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			km_mile: ['mile', Validators.required],
-			milage_rate: [2, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
-			kilometer_rate: [1.71, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
+			milage_rate: ['', [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
+			kilometer_rate: ['', [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			minimum_airport_departure_rate: [0, [Validators.required, Validators.min(0.1), Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			minimum_airport_arrival_rate: [0, [Validators.required, Validators.min(0.1), Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			minimum_city_rate: [0, [Validators.required, Validators.min(0.1), Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
@@ -597,8 +597,8 @@ export class VehicleRateSettingsComponent implements OnInit {
 			hours_day_rate: 8,
 			day_rate: 0,
 			km_mile: 'mile',
-			milage_rate: 2,
-			kilometer_rate: 1.71,
+			milage_rate: '',
+			kilometer_rate: '',
 			minimum_airport_departure_rate: 0,
 			minimum_airport_arrival_rate: 0,
 			minimum_city_rate: 0,

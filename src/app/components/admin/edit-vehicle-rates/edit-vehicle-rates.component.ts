@@ -229,8 +229,8 @@ export class EditVehicleRatesComponent implements OnInit {
 			hours_day_rate: [8, [Validators.pattern(/^\d+(\.\d+)?$/)]],
 			day_rate: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
 			km_mile: ['mile', Validators.required],
-			milage_rate: [2, [Validators.required, , Validators.pattern(/^\d+(\.\d+)?$/)]],
-			kilometer_rate: [1.71, [Validators.pattern(/^\d+(\.\d+)?$/)]],
+			milage_rate: ['', [Validators.required, , Validators.pattern(/^\d+(\.\d+)?$/)]],
+			kilometer_rate: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
 			minimum_airport_departure_rate: ['', [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)]],
 			minimum_airport_arrival_rate: ['', [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)]],
 			minimum_city_rate: ['', [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)]],
@@ -323,7 +323,7 @@ export class EditVehicleRatesComponent implements OnInit {
 		for (let form_name in this.rate_range_object) {
 			try {
 				// console.log(form_name,typeof this.addVehicleRatesForm.get(form_name).value)
-				this.rate_range_object[form_name] = parseFloat(this.addVehicleRatesForm.get(form_name).value.toFixed(2))
+				this.rate_range_object[form_name] = parseFloat(this.addVehicleRatesForm.get(form_name).value)
 			}
 			catch (err) {
 				console.log(form_name, typeof this.addVehicleRatesForm.get(form_name).value, err)
