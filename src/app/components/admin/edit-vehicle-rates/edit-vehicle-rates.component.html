@@ -82,7 +82,8 @@
 					</div>
 				</div>
 				<div class="col-md-6" *ngIf="milage_rate_selected; else kilometer_rate">
-					<mat-form-field class="mat-form-field-rates" appearance="outline">
+					<mat-form-field class="mat-form-field-rates" appearance="outline"
+						[ngClass]="{ 'border-red': f.milage_rate.errors.min }">
 						<mat-label>{{currencySymbol}} per mile<span class="asterisk">*</span></mat-label>
 						<span matPrefix
 							*ngIf="f.milage_rate.value == null || f.milage_rate.value == ''; else hideZero">{{currencySymbol}}
@@ -99,7 +100,7 @@
 					</div>
 					<div *ngIf="f.milage_rate.errors" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.milage_rate.errors.pattern">Enter Numbers only</div>
-						<div *ngIf="f.milage_rate.errors.min">Minimum value will be 2</div>
+						<div *ngIf="f.milage_rate.errors.min">Minimum value should be more than 2</div>
 					</div>
 					<div *ngIf="IsZeroValidator(f.milage_rate.value, 'milage_rate')"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -108,7 +109,8 @@
 				</div>
 				<ng-template #kilometer_rate>
 					<div class="col-md-6">
-						<mat-form-field class="mat-form-field-rates" appearance="outline">
+						<mat-form-field class="mat-form-field-rates" appearance="outline"
+							[ngClass]="{ 'border-red': f.kilometer_rate.errors.min }">
 							<mat-label>{{currencySymbol}} per km<span class="asterisk">*</span></mat-label>
 							<span matPrefix
 								*ngIf="f.kilometer_rate.value == null || f.kilometer_rate.value == ''; else hideZero">{{currencySymbol}}
@@ -125,7 +127,7 @@
 						</div>
 						<div *ngIf="f.kilometer_rate.errors" class="text-danger margin-bottom-thin my-mat-hint">
 							<div *ngIf="f.kilometer_rate.errors.pattern">Enter Numbers only</div>
-							<div *ngIf="f.kilometer_rate.errors.min">Minimum value will be 1.71</div>
+							<div *ngIf="f.kilometer_rate.errors.min">Minimum value should be more than 1.71</div>
 						</div>
 						<div *ngIf="IsZeroValidator(f.kilometer_rate.value, 'kilometer_rate')"
 							class="text-danger margin-bottom-thin my-mat-hint">

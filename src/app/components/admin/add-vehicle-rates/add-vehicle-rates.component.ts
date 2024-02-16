@@ -36,7 +36,7 @@ export class AddVehicleRatesComponent implements OnInit {
 	public submittedForm: boolean;
 	public disableSubmitButton: boolean = false;
 
-	public response: any;	
+	public response: any;
 	rate_range_object: any = {}
 	thumb_value: number = 0;
 
@@ -92,12 +92,12 @@ export class AddVehicleRatesComponent implements OnInit {
 			minimum_airport_departure_rate: ['', [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)]],
 			minimum_airport_arrival_rate: ['', [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)]],
 			minimum_city_rate: ['', [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)]],
-			minimum_cruise_port_arrival_rate: ['', [ Validators.pattern(/^\d+(\.\d+)?$/)]],
-			minimum_cruise_port_departure_rate : ['', [ Validators.pattern(/^\d+(\.\d+)?$/)]],
+			minimum_cruise_port_arrival_rate: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
+			minimum_cruise_port_departure_rate: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
 			minimum_on_demand_rate: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
 			per_person_group_ride_rate: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
-			in_town_extra_stop:['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
-			outside_town_extra_stop:['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
+			in_town_extra_stop: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
+			outside_town_extra_stop: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
 			airport_city_percentage_booking_cancel_charges: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
 			charter_percentage_booking_cancel_charges: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
 			gratuity: ['20', [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)]],
@@ -119,9 +119,9 @@ export class AddVehicleRatesComponent implements OnInit {
 			vat: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
 			workmans_comp: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
 			other_transportation_tax: ['', [Validators.pattern("^[0-9]*$")]],
-			early_late_charges:[0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
-			holiday_charges:[0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
-			friday_saturday_charges:[0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
+			early_late_charges: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
+			holiday_charges: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
+			friday_saturday_charges: [0, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 		});
 		//autopopulate values of departure in arrival
 		this.addVehicleRatesForm.get('minimum_airport_departure_rate').valueChanges.subscribe(
@@ -190,10 +190,10 @@ export class AddVehicleRatesComponent implements OnInit {
 			});
 		}
 	}
-	handleChangeMCPAR(value){
-		
+	handleChangeMCPAR(value) {
+
 		this.addVehicleRatesForm.patchValue({
-			minimum_cruise_port_departure_rate : value ? value : null
+			minimum_cruise_port_departure_rate: value ? value : null
 		})
 	}
 
@@ -226,9 +226,9 @@ export class AddVehicleRatesComponent implements OnInit {
 	 */
 	initRateRangeObject(): boolean {
 		let form_control_names = ['milage_rate', 'kilometer_rate', 'hourly_rate', 'hourly_rate_after_five_hours',
-		 'day_rate', 'minimum_city_rate', 'minimum_airport_departure_rate', 'minimum_airport_arrival_rate', 
-		 'minimum_cruise_port_arrival_rate', 'minimum_cruise_port_departure_rate', 'in_town_extra_stop' ,'outside_town_extra_stop',
-		 'airport_city_percentage_booking_cancel_charges', 'per_person_group_ride_rate']
+			'day_rate', 'minimum_city_rate', 'minimum_airport_departure_rate', 'minimum_airport_arrival_rate',
+			'minimum_cruise_port_arrival_rate', 'minimum_cruise_port_departure_rate', 'in_town_extra_stop', 'outside_town_extra_stop',
+			'airport_city_percentage_booking_cancel_charges', 'per_person_group_ride_rate']
 		form_control_names.forEach((name: string) => {
 			this.rate_range_object[name] = this.addVehicleRatesForm.get(name).value ?? 0
 		})
@@ -248,91 +248,91 @@ export class AddVehicleRatesComponent implements OnInit {
 		console.log(this.rate_range_object)
 	}
 
-		/**
-	 * 
-	 * @param range_value current value of the slider
-	 */
-		getRateRange(range_value: number) {
-			console.log('range_value', range_value)
-			this.thumb_value = range_value
-			this.SetFormValue('rate_range', range_value)
-			// --------- For Flat ------------------
-			if (this.form.rate_range_percent_flat.value == 'flat') {
-				// for neutral
-				if (range_value == 0) {
-					console.log('B')
-					for (const key in this.rate_range_object) {
-						this.SetFormValue('rate_range', '0')
-						this.SetFormValue(key, this.rate_range_object[key])
-					}
+	/**
+ * 
+ * @param range_value current value of the slider
+ */
+	getRateRange(range_value: number) {
+		console.log('range_value', range_value)
+		this.thumb_value = range_value
+		this.SetFormValue('rate_range', range_value)
+		// --------- For Flat ------------------
+		if (this.form.rate_range_percent_flat.value == 'flat') {
+			// for neutral
+			if (range_value == 0) {
+				console.log('B')
+				for (const key in this.rate_range_object) {
+					this.SetFormValue('rate_range', '0')
+					this.SetFormValue(key, this.rate_range_object[key])
 				}
-	
-				// for negative side indicator
-				if (range_value < 0) {
-					for (const key in this.rate_range_object) {
-						this.rate_range_object[key] == null && this.SetFormValue(key, 0)	// set 0 if null
-						// decrease by number and set value upto two decimal places and update
-						// let value = Math.round(Number.EPSILON + (Math.abs(parseInt(this.rate_range_object[key])) - Math.abs(range_value)) * 100) / 100
-						let value = parseFloat(Math.abs(this.rate_range_object[key] - Math.abs(range_value)).toFixed(2))
-						this.SetFormValue(key, value)
-					}
-				}
-	
-				// for positive side indicator
-				if (range_value > 0) {
-					for (const key in this.rate_range_object) {
-						this.rate_range_object[key] == null && this.SetFormValue(key, 0) 	// set 0 if null
-	
-						// let value = this.rate_range_object[key]
-						// increase by number and set value upto two decimal places and update
-						// let value = Math.round(Number.EPSILON + (Math.abs(parseInt(this.rate_range_object[key])) + Math.abs(range_value)) * 100) / 100
-						let value = parseFloat(Math.abs(this.rate_range_object[key] + Math.abs(range_value)).toFixed(2))
-						this.SetFormValue(key, value)
-					}
-				}
-				console.log(this.rate_range_object)
 			}
-			// -------------- For Percentage ------------------
-			else {
-				// for neutral
-				if (range_value == 0) {
-					for (const key in this.rate_range_object) {
-						this.SetFormValue('rate_range', '0')
-						this.SetFormValue(key, this.rate_range_object[key])
-					}
+
+			// for negative side indicator
+			if (range_value < 0) {
+				for (const key in this.rate_range_object) {
+					this.rate_range_object[key] == null && this.SetFormValue(key, 0)	// set 0 if null
+					// decrease by number and set value upto two decimal places and update
+					// let value = Math.round(Number.EPSILON + (Math.abs(parseInt(this.rate_range_object[key])) - Math.abs(range_value)) * 100) / 100
+					let value = parseFloat(Math.abs(this.rate_range_object[key] - Math.abs(range_value)).toFixed(2))
+					this.SetFormValue(key, value)
 				}
-				// for negative side indicator
-				if (range_value < 0) {
-					for (const key in this.rate_range_object) {
-						this.rate_range_object[key] == null && this.SetFormValue(key, 0)	// set 0 if null
-	
-						// decrease by percentage and set value upto two decimal places and update
-						let percentage_value = this.rate_range_object[key] - (this.rate_range_object[key] * Math.abs(range_value) / 100)
-						let value = Math.round(Number.EPSILON + percentage_value * 100) / 100
-						this.SetFormValue(key, value)
-					}
+			}
+
+			// for positive side indicator
+			if (range_value > 0) {
+				for (const key in this.rate_range_object) {
+					this.rate_range_object[key] == null && this.SetFormValue(key, 0) 	// set 0 if null
+
+					// let value = this.rate_range_object[key]
+					// increase by number and set value upto two decimal places and update
+					// let value = Math.round(Number.EPSILON + (Math.abs(parseInt(this.rate_range_object[key])) + Math.abs(range_value)) * 100) / 100
+					let value = parseFloat(Math.abs(this.rate_range_object[key] + Math.abs(range_value)).toFixed(2))
+					this.SetFormValue(key, value)
 				}
-	
-				// for positive side indicator
-				if (range_value > 0) {
-					for (const key in this.rate_range_object) {
-						this.rate_range_object[key] == null && this.SetFormValue(key, 0)	// set 0 if null
-	
-						// decrease by percentage and set value upto two decimal places and update
-						let percentage_value = this.rate_range_object[key] + (this.rate_range_object[key] * Math.abs(range_value) / 100)
-						let value = Math.round(Number.EPSILON + percentage_value * 100) / 100
-						this.SetFormValue(key, value)
-					}
+			}
+			console.log(this.rate_range_object)
+		}
+		// -------------- For Percentage ------------------
+		else {
+			// for neutral
+			if (range_value == 0) {
+				for (const key in this.rate_range_object) {
+					this.SetFormValue('rate_range', '0')
+					this.SetFormValue(key, this.rate_range_object[key])
+				}
+			}
+			// for negative side indicator
+			if (range_value < 0) {
+				for (const key in this.rate_range_object) {
+					this.rate_range_object[key] == null && this.SetFormValue(key, 0)	// set 0 if null
+
+					// decrease by percentage and set value upto two decimal places and update
+					let percentage_value = this.rate_range_object[key] - (this.rate_range_object[key] * Math.abs(range_value) / 100)
+					let value = Math.round(Number.EPSILON + percentage_value * 100) / 100
+					this.SetFormValue(key, value)
+				}
+			}
+
+			// for positive side indicator
+			if (range_value > 0) {
+				for (const key in this.rate_range_object) {
+					this.rate_range_object[key] == null && this.SetFormValue(key, 0)	// set 0 if null
+
+					// decrease by percentage and set value upto two decimal places and update
+					let percentage_value = this.rate_range_object[key] + (this.rate_range_object[key] * Math.abs(range_value) / 100)
+					let value = Math.round(Number.EPSILON + percentage_value * 100) / 100
+					this.SetFormValue(key, value)
 				}
 			}
 		}
+	}
 
-		/**
-	 * Set the specified value into form
-	 * 
-	 * @params form_control: String [Required] Form Control name
-	 * @params value: String [Required] value to be saved in form
-	 */
+	/**
+ * Set the specified value into form
+ * 
+ * @params form_control: String [Required] Form Control name
+ * @params value: String [Required] value to be saved in form
+ */
 	SetFormValue(form_control: string, value: any) {
 		console.info('Setting Value of ', form_control, ': ', value)
 		this.addVehicleRatesForm.get(form_control).setValue(value)
@@ -352,7 +352,7 @@ export class AddVehicleRatesComponent implements OnInit {
 			case 'kilometer': {
 				this.milage_rate_selected = false;
 				console.log('set validator for km')
-				this.addVehicleRatesForm.get('kilometer_rate')?.setValidators([Validators.required,Validators.pattern("^[0-9]*(\.[0-9]+)?$"),Validators.min(1.71)]); // Set back the validator
+				this.addVehicleRatesForm.get('kilometer_rate')?.setValidators([Validators.required, Validators.pattern("^[0-9]*(\.[0-9]+)?$"), Validators.min(1.72)]); // Set back the validator
 				this.addVehicleRatesForm.get('milage_rate')?.clearValidators(); // Clear the validator
 				this.addVehicleRatesForm.get('kilometer_rate')?.updateValueAndValidity();
 				this.addVehicleRatesForm.get('milage_rate')?.updateValueAndValidity();
@@ -360,8 +360,8 @@ export class AddVehicleRatesComponent implements OnInit {
 			}
 			case 'mile': {
 				this.milage_rate_selected = true;
-				this.addVehicleRatesForm.get('milage_rate')?.setValidators([Validators.required,Validators.pattern("^[0-9]*(\.[0-9]+)?$") ,Validators.min(2)]); // Set back the validator
-				this.addVehicleRatesForm.get('kilometer_rate')?.clearValidators(); 
+				this.addVehicleRatesForm.get('milage_rate')?.setValidators([Validators.required, Validators.pattern("^[0-9]*(\.[0-9]+)?$"), Validators.min(2.1)]); // Set back the validator
+				this.addVehicleRatesForm.get('kilometer_rate')?.clearValidators();
 				this.addVehicleRatesForm.get('milage_rate')?.updateValueAndValidity()
 				this.addVehicleRatesForm.get('kilometer_rate')?.updateValueAndValidity();
 				break;
@@ -392,10 +392,8 @@ export class AddVehicleRatesComponent implements OnInit {
 		return this.addVehicleRatesForm.controls;
 	}
 
-	IsZeroValidator(value: any, form_control: string)
-	{
-		if(value == 0)
-		{
+	IsZeroValidator(value: any, form_control: string) {
+		if (value == 0) {
 			this.addVehicleRatesForm.get(form_control).setValue(null);
 			this.addVehicleRatesForm.updateValueAndValidity();
 			return true;
