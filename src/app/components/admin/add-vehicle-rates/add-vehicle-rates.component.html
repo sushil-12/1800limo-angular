@@ -92,13 +92,13 @@
 						<input matInput type="number" (change)="updateRateRangeObject()" placeholder="Mileage Rate"
 							formControlName="milage_rate" tabindex="1" value="0" (focus)="$event.target.select()">
 					</mat-form-field>
-					<div *ngIf="submittedForm && f.milage_rate.errors || f.milage_rate.touched && f.milage_rate.errors"
+					<div *ngIf="f.milage_rate.errors && (f.milage_rate.touched || f.milage_rate.errors)"
 						class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.milage_rate.errors.required">This field is required</div>
 					</div>
 					<div *ngIf="f.milage_rate.errors" class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.milage_rate.errors.min">Minimum value will be 2</div>
 						<div *ngIf="f.milage_rate.errors.pattern">Enter Numbers only</div>
+						<div *ngIf="f.milage_rate.errors.min">Minimum value should be more than 2</div>
 					</div>
 					<div *ngIf="IsZeroValidator(f.milage_rate.value, 'milage_rate')"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -125,7 +125,7 @@
 						</div>
 						<div *ngIf="f.kilometer_rate.errors" class="text-danger margin-bottom-thin my-mat-hint">
 							<div *ngIf="f.kilometer_rate.errors.pattern">Enter Numbers only</div>
-							<div *ngIf="f.kilometer_rate.errors.min">Minimum value will be 1.71</div>
+							<div *ngIf="f.kilometer_rate.errors.min">Minimum value should be more than 1.71</div>
 						</div>
 						<div *ngIf="IsZeroValidator(f.kilometer_rate.value, 'kilometer_rate')"
 							class="text-danger margin-bottom-thin my-mat-hint">

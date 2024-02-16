@@ -101,10 +101,16 @@
 					<input matInput placeholder="Milage Rate" type="number" formControlName="milage_rate" tabindex="1"
 						value="0" (focus)="$event.target.select()" (change)="updateRateRangeObject()" />
 				</mat-form-field>
-				<div *ngIf="
-						(is_form_submitted && form.milage_rate.errors) ||
-						(form.milage_rate.touched && form.milage_rate.errors)
-					" class="text-danger margin-bottom-thin my-mat-hint">
+				<div *ngIf="form.milage_rate.errors && (form.milage_rate.touched || form.milage_rate.errors)"
+					class="text-danger margin-bottom-thin my-mat-hint">
+					<div *ngIf="form.milage_rate.errors.required">This field is required</div>
+				</div>
+				<div *ngIf="form.milage_rate.errors" class="text-danger margin-bottom-thin my-mat-hint">
+					<div *ngIf="form.milage_rate.errors.pattern">Enter Numbers only</div>
+					<div *ngIf="form.milage_rate.errors.min">Minimum value should be more than 2</div>
+				</div>
+				<!-- <div *ngIf="is_form_submitted && form.milage_rate.errors || form.milage_rate.touched && form.milage_rate.errors"
+					class="text-danger margin-bottom-thin my-mat-hint">
 					<div *ngIf="form.milage_rate.errors.required">
 						This field is required
 					</div>
@@ -114,9 +120,9 @@
 						Enter Numbers only
 					</div>
 					<div *ngIf="form?.milage_rate.errors.min">
-						minimum value will be 2
+						Minimum value should be more than 2
 					</div>
-				</div>
+				</div> -->
 			</div>
 
 			<!-- RATE BUCKET: KILOMETER RATE -->
@@ -130,11 +136,16 @@
 						<input matInput placeholder="Kilometer Rate" type="number" formControlName="kilometer_rate"
 							tabindex="1" (focus)="$event.target.select()" (change)="updateRateRangeObject()" />
 					</mat-form-field>
-					<div *ngIf="
-							(is_form_submitted && form.kilometer_rate.errors) ||
-							(form.kilometer_rate.touched &&
-								form.kilometer_rate.errors)
-						" class="text-danger margin-bottom-thin my-mat-hint">
+					<div *ngIf="form.kilometer_rate.errors && (form.kilometer_rate.touched || form.kilometer_rate.errors)"
+						class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="form.kilometer_rate.errors.required">This field is required</div>
+					</div>
+					<div *ngIf="form.kilometer_rate.errors" class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="form.kilometer_rate.errors.pattern">Enter Numbers only</div>
+						<div *ngIf="form.kilometer_rate.errors.min">Minimum value should be more than 1.71</div>
+					</div>
+					<!-- <div *ngIf="is_form_submitted && form.kilometer_raterrors || form.kilometer_rate.touched && form.kilometer_raterrors"
+						class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="form.kilometer_rate.errors.required">
 							This field is required
 						</div>
@@ -144,9 +155,9 @@
 							Enter Numbers only
 						</div>
 						<div *ngIf="form.kilometer_rate.errors.min">
-							minimum value will be 1.71
+							Minimum value should be more than 1.71
 						</div>
-					</div>
+					</div> -->
 				</div>
 			</ng-template>
 		</div>
