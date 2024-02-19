@@ -367,8 +367,8 @@
 					<mat-form-field appearance="outline" class="example-full-width">
 						<mat-label>Badge City
 						</mat-label>
-						<input type="text" placeholder="Pick one" aria-label="Number" matInput
-							formControlName="badge_city_name" [matAutocomplete]="auto"
+						<input type="text" placeholder="Choose the largest major city you service" aria-label="Number"
+							matInput formControlName="badge_city_name" [matAutocomplete]="auto"
 							(keyup)="handleBadgeCity($event.target.value)" (focus)="$event.target.select()">
 						<mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
 							<mat-option *ngFor="let option of filteredOptions"

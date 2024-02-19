@@ -44,10 +44,14 @@
                 <label class="ml-3" for="deleted_accounts">Show Deleted accounts</label>
             </div>
             <div class="col-md-8 col-sm-12 d-flex justify-content-end" style="gap: 15px;" *ngIf="showActionColumn">
-                <h3 class="headingAccepted">Individual: {{accounts_count?.individual_count}}</h3>
-                <h3 class="headingInProgress">Driver: {{accounts_count?.driver_count}}</h3>
-                <h3 class="headingRejected">Travel Agent: {{accounts_count?.tarvel_agent_count}}</h3>
-                <h3 class="headingStripe">Sub Admin: {{accounts_count?.subadmin_count}}</h3>
+                <h3 class="headingAccepted" routerLink="/admin/individual-account-admin">Individual:
+                    {{accounts_count?.individual_count}}</h3>
+                <h3 class="headingInProgress" routerLink="/admin/affiliates/all-operators">Driver:
+                    {{accounts_count?.driver_count}}</h3>
+                <h3 class="headingRejected" routerLink="/admin/travel-planner-account-admin">Travel Agent:
+                    {{accounts_count?.tarvel_agent_count}}</h3>
+                <h3 class="headingStripe" routerLink="/admin/sub-admins">Sub Admin: {{accounts_count?.subadmin_count}}
+                </h3>
             </div>
         </div>
         <div class="containeredd driverside_table">

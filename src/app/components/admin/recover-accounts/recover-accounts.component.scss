@@ -1,18 +1,23 @@
-.headingAccepted{
-    font-size: 20px;
-    color: #00bd1f;
-      }
-    
-      .headingInProgress{
-        font-size: 20px;
-        color: #0474fc;
-      }
-    
-      .headingRejected{
-        font-size: 20px;
-        color: #fc0404;
-      }
-      .headingStripe{
-        font-size: 20px;
-        color: #ff69b4;
-      }
+.headingAccepted {
+  font-size: 20px;
+  color: #00bd1f;
+  cursor: pointer;
+}
+
+.headingInProgress {
+  font-size: 20px;
+  color: #0474fc;
+  cursor: pointer;
+}
+
+.headingRejected {
+  font-size: 20px;
+  color: #fc0404;
+  cursor: pointer;
+}
+
+.headingStripe {
+  font-size: 20px;
+  color: #ff69b4;
+  cursor: pointer;
+}
