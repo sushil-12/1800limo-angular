@@ -61,6 +61,7 @@ export class AffiliateAccountsComponent implements OnInit {
 	searchText: any = '';
 	affiliate_count: any;
 	loginAsUserResponse: any;
+	allSelected = false;
 
 	constructor(
 		private adminService: AdminService,
@@ -440,6 +441,15 @@ export class AffiliateAccountsComponent implements OnInit {
 		})
 		this.show = false
 		$("#sendEmailModal").modal("hide");
+	}
+
+	selectAll() {
+		if (this.allSelected) {
+			this.emails.patchValue([]);
+		} else {
+			this.emails.patchValue(this.affiliate_accounts_emails.map(option => option.Email));
+		}
+		this.allSelected = !this.allSelected;
 	}
 
 	//submit email modal
