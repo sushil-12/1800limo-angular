@@ -289,7 +289,8 @@ export class AffiliateFinalizeComponent implements OnInit {
 				stripeFee: stripeFee,
 				adminShare: adminShare,
 				deducted_admin_share: deducted_admin_share,  // Admin will get this amount only
-				affiliateShare: (grandTotal - adminShare)
+				affiliateShare: grandTotal - base_rate * 0.25
+
 			}
 			// travelAgentShare : 
 			if (this.BookingDetail?.account_type == 'travel_planner' && !this.isCreatedByAdmin) {

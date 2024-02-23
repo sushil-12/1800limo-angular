@@ -1868,7 +1868,8 @@ export class CreateNewBookingComponent implements OnInit {
 				stripeFee: stripeFee,
 				adminShare: adminShare,
 				deducted_admin_share: deducted_admin_share,  // Admin will get this amount only
-				affiliateShare: (grandTotal - adminShare),
+				affiliateShare: grandTotal - base_rate * 0.25
+
 			}
 			// travelAgentShare : 
 			if (this.BookingForm.value?.account_type == 'travel_planner' && !this.isCreatedByAdmin) {
@@ -1876,7 +1877,6 @@ export class CreateNewBookingComponent implements OnInit {
 				shareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100
 				shareArray['deducted_admin_share'] = shareArray['adminShare'] - shareArray['stripeFee']
 				shareArray['travelAgentShare'] = base_rate * 0.10
-				shareArray['affiliateShare'] = (grandTotal - adminShare - (base_rate * 0.10))
 			}
 			if (this.updateType == 'repeat' || this.updateType == 'return') {
 				this.adminSharePercent = 15
