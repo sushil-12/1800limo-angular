@@ -1621,7 +1621,7 @@
 
 					<!-- Rate Distribution Information -->
 					<div class="distribution_rate"
-						*ngIf="bookingPreview?.affiliate_type === 'affiliate' && bookingPreview?.payment_status=='unpaid' && bookingPreview?.share_array?.length == 0">
+						*ngIf="bookingPreview?.payment_status=='unpaid' && bookingPreview?.share_array?.length == 0">
 						<h4 class="font-weight-bolder m-0 my-3">
 							Rates Distribution {{bookingPreview.loose_affiliate}}
 						</h4>
@@ -1737,7 +1737,7 @@
 						</div>
 					</div>
 					<div class="distribution_rate"
-						*ngIf="bookingPreview?.affiliate_type === 'affiliate' && bookingPreview?.payment_status=='unpaid' && bookingPreview?.share_array?.length != 0">
+						*ngIf="bookingPreview?.payment_status=='unpaid' && bookingPreview?.share_array?.length != 0">
 						<h4 class="font-weight-bolder m-0 my-3">
 							Rates Distribution
 						</h4>

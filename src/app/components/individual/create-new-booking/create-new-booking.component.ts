@@ -1876,6 +1876,7 @@ export class CreateNewBookingComponent implements OnInit {
 				shareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100
 				shareArray['deducted_admin_share'] = shareArray['adminShare'] - shareArray['stripeFee']
 				shareArray['travelAgentShare'] = base_rate * 0.10
+				shareArray['affiliateShare'] = (grandTotal - adminShare - (base_rate * 0.10))
 			}
 			if (this.updateType == 'repeat' || this.updateType == 'return') {
 				this.adminSharePercent = 15

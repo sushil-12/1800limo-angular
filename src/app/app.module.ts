@@ -66,7 +66,7 @@ import { HtmlToTextPipe } from './pipes/html-to-text.pipe';
 import { LocateMapComponent } from './components/locate-map/locate-map.component';
 import { BookingStatusVerificationComponent } from './components/email-pages/booking-status-verification/booking-status-verification.component';
 import { TransactionHistoryComponent } from './components/website/transaction-history/transaction-history.component';
-import { NgOtpInputModule } from  'ng-otp-input';
+import { NgOtpInputModule } from 'ng-otp-input';
 import { AutoDetectOtpDirective } from './auto-detect-otp.directive';
 import { LongPressDirective } from './directives/long-press.directive';
 import { AutoFocusDirective } from './directives/auto-focus.directive';
@@ -122,7 +122,7 @@ import { ModifyBookingComponent } from './components/email-pages/modify-booking/
 		ReactiveFormsModule,
 		MatSidenavModule,
 		AgmCoreModule.forRoot({
-			apiKey: 'AIzaSyCxj_Txh7lMTSVjCaeFZ76krKaWH_-XpPQ',
+			apiKey: 'AIzaSyDjV38fI9kDAaVJKqEq2sdgLAHXQPC3Up4',
 			libraries: ['places', 'geometry']
 		}),
 		AgmDirectionModule,
