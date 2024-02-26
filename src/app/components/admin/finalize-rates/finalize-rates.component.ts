@@ -190,6 +190,15 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 		}
 	}
 
+	handleHourChange(event: any) {
+		console.log('------->>>>>>>', event.target.value)
+		if (event.target.value == '') {
+			let n_hr: any = 1
+			this.returnNumberOfHr.emit(n_hr)
+		}
+		this.returnNumberOfHr.emit(event.target.value)
+	}
+
 	scroll(id) {
 		let el = document.getElementById(id);
 		let elementRect = el.getBoundingClientRect();
