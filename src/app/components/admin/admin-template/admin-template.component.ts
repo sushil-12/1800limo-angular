@@ -85,8 +85,8 @@ export class AdminTemplateComponent implements OnInit {
 	}
 
 	handleDivClick(event: MouseEvent | TouchEvent) {
-		console.log('Clicked/touched parent div' ,event,this.showSidebar);
-		if(!this.showSidebar){
+		console.log('Clicked/touched parent div', event, this.showSidebar);
+		if (!this.showSidebar) {
 			$("body").toggleClass("sidenav-toggled");
 			this.showSidebar = true
 		}
@@ -178,6 +178,7 @@ export class AdminTemplateComponent implements OnInit {
 			});
 	}
 	showSidebarFunc(status) {
+
 		$("body").toggleClass("sidenav-toggled");
 		if (status) {
 			this.showSidebar = true;
@@ -188,10 +189,11 @@ export class AdminTemplateComponent implements OnInit {
 	}
 
 	closeSidebarFunc(status) {
+
 		if (this.screenWidth <= '991') {
-			console.log('in function close side bar function' , this.showSidebar)
-				this.showSidebar = true;
-				$("body").removeClass("sidenav-toggled");
+			console.log('in function close side bar function', this.showSidebar)
+			this.showSidebar = true;
+			$("body").removeClass("sidenav-toggled");
 		}
 	}
 	invoiceFunc(status) {

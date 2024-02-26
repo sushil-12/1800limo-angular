@@ -367,7 +367,7 @@
 <section class="section-container mt-2">
 	<app-affiliate-finalize-rates *ngIf="init_rates" class="d-flex flex-wrap finalize-rates" [initRates]="init_rates"
 		(formvalue)="RateFormValue($event)" [distance]="finalize_params.distance" [isTravelShare]="isTravelShare"
-		[reservation_id]="finalize_params.booking_id" [reset]="false" [hours]="hours"
+		[reservation_id]="finalize_params.booking_id" [reset]="false" [hours]="finalize_params.number_of_hours"
 		[vehicles]="finalize_params.number_of_vehicles" (returnNumberOfHr)="HandleReturnNumberOfHr($event)"
 		[isCreatedByAdmin]="isCreatedByAdmin" [isFarmoutBooking]="isFarmoutBooking" [service_type]="service_type">
 	</app-affiliate-finalize-rates>
@@ -632,7 +632,7 @@
 		</h4>
 		<div class="d-flex align-items-center mr-4">
 			<button type="button" class="custom-filled-button m-3 mr-4"
-				[ngClass]="isFinalizeButton ? 'color-green' : 'color-grey' " (click)="makePayment('cash')">
+				[ngClass]="isFinalizeButton ? 'color-blue' : 'color-grey' " (click)="makePayment('cash')">
 				Pay with cash
 			</button>
 			<button type="button" class="custom-filled-button m-3 mr-4"

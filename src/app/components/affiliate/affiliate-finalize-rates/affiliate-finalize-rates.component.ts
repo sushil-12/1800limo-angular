@@ -363,6 +363,14 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 	getRatesData() {
 		return this.ratesdata.asObservable();
 	}
+	handleHourChange(event: any) {
+		console.log('------->>>>>>>', event.target.value)
+		if (event.target.value == '') {
+			let n_hr: any = 1
+			this.returnNumberOfHr.emit(n_hr)
+		}
+		this.returnNumberOfHr.emit(event.target.value)
+	}
 
 	buildRatesForm(form: string, data: Record<string, any>): FormGroup {
 		// Base Value for foundation of the whole algorithm
