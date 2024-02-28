@@ -123,8 +123,18 @@
                             <div *ngIf="f.email.errors.pattern">Email format should be valid</div>
                         </div>
                     </div>
+                    <div class="col-md-12 mt-3">
+                        <h3 class="addveh_top d-md-flex justify-content-between align-items-center mb-0">
+                            <label class="alert alert-danger" style="color: red !important;">Choose exact address from
+                                the
+                                drop-down.</label>
+                            <!-- <label class="alert alert-danger my-2 mx-2">Choose nearest major city or airport
+                                    location</label> -->
+
+                        </h3>
+                    </div>
                     <div class="col-md-12">
-                        <mat-form-field appearance="outline">
+                        <mat-form-field appearance="outline" [ngClass]="{ 'border-red': (f.address.value == '')}">
                             <mat-label>Address <span class="asterisk">*</span></mat-label>
                             <input formControlName="address" type="text" matInput placeholder="Address" #search1
                                 (focus)="$event.target.select()">
