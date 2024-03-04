@@ -54,7 +54,7 @@ export class MyBookingsComponent implements OnInit {
 	audit_Trail: any;
 	company_name: any = JSON.parse(localStorage.getItem('currentUser'))?.affiliate_company || ''
 	cancelBookingId: any = null
-	useDateFilter: boolean = true;
+	useDateFilter: boolean = false;
 	adminSharePercent: number;
 	shareArray: any;
 	rates_preview: any;
@@ -87,7 +87,7 @@ export class MyBookingsComponent implements OnInit {
 
 		this.useDateFilter = localStorage.getItem('farmInuseDateFilter') ?
 			(localStorage.getItem('farmInuseDateFilter') == 'true' ? true : false)
-			: true;
+			: false;
 		console.log('farmInuseDateFilter-->', this.useDateFilter)
 
 		//save currency symbol
@@ -218,7 +218,7 @@ export class MyBookingsComponent implements OnInit {
 		// this.affiliateService.deleteCookie('filtertype')
 		this.searchText = "";
 		localStorage.removeItem('farmInuseDateFilter')
-		this.useDateFilter = true
+		this.useDateFilter = false
 		// this.filtertype = 'bookingid';
 
 		console.log('Reset Successfully. ');
