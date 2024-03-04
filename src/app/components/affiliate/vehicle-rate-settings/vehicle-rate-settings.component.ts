@@ -114,14 +114,14 @@ export class VehicleRateSettingsComponent implements OnInit {
 			this.SetFormValue(form_control, value)
 			if (value == "kilometer") {
 				console.log('set validator for km')
-				this.VehicleRateSettingsForm.get('kilometer_rate')?.setValidators([Validators.required, Validators.pattern("^[0-9]*(\.[0-9]+)?$"), Validators.min(1.72), Validators.max(12)]); // Set back the validator
+				this.VehicleRateSettingsForm.get('kilometer_rate')?.setValidators([Validators.required, Validators.pattern("^[0-9]*(\.[0-9]+)?$"), Validators.min(1.72), Validators.max(15)]); // Set back the validator
 				this.VehicleRateSettingsForm.get('milage_rate')?.clearValidators(); // Clear the validator
 				this.VehicleRateSettingsForm.get('kilometer_rate')?.updateValueAndValidity();
 				this.VehicleRateSettingsForm.get('milage_rate')?.updateValueAndValidity();
 			}
 			else if (value == "mile") {
 				console.log('set validator for mile')
-				this.VehicleRateSettingsForm.get('milage_rate')?.setValidators([Validators.required, Validators.pattern("^[0-9]*(\.[0-9]+)?$"), Validators.min(2.1), Validators.max(12)]); // Set back the validator
+				this.VehicleRateSettingsForm.get('milage_rate')?.setValidators([Validators.required, Validators.pattern("^[0-9]*(\.[0-9]+)?$"), Validators.min(2.1), Validators.max(15)]); // Set back the validator
 				this.VehicleRateSettingsForm.get('kilometer_rate')?.clearValidators();
 				this.VehicleRateSettingsForm.get('milage_rate')?.updateValueAndValidity()
 				this.VehicleRateSettingsForm.get('kilometer_rate')?.updateValueAndValidity();

@@ -63,8 +63,8 @@
 				</div>
 			</div>
 			<div>
-				<p><mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">Uncheck this
-						box to view all bookings</mat-checkbox></p>
+				<p><mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">Check this
+						box to see current week’s bookings or change the dates.</mat-checkbox></p>
 			</div>
 		</div>
 		<div class="containeredd driverside_table">
@@ -172,7 +172,7 @@
 									<td class="text-center font-weight-bolder cursor-pointer">
 										<p class="booking-id-font font-weight-bolder cursor-pointer">
 											<span class="currency">{{currencySymbol}}</span><span
-												[innerHTML]="highlighText(booking.grand_total)"></span>
+												[innerHTML]="highlighText(booking?.share_array?.affiliateShare.toFixed(2))"></span>
 										</p>
 									</td>
 									<td>
