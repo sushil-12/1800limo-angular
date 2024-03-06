@@ -172,7 +172,7 @@
 									<td class="text-center font-weight-bolder cursor-pointer">
 										<p class="booking-id-font font-weight-bolder cursor-pointer">
 											<span class="currency">{{currencySymbol}}</span><span
-												[innerHTML]="highlighText(booking?.share_array?.affiliateShare.toFixed(2))"></span>
+												[innerHTML]="highlighText(booking?.share_array?.length > 0 ? booking?.share_array?.affiliateShare.toFixed(2) : booking?.grand_total)"></span>
 										</p>
 									</td>
 									<td>

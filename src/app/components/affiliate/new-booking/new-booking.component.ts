@@ -158,7 +158,7 @@ export class NewBookingComponent implements OnInit {
 			//save currency symbol
 			// this.currencySymbol = this.stateManagementService.getCurrencySymbol();
 			this.currencyObj = JSON.parse(sessionStorage.getItem('currencyData'))
-			this.currencySymbol = this.currencyObj?.symbol
+			this.currencySymbol = this.currencyObj ? this.currencyObj?.symbol : JSON.parse(localStorage.getItem("currencySymbol"))
 
 			this.Subscriptions()
 			this.fetchClientAccounts('individual')
