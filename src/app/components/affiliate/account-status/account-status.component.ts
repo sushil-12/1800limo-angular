@@ -36,13 +36,14 @@ export class AccountStatusComponent implements OnInit {
     this.reasons = ""
 
     this.affiliateService.checkAffiliateAccountStatus().subscribe(({ data, message }: any) => {
-      console.log("status",data?.status,message)
+      console.log("status", data?.status, message)
       this.account_approval_status = data?.status;
       // this.reasons = data.comment.replace('/\n+/g', 'br/>')
-    
+
       if (this.account_approval_status == 'accepted') {
         localStorage.setItem('account_approval', 'accepted')
         this.$router.navigate(['/affiliate/my-bookings'])
+        window.location.reload()
       } else if (this.account_approval_status == 'completed') {
         this.status_message = ""
         this.status_title = "In Review ..."
@@ -54,13 +55,13 @@ export class AccountStatusComponent implements OnInit {
         this.status_title = "Rejected ..."
         this.status_color = "text-danger"
         this.reasons = message
-      } else if(this.account_approval_status == 'stripe_error'){
+      } else if (this.account_approval_status == 'stripe_error') {
         this.status_message = ""
         this.status_title = "Stripe-Error ..."
         this.status_color = "text-danger"
         this.reasons = 'Please check Step 2 to fix the stripe errors!'
         localStorage.setItem('account_approval', 'stripe_error')
-      }else {
+      } else {
         // do in case of IN-PROGRESS || REJECTED
 
         [this.status_color, this.status_title, this.status_message] = (function (status: string) {
@@ -69,6 +70,7 @@ export class AccountStatusComponent implements OnInit {
             ['text-danger', 'Rejected', 'Your application has been rejected by the Admin due to the following reasons: ']
         })(data.status)
       }
+
     });
   }
 }
