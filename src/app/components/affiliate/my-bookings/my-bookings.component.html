@@ -1451,7 +1451,8 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										{{currencySymbol}}{{rates_preview?.baseRate.toFixed(2)}}
+										{{currencySymbol}}{{rates_preview?.baseRate ? rates_preview?.baseRate.toFixed(2)
+										: rates_preview?.ride_base_rate.toFixed(2)}}
 									</span>
 									(Fare Base Rate)
 								</div>
@@ -1466,7 +1467,8 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										{{currencySymbol}}{{rates_preview?.adminShare.toFixed(2) }}
+										{{currencySymbol}}{{rates_preview?.adminShare ?
+										rates_preview?.adminShare.toFixed(2) : rates_preview?.admin_share.toFixed(2) }}
 									</span>
 									({{adminSharePercent}}% of Base Rate)
 								</div>
@@ -1482,7 +1484,8 @@
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
 										{{currencySymbol}}{{rates_preview?.grandTotal ?
-										rates_preview?.grandTotal.toFixed(2) :
+										rates_preview?.grandTotal.toFixed(2) : rates_preview?.total_price ?
+										rates_preview?.total_price.toFixed(2) :
 										rates_preview?.returnGrandTotal.toFixed(2)}}
 									</span>
 									(Actual Cost to Customer)
@@ -1498,7 +1501,8 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										{{currencySymbol}}{{rates_preview?.stripeFee.toFixed(2)}}
+										{{currencySymbol}}{{rates_preview?.stripeFee ?
+										rates_preview?.stripeFee.toFixed(2) : rates_preview?.stripe_fees.toFixed(2)}}
 									</span>
 									(Platform fee 5% + 30 cents - <b>Paid from Admin share</b>)
 								</div>
@@ -1514,7 +1518,9 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										{{currencySymbol}}{{rates_preview?.affiliateShare.toFixed(2)}}
+										{{currencySymbol}}{{rates_preview?.affiliateShare ?
+										rates_preview?.affiliateShare.toFixed(2) :
+										rates_preview?.affiliate_share.toFixed(2)}}
 									</span>
 									( Total Price - (Ride Base Rate + Other Taxes) )
 								</div>
