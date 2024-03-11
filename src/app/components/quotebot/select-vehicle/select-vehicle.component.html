@@ -383,7 +383,7 @@
 							</p>
 
 							<!-- VEHICLE: PRICE -->
-							<p class="price">
+							<p class="price" *ngIf="vehinfo?.number_of_vehicles <= 1">
 								{{ formatter(getKeyName()) | titlecase }}:
 								<span>
 									{{currencySymbol}}
@@ -394,6 +394,14 @@
 							<span class="text-secondary text-rate">
 								All Inclusive Rate<sup class="sup-red">*</sup>
 							</span>
+							<p class="price" *ngIf="vehinfo?.number_of_vehicles > 1">
+								Estimated One-Way: <span
+									class="font-weight-bold">{{currencySymbol}}{{vehinfo?.estimated_price_one_way}}</span>
+							</p>
+							<p class="price" *ngIf="vehinfo?.number_of_vehicles > 1">
+								Estimated Round-Trip: <span
+									class="font-weight-bold">{{currencySymbol}}{{vehinfo?.estimated_price_round_trip}}</span>
+							</p>
 							<p class="price">
 								Number of Vehicles: <span
 									class="font-weight-bold">{{vehinfo?.number_of_vehicles}}</span>
