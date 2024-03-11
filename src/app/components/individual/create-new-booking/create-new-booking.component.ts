@@ -1859,6 +1859,14 @@ export class CreateNewBookingComponent implements OnInit {
 				base_rate += this.rateArray.amenities[key].baserate;
 			}
 			let grandTotal = this.grandtotal
+			if (this.BookingForm?.get('number_of_vehicles').value > 1) {
+				grandTotal = grandTotal * this.Form.number_of_vehicles.value
+				console.log("changes in number of vehciles if ", grandTotal)
+			}
+			else {
+				grandTotal = this.grandtotal
+				console.log("changes in number of vehciles else ", grandTotal)
+			}
 			let stripeFee = grandTotal * 0.05 + 0.30
 			let adminShare = (base_rate * this.adminSharePercent) / 100
 			let deducted_admin_share = adminShare - stripeFee
@@ -1904,6 +1912,14 @@ export class CreateNewBookingComponent implements OnInit {
 				base_rate += this.returnRateArray.amenities[key].baserate;
 			}
 			let returnGrandTotal = this.r_grandtotal
+			if (this.BookingForm?.get('number_of_vehicles').value > 1) {
+				returnGrandTotal = returnGrandTotal * this.Form.number_of_vehicles.value
+				console.log("changes in number of vehciles if ", returnGrandTotal)
+			}
+			else {
+				returnGrandTotal = this.r_grandtotal
+				console.log("changes in number of vehciles else ", returnGrandTotal)
+			}
 			let stripeFee = returnGrandTotal * 0.05 + 0.30
 			let adminShare = (base_rate * this.adminSharePercent) / 100
 			let returnShareArray = {
@@ -2137,6 +2153,8 @@ export class CreateNewBookingComponent implements OnInit {
 				this.SetFormValue('number_of_hours', QB?.booking_hour)
 				this.number_of_hours = QB?.booking_hour
 			}
+			//set no of vehicles
+			this.SetFormValue('number_of_vehicles', selected_vehicle?.number_of_vehicles)
 			let transfer_type_value = QB?.pickup_type + '_to_' + QB?.dropoff_type
 			let return_transfer_type_value = QB?.dropoff_type + '_to_' + QB?.pickup_type
 			this.transfer_type = transfer_type_value

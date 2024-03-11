@@ -88,7 +88,7 @@ export class AffiliateAccountsComponent implements OnInit {
 			reject_cause: ['', Validators.required],
 		});
 
-		this.adminService.getEmailList()
+		this.adminService.getEmailList(this.searchText)
 			.pipe(
 				catchError(err => {
 					return throwError(err);
