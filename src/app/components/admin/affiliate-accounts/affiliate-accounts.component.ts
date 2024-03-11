@@ -88,6 +88,12 @@ export class AffiliateAccountsComponent implements OnInit {
 			reject_cause: ['', Validators.required],
 		});
 
+		this.getEmailList()
+
+
+	}
+
+	getEmailList() {
 		this.adminService.getEmailList(this.searchText)
 			.pipe(
 				catchError(err => {
@@ -97,11 +103,7 @@ export class AffiliateAccountsComponent implements OnInit {
 			.subscribe(({ data, success, message }: any) => {
 				this.affiliate_accounts_emails = data
 			});
-
-
-
 	}
-
 
 	affiliateTypeSwitch(_affiliateType: string) {
 		switch (_affiliateType) {
@@ -162,6 +164,7 @@ export class AffiliateAccountsComponent implements OnInit {
 		this.timer = setTimeout(() => {
 			localStorage.setItem('affiliateSearch', text)
 			this.loadAffiliateOperators()
+			this.getEmailList()
 		}, 700)
 	}
 	handleKeypressEvents() {
