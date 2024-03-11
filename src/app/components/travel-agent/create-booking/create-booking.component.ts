@@ -117,7 +117,7 @@ export class CreateBookingComponent implements OnInit {
 	subtotal: any = 0
 	agentShare: any = 0;
 	grandtotal: any = 0
-	vehicles: Number = 1
+	vehicles: number = 1;
 	driverImgUrl: any = '../../../../assets/images/driverImg.jpg';
 	vehicleImgUrl: any = '';
 	driver_info: any = {};
@@ -2161,6 +2161,7 @@ export class CreateBookingComponent implements OnInit {
 		this.BookingForm.get('number_of_hours').setValue(data)
 	}
 
+
 	createReservationShareArray() {
 		console.log('in function createReservationShareArray')
 		if (this.rateArray) {
@@ -2180,6 +2181,14 @@ export class CreateBookingComponent implements OnInit {
 			}
 			console.log("grand total", this.grandtotal)
 			let grandTotal = this.grandtotal
+			if (this.BookingForm?.get('number_of_vehicles').value > 1) {
+				grandTotal = grandTotal * this.Form.number_of_vehicles.value
+				console.log("changes in number of vehciles if ", grandTotal)
+			}
+			else {
+				grandTotal = this.grandtotal
+				console.log("changes in number of vehciles else ", grandTotal)
+			}
 			let stripeFee = grandTotal * 0.05 + 0.30
 			let adminShare = (base_rate * this.adminSharePercent) / 100
 			let deducted_admin_share = adminShare - stripeFee
@@ -2212,6 +2221,8 @@ export class CreateBookingComponent implements OnInit {
 			// value['rateArray'] = JSON.parse(JSON.stringify(this.rateArray))
 		}
 	}
+
+
 	createReservationReturnShareArray() {
 		console.log('createReservationReturnShareArray', this.r_grandtotal)
 		if (this.Form.service_type.value == 'round_trip' && this.returnRateArray) {
@@ -2224,6 +2235,14 @@ export class CreateBookingComponent implements OnInit {
 				base_rate += this.returnRateArray.amenities[key].baserate;
 			}
 			let returnGrandTotal = this.r_grandtotal
+			if (this.BookingForm?.get('number_of_vehicles').value > 1) {
+				returnGrandTotal = returnGrandTotal * this.Form.number_of_vehicles.value
+				console.log("changes in number of vehciles if ", returnGrandTotal)
+			}
+			else {
+				returnGrandTotal = this.r_grandtotal
+				console.log("changes in number of vehciles else ", returnGrandTotal)
+			}
 			let stripeFee = returnGrandTotal * 0.05 + 0.30
 			let adminShare = (base_rate * this.adminSharePercent) / 100
 			let returnShareArray = {
@@ -2488,6 +2507,9 @@ export class CreateBookingComponent implements OnInit {
 				this.SetFormValue('number_of_hours', QB?.booking_hour)
 				this.number_of_hours = QB?.booking_hour
 			}
+			//set no of vehicles
+			this.SetFormValue('number_of_vehicles', selected_vehicle?.number_of_vehicles)
+			// this.vehicles = selected_vehicle?.number_of_vehicles
 			let transfer_type_value = QB?.pickup_type + '_to_' + QB?.dropoff_type
 			let return_transfer_type_value = QB?.dropoff_type + '_to_' + QB?.pickup_type
 			this.transfer_type = transfer_type_value
