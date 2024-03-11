@@ -2345,6 +2345,8 @@ export class CreateNewBookingComponent implements OnInit {
 			this.SetFormValue('number_of_hours', QB?.booking_hour)
 			this.number_of_hours = QB?.booking_hour
 		}
+		this.SetFormValue('number_of_vehicles', selected_vehicle?.number_of_vehicles)
+		console.log("selected_vehicle", this.BookingForm.get('number_of_vehicles').value)
 		let transfer_type_value = QB?.pickup_type + '_to_' + QB?.dropoff_type
 		let return_transfer_type_value = QB?.dropoff_type + '_to_' + QB?.pickup_type
 		this.service_type = QB?.service_type
