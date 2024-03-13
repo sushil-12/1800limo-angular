@@ -184,7 +184,7 @@ export class DuplicateVehicleComponent implements OnInit, AfterViewChecked {
 			year: ['', Validators.required],
 			color: ['', Validators.required],
 			numberOfVehicles: [],
-			licensePlate: ['', Validators.required],
+			licensePlate: [''],
 			seats: ['', [Validators.required, Validators.pattern("^[0-9]*$")]],
 			luggage: ['', [Validators.required, Validators.pattern("^[0-9]*$")]],
 			charterCancelPolicy: ['2', Validators.required],
