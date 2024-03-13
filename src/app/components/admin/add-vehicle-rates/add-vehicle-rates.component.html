@@ -596,7 +596,7 @@
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label class="amenityLabel">{{amenity.value.value.name}}</mat-label>
 						<span matPrefix>{{currencySymbol}} &nbsp;</span>
-						<input matInput placeholder="{{amenity.value.value.name}}" formControlName="price"
+						<input matInput placeholder={{amenity.value.value.name}} formControlName="price"
 							[id]="amenity.value.value.label"
 							(input)="changeAmenityRate(amenity.key,amenity.value.value)" tabindex="1"
 							(focus)="$event.target.select()">
@@ -604,6 +604,22 @@
 				</div>
 			</div>
 		</div>
+
+		<!-- <div class="container">
+			<div class="row" [formGroup]="amenites_rates" *ngIf="amenites_rates">
+				<div class="col-md-6" *ngFor="let  amenity of amenites_rates.controls | keyvalue"
+					[formGroupName]="amenity.key">
+					<mat-form-field class="mat-form-field-rates" appearance="outline">
+						<mat-label class="amenityLabel">{{amenity.value.value.name}}</mat-label>
+						<span matPrefix>{{currencySymbol}} &nbsp;</span>
+						<input matInput placeholder="{{amenity.value.value.name}}" formControlName="price"
+							[id]="amenity.value.value.label"
+							(input)="changeAmenityRate(amenity.key,amenity.value.value)" tabindex="1"
+							(focus)="$event.target.select()">
+					</mat-form-field>
+				</div>
+			</div>
+		</div> -->
 	</section>
 	<!-- Main page content-->
 	<section class="user_information taxesStyle">

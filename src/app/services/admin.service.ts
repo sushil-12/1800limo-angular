@@ -269,8 +269,13 @@ export class AdminService {
 	}
 	//
 	//vehicle rates 
-	getVehicleInfo(vehicleId) {
-		return this.httpClient.get(this.serverUrl + 'admin/get-affililate-vehicle-info/' + vehicleId);
+	getVehicleInfo(vehicleId, relative_vehicle_id: any = null) {
+		if (relative_vehicle_id) {
+			return this.httpClient.get(this.serverUrl + `admin/get-affililate-vehicle-info/${vehicleId}?relative_vehicle_id=${relative_vehicle_id}`);
+		}
+		else {
+			return this.httpClient.get(this.serverUrl + 'admin/get-affililate-vehicle-info/' + vehicleId);
+		}
 	}
 	addVehicleRates(data) {
 		return this.httpClient.post(this.serverUrl + 'admin/add-affiliate-vehicle-fare', data);
