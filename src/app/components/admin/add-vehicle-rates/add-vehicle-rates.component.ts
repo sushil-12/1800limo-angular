@@ -39,6 +39,7 @@ export class AddVehicleRatesComponent implements OnInit {
 	public response: any;
 	rate_range_object: any = {}
 	thumb_value: number = 0;
+	relativeVehicleId: any;
 
 
 	constructor(
@@ -57,6 +58,9 @@ export class AddVehicleRatesComponent implements OnInit {
 		this.activatedroute.queryParamMap
 			.subscribe((params) => {
 				this.paramResponse = { ...params.keys, ...params };
+				if (this.paramResponse.params?.relativeVehicleId) {
+					this.relativeVehicleId = this.paramResponse.params?.relativeVehicleId
+				}
 				this.vehicle_id = this.paramResponse.params.vehicleId;
 			}
 			);
@@ -152,33 +156,170 @@ export class AddVehicleRatesComponent implements OnInit {
 			}
 		);
 
-		//get selected amenities to show fields
-		this.adminService.getVehicleInfo(this.vehicle_id)
+		if (this.relativeVehicleId) {
+			this.getVehicleRates()
+			this.adminService.getVehicleInfo(this.vehicle_id, this.relativeVehicleId)
+				.pipe(
+					catchError(err => {
+						// this.stateManagementService.setprogressBar(false);
+						return throwError(err);
+					})
+				).subscribe(({ data }: any) => {
+					if (data.amenities) {
+						Object.entries(data.amenities).forEach(
+							([key, value]) => {
+								console.log(key, value)
+								this.amenites_rates.addControl(key, this.createItem(value))
+							}
+						);
+					}
+					console.log(this.amenites_rates.controls, "?????????????????????????????")
+					this.vehicleType = data.vehicleType;
+					this.vehicleColor = data.vehicleColor;
+					this.vehicleMake = data.vehicleMake;
+					this.vehicleModel = data.vehicleModel;
+					this.vehicleYear = data.vehicleYear;
+					this.vehicle_image = data.vehicle_image;
+					// this.stateManagementService.setprogressBar(false);
+				});
+		}
+		else {
+			this.adminService.getVehicleInfo(this.vehicle_id)
+				.pipe(
+					catchError(err => {
+						// this.stateManagementService.setprogressBar(false);
+						return throwError(err);
+					})
+				).subscribe(({ data }: any) => {
+					if (data.amenities) {
+						Object.entries(data.amenities).forEach(
+							([key, value]) => {
+								console.log(key, value)
+								this.amenites_rates.addControl(key, this.createItem(value))
+							}
+						);
+					}
+					console.log(this.amenites_rates.controls, "?????????????????????????????")
+					this.vehicleType = data.vehicleType;
+					this.vehicleColor = data.vehicleColor;
+					this.vehicleMake = data.vehicleMake;
+					this.vehicleModel = data.vehicleModel;
+					this.vehicleYear = data.vehicleYear;
+					this.vehicle_image = data.vehicle_image;
+					// this.stateManagementService.setprogressBar(false);
+				});
+		}
+
+
+
+		this.km_mile_switch('mile');
+		this.initRateRangeObject();
+		this.updateRateRangeObject()
+	}
+
+	getVehicleRates() {
+		const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+		//get vehicle rates
+		this.adminService.getVehicleRates(this.relativeVehicleId)
 			.pipe(
 				catchError(err => {
 					// this.stateManagementService.setprogressBar(false);
 					return throwError(err);
 				})
-			).subscribe(({ data }: any) => {
-				if (data.amenities) {
-					Object.entries(data.amenities).forEach(
-						([key, value]) => {
-							this.amenites_rates.addControl(key, this.createItem(value))
+			).subscribe(result => {
+				this.response = result;
+				if (this.response.data == null) {
+					//load list of currencies
+					this.httpClient.get("assets/json/currencyOptions.json").subscribe(data => {
+						this.currencyOptions = data;
+						for (const key of Object.keys(this.currencyOptions)) {
+							if (key.toLowerCase() == currentUser.CellNumberCountry.toLowerCase()) {
+								this.addVehicleRatesForm.patchValue({
+									currency: key
+								});
+								this.changeCurrency(this.currencyOptions[key].symbol);
+							}
 						}
-					);
+					})
+					// this.stateManagementService.setprogressBar(false);
+					return false;
 				}
-				this.vehicleType = data.vehicleType;
-				this.vehicleColor = data.vehicleColor;
-				this.vehicleMake = data.vehicleMake;
-				this.vehicleModel = data.vehicleModel;
-				this.vehicleYear = data.vehicleYear;
-				this.vehicle_image = data.vehicle_image;
+
+				//load list of currencies and show selected currency
+				this.httpClient.get("assets/json/currencyOptions.json").subscribe(data => {
+					this.currencyOptions = data;
+					//show selected currency symbol on all fields 
+					for (const key of Object.keys(this.currencyOptions)) {
+						if (key == this.response.data.currency) {
+							this.changeCurrency(this.currencyOptions[key].symbol);
+						}
+					}
+					//patch currency value to show currency selected
+					this.addVehicleRatesForm.patchValue({
+						currency: this.response.data.currency
+					});
+				})
+				// set Gratutity
+				this.is_gratuity = this.response.data.is_gratuity;
+
+				this.addVehicleRatesForm.patchValue({
+					id: this.response.data.id,
+					vehicle_id: this.response.data.vehicle_id,
+					hourly_rate: this.response.data.hourly_rate,
+					hourly_rate_after_five_hours: this.response.data.hourly_rate_after_five_hours,
+					hours_day_rate: this.response.data.hours_day_rate,
+					day_rate: this.response.data.day_rate,
+					milage_rate: this.response.data.milage_rate,
+					km_mile: this.response.data.km_mile,
+					kilometer_rate: this.response.data.kilometer_rate,
+					minimum_airport_departure_rate: this.response.data.minimum_airport_departure_rate,
+					minimum_airport_arrival_rate: this.response.data.minimum_airport_arrival_rate,
+					minimum_city_rate: this.response.data.minimum_city_rate,
+					minimum_cruise_port_arrival_rate: this.response.data.minimum_cruise_port_arrival_rate,
+					minimum_cruise_port_departure_rate: this.response?.data?.minimum_cruise_port_departure_rate,
+					minimum_on_demand_rate: this.response.data.minimum_on_demand_rate,
+					per_person_group_ride_rate: this.response.data.per_person_group_ride_rate,
+					airport_city_percentage_booking_cancel_charges: this.response.data.airport_city_percentage_booking_cancel_charges,
+					charter_percentage_booking_cancel_charges: this.response.data.charter_percentage_booking_cancel_charges,
+					gratuity: this.response.data.gratuity,
+					is_gratuity: this.response.data.is_gratuity,
+					rate_range_percent_flat: this.response.data.rate_range_percent_flat,
+					rate_range: this.response.data.rate_range,
+					airport_arrival_tax_per_us: this.response.data.airport_arrival_tax_per_us,
+					airport_departure_tax_per_us: this.response.data.airport_departure_tax_per_us,
+					sea_port_tax_per_us: this.response.data.sea_port_tax_per_us,
+					city_congestion_tax_per_us: this.response.data.city_congestion_tax_per_us,
+					city_tax: this.response.data.city_tax,
+					city_tax_percent_flat: this.response.data.city_tax_percent_flat,
+					state_tax: this.response.data.state_tax,
+					state_tax_percent_flat: this.response.data.state_tax_percent_flat,
+					vat: this.response.data.vat,
+					vat_percent_flat: this.response.data.vat_percent_flat,
+					workmans_comp: this.response.data.workmans_comp,
+					workman_comp_percent_flat: this.response.data.workman_comp_percent_flat,
+					other_transportation_tax: this.response.data.other_transportation_tax,
+					other_transportation_tax_percent_flat: this.response.data.other_transportation_tax_percent_flat,
+					body_guard_security: this.response.data.body_guard_security,
+					tour_guide: this.response.data.tour_guide,
+					baggage_meet: this.response.data.baggage_meet,
+					lei_greeting_hi: this.response.data.lei_greeting_hi,
+					baby_seat: this.response.data.baby_seat,
+					booster_seat: this.response.data.booster_seat,
+					bike_rack: this.response.data.bike_rack,
+					per_diem: this.response.data.per_diem,
+					early_late_charges: this.response.data.early_late_charges,
+					friday_saturday_charges: this.response.data.friday_saturday_charges,
+					holiday_charges: this.response.data.holiday_charges,
+					in_town_extra_stop: this.response.data?.in_town_extra_stop,
+					outside_town_extra_stop: this.response.data?.outside_town_extra_stop
+				});
+				this.km_mile_switch(this.response.data.km_mile);//show selected input field 
 				// this.stateManagementService.setprogressBar(false);
+				this.updateRateRangeObject()
 			});
-		this.km_mile_switch('mile');
-		this.initRateRangeObject();
-		this.updateRateRangeObject()
 	}
+
+
 	changeGraruity(e) {
 		if (e.checked) {
 			this.addVehicleRatesForm.patchValue({
