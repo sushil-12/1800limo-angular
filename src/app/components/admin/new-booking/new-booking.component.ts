@@ -1917,22 +1917,33 @@ export class NewBookingComponent implements OnInit {
 		}
 
 		if (preview) {
-			this.$spinner.show()
-			this.$api.createBooking(value, this.Form.updateType.value).subscribe((response: any) => {
-				// this.$errors.openDialog({
-				// 	errors: {
-				// 		error: `<span class='text-success'>${response.message}</span>`
-				// 	}
-				// })
-				if (response.data?.is_confirm == false) {
-					this.confirmMsg = response?.message
-					this.$spinner.hide()
-					$('#confirmationModal').modal('show')
-				}
-				else {
-					this.$router.navigate(['/admin/daily-bookings-admin'])
-				}
-			})
+			if (this.RatesForm.all_inclusive_rates["Base_Rate"].baserate <= 0) {
+				console.log("in if base rate less than 0")
+				this.$errors.openDialog({
+					errors: {
+						error: 'Base rate can not be empty.'
+					}
+				})
+			}
+			else {
+				this.$spinner.show()
+				this.$api.createBooking(value, this.Form.updateType.value).subscribe((response: any) => {
+					// this.$errors.openDialog({
+					// 	errors: {
+					// 		error: `<span class='text-success'>${response.message}</span>`
+					// 	}
+					// })
+					if (response.data?.is_confirm == false) {
+						this.confirmMsg = response?.message
+						this.$spinner.hide()
+						$('#confirmationModal').modal('show')
+					}
+					else {
+						this.$router.navigate(['/admin/daily-bookings-admin'])
+					}
+				})
+			}
+
 		}
 		else {
 			$('#previewBooking').modal('handleUpdate').modal('show')
