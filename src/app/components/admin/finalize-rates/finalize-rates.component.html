@@ -92,8 +92,8 @@
 							Number of Hours
 						</mat-label>
 						<input type="number" matInput placeholder="0" [value]="hours" [readonly]="is_readonly_min_rate"
-							class="font-weight-bolder rate-input-field text-right"
-							(change)="handleHourChange($event)" />
+							class="font-weight-bolder rate-input-field text-right" (change)="handleHourChange($event)"
+							(focus)="$event.target.select()" />
 					</mat-form-field>
 					<span *ngIf="is_readonly_min_rate">Hours cannot be edited as these are the minimum rates
 						issued</span>
