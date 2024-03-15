@@ -306,8 +306,8 @@ export class AffiliateService {
 	getVehicleRates(id) {
 		return this.httpClient.get(this.serverUrl + 'get-affiliate-vehicle-fare/' + id);
 	}
-	editVehicleRates(data) {
-		if (data.id)//edit vehicle rate
+	editVehicleRates(data, duplicateVehicleId: any = null) {
+		if (data.id && !duplicateVehicleId)//edit vehicle rate
 		{
 			console.log('Editing Rates')
 			return this.httpClient.put(this.serverUrl + 'edit-affiliate-vehicle-fare', data);
