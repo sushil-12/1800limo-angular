@@ -232,14 +232,14 @@
 												<div class="dropdown-item-icon"></div>
 												Email All
 											</a>
-											<a class="dropdown-item"
+											<!-- <a class="dropdown-item"
 												(click)="sendEmailClicked(booking.booking_id,'updatedEmailAll')"
 												data-toggle="modal" data-target="#updatedEmailAll"
 												*ngIf="currentUser?.RoleName == 'admin' && booking?.show_changed_fields">
 												<div class="dropdown-item-icon"></div>
 												Send Updated Email
-											</a>
-											<a class="dropdown-item" (click)="auditTrail(booking.booking_id)"
+											</a> -->
+											<!-- <a class="dropdown-item" (click)="auditTrail(booking.booking_id)"
 												data-toggle="modal" data-target="#AuditTrailModal"
 												*ngIf="currentUser?.RoleName == 'admin' || subModules.includes('audit_trial')">
 												<div class="dropdown-item-icon"></div>
@@ -249,7 +249,7 @@
 												*ngIf="(currentUser?.RoleName == 'admin' &&( booking.booking_status == 'rejected' || booking?.booking_status == 'pending' || booking?.booking_status == 'driver_unassigned') )">
 												<div class="dropdown-item-icon"></div>
 												ReAffiliate
-											</a>
+											</a> -->
 
 
 										</div>
