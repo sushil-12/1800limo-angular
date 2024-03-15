@@ -27,6 +27,9 @@ export class VehicleRateSettingsComponent implements OnInit {
 	currency_options: any
 	rate_range_object: any = {}
 	thumb_value: number = 0
+	duplicateVehicleId: any;
+	vehcileId: any;
+
 
 
 	constructor(
@@ -46,6 +49,8 @@ export class VehicleRateSettingsComponent implements OnInit {
 				if (params.duplicateVehicleId) {
 					this.fetchVehicleInfoDuplicate(params.vehicleId, params.duplicateVehicleId)
 					this.prefillTheFormForDuplicateVehicle(params.duplicateVehicleId)
+					this.vehcileId = params.vehicleId
+					this.duplicateVehicleId = params.duplicateVehicleId
 				}
 				else {
 					this.fetchVehicleInfo(params.vehicleId)
@@ -549,7 +554,13 @@ export class VehicleRateSettingsComponent implements OnInit {
 
 		this.$spinner.show();
 
-		this.$api.editVehicleRates(this.VehicleRateSettingsForm.value)
+		if (this.duplicateVehicleId) {
+			this.VehicleRateSettingsForm.patchValue({
+				id: "",
+				vehicle_id: this.vehcileId
+			})
+		}
+		this.$api.editVehicleRates(this.VehicleRateSettingsForm.value, this.duplicateVehicleId)
 			.pipe(
 				catchError(err => {
 					this.$spinner.hide();//hide spinner
