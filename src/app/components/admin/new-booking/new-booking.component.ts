@@ -488,6 +488,7 @@ export class NewBookingComponent implements OnInit {
 			this.SetFormValue('return_meet_greet_choices', 2)
 			this.SetFormValue('return_meet_greet_choices_name', "Driver -  Airport - Text/call after plane lands with curbside meet location")
 		}
+
 	}
 
 	handleChangeMonth(value: any) {
@@ -2079,12 +2080,51 @@ export class NewBookingComponent implements OnInit {
 
 		// Transfer Type
 		this.BookingForm.get('transfer_type').valueChanges.subscribe((value: string) => {
+			console.log("in transfer_type value changes", value)
+
+			// set cruise ship name and cruise port mandatory
+			if (value.includes('_cruise') || value.includes('cruise_')) {
+				console.log("setting value of cruise port and name mandatory")
+				this.BookingForm.get('cruise_name').setValidators([Validators.required]);
+				this.BookingForm.get('cruise_port').setValidators([Validators.required]);
+				this.BookingForm.get('cruise_name').updateValueAndValidity();
+				this.BookingForm.get('cruise_port').updateValueAndValidity();
+			} else {
+				console.log("setting value of cruise port and name not mandatory")
+				this.BookingForm.get('cruise_name').clearValidators();
+				this.BookingForm.get('cruise_port').clearValidators();
+				this.BookingForm.get('cruise_name').updateValueAndValidity();
+				this.BookingForm.get('cruise_port').updateValueAndValidity();
+			}
+
+
 			const reverseStringChars = (text: string) => {
 				let temp = text.split('_')
 				return temp.reverse().join('_')
 			}
 			this.SetFormValue('return_transfer_type', reverseStringChars(value))
 			this.return_transfer_type = reverseStringChars(value)
+
+		})
+
+		this.BookingForm.get('return_transfer_type').valueChanges.subscribe((value: string) => {
+			console.log("in return_transfer_type value changes", value)
+
+			// set cruise ship name and cruise port mandatory
+			if (value.includes('_cruise') || value.includes('cruise_')) {
+				console.log("setting value of return cruise port and name mandatory")
+				this.BookingForm.get('return_cruise_name').setValidators([Validators.required]);
+				this.BookingForm.get('return_cruise_port').setValidators([Validators.required]);
+				this.BookingForm.get('return_cruise_name').updateValueAndValidity();
+				this.BookingForm.get('return_cruise_port').updateValueAndValidity();
+			} else {
+				console.log("setting value of return cruise port and name not mandatory")
+				this.BookingForm.get('return_cruise_name').clearValidators();
+				this.BookingForm.get('return_cruise_port').clearValidators();
+				this.BookingForm.get('return_cruise_name').updateValueAndValidity();
+				this.BookingForm.get('return_cruise_port').updateValueAndValidity();
+			}
+
 		})
 
 		// Account Type Subscription
