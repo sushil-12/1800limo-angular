@@ -103,11 +103,11 @@
 					<strong>{{ BookingDetail?.cruise_port | titlecase }}</strong>
 				</div>
 				<div class="col-md-4 field" *ngIf="transferType?.includes('cruise_')">
-					<p>Cruise Name</p>
+					<p>Cruise Ship Name</p>
 					<strong>{{ BookingDetail?.cruise_name | titlecase }}</strong>
 				</div>
 				<div class="col-md-4 field" *ngIf="transferType?.includes('cruise_')">
-					<p>Cruise Time</p>
+					<p>Ship Arrival time</p>
 					<strong>{{ timeFormat2(BookingDetail?.cruise_time) }} |
 						{{ timeFormat(BookingDetail?.cruise_time) }}</strong>
 				</div>
@@ -136,11 +136,11 @@
 					<strong>{{ BookingDetail?.cruise_port | titlecase }}</strong>
 				</div>
 				<div class="col-md-4 field" *ngIf="transferType?.includes('_cruise')">
-					<p>Dropoff Cruise Name</p>
+					<p>Dropoff Cruise Ship Name</p>
 					<strong>{{ BookingDetail?.cruise_name | titlecase }}</strong>
 				</div>
 				<div class="col-md-4 field" *ngIf="transferType?.includes('_cruise')">
-					<p>Dropoff Cruise Time</p>
+					<p>Dropoff Ship Arrival time</p>
 					<strong>{{ timeFormat2(BookingDetail?.cruise_time) }} |
 						{{ timeFormat(BookingDetail?.cruise_time) }}</strong>
 				</div>
