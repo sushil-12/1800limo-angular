@@ -708,7 +708,7 @@
 					<div class="col-md-4" id="travel_time">
 						<mat-form-field appearance="outline">
 							<mat-label>
-								Travel Time
+								Pickup Time
 							</mat-label>
 							<input [ngxTimepicker]="onwy_tm" formControlName="pickup_time" matInput readonly />
 						</mat-form-field>
@@ -848,13 +848,13 @@
 							</mat-form-field>
 						</div>
 
-						<!-- Cruise Name -->
+						<!-- Cruise Ship Name -->
 						<div class="col-md-4">
 							<mat-form-field appearance="outline">
 								<mat-label>
-									Cruise Name
+									Cruise Ship Name
 								</mat-label>
-								<input formControlName="cruise_name" type="text" matInput placeholder="Cruise Name"
+								<input formControlName="cruise_name" type="text" matInput placeholder="Cruise Ship Name"
 									(focus)="$event.target.select()" />
 							</mat-form-field>
 						</div>
@@ -863,7 +863,7 @@
 						<div class="col-md-4">
 							<mat-form-field appearance="outline">
 								<mat-label>
-									Cruise Time
+									Ship Arrival time
 								</mat-label>
 								<input [ngxTimepicker]="crse_tm" matInput formControlName="cruise_time"
 									(focus)="$event.target.select()" readonly />
@@ -992,13 +992,13 @@
 							</mat-form-field>
 						</div>
 
-						<!-- Cruise Name -->
+						<!-- Cruise Ship Name -->
 						<div class="col-md-4">
 							<mat-form-field appearance="outline">
 								<mat-label>
-									Cruise Name
+									Cruise Ship Name
 								</mat-label>
-								<input formControlName="cruise_name" type="text" matInput placeholder="Cruise Name"
+								<input formControlName="cruise_name" type="text" matInput placeholder="Cruise Ship Name"
 									(focus)="$event.target.select()" />
 							</mat-form-field>
 						</div>
@@ -1007,7 +1007,7 @@
 						<div class="col-md-4">
 							<mat-form-field appearance="outline">
 								<mat-label>
-									Cruise Time
+									Ship Arrival time
 								</mat-label>
 								<input [ngxTimepicker]="crse_tm" matInput formControlName="cruise_time"
 									(focus)="$event.target.select()" readonly />
@@ -1582,14 +1582,14 @@
 							</mat-form-field>
 						</div>
 
-						<!-- Cruise Name -->
+						<!-- Cruise Ship Name -->
 						<div class="col-md-4">
 							<mat-form-field appearance="outline">
 								<mat-label>
-									Cruise Name
+									Cruise Ship Name
 								</mat-label>
 								<input formControlName="return_cruise_name" type="text" matInput
-									placeholder="Cruise Name" (focus)="$event.target.select()" />
+									placeholder="Cruise Ship Name" (focus)="$event.target.select()" />
 							</mat-form-field>
 						</div>
 
@@ -1597,7 +1597,7 @@
 						<div class="col-md-4">
 							<mat-form-field appearance="outline">
 								<mat-label>
-									Cruise Time
+									Ship Arrival time
 								</mat-label>
 								<input [ngxTimepicker]="re_crse_tm" matInput formControlName="return_cruise_time"
 									(focus)="$event.target.select()" readonly />
@@ -1729,14 +1729,14 @@
 							</mat-form-field>
 						</div>
 
-						<!-- Cruise Name -->
+						<!-- Cruise Ship Name -->
 						<div class="col-md-4">
 							<mat-form-field appearance="outline">
 								<mat-label>
-									Cruise Name
+									Cruise Ship Name
 								</mat-label>
 								<input formControlName="return_cruise_name" type="text" matInput
-									placeholder="Cruise Name" (focus)="$event.target.select()" />
+									placeholder="Cruise Ship Name" (focus)="$event.target.select()" />
 							</mat-form-field>
 						</div>
 
@@ -1744,7 +1744,7 @@
 						<div class="col-md-4">
 							<mat-form-field appearance="outline">
 								<mat-label>
-									Cruise Time
+									Ship Arrival time
 								</mat-label>
 								<input [ngxTimepicker]="re_crse_tm" matInput formControlName="return_cruise_time"
 									(focus)="$event.target.select()" readonly />
@@ -2379,11 +2379,11 @@
 							</div>
 						</div>
 						<!-- Cruise Port -->
-						<!-- Cruise Name -->
+						<!-- Cruise Ship Name -->
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
-									Cruise Name
+									Cruise Ship Name
 								</span>
 							</div>
 							<div class="col-md-8 value">
@@ -2392,12 +2392,12 @@
 								</span>
 							</div>
 						</div>
-						<!-- Cruise Name -->
-						<!-- Cruise Time -->
+						<!-- Cruise Ship Name -->
+						<!-- Ship Arrival time -->
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
-									Cruise Time
+									Ship Arrival time
 								</span>
 							</div>
 							<div class="col-md-8 value">
@@ -2525,11 +2525,11 @@
 							</div>
 						</div>
 						<!-- Cruise Port -->
-						<!-- Cruise Name -->
+						<!-- Cruise Ship Name -->
 						<div class="row p-2">
 							<div class="col-md-4 key">
 								<span>
-									Cruise Name
+									Cruise Ship Name
 								</span>
 							</div>
 							<div class="col-md-8 value">
@@ -2538,12 +2538,12 @@
 								</span>
 							</div>
 						</div>
-						<!-- Cruise Name -->
-						<!-- Cruise Time -->
+						<!-- Cruise Ship Name -->
+						<!-- Ship Arrival time -->
 						<div class="row p-2">
 							<div class="col-md-4 key">
 								<span>
-									Cruise Time
+									Ship Arrival time
 								</span>
 							</div>
 							<div class="col-md-8 value">
@@ -2554,7 +2554,7 @@
 								</span>
 							</div>
 						</div>
-						<!-- Cruise Time -->
+						<!-- Ship Arrival time -->
 					</div>
 					<hr>
 					<div class="mx-2" *ngIf="Form?.meet_greet_choices_name.value">
@@ -2718,11 +2718,11 @@
 									</span>
 								</div>
 							</div>
-							<!-- Cruise Name -->
+							<!-- Cruise Ship Name -->
 							<div class="row p-2">
 								<div class="col-md-4 key">
 									<span>
-										Cruise Name
+										Cruise Ship Name
 									</span>
 								</div>
 								<div class="col-md-8 value">
@@ -2733,11 +2733,11 @@
 								</div>
 							</div>
 
-							<!-- Cruise Time -->
+							<!-- Ship Arrival time -->
 							<div class="row p-2">
 								<div class="col-md-4 key">
 									<span>
-										Cruise Time
+										Ship Arrival time
 									</span>
 								</div>
 								<div class="col-md-8 value">
@@ -2866,11 +2866,11 @@
 								</div>
 							</div>
 
-							<!-- Cruise Name -->
+							<!-- Cruise Ship Name -->
 							<div class="row p-2">
 								<div class="col-md-4 key">
 									<span>
-										Cruise Name
+										Cruise Ship Name
 									</span>
 								</div>
 								<div class="col-md-8 value">
@@ -2881,11 +2881,11 @@
 								</div>
 							</div>
 
-							<!-- Cruise Time -->
+							<!-- Ship Arrival time -->
 							<div class="row p-2">
 								<div class="col-md-4 key">
 									<span>
-										Cruise Time
+										Ship Arrival time
 									</span>
 								</div>
 								<div class="col-md-8 value">
