@@ -1615,40 +1615,43 @@ export class CreateNewBookingComponent implements OnInit {
 		this.BookingForm.get('return_transfer_type').valueChanges.subscribe((value: string) => {
 			console.log("in return_transfer_type value changes", value)
 
-			// set cruise ship name and cruise port mandatory
-			if (value.includes('_cruise') || value.includes('cruise_')) {
-				console.log("setting value of return cruise port and name mandatory")
-				this.BookingForm.get('return_cruise_name').setValidators([Validators.required]);
-				this.BookingForm.get('return_cruise_port').setValidators([Validators.required]);
-				this.BookingForm.get('return_cruise_name').updateValueAndValidity();
-				this.BookingForm.get('return_cruise_port').updateValueAndValidity();
-			} else {
-				console.log("setting value of return cruise port and name not mandatory")
-				this.BookingForm.get('return_cruise_name').clearValidators();
-				this.BookingForm.get('return_cruise_port').clearValidators();
-				this.BookingForm.get('return_cruise_name').updateValueAndValidity();
-				this.BookingForm.get('return_cruise_port').updateValueAndValidity();
-			}
+			if (this.BookingForm.get('service_type').value == 'round_trip') {
 
-			// set flight number mandatory
-			if (value.includes('_airport')) {
-				console.log("setting value of return dropoff flight mandatory")
-				this.BookingForm.get('return_dropoff_flight').setValidators([Validators.required]);
-				this.BookingForm.get('return_dropoff_flight').updateValueAndValidity();
-			} else {
-				console.log("setting value of return dropoff flight not mandatory")
-				this.BookingForm.get('return_dropoff_flight').clearValidators();
-				this.BookingForm.get('return_dropoff_flight').updateValueAndValidity();
-			}
+				// set cruise ship name and cruise port mandatory
+				if (value.includes('_cruise') || value.includes('cruise_')) {
+					console.log("setting value of return cruise port and name mandatory")
+					this.BookingForm.get('return_cruise_name').setValidators([Validators.required]);
+					this.BookingForm.get('return_cruise_port').setValidators([Validators.required]);
+					this.BookingForm.get('return_cruise_name').updateValueAndValidity();
+					this.BookingForm.get('return_cruise_port').updateValueAndValidity();
+				} else {
+					console.log("setting value of return cruise port and name not mandatory")
+					this.BookingForm.get('return_cruise_name').clearValidators();
+					this.BookingForm.get('return_cruise_port').clearValidators();
+					this.BookingForm.get('return_cruise_name').updateValueAndValidity();
+					this.BookingForm.get('return_cruise_port').updateValueAndValidity();
+				}
 
-			if (value.includes('airport_')) {
-				console.log("setting value of return pickup flight mandatory")
-				this.BookingForm.get('return_pickup_flight').setValidators([Validators.required]);
-				this.BookingForm.get('return_pickup_flight').updateValueAndValidity();
-			} else {
-				console.log("setting value of return pickup flight not mandatory")
-				this.BookingForm.get('return_pickup_flight').clearValidators();
-				this.BookingForm.get('return_pickup_flight').updateValueAndValidity();
+				// set flight number mandatory
+				if (value.includes('_airport')) {
+					console.log("setting value of return dropoff flight mandatory")
+					this.BookingForm.get('return_dropoff_flight').setValidators([Validators.required]);
+					this.BookingForm.get('return_dropoff_flight').updateValueAndValidity();
+				} else {
+					console.log("setting value of return dropoff flight not mandatory")
+					this.BookingForm.get('return_dropoff_flight').clearValidators();
+					this.BookingForm.get('return_dropoff_flight').updateValueAndValidity();
+				}
+
+				if (value.includes('airport_')) {
+					console.log("setting value of return pickup flight mandatory")
+					this.BookingForm.get('return_pickup_flight').setValidators([Validators.required]);
+					this.BookingForm.get('return_pickup_flight').updateValueAndValidity();
+				} else {
+					console.log("setting value of return pickup flight not mandatory")
+					this.BookingForm.get('return_pickup_flight').clearValidators();
+					this.BookingForm.get('return_pickup_flight').updateValueAndValidity();
+				}
 			}
 
 		})
