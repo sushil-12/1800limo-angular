@@ -966,6 +966,15 @@
                             <input type="text" matInput placeholder="Flight / Tail #" aria-label="Flight"
                                 formControlName="pickup_flight" (focus)="$event.target.select()" />
                         </mat-form-field>
+                        <div class="error-box">
+                            <div class="error-message"
+                                *ngIf="Form.pickup_flight.invalid && (Form.pickup_flight.touched || Form.pickup_flight.dirty)"
+                                style="margin-top:-15px">
+                                <p class="text-danger text-lg m-0" *ngIf="Form.pickup_flight.errors?.required">
+                                    This field is required
+                                </p>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Origin Airport / City -->
@@ -993,6 +1002,15 @@
                             <input type="text" matInput placeholder="Cruise Port" formControlName="cruise_port"
                                 (focus)="$event.target.select()" />
                         </mat-form-field>
+                        <div class="error-box">
+                            <div class="error-message"
+                                *ngIf="Form.cruise_port.invalid && (Form.cruise_port.touched || Form.cruise_port.dirty)"
+                                style="margin-top:-15px">
+                                <p class="text-danger text-lg m-0" *ngIf="Form.cruise_port.errors?.required">
+                                    This field is required
+                                </p>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Cruise Ship Name -->
@@ -1004,6 +1022,15 @@
                             <input formControlName="cruise_name" type="text" matInput placeholder="Cruise Ship Name"
                                 (focus)="$event.target.select()" />
                         </mat-form-field>
+                        <div class="error-box">
+                            <div class="error-message"
+                                *ngIf="Form.cruise_name.invalid && (Form.cruise_name.touched || Form.cruise_name.dirty)"
+                                style="margin-top:-15px">
+                                <p class="text-danger text-lg m-0" *ngIf="Form.cruise_name.errors?.required">
+                                    This field is required
+                                </p>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Time -->
@@ -1078,6 +1105,15 @@
                             <input type="text" matInput placeholder="Flight / Tail #" aria-label="Flight"
                                 formControlName="dropoff_flight" (focus)="$event.target.select()" />
                         </mat-form-field>
+                        <div class="error-box">
+                            <div class="error-message"
+                                *ngIf="Form.dropoff_flight.invalid && (Form.dropoff_flight.touched || Form.dropoff_flight.dirty)"
+                                style="margin-top:-15px">
+                                <p class="text-danger text-lg m-0" *ngIf="Form.dropoff_flight.errors?.required">
+                                    This field is required
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1093,6 +1129,15 @@
                             <input type="text" matInput placeholder="Cruise Port" formControlName="cruise_port"
                                 (focus)="$event.target.select()" />
                         </mat-form-field>
+                        <div class="error-box">
+                            <div class="error-message"
+                                *ngIf="Form.cruise_port.invalid && (Form.cruise_port.touched || Form.cruise_port.dirty)"
+                                style="margin-top:-15px">
+                                <p class="text-danger text-lg m-0" *ngIf="Form.cruise_port.errors?.required">
+                                    This field is required
+                                </p>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Cruise Ship Name -->
@@ -1104,6 +1149,15 @@
                             <input formControlName="cruise_name" type="text" matInput placeholder="Cruise Ship Name"
                                 (focus)="$event.target.select()" />
                         </mat-form-field>
+                        <div class="error-box">
+                            <div class="error-message"
+                                *ngIf="Form.cruise_name.invalid && (Form.cruise_name.touched || Form.cruise_name.dirty)"
+                                style="margin-top:-15px">
+                                <p class="text-danger text-lg m-0" *ngIf="Form.cruise_name.errors?.required">
+                                    This field is required
+                                </p>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Time -->
@@ -1385,6 +1439,15 @@
                             <input type="text" matInput placeholder="Flight / Tail #" aria-label="Flight"
                                 formControlName="return_pickup_flight" (focus)="$event.target.select()" />
                         </mat-form-field>
+                        <div class="error-box">
+                            <div class="error-message"
+                                *ngIf="Form.return_pickup_flight.invalid && (Form.return_pickup_flight.touched || Form.return_pickup_flight.dirty)"
+                                style="margin-top:-15px">
+                                <p class="text-danger text-lg m-0" *ngIf="Form.return_pickup_flight.errors?.required">
+                                    This field is required
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1402,6 +1465,15 @@
                             <input type="text" matInput placeholder="Cruise Port" formControlName="return_cruise_port"
                                 (focus)="$event.target.select()" />
                         </mat-form-field>
+                        <div class="error-box">
+                            <div class="error-message"
+                                *ngIf="Form.return_cruise_port.invalid && (Form.return_cruise_port.touched || Form.return_cruise_port.dirty)"
+                                style="margin-top:-15px">
+                                <p class="text-danger text-lg m-0" *ngIf="Form.return_cruise_port.errors?.required">
+                                    This field is required
+                                </p>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Cruise Ship Name -->
@@ -1413,6 +1485,15 @@
                             <input formControlName="return_cruise_name" type="text" matInput
                                 placeholder="Cruise Ship Name" (focus)="$event.target.select()" />
                         </mat-form-field>
+                        <div class="error-box">
+                            <div class="error-message"
+                                *ngIf="Form.return_cruise_name.invalid && (Form.return_cruise_name.touched || Form.return_cruise_name.dirty)"
+                                style="margin-top:-15px">
+                                <p class="text-danger text-lg m-0" *ngIf="Form.return_cruise_name.errors?.required">
+                                    This field is required
+                                </p>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Time -->
@@ -1493,6 +1574,15 @@
                             <input type="text" matInput placeholder="Flight / Tail #" aria-label="Flight"
                                 formControlName="return_dropoff_flight" (focus)="$event.target.select()" />
                         </mat-form-field>
+                        <div class="error-box">
+                            <div class="error-message"
+                                *ngIf="Form.return_dropoff_flight.invalid && (Form.return_dropoff_flight.touched || Form.return_dropoff_flight.dirty)"
+                                style="margin-top:-15px">
+                                <p class="text-danger text-lg m-0" *ngIf="Form.return_dropoff_flight.errors?.required">
+                                    This field is required
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1510,6 +1600,15 @@
                             <input type="text" matInput placeholder="Cruise Port" formControlName="return_cruise_port"
                                 (focus)="$event.target.select()" />
                         </mat-form-field>
+                        <div class="error-box">
+                            <div class="error-message"
+                                *ngIf="Form.return_cruise_port.invalid && (Form.return_cruise_port.touched || Form.return_cruise_port.dirty)"
+                                style="margin-top:-15px">
+                                <p class="text-danger text-lg m-0" *ngIf="Form.return_cruise_port.errors?.required">
+                                    This field is required
+                                </p>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Cruise Ship Name -->
@@ -1521,6 +1620,15 @@
                             <input formControlName="return_cruise_name" type="text" matInput
                                 placeholder="Cruise Ship Name" (focus)="$event.target.select()" />
                         </mat-form-field>
+                        <div class="error-box">
+                            <div class="error-message"
+                                *ngIf="Form.return_cruise_name.invalid && (Form.return_cruise_name.touched || Form.return_cruise_name.dirty)"
+                                style="margin-top:-15px">
+                                <p class="text-danger text-lg m-0" *ngIf="Form.return_cruise_name.errors?.required">
+                                    This field is required
+                                </p>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Time -->
