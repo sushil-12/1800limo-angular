@@ -1703,6 +1703,15 @@
 							<input type="text" matInput placeholder="Flight / Tail #" aria-label="Flight"
 								formControlName="pickup_flight" (focus)="$event.target.select()" />
 						</mat-form-field>
+						<div class="error-box">
+							<div class="error-message"
+								*ngIf="Form.pickup_flight.invalid && (Form.pickup_flight.touched || Form.pickup_flight.dirty)"
+								style="margin-top:-15px">
+								<p class="text-danger text-lg m-0" *ngIf="Form.pickup_flight.errors?.required">
+									This field is required
+								</p>
+							</div>
+						</div>
 					</div>
 
 					<!-- Origin Airport / City -->
@@ -1877,6 +1886,15 @@
 							<input type="text" matInput placeholder="Flight / Tail #" aria-label="Flight"
 								formControlName="dropoff_flight" (focus)="$event.target.select()" />
 						</mat-form-field>
+						<div class="error-box">
+							<div class="error-message"
+								*ngIf="Form.dropoff_flight.invalid && (Form.dropoff_flight.touched || Form.dropoff_flight.dirty)"
+								style="margin-top:-15px">
+								<p class="text-danger text-lg m-0" *ngIf="Form.dropoff_flight.errors?.required">
+									This field is required
+								</p>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -2496,6 +2514,15 @@
 							<input type="text" matInput placeholder="Flight / Tail #" aria-label="Flight"
 								formControlName="return_pickup_flight" (focus)="$event.target.select()" />
 						</mat-form-field>
+						<div class="error-box">
+							<div class="error-message"
+								*ngIf="Form.return_pickup_flight.invalid && (Form.return_pickup_flight.touched || Form.return_pickup_flight.dirty)"
+								style="margin-top:-15px">
+								<p class="text-danger text-lg m-0" *ngIf="Form.return_pickup_flight.errors?.required">
+									This field is required
+								</p>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -2659,6 +2686,15 @@
 							<input type="text" matInput placeholder="Flight / Tail #" aria-label="Flight"
 								formControlName="return_dropoff_flight" (focus)="$event.target.select()" />
 						</mat-form-field>
+						<div class="error-box">
+							<div class="error-message"
+								*ngIf="Form.return_dropoff_flight.invalid && (Form.return_dropoff_flight.touched || Form.return_dropoff_flight.dirty)"
+								style="margin-top:-15px">
+								<p class="text-danger text-lg m-0" *ngIf="Form.return_dropoff_flight.errors?.required">
+									This field is required
+								</p>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>

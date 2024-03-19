@@ -2097,6 +2097,26 @@ export class NewBookingComponent implements OnInit {
 				this.BookingForm.get('cruise_port').updateValueAndValidity();
 			}
 
+			// set flight number mandatory
+			if (value.includes('_airport')) {
+				console.log("setting value of dropoff flight mandatory")
+				this.BookingForm.get('dropoff_flight').setValidators([Validators.required]);
+				this.BookingForm.get('dropoff_flight').updateValueAndValidity();
+			} else {
+				console.log("setting value of dropoff flight not mandatory")
+				this.BookingForm.get('dropoff_flight').clearValidators();
+				this.BookingForm.get('dropoff_flight').updateValueAndValidity();
+			}
+
+			if (value.includes('airport_')) {
+				console.log("setting value of pickup flight mandatory")
+				this.BookingForm.get('pickup_flight').setValidators([Validators.required]);
+				this.BookingForm.get('pickup_flight').updateValueAndValidity();
+			} else {
+				console.log("setting value of pickup flight not mandatory")
+				this.BookingForm.get('pickup_flight').clearValidators();
+				this.BookingForm.get('pickup_flight').updateValueAndValidity();
+			}
 
 			const reverseStringChars = (text: string) => {
 				let temp = text.split('_')
@@ -2123,6 +2143,27 @@ export class NewBookingComponent implements OnInit {
 				this.BookingForm.get('return_cruise_port').clearValidators();
 				this.BookingForm.get('return_cruise_name').updateValueAndValidity();
 				this.BookingForm.get('return_cruise_port').updateValueAndValidity();
+			}
+
+			// set flight number mandatory
+			if (value.includes('_airport')) {
+				console.log("setting value of return dropoff flight mandatory")
+				this.BookingForm.get('return_dropoff_flight').setValidators([Validators.required]);
+				this.BookingForm.get('return_dropoff_flight').updateValueAndValidity();
+			} else {
+				console.log("setting value of return dropoff flight not mandatory")
+				this.BookingForm.get('return_dropoff_flight').clearValidators();
+				this.BookingForm.get('return_dropoff_flight').updateValueAndValidity();
+			}
+
+			if (value.includes('airport_')) {
+				console.log("setting value of return pickup flight mandatory")
+				this.BookingForm.get('return_pickup_flight').setValidators([Validators.required]);
+				this.BookingForm.get('return_pickup_flight').updateValueAndValidity();
+			} else {
+				console.log("setting value of return pickup flight not mandatory")
+				this.BookingForm.get('return_pickup_flight').clearValidators();
+				this.BookingForm.get('return_pickup_flight').updateValueAndValidity();
 			}
 
 		})
