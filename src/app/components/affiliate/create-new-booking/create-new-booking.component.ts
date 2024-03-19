@@ -1772,16 +1772,105 @@ export class CreateNewBookingComponent implements OnInit {
 				this.BookingForm.updateValueAndValidity()
 				console.log(this.BookingForm.get('number_of_hours').value);
 			}
+			if (value == 'one_way') {
+				console.log("setting value of return cruise port and name not mandatory")
+				this.BookingForm.get('return_cruise_name').clearValidators();
+				this.BookingForm.get('return_cruise_port').clearValidators();
+				this.BookingForm.get('return_dropoff_flight').clearValidators();
+				this.BookingForm.get('return_pickup_flight').clearValidators();
+				this.BookingForm.get('return_pickup_flight').updateValueAndValidity();
+				this.BookingForm.get('return_dropoff_flight').updateValueAndValidity();
+				this.BookingForm.get('return_cruise_name').updateValueAndValidity();
+				this.BookingForm.get('return_cruise_port').updateValueAndValidity();
+			}
 		})
 
 		// Transfer Type
 		this.BookingForm.get('transfer_type').valueChanges.subscribe((value: string) => {
+
+			// set cruise ship name and cruise port mandatory
+			if (value.includes('_cruise') || value.includes('cruise_')) {
+				console.log("setting value of cruise port and name mandatory")
+				this.BookingForm.get('cruise_name').setValidators([Validators.required]);
+				this.BookingForm.get('cruise_port').setValidators([Validators.required]);
+				this.BookingForm.get('cruise_name').updateValueAndValidity();
+				this.BookingForm.get('cruise_port').updateValueAndValidity();
+			} else {
+				console.log("setting value of cruise port and name not mandatory")
+				this.BookingForm.get('cruise_name').clearValidators();
+				this.BookingForm.get('cruise_port').clearValidators();
+				this.BookingForm.get('cruise_name').updateValueAndValidity();
+				this.BookingForm.get('cruise_port').updateValueAndValidity();
+			}
+
+			// set flight number mandatory
+			if (value.includes('_airport')) {
+				console.log("setting value of dropoff flight mandatory")
+				this.BookingForm.get('dropoff_flight').setValidators([Validators.required]);
+				this.BookingForm.get('dropoff_flight').updateValueAndValidity();
+			} else {
+				console.log("setting value of dropoff flight not mandatory")
+				this.BookingForm.get('dropoff_flight').clearValidators();
+				this.BookingForm.get('dropoff_flight').updateValueAndValidity();
+			}
+
+			if (value.includes('airport_')) {
+				console.log("setting value of pickup flight mandatory")
+				this.BookingForm.get('pickup_flight').setValidators([Validators.required]);
+				this.BookingForm.get('pickup_flight').updateValueAndValidity();
+			} else {
+				console.log("setting value of pickup flight not mandatory")
+				this.BookingForm.get('pickup_flight').clearValidators();
+				this.BookingForm.get('pickup_flight').updateValueAndValidity();
+			}
 			const reverseStringChars = (text: string) => {
 				let temp = text.split('_')
 				return temp.reverse().join('_')
 			}
 			this.SetFormValue('return_transfer_type', reverseStringChars(value))
 		})
+
+		this.BookingForm.get('return_transfer_type').valueChanges.subscribe((value: string) => {
+			console.log("in return_transfer_type value changes", value)
+
+			// set cruise ship name and cruise port mandatory
+			if (value.includes('_cruise') || value.includes('cruise_')) {
+				console.log("setting value of return cruise port and name mandatory")
+				this.BookingForm.get('return_cruise_name').setValidators([Validators.required]);
+				this.BookingForm.get('return_cruise_port').setValidators([Validators.required]);
+				this.BookingForm.get('return_cruise_name').updateValueAndValidity();
+				this.BookingForm.get('return_cruise_port').updateValueAndValidity();
+			} else {
+				console.log("setting value of return cruise port and name not mandatory")
+				this.BookingForm.get('return_cruise_name').clearValidators();
+				this.BookingForm.get('return_cruise_port').clearValidators();
+				this.BookingForm.get('return_cruise_name').updateValueAndValidity();
+				this.BookingForm.get('return_cruise_port').updateValueAndValidity();
+			}
+
+			// set flight number mandatory
+			if (value.includes('_airport')) {
+				console.log("setting value of return dropoff flight mandatory")
+				this.BookingForm.get('return_dropoff_flight').setValidators([Validators.required]);
+				this.BookingForm.get('return_dropoff_flight').updateValueAndValidity();
+			} else {
+				console.log("setting value of return dropoff flight not mandatory")
+				this.BookingForm.get('return_dropoff_flight').clearValidators();
+				this.BookingForm.get('return_dropoff_flight').updateValueAndValidity();
+			}
+
+			if (value.includes('airport_')) {
+				console.log("setting value of return pickup flight mandatory")
+				this.BookingForm.get('return_pickup_flight').setValidators([Validators.required]);
+				this.BookingForm.get('return_pickup_flight').updateValueAndValidity();
+			} else {
+				console.log("setting value of return pickup flight not mandatory")
+				this.BookingForm.get('return_pickup_flight').clearValidators();
+				this.BookingForm.get('return_pickup_flight').updateValueAndValidity();
+			}
+
+		})
+
 
 		// Account Type Subscription
 		this.BookingForm.get('account_type').valueChanges.subscribe((value: string) => {

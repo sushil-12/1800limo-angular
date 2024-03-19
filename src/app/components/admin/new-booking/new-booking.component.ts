@@ -2076,6 +2076,17 @@ export class NewBookingComponent implements OnInit {
 				this.BookingForm.updateValueAndValidity()
 				console.log(this.BookingForm.get('number_of_hours').value);
 			}
+			if (value == 'one_way') {
+				console.log("setting value of return cruise port and name not mandatory")
+				this.BookingForm.get('return_cruise_name').clearValidators();
+				this.BookingForm.get('return_cruise_port').clearValidators();
+				this.BookingForm.get('return_dropoff_flight').clearValidators();
+				this.BookingForm.get('return_pickup_flight').clearValidators();
+				this.BookingForm.get('return_pickup_flight').updateValueAndValidity();
+				this.BookingForm.get('return_dropoff_flight').updateValueAndValidity();
+				this.BookingForm.get('return_cruise_name').updateValueAndValidity();
+				this.BookingForm.get('return_cruise_port').updateValueAndValidity();
+			}
 		})
 
 		// Transfer Type
