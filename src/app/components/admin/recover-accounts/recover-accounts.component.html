@@ -181,3 +181,37 @@
     </div>
 </div>
 <!-- <app-delete-confirmation (deleteRecord)="deleteAccount()" [alertMessage]="alertMessage"></app-delete-confirmation> -->
+
+
+<!-- Message modal -->
+<div class="modal fade" tabindex="-1" id="messageModal" aria-labelledby="messageModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4></h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <p id="affiliate-details"></p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <p id="label">
+                            Message:
+                        </p>
+                        <textarea id="message" rows="7" placeholder="Your Message" #message
+                            style="font-weight: 700;"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-end">
+                <button class="custom-filled-button" data-dismiss="modal"
+                    (click)="sendMessage(messagetype?.type, messagetype?.travelPlanner, message.value)">
+                    Send {{ messagetype?.type | titlecase }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
