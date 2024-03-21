@@ -5,6 +5,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { AdminService } from 'src/app/services/admin.service';
+import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 declare var $: any;
 
 @Component({
@@ -43,6 +44,7 @@ export class RecoverAccountsComponent implements OnInit {
   constructor(
     private adminService: AdminService,
     private router: Router,
+    private errorDialog: ErrorDialogService,
     private spinner: NgxSpinnerService) { }
 
   ngOnInit(): void {
@@ -188,14 +190,23 @@ export class RecoverAccountsComponent implements OnInit {
   }
 
   messagetype: Record<string, any>
-  sendMessage(type: 'email' | 'sms', travelPlanner: Object, message: string = null) {
-    console.log('Request to send a Message to travel agent id: ', type, travelPlanner['id'])
+  sendMessage(type: 'email' | 'sms', travelPlanner: any, message: string = null) {
+    console.log('Request to send a Message to travel agent id: ', type, travelPlanner)
     this.messagetype = { type, travelPlanner }
     $('#messageModal').modal('show')
     $('#messageModal').find('.modal-header').find('h4').text('Contact to User via ' + type.toUpperCase())
     $('#messageModal').find('.modal-body').find('p#affiliate-details').html(`User Name: ${travelPlanner['first_name']} ${travelPlanner['last_name']}<br/>User Email: ${travelPlanner['email']}`)
     if (message != null) {
-      this.adminService.sendAffiliateMessage(type, travelPlanner['id'], { sendContent: message },).subscribe((response: any) => {
+      let body = {
+        text_message: message
+      }
+      if (type == 'email') {
+        body['email_address'] = travelPlanner?.email
+      }
+      else {
+        body['phone_number'] = travelPlanner?.isd + travelPlanner?.phone
+      }
+      this.adminService.sendNotificationAllAccounts(type, body).subscribe((response: any) => {
         if (response.success) {
           console.log('Message Sent Successfully. ')
         }
