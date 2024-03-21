@@ -978,6 +978,10 @@ export class AdminService {
 		return this.httpClient.post(`${this.serverUrl}admin/notification/send-${type}/${affiliate_id}`, data)
 	}
 
+	sendNotificationAllAccounts(type: 'email' | 'sms', data: Object) {
+		return this.httpClient.post(`${this.serverUrl}admin-send-notification/${type}`, data)
+	}
+
 	//invoices
 	getInvoiceData(id) {
 		return this.httpClient.get(this.serverUrl + 'invoice-summary/' + id);

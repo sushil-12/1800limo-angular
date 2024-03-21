@@ -81,7 +81,8 @@ button {
 .paid_cash {
 	background-color: #D1B000;
 }
-.partial_refund{
+
+.partial_refund {
 	background-color: #212529;
 }
 
@@ -399,7 +400,9 @@ input::-webkit-input-placeholder {
 
 a.dropdown-item {
 	padding: 0.4rem 1.4rem !important;
-	font-size: 16px;
+	font-size: 17px;
+	font-weight: 550 !important;
+
 }
 
 .x-copy-btn {
@@ -469,17 +472,18 @@ a.dropdown-item {
 	text-transform: uppercase;
 }
 
-.pin-icon-preview{
+.pin-icon-preview {
 	font-size: 26px;
 }
 
-@media only screen and (max-width: 768px){
-	.sortCheckBox{
+@media only screen and (max-width: 768px) {
+	.sortCheckBox {
 		display: flex;
 		flex-direction: column;
 		gap: 4px;
 	}
-	.pin-icon-preview{
+
+	.pin-icon-preview {
 		font-size: 34px;
 	}
 }

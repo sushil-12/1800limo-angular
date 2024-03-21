@@ -21,3 +21,35 @@
   color: #ff69b4;
   cursor: pointer;
 }
+
+.clickable {
+  cursor: pointer;
+  transition: color 0.1s ease-in-out, -webkit-text-decoration 0.2s ease-in-out;
+  transition: color 0.1s ease-in-out, text-decoration 0.2s ease-in-out;
+  transition: color 0.1s ease-in-out, text-decoration 0.2s ease-in-out, -webkit-text-decoration 0.2s ease-in-out;
+
+  &:hover {
+    text-decoration: underline;
+    color: var(--blue);
+  }
+}
+
+.modal#messageModal {
+  .modal-body {
+    p {
+      font-size: 1rem;
+      font-weight: 500;
+
+      span {
+        font-size: 1.1rem;
+      }
+    }
+
+    textarea#message {
+      width: 100%;
+      border-radius: 1rem;
+      padding: 1rem;
+      max-height: 15rem;
+    }
+  }
+}

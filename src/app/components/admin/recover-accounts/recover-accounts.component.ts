@@ -5,6 +5,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { AdminService } from 'src/app/services/admin.service';
+import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 declare var $: any;
 
 @Component({
@@ -18,19 +19,19 @@ export class RecoverAccountsComponent implements OnInit {
   checked = false;
   disabled = false;
 
-  public paramResponse:any;
+  public paramResponse: any;
 
-  public firstPage:Number;
-  public lastPage:Number;
-  public totalPage:Number;
-  public currentPage:any;
-  public from:Number;
-  public to:Number;
-  public path:string;
-  public firstPageUrl:string;
-  public lastPageUrl:string;
-  public prevPageUrl:string;
-  public nextPageUrl:string;
+  public firstPage: Number;
+  public lastPage: Number;
+  public totalPage: Number;
+  public currentPage: any;
+  public from: Number;
+  public to: Number;
+  public path: string;
+  public firstPageUrl: string;
+  public lastPageUrl: string;
+  public prevPageUrl: string;
+  public nextPageUrl: string;
   public accountToDelete: number;
   public alertMessage: string;
   searchText: any;
@@ -41,195 +42,197 @@ export class RecoverAccountsComponent implements OnInit {
   accounts_count: any;
 
   constructor(
-    private adminService:AdminService,
+    private adminService: AdminService,
     private router: Router,
+    private errorDialog: ErrorDialogService,
     private spinner: NgxSpinnerService) { }
 
   ngOnInit(): void {
-		this.searchText = localStorage.getItem('allAccountsSearch') ? localStorage.getItem('allAccountsSearch') : '' 
+    this.searchText = localStorage.getItem('allAccountsSearch') ? localStorage.getItem('allAccountsSearch') : ''
     // this.searchText = ''
-      this.loadAccounts();//load travelPlanners
+    this.loadAccounts();//load travelPlanners
 
-        // localStorage.removeItem('travelAgent_id' )
+    // localStorage.removeItem('travelAgent_id' )
   }
 
-	timer: any
-	handleSearchKeyword(text:any){
-		console.log('on change search text-->>' , text)
-		this.searchText = text
-		clearTimeout(this.timer);
-		this.timer = setTimeout(() => {
-			localStorage.setItem('allAccountsSearch' , text)
-			this.loadAccounts()
-		}, 700)
-	}
-	handleKeypressEvents() {
-		clearTimeout(this.timer)
-	}
+  timer: any
+  handleSearchKeyword(text: any) {
+    console.log('on change search text-->>', text)
+    this.searchText = text
+    clearTimeout(this.timer);
+    this.timer = setTimeout(() => {
+      localStorage.setItem('allAccountsSearch', text)
+      this.loadAccounts()
+    }, 700)
+  }
+  handleKeypressEvents() {
+    clearTimeout(this.timer)
+  }
 
   scroll(id) {
-		// let el = document.getElementById(id);
-		// let elementRect = el.getBoundingClientRect();
-		// let absoluteElementTop = elementRect.top + window.pageYOffset;
-		// let topElement = absoluteElementTop - 200;
+    // let el = document.getElementById(id);
+    // let elementRect = el.getBoundingClientRect();
+    // let absoluteElementTop = elementRect.top + window.pageYOffset;
+    // let topElement = absoluteElementTop - 200;
 
-		// console.log(`scrolling to ${id}`, el , absoluteElementTop ,window.innerHeight);
-		// window.scrollTo({
-		// 	top: topElement,
-		// 	behavior: 'smooth'
-		// });
+    // console.log(`scrolling to ${id}`, el , absoluteElementTop ,window.innerHeight);
+    // window.scrollTo({
+    // 	top: topElement,
+    // 	behavior: 'smooth'
+    // });
 
-		let el = document.getElementById(id);
-		console.log(`scrolling to ${id}`, el);
-		el.scrollIntoView({ behavior: 'smooth' });
-	}
+    let el = document.getElementById(id);
+    console.log(`scrolling to ${id}`, el);
+    el.scrollIntoView({ behavior: 'smooth' });
+  }
 
-  loadAccounts(pageUrl=null)
-  {
-    if(pageUrl){
-			console.log("pageurl",pageUrl)
+  loadAccounts(pageUrl = null) {
+    if (pageUrl) {
+      console.log("pageurl", pageUrl)
       this.scroll('all_accounts_table')
-		}
-      /** spinner starts on init */
-      this.spinner.show();
+    }
+    /** spinner starts on init */
+    this.spinner.show();
 
-      var keyword = this.searchText;
+    var keyword = this.searchText;
 
-      // Load Our travelPlanners using API
-      this.adminService.getAccounts(pageUrl,this.isDeletedAcc , keyword).then((result:any)=>{
-        let response = result
-        this.accounts= result?.data?.users?.data;
-        this.accounts_count = result?.data?.account_counts;
+    // Load Our travelPlanners using API
+    this.adminService.getAccounts(pageUrl, this.isDeletedAcc, keyword).then((result: any) => {
+      let response = result
+      this.accounts = result?.data?.users?.data;
+      this.accounts_count = result?.data?.account_counts;
 
-        this.firstPage=1;
-        this.lastPage=result.data?.users?.last_page;
-        this.totalPage=result.data?.users?.last_page;
-        this.currentPage=result.data?.users?.current_page;
-        this.from=result.data?.users?.from;
-        this.to=result.data?.users?.to;
-        this.path=result.data?.users?.path;
-        this.firstPageUrl=result.data?.users?.first_page_url;
-        this.lastPageUrl=result.data?.users?.last_page_url;
-        this.prevPageUrl=result.data?.users?.prev_page_url;
-        this.nextPageUrl=result.data?.users?.next_page_url;
-        // sessionStorage.setItem('travelPlanners',JSON.stringify(this.travelPlanners));
-        //hide action column
-       
-        this.spinner.hide();//hide spinner
-      })
-      .catch(err=>{
+      this.firstPage = 1;
+      this.lastPage = result.data?.users?.last_page;
+      this.totalPage = result.data?.users?.last_page;
+      this.currentPage = result.data?.users?.current_page;
+      this.from = result.data?.users?.from;
+      this.to = result.data?.users?.to;
+      this.path = result.data?.users?.path;
+      this.firstPageUrl = result.data?.users?.first_page_url;
+      this.lastPageUrl = result.data?.users?.last_page_url;
+      this.prevPageUrl = result.data?.users?.prev_page_url;
+      this.nextPageUrl = result.data?.users?.next_page_url;
+      // sessionStorage.setItem('travelPlanners',JSON.stringify(this.travelPlanners));
+      //hide action column
+
+      this.spinner.hide();//hide spinner
+    })
+      .catch(err => {
         this.spinner.hide();//hide spinner
       });
   }
 
-  addTravelPlannerClick(travelPlannerId)
-  {
-    this.router.navigate(['/admin/travel-planner-account/step1'],{queryParams:{travelPlannerId:travelPlannerId}});
+  addTravelPlannerClick(travelPlannerId) {
+    this.router.navigate(['/admin/travel-planner-account/step1'], { queryParams: { travelPlannerId: travelPlannerId } });
   }
 
-  formatText(value){
+  formatText(value) {
     return value ? value.replaceAll('_', ' ') : 'N/A'
   }
-  handleChangeToggle(){
-    this.isDeletedAcc=!this.isDeletedAcc;
-    if(this.isDeletedAcc){
+  handleChangeToggle() {
+    this.isDeletedAcc = !this.isDeletedAcc;
+    if (this.isDeletedAcc) {
       this.showActionColumn = false
       this.title = "Deleted"
     }
-    else{
+    else {
       this.showActionColumn = true
-       this.title = "All"
+      this.title = "All"
     }
   }
 
   enableDisableClickedDelete(id) {
     $('#deleteConfirmationModal').modal('show');
     console.log('in function open modal', this.accountToDelete)
-		this.accountToDelete = id;
-		this.alertMessage = "Are you sure you want to delete this account?"
-	}
+    this.accountToDelete = id;
+    this.alertMessage = "Are you sure you want to delete this account?"
+  }
 
-  deleteAccount(){
+  deleteAccount() {
     $('#deleteConfirmationModal').modal('hide');
     console.log('in function delete account', this.accountToDelete)
     this.adminService.deleteAccount(this.accountToDelete)
-    .pipe(
-      catchError(err => {
-        // this.stateManagementService.setprogressBar(false);
-        return throwError(err);
-      })
-    ).subscribe(result => {
-      this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
-        this.router.navigate(['/admin/all-accounts']);
-      });
-      this.loadAccounts()
+      .pipe(
+        catchError(err => {
+          // this.stateManagementService.setprogressBar(false);
+          return throwError(err);
+        })
+      ).subscribe(result => {
+        this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
+          this.router.navigate(['/admin/all-accounts']);
+        });
+        this.loadAccounts()
       });
 
   }
 
-  clickEditTravelPlanner(travelPlannerId)
-  {
+  clickEditTravelPlanner(travelPlannerId) {
     localStorage.setItem('travelAgent_id', travelPlannerId)
-    this.router.navigate(['/admin/travel-planner-account/step1'],{queryParams:{travelPlannerId:travelPlannerId}});
+    this.router.navigate(['/admin/travel-planner-account/step1'], { queryParams: { travelPlannerId: travelPlannerId } });
   }
 
-  clickTravelPlannerCards(travelPlannerId)
-  {
-    this.router.navigate(['/admin/cards'],{queryParams:{accountType:'travelPlanner',accountId:travelPlannerId}});
+  clickTravelPlannerCards(travelPlannerId) {
+    this.router.navigate(['/admin/cards'], { queryParams: { accountType: 'travelPlanner', accountId: travelPlannerId } });
   }
-  
-  clickTravelPlannerStaff(travelPlannerId)
-  {
-    this.router.navigate(['/admin/staff'],{queryParams:{accountType:'travelPlanner',accountId:travelPlannerId}});
+
+  clickTravelPlannerStaff(travelPlannerId) {
+    this.router.navigate(['/admin/staff'], { queryParams: { accountType: 'travelPlanner', accountId: travelPlannerId } });
   }
 
   highlighText(args: string) {
-		if (!this.searchText) { return args ? args : 'N/A'; }
-		if (args) {
-			args = args.toString()
-			var re = new RegExp(this.searchText, 'gi'); //'gi' for case insensitive and can use 'g' if you want the search to be case sensitive.
-			return args.replace(re, '<mark class="font-weight-bold">$&</mark>');
-		}
-	}
+    if (!this.searchText) { return args ? args : 'N/A'; }
+    if (args) {
+      args = args.toString()
+      var re = new RegExp(this.searchText, 'gi'); //'gi' for case insensitive and can use 'g' if you want the search to be case sensitive.
+      return args.replace(re, '<mark class="font-weight-bold">$&</mark>');
+    }
+  }
 
   messagetype: Record<string, any>
-	sendMessage(type: 'email' | 'sms', travelPlanner: Object, message: string = null) {
-		console.log('Request to send a Message to travel agent id: ', type, travelPlanner['id'])
-		this.messagetype = { type, travelPlanner }
-		$('#messageModal').modal('show')
-		$('#messageModal').find('.modal-header').find('h4').text('Contact to Travel Agent via ' + type.toUpperCase())
-		$('#messageModal').find('.modal-body').find('p#affiliate-details').html(`Travel Agent Name: ${travelPlanner['first_name']} ${travelPlanner['last_name']}<br/>Travel Agent Email: ${travelPlanner['email']}`)
-		if (message != null) {
-			this.adminService.sendAffiliateMessage(type, travelPlanner['id'], { sendContent: message },).subscribe((response: any) => {
-				if (response.success) {
-					console.log('Message Sent Successfully. ')
-				}
-			})
-		}
-	}
+  sendMessage(type: 'email' | 'sms', travelPlanner: any, message: string = null) {
+    console.log('Request to send a Message to travel agent id: ', type, travelPlanner)
+    this.messagetype = { type, travelPlanner }
+    $('#messageModal').modal('show')
+    $('#messageModal').find('.modal-header').find('h4').text('Contact to User via ' + type.toUpperCase())
+    $('#messageModal').find('.modal-body').find('p#affiliate-details').html(`User Name: ${travelPlanner['first_name']} ${travelPlanner['last_name']}<br/>User Email: ${travelPlanner['email']}`)
+    if (message != null) {
+      let body = {
+        text_message: message
+      }
+      if (type == 'email') {
+        body['email_address'] = travelPlanner?.email
+      }
+      else {
+        body['phone_number'] = travelPlanner?.isd + travelPlanner?.phone
+      }
+      this.adminService.sendNotificationAllAccounts(type, body).subscribe((response: any) => {
+        if (response.success) {
+          console.log('Message Sent Successfully. ')
+        }
+      })
+    }
+  }
 
-  enableDisableClicked(event,id)
-  {
+  enableDisableClicked(event, id) {
     this.spinner.show();//show spinner
     console.log(event.checked);
-    if(event.checked)
-    {
-      var status='enable';
+    if (event.checked) {
+      var status = 'enable';
     }
-    else
-    {
-      var status='disable';
+    else {
+      var status = 'disable';
     }
-    this.adminService.travelPlannerAccountStatus(id,status)
-    .pipe(
+    this.adminService.travelPlannerAccountStatus(id, status)
+      .pipe(
         catchError(err => {
           this.spinner.hide();//hide spinner
           return throwError(err);
         })
-    ).subscribe(result=>{
+      ).subscribe(result => {
 
-      this.spinner.hide();//hide spinner
-    });
+        this.spinner.hide();//hide spinner
+      });
   }
 
   //for paginator
@@ -238,26 +241,24 @@ export class RecoverAccountsComponent implements OnInit {
     var startFrom;
     var endTo;
 
-    if(this.currentPage<5)
-    {
-      startFrom=0;
-      endTo=this.totalPage;
+    if (this.currentPage < 5) {
+      startFrom = 0;
+      endTo = this.totalPage;
     }
-    else if(this.currentPage<this.totalPage){
-      currentPage=this.currentPage
-      endTo=currentPage+1;
-      startFrom=endTo-5;
+    else if (this.currentPage < this.totalPage) {
+      currentPage = this.currentPage
+      endTo = currentPage + 1;
+      startFrom = endTo - 5;
     }
-    else{
-      endTo=this.totalPage;
-      startFrom=endTo-5;
+    else {
+      endTo = this.totalPage;
+      startFrom = endTo - 5;
     }
 
     var i;
-    var udpArr=new Array();
-    for(i=startFrom;i<endTo;i++)
-    {
-      udpArr.push(i+1);
+    var udpArr = new Array();
+    for (i = startFrom; i < endTo; i++) {
+      udpArr.push(i + 1);
     }
     return udpArr;
   }
