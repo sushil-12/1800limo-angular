@@ -17,8 +17,7 @@ declare var $: any;
 	templateUrl: './add-vehicle-from-affiliate.component.html',
 	styleUrls: ['./add-vehicle-from-affiliate.component.scss']
 })
-export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecked
-{
+export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecked {
 
 	public tree: any;
 	public affiliateId: string;
@@ -87,9 +86,9 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 	public charterCancelOptions: Array<Object>;
 	public nonCharterCancelOptions: Array<Object>;
 	public serviceType: string;
-	isVehicleTypeSelected: boolean=true;
-	changeNonCharterCancelPolicy : boolean = false
-	changeCharterCancelPolicy : boolean = false
+	isVehicleTypeSelected: boolean = true;
+	changeNonCharterCancelPolicy: boolean = false
+	changeCharterCancelPolicy: boolean = false
 
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
 	errorMsg: boolean;
@@ -112,66 +111,53 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 		private errorModal: ErrorDialogService
 	) { }
 
-	ngAfterViewChecked()
-	{
+	ngAfterViewChecked() {
 		$(".camera-svg").tooltip({
 			trigger: 'hover'
 		});
-		$(".camera-svg").on('mouseleave', function ()
-		{
+		$(".camera-svg").on('mouseleave', function () {
 			$(this).tooltip('dispose');
 		});
-		$(".camera-svg").on('click', function ()
-		{
+		$(".camera-svg").on('click', function () {
 			$(this).tooltip('dispose');
 		});
 		$(".backbutton").tooltip({
 			trigger: 'hover'
 		});
-		$(".backbutton").on('mouseleave', function ()
-		{
+		$(".backbutton").on('mouseleave', function () {
 			$(this).tooltip('dispose');
 		});
-		$(".backbutton").on('click', function ()
-		{
+		$(".backbutton").on('click', function () {
 			$(this).tooltip('dispose');
 		});
 		// this.Subscriptions()
 	}
 
-	ngOnInit(): void
-	{
-		$('#vehicleTypeField').focusout(() =>
-		{
+	ngOnInit(): void {
+		$('#vehicleTypeField').focusout(() => {
 			this.errorMsg = true;
 		})
-		$('#makeField').focusout(() =>
-		{
+		$('#makeField').focusout(() => {
 			this.errorMsg1 = true;
 		})
-		$('#modelField').focusout(() =>
-		{
+		$('#modelField').focusout(() => {
 			this.errorMsg2 = true;
 		})
-		$('#yearField').focusout(() =>
-		{
+		$('#yearField').focusout(() => {
 			this.errorMsg3 = true;
 		})
-		$('#colorField').focusout(() =>
-		{
+		$('#colorField').focusout(() => {
 			this.errorMsg4 = true;
 		})
 
 		//pick vehicle type id from query params
 		this.activatedroute.queryParamMap
-			.subscribe((params) =>
-			{
+			.subscribe((params) => {
 				this.paramResponse = { ...params.keys, ...params };
 				this.vehicleTypeId = this.paramResponse.params.vehicleTypeId;
 			}
 			);
-		this.httpClient.get("assets/json/charterOptions.json").subscribe((data: any) =>
-		{
+		this.httpClient.get("assets/json/charterOptions.json").subscribe((data: any) => {
 			this.nonCharterCancelOptions = data;
 			this.charterCancelOptions = data;
 		});
@@ -179,12 +165,10 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 		this.affiliateId = currentUser.account_id;
 
 		//data for dropdown of seats and luggage
-		for (let i = 2; i <= 75; i++)
-		{
+		for (let i = 2; i <= 75; i++) {
 			this.luggageOptions.push(i);
 		}
-		for (let i = 4; i <= 75; i++)
-		{
+		for (let i = 4; i <= 75; i++) {
 			this.seatOptions.push(i);
 		}
 
@@ -238,23 +222,19 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 
 		this.affiliateType = currentUser.affiliate_type;
 
-		this.stateManagementService.getNumberOfVehicles().subscribe(numberOfVehicles =>
-		{
+		this.stateManagementService.getNumberOfVehicles().subscribe(numberOfVehicles => {
 			let numberOfVehiclesCanBeAdded;
-			console.log("IN BLACK CAR LIMO",this.affiliateType,numberOfVehicles)
-			
-			if (this.affiliateType == 'fleet_operator')
-			{
+			console.log("IN BLACK CAR LIMO", this.affiliateType, numberOfVehicles)
+
+			if (this.affiliateType == 'fleet_operator') {
 				this.addVehicleForm.controls['numberOfVehicles'].setValidators([Validators.required, Validators.pattern("^[0-9]*$")]);
 			}
-			else if (this.affiliateType == 'black_limo_operator' || this.affiliateType == 'Black Car/Limo Owner Operator')
-			{
-				console.log("IN BLACK CAR LIMO",numberOfVehicles)
+			else if (this.affiliateType == 'black_limo_operator' || this.affiliateType == 'Black Car/Limo Owner Operator') {
+				console.log("IN BLACK CAR LIMO", numberOfVehicles)
 				numberOfVehiclesCanBeAdded = 2 - numberOfVehicles;
 				this.addVehicleForm.controls['numberOfVehicles'].setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.min(1), Validators.max(numberOfVehiclesCanBeAdded)]);
 			}
-			else
-			{
+			else {
 				numberOfVehiclesCanBeAdded = 1 - numberOfVehicles;
 				this.addVehicleForm.controls['numberOfVehicles'].setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.min(1), Validators.max(numberOfVehiclesCanBeAdded)]);
 			}
@@ -266,13 +246,11 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 		// Load data for form
 		this.affiliateService.getFieldsData()
 			.pipe(
-				catchError(err =>
-				{
+				catchError(err => {
 					this.spinner.hide() //hide spinner
 					return throwError(err);
 				})
-			).subscribe(result =>
-			{
+			).subscribe(result => {
 				this.response = result;
 				this.filteredYear = this.year = this.response.data.years;
 				this.filteredMake = this.make = this.response.data.make;
@@ -308,8 +286,7 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 				this.vehicleImageId8 = this.response.data.vehicleImage8.id;
 				this.vehicleImageId9 = this.response.data.vehicleImage9.id;
 
-				if (this.affiliateType != 'fleet_operator')
-				{
+				if (this.affiliateType != 'fleet_operator') {
 					this.rearPlateImage = this.oldvehicleImage[9] = this.response.data.rear_plate.image;
 					this.windowPermitImage = this.oldvehicleImage[10] = this.response.data.window_permit.image;
 					this.windowPermit2Image = this.oldvehicleImage[11] = this.response.data.window_permit_1.image;
@@ -326,10 +303,8 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 				//get models as per make
 				let models = JSON.parse(sessionStorage.getItem('models'));
 				let selectedMake = this.make[0].ID;
-				let resmodels = models.filter(function (model)
-				{
-					if (model.make_id == selectedMake)
-					{
+				let resmodels = models.filter(function (model) {
+					if (model.make_id == selectedMake) {
 						return true;
 					}
 				});
@@ -346,8 +321,7 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 					vehicle_image_8: this.vehicleImageId8,
 					vehicle_image_9: this.vehicleImageId9,
 				});
-				if (this.affiliateType != 'fleet_operator')
-				{
+				if (this.affiliateType != 'fleet_operator') {
 					this.addVehicleForm.patchValue({
 						rearPlateImage: this.rearPlateId,
 						windowPermitImage: this.windowPermitId,
@@ -361,22 +335,17 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 		this.pushValuesTypeOfService(['local'])
 	}
 
-	closeButton()
-	{
+	closeButton() {
 		this.closeTab.emit();
 	}
 	//Start of autocomplete search and selection
-	searchSorting(keyword, a, b)
-	{
+	searchSorting(keyword, a, b) {
 		// Sort results by matching name with keyword position in name
-		if (a.name.toLowerCase().indexOf(keyword.toLowerCase()) > b.name.toLowerCase().indexOf(keyword.toLowerCase()))
-		{
+		if (a.name.toLowerCase().indexOf(keyword.toLowerCase()) > b.name.toLowerCase().indexOf(keyword.toLowerCase())) {
 			return 1;
-		} else if (a.name.toLowerCase().indexOf(keyword.toLowerCase()) < b.name.toLowerCase().indexOf(keyword.toLowerCase()))
-		{
+		} else if (a.name.toLowerCase().indexOf(keyword.toLowerCase()) < b.name.toLowerCase().indexOf(keyword.toLowerCase())) {
 			return -1;
-		} else
-		{
+		} else {
 			if (a.name > b.name)
 				return 1;
 			else
@@ -384,41 +353,34 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 		}
 	}
 
-	searchVehicleType(keyword)
-	{
+	searchVehicleType(keyword) {
 		this.addVehicleForm.patchValue({
 			vehicleType: '',
 		});
-		if (keyword == '')
-		{
+		if (keyword == '') {
 			this.filteredVehicleTypes = this.vehicleTypes;
 		}
-		else
-		{
-			this.filteredVehicleTypes = this.vehicleTypes.filter((vehicle_Type: any) =>
-			{
-				if (vehicle_Type.name.toLowerCase() === keyword.toLowerCase())
-				{
+		else {
+			this.filteredVehicleTypes = this.vehicleTypes.filter((vehicle_Type: any) => {
+				if (vehicle_Type.name.toLowerCase() === keyword.toLowerCase()) {
 					this.addVehicleForm.patchValue({
 						vehicleType: vehicle_Type.ID,
 					});
 				}
 				return vehicle_Type.name.toLowerCase().includes(keyword.toLowerCase());
 			})
-				.sort((a: any, b: any) =>
-				{
+				.sort((a: any, b: any) => {
 					return this.searchSorting(keyword, a, b)
 				});
 		}
 	}
-	handleChangeVehicleType(value){
+	handleChangeVehicleType(value) {
 		console.log('Selected Value:', value);
-		
+
 		this.isVehicleTypeSelected = value ? true : false
 	}
 
-	selectVehicleType(val, isSelected)
-	{
+	selectVehicleType(val, isSelected) {
 		if (isSelected)// ignore on deselection of the previous option
 		{
 			this.addVehicleForm.patchValue({
@@ -427,35 +389,28 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 		}
 	}
 
-	searchMake(keyword)
-	{
+	searchMake(keyword) {
 		this.addVehicleForm.patchValue({
 			make: '',
 		});
-		if (keyword == '')
-		{
+		if (keyword == '') {
 			this.filteredMake = this.make;
 		}
-		else
-		{
-			this.filteredMake = this.make.filter((mk: any) =>
-			{
-				if (mk.name.toLowerCase() === keyword.toLowerCase())
-				{
+		else {
+			this.filteredMake = this.make.filter((mk: any) => {
+				if (mk.name.toLowerCase() === keyword.toLowerCase()) {
 					this.addVehicleForm.patchValue({
 						make: mk.ID,
 					});
 				}
 				return mk.name.toLowerCase().includes(keyword.toLowerCase());
 			})
-				.sort((a: any, b: any) =>
-				{
+				.sort((a: any, b: any) => {
 					return this.searchSorting(keyword, a, b)
 				});
 		}
 	}
-	selectMake(val, isSelected)
-	{
+	selectMake(val, isSelected) {
 		if (isSelected)// ignore on deselection of the previous option
 		{
 			this.addVehicleForm.patchValue({
@@ -470,44 +425,37 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 	// 	this.addVehicleForm.get('vehicleType')?.valueChanges.subscribe((value: string) => {
 	// 		console.log('change in vehicle type-->>' , value)
 	// 	})
-	
+
 	// }
-	handleSelectMake(){
-		console.log('in function handle select make->>' , this.addVehicleForm.controls['make'].value)
+	handleSelectMake() {
+		console.log('in function handle select make->>', this.addVehicleForm.controls['make'].value)
 		this.changeMake(this.addVehicleForm.controls['make'].value);
 		let modelField: any = document.getElementById('modelField');
-			modelField.value = '';
+		modelField.value = '';
 	}
 
-	searchModel(keyword)
-	{
+	searchModel(keyword) {
 		this.addVehicleForm.patchValue({
 			model: '',
 		});
-		if (keyword == '')
-		{
+		if (keyword == '') {
 			this.filteredModel = this.model;
 		}
-		else
-		{
-			this.filteredModel = this.model.filter((mdl: any) =>
-			{
-				if (mdl.name.toLowerCase() === keyword.toLowerCase())
-				{
+		else {
+			this.filteredModel = this.model.filter((mdl: any) => {
+				if (mdl.name.toLowerCase() === keyword.toLowerCase()) {
 					this.addVehicleForm.patchValue({
 						model: mdl.ID,
 					});
 				}
 				return mdl.name.toLowerCase().includes(keyword.toLowerCase());
 			})
-				.sort((a: any, b: any) =>
-				{
+				.sort((a: any, b: any) => {
 					return this.searchSorting(keyword, a, b)
 				});
 		}
 	}
-	selectModel(val, isSelected)
-	{
+	selectModel(val, isSelected) {
 		if (isSelected)// ignore on deselection of the previous option
 		{
 			this.addVehicleForm.patchValue({
@@ -516,35 +464,28 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 		}
 	}
 
-	searchYear(keyword)
-	{
+	searchYear(keyword) {
 		this.addVehicleForm.patchValue({
 			year: '',
 		});
-		if (keyword == '')
-		{
+		if (keyword == '') {
 			this.filteredYear = this.year;
 		}
-		else
-		{
-			this.filteredYear = this.year.filter((yr: any) =>
-			{
-				if (yr.name.toLowerCase() === keyword.toLowerCase())
-				{
+		else {
+			this.filteredYear = this.year.filter((yr: any) => {
+				if (yr.name.toLowerCase() === keyword.toLowerCase()) {
 					this.addVehicleForm.patchValue({
 						year: yr.ID,
 					});
 				}
 				return yr.name.toLowerCase().includes(keyword.toLowerCase());
 			})
-				.sort((a: any, b: any) =>
-				{
+				.sort((a: any, b: any) => {
 					return this.searchSorting(keyword, a, b)
 				});
 		}
 	}
-	selectYear(val, isSelected)
-	{
+	selectYear(val, isSelected) {
 		if (isSelected)// ignore on deselection of the previous option
 		{
 			this.addVehicleForm.patchValue({
@@ -553,35 +494,28 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 		}
 	}
 
-	searchColor(keyword)
-	{
+	searchColor(keyword) {
 		this.addVehicleForm.patchValue({
 			color: '',
 		});
-		if (keyword == '')
-		{
+		if (keyword == '') {
 			this.filteredColor = this.color;
 		}
-		else
-		{
-			this.filteredColor = this.color.filter((cl: any) =>
-			{
-				if (cl.name.toLowerCase() === keyword.toLowerCase())
-				{
+		else {
+			this.filteredColor = this.color.filter((cl: any) => {
+				if (cl.name.toLowerCase() === keyword.toLowerCase()) {
 					this.addVehicleForm.patchValue({
 						color: cl.ID,
 					});
 				}
 				return cl.name.toLowerCase().includes(keyword.toLowerCase());
 			})
-				.sort((a: any, b: any) =>
-				{
+				.sort((a: any, b: any) => {
 					return this.searchSorting(keyword, a, b)
 				});
 		}
 	}
-	selectColor(val, isSelected)
-	{
+	selectColor(val, isSelected) {
 		if (isSelected)// ignore on deselection of the previous option
 		{
 			this.addVehicleForm.patchValue({
@@ -593,150 +527,133 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 
 
 
-	onAmenitiesCheckboxChange(val, ischecked)
-	{
+	onAmenitiesCheckboxChange(val, ischecked) {
 		const amenities: FormArray = this.addVehicleForm.get('amenities') as FormArray;
-		if (ischecked)
-		{
+		if (ischecked) {
 			amenities.push(new FormControl(val));
-		} else
-		{
+		} else {
 			const index = amenities.controls.findIndex(x => x.value === val);
 			amenities.removeAt(index);
 		}
 	}
-	onSpecialAmenitiesCheckboxChange(e)
-	{
+	onSpecialAmenitiesCheckboxChange(e) {
 		const specialAmenities: FormArray = this.addVehicleForm.get('specialAmenities') as FormArray;
-		if (e.target.checked)
-		{
+		if (e.target.checked) {
 			specialAmenities.push(new FormControl(e.target.value));
-		} else
-		{
+		} else {
 			const index = specialAmenities.controls.findIndex(x => x.value === e.target.value);
 			specialAmenities.removeAt(index);
 		}
 	}
-	handleNonCharterCancelPolicy(event){
+	handleNonCharterCancelPolicy(event) {
 		console.log('in function handleNonCharterCancelPolicy--->>', event)
 		this.changeNonCharterCancelPolicy = true
 	}
-	handleChangeCharterCancelPolicy(event){
+	handleChangeCharterCancelPolicy(event) {
 		this.changeCharterCancelPolicy = true
 	}
 
-	onInteriorsCheckboxChange(e) 
-	{
+	onInteriorsCheckboxChange(e) {
 		const vehicleInterior: FormArray = this.addVehicleForm.get('vehicleInterior') as FormArray;
-		if (e.target.checked)
-		{
+		if (e.target.checked) {
 			vehicleInterior.push(new FormControl(e.target.value));
-		} else
-		{
+		} else {
 			const index = vehicleInterior.controls.findIndex(x => x.value === e.target.value);
 			vehicleInterior.removeAt(index);
 		}
 	}
-	fetchImageBlob(url ,key ,id){
+	fetchImageBlob(url, key, id) {
 		this.stateManagementService.setprogressBar(true);
-		
+
 		this.adminService.fetchImageBlob(url)
-		.pipe(
-			catchError(err => {
+			.pipe(
+				catchError(err => {
+					this.stateManagementService.setprogressBar(false);
+					return throwError(err);
+				})
+			)
+			.subscribe(async ({ data }: any) => {
 				this.stateManagementService.setprogressBar(false);
-				return throwError(err);
+				const response = await fetch(data);
+				const imageBlob = await response.blob()
+				console.log('imageBlob', imageBlob)
+				const canvas = document.createElement("canvas");
+				const ctx = canvas.getContext("2d");
+				const img = new Image();
+				img.src = URL.createObjectURL(imageBlob);
+				console.log('img-->', img)
+				img.onload = () => {
+					// Rotate the image by 90 degrees (or your desired angle)
+					canvas.width = img.width;
+					canvas.height = img.height;
+					ctx.translate(canvas.width / 2, canvas.height / 2);
+					ctx.rotate(Math.PI); // Rotate by 180 degrees
+					ctx.drawImage(img, -img.width / 2, -img.height / 2);
+					// ctx.drawImage(img, 0, -canvas.width);
+
+					// Convert the canvas to a Blob (JPEG format)
+					canvas.toBlob((blob) => {
+						console.log(blob);
+
+						this.blobToDataURL(blob, key, id);
+						// });
+					}, "image/jpeg");
+				}
 			})
-		)
-		.subscribe(async({ data }: any) => {
-			this.stateManagementService.setprogressBar(false);
-			const response = await fetch(data);
-			const imageBlob = await response.blob()
-			console.log('imageBlob',imageBlob)
-		const canvas = document.createElement("canvas");
-		const ctx = canvas.getContext("2d");
-		const img = new Image();
-		img.src = URL.createObjectURL(imageBlob);
-		console.log('img-->' , img)
-		img.onload = () => {
-			// Rotate the image by 90 degrees (or your desired angle)
-			canvas.width = img.width; 
-			canvas.height = img.height;
-			ctx.translate(canvas.width / 2, canvas.height / 2);
-			ctx.rotate(Math.PI); // Rotate by 180 degrees
-			ctx.drawImage(img, -img.width / 2, -img.height / 2);
-			// ctx.drawImage(img, 0, -canvas.width);
-
-			// Convert the canvas to a Blob (JPEG format)
-			canvas.toBlob((blob) => {
-				console.log(blob);
-
-				this.blobToDataURL(blob, key ,id);
-				// });
-			}, "image/jpeg");
-		}
-		})
 	}
-	blobToDataURL(blob: Blob , key , id) {
+	blobToDataURL(blob: Blob, key, id) {
 		var reader = new FileReader();
 		reader.readAsDataURL(blob);
 		reader.onload = () => {
 			let dataUrl = reader.result;
 			console.log(dataUrl); //DataURL
-			isNaN(parseInt(key)) ? this.vehicleOfficialImagesChange1(dataUrl, key,id) :this.onFileChange1(dataUrl, key,id);
+			isNaN(parseInt(key)) ? this.vehicleOfficialImagesChange1(dataUrl, key, id) : this.onFileChange1(dataUrl, key, id);
 		};
 	}
-	async onFileChange1(dataUrl, imageNumber,imageId)
-	{
-		if(!await this.commonServices.handleFile(event)) {
+	async onFileChange1(dataUrl, imageNumber, imageId) {
+		if (!await this.commonServices.handleFile(event)) {
 			return;
 		}
 		this.stateManagementService.setprogressBar(true);
-				this.imageSrc = dataUrl;
-				this.affiliateService.uploadVehicleImage(this.imageSrc)
-					.pipe(
-						catchError(err =>
-						{
-							this.stateManagementService.setprogressBar(false);
-							return throwError(err);
-						})
-					)
-					.subscribe(result =>
-					{
-						this.response = result;
-						this.addVehicleForm.patchValue({
-							["vehicle_image_" + imageNumber]: this.response.data.id,
-						});
-						this["vehicleImage" + imageNumber] = this.response.data.image;
+		this.imageSrc = dataUrl;
+		this.affiliateService.uploadVehicleImage(this.imageSrc)
+			.pipe(
+				catchError(err => {
+					this.stateManagementService.setprogressBar(false);
+					return throwError(err);
+				})
+			)
+			.subscribe(result => {
+				this.response = result;
+				this.addVehicleForm.patchValue({
+					["vehicle_image_" + imageNumber]: this.response.data.id,
+				});
+				this["vehicleImage" + imageNumber] = this.response.data.image;
 
-						this.stateManagementService.setprogressBar(false);
-					});
+				this.stateManagementService.setprogressBar(false);
+			});
 	}
 
 
-	async onFileChange(event, imageId, imageNumber)
-	{
-		if(!await this.commonServices.handleFile(event)) {
+	async onFileChange(event, imageId, imageNumber) {
+		if (!await this.commonServices.handleFile(event)) {
 			return;
 		}
 		this.stateManagementService.setprogressBar(true);
 		const reader = new FileReader();
-		if (event.target.files && event.target.files.length)
-		{
+		if (event.target.files && event.target.files.length) {
 			const [file] = event.target.files;
 			reader.readAsDataURL(file);
-			reader.onload = () =>
-			{
+			reader.onload = () => {
 				this.imageSrc = reader.result as string;
 				this.affiliateService.uploadVehicleImage(this.imageSrc)
 					.pipe(
-						catchError(err =>
-						{
+						catchError(err => {
 							this.stateManagementService.setprogressBar(false);
 							return throwError(err);
 						})
 					)
-					.subscribe(result =>
-					{
+					.subscribe(result => {
 						this.response = result;
 						this.addVehicleForm.patchValue({
 							["vehicle_image_" + imageNumber]: this.response.data.id,
@@ -749,108 +666,98 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 		}
 	}
 
-	async vehicleOfficialImagesChange1(url, imageType, imageId)
-	{
-		if(!await this.commonServices.handleFile(event)) {
+	async vehicleOfficialImagesChange1(url, imageType, imageId) {
+		if (!await this.commonServices.handleFile(event)) {
 			return;
 		}
 		this.stateManagementService.setprogressBar(true);
-				this.imageSrc = url;
-				this.affiliateService.uploadVehicleImage(this.imageSrc)
-					.pipe(
-						catchError(err =>
-						{
-							this.stateManagementService.setprogressBar(false);
-							return throwError(err);
-						})
-					)
-					.subscribe(result =>
-					{
-						this.response = result;
+		this.imageSrc = url;
+		this.affiliateService.uploadVehicleImage(this.imageSrc)
+			.pipe(
+				catchError(err => {
+					this.stateManagementService.setprogressBar(false);
+					return throwError(err);
+				})
+			)
+			.subscribe(result => {
+				this.response = result;
 
-						switch (imageType)
-						{
-							case 'rearPlate': {
-								this.addVehicleForm.patchValue({
-									rearPlateImage: this.response.data.id,
-								});
-								// this.rearPlateUploaded=true;
-								this.rearPlateImage = this.response.data.image;
-								// this.deleteImage(imageId,'rearPlate');//delete previous image
-								break;
-							}
-							case 'windowPermit': {
-								this.addVehicleForm.patchValue({
-									windowPermitImage: this.response.data.id,
-								});
-								// this.windowPermitUploaded=true;
-								this.windowPermitImage = this.response.data.image;
-								// this.deleteImage(imageId,'windowPermit');//delete previous image
-								break;
-							}
-							case 'windowPermit2': {
-								this.addVehicleForm.patchValue({
-									windowPermit2Image: this.response.data.id,
-								});
-								// this.windowPermit2Uploaded=true;
-								this.windowPermit2Image = this.response.data.image;
-								// this.deleteImage(imageId,'windowPermit2');//delete previous image
-								break;
-							}
-							case 'usdotPermit': {
-								this.addVehicleForm.patchValue({
-									usdotPermitImage: this.response.data.id,
-								});
-								// this.usdotPermitUploaded=true;
-								this.usdotPermitImage = this.response.data.image;
-								// this.deleteImage(imageId,'usdotPermit');//delete previous image
-								break;
-							}
-							case 'mc': {
-								// this.deleteImage(imageId,'mc');//delete previous image
-								this.addVehicleForm.patchValue({
-									mcImage: this.response.data.id,
-								});
-								// this.mcUploaded=true;
-								this.mcImage = this.response.data.image;
-								break;
-							}
-							default: {
-								break;
-							}
-						}
-						this.stateManagementService.setprogressBar(false);
-					});
+				switch (imageType) {
+					case 'rearPlate': {
+						this.addVehicleForm.patchValue({
+							rearPlateImage: this.response.data.id,
+						});
+						// this.rearPlateUploaded=true;
+						this.rearPlateImage = this.response.data.image;
+						// this.deleteImage(imageId,'rearPlate');//delete previous image
+						break;
+					}
+					case 'windowPermit': {
+						this.addVehicleForm.patchValue({
+							windowPermitImage: this.response.data.id,
+						});
+						// this.windowPermitUploaded=true;
+						this.windowPermitImage = this.response.data.image;
+						// this.deleteImage(imageId,'windowPermit');//delete previous image
+						break;
+					}
+					case 'windowPermit2': {
+						this.addVehicleForm.patchValue({
+							windowPermit2Image: this.response.data.id,
+						});
+						// this.windowPermit2Uploaded=true;
+						this.windowPermit2Image = this.response.data.image;
+						// this.deleteImage(imageId,'windowPermit2');//delete previous image
+						break;
+					}
+					case 'usdotPermit': {
+						this.addVehicleForm.patchValue({
+							usdotPermitImage: this.response.data.id,
+						});
+						// this.usdotPermitUploaded=true;
+						this.usdotPermitImage = this.response.data.image;
+						// this.deleteImage(imageId,'usdotPermit');//delete previous image
+						break;
+					}
+					case 'mc': {
+						// this.deleteImage(imageId,'mc');//delete previous image
+						this.addVehicleForm.patchValue({
+							mcImage: this.response.data.id,
+						});
+						// this.mcUploaded=true;
+						this.mcImage = this.response.data.image;
+						break;
+					}
+					default: {
+						break;
+					}
+				}
+				this.stateManagementService.setprogressBar(false);
+			});
 	}
 
-	async vehicleOfficialImagesChange(event, imageType, imageId)
-	{
-		if(!await this.commonServices.handleFile(event)) {
+	async vehicleOfficialImagesChange(event, imageType, imageId) {
+		if (!await this.commonServices.handleFile(event)) {
 			return;
 		}
 		this.stateManagementService.setprogressBar(true);
 		const reader = new FileReader();
-		if (event.target.files && event.target.files.length)
-		{
+		if (event.target.files && event.target.files.length) {
 			const [file] = event.target.files;
 			reader.readAsDataURL(file);
-			reader.onload = () =>
-			{
+			reader.onload = () => {
 				this.imageSrc = reader.result as string;
 				this.affiliateService.uploadVehicleImage(this.imageSrc)
 					.pipe(
-						catchError(err =>
-						{
+						catchError(err => {
 							this.stateManagementService.setprogressBar(false);
 							return throwError(err);
 						})
 					)
-					.subscribe(result =>
-					{
+					.subscribe(result => {
 						this.response = result;
 
-						switch (imageType)
-						{
+						switch (imageType) {
 							case 'rearPlate': {
 								this.addVehicleForm.patchValue({
 									rearPlateImage: this.response.data.id,
@@ -906,10 +813,8 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 		}
 	}
 
-	deleteImage(id, imageType, imageNumber = null)
-	{
-		switch (imageType)
-		{
+	deleteImage(id, imageType, imageNumber = null) {
+		switch (imageType) {
 			case 'rearPlate': {
 				this.addVehicleForm.patchValue({
 					rearPlateImage: '',
@@ -958,20 +863,17 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 		}
 	}
 
-	showImageInModal(imageUrl)
-	{
+	showImageInModal(imageUrl) {
 		this.modalImage = imageUrl;
 		$("#imageModal").addClass("showImage");
 		$("#imageModal").removeClass("d-none");
 	}
 
-	get f()
-	{
+	get f() {
 		return this.addVehicleForm.controls;
 	}
 
-	submitForm()
-	{
+	submitForm() {
 		this.addVehicleForm.patchValue({
 			acc_id: this.affiliateId,
 		});
@@ -982,8 +884,15 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 
 		this.submittedForm = true;
 		// stop here if form is invalid
-		if (this.addVehicleForm.invalid)
-		{
+		if (this.addVehicleForm.invalid) {
+			return;
+		}
+		if (this.addVehicleForm.get('vehicle_image_1').value == this.vehicleImageId1) {
+			this.errorModal.openDialog({
+				errors: {
+					error: 'Please change Vehicle Image!'
+				}
+			})
 			return;
 		}
 		this.spinner.show(); // show spinner
@@ -991,15 +900,13 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 
 		this.affiliateService.submitVehicle(this.addVehicleForm.value)
 			.pipe(
-				catchError(err =>
-				{
+				catchError(err => {
 					this.spinner.hide(); // hide spinner
 					this.disableSubmitButton = false; //enable submit button
 					return throwError(err);
 				})
 			)
-			.subscribe(result =>
-			{
+			.subscribe(result => {
 				this.response = result;
 				this.spinner.hide(); // hide spinner
 				this.disableSubmitButton = true; //enable submit button
@@ -1010,8 +917,7 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 			});
 	}
 
-	resetForm()
-	{
+	resetForm() {
 		this.submittedForm = true;
 		this.addVehicleForm.reset();
 		this.vehicleImageArray = [];
@@ -1027,8 +933,7 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 		let yearField: any = document.getElementById('yearField');
 		yearField.value = "";
 		this.vehicleImage1 = this.oldvehicleImage[0];
-		if (this.affiliateType != 'fleet_operator')
-		{
+		if (this.affiliateType != 'fleet_operator') {
 			// this.vehicleImage2 = this.oldvehicleImage[1];
 			// this.vehicleImage3 = this.oldvehicleImage[2];
 			// this.vehicleImage4 = this.oldvehicleImage[3];
@@ -1045,71 +950,60 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 		}
 	}
 
-	backButton()
-	{
+	backButton() {
 		this.router.navigate(['/affiliate/step5']);
 	}
 
-	changeMake(selectedMake)
-	{
-		console.log('spinner show in function change make',selectedMake)
-		if(!selectedMake){
+	changeMake(selectedMake) {
+		console.log('spinner show in function change make', selectedMake)
+		if (!selectedMake) {
 			this.addVehicleForm.patchValue({
-				model : ''
+				model: ''
 			})
 			this.filteredModel = []
 			return false
 		}
 		this.spinner.show()
 		let models = JSON.parse(sessionStorage.getItem('models'));
-		this.filteredModel = this.model = models.filter(function (model)
-		{
-			if (model.make_id == selectedMake)
-			{
+		this.filteredModel = this.model = models.filter(function (model) {
+			if (model.make_id == selectedMake) {
 				return true;
 			}
 		});
 		console.log('spinner hide in function change make')
 		this.addVehicleForm.patchValue({
-			model : this.filteredModel[0]?.ID
+			model: this.filteredModel[0]?.ID
 		})
 		this.spinner.hide()
 	}
 
-	get typeOfService(): FormArray
-	{
+	get typeOfService(): FormArray {
 		return this.addVehicleForm.get('typeOfService') as FormArray;
 	}
 
-	pushValuesTypeOfService(value: Array<any>)
-	{
+	pushValuesTypeOfService(value: Array<any>) {
 		this.typeOfService.clear()
 		this.service = this.addVehicleForm.get('typeOfService').value
-		value.forEach((item: string) =>
-		{
+		value.forEach((item: string) => {
 			!this.service.includes(item) && this.service.push(item)
 			this.typeOfService.push(this.formBuilder.control(item))
 		})
 	}
 
 	service: Array<any> = []
-	onServiceChange(value: string)
-	{
+	onServiceChange(value: string) {
 		console.log(value)
-		if (this.service.includes(value))
-		{
+		if (this.service.includes(value)) {
 			// a never reaching code line
 			this.service = this.service.filter(val => val != value)
-		} else
-		{
+		} else {
 			this.service = []
 			this.service.push(value)
 		}
 
 		// as per new update from client: he wants to make the whole thing work as a radio button
 		return
-		if (!is_service_valid(value, this.service))
-		{
+		if (!is_service_valid(value, this.service)) {
 			this.errorModal.openDialog({
 				errors: {
 					error: 'Cannot choose Local and Over The Road service at the same time'
@@ -1126,17 +1020,13 @@ export class AddVehicleFromAffiliateComponent implements OnInit, AfterViewChecke
 		 * 
 		 * @param value: String [Required] value to check
 		 */
-		function is_service_valid(value: string, service: Array<any>)
-		{
-			if (value == 'local' && service.includes('over_the_road'))
-			{
+		function is_service_valid(value: string, service: Array<any>) {
+			if (value == 'local' && service.includes('over_the_road')) {
 				return false
-			} else if (value == 'over_the_road' && service.includes('local'))
-			{
+			} else if (value == 'over_the_road' && service.includes('local')) {
 				return false
 			}
-			else
-			{
+			else {
 				return true
 			}
 		}
