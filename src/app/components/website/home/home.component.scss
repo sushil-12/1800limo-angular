@@ -147,13 +147,48 @@ section {
 	font-size: 19px !important;
 }
 
+.after_icon::after {
+	content: url('../../../../assets/images/swap_logo_single.svg');
+	display: block;
+	position: absolute;
+	right: -12px;
+	position: absolute;
+	top: 27px;
+	// transform: rotate(-90deg);
+}
+
+.after_icon_roundtrip::after {
+	content: url('../../../../assets/images/swap_logo.png');
+	display: block;
+	position: absolute;
+	right: -9px;
+	position: absolute;
+	top: 24px;
+	transform: rotate(90deg);
+}
+
 .swap_btn {
-	margin-top: 36px;
+	margin-top: 2px;
 	margin-left: -14px;
-	// background-color: rgba(60,64,67,0.04);
-	// background-size: 24px 24px;
+	margin-bottom: 12px;
 	scale: 1.5;
 }
+
+// .swap_btn_roundtrip {
+// 	transform: rotate(90deg);
+// 	/* height: 30px; */
+// 	/* width: 30px; */
+// 	margin-top: 25px;
+// }
+
+// .swap_btn_oneway {
+// 	transform: rotate(-90deg);
+// 	height: 20px;
+// 	/* width: 30px; */
+// 	margin-top: 25px;
+// }
+
+
 
 .goog-te-gadget .goog-te-combo {
 	margin: 15px 0 0 15px !important;

@@ -219,7 +219,8 @@
 									</div>
 
 									<!-- Pickup Type -->
-									<div class="col-6 col-md-6">
+									<div class="col-6 col-md-6"
+										[ngClass]="QBForm.service_type.value == 'one_way' ? 'after_icon' : 'after_icon_roundtrip'">
 										<label>Pickup Type</label>
 										<div class="inselect">
 											<select formControlName="pickup_type" class="font-weight-bolder"
@@ -237,7 +238,14 @@
 											</div>
 										</div>
 									</div>
-
+									<!-- <div class="col" *ngIf="QBForm.service_type.value == 'one_way'">
+										<img src="../../../../assets/images/swap_logo_single.png" alt="img"
+											class="swap_btn_oneway">
+									</div>
+									<div class="col" *ngIf="QBForm.service_type.value == 'round_trip'">
+										<img src="../../../../assets/images/swap_logo.png" alt="img"
+											class="swap_btn_roundtrip">
+									</div> -->
 									<!-- Drop Off Type -->
 									<div class="col-6 col-md-6">
 										<label>Drop Off Type </label>
@@ -552,8 +560,12 @@
 												</div>
 											</ng-template>
 										</div>
-										<div class="d-flex justify-content-center">
+										<!-- <div class="d-flex justify-content-center">
 											<span class="span-term-to">TO</span>
+										</div> -->
+										<div class="d-flex justify-content-center">
+											<img src="../../../../assets/images/swap_logo.png" alt="img"
+												class="swap_btn" (click)="swapPickupDropoff('oneway')">
 										</div>
 										<!-- DROPOFF AIRPORT -->
 										<div class="errorMsg col-12 col-md-12"
@@ -641,10 +653,10 @@
 											</ng-template>
 										</div>
 									</div>
-									<div>
+									<!-- <div>
 										<img src="../../../../assets/images/swap_logo.png" alt="img" class="swap_btn"
 											(click)="swapPickupDropoff('oneway')">
-									</div>
+									</div> -->
 									<!-- PICKUP/DROPOFF AIRPORT/ADDRESS ENDS -->
 								</div>
 
@@ -852,8 +864,12 @@
 											</ng-template>
 										</div>
 
-										<div class="d-flex justify-content-center">
+										<!-- <div class="d-flex justify-content-center">
 											<span class="span-term-to">TO</span>
+										</div> -->
+										<div class="d-flex justify-content-center">
+											<img src="../../../../assets/images/swap_logo.png" alt="img"
+												class="swap_btn" (click)="swapPickupDropoff('oneway')">
 										</div>
 										<!-- RETURN DROPOFF AIRPORT -->
 										<div class="errorMsg col-12 col-md-12"
@@ -939,10 +955,10 @@
 
 
 									</div>
-									<div>
+									<!-- <div>
 										<img src="../../../../assets/images/swap_logo.png" alt="img" class="swap_btn"
 											(click)="swapPickupDropoff('roundtrip')">
-									</div>
+									</div> -->
 									<!-- PICKUP/DROPOFF AIRPORT/ADDRESS ENDS -->
 								</div>
 								<!-- RETURN FIELDS [ROUND TRIP] ENDS -->
