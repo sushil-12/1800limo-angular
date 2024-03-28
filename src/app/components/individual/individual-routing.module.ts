@@ -8,44 +8,50 @@ import { CreateNewBookingComponent } from './create-new-booking/create-new-booki
 import { InvoiceComponent } from './invoice/invoice.component';
 import { AddCardComponent } from './add-card/add-card.component';
 import { InvoiceSummaryComponent } from './invoice-summary/invoice-summary.component';
+import { FamilyMembersComponent } from './family-members/family-members.component';
 
 const routes: Routes = [
   {
-		path: '',
-		redirectTo: 'bookings',
-		pathMatch: 'full'
-	},
+    path: '',
+    redirectTo: 'bookings',
+    pathMatch: 'full'
+  },
   {
-    path:'bookings',
-    component:BookingsComponent,
+    path: 'bookings',
+    component: BookingsComponent,
     canActivate: [IndividualGuardGuard],
   },
   {
-    path:'profile',
-    component:ProfileComponent,
+    path: 'profile',
+    component: ProfileComponent,
     canActivate: [IndvOtherGuardGuard],
   },
   {
-    path:'create-new-booking',
-    component:CreateNewBookingComponent,
+    path: 'create-new-booking',
+    component: CreateNewBookingComponent,
     canActivate: [IndividualGuardGuard],
   },
   {
-    path:'invoice',
-    component:InvoiceComponent,
+    path: 'invoice',
+    component: InvoiceComponent,
     canActivate: [IndividualGuardGuard],
   },
   {
-    path:'invoice-summary',
-    component:InvoiceSummaryComponent,
+    path: 'invoice-summary',
+    component: InvoiceSummaryComponent,
     canActivate: [IndividualGuardGuard],
   },
   {
-    path:'add-card',
-    component:AddCardComponent,
+    path: 'add-card',
+    component: AddCardComponent,
     canActivate: [IndividualGuardGuard],
   },
-  
+  {
+    path: 'family-members',
+    component: FamilyMembersComponent,
+    canActivate: [IndividualGuardGuard],
+  },
+
 ];
 
 @NgModule({
