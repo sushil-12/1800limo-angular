@@ -9,6 +9,7 @@ import { InvoiceComponent } from './invoice/invoice.component';
 import { AddCardComponent } from './add-card/add-card.component';
 import { InvoiceSummaryComponent } from './invoice-summary/invoice-summary.component';
 import { FamilyMembersComponent } from './family-members/family-members.component';
+import { FamilyMemberAccountComponent } from './family-member-account/family-member-account.component';
 
 const routes: Routes = [
   {
@@ -51,7 +52,15 @@ const routes: Routes = [
     component: FamilyMembersComponent,
     canActivate: [IndividualGuardGuard],
   },
-
+  {
+    path: 'add-family-member',
+    component: FamilyMemberAccountComponent,
+    canActivate: [IndividualGuardGuard],
+  }, {
+    path: 'edit-family-member',
+    component: FamilyMemberAccountComponent,
+    canActivate: [IndividualGuardGuard],
+  },
 ];
 
 @NgModule({

@@ -1,0 +1,145 @@
+<ngx-spinner></ngx-spinner>
+<main>
+    <!-- Main page content-->
+    <form [formGroup]="addFamilyMemberAccountForm" appInvalidControlScroll>
+        <section class="user_information">
+            <h2 class="headinginfo adminbox_shadow">Add Member Account</h2>
+
+            <div class="container-fluid mt-1 ">
+                <div class="row ">
+                    <div class="col-md-6">
+                        <mat-form-field appearance="outline">
+                            <mat-label>First Name <span class="asterisk">*</span></mat-label>
+                            <input formControlName="first_name" type="text" matInput placeholder="First Name">
+                        </mat-form-field>
+                        <div *ngIf="submittedForm && f.first_name.errors" class="text-danger">
+                            <div *ngIf="f.first_name.errors.required">This field is required</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Last Name <span class="asterisk">*</span></mat-label>
+                            <input formControlName="last_name" type="text" matInput placeholder="Last Name">
+                        </mat-form-field>
+                        <div *ngIf="submittedForm && f.last_name.errors" class="text-danger">
+                            <div *ngIf="f.last_name.errors.required">This field is required</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <mat-form-field appearance="outline" class="mobileLabelClass">
+                            <label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Mobile<span
+                                    class="asterisk">
+                                    *</span></label>
+                            <input matInput placeholder="Mobile" formControlName="phone_number" ng2TelInput
+                                [ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
+                                placeholder="1234567890" class="phoneNumberClass"
+                                (countryChange)="onCountryChange($event,'phone_number')"
+                                (intlTelInputObject)="telInputObjectMobile($event)" tabIndex="1"
+                                (focus)="$event.target.select()" />
+                        </mat-form-field>
+                        <div *ngIf="submittedForm && f.phone_number.errors || f.phone_number.touched && f.phone_number.errors"
+                            class="text-danger margin-bottom-thin my-mat-hint">
+                            <div *ngIf="f.phone_number.errors.required">This field is required</div>
+                        </div>
+                        <div *ngIf="f.phone_number.errors" class="text-danger margin-bottom-thin my-mat-hint">
+                            <div *ngIf="f.phone_number.errors?.invalid_Pattern;else plusError">Do not add
+                                Dashes
+                                with numbers</div>
+                            <ng-template #plusError>
+                                <div *ngIf="f.phone_number.errors?.invalidPattern;else allErrors">Do not
+                                    enter +
+                                    sign</div>
+                                <ng-template #allErrors>
+                                    <div *ngIf="f.phone_number.errors?.pattern;else numberLength">Please enter a number
+                                    </div>
+                                    <ng-template #numberLength>
+                                        <div *ngIf="f.phone_number.errors.minlength">Minimum length should
+                                            be 4</div>
+                                        <div *ngIf="f.phone_number.errors.maxlength">Maximum length should
+                                            be 15</div>
+                                    </ng-template>
+                                </ng-template>
+                            </ng-template>
+                        </div>
+                        <a class="phone_icon" *ngIf="clientId"
+                            href="tel:{{f?.phone_isd?.value}}{{f?.phone_number?.value}}">
+                            <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 122.88 122.88">
+                                <defs>
+                                    <style>
+                                        .phoneCls-1 {
+                                            fill: #33a867;
+                                            fill-rule: evenodd;
+                                        }
+                                    </style>
+                                </defs>
+                                <path class="phoneCls-1"
+                                    d="M61.44,0A61.46,61.46,0,1,1,18,18,61.21,61.21,0,0,1,61.44,0ZM48.1,56.19A49.35,49.35,0,0,0,55.39,66.4a41.25,41.25,0,0,0,11.55,8.51,1.14,1.14,0,0,0,1,0,4.48,4.48,0,0,0,1.39-1A16.91,16.91,0,0,0,70.6,72.4c1.85-2.44,4.15-5.47,7.39-4l.2.11L89,74.77l.11.07a4.84,4.84,0,0,1,2,4.2,11.43,11.43,0,0,1-1.58,5.37,11.06,11.06,0,0,1-5.2,4.6A23.63,23.63,0,0,1,78,90.75a21.69,21.69,0,0,1-9.8-.82,43.06,43.06,0,0,1-9.85-4.76L58.05,85c-1.6-1-3.33-2.07-5-3.33a62.69,62.69,0,0,1-16.65-18.9c-3.46-6.26-5.34-13-4.32-19.44a14,14,0,0,1,4.72-8.85A12.68,12.68,0,0,1,46.18,32a1.35,1.35,0,0,1,1.09.7L54.21,44.4a3.68,3.68,0,0,1,.59,3.92,7.71,7.71,0,0,1-2.66,3c-.37.32-.82.64-1.29,1-1.55,1.12-3.32,2.42-2.71,4l0-.05Z" />
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="col-md-6 d-flex align-items-center mt-4">
+                        <!-- [checked]="use_for_login" -->
+                        <p><mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="uselogin">Use this
+                                for
+                                login</mat-checkbox>
+
+                        </p>
+                    </div>
+
+                    <!-- <div class="col-md-12">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Address <span class="asterisk">*</span></mat-label>
+                            <input formControlName="address" type="text" matInput placeholder="Address" #search1>
+                        </mat-form-field> -->
+                    <!-- <textarea placeholder="Address" formControlName="address"></textarea> -->
+                    <!-- <div *ngIf="submittedForm && f.address.errors" class="text-danger">
+                            <div *ngIf="f.address.errors.required">This field is required</div>
+                        </div>
+                    </div> -->
+                    <div class="col-md-6">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Relation <span class="asterisk">*</span></mat-label>
+                            <input formControlName="relationship" type="text" matInput placeholder="Relation">
+                        </mat-form-field>
+                        <div *ngIf="submittedForm && f.relationship.errors" class="text-danger">
+                            <div *ngIf="f.relationship.errors.required">This field is required</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Age <span class="asterisk">*</span></mat-label>
+                            <input formControlName="age" type="text" matInput placeholder="Age">
+                        </mat-form-field>
+                        <div *ngIf="submittedForm && f.age.errors || f.age.touched && f.age.errors" class="text-danger">
+                            <div *ngIf="f.age.errors.required">This field is required</div>
+                            <div *ngIf="f.age.errors.pattern">This field should be a number
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="container">
+            <div class="row py-4">
+                <div class="col-md-6">
+
+                </div>
+                <div class="col-md-6 ">
+                    <div class="billing_inforamtion">
+                        <ul class="d-flex justify-content-center">
+                            <li><button class="custom-btn mr-2 savebutton btn-shadow" (click)="submitForm()"
+                                    [disabled]="disableSubmitButton">SAVE</button> </li>
+                            <li><button class="custom-btn  mr-2 resetbutton btn-shadow"
+                                    (click)="resetForm()">RESET</button> </li>
+                            <!-- <li><button class="custom-btn  mr-3 backbutton btn-shadow"
+									(click)="backButton()">BACK</button> </li> -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+</main>

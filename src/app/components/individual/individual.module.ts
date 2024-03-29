@@ -35,12 +35,13 @@ import { InvoiceComponent } from './invoice/invoice.component';
 import { AddCardComponent } from './add-card/add-card.component';
 import { InvoiceSummaryComponent } from './invoice-summary/invoice-summary.component';
 import { FamilyMembersComponent } from './family-members/family-members.component';
+import { FamilyMemberAccountComponent } from './family-member-account/family-member-account.component';
 
 
 
 
 @NgModule({
-  declarations: [IndividualTemplateComponent, IndividualComponent, BookingsComponent, ProfileComponent, CreateNewBookingComponent, InvoiceComponent, AddCardComponent, InvoiceSummaryComponent, FamilyMembersComponent],
+  declarations: [IndividualTemplateComponent, IndividualComponent, BookingsComponent, ProfileComponent, CreateNewBookingComponent, InvoiceComponent, AddCardComponent, InvoiceSummaryComponent, FamilyMembersComponent, FamilyMemberAccountComponent],
   imports: [
     CommonModule,
     IndividualRoutingModule,
