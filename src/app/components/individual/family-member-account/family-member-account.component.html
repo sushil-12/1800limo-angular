@@ -35,7 +35,7 @@
                                 placeholder="1234567890" class="phoneNumberClass"
                                 (countryChange)="onCountryChange($event,'phone_number')"
                                 (intlTelInputObject)="telInputObjectMobile($event)" tabIndex="1"
-                                (focus)="$event.target.select()" />
+                                (focus)="$event.target.select()" [readonly]="clientId" />
                         </mat-form-field>
                         <div *ngIf="submittedForm && f.phone_number.errors || f.phone_number.touched && f.phone_number.errors"
                             class="text-danger margin-bottom-thin my-mat-hint">

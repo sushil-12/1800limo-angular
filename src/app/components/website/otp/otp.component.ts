@@ -29,8 +29,8 @@ export class OtpComponent implements OnInit, OnDestroy {
 	public dDay = new Date().getTime() + 16 * 1000;
 	public timeDifference;
 	public secondsToDday;
-	review_referral_url:any;
-	Role:any;
+	review_referral_url: any;
+	Role: any;
 	@ViewChild(NgOtpInputComponent, { static: false }) ngOtpInput: NgOtpInputComponent;
 	@ViewChild('otpInput') otpInput: ElementRef;
 	email: any = null;
@@ -123,32 +123,31 @@ export class OtpComponent implements OnInit, OnDestroy {
 					// this.otpCheck()
 				}, 2000)
 			}
-			if(params.email){
+			if (params.email) {
 				this.email = params.email
 			}
-			if(params?.role){
+			if (params?.role) {
 				this.Role = params?.role
 			}
 		})
 		document.querySelectorAll('.otp-input').forEach(occurence => {
 			occurence.addEventListener('click', (e) => {
-			  console.log('A link was clicked');
+				console.log('A link was clicked');
 			});
-		  });
+		});
 	}
 
-	ngAfterViewInit()
-	{
+	ngAfterViewInit() {
 		setTimeout(() => {
-			$(document).ready(function() {
+			$(document).ready(function () {
 				// Set focus on the input field
-				console.log('------------->>>otpInput' , $('#otpInput'))
-				
-				
+				console.log('------------->>>otpInput', $('#otpInput'))
+
+
 				console.log('click trigger')
-			  });
-			  $(".otp-input:first").focus();
-			  $(".otp-input:first").trigger('click');
+			});
+			$(".otp-input:first").focus();
+			$(".otp-input:first").trigger('click');
 		}, 2000);
 	}
 
@@ -163,7 +162,7 @@ export class OtpComponent implements OnInit, OnDestroy {
 	onOtpChange(value) {
 		this.otpForm.get('otp').setValue(value)
 		this.otpForm.updateValueAndValidity()
-		if(value.length >=6){
+		if (value.length >= 6) {
 			this.otpCheck()
 		}
 	}
@@ -173,7 +172,7 @@ export class OtpComponent implements OnInit, OnDestroy {
 		this.showProgressBar = true; //show progressbar
 
 		let userId = sessionStorage.getItem('userId');
-		this.authService.resendOtp({ "userId": userId ,"role":this.Role})
+		this.authService.resendOtp({ "userId": userId, "role": this.Role })
 			.pipe(
 				catchError(err => {
 					this.disableSubmit = false; //enable submit button
@@ -206,7 +205,9 @@ export class OtpComponent implements OnInit, OnDestroy {
 		this.showProgressBar = true; //show progressbar
 
 		let userId = sessionStorage.getItem('userId');
+		let family_id = sessionStorage.getItem('family_id')
 		this.otpForm.value.userId = userId;
+		this.otpForm.value.family_id = family_id
 
 		this.authService.verifyOtp(this.otpForm.value)
 			.pipe(
@@ -224,7 +225,7 @@ export class OtpComponent implements OnInit, OnDestroy {
 					Phone: this.response.data.user.phone,
 					RoleName: this.response.data.user.roleName,
 					PhoneCountry: this.response.data.user.phoneCountry,
-					profile_picture : this.response?.data?.user?.profile_picture
+					profile_picture: this.response?.data?.user?.profile_picture
 				}
 				//end
 
@@ -233,10 +234,14 @@ export class OtpComponent implements OnInit, OnDestroy {
 				localStorage.setItem('currentUser', JSON.stringify(this.response?.data?.user));
 				localStorage.setItem('access_token', this.response?.data?.access_token);
 				localStorage.setItem('currencySymbol', JSON.stringify(this.response?.currency?.symbol))
-				if(this.response?.data?.invite_link){
-					localStorage.setItem('invite_link',this.response?.data?.invite_link)
+				if (this.response?.data?.is_family_member) {
+					localStorage.setItem('is_family_member', this.response?.data?.is_family_member)
+					localStorage.setItem("family_member_data", JSON.stringify(this.response?.data?.family_member_data))
 				}
-				else{
+				if (this.response?.data?.invite_link) {
+					localStorage.setItem('invite_link', this.response?.data?.invite_link)
+				}
+				else {
 					localStorage.removeItem('invite_link')
 				}
 
@@ -255,10 +260,10 @@ export class OtpComponent implements OnInit, OnDestroy {
 						break;
 					}
 					case 'individual': {
-						if(this.response?.data.user?.is_profile_complete){
+						if (this.response?.data.user?.is_profile_complete) {
 							this.router.navigateByUrl('/individual/bookings');
 						}
-						else{
+						else {
 							this.router.navigateByUrl('/individual/profile');
 						}
 						break;
@@ -270,7 +275,7 @@ export class OtpComponent implements OnInit, OnDestroy {
 						this.affiliateService.updateStepsCompletedObject(this.response.data.affiliateParmas.step_completed_obj);
 						switch (this.response.data.affiliateParmas.account_approval) {
 							case 'accepted': {
-								if (QB_redirectUrl=='true' && vehicle_selected) {
+								if (QB_redirectUrl == 'true' && vehicle_selected) {
 									this.router.navigate([
 										'/affiliate/create-new-booking'
 									],
@@ -325,27 +330,27 @@ export class OtpComponent implements OnInit, OnDestroy {
 					case 'travel_agent': {
 						sessionStorage.setItem('step_completed', JSON.stringify(this.response.data?.travel_planner.step_completed))
 						sessionStorage.setItem('step_completed_obj', JSON.stringify(this.response.data?.travel_planner.step_completed_obj))
-						localStorage.setItem('agentAccountStatus',this.response?.data?.travel_planner?.account_approval)
-						if(this.response.data.user?.is_profile_complete && this.response?.data?.travel_planner?.account_approval == 'accepted'){
-                               if(this.review_referral_url){
+						localStorage.setItem('agentAccountStatus', this.response?.data?.travel_planner?.account_approval)
+						if (this.response.data.user?.is_profile_complete && this.response?.data?.travel_planner?.account_approval == 'accepted') {
+							if (this.review_referral_url) {
 								this.router.navigateByUrl(this.review_referral_url);
-							   }
-							   else{
-								   this.router.navigateByUrl('/travel_agent/bookings');
-							   }
+							}
+							else {
+								this.router.navigateByUrl('/travel_agent/bookings');
+							}
 						}
-						else{
+						else {
 							this.router.navigateByUrl('/travel_agent/profile/step1');
 						}
-							
-						
+
+
 						break;
 					}
-					case 'sub_travel_agent':{
-						if(this.response?.data?.user?.is_profile_complete){
+					case 'sub_travel_agent': {
+						if (this.response?.data?.user?.is_profile_complete) {
 							this.router.navigateByUrl('/sub_travel_agent/bookings');
 						}
-						else{
+						else {
 							this.router.navigateByUrl('/sub_travel_agent/profile')
 						}
 						break;
