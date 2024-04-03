@@ -23,7 +23,7 @@ export class FamilyMemberAccountComponent implements OnInit {
   public MobileObject: any;
   clientId: any = null;
   type: any = null;
-  uselogin: boolean = false;
+  // uselogin: boolean = false;
 
   constructor(
     private individualService: IndividualService,
@@ -78,6 +78,7 @@ export class FamilyMemberAccountComponent implements OnInit {
             last_name: this.response.data?.last_name,
             phone_number: this.response.data?.phone_number,
             phone_isd: this.response.data?.phone_isd,
+            email: this.response.data?.email,
             // address: this.response.data?.address,
             // city: this.response.data?.city,
             // state: this.response.data?.state,
@@ -85,12 +86,12 @@ export class FamilyMemberAccountComponent implements OnInit {
             // zipCode: this.response.data.zip,
             // latitude: this.response.data?.latitude,
             // longitude: this.response.data?.longitude,
-            use_for_login: this.response.data?.use_for_login,
-            age: this.response.data?.age,
-            relationship: this.response.data?.relationship,
+            // use_for_login: this.response.data?.use_for_login,
+            // age: this.response.data?.age,
+            // relationship: this.response.data?.relationship,
 
           });
-          this.uselogin = this.response.data?.use_for_login
+          // this.uselogin = this.response.data?.use_for_login
           this.spinner.hide();//hide spinner
           this.MobileObject.setCountry(this.response.data.mobileCountry);
         });
@@ -175,6 +176,7 @@ export class FamilyMemberAccountComponent implements OnInit {
       phone_number: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
       phone_isd: ['+1', Validators.required],
       mobileCountry: ['us'],
+      email: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)]],
       // address: ['', Validators.required],
       // city: [''],
       // state: [''],
@@ -182,9 +184,9 @@ export class FamilyMemberAccountComponent implements OnInit {
       // zipCode: ['', Validators.required],
       // latitude: [''],
       // longitude: [''],
-      use_for_login: [false],
-      age: ['', [Validators.required, Validators.pattern("^[0-9]*$")]],
-      relationship: ['', Validators.required]
+      // use_for_login: [false],
+      // age: ['', [Validators.required, Validators.pattern("^[0-9]*$")]],
+      // relationship: ['', Validators.required]
     });
   }
 
@@ -207,12 +209,12 @@ export class FamilyMemberAccountComponent implements OnInit {
     return this.addFamilyMemberAccountForm.controls;
   }
 
-  handleChangeCheckbox(event) {
-    this.uselogin = event
-    this.addFamilyMemberAccountForm.patchValue({
-      use_for_login: this.uselogin
-    })
-  }
+  // handleChangeCheckbox(event) {
+  //   this.uselogin = event
+  //   this.addFamilyMemberAccountForm.patchValue({
+  //     use_for_login: this.uselogin
+  //   })
+  // }
 
   submitForm() {
     console.log(this.addFamilyMemberAccountForm);

@@ -3,7 +3,7 @@
     <!-- Main page content-->
     <form [formGroup]="addFamilyMemberAccountForm" appInvalidControlScroll>
         <section class="user_information">
-            <h2 class="headinginfo adminbox_shadow">Add Member Account</h2>
+            <h2 class="headinginfo adminbox_shadow">{{clientId ? "Edit" : "Add"}} Member Account</h2>
 
             <div class="container-fluid mt-1 ">
                 <div class="row ">
@@ -78,13 +78,17 @@
                             </svg>
                         </a>
                     </div>
-                    <div class="col-md-6 d-flex align-items-center mt-4">
-                        <!-- [checked]="use_for_login" -->
-                        <p><mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="uselogin">Use this
-                                for
-                                login</mat-checkbox>
-
-                        </p>
+                    <div class="col-md-6">
+                        <mat-form-field appearance="outline">
+                            <mat-label>E-mail <span class="asterisk">*</span></mat-label>
+                            <input formControlName="email" type="email" matInput placeholder="E-mail"
+                                (focus)="$event.target.select()">
+                        </mat-form-field>
+                        <div *ngIf="(submittedForm && f.email.errors) || (f.email.touched && f.email.errors)"
+                            class="text-danger text-lg m-0">
+                            <div *ngIf="f.email.errors.required">This field is required</div>
+                            <div *ngIf="f.email.errors.pattern">Email format should be valid</div>
+                        </div>
                     </div>
 
                     <!-- <div class="col-md-12">
@@ -97,7 +101,7 @@
                             <div *ngIf="f.address.errors.required">This field is required</div>
                         </div>
                     </div> -->
-                    <div class="col-md-6">
+                    <!-- <div class="col-md-6">
                         <mat-form-field appearance="outline">
                             <mat-label>Relation <span class="asterisk">*</span></mat-label>
                             <input formControlName="relationship" type="text" matInput placeholder="Relation">
@@ -116,7 +120,7 @@
                             <div *ngIf="f.age.errors.pattern">This field should be a number
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </section>

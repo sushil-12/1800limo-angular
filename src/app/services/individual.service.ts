@@ -25,6 +25,10 @@ export class IndividualService {
     }
   }
 
+  memberAccountStatus(id, status) {
+    return this.httpClient.post(this.serverUrl + `family-member-status/${id}`, { 'status': status });
+  }
+
   getIndividualAccountDetails() {
     return this.httpClient.get(this.serverUrl + `get-profile-data`);
   }

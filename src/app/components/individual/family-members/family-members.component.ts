@@ -122,6 +122,27 @@ export class FamilyMembersComponent implements OnInit {
     }
   }
 
+  enableDisableClicked(event, id) {
+    this.spinner.show();//show spinner
+    console.log(event.checked);
+    if (event.checked) {
+      var status = 'enable';
+    }
+    else {
+      var status = 'disable';
+    }
+    this.individualService.memberAccountStatus(id, status)
+      .pipe(
+        catchError(err => {
+          this.spinner.hide();//hide spinner
+          return throwError(err);
+        })
+      ).subscribe(result => {
+
+        this.spinner.hide();//hide spinner
+      });
+  }
+
   //for paginator
   counter() {
     var currentPage;
