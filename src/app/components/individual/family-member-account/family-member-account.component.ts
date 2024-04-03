@@ -1,0 +1,270 @@
+import { MapsAPILoader } from '@agm/core';
+import { Component, ElementRef, NgZone, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { IndividualService } from 'src/app/services/individual.service';
+import { TravelAgentService } from 'src/app/services/travel-agent.service';
+
+@Component({
+  selector: 'app-family-member-account',
+  templateUrl: './family-member-account.component.html',
+  styleUrls: ['./family-member-account.component.scss']
+})
+export class FamilyMemberAccountComponent implements OnInit {
+
+  public addFamilyMemberAccountForm: FormGroup;
+  public submittedForm: boolean;
+  public disableSubmitButton: boolean = false;
+  public response: any;
+  public yearOptions: any = [];
+  public MobileObject: any;
+  clientId: any = null;
+  type: any = null;
+  // uselogin: boolean = false;
+
+  constructor(
+    private individualService: IndividualService,
+    private router: Router,
+    private spinner: NgxSpinnerService,
+    private formBuilder: FormBuilder,
+    private $routeurl: ActivatedRoute,
+    private mapsAPILoader: MapsAPILoader,
+    private ngZone: NgZone,
+  ) { }
+
+
+  //google map autocomplete
+  title: string = 'AGM project';
+  latitude: number;
+  longitude: number;
+  zoom: number;
+  address: string;
+  private geoCoder;
+  @ViewChild('search1')
+  public searchElementRef: ElementRef;
+  currentUser: any;
+
+  ngOnInit(): void {
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser'))
+    this.buildAddIndividualForm();
+    this.$routeurl.queryParams.subscribe((params: any) => {
+      console.log('params---->>>>>', params)
+      this.clientId = params?.id
+      if (params && params.type) {
+        this.type = params.type
+      }
+    })
+    const currentYear = (new Date()).getFullYear();
+    for (let i = 0; i < 40; i++) {
+      this.yearOptions.push(currentYear + i);
+    }
+
+    if (this.clientId) {
+      this.individualService.getAccount(this.clientId)
+        .pipe(
+          catchError(err => {
+            this.spinner.hide();//hide spinner
+            return throwError(err);
+          })
+        ).subscribe(result => {
+          this.response = result;
+
+          this.addFamilyMemberAccountForm.patchValue({
+            id: this.clientId,
+            first_name: this.response.data?.first_name,
+            last_name: this.response.data?.last_name,
+            phone_number: this.response.data?.phone_number,
+            phone_isd: this.response.data?.phone_isd,
+            email: this.response.data?.email,
+            // address: this.response.data?.address,
+            // city: this.response.data?.city,
+            // state: this.response.data?.state,
+            // country: this.response.data?.country,
+            // zipCode: this.response.data.zip,
+            // latitude: this.response.data?.latitude,
+            // longitude: this.response.data?.longitude,
+            // use_for_login: this.response.data?.use_for_login,
+            // age: this.response.data?.age,
+            // relationship: this.response.data?.relationship,
+
+          });
+          // this.uselogin = this.response.data?.use_for_login
+          this.spinner.hide();//hide spinner
+          this.MobileObject.setCountry(this.response.data.mobileCountry);
+        });
+    }
+    //google map autocomplete
+    this.mapsAPILoader.load().then(() => {
+      // this.setCurrentLocation();
+      this.geoCoder = new google.maps.Geocoder;
+      let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement);
+      autocomplete.addListener("place_changed", () => {
+        console.log('auto fill address-->>>')
+        this.ngZone.run(() => {
+          //get the place result
+          let place: google.maps.places.PlaceResult = autocomplete.getPlace();
+          //verify result
+          if (place.geometry === undefined || place.geometry === null) {
+            return;
+          }
+          console.log(place);
+          this.addFamilyMemberAccountForm.patchValue({
+            zipCode: '',
+            city: '',
+            state: '',
+            country: ''
+          })
+          this.addFamilyMemberAccountForm.patchValue({
+            address: place.formatted_address
+          })
+          //Fill one way form pickup address fields
+          this.addFamilyMemberAccountForm.patchValue({
+            latitude: place.geometry.location.lat(),
+            longitude: place.geometry.location.lng()
+          });
+          place.address_components.forEach(component => {
+            const types = component.types;
+
+            if (types.includes('postal_code')) {
+              this.addFamilyMemberAccountForm.patchValue({
+                zipCode: component.long_name
+              });
+            } else if (types.includes('locality')) {
+              this.addFamilyMemberAccountForm.patchValue({
+                city: component.long_name
+              });
+            } else if (types.includes('administrative_area_level_1')) {
+              this.addFamilyMemberAccountForm.patchValue({
+                state: component.long_name
+              });
+            } else if (types.includes('country')) {
+              this.addFamilyMemberAccountForm.patchValue({
+                country: component.long_name
+              });
+            }
+          });
+          // if (place.address_components[1])
+          // 	this.addFamilyMemberAccountForm.patchValue({
+          // 		city: place.address_components[1].long_name
+          // 	});
+          // if (place.address_components[2])
+          // 	this.addFamilyMemberAccountForm.patchValue({
+          // 		state: place.address_components[2].long_name
+          // 	});
+          // if (place.address_components[3])
+          // 	this.addFamilyMemberAccountForm.patchValue({
+          // 		country: place.address_components[3].long_name
+          // 	});
+          // if (place.address_components[4])
+          // 	this.addFamilyMemberAccountForm.patchValue({
+          // 		zipCode: place.address_components[place.address_components.length - 1].long_name
+          // 	});
+        });
+      });
+    });
+
+  }
+
+  buildAddIndividualForm() {
+    this.addFamilyMemberAccountForm = this.formBuilder.group({
+      id: [''],
+      first_name: ['', Validators.required],
+      last_name: ['', Validators.required],
+      phone_number: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
+      phone_isd: ['+1', Validators.required],
+      mobileCountry: ['us'],
+      email: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)]],
+      // address: ['', Validators.required],
+      // city: [''],
+      // state: [''],
+      // country: ['', Validators.required],
+      // zipCode: ['', Validators.required],
+      // latitude: [''],
+      // longitude: [''],
+      // use_for_login: [false],
+      // age: ['', [Validators.required, Validators.pattern("^[0-9]*$")]],
+      // relationship: ['', Validators.required]
+    });
+  }
+
+
+
+  onCountryChange(event, type) {
+    console.log("in mobile", event.dialCode, event.iso2)
+    this.addFamilyMemberAccountForm.patchValue({
+      phone_isd: '+' + event.dialCode,
+      phone_number: event.iso2
+    });
+
+  }
+
+  telInputObjectMobile(obj) {
+    this.MobileObject = obj;
+  }
+
+  get f() {
+    return this.addFamilyMemberAccountForm.controls;
+  }
+
+  // handleChangeCheckbox(event) {
+  //   this.uselogin = event
+  //   this.addFamilyMemberAccountForm.patchValue({
+  //     use_for_login: this.uselogin
+  //   })
+  // }
+
+  submitForm() {
+    console.log(this.addFamilyMemberAccountForm);
+    // console.log(JSON.stringify(this.addVehicleRatesForm.value));
+    this.submittedForm = true;
+    // stop here if form is invalid
+    if (this.addFamilyMemberAccountForm.invalid) {
+      return;
+    }
+
+    console.log(this.addFamilyMemberAccountForm.value);
+    // console.log(JSON.stringify(this.addVehicleRatesForm.value));
+    this.spinner.show();
+    this.disableSubmitButton = true; //disable submit button
+    console.log(this.addFamilyMemberAccountForm.value)
+    this.individualService.addAccount(this.addFamilyMemberAccountForm.value, this.clientId)
+      .pipe(
+        catchError(err => {
+          this.spinner.hide();//hide spinner
+          this.disableSubmitButton = false; //enable submit button
+          return throwError(err);
+        })
+      )
+      .subscribe(result => {
+        this.response = result;
+        this.spinner.hide();//hide spinner
+        this.disableSubmitButton = false; //enable submit button
+
+        this.router.navigate([`/individual/family-members`]);
+      });
+  }
+
+  resetForm() {
+    const keepValues = [
+      this.addFamilyMemberAccountForm.controls.phone_number.value,
+      this.addFamilyMemberAccountForm.controls.id.value,
+      this.addFamilyMemberAccountForm.controls.phone_isd.value,
+      this.addFamilyMemberAccountForm.controls.mobileCountry.value,
+
+    ];
+
+    this.buildAddIndividualForm()
+    this.addFamilyMemberAccountForm.controls.phone_number.patchValue(keepValues[0]);
+    this.addFamilyMemberAccountForm.controls.id.patchValue(keepValues[1]);
+    this.addFamilyMemberAccountForm.controls.phone_isd.patchValue(keepValues[2]);
+    this.addFamilyMemberAccountForm.controls.mobileCountry.patchValue(keepValues[3]);
+
+    console.log(this.addFamilyMemberAccountForm.value)
+  }
+  backButton() {
+    this.router.navigate([`/individual/family-members`]);
+  }
+}

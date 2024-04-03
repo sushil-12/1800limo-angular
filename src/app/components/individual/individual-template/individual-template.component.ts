@@ -26,6 +26,8 @@ export class IndividualTemplateComponent implements OnInit {
 	chevron: boolean = false;
 	chevron1: boolean = false;
 	bkpData: any = '';
+	is_family_member: any = false;
+	family_member_name: any = '';
 
 	constructor(
 		private router: Router,
@@ -52,6 +54,9 @@ export class IndividualTemplateComponent implements OnInit {
 		//Get logged in user name
 		this.currentUser = this.stateManagementService.getUser()
 		console.log(this.currentUser?.is_profile_complete, "is profile")
+
+		this.is_family_member = localStorage.getItem("is_family_member") ? localStorage.getItem("is_family_member") : false
+		this.family_member_name = JSON.parse(localStorage.getItem("family_member_data")).first_name + " " + JSON.parse(localStorage.getItem("family_member_data")).last_name
 
 		//Get ProgressBar
 		this.stateManagementService.getprogressBar().subscribe(commonProgressBar => {

@@ -13,7 +13,9 @@
 					<h2 *ngIf=" Role == 'master_user'; else userLogin1 ">Welcome Joe, Please Sign In as Super Admin</h2>
 				</ng-template>
 				<ng-template #userLogin1>
-					<h2>Welcome {{format(Role) | titlecase}}, Create an Account or Sign In.</h2>
+					<h2 *ngIf=" Role != 'individual' ">Welcome {{format(Role) | titlecase}}, Create an Account or Sign
+						In.</h2>
+					<h2 *ngIf=" Role == 'individual'">Welcome, Create, or Sign In to Individual / Shared Account.</h2>
 				</ng-template>
 			</div>
 			<div class="d-flex justify-content-center" *ngIf="Role == 'travel_agent' ">

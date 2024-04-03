@@ -11,7 +11,7 @@
                         <mat-form-field appearance="outline">
                             <mat-label>First Name <span class="asterisk">*</span></mat-label>
                             <input formControlName="firstName" type="text" matInput placeholder="First Name"
-                                (focus)="$event.target.select()">
+                                (focus)="$event.target.select()" [readonly]="is_family_member">
                         </mat-form-field>
                         <div *ngIf="submittedForm && f.firstName.errors" class="text-danger text-lg m-0">
                             <div *ngIf="f.firstName.errors.required">This field is required</div>
@@ -21,14 +21,14 @@
                         <mat-form-field appearance="outline">
                             <mat-label>Middle Name</mat-label>
                             <input formControlName="middleName" type="text" matInput placeholder="Middle Name"
-                                (focus)="$event.target.select()">
+                                (focus)="$event.target.select()" [readonly]="is_family_member">
                         </mat-form-field>
                     </div>
                     <div class="col-md-4">
                         <mat-form-field appearance="outline">
                             <mat-label>Last Name <span class="asterisk">*</span></mat-label>
                             <input formControlName="lastName" type="text" matInput placeholder="Last Name"
-                                (focus)="$event.target.select()">
+                                (focus)="$event.target.select()" [readonly]="is_family_member">
                         </mat-form-field>
                         <div *ngIf="submittedForm && f.lastName.errors" class="text-danger text-lg m-0">
                             <div *ngIf="f.lastName.errors.required">This field is required</div>
@@ -81,7 +81,8 @@
                                 [ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
                                 placeholder="1234567890" class="phoneNumberClass"
                                 (countryChange)="onCountryChange($event,'work')"
-                                (intlTelInputObject)="telInputObjectWork($event)" (focus)="$event.target.select()" />
+                                (intlTelInputObject)="telInputObjectWork($event)" (focus)="$event.target.select()"
+                                [readonly]="is_family_member" />
                         </mat-form-field>
                         <div *ngIf="submittedForm && f.work.errors || f.work.touched && f.work.errors"
                             class="text-danger text-lg m-0 margin-bottom-thin my-mat-hint">
@@ -115,7 +116,7 @@
                         <mat-form-field appearance="outline">
                             <mat-label>E-mail <span class="asterisk">*</span></mat-label>
                             <input formControlName="email" type="email" matInput placeholder="E-mail"
-                                (focus)="$event.target.select()">
+                                (focus)="$event.target.select()" [readonly]="is_family_member">
                         </mat-form-field>
                         <div *ngIf="(submittedForm && f.email.errors) || (f.email.touched && f.email.errors)"
                             class="text-danger text-lg m-0">
@@ -137,7 +138,7 @@
                         <mat-form-field appearance="outline" [ngClass]="{ 'border-red': (f.address.value == '')}">
                             <mat-label>Address <span class="asterisk">*</span></mat-label>
                             <input formControlName="address" type="text" matInput placeholder="Address" #search1
-                                (focus)="$event.target.select()">
+                                (focus)="$event.target.select()" [readonly]="is_family_member">
                         </mat-form-field>
                         <!-- <textarea placeholder="Address" formControlName="address"></textarea> -->
                         <div *ngIf="submittedForm && f.address.errors" class="text-danger text-lg m-0">
@@ -168,7 +169,7 @@
                         <mat-form-field appearance="outline">
                             <mat-label>Country <span class="asterisk">*</span></mat-label>
                             <input formControlName="country" type="text" matInput placeholder="Country"
-                                (focus)="$event.target.select()">
+                                (focus)="$event.target.select()" [readonly]="is_family_member">
                         </mat-form-field>
                         <div *ngIf="submittedForm && f.country.errors" class="text-danger text-lg m-0">
                             <div *ngIf="f.country.errors.required">This field is required</div>
@@ -178,7 +179,8 @@
                         <mat-form-field appearance="outline">
                             <mat-label>Zip Code / Country Address Code <span class="asterisk">*</span></mat-label>
                             <input formControlName="zipCode" type="text" matInput
-                                placeholder="Zip Code / Country Address Code" (focus)="$event.target.select()">
+                                placeholder="Zip Code / Country Address Code" (focus)="$event.target.select()"
+                                [readonly]="is_family_member">
                         </mat-form-field>
                         <div *ngIf="submittedForm && f.zipCode.errors" class="text-danger text-lg m-0">
                             <div *ngIf="f.zipCode.errors.required">This field is required</div>
@@ -350,7 +352,7 @@
             <section class="user_information driverbooking_top adminbox_shadow">
                 <div class="containeredd">
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-12" *ngIf="!is_family_member">
                             <button class="custom-btn add-button" (click)="addCardClick()" tabindex="-1">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-plus-circle"
                                     viewBox="0 0 16 16">
@@ -375,7 +377,7 @@
                                         <th>Card No.</th>
                                         <th>MM/YYYY</th>
                                         <th>Card Type</th>
-                                        <th>Delete</th>
+                                        <th *ngIf="!is_family_member">Delete</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -399,7 +401,7 @@
                                                 <td class="text-capitalize">
                                                     {{ card?.card_type }}
                                                 </td>
-                                                <td>
+                                                <td *ngIf="!is_family_member">
                                                     <i class="fa fa-trash" style="
                                                             font-size: x-large;
                                                             color: #d64646;
@@ -427,7 +429,7 @@
         </ng-template>
 
     </form>
-    <div class="container">
+    <div class="container" *ngIf="!is_family_member">
         <div class="row justify-content-between">
 
             <div class="billing_inforamtion">
