@@ -196,7 +196,7 @@ export class FamilyMemberAccountComponent implements OnInit {
     console.log("in mobile", event.dialCode, event.iso2)
     this.addFamilyMemberAccountForm.patchValue({
       phone_isd: '+' + event.dialCode,
-      phone_number: event.iso2
+      mobileCountry: event.iso2
     });
 
   }
