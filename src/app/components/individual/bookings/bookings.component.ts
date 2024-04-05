@@ -765,6 +765,9 @@ export class BookingsComponent implements OnInit {
 		this.paymentMethod = method
 	}
 
+	addFamilyMember() {
+		this.router.navigate(['/individual/add-family-member']);
+	}
 
 	makePayment() {
 

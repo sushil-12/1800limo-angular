@@ -2,15 +2,24 @@
 <main>
     <!-- Main page content-->
     <section class="adminbox_shadow user_information" id="indv_bookings_table">
-        <div class="row">
+        <div class="row mb-3">
             <div class="col-md-7">
-                <h2 class="headinginfo" style="font-weight: 600 !important; font-size: 22px !important;">
+                <h2 class="headinginfo d-flex align-items-center"
+                    style="font-weight: 600 !important; font-size: 22px !important;">
                     {{currentUser?.name.charAt(0).toUpperCase() + currentUser?.name.slice(1)}} Bookings
                 </h2>
-
             </div>
-
-
+            <div class="col-md-5 add-member-div">
+                <button class="custom-btn btn-add-other-memeber" (click)="addFamilyMember()"
+                    style="margin: 0 !important;">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-plus-circle"
+                        viewBox="0 0 16 16">
+                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                        <path
+                            d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+                    </svg> Add Other Members / Users
+                </button>
+            </div>
         </div>
         <div class="containeredd mt-1 ">
             <div class="row my-2 align-items-center">
