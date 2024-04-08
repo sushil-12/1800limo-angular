@@ -564,3 +564,9 @@ a.dropdown-item {
 		margin-top: 10px;
 	}
 }
+
+@media only screen and (max-width:1190px) {
+	.btn-add-other-memeber {
+		font-size: 15px !important;
+	}
+}
