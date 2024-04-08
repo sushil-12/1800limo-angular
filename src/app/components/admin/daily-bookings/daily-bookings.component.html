@@ -136,7 +136,7 @@
 										</a>
 										<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
 											aria-labelledby="navbarDropdownUserImage"
-											style="min-height: 200px;max-height: 410px;overflow-y: auto;">
+											style="min-height: 200px;max-height: 480px;overflow-y: scroll;">
 											<a class="dropdown-item" [routerLink]="['/admin/new-booking']"
 												*ngIf="((currentUser?.RoleName == 'admin' || subModules.includes('edit_booking')) && (booking?.booking_status != 'paid' && booking?.booking_status != 'paid_cash'))"
 												[queryParams]="{bookingId: booking.booking_id, updateType: 'edit'}">

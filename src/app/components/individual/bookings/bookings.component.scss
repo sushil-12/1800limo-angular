@@ -50,9 +50,9 @@ hr {
 	border-top: 1px solid black
 }
 
-button {
-	font-family: "PT Serif", serif !important;
-}
+// button {
+// 	font-family: "PT Serif", serif !important;
+// }
 
 .none-display {
 	display: none;
@@ -522,11 +522,13 @@ a.dropdown-item {
 	color: #fff !important;
 	background-color: var(--green-color);
 	border-color: var(--green-color);
-	font-size: 14px;
-	text-transform: uppercase;
+	font-size: 18px;
+	// text-transform: uppercase
+	font-weight: 700;
 	text-decoration: none;
 	// margin: 20px 0;
 	border-radius: 15px;
+	font-family: "Roboto", sans-serif !important;
 	padding: 10px 20px !important;
 	box-shadow: 0px 5px 10px 1px rgba(0, 0, 0, 0.4);
 }
