@@ -110,7 +110,7 @@
 		<div class="containeredd driverside_table">
 			<div class="row">
 				<div class="col-md-12 custom_table">
-					<div class="table-responsive" style="min-height: 350px" *ngIf="!noError">
+					<div class="table-responsive" style="min-height: 450px" *ngIf="!noError">
 						<table class="table table-dark table-striped table-bordered dataTable dt-responsive"
 							id="dataTable" role="grid" aria-describedby="dataTable_info" cellspacing="0">
 							<thead>
@@ -136,7 +136,7 @@
 										</a>
 										<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
 											aria-labelledby="navbarDropdownUserImage"
-											style="min-height: 200px;max-height: 480px;overflow-y: scroll;">
+											style="min-height: 200px;max-height: 480px;overflow-y: scroll; z-index: 2;">
 											<a class="dropdown-item" [routerLink]="['/admin/new-booking']"
 												*ngIf="((currentUser?.RoleName == 'admin' || subModules.includes('edit_booking')) && (booking?.booking_status != 'paid' && booking?.booking_status != 'paid_cash'))"
 												[queryParams]="{bookingId: booking.booking_id, updateType: 'edit'}">
