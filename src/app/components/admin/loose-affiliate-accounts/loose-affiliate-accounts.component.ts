@@ -6,6 +6,7 @@ import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { AdminService } from 'src/app/services/admin.service';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
+declare var $: any;
 
 @Component({
   selector: 'app-loose-affiliate-accounts',
@@ -36,6 +37,8 @@ export class LooseAffiliateAccountsComponent implements OnInit {
   searchText: any;
   travelAccountCount: any;
   loginAsUserResponse: any;
+  alertMessage: string = '';
+  looseAffId: any;
 
   constructor(
     private adminService: AdminService,
@@ -148,6 +151,33 @@ export class LooseAffiliateAccountsComponent implements OnInit {
       var re = new RegExp(this.searchText, 'gi'); //'gi' for case insensitive and can use 'g' if you want the search to be case sensitive.
       return args.replace(re, '<mark class="font-weight-bold">$&</mark>');
     }
+  }
+
+  addLooseAffiliateClick() {
+    this.router.navigate(['/admin/add-loose-affiliate-account']);
+  }
+
+  editLooseAffClick(looseAffId) {
+    this.router.navigate(['/admin/edit-loose-affiliate-account'], { queryParams: { looseAffId: looseAffId } });
+  }
+
+  enableDisableClicked(id: any) {
+    this.alertMessage = 'Are you sure you want to delete this account?'
+    this.looseAffId = id
+  }
+
+  delete() {
+    $('#deleteConfirmationModal').modal('hide');
+    this.adminService.deleteLooseAffAccount(this.looseAffId)
+      .pipe(
+        catchError(err => {
+          // this.stateManagementService.setprogressBar(false);
+          return throwError(err);
+        })
+      ).subscribe(result => {
+        this.loadSubLooseAffiliateAcc()
+        // this.stateManagementService.setprogressBar(false);
+      });
   }
 
 
