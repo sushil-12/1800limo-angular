@@ -4614,3 +4614,23 @@ header .navbar-toggler {
 	pointer-events: none;
 	cursor: not-allowed;
 }
+
+.timepicker-dial__container {
+	flex-direction: row !important;
+	gap: 17px !important;
+}
+
+.timepicker {
+	display: flex !important;
+	flex-direction: column;
+	align-items: center !important;
+	width: 100% !important;
+	/* height: 303px !important; */
+}
+
+.timepicker__header {
+	padding: 15px 64px;
+	width: 100%;
+	text-align: center;
+	background-color: #00bfff;
+}
