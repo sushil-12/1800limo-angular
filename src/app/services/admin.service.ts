@@ -589,6 +589,10 @@ export class AdminService {
 		return this.httpClient.delete(this.serverUrl + 'delete-credit-card/' + acc_id + '/' + id);
 	}
 
+	deleteLooseAffAccount(id) {
+		return this.httpClient.delete(this.serverUrl + `delete-loose-affiliate/${id}`);
+	}
+
 	deleteAccount(id) {
 		return this.httpClient.delete(this.serverUrl + 'admin/delete-user/' + id);
 	}
@@ -1243,6 +1247,20 @@ export class AdminService {
 			path = this.serverUrl + 'loose-affiliate-accounts' + '?search=' + keyword;
 		}
 		return this.httpClient.get(path).toPromise();;
+	}
+
+	createLooseAffAcc(data, id = null) {
+		if (id) {
+			//update api here
+			return this.httpClient.post(this.serverUrl + `add-new-loose-affiliate/${id}`, data);
+		}
+		else {
+			return this.httpClient.post(this.serverUrl + 'add-new-loose-affiliate', data);
+		}
+	}
+
+	getLooseAffAccDetails(id: any) {
+		return this.httpClient.get(this.serverUrl + `get-loose-affiliate/${id}`);
 	}
 
 
