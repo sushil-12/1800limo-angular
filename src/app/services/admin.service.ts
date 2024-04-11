@@ -1252,7 +1252,8 @@ export class AdminService {
 	createLooseAffAcc(data, id = null) {
 		if (id) {
 			//update api here
-			return this.httpClient.post(this.serverUrl + `add-new-loose-affiliate/${id}`, data);
+			data['id'] = id
+			return this.httpClient.post(this.serverUrl + `add-new-loose-affiliate`, data);
 		}
 		else {
 			return this.httpClient.post(this.serverUrl + 'add-new-loose-affiliate', data);
