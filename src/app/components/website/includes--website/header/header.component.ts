@@ -58,14 +58,14 @@ export class HeaderComponent implements OnInit {
 		this.accountStatus = localStorage.getItem("account_approval");
 
 		if (this.accountStatus == "completed" || this.accountStatus == "accepted") {
-			this.Value = "Manage / Daily Bookings";
+			this.Value = "Manage Bookings";
 		}
 		else {
 			this.Value = "Continue Affiliate Set-Up";
 		}
 
 		// For Select Box Dropdown
-		$(window).on('load', function() {
+		$(window).on('load', function () {
 			$(".goog-te-combo").css({
 				'-webkit-appearance': 'none',
 				'-moz-appearance': 'none',
@@ -79,7 +79,7 @@ export class HeaderComponent implements OnInit {
 	}
 
 
-	ngAfterViewInit(): void{
+	ngAfterViewInit(): void {
 		// this.desktopWidth = window.innerWidth;
 		// if (this.desktopWidth > '767') {
 		// 	//google translate
@@ -110,20 +110,20 @@ export class HeaderComponent implements OnInit {
 		// 	var myVar = setInterval(function () { myTimer() }, 0);
 
 		// }
-					  
-		   
-	// setTimeout(() => {
-	// 	console.log('------- set timeout exe')
-	// 	$('body').find(".VIpgJd-ZVi9od-xl07Ob-lTBxed").attr('href', 'javascript:void(0)'); 
-	// 	$('.VIpgJd-ZVi9od-xl07Ob-lTBxed').find('span:first').text('Translate')
-	// 	$('goog-te-combo').find('option:first').text('Translate')
-	// 	$('.goog-te-gadget-simple').css({height :'auto'}); 
-	// 	const elements = document.querySelectorAll('.VIpgJd-ZVi9od-xl07Ob-lTBxed');
-	// 	if (elements.length === 2) {
-	// 		elements[0].parentNode.removeChild(elements[0]);
-	// 	}
-	// }, 300)
-}
+
+
+		// setTimeout(() => {
+		// 	console.log('------- set timeout exe')
+		// 	$('body').find(".VIpgJd-ZVi9od-xl07Ob-lTBxed").attr('href', 'javascript:void(0)'); 
+		// 	$('.VIpgJd-ZVi9od-xl07Ob-lTBxed').find('span:first').text('Translate')
+		// 	$('goog-te-combo').find('option:first').text('Translate')
+		// 	$('.goog-te-gadget-simple').css({height :'auto'}); 
+		// 	const elements = document.querySelectorAll('.VIpgJd-ZVi9od-xl07Ob-lTBxed');
+		// 	if (elements.length === 2) {
+		// 		elements[0].parentNode.removeChild(elements[0]);
+		// 	}
+		// }, 300)
+	}
 	getPermissions() {
 		this.adminService.getMyPermissions()
 			.pipe(
@@ -143,7 +143,7 @@ export class HeaderComponent implements OnInit {
 	}
 
 	loginButtons(role: string) {
-		if (role != 'driver' && role!='sub_admin' && role!='travel_agent'  && role!='individual') {
+		if (role != 'driver' && role != 'sub_admin' && role != 'travel_agent' && role != 'individual') {
 			this.errorDialogService.openDialog({
 				errors: {
 					error: 'Currently only Drivers are allowed to Sign In. User accounts coming soon! Recruiting quality vetted drivers, and chauffeurs, only at this time. Refer a trusted driver/ chauffeur to 1-800 - LIMO.COM now! You deserve the best.'
@@ -153,7 +153,7 @@ export class HeaderComponent implements OnInit {
 		}
 		//navigate to login screen
 		// this.router.navigate(['/login/' + role]);
-		this.router.navigateByUrl('/login/' + role).then(()=>{
+		this.router.navigateByUrl('/login/' + role).then(() => {
 			window.location.reload()
 		});
 	}
@@ -197,14 +197,14 @@ export class HeaderComponent implements OnInit {
 			console.log("step 0  dashboard");
 
 		}
-		else{
+		else {
 			console.log(`redirecting to ${role}/bookings`)
 			this.spinner.show();
 			this.router.navigateByUrl(`${role}/bookings`)
 		}
 	}
-	redirectCompleteProfile(role){
-		console.log('redirecting to complete profile',role)
+	redirectCompleteProfile(role) {
+		console.log('redirecting to complete profile', role)
 		this.spinner.show()
 		this.router.navigateByUrl(`${role}/profile`)
 	}
