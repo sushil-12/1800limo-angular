@@ -40,24 +40,17 @@
 <section class="container-fluid pt-2 pb-5 mob-height" [ngClass]="openfilters ? 'position-fixed' : ''">
 	<div id="page-instruction-text" class="mx-2 mt-4 mb-2">
 		<h5>
-			Select the vehicle that meets your requirements.
+			Filter By
 		</h5>
-		<span style="font-size: 1.18rem; color: #464646">
-			Use Filter / Sort for more specific choices to match your search for rates.
-		</span>
 	</div>
 
-	<div class="row mb-5">
+	<!-- <div class="row mb-5">
 		<div class="col-md-12">
 			<div id="back-button">
-				<button type="button" class="custom-filled-button green-button" (click)="backButton()">
-					<i class="bi bi-arrow-left mx-2"></i>
-					Back to Home
-				</button>
+				
 			</div>
 		</div>
-	</div>
-
+	</div> -->
 
 	<p class="clearfix"></p>
 	<div class="row">
@@ -294,36 +287,69 @@
 		<!-- MASTER VEHICLE TYPES SECTION -->
 		<div class="col-md-12 col-lg-9" [ngStyle]="openfilters ? {'z-index': -1, 'position': 'relative'} : ''"
 			*ngIf="vehicleDetails.length == 0 || master_vehicles.length == 0">
+			<!-- title box -->
+			<div class="select_vehicle_div">
+				<div class="row d-flex justify-content-between align-items-center">
+					<div class="col-md-6">
+						<h5 style="color:#fff;font-size: 22px;">
+							Select the vehicle that meets your requirements.
+						</h5>
+						<span style="color:#fff;font-size: 14px;">
+							<span style="color:#FEB573;">Use Filter / </span>Sort for more specific choices to match
+							your
+							search for rates.
+						</span>
+					</div>
+					<div class="col-md-6 d-flex justify-content-end">
+						<button type="button" class="custom-filled-button green-button" (click)="backButton()">
+							<i class="bi bi-arrow-left mx-1"></i>
+							Back to Home
+						</button>
+					</div>
+				</div>
+			</div>
+
+
+
+			<!-- vehicle listing below -->
 			<p style="font-size: 1rem; font-weight: 500; color: #e63232"
 				*ngIf="(vehicleDetails.length == 0 && this.filters.selections.length > 0) || master_vehicles.length == 0">
 				{{ no_vehicle_msg }}
 			</p>
-			<div id="master-vehicle-box-container" class="row" *ngIf="master_vehicles.length > 0">
-				<div id="master-vehicle-box" class="col-md-3 mb-5 d-flex flex-nowrap flex-md-wrap cursor-pointer"
-					style="gap: 10px" *ngFor="let vehicle_obj of master_vehicles; index as vehicle_obj_index"
+			<div id="master-vehicle-box-container" class="row vehicle-grid-card" *ngIf="master_vehicles.length > 0">
+				<div id="master-vehicle-box" class="card mb-5 d-flex flex-nowrap flex-md-wrap cursor-pointer"
+					*ngFor="let vehicle_obj of master_vehicles; index as vehicle_obj_index"
 					(click)="selectCategory(vehicle_obj?.name)">
-					<div id="vehicle-image" class="imageStyle bg-white">
-						<img [src]="vehicle_obj.cat_img" class="img-fluid" [attr.id]="'vehicle_' + vehicle_obj_index" />
+					<div id="vehicle-image" class="imageStyle bg-white d-flex justify-content-center">
+						<img src="http://localhost:4200/assets/images/lexus.png" class="img-fluid"
+							[attr.id]="'vehicle_' + vehicle_obj_index" />
 					</div>
-					<div id="vehicle-information" class="m-0">
-						<p id="vehicle-name">
+					<div id="vehicle-information" class="m-0" style="padding:15px;">
+						<p id="vehicle-name" class="vehicle-name-text">
 							{{ vehicle_obj?.name }}
 						</p>
-						<p id="vehicle-price" class="font-weight-bolder" style="font-size: 1.1rem"
+						<p id="vehicle-price" class="font-weight-bolder mb-4" style="font-size: 1.1rem"
 							*ngIf="('rate_breakdown_' + getKeyName()) != undefined || ('rate_breakdown_' + getKeyName()).length <= 0">
-							<span style="color: #c94505;font-weight: 700;">
-								From
+							<span style="color: #c94505;font-weight: 600;">
+								From&nbsp;
 							</span>
 							{{currencySymbol}} {{ vehicle_obj['rate_breakdown_' + getKeyName()]?.grand_total !=
 							undefined
 							?
 							vehicle_obj['rate_breakdown_' + getKeyName()]?.grand_total : '0.00' }}
 						</p>
-						<div id="icons">
-							<img alt="" src="assets/images/select_vehicle/pass.png" class="mx-1" style="width: 13px" />
-							<span class="marginText mx-2">{{ vehicle_obj?.passenger }}</span>
-							<img alt="" src="assets/images/select_vehicle/lug.png" class="mx-1" />
-							<span class="marginText2 mx-2">{{ vehicle_obj?.luggage }}</span>
+						<div id="icons" class="d-flex" style="gap:10px;">
+							<div class="icon-container">
+								<img alt="" src="assets/images/select_vehicle/pass.png"
+									style="margin-right: 0.50rem;" />
+								<span>Passengers</span>
+								<span class="font-weight-bolder mx-2">{{ vehicle_obj?.passenger }}</span>
+							</div>
+							<div class="icon-container">
+								<img alt="" src="assets/images/select_vehicle/lug.png" style="margin-right: 0.50rem;" />
+								<span>Luggages</span>
+								<span class="font-weight-bolder mx-2">{{ vehicle_obj?.luggage }}</span>
+							</div>
 						</div>
 					</div>
 				</div>
