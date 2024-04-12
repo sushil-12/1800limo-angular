@@ -180,5 +180,30 @@ export class LooseAffiliateAccountsComponent implements OnInit {
       });
   }
 
+  messagetype: Record<string, any>
+  sendMessage(type: 'email' | 'sms', travelPlanner: any, message: string = null) {
+    console.log('Request to send a Message to travel agent id: ', type, travelPlanner)
+    this.messagetype = { type, travelPlanner }
+    $('#messageModal').modal('show')
+    $('#messageModal').find('.modal-header').find('h4').text('Contact to User via ' + type.toUpperCase())
+    $('#messageModal').find('.modal-body').find('p#affiliate-details').html(`User Name: ${travelPlanner['name']}<br/>User Email: ${travelPlanner['email']}`)
+    if (message != null) {
+      let body = {
+        text_message: message
+      }
+      if (type == 'email') {
+        body['email_address'] = travelPlanner?.email
+      }
+      else {
+        body['phone_number'] = travelPlanner?.phone_isd + travelPlanner?.phone
+      }
+      this.adminService.sendNotificationAllAccounts(type, body).subscribe((response: any) => {
+        if (response.success) {
+          console.log('Message Sent Successfully. ')
+        }
+      })
+    }
+  }
+
 
 }
