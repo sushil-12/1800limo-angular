@@ -861,7 +861,7 @@ button.link {
 	background: #000;
 	border-radius: 10px;
 	padding: 20px;
-	margin-bottom: 5rem;
+	margin-bottom: 2rem;
 }
 
 // back to home button
@@ -909,8 +909,25 @@ button.link {
 
 //vehicle card icon 
 .icon-container {
-	padding: 5px;
+	padding: 3px;
+	min-width: fit-content;
 	border: 1px solid #D9D9D9;
 	border-radius: 15px;
 	background: #f3f0f0;
+}
+
+//make-model-container
+.make-model-container {
+	background: #fff;
+	border: 2px solid #fff;
+	margin-bottom: 3rem;
+	padding: 15px;
+}
+
+//selected-filter-box inside make model container
+.selected-filter-box {
+	border: 1px solid lightgray;
+	border-radius: 10px;
+	margin-left: 15px;
+	padding: 10px;
 }
