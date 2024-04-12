@@ -51,7 +51,8 @@
                                 <td>
                                     <a class="user-profileded view-button btn-transparent-dark dropdown-toggle"
                                         id="navbarDropdownUserImage" href="javascript:void(0);" role="button"
-                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                        style="text-decoration: none !important;">
                                         <span>View</span>
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
@@ -71,8 +72,11 @@
                                 <td>
                                     <span [innerHTML]="highlighText(LooseAffiliate?.name)"></span>
                                 </td>
-                                <td><span [innerHTML]="highlighText(LooseAffiliate?.email)"></span></td>
-                                <td><span
+                                <td class="clickable" (click)="sendMessage('email', LooseAffiliate)"
+                                    data-messagetype="email"><span
+                                        [innerHTML]="highlighText(LooseAffiliate?.email)"></span></td>
+                                <td class="clickable" (click)="sendMessage('sms', LooseAffiliate)"
+                                    data-messagetype="sms"><span
                                         [innerHTML]="highlighText(LooseAffiliate?.phone_isd+LooseAffiliate?.phone)"></span>
                                 </td>
                             </tr>
@@ -116,34 +120,36 @@
 
 <!-- Delete confirmation modal -->
 <app-delete-confirmation (deleteRecord)="delete()" [alertMessage]="alertMessage"></app-delete-confirmation>
+
 <!-- Message modal -->
-<!-- <div class="modal fade" tabindex="-1" id="messageModal" aria-labelledby="messageModal" aria-hidden="true">
-	<div class="modal-dialog modal-dialog-centered">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h4></h4>
-			</div>
-			<div class="modal-body">
-				<div class="row">
-					<div class="col-md-12">
-						<p id="affiliate-details"></p>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-md-12">
-						<p id="label">
-							Message:
-						</p>
-						<textarea id="message" rows="7" placeholder="Your Message" #message></textarea>
-					</div>
-				</div>
-			</div>
-			<div class="modal-footer justify-content-end">
-				<button class="custom-filled-button" data-dismiss="modal"
-					(click)="sendMessage(messagetype?.type, messagetype?.LooseAffiliate, message.value)">
-					Send {{ messagetype?.type | titlecase }}
-				</button>
-			</div>
-		</div>
-	</div>
-</div> -->
+<div class="modal fade" tabindex="-1" id="messageModal" aria-labelledby="messageModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4></h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <p id="affiliate-details"></p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <p id="label">
+                            Message:
+                        </p>
+                        <textarea id="message" formControlName="message" rows="7" placeholder="Your Message" #message
+                            style="font-weight: 700;"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-end">
+                <button class="custom-filled-button" data-dismiss="modal"
+                    (click)="sendMessage(messagetype?.type, messagetype?.travelPlanner, message.value)">
+                    Send {{ messagetype?.type | titlecase }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

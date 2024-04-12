@@ -1,0 +1,24 @@
+.modal#messageModal {
+    .modal-body {
+        p {
+            font-size: 1rem;
+            font-weight: 500;
+
+            span {
+                font-size: 1.1rem;
+            }
+        }
+
+        textarea#message {
+            width: 100%;
+            border-radius: 1rem;
+            padding: 1rem;
+            max-height: 15rem;
+        }
+    }
+}
+
+.clickable:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
