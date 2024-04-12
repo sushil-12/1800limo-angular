@@ -264,9 +264,12 @@ section#vehicle-listing-container {
 	margin: 0;
 	padding: 0;
 	font-weight: bold;
-	font-size: 19px;
-	color: #000;
+	font-size: 18px;
+	color: #333333;
+	letter-spacing: 175%;
+	line-height: 175%;
 }
+
 
 .org-Btn {
 	border-radius: 8px;
@@ -327,12 +330,24 @@ input::-webkit-input-placeholder {
 	font-size: 1rem;
 }
 
+.input-group-text {
+	background-color: #ffffff !important;
+	border-radius: 11px !important;
+	border: 1px solid ced4da !important;
+	border-right: none !important;
+	border-radius: 0 !important;
+	border-top-left-radius: 11px !important;
+	;
+	border-bottom-left-radius: 11px !important;
+	;
+}
+
 input.form-control.filter-search-area {
-	position: relative;
-	border: none;
-	border-bottom: 1px solid var(--orange);
-	padding: 7px;
-	border-radius: 0;
+	padding: 6px;
+	height: 40px;
+	border-bottom-right-radius: 11px;
+	border-top-right-radius: 11px;
+	border-left: none;
 
 	&:focus {
 		outline: none;
@@ -459,11 +474,10 @@ aside.sidebar {
 }
 
 .filter-list .accordion .card-header h2 .btn:after {
-	content: "\f106";
+	content: "";
 	font-family: FontAwesome;
-	position: absolute;
-	right: 0;
-	top: 12px;
+	position: relative;
+	left: 10px;
 }
 
 .filter-list .accordion .card-header h2 .btn.collapsed:after {
@@ -930,4 +944,13 @@ button.link {
 	border-radius: 10px;
 	margin-left: 15px;
 	padding: 10px;
+}
+
+// accordian card
+.accordian_Card {
+	background-color: white !important;
+	padding: 15px !important;
+	border: none !important;
+	border-radius: 10px !important;
+
 }
