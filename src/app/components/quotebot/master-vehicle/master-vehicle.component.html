@@ -34,28 +34,18 @@
 <!-- FILTERS AND SORT BUTTON SECTION ENDS -->
 
 
-
-
 <!-- FILTERS AND VEHICLE LISTING SECTION -->
 <section class="container-fluid pt-2 pb-5 mob-height" [ngClass]="openfilters ? 'position-fixed' : ''">
-	<div id="page-instruction-text" class="mx-2 mt-4 mb-2">
+	<div id="page-instruction-text" class="mx-2 mt-4 mb-2 hideMobile">
 		<h5>
 			Filter By
 		</h5>
 	</div>
 
-	<!-- <div class="row mb-5">
-		<div class="col-md-12">
-			<div id="back-button">
-				
-			</div>
-		</div>
-	</div> -->
-
 	<p class="clearfix"></p>
 	<div class="row">
 		<!-- FILTERS SECTION -->
-		<section id=" filters-container test" class="col-lg-2">
+		<section id=" filters-container test" class="col-lg-3 col-xl-2">
 			<div class="navbar-expand-lg pro-Fil">
 				<div class="collapse navbar-collapse" id="navbarSupportedContent" [ngClass]="openfilters ? 'show' : ''">
 					<div class="close-sidebar">
@@ -64,19 +54,22 @@
 						</span>
 					</div>
 					<aside class="sidebar w-100">
-						<!-- <div id="filter-buttons" class="mb-4">
-							<button type="button" (click)="clearFilters(null)"
-								class="custom-filled-button orange-button my-2 mx-1">
-								Clear filters
-							</button>
+						<div id="page-instruction-text" class="mx-2 mt-4 mb-4 hideDesktop">
+							<h5>
+								Filter By
+							</h5>
+						</div>
+						<div class="d-flex ml-2 mb-4">
 							<button type="button" (click)="getVehicleDetails(); openfilters=false"
-								class="custom-filled-button green-button ml-1">
-								Apply filters
+								class="custom-filled-button green-button mr-4">
+								Apply filter
 							</button>
-						</div> -->
-
-						<!-- THE SELECTED FILTERS LIST -->
-						<!-- <div class="fil-itm" *ngIf="filters?.selections?.length > 0">
+							<button type="button" (click)="clearFilters(null)"
+								class="custom-filled-button orange-button">
+								Clear filter
+							</button>
+						</div>
+						<div class="fil-itm" *ngIf="filters?.selections?.length > 0">
 							<div class="btn-custom-btn btn btn-outline-dark" *ngFor="let obj of filters?.selections"
 								(click)="clearFilters(obj)">
 								<span class="close" aria-hidden="true">
@@ -84,9 +77,7 @@
 								</span>
 								{{ obj['name'] }}
 							</div>
-						</div> -->
-						<!-- THE SELECTED FILTERS LIST ENDS -->
-
+						</div>
 						<!-- THE FILTER LIST - ACCORDION -->
 						<div class="filter-list">
 							<div class="accordion" id="accordionExample">
@@ -110,10 +101,10 @@
 									<!-- FILTER TITLE ENDS -->
 
 									<!-- FILTER COLLAPSIBLE CARD - uncollapsed for first card-->
-									<!-- [ngClass]="filter_text_index == 0 ? 'show' : ''" -->
-									<div class="collapse show" data-parent="#accordionExample"
+									<div class="collapse" data-parent="#accordionExample"
 										[attr.aria-labelledby]="'card_' + filter_text_index"
-										[attr.id]="'filter_' + filter_text_index">
+										[attr.id]="'filter_' + filter_text_index"
+										[ngClass]="filter_text_index == 0 ? 'show' : ''">
 										<!-- IF RP IS A STRING -->
 										<div class="card-body pt-0" *ngIf="!isArray(filter_text.rp)">
 											<!-- Search Field -->
@@ -121,12 +112,13 @@
 												<div class="input-group mb-3 ">
 													<div class="input-group-prepend bg-white">
 														<div class="input-group-text">
-															<i class="fa fa-search"></i>
+															<i class="fa fa-search" style="color:grey;"></i>
 														</div>
 													</div>
 													<input class="form-control filter-search-area"
 														(keyup)="searchIn(filter_text.rp, $event.target.value)"
-														placeholder="Search for {{ halfText(formatter(filter_text.dp)) | titlecase }}" />
+														placeholder="Search" />
+													<!--  for {{ halfText(formatter(filter_text.dp)) | titlecase }} -->
 												</div>
 
 											</div>
@@ -145,7 +137,9 @@
 														[checked]="isFilterAlreadySelected(filter_text.rp, filter)" />
 													<label class="custom-control-label"
 														[attr.for]="filter_text.dp + '_' + '_' + filter_index">
-														{{ filter.name | titlecase }}
+														<span class="checkbox-label-text">{{
+															filter.name
+															| titlecase }}</span>
 														<i class="bi bi-currency-dollar text-orange"
 															*ngIf="filter.chargeable == 'yes'"></i>
 													</label>
@@ -199,13 +193,22 @@
 														[attr.id]="'inner_filter_' + filter_text.dp + '_' + inner_filter_text_index"
 														[ngClass]="inner_filter_text_index == 0 ? 'show' : ''">
 														<!-- IF RP HAS A STRING VALUE -->
+
 														<div class="card-body pt-0"
 															*ngIf="!isArray(inner_filter_text.rp)">
-															<!-- Search Field -->
-															<div class="filter-field mb-3">
+														</div>
+														<!-- Search Field -->
+														<div class="filter-field mb-3">
+															<div class="input-group mb-3 ">
+																<div class="input-group-prepend bg-white">
+																	<div class="input-group-text">
+																		<i class="fa fa-search" style="color:grey;"></i>
+																	</div>
+																</div>
 																<input class="form-control filter-search-area"
 																	(keyup)="searchIn(inner_filter_text.rp, $event.target.value)"
-																	placeholder="Search for {{ halfText(formatter(inner_filter_text.dp)) | titlecase }}" />
+																	placeholder="Search" />
+																<!--  for {{ halfText(formatter(inner_filter_text.dp)) | titlecase }} -->
 															</div>
 															<!-- Search Field Ends -->
 
@@ -226,7 +229,8 @@
 																			}}
 																		</span>
 																		<span *ngIf="inner_filter.name == 'LGBTQIA+'">
-																			{{ inner_filter.name }}
+																			<span class="checkbox-label-text">{{
+																				inner_filter.name }}</span>
 																		</span>
 																	</label>
 																</div>
@@ -260,31 +264,19 @@
 										<!-- INNER ACCORDION ENDS -->
 									</div>
 								</div>
-								<!-- OUTER CARD -->
-								<!-- <div class="my-2" *ngIf="role==2">
-									<div class="font-weight-bold display-5" style="font-size: 18px;">
-										Affiliate Vehicles
-									</div>
-								</div> -->
-								<!-- <div class="d-flex justify-content-end">
-									<button type="button" (click)="closeAllAccordian()"
-										class="custom-filled-button grey-button">
-										Close all
-									</button>
-								</div> -->
 							</div>
-							<!-- <div id="filter-buttons" class="mt-4">
-								<button type="button" (click)="clearFilters(null)"
-									class="custom-filled-button orange-button my-2 mx-1">
-									Clear filters
-								</button>
-								<button type="button" (click)="getVehicleDetails(); openfilters=false"
-									class="custom-filled-button green-button ml-1">
-									Apply filters
-								</button>
-							</div> -->
 						</div>
 						<!-- FILTER LIST ENDS - ACCORDION-->
+						<div class="d-flex ml-2 mb-4">
+							<button type="button" (click)="getVehicleDetails(); openfilters=false"
+								class="custom-filled-button green-button mr-4">
+								Apply filter
+							</button>
+							<button type="button" (click)="clearFilters(null)"
+								class="custom-filled-button orange-button">
+								Clear filter
+							</button>
+						</div>
 					</aside>
 				</div>
 			</div>
@@ -294,7 +286,7 @@
 
 
 		<!-- MASTER VEHICLE TYPES SECTION -->
-		<div class="col-md-12 col-lg-10" [ngStyle]="openfilters ? {'z-index': -1, 'position': 'relative'} : ''"
+		<div class="col-md-12 col-lg-9 col-xl-10" [ngStyle]="openfilters ? {'z-index': -1, 'position': 'relative'} : ''"
 			*ngIf="vehicleDetails.length == 0 || master_vehicles.length == 0">
 			<!-- title box -->
 			<div class="select_vehicle_div">
@@ -319,15 +311,8 @@
 			</div>
 
 			<!-- make model colours years div -->
-			<div class="make-model-container">
+			<!-- <div class="make-model-container">
 				<div class="d-flex justify-content-between">
-					<div class="row col-md-6">
-						<div class="col-md-3" *ngFor="let test of [0,1,2,3]">
-							<ng-select appearance="outline" dropdownPosition="bottom" [markFirst]="true"
-								[virtualScroll]="true" bindLabel="name" bindValue="ID" placeholder="Make">
-							</ng-select>
-						</div>
-					</div>
 					<div class="d-flex align-items-center justify-content-end col-md-6">
 						<button type="button" (click)="getVehicleDetails(); openfilters=false"
 							class="custom-filled-button green-button mr-4">
@@ -337,9 +322,9 @@
 							Clear filter
 						</button>
 					</div>
-				</div>
-				<!-- THE SELECTED FILTERS LIST -->
-				<div class="selected-filter-box fil-itm mt-2" *ngIf="filters?.selections?.length > 0">
+				</div> -->
+			<!-- THE SELECTED FILTERS LIST -->
+			<!-- <div class="selected-filter-box fil-itm mt-2" *ngIf="filters?.selections?.length > 0">
 					<div class="btn-custom-btn btn btn-outline-dark" *ngFor="let obj of filters?.selections"
 						(click)="clearFilters(obj)">
 						<span class="close" aria-hidden="true">
@@ -348,7 +333,7 @@
 						{{ obj['name'] }}
 					</div>
 				</div>
-			</div>
+			</div> -->
 
 			<!-- vehicle listing below -->
 			<p style="font-size: 1rem; font-weight: 500; color: #e63232"
@@ -377,7 +362,7 @@
 							?
 							vehicle_obj['rate_breakdown_' + getKeyName()]?.grand_total : '0.00' }}
 						</p>
-						<div id="icons" class="d-flex" style="gap:10px;">
+						<div id="icons" class="passnger-luggage-div">
 							<div class="icon-container">
 								<img alt="" src="assets/images/select_vehicle/pass.png"
 									style="margin-right: 0.50rem;" />
