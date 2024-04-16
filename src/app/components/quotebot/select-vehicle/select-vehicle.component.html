@@ -477,12 +477,14 @@
 						<!-- VEHICLE DETAILS ENDS -->
 
 						<!-- DIV: PREVIEW BUTTON -->
-						<div class="d-flex justify-content-between mb-1">
+						<div class="d-flex justify-content-between mb-1 align-items-center">
 							<button type="button" (click)="viewDetails(vehinfo)"
-								class="custom-filled-button orange-button">
+								class="custom-filled-button orange-button" style="height: 40px !important;">
 								Vehicle Details
 							</button>
-							<button type="button" (click)="bookNow(vehinfo)" class="custom-filled-button green-button">
+							<button type="button" (click)="bookNow(vehinfo)"
+								class="custom-filled-button green-button rounded-pill"
+								style="font-size: 1.1rem !important;padding: 0.495rem !important;">
 								Book Now
 							</button>
 						</div>
