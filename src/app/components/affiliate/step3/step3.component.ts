@@ -1,10 +1,9 @@
-import
-{
-	Component,
-	EventEmitter,
-	Input,
-	OnInit,
-	AfterViewInit,
+import {
+Component,
+EventEmitter,
+Input,
+OnInit,
+AfterViewInit,
 } from "@angular/core";
 import { AffiliateService } from "../../../services/affiliate.service";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
@@ -24,8 +23,7 @@ declare var $: any;
 	templateUrl: "./step3.component.html",
 	styleUrls: ["./step3.component.scss"],
 })
-export class Step3Component implements OnInit, AfterViewInit
-{
+export class Step3Component implements OnInit, AfterViewInit {
 	public imageSrc: string;
 	public addInsuranceForm: FormGroup;
 	public submittedForm: boolean;
@@ -57,20 +55,17 @@ export class Step3Component implements OnInit, AfterViewInit
 		private customValidator: CustomvalidationService
 	) { }
 
-	ngAfterViewInit()
-	{
+	ngAfterViewInit() {
 		//set current user country as default in phone number
 		this.AgentTelephoneObject.setCountry(this.currentUser.phoneCountry);
 	}
-	ngOnInit(): void
-	{
-		$('.HeadingH1').css({display: "block"})
+	ngOnInit(): void {
+		$('.HeadingH1').css({ display: "block" })
 		//show "stripe can take upto 24 hours" modal on first time completing step 2
 		const showStripe24HourAlert = sessionStorage.getItem(
 			"showStripe24HourAlert"
 		);
-		if (showStripe24HourAlert == "yes")
-		{
+		if (showStripe24HourAlert == "yes") {
 			$("#showStripe24HourAlert").modal("show");
 			sessionStorage.removeItem("showStripe24HourAlert");
 		}
@@ -85,14 +80,12 @@ export class Step3Component implements OnInit, AfterViewInit
 
 		let currentYear: number = new Date().getFullYear();
 		//days
-		for (let i = 1; i <= 31; i++)
-		{
+		for (let i = 1; i <= 31; i++) {
 			this.policyExpiredDay.push(i);
 		}
 		//year
 		let temp = 0;
-		while (temp < 50)
-		{
+		while (temp < 50) {
 			//max 50 year future
 			this.policyExpiredYear.push(currentYear);
 			currentYear++;
@@ -115,26 +108,22 @@ export class Step3Component implements OnInit, AfterViewInit
 			insuranceLimits: ['500000', Validators.required],
 			AgentEmail: ['', [Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)]],
 			insCertificate: ['', Validators.required],
-			insuranceCard: ['', Validators.required],
+			insuranceCard: [''],
 		});
 		// , { validator: this.customValidationFunction }
-		if (this.affiliateId) 
-		{
-			if (stepCompleted.includes("3")) 
-			{
+		if (this.affiliateId) {
+			if (stepCompleted.includes("3")) {
 				// get data for editing using API
 				this.spinner.show(); //show spinner
 				this.affiliateService
 					.getInsuranceDetail(this.affiliateId)
 					.pipe(
-						catchError((err) =>
-						{
+						catchError((err) => {
 							this.spinner.hide(); //hide spinner
 							return throwError(err);
 						})
 					)
-					.subscribe(({ data }: any) =>
-					{
+					.subscribe(({ data }: any) => {
 						this.spinner.hide(); //hide spinner
 						this.insCertificateImage = data.insCertificate.image;
 						this.insuranceCardImage = data.insuranceCard.image;
@@ -161,8 +150,7 @@ export class Step3Component implements OnInit, AfterViewInit
 							data.AgentTelephoneCountry
 						);
 					});
-			} else
-			{
+			} else {
 				var dateobj = new Date();
 				var month = dateobj.getMonth() + 1;
 				var day = dateobj.getDate();
@@ -177,23 +165,19 @@ export class Step3Component implements OnInit, AfterViewInit
 		}
 	}
 
-	closeButton()
-	{
+	closeButton() {
 		this.closeTab.emit();
 	}
 
-	customValidationFunction(group): any
-	{
-		if (group)
-		{
+	customValidationFunction(group): any {
+		if (group) {
 			var currentDate = formatDate(new Date(), "yyyy-MM-dd", "en");
 			console.log(currentDate);
 			if (
 				!group.controls["policyExpiredDay"].value ||
 				!group.controls["policyExpiredMonth"].value ||
 				!group.controls["policyExpiredYear"].value
-			)
-			{
+			) {
 				return null;
 			}
 			const enteredDate =
@@ -206,151 +190,137 @@ export class Step3Component implements OnInit, AfterViewInit
 			if (
 				new Date(enteredDate).getTime() >=
 				new Date(currentDate).getTime()
-			)
-			{
+			) {
 				return null;
 			}
 		}
 		return { policyError: true };
 	}
 
-	onCountryChange(event, type)
-	{
-		if (type == "AgentTelephone")
-		{
+	onCountryChange(event, type) {
+		if (type == "AgentTelephone") {
 			this.addInsuranceForm.patchValue({
 				AgentTelephoneIsd: "+" + event.dialCode,
 				AgentTelephoneCountry: event.iso2,
 			});
 		}
 	}
-	telInputObjectAgentTelephone(obj)
-	{
+	telInputObjectAgentTelephone(obj) {
 		this.AgentTelephoneObject = obj;
 	}
 
-	fetchImageBlob(url ,key ,id){
+	fetchImageBlob(url, key, id) {
 		this.stateManagementService.setprogressBar(true);
-		
+
 		this.adminService.fetchImageBlob(url)
-		.pipe(
-			catchError(err => {
+			.pipe(
+				catchError(err => {
+					this.stateManagementService.setprogressBar(false);
+					return throwError(err);
+				})
+			)
+			.subscribe(async ({ data }: any) => {
 				this.stateManagementService.setprogressBar(false);
-				return throwError(err);
+				const response = await fetch(data);
+				const imageBlob = await response.blob()
+				console.log('imageBlob', imageBlob)
+				const canvas = document.createElement("canvas");
+				const ctx = canvas.getContext("2d");
+				const img = new Image();
+				img.src = URL.createObjectURL(imageBlob);
+				console.log('img-->', img)
+				img.onload = () => {
+					// Rotate the image by 90 degrees (or your desired angle)
+					canvas.width = img.width;
+					canvas.height = img.height;
+					ctx.translate(canvas.width / 2, canvas.height / 2);
+					ctx.rotate(Math.PI); // Rotate by 180 degrees
+					ctx.drawImage(img, -img.width / 2, -img.height / 2);
+					// ctx.drawImage(img, 0, -canvas.width);
+
+					// Convert the canvas to a Blob (JPEG format)
+					canvas.toBlob((blob) => {
+						console.log(blob);
+
+						this.blobToDataURL(blob, key, id);
+						// });
+					}, "image/jpeg");
+				}
 			})
-		)
-		.subscribe(async({ data }: any) => {
-			this.stateManagementService.setprogressBar(false);
-			const response = await fetch(data);
-			const imageBlob = await response.blob()
-			console.log('imageBlob',imageBlob)
-		const canvas = document.createElement("canvas");
-		const ctx = canvas.getContext("2d");
-		const img = new Image();
-		img.src = URL.createObjectURL(imageBlob);
-		console.log('img-->' , img)
-		img.onload = () => {
-			// Rotate the image by 90 degrees (or your desired angle)
-			canvas.width = img.width; 
-			canvas.height = img.height;
-			ctx.translate(canvas.width / 2, canvas.height / 2);
-			ctx.rotate(Math.PI); // Rotate by 180 degrees
-			ctx.drawImage(img, -img.width / 2, -img.height / 2);
-			// ctx.drawImage(img, 0, -canvas.width);
-
-			// Convert the canvas to a Blob (JPEG format)
-			canvas.toBlob((blob) => {
-				console.log(blob);
-
-				this.blobToDataURL(blob, key ,id);
-				// });
-			}, "image/jpeg");
-		}
-		})
 	}
-	blobToDataURL(blob: Blob , key , id) {
+	blobToDataURL(blob: Blob, key, id) {
 		var reader = new FileReader();
 		reader.readAsDataURL(blob);
 		reader.onload = () => {
 			let dataUrl = reader.result;
 			console.log(dataUrl); //DataURL
-			this.vehicleOfficialImagesChange1(dataUrl, key,id);
+			this.vehicleOfficialImagesChange1(dataUrl, key, id);
 		};
 	}
 
 
-	async vehicleOfficialImagesChange1(imageUrl, imageType, imageId)
-	{
-		if(!await this.commonServices.handleFile(event)) {
+	async vehicleOfficialImagesChange1(imageUrl, imageType, imageId) {
+		if (!await this.commonServices.handleFile(event)) {
 			return;
 		}
 		this.stateManagementService.setprogressBar(true);
-		
-				this.imageSrc = imageUrl;
-				this.affiliateService
-					.uploadVehicleImage(this.imageSrc)
-					.pipe(
-						catchError((err) =>
-						{
-							this.stateManagementService.setprogressBar(false);
-							return throwError(err);
-						})
-					)
-					.subscribe(({ data }: any) =>
-					{
-						switch (imageType)
-						{
-							case "insCertificate": {
-								this.addInsuranceForm.patchValue({
-									insCertificate: data.id,
-								});
-								this.insCertificateImage = data.image;
-								this.insCertificateId = data.id;
-								break;
-							}
-							case "insuranceCard": {
-								this.addInsuranceForm.patchValue({
-									insuranceCard: data.id,
-								});
-								this.insuranceCardImage = data.image;
-								this.insuranceCardId = data.id;
-								break;
-							}
-							default: {
-								break;
-							}
-						}
-						this.stateManagementService.setprogressBar(false);
-					});
+
+		this.imageSrc = imageUrl;
+		this.affiliateService
+			.uploadVehicleImage(this.imageSrc)
+			.pipe(
+				catchError((err) => {
+					this.stateManagementService.setprogressBar(false);
+					return throwError(err);
+				})
+			)
+			.subscribe(({ data }: any) => {
+				switch (imageType) {
+					case "insCertificate": {
+						this.addInsuranceForm.patchValue({
+							insCertificate: data.id,
+						});
+						this.insCertificateImage = data.image;
+						this.insCertificateId = data.id;
+						break;
+					}
+					case "insuranceCard": {
+						this.addInsuranceForm.patchValue({
+							insuranceCard: data.id,
+						});
+						this.insuranceCardImage = data.image;
+						this.insuranceCardId = data.id;
+						break;
+					}
+					default: {
+						break;
+					}
+				}
+				this.stateManagementService.setprogressBar(false);
+			});
 	}
 
-	async vehicleOfficialImagesChange(event, imageType, imageId)
-	{
-		if(!await this.commonServices.handleFile(event)) {
+	async vehicleOfficialImagesChange(event, imageType, imageId) {
+		if (!await this.commonServices.handleFile(event)) {
 			return;
 		}
 		this.stateManagementService.setprogressBar(true);
 		const reader = new FileReader();
-		if (event.target.files && event.target.files.length)
-		{
+		if (event.target.files && event.target.files.length) {
 			const [file] = event.target.files;
 			reader.readAsDataURL(file);
-			reader.onload = () =>
-			{
+			reader.onload = () => {
 				this.imageSrc = reader.result as string;
 				this.affiliateService
 					.uploadVehicleImage(this.imageSrc)
 					.pipe(
-						catchError((err) =>
-						{
+						catchError((err) => {
 							this.stateManagementService.setprogressBar(false);
 							return throwError(err);
 						})
 					)
-					.subscribe(({ data }: any) =>
-					{
-						switch (imageType)
-						{
+					.subscribe(({ data }: any) => {
+						switch (imageType) {
 							case "insCertificate": {
 								this.addInsuranceForm.patchValue({
 									insCertificate: data.id,
@@ -377,10 +347,8 @@ export class Step3Component implements OnInit, AfterViewInit
 		}
 	}
 
-	deleteImage(id, imageType)
-	{
-		switch (imageType)
-		{
+	deleteImage(id, imageType) {
+		switch (imageType) {
 			case "insCertificate": {
 				this.addInsuranceForm.patchValue({
 					insCertificate: "",
@@ -401,37 +369,31 @@ export class Step3Component implements OnInit, AfterViewInit
 		}
 	}
 
-	showImageInModal(imageUrl)
-	{
+	showImageInModal(imageUrl) {
 		this.modalImage = imageUrl;
 		$("#imageModal").addClass("showImage");
 		$("#imageModal").removeClass("d-none");
 	}
 
-	get f()
-	{
+	get f() {
 		return this.addInsuranceForm.controls;
 	}
 
-	submitForm()
-	{
-		if (this.affiliate_type != "fleet_operator")
-		{
+	submitForm() {
+		if (this.affiliate_type != "fleet_operator") {
 			console.log("set validation on field");
-			this.addInsuranceForm
-				.get("insuranceCard")
-				.setValidators([Validators.required]);
-		} else
-		{
+			// this.addInsuranceForm
+			// 	.get("insuranceCard")
+			// 	.setValidators([Validators.required]);
+		} else {
 			console.log("enter in conditions");
 			this.addInsuranceForm.get("insuranceCard").clearValidators();
 			this.addInsuranceForm.get("insuranceCard").updateValueAndValidity();
 		}
-		console.log('form->',this.addInsuranceForm);
+		console.log('form->', this.addInsuranceForm);
 		this.submittedForm = true;
 		// stop here if form is invalid
-		if (this.addInsuranceForm.invalid)
-		{
+		if (this.addInsuranceForm.invalid) {
 			return;
 		}
 
@@ -444,20 +406,17 @@ export class Step3Component implements OnInit, AfterViewInit
 		this.affiliateService
 			.addInsuranceDetail(this.addInsuranceForm.value)
 			.pipe(
-				catchError((err) =>
-				{
+				catchError((err) => {
 					this.spinner.hide(); //hide spinner
 					this.disableSubmitButton = false; //enable submit button
 					return throwError(err);
 				})
 			)
-			.subscribe(({ success }: any) =>
-			{
+			.subscribe(({ success }: any) => {
 				this.spinner.hide(); //hide spinner
 				this.disableSubmitButton = false; //enable submit button
 
-				if (success == true)
-				{
+				if (success == true) {
 					this.affiliateService.updateStepsLocal("3");
 				}
 				this.router
@@ -466,8 +425,7 @@ export class Step3Component implements OnInit, AfterViewInit
 			});
 	}
 
-	resetForm()
-	{
+	resetForm() {
 		// this.addInsuranceForm.reset();
 		window.scroll({
 			top: 0,
@@ -491,26 +449,22 @@ export class Step3Component implements OnInit, AfterViewInit
 		this.insCertificateImage = "";
 		this.insuranceCardImage = "";
 	}
-	selectDropdownExMonth()
-	{
+	selectDropdownExMonth() {
 		$(".selectExMonthLabel")
 			.removeClass("selectExMonthLabel ")
 			.addClass("select-ex-month-label");
 	}
-	selectDropdownExDay()
-	{
+	selectDropdownExDay() {
 		$(".selectExDayLabel")
 			.removeClass("selectExDayLabel ")
 			.addClass("select-ex-day-label");
 	}
-	selectDropdownExYear()
-	{
+	selectDropdownExYear() {
 		$(".selectExYearLabel")
 			.removeClass("selectExYearLabel ")
 			.addClass("select-ex-year-label");
 	}
-	selectDropdownInsurance()
-	{
+	selectDropdownInsurance() {
 		$(".selectInsuranceLabel")
 			.removeClass("selectInsuranceLabel ")
 			.addClass("select-insurance-label");
