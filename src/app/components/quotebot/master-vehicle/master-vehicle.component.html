@@ -108,7 +108,9 @@
 										<!-- IF RP IS A STRING -->
 										<div class="card-body pt-0" *ngIf="!isArray(filter_text.rp)">
 											<!-- Search Field -->
-											<div class="filter-field mb-3">
+											<!-- added condition to hide search for first accordian -->
+											<div class="filter-field mb-3"
+												*ngIf="filter_text.dp != 'vehicle-type-preferences' ">
 												<div class="input-group mb-3 ">
 													<div class="input-group-prepend bg-white">
 														<div class="input-group-text">
