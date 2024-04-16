@@ -43,7 +43,8 @@
 .rounded-pill {
 	font-size: 14px;
 	border-radius: 50% !important;
-	width: 70px;
+	width: 90px;
+	height: 70px;
 	color: #FFF !important;
 }
 
@@ -996,6 +997,7 @@ button.link {
 .imageStyle {
 	width: 100%;
 	max-height: 15rem;
+	min-height: 15rem;
 	margin-bottom: 10px;
 }
 
