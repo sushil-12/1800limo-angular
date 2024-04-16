@@ -347,8 +347,7 @@
 					*ngFor="let vehicle_obj of master_vehicles; index as vehicle_obj_index"
 					(click)="selectCategory(vehicle_obj?.name)">
 					<div id="vehicle-image" class="imageStyle bg-white d-flex justify-content-center">
-						<img src="http://localhost:4200/assets/images/lexus.png" class="img-fluid"
-							[attr.id]="'vehicle_' + vehicle_obj_index" />
+						<img [src]="vehicle_obj.cat_img" class="img-fluid" [attr.id]="'vehicle_' + vehicle_obj_index" />
 					</div>
 					<div id="vehicle-information" class="m-0" style="padding:15px;">
 						<p id="vehicle-name" class="vehicle-name-text">
