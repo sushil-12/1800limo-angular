@@ -520,13 +520,16 @@
 <div aria-hidden="true" aria-labelledby="ModalVehicleRates" class="modal fade" id="ModalVehicleRates" tab-index="-1">
 	<div class="modal-dialog modal-md modal-dialog-centered">
 		<div class="modal-content">
-			<div class="modal-header">
-				<h4 class="modal-title">
-					Detailed Fare Rate Slip
-				</h4>
+			<div class="modal-header" style="flex-direction: column;">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
+				<h4 class="modal-title">
+					Detailed Fare Rate Slip
+				</h4>
+				<h4 class="alert alert-danger"
+					style="padding :0.25rem 1.25rem; color: red !important;font-size: 15px !important;">
+					Gratuity Included (hand tip extra at own discretion)</h4>
 			</div>
 			<div class="modal-body">
 				<table class="table">
@@ -539,10 +542,10 @@
 						*ngIf="quotebot_form.service_type == 'one_way' || quotebot_form.service_type == 'charter_tour'">
 						<tr
 							*ngFor="let rate of one_way_rates?.rateArray?.all_inclusive_rates | keyvalue; index as rate_index">
-							<td>
+							<td *ngIf="rate?.value?.rate_label != 'Gratuity' ">
 								{{ rate.value.rate_label }}
 							</td>
-							<td>
+							<td *ngIf="rate?.value?.rate_label != 'Gratuity' ">
 								{{currencySymbol}} {{ rate.value.baserate.toFixed(2) }} {{ (rate.value.multitple !=
 								undefined ||
 								rate.value.multiple
@@ -550,7 +553,7 @@
 								? ' ' : 'x' }} {{ rate.value.multiple !== undefined ?
 								rate.value.multiple : '' }}
 							</td>
-							<td>
+							<td *ngIf="rate?.value?.rate_label != 'Gratuity' ">
 								{{currencySymbol}} {{ rate.value.amount }}
 							</td>
 						</tr>
@@ -576,10 +579,10 @@
 					<tbody *ngIf="quotebot_form.service_type == 'round_trip'">
 						<tr
 							*ngFor="let rate of round_trip_rates?.rateArray?.all_inclusive_rates | keyvalue; index as rate_index">
-							<td>
+							<td *ngIf="rate?.value?.rate_label != 'Gratuity' ">
 								{{ rate.value.rate_label }}
 							</td>
-							<td>
+							<td *ngIf="rate?.value?.rate_label != 'Gratuity' ">
 								{{currencySymbol}} {{ rate.value.baserate.toFixed(2) }} {{ (rate.value.multitple !=
 								undefined ||
 								rate.value.multiple
@@ -587,7 +590,7 @@
 								? ' ' : 'x' }} {{ rate.value.multiple !== undefined ?
 								rate.value.multiple : '' }}
 							</td>
-							<td>
+							<td *ngIf="rate?.value?.rate_label != 'Gratuity' ">
 								{{currencySymbol}} {{ rate.value.amount }}
 							</td>
 						</tr>
