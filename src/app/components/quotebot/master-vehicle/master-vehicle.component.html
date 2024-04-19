@@ -60,14 +60,15 @@
 							</h5>
 						</div>
 						<div class="d-flex ml-2 mb-4">
+							<button type="button" (click)="clearFilters(null)"
+								class="custom-filled-button orange-button mr-4">
+								Clear
+							</button>
 							<button type="button" (click)="getVehicleDetails(); openfilters=false"
-								class="custom-filled-button green-button mr-4">
+								class="custom-filled-button green-button">
 								Apply filter
 							</button>
-							<button type="button" (click)="clearFilters(null)"
-								class="custom-filled-button orange-button">
-								Clear filter
-							</button>
+
 						</div>
 						<div class="fil-itm" *ngIf="filters?.selections?.length > 0">
 							<div class="btn-custom-btn btn btn-outline-dark" *ngFor="let obj of filters?.selections"
@@ -270,14 +271,15 @@
 						</div>
 						<!-- FILTER LIST ENDS - ACCORDION-->
 						<div class="d-flex ml-2 mb-4">
+							<button type="button" (click)="clearFilters(null)"
+								class="custom-filled-button orange-button mr-4">
+								Clear
+							</button>
 							<button type="button" (click)="getVehicleDetails(); openfilters=false"
-								class="custom-filled-button green-button mr-4">
+								class="custom-filled-button green-button">
 								Apply filter
 							</button>
-							<button type="button" (click)="clearFilters(null)"
-								class="custom-filled-button orange-button">
-								Clear filter
-							</button>
+
 						</div>
 					</aside>
 				</div>

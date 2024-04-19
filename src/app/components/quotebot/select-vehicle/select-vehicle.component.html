@@ -62,14 +62,15 @@
 							</h5>
 						</div>
 						<div class="d-flex ml-2 mb-4">
+							<button type="button" (click)="clearFilters(null)"
+								class="custom-filled-button orange-button mr-4">
+								Clear
+							</button>
 							<button type="button" (click)="getVehicleDetails(); openfilters=false"
-								class="custom-filled-button green-button mr-4">
+								class="custom-filled-button green-button">
 								Apply filter
 							</button>
-							<button type="button" (click)="clearFilters(null)"
-								class="custom-filled-button orange-button">
-								Clear filter
-							</button>
+
 						</div>
 						<div class="fil-itm" *ngIf="filters?.selections?.length > 0">
 							<div class="btn-custom-btn btn btn-outline-dark" *ngFor="let obj of filters?.selections"
@@ -271,14 +272,15 @@
 							</div>
 						</div>
 						<div class="d-flex ml-2 mb-4">
+							<button type="button" (click)="clearFilters(null)"
+								class="custom-filled-button orange-button mr-4">
+								Clear
+							</button>
 							<button type="button" (click)="getVehicleDetails(); openfilters=false"
-								class="custom-filled-button green-button mr-4">
+								class="custom-filled-button green-button">
 								Apply filter
 							</button>
-							<button type="button" (click)="clearFilters(null)"
-								class="custom-filled-button orange-button">
-								Clear filter
-							</button>
+
 						</div>
 
 						<!-- FILTER LIST ENDS - ACCORDION-->
@@ -444,7 +446,8 @@
 										</div>
 									</div>
 
-									<div class="d-flex price" *ngIf="vehinfo?.vehicle_details.year">
+									<div class="d-flex price"
+										*ngIf="vehinfo?.vehicle_details.year && !vehinfo?.is_master_vehicle">
 										<div class="col-md-8 p-0" style="min-width: fit-content;">Year</div>
 										<div class="col-md-4" style="min-width: fit-content;">
 											<span class="font-weight-bold">
@@ -452,13 +455,15 @@
 											</span>
 										</div>
 									</div>
-									<div class="d-flex price" *ngIf="vehinfo?.vehicle_details.make">
+									<div class="d-flex price"
+										*ngIf="vehinfo?.vehicle_details.make  && !vehinfo?.is_master_vehicle">
 										<div class="col-md-8 p-0" style="min-width: fit-content;">Make</div>
 										<div class="col-md-4" style="min-width: fit-content;">
 											<span class="font-weight-bold">{{vehinfo?.vehicle_details.make}}</span>
 										</div>
 									</div>
-									<div class="d-flex price" *ngIf="vehinfo?.vehicle_details.model">
+									<div class="d-flex price"
+										*ngIf="vehinfo?.vehicle_details.model  && !vehinfo?.is_master_vehicle">
 										<div class="col-md-8 p-0" style="min-width: fit-content;">Model</div>
 										<div class="col-md-4" style="min-width: fit-content;">
 											<span class="font-weight-bold">{{vehinfo?.vehicle_details.model}}</span>
