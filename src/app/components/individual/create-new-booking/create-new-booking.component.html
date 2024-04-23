@@ -933,12 +933,17 @@
                         <ng-select appearance="outline" [items]="BigData?.airportsData"
                             [searchFn]="airportSearchFunction" (change)="change($event, 'pickup_airport')"
                             placeholder="Select Airport" bindLabel="formatted_name" dropdownPosition="bottom"
-                            [markFirst]="true" [virtualScroll]="true" formControlName="pickup_airport_option">
+                            [markFirst]="true" [virtualScroll]="true" formControlName="pickup_airport_option"
+                            [ngClass]="{ 'border-red': (submitBookingForm && Form.pickup_airport_option.invalid) }"
+                            style="height:66px;">
                             <ng-template ng-option-tmp let-item="item">
                                 <div [title]="item.formatted_name">{{item.formatted_name}}</div>
                             </ng-template>
                         </ng-select>
-
+                        <div *ngIf="(submitBookingForm && Form.pickup_airport_option.invalid) "
+                            class="text-danger my-mat-hint" style="margin-bottom: 10px;">
+                            <div *ngIf="Form.pickup_airport_option.errors.required">This field is required</div>
+                        </div>
 
                     </div>
 
@@ -949,11 +954,17 @@
                         <ng-select appearance="outline" [items]="BigData?.airlinesData"
                             [searchFn]="airlineSearchFunction" (change)="change($event, 'pickup_airline')"
                             placeholder="Select Airline" bindLabel="formatted_name" dropdownPosition="bottom"
-                            [markFirst]="true" [virtualScroll]="true" formControlName="pickup_airline_option">
+                            [markFirst]="true" [virtualScroll]="true" formControlName="pickup_airline_option"
+                            [ngClass]="{ 'border-red': (submitBookingForm && Form.pickup_airline_option.invalid) }"
+                            style="height:66px;">
                             <ng-template ng-option-tmp let-item="item">
                                 <div [title]="item.formatted_name">{{item.formatted_name}}</div>
                             </ng-template>
                         </ng-select>
+                        <div *ngIf="(submitBookingForm && Form.pickup_airline_option.invalid) "
+                            class="text-danger my-mat-hint" style="margin-bottom: 10px;">
+                            <div *ngIf="Form.pickup_airline_option.errors.required">This field is required</div>
+                        </div>
                     </div>
 
                     <!-- Flight / Tail # -->
@@ -961,7 +972,7 @@
                         <mat-form-field appearance="outline" class="vehicleLable mt-0"
                             style="margin-top: 0px !important;">
                             <mat-label>
-                                Flight / Tail #
+                                Flight / Tail # <span class="asterisk">*</span>
                             </mat-label>
                             <input type="text" matInput placeholder="Flight / Tail #" aria-label="Flight"
                                 formControlName="pickup_flight" (focus)="$event.target.select()" />
@@ -982,11 +993,20 @@
                         <mat-form-field appearance="outline" class="vehicleLable mt-0"
                             style="margin-top: 0px !important;">
                             <mat-label>
-                                Origin Airport / City
+                                Origin Airport / City <span class="asterisk">*</span>
                             </mat-label>
                             <input formControlName="origin_airport_city" type="text" matInput
                                 placeholder="Origin Airport / City" (focus)="$event.target.select()" />
                         </mat-form-field>
+                        <div class="error-box">
+                            <div class="error-message"
+                                *ngIf="Form.origin_airport_city.invalid && (Form.origin_airport_city.touched || Form.origin_airport_city.dirty)"
+                                style="margin-top:-15px">
+                                <p class="text-danger text-lg m-0" *ngIf="Form.origin_airport_city.errors?.required">
+                                    This field is required
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1074,11 +1094,17 @@
                         <ng-select appearance="outline" [items]="BigData?.airportsData"
                             [searchFn]="airportSearchFunction" (change)="change($event, 'dropoff_airport')"
                             placeholder="Select Airport" bindLabel="formatted_name" dropdownPosition="bottom"
-                            [markFirst]="true" [virtualScroll]="true" formControlName="dropoff_airport_option">
+                            [markFirst]="true" [virtualScroll]="true" formControlName="dropoff_airport_option"
+                            [ngClass]="{ 'border-red': (submitBookingForm && Form.dropoff_airport_option.invalid) }"
+                            style="height:66px;">
                             <ng-template ng-option-tmp let-item="item">
                                 <div [title]="item.formatted_name">{{item.formatted_name}}</div>
                             </ng-template>
                         </ng-select>
+                        <div *ngIf="(submitBookingForm && Form.dropoff_airport_option.invalid) "
+                            class="text-danger my-mat-hint" style="margin-bottom: 10px;">
+                            <div *ngIf="Form.dropoff_airport_option.errors.required">This field is required</div>
+                        </div>
                     </div>
 
                     <!-- Airline -->
@@ -1088,11 +1114,17 @@
                         <ng-select appearance="outline" [items]="BigData?.airlinesData"
                             [searchFn]="airlineSearchFunction" (change)="change($event, 'dropoff_airline')"
                             placeholder="Select Airline" bindLabel="formatted_name" dropdownPosition="bottom"
-                            [markFirst]="true" [virtualScroll]="true" formControlName="dropoff_airline_option">
+                            [markFirst]="true" [virtualScroll]="true" formControlName="dropoff_airline_option"
+                            [ngClass]="{ 'border-red': (submitBookingForm && Form.dropoff_airline_option.invalid) }"
+                            style="height:66px;">
                             <ng-template ng-option-tmp let-item="item">
                                 <div [title]="item.formatted_name">{{item.formatted_name}}</div>
                             </ng-template>
                         </ng-select>
+                        <div *ngIf="(submitBookingForm && Form.dropoff_airline_option.invalid) "
+                            class="text-danger my-mat-hint" style="margin-bottom: 10px;">
+                            <div *ngIf="Form.dropoff_airline_option.errors.required">This field is required</div>
+                        </div>
                     </div>
 
                     <!-- Flight / Tail # -->
@@ -1100,7 +1132,7 @@
                         <mat-form-field appearance="outline" class="vehicleLable mt-0"
                             style="margin-top: 0px !important;">
                             <mat-label>
-                                Flight / Tail #
+                                Flight / Tail # <span class="asterisk">*</span>
                             </mat-label>
                             <input type="text" matInput placeholder="Flight / Tail #" aria-label="Flight"
                                 formControlName="dropoff_flight" (focus)="$event.target.select()" />
@@ -1408,11 +1440,17 @@
                         <ng-select appearance="outline" [items]="BigData?.airportsData"
                             [searchFn]="airportSearchFunction" (change)="change($event, 'return_pickup_airport')"
                             bindLabel="formatted_name" placeholder="Select Airport" dropdownPosition="bottom"
-                            [markFirst]="true" [virtualScroll]="true" formControlName="return_pickup_airport_option">
+                            [markFirst]="true" [virtualScroll]="true" formControlName="return_pickup_airport_option"
+                            [ngClass]="{ 'border-red': (submitBookingForm && Form.return_pickup_airport_option.invalid) }"
+                            style="height:66px;">
                             <ng-template ng-option-tmp let-item="item">
                                 <div [title]="item.formatted_name">{{item.formatted_name}}</div>
                             </ng-template>
                         </ng-select>
+                        <div *ngIf="(submitBookingForm && Form.return_pickup_airport_option.invalid) "
+                            class="text-danger my-mat-hint" style="margin-bottom: 10px;">
+                            <div *ngIf="Form.return_pickup_airport_option.errors.required">This field is required</div>
+                        </div>
                     </div>
 
                     <!-- Airline -->
@@ -1422,11 +1460,17 @@
                         <ng-select appearance="outline" [items]="BigData?.airlinesData"
                             [searchFn]="airlineSearchFunction" (change)="change($event, 'return_pickup_airline')"
                             bindLabel="formatted_name" placeholder="Select Airline" dropdownPosition="bottom"
-                            [markFirst]="true" [virtualScroll]="true" formControlName="return_pickup_airline_option">
+                            [markFirst]="true" [virtualScroll]="true" formControlName="return_pickup_airline_option"
+                            [ngClass]="{ 'border-red': (submitBookingForm && Form.return_pickup_airline_option.invalid) }"
+                            style="height:66px;">
                             <ng-template ng-option-tmp let-item="item">
                                 <div [title]="item.formatted_name">{{item.formatted_name}}</div>
                             </ng-template>
                         </ng-select>
+                        <div *ngIf="(submitBookingForm && Form.return_pickup_airline_option.invalid) "
+                            class="text-danger my-mat-hint" style="margin-bottom: 10px;">
+                            <div *ngIf="Form.return_pickup_airline_option.errors.required">This field is required</div>
+                        </div>
                     </div>
 
                     <!-- Flight / Tail # -->
@@ -1434,7 +1478,7 @@
                         <mat-form-field appearance="outline" class="vehicleLable mt-0"
                             style="margin-top: 0px !important;">
                             <mat-label>
-                                Flight / Tail #
+                                Flight / Tail # <span class="asterisk">*</span>
                             </mat-label>
                             <input type="text" matInput placeholder="Flight / Tail #" aria-label="Flight"
                                 formControlName="return_pickup_flight" (focus)="$event.target.select()" />
@@ -1543,11 +1587,17 @@
                         <ng-select appearance="outline" [items]="BigData?.airportsData"
                             [searchFn]="airportSearchFunction" (change)="change($event, 'return_dropoff_airport')"
                             bindLabel="formatted_name" placeholder="Select Airport" dropdownPosition="bottom"
-                            [markFirst]="true" [virtualScroll]="true" formControlName="return_dropoff_airport_option">
+                            [markFirst]="true" [virtualScroll]="true" formControlName="return_dropoff_airport_option"
+                            [ngClass]="{ 'border-red': (submitBookingForm && Form.return_dropoff_airport_option.invalid) }"
+                            style="height:66px;">
                             <ng-template ng-option-tmp let-item="item">
                                 <div [title]="item.formatted_name">{{item.formatted_name}}</div>
                             </ng-template>
                         </ng-select>
+                        <div *ngIf="(submitBookingForm && Form.return_dropoff_airport_option.invalid) "
+                            class="text-danger my-mat-hint" style="margin-bottom: 10px;">
+                            <div *ngIf="Form.return_dropoff_airport_option.errors.required">This field is required</div>
+                        </div>
                     </div>
 
                     <!-- Airline -->
@@ -1557,11 +1607,17 @@
                         <ng-select appearance="outline" [items]="BigData?.airlinesData"
                             [searchFn]="airlineSearchFunction" (change)="change($event, 'return_dropoff_airline')"
                             bindLabel="formatted_name" placeholder="Select Airline" dropdownPosition="bottom"
-                            [markFirst]="true" [virtualScroll]="true" formControlName="return_dropoff_airline_option">
+                            [markFirst]="true" [virtualScroll]="true" formControlName="return_dropoff_airline_option"
+                            [ngClass]="{ 'border-red': (submitBookingForm && Form.return_dropoff_airline_option.invalid) }"
+                            style="height:66px;">
                             <ng-template ng-option-tmp let-item="item">
                                 <div [title]="item.formatted_name">{{item.formatted_name}}</div>
                             </ng-template>
                         </ng-select>
+                        <div *ngIf="(submitBookingForm && Form.return_dropoff_airline_option.invalid) "
+                            class="text-danger my-mat-hint" style="margin-bottom: 10px;">
+                            <div *ngIf="Form.return_dropoff_airline_option.errors.required">This field is required</div>
+                        </div>
                     </div>
 
                     <!-- Flight / Tail # -->
@@ -1569,7 +1625,7 @@
                         <mat-form-field appearance="outline" class="vehicleLable mt-0"
                             style="margin-top: 0px !important;">
                             <mat-label>
-                                Flight / Tail #
+                                Flight / Tail # <span class="asterisk">*</span>
                             </mat-label>
                             <input type="text" matInput placeholder="Flight / Tail #" aria-label="Flight"
                                 formControlName="return_dropoff_flight" (focus)="$event.target.select()" />

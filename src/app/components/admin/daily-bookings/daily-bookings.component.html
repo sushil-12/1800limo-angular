@@ -142,7 +142,7 @@
 												[queryParams]="{bookingId: booking.booking_id, updateType: 'edit'}">
 
 												<div class="dropdown-item-icon"></div>
-												Edit
+												Edit / Change
 											</a>
 											<a class="dropdown-item" data-toggle="modal"
 												data-target="#return_repeat_booking_Modal"
@@ -1650,7 +1650,7 @@
 
 
 					<!-- Rate Distribution Information -->
-					<div class="distribution_rate"
+					<!-- <div class="distribution_rate"
 						*ngIf="bookingPreview?.payment_status=='unpaid' && bookingPreview?.share_array?.length == 0">
 						<h4 class="font-weight-bolder m-0 my-3">
 							Rates Distribution {{bookingPreview.loose_affiliate}}
@@ -1765,9 +1765,9 @@
 								</div>
 							</div>
 						</div>
-					</div>
-					<div class="distribution_rate"
-						*ngIf="bookingPreview?.payment_status=='unpaid' && bookingPreview?.share_array?.length != 0">
+					</div> -->
+					<!-- *ngIf="bookingPreview?.payment_status=='unpaid' && bookingPreview?.share_array?.length != 0" -->
+					<div class="distribution_rate">
 						<h4 class="font-weight-bolder m-0 my-3">
 							Rates Distribution
 						</h4>
@@ -1775,13 +1775,13 @@
 						<div class="mx-2">
 							<div class="row m-0">
 								<div class="col-md-4 key d-flex align-items-center">
-									<span class="">
+									<span>
 										Base Rate
 									</span>
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										{{bookingPreview?.currency_symbol}}{{shareArray?.baseRate.toFixed(2)}}
+										{{bookingPreview?.currency_symbol}}{{bookingPreview?.share_array?.baseRate.toFixed(2)}}
 									</span>
 									(Fare Base Rate)
 								</div>
@@ -1790,28 +1790,30 @@
 						<div class="mx-2">
 							<div class="row m-0">
 								<div class="col-md-4 key d-flex align-items-center">
-									<span class="">
+									<span class="font-weight-bolder" style="color: #1e7500">
 										Admin Share
 									</span>
 								</div>
-								<div class="col-md-8 value preview-airport-color">
+								<div class="col-md-8 value preview-airport-color" style="color: #1e7500">
 									<span class="font-weight-bolder preview-output-feild">
-										{{bookingPreview?.currency_symbol}}{{shareArray?.adminShare.toFixed(2) }}
+										{{bookingPreview?.currency_symbol}}{{bookingPreview?.share_array?.adminShare.toFixed(2)
+										}}
 									</span>
 									({{adminSharePercent}}% of Base Rate)
 								</div>
 							</div>
 						</div>
-						<div class="mx-2" *ngIf="shareArray?.travelAgentShare">
+						<div class="mx-2" *ngIf="bookingPreview?.share_array?.travelAgentShare">
 							<div class="row m-0">
 								<div class="col-md-4 key d-flex align-items-center">
-									<span class="">
+									<span>
 										Travel Agent Share
 									</span>
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										{{bookingPreview?.currency_symbol}}{{shareArray?.travelAgentShare.toFixed(2) }}
+										{{bookingPreview?.currency_symbol}}{{bookingPreview?.share_array?.travelAgentShare.toFixed(2)
+										}}
 									</span>
 									(10% of Base Rate)
 								</div>
@@ -1820,15 +1822,15 @@
 						<div class="mx-2">
 							<div class="row m-0">
 								<div class="col-md-4 key d-flex align-items-center">
-									<span class="">
+									<span>
 										Total Cost
 									</span>
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										{{bookingPreview?.currency_symbol}}{{shareArray?.grandTotal ?
-										shareArray?.grandTotal.toFixed(2) :
-										shareArray?.returnGrandTotal.toFixed(2)}}
+										{{bookingPreview?.currency_symbol}}{{bookingPreview?.share_array?.grandTotal ?
+										bookingPreview?.share_array?.grandTotal.toFixed(2) :
+										bookingPreview?.share_array?.returnGrandTotal.toFixed(2)}}
 									</span>
 									(Actual Cost to Customer)
 								</div>
@@ -1837,13 +1839,13 @@
 						<div class="mx-2">
 							<div class="row m-0">
 								<div class="col-md-4 key d-flex align-items-center">
-									<span class="">
+									<span>
 										Stripe fees
 									</span>
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										{{bookingPreview?.currency_symbol}}{{shareArray?.stripeFee.toFixed(2)}}
+										{{bookingPreview?.currency_symbol}}{{bookingPreview?.share_array?.stripeFee.toFixed(2)}}
 									</span>
 									(Platform fee 5% + 30 cents - <b>Paid from Admin share</b>)
 								</div>
@@ -1853,28 +1855,28 @@
 						<div class="mx-2">
 							<div class="row m-0">
 								<div class="col-md-4 key d-flex align-items-center">
-									<span class="">
+									<span>
 										Affliate Payout
 									</span>
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										{{bookingPreview?.currency_symbol}}{{shareArray?.affiliateShare.toFixed(2)}}
+										{{bookingPreview?.currency_symbol}}{{bookingPreview?.share_array?.affiliateShare.toFixed(2)}}
 									</span>
 									( Total Price - (Ride Base Rate + Other Taxes) )
 								</div>
 							</div>
 						</div>
-						<div class="mx-2" *ngIf="shareArray?.farmoutShare">
+						<div class="mx-2" *ngIf="bookingPreview?.share_array?.farmoutShare">
 							<div class="row m-0">
 								<div class="col-md-4 key d-flex align-items-center">
-									<span class="">
+									<span>
 										Affliate Farmout share
 									</span>
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										{{bookingPreview?.currency_symbol}}{{shareArray?.farmoutShare.toFixed(2)}}
+										{{bookingPreview?.currency_symbol}}{{bookingPreview?.share_array?.farmoutShare.toFixed(2)}}
 									</span>
 									( 10 % of Base Rate)
 								</div>
