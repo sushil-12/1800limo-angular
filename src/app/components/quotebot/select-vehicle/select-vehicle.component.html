@@ -392,7 +392,7 @@
 										{{ formatter(getKeyName()) | titlecase }}
 									</div>
 									<div class="col-md-6" style="min-width: fit-content;">
-										<span>
+										<span style="font-size: 20px;">
 											{{currencySymbol}}
 											{{ vehinfo['rate_breakdown_' + getKeyName()]?.grand_total != undefined ?
 											vehinfo['rate_breakdown_' + getKeyName()]?.grand_total : '0.00' }}
@@ -404,7 +404,7 @@
 										Estimated One-Way
 									</div>
 									<div class="col-md-4" style="min-width: fit-content;">
-										<span class="font-weight-bold">{{currencySymbol}}
+										<span class="font-weight-bold" style="font-size: 20px;">{{currencySymbol}}
 											{{vehinfo?.estimated_price_one_way}}</span>
 									</div>
 								</div>
@@ -413,7 +413,7 @@
 										Estimated Round-Trip
 									</div>
 									<div class="col-md-4" style="min-width: fit-content;">
-										<span class="font-weight-bold">{{currencySymbol}}
+										<span class="font-weight-bold" style="font-size: 20px;">{{currencySymbol}}
 											{{vehinfo?.estimated_price_round_trip}}</span>
 									</div>
 								</div>

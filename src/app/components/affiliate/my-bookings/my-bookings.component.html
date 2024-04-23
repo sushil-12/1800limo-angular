@@ -1436,8 +1436,8 @@
 
 
 
-
-					<div class="distribution_rate" *ngIf="bookingPreview?.payment_status=='unpaid'">
+					<!-- *ngIf="bookingPreview?.payment_status=='unpaid'" -->
+					<div class="distribution_rate">
 						<h4 class="font-weight-bolder m-0 my-3">
 							Rates Distribution
 						</h4>
@@ -1445,7 +1445,7 @@
 						<div class="mx-2">
 							<div class="row m-0">
 								<div class="col-md-4 key d-flex align-items-center">
-									<span class="">
+									<span>
 										Base Rate
 									</span>
 								</div>
@@ -1461,7 +1461,7 @@
 						<div class="mx-2">
 							<div class="row m-0">
 								<div class="col-md-4 key d-flex align-items-center">
-									<span class="">
+									<span>
 										Admin Share
 									</span>
 								</div>
@@ -1477,7 +1477,7 @@
 						<div class="mx-2">
 							<div class="row m-0">
 								<div class="col-md-4 key d-flex align-items-center">
-									<span class="">
+									<span>
 										Total Cost
 									</span>
 								</div>
@@ -1495,7 +1495,7 @@
 						<div class="mx-2">
 							<div class="row m-0">
 								<div class="col-md-4 key d-flex align-items-center">
-									<span class="">
+									<span>
 										Stripe fees
 									</span>
 								</div>
@@ -1512,11 +1512,11 @@
 						<div class="mx-2">
 							<div class="row m-0">
 								<div class="col-md-4 key d-flex align-items-center">
-									<span class="">
+									<span class="font-weight-bolder" style="color: #1e7500;">
 										Affliate Payout
 									</span>
 								</div>
-								<div class="col-md-8 value preview-airport-color">
+								<div class="col-md-8 value preview-airport-color" style="color: #1e7500 !important;">
 									<span class="font-weight-bolder preview-output-feild">
 										{{currencySymbol}}{{rates_preview?.affiliateShare ?
 										rates_preview?.affiliateShare.toFixed(2) :
@@ -1529,11 +1529,11 @@
 						<div class="mx-2" *ngIf="rates_preview?.farmoutShare">
 							<div class="row m-0">
 								<div class="col-md-4 key d-flex align-items-center">
-									<span class="">
+									<span class="font-weight-bolder" style="color: #1e7500;">
 										Affliate Farmout share
 									</span>
 								</div>
-								<div class="col-md-8 value preview-airport-color">
+								<div class="col-md-8 value preview-airport-color" style="color: #1e7500 !important;">
 									<span class="font-weight-bolder preview-output-feild">
 										{{currencySymbol}}{{rates_preview?.farmoutShare.toFixed(2)}}
 									</span>

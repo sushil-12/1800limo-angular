@@ -89,10 +89,10 @@
 					<p>Pickup Airport </p>
 					<strong>{{ BookingDetail?.pickup_airport_name | titlecase }}</strong>
 				</div>
-				<div class="col-md-4 field" *ngIf="transferType?.includes('airport_')">
+				<!-- <div class="col-md-4 field" *ngIf="transferType?.includes('airport_')">
 					<p>Pickup Airline</p>
 					<strong>{{ BookingDetail?.pickup_airline_name | titlecase }}</strong>
-				</div>
+				</div> -->
 				<div class="col-md-4 field" *ngIf="transferType?.includes('airport_')">
 					<p>Pickup Flight</p>
 					<strong>{{ BookingDetail?.pickup_flight }}</strong>
