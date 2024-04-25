@@ -110,14 +110,14 @@ const routes: Routes = [
 				path: 'contact-us',
 				component: ContactUsComponent
 			},
-			{
-				path: 'testimonials',
-				component: TestimonialsComponent
-			},
-			{
-				path: 'suggestions-complaints',
-				component: SuggestionsComplaintsComponent
-			},
+			// {
+			// 	path: 'testimonials',
+			// 	component: TestimonialsComponent
+			// },
+			// {
+			// 	path: 'suggestions-complaints',
+			// 	component: SuggestionsComplaintsComponent
+			// },
 			{
 				path: 'insurance-licensing',
 				component: InsuranceLicensingComponent
@@ -138,7 +138,7 @@ const routes: Routes = [
 				path: 'transaction-history',
 				component: TransactionHistoryComponent
 			},
-			
+
 			{
 				path: 'email',
 				children: [
