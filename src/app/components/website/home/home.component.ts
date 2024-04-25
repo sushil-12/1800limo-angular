@@ -1365,6 +1365,10 @@ export class HomeComponent implements OnInit {
 			this.router.navigateByUrl('/admin/daily-bookings-admin');
 			console.log("step 0  dashboard");
 		}
+		else if (role == 'driver') {
+			this.spinner.show();
+			this.router.navigateByUrl('/affiliate/my-bookings');
+		}
 		else {
 			console.log(`redirecting to ${role}/bookings`)
 			this.spinner.show();
