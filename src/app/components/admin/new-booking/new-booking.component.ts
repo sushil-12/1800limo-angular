@@ -2911,6 +2911,14 @@ export class NewBookingComponent implements OnInit {
 					}
 				}
 
+				this.SetFormValue('pickup_airport_option', this.BigData.airportsData.find((item: any) => item.id == this.Form.pickup_airport.value));
+				this.SetFormValue('pickup_airline_option', this.BigData.airlinesData.find((item: any) => item.id == this.Form.pickup_airline.value));
+				this.SetFormValue('dropoff_airport_option', this.BigData.airportsData.find((item: any) => item.id == this.Form.dropoff_airport.value));
+				this.SetFormValue('dropoff_airline_option', this.BigData.airlinesData.find((item: any) => item.id == this.Form.dropoff_airline.value));
+				this.SetFormValue('return_pickup_airport_option', this.BigData.airportsData.find((item: any) => item.id == this.Form.return_pickup_airport.value));
+				this.SetFormValue('return_pickup_airline_option', this.BigData.airlinesData.find((item: any) => item.id == this.Form.return_pickup_airline.value));
+				this.SetFormValue('return_dropoff_airport_option', this.BigData.airportsData.find((item: any) => item.id == this.Form.return_dropoff_airport.value));
+				this.SetFormValue('return_dropoff_airline_option', this.BigData.airlinesData.find((item: any) => item.id == this.Form.return_dropoff_airline.value));
 
 				if (editing_data.driver_image) {
 					this.SetFormValue('driver_image_id', editing_data.driver_image.id);
@@ -3011,6 +3019,7 @@ export class NewBookingComponent implements OnInit {
 		this.SetFormValue('dropoff_airport_option', QB?.other_details?.dropoff_airport_name)
 		this.SetFormValue('dropoff_airport_latitude', QB?.dropoff_airport_lat)
 		this.SetFormValue('dropoff_airport_longitude', QB?.dropoff_address_long)
+		// this.SetFormValue('dropoff_airline_option', QB?.dropoff_airline);
 
 
 		//return pickup
