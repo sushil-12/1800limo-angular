@@ -1652,8 +1652,9 @@
 						<!-- Ng-Select - Pickup > Airport -->
 						<ng-select appearance="outline" [items]="BigData?.airportsData"
 							[searchFn]="airportSearchFunction" (change)="change($event, 'pickup_airport')"
-							placeholder="Select Airport" bindLabel="formatted_name" dropdownPosition="bottom"
-							[markFirst]="true" [virtualScroll]="true" formControlName="pickup_airport_option"
+							placeholder="Select Airport (Search by airport code or name)" bindLabel="formatted_name"
+							dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
+							formControlName="pickup_airport_option"
 							[ngClass]="{ 'border-red': (submitBookingForm && Form.pickup_airport_option.invalid) }"
 							style="height:66px;">
 							<ng-template ng-option-tmp let-item="item">
@@ -1857,8 +1858,9 @@
 						<!-- Ng-Select > Dropoff > Airport -->
 						<ng-select appearance="outline" [items]="BigData?.airportsData"
 							[searchFn]="airportSearchFunction" (change)="change($event, 'dropoff_airport')"
-							placeholder="Select Airport" bindLabel="formatted_name" dropdownPosition="bottom"
-							[markFirst]="true" [virtualScroll]="true" formControlName="dropoff_airport_option"
+							placeholder="Select Airport (Search by airport code or name)" bindLabel="formatted_name"
+							dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
+							formControlName="dropoff_airport_option"
 							[ngClass]="{ 'border-red': (submitBookingForm && Form.dropoff_airport_option.invalid) }"
 							style="height:66px;">
 							<ng-template ng-option-tmp let-item="item">
@@ -2498,8 +2500,9 @@
 						<!-- Ng-Select > Return > Pickup > Airport -->
 						<ng-select appearance="outline" [items]="BigData?.airportsData"
 							[searchFn]="airportSearchFunction" (change)="change($event, 'return_pickup_airport')"
-							bindLabel="formatted_name" placeholder="Select Airport" dropdownPosition="bottom"
-							[markFirst]="true" [virtualScroll]="true" formControlName="return_pickup_airport_option"
+							bindLabel="formatted_name" placeholder="Select Airport (Search by airport code or name)"
+							dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
+							formControlName="return_pickup_airport_option"
 							[ngClass]="{ 'border-red': (submitBookingForm && Form.return_pickup_airport_option.invalid) }"
 							style="height:66px;">
 							<ng-template ng-option-tmp let-item="item">
@@ -2681,8 +2684,9 @@
 						<!-- Ng-Select > Return > Dropoff > Airport -->
 						<ng-select appearance="outline" [items]="BigData?.airportsData"
 							[searchFn]="airportSearchFunction" (change)="change($event, 'return_dropoff_airport')"
-							bindLabel="formatted_name" placeholder="Select Airport" dropdownPosition="bottom"
-							[markFirst]="true" [virtualScroll]="true" formControlName="return_dropoff_airport_option"
+							bindLabel="formatted_name" placeholder="Select Airport (Search by airport code or name)"
+							dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
+							formControlName="return_dropoff_airport_option"
 							[ngClass]="{ 'border-red': (submitBookingForm && Form.return_dropoff_airport_option.invalid) }"
 							style="height:66px;">
 							<ng-template ng-option-tmp let-item="item">

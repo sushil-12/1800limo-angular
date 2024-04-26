@@ -425,7 +425,7 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 			this.subtotal = 0;
 			for (let item in this.total) {
 				this.subtotal = Number(this.subtotal.toFixed(2)) + Number(this.total[item].toFixed(2));
-				// console.log("in total checkk---->",this.subtotal,Number(this.subtotal.toFixed(2)),'--->',Number(this.total[item].toFixed(2)))
+				console.log("in total checkk---->", this.subtotal, Number(this.subtotal.toFixed(2)), '--->', Number(this.total[item].toFixed(2)), this.total)
 			}
 		}
 
