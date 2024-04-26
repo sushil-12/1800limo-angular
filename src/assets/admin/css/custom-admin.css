@@ -1821,6 +1821,11 @@ h2.headinginfo .orangeHeading {
     .driverside_table ul li {
         margin-top: 10px;
     }
+
+    .sidenav-menu .nav-item a span {
+        font-size: 19px;
+        font-weight: 500;
+    }
 }
 
 .delete-btn svg {
