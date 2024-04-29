@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { AuthService } from './auth.service';
 
 
 @Injectable({
@@ -13,7 +14,7 @@ export class AdminService {
 
 
 	private serverUrl = environment.serverUrl;
-	constructor(private httpClient: HttpClient) {
+	constructor(private httpClient: HttpClient, private authService: AuthService) {
 		if (this.big_data_list == undefined) {
 			this.createBookingGetData().subscribe((response: any) => {
 				this.big_data_list = response.data
@@ -982,8 +983,19 @@ export class AdminService {
 		return this.httpClient.post(`${this.serverUrl}admin/notification/send-${type}/${affiliate_id}`, data)
 	}
 
-	sendNotificationAllAccounts(type: 'email' | 'sms', data: Object) {
-		return this.httpClient.post(`${this.serverUrl}admin-send-notification/${type}`, data)
+	sendNotificationAllAccounts(type: 'email' | 'sms', data: any) {
+		// return this.httpClient.post(`${this.serverUrl}admin-send-notification/${type}`, data)
+		let resp: any
+		const accessToken = this.authService.getAccessToken();
+		resp = fetch(`${this.serverUrl}admin-send-notification/${type}`, {
+			method: 'POST',
+			body: data,
+			headers: {
+				Authorization: `Bearer ${accessToken}`
+			}
+		})
+
+		return resp;
 	}
 
 	//invoices
