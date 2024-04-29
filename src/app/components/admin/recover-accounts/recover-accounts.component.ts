@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ThemePalette } from '@angular/material/core';
 import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -34,6 +35,9 @@ export class RecoverAccountsComponent implements OnInit {
   public nextPageUrl: string;
   public accountToDelete: number;
   public alertMessage: string;
+  public sendMessageForm: FormGroup;
+  fileToUpload: File;
+  emailFileName: string = '';
   searchText: any;
   accounts: any;
   isDeletedAcc: boolean = false;
@@ -45,12 +49,16 @@ export class RecoverAccountsComponent implements OnInit {
     private adminService: AdminService,
     private router: Router,
     private errorDialog: ErrorDialogService,
+    private formBuilder: FormBuilder,
     private spinner: NgxSpinnerService) { }
 
   ngOnInit(): void {
     this.searchText = localStorage.getItem('allAccountsSearch') ? localStorage.getItem('allAccountsSearch') : ''
     // this.searchText = ''
     this.loadAccounts();//load travelPlanners
+    this.sendMessageForm = this.formBuilder.group({
+      file: [null]
+    })
 
     // localStorage.removeItem('travelAgent_id' )
   }
@@ -189,6 +197,13 @@ export class RecoverAccountsComponent implements OnInit {
     }
   }
 
+  inviteEmailFileChange(event: any) {
+    console.log('fileeeeeee', event.target.files[0])
+    // this.fileToUpload = files.item(0);
+    this.emailFileName = event.target.files[0].name
+    this.fileToUpload = event.target.files[0];
+  }
+
   messagetype: Record<string, any>
   sendMessage(type: 'email' | 'sms', travelPlanner: any, message: string = null) {
     console.log('Request to send a Message to travel agent id: ', type, travelPlanner)
@@ -197,20 +212,80 @@ export class RecoverAccountsComponent implements OnInit {
     $('#messageModal').find('.modal-header').find('h4').text('Contact to User via ' + type.toUpperCase())
     $('#messageModal').find('.modal-body').find('p#affiliate-details').html(`User Name: ${travelPlanner['first_name']} ${travelPlanner['last_name']}<br/>User Email: ${travelPlanner['email']}`)
     if (message != null) {
-      let body = {
-        text_message: message
-      }
+      // let body = {
+      //   text_message: message
+      // }
+      // if (type == 'email') {
+      //   body['email_address'] = travelPlanner?.email
+      // }
+      // else {
+      //   body['phone_number'] = travelPlanner?.isd + travelPlanner?.phone
+      // }
+
+      const formData = new FormData();
+      // Store form name as "file" with file data
+      formData.append("file", this.fileToUpload);
+
+      formData.append("text_message", message);
       if (type == 'email') {
-        body['email_address'] = travelPlanner?.email
+        formData.append("email_address", travelPlanner?.email)
       }
       else {
-        body['phone_number'] = travelPlanner?.isd + travelPlanner?.phone
+        formData.append('phone_number', travelPlanner?.isd + travelPlanner?.phone)
       }
-      this.adminService.sendNotificationAllAccounts(type, body).subscribe((response: any) => {
-        if (response.success) {
-          console.log('Message Sent Successfully. ')
+
+      this.adminService.sendNotificationAllAccounts(type, formData).then(response => {
+        if (!response.ok) {
+          if (response.status === 422) {
+            // Parse the JSON response
+            response.json().then(errorData => {
+              // Handle validation errors or other specific errors
+              console.error('Validation errors:', errorData?.message);
+              this.errorDialog.openDialog({
+                errors: {
+                  error: errorData?.message
+                }
+              })
+            });
+          }
+          throw new Error('Network response was not ok');
         }
+        return response.json();
       })
+        .then(data => {
+          console.log('File uploaded successfully:', data);
+          this.fileToUpload = null
+          this.emailFileName = ''
+          this.sendMessageForm.patchValue({
+            file: [null]
+          })
+          message = ''
+          this.errorDialog.openDialog({
+            errors: {
+              error: `<span class='text-success'>${data?.message}</span>`
+            }
+          })
+
+        })
+        .catch(error => {
+          console.error('Error uploading file:', error);
+          this.errorDialog.openDialog({
+            errors: {
+              error: 'Server Error'
+            }
+          })
+        });
+
+      // this.adminService.sendNotificationAllAccounts(type, formData).subscribe((response: any) => {
+      //   if (response.success) {
+      //     this.fileToUpload = null
+      //     this.emailFileName = ''
+      //     this.sendMessageForm.patchValue({
+      //       file: [null]
+      //     })
+      //     console.log('Message Sent Successfully. ')
+      //   }
+      // })
     }
   }
 
