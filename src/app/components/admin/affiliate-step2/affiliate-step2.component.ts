@@ -56,12 +56,14 @@ export class AffiliateStep2Component implements OnInit {
 	public cardsRes: any;
 	enableSsnField: boolean = false;
 	ssn_copy: any;
-	ssnErrorMessage:string;
-	addressErrorMessage:string;
-	dobErrorMessage:string;
-	public AddressCheckStripe = ['address','street','city','country'];
-	isSsnSelected:boolean=false;
-	isAddressSelected:boolean=false;
+	ssnErrorMessage: string;
+	addressErrorMessage: string;
+	routingErrorMessage: string;
+	dobErrorMessage: string;
+	public AddressCheckStripe = ['address', 'street', 'city', 'country'];
+	isSsnSelected: boolean = false;
+	isAddressSelected: boolean = false;
+	isRoutingSelected: boolean = false;
 
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
 	stepsObj: any;
@@ -247,7 +249,7 @@ export class AffiliateStep2Component implements OnInit {
 							});
 							this.ssn_copy = this.response?.data?.bankinfo?.ssn
 							this.isSsnSelected = true
-							this.isAddressSelected=true
+							this.isAddressSelected = true
 							//to check ssn error
 							// if (this.response?.data?.error_fields?.find(val => val?.field == 'ssn')) {
 							// 	this.ssnErrorMessage = this.response?.data?.error_fields?.find(val => val?.field == 'ssn')?.message
@@ -258,46 +260,46 @@ export class AffiliateStep2Component implements OnInit {
 							// 	this.enableSsnField = true
 							// }
 
-                            if(this.response?.data?.error_fields?.length > 0){
+							if (this.response?.data?.error_fields?.length > 0) {
 								const hasNonEmptyObjects = this.response?.data?.error_fields?.filter(obj => Object.keys(obj).length > 0).length > 0;
-								console.log(hasNonEmptyObjects,"hasnonnonono")
-								if(!hasNonEmptyObjects){
+								console.log(hasNonEmptyObjects, "hasnonnonono")
+								if (!hasNonEmptyObjects) {
 									this.enableSsnField = true
 								}
-								else{
+								else {
 
-									this.response?.data?.error_fields?.forEach(item=>{
-										if(item.field == 'ssn'){
+									this.response?.data?.error_fields?.forEach(item => {
+										if (item.field == 'ssn') {
 											this.enableSsnField = false
 											this.ssnErrorMessage = 'PLEASE ENTER A VALID SSN / GOVERNMENT ID'
-											console.log('error mesage---->',this.ssnErrorMessage)
+											console.log('error mesage---->', this.ssnErrorMessage)
 										}
-										else{
+										else {
 											this.enableSsnField = true
 										}
-										 if(this.AddressCheckStripe?.includes(item?.field)){
+										if (this.AddressCheckStripe?.includes(item?.field)) {
 											console.log("in if addressssssssss-->")
 											this.addressErrorMessage = 'Please enter a valid address'
-											console.log('error mesage---->',this.addressErrorMessage)
+											console.log('error mesage---->', this.addressErrorMessage)
 											// this.enableSsnField = true
-	
+
 										}
-										if(item?.field == 'dob'){
+										if (item?.field == 'dob') {
 											this.dobErrorMessage = 'Please enter a valid dob'
-											console.log('error mesage---->',this.dobErrorMessage)
+											console.log('error mesage---->', this.dobErrorMessage)
 											// this.enableSsnField = true
-										}									
-								  })
+										}
+									})
 								}
-							
+
 							}
-							else{
+							else {
 								this.enableSsnField = true
 
 							}
-							console.log("trueeee===>",this.enableSsnField)
+							console.log("trueeee===>", this.enableSsnField)
 							//to check varificatiom failed tax id error only
-							if(this.response?.data?.stripeDetail?.stripe_errors?.find(err => err?.error_code == 'verification_failed_tax_id_match')){
+							if (this.response?.data?.stripeDetail?.stripe_errors?.find(err => err?.error_code == 'verification_failed_tax_id_match')) {
 								this.enableSsnField = false
 								this.TaxIdMatch = 'NOTE - Please verify your SSN  number and Buisness/Tax ID number'
 							}
@@ -584,7 +586,7 @@ export class AffiliateStep2Component implements OnInit {
 		};
 	}
 	async idCardImageChange1(dataUrl, imageType, imageId = null) {
-		if(!await this.commonServices.handleFile(event)) {
+		if (!await this.commonServices.handleFile(event)) {
 			return;
 		}
 		this.stateManagementService.setprogressBar(true);
@@ -623,7 +625,7 @@ export class AffiliateStep2Component implements OnInit {
 			});
 	}
 	async idCardImageChange(event, imageType, imageId = null) {
-		if(!await this.commonServices.handleFile(event)) {
+		if (!await this.commonServices.handleFile(event)) {
 			return;
 		}
 		// this.stateManagementService.setprogressBar(true);
@@ -740,28 +742,31 @@ export class AffiliateStep2Component implements OnInit {
 		return controlEl.getBoundingClientRect().top + window.scrollY - labelOffset;
 	}
 	handleSsnInput(value: any) {
-		
+
 		console.log("prev--->", this.ssn_copy, this.addBankForm.get('ssn').value)
 		value.includes("*") ? "" : this.ssn_copy = value
 		console.log("after--->", this.ssn_copy)
 
 	}
-	removeErrorSsn(value:any,type:string){
-		console.log("TYPE----->",type)
-		if(type == 'ssn'){
+	removeErrorSsn(value: any, type: string) {
+		console.log("TYPE----->", type)
+		if (type == 'ssn') {
 			this.ssnErrorMessage = ""
-			this.isSsnSelected = value ? true :false;
+			this.isSsnSelected = value ? true : false;
 		}
-		else if(type == 'address'){
+		else if (type == 'address') {
 			this.addressErrorMessage = ""
-			this.isAddressSelected = value ? true :false;
+			this.isAddressSelected = value ? true : false;
+		}
+		else if (type == 'Routing') {
+			this.isRoutingSelected = value ? true : false;
 		}
 		// else if(type == 'dob'){
 		// 	console.log("in dobbbbhbbb")
 		// 	this.dobErrorMessage = ""
 		// }
 	}
-	removeDobError(){
+	removeDobError() {
 		console.log("in dobbbbhbbb")
 		this.dobErrorMessage = ""
 	}
@@ -780,6 +785,7 @@ export class AffiliateStep2Component implements OnInit {
 		console.log(this.addBankForm.value);
 		// console.log(JSON.stringify(this.addVehicleRatesForm.value));
 		this.disableSubmitButton = true; //disable submit button
+		this.isRoutingSelected = true;
 		this.spinner.show();
 		this.adminService.addBankOfAffiliate(this.addBankForm.value)
 			.pipe(
@@ -789,7 +795,10 @@ export class AffiliateStep2Component implements OnInit {
 					})
 					this.spinner.hide();//hide spinner
 					this.disableSubmitButton = false; //enable submit button
-
+					if (err?.errors?.error.includes('Routing Number is invalid')) {
+						this.routingErrorMessage = 'Please enter correct routing number.'
+						console.log('error mesage---->', this.ssnErrorMessage)
+					}
 					return throwError(err);
 				})
 			)
@@ -834,9 +843,9 @@ export class AffiliateStep2Component implements OnInit {
 		const keepValues = [
 			this.addBankForm.controls.ssn.value,
 		]
-	
-	 this.addBankForm.reset();
-	 this.addBankForm.controls.ssn.patchValue(keepValues[0]);
+
+		this.addBankForm.reset();
+		this.addBankForm.controls.ssn.patchValue(keepValues[0]);
 		this.id_front_image = "";
 		this.id_back_image = "";
 	}
