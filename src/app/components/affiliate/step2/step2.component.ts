@@ -293,6 +293,7 @@ export class Step2Component implements OnInit {
 							this.ssn_copy = this.response?.data?.bankinfo?.ssn
 							this.isSsnSelected = true
 							this.isAddressSelected = true
+							this.isRoutingSelected = true
 							// if(this.response?.data?.error_fields?.find(val => val?.field == 'ssn')){
 							// 	this.ssnErrorMessage = this.response?.data?.error_fields?.find(val => val?.field == 'ssn')?.message
 							// 	this.enableSsnField=false
@@ -1020,7 +1021,7 @@ export class Step2Component implements OnInit {
 
 					//check routing number error
 					// err?.error_fields?.forEach(item => {
-					if (err?.errors?.error.includes('Routing Number is invalid')) {
+					if (err?.errors?.error.includes('Routing Number is invalid' || 'Invalid routing number')) {
 						this.routingErrorMessage = 'Please enter correct routing number.'
 						console.log('error mesage---->', this.ssnErrorMessage)
 					}

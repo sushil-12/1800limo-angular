@@ -59,6 +59,16 @@
 	display: block;
 }
 
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-form-field-wrapper .mat-form-field-infix mat-label {
+	font-weight: 500 !important;
+	font-size: 19px !important;
+	color: #191919;
+}
+
+:host ::ng-deep.mat-form-field-appearance-outline .mat-form-field-label {
+	top: 1.6675em !important;
+}
+
 .errors {
 	height: 2rem;
 	padding: 1rem;

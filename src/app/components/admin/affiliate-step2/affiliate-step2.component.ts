@@ -250,6 +250,7 @@ export class AffiliateStep2Component implements OnInit {
 							this.ssn_copy = this.response?.data?.bankinfo?.ssn
 							this.isSsnSelected = true
 							this.isAddressSelected = true
+							this.isRoutingSelected = true
 							//to check ssn error
 							// if (this.response?.data?.error_fields?.find(val => val?.field == 'ssn')) {
 							// 	this.ssnErrorMessage = this.response?.data?.error_fields?.find(val => val?.field == 'ssn')?.message
@@ -795,7 +796,7 @@ export class AffiliateStep2Component implements OnInit {
 					})
 					this.spinner.hide();//hide spinner
 					this.disableSubmitButton = false; //enable submit button
-					if (err?.errors?.error.includes('Routing Number is invalid')) {
+					if (err?.errors?.error.includes('Routing Number is invalid' || 'Invalid routing number')) {
 						this.routingErrorMessage = 'Please enter correct routing number.'
 						console.log('error mesage---->', this.ssnErrorMessage)
 					}
