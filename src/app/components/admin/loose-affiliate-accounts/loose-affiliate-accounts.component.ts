@@ -188,20 +188,60 @@ export class LooseAffiliateAccountsComponent implements OnInit {
     $('#messageModal').find('.modal-header').find('h4').text('Contact to User via ' + type.toUpperCase())
     $('#messageModal').find('.modal-body').find('p#affiliate-details').html(`User Name: ${travelPlanner['name']}<br/>User Email: ${travelPlanner['email']}`)
     if (message != null) {
-      let body = {
-        text_message: message
-      }
+      // let body = {
+      //   text_message: message
+      // }
+      const formData = new FormData();
+      formData.append("text_message", message);
       if (type == 'email') {
-        body['email_address'] = travelPlanner?.email
+        formData.append("email_address", travelPlanner?.email)
       }
       else {
-        body['phone_number'] = travelPlanner?.phone_isd + travelPlanner?.phone
+        formData.append('phone_number', travelPlanner?.phone_isd + travelPlanner?.phone)
       }
-      this.adminService.sendNotificationAllAccounts(type, body).subscribe((response: any) => {
-        if (response.success) {
-          console.log('Message Sent Successfully. ')
+      // if (type == 'email') {
+      //   body['email_address'] = travelPlanner?.email
+      // }
+      // else {
+      //   body['phone_number'] = travelPlanner?.phone_isd + travelPlanner?.phone
+      // }
+      console.log("bodyy in send message", formData)
+      this.adminService.sendNotificationAllAccounts(type, formData).then(response => {
+        if (!response.ok) {
+          if (response.status === 422) {
+            // Parse the JSON response
+            response.json().then(errorData => {
+              // Handle validation errors or other specific errors
+              console.error('Validation errors:', errorData?.message);
+              this.errorDialog.openDialog({
+                errors: {
+                  error: errorData?.message
+                }
+              })
+            });
+          }
+          throw new Error('Network response was not ok');
         }
+        return response.json();
       })
+        .then(data => {
+          console.log('File uploaded successfully:', data);
+          message = ''
+          this.errorDialog.openDialog({
+            errors: {
+              error: `<span class='text-success'>${data?.message}</span>`
+            }
+          })
+
+        })
+        .catch(error => {
+          console.error('Error uploading file:', error);
+          this.errorDialog.openDialog({
+            errors: {
+              error: 'Server Error'
+            }
+          })
+        });
     }
   }
 
