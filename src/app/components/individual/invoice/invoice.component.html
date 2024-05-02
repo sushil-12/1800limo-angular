@@ -160,8 +160,11 @@
                                         <td>
                                             <p data-target="#sendEmailModal" style="white-space: pre"
                                                 data-toggle="modal">
-                                                <span [innerHTML]="highlighText(invoice.driver_name)"></span> |
-                                                <span [innerHTML]="highlighText(invoice.driver_phone)"></span>
+                                                <span
+                                                    [innerHTML]="highlighText(invoice?.driver_name ? invoice?.driver_name : '1800Limo Chauffeurs')"></span>
+                                                |
+                                                <span
+                                                    [innerHTML]="highlighText(invoice?.driver_phone ? invoice?.driver_phone : '+18005466266')"></span>
                                             </p>
                                             <span class="text-underline cursor-pointer">
                                                 <span [innerHTML]="highlighText(invoice.dropoff_address)"></span>
