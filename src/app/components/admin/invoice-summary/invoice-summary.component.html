@@ -95,7 +95,7 @@
 								<p class="m-1 invoice-p text-white invoice-status-bar">
 									Invoice Status: <span
 										class="invoice-text-bold invoice-status-bar">{{formatText(invoiceData?.invoice_status)
-										| titlecase}}</span>
+										| titlecase}} Invoice </span>
 								</p>
 							</div>
 							<div class="p-2 col-6 bd-highlight " *ngIf="invoiceData.date_of_service">
@@ -262,6 +262,14 @@
 							<!-- to show refund ammount -->
 
 							<div class="invoice-subhead px-3">
+								<div class="row d-flex justify-content-between" *ngIf="invoiceData?.number_of_hours">
+									<p class="m-0 p-1 text-charges">
+										No. of hours
+									</p>
+									<p class="m-0 p-1 text-charges">
+										{{invoiceData?.number_of_hours}}
+									</p>
+								</div>
 								<div class="row d-flex justify-content-between">
 									<p class="m-0 p-1 text-charges">
 										Sub Total
