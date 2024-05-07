@@ -289,10 +289,11 @@
 										<p data-target="#sendEmailModal" style="white-space: pre" data-toggle="modal"
 											(click)="openModal(booking, 'Passenger')" id="box"
 											[ngClass]="currentUser?.RoleName == 'admin' || subModules.includes('can_send_notifications') ? '' : 'disabled-btn'">
+											<span [innerHTML]="highlighText(booking.passenger_name)"></span> |
 											<span class="font-weight-bolder"
-												[innerHTML]="highlighText(booking.passenger_name)"></span> |
-											<span [innerHTML]="highlighText( booking.passenger_cell_isd)"></span>
-											<span [innerHTML]="highlighText( booking.passenger_cell)"></span>
+												[innerHTML]="highlighText( booking.passenger_cell_isd)"></span>
+											<span class="font-weight-bolder"
+												[innerHTML]="highlighText( booking.passenger_cell)"></span>
 										</p>
 										<span class="text-underline cursor-pointer">
 											<span [innerHTML]="highlighText(booking.pickup_address)"></span>
@@ -306,11 +307,11 @@
 											(click)="openModal(booking, 'Loose_Affiliate')"
 											[ngClass]="currentUser?.RoleName == 'admin' || subModules.includes('can_send_notifications') ? '' : 'disabled-btn'"
 											*ngIf="booking.affiliate_type == null; else otherAffiliate">
-											<span class="font-weight-bolder"
+											<span
 												[innerHTML]="highlighText(booking.loose_affiliate_name ? booking.loose_affiliate_name + ' '+'(L)' : '1800Limo Chauffeurs ')"></span>|
-											<span
+											<span class="font-weight-bolder"
 												[innerHTML]="highlighText(booking.loose_affiliate_phone_isd ? booking.loose_affiliate_phone_isd : '+1')"></span>
-											<span
+											<span class="font-weight-bolder"
 												[innerHTML]="highlighText(booking.loose_affiliate_phone ? booking.loose_affiliate_phone : '8005466266')"></span>
 										</p>
 										<ng-template #otherAffiliate>
@@ -318,29 +319,30 @@
 												(click)="openModal(booking, 'Affiliate')"
 												[ngClass]="currentUser?.RoleName == 'admin' || subModules.includes('can_send_notifications') ? '' : 'disabled-btn'"
 												*ngIf="booking.affiliate_type != 'gig_operator'; else gigOperator">
-												<span class="font-weight-bolder text-capitalize"
+												<span class="text-capitalize"
 													[innerHTML]="highlighText(booking?.driver_first_name + ' ' + booking?.driver_last_name?.slice(0,1))"></span>&nbsp;
 
 												<!-- <span class="font-weight-bolder"
 														[innerHTML]="highlighText(booking.driver_last_name)"></span>&nbsp; -->
-												<span
-													class="font-weight-bolder">({{fomatAffiliateType(booking.affiliate_type)}})</span>
+												<span>({{fomatAffiliateType(booking.affiliate_type)}})</span>
 												|
-												<span [innerHTML]="highlighText(booking.affiliate_dispatch_isd)"></span>
-												<span
+												<span class="font-weight-bolder"
+													[innerHTML]="highlighText(booking.affiliate_dispatch_isd)"></span>
+												<span class="font-weight-bolder"
 													[innerHTML]="highlighText(booking.affiliate_dispatch_number)"></span>
 											</p>
 											<ng-template #gigOperator>
 												<p data-target="#sendEmailModal" data-toggle="modal"
 													[ngClass]="currentUser?.RoleName == 'admin' || subModules.includes('can_send_notifications') ? '' : 'disabled-btn'"
 													(click)="openModal(booking, 'Affiliate')">
-													<span class="font-weight-bolder text-capitalize"
+													<span class="text-capitalize"
 														[innerHTML]="highlighText(booking?.driver_first_name + ' ' + booking?.driver_last_name?.slice(0,1))"></span>&nbsp;
 													<!-- <span class="font-weight-bolder" [innerHTML]="highlighText(booking.driver_last_name)"></span>&nbsp; -->
-													<span
-														class="font-weight-bolder">({{fomatAffiliateType(booking.affiliate_type)}})</span>|
-													<span [innerHTML]="highlighText(booking.gig_cell_isd)"></span>
-													<span [innerHTML]="highlighText(booking.gig_cell_mobile)"></span>
+													<span>({{fomatAffiliateType(booking.affiliate_type)}})</span>|
+													<span class="font-weight-bolder"
+														[innerHTML]="highlighText(booking.gig_cell_isd)"></span>
+													<span class="font-weight-bolder"
+														[innerHTML]="highlighText(booking.gig_cell_mobile)"></span>
 												</p>
 											</ng-template>
 										</ng-template>
