@@ -1275,15 +1275,17 @@ export class NewBookingComponent implements OnInit {
 		selectedVehicle.licensePlate === null ? this.BookingForm.get('vehicle_license_plate').setValue('') : this.SetFormValue('vehicle_license_plate', selectedVehicle.licensePlate)
 		this.SetFormValue('vehicle_seats', selectedVehicle.seats)
 		//set cancellation period
-		if (this.BookingForm.get('service_type').value == 'charter_tour') {
-			this.BookingForm.patchValue({
-				cancellation_hours: selectedVehicle?.charter_cancellation_hours
-			})
-		}
-		else {
-			this.BookingForm.patchValue({
-				cancellation_hours: selectedVehicle?.non_charter_cancellation_hours.toString()
-			})
+		if (!this.booking_id) {
+			if (this.BookingForm.get('service_type').value == 'charter_tour') {
+				this.BookingForm.patchValue({
+					cancellation_hours: selectedVehicle?.charter_cancellation_hours.toString()
+				})
+			}
+			else {
+				this.BookingForm.patchValue({
+					cancellation_hours: selectedVehicle?.non_charter_cancellation_hours.toString()
+				})
+			}
 		}
 		this.buildBookingData()
 	}
@@ -2090,7 +2092,7 @@ export class NewBookingComponent implements OnInit {
 				this.BookingForm.updateValueAndValidity()
 				console.log(this.BookingForm.get('number_of_hours').value);
 				this.BookingForm.patchValue({
-					cancellation_hours: this.selectedVehicle?.charter_cancellation_hours
+					cancellation_hours: this.selectedVehicle?.charter_cancellation_hours.toString()
 				})
 			}
 			if (value == 'one_way') {
