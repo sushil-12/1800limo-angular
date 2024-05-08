@@ -1287,6 +1287,18 @@ export class NewBookingComponent implements OnInit {
 				})
 			}
 		}
+		else if (this.updateType == 'repeat' || this.updateType == 'return') {
+			if (this.BookingForm.get('service_type').value == 'charter_tour') {
+				this.BookingForm.patchValue({
+					cancellation_hours: selectedVehicle?.charter_cancellation_hours.toString()
+				})
+			}
+			else {
+				this.BookingForm.patchValue({
+					cancellation_hours: selectedVehicle?.non_charter_cancellation_hours.toString()
+				})
+			}
+		}
 		this.buildBookingData()
 	}
 
