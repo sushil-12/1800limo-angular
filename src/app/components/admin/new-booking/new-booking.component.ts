@@ -338,7 +338,7 @@ export class NewBookingComponent implements OnInit {
 			lose_affiliate_phone_isd: ['+1'],
 			lose_affiliate_phone_country: ['us'],
 			lose_affiliate_email: [''],
-			cancellation_hours: ['24'],
+			cancellation_hours: ['24', [Validators.required]],
 			vehicle_type: [''],
 			vehicle_type_name: [''],
 			vehicle_id: [''],
@@ -1274,6 +1274,17 @@ export class NewBookingComponent implements OnInit {
 		this.SetFormValue('vehicle_color_name', selectedVehicle.color);
 		selectedVehicle.licensePlate === null ? this.BookingForm.get('vehicle_license_plate').setValue('') : this.SetFormValue('vehicle_license_plate', selectedVehicle.licensePlate)
 		this.SetFormValue('vehicle_seats', selectedVehicle.seats)
+		//set cancellation period
+		if (this.BookingForm.get('service_type').value == 'charter_tour') {
+			this.BookingForm.patchValue({
+				cancellation_hours: selectedVehicle?.charter_cancellation_hours
+			})
+		}
+		else {
+			this.BookingForm.patchValue({
+				cancellation_hours: selectedVehicle?.non_charter_cancellation_hours.toString()
+			})
+		}
 		this.buildBookingData()
 	}
 
@@ -2070,11 +2081,17 @@ export class NewBookingComponent implements OnInit {
 				setTimeout(() => {
 					this.MapController(true)
 				}, 2000)
+				this.BookingForm.patchValue({
+					cancellation_hours: this.selectedVehicle?.non_charter_cancellation_hours.toString()
+				})
 			}
 			if (value != 'charter_tour') {
 				this.BookingForm.get('number_of_hours').setValue(0)
 				this.BookingForm.updateValueAndValidity()
 				console.log(this.BookingForm.get('number_of_hours').value);
+				this.BookingForm.patchValue({
+					cancellation_hours: this.selectedVehicle?.charter_cancellation_hours
+				})
 			}
 			if (value == 'one_way') {
 				console.log("setting value of return cruise port and name not mandatory")
@@ -2094,6 +2111,9 @@ export class NewBookingComponent implements OnInit {
 				this.BookingForm.get('return_pickup_airport_option').updateValueAndValidity();
 				this.BookingForm.get('return_cruise_name').updateValueAndValidity();
 				this.BookingForm.get('return_cruise_port').updateValueAndValidity();
+				this.BookingForm.patchValue({
+					cancellation_hours: this.selectedVehicle?.non_charter_cancellation_hours.toString()
+				})
 			}
 		})
 
@@ -2361,7 +2381,7 @@ export class NewBookingComponent implements OnInit {
 				this.BookingForm.get('lose_affiliate_name').setValidators([Validators.required])
 				this.BookingForm.get('lose_affiliate_phone').setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)])
 				this.BookingForm.get('lose_affiliate_email').setValidators([Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)])
-				this.BookingForm.get('cancellation_hours').setValidators([Validators.required])
+				// this.BookingForm.get('cancellation_hours').setValidators([Validators.required])
 				this.BookingForm.updateValueAndValidity()
 				this.init_rates = true
 				if (this.Form.service_type.value === 'round_trip') {
@@ -2392,8 +2412,8 @@ export class NewBookingComponent implements OnInit {
 				this.BookingForm.get('lose_affiliate_email').clearValidators()
 				this.BookingForm.get('lose_affiliate_email').updateValueAndValidity()
 
-				this.BookingForm.get('cancellation_hours').clearValidators()
-				this.BookingForm.get('cancellation_hours').updateValueAndValidity()
+				// this.BookingForm.get('cancellation_hours').clearValidators()
+				// this.BookingForm.get('cancellation_hours').updateValueAndValidity()
 
 
 				console.log('clear validation')
@@ -2993,6 +3013,10 @@ export class NewBookingComponent implements OnInit {
 		}
 		//set no of vehicles
 		this.SetFormValue('number_of_vehicles', selected_vehicle?.number_of_vehicles)
+		//set cancellation period
+		this.BookingForm.patchValue({
+			cancellation_hours: selected_vehicle?.cancellation_policy.toString()
+		})
 		let transfer_type_value = QB?.pickup_type + '_to_' + QB?.dropoff_type
 		let return_transfer_type_value = QB?.dropoff_type + '_to_' + QB?.pickup_type
 		this.SetFormValue('transfer_type', transfer_type_value)
