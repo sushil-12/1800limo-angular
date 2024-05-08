@@ -1089,6 +1089,25 @@
 							</div>
 						</div>
 					</div>
+					<div class="col-md-6 margin-mat-field" style="margin-top: -25px;">
+						<mat-form-field appearance="outline">
+							<mat-label>Cancellation Policy</mat-label>
+							<mat-select formControlName="cancellation_hours" tabindex="1">
+								<mat-option value="">Choose Cancellation Policy</mat-option>
+								<mat-option *ngFor="let canceloption of canceloptions"
+									[value]="canceloption.value">{{canceloption.label}}</mat-option>
+							</mat-select>
+						</mat-form-field>
+						<div *ngIf="submittedForm && Form.cancellation_hours.errors"
+							class="text-danger margin-bottom-thin my-mat-hint">
+							<div *ngIf="Form.cancellation_hours.errors.required">The Cancellation Policy is
+								required
+							</div>
+							<div *ngIf="Form.cancellation_hours.errors.pattern">The Cancellation Policy should be
+								a
+								number</div>
+						</div>
+					</div>
 				</div>
 			</div>
 
