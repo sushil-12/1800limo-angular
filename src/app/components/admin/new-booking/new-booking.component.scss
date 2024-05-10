@@ -360,6 +360,11 @@ ul {
 	font-weight: 500;
 }
 
+:host ::ng-deep .cancellation_policy span.mat-select-value-text span {
+	font-weight: 500;
+	color: red;
+}
+
 :host ::ng-deep ng-select span {
 	font-weight: 500;
 }
@@ -373,17 +378,17 @@ ul {
 	margin-left: 2px;
 }
 
-.border-red{
+.border-red {
 	border: 3px solid red;
 	border-radius: 12px;
 }
 
-.pin-icon-preview{
+.pin-icon-preview {
 	font-size: 26px;
 }
 
-@media only screen and (max-width: 768px){
-.pin-icon-preview{
+@media only screen and (max-width: 768px) {
+	.pin-icon-preview {
 		font-size: 34px;
 	}
 }
