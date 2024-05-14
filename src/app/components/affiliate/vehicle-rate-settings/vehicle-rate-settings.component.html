@@ -96,12 +96,10 @@
 			<!-- RATE BUCKET: MILEAGE RATE -->
 			<div class="col-md-6" *ngIf="form.km_mile.value == 'mile'; else kilometer_rate">
 				<mat-form-field class="mat-form-field-rates m-0" appearance="outline">
-					<mat-label>{{ currency_symbol }} per mile (Maximum {{currency_symbol}}15 per mile)<span
-							class="asterisk">*</span></mat-label>
+					<mat-label>{{ currency_symbol }} per mile<span class="asterisk">*</span></mat-label>
 					<span matPrefix>{{ currency_symbol }} &nbsp;</span>
-					<input matInput placeholder="Milage Rate (Maximum {{currency_symbol}}15 per mile)" type="number"
-						formControlName="milage_rate" tabindex="1" value="0" (focus)="$event.target.select()"
-						(change)="updateRateRangeObject()" />
+					<input matInput placeholder="Milage Rate" type="number" formControlName="milage_rate" tabindex="1"
+						value="0" (focus)="$event.target.select()" (change)="updateRateRangeObject()" />
 				</mat-form-field>
 				<div *ngIf="form.milage_rate.errors && (form.milage_rate.touched || form.milage_rate.errors)"
 					class="text-danger margin-bottom-thin my-mat-hint">
@@ -110,8 +108,7 @@
 				<div *ngIf="form.milage_rate.errors" class="text-danger margin-bottom-thin my-mat-hint">
 					<div *ngIf="form.milage_rate.errors.pattern">Enter Numbers only</div>
 					<div *ngIf="form.milage_rate.errors.min">Minimum value should be more than 2</div>
-					<div *ngIf="form.milage_rate.errors.max">Maximum value should be {{currencySymbol}}15 per
-						mile.</div>
+					<div *ngIf="form.milage_rate.errors.max">Rates are too expensive.</div>
 				</div>
 				<!-- <div *ngIf="is_form_submitted && form.milage_rate.errors || form.milage_rate.touched && form.milage_rate.errors"
 					class="text-danger margin-bottom-thin my-mat-hint">
@@ -133,13 +130,12 @@
 			<ng-template #kilometer_rate>
 				<div class="col-md-6">
 					<mat-form-field class="mat-form-field-rates m-0" appearance="outline">
-						<mat-label>{{ currency_symbol }} per km (Maximum {{currency_symbol}}15 per km)
+						<mat-label>{{ currency_symbol }} per km
 							<span class="asterisk">*</span>
 						</mat-label>
 						<span matPrefix>{{ currency_symbol }} &nbsp;</span>
-						<input matInput placeholder="Kilometer Rate (Maximum {{currency_symbol}}15 per km)"
-							type="number" formControlName="kilometer_rate" tabindex="1" (focus)="$event.target.select()"
-							(change)="updateRateRangeObject()" />
+						<input matInput placeholder="Kilometer Rate" type="number" formControlName="kilometer_rate"
+							tabindex="1" (focus)="$event.target.select()" (change)="updateRateRangeObject()" />
 					</mat-form-field>
 					<div *ngIf="form.kilometer_rate.errors && (form.kilometer_rate.touched || form.kilometer_rate.errors)"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -148,8 +144,7 @@
 					<div *ngIf="form.kilometer_rate.errors" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="form.kilometer_rate.errors.pattern">Enter Numbers only</div>
 						<div *ngIf="form.kilometer_rate.errors.min">Minimum value should be more than 1.71</div>
-						<div *ngIf="form.kilometer_rate.errors.max">maximum value should be {{currency_symbol}}15 per
-							km.</div>
+						<div *ngIf="form.kilometer_rate.errors.max">Rates are too expensive.</div>
 					</div>
 					<!-- <div *ngIf="is_form_submitted && form.kilometer_raterrors || form.kilometer_rate.touched && form.kilometer_raterrors"
 						class="text-danger margin-bottom-thin my-mat-hint">

@@ -39,7 +39,8 @@
 						<mat-label>Search Filter by Key word</mat-label>
 						<input type="text" matInput (keyup)="handleSearchKeyword($event.target.value)"
 							(focus)="$event.target.select()" [value]="searchText"
-							placeholder="Search Filter by Key word" id="keyword">
+							placeholder="Search by status, steps, name, email, cell phone, address, agency name, country, IATA, payee name"
+							id="keyword">
 					</mat-form-field>
 				</div>
 				<!-- <div class="col-md-2  mt-3 mb-3">

@@ -57,8 +57,9 @@
 			<div id="search-field-farmout">
 				<mat-form-field appearance="outline" class="m-0">
 					<input matInput type="text" (keypress)="handleKeypressEvents()" (focus)="$event.target.select()"
-						(keyup)="searchInBookings($event.target.value)" [value]="searchText" placeholder="Search"
-						id="keyword" autofocus>
+						(keyup)="searchInBookings($event.target.value)" [value]="searchText"
+						placeholder="Search by booking number, status, name, cell phone, vehicle type" id="keyword"
+						autofocus>
 				</mat-form-field>
 			</div>
 		</div>
@@ -75,7 +76,7 @@
 			<div id="create-new-btn" class="my-3">
 				<button id="farmout-btn" class="custom-filled-button" [routerLink]="['/']" style="font-size: 1.1rem">
 					<i class="bi bi-plus-lg"></i>
-					Create New Farmout
+					Create New Farm out
 				</button>
 			</div>
 		</div>
@@ -1474,7 +1475,7 @@
 						<div class="row m-0">
 							<div class="col-md-4 key d-flex align-items-center">
 								<span class="font-weight-bolder" style="color: #1e7500;">
-									Affliate Farmout share
+									Affliate Farm out share
 								</span>
 							</div>
 							<div class="col-md-8 value preview-airport-color" style="color: #1e7500 !important;">
