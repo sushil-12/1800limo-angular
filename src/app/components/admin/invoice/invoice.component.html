@@ -74,8 +74,8 @@
           <div id="search-field">
             <mat-form-field appearance="outline" class="m-0">
               <input matInput type="text" (keypress)="handleKeypressEvents()" (focus)="$event.target.select()"
-                (keyup)="searchInBookings($event.target.value)" [value]="searchText" placeholder="Search" id="keyword2"
-                autofocus>
+                (keyup)="searchInBookings($event.target.value)" [value]="searchText"
+                placeholder="Search by booking number, invoice number, name, cell phone" id="keyword2" autofocus>
             </mat-form-field>
           </div>
         </div>

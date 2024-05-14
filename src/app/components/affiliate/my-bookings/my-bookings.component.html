@@ -57,14 +57,18 @@
 						<mat-form-field appearance="outline" class="m-0">
 							<input matInput type="text" (keypress)="handleKeypressEvents()"
 								(focus)="$event.target.select()" (keyup)="searchInBookings($event.target.value)"
-								[value]="searchText" placeholder="Search" id="keyword" autofocus>
+								[value]="searchText"
+								placeholder="Search by booking number, status, name, cell phone, vehicle type"
+								id="keyword" autofocus>
 						</mat-form-field>
 					</div>
 				</div>
 			</div>
 			<div>
-				<p><mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">Check this
-						box to see current week’s bookings or change the dates.</mat-checkbox></p>
+				<p><mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">
+						{{useDateFilter ? 'Current and future bookings.' :
+						'See all past bookings or change the dates.' }}
+					</mat-checkbox></p>
 			</div>
 		</div>
 		<div class="containeredd driverside_table">
@@ -1529,7 +1533,7 @@
 							<div class="row m-0">
 								<div class="col-md-4 key d-flex align-items-center">
 									<span class="font-weight-bolder" style="color: #1e7500;">
-										Affliate Farmout share
+										Affliate Farm out share
 									</span>
 								</div>
 								<div class="col-md-8 value preview-airport-color" style="color: #1e7500 !important;">
