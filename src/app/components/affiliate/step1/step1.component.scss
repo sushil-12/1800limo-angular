@@ -1,9 +1,6 @@
-#radio-tiles-container
-{
-	.radio-tiles
-	{
-		.tile
-		{
+#radio-tiles-container {
+	.radio-tiles {
+		.tile {
 			position: relative;
 			width: 12rem;
 			height: auto;
@@ -15,13 +12,13 @@
 			flex-basis: 10rem;
 			box-shadow: 0px 5px 10px 1px rgba(0, 0, 0, 0.4);
 			transition: box-shadow 0.25s ease, background-color 0.25s ease;
-			#check-icon
-			{
+
+			#check-icon {
 				position: absolute;
 				margin: 0 auto;
 				transform: translate(-15px, -30px);
-				i
-				{
+
+				i {
 					padding: 3px;
 					border-radius: 50%;
 					color: #000000;
@@ -30,8 +27,8 @@
 					font-size: 1.2rem
 				}
 			}
-			#tile-name
-			{
+
+			#tile-name {
 				p {
 					font-size: 1.2rem;
 					text-transform: uppercase;
@@ -39,33 +36,33 @@
 				}
 			}
 		}
-		.tile.active
-		{
+
+		.tile.active {
 			background-color: var(--green);
 			box-shadow: 0px 5px 10px -1px rgb(0 0 0 / 30%);
 		}
 	}
 }
 
-.border-red{
-	border: 3px solid red;border-radius: 10px;
+.border-red {
+	border: 3px solid red;
+	border-radius: 10px;
 }
 
-.selectStyle
-{
+.selectStyle {
 	color: #000;
-	select
-	{
+
+	select {
 		color: #000;
-		option
-		{
+
+		option {
 			color: #000;
 		}
 	}
 }
 
 .vehtype_extint img {
-	height       : 225px;
+	height: 225px;
 	border-radius: 15px;
 }
 
@@ -82,23 +79,23 @@
 }
 
 .edit-email {
-	text-transform  : uppercase;
-	text-decoration : none;
-	margin-top      : 25px;
-	border-radius   : 0.5rem;
-	border          : 1px solid var(--orange-color);
+	text-transform: uppercase;
+	text-decoration: none;
+	margin-top: 25px;
+	border-radius: 0.5rem;
+	border: 1px solid var(--orange-color);
 	background-color: var(--orange-color);
-	color           : #fff;
-	width           : 100%;
-	line-height     : 41px;
-	height          : calc(100% - 25px);
+	color: #fff;
+	width: 100%;
+	line-height: 41px;
+	height: calc(100% - 25px);
 	box-shadow: 0px 5px 10px 1px rgba(0, 0, 0, 0.4);
 }
 
 .edit-email svg {
 	margin-bottom: 10px;
-	margin-right : 10px;
-	height       : 30px;
+	margin-right: 10px;
+	height: 30px;
 }
 
 .edit-email svg path {
@@ -106,15 +103,15 @@
 }
 
 .edit-email:hover {
-	border          : 1px solid var(--orange-color);
+	border: 1px solid var(--orange-color);
 	background-color: transparent;
-	color           : var(--orange-color);
+	color: var(--orange-color);
 }
 
 .edit-email:focus {
-	border          : 1px solid var(--orange-color);
+	border: 1px solid var(--orange-color);
 	background-color: transparent;
-	color           : var(--orange-color);
+	color: var(--orange-color);
 }
 
 .edit-email:hover svg path {
@@ -126,11 +123,11 @@
 }
 
 .email-verified {
-	height  : 35px;
-	fill    : #05b171;
+	height: 35px;
+	fill: #05b171;
 	position: absolute;
-	right   : 5px;
-	bottom  : 12px;
+	right: 5px;
+	bottom: 12px;
 }
 
 .emailText {
@@ -138,11 +135,11 @@
 }
 
 .email-not-verified {
-	height  : 35px;
+	height: 35px;
 	position: absolute;
-	right   : 5px;
-	bottom  : 12px;
-	fill    : #ea4444;
+	right: 5px;
+	bottom: 12px;
+	fill: #ea4444;
 }
 
 .modal-header {
@@ -154,22 +151,22 @@
 }
 
 .resent-otp {
-	cursor  : pointer;
+	cursor: pointer;
 	position: absolute;
-	left   : 1rem;
-	top     : 1rem;
-	color   : var(--orange-color);
+	left: 1rem;
+	top: 1rem;
+	color: var(--orange-color);
 }
 
 .modal-title {
 	margin-bottom: 0 !important;
-	text-align   : center;
-	font-weight  : 600;
-	padding      : 10px 30px;
+	text-align: center;
+	font-weight: 600;
+	padding: 10px 30px;
 }
 
 .modal-body {
-	padding-top   : 0 !important;
+	padding-top: 0 !important;
 	padding-bottom: 0 !important;
 }
 
@@ -188,67 +185,67 @@
 
 
 .radio-tile-group {
-	display        : flex;
-	flex-wrap      : wrap;
+	display: flex;
+	flex-wrap: wrap;
 	justify-content: center;
 }
 
 .input-container {
 	position: relative;
-	height  : 4em;
-	width   : 12rem;
-	margin  : 0.5rem;
+	height: 4em;
+	width: 12rem;
+	margin: 0.5rem;
 }
 
 .radio-button {
-	opacity : 0;
+	opacity: 0;
 	position: absolute;
-	top     : 0;
-	left    : 0;
-	height  : 100%;
-	width   : 100%;
-	margin  : 0;
-	cursor  : pointer;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	margin: 0;
+	cursor: pointer;
 }
 
 .radio-tile {
-	display        : flex;
-	flex-direction : column;
-	align-items    : center;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 	justify-content: center;
-	width          : 100%;
-	height         : 100%;
-	border         : 2px solid var(--green-color);
-	border-radius  : 5px;
-	padding        : 1rem;
-	transition     : transform 300ms ease;
+	width: 100%;
+	height: 100%;
+	border: 2px solid var(--green-color);
+	border-radius: 5px;
+	padding: 1rem;
+	transition: transform 300ms ease;
 }
 
 
 .radio-tile-label {
-	text-align    : center;
-	font-size     : 0.85rem !important;
-	font-weight   : 700 !important;
+	text-align: center;
+	font-size: 0.85rem !important;
+	font-weight: 700 !important;
 	text-transform: uppercase;
 	letter-spacing: 1px;
-	color         : #000;
-	margin-bottom : 30px;
+	color: #000;
+	margin-bottom: 30px;
 
 }
 
 .radio-button:checked+.radio-tile {
 	background-color: var(--green-color);
-	border          : 2px solid var(--green-color);
-	color           : white;
-	transform       : scale(1, 1);
+	border: 2px solid var(--green-color);
+	color: white;
+	transform: scale(1, 1);
 
 	.radio-tile-label {
-		color           : white;
+		color: white;
 		background-color: var(--green-color);
 	}
 
 	.check {
-		width        : 30px;
+		width: 30px;
 		// margin-top: -25px !important;
 		margin-bottom: 5px !important;
 	}
@@ -256,102 +253,102 @@
 
 @media only screen and (min-width:1199px) {
 	.input-container:focus {
-		outline         : none;
+		outline: none;
 		background-color: var(--green-color);
-		border          : 2px solid var(--green-color);
-		border-radius   : 5px;
-		transform       : scale(1.1, 1.1);
+		border: 2px solid var(--green-color);
+		border-radius: 5px;
+		transform: scale(1.1, 1.1);
 	}
 }
 
 @media only screen and (max-width:767px) {
 	.input-container {
 		position: relative;
-		height  : 4em;
-		width   : 100%;
-		margin  : 0.5rem;
+		height: 4em;
+		width: 100%;
+		margin: 0.5rem;
 	}
 
 	.radio-tile-label {
-		text-align    : center;
-		font-weight   : 500;
+		text-align: center;
+		font-weight: 500;
 		text-transform: uppercase;
 		letter-spacing: 1px;
-		color         : #000;
-		margin-bottom : 35px;
-		margin-top    : 5px;
+		color: #000;
+		margin-bottom: 35px;
+		margin-top: 5px;
 	}
 }
 
 @media (min-width:768px) and (max-width:991px) {
 	.input-container {
 		position: relative;
-		height  : 4em;
-		width   : 12rem;
-		margin  : 0 !important;
+		height: 4em;
+		width: 12rem;
+		margin: 0 !important;
 	}
 
 	.radio-tile-label {
-		text-align    : center;
-		font-size     : 0.75rem;
-		font-weight   : 500;
+		text-align: center;
+		font-size: 0.75rem;
+		font-weight: 500;
 		text-transform: uppercase;
 		letter-spacing: 1px;
-		color         : #000;
-		margin-bottom : 35px;
-		margin-top    : 5px;
+		color: #000;
+		margin-bottom: 35px;
+		margin-top: 5px;
 	}
 
 	.blacklimo .radio-tile-label {
-		text-align    : center;
-		font-size     : 0.75rem;
-		font-weight   : 500;
+		text-align: center;
+		font-size: 0.75rem;
+		font-weight: 500;
 		text-transform: uppercase;
 		letter-spacing: 1px;
-		color         : #000;
-		margin-bottom : 25px !important;
-		margin-top    : 0px !important;
+		color: #000;
+		margin-bottom: 25px !important;
+		margin-top: 0px !important;
 	}
 }
 
 @media (min-width:992px) and (max-width:1199px) {
 	.input-container {
-		position  : relative;
-		height    : 5em;
-		width     : 12rem;
-		margin    : 0 !important;
+		position: relative;
+		height: 5em;
+		width: 12rem;
+		margin: 0 !important;
 		margin-top: 15px !important;
 	}
 
 	.radio-tile-label {
-		text-align    : center;
-		font-size     : 0.85rem;
-		font-weight   : 500;
+		text-align: center;
+		font-size: 0.85rem;
+		font-weight: 500;
 		text-transform: uppercase;
 		letter-spacing: 1px;
-		color         : #000;
-		margin-bottom : 35px;
-		margin-top    : 5px;
+		color: #000;
+		margin-bottom: 35px;
+		margin-top: 5px;
 	}
 
 	.blacklimo .radio-tile-label {
-		text-align    : center;
-		font-weight   : 500;
+		text-align: center;
+		font-weight: 500;
 		text-transform: uppercase;
 		letter-spacing: 1px;
-		color         : #000;
-		margin-bottom : 25px !important;
-		margin-top    : 0px !important;
+		color: #000;
+		margin-bottom: 25px !important;
+		margin-top: 0px !important;
 	}
 
 	.GigOperator .radio-tile-label {
-		text-align    : center;
-		font-weight   : 500;
+		text-align: center;
+		font-weight: 500;
 		text-transform: uppercase;
 		letter-spacing: 1px;
-		color         : #000;
-		margin-bottom : 45px !important;
-		margin-top    : 10px !important;
+		color: #000;
+		margin-bottom: 45px !important;
+		margin-top: 10px !important;
 	}
 }
 
@@ -360,34 +357,34 @@
 
 div#imageModal {
 	position: fixed;
-	width   : 100%;
-	height  : 100%;
-	top     : 0;
-	left    : 0;
-	z-index : 9999;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	z-index: 9999;
 
 	button.close {
 		background-color: #fff;
-		position        : absolute;
-		z-index         : 999;
-		right           : 4px;
-		top             : 5px;
-		width           : 24px;
+		position: absolute;
+		z-index: 999;
+		right: 4px;
+		top: 5px;
+		width: 24px;
 	}
 
 	pinch-zoom {
-		width : 100%;
+		width: 100%;
 		height: 100%;
 
 		img {
-			max-width : 100%;
+			max-width: 100%;
 			max-height: 100%;
 			-o-object-fit: contain;
-			   object-fit: contain;
-			height    : 100%;
-			width     : 100%;
-			position  : absolute;
-			top       : 0;
+			object-fit: contain;
+			height: 100%;
+			width: 100%;
+			position: absolute;
+			top: 0;
 		}
 
 	}
@@ -397,198 +394,232 @@ div#imageModal {
 
 @media (min-width: 768px) and (max-width: 991px) {
 	#editAffiliateEmailModal .modal-dialog {
-		position      : relative;
-		width         : auto;
-		margin        : 0.5rem auto;
-		margin-top    : 2.5rem !important;
+		position: relative;
+		width: auto;
+		margin: 0.5rem auto;
+		margin-top: 2.5rem !important;
 		pointer-events: none;
 	}
 
 	#editDispatchEmailModal .modal-dialog {
-		position      : relative;
-		width         : auto;
-		margin        : 0.5rem auto;
-		margin-top    : 2.5rem !important;
+		position: relative;
+		width: auto;
+		margin: 0.5rem auto;
+		margin-top: 2.5rem !important;
 		pointer-events: none;
 	}
 
 	#affiliateInstructionsModal .modal-dialog {
-		position      : relative;
-		width         : auto;
-		margin        : 0.5rem auto;
-		margin-top    : 2.5rem !important;
+		position: relative;
+		width: auto;
+		margin: 0.5rem auto;
+		margin-top: 2.5rem !important;
 		pointer-events: none;
 	}
 
 	#instructionsModal .modal-dialog {
-		position      : relative;
-		width         : auto;
-		margin        : 0.5rem auto;
-		margin-top    : 2.5rem !important;
+		position: relative;
+		width: auto;
+		margin: 0.5rem auto;
+		margin-top: 2.5rem !important;
 		pointer-events: none;
 	}
 }
 
 .cellLabelClass.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
-	padding-left    : 0px;
+	padding-left: 0px;
 	background-color: #e5e5e5;
-	max-width       : 50px;
-	text-align      : center;
-	left            : -6px;
-	top             : 33px;
+	max-width: 50px;
+	text-align: center;
+	left: -6px;
+	top: 33px;
 }
 
 .headingH6 {
-	color    : var(--orange-color);
+	color: var(--orange-color);
 	font-size: 18px;
 }
 
 #instructionsModal .modal-content li {
-	line-height   : 25px;
+	line-height: 25px;
 	padding-bottom: 15px;
 }
 
 .select-year-label {
-	position  : relative;
-	top       : 15px;
-	left      : 8px;
+	position: relative;
+	top: 15px;
+	left: 8px;
 	background: #fff;
-	color     : #000 !important;
-	padding   : 0 3px;
-	font-size : 12px !important;
+	color: #000 !important;
+	padding: 0 3px;
+	font-size: 12px !important;
 	transition: 0.3s;
 }
 
 .select-gender-label {
-	position  : relative;
-	top       : 15px;
-	left      : 8px;
+	position: relative;
+	top: 15px;
+	left: 8px;
 	background: #fff;
-	color     : #000 !important;
-	padding   : 0 3px;
-	font-size : 12px !important;
+	color: #000 !important;
+	padding: 0 3px;
+	font-size: 12px !important;
 	transition: 0.3s;
 }
 
 
 
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-outline-gap{
-	border-top-color: #f44336!important;
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-outline-gap {
+	border-top-color: #f44336 !important;
 }
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.ng-untouched.mat-form-field-should-float.mat-focused .mat-form-field-outline-gap{
-	border-top-color: #3f51b5!important;
-}
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.ng-touched.ng-dirty.mat-form-field-should-float.ng-valid .mat-form-field-outline-gap{
-	border-top-color: rgba(0,0,0,.12)!important;
-}
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.ng-touched.mat-form-field-should-float.ng-valid.mat-focused .mat-form-field-outline-gap{
-	border-top-color: #3f51b5!important;
-}
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float.ng-dirty.ng-valid.ng-touched .mat-form-field-flex:hover .mat-form-field-outline-gap{border-top-color: rgba(0,0,0,.87)!important;}
 
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float.mat-focused .mat-form-field-outline-gap{
-	border-top-color: #f44336!important;
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.ng-untouched.mat-form-field-should-float.mat-focused .mat-form-field-outline-gap {
+	border-top-color: #3f51b5 !important;
 }
-:host ::ng-deep.mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick .mat-form-field-outline-gap{
-	border-top-color: #3f51b5!important;
-}
-:host ::ng-deep.mat-form-field-type-mat-select.mat-form-field-appearance-outline.mat-form-field-can-float.ng-untouched.ng-invalid.mat-form-field-should-float .mat-form-field-outline-gap{
-	border-top-color: rgba(0,0,0,.12)!important;
-}
-:host ::ng-deep.mat-form-field-type-mat-select.mat-form-field-appearance-outline.mat-form-field-can-float.ng-untouched.ng-invalid .mat-form-field-flex:hover .mat-form-field-outline-gap{border-top-color: rgba(0,0,0,.87)!important;}
 
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-form-field-wrapper .mat-form-field-infix mat-label{
-	font-weight: normal!important;
-	font-size: 14px!important;
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.ng-touched.ng-dirty.mat-form-field-should-float.ng-valid .mat-form-field-outline-gap {
+	border-top-color: rgba(0, 0, 0, .12) !important;
+}
+
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.ng-touched.mat-form-field-should-float.ng-valid.mat-focused .mat-form-field-outline-gap {
+	border-top-color: #3f51b5 !important;
+}
+
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float.ng-dirty.ng-valid.ng-touched .mat-form-field-flex:hover .mat-form-field-outline-gap {
+	border-top-color: rgba(0, 0, 0, .87) !important;
+}
+
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float.mat-focused .mat-form-field-outline-gap {
+	border-top-color: #f44336 !important;
+}
+
+:host ::ng-deep.mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick .mat-form-field-outline-gap {
+	border-top-color: #3f51b5 !important;
+}
+
+:host ::ng-deep.mat-form-field-type-mat-select.mat-form-field-appearance-outline.mat-form-field-can-float.ng-untouched.ng-invalid.mat-form-field-should-float .mat-form-field-outline-gap {
+	border-top-color: rgba(0, 0, 0, .12) !important;
+}
+
+:host ::ng-deep.mat-form-field-type-mat-select.mat-form-field-appearance-outline.mat-form-field-can-float.ng-untouched.ng-invalid .mat-form-field-flex:hover .mat-form-field-outline-gap {
+	border-top-color: rgba(0, 0, 0, .87) !important;
+}
+
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-form-field-wrapper .mat-form-field-infix mat-label {
+	font-weight: normal !important;
+	font-size: 14px !important;
 	color: #191919;
 }
-:host ::ng-deep.mat-form-field-appearance-outline .mat-form-field-label{top:1.3675em}
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-form-field-wrapper .mat-form-field-infix .labelClass{font-weight: normal!important;
-	font-size: 14px!important;
+
+:host ::ng-deep.mat-form-field-appearance-outline .mat-form-field-label {
+	top: 1.3675em
+}
+
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-form-field-wrapper .mat-form-field-infix .labelClass {
+	font-weight: normal !important;
+	font-size: 14px !important;
 	color: #191919;
-top:1.75em}
+	top: 1.75em
+}
+
 :host ::ng-deep .mat-form-field {
 	.mat-form-field-outline {
-	  &-end {
-		border-radius: 0 10px 10px 0 !important;
-	  }
-  
-	  &-start {
-		border-radius: 10px 0 0 10px !important;
-		flex-grow: 1;
-	  }
+		&-end {
+			border-radius: 0 10px 10px 0 !important;
+		}
+
+		&-start {
+			border-radius: 10px 0 0 10px !important;
+			flex-grow: 1;
+		}
 	}
-  }
-  :host ::ng-deep .mat-form-field .mat-form-field-wrapper{
-		border-radius: 10px;
-		background-color: rgb(226, 226, 226,1);
-  } 
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-form-field-wrapper .mat-form-field-infix .labelClass+.iti--allow-dropdown .iti__flag-container{top:-12px}
-:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label,:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-input-server:focus+.mat-form-field-label-wrapper .mat-form-field-label{transform:translateY(-0.8em) scale(0.85)!important;width:133.3333333333%}
+}
+
+:host ::ng-deep .mat-form-field .mat-form-field-wrapper {
+	border-radius: 10px;
+	background-color: rgb(226, 226, 226, 1);
+}
+
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-form-field-wrapper .mat-form-field-infix .labelClass+.iti--allow-dropdown .iti__flag-container {
+	top: -12px
+}
+
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label,
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-input-server:focus+.mat-form-field-label-wrapper .mat-form-field-label {
+	transform: translateY(-0.8em) scale(0.85) !important;
+	width: 133.3333333333%
+}
 
 :host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-outline-gap {
-    border-top-color: #b2b2b2 !important;
+	border-top-color: #b2b2b2 !important;
 }
 
-:host ::ng-deep .selectInputStyle,.mat-form-field-label{
-	background-color: rgb(226, 226, 226,1) !important;
+:host ::ng-deep .selectInputStyle,
+.mat-form-field-label {
+	background-color: rgb(226, 226, 226, 1) !important;
 }
 
-:host ::ng-deep .select-gender-label,.select-year-label{
-	background-color: rgb(226, 226, 226,1) !important;
+:host ::ng-deep .select-gender-label,
+.select-year-label {
+	background-color: rgb(226, 226, 226, 1) !important;
 	transform: translateY(0.4em) scale(1) !important;
 }
 
-:host ::ng-deep .select-year-label{
+:host ::ng-deep .select-year-label {
 	transform: translateY(0.8em) translateX(-0.8em) scale(0.9) !important;
-    opacity: 0.8;
-    font-size: 13px !important;
+	opacity: 0.8;
+	font-size: 13px !important;
 	background: none !important;
 }
 
 
-.mat-option{
-	background-color: rgb(226, 226, 226,1) !important;
-}
-:host ::ng-deep .ng-option{
-	background-color: rgb(226, 226, 226,1) !important;
+.mat-option {
+	background-color: rgb(226, 226, 226, 1) !important;
 }
 
-:host ::ng-deep .select-gender-label{
+:host ::ng-deep .ng-option {
+	background-color: rgb(226, 226, 226, 1) !important;
+}
+
+:host ::ng-deep .select-gender-label {
 	transform: translateY(0.8em) translateX(-0.2em) scale(0.9) !important;
-    opacity: 0.8;
-    font-size: 13px !important;
+	opacity: 0.8;
+	font-size: 13px !important;
 	background: none !important;
 }
-:host ::ng-deep .iti__selected-flag{
+
+:host ::ng-deep .iti__selected-flag {
 	transform: translateY(5px);
 }
 
 
 .topLabelClass.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
-    text-align: start;
-    padding-left: 8px;
+	text-align: start;
+	padding-left: 8px;
 }
 
-:host ::ng-deep .mat-input-element{
+:host ::ng-deep .mat-input-element {
 	font-weight: 500;
 }
 
 :host ::ng-deep .selectStyle select {
 	font-weight: 400;
 }
-.asterisk{
+
+.asterisk {
 	font-size: 21px;
 	margin-left: 2px;
 }
-.asterisk1{
+
+.asterisk1 {
 	font-size: 19px !important;
-    margin-left: 2px;
-    color: #ff0000 !important;
-    background: none !important;
+	margin-left: 2px;
+	color: #ff0000 !important;
+	background: none !important;
 }
-.user_information .selectInputStyle{
-height: 58px !important;
+
+.user_information .selectInputStyle {
+	height: 58px !important;
 }
 
 // tooltip css 
@@ -607,74 +638,84 @@ height: 58px !important;
 	width: 100%;
 	font-weight: 600;
 	-webkit-transform: translateY(10px);
-	  -moz-transform: translateY(10px);
-	  -ms-transform: translateY(10px);
-	   -o-transform: translateY(10px);
-		transform: translateY(10px);
+	-moz-transform: translateY(10px);
+	-ms-transform: translateY(10px);
+	-o-transform: translateY(10px);
+	transform: translateY(10px);
 	-webkit-transition: all .25s ease-out;
-	  -moz-transition: all .25s ease-out;
-	  -ms-transition: all .25s ease-out;
-	   -o-transition: all .25s ease-out;
-		transition: all .25s ease-out;
+	-moz-transition: all .25s ease-out;
+	-ms-transition: all .25s ease-out;
+	-o-transition: all .25s ease-out;
+	transition: all .25s ease-out;
 	-webkit-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
-	  -moz-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
-	  -ms-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
-	   -o-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
-		box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
-	}
-	
-	.wrapper .tooltip:before {
-		bottom: -20px;
-		content: " ";
-		display: block;
-		height: 20px;
-		left: 0;
-		position: absolute;
-		width: 100%;
-	}
-	
-	.wrapper .tooltip:after {
-		border-left: solid transparent 10px;
-		border-right: solid transparent 10px;
-		border-top: solid #fb904b 10px;
-		bottom: -10px;
-		content: " ";
-		height: 0;
-		left: 50%;
-		margin-left: -13px;
-		position: absolute;
-		width: 0;
-	}
-	
-	.wrapper:hover .tooltip {
+	-moz-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
+	-ms-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
+	-o-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
+	box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.28);
+}
+
+.wrapper .tooltip:before {
+	bottom: -20px;
+	content: " ";
+	display: block;
+	height: 20px;
+	left: 0;
+	position: absolute;
+	width: 100%;
+}
+
+.wrapper .tooltip:after {
+	border-left: solid transparent 10px;
+	border-right: solid transparent 10px;
+	border-top: solid #fb904b 10px;
+	bottom: -10px;
+	content: " ";
+	height: 0;
+	left: 50%;
+	margin-left: -13px;
+	position: absolute;
+	width: 0;
+}
+
+.wrapper:hover .tooltip {
 	opacity: 1;
 	pointer-events: auto;
 	-webkit-transform: translateY(0px);
-	  -moz-transform: translateY(0px);
-	  -ms-transform: translateY(0px);
-	   -o-transform: translateY(0px);
-		transform: translateY(0px);
-	}
-	
-	@media only screen and (max-width: 768px) {
-		.tooltip{
-			display:none !important;
-		}
-	}
+	-moz-transform: translateY(0px);
+	-ms-transform: translateY(0px);
+	-o-transform: translateY(0px);
+	transform: translateY(0px);
+}
 
-	.choose_ameniteslist{
-		flex-direction: column !important;
-		height: 30vh !important;
-	  }
-	  
-	  @media  (min-width: 767px) and (max-width:821px) {
-		.choose_ameniteslist{
-		  height: 38vh !important;
-		}
-	  }
-	  
-	  @media screen and (max-width: 767px){
-		.choose_ameniteslist{
-		  height: auto !important;
-		}
-	  }
+@media only screen and (max-width: 768px) {
+	.tooltip {
+		display: none !important;
+	}
+}
+
+.choose_ameniteslist {
+	flex-direction: column !important;
+	height: 30vh !important;
+}
+
+@media (min-width: 767px) and (max-width:821px) {
+	.choose_ameniteslist {
+		height: 38vh !important;
+	}
+}
+
+@media screen and (max-width: 767px) {
+	.choose_ameniteslist {
+		height: auto !important;
+	}
+}
+
+.red-placeholder ::placeholder {
+	color: red !important;
+	/* Red color for the placeholder */
+}
+
+.red-placeholder {
+	color: red !important;
+	font-weight: 500 !important;
+}
