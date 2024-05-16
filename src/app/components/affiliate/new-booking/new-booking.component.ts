@@ -111,6 +111,7 @@ export class NewBookingComponent implements OnInit {
 	isFarmoutBooking: boolean = false;
 	currencySymbol: any;
 	currencyObj: any;
+	updateType: any;
 
 
 
@@ -145,6 +146,7 @@ export class NewBookingComponent implements OnInit {
 				this.SetFormValue('reservation_id', params.bookingId)
 				console.log('settting-------------- reservation_id', params.bookingId)
 				params.updateType ? this.SetFormValue('updateType', params.updateType) : this.SetFormValue('updateType', 'edit')
+				this.updateType = params.updateType
 			}
 			else if (params && params.new == 'true') {
 				console.log('in create new booking through QB------------->>', params.new == 'true')
