@@ -65,9 +65,10 @@
 			</div>
 			<div class="row d-flex justify-content-between">
 				<div class="col-md-6">
-					<p><mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">Uncheck
-							this
-							box to view all bookings</mat-checkbox></p>
+					<p><mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">
+							{{useDateFilter ? 'Uncheck this box to view all bookings.' :
+							'Check this box to see bookings based on dates.' }}
+						</mat-checkbox></p>
 				</div>
 
 				<!-- <div class="col-md-6 sortCheckBox"> -->
@@ -154,7 +155,7 @@
 												<div class="dropdown-item-icon" *></div>
 												Repeat
 											</a>
-											<a *ngIf="booking.service_type=='oneway' && (currentUser?.RoleName == 'admin' || subModules.includes('repeat_booking'))"
+											<a *ngIf="(currentUser?.RoleName == 'admin' || subModules.includes('repeat_booking') && (booking?.booking_status == 'pending'))"
 												class="dropdown-item" data-toggle="modal"
 												data-target="#return_repeat_booking_Modal"
 												[routerLink]="['/admin/new-booking']"

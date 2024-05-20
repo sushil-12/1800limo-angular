@@ -548,8 +548,10 @@ export class NewBookingComponent implements OnInit {
 
 			// override specific value
 			this.BookingForm.patchValue({
-				service_type: response?.data?.service_type == 'oneway' ? 'one_way' : response?.data['service_type'] == 'roundtrip' ? 'round_trip' : 'charter_tour',
+				service_type: response.data.service_type == 'oneway' ? 'one_way' : response.data['service_type'] == 'roundtrip' ? 'round_trip' : 'charter_tour',
 			})
+
+			this.service_type = response.data.service_type == 'oneway' ? 'one_way' : response.data['service_type'] == 'roundtrip' ? 'round_trip' : 'charter_tour'
 
 			if (this.Form?.updateType?.value == 'edit') {
 				this.booking_params?.client_account_types?.pop()
@@ -989,7 +991,7 @@ export class NewBookingComponent implements OnInit {
 		this.booking_data = {
 			vehicle_id: this.BookingForm.get('vehicle_id').value,
 			transfer_type: this.transfer_type,
-			service_type: this.service_type,
+			service_type: this.BookingForm.get('service_type').value,
 			numberOfVehicles: 1,
 			distance: this.distance,
 			return_distance: this.return_distance,
@@ -1005,6 +1007,7 @@ export class NewBookingComponent implements OnInit {
 		this.number_of_hours > 0 ? this.buildBookingData() : ''
 	}
 	onSelectionChangeServiceType(event: any) {
+		console.log("in service type change--->", event.value)
 		this.service_type = event.value;
 		this.buildBookingData()
 	}

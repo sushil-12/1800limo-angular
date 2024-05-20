@@ -128,6 +128,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 
 	ngOnChanges(changes: SimpleChanges) {
 		console.warn("Change has been detected: ", changes);
+		console.log("servicetyep", this.service_type)
 		this.currencySymbol = this.currencyObject ? this.currencyObject?.symbol : "$"
 		this.ratesform = true;
 		// changes.init_rates?.currentValue ?? this.ratesform
