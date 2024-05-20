@@ -65,8 +65,10 @@
 		</div>
 	</div>
 	<div class="ml-4">
-		<p><mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">Uncheck this box to
-				view all bookings</mat-checkbox></p>
+		<p><mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">
+				{{useDateFilter ? 'Uncheck this box to see all future bookings' :
+				'Check this box to see past and future bookings.' }}
+			</mat-checkbox></p>
 	</div>
 	<!-- DIVISION: SEARCH PARAMETERS ENDS -->
 
@@ -753,6 +755,7 @@
 								</span>
 							</div>
 						</div>
+						<hr>
 					</div>
 
 					<!-- Pickup > City Details -->
@@ -772,6 +775,7 @@
 										class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
 							</div>
 						</div>
+						<hr>
 					</div>
 
 					<!-- Pickup > Airline Details -->

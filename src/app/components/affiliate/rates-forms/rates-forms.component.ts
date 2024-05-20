@@ -26,6 +26,7 @@ export class RatesFormsComponent implements OnInit, OnChanges {
 	@Input('isCreatedByAdmin') isCreatedByAdmin: boolean = true;
 	@Input('isFarmoutBooking') isFarmoutBooking: boolean = false;
 	@Input("currencyObject") currencyObject: any;
+	@Input("service_type") service_type: string = "";
 
 	// Throw Events.
 	@Output("formvalue") formvalue = new EventEmitter<Record<string, any>>();
@@ -123,6 +124,7 @@ export class RatesFormsComponent implements OnInit, OnChanges {
 
 	ngOnChanges(changes: SimpleChanges) {
 		console.warn("Change has been detected: ", changes);
+		console.log("servicetyep", this.service_type)
 		this.currencySymbol = this.currencyObject?.symbol
 		this.ratesform = true;
 		// changes.init_rates?.currentValue ?? this.ratesform
@@ -577,7 +579,7 @@ export class RatesFormsComponent implements OnInit, OnChanges {
 	calculateReturnBaseRateShare() {
 		try {
 			let baseRate = 0;
-			if (this.book_data.service_type == 'charter_tour' && !this.is_readonly_min_rate) {
+			if ((this.service_type == 'charter_tour' || this.service_type == 'chartertour') && !this.is_readonly_min_rate) {
 				baseRate += (<FormGroup>((<FormGroup>this.ReturnRatesForm.get('all_inclusive_rates'))?.get('Base_Rate')))?.get("baserate").value * this.nums
 			}
 			else {
@@ -614,11 +616,13 @@ export class RatesFormsComponent implements OnInit, OnChanges {
 	calculateBaseRateShare() {
 		try {
 			let baseRate = 0;
-			console.log('in function calculateBaseRateShare', this.RatesForm)
-			if (this.book_data?.service_type == 'charter_tour' && !this.is_readonly_min_rate) {
+			console.log('in function calculateBaseRateShare', this.RatesForm, this.book_data?.service_type)
+			if ((this.service_type == 'charter_tour' || this.service_type == 'chartertour') && !this.is_readonly_min_rate) {
+				console.log('in function calculateBaseRateShare1', this.nums)
 				baseRate += (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates'))?.get('Base_Rate')))?.get("baserate").value * this.nums
 			}
 			else {
+				console.log('in function calculateBaseRateShare1', this.RatesForm)
 				baseRate += (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates'))?.get('Base_Rate')))?.get("baserate").value || 0
 			}
 			['ELH_Charges', 'Stops', 'Wait'].map((i) => {
@@ -733,7 +737,7 @@ export class RatesFormsComponent implements OnInit, OnChanges {
 			this.total[subform] = Number(Number(amount).toFixed(2));
 			if (formgroup == 'amenities' || formgroup == "all_inclusive_rates") {
 				let baseRateAmount = (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates')).get('Base_Rate'))).get("baserate").value;
-				if (this.book_data.service_type == 'charter_tour' && !this.is_readonly_min_rate) {
+				if ((this.service_type == 'charter_tour' || this.service_type == 'chartertour') && !this.is_readonly_min_rate) {
 					baseRateAmount = (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates')).get('Base_Rate'))).get("baserate").value * this.nums
 				}
 				baseRateAmount += this.calc_admin_share
@@ -838,7 +842,7 @@ export class RatesFormsComponent implements OnInit, OnChanges {
 			this.r_total[subform] = Number(Number(amount).toFixed(2));
 			if (formgroup == 'amenities' || formgroup == "all_inclusive_rates") {
 				let baseRateAmount = (<FormGroup>((<FormGroup>this.ReturnRatesForm.get('all_inclusive_rates')).get('Base_Rate'))).get("baserate").value;
-				if (this.book_data.service_type == 'charter_tour' && !this.is_readonly_min_rate) {
+				if ((this.book_data?.service_type == 'charter_tour' || this.book_data?.service_type == 'chartertour') && !this.is_readonly_min_rate) {
 					baseRateAmount = (<FormGroup>((<FormGroup>this.ReturnRatesForm.get('all_inclusive_rates')).get('Base_Rate'))).get("baserate").value * this.nums
 				}
 				baseRateAmount += this.r_calc_admin_share

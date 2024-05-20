@@ -66,8 +66,8 @@
 			</div>
 			<div>
 				<p><mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">
-						{{useDateFilter ? 'Current and future bookings.' :
-						'See all past bookings or change the dates.' }}
+						{{useDateFilter ? 'Uncheck this box to see all future bookings' :
+						'Check this box to see past and future bookings.' }}
 					</mat-checkbox></p>
 			</div>
 		</div>
@@ -782,6 +782,7 @@
 								</span>
 							</div>
 						</div>
+						<hr>
 					</div>
 
 					<!-- Pickup > City Details -->
@@ -801,6 +802,7 @@
 										class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
 							</div>
 						</div>
+						<hr>
 					</div>
 
 					<!-- Pickup > Airline Details -->

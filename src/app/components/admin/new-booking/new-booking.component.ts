@@ -1000,6 +1000,7 @@ export class NewBookingComponent implements OnInit {
 	}
 
 	onSelectionChangeServiceType(event: any) {
+		console.log("in service type change--->", event.value)
 		this.service_type = event.value;
 		this.buildBookingData()
 	}
