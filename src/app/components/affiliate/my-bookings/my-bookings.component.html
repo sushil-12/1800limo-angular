@@ -118,7 +118,7 @@
 													Return
 												</a> -->
 											<a class="dropdown-item" (click)="finalizeAction(booking?.booking_id)"
-												*ngIf="(booking?.booking_status != 'paid' && booking?.booking_status != 'paid_cash')">
+												*ngIf="(booking?.can_finalise && (booking?.booking_status != 'paid' && booking?.booking_status != 'paid_cash'))">
 												<div class="dropdown-item-icon"></div>
 												Finalize
 											</a>
@@ -150,7 +150,7 @@
 												<div class="dropdown-item-icon"></div>
 												Audit Trial
 											</a>
-											<a class="dropdown-item" (click)="cancelBookingId=booking.booking_id"
+											<!-- <a class="dropdown-item" (click)="cancelBookingId=booking.booking_id"
 												*ngIf="booking?.booking_status !='refund' && booking?.booking_status !='paid' && booking?.booking_status !='partial_paid'  && booking?.booking_status !='cancelled'"
 												data-toggle="modal" data-target="#acceptBooking">
 												<div class="dropdown-item-icon"></div>
@@ -161,7 +161,7 @@
 												data-toggle="modal" data-target="#cancelBooking">
 												<div class="dropdown-item-icon"></div>
 												Reject
-											</a>
+											</a> -->
 
 										</div>
 									</td>
