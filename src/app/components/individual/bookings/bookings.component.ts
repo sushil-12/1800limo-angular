@@ -78,6 +78,7 @@ export class BookingsComponent implements OnInit {
 	rateArray: any;
 	cancelMessage: any;
 	currencySymbol: any;
+	is_family_member: any = false;
 
 	constructor(
 		private affiliateService: AffiliateService,
@@ -93,6 +94,7 @@ export class BookingsComponent implements OnInit {
 	ngOnInit(): void {
 
 		this.currentUser = JSON.parse(localStorage.getItem('currentUser'))
+		this.is_family_member = localStorage.getItem("is_family_member") ? localStorage.getItem("is_family_member") : false
 		let date = new Date();
 		// Set Search Filters According to cookies or the intial state
 		this.startDate = this.affiliateService.checkCookie('indv_startDate') ?

@@ -9,7 +9,7 @@
                     {{currentUser?.name.charAt(0).toUpperCase() + currentUser?.name.slice(1)}} Bookings
                 </h2>
             </div>
-            <div class="col-md-5 add-member-div">
+            <div class="col-md-5 add-member-div" *ngIf="!is_family_member">
                 <button class="custom-btn btn-add-other-memeber" (click)="addFamilyMember()"
                     style="margin: 0 !important;">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-plus-circle"
