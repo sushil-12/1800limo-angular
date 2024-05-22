@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ThemePalette } from '@angular/material/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -39,17 +40,23 @@ export class LooseAffiliateAccountsComponent implements OnInit {
   loginAsUserResponse: any;
   alertMessage: string = '';
   looseAffId: any;
+  sendEmailForm: FormGroup;
+  show: boolean;
+  allSelected = false;
+  emails = new FormControl('');
 
   constructor(
     private adminService: AdminService,
     private router: Router,
     private errorDialog: ErrorDialogService,
+    private $form: FormBuilder,
     private $routeurl: ActivatedRoute,
     private spinner: NgxSpinnerService) { }
 
   ngOnInit(): void {
     this.searchText = localStorage.getItem('looseAffiliateSearch') ? localStorage.getItem('looseAffiliateSearch') : ''
     this.loadSubLooseAffiliateAcc();//load LooseAffiliateAcc
+    this.buildSendEmailForm();
   }
 
   timer: any
@@ -115,6 +122,67 @@ export class LooseAffiliateAccountsComponent implements OnInit {
         this.spinner.hide();//hide spinner
       });
   }
+
+  get Form() {
+    return this.sendEmailForm.controls;
+  }
+
+
+  //build email modal
+  buildSendEmailForm() {
+    this.sendEmailForm = this.$form.group({
+      subject: [''],
+      text_message: ['']
+    })
+  }
+
+  //close email modal
+  closeModal() {
+    this.sendEmailForm.patchValue({
+      subject: "",
+      text_message: ''
+    })
+    this.show = false
+    $("#sendEmailModal").modal("hide");
+  }
+
+  selectAll() {
+    if (this.allSelected) {
+      this.emails.patchValue([]);
+    } else {
+      this.emails.patchValue(this.LooseAffiliateAcc.map(option => option.Email));
+    }
+    this.allSelected = !this.allSelected;
+  }
+
+  //submit email modal
+  sendEmail() {
+    this.spinner.show()
+    let body = {
+      subject: this.sendEmailForm.get('subject').value,
+      message: this.sendEmailForm.get('text_message').value,
+      recipents: this.emails.value
+    }
+    console.log("body-------->", body)
+    this.adminService.sendEmailAffiliate(body).subscribe((response: any) => {
+      this.errorDialog.openDialog({
+        errors: {
+          error: `<span class='text-success'>${response.message}</span>`
+        }
+      })
+      this.spinner.hide()
+      console.log("response-------->", response)
+    })
+
+    this.show = false
+    this.sendEmailForm.patchValue({
+      subject: "",
+      text_message: ''
+    })
+    this.emails.setValue('');
+    $("#sendEmailModal").modal("hide");
+  }
+
 
   counter() {
     var currentPage;

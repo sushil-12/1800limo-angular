@@ -675,9 +675,19 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 
 			let amount = (<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("amount").value;
 			this.total[subform] = Number(Number(amount).toFixed(2));
+
+			// fix this for elh_charges,stops,wait as they are not reflecting in subform object
 			if (!(this.total.hasOwnProperty('ELH_Charges'))) {
 				this.total['ELH_Charges'] = (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates'))?.get('ELH_Charges')))?.get("baserate").value
 			}
+			if (!(this.total.hasOwnProperty('Stops'))) {
+				this.total['Stops'] = (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates'))?.get('Stops')))?.get("baserate").value
+			}
+			if (!(this.total.hasOwnProperty('Wait'))) {
+				this.total['Wait'] = (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates'))?.get('Wait')))?.get("baserate").value
+			}
+
+
 			console.log("in this total---->", this.total, amount, subform)
 			if (formgroup == 'amenities' || formgroup == "all_inclusive_rates") {
 				let baseRateAmount = (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates')).get('Base_Rate'))).get("baserate").value;

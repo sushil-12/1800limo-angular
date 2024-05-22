@@ -218,7 +218,7 @@ export class DailyBookingsComponent implements OnInit {
 		// this.adminService.deleteCookie('search')
 		localStorage.removeItem("DBSearch");
 		localStorage.removeItem("useDateFilter");
-		this.useDateFilter = true;
+		this.useDateFilter = false;
 		// this.adminService.deleteCookie('filtertype')
 		this.searchText = "";
 		// this.filtertype = 'bookingid';
@@ -343,7 +343,7 @@ export class DailyBookingsComponent implements OnInit {
 	}
 
 	submit(message, format) {
-		console.log("format",format)
+		console.log("format", format)
 		if (this.passengerDetails.selection_button == "Passenger") {
 			this.sendInformation = format
 				? this.passengerDetails.passenger_cell_isd +
@@ -430,11 +430,11 @@ export class DailyBookingsComponent implements OnInit {
 		end_date: string,
 		search_value: string = ""
 	) {
-		if(pageUrl){
-			console.log("pageurl",pageUrl)
+		if (pageUrl) {
+			console.log("pageurl", pageUrl)
 			this.scroll('daily_bookings_table')
 		}
-	
+
 		search_value == "" && this.spinner.show();
 		this.noError = false;
 		// Load Our bookings using API
