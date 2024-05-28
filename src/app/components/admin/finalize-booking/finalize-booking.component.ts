@@ -285,12 +285,24 @@ export class FinalizeBookingComponent implements OnInit {
 		console.log('in function createReservationShareArray')
 		if (this.edit_rates_value) {
 			let base_rate = 0
-			for (const key of Object.keys(this.edit_rates_value.all_inclusive_rates)) {
-				base_rate += this.edit_rates_value.all_inclusive_rates[key].baserate;
+			if (this.service_type == 'charter_tour') {
+				base_rate += this.edit_rates_value.all_inclusive_rates["Base_Rate"].baserate * this.finalize_params.number_of_hours
 			}
+			else {
+				base_rate += this.edit_rates_value.all_inclusive_rates["Base_Rate"].baserate
+			}
+			['ELH_Charges', 'Stops', 'Wait'].map((key) => {
+				base_rate += this.edit_rates_value.all_inclusive_rates[key].baserate
+			});
 			for (const key of Object.keys(this.edit_rates_value.amenities)) {
 				base_rate += this.edit_rates_value.amenities[key].baserate;
 			}
+			// for (const key of Object.keys(this.edit_rates_value.all_inclusive_rates)) {
+			// 	base_rate += this.edit_rates_value.all_inclusive_rates[key].baserate;
+			// }
+			// for (const key of Object.keys(this.edit_rates_value.amenities)) {
+			// 	base_rate += this.edit_rates_value.amenities[key].baserate;
+			// }
 			let grandTotal = this.edit_rates_value.grand_total
 			let stripeFee = grandTotal * 0.05 + 0.30
 			let adminShare = (base_rate * this.adminSharePercent) / 100
