@@ -1692,16 +1692,16 @@ export class CreateBookingComponent implements OnInit {
 				console.log("setting value of dropoff flight mandatory")
 				// this.BookingForm.get('dropoff_flight').setValidators([Validators.required]);
 				// this.BookingForm.get('dropoff_flight').updateValueAndValidity();
-				// this.BookingForm.get('dropoff_airline_option').setValidators([Validators.required]);
-				// this.BookingForm.get('dropoff_airline_option').updateValueAndValidity();
+				this.BookingForm.get('dropoff_airline_option').setValidators([Validators.required]);
+				this.BookingForm.get('dropoff_airline_option').updateValueAndValidity();
 				this.BookingForm.get('dropoff_airport_option').setValidators([Validators.required]);
 				this.BookingForm.get('dropoff_airport_option').updateValueAndValidity();
 			} else {
 				console.log("setting value of dropoff flight not mandatory")
 				// this.BookingForm.get('dropoff_flight').clearValidators();
 				// this.BookingForm.get('dropoff_flight').updateValueAndValidity();
-				// this.BookingForm.get('dropoff_airline_option').clearValidators();
-				// this.BookingForm.get('dropoff_airline_option').updateValueAndValidity();
+				this.BookingForm.get('dropoff_airline_option').clearValidators();
+				this.BookingForm.get('dropoff_airline_option').updateValueAndValidity();
 				this.BookingForm.get('dropoff_airport_option').clearValidators();
 				this.BookingForm.get('dropoff_airport_option').updateValueAndValidity();
 			}
@@ -1762,16 +1762,16 @@ export class CreateBookingComponent implements OnInit {
 					console.log("setting value of return dropoff flight mandatory")
 					// this.BookingForm.get('return_dropoff_flight').setValidators([Validators.required]);
 					// this.BookingForm.get('return_dropoff_flight').updateValueAndValidity();
-					// this.BookingForm.get('return_dropoff_airline_option').setValidators([Validators.required]);
-					// this.BookingForm.get('return_dropoff_airline_option').updateValueAndValidity();
+					this.BookingForm.get('return_dropoff_airline_option').setValidators([Validators.required]);
+					this.BookingForm.get('return_dropoff_airline_option').updateValueAndValidity();
 					this.BookingForm.get('return_dropoff_airport_option').setValidators([Validators.required]);
 					this.BookingForm.get('return_dropoff_airport_option').updateValueAndValidity();
 				} else {
 					console.log("setting value of return dropoff flight not mandatory")
 					// this.BookingForm.get('return_dropoff_flight').clearValidators();
 					// this.BookingForm.get('return_dropoff_flight').updateValueAndValidity();
-					// this.BookingForm.get('return_dropoff_airline_option').clearValidators();
-					// this.BookingForm.get('return_dropoff_airline_option').updateValueAndValidity();
+					this.BookingForm.get('return_dropoff_airline_option').clearValidators();
+					this.BookingForm.get('return_dropoff_airline_option').updateValueAndValidity();
 					this.BookingForm.get('return_dropoff_airport_option').clearValidators();
 					this.BookingForm.get('return_dropoff_airport_option').updateValueAndValidity();
 				}
