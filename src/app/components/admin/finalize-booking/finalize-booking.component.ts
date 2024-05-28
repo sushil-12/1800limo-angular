@@ -207,7 +207,7 @@ export class FinalizeBookingComponent implements OnInit {
 				this.finalize_params['booking_id'] = this.BookingDetail.reservation_id
 				this.affiliate_type = response.data.affiliate_type
 				this.visibility = response.data.payment_status == 'paid' ? false : true
-				this.paidAmount = response.data?.paid_amount ? parseFloat(response.data?.paid_amount) : 0
+				this.paidAmount = response.data?.charged_amount ? parseFloat(response.data?.charged_amount) : 0
 				this.subModules = localStorage.getItem('sub_modules') || [];
 				this.currentUser = JSON.parse(localStorage.getItem('userData')) || "";
 				setTimeout(() => {
@@ -483,7 +483,7 @@ export class FinalizeBookingComponent implements OnInit {
 	RateFormValue(form: any) {
 		this.edit_rates_value = form
 		console.log("edit_rates_value", this.edit_rates_value)
-		this.payableAmount = this.edit_rates_value.grand_total - this.paidAmount
+		this.payableAmount = this.edit_rates_value.grand_total
 		if (this.BookingDetail?.booking_status == 'finalized') {
 			if (this.edit_rates_value.grand_total != this.BookingDetail?.grand_total) {
 				this.isFinalizeButton = false
