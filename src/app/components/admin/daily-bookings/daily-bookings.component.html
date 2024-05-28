@@ -66,8 +66,8 @@
 			<div class="row d-flex justify-content-between">
 				<div class="col-md-6">
 					<p><mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">
-							{{useDateFilter ? 'Uncheck this to see Current and future bookings' :
-							'Check this box to see bookings based on dates.' }}
+						{{useDateFilter ? 'Uncheck to see current and all future bookings' :
+						'Change the calendar date and search all past bookings. Check to see only current 7 days bookings' }}
 						</mat-checkbox></p>
 				</div>
 
