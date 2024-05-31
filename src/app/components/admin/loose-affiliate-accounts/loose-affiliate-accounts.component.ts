@@ -150,7 +150,7 @@ export class LooseAffiliateAccountsComponent implements OnInit {
     if (this.allSelected) {
       this.emails.patchValue([]);
     } else {
-      this.emails.patchValue(this.LooseAffiliateAcc.map(option => option.Email));
+      this.emails.patchValue(this.LooseAffiliateAcc.map(option => option.email));
     }
     this.allSelected = !this.allSelected;
   }
