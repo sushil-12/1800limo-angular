@@ -47,6 +47,7 @@
                                 <th>Name</th>
                                 <th>Email</th>
                                 <th>Mobile</th>
+                                <th>Address</th>
 
                             </tr>
                         </thead>
@@ -83,6 +84,9 @@
                                     data-messagetype="sms"><span
                                         [innerHTML]="highlighText(LooseAffiliate?.phone_isd+LooseAffiliate?.phone)"></span>
                                 </td>
+                                <td><span
+                                    [innerHTML]="highlighText(LooseAffiliate?.city)"></span>
+                            </td>
                             </tr>
 
                         </tbody>

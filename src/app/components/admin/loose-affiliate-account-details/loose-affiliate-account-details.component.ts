@@ -23,9 +23,12 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit {
   public profileForm: FormGroup;
   public submittedForm: boolean;
   public MobileObject: any;
+  public OfficeObject:any;
   currentUser: any;
   userId: any;
   getProfileResponseData: any;
+  languageList:any;
+  resp:any;
 
   //google map autocomplete
   title: string = 'AGM project';
@@ -59,6 +62,19 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit {
     })
 
     this.buildProfileForm()
+    
+    this.adminService.getAssicationsLanguages()
+      .pipe(
+        catchError(err => {
+          this.spinner.hide();//hide spinner
+          return throwError(err);
+        })
+      ).subscribe(data => {
+        this.spinner.hide();//hide spinner
+        this.resp = data
+        this.languageList = this.resp?.data?.languages;
+       
+      })
 
     if (this.userId) {
       this.getProfile()
@@ -125,14 +141,18 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit {
       phone: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
       phone_isd: ['+1', Validators.required],
       phone_country: ['us'],
-      email: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)]],
-      address: ['', Validators.required],
+      email: ['info@1800limo.com', [Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)]],
+      address: [''],
+      work: ['', [Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
+      work_isd: ['+1'],
+      work_country: ['us'],
       // city: [''],
       // state: [''],
       // country: ['', Validators.required],
       // zip: ['', [Validators.required, Validators.pattern("^[0-9]*$")]],
       latitude: [''],
       longitude: [''],
+      language:[1],
 
 
     });
@@ -158,6 +178,9 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit {
           phone: this.getProfileResponseData?.data?.phone,
           phone_isd: this.getProfileResponseData?.data?.phone_isd,
           phone_country: this.getProfileResponseData?.data?.phone_country,
+          work: this.getProfileResponseData?.data?.work_phone,
+          work_isd: this.getProfileResponseData?.data?.work_isd,
+          work_country: this.getProfileResponseData?.data?.work_country,
           email: this.getProfileResponseData?.data?.email,
           address: this.getProfileResponseData?.data?.city,
           city: this.getProfileResponseData?.data?.city,
@@ -168,21 +191,35 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit {
         })
         console.log('profile this.getProfileResponseData?.data-->>>>', this.getProfileResponseData?.data)
         this.MobileObject.setCountry(this.getProfileResponseData?.data?.phone_country)
+        this.OfficeObject.setCountry(this.getProfileResponseData?.data?.work_country)
       })
   }
 
   onCountryChange(event, type) {
     console.log("11111", event)
-    this.profileForm.patchValue({
-      phone_isd: '+' + event.dialCode,
-      phone_country: event.iso2
-    });
+    if(type == 'phone'){
+      this.profileForm.patchValue({
+        phone_isd: '+' + event.dialCode,
+        phone_country: event.iso2
+      });
+    }
+    else{
+      this.profileForm.patchValue({
+        work_isd: '+' + event.dialCode,
+        work_country: event.iso2
+      });
+    }
+  
 
   }
 
   telInputObjectMobile(obj) {
     console.log('telInputMobile', obj)
     this.MobileObject = obj;
+  }
+
+  telInputObjectOffice(obj) {
+    this.OfficeObject = obj;
   }
 
 
@@ -207,7 +244,7 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit {
       .subscribe(result => {
         this.response = result;
         this.spinner.hide();//hide spinner
-        this.router.navigate(['/admin/loose-affiliate-accounts']);
+        this.router.navigate(['/admin/add-loose-affiliate-account']);
         console.log("profile created", this.response)
       });
 
