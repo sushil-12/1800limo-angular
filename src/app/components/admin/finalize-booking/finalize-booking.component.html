@@ -163,6 +163,10 @@
 			{{isFinalizeButton ? 'Finalized' :'Finalize'}}
 		</button>
 	</div>
+	<div class="col-md-12">
+		<p class="alert alert-danger" *ngIf="paidAmount">Note- 50% amount already been deducted for this charter booking is <span
+			class="font-weight-bold">{{currencySymbol}}{{paidAmount.toFixed(2)}}</span></p>
+	</div>
 </div>
 
 

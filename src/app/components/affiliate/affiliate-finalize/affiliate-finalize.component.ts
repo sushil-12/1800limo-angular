@@ -66,6 +66,7 @@ export class AffiliateFinalizeComponent implements OnInit {
 	isFinalizeButton: boolean = false;
 	bookdataresp: any;
 	currencySymbol: any;
+	paidAmount:any;
 
 	constructor(
 		private $api: AdminService,
@@ -121,6 +122,7 @@ export class AffiliateFinalizeComponent implements OnInit {
 				this.BookingDetail = data?.booking_detail
 				this.isFinalizeButton = this.BookingDetail?.booking_status == 'finalized' ? true : false,
 					this.transferType = this.BookingDetail?.transfer_type
+				this.paidAmount = this.BookingDetail?.charged_amount
 				this.isTravelShare = data?.booking_detail?.account_type == 'travel_planner' ? true : false
 				this.isFarmoutBooking = data?.booking_detail?.reservation_type == 'farmout' ? true : false
 				this.finalize_params.number_of_vehicles = data?.booking_detail?.number_of_vehicles

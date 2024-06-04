@@ -3077,7 +3077,7 @@
 					</div>
 
 					<!-- ################ Pickup ################### -->
-					<h5 class="p-2 m-0 text-xl preview-pickup-color">
+					<h5 class="p-2 m-0 text-xl">
 						Pickup Details
 					</h5>
 					<!-- Pickup > Date -->
@@ -3123,7 +3123,7 @@
 						<div class="row m-0">
 							<div class="col-md-4">
 								<span>
-									Address
+									{{Form.extra_stops.value.length > 0 ? 'First Pickup' : 'Address'}}
 								</span>
 							</div>
 							<div class="col-md-8">
@@ -3134,7 +3134,7 @@
 										class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
 							</div>
 						</div>
-						<hr>
+						<hr *ngIf="Form.extra_stops.value.length > 0">
 					</div>
 
 					<!-- Pickup > Airline Details -->
@@ -3260,10 +3260,10 @@
 						</div>
 					</div>
 					<!-- Extra Stops -->
-					<hr *ngIf="Form.extra_stops.value.length > 0" />
+					<!-- <hr *ngIf="Form.extra_stops.value.length > 0" /> -->
 
 					<div *ngIf="Form.extra_stops.value.length > 0" class="preview-extra-stop-color">
-						<h5 class="p-2 m-0 text-xl">
+						<h5 class="p-2 m-0 text-xl" style="color: darkblue;">
 							Extra Stops
 						</h5>
 						<div class="mx-2" *ngFor="let stop of Form.extra_stops.value; index as stop_index">
@@ -3532,7 +3532,7 @@
 						<h4 class="font-weight-bolder">
 							Return Trip
 						</h4>
-						<h5 class="px-3 m-1 text-xl preview-pickup-color">
+						<h5 class="px-3 m-1 text-xl">
 							Pickup Details
 						</h5>
 

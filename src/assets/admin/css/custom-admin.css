@@ -2614,6 +2614,19 @@ table #navbarDropdownUserImage {
     box-shadow: 0px 5px 10px 1px rgba(0, 0, 0, 0.4);
 }
 
+.send-email-button {
+    color: #fff !important;
+    background-color: #366bc1;
+    border-color: #66b3ff;
+    font-size: 14px;
+    text-transform: uppercase;
+    text-decoration: none;
+    margin: 20px 0;
+    border-radius: 15px;
+    padding: 10px 20px !important;
+    box-shadow: 0px 5px 10px 1px rgba(0, 0, 0, 0.4);
+}
+
 .add-button svg {
     height: 20px;
     margin-right: 8px;
@@ -2629,6 +2642,16 @@ table #navbarDropdownUserImage {
     .add-button:focus {
         transform: scale(1.1, 1.1);
         background-color: #28b24b;
+    }
+
+    .send-email-button:hover {
+        background-color: #366bc1;
+        border-color: #366bc1;
+    }
+
+    .send-email-button:focus {
+        transform: scale(1.1, 1.1);
+        background-color: #366bc1;
     }
 }
 
@@ -2654,6 +2677,11 @@ table #navbarDropdownUserImage {
 
 @media (max-width: 767.98px) {
     .add-button {
+        padding: 10px !important;
+        line-height: 1.4;
+    }
+
+    .send-email-button {
         padding: 10px !important;
         line-height: 1.4;
     }

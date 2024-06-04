@@ -83,8 +83,10 @@
                 </div>
             </div>
             <div>
-                <p><mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">Check this
-                        box to see current week’s bookings or change the dates.</mat-checkbox>
+                <p><mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">
+                    {{useDateFilter ? 'Uncheck to see current and all future bookings' :
+                    'Change the calendar date and search all past bookings. Check to see only current 7 days bookings' }}
+                </mat-checkbox>
 
                 </p>
             </div>

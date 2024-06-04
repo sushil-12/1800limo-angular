@@ -889,7 +889,7 @@
 					</div>
 
 					<!-- ################ Pickup ################### -->
-					<h5 class="m-0 my-2 text-xl preview-pickup-color">
+					<h5 class="m-0 my-2 text-xl">
 						Pickup Details
 					</h5>
 					<!-- Pickup > Date -->
@@ -935,7 +935,7 @@
 						<div class="row m-0">
 							<div class="col-md-4">
 								<span>
-									Address
+									{{bookingPreview.extra_stops ? 'First Pickup' : 'Address'}}
 								</span>
 							</div>
 							<div class="col-md-8">
@@ -983,6 +983,7 @@
 					<!-- Pickup > Airline Details -->
 					<div class="mx-2 preview-pickup-color" *ngIf="bookingPreview.transfer_type.includes('airport_')">
 						<!-- Airport -->
+						<hr>
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
@@ -1076,7 +1077,7 @@
 					<hr>
 					<!-- Extra Stops -->
 					<div *ngIf="bookingPreview.extra_stops && bookingPreview.extra_stops.length > 0">
-						<h5 class="m-0 text-xl preview-extra-stop-color">
+						<h5 class="m-0 text-xl"  style="color: darkblue;">
 							Extra Stops
 						</h5>
 						<div class="mx-2 preview-extra-stop-color"
