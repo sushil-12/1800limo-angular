@@ -64,7 +64,7 @@ export class DailyBookingsComponent implements OnInit {
 	audit_Trail: any = [];
 	currentUser: any = JSON.parse(localStorage.getItem("userData")) || "";
 	subModules: any = localStorage.getItem("sub_modules") || "";
-	useDateFilter: boolean = true;
+	useDateFilter: boolean = false;
 	use_created_at: boolean = false;
 	rates_preview: any;
 	quotebotNewData: any;
@@ -107,11 +107,9 @@ export class DailyBookingsComponent implements OnInit {
 			"usedatefilter---->>>>>>>",
 			localStorage.getItem("useDateFilter")
 		);
-		this.useDateFilter = localStorage.getItem("useDateFilter")
-			? localStorage.getItem("useDateFilter") == "true"
-				? true
-				: false
-			: true;
+		this.useDateFilter = localStorage.getItem('useDateFilter') ?
+		(localStorage.getItem('useDateFilter') == 'true' ? true : false)
+		: false;
 		console.log("useDateFilter-->", this.useDateFilter);
 		this.orderBy = localStorage.getItem("orderByCreatedAt") ? localStorage.getItem("orderByCreatedAt") : "pickup_date_desc"
 		this.use_created_at = localStorage.getItem("orderByCreatedAt") ? true : false
