@@ -66,8 +66,8 @@
 			<div class="row d-flex justify-content-between">
 				<div class="col-md-6">
 					<p><mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">
-						{{useDateFilter ? 'Uncheck to see current and all future bookings' :
-						'Change the calendar date and search all past bookings. Check to see only current 7 days bookings' }}
+							{{useDateFilter ? 'Uncheck to see current and future bookings' :
+							'Check to see only current 7 day bookings' }}
 						</mat-checkbox></p>
 				</div>
 
@@ -287,6 +287,7 @@
 										<p style="font-weight: 600 !important;">{{ FormatDate(booking.pickup_date) }}
 										</p>
 										<p>{{ FormatTime(booking.pickup_time) }}</p>
+										<p>{{booking.pickup_day}}</p>
 									</td>
 									<td>
 										<p data-target="#sendEmailModal" style="white-space: pre" data-toggle="modal"
@@ -298,12 +299,13 @@
 											<span class="font-weight-bolder"
 												[innerHTML]="highlighText( booking.passenger_cell)"></span>
 										</p>
+										<span class="loc-logo"
+											(click)="showLocationPointOnMap(booking.booking_id, 'pickup')">
+											<i class="bi bi-geo-alt-fill pin-icon-preview"></i>&nbsp;&nbsp;</span>
 										<span class="text-underline cursor-pointer">
 											<span [innerHTML]="highlighText(booking.pickup_address)"></span>
 										</span>
-										<span class="loc-logo"
-											(click)="showLocationPointOnMap(booking.booking_id, 'pickup')">
-											&nbsp;&nbsp;&nbsp;<i class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
+
 									</td>
 									<td>
 										<p data-target="#sendEmailModal" data-toggle="modal"
@@ -349,12 +351,13 @@
 												</p>
 											</ng-template>
 										</ng-template>
+										<span class="loc-logo"
+											(click)="showLocationPointOnMap(booking.booking_id, 'dropoff')">
+											<i class="bi bi-geo-alt-fill pin-icon-preview"></i>&nbsp;&nbsp;</span>
 										<span class="text-underline cursor-pointer">
 											<span [innerHTML]="highlighText(booking.dropoff_address)"></span>
 										</span>
-										<span class="loc-logo"
-											(click)="showLocationPointOnMap(booking.booking_id, 'dropoff')">
-											&nbsp;&nbsp;&nbsp;<i class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
+
 									</td>
 									<td>
 										<span [innerHTML]="highlighText(booking.vehicle_cat_name)"></span>
@@ -926,12 +929,13 @@
 								</span>
 							</div>
 						</div>
-						<hr>
+
 					</div>
 
 					<!-- Pickup > City Details -->
 					<div class="mx-2 preview-pickup-color"
 						*ngIf="bookingPreview.transfer_type.includes('city_') || bookingPreview.transfer_type.includes('cruise_')">
+						<hr>
 						<div class="row m-0">
 							<div class="col-md-4">
 								<span>
@@ -946,39 +950,9 @@
 										class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
 							</div>
 						</div>
-						<hr>
+
 					</div>
-					<!-- Distance Details -->
-					<div class="mx-2 preview-pickup-color">
-						<div class="row m-0">
-							<div class="col-md-4">
-								<span>
-									Total Distance
-								</span>
-							</div>
-							<div class="col-md-8 ">
-								<span class="font-weight-bolder preview-output-feild">
-									{{ mToMi(bookingPreview?.distance) }} Miles / {{ mToKm(bookingPreview?.distance)
-									}} Km
-								</span>
-							</div>
-						</div>
-					</div>
-					<div class="mx-2 preview-pickup-color">
-						<div class="row m-0">
-							<div class="col-md-4">
-								<span>
-									Estimated time
-								</span>
-							</div>
-							<div class="col-md-8">
-								<span class="font-weight-bolder preview-output-feild">
-									{{convertToMinutes(bookingPreview.duration)}}
-								</span>
-							</div>
-						</div>
-					</div>
-					<!-- Distance Details -->
+
 
 					<!-- Pickup > Airline Details -->
 					<div class="mx-2 preview-pickup-color" *ngIf="bookingPreview.transfer_type.includes('airport_')">
@@ -1077,7 +1051,7 @@
 					<hr>
 					<!-- Extra Stops -->
 					<div *ngIf="bookingPreview.extra_stops && bookingPreview.extra_stops.length > 0">
-						<h5 class="m-0 text-xl"  style="color: darkblue;">
+						<h5 class="m-0 text-xl" style="color: darkblue;">
 							Extra Stops
 						</h5>
 						<div class="mx-2 preview-extra-stop-color"
@@ -1102,7 +1076,6 @@
 
 					<hr style="width: 50%; margin: 1rem auto; border: 1.3px solid #aeaeae;"
 						*ngIf="bookingPreview.extra_stops && bookingPreview.extra_stops.length == 0" />
-
 
 					<!-- ############# Dropoff ################# -->
 					<h5 class="px-2 m-0 my-3 text-xl preview-dropoff-color">
@@ -1225,7 +1198,39 @@
 					<!-- Dropoff > Cruise Details - Ends -->
 
 					<!-- 2ND p -->
+					<!-- Distance Details -->
+					<div class="mx-2">
+						<hr>
+						<div class="row m-0">
+							<div class="col-md-4">
+								<span>
+									Total Distance
+								</span>
+							</div>
+							<div class="col-md-8 ">
+								<span class="font-weight-bolder preview-output-feild">
+									{{ mToMi(bookingPreview?.distance) }} Miles / {{ mToKm(bookingPreview?.distance)
+									}} Km
+								</span>
+							</div>
+						</div>
+					</div>
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4">
+								<span>
+									Estimated time
+								</span>
+							</div>
+							<div class="col-md-8">
+								<span class="font-weight-bolder preview-output-feild">
+									{{convertToMinutes(bookingPreview.duration)}}
+								</span>
+							</div>
+						</div>
 
+					</div>
+					<!-- Distance Details -->
 					<hr>
 					<!-- Passenger Information -->
 					<h4 class="font-weight-bolder m-0 mt-3">

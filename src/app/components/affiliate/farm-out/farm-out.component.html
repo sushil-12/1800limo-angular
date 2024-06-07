@@ -66,8 +66,8 @@
 	</div>
 	<div class="ml-4">
 		<p><mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">
-			{{useDateFilter ? 'Uncheck to see current and all future bookings' :
-			'Change the calendar date and search all past bookings. Check to see only current 7 days bookings' }}
+			{{useDateFilter ? 'Uncheck to see current and future bookings' :
+			'Check to see only current 7 day bookings' }}
 			</mat-checkbox></p>
 	</div>
 	<!-- DIVISION: SEARCH PARAMETERS ENDS -->
@@ -207,12 +207,13 @@
 										<span class="font-weight-bolder"
 											[innerHTML]="highlighText( booking?.pax_tel)"></span>
 									</p>
+									<span class="loc-logo"
+										(click)="showLocationPointOnMap(booking.booking_id, 'pickup')">
+										<i class="bi bi-geo-alt-fill pin-icon-preview"></i>&nbsp;&nbsp;</span>
 									<span class="text-underline cursor-pointer">
 										<span [innerHTML]="highlighText(booking?.pickup_address)"></span>
 									</span>
-									<span class="loc-logo"
-										(click)="showLocationPointOnMap(booking.booking_id, 'pickup')">
-										&nbsp;&nbsp;&nbsp;<i class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
+									
 								</td>
 								<td>
 									<!-- class="disabled-btn" -->
@@ -225,13 +226,13 @@
 											[innerHTML]="highlighText(booking?.driver_cell_isd + booking?.driver_tel)"></span>
 
 									</p>
-
+									<span class="loc-logo"
+									(click)="showLocationPointOnMap(booking.booking_id, 'dropoff')">
+									<i class="bi bi-geo-alt-fill pin-icon-preview"></i>&nbsp;&nbsp;</span>
 									<span class="text-underline cursor-pointer">
 										<span [innerHTML]="highlighText(booking?.dropoff_address)"></span>
 									</span>
-									<span class="loc-logo"
-										(click)="showLocationPointOnMap(booking.booking_id, 'dropoff')">
-										&nbsp;&nbsp;&nbsp;<i class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
+									
 								</td>
 								<td>
 									<span [innerHTML]="highlighText(booking?.vehicle_cat_name)"></span>

@@ -88,22 +88,22 @@ export class AffiliateAccountsComponent implements OnInit {
 			reject_cause: ['', Validators.required],
 		});
 
-		this.getEmailList()
+		// this.getEmailList()
 
 
 	}
 
-	getEmailList() {
-		this.adminService.getEmailList(this.searchText)
-			.pipe(
-				catchError(err => {
-					return throwError(err);
-				})
-			)
-			.subscribe(({ data, success, message }: any) => {
-				this.affiliate_accounts_emails = data
-			});
-	}
+	// getEmailList() {
+	// 	this.adminService.getEmailList(this.searchText)
+	// 		.pipe(
+	// 			catchError(err => {
+	// 				return throwError(err);
+	// 			})
+	// 		)
+	// 		.subscribe(({ data, success, message }: any) => {
+	// 			this.affiliate_accounts_emails = data
+	// 		});
+	// }
 
 	affiliateTypeSwitch(_affiliateType: string) {
 		switch (_affiliateType) {
@@ -164,7 +164,7 @@ export class AffiliateAccountsComponent implements OnInit {
 		this.timer = setTimeout(() => {
 			localStorage.setItem('affiliateSearch', text)
 			this.loadAffiliateOperators()
-			this.getEmailList()
+			// this.getEmailList()
 		}, 700)
 	}
 	handleKeypressEvents() {
@@ -450,7 +450,7 @@ export class AffiliateAccountsComponent implements OnInit {
 		if (this.allSelected) {
 			this.emails.patchValue([]);
 		} else {
-			this.emails.patchValue(this.affiliate_accounts_emails.map(option => option.Email));
+			this.emails.patchValue(this.affiliate_accounts.map(option => option.Email));
 		}
 		this.allSelected = !this.allSelected;
 	}

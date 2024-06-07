@@ -84,8 +84,8 @@
             </div>
             <div>
                 <p><mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">
-                    {{useDateFilter ? 'Uncheck to see current and all future bookings' :
-                    'Change the calendar date and search all past bookings. Check to see only current 7 days bookings' }}
+                    {{useDateFilter ? 'Uncheck to see current and future bookings' :
+                    'Check to see only current 7 day bookings' }}
                 </mat-checkbox>
 
                 </p>
@@ -185,12 +185,13 @@
                                             <span class="font-weight-bolder"
                                                 [innerHTML]="highlighText( formatPhoneNumber(booking?.pax_isd + booking?.pax_tel))"></span>
                                         </p>
+                                        <span class="loc-logo"
+                                        (click)="showLocationPointOnMap(booking.booking_id, 'pickup')">
+                                       <i class="bi bi-geo-alt-fill pin-icon-preview"></i>&nbsp;&nbsp;</span>
                                         <span class="text-underline cursor-pointer">
                                             <span [innerHTML]="highlighText(booking?.pickup_address)"></span>
                                         </span>
-                                        <span class="loc-logo"
-                                            (click)="showLocationPointOnMap(booking.booking_id, 'pickup')">
-                                            &nbsp;&nbsp;&nbsp;<i class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
+                                       
                                     </td>
                                     <td>
                                         <p data-target="#sendEmailModal" data-toggle="modal"
@@ -210,13 +211,13 @@
                                                 *ngIf="!booking?.loose_affiliate_phone && !booking?.driver_cell_isd"
                                                 [innerHTML]="highlighText('+18005466266')"></span>
                                         </p>
-
+                                        <span class="loc-logo"
+                                        (click)="showLocationPointOnMap(booking.booking_id, 'dropoff')">
+                                        <i class="bi bi-geo-alt-fill pin-icon-preview"></i>&nbsp;&nbsp;</span>
                                         <span class="text-underline cursor-pointer">
                                             <span [innerHTML]="highlighText(booking?.dropoff_address)"></span>
                                         </span>
-                                        <span class="loc-logo"
-                                            (click)="showLocationPointOnMap(booking.booking_id, 'dropoff')">
-                                            &nbsp;&nbsp;&nbsp;<i class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
+                                       
                                     </td>
                                     <td>
                                         <span [innerHTML]="highlighText(booking?.vehicle_cat_name)"></span>
@@ -805,7 +806,7 @@
                         <div class="row m-0">
                             <div class="col-md-4">
                                 <span>
-                                    Address
+                                    {{bookingPreview.extra_stops ? 'First Pickup' : 'Address'}}
                                 </span>
                             </div>
                             <div class="col-md-8">
@@ -914,7 +915,7 @@
                     <hr *ngIf="bookingPreview.extra_stops && bookingPreview.extra_stops.length > 0">
                     <!-- Extra Stops -->
                     <div *ngIf="bookingPreview.extra_stops && bookingPreview.extra_stops.length > 0">
-                        <h5 class="m-0 text-xl preview-extra-stop-color">
+                        <h5 class="m-0 text-xl" style="color: darkblue;">
                             Extra Stops
                         </h5>
                         <div class="mx-2 preview-extra-stop-color"
