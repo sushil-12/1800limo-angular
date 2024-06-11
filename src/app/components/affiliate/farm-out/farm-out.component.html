@@ -67,7 +67,7 @@
 	<div class="ml-4">
 		<p><mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">
 			{{useDateFilter ? 'Uncheck to see current and future bookings' :
-			'Check to see only current 7 day bookings' }}
+			'Check to see only current 7 day bookings and search by any term.' }}
 			</mat-checkbox></p>
 	</div>
 	<!-- DIVISION: SEARCH PARAMETERS ENDS -->
@@ -199,6 +199,7 @@
 									<p style="font-weight: 600 !important;">{{ FormatDate(booking?.pickup_date) }}
 									</p>
 									<p>{{ FormatTime(booking?.pickup_time) }}</p>
+									<p>{{booking?.pickup_day}}</p>
 								</td>
 								<td>
 									<p data-target="#sendEmailModal" style="white-space: pre" data-toggle="modal"
