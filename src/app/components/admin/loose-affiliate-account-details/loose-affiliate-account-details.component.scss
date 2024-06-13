@@ -224,3 +224,13 @@ button.custom-filled-accept-button {
         box-shadow: 0px 5px 10px -1px rgb(0 0 0 / 30%);
     }
 }
+
+.red-placeholder ::placeholder {
+    color: red !important;
+    /* Red color for the placeholder */
+  }
+  
+  .red-placeholder {
+    color: red !important;
+    font-weight: 500 !important;
+  }

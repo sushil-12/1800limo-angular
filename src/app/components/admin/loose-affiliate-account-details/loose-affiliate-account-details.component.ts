@@ -23,12 +23,15 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit {
   public profileForm: FormGroup;
   public submittedForm: boolean;
   public MobileObject: any;
-  public OfficeObject:any;
+  public OfficeObject: any;
   currentUser: any;
   userId: any;
   getProfileResponseData: any;
-  languageList:any;
-  resp:any;
+  languageList: any;
+  resp: any;
+  badgeCityResp:any;
+  filteredOptions: any;
+  badgeOptions: any;
 
   //google map autocomplete
   title: string = 'AGM project';
@@ -62,7 +65,20 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit {
     })
 
     this.buildProfileForm()
-    
+
+    // this.adminService.getAllEnableBadgeCities()
+    // .pipe(
+    //   catchError(err => {
+    //     this.spinner.hide();//hide spinner
+    //     return throwError(err);
+    //   })
+    // ).subscribe(data => {
+    //   this.badgeCityResp = data
+    //   this.badgeOptions = this.badgeCityResp?.data
+		// 	this.filteredOptions = this.badgeCityResp?.data
+
+    // })
+
     this.adminService.getAssicationsLanguages()
       .pipe(
         catchError(err => {
@@ -73,8 +89,9 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit {
         this.spinner.hide();//hide spinner
         this.resp = data
         this.languageList = this.resp?.data?.languages;
-       
+
       })
+    
 
     if (this.userId) {
       this.getProfile()
@@ -135,9 +152,12 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit {
 
   }
 
+
+
   buildProfileForm() {
     this.profileForm = this.formBuilder.group({
       name: ['', Validators.required],
+      operator_name: [''],
       phone: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
       phone_isd: ['+1', Validators.required],
       phone_country: ['us'],
@@ -152,7 +172,9 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit {
       // zip: ['', [Validators.required, Validators.pattern("^[0-9]*$")]],
       latitude: [''],
       longitude: [''],
-      language:[1],
+      language: [1],
+      badge_city: [''],
+      badge_city_name: [''],
 
 
     });
@@ -173,8 +195,19 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit {
       ).subscribe(data => {
         this.spinner.hide();//hide spinner
         this.getProfileResponseData = data
+        // console.log("badge city",this.badgeOptions)
+        // this.badgeOptions.map((i: any) => {
+        //   if (i.id == this.getProfileResponseData.data?.badge_city) {
+        //     this.profileForm.patchValue({
+        //       badge_city: i.id,
+        //       badge_city_name: i.name
+        //     })
+        //   }
+        // })
+
         this.profileForm.patchValue({
           name: this.getProfileResponseData?.data?.name,
+          operator_name: this.getProfileResponseData?.data?.operator_name,
           phone: this.getProfileResponseData?.data?.phone,
           phone_isd: this.getProfileResponseData?.data?.phone_isd,
           phone_country: this.getProfileResponseData?.data?.phone_country,
@@ -186,6 +219,7 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit {
           city: this.getProfileResponseData?.data?.city,
           state: this.getProfileResponseData?.data?.state,
           country: this.getProfileResponseData?.data?.country,
+          language: this.getProfileResponseData?.data?.language,
           latitude: this.getProfileResponseData?.data?.latitude,
           longitude: this.getProfileResponseData?.data?.longitude,
         })
@@ -197,19 +231,19 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit {
 
   onCountryChange(event, type) {
     console.log("11111", event)
-    if(type == 'phone'){
+    if (type == 'phone') {
       this.profileForm.patchValue({
         phone_isd: '+' + event.dialCode,
         phone_country: event.iso2
       });
     }
-    else{
+    else {
       this.profileForm.patchValue({
         work_isd: '+' + event.dialCode,
         work_country: event.iso2
       });
     }
-  
+
 
   }
 
@@ -222,6 +256,21 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit {
     this.OfficeObject = obj;
   }
 
+  handleBadgeCity(value: any) {
+    console.log(value, this.filteredOptions)
+    this.filteredOptions = this.badgeOptions.filter((i: any) => i.name.toLowerCase().includes(value.toLowerCase()))
+  }
+
+  selectBadgeCity(option: any, isUserInput) {
+    console.log('in function selectBadgeCity-->>>', isUserInput)
+    if (isUserInput) {
+      this.profileForm.patchValue({
+        badge_city: option.id
+      })
+      // this.addAffiliateAccountForm.updateValueAndValidity()
+    }
+
+  }
 
   submitForm() {
     console.log(this.profileForm);
@@ -244,7 +293,9 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit {
       .subscribe(result => {
         this.response = result;
         this.spinner.hide();//hide spinner
-        this.router.navigate(['/admin/add-loose-affiliate-account']);
+        this.router.navigate(['/admin/add-loose-affiliate-account']).then(() => {
+          window.location.reload();
+        });
         console.log("profile created", this.response)
       });
 
