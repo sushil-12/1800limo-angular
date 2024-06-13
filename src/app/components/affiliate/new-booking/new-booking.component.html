@@ -709,6 +709,79 @@
 				</div>
 			</div>
 
+		<!-- Affiliate Driver Information -->
+		<div class="px-4 my-4" *ngIf="Form.affiliate_type.value == 'loose_affiliate' || Form.affiliate_id.value">
+			<h4 class="border-secondary margin-top-minus-20">
+				Driver Preferences
+			</h4>
+			<div class="row">
+				<!-- Affiliate Driver Name -->
+				<div id="driver" class="col-md-3" *ngIf="Form.affiliate_type.value != 'loose_affiliate'">
+					<mat-form-field appearance="outline" class="m-0">
+						<mat-label>
+							Choose Driver
+						</mat-label>
+						<mat-select formControlName="driver_id" placholder="Choose Driver"
+							(selectionChange)="autofillData('driver', $event.value)">
+							<mat-option *ngFor="let driver of DriverList" [value]="driver.id">
+								{{ driver.FirstName }} {{ driver.MiddleName != null ?
+								driver.MiddleName : ''
+								}} {{ driver.LastName }}
+							</mat-option>
+						</mat-select>
+					</mat-form-field>
+				</div>
+
+				<!-- Affiliate Driver Email -->
+				<div id="driver-email" class="col-md-3" *ngIf="Form.affiliate_type.value != 'loose_affiliate'">
+					<mat-form-field appearance="outline" class="m-0">
+						<mat-label>
+							Email
+						</mat-label>
+						<input matInput formControlName="driver_email" type="text" readonly
+							(focus)="$event.target.select()" placeholder="Email">
+					</mat-form-field>
+					<div class="error-box">
+						<div class="error-message"
+							*ngIf="Form.driver_email.invalid && (Form.driver_email.touched || Form.driver_email.dirty)">
+							<p class="text-danger text-lg m-0" *ngIf="Form.driver_email.errors?.email">
+								Please enter a valid Email Id
+							</p>
+						</div>
+					</div>
+				</div>
+
+				<!-- Affiliate Driver Cell -->
+				<div id="driver-cell" class="col-md-3" *ngIf="Form.affiliate_type.value != 'loose_affiliate'">
+					<mat-form-field appearance="outline" class="mat-custom-phone m-0">
+						<mat-label>
+							Phone
+						</mat-label>
+						<input matInput placeholder="Phone Number" type="text" readonly
+							formControlName="driver_cell" (focus)="$event.target.select()"
+							[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}" ng2TelInput
+							(intlTelInputObject)="DrvTelInputObject($event)"
+							(countryChange)="SetFormValue('driver_cell_isd', '+' + $event.dialCode); SetFormValue('driver_cell_country', $event.iso2)" />
+					</mat-form-field>
+				</div>
+
+				<!-- Affiliate Diver Gender -->
+				<div id="driver-gender" class="col-md-3" *ngIf="Form.affiliate_type.value != 'loose_affiliate'">
+					<mat-form-field appearance="outline" class="m-0">
+						<mat-label>
+							Gender
+						</mat-label>
+						<mat-select formControlName="driver_gender" [disabled]="true">
+							<mat-option value="male"> Male </mat-option>
+							<mat-option value="female"> Female </mat-option>
+							<mat-option value="lgbtq+">X (LGBTQ+)</mat-option>
+						</mat-select>
+					</mat-form-field>
+				</div>
+
+			</div>
+		</div>
+		<!-- Affiliate Driver Information Ends -->
 
 			<h4 class="pl-2 mt-3">
 				Pickup

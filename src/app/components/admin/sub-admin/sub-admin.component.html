@@ -60,18 +60,18 @@
 							<tbody>
 								<tr role="row" class="odd" *ngFor="let subAdmin of subAdmins">
 									<td>
-										<a class="user-profileded btn btn-icon btn-transparent-dark dropdown-toggle"
+										<a class="user-profileded btn btn-icon btn-transparent-dark "
 											id="navbarDropdownUserImage" href="javascript:void(0);" role="button"
-											data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+											data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" (click)="clickEditSubAdmin(subAdmin.id)">
 											<span>View</span>
 										</a>
-										<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
+										<!-- <div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
 											aria-labelledby="navbarDropdownUserImage">
 											<a class="dropdown-item" (click)="clickEditSubAdmin(subAdmin.id)">
 												<div class="dropdown-item-icon"></div>
 												Edit Sub Admin Account
 											</a>
-										</div>
+										</div> -->
 									</td>
 									<td>{{subAdmin.first_name +' '}}{{subAdmin?.middle_name ? subAdmin?.middle_name : '
 										'}} {{subAdmin.last_name}}</td>

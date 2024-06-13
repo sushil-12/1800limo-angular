@@ -112,6 +112,7 @@ export class NewBookingComponent implements OnInit {
 	currencySymbol: any;
 	currencyObj: any;
 	updateType: any;
+	bookingResponse:any;
 
 
 
@@ -466,6 +467,7 @@ export class NewBookingComponent implements OnInit {
 		console.warn('Prefilling via Booking Id', booking_id)
 		this.$spinner.show('normalspinner');
 		this.affiliateService.getBookingDataForEdit(booking_id).subscribe((response: any) => {
+			this.bookingResponse = response.data
 			this.SetFormValue('account_type', response?.data?.account_type)
 			response.data.booking_instructions = response?.data?.booking_instructions?.replaceAll('<br />', '')
 			let currency = response?.data?.currency
@@ -570,7 +572,7 @@ export class NewBookingComponent implements OnInit {
 					this.DrvTelObject.setCountry(this.BookingForm.get('driver_cell_country').value);
 				}, 2000)
 			}
-
+			this.fetchAffiliateDrivers(this.BookingForm.get('affiliate_id').value)
 			this.$spinner.hide('normalspinner')
 			this.scroll('booking_detail')
 		})
@@ -874,6 +876,8 @@ export class NewBookingComponent implements OnInit {
 			})
 		}
 	}
+
+
 	// custom search function
 	airportSearchFunction(term: string, item: any) {
 		term = term.toLowerCase();
@@ -970,20 +974,35 @@ export class NewBookingComponent implements OnInit {
 			console.error('Invalid Paramater affiliate_data', affiliate_id)
 			return
 		}
+		console.log('in function fectch driver info -------------------')
 
-		// this.$spinner.show()
-		// this.$api.driverList(affiliate_id).then((response: any) => {
-		// 	if (response.success && response.data?.data.length > 0) {
-		// 		this.DriverList = response.data.data
-
-		// 		// autofill data
-		// 		if (this.DriverList.length == 1) {
-		// 			this.SetFormValue('driver_id', this.DriverList[0].id)
-		// 			this.autofillData('driver', this.DriverList[0])
-		// 		}
-		// 	}
-		// 	this.$spinner.hide();
-		// })
+		this.$spinner.show()
+		this.affiliateService.driverList(affiliate_id).then((response: any) => {
+			if (response.success && response.data?.data.length > 0) {
+				this.DriverList = response.data.data
+				let isValueSet = false
+				for (let i = 0; i < this.DriverList.length; i++) {
+					if(this.bookingResponse?.driver_id && this.DriverList[i]?.id == this.bookingResponse?.driver_id)
+						{
+							this.SetFormValue('driver_id', this.DriverList[i].id)
+							console.log('autofill driver info--->>', this.DriverList[i])
+							this.autofillData('driver', this.DriverList[i])
+							isValueSet = true
+							break;
+						}
+						}
+				if (!isValueSet) {
+					this.SetFormValue('driver_id', this.DriverList[0].id)
+					this.autofillData('driver', this.DriverList[0])
+				}
+				// autofill data
+				// if (this.DriverList.length == 1) {
+				// 	this.SetFormValue('driver_id', this.DriverList[0].id)
+				// 	this.autofillData('driver', this.DriverList[0])
+				// }
+			}
+			this.$spinner.hide();
+		})
 	}
 
 	buildBookingData() {
@@ -1178,6 +1197,14 @@ export class NewBookingComponent implements OnInit {
 		}
 
 		if (filling_for == 'driver') {
+			let info = data
+			if (!isNaN(data)) {
+				for (let i = 0; i < this.DriverList.length; i++) {
+					if (this.DriverList[i].id == data) {
+						info = { ...this.DriverList[i] }
+					}
+				}
+			}
 			this.SetFormValue('driver_name', `${data.FirstName} ${data.MiddleName ?? ''} ${data.LastName}`)
 			this.SetFormValue('driver_gender', data.Gender)
 			this.SetFormValue('driver_cell', data.CellNumber)
@@ -2255,6 +2282,11 @@ export class NewBookingComponent implements OnInit {
 		this.SetFormValue('return_cruise_time', this.FormatTime(QB?.return_pickup_time))
 		// this.MapController()
 		// this.MapController(true)
+		setTimeout(() => {
+			console.log('settimeout finction---------------------------------------------------------------')
+			// this.fetchQBAffiliateVehicles(selected_vehicle?.affiliate_id)
+			this.fetchAffiliateDrivers(this.BookingForm.get('affiliate_id').value)
+		}, 5000)
 	}
 
 }
