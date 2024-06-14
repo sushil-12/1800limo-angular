@@ -160,8 +160,13 @@ export class BookingsComponent implements OnInit {
 		this.individualService.loadBookings(pageUrl, this.searchText, this.startDate, this.endDate, this.useDateFilter).then(result => {
 			this.cancelMessage = ''
 			this.spinner.hide()
+			let date = new Date();
+			let timestamp = date.getTime();
+			date.setDate(date.getDate() + 7);
+			timestamp = date.getTime();
 			this.bookingsRes = result;
 			this.bookings = this.bookingsRes?.data?.data;
+			this.endDate = this.bookings?.length > 0 ? this.bookings[this.bookings?.length - 1]?.pickup_date : moment(timestamp).format("YYYY-MM-DD")
 			this.totalRecords = this.bookingsRes?.data?.total;
 			this.noError = false
 			this.firstPage = 1;
@@ -245,8 +250,7 @@ export class BookingsComponent implements OnInit {
 		try {
 			return text.replace(/[\\\_$]+/g, ' ')
 		}
-		catch
-		{
+		catch {
 			return text
 		}
 	}

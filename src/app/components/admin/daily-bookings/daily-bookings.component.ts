@@ -108,8 +108,8 @@ export class DailyBookingsComponent implements OnInit {
 			localStorage.getItem("useDateFilter")
 		);
 		this.useDateFilter = localStorage.getItem('useDateFilter') ?
-		(localStorage.getItem('useDateFilter') == 'true' ? true : false)
-		: false;
+			(localStorage.getItem('useDateFilter') == 'true' ? true : false)
+			: false;
 		console.log("useDateFilter-->", this.useDateFilter);
 		this.orderBy = localStorage.getItem("orderByCreatedAt") ? localStorage.getItem("orderByCreatedAt") : "pickup_date_desc"
 		this.use_created_at = localStorage.getItem("orderByCreatedAt") ? true : false
@@ -449,8 +449,14 @@ export class DailyBookingsComponent implements OnInit {
 				if (result?.data?.data == 0) {
 					this.noError = true;
 				}
+				let date = new Date();
+				let timestamp = date.getTime();
+				date.setDate(date.getDate() + 7);
+				timestamp = date.getTime();
 				this.bookingsRes = result;
 				this.bookings = this.bookingsRes.data.data;
+				console.log("last element", this.bookings[this.bookings?.length - 1].pickup_date)
+				this.endDate = this.bookings?.length > 0 ? this.bookings[this.bookings?.length - 1]?.pickup_date : moment(timestamp).format("YYYY-MM-DD")
 				this.totalRecords = this.bookingsRes.data.total;
 				this.firstPage = 1;
 				this.lastPage = this.bookingsRes.data.last_page;
