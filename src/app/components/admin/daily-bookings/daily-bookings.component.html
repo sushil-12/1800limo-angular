@@ -125,6 +125,7 @@
 									<th>Date</th>
 									<th>Pax</th>
 									<th>Driver</th>
+									<th>Booking Type</th>
 									<th>Vehicle</th>
 									<!-- <th>Status</th> -->
 								</tr>
@@ -358,6 +359,13 @@
 											<span [innerHTML]="highlighText(booking.dropoff_address)"></span>
 										</span>
 
+									</td>
+									<td>
+										<span>
+											{{ textFormatter(booking?.service_type) | titlecase }}
+											/
+											{{ textFormatter(booking?.transfer_type) | titlecase }}
+										</span>
 									</td>
 									<td>
 										<span [innerHTML]="highlighText(booking.vehicle_cat_name)"></span>
