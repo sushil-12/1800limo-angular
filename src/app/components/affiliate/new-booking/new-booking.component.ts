@@ -1150,6 +1150,7 @@ export class NewBookingComponent implements OnInit {
 	}
 
 	autofillData(filling_for: string, data: any) {
+		console.log("data in autofill",data)
 		if (filling_for === 'passenger') {
 			data.middle_name ?
 				this.SetFormValue('passenger_name', `${data?.first_name} ${data?.middle_name} ${data?.last_name}`) : this.SetFormValue('passenger_name', `${data?.first_name} ${data?.last_name}`)
@@ -1197,6 +1198,7 @@ export class NewBookingComponent implements OnInit {
 		}
 
 		if (filling_for == 'driver') {
+			console.log('autofill data driver info-->>>', data, this.DriverList)
 			let info = data
 			if (!isNaN(data)) {
 				for (let i = 0; i < this.DriverList.length; i++) {
@@ -1205,13 +1207,13 @@ export class NewBookingComponent implements OnInit {
 					}
 				}
 			}
-			this.SetFormValue('driver_name', `${data.FirstName} ${data.MiddleName ?? ''} ${data.LastName}`)
-			this.SetFormValue('driver_gender', data.Gender)
-			this.SetFormValue('driver_cell', data.CellNumber)
-			this.SetFormValue('driver_cell_isd', data.CellIsd)
-			this.SetFormValue('driver_cell_country', data.CellNumberCountry)
-			this.SetFormValue('driver_email', data.Email)
-			this.SetFormValue('driver_phone_type', data.PhoneType ?? '');
+			this.SetFormValue('driver_name', `${info?.FirstName} ${info?.MiddleName ?? ''} ${info?.LastName}`)
+			this.SetFormValue('driver_gender', info?.Gender)
+			this.SetFormValue('driver_cell', info?.CellNumber)
+			this.SetFormValue('driver_cell_isd', info?.CellIsd)
+			this.SetFormValue('driver_cell_country', info?.CellNumberCountry)
+			this.SetFormValue('driver_email', info?.Email)
+			this.SetFormValue('driver_phone_type', info?.PhoneType ?? '');
 			this.DrvTelObject.setCountry(this.BookingForm.get('driver_cell_country').value);
 		}
 	}
