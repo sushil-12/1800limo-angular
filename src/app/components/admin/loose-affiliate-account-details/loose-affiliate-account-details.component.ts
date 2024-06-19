@@ -29,7 +29,6 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit {
   getProfileResponseData: any;
   languageList: any;
   resp: any;
-  badgeCityResp:any;
   filteredOptions: any;
   badgeOptions: any;
 
@@ -66,19 +65,6 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit {
 
     this.buildProfileForm()
 
-    // this.adminService.getAllEnableBadgeCities()
-    // .pipe(
-    //   catchError(err => {
-    //     this.spinner.hide();//hide spinner
-    //     return throwError(err);
-    //   })
-    // ).subscribe(data => {
-    //   this.badgeCityResp = data
-    //   this.badgeOptions = this.badgeCityResp?.data
-		// 	this.filteredOptions = this.badgeCityResp?.data
-
-    // })
-
     this.adminService.getAssicationsLanguages()
       .pipe(
         catchError(err => {
@@ -91,10 +77,23 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit {
         this.languageList = this.resp?.data?.languages;
 
       })
-    
+
 
     if (this.userId) {
       this.getProfile()
+    }
+    else {
+      this.adminService.getAllEnableBadgeCities()
+        .pipe(
+          catchError(err => {
+            this.spinner.hide();//hide spinner
+            return throwError(err);
+          })
+        ).subscribe((res: any) => {
+          this.badgeOptions = res?.data
+          this.filteredOptions = res?.data
+
+        })
     }
 
     this.mapsAPILoader.load().then(() => {
@@ -195,15 +194,26 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit {
       ).subscribe(data => {
         this.spinner.hide();//hide spinner
         this.getProfileResponseData = data
-        // console.log("badge city",this.badgeOptions)
-        // this.badgeOptions.map((i: any) => {
-        //   if (i.id == this.getProfileResponseData.data?.badge_city) {
-        //     this.profileForm.patchValue({
-        //       badge_city: i.id,
-        //       badge_city_name: i.name
-        //     })
-        //   }
-        // })
+        console.log("badge city", this.badgeOptions)
+        this.adminService.getAllEnableBadgeCities()
+          .pipe(
+            catchError(err => {
+              this.spinner.hide();//hide spinner
+              return throwError(err);
+            })
+          ).subscribe((res: any) => {
+            this.badgeOptions = res?.data
+            this.filteredOptions = res?.data
+            res?.data?.map((i: any) => {
+              if (i.id == this.getProfileResponseData.data?.badge_city) {
+                this.profileForm.patchValue({
+                  badge_city: i.id,
+                  badge_city_name: i.name
+                })
+              }
+            })
+          })
+
 
         this.profileForm.patchValue({
           name: this.getProfileResponseData?.data?.name,
