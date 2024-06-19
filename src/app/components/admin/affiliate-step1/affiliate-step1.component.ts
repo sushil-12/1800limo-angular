@@ -156,7 +156,7 @@ export class AffiliateStep1Component implements OnInit {
 							})
 						).subscribe(result2 => {
 							this.response2 = result2;
-							this.badgeOptions.map((i: any) => {
+							this.badgeOptions?.map((i: any) => {
 								if (i.id == this.response2.data.badge_city) {
 									this.addAffiliateAccountForm.patchValue({
 										badge_city: i.id,
