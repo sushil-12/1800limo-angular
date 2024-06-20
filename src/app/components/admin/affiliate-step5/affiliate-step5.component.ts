@@ -130,8 +130,7 @@ export class AffiliateStep5Component implements OnInit {
 	}
 
 
-	drop(event: CdkDragDrop<string[]>)
-	{
+	drop(event: CdkDragDrop<string[]>) {
 		// moveItemInArray(this.vehicles, event.previousIndex, event.currentIndex);'
 		console.log(event, "check event")
 		console.log("previous index", event.previousIndex)
@@ -139,10 +138,8 @@ export class AffiliateStep5Component implements OnInit {
 		this.spinner.show();
 		let id = this.vehicles[event.previousIndex].ID
 		console.log(id, "////////////")
-		this.adminService.changeSortOrder({ vehicle_id: id, currentIndex: event.currentIndex, previousIndex: event.previousIndex }).subscribe((response: any) =>
-		{
-			this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() =>
-			{
+		this.adminService.changeSortOrder({ vehicle_id: id, currentIndex: event.currentIndex, previousIndex: event.previousIndex, type: "affiliate-vehicle" }).subscribe((response: any) => {
+			this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
 				this.router.navigate(['/admin/affiliate/step5']);
 			});
 			this.spinner.hide();
@@ -154,8 +151,8 @@ export class AffiliateStep5Component implements OnInit {
 		this.router.navigate(['/admin/affiliate/step5/edit-vehicle'], { queryParams: { vehicleId: vehicleId, vehicleTypeId: this.vehicleTypeId } });
 	}
 
-	clickedDuplicateVehicle(vehicleId){
-		this.router.navigate(['/admin/affiliate/step5/duplicate-vehicle'], { queryParams: { vehicleId: vehicleId, vehicleTypeId: this.vehicleTypeId , new : true , duplicateVehcile : true} });
+	clickedDuplicateVehicle(vehicleId) {
+		this.router.navigate(['/admin/affiliate/step5/duplicate-vehicle'], { queryParams: { vehicleId: vehicleId, vehicleTypeId: this.vehicleTypeId, new: true, duplicateVehcile: true } });
 	}
 
 	clickEditVehicleRates(vehicleId) {

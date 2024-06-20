@@ -14,8 +14,7 @@ declare var $: any;
 	templateUrl: './master-vehicle-types.component.html',
 	styleUrls: ['./master-vehicle-types.component.scss']
 })
-export class MasterVehicleTypesComponent implements OnInit
-{
+export class MasterVehicleTypesComponent implements OnInit {
 
 	vehicles: any;
 	vehiclesRes: any;
@@ -41,23 +40,20 @@ export class MasterVehicleTypesComponent implements OnInit
 		private spinner: NgxSpinnerService,
 		private formBuilder: FormBuilder) { }
 
-	ngOnInit(): void
-	{
+	ngOnInit(): void {
 
 		// this.drop;
 		/** spinner starts on init */
 		this.spinner.show();
 
 		// Load Our vehicles using API
-		this.adminService.getOurVehicles().then(result =>
-		{
+		this.adminService.getOurVehicles().then(result => {
 			this.vehiclesRes = result;
 			this.vehicles = this.vehiclesRes.data;
 			sessionStorage.setItem('vehiclesTypes', JSON.stringify(this.vehicles));
 			this.spinner.hide();//hide spinner
 		})
-			.catch(err =>
-			{
+			.catch(err => {
 				this.spinner.hide();//hide spinner
 			});
 
@@ -81,8 +77,7 @@ export class MasterVehicleTypesComponent implements OnInit
 		});
 	}
 
-	drop(event: CdkDragDrop<string[]>)
-	{
+	drop(event: CdkDragDrop<string[]>) {
 		// moveItemInArray(this.vehicles, event.previousIndex, event.currentIndex);'
 		console.log(event, "check event")
 		console.log("previous index", event.previousIndex)
@@ -90,24 +85,19 @@ export class MasterVehicleTypesComponent implements OnInit
 		this.spinner.show();
 		let id = this.vehicles[event.previousIndex].ID
 		console.log(id, "////////////")
-		this.adminService.changeSortOrder({ vehicle_id: id, currentIndex: event.currentIndex, previousIndex: event.previousIndex }).subscribe((response: any) =>
-		{
-			this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() =>
-			{
+		this.adminService.changeSortOrder({ vehicle_id: id, currentIndex: event.currentIndex, previousIndex: event.previousIndex, type: "master-vehicle" }).subscribe((response: any) => {
+			this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
 				this.router.navigate(['/admin/master-vehicle-types']);
 			});
 			this.spinner.hide();
 			// console.log(response.data)
 		})
 	}
-	serach(val)
-	{
+	serach(val) {
 		console.log(val);
 		let allVehicleTypes = JSON.parse(sessionStorage.getItem('vehiclesTypes'));
-		let searchVehicles = allVehicleTypes.filter(function (vehicleType)
-		{
-			if (vehicleType.vehicle_name.toLowerCase().search(val) != -1)
-			{
+		let searchVehicles = allVehicleTypes.filter(function (vehicleType) {
+			if (vehicleType.vehicle_name.toLowerCase().search(val) != -1) {
 				return true;
 			}
 		});
@@ -115,22 +105,18 @@ export class MasterVehicleTypesComponent implements OnInit
 		this.vehicles = searchVehicles;
 	}
 
-	get f()
-	{
+	get f() {
 		return this.addVehicleTypeForm.controls;
 	}
 
-	onFileChange(event)
-	{
+	onFileChange(event) {
 		const reader = new FileReader();
 
-		if (event.target.files && event.target.files.length)
-		{
+		if (event.target.files && event.target.files.length) {
 			const [file] = event.target.files;
 			reader.readAsDataURL(file);
 
-			reader.onload = () =>
-			{
+			reader.onload = () => {
 
 				this.imageSrc = reader.result as string;
 
@@ -141,8 +127,7 @@ export class MasterVehicleTypesComponent implements OnInit
 			};
 		}
 	}
-	openAddModal()
-	{
+	openAddModal() {
 		this.imageSrc = '';
 		this.addVehicleTypeForm.reset();
 		this.addVehicleTypeForm.patchValue({ seats: 1, luggage: 0 });
@@ -150,12 +135,10 @@ export class MasterVehicleTypesComponent implements OnInit
 
 		$('#addVehicleTypeModal').modal('show');
 	}
-	submitForm()
-	{
+	submitForm() {
 		this.submitted = true;
 		// stop here if form is invalid
-		if (this.addVehicleTypeForm.invalid)
-		{
+		if (this.addVehicleTypeForm.invalid) {
 			return;
 		}
 
@@ -165,19 +148,16 @@ export class MasterVehicleTypesComponent implements OnInit
 
 		this.adminService.addVehicleType(this.addVehicleTypeForm.value)
 			.pipe(
-				catchError(err =>
-				{
+				catchError(err => {
 					$('#addVehicleTypeModal').modal('hide');
 					return throwError(err);
 				})
 			)
-			.subscribe(result =>
-			{
+			.subscribe(result => {
 				this.response = result;
 				// this.router.navigateByUrl('/admin/master-vehicle-types');
 				$('#addVehicleTypeModal').modal('hide');
-				this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() =>
-				{
+				this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
 					this.router.navigate(['/admin/master-vehicle-types']);
 				});
 			});
@@ -185,20 +165,17 @@ export class MasterVehicleTypesComponent implements OnInit
 		// this.showProgressBar=false; //hide progressbar
 	}
 
-	editVehicleType(id)
-	{
+	editVehicleType(id) {
 		this.spinner.show();
 
 		this.adminService.getVehicleType(id)
 			.pipe(
-				catchError(err =>
-				{
+				catchError(err => {
 					this.spinner.hide();//hide spinner
 					return throwError(err);
 				})
 			)
-			.subscribe(result =>
-			{
+			.subscribe(result => {
 				this.response = result;
 				this.vehicleId = this.response.data.ID
 
@@ -214,17 +191,14 @@ export class MasterVehicleTypesComponent implements OnInit
 			});
 	}
 
-	onFileUpdate(event)
-	{
+	onFileUpdate(event) {
 		const reader = new FileReader();
 
-		if (event.target.files && event.target.files.length)
-		{
+		if (event.target.files && event.target.files.length) {
 			const [file] = event.target.files;
 			reader.readAsDataURL(file);
 
-			reader.onload = () =>
-			{
+			reader.onload = () => {
 
 				this.imageSrc = reader.result as string;
 
@@ -237,72 +211,54 @@ export class MasterVehicleTypesComponent implements OnInit
 	}
 
 	//increment/decrement in ONE WAY form
-	if()
-	{
+	if() {
 
 	}
-	change(changeType: 'i' | 'd', fieldName: 'l' | 'p')
-	{
+	change(changeType: 'i' | 'd', fieldName: 'l' | 'p') {
 		let max_length = 75
-		if (fieldName == 'p')
-		{
+		if (fieldName == 'p') {
 			// for passenger
-			if (changeType == 'i' && this.addVehicleTypeForm.value.seats < max_length)
-			{
+			if (changeType == 'i' && this.addVehicleTypeForm.value.seats < max_length) {
 				this.f.seats.setValue(this.addVehicleTypeForm.value.seats + 1)
-			} else if (changeType == 'd' && this.addVehicleTypeForm.value.seats > 1)
-			{
+			} else if (changeType == 'd' && this.addVehicleTypeForm.value.seats > 1) {
 				this.f.seats.setValue(this.addVehicleTypeForm.value.seats - 1)
 			}
-		} else
-		{
+		} else {
 			// for luggage
-			if (changeType == 'i' && this.addVehicleTypeForm.value.luggage < max_length)
-			{
+			if (changeType == 'i' && this.addVehicleTypeForm.value.luggage < max_length) {
 				this.f.luggage.setValue(this.addVehicleTypeForm.value.luggage + 1)
-			} else if (changeType == 'd' && this.addVehicleTypeForm.value.luggage >= 1)
-			{
+			} else if (changeType == 'd' && this.addVehicleTypeForm.value.luggage >= 1) {
 				this.f.luggage.setValue(this.addVehicleTypeForm.value.luggage - 1)
 			}
 		}
 	}
 
-	editChange(changeType: 'i' | 'd', fieldName: 'l' | 'p')
-	{
+	editChange(changeType: 'i' | 'd', fieldName: 'l' | 'p') {
 		let max_length = 75
-		if (fieldName == 'p')
-		{
+		if (fieldName == 'p') {
 			// for passenger
-			if (changeType == 'i' && this.editVehicleTypeForm.value.seats < max_length)
-			{
+			if (changeType == 'i' && this.editVehicleTypeForm.value.seats < max_length) {
 				this.fEdit.seats.setValue(this.editVehicleTypeForm.value.seats + 1)
-			} else if (changeType == 'd' && this.editVehicleTypeForm.value.seats > 1)
-			{
+			} else if (changeType == 'd' && this.editVehicleTypeForm.value.seats > 1) {
 				this.fEdit.seats.setValue(this.editVehicleTypeForm.value.seats - 1)
 			}
-		} else
-		{
+		} else {
 			// for luggage
-			if (changeType == 'i' && this.editVehicleTypeForm.value.luggage < max_length)
-			{
+			if (changeType == 'i' && this.editVehicleTypeForm.value.luggage < max_length) {
 				this.fEdit.luggage.setValue(this.editVehicleTypeForm.value.luggage + 1)
-			} else if (changeType == 'd' && this.editVehicleTypeForm.value.luggage >= 1)
-			{
+			} else if (changeType == 'd' && this.editVehicleTypeForm.value.luggage >= 1) {
 				this.fEdit.luggage.setValue(this.editVehicleTypeForm.value.luggage - 1)
 			}
 		}
 	}
 
-	get fEdit()
-	{
+	get fEdit() {
 		return this.editVehicleTypeForm.controls;
 	}
-	updateVehicleForm()
-	{
+	updateVehicleForm() {
 		this.submitted = true;
 		// stop here if form is invalid
-		if (this.editVehicleTypeForm.invalid)
-		{
+		if (this.editVehicleTypeForm.invalid) {
 			return;
 		}
 
@@ -312,19 +268,16 @@ export class MasterVehicleTypesComponent implements OnInit
 
 		this.adminService.updateVehicleType(this.editVehicleTypeForm.value)
 			.pipe(
-				catchError(err =>
-				{
+				catchError(err => {
 					$('#editVehicleTypeModal').modal('hide');
 					return throwError(err);
 				})
 			)
-			.subscribe(result =>
-			{
+			.subscribe(result => {
 				this.response = result;
 				// this.router.navigateByUrl('/admin/master-vehicle-types');
 				$('#editVehicleTypeModal').modal('hide');
-				this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() =>
-				{
+				this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
 					this.router.navigate(['/admin/master-vehicle-types']);
 				});
 			});
@@ -348,8 +301,7 @@ export class MasterVehicleTypesComponent implements OnInit
 	 * @param type_iden : Number [Required] vehicle type identification number
 	 * @param vehicle_iden : Number [Required] vehicle identification number
 	 */
-	changeRouting(type_selected: any)
-	{
+	changeRouting(type_selected: any) {
 
 		// * End Step: hit the api with all current configurations
 		this.router.navigate([`/admin/master-vehicle-types/master-vehicle-fare`], {
@@ -359,8 +311,7 @@ export class MasterVehicleTypesComponent implements OnInit
 		})
 
 	}
-	resetForm()
-	{
+	resetForm() {
 		this.addVehicleTypeForm.reset();
 		this.addVehicleTypeForm.patchValue({ seats: 1, luggage: 0 });
 		this.editVehicleTypeForm.reset();
