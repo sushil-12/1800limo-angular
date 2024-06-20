@@ -36,7 +36,7 @@ export class Step5Component implements OnInit, AfterViewChecked {
 		private stateManagementService: StateManagementService,
 		private router: Router,
 		private spinner: NgxSpinnerService,
-		private adminService:AdminService,
+		private adminService: AdminService,
 		private activatedroute: ActivatedRoute) { }
 
 
@@ -53,7 +53,7 @@ export class Step5Component implements OnInit, AfterViewChecked {
 	}
 
 	ngOnInit(): void {
-		$('.HeadingH1').css({display: "block"})
+		$('.HeadingH1').css({ display: "block" })
 		this.spinner.show(); //show spinner
 
 		this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
@@ -103,8 +103,7 @@ export class Step5Component implements OnInit, AfterViewChecked {
 		$('#amenityListModal').modal('show');
 	}
 
-	drop(event: CdkDragDrop<string[]>)
-	{
+	drop(event: CdkDragDrop<string[]>) {
 		// moveItemInArray(this.vehicles, event.previousIndex, event.currentIndex);'
 		console.log(event, "check event")
 		console.log("previous index", event.previousIndex)
@@ -112,10 +111,8 @@ export class Step5Component implements OnInit, AfterViewChecked {
 		this.spinner.show();
 		let id = this.vehicles[event.previousIndex].ID
 		console.log(id, "////////////")
-		this.adminService.changeSortOrder({ vehicle_id: id, currentIndex: event.currentIndex, previousIndex: event.previousIndex }).subscribe((response: any) =>
-		{
-			this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() =>
-			{
+		this.adminService.changeSortOrder({ vehicle_id: id, currentIndex: event.currentIndex, previousIndex: event.previousIndex, type: "affiliate-vehicle" }).subscribe((response: any) => {
+			this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
 				this.router.navigate(['/affiliate/step5']);
 			});
 			this.spinner.hide();
