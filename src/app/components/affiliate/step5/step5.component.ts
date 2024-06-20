@@ -5,6 +5,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { AdminService } from 'src/app/services/admin.service';
 declare var $: any;
 
 @Component({
@@ -34,6 +36,7 @@ export class Step5Component implements OnInit, AfterViewChecked {
 		private stateManagementService: StateManagementService,
 		private router: Router,
 		private spinner: NgxSpinnerService,
+		private adminService:AdminService,
 		private activatedroute: ActivatedRoute) { }
 
 
@@ -98,6 +101,26 @@ export class Step5Component implements OnInit, AfterViewChecked {
 	updateAmenityList(amenityList) {
 		this.amenityList = amenityList;
 		$('#amenityListModal').modal('show');
+	}
+
+	drop(event: CdkDragDrop<string[]>)
+	{
+		// moveItemInArray(this.vehicles, event.previousIndex, event.currentIndex);'
+		console.log(event, "check event")
+		console.log("previous index", event.previousIndex)
+		console.log("current index", event.currentIndex)
+		this.spinner.show();
+		let id = this.vehicles[event.previousIndex].ID
+		console.log(id, "////////////")
+		this.adminService.changeSortOrder({ vehicle_id: id, currentIndex: event.currentIndex, previousIndex: event.previousIndex }).subscribe((response: any) =>
+		{
+			this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() =>
+			{
+				this.router.navigate(['/affiliate/step5']);
+			});
+			this.spinner.hide();
+			// console.log(response.data)
+		})
 	}
 
 	addVehicleClick(vehicleTypeId) {
