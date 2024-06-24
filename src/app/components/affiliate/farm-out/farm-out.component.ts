@@ -62,7 +62,7 @@ export class FarmOutComponent implements OnInit {
 	start_date: string
 	end_date: string
 	bookingPreview: any;
-	useDateFilter: boolean = true;
+	useDateFilter: boolean = false;
 	adminSharePercent: number;
 	rates_preview: any;
 	shareArray: any;
@@ -107,7 +107,7 @@ export class FarmOutComponent implements OnInit {
 
 		this.useDateFilter = localStorage.getItem('farmOutuseDateFilter') ?
 			(localStorage.getItem('farmOutuseDateFilter') == 'true' ? true : false)
-			: true;
+			: false;
 		console.log('farmOutuseDateFilter-->', this.useDateFilter)
 
 		this.changeStatusForm = this.formBuilder.group({
@@ -169,7 +169,9 @@ export class FarmOutComponent implements OnInit {
 			timestamp = date.getTime();
 			this.bookingsRes = result;
 			this.bookings = this.bookingsRes?.data?.data;
-			this.endDate = this.bookings?.length > 0 ? this.bookings[this.bookings?.length - 1]?.pickup_date : moment(timestamp).format("YYYY-MM-DD")
+			if(!this.useDateFilter){
+				this.endDate = this.bookings?.length > 0 ? this.bookings[this.bookings?.length - 1]?.pickup_date : moment(timestamp).format("YYYY-MM-DD")
+			}
 			this.totalRecords = this.bookingsRes?.data?.total;
 			this.noError = false
 			this.firstPage = 1;
@@ -221,7 +223,7 @@ export class FarmOutComponent implements OnInit {
 		// this.affiliateService.deleteCookie('filtertype')
 		this.searchText = "";
 		localStorage.removeItem('farmInuseDateFilter')
-		this.useDateFilter = true
+		this.useDateFilter = false
 		// this.filtertype = 'bookingid';
 
 		console.log('Reset Successfully. ');
@@ -232,6 +234,10 @@ export class FarmOutComponent implements OnInit {
 		this.useDateFilter = value
 		// this.saveCookie('useDateFilter',value)
 		localStorage.setItem('farmOutuseDateFilter', value)
+		let date = new Date();
+		date.setDate(date.getDate() + 7);
+		let timestamp = date.getTime();
+		this.endDate = moment(timestamp).format("YYYY-MM-DD");
 		this.loadBookings();
 	}
 

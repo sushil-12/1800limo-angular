@@ -190,25 +190,25 @@ export class Step1Component implements OnInit, AfterViewInit {
 								AffiliateType: data.AffiliateType,
 								FirstYearBusiness: data.FirstYearBusiness,
 							});
-							this.adminService.getAllEnableBadgeCities().toPromise()
-								.then((res: any) => {
-									this.badgeOptions = res?.data;
-									this.filteredOptions = res?.data;
-									res?.data?.map((i: any) => {
-										if (i.id == data?.badge_city) {
-											this.addAffiliateAccountForm.patchValue({
-												badge_city: i.id,
-												badge_city_name: i.name
-											})
-										}
-										this.isBadgeCity = true
-									})
+							// this.adminService.getAllEnableBadgeCities().toPromise()
+							// 	.then((res: any) => {
+							// 		this.badgeOptions = res?.data;
+							// 		this.filteredOptions = res?.data;
+							// 		res?.data?.map((i: any) => {
+							// 			if (i.id == data?.badge_city) {
+							// 				this.addAffiliateAccountForm.patchValue({
+							// 					badge_city: i.id,
+							// 					badge_city_name: i.name
+							// 				})
+							// 			}
+							// 			this.isBadgeCity = true
+							// 		})
 
 
-								})
-								.catch((err) => {
-									throw err; // Re-throwing the error if needed
-								});
+							// 	})
+							// 	.catch((err) => {
+							// 		throw err; // Re-throwing the error if needed
+							// 	});
 							//Show edit/resend button on affiliate email field
 							this.updatedAffiliateEmail = data.Email;
 							this.affiliateEmailStatus = data.is_email_verified;
@@ -420,8 +420,8 @@ export class Step1Component implements OnInit, AfterViewInit {
 			MiddleName: [""],
 			LastName: ["", Validators.required],
 			Gender: ["male", Validators.required],
-			badge_city: [''],
-			badge_city_name: [''],
+			// badge_city: [''],
+			// badge_city_name: [''],
 			CellNumber: [
 				this.currentUser.phone,
 				[
@@ -1341,8 +1341,8 @@ export class Step1Component implements OnInit, AfterViewInit {
 			MiddleName: [""],
 			LastName: ["", Validators.required],
 			Gender: ["", Validators.required],
-			badge_city: [''],
-			badge_city_name: [''],
+			// badge_city: [''],
+			// badge_city_name: [''],
 			CellNumber: [
 				this.currentUser.phone,
 				[
