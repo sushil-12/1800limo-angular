@@ -166,7 +166,9 @@ export class BookingsComponent implements OnInit {
 			timestamp = date.getTime();
 			this.bookingsRes = result;
 			this.bookings = this.bookingsRes?.data?.data;
-			this.endDate = this.bookings?.length > 0 ? this.bookings[this.bookings?.length - 1]?.pickup_date : moment(timestamp).format("YYYY-MM-DD")
+			if(!this.useDateFilter){
+				this.endDate = this.bookings?.length > 0 ? this.bookings[this.bookings?.length - 1]?.pickup_date : moment(timestamp).format("YYYY-MM-DD")
+			}
 			this.totalRecords = this.bookingsRes?.data?.total;
 			this.noError = false
 			this.firstPage = 1;
@@ -243,6 +245,10 @@ export class BookingsComponent implements OnInit {
 		this.useDateFilter = value
 		// this.saveCookie('useDateFilter',value)
 		localStorage.setItem('indvUseDateFilter', value)
+		let date = new Date();
+		date.setDate(date.getDate() + 7);
+		let timestamp = date.getTime();
+		this.endDate = moment(timestamp).format("YYYY-MM-DD");
 		this.loadBookings();
 	}
 

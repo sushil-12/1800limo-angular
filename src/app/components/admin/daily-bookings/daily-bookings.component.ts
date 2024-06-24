@@ -180,6 +180,10 @@ export class DailyBookingsComponent implements OnInit {
 		console.log("event---->> ", value);
 		this.useDateFilter = value;
 		this.saveCookie("useDateFilter", value);
+		let date = new Date();
+		date.setDate(date.getDate() + 7);
+		let timestamp = date.getTime();
+		this.endDate = moment(timestamp).format("YYYY-MM-DD");
 		this.loadBookings(null, this.startDate, this.endDate, this.searchText);
 	}
 	handleCheckboxSort(value: any) {
@@ -454,9 +458,10 @@ export class DailyBookingsComponent implements OnInit {
 				date.setDate(date.getDate() + 7);
 				timestamp = date.getTime();
 				this.bookingsRes = result;
-				this.bookings = this.bookingsRes.data.data;
-				console.log("last element", this.bookings[this.bookings?.length - 1].pickup_date)
-				this.endDate = this.bookings?.length > 0 ? this.bookings[this.bookings?.length - 1]?.pickup_date : moment(timestamp).format("YYYY-MM-DD")
+				this.bookings = this.bookingsRes?.data?.data;
+				if(!this.useDateFilter){
+					this.endDate = this.bookings?.length > 0 ? this.bookings[this.bookings?.length - 1]?.pickup_date : moment(timestamp).format("YYYY-MM-DD")
+				}
 				this.totalRecords = this.bookingsRes.data.total;
 				this.firstPage = 1;
 				this.lastPage = this.bookingsRes.data.last_page;

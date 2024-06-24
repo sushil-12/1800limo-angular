@@ -128,6 +128,16 @@ export class Step2Component implements OnInit {
 		const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 		this.affiliateId = currentUser.account_id;
 		this.stepCompleted = this.affiliateService.getLocalStepCompleted();
+
+		this.adminService.getAllEnableBadgeCities().pipe(
+			catchError(err => {
+				return throwError(err)
+			})
+		).subscribe((res: any) => {
+			this.badgeOptions = res?.data
+			this.filteredOptions = res?.data
+		})
+
 		//add bank form validation
 		this.addBankForm = this.formBuilder.group({
 			id: [''],//bank id for edit purpose
@@ -357,14 +367,22 @@ export class Step2Component implements OnInit {
 							}
 
 							this.changeCountry(this.response.data?.bankinfo?.country);//for selected country
-							this.badgeOptions.map((i: any) => {
-								if (i.id == this.response?.data?.bankinfo?.badge_city) {
-									this.addBankForm.patchValue({
-										badge_city: i.id,
-										badge_city_name: i.name
-									})
-									this.isBadgeCity = true
-								}
+							this.adminService.getAllEnableBadgeCities().pipe(
+								catchError(err => {
+									return throwError(err)
+								})
+							).subscribe((res: any) => {
+								this.badgeOptions = res?.data
+								this.filteredOptions = res?.data
+								res?.data?.map((i: any) => {
+									if (i.id == this.response?.data?.bankinfo?.badge_city) {
+										this.addBankForm.patchValue({
+											badge_city: i.id,
+											badge_city_name: i.name
+										})
+										this.isBadgeCity = true
+									}
+								})
 							})
 							// if (this.postCountryName == this.getCountryName)
 							// {
@@ -399,14 +417,6 @@ export class Step2Component implements OnInit {
 			}
 		})
 
-		this.adminService.getAllEnableBadgeCities().pipe(
-			catchError(err => {
-				return throwError(err)
-			})
-		).subscribe((res: any) => {
-			this.badgeOptions = res?.data
-			this.filteredOptions = res?.data
-		})
 	}
 	// ngOnInit Ends 
 

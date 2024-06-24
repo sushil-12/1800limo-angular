@@ -309,13 +309,21 @@ export class AffiliateStep2Component implements OnInit {
 							this.haveEin(this.response.data.bankinfo.ein ? 'yesEin' : 'noEin');
 							this.changeCountry(this.response.data.bankinfo.country);//for selected country
 							// this.stateManagementService.setprogressBar(false);
-							this.badgeOptions.map((i: any) => {
-								if (i.id == this.response?.data?.bankinfo?.badge_city) {
-									this.addBankForm.patchValue({
-										badge_city: i?.id,
-										badge_city_name: i?.name
-									})
-								}
+							this.adminService.getAllEnableBadgeCities().pipe(
+								catchError(err => {
+									return throwError(err)
+								})
+							).subscribe((res: any) => {
+								this.badgeOptions = res?.data
+								this.filteredOptions = res?.data
+								res?.data?.map((i: any) => {
+									if (i.id == this.response?.data?.bankinfo?.badge_city) {
+										this.addBankForm.patchValue({
+											badge_city: i?.id,
+											badge_city_name: i?.name
+										})
+									}
+								})
 							})
 
 
