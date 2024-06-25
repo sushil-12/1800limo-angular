@@ -226,8 +226,7 @@ export class CreateNewBookingComponent implements OnInit {
 		try {
 			return text.replace(/[\\\_$]+/g, ' ')
 		}
-		catch
-		{
+		catch {
 			return text
 		}
 	}
@@ -577,8 +576,7 @@ export class CreateNewBookingComponent implements OnInit {
 			this.Form.affiliate_id.value != 0 ? this.chooseAffiliate() : ''
 			try {
 				this.PaxTelObject.setCountry(this.BookingForm.get('passenger_cell_country').value);
-			} catch
-			{
+			} catch {
 				console.error('Set Country Value is null.')
 			}
 			if (this.Form.affiliate_type.value == 'loose_affiliate') {
@@ -1278,8 +1276,7 @@ export class CreateNewBookingComponent implements OnInit {
 		try {
 			return (<FormArray>this.BookingForm.get(form_group_name)).at(index).get('address').value
 		}
-		catch
-		{
+		catch {
 			return ''
 		}
 	}
@@ -1287,8 +1284,7 @@ export class CreateNewBookingComponent implements OnInit {
 		try {
 			return (<FormArray>this.BookingForm.get(form_group_name)).at(index).get('booking_instructions').value
 		}
-		catch
-		{
+		catch {
 			return ''
 		}
 	}
@@ -1757,6 +1753,14 @@ export class CreateNewBookingComponent implements OnInit {
 	}
 
 	Subscriptions() {
+		//pickup time change 
+		this.BookingForm.get('pickup_time').valueChanges.subscribe((value: string) => {
+			this.buildBookingData()
+		})
+		this.BookingForm.get('return_pickup_time').valueChanges.subscribe((value: string) => {
+			this.buildBookingData()
+		})
+
 		// Service Type
 		this.BookingForm.get('service_type').valueChanges.subscribe((value: string) => {
 			this.init_return_rates = false;
@@ -2434,8 +2438,7 @@ export class CreateNewBookingComponent implements OnInit {
 		try {
 			return text.replace(/[\\\_$]+/g, ' ') + '?'
 		}
-		catch
-		{
+		catch {
 			return text
 		}
 	}
@@ -2451,7 +2454,9 @@ export class CreateNewBookingComponent implements OnInit {
 			no_of_hours: this.number_of_hours,
 			is_master_vehicle: this.is_master_vehicle,
 			extra_stops: this.BookingForm.get('extra_stops').value,
-			return_extra_stops: this.BookingForm.get('return_extra_stops').value
+			return_extra_stops: this.BookingForm.get('return_extra_stops').value,
+			pickup_time: this.BookingForm.get('pickup_time').value,
+			return_pickup_time: this.BookingForm.get('return_pickup_time').value,
 		}
 	}
 	handleNoOfHours(value) {

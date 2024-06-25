@@ -112,7 +112,7 @@ export class NewBookingComponent implements OnInit {
 	currencySymbol: any;
 	currencyObj: any;
 	updateType: any;
-	bookingResponse:any;
+	bookingResponse: any;
 
 
 
@@ -210,8 +210,7 @@ export class NewBookingComponent implements OnInit {
 		try {
 			return text.replace(/[\\\_$]+/g, ' ')
 		}
-		catch
-		{
+		catch {
 			return text
 		}
 	}
@@ -219,8 +218,7 @@ export class NewBookingComponent implements OnInit {
 		try {
 			return text == 'travel_planner' ? 'Travel Agent' : text.replace(/[\\\_$]+/g, ' ')
 		}
-		catch
-		{
+		catch {
 			return text
 		}
 	}
@@ -562,8 +560,7 @@ export class NewBookingComponent implements OnInit {
 			// this.Form.affiliate_id.value != 0 ? this.chooseAffiliate() : ''
 			try {
 				this.PaxTelObject.setCountry(this.BookingForm.get('passenger_cell_country').value);
-			} catch
-			{
+			} catch {
 				console.error('Set Country Value is null.')
 			}
 			if (this.Form.affiliate_type.value == 'loose_affiliate') {
@@ -982,15 +979,14 @@ export class NewBookingComponent implements OnInit {
 				this.DriverList = response.data.data
 				let isValueSet = false
 				for (let i = 0; i < this.DriverList.length; i++) {
-					if(this.bookingResponse?.driver_id && this.DriverList[i]?.id == this.bookingResponse?.driver_id)
-						{
-							this.SetFormValue('driver_id', this.DriverList[i].id)
-							console.log('autofill driver info--->>', this.DriverList[i])
-							this.autofillData('driver', this.DriverList[i])
-							isValueSet = true
-							break;
-						}
-						}
+					if (this.bookingResponse?.driver_id && this.DriverList[i]?.id == this.bookingResponse?.driver_id) {
+						this.SetFormValue('driver_id', this.DriverList[i].id)
+						console.log('autofill driver info--->>', this.DriverList[i])
+						this.autofillData('driver', this.DriverList[i])
+						isValueSet = true
+						break;
+					}
+				}
 				if (!isValueSet) {
 					this.SetFormValue('driver_id', this.DriverList[0].id)
 					this.autofillData('driver', this.DriverList[0])
@@ -1017,7 +1013,9 @@ export class NewBookingComponent implements OnInit {
 			no_of_hours: this.number_of_hours,
 			is_master_vehicle: this.is_master_vehicle,
 			extra_stops: this.BookingForm.get('extra_stops').value,
-			return_extra_stops: this.BookingForm.get('return_extra_stops').value
+			return_extra_stops: this.BookingForm.get('return_extra_stops').value,
+			pickup_time: this.BookingForm.get('pickup_time').value,
+			return_pickup_time: this.BookingForm.get('return_pickup_time').value
 		}
 	}
 	handleNoOfHours(value) {
@@ -1143,14 +1141,13 @@ export class NewBookingComponent implements OnInit {
 		try {
 			return (<FormArray>this.BookingForm.get(form_group_name)).at(index).get('address').value
 		}
-		catch
-		{
+		catch {
 			return ''
 		}
 	}
 
 	autofillData(filling_for: string, data: any) {
-		console.log("data in autofill",data)
+		console.log("data in autofill", data)
 		if (filling_for === 'passenger') {
 			data.middle_name ?
 				this.SetFormValue('passenger_name', `${data?.first_name} ${data?.middle_name} ${data?.last_name}`) : this.SetFormValue('passenger_name', `${data?.first_name} ${data?.last_name}`)
@@ -1386,8 +1383,7 @@ export class NewBookingComponent implements OnInit {
 		try {
 			return text.replace(/[\\\_$]+/g, ' ') + '?'
 		}
-		catch
-		{
+		catch {
 			return text
 		}
 	}
@@ -1646,6 +1642,15 @@ export class NewBookingComponent implements OnInit {
 		// 	}
 		// 	this.SetFormValue('return_transfer_type', reverseStringChars(value))
 		// })
+
+		//pickup time change 
+		this.BookingForm.get('pickup_time').valueChanges.subscribe((value: string) => {
+			this.buildBookingData()
+		})
+		this.BookingForm.get('return_pickup_time').valueChanges.subscribe((value: string) => {
+			this.buildBookingData()
+		})
+
 
 		// Service Type
 		this.BookingForm.get('service_type').valueChanges.subscribe((value: string) => {
