@@ -209,7 +209,9 @@ export class NewBookingComponent implements OnInit {
 			is_master_vehicle: this.is_master_vehicle,
 			extra_stops: this.BookingForm.get('extra_stops').value,
 			return_extra_stops: this.BookingForm.get('return_extra_stops').value,
-			manual_change_aff_veh: this.manual_change_aff_veh
+			manual_change_aff_veh: this.manual_change_aff_veh,
+			pickup_time: this.BookingForm.get('pickup_time').value,
+			return_pickup_time: this.BookingForm.get('return_pickup_time').value
 		}
 	}
 	ngAfterViewInit(): void {
@@ -250,8 +252,7 @@ export class NewBookingComponent implements OnInit {
 		try {
 			return text.replace(/[\\\_$]+/g, ' ')
 		}
-		catch
-		{
+		catch {
 			return text
 		}
 	}
@@ -259,8 +260,7 @@ export class NewBookingComponent implements OnInit {
 		try {
 			return text == 'travel_planner' ? 'Travel Agent' : text.replace(/[\\\_$]+/g, ' ')
 		}
-		catch
-		{
+		catch {
 			return text
 		}
 	}
@@ -665,8 +665,7 @@ export class NewBookingComponent implements OnInit {
 			this.Form.affiliate_id.value != 0 ? this.chooseAffiliate() : ''
 			try {
 				this.PaxTelObject.setCountry(this.BookingForm.get('passenger_cell_country').value);
-			} catch
-			{
+			} catch {
 				console.error('Set Country Value is null.')
 			}
 			if (this.Form.affiliate_type.value == 'loose_affiliate') {
@@ -1526,8 +1525,7 @@ export class NewBookingComponent implements OnInit {
 		try {
 			return (<FormArray>this.BookingForm.get(form_group_name)).at(index).get('address').value
 		}
-		catch
-		{
+		catch {
 			return ''
 		}
 	}
@@ -1535,8 +1533,7 @@ export class NewBookingComponent implements OnInit {
 		try {
 			return (<FormArray>this.BookingForm.get(form_group_name)).at(index).get('booking_instructions').value
 		}
-		catch
-		{
+		catch {
 			return ''
 		}
 	}
@@ -2089,6 +2086,14 @@ export class NewBookingComponent implements OnInit {
 	}
 
 	Subscriptions() {
+		//pickup time change 
+		this.BookingForm.get('pickup_time').valueChanges.subscribe((value:string)=>{
+			this.buildBookingData()
+		})
+		this.BookingForm.get('return_pickup_time').valueChanges.subscribe((value:string)=>{
+			this.buildBookingData()
+		})
+
 		// Service Type
 		this.BookingForm.get('service_type').valueChanges.subscribe((value: string) => {
 			this.init_return_rates = false;
@@ -2888,8 +2893,7 @@ export class NewBookingComponent implements OnInit {
 		try {
 			return text.replace(/[\\\_$]+/g, ' ') + '?'
 		}
-		catch
-		{
+		catch {
 			return text
 		}
 	}
@@ -2989,8 +2993,7 @@ export class NewBookingComponent implements OnInit {
 
 				try {
 					this.PaxTelObject.setCountry(this.BookingForm.get('passenger_cell_country').value);
-				} catch
-				{
+				} catch {
 					console.error('Set Country Value is null.')
 				}
 
