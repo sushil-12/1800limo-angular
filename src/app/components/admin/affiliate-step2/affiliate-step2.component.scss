@@ -291,3 +291,33 @@ agm-map {
 	font-weight: 500 !important;
 	font-size: 15px !important;
   }
+
+  :host ::ng-deep .selectStyle select {
+	font-weight: 400;
+}
+
+.user_information .selectInputStyle{
+	height: 58px !important;
+}
+
+.selectCurrencyLabel {
+	position  : relative;
+	top       : 43px;
+	left      : 8px;
+	background: #fff;
+	color     : #808080 !important;
+	padding   : 0 3px;
+	font-size : 16px !important;
+}
+
+.select-currency-label {
+	position  : relative;
+	top       : 18px;
+	left      : 8px;
+	background: #fff;
+	color     : #000 !important;
+	padding   : 0 3px;
+	font-size : 13px !important;
+	font-weight: 600 !important;
+	transition: 0.3s;
+}

@@ -926,4 +926,8 @@ export class AffiliateStep2Component implements OnInit {
 		$('.selectExYearLabel').removeClass('selectExYearLabel ').addClass('select-ex-year-label');
 	}
 
+	selectDropdownCurrency() {
+		$('.selectCurrencyLabel').removeClass('selectCurrencyLabel ').addClass('select-currency-label');
+	}
+
 }

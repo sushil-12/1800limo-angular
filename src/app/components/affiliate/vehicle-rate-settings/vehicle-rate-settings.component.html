@@ -255,7 +255,7 @@
 					</mat-label>
 					<span matPrefix>{{ currency_symbol }} &nbsp;</span>
 					<input type="number" matInput placeholder="Day Rate Extension" formControlName="day_rate"
-						tabindex="1" (change)="updateRateRangeObject()" />
+						tabindex="1" (change)="updateRateRangeObject()" (focus)="$event.target.select()"/>
 				</mat-form-field>
 				<div *ngIf="
 						(is_form_submitted && form.day_rate.errors) ||
@@ -309,7 +309,7 @@
 					<input type="number" matInput placeholder="Minimum Airport Rate - Arrival"
 						formControlName="minimum_airport_arrival_rate" (focus)="$event.target.select()"
 						(change)="updateRateRangeObject(); cloneValue('minimum_airport_arrival_rate', 'minimum_airport_departure_rate')"
-						tabindex="1">
+						tabindex="1" (focus)="$event.target.select()">
 				</mat-form-field>
 				<div *ngIf="
 						(is_form_submitted &&
@@ -569,7 +569,7 @@
 					<mat-label>Extra stop - same town</mat-label>
 					<span matPrefix>{{ currency_symbol }} &nbsp;</span>
 					<input matInput type="number" placeholder="Shared Ride Rate - Per Person"
-						(change)="updateRateRangeObject()" formControlName="in_town_extra_stop" tabindex="1">
+						(change)="updateRateRangeObject()" formControlName="in_town_extra_stop" tabindex="1" (focus)="$event.target.select()">
 				</mat-form-field>
 				<div *ngIf="is_form_submitted && form.in_town_extra_stop.errors || form.in_town_extra_stop.touched && form.in_town_extra_stop.errors"
 					class="text-danger margin-bottom-thin my-mat-hint">
@@ -581,7 +581,7 @@
 					<mat-label>Extra stop - different town</mat-label>
 					<span matPrefix>{{ currency_symbol }} &nbsp;</span>
 					<input matInput type="number" placeholder="Shared Ride Rate - Per Person"
-						(change)="updateRateRangeObject()" formControlName="outside_town_extra_stop" tabindex="1">
+						(change)="updateRateRangeObject()" formControlName="outside_town_extra_stop" tabindex="1" (focus)="$event.target.select()">
 				</mat-form-field>
 				<div *ngIf="is_form_submitted && form.outside_town_extra_stop.errors || form.outside_town_extra_stop.touched && form.outside_town_extra_stop.errors"
 					class="text-danger margin-bottom-thin my-mat-hint">
@@ -905,7 +905,7 @@
 							</span>
 						</ng-template>
 						<input type="number" matInput placeholder="City Congestion Tax"
-							formControlName="city_congestion_tax_per_us" tabindex="1" autocomplete="off" />
+							formControlName="city_congestion_tax_per_us" tabindex="1" autocomplete="off" (focus)="$event.target.select()"/>
 					</mat-form-field>
 					<div *ngIf="
 							(is_form_submitted &&

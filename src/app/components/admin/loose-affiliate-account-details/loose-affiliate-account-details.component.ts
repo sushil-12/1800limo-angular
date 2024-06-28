@@ -27,7 +27,8 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit {
   currentUser: any;
   userId: any;
   getProfileResponseData: any;
-  languageList: any;
+  languageList: { id: number, name: string }[] = [];
+  selectedLanguages: number[] = [];
   resp: any;
   filteredOptions: any;
   badgeOptions: any;
@@ -229,11 +230,13 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit {
           city: this.getProfileResponseData?.data?.city,
           state: this.getProfileResponseData?.data?.state,
           country: this.getProfileResponseData?.data?.country,
-          language: this.getProfileResponseData?.data?.language,
+          // language: this.getProfileResponseData?.data?.language,
           latitude: this.getProfileResponseData?.data?.latitude,
           longitude: this.getProfileResponseData?.data?.longitude,
         })
-        console.log('profile this.getProfileResponseData?.data-->>>>', this.getProfileResponseData?.data)
+        this.selectedLanguages =  this.getProfileResponseData?.data?.language_spoken; // Assuming API returns [1, 2] for selected languages
+        this.profileForm.patchValue({ language: this.selectedLanguages });
+        console.log('profile this.getProfileResponseData?.data-->>>>', this.profileForm.value)
         this.MobileObject.setCountry(this.getProfileResponseData?.data?.phone_country)
         this.OfficeObject.setCountry(this.getProfileResponseData?.data?.work_country)
       })
