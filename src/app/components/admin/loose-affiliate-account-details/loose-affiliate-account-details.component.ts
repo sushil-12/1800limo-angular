@@ -156,7 +156,7 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit {
 
   buildProfileForm() {
     this.profileForm = this.formBuilder.group({
-      name: ['', Validators.required],
+      name: [''],
       operator_name: [''],
       phone: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
       phone_isd: ['+1', Validators.required],
