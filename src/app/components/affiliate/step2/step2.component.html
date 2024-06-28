@@ -480,13 +480,13 @@
 					</div>
 				</div>
 				<div class="col-md-6">
-					<mat-form-field appearance="outline" class="example-full-width red-placeholder"
+					<mat-form-field appearance="outline" class="example-full-width" [ngClass]="(f.badge_city_name.value) ? '' : 'red-placeholder' "
 						[ngClass]="isBadgeCity ? '' : 'border-red'">
-						<mat-label class="red-placeholder">Badge city (Enter Largest Major City You Service)
+						<mat-label [ngClass]="(f.badge_city_name.value) ? '' : 'red-placeholder' ">Badge city (Enter Largest Major City You Service)
 						</mat-label>
-						<input type="text" placeholder="Enter Largest Major City You Service" aria-label="Number"
+						<input type="text" placeholder="Enter Largest Major City You Service" [ngClass]="(f.badge_city_name.value) ? '' : 'red-placeholder' " aria-label="Number"
 							matInput formControlName="badge_city_name" [matAutocomplete]="auto"
-							(keyup)="handleBadgeCity($event.target.value)" class="red-placeholder">
+							(keyup)="handleBadgeCity($event.target.value)">
 						<mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
 							<mat-option *ngFor="let option of filteredOptions"
 								(onSelectionChange)="selectBadgeCity(option,$event.isUserInput)" [value]="option.name">
