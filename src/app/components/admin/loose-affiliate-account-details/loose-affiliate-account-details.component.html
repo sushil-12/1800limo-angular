@@ -10,9 +10,9 @@
                             <input formControlName="name" type="text" matInput placeholder="Name"
                                 (focus)="$event.target.select()">
                         </mat-form-field>
-                        <div *ngIf="submittedForm && f.name.errors" class="text-danger text-lg m-0">
+                        <!-- <div *ngIf="submittedForm && f.name.errors" class="text-danger text-lg m-0">
                             <div *ngIf="f.name.errors.required">This field is required</div>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="col-md-6">
                         <mat-form-field appearance="outline">
