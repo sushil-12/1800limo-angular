@@ -261,7 +261,7 @@
 
 									<td class="text-center font-weight-bolder cursor-pointer " data-toggle="modal"
 										data-target="#previewBookingOnID"
-										(click)="showBookingPreviewModal(booking.booking_id)">
+										(click)="showBookingPreviewModal(booking?.booking_id)">
 										<p class="booking-id-font font-weight-bolder cursor-pointer">
 											<span class="text-underline" [innerHTML]="highlighText(booking.booking_id )"
 												style="font-weight: 600;"></span>
@@ -844,11 +844,11 @@
 						</div>
 						<div class="col-md-8 value">
 							<span class="font-weight-bolder preview-output-feild">
-								{{ textFormatter(bookingPreview.service_type) | titlecase }}
+								{{ textFormatter(bookingPreview?.service_type) | titlecase }}
 								/
-								{{ textFormatter(bookingPreview.transfer_type) | titlecase }}
-								<span class="font-weight-bolder" *ngIf="bookingPreview.service_type == 'round_trip'">
-									/ {{ textFormatter(bookingPreview.return_transfer_type) |
+								{{ textFormatter(bookingPreview?.transfer_type) | titlecase }}
+								<span class="font-weight-bolder" *ngIf="bookingPreview?.service_type == 'round_trip'">
+									/ {{ textFormatter(bookingPreview?.return_transfer_type) |
 									titlecase
 									}}
 								</span>
@@ -913,9 +913,9 @@
 							</div>
 							<div class="col-md-8 value">
 								<span class="font-weight-bolder preview-output-feild">
-									{{ dateFormat2(bookingPreview.pickup_date) }}
+									{{ dateFormat2(bookingPreview?.pickup_date) }}
 									|
-									{{ dateFormat(bookingPreview.pickup_date) }}
+									{{ dateFormat(bookingPreview?.pickup_date) }}
 								</span>
 							</div>
 						</div>
@@ -931,9 +931,9 @@
 							</div>
 							<div class="col-md-8 value">
 								<span class="font-weight-bolder preview-output-feild">
-									{{ timeFormat2(bookingPreview.pickup_time) }}
+									{{ timeFormat2(bookingPreview?.pickup_time) }}
 									|
-									{{ timeFormat(bookingPreview.pickup_time) }}
+									{{ timeFormat(bookingPreview?.pickup_time) }}
 								</span>
 							</div>
 						</div>
@@ -942,19 +942,19 @@
 
 					<!-- Pickup > City Details -->
 					<div class="mx-2 preview-pickup-color"
-						*ngIf="bookingPreview.transfer_type.includes('city_') || bookingPreview.transfer_type.includes('cruise_')">
+						*ngIf="bookingPreview?.transfer_type.includes('city_') || bookingPreview?.transfer_type.includes('cruise_')">
 						<hr>
 						<div class="row m-0">
 							<div class="col-md-4">
 								<span>
-									{{bookingPreview.extra_stops ? 'First Pickup' : 'Address'}}
+									{{bookingPreview?.extra_stops ? 'First Pickup' : 'Address'}}
 								</span>
 							</div>
 							<div class="col-md-8">
 								<span class="font-weight-bolder preview-output-feild">
-									{{ textFormatter(bookingPreview.pickup) }}
+									{{ textFormatter(bookingPreview?.pickup) }}
 								</span>
-								<span (click)="showLocationPointOnMapByAddress(bookingPreview.pickup)"><i
+								<span (click)="showLocationPointOnMapByAddress(bookingPreview?.pickup)"><i
 										class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
 							</div>
 						</div>
@@ -963,7 +963,7 @@
 
 
 					<!-- Pickup > Airline Details -->
-					<div class="mx-2 preview-pickup-color" *ngIf="bookingPreview.transfer_type.includes('airport_')">
+					<div class="mx-2 preview-pickup-color" *ngIf="bookingPreview?.transfer_type.includes('airport_')">
 						<!-- Airport -->
 						<hr>
 						<div class="row m-0">
@@ -974,9 +974,9 @@
 							</div>
 							<div class="col-md-8 value preview-airport-color">
 								<span class="font-weight-bolder preview-output-feild">
-									{{ textFormatter(bookingPreview.pickup_airport_name) }}
+									{{ textFormatter(bookingPreview?.pickup_airport_name) }}
 								</span>
-								<span (click)="showLocationPointOnMapByAddress(bookingPreview.pickup_airport_name)"><i
+								<span (click)="showLocationPointOnMapByAddress(bookingPreview?.pickup_airport_name)"><i
 										class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
 							</div>
 						</div>
@@ -990,7 +990,7 @@
 							</div>
 							<div class="col-md-8 value">
 								<span class="font-weight-bolder preview-output-feild">
-									{{ textFormatter(bookingPreview.pickup_airline_name) }}
+									{{ textFormatter(bookingPreview?.pickup_airline_name) }}
 								</span>
 							</div>
 						</div>
@@ -1004,7 +1004,7 @@
 							</div>
 							<div class="col-md-8 value">
 								<span class="font-weight-bolder preview-output-feild">
-									{{ textFormatter(bookingPreview.pickup_flight) }}
+									{{ textFormatter(bookingPreview?.pickup_flight) }}
 								</span>
 							</div>
 						</div>
@@ -1013,7 +1013,7 @@
 					</div>
 
 					<!-- Pickup > Cruise Details -->
-					<div class="mx-2 preview-pickup-color" *ngIf="bookingPreview.transfer_type.includes('cruise_')">
+					<div class="mx-2 preview-pickup-color" *ngIf="bookingPreview?.transfer_type.includes('cruise_')">
 						<!-- Cruise Port -->
 						<div class="row m-0">
 							<div class="col-md-4 key">
@@ -1023,7 +1023,7 @@
 							</div>
 							<div class="col-md-8 value">
 								<span class="font-weight-bolder preview-output-feild">
-									{{ textFormatter(bookingPreview.cruise_port) | titlecase }}
+									{{ textFormatter(bookingPreview?.cruise_port) | titlecase }}
 								</span>
 							</div>
 						</div>
@@ -1037,7 +1037,7 @@
 							</div>
 							<div class="col-md-8 value">
 								<span class="font-weight-bolder preview-output-feild">
-									{{ textFormatter(bookingPreview.cruise_name) | titlecase }}
+									{{ textFormatter(bookingPreview?.cruise_name) | titlecase }}
 								</span>
 							</div>
 						</div>
@@ -1051,19 +1051,19 @@
 							</div>
 							<div class="col-md-8 value">
 								<span class="font-weight-bolder preview-output-feild">
-									{{ textFormatter(bookingPreview.cruise_time) | titlecase }}
+									{{ textFormatter(bookingPreview?.cruise_time) | titlecase }}
 								</span>
 							</div>
 						</div>
 					</div>
 					<hr>
 					<!-- Extra Stops -->
-					<div *ngIf="bookingPreview.extra_stops && bookingPreview.extra_stops.length > 0">
+					<div *ngIf="bookingPreview?.extra_stops && bookingPreview?.extra_stops.length > 0">
 						<h5 class="m-0 text-xl" style="color: darkblue;">
 							Extra Stops
 						</h5>
 						<div class="mx-2 preview-extra-stop-color"
-							*ngFor="let stop of bookingPreview.extra_stops; index as stop_index">
+							*ngFor="let stop of bookingPreview?.extra_stops; index as stop_index">
 							<div class="row m-0 mx-2">
 								<div class="col-md-4 key">
 									<span>
@@ -1083,7 +1083,7 @@
 					</div>
 
 					<hr style="width: 50%; margin: 1rem auto; border: 1.3px solid #aeaeae;"
-						*ngIf="bookingPreview.extra_stops && bookingPreview.extra_stops.length == 0" />
+						*ngIf="bookingPreview?.extra_stops && bookingPreview?.extra_stops.length == 0" />
 
 					<!-- ############# Dropoff ################# -->
 					<h5 class="px-2 m-0 my-3 text-xl preview-dropoff-color">
@@ -1091,7 +1091,7 @@
 					</h5>
 					<!-- Dropoff > City Details -->
 					<div class="mx-2 preview-dropoff-color"
-						*ngIf="bookingPreview.transfer_type.includes('_city') || bookingPreview.transfer_type.includes('_cruise')">
+						*ngIf="bookingPreview?.transfer_type.includes('_city') || bookingPreview?.transfer_type.includes('_cruise')">
 						<div class="row">
 							<div class="col-md-4 key">
 								<span>
@@ -1100,16 +1100,16 @@
 							</div>
 							<div class="col-md-8 value">
 								<span class="font-weight-bolder preview-output-feild">
-									{{ textFormatter(bookingPreview.dropoff) }}
+									{{ textFormatter(bookingPreview?.dropoff) }}
 								</span>
-								<span (click)="showLocationPointOnMapByAddress(bookingPreview.dropoff)"><i
+								<span (click)="showLocationPointOnMapByAddress(bookingPreview?.dropoff)"><i
 										class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
 							</div>
 						</div>
 					</div>
 
 					<!-- Dropoff > Airline Details -->
-					<div class="mx-2 preview-dropoff-color" *ngIf="bookingPreview.transfer_type.includes('_airport')">
+					<div class="mx-2 preview-dropoff-color" *ngIf="bookingPreview?.transfer_type.includes('_airport')">
 						<!-- Airport -->
 						<div class="row">
 							<div class="col-md-4 key">
@@ -1119,9 +1119,9 @@
 							</div>
 							<div class="col-md-8 value preview-airport-color">
 								<span class="font-weight-bolder preview-output-feild">
-									{{ textFormatter(bookingPreview.dropoff_airport_name ) }}
+									{{ textFormatter(bookingPreview?.dropoff_airport_name ) }}
 								</span>
-								<span (click)="showLocationPointOnMapByAddress(bookingPreview.dropoff_airport_name)"><i
+								<span (click)="showLocationPointOnMapByAddress(bookingPreview?.dropoff_airport_name)"><i
 										class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
 							</div>
 						</div>
@@ -1135,7 +1135,7 @@
 							</div>
 							<div class="col-md-8 value">
 								<span class="font-weight-bolder preview-output-feild">
-									{{ textFormatter(bookingPreview.dropoff_airline_name) }}
+									{{ textFormatter(bookingPreview?.dropoff_airline_name) }}
 								</span>
 							</div>
 						</div>
@@ -1149,7 +1149,7 @@
 							</div>
 							<div class="col-md-8 value">
 								<span class="font-weight-bolder preview-output-feild">
-									{{ textFormatter(bookingPreview.dropoff_flight) }}
+									{{ textFormatter(bookingPreview?.dropoff_flight) }}
 								</span>
 							</div>
 						</div>
@@ -1157,7 +1157,7 @@
 					</div>
 
 					<!-- Dropoff > Cruise Details -->
-					<div class="mx-2 preview-dropoff-color" *ngIf="bookingPreview.transfer_type.includes('_cruise')">
+					<div class="mx-2 preview-dropoff-color" *ngIf="bookingPreview?.transfer_type.includes('_cruise')">
 						<!-- Cruise Port -->
 						<div class="row">
 							<div class="col-md-4 key">
@@ -1167,7 +1167,7 @@
 							</div>
 							<div class="col-md-8 value">
 								<span class="font-weight-bolder preview-output-feild">
-									{{ textFormatter(bookingPreview.cruise_port) | titlecase }}
+									{{ textFormatter(bookingPreview?.cruise_port) | titlecase }}
 								</span>
 							</div>
 						</div>
@@ -1182,7 +1182,7 @@
 							</div>
 							<div class="col-md-8 value">
 								<span class="font-weight-bolder preview-output-feild">
-									{{ textFormatter(bookingPreview.cruise_name) | titlecase }}
+									{{ textFormatter(bookingPreview?.cruise_name) | titlecase }}
 								</span>
 							</div>
 						</div>
@@ -1197,7 +1197,7 @@
 							</div>
 							<div class="col-md-8 value">
 								<span class="font-weight-bolder preview-output-feild">
-									{{ textFormatter(bookingPreview.cruise_time) }}
+									{{ textFormatter(bookingPreview?.cruise_time) }}
 								</span>
 							</div>
 						</div>
@@ -1232,7 +1232,7 @@
 							</div>
 							<div class="col-md-8">
 								<span class="font-weight-bolder preview-output-feild">
-									{{convertToMinutes(bookingPreview.duration)}}
+									{{convertToMinutes(bookingPreview?.duration)}}
 								</span>
 							</div>
 						</div>
@@ -1255,7 +1255,7 @@
 							</div>
 							<div class="col-md-8 value">
 								<span class="font-weight-bolder preview-output-feild">
-									{{ textFormatter(bookingPreview.passenger_name) }}
+									{{ textFormatter(bookingPreview?.passenger_name) }}
 								</span>
 							</div>
 						</div>
@@ -1271,9 +1271,9 @@
 							<div class="col-md-8 value">
 								<a class="font-weight-bolder preview-output-feild cursor-pointer"
 									style="color: #1e7500;"
-									href="tel:{{bookingPreview.passenger_cell_isd}}{{bookingPreview.passenger_cell}}">
-									({{ bookingPreview.passenger_cell_isd }})
-									{{ textFormatter(bookingPreview.passenger_cell) }}
+									href="tel:{{bookingPreview?.passenger_cell_isd}}{{bookingPreview?.passenger_cell}}">
+									({{ bookingPreview?.passenger_cell_isd }})
+									{{ textFormatter(bookingPreview?.passenger_cell) }}
 								</a>
 							</div>
 						</div>
@@ -1288,7 +1288,7 @@
 							</div>
 							<div class="col-md-8 value">
 								<span class="font-weight-bolder preview-output-feild">
-									{{ textFormatter(bookingPreview.passenger_email) }}
+									{{ textFormatter(bookingPreview?.passenger_email) }}
 								</span>
 							</div>
 						</div>
@@ -1304,7 +1304,7 @@
 							</div>
 							<div class="col-md-8 value">
 								<span class="font-weight-bolder preview-output-feild">
-									{{ bookingPreview.total_passengers }}
+									{{ bookingPreview?.total_passengers }}
 								</span>
 							</div>
 						</div>
@@ -1318,7 +1318,7 @@
 							</div>
 							<div class="col-md-8 value">
 								<span class="font-weight-bolder preview-output-feild">
-									{{ bookingPreview.luggage_count }}
+									{{ bookingPreview?.luggage_count }}
 								</span>
 							</div>
 						</div>
@@ -1595,7 +1595,7 @@
 							</div>
 							<div class="col-md-8 value">
 								<span class="font-weight-bolder preview-output-feild">
-									{{bookingPreview?.driver_name ? (textFormatter(bookingPreview.driver_name) |
+									{{bookingPreview?.driver_name ? (textFormatter(bookingPreview?.driver_name) |
 									titlecase) : '1800Limo Chauffeurs' }}
 								</span>
 							</div>
@@ -1612,7 +1612,7 @@
 							</div>
 							<div class="col-md-8 value">
 								<span class="font-weight-bolder preview-output-feild">
-									{{ textFormatter(bookingPreview.driver_email) }}
+									{{ textFormatter(bookingPreview?.driver_email) }}
 								</span>
 							</div>
 						</div>
@@ -1628,7 +1628,7 @@
 							</div>
 							<div class="col-md-8 value">
 								<span class="font-weight-bolder preview-output-feild">
-									{{ bookingPreview?.driver_cell_isd ? ( bookingPreview.driver_cell_isd ) : '(+1) '
+									{{ bookingPreview?.driver_cell_isd ? ( bookingPreview?.driver_cell_isd ) : '(+1) '
 									}}{{
 									bookingPreview?.driver_cell ? bookingPreview?.driver_cell : '8005466266' }}
 								</span>
@@ -1637,7 +1637,7 @@
 					</div>
 					<hr>
 
-					<div class="row" *ngIf="bookingPreview.total_amount_refunded>0">
+					<div class="row" *ngIf="bookingPreview?.total_amount_refunded>0">
 						<div class="col-md-4 key">
 							<span>
 								Refund amount
@@ -1650,7 +1650,7 @@
 							</span>
 						</div>
 					</div>
-					<div class="row" *ngIf="bookingPreview.total_amount_refunded>0">
+					<div class="row" *ngIf="bookingPreview?.total_amount_refunded>0">
 						<div class="col-md-4 key">
 							<span>
 								New total
@@ -1674,7 +1674,7 @@
 					<!-- <div class="distribution_rate"
 						*ngIf="bookingPreview?.payment_status=='unpaid' && bookingPreview?.share_array?.length == 0">
 						<h4 class="font-weight-bolder m-0 my-3">
-							Rates Distribution {{bookingPreview.loose_affiliate}}
+							Rates Distribution {{bookingPreview?.loose_affiliate}}
 						</h4>
 
 						<div class="mx-2">
