@@ -593,19 +593,19 @@ export class SelectVehicleComponent implements OnInit {
 				this.vehicleDetails = [...response.data?.vehicleData]
 				this.quotebotNewData = response.data?.quote
 
-				let location_info = []
-				let tempObj = {
-					distance: {
-						text: this.quotebotNewData?.distance / 1000 + "km",
-						value: Number(this.quotebotNewData?.distance)
-					},
-					duration: {
-						text: this.quotebotNewData?.duration / 60 + "mins",
-						value: Number(this.quotebotNewData?.duration)
-					}
-				}
-				location_info.push(tempObj)
-				this.quotebotNewData['location_info'] = location_info
+				// let location_info = []
+				// let tempObj = {
+				// 	distance: {
+				// 		text: this.quotebotNewData?.distance / 1000 + "km",
+				// 		value: Number(this.quotebotNewData?.distance)
+				// 	},
+				// 	duration: {
+				// 		text: this.quotebotNewData?.duration / 60 + "mins",
+				// 		value: Number(this.quotebotNewData?.duration)
+				// 	}
+				// }
+				// location_info.push(tempObj)
+				// this.quotebotNewData['location_info'] = location_info
 				console.log("in location->", this.quotebotNewData)
 				localStorage.setItem('quotebot_form', JSON.stringify(this.quotebotNewData))
 			} catch (error) {

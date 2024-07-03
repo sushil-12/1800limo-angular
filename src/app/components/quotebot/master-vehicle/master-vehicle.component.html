@@ -347,7 +347,7 @@
 			<div id="master-vehicle-box-container" class="vehicle-grid-card" *ngIf="master_vehicles.length > 0">
 				<div id="master-vehicle-box" class="card mb-5 d-flex flex-nowrap flex-md-wrap cursor-pointer"
 					*ngFor="let vehicle_obj of master_vehicles; index as vehicle_obj_index"
-					(click)="selectCategory(vehicle_obj?.name)">
+					(click)="selectCategory(vehicle_obj?.name)" style="position: relative !important;">
 					<div id="vehicle-image" class="imageStyle bg-white d-flex justify-content-center">
 						<img [src]="vehicle_obj.cat_img" class="img-fluid" [attr.id]="'vehicle_' + vehicle_obj_index" />
 					</div>
@@ -378,7 +378,7 @@
 								<span class="font-weight-bolder mx-2">{{ vehicle_obj?.luggage }}</span>
 							</div>
 						</div>
-						<div class="d-flex justify-content-end mt-4">
+						<div class="d-flex justify-content-end mt-4" style="position: absolute; bottom: 0;right: 0;margin-bottom: 7px;">
 							<button type="button" class="view-more-circle-button"
 								(click)="selectCategory(vehicle_obj?.name)">
 								View More

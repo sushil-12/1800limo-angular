@@ -2,7 +2,7 @@
 <main>
     <!-- Main page content-->
     <section class="user_information" id="loose_affiliae_table">
-        <h2 class="headinginfo">Loose Affiliate Accounts </h2>
+        <h2 class="headinginfo">Loose Affiliate Accounts ({{LooseAffiliateAccRes?.data.total}})</h2>
         <div class="containeredd">
             <div class="row">
                 <div class="col-md-12">
@@ -44,11 +44,12 @@
                         <thead style="background: #f3933d;">
                             <tr role="row">
                                 <th>Actions</th>
-                                <th>Name</th>
+                                <th>Company Name</th>
+                                <th>Owner Name</th>
                                 <th>Email</th>
                                 <th>Mobile</th>
                                 <th>Address</th>
-
+                                <th>Badge City</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -77,6 +78,10 @@
                                 <td>
                                     <span [innerHTML]="highlighText(LooseAffiliate?.name)"></span>
                                 </td>
+                                <td>
+                                    <span [innerHTML]="highlighText(LooseAffiliate?.operator_name)">
+                                    </span>
+                                </td>
                                 <td class="clickable" (click)="sendMessage('email', LooseAffiliate)"
                                     data-messagetype="email"><span
                                         [innerHTML]="highlighText(LooseAffiliate?.email)"></span></td>
@@ -84,9 +89,11 @@
                                     data-messagetype="sms"><span
                                         [innerHTML]="highlighText(LooseAffiliate?.phone_isd+LooseAffiliate?.phone)"></span>
                                 </td>
-                                <td><span
-                                    [innerHTML]="highlighText(LooseAffiliate?.city)"></span>
-                            </td>
+                                <td><span [innerHTML]="highlighText(LooseAffiliate?.city)"></span></td>
+                                <td>
+                                    <span [innerHTML]="highlighText(LooseAffiliate?.badge_city)"></span>
+                                </td>
+
                             </tr>
 
                         </tbody>

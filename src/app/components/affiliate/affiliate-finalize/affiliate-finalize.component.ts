@@ -357,6 +357,11 @@ export class AffiliateFinalizeComponent implements OnInit {
 			console.log('response-->>', response)
 			this.finalize_btn = "Finalized"
 			this.getBookingData(this.bookingId)
+			this.$errors.openDialog({
+				errors: {
+					error: `<span class='text-success font-weight-bolder' style="font-size: 20px;">Please click on Charge button!</span>`
+				}
+			})
 
 		})
 
