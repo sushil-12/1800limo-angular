@@ -1008,26 +1008,26 @@ export class DailyBookingsComponent implements OnInit {
 
 	getQuoteDetails(id) {
 		this.adminService.getQuoteData(id).subscribe((response: any) => {
-			console.log("in function get quote data", response);
+			console.log("in function get quote data", response.data.quote.location_info);
 			this.quotebotNewData = response.data?.quote;
 
-			let location_info = [];
-			let tempObj = {
-				distance: {
-					text: this.quotebotNewData?.distance / 1000 + "km",
-					value: Number(this.quotebotNewData?.distance),
-				},
-				duration: {
-					text: this.quotebotNewData?.duration / 60 + "mins",
-					value: Number(this.quotebotNewData?.duration),
-				},
-			};
-			location_info.push(tempObj);
-			this.quotebotNewData["location_info"] = location_info;
-			console.log("in location->", this.quotebotNewData);
+			// let location_info = [];
+			// let tempObj = {
+			// 	distance: {
+			// 		text: this.quotebotNewData?.distance / 1000 + "km",
+			// 		value: Number(this.quotebotNewData?.distance),
+			// 	},
+			// 	duration: {
+			// 		text: this.quotebotNewData?.duration / 60 + "mins",
+			// 		value: Number(this.quotebotNewData?.duration),
+			// 	},
+			// };
+			// location_info.push(tempObj);
+			// this.quotebotNewData["location_info"] = location_info;
+			console.log("in location->", response.data?.quote);
 			localStorage.setItem(
 				"quotebot_form",
-				JSON.stringify(this.quotebotNewData)
+				JSON.stringify(response.data?.quote)
 			);
 			// this.router.navigate(['quotebot/select-vehicle'], { queryParams: { id } });
 			// this.Sort.LowToHigh() // default sort to Low-High
