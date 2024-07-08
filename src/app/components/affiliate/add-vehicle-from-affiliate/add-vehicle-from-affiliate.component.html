@@ -357,13 +357,13 @@
 
 				<!-- Airport/City Cancel Times -->
 				<div class="col-md-6">
-					<label class="select-cancel-label">Airport / City Cancel Policy
+					<label class="select-cancel-label">Airport / City / Cruise Port Cancel Policy
 						<span class="asterisk1">*</span></label>
 					<div class="selectStyle" [ngClass]="changeNonCharterCancelPolicy ? '' : 'border-red'">
 						<select class="selectInputStyle" formControlName="nonCharterCancelPolicy"
 							(change)="handleNonCharterCancelPolicy($event)" tabindex="1">
 							<option value="">
-								Choose Airport / City Cancel Policy
+								Choose Airport / City / Cruise Port Cancel Policy
 							</option>
 							<option *ngFor="
 									let nonCharterCancelOption of nonCharterCancelOptions
@@ -392,12 +392,12 @@
 								f.nonCharterCancelPolicy.errors)
 						" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.nonCharterCancelPolicy.errors.required">
-							The Charter Cancel Policy is required
+							The Airport / City / Cruise Port Cancel Policy is required
 						</div>
 					</div>
 					<div *ngIf="f.nonCharterCancelPolicy.errors" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.nonCharterCancelPolicy.errors.pattern">
-							The Charter Cancel Policy should be a number
+							The Airport / City / Cruise Port Cancel Policy should be a number
 						</div>
 					</div>
 				</div>
@@ -482,29 +482,24 @@
 			<div class="row mt-3">
 				<div class="col-md-4">
 					<div class="input-checkbox">
-						<div class="checkbox" [ngClass]="
-								service.includes('local') ? 'active' : ''
-							" (click)="onServiceChange('local')">
+						<div class="checkbox" [ngClass]="service.includes('local') ? 'active' : ''"
+							(click)="onServiceChange('local')">
 							Local Service Only
 						</div>
 					</div>
 				</div>
 				<div class="col-md-4">
 					<div class="input-checkbox">
-						<div class="checkbox" [ngClass]="
-								service.includes('over_the_road')
-									? 'active'
-									: ''
-							" (click)="onServiceChange('over_the_road')">
+						<div class="checkbox" [ngClass]="service.includes('over_the_road') ? 'active' : ''"
+							(click)="onServiceChange('over_the_road')">
 							Over The Road
 						</div>
 					</div>
 				</div>
 				<div class="col-md-4">
 					<div class="input-checkbox">
-						<div class="checkbox" [ngClass]="
-								service.includes('shuttle') ? 'active' : ''
-							" (click)="onServiceChange('shuttle')">
+						<div class="checkbox" [ngClass]="service.includes('shuttle') ? 'active' : ''"
+							(click)="onServiceChange('shuttle')">
 							Shuttle Service
 						</div>
 					</div>

@@ -174,20 +174,20 @@
 				</div>
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
-						<mat-label>Airport / City Cancel Policy <span class="asterisk">*</span></mat-label>
+						<mat-label>Airport / City / Cruise Port Cancel Policy <span class="asterisk">*</span></mat-label>
 						<mat-select formControlName="nonCharterCancelPolicy" tabindex="1">
-							<mat-option value="">Choose Airport / City Cancel Policy</mat-option>
+							<mat-option value="">Choose Airport / City / Cruise Port Cancel Policy</mat-option>
 							<mat-option *ngFor="let nonCharterCancelOption of nonCharterCancelOptions"
 								[value]="nonCharterCancelOption.value">{{nonCharterCancelOption.label}}</mat-option>
 						</mat-select>
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.nonCharterCancelPolicy.errors || f.nonCharterCancelPolicy.touched && f.nonCharterCancelPolicy.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.nonCharterCancelPolicy.errors.required">The Charter Cancel Policy is required
+						<div *ngIf="f.nonCharterCancelPolicy.errors.required">The Airport / City / Cruise Port Cancel Policy is required
 						</div>
 					</div>
 					<div *ngIf="f.nonCharterCancelPolicy.errors" class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.nonCharterCancelPolicy.errors.pattern">The Charter Cancel Policy should be a
+						<div *ngIf="f.nonCharterCancelPolicy.errors.pattern">The Airport / City / Cruise Port Cancel Policy should be a
 							number
 						</div>
 					</div>

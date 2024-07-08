@@ -10,7 +10,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { CustomvalidationService } from 'src/app/services/customvalidation.service';
 import { StateManagementService } from 'src/app/services/statemanagement.service';
 import { TravelAgentService } from 'src/app/services/travel-agent.service';
-declare var $: any;
+declare var $ :any;
 
 
 @Component({
@@ -24,25 +24,25 @@ export class SubAgentAccountDetailsComponent implements OnInit {
   public submittedForm: boolean;
   public OfficeObject: any;
   public MobileObject: any;
-  currentUser: any;
-  agency_name: any;
-  invite_code: any;
-  userId: any;
-  getProfileResponseData: any;
+  currentUser:any;
+  agency_name:any;
+  invite_code:any;
+  userId:any;
+  getProfileResponseData:any;
   timezoneForm: FormGroup;
 
-  //google map autocomplete
-  title: string = 'AGM project';
-  latitude: number;
-  longitude: number;
-  zoom: number;
-  address: string;
-  private geoCoder;
-  @ViewChild('search1')
-  public searchElementRef: ElementRef;
-  response: any;
-  defaultCountryCode: string;
-  lastSegment: string;
+   	//google map autocomplete
+     title: string = 'AGM project';
+     latitude: number;
+     longitude: number;
+     zoom: number;
+     address: string;
+     private geoCoder;
+     @ViewChild('search1')
+     public searchElementRef: ElementRef;
+     response: any;
+     defaultCountryCode: string;
+     lastSegment: string;
 
   constructor(
     private stateManagementService: StateManagementService,
@@ -53,7 +53,7 @@ export class SubAgentAccountDetailsComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private router: Router,
     private route: ActivatedRoute,
-    private authService: AuthService,
+    private authService:AuthService,
     private travelAgentService: TravelAgentService,
     private adminService: AdminService,
   ) { }
@@ -61,9 +61,9 @@ export class SubAgentAccountDetailsComponent implements OnInit {
   ngOnInit(): void {
 
     localStorage.removeItem('review_referral_url')
-    this.route.queryParams.subscribe((params: any) => {
-      this.userId = params?.id
-    })
+    this.route.queryParams.subscribe((params:any)=>{
+			this.userId = params?.id
+		})
 
     this.buildProfileForm()
     this.timezoneForm = this.formBuilder.group({
@@ -87,38 +87,38 @@ export class SubAgentAccountDetailsComponent implements OnInit {
           this.profileForm.patchValue({
             latitude: place.geometry.location.lat(),
             longitude: place.geometry.location.lng(),
-            address: place?.formatted_address
+            address:place?.formatted_address 
           });
           for (var i = 0; i < place.address_components.length; i++) {
-            for (var j = 0; j < place.address_components[i].types.length; j++) {
-              if (place.address_components[i].types[j] == "country") {
-                this.profileForm.patchValue({
-                  country: place.address_components[i].long_name
-                });
-                // this.changeCountry(place.address_components[i].short_name)
-              }
-              else if (place.address_components[i].types[j] == "administrative_area_level_1") {
-                this.profileForm.patchValue({
-                  state: place.address_components[i].long_name
-                });
-              }
-              else if (place.address_components[i].types[j] == "administrative_area_level_3") {
-                this.profileForm.patchValue({
-                  city: place.address_components[i].long_name
-                });
-              }
-              else if (place.address_components[i].types[j] == "postal_code") {
-                this.profileForm.patchValue({
-                  zip: place.address_components[i].long_name
-                });
-              }
-              // else if (place.address_components[i].types[j] == "street_number") {
-              // 	this.profileForm.patchValue({
-              // 		address: place.address_components[i].long_name
-              // 	});
-              // }
-            }
-          }
+						for (var j = 0; j < place.address_components[i].types.length; j++) {
+							if (place.address_components[i].types[j] == "country") {
+								this.profileForm.patchValue({
+									country: place.address_components[i].long_name
+								});
+								// this.changeCountry(place.address_components[i].short_name)
+							}
+							else if (place.address_components[i].types[j] == "administrative_area_level_1") {
+								this.profileForm.patchValue({
+									state: place.address_components[i].long_name
+								});
+							}
+							else if (place.address_components[i].types[j] == "administrative_area_level_3") {
+								this.profileForm.patchValue({
+									city: place.address_components[i].long_name
+								});
+							}
+							else if (place.address_components[i].types[j] == "postal_code") {
+								this.profileForm.patchValue({
+									zip: place.address_components[i].long_name
+								});
+							}
+							// else if (place.address_components[i].types[j] == "street_number") {
+							// 	this.profileForm.patchValue({
+							// 		address: place.address_components[i].long_name
+							// 	});
+							// }
+						}
+					}
         });
       });
     });
@@ -127,7 +127,6 @@ export class SubAgentAccountDetailsComponent implements OnInit {
 
   buildProfileForm() {
     this.profileForm = this.formBuilder.group({
-      acc_id:[''],
       firstName: ['', Validators.required],
       middleName: [''],
       lastName: ['', Validators.required],
@@ -142,7 +141,7 @@ export class SubAgentAccountDetailsComponent implements OnInit {
       city: [''],
       state: [''],
       country: ['', Validators.required],
-      zip: ['', [Validators.required, Validators.pattern("^[0-9]*$")]],
+      zip: ['',[Validators.required,Validators.pattern("^[0-9]*$")]],
       latitude: [''],
       longitude: [''],
       agency_name: ['', Validators.required],
@@ -155,18 +154,18 @@ export class SubAgentAccountDetailsComponent implements OnInit {
     return this.profileForm.controls;
   }
 
-  getProfile() {
+  getProfile(){
     this.spinner.show();
     this.travelAgentService.getSubAgentAccountDetails(this.userId)
-      .then(({ data }: any) => {
-        this.spinner.hide();//hide spinner
-        this.getProfileResponseData = data
-        this.timezoneForm.patchValue({
-          timezone: data?.timezone
-        })
+     .then(({ data }: any) => {
+      this.spinner.hide();//hide spinner
+      this.getProfileResponseData = data
+      this.timezoneForm.patchValue({
+        timezone : data?.timezone
+      })
         this.profileForm.patchValue({
           acc_id: data?.acc_id,
-          tp_id: data?.tp_id,
+          tp_id : data?.tp_id,
           firstName: data?.first_name,
           middleName: data?.middle_name,
           lastName: data?.last_name,
@@ -197,7 +196,7 @@ export class SubAgentAccountDetailsComponent implements OnInit {
         console.log('profile data-->>>>', data)
         this.MobileObject.setCountry(data?.mobileCountry)
         this.OfficeObject.setCountry(data?.workCountry);
-      }).catch((err) => {
+      }).catch((err)=>{
         this.spinner.hide();//hide spinner
         console.log(err)
       })
@@ -243,10 +242,11 @@ export class SubAgentAccountDetailsComponent implements OnInit {
     this.MobileObject = obj;
   }
 
+ 
 
 
-
-  submitForm() {
+  submitForm()
+	{
     console.log(this.profileForm);
     this.submittedForm = true;
     // stop here if form is invalid
@@ -257,101 +257,102 @@ export class SubAgentAccountDetailsComponent implements OnInit {
     console.log(this.profileForm.value);
     this.spinner.show();
 
-    this.travelAgentService.updateSubAgent(this.profileForm.value)
-      .pipe(
-        catchError(err => {
-          this.spinner.hide();//hide spinner
-          return throwError(err);
-        })
-      )
-      .subscribe(result => {
-        this.response = result;
+    this.travelAgentService.createNewSubAgent(this.profileForm.value ,  this.currentUser?.is_profile_complete)
+    .pipe(
+      catchError(err => {
         this.spinner.hide();//hide spinner
-        console.log("profile created", this.response)
-        this.router.navigate(['/travel_agent/sub-agent-accounts']);
-        //  $("#redirectModal").modal("show");
+        return throwError(err);
+      })
+    )
+    .subscribe(result => {
+      this.response = result;
+      this.spinner.hide();//hide spinner
+     console.log("profile created",this.response)
+     $("#redirectModal").modal("show");
 
-        //  setTimeout(()=>{
-        //   console.log("in timeout")
-        //   this.spinner.show()
-        //   $("#redirectModal").modal("hide");
-        //   this.authService.logout()
-        // 	.pipe(
-        // 		catchError(err =>
-        // 		{
-        // 			this.spinner.hide();//hide spinner
-        // 			return throwError(err);
-        // 		})
-        // 	).subscribe(({ success }: any) =>
-        // 	{
-        // 		this.spinner.hide();//hide spinner
-        // 		if (success == true)
-        // 		{
-        // 			this.stateManagementService.removeUser();
-        // 		}
-        // 		this.router.navigate(['/']);
-        // 	});
-        //  },10000)
+     setTimeout(()=>{
+      console.log("in timeout")
+      this.spinner.show()
+      $("#redirectModal").modal("hide");
+      this.authService.logout()
+			.pipe(
+				catchError(err =>
+				{
+					this.spinner.hide();//hide spinner
+					return throwError(err);
+				})
+			).subscribe(({ success }: any) =>
+			{
+				this.spinner.hide();//hide spinner
+				if (success == true)
+				{
+					this.stateManagementService.removeUser();
+				}
+				this.router.navigate(['/']);
+			});
+     },10000)
 
-      });
-
-
-  }
+    });
 
 
+	}
+
+  
   acceptRejectAffiliate(status) {
-    this.spinner.show();
-    // this.disableSubmitButton=true; //disable submit button
-    console.log('acc_id', this.getProfileResponseData?.acc_id, status, 'status')
+		this.spinner.show();
+		// this.disableSubmitButton=true; //disable submit button
+		console.log('acc_id', this.getProfileResponseData?.acc_id,status,'status')
 
-    this.travelAgentService.acceptRejectAffiliate(this.getProfileResponseData?.acc_id, status)
-      .pipe(
-        catchError(err => {
-          this.spinner.hide();//hide spinner
-          return throwError(err);
-        })
-      )
-      .subscribe(({ data, success, message }: any) => {
-        if (success == true) {
-          this.spinner.hide();//hide spinner
+		this.travelAgentService.acceptRejectAffiliate(this.getProfileResponseData?.acc_id,status)
+			.pipe(
+				catchError(err => {
+					this.spinner.hide();//hide spinner
+					return throwError(err);
+				})
+			)
+			.subscribe(({ data, success, message }: any) => {
+				if (success == true) {
+					this.spinner.hide();//hide spinner
           this.router.navigate(['/travel_agent/sub-agent-accounts'])
-          // this.loadClientAccounts()
-        }
-      });
-  }
+					// this.loadClientAccounts()
+				}
+			});
+	}
 
 
-  resetForm() {
+	resetForm()
+	{
     const keepValues = [
       this.profileForm.controls.mobile.value,
       this.profileForm.controls.id.value,
       this.profileForm.controls.mobileIsd.value,
       this.profileForm.controls.mobileCountry.value,
       this.profileForm.controls.agency_name.value
-
-    ];
-
-    this.buildProfileForm();
-    this.profileForm.controls.mobile.patchValue(keepValues[0]);
-    this.profileForm.controls.id.patchValue(keepValues[1]);
-    this.profileForm.controls.mobileIsd.patchValue(keepValues[2]);
-    this.profileForm.controls.mobileCountry.patchValue(keepValues[3]);
-    this.profileForm.controls.agency_name.patchValue(keepValues[4])
-
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-  backButton() {
-    this.router.navigate(['/travel_agent/sub-agent-accounts']);
-  }
+      
+     ];
+  
+     this.buildProfileForm();
+     this.profileForm.controls.mobile.patchValue(keepValues[0]);
+     this.profileForm.controls.id.patchValue(keepValues[1]);
+     this.profileForm.controls.mobileIsd.patchValue(keepValues[2]);
+     this.profileForm.controls.mobileCountry.patchValue(keepValues[3]);
+     this.profileForm.controls.agency_name.patchValue(keepValues[4])
+  
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+	}
+	backButton()
+	{
+		this.router.navigate(['/travel_agent/sub-agent-accounts']);
+	}
   onTimezoneChange(event: any): void {
     const selectedValue = event.value;
     console.log('Selected Timezone:', selectedValue);
     this.adminService
-      .changeTimezone(selectedValue)
-      .pipe()
-      .subscribe((response: any) => {
-        console.log(response, 'timezone changed success');
-      });
+			.changeTimezone(selectedValue)
+			.pipe()
+			.subscribe((response: any) => {
+				console.log(response,'timezone changed success');
+			});
 
   }
 }
