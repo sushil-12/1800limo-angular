@@ -191,7 +191,7 @@ export class EditVehicleComponent implements OnInit {
 			luggage: ['', [Validators.required, Validators.pattern("^[0-9]*$")]],
 			charterCancelPolicy: ['2', Validators.required],
 			nonCharterCancelPolicy: ['2', Validators.required],
-			typeOfService: ['localService', Validators.required],
+			typeOfService: this.formBuilder.array([]),
 			amenities: this.formBuilder.array([], [Validators.required]),
 			specialAmenitiesGet: this.formBuilder.array([]),
 			specialAmenities: this.formBuilder.array([]),
@@ -414,6 +414,8 @@ export class EditVehicleComponent implements OnInit {
 							nonCharterCancelPolicy: this.response2.data.nonCharterCancelPolicy,
 							typeOfService: this.response2.data.typeOfService
 						});
+						this.pushValuesTypeOfService(this.response2?.data?.typeOfService) // push into fo
+
 						//Set values in autocomplete fields
 						let vehicleTypeField: any = document.getElementById('vehicleTypeField');
 						vehicleTypeField.value = this.response2.data.vehicle_typeName;
@@ -450,6 +452,7 @@ export class EditVehicleComponent implements OnInit {
 					});
 				// this.stateManagementService.setprogressBar(false);
 			});
+			this.typeOfService // assign the global variable - service.
 		this.Subscriptions();
 	}
 
@@ -646,9 +649,9 @@ export class EditVehicleComponent implements OnInit {
 		}
 	}
 	//End of autocomplete search and selection
-	typeOfService(type) {
-		this.serviceType = type;
-	}
+	// typeOfService(type) {
+	// 	this.serviceType = type;
+	// }
 
 	setAmenities() {
 		var chargableAmenities = this.chargableAmenities;
@@ -1069,6 +1072,7 @@ export class EditVehicleComponent implements OnInit {
 
 	submitForm() {
 		console.log(this.addVehicleForm);
+		this.pushValuesTypeOfService(this.service)
 		this.submittedForm = true;
 		// stop here if form is invalid
 		if (this.addVehicleForm.invalid) {
@@ -1182,6 +1186,39 @@ export class EditVehicleComponent implements OnInit {
 			this.addVehicleForm.patchValue({
 				model: this.response2.data.model
 			});
+		}
+	}
+
+	get typeOfService(): FormArray
+	{
+		return this.addVehicleForm.get('typeOfService') as FormArray;
+	}
+
+	pushValuesTypeOfService(value: Array<any>)
+	{
+		console.log('type of srvicer',value)
+		this.typeOfService.clear()
+		if (value.length == 0)
+		{
+			return
+		}
+		value.forEach((item: string) =>
+		{
+			!this.service.includes(item) && this.service.push(item)
+			this.typeOfService.push(this.formBuilder.control(item))
+		})
+	}
+
+	service: Array<any> = []
+	onServiceChange(value: string) {
+		console.log(value)
+		const index = this.service.indexOf(value);
+		if (index === -1) {
+			// If the service type is not selected, add it to the array
+			this.service.push(value);
+		} else {
+			// If the service type is already selected, remove it from the array
+			this.service.splice(index, 1);
 		}
 	}
 
