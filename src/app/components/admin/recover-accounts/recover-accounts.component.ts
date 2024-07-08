@@ -206,7 +206,7 @@ export class RecoverAccountsComponent implements OnInit {
 
   messagetype: Record<string, any>
   sendMessage(type: 'email' | 'sms', travelPlanner: any, message: string = null) {
-    console.log('Request to send a Message to travel agent id: ', type, travelPlanner)
+    console.log('Request to send a Message to travel agent id: ', type, travelPlanner,message)
     this.messagetype = { type, travelPlanner }
     $('#messageModal').modal('show')
     $('#messageModal').find('.modal-header').find('h4').text('Contact to User via ' + type.toUpperCase())
@@ -233,8 +233,8 @@ export class RecoverAccountsComponent implements OnInit {
       else {
         formData.append('phone_number', travelPlanner?.isd + travelPlanner?.phone)
       }
-
-      this.adminService.sendNotificationAllAccounts(type, formData).then(response => {
+      console.log("bodyy in send message", formData)
+      this.adminService.sendNotificationAllAccounts(type, travelPlanner?.id, formData).then(response => {
         if (!response.ok) {
           if (response.status === 422) {
             // Parse the JSON response

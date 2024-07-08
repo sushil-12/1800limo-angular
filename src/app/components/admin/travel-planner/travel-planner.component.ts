@@ -179,10 +179,14 @@ export class TravelPlannerComponent implements OnInit {
     if (this.allSelected) {
       this.emails.patchValue([]);
     } else {
-      this.emails.patchValue(this.travel_accounts_email.map(option => option.Email));
+      this.emails.patchValue(this.travel_accounts_email.map(option => this.stringifyOption(option)));
     }
     this.allSelected = !this.allSelected;
   }
+
+  stringifyOption(option: any) {
+		return { id: option.id, email: option.email };
+	  }
 
   //submit email modal
   sendEmail() {
