@@ -450,10 +450,14 @@ export class AffiliateAccountsComponent implements OnInit {
 		if (this.allSelected) {
 			this.emails.patchValue([]);
 		} else {
-			this.emails.patchValue(this.affiliate_accounts.map(option => option.Email));
+			this.emails.patchValue(this.affiliate_accounts.map(option => this.stringifyOption(option)));
 		}
 		this.allSelected = !this.allSelected;
 	}
+
+	stringifyOption(option: any) {
+		return { id: option.id, email: option.Email };
+	  }
 
 	//submit email modal
 	sendEmail() {
