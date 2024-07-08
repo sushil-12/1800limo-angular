@@ -206,7 +206,7 @@
                                     <!-- Add Select All option -->
                                     <mat-option (click)="selectAll()">Select All</mat-option>
                                     <mat-option *ngFor="let option of LooseAffiliateAcc"
-                                        [value]="option.email">{{option.name}}</mat-option>
+                                    [value]="stringifyOption(option)">{{option.name}}</mat-option>
                                 </mat-select>
                             </mat-form-field>
                         </div>

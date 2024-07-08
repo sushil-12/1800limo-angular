@@ -296,7 +296,7 @@
 									<!-- Add Select All option -->
 									<mat-option (click)="selectAll()">Select All</mat-option>
 									<mat-option *ngFor="let option of individuals"
-										[value]="option.email">{{option.first_name + " " +
+									[value]="stringifyOption(option)">{{option.first_name + " " +
 										option.last_name}}</mat-option>
 								</mat-select>
 							</mat-form-field>

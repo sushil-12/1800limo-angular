@@ -266,7 +266,7 @@ export class ProfileComponent implements OnInit {
     console.log(this.profileForm.value);
     this.spinner.show();
 
-    this.travelAgentService.createNewSubAgent(this.profileForm.value, this.currentUser?.is_profile_complete)
+    this.travelAgentService.createNewSubAgent(this.profileForm.value)
     .pipe(
       catchError(err => {
         this.spinner.hide();//hide spinner

@@ -150,10 +150,14 @@ export class LooseAffiliateAccountsComponent implements OnInit {
     if (this.allSelected) {
       this.emails.patchValue([]);
     } else {
-      this.emails.patchValue(this.LooseAffiliateAcc.map(option => option.email));
+      this.emails.patchValue(this.LooseAffiliateAcc.map(option => this.stringifyOption(option)));
     }
     this.allSelected = !this.allSelected;
   }
+
+  stringifyOption(option: any) {
+		return { id: option.id, email: option.email };
+	  }
 
   //submit email modal
   sendEmail() {
@@ -250,31 +254,27 @@ export class LooseAffiliateAccountsComponent implements OnInit {
 
   messagetype: Record<string, any>
   sendMessage(type: 'email' | 'sms', travelPlanner: any, message: string = null) {
-    console.log('Request to send a Message to travel agent id: ', type, travelPlanner)
+    console.log('Request to send a Message to travel agent id: ', type, travelPlanner,message)
     this.messagetype = { type, travelPlanner }
     $('#messageModal').modal('show')
     $('#messageModal').find('.modal-header').find('h4').text('Contact to User via ' + type.toUpperCase())
     $('#messageModal').find('.modal-body').find('p#affiliate-details').html(`User Name: ${travelPlanner['name']}<br/>User Email: ${travelPlanner['email']}`)
     if (message != null) {
-      // let body = {
-      //   text_message: message
-      // }
+   
       const formData = new FormData();
+      // Store form name as "file" with file data
+      // formData.append("file", this.fileToUpload);
+
       formData.append("text_message", message);
       if (type == 'email') {
         formData.append("email_address", travelPlanner?.email)
       }
       else {
-        formData.append('phone_number', travelPlanner?.phone_isd + travelPlanner?.phone)
+        formData.append('phone_number', travelPlanner?.isd + travelPlanner?.phone)
       }
-      // if (type == 'email') {
-      //   body['email_address'] = travelPlanner?.email
-      // }
-      // else {
-      //   body['phone_number'] = travelPlanner?.phone_isd + travelPlanner?.phone
-      // }
       console.log("bodyy in send message", formData)
-      this.adminService.sendNotificationAllAccounts(type, formData).then(response => {
+
+      this.adminService.sendNotificationAllAccounts(type,travelPlanner?.id ,formData).then(response => {
         if (!response.ok) {
           if (response.status === 422) {
             // Parse the JSON response

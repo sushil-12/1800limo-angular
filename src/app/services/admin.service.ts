@@ -983,11 +983,11 @@ export class AdminService {
 		return this.httpClient.post(`${this.serverUrl}admin/notification/send-${type}/${affiliate_id}`, data)
 	}
 
-	sendNotificationAllAccounts(type: 'email' | 'sms', data: any) {
+	sendNotificationAllAccounts(type: 'email' | 'sms', id: number, data: any) {
 		// return this.httpClient.post(`${this.serverUrl}admin-send-notification/${type}`, data)
 		let resp: any
 		const accessToken = this.authService.getAccessToken();
-		resp = fetch(`${this.serverUrl}admin-send-notification/${type}`, {
+		resp = fetch(`${this.serverUrl}admin-send-notification/${type}/${id}`, {
 			method: 'POST',
 			body: data,
 			headers: {
