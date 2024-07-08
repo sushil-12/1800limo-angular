@@ -127,6 +127,7 @@ export class SubAgentAccountDetailsComponent implements OnInit {
 
   buildProfileForm() {
     this.profileForm = this.formBuilder.group({
+      acc_id:[''],
       firstName: ['', Validators.required],
       middleName: [''],
       lastName: ['', Validators.required],
@@ -257,7 +258,7 @@ export class SubAgentAccountDetailsComponent implements OnInit {
     console.log(this.profileForm.value);
     this.spinner.show();
 
-    this.travelAgentService.createNewSubAgent(this.profileForm.value ,  this.currentUser?.is_profile_complete)
+    this.travelAgentService.updateSubAgentAccount(this.profileForm.value)
     .pipe(
       catchError(err => {
         this.spinner.hide();//hide spinner
@@ -266,33 +267,10 @@ export class SubAgentAccountDetailsComponent implements OnInit {
     )
     .subscribe(result => {
       this.response = result;
+      console.log("profile updated",this.response)
       this.spinner.hide();//hide spinner
-     console.log("profile created",this.response)
-     $("#redirectModal").modal("show");
-
-     setTimeout(()=>{
-      console.log("in timeout")
-      this.spinner.show()
-      $("#redirectModal").modal("hide");
-      this.authService.logout()
-			.pipe(
-				catchError(err =>
-				{
-					this.spinner.hide();//hide spinner
-					return throwError(err);
-				})
-			).subscribe(({ success }: any) =>
-			{
-				this.spinner.hide();//hide spinner
-				if (success == true)
-				{
-					this.stateManagementService.removeUser();
-				}
-				this.router.navigate(['/']);
-			});
-     },10000)
-
-    });
+      this.router.navigate(['/travel_agent/sub-agent-accounts']);
+    })
 
 
 	}

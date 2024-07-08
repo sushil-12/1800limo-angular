@@ -255,6 +255,10 @@ export class TravelAgentService {
 		}
 	}
 
+	updateSubAgentAccount(data){
+		return this.httpClient.post(this.serverUrl + 'update-sub-travel-agent', data);
+	}
+
 	cancelBooking(id) {
 		return this.httpClient.get(this.serverUrl + `cancel-booking/${id}`);
 	}

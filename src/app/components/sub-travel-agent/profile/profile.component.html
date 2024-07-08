@@ -13,7 +13,7 @@
                     <div class="col-md-4">
                         <mat-form-field appearance="outline">
                             <mat-label>First Name <span class="asterisk">*</span></mat-label>
-                            <input formControlName="firstName" type="text" matInput placeholder="First Name">
+                            <input formControlName="firstName" type="text" matInput placeholder="First Name" (focus)="$event.target.select()">
                         </mat-form-field>
                         <div *ngIf="submittedForm && f?.firstName?.errors || f?.firstName?.touched && f?.firstName?.errors"
                             class="text-danger">
@@ -23,7 +23,7 @@
                     <div class="col-md-4">
                         <mat-form-field appearance="outline">
                             <mat-label>Middle Name </mat-label>
-                            <input formControlName="middleName" type="text" matInput placeholder="Middle Name">
+                            <input formControlName="middleName" type="text" matInput placeholder="Middle Name" (focus)="$event.target.select()">
                         </mat-form-field>
                         <div *ngIf="submittedForm && f?.middleName?.errors" class="text-danger">
                             <div *ngIf="f?.middleName?.errors?.required">This field is required</div>
@@ -32,7 +32,7 @@
                     <div class="col-md-4">
                         <mat-form-field appearance="outline">
                             <mat-label>Last Name <span class="asterisk">*</span></mat-label>
-                            <input formControlName="lastName" type="text" matInput placeholder="Last Name">
+                            <input formControlName="lastName" type="text" matInput placeholder="Last Name" (focus)="$event.target.select()">
                         </mat-form-field>
                         <div *ngIf="submittedForm && f?.lastName?.errors || f?.lastName?.touched && f?.lastName?.errors"
                             class="text-danger">
@@ -48,7 +48,7 @@
                                 [ng2TelInputOptions]="{'initialCountry': defaultCountryCode,'preferredCountries': ['us','in','ca','mx','gb']}"
                                 placeholder="1234567890" class="phoneNumberClass" readonly
                                 (countryChange)="onCountryChange($event,'mobile')"
-                                (intlTelInputObject)="telInputObjectMobile($event)" tabIndex="1" />
+                                (intlTelInputObject)="telInputObjectMobile($event)" tabIndex="1" (focus)="$event.target.select()"/>
                         </mat-form-field>
                         <div *ngIf="submittedForm && f?.mobile?.errors || f?.mobile?.touched && f?.mobile?.errors"
                             class="text-danger margin-bottom-thin my-mat-hint">
@@ -79,7 +79,7 @@
                                 [ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
                                 placeholder="1234567890" class="phoneNumberClass"
                                 (countryChange)="onCountryChange($event,'work_contact_number')"
-                                (intlTelInputObject)="telInputObjectOffice($event)" tabIndex="1" />
+                                (intlTelInputObject)="telInputObjectOffice($event)" tabIndex="1" (focus)="$event.target.select()"/>
                         </mat-form-field>
                         <div *ngIf="submittedForm && f?.work_contact_number?.errors || f?.work_contact_number?.touched && f?.work_contact_number?.errors"
                             class="text-danger margin-bottom-thin my-mat-hint">
@@ -112,7 +112,7 @@
                     <div class="col-md-4">
                         <mat-form-field appearance="outline">
                             <mat-label>E-mail <span class="asterisk">*</span></mat-label>
-                            <input formControlName="email" type="text" matInput placeholder="E-mail">
+                            <input formControlName="email" type="text" matInput placeholder="E-mail" (focus)="$event.target.select()">
                         </mat-form-field>
                         <div *ngIf="submittedForm && f?.email?.errors || f?.email?.touched && f?.email?.errors"
                             class="text-danger">
@@ -123,7 +123,7 @@
                     <div class="col-md-4">
                         <mat-form-field appearance="outline">
                             <mat-label>Agency Name <span class="asterisk">*</span></mat-label>
-                            <input formControlName="agency_name" type="text" matInput placeholder="Agency Name">
+                            <input formControlName="agency_name" type="text" matInput placeholder="Agency Name" (focus)="$event.target.select()"> 
                         </mat-form-field>
                         <div *ngIf="submittedForm && f?.agency_name?.errors" class="text-danger">
                             <div *ngIf="f?.agency_name?.errors?.required">This field is required</div>
@@ -147,7 +147,7 @@
                     <div class="col-md-12">
                         <mat-form-field appearance="outline" [ngClass]="{ 'border-red': (f.address.value == '')}">
                             <mat-label>Street Address <span class="asterisk">*</span></mat-label>
-                            <input formControlName="address" type="text" matInput placeholder="Street Address" #search1>
+                            <input formControlName="address" type="text" matInput placeholder="Street Address" #search1 (focus)="$event.target.select()">
                         </mat-form-field>
                         <!-- <textarea placeholder="Address" formControlName="address"></textarea> -->
                         <div *ngIf="submittedForm && f?.address?.errors || f?.address?.touced && f?.address?.errors"
@@ -158,7 +158,7 @@
                     <div class="col-md-6">
                         <mat-form-field appearance="outline">
                             <mat-label>Country <span class="asterisk">*</span></mat-label>
-                            <input formControlName="country" type="text" matInput placeholder="Country">
+                            <input formControlName="country" type="text" matInput placeholder="Country" (focus)="$event.target.select()">
                         </mat-form-field>
                         <div *ngIf="submittedForm && f?.country?.errors" class="text-danger">
                             <div *ngIf="f?.country?.errors?.required">This field is required</div>
@@ -168,7 +168,7 @@
                         <mat-form-field appearance="outline">
                             <mat-label>Zip Code / Country Address Code <span class="asterisk">*</span></mat-label>
                             <input formControlName="zip" type="text" matInput
-                                placeholder="Zip Code / Country Address Code">
+                                placeholder="Zip Code / Country Address Code" (focus)="$event.target.select()">
                         </mat-form-field>
                         <div *ngIf="submittedForm && f?.zip?.errors || f.zip.touched && f.zip.errors"
                             class="text-danger">

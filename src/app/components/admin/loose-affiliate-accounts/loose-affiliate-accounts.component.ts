@@ -36,7 +36,7 @@ export class LooseAffiliateAccountsComponent implements OnInit {
   public prevPageUrl: string;
   public nextPageUrl: string;
   searchText: any;
-  travelAccountCount: any;
+  looseAffiliateAccountCount: any;
   loginAsUserResponse: any;
   alertMessage: string = '';
   looseAffId: any;
@@ -101,20 +101,20 @@ export class LooseAffiliateAccountsComponent implements OnInit {
     // Load Our LooseAffiliateAcc using API
     this.adminService.getLooseAffiliaeAccounts(pageUrl, keyword).then(result => {
       this.LooseAffiliateAccRes = result;
-      this.LooseAffiliateAcc = this.LooseAffiliateAccRes?.data?.data;
+      this.LooseAffiliateAcc = this.LooseAffiliateAccRes?.data?.loose_affiliates?.data;
       console.log('loose aff acc--->', this.LooseAffiliateAcc)
       this.firstPage = 1;
-      this.travelAccountCount = this.LooseAffiliateAccRes?.data?.account_counts
-      this.lastPage = this.LooseAffiliateAccRes.data.last_page;
-      this.totalPage = this.LooseAffiliateAccRes.data.last_page;
-      this.currentPage = this.LooseAffiliateAccRes.data.current_page;
-      this.from = this.LooseAffiliateAccRes.data.from;
-      this.to = this.LooseAffiliateAccRes.data.to;
-      this.path = this.LooseAffiliateAccRes.data.path;
-      this.firstPageUrl = this.LooseAffiliateAccRes.data.first_page_url;
-      this.lastPageUrl = this.LooseAffiliateAccRes.data.last_page_url;
-      this.prevPageUrl = this.LooseAffiliateAccRes.data.prev_page_url;
-      this.nextPageUrl = this.LooseAffiliateAccRes.data.next_page_url;
+      this.looseAffiliateAccountCount = this.LooseAffiliateAccRes?.data?.count
+      this.lastPage = this.LooseAffiliateAccRes?.data?.loose_affiliates?.last_page;
+      this.totalPage = this.LooseAffiliateAccRes?.data?.loose_affiliates?.last_page;
+      this.currentPage = this.LooseAffiliateAccRes?.data?.loose_affiliates?.current_page;
+      this.from = this.LooseAffiliateAccRes?.data?.loose_affiliates?.from;
+      this.to = this.LooseAffiliateAccRes?.data?.loose_affiliates?.to;
+      this.path = this.LooseAffiliateAccRes?.data?.loose_affiliates?.path;
+      this.firstPageUrl = this.LooseAffiliateAccRes?.data?.loose_affiliates?.first_page_url;
+      this.lastPageUrl = this.LooseAffiliateAccRes?.data?.loose_affiliates?.last_page_url;
+      this.prevPageUrl = this.LooseAffiliateAccRes?.data?.loose_affiliates?.prev_page_url;
+      this.nextPageUrl = this.LooseAffiliateAccRes?.data?.loose_affiliates?.next_page_url;
       // sessionStorage.setItem('LooseAffiliateAcc',JSON.stringify(this.LooseAffiliateAcc));
       this.spinner.hide();//hide spinner
     })
