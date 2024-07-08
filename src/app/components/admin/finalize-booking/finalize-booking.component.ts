@@ -109,6 +109,7 @@ export class FinalizeBookingComponent implements OnInit {
 				this.bookingId = params.bookingId;
 				this.getReservationDetails(this.bookingId);
 				this.paymentDetail(this.bookingId)
+				this.scroll('submitForm')
 			} else {
 				// navigate back to dashboard in case of no booking Id specified.
 				this.$router.navigate(["/admin/daily-bookings-admin"]);
@@ -211,7 +212,7 @@ export class FinalizeBookingComponent implements OnInit {
 				this.subModules = localStorage.getItem('sub_modules') || [];
 				this.currentUser = JSON.parse(localStorage.getItem('userData')) || "";
 				setTimeout(() => {
-					this.scroll('NumVehicles')
+					this.scroll('submitForm')
 
 				}, 600)
 			});
