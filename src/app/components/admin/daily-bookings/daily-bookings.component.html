@@ -1788,7 +1788,7 @@
 						</div>
 					</div> -->
 					<!-- *ngIf="bookingPreview?.payment_status=='unpaid' && bookingPreview?.share_array?.length != 0" -->
-					<div class="distribution_rate">
+					<div class="distribution_rate" *ngIf="bookingPreview?.affiliate_type != 'unassigned'">
 						<h4 class="font-weight-bolder m-0 my-3">
 							Rates Distribution
 						</h4>
