@@ -234,7 +234,7 @@ export class RecoverAccountsComponent implements OnInit {
         formData.append('phone_number', travelPlanner?.isd + travelPlanner?.phone)
       }
       console.log("bodyy in send message", formData)
-      this.adminService.sendNotificationAllAccounts(type, travelPlanner?.acc_id, formData).then(response => {
+      this.adminService.sendNotificationAllAccounts(type, travelPlanner?.account_id, formData).then(response => {
         if (!response.ok) {
           if (response.status === 422) {
             // Parse the JSON response
