@@ -360,12 +360,13 @@ export class DailyBookingsComponent implements OnInit {
 			this.reciptentName =
 				this.passengerDetails.driver_first_name +
 				this.passengerDetails.driver_last_name;
-		} else {
+		}
+		else {
 			this.sendInformation = format
-				? this.passengerDetails.loose_affiliate_phone_isd +
-				this.passengerDetails.loose_affiliate_phone
-				: this.passengerDetails.loose_affiliate_email;
-			this.reciptentName = this.passengerDetails.loose_affiliate_name;
+				? (this.passengerDetails.loose_affiliate_phone_isd ? this.passengerDetails.loose_affiliate_phone_isd : '+1') +
+				(this.passengerDetails.loose_affiliate_phone ? this.passengerDetails.loose_affiliate_phone : '8005466266')
+				: (this.passengerDetails.loose_affiliate_email ? this.passengerDetails.loose_affiliate_email : 'info@1800limo.com');
+			this.reciptentName = (this.passengerDetails.loose_affiliate_name ? this.passengerDetails.loose_affiliate_name : '1800Limo Chauffeurs');
 		}
 
 		let obj = {
@@ -459,7 +460,7 @@ export class DailyBookingsComponent implements OnInit {
 				timestamp = date.getTime();
 				this.bookingsRes = result;
 				this.bookings = this.bookingsRes?.data?.data;
-				if(!this.useDateFilter){
+				if (!this.useDateFilter) {
 					this.endDate = this.bookings?.length > 0 ? this.bookings[this.bookings?.length - 1]?.pickup_date : moment(timestamp).format("YYYY-MM-DD")
 				}
 				this.totalRecords = this.bookingsRes.data.total;
@@ -535,6 +536,7 @@ export class DailyBookingsComponent implements OnInit {
 		} catch (error) {
 			console.log("----------error------->>>>>> ", error);
 		}
+		console.log("passenger details", booking, selection_button)
 		this.passengerDetails = booking;
 		this.passengerDetails["selection_button"] = selection_button;
 	}
