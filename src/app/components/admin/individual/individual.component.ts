@@ -150,14 +150,15 @@ export class IndividualComponent implements OnInit {
 		if (this.allSelected) {
 			this.emails.patchValue([]);
 		} else {
-			this.emails.patchValue(this.individuals.map(option => this.stringifyOption(option)));
+			const allValues = this.individuals.map(option => this.stringifyOption(option));
+			this.emails.setValue(allValues);
 		}
 		this.allSelected = !this.allSelected;
 	}
 
-	stringifyOption(option: any) {
-		return { id: option.id, email: option.email };
-	  }
+	stringifyOption(option: any): string {
+		return JSON.stringify({ id: option.id, email: option.email });
+	}
 
 	//submit email modal
 	sendEmail() {
