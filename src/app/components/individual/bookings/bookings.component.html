@@ -84,9 +84,9 @@
             </div>
             <div>
                 <p><mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">
-                    {{useDateFilter ? 'Uncheck to see current and future bookings' :
-                    'Check to see only current 7 day bookings and search by any term.' }}
-                </mat-checkbox>
+                        {{useDateFilter ? 'Uncheck to see current and future bookings' :
+                        'Check to see only current 7 day bookings and search by any term.' }}
+                    </mat-checkbox>
 
                 </p>
             </div>
@@ -176,7 +176,8 @@
                                     <td class="sorting_1">
                                         <p style="font-weight: 600 !important;">{{ FormatDate(booking?.pickup_date) }}
                                         </p>
-                                        <p style="font-weight: 600 !important;" >{{ FormatTime(booking?.pickup_time) }}</p>
+                                        <p style="font-weight: 600 !important;">{{ FormatTime(booking?.pickup_time) }}
+                                        </p>
                                         <p style="font-weight: 600 !important;">{{booking?.pickup_day}}</p>
                                     </td>
                                     <td>
@@ -187,12 +188,12 @@
                                                 [innerHTML]="highlighText( formatPhoneNumber(booking?.pax_isd + booking?.pax_tel))"></span>
                                         </p>
                                         <span class="loc-logo"
-                                        (click)="showLocationPointOnMap(booking.booking_id, 'pickup')">
-                                       <i class="bi bi-geo-alt-fill pin-icon-preview"></i>&nbsp;&nbsp;</span>
+                                            (click)="showLocationPointOnMap(booking.booking_id, 'pickup')">
+                                            <i class="bi bi-geo-alt-fill pin-icon-preview"></i>&nbsp;&nbsp;</span>
                                         <span class="text-underline cursor-pointer">
                                             <span [innerHTML]="highlighText(booking?.pickup_address)"></span>
                                         </span>
-                                       
+
                                     </td>
                                     <td>
                                         <p data-target="#sendEmailModal" data-toggle="modal"
@@ -213,12 +214,12 @@
                                                 [innerHTML]="highlighText('+18005466266')"></span>
                                         </p>
                                         <span class="loc-logo"
-                                        (click)="showLocationPointOnMap(booking.booking_id, 'dropoff')">
-                                        <i class="bi bi-geo-alt-fill pin-icon-preview"></i>&nbsp;&nbsp;</span>
+                                            (click)="showLocationPointOnMap(booking.booking_id, 'dropoff')">
+                                            <i class="bi bi-geo-alt-fill pin-icon-preview"></i>&nbsp;&nbsp;</span>
                                         <span class="text-underline cursor-pointer">
                                             <span [innerHTML]="highlighText(booking?.dropoff_address)"></span>
                                         </span>
-                                       
+
                                     </td>
                                     <td>
                                         <span [innerHTML]="highlighText(booking?.vehicle_cat_name)"></span>
@@ -847,7 +848,8 @@
                                 </span>
                             </div>
                             <div class="col-md-8 value">
-                                <span class="font-weight-bolder preview-output-feild">
+                                <span class="font-weight-bolder preview-output-feild" style="cursor: pointer;"
+                                    (click)="searchOnGoogle(bookingPreview?.pickup_airline_name + ' ' + bookingPreview?.pickup_flight)">
                                     {{ textFormatter(bookingPreview.pickup_airline_name) }}
                                 </span>
                             </div>
@@ -861,7 +863,8 @@
                                 </span>
                             </div>
                             <div class="col-md-8 value">
-                                <span class="font-weight-bolder preview-output-feild">
+                                <span class="font-weight-bolder preview-output-feild" style="cursor: pointer;"
+                                    (click)="searchOnGoogle(bookingPreview?.pickup_airline_name + ' ' + bookingPreview?.pickup_flight)">
                                     {{ textFormatter(bookingPreview.pickup_flight) }}
                                 </span>
                             </div>
@@ -991,7 +994,8 @@
                                 </span>
                             </div>
                             <div class="col-md-8 value">
-                                <span class="font-weight-bolder preview-output-feild">
+                                <span class="font-weight-bolder preview-output-feild" style="cursor: pointer;"
+                                    (click)="searchOnGoogle(bookingPreview?.dropoff_airline_name + ' ' + bookingPreview?.dropoff_flight)">
                                     {{ textFormatter(bookingPreview.dropoff_airline_name) }}
                                 </span>
                             </div>
@@ -1005,7 +1009,8 @@
                                 </span>
                             </div>
                             <div class="col-md-8 value">
-                                <span class="font-weight-bolder preview-output-feild">
+                                <span class="font-weight-bolder preview-output-feild" style="cursor: pointer;"
+                                    (click)="searchOnGoogle(bookingPreview?.dropoff_airline_name + ' ' + bookingPreview?.dropoff_flight)">
                                     {{ textFormatter(bookingPreview.dropoff_flight) }}
                                 </span>
                             </div>

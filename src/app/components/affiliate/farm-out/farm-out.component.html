@@ -66,8 +66,8 @@
 	</div>
 	<div class="ml-4">
 		<p><mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">
-			{{useDateFilter ? 'Uncheck to see current and future bookings' :
-			'Check to see only current 7 day bookings and search by any term.' }}
+				{{useDateFilter ? 'Uncheck to see current and future bookings' :
+				'Check to see only current 7 day bookings and search by any term.' }}
 			</mat-checkbox></p>
 	</div>
 	<!-- DIVISION: SEARCH PARAMETERS ENDS -->
@@ -214,7 +214,7 @@
 									<span class="text-underline cursor-pointer">
 										<span [innerHTML]="highlighText(booking?.pickup_address)"></span>
 									</span>
-									
+
 								</td>
 								<td>
 									<!-- class="disabled-btn" -->
@@ -228,12 +228,12 @@
 
 									</p>
 									<span class="loc-logo"
-									(click)="showLocationPointOnMap(booking.booking_id, 'dropoff')">
-									<i class="bi bi-geo-alt-fill pin-icon-preview"></i>&nbsp;&nbsp;</span>
+										(click)="showLocationPointOnMap(booking.booking_id, 'dropoff')">
+										<i class="bi bi-geo-alt-fill pin-icon-preview"></i>&nbsp;&nbsp;</span>
 									<span class="text-underline cursor-pointer">
 										<span [innerHTML]="highlighText(booking?.dropoff_address)"></span>
 									</span>
-									
+
 								</td>
 								<td>
 									<span [innerHTML]="highlighText(booking?.vehicle_cat_name)"></span>
@@ -806,7 +806,8 @@
 								</span>
 							</div>
 							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
+								<span class="font-weight-bolder preview-output-feild" style="cursor: pointer;"
+									(click)="searchOnGoogle(bookingPreview?.pickup_airline_name + ' ' + bookingPreview?.pickup_flight)">
 									{{ textFormatter(bookingPreview?.pickup_airline_name) }}
 								</span>
 							</div>
@@ -820,7 +821,8 @@
 								</span>
 							</div>
 							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
+								<span class="font-weight-bolder preview-output-feild" style="cursor: pointer;"
+									(click)="searchOnGoogle(bookingPreview?.pickup_airline_name + ' ' + bookingPreview?.pickup_flight)">
 									{{ textFormatter(bookingPreview?.pickup_flight) }}
 								</span>
 							</div>
@@ -948,7 +950,8 @@
 								</span>
 							</div>
 							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
+								<span class="font-weight-bolder preview-output-feild" style="cursor: pointer;"
+									(click)="searchOnGoogle(bookingPreview?.dropoff_airline_name + ' ' + bookingPreview?.dropoff_flight)">
 									{{ textFormatter(bookingPreview?.dropoff_airline_name) }}
 								</span>
 							</div>
@@ -962,7 +965,8 @@
 								</span>
 							</div>
 							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
+								<span class="font-weight-bolder preview-output-feild" style="cursor: pointer;"
+									(click)="searchOnGoogle(bookingPreview?.dropoff_airline_name + ' ' + bookingPreview?.dropoff_flight)">
 									{{ textFormatter(bookingPreview?.dropoff_flight) }}
 								</span>
 							</div>
