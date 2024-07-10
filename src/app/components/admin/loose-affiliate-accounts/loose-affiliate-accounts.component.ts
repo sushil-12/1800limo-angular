@@ -151,15 +151,15 @@ export class LooseAffiliateAccountsComponent implements OnInit {
     if (this.allSelected) {
       this.emails.patchValue([]);
     } else {
-      this.emails.patchValue(this.LooseAffiliateAcc.map(option => this.stringifyOption(option)));
+      const allValues = this.LooseAffiliateAcc.map(option => this.stringifyOption(option));
+      this.emails.setValue(allValues);
     }
     this.allSelected = !this.allSelected;
   }
 
-  stringifyOption(option: any) {
-    return { id: option.id, email: option.email };
+  stringifyOption(option: any): string {
+    return JSON.stringify({ id: option.id, email: option.email });
   }
-
   //submit email modal
   sendEmail() {
     this.spinner.show()
@@ -234,10 +234,10 @@ export class LooseAffiliateAccountsComponent implements OnInit {
       });
   }
 
-  viewEmailContent(id:any){
+  viewEmailContent(id: any) {
     console.log("In function view email content", id);
     const url = isDevMode() ? `https://1800limoapi.infodevbox.com/log-content/${id}` : `https://api.1800limo.com/log-content/${id}`;
-		window.open(url, '_blank');
+    window.open(url, '_blank');
   }
 
   highlighText(args: string) {

@@ -16,7 +16,7 @@ declare var $: any;
 	styleUrls: ['./affiliate-accounts.component.scss']
 })
 export class AffiliateAccountsComponent implements OnInit {
-	emails = new FormControl('');
+	emails = new FormControl();
 	emailList: string[] = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato'];
 	color: ThemePalette = 'primary';
 	checked = false;
@@ -451,13 +451,14 @@ export class AffiliateAccountsComponent implements OnInit {
 		if (this.allSelected) {
 			this.emails.patchValue([]);
 		} else {
-			this.emails.patchValue(this.affiliate_accounts.map(option => this.stringifyOption(option)));
+			const allValues = this.affiliate_accounts.map(option => this.stringifyOption(option));
+			this.emails.setValue(allValues);
 		}
 		this.allSelected = !this.allSelected;
 	}
 
-	stringifyOption(option: any) {
-		return { id: option.id, email: option.Email };
+	stringifyOption(option: any): string {
+		return JSON.stringify({ id: option.id, email: option.Email });
 	}
 
 	auditTrail(id: any) {

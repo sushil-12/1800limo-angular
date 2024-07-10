@@ -180,13 +180,14 @@ export class TravelPlannerComponent implements OnInit {
     if (this.allSelected) {
       this.emails.patchValue([]);
     } else {
-      this.emails.patchValue(this.travel_accounts_email.map(option => this.stringifyOption(option)));
+      const allValues = this.travel_accounts_email.map(option => this.stringifyOption(option));
+      this.emails.setValue(allValues);
     }
     this.allSelected = !this.allSelected;
   }
 
-  stringifyOption(option: any) {
-    return { id: option.id, email: option.email };
+  stringifyOption(option: any): string {
+    return JSON.stringify({ id: option.id, email: option.email });
   }
 
   auditTrail(id: any) {
