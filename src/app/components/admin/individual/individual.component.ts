@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, isDevMode } from '@angular/core';
 import { AdminService } from '../../../services/admin.service';
 import { Router } from '@angular/router';
 import { NgxSpinnerService } from "ngx-spinner";
@@ -41,6 +41,7 @@ export class IndividualComponent implements OnInit {
 	show: boolean;
 	allSelected = false;
 	emails = new FormControl('');
+	audit_Trail: any = [];
 
 	constructor(
 		private adminService: AdminService,
@@ -185,6 +186,30 @@ export class IndividualComponent implements OnInit {
 		this.emails.setValue('');
 		$("#sendEmailModal").modal("hide");
 	}
+
+	auditTrail(id: any) {
+		console.log("In function audit trail", id);
+		this.spinner.show();
+		this.adminService
+			.communicationLogs(id)
+			.pipe(
+				catchError((err) => {
+					return throwError(err);
+				})
+			)
+			.subscribe((response: any) => {
+				this.spinner.hide();
+				console.log("audit trail --->>>>>>>>", response);
+				this.audit_Trail = response?.data?.logs;
+				// $("#AuditTrailModal").modal("hide");
+			});
+	}
+
+	viewEmailContent(id:any){
+		console.log("In function view email content", id);
+		const url = isDevMode() ? `https://1800limoapi.infodevbox.com/log-content/${id}` : `https://api.1800limo.com/log-content/${id}`;
+		window.open(url, '_blank');
+	  }
 
 	addIndividualClick(individualId) {
 		this.router.navigate(['/admin/add-individual-account'], { queryParams: { individualId: individualId } });

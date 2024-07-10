@@ -73,6 +73,11 @@
                                             <div class="dropdown-item-icon"></div>
                                             Delete Account
                                         </a>
+                                        <a class="dropdown-item" (click)="auditTrail(LooseAffiliate.id)"
+                                            data-toggle="modal" data-target="#AuditTrailModal">
+                                            <div class="dropdown-item-icon"></div>
+                                            Communication Logs
+                                        </a>
                                     </div>
                                 </td>
                                 <td>
@@ -206,7 +211,7 @@
                                     <!-- Add Select All option -->
                                     <mat-option (click)="selectAll()">Select All</mat-option>
                                     <mat-option *ngFor="let option of LooseAffiliateAcc"
-                                    [value]="stringifyOption(option)">{{option.name}}</mat-option>
+                                        [value]="stringifyOption(option)">{{option.name}}</mat-option>
                                 </mat-select>
                             </mat-form-field>
                         </div>
@@ -216,6 +221,59 @@
             <div class="modal-footer d-flex justify-content-center">
                 <button class="custom-btn add-button" type="submit" (click)="sendEmail()"
                     [disabled]="Form.subject?.invalid && (Form.subject.touched || Form.subject.dirty)">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Audit trail Modal -->
+<div class="modal fade bd-example-modal-lg" id="AuditTrailModal" tabindex="-1" role="dialog"
+    aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content user_information bottom-container">
+            <div class="modal-header pb-0">
+                <h3 class="modal-title mb-0">Communication Logs</h3>
+            </div>
+            <div class="modal-body">
+                <!-- {{invoiceData.audit_trail | json}} -->
+                <table id="audittrail" class="table table-striped">
+                    <thead style="background-color: white;">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Content</th>
+                            <th scope="col" id="date">Created Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <!-- <ng-container *ngIf="audit_Trail; else not_found"> -->
+                        <tr *ngFor="let record of audit_Trail; let i=index">
+                            <th scope="row">{{i+1}}</th>
+                            <td style="word-wrap: break-word;">{{record?.description}}</td>
+                            <td style="word-wrap: break-word;" *ngIf="record?.type == 'sms' ">{{record?.content}}</td>
+                            <td style="word-wrap: break-word;" *ngIf="record?.type == 'email' "><a
+                                    style="color: blue;text-decoration: underline;cursor: pointer;" (click)="viewEmailContent(record?.id)">View
+                                    Content</a></td>
+                            <td>{{record?.created_at}}</td>
+                        </tr>
+
+                        <!-- </ng-container> -->
+                        <!-- <ng-template #not_found>
+							<tr>
+								<td colspan = "3">No Record Found!</td>
+							</tr>	
+						</ng-template> -->
+
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer justify-content-end">
+                <button type="button" class="x-close-btn x-cross-btn mx-3" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="bi bi-x-circle"></span>
+                </button>
+
             </div>
         </div>
     </div>

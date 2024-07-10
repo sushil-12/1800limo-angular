@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, isDevMode } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ThemePalette } from '@angular/material/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -44,6 +44,7 @@ export class LooseAffiliateAccountsComponent implements OnInit {
   show: boolean;
   allSelected = false;
   emails = new FormControl('');
+  audit_Trail: any = [];
 
   constructor(
     private adminService: AdminService,
@@ -156,8 +157,8 @@ export class LooseAffiliateAccountsComponent implements OnInit {
   }
 
   stringifyOption(option: any) {
-		return { id: option.id, email: option.email };
-	  }
+    return { id: option.id, email: option.email };
+  }
 
   //submit email modal
   sendEmail() {
@@ -215,6 +216,29 @@ export class LooseAffiliateAccountsComponent implements OnInit {
     return udpArr;
   }
 
+  auditTrail(id: any) {
+    console.log("In function audit trail", id);
+    this.spinner.show();
+    this.adminService
+      .communicationLogs(id)
+      .pipe(
+        catchError((err) => {
+          return throwError(err);
+        })
+      )
+      .subscribe((response: any) => {
+        this.spinner.hide();
+        console.log("audit trail --->>>>>>>>", response);
+        this.audit_Trail = response?.data?.logs;
+        // $("#AuditTrailModal").modal("hide");
+      });
+  }
+
+  viewEmailContent(id:any){
+    console.log("In function view email content", id);
+    const url = isDevMode() ? `https://1800limoapi.infodevbox.com/log-content/${id}` : `https://api.1800limo.com/log-content/${id}`;
+		window.open(url, '_blank');
+  }
 
   highlighText(args: string) {
     if (!this.searchText) { return args; }
@@ -254,13 +278,13 @@ export class LooseAffiliateAccountsComponent implements OnInit {
 
   messagetype: Record<string, any>
   sendMessage(type: 'email' | 'sms', travelPlanner: any, message: string = null) {
-    console.log('Request to send a Message to travel agent id: ', type, travelPlanner,message)
+    console.log('Request to send a Message to travel agent id: ', type, travelPlanner, message)
     this.messagetype = { type, travelPlanner }
     $('#messageModal').modal('show')
     $('#messageModal').find('.modal-header').find('h4').text('Contact to User via ' + type.toUpperCase())
     $('#messageModal').find('.modal-body').find('p#affiliate-details').html(`User Name: ${travelPlanner['name']}<br/>User Email: ${travelPlanner['email']}`)
     if (message != null) {
-   
+
       const formData = new FormData();
       // Store form name as "file" with file data
       // formData.append("file", this.fileToUpload);
@@ -274,7 +298,7 @@ export class LooseAffiliateAccountsComponent implements OnInit {
       }
       console.log("bodyy in send message", formData)
 
-      this.adminService.sendNotificationAllAccounts(type,travelPlanner?.id ,formData).then(response => {
+      this.adminService.sendNotificationAllAccounts(type, travelPlanner?.id, formData).then(response => {
         if (!response.ok) {
           if (response.status === 422) {
             // Parse the JSON response

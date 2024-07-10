@@ -1275,6 +1275,8 @@ export class AdminService {
 	getLooseAffAccDetails(id: any) {
 		return this.httpClient.get(this.serverUrl + `get-loose-affiliate/${id}`);
 	}
-
+	communicationLogs(id) {
+		return this.httpClient.get(this.serverUrl + `admin/communication-logs/${id}`)
+	}
 
 }
