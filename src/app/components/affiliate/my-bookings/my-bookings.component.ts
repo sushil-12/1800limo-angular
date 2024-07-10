@@ -725,4 +725,12 @@ export class MyBookingsComponent implements OnInit {
 			throw new Error('Error: Location Points Not Specified Properly. ');
 		}
 	}
+
+	searchOnGoogle(query: string) {
+		console.log("in search google", query)
+		if (query) {
+			const url = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+			window.open(url, '_blank'); // Opens the search in a new tab
+		}
+	}
 }

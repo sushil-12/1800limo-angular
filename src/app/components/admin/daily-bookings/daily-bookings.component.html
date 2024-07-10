@@ -287,7 +287,8 @@
 									<td class="sorting_1">
 										<p style="font-weight: 600 !important;">{{ FormatDate(booking.pickup_date) }}
 										</p>
-										<p style="font-weight: 600 !important;">{{ FormatTime(booking.pickup_time) }}</p>
+										<p style="font-weight: 600 !important;">{{ FormatTime(booking.pickup_time) }}
+										</p>
 										<p style="font-weight: 600 !important;">{{booking?.pickup_day}}</p>
 									</td>
 									<td>
@@ -989,7 +990,8 @@
 								</span>
 							</div>
 							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
+								<span class="font-weight-bolder preview-output-feild" style="cursor: pointer;"
+									(click)="searchOnGoogle(bookingPreview?.pickup_airline_name + ' ' + bookingPreview?.pickup_flight)">
 									{{ textFormatter(bookingPreview?.pickup_airline_name) }}
 								</span>
 							</div>
@@ -1003,7 +1005,8 @@
 								</span>
 							</div>
 							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
+								<span class="font-weight-bolder preview-output-feild" style="cursor: pointer;"
+									(click)="searchOnGoogle(bookingPreview?.pickup_airline_name + ' ' + bookingPreview?.pickup_flight)">
 									{{ textFormatter(bookingPreview?.pickup_flight) }}
 								</span>
 							</div>
@@ -1134,7 +1137,8 @@
 								</span>
 							</div>
 							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
+								<span class="font-weight-bolder preview-output-feild" style="cursor: pointer;"
+									(click)="searchOnGoogle(bookingPreview?.dropoff_airline_name + ' ' + bookingPreview?.dropoff_flight)">
 									{{ textFormatter(bookingPreview?.dropoff_airline_name) }}
 								</span>
 							</div>
@@ -1148,7 +1152,8 @@
 								</span>
 							</div>
 							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild">
+								<span class="font-weight-bolder preview-output-feild" style="cursor: pointer;"
+									(click)="searchOnGoogle(bookingPreview?.dropoff_airline_name + ' ' + bookingPreview?.dropoff_flight)">
 									{{ textFormatter(bookingPreview?.dropoff_flight) }}
 								</span>
 							</div>

@@ -166,7 +166,7 @@ export class BookingsComponent implements OnInit {
 			timestamp = date.getTime();
 			this.bookingsRes = result;
 			this.bookings = this.bookingsRes?.data?.data;
-			if(!this.useDateFilter){
+			if (!this.useDateFilter) {
 				this.endDate = this.bookings?.length > 0 ? this.bookings[this.bookings?.length - 1]?.pickup_date : moment(timestamp).format("YYYY-MM-DD")
 			}
 			this.totalRecords = this.bookingsRes?.data?.total;
@@ -817,5 +817,14 @@ export class BookingsComponent implements OnInit {
 			this.spinner.hide()
 		})
 	}
+
+	searchOnGoogle(query: string) {
+		console.log("in search google", query)
+		if (query) {
+			const url = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+			window.open(url, '_blank'); // Opens the search in a new tab
+		}
+	}
+
 }
 
