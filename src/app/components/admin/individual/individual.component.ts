@@ -57,6 +57,11 @@ export class IndividualComponent implements OnInit {
 
 	}
 
+	adjustTextareaHeight(textarea: HTMLTextAreaElement) {
+		textarea.style.height = 'auto';
+		textarea.style.height = textarea.scrollHeight + 'px';
+	}
+
 	timer: any
 	handleSearchKeyword(text: any) {
 		console.log('on change search text-->>', text)
