@@ -60,6 +60,11 @@ export class LooseAffiliateAccountsComponent implements OnInit {
     this.buildSendEmailForm();
   }
 
+  adjustTextareaHeight(textarea: HTMLTextAreaElement) {
+		textarea.style.height = 'auto';
+		textarea.style.height = textarea.scrollHeight + 'px';
+	}
+
   timer: any
   handleSearchKeyword(text: any) {
     console.log('on change search text-->>', text)

@@ -290,8 +290,11 @@
 								<mat-label>
 									Text Message <span class="asterisk">*</span>
 								</mat-label>
-								<textarea matInput style="white-space: pre-wrap;" formControlName="text_message"
-									(focus)="$event.target.select()" rows="5" style="font-weight: 500;"></textarea>
+								<textarea matInput #textArea
+									style="white-space: pre-wrap; font-weight: 500; overflow: hidden;"
+									formControlName="text_message" (focus)="$event.target.select()"
+									(input)="adjustTextareaHeight(textArea)" rows="5">
+								</textarea>
 							</mat-form-field>
 						</div>
 						<div class="col-md-12">

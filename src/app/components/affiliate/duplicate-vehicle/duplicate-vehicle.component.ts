@@ -903,10 +903,7 @@ export class DuplicateVehicleComponent implements OnInit, AfterViewChecked {
 
 	pushValuesTypeOfService(value: Array<any>) {
 		this.typeOfService.clear()
-		this.service = []
-		if (value.length == 0) {
-			return
-		}
+		this.service = this.addVehicleForm.get('typeOfService').value
 		value.forEach((item: string) => {
 			!this.service.includes(item) && this.service.push(item)
 			this.typeOfService.push(this.formBuilder.control(item))
@@ -916,45 +913,14 @@ export class DuplicateVehicleComponent implements OnInit, AfterViewChecked {
 	service: Array<any> = []
 	onServiceChange(value: string) {
 		console.log(value)
-		if (this.service.includes(value)) {
-			// a never reaching code line
-			this.service = this.service.filter(val => val != value)
+		const index = this.service.indexOf(value);
+		if (index === -1) {
+			// If the service type is not selected, add it to the array
+			this.service.push(value);
 		} else {
-			this.service = []
-			this.service.push(value)
+			// If the service type is already selected, remove it from the array
+			this.service.splice(index, 1);
 		}
-
-		// as per new update from client: he wants to make the whole thing work as a radio button
-		return
-		if (!is_service_valid(value, this.service)) {
-			this.errorModal.openDialog({
-				errors: {
-					error: 'Cannot choose Local and Over The Road service at the same time'
-				}
-			})
-			this.service = this.service.filter(val => val != value)
-			return
-		}
-		console.log('Inital Array: ', this.service)
-
-		/**
-		 * The Array Validation Check function
-		 * - make sure the array doesn't containe 'local' and 'over_the_road' values at a time.
-		 * 
-		 * @param value: String [Required] value to check
-		 */
-		function is_service_valid(value: string, service: Array<any>) {
-			if (value == 'local' && service.includes('over_the_road')) {
-				return false
-			} else if (value == 'over_the_road' && service.includes('local')) {
-				return false
-			}
-			else {
-				return true
-			}
 		}
 	}
 
-
-
-}

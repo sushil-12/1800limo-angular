@@ -62,6 +62,11 @@ export class TravelPlannerComponent implements OnInit {
     sessionStorage.removeItem('step_completed_obj')
   }
 
+  adjustTextareaHeight(textarea: HTMLTextAreaElement) {
+		textarea.style.height = 'auto';
+		textarea.style.height = textarea.scrollHeight + 'px';
+	}
+
   timer: any
   handleSearchKeyword(text: any) {
     console.log('on change search text-->>', text)

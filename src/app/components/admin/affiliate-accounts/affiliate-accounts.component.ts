@@ -94,17 +94,11 @@ export class AffiliateAccountsComponent implements OnInit {
 
 	}
 
-	// getEmailList() {
-	// 	this.adminService.getEmailList(this.searchText)
-	// 		.pipe(
-	// 			catchError(err => {
-	// 				return throwError(err);
-	// 			})
-	// 		)
-	// 		.subscribe(({ data, success, message }: any) => {
-	// 			this.affiliate_accounts_emails = data
-	// 		});
-	// }
+	adjustTextareaHeight(textarea: HTMLTextAreaElement) {
+		textarea.style.height = 'auto';
+		textarea.style.height = textarea.scrollHeight + 'px';
+	}
+
 
 	affiliateTypeSwitch(_affiliateType: string) {
 		switch (_affiliateType) {
