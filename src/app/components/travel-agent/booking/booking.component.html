@@ -1020,9 +1020,9 @@
 						</div>
 					</div>
 
-					<hr style="width: 50%; margin: 1rem auto; border: 1.3px solid #aeaeae;"
-						*ngIf="bookingPreview.extra_stops && bookingPreview.extra_stops.length == 0" />
-					<hr>
+					<!-- <hr style="width: 50%; margin: 1rem auto; border: 1.3px solid #aeaeae;"
+						*ngIf="bookingPreview.extra_stops && bookingPreview.extra_stops.length == 0" /> -->
+					<!-- <hr> -->
 
 					<!-- ############# Dropoff ################# -->
 					<h5 class="px-2 m-0 my-3 text-xl preview-dropoff-color">
@@ -1147,7 +1147,43 @@
 					<!-- Dropoff > Cruise Details - Ends -->
 
 					<!-- 2ND p -->
+					<div class="mx-2">
+						<hr>
+						<div class="row m-0">
+							<div class="col-md-4">
+								<span>
+									Estimated Total Distance
+								</span>
+							</div>
+							<div class="col-md-8 ">
+								<span class="font-weight-bolder preview-output-feild">
+									{{ mToMi(bookingPreview?.distance) }} Miles / {{ mToKm(bookingPreview?.distance)
+									}} Km
+								</span>
+							</div>
+						</div>
+					</div>
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4">
+								<span>
+									Estimated time
+								</span>
+							</div>
+							<div class="col-md-8">
+								<span class="font-weight-bolder preview-output-feild">
+									{{convertToMinutes(bookingPreview?.duration)}}
+								</span>
+							</div>
+						</div>
 
+					</div> 
+					<hr>
+					<br>
+					<div class="google_map">
+						<div id="map" class="map"></div>
+					</div>
+					<br>
 					<hr>
 
 					<!-- Rate Distribution Information -->

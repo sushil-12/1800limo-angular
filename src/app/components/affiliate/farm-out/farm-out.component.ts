@@ -10,6 +10,7 @@ import { ThemePalette } from '@angular/material/core';
 import * as moment from 'moment';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 import { StateManagementService } from 'src/app/services/statemanagement.service';
+import { MapsAPILoader } from '@agm/core';
 
 declare var $: any
 
@@ -74,7 +75,8 @@ export class FarmOutComponent implements OnInit {
 		private $router: Router,
 		private formBuilder: FormBuilder,
 		private stateManagementService: StateManagementService,
-		private $errors: ErrorDialogService
+		private $errors: ErrorDialogService,
+		private $mapsapi: MapsAPILoader,
 	) { }
 
 	ngOnInit(): void {
@@ -126,10 +128,89 @@ export class FarmOutComponent implements OnInit {
 		this.loadBookings()
 
 		$("#search-field-farmout").addClass("box-outline")
+		this.MapController()
 
 	}
 	ngAfterViewInit(): void {
 		$("#search-field-farmout").addClass("box-outline")
+	}
+
+	mToMi(distance: number): string {
+		return (distance / 1609).toFixed(2);
+	}
+
+	mToKm(distance: number): string {
+		return (distance / 1000).toFixed(2);
+	}
+	
+	MapController() {
+		console.log('Map has been initialised.')
+		let waypoints = []
+		let origin: google.maps.LatLng
+		let destination: google.maps.LatLng
+		let map: google.maps.Map
+
+		this.$mapsapi.load().then(() => {
+
+			// console.log('Return Map has been initialised. ')
+			// map
+			map = new google.maps.Map(document.getElementById('map'), {
+				zoom: 7,
+				center: new google.maps.LatLng(41.850033, -87.6500523),
+				scaleControl: true
+			})
+
+
+			// defaults for Source/Target - City
+			origin = new google.maps.LatLng(this.bookingPreview?.pickup_latitude, this.bookingPreview?.pickup_longitude)
+			destination = new google.maps.LatLng(this.bookingPreview?.dropoff_airport_latitude, this.bookingPreview?.dropoff_airport_longitude)
+
+			//defaults for Source/Target - City
+			origin = new google.maps.LatLng(this.bookingPreview?.pickup_latitude, this.bookingPreview?.pickup_longitude)
+			destination = new google.maps.LatLng(this.bookingPreview?.dropoff_latitude, this.bookingPreview?.dropoff_longitude)
+
+			// Overrides
+			if (this.bookingPreview?.transfer_type.includes('airport_')) {
+				// override for Source - Airport
+				// console.log('Override for Source Airport')
+				origin = new google.maps.LatLng(this.bookingPreview?.pickup_airport_latitude, this.bookingPreview?.pickup_airport_longitude)
+			}
+			if (this.bookingPreview?.transfer_type.includes('_airport')) {
+				// override for Target - Airport
+				// console.log('Override for Target Airport')
+				destination = new google.maps.LatLng(this.bookingPreview?.dropoff_airport_latitude, this.bookingPreview?.dropoff_airport_longitude)
+			}
+
+			this.drawMap(map, {
+				origin,
+				destination,
+				waypoints,
+				optimizeWaypoints: true,
+				travelMode: google.maps.TravelMode.DRIVING
+			})
+		})
+	}
+
+
+	drawMap(map: google.maps.Map, request: Object) {
+		if (request && !request.hasOwnProperty('waypoints') && !request.hasOwnProperty('origin') && !request.hasOwnProperty('destination')) {
+			console.error('Request Object is not properly according to specified requirements.')
+			return
+		}
+
+		this.$mapsapi.load().then(() => {
+			const directionsRenderer = new google.maps.DirectionsRenderer()
+			const directionsService = new google.maps.DirectionsService()
+			directionsRenderer.setMap(map)
+
+			directionsService.route(request, (response: any, status: string) => {
+				if (status == google.maps.DirectionsStatus.OK) {
+					console.log('Directions Service Response: ', response)
+					directionsRenderer.setDirections(response)
+				}
+			})
+
+		})
 	}
 
 	scroll(id) {
@@ -409,6 +490,7 @@ export class FarmOutComponent implements OnInit {
 			).subscribe((response: any) => {
 				console.log("respinse", response.data)
 				this.bookingPreview = response.data;
+				this.MapController()
 				if (this.bookingPreview?.account_type == 'travel_planner' && this.bookingPreview?.created_by != 1) {
 					console.log("in if created by ta")
 					this.adminSharePercent = 15
