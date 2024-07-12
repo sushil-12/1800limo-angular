@@ -16,6 +16,7 @@ import * as moment from "moment";
 import { ErrorDialogService } from "src/app/services/error-dialog/errordialog.service";
 import { MatSelect } from "@angular/material/select";
 import { DatePickerComponent } from "../../shared/date-picker/date-picker.component";
+import { MapsAPILoader } from "@agm/core";
 
 @Component({
 	selector: "app-daily-bookings",
@@ -76,7 +77,8 @@ export class DailyBookingsComponent implements OnInit {
 		private router: Router,
 		private spinner: NgxSpinnerService,
 		private formBuilder: FormBuilder,
-		private $errorDialog: ErrorDialogService
+		private $errorDialog: ErrorDialogService,
+		private $mapsapi: MapsAPILoader,
 	) { }
 
 	ngOnInit(): void {
@@ -167,6 +169,8 @@ export class DailyBookingsComponent implements OnInit {
 			reservation_id: ["", Validators.required],
 			emailTarget: ["", Validators.required],
 		});
+
+		this.MapController()
 	}
 	ngAfterViewInit(): void {
 		this.subModules = localStorage.getItem("sub_modules");
@@ -176,6 +180,77 @@ export class DailyBookingsComponent implements OnInit {
 			.querySelector("textarea")
 			.focus();
 	}
+
+	MapController() {
+		console.log('Map has been initialised.')
+		let waypoints = []
+		let origin: google.maps.LatLng
+		let destination: google.maps.LatLng
+		let map: google.maps.Map
+
+		this.$mapsapi.load().then(() => {
+
+			// console.log('Return Map has been initialised. ')
+			// map
+			map = new google.maps.Map(document.getElementById('map'), {
+				zoom: 7,
+				center: new google.maps.LatLng(41.850033, -87.6500523),
+				scaleControl: true
+			})
+
+
+			// defaults for Source/Target - City
+			origin = new google.maps.LatLng(this.bookingPreview?.pickup_latitude, this.bookingPreview?.pickup_longitude)
+			destination = new google.maps.LatLng(this.bookingPreview?.dropoff_airport_latitude, this.bookingPreview?.dropoff_airport_longitude)
+
+			//defaults for Source/Target - City
+			origin = new google.maps.LatLng(this.bookingPreview?.pickup_latitude, this.bookingPreview?.pickup_longitude)
+			destination = new google.maps.LatLng(this.bookingPreview?.dropoff_latitude, this.bookingPreview?.dropoff_longitude)
+
+			// Overrides
+			if (this.bookingPreview?.transfer_type.includes('airport_')) {
+				// override for Source - Airport
+				// console.log('Override for Source Airport')
+				origin = new google.maps.LatLng(this.bookingPreview?.pickup_airport_latitude, this.bookingPreview?.pickup_airport_longitude)
+			}
+			if (this.bookingPreview?.transfer_type.includes('_airport')) {
+				// override for Target - Airport
+				// console.log('Override for Target Airport')
+				destination = new google.maps.LatLng(this.bookingPreview?.dropoff_airport_latitude, this.bookingPreview?.dropoff_airport_longitude)
+			}
+
+			this.drawMap(map, {
+				origin,
+				destination,
+				waypoints,
+				optimizeWaypoints: true,
+				travelMode: google.maps.TravelMode.DRIVING
+			})
+		})
+	}
+
+
+	drawMap(map: google.maps.Map, request: Object) {
+		if (request && !request.hasOwnProperty('waypoints') && !request.hasOwnProperty('origin') && !request.hasOwnProperty('destination')) {
+			console.error('Request Object is not properly according to specified requirements.')
+			return
+		}
+
+		this.$mapsapi.load().then(() => {
+			const directionsRenderer = new google.maps.DirectionsRenderer()
+			const directionsService = new google.maps.DirectionsService()
+			directionsRenderer.setMap(map)
+
+			directionsService.route(request, (response: any, status: string) => {
+				if (status == google.maps.DirectionsStatus.OK) {
+					console.log('Directions Service Response: ', response)
+					directionsRenderer.setDirections(response)
+				}
+			})
+
+		})
+	}
+
 	handleChangeCheckbox(value: any) {
 		console.log("event---->> ", value);
 		this.useDateFilter = value;
@@ -801,6 +876,7 @@ export class DailyBookingsComponent implements OnInit {
 			.subscribe((response: any) => {
 				this.spinner.hide();
 				this.bookingPreview = response.data;
+				this.MapController()
 				if (this.bookingPreview?.account_type == 'travel_planner' && this.bookingPreview?.created_by != 1) {
 					this.adminSharePercent = 15
 				}
@@ -1059,5 +1135,6 @@ export class DailyBookingsComponent implements OnInit {
 			window.open(url, '_blank'); // Opens the search in a new tab
 		}
 	}
+
 
 }
