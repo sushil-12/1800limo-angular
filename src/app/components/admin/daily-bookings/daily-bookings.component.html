@@ -806,13 +806,14 @@
 <div class="modal fade" id="previewBookingOnID" tabindex="-1" aria-labelledby="previewBookingLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
 		<div class="modal-content" style="background: #f5f4fe;">
-			<div class="modal-header d-flex justify-content-start py-0">
+			<div class="modal-header d-flex justify-content-between py-0">
 				<h3 class="modal-title">
 					Preview Booking #{{bookingPreview?.reservation_id}}
 				</h3>
 				<!-- <button type="button" class="close x-circle-btn" data-dismiss="modal" aria-label="Close" >
 					<span aria-hidden="true" class="bi bi-x-circle"></span>
 				</button> -->
+				<button class="custom-filled-button orange-button" data-toggle="modal" data-target="#previewCopyData" (click)="closePreview()">Show Content</button>
 			</div>
 			<div class="modal-body" style="font-family: 'PT Serif', serif;">
 				<div class="container text-lg" *ngIf="bookingPreview">
@@ -905,7 +906,7 @@
 						Pickup Details
 					</h5>
 					<!-- Pickup > Date -->
-					<div class="mx-2 preview-pickup-color">
+					<div class="mx-2">
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
@@ -923,7 +924,7 @@
 					</div>
 
 					<!-- Pickup > Time -->
-					<div class="mx-2 preview-pickup-color">
+					<div class="mx-2">
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
@@ -983,7 +984,7 @@
 						</div>
 						<!-- Airport -->
 						<!-- Airline -->
-						
+
 						<div class="row m-0 preview-pickup-color">
 							<div class="col-md-4 key">
 								<span>
@@ -1943,3 +1944,17 @@
 		</div>
 	</div>
 </div>
+
+<div class="modal fade" id="previewCopyData" tabindex="-1" aria-labelledby="previewCopyDataLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+		<div class="modal-content">
+			<div class="modal-body">
+				<pre style="white-space: pre-wrap">{{ previewCopyData }}</pre>
+		</div>
+		<div class="modal-footer justify-content-end">
+			<button type="button" class="close x-circle-btn" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true" class="bi bi-x-circle"></span>
+			</button>
+		</div>
+		</div>
+	</div>

@@ -71,6 +71,7 @@ export class DailyBookingsComponent implements OnInit {
 	quotebotNewData: any;
 	shareArray: any;
 	adminSharePercent: any;
+	previewCopyData: any;
 
 	constructor(
 		private adminService: AdminService,
@@ -868,6 +869,36 @@ export class DailyBookingsComponent implements OnInit {
 		return text.replaceAll("_", " ");
 	}
 
+	extractTextFromHtml(html: string): string {
+		const div = document.createElement('div');
+		div.innerHTML = html;
+
+		// Convert paragraph tags to newline
+		const paragraphs = div.querySelectorAll('p');
+		paragraphs.forEach(p => {
+			p.innerHTML += '\n';
+		});
+
+		// Replace break tags with new lines
+		const breaks = div.querySelectorAll('br');
+		breaks.forEach(br => {
+			br.outerHTML = '\n';
+		});
+
+		// Convert bold tags to uppercase text
+		const bolds = div.querySelectorAll('b');
+		bolds.forEach(b => {
+			b.innerHTML = `${b.innerHTML}`;
+		});
+
+		// Return the inner HTML as plain text with preserved formatting
+		return div.innerText || div.textContent || '';
+	}
+
+	closePreview() {
+		$('#previewBookingOnID').modal('hide');
+	}
+
 	bookingPreview: any;
 	showBookingPreviewModal(booking_id: number) {
 		// this.spinner.show();
@@ -876,6 +907,7 @@ export class DailyBookingsComponent implements OnInit {
 			.subscribe((response: any) => {
 				this.spinner.hide();
 				this.bookingPreview = response.data;
+				this.previewCopyData = this.extractTextFromHtml(this.bookingPreview?.preview_data)
 				this.MapController()
 				if (this.bookingPreview?.account_type == 'travel_planner' && this.bookingPreview?.created_by != 1) {
 					this.adminSharePercent = 15
