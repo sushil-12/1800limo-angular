@@ -983,6 +983,7 @@
 						</div>
 						<!-- Airport -->
 						<!-- Airline -->
+						
 						<div class="row m-0 preview-pickup-color">
 							<div class="col-md-4 key">
 								<span>
@@ -990,7 +991,8 @@
 								</span>
 							</div>
 							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild" style="cursor: pointer;"
+								<span class="font-weight-bolder preview-output-feild"
+									style="cursor: pointer;text-decoration: underline;"
 									(click)="searchOnGoogle(bookingPreview?.pickup_airline_name + ' ' + bookingPreview?.pickup_flight)">
 									{{ textFormatter(bookingPreview?.pickup_airline_name) }}
 								</span>
@@ -998,14 +1000,19 @@
 						</div>
 						<!-- Airline -->
 						<!-- Flight Number -->
+						<hr>
 						<div class="row m-0 preview-pickup-color">
-							<div class="col-md-4 key">
+							<div class="col-md-5 key">
 								<span>
-									Flight Number
+									Flight Number &nbsp;<span
+										style="color: black;text-decoration: underline;font-weight: 600;cursor: pointer;"
+										(click)="searchOnGoogle(bookingPreview?.pickup_airline_name + ' ' + bookingPreview?.pickup_flight)">(View
+										Flight time)</span>
 								</span>
 							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild" style="cursor: pointer;"
+							<div class="col-md-7 value">
+								<span class="font-weight-bolder preview-output-feild"
+									style="cursor: pointer;text-decoration: underline;"
 									(click)="searchOnGoogle(bookingPreview?.pickup_airline_name + ' ' + bookingPreview?.pickup_flight)">
 									{{ textFormatter(bookingPreview?.pickup_flight) }}
 								</span>
@@ -1137,7 +1144,8 @@
 								</span>
 							</div>
 							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild" style="cursor: pointer;"
+								<span class="font-weight-bolder preview-output-feild"
+									style="cursor: pointer;text-decoration: underline;"
 									(click)="searchOnGoogle(bookingPreview?.dropoff_airline_name + ' ' + bookingPreview?.dropoff_flight)">
 									{{ textFormatter(bookingPreview?.dropoff_airline_name) }}
 								</span>
@@ -1145,14 +1153,19 @@
 						</div>
 						<!-- Airline -->
 						<!-- Flight Number -->
+						<hr>
 						<div class="row preview-dropoff-color">
-							<div class="col-md-4 key">
+							<div class="col-md-5 key">
 								<span>
-									Flight Number
+									Flight Number &nbsp;<span
+										style="color: black;text-decoration: underline;font-weight: 600;cursor: pointer;"
+										(click)="searchOnGoogle(bookingPreview?.dropoff_airline_name + ' ' + bookingPreview?.dropoff_flight)">(View
+										Flight time)</span>
 								</span>
 							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild" style="cursor: pointer;"
+							<div class="col-md-7 value">
+								<span class="font-weight-bolder preview-output-feild"
+									style="cursor: pointer;text-decoration: underline;"
 									(click)="searchOnGoogle(bookingPreview?.dropoff_airline_name + ' ' + bookingPreview?.dropoff_flight)">
 									{{ textFormatter(bookingPreview?.dropoff_flight) }}
 								</span>
@@ -1242,7 +1255,7 @@
 							</div>
 						</div>
 
-					</div> 
+					</div>
 					<hr>
 					<br>
 					<div class="google_map">
