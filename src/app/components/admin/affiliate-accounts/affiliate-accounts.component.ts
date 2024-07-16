@@ -479,12 +479,26 @@ export class AffiliateAccountsComponent implements OnInit {
 		window.open(url, '_blank');
 	}
 
+	convertTextToHtml(text: string): string {
+		// Basic conversion of text to HTML
+		// Replace newlines with <br> tags
+		const escapedText = text
+			.replace(/&/g, '&amp;')
+			.replace(/</g, '&lt;')
+			.replace(/>/g, '&gt;')
+			.replace(/\n/g, '<br>');
+
+		return `<p>${escapedText}</p>`;
+	}
+
 	//submit email modal
 	sendEmail() {
 		this.spinner.show()
+		const textContent = this.sendEmailForm.get('text_message')?.value;
+		const htmlContent = this.convertTextToHtml(textContent);
 		let body = {
 			subject: this.sendEmailForm.get('subject').value,
-			message: this.sendEmailForm.get('text_message').value,
+			message: htmlContent,
 			recipents: this.emails.value
 		}
 		console.log("body-------->", body)

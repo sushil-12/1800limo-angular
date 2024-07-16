@@ -113,7 +113,14 @@ export class NewBookingComponent implements OnInit {
 	currencyObj: any;
 	updateType: any;
 	bookingResponse: any;
-
+	vehicleType_arr: any;
+	vehicleMake_arr: any;
+	vehicleModal_arr: any;
+	vehicleYear_arr: any;
+	vehicleColor_arr: any;
+	unique_key: any;
+	firstLoadAffiliateId: any;
+	firstLoadVehicleId: any;
 
 
 	constructor(
@@ -478,6 +485,9 @@ export class NewBookingComponent implements OnInit {
 				}
 			})
 			console.log("this.currencyObj?.currency", this.currencyObj)
+			this.firstLoadVehicleId = response.data.vehicle_id
+			this.firstLoadAffiliateId = response.data.affiliate_id
+			this.fetchAffiliateVehicles(this.firstLoadAffiliateId)
 			this.isTravelShare = response?.data?.account_type == 'travel_planner' ? true : false
 			this.isCreatedByAdmin = response?.data?.created_by == 1 ? true : false
 			this.isFarmoutBooking = response?.data?.reservation_type == 'farmout' ? true : false
@@ -947,23 +957,47 @@ export class NewBookingComponent implements OnInit {
 			console.error('Invalid Paramater affiliate_data', affiliate_id)
 			return
 		}
-		// this.$spinner.show()
-		// this.$api.adminAffiliateVehicleList(affiliate_id).then((response: any) => {
-		// 	if (response.success && response.data.vehicleList.length > 0) {
-		// 		this.VehicleList = response.data.vehicleList
-		// 		// add a key with formatted name to every value
-		// 		this.VehicleList.map((item: any) => item['formatted_name'] = `${item.vehicleType} - ${item.make} (${item.model})`);
+		this.$spinner.show()
+		this.affiliateService.getVehicleDataByAffiliateId(affiliate_id).then((response: any) => {
+			console.log('get vehicle data response------------------->>>>>>>>>>>>>>>', response.success && response.data?.vehicleList.length > 0, response.data)
+			if (response.success && response.data?.vehicleList.length > 0) {
+				this.VehicleList = response.data?.vehicleList
+				console.log('in else vehicle list ---->>>>>>', this.VehicleList)
+				// add a key with formatted name to every value
+				this.VehicleList.map((item: any) => item['formatted_name'] = `${item.vehicleType} - ${item.make} (${item.model})`);
 
-		// 		// autofill data
-		// 		if (this.VehicleList.length == 1) {
-		// 			let vehicle_type_id = this.BigData['vehicleCategories'].find(item => item.name == this.VehicleList[0].vehicleType)['id']
-		// 			this.SetFormValue('vehicle_type', vehicle_type_id)
-		// 			this.SetFormValue('vehicle_id', this.VehicleList[0].ID);
-		// 			this.autofillData('vehicle', this.VehicleList[0]);
-		// 		}
-		// 	}
-		// 	this.$spinner.hide()
-		// })
+				this.vehicleType_arr = this.VehicleList = this.vehicleMake_arr = this.VehicleList = this.vehicleModal_arr = this.VehicleList = this.vehicleYear_arr = this.VehicleList = this.vehicleColor_arr = this.VehicleList
+				for (let i = 0; i < this.VehicleList.length; i++) {
+					if (this.VehicleList[i].isRatesCompleted) {
+						// let vehicle_type_id = this.BigData['vehicleCategories'].find(item => item.name == this.VehicleList[i].vehicleType)['id']
+						if (affiliate_id == this.firstLoadAffiliateId) {
+							if (this.VehicleList[i].ID == this.firstLoadVehicleId) {
+								console.log('selected vehicle on first load---------------------------------->>>>>', this.VehicleList[i])
+								this.SetFormValue('vehicle_id', this.VehicleList[i].ID);
+								this.SetFormValue('vehicle_type', this.VehicleList[i].vehicleType_id)
+								this.SetFormValue('vehicle_type_name', this.VehicleList[i].vehicleType)
+								this.unique_key = this.VehicleList[i].unique_key
+								this.handleSelectVehicleType(this.VehicleList[i])
+								// this.autofillData('vehicle', this.VehicleList[i]);
+								break;
+							}
+						}
+						else {
+							console.log('new affiliate seleted')
+							this.SetFormValue('vehicle_id', this.VehicleList[i].ID);
+							this.SetFormValue('vehicle_type', this.VehicleList[i].vehicleType_id)
+							this.SetFormValue('vehicle_type_name', this.VehicleList[i].vehicleType)
+							this.unique_key = this.VehicleList[i].unique_key
+							this.handleSelectVehicleType(this.VehicleList[i])
+							// this.autofillData('vehicle', this.VehicleList[i]);
+							break;
+						}
+
+					}
+				}
+			}
+			this.$spinner.hide()
+		})
 	}
 
 	fetchAffiliateDrivers(affiliate_id: number) {
@@ -1313,6 +1347,29 @@ export class NewBookingComponent implements OnInit {
 		return null;
 	}
 
+	handleChangeVehicleType(event) {
+		console.log('in function handle change vehicle type', event, event.unique_key)
+		this.VehicleList.map(i => (i.unique_key == event.unique_key) ? this.handleSelectVehicleType(i) : '')
+
+	}
+
+	handleSelectVehicleType(selectedVehicle: any) {
+		console.log('selectweed vehicle-->>>>', selectedVehicle, selectedVehicle.licensePlate === null)
+		this.SetFormValue('vehicle_id', selectedVehicle.ID);
+		this.SetFormValue('vehicle_type_name', selectedVehicle.vehicleType)
+		this.SetFormValue('vehicle_make', selectedVehicle.make_id);
+		this.SetFormValue('vehicle_make_name', selectedVehicle.make);
+		this.SetFormValue('vehicle_model', selectedVehicle.model_id);
+		this.SetFormValue('vehicle_model_name', selectedVehicle.model);
+		this.SetFormValue('vehicle_year', selectedVehicle.year_id);
+		this.SetFormValue('vehicle_year_name', selectedVehicle.year);
+		this.SetFormValue('vehicle_color', selectedVehicle.color_id);
+		this.SetFormValue('vehicle_color_name', selectedVehicle.color);
+		selectedVehicle.licensePlate === null ? this.BookingForm.get('vehicle_license_plate').setValue('') : this.SetFormValue('vehicle_license_plate', selectedVehicle.licensePlate)
+		this.SetFormValue('vehicle_seats', selectedVehicle.seats)
+		this.buildBookingData()
+	}
+
 	checkExtraStopInTown(location1: string, location2: string, formKey: string, index: any) {
 		console.log('in function check extra stop in town', location1, location2)
 		const geocoder = new google.maps.Geocoder();
@@ -1642,6 +1699,106 @@ export class NewBookingComponent implements OnInit {
 		// 	}
 		// 	this.SetFormValue('return_transfer_type', reverseStringChars(value))
 		// })
+
+		this.BookingForm.get('vehicle_type').valueChanges.subscribe((value: string) => {
+			if (this.Form.affiliate_type.value == 'affiliate') {
+				console.log('in function change value for affilliate vehicle_type', value)
+				if (value) {
+					this.VehicleList.map(i => (i.unique_key == this.unique_key) ? this.handleSelectVehicleType(i) : '')
+				}
+				else {
+					this.SetFormValue('vehicle_type_name', '');
+					this.BookingForm.get('vehicle_make').setValue('')
+					this.BookingForm.get('vehicle_make_name').setValue('')
+					this.BookingForm.get('vehicle_model').setValue('')
+					this.BookingForm.get('vehicle_model_name').setValue('')
+					this.BookingForm.get('vehicle_year').setValue('')
+					this.BookingForm.get('vehicle_year_name').setValue('')
+					this.BookingForm.get('vehicle_color').setValue('')
+					this.BookingForm.get('vehicle_color_name').setValue('')
+					this.BookingForm.updateValueAndValidity();
+				}
+
+			} else {
+				if (value && this.BigData) {
+					let name = this.BigData['vehicleCategories'].find(item => item.id == value)['name']
+					this.SetFormValue('vehicle_type_name', name);
+					this.BookingForm.get('vehicle_make').setValue('')
+					this.BookingForm.get('vehicle_make_name').setValue('')
+					this.BookingForm.get('vehicle_model').setValue('')
+					this.BookingForm.get('vehicle_model_name').setValue('')
+					this.BookingForm.get('vehicle_year').setValue('')
+					this.BookingForm.get('vehicle_year_name').setValue('')
+					this.BookingForm.get('vehicle_color').setValue('')
+					this.BookingForm.get('vehicle_color_name').setValue('')
+					this.BookingForm.updateValueAndValidity();
+				}
+			}
+		})
+
+		this.BookingForm.get('vehicle_make').valueChanges.subscribe((value: string) => {
+			if (this.Form.affiliate_type.value == 'affiliate') {
+				console.log('in function change value for affilliate  vehicle_make')
+			} else {
+				if (value && this.BigData) {
+					this.BigData['vehicleModels'] = this.BigData_COPY?.vehicleModels.filter(item => item.make_id == value)
+					let name = this.BigData['vehicleMakes'].find(item => item.id == value)['name']
+					this.SetFormValue('vehicle_model', this.BigData?.vehicleModels[0]['id'])
+					this.SetFormValue('vehicle_make_name', name)
+				}
+				else {
+					this.BookingForm.get('vehicle_make_name').setValue('')
+					this.BookingForm.updateValueAndValidity();
+				}
+			}
+		})
+
+		this.BookingForm.get('vehicle_model').valueChanges.subscribe((value: string) => {
+			if (this.Form.affiliate_type.value == 'affiliate') {
+				console.log('in function change value for affilliate vehicle_model')
+
+			} else {
+				if (value && this.BigData) {
+					let name = this.BigData['vehicleModels'].find(item => item.id == value)['name']
+					this.SetFormValue('vehicle_model_name', name)
+				}
+				else {
+					this.BookingForm.get('vehicle_model_name').setValue('')
+					this.BookingForm.updateValueAndValidity();
+				}
+			}
+		})
+
+		this.BookingForm.get('vehicle_year').valueChanges.subscribe((value: string) => {
+			if (this.Form.affiliate_type.value == 'affiliate') {
+				console.log('in function change value for affilliate vehicle_year')
+			} else {
+				if (value && this.BigData) {
+					let name = this.BigData['vehicleYears'].find(item => item.id == value)['name']
+					this.SetFormValue('vehicle_year_name', name)
+				}
+				else {
+					this.BookingForm.get('vehicle_year_name').setValue('')
+					this.BookingForm.updateValueAndValidity();
+				}
+			}
+		})
+		this.BookingForm.get('vehicle_color').valueChanges.subscribe((value: string) => {
+			if (this.Form.affiliate_type.value == 'affiliate') {
+				console.log('in function change value for affilliate vehicle_color')
+
+			} else {
+				if (value && this.BigData) {
+					let name = this.BigData['vehicleColors'].find(item => item.id == value)['name']
+					this.SetFormValue('vehicle_color_name', name)
+				}
+				else {
+					this.BookingForm.get('vehicle_color_name').setValue('')
+					this.BookingForm.updateValueAndValidity();
+
+				}
+			}
+		})
 
 		//pickup time change 
 		this.BookingForm.get('pickup_time').valueChanges.subscribe((value: string) => {
