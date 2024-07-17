@@ -357,7 +357,7 @@ export class AffiliateStep1Component implements OnInit {
 			case 'black_limo_operator': {
 				if (this.affiliateId) {
 					if (this.f.AffiliateType.value == 'fleet_operator') {
-						this.modalAlertMessage = "Fleet Operator can not change on Black Car / Owner Operators";
+						this.modalAlertMessage = "Fleet/Coach Operator can not change on Black Car / Owner Operators";
 						$('#affiliateAlertMessageModal').modal('show');
 						return false;
 					}
@@ -375,7 +375,7 @@ export class AffiliateStep1Component implements OnInit {
 							return false;
 						}
 						case 'fleet_operator': {
-							this.modalAlertMessage = "Fleet Operators can not change on Taxi Operators";
+							this.modalAlertMessage = "Fleet/Coach Operators can not change on Taxi Operators";
 							$('#affiliateAlertMessageModal').modal('show');
 							return false;
 						}
@@ -393,7 +393,7 @@ export class AffiliateStep1Component implements OnInit {
 			case 'gig_operator': {
 				if (this.affiliateId) {
 					if (this.f.AffiliateType.value == 'fleet_operator') {
-						this.modalAlertMessage = "Fleet Operator can not change on Gig Operators";
+						this.modalAlertMessage = "Fleet/Coach Operator can not change on Gig Operators";
 						$('#affiliateAlertMessageModal').modal('show');
 						return false;
 					}

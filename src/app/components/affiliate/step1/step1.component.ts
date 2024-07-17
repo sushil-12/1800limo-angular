@@ -626,9 +626,9 @@ export class Step1Component implements OnInit, AfterViewInit {
 			case "fleet_operator": {
 				this.showCompanyInformation = true;
 				this.selectedAffiliate = "fleet_operator";
-				this.affiliateInstructionHeading = "Fleet Operator";
+				this.affiliateInstructionHeading = "Fleet/Coach Operator";
 				this.affiliateInstruction =
-					"Fleet Operators must be fully licensed by city and state with a minimum $1,000,000 liability coverage. Fleet Operators may enter unlimited vehicles and drivers.";
+					"Fleet/Coach Operators must be fully licensed by city and state with a minimum $1,000,000 liability coverage. Fleet/Coach Operators may enter unlimited vehicles and drivers.";
 				this.conditionalValidations("fleet_operator");
 				this.subs = this.addAffiliateAccountForm.get('Email').valueChanges.subscribe((value) => {
 					this.SetFormValue('dispatchEmail', value)
@@ -645,7 +645,7 @@ export class Step1Component implements OnInit, AfterViewInit {
 				if (this.affiliateId) {
 					if (this.currentUser.affiliate_type == "fleet_operator") {
 						this.modalAlertMessage =
-							"Fleet Operator can not change on Black Car / Owner Operators";
+							"Fleet/Coach Operator can not change on Black Car / Owner Operators";
 						$("#affiliateAlertMessageModal").modal("show");
 						return false;
 					}
@@ -684,7 +684,7 @@ export class Step1Component implements OnInit, AfterViewInit {
 						}
 						case "fleet_operator": {
 							this.modalAlertMessage =
-								"Fleet Operators can not change on Taxi Operators";
+								"Fleet/Coach Operators can not change on Taxi Operators";
 							$("#affiliateAlertMessageModal").modal("show");
 							return false;
 						}
@@ -722,7 +722,7 @@ export class Step1Component implements OnInit, AfterViewInit {
 				if (this.affiliateId) {
 					if (this.currentUser.affiliate_type == "fleet_operator") {
 						this.modalAlertMessage =
-							"Fleet Operator can not change on Gig Operators";
+							"Fleet/Coach Operator can not change on Gig Operators";
 						$("#affiliateAlertMessageModal").modal("show");
 						return false;
 					}
@@ -1318,10 +1318,10 @@ export class Step1Component implements OnInit, AfterViewInit {
 	}
 	changeTooltipText(value) {
 		if (value == "black_limo_operator") {
-			this.tooltipText = "Black Car can advertise only two vehicles, or change to Fleet Operator."
+			this.tooltipText = "Black Car can advertise only two vehicles, or change to Fleet/Coach Operator."
 		}
 		else if (value == "fleet_operator") {
-			this.tooltipText = "Fleet Operators can advertise unlimited vehicles"
+			this.tooltipText = "Fleet/Coach Operators can advertise unlimited vehicles"
 		}
 		else if (value == "taxi_operator") {
 			this.tooltipText = "Taxi can only advertise one vehicle."

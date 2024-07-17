@@ -127,12 +127,12 @@
 				<p><mat-checkbox *ngIf="currentUser?.roleName == 'travel_agent'"
 						(change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">
 						{{useDateFilter ? 'Uncheck to see current and future bookings' :
-						'Check to see only current 7 day bookings and search by any term.' }}
+						'Check to see bookings based upon dates and search by any term.' }}
 					</mat-checkbox>
 					<mat-checkbox *ngIf="currentUser?.roleName == 'sub_travel_agent'"
 						(change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">
 						{{useDateFilter ? 'Uncheck to see current and future bookings' :
-						'Check to see only current 7 day bookings and search by any term.' }}
+						'Check to see bookings based upon dates and search by any term.' }}
 					</mat-checkbox>
 				</p>
 			</div>
@@ -1407,6 +1407,22 @@
 								</div>
 							</div>
 						</div>
+						
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key d-flex align-items-center">
+									<span class="">
+										Stripe fees
+									</span>
+								</div>
+								<div class="col-md-8 value preview-airport-color">
+									<span class="font-weight-bolder preview-output-feild">
+										{{currencySymbol}}{{shareArray?.stripeFee.toFixed(2)}}
+									</span>
+									(Platform fee 5% + 30 cents - <b>Paid from Admin share</b>)
+								</div>
+							</div>
+						</div>
 						<div class="mx-2">
 							<div class="row m-0">
 								<div class="col-md-4 key d-flex align-items-center">
@@ -1423,22 +1439,6 @@
 								</div>
 							</div>
 						</div>
-						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key d-flex align-items-center">
-									<span class="">
-										Stripe fees
-									</span>
-								</div>
-								<div class="col-md-8 value preview-airport-color">
-									<span class="font-weight-bolder preview-output-feild">
-										{{currencySymbol}}{{shareArray?.stripeFee.toFixed(2)}}
-									</span>
-									(Platform fee 5% + 30 cents - <b>Paid from Admin share</b>)
-								</div>
-							</div>
-						</div>
-
 
 					</div>
 				</div>

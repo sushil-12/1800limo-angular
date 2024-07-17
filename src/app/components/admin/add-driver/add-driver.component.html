@@ -85,9 +85,9 @@
 				</div>
 				<div class="col-md-4">
 					<mat-form-field appearance="outline">
-						<mat-label>Driver E-mail (Fleet Operator - <span class="braces-content">Optional</span>)
+						<mat-label>Driver E-mail (Fleet/Coach Operator - <span class="braces-content">Optional</span>)
 						</mat-label>
-						<input matInput placeholder="Driver E-mail (Fleet Operator - Optional)" formControlName="Email"
+						<input matInput placeholder="Driver E-mail (Fleet/Coach Operator - Optional)" formControlName="Email"
 							tabindex="1" (focus)="$event.target.select()">
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.Email.errors || f.Email.touched && f.Email.errors"
