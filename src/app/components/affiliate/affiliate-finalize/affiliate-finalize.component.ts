@@ -359,7 +359,7 @@ export class AffiliateFinalizeComponent implements OnInit {
 			this.getBookingData(this.bookingId)
 			this.$errors.openDialog({
 				errors: {
-					error: `<span class='text-success font-weight-bolder' style="font-size: 24px;">Please click on Charge button!</span>`
+					error: `<span class='text-success font-weight-bolder text-2xl' style="font-size: 24px;">Please click on Charge button!</span>`
 				}
 			})
 
