@@ -111,10 +111,10 @@ export class AffiliateAccountsComponent implements OnInit {
 				break;
 			}
 			case 'fleet-operator': {
-				this.heading = "Fleet Accounts";
-				this.addButton = "Add Fleet Account";
+				this.heading = "Fleet/Coach Accounts";
+				this.addButton = "Add Fleet/Coach Account";
 				this.affiliateType = 'fleet_operator';
-				this.affiliateName = "Fleet";
+				this.affiliateName = "Fleet/Coach";
 				this.loadAffiliateOperators()
 				break;
 			}

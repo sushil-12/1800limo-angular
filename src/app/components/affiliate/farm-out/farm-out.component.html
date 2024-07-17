@@ -67,7 +67,7 @@
 	<div class="ml-4">
 		<p><mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">
 				{{useDateFilter ? 'Uncheck to see current and future bookings' :
-				'Check to see only current 7 day bookings and search by any term.' }}
+				'Check to see bookings based upon dates and search by any term.' }}
 			</mat-checkbox></p>
 	</div>
 	<!-- DIVISION: SEARCH PARAMETERS ENDS -->
@@ -1478,23 +1478,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key d-flex align-items-center">
-								<span>
-									Total Cost
-								</span>
-							</div>
-							<div class="col-md-8 value preview-airport-color">
-								<span class="font-weight-bolder preview-output-feild">
-									{{currencySymbol}}{{rates_preview?.grandTotal ? rates_preview?.grandTotal.toFixed(2)
-									:
-									rates_preview?.returnGrandTotal.toFixed(2)}}
-								</span>
-								(Actual Cost to Customer)
-							</div>
-						</div>
-					</div>
+				
 					<div class="mx-2">
 						<div class="row m-0">
 							<div class="col-md-4 key d-flex align-items-center">
@@ -1538,6 +1522,23 @@
 									{{currencySymbol}}{{rates_preview?.farmoutShare.toFixed(2)}}
 								</span>
 								( 10 % of Base Rate)
+							</div>
+						</div>
+					</div>
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key d-flex align-items-center">
+								<span>
+									Total Cost
+								</span>
+							</div>
+							<div class="col-md-8 value preview-airport-color">
+								<span class="font-weight-bolder preview-output-feild">
+									{{currencySymbol}}{{rates_preview?.grandTotal ? rates_preview?.grandTotal.toFixed(2)
+									:
+									rates_preview?.returnGrandTotal.toFixed(2)}}
+								</span>
+								(Actual Cost to Customer)
 							</div>
 						</div>
 					</div>

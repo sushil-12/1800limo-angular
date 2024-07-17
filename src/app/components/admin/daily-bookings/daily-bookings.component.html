@@ -67,7 +67,7 @@
 				<div class="col-md-6">
 					<p><mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">
 							{{useDateFilter ? 'Uncheck to see current and future bookings' :
-							'Check to see only current 7 day bookings and search by any term.' }}
+							'Check to see bookings based upon dates and search by any term.' }}
 						</mat-checkbox></p>
 				</div>
 
@@ -1865,23 +1865,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="mx-2">
-							<div class="row m-0">
-								<div class="col-md-4 key d-flex align-items-center">
-									<span>
-										Total Cost
-									</span>
-								</div>
-								<div class="col-md-8 value preview-airport-color">
-									<span class="font-weight-bolder preview-output-feild">
-										{{bookingPreview?.currency_symbol}}{{bookingPreview?.share_array?.grandTotal ?
-										bookingPreview?.share_array?.grandTotal.toFixed(2) :
-										bookingPreview?.share_array?.returnGrandTotal.toFixed(2)}}
-									</span>
-									(Actual Cost to Customer)
-								</div>
-							</div>
-						</div>
+						
 						<div class="mx-2">
 							<div class="row m-0">
 								<div class="col-md-4 key d-flex align-items-center">
@@ -1925,6 +1909,23 @@
 										{{bookingPreview?.currency_symbol}}{{bookingPreview?.share_array?.farmoutShare.toFixed(2)}}
 									</span>
 									( 10 % of Base Rate)
+								</div>
+							</div>
+						</div>
+						<div class="mx-2">
+							<div class="row m-0">
+								<div class="col-md-4 key d-flex align-items-center">
+									<span>
+										Total Cost
+									</span>
+								</div>
+								<div class="col-md-8 value preview-airport-color">
+									<span class="font-weight-bolder preview-output-feild">
+										{{bookingPreview?.currency_symbol}}{{bookingPreview?.share_array?.grandTotal ?
+										bookingPreview?.share_array?.grandTotal.toFixed(2) :
+										bookingPreview?.share_array?.returnGrandTotal.toFixed(2)}}
+									</span>
+									(Actual Cost to Customer)
 								</div>
 							</div>
 						</div>
