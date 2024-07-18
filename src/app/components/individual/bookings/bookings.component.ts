@@ -13,6 +13,7 @@ import { DatePickerComponent } from '../../shared/date-picker/date-picker.compon
 import { HttpClient } from '@angular/common/http';
 import { IndividualService } from 'src/app/services/individual.service';
 import { StateManagementService } from 'src/app/services/statemanagement.service';
+import { MapsAPILoader } from '@agm/core';
 declare var $: any;
 
 @Component({
@@ -78,6 +79,7 @@ export class BookingsComponent implements OnInit {
 	rateArray: any;
 	cancelMessage: any;
 	currencySymbol: any;
+	is_family_member: any = false;
 
 	constructor(
 		private affiliateService: AffiliateService,
@@ -88,11 +90,13 @@ export class BookingsComponent implements OnInit {
 		private formBuilder: FormBuilder,
 		private stateManagementService: StateManagementService,
 		private individualService: IndividualService,
+		private $mapsapi: MapsAPILoader,
 		private http: HttpClient) { }
 
 	ngOnInit(): void {
 
 		this.currentUser = JSON.parse(localStorage.getItem('currentUser'))
+		this.is_family_member = localStorage.getItem("is_family_member") ? localStorage.getItem("is_family_member") : false
 		let date = new Date();
 		// Set Search Filters According to cookies or the intial state
 		this.startDate = this.affiliateService.checkCookie('indv_startDate') ?
@@ -131,10 +135,83 @@ export class BookingsComponent implements OnInit {
 		});
 
 		$("#search-field-my-booking").addClass("box-outline")
+
+		this.MapController()
 	}
 
 	ngAfterViewInit(): void {
 		$("#search-field-my-booking").addClass("box-outline")
+	}
+
+
+	MapController() {
+		console.log('Map has been initialised.')
+		let waypoints = []
+		let origin: google.maps.LatLng
+		let destination: google.maps.LatLng
+		let map: google.maps.Map
+
+		this.$mapsapi.load().then(() => {
+
+			// console.log('Return Map has been initialised. ')
+			// map
+			map = new google.maps.Map(document.getElementById('map'), {
+				zoom: 7,
+				center: new google.maps.LatLng(41.850033, -87.6500523),
+				scaleControl: true
+			})
+
+
+			// defaults for Source/Target - City
+			origin = new google.maps.LatLng(this.bookingPreview?.pickup_latitude, this.bookingPreview?.pickup_longitude)
+			destination = new google.maps.LatLng(this.bookingPreview?.dropoff_airport_latitude, this.bookingPreview?.dropoff_airport_longitude)
+
+			//defaults for Source/Target - City
+			origin = new google.maps.LatLng(this.bookingPreview?.pickup_latitude, this.bookingPreview?.pickup_longitude)
+			destination = new google.maps.LatLng(this.bookingPreview?.dropoff_latitude, this.bookingPreview?.dropoff_longitude)
+
+			// Overrides
+			if (this.bookingPreview?.transfer_type.includes('airport_')) {
+				// override for Source - Airport
+				// console.log('Override for Source Airport')
+				origin = new google.maps.LatLng(this.bookingPreview?.pickup_airport_latitude, this.bookingPreview?.pickup_airport_longitude)
+			}
+			if (this.bookingPreview?.transfer_type.includes('_airport')) {
+				// override for Target - Airport
+				// console.log('Override for Target Airport')
+				destination = new google.maps.LatLng(this.bookingPreview?.dropoff_airport_latitude, this.bookingPreview?.dropoff_airport_longitude)
+			}
+
+			this.drawMap(map, {
+				origin,
+				destination,
+				waypoints,
+				optimizeWaypoints: true,
+				travelMode: google.maps.TravelMode.DRIVING
+			})
+		})
+	}
+
+
+	drawMap(map: google.maps.Map, request: Object) {
+		if (request && !request.hasOwnProperty('waypoints') && !request.hasOwnProperty('origin') && !request.hasOwnProperty('destination')) {
+			console.error('Request Object is not properly according to specified requirements.')
+			return
+		}
+
+		this.$mapsapi.load().then(() => {
+			const directionsRenderer = new google.maps.DirectionsRenderer()
+			const directionsService = new google.maps.DirectionsService()
+			directionsRenderer.setMap(map)
+
+			directionsService.route(request, (response: any, status: string) => {
+				if (status == google.maps.DirectionsStatus.OK) {
+					console.log('Directions Service Response: ', response)
+					directionsRenderer.setDirections(response)
+				}
+			})
+
+		})
 	}
 
 
@@ -158,8 +235,15 @@ export class BookingsComponent implements OnInit {
 		this.individualService.loadBookings(pageUrl, this.searchText, this.startDate, this.endDate, this.useDateFilter).then(result => {
 			this.cancelMessage = ''
 			this.spinner.hide()
+			let date = new Date();
+			let timestamp = date.getTime();
+			date.setDate(date.getDate() + 7);
+			timestamp = date.getTime();
 			this.bookingsRes = result;
 			this.bookings = this.bookingsRes?.data?.data;
+			if (!this.useDateFilter) {
+				this.endDate = this.bookings?.length > 0 ? this.bookings[this.bookings?.length - 1]?.pickup_date : moment(timestamp).format("YYYY-MM-DD")
+			}
 			this.totalRecords = this.bookingsRes?.data?.total;
 			this.noError = false
 			this.firstPage = 1;
@@ -236,6 +320,10 @@ export class BookingsComponent implements OnInit {
 		this.useDateFilter = value
 		// this.saveCookie('useDateFilter',value)
 		localStorage.setItem('indvUseDateFilter', value)
+		let date = new Date();
+		date.setDate(date.getDate() + 7);
+		let timestamp = date.getTime();
+		this.endDate = moment(timestamp).format("YYYY-MM-DD");
 		this.loadBookings();
 	}
 
@@ -243,8 +331,7 @@ export class BookingsComponent implements OnInit {
 		try {
 			return text.replace(/[\\\_$]+/g, ' ')
 		}
-		catch
-		{
+		catch {
 			return text
 		}
 	}
@@ -265,6 +352,14 @@ export class BookingsComponent implements OnInit {
 			});
 	}
 
+	mToMi(distance: number): string {
+		return (distance / 1609).toFixed(2);
+	}
+
+	mToKm(distance: number): string {
+		return (distance / 1000).toFixed(2);
+	}
+
 	bookingPreview: any;
 	showBookingPreviewModal(booking_id: number) {
 		console.log("hii im here")
@@ -278,6 +373,7 @@ export class BookingsComponent implements OnInit {
 			).subscribe((response: any) => {
 				console.log("respinse", response.data)
 				this.bookingPreview = response.data;
+				this.MapController()
 				if (this.bookingPreview?.account_type == 'travel_planner' && this.bookingPreview?.created_by != 1) {
 					console.log("in if created by ta")
 					this.adminSharePercent = 15
@@ -765,6 +861,9 @@ export class BookingsComponent implements OnInit {
 		this.paymentMethod = method
 	}
 
+	addFamilyMember() {
+		this.router.navigate(['/individual/add-family-member']);
+	}
 
 	makePayment() {
 
@@ -802,5 +901,14 @@ export class BookingsComponent implements OnInit {
 			this.spinner.hide()
 		})
 	}
+
+	searchOnGoogle(query: string) {
+		console.log("in search google", query)
+		if (query) {
+			const url = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+			window.open(url, '_blank'); // Opens the search in a new tab
+		}
+	}
+
 }
 

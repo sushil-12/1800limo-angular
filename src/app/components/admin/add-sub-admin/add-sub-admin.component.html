@@ -6,7 +6,7 @@
 			<h2 class="headinginfo adminbox_shadow"> Sub Admin Information </h2>
 			<div class="container mt-1 ">
 				<div class="row ">
-					<div class="col-md-4">
+					<div class="col-md-6">
 						<mat-form-field appearance="outline">
 							<mat-label>First Name <span class="asterisk">*</span></mat-label>
 							<input type="text" matInput placeholder="First Name" formControlName="firstName"
@@ -16,14 +16,14 @@
 							<div *ngIf="f.firstName.errors.required">This field is required</div>
 						</div>
 					</div>
-					<div class="col-md-4">
+					<!-- <div class="col-md-4">
 						<mat-form-field appearance="outline">
 							<mat-label>Middle Name</mat-label>
 							<input type="text" matInput placeholder="Middle Name" formControlName="middleName"
 								(focus)="$event.target.select()">
 						</mat-form-field>
-					</div>
-					<div class="col-md-4">
+					</div> -->
+					<div class="col-md-6">
 						<mat-form-field appearance="outline">
 							<mat-label>Last Name <span class="asterisk">*</span></mat-label>
 							<input type="text" matInput placeholder="Last Name" formControlName="lastName"
@@ -33,13 +33,14 @@
 							<div *ngIf="f.lastName.errors.required">This field is required</div>
 						</div>
 					</div>
-					<div class="col-md-4" *ngIf="!subAdminId">
+					<div class="col-md-6">
 						<mat-form-field appearance="outline" class="mat-custom-phone">
 							<mat-label>Mobile<span class="asterisk">*</span></mat-label>
 							<input matInput ng2TelInput
 								[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
+								(intlTelInputObject)="telInputObjectMobile($event)"
 								(countryChange)="onCountryChange($event)" placeholder="Mobile" formControlName="mobile"
-								(focus)="$event.target.select()">
+								(focus)="$event.target.select()" [readonly]="subAdminId">
 						</mat-form-field>
 						<div *ngIf="f.mobile.invalid && (f.mobile.touched || f.mobile.dirty)" class="text-danger">
 							<div *ngIf="f.mobile.errors.required">This field is required</div>
@@ -48,7 +49,7 @@
 							<div *ngIf="f.mobile.errors.maxlength">Maximum length should be 12</div>
 						</div>
 					</div>
-					<div [ngClass]="subAdminId ? 'col-md-6' : 'col-md-4'">
+					<div class="col-md-6">
 						<mat-form-field appearance="outline">
 							<mat-label>E-mail <span class="asterisk">*</span></mat-label>
 							<input type="email" matInput placeholder="E-mail" formControlName="email"
@@ -59,7 +60,7 @@
 							<div *ngIf="f.email.errors.pattern">Email format should be valid</div>
 						</div>
 					</div>
-					<div [ngClass]="subAdminId ? 'col-md-6' : 'col-md-4'">
+					<div class="col-md-12">
 						<mat-form-field appearance="outline">
 							<mat-label>Address <span class="asterisk">*</span></mat-label>
 							<input type="text" matInput placeholder="Address" #search1 formControlName="address"
@@ -70,7 +71,7 @@
 							<div *ngIf="f.address.errors.pattern">This field should be a number</div>
 						</div>
 					</div>
-					<div class="col-md-6">
+					<!-- <div class="col-md-6">
 						<mat-form-field appearance="outline">
 							<mat-label>City </mat-label>
 							<input type="text" matInput placeholder="City" formControlName="city"
@@ -90,11 +91,11 @@
 						<div *ngIf="submittedForm && f.state.errors" class="text-danger">
 							<div *ngIf="f.state.errors.required">This field is required</div>
 							<div *ngIf="f.state.errors.pattern">This field should be a number</div>
-						</div>
-					</div>
+						</div> 
+					</div> -->
 					<div class="col-md-6">
 						<mat-form-field appearance="outline">
-							<mat-label>Country </mat-label>
+							<mat-label>Country  <span class="asterisk">*</span></mat-label>
 							<input type="text" matInput placeholder="Country" formControlName="country"
 								(focus)="$event.target.select()">
 						</mat-form-field>
@@ -105,7 +106,7 @@
 					</div>
 					<div class="col-md-6">
 						<mat-form-field appearance="outline">
-							<mat-label>Zip Code / Country Address Code </mat-label>
+							<mat-label>Zip Code / Country Address Code  <span class="asterisk">*</span></mat-label>
 							<input type="text" matInput placeholder="Zip Code / Country Address Code"
 								formControlName="zipCode" (focus)="$event.target.select()">
 						</mat-form-field>
@@ -119,22 +120,15 @@
 		</section>
 		<!-----BILLING INFO-------------->
 		<div class="container">
-			<div class="row justify-content-between">
-
-				<div class="billing_inforamtion">
-					<ul>
+			<div class="col-md-12">
+				<div class="billing_inforamtion ">
+					<ul class="d-flex justify-content-center">
 						<li>
 
 							<button class="custom-filled-back-button" (click)="backButton()">
 								BACK
 							</button>
 						</li>
-					</ul>
-				</div>
-
-
-				<div class="billing_inforamtion">
-					<ul>
 						<li>
 							<button class="custom-filled-reset-button" (click)="resetForm()" tabIndex="2">
 								RESET
@@ -146,7 +140,6 @@
 						</li>
 					</ul>
 				</div>
-
 			</div>
 		</div>
 		<!-- <div class="billing_inforamtion">

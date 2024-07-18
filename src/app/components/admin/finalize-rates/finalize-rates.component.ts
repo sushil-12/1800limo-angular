@@ -161,7 +161,7 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 				if (response && Object.keys(response).length > 0) {
 					for (let item in this.RateForm) {
 						for (let key in (<FormGroup>this.RatesForm.get(item)).controls) {
-							console.log(item, key);
+							// console.log(item, key);
 							let baserate = response[item][key]["baserate"];
 							let type = response[item][key]["type"] ?? "flat";
 							(<FormGroup>((<FormGroup>this.RatesForm.get(item)).get(key))).get("baserate").setValue(baserate);
@@ -188,6 +188,15 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 				this.calculateGrandTotal('ReturnRatesForm')
 			}
 		}
+	}
+
+	handleHourChange(event: any) {
+		console.log('------->>>>>>>', event.target.value)
+		if (event.target.value == '') {
+			let n_hr: any = 1
+			this.returnNumberOfHr.emit(n_hr)
+		}
+		this.returnNumberOfHr.emit(event.target.value)
 	}
 
 	scroll(id) {
@@ -381,7 +390,7 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 			{
 				for (let item in data[key]) {
 					if (form === "RatesForm") {
-						console.log(key, item);
+						// console.log(key, item);
 						(<FormGroup>this.RatesForm.get(key)).addControl(item, this.buildRatesForm(form, data[key][item]));
 
 						(<FormGroup>((<FormGroup>this.RatesForm.get(key)).get(item))).get("baserate").valueChanges.subscribe((value: number) => {
@@ -416,7 +425,7 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 			this.subtotal = 0;
 			for (let item in this.total) {
 				this.subtotal = Number(this.subtotal.toFixed(2)) + Number(this.total[item].toFixed(2));
-				// console.log("in total checkk---->",this.subtotal,Number(this.subtotal.toFixed(2)),'--->',Number(this.total[item].toFixed(2)))
+				// console.log("in total checkk---->", this.subtotal, Number(this.subtotal.toFixed(2)), '--->', Number(this.total[item].toFixed(2)), this.total)
 			}
 		}
 
@@ -426,7 +435,7 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 				this.r_subtotal = Number(this.r_subtotal.toFixed(2)) + Number(this.r_total[item].toFixed(2));
 			}
 		}
-		console.log("in function calculate total", this.grandtotal, this.subtotal)
+		// console.log("in function calculate total", this.grandtotal, this.subtotal)
 
 	}
 
@@ -518,6 +527,7 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 				baseRate += (<FormGroup>((<FormGroup>this.ReturnRatesForm.get('all_inclusive_rates'))?.get('Base_Rate')))?.get("baserate").value || 0
 			}
 			['ELH_Charges', 'Stops', 'Wait'].map((i) => {
+				// console.log("in chargeee", i, (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates'))?.get(i)))?.get("baserate").value)
 				baseRate += (<FormGroup>((<FormGroup>this.ReturnRatesForm.get('all_inclusive_rates'))?.get(i)))?.get("baserate").value || 0
 			});
 			['Baby_Seat', 'Baggage_Meet_(Dom)', 'Baggage_Meet_(Int)', 'Bike_Rack', 'Booster_Seat', 'Golf_Bags',
@@ -535,7 +545,7 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 		this.admin_share = (this.isTravelShare && !this.isCreatedByAdmin || this.isFarmoutBooking) ? 15 : 25
 		this.r_calc_admin_share = baseRate * this.admin_share / 100
 		this.isFarmoutBooking ? this.r_farmoutShare = baseRate * 0.10 : ''
-		console.log('in function caculate admin share-->>', this.r_calc_admin_share)
+		// console.log('in function caculate admin share-->>', this.r_calc_admin_share)
 	}
 	calculateReturnTravelShare() {
 		if (!this.isTravelShare && this.isCreatedByAdmin) {
@@ -556,6 +566,7 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 				baseRate += (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates'))?.get('Base_Rate')))?.get("baserate").value || 0
 			}
 			['ELH_Charges', 'Stops', 'Wait'].map((i) => {
+				console.log("in chargeee", i, (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates'))?.get(i)))?.get("baserate").value)
 				baseRate += (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates'))?.get(i)))?.get("baserate").value || 0
 			});
 			['Baby_Seat', 'Baggage_Meet_(Dom)', 'Baggage_Meet_(Int)', 'Bike_Rack', 'Booster_Seat', 'Golf_Bags',
@@ -590,7 +601,7 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 	}
 
 	async calculateAmount(form: string, formgroup: string, subform: string) {
-		console.log('in function calculateAmount')
+		console.log('in function calculateAmount --> subform', subform)
 		await this.calculateAdminShare()
 		await this.calculateTravelShare()
 		if (form === "RatesForm") {
@@ -665,6 +676,7 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 
 			let amount = (<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("amount").value;
 			this.total[subform] = Number(Number(amount).toFixed(2));
+			// console.log("in this total---->", this.total, amount, subform)
 			if (formgroup == 'amenities' || formgroup == "all_inclusive_rates") {
 				let baseRateAmount = (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates')).get('Base_Rate'))).get("baserate").value;
 				if (this.service_type == 'charter_tour' && !this.is_readonly_min_rate) {
@@ -679,6 +691,7 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 				}
 				// (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates')).get('Base_Rate'))).get("amount").setValue(baseRateAmount);
 				this.total['Base_Rate'] = Number(Number(baseRateAmount).toFixed(2));
+				// console.log("in this total baserate---->", this.total, baseRateAmount)
 			}
 			this.RatesForm.updateValueAndValidity();
 		}

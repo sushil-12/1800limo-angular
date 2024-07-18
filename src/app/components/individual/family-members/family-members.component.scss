@@ -1,0 +1,62 @@
+.btn-add-other-memeber {
+    color: #fff !important;
+    background-color: var(--green-color);
+    border-color: var(--green-color);
+    font-size: 18px;
+    // text-transform: uppercase
+    font-weight: 700;
+    text-decoration: none;
+    // margin: 20px 0;
+    border-radius: 15px;
+    padding: 10px 20px !important;
+    box-shadow: 0px 5px 10px 1px rgba(0, 0, 0, 0.4);
+}
+
+.btn-add-other-memeber svg {
+    height: 20px;
+    margin-right: 8px;
+    margin-bottom: 2px;
+}
+
+@media only screen and (min-width: 1199px) {
+    .btn-add-other-memeber:hover {
+        background-color: #28b24b;
+        border-color: #28b24b;
+    }
+
+    .btn-add-other-memeber:focus {
+        transform: scale(1.1, 1.1);
+        background-color: #28b24b;
+    }
+
+}
+
+.add-member-div {
+    display: flex;
+    justify-content: flex-end;
+}
+
+@media only screen and (max-width: 600px) {
+    .add-member-div {
+        display: flex;
+        justify-content: flex-start;
+        margin-top: 10px;
+    }
+}
+
+@media only screen and (max-width:1190px) {
+    .btn-add-other-memeber {
+        font-size: 15px !important;
+    }
+}
+
+
+.view-account-button {
+    background-color: var(--orange-color);
+    border-color: var(--orange-color);
+    color: #000;
+    padding: 8px 15px !important;
+    border-radius: 3rem !important;
+    width: 9rem;
+    font-size: 16px;
+}

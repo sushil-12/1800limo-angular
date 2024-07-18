@@ -40,9 +40,9 @@ export class Step2Component implements OnInit {
 	public id_front_image: string;
 	public id_back_image: string;
 	public id_front_image_id: string;
-	public id_front_image_degree : number = 0
+	public id_front_image_degree: number = 0
 	public id_back_image_id: string;
-	public id_back_image_degree : number = 0
+	public id_back_image_degree: number = 0
 	public imageSrc: string;
 	public cardToDelete: number;
 	public date25YearsBack: string;
@@ -58,23 +58,25 @@ export class Step2Component implements OnInit {
 	public disableSubmitRequestAddressChangeButton: boolean = false;
 	public showProgressBar: boolean = false;
 	public haveEinNo: boolean = true;
-	public isBadgeCity : boolean = false;
-	enableSsnField:boolean=false;
-	ssn_copy:any;
-	ssnErrorMessage:string;
-	addressErrorMessage:string;
-	dobErrorMessage:string;
-	public AddressCheckStripe = ['address','street','city','country'];
-	isSsnSelected:boolean=false;
-	isAddressSelected:boolean=false;
+	public isBadgeCity: boolean = false;
+	enableSsnField: boolean = false;
+	routingErrorMessage: string;
+	ssn_copy: any;
+	ssnErrorMessage: string;
+	addressErrorMessage: string;
+	dobErrorMessage: string;
+	public AddressCheckStripe = ['address', 'street', 'city', 'country'];
+	isSsnSelected: boolean = false;
+	isAddressSelected: boolean = false;
+	isRoutingSelected: boolean = false;
 
 
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
 	selectedCountryName: any;
 	badgeOptions: any;
 	filteredOptions: any;
-	rotateDriverLicence:boolean = false;
-	rotateDriverLicenceBack:boolean = false;
+	rotateDriverLicence: boolean = false;
+	rotateDriverLicenceBack: boolean = false;
 	TaxIdMatch: string;
 	constructor(
 		private affiliateService: AffiliateService,
@@ -94,7 +96,7 @@ export class Step2Component implements OnInit {
 	) { }
 
 	ngOnInit(): void {
-		$('.HeadingH1').css({display: "block"})
+		$('.HeadingH1').css({ display: "block" })
 		//code related to autocomplete and map
 		this.mapFunction();
 
@@ -126,6 +128,16 @@ export class Step2Component implements OnInit {
 		const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 		this.affiliateId = currentUser.account_id;
 		this.stepCompleted = this.affiliateService.getLocalStepCompleted();
+
+		this.adminService.getAllEnableBadgeCities().pipe(
+			catchError(err => {
+				return throwError(err)
+			})
+		).subscribe((res: any) => {
+			this.badgeOptions = res?.data
+			this.filteredOptions = res?.data
+		})
+
 		//add bank form validation
 		this.addBankForm = this.formBuilder.group({
 			id: [''],//bank id for edit purpose
@@ -153,8 +165,8 @@ export class Step2Component implements OnInit {
 			street: [''],
 			city: [''],
 			state: ['', Validators.required],
-			badge_city :[''],
-			badge_city_name:[''],
+			badge_city: [''],
+			badge_city_name: [''],
 			country: ['', Validators.required],
 			zipCode: ['', Validators.required],
 			unit: [''],
@@ -220,17 +232,17 @@ export class Step2Component implements OnInit {
 			if (this.affiliateId) {
 				if (this.stepCompleted.includes('2')) {
 					this.isStep2Completed = true;
-					
+
 					this.affiliateService.getBankOfAffiliate(this.affiliateId)
 						.pipe(
 							catchError(err => {
 								this.spinner.hide(); //hide spinner
 								return throwError(err);
 							})
-							).subscribe(result => {
-								console.log('response--->>>>' , result)
-								this.response = result;
-								this.spinner.hide(); //hide spinner
+						).subscribe(result => {
+							console.log('response--->>>>', result)
+							this.response = result;
+							this.spinner.hide(); //hide spinner
 							this.getCountryName = this.response?.data?.bankinfo?.countryName;
 							//to show stripe errors at the top
 							if (this.response.data?.stripeDetail?.stripe_errors) {
@@ -240,7 +252,7 @@ export class Step2Component implements OnInit {
 							this.id_front_image = this.response.data?.bankinfo?.id_front_image?.image;
 							this.id_back_image = this.response.data?.bankinfo?.id_back_image?.image;
 							this.id_front_image_degree = this.response.data?.bankinfo?.id_front_image?.orientation || 0;
-							this.id_back_image_degree = this.response.data?.bankinfo?.id_back_image?.orientation  || 0;
+							this.id_back_image_degree = this.response.data?.bankinfo?.id_back_image?.orientation || 0;
 
 							this.id_front_image_id = this.response.data.bankinfo?.id_front_image?.ID;
 							this.id_back_image_id = this.response.data?.bankinfo?.id_back_image?.ID;
@@ -288,18 +300,19 @@ export class Step2Component implements OnInit {
 								id_front_image: this.response.data?.bankinfo?.id_front_image?.ID,
 								id_back_image: this.response.data?.bankinfo?.id_back_image?.ID,
 							});
-							this.ssn_copy=this.response?.data?.bankinfo?.ssn
+							this.ssn_copy = this.response?.data?.bankinfo?.ssn
 							this.isSsnSelected = true
-							this.isAddressSelected=true
+							this.isAddressSelected = true
+							this.isRoutingSelected = true
 							// if(this.response?.data?.error_fields?.find(val => val?.field == 'ssn')){
 							// 	this.ssnErrorMessage = this.response?.data?.error_fields?.find(val => val?.field == 'ssn')?.message
 							// 	this.enableSsnField=false
-                            //             console.log("in if ssn error",this.enableSsnField)
+							//             console.log("in if ssn error",this.enableSsnField)
 							// }
 							// else{
 							// 	this.enableSsnField=true
 							// }
-								//to check ssn error
+							//to check ssn error
 							// if (this.response?.data?.error_fields?.find(val => val?.field == 'ssn')) {
 							// 	this.ssnErrorMessage = this.response?.data?.error_fields?.find(val => val?.field == 'ssn')?.message
 							// 	this.enableSsnField = false
@@ -309,59 +322,67 @@ export class Step2Component implements OnInit {
 							// 	this.enableSsnField = true
 							// }
 
-                            if(this.response?.data?.error_fields?.length > 0){
+							if (this.response?.data?.error_fields?.length > 0) {
 								const hasNonEmptyObjects = this.response?.data?.error_fields?.filter(obj => Object.keys(obj).length > 0).length > 0;
-								console.log(hasNonEmptyObjects,"hasnonnonono")
-								if(!hasNonEmptyObjects){
+								console.log(hasNonEmptyObjects, "hasnonnonono")
+								if (!hasNonEmptyObjects) {
 									this.enableSsnField = true
 								}
-								else{
+								else {
 
-									this.response?.data?.error_fields?.forEach(item=>{
-										if(item.field == 'ssn'){
+									this.response?.data?.error_fields?.forEach(item => {
+										if (item.field == 'ssn') {
 											this.enableSsnField = false
 											this.ssnErrorMessage = 'PLEASE ENTER A VALID SSN / GOVERNMENT ID'
-											console.log('error mesage---->',this.ssnErrorMessage)
+											console.log('error mesage---->', this.ssnErrorMessage)
 										}
-										else{
+										else {
 											this.enableSsnField = true
 										}
-									if(this.AddressCheckStripe?.includes(item?.field)){
-										this.addressErrorMessage = 'Please enter a valid address'
-										console.log('error mesage---->',this.addressErrorMessage)
-										// this.enableSsnField = true
+										if (this.AddressCheckStripe?.includes(item?.field)) {
+											this.addressErrorMessage = 'Please enter a valid address'
+											console.log('error mesage---->', this.addressErrorMessage)
+											// this.enableSsnField = true
 
-									}
-									if(item?.field == 'dob'){
-										this.dobErrorMessage = 'Please enter a valid dob'
-										console.log('error mesage---->',this.dobErrorMessage)
-										// this.enableSsnField = true
-									}
-									
-							  })
+										}
+										if (item?.field == 'dob') {
+											this.dobErrorMessage = 'Please enter a valid dob'
+											console.log('error mesage---->', this.dobErrorMessage)
+											// this.enableSsnField = true
+										}
+
+									})
+								}
 							}
-							}
-							else{
+							else {
 								this.enableSsnField = true
 
 							}
-							console.log("trueeee===>",this.enableSsnField)
+							console.log("trueeee===>", this.enableSsnField)
 
 							//to check varificatiom failed tax id error only
-							if(this.response?.data?.stripeDetail?.stripe_errors?.find(err => err?.error_code == 'verification_failed_tax_id_match')){
+							if (this.response?.data?.stripeDetail?.stripe_errors?.find(err => err?.error_code == 'verification_failed_tax_id_match')) {
 								this.enableSsnField = false
 								this.TaxIdMatch = 'NOTE - Please verify your SSN  number and Buisness/Tax ID number'
 							}
-							
+
 							this.changeCountry(this.response.data?.bankinfo?.country);//for selected country
-							this.badgeOptions.map((i:any)=>{
-								if(i.id==this.response?.data?.bankinfo?.badge_city){
-									this.addBankForm.patchValue({
-										badge_city:i.id,
-										badge_city_name:i.name
-									})
-									this.isBadgeCity = true
-								}
+							this.adminService.getAllEnableBadgeCities().pipe(
+								catchError(err => {
+									return throwError(err)
+								})
+							).subscribe((res: any) => {
+								this.badgeOptions = res?.data
+								this.filteredOptions = res?.data
+								res?.data?.map((i: any) => {
+									if (i.id == this.response?.data?.bankinfo?.badge_city) {
+										this.addBankForm.patchValue({
+											badge_city: i.id,
+											badge_city_name: i.name
+										})
+										this.isBadgeCity = true
+									}
+								})
 							})
 							// if (this.postCountryName == this.getCountryName)
 							// {
@@ -369,7 +390,7 @@ export class Step2Component implements OnInit {
 							// 	console.log(this.addBankForm.value.currency, "jhjhjgufytfhguhgjgfjjvj")
 							// }
 						});
-						this.spinner.hide(); //hide spinner
+					this.spinner.hide(); //hide spinner
 
 				}
 				else {
@@ -388,22 +409,14 @@ export class Step2Component implements OnInit {
 			}
 			else {
 				//for selected country
-			this.spinner.hide();
-			this.changeCountry(currentUser?.phoneCountry.toUpperCase());
+				this.spinner.hide();
+				this.changeCountry(currentUser?.phoneCountry.toUpperCase());
 				this.addBankForm.patchValue({
 					country: currentUser?.phoneCountry.toUpperCase()
 				});
 			}
 		})
 
-		this.adminService.getAllEnableBadgeCities().pipe(
-			catchError(err => {
-				return throwError(err)
-			})
-		).subscribe((res:any)=> {
-			this.badgeOptions = res?.data
-			this.filteredOptions = res?.data
-		})
 	}
 	// ngOnInit Ends 
 
@@ -595,7 +608,7 @@ export class Step2Component implements OnInit {
 			this.addBankForm.controls['ein'].setValidators([Validators.required])
 			this.addBankForm.controls['ein'].updateValueAndValidity()
 		}
-		else{
+		else {
 			this.addBankForm.controls['ein'].setValidators([])
 			this.addBankForm.controls['ein'].updateValueAndValidity()
 		}
@@ -637,7 +650,7 @@ export class Step2Component implements OnInit {
 	}
 
 	async idCardImageChange1(imageUrl, imageType, imageId = null) {
-		if(!await this.commonServices.handleFile(event)) {
+		if (!await this.commonServices.handleFile(event)) {
 			return;
 		}
 		this.stateManagementService.setprogressBar(true);
@@ -680,7 +693,7 @@ export class Step2Component implements OnInit {
 
 
 	async idCardImageChange(event, imageType, imageId = null) {
-		if(!await this.commonServices.handleFile(event)) {
+		if (!await this.commonServices.handleFile(event)) {
 			return;
 		}
 		this.stateManagementService.setprogressBar(true);
@@ -753,7 +766,7 @@ export class Step2Component implements OnInit {
 		$("#imageModal").addClass("showImage");
 		$("#imageModal").removeClass("d-none");
 	}
-	handleRotateSec(key:string){
+	handleRotateSec(key: string) {
 		this[key] = !this[key]
 	}
 	// rotateImage(key:string): void {
@@ -763,88 +776,88 @@ export class Step2Component implements OnInit {
 	// 	  this[key] = 0;
 	// 	}
 	//   }
-	updateImageOrentation(key){
+	updateImageOrentation(key) {
 		this.stateManagementService.setprogressBar(true);
 		let data = {
-			id : this[key +'_id'],
+			id: this[key + '_id'],
 			// id :  '',
-			image : this[key],
-			orientation : this[key +'_degree'] 
+			image: this[key],
+			orientation: this[key + '_degree']
 		}
-		console.log('img date' , key , data)
+		console.log('img date', key, data)
 		this.adminService.updateOrientationImage(data)
-		.pipe(
-			catchError(err => {
+			.pipe(
+				catchError(err => {
+					this.stateManagementService.setprogressBar(false);
+					return throwError(err);
+				})
+			)
+			.subscribe(({ data }: any) => {
+				console.log('data-->>', data)
 				this.stateManagementService.setprogressBar(false);
-				return throwError(err);
 			})
-		)
-		.subscribe(({ data }: any) => {
-			console.log('data-->>' , data)
-			this.stateManagementService.setprogressBar(false);
-		})
 	}
-	fetchImageBlob(url ,key ,id){
+	fetchImageBlob(url, key, id) {
 		this.stateManagementService.setprogressBar(true);
-		
+
 		this.adminService.fetchImageBlob(url)
-		.pipe(
-			catchError(err => {
+			.pipe(
+				catchError(err => {
+					this.stateManagementService.setprogressBar(false);
+					return throwError(err);
+				})
+			)
+			.subscribe(async ({ data }: any) => {
 				this.stateManagementService.setprogressBar(false);
-				return throwError(err);
+				const response = await fetch(data);
+				const imageBlob = await response.blob()
+				console.log('imageBlob', imageBlob)
+				const canvas = document.createElement("canvas");
+				const ctx = canvas.getContext("2d");
+				const img = new Image();
+				img.src = URL.createObjectURL(imageBlob);
+				console.log('img-->', img)
+				img.onload = () => {
+					// Rotate the image by 90 degrees (or your desired angle)
+					canvas.width = img.width;
+					canvas.height = img.height;
+					ctx.translate(canvas.width / 2, canvas.height / 2);
+					ctx.rotate(Math.PI); // Rotate by 180 degrees
+					ctx.drawImage(img, -img.width / 2, -img.height / 2);
+					// ctx.drawImage(img, 0, -canvas.width);
+
+					// Convert the canvas to a Blob (JPEG format)
+					canvas.toBlob((blob) => {
+						console.log(blob);
+
+						this.blobToDataURL(blob, key, id);
+						// });
+					}, "image/jpeg");
+				}
 			})
-		)
-		.subscribe(async({ data }: any) => {
-			this.stateManagementService.setprogressBar(false);
-			const response = await fetch(data);
-			const imageBlob = await response.blob()
-			console.log('imageBlob',imageBlob)
-		const canvas = document.createElement("canvas");
-		const ctx = canvas.getContext("2d");
-		const img = new Image();
-		img.src = URL.createObjectURL(imageBlob);
-		console.log('img-->' , img)
-		img.onload = () => {
-			// Rotate the image by 90 degrees (or your desired angle)
-			canvas.width = img.width; 
-			canvas.height = img.height;
-			ctx.translate(canvas.width / 2, canvas.height / 2);
-			ctx.rotate(Math.PI); // Rotate by 180 degrees
-			ctx.drawImage(img, -img.width / 2, -img.height / 2);
-			// ctx.drawImage(img, 0, -canvas.width);
-
-			// Convert the canvas to a Blob (JPEG format)
-			canvas.toBlob((blob) => {
-				console.log(blob);
-
-				this.blobToDataURL(blob, key ,id);
-				// });
-			}, "image/jpeg");
-		}
-		})
 	}
-	blobToDataURL(blob: Blob , key , id) {
+	blobToDataURL(blob: Blob, key, id) {
 		var reader = new FileReader();
 		reader.readAsDataURL(blob);
 		reader.onload = () => {
 			let dataUrl = reader.result;
 			console.log(dataUrl); //DataURL
-			this.idCardImageChange1(dataUrl, key,id);
+			this.idCardImageChange1(dataUrl, key, id);
 		};
 	}
 
-	  handleBadgeCity(value:any){
-		console.log(value , this.filteredOptions)
-		if(!value){
+	handleBadgeCity(value: any) {
+		console.log(value, this.filteredOptions)
+		if (!value) {
 			this.isBadgeCity = false
 		}
-		this.filteredOptions = this.badgeOptions.filter((i:any)=> i.name.toLowerCase().includes(value.toLowerCase()))
+		this.filteredOptions = this.badgeOptions.filter((i: any) => i.name.toLowerCase().includes(value.toLowerCase()))
 	}
-	selectBadgeCity(option:any,isUserInput){
-		console.log('in function selectBadgeCity-->>>' ,option,isUserInput)
-		if(isUserInput){
+	selectBadgeCity(option: any, isUserInput) {
+		console.log('in function selectBadgeCity-->>>', option, isUserInput)
+		if (isUserInput) {
 			this.addBankForm.patchValue({
-				badge_city:option.id
+				badge_city: option.id
 			})
 			this.isBadgeCity = true
 			// this.addAffiliateAccountForm.updateValueAndValidity()
@@ -931,11 +944,11 @@ export class Step2Component implements OnInit {
 	get f() {
 		return this.addBankForm.controls;
 	}
-	showOnlyLast4Digit(value){
-		if(value){
+	showOnlyLast4Digit(value) {
+		if (value) {
 			value = value.toString()
 			return '*'.repeat(value.length - 4) + value.slice(-4)
-		}else{
+		} else {
 			return ''
 		}
 	}
@@ -953,30 +966,33 @@ export class Step2Component implements OnInit {
 				this.spinner.hide();
 			})
 	}
-	handleSsnInput(value:any){
-		
-		console.log("prev--->",this.ssn_copy,this.addBankForm.get('ssn').value)
-		value.includes("*") ? "" :this.ssn_copy=value
-		console.log("after--->",this.ssn_copy)
-		
+	handleSsnInput(value: any) {
+
+		console.log("prev--->", this.ssn_copy, this.addBankForm.get('ssn').value)
+		value.includes("*") ? "" : this.ssn_copy = value
+		console.log("after--->", this.ssn_copy)
+
 
 	}
-	removeErrorSsn(value:any,type:string){
-		console.log("TYPE----->",type)
-		if(type == 'ssn'){
+	removeErrorSsn(value: any, type: string) {
+		console.log("TYPE----->", type)
+		if (type == 'ssn') {
 			this.ssnErrorMessage = ""
-			this.isSsnSelected = value ? true :false;
+			this.isSsnSelected = value ? true : false;
 		}
-		else if(type == 'address'){
+		else if (type == 'address') {
 			this.addressErrorMessage = ""
-			this.isAddressSelected = value ? true:false;
+			this.isAddressSelected = value ? true : false;
+		}
+		else if (type == 'Routing') {
+			this.isRoutingSelected = value ? true : false;
 		}
 		// else if(type == 'dob'){
 		// 	console.log("in dobbbbhbbb")
 		// 	this.dobErrorMessage = ""
 		// }
 	}
-	removeDobError(){
+	removeDobError() {
 		console.log("in dobbbbhbbb")
 		this.dobErrorMessage = ""
 	}
@@ -989,30 +1005,40 @@ export class Step2Component implements OnInit {
 		}
 		this.addBankForm.value.stepCompleted = this.affiliateService.getUpdatedStepsLocal('2');
 		this.addBankForm.patchValue({
-			ssn:this.ssn_copy
+			ssn: this.ssn_copy
 		})
 		let payload = this.addBankForm.value
 		payload['stepCompleted'] = this.affiliateService.getUpdatedStepsLocal('2');
-		console.log(this.addBankForm.value , payload);
+		console.log(this.addBankForm.value, payload);
 		this.spinner.show();//show spinner
 		// this.stateManagementService.setprogressBar(true);
 		this.disableSubmitButton = true; //disable submit button
 		localStorage.setItem("driverFrontLicense", this.id_front_image);
+		this.isRoutingSelected = true;
 		this.affiliateService.addBankOfAffiliate(payload)
 			.pipe(
 				catchError(err => {
 					// this.addBankForm.patchValue({
 					// 	ssn:this.showOnlyLast4Digit(this.ssn_copy)
 					// })
-					console.log(this.addBankForm?.get('ssn').value,"valueeeeee")
-					console.log(err)
+					console.log(this.addBankForm?.get('ssn').value, "valueeeeee")
+					console.log('error', err, err?.error_fields)
 					if (err?.otherParams?.formcontrolname) {
 						this.scrollToErrorFormControlName(err.otherParams.formcontrolname)
 					}
 					this.spinner.hide();//hide spinner
 					// this.stateManagementService.setprogressBar(false);
+
+					//check routing number error
+					// err?.error_fields?.forEach(item => {
+					if (err?.errors?.error.includes('Routing Number is invalid' || 'Invalid routing number')) {
+						this.routingErrorMessage = 'Please enter correct routing number.'
+						console.log('error mesage---->', this.ssnErrorMessage)
+					}
+
+					// })
 					this.disableSubmitButton = false; //enable submit button
-					
+
 					return throwError(err);
 				})
 			)
@@ -1047,7 +1073,7 @@ export class Step2Component implements OnInit {
 		const keepValues = [
 			this.addBankForm.controls.ssn.value,
 		]
-	
+
 		this.addBankForm.patchValue({//affiliate account id
 			BankName: '',
 			BankAddress: '',
@@ -1061,12 +1087,12 @@ export class Step2Component implements OnInit {
 			ein: '',
 			currency: '',
 			dobDay: '',
-			dobMonth:'',
+			dobMonth: '',
 			dobYear: '',
 			id_front_image: '',
 			id_back_image: '',
 		});
-	 this.addBankForm.controls.ssn.patchValue(keepValues[0]);
+		this.addBankForm.controls.ssn.patchValue(keepValues[0]);
 
 		this.id_front_image = "";
 		this.id_back_image = "";

@@ -214,11 +214,11 @@
 					</div>
 					<div class="col-md-6">
 						<mat-form-field appearance="outline" class="phoneLabelClass">
-							<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Office
-								Phone<span class="asterisk">
+							<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">24hr Agent
+								Help Desk <span class="asterisk">
 									*</span></label>
-							<input matInput placeholder="Office Phone" formControlName="officeNumber" ng2TelInput
-								[ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
+							<input matInput placeholder="24hr Agent Help Desk" formControlName="officeNumber"
+								ng2TelInput [ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
 								placeholder="1234567890" class="phoneNumberClass"
 								(countryChange)="onCountryChange($event,'officeNumber')"
 								(intlTelInputObject)="telInputObjectOfficePhone($event)" tabIndex="1"
@@ -453,22 +453,14 @@
 			</div>
 		</section>
 		<div class="container">
-			<div class="row justify-content-between">
-
-				<div class="billing_inforamtion">
-					<ul>
+			<div class="col-md-12">
+				<div class="billing_inforamtion ">
+					<ul class="d-flex justify-content-center">
 						<li>
-
 							<button class="custom-filled-back-button" (click)="backButton()">
 								BACK
 							</button>
 						</li>
-					</ul>
-				</div>
-
-
-				<div class="billing_inforamtion">
-					<ul>
 						<li>
 							<button class="custom-filled-reset-button" (click)="resetForm()" tabIndex="2">
 								RESET
@@ -480,7 +472,6 @@
 						</li>
 					</ul>
 				</div>
-
 			</div>
 		</div>
 		<!-- <div class="container">

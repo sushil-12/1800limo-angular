@@ -859,7 +859,7 @@
 				<div class="col-md-4" id="travel_time">
 					<mat-form-field appearance="outline">
 						<mat-label>
-							Travel Time
+							Pickup Time
 						</mat-label>
 						<input [ngxTimepicker]="onwy_tm" formControlName="pickup_time" matInput readonly />
 					</mat-form-field>
@@ -892,13 +892,19 @@
 						<!-- Ng-Select - Pickup > Airport -->
 						<ng-select appearance="outline" [items]="BigData?.airportsData"
 							[searchFn]="airportSearchFunction" (change)="change($event, 'pickup_airport')"
-							placeholder="Select Airport" bindLabel="formatted_name" dropdownPosition="bottom"
-							[markFirst]="true" [virtualScroll]="true" formControlName="pickup_airport_option">
+							placeholder="Select Airport (Search by airport code or name)" bindLabel="formatted_name"
+							dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
+							formControlName="pickup_airport_option"
+							[ngClass]="{ 'border-red': (submitBookingForm && Form.pickup_airport_option.invalid) }"
+							style="height:66px;">
 							<ng-template ng-option-tmp let-item="item">
 								<div [title]="item.formatted_name">{{item.formatted_name}}</div>
 							</ng-template>
 						</ng-select>
-
+						<div *ngIf="(submitBookingForm && Form.pickup_airport_option.invalid) "
+							class="text-danger my-mat-hint" style="margin-bottom: 10px;">
+							<div *ngIf="Form.pickup_airport_option.errors.required">This field is required</div>
+						</div>
 
 					</div>
 
@@ -909,11 +915,17 @@
 						<ng-select appearance="outline" [items]="BigData?.airlinesData"
 							[searchFn]="airlineSearchFunction" (change)="change($event, 'pickup_airline')"
 							placeholder="Select Airline" bindLabel="formatted_name" dropdownPosition="bottom"
-							[markFirst]="true" [virtualScroll]="true" formControlName="pickup_airline_option">
+							[markFirst]="true" [virtualScroll]="true" formControlName="pickup_airline_option"
+							[ngClass]="{ 'border-red': (submitBookingForm && Form.pickup_airline_option.invalid) }"
+							style="height:66px;">
 							<ng-template ng-option-tmp let-item="item">
 								<div [title]="item.formatted_name">{{item.formatted_name}}</div>
 							</ng-template>
 						</ng-select>
+						<div *ngIf="(submitBookingForm && Form.pickup_airline_option.invalid) "
+							class="text-danger my-mat-hint" style="margin-bottom: 10px;">
+							<div *ngIf="Form.pickup_airline_option.errors.required">This field is required</div>
+						</div>
 					</div>
 
 					<!-- Flight / Tail # -->
@@ -921,11 +933,20 @@
 						<mat-form-field appearance="outline" class="vehicleLable mt-0"
 							style="margin-top: 0px !important;">
 							<mat-label>
-								Flight / Tail #
+								Flight / Tail # <span class="asterisk">*</span>
 							</mat-label>
 							<input type="text" matInput placeholder="Flight / Tail #" aria-label="Flight"
 								formControlName="pickup_flight" (focus)="$event.target.select()" />
 						</mat-form-field>
+						<div class="error-box">
+							<div class="error-message"
+								*ngIf="Form.pickup_flight.invalid && (Form.pickup_flight.touched || Form.pickup_flight.dirty)"
+								style="margin-top:-15px">
+								<p class="text-danger text-lg m-0" *ngIf="Form.pickup_flight.errors?.required">
+									This field is required
+								</p>
+							</div>
+						</div>
 					</div>
 
 					<!-- Origin Airport / City -->
@@ -933,11 +954,20 @@
 						<mat-form-field appearance="outline" class="vehicleLable mt-0"
 							style="margin-top: 0px !important;">
 							<mat-label>
-								Origin Airport / City
+								Origin Airport / City <span class="asterisk">*</span>
 							</mat-label>
 							<input formControlName="origin_airport_city" type="text" matInput
 								placeholder="Origin Airport / City" (focus)="$event.target.select()" />
 						</mat-form-field>
+						<div class="error-box">
+							<div class="error-message"
+								*ngIf="Form.origin_airport_city.invalid && (Form.origin_airport_city.touched || Form.origin_airport_city.dirty)"
+								style="margin-top:-15px">
+								<p class="text-danger text-lg m-0" *ngIf="Form.origin_airport_city.errors?.required">
+									This field is required
+								</p>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -953,24 +983,42 @@
 							<input type="text" matInput placeholder="Cruise Port" formControlName="cruise_port"
 								(focus)="$event.target.select()" />
 						</mat-form-field>
+						<div class="error-box">
+							<div class="error-message"
+								*ngIf="Form.cruise_port.invalid && (Form.cruise_port.touched || Form.cruise_port.dirty)"
+								style="margin-top:-15px">
+								<p class="text-danger text-lg m-0" *ngIf="Form.cruise_port.errors?.required">
+									This field is required
+								</p>
+							</div>
+						</div>
 					</div>
 
-					<!-- Cruise Name -->
+					<!-- Cruise Ship Name -->
 					<div class="col-md-4">
 						<mat-form-field appearance="outline">
 							<mat-label>
-								Cruise Name
+								Cruise Ship Name
 							</mat-label>
-							<input formControlName="cruise_name" type="text" matInput placeholder="Cruise Name"
+							<input formControlName="cruise_name" type="text" matInput placeholder="Cruise Ship Name"
 								(focus)="$event.target.select()" />
 						</mat-form-field>
+						<div class="error-box">
+							<div class="error-message"
+								*ngIf="Form.cruise_name.invalid && (Form.cruise_name.touched || Form.cruise_name.dirty)"
+								style="margin-top:-15px">
+								<p class="text-danger text-lg m-0" *ngIf="Form.cruise_name.errors?.required">
+									This field is required
+								</p>
+							</div>
+						</div>
 					</div>
 
 					<!-- Time -->
 					<div class="col-md-4">
 						<mat-form-field appearance="outline">
 							<mat-label>
-								Cruise Time
+								Ship Arrival time
 							</mat-label>
 							<input [ngxTimepicker]="crse_tm" matInput formControlName="cruise_time"
 								(focus)="$event.target.select()" readonly />
@@ -1007,11 +1055,17 @@
 						<ng-select appearance="outline" [items]="BigData?.airportsData"
 							[searchFn]="airportSearchFunction" (change)="change($event, 'dropoff_airport')"
 							placeholder="Select Airport" bindLabel="formatted_name" dropdownPosition="bottom"
-							[markFirst]="true" [virtualScroll]="true" formControlName="dropoff_airport_option">
+							[markFirst]="true" [virtualScroll]="true" formControlName="dropoff_airport_option"
+							[ngClass]="{ 'border-red': (submitBookingForm && Form.dropoff_airport_option.invalid) }"
+							style="height:66px;">
 							<ng-template ng-option-tmp let-item="item">
 								<div [title]="item.formatted_name">{{item.formatted_name}}</div>
 							</ng-template>
 						</ng-select>
+						<div *ngIf="(submitBookingForm && Form.dropoff_airport_option.invalid) "
+							class="text-danger my-mat-hint" style="margin-bottom: 10px;">
+							<div *ngIf="Form.dropoff_airport_option.errors.required">This field is required</div>
+						</div>
 					</div>
 
 					<!-- Airline -->
@@ -1021,11 +1075,17 @@
 						<ng-select appearance="outline" [items]="BigData?.airlinesData"
 							[searchFn]="airlineSearchFunction" (change)="change($event, 'dropoff_airline')"
 							placeholder="Select Airline" bindLabel="formatted_name" dropdownPosition="bottom"
-							[markFirst]="true" [virtualScroll]="true" formControlName="dropoff_airline_option">
+							[markFirst]="true" [virtualScroll]="true" formControlName="dropoff_airline_option"
+							[ngClass]="{ 'border-red': (submitBookingForm && Form.dropoff_airline_option.invalid) }"
+							style="height:66px;">
 							<ng-template ng-option-tmp let-item="item">
 								<div [title]="item.formatted_name">{{item.formatted_name}}</div>
 							</ng-template>
 						</ng-select>
+						<div *ngIf="(submitBookingForm && Form.dropoff_airline_option.invalid) "
+							class="text-danger my-mat-hint" style="margin-bottom: 10px;">
+							<div *ngIf="Form.dropoff_airline_option.errors.required">This field is required</div>
+						</div>
 					</div>
 
 					<!-- Flight / Tail # -->
@@ -1038,6 +1098,15 @@
 							<input type="text" matInput placeholder="Flight / Tail #" aria-label="Flight"
 								formControlName="dropoff_flight" (focus)="$event.target.select()" />
 						</mat-form-field>
+						<div class="error-box">
+							<div class="error-message"
+								*ngIf="Form.dropoff_flight.invalid && (Form.dropoff_flight.touched || Form.dropoff_flight.dirty)"
+								style="margin-top:-15px">
+								<p class="text-danger text-lg m-0" *ngIf="Form.dropoff_flight.errors?.required">
+									This field is required
+								</p>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -1053,24 +1122,42 @@
 							<input type="text" matInput placeholder="Cruise Port" formControlName="cruise_port"
 								(focus)="$event.target.select()" />
 						</mat-form-field>
+						<div class="error-box">
+							<div class="error-message"
+								*ngIf="Form.cruise_port.invalid && (Form.cruise_port.touched || Form.cruise_port.dirty)"
+								style="margin-top:-15px">
+								<p class="text-danger text-lg m-0" *ngIf="Form.cruise_port.errors?.required">
+									This field is required
+								</p>
+							</div>
+						</div>
 					</div>
 
-					<!-- Cruise Name -->
+					<!-- Cruise Ship Name -->
 					<div class="col-md-4">
 						<mat-form-field appearance="outline">
 							<mat-label>
-								Cruise Name
+								Cruise Ship Name
 							</mat-label>
-							<input formControlName="cruise_name" type="text" matInput placeholder="Cruise Name"
+							<input formControlName="cruise_name" type="text" matInput placeholder="Cruise Ship Name"
 								(focus)="$event.target.select()" />
 						</mat-form-field>
+						<div class="error-box">
+							<div class="error-message"
+								*ngIf="Form.cruise_name.invalid && (Form.cruise_name.touched || Form.cruise_name.dirty)"
+								style="margin-top:-15px">
+								<p class="text-danger text-lg m-0" *ngIf="Form.cruise_name.errors?.required">
+									This field is required
+								</p>
+							</div>
+						</div>
 					</div>
 
 					<!-- Time -->
 					<div class="col-md-4">
 						<mat-form-field appearance="outline">
 							<mat-label>
-								Cruise Time
+								Ship Arrival time
 							</mat-label>
 							<input [ngxTimepicker]="crse_tm" matInput formControlName="cruise_time"
 								(focus)="$event.target.select()" readonly />
@@ -1313,12 +1400,19 @@
 						<!-- Ng-Select > Return > Pickup > Airport -->
 						<ng-select appearance="outline" [items]="BigData?.airportsData"
 							[searchFn]="airportSearchFunction" (change)="change($event, 'return_pickup_airport')"
-							bindLabel="formatted_name" placeholder="Select Airport" dropdownPosition="bottom"
-							[markFirst]="true" [virtualScroll]="true" formControlName="return_pickup_airport_option">
+							bindLabel="formatted_name" placeholder="Select Airport (Search by airport code or name)"
+							dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
+							formControlName="return_pickup_airport_option"
+							[ngClass]="{ 'border-red': (submitBookingForm && Form.return_pickup_airport_option.invalid) }"
+							style="height:66px;">
 							<ng-template ng-option-tmp let-item="item">
 								<div [title]="item.formatted_name">{{item.formatted_name}}</div>
 							</ng-template>
 						</ng-select>
+						<div *ngIf="(submitBookingForm && Form.return_pickup_airport_option.invalid) "
+							class="text-danger my-mat-hint" style="margin-bottom: 10px;">
+							<div *ngIf="Form.return_pickup_airport_option.errors.required">This field is required</div>
+						</div>
 					</div>
 
 					<!-- Airline -->
@@ -1328,11 +1422,17 @@
 						<ng-select appearance="outline" [items]="BigData?.airlinesData"
 							[searchFn]="airlineSearchFunction" (change)="change($event, 'return_pickup_airline')"
 							bindLabel="formatted_name" placeholder="Select Airline" dropdownPosition="bottom"
-							[markFirst]="true" [virtualScroll]="true" formControlName="return_pickup_airline_option">
+							[markFirst]="true" [virtualScroll]="true" formControlName="return_pickup_airline_option"
+							[ngClass]="{ 'border-red': (submitBookingForm && Form.return_pickup_airline_option.invalid) }"
+							style="height:66px;">
 							<ng-template ng-option-tmp let-item="item">
 								<div [title]="item.formatted_name">{{item.formatted_name}}</div>
 							</ng-template>
 						</ng-select>
+						<div *ngIf="(submitBookingForm && Form.return_pickup_airline_option.invalid) "
+							class="text-danger my-mat-hint" style="margin-bottom: 10px;">
+							<div *ngIf="Form.return_pickup_airline_option.errors.required">This field is required</div>
+						</div>
 					</div>
 
 					<!-- Flight / Tail # -->
@@ -1340,11 +1440,20 @@
 						<mat-form-field appearance="outline" class="vehicleLable mt-0"
 							style="margin-top: 0px !important;">
 							<mat-label>
-								Flight / Tail #
+								Flight / Tail # <span class="asterisk">*</span>
 							</mat-label>
 							<input type="text" matInput placeholder="Flight / Tail #" aria-label="Flight"
 								formControlName="return_pickup_flight" (focus)="$event.target.select()" />
 						</mat-form-field>
+						<div class="error-box">
+							<div class="error-message"
+								*ngIf="Form.return_pickup_flight.invalid && (Form.return_pickup_flight.touched || Form.return_pickup_flight.dirty)"
+								style="margin-top:-15px">
+								<p class="text-danger text-lg m-0" *ngIf="Form.return_pickup_flight.errors?.required">
+									This field is required
+								</p>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -1362,24 +1471,42 @@
 							<input type="text" matInput placeholder="Cruise Port" formControlName="return_cruise_port"
 								(focus)="$event.target.select()" />
 						</mat-form-field>
+						<div class="error-box">
+							<div class="error-message"
+								*ngIf="Form.return_cruise_port.invalid && (Form.return_cruise_port.touched || Form.return_cruise_port.dirty)"
+								style="margin-top:-15px">
+								<p class="text-danger text-lg m-0" *ngIf="Form.return_cruise_port.errors?.required">
+									This field is required
+								</p>
+							</div>
+						</div>
 					</div>
 
-					<!-- Cruise Name -->
+					<!-- Cruise Ship Name -->
 					<div class="col-md-4">
 						<mat-form-field appearance="outline">
 							<mat-label>
-								Cruise Name
+								Cruise Ship Name
 							</mat-label>
-							<input formControlName="return_cruise_name" type="text" matInput placeholder="Cruise Name"
-								(focus)="$event.target.select()" />
+							<input formControlName="return_cruise_name" type="text" matInput
+								placeholder="Cruise Ship Name" (focus)="$event.target.select()" />
 						</mat-form-field>
+						<div class="error-box">
+							<div class="error-message"
+								*ngIf="Form.return_cruise_name.invalid && (Form.return_cruise_name.touched || Form.return_cruise_name.dirty)"
+								style="margin-top:-15px">
+								<p class="text-danger text-lg m-0" *ngIf="Form.return_cruise_name.errors?.required">
+									This field is required
+								</p>
+							</div>
+						</div>
 					</div>
 
 					<!-- Time -->
 					<div class="col-md-4">
 						<mat-form-field appearance="outline">
 							<mat-label>
-								Cruise Time
+								Ship Arrival time
 							</mat-label>
 							<input [ngxTimepicker]="re_crse_tm" matInput formControlName="return_cruise_time"
 								(focus)="$event.target.select()" readonly />
@@ -1421,12 +1548,19 @@
 						<!-- Ng-Select > Return > Dropoff > Airport -->
 						<ng-select appearance="outline" [items]="BigData?.airportsData"
 							[searchFn]="airportSearchFunction" (change)="change($event, 'return_dropoff_airport')"
-							bindLabel="formatted_name" placeholder="Select Airport" dropdownPosition="bottom"
-							[markFirst]="true" [virtualScroll]="true" formControlName="return_dropoff_airport_option">
+							bindLabel="formatted_name" placeholder="Select Airport (Search by airport code or name)"
+							dropdownPosition="bottom" [markFirst]="true" [virtualScroll]="true"
+							formControlName="return_dropoff_airport_option"
+							[ngClass]="{ 'border-red': (submitBookingForm && Form.return_dropoff_airport_option.invalid) }"
+							style="height:66px;">
 							<ng-template ng-option-tmp let-item="item">
 								<div [title]="item.formatted_name">{{item.formatted_name}}</div>
 							</ng-template>
 						</ng-select>
+						<div *ngIf="(submitBookingForm && Form.return_dropoff_airport_option.invalid) "
+							class="text-danger my-mat-hint" style="margin-bottom: 10px;">
+							<div *ngIf="Form.return_dropoff_airport_option.errors.required">This field is required</div>
+						</div>
 					</div>
 
 					<!-- Airline -->
@@ -1436,11 +1570,17 @@
 						<ng-select appearance="outline" [items]="BigData?.airlinesData"
 							[searchFn]="airlineSearchFunction" (change)="change($event, 'return_dropoff_airline')"
 							bindLabel="formatted_name" placeholder="Select Airline" dropdownPosition="bottom"
-							[markFirst]="true" [virtualScroll]="true" formControlName="return_dropoff_airline_option">
+							[markFirst]="true" [virtualScroll]="true" formControlName="return_dropoff_airline_option"
+							[ngClass]="{ 'border-red': (submitBookingForm && Form.return_dropoff_airline_option.invalid) }"
+							style="height:66px;">
 							<ng-template ng-option-tmp let-item="item">
 								<div [title]="item.formatted_name">{{item.formatted_name}}</div>
 							</ng-template>
 						</ng-select>
+						<div *ngIf="(submitBookingForm && Form.return_dropoff_airline_option.invalid) "
+							class="text-danger my-mat-hint" style="margin-bottom: 10px;">
+							<div *ngIf="Form.return_dropoff_airline_option.errors.required">This field is required</div>
+						</div>
 					</div>
 
 					<!-- Flight / Tail # -->
@@ -1453,6 +1593,15 @@
 							<input type="text" matInput placeholder="Flight / Tail #" aria-label="Flight"
 								formControlName="return_dropoff_flight" (focus)="$event.target.select()" />
 						</mat-form-field>
+						<div class="error-box">
+							<div class="error-message"
+								*ngIf="Form.return_dropoff_flight.invalid && (Form.return_dropoff_flight.touched || Form.return_dropoff_flight.dirty)"
+								style="margin-top:-15px">
+								<p class="text-danger text-lg m-0" *ngIf="Form.return_dropoff_flight.errors?.required">
+									This field is required
+								</p>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -1470,24 +1619,42 @@
 							<input type="text" matInput placeholder="Cruise Port" formControlName="return_cruise_port"
 								(focus)="$event.target.select()" />
 						</mat-form-field>
+						<div class="error-box">
+							<div class="error-message"
+								*ngIf="Form.return_cruise_port.invalid && (Form.return_cruise_port.touched || Form.return_cruise_port.dirty)"
+								style="margin-top:-15px">
+								<p class="text-danger text-lg m-0" *ngIf="Form.return_cruise_port.errors?.required">
+									This field is required
+								</p>
+							</div>
+						</div>
 					</div>
 
-					<!-- Cruise Name -->
+					<!-- Cruise Ship Name -->
 					<div class="col-md-4">
 						<mat-form-field appearance="outline">
 							<mat-label>
-								Cruise Name
+								Cruise Ship Name
 							</mat-label>
-							<input formControlName="return_cruise_name" type="text" matInput placeholder="Cruise Name"
-								(focus)="$event.target.select()" />
+							<input formControlName="return_cruise_name" type="text" matInput
+								placeholder="Cruise Ship Name" (focus)="$event.target.select()" />
 						</mat-form-field>
+						<div class="error-box">
+							<div class="error-message"
+								*ngIf="Form.return_cruise_name.invalid && (Form.return_cruise_name.touched || Form.return_cruise_name.dirty)"
+								style="margin-top:-15px">
+								<p class="text-danger text-lg m-0" *ngIf="Form.return_cruise_name.errors?.required">
+									This field is required
+								</p>
+							</div>
+						</div>
 					</div>
 
 					<!-- Time -->
 					<div class="col-md-4">
 						<mat-form-field appearance="outline">
 							<mat-label>
-								Cruise Time
+								Ship Arrival time
 							</mat-label>
 							<input [ngxTimepicker]="re_crse_tm" matInput formControlName="return_cruise_time"
 								(focus)="$event.target.select()" readonly />
@@ -1604,7 +1771,7 @@
 					</p>
 				</div>
 				<div class="col-md-4 col-xl-5 text-3xl text-right">
-					<span style="color: #dc3545!important;">{{currencySymbol}}</span> {{ grandtotal.toFixed(2) *
+					<span style="color: #dc3545!important;">{{currencySymbol}}</span> {{ (grandtotal.toFixed(2)) *
 					Form.number_of_vehicles.value }}
 				</div>
 			</div>
@@ -1650,7 +1817,8 @@
 					</p>
 				</div>
 				<div class="col-md-4 col-xl-5 text-3xl text-right">
-					<span style="color: #dc3545!important;">{{currencySymbol}}</span> {{ r_grandtotal.toFixed(2) }}
+					<span style="color: #dc3545!important;">{{currencySymbol}}</span> {{ (r_grandtotal.toFixed(2)) *
+					Form.number_of_vehicles.value}}
 				</div>
 			</div>
 			<div class="row px-2 justify-content-between align-items-center flex-nowrap">
@@ -2005,6 +2173,7 @@
 								</span>
 							</div>
 						</div>
+						<hr>
 					</div>
 
 					<!-- Pickup > City Details -->
@@ -2024,6 +2193,7 @@
 										class="bi bi-geo-alt-fill pin-icon-preview"></i></span>
 							</div>
 						</div>
+						<hr>
 					</div>
 
 					<!-- Pickup > Airline Details -->
@@ -2091,11 +2261,11 @@
 							</div>
 						</div>
 						<!-- Cruise Port -->
-						<!-- Cruise Name -->
+						<!-- Cruise Ship Name -->
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
-									Cruise Name
+									Cruise Ship Name
 								</span>
 							</div>
 							<div class="col-md-8 value">
@@ -2104,12 +2274,12 @@
 								</span>
 							</div>
 						</div>
-						<!-- Cruise Name -->
-						<!-- Cruise Time -->
+						<!-- Cruise Ship Name -->
+						<!-- Ship Arrival time -->
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
-									Cruise Time
+									Ship Arrival time
 								</span>
 							</div>
 							<div class="col-md-8 value">
@@ -2237,11 +2407,11 @@
 							</div>
 						</div>
 						<!-- Cruise Port -->
-						<!-- Cruise Name -->
+						<!-- Cruise Ship Name -->
 						<div class="row p-2">
 							<div class="col-md-4 key">
 								<span>
-									Cruise Name
+									Cruise Ship Name
 								</span>
 							</div>
 							<div class="col-md-8 value">
@@ -2250,12 +2420,12 @@
 								</span>
 							</div>
 						</div>
-						<!-- Cruise Name -->
-						<!-- Cruise Time -->
+						<!-- Cruise Ship Name -->
+						<!-- Ship Arrival time -->
 						<div class="row p-2">
 							<div class="col-md-4 key">
 								<span>
-									Cruise Time
+									Ship Arrival time
 								</span>
 							</div>
 							<div class="col-md-8 value">
@@ -2266,7 +2436,7 @@
 								</span>
 							</div>
 						</div>
-						<!-- Cruise Time -->
+						<!-- Ship Arrival time -->
 					</div>
 					<hr>
 					<div class="mx-2" *ngIf="Form?.meet_greet_choices_name.value">
@@ -2499,11 +2669,11 @@
 									</span>
 								</div>
 							</div>
-							<!-- Cruise Name -->
+							<!-- Cruise Ship Name -->
 							<div class="row p-2">
 								<div class="col-md-4 key">
 									<span>
-										Cruise Name
+										Cruise Ship Name
 									</span>
 								</div>
 								<div class="col-md-8 value">
@@ -2514,11 +2684,11 @@
 								</div>
 							</div>
 
-							<!-- Cruise Time -->
+							<!-- Ship Arrival time -->
 							<div class="row p-2">
 								<div class="col-md-4 key">
 									<span>
-										Cruise Time
+										Ship Arrival time
 									</span>
 								</div>
 								<div class="col-md-8 value">
@@ -2647,11 +2817,11 @@
 								</div>
 							</div>
 
-							<!-- Cruise Name -->
+							<!-- Cruise Ship Name -->
 							<div class="row p-2">
 								<div class="col-md-4 key">
 									<span>
-										Cruise Name
+										Cruise Ship Name
 									</span>
 								</div>
 								<div class="col-md-8 value">
@@ -2662,11 +2832,11 @@
 								</div>
 							</div>
 
-							<!-- Cruise Time -->
+							<!-- Ship Arrival time -->
 							<div class="row p-2">
 								<div class="col-md-4 key">
 									<span>
-										Cruise Time
+										Ship Arrival time
 									</span>
 								</div>
 								<div class="col-md-8 value">

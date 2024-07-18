@@ -66,6 +66,7 @@ export class AffiliateFinalizeComponent implements OnInit {
 	isFinalizeButton: boolean = false;
 	bookdataresp: any;
 	currencySymbol: any;
+	paidAmount:any;
 
 	constructor(
 		private $api: AdminService,
@@ -121,6 +122,7 @@ export class AffiliateFinalizeComponent implements OnInit {
 				this.BookingDetail = data?.booking_detail
 				this.isFinalizeButton = this.BookingDetail?.booking_status == 'finalized' ? true : false,
 					this.transferType = this.BookingDetail?.transfer_type
+				this.paidAmount = this.BookingDetail?.charged_amount
 				this.isTravelShare = data?.booking_detail?.account_type == 'travel_planner' ? true : false
 				this.isFarmoutBooking = data?.booking_detail?.reservation_type == 'farmout' ? true : false
 				this.finalize_params.number_of_vehicles = data?.booking_detail?.number_of_vehicles
@@ -273,12 +275,24 @@ export class AffiliateFinalizeComponent implements OnInit {
 		console.log('in function createReservationShareArray')
 		if (this.edit_rates_value) {
 			let base_rate = 0
-			for (const key of Object.keys(this.edit_rates_value.all_inclusive_rates)) {
-				base_rate += this.edit_rates_value.all_inclusive_rates[key].baserate;
+			if (this.service_type == 'charter_tour') {
+				base_rate += this.edit_rates_value.all_inclusive_rates["Base_Rate"].baserate * this.finalize_params.number_of_hours
 			}
+			else {
+				base_rate += this.edit_rates_value.all_inclusive_rates["Base_Rate"].baserate
+			}
+			['ELH_Charges', 'Stops', 'Wait'].map((key) => {
+				base_rate += this.edit_rates_value.all_inclusive_rates[key].baserate
+			});
 			for (const key of Object.keys(this.edit_rates_value.amenities)) {
 				base_rate += this.edit_rates_value.amenities[key].baserate;
 			}
+			// for (const key of Object.keys(this.edit_rates_value.all_inclusive_rates)) {
+			// 	base_rate += this.edit_rates_value.all_inclusive_rates[key].baserate;
+			// }
+			// for (const key of Object.keys(this.edit_rates_value.amenities)) {
+			// 	base_rate += this.edit_rates_value.amenities[key].baserate;
+			// }
 			let grandTotal = this.edit_rates_value.grand_total
 			let stripeFee = grandTotal * 0.05 + 0.30
 			let adminShare = (base_rate * this.adminSharePercent) / 100
@@ -289,7 +303,8 @@ export class AffiliateFinalizeComponent implements OnInit {
 				stripeFee: stripeFee,
 				adminShare: adminShare,
 				deducted_admin_share: deducted_admin_share,  // Admin will get this amount only
-				affiliateShare: (grandTotal - adminShare)
+				affiliateShare: grandTotal - base_rate * 0.25
+
 			}
 			// travelAgentShare : 
 			if (this.BookingDetail?.account_type == 'travel_planner' && !this.isCreatedByAdmin) {
@@ -342,6 +357,11 @@ export class AffiliateFinalizeComponent implements OnInit {
 			console.log('response-->>', response)
 			this.finalize_btn = "Finalized"
 			this.getBookingData(this.bookingId)
+			this.$errors.openDialog({
+				errors: {
+					error: `<span class='text-success font-weight-bolder text-2xl' style="font-size: 24px;">Please click on Charge button!</span>`
+				}
+			})
 
 		})
 

@@ -27,7 +27,7 @@
                         <mat-label>Search Filter by Keyword</mat-label>
                         <input type="text" matInput (keyup)="handleSearchKeyword($event.target.value)"
                             (focus)="$event.target.select()" [value]="searchText"
-                            placeholder="Search Filter by Key word" id="keyword">
+                            placeholder="Search by name, email, cell phone, role" id="keyword">
                     </mat-form-field>
                 </div>
                 <!-- <div class="col-md-2  mt-3 mb-3">
@@ -44,10 +44,14 @@
                 <label class="ml-3" for="deleted_accounts">Show Deleted accounts</label>
             </div>
             <div class="col-md-8 col-sm-12 d-flex justify-content-end" style="gap: 15px;" *ngIf="showActionColumn">
-                <h3 class="headingAccepted">Individual: {{accounts_count?.individual_count}}</h3>
-                <h3 class="headingInProgress">Driver: {{accounts_count?.driver_count}}</h3>
-                <h3 class="headingRejected">Travel Agent: {{accounts_count?.tarvel_agent_count}}</h3>
-                <h3 class="headingStripe">Sub Admin: {{accounts_count?.subadmin_count}}</h3>
+                <h3 class="headingAccepted" routerLink="/admin/individual-account-admin">Individual:
+                    {{accounts_count?.individual_count}}</h3>
+                <h3 class="headingInProgress" routerLink="/admin/affiliates/all-operators">Driver:
+                    {{accounts_count?.driver_count}}</h3>
+                <h3 class="headingRejected" routerLink="/admin/travel-planner-account-admin">Travel Agent:
+                    {{accounts_count?.tarvel_agent_count}}</h3>
+                <h3 class="headingStripe" routerLink="/admin/sub-admins">Sub Admin: {{accounts_count?.subadmin_count}}
+                </h3>
             </div>
         </div>
         <div class="containeredd driverside_table">
@@ -177,3 +181,58 @@
     </div>
 </div>
 <!-- <app-delete-confirmation (deleteRecord)="deleteAccount()" [alertMessage]="alertMessage"></app-delete-confirmation> -->
+
+
+<!-- Message modal -->
+<div class="modal fade" tabindex="-1" id="messageModal" aria-labelledby="messageModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4></h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <p id="affiliate-details"></p>
+                    </div>
+                </div>
+                <div class="row">
+                    <form [formGroup]="sendMessageForm" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <div class="col-md-12 d-flex justify-content-center mt-2 mb-2">
+                                <button class="uploadExcelFile" tabIndex="1" *ngIf="!emailFileName; else noEmailFile">
+                                    <input type="file" (change)="inviteEmailFileChange($event)" tabIndex="-1"
+                                        multiple="false" accept=".xlsx , .xls , .csv, .png, .jpeg, .jpg, .pdf"
+                                        name="xlx_file">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                        <path fill="none" d="M0 0h24v24H0V0z" />
+                                        <circle cx="12" cy="12" r="3" />
+                                        <path
+                                            d="M20 4h-3.17l-1.24-1.35c-.37-.41-.91-.65-1.47-.65H9.88c-.56 0-1.1.24-1.48.65L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+                                    </svg>
+                                    Upload file
+                                </button>
+                                <ng-template #noEmailFile>
+                                    <h4 style="color:blue ;font-size:20px;">File uploaded: {{emailFileName}}</h4>
+                                </ng-template>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="col-md-12">
+                        <p id="label">
+                            Message:
+                        </p>
+                        <textarea id="message" formControlName="message" rows="7" placeholder="Your Message" #message
+                            style="font-weight: 700;"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-end">
+                <button class="custom-filled-button" data-dismiss="modal"
+                    (click)="sendMessage(messagetype?.type, messagetype?.travelPlanner, message.value)">
+                    Send {{ messagetype?.type | titlecase }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -25,6 +25,10 @@ export class IndividualService {
     }
   }
 
+  memberAccountStatus(id, status) {
+    return this.httpClient.post(this.serverUrl + `family-member-status/${id}`, { 'status': status });
+  }
+
   getIndividualAccountDetails() {
     return this.httpClient.get(this.serverUrl + `get-profile-data`);
   }
@@ -53,54 +57,81 @@ export class IndividualService {
     return this.httpClient.get(this.serverUrl + `get-account-details`);
   }
 
+
   loadBookings(url, keyword, startDate, endDate, useDateFilter) {
-		var path;
-		if (url) {
-			path = url + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword + '&useDateFilter=' + useDateFilter;
-		}
-		else {
-			path = this.serverUrl + 'get-all-reservation' + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword + '&useDateFilter=' + useDateFilter;
-		}
-		return this.httpClient.get(path).toPromise();
-	}
+    var path;
+    if (url) {
+      path = url + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword + '&useDateFilter=' + useDateFilter;
+    }
+    else {
+      path = this.serverUrl + 'get-all-reservation' + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword + '&useDateFilter=' + useDateFilter;
+    }
+    return this.httpClient.get(path).toPromise();
+  }
+
+
+  getFamilyMemberList(url, keyword) {
+    var path;
+    if (url) {
+      path = url + '&search=' + keyword;
+    }
+    else {
+      path = this.serverUrl + 'family-members' + '?search=' + keyword;
+    }
+    return this.httpClient.get(path).toPromise();;
+  }
 
   //get details of the booking
-	getBookingPreview(reservation_id: number) {
-		return this.httpClient.get(`${this.serverUrl}get-booking-preview/${reservation_id}`);
-	}
+  getBookingPreview(reservation_id: number) {
+    return this.httpClient.get(`${this.serverUrl}get-booking-preview/${reservation_id}`);
+  }
 
   getBookingDataForEdit(id, updateType) {
-		return this.httpClient.get(this.serverUrl + `get-reservation/${id}/${updateType}`);
-	}
+    return this.httpClient.get(this.serverUrl + `get-reservation/${id}/${updateType}`);
+  }
 
   //get invoice list
-	invoiceList(url, startDate, endDate, useDateFilter, keyword = '') {
-		var path;
-		if (url) {
-			path = url + '&from=' + startDate + '&to=' + endDate + '&search=' + keyword + '&useDateFilter=' + useDateFilter;
+  invoiceList(url, startDate, endDate, useDateFilter, keyword = '') {
+    var path;
+    if (url) {
+      path = url + '&from=' + startDate + '&to=' + endDate + '&search=' + keyword + '&useDateFilter=' + useDateFilter;
 
-		}
-		else {
-			path = this.serverUrl + 'invoices' + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword + '&useDateFilter=' + useDateFilter;
-		}
-		return this.httpClient.get(path).toPromise();
-	}
+    }
+    else {
+      path = this.serverUrl + 'invoices' + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword + '&useDateFilter=' + useDateFilter;
+    }
+    return this.httpClient.get(path).toPromise();
+  }
 
-	//invoice summary
-	getInvoiceData(id) {
-		return this.httpClient.get(this.serverUrl + 'invoice-summary/' + id);
-	}
+  //invoice summary
+  getInvoiceData(id) {
+    return this.httpClient.get(this.serverUrl + 'invoice-summary/' + id);
+  }
 
   paymentProcessing(data) {
-		return this.httpClient.post(this.serverUrl + 'payment-processing', data);
-	}
+    return this.httpClient.post(this.serverUrl + 'payment-processing', data);
+  }
 
   cancelBooking(id) {
-		return this.httpClient.get(this.serverUrl + `cancel-booking/${id}`);
-	}
+    return this.httpClient.get(this.serverUrl + `cancel-booking/${id}`);
+  }
 
-  showRatesArray(id){
+  showRatesArray(id) {
     return this.httpClient.get(this.serverUrl + `show-rates-array/${id}`)
+  }
+
+  addAccount(data, id = null) {
+    if (id) {
+      //update api here
+      return this.httpClient.post(this.serverUrl + `family-members/${id}`, data);
+    }
+    else {
+      return this.httpClient.post(this.serverUrl + 'family-members', data);
+    }
+  }
+
+  getAccount(id) {
+    return this.httpClient.get(this.serverUrl + `family-member/${id}`);
   }
 
 }

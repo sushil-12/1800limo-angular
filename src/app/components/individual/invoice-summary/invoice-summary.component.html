@@ -17,7 +17,7 @@
 							<img src="assets/admin/images/new_logo.png" class="logo" alt="">
 						</div> -->
                         <div class="p-2 bd-highlight ml-2" style="margin: auto 0;">
-                            <p class="my-1 invoice-head--text">Invoice {{invoiceData.invoice_number}}</p>
+                            <p class="my-1 invoice-head--text">Paid Invoice {{invoiceData.invoice_number}}</p>
                             <p class="m-0 invoice-text--booking">
                                 Booking # {{invoiceData.reservation_id}}
                             </p>
@@ -48,7 +48,7 @@
                                 <p class="m-1 invoice-p text-white invoice-status-bar">
                                     Invoice Status: <span
                                         class="invoice-text-bold invoice-status-bar">{{invoiceData?.invoice_status |
-                                        titlecase}}</span>
+                                        titlecase}} Invoice</span>
                                 </p>
                             </div>
                             <div class="p-2 col-6 bd-highlight " *ngIf="invoiceData.date_of_service">
@@ -208,6 +208,14 @@
                             <!-- to show refund ammount -->
 
                             <div class="invoice-subhead px-3">
+                                <div class="row d-flex justify-content-between" *ngIf="invoiceData?.number_of_hours">
+                                    <p class="m-0 p-1 text-charges">
+                                        No. of hours
+                                    </p>
+                                    <p class="m-0 p-1 text-charges">
+                                        {{invoiceData?.number_of_hours}}
+                                    </p>
+                                </div>
                                 <div class="row d-flex justify-content-between">
                                     <p class="m-0 p-1 text-charges">
                                         Sub Total

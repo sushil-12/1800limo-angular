@@ -38,7 +38,7 @@ export class AffiliateTemplateComponent implements OnInit, AfterViewInit {
 	public desktopWidth: any;
 	public currentYear: number = new Date().getFullYear();
 	public progressBar: boolean;
-	chevron_up: boolean = false;
+	chevron_up: boolean = true;
 	bkpData: any = '';
 
 

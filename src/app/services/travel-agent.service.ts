@@ -48,6 +48,10 @@ export class TravelAgentService {
 		return this.httpClient.post(this.serverUrl + 'profile-detail/upload-image', { 'image': image });
 	}
 
+	deleteClient(id) {
+		return this.httpClient.get(this.serverUrl + `delete-client/${id}`);
+	}
+
 	cardsList(id = null) {
 		if (id) {
 			return this.httpClient.get(`${this.serverUrl}client-credit-cards/${id}`)
@@ -217,13 +221,13 @@ export class TravelAgentService {
 	getClientAccount(id) {
 		return this.httpClient.get(this.serverUrl + `get-an-account/${id}`);
 	}
-	getAllTravelClientAccountList(type,value=null) {
-		console.log("in api---->",value)
-		if(value){
+	getAllTravelClientAccountList(type, value = null) {
+		console.log("in api---->", value)
+		if (value) {
 			return this.httpClient.get(this.serverUrl + `get-account-by-type/${type}/` + value).toPromise();;
 
 		}
-		else{
+		else {
 
 			return this.httpClient.get(this.serverUrl + `get-account-by-type/${type}`).toPromise();;
 		}
@@ -249,6 +253,10 @@ export class TravelAgentService {
 		else {
 			return this.httpClient.post(this.serverUrl + 'create-a-new-travel-agent', data);
 		}
+	}
+
+	updateSubAgentAccount(data){
+		return this.httpClient.post(this.serverUrl + 'update-sub-travel-agent', data);
 	}
 
 	cancelBooking(id) {

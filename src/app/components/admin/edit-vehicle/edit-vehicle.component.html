@@ -6,7 +6,7 @@
 			<div class="row ">
 				<div class="col-md-6">
 					<!-- <mat-form-field appearance="outline"
-						[ngClass]="(errorMsg && f.vehicleType.errors) || (submittedForm && f.vehicleType.errors) ? 'mat-form-field-invalid ng-invalid' : ''">
+						[ngClass]="( && f.vehicleType.errors) || (submittedForm && f.vehicleType.errors) ? 'mat-form-field-invalid ng-invalid' : ''">
 						<mat-label>Vehicle Type <span class="asterisk">*</span></mat-label>
 						<input type="text" id="vehicleTypeField" placeholder="Pick one" aria-label="Number" matInput
 							(keyup)="searchVehicleType($event.target.value)" [matAutocomplete]="auto1" tabindex="1">
@@ -163,19 +163,19 @@
 				</div>
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
-						<mat-label>Airport / City Cancel Policy <span class="asterisk">*</span></mat-label>
+						<mat-label>Airport / City / Cruise Port Cancel Policy <span class="asterisk">*</span></mat-label>
 						<mat-select formControlName="nonCharterCancelPolicy" tabindex="1">
-							<mat-option value="">Choose Airport / City Cancel Policy</mat-option>
+							<mat-option value="">Choose Airport / City / Cruise Port Cancel Policy</mat-option>
 							<mat-option *ngFor="let nonCharterCancelOption of nonCharterCancelOptions"
 								[value]="nonCharterCancelOption.value">{{nonCharterCancelOption.label}}</mat-option>
 						</mat-select>
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.nonCharterCancelPolicy.errors"
 						class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.nonCharterCancelPolicy.errors.required">The Airport / City Cancel Policy is
+						<div *ngIf="f.nonCharterCancelPolicy.errors.required">The Airport / City / Cruise Port Cancel Policy is
 							required
 						</div>
-						<div *ngIf="f.nonCharterCancelPolicy.errors.pattern">The Airport / City Cancel Policy should be
+						<div *ngIf="f.nonCharterCancelPolicy.errors.pattern">The Airport / City / Cruise Port Cancel Policy should be
 							a
 							number</div>
 					</div>
@@ -209,7 +209,7 @@
 						<input matInput placeholder="License Plate #" formControlName="licensePlate" tabindex="1">
 					</mat-form-field>
 				</div>
-				<div class="col-md-3 pr-0 borderright mobilePadding">
+				<!-- <div class="col-md-3 pr-0 borderright mobilePadding">
 					<div class="form-group radio-tile-group">
 						<div class="custom-radio input-container box-shadow" tabindex="1">
 							<input class="radio-button" type="radio" id="local" value="localService"
@@ -234,6 +234,37 @@
 									[ngClass]="serviceType=='longDistance' ? 'radio-active' : ''">Over the Road – Long
 									Distance</label>
 							</div>
+						</div>
+					</div>
+				</div> -->
+			</div>
+			<div class="row mt-3">
+				<div class="col-md-4">
+					<div class="input-checkbox">
+						<div class="checkbox" [ngClass]="
+								service.includes('local') ? 'active' : ''
+							" (click)="onServiceChange('local')">
+							Local Service Only
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="input-checkbox">
+						<div class="checkbox" [ngClass]="
+								service.includes('over_the_road')
+									? 'active'
+									: ''
+							" (click)="onServiceChange('over_the_road')">
+							Over The Road
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="input-checkbox">
+						<div class="checkbox" [ngClass]="
+								service.includes('shuttle') ? 'active' : ''
+							" (click)="onServiceChange('shuttle')">
+							Shuttle Service
 						</div>
 					</div>
 				</div>
@@ -1480,21 +1511,14 @@
 		</div>
 	</section>
 	<div class="container">
-		<div class="row justify-content-between">
-
-			<div class="billing_inforamtion">
-				<ul>
+		<div class="col-md-12">
+			<div class="billing_inforamtion ">
+				<ul class="d-flex justify-content-center">
 					<li>
 						<button class="custom-filled-back-button" type="button" (click)="backButton()"
 							data-toggle="tooltip" data-placement="top" title="Clicking back button deletes all fields."
 							tabindex="1">BACK</button>
 					</li>
-				</ul>
-
-			</div>
-
-			<div class="billing_inforamtion">
-				<ul>
 					<li><button class="custom-filled-reset-button" (click)="resetForm()" tabindex="1">RESET</button>
 					</li>
 					<li><button class="custom-filled-button" (click)="submitForm()" [disabled]="disableSubmitButton"
@@ -1502,9 +1526,8 @@
 					<!-- <li>
 						</li> -->
 				</ul>
-
-			</div>
 		</div>
+	</div>
 	</div>
 
 </form>

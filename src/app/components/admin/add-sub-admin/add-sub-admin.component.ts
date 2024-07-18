@@ -12,14 +12,14 @@ import { throwError } from 'rxjs';
 	templateUrl: './add-sub-admin.component.html',
 	styleUrls: ['./add-sub-admin.component.scss']
 })
-export class AddSubAdminComponent implements OnInit
-{
+export class AddSubAdminComponent implements OnInit {
 
 	public addSubAdminAccountForm: FormGroup;
 	public submittedForm: boolean;
 	public disableSubmitButton: boolean = false;
 	public response: any;
 	public subAdminId: number;
+	public MobileObject: any;
 
 	constructor(
 		private adminService: AdminService,
@@ -42,8 +42,7 @@ export class AddSubAdminComponent implements OnInit
 	@ViewChild('search1')
 	public searchElementRef: ElementRef;
 
-	ngOnInit(): void
-	{
+	ngOnInit(): void {
 		//add amenity form validation
 		this.addSubAdminAccountForm = this.formBuilder.group({
 			id: [],
@@ -54,9 +53,9 @@ export class AddSubAdminComponent implements OnInit
 			mobileIsd: ['+1', Validators.required],
 			email: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)]],
 			address: ['', Validators.required],
-			city: ['', Validators.required],
-			state: ['', Validators.required],
-			country: ['United States', Validators.required],
+			city: [''],
+			state: [''],
+			country: ['', Validators.required],
 			zipCode: ['', Validators.required],
 			latitude: [''],
 			longitude: [''],
@@ -66,8 +65,7 @@ export class AddSubAdminComponent implements OnInit
 
 		//pick vehicle type id from query params
 		this.activatedroute.queryParamMap
-			.subscribe((params) =>
-			{
+			.subscribe((params) => {
 				var paramResponse: any = { ...params.keys, ...params };
 				// console.log(this.paramResponse.params.vehicleTypeId);
 				this.subAdminId = paramResponse.params.subAdminId;
@@ -75,18 +73,15 @@ export class AddSubAdminComponent implements OnInit
 			}
 			);
 
-		if (this.subAdminId)
-		{
+		if (this.subAdminId) {
 			// fetch data to display on edit screen
 			this.adminService.getSubAdminAccount(this.subAdminId)
 				.pipe(
-					catchError(err =>
-					{
+					catchError(err => {
 						this.spinner.hide();//hide spinner
 						return throwError(err);
 					})
-				).subscribe(result =>
-				{
+				).subscribe(result => {
 					this.response = result;
 
 					this.addSubAdminAccountForm.patchValue({
@@ -105,76 +100,88 @@ export class AddSubAdminComponent implements OnInit
 						latitude: this.response.data.latitude,
 						longitude: this.response.data.longitude,
 					});
+					this.MobileObject.setCountry(this.response.data.mobileCountry);
 					this.spinner.hide();//hide spinner
 				});
 		}
 
 		//google map autocomplete
-		this.mapsAPILoader.load().then(() =>
-		{
+		this.mapsAPILoader.load().then(() => {
 			// this.setCurrentLocation();
 			this.geoCoder = new google.maps.Geocoder;
 			let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement);
-			autocomplete.addListener("place_changed", () =>
-			{
-				this.ngZone.run(() =>
-				{
+			autocomplete.addListener("place_changed", () => {
+				this.ngZone.run(() => {
+
 					//get the place result
 					let place: google.maps.places.PlaceResult = autocomplete.getPlace();
 					//verify result
-					if (place.geometry === undefined || place.geometry === null)
-					{
+					if (place.geometry === undefined || place.geometry === null) {
 						return;
 					}
 					console.log(place);
+					this.addSubAdminAccountForm.patchValue({
+						zipCode: '',
+						city: '',
+						state: '',
+						country: ''
+					})
+					this.addSubAdminAccountForm.patchValue({
+						address: place.formatted_address
+					})
 					//Fill one way form pickup address fields
 					this.addSubAdminAccountForm.patchValue({
 						latitude: place.geometry.location.lat(),
 						longitude: place.geometry.location.lng()
 					});
-					if (place.address_components[1])
-						this.addSubAdminAccountForm.patchValue({
-							city: place.address_components[1].long_name
-						});
-					if (place.address_components[2])
-						this.addSubAdminAccountForm.patchValue({
-							state: place.address_components[2].long_name
-						});
-					// if (place.address_components[3])
-					// 	this.addSubAdminAccountForm.patchValue({
-					// 		country: place.address_components[3].long_name
-					// 	});
-					if (place.address_components[4])
-						this.addSubAdminAccountForm.patchValue({
-							zipCode: place.address_components[4].long_name
-						});
+					place.address_components.forEach(component => {
+						const types = component.types;
+
+						if (types.includes('postal_code')) {
+							this.addSubAdminAccountForm.patchValue({
+								zipCode: component.long_name
+							});
+						} else if (types.includes('locality')) {
+							this.addSubAdminAccountForm.patchValue({
+								city: component.long_name
+							});
+						} else if (types.includes('administrative_area_level_1')) {
+							this.addSubAdminAccountForm.patchValue({
+								state: component.long_name
+							});
+						} else if (types.includes('country')) {
+							this.addSubAdminAccountForm.patchValue({
+								country: component.long_name
+							});
+						}
+					});
 				});
 			});
 		});
 	}
 
-	onCountryChange(event)
-	{
+	onCountryChange(event) {
 		this.addSubAdminAccountForm.patchValue({
 			mobileIsd: '+' + event.dialCode,
-			country:event.name
+			country: event.name
 		});
 		console.log(event);
 	}
 
-	get f()
-	{
+	get f() {
 		return this.addSubAdminAccountForm.controls;
 	}
 
-	submitForm()
-	{
+	telInputObjectMobile(obj) {
+		this.MobileObject = obj;
+	}
+
+	submitForm() {
 		console.log(this.addSubAdminAccountForm);
 		// console.log(JSON.stringify(this.addVehicleRatesForm.value));
 		this.submittedForm = true;
 		// stop here if form is invalid
-		if (this.addSubAdminAccountForm.invalid)
-		{
+		if (this.addSubAdminAccountForm.invalid) {
 			return;
 		}
 
@@ -185,15 +192,13 @@ export class AddSubAdminComponent implements OnInit
 
 		this.adminService.addSubAdmin(this.addSubAdminAccountForm.value)
 			.pipe(
-				catchError(err =>
-				{
+				catchError(err => {
 					this.spinner.hide();//hide spinner
 					this.disableSubmitButton = false; //enable submit button
 					return throwError(err);
 				})
 			)
-			.subscribe(result =>
-			{
+			.subscribe(result => {
 				this.response = result;
 				this.spinner.hide();//hide spinner
 				this.disableSubmitButton = false; //enable submit button
@@ -202,8 +207,7 @@ export class AddSubAdminComponent implements OnInit
 			});
 	}
 
-	resetForm()
-	{
+	resetForm() {
 		this.addSubAdminAccountForm = this.formBuilder.group({
 			id: [],
 			firstName: ['', Validators.required],
@@ -221,8 +225,7 @@ export class AddSubAdminComponent implements OnInit
 			longitude: [''],
 		});
 	}
-	backButton()
-	{
+	backButton() {
 		this.router.navigate(['/admin/sub-admins']);
 	}
 

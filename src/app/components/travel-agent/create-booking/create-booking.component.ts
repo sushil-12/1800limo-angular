@@ -117,7 +117,7 @@ export class CreateBookingComponent implements OnInit {
 	subtotal: any = 0
 	agentShare: any = 0;
 	grandtotal: any = 0
-	vehicles: Number = 1
+	vehicles: number = 1;
 	driverImgUrl: any = '../../../../assets/images/driverImg.jpg';
 	vehicleImgUrl: any = '';
 	driver_info: any = {};
@@ -360,8 +360,8 @@ export class CreateBookingComponent implements OnInit {
 		this.SetFormValue('pickup_date', full_date.slice(0, full_date.indexOf('T')))
 		this.SetFormValue('return_pickup_date', future_full_date.slice(0, future_full_date.indexOf('T')))
 		this.SetFormValue('number_of_vehicles', 1)
-		this.SetFormValue('booking_instructions', "Text the client the day before each booking, and confirm the driver's name and cell number");
-		this.SetFormValue('return_booking_instructions', "Text the client the day before each booking, and confirm the driver's name and cell number");
+		this.SetFormValue('booking_instructions', "1. For Pax- Text driver when first landing for easy pickup instructions. 2. For Driver- Text the client the day before each booking, and confirm the driver's name and cell number. Text client with ETA when en route. Text the client when on location.");
+		this.SetFormValue('return_booking_instructions', "1. For Pax- Text driver when first landing for easy pickup instructions. 2. For Driver- Text the client the day before each booking, and confirm the driver's name and cell number. Text client with ETA when en route. Text the client when on location.");
 
 		if (this.BookingForm.value.transfer_type.includes('city_')) {
 			this.SetFormValue('meet_greet_choices', 1)
@@ -530,8 +530,7 @@ export class CreateBookingComponent implements OnInit {
 			// this.Form.affiliate_id.value != 0 ? this.chooseAffiliate() : ''
 			try {
 				this.PaxTelObject.setCountry(this.BookingForm.get('passenger_cell_country').value);
-			} catch
-			{
+			} catch {
 				console.error('Set Country Value is null.')
 			}
 			if (this.Form.affiliate_type.value == 'loose_affiliate') {
@@ -792,8 +791,7 @@ export class CreateBookingComponent implements OnInit {
 		try {
 			return text.replace(/[\\\_$]+/g, ' ')
 		}
-		catch
-		{
+		catch {
 			return text
 		}
 	}
@@ -959,8 +957,7 @@ export class CreateBookingComponent implements OnInit {
 		try {
 			return (<FormArray>this.BookingForm.get(form_group_name)).at(index).get('address').value
 		}
-		catch
-		{
+		catch {
 			return ''
 		}
 	}
@@ -968,8 +965,7 @@ export class CreateBookingComponent implements OnInit {
 		try {
 			return (<FormArray>this.BookingForm.get(form_group_name)).at(index).get('booking_instructions').value
 		}
-		catch
-		{
+		catch {
 			return ''
 		}
 	}
@@ -1031,8 +1027,7 @@ export class CreateBookingComponent implements OnInit {
 		try {
 			return text.replace(/[\\\_$]+/g, ' ') + '?'
 		}
-		catch
-		{
+		catch {
 			return text
 		}
 	}
@@ -1633,6 +1628,15 @@ export class CreateBookingComponent implements OnInit {
 	}
 
 	Subscriptions() {
+		//pickup time change 
+		this.BookingForm.get('pickup_time').valueChanges.subscribe((value: string) => {
+			this.buildBookingData()
+		})
+		this.BookingForm.get('return_pickup_time').valueChanges.subscribe((value: string) => {
+			this.buildBookingData()
+		})
+
+
 		// Service Type
 		this.BookingForm.get('service_type').valueChanges.subscribe((value: string) => {
 			this.init_return_rates = false;
@@ -1647,11 +1651,87 @@ export class CreateBookingComponent implements OnInit {
 				this.BookingForm.updateValueAndValidity()
 				console.log(this.BookingForm.get('number_of_hours').value);
 			}
+			if (value == 'one_way') {
+				console.log("setting value of return cruise port and name not mandatory")
+				this.BookingForm.get('return_cruise_name').clearValidators();
+				this.BookingForm.get('return_cruise_port').clearValidators();
+				// this.BookingForm.get('return_dropoff_flight').clearValidators();
+				// this.BookingForm.get('return_dropoff_flight').updateValueAndValidity();
+				this.BookingForm.get('return_dropoff_airport_option').clearValidators();
+				this.BookingForm.get('return_dropoff_airport_option').updateValueAndValidity();
+				// this.BookingForm.get('return_dropoff_airline_option').clearValidators();
+				// this.BookingForm.get('return_dropoff_airline_option').updateValueAndValidity();
+				this.BookingForm.get('return_pickup_flight').clearValidators();
+				this.BookingForm.get('return_pickup_flight').updateValueAndValidity();
+				this.BookingForm.get('return_pickup_airline_option').clearValidators();
+				this.BookingForm.get('return_pickup_airline_option').updateValueAndValidity();
+				this.BookingForm.get('return_pickup_airport_option').clearValidators();
+				this.BookingForm.get('return_pickup_airport_option').updateValueAndValidity();
+				this.BookingForm.get('return_cruise_name').updateValueAndValidity();
+				this.BookingForm.get('return_cruise_port').updateValueAndValidity();
+			}
 		})
 
 		// Transfer Type
 		this.BookingForm.get('transfer_type').valueChanges.subscribe((value: string) => {
-			console.log('transfer_type-------_>>>>>>>>>>>', value)
+			console.log("in transfer_type value changes", value)
+
+			// set cruise ship name and cruise port mandatory
+			if (value.includes('_cruise') || value.includes('cruise_')) {
+				console.log("setting value of cruise port and name mandatory")
+				this.BookingForm.get('cruise_name').setValidators([Validators.required]);
+				this.BookingForm.get('cruise_port').setValidators([Validators.required]);
+				this.BookingForm.get('cruise_name').updateValueAndValidity();
+				this.BookingForm.get('cruise_port').updateValueAndValidity();
+			} else {
+				console.log("setting value of cruise port and name not mandatory")
+				this.BookingForm.get('cruise_name').clearValidators();
+				this.BookingForm.get('cruise_port').clearValidators();
+				this.BookingForm.get('cruise_name').updateValueAndValidity();
+				this.BookingForm.get('cruise_port').updateValueAndValidity();
+			}
+
+			// set flight number mandatory
+			if (value.includes('_airport')) {
+				console.log("setting value of dropoff flight mandatory")
+				// this.BookingForm.get('dropoff_flight').setValidators([Validators.required]);
+				// this.BookingForm.get('dropoff_flight').updateValueAndValidity();
+				this.BookingForm.get('dropoff_airline_option').setValidators([Validators.required]);
+				this.BookingForm.get('dropoff_airline_option').updateValueAndValidity();
+				this.BookingForm.get('dropoff_airport_option').setValidators([Validators.required]);
+				this.BookingForm.get('dropoff_airport_option').updateValueAndValidity();
+			} else {
+				console.log("setting value of dropoff flight not mandatory")
+				// this.BookingForm.get('dropoff_flight').clearValidators();
+				// this.BookingForm.get('dropoff_flight').updateValueAndValidity();
+				this.BookingForm.get('dropoff_airline_option').clearValidators();
+				this.BookingForm.get('dropoff_airline_option').updateValueAndValidity();
+				this.BookingForm.get('dropoff_airport_option').clearValidators();
+				this.BookingForm.get('dropoff_airport_option').updateValueAndValidity();
+			}
+
+			if (value.includes('airport_')) {
+				console.log("setting value of pickup flight mandatory")
+				this.BookingForm.get('pickup_flight').setValidators([Validators.required]);
+				this.BookingForm.get('pickup_flight').updateValueAndValidity();
+				this.BookingForm.get('pickup_airline_option').setValidators([Validators.required]);
+				this.BookingForm.get('pickup_airline_option').updateValueAndValidity();
+				this.BookingForm.get('pickup_airport_option').setValidators([Validators.required]);
+				this.BookingForm.get('pickup_airport_option').updateValueAndValidity();
+				this.BookingForm.get('origin_airport_city').setValidators([Validators.required]);
+				this.BookingForm.get('origin_airport_city').updateValueAndValidity();
+			} else {
+				console.log("setting value of pickup flight not mandatory")
+				this.BookingForm.get('pickup_flight').clearValidators();
+				this.BookingForm.get('pickup_flight').updateValueAndValidity();
+				this.BookingForm.get('pickup_airline_option').clearValidators();
+				this.BookingForm.get('pickup_airline_option').updateValueAndValidity();
+				this.BookingForm.get('pickup_airport_option').clearValidators();
+				this.BookingForm.get('pickup_airport_option').updateValueAndValidity();
+				this.BookingForm.get('origin_airport_city').clearValidators();
+				this.BookingForm.get('origin_airport_city').updateValueAndValidity();
+
+			}
 			const reverseStringChars = (text: string) => {
 				let temp = text.split('_')
 				return temp.reverse().join('_')
@@ -1659,6 +1739,65 @@ export class CreateBookingComponent implements OnInit {
 			this.SetFormValue('return_transfer_type', reverseStringChars(value))
 			this.return_transfer_type = reverseStringChars(value)
 			// this.buildBookingData()
+		})
+
+		this.BookingForm.get('return_transfer_type').valueChanges.subscribe((value: string) => {
+			console.log("in return_transfer_type value changes", value)
+
+			if (this.BookingForm.get('service_type').value == 'round_trip') {
+
+				// set cruise ship name and cruise port mandatory
+				if (value.includes('_cruise') || value.includes('cruise_')) {
+					console.log("setting value of return cruise port and name mandatory")
+					this.BookingForm.get('return_cruise_name').setValidators([Validators.required]);
+					this.BookingForm.get('return_cruise_port').setValidators([Validators.required]);
+					this.BookingForm.get('return_cruise_name').updateValueAndValidity();
+					this.BookingForm.get('return_cruise_port').updateValueAndValidity();
+				} else {
+					console.log("setting value of return cruise port and name not mandatory")
+					this.BookingForm.get('return_cruise_name').clearValidators();
+					this.BookingForm.get('return_cruise_port').clearValidators();
+					this.BookingForm.get('return_cruise_name').updateValueAndValidity();
+					this.BookingForm.get('return_cruise_port').updateValueAndValidity();
+				}
+
+				// set flight number mandatory
+				if (value.includes('_airport')) {
+					console.log("setting value of return dropoff flight mandatory")
+					// this.BookingForm.get('return_dropoff_flight').setValidators([Validators.required]);
+					// this.BookingForm.get('return_dropoff_flight').updateValueAndValidity();
+					this.BookingForm.get('return_dropoff_airline_option').setValidators([Validators.required]);
+					this.BookingForm.get('return_dropoff_airline_option').updateValueAndValidity();
+					this.BookingForm.get('return_dropoff_airport_option').setValidators([Validators.required]);
+					this.BookingForm.get('return_dropoff_airport_option').updateValueAndValidity();
+				} else {
+					console.log("setting value of return dropoff flight not mandatory")
+					// this.BookingForm.get('return_dropoff_flight').clearValidators();
+					// this.BookingForm.get('return_dropoff_flight').updateValueAndValidity();
+					this.BookingForm.get('return_dropoff_airline_option').clearValidators();
+					this.BookingForm.get('return_dropoff_airline_option').updateValueAndValidity();
+					this.BookingForm.get('return_dropoff_airport_option').clearValidators();
+					this.BookingForm.get('return_dropoff_airport_option').updateValueAndValidity();
+				}
+
+				if (value.includes('airport_')) {
+					console.log("setting value of return pickup flight mandatory")
+					this.BookingForm.get('return_pickup_flight').setValidators([Validators.required]);
+					this.BookingForm.get('return_pickup_flight').updateValueAndValidity();
+					this.BookingForm.get('return_pickup_airline_option').setValidators([Validators.required]);
+					this.BookingForm.get('return_pickup_airline_option').updateValueAndValidity();
+					this.BookingForm.get('return_pickup_airport_option').setValidators([Validators.required]);
+					this.BookingForm.get('return_pickup_airport_option').updateValueAndValidity();
+				} else {
+					console.log("setting value of return pickup flight not mandatory")
+					this.BookingForm.get('return_pickup_flight').clearValidators();
+					this.BookingForm.get('return_pickup_flight').updateValueAndValidity();
+					this.BookingForm.get('return_pickup_airline_option').clearValidators();
+					this.BookingForm.get('return_pickup_airline_option').updateValueAndValidity();
+					this.BookingForm.get('return_pickup_airport_option').clearValidators();
+					this.BookingForm.get('return_pickup_airport_option').updateValueAndValidity();
+				}
+			}
 		})
 
 		// Account Type Subscription
@@ -2161,6 +2300,7 @@ export class CreateBookingComponent implements OnInit {
 		this.BookingForm.get('number_of_hours').setValue(data)
 	}
 
+
 	createReservationShareArray() {
 		console.log('in function createReservationShareArray')
 		if (this.rateArray) {
@@ -2180,6 +2320,14 @@ export class CreateBookingComponent implements OnInit {
 			}
 			console.log("grand total", this.grandtotal)
 			let grandTotal = this.grandtotal
+			if (this.BookingForm?.get('number_of_vehicles').value > 1) {
+				grandTotal = grandTotal * this.Form.number_of_vehicles.value
+				console.log("changes in number of vehciles if ", grandTotal)
+			}
+			else {
+				grandTotal = this.grandtotal
+				console.log("changes in number of vehciles else ", grandTotal)
+			}
 			let stripeFee = grandTotal * 0.05 + 0.30
 			let adminShare = (base_rate * this.adminSharePercent) / 100
 			let deducted_admin_share = adminShare - stripeFee
@@ -2189,7 +2337,7 @@ export class CreateBookingComponent implements OnInit {
 				stripeFee: stripeFee,
 				adminShare: adminShare,
 				deducted_admin_share: deducted_admin_share,  // Admin will get this amount only
-				affiliateShare: (grandTotal - adminShare),
+				affiliateShare: grandTotal - base_rate * 0.25
 			}
 			// travelAgentShare : 
 			if (this.BookingForm.value?.account_type == 'travel_planner' && !this.isCreatedByAdmin) {
@@ -2212,6 +2360,8 @@ export class CreateBookingComponent implements OnInit {
 			// value['rateArray'] = JSON.parse(JSON.stringify(this.rateArray))
 		}
 	}
+
+
 	createReservationReturnShareArray() {
 		console.log('createReservationReturnShareArray', this.r_grandtotal)
 		if (this.Form.service_type.value == 'round_trip' && this.returnRateArray) {
@@ -2224,6 +2374,14 @@ export class CreateBookingComponent implements OnInit {
 				base_rate += this.returnRateArray.amenities[key].baserate;
 			}
 			let returnGrandTotal = this.r_grandtotal
+			if (this.BookingForm?.get('number_of_vehicles').value > 1) {
+				returnGrandTotal = returnGrandTotal * this.Form.number_of_vehicles.value
+				console.log("changes in number of vehciles if ", returnGrandTotal)
+			}
+			else {
+				returnGrandTotal = this.r_grandtotal
+				console.log("changes in number of vehciles else ", returnGrandTotal)
+			}
 			let stripeFee = returnGrandTotal * 0.05 + 0.30
 			let adminShare = (base_rate * this.adminSharePercent) / 100
 			let returnShareArray = {
@@ -2392,7 +2550,10 @@ export class CreateBookingComponent implements OnInit {
 			no_of_hours: this.number_of_hours,
 			is_master_vehicle: this.is_master_vehicle,
 			extra_stops: this.BookingForm.get('extra_stops').value,
-			return_extra_stops: this.BookingForm.get('return_extra_stops').value
+			return_extra_stops: this.BookingForm.get('return_extra_stops').value,
+			pickup_time: this.BookingForm.get('pickup_time').value,
+			return_pickup_time: this.BookingForm.get('return_pickup_time').value,
+
 		}
 
 		let vehicle_id = booking_data?.vehicle_id.toString().length ? booking_data?.vehicle_id : this.master_vehicle_id
@@ -2488,6 +2649,9 @@ export class CreateBookingComponent implements OnInit {
 				this.SetFormValue('number_of_hours', QB?.booking_hour)
 				this.number_of_hours = QB?.booking_hour
 			}
+			//set no of vehicles
+			this.SetFormValue('number_of_vehicles', selected_vehicle?.number_of_vehicles)
+			// this.vehicles = selected_vehicle?.number_of_vehicles
 			let transfer_type_value = QB?.pickup_type + '_to_' + QB?.dropoff_type
 			let return_transfer_type_value = QB?.dropoff_type + '_to_' + QB?.pickup_type
 			this.transfer_type = transfer_type_value

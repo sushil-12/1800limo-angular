@@ -1392,9 +1392,9 @@ h2.headinginfo .orangeHeading {
     white-space: nowrap;
 }
 
-.affilate-wrapper .sidenav-menu .nav-item:nth-child(2) a {
+/* .affilate-wrapper .sidenav-menu .nav-item:nth-child(2) a {
     padding-left: 22px !important;
-}
+} */
 
 .box-shadow {
     box-shadow: 0px 5px 20px -6px rgb(0 0 0 / 60%);
@@ -1820,6 +1820,11 @@ h2.headinginfo .orangeHeading {
 
     .driverside_table ul li {
         margin-top: 10px;
+    }
+
+    .sidenav-menu .nav-item a span {
+        font-size: 19px;
+        font-weight: 500;
     }
 }
 
@@ -2609,6 +2614,19 @@ table #navbarDropdownUserImage {
     box-shadow: 0px 5px 10px 1px rgba(0, 0, 0, 0.4);
 }
 
+.send-email-button {
+    color: #fff !important;
+    background-color: #366bc1;
+    border-color: #66b3ff;
+    font-size: 14px;
+    text-transform: uppercase;
+    text-decoration: none;
+    margin: 20px 0;
+    border-radius: 15px;
+    padding: 10px 20px !important;
+    box-shadow: 0px 5px 10px 1px rgba(0, 0, 0, 0.4);
+}
+
 .add-button svg {
     height: 20px;
     margin-right: 8px;
@@ -2624,6 +2642,16 @@ table #navbarDropdownUserImage {
     .add-button:focus {
         transform: scale(1.1, 1.1);
         background-color: #28b24b;
+    }
+
+    .send-email-button:hover {
+        background-color: #366bc1;
+        border-color: #366bc1;
+    }
+
+    .send-email-button:focus {
+        transform: scale(1.1, 1.1);
+        background-color: #366bc1;
     }
 }
 
@@ -2649,6 +2677,11 @@ table #navbarDropdownUserImage {
 
 @media (max-width: 767.98px) {
     .add-button {
+        padding: 10px !important;
+        line-height: 1.4;
+    }
+
+    .send-email-button {
         padding: 10px !important;
         line-height: 1.4;
     }
@@ -2897,10 +2930,29 @@ table #navbarDropdownUserImage {
     background-color: var(--orange-color) !important;
 }
 
-@media (min-width : 570px) and (max-width: 1023px) {
+/* @media (min-width : 570px) and (max-width: 1023px) {
     .timepicker__header {
         height: 303px !important
     }
+} */
+.timepicker-dial__container {
+    flex-direction: row !important;
+    gap: 17px !important;
+}
+
+.timepicker {
+    display: flex !important;
+    flex-direction: column;
+    align-items: center !important;
+    width: 100% !important;
+    /* height: 303px !important; */
+}
+
+.timepicker__header {
+    padding: 15px 64px;
+    width: 100%;
+    text-align: center;
+    background-color: #00bfff;
 }
 
 .clock-face__number>span.active {

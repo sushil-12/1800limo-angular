@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, isDevMode } from '@angular/core';
 import { AdminService } from '../../../services/admin.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from "ngx-spinner";
@@ -16,7 +16,7 @@ declare var $: any;
 	styleUrls: ['./affiliate-accounts.component.scss']
 })
 export class AffiliateAccountsComponent implements OnInit {
-	emails = new FormControl('');
+	emails = new FormControl();
 	emailList: string[] = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato'];
 	color: ThemePalette = 'primary';
 	checked = false;
@@ -61,6 +61,8 @@ export class AffiliateAccountsComponent implements OnInit {
 	searchText: any = '';
 	affiliate_count: any;
 	loginAsUserResponse: any;
+	allSelected = false;
+	audit_Trail: any = [];
 
 	constructor(
 		private adminService: AdminService,
@@ -87,18 +89,14 @@ export class AffiliateAccountsComponent implements OnInit {
 			reject_cause: ['', Validators.required],
 		});
 
-		this.adminService.getEmailList()
-			.pipe(
-				catchError(err => {
-					return throwError(err);
-				})
-			)
-			.subscribe(({ data, success, message }: any) => {
-				this.affiliate_accounts_emails = data
-			});
+		// this.getEmailList()
 
 
+	}
 
+	adjustTextareaHeight(textarea: HTMLTextAreaElement) {
+		textarea.style.height = 'auto';
+		textarea.style.height = textarea.scrollHeight + 'px';
 	}
 
 
@@ -113,10 +111,10 @@ export class AffiliateAccountsComponent implements OnInit {
 				break;
 			}
 			case 'fleet-operator': {
-				this.heading = "Fleet Accounts";
-				this.addButton = "Add Fleet Account";
+				this.heading = "Fleet/Coach Accounts";
+				this.addButton = "Add Fleet/Coach Account";
 				this.affiliateType = 'fleet_operator';
-				this.affiliateName = "Fleet";
+				this.affiliateName = "Fleet/Coach";
 				this.loadAffiliateOperators()
 				break;
 			}
@@ -161,6 +159,7 @@ export class AffiliateAccountsComponent implements OnInit {
 		this.timer = setTimeout(() => {
 			localStorage.setItem('affiliateSearch', text)
 			this.loadAffiliateOperators()
+			// this.getEmailList()
 		}, 700)
 	}
 	handleKeypressEvents() {
@@ -442,12 +441,64 @@ export class AffiliateAccountsComponent implements OnInit {
 		$("#sendEmailModal").modal("hide");
 	}
 
+	selectAll() {
+		if (this.allSelected) {
+			this.emails.patchValue([]);
+		} else {
+			const allValues = this.affiliate_accounts.map(option => this.stringifyOption(option));
+			this.emails.setValue(allValues);
+		}
+		this.allSelected = !this.allSelected;
+	}
+
+	stringifyOption(option: any): string {
+		return JSON.stringify({ id: option.id, email: option.Email });
+	}
+
+	auditTrail(id: any) {
+		console.log("In function audit trail", id);
+		this.spinner.show();
+		this.adminService
+			.communicationLogs(id)
+			.pipe(
+				catchError((err) => {
+					return throwError(err);
+				})
+			)
+			.subscribe((response: any) => {
+				this.spinner.hide();
+				console.log("audit trail --->>>>>>>>", response);
+				this.audit_Trail = response?.data?.logs;
+				// $("#AuditTrailModal").modal("hide");
+			});
+	}
+
+	viewEmailContent(id: any) {
+		console.log("In function view email content", id);
+		const url = isDevMode() ? `https://1800limoapi.infodevbox.com/log-content/${id}` : `https://api.1800limo.com/log-content/${id}`;
+		window.open(url, '_blank');
+	}
+
+	convertTextToHtml(text: string): string {
+		// Basic conversion of text to HTML
+		// Replace newlines with <br> tags
+		const escapedText = text
+			.replace(/&/g, '&amp;')
+			.replace(/</g, '&lt;')
+			.replace(/>/g, '&gt;')
+			.replace(/\n/g, '<br>');
+
+		return `<p>${escapedText}</p>`;
+	}
+
 	//submit email modal
 	sendEmail() {
 		this.spinner.show()
+		const textContent = this.sendEmailForm.get('text_message')?.value;
+		const htmlContent = this.convertTextToHtml(textContent);
 		let body = {
 			subject: this.sendEmailForm.get('subject').value,
-			message: this.sendEmailForm.get('text_message').value,
+			message: htmlContent,
 			recipents: this.emails.value
 		}
 		console.log("body-------->", body)

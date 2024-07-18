@@ -113,14 +113,14 @@ export class AffiliateStep1Component implements OnInit {
 		this.spinner.show()
 		// this.stateManagementService.setprogressBar(true);
 		// Load Our languages using API
-		this.adminService.getAllEnableBadgeCities().pipe(
-			catchError(err => {
-				return throwError(err)
-			})
-		).subscribe((res: any) => {
-			this.badgeOptions = res?.data
-			this.filteredOptions = res?.data
-		})
+		// this.adminService.getAllEnableBadgeCities().pipe(
+		// 	catchError(err => {
+		// 		return throwError(err)
+		// 	})
+		// ).subscribe((res: any) => {
+		// 	this.badgeOptions = res?.data
+		// 	this.filteredOptions = res?.data
+		// })
 
 		this.httpClient
 			.get("assets/json/businessYear.json")
@@ -156,14 +156,14 @@ export class AffiliateStep1Component implements OnInit {
 							})
 						).subscribe(result2 => {
 							this.response2 = result2;
-							this.badgeOptions.map((i: any) => {
-								if (i.id == this.response2.data.badge_city) {
-									this.addAffiliateAccountForm.patchValue({
-										badge_city: i.id,
-										badge_city_name: i.name
-									})
-								}
-							})
+							// this.badgeOptions?.map((i: any) => {
+							// 	if (i.id == this.response2.data.badge_city) {
+							// 		this.addAffiliateAccountForm.patchValue({
+							// 			badge_city: i.id,
+							// 			badge_city_name: i.name
+							// 		})
+							// 	}
+							// })
 							this.addAffiliateAccountForm.patchValue({
 								id: this.response2.data.id,
 								FirstName: this.response2.data.FirstName,
@@ -316,8 +316,8 @@ export class AffiliateStep1Component implements OnInit {
 			CellNumber: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
 			CellIsd: ['+1', Validators.required],
 			Email: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)]],
-			badge_city: [''],
-			badge_city_name: [''],
+			// badge_city: [''],
+			// badge_city_name: [''],
 			latitude: [''],
 			longitude: [''],
 			FirstYearBusiness: ['', [Validators.required, Validators.pattern("^[0-9]*$")]],
@@ -357,7 +357,7 @@ export class AffiliateStep1Component implements OnInit {
 			case 'black_limo_operator': {
 				if (this.affiliateId) {
 					if (this.f.AffiliateType.value == 'fleet_operator') {
-						this.modalAlertMessage = "Fleet Operator can not change on Black Car / Owner Operators";
+						this.modalAlertMessage = "Fleet/Coach Operator can not change on Black Car / Owner Operators";
 						$('#affiliateAlertMessageModal').modal('show');
 						return false;
 					}
@@ -375,7 +375,7 @@ export class AffiliateStep1Component implements OnInit {
 							return false;
 						}
 						case 'fleet_operator': {
-							this.modalAlertMessage = "Fleet Operators can not change on Taxi Operators";
+							this.modalAlertMessage = "Fleet/Coach Operators can not change on Taxi Operators";
 							$('#affiliateAlertMessageModal').modal('show');
 							return false;
 						}
@@ -393,7 +393,7 @@ export class AffiliateStep1Component implements OnInit {
 			case 'gig_operator': {
 				if (this.affiliateId) {
 					if (this.f.AffiliateType.value == 'fleet_operator') {
-						this.modalAlertMessage = "Fleet Operator can not change on Gig Operators";
+						this.modalAlertMessage = "Fleet/Coach Operator can not change on Gig Operators";
 						$('#affiliateAlertMessageModal').modal('show');
 						return false;
 					}

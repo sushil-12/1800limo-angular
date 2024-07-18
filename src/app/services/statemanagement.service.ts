@@ -4,79 +4,67 @@ import { BehaviorSubject, Subscription } from 'rxjs';
 @Injectable({
 	providedIn: 'root'
 })
-export class StateManagementService
-{
+export class StateManagementService {
 
 	constructor() { }
 
 	//state for global errors
 	private errors = new BehaviorSubject({});
-	setError(value)
-	{
+	setError(value) {
 		this.errors.next(value);
 	}
-	getError()
-	{
+	getError() {
 		return this.errors;
 	}
 
 	//state for progressBar
 	private progressBar = new BehaviorSubject(false);
-	setprogressBar(value)
-	{
+	setprogressBar(value) {
 		this.progressBar.next(value);
 	}
-	getprogressBar()
-	{
+	getprogressBar() {
 		return this.progressBar;
 	}
 
 	//state for global number of vehicles
 	private numOfVehicles = 0;
 	private numberOfVehicles = new BehaviorSubject(0);
-	setNumberOfVehicles(value)
-	{
+	setNumberOfVehicles(value) {
 		this.numOfVehicles = value;
 		this.numberOfVehicles.next(value);
 	}
-	addNumberOfVehicles(value)
-	{
+	addNumberOfVehicles(value) {
 		this.numOfVehicles = value + this.numOfVehicles;
 		this.numberOfVehicles.next(this.numOfVehicles);
 	}
-	getNumberOfVehicles()
-	{
+	getNumberOfVehicles() {
 		return this.numberOfVehicles;
 	}
 
 	//Login-Logout
-	setUser()
-	{
+	setUser() {
 		JSON.parse(localStorage.getItem("currentUser"));
 	}
-	getUser()
-	{
+	getUser() {
 		return JSON.parse(localStorage.getItem("currentUser"));
 	}
-	removeUser()
-	{
+	removeUser() {
 		// remove user from local storage to logout user
 		localStorage.clear();
+		sessionStorage.clear();
 
 	}
-	
-	getCurrencySymbol(){
+
+	getCurrencySymbol() {
 		return JSON.parse(localStorage.getItem('currencySymbol'))
 	}
 
 
 	private state = new BehaviorSubject({})
-	set(value: any)
-	{
+	set(value: any) {
 		this.state.next(value)
 	}
-	get()
-	{
+	get() {
 		return this.state
 	}
 

@@ -109,6 +109,7 @@ export class FinalizeBookingComponent implements OnInit {
 				this.bookingId = params.bookingId;
 				this.getReservationDetails(this.bookingId);
 				this.paymentDetail(this.bookingId)
+				this.scroll('submitForm')
 			} else {
 				// navigate back to dashboard in case of no booking Id specified.
 				this.$router.navigate(["/admin/daily-bookings-admin"]);
@@ -207,11 +208,11 @@ export class FinalizeBookingComponent implements OnInit {
 				this.finalize_params['booking_id'] = this.BookingDetail.reservation_id
 				this.affiliate_type = response.data.affiliate_type
 				this.visibility = response.data.payment_status == 'paid' ? false : true
-				this.paidAmount = response.data?.paid_amount ? parseFloat(response.data?.paid_amount) : 0
+				this.paidAmount = response.data?.charged_amount ? parseFloat(response.data?.charged_amount) : 0
 				this.subModules = localStorage.getItem('sub_modules') || [];
 				this.currentUser = JSON.parse(localStorage.getItem('userData')) || "";
 				setTimeout(() => {
-					this.scroll('NumVehicles')
+					this.scroll('submitForm')
 
 				}, 600)
 			});
@@ -285,12 +286,24 @@ export class FinalizeBookingComponent implements OnInit {
 		console.log('in function createReservationShareArray')
 		if (this.edit_rates_value) {
 			let base_rate = 0
-			for (const key of Object.keys(this.edit_rates_value.all_inclusive_rates)) {
-				base_rate += this.edit_rates_value.all_inclusive_rates[key].baserate;
+			if (this.service_type == 'charter_tour') {
+				base_rate += this.edit_rates_value.all_inclusive_rates["Base_Rate"].baserate * this.finalize_params.number_of_hours
 			}
+			else {
+				base_rate += this.edit_rates_value.all_inclusive_rates["Base_Rate"].baserate
+			}
+			['ELH_Charges', 'Stops', 'Wait'].map((key) => {
+				base_rate += this.edit_rates_value.all_inclusive_rates[key].baserate
+			});
 			for (const key of Object.keys(this.edit_rates_value.amenities)) {
 				base_rate += this.edit_rates_value.amenities[key].baserate;
 			}
+			// for (const key of Object.keys(this.edit_rates_value.all_inclusive_rates)) {
+			// 	base_rate += this.edit_rates_value.all_inclusive_rates[key].baserate;
+			// }
+			// for (const key of Object.keys(this.edit_rates_value.amenities)) {
+			// 	base_rate += this.edit_rates_value.amenities[key].baserate;
+			// }
 			let grandTotal = this.edit_rates_value.grand_total
 			let stripeFee = grandTotal * 0.05 + 0.30
 			let adminShare = (base_rate * this.adminSharePercent) / 100
@@ -301,7 +314,7 @@ export class FinalizeBookingComponent implements OnInit {
 				stripeFee: stripeFee,
 				adminShare: adminShare,
 				deducted_admin_share: deducted_admin_share,  // Admin will get this amount only
-				affiliateShare: (grandTotal - adminShare)
+				affiliateShare: grandTotal - base_rate * 0.25
 			}
 			// travelAgentShare : 
 			if (this.BookingDetail?.account_type == 'travel_planner' && !this.isCreatedByAdmin) {
@@ -483,7 +496,7 @@ export class FinalizeBookingComponent implements OnInit {
 	RateFormValue(form: any) {
 		this.edit_rates_value = form
 		console.log("edit_rates_value", this.edit_rates_value)
-		this.payableAmount = this.edit_rates_value.grand_total - this.paidAmount
+		this.payableAmount = this.edit_rates_value.grand_total
 		if (this.BookingDetail?.booking_status == 'finalized') {
 			if (this.edit_rates_value.grand_total != this.BookingDetail?.grand_total) {
 				this.isFinalizeButton = false

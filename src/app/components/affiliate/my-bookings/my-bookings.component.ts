@@ -9,6 +9,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import * as moment from 'moment';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 import { StateManagementService } from 'src/app/services/statemanagement.service';
+import { MapsAPILoader } from '@agm/core';
 declare var $: any;
 
 @Component({
@@ -54,7 +55,7 @@ export class MyBookingsComponent implements OnInit {
 	audit_Trail: any;
 	company_name: any = JSON.parse(localStorage.getItem('currentUser'))?.affiliate_company || ''
 	cancelBookingId: any = null
-	useDateFilter: boolean = true;
+	useDateFilter: boolean = false;
 	adminSharePercent: number;
 	shareArray: any;
 	rates_preview: any;
@@ -66,7 +67,8 @@ export class MyBookingsComponent implements OnInit {
 		private spinner: NgxSpinnerService,
 		private $errors: ErrorDialogService,
 		private stateManagementService: StateManagementService,
-		private formBuilder: FormBuilder) { }
+		private formBuilder: FormBuilder,
+		private $mapsapi: MapsAPILoader,) { }
 
 	ngOnInit(): void {
 
@@ -87,7 +89,7 @@ export class MyBookingsComponent implements OnInit {
 
 		this.useDateFilter = localStorage.getItem('farmInuseDateFilter') ?
 			(localStorage.getItem('farmInuseDateFilter') == 'true' ? true : false)
-			: true;
+			: false;
 		console.log('farmInuseDateFilter-->', this.useDateFilter)
 
 		//save currency symbol
@@ -107,10 +109,83 @@ export class MyBookingsComponent implements OnInit {
 		});
 
 		$("#search-field-my-booking").addClass("box-outline")
+
+		this.MapController()
 	}
 
 	ngAfterViewInit(): void {
 		$("#search-field-my-booking").addClass("box-outline")
+	}
+
+
+	MapController() {
+		console.log('Map has been initialised.')
+		let waypoints = []
+		let origin: google.maps.LatLng
+		let destination: google.maps.LatLng
+		let map: google.maps.Map
+
+		this.$mapsapi.load().then(() => {
+
+			// console.log('Return Map has been initialised. ')
+			// map
+			map = new google.maps.Map(document.getElementById('map'), {
+				zoom: 7,
+				center: new google.maps.LatLng(41.850033, -87.6500523),
+				scaleControl: true
+			})
+
+
+			// defaults for Source/Target - City
+			origin = new google.maps.LatLng(this.bookingPreview?.pickup_latitude, this.bookingPreview?.pickup_longitude)
+			destination = new google.maps.LatLng(this.bookingPreview?.dropoff_airport_latitude, this.bookingPreview?.dropoff_airport_longitude)
+
+			//defaults for Source/Target - City
+			origin = new google.maps.LatLng(this.bookingPreview?.pickup_latitude, this.bookingPreview?.pickup_longitude)
+			destination = new google.maps.LatLng(this.bookingPreview?.dropoff_latitude, this.bookingPreview?.dropoff_longitude)
+
+			// Overrides
+			if (this.bookingPreview?.transfer_type.includes('airport_')) {
+				// override for Source - Airport
+				// console.log('Override for Source Airport')
+				origin = new google.maps.LatLng(this.bookingPreview?.pickup_airport_latitude, this.bookingPreview?.pickup_airport_longitude)
+			}
+			if (this.bookingPreview?.transfer_type.includes('_airport')) {
+				// override for Target - Airport
+				// console.log('Override for Target Airport')
+				destination = new google.maps.LatLng(this.bookingPreview?.dropoff_airport_latitude, this.bookingPreview?.dropoff_airport_longitude)
+			}
+
+			this.drawMap(map, {
+				origin,
+				destination,
+				waypoints,
+				optimizeWaypoints: true,
+				travelMode: google.maps.TravelMode.DRIVING
+			})
+		})
+	}
+
+
+	drawMap(map: google.maps.Map, request: Object) {
+		if (request && !request.hasOwnProperty('waypoints') && !request.hasOwnProperty('origin') && !request.hasOwnProperty('destination')) {
+			console.error('Request Object is not properly according to specified requirements.')
+			return
+		}
+
+		this.$mapsapi.load().then(() => {
+			const directionsRenderer = new google.maps.DirectionsRenderer()
+			const directionsService = new google.maps.DirectionsService()
+			directionsRenderer.setMap(map)
+
+			directionsService.route(request, (response: any, status: string) => {
+				if (status == google.maps.DirectionsStatus.OK) {
+					console.log('Directions Service Response: ', response)
+					directionsRenderer.setDirections(response)
+				}
+			})
+
+		})
 	}
 
 	scroll(id) {
@@ -143,8 +218,15 @@ export class MyBookingsComponent implements OnInit {
 		// Load Our bookings using API
 		this.affiliateService.loadBookings(pageUrl, this.searchText, this.startDate, this.endDate, this.useDateFilter).then(result => {
 			console.log('result------------------------->>>', result)
+			let date = new Date();
+			let timestamp = date.getTime();
+			date.setDate(date.getDate() + 7);
+			timestamp = date.getTime();
 			this.bookingsRes = result;
 			this.bookings = this.bookingsRes?.data?.data;
+			if(!this.useDateFilter){
+				this.endDate = this.bookings?.length > 0 ? this.bookings[this.bookings?.length - 1]?.pickup_date : moment(timestamp).format("YYYY-MM-DD")
+			}
 			this.totalRecords = this.bookingsRes?.data?.total;
 			this.noError = false
 			this.firstPage = 1;
@@ -204,6 +286,10 @@ export class MyBookingsComponent implements OnInit {
 		this.useDateFilter = value
 		// this.saveCookie('useDateFilter',value)
 		localStorage.setItem('farmInuseDateFilter', value)
+		let date = new Date();
+		date.setDate(date.getDate() + 7);
+		let timestamp = date.getTime();
+		this.endDate = moment(timestamp).format("YYYY-MM-DD");
 		this.loadBookings();
 	}
 
@@ -218,7 +304,7 @@ export class MyBookingsComponent implements OnInit {
 		// this.affiliateService.deleteCookie('filtertype')
 		this.searchText = "";
 		localStorage.removeItem('farmInuseDateFilter')
-		this.useDateFilter = true
+		this.useDateFilter = false
 		// this.filtertype = 'bookingid';
 
 		console.log('Reset Successfully. ');
@@ -262,6 +348,7 @@ export class MyBookingsComponent implements OnInit {
 			).subscribe((response: any) => {
 				console.log("respinse", response.data)
 				this.bookingPreview = response.data;
+				this.MapController()
 				if (this.bookingPreview?.account_type == 'travel_planner' && this.bookingPreview?.created_by != 1) {
 					console.log("in if created by ta")
 					this.adminSharePercent = 15
@@ -712,6 +799,14 @@ export class MyBookingsComponent implements OnInit {
 			}
 		} else {
 			throw new Error('Error: Location Points Not Specified Properly. ');
+		}
+	}
+
+	searchOnGoogle(query: string) {
+		console.log("in search google", query)
+		if (query) {
+			const url = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+			window.open(url, '_blank'); // Opens the search in a new tab
 		}
 	}
 }

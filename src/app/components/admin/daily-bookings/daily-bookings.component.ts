@@ -16,6 +16,7 @@ import * as moment from "moment";
 import { ErrorDialogService } from "src/app/services/error-dialog/errordialog.service";
 import { MatSelect } from "@angular/material/select";
 import { DatePickerComponent } from "../../shared/date-picker/date-picker.component";
+import { MapsAPILoader } from "@agm/core";
 
 @Component({
 	selector: "app-daily-bookings",
@@ -64,19 +65,21 @@ export class DailyBookingsComponent implements OnInit {
 	audit_Trail: any = [];
 	currentUser: any = JSON.parse(localStorage.getItem("userData")) || "";
 	subModules: any = localStorage.getItem("sub_modules") || "";
-	useDateFilter: boolean = true;
+	useDateFilter: boolean = false;
 	use_created_at: boolean = false;
 	rates_preview: any;
 	quotebotNewData: any;
 	shareArray: any;
 	adminSharePercent: any;
+	previewCopyData: any;
 
 	constructor(
 		private adminService: AdminService,
 		private router: Router,
 		private spinner: NgxSpinnerService,
 		private formBuilder: FormBuilder,
-		private $errorDialog: ErrorDialogService
+		private $errorDialog: ErrorDialogService,
+		private $mapsapi: MapsAPILoader,
 	) { }
 
 	ngOnInit(): void {
@@ -107,11 +110,9 @@ export class DailyBookingsComponent implements OnInit {
 			"usedatefilter---->>>>>>>",
 			localStorage.getItem("useDateFilter")
 		);
-		this.useDateFilter = localStorage.getItem("useDateFilter")
-			? localStorage.getItem("useDateFilter") == "true"
-				? true
-				: false
-			: true;
+		this.useDateFilter = localStorage.getItem('useDateFilter') ?
+			(localStorage.getItem('useDateFilter') == 'true' ? true : false)
+			: false;
 		console.log("useDateFilter-->", this.useDateFilter);
 		this.orderBy = localStorage.getItem("orderByCreatedAt") ? localStorage.getItem("orderByCreatedAt") : "pickup_date_desc"
 		this.use_created_at = localStorage.getItem("orderByCreatedAt") ? true : false
@@ -169,6 +170,8 @@ export class DailyBookingsComponent implements OnInit {
 			reservation_id: ["", Validators.required],
 			emailTarget: ["", Validators.required],
 		});
+
+		this.MapController()
 	}
 	ngAfterViewInit(): void {
 		this.subModules = localStorage.getItem("sub_modules");
@@ -178,10 +181,85 @@ export class DailyBookingsComponent implements OnInit {
 			.querySelector("textarea")
 			.focus();
 	}
+
+	MapController() {
+		console.log('Map has been initialised.')
+		let waypoints = []
+		let origin: google.maps.LatLng
+		let destination: google.maps.LatLng
+		let map: google.maps.Map
+
+		this.$mapsapi.load().then(() => {
+
+			// console.log('Return Map has been initialised. ')
+			// map
+			map = new google.maps.Map(document.getElementById('map'), {
+				zoom: 7,
+				center: new google.maps.LatLng(41.850033, -87.6500523),
+				scaleControl: true
+			})
+
+
+			// defaults for Source/Target - City
+			origin = new google.maps.LatLng(this.bookingPreview?.pickup_latitude, this.bookingPreview?.pickup_longitude)
+			destination = new google.maps.LatLng(this.bookingPreview?.dropoff_airport_latitude, this.bookingPreview?.dropoff_airport_longitude)
+
+			//defaults for Source/Target - City
+			origin = new google.maps.LatLng(this.bookingPreview?.pickup_latitude, this.bookingPreview?.pickup_longitude)
+			destination = new google.maps.LatLng(this.bookingPreview?.dropoff_latitude, this.bookingPreview?.dropoff_longitude)
+
+			// Overrides
+			if (this.bookingPreview?.transfer_type.includes('airport_')) {
+				// override for Source - Airport
+				// console.log('Override for Source Airport')
+				origin = new google.maps.LatLng(this.bookingPreview?.pickup_airport_latitude, this.bookingPreview?.pickup_airport_longitude)
+			}
+			if (this.bookingPreview?.transfer_type.includes('_airport')) {
+				// override for Target - Airport
+				// console.log('Override for Target Airport')
+				destination = new google.maps.LatLng(this.bookingPreview?.dropoff_airport_latitude, this.bookingPreview?.dropoff_airport_longitude)
+			}
+
+			this.drawMap(map, {
+				origin,
+				destination,
+				waypoints,
+				optimizeWaypoints: true,
+				travelMode: google.maps.TravelMode.DRIVING
+			})
+		})
+	}
+
+
+	drawMap(map: google.maps.Map, request: Object) {
+		if (request && !request.hasOwnProperty('waypoints') && !request.hasOwnProperty('origin') && !request.hasOwnProperty('destination')) {
+			console.error('Request Object is not properly according to specified requirements.')
+			return
+		}
+
+		this.$mapsapi.load().then(() => {
+			const directionsRenderer = new google.maps.DirectionsRenderer()
+			const directionsService = new google.maps.DirectionsService()
+			directionsRenderer.setMap(map)
+
+			directionsService.route(request, (response: any, status: string) => {
+				if (status == google.maps.DirectionsStatus.OK) {
+					console.log('Directions Service Response: ', response)
+					directionsRenderer.setDirections(response)
+				}
+			})
+
+		})
+	}
+
 	handleChangeCheckbox(value: any) {
 		console.log("event---->> ", value);
 		this.useDateFilter = value;
 		this.saveCookie("useDateFilter", value);
+		let date = new Date();
+		date.setDate(date.getDate() + 7);
+		let timestamp = date.getTime();
+		this.endDate = moment(timestamp).format("YYYY-MM-DD");
 		this.loadBookings(null, this.startDate, this.endDate, this.searchText);
 	}
 	handleCheckboxSort(value: any) {
@@ -218,7 +296,7 @@ export class DailyBookingsComponent implements OnInit {
 		// this.adminService.deleteCookie('search')
 		localStorage.removeItem("DBSearch");
 		localStorage.removeItem("useDateFilter");
-		this.useDateFilter = true;
+		this.useDateFilter = false;
 		// this.adminService.deleteCookie('filtertype')
 		this.searchText = "";
 		// this.filtertype = 'bookingid';
@@ -343,7 +421,7 @@ export class DailyBookingsComponent implements OnInit {
 	}
 
 	submit(message, format) {
-		console.log("format",format)
+		console.log("format", format)
 		if (this.passengerDetails.selection_button == "Passenger") {
 			this.sendInformation = format
 				? this.passengerDetails.passenger_cell_isd +
@@ -358,12 +436,13 @@ export class DailyBookingsComponent implements OnInit {
 			this.reciptentName =
 				this.passengerDetails.driver_first_name +
 				this.passengerDetails.driver_last_name;
-		} else {
+		}
+		else {
 			this.sendInformation = format
-				? this.passengerDetails.loose_affiliate_phone_isd +
-				this.passengerDetails.loose_affiliate_phone
-				: this.passengerDetails.loose_affiliate_email;
-			this.reciptentName = this.passengerDetails.loose_affiliate_name;
+				? (this.passengerDetails.loose_affiliate_phone_isd ? this.passengerDetails.loose_affiliate_phone_isd : '+1') +
+				(this.passengerDetails.loose_affiliate_phone ? this.passengerDetails.loose_affiliate_phone : '8005466266')
+				: (this.passengerDetails.loose_affiliate_email ? this.passengerDetails.loose_affiliate_email : 'info@1800limo.com');
+			this.reciptentName = (this.passengerDetails.loose_affiliate_name ? this.passengerDetails.loose_affiliate_name : '1800Limo Chauffeurs');
 		}
 
 		let obj = {
@@ -430,11 +509,11 @@ export class DailyBookingsComponent implements OnInit {
 		end_date: string,
 		search_value: string = ""
 	) {
-		if(pageUrl){
-			console.log("pageurl",pageUrl)
+		if (pageUrl) {
+			console.log("pageurl", pageUrl)
 			this.scroll('daily_bookings_table')
 		}
-	
+
 		search_value == "" && this.spinner.show();
 		this.noError = false;
 		// Load Our bookings using API
@@ -451,8 +530,15 @@ export class DailyBookingsComponent implements OnInit {
 				if (result?.data?.data == 0) {
 					this.noError = true;
 				}
+				let date = new Date();
+				let timestamp = date.getTime();
+				date.setDate(date.getDate() + 7);
+				timestamp = date.getTime();
 				this.bookingsRes = result;
-				this.bookings = this.bookingsRes.data.data;
+				this.bookings = this.bookingsRes?.data?.data;
+				if (!this.useDateFilter) {
+					this.endDate = this.bookings?.length > 0 ? this.bookings[this.bookings?.length - 1]?.pickup_date : moment(timestamp).format("YYYY-MM-DD")
+				}
 				this.totalRecords = this.bookingsRes.data.total;
 				this.firstPage = 1;
 				this.lastPage = this.bookingsRes.data.last_page;
@@ -526,6 +612,7 @@ export class DailyBookingsComponent implements OnInit {
 		} catch (error) {
 			console.log("----------error------->>>>>> ", error);
 		}
+		console.log("passenger details", booking, selection_button)
 		this.passengerDetails = booking;
 		this.passengerDetails["selection_button"] = selection_button;
 	}
@@ -782,6 +869,36 @@ export class DailyBookingsComponent implements OnInit {
 		return text.replaceAll("_", " ");
 	}
 
+	extractTextFromHtml(html: string): string {
+		const div = document.createElement('div');
+		div.innerHTML = html;
+
+		// Convert paragraph tags to newline
+		const paragraphs = div.querySelectorAll('p');
+		paragraphs.forEach(p => {
+			p.innerHTML += '\n';
+		});
+
+		// Replace break tags with new lines
+		const breaks = div.querySelectorAll('br');
+		breaks.forEach(br => {
+			br.outerHTML = '\n';
+		});
+
+		// Convert bold tags to uppercase text
+		const bolds = div.querySelectorAll('b');
+		bolds.forEach(b => {
+			b.innerHTML = `${b.innerHTML}`;
+		});
+
+		// Return the inner HTML as plain text with preserved formatting
+		return div.innerText || div.textContent || '';
+	}
+
+	closePreview() {
+		$('#previewBookingOnID').modal('hide');
+	}
+
 	bookingPreview: any;
 	showBookingPreviewModal(booking_id: number) {
 		// this.spinner.show();
@@ -790,6 +907,8 @@ export class DailyBookingsComponent implements OnInit {
 			.subscribe((response: any) => {
 				this.spinner.hide();
 				this.bookingPreview = response.data;
+				this.previewCopyData = this.extractTextFromHtml(this.bookingPreview?.preview_data)
+				this.MapController()
 				if (this.bookingPreview?.account_type == 'travel_planner' && this.bookingPreview?.created_by != 1) {
 					this.adminSharePercent = 15
 				}
@@ -999,26 +1118,26 @@ export class DailyBookingsComponent implements OnInit {
 
 	getQuoteDetails(id) {
 		this.adminService.getQuoteData(id).subscribe((response: any) => {
-			console.log("in function get quote data", response);
+			console.log("in function get quote data", response.data.quote.location_info);
 			this.quotebotNewData = response.data?.quote;
 
-			let location_info = [];
-			let tempObj = {
-				distance: {
-					text: this.quotebotNewData?.distance / 1000 + "km",
-					value: Number(this.quotebotNewData?.distance),
-				},
-				duration: {
-					text: this.quotebotNewData?.duration / 60 + "mins",
-					value: Number(this.quotebotNewData?.duration),
-				},
-			};
-			location_info.push(tempObj);
-			this.quotebotNewData["location_info"] = location_info;
-			console.log("in location->", this.quotebotNewData);
+			// let location_info = [];
+			// let tempObj = {
+			// 	distance: {
+			// 		text: this.quotebotNewData?.distance / 1000 + "km",
+			// 		value: Number(this.quotebotNewData?.distance),
+			// 	},
+			// 	duration: {
+			// 		text: this.quotebotNewData?.duration / 60 + "mins",
+			// 		value: Number(this.quotebotNewData?.duration),
+			// 	},
+			// };
+			// location_info.push(tempObj);
+			// this.quotebotNewData["location_info"] = location_info;
+			console.log("in location->", response.data?.quote);
 			localStorage.setItem(
 				"quotebot_form",
-				JSON.stringify(this.quotebotNewData)
+				JSON.stringify(response.data?.quote)
 			);
 			// this.router.navigate(['quotebot/select-vehicle'], { queryParams: { id } });
 			// this.Sort.LowToHigh() // default sort to Low-High
@@ -1040,4 +1159,14 @@ export class DailyBookingsComponent implements OnInit {
 			this.spinner.hide();
 		});
 	}
+
+	searchOnGoogle(query: string) {
+		console.log("in search google", query)
+		if (query) {
+			const url = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+			window.open(url, '_blank'); // Opens the search in a new tab
+		}
+	}
+
+
 }

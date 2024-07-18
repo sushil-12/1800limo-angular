@@ -150,7 +150,7 @@ export class AddVehicleComponent implements OnInit {
 		//pick vehicle type id from query params
 		this.activatedroute.queryParamMap
 			.subscribe((params) => {
-				console.log('params--->>>' , params)
+				console.log('params--->>>', params)
 				this.paramResponse = { ...params.keys, ...params };
 				this.vehicleTypeId = this.paramResponse.params.vehicleTypeId;
 			}
@@ -187,7 +187,7 @@ export class AddVehicleComponent implements OnInit {
 			luggage: [2, [Validators.required, Validators.pattern("^[0-9]*$")]],
 			charterCancelPolicy: ['2', Validators.required],
 			nonCharterCancelPolicy: ['2', Validators.required],
-			typeOfService: ['localService', Validators.required],
+			typeOfService: this.formBuilder.array([], [Validators.required]),
 			amenities: this.formBuilder.array([], [Validators.required]),
 			specialAmenities: this.formBuilder.array([]),
 			vehicleInterior: this.formBuilder.array([], [Validators.required]),
@@ -322,6 +322,7 @@ export class AddVehicleComponent implements OnInit {
 					mcImage: this.mcId,
 				});
 				this.spinner.hide();
+				this.pushValuesTypeOfService(['local'])
 			});
 		this.Subscriptions()
 
@@ -343,9 +344,9 @@ export class AddVehicleComponent implements OnInit {
 				return -1;
 		}
 	}
-	handleChangeVehicleType(value){
+	handleChangeVehicleType(value) {
 		console.log('Selected Value:', value);
-		
+
 		this.isVehicleTypeSelected = value ? true : false
 	}
 
@@ -428,7 +429,7 @@ export class AddVehicleComponent implements OnInit {
 			let modelField: any = document.getElementById('modelField');
 			modelField.value = '';
 		})
-		
+
 		// this.addVehicleForm.get('make').valueChanges.subscribe((value: string) => {
 		// 	console.log('in function change make-->',value )
 		// 	// let models = this.allModels
@@ -530,8 +531,22 @@ export class AddVehicleComponent implements OnInit {
 		}
 	}
 	//End of autocomplete search and selection
-	typeOfService(type) {
-		this.serviceType = type;
+	// typeOfService(type) {
+	// 	this.serviceType = type;
+	// }
+
+	get typeOfService(): FormArray {
+		return this.addVehicleForm.get('typeOfService') as FormArray;
+	}
+
+
+	pushValuesTypeOfService(value: Array<any>) {
+		this.typeOfService.clear()
+		this.service = this.addVehicleForm.get('typeOfService').value
+		value.forEach((item: string) => {
+			!this.service.includes(item) && this.service.push(item)
+			this.typeOfService.push(this.formBuilder.control(item))
+		})
 	}
 
 	onAmenitiesCheckboxChange(val, ischecked) {
@@ -554,7 +569,7 @@ export class AddVehicleComponent implements OnInit {
 	}
 	onInteriorsCheckboxChange(e) {
 		const vehicleInterior: FormArray = this.addVehicleForm.get('vehicleInterior') as FormArray;
-		console.log('------>>>>>>' , vehicleInterior)
+		console.log('------>>>>>>', vehicleInterior)
 		if (e.target.checked) {
 			vehicleInterior.push(new FormControl(e.target.value));
 		} else {
@@ -562,157 +577,150 @@ export class AddVehicleComponent implements OnInit {
 			vehicleInterior.removeAt(index);
 		}
 	}
-	fetchImageBlob(url ,key ,id){
+	fetchImageBlob(url, key, id) {
 		this.stateManagementService.setprogressBar(true);
-		
+
 		this.adminService.fetchImageBlob(url)
-		.pipe(
-			catchError(err => {
+			.pipe(
+				catchError(err => {
+					this.stateManagementService.setprogressBar(false);
+					return throwError(err);
+				})
+			)
+			.subscribe(async ({ data }: any) => {
 				this.stateManagementService.setprogressBar(false);
-				return throwError(err);
+				const response = await fetch(data);
+				const imageBlob = await response.blob()
+				console.log('imageBlob', imageBlob)
+				const canvas = document.createElement("canvas");
+				const ctx = canvas.getContext("2d");
+				const img = new Image();
+				img.src = URL.createObjectURL(imageBlob);
+				console.log('img-->', img)
+				img.onload = () => {
+					// Rotate the image by 90 degrees (or your desired angle)
+					canvas.width = img.width;
+					canvas.height = img.height;
+					ctx.translate(canvas.width / 2, canvas.height / 2);
+					ctx.rotate(Math.PI); // Rotate by 180 degrees
+					ctx.drawImage(img, -img.width / 2, -img.height / 2);
+					// ctx.drawImage(img, 0, -canvas.width);
+
+					// Convert the canvas to a Blob (JPEG format)
+					canvas.toBlob((blob) => {
+						console.log(blob);
+
+						this.blobToDataURL(blob, key, id);
+						// });
+					}, "image/jpeg");
+				}
 			})
-		)
-		.subscribe(async({ data }: any) => {
-			this.stateManagementService.setprogressBar(false);
-			const response = await fetch(data);
-			const imageBlob = await response.blob()
-			console.log('imageBlob',imageBlob)
-		const canvas = document.createElement("canvas");
-		const ctx = canvas.getContext("2d");
-		const img = new Image();
-		img.src = URL.createObjectURL(imageBlob);
-		console.log('img-->' , img)
-		img.onload = () => {
-			// Rotate the image by 90 degrees (or your desired angle)
-			canvas.width = img.width; 
-			canvas.height = img.height;
-			ctx.translate(canvas.width / 2, canvas.height / 2);
-			ctx.rotate(Math.PI); // Rotate by 180 degrees
-			ctx.drawImage(img, -img.width / 2, -img.height / 2);
-			// ctx.drawImage(img, 0, -canvas.width);
-
-			// Convert the canvas to a Blob (JPEG format)
-			canvas.toBlob((blob) => {
-				console.log(blob);
-
-				this.blobToDataURL(blob, key ,id);
-				// });
-			}, "image/jpeg");
-		}
-		})
 	}
-	blobToDataURL(blob: Blob , key , id) {
+	blobToDataURL(blob: Blob, key, id) {
 		var reader = new FileReader();
 		reader.readAsDataURL(blob);
 		reader.onload = () => {
 			let dataUrl = reader.result;
 			console.log(dataUrl); //DataURL
-			isNaN(parseInt(key)) ? this.vehicleOfficialImagesChange1(dataUrl, key,id) :this.onFileChange1(dataUrl, key,id);
+			isNaN(parseInt(key)) ? this.vehicleOfficialImagesChange1(dataUrl, key, id) : this.onFileChange1(dataUrl, key, id);
 		};
 	}
- 	async onFileChange1(dataUrl, imageNumber,imageId)
-	{
-		if(!await this.commonServices.handleFile(event)) {
+	async onFileChange1(dataUrl, imageNumber, imageId) {
+		if (!await this.commonServices.handleFile(event)) {
 			return;
 		}
 		this.stateManagementService.setprogressBar(true);
-				this.imageSrc = dataUrl;
-				this.adminService.uploadVehicleImage(this.imageSrc)
-					.pipe(
-						catchError(err =>
-						{
-							this.stateManagementService.setprogressBar(false);
-							return throwError(err);
-						})
-					)
-					.subscribe(result =>
-					{
-						this.response = result;
+		this.imageSrc = dataUrl;
+		this.adminService.uploadVehicleImage(this.imageSrc)
+			.pipe(
+				catchError(err => {
+					this.stateManagementService.setprogressBar(false);
+					return throwError(err);
+				})
+			)
+			.subscribe(result => {
+				this.response = result;
+				this.addVehicleForm.patchValue({
+					["vehicle_image_" + imageNumber]: this.response.data.id,
+				});
+				this["vehicleImage" + imageNumber] = this.response.data.image;
+
+				this.stateManagementService.setprogressBar(false);
+			});
+	}
+	async vehicleOfficialImagesChange1(url, imageType, imageId) {
+		if (!await this.commonServices.handleFile(event)) {
+			return;
+		}
+		this.stateManagementService.setprogressBar(true);
+		this.imageSrc = url;
+		this.adminService.uploadVehicleImage(this.imageSrc)
+			.pipe(
+				catchError(err => {
+					this.stateManagementService.setprogressBar(false);
+					return throwError(err);
+				})
+			)
+			.subscribe(result => {
+				this.response = result;
+
+				switch (imageType) {
+					case 'rearPlate': {
 						this.addVehicleForm.patchValue({
-							["vehicle_image_" + imageNumber]: this.response.data.id,
+							rearPlateImage: this.response.data.id,
 						});
-						this["vehicleImage" + imageNumber] = this.response.data.image;
-
-						this.stateManagementService.setprogressBar(false);
-					});
+						// this.rearPlateUploaded=true;
+						this.rearPlateImage = this.response.data.image;
+						// this.deleteImage(imageId,'rearPlate');//delete previous image
+						break;
+					}
+					case 'windowPermit': {
+						this.addVehicleForm.patchValue({
+							windowPermitImage: this.response.data.id,
+						});
+						// this.windowPermitUploaded=true;
+						this.windowPermitImage = this.response.data.image;
+						// this.deleteImage(imageId,'windowPermit');//delete previous image
+						break;
+					}
+					case 'windowPermit2': {
+						this.addVehicleForm.patchValue({
+							windowPermit2Image: this.response.data.id,
+						});
+						// this.windowPermit2Uploaded=true;
+						this.windowPermit2Image = this.response.data.image;
+						// this.deleteImage(imageId,'windowPermit2');//delete previous image
+						break;
+					}
+					case 'usdotPermit': {
+						this.addVehicleForm.patchValue({
+							usdotPermitImage: this.response.data.id,
+						});
+						// this.usdotPermitUploaded=true;
+						this.usdotPermitImage = this.response.data.image;
+						// this.deleteImage(imageId,'usdotPermit');//delete previous image
+						break;
+					}
+					case 'mc': {
+						// this.deleteImage(imageId,'mc');//delete previous image
+						this.addVehicleForm.patchValue({
+							mcImage: this.response.data.id,
+						});
+						// this.mcUploaded=true;
+						this.mcImage = this.response.data.image;
+						break;
+					}
+					default: {
+						break;
+					}
+				}
+				this.stateManagementService.setprogressBar(false);
+			});
 	}
-	async vehicleOfficialImagesChange1(url, imageType, imageId)
-	{
-		if(!await this.commonServices.handleFile(event)) {
+	async vehicleOfficialImagesChange(event, imageType, imageId) {
+		if (!await this.commonServices.handleFile(event)) {
 			return;
 		}
-		this.stateManagementService.setprogressBar(true);
-				this.imageSrc = url;
-				this.adminService.uploadVehicleImage(this.imageSrc)
-					.pipe(
-						catchError(err =>
-						{
-							this.stateManagementService.setprogressBar(false);
-							return throwError(err);
-						})
-					)
-					.subscribe(result =>
-					{
-						this.response = result;
-
-						switch (imageType)
-						{
-							case 'rearPlate': {
-								this.addVehicleForm.patchValue({
-									rearPlateImage: this.response.data.id,
-								});
-								// this.rearPlateUploaded=true;
-								this.rearPlateImage = this.response.data.image;
-								// this.deleteImage(imageId,'rearPlate');//delete previous image
-								break;
-							}
-							case 'windowPermit': {
-								this.addVehicleForm.patchValue({
-									windowPermitImage: this.response.data.id,
-								});
-								// this.windowPermitUploaded=true;
-								this.windowPermitImage = this.response.data.image;
-								// this.deleteImage(imageId,'windowPermit');//delete previous image
-								break;
-							}
-							case 'windowPermit2': {
-								this.addVehicleForm.patchValue({
-									windowPermit2Image: this.response.data.id,
-								});
-								// this.windowPermit2Uploaded=true;
-								this.windowPermit2Image = this.response.data.image;
-								// this.deleteImage(imageId,'windowPermit2');//delete previous image
-								break;
-							}
-							case 'usdotPermit': {
-								this.addVehicleForm.patchValue({
-									usdotPermitImage: this.response.data.id,
-								});
-								// this.usdotPermitUploaded=true;
-								this.usdotPermitImage = this.response.data.image;
-								// this.deleteImage(imageId,'usdotPermit');//delete previous image
-								break;
-							}
-							case 'mc': {
-								// this.deleteImage(imageId,'mc');//delete previous image
-								this.addVehicleForm.patchValue({
-									mcImage: this.response.data.id,
-								});
-								// this.mcUploaded=true;
-								this.mcImage = this.response.data.image;
-								break;
-							}
-							default: {
-								break;
-							}
-						}
-						this.stateManagementService.setprogressBar(false);
-					});
-	}
-async vehicleOfficialImagesChange(event, imageType, imageId) {
-	if(!await this.commonServices.handleFile(event)) {
-		return;
-	}
 		// this.stateManagementService.setprogressBar(true);
 		const reader = new FileReader();
 		if (event.target.files && event.target.files.length) {
@@ -787,7 +795,7 @@ async vehicleOfficialImagesChange(event, imageType, imageId) {
 	}
 
 	async onFileChange(event, imageId, imageNumber) {
-		if(!await this.commonServices.handleFile(event)) {
+		if (!await this.commonServices.handleFile(event)) {
 			return;
 		}
 		this.stateManagementService.setprogressBar(true);
@@ -817,7 +825,7 @@ async vehicleOfficialImagesChange(event, imageType, imageId) {
 		}
 	}
 
-	
+
 
 	showImageInModal(imageUrl) {
 		this.modalImage = imageUrl;
@@ -885,6 +893,8 @@ async vehicleOfficialImagesChange(event, imageType, imageId) {
 			acc_id: this.affiliateId
 		});
 
+		this.pushValuesTypeOfService(this.service)
+
 		this.submittedForm = true;
 		// stop here if form is invalid
 		if (this.addVehicleForm.invalid) {
@@ -947,15 +957,15 @@ async vehicleOfficialImagesChange(event, imageType, imageId) {
 	}
 
 	changeMake(selectedMake) {
-		console.log('selectedMake-->>>>' , selectedMake)
-		if(!selectedMake){
+		console.log('selectedMake-->>>>', selectedMake)
+		if (!selectedMake) {
 			this.addVehicleForm.patchValue({
-				model : ''
+				model: ''
 			})
 			this.filteredModel = []
 			return false
 		}
-		
+
 		let models = JSON.parse(sessionStorage.getItem('models'));
 		this.filteredModel = models.filter(function (model) {
 			if (model.make_id == selectedMake) {
@@ -963,49 +973,57 @@ async vehicleOfficialImagesChange(event, imageType, imageId) {
 			}
 		});
 		this.addVehicleForm.patchValue({
-			model : this.filteredModel[0]?.ID
+			model: this.filteredModel[0]?.ID
 		})
 	}
 	service: Array<any> = []
 	onServiceChange(value: string) {
 		console.log(value)
-		if (this.service.includes(value)) {
-			// a never reaching code line
-			this.service = this.service.filter(val => val != value)
+		const index = this.service.indexOf(value);
+		if (index === -1) {
+			// If the service type is not selected, add it to the array
+			this.service.push(value);
 		} else {
-			this.service = []
-			this.service.push(value)
+			// If the service type is already selected, remove it from the array
+			this.service.splice(index, 1);
 		}
+		// if (this.service.includes(value)) {
+		// 	// a never reaching code line
+		// 	this.service = this.service.filter(val => val != value)
+		// } else {
+		// 	this.service = []
+		// 	this.service.push(value)
+		// }
 
-		// as per new update from client: he wants to make the whole thing work as a radio button
-		return
-		if (!is_service_valid(value, this.service)) {
-			this.errorModal.openDialog({
-				errors: {
-					error: 'Cannot choose Local and Over The Road service at the same time'
-				}
-			})
-			this.service = this.service.filter(val => val != value)
-			return
-		}
-		console.log('Inital Array: ', this.service)
+		// // as per new update from client: he wants to make the whole thing work as a radio button
+		// return
+		// if (!is_service_valid(value, this.service)) {
+		// 	this.errorModal.openDialog({
+		// 		errors: {
+		// 			error: 'Cannot choose Local and Over The Road service at the same time'
+		// 		}
+		// 	})
+		// 	this.service = this.service.filter(val => val != value)
+		// 	return
+		// }
+		// console.log('Inital Array: ', this.service)
 
-		/**
-		 * The Array Validation Check function
-		 * - make sure the array doesn't containe 'local' and 'over_the_road' values at a time.
-		 * 
-		 * @param value: String [Required] value to check
-		 */
-		function is_service_valid(value: string, service: Array<any>) {
-			if (value == 'local' && service.includes('over_the_road')) {
-				return false
-			} else if (value == 'over_the_road' && service.includes('local')) {
-				return false
-			}
-			else {
-				return true
-			}
-		}
+		// /**
+		//  * The Array Validation Check function
+		//  * - make sure the array doesn't containe 'local' and 'over_the_road' values at a time.
+		//  * 
+		//  * @param value: String [Required] value to check
+		//  */
+		// function is_service_valid(value: string, service: Array<any>) {
+		// 	if (value == 'local' && service.includes('over_the_road')) {
+		// 		return false
+		// 	} else if (value == 'over_the_road' && service.includes('local')) {
+		// 		return false
+		// 	}
+		// 	else {
+		// 		return true
+		// 	}
+		// }
 	}
 
 

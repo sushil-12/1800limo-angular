@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { AuthService } from './auth.service';
 
 
 @Injectable({
@@ -13,7 +14,7 @@ export class AdminService {
 
 
 	private serverUrl = environment.serverUrl;
-	constructor(private httpClient: HttpClient) {
+	constructor(private httpClient: HttpClient, private authService: AuthService) {
 		if (this.big_data_list == undefined) {
 			this.createBookingGetData().subscribe((response: any) => {
 				this.big_data_list = response.data
@@ -63,27 +64,27 @@ export class AdminService {
 
 	deleteCookie(cookieName: string) {
 		const cookies = document.cookie.split(';');
-		console.log('cookies-->>>>>>>',cookies)
+		console.log('cookies-->>>>>>>', cookies)
 		document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 
 		for (let i = 0; i < cookies.length; i++) {
-		  const cookie = cookies[i].trim();
-		  // Check if the cookie starts with the desired name
-		  if (cookie.indexOf(cookieName + '=') === 0) {
-			  console.log('selected cookies-->>' , cookie)
-			// Extract the cookie's name and value
-			const [name, value] = cookie.split('=');
-	  
-			// Split the cookie path and value
-			const [path,] = value.split(';');
-	  
-			// Set the Expiry date in the past to delete the cookie
-			document.cookie = `${name}=${path}; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=${path}`;
+			const cookie = cookies[i].trim();
+			// Check if the cookie starts with the desired name
+			if (cookie.indexOf(cookieName + '=') === 0) {
+				console.log('selected cookies-->>', cookie)
+				// Extract the cookie's name and value
+				const [name, value] = cookie.split('=');
 
-		  }
+				// Split the cookie path and value
+				const [path,] = value.split(';');
+
+				// Set the Expiry date in the past to delete the cookie
+				document.cookie = `${name}=${path}; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=${path}`;
+
+			}
 		}
 	}
-	getMyPermissions(){
+	getMyPermissions() {
 		return this.httpClient.get(this.serverUrl + 'my-permissions');
 	}
 
@@ -119,7 +120,7 @@ export class AdminService {
 	chargeByCard(data) {
 		return this.httpClient.post(this.serverUrl + 'charge-credit-card', data);
 	}
-	paymentLogs(id){
+	paymentLogs(id) {
 		return this.httpClient.get(this.serverUrl + 'get-account-logs/' + id);
 	}
 
@@ -189,7 +190,7 @@ export class AdminService {
 	//
 	// add / edit / update vehicle for admin-affiliate-step 5
 	// Add / Edit / Get vehicle data for admin affliliate step 5
-	async adminAffiliateVehicleList(id , flag=true) {
+	async adminAffiliateVehicleList(id, flag = true) {
 		const result = await this.httpClient.get(this.serverUrl + 'admin/get-affiliate-all-vehicles/' + id + `?show_all_vehicles=${flag}`).toPromise();
 		return result;
 	}
@@ -211,14 +212,12 @@ export class AdminService {
 	adminAffiliateGetFieldsData() {
 		return this.httpClient.get(this.serverUrl + 'admin/vehicle-data');
 	}
-	updateOrientationImage(data)
-	{
-		console.log('img data' , data)
-		return this.httpClient.put(this.serverUrl + 'edit-single-image',data);
+	updateOrientationImage(data) {
+		console.log('img data', data)
+		return this.httpClient.put(this.serverUrl + 'edit-single-image', data);
 	}
-	fetchImageBlob(url)
-	{
-		return this.httpClient.get(this.serverUrl + 'return-blob-image?url='+url);
+	fetchImageBlob(url) {
+		return this.httpClient.get(this.serverUrl + 'return-blob-image?url=' + url);
 	}
 	// end
 
@@ -271,8 +270,13 @@ export class AdminService {
 	}
 	//
 	//vehicle rates 
-	getVehicleInfo(vehicleId) {
-		return this.httpClient.get(this.serverUrl + 'admin/get-affililate-vehicle-info/' + vehicleId);
+	getVehicleInfo(vehicleId, relative_vehicle_id: any = null) {
+		if (relative_vehicle_id) {
+			return this.httpClient.get(this.serverUrl + `admin/get-affililate-vehicle-info/${vehicleId}?relative_vehicle_id=${relative_vehicle_id}`);
+		}
+		else {
+			return this.httpClient.get(this.serverUrl + 'admin/get-affililate-vehicle-info/' + vehicleId);
+		}
 	}
 	addVehicleRates(data) {
 		return this.httpClient.post(this.serverUrl + 'admin/add-affiliate-vehicle-fare', data);
@@ -324,15 +328,15 @@ export class AdminService {
 		return this.httpClient.get(this.serverUrl + 'admin/all-badge-cities');
 	}
 	updateBadgeCity(body) {
-		return this.httpClient.put(this.serverUrl + 'admin/edit-badge-city',body);
+		return this.httpClient.put(this.serverUrl + 'admin/edit-badge-city', body);
 	}
 	addBadgeCity(body) {
-		return this.httpClient.post(this.serverUrl + 'admin/add-badge-city',body);
+		return this.httpClient.post(this.serverUrl + 'admin/add-badge-city', body);
 	}
-	updateBadgeCityStatus(body){
-		return this.httpClient.put(this.serverUrl + 'admin/update-badge-city-status',body);
+	updateBadgeCityStatus(body) {
+		return this.httpClient.put(this.serverUrl + 'admin/update-badge-city-status', body);
 	}
-	
+
 	addColor(data) {
 		return this.httpClient.post(this.serverUrl + 'add-vehicle-color', data);
 	}
@@ -508,11 +512,11 @@ export class AdminService {
 	}
 
 	//corporate api
-	addTravelPlannerAccount(data,id=null) {
-		if(id){
+	addTravelPlannerAccount(data, id = null) {
+		if (id) {
 			return this.httpClient.put(this.serverUrl + 'edit-travel-planner-account', data);
 		}
-		else{
+		else {
 			return this.httpClient.post(this.serverUrl + 'add-travel-planner-account', data);
 		}
 	}
@@ -527,7 +531,7 @@ export class AdminService {
 		return this.httpClient.get(path).toPromise();;
 	}
 
-	subTravelPlannerAccountsbyId(url, keyword,id) {
+	subTravelPlannerAccountsbyId(url, keyword, id) {
 		var path;
 		if (url) {
 			path = url + '&search=' + keyword;
@@ -538,7 +542,7 @@ export class AdminService {
 		return this.httpClient.get(path).toPromise();;
 	}
 
-	loginAsUser(id){
+	loginAsUser(id) {
 		return this.httpClient.get(this.serverUrl + 'admin/login-as-user/' + id);
 	}
 
@@ -548,7 +552,7 @@ export class AdminService {
 			path = url + '&deleted=' + isDeletedAcc + '&search=' + keyword;;
 		}
 		else {
-			path = this.serverUrl + 'admin/all-user' + '?deleted=' + isDeletedAcc  + '&search=' + keyword;
+			path = this.serverUrl + 'admin/all-user' + '?deleted=' + isDeletedAcc + '&search=' + keyword;
 		}
 		return this.httpClient.get(path).toPromise();;
 	}
@@ -561,7 +565,7 @@ export class AdminService {
 	travelPlannerAccountStatus(id, status) {
 		return this.httpClient.put(this.serverUrl + 'travel-planner-status', { 'id': id, 'status': status });
 	}
-	getTravelClientAccount(id){
+	getTravelClientAccount(id) {
 		return this.httpClient.get(this.serverUrl + 'get-account-for-travel-agent/' + id);
 	}
 
@@ -584,6 +588,10 @@ export class AdminService {
 	}
 	deleteCard(id, acc_id) {
 		return this.httpClient.delete(this.serverUrl + 'delete-credit-card/' + acc_id + '/' + id);
+	}
+
+	deleteLooseAffAccount(id) {
+		return this.httpClient.delete(this.serverUrl + `delete-loose-affiliate/${id}`);
 	}
 
 	deleteAccount(id) {
@@ -840,7 +848,7 @@ export class AdminService {
 	}
 
 	chooseUser(id: number, accountType: string) {
-		console.log('choosen account-->>' , accountType)
+		console.log('choosen account-->>', accountType)
 		switch (accountType) {
 			case 'individual': {
 				return this.httpClient.get(this.serverUrl + 'get-an-account/' + id);
@@ -857,7 +865,7 @@ export class AdminService {
 		}
 	}
 
-	getTravelClientDetailById(id){
+	getTravelClientDetailById(id) {
 		return this.httpClient.get(this.serverUrl + 'get-an-account/' + id);
 	}
 
@@ -889,7 +897,7 @@ export class AdminService {
 	getFinalizeDetails(reservation_id: number) {
 		return this.httpClient.get(`${this.serverUrl}admin/finalize-booking-detail/${reservation_id}`);
 	}
-	getPaymentDetailFinalize(reservation_id: number){
+	getPaymentDetailFinalize(reservation_id: number) {
 		return this.httpClient.get(`${this.serverUrl}admin/booking-payment-log/${reservation_id}`);
 	}
 	// saveCard(data){
@@ -919,23 +927,23 @@ export class AdminService {
 	auditTrailInfoInvoice(bookingId) {
 		return this.httpClient.get(this.serverUrl + `admin/booking-audit-records/${bookingId}/invoice`)
 	}
-	loadPastFutureBookings(url,id,type,isAffiliate,keyword = '') {
+	loadPastFutureBookings(url, id, type, isAffiliate, keyword = '') {
 		var path;
 		if (url) {
-			path = url + '&search=' + keyword ;
+			path = url + '&search=' + keyword;
 		}
 		else {
-			path = this.serverUrl + 'reservations/'+ id + '?past='+ type+ '&affiliate_bookings='+isAffiliate+'&search=' + keyword;
+			path = this.serverUrl + 'reservations/' + id + '?past=' + type + '&affiliate_bookings=' + isAffiliate + '&search=' + keyword;
 		}
 		return this.httpClient.get(path).toPromise();
 	}
-	loadBookings(url, startDate, endDate, useDateFilter,keyword = '',orderBy) {
+	loadBookings(url, startDate, endDate, useDateFilter, keyword = '', orderBy) {
 		var path;
 		if (url) {
-			path = url + '&from=' + startDate + '&to=' + endDate + '&search=' + keyword +'&useDateFilter='+useDateFilter +'&orderBy='+orderBy;
+			path = url + '&from=' + startDate + '&to=' + endDate + '&search=' + keyword + '&useDateFilter=' + useDateFilter + '&orderBy=' + orderBy;
 		}
 		else {
-			path = this.serverUrl + 'reservations' + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword+'&useDateFilter='+useDateFilter+'&order_by='+orderBy;
+			path = this.serverUrl + 'reservations' + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword + '&useDateFilter=' + useDateFilter + '&order_by=' + orderBy;
 		}
 		return this.httpClient.get(path).toPromise();
 	}
@@ -949,13 +957,11 @@ export class AdminService {
 		return this.httpClient.post(this.serverUrl + 'payment-processing', data);
 	}
 
-	getQuoteData(id:any)
-	{
+	getQuoteData(id: any) {
 		return this.httpClient.get(`${this.serverUrl}quote/copy/${id}`)
 	}
 
-	getFilterData(id:any)
-	{
+	getFilterData(id: any) {
 		return this.httpClient.get(`${this.serverUrl}quote/static_filter/${id}`)
 	}
 
@@ -977,11 +983,26 @@ export class AdminService {
 		return this.httpClient.post(`${this.serverUrl}admin/notification/send-${type}/${affiliate_id}`, data)
 	}
 
+	sendNotificationAllAccounts(type: 'email' | 'sms', id: number, data: any) {
+		// return this.httpClient.post(`${this.serverUrl}admin-send-notification/${type}`, data)
+		let resp: any
+		const accessToken = this.authService.getAccessToken();
+		resp = fetch(`${this.serverUrl}admin-send-notification/${type}/${id}`, {
+			method: 'POST',
+			body: data,
+			headers: {
+				Authorization: `Bearer ${accessToken}`
+			}
+		})
+
+		return resp;
+	}
+
 	//invoices
 	getInvoiceData(id) {
 		return this.httpClient.get(this.serverUrl + 'invoice-summary/' + id);
 	}
-	getCustomInvoiceData(id){
+	getCustomInvoiceData(id) {
 		return this.httpClient.get(this.serverUrl + 'get-invoice-data/' + id);
 	}
 	getInvoiceRefundHistory(id) {
@@ -993,18 +1014,18 @@ export class AdminService {
 	getInvoiceRefundHistoryCommon(id) {
 		return this.httpClient.get(this.serverUrl + 'get-refund-list/' + id);
 	}
-	invoiceList(url, startDate, endDate, useDateFilter,keyword = '') {
+	invoiceList(url, startDate, endDate, useDateFilter, keyword = '') {
 		var path;
 		if (url) {
-			path = url + '&from=' + startDate + '&to=' + endDate + '&search=' + keyword +'&useDateFilter='+useDateFilter;
+			path = url + '&from=' + startDate + '&to=' + endDate + '&search=' + keyword + '&useDateFilter=' + useDateFilter;
 
 		}
 		else {
-			path = this.serverUrl + 'invoices' + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword+'&useDateFilter='+useDateFilter;
+			path = this.serverUrl + 'invoices' + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword + '&useDateFilter=' + useDateFilter;
 		}
 		return this.httpClient.get(path).toPromise();
 	}
-	getBookingLogs(url,keyword = ''){
+	getBookingLogs(url, keyword = '') {
 		var path;
 		if (url) {
 			path = url + '&search=' + keyword;
@@ -1123,17 +1144,17 @@ export class AdminService {
 			return this.httpClient.get(`${this.serverUrl}admin/booking-rates`)
 		}
 	}
-		// const params = new HttpParams()
-		// 	.set('vehicle_id', vehicle_id)
-		// 	.set('transfer_type', data?.transfer_type)
-		// 	.set('service_type', data?.service_type)
-		// 	.set('numberOfVehicles', data?.numberOfVehicles)
-		// 	.set('distance', data?.distance)
-		// 	.set('no_of_hours', data?.no_of_hours)
-		// 	.set('is_master_vehicle' , data?.is_master_vehicle);
+	// const params = new HttpParams()
+	// 	.set('vehicle_id', vehicle_id)
+	// 	.set('transfer_type', data?.transfer_type)
+	// 	.set('service_type', data?.service_type)
+	// 	.set('numberOfVehicles', data?.numberOfVehicles)
+	// 	.set('distance', data?.distance)
+	// 	.set('no_of_hours', data?.no_of_hours)
+	// 	.set('is_master_vehicle' , data?.is_master_vehicle);
 	fetchRatesByAffiliateVeh(vehicle_id, data) {
 		data['vehicle_id'] = vehicle_id
-		return this.httpClient.post(`${this.serverUrl}admin/booking-rates-vehicle`,data )
+		return this.httpClient.post(`${this.serverUrl}admin/booking-rates-vehicle`, data)
 	}
 	checkUniquePhoneNumberForLooseCustomer(customer_data: Record<string, any>) {
 		return this.httpClient.post(`${this.serverUrl}admin/check-unique-user`, customer_data)
@@ -1153,92 +1174,109 @@ export class AdminService {
 	sendInvoiveToCustomer(bookingId: any) {
 		return this.httpClient.get(`${this.serverUrl}admin/send-invoice/${bookingId}`)
 	}
-	sendCustomInvoiveToCustomer(id){
+	sendCustomInvoiveToCustomer(id) {
 		return this.httpClient.get(`${this.serverUrl}send-invoice-data-to-customer/${id}`)
 	}
-	
+
 	sendInvoiveToAny(bookingId: any, data: any) {
 		return this.httpClient.post(`${this.serverUrl}admin/send-invoice-to-anyone/${bookingId}`, data)
 	}
-	sendCustomInvoiceToAny(id,data){
+	sendCustomInvoiceToAny(id, data) {
 		return this.httpClient.post(`${this.serverUrl}send-invoice-data-to-anyone/${id}`, data)
 	}
-	cancellationBooking(url,data){
-		return this.httpClient.post(`${url}`,data)
+	cancellationBooking(url, data) {
+		return this.httpClient.post(`${url}`, data)
 	}
 
 	refund(body: any) {
 		return this.httpClient.post(`${this.serverUrl}admin/refund-request`, body)
 	}
-	getPermission(id:any){
+	getPermission(id: any) {
 		return this.httpClient.get(`${this.serverUrl}admin/permissions/${id}`)
 	}
-	getRoles(){
+	getRoles() {
 		return this.httpClient.get(`${this.serverUrl}admin/roles`)
 	}
-	updartePermission(id,data){
-		return this.httpClient.post(`${this.serverUrl}admin/assign-permissions/${id}`,data)
+	updartePermission(id, data) {
+		return this.httpClient.post(`${this.serverUrl}admin/assign-permissions/${id}`, data)
 	}
-	addRole(data){
-		return this.httpClient.post(`${this.serverUrl}admin/create-role`,data)
+	addRole(data) {
+		return this.httpClient.post(`${this.serverUrl}admin/create-role`, data)
 	}
 
 	//list of affilate accounts
-	getEmailList(){
-		return this.httpClient.get(`${this.serverUrl}affiliate-accountss/emails`)
+	getEmailList(keyword) {
+		return this.httpClient.get(`${this.serverUrl}affiliate-accountss/emails?search=${keyword}`)
 	}
 
 	//send email
-	sendEmailAffiliate(body:any){
-		return this.httpClient.post(`${this.serverUrl}send-email-data-to-users`,body)
+	sendEmailAffiliate(body: any) {
+		return this.httpClient.post(`${this.serverUrl}send-email-data-to-users`, body)
 	}
 
-	changeTimezone(value){
-		return this.httpClient.put(`${this.serverUrl}update-timezone/${value}`,'')
+	changeTimezone(value) {
+		return this.httpClient.put(`${this.serverUrl}update-timezone/${value}`, '')
 	}
 
 	// travel agent stripe add,edit,get api step2
-	getBankOfTravelAgent(acc_id){
+	getBankOfTravelAgent(acc_id) {
 		return this.httpClient.get(this.serverUrl + `get-travel-planner-bank/${acc_id}`);
-  }
-  addBankOfTravelAgent(data, id=null){
-	if(id){
+	}
+	addBankOfTravelAgent(data, id = null) {
+		if (id) {
+			return this.httpClient.put(this.serverUrl + 'edit-travel-planner-bank', data);
+		}
+		else {
+			return this.httpClient.post(this.serverUrl + 'add-travel-planner-bank', data);
+		}
+	}
+	updateBankOfTravelAgent(data) {
 		return this.httpClient.put(this.serverUrl + 'edit-travel-planner-bank', data);
 	}
-	else{
-		return this.httpClient.post(this.serverUrl + 'add-travel-planner-bank', data);
+
+
+	getStepsCompletedTravelAgent(acc_id = 0) {
+		return this.httpClient.get(this.serverUrl + `get-travel-planner-step-completed/${acc_id}`);
 	}
-  }
-  updateBankOfTravelAgent(data){
-    return this.httpClient.put(this.serverUrl + 'edit-travel-planner-bank', data);
-  }
 
-
-  getStepsCompletedTravelAgent(acc_id = 0) {
-	return this.httpClient.get(this.serverUrl + `get-travel-planner-step-completed/${acc_id}`);
-}
-
-updateStepsArrayLocalTravelAgent(stepArray) {
-	sessionStorage.setItem('stepCompleted', stepArray.toString())
-}
-// accept or reject sub ta
-acceptRejectAffiliate(acc_id,status) {
-	return this.httpClient.put(this.serverUrl + 'admin/travel-planner/account-approval', { 'acc_id': acc_id ,'status':status});
-}
-updateStepsCompletedObjTravelAgent(stepObject) {
-	sessionStorage.setItem('step_completed_obj', JSON.stringify(stepObject))
-}
-
-getLooseAffiliaeAccounts(url, keyword) {
-	var path;
-	if (url) {
-		path = url + '&search=' + keyword;
+	updateStepsArrayLocalTravelAgent(stepArray) {
+		sessionStorage.setItem('stepCompleted', stepArray.toString())
 	}
-	else {
-		path = this.serverUrl + 'loose-affiliate-accounts' + '?search=' + keyword;
+	// accept or reject sub ta
+	acceptRejectAffiliate(acc_id, status) {
+		return this.httpClient.put(this.serverUrl + 'admin/travel-planner/account-approval', { 'acc_id': acc_id, 'status': status });
 	}
-	return this.httpClient.get(path).toPromise();;
-}
+	updateStepsCompletedObjTravelAgent(stepObject) {
+		sessionStorage.setItem('step_completed_obj', JSON.stringify(stepObject))
+	}
 
+	getLooseAffiliaeAccounts(url, keyword) {
+		var path;
+		if (url) {
+			path = url + '&search=' + keyword;
+		}
+		else {
+			path = this.serverUrl + 'loose-affiliate-accounts' + '?search=' + keyword;
+		}
+		return this.httpClient.get(path).toPromise();;
+	}
+
+	createLooseAffAcc(data, id = null) {
+		if (id) {
+			//update api here
+			data['id'] = id
+			return this.httpClient.post(this.serverUrl + `add-new-loose-affiliate`, data);
+		}
+		else {
+			return this.httpClient.post(this.serverUrl + 'add-new-loose-affiliate', data);
+		}
+	}
+
+	getLooseAffAccDetails(id: any) {
+		return this.httpClient.get(this.serverUrl + `get-loose-affiliate/${id}`);
+	}
+	communicationLogs(id) {
+		return this.httpClient.get(this.serverUrl + `admin/communication-logs/${id}`)
+	}
 
 }

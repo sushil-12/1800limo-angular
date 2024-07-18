@@ -4,6 +4,13 @@
 		<h2 class="headinginfo">Insurance Settings</h2>
 		<div class="container">
 			<div class="row">
+				<div class="col-12" style="font-size: 20px; margin-top: 15px;">
+					Click icon
+					<a href="https://1800limo.s3.us-east-2.amazonaws.com/tutorials/Affiliate+registration+step+3.mp4"
+						target="_blank" title="View Tutorial"><img src="../../../../assets/images/tutorial_icon.svg"
+							height="40" style="background: greenyellow; width: 40px !important;" /></a>
+					to view STEP 3 tutorials
+				</div>
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
 						<mat-label>Name of Insurance Company
@@ -412,7 +419,6 @@
 							<div>
 								<p>
 									In-Vehicle Insurance Card
-									<span class="asterisk">*</span>
 								</p>
 								<img src="{{insuranceCardImage}}" (click)="showImageInModal(insuranceCardImage)"
 									tabindex="-1">
@@ -459,7 +465,6 @@
 								<div>
 									<p>
 										In-Vehicle Insurance Card
-										<span class="asterisk">*</span>
 									</p>
 									<div class="emptyImage">
 										<img src="../../../../assets/images/empty-image.png" tabindex="-1" />
@@ -503,12 +508,7 @@
 
 	<div class="container">
 		<div class="row py-4">
-			<div class="col-md-7">
-				<button class="custom-filled-back-button m-2 mx-4" routerLink="/affiliate/step2">
-					BACK
-				</button>
-			</div>
-			<div class="col-md-5">
+			<div class="col-md-12">
 				<div class="d-flex justify-content-center">
 					<button class="custom-filled-reset-button mr-3 m-2" (click)="resetForm()" tabIndex="2">
 						RESET

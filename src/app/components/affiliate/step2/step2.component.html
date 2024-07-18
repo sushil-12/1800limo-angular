@@ -4,6 +4,13 @@
 	</h2>
 	<div class="container">
 		<div class="row" *ngIf="response">
+			<div class="col-12" style="font-size: 20px; margin-top: 15px;">
+				Click icon
+				<a href="https://1800limo.s3.us-east-2.amazonaws.com/tutorials/Affiliate+registration+step+2.mp4"
+					target="_blank" title="View Tutorial"><img src="../../../../assets/images/tutorial_icon.svg"
+						height="40" style="background: greenyellow; width: 40px !important;" /></a>
+				to view STEP 2 tutorials
+			</div>
 			<div class="col-md-12" *ngIf="response?.data?.stripeDetail?.transfer_status != 'active'">
 				<p class="text-danger margin-bottom-thin my-mat-hint" style="font-size: 17px; font-weight: 800;">
 					Stripe Activation can take upto 24 Hours?.
@@ -195,13 +202,18 @@
 					</div>
 				</div>
 				<div class="col-md-6">
-					<mat-form-field appearance="outline">
+					<mat-form-field appearance="outline"
+						[ngClass]="{ 'border-red': routingErrorMessage || !isRoutingSelected }">
 						<mat-label>Check Routing # / Bank Branch #
 							<span class="asterisk">*</span>
 						</mat-label>
 						<input matInput placeholder="Check Routing # / Bank Branch #" (focus)="$event?.target?.select()"
-							formControlName="Routing" tabindex="1" />
+							(keyup)="removeErrorSsn($event.target.value,'Routing')" formControlName="Routing"
+							tabindex="1" />
 					</mat-form-field>
+					<div *ngIf="routingErrorMessage" class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="routingErrorMessage" style="font-weight: 550;">{{routingErrorMessage}}</div>
+					</div>
 					<div *ngIf="
 							(submittedForm && f?.Routing?.errors) ||
 							(f?.Routing?.touched && f?.Routing?.errors)
@@ -466,6 +478,22 @@
 							This field is required
 						</div>
 					</div>
+				</div>
+				<div class="col-md-6">
+					<mat-form-field appearance="outline" class="example-full-width" [ngClass]="(f.badge_city_name.value) ? '' : 'red-placeholder' "
+						[ngClass]="isBadgeCity ? '' : 'border-red'">
+						<mat-label [ngClass]="(f.badge_city_name.value) ? '' : 'red-placeholder' ">Badge city (Enter Largest Major City You Service)
+						</mat-label>
+						<input type="text" placeholder="Enter Largest Major City You Service" [ngClass]="(f.badge_city_name.value) ? '' : 'red-placeholder' " aria-label="Number"
+							matInput formControlName="badge_city_name" [matAutocomplete]="auto"
+							(keyup)="handleBadgeCity($event.target.value)">
+						<mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+							<mat-option *ngFor="let option of filteredOptions"
+								(onSelectionChange)="selectBadgeCity(option,$event.isUserInput)" [value]="option.name">
+								{{option.name}}
+							</mat-option>
+						</mat-autocomplete>
+					</mat-form-field>
 				</div>
 			</div>
 		</div>
@@ -975,10 +1003,7 @@
 	</section>
 	<div class="container">
 		<div class="row py-4">
-			<div class="col-md-7">
-
-			</div>
-			<div class="col-md-5">
+			<div class="col-md-12">
 				<div class="">
 					<div class="row flex flex-wrap-reverse">
 						<div class="col-md-auto mx-auto">

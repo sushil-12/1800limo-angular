@@ -46,7 +46,7 @@
 					<div class="col-md-6">
 						<mat-form-field appearance="outline">
 							<mat-label>First & Last Name*</mat-label>
-							<input matInput placeholder="First & Last Name" formControlName="name">
+							<input matInput placeholder="First & Last Name" formControlName="name" (focus)="$event.target.select()">
 						</mat-form-field>
 						<div *ngIf="submittedForm && f.name.errors || f.name.touched && f.name.errors"
 							class="text-danger margin-bottom-thin my-mat-hint">
@@ -56,7 +56,7 @@
 					<div class="col-md-6">
 						<mat-form-field appearance="outline">
 							<mat-label>Card No*</mat-label>
-							<input matInput placeholder="Card No" formControlName="number" id="card-number">
+							<input matInput placeholder="Card No" formControlName="number" id="card-number" (focus)="$event.target.select()">
 						</mat-form-field>
 						<div *ngIf="submittedForm && f.number.errors || f.number.touched && f.number.errors"
 							class="text-danger margin-bottom-thin my-mat-hint">
@@ -125,7 +125,7 @@
 					<div class="col-md-4">
 						<mat-form-field appearance="outline">
 							<mat-label>CVV (3-4 digit code)*</mat-label>
-							<input matInput placeholder="CVV (3-4 digit code)" formControlName="cvc">
+							<input matInput placeholder="CVV (3-4 digit code)" formControlName="cvc" (focus)="$event.target.select()">
 						</mat-form-field>
 						<div *ngIf="submittedForm && f.cvc.errors || f.cvc.touched && f.cvc.errors"
 							class="text-danger margin-bottom-thin my-mat-hint">
@@ -157,22 +157,15 @@
 			</div>
 		</section>
 		<div class="container">
-			<div class="row justify-content-between">
-
-				<div class="billing_inforamtion">
-					<ul>
+			<div class="col-md-12">
+				<div class="billing_inforamtion ">
+					<ul class="d-flex justify-content-center">
 						<li>
 
 							<button class="custom-filled-back-button" (click)="backButton()">
 								BACK
 							</button>
 						</li>
-					</ul>
-				</div>
-
-
-				<div class="billing_inforamtion">
-					<ul>
 						<li>
 							<button class="custom-filled-reset-button" (click)="resetForm()" tabIndex="2">
 								RESET

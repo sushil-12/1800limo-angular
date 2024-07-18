@@ -36,6 +36,8 @@
 					<label class="alert alert-danger mt-2">Raise or lower your rates in real time, depending on demand
 						or season .
 					</label>
+					<label class="alert alert-danger mt-2">Any competitive rate is better than deadheading.
+					</label>
 				</div>
 				<div class="col-md-12">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
@@ -90,13 +92,15 @@
 						<input matInput type="number" (change)="updateRateRangeObject()" placeholder="Mileage Rate"
 							formControlName="milage_rate" tabindex="1" value="0" (focus)="$event.target.select()">
 					</mat-form-field>
-					<div *ngIf="submittedForm && f.milage_rate.errors || f.milage_rate.touched && f.milage_rate.errors"
+					<div *ngIf="f.milage_rate.errors && (f.milage_rate.touched || f.milage_rate.errors)"
 						class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.milage_rate.errors.required">This field is required</div>
 					</div>
 					<div *ngIf="f.milage_rate.errors" class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.milage_rate.errors.min">Minimum value will be 2</div>
 						<div *ngIf="f.milage_rate.errors.pattern">Enter Numbers only</div>
+						<div *ngIf="f.milage_rate.errors.min">Minimum value should be more than 2</div>
+						<div *ngIf="f.milage_rate.errors.max">Rates are too expensive.
+						</div>
 					</div>
 					<div *ngIf="IsZeroValidator(f.milage_rate.value, 'milage_rate')"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -123,7 +127,8 @@
 						</div>
 						<div *ngIf="f.kilometer_rate.errors" class="text-danger margin-bottom-thin my-mat-hint">
 							<div *ngIf="f.kilometer_rate.errors.pattern">Enter Numbers only</div>
-							<div *ngIf="f.kilometer_rate.errors.min">Minimum value will be 1.71</div>
+							<div *ngIf="f.kilometer_rate.errors.min">Minimum value should be more than 1.71</div>
+							<div *ngIf="f.kilometer_rate.errors.max">Rates are too expensive.</div>
 						</div>
 						<div *ngIf="IsZeroValidator(f.kilometer_rate.value, 'kilometer_rate')"
 							class="text-danger margin-bottom-thin my-mat-hint">
@@ -400,6 +405,10 @@
 						<div>Any value required</div>
 					</div>
 				</div>
+				<div class="col-md-12 mt-2">
+					<label class="alert alert-danger" style="font-size: 0.9rem !important;">
+						You may add Early/Late rate between 11 PM and 5.30 AM.</label>
+				</div>
 				<div class="col-md-6">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label>Early AM / Late PM Surge Rate</mat-label>
@@ -561,7 +570,7 @@
 						</div> -->
 					</div>
 				</div>
-				<div class="col-md-12 mt-4">
+				<!-- <div class="col-md-12 mt-4">
 					<h3 class="addveh_top d-md-flex justify-content-between align-items-center">
 						<label class="alert alert-danger">Surge Protection</label>
 					</h3>
@@ -574,13 +583,29 @@
 						<label class="ml-2" style="font-weight: 700!important; color: red !important;">Turn
 							on 20% surge pricing only for high demand temporary events.</label>
 					</div>
-				</div>
+				</div> -->
 			</div>
 		</div>
 	</section>
 	<section class="user_information">
 		<h2 class="headinginfo">Amenity Rates <span>(Enter an all-inclusive rate in each applicable bucket)</span></h2>
 		<div class="container">
+			<div class="row" [formGroup]="amenites_rates" *ngIf="amenites_rates">
+				<div class="col-md-6" *ngFor="let  amenity of amenites_rates.controls | keyvalue"
+					[formGroupName]="amenity.key">
+					<mat-form-field class="mat-form-field-rates" appearance="outline">
+						<mat-label class="amenityLabel">{{amenity.value.value.name}}</mat-label>
+						<span matPrefix>{{currencySymbol}} &nbsp;</span>
+						<input matInput placeholder={{amenity.value.value.name}} formControlName="price"
+							[id]="amenity.value.value.label"
+							(input)="changeAmenityRate(amenity.key,amenity.value.value)" tabindex="1"
+							(focus)="$event.target.select()">
+					</mat-form-field>
+				</div>
+			</div>
+		</div>
+
+		<!-- <div class="container">
 			<div class="row" [formGroup]="amenites_rates" *ngIf="amenites_rates">
 				<div class="col-md-6" *ngFor="let  amenity of amenites_rates.controls | keyvalue"
 					[formGroupName]="amenity.key">
@@ -594,7 +619,7 @@
 					</mat-form-field>
 				</div>
 			</div>
-		</div>
+		</div> -->
 	</section>
 	<!-- Main page content-->
 	<section class="user_information taxesStyle">
@@ -889,10 +914,7 @@
 	</section>
 	<div class="container">
 		<div class="row">
-			<div class="col-md-7">
-
-			</div>
-			<div class="col-md-5">
+			<div class="col-md-12">
 				<div class="billing_inforamtion">
 					<ul class="d-flex justify-content-center">
 						<li><button class="custom-filled-reset-button" (click)="resetForm()" tabindex="1">RESET</button>

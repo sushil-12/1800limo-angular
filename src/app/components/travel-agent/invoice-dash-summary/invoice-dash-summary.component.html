@@ -6,7 +6,7 @@
 				[useExistingCss]="true" printTitle="Invoice" printSectionId="print-section" ngxPrint>
 				Print Invoice</button>
 		</div>
-	
+
 	</div>
 	<section class="invoice" id="print-section">
 		<div class="container p-0">
@@ -17,7 +17,7 @@
 							<img src="assets/admin/images/new_logo.png" class="logo" alt="">
 						</div> -->
 						<div class="p-2 bd-highlight ml-2" style="margin: auto 0;">
-							<p class="my-1 invoice-head--text">Invoice {{invoiceData.invoice_number}}</p>
+							<p class="my-1 invoice-head--text">Paid Invoice {{invoiceData.invoice_number}}</p>
 							<p class="m-0 invoice-text--booking">
 								Booking # {{invoiceData.reservation_id}}
 							</p>
@@ -25,7 +25,8 @@
 						<div class="bd-highlight invoice-p m-3">
 							Paid Amount
 							<p class="invoice-dollar--color display-4">
-								<strong style="font-size: xx-large;"><span>{{currencySymbol}}</span>{{invoiceData?.paid_amount}}</strong>
+								<strong
+									style="font-size: xx-large;"><span>{{currencySymbol}}</span>{{invoiceData?.paid_amount}}</strong>
 							</p>
 							<!-- Invoice Status
 							<p class="invoice-dollar--color display-4">
@@ -64,7 +65,8 @@
 								</p>
 								<p class="m-1 invoice-p text-white invoice-status-bar">
 									Invoice Status: <span
-										class="invoice-text-bold invoice-status-bar">{{invoiceData?.invoice_status | titlecase}}</span>
+										class="invoice-text-bold invoice-status-bar">{{invoiceData?.invoice_status |
+										titlecase}} Invoice</span>
 								</p>
 							</div>
 							<div class="p-2 col-6 bd-highlight " *ngIf="invoiceData.date_of_service">
@@ -202,7 +204,7 @@
 							</div>
 						</div>
 						<div class="div" *ngIf="invoiceData.priceDetail">
-                            <div class="col-md-12 p-3 row" *ngFor="let priceObj of invoiceData.priceDetail | keyvalue">
+							<div class="col-md-12 p-3 row" *ngFor="let priceObj of invoiceData.priceDetail | keyvalue">
 								<div class="col-3">
 									<p class="invoice-text-charges">{{priceObj.key}}
 									</p>
@@ -223,7 +225,7 @@
 										<li style="margin-bottom: 8px; " class="invoice-charges-textb "
 											*ngFor="let price of priceObj.value">
 											<span class="font-weight-bold" *ngIf="price.amount">
-											{{currencySymbol+price.amount}}</span>
+												{{currencySymbol+price.amount}}</span>
 										</li>
 									</ul>
 								</div>
@@ -231,12 +233,20 @@
 							<!-- to show refund ammount -->
 
 							<div class="invoice-subhead px-3">
+								<div class="row d-flex justify-content-between" *ngIf="invoiceData?.number_of_hours">
+									<p class="m-0 p-1 text-charges">
+										No. of hours
+									</p>
+									<p class="m-0 p-1 text-charges">
+										{{invoiceData?.number_of_hours}}
+									</p>
+								</div>
 								<div class="row d-flex justify-content-between">
 									<p class="m-0 p-1 text-charges">
 										Sub Total
 									</p>
 									<p class="m-0 p-1 text-charges">
-										<span >{{currencySymbol}}</span>
+										<span>{{currencySymbol}}</span>
 										{{invoiceData?.sub_total.toFixed(2)}}
 									</p>
 								</div>
@@ -250,21 +260,23 @@
 									</p>
 								</div>
 								<div class="row d-flex justify-content-between">
-									<p class="m-0 p-1 text-charges" >
+									<p class="m-0 p-1 text-charges">
 										Total-Amount</p>
-										<p class="m-0 p-1 text-charges font-weight-bold">
-											<span >{{currencySymbol}}</span>{{this.invoiceData?.grand_total.toFixed(2)}}
-										</p>
-									</div>
-									<div class="row d-flex justify-content-between" *ngIf="(this.invoiceData?.grand_total - invoiceData?.paid_amount) > 0">
-										<p class="m-0 p-1 text-charges">
-											Payable payment
-											<!-- <i class="bi bi-info-circle-fill"></i> -->
-										</p>
-										<p class="m-0 p-1 text-charges">
-											<span >{{currencySymbol}}</span>{{(this.invoiceData?.grand_total.toFixed(2) - invoiceData?.paid_amount).toFixed(2)}}
-										</p>
-									</div>
+									<p class="m-0 p-1 text-charges font-weight-bold">
+										<span>{{currencySymbol}}</span>{{this.invoiceData?.grand_total.toFixed(2)}}
+									</p>
+								</div>
+								<div class="row d-flex justify-content-between"
+									*ngIf="(this.invoiceData?.grand_total - invoiceData?.paid_amount) > 0">
+									<p class="m-0 p-1 text-charges">
+										Payable payment
+										<!-- <i class="bi bi-info-circle-fill"></i> -->
+									</p>
+									<p class="m-0 p-1 text-charges">
+										<span>{{currencySymbol}}</span>{{(this.invoiceData?.grand_total.toFixed(2) -
+										invoiceData?.paid_amount).toFixed(2)}}
+									</p>
+								</div>
 								<!-- <div class="row d-flex justify-content-between" >
 									<p class="m-0 p-1 text-charges" >
 										Grand-Amount</p>
@@ -285,11 +297,12 @@
 		background: #F2933C;">
 			</div> -->
 		</div>
-        <section class="billing_inforamtion">
-            <div class="row m-2">
-                <button class="ok-btn custom-ok-btn box-shadow ml-3" style="height: 40px;width: 100px; font-size: 14px;" type="button" (click)="backButton()" tabindex="1">OK</button>
-                </div>
-        </section>
+		<section class="billing_inforamtion">
+			<div class="row m-2">
+				<button class="ok-btn custom-ok-btn box-shadow ml-3" style="height: 40px;width: 100px; font-size: 14px;"
+					type="button" (click)="backButton()" tabindex="1">OK</button>
+			</div>
+		</section>
 	</section>
 
 </main>

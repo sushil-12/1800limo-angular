@@ -7,7 +7,7 @@
 		<div class="invoicesum_header">
 			<div class="row">
 				<div class="col-md-6">
-					<h3 class="text-lg pl-0">Booking # {{ BookingDetail?.reservation_id }}</h3>
+					<h3 class="text-lg pl-0">Booking <span style="font-size: 25px;font-weight: 500;"># {{ BookingDetail?.reservation_id }}</span></h3>
 				</div>
 				<div class="col-md-6 text-right">
 					<h3 class="text-lg pl-0">Payment Status # {{ BookingDetail?.payment_status | titlecase}}</h3>
@@ -89,10 +89,10 @@
 					<p>Pickup Airport </p>
 					<strong>{{ BookingDetail?.pickup_airport_name | titlecase }}</strong>
 				</div>
-				<div class="col-md-4 field" *ngIf="transferType?.includes('airport_')">
+				<!-- <div class="col-md-4 field" *ngIf="transferType?.includes('airport_')">
 					<p>Pickup Airline</p>
 					<strong>{{ BookingDetail?.pickup_airline_name | titlecase }}</strong>
-				</div>
+				</div> -->
 				<div class="col-md-4 field" *ngIf="transferType?.includes('airport_')">
 					<p>Pickup Flight</p>
 					<strong>{{ BookingDetail?.pickup_flight }}</strong>
@@ -103,11 +103,11 @@
 					<strong>{{ BookingDetail?.cruise_port | titlecase }}</strong>
 				</div>
 				<div class="col-md-4 field" *ngIf="transferType?.includes('cruise_')">
-					<p>Cruise Name</p>
+					<p>Cruise Ship Name</p>
 					<strong>{{ BookingDetail?.cruise_name | titlecase }}</strong>
 				</div>
 				<div class="col-md-4 field" *ngIf="transferType?.includes('cruise_')">
-					<p>Cruise Time</p>
+					<p>Ship Arrival time</p>
 					<strong>{{ timeFormat2(BookingDetail?.cruise_time) }} |
 						{{ timeFormat(BookingDetail?.cruise_time) }}</strong>
 				</div>
@@ -136,11 +136,11 @@
 					<strong>{{ BookingDetail?.cruise_port | titlecase }}</strong>
 				</div>
 				<div class="col-md-4 field" *ngIf="transferType?.includes('_cruise')">
-					<p>Dropoff Cruise Name</p>
+					<p>Dropoff Cruise Ship Name</p>
 					<strong>{{ BookingDetail?.cruise_name | titlecase }}</strong>
 				</div>
 				<div class="col-md-4 field" *ngIf="transferType?.includes('_cruise')">
-					<p>Dropoff Cruise Time</p>
+					<p>Dropoff Ship Arrival time</p>
 					<strong>{{ timeFormat2(BookingDetail?.cruise_time) }} |
 						{{ timeFormat(BookingDetail?.cruise_time) }}</strong>
 				</div>
@@ -162,6 +162,10 @@
 			[ngClass]="isFinalizeButton ? 'color-grey':'color-green'" (click)="submitForm()">
 			{{isFinalizeButton ? 'Finalized' :'Finalize'}}
 		</button>
+	</div>
+	<div class="col-md-12">
+		<p class="alert alert-danger" *ngIf="paidAmount">Note- 50% amount already been deducted for this charter booking is <span
+			class="font-weight-bold">{{currencySymbol}}{{paidAmount.toFixed(2)}}</span></p>
 	</div>
 </div>
 
@@ -203,12 +207,12 @@
 <!-- Payment Section -->
 <section class="section-container" style="margin-top: 22px !important;"
 	*ngIf="(BookingDetail?.payment_status=='unpaid' || BookingDetail?.payable_amount > 0) && (currentUser?.RoleName == 'admin' || subModules.includes('can_pay_booking'))">
-	<div class="col-md-12 p-0" (click)="handlePaymentSection()">
+	<!-- <div class="col-md-12 p-0" (click)="handlePaymentSection()">
 		<h4 class="section-dropdown-header mb-0">
 			Payment
 		</h4>
 		<p [ngClass]="chevron ? 'bi bi-chevron-down' : 'bi bi-chevron-up'"></p>
-	</div>
+	</div> -->
 	<div class="row" *ngIf="paymentSection">
 
 		<!-- RADIO BUTTONS -->
@@ -444,8 +448,10 @@
 				<h3 class="mb-0 ">Payment</h3>
 			</div>
 			<div class="modal-body text-center">
-				<p>Payable amount is <span
-						class="font-weight-bold">{{currencySymbol}}{{payableAmount.toFixed(2)}}</span></p>
+				<p *ngIf="paidAmount">Amount charged is <span
+						class="font-weight-bold">{{currencySymbol}}{{paidAmount.toFixed(2)}}</span></p>
+				<p>Payable amount is <span class="font-weight-bold">{{currencySymbol}}{{(payableAmount -
+						paidAmount).toFixed(2)}}</span></p>
 				<span *ngIf="payableAmount<= 0" class="text-danger">Amount has been overcharger earlier</span>
 			</div>
 			<div class="modal-footer">

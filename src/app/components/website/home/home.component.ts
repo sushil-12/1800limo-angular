@@ -116,25 +116,25 @@ export class HomeComponent implements OnInit {
 		try {
 			const elementsWithTabIndex = document.querySelectorAll('[tabindex]');
 
-		// Add event listeners for focus and blur events to each element
-		console.log('home-- elementsWithTabIndex-->' , elementsWithTabIndex)
-		elementsWithTabIndex?.forEach((element) => {
-			element.addEventListener('focus', () => {
-				element.classList.add('focus-border'); // Add the focus-border class on focus
-				setTimeout(()=>{
-					element.classList.remove('focus-border');
-				},1500)
-			});
+			// Add event listeners for focus and blur events to each element
+			console.log('home-- elementsWithTabIndex-->', elementsWithTabIndex)
+			elementsWithTabIndex?.forEach((element) => {
+				element.addEventListener('focus', () => {
+					element.classList.add('focus-border'); // Add the focus-border class on focus
+					setTimeout(() => {
+						element.classList.remove('focus-border');
+					}, 1500)
+				});
 
-			element.addEventListener('blur', () => {
-				element.classList.remove('focus-border'); // Remove the focus-border class on blur (when focus is lost)
+				element.addEventListener('blur', () => {
+					element.classList.remove('focus-border'); // Remove the focus-border class on blur (when focus is lost)
+				});
 			});
-		});
 		} catch (error) {
 			console.log(error)
 		}
-		
-		
+
+
 		this.fetchAirportsData()
 
 		setTimeout(() => {
@@ -156,7 +156,7 @@ export class HomeComponent implements OnInit {
 		this.accountStatus = localStorage.getItem("account_approval");
 
 		if (this.accountStatus == "completed" || this.accountStatus == "accepted") {
-			this.value = "Manage / Daily Bookings";
+			this.value = "Manage Bookings";
 		}
 		else {
 			this.value = "Continue Affiliate Set-Up";
@@ -544,9 +544,9 @@ export class HomeComponent implements OnInit {
 		// Also, check if the parsed date string is equal to the original dateString
 	}
 
-	format(text){
-		if(text)
-			return text.replace('_' ,' ');
+	format(text) {
+		if (text)
+			return text.replace('_', ' ');
 		else
 			return ' ';
 	}
@@ -914,7 +914,7 @@ export class HomeComponent implements OnInit {
 	changeDetection = {
 		pickupDate: (value: any) => {
 			console.log('--->>>>', value.format("YYYY-MM-DD"))
-			this.SetFormValue('pickup_date',  value.format("YYYY-MM-DD"))
+			this.SetFormValue('pickup_date', value.format("YYYY-MM-DD"))
 		},
 		pickupTime: (event: any = null, form_control: string) => {
 			if (event == null) {
@@ -924,8 +924,8 @@ export class HomeComponent implements OnInit {
 			this.SetFormValue(form_control, event.target.value)
 		},
 		return_pickup_date: (value: any) => {
-			console.log('value-- return ' ,  value.format("YYYY-MM-DD") )
-			this.SetFormValue('return_pickup_date',   value.format("YYYY-MM-DD"))
+			console.log('value-- return ', value.format("YYYY-MM-DD"))
+			this.SetFormValue('return_pickup_date', value.format("YYYY-MM-DD"))
 		},
 
 		bookingHours: (event: any) => {
@@ -1058,7 +1058,7 @@ export class HomeComponent implements OnInit {
 		this.submitted = true
 		this.ValidateForm(this.quoteBotForm)
 
-		console.log('checking form valid', this.quoteBotForm.valid, this.quoteBotForm,this.QBForm.location_info.valid);
+		console.log('checking form valid', this.quoteBotForm.valid, this.quoteBotForm, this.QBForm.location_info.valid);
 
 		// enter only if values excluding location_info presents invalid status
 		if (!this.quoteBotForm.valid && !this.QBForm.location_info.valid) {
@@ -1365,7 +1365,11 @@ export class HomeComponent implements OnInit {
 			this.router.navigateByUrl('/admin/daily-bookings-admin');
 			console.log("step 0  dashboard");
 		}
-		else{
+		else if (role == 'driver') {
+			this.spinner.show();
+			this.router.navigateByUrl('/affiliate/my-bookings');
+		}
+		else {
 			console.log(`redirecting to ${role}/bookings`)
 			this.spinner.show();
 			this.router.navigateByUrl(`${role}/bookings`)

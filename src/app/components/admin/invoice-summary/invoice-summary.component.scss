@@ -5,10 +5,12 @@
 // }
 .example-chip-list {
 	width: 100%;
-  }
-.invoice{
+}
+
+.invoice {
 	background-color: #fff;
 }
+
 .invoice p,
 h1,
 h2,
@@ -20,9 +22,10 @@ span {
 	font-family: 'Inter', sans-serif;
 }
 
-img{
+img {
 	height: 50px;
 }
+
 .invoice .invoice-header {
 	max-width: 100%;
 
@@ -221,7 +224,7 @@ dd {
 .invoice .invoice-text-charges {
 	font-style: normal;
 	font-weight: 600;
-	font-size: 14px;
+	font-size: 18px;
 	line-height: 17px;
 
 	letter-spacing: 0.05em;
@@ -234,7 +237,7 @@ dd {
 	font-family: 'Inter', sans-serif;
 	font-style: normal;
 	font-weight: 500;
-	font-size: 14px;
+	font-size: 17px;
 	line-height: 26px;
 
 	color: #222234;
@@ -262,12 +265,13 @@ dd {
 	margin-left: 0px !important;
 }
 
-.ok-btn{
+.ok-btn {
 	padding: 15px 40px;
 	background-color: #66b3ff;
 	border-color: #66b3ff !important;
 	color: #fff;
 }
+
 .custom-ok-btn {
 	display: -webkit-inline-box;
 	display: -ms-inline-flexbox;
@@ -285,21 +289,22 @@ dd {
 	vertical-align: middle;
 	user-select: none;
 	border: 1px solid;
-	  border-top-color: currentcolor;
-	  border-right-color: currentcolor;
-	  border-bottom-color: currentcolor;
-	  border-left-color: currentcolor;
+	border-top-color: currentcolor;
+	border-right-color: currentcolor;
+	border-bottom-color: currentcolor;
+	border-left-color: currentcolor;
 	border-radius: 15px;
-  }
+}
 
-  .btnStyle {
+.btnStyle {
 	color: #fff !important;
 	background-color: var(--orange-color) !important;
 	border-color: var(--orange-color) !important;
-	padding: 10px 40px;	
+	padding: 10px 40px;
 	transition: box-shadow 0.1s ease-in-out;
-    box-shadow: 0px 5px 10px 1px rgb(0 0 0 / 40%);
+	box-shadow: 0px 5px 10px 1px rgb(0 0 0 / 40%);
 }
+
 .saveButtonModal {
 	color: #fff !important;
 	background-color: #5dbd8a;
@@ -308,26 +313,29 @@ dd {
 	bottom: -60px;
 	left: 15px;
 	transition: box-shadow 0.1s ease-in-out;
-    box-shadow: 0px 5px 10px 1px rgb(0 0 0 / 40%);
+	box-shadow: 0px 5px 10px 1px rgb(0 0 0 / 40%);
 }
-.x-cross-btn{
+
+.x-cross-btn {
 	background: #fff !important;
-    color: #ff0000 !important;
-    /* position: absolute; */
-    top: 5px;
-    right: 15px;
-    border-radius: 20px;
-    width: 25px;
-    opacity: 1 !important;
+	color: #ff0000 !important;
+	/* position: absolute; */
+	top: 5px;
+	right: 15px;
+	border-radius: 20px;
+	width: 25px;
+	opacity: 1 !important;
 }
-.x-close-btn{
+
+.x-close-btn {
 	float: right;
-    font-size: 1.8rem;
-    font-weight: 700;
-    line-height: 1;
+	font-size: 1.8rem;
+	font-weight: 700;
+	line-height: 1;
 	border: none;
 }
-.currencySymbol{
+
+.currencySymbol {
 	color: #f3933d;
 }
 
@@ -378,28 +386,28 @@ dd {
 	}
 }
 
-.invoice-status-bar{
+.invoice-status-bar {
 	font-size: large !important;
 }
 
 
-.print-btn{
+.print-btn {
 	color: #fff !important;
-    background-color: var(--orange-color);
-    border-color: var(--orange-color);
+	background-color: var(--orange-color);
+	border-color: var(--orange-color);
 }
 
 
-.refund-btn{
+.refund-btn {
 	color: #fff !important;
-    background-color: #db4949;
-    border-color: #db4949;
+	background-color: #db4949;
+	border-color: #db4949;
 }
 
-.edit-btn{
+.edit-btn {
 	color: #fff !important;
-    background-color: #3351c6;
-    border-color: #3351c6;
+	background-color: #3351c6;
+	border-color: #3351c6;
 }
 
 
@@ -424,8 +432,8 @@ dd {
 	.invoice .pr-5 {
 		padding: 0 20px !important;
 	}
-	
-	
+
+
 }
 
 
@@ -435,15 +443,15 @@ dd {
 	// .invoice .justify-content-end {
 	// 	justify-content: left !important;
 	// }
-	#btn-display-coloumn{
+	#btn-display-coloumn {
 		flex-direction: column;
 	}
-	
-	.invoice .invoice-subhead{
+
+	.invoice .invoice-subhead {
 		padding: 19.0px !important;
 		line-height: 10px;
 	}
-	
+
 }
 
 
@@ -738,15 +746,15 @@ dd {
 
 button.backbar {
 	background-color: #c3cfd9;
-	color           : #000;
-	padding         : 10px 15px;
-	margin          : 20px 10px 0px 0px;
-	display         : inline-block;
-	width           : 100px;
-	text-align      : center;
-	text-transform  : uppercase;
-	font-weight     : bold;
-	border          : 1px solid #c3cfd9;
+	color: #000;
+	padding: 10px 15px;
+	margin: 20px 10px 0px 0px;
+	display: inline-block;
+	width: 100px;
+	text-align: center;
+	text-transform: uppercase;
+	font-weight: bold;
+	border: 1px solid #c3cfd9;
 }
 
 
@@ -827,10 +835,11 @@ button.backbar {
 // 		width: 50%;
 // 	}
 // }
-.asterisk{
+.asterisk {
 	font-size: 1.5rem;
 }
-.asterisk1{
+
+.asterisk1 {
 	color: red;
 	font-size: 1.3rem;
 	margin-left: 2px;

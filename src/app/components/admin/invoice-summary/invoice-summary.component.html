@@ -46,7 +46,7 @@
 							<img src="assets/admin/images/new_logo.png" class="logo" alt="">
 						</div> -->
 						<div class="p-2 bd-highlight ml-2" style="margin: auto 0;">
-							<p class="my-1 invoice-head--text">Invoice {{invoiceData.invoice_number}}</p>
+							<p class="my-1 invoice-head--text">Paid Invoice {{invoiceData.invoice_number}}</p>
 							<p class="m-0 invoice-text--booking">
 								Booking # {{invoiceData.reservation_id}}
 							</p>
@@ -95,7 +95,7 @@
 								<p class="m-1 invoice-p text-white invoice-status-bar">
 									Invoice Status: <span
 										class="invoice-text-bold invoice-status-bar">{{formatText(invoiceData?.invoice_status)
-										| titlecase}}</span>
+										| titlecase}} Invoice </span>
 								</p>
 							</div>
 							<div class="p-2 col-6 bd-highlight " *ngIf="invoiceData.date_of_service">
@@ -234,14 +234,14 @@
 						</div>
 						<div class="div" *ngIf="invoiceData.priceDetail">
 							<div class="col-md-12 p-3 row" *ngFor="let priceObj of invoiceData.priceDetail | keyvalue">
-								<div class="col-3">
+								<div class="col-5">
 									<p class="invoice-text-charges">{{priceObj.key | bookingStatusTextReplace:'_':' '}}
 									</p>
 								</div>
 								<div>
 
 								</div>
-								<div class="col-6">
+								<div class="col-4">
 									<ul style="list-style: none;margin:0;color: #1c1a1a;font-size:15px">
 										<li style="margin-bottom: 8px;" class="invoice-charges-textb"
 											*ngFor="let price of priceObj.value">
@@ -262,6 +262,14 @@
 							<!-- to show refund ammount -->
 
 							<div class="invoice-subhead px-3">
+								<div class="row d-flex justify-content-between" *ngIf="invoiceData?.number_of_hours">
+									<p class="m-0 p-1 text-charges">
+										No. of hours
+									</p>
+									<p class="m-0 p-1 text-charges">
+										{{invoiceData?.number_of_hours}}
+									</p>
+								</div>
 								<div class="row d-flex justify-content-between">
 									<p class="m-0 p-1 text-charges">
 										Sub Total

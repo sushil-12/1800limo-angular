@@ -77,7 +77,9 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 	is_readonly_min_rate: boolean = false;
 	travel_share: number = 10
 	travel_agent_share: any = 0;
-	farmoutShare: any;
+	r_travel_agent_share: any = 0;
+	farmoutShare: any = 0;
+	r_farmoutShare: any = 0;
 	currencySymbol: any;
 
 	constructor(
@@ -157,7 +159,7 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 				if (response && Object.keys(response).length > 0) {
 					for (let item in this.RateForm) {
 						for (let key in (<FormGroup>this.RatesForm.get(item)).controls) {
-							console.log(item, key);
+							// console.log(item, key);
 							let baserate = response[item][key]["baserate"];
 							let type = response[item][key]["type"] ?? "flat";
 							(<FormGroup>((<FormGroup>this.RatesForm.get(item)).get(key))).get("baserate").setValue(baserate);
@@ -363,6 +365,14 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 	getRatesData() {
 		return this.ratesdata.asObservable();
 	}
+	handleHourChange(event: any) {
+		console.log('------->>>>>>>', event.target.value)
+		if (event.target.value == '') {
+			let n_hr: any = 1
+			this.returnNumberOfHr.emit(n_hr)
+		}
+		this.returnNumberOfHr.emit(event.target.value)
+	}
 
 	buildRatesForm(form: string, data: Record<string, any>): FormGroup {
 		// Base Value for foundation of the whole algorithm
@@ -381,17 +391,32 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 			{
 				for (let item in data[key]) {
 					if (form === "RatesForm") {
-						console.log(key, item);
+						// console.log(key, item);
 						(<FormGroup>this.RatesForm.get(key)).addControl(item, this.buildRatesForm(form, data[key][item]));
+
 						(<FormGroup>((<FormGroup>this.RatesForm.get(key)).get(item))).get("baserate").valueChanges.subscribe((value: number) => {
 							this.calculateAmount("RatesForm", key, item);
 						});
-						// this.calculateAmount("RatesForm", key, item);
 					}
-
+					if (form === "ReturnRatesForm") {
+						(<FormGroup>this.ReturnRatesForm.get(key)).addControl(
+							item,
+							this.buildRatesForm(form, data[key][item])
+						);
+						(<FormGroup>(
+							(<FormGroup>this.ReturnRatesForm.get(key)).get(item)
+						))
+							.get("baserate")
+							.valueChanges.subscribe((value: number) => {
+								this.calculateAmount(
+									"ReturnRatesForm",
+									key,
+									item
+								);
+							});
+					}
 				}
 			}
-			console.log('in function build rates form-->>>', data)
 		}
 	}
 
@@ -401,10 +426,9 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 			this.subtotal = 0;
 			for (let item in this.total) {
 				this.subtotal = Number(this.subtotal.toFixed(2)) + Number(this.total[item].toFixed(2));
-				console.log("in total checkk---->", this.subtotal, Number(this.subtotal.toFixed(2)), '--->', Number(this.total[item].toFixed(2)))
+				// console.log("in total checkk---->", this.subtotal, Number(this.subtotal.toFixed(2)), '--->', Number(this.total[item].toFixed(2)), this.total)
 			}
 		}
-		console.log('in function calcultae total-->>>', this.subtotal)
 
 		if (form === "ReturnRatesForm") {
 			this.r_subtotal = 0;
@@ -412,7 +436,7 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 				this.r_subtotal = Number(this.r_subtotal.toFixed(2)) + Number(this.r_total[item].toFixed(2));
 			}
 		}
-		console.log("in function calculate total", this.grandtotal, this.subtotal)
+		// console.log("in function calculate total", this.grandtotal, this.subtotal)
 
 	}
 
@@ -423,7 +447,6 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 				let amount = (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates')).get(subform))).get("amount").value
 				temp += amount
 			}
-			console.log('in function calc base rate-->>>', temp)
 			return temp
 		}
 		if (form === 'ReturnRatesForm') {
@@ -446,8 +469,6 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 			value["sub_total"] = this.subtotal;
 
 			this.formvalue.emit(value);
-			console.log('in function calc g total-->>>', this.grandtotal)
-
 		}
 		if (form == 'ReturnRatesForm' && this.ReturnRatesForm) {
 			if (this.vehicles !== 0) {
@@ -459,7 +480,7 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 
 			this.returnformvalue.emit(value);
 		}
-		console.log("in function calculate total", this.grandtotal, this.subtotal)
+		// console.log("in function calculate total",this.grandtotal,this.subtotal)
 	}
 
 	toggleDropdown(section: string) {
@@ -495,21 +516,56 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 		}, 300)
 	}
 
+
+	calculateReturnBaseRateShare() {
+		try {
+			let baseRate = 0;
+			if (this.service_type == 'charter_tour' && !this.is_readonly_min_rate) {
+				baseRate += (<FormGroup>((<FormGroup>this.ReturnRatesForm.get('all_inclusive_rates'))?.get('Base_Rate')))?.get("baserate").value * this.nums
+			}
+			else {
+				baseRate += (<FormGroup>((<FormGroup>this.ReturnRatesForm.get('all_inclusive_rates'))?.get('Base_Rate')))?.get("baserate").value || 0
+			}
+			['ELH_Charges', 'Stops', 'Wait'].map((i) => {
+				baseRate += (<FormGroup>((<FormGroup>this.ReturnRatesForm.get('all_inclusive_rates'))?.get(i)))?.get("baserate").value || 0
+			});
+			['Baby_Seat', 'Baggage_Meet_(Dom)', 'Baggage_Meet_(Int)', 'Bike_Rack', 'Booster_Seat', 'Golf_Bags',
+				'Lei_Greeting_–_Hawaii', 'Luggage_Trailer', 'Per_Diem', 'Red_Carpet', 'Security_/_Guard', 'Skis',
+				'Tour_Guide', 'Wedding_Package'].map((j) => {
+					baseRate += (<FormGroup>((<FormGroup>this.ReturnRatesForm.get('amenities'))?.get(j)))?.get("baserate").value || 0
+				})
+			return baseRate;
+		} catch (error) {
+			console.log('error-----____>>>>', error)
+		}
+	}
+	calculateReturnAdminShare() {
+		let baseRate = this.calculateReturnBaseRateShare()
+		this.admin_share = (this.isTravelShare && !this.isCreatedByAdmin || this.isFarmoutBooking) ? 15 : 25
+		this.r_calc_admin_share = baseRate * this.admin_share / 100
+		this.isFarmoutBooking ? this.r_farmoutShare = baseRate * 0.10 : ''
+		// console.log('in function caculate admin share-->>', this.r_calc_admin_share)
+	}
+	calculateReturnTravelShare() {
+		if (!this.isTravelShare && this.isCreatedByAdmin) {
+			return 0
+		}
+		let baseRate = this.calculateReturnBaseRateShare()
+		this.r_travel_agent_share = baseRate * this.travel_share / 100
+	}
+
 	calculateBaseRateShare() {
 		try {
 			let baseRate = 0;
-			console.log('in function calculateBaseRateShare', this.RatesForm)
+			// console.log('in function calculateBaseRateShare', this.RatesForm)
 			if (this?.service_type == 'charter_tour' && !this.is_readonly_min_rate) {
 				baseRate += (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates'))?.get('Base_Rate')))?.get("baserate").value * this.nums
-				console.log('in function if charter-->>>', baseRate)
-
 			}
 			else {
 				baseRate += (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates'))?.get('Base_Rate')))?.get("baserate").value || 0
-				console.log('in function else charter-->>>', baseRate)
-
 			}
 			['ELH_Charges', 'Stops', 'Wait'].map((i) => {
+				// console.log("in chargeee", i, (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates'))?.get(i)))?.get("baserate").value)
 				baseRate += (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates'))?.get(i)))?.get("baserate").value || 0
 			});
 			['Baby_Seat', 'Baggage_Meet_(Dom)', 'Baggage_Meet_(Int)', 'Bike_Rack', 'Booster_Seat', 'Golf_Bags',
@@ -518,7 +574,7 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 					baseRate += (<FormGroup>((<FormGroup>this.RatesForm.get('amenities'))?.get(j)))?.get("baserate").value || 0
 				})
 
-			console.log('in function calculateBaseRateShare', baseRate)
+			// console.log('in function calculateBaseRateShare', baseRate)
 
 			return baseRate;
 		} catch (error) {
@@ -526,16 +582,16 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 		}
 	}
 	calculateAdminShare() {
-		console.log('in function calculateAdminShare')
+		// console.log('in function calculateAdminShare')
 
 		let baseRate = this.calculateBaseRateShare()
 		this.admin_share = (this.isTravelShare && !this.isCreatedByAdmin || this.isFarmoutBooking) ? 15 : 25
 		this.calc_admin_share = baseRate * this.admin_share / 100
 		this.isFarmoutBooking ? this.farmoutShare = baseRate * 0.10 : ''
-		console.log('in function caculate admin share-->>', this.calc_admin_share)
+		// console.log('in function caculate admin share-->>', this.calc_admin_share)
 	}
 	calculateTravelShare() {
-		console.log('in function calculateTravelShare')
+		// console.log('in function calculateTravelShare')
 		if (!this.isTravelShare && this.isCreatedByAdmin) {
 			return 0
 		}
@@ -544,7 +600,7 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 	}
 
 	async calculateAmount(form: string, formgroup: string, subform: string) {
-		console.log('in function calculateAmount')
+		console.log('in function calculateAmount --> subform', subform)
 		await this.calculateAdminShare()
 		await this.calculateTravelShare()
 		if (form === "RatesForm") {
@@ -574,7 +630,7 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 				// Admin Share Calculation
 				if (subform == 'Base_Rate' && !this.is_readonly_min_rate) {
 					// this.calc_admin_share = (amount * this.admin_share) / 100;
-					console.log('calc_admin_share--->>', amount, this.calc_admin_share)
+					// console.log('calc_admin_share--->>', amount, this.calc_admin_share)
 					// amount = parseFloat((amount + this.calc_admin_share).toFixed(2));
 				}
 				console.log('is_readonly_min_rate-->>', this.is_readonly_min_rate)
@@ -587,7 +643,7 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 					let min_rate = (<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("baserate").value;
 					// this.calc_admin_share = (min_rate * this.admin_share) / 100
 					// amount = amount + this.calc_admin_share;   
-					console.log('is_readonly_min_rate_amount-->>', amount, this.calc_admin_share)
+					// console.log('is_readonly_min_rate_amount-->>', amount, this.calc_admin_share)
 				}
 
 				(<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("amount").setValue(amount);
@@ -619,6 +675,20 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 
 			let amount = (<FormGroup>((<FormGroup>this.RatesForm.get(formgroup)).get(subform))).get("amount").value;
 			this.total[subform] = Number(Number(amount).toFixed(2));
+
+			// fix this for elh_charges,stops,wait as they are not reflecting in subform object
+			if (!(this.total.hasOwnProperty('ELH_Charges'))) {
+				this.total['ELH_Charges'] = (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates'))?.get('ELH_Charges')))?.get("baserate").value
+			}
+			if (!(this.total.hasOwnProperty('Stops'))) {
+				this.total['Stops'] = (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates'))?.get('Stops')))?.get("baserate").value
+			}
+			if (!(this.total.hasOwnProperty('Wait'))) {
+				this.total['Wait'] = (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates'))?.get('Wait')))?.get("baserate").value
+			}
+
+
+			console.log("in this total---->", this.total, amount, subform)
 			if (formgroup == 'amenities' || formgroup == "all_inclusive_rates") {
 				let baseRateAmount = (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates')).get('Base_Rate'))).get("baserate").value;
 				if (this.service_type == 'charter_tour' && !this.is_readonly_min_rate) {
@@ -633,11 +703,115 @@ export class AffiliateFinalizeRatesComponent implements OnInit {
 				}
 				// (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates')).get('Base_Rate'))).get("amount").setValue(baseRateAmount);
 				this.total['Base_Rate'] = Number(Number(baseRateAmount).toFixed(2));
+				console.log("in this total baserate---->", this.total, baseRateAmount)
 			}
 			this.RatesForm.updateValueAndValidity();
 		}
 
 
+		// --------------------- RETURN RATES FORM ------------------------
+		if (form === "ReturnRatesForm") {
+			await this.calculateReturnAdminShare()
+			await this.calculateReturnTravelShare()
+			let baserate = (<FormGroup>((<FormGroup>this.ReturnRatesForm.get(formgroup)).get(subform))).get("baserate").value;
+
+			if (["direct_taxes", "amenities", "taxes", "misc"].includes(formgroup)) {
+				// Flat Values
+				this.ReturnRateForm[formgroup].controls[subform].controls.amount.setValue(baserate);
+				// initially run for taxes also because default value will be flat
+			}
+
+			if (formgroup == "all_inclusive_rates") {
+				let amount = baserate;
+				if (subform == 'Base_Rate') {
+					// this.r_calc_admin_share = (amount * this.admin_share) / 100;
+					// amount = parseFloat((amount + this.r_calc_admin_share).toFixed(2));
+					if (this.isTravelShare && subform == 'Base_Rate') {
+						let min_rate = (<FormGroup>((<FormGroup>this.ReturnRatesForm.get(formgroup)).get(subform))).get("baserate").value;
+						// this.r_travel_agent_share = (min_rate * this.travel_share) / 100
+						// amount = amount + this.r_travel_agent_share;
+					}
+				}
+				(<FormGroup>((<FormGroup>this.ReturnRatesForm.get(formgroup)).get(subform))).get("amount").setValue(amount);
+			}
+
+			if (formgroup == "others") {
+				// Gratuity
+				// let kmrate = (<FormGroup>((<FormGroup>(this.ReturnRatesForm.get("all_inclusive_rates"))).get("Base_Rate"))).get("amount").value;
+				let type = (<FormGroup>((<FormGroup>this.ReturnRatesForm.get(formgroup)).get(subform))).get("type").value;
+				if (type === "flat") {
+					let kmrate = await this.calculateBaseRate('ReturnRatesForm') - this.r_calc_admin_share;
+					let basevalue = (<FormGroup>((<FormGroup>this.ReturnRatesForm.get(formgroup)).get(subform))).get("baserate").value;
+
+					let amount = Number(Number(basevalue)).toFixed(2);
+
+					(<FormGroup>((<FormGroup>this.ReturnRatesForm.get(formgroup)).get(subform))).get("amount").setValue(amount);
+					// set value of percentage same as gratuity
+					(<FormGroup>((<FormGroup>this.ReturnRatesForm.get(formgroup)).get(subform))).get("percentage").setValue(basevalue);
+				}
+
+				if (type === "percent") {
+					// let kmrate = (<FormGroup>((<FormGroup>(this.ReturnRatesForm.get("all_inclusive_rates"))).get("Base_Rate"))).get("amount").value;
+					let kmrate = await this.calculateBaseRate('ReturnRatesForm') - this.r_calc_admin_share - this.r_travel_agent_share;
+					let basevalue = (<FormGroup>((<FormGroup>this.ReturnRatesForm.get(formgroup)).get(subform))).get("baserate").value;
+
+					let amount = Number(Number((basevalue / 100) * kmrate).toFixed(2)
+					);
+
+					(<FormGroup>((<FormGroup>this.ReturnRatesForm.get(formgroup)).get(subform))).get("amount").setValue(amount);
+					// set value of percentage same as gratuity
+					(<FormGroup>((<FormGroup>this.ReturnRatesForm.get(formgroup)).get(subform))).get("percentage").setValue(basevalue);
+				}
+
+				// Flat | Percentage - Taxes
+				(<FormGroup>((<FormGroup>this.ReturnRatesForm.get("others")).get(subform))).get("type").valueChanges.subscribe((value: any) => {
+					this.calculateAmount("ReturnRatesForm", formgroup, subform);
+				});
+
+			}
+
+			if (formgroup == "taxes") {
+				let type = (<FormGroup>((<FormGroup>this.ReturnRatesForm.get(formgroup)).get(subform))).get("type").value;
+				if (type === "flat") {
+					(<FormGroup>((<FormGroup>this.ReturnRatesForm.get(formgroup)).get(subform))).get("amount").setValue(baserate);
+				}
+
+				if (type === "percent") {
+					// let kmrate = (<FormGroup>((<FormGroup>(this.ReturnRatesForm.get("all_inclusive_rates"))).get("Base_Rate"))).get("amount").value;
+					let kmrate = await this.calculateBaseRate('ReturnRatesForm') - this.r_calc_admin_share - this.r_travel_agent_share;
+					let taxvalue = (<FormGroup>((<FormGroup>this.ReturnRatesForm.get("taxes")).get(subform))).get("baserate").value;
+
+					let amount = Number(Number((taxvalue / 100) * kmrate).toFixed(2));
+
+					(<FormGroup>((<FormGroup>this.ReturnRatesForm.get(formgroup)).get(subform))).get("amount").setValue(amount);
+				}
+
+				// Flat | Percentage - Taxes
+				(<FormGroup>((<FormGroup>this.ReturnRatesForm.get("taxes")).get(subform))).get("type").valueChanges.subscribe((value: any) => {
+					this.calculateAmount("ReturnRatesForm", formgroup, subform);
+				});
+			}
+
+			let amount = (<FormGroup>((<FormGroup>this.ReturnRatesForm.get(formgroup)).get(subform))).get("amount").value;
+			this.r_total[subform] = Number(Number(amount).toFixed(2));
+			if (formgroup == 'amenities' || formgroup == "all_inclusive_rates") {
+				let baseRateAmount = (<FormGroup>((<FormGroup>this.ReturnRatesForm.get('all_inclusive_rates')).get('Base_Rate'))).get("baserate").value;
+				if (this.service_type == 'charter_tour' && !this.is_readonly_min_rate) {
+					baseRateAmount = (<FormGroup>((<FormGroup>this.ReturnRatesForm.get('all_inclusive_rates')).get('Base_Rate'))).get("baserate").value * this.nums
+				}
+				baseRateAmount += this.r_calc_admin_share
+				if (this.isTravelShare && !this.isCreatedByAdmin) {
+					baseRateAmount = baseRateAmount + this.r_travel_agent_share;
+				}
+				else if (this.isFarmoutBooking) {
+					baseRateAmount = baseRateAmount + this.r_farmoutShare;
+				}
+				// (<FormGroup>((<FormGroup>this.RatesForm.get('all_inclusive_rates')).get('Base_Rate'))).get("amount").setValue(baseRateAmount);
+				this.r_total['Base_Rate'] = Number(Number(baseRateAmount).toFixed(2));
+			}
+			this.ReturnRatesForm.updateValueAndValidity();
+		}
+		// console.log(this.total, this.r_total);
 	}
 
 }

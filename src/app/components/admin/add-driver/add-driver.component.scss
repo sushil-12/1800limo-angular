@@ -1,5 +1,5 @@
 .vehtype_extint img {
-	height       : 200px;
+	height: 200px;
 	border-radius: 15px;
 }
 
@@ -40,13 +40,31 @@ hr {
 }
 
 .topLabelClass.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
-	padding-left    : 0px;
+	padding-left: 0px;
 	background-color: #fff;
-	max-width       : 50px;
-	text-align      : center;
-	left            : -6px;
+	max-width: 50px;
+	text-align: center;
+	left: -6px;
 }
-.asterisk{
-    font-size: 1.45rem;
-    margin-left: 3px;
-  }
+
+.asterisk {
+	font-size: 1.45rem;
+	margin-left: 3px;
+}
+
+.choose_ameniteslist {
+	flex-direction: column !important;
+	height: 34vh !important;
+}
+
+@media (min-width: 767px) and (max-width:821px) {
+	.choose_ameniteslist {
+		height: 38vh !important;
+	}
+}
+
+@media screen and (max-width: 767px) {
+	.choose_ameniteslist {
+		height: auto !important;
+	}
+}

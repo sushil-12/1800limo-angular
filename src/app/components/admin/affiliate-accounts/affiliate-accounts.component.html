@@ -18,7 +18,7 @@
 								Limo Accounts
 							</mat-option>
 							<mat-option value="fleet-operator" name="affiliateType"
-								(click)="affiliateTypeSwitch('fleet-operator')">Fleet
+								(click)="affiliateTypeSwitch('fleet-operator')">Fleet/Coach
 								Accounts</mat-option>
 							<mat-option value="taxi-operator" name="affiliateType"
 								(click)="affiliateTypeSwitch('taxi-operator')">Taxi
@@ -78,7 +78,7 @@
 								d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
 						</svg> {{addButton}}
 					</button>
-					<button class="custom-btn add-button" data-toggle="modal" data-target="#sendEmailModal"
+					<button class="custom-btn send-email-button" data-toggle="modal" data-target="#sendEmailModal"
 						(click)="buildSendEmailForm();">
 						Send Email
 					</button>
@@ -170,6 +170,11 @@
 											<div class="dropdown-item-icon"></div>
 											Log into this account
 										</a>
+										<a class="dropdown-item" (click)="auditTrail(blackCarLimoBus.id)"
+											data-toggle="modal" data-target="#AuditTrailModal">
+											<div class="dropdown-item-icon"></div>
+											Communication Logs
+										</a>
 									</div>
 								</td>
 								<td>
@@ -199,6 +204,8 @@
 								</td>
 								<td>
 									<span [innerHTML]="highlighText(blackCarLimoBus.AffiliateTypeName)"></span>
+									<span style="font-weight: 600;">
+										{{'('+(blackCarLimoBus?.number_of_vehicles)+')'}}</span>
 								</td>
 
 								<td>
@@ -364,7 +371,7 @@
 				<i class="bi bi-x-circle"></i>
 			</button>
 			<div class="modal-header pb-0 d-flex justify-content-center">
-				<h3 class="mb-0" id="exampleModalLabel">Send Email</h3>
+				<h3 class="mb-0" id="exampleModalLabel">Send Email to Affiliates</h3>
 			</div>
 			<div class="modal-body">
 				<form [formGroup]="sendEmailForm" appInvalidControlScroll>
@@ -380,16 +387,22 @@
 								<mat-label>
 									Text Message <span class="asterisk">*</span>
 								</mat-label>
-								<textarea matInput style="white-space: pre-wrap;" formControlName="text_message"
-									(focus)="$event.target.select()" rows="5" style="font-weight: 500;"></textarea>
+								<textarea matInput #textArea
+									style="white-space: pre-wrap; font-weight: 500; overflow: hidden;"
+									formControlName="text_message" (focus)="$event.target.select()"
+									(input)="adjustTextareaHeight(textArea)" rows="5">
+								</textarea>
 							</mat-form-field>
 						</div>
 						<div class="col-md-12">
 							<mat-form-field appearance="outline">
 								<mat-label>Select Emails <span class="asterisk">*</span></mat-label>
 								<mat-select [formControl]="emails" multiple panelClass="custom-select-panel">
-									<mat-option *ngFor="let option of affiliate_accounts_emails"
-										[value]="option.Email">{{option.FirstName + " " + option.LastName}}</mat-option>
+									<!-- Add Select All option -->
+									<mat-option (click)="selectAll()">Select All</mat-option>
+									<mat-option *ngFor="let option of affiliate_accounts"
+										[value]="stringifyOption(option)">{{option.FirstName + " " +
+										option.LastName}}</mat-option>
 								</mat-select>
 							</mat-form-field>
 						</div>
@@ -399,6 +412,60 @@
 			<div class="modal-footer d-flex justify-content-center">
 				<button class="custom-btn add-button" type="submit" (click)="sendEmail()"
 					[disabled]="Form.subject?.invalid && (Form.subject.touched || Form.subject.dirty)">Submit</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Audit trail Modal -->
+<div class="modal fade bd-example-modal-lg" id="AuditTrailModal" tabindex="-1" role="dialog"
+	aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content user_information bottom-container">
+			<div class="modal-header pb-0">
+				<h3 class="modal-title mb-0">Communication Logs</h3>
+			</div>
+			<div class="modal-body">
+				<!-- {{invoiceData.audit_trail | json}} -->
+				<table id="audittrail" class="table table-striped">
+					<thead style="background-color: white;">
+						<tr>
+							<th scope="col">#</th>
+							<th scope="col">Description</th>
+							<th scope="col">Content</th>
+							<th scope="col" id="date">Created Date</th>
+						</tr>
+					</thead>
+					<tbody>
+
+						<!-- <ng-container *ngIf="audit_Trail; else not_found"> -->
+						<tr *ngFor="let record of audit_Trail; let i=index">
+							<th scope="row">{{i+1}}</th>
+							<td style="word-wrap: break-word;">{{record?.description}}</td>
+							<td style="word-wrap: break-word;" *ngIf="record?.type == 'sms' ">{{record?.content}}</td>
+							<td style="word-wrap: break-word;" *ngIf="record?.type == 'email' "><a
+									style="color: blue;text-decoration: underline;cursor: pointer;"
+									(click)="viewEmailContent(record?.id)">View
+									Content</a></td>
+							<td>{{record?.created_at}}</td>
+						</tr>
+
+						<!-- </ng-container> -->
+						<!-- <ng-template #not_found>
+							<tr>
+								<td colspan = "3">No Record Found!</td>
+							</tr>	
+						</ng-template> -->
+
+
+					</tbody>
+				</table>
+			</div>
+			<div class="modal-footer justify-content-end">
+				<button type="button" class="x-close-btn x-cross-btn mx-3" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true" class="bi bi-x-circle"></span>
+				</button>
+
 			</div>
 		</div>
 	</div>

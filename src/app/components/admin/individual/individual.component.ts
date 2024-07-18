@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, isDevMode } from '@angular/core';
 import { AdminService } from '../../../services/admin.service';
 import { Router } from '@angular/router';
 import { NgxSpinnerService } from "ngx-spinner";
@@ -6,6 +6,7 @@ import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { ThemePalette } from '@angular/material/core';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 declare var $: any;
 @Component({
 	selector: 'app-individual',
@@ -36,17 +37,29 @@ export class IndividualComponent implements OnInit {
 	public nextPageUrl: string;
 	searchText: string = '';
 	loginAsUserResponse: any;
+	sendEmailForm: FormGroup;
+	show: boolean;
+	allSelected = false;
+	emails = new FormControl('');
+	audit_Trail: any = [];
 
 	constructor(
 		private adminService: AdminService,
 		private router: Router,
+		private $form: FormBuilder,
 		private errorDialog: ErrorDialogService,
 		private spinner: NgxSpinnerService) { }
 
 	ngOnInit(): void {
 		this.searchText = localStorage.getItem('individualSearch') ? localStorage.getItem('individualSearch') : ''
 		this.loadIndividuals();//load individuals
+		this.buildSendEmailForm();
 
+	}
+
+	adjustTextareaHeight(textarea: HTMLTextAreaElement) {
+		textarea.style.height = 'auto';
+		textarea.style.height = textarea.scrollHeight + 'px';
 	}
 
 	timer: any
@@ -93,7 +106,7 @@ export class IndividualComponent implements OnInit {
 		// Load Our individuals using API
 		this.adminService.individualAccounts(pageUrl, keyword).then(result => {
 			this.individualsRes = result;
-			this.individuals = this.individualsRes.data.data;
+			this.individuals = this.individualsRes?.data?.data;
 
 			this.firstPage = 1;
 			this.lastPage = this.individualsRes.data.last_page;
@@ -113,6 +126,96 @@ export class IndividualComponent implements OnInit {
 				// this.spinner.hide();//hide spinner
 			});
 	}
+
+	get Form() {
+		return this.sendEmailForm.controls;
+	}
+
+
+	//build email modal
+	buildSendEmailForm() {
+		this.sendEmailForm = this.$form.group({
+			subject: [''],
+			text_message: ['']
+		})
+	}
+
+
+	//close email modal
+	closeModal() {
+		this.sendEmailForm.patchValue({
+			subject: "",
+			text_message: ''
+		})
+		this.show = false
+		$("#sendEmailModal").modal("hide");
+	}
+
+	selectAll() {
+		if (this.allSelected) {
+			this.emails.patchValue([]);
+		} else {
+			const allValues = this.individuals.map(option => this.stringifyOption(option));
+			this.emails.setValue(allValues);
+		}
+		this.allSelected = !this.allSelected;
+	}
+
+	stringifyOption(option: any): string {
+		return JSON.stringify({ id: option.id, email: option.email });
+	}
+
+	//submit email modal
+	sendEmail() {
+		this.spinner.show()
+		let body = {
+			subject: this.sendEmailForm.get('subject').value,
+			message: this.sendEmailForm.get('text_message').value,
+			recipents: this.emails.value
+		}
+		console.log("body-------->", body)
+		this.adminService.sendEmailAffiliate(body).subscribe((response: any) => {
+			this.errorDialog.openDialog({
+				errors: {
+					error: `<span class='text-success'>${response.message}</span>`
+				}
+			})
+			this.spinner.hide()
+			console.log("response-------->", response)
+		})
+
+		this.show = false
+		this.sendEmailForm.patchValue({
+			subject: "",
+			text_message: ''
+		})
+		this.emails.setValue('');
+		$("#sendEmailModal").modal("hide");
+	}
+
+	auditTrail(id: any) {
+		console.log("In function audit trail", id);
+		this.spinner.show();
+		this.adminService
+			.communicationLogs(id)
+			.pipe(
+				catchError((err) => {
+					return throwError(err);
+				})
+			)
+			.subscribe((response: any) => {
+				this.spinner.hide();
+				console.log("audit trail --->>>>>>>>", response);
+				this.audit_Trail = response?.data?.logs;
+				// $("#AuditTrailModal").modal("hide");
+			});
+	}
+
+	viewEmailContent(id:any){
+		console.log("In function view email content", id);
+		const url = isDevMode() ? `https://1800limoapi.infodevbox.com/log-content/${id}` : `https://api.1800limo.com/log-content/${id}`;
+		window.open(url, '_blank');
+	  }
 
 	addIndividualClick(individualId) {
 		this.router.navigate(['/admin/add-individual-account'], { queryParams: { individualId: individualId } });

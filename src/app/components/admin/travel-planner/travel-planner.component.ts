@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, isDevMode } from '@angular/core';
 import { AdminService } from '../../../services/admin.service';
 import { Router } from '@angular/router';
 import { NgxSpinnerService } from "ngx-spinner";
@@ -6,6 +6,7 @@ import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { ThemePalette } from '@angular/material/core';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 declare var $: any;
 @Component({
   selector: 'app-travel-planner',
@@ -34,24 +35,37 @@ export class TravelPlannerComponent implements OnInit {
   public lastPageUrl: string;
   public prevPageUrl: string;
   public nextPageUrl: string;
+  sendEmailForm: FormGroup;
+  show: boolean;
+  emails = new FormControl('');
+  allSelected = false;
+  public travel_accounts_email: any = [];
   searchText: any;
   travelAccountCount: any;
   loginAsUserResponse: any;
+  audit_Trail: any = [];
 
   constructor(
     private adminService: AdminService,
     private router: Router,
+    private $form: FormBuilder,
     private errorDialog: ErrorDialogService,
     private spinner: NgxSpinnerService) { }
 
   ngOnInit(): void {
     this.searchText = localStorage.getItem('TravelAgentSearch') ? localStorage.getItem('TravelAgentSearch') : ''
     this.loadTravelPlanners();//load travelPlanners
+    this.buildSendEmailForm();
 
     localStorage.removeItem('travelAgent_id')
     sessionStorage.removeItem('stepCompleted')
     sessionStorage.removeItem('step_completed_obj')
   }
+
+  adjustTextareaHeight(textarea: HTMLTextAreaElement) {
+		textarea.style.height = 'auto';
+		textarea.style.height = textarea.scrollHeight + 'px';
+	}
 
   timer: any
   handleSearchKeyword(text: any) {
@@ -98,6 +112,7 @@ export class TravelPlannerComponent implements OnInit {
     this.adminService.travelPlannerAccounts(pageUrl, keyword).then(result => {
       this.travelPlannersRes = result;
       this.travelPlanners = this.travelPlannersRes.data.data;
+      this.travel_accounts_email = this.travelPlannersRes?.data?.data;
 
       this.firstPage = 1;
       this.travelAccountCount = this.travelPlannersRes?.data?.account_counts
@@ -141,6 +156,106 @@ export class TravelPlannerComponent implements OnInit {
 
   addTravelPlannerClick(travelPlannerId) {
     this.router.navigate(['/admin/travel-planner-account/step1'], { queryParams: { travelPlannerId: travelPlannerId } });
+  }
+
+  get Form() {
+    return this.sendEmailForm.controls;
+  }
+
+  //build email modal
+  buildSendEmailForm() {
+    this.sendEmailForm = this.$form.group({
+      subject: [''],
+      text_message: ['']
+    })
+  }
+
+
+  //close email modal
+  closeModal() {
+    this.sendEmailForm.patchValue({
+      subject: "",
+      text_message: ''
+    })
+    this.show = false
+    $("#sendEmailModal").modal("hide");
+  }
+
+  selectAll() {
+    if (this.allSelected) {
+      this.emails.patchValue([]);
+    } else {
+      const allValues = this.travel_accounts_email.map(option => this.stringifyOption(option));
+      this.emails.setValue(allValues);
+    }
+    this.allSelected = !this.allSelected;
+  }
+
+  stringifyOption(option: any): string {
+    return JSON.stringify({ id: option.id, email: option.email });
+  }
+
+  auditTrail(id: any) {
+    console.log("In function audit trail", id);
+    this.spinner.show();
+    this.adminService
+      .communicationLogs(id)
+      .pipe(
+        catchError((err) => {
+          return throwError(err);
+        })
+      )
+      .subscribe((response: any) => {
+        this.spinner.hide();
+        console.log("audit trail --->>>>>>>>", response);
+        this.audit_Trail = response?.data?.logs;
+        // $("#AuditTrailModal").modal("hide");
+      });
+  }
+
+  viewEmailContent(id: any) {
+    console.log("In function view email content", id);
+    const url = isDevMode() ? `https://1800limoapi.infodevbox.com/log-content/${id}` : `https://api.1800limo.com/log-content/${id}`;
+		window.open(url, '_blank');
+  }
+
+
+  //submit email modal
+  sendEmail() {
+    this.spinner.show()
+    let body = {
+      subject: this.sendEmailForm.get('subject').value,
+      message: this.sendEmailForm.get('text_message').value,
+      recipents: this.emails.value
+    }
+    console.log("body-------->", body)
+    this.adminService.sendEmailAffiliate(body).subscribe((response: any) => {
+      this.errorDialog.openDialog({
+        errors: {
+          error: `<span class='text-success'>${response.message}</span>`
+        }
+      })
+      this.spinner.hide()
+      console.log("response-------->", response)
+    })
+
+    this.show = false
+    this.sendEmailForm.patchValue({
+      subject: "",
+      text_message: ''
+    })
+    this.emails.setValue('');
+    $("#sendEmailModal").modal("hide");
+  }
+
+  highlighTextSteps(args: string) {
+    if (!this.searchText) { return args ? args.replace("_", " ").toUpperCase() : "N/A"; }
+    if (args) {
+      args = args.replace("_", " ").toUpperCase()
+      var re = new RegExp(this.searchText, 'gi'); //'gi' for case insensitive and can use 'g' if you want the search to be case sensitive.
+      return args.replace(re, '<mark class="font-weight-bold">$&</mark>');
+    }
+
   }
 
   clickEditTravelPlanner(travelPlannerId) {

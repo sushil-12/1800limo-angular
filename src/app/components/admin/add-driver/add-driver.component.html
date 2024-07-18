@@ -85,9 +85,9 @@
 				</div>
 				<div class="col-md-4">
 					<mat-form-field appearance="outline">
-						<mat-label>Driver E-mail (Fleet Operator - <span class="braces-content">Optional</span>)
+						<mat-label>Driver E-mail (Fleet/Coach Operator - <span class="braces-content">Optional</span>)
 						</mat-label>
-						<input matInput placeholder="Driver E-mail (Fleet Operator - Optional)" formControlName="Email"
+						<input matInput placeholder="Driver E-mail (Fleet/Coach Operator - Optional)" formControlName="Email"
 							tabindex="1" (focus)="$event.target.select()">
 					</mat-form-field>
 					<div *ngIf="submittedForm && f.Email.errors || f.Email.touched && f.Email.errors"
@@ -1206,29 +1206,23 @@
 		</div>
 	</section>
 	<div class="container">
-		<div class="row justify-content-between">
-
-			<div class="billing_inforamtion">
-				<ul>
-					<li>
-						<button class="custom-filled-back-button" type="button" (click)="backButton()"
-							data-toggle="tooltip" data-placement="top" title="Clicking back button deletes all fields."
-							tabindex="1">BACK</button>
-					</li>
-				</ul>
-
-			</div>
-
-			<div class="billing_inforamtion">
-				<ul>
-					<li><button class="custom-filled-reset-button" (click)="resetForm()" tabindex="1">RESET</button>
-					</li>
-					<li><button class="custom-filled-button" (click)="submitForm()" [disabled]="disableSubmitButton"
-							tabindex="1">SAVE</button></li>
-					<!-- <li>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="billing_inforamtion ">
+					<ul class="d-flex justify-content-center">
+						<li>
+							<button class="custom-filled-back-button" type="button" (click)="backButton()"
+								data-toggle="tooltip" data-placement="top"
+								title="Clicking back button deletes all fields." tabindex="1">BACK</button>
+						</li>
+						<li><button class="custom-filled-reset-button" (click)="resetForm()" tabindex="1">RESET</button>
+						</li>
+						<li><button class="custom-filled-button" (click)="submitForm()" [disabled]="disableSubmitButton"
+								tabindex="1">SAVE</button></li>
+						<!-- <li>
 						</li> -->
-				</ul>
-
+					</ul>
+				</div>
 			</div>
 		</div>
 	</div>

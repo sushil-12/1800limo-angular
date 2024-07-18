@@ -1,18 +1,18 @@
 import {
-AfterViewInit,
-AfterViewChecked,
-Component,
-EventEmitter,
-Input,
-OnInit,
+	AfterViewInit,
+	AfterViewChecked,
+	Component,
+	EventEmitter,
+	Input,
+	OnInit,
 } from "@angular/core";
 import { AffiliateService } from "../../../services/affiliate.service";
 import {
-FormGroup,
-FormBuilder,
-Validators,
-FormArray,
-FormControl,
+	FormGroup,
+	FormBuilder,
+	Validators,
+	FormArray,
+	FormControl,
 } from "@angular/forms";
 import { Router, ActivatedRoute } from "@angular/router";
 import { NgxSpinnerService } from "ngx-spinner";
@@ -246,7 +246,9 @@ export class AddDriverFromAffiliateComponent
 				})
 			)
 			.subscribe(({ data }: any) => {
-				this.languages = data.languages;
+				let languagesData = data.languages;
+				this.languages = languagesData.sort((a, b) => a.name.localeCompare(b.name));
+				// this.languages = data.languages;
 				this.dresses = data.dresses;
 
 				if (this.affiliateId) {
@@ -584,146 +586,146 @@ export class AddDriverFromAffiliateComponent
 				}
 			});
 	}
-	fetchImageBlob(url ,key ,id){
+	fetchImageBlob(url, key, id) {
 		this.stateManagementService.setprogressBar(true);
-		
+
 		this.adminService.fetchImageBlob(url)
-		.pipe(
-			catchError(err => {
+			.pipe(
+				catchError(err => {
+					this.stateManagementService.setprogressBar(false);
+					return throwError(err);
+				})
+			)
+			.subscribe(async ({ data }: any) => {
 				this.stateManagementService.setprogressBar(false);
-				return throwError(err);
+				const response = await fetch(data);
+				const imageBlob = await response.blob()
+				console.log('imageBlob', imageBlob)
+				const canvas = document.createElement("canvas");
+				const ctx = canvas.getContext("2d");
+				const img = new Image();
+				img.src = URL.createObjectURL(imageBlob);
+				console.log('img-->', img)
+				img.onload = () => {
+					// Rotate the image by 90 degrees (or your desired angle)
+					canvas.width = img.width;
+					canvas.height = img.height;
+					ctx.translate(canvas.width / 2, canvas.height / 2);
+					ctx.rotate(Math.PI); // Rotate by 180 degrees
+					ctx.drawImage(img, -img.width / 2, -img.height / 2);
+					// ctx.drawImage(img, 0, -canvas.width);
+
+					// Convert the canvas to a Blob (JPEG format)
+					canvas.toBlob((blob) => {
+						console.log(blob);
+
+						this.blobToDataURL(blob, key, id);
+						// });
+					}, "image/jpeg");
+				}
 			})
-		)
-		.subscribe(async({ data }: any) => {
-			this.stateManagementService.setprogressBar(false);
-			const response = await fetch(data);
-			const imageBlob = await response.blob()
-			console.log('imageBlob',imageBlob)
-		const canvas = document.createElement("canvas");
-		const ctx = canvas.getContext("2d");
-		const img = new Image();
-		img.src = URL.createObjectURL(imageBlob);
-		console.log('img-->' , img)
-		img.onload = () => {
-			// Rotate the image by 90 degrees (or your desired angle)
-			canvas.width = img.width; 
-			canvas.height = img.height;
-			ctx.translate(canvas.width / 2, canvas.height / 2);
-			ctx.rotate(Math.PI); // Rotate by 180 degrees
-			ctx.drawImage(img, -img.width / 2, -img.height / 2);
-			// ctx.drawImage(img, 0, -canvas.width);
-
-			// Convert the canvas to a Blob (JPEG format)
-			canvas.toBlob((blob) => {
-				console.log(blob);
-
-				this.blobToDataURL(blob, key ,id);
-				// });
-			}, "image/jpeg");
-		}
-		})
 	}
-	blobToDataURL(blob: Blob , key , id) {
+	blobToDataURL(blob: Blob, key, id) {
 		var reader = new FileReader();
 		reader.readAsDataURL(blob);
 		reader.onload = () => {
 			let dataUrl = reader.result;
 			console.log(dataUrl); //DataURL
-			this.vehicleOfficialImagesChange1(dataUrl, key,id);
+			this.vehicleOfficialImagesChange1(dataUrl, key, id);
 		};
 	}
 
 	async vehicleOfficialImagesChange1(imgUrl, imageType, imageId) {
-		if(!await this.commonServices.handleFile(event)) {
+		if (!await this.commonServices.handleFile(event)) {
 			return;
 		}
 		this.stateManagementService.setprogressBar(true);
-				this.imageSrc = imgUrl
-				this.affiliateService
-					.uploadVehicleImage(this.imageSrc)
-					.pipe(
-						catchError((err) => {
-							this.stateManagementService.setprogressBar(false);
-							return throwError(err);
-						})
-					)
-					.subscribe(({ data }: any) => {
-						switch (imageType) {
-							case "DriverImage": {
-								this.addDriverForm.patchValue({
-									DriverImage: data.id,
-								});
-								this.DriverImage = data.image;
-								this.DriverImageId = data.id;
-								break;
-							}
-							case "DriverLicense": {
-								this.addDriverForm.patchValue({
-									DriverLicense: data.id,
-								});
-								this.DriverLicense = data.image;
-								break;
-							}
-							case "StarRating": {
-								this.addDriverForm.patchValue({
-									StarRating: data.id,
-								});
-								this.StarRating = data.image;
-								break;
-							}
-							case "VeteranIdCard": {
-								this.addDriverForm.patchValue({
-									VeteranIdCard: data.id,
-								});
-								this.VeteranIdCard = data.image;
-								break;
-							}
-							case "schoolBusCertificateImage": {
-								this.addDriverForm.patchValue({
-									schoolBusCertificateImage: data.id,
-								});
-								this.schoolBusCertificateImage = data.image;
-								break;
-							}
-							case "FoidCardImage": {
-								this.addDriverForm.patchValue({
-									FoidCardImage: data.id,
-								});
-								this.FoidCardImage = data.image;
-								break;
-							}
-							case "BackgroundCheckerID": {
-								this.addDriverForm.patchValue({
-									BackgroundCheckerID: data.id,
-								});
-								this.BackgroundCheckerID = data.image;
-								break;
-							}
-							case "VaccinationCardImage": {
-								this.addDriverForm.patchValue({
-									VaccinationCardImage: data.id,
-								});
-								this.VaccinationCardImage = data.image;
-								break;
-							}
-							case "DoDImage": {
-								this.addDriverForm.patchValue({
-									DoDImage: data.id,
-								});
-								this.DoDImage = data.image;
-								break;
-							}
-							default: {
-								break;
-							}
-						}
-						this.stateManagementService.setprogressBar(false);
-					});
+		this.imageSrc = imgUrl
+		this.affiliateService
+			.uploadVehicleImage(this.imageSrc)
+			.pipe(
+				catchError((err) => {
+					this.stateManagementService.setprogressBar(false);
+					return throwError(err);
+				})
+			)
+			.subscribe(({ data }: any) => {
+				switch (imageType) {
+					case "DriverImage": {
+						this.addDriverForm.patchValue({
+							DriverImage: data.id,
+						});
+						this.DriverImage = data.image;
+						this.DriverImageId = data.id;
+						break;
+					}
+					case "DriverLicense": {
+						this.addDriverForm.patchValue({
+							DriverLicense: data.id,
+						});
+						this.DriverLicense = data.image;
+						break;
+					}
+					case "StarRating": {
+						this.addDriverForm.patchValue({
+							StarRating: data.id,
+						});
+						this.StarRating = data.image;
+						break;
+					}
+					case "VeteranIdCard": {
+						this.addDriverForm.patchValue({
+							VeteranIdCard: data.id,
+						});
+						this.VeteranIdCard = data.image;
+						break;
+					}
+					case "schoolBusCertificateImage": {
+						this.addDriverForm.patchValue({
+							schoolBusCertificateImage: data.id,
+						});
+						this.schoolBusCertificateImage = data.image;
+						break;
+					}
+					case "FoidCardImage": {
+						this.addDriverForm.patchValue({
+							FoidCardImage: data.id,
+						});
+						this.FoidCardImage = data.image;
+						break;
+					}
+					case "BackgroundCheckerID": {
+						this.addDriverForm.patchValue({
+							BackgroundCheckerID: data.id,
+						});
+						this.BackgroundCheckerID = data.image;
+						break;
+					}
+					case "VaccinationCardImage": {
+						this.addDriverForm.patchValue({
+							VaccinationCardImage: data.id,
+						});
+						this.VaccinationCardImage = data.image;
+						break;
+					}
+					case "DoDImage": {
+						this.addDriverForm.patchValue({
+							DoDImage: data.id,
+						});
+						this.DoDImage = data.image;
+						break;
+					}
+					default: {
+						break;
+					}
+				}
+				this.stateManagementService.setprogressBar(false);
+			});
 	}
 
 
 	async vehicleOfficialImagesChange(event, imageType, imageId) {
-		if(!await this.commonServices.handleFile(event)) {
+		if (!await this.commonServices.handleFile(event)) {
 			return;
 		}
 		this.stateManagementService.setprogressBar(true);
@@ -1181,11 +1183,11 @@ export class AddDriverFromAffiliateComponent
 		this.BackgroundCheckerID = "";
 		this.VaccinationCardImage = "";
 		this.DoDImage = "",
-		window.scrollTo({
-			top:0,
-			behavior:'smooth'
-		})
-		this.submittedForm= true
+			window.scrollTo({
+				top: 0,
+				behavior: 'smooth'
+			})
+		this.submittedForm = true
 	}
 	backButton() {
 		this.router.navigate(["/affiliate/step4"]);

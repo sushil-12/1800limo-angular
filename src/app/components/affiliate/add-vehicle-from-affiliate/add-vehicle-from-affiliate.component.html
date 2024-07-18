@@ -357,13 +357,13 @@
 
 				<!-- Airport/City Cancel Times -->
 				<div class="col-md-6">
-					<label class="select-cancel-label">Airport / City Cancel Policy
+					<label class="select-cancel-label">Airport / City / Cruise Port Cancel Policy
 						<span class="asterisk1">*</span></label>
 					<div class="selectStyle" [ngClass]="changeNonCharterCancelPolicy ? '' : 'border-red'">
 						<select class="selectInputStyle" formControlName="nonCharterCancelPolicy"
 							(change)="handleNonCharterCancelPolicy($event)" tabindex="1">
 							<option value="">
-								Choose Airport / City Cancel Policy
+								Choose Airport / City / Cruise Port Cancel Policy
 							</option>
 							<option *ngFor="
 									let nonCharterCancelOption of nonCharterCancelOptions
@@ -392,12 +392,12 @@
 								f.nonCharterCancelPolicy.errors)
 						" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.nonCharterCancelPolicy.errors.required">
-							The Charter Cancel Policy is required
+							The Airport / City / Cruise Port Cancel Policy is required
 						</div>
 					</div>
 					<div *ngIf="f.nonCharterCancelPolicy.errors" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.nonCharterCancelPolicy.errors.pattern">
-							The Charter Cancel Policy should be a number
+							The Airport / City / Cruise Port Cancel Policy should be a number
 						</div>
 					</div>
 				</div>
@@ -482,29 +482,24 @@
 			<div class="row mt-3">
 				<div class="col-md-4">
 					<div class="input-checkbox">
-						<div class="checkbox" [ngClass]="
-								service.includes('local') ? 'active' : ''
-							" (click)="onServiceChange('local')">
+						<div class="checkbox" [ngClass]="service.includes('local') ? 'active' : ''"
+							(click)="onServiceChange('local')">
 							Local Service Only
 						</div>
 					</div>
 				</div>
 				<div class="col-md-4">
 					<div class="input-checkbox">
-						<div class="checkbox" [ngClass]="
-								service.includes('over_the_road')
-									? 'active'
-									: ''
-							" (click)="onServiceChange('over_the_road')">
+						<div class="checkbox" [ngClass]="service.includes('over_the_road') ? 'active' : ''"
+							(click)="onServiceChange('over_the_road')">
 							Over The Road
 						</div>
 					</div>
 				</div>
 				<div class="col-md-4">
 					<div class="input-checkbox">
-						<div class="checkbox" [ngClass]="
-								service.includes('shuttle') ? 'active' : ''
-							" (click)="onServiceChange('shuttle')">
+						<div class="checkbox" [ngClass]="service.includes('shuttle') ? 'active' : ''"
+							(click)="onServiceChange('shuttle')">
 							Shuttle Service
 						</div>
 					</div>
@@ -668,8 +663,8 @@
 				These are sample images as a guide to good picture taking. Sell your unique features that travelers and
 				party goers want!
 			</span>
-			<span class="alert alert-danger row ml-2 mr-2 mt-3 mb-2 text-uppercase font-weight-bolder">
-				Delete all other images not related to this vehicle.
+			<span class="alert alert-danger row ml-2 mr-2">
+				Please upload clear and undistorted images from proper angle!
 			</span>
 			<div class="mt-4 vehtype_extintwrap">
 				<div class="row">
@@ -1801,22 +1796,14 @@
 		</div>
 	</section>
 	<div class="container">
-		<div class="row justify-content-between">
-
-			<div class="billing_inforamtion">
-				<ul>
+		<div class="col-md-12">
+			<div class="billing_inforamtion ">
+				<ul class="d-flex justify-content-center">
 					<li>
-
 						<button class="custom-filled-back-button" routerLink="/affiliate/step5">
 							BACK
 						</button>
 					</li>
-				</ul>
-			</div>
-
-
-			<div class="billing_inforamtion">
-				<ul>
 					<li>
 						<button class="custom-filled-reset-button" (click)="resetForm()" tabIndex="2">
 							RESET

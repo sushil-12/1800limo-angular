@@ -85,6 +85,7 @@ import { TravelAgentStripeFormComponent } from './travel-agent-stripe-form/trave
 import { RecoverAccountsComponent } from './recover-accounts/recover-accounts.component';
 import { SubTravelPlannerAccountComponent } from './sub-travel-planner-account/sub-travel-planner-account.component';
 import { LooseAffiliateAccountsComponent } from './loose-affiliate-accounts/loose-affiliate-accounts.component';
+import { LooseAffiliateAccountDetailsComponent } from './loose-affiliate-account-details/loose-affiliate-account-details.component';
 
 
 const routes: Routes = [
@@ -202,7 +203,7 @@ const routes: Routes = [
 		canActivate: [SubAdminGuard],
 		component: AffiliateBookingComponent
 	},
-	
+
 	{
 		path: 'create-new-booking',
 		canActivate: [SubAdminGuard],
@@ -387,7 +388,7 @@ const routes: Routes = [
 				component: TravelAgentStripeFormComponent
 			},
 		]
-	}, 
+	},
 	{
 		path: 'sub-travel-planner-account',
 		canActivate: [SubAdminGuard],
@@ -463,7 +464,7 @@ const routes: Routes = [
 		canActivate: [AdminGuardGuard],
 		component: StaffRolesListComponent
 	},
-	
+
 	{
 		path: 'staff-permissions',
 		canActivate: [AdminGuardGuard],
@@ -478,6 +479,16 @@ const routes: Routes = [
 		path: 'loose-affiliate-accounts',
 		canActivate: [AdminGuardGuard],
 		component: LooseAffiliateAccountsComponent
+	},
+	{
+		path: 'add-loose-affiliate-account',
+		canActivate: [AdminGuardGuard],
+		component: LooseAffiliateAccountDetailsComponent
+	},
+	{
+		path: 'edit-loose-affiliate-account',
+		canActivate: [AdminGuardGuard],
+		component: LooseAffiliateAccountDetailsComponent
 	},
 	{
 		path: 'affiliate',

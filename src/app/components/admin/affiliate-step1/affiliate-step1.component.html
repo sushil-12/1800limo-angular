@@ -78,7 +78,7 @@
 											d="M42.37,51.68,53.26,62,79,35.87c2.13-2.16,3.47-3.9,6.1-1.19l8.53,8.74c2.8,2.77,2.66,4.4,0,7L58.14,85.34c-5.58,5.46-4.61,5.79-10.26.19L28,65.77c-1.18-1.28-1.05-2.57.24-3.84l9.9-10.27c1.5-1.58,2.7-1.44,4.22,0Z" />
 									</svg></div>
 								<label class="radio-tile-label"
-									[ngClass]="selectedAffiliate=='fleet_operator' ? 'active' : ''" for="fleet">Fleet
+									[ngClass]="selectedAffiliate=='fleet_operator' ? 'active' : ''" for="fleet">Fleet/Coach
 									Operator Owned</label>
 							</div>
 						</div>
@@ -363,13 +363,14 @@
 					</div>
 				</div>
 
-				<div class="col-md-6 my-3">
-					<mat-form-field appearance="outline" class="example-full-width">
-						<mat-label>Badge City
+				<!-- <div class="col-md-6 my-3">
+					<mat-form-field appearance="outline" class="example-full-width red-placeholder">
+						<mat-label class="red-placeholder">Badge city (Enter Largest Major City You Service)
 						</mat-label>
-						<input type="text" placeholder="Pick one" aria-label="Number" matInput
-							formControlName="badge_city_name" [matAutocomplete]="auto"
-							(keyup)="handleBadgeCity($event.target.value)" (focus)="$event.target.select()">
+						<input type="text" placeholder="Enter Largest Major City You Service" aria-label="Number"
+							matInput formControlName="badge_city_name" [matAutocomplete]="auto"
+							(keyup)="handleBadgeCity($event.target.value)" (focus)="$event.target.select()"
+							class="red-placeholder">
 						<mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
 							<mat-option *ngFor="let option of filteredOptions"
 								(onSelectionChange)="selectBadgeCity(option,$event.isUserInput)" [value]="option.name">
@@ -377,7 +378,7 @@
 							</mat-option>
 						</mat-autocomplete>
 					</mat-form-field>
-				</div>
+				</div> -->
 			</div>
 		</div>
 	</section>
@@ -557,9 +558,9 @@
 
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
-						<mat-label>City/State Permit #</mat-label>
-						<input matInput placeholder="City/State Permit #" formControlName="cpcn_tpc" tabIndex="1"
-							(focus)="$event.target.select()" />
+						<mat-label>City/State/Permit/License #</mat-label>
+						<input matInput placeholder="City/State/Permit/License #" formControlName="cpcn_tpc"
+							tabIndex="1" (focus)="$event.target.select()" />
 					</mat-form-field>
 					<div *ngIf="f.cpcn_tpc.errors" class="text-danger margin-bottom-thin my-mat-hint">
 						<div *ngIf="f.cpcn_tpc.errors?.invalid_Pattern;else plusError">Do not add Dashes
@@ -789,10 +790,7 @@
 	</section>
 	<div class="container">
 		<div class="row">
-			<div class="col-md-7">
-
-			</div>
-			<div class="col-md-5">
+			<div class="col-md-12">
 				<div class="billing_inforamtion">
 					<ul class="d-flex justify-content-center">
 						<li><button class="custom-filled-reset-button mr-2" (click)="resetForm()"

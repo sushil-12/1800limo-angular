@@ -119,6 +119,7 @@ import { RecoverAccountsComponent } from './recover-accounts/recover-accounts.co
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { SubTravelPlannerAccountComponent } from './sub-travel-planner-account/sub-travel-planner-account.component';
 import { LooseAffiliateAccountsComponent } from './loose-affiliate-accounts/loose-affiliate-accounts.component';
+import { LooseAffiliateAccountDetailsComponent } from './loose-affiliate-account-details/loose-affiliate-account-details.component';
 
 
 @NgModule({
@@ -210,7 +211,8 @@ import { LooseAffiliateAccountsComponent } from './loose-affiliate-accounts/loos
 		TravelAgentStripeFormComponent,
 		RecoverAccountsComponent,
 		SubTravelPlannerAccountComponent,
-		LooseAffiliateAccountsComponent
+		LooseAffiliateAccountsComponent,
+		LooseAffiliateAccountDetailsComponent
 	],
 	imports: [
 		CommonModule,

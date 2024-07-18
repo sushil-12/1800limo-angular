@@ -1,3 +1,4 @@
+<ngx-spinner></ngx-spinner>
 <section class="driverbooking_top user_information">
 	<h2 class="headinginfo">ADD VEHICLE <span>(s)</span></h2>
 	<div class="containeredd">
@@ -13,6 +14,10 @@
 			<div class="col-md-12 mb-2">
 				<label class="alert alert-danger" *ngIf="instructionBasedOnAffiliate">
 					Click the View button and click Duplicate and change Year, Color, Amenities, or Rates.</label>
+			</div>
+			<div class="col-md-12 mb-2">
+				<label class="alert alert-danger" *ngIf="instructionBasedOnAffiliate">
+					Click and drag each vehicle to change their order.</label>
 			</div>
 
 		</div>
@@ -52,9 +57,10 @@
 								<th>Delete</th>
 							</tr>
 						</thead>
-						<tbody>
+						<tbody cdkDropList (cdkDropListDropped)="drop($event)">
 							<ng-container *ngIf="vehicles">
-								<tr role="row" class="odd" *ngFor="let vehicle of vehicles">
+								<tr *ngFor="let vehicle of vehicles;index as vehicle_index"
+									[attr.id]="'vehicle_' + vehicle.ID" role="row" class="odd" cdkDrag>
 									<td>
 										<a *ngIf="vehicle.isRatesCompleted; else pendingRates"
 											class="user-profileded btn btn-icon btn-transparent-dark dropdown-toggle"
