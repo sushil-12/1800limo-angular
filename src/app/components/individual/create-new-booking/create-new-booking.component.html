@@ -2502,8 +2502,8 @@
                                 </span>
                             </div>
                             <div class="col-md-8 value box-special-instruction">
-                                <span class="font-weight-bolder" style="white-space: pre-wrap;">
-                                    {{Form?.booking_instructions.value}}
+                                <span class="font-weight-bolder" style="white-space: pre-wrap;" [innerHTML]="highlightNumbers(Form?.booking_instructions.value)">
+                                    <!-- {{Form?.booking_instructions.value}} -->
                                 </span>
                             </div>
                         </div>
@@ -2843,8 +2843,8 @@
                                 </span>
                             </div>
                             <div class="col-md-8 value box-special-instruction">
-                                <span class="font-weight-bolder" style="white-space: pre-wrap;">
-                                    {{Form?.return_booking_instructions.value}}
+                                <span class="font-weight-bolder" style="white-space: pre-wrap;" [innerHTML]="highlightNumbers(Form?.return_booking_instructions.value)">
+                                    <!-- {{Form?.return_booking_instructions.value}} -->
                                 </span>
                             </div>
                         </div>

@@ -938,6 +938,23 @@ export class DailyBookingsComponent implements OnInit {
 			});
 	}
 
+	// numbers in red and seperated to next line
+	highlightNumbers(text: string): string {
+		const parts = text.split(/\b(\d+\.\s)/); // Split by number followed by dot and space
+
+        // Process parts and apply formatting
+        let formattedText = '';
+        for (let i = 0; i < parts.length; i++) {
+            if (i % 2 === 0) {
+                formattedText += parts[i]; // Regular text part
+            } else {
+                formattedText += `<br><span class="text-danger font-weight-bolder">${parts[i]}</span>`; // Numbered instruction part
+            }
+        }
+
+        return formattedText;
+    }
+
 	timer: any;
 	searchInBookings(search_value: string) {
 		this.searchText = search_value;
