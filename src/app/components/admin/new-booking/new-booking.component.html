@@ -1488,7 +1488,8 @@
 				<div class="col-md-12 col-lg-10">
 					<mat-radio-group aria-label="Select an option" formControlName="return_affiliate_type">
 						<mat-radio-button [value]="aa" class="my-2 ml-4 mr-5 mx-md-4"
-							(click)="resetDriverAndVehicle(aa)" *ngFor="let aa of booking_params.affiliate_accounts">
+							(click)="resetReturnDriverAndVehicle(aa)"
+							*ngFor="let aa of booking_params.affiliate_accounts">
 							{{ textFormatter(aa) | titlecase }}
 						</mat-radio-button>
 					</mat-radio-group>
@@ -1513,7 +1514,7 @@
 					</mat-form-field> -->
 
 					<!-- Ng-Select -->
-					<ng-select appearance="outline" [items]="AffiliateAccounts" bindLabel="bindNameAffiliate"
+					<ng-select appearance="outline" [items]="Return_AffiliateAccounts" bindLabel="bindNameAffiliate"
 						bindValue="id" placeholder="Select Affiliate" dropdownPosition="bottom" [markFirst]="true"
 						[virtualScroll]="true" formControlName="return_affiliate_id"
 						(change)="handleAffiliateChange($event)">
@@ -1546,12 +1547,12 @@
 
 			<!-- Visible in only Loose Affiliate Section -->
 			<!-- Loose Affiliate Section -->
-			<div class="row px-4 margin-bottom-minus-20" *ngIf="Form.affiliate_type.value == 'loose_affiliate'">
+			<div class="row px-4 margin-bottom-minus-20" *ngIf="Form.return_affiliate_type.value == 'loose_affiliate'">
 				<div class="col-md-12">
-					<ng-select appearance="outline" [items]="LooseAffiliateAccounts" bindLabel="name" bindValue="id"
+					<ng-select appearance="outline" [items]="Return_LooseAffiliateAccounts" bindLabel="name" bindValue="id"
 						placeholder="Select Loose Affiliate" dropdownPosition="bottom" [markFirst]="true"
-						[virtualScroll]="true" formControlName="loose_affiliate_id"
-						(change)="handleLooseAffiliateChange($event)">
+						[virtualScroll]="true" formControlName="return_loose_affiliate_id"
+						(change)="handleReturnLooseAffiliateChange($event)">
 					</ng-select>
 				</div>
 				<div class="col-md-4 col-lg-4">
@@ -1560,15 +1561,16 @@
 							Name <span class="asterisk">*</span>
 						</mat-label>
 						<input type="text" matInput placeholder="Full Name" (focus)="$event.target.select()"
-							formControlName="lose_affiliate_name" (keyup)="handleLooseAffiliateName()" />
+							formControlName="return_lose_affiliate_name" (keyup)="handleLooseAffiliateName()" />
 					</mat-form-field>
 					<div class="error-box">
 						<div class="error-message"
-							*ngIf="Form.lose_affiliate_name.invalid && (Form.lose_affiliate_name.touched || Form.lose_affiliate_name.dirty)">
-							<p class="text-danger text-lg m-0" *ngIf="Form.lose_affiliate_name.errors?.required">
+							*ngIf="Form.return_lose_affiliate_name.invalid && (Form.return_lose_affiliate_name.touched || Form.return_lose_affiliate_name.dirty)">
+							<p class="text-danger text-lg m-0" *ngIf="Form.return_lose_affiliate_name.errors?.required">
 								This field is required
 							</p>
-							<p class="text-danger text-lg m-0" *ngIf="Form.lose_affiliate_name.errors?.whitespace">
+							<p class="text-danger text-lg m-0"
+								*ngIf="Form.return_lose_affiliate_name.errors?.whitespace">
 								Extra White Space are not Allowed
 							</p>
 						</div>
@@ -1580,28 +1582,31 @@
 						<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Phone <span
 								class="asterisk">*</span>
 						</label>
-						<input matInput formControlName="lose_affiliate_phone" ng2TelInput [ng2TelInputOptions]="{
+						<input matInput formControlName="return_lose_affiliate_phone" ng2TelInput [ng2TelInputOptions]="{
 								preferredCountries: ['us', 'ca', 'mx', 'gb']
 							}" placeholder="1234567890" class="phoneNumberClass" (intlTelInputObject)="LATelInputObject($event)"
 							(keyup)="handleLooseAffiliatePhone()"
-							(countryChange)="SetFormValue('lose_affiliate_phone_isd', '+' + $event.dialCode); SetFormValue('lose_affiliate_phone_country', $event.iso2)"
+							(countryChange)="SetFormValue('return_lose_affiliate_phone_isd', '+' + $event.dialCode); SetFormValue('return_lose_affiliate_phone_country', $event.iso2)"
 							(focus)="$event.target.select()" />
 					</mat-form-field>
 					<div class="error-box">
 						<div class="error-message"
-							*ngIf="Form.lose_affiliate_phone.invalid && (Form.lose_affiliate_phone.touched || Form.lose_affiliate_phone.dirty)">
-							<p class="text-danger text-lg m-0" *ngIf="Form.lose_affiliate_phone.errors?.required">
+							*ngIf="Form.return_lose_affiliate_phone.invalid && (Form.return_lose_affiliate_phone.touched || Form.return_lose_affiliate_phone.dirty)">
+							<p class="text-danger text-lg m-0"
+								*ngIf="Form.return_lose_affiliate_phone.errors?.required">
 								This field is required
 							</p>
 							<p class="text-danger text-lg m-0"
-								*ngIf="Form.lose_affiliate_phone.errors?.pattern;else looseAffError">
+								*ngIf="Form.return_lose_affiliate_phone.errors?.pattern;else looseAffError">
 								Only Numbers are Allowed
 							</p>
 							<ng-template #looseAffError>
-								<p class="text-danger text-lg m-0" *ngIf="Form.lose_affiliate_phone.errors?.minlength">
+								<p class="text-danger text-lg m-0"
+									*ngIf="Form.return_lose_affiliate_phone.errors?.minlength">
 									Minimum length should be 4
 								</p>
-								<p class="text-danger text-lg m-0" *ngIf="Form.lose_affiliate_phone.errors?.maxlength">
+								<p class="text-danger text-lg m-0"
+									*ngIf="Form.return_lose_affiliate_phone.errors?.maxlength">
 									Maximum length should be 15
 								</p>
 							</ng-template>
@@ -1616,15 +1621,16 @@
 							Email <span class="asterisk">*</span>
 						</mat-label>
 						<input type="text" matInput placeholder="Email" (focus)="$event.target.select()"
-							formControlName="lose_affiliate_email" />
+							formControlName="return_lose_affiliate_email" />
 					</mat-form-field>
 					<div class="error-box">
 						<div class="error-message"
-							*ngIf="Form.lose_affiliate_email.invalid && (Form.lose_affiliate_email.touched || Form.lose_affiliate_email.dirty)">
-							<p class="text-danger text-lg m-0" *ngIf="Form.lose_affiliate_email.errors?.required">
+							*ngIf="Form.return_lose_affiliate_email.invalid && (Form.return_lose_affiliate_email.touched || Form.return_lose_affiliate_email.dirty)">
+							<p class="text-danger text-lg m-0"
+								*ngIf="Form.return_lose_affiliate_email.errors?.required">
 								This field is required
 							</p>
-							<p class="text-danger text-lg m-0" *ngIf="Form.lose_affiliate_email.errors?.pattern">
+							<p class="text-danger text-lg m-0" *ngIf="Form.return_lose_affiliate_email.errors?.pattern">
 								Please enter a valid Email Id
 							</p>
 						</div>
@@ -1749,14 +1755,14 @@
 
 
 			<!-- Loose affiliate vehicle information -->
-			<div class="px-4 mt-4" *ngIf="Form.affiliate_type.value == 'loose_affiliate'">
+			<div class="px-4 mt-4" *ngIf="Form.return_affiliate_type.value == 'loose_affiliate'">
 				<h4>
 					Vehicle Preferences
 				</h4>
 				<div class="row">
 					<!-- Vehicle Type -->
 					<div id="vehicle-type"
-						[ngClass]="Form.vehicle_type.value && !Form.vehicle_make.value ? 'col-md-6 col-xl-4' : Form.vehicle_make.value ? 'col-md-4 col-xl-3' : 'col-md-12'">
+						[ngClass]="Form.return_vehicle_type.value && !Form.return_vehicle_make.value ? 'col-md-6 col-xl-4' : Form.return_vehicle_make.value ? 'col-md-4 col-xl-3' : 'col-md-12'">
 						<!-- <mat-form-field appearance="outline">
 							<mat-label>
 								Vehicle Type
@@ -1779,13 +1785,13 @@
 						<!-- Ng-Select -->
 						<ng-select appearance="outline" [items]="BigData?.vehicleCategories" bindLabel="name"
 							bindValue="id" placeholder="Select Vehicle Type" dropdownPosition="bottom"
-							[markFirst]="true" [virtualScroll]="true" formControlName="vehicle_type">
+							[markFirst]="true" [virtualScroll]="true" formControlName="return_vehicle_type">
 						</ng-select>
 					</div>
 
 					<!-- Make -->
-					<div id="make" *ngIf="Form.vehicle_type.value"
-						[ngClass]="Form.vehicle_make.value ? 'col-md-4 col-xl-3' : 'col-md-6 col-xl-4'">
+					<div id="make" *ngIf="Form.return_vehicle_type.value"
+						[ngClass]="Form.return_vehicle_make.value ? 'col-md-4 col-xl-3' : 'col-md-6 col-xl-4'">
 						<!-- <mat-form-field appearance="outline">
 							<mat-label>
 								Make
@@ -1808,7 +1814,7 @@
 						<!-- Make - Ng-Select -->
 						<ng-select appearance="outline" [items]="BigData?.vehicleMakes" dropdownPosition="bottom"
 							[markFirst]="true" [virtualScroll]="true" bindLabel="name" bindValue="id"
-							placeholder="Select Make" formControlName="vehicle_make">
+							placeholder="Select Make" formControlName="return_vehicle_make">
 						</ng-select>
 					</div>
 
@@ -1836,7 +1842,7 @@
 						<!-- Ng-Select -->
 						<ng-select appearance="outline" [items]="BigData?.vehicleModels" bindLabel="name" bindValue="id"
 							placeholder="Select Model" dropdownPosition="bottom" [markFirst]="true"
-							[virtualScroll]="true" formControlName="vehicle_model">
+							[virtualScroll]="true" formControlName="return_vehicle_model">
 						</ng-select>
 					</div>
 
@@ -1864,7 +1870,7 @@
 						<!-- Ng-Select -->
 						<ng-select appearance="outline" [items]="BigData?.vehicleYears" bindLabel="name" bindValue="id"
 							placeholder="Select Year" dropdownPosition="bottom" [markFirst]="true"
-							[virtualScroll]="true" formControlName="vehicle_year">
+							[virtualScroll]="true" formControlName="return_vehicle_year">
 						</ng-select>
 					</div>
 
@@ -1892,7 +1898,7 @@
 						<!-- Ng-Select -->
 						<ng-select appearance="outline" [items]="BigData?.vehicleColors" bindLabel="name" bindValue="id"
 							placeholder="Select Color" dropdownPosition="bottom" [markFirst]="true"
-							[virtualScroll]="true" formControlName="vehicle_color">
+							[virtualScroll]="true" formControlName="return_vehicle_color">
 						</ng-select>
 					</div>
 
@@ -1903,13 +1909,13 @@
 								License Plate #
 							</mat-label>
 							<input type="text" matInput (focus)="$event.target.select()"
-								formControlName="vehicle_license_plate" placeholder="License Plate #">
+								formControlName="return_vehicle_license_plate" placeholder="License Plate #">
 						</mat-form-field>
 						<div class="error-box">
 							<div class="error-message"
-								*ngIf="Form.vehicle_license_plate.invalid && (Form.vehicle_license_plate.touched || Form.vehicle_license_plate.dirty)">
+								*ngIf="Form.return_vehicle_license_plate.invalid && (Form.return_vehicle_license_plate.touched || Form.return_vehicle_license_plate.dirty)">
 								<p class="text-danger text-lg m-0"
-									*ngIf="Form.vehicle_license_plate.errors?.whitespace">
+									*ngIf="Form.return_vehicle_license_plate.errors?.whitespace">
 									Extra White Space are not Allowed
 								</p>
 							</div>
@@ -1922,13 +1928,13 @@
 							<mat-label>
 								Number of Seats
 							</mat-label>
-							<input type="text" matInput formControlName="vehicle_seats" placeholder="Number of Seats"
-								(focus)="$event.target.select()" />
+							<input type="text" matInput formControlName="return_vehicle_seats"
+								placeholder="Number of Seats" (focus)="$event.target.select()" />
 						</mat-form-field>
 						<div class="error-box">
 							<div class="error-message"
-								*ngIf="Form.vehicle_seats.invalid && (Form.vehicle_seats.touched || Form.vehicle_seats.dirty)">
-								<p class="text-danger text-lg m-0" *ngIf="Form.vehicle_seats.errors?.pattern">
+								*ngIf="Form.return_vehicle_seats.invalid && (Form.return_vehicle_seats.touched || Form.return_vehicle_seats.dirty)">
+								<p class="text-danger text-lg m-0" *ngIf="Form.return_vehicle_seats.errors?.pattern">
 									Only Numbers are Allowed
 								</p>
 							</div>
@@ -1937,18 +1943,18 @@
 					<div class="cancellation_policy col-md-6 margin-mat-field" style="margin-top: -25px;">
 						<mat-form-field appearance="outline">
 							<mat-label>Cancellation Policy</mat-label>
-							<mat-select formControlName="cancellation_hours" tabindex="1">
+							<mat-select formControlName="return_cancellation_hours" tabindex="1">
 								<mat-option value="">Choose Cancellation Policy</mat-option>
 								<mat-option *ngFor="let canceloption of canceloptions"
 									[value]="canceloption.value">{{canceloption.label}}</mat-option>
 							</mat-select>
 						</mat-form-field>
-						<div *ngIf="submittedForm && Form.cancellation_hours.errors"
+						<div *ngIf="submittedForm && Form.return_cancellation_hours.errors"
 							class="text-danger margin-bottom-thin my-mat-hint">
-							<div *ngIf="Form.cancellation_hours.errors.required">The Cancellation Policy is
+							<div *ngIf="Form.return_cancellation_hours.errors.required">The Cancellation Policy is
 								required
 							</div>
-							<div *ngIf="Form.cancellation_hours.errors.pattern">The Cancellation Policy should be
+							<div *ngIf="Form.return_cancellation_hours.errors.pattern">The Cancellation Policy should be
 								a
 								number</div>
 						</div>
@@ -4359,7 +4365,7 @@
 							</div>
 						</div>
 						<!-- style="width: 50%; margin: 1.6rem auto; border: 1.2px solid #aeaeae;" -->
-						<hr *ngIf="Form.return_extra_stops.value.length == 0" />
+						<!-- <hr *ngIf="Form.return_extra_stops.value.length == 0" /> -->
 
 						<!-- ############## Dropoff #################### -->
 						<h5 class="px-3 m-1 text-xl preview-dropoff-color">
@@ -4922,6 +4928,67 @@
 					</div>
 				</ng-template>
 				<hr>
+
+				<!-- Return Loose Affiliate Information -->
+				<ng-container *ngIf="Form.return_affiliate_type.value == 'loose_affiliate' then returnlooseAffiliate">
+				</ng-container>
+
+				<!-- Loose Affiliate -->
+				<ng-template #returnlooseAffiliate>
+					<h4 class="font-weight-bolder m-0 mt-3">
+						Return Loose Affiliate Information
+					</h4>
+
+					<!-- Loose Affiliate > Name -->
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Name
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ textFormatter(Form.return_lose_affiliate_name.value) }}
+								</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Loose Affiliate > Email -->
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Email
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ textFormatter(Form.return_lose_affiliate_email.value) }}
+								</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Loose Affiliate > Phone -->
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Phone
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									({{ Form.return_lose_affiliate_phone_isd.value }})
+									{{ textFormatter(Form.return_lose_affiliate_phone.value) }}
+								</span>
+							</div>
+						</div>
+					</div>
+					<hr>
+				</ng-template>
 				<!-- Driver Information -->
 				<h4 class="font-weight-bolder m-0 mt-3">
 					Driver Information
@@ -4978,7 +5045,7 @@
 
 				<div *ngIf="service_type == 'round_trip' ">
 					<!-- Driver Information -->
-					
+
 					<h4 class="font-weight-bolder m-0 mt-3">
 						Return Driver Information
 					</h4>
@@ -5098,7 +5165,7 @@
 
 				<div class="distribution_rate">
 					<h4 class="font-weight-bolder m-0 my-3">
-						Rates Distribution
+						Return Rates Distribution
 					</h4>
 
 					<div class="mx-2">
