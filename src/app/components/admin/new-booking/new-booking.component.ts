@@ -210,7 +210,7 @@ export class NewBookingComponent implements OnInit {
 		console.log('rebuild booking data')
 		this.booking_data = {
 			vehicle_id: this.BookingForm.get('vehicle_id').value,
-			return_vehicle_id:this.BookingForm.get('return_vehicle_id').value,
+			return_vehicle_id: this.BookingForm.get('return_vehicle_id').value,
 			transfer_type: this.transfer_type,
 			service_type: this.service_type,
 			numberOfVehicles: 1,
@@ -222,7 +222,9 @@ export class NewBookingComponent implements OnInit {
 			return_extra_stops: this.BookingForm.get('return_extra_stops').value,
 			manual_change_aff_veh: this.manual_change_aff_veh,
 			pickup_time: this.BookingForm.get('pickup_time').value,
-			return_pickup_time: this.BookingForm.get('return_pickup_time').value
+			return_pickup_time: this.BookingForm.get('return_pickup_time').value,
+			affiliate_type: this.BookingForm.get('affiliate_type').value,
+			return_affiliate_type: this.BookingForm.get('return_affiliate_type').value
 		}
 	}
 	ngAfterViewInit(): void {
@@ -2297,10 +2299,10 @@ export class NewBookingComponent implements OnInit {
 
 	Subscriptions() {
 		//pickup time change 
-		this.BookingForm.get('pickup_time').valueChanges.subscribe((value:string)=>{
+		this.BookingForm.get('pickup_time').valueChanges.subscribe((value: string) => {
 			this.buildBookingData()
 		})
-		this.BookingForm.get('return_pickup_time').valueChanges.subscribe((value:string)=>{
+		this.BookingForm.get('return_pickup_time').valueChanges.subscribe((value: string) => {
 			this.buildBookingData()
 		})
 
@@ -3373,6 +3375,7 @@ export class NewBookingComponent implements OnInit {
 		this.SetFormValue('luggage_count', QB?.no_of_passenger)
 		this.SetFormValue('affiliate_type', 'affiliate')
 		this.SetFormValue('affiliate_id', this.affiliate_id)
+		this.SetFormValue('return_affiliate_id', this.affiliate_id)
 		//vehicle id when chossing vehicle from Quote bot screen
 		this.QB_vehicle_id = selected_vehicle?.id || null
 		//pickup
@@ -3436,17 +3439,17 @@ export class NewBookingComponent implements OnInit {
 	highlightNumbers(text: string): string {
 		const parts = text.split(/\b(\d+\.\s)/); // Split by number followed by dot and space
 
-        // Process parts and apply formatting
-        let formattedText = '';
-        for (let i = 0; i < parts.length; i++) {
-            if (i % 2 === 0) {
-                formattedText += parts[i]; // Regular text part
-            } else {
-                formattedText += `<br><span class="text-danger font-weight-bolder">${parts[i]}</span>`; // Numbered instruction part
-            }
-        }
+		// Process parts and apply formatting
+		let formattedText = '';
+		for (let i = 0; i < parts.length; i++) {
+			if (i % 2 === 0) {
+				formattedText += parts[i]; // Regular text part
+			} else {
+				formattedText += `<br><span class="text-danger font-weight-bolder">${parts[i]}</span>`; // Numbered instruction part
+			}
+		}
 
-        return formattedText;
-    }
+		return formattedText;
+	}
 }
 
