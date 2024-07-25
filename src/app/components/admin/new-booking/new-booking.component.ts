@@ -87,6 +87,8 @@ export class NewBookingComponent implements OnInit {
 	ClientAccounts: Array<Record<string, any>> = []
 	AffiliateAccounts: Array<Record<string, any>> = []
 	LooseAffiliateAccounts: Array<Record<string, any>> = []
+	Return_AffiliateAccounts: Array<Record<string, any>> = []
+	Return_LooseAffiliateAccounts: Array<Record<string, any>> = []
 	VehicleList: Array<Record<string, any>> = []
 	DriverList: Array<Record<string, any>> = []
 	vehicleType_arr: any;
@@ -196,6 +198,7 @@ export class NewBookingComponent implements OnInit {
 			this.Subscriptions()
 			this.fetchClientAccounts('individual')
 			this.fetchAffiliates('affiliate')
+			this.fetchReturnAffiliates('affiliate')
 			this.select(true, 'driver_languages', 1)
 		})
 		// fetch the big data
@@ -348,11 +351,18 @@ export class NewBookingComponent implements OnInit {
 			return_affiliate_id: [''],
 			loose_affiliate_id: [''],
 			is_old_loose_affiliate: [false],
+			return_loose_affiliate_id: [''],
+			return_is_old_loose_affiliate: [false],
 			lose_affiliate_name: ['', [this.customValidator.whitespace()]],
 			lose_affiliate_phone: [''],
 			lose_affiliate_phone_isd: ['+1'],
 			lose_affiliate_phone_country: ['us'],
 			lose_affiliate_email: [''],
+			return_lose_affiliate_name: ['', [this.customValidator.whitespace()]],
+			return_lose_affiliate_phone: [''],
+			return_lose_affiliate_phone_isd: ['+1'],
+			return_lose_affiliate_phone_country: ['us'],
+			return_lose_affiliate_email: [''],
 			cancellation_hours: ['24', [Validators.required]],
 			return_cancellation_hours: ['24', [Validators.required]],
 			vehicle_type: [''],
@@ -1159,7 +1169,7 @@ export class NewBookingComponent implements OnInit {
 	}
 
 
-	fetchAffiliates(affiliate_type: 'affiliate' | 'loose_affiliate') {
+		fetchAffiliates(affiliate_type: 'affiliate' | 'loose_affiliate') {
 		if (affiliate_type == 'loose_affiliate') {
 			this.$spinner.show()
 			this.$api.getAccountBytype('loose_affiliate').subscribe((response: any) => {
@@ -1191,6 +1201,40 @@ export class NewBookingComponent implements OnInit {
 			})
 		}
 	}
+
+	fetchReturnAffiliates(return_affiliate_type: 'affiliate' | 'loose_affiliate') {
+		if (return_affiliate_type == 'loose_affiliate') {
+			this.$spinner.show()
+			this.$api.getAccountBytype('loose_affiliate').subscribe((response: any) => {
+				this.Return_LooseAffiliateAccounts = response?.data
+				this.$spinner.hide()
+			})
+		}
+		else {
+			this.Return_AffiliateAccounts = []
+			this.$spinner.show()
+			this.$api.getAccountBytype('driver').subscribe((response: any) => {
+				if (response.success && response.data.length > 0) {
+					this.Return_AffiliateAccounts = response.data.map((item) => {
+						item.bindNameAffiliate = item.name + ' / ' + item.driver_name
+						return item
+					})
+					console.log('affiliate accounts', this.Return_AffiliateAccounts)
+					this.AffiliateAccounts_copy = [...this.Return_AffiliateAccounts]
+					//lose all affiliate vehicle and driver data on change of affiliate type
+					// for (let key in this.Form)
+					// {
+					// 	if (this.BookingForm.get(key) instanceof FormControl && (this.searchSubstring(key, 'vehicle') || this.searchSubstring(key, 'driver')))
+					// 	{
+					// 		this.BookingForm.get(key).reset()
+					// 	}
+					// }
+				}
+				this.$spinner.hide()
+			})
+		}
+	}
+
 	changeAffiliateAccount(event) {
 		console.log('in change aff acc', event)
 		this.AffiliateAccounts = this.AffiliateAccounts_copy.filter((item) =>
@@ -1280,6 +1324,34 @@ export class NewBookingComponent implements OnInit {
 			this.SetFormValue('lose_affiliate_email', '')
 			this.SetFormValue('lose_affiliate_phone_isd', '')
 			this.SetFormValue('lose_affiliate_phone_country', 'us')
+		}
+		console.log('booking form value after selecting loose aff--->', this.BookingForm.value)
+	}
+	handleReturnLooseAffiliateChange(looseAffData) {
+		console.log('in function handleReturnlooseAffiliateChange-->>', looseAffData)
+		if (looseAffData) {
+			this.BookingForm.patchValue({
+				return_driver_name: looseAffData?.driver_name,
+				return_driver_cell: looseAffData?.driver_phone,
+				return_driver_email: looseAffData?.driver_email,
+				return_loose_affiliate_id: looseAffData?.id,
+				return_is_old_loose_affiliate: true
+			})
+			this.SetFormValue('return_lose_affiliate_name', looseAffData?.driver_name)
+			this.SetFormValue('return_lose_affiliate_phone', looseAffData?.driver_phone)
+			this.SetFormValue('return_lose_affiliate_email', looseAffData?.driver_email)
+			this.SetFormValue('return_lose_affiliate_phone_isd', looseAffData?.driver_isd)
+			this.SetFormValue('return_lose_affiliate_phone_country', looseAffData?.driver_phone_country)
+		}
+		else {
+			this.BookingForm?.patchValue({
+				return_is_old_loose_affiliate: false
+			})
+			this.SetFormValue('return_lose_affiliate_name', '')
+			this.SetFormValue('return_lose_affiliate_phone', '')
+			this.SetFormValue('return_lose_affiliate_email', '')
+			this.SetFormValue('return_lose_affiliate_phone_isd', '')
+			this.SetFormValue('return_lose_affiliate_phone_country', 'us')
 		}
 		console.log('booking form value after selecting loose aff--->', this.BookingForm.value)
 	}
@@ -2662,6 +2734,59 @@ export class NewBookingComponent implements OnInit {
 			}
 		})
 
+		// Affiliate Type
+		this.BookingForm.get('return_affiliate_type').valueChanges.subscribe((value: string) => {
+			if (value == 'loose_affiliate') {
+				this.fetchReturnAffiliates('loose_affiliate')
+				this.toggleDropdown(null)
+				this.BookingForm.get('return_lose_affiliate_name').setValidators([Validators.required])
+				this.BookingForm.get('return_lose_affiliate_phone').setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)])
+				this.BookingForm.get('return_lose_affiliate_email').setValidators([Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)])
+				// this.BookingForm.get('cancellation_hours').setValidators([Validators.required])
+				this.BookingForm.updateValueAndValidity()
+				this.init_rates = true
+				if (this.Form.service_type.value === 'round_trip') {
+					this.init_return_rates = true;
+				}
+				if (this.Form.updateType.value != 'edit' && this.Form.updateType.value != 'repeat' && this.Form.updateType.value != 'return') {
+					this.SetFormValue('return_vehicle_type_name', '');
+					this.BookingForm.get('return_vehicle_make').setValue('')
+					this.BookingForm.get('return_vehicle_make_name').setValue('')
+					this.BookingForm.get('return_vehicle_model').setValue('')
+					this.BookingForm.get('return_vehicle_model_name').setValue('')
+					this.BookingForm.get('return_vehicle_year').setValue('')
+					this.BookingForm.get('return_vehicle_year_name').setValue('')
+					this.BookingForm.get('return_vehicle_color').setValue('')
+					this.BookingForm.get('return_vehicle_color_name').setValue('')
+					this.BookingForm.updateValueAndValidity();
+				}
+			}
+			else {
+				console.log('value--->> clearing validations for--> ', value)
+				this.BookingForm.get('return_lose_affiliate_name').clearValidators()
+				this.BookingForm.get('return_lose_affiliate_name').updateValueAndValidity()
+
+				this.BookingForm.get('return_lose_affiliate_phone').clearValidators()
+				this.BookingForm.get('return_lose_affiliate_phone').updateValueAndValidity()
+
+
+				this.BookingForm.get('return_lose_affiliate_email').clearValidators()
+				this.BookingForm.get('return_lose_affiliate_email').updateValueAndValidity()
+
+				// this.BookingForm.get('cancellation_hours').clearValidators()
+				// this.BookingForm.get('cancellation_hours').updateValueAndValidity()
+
+
+				console.log('clear validation')
+				this.init_rates = true;
+				if (this.Form.service_type.value === 'round_trip') {
+					this.init_return_rates = true;
+				}
+				this.fetchReturnAffiliates('affiliate')
+				this.chooseReturnAffiliate()
+			}
+		})
+
 		this.BookingForm.get('affiliate_id').valueChanges.subscribe((value: number) => {
 			if (value) {
 				this.chooseAffiliate()
@@ -3050,6 +3175,17 @@ export class NewBookingComponent implements OnInit {
 			})
 			this.SetFormValue('driver_cell_isd', '+1');
 			this.SetFormValue('driver_cell_country', 'us');
+		}
+	}
+
+	resetReturnDriverAndVehicle(return_affiliate_type: string) {
+		if (return_affiliate_type == 'loose_affiliate') {
+			['return_vehicle_type', 'return_vehicle_id', 'return_vehicle_make', 'return_vehicle_model', 'return_vehicle_color', 'return_vehicle_year', 'return_driver_name', 'return_driver_email', 'return_driver_gender', 'return_driver_cell', 'return_vehicle_license_plate'].forEach((item: any) => {
+				this.BookingForm.get(item).reset();
+				this.BookingForm.updateValueAndValidity();
+			})
+			this.SetFormValue('return_driver_cell_isd', '+1');
+			this.SetFormValue('return_driver_cell_country', 'us');
 		}
 	}
 
