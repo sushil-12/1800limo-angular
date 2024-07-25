@@ -146,32 +146,33 @@
 									</a>
 									<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
 										aria-labelledby="navbarDropdownUserImage">
-										<a class="dropdown-item"
-											(click)="editAffiliateAccount(blackCarLimoBus.id, blackCarLimoBus.AffiliateType , blackCarLimoBus)">
+										<a class="dropdown-item" *ngIf="blackCarLimoBus?.id"
+											(click)="editAffiliateAccount(blackCarLimoBus?.id, blackCarLimoBus?.AffiliateType , blackCarLimoBus)">
 											<div class="dropdown-item-icon"></div>
-											Edit {{formatter(blackCarLimoBus.AffiliateType) |
+											Edit {{formatter(blackCarLimoBus?.AffiliateType) |
 											titlecase }} Account
 										</a>
-										<a class="dropdown-item" [routerLink]="['/admin/booking-list']"
+										<a class="dropdown-item" [routerLink]="['/admin/booking-list']" *ngIf="blackCarLimoBus?.id"
 											[queryParams]="{type: 'past', id:blackCarLimoBus?.id , isAffiliate:'true' , for:blackCarLimoBus?.FirstName}">
 											<div class="dropdown-item-icon"></div>
 											Past bookings
 										</a>
-										<a class="dropdown-item" [routerLink]="['/admin/booking-list']"
+										<a class="dropdown-item" [routerLink]="['/admin/booking-list']" *ngIf="blackCarLimoBus?.id"
 											[queryParams]="{type: 'future', id: blackCarLimoBus?.id,isAffiliate:'true',for:blackCarLimoBus?.FirstName}">
 											<div class="dropdown-item-icon"></div>
 											Future bookings
 										</a>
-										<a class="dropdown-item" (click)="viewAffiliateCreditCards(blackCarLimoBus.id)">
+										<a class="dropdown-item" *ngIf="blackCarLimoBus?.id"
+											(click)="viewAffiliateCreditCards(blackCarLimoBus?.id)">
 											<div class="dropdown-item-icon"></div>
 											View Credit Cards
 										</a>
-										<a class="dropdown-item" (click)="loginAsUser(blackCarLimoBus.user_id)">
+										<a class="dropdown-item" (click)="loginAsUser(blackCarLimoBus?.user_id)" *ngIf="blackCarLimoBus?.id">
 											<div class="dropdown-item-icon"></div>
 											Log into this account
 										</a>
-										<a class="dropdown-item" (click)="auditTrail(blackCarLimoBus.id)"
-											data-toggle="modal" data-target="#AuditTrailModal">
+										<a class="dropdown-item" (click)="auditTrail(blackCarLimoBus?.id)"
+											data-toggle="modal" data-target="#AuditTrailModal" *ngIf="blackCarLimoBus?.id">
 											<div class="dropdown-item-icon"></div>
 											Communication Logs
 										</a>
@@ -179,16 +180,16 @@
 								</td>
 								<td>
 									<div class="accpet_reject_div"
-										*ngIf="blackCarLimoBus.account_approval=='completed'; else notCompleted">
-										<button class="rejectButton" (click)="rejectAffiliateClick(blackCarLimoBus.id)"
+										*ngIf="blackCarLimoBus?.account_approval=='completed'; else notCompleted">
+										<button class="rejectButton" (click)="rejectAffiliateClick(blackCarLimoBus?.id)"
 											data-toggle="modal" data-target="#rejectCauseModal">Reject</button>
 										<button class="acceptButton"
-											(click)="acceptAffiliate(blackCarLimoBus.id)">Accept</button>
+											(click)="acceptAffiliate(blackCarLimoBus?.id)">Accept</button>
 									</div>
 									<ng-template #notCompleted>
-										<div (click)="navigateToStep0Inprogress(blackCarLimoBus.id, blackCarLimoBus.AffiliateType , blackCarLimoBus)"
-											[className]="'badge badge-pill approval_status ' + blackCarLimoBus.account_approval">
-											{{blackCarLimoBus.account_approval |
+										<div (click)="navigateToStep0Inprogress(blackCarLimoBus?.id, blackCarLimoBus?.AffiliateType , blackCarLimoBus)"
+											[className]="'badge badge-pill approval_status ' + blackCarLimoBus?.account_approval">
+											{{blackCarLimoBus?.account_approval |
 											bookingStatusTextReplace : '_' : ' '
 											|titlecase}}</div>
 									</ng-template>
@@ -198,51 +199,53 @@
 								</td>
 								<td>
 									<mat-slide-toggle class="example-margin" [color]="color"
-										[checked]="blackCarLimoBus.status" [disabled]="disabled"
-										(change)="enableDisableClicked($event,blackCarLimoBus.id)">
+										[checked]="blackCarLimoBus?.status" [disabled]="disabled"
+										(change)="enableDisableClicked($event,blackCarLimoBus?.id)">
 									</mat-slide-toggle>
 								</td>
 								<td>
-									<span [innerHTML]="highlighText(blackCarLimoBus.AffiliateTypeName)"></span>
+									<span [innerHTML]="highlighText(blackCarLimoBus?.AffiliateTypeName)"></span>
 									<span style="font-weight: 600;">
 										{{'('+(blackCarLimoBus?.number_of_vehicles)+')'}}</span>
 								</td>
 
 								<td>
-									<span
-										[innerHTML]="highlighText(blackCarLimoBus.FirstName + ' ' + (blackCarLimoBus.MiddleName ? blackCarLimoBus.MiddleName : '') + ' ' + blackCarLimoBus.LastName )"></span>
-
+									<span *ngIf="blackCarLimoBus?.id; else noId"
+										[innerHTML]="highlighText(blackCarLimoBus?.FirstName + ' ' + (blackCarLimoBus?.MiddleName ? blackCarLimoBus?.MiddleName : '') + ' ' + blackCarLimoBus?.LastName )"></span>
+									<ng-template #noId>
+										<span>N/A</span>
+									</ng-template>
 								</td>
 								<td class="clickable" (click)="sendMessage('email', blackCarLimoBus)"
 									data-messagetype="email">
-									<span [innerHTML]="highlighText(blackCarLimoBus.Email)"></span>
+									<span [innerHTML]="highlighText(blackCarLimoBus?.Email)"></span>
 								</td>
-								<td><span [innerHTML]="highlighText(blackCarLimoBus.badge_city_name)"></span></td>
+								<td><span [innerHTML]="highlighText(blackCarLimoBus?.badge_city_name)"></span></td>
 								<td class="clickable" (click)="sendMessage('sms', blackCarLimoBus)"
 									data-messagetype="sms">
 									<span
-										[innerHTML]="highlighText(blackCarLimoBus.CellIsd+blackCarLimoBus.CellNumber+' '+'('+blackCarLimoBus?.CellNumberCountry.toUpperCase()+')')"></span>
+										[innerHTML]="highlighText(blackCarLimoBus?.CellIsd+blackCarLimoBus?.CellNumber+' '+'('+blackCarLimoBus?.CellNumberCountry.toUpperCase()+')')"></span>
 								</td>
-								<td><span [innerHTML]="highlighText(blackCarLimoBus.CompanyName)"></span></td>
-								<td><span [innerHTML]="highlighText(blackCarLimoBus.DBA)"></span></td>
+								<td><span [innerHTML]="highlighText(blackCarLimoBus?.CompanyName)"></span></td>
+								<td><span [innerHTML]="highlighText(blackCarLimoBus?.DBA)"></span></td>
 
 								<td>
 									<div *ngIf="blackCarLimoBus?.readMore">
 										<span
-											[innerHTML]="teset(blackCarLimoBus.LanguagesSpoken?.toString().slice(0,20))">
+											[innerHTML]="teset(blackCarLimoBus?.LanguagesSpoken?.toString().slice(0,20))">
 										</span>
 										<button class="showMoreButton"
 											(click)="toggleShowMore(blackCarLimoBus , false)">...more</button>
 									</div>
 									<div *ngIf="!blackCarLimoBus?.readMore">
-										<span [innerHTML]="teset(blackCarLimoBus.LanguagesSpoken)"></span>
+										<span [innerHTML]="teset(blackCarLimoBus?.LanguagesSpoken)"></span>
 										<button class="showMoreButton"
 											*ngIf="blackCarLimoBus?.LanguagesSpoken?.length > 2"
 											(click)="toggleShowMore(blackCarLimoBus , true)">...less</button>
 									</div>
 								</td>
-								<!-- <td><span [innerHTML]="highlighText(blackCarLimoBus.Associations)"></span></td> -->
-								<td><span [innerHTML]="highlighText(blackCarLimoBus.Address)"></span></td>
+								<!-- <td><span [innerHTML]="highlighText(blackCarLimoBus?.Associations)"></span></td> -->
+								<td><span [innerHTML]="highlighText(blackCarLimoBus?.Address)"></span></td>
 								<td>
 									<ul
 										style="flex-direction: column !important; padding: 0px !important; margin: 0px !important;">
@@ -251,9 +254,9 @@
 									</ul>
 
 								</td>
-								<!-- <td><span [innerHTML]="highlighText(blackCarLimoBus.City)"></span></td> -->
-								<!-- <td>{{blackCarLimoBus.State}}</td>
-								<td>{{blackCarLimoBus.Country}}</td> -->
+								<!-- <td><span [innerHTML]="highlighText(blackCarLimoBus?.City)"></span></td> -->
+								<!-- <td>{{blackCarLimoBus?.State}}</td>
+								<td>{{blackCarLimoBus?.Country}}</td> -->
 							</tr>
 
 						</tbody>
