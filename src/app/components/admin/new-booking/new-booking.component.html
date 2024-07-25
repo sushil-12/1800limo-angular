@@ -1481,7 +1481,7 @@
 		<!-- IF ROUND TRIP Section - Return Affiliate/Loose Details -->
 		<div class="section-container mt-2" *ngIf="service_type == 'round_trip' ">
 			<h4 class=" border-secondary">
-			Return Affiliate Details
+				Return Affiliate Details
 			</h4>
 			<!-- Affiliate Type -->
 			<div class="row">
@@ -1515,7 +1515,8 @@
 					<!-- Ng-Select -->
 					<ng-select appearance="outline" [items]="AffiliateAccounts" bindLabel="bindNameAffiliate"
 						bindValue="id" placeholder="Select Affiliate" dropdownPosition="bottom" [markFirst]="true"
-						[virtualScroll]="true" formControlName="return_affiliate_id" (change)="handleAffiliateChange($event)">
+						[virtualScroll]="true" formControlName="return_affiliate_id"
+						(change)="handleAffiliateChange($event)">
 					</ng-select>
 				</div>
 			</div>
@@ -1671,8 +1672,8 @@
 
 					<!-- Year -->
 					<div id="year" class="col-md-3 block-cursor">
-						<ng-select appearance="outline" [items]="return_vehicleYear_arr" bindLabel="year" bindValue="year_id"
-							placeholder="Select Year" dropdownPosition="bottom" [markFirst]="true"
+						<ng-select appearance="outline" [items]="return_vehicleYear_arr" bindLabel="year"
+							bindValue="year_id" placeholder="Select Year" dropdownPosition="bottom" [markFirst]="true"
 							[virtualScroll]="true" formControlName="return_vehicle_year">
 						</ng-select>
 					</div>
@@ -1711,8 +1712,8 @@
 							<mat-label>
 								Number of Seats
 							</mat-label>
-							<input type="text" matInput formControlName="return_vehicle_seats" placeholder="Number of Seats"
-								(focus)="$event.target.select()" />
+							<input type="text" matInput formControlName="return_vehicle_seats"
+								placeholder="Number of Seats" (focus)="$event.target.select()" />
 						</mat-form-field>
 						<div class="error-box">
 							<div class="error-message"
@@ -1957,7 +1958,8 @@
 			<!-- Affiliate Vehicle Information Ends -->
 			<!-- Visible in Affiliate as well as Loose Affiliate Section -->
 			<!-- Affiliate Driver Information -->
-			<div class="px-4 my-4" *ngIf="Form.return_affiliate_type.value == 'loose_affiliate' || Form.return_affiliate_id.value">
+			<div class="px-4 my-4"
+				*ngIf="Form.return_affiliate_type.value == 'loose_affiliate' || Form.return_affiliate_id.value">
 				<h4 class="margin-top-minus">
 					Driver Preferences
 				</h4>
@@ -1980,7 +1982,8 @@
 					</div>
 
 					<!-- Loose Affiliate Driver Name -->
-					<div id="driver-name" class="col-md-3" *ngIf="Form.return_affiliate_type.value == 'loose_affiliate'">
+					<div id="driver-name" class="col-md-3"
+						*ngIf="Form.return_affiliate_type.value == 'loose_affiliate'">
 						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>
 								Driver Name
@@ -1999,7 +2002,8 @@
 					</div>
 
 					<!-- Affiliate Driver Email -->
-					<div id="driver-email" class="col-md-3" *ngIf="Form.return_affiliate_type.value != 'loose_affiliate'">
+					<div id="driver-email" class="col-md-3"
+						*ngIf="Form.return_affiliate_type.value != 'loose_affiliate'">
 						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>
 								Email
@@ -2018,13 +2022,14 @@
 					</div>
 
 					<!--  Loose Affiliate Driver Email -->
-					<div id="driver-email" class="col-md-3" *ngIf="Form.return_affiliate_type.value == 'loose_affiliate'">
+					<div id="driver-email" class="col-md-3"
+						*ngIf="Form.return_affiliate_type.value == 'loose_affiliate'">
 						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>
 								Email
 							</mat-label>
-							<input matInput formControlName="return_driver_email" type="text" (focus)="$event.target.select()"
-								placeholder="Email">
+							<input matInput formControlName="return_driver_email" type="text"
+								(focus)="$event.target.select()" placeholder="Email">
 						</mat-form-field>
 						<div class="error-box">
 							<div class="error-message"
@@ -2037,7 +2042,8 @@
 					</div>
 
 					<!-- Affiliate Driver Cell -->
-					<div id="driver-cell" class="col-md-3" *ngIf="Form.return_affiliate_type.value != 'loose_affiliate'">
+					<div id="driver-cell" class="col-md-3"
+						*ngIf="Form.return_affiliate_type.value != 'loose_affiliate'">
 						<mat-form-field appearance="outline" class="mat-custom-phone m-0">
 							<mat-label>
 								Phone
@@ -2051,7 +2057,8 @@
 					</div>
 
 					<!-- Loose Affiliate Driver Cell -->
-					<div id="driver-cell" class="col-md-3" *ngIf="Form.return_affiliate_type.value == 'loose_affiliate'">
+					<div id="driver-cell" class="col-md-3"
+						*ngIf="Form.return_affiliate_type.value == 'loose_affiliate'">
 						<mat-form-field appearance="outline" class="mat-custom-phone m-0 cellLabelClass">
 							<label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Phone
 							</label>
@@ -2069,10 +2076,12 @@
 									Only Numbers are Allowed
 								</p>
 								<ng-template #looseAffError>
-									<p class="text-danger text-lg m-0" *ngIf="Form.return_driver_cell.errors?.minlength">
+									<p class="text-danger text-lg m-0"
+										*ngIf="Form.return_driver_cell.errors?.minlength">
 										Minimum length should be 4
 									</p>
-									<p class="text-danger text-lg m-0" *ngIf="Form.return_driver_cell.errors?.maxlength">
+									<p class="text-danger text-lg m-0"
+										*ngIf="Form.return_driver_cell.errors?.maxlength">
 										Maximum length should be 15
 									</p>
 								</ng-template>
@@ -2081,7 +2090,8 @@
 					</div>
 
 					<!-- Affiliate Diver Gender -->
-					<div id="driver-gender" class="col-md-3" *ngIf="Form.return_affiliate_type.value != 'loose_affiliate'">
+					<div id="driver-gender" class="col-md-3"
+						*ngIf="Form.return_affiliate_type.value != 'loose_affiliate'">
 						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>
 								Gender
@@ -2095,7 +2105,8 @@
 					</div>
 
 					<!-- Loose Affiliate Diver Gender -->
-					<div id="driver-gender" class="col-md-3" *ngIf="Form.return_affiliate_type.value == 'loose_affiliate'">
+					<div id="driver-gender" class="col-md-3"
+						*ngIf="Form.return_affiliate_type.value == 'loose_affiliate'">
 						<mat-form-field appearance="outline" class="m-0">
 							<mat-label>
 								Gender
@@ -4137,7 +4148,8 @@
 								</span>
 							</div>
 							<div class="col-md-8 value box-special-instruction">
-								<span class="font-weight-bolder" style="white-space: pre-wrap;" [innerHTML]="highlightNumbers(Form?.booking_instructions.value || ' ')">
+								<span class="font-weight-bolder" style="white-space: pre-wrap;"
+									[innerHTML]="highlightNumbers(Form?.booking_instructions.value || ' ')">
 									<!-- {{Form?.booking_instructions.value}} -->
 								</span>
 							</div>
@@ -4485,7 +4497,8 @@
 							</span>
 						</div>
 						<div class="col-md-8 value box-special-instruction">
-							<span class="font-weight-bolder" style="white-space: pre-wrap;" [innerHTML]="highlightNumbers(Form?.return_booking_instructions.value || ' ')">
+							<span class="font-weight-bolder" style="white-space: pre-wrap;"
+								[innerHTML]="highlightNumbers(Form?.return_booking_instructions.value || ' ')">
 								<!-- {{Form?.return_booking_instructions.value}} -->
 							</span>
 						</div>
@@ -4620,6 +4633,7 @@
 						</div>
 					</div>
 				</div>
+				<hr>
 				<h4 class="font-weight-bolder m-0">
 					Vehicle Preferences
 				</h4>
@@ -4778,6 +4792,76 @@
 					</div>
 				</ng-template>
 
+				<!--Return Affiliate Information -->
+				<ng-container *ngIf="Form.return_affiliate_type.value == 'affiliate' then returnaffiliateUser">
+				</ng-container>
+
+				<!-- Affiliate -->
+				<ng-template #returnaffiliateUser>
+					<hr>
+					<h4 class="font-weight-bolder m-0 mt-3">
+						Return Affiliate Information
+					</h4>
+
+					<!-- Affiliate > Name -->
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Name
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder"
+									*ngIf="ReturnAffiliateInformation.MiddleName == null;else affiliateMiddleName">
+									{{ textFormatter(ReturnAffiliateInformation.FirstName) }} {{
+									textFormatter(ReturnAffiliateInformation.LastName) }}
+								</span>
+								<ng-template #affiliateMiddleName>
+									<span class="font-weight-bolder">
+										{{ textFormatter(ReturnAffiliateInformation.FirstName) }} {{
+										textFormatter(ReturnAffiliateInformation.MiddleName) }} {{
+										textFormatter(ReturnAffiliateInformation.LastName) }}
+									</span>
+								</ng-template>
+							</div>
+						</div>
+					</div>
+
+					<!-- Affiliate > Email -->
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Email
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ textFormatter(ReturnAffiliateInformation.Email) }}
+								</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Affiliate > Phone -->
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Phone
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									({{ ReturnAffiliateInformation.CellIsd }})
+									{{ textFormatter(ReturnAffiliateInformation.CellNumber) }}
+								</span>
+							</div>
+						</div>
+					</div>
+				</ng-template>
+
 				<!-- Loose Affiliate Information -->
 				<ng-container *ngIf="Form.affiliate_type.value == 'loose_affiliate' then looseAffiliate">
 				</ng-container>
@@ -4891,6 +4975,63 @@
 					</div>
 				</div>
 				<hr>
+
+				<div *ngIf="service_type == 'round_trip' ">
+					<!-- Driver Information -->
+					
+					<h4 class="font-weight-bolder m-0 mt-3">
+						Return Driver Information
+					</h4>
+					<!-- Driver Name -->
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Name
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ textFormatter(Form.return_driver_name.value) | titlecase }}
+								</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Driver Email -->
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Email
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									{{ textFormatter(Form.return_driver_email.value) }}
+								</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Driver Cell -->
+					<div class="mx-2">
+						<div class="row m-0">
+							<div class="col-md-4 key">
+								<span>
+									Phone
+								</span>
+							</div>
+							<div class="col-md-8 value">
+								<span class="font-weight-bolder">
+									({{ Form.return_driver_cell_isd.value }}) {{
+									Form.return_driver_cell.value }}
+								</span>
+							</div>
+						</div>
+					</div>
+					<hr>
+				</div>
 
 				<!-- Loose Customer Information -->
 				<ng-container *ngIf="Form['account_type'].value == 'loose_customer' then LooseCustomerSec">
