@@ -94,14 +94,21 @@ export class FarmOutComponent implements OnInit {
 
 		let date = new Date();
 		// Set Search Filters According to cookies or the intial state
-		this.startDate = this.$affiliateService.checkCookie('farmout_startDate') ?
-			this.$affiliateService.getCookie('farmout_startDate') :
-			date.toISOString().substring(0, 10);
+		// this.startDate = this.$affiliateService.checkCookie('farmout_startDate') ?
+		// 	this.$affiliateService.getCookie('farmout_startDate') :
+		// 	date.toISOString().substring(0, 10);
+
+		// date.setDate(date.getDate() + 7);
+		// this.endDate = this.$affiliateService.checkCookie('farmout_endDate') ?
+		// 	this.$affiliateService.getCookie('farmout_endDate') :
+		// 	date.toISOString().substring(0, 10);
+
+		this.startDate = date.toISOString().substring(0, 10);;
 
 		date.setDate(date.getDate() + 7);
-		this.endDate = this.$affiliateService.checkCookie('farmout_endDate') ?
-			this.$affiliateService.getCookie('farmout_endDate') :
-			date.toISOString().substring(0, 10);
+
+		this.endDate = date.toISOString().substring(0, 10);;
+
 
 		this.searchText = this.$affiliateService.checkCookie('farmout_search') ?
 			this.$affiliateService.getCookie('farmout_search')

@@ -127,12 +127,12 @@
 				<p><mat-checkbox *ngIf="currentUser?.roleName == 'travel_agent'"
 						(change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">
 						{{useDateFilter ? 'Uncheck to see current and future bookings' :
-						'Check to see bookings based upon dates and search by any term.' }}
+						'Check to see bookings for 7 days or based upon dates and search by any term.' }}
 					</mat-checkbox>
 					<mat-checkbox *ngIf="currentUser?.roleName == 'sub_travel_agent'"
 						(change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">
 						{{useDateFilter ? 'Uncheck to see current and future bookings' :
-						'Check to see bookings based upon dates and search by any term.' }}
+						'Check to see bookings for 7 days or based upon dates and search by any term.' }}
 					</mat-checkbox>
 				</p>
 			</div>
