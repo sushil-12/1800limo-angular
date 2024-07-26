@@ -1014,8 +1014,14 @@
 						<ng-select appearance="outline" [items]="vehicleType_arr" bindLabel="formatted_name"
 							bindValue="vehicleType_id" placeholder="Select Vehicle Type" dropdownPosition="bottom"
 							[markFirst]="true" [virtualScroll]="true" formControlName="vehicle_type"
-							(change)="handleChangeVehicleType($event)">
+							(change)="handleChangeVehicleType($event)"
+							[ngClass]="{ 'border-red': (submitBookingForm && Form.vehicle_type.invalid) }"
+							style="height:66px;">
 						</ng-select>
+						<div *ngIf="(submitBookingForm && Form.vehicle_type.invalid) "
+							class="text-danger margin-bottom-thin my-mat-hint" style="margin-bottom: 20px;">
+							<div *ngIf="Form.vehicle_type.errors.required">Please select a vehicle type</div>
+						</div>
 					</div>
 
 					<!-- Make -->
@@ -1144,8 +1150,14 @@
 						<!-- Ng-Select -->
 						<ng-select appearance="outline" [items]="BigData?.vehicleCategories" bindLabel="name"
 							bindValue="id" placeholder="Select Vehicle Type" dropdownPosition="bottom"
-							[markFirst]="true" [virtualScroll]="true" formControlName="vehicle_type">
+							[markFirst]="true" [virtualScroll]="true" formControlName="vehicle_type"
+							[ngClass]="{ 'border-red': (submitBookingForm && Form.vehicle_type.invalid) }"
+							style="height:66px;">
 						</ng-select>
+						<div *ngIf="(submitBookingForm && Form.vehicle_type.invalid) "
+							class="text-danger margin-bottom-thin my-mat-hint" style="margin-bottom: 20px;">
+							<div *ngIf="Form.vehicle_type.errors.required">Please select a vehicle type</div>
+						</div>
 					</div>
 
 					<!-- Make -->
@@ -1549,8 +1561,8 @@
 			<!-- Loose Affiliate Section -->
 			<div class="row px-4 margin-bottom-minus-20" *ngIf="Form.return_affiliate_type.value == 'loose_affiliate'">
 				<div class="col-md-12">
-					<ng-select appearance="outline" [items]="Return_LooseAffiliateAccounts" bindLabel="name" bindValue="id"
-						placeholder="Select Loose Affiliate" dropdownPosition="bottom" [markFirst]="true"
+					<ng-select appearance="outline" [items]="Return_LooseAffiliateAccounts" bindLabel="name"
+						bindValue="id" placeholder="Select Loose Affiliate" dropdownPosition="bottom" [markFirst]="true"
 						[virtualScroll]="true" formControlName="return_loose_affiliate_id"
 						(change)="handleReturnLooseAffiliateChange($event)">
 					</ng-select>
@@ -1655,8 +1667,14 @@
 						<ng-select appearance="outline" [items]="return_vehicleType_arr" bindLabel="formatted_name"
 							bindValue="vehicleType_id" placeholder="Select Vehicle Type" dropdownPosition="bottom"
 							[markFirst]="true" [virtualScroll]="true" formControlName="return_vehicle_type"
-							(change)="handleReturnChangeVehicleType($event)">
+							(change)="handleReturnChangeVehicleType($event)"
+							[ngClass]="{ 'border-red': (submitBookingForm && Form.return_vehicle_type.invalid) }"
+							style="height:66px;">
 						</ng-select>
+						<div *ngIf="(submitBookingForm && Form.return_vehicle_type.invalid) "
+							class="text-danger margin-bottom-thin my-mat-hint" style="margin-bottom: 20px;">
+							<div *ngIf="Form.return_vehicle_type.errors.required">Please select a vehicle type</div>
+						</div>
 					</div>
 
 					<!-- Make -->
@@ -1785,8 +1803,14 @@
 						<!-- Ng-Select -->
 						<ng-select appearance="outline" [items]="BigData?.vehicleCategories" bindLabel="name"
 							bindValue="id" placeholder="Select Vehicle Type" dropdownPosition="bottom"
-							[markFirst]="true" [virtualScroll]="true" formControlName="return_vehicle_type">
+							[markFirst]="true" [virtualScroll]="true" formControlName="return_vehicle_type"
+							[ngClass]="{ 'border-red': (submitBookingForm && Form.return_vehicle_type.invalid) }"
+							style="height:66px;">
 						</ng-select>
+						<div *ngIf="(submitBookingForm && Form.return_vehicle_type.invalid) "
+							class="text-danger margin-bottom-thin my-mat-hint" style="margin-bottom: 20px;">
+							<div *ngIf="Form.return_vehicle_type.errors.required">Please select a vehicle type</div>
+						</div>
 					</div>
 
 					<!-- Make -->
