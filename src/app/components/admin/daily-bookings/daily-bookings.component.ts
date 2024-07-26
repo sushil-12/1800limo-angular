@@ -93,15 +93,19 @@ export class DailyBookingsComponent implements OnInit {
 		// const localeDateString = date.toLocaleDateString(undefined, options).
 		// replace(/(\d+)\/(\d+)\/(\d+)/,'$3-$1-$2');
 		// Set Search Filters According to cookies or the intial state
-		this.startDate = localStorage.getItem("admin_startDate")
-			? localStorage.getItem("admin_startDate")
-			: moment(timestamp).format("YYYY-MM-DD");
+		// this.startDate = localStorage.getItem("admin_startDate")
+		// 	? localStorage.getItem("admin_startDate")
+		// 	: moment(timestamp).format("YYYY-MM-DD");
+
+		this.startDate = moment(timestamp).format("YYYY-MM-DD");
 
 		date.setDate(date.getDate() + 7);
 		timestamp = date.getTime();
-		this.endDate = localStorage.getItem("admin_endDate")
-			? localStorage.getItem("admin_endDate")
-			: moment(timestamp).format("YYYY-MM-DD");
+		// this.endDate = localStorage.getItem("admin_endDate")
+		// 	? localStorage.getItem("admin_endDate")
+		// 	: moment(timestamp).format("YYYY-MM-DD");
+
+		this.endDate = moment(timestamp).format("YYYY-MM-DD");
 
 		this.searchText = localStorage.getItem("DBSearch")
 			? localStorage.getItem("DBSearch")
@@ -942,18 +946,18 @@ export class DailyBookingsComponent implements OnInit {
 	highlightNumbers(text: string): string {
 		const parts = text.split(/\b(\d+\.\s)/); // Split by number followed by dot and space
 
-        // Process parts and apply formatting
-        let formattedText = '';
-        for (let i = 0; i < parts.length; i++) {
-            if (i % 2 === 0) {
-                formattedText += parts[i]; // Regular text part
-            } else {
-                formattedText += `<br><span class="text-danger font-weight-bolder">${parts[i]}</span>`; // Numbered instruction part
-            }
-        }
+		// Process parts and apply formatting
+		let formattedText = '';
+		for (let i = 0; i < parts.length; i++) {
+			if (i % 2 === 0) {
+				formattedText += parts[i]; // Regular text part
+			} else {
+				formattedText += `<br><span class="text-danger font-weight-bolder">${parts[i]}</span>`; // Numbered instruction part
+			}
+		}
 
-        return formattedText;
-    }
+		return formattedText;
+	}
 
 	timer: any;
 	searchInBookings(search_value: string) {

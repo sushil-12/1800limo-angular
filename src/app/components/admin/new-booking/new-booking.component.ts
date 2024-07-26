@@ -365,7 +365,7 @@ export class NewBookingComponent implements OnInit {
 			return_lose_affiliate_email: [''],
 			cancellation_hours: ['24', [Validators.required]],
 			return_cancellation_hours: ['24', [Validators.required]],
-			vehicle_type: [''],
+			vehicle_type: ['',[Validators.required]],
 			vehicle_type_name: [''],
 			vehicle_id: [''],
 			vehicle_make: [''],
@@ -2180,7 +2180,14 @@ export class NewBookingComponent implements OnInit {
 	submitForm(preview: boolean) {
 		this.submitBookingForm = true
 		// this.BookingForm['currency'] = this.currencyObj?.currency
-		console.log("this.currencyObj?.currency", this.currencyObj?.currency)
+		if(this.service_type == 'round_trip'){
+			this.BookingForm.get('return_vehicle_type').setValidators([Validators.required]);
+			this.BookingForm.get('return_vehicle_type').updateValueAndValidity()
+		}
+		else{
+			this.BookingForm.get('return_vehicle_type').clearValidators()
+			this.BookingForm.get('return_vehicle_type').updateValueAndValidity()
+		}
 		console.log(this.BookingForm);
 		console.log(this.BookingForm.status);
 		// let EditedKeys = []

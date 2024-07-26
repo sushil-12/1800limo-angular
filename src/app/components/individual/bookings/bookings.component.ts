@@ -99,14 +99,20 @@ export class BookingsComponent implements OnInit {
 		this.is_family_member = localStorage.getItem("is_family_member") ? localStorage.getItem("is_family_member") : false
 		let date = new Date();
 		// Set Search Filters According to cookies or the intial state
-		this.startDate = this.affiliateService.checkCookie('indv_startDate') ?
-			this.affiliateService.getCookie('indv_startDate') :
-			date.toISOString().substring(0, 10);
+		// this.startDate = this.affiliateService.checkCookie('indv_startDate') ?
+		// 	this.affiliateService.getCookie('indv_startDate') :
+		// 	date.toISOString().substring(0, 10);
+
+		// date.setDate(date.getDate() + 7);
+		// this.endDate = this.affiliateService.checkCookie('indv_endDate') ?
+		// 	this.affiliateService.getCookie('indv_endDate') :
+		// 	date.toISOString().substring(0, 10);
+
+		this.startDate = date.toISOString().substring(0, 10);;
 
 		date.setDate(date.getDate() + 7);
-		this.endDate = this.affiliateService.checkCookie('indv_endDate') ?
-			this.affiliateService.getCookie('indv_endDate') :
-			date.toISOString().substring(0, 10);
+
+		this.endDate = date.toISOString().substring(0, 10);;
 
 		this.searchText = this.affiliateService.checkCookie('indv_search') ?
 			this.affiliateService.getCookie('indv_search')

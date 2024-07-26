@@ -85,7 +85,7 @@
             <div>
                 <p><mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">
                         {{useDateFilter ? 'Uncheck to see current and future bookings' :
-                        'Check to see bookings based upon dates and search by any term.' }}
+                        'Check to see bookings for 7 days or based upon dates and search by any term.' }}
                     </mat-checkbox>
 
                 </p>
@@ -646,11 +646,17 @@
                                 </span>
                             </div>
                             <div class="col-md-8 value">
-                                <span class="font-weight-bolder preview-output-feild">
+                                <a class="font-weight-bolder preview-output-feild cursor-pointer"
+                                    style="color: #1e7500;"
+                                    href="tel:{{bookingPreview?.driver_cell_isd ? ( bookingPreview.driver_cell_isd ) : '(+1) '}}{{ bookingPreview?.driver_cell ? bookingPreview?.driver_cell : '8005466266' }}">
+                                    {{ bookingPreview?.driver_cell_isd ? ( bookingPreview.driver_cell_isd ) : '(+1) '}}
+                                    {{ bookingPreview?.driver_cell ? bookingPreview?.driver_cell : '8005466266' }}
+                                </a>
+                                <!-- <span class="font-weight-bolder preview-output-feild">
                                     {{ bookingPreview?.driver_cell_isd ? ( bookingPreview.driver_cell_isd ) : '(+1) '
                                     }}{{
                                     bookingPreview?.driver_cell ? bookingPreview?.driver_cell : '8005466266' }}
-                                </span>
+                                </span> -->
                             </div>
                         </div>
                     </div>
@@ -860,11 +866,11 @@
                         <div class="row m-0 preview-pickup-color">
                             <div class="col-md-5 key">
                                 <span>
-									Flight Number &nbsp;<span
-										style="color: black;text-decoration: underline;font-weight: 600;cursor: pointer;"
-										(click)="searchOnGoogle(bookingPreview?.pickup_airline_name + ' ' + bookingPreview?.pickup_flight)">(View
-										Flight time)</span>
-								</span>
+                                    Flight Number &nbsp;<span
+                                        style="color: black;text-decoration: underline;font-weight: 600;cursor: pointer;"
+                                        (click)="searchOnGoogle(bookingPreview?.pickup_airline_name + ' ' + bookingPreview?.pickup_flight)">(View
+                                        Flight time)</span>
+                                </span>
                             </div>
                             <div class="col-md-7 value">
                                 <span class="font-weight-bolder preview-output-feild" style="cursor: pointer;"
@@ -873,6 +879,7 @@
                                 </span>
                             </div>
                         </div>
+                        <hr>
                         <!-- Flight Number -->
                     </div>
 
@@ -998,7 +1005,7 @@
                                 </span>
                             </div>
                             <div class="col-md-8 value">
-                                <span class="font-weight-bolder preview-output-feild" style="cursor: pointer;"
+                                <span class="font-weight-bolder preview-output-feild" style="cursor: pointer;color: #007500 !important;"
                                     (click)="searchOnGoogle(bookingPreview?.dropoff_airline_name + ' ' + bookingPreview?.dropoff_flight)">
                                     {{ textFormatter(bookingPreview.dropoff_airline_name) }}
                                 </span>
@@ -1010,14 +1017,14 @@
                         <div class="row preview-dropoff-color">
                             <div class="col-md-5 key">
                                 <span>
-									Flight Number &nbsp;<span
-										style="color: black;text-decoration: underline;font-weight: 600;cursor: pointer;"
-										(click)="searchOnGoogle(bookingPreview?.dropoff_airline_name + ' ' + bookingPreview?.dropoff_flight)">(View
-										Flight time)</span>
-								</span>
+                                    Flight Number &nbsp;<span
+                                        style="color: black;text-decoration: underline;font-weight: 600;cursor: pointer;"
+                                        (click)="searchOnGoogle(bookingPreview?.dropoff_airline_name + ' ' + bookingPreview?.dropoff_flight)">(View
+                                        Flight time)</span>
+                                </span>
                             </div>
                             <div class="col-md-7 value">
-                                <span class="font-weight-bolder preview-output-feild" style="cursor: pointer;"
+                                <span class="font-weight-bolder preview-output-feild" style="cursor: pointer;color: #007500 !important;"
                                     (click)="searchOnGoogle(bookingPreview?.dropoff_airline_name + ' ' + bookingPreview?.dropoff_flight)">
                                     {{ textFormatter(bookingPreview.dropoff_flight) }}
                                 </span>
@@ -1077,42 +1084,42 @@
 
                     <!-- 2ND p -->
                     <div class="mx-2">
-						<hr>
-						<div class="row m-0">
-							<div class="col-md-4">
-								<span>
-									Estimated Total Distance
-								</span>
-							</div>
-							<div class="col-md-8 ">
-								<span class="font-weight-bolder preview-output-feild">
-									{{ mToMi(bookingPreview?.distance) }} Miles / {{ mToKm(bookingPreview?.distance)
-									}} Km
-								</span>
-							</div>
-						</div>
-					</div>
-					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4">
-								<span>
-									Estimated time
-								</span>
-							</div>
-							<div class="col-md-8">
-								<span class="font-weight-bolder preview-output-feild">
-									{{convertToMinutes(bookingPreview?.duration)}}
-								</span>
-							</div>
-						</div>
+                        <hr>
+                        <div class="row m-0">
+                            <div class="col-md-4">
+                                <span>
+                                    Estimated Total Distance
+                                </span>
+                            </div>
+                            <div class="col-md-8 ">
+                                <span class="font-weight-bolder preview-output-feild">
+                                    {{ mToMi(bookingPreview?.distance) }} Miles / {{ mToKm(bookingPreview?.distance)
+                                    }} Km
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mx-2">
+                        <div class="row m-0">
+                            <div class="col-md-4">
+                                <span>
+                                    Estimated time
+                                </span>
+                            </div>
+                            <div class="col-md-8">
+                                <span class="font-weight-bolder preview-output-feild">
+                                    {{convertToMinutes(bookingPreview?.duration)}}
+                                </span>
+                            </div>
+                        </div>
 
-					</div> 
-					<hr>
-					<br>
-					<div class="google_map">
-						<div id="map" class="map"></div>
-					</div>
-					<br>
+                    </div>
+                    <hr>
+                    <br>
+                    <div class="google_map">
+                        <div id="map" class="map"></div>
+                    </div>
+                    <br>
                     <hr>
                 </div>
                 <div class="mx-2" *ngIf="bookingPreview?.meet_greet_choice_name">
@@ -1155,7 +1162,8 @@
                             </span>
                         </div>
                         <div class="col-md-8 value box-special-instruction">
-                            <span class="font-weight-bolder preview-output-feild" style="white-space: pre-wrap;" [innerHTML]="highlightNumbers(bookingPreview?.booking_instructions || '')" >
+                            <span class="font-weight-bolder preview-output-feild" style="white-space: pre-wrap;"
+                                [innerHTML]="highlightNumbers(bookingPreview?.booking_instructions || '')">
                                 <!-- {{ textFormatter(bookingPreview?.booking_instructions)| titlecase }} -->
                             </span>
                         </div>

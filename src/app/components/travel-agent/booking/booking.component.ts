@@ -101,14 +101,21 @@ export class BookingComponent implements OnInit {
 		this.buildInviteAgentForm();
 		let date = new Date();
 		// Set Search Filters According to cookies or the intial state
-		this.startDate = this.affiliateService.checkCookie('ta_startDate') ?
-			this.affiliateService.getCookie('ta_startDate') :
-			date.toISOString().substring(0, 10);
+		// this.startDate = this.affiliateService.checkCookie('ta_startDate') ?
+		// 	this.affiliateService.getCookie('ta_startDate') :
+		// 	date.toISOString().substring(0, 10);
+
+		// date.setDate(date.getDate() + 7);
+		// this.endDate = this.affiliateService.checkCookie('ta_endDate') ?
+		// 	this.affiliateService.getCookie('ta_endDate') :
+		// 	date.toISOString().substring(0, 10);
+
+		this.startDate = date.toISOString().substring(0, 10);;
 
 		date.setDate(date.getDate() + 7);
-		this.endDate = this.affiliateService.checkCookie('ta_endDate') ?
-			this.affiliateService.getCookie('ta_endDate') :
-			date.toISOString().substring(0, 10);
+
+		this.endDate = date.toISOString().substring(0, 10);;
+
 
 		this.searchText = this.affiliateService.checkCookie('ta_search') ?
 			this.affiliateService.getCookie('ta_search')
