@@ -2553,6 +2553,8 @@ export class CreateBookingComponent implements OnInit {
 			return_extra_stops: this.BookingForm.get('return_extra_stops').value,
 			pickup_time: this.BookingForm.get('pickup_time').value,
 			return_pickup_time: this.BookingForm.get('return_pickup_time').value,
+			return_vehicle_id: this.BookingForm.get('vehicle_id').value,
+			return_affiliate_type: this.BookingForm.get('affiliate_type').value,
 
 		}
 
