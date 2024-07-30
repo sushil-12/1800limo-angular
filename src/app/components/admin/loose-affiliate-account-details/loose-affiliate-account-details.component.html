@@ -32,7 +32,7 @@
                                 [ng2TelInputOptions]="{'initialCountry': defaultCountryCode,'preferredCountries': ['us','in','ca','mx','gb']}"
                                 placeholder="1234567890" class="phoneNumberClass"
                                 (countryChange)="onCountryChange($event,'phone')"
-                                (intlTelInputObject)="telInputObjectMobile($event)" tabIndex="1"
+                                (intlTelInputObject)="telInputObjectMobile($event)"
                                 (focus)="$event.target.select()" />
                         </mat-form-field>
                         <div *ngIf="submittedForm && f.phone.errors || f.phone.touched && f.phone.errors"
@@ -80,7 +80,7 @@
                                 [ng2TelInputOptions]="{'initialCountry': defaultCountryCode,'preferredCountries': ['us','in','ca','mx','gb']}"
                                 placeholder="1234567890" class="phoneNumberClass"
                                 (countryChange)="onCountryChange($event,'work')"
-                                (intlTelInputObject)="telInputObjectOffice($event)" tabIndex="1"
+                                (intlTelInputObject)="telInputObjectOffice($event)"
                                 (focus)="$event.target.select()" />
                         </mat-form-field>
                         <div *ngIf="submittedForm && f.work.errors || f.work.touched && f.work.errors"
