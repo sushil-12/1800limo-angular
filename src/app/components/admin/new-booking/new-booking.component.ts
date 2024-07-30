@@ -2397,6 +2397,9 @@ export class NewBookingComponent implements OnInit {
 					cancellation_hours: this.selectedVehicle?.non_charter_cancellation_hours.toString(),
 					return_cancellation_hours: this.return_selectedVehicle?.non_charter_cancellation_hours.toString()
 				})
+				this.SetFormValue('return_pickup_date', moment().format('YYYY-MM-DD'))
+				this.SetFormValue('return_pickup_time', '12:00 pm')
+
 			}
 			if (value != 'charter_tour') {
 				this.BookingForm.get('number_of_hours').setValue(0)
