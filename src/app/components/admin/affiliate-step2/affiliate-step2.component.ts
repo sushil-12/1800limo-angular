@@ -494,7 +494,7 @@ export class AffiliateStep2Component implements OnInit {
 	}
 
 	handleBadgeCity(value: any) {
-		this.filteredOptions = this.badgeOptions.filter((i: any) => i.name.toLowerCase().includes(value.toLowerCase()))
+		this.filteredOptions = this.badgeOptions.filter((i: any) => i.name.toLowerCase().startsWith(value.toLowerCase()))
 		console.log(value, this.filteredOptions)
 	}
 	selectBadgeCity(option: any, isUserInput) {

@@ -518,7 +518,7 @@ export class Step1Component implements OnInit, AfterViewInit {
 	}
 	handleBadgeCity(value: any) {
 		console.log(value, this.filteredOptions)
-		this.filteredOptions = this.badgeOptions.filter((i: any) => i.name.toLowerCase().includes(value.toLowerCase()))
+		this.filteredOptions = this.badgeOptions.filter((i: any) => i.name.toLowerCase().startsWith(value.toLowerCase()))
 		if (!value) {
 			this.isBadgeCity = false
 		}

@@ -686,16 +686,24 @@ export class HomeComponent implements OnInit {
 		})
 	}
 	returnSearchAirport(searchText: any) {
-		console.log('search text is->', searchText)
-		if (searchText.length == 3) {
+		console.log('search text is->', searchText);
+
+		// Convert searchText to lowercase for case-insensitive comparison
+		const searchTextLower = searchText.toLowerCase();
+
+		// Filter based on the length of searchText
+		if (searchText.length === 3) {
 			return JSON.parse(JSON.stringify(this.airports_data_copy.filter((item: any) => {
-				return item['airport'].slice(0, 3).toLowerCase().startsWith(searchText.toLowerCase());
-			})))
-		}
-		else {
+				// Check if the airport code starts with the search text
+				return item['airport'].slice(0, 3).toLowerCase().startsWith(searchTextLower);
+			})));
+		} else {
 			return JSON.parse(JSON.stringify(this.airports_data_copy.filter((item: any) => {
-				return (item.city.toLowerCase().includes(searchText.toLowerCase()) || item.airport.split('-')[0].toLowerCase().includes(searchText.toLowerCase()) || item?.name.toLowerCase().includes(searchText.toLowerCase()))
-			})))
+				// Check if the search text matches the beginning of city, airport (before dash), or name
+				return item.city.toLowerCase().startsWith(searchTextLower) ||
+					item.airport.split('-')[0].toLowerCase().startsWith(searchTextLower) ||
+					item?.name.toLowerCase().startsWith(searchTextLower);
+			})));
 		}
 	}
 

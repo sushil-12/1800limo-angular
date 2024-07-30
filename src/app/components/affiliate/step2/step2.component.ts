@@ -851,7 +851,7 @@ export class Step2Component implements OnInit {
 		if (!value) {
 			this.isBadgeCity = false
 		}
-		this.filteredOptions = this.badgeOptions.filter((i: any) => i.name.toLowerCase().includes(value.toLowerCase()))
+		this.filteredOptions = this.badgeOptions.filter((i: any) => i.name.toLowerCase().startsWith(value.toLowerCase()))
 	}
 	selectBadgeCity(option: any, isUserInput) {
 		console.log('in function selectBadgeCity-->>>', option, isUserInput)

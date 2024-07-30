@@ -364,7 +364,7 @@ export class NewBookingComponent implements OnInit {
 			return_lose_affiliate_phone_country: ['us'],
 			return_lose_affiliate_email: [''],
 			cancellation_hours: ['24', [Validators.required]],
-			return_cancellation_hours: ['24', [Validators.required]],
+			return_cancellation_hours: ['24'],
 			vehicle_type: ['',[Validators.required]],
 			vehicle_type_name: [''],
 			vehicle_id: [''],
