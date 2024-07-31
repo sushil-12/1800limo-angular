@@ -1026,7 +1026,8 @@
 								</span>
 							</div>
 							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild" style="cursor: pointer;color: #007500 !important;"
+								<span class="font-weight-bolder preview-output-feild"
+									style="cursor: pointer;color: #007500 !important;"
 									(click)="searchOnGoogle(bookingPreview?.dropoff_airline_name + ' ' + bookingPreview?.dropoff_flight)">
 									{{ textFormatter(bookingPreview?.dropoff_airline_name) }}
 								</span>
@@ -1045,7 +1046,8 @@
 								</span>
 							</div>
 							<div class="col-md-7 value">
-								<span class="font-weight-bolder preview-output-feild" style="cursor: pointer;color: #007500 !important;"
+								<span class="font-weight-bolder preview-output-feild"
+									style="cursor: pointer;color: #007500 !important;"
 									(click)="searchOnGoogle(bookingPreview?.dropoff_airline_name + ' ' + bookingPreview?.dropoff_flight)">
 									{{ textFormatter(bookingPreview?.dropoff_flight) }}
 								</span>
@@ -1235,7 +1237,8 @@
 								</span>
 							</div>
 							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild" style="white-space: pre-wrap;" [innerHTML]="highlightNumbers(bookingPreview?.booking_instructions || ' ')">
+								<span class="font-weight-bolder preview-output-feild" style="white-space: pre-wrap;"
+									[innerHTML]="highlightNumbers(bookingPreview?.booking_instructions || ' ')">
 									<!-- {{ textFormatter(bookingPreview?.booking_instructions)| titlecase }} -->
 								</span>
 							</div>
@@ -1520,8 +1523,9 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										{{currencySymbol}}{{rates_preview?.baseRate ? rates_preview?.baseRate.toFixed(2)
-										: rates_preview?.ride_base_rate.toFixed(2)}}
+										{{currencySymbol}}{{rates_preview?.baseRate ?
+										formatBaseRate(rates_preview?.baseRate)
+										: formatBaseRate(rates_preview?.ride_base_rate)}}
 									</span>
 									(Fare Base Rate)
 								</div>
@@ -1537,7 +1541,8 @@
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
 										{{currencySymbol}}{{rates_preview?.adminShare ?
-										rates_preview?.adminShare.toFixed(2) : rates_preview?.admin_share.toFixed(2) }}
+										formatBaseRate(rates_preview?.adminShare) :
+										formatBaseRate(rates_preview?.admin_share) }}
 									</span>
 									({{adminSharePercent}}% of Base Rate)
 								</div>
@@ -1554,7 +1559,8 @@
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
 										{{currencySymbol}}{{rates_preview?.stripeFee ?
-										rates_preview?.stripeFee.toFixed(2) : rates_preview?.stripe_fees.toFixed(2)}}
+										formatBaseRate(rates_preview?.stripeFee) :
+										formatBaseRate(rates_preview?.stripe_fees)}}
 									</span>
 									(Platform fee 5% + 30 cents - <b>Paid from Admin share</b>)
 								</div>
@@ -1571,8 +1577,8 @@
 								<div class="col-md-8 value preview-airport-color" style="color: #1e7500 !important;">
 									<span class="font-weight-bolder preview-output-feild">
 										{{currencySymbol}}{{rates_preview?.affiliateShare ?
-										rates_preview?.affiliateShare.toFixed(2) :
-										rates_preview?.affiliate_share.toFixed(2)}}
+										formatBaseRate(rates_preview?.affiliateShare) :
+										formatBaseRate(rates_preview?.affiliate_share)}}
 									</span>
 									( Total Price - (Ride Base Rate + Other Taxes) )
 								</div>
@@ -1587,7 +1593,7 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color" style="color: #1e7500 !important;">
 									<span class="font-weight-bolder preview-output-feild">
-										{{currencySymbol}}{{rates_preview?.farmoutShare.toFixed(2)}}
+										{{currencySymbol}}{{formatBaseRate(rates_preview?.farmoutShare)}}
 									</span>
 									( 10 % of Base Rate)
 								</div>
@@ -1603,9 +1609,9 @@
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
 										{{currencySymbol}}{{rates_preview?.grandTotal ?
-										rates_preview?.grandTotal.toFixed(2) : rates_preview?.total_price ?
-										rates_preview?.total_price.toFixed(2) :
-										rates_preview?.returnGrandTotal.toFixed(2)}}
+										formatBaseRate(rates_preview?.grandTotal) : rates_preview?.total_price ?
+										formatBaseRate(rates_preview?.total_price) :
+										formatBaseRate(rates_preview?.returnGrandTotal)}}
 									</span>
 									(Actual Cost to Customer)
 								</div>

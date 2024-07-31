@@ -922,14 +922,14 @@ export class DailyBookingsComponent implements OnInit {
 				else {
 					this.adminSharePercent = 25
 				}
-				if (this.bookingPreview?.payment_status == "unpaid") {
-					console.log("in shre array", this.bookingPreview?.share_array?.length != 0, this.bookingPreview?.share_array?.length)
-					if (this.bookingPreview?.share_array?.length != 0) {
-						console.log("in shre array")
+				// if (this.bookingPreview?.payment_status == "unpaid") {
+				// 	console.log("in shre array", this.bookingPreview?.share_array?.length != 0, this.bookingPreview?.share_array?.length)
+				// 	if (this.bookingPreview?.share_array?.length != 0) {
+				// 		console.log("in shre array")
 						this.shareArray = this?.bookingPreview?.share_array
-					}
+					// }
 					this.rates_preview = this.bookingPreview?.rates_preview;
-				}
+				// }
 				// for(let i in this.bookingPreview?.rates_preview){
 				// 	if(!Array.isArray(this.bookingPreview?.rates_preview[i])){
 				// 	}
@@ -973,6 +973,19 @@ export class DailyBookingsComponent implements OnInit {
 
 	handleKeypressEvents() {
 		clearTimeout(this.timer);
+	}
+
+	formatBaseRate(baseRate: string | number): string {
+		// Convert baseRate to a number if it is a string
+		const numericValue = typeof baseRate === 'string' ? parseFloat(baseRate) : baseRate;
+	
+		// Check if numericValue is a valid number
+		if (!isNaN(numericValue)) {
+			return numericValue.toFixed(2);
+		}
+	
+		// Return a default value or an empty string if baseRate is not a valid number
+		return '0.00';
 	}
 
 	saveCookie(key: string, value: string) {

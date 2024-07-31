@@ -2747,6 +2747,9 @@ export class NewBookingComponent implements OnInit {
 		// Affiliate Type
 		this.BookingForm.get('return_affiliate_type').valueChanges.subscribe((value: string) => {
 			if (value == 'loose_affiliate') {
+				this.BookingForm.patchValue({
+					return_affiliate_id: ''
+				})
 				this.fetchReturnAffiliates('loose_affiliate')
 				this.toggleDropdown(null)
 				this.BookingForm.get('return_lose_affiliate_name').setValidators([Validators.required])
