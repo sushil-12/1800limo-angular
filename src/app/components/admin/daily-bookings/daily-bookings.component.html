@@ -1815,7 +1815,7 @@
 					<!-- *ngIf="bookingPreview?.payment_status=='unpaid' && bookingPreview?.share_array?.length != 0" -->
 					<div class="distribution_rate" *ngIf="bookingPreview?.affiliate_type != 'unassigned'">
 						<h4 class="font-weight-bolder m-0 my-3">
-							Rates Distribution
+							Rates Distribution 
 						</h4>
 
 						<div class="mx-2">
@@ -1827,7 +1827,7 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										{{bookingPreview?.currency_symbol}}{{bookingPreview?.share_array?.baseRate.toFixed(2)}}
+										{{bookingPreview?.currency_symbol}}{{formatBaseRate(bookingPreview?.share_array?.baseRate)}}
 									</span>
 									(Fare Base Rate)
 								</div>
@@ -1842,7 +1842,7 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color" style="color: #1e7500">
 									<span class="font-weight-bolder preview-output-feild">
-										{{bookingPreview?.currency_symbol}}{{bookingPreview?.share_array?.adminShare.toFixed(2)
+										{{bookingPreview?.currency_symbol}}{{formatBaseRate(bookingPreview?.share_array?.adminShare)
 										}}
 									</span>
 									({{adminSharePercent}}% of Base Rate)
@@ -1858,7 +1858,7 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										{{bookingPreview?.currency_symbol}}{{bookingPreview?.share_array?.travelAgentShare.toFixed(2)
+										{{bookingPreview?.currency_symbol}}{{formatBaseRate(bookingPreview?.share_array?.travelAgentShare)
 										}}
 									</span>
 									(10% of Base Rate)
@@ -1875,7 +1875,7 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										{{bookingPreview?.currency_symbol}}{{bookingPreview?.share_array?.stripeFee.toFixed(2)}}
+										{{bookingPreview?.currency_symbol}}{{formatBaseRate(bookingPreview?.share_array?.stripeFee)}}
 									</span>
 									(Platform fee 5% + 30 cents - <b>Paid from Admin share</b>)
 								</div>
@@ -1891,7 +1891,7 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										{{bookingPreview?.currency_symbol}}{{bookingPreview?.share_array?.affiliateShare.toFixed(2)}}
+										{{bookingPreview?.currency_symbol}}{{formatBaseRate(bookingPreview?.share_array?.affiliateShare)}}
 									</span>
 									( Total Price - (Ride Base Rate + Other Taxes) )
 								</div>
@@ -1906,7 +1906,7 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										{{bookingPreview?.currency_symbol}}{{bookingPreview?.share_array?.farmoutShare.toFixed(2)}}
+										{{bookingPreview?.currency_symbol}}{{formatBaseRate(bookingPreview?.share_array?.farmoutShare)}}
 									</span>
 									( 10 % of Base Rate)
 								</div>
@@ -1922,8 +1922,8 @@
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
 										{{bookingPreview?.currency_symbol}}{{bookingPreview?.share_array?.grandTotal ?
-										bookingPreview?.share_array?.grandTotal.toFixed(2) :
-										bookingPreview?.share_array?.returnGrandTotal.toFixed(2)}}
+											formatBaseRate(bookingPreview?.share_array?.grandTotal) :
+											formatBaseRate(bookingPreview?.share_array?.returnGrandTotal)}}
 									</span>
 									(Actual Cost to Customer)
 								</div>
