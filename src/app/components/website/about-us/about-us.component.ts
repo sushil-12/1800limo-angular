@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { AdminService } from 'src/app/services/admin.service';
 declare var $: any;
 @Component({
     selector: 'app-about-us',
@@ -13,6 +16,9 @@ export class AboutUsComponent implements OnInit
     public carouselType: string;
     public carouselInformation: boolean = true;
     public selectedCarousel: string;
+    public aboutUsSecionsData: any;
+    public timeLineData:any;
+
     carouselSwitch(carouselType)
     {
         switch (carouselType)
@@ -67,9 +73,9 @@ export class AboutUsComponent implements OnInit
             }
         }
     }
-    constructor()
-    {
-    }
+    constructor(
+        private adminService: AdminService,
+    ) {}
     ngOnInit(): void
     {
         $('.aboutnw_slideriner').trigger('to.owl.carousel', -1);
@@ -105,5 +111,40 @@ export class AboutUsComponent implements OnInit
                 }
             }
         });
+        
+        this.getAboutPageContent();
+        this.getAboutUsSectionDataByID();
     }
+
+    getAboutPageContent()
+	{
+		//this.spinner.show();
+		this.adminService.getAboutUsPageContent().pipe(
+			catchError(err =>
+			{
+				return throwError(err);
+			})
+		).subscribe(({ data }: any) =>
+		{
+			console.log(data);
+			this.aboutUsSecionsData = data;
+		})
+	}
+
+    getAboutUsSectionDataByID()
+	{
+		//this.spinner.show();
+		this.adminService.getAboutUsSectionDataByID('18').pipe(
+			catchError(err =>
+			{
+				return throwError(err);
+			})
+		).subscribe(({ data }: any) =>
+		{
+			console.log(data);
+			this.timeLineData = data;
+		})
+	}
+
+
 }

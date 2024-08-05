@@ -30,7 +30,8 @@
 							<div class="col-md-12" *ngIf="content">
 								<mat-form-field appearance="outline">
 									<mat-label>Content</mat-label>
-									<textarea matInput placeholder="Content" formControlName="content"></textarea>
+									<textarea matInput placeholder="Content" cdkTextareaAutosize rows="5"
+									#autosize="cdkTextareaAutosize" formControlName="content"></textarea>
 								</mat-form-field>
 							</div>
 						</div>

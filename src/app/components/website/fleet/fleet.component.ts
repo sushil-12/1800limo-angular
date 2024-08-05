@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { AdminService } from 'src/app/services/admin.service';
 declare var $: any;
 @Component({
   selector: 'app-fleet',
@@ -6,8 +9,9 @@ declare var $: any;
   styleUrls: ['./fleet.component.scss']
 })
 export class FleetComponent implements OnInit {
+  public fleetContents:any;
 
-  constructor() { }
+  constructor(private adminServices:AdminService,) { }
 
   ngOnInit(): void {
     $(document).ready(function () {
@@ -30,5 +34,18 @@ export class FleetComponent implements OnInit {
         }
       });
     });
+ 
+		this.adminServices.getStepContentData('fleet').pipe(
+			catchError(err =>
+			{
+
+				return throwError(err);
+			})
+		).subscribe(({ data }: any) =>
+		{
+			console.log(data);
+			this.fleetContents = data;
+		})
+
   }
 }

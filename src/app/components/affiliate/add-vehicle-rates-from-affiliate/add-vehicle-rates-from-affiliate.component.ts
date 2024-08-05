@@ -101,6 +101,7 @@ export class AddVehicleRatesFromAffiliateComponent implements OnInit
 			vehicle_id: ['', [Validators.required, Validators.pattern("^[0-9]*$")]],
 			currency: ['$', Validators.required],
 			hourly_rate: ['', [Validators.required, Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
+			minimum_charter_hours:['2', [Validators.required, Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			hourly_rate_after_five_hours: ['', [Validators.required, Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			hours_day_rate: [8, [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],
 			day_rate: ['', [Validators.pattern("^[0-9]*(\.[0-9]+)?$")]],

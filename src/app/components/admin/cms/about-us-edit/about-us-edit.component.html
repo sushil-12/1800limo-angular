@@ -53,7 +53,8 @@
 						<div class="col-md-12" *ngIf="content">
 							<mat-form-field appearance="outline">
 								<mat-label>Content</mat-label>
-								<textarea matInput placeholder="Content" formControlName="content"></textarea>
+								<textarea matInput placeholder="Content" cdkTextareaAutosize rows="5"
+									#autosize="cdkTextareaAutosize" formControlName="content"></textarea>
 							</mat-form-field>
 						</div>
 					</div>
@@ -206,7 +207,7 @@
 												</mat-form-field>
 											</div>
 											<!--images in timeline-->
-											<div class="row">
+											<!-- <div class="row">
 												<div class="col-md-12" [formGroupName]="j">
 													<div class="p-3 border rounded-lg mt-3"
 														formArrayName="timeline_images">
@@ -270,7 +271,7 @@
 														</div>
 													</div>
 												</div>
-											</div>
+											</div> -->
 											<!--end images-->
 
 											<div class="col-md-12 mt-4 d-flex justify-content-center" *ngIf="j != 0;">
