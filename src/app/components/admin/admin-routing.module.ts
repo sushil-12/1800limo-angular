@@ -86,6 +86,8 @@ import { RecoverAccountsComponent } from './recover-accounts/recover-accounts.co
 import { SubTravelPlannerAccountComponent } from './sub-travel-planner-account/sub-travel-planner-account.component';
 import { LooseAffiliateAccountsComponent } from './loose-affiliate-accounts/loose-affiliate-accounts.component';
 import { LooseAffiliateAccountDetailsComponent } from './loose-affiliate-account-details/loose-affiliate-account-details.component';
+import { FleetComponent } from './cms/fleet/fleet.component';
+import { FleetPageEditComponent } from './cms/fleet-page-edit/fleet-page-edit.component';
 
 
 const routes: Routes = [
@@ -110,6 +112,11 @@ const routes: Routes = [
 		component: EditStep0Component
 	},
 	{
+		path: 'cms/fleet/edit/:id',
+		canActivate: [SubAdminGuard],
+		component: FleetPageEditComponent
+	},
+	{
 		path: 'cms/step6',
 		canActivate: [SubAdminGuard],
 		component: Step6Component
@@ -128,6 +135,11 @@ const routes: Routes = [
 		path: 'cms/about-us/edit/:id',
 		canActivate: [SubAdminGuard],
 		component: AboutUsEditComponent
+	},
+	{
+		path: 'cms/fleet',
+		canActivate: [SubAdminGuard],
+		component: FleetComponent
 	},
 	{
 		path: '',

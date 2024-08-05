@@ -1,0 +1,56 @@
+<ngx-spinner></ngx-spinner>
+<main>
+	<!-- Main page content-->
+	<form [formGroup]="editContentForm">
+		<!-----BILLING INFO-------------->
+		<section class="user_information">
+			<h2 class="headinginfo">Edit {{title}} section of {{ heading }}</h2>
+			<div class="" id="accordionSidebar1">
+				<div class="">
+					<div class="container py-2">
+						<div class="row">
+							<div class="col-md-12" *ngIf="title">
+								<mat-form-field appearance="outline">
+									<mat-label>Title</mat-label>
+									<input matInput placeholder="Title" formControlName="title">
+								</mat-form-field>
+							</div>
+							<div class="col-md-12" *ngIf="subtitle">
+								<mat-form-field appearance="outline">
+									<mat-label>Subtitle</mat-label>
+									<input matInput placeholder="Subtitle" formControlName="subtitle">
+								</mat-form-field>
+							</div>
+							<div class="col-md-12" *ngIf="content">
+								<mat-form-field appearance="outline">
+									<mat-label>Content</mat-label>
+									<textarea matInput placeholder="Content" formControlName="content" cdkTextareaAutosize rows="5"
+									#autosize="cdkTextareaAutosize"></textarea>
+								</mat-form-field>
+							</div>
+
+						</div>
+
+						<div class="row">
+							<div class="col-md-12">
+								<mat-form-field appearance="outline">
+									<mat-label>Status</mat-label>
+									<mat-select formControlName="section_status">
+										<mat-option value="enable">Enable</mat-option>
+										<mat-option value="disable">Disable</mat-option>
+									</mat-select>
+								</mat-form-field>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<section class="billing_inforamtion">
+			<ul>
+				<li><button class="custom-btn savebutton" (click)="saveEditValue()">SAVE</button> </li>
+				<li><button class="custom-btn backbutton" (click)="backButton()">BACK</button> </li>
+			</ul>
+		</section>
+	</form>
+</main>
