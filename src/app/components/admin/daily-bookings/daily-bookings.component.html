@@ -164,6 +164,13 @@
 												<div class="dropdown-item-icon"></div>
 												Return
 											</a>
+											<a *ngIf="(currentUser?.RoleName == 'admin' || subModules.includes('repeat_booking') && (booking?.booking_status != 'paid' && booking?.booking_status != 'paid_cash' && booking?.booking_status != 'cancelled'))"
+												class="dropdown-item" data-toggle="modal"
+												data-target="#accept_charge_modal"
+												(click)="acceptChargeClick(booking.booking_id)">
+												<div class="dropdown-item-icon"></div>
+												Accept & Charge
+											</a>
 											<a class="dropdown-item" [routerLink]="['/admin/finalize-booking']"
 												[queryParams]="{bookingId: booking.booking_id}"
 												*ngIf="((currentUser?.RoleName == 'admin' || subModules.includes('edit_booking')) && (booking?.booking_status != 'paid' && booking?.booking_status != 'paid_cash'))">
@@ -595,6 +602,21 @@
 	</div>
 </div>
 
+<!-- Accept charge modal -->
+<div class="modal fade" id="accept_charge_modal" tabindex="-1" role="dialog" aria-labelledby="accept_charge_modal" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-body text-center">
+				<p style="font-size: 19px;font-weight: 400;">Are you sure, You want to charge 50% of this booking?</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="custom-btn savebutton" (click)="accpetChargeAction()">Charge</button>
+				<button type="button" class="custom-btn resetbutton" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
 <!-- send email and call modal -->
 <div class="modal fade" id="sendEmailModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
 	aria-hidden="true" data-keyboard="false" #sendEmailModalFocus>
@@ -1006,9 +1028,9 @@
 							<div class="col-md-5 key">
 								<span>
 									Flight Number &nbsp;<span
-										style="color: black;text-decoration: underline;font-weight: 600;cursor: pointer;"
-										(click)="searchOnGoogle(bookingPreview?.pickup_airline_name + ' ' + bookingPreview?.pickup_flight)">(View
-										Flight time)</span>
+										style="color: blue;text-decoration: underline;font-weight: 600;cursor: pointer;font-size: 18px;"
+										(click)="searchOnGoogle(bookingPreview?.pickup_airline_name + ' ' + bookingPreview?.pickup_flight)">(Update
+										Arrival time)</span>
 								</span>
 							</div>
 							<div class="col-md-7 value">
@@ -1159,9 +1181,9 @@
 							<div class="col-md-5 key">
 								<span>
 									Flight Number &nbsp;<span
-										style="color: black;text-decoration: underline;font-weight: 600;cursor: pointer;"
-										(click)="searchOnGoogle(bookingPreview?.dropoff_airline_name + ' ' + bookingPreview?.dropoff_flight)">(View
-										Flight time)</span>
+										style="color: blue;text-decoration: underline;font-weight: 600;cursor: pointer;font-size: 18px;"
+										(click)="searchOnGoogle(bookingPreview?.dropoff_airline_name + ' ' + bookingPreview?.dropoff_flight)">(Update
+										Arrival time)</span>
 								</span>
 							</div>
 							<div class="col-md-7 value">

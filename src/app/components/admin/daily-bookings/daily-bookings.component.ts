@@ -72,6 +72,7 @@ export class DailyBookingsComponent implements OnInit {
 	shareArray: any;
 	adminSharePercent: any;
 	previewCopyData: any;
+	accept_charge_id: any;
 
 	constructor(
 		private adminService: AdminService,
@@ -926,9 +927,9 @@ export class DailyBookingsComponent implements OnInit {
 				// 	console.log("in shre array", this.bookingPreview?.share_array?.length != 0, this.bookingPreview?.share_array?.length)
 				// 	if (this.bookingPreview?.share_array?.length != 0) {
 				// 		console.log("in shre array")
-						this.shareArray = this?.bookingPreview?.share_array
-					// }
-					this.rates_preview = this.bookingPreview?.rates_preview;
+				this.shareArray = this?.bookingPreview?.share_array
+				// }
+				this.rates_preview = this.bookingPreview?.rates_preview;
 				// }
 				// for(let i in this.bookingPreview?.rates_preview){
 				// 	if(!Array.isArray(this.bookingPreview?.rates_preview[i])){
@@ -978,12 +979,12 @@ export class DailyBookingsComponent implements OnInit {
 	formatBaseRate(baseRate: string | number): string {
 		// Convert baseRate to a number if it is a string
 		const numericValue = typeof baseRate === 'string' ? parseFloat(baseRate) : baseRate;
-	
+
 		// Check if numericValue is a valid number
 		if (!isNaN(numericValue)) {
 			return numericValue.toFixed(2);
 		}
-	
+
 		// Return a default value or an empty string if baseRate is not a valid number
 		return '0.00';
 	}
@@ -1200,6 +1201,35 @@ export class DailyBookingsComponent implements OnInit {
 			const url = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
 			window.open(url, '_blank'); // Opens the search in a new tab
 		}
+	}
+
+	acceptChargeClick(id) {
+		this.accept_charge_id = id
+	}
+
+	accpetChargeAction() {
+		this.spinner.show()
+		let data = {
+			reservation_id: this.accept_charge_id
+		}
+		this.adminService
+			.acceptCharge(data)
+			.pipe(
+				catchError((err) => {
+					return throwError(err);
+				})
+			)
+			.subscribe((response: any) => {
+				this.spinner.hide();
+				$("#accept_charge_modal").modal("hide");
+				this.$errorDialog.openDialog({
+					errors: {
+						error: `<span class='text-success font-weight-bolder text-2xl' style="font-size: 24px;">Half payment have been charged successfully!</span>`
+					}
+				})
+				console.log("accept charge action", response);
+			});
+
 	}
 
 
