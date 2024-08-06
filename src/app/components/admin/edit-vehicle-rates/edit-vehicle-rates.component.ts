@@ -163,7 +163,7 @@ export class EditVehicleRatesComponent implements OnInit {
 							id: this.response.data.id,
 							vehicle_id: this.response.data.vehicle_id,
 							hourly_rate: this.response.data.hourly_rate,
-							minimum_charter_hours:this.response.data?.minimum_charter_hours,
+							minimum_charter_hours:Number(this.response.data?.minimum_charter_hours),
 							hourly_rate_after_five_hours: this.response.data.hourly_rate_after_five_hours,
 							hours_day_rate: this.response.data.hours_day_rate,
 							day_rate: this.response.data.day_rate,
