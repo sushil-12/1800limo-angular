@@ -147,6 +147,20 @@
 				</div>
 				<div class="col-md-6">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
+						<mat-label>Minimum Charter Hours <span class="asterisk">*</span></mat-label>
+						<input matInput placeholder="Hourly Rate" formControlName="minimum_charter_hours" tabindex="1"
+							(change)="updateRateRangeObject('minimum_charter_hours')" />
+					</mat-form-field>
+					<div *ngIf="submittedForm && f.minimum_charter_hours.errors || f.minimum_charter_hours.touched && f.minimum_charter_hours.errors"
+						class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="f.minimum_charter_hours.errors.required">This field is required</div>
+					</div>
+					<div *ngIf="f.minimum_charter_hours.errors" class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="f.minimum_charter_hours.errors.pattern">Enter Numbers only</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label>Hourly Rate After 5 Hours <span class="asterisk">*</span></mat-label>
 						<span matPrefix
 							*ngIf="f.hourly_rate_after_five_hours.value == null || f.hourly_rate_after_five_hours.value == ''; else hideZero2">{{currencySymbol}}
@@ -383,6 +397,7 @@
 				<div class="col-md-12 mt-5">
 					<h2 class="headinginfo p-0">Rate Manager<span class="spanText">(Adjust Your rates up or down)</span>
 					</h2>
+					<hr>
 					<div class="row">
 						<div class="col-md-6 col-lg-3 pr-0 borderright mobilePadding">
 							<div class="form-group radio-tile-group assment_radio">
@@ -464,6 +479,7 @@
 				</div>
 			</div>
 		</div>
+		<hr>
 	</section>
 	<section class="user_information">
 		<h2 class="headinginfo">Amenity Rates <span class="spanText">(Enter an all-inclusive rate in each applicable
@@ -776,7 +792,7 @@
 	<section class="billing_inforamtion">
 		<div class="col-md-12">
 			<div class="billing_inforamtion ">
-				<ul class="d-flex justify-content-center">
+				<ul class="d-flex justify-content-center" style="gap:30px;">
 			<li><button class="custom-btn savebutton" (click)="submitForm()" [disabled]="disableSubmitButton"
 					tabindex="1">SAVE</button> </li>
 			<li><button class="custom-btn resetbutton" (click)="resetForm()" tabindex="1">RESET</button> </li>

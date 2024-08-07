@@ -721,8 +721,14 @@
 						<ng-select appearance="outline" [items]="vehicleType_arr" bindLabel="formatted_name"
 							bindValue="vehicleType_id" placeholder="Select Vehicle Type" dropdownPosition="bottom"
 							[markFirst]="true" [virtualScroll]="true" formControlName="vehicle_type"
-							(change)="handleChangeVehicleType($event)">
+							(change)="handleChangeVehicleType($event)"
+							[ngClass]="{ 'border-red': (submitBookingForm && Form.vehicle_type.invalid) }"
+							style="height:66px;">
 						</ng-select>
+						<div *ngIf="(submitBookingForm && Form.vehicle_type.invalid) "
+							class="text-danger margin-bottom-thin my-mat-hint" style="margin-bottom: 20px;">
+							<div *ngIf="Form.vehicle_type.errors.required">Please select a vehicle type</div>
+						</div>
 					</div>
 
 					<!-- Make -->
@@ -2658,8 +2664,9 @@
 								</span>
 							</div>
 							<div class="col-md-8 value box-special-instruction">
-								<span class="font-weight-bolder" style="white-space: pre-wrap;">
-									{{Form?.booking_instructions.value}}
+								<span class="font-weight-bolder" style="white-space: pre-wrap;"
+									[innerHTML]="highlightNumbers(Form?.booking_instructions.value || ' ')">
+									<!-- {{Form?.booking_instructions.value}} -->
 								</span>
 							</div>
 						</div>
@@ -3093,8 +3100,9 @@
 							</span>
 						</div>
 						<div class="col-md-8 value box-special-instruction">
-							<span class="font-weight-bolder" style="white-space: pre-wrap;">
-								{{Form?.return_booking_instructions.value}}
+							<span class="font-weight-bolder" style="white-space: pre-wrap;"
+								[innerHTML]="highlightNumbers(Form?.return_booking_instructions.value || ' ')">
+								<!-- {{Form?.return_booking_instructions.value}} -->
 							</span>
 						</div>
 					</div>

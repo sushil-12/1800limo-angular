@@ -2200,6 +2200,8 @@ export class CreateNewBookingComponent implements OnInit {
 			return_extra_stops: this.BookingForm.get('return_extra_stops').value,
 			pickup_time: this.BookingForm.get('pickup_time').value,
 			return_pickup_time: this.BookingForm.get('return_pickup_time').value,
+			return_vehicle_id: this.BookingForm.get('vehicle_id').value,
+			return_affiliate_type: this.BookingForm.get('affiliate_type').value,
 		}
 
 		let vehicle_id = booking_data?.vehicle_id.toString().length ? booking_data?.vehicle_id : this.master_vehicle_id
@@ -2384,6 +2386,23 @@ export class CreateNewBookingComponent implements OnInit {
 		// 	this.fetchQBAffiliateVehicles(selected_vehicle?.affiliate_id)
 		// 	this.fetchAffiliateDrivers(this.affiliate_id)
 		// }, 5000)
+	}
+
+	// numbers in red and seperated to next line
+	highlightNumbers(text: string): string {
+		const parts = text.split(/\b(\d+\.\s)/); // Split by number followed by dot and space
+
+		// Process parts and apply formatting
+		let formattedText = '';
+		for (let i = 0; i < parts.length; i++) {
+			if (i % 2 === 0) {
+				formattedText += parts[i]; // Regular text part
+			} else {
+				formattedText += `<br><span class="text-danger font-weight-bolder">${parts[i]}</span>`; // Numbered instruction part
+			}
+		}
+
+		return formattedText;
 	}
 
 }

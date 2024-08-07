@@ -67,7 +67,7 @@
 				<div class="col-md-6">
 					<p><mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">
 							{{useDateFilter ? 'Uncheck to see current and future bookings' :
-							'Check to see bookings based upon dates and search by any term.' }}
+							'Check to see bookings for 7 days or based upon dates and search by any term.' }}
 						</mat-checkbox></p>
 				</div>
 
@@ -163,6 +163,13 @@
 												[queryParams]="{bookingId: booking.booking_id, updateType: 'return'}">
 												<div class="dropdown-item-icon"></div>
 												Return
+											</a>
+											<a *ngIf="(currentUser?.RoleName == 'admin' || subModules.includes('repeat_booking') && (booking?.booking_status != 'paid' && booking?.booking_status != 'paid_cash' && booking?.booking_status != 'cancelled'))"
+												class="dropdown-item" data-toggle="modal"
+												data-target="#accept_charge_modal"
+												(click)="acceptChargeClick(booking.booking_id)">
+												<div class="dropdown-item-icon"></div>
+												Accept & Charge
 											</a>
 											<a class="dropdown-item" [routerLink]="['/admin/finalize-booking']"
 												[queryParams]="{bookingId: booking.booking_id}"
@@ -595,6 +602,21 @@
 	</div>
 </div>
 
+<!-- Accept charge modal -->
+<div class="modal fade" id="accept_charge_modal" tabindex="-1" role="dialog" aria-labelledby="accept_charge_modal" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-body text-center">
+				<p style="font-size: 19px;font-weight: 400;">Are you sure, You want to charge 50% of this booking?</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="custom-btn savebutton" (click)="accpetChargeAction()">Charge</button>
+				<button type="button" class="custom-btn resetbutton" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
 <!-- send email and call modal -->
 <div class="modal fade" id="sendEmailModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
 	aria-hidden="true" data-keyboard="false" #sendEmailModalFocus>
@@ -1006,9 +1028,9 @@
 							<div class="col-md-5 key">
 								<span>
 									Flight Number &nbsp;<span
-										style="color: black;text-decoration: underline;font-weight: 600;cursor: pointer;"
-										(click)="searchOnGoogle(bookingPreview?.pickup_airline_name + ' ' + bookingPreview?.pickup_flight)">(View
-										Flight time)</span>
+										style="color: blue;text-decoration: underline;font-weight: 600;cursor: pointer;font-size: 18px;"
+										(click)="searchOnGoogle(bookingPreview?.pickup_airline_name + ' ' + bookingPreview?.pickup_flight)">(Update
+										Arrival time)</span>
 								</span>
 							</div>
 							<div class="col-md-7 value">
@@ -1146,7 +1168,7 @@
 							</div>
 							<div class="col-md-8 value">
 								<span class="font-weight-bolder preview-output-feild"
-									style="cursor: pointer;text-decoration: underline;"
+									style="cursor: pointer;text-decoration: underline;color: #007500 !important;"
 									(click)="searchOnGoogle(bookingPreview?.dropoff_airline_name + ' ' + bookingPreview?.dropoff_flight)">
 									{{ textFormatter(bookingPreview?.dropoff_airline_name) }}
 								</span>
@@ -1159,14 +1181,14 @@
 							<div class="col-md-5 key">
 								<span>
 									Flight Number &nbsp;<span
-										style="color: black;text-decoration: underline;font-weight: 600;cursor: pointer;"
-										(click)="searchOnGoogle(bookingPreview?.dropoff_airline_name + ' ' + bookingPreview?.dropoff_flight)">(View
-										Flight time)</span>
+										style="color: blue;text-decoration: underline;font-weight: 600;cursor: pointer;font-size: 18px;"
+										(click)="searchOnGoogle(bookingPreview?.dropoff_airline_name + ' ' + bookingPreview?.dropoff_flight)">(Update
+										Arrival time)</span>
 								</span>
 							</div>
 							<div class="col-md-7 value">
 								<span class="font-weight-bolder preview-output-feild"
-									style="cursor: pointer;text-decoration: underline;"
+									style="cursor: pointer;text-decoration: underline;color: #007500 !important;"
 									(click)="searchOnGoogle(bookingPreview?.dropoff_airline_name + ' ' + bookingPreview?.dropoff_flight)">
 									{{ textFormatter(bookingPreview?.dropoff_flight) }}
 								</span>
@@ -1358,8 +1380,8 @@
 								</span>
 							</div>
 							<div class="col-md-8 value box-special-instruction">
-								<span class="font-weight-bolder preview-output-feild" style="white-space: pre-wrap;">
-									{{ textFormatter(bookingPreview?.booking_instructions)| titlecase }}
+								<span class="font-weight-bolder preview-output-feild" style="white-space: pre-wrap;" [innerHTML]="highlightNumbers(bookingPreview?.booking_instructions || ' ')">
+									<!-- {{ highlightNumbers(bookingPreview?.booking_instructions) }} -->
 								</span>
 							</div>
 						</div>
@@ -1551,7 +1573,7 @@
 					</ng-container>
 
 					<ng-template #looseAffiliate>
-						<h4 class="font-weight m-0 mt-3">
+						<h4 class="font-weight-bolder m-0 mt-3">
 							Loose Affiliate Information
 						</h4>
 
@@ -1605,7 +1627,7 @@
 						</div>
 
 					</ng-template>
-					<hr *ngIf="bookingPreview?.affiliate_type == 'affiliate'">
+					<hr>
 					<!-- Driver Information -->
 					<h4 class="font-weight-bolder m-0 mt-3">
 						Driver Information
@@ -1815,7 +1837,7 @@
 					<!-- *ngIf="bookingPreview?.payment_status=='unpaid' && bookingPreview?.share_array?.length != 0" -->
 					<div class="distribution_rate" *ngIf="bookingPreview?.affiliate_type != 'unassigned'">
 						<h4 class="font-weight-bolder m-0 my-3">
-							Rates Distribution
+							Rates Distribution 
 						</h4>
 
 						<div class="mx-2">
@@ -1827,7 +1849,7 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										{{bookingPreview?.currency_symbol}}{{bookingPreview?.share_array?.baseRate.toFixed(2)}}
+										{{bookingPreview?.currency_symbol}}{{formatBaseRate(bookingPreview?.share_array?.baseRate)}}
 									</span>
 									(Fare Base Rate)
 								</div>
@@ -1842,7 +1864,7 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color" style="color: #1e7500">
 									<span class="font-weight-bolder preview-output-feild">
-										{{bookingPreview?.currency_symbol}}{{bookingPreview?.share_array?.adminShare.toFixed(2)
+										{{bookingPreview?.currency_symbol}}{{formatBaseRate(bookingPreview?.share_array?.adminShare)
 										}}
 									</span>
 									({{adminSharePercent}}% of Base Rate)
@@ -1858,7 +1880,7 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										{{bookingPreview?.currency_symbol}}{{bookingPreview?.share_array?.travelAgentShare.toFixed(2)
+										{{bookingPreview?.currency_symbol}}{{formatBaseRate(bookingPreview?.share_array?.travelAgentShare)
 										}}
 									</span>
 									(10% of Base Rate)
@@ -1875,7 +1897,7 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										{{bookingPreview?.currency_symbol}}{{bookingPreview?.share_array?.stripeFee.toFixed(2)}}
+										{{bookingPreview?.currency_symbol}}{{formatBaseRate(bookingPreview?.share_array?.stripeFee)}}
 									</span>
 									(Platform fee 5% + 30 cents - <b>Paid from Admin share</b>)
 								</div>
@@ -1891,7 +1913,7 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										{{bookingPreview?.currency_symbol}}{{bookingPreview?.share_array?.affiliateShare.toFixed(2)}}
+										{{bookingPreview?.currency_symbol}}{{formatBaseRate(bookingPreview?.share_array?.affiliateShare)}}
 									</span>
 									( Total Price - (Ride Base Rate + Other Taxes) )
 								</div>
@@ -1906,7 +1928,7 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										{{bookingPreview?.currency_symbol}}{{bookingPreview?.share_array?.farmoutShare.toFixed(2)}}
+										{{bookingPreview?.currency_symbol}}{{formatBaseRate(bookingPreview?.share_array?.farmoutShare)}}
 									</span>
 									( 10 % of Base Rate)
 								</div>
@@ -1922,8 +1944,8 @@
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
 										{{bookingPreview?.currency_symbol}}{{bookingPreview?.share_array?.grandTotal ?
-										bookingPreview?.share_array?.grandTotal.toFixed(2) :
-										bookingPreview?.share_array?.returnGrandTotal.toFixed(2)}}
+											formatBaseRate(bookingPreview?.share_array?.grandTotal) :
+											formatBaseRate(bookingPreview?.share_array?.returnGrandTotal)}}
 									</span>
 									(Actual Cost to Customer)
 								</div>
@@ -1950,7 +1972,7 @@
 	<div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
 		<div class="modal-content">
 			<div class="modal-body">
-				<pre style="white-space: pre-wrap">{{ previewCopyData }}</pre>
+				<pre style="white-space: pre-wrap;font-family: 'PT Serif', serif;font-size: 18px;">{{ previewCopyData }}</pre>
 		</div>
 		<div class="modal-footer justify-content-end">
 			<button type="button" class="close x-circle-btn" data-dismiss="modal" aria-label="Close">

@@ -19,6 +19,7 @@ declare var $: any;
   styleUrls: ['./loose-affiliate-account-details.component.scss']
 })
 export class LooseAffiliateAccountDetailsComponent implements OnInit {
+  @ViewChild('nameInput') nameInput: ElementRef;
 
   public profileForm: FormGroup;
   public submittedForm: boolean;
@@ -150,9 +151,18 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit {
       });
     });
 
+
   }
 
+  ngAfterViewInit(): void {
+    // Focus on the input field when the component has fully initialized
+    if (this.nameInput) {
+      this.nameInput.nativeElement.focus();
+    }
 
+    this.selectedLanguages = [1]
+    this.profileForm.patchValue({ language: this.selectedLanguages });
+  }
 
   buildProfileForm() {
     this.profileForm = this.formBuilder.group({
@@ -172,7 +182,7 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit {
       // zip: ['', [Validators.required, Validators.pattern("^[0-9]*$")]],
       latitude: [''],
       longitude: [''],
-      language: [1],
+      language: [''],
       badge_city: [''],
       badge_city_name: [''],
 
@@ -234,7 +244,7 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit {
           latitude: this.getProfileResponseData?.data?.latitude,
           longitude: this.getProfileResponseData?.data?.longitude,
         })
-        this.selectedLanguages =  this.getProfileResponseData?.data?.language_spoken; // Assuming API returns [1, 2] for selected languages
+        this.selectedLanguages = this.getProfileResponseData?.data?.language_spoken; // Assuming API returns [1, 2] for selected languages
         this.profileForm.patchValue({ language: this.selectedLanguages });
         console.log('profile this.getProfileResponseData?.data-->>>>', this.profileForm.value)
         this.MobileObject.setCountry(this.getProfileResponseData?.data?.phone_country)
@@ -271,7 +281,7 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit {
 
   handleBadgeCity(value: any) {
     console.log(value, this.filteredOptions)
-    this.filteredOptions = this.badgeOptions.filter((i: any) => i.name.toLowerCase().includes(value.toLowerCase()))
+    this.filteredOptions = this.badgeOptions.filter((i: any) => i.name.toLowerCase().startsWith(value.toLowerCase()))
   }
 
   selectBadgeCity(option: any, isUserInput) {

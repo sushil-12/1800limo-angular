@@ -101,14 +101,21 @@ export class BookingComponent implements OnInit {
 		this.buildInviteAgentForm();
 		let date = new Date();
 		// Set Search Filters According to cookies or the intial state
-		this.startDate = this.affiliateService.checkCookie('ta_startDate') ?
-			this.affiliateService.getCookie('ta_startDate') :
-			date.toISOString().substring(0, 10);
+		// this.startDate = this.affiliateService.checkCookie('ta_startDate') ?
+		// 	this.affiliateService.getCookie('ta_startDate') :
+		// 	date.toISOString().substring(0, 10);
+
+		// date.setDate(date.getDate() + 7);
+		// this.endDate = this.affiliateService.checkCookie('ta_endDate') ?
+		// 	this.affiliateService.getCookie('ta_endDate') :
+		// 	date.toISOString().substring(0, 10);
+
+		this.startDate = date.toISOString().substring(0, 10);;
 
 		date.setDate(date.getDate() + 7);
-		this.endDate = this.affiliateService.checkCookie('ta_endDate') ?
-			this.affiliateService.getCookie('ta_endDate') :
-			date.toISOString().substring(0, 10);
+
+		this.endDate = date.toISOString().substring(0, 10);;
+
 
 		this.searchText = this.affiliateService.checkCookie('ta_search') ?
 			this.affiliateService.getCookie('ta_search')
@@ -556,6 +563,23 @@ export class BookingComponent implements OnInit {
 				})
 			});
 	}
+
+	// numbers in red and seperated to next line
+	highlightNumbers(text: string): string {
+		const parts = text.split(/\b(\d+\.\s)/); // Split by number followed by dot and space
+
+        // Process parts and apply formatting
+        let formattedText = '';
+        for (let i = 0; i < parts.length; i++) {
+            if (i % 2 === 0) {
+                formattedText += parts[i]; // Regular text part
+            } else {
+                formattedText += `<br><span class="text-danger font-weight-bolder">${parts[i]}</span>`; // Numbered instruction part
+            }
+        }
+
+        return formattedText;
+    }
 
 
 	closeModal() {

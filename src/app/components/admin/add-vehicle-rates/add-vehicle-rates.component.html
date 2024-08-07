@@ -136,127 +136,15 @@
 						</div>
 					</div>
 				</ng-template>
-				<div class="col-md-6">
-					<mat-form-field class="mat-form-field-rates" appearance="outline">
-						<mat-label>Hourly Rate <span class="asterisk">*</span></mat-label>
-						<!-- <span matPrefix
-							*ngIf="f.hourly_rate.value == null || f.hourly_rate.value == ''; else hideZero1">{{currencySymbol}}
-							0 &nbsp;</span>
-						<ng-template #hideZero1> -->
-						<span matPrefix>{{currencySymbol}} &nbsp;</span>
-						<!-- </ng-template> -->
-						<input matInput type="number" (change)="updateRateRangeObject()" placeholder="Hourly Rate"
-							formControlName="hourly_rate" tabindex="1" (focus)="$event.target.select()">
-					</mat-form-field>
-					<div *ngIf="submittedForm && f.hourly_rate.errors || f.hourly_rate.touched && f.hourly_rate.errors"
-						class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.hourly_rate.errors.required">This field is required</div>
-					</div>
-					<div *ngIf="f.hourly_rate.errors" class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.hourly_rate.errors.pattern">Enter Numbers only</div>
-					</div>
-					<div *ngIf="IsZeroValidator(f.hourly_rate.value, 'hourly_rate')"
-						class="text-danger margin-bottom-thin my-mat-hint">
-						<div>Any value required</div>
-					</div>
-				</div>
-				<div class="col-md-6">
-					<mat-form-field class="mat-form-field-rates" appearance="outline">
-						<mat-label>Hourly Rate After 5 Hours <span class="asterisk">*</span></mat-label>
-						<!-- <span matPrefix
-							*ngIf="f.hourly_rate_after_five_hours.value == null || f.hourly_rate_after_five_hours.value == ''; else hideZero2">{{currencySymbol}}
-							0 &nbsp;</span>
-						<ng-template #hideZero2> -->
-						<span matPrefix>{{currencySymbol}} &nbsp;</span>
-						<!-- </ng-template> -->
-						<input matInput type="number" (change)="updateRateRangeObject()"
-							placeholder="Hourly Rate After 5 Hours" formControlName="hourly_rate_after_five_hours"
-							tabindex="1" (focus)="$event.target.select()">
-					</mat-form-field>
-					<div *ngIf="submittedForm && f.hourly_rate_after_five_hours.errors || f.hourly_rate_after_five_hours.touched && f.hourly_rate_after_five_hours.errors"
-						class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.hourly_rate_after_five_hours.errors.required">This field is required</div>
-					</div>
-					<div *ngIf="f.hourly_rate_after_five_hours.errors"
-						class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.hourly_rate_after_five_hours.errors.pattern">Enter Numbers only</div>
-					</div>
-					<div *ngIf="IsZeroValidator(f.hourly_rate_after_five_hours.value, 'hourly_rate_after_five_hours')"
-						class="text-danger margin-bottom-thin my-mat-hint">
-						<div>Any value required</div>
-					</div>
-				</div>
-				<div class="col-md-3">
-					<mat-form-field class="mat-form-field-rates" appearance="outline">
-						<mat-label># Hours = Day Rate Extension</mat-label>
-						<span matPrefix># &nbsp;</span>
-						<mat-select formControlName="hours_day_rate" tabindex="1"
-							(onSelectionChange)="updateRateRangeObject()">
-							<mat-option value="">Choose Hours=Day Rate?</mat-option>
-							<mat-option [value]="8">8</mat-option>
-							<mat-option [value]="10">10</mat-option>
-							<mat-option [value]="12">12</mat-option>
-						</mat-select>
-					</mat-form-field>
-					<div *ngIf="submittedForm && f.hours_day_rate.errors || f.hours_day_rate.touched && f.hours_day_rate.errors"
-						class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.hours_day_rate.errors.pattern">Enter Numbers only</div>
-					</div>
-				</div>
-				<div class="col-md-3">
-					<mat-form-field class="mat-form-field-rates" appearance="outline">
-						<mat-label>Day Rate Extension</mat-label>
-						<!-- <span matPrefix
-							*ngIf="f.day_rate.value == null || f.day_rate.value == ''; else hideZero4">{{currencySymbol}}
-							0 &nbsp;</span>
-						<ng-template #hideZero4> -->
-						<span matPrefix>{{currencySymbol}} &nbsp;</span>
-						<!-- </ng-template> -->
-						<input matInput type="number" (change)="updateRateRangeObject()"
-							placeholder="Day Rate Extension" formControlName="day_rate" tabindex="1"
-							(focus)="$event.target.select()">
-					</mat-form-field>
-					<div *ngIf="submittedForm && f.day_rate.errors || f.day_rate.touched && f.day_rate.errors"
-						class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.day_rate.errors.pattern">Enter Numbers only</div>
-					</div>
-					<div *ngIf="IsZeroValidator(f.day_rate.value, 'day_rate')"
-						class="text-danger margin-bottom-thin my-mat-hint">
-						<div>Any value required</div>
-					</div>
-				</div>
-				<div class="col-md-6">
-					<mat-form-field class="mat-form-field-rates" appearance="outline">
-						<mat-label>Minimum City to Intercity rate <span class="asterisk">*</span></mat-label>
-						<!-- <span matPrefix
-							*ngIf="f.minimum_city_rate.value == null || f.minimum_city_rate.value == ''; else hideZero5">{{currencySymbol}}
-							0 &nbsp;</span> -->
-						<ng-template #hideZero5>
-							<span matPrefix>{{currencySymbol}} &nbsp;</span>
-						</ng-template>
-						<input matInput type="number" (change)="updateRateRangeObject()"
-							placeholder="Minimum City to Intercity rate" formControlName="minimum_city_rate"
-							tabindex="1" (focus)="$event.target.select()">
-					</mat-form-field>
-					<div *ngIf="submittedForm && f.minimum_city_rate.errors || f.minimum_city_rate.touched && f.minimum_city_rate.errors"
-						class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.minimum_city_rate.errors.required">This field is required</div>
-					</div>
-					<div *ngIf="f.minimum_city_rate.errors" class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="f.minimum_city_rate.errors.pattern">Enter Numbers only</div>
-					</div>
-					<div *ngIf="IsZeroValidator(f.minimum_city_rate.value, 'minimum_city_rate')"
-						class="text-danger margin-bottom-thin my-mat-hint">
-						<div>Any value required</div>
-					</div>
-				</div>
+			</div>
+			<div class="row">
 				<div class="col-md-3">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label>Minimum Airport Rate - Departure <span class="asterisk">*</span></mat-label>
 						<!-- <span matPrefix
-							*ngIf="f.minimum_airport_departure_rate.value == null || f.minimum_airport_departure_rate.value == ''; else hideZero6">{{currencySymbol}}
-							0 &nbsp;</span>
-						<ng-template #hideZero6> -->
+								*ngIf="f.minimum_airport_departure_rate.value == null || f.minimum_airport_departure_rate.value == ''; else hideZero6">{{currencySymbol}}
+								0 &nbsp;</span>
+							<ng-template #hideZero6> -->
 						<span matPrefix>{{currencySymbol}} &nbsp;</span>
 						<!-- </ng-template> -->
 						<input matInput placeholder="Minimum Airport Departure Rate" (change)="updateRateRangeObject()"
@@ -280,9 +168,9 @@
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label>Minimum Airport Rate - Arrival <span class="asterisk">*</span></mat-label>
 						<!-- <span matPrefix
-							*ngIf="f.minimum_airport_arrival_rate.value == null || f.minimum_airport_arrival_rate.value == ''; else hideZero7">{{currencySymbol}}
-							0 &nbsp;</span>
-						<ng-template #hideZero7> -->
+								*ngIf="f.minimum_airport_arrival_rate.value == null || f.minimum_airport_arrival_rate.value == ''; else hideZero7">{{currencySymbol}}
+								0 &nbsp;</span>
+							<ng-template #hideZero7> -->
 						<span matPrefix>{{currencySymbol}} &nbsp;</span>
 						<!-- </ng-template> -->
 						<input matInput type="number" placeholder="Minimum Airport Arrival Rate"
@@ -303,15 +191,44 @@
 					</div>
 
 				</div>
+
+				<div class="col-md-6">
+					<mat-form-field class="mat-form-field-rates" appearance="outline">
+						<mat-label>Minimum City to Intercity rate <span class="asterisk">*</span></mat-label>
+						<!-- <span matPrefix
+								*ngIf="f.minimum_city_rate.value == null || f.minimum_city_rate.value == ''; else hideZero5">{{currencySymbol}}
+								0 &nbsp;</span> -->
+						<ng-template #hideZero5>
+							<span matPrefix>{{currencySymbol}} &nbsp;</span>
+						</ng-template>
+						<input matInput type="number" (change)="updateRateRangeObject()"
+							placeholder="Minimum City to Intercity rate" formControlName="minimum_city_rate"
+							tabindex="1" (focus)="$event.target.select()">
+					</mat-form-field>
+					<div *ngIf="submittedForm && f.minimum_city_rate.errors || f.minimum_city_rate.touched && f.minimum_city_rate.errors"
+						class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="f.minimum_city_rate.errors.required">This field is required</div>
+					</div>
+					<div *ngIf="f.minimum_city_rate.errors" class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="f.minimum_city_rate.errors.pattern">Enter Numbers only</div>
+					</div>
+					<div *ngIf="IsZeroValidator(f.minimum_city_rate.value, 'minimum_city_rate')"
+						class="text-danger margin-bottom-thin my-mat-hint">
+						<div>Any value required</div>
+					</div>
+				</div>
+
+			</div>
+			<div class="row">
 				<div class="col-md-3">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label>Minimum Cruise Port Rate -Arrival
 							<!-- <span class="asterisk">*</span> -->
 						</mat-label>
 						<!-- <span matPrefix
-							*ngIf="f.minimum_cruise_port_arrival_rate.value == null || f.minimum_cruise_port_arrival_rate.value == ''; else hideZero9">{{currencySymbol}}
-							0 &nbsp;</span>
-						<ng-template #hideZero9> -->
+								*ngIf="f.minimum_cruise_port_arrival_rate.value == null || f.minimum_cruise_port_arrival_rate.value == ''; else hideZero9">{{currencySymbol}}
+								0 &nbsp;</span>
+							<ng-template #hideZero9> -->
 						<span matPrefix>{{currencySymbol}} &nbsp;</span>
 						<!-- </ng-template> -->
 						<input matInput type="number" placeholder="Minimum Cruise Port Arrival Rate"
@@ -356,18 +273,130 @@
 						<div *ngIf="f.minimum_cruise_port_departure_rate.errors.pattern">Enter Numbers only</div>
 					</div>
 					<!-- <div *ngIf="IsZeroValidator(f.minimum_cruise_port_departure_rate.value, 'minimum_cruise_port_departure_rate')" class="text-danger margin-bottom-thin my-mat-hint">
-						<div >Any value required</div>
-					</div> -->
+							<div >Any value required</div>
+						</div> -->
 				</div>
 				<div class="col-md-6">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
-						<mat-label>Airport / Cruise Port Cancel Rate</mat-label>
+						<mat-label>Hourly Rate <span class="asterisk">*</span></mat-label>
 						<!-- <span matPrefix
-							*ngIf="f.airport_city_percentage_booking_cancel_charges.value == null || f.airport_city_percentage_booking_cancel_charges.value == ''; else hideZero11">{{currencySymbol}}
-							0 &nbsp;</span>
-						<ng-template #hideZero11> -->
+								*ngIf="f.hourly_rate.value == null || f.hourly_rate.value == ''; else hideZero1">{{currencySymbol}}
+								0 &nbsp;</span>
+							<ng-template #hideZero1> -->
 						<span matPrefix>{{currencySymbol}} &nbsp;</span>
 						<!-- </ng-template> -->
+						<input matInput type="number" (change)="updateRateRangeObject()" placeholder="Hourly Rate"
+							formControlName="hourly_rate" tabindex="1" (focus)="$event.target.select()">
+					</mat-form-field>
+					<div *ngIf="submittedForm && f.hourly_rate.errors || f.hourly_rate.touched && f.hourly_rate.errors"
+						class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="f.hourly_rate.errors.required">This field is required</div>
+					</div>
+					<div *ngIf="f.hourly_rate.errors" class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="f.hourly_rate.errors.pattern">Enter Numbers only</div>
+					</div>
+					<div *ngIf="IsZeroValidator(f.hourly_rate.value, 'hourly_rate')"
+						class="text-danger margin-bottom-thin my-mat-hint">
+						<div>Any value required</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6">
+					<mat-form-field class="mat-form-field-rates" appearance="outline">
+						<mat-label>
+							Minimum Charter Hours
+						</mat-label>
+						<span matPrefix># &nbsp;</span>
+						<mat-select formControlName="minimum_charter_hours" tabindex="1"
+							(onSelectionChange)="updateRateRangeObject()">
+							<mat-option value="">Choose Hours</mat-option>
+							<mat-option [value]="2">2</mat-option>
+							<mat-option [value]="3">3</mat-option>
+							<mat-option [value]="4">4</mat-option>
+							<mat-option [value]="5">5</mat-option>
+						</mat-select>
+					</mat-form-field>
+					<div *ngIf="submittedForm && form.minimum_charter_hours.errors || form.minimum_charter_hours.touched && form.minimum_charter_hours.errors"
+						class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="form.minimum_charter_hours.errors.pattern">Enter Numbers only</div>
+					</div>
+				</div>
+
+				<div class="col-md-6">
+					<mat-form-field class="mat-form-field-rates" appearance="outline">
+						<mat-label>Discount After 5 Hours? <span class="asterisk">*</span></mat-label>
+						<!-- <span matPrefix
+							*ngIf="f.hourly_rate_after_five_hours.value == null || f.hourly_rate_after_five_hours.value == ''; else hideZero2">{{currencySymbol}}
+							0 &nbsp;</span>
+						<ng-template #hideZero2> -->
+						<span matPrefix>{{currencySymbol}} &nbsp;</span>
+						<!-- </ng-template> -->
+						<input matInput type="number" (change)="updateRateRangeObject()"
+							placeholder="Discount After 5 Hours?" formControlName="hourly_rate_after_five_hours"
+							tabindex="1" (focus)="$event.target.select()">
+					</mat-form-field>
+					<div *ngIf="submittedForm && f.hourly_rate_after_five_hours.errors || f.hourly_rate_after_five_hours.touched && f.hourly_rate_after_five_hours.errors"
+						class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="f.hourly_rate_after_five_hours.errors.required">This field is required</div>
+					</div>
+					<div *ngIf="f.hourly_rate_after_five_hours.errors"
+						class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="f.hourly_rate_after_five_hours.errors.pattern">Enter Numbers only</div>
+					</div>
+					<div *ngIf="IsZeroValidator(f.hourly_rate_after_five_hours.value, 'hourly_rate_after_five_hours')"
+						class="text-danger margin-bottom-thin my-mat-hint">
+						<div>Any value required</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-3">
+					<mat-form-field class="mat-form-field-rates" appearance="outline">
+						<mat-label># Hours = Day Rate Extension</mat-label>
+						<span matPrefix># &nbsp;</span>
+						<mat-select formControlName="hours_day_rate" tabindex="1"
+							(onSelectionChange)="updateRateRangeObject()">
+							<mat-option value="">Choose Hours=Day Rate?</mat-option>
+							<mat-option [value]="8">8</mat-option>
+							<mat-option [value]="10">10</mat-option>
+							<mat-option [value]="12">12</mat-option>
+						</mat-select>
+					</mat-form-field>
+					<div *ngIf="submittedForm && f.hours_day_rate.errors || f.hours_day_rate.touched && f.hours_day_rate.errors"
+						class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="f.hours_day_rate.errors.pattern">Enter Numbers only</div>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<mat-form-field class="mat-form-field-rates" appearance="outline">
+						<mat-label>Day Rate Extension</mat-label>
+						<!-- <span matPrefix
+							*ngIf="f.day_rate.value == null || f.day_rate.value == ''; else hideZero4">{{currencySymbol}}
+							0 &nbsp;</span>
+						<ng-template #hideZero4> -->
+						<span matPrefix>{{currencySymbol}} &nbsp;</span>
+						<!-- </ng-template> -->
+						<input matInput type="number" (change)="updateRateRangeObject()"
+							placeholder="Day Rate Extension" formControlName="day_rate" tabindex="1"
+							(focus)="$event.target.select()">
+					</mat-form-field>
+					<div *ngIf="submittedForm && f.day_rate.errors || f.day_rate.touched && f.day_rate.errors"
+						class="text-danger margin-bottom-thin my-mat-hint">
+						<div *ngIf="f.day_rate.errors.pattern">Enter Numbers only</div>
+					</div>
+					<div *ngIf="IsZeroValidator(f.day_rate.value, 'day_rate')"
+						class="text-danger margin-bottom-thin my-mat-hint">
+						<div>Any value required</div>
+					</div>
+				</div>
+
+
+				<!-- <div class="col-md-6">
+					<mat-form-field class="mat-form-field-rates" appearance="outline">
+						<mat-label>Airport / Cruise Port Cancel Rate</mat-label>
+						<span matPrefix>{{currencySymbol}} &nbsp;</span>
 						<input matInput type="number" placeholder="Airport / Cruise Port Cancel Rate"
 							(change)="updateRateRangeObject()"
 							formControlName="airport_city_percentage_booking_cancel_charges" tabindex="1"
@@ -382,7 +411,7 @@
 						class="text-danger margin-bottom-thin my-mat-hint">
 						<div>Any value required</div>
 					</div>
-				</div>
+				</div> -->
 				<div class="col-md-6">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label>Shared Ride Rate - Per Person</mat-label>
@@ -405,6 +434,9 @@
 						<div>Any value required</div>
 					</div>
 				</div>
+			</div>
+
+			<div class="row">
 				<div class="col-md-12 mt-2">
 					<label class="alert alert-danger" style="font-size: 0.9rem !important;">
 						You may add Early/Late rate between 11 PM and 5.30 AM.</label>
@@ -492,73 +524,74 @@
 						<div *ngIf="f.outside_town_extra_stop.errors.pattern">Enter Numbers only</div>
 					</div>
 				</div>
-				<div class="col-md-12">
-					<h2 class="headinginfo my-4">
-						Rate Manager
-						<span class="spanText"> (Adjust Your rates up or down)</span>
-						<br />
-						<span class="text-orange" style="font-size: 0.95rem">
-							Click on the range value to reset.
+			</div>
+
+			<div class="col-md-12">
+				<h2 class="headinginfo my-4">
+					Rate Manager
+					<span class="spanText"> (Adjust Your rates up or down)</span>
+					<br />
+					<span class="text-orange" style="font-size: 0.95rem">
+						Click on the range value to reset.
+					</span>
+				</h2>
+				<hr>
+				<div class="row">
+					<div class="col-md-6 col-lg-3 pr-0 borderright mobilePadding">
+						<div class="form-group radio-tile-group assment_radio">
+							<div class="custom-radio input-container">
+								<input class="radio-button" type="radio" id="rangeTest1" name="rate_range_percent_flat"
+									checked="" formControlName="rate_range_percent_flat" value="percent" tabindex="-1">
+								<div class="radio-tile box-shadow">
+									<label class="radio-tile-label" for="rangeTest1">Percent (<span
+											class="prefix">%</span>)
+									</label>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6 col-lg-3 pl-0 mobilePadding">
+						<div class="form-group radio-tile-group assment_radio">
+							<div class="custom-radio input-container flatRange">
+								<input class="radio-button" type="radio" id="rangeTest2" name="rate_range_percent_flat"
+									formControlName="rate_range_percent_flat" value="flat" tabindex="-1">
+								<div class="radio-tile box-shadow">
+									<label class="radio-tile-label" for="rangeTest2">Flat (<span
+											class="prefix">{{currencySymbol}}</span>) </label>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div id="rate-manager-slider" class="col-md-6 mt-3 p-0">
+						<span id="sign-percent-minus" (click)="changeThumb(1, '-')">
+							-
+							<i class="bi text-orange" [ngClass]="
+										form.rate_range_percent_flat.value == 'percent'
+											? 'bi-percent'
+											: 'bi-currency-dollar'
+									"></i>
 						</span>
-					</h2>
-					<div class="row">
-						<div class="col-md-6 col-lg-3 pr-0 borderright mobilePadding">
-							<div class="form-group radio-tile-group assment_radio">
-								<div class="custom-radio input-container">
-									<input class="radio-button" type="radio" id="rangeTest1"
-										name="rate_range_percent_flat" checked=""
-										formControlName="rate_range_percent_flat" value="percent" tabindex="-1">
-									<div class="radio-tile box-shadow">
-										<label class="radio-tile-label" for="rangeTest1">Percent (<span
-												class="prefix">%</span>)
-										</label>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-6 col-lg-3 pl-0 mobilePadding">
-							<div class="form-group radio-tile-group assment_radio">
-								<div class="custom-radio input-container flatRange">
-									<input class="radio-button" type="radio" id="rangeTest2"
-										name="rate_range_percent_flat" formControlName="rate_range_percent_flat"
-										value="flat" tabindex="-1">
-									<div class="radio-tile box-shadow">
-										<label class="radio-tile-label" for="rangeTest2">Flat (<span
-												class="prefix">{{currencySymbol}}</span>) </label>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div id="rate-manager-slider" class="col-md-6 mt-3 p-0">
-							<span id="sign-percent-minus" (click)="changeThumb(1, '-')">
-								-
-								<i class="bi text-orange" [ngClass]="
+						<span class="mx-lg-1">
+							<input type="range" [value]="form.rate_range.value" min="-50" max="50" id="slider"
+								(input)="getRateRange($event.target.value)" />
+						</span>
+						<span id="sign-percent-plus" (click)="changeThumb(1, '+')">
+							+
+							<i class="bi text-orange" [ngClass]="
 										form.rate_range_percent_flat.value == 'percent'
 											? 'bi-percent'
 											: 'bi-currency-dollar'
 									"></i>
-							</span>
-							<span class="mx-lg-1">
-								<input type="range" [value]="form.rate_range.value" min="-50" max="50" id="slider"
-									(input)="getRateRange($event.target.value)" />
-							</span>
-							<span id="sign-percent-plus" (click)="changeThumb(1, '+')">
-								+
-								<i class="bi text-orange" [ngClass]="
-										form.rate_range_percent_flat.value == 'percent'
-											? 'bi-percent'
-											: 'bi-currency-dollar'
-									"></i>
-							</span>
-							<p id="thumb-value" class="text-center m-0 mt-3" (click)="getRateRange(0)">
-								<i class="bi bi-currency-dollar text-orange"
-									*ngIf="form.rate_range_percent_flat.value == 'flat'"></i>
-								{{ thumb_value }}
-								<i class="bi bi-percent text-orange"
-									*ngIf="form.rate_range_percent_flat.value == 'percent'"></i>
-							</p>
-						</div>
-						<!-- <div class="col-md-12 col-lg-6">
+						</span>
+						<p id="thumb-value" class="text-center m-0 mt-3" (click)="getRateRange(0)">
+							<i class="bi bi-currency-dollar text-orange"
+								*ngIf="form.rate_range_percent_flat.value == 'flat'"></i>
+							{{ thumb_value }}
+							<i class="bi bi-percent text-orange"
+								*ngIf="form.rate_range_percent_flat.value == 'percent'"></i>
+						</p>
+					</div>
+					<!-- <div class="col-md-12 col-lg-6">
 							<mat-form-field class="mat-form-field-rates" appearance="outline">
 								<mat-label>Rate Manager</mat-label>
 								<input matInput placeholder="Rate Manager" formControlName="rate_range" tabindex="1">
@@ -568,9 +601,9 @@
 								<div *ngIf="f.rate_range.errors.pattern">Enter Numbers only</div>
 							</div>
 						</div> -->
-					</div>
 				</div>
-				<!-- <div class="col-md-12 mt-4">
+			</div>
+			<!-- <div class="col-md-12 mt-4">
 					<h3 class="addveh_top d-md-flex justify-content-between align-items-center">
 						<label class="alert alert-danger">Surge Protection</label>
 					</h3>
@@ -584,9 +617,11 @@
 							on 20% surge pricing only for high demand temporary events.</label>
 					</div>
 				</div> -->
-			</div>
+
 		</div>
+		<hr>
 	</section>
+
 	<section class="user_information">
 		<h2 class="headinginfo">Amenity Rates <span>(Enter an all-inclusive rate in each applicable bucket)</span></h2>
 		<div class="container">
@@ -916,7 +951,7 @@
 		<div class="row">
 			<div class="col-md-12">
 				<div class="billing_inforamtion">
-					<ul class="d-flex justify-content-center">
+					<ul class="d-flex justify-content-center" style="gap:30px;">
 						<li><button class="custom-filled-reset-button" (click)="resetForm()" tabindex="1">RESET</button>
 						</li>
 						<li><button class="custom-filled-button" (click)="submitForm()" [disabled]="disableSubmitButton"

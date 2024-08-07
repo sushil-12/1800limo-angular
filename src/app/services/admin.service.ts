@@ -1097,6 +1097,9 @@ export class AdminService {
 	changeStepOSectionStauts(id, event) {
 		return this.httpClient.put(this.serverUrl + 'admin/cms/step0/section/status/update', { 'id': id, 'data': event })
 	}
+	changeFleetSectionStatus(id, event) {
+		return this.httpClient.put(this.serverUrl + 'admin/cms/fleet/section/status/update', { 'id': id, 'data': event })
+	}
 	changeStep6SectionStatus(id, event) {
 		return this.httpClient.put(`${this.serverUrl}admin/cms/step6/section/status/update`, { id: id, data: event })
 	}
@@ -1277,6 +1280,10 @@ export class AdminService {
 	}
 	communicationLogs(id) {
 		return this.httpClient.get(this.serverUrl + `admin/communication-logs/${id}`)
+	}
+
+	acceptCharge(data){
+		return this.httpClient.post(this.serverUrl + `admin/charge-half-payment`,data)
 	}
 
 }

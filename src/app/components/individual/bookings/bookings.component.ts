@@ -99,14 +99,20 @@ export class BookingsComponent implements OnInit {
 		this.is_family_member = localStorage.getItem("is_family_member") ? localStorage.getItem("is_family_member") : false
 		let date = new Date();
 		// Set Search Filters According to cookies or the intial state
-		this.startDate = this.affiliateService.checkCookie('indv_startDate') ?
-			this.affiliateService.getCookie('indv_startDate') :
-			date.toISOString().substring(0, 10);
+		// this.startDate = this.affiliateService.checkCookie('indv_startDate') ?
+		// 	this.affiliateService.getCookie('indv_startDate') :
+		// 	date.toISOString().substring(0, 10);
+
+		// date.setDate(date.getDate() + 7);
+		// this.endDate = this.affiliateService.checkCookie('indv_endDate') ?
+		// 	this.affiliateService.getCookie('indv_endDate') :
+		// 	date.toISOString().substring(0, 10);
+
+		this.startDate = date.toISOString().substring(0, 10);;
 
 		date.setDate(date.getDate() + 7);
-		this.endDate = this.affiliateService.checkCookie('indv_endDate') ?
-			this.affiliateService.getCookie('indv_endDate') :
-			date.toISOString().substring(0, 10);
+
+		this.endDate = date.toISOString().substring(0, 10);;
 
 		this.searchText = this.affiliateService.checkCookie('indv_search') ?
 			this.affiliateService.getCookie('indv_search')
@@ -660,6 +666,23 @@ export class BookingsComponent implements OnInit {
 			this.router.navigate([`/${this.currentUser?.roleName}/create-new-booking`], { queryParams: { bookingId: bookingId, updateType: 'repeat' } });
 		}
 	}
+
+	// numbers in red and seperated to next line
+	highlightNumbers(text: string): string {
+		const parts = text.split(/\b(\d+\.\s)/); // Split by number followed by dot and space
+
+        // Process parts and apply formatting
+        let formattedText = '';
+        for (let i = 0; i < parts.length; i++) {
+            if (i % 2 === 0) {
+                formattedText += parts[i]; // Regular text part
+            } else {
+                formattedText += `<br><span class="text-danger font-weight-bolder">${parts[i]}</span>`; // Numbered instruction part
+            }
+        }
+
+        return formattedText;
+    }
 
 	get changeStatusF() {
 		return this.changeStatusForm.controls;

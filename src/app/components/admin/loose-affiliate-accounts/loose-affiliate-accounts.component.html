@@ -46,10 +46,10 @@
                                 <th>Actions</th>
                                 <th>Company Name</th>
                                 <th>Owner Name</th>
+                                <th>Badge City</th>
                                 <th>Email</th>
                                 <th>Mobile</th>
                                 <th>Address</th>
-                                <th>Badge City</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -87,6 +87,9 @@
                                     <span [innerHTML]="highlighText(LooseAffiliate?.operator_name)">
                                     </span>
                                 </td>
+                                <td>
+                                    <span [innerHTML]="highlighText(LooseAffiliate?.badge_city_name)"></span>
+                                </td>
                                 <td class="clickable" (click)="sendMessage('email', LooseAffiliate)"
                                     data-messagetype="email"><span
                                         [innerHTML]="highlighText(LooseAffiliate?.email)"></span></td>
@@ -95,9 +98,6 @@
                                         [innerHTML]="highlighText(LooseAffiliate?.phone_isd+LooseAffiliate?.phone)"></span>
                                 </td>
                                 <td><span [innerHTML]="highlighText(LooseAffiliate?.city)"></span></td>
-                                <td>
-                                    <span [innerHTML]="highlighText(LooseAffiliate?.badge_city_name)"></span>
-                                </td>
 
                             </tr>
 

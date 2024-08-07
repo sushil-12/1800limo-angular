@@ -120,6 +120,8 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
 import { SubTravelPlannerAccountComponent } from './sub-travel-planner-account/sub-travel-planner-account.component';
 import { LooseAffiliateAccountsComponent } from './loose-affiliate-accounts/loose-affiliate-accounts.component';
 import { LooseAffiliateAccountDetailsComponent } from './loose-affiliate-account-details/loose-affiliate-account-details.component';
+import { FleetComponent } from './cms/fleet/fleet.component';
+import { FleetPageEditComponent } from './cms/fleet-page-edit/fleet-page-edit.component';
 
 
 @NgModule({
@@ -212,7 +214,9 @@ import { LooseAffiliateAccountDetailsComponent } from './loose-affiliate-account
 		RecoverAccountsComponent,
 		SubTravelPlannerAccountComponent,
 		LooseAffiliateAccountsComponent,
-		LooseAffiliateAccountDetailsComponent
+		LooseAffiliateAccountDetailsComponent,
+		FleetComponent,
+		FleetPageEditComponent
 	],
 	imports: [
 		CommonModule,

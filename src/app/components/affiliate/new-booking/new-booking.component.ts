@@ -294,7 +294,7 @@ export class NewBookingComponent implements OnInit {
 			lose_affiliate_phone_isd: ['+1'],
 			lose_affiliate_phone_country: ['us'],
 			lose_affiliate_email: ['', Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)],
-			vehicle_type: [''],
+			vehicle_type: ['',[Validators.required]],
 			vehicle_type_name: [''],
 			vehicle_id: [''],
 			vehicle_make: [''],
@@ -1049,7 +1049,9 @@ export class NewBookingComponent implements OnInit {
 			extra_stops: this.BookingForm.get('extra_stops').value,
 			return_extra_stops: this.BookingForm.get('return_extra_stops').value,
 			pickup_time: this.BookingForm.get('pickup_time').value,
-			return_pickup_time: this.BookingForm.get('return_pickup_time').value
+			return_pickup_time: this.BookingForm.get('return_pickup_time').value,
+			return_vehicle_id: this.BookingForm.get('vehicle_id').value,
+			return_affiliate_type: this.BookingForm.get('affiliate_type').value,
 		}
 	}
 	handleNoOfHours(value) {
@@ -2453,4 +2455,21 @@ export class NewBookingComponent implements OnInit {
 		}, 5000)
 	}
 
+		// numbers in red and seperated to next line
+		highlightNumbers(text: string): string {
+			const parts = text.split(/\b(\d+\.\s)/); // Split by number followed by dot and space
+	
+			// Process parts and apply formatting
+			let formattedText = '';
+			for (let i = 0; i < parts.length; i++) {
+				if (i % 2 === 0) {
+					formattedText += parts[i]; // Regular text part
+				} else {
+					formattedText += `<br><span class="text-danger font-weight-bolder">${parts[i]}</span>`; // Numbered instruction part
+				}
+			}
+	
+			return formattedText;
+		}
+		
 }

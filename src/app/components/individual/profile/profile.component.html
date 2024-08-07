@@ -74,10 +74,10 @@
                     </div>
                     <div class="col-md-4">
                         <mat-form-field appearance="outline" class="mobileLabelClass">
-                            <label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Work<span
+                            <label class="mat-form-field-label mat-empty mat-form-field-empty labelClass">Work/Home<span
                                     class="asterisk">
                                 </span></label>
-                            <input matInput type="number" placeholder="Work" formControlName="work" ng2TelInput
+                            <input matInput type="number" placeholder="Work/Home" formControlName="work" ng2TelInput
                                 [ng2TelInputOptions]="{'preferredCountries': ['us', 'ca','mx','gb']}"
                                 placeholder="1234567890" class="phoneNumberClass"
                                 (countryChange)="onCountryChange($event,'work')"
@@ -432,7 +432,7 @@
     <div class="container" *ngIf="!is_family_member">
         <div class="col-md-12">
             <div class="billing_inforamtion ">
-                <ul class="d-flex justify-content-center">
+                <ul class="d-flex justify-content-center" style="gap:30px;">
                     <li>
 
                         <!-- <button class="custom-filled-back-button" (click)="backButton()">
