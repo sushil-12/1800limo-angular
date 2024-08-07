@@ -1282,4 +1282,8 @@ export class AdminService {
 		return this.httpClient.get(this.serverUrl + `admin/communication-logs/${id}`)
 	}
 
+	acceptCharge(data){
+		return this.httpClient.post(this.serverUrl + `admin/charge-half-payment`,data)
+	}
+
 }
