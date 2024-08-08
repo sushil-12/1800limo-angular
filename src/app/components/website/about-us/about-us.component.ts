@@ -113,7 +113,7 @@ export class AboutUsComponent implements OnInit
         });
         
         this.getAboutPageContent();
-        this.getAboutUsSectionDataByID();
+        // this.getAboutUsSectionDataByID();
     }
 
     getAboutPageContent()
