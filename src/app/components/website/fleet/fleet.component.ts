@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { AdminService } from 'src/app/services/admin.service';
@@ -9,9 +10,9 @@ declare var $: any;
   styleUrls: ['./fleet.component.scss']
 })
 export class FleetComponent implements OnInit {
-  public fleetContents:any;
+  public fleetContents: any;
 
-  constructor(private adminServices:AdminService,) { }
+  constructor(private adminServices: AdminService, private spinner: NgxSpinnerService) { }
 
   ngOnInit(): void {
     $(document).ready(function () {
@@ -34,18 +35,24 @@ export class FleetComponent implements OnInit {
         }
       });
     });
- 
-		this.adminServices.getStepContentData('fleet').pipe(
-			catchError(err =>
-			{
 
-				return throwError(err);
-			})
-		).subscribe(({ data }: any) =>
-		{
-			console.log(data);
-			this.fleetContents = data;
-		})
+    this.getFleet();
 
+  
+
+  }
+
+  getFleet(){
+    this.spinner.show()
+    this.adminServices.getStepContentData('fleet').pipe(
+			catchError(err => {
+        this.spinner.hide()
+        return throwError(err);
+      })
+    ).subscribe(({ data }: any) => {
+      this.spinner.hide()
+      console.log(data);
+      this.fleetContents = data;
+    })
   }
 }
