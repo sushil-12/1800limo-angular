@@ -4553,7 +4553,7 @@
 					</div>
 					<div class="distribution_rate">
 						<h4 class="font-weight-bolder m-0 my-3">
-							Rates Distribution
+						Return Rates Distribution
 						</h4>
 
 						<div class="mx-2">
@@ -4824,7 +4824,7 @@
 				</ng-template>
 
 				<!--Return Affiliate Information -->
-				<ng-container *ngIf="Form.return_affiliate_type.value == 'affiliate' then returnaffiliateUser">
+				<ng-container *ngIf="Form.return_affiliate_type.value == 'affiliate' && service_type == 'round_trip' then returnaffiliateUser">
 				</ng-container>
 
 				<!-- Affiliate -->
@@ -4955,7 +4955,7 @@
 				<hr>
 
 				<!-- Return Loose Affiliate Information -->
-				<ng-container *ngIf="Form.return_affiliate_type.value == 'loose_affiliate' then returnlooseAffiliate">
+				<ng-container *ngIf="Form.return_affiliate_type.value == 'loose_affiliate' && service_type == 'round_trip' then returnlooseAffiliate">
 				</ng-container>
 
 				<!-- Loose Affiliate -->
@@ -5190,7 +5190,7 @@
 
 				<div class="distribution_rate">
 					<h4 class="font-weight-bolder m-0 my-3">
-						Return Rates Distribution
+					Rates Distribution
 					</h4>
 
 					<div class="mx-2">
