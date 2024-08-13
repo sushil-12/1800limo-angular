@@ -29,6 +29,8 @@ import { FarmOutComponent } from './farm-out/farm-out.component';
 import { VehicleRateSettingsComponent } from './vehicle-rate-settings/vehicle-rate-settings.component';
 import { AffiliateFinalizeComponent } from './affiliate-finalize/affiliate-finalize.component';
 import { NewBookingComponent } from './new-booking/new-booking.component';
+import { AddSubAffiliateComponent } from './add-sub-affiliate/add-sub-affiliate.component';
+import { SubAffiliateAccountsComponent } from './sub-affiliate-accounts/sub-affiliate-accounts.component';
 
 const routes: Routes = [
 	{
@@ -153,6 +155,21 @@ const routes: Routes = [
 		path: 'finalize-booking',
 		canActivate: [AffiliateOtherRouteGuard],
 		component: AffiliateFinalizeComponent
+	},
+	{
+		path: 'add-sub-affiliate',
+		canActivate: [AffiliateOtherRouteGuard],
+		component: AddSubAffiliateComponent
+	},
+	{
+		path: 'edit-sub-affiliate',
+		canActivate: [AffiliateOtherRouteGuard],
+		component: AddSubAffiliateComponent
+	},
+	{
+		path: 'sub-affiliate-accounts',
+		canActivate: [AffiliateOtherRouteGuard],
+		component: SubAffiliateAccountsComponent
 	},
 ];
 

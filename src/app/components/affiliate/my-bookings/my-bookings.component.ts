@@ -845,4 +845,8 @@ export class MyBookingsComponent implements OnInit {
 			window.open(url, '_blank'); // Opens the search in a new tab
 		}
 	}
+
+	addSubAffiliate() {
+		this.router.navigate(['/affiliate/add-sub-affiliate']);
+	}
 }
