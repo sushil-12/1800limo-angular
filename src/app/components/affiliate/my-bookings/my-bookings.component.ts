@@ -60,6 +60,7 @@ export class MyBookingsComponent implements OnInit {
 	shareArray: any;
 	rates_preview: any;
 	currencySymbol: any;
+	currentUser:any;
 
 	constructor(
 		private affiliateService: AffiliateService,
@@ -71,6 +72,8 @@ export class MyBookingsComponent implements OnInit {
 		private $mapsapi: MapsAPILoader,) { }
 
 	ngOnInit(): void {
+
+		this.currentUser = JSON.parse(localStorage.getItem('currentUser'))
 
 		let date = new Date();
 		// Set Search Filters According to cookies or the intial state

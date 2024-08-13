@@ -6,7 +6,7 @@
 			<div class="col-md-7">
 				<h2 class="headinginfo">{{company_name | titlecase}} Bookings</h2>
 			</div>
-			<div class="col-md-5 add-member-div">
+			<div class="col-md-5 add-member-div" *ngIf="currentUser?.roleName == 'driver' ">
                 <button class="custom-btn btn-add-other-memeber"
                     style="margin: 0 !important;" (click)="addSubAffiliate()">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-plus-circle"
