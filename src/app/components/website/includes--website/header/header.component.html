@@ -81,8 +81,9 @@
 						<a class="user-profile btn btn-icon btn-transparent-dark dropdown-toggle" tabindex="1"
 							id="navbarDropdownUserImage" href="javascript:void(0);" role="button" data-toggle="dropdown"
 							aria-haspopup="true" aria-expanded="false" *ngIf="(currentUser?.roleName != 'individual')">
-							{{ currentUser?.affiliate_company ? currentUser?.affiliate_company
-							: currentUser?.name
+							{{ currentUser?.roleName == 'driver' ? currentUser?.affiliate_company ?
+							currentUser?.affiliate_company
+							: currentUser?.FirstName + currentUser?.Lastname.charAt(0) : currentUser?.name
 							?
 							currentUser?.name : currentUser?.FirstName +
 							currentUser?.LastName?.charAt(0)}}
@@ -104,9 +105,9 @@
 								<div class="dropdown-user-details">
 									<div class="dropdown-user-details-name"
 										*ngIf="(currentUser?.roleName != 'individual')">
-										{{currentUser?.affiliate_company ?
-										currentUser?.affiliate_company :
-										currentUser?.name ?
+										{{currentUser?.roleName == 'driver' ? currentUser?.affiliate_company ?
+										currentUser?.affiliate_company
+										: currentUser?.FirstName + currentUser?.Lastname.charAt(0) : currentUser?.name ?
 										currentUser?.name : currentUser?.FirstName +
 										currentUser?.LastName.charAt(0)}}
 									</div>
