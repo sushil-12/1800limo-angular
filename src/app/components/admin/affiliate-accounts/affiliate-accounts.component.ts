@@ -199,6 +199,7 @@ export class AffiliateAccountsComponent implements OnInit {
 		// Load Our blackCarLimoBus using API
 		this.adminService.blackCarLimoBusAccounts(pageUrl, this.affiliateType, this.filter_type, keyword).then((result: any) => {
 			this.affiliate_accounts = result.data.data;
+			this.affiliate_accounts_emails = this.affiliate_accounts.filter(item => item.Email !== null)
 			this.affiliate_accounts = this.affiliate_accounts.map(i => {
 				if (i?.LanguagesSpoken) {
 					console.log("in language iffff")
@@ -445,7 +446,7 @@ export class AffiliateAccountsComponent implements OnInit {
 		if (this.allSelected) {
 			this.emails.patchValue([]);
 		} else {
-			const allValues = this.affiliate_accounts.map(option => this.stringifyOption(option));
+			const allValues = this.affiliate_accounts_emails.map(option => this.stringifyOption(option));
 			this.emails.setValue(allValues);
 		}
 		this.allSelected = !this.allSelected;

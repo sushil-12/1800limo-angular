@@ -403,7 +403,7 @@
 								<mat-select [formControl]="emails" multiple panelClass="custom-select-panel">
 									<!-- Add Select All option -->
 									<mat-option (click)="selectAll()">Select All</mat-option>
-									<mat-option *ngFor="let option of affiliate_accounts"
+									<mat-option *ngFor="let option of affiliate_accounts_emails"
 										[value]="stringifyOption(option)">{{option.FirstName + " " +
 										option.LastName}}</mat-option>
 								</mat-select>
