@@ -141,7 +141,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
 			const role = params['role'];
 			console.log('Role:', role, params);
 
-			const existRoles = ['admin', 'driver', 'sub_admin', 'travel_agent', 'master_user', 'sub_travel_agent', 'individual']
+			const existRoles = ['admin', 'driver', 'sub_admin', 'travel_agent', 'master_user', 'sub_travel_agent', 'individual','sub_affiliate']
 
 			console.log('Role:', role);
 			// const existRoles = ['admin' , 'driver' , 'sub_admin' , 'travel_agent',]
@@ -172,6 +172,12 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
 	loginSubTravelAgent() {
 		this.router.navigate(['/login/sub_travel_agent']).then(() => {
+			window.location.reload()
+		})
+
+	}
+	loginSubAffiliate() {
+		this.router.navigate(['/login/sub_affiliate']).then(() => {
 			window.location.reload()
 		})
 

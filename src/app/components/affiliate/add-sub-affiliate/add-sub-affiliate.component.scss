@@ -1,0 +1,190 @@
+.vehtype_extint img {
+    height       : 200px;
+    border-radius: 15px;
+}
+.mobileLabelClass.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
+	padding-left    : 0px;
+	// background-color: #fff;
+	max-width       : 70px;
+	text-align      : center;
+	left            : -6px;
+	top             : 24px;
+}
+
+.phoneLabelClass.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
+	padding-left    : 0px;
+	// background-color: #fff;
+	max-width       : 120px;
+	text-align      : center;
+	left            : -5px;
+	top             : 24px;
+}
+
+
+.single-image .row {
+    justify-content: inherit;
+}
+
+.deactivate-button {
+    color           : #fff !important;
+    background-color: #F33C2F;
+    border-color    : #F33C2F;
+    padding         : 8px 10px;
+	
+}
+.vehtype_extintwrap ul {
+    display: flex;
+    justify-content: left !important;
+   
+}
+.vehtype_extint img {
+    width: 154px;
+    height: 100%;
+    object-fit: contain !important;
+    cursor: zoom-in;
+}
+.billing_inforamtion ul{
+	display: flex;
+    justify-content: right;
+	margin: 0px 14px !important;
+	padding-bottom: 20px !important;
+    padding-top: 15px !important;
+}
+@media only screen and (min-width:1199px) {
+	.deactivate-button:hover {
+		background-color: #d12c20;
+		color           : #fff;
+		text-decoration : none;
+	}
+
+	.deactivate-button:focus {
+		transform       : scale(1.1, 1.1);
+		background-color: #d12c20;
+	}
+}
+.margin-left-minus{
+	left: -14px !important;
+}
+
+
+
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-outline-gap{
+	border-top-color: #f44336!important;
+}
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.ng-untouched.mat-form-field-should-float.mat-focused .mat-form-field-outline-gap{
+	border-top-color: #3f51b5!important;
+}
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.ng-touched.ng-dirty.mat-form-field-should-float.ng-valid .mat-form-field-outline-gap{
+	border-top-color: rgba(0,0,0,.12)!important;
+}
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.ng-touched.mat-form-field-should-float.ng-valid.mat-focused .mat-form-field-outline-gap{
+	border-top-color: #3f51b5!important;
+}
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float.ng-dirty.ng-valid.ng-touched .mat-form-field-flex:hover .mat-form-field-outline-gap{border-top-color: rgba(0,0,0,.87)!important;}
+
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float.mat-focused .mat-form-field-outline-gap{
+	border-top-color: #f44336!important;
+}
+:host ::ng-deep.mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick .mat-form-field-outline-gap{
+	border-top-color: #3f51b5!important;
+}
+:host ::ng-deep.mat-form-field-type-mat-select.mat-form-field-appearance-outline.mat-form-field-can-float.ng-untouched.ng-invalid.mat-form-field-should-float .mat-form-field-outline-gap{
+	border-top-color: rgba(0,0,0,.12)!important;
+}
+:host ::ng-deep.mat-form-field-type-mat-select.mat-form-field-appearance-outline.mat-form-field-can-float.ng-untouched.ng-invalid .mat-form-field-flex:hover .mat-form-field-outline-gap{border-top-color: rgba(0,0,0,.87)!important;}
+
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-form-field-wrapper .mat-form-field-infix mat-label{
+	font-weight: normal!important;
+	font-size: 14px!important;
+	color: #191919;
+}
+:host ::ng-deep.mat-form-field-appearance-outline .mat-form-field-label{top:1.3675em}
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-form-field-wrapper .mat-form-field-infix .labelClass{font-weight: normal!important;
+	font-size: 14px!important;
+	color: #191919;
+top:2.05em}
+:host ::ng-deep .mat-form-field {
+	.mat-form-field-outline {
+	  &-end {
+		border-radius: 0 10px 10px 0 !important;
+	  }
+  
+	  &-start {
+		border-radius: 10px 0 0 10px !important;
+		flex-grow: 1;
+	  }
+	}
+  }
+  :host ::ng-deep .mat-form-field .mat-form-field-wrapper{
+		border-radius: 10px;
+		background-color: rgb(226, 226, 226,1);
+  } 
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-form-field-wrapper .mat-form-field-infix .labelClass+.iti--allow-dropdown .iti__flag-container{top:-1px}
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label,:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-input-server:focus+.mat-form-field-label-wrapper .mat-form-field-label{transform:translateY(-1em) scale(0.99)!important;width:133.3333333333%}
+
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-outline-gap {
+    border-top-color: #b2b2b2 !important;
+}
+
+:host ::ng-deep .selectInputStyle{
+	background-color: rgb(226, 226, 226,1) !important;
+}
+
+
+.mat-option{
+    background-color: rgb(226, 226, 226,1) !important;
+}
+
+:host ::ng-deep .ng-option{
+    background-color: rgb(226, 226, 226,1) !important;
+}
+.asterisk{
+	font-size: 19px;
+	margin-left: 2px;
+}
+:host ::ng-deep .mat-input-element{
+	font-weight: 500;
+}
+
+button.custom-filled-reject-button {
+    padding: 7px 20px;
+    border-radius: 0.895rem;
+    border: 2px solid #a2a3a2;
+    background-color: #fc0404;
+    color: #FFF;
+    letter-spacing: 1px;
+    font-size: 0.98rem;
+    display: inline-block;
+    font-family: "Roboto", sans-serif;
+    font-weight: 700;
+    appearance: button;
+    -moz-appearance: button;
+    -webkit-appearance: button;
+    transition: box-shadow 0.1s ease-in-out;
+    box-shadow: 0px 5px 10px 1px rgba(0, 0, 0, 0.4);
+
+    &:active {
+        box-shadow: 0px 5px 10px -1px rgb(0 0 0 / 30%);
+    }
+}
+button.custom-filled-accept-button {
+    padding: 7px 20px;
+    border-radius: 0.895rem;
+    border: 2px solid #a2a3a2;
+    background-color: #00bd1f;
+    color: #FFF;
+    letter-spacing: 1px;
+    font-size: 0.98rem;
+    display: inline-block;
+    font-family: "Roboto", sans-serif;
+    font-weight: 700;
+    appearance: button;
+    -moz-appearance: button;
+    -webkit-appearance: button;
+    transition: box-shadow 0.1s ease-in-out;
+    box-shadow: 0px 5px 10px 1px rgba(0, 0, 0, 0.4);
+
+    &:active {
+        box-shadow: 0px 5px 10px -1px rgb(0 0 0 / 30%);
+    }
+}

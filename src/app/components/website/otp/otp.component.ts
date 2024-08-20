@@ -355,6 +355,10 @@ export class OtpComponent implements OnInit, OnDestroy {
 						}
 						break;
 					}
+					case 'sub_affiliate': {
+						this.router.navigateByUrl('/sub_affiliate/bookings');
+						break;
+					}
 					default: {
 						return false;
 						break;

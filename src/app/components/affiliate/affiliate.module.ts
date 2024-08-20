@@ -52,6 +52,8 @@ import { AffiliateFinalizeRatesComponent } from './affiliate-finalize-rates/affi
 import { NewBookingComponent } from './new-booking/new-booking.component';
 import { NgxPrintModule } from 'ngx-print';
 import { RatesFormsComponent } from './rates-forms/rates-forms.component';
+import { AddSubAffiliateComponent } from './add-sub-affiliate/add-sub-affiliate.component';
+import { SubAffiliateAccountsComponent } from './sub-affiliate-accounts/sub-affiliate-accounts.component';
 
 @NgModule({
 	declarations: [
@@ -83,7 +85,9 @@ import { RatesFormsComponent } from './rates-forms/rates-forms.component';
 		AffiliateFinalizeComponent,
 		AffiliateFinalizeRatesComponent,
 		NewBookingComponent,
-		RatesFormsComponent
+		RatesFormsComponent,
+		AddSubAffiliateComponent,
+		SubAffiliateAccountsComponent
 	],
 	imports: [
 		CommonModule,

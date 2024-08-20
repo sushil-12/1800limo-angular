@@ -42,6 +42,7 @@ import { IndividualConfirmationComponent } from './components/email-pages/indivi
 import { ModifyBookingComponent } from './components/email-pages/modify-booking/modify-booking.component';
 import { SubTravelAgentTemplateComponent } from './components/sub-travel-agent/sub-travel-agent-template/sub-travel-agent-template.component';
 import { IndividualTemplateComponent } from './components/individual/individual-template/individual-template.component';
+import { SubAffiliateTemplateComponent } from './components/sub-affiliate/sub-affiliate-template/sub-affiliate-template.component';
 
 
 const routes: Routes = [
@@ -266,6 +267,20 @@ const routes: Routes = [
 			{
 				path: '',
 				loadChildren: () => import('./components/affiliate/affiliate.module').then(m => m.AffiliateModule)
+			}
+		]
+	},
+	{
+		path: 'sub_affiliate',
+		component: SubAffiliateTemplateComponent,
+		// canActivate: [AdminGuardGuard],
+		data: {
+			title: 'subaffiliate'
+		},
+		children: [
+			{
+				path: '',
+				loadChildren: () => import('./components/sub-affiliate/sub-affiliate.module').then(m => m.SubAffiliateModule)
 			}
 		]
 	},

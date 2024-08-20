@@ -492,5 +492,45 @@ export class AffiliateService {
 		return false
 	}
 
+	createNewSubAgent(data, updateBasicInfo) {
+		if (updateBasicInfo) {
+			return this.httpClient.post(this.serverUrl + 'update-a-travel-agent', data);
+		}
+		else {
+			return this.httpClient.post(this.serverUrl + 'create-a-new-travel-agent', data);
+		}
+	}
+
+	//sub affiliate
+	addSubAffiliate(data){
+		if (data?.acc_id) {
+			return this.httpClient.put(this.serverUrl + 'update-sub-affiliate', data);
+		}
+		else{
+			return this.httpClient.post(this.serverUrl + 'add-sub-affiliate', data);
+		}
+	}
+
+	//get sub aff accounts list
+	getsubAffAccounts(url, keyword) {
+		var path;
+		if (url) {
+			path = url + '&search=' + keyword;
+		}
+		else {
+			path = this.serverUrl + 'get-sub-affiliates' + '?search=' + keyword;
+		}
+		return this.httpClient.get(path).toPromise();;
+	}
+
+	//chnage sub aff account status
+	subAffAccountStatus(id, status) {
+		return this.httpClient.put(this.serverUrl + 'change-account-status', { 'acc_id': id, 'status': status });
+	}
+
+	getSubAddDetailsById(id) {
+		return this.httpClient.get(this.serverUrl + `get-sub-affiliate-account/${id}`).toPromise();
+	}
+
 
 }
