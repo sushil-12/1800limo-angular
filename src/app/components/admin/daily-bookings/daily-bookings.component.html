@@ -164,10 +164,10 @@
 												<div class="dropdown-item-icon"></div>
 												Return
 											</a>
-											<a *ngIf="(currentUser?.RoleName == 'admin' || subModules.includes('repeat_booking') && (booking?.booking_status != 'paid' && booking?.booking_status != 'paid_cash' && booking?.booking_status != 'cancelled'))"
-												class="dropdown-item" data-toggle="modal"
+											<a class="dropdown-item" data-toggle="modal"
 												data-target="#accept_charge_modal"
-												(click)="acceptChargeClick(booking.booking_id)">
+												(click)="acceptChargeClick(booking.booking_id)"
+												*ngIf="((currentUser?.RoleName == 'admin' || subModules.includes('edit_booking')) && (booking?.booking_status != 'paid' && booking?.booking_status != 'paid_cash' && booking?.booking_status != 'cancelled'))">
 												<div class="dropdown-item-icon"></div>
 												Accept & Charge
 											</a>
@@ -603,7 +603,8 @@
 </div>
 
 <!-- Accept charge modal -->
-<div class="modal fade" id="accept_charge_modal" tabindex="-1" role="dialog" aria-labelledby="accept_charge_modal" aria-hidden="true">
+<div class="modal fade" id="accept_charge_modal" tabindex="-1" role="dialog" aria-labelledby="accept_charge_modal"
+	aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content">
 			<div class="modal-body text-center">
@@ -835,7 +836,8 @@
 				<!-- <button type="button" class="close x-circle-btn" data-dismiss="modal" aria-label="Close" >
 					<span aria-hidden="true" class="bi bi-x-circle"></span>
 				</button> -->
-				<button class="custom-filled-button orange-button" data-toggle="modal" data-target="#previewCopyData" (click)="closePreview()">Show Content</button>
+				<button class="custom-filled-button orange-button" data-toggle="modal" data-target="#previewCopyData"
+					(click)="closePreview()">Show Content</button>
 			</div>
 			<div class="modal-body" style="font-family: 'PT Serif', serif;">
 				<div class="container text-lg" *ngIf="bookingPreview">
@@ -1380,7 +1382,8 @@
 								</span>
 							</div>
 							<div class="col-md-8 value box-special-instruction">
-								<span class="font-weight-bolder preview-output-feild" style="white-space: pre-wrap;" [innerHTML]="highlightNumbers(bookingPreview?.booking_instructions || ' ')">
+								<span class="font-weight-bolder preview-output-feild" style="white-space: pre-wrap;"
+									[innerHTML]="highlightNumbers(bookingPreview?.booking_instructions || ' ')">
 									<!-- {{ highlightNumbers(bookingPreview?.booking_instructions) }} -->
 								</span>
 							</div>
@@ -1837,7 +1840,7 @@
 					<!-- *ngIf="bookingPreview?.payment_status=='unpaid' && bookingPreview?.share_array?.length != 0" -->
 					<div class="distribution_rate" *ngIf="bookingPreview?.affiliate_type != 'unassigned'">
 						<h4 class="font-weight-bolder m-0 my-3">
-							Rates Distribution 
+							Rates Distribution
 						</h4>
 
 						<div class="mx-2">
@@ -1887,7 +1890,7 @@
 								</div>
 							</div>
 						</div>
-						
+
 						<div class="mx-2">
 							<div class="row m-0">
 								<div class="col-md-4 key d-flex align-items-center">
@@ -1944,8 +1947,8 @@
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
 										{{bookingPreview?.currency_symbol}}{{bookingPreview?.share_array?.grandTotal ?
-											formatBaseRate(bookingPreview?.share_array?.grandTotal) :
-											formatBaseRate(bookingPreview?.share_array?.returnGrandTotal)}}
+										formatBaseRate(bookingPreview?.share_array?.grandTotal) :
+										formatBaseRate(bookingPreview?.share_array?.returnGrandTotal)}}
 									</span>
 									(Actual Cost to Customer)
 								</div>
@@ -1972,12 +1975,13 @@
 	<div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
 		<div class="modal-content">
 			<div class="modal-body">
-				<pre style="white-space: pre-wrap;font-family: 'PT Serif', serif;font-size: 18px;">{{ previewCopyData }}</pre>
-		</div>
-		<div class="modal-footer justify-content-end">
-			<button type="button" class="close x-circle-btn" data-dismiss="modal" aria-label="Close">
-				<span aria-hidden="true" class="bi bi-x-circle"></span>
-			</button>
-		</div>
+				<pre
+					style="white-space: pre-wrap;font-family: 'PT Serif', serif;font-size: 18px;">{{ previewCopyData }}</pre>
+			</div>
+			<div class="modal-footer justify-content-end">
+				<button type="button" class="close x-circle-btn" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true" class="bi bi-x-circle"></span>
+				</button>
+			</div>
 		</div>
 	</div>

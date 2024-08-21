@@ -197,7 +197,10 @@ export class HeaderComponent implements OnInit {
 			console.log("step 0  dashboard");
 
 		}
-		else {
+		else if(role == 'sub_affiliate'){
+			this.router.navigateByUrl('/sub_affiliate/my-bookings');
+		}
+		else{
 			console.log(`redirecting to ${role}/bookings`)
 			this.spinner.show();
 			this.router.navigateByUrl(`${role}/bookings`)

@@ -121,6 +121,7 @@ export class NewBookingComponent implements OnInit {
 	unique_key: any;
 	firstLoadAffiliateId: any;
 	firstLoadVehicleId: any;
+	currentUser: any;
 
 
 	constructor(
@@ -144,6 +145,9 @@ export class NewBookingComponent implements OnInit {
 		this.triggerAutoCompleteInput.openPanel();
 	}
 	ngOnInit(): void {
+
+		this.currentUser = JSON.parse(localStorage.getItem('currentUser'))
+
 
 		// build the form first 
 		this.buildBookingForm()
@@ -294,7 +298,7 @@ export class NewBookingComponent implements OnInit {
 			lose_affiliate_phone_isd: ['+1'],
 			lose_affiliate_phone_country: ['us'],
 			lose_affiliate_email: ['', Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)],
-			vehicle_type: ['',[Validators.required]],
+			vehicle_type: ['', [Validators.required]],
 			vehicle_type_name: [''],
 			vehicle_id: [''],
 			vehicle_make: [''],
@@ -469,7 +473,7 @@ export class NewBookingComponent implements OnInit {
 	}
 
 	prefillViaBookingID(booking_id: number) {
-		console.warn('Prefilling via Booking Id', booking_id)
+		console.log('Prefilling via Booking Id', booking_id)
 		this.$spinner.show('normalspinner');
 		this.affiliateService.getBookingDataForEdit(booking_id).subscribe((response: any) => {
 			this.bookingResponse = response.data
@@ -1577,7 +1581,12 @@ export class NewBookingComponent implements OnInit {
 				// 		error: `<span class='text-success'>${response.message}</span>`
 				// 	}
 				// })
-				this.nav_to_farmIn ? this.$router.navigate(['/affiliate/my-bookings']) : this.$router.navigate(['/affiliate/farm-out'])
+				if (this.currentUser.roleName == 'sub_affiliate') {
+					this.nav_to_farmIn ? this.$router.navigate(['/sub_affiliate/my-bookings']) : this.$router.navigate(['/sub_affiliate/farm-out'])
+				}
+				else {
+					this.nav_to_farmIn ? this.$router.navigate(['/affiliate/my-bookings']) : this.$router.navigate(['/affiliate/farm-out'])
+				}
 
 				this.$spinner.hide()
 			})
@@ -2457,21 +2466,21 @@ export class NewBookingComponent implements OnInit {
 		}, 5000)
 	}
 
-		// numbers in red and seperated to next line
-		highlightNumbers(text: string): string {
-			const parts = text.split(/\b(\d+\.\s)/); // Split by number followed by dot and space
-	
-			// Process parts and apply formatting
-			let formattedText = '';
-			for (let i = 0; i < parts.length; i++) {
-				if (i % 2 === 0) {
-					formattedText += parts[i]; // Regular text part
-				} else {
-					formattedText += `<br><span class="text-danger font-weight-bolder">${parts[i]}</span>`; // Numbered instruction part
-				}
+	// numbers in red and seperated to next line
+	highlightNumbers(text: string): string {
+		const parts = text.split(/\b(\d+\.\s)/); // Split by number followed by dot and space
+
+		// Process parts and apply formatting
+		let formattedText = '';
+		for (let i = 0; i < parts.length; i++) {
+			if (i % 2 === 0) {
+				formattedText += parts[i]; // Regular text part
+			} else {
+				formattedText += `<br><span class="text-danger font-weight-bolder">${parts[i]}</span>`; // Numbered instruction part
 			}
-	
-			return formattedText;
 		}
-		
+
+		return formattedText;
+	}
+
 }

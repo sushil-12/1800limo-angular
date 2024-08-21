@@ -67,6 +67,7 @@ export class AffiliateFinalizeComponent implements OnInit {
 	bookdataresp: any;
 	currencySymbol: any;
 	paidAmount:any;
+	currentUser:any;
 
 	constructor(
 		private $api: AdminService,
@@ -81,6 +82,8 @@ export class AffiliateFinalizeComponent implements OnInit {
 	) { }
 
 	ngOnInit(): void {
+
+		this.currentUser = JSON.parse(localStorage.getItem('currentUser'))
 		// this.spinner.show()
 		this.buildingCardForm();
 		this.activatedroute.queryParams
@@ -90,7 +93,12 @@ export class AffiliateFinalizeComponent implements OnInit {
 				console.log("booking id---->>>>>>", this.bookingId,)
 
 				if (!this.bookingId) {
-					this.router.navigate(['/affiliate/my-bookings']);
+					if(this.currentUser.roleName == 'sub_affiliate'){
+						this.router.navigate(['/sub_affiliate/my-bookings']);
+					}
+					else{
+						this.router.navigate(['/affiliate/my-bookings']);
+					}
 				}
 				else {
 					// this.buildChargesFormGroup()
@@ -230,7 +238,12 @@ export class AffiliateFinalizeComponent implements OnInit {
 				.subscribe(({ data, success, message }: any) => {
 					if (success == true) {
 						this.spinner.hide();//hide spinner
-						this.router.navigate(['/affiliate/my-bookings']);
+						if(this.currentUser.roleName == 'sub_affiliate'){
+							this.router.navigate(['/sub_affiliate/my-bookings']);
+						}
+						else{
+							this.router.navigate(['/affiliate/my-bookings']);
+						}
 
 						// this.loadBookings()
 						// $('#cancelBooking').modal('hide');
@@ -258,7 +271,12 @@ export class AffiliateFinalizeComponent implements OnInit {
 				.subscribe(({ data, success, message }: any) => {
 					if (success == true) {
 						this.spinner.hide();//hide spinner
-						this.router.navigate(['/affiliate/my-bookings']);
+						if(this.currentUser.roleName == 'sub_affiliate'){
+							this.router.navigate(['/sub_affiliate/my-bookings']);
+						}
+						else{
+							this.router.navigate(['/affiliate/my-bookings']);
+						}
 
 						// this.loadBookings()
 						// $('#acceptBooking').modal('hide');
@@ -431,7 +449,12 @@ export class AffiliateFinalizeComponent implements OnInit {
 				// 		error: `<span class='text-success'>${response.message}</span>`
 				// 	}
 				// })
-				this.router.navigate(['/affiliate/invoice-summary'], { queryParams: { bookingId: this.bookingId } })
+				if(this.currentUser.roleName == 'sub_affiliate'){
+					this.router.navigate(['/sub_affiliate/invoice-summary'], { queryParams: { bookingId: this.bookingId } })
+				}
+				else{
+					this.router.navigate(['/affiliate/invoice-summary'], { queryParams: { bookingId: this.bookingId } })
+				}
 				console.log('response---------------------->>', response)
 				this.spinner.hide()
 			})
@@ -480,7 +503,12 @@ export class AffiliateFinalizeComponent implements OnInit {
 					// 		error: `<span class='text-success'>${response.message}</span>`
 					// 	}
 					// })
-					this.router.navigate(['/affiliate/invoice-summary'], { queryParams: { bookingId: this.bookingId } })
+					if(this.currentUser.roleName == 'sub_affiliate'){
+						this.router.navigate(['/sub_affiliate/invoice-summary'], { queryParams: { bookingId: this.bookingId } })
+					}
+					else{
+						this.router.navigate(['/affiliate/invoice-summary'], { queryParams: { bookingId: this.bookingId } })
+					}
 					console.log('response---------------------->>', response)
 					this.spinner.hide()
 				})

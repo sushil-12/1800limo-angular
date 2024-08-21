@@ -143,8 +143,8 @@
 											<div class="dropdown-item-icon"></div>
 											Confirm/Deny
 										</a> -->
-										<a class="dropdown-item" routerLink="/affiliate/invoice-summary"
-											[queryParams]="{bookingId: booking?.booking_id}"
+
+										<a class="dropdown-item" (click)="(booking?.booking_id)"
 											*ngIf="booking?.payment_status=='paid' || booking?.payment_status == 'paid_cash'">
 											<div class="dropdown-item-icon"></div>
 											Invoice

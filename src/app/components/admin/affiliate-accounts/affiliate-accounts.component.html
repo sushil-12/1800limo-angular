@@ -139,7 +139,7 @@
 						<tbody>
 							<tr role="row" class="odd" *ngFor="let blackCarLimoBus of affiliate_accounts">
 								<td>
-									<a class="user-profileded btn btn-icon btn-transparent-dark dropdown-toggle"
+									<a [ngClass]="(blackCarLimoBus?.at_step == 'step1') ? 'disabled user-profileded btn btn-icon btn-transparent-dark dropdown-toggle' : 'user-profileded btn btn-icon btn-transparent-dark dropdown-toggle'"
 										id="navbarDropdownUserImage" href="javascript:void(0);" role="button"
 										data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 										<span>View</span>

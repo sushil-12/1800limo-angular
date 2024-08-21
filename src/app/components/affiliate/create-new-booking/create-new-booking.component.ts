@@ -135,6 +135,7 @@ export class CreateNewBookingComponent implements OnInit {
 	r_shareArray: any;
 	currencySymbol: any;
 	currencyObj: any;
+	currentUser: any;
 
 
 	constructor(
@@ -158,6 +159,8 @@ export class CreateNewBookingComponent implements OnInit {
 		this.triggerAutoCompleteInput.openPanel();
 	}
 	ngOnInit(): void {
+
+		this.currentUser = JSON.parse(localStorage.getItem('currentUser'))
 
 		// build the form first 
 		localStorage.removeItem('QB_redirectUrl')
@@ -1635,7 +1638,12 @@ export class CreateNewBookingComponent implements OnInit {
 				// 		error: `<span class='text-success'>${response.message}</span>`
 				// 	}
 				// })
-				this.$router.navigate(['/affiliate/farm-out'])
+				if(this.currentUser?.roleName == 'sub_affiliate'){
+					this.$router.navigate(['/sub_affiliate/farm-out'])
+				}
+				else{
+					this.$router.navigate(['/affiliate/farm-out'])
+				}
 				this.$spinner.hide()
 			})
 		}

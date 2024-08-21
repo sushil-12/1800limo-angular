@@ -68,6 +68,7 @@ export class FarmOutComponent implements OnInit {
 	rates_preview: any;
 	shareArray: any;
 	currencySymbol: any;
+	currentUser: any;
 
 	constructor(
 		private $affiliateService: AffiliateService,
@@ -80,6 +81,9 @@ export class FarmOutComponent implements OnInit {
 	) { }
 
 	ngOnInit(): void {
+
+		this.currentUser = JSON.parse(localStorage.getItem('currentUser'))
+
 		// check for selected vehicle and logged in affiliate
 		console.log(this.$affiliateService.initialiseFarmout())
 		if (!this.$affiliateService.initialiseFarmout()) {
@@ -149,7 +153,7 @@ export class FarmOutComponent implements OnInit {
 	mToKm(distance: number): string {
 		return (distance / 1000).toFixed(2);
 	}
-	
+
 	MapController() {
 		console.log('Map has been initialised.')
 		let waypoints = []
@@ -257,7 +261,7 @@ export class FarmOutComponent implements OnInit {
 			timestamp = date.getTime();
 			this.bookingsRes = result;
 			this.bookings = this.bookingsRes?.data?.data;
-			if(!this.useDateFilter){
+			if (!this.useDateFilter) {
 				this.endDate = this.bookings?.length > 0 ? this.bookings[this.bookings?.length - 1]?.pickup_date : moment(timestamp).format("YYYY-MM-DD")
 			}
 			this.totalRecords = this.bookingsRes?.data?.total;
@@ -373,8 +377,7 @@ export class FarmOutComponent implements OnInit {
 		try {
 			return text.replace(/[\\\_$]+/g, ' ')
 		}
-		catch
-		{
+		catch {
 			return text
 		}
 	}
@@ -456,21 +459,36 @@ export class FarmOutComponent implements OnInit {
 	highlightNumbers(text: string): string {
 		const parts = text.split(/\b(\d+\.\s)/); // Split by number followed by dot and space
 
-        // Process parts and apply formatting
-        let formattedText = '';
-        for (let i = 0; i < parts.length; i++) {
-            if (i % 2 === 0) {
-                formattedText += parts[i]; // Regular text part
-            } else {
-                formattedText += `<br><span class="text-danger font-weight-bolder">${parts[i]}</span>`; // Numbered instruction part
-            }
-        }
+		// Process parts and apply formatting
+		let formattedText = '';
+		for (let i = 0; i < parts.length; i++) {
+			if (i % 2 === 0) {
+				formattedText += parts[i]; // Regular text part
+			} else {
+				formattedText += `<br><span class="text-danger font-weight-bolder">${parts[i]}</span>`; // Numbered instruction part
+			}
+		}
 
-        return formattedText;
-    }
+		return formattedText;
+	}
+
+	invoiceAction(bookingId) {
+		if(this.currentUser.roleName == 'sub_affiliate'){
+			this.$router.navigate(['/sub_affiliate/invoice-summary'], { queryParams: { bookingId: bookingId } });
+		}
+		else{
+			this.$router.navigate(['/affiliate/invoice-summary'], { queryParams: { bookingId: bookingId } });
+		}
+	}
 
 	editAction(bookingId, updateType) {
-		this.$router.navigate(['/affiliate/new-booking'], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'false' } });
+		if(this.currentUser.roleName == 'sub_affiliate'){
+			this.$router.navigate(['/sub_affiliate/new-booking'], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'false' } });
+		}
+		else{
+			this.$router.navigate(['/affiliate/new-booking'], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'false' } });
+		}
+		
 	}
 	finalizeAction(bookingId) {
 		this.$router.navigate(['/affiliate/finalize-booking'], { queryParams: { bookingId: bookingId } });
@@ -694,9 +712,16 @@ export class FarmOutComponent implements OnInit {
 				if (success == true) {
 					this.$spinner.hide();//hide spinner
 					$('#emailModal').modal('hide');
-					this.$router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
-						this.$router.navigate(['/affiliate/my-bookings']);
-					});
+					if(this.currentUser.roleName == 'sub_affiliate'){
+						this.$router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
+							this.$router.navigate(['/sub_affiliate/my-bookings']);
+						});
+					}
+					else{
+						this.$router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
+							this.$router.navigate(['/affiliate/my-bookings']);
+						});
+					}
 				}
 			});
 	}

@@ -1377,7 +1377,10 @@ export class HomeComponent implements OnInit {
 			this.spinner.show();
 			this.router.navigateByUrl('/affiliate/my-bookings');
 		}
-		else {
+		else if(role == 'sub_affiliate'){
+			this.router.navigateByUrl('/sub_affiliate/my-bookings');
+		}
+		else{
 			console.log(`redirecting to ${role}/bookings`)
 			this.spinner.show();
 			this.router.navigateByUrl(`${role}/bookings`)
