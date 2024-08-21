@@ -734,5 +734,18 @@ export class FarmOutComponent implements OnInit {
 		}
 	}
 
+	formatBaseRate(baseRate: string | number): string {
+		// Convert baseRate to a number if it is a string
+		const numericValue = typeof baseRate === 'string' ? parseFloat(baseRate) : baseRate;
+
+		// Check if numericValue is a valid number
+		if (!isNaN(numericValue)) {
+			return numericValue.toFixed(2);
+		}
+
+		// Return a default value or an empty string if baseRate is not a valid number
+		return '0.00';
+	}
+
 
 }

@@ -1527,7 +1527,7 @@
 
 
 					<!-- *ngIf="bookingPreview?.payment_status=='unpaid'" -->
-					<div class="distribution_rate">
+					<div class="distribution_rate" *ngIf="bookingPreview?.payment_status != 'paid'">
 						<h4 class="font-weight-bolder m-0 my-3">
 							Rates Distribution
 						</h4>
