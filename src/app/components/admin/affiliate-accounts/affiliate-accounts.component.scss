@@ -1,30 +1,38 @@
-.approval_status{
-    font-size:medium;
-    color:#fff;
+.approval_status {
+    font-size: medium;
+    color: #fff;
 }
-.in-progress{
+
+.in-progress {
     background-color: #0474fc;
 }
-.completed{
+
+.completed {
     background-color: #f7905d;
 }
-.accepted{
+
+.accepted {
     background-color: #00bd1f;
 }
-.rejected{
+
+.rejected {
     background-color: #fc0404;
 }
-.stripe_error{
+
+.stripe_error {
     background-color: #fc0404;
 }
-.mat-form-field-hide-placeholder{
-	border: solid 3px;
+
+.mat-form-field-hide-placeholder {
+    border: solid 3px;
     border-radius: 4px;
 }
-.md-stepper-horizontal{
+
+.md-stepper-horizontal {
     background-color: var(--section-bg-color);
 }
-.acceptButton{
+
+.acceptButton {
     background-color: #00bd1f;
     color: #fff;
     border: none;
@@ -33,7 +41,8 @@
     font-size: 17px;
     font-weight: 500;
 }
-.rejectButton{
+
+.rejectButton {
     background-color: #fc0404;
     color: #fff;
     border: none;
@@ -42,38 +51,34 @@
     font-weight: 500;
 }
 
-.custom-filled-button
-{
+.custom-filled-button {
     padding: 0.875rem 1.058rem;
 }
 
-.clickable
-{
+.clickable {
     cursor: pointer;
     transition: color 0.1s ease-in-out, -webkit-text-decoration 0.2s ease-in-out;
     transition: color 0.1s ease-in-out, text-decoration 0.2s ease-in-out;
     transition: color 0.1s ease-in-out, text-decoration 0.2s ease-in-out, -webkit-text-decoration 0.2s ease-in-out;
-    &:hover
-    {
+
+    &:hover {
         text-decoration: underline;
         color: var(--blue);
     }
 }
-.modal#messageModal
-{
-    .modal-body
-    {
-        p
-        {
+
+.modal#messageModal {
+    .modal-body {
+        p {
             font-size: 1rem;
             font-weight: 500;
-            span
-            {
+
+            span {
                 font-size: 1.1rem;
             }
         }
-        textarea#message
-        {
+
+        textarea#message {
             width: 100%;
             border-radius: 1rem;
             padding: 1rem;
@@ -87,74 +92,84 @@ a.dropdown-item {
     font-size: 16px;
 }
 
-.x-circle-btn{
-	opacity: 1;
-	color: red;
-	font-size: xx-large;
-	width: max-content;
+.x-circle-btn {
+    opacity: 1;
+    color: red;
+    font-size: xx-large;
+    width: max-content;
 }
+
 .custom-select-panel {
-    max-height: 300px; /* Adjust the height as needed */
-  }
-  .asterisk{
+    max-height: 300px;
+    /* Adjust the height as needed */
+}
+
+.asterisk {
     font-size: 22px;
     margin-left: 2px;
-  }
+}
 
-  .headingStatus{
-display: flex;
-gap: 20px;
-margin-left: 4px;
-  }
+.headingStatus {
+    display: flex;
+    gap: 20px;
+    margin-left: 4px;
+}
 
-  .headingAccepted{
-font-size: 20px;
-color: #00bd1f;
-  }
+.headingAccepted {
+    font-size: 20px;
+    color: #00bd1f;
+}
 
-  .headingInProgress{
+.headingInProgress {
     font-size: 20px;
     color: #0474fc;
-  }
+}
 
-  .headingRejected{
+.headingRejected {
     font-size: 20px;
     color: #fc0404;
-  }
-  .headingStripe{
+}
+
+.headingStripe {
     font-size: 20px;
     color: #ff69b4;
-  }
-  .accpet_reject_div{
+}
+
+.accpet_reject_div {
     display: flex;
     flex-direction: row;
     gap: 5px;
-  }
+}
 
-  .showMoreButton{
+.showMoreButton {
     background: transparent;
     border: none;
     color: orange;
     text-decoration: underline;
     font-weight: 600;
-  }
+}
 
-  .x-cross-btn {
-	background: #fff !important;
-	color: #ff0000 !important;
-	/* position: absolute; */
-	top: 5px;
-	right: 15px;
-	border-radius: 20px;
-	width: 25px;
-	opacity: 1 !important;
+.x-cross-btn {
+    background: #fff !important;
+    color: #ff0000 !important;
+    /* position: absolute; */
+    top: 5px;
+    right: 15px;
+    border-radius: 20px;
+    width: 25px;
+    opacity: 1 !important;
 }
 
 .x-close-btn {
-	float: right;
-	font-size: 1.8rem;
-	font-weight: 700;
-	line-height: 1;
-	border: none;
-	z-index: 10;
+    float: right;
+    font-size: 1.8rem;
+    font-weight: 700;
+    line-height: 1;
+    border: none;
+    z-index: 10;
+}
+
+.disabled {
+    pointer-events: none;
+    background-color: #a2a3a2 !important;
 }

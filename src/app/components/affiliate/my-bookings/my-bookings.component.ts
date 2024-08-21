@@ -634,24 +634,58 @@ export class MyBookingsComponent implements OnInit {
 
 
 	editAction(bookingId, updateType) {
-		this.router.navigate(['/affiliate/new-booking'], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'true' } });
+		if(this.currentUser.roleName == 'sub_affiliate'){
+			this.router.navigate(['/sub_affiliate/new-booking'], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'true' } });
+		}
+		else{
+			this.router.navigate(['/affiliate/new-booking'], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'true' } });
+		}
 	}
 
 	finalizeAction(bookingId) {
-		this.router.navigate(['/affiliate/finalize-booking'], { queryParams: { bookingId: bookingId } });
+		if(this.currentUser.roleName == 'sub_affiliate'){
+			this.router.navigate(['/sub_affiliate/finalize-booking'], { queryParams: { bookingId: bookingId } });
+		}
+		else{
+			this.router.navigate(['/affiliate/finalize-booking'], { queryParams: { bookingId: bookingId } });
+		}
 	}
 
 	previewRate(bookingId) {
-		this.router.navigate(['/affiliate/finalize-booking'], { queryParams: { bookingId: bookingId, editRate: true } });
+		if(this.currentUser.roleName == 'sub_affiliate'){
+			this.router.navigate(['/sub_affiliate/finalize-booking'], { queryParams: { bookingId: bookingId, editRate: true } });
+		}
+		else{
+			this.router.navigate(['/affiliate/finalize-booking'], { queryParams: { bookingId: bookingId, editRate: true } });
+		}
 	}
 	returnRepeatAction(actionType, bookingId, serviceType) {
 		console.log(actionType, bookingId, serviceType);
 
 		if (actionType == 'return') {
-			this.router.navigate(['/affiliate/create-new-booking'], { queryParams: { bookingId: bookingId, bookingType: 'return' } });
+			if(this.currentUser.roleName == 'sub_affiliate'){
+				this.router.navigate(['/sub_affiliate/create-new-booking'], { queryParams: { bookingId: bookingId, bookingType: 'return' } });
+			}
+			else{
+				this.router.navigate(['/affiliate/create-new-booking'], { queryParams: { bookingId: bookingId, bookingType: 'return' } });
+			}
 		}
 		else {
-			this.router.navigate(['/affiliate/create-new-booking'], { queryParams: { bookingId: bookingId, bookingType: 'repeat' } });
+			if(this.currentUser.roleName == 'sub_affiliate'){
+				this.router.navigate(['/sub_affiliate/create-new-booking'], { queryParams: { bookingId: bookingId, bookingType: 'repeat' } });
+			}
+			else{
+				this.router.navigate(['/affiliate/create-new-booking'], { queryParams: { bookingId: bookingId, bookingType: 'repeat' } });
+			}
+		}
+	}
+
+	invoiceAction(bookingId) {
+		if(this.currentUser.roleName == 'sub_affiliate'){
+			this.router.navigate(['/sub_affiliate/invoice-summary'], { queryParams: { bookingId: bookingId } });
+		}
+		else{
+			this.router.navigate(['/affiliate/invoice-summary'], { queryParams: { bookingId: bookingId } });
 		}
 	}
 
@@ -688,9 +722,16 @@ export class MyBookingsComponent implements OnInit {
 				if (success == true) {
 					this.spinner.hide();//hide spinner
 					$('#change_status_booking_Modal').modal('hide');
-					this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
-						this.router.navigate(['/affiliate/my-bookings']);
-					});
+					if(this.currentUser.roleName == 'sub_affiliate'){
+						this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
+							this.router.navigate(['/sub_affiliate/my-bookings']);
+						});
+					}
+					else{
+						this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
+							this.router.navigate(['/affiliate/my-bookings']);
+						});
+					}
 				}
 			});
 	}
@@ -725,9 +766,17 @@ export class MyBookingsComponent implements OnInit {
 				if (success == true) {
 					this.spinner.hide();//hide spinner
 					$('#emailModal').modal('hide');
-					this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
-						this.router.navigate(['/affiliate/my-bookings']);
-					});
+					if(this.currentUser.roleName == 'sub_affiliate'){
+						this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
+							this.router.navigate(['/sub_affiliate/my-bookings']);
+						});
+					}
+					else{
+						this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
+							this.router.navigate(['/affiliate/my-bookings']);
+						});
+					}
+				
 				}
 			});
 	}

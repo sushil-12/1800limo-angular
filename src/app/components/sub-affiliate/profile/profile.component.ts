@@ -245,7 +245,7 @@ export class ProfileComponent implements OnInit {
       this.response = result;
       console.log("profile updated",this.response)
       this.spinner.hide();//hide spinner
-      this.router.navigate(['/sub_affiliate/bookings']);
+      this.router.navigate(['/sub_affiliate/my-bookings']);
     })
 
 
@@ -275,7 +275,7 @@ export class ProfileComponent implements OnInit {
 
 	backButton()
 	{
-		this.router.navigate(['/sub_affiliate/bookings']);
+		this.router.navigate(['/sub_affiliate/my-bookings']);
 	}
 
   // onTimezoneChange(event: any): void {
