@@ -473,6 +473,7 @@ export class FarmOutComponent implements OnInit {
 	}
 
 	invoiceAction(bookingId) {
+		console.log("in nivoice")
 		if(this.currentUser.roleName == 'sub_affiliate'){
 			this.$router.navigate(['/sub_affiliate/invoice-summary'], { queryParams: { bookingId: bookingId } });
 		}
