@@ -28,6 +28,7 @@
                             <tr role="row">
                                 <th style="width: 11%;">Actions</th>
                                 <th>Status</th>
+                                <th>Notifications</th>
                                 <th>Name</th>
                                 <th>Email</th>
                                 <th>Mobile</th>
@@ -49,6 +50,12 @@
                                     <mat-slide-toggle class="example-margin" [color]="color"
                                         [checked]="subAffAcc.status" [disabled]="disabled"
                                         (change)="enableDisableClicked($event,subAffAcc.acc_id)">
+                                    </mat-slide-toggle>
+                                </td>
+                                <td>
+                                    <mat-slide-toggle class="example-margin" [color]="color"
+                                        [checked]="subAffAcc.notification" [disabled]="disabled"
+                                        (change)="enableDisableNotification($event,subAffAcc.acc_id)">
                                     </mat-slide-toggle>
                                 </td>
                                 <td *ngIf="subAffAcc.middle_name==null;else middleName">
