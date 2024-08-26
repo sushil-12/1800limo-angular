@@ -813,18 +813,9 @@
 				<div class="col-md-3">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label> Airport Arrival Tax </mat-label>
-						<span matPrefix *ngIf="
-								form.airport_arrival_tax_per_us.value == null ||
-									form.airport_arrival_tax_per_us.value == '';
-								else hideZero14
-							">
-							{{ currency_symbol }} 0 &nbsp;
-						</span>
-						<ng-template #hideZero14>
 							<span matPrefix>
 								{{ currency_symbol }} &nbsp;
 							</span>
-						</ng-template>
 						<input type="number" matInput placeholder="Airport Arrival Tax"
 							formControlName="airport_arrival_tax_per_us" tabindex="1" (focus)="$event.target.select()">
 					</mat-form-field>
@@ -846,20 +837,9 @@
 				<div class="col-md-3">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label> Airport Departure Tax </mat-label>
-						<span matPrefix *ngIf="
-								form.airport_departure_tax_per_us.value ==
-									null ||
-									form.airport_departure_tax_per_us.value ==
-										'';
-								else hideZero15
-							">
-							{{ currency_symbol }} 0 &nbsp;
-						</span>
-						<ng-template #hideZero15>
 							<span matPrefix>
 								{{ currency_symbol }} &nbsp;
 							</span>
-						</ng-template>
 						<input type="number" matInput placeholder="Airport Departure Tax"
 							formControlName="airport_departure_tax_per_us" tabindex="1"
 							(focus)="$event.target.select()" />
@@ -884,15 +864,9 @@
 						<mat-label>
 							Sea Port Tax
 						</mat-label>
-						<span matPrefix
-							*ngIf="form.sea_port_tax_per_us.value == null || form.sea_port_tax_per_us.value == ''; else hideZero16">
-							{{currency_symbol}} 0 &nbsp;
-						</span>
-						<ng-template #hideZero16>
 							<span matPrefix>
 								{{ currency_symbol }} &nbsp;
 							</span>
-						</ng-template>
 						<input type="number" matInput placeholder="Sea Port Tax" (focus)="$event.target.select()"
 							formControlName="sea_port_tax_per_us" tabindex="1" />
 					</mat-form-field>
@@ -912,17 +886,9 @@
 				<div class="col-md-3">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label> City Congestion Tax </mat-label>
-						<span matPrefix *ngIf="
-								form.city_congestion_tax_per_us.value == null ||
-									form.city_congestion_tax_per_us.value == '';
-								else hideZero17
-							">
-							{{ currency_symbol }} 0 &nbsp;</span>
-						<ng-template #hideZero17>
 							<span matPrefix>
 								{{ currency_symbol }} &nbsp;
 							</span>
-						</ng-template>
 						<input type="number" matInput placeholder="City Congestion Tax"
 							formControlName="city_congestion_tax_per_us" tabindex="1" autocomplete="off" (focus)="$event.target.select()"/>
 					</mat-form-field>
