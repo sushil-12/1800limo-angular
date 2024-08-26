@@ -141,9 +141,9 @@
 				</div> -->
 				<div class="col-md-4">
 					<mat-form-field appearance="outline">
-						<mat-label>First Year Pro Driver <span class="asterisk">*</span></mat-label>
+						<mat-label>Number of years of experience <span class="asterisk">*</span></mat-label>
 						<mat-select formControlName="StartDate" tabindex="1">
-							<mat-option value="">Choose Expiry Year</mat-option>
+							<mat-option value="">Choose Year</mat-option>
 							<mat-option *ngFor="let proDriverYear of proDriverYears" [value]="proDriverYear.value">
 								{{ proDriverYear.label }}
 							</mat-option>
@@ -256,7 +256,7 @@
 			<div class="vehtype_extintwrap">
 				<div class="row">
 					<div class="col-md-4" *ngIf="DriverImage; else noDriverImage">
-						<div class="vehtype_extint">
+						<div class="vehtype_extint_potrait">
 							<div>
 								<p>Driver - Head and Shoulder <span class="optionalTextStyle">(portrait) </span> <span
 										class="asterisk">*</span></p>
@@ -294,14 +294,14 @@
 					</div>
 					<ng-template #noDriverImage>
 						<div class="col-md-4">
-							<div class="vehtype_extint">
+							<div class="vehtype_extint_potrait">
 								<div>
 									<p [class.ng-invalid]="submittedForm && f.DriverImage.errors.required">Driver - Head
 										and
 										Shoulder <span class="optionalTextStyle">(portrait) </span> <span
 											class="asterisk">*</span></p>
 									<div class="emptyImage">
-										<img src="../../../../assets/images/empty-image.png" tabindex="-1">
+										<img src="../../../../assets/images/empty_image_potrait.png" tabindex="-1">
 									</div>
 									<ul class="mt-3">
 										<li>
