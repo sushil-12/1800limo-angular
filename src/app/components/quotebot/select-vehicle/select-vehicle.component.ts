@@ -112,7 +112,7 @@ export class SelectVehicleComponent implements OnInit {
 			]
 		},
 		{
-			dp: 'vehicle-service-area',
+			dp: 'vehicle-service-area-type',
 			rp: 'vehicle-service-area'
 		},
 		{

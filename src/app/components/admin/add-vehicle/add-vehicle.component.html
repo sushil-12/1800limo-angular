@@ -214,14 +214,14 @@
 				<div class="col-md-6">
 					<mat-form-field appearance="outline">
 						<mat-label>
-							License Plate #
+							License plate # or other vehicle identifier
 							<!-- <span *ngIf="affiliateType!='fleet_operator'; else nonFleetOperator"
 								class="asterisk">*</span> -->
 							<ng-template #nonFleetOperator>
 								<span class="theme-color">(optional)</span>
 							</ng-template>
 						</mat-label>
-						<input matInput placeholder="License Plate #" formControlName="licensePlate" tabindex="1"
+						<input matInput placeholder="License plate # or other vehicle identifier" formControlName="licensePlate" tabindex="1"
 							(focus)="$event.target.select()">
 					</mat-form-field>
 				</div>
@@ -264,7 +264,14 @@
 					</div>
 				</div> -->
 			</div>
-
+			<div class="row">
+				<div class="col-md-12">
+					<h3 class="addveh_top d-md-flex justify-content-between align-items-center mb-0 ml-1 mt-2">
+						<label class="alert alert-danger" style="padding :0.25rem 1.25rem;">
+							Choose all that apply.</label>
+					</h3>
+				</div>
+			</div>
 			<div class="row mt-3">
 				<div class="col-md-4">
 					<div class="input-checkbox">

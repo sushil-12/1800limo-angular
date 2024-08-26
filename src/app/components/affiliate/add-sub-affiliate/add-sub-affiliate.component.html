@@ -2,7 +2,7 @@
 <main>
     <form [formGroup]="profileForm" appInvalidControlScroll>
         <section class="user_information">
-            <h2 class="headinginfo adminbox_shadow">Add Sub Affiliate Account</h2>
+            <h2 class="headinginfo adminbox_shadow">{{userId ? 'Edit' : 'Add'}} Sub Admin Account</h2>
             <div class="container mt-1 ">
                 <div class="row ">
                     <div class="col-md-4">
