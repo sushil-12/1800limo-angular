@@ -532,5 +532,9 @@ export class AffiliateService {
 		return this.httpClient.get(this.serverUrl + `get-sub-affiliate-account/${id}`).toPromise();
 	}
 
+	subAffNotificationStatus(id, status) {
+		return this.httpClient.put(this.serverUrl + 'change-notification-status', { 'acc_id': id, 'status': status });
+	}
+
 
 }
