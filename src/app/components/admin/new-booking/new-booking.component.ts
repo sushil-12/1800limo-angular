@@ -2398,7 +2398,8 @@ export class NewBookingComponent implements OnInit {
 				}, 2000)
 				this.BookingForm.patchValue({
 					cancellation_hours: this.selectedVehicle?.non_charter_cancellation_hours.toString(),
-					return_cancellation_hours: this.return_selectedVehicle?.non_charter_cancellation_hours.toString()
+					return_cancellation_hours: this.return_selectedVehicle?.non_charter_cancellation_hours.toString(),
+					return_affiliate_id :  this.BookingForm.get('affiliate_id').value
 				})
 				this.SetFormValue('return_pickup_date', moment().format('YYYY-MM-DD'))
 				this.SetFormValue('return_pickup_time', '12:00 pm')
@@ -2809,6 +2810,11 @@ export class NewBookingComponent implements OnInit {
 				this.fetchAffiliateInformation(value)
 				if (this.Form.updateType.value != 'edit' && this.Form.updateType.value != 'repeat' && this.Form.updateType.value != 'return') {
 					this.scroll('booking_detail_section')
+				}
+				if(this.BookingForm.get('service_type').value == 'round_trip'){
+					this.BookingForm.patchValue({
+						return_affiliate_id : value
+					})
 				}
 			}
 		})
