@@ -1638,11 +1638,15 @@ export class CreateNewBookingComponent implements OnInit {
 				// 		error: `<span class='text-success'>${response.message}</span>`
 				// 	}
 				// })
-				if(this.currentUser?.roleName == 'sub_affiliate'){
-					this.$router.navigate(['/sub_affiliate/farm-out'])
+				if (this.currentUser?.roleName == 'sub_affiliate') {
+					this.$router.navigate(['/sub_affiliate/farm-out']).then(()=>{
+						window.location.reload()
+					})
 				}
-				else{
-					this.$router.navigate(['/affiliate/farm-out'])
+				else {
+					this.$router.navigate(['/affiliate/farm-out']).then(() => {
+						window.location.reload()
+					})
 				}
 				this.$spinner.hide()
 			})
