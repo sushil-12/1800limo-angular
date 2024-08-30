@@ -1161,9 +1161,9 @@ button.link {
 }
 
 .col-sm-3.imageStyle-mobile {
-    width: 80%;
+    width: 65%;
     object-fit: contain;
-    padding: 0 10px;
+    padding: 0 !important;
     justify-content: center;
     align-items: center;
     display: flex;
