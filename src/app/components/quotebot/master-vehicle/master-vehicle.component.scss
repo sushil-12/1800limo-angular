@@ -920,6 +920,11 @@ button.link {
 	margin: 0 0 2px !important;
 }
 
+.vehicle-name-text-mobile {
+	font-size: 14px;
+	font-weight: 500;
+	margin: 0 0 2px !important;
+}
 
 //vehicle image styles in card
 .imageStyle {
@@ -1058,6 +1063,7 @@ button.link {
 	.hideMobile {
 		display: none;
 	}
+
 }
 
 
@@ -1066,6 +1072,21 @@ button.link {
 		display: none;
 	}
 }
+
+@media only screen and (max-width:480px)
+{
+	.hideInMobile{
+		display: none;
+	}
+}
+
+@media only screen and (min-width:480px)
+{
+	.hideInDesktop{
+		display: none;
+	}
+}
+
 
 .view-more-circle-button {
 	font-size: 0.9rem;
@@ -1086,4 +1107,77 @@ button.link {
 	-moz-appearance: button;
 	-webkit-appearance: button;
 
+}
+
+
+// top div having text and back button
+.select_vehicle_div_mobile {
+	background: #000;
+	border-radius: 10px;
+	padding: 12px;
+	margin-bottom: 1.5rem;
+}
+
+.back_button_mobile{
+		padding: 2px 3px;
+		border-radius: 0.295rem;
+		border: 2px solid #33c658;
+		background-color: #33c658;
+		color: #202020;
+		letter-spacing: 1px;
+		font-size: 0.78rem;
+		display: inline-block;
+		font-family: "Roboto", sans-serif;
+		font-weight: 700;
+		appearance: button;
+		-moz-appearance: button;
+		-webkit-appearance: button;
+		transition: box-shadow 0.1s ease-in-out;
+		box-shadow: 0px 5px 20px -6px rgb(0, 0, 0, 0.6);
+		border-color: #33c658;
+		background-color: #33c658;
+	
+		&:active {
+			box-shadow: 0px 5px 10px -1px rgb(0 0 0 / 30%);
+		}
+}
+
+
+.sort_filter_div_mobile{
+	display: flex;
+	justify-content: space-between;
+	padding: 4px;
+	border-radius: 8px;
+	box-shadow: 0px 4px 8px -1px rgb(0 0 0 / 20%);
+}
+
+//vehicle card icon 
+.icon-container-mobile {
+	padding: 0px 2px 0px 2px;
+	min-width: fit-content;
+	border: 1px solid #D9D9D9;
+	border-radius: 15px;
+	background: #f3f0f0;
+}
+
+.col-sm-3.imageStyle-mobile {
+    width: 80%;
+    object-fit: contain;
+    padding: 0 10px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+
+.imageStyle-mobile img{
+	/* height: 100%; */
+    /* max-width: 110%; */
+    /* width: 100%; */
+    /* height: 100%; */
+    /* max-width: 100px; */
+    /* min-width: 100px; */
+    min-width: 100px;
+    width: 100%;
+    height: auto;
+    object-fit: contain; /* or 'contain', depending on your needs */
 }

@@ -168,7 +168,7 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit {
     this.profileForm = this.formBuilder.group({
       name: [''],
       operator_name: [''],
-      phone: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(15)]],
+      phone: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(7), Validators.maxLength(15)]],
       phone_isd: ['+1', Validators.required],
       phone_country: ['us'],
       email: ['info@1800limo.com', [Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)]],
