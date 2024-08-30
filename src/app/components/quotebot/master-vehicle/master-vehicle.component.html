@@ -1,7 +1,7 @@
 <ngx-spinner></ngx-spinner>
 
 <!-- FILTERS AND SORT BUTTON SECTION -->
-<section id="fixed-filters-sortby-button" class="fixed-bottom">
+<section id="fixed-filters-sortby-button" class="fixed-bottom hideInMobile">
 	<div id="fixed-section-container" class="container-fluid mb-2">
 		<div id="fixed-section-box" class="d-flex justify-content-center align-items-center">
 			<div id="filters-button" class="d-block d-lg-none">
@@ -20,8 +20,8 @@
 				<button class="filter-btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
 					data-toggle="dropdown" aria-controls="dropdownMenu" aria-label="Toggle Navigation"
 					aria-expanded="false">
-					<span class="mr-2"> Sort By </span>
-					<i class="fas fa-sort"></i>
+					<span class="mr-2"> Sort By <i class="bi bi-caret-down"></i></span>
+
 				</button>
 				<div class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="dropdownMenu">
 					<a class="dropdown-item" (click)="Sort.LowToHigh()"> Price: Low to High </a>
@@ -50,7 +50,7 @@
 				<div class="collapse navbar-collapse" id="navbarSupportedContent" [ngClass]="openfilters ? 'show' : ''">
 					<div class="close-sidebar">
 						<span (click)="openfilters = false">
-							<i class="fas fa-times"></i>
+							<i class="bi bi-x-lg"></i>
 						</span>
 					</div>
 					<aside class="sidebar w-100">
@@ -290,7 +290,8 @@
 
 
 		<!-- MASTER VEHICLE TYPES SECTION -->
-		<div class="col-md-12 col-lg-9 col-xl-10" [ngStyle]="openfilters ? {'z-index': -1, 'position': 'relative'} : ''"
+		<div class="hideInMobile col-md-12 col-lg-9 col-xl-10"
+			[ngStyle]="openfilters ? {'z-index': -1, 'position': 'relative'} : ''"
 			*ngIf="vehicleDetails.length == 0 || master_vehicles.length == 0">
 			<!-- title box -->
 			<div class="select_vehicle_div">
@@ -378,7 +379,8 @@
 								<span class="font-weight-bolder mx-2">{{ vehicle_obj?.luggage }}</span>
 							</div>
 						</div>
-						<div class="d-flex justify-content-end mt-4" style="position: absolute; bottom: 0;right: 0;margin-bottom: 7px;">
+						<div class="d-flex justify-content-end mt-4"
+							style="position: absolute; bottom: 0;right: 0;margin-bottom: 7px;">
 							<button type="button" class="view-more-circle-button"
 								(click)="selectCategory(vehicle_obj?.name)">
 								View More
@@ -390,6 +392,104 @@
 			</div>
 		</div>
 		<!-- MASTER VEHICLE TYPES SECTION ENDS -->
+
+
+		<!-- MASTER VEHICLE TYPES SECTION IN MOBILE-->
+		<div class="hideInDesktop col-md-12 col-lg-9 col-xl-10"
+			[ngStyle]="openfilters ? {'z-index': -1, 'position': 'relative'} : ''"
+			*ngIf="vehicleDetails.length == 0 || master_vehicles.length == 0">
+			<!-- title box -->
+			<div class="select_vehicle_div_mobile">
+				<button type="button" class="back_button_mobile mb-2" (click)="backButton()">
+					<i class="bi bi-arrow-left mx-1"></i>
+					Back to Home
+				</button>
+				<div class="row d-flex justify-content-between align-items-center">
+					<div class="col-md-12" style="display: flex;flex-direction: column;">
+						<span style="color:#fff;font-size: 16px;font-weight: 500;">
+							Select the vehicle that meets your requirements
+						</span>
+						<span style="color:#fff;font-size: 13px;font-weight: 500;">
+							Use <span style="color:#FEB573;font-weight: 500;">Filter / Sort</span> for more specific choices to match
+							your
+							search for rates.
+						</span>
+					</div>
+
+				</div>
+			</div>
+			<div class="sort_filter_div_mobile mb-3">
+				<div>
+					<!-- <span style="font-weight: 500;margin-left: 10px;">
+						Save this search
+					</span> -->
+				</div>
+				<div class="d-flex justify-content-end ">
+					<span>
+						<a href="javascript:void(0);" role="button" data-toggle="dropdown" aria-haspopup="true"
+							aria-expanded="false" style="text-decoration: none;color: black;font-weight: 500;">
+							<i class="bi bi-caret-down"></i> Sort
+						</a>
+						<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
+							aria-labelledby="navbarDropdownUserImage">
+							<a class="dropdown-item" (click)="Sort.LowToHigh()"> Price: Low to High </a>
+							<a class="dropdown-item" (click)="Sort.HighToLow()"> Price: High to Low </a>
+						</div>
+					</span>
+					<span style="font-weight: 500;margin: 0px 10px 0px 10px;" (click)="openfilters = true">
+						<i class="bi bi-filter"></i> Filter
+					</span>
+				</div>
+			</div>
+			<p style="font-size: 1rem; font-weight: 500; color: #e63232"
+				*ngIf="(vehicleDetails.length == 0 && this.filters.selections.length > 0) || master_vehicles.length == 0">
+				{{ no_vehicle_msg }}
+			</p>
+			<div id="master-vehicle-box-container" class="vehicle-grid-card" *ngIf="master_vehicles.length > 0" style="grid-gap: 15px !important;">
+				<div id="master-vehicle-box" class="card mb-1 d-flex flex-nowrap flex-md-wrap cursor-pointer"
+					*ngFor="let vehicle_obj of master_vehicles; index as vehicle_obj_index"
+					(click)="selectCategory(vehicle_obj?.name)" style="position: relative !important;">
+					<div id="vehicle-image" class="bg-white d-flex">
+						<div class="col-sm-3 imageStyle-mobile">
+							<img [src]="vehicle_obj.cat_img"
+								[attr.id]="'vehicle_' + vehicle_obj_index"/>
+						</div>
+						<div class="col-sm-9">
+							<div class="d-flex flex-column">
+								<p id="vehicle-name" class="vehicle-name-text-mobile">
+									{{ vehicle_obj?.name }}
+								</p>
+								<p id="vehicle-price" class="font-weight-bolder mb-4" style="font-size: 0.8rem;"
+									*ngIf="('rate_breakdown_' + getKeyName()) != undefined || ('rate_breakdown_' + getKeyName()).length <= 0">
+									<span style="color: #c94505;font-weight: 500;">
+										From&nbsp;
+									</span>
+									{{currencySymbol}} {{ vehicle_obj['rate_breakdown_' + getKeyName()]?.grand_total !=
+									undefined
+									?
+									vehicle_obj['rate_breakdown_' + getKeyName()]?.grand_total : '0.00' }}
+								</p>
+								<div id="icons" class="d-flex mb-2" style="gap:8px;">
+									<div class="icon-container-mobile">
+										<img alt="" src="assets/images/select_vehicle/pass.png"
+											style="margin-right: 0.2rem;" />
+										<span style="font-size: 0.6rem;margin-left: 0.2rem;">Passengers</span>
+										<span class="font-weight-bolder" style="font-size: 0.6rem;margin-left: 0.2rem;">{{ vehicle_obj?.passenger }}</span>
+									</div>
+									<div class="icon-container-mobile">
+										<img alt="" src="assets/images/select_vehicle/lug.png" style="margin-right: 0.2rem;" />
+										<span style="font-size: 0.6rem">Luggages</span>
+										<span class="font-weight-bolder" style="font-size: 0.6rem;margin-left: 0.2rem;">{{ vehicle_obj?.luggage }}</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<!-- MASTER VEHICLE TYPES SECTION IN MOBILE ENDS -->
 	</div>
 </section>
 
