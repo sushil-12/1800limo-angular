@@ -1226,12 +1226,13 @@ button.link {
 }
 
 .col-sm-3.imageStyle-mobile {
-	width: 80%;
+	width: 70%;
 	object-fit: contain;
-	padding: 0 10px;
+	padding: 0 8px 0 0 !important;
 	justify-content: center;
 	align-items: center;
 	display: flex;
+	max-height: 60%;
 }
 
 .imageStyle-mobile img {

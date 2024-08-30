@@ -623,7 +623,7 @@
 								<img id="V_I_{{ vehinfo_index }}" [src]="vehinfo.vehicle_images[0]" />
 							</div>
 
-							<div id="vehinfo_{{ vehinfo_index }}" class="col-md-9">
+							<div id="vehinfo_{{ vehinfo_index }}" class="col-md-9" style="padding: 0 !important;">
 								<div class="d-flex flex-column">
 									<p id="vehicle-name" class="vehicle-name-text-mobile">
 										{{vehinfo?.name}}
@@ -659,18 +659,18 @@
 									<div id="icons" class="d-flex mb-2" style="gap:8px;">
 										<div class="icon-container-mobile">
 											<img alt="" src="assets/images/select_vehicle/pass.png"
-												style="margin-right: 0.2rem;" />
-											<span style="font-size: 0.6rem;margin-left: 0.2rem;">Passengers</span>
-											<span class="font-weight-bolder"
-												style="font-size: 0.6rem;margin-left: 0.2rem;">{{ vehinfo?.passenger
+												style="padding: 3px;" />
+											<span style="font-size: 0.6rem;margin-left: 0.1rem;">Passengers</span>
+											<span class="font-weight-bolder" style="font-size: 0.7rem;padding: 3px;">{{
+												vehinfo?.passenger
 												}}</span>
 										</div>
 										<div class="icon-container-mobile">
 											<img alt="" src="assets/images/select_vehicle/lug.png"
-												style="margin-right: 0.2rem;" />
-											<span style="font-size: 0.6rem">Luggages</span>
-											<span class="font-weight-bolder"
-												style="font-size: 0.6rem;margin-left: 0.2rem;">{{ vehinfo?.luggage
+												style="padding: 3px;" />
+											<span style="font-size: 0.6rem;margin-left: 0.1rem;">Luggages</span>
+											<span class="font-weight-bolder" style="font-size: 0.7rem;padding: 3px;">{{
+												vehinfo?.luggage
 												}}</span>
 										</div>
 									</div>
@@ -728,8 +728,7 @@
 								class="custom-filled-button orange-button" style="font-size: 0.7rem !important;">
 								Vehicle Details
 							</button>
-							<button type="button" (click)="bookNow(vehinfo)"
-								class="custom-filled-button green-button"
+							<button type="button" (click)="bookNow(vehinfo)" class="custom-filled-button green-button"
 								style="font-size: 0.7rem !important;">
 								Book Now
 							</button>

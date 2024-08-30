@@ -454,7 +454,7 @@
 							<img [src]="vehicle_obj.cat_img"
 								[attr.id]="'vehicle_' + vehicle_obj_index"/>
 						</div>
-						<div class="col-sm-9">
+						<div class="col-sm-9" style="padding: 0 !important;">
 							<div class="d-flex flex-column">
 								<p id="vehicle-name" class="vehicle-name-text-mobile">
 									{{ vehicle_obj?.name }}
@@ -472,14 +472,14 @@
 								<div id="icons" class="d-flex mb-2" style="gap:8px;">
 									<div class="icon-container-mobile">
 										<img alt="" src="assets/images/select_vehicle/pass.png"
-											style="margin-right: 0.2rem;" />
-										<span style="font-size: 0.6rem;margin-left: 0.2rem;">Passengers</span>
-										<span class="font-weight-bolder" style="font-size: 0.6rem;margin-left: 0.2rem;">{{ vehicle_obj?.passenger }}</span>
+											style="padding: 3px;" />
+										<span style="font-size: 0.6rem;margin-left: 0.1rem;">Passengers</span>
+										<span class="font-weight-bolder" style="font-size: 0.7rem;padding: 3px;">{{ vehicle_obj?.passenger }}</span>
 									</div>
 									<div class="icon-container-mobile">
-										<img alt="" src="assets/images/select_vehicle/lug.png" style="margin-right: 0.2rem;" />
-										<span style="font-size: 0.6rem">Luggages</span>
-										<span class="font-weight-bolder" style="font-size: 0.6rem;margin-left: 0.2rem;">{{ vehicle_obj?.luggage }}</span>
+										<img alt="" src="assets/images/select_vehicle/lug.png" style="padding: 3px;" />
+										<span style="font-size: 0.6rem;margin-left: 0.1rem;">Luggages</span>
+										<span class="font-weight-bolder" style="font-size: 0.7rem;padding: 3px;">{{ vehicle_obj?.luggage }}</span>
 									</div>
 								</div>
 							</div>
