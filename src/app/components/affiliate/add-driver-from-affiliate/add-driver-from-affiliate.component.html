@@ -273,7 +273,7 @@
 				<div class="row">
 					<div class="col-md-4" *ngIf="DriverImage; else noDriverImage">
 						<div class="vehtype_extint_potrait">
-							<div>
+							<div style="display: flex;flex-direction: column;align-items: center;">
 								<p>Driver - Head and Shoulder <span class="optionalTextStyle">(portrait) </span> <span
 										class="asterisk">*</span></p>
 								<img src="{{DriverImage}}" (click)="showImageInModal(DriverImage)" tabindex="-1">
@@ -310,7 +310,7 @@
 					<ng-template #noDriverImage>
 						<div class="col-md-4">
 							<div class="vehtype_extint_potrait">
-								<div>
+								<div style="display: flex;flex-direction: column;align-items: center;">
 									<p [class.ng-invalid]="submittedForm && f.DriverImage.errors.required">Driver - Head
 										and
 										Shoulder <span class="optionalTextStyle">(portrait) </span> <span
