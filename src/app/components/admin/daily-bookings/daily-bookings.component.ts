@@ -1232,5 +1232,30 @@ export class DailyBookingsComponent implements OnInit {
 
 	}
 
+	chargeBackAction() {
+		this.spinner.show()
+		let data = {
+			reservation_id: this.accept_charge_id
+		}
+		this.adminService
+			.chargeBack(data)
+			.pipe(
+				catchError((err) => {
+					return throwError(err);
+				})
+			)
+			.subscribe((response: any) => {
+				this.spinner.hide();
+				$("#charge_back_modal").modal("hide");
+				this.$errorDialog.openDialog({
+					errors: {
+						error: `<span class='text-success font-weight-bolder text-2xl' style="font-size: 24px;">Payment have been charged back successfully!</span>`
+					}
+				})
+				console.log("accept charge action", response);
+			});
+
+	}
+
 
 }

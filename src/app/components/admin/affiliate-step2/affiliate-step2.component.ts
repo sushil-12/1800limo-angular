@@ -64,6 +64,7 @@ export class AffiliateStep2Component implements OnInit {
 	isSsnSelected: boolean = false;
 	isAddressSelected: boolean = false;
 	isRoutingSelected: boolean = false;
+	disabled = false;
 
 	@Input() closeTab: EventEmitter<any> = new EventEmitter();
 	stepsObj: any;
@@ -928,6 +929,27 @@ export class AffiliateStep2Component implements OnInit {
 
 	selectDropdownCurrency() {
 		$('.selectCurrencyLabel').removeClass('selectCurrencyLabel ').addClass('select-currency-label');
+	}
+
+	acceptRejectConsent(event) {
+		this.spinner.show();//show spinner
+		console.log(event.checked);
+		if (event.checked) {
+			var permission = 'yes';
+		}
+		else {
+			var permission = 'no';
+		}
+		this.adminService.chargeBackPermission(this.affiliateId, permission)
+			.pipe(
+				catchError(err => {
+					this.spinner.hide();//hide spinner
+					return throwError(err);
+				})
+			).subscribe(result => {
+
+				this.spinner.hide();//hide spinner
+			});
 	}
 
 }
