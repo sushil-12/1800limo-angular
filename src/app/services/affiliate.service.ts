@@ -536,5 +536,9 @@ export class AffiliateService {
 		return this.httpClient.put(this.serverUrl + 'change-notification-status', { 'acc_id': id, 'status': status });
 	}
 
+	chargeBackPermission(acc_id, permission) {
+		return this.httpClient.post(this.serverUrl + 'charge-back-permission', { 'acc_id': acc_id, 'permission': permission });
+	}
+
 
 }

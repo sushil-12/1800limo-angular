@@ -171,6 +171,13 @@
 												<div class="dropdown-item-icon"></div>
 												Accept & Charge
 											</a>
+											<a class="dropdown-item" data-toggle="modal"
+												data-target="#charge_back_modal"
+												(click)="acceptChargeClick(booking.booking_id)"
+												*ngIf="((currentUser?.RoleName == 'admin' || subModules.includes('edit_booking')) && (booking?.affiliate_charged_amount != null && booking?.booking_status != 'paid' && booking?.booking_status != 'paid_cash'))">
+												<div class="dropdown-item-icon"></div>
+												Charge Back
+											</a>
 											<a class="dropdown-item" [routerLink]="['/admin/finalize-booking']"
 												[queryParams]="{bookingId: booking.booking_id}"
 												*ngIf="((currentUser?.RoleName == 'admin' || subModules.includes('edit_booking')) && (booking?.booking_status != 'paid' && booking?.booking_status != 'paid_cash'))">
@@ -211,13 +218,13 @@
 												<div class="dropdown-item-icon"></div>
 												Email Passenger
 											</a>
-											<a class="dropdown-item"
+											<!-- <a class="dropdown-item"
 												(click)="sendEmailClicked(booking.booking_id,'emailAll')"
 												data-toggle="modal" data-target="#emailAll"
 												*ngIf="currentUser?.RoleName == 'admin' || subModules.includes('email_all')">
 												<div class="dropdown-item-icon"></div>
 												Email All
-											</a>
+											</a> -->
 											<a class="dropdown-item"
 												(click)="sendEmailClicked(booking.booking_id,'updatedEmailAll')"
 												data-toggle="modal" data-target="#updatedEmailAll"
@@ -612,6 +619,22 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="custom-btn savebutton" (click)="accpetChargeAction()">Charge</button>
+				<button type="button" class="custom-btn resetbutton" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- charge back modal -->
+<div class="modal fade" id="charge_back_modal" tabindex="-1" role="dialog" aria-labelledby="charge_back_modal"
+	aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-body text-center">
+				<p style="font-size: 19px;font-weight: 400;">Are you sure, You want to charge back for this booking?</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="custom-btn savebutton" (click)="chargeBackAction()">Charge</button>
 				<button type="button" class="custom-btn resetbutton" data-dismiss="modal">Close</button>
 			</div>
 		</div>

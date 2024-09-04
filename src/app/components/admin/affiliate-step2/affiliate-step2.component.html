@@ -309,12 +309,15 @@
 					</div>
 				</div>
 				<div class="col-md-6">
-					<mat-form-field appearance="outline" class="example-full-width" [ngClass]="(f.badge_city_name.value) ? '' : 'red-placeholder' ">
-						<mat-label [ngClass]="(f.badge_city_name.value) ? '' : 'red-placeholder' ">Badge city (Enter Largest Major City You Service)
+					<mat-form-field appearance="outline" class="example-full-width"
+						[ngClass]="(f.badge_city_name.value) ? '' : 'red-placeholder' ">
+						<mat-label [ngClass]="(f.badge_city_name.value) ? '' : 'red-placeholder' ">Badge city (Enter
+							Largest Major City You Service)
 						</mat-label>
 						<input type="text" placeholder="Enter Largest Major City You Service" aria-label="Number"
 							matInput formControlName="badge_city_name" [matAutocomplete]="auto"
-							(keyup)="handleBadgeCity($event.target.value)" [ngClass]="(f.badge_city_name.value) ? '' : 'red-placeholder' ">
+							(keyup)="handleBadgeCity($event.target.value)"
+							[ngClass]="(f.badge_city_name.value) ? '' : 'red-placeholder' ">
 						<mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
 							<mat-option *ngFor="let option of filteredOptions"
 								(onSelectionChange)="selectBadgeCity(option,$event.isUserInput)" [value]="option.name">
@@ -885,6 +888,13 @@
 				<div class="col-md-12 mb-2">
 					<label class="alert alert-danger">Add Debit/Credit Card To Pay Farm Out
 						Bookings and earn a 10% Travel Agent commission. (Optional)</label>
+				</div>
+				<div class="col-md-12 mb-2">
+					<label class="alert alert-danger"><mat-slide-toggle class="example-margin mr-2" [color]="color"
+							[checked]="response?.data?.accepted_auto_deduct" [disabled]="disabled"
+							(change)="acceptRejectConsent($event)">
+						</mat-slide-toggle> Enable this if you want to accept 25% advance for charter
+						bookings.</label>
 				</div>
 			</div>
 			<div class="row">

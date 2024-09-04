@@ -1240,6 +1240,13 @@
 						<label class="alert alert-danger">Add Debit/Credit Card To Pay Farm Out
 							Bookings and earn a 10% Travel Agent commission. (Optional)</label>
 					</div>
+					<div class="col-md-12 mb-2">
+						<label class="alert alert-danger"><mat-slide-toggle class="example-margin mr-2" [color]="color"
+								[checked]="response?.data?.accepted_auto_deduct" [disabled]="disabled"
+								(change)="acceptRejectConsent($event)">
+							</mat-slide-toggle> Enable this if you want to accept 25% advance for charter
+							bookings.</label>
+					</div>
 				</div>
 				<div class="row">
 					<div class="col-md-12">

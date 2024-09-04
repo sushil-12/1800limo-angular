@@ -1286,4 +1286,12 @@ export class AdminService {
 		return this.httpClient.post(this.serverUrl + `admin/charge-half-payment`,data)
 	}
 
+	chargeBack(data){
+		return this.httpClient.post(this.serverUrl + `admin/charge-back-affiliate`,data)
+	}
+
+	chargeBackPermission(acc_id, permission) {
+		return this.httpClient.post(this.serverUrl + 'affiliate/charge-back-permission', { 'acc_id': acc_id, 'permission': permission });
+	}
+
 }
