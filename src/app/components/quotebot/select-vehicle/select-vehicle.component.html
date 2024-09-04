@@ -560,7 +560,7 @@
 				<div class="d-flex justify-content-end ">
 					<span>
 						<a href="javascript:void(0);" role="button" data-toggle="dropdown" aria-haspopup="true"
-							aria-expanded="false" style="text-decoration: none;color: black;font-weight: 500;">
+							aria-expanded="false" style="text-decoration: none;font-weight: 500;color: blue;margin-right: 5px;">
 							<i class="bi bi-caret-down"></i> Sort
 						</a>
 						<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
@@ -569,7 +569,10 @@
 							<a class="dropdown-item" (click)="Sort.HighToLow()"> Price: High to Low </a>
 						</div>
 					</span>
-					<span style="font-weight: 500;margin: 0px 10px 0px 10px;" (click)="openfilters = true">
+					<span>
+						|
+					</span>
+					<span style="font-weight: 500;margin: 0px 10px 0px 5px;color: blue;" (click)="openfilters = true">
 						<i class="bi bi-filter"></i> Filter
 					</span>
 				</div>
@@ -660,16 +663,16 @@
 										<div class="icon-container-mobile">
 											<img alt="" src="assets/images/select_vehicle/pass.png"
 												style="padding: 3px;" />
-											<span style="font-size: 0.6rem;margin-left: 0.1rem;">Passengers</span>
-											<span class="font-weight-bolder" style="font-size: 0.7rem;padding: 3px;">{{
+											<span style="font-size: 0.7rem;margin-left: 0.1rem;">Passengers</span>
+											<span class="font-weight-bolder" style="font-size: 0.8rem;padding: 3px;">{{
 												vehinfo?.passenger
 												}}</span>
 										</div>
 										<div class="icon-container-mobile">
 											<img alt="" src="assets/images/select_vehicle/lug.png"
 												style="padding: 3px;" />
-											<span style="font-size: 0.6rem;margin-left: 0.1rem;">Luggages</span>
-											<span class="font-weight-bolder" style="font-size: 0.7rem;padding: 3px;">{{
+											<span style="font-size: 0.7rem;margin-left: 0.1rem;">Luggages</span>
+											<span class="font-weight-bolder" style="font-size: 0.8rem;padding: 3px;">{{
 												vehinfo?.luggage
 												}}</span>
 										</div>
@@ -679,36 +682,23 @@
 						</div>
 						<div style="padding: 16px;">
 							<div class="vehicle-details-data-mobile">
-								<div class="d-flex justify-content-between" style="max-height: 25px;">
+								<!-- <div class="d-flex justify-content-between" style="max-height: 25px;">
 									<p>
 										Number of Vehicles
 									</p>
 									<p style="font-weight: 500;">
 										{{vehinfo?.number_of_vehicles}}
 									</p>
-								</div>
+								</div> -->
 								<div class="d-flex justify-content-between" style="max-height: 25px;">
 									<p>
-										Year
+										Year&nbsp;<span style="font-weight: 500;">{{vehinfo?.vehicle_details?.year}}</span>
 									</p>
-									<p style="font-weight: 500;">
-										{{vehinfo?.vehicle_details?.year}}
-									</p>
-								</div>
-								<div class="d-flex justify-content-between" style="max-height: 25px;">
 									<p>
-										Make
+										Make&nbsp;<span style="font-weight: 500;">{{vehinfo?.vehicle_details?.make}}</span>
 									</p>
-									<p style="font-weight: 500;">
-										{{vehinfo?.vehicle_details?.make}}
-									</p>
-								</div>
-								<div class="d-flex justify-content-between" style="max-height: 25px;">
 									<p>
-										Model
-									</p>
-									<p style="font-weight: 500;">
-										{{vehinfo?.vehicle_details?.model}}
+										Model&nbsp;<span style="font-weight: 500;">{{vehinfo?.vehicle_details?.model}}</span>
 									</p>
 								</div>
 							</div>
@@ -725,11 +715,11 @@
 						<div class="d-flex justify-content-between align-items-center mb-2"
 							style="padding: 2px 16px 2px 16px;">
 							<button type="button" (click)="viewDetails(vehinfo)"
-								class="custom-filled-button orange-button" style="font-size: 0.7rem !important;">
+								class="custom-filled-button orange-button" style="font-size: 0.8rem !important;">
 								Vehicle Details
 							</button>
 							<button type="button" (click)="bookNow(vehinfo)" class="custom-filled-button green-button"
-								style="font-size: 0.7rem !important;">
+								style="font-size: 0.8rem !important;">
 								Book Now
 							</button>
 						</div>

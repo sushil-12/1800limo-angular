@@ -410,7 +410,8 @@
 							Select the vehicle that meets your requirements
 						</span>
 						<span style="color:#fff;font-size: 13px;font-weight: 500;">
-							Use <span style="color:#FEB573;font-weight: 500;">Filter / Sort</span> for more specific choices to match
+							Use <span style="color:#FEB573;font-weight: 500;">Filter / Sort</span> for more specific
+							choices to match
 							your
 							search for rates.
 						</span>
@@ -427,7 +428,7 @@
 				<div class="d-flex justify-content-end ">
 					<span>
 						<a href="javascript:void(0);" role="button" data-toggle="dropdown" aria-haspopup="true"
-							aria-expanded="false" style="text-decoration: none;color: black;font-weight: 500;">
+							aria-expanded="false" style="text-decoration: none;font-weight: 500;color: blue;margin-right: 5px;">
 							<i class="bi bi-caret-down"></i> Sort
 						</a>
 						<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
@@ -436,7 +437,10 @@
 							<a class="dropdown-item" (click)="Sort.HighToLow()"> Price: High to Low </a>
 						</div>
 					</span>
-					<span style="font-weight: 500;margin: 0px 10px 0px 10px;" (click)="openfilters = true">
+					<span>
+						|
+					</span>
+					<span style="font-weight: 500;margin: 0px 10px 0px 5px;color: blue;" (click)="openfilters = true">
 						<i class="bi bi-filter"></i> Filter
 					</span>
 				</div>
@@ -445,14 +449,14 @@
 				*ngIf="(vehicleDetails.length == 0 && this.filters.selections.length > 0) || master_vehicles.length == 0">
 				{{ no_vehicle_msg }}
 			</p>
-			<div id="master-vehicle-box-container" class="vehicle-grid-card" *ngIf="master_vehicles.length > 0" style="grid-gap: 15px !important;">
+			<div id="master-vehicle-box-container" class="vehicle-grid-card" *ngIf="master_vehicles.length > 0"
+				style="grid-gap: 15px !important;">
 				<div id="master-vehicle-box" class="card mb-1 d-flex flex-nowrap flex-md-wrap cursor-pointer"
 					*ngFor="let vehicle_obj of master_vehicles; index as vehicle_obj_index"
 					(click)="selectCategory(vehicle_obj?.name)" style="position: relative !important;">
 					<div id="vehicle-image" class="bg-white d-flex">
 						<div class="col-sm-3 imageStyle-mobile">
-							<img [src]="vehicle_obj.cat_img"
-								[attr.id]="'vehicle_' + vehicle_obj_index"/>
+							<img [src]="vehicle_obj.cat_img" [attr.id]="'vehicle_' + vehicle_obj_index" />
 						</div>
 						<div class="col-sm-9" style="padding: 0 !important;">
 							<div class="d-flex flex-column">
@@ -471,15 +475,16 @@
 								</p>
 								<div id="icons" class="d-flex mb-2" style="gap:8px;">
 									<div class="icon-container-mobile">
-										<img alt="" src="assets/images/select_vehicle/pass.png"
-											style="padding: 3px;" />
-										<span style="font-size: 0.6rem;margin-left: 0.1rem;">Passengers</span>
-										<span class="font-weight-bolder" style="font-size: 0.7rem;padding: 3px;">{{ vehicle_obj?.passenger }}</span>
+										<img alt="" src="assets/images/select_vehicle/pass.png" style="padding: 3px;" />
+										<span style="font-size: 0.7rem;margin-left: 0.1rem;">Passengers</span>
+										<span class="font-weight-bolder" style="font-size: 0.8rem;padding: 3px;">{{
+											vehicle_obj?.passenger }}</span>
 									</div>
 									<div class="icon-container-mobile">
 										<img alt="" src="assets/images/select_vehicle/lug.png" style="padding: 3px;" />
-										<span style="font-size: 0.6rem;margin-left: 0.1rem;">Luggages</span>
-										<span class="font-weight-bolder" style="font-size: 0.7rem;padding: 3px;">{{ vehicle_obj?.luggage }}</span>
+										<span style="font-size: 0.7rem;margin-left: 0.1rem;">Luggages</span>
+										<span class="font-weight-bolder" style="font-size: 0.8rem;padding: 3px;">{{
+											vehicle_obj?.luggage }}</span>
 									</div>
 								</div>
 							</div>

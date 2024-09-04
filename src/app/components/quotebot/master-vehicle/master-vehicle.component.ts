@@ -81,11 +81,11 @@ export class MasterVehicleComponent implements OnInit {
 		,
 		{
 			dp: 'amenities',
-			rp: 'amenities'
+			rp: 'special-amenities'
 		},
 		{
 			dp: 'extra-$-amenities',
-			rp: 'special-amenities'
+			rp: 'amenities'
 		},
 		{
 			dp: 'driver-preferences',
