@@ -581,7 +581,7 @@ export class CreateBookingComponent implements OnInit {
 			}
 
 			let base_rate = 0
-			if (this.BookingForm.value?.service_type == 'charter_tour') {
+			if (this.BookingForm.value?.service_type == 'charter_tour'  && !this.min_rate_involved) {
 
 				base_rate += this.rateArray.all_inclusive_rates["Base_Rate"].baserate * this.number_of_hours
 				this.subtotal += this.rateArray.all_inclusive_rates["Base_Rate"].baserate * (this.number_of_hours - 1)
@@ -2306,7 +2306,7 @@ export class CreateBookingComponent implements OnInit {
 		if (this.rateArray) {
 			console.log('in function createReservationShareArray iffffff', this.rateArray)
 			let base_rate = 0
-			if (this.BookingForm.value?.service_type == 'charter_tour') {
+			if (this.BookingForm.value?.service_type == 'charter_tour' && !this.min_rate_involved) {
 				base_rate += this.rateArray.all_inclusive_rates["Base_Rate"].baserate * this.number_of_hours
 			}
 			else {
@@ -2581,7 +2581,7 @@ export class CreateBookingComponent implements OnInit {
 					}
 				}
 				let base_rate = 0
-				if (this.BookingForm.value?.service_type == 'charter_tour') {
+				if (this.BookingForm.value?.service_type == 'charter_tour'  && !this.min_rate_involved) {
 					base_rate += this.rateArray.all_inclusive_rates["Base_Rate"].baserate * this.number_of_hours
 				}
 				else {

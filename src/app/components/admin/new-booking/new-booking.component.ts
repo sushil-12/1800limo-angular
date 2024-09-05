@@ -2092,7 +2092,7 @@ export class NewBookingComponent implements OnInit {
 		console.log('in function createReservationShareArray')
 		if (this.RatesForm) {
 			let base_rate = 0
-			if (this.BookingForm.value?.service_type == 'charter_tour') {
+			if (this.BookingForm.value?.service_type == 'charter_tour' && !this.BookingForm.value.rateArray?.min_rate_involved) {
 				base_rate += this.RatesForm.all_inclusive_rates["Base_Rate"].baserate * this.number_of_hours
 			}
 			else {
@@ -2104,7 +2104,7 @@ export class NewBookingComponent implements OnInit {
 			for (const key of Object.keys(this.RatesForm.amenities)) {
 				base_rate += this.RatesForm.amenities[key].baserate;
 			}
-			console.log("extra gratutiy",this.BookingForm.value.rateArray.misc.Extra_Gratuity.amount)
+			console.log("extra gratutiy",this.BookingForm.value.rateArray.misc.Extra_Gratuity.amount,"min rate",this.BookingForm.value.rateArray?.min_rate_involved)
 			let grandTotal = this.BookingForm.value.rateArray.grand_total
 			let stripeFee = grandTotal * 0.05 + 0.30
 			let adminShare = (base_rate * this.adminSharePercent) / 100
