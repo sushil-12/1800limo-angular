@@ -1078,7 +1078,8 @@
 								</span>
 							</div>
 							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild" style="cursor: pointer;color: #007500 !important;"
+								<span class="font-weight-bolder preview-output-feild"
+									style="cursor: pointer;color: #007500 !important;"
 									(click)="searchOnGoogle(bookingPreview?.dropoff_airline_name + ' ' + bookingPreview?.dropoff_flight)">
 									{{ textFormatter(bookingPreview.dropoff_airline_name) }}
 								</span>
@@ -1097,7 +1098,8 @@
 								</span>
 							</div>
 							<div class="col-md-7 value">
-								<span class="font-weight-bolder preview-output-feild" style="cursor: pointer;color: #007500 !important;"
+								<span class="font-weight-bolder preview-output-feild"
+									style="cursor: pointer;color: #007500 !important;"
 									(click)="searchOnGoogle(bookingPreview?.dropoff_airline_name + ' ' + bookingPreview?.dropoff_flight)">
 									{{ textFormatter(bookingPreview.dropoff_flight) }}
 								</span>
@@ -1186,7 +1188,7 @@
 							</div>
 						</div>
 
-					</div> 
+					</div>
 					<hr>
 					<br>
 					<div class="google_map">
@@ -1352,7 +1354,8 @@
 							</span>
 						</div>
 						<div class="col-md-8 value box-special-instruction">
-							<span class="font-weight-bolder preview-output-feild" style="white-space: pre-wrap;" [innerHTML]="highlightNumbers(bookingPreview?.booking_instructions || ' ')">
+							<span class="font-weight-bolder preview-output-feild" style="white-space: pre-wrap;"
+								[innerHTML]="highlightNumbers(bookingPreview?.booking_instructions || ' ')">
 								<!-- {{ textFormatter(bookingPreview?.booking_instructions)| titlecase }} -->
 							</span>
 						</div>
@@ -1372,7 +1375,7 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										{{currencySymbol}}{{shareArray?.baseRate.toFixed(2)}}
+										{{currencySymbol}}{{formatBaseRate(shareArray?.baseRate)}}
 									</span>
 									(Fare Base Rate)
 								</div>
@@ -1387,7 +1390,7 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										{{currencySymbol}}{{shareArray?.adminShare.toFixed(2) }}
+										{{currencySymbol}}{{formatBaseRate(shareArray?.adminShare)}}
 									</span>
 									({{adminSharePercent}}% of Base Rate)
 								</div>
@@ -1402,13 +1405,13 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										{{currencySymbol}}{{shareArray?.travelAgentShare.toFixed(2)}}
+										{{currencySymbol}}{{formatBaseRate(shareArray?.travelAgentShare)}}
 									</span>
 									(10% of base rate )
 								</div>
 							</div>
 						</div>
-						
+
 						<div class="mx-2">
 							<div class="row m-0">
 								<div class="col-md-4 key d-flex align-items-center">
@@ -1418,7 +1421,7 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										{{currencySymbol}}{{shareArray?.stripeFee.toFixed(2)}}
+										{{currencySymbol}}{{formatBaseRate(shareArray?.stripeFee)}}
 									</span>
 									(Platform fee 5% + 30 cents - <b>Paid from Admin share</b>)
 								</div>
@@ -1433,8 +1436,9 @@
 								</div>
 								<div class="col-md-8 value preview-airport-color">
 									<span class="font-weight-bolder preview-output-feild">
-										{{currencySymbol}}{{shareArray?.grandTotal ? shareArray?.grandTotal.toFixed(2) :
-										shareArray?.returnGrandTotal.toFixed(2)}}
+										{{currencySymbol}}{{shareArray?.grandTotal ?
+										formatBaseRate(shareArray?.grandTotal) :
+										formatBaseRate(shareArray?.returnGrandTotal)}}
 									</span>
 									(Actual Cost to Customer)
 								</div>
