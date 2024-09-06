@@ -169,7 +169,7 @@
 												(click)="acceptChargeClick(booking.booking_id)"
 												*ngIf="((currentUser?.RoleName == 'admin' || subModules.includes('edit_booking')) && (booking?.booking_status != 'paid' && booking?.booking_status != 'paid_cash' && booking?.booking_status != 'cancelled'))">
 												<div class="dropdown-item-icon"></div>
-												Accept & Charge
+												Accept & Charge (50%)
 											</a>
 											<a class="dropdown-item" data-toggle="modal"
 												data-target="#charge_back_modal"
