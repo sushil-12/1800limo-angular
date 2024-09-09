@@ -1,5 +1,5 @@
 <!-- Selected Vehicle section -->
-<section class="pro-Fil pt-5">
+<section class="pro-Fil">
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-md-12">
@@ -35,7 +35,23 @@
 							<h5>
 								{{ selected_vehicle.name }}
 							</h5>
-							<div class="car-cap d-flex">
+							<div id="icons" class="d-flex mb-2" style="gap:8px;">
+								<div class="icon-container-mobile">
+									<img alt="" src="assets/images/select_vehicle/pass.png" style="padding: 3px;" />
+									<span style="font-size: 0.8rem;margin-left: 0.1rem;font-weight: 500;">Pax</span>
+									<span class="font-weight-bolder" style="font-size: 0.9rem;padding: 3px;">{{
+										selected_vehicle?.passenger
+										}}</span>
+								</div>
+								<div class="icon-container-mobile">
+									<img alt="" src="assets/images/select_vehicle/lug.png" style="padding: 3px;" />
+									<span style="font-size: 0.8rem;margin-left: 0.1rem;font-weight: 500;">Luggage</span>
+									<span class="font-weight-bolder" style="font-size: 0.9rem;padding: 3px;">{{
+										selected_vehicle?.luggage
+										}}</span>
+								</div>
+							</div>
+							<!-- <div class="car-cap d-flex">
 								<div class="pass-det mx-2">
 									<img alt="" class="img-fluid mr-2" src="assets/images/select_vehicle/pass.png" /> {{
 									selected_vehicle.passenger }}
@@ -44,55 +60,74 @@
 									<img alt="" class="img-fluid mr-2" src="assets/images/select_vehicle/lug.png" /> {{
 									selected_vehicle.luggage }}
 								</div>
-							</div>
+							</div> -->
 							<div class="textArea mt-3" *ngIf="selected_vehicle.description">
 								{{ selected_vehicle.description }}
 							</div>
-
-							<!-- PRICE BLOCK -->
-							<div class="price-Blc my-3">
-								<div class="checkbox-block d-md-flex" (change)="selectPrice()">
-									<!-- One Way -->
-									<div class="custom-control custom-checkbox custom-control-inline"
-										*ngIf="getKeyName() != 'charter_tour'">
-										<input type="checkbox" id="price1" name="price1" class="custom-control-input"
-											(change)="routeSelection('one_way')" value="one_way"
-											[checked]="quotebot_form.service_type == 'one_way'" />
-										<label class="custom-control-label" for="price1">
-											<small>
-												One Way
-											</small>
-											{{currencySymbol}} {{
-											selected_vehicle['rate_breakdown_one_way']?.grand_total
-											}}
-										</label>
-									</div>
-
-									<!-- Round Trip -->
-									<div class="custom-control custom-checkbox custom-control-inline"
-										*ngIf="getKeyName() != 'charter_tour'">
-										<input type="checkbox" id="price2" name="price2" class="custom-control-input"
-											(change)="routeSelection('round_trip')" value="round_trip"
-											[checked]="quotebot_form.service_type == 'round_trip'" />
-										<label class="custom-control-label" for="price2">
-											<small>
-												Round Trip
-											</small>
-											{{currencySymbol}} {{
-											selected_vehicle['rate_breakdown_round_trip']?.grand_total
-											}}
-										</label>
-									</div>
-
-									<!-- Charter Tour -->
-									<div id="charter-price" *ngIf="getKeyName() == 'charter_tour'">
-										<p class="font-weight-bolder">
-											Charter Tour: {{currencySymbol}} {{
-											selected_vehicle['rate_breakdown_charter_tour']?.grand_total
-											}}
+							<div>
+								<div class="vehicle-details-data-mobile mb-2">
+									<div class="d-flex justify-content-between" style="max-height: 25px;">
+										<p>
+											Year&nbsp;<span
+												style="font-weight: 500;">{{selected_vehicle?.vehicle_details?.year}}</span>
+										</p>
+										<p>
+											Make&nbsp;<span
+												style="font-weight: 500;">{{selected_vehicle?.vehicle_details?.make}}</span>
+										</p>
+										<p>
+											Model&nbsp;<span
+												style="font-weight: 500;">{{selected_vehicle?.vehicle_details?.model}}</span>
 										</p>
 									</div>
 								</div>
+							</div>
+
+							<!-- PRICE BLOCK -->
+							<div class="checkbox-block d-md-flex" (change)="selectPrice()">
+								<!-- One Way -->
+								<div class="custom-control custom-checkbox custom-control-inline"
+									*ngIf="getKeyName() != 'charter_tour'">
+									<input type="checkbox" id="price1" name="price1" class="custom-control-input"
+										(change)="routeSelection('one_way')" value="one_way"
+										[checked]="quotebot_form.service_type == 'one_way'" />
+									<label class="custom-control-label" for="price1">
+										<small>
+											One Way
+										</small>
+										{{currencySymbol}} {{
+										selected_vehicle['rate_breakdown_one_way']?.grand_total
+										}}
+									</label>
+								</div>
+
+								<!-- Round Trip -->
+								<div class="custom-control custom-checkbox custom-control-inline"
+									*ngIf="getKeyName() != 'charter_tour'">
+									<input type="checkbox" id="price2" name="price2" class="custom-control-input"
+										(change)="routeSelection('round_trip')" value="round_trip"
+										[checked]="quotebot_form.service_type == 'round_trip'" />
+									<label class="custom-control-label" for="price2">
+										<small>
+											Round Trip
+										</small>
+										{{currencySymbol}} {{
+										selected_vehicle['rate_breakdown_round_trip']?.grand_total
+										}}
+									</label>
+								</div>
+
+								<!-- Charter Tour -->
+								<div id="charter-price" *ngIf="getKeyName() == 'charter_tour'">
+									<p class="font-weight-bolder">
+										Charter Tour: {{currencySymbol}} {{
+										selected_vehicle['rate_breakdown_charter_tour']?.grand_total
+										}}
+									</p>
+								</div>
+							</div>
+							<div class="price-Blc">
+
 								<small> All Inclusive Rates (Some Taxes, and Tolls are additional)
 								</small>
 							</div>
@@ -102,7 +137,7 @@
 						<!-- CONTENT BLOCK ENDS -->
 
 						<!-- FUNCTIONAL BUTTONS -->
-						<div class="btn-Area d-flex flex-wrap align-items-center">
+						<div class="btn-Area d-flex flex-wrap align-items-center" style="gap: 9px;">
 							<button type="button" class="custom-btn" data-toggle="modal"
 								data-target="#ModalVehicleRates">
 								View Subtotals
@@ -447,7 +482,7 @@
 		<div>
 
 		</div>
-		<div class="row my-3" *ngIf="selected_vehicle?.vehicle_details.year">
+		<!-- <div class="row my-3" *ngIf="selected_vehicle?.vehicle_details.year">
 			<div class="col-sm-6 col-md-5">
 				<p class="pv-title pv-details text-orange">
 					Vehicle Details
@@ -489,19 +524,23 @@
 					{{selected_vehicle?.vehicle_details.model}}
 				</p>
 			</div>
-		</div>
+		</div> -->
 	</div>
 	<!-- QuoteBot Preview Section ends -->
 
 
 
-	<div class="btn-Area d-flex mx-5 justify-content-end" style="gap: 1rem">
-		<button type="button" class="custom-filled-back-button" (click)="backButton()">
-			Back
-		</button>
-		<button type="button" class="custom-filled-button rounded-pill" (click)="bookNow()">
-			Book Now
-		</button>
+	<div class="btn-Area d-flex mx-5 justify-content-end align-items-center" stylee="gap: 1rem">
+		<div>
+			<button type="button" class="custom-filled-back-button" (click)="backButton()">
+				Back
+			</button>
+		</div>
+		<div>
+			<button type="button" class="custom-filled-button rounded-pill" (click)="bookNow()">
+				Book Now
+			</button>
+		</div>
 	</div>
 </section>
 

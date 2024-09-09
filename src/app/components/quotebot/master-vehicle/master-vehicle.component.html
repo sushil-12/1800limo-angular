@@ -428,7 +428,8 @@
 				<div class="d-flex justify-content-end ">
 					<span>
 						<a href="javascript:void(0);" role="button" data-toggle="dropdown" aria-haspopup="true"
-							aria-expanded="false" style="text-decoration: none;font-weight: 500;color: blue;margin-right: 5px;">
+							aria-expanded="false"
+							style="text-decoration: none;font-weight: 500;color: blue;margin-right: 5px;">
 							<i class="bi bi-caret-down"></i> Sort
 						</a>
 						<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
@@ -463,7 +464,7 @@
 								<p id="vehicle-name" class="vehicle-name-text-mobile">
 									{{ vehicle_obj?.name }}
 								</p>
-								<p id="vehicle-price" class="font-weight-bolder mb-4" style="font-size: 0.8rem;"
+								<p id="vehicle-price" class="font-weight-bolder" style="font-size: 0.8rem;"
 									*ngIf="('rate_breakdown_' + getKeyName()) != undefined || ('rate_breakdown_' + getKeyName()).length <= 0">
 									<span style="color: #c94505;font-weight: 500;">
 										From&nbsp;
@@ -473,19 +474,30 @@
 									?
 									vehicle_obj['rate_breakdown_' + getKeyName()]?.grand_total : '0.00' }}
 								</p>
+								<p id="vehicle-name" class="text-rate mb-2">
+									All Inclusive Rate<sup class="sup-red">*</sup>
+								</p>
 								<div id="icons" class="d-flex mb-2" style="gap:8px;">
 									<div class="icon-container-mobile">
 										<img alt="" src="assets/images/select_vehicle/pass.png" style="padding: 3px;" />
-										<span style="font-size: 0.7rem;margin-left: 0.1rem;">Passengers</span>
-										<span class="font-weight-bolder" style="font-size: 0.8rem;padding: 3px;">{{
+										<span style="font-size: 0.8rem;margin-left: 0.1rem;font-weight: 500;">Pax</span>
+										<span class="font-weight-bolder" style="font-size: 0.9rem;padding: 3px;">{{
 											vehicle_obj?.passenger }}</span>
 									</div>
 									<div class="icon-container-mobile">
 										<img alt="" src="assets/images/select_vehicle/lug.png" style="padding: 3px;" />
-										<span style="font-size: 0.7rem;margin-left: 0.1rem;">Luggages</span>
-										<span class="font-weight-bolder" style="font-size: 0.8rem;padding: 3px;">{{
+										<span
+											style="font-size: 0.8rem;margin-left: 0.1rem;font-weight: 500;">Luggage</span>
+										<span class="font-weight-bolder" style="font-size: 0.9rem;padding: 3px;">{{
 											vehicle_obj?.luggage }}</span>
 									</div>
+								</div>
+								<div class="d-flex justify-content-end">
+									<button type="button" class="view-more-circle-button"
+										(click)="selectCategory(vehicle_obj?.name)" style="padding: 1px 4px !important;font-size: 0.7rem !important;">
+										View More
+										<i class="bi bi-arrow-right"></i>
+									</button>
 								</div>
 							</div>
 						</div>
