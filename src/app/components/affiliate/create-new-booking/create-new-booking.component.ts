@@ -403,16 +403,21 @@ export class CreateNewBookingComponent implements OnInit {
 			updateType: [''],
 		})
 
-		let month = new Date().getMonth()
-		let date: string | number = new Date().getDate() + 1
-		let year = new Date().getFullYear()
+		// let month = new Date().getMonth()
+		// let date: string | number = new Date().getDate() + 1
+		// let year = new Date().getFullYear()
 
 
-		let full_date = new Date(year, month, date).toISOString()
-		// 10 days later
-		let future_full_date = new Date(year, month, date).toISOString()
-		this.SetFormValue('pickup_date', full_date.slice(0, full_date.indexOf('T')))
-		this.SetFormValue('return_pickup_date', future_full_date.slice(0, future_full_date.indexOf('T')))
+		// let full_date = new Date(year, month, date).toISOString()
+		// // 10 days later
+		// let future_full_date = new Date(year, month, date).toISOString()
+
+
+		let date = new Date();
+		let timestamp = date.getTime();
+
+		this.SetFormValue('pickup_date', moment(timestamp).format("YYYY-MM-DD"))
+		this.SetFormValue('return_pickup_date', moment(timestamp).format("YYYY-MM-DD"))
 		this.SetFormValue('number_of_vehicles', 1)
 
 

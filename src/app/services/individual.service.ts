@@ -3,18 +3,31 @@ import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { AuthService } from './auth.service';
 import { ErrorDialogService } from './error-dialog/errordialog.service';
+import * as moment from 'moment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class IndividualService {
+  current_date: any;
+  current_time: any;
   private environmentServerUrl = environment.serverUrl;
   private serverUrl = environment.serverUrl + 'individual/';
   constructor(
     private httpClient: HttpClient,
     private $errors: ErrorDialogService,
     private authService: AuthService
-  ) { }
+  ) {
+    let date = new Date();
+    let timestamp = date.getTime();
+
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
+
+    this.current_date = moment(timestamp).format("YYYY-MM-DD");
+    this.current_time = `${hours}:${minutes}:${seconds}`;
+  }
 
   createIndividualAccount(data, is_profile_complete) {
     if (is_profile_complete) {
@@ -61,10 +74,10 @@ export class IndividualService {
   loadBookings(url, keyword, startDate, endDate, useDateFilter) {
     var path;
     if (url) {
-      path = url + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword + '&useDateFilter=' + useDateFilter;
+      path = url + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword + '&useDateFilter=' + useDateFilter + '&current_date=' + this.current_date + '&current_time=' + this.current_time;
     }
     else {
-      path = this.serverUrl + 'get-all-reservation' + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword + '&useDateFilter=' + useDateFilter;
+      path = this.serverUrl + 'get-all-reservation' + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword + '&useDateFilter=' + useDateFilter + '&current_date=' + this.current_date + '&current_time=' + this.current_time;
     }
     return this.httpClient.get(path).toPromise();
   }

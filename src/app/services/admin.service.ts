@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { AuthService } from './auth.service';
+import * as moment from 'moment';
 
 
 @Injectable({
@@ -11,6 +12,8 @@ import { AuthService } from './auth.service';
 
 export class AdminService {
 	big_data_list: any = undefined;
+	current_date: any;
+	current_time: any;
 
 
 	private serverUrl = environment.serverUrl;
@@ -20,6 +23,16 @@ export class AdminService {
 				this.big_data_list = response.data
 			})
 		}
+
+		let date = new Date();
+		let timestamp = date.getTime();
+
+		const hours = String(date.getHours()).padStart(2, '0');
+		const minutes = String(date.getMinutes()).padStart(2, '0');
+		const seconds = String(date.getSeconds()).padStart(2, '0');
+
+		this.current_date = moment(timestamp).format("YYYY-MM-DD");
+		this.current_time = `${hours}:${minutes}:${seconds}`;
 	}
 
 	getAirportsAndBigData() {
@@ -940,10 +953,10 @@ export class AdminService {
 	loadBookings(url, startDate, endDate, useDateFilter, keyword = '', orderBy) {
 		var path;
 		if (url) {
-			path = url + '&from=' + startDate + '&to=' + endDate + '&search=' + keyword + '&useDateFilter=' + useDateFilter + '&orderBy=' + orderBy;
+			path = url + '&from=' + startDate + '&to=' + endDate + '&search=' + keyword + '&useDateFilter=' + useDateFilter + '&orderBy=' + orderBy + '&current_date=' + this.current_date + '&current_time=' + this.current_time;
 		}
 		else {
-			path = this.serverUrl + 'reservations' + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword + '&useDateFilter=' + useDateFilter + '&order_by=' + orderBy;
+			path = this.serverUrl + 'reservations' + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword + '&useDateFilter=' + useDateFilter + '&order_by=' + orderBy + '&current_date=' + this.current_date + '&current_time=' + this.current_time;
 		}
 		return this.httpClient.get(path).toPromise();
 	}
@@ -1282,12 +1295,12 @@ export class AdminService {
 		return this.httpClient.get(this.serverUrl + `admin/communication-logs/${id}`)
 	}
 
-	acceptCharge(data){
-		return this.httpClient.post(this.serverUrl + `admin/charge-half-payment`,data)
+	acceptCharge(data) {
+		return this.httpClient.post(this.serverUrl + `admin/charge-half-payment`, data)
 	}
 
-	chargeBack(data){
-		return this.httpClient.post(this.serverUrl + `admin/charge-back-affiliate`,data)
+	chargeBack(data) {
+		return this.httpClient.post(this.serverUrl + `admin/charge-back-affiliate`, data)
 	}
 
 	chargeBackPermission(acc_id, permission) {
