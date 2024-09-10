@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import * as moment from 'moment';
 
 @Injectable({
 	providedIn: 'root'
@@ -10,6 +11,9 @@ export class AffiliateService {
 		throw new Error('Method not implemented.');
 	}
 	big_data_list: any
+	current_date: any;
+	current_time: any;
+
 	private environmentServerUrl = environment.serverUrl;
 	private serverUrl = environment.serverUrl + 'affiliate/';
 
@@ -19,6 +23,17 @@ export class AffiliateService {
 				this.big_data_list = response?.data
 			})
 		}
+
+		let date = new Date();
+		let timestamp = date.getTime();
+
+		const hours = String(date.getHours()).padStart(2, '0');
+		const minutes = String(date.getMinutes()).padStart(2, '0');
+		const seconds = String(date.getSeconds()).padStart(2, '0');
+
+		this.current_date = moment(timestamp).format("YYYY-MM-DD");
+		this.current_time = `${hours}:${minutes}:${seconds}`;
+
 	}
 
 
@@ -355,20 +370,20 @@ export class AffiliateService {
 	loadBookings(url, keyword, startDate, endDate, useDateFilter) {
 		var path;
 		if (url) {
-			path = url + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword + '&useDateFilter=' + useDateFilter;
+			path = url + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword + '&useDateFilter=' + useDateFilter + '&current_date=' + this.current_date + '&current_time=' + this.current_time;
 		}
 		else {
-			path = this.serverUrl + 'get-bookings' + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword + '&useDateFilter=' + useDateFilter;;
+			path = this.serverUrl + 'get-bookings' + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword + '&useDateFilter=' + useDateFilter + '&current_date=' + this.current_date + '&current_time=' + this.current_time;
 		}
 		return this.httpClient.get(path).toPromise();
 	}
 	loadFarmoutBookings(url, keyword, startDate, endDate, useDateFilter) {
 		var path;
 		if (url) {
-			path = url + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword + '&useDateFilter=' + useDateFilter;
+			path = url + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword + '&useDateFilter=' + useDateFilter + '&current_date=' + this.current_date + '&current_time=' + this.current_time;
 		}
 		else {
-			path = this.serverUrl + 'get-farm-out-bookings' + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword + '&useDateFilter=' + useDateFilter;
+			path = this.serverUrl + 'get-farm-out-bookings' + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword + '&useDateFilter=' + useDateFilter + '&current_date=' + this.current_date + '&current_time=' + this.current_time;
 		}
 		return this.httpClient.get(path).toPromise();
 	}
@@ -502,11 +517,11 @@ export class AffiliateService {
 	}
 
 	//sub affiliate
-	addSubAffiliate(data){
+	addSubAffiliate(data) {
 		if (data?.acc_id) {
 			return this.httpClient.put(this.serverUrl + 'update-sub-affiliate', data);
 		}
-		else{
+		else {
 			return this.httpClient.post(this.serverUrl + 'add-sub-affiliate', data);
 		}
 	}

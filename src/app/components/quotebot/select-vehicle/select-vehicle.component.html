@@ -504,7 +504,7 @@
 						<div class="d-flex justify-content-between mb-1 align-items-center">
 							<button type="button" (click)="viewDetails(vehinfo)"
 								class="custom-filled-button orange-button" style="height: 40px !important;">
-								Vehicle Details
+								Booking Details
 							</button>
 							<button type="button" (click)="bookNow(vehinfo)"
 								class="custom-filled-button green-button rounded-pill"
@@ -585,7 +585,7 @@
 					<!-- DIV: AFFILIATE INFO -->
 					<div id="affiliate-info"
 						*ngIf="currentUser != null && currentUser?.roleName == 'admin' && (vehinfo?.affiliate_name || vehinfo?.affiliate_company)">
-						<button class="link" *ngIf="vehinfo?.readMore">
+						<!-- <button class="link" *ngIf="vehinfo?.readMore">
 							<p class="text-left text-secondary m-0 my-md-2" style="color: #007fee !important;">
 								<span (click)="editAffiliateAccount(vehinfo)">
 									{{vehinfo?.affiliate_company.slice(0,7) }}
@@ -595,8 +595,8 @@
 								</span>
 								<span (click)="handleReadMore(vehinfo , false)" style="color: black;">...more</span>
 							</p>
-						</button>
-						<button class="link" *ngIf="!vehinfo?.readMore">
+						</button> -->
+						<button class="link">
 							<p class="text-left text-secondary m-0 my-md-2" style="color: #007fee !important;">
 								<span (click)="editAffiliateAccount(vehinfo)">
 									{{vehinfo?.affiliate_company }}
@@ -611,7 +611,7 @@
 										<span>{{vehinfo?.affiliate_phone}}</span>
 									</p>
 								</span>
-								<span (click)="handleReadMore(vehinfo , true)" style="color: black;">...less</span>
+								<!-- <span (click)="handleReadMore(vehinfo , true)" style="color: black;">...less</span> -->
 							</p>
 						</button>
 					</div>
@@ -663,16 +663,16 @@
 										<div class="icon-container-mobile">
 											<img alt="" src="assets/images/select_vehicle/pass.png"
 												style="padding: 3px;" />
-											<span style="font-size: 0.7rem;margin-left: 0.1rem;">Passengers</span>
-											<span class="font-weight-bolder" style="font-size: 0.8rem;padding: 3px;">{{
+												<span style="font-size: 0.8rem;margin-left: 0.1rem;font-weight: 500;">Pax</span>
+											<span class="font-weight-bolder" style="font-size: 0.9rem;padding: 3px;">{{
 												vehinfo?.passenger
 												}}</span>
 										</div>
 										<div class="icon-container-mobile">
 											<img alt="" src="assets/images/select_vehicle/lug.png"
 												style="padding: 3px;" />
-											<span style="font-size: 0.7rem;margin-left: 0.1rem;">Luggages</span>
-											<span class="font-weight-bolder" style="font-size: 0.8rem;padding: 3px;">{{
+												<span style="font-size: 0.8rem;margin-left: 0.1rem;font-weight: 500;">Luggage</span>
+											<span class="font-weight-bolder" style="font-size: 0.9rem;padding: 3px;">{{
 												vehinfo?.luggage
 												}}</span>
 										</div>
@@ -680,7 +680,7 @@
 								</div>
 							</div>
 						</div>
-						<div style="padding: 16px;">
+						<div style="padding: 0px 14px 14px 14px;">
 							<div class="vehicle-details-data-mobile">
 								<!-- <div class="d-flex justify-content-between" style="max-height: 25px;">
 									<p>
@@ -707,16 +707,14 @@
 							style="max-height: 25px;padding: 2px 16px 2px 16px;" *ngIf="!vehinfo?.is_master_vehicle">
 							<p style="font-size: 0.9rem;">
 								<i class="bi bi-exclamation-circle-fill" style="color: red;"></i>
-								&nbsp; Cancellation Policy:
-							</p>
-							<p style="font-weight: 500;">{{convertHrIntoDays(vehinfo?.cancellation_policy)}}
+								&nbsp; Cancellation Policy: &nbsp;<span style="font-weight: 500;">{{convertHrIntoDays(vehinfo?.cancellation_policy)}}</span>
 							</p>
 						</div>
 						<div class="d-flex justify-content-between align-items-center mb-2"
 							style="padding: 2px 16px 2px 16px;">
 							<button type="button" (click)="viewDetails(vehinfo)"
 								class="custom-filled-button orange-button" style="font-size: 0.8rem !important;">
-								Vehicle Details
+								Booking Details
 							</button>
 							<button type="button" (click)="bookNow(vehinfo)" class="custom-filled-button green-button"
 								style="font-size: 0.8rem !important;">
