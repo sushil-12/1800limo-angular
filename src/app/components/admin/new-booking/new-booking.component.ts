@@ -232,7 +232,7 @@ export class NewBookingComponent implements OnInit {
 	}
 	ngAfterViewInit(): void {
 		console.log('<<<<<<<<<<<<<<<<<<<<<-----------ng after view init--------------->>>>>>>>>>>>>')
-		if (this.updateType == 'repeat' || this.updateType == 'return' || this.updateType == 'edit') {
+		if (this.updateType == 'repeat' || this.updateType == 'return' || this.updateType == 'edit' || this.updateType == 'round') {
 			this.scroll('pickup_adress')
 			this.SetFormValue('pickup_date', moment().format('YYYY-MM-DD'))
 		}
@@ -736,7 +736,7 @@ export class NewBookingComponent implements OnInit {
 				// this.SetFormValue('pickup_date', moment().format('YYYY-MM-DD'))
 				this.SetFormValue('pickup_date', this.bookingResponse?.pickup_date)
 			}
-			if (this.updateType == 'repeat' || this.updateType == 'return') {
+			if (this.updateType == 'repeat' || this.updateType == 'return' || this.updateType == 'round') {
 				this.scroll('pickup_adress')
 				if (new Date(this.bookingResponse?.pickup_date).getTime() < new Date().getTime()) {
 					this.SetFormValue('pickup_date', moment().format('YYYY-MM-DD'))
@@ -1418,7 +1418,7 @@ export class NewBookingComponent implements OnInit {
 				})
 			}
 		}
-		else if (this.updateType == 'repeat' || this.updateType == 'return') {
+		else if (this.updateType == 'repeat' || this.updateType == 'return' || this.updateType == 'round') {
 			if (this.BookingForm.get('service_type').value == 'charter_tour') {
 				this.BookingForm.patchValue({
 					cancellation_hours: selectedVehicle?.charter_cancellation_hours.toString()
@@ -1461,7 +1461,7 @@ export class NewBookingComponent implements OnInit {
 				})
 			}
 		}
-		else if (this.updateType == 'repeat' || this.updateType == 'return') {
+		else if (this.updateType == 'repeat' || this.updateType == 'return' || this.updateType == 'round') {
 			if (this.BookingForm.get('service_type').value == 'charter_tour') {
 				this.BookingForm.patchValue({
 					return_cancellation_hours: selectedVehicle?.charter_cancellation_hours.toString()
@@ -2636,13 +2636,13 @@ export class NewBookingComponent implements OnInit {
 		})
 
 		this.BookingForm.get('acc_id').valueChanges.subscribe((value: number) => {
-			if (value && this.updateType == 'repeat' && this.updateType == 'return' && this.updateType == 'edit') {
+			if (value && this.updateType == 'repeat' && this.updateType == 'return' && this.updateType == 'edit' && this.updateType == 'round') {
 				this.chooseUser(value)
 			}
 		})
 
 		this.BookingForm.get('travel_client_id').valueChanges.subscribe((value: number) => {
-			if (value && this.updateType == 'repeat' && this.updateType == 'return' && this.updateType == 'edit') {
+			if (value && this.updateType == 'repeat' && this.updateType == 'return' && this.updateType == 'edit' && this.updateType == 'round') {
 				this.handleTravelStaffAccounts({ id: value })
 			}
 		})
@@ -3498,7 +3498,7 @@ export class NewBookingComponent implements OnInit {
 					// this.SetFormValue('pickup_date', moment().format('YYYY-MM-DD'))
 					this.SetFormValue('pickup_date', editing_data?.pickup_date)
 				}
-				if (this.updateType == 'repeat' || this.updateType == 'return') {
+				if (this.updateType == 'repeat' || this.updateType == 'return' || this.updateType == 'round') {
 					this.scroll('pickup_adress')
 					if (new Date(editing_data?.pickup_date).getTime() < new Date().getTime()) {
 						this.SetFormValue('pickup_date', moment().format('YYYY-MM-DD'))

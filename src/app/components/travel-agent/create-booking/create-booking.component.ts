@@ -536,7 +536,7 @@ export class CreateBookingComponent implements OnInit {
 
 			this.$spinner.hide('normalspinner')
 			console.log('<<<<<<<<<<<-----------set pickup date------->>>>', moment().format('YYYY-MM-DD'), this.updateType)
-			if (this.updateType == 'repeat' || this.updateType == 'return') {
+			if (this.updateType == 'repeat' || this.updateType == 'return' || this.updateType == 'round') {
 				this.scroll('pickup_address')
 				this.SetFormValue('pickup_date', moment().format('YYYY-MM-DD'))
 			}
@@ -597,7 +597,7 @@ export class CreateBookingComponent implements OnInit {
 				this.subtotal += adminShare + this.agentShare
 				console.log("in if created by ta", this.subtotal)
 			}
-			else if (this.updateType == 'repeat' || this.updateType == 'return') {
+			else if (this.updateType == 'repeat' || this.updateType == 'return' || this.updateType == 'round') {
 				let adminShare = (base_rate * 15) / 100
 				this.agentShare = base_rate * 0.10
 				this.subtotal += adminShare + this.agentShare
@@ -659,7 +659,7 @@ export class CreateBookingComponent implements OnInit {
 					this.r_subtotal += adminShare + this.r_agentShare
 					console.log("in if created by ta", this.r_subtotal)
 				}
-				else if (this.updateType == 'repeat' || this.updateType == 'return') {
+				else if (this.updateType == 'repeat' || this.updateType == 'return' || this.updateType == 'round') {
 					let adminShare = (base_rate * 15) / 100
 					this.r_agentShare = base_rate * 0.10
 					this.r_subtotal += adminShare + this.r_agentShare
@@ -1851,7 +1851,7 @@ export class CreateBookingComponent implements OnInit {
 		// })
 
 		this.BookingForm.get('acc_id').valueChanges.subscribe((value: number) => {
-			if (value && this.updateType == 'repeat' && this.updateType == 'return' && this.updateType == 'edit') {
+			if (value && this.updateType == 'repeat' && this.updateType == 'return' && this.updateType == 'edit' && this.updateType == 'round') {
 				this.chooseUser(value)
 			}
 		})
@@ -1922,7 +1922,7 @@ export class CreateBookingComponent implements OnInit {
 		// 	}
 		// })
 		this.BookingForm.get('travel_client_id').valueChanges.subscribe((value: number) => {
-			if (value && this.updateType == 'repeat' && this.updateType == 'return' && this.updateType == 'edit') {
+			if (value && this.updateType == 'repeat' && this.updateType == 'return' && this.updateType == 'edit' && this.updateType == 'round') {
 				this.handleTravelStaffAccounts({ id: value })
 			}
 		})
@@ -2341,7 +2341,7 @@ export class CreateBookingComponent implements OnInit {
 				shareArray['deducted_admin_share'] = shareArray['adminShare'] - shareArray['stripeFee']
 				shareArray['travelAgentShare'] = base_rate * 0.10
 			}
-			if (this.updateType == 'repeat' || this.updateType == 'return') {
+			if (this.updateType == 'repeat' || this.updateType == 'return' || this.updateType == 'round') {
 				this.adminSharePercent = 15
 				shareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100
 				shareArray['deducted_admin_share'] = shareArray['adminShare'] - shareArray['stripeFee']

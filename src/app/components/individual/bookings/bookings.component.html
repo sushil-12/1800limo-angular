@@ -138,6 +138,13 @@
                                                 <div class="dropdown-item-icon"></div>
                                                 Return
                                             </a>
+                                            <a *ngIf="booking.service_type=='oneway' && (booking?.booking_status != 'driver_unassigned')"
+                                                class="dropdown-item" data-toggle="modal"
+                                                data-target="#return_repeat_booking_Modal"
+                                                (click)="returnRepeatAction(booking?.booking_id,'round')">
+                                                <div class="dropdown-item-icon"></div>
+                                                Round Trip
+                                            </a>
                                             <a class="dropdown-item" (click)="editAction(booking?.booking_id,'cancel')"
                                                 data-toggle="modal" data-target="#cancel_booking_modal"
                                                 *ngIf="(booking?.booking_status != 'paid' && booking?.booking_status != 'paid_cash' && booking?.booking_status != 'cancelled')">
@@ -869,7 +876,7 @@
                                     Flight Number &nbsp;<span
                                         style="color: blue;text-decoration: underline;font-weight: 600;cursor: pointer;font-size: 18px;"
                                         (click)="searchOnGoogle(bookingPreview?.pickup_airline_name + ' ' + bookingPreview?.pickup_flight)">(Update
-										Arrival time)</span>
+                                        Arrival time)</span>
                                 </span>
                             </div>
                             <div class="col-md-7 value">
@@ -1005,7 +1012,8 @@
                                 </span>
                             </div>
                             <div class="col-md-8 value">
-                                <span class="font-weight-bolder preview-output-feild" style="cursor: pointer;color: #007500 !important;"
+                                <span class="font-weight-bolder preview-output-feild"
+                                    style="cursor: pointer;color: #007500 !important;"
                                     (click)="searchOnGoogle(bookingPreview?.dropoff_airline_name + ' ' + bookingPreview?.dropoff_flight)">
                                     {{ textFormatter(bookingPreview.dropoff_airline_name) }}
                                 </span>
@@ -1020,11 +1028,12 @@
                                     Flight Number &nbsp;<span
                                         style="color: blue;text-decoration: underline;font-weight: 600;cursor: pointer;font-size: 18px;"
                                         (click)="searchOnGoogle(bookingPreview?.dropoff_airline_name + ' ' + bookingPreview?.dropoff_flight)">(Update
-										Arrival time)</span>
+                                        Arrival time)</span>
                                 </span>
                             </div>
                             <div class="col-md-7 value">
-                                <span class="font-weight-bolder preview-output-feild" style="cursor: pointer;color: #007500 !important;"
+                                <span class="font-weight-bolder preview-output-feild"
+                                    style="cursor: pointer;color: #007500 !important;"
                                     (click)="searchOnGoogle(bookingPreview?.dropoff_airline_name + ' ' + bookingPreview?.dropoff_flight)">
                                     {{ textFormatter(bookingPreview.dropoff_flight) }}
                                 </span>
