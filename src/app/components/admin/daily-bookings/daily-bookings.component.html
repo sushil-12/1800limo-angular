@@ -165,6 +165,14 @@
 												Return
 											</a>
 											<a class="dropdown-item" data-toggle="modal"
+												data-target="#return_repeat_booking_Modal"
+												[routerLink]="['/admin/new-booking']"
+												[queryParams]="{bookingId: booking.booking_id, updateType: 'round'}"
+												*ngIf="(currentUser?.RoleName == 'admin' || subModules.includes('repeat_booking') && booking?.service_type == 'oneway')">
+												<div class="dropdown-item-icon" *></div>
+												Round Trip
+											</a>
+											<a class="dropdown-item" data-toggle="modal"
 												data-target="#accept_charge_modal"
 												(click)="acceptChargeClick(booking.booking_id)"
 												*ngIf="((currentUser?.RoleName == 'admin' || subModules.includes('edit_booking')) && (booking?.booking_status != 'paid' && booking?.booking_status != 'paid_cash' && booking?.booking_status != 'cancelled'))">

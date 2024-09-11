@@ -91,7 +91,7 @@ export class TravelAgentService {
 		return this.httpClient.get(path).toPromise();
 	}
 	createBooking(data: any, update_type: string) {
-		if (update_type == 'return' || update_type == 'repeat') {
+		if (update_type == 'return' || update_type == 'repeat' || update_type == 'round') {
 			return this.httpClient.post(`${this.serverUrl}duplicate-reservation`, data)
 		}
 		if (data.reservation_id) {
