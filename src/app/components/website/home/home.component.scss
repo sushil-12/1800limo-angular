@@ -1061,6 +1061,12 @@ a.user-profile:active::after {
 	}
 }
 
+@media only screen and (min-width:769px) {
+	.errorMsg {
+		width: 610px;
+	}
+}
+
 
 button.custom-filled-button {
 	padding: 0.475rem 1.358rem !important;
