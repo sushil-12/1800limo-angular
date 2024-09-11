@@ -106,7 +106,7 @@ mat-progress-bar.my-color .mat-progress-bar-fill::after {
 }
 
 .pac-container.pac-logo {
-    width: 550px !important;
+    /* width: 550px !important; */
     position: absolute;
     left: 1208px;
     top: 528px;
@@ -150,17 +150,18 @@ mat-progress-bar.my-color .mat-progress-bar-fill::after {
     }
 }
 
-@media only screen and (min-width: 426px) and (max-width: 1180px) {
+@media only screen and (max-width: 820px) {
+    .pac-container.pac-logo {
+        width: 280px !important;
+    }
+}
+
+@media only screen and (min-width: 821px) and (max-width: 1180px) {
     .pac-container.pac-logo {
         width: 380px !important;
     }
 }
 
-@media only screen and (max-width: 425px) {
-    .pac-container.pac-logo {
-        width: 280px !important;
-    }
-}
 
 
 
