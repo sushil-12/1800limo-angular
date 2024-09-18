@@ -141,7 +141,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
 			const role = params['role'];
 			console.log('Role:', role, params);
 
-			const existRoles = ['admin', 'driver', 'sub_admin', 'travel_agent', 'master_user', 'sub_travel_agent', 'individual','sub_affiliate']
+			const existRoles = ['admin', 'driver', 'sub_admin', 'travel_agent', 'master_user', 'sub_travel_agent', 'individual','sub_affiliate','subscriber']
 
 			console.log('Role:', role);
 			// const existRoles = ['admin' , 'driver' , 'sub_admin' , 'travel_agent',]

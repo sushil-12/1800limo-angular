@@ -259,6 +259,10 @@ export class OtpComponent implements OnInit, OnDestroy {
 						localStorage.setItem('sub_modules', this.response.data?.sub_modules)
 						break;
 					}
+					case 'subscriber': {
+						this.router.navigateByUrl('/admin');
+						break;
+					}
 					case 'individual': {
 						if (this.response?.data.user?.is_profile_complete) {
 							this.router.navigateByUrl('/individual/bookings');
