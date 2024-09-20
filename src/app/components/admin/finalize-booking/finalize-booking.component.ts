@@ -582,4 +582,9 @@ export class FinalizeBookingComponent implements OnInit {
 			this.visibility = false
 		}
 	}
+
+	backButton()
+	{
+		this.$router.navigate(['/admin/daily-bookings-admin']);
+	}
 }

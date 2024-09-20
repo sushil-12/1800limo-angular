@@ -403,6 +403,9 @@
 		</div>
 
 		<div class="col-md-12 text-right mr-4">
+			<button class="custom-filled-back-button" (click)="backButton()">
+				Back to Dashboard
+			</button>
 			<button type="button" class="custom-filled-button m-3 mr-4"
 				[ngClass]="isFinalizeButton ? 'color-green' : 'color-grey' " data-toggle="modal"
 				data-target="#paymentModal">

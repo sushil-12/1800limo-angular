@@ -232,11 +232,11 @@ const routes: Routes = [
 		canActivate: [SubAdminGuard],
 		component: CreateNewBooking2Component
 	},
-	{
-		path: 'booking-logs',
-		canActivate: [SubAdminGuard],
-		component: BookingLogsComponent
-	},
+	// {
+	// 	path: 'booking-logs',
+	// 	canActivate: [SubAdminGuard],
+	// 	component: BookingLogsComponent
+	// },
 	{
 		path: 'finalize-booking',
 		canActivate: [SubAdminGuard],
@@ -262,11 +262,11 @@ const routes: Routes = [
 		canActivate: [SubAdminGuard],
 		component: IndividualComponent
 	},
-	{
-		path: 'corporate-account-admin',
-		canActivate: [SubAdminGuard],
-		component: CorporateComponent
-	},
+	// {
+	// 	path: 'corporate-account-admin',
+	// 	canActivate: [SubAdminGuard],
+	// 	component: CorporateComponent
+	// },
 	{
 		path: 'travel-planner-account-admin',
 		canActivate: [SubAdminGuard],
@@ -372,16 +372,16 @@ const routes: Routes = [
 		canActivate: [SubAdminGuard],
 		component: EditIndividualAccountComponent
 	},
-	{
-		path: 'add-corporate-account',
-		canActivate: [SubAdminGuard],
-		component: AddCorporateAccountComponent
-	},
-	{
-		path: 'edit-corporate-account',
-		canActivate: [SubAdminGuard],
-		component: EditCorporateAccountComponent
-	},
+	// {
+	// 	path: 'add-corporate-account',
+	// 	canActivate: [SubAdminGuard],
+	// 	component: AddCorporateAccountComponent
+	// },
+	// {
+	// 	path: 'edit-corporate-account',
+	// 	canActivate: [SubAdminGuard],
+	// 	component: EditCorporateAccountComponent
+	// },
 	{
 		path: 'travel-planner-account',
 		// canActivate: [],
