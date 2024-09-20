@@ -16,7 +16,7 @@
 						<div class="nav-item dropdown button-signin" *ngIf="!currentUser; else loggedInUser">
 							<button class="nav-link dropdown-toggle custom-filled-button" href="#" id="dropdown05"
 								data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">LOGIN /
-								CREATE</button>
+							CREATE</button>
 							<div class="dropdown-menu" aria-labelledby="dropdown05">
 								<a class="dropdown-item indv-btn" style="color: #fff !important;"
 									(click)="loginButtons('individual')">Individual Account</a>
@@ -36,10 +36,10 @@
 									(click)="loginButtons('sub_admin')">
 									Sub Admin
 								</a>
-								<!-- <a class="dropdown-item sub-admin-dropdown box-shadow" style="color: #fff !important;"
+								<a class="dropdown-item sub-admin-dropdown box-shadow" style="color: #fff !important;"
 									(click)="loginButtons('subscriber')">
 									Partner Login
-								</a> -->
+								</a>
 							</div>
 						</div>
 						<ng-template #loggedInUser>
