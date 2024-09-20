@@ -179,9 +179,9 @@
 									<a class="collapse-item" [routerLinkActive]="['active']"
 										routerLink="/admin/invoices-admin"
 										(click)="closeSidebarFunc(false)">Invoices</a>
-									<a class="collapse-item" [routerLinkActive]="['active']"
+									<!-- <a class="collapse-item" [routerLinkActive]="['active']"
 										routerLink="/admin/booking-logs" (click)="closeSidebarFunc(false)">Booking
-										logs</a>
+										logs</a> -->
 									<a class="collapse-item" [routerLinkActive]="['active']"
 										routerLink="/admin/create-debit-cc-card-admin"
 										*ngIf="role=='admin' || subModules.includes('can_add_edit_card')"
@@ -219,18 +219,18 @@
 										routerLink="/admin/individual-account-admin"
 										*ngIf="role=='admin' ||modules.includes('individual_account')"
 										(click)="closeSidebarFunc(false)">Individual</a>
-									<a class="collapse-item" [routerLinkActive]="['active']"
+									<!-- <a class="collapse-item" [routerLinkActive]="['active']"
 										routerLink="/admin/corporate-account-admin"
 										*ngIf="role=='admin' || modules.includes('corporate_account')"
-										(click)="closeSidebarFunc(false)">Corporate</a>
+										(click)="closeSidebarFunc(false)">Corporate</a> -->
 									<a class="collapse-item" [routerLinkActive]="['active']"
 										routerLink="/admin/travel-planner-account-admin"
 										*ngIf="role=='admin' || modules.includes('travel_planner_account')"
 										(click)="closeSidebarFunc(false)">Travel Agent</a>
-									<a class="collapse-item" [routerLinkActive]="['active']"
+									<!-- <a class="collapse-item" [routerLinkActive]="['active']"
 										routerLink="/admin/tour-guide-account-admin"
 										*ngIf="role=='admin' || modules.includes('tour_guide_account')"
-										(click)="closeSidebarFunc(false)">Tour Guide</a>
+										(click)="closeSidebarFunc(false)">Tour Guide</a> -->
 									<a class="collapse-item" [routerLinkActive]="['active']"
 										routerLink="/admin/all-accounts"
 										*ngIf="role=='admin' || modules.includes('individual_account')"
@@ -266,7 +266,7 @@
 							</a>
 						</li>
 						<!--7th -->
-						<li class="nav-item" *ngIf="role=='admin'">
+						<!-- <li class="nav-item" *ngIf="role=='admin'">
 							<a class="nav-link collapsed dropdwn" [routerLinkActive]="['active']" data-toggle="collapse"
 								data-target="#collapse8" aria-expanded="true" aria-controls="collapseUtilities"
 								tabIndex="-1">
@@ -306,7 +306,7 @@
 										Reports</a>
 								</div>
 							</div>
-						</li>
+						</li> -->
 						<!--8th -->
 						<!-- <li class="nav-item" *ngIf="role=='admin'">
 							<a class="nav-link collapsed" [routerLinkActive]="['active']"

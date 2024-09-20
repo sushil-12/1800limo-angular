@@ -369,9 +369,9 @@
 							<button (click)="show+index = !show+index">{{ show ? 'Show less': 'Show More' }}</button>
 						</ng-template> -->
 						</div>
-						<div *ngIf="vehinfo?.is_master_vehicle==true || vehinfo?.affiliate_id==''">
+						<!-- <div *ngIf="vehinfo?.is_master_vehicle==true || vehinfo?.affiliate_id==''">
 							<p style="padding: 4px; font-weight: bolder;">Master vehicle</p>
-						</div>
+						</div> -->
 						<!-- AFFILIATE INFO ENDS -->
 
 						<!-- DIV: VEHICLE DETAILS -->
@@ -615,9 +615,9 @@
 							</p>
 						</button>
 					</div>
-					<div *ngIf="vehinfo?.is_master_vehicle==true || vehinfo?.affiliate_id==''">
+					<!-- <div *ngIf="vehinfo?.is_master_vehicle==true || vehinfo?.affiliate_id==''">
 						<p style="padding: 4px; font-weight: bolder;">Master vehicle</p>
-					</div>
+					</div> -->
 					<!-- AFFILIATE INFO ENDS -->
 
 					<div id="vehicle-image_{{ vehinfo_index }}" class="bg-white d-flex mt-2 flex-column">
