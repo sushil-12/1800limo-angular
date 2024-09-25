@@ -417,7 +417,7 @@
 						</li>
 
 						<!--10th-->
-						<li class="nav-item" *ngIf="role=='admin' || modules.includes('cms_pages')">
+						<li class="nav-item" *ngIf="(role=='admin' && created_by_role != 'subscriber') || modules.includes('cms_pages')">
 							<a class="nav-link collapsed dropdwn" [routerLinkActive]="['active']" data-toggle="collapse"
 								data-target="#collapse11" aria-expanded="true" aria-controls="collapseUtilities"
 								tabIndex="-1">
