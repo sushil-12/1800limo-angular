@@ -232,7 +232,7 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit {
           phone: this.getProfileResponseData?.data?.phone,
           phone_isd: this.getProfileResponseData?.data?.phone_isd,
           phone_country: this.getProfileResponseData?.data?.phone_country,
-          work: this.getProfileResponseData?.data?.work_phone,
+          work: this.getProfileResponseData?.data?.work_phone == 0 ? '' : this.getProfileResponseData?.data?.work_phone,
           work_isd: this.getProfileResponseData?.data?.work_isd,
           work_country: this.getProfileResponseData?.data?.work_country,
           email: this.getProfileResponseData?.data?.email,
@@ -316,9 +316,14 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit {
       .subscribe(result => {
         this.response = result;
         this.spinner.hide();//hide spinner
-        this.router.navigate(['/admin/add-loose-affiliate-account']).then(() => {
-          window.location.reload();
-        });
+        if(this.userId){
+          this.router.navigate(['/admin/loose-affiliate-accounts'])
+        }
+        else{
+          this.router.navigate(['/admin/add-loose-affiliate-account']).then(() => {
+            window.location.reload();
+          });
+        }
         console.log("profile created", this.response)
       });
 
