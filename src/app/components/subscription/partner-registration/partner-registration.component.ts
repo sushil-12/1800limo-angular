@@ -261,6 +261,11 @@ export class PartnerRegistrationComponent implements OnInit {
       return;
     }
 
+    if(this.registrationForm.get('userId').value == ""){
+      this.enableOtpField = true
+      return;
+    }
+
     this.spinner.show()
     this.authService.registerSubscriber(this.registrationForm.value)
       .pipe(

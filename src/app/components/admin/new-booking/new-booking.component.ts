@@ -1043,10 +1043,15 @@ export class NewBookingComponent implements OnInit {
 		}
 		else {
 			this.$spinner.show()
+			console.log("client acc",this.ClientAccounts)
 			this.$api.getAccountBytype(legend[account_type]).subscribe((response: any) => {
 				if (response.success && response.data.length > 0) {
 					this.ClientAccounts = response.data;
 				}
+				else{
+					this.ClientAccounts = []
+				}
+				console.log("client acc",this.ClientAccounts)
 				this.$spinner.hide()
 			})
 		}
