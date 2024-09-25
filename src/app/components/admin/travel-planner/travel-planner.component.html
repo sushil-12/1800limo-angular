@@ -250,9 +250,9 @@
 									Text Message <span class="asterisk">*</span>
 								</mat-label>
 								<textarea matInput #textArea
-                                style="white-space: pre-wrap; font-weight: 500; overflow: hidden;"
-                                formControlName="text_message" (focus)="$event.target.select()"
-                                (input)="adjustTextareaHeight(textArea)" rows="5">
+									style="white-space: pre-wrap; font-weight: 500; overflow: hidden;"
+									formControlName="text_message" (focus)="$event.target.select()"
+									(input)="adjustTextareaHeight(textArea)" rows="5">
                             </textarea>
 							</mat-form-field>
 						</div>
@@ -302,14 +302,18 @@
 
 						<!-- <ng-container *ngIf="audit_Trail; else not_found"> -->
 						<tr *ngFor="let record of audit_Trail; let i=index">
-							<th scope="row">{{i+1}}</th>
-							<td style="word-wrap: break-word;">{{record?.description}}</td>
-							<td style="word-wrap: break-word;" *ngIf="record?.type == 'sms' ">{{record?.content}}</td>
-							<td style="word-wrap: break-word;" *ngIf="record?.type == 'email' "><a
+							<th scope="row" *ngIf="record?.user_type != 'loose_affiliate' ">{{i+1}}</th>
+							<td style="word-wrap: break-word;" *ngIf="record?.user_type != 'loose_affiliate'">
+								{{record?.description}}</td>
+							<td style="word-wrap: break-word;"
+								*ngIf="record?.type == 'sms' && record?.user_type != 'loose_affiliate'">
+								{{record?.content}}</td>
+							<td style="word-wrap: break-word;"
+								*ngIf="record?.type == 'email' && record?.user_type != 'loose_affiliate'"><a
 									style="color: blue;text-decoration: underline;cursor: pointer;"
-									(click)="viewEmailContent(record?.id)">View
+									(click)="viewEmailContent(record?.encrypted_id)">View
 									Content</a></td>
-							<td>{{record?.created_at}}</td>
+							<td *ngIf="record?.user_type != 'loose_affiliate'">{{record?.created_at}}</td>
 						</tr>
 
 						<!-- </ng-container> -->

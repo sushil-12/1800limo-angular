@@ -171,7 +171,8 @@ export class LooseAffiliateAccountsComponent implements OnInit {
     let body = {
       subject: this.sendEmailForm.get('subject').value,
       message: this.sendEmailForm.get('text_message').value,
-      recipents: this.emails.value
+      recipents: this.emails.value,
+      account_type: 'loose_affiliate'
     }
     console.log("body-------->", body)
     this.adminService.sendEmailAffiliate(body).subscribe((response: any) => {
@@ -295,6 +296,7 @@ export class LooseAffiliateAccountsComponent implements OnInit {
       // formData.append("file", this.fileToUpload);
 
       formData.append("text_message", message);
+      formData.append("account_type",'loose_affiliate')
       if (type == 'email') {
         formData.append("email_address", travelPlanner?.email)
       }
