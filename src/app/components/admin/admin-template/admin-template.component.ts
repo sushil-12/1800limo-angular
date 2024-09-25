@@ -16,6 +16,7 @@ declare var $: any;
 export class AdminTemplateComponent implements OnInit {
 	copyright_text: string = new Date().getFullYear().toString() + ' 1800LIMO.COM'
 	public role: string;
+	public created_by_role: string;
 	public affiliateAccountStatus: string;
 	public userImage: string = 'assets/images/user.png';
 	public userName: string = 'Admin';
@@ -72,6 +73,7 @@ export class AdminTemplateComponent implements OnInit {
 		this.affiliateAccountStatus = localStorage.getItem("account_approval");
 
 		const currentUser = this.authService.currentUserValue;
+		this.created_by_role = currentUser?.created_by_role
 		this.role = currentUser.roleName;
 		this.name = currentUser.name
 
