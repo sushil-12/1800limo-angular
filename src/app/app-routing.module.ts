@@ -43,6 +43,7 @@ import { ModifyBookingComponent } from './components/email-pages/modify-booking/
 import { SubTravelAgentTemplateComponent } from './components/sub-travel-agent/sub-travel-agent-template/sub-travel-agent-template.component';
 import { IndividualTemplateComponent } from './components/individual/individual-template/individual-template.component';
 import { SubAffiliateTemplateComponent } from './components/sub-affiliate/sub-affiliate-template/sub-affiliate-template.component';
+import { PartnerRegistrationComponent } from './components/subscription/partner-registration/partner-registration.component';
 
 
 const routes: Routes = [
@@ -186,6 +187,10 @@ const routes: Routes = [
 	{
 		path: 'otp',
 		component: OtpComponent
+	},
+	{
+		path: 'partner-registration',
+		component: PartnerRegistrationComponent
 	},
 	{
 		path: 'quotebot',

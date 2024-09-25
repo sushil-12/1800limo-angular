@@ -10,9 +10,10 @@
 
 				<h2 *ngIf=" Role == 'admin'; else userLogin ">Welcome Admin</h2>
 				<ng-template #userLogin>
-					<h2 *ngIf=" Role != 'individual' ">Welcome {{format(Role) | titlecase}}, Create an Account or Sign
+					<h2 *ngIf=" Role != 'individual' && Role != 'subscriber' ">Welcome {{format(Role) | titlecase}}, Create an Account or Sign
 						In.</h2>
 					<h2 *ngIf=" Role == 'individual'">Welcome, Create, or Sign In to Individual / Shared Account.</h2>
+					<h2 *ngIf=" Role == 'subscriber'">Partner Login</h2>
 				</ng-template>
 			</div>
 			<div class="d-flex justify-content-center" *ngIf="Role == 'travel_agent' ">
