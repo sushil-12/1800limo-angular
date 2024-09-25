@@ -73,6 +73,7 @@ import { AutoFocusDirective } from './directives/auto-focus.directive';
 import { IndividualConfirmationComponent } from './components/email-pages/individual-confirmation/individual-confirmation.component';
 import { MatRadioModule } from '@angular/material/radio';
 import { ModifyBookingComponent } from './components/email-pages/modify-booking/modify-booking.component';
+import { PartnerRegistrationComponent } from './components/subscription/partner-registration/partner-registration.component';
 @NgModule({
 	declarations: [
 		AppComponent,
@@ -113,6 +114,7 @@ import { ModifyBookingComponent } from './components/email-pages/modify-booking/
 		AutoFocusDirective,
 		IndividualConfirmationComponent,
 		ModifyBookingComponent,
+		PartnerRegistrationComponent,
 	],
 	imports: [
 		BrowserModule,
