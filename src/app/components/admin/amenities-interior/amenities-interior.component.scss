@@ -1,3 +1,7 @@
 .modal-header {
 	justify-content: center;
 }
+.disabled {
+    pointer-events: none;
+    background-color: #a2a3a2 !important;
+}

@@ -16,7 +16,7 @@ declare var $: any;
 export class AdminTemplateComponent implements OnInit {
 	copyright_text: string = new Date().getFullYear().toString() + ' 1800LIMO.COM'
 	public role: string;
-	public created_by_role: string;
+	public created_by_role: any;
 	public affiliateAccountStatus: string;
 	public userImage: string = 'assets/images/user.png';
 	public userName: string = 'Admin';
