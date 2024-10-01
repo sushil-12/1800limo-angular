@@ -234,7 +234,7 @@ export class MyBookingsComponent implements OnInit {
 			timestamp = date.getTime();
 			this.bookingsRes = result;
 			this.bookings = this.bookingsRes?.data?.data;
-			if (!this.useDateFilter) {
+			if (!this.useDateFilter && !this.searchText) {
 				this.endDate = this.bookings?.length > 0 ? this.bookings[this.bookings?.length - 1]?.pickup_date : moment(timestamp).format("YYYY-MM-DD")
 			}
 			this.totalRecords = this.bookingsRes?.data?.total;
