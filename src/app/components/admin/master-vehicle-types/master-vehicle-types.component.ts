@@ -33,6 +33,7 @@ export class MasterVehicleTypesComponent implements OnInit {
 	public showProgressBarEdit: boolean = false;
 	public editVehiclePic: string;
 	vehicleId: any;
+	currentUser:any;
 
 	constructor(
 		private adminService: AdminService,
@@ -56,6 +57,8 @@ export class MasterVehicleTypesComponent implements OnInit {
 			.catch(err => {
 				this.spinner.hide();//hide spinner
 			});
+
+		this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
 		//add vehicle type form validation
 		this.addVehicleTypeForm = this.formBuilder.group({

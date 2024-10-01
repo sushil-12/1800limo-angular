@@ -30,6 +30,7 @@ export class AffiliatePreferenceComponent implements OnInit {
   public response:any;
   public disableAddButton:boolean=false;
   public disableEditButton:boolean=false;
+  currentUser:any;
 
   constructor(
     private adminService:AdminService,
@@ -49,6 +50,7 @@ export class AffiliatePreferenceComponent implements OnInit {
           sessionStorage.setItem('affilatePreference',JSON.stringify(this.affilatePreference));
           this.spinner.hide();//hide spinner
         });
+        this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
         //add affilatePreference type form validation
         this.addAffilatePreferenceForm = this.formBuilder.group({

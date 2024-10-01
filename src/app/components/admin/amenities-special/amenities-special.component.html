@@ -58,7 +58,7 @@
 									</mat-slide-toggle>
 								</td>
 								<td>
-									<a class="user-profileded btn btn-icon btn-transparent-dark"
+									<a [ngClass]="currentUser?.account_id == amenity?.created_by ? 'user-profileded btn btn-icon btn-transparent-dark' : ' disabled user-profileded btn btn-icon btn-transparent-dark' "
 										id="navbarDropdownUserImage" (click)="editSpecialAmenity(amenity.id)"
 										role="button" tabindex="1"> <span>Edit</span>
 									</a>

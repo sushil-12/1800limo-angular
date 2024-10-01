@@ -32,6 +32,7 @@ export class VehicleModelComponent implements OnInit {
   public response:any;
   public disableAddButton:boolean=false;
   public disableEditButton:boolean=false;
+  currentUser = JSON.parse(localStorage.getItem('curentUser'))
 
   constructor(
     private adminService:AdminService,
