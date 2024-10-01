@@ -949,7 +949,7 @@
 								preferredCountries: ['us', 'ca', 'mx', 'gb']
 							}" placeholder="1234567890" class="phoneNumberClass" (intlTelInputObject)="LATelInputObject($event)"
 							(keyup)="handleLooseAffiliatePhone()"
-							(countryChange)="SetFormValue('lose_affiliate_phone_isd', '+' + $event.dialCode); SetFormValue('lose_affiliate_phone_country', $event.iso2)"
+							(countryChange)="handleCountryChangeLA($event)"
 							(focus)="$event.target.select()" />
 					</mat-form-field>
 					<div class="error-box">
