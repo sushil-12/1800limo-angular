@@ -159,7 +159,7 @@
 <div class="row mb-3" id="submitForm">
 	<div class="col-md-12 text-right">
 		<button type="button" class="custom-filled-button ratesButton m-3"
-			[ngClass]="isFinalizeButton ? 'color-grey':'color-green'" (click)="submitForm()">
+			[ngClass]="isFinalizeButton ? 'color-grey':'color-green-finalize'" (click)="submitForm()">
 			{{isFinalizeButton ? 'Finalized' :'Finalize'}}
 		</button>
 	</div>
@@ -403,8 +403,8 @@
 		</div>
 
 		<div class="col-md-12 text-right mr-4">
-			<button class="custom-filled-back-button" (click)="backButton()">
-				Back to Dashboard
+			<button class="custom-filled-back-button" (click)="backButton()" style="margin-right: 30px !important;">
+				Back to Daily Bookings
 			</button>
 			<button type="button" class="custom-filled-button m-3 mr-4"
 				[ngClass]="isFinalizeButton ? 'color-green' : 'color-grey' " data-toggle="modal"

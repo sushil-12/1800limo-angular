@@ -374,7 +374,7 @@
 	<div class="row" id="submitForm" *ngIf="BookingDetail?.payment_status=='unpaid' && !editRate">
 		<div class="col-md-12 text-right">
 			<button type="button" class="custom-filled-button ratesButton m-3"
-				[ngClass]="isFinalizeButton ? 'color-grey':'color-green'" (click)="submitForm()">
+				[ngClass]="isFinalizeButton ? 'color-grey':'color-green-finalize'" (click)="submitForm()">
 				{{isFinalizeButton ? 'Finalized' :'Finalize'}}
 			</button>
 		</div>

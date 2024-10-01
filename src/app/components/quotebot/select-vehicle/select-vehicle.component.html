@@ -680,7 +680,7 @@
 								</div>
 							</div>
 						</div>
-						<div style="padding: 0px 14px 14px 14px;">
+						<div style="padding: 0px 14px 14px 14px;" *ngIf="!vehinfo?.is_master_vehicle">
 							<div class="vehicle-details-data-mobile">
 								<div class="d-flex justify-content-between" style="max-height: 25px;">
 									<p>
@@ -705,11 +705,11 @@
 						<div class="d-flex justify-content-between align-items-center mb-2"
 							style="padding: 2px 16px 2px 16px;">
 							<button type="button" (click)="viewDetails(vehinfo)"
-								class="custom-filled-button orange-button" style="font-size: 0.8rem !important;">
+								class="custom-filled-button orange-button" style="font-size: 0.85rem !important;">
 								Booking Details
 							</button>
 							<button type="button" (click)="bookNow(vehinfo)" class="custom-filled-button green-button"
-								style="font-size: 0.8rem !important;">
+								style="font-size: 0.85rem !important;">
 								Book Now
 							</button>
 						</div>

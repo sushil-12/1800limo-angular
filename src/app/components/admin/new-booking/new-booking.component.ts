@@ -68,8 +68,8 @@ export class NewBookingComponent implements OnInit {
 
 	LCTelObject: any
 	PaxTelObject: any
-	DrvTelObject: any
-	LATelObject: any
+	driverCellTelInput: any
+	loseAffiliateTelInput: any
 
 	BookingForm: FormGroup
 	RatesForm: any
@@ -365,7 +365,7 @@ export class NewBookingComponent implements OnInit {
 			return_lose_affiliate_email: [''],
 			cancellation_hours: ['24', [Validators.required]],
 			return_cancellation_hours: ['24'],
-			vehicle_type: ['',[Validators.required]],
+			vehicle_type: ['', [Validators.required]],
 			vehicle_type_name: [''],
 			vehicle_id: [''],
 			vehicle_make: [''],
@@ -503,7 +503,7 @@ export class NewBookingComponent implements OnInit {
 
 		this.SetFormValue('pickup_date', moment(timestamp).format("YYYY-MM-DD"))
 		this.SetFormValue('return_pickup_date', moment(timestamp).format("YYYY-MM-DD"))
-		
+
 		this.SetFormValue('number_of_vehicles', 1)
 		this.SetFormValue('booking_instructions', "1. Pax- Text driver when first landing for easy pickup instructions. 2. Driver- Call on Location. Text the client the day before each booking, and confirm the driver's name and cell number. Text client with ETA when en route. Text the client when on location.");
 		this.SetFormValue('return_booking_instructions', "1. Pax- Text driver when first landing for easy pickup instructions. 2. Driver- Call on Location. Text the client the day before each booking, and confirm the driver's name and cell number. Text client with ETA when en route. Text the client when on location.");
@@ -724,8 +724,8 @@ export class NewBookingComponent implements OnInit {
 			}
 			if (this.Form.affiliate_type.value == 'loose_affiliate') {
 				setTimeout(() => {
-					this.LATelObject.setCountry(this.BookingForm.get('lose_affiliate_phone_country').value);
-					this.DrvTelObject.setCountry(this.BookingForm.get('driver_cell_country').value);
+					this.loseAffiliateTelInput.setCountry(this.BookingForm.get('lose_affiliate_phone_country').value);
+					this.driverCellTelInput.setCountry(this.BookingForm.get('driver_cell_country').value);
 				}, 2000)
 			}
 
@@ -1043,15 +1043,15 @@ export class NewBookingComponent implements OnInit {
 		}
 		else {
 			this.$spinner.show()
-			console.log("client acc",this.ClientAccounts)
+			console.log("client acc", this.ClientAccounts)
 			this.$api.getAccountBytype(legend[account_type]).subscribe((response: any) => {
 				if (response.success && response.data.length > 0) {
 					this.ClientAccounts = response.data;
 				}
-				else{
+				else {
 					this.ClientAccounts = []
 				}
-				console.log("client acc",this.ClientAccounts)
+				console.log("client acc", this.ClientAccounts)
 				this.$spinner.hide()
 			})
 		}
@@ -1181,7 +1181,7 @@ export class NewBookingComponent implements OnInit {
 	}
 
 
-		fetchAffiliates(affiliate_type: 'affiliate' | 'loose_affiliate') {
+	fetchAffiliates(affiliate_type: 'affiliate' | 'loose_affiliate') {
 		if (affiliate_type == 'loose_affiliate') {
 			this.$spinner.show()
 			this.$api.getAccountBytype('loose_affiliate').subscribe((response: any) => {
@@ -1880,7 +1880,7 @@ export class NewBookingComponent implements OnInit {
 			this.SetFormValue('driver_cell_country', info?.CellNumberCountry)
 			this.SetFormValue('driver_email', info?.Email)
 			this.SetFormValue('driver_phone_type', info?.PhoneType ?? '');
-			this.DrvTelObject.setCountry(this.BookingForm.get('driver_cell_country').value);
+			this.driverCellTelInput.setCountry(this.BookingForm.get('driver_cell_country').value);
 		}
 		if (filling_for == 'return_driver') {
 			console.log('autofill data driver info-->>>', data, this.return_DriverList)
@@ -1899,7 +1899,7 @@ export class NewBookingComponent implements OnInit {
 			this.SetFormValue('return_driver_cell_country', info?.CellNumberCountry)
 			this.SetFormValue('return_driver_email', info?.Email)
 			this.SetFormValue('return_driver_phone_type', info?.PhoneType ?? '');
-			this.DrvTelObject.setCountry(this.BookingForm.get('return_driver_cell_country').value);
+			this.driverCellTelInput.setCountry(this.BookingForm.get('return_driver_cell_country').value);
 		}
 	}
 
@@ -2116,7 +2116,7 @@ export class NewBookingComponent implements OnInit {
 			for (const key of Object.keys(this.RatesForm.amenities)) {
 				base_rate += this.RatesForm.amenities[key].baserate;
 			}
-			console.log("extra gratutiy",this.BookingForm.value.rateArray.misc.Extra_Gratuity.amount,"min rate",this.BookingForm.value.rateArray?.min_rate_involved)
+			console.log("extra gratutiy", this.BookingForm.value.rateArray.misc.Extra_Gratuity.amount, "min rate", this.BookingForm.value.rateArray?.min_rate_involved)
 			let grandTotal = this.BookingForm.value.rateArray.grand_total
 			let stripeFee = grandTotal * 0.05 + 0.30
 			let adminShare = (base_rate * this.adminSharePercent) / 100
@@ -2191,15 +2191,30 @@ export class NewBookingComponent implements OnInit {
 		}
 	}
 
+	handleCountryChangeLA(event: any) {
+		const dialCode = '+' + event.dialCode;
+		
+		this.BookingForm.patchValue({
+			lose_affiliate_phone_isd: dialCode,
+			lose_affiliate_phone_country : event.iso2,
+			driver_cell_isd: dialCode, // Update driver_cell ISD
+			driver_cell_country: event.iso2
+		});
+		this.loseAffiliateTelInput.setCountry(event.iso2); // Update flag in lose_affiliate_phone
+		this.driverCellTelInput.setCountry(event.iso2); // Update flag in driver_cell
+
+	}
+
+
 
 	submitForm(preview: boolean) {
 		this.submitBookingForm = true
 		// this.BookingForm['currency'] = this.currencyObj?.currency
-		if(this.service_type == 'round_trip'){
+		if (this.service_type == 'round_trip') {
 			this.BookingForm.get('return_vehicle_type').setValidators([Validators.required]);
 			this.BookingForm.get('return_vehicle_type').updateValueAndValidity()
 		}
-		else{
+		else {
 			this.BookingForm.get('return_vehicle_type').clearValidators()
 			this.BookingForm.get('return_vehicle_type').updateValueAndValidity()
 		}
@@ -2411,7 +2426,7 @@ export class NewBookingComponent implements OnInit {
 				this.BookingForm.patchValue({
 					cancellation_hours: this.selectedVehicle?.non_charter_cancellation_hours.toString(),
 					return_cancellation_hours: this.return_selectedVehicle?.non_charter_cancellation_hours.toString(),
-					return_affiliate_id :  this.BookingForm.get('affiliate_id').value
+					return_affiliate_id: this.BookingForm.get('affiliate_id').value
 				})
 				this.SetFormValue('return_pickup_date', moment().format('YYYY-MM-DD'))
 				this.SetFormValue('return_pickup_time', '12:00 pm')
@@ -2823,9 +2838,9 @@ export class NewBookingComponent implements OnInit {
 				if (this.Form.updateType.value != 'edit' && this.Form.updateType.value != 'repeat' && this.Form.updateType.value != 'return') {
 					this.scroll('booking_detail_section')
 				}
-				if(this.BookingForm.get('service_type').value == 'round_trip'){
+				if (this.BookingForm.get('service_type').value == 'round_trip') {
 					this.BookingForm.patchValue({
-						return_affiliate_id : value
+						return_affiliate_id: value
 					})
 				}
 			}
@@ -3195,7 +3210,7 @@ export class NewBookingComponent implements OnInit {
 		// 	this.SetFormValue('driver_cell_country', data.CellNumberCountry)
 		// 	this.SetFormValue('driver_email', data.Email)
 		// 	this.SetFormValue('driver_phone_type', data.PhoneType ?? '');
-		// 	this.DrvTelObject.setCountry(this.BookingForm.get('driver_cell_country').value);
+		// 	this.driverCellTelInput.setCountry(this.BookingForm.get('driver_cell_country').value);
 		// })
 
 
@@ -3314,11 +3329,11 @@ export class NewBookingComponent implements OnInit {
 	}
 
 	LATelInputObject(event: any) {
-		this.LATelObject = event;
+		this.loseAffiliateTelInput = event;
 	}
 
 	DrvTelInputObject(event: any) {
-		this.DrvTelObject = event;
+		this.driverCellTelInput = event;
 	}
 	// addLineBreak(){
 	// 	console.log('add line break __>>' , this.BookingForm.get('booking_instructions').value)
