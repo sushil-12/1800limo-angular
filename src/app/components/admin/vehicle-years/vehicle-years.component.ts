@@ -30,7 +30,7 @@ export class VehicleYearsComponent implements OnInit {
   public response:any;
   public disableAddButton:boolean=false;
   public disableEditButton:boolean=false;
-  currentUser = JSON.parse(localStorage.getItem('curentUser'))
+  currentUser = JSON.parse(localStorage.getItem("currentUser"));
   
   constructor(
     private adminService:AdminService,

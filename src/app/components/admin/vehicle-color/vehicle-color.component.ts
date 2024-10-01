@@ -51,7 +51,7 @@ export class VehicleColorComponent implements OnInit {
           this.spinner.hide();//hide spinner
         });
 
-        this.currentUser = JSON.parse(localStorage.getItem('curentUser'))
+        this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
         //add color type form validation
         this.addColorsForm = this.formBuilder.group({
