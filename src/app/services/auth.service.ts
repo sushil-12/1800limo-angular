@@ -55,4 +55,17 @@ export class AuthService {
     return this.httpClient.post(this.serverUrl + 'register-subscriber', data);
   }
 
+  validateSubsData(data){
+    return this.httpClient.post(this.serverUrl + 'validate-subscriber-data', data);
+  }
+ 
+
+  getSubsPlans(){
+    return this.httpClient.get(this.serverUrl + 'get-subscription-products');
+  }
+
+  createPayment(data){
+    return this.httpClient.post(this.serverUrl + 'create-subscription-plan', data);
+  }
+
 }

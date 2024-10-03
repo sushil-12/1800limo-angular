@@ -1,0 +1,15 @@
+<ngx-spinner></ngx-spinner>
+    <div class="subs_wrapper">
+        dfdf
+        <div *ngFor="let plans of planData?.data">
+            <p>
+                {{plans?.product_name}}
+            </p>
+            <p>
+               $ {{plans?.product_price}}
+            </p>
+            <button (click)="submitPlan(plans?.id)">
+               Get Started
+            </button>
+        </div>
+    </div>
