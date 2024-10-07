@@ -114,15 +114,15 @@ export class OtpComponent implements OnInit, OnDestroy {
 
 		console.log(this.$route.url)
 		this.$route.queryParams.subscribe((params: any) => {
-			if (params.otp) {
-				setTimeout(() => {
-					this.ngOtpInput.setValue(params.otp);
-					this.otpForm.get('otp').setValue(params.otp)
-					this.otpForm.updateValueAndValidity()
-					// this.ngOtpInput.focusTo(this.otpInput)
-					// this.otpCheck()
-				}, 2000)
-			}
+			// if (params.otp) {
+			// 	setTimeout(() => {
+			// 		this.ngOtpInput.setValue(params.otp);
+			// 		this.otpForm.get('otp').setValue(params.otp)
+			// 		this.otpForm.updateValueAndValidity()
+			// 		// this.ngOtpInput.focusTo(this.otpInput)
+			// 		// this.otpCheck()
+			// 	}, 2000)
+			// }
 			if (params.email) {
 				this.email = params.email
 			}

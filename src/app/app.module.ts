@@ -74,6 +74,8 @@ import { IndividualConfirmationComponent } from './components/email-pages/indivi
 import { MatRadioModule } from '@angular/material/radio';
 import { ModifyBookingComponent } from './components/email-pages/modify-booking/modify-booking.component';
 import { PartnerRegistrationComponent } from './components/subscription/partner-registration/partner-registration.component';
+import { SubscriptionPlansComponent } from './components/subscription/subscription-plans/subscription-plans.component';
+import { PaymentDetailsComponent } from './components/subscription/payment-details/payment-details.component';
 @NgModule({
 	declarations: [
 		AppComponent,
@@ -115,6 +117,8 @@ import { PartnerRegistrationComponent } from './components/subscription/partner-
 		IndividualConfirmationComponent,
 		ModifyBookingComponent,
 		PartnerRegistrationComponent,
+		SubscriptionPlansComponent,
+		PaymentDetailsComponent,
 	],
 	imports: [
 		BrowserModule,

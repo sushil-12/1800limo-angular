@@ -17,6 +17,12 @@
       </div>
       <!-- Login Form -->
       <form [formGroup]="otpForm">
+         <h3 class="addveh_top d-md-flex justify-content-between align-items-center mb-0 ml-1 mt-2">
+            <label class="alert alert-danger"
+               style="padding :0.85rem 1.25rem; color: #000 !important; font-weight: 700;font-size: 17px;">NOTE: Please call us at +17082056607 to obtain the OTP. We apologize for any inconvenience this may have caused. The SMS service
+               will resume shortly.</label>
+         </h3>
+
          <h3>Enter Your OTP Number</h3>
          <!-- <h3>For a temporary basis,Please check your {{email ? email : 'info@1800limo.com'}} for OTP</h3> -->
          <!-- progress bar -->
@@ -25,7 +31,9 @@
             <mat-label>OTP</mat-label>
             <input matInput placeholder="OTP Number" formControlName="otp">
          </mat-form-field> -->
-				<ng-otp-input #otpInput id="otpInput" appAutoDetectOtp [config]="{length:6,allowNumbersOnly:true,disableAutoFocus:false}" (onInputChange)="onOtpChange($event)"></ng-otp-input>
+         <ng-otp-input #otpInput id="otpInput" appAutoDetectOtp
+            [config]="{length:6,allowNumbersOnly:true,disableAutoFocus:false}"
+            (onInputChange)="onOtpChange($event)"></ng-otp-input>
          <div *ngIf="submitted && f.otp.errors" class="text-danger">
             <div *ngIf="f.otp.errors.required">The OTP is required</div>
             <div *ngIf="f.otp.errors.pattern; else phoneNumberError">The OTP is not valid</div>
@@ -41,16 +49,17 @@
       <!-- Remind Passowrd -->
       <div id="formFooter">
          <p class="firebaseui-tos firebaseui-phone-tos">By tapping Verify, you are indicating that you accept our <a
-            routerLink="/client-terms-condition" class="common-anchor" target="_blank">Terms of Service</a> and
-         <a routerLink="/privacy-policy" class="common-anchor" target="_blank">Privacy Policy</a>. An SMS may be
-         sent. Message &amp; data rates may apply.
-      </p>
+               routerLink="/client-terms-condition" class="common-anchor" target="_blank">Terms of Service</a> and
+            <a routerLink="/privacy-policy" class="common-anchor" target="_blank">Privacy Policy</a>. An SMS may be
+            sent. Message &amp; data rates may apply.
+         </p>
       </div>
    </div>
 </div>
 
 <!-- Instructions modal -->
-<div class="modal fade" id="resendOtpModal" tabindex="-1" role="dialog" aria-labelledby="resendOtpModal" aria-hidden="true">
+<div class="modal fade" id="resendOtpModal" tabindex="-1" role="dialog" aria-labelledby="resendOtpModal"
+   aria-hidden="true">
    <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
          <div class="modal-body">

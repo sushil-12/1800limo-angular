@@ -261,13 +261,14 @@ export class PartnerRegistrationComponent implements OnInit {
       return;
     }
 
-    if(this.registrationForm.get('userId').value == ""){
+    if (this.registrationForm.get('userId').value == "") {
       this.enableOtpField = true
       return;
     }
 
     this.spinner.show()
-    this.authService.registerSubscriber(this.registrationForm.value)
+
+    this.authService.validateSubsData(this.registrationForm.value)
       .pipe(
         catchError(err => {
           this.spinner.hide()
@@ -276,10 +277,26 @@ export class PartnerRegistrationComponent implements OnInit {
       )
       .subscribe((result: any) => {
         this.spinner.hide()
-        this.snackbarMsg = "Registration Successful. PLease Login!";
+        sessionStorage.setItem("registeredUserData", JSON.stringify(this.registrationForm.value))
+        this.snackbarMsg = "Registration Successful. PLease Proceed for payment!";
         this.openSnackbar();
-        this.router.navigate(['/login/subscriber']);
+        this.router.navigate(['/payment-details']);
       });
+
+
+    // this.authService.registerSubscriber(this.registrationForm.value)
+    //   .pipe(
+    //     catchError(err => {
+    //       this.spinner.hide()
+    //       return throwError(err);
+    //     })
+    //   )
+    //   .subscribe((result: any) => {
+    //     this.spinner.hide()
+    //     this.snackbarMsg = "Registration Successful. PLease Login!";
+    //     this.openSnackbar();
+    //     this.router.navigate(['/login/subscriber']);
+    //   });
 
 
 
