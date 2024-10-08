@@ -1306,5 +1306,19 @@ export class AdminService {
 	chargeBackPermission(acc_id, permission) {
 		return this.httpClient.post(this.serverUrl + 'affiliate/charge-back-permission', { 'acc_id': acc_id, 'permission': permission });
 	}
+	
+	addSubscriberBank(data, type = ''){
+		console.log("type",type)
+		if(type == 'edit'){
+			return this.httpClient.put(this.serverUrl + 'edit-subscriber-bank', data);
+		}
+		else{
+			return this.httpClient.post(this.serverUrl + 'add-subscriber-bank', data);
+		}
+	}
+
+	getSubsriberBank(acc_id) {
+		return this.httpClient.get(this.serverUrl + `get-subscriber-bank/${acc_id}`);
+	}
 
 }

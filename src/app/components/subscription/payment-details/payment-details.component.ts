@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -24,6 +25,7 @@ export class PaymentDetailsComponent implements OnInit {
     private customValidator: CustomvalidationService,
     private spinner: NgxSpinnerService,
     private authService: AuthService,
+    private router: Router
 
   ) { }
 
@@ -70,7 +72,7 @@ export class PaymentDetailsComponent implements OnInit {
 
     dataToSend['subscription_product_id'] = this.subscription_product_id
 
-    console.log("dataTosend",dataToSend)
+    console.log("dataTosend", dataToSend)
 
 
     this.authService.createPayment(dataToSend)
@@ -83,6 +85,7 @@ export class PaymentDetailsComponent implements OnInit {
       .subscribe(result => {
         this.spinner.hide();
         this.response = result;
+        this.router.navigate(['/login/subscriber'])
       });
   }
 

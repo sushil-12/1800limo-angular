@@ -73,6 +73,7 @@ export class DailyBookingsComponent implements OnInit {
 	adminSharePercent: any;
 	previewCopyData: any;
 	accept_charge_id: any;
+	public is_stripe_added:boolean = false;
 
 	constructor(
 		private adminService: AdminService,
@@ -84,6 +85,7 @@ export class DailyBookingsComponent implements OnInit {
 	) { }
 
 	ngOnInit(): void {
+		this.is_stripe_added = JSON.parse(localStorage.getItem('is_stripe_account_added'))
 		let date = new Date();
 		let timestamp = date.getTime();
 		//     const options:any = {
@@ -1255,6 +1257,10 @@ export class DailyBookingsComponent implements OnInit {
 				console.log("accept charge action", response);
 			});
 
+	}
+
+	addBank(){
+		this.router.navigate(['/admin/add-bank-details'])
 	}
 
 

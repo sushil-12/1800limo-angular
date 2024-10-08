@@ -114,15 +114,15 @@ export class OtpComponent implements OnInit, OnDestroy {
 
 		console.log(this.$route.url)
 		this.$route.queryParams.subscribe((params: any) => {
-			// if (params.otp) {
-			// 	setTimeout(() => {
-			// 		this.ngOtpInput.setValue(params.otp);
-			// 		this.otpForm.get('otp').setValue(params.otp)
-			// 		this.otpForm.updateValueAndValidity()
-			// 		// this.ngOtpInput.focusTo(this.otpInput)
-			// 		// this.otpCheck()
-			// 	}, 2000)
-			// }
+			if (params.otp) {
+				setTimeout(() => {
+					this.ngOtpInput.setValue(params.otp);
+					this.otpForm.get('otp').setValue(params.otp)
+					this.otpForm.updateValueAndValidity()
+					// this.ngOtpInput.focusTo(this.otpInput)
+					// this.otpCheck()
+				}, 2000)
+			}
 			if (params.email) {
 				this.email = params.email
 			}
@@ -250,17 +250,19 @@ export class OtpComponent implements OnInit, OnDestroy {
 
 				switch (this.response.data.user.roleName) {
 					case 'admin': {
-						this.router.navigateByUrl('/admin');
+						localStorage.setItem("is_stripe_account_added", this.response.data?.subscriber_data?.is_stripe_account_added);
+						if (this.response.data?.user?.created_by_role == 'subscriber' && !this.response.data?.subscriber_data?.is_stripe_account_added) {
+							this.router.navigateByUrl('/admin/add-bank-details');
+						}
+						else {
+							this.router.navigateByUrl('/admin');
+						}
 						break;
 					}
 					case 'sub_admin': {
 						this.router.navigateByUrl('/admin');
 						localStorage.setItem('modules', this.response.data?.modules);
 						localStorage.setItem('sub_modules', this.response.data?.sub_modules)
-						break;
-					}
-					case 'subscriber': {
-						this.router.navigateByUrl('/admin');
 						break;
 					}
 					case 'individual': {
