@@ -76,6 +76,7 @@ import { ModifyBookingComponent } from './components/email-pages/modify-booking/
 import { PartnerRegistrationComponent } from './components/subscription/partner-registration/partner-registration.component';
 import { SubscriptionPlansComponent } from './components/subscription/subscription-plans/subscription-plans.component';
 import { PaymentDetailsComponent } from './components/subscription/payment-details/payment-details.component';
+import { AddBankComponent } from './components/subscription/add-bank/add-bank.component';
 @NgModule({
 	declarations: [
 		AppComponent,
@@ -119,6 +120,7 @@ import { PaymentDetailsComponent } from './components/subscription/payment-detai
 		PartnerRegistrationComponent,
 		SubscriptionPlansComponent,
 		PaymentDetailsComponent,
+		AddBankComponent,
 	],
 	imports: [
 		BrowserModule,

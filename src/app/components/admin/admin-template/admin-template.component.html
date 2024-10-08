@@ -417,7 +417,8 @@
 						</li>
 
 						<!--10th-->
-						<li class="nav-item" *ngIf="(role=='admin' && created_by_role != 'subscriber') || modules.includes('cms_pages')">
+						<li class="nav-item"
+							*ngIf="(role=='admin' && created_by_role != 'subscriber') || modules.includes('cms_pages')">
 							<a class="nav-link collapsed dropdwn" [routerLinkActive]="['active']" data-toggle="collapse"
 								data-target="#collapse11" aria-expanded="true" aria-controls="collapseUtilities"
 								tabIndex="-1">
@@ -441,7 +442,7 @@
 										(click)="closeSidebarFunc(false)" routerLink="/admin/cms/home-page">Home</a>
 									<a class="collapse-item" [routerLinkActive]="['active']"
 										(click)="closeSidebarFunc(false)" routerLink="/admin/cms/about-us">About Us</a>
-										<a class="collapse-item" [routerLinkActive]="['active']"
+									<a class="collapse-item" [routerLinkActive]="['active']"
 										(click)="closeSidebarFunc(false)" routerLink="/admin/cms/fleet">Fleet</a>
 									<!-- <a class="collapse-item" [routerLinkActive]="['active']"
 										(click)="closeSidebarFunc(false)" routerLink="/admin/cms/step0">Step 0</a>
@@ -449,6 +450,17 @@
 										(click)="closeSidebarFunc(false)" routerLink="/admin/cms/step6">Step 6</a> -->
 								</div>
 							</div>
+						</li>
+						<li class="nav-item" *ngIf="(role=='admin' && created_by_role == 'subscriber')">
+							<a class="nav-link collapsed" [routerLinkActive]="['active']"
+								routerLink="/admin/add-bank-details" (click)="closeSidebarFunc(false)" tabIndex="-1">
+								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+									class="bi bi-credit-card" viewBox="0 0 16 16">
+									<path
+										d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2-1a1 1 0 0 0-1 1v1h14V4a1 1 0 0 0-1-1H2zm13 4H1v5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V7z" />
+									<path d="M2 10a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-1z" />
+								</svg><span>Bank-Details</span>
+							</a>
 						</li>
 						<hr class="sidebar-divider d-none d-md-block">
 						<div class="text-center d-none d-md-inline">

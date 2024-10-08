@@ -88,6 +88,7 @@ import { LooseAffiliateAccountsComponent } from './loose-affiliate-accounts/loos
 import { LooseAffiliateAccountDetailsComponent } from './loose-affiliate-account-details/loose-affiliate-account-details.component';
 import { FleetComponent } from './cms/fleet/fleet.component';
 import { FleetPageEditComponent } from './cms/fleet-page-edit/fleet-page-edit.component';
+import { AddBankComponent } from '../subscription/add-bank/add-bank.component';
 
 
 const routes: Routes = [
@@ -501,6 +502,11 @@ const routes: Routes = [
 		path: 'edit-loose-affiliate-account',
 		canActivate: [AdminGuardGuard],
 		component: LooseAffiliateAccountDetailsComponent
+	},
+	{
+		path: 'add-bank-details',
+		canActivate: [AdminGuardGuard],
+		component: AddBankComponent
 	},
 	{
 		path: 'affiliate',
