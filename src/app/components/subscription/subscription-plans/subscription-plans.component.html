@@ -1,15 +1,32 @@
 <ngx-spinner></ngx-spinner>
-    <div class="subs_wrapper">
-        dfdf
-        <div *ngFor="let plans of planData?.data">
-            <p>
+<div class="subs_wrapper">
+    <div class="subs_div">
+        <div [ngClass]="selectedPlanId == plans?.id ? 'selected_subs_content' : 'subs_content' " *ngFor="let plans of planData" (click)="selectedPlan(plans?.id)">
+            <img src="../../../../assets//images/basePlan.png" *ngIf="plans?.id == 1 else premiumPlan;" height="25" width="25"/>
+            <ng-template #premiumPlan>
+                <img src="../../../../assets//images/gem.png" height="25" width="25"/>
+            </ng-template>
+            <p class="subs_planName">
                 {{plans?.product_name}}
             </p>
-            <p>
-               $ {{plans?.product_price}}
+            <p class="subs_planTitle">
+                Unleash the Power of Your Business
             </p>
-            <button (click)="submitPlan(plans?.id)">
-               Get Started
+            <p class="sub_planPrice">
+                $ {{plans?.product_price}} <span style="color: #797878;font-weight: 300;font-size: 17px;">per
+                    month</span>
+            </p>
+            <div class="sub_planDetails">
+                <ul class="sub_ul" *ngIf="plans?.plan_details?.length > 0">
+                    <li *ngFor="let detail of plans.plan_details">
+                        <img src="../../../../assets/images/Check.png" height="22" style="margin-right: 6px;" />
+                        {{ detail }}
+                    </li>
+                </ul>
+            </div>
+            <button [ngClass]="selectedPlanId == plans?.id ? 'selected_subs_btn' : 'subs_btn'" (click)="submitPlan(plans?.id)">
+                Get Started
             </button>
         </div>
     </div>
+</div>

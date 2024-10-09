@@ -18,7 +18,7 @@ export class FooterComponent implements OnInit {
 	// onKeyDown(event: KeyboardEvent) {
 	//   event.preventDefault();
 	// }
-	copyright_text: string = new Date().getFullYear().toString() + '1800LIMO.COM All rights reserved.'
+	copyright_text: string = new Date().getFullYear().toString() + ' 1800LIMO.COM All rights reserved.'
 	public currentUser;
 	public Value: any;
 	public steps: string = "";
