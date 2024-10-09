@@ -142,7 +142,18 @@ const routes: Routes = [
 				path: 'transaction-history',
 				component: TransactionHistoryComponent
 			},
-
+			{
+				path: 'subscription',
+				component: SubscriptionPlansComponent
+			},
+			{
+				path: 'partner-registration',
+				component: PartnerRegistrationComponent
+			},
+			{
+				path: 'payment-details',
+				component: PaymentDetailsComponent
+			},
 			{
 				path: 'email',
 				children: [
@@ -189,18 +200,6 @@ const routes: Routes = [
 	{
 		path: 'otp',
 		component: OtpComponent
-	},
-	{
-		path: 'subscription',
-		component: SubscriptionPlansComponent
-	},
-	{
-		path: 'partner-registration',
-		component: PartnerRegistrationComponent
-	},
-	{
-		path: 'payment-details',
-		component: PaymentDetailsComponent
 	},
 	{
 		path: 'quotebot',
