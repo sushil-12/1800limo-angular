@@ -417,8 +417,9 @@
 						</li>
 
 						<!--10th-->
+						<!-- && created_by_role != 'subscriber')  -->
 						<li class="nav-item"
-							*ngIf="(role=='admin' && created_by_role != 'subscriber') || modules.includes('cms_pages')">
+							*ngIf="(role=='admin')|| modules.includes('cms_pages')">
 							<a class="nav-link collapsed dropdwn" [routerLinkActive]="['active']" data-toggle="collapse"
 								data-target="#collapse11" aria-expanded="true" aria-controls="collapseUtilities"
 								tabIndex="-1">
@@ -451,7 +452,7 @@
 								</div>
 							</div>
 						</li>
-						<li class="nav-item" *ngIf="(role=='admin' && created_by_role == 'subscriber')">
+						<!-- <li class="nav-item" *ngIf="(role=='admin' && created_by_role == 'subscriber')">
 							<a class="nav-link collapsed" [routerLinkActive]="['active']"
 								routerLink="/admin/add-bank-details" (click)="closeSidebarFunc(false)" tabIndex="-1">
 								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -461,7 +462,7 @@
 									<path d="M2 10a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-1z" />
 								</svg><span>Bank-Details</span>
 							</a>
-						</li>
+						</li> -->
 						<hr class="sidebar-divider d-none d-md-block">
 						<div class="text-center d-none d-md-inline">
 							<button class="rounded-circle border-0" id="sidebarToggle" tabIndex="-1"></button>
