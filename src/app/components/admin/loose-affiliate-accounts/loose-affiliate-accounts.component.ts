@@ -301,7 +301,7 @@ export class LooseAffiliateAccountsComponent implements OnInit {
         formData.append("email_address", travelPlanner?.email)
       }
       else {
-        formData.append('phone_number', travelPlanner?.isd + travelPlanner?.phone)
+        formData.append('phone_number', travelPlanner?.phone_isd + travelPlanner?.phone)
       }
       console.log("bodyy in send message", formData)
 
