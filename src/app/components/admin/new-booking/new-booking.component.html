@@ -948,8 +948,7 @@
 						<input matInput formControlName="lose_affiliate_phone" ng2TelInput [ng2TelInputOptions]="{
 								preferredCountries: ['us', 'ca', 'mx', 'gb']
 							}" placeholder="1234567890" class="phoneNumberClass" (intlTelInputObject)="LATelInputObject($event)"
-							(keyup)="handleLooseAffiliatePhone()"
-							(countryChange)="handleCountryChangeLA($event)"
+							(keyup)="handleLooseAffiliatePhone()" (countryChange)="handleCountryChangeLA($event)"
 							(focus)="$event.target.select()" />
 					</mat-form-field>
 					<div class="error-box">
@@ -2912,10 +2911,15 @@
 						<div class="google_map">
 							<div id="return_map" class="map"></div>
 						</div>
-						<h6>
-							Total Distance: {{ mToMi(return_distance) }} Miles / {{
-							mToKm(return_distance) }} Km
-						</h6>
+						<div class="row">
+							<h6>
+								Total Distance: {{ mToMi(return_distance) }} Miles / {{
+								mToKm(return_distance) }} Km
+							</h6>
+							<h6 class="mx-2">
+								Estimated time: {{convertToMinutes(Form.returnJourneyTime.value)}}
+							</h6>
+						</div>
 					</div>
 				</div>
 				<!-- AGM Map Ends -->
@@ -3833,6 +3837,7 @@
 						</div>
 						<!-- Airport -->
 						<!-- Airline -->
+						<hr>
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
@@ -4006,6 +4011,7 @@
 						</div>
 						<!-- Airport -->
 						<!-- Airline -->
+						<hr>
 						<div class="row p-2">
 							<div class="col-md-4 key">
 								<span>
@@ -4290,6 +4296,7 @@
 								</div>
 							</div>
 							<!-- Airline -->
+							<hr>
 							<div class="row p-2">
 								<div class="col-md-4 key">
 									<span>
@@ -4436,6 +4443,7 @@
 							</div>
 
 							<!-- Airline -->
+							<hr>
 							<div class="row p-2">
 								<div class="col-md-4 key">
 									<span>
@@ -4553,7 +4561,7 @@
 					</div>
 					<div class="distribution_rate">
 						<h4 class="font-weight-bolder m-0 my-3">
-						Return Rates Distribution
+							Return Rates Distribution
 						</h4>
 
 						<div class="mx-2">
@@ -4824,7 +4832,8 @@
 				</ng-template>
 
 				<!--Return Affiliate Information -->
-				<ng-container *ngIf="Form.return_affiliate_type.value == 'affiliate' && service_type == 'round_trip' then returnaffiliateUser">
+				<ng-container
+					*ngIf="Form.return_affiliate_type.value == 'affiliate' && service_type == 'round_trip' then returnaffiliateUser">
 				</ng-container>
 
 				<!-- Affiliate -->
@@ -4955,7 +4964,8 @@
 				<hr>
 
 				<!-- Return Loose Affiliate Information -->
-				<ng-container *ngIf="Form.return_affiliate_type.value == 'loose_affiliate' && service_type == 'round_trip' then returnlooseAffiliate">
+				<ng-container
+					*ngIf="Form.return_affiliate_type.value == 'loose_affiliate' && service_type == 'round_trip' then returnlooseAffiliate">
 				</ng-container>
 
 				<!-- Loose Affiliate -->
@@ -5190,7 +5200,7 @@
 
 				<div class="distribution_rate">
 					<h4 class="font-weight-bolder m-0 my-3">
-					Rates Distribution
+						Rates Distribution
 					</h4>
 
 					<div class="mx-2">
