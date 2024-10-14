@@ -73,7 +73,7 @@ export class DailyBookingsComponent implements OnInit {
 	adminSharePercent: any;
 	previewCopyData: any;
 	accept_charge_id: any;
-	public is_stripe_added:boolean = false;
+	public is_stripe_added: boolean = false;
 
 	constructor(
 		private adminService: AdminService,
@@ -85,7 +85,6 @@ export class DailyBookingsComponent implements OnInit {
 	) { }
 
 	ngOnInit(): void {
-		this.is_stripe_added = JSON.parse(localStorage.getItem('is_stripe_account_added'))
 		let date = new Date();
 		let timestamp = date.getTime();
 		//     const options:any = {
@@ -179,6 +178,8 @@ export class DailyBookingsComponent implements OnInit {
 		});
 
 		this.MapController()
+		this.is_stripe_added = localStorage.getItem('is_stripe_account_added') ? JSON.parse(localStorage.getItem('is_stripe_account_added')) : '';
+
 	}
 	ngAfterViewInit(): void {
 		this.subModules = localStorage.getItem("sub_modules");
@@ -1259,7 +1260,7 @@ export class DailyBookingsComponent implements OnInit {
 
 	}
 
-	addBank(){
+	addBank() {
 		this.router.navigate(['/admin/add-bank-details'])
 	}
 
