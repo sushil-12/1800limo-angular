@@ -47,12 +47,13 @@ export class SubscriptionPlansComponent implements OnInit {
     )
   }
 
-  submitPlan(id) {
-    if (id == 1) {
+  submitPlan(plan) {
+    console.log("plan",plan)
+    if (plan?.id == 1) {
       this.router.navigate(['/login/driver'])
     }
     else {
-      sessionStorage.setItem("selectedPlanId", id)
+      sessionStorage.setItem("selectedPlan", JSON.stringify(plan))
       this.router.navigate(['/partner-registration'])
     }
   }

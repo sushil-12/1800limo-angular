@@ -29,6 +29,8 @@ export class PartnerRegistrationComponent implements OnInit {
   public enableOtpField: boolean = true;
   public snackbarMsg: string;
   public verifiedNumber: any;
+  public planName: string = '';
+  public planPrice: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -53,6 +55,9 @@ export class PartnerRegistrationComponent implements OnInit {
   public searchElementRef: ElementRef;
 
   ngOnInit(): void {
+
+    this.planName = JSON.parse(sessionStorage.getItem("selectedPlan"))?.product_name
+    this.planPrice = JSON.parse(sessionStorage.getItem("selectedPlan"))?.product_price
 
     this.buildregistrationForm();
 
