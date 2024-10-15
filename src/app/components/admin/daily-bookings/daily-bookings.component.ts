@@ -63,7 +63,7 @@ export class DailyBookingsComponent implements OnInit {
 	notification_msg: any;
 	status_list: any = [];
 	audit_Trail: any = [];
-	currentUser: any = JSON.parse(localStorage.getItem("userData")) || "";
+	currentUser: any = JSON.parse(localStorage.getItem("currentUser")) || "";
 	subModules: any = localStorage.getItem("sub_modules") || "";
 	useDateFilter: boolean = false;
 	use_created_at: boolean = false;
@@ -73,7 +73,7 @@ export class DailyBookingsComponent implements OnInit {
 	adminSharePercent: any;
 	previewCopyData: any;
 	accept_charge_id: any;
-	public is_stripe_added: boolean = false;
+	public is_stripe_added: any;
 
 	constructor(
 		private adminService: AdminService,
@@ -179,7 +179,6 @@ export class DailyBookingsComponent implements OnInit {
 
 		this.MapController()
 		this.is_stripe_added = localStorage.getItem('is_stripe_account_added') ? JSON.parse(localStorage.getItem('is_stripe_account_added')) : '';
-
 	}
 	ngAfterViewInit(): void {
 		this.subModules = localStorage.getItem("sub_modules");
@@ -560,8 +559,6 @@ export class DailyBookingsComponent implements OnInit {
 				this.prevPageUrl = this.bookingsRes.data.prev_page_url;
 				this.nextPageUrl = this.bookingsRes.data.next_page_url;
 				this.subModules = localStorage.getItem("sub_modules") || "";
-				this.currentUser =
-					JSON.parse(localStorage.getItem("userData")) || "";
 				this.spinner.hide();
 			});
 	}

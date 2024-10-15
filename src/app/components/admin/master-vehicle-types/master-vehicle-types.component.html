@@ -1,14 +1,10 @@
 <ngx-spinner></ngx-spinner>
 <main>
 	<!-- Main page content-->
-	<!-- *ngIf="currentUser?.created_by_role == 'admin' "
-*ngIf="currentUser?.created_by_role == 'admin' "
-*ngIf="currentUser?.created_by_role == 'admin' "
-*ngIf="currentUser?.created_by_role == 'admin' " -->
 	<section class="user_information">
 		<h2 class="headinginfo"> Master Vehicle Types </h2>
 		<div class="containeredd">
-			<div class="row">
+			<div class="row" *ngIf="currentUser?.created_by_role == 'admin' ">
 				<div class="col-md-12">
 					<button class="custom-btn add-button" (click)="openAddModal()">
 						<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-plus-circle"
@@ -21,7 +17,7 @@
 				</div>
 			</div>
 
-			<div class="row">
+			<div class="row" *ngIf="currentUser?.created_by_role == 'admin' ">
 				<div class="col-md-12">
 					<label class="alert alert-danger">Note: Add each different vehicle first. Enter rates and taxes for
 						each vehicle.</label>
@@ -48,7 +44,7 @@
 							<tr role="row">
 								<th>Image</th>
 								<th>Vehicle Type</th>
-								<th>Actions</th>
+								<th *ngIf="currentUser?.created_by_role == 'admin' ">Actions</th>
 							</tr>
 						</thead>
 						<tbody cdkDropList (cdkDropListDropped)="drop($event)">
@@ -60,7 +56,7 @@
 								<td>
 									<p>{{vehicle.vehicle_name}}</p>
 								</td>
-								<td>
+								<td *ngIf="currentUser?.created_by_role == 'admin' ">
 									<a class="user-profileded btn btn-icon btn-transparent-dark dropdown-toggle"
 										id="navbarDropdownUserImage" href="javascript:void(0);" role="button"
 										data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

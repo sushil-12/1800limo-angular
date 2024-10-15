@@ -24,7 +24,7 @@
                     </li>
                 </ul>
             </div>
-            <button [ngClass]="selectedPlanId == plans?.id ? 'selected_subs_btn' : 'subs_btn'" (click)="submitPlan(plans?.id)">
+            <button [ngClass]="selectedPlanId == plans?.id ? 'selected_subs_btn' : 'subs_btn'" (click)="submitPlan(plans)">
                 Get Started
             </button>
         </div>

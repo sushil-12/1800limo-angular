@@ -19,6 +19,8 @@ export class PaymentDetailsComponent implements OnInit {
   public response: any;
   public yearOptions: any = [];
   public subscription_product_id: any;
+  public planName: string = '';
+  public planPrice: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -32,7 +34,9 @@ export class PaymentDetailsComponent implements OnInit {
   ngOnInit(): void {
 
     this.registeredUser = JSON.parse(sessionStorage.getItem("registeredUserData"))
-    this.subscription_product_id = sessionStorage.getItem('selectedPlanId')
+    this.subscription_product_id = JSON.parse(sessionStorage.getItem('selectedPlan'))?.id
+    this.planName = JSON.parse(sessionStorage.getItem("selectedPlan"))?.product_name
+    this.planPrice = JSON.parse(sessionStorage.getItem("selectedPlan"))?.product_price
 
     const currentYear = (new Date()).getFullYear();
     for (let i = 0; i < 40; i++) {
@@ -57,23 +61,23 @@ export class PaymentDetailsComponent implements OnInit {
   submitForm() {
 
     this.submittedForm = true;
-
+    
     // stop here if form is invalid
     if (this.cardDetails.invalid) {
       return;
     }
-
+    
     console.log(this.cardDetails.value, this.registeredUser, this.subscription_product_id);
-
+    this.spinner.show()
+    
     let dataToSend = {
       ...this.cardDetails.value,
       ...this.registeredUser,
     }
-
+    
     dataToSend['subscription_product_id'] = this.subscription_product_id
 
     console.log("dataTosend", dataToSend)
-
 
     this.authService.createPayment(dataToSend)
       .pipe(

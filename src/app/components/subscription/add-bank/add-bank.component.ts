@@ -88,6 +88,7 @@ export class AddBankComponent implements OnInit {
 
     this.subsciberId = JSON.parse(localStorage.getItem("currentUser"))?.account_id
     this.is_stripe_added = JSON.parse(localStorage.getItem('is_stripe_account_added'))
+    console.log("is stripe",this.is_stripe_added)
 
     this.mapFunction();
 
