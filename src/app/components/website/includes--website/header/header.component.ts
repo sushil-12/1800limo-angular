@@ -26,8 +26,8 @@ export class HeaderComponent implements OnInit {
 	total_count: any;
 	splitSteps: any;
 	desktopWidth: any;
-	routeForSubscriptionProcess:any;
-	excludedRoutes: string[] = ['/subscription', '/partner-registration', '/payment-details']
+	routeForSubscriptionProcess: any;
+	excludedRoutes: string[] = ['/subscription', '/partner-registration', '/payment-details', '/quotebot/master-vehicle', '/quotebot/select-vehicle', '/quotebot/vehicle-details']
 
 	constructor(
 		private router: Router,
@@ -48,7 +48,7 @@ export class HeaderComponent implements OnInit {
 		//to remove join us btn from header
 		this.router.events.subscribe(event => {
 			if (event instanceof NavigationEnd) {
-			  this.routeForSubscriptionProcess = this.router.url;
+				this.routeForSubscriptionProcess = this.router.url;
 			}
 		});
 
@@ -56,7 +56,7 @@ export class HeaderComponent implements OnInit {
 
 	isExcludedRoute(): boolean {
 		return this.excludedRoutes.includes(this.routeForSubscriptionProcess);
-	  }
+	}
 
 	ngOnInit(): void {
 		// header scroll
@@ -211,10 +211,10 @@ export class HeaderComponent implements OnInit {
 			console.log("step 0  dashboard");
 
 		}
-		else if(role == 'sub_affiliate'){
+		else if (role == 'sub_affiliate') {
 			this.router.navigateByUrl('/sub_affiliate/my-bookings');
 		}
-		else{
+		else {
 			console.log(`redirecting to ${role}/bookings`)
 			this.spinner.show();
 			this.router.navigateByUrl(`${role}/bookings`)
