@@ -262,12 +262,23 @@ export class PartnerRegistrationComponent implements OnInit {
 
     this.submittedForm = true
 
-    if (this.registrationForm.invalid || this.enableOtpField) {
+    if (this.registrationForm.invalid) {
+      return;
+    }
+
+    if(this.enableOtpField){
+      console.log("phone not verified")
+      this.errorDialog.openDialog({
+        errors: {
+					error: `Please verify mobile number!`
+				}
+      })
       return;
     }
 
     if (this.registrationForm.get('userId').value == "") {
       this.enableOtpField = true
+      console.log("user id empty")
       return;
     }
 

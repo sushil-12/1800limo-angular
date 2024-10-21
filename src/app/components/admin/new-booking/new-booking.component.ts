@@ -1064,6 +1064,7 @@ export class NewBookingComponent implements OnInit {
 	}
 
 	changeReturnTransferType(event: any) {
+		console.log("return transfer type", event)
 		this.return_transfer_type = event
 	}
 
@@ -2536,6 +2537,7 @@ export class NewBookingComponent implements OnInit {
 			this.return_transfer_type = reverseStringChars(value)
 
 		})
+		
 
 		this.BookingForm.get('return_transfer_type').valueChanges.subscribe((value: string) => {
 			console.log("in return_transfer_type value changes", value)
@@ -2594,6 +2596,13 @@ export class NewBookingComponent implements OnInit {
 					this.BookingForm.get('return_pickup_airport_option').updateValueAndValidity();
 				}
 			}
+
+			const reverseStringChars = (text: string) => {
+				let temp = text.split('_')
+				return temp.reverse().join('_')
+			}
+			this.SetFormValue('transfer_type', reverseStringChars(value))
+			this.transfer_type = reverseStringChars(value)
 		})
 
 
