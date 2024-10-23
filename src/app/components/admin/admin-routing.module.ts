@@ -89,6 +89,8 @@ import { LooseAffiliateAccountDetailsComponent } from './loose-affiliate-account
 import { FleetComponent } from './cms/fleet/fleet.component';
 import { FleetPageEditComponent } from './cms/fleet-page-edit/fleet-page-edit.component';
 import { AddBankComponent } from '../subscription/add-bank/add-bank.component';
+import { AddVehicleSubscriberComponent } from '../subscription/add-vehicle-subscriber/add-vehicle-subscriber.component';
+import { VehicleDetailsComponent } from '../subscription/vehicle-details/vehicle-details.component';
 
 
 const routes: Routes = [
@@ -569,6 +571,14 @@ const routes: Routes = [
 				component: AffiliateStep6Component
 			}
 		]
+	},
+	{
+		path: 'vehicle-details',
+		component: VehicleDetailsComponent
+	},
+	{
+		path: 'add-vehicle-subscriber',
+		component: AddVehicleSubscriberComponent
 	}
 ];
 
