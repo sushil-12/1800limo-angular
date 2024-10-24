@@ -1,7 +1,7 @@
 <ngx-spinner></ngx-spinner>
 <div class="subs_wrapper">
     <div class="subs_div">
-        <div [ngClass]="selectedPlanId == plans?.id ? 'selected_subs_content' : 'subs_content' " *ngFor="let plans of planData" (click)="selectedPlan(plans?.id)">
+        <div [ngClass]="selectedPlanId == plans?.id ? 'selected_subs_content' : 'subs_content' " *ngFor="let plans of planData?.data" (click)="selectedPlan(plans?.id)">
             <img src="../../../../assets//images/basePlan.png" *ngIf="plans?.id == 1 else premiumPlan;" height="25" width="25"/>
             <ng-template #premiumPlan>
                 <img src="../../../../assets//images/gem.png" height="25" width="25"/>
@@ -17,8 +17,8 @@
                     month</span>
             </p>
             <div class="sub_planDetails">
-                <ul class="sub_ul" *ngIf="plans?.plan_details?.length > 0">
-                    <li *ngFor="let detail of plans.plan_details">
+                <ul class="sub_ul">
+                    <li *ngFor="let detail of plans?.product_description">
                         <img src="../../../../assets/images/Check.png" height="22" style="margin-right: 6px;" />
                         {{ detail }}
                     </li>

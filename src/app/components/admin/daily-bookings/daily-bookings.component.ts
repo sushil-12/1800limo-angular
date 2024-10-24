@@ -74,6 +74,8 @@ export class DailyBookingsComponent implements OnInit {
 	previewCopyData: any;
 	accept_charge_id: any;
 	public is_stripe_added: any;
+	public stripeResp: any;
+	public stripeErroMsg: string = '';
 
 	constructor(
 		private adminService: AdminService,
@@ -136,33 +138,6 @@ export class DailyBookingsComponent implements OnInit {
 				this.status_list = data;
 			});
 
-		// this.filtertype = this.adminService.checkCookie('filtertype') ?
-		// 	this.adminService.getCookie('filtertype') :
-		// 	"bookingid";
-
-		// if (this.adminService.checkCookie('startDate'))
-		// {
-		// 	this.startDate = this.adminService.getCookie('startDate');
-		// }
-
-		// Override End Date
-		// if (this.adminService.checkCookie('endDate'))
-		// {
-		// 	this.endDate = this.adminService.getCookie('endDate');
-		// }
-
-		// // Override Search Text
-		// if (this.adminService.checkCookie('search'))
-		// {
-		// 	this.searchText = this.adminService.getCookie('search');
-		// }
-
-		// Override Filter Type
-		// if (this.adminService.checkCookie('filtertype'))
-		// {
-		// 	this.filtertype = this.adminService.getCookie('filtertype');
-		// }
-
 		this.loadBookings(null, this.startDate, this.endDate, this.searchText);
 
 		//change status booking form validation
@@ -178,7 +153,39 @@ export class DailyBookingsComponent implements OnInit {
 		});
 
 		this.MapController()
-		this.is_stripe_added = localStorage.getItem('is_stripe_account_added') ? JSON.parse(localStorage.getItem('is_stripe_account_added')) : '';
+		if (this.currentUser?.created_by_role == 'subscriber') {
+			this.is_stripe_added = localStorage.getItem('is_stripe_account_added') ? JSON.parse(localStorage.getItem('is_stripe_account_added')) : '';
+			console.log("is stripe", this.is_stripe_added)
+			this.spinner.show()
+			this.adminService.getSubsriberBank(this.currentUser?.account_id)
+				.pipe(
+					catchError(err => {
+						// this.stateManagementService.setprogressBar(false);
+						this.spinner.hide()
+						return throwError(err);
+					})
+				).subscribe(result => {
+					this.spinner.hide()
+					this.stripeResp = result
+					console.log(this.stripeResp)
+					console.log(this.stripeResp?.data?.stripe_account_status == 'unverified')
+					if (this.stripeResp?.data?.stripe_account_status == 'unverified') {
+						console.log("in if")
+						this.stripeErroMsg = 'Your Stripe/Bank account is currently unverified. Please check for any issues or wait for 24 hours.'
+					}
+					else if (!this.is_stripe_added) {
+						this.stripeErroMsg = 'Please fill out the bank details to activate payments.'
+					}
+					else {
+						this.stripeErroMsg = ''
+					}
+		
+					console.log('Error msg:', this.stripeErroMsg)
+				})
+
+
+		}
+
 	}
 	ngAfterViewInit(): void {
 		this.subModules = localStorage.getItem("sub_modules");

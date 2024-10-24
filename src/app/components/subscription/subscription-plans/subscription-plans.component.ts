@@ -12,7 +12,6 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class SubscriptionPlansComponent implements OnInit {
   public planData: any;
-  public planDetails: string[] = ['Enhanced Analytics', 'Custom Domain', 'E-commerce Integration', 'Customer Support', 'Advanced Security'];
   public selectedPlanId: any = '';
 
   constructor(
@@ -38,10 +37,6 @@ export class SubscriptionPlansComponent implements OnInit {
       response => {
         this.spinner.hide()
         this.planData = response
-        this.planData = this.planData?.data.map(plan => ({
-          ...plan,
-          plan_details: this.planDetails // Add plan details to each plan
-        }));
         console.log("subs plan", this.planData)
       }
     )

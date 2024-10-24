@@ -77,6 +77,11 @@ import { PartnerRegistrationComponent } from './components/subscription/partner-
 import { SubscriptionPlansComponent } from './components/subscription/subscription-plans/subscription-plans.component';
 import { PaymentDetailsComponent } from './components/subscription/payment-details/payment-details.component';
 import { AddBankComponent } from './components/subscription/add-bank/add-bank.component';
+import { AddVehicleSubscriberComponent } from './components/subscription/add-vehicle-subscriber/add-vehicle-subscriber.component';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { VehicleDetailsComponent } from './components/subscription/vehicle-details/vehicle-details.component';
+import { VehicleRatesSubscriberComponent } from './components/subscription/vehicle-rates-subscriber/vehicle-rates-subscriber.component';
+import { EditVehicleSubscriberComponent } from './components/subscription/edit-vehicle-subscriber/edit-vehicle-subscriber.component';
 @NgModule({
 	declarations: [
 		AppComponent,
@@ -121,6 +126,10 @@ import { AddBankComponent } from './components/subscription/add-bank/add-bank.co
 		SubscriptionPlansComponent,
 		PaymentDetailsComponent,
 		AddBankComponent,
+		AddVehicleSubscriberComponent,
+		VehicleDetailsComponent,
+		VehicleRatesSubscriberComponent,
+		EditVehicleSubscriberComponent,
 	],
 	imports: [
 		BrowserModule,
@@ -144,7 +153,8 @@ import { AddBankComponent } from './components/subscription/add-bank/add-bank.co
 		NgxSpinnerModule,
 		SharedModule,
 		NgOtpInputModule,
-		MatRadioModule
+		MatRadioModule,
+		NgSelectModule
 	],
 	providers: [
 		{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },

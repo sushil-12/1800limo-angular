@@ -1,0 +1,322 @@
+.row {
+	margin: 0;
+}
+
+.imageSection {
+	margin-top: 30px;
+}
+
+.vehicleData {
+	list-style-type: none;
+	padding-left   : 0;
+	margin-bottom  : 0;
+}
+
+.input-container {
+	margin-top: 0;
+}
+
+.cityTax {
+	margin-top   : 0px;
+	margin-bottom: 0px;
+}
+
+.cityTaxErrorMsg {
+	margin-bottom: 20px;
+}
+
+.mile_km_radio li p label {
+	font-size: 1rem;
+}
+
+.vehicleImage img {
+	width        : 280px;
+	height       : 200px;
+	max-width    : 100%;
+	border-radius: 20px;
+	object-fit   : cover;
+}
+
+.taxesStyle .input-container {
+	margin-top: 0;
+}
+
+.gratuityLabel {
+	font-size   : 24px;
+	position    : absolute;
+	font-weight : 600;
+	top         : -5px;
+	padding-left: 10px;
+}
+
+.amenityLabel {
+	font-weight: 600;
+}
+
+div#rate-manager-slider {
+	width: 100%;
+
+	&>span {
+		cursor: pointer;
+
+		input {
+			width: 81%;
+		}
+	}
+
+	&>p {
+		width : 90%;
+		cursor: pointer;
+	}
+
+	#slider {
+		background-color: #908c8c;
+		appearance      : none;
+		outline         : none;
+		border-radius   : 10px;
+		height          : 3px
+	}
+
+	#slider::-webkit-slider-thumb {
+		-webkit-appearance: none;
+		appearance        : none;
+		width             : 25px;
+		height            : 25px;
+		border-radius     : 50%;
+		background-color  : var(--orange-color);
+		cursor            : pointer;
+		border            : 3px solid var(--orange-color);
+	}
+
+	#slider::-moz-range-thumb {
+		width           : 25px;
+		height          : 25px;
+		border-radius   : 50%;
+		background-color: var(--orange-color);
+		cursor          : pointer;
+		border          : 3px solid var(--orange-color);
+	}
+}
+
+.select-currency-label {
+	position  : relative;
+	top       : 15px;
+	left      : 8px;
+	background: #fff;
+	color     : #000 !important;
+	padding   : 0 3px;
+	font-size : 12px !important;
+	transition: 0.3s;
+}
+
+.select-extension-label {
+	position  : relative;
+	top       : 15px;
+	left      : 8px;
+	background: #fff;
+	color     : #000 !important;
+	padding   : 0 3px;
+	font-size : 12px !important;
+	transition: 0.3s;
+}
+
+.user_information .rateExtensionStyle {
+	border-bottom: 1px solid #ccc !important;
+	background   : #fff;
+	padding-left : 25px;
+	height       : 60px;
+	border-radius: 5px;
+}
+
+.spanRate {
+	color   : var(--orange-color);
+	position: absolute;
+	top     : 43px;
+	left    : 25px;
+}
+
+
+
+#card-type-container {
+	.card-type {
+		width        : 48%;
+		padding      : 1rem;
+		text-align   : center;
+		border-radius: 1rem;
+		height       : fit-content;
+		line-height  : 2.7rem;
+		box-shadow   : 0px 5px 10px 1px rgba(0, 0, 0, 0.4);
+		margin       : 0 3px;
+		cursor       : pointer;
+		transition   : box-shadow 0.25s ease, background-color 0.25s ease;
+	}
+
+	.card-type.active {
+		background-color: var(--green-color);
+		box-shadow      : 0px 5px 10px -1px rgb(0 0 0 / 30%);
+	}
+}
+
+@media only screen and (min-width:768px) {
+	.vehicleData li {
+		margin-bottom: 10px;
+		font-size    : 18px;
+		font-weight  : 600;
+	}
+}
+
+
+@media only screen and (min-width:1199px) {
+	.input-container:focus {
+		outline: none;
+
+		.radio-button:checked+.radio-tile {
+			color    : #000 !important;
+			transform: scale(1, 1);
+
+			.radio-tile-label {
+				color: #000 !important;
+			}
+		}
+
+		.radio-tile-label {
+			color: #000 !important;
+		}
+	}
+}
+
+@media only screen and (max-width:991px) {
+	.vehicleImage img {
+		width : 100%;
+		height: auto;
+	}
+}
+
+@media only screen and (max-width:767px) {
+	.mobilePadding {
+		padding: 0px 15px !important;
+	}
+
+	.cityTax {
+		margin-top   : 10px;
+		margin-bottom: 0px;
+	}
+
+	.flatRange {
+		margin-top: 0px;
+	}
+
+	.vehicleData li {
+		margin-top: 10px;
+	}
+
+	.card-type {
+		padding: 0 !important;
+	}
+}
+
+@media only screen and (max-width:575px) {
+	.vehicleData li:first-child {
+		margin-top: 0px;
+	}
+
+	.vehicleData li {
+		margin-top: 0px;
+		font-size : 14px;
+	}
+
+	.vehicleImage img {
+		width : 100%;
+		height: auto;
+	}
+}
+
+// #cd-percent label{
+// 	font-size: 1.1vw !important;
+// }
+
+
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-outline-gap{
+	border-top-color: #f44336!important;
+}
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.ng-untouched.mat-form-field-should-float.mat-focused .mat-form-field-outline-gap{
+	border-top-color: #3f51b5!important;
+}
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.ng-touched.ng-dirty.mat-form-field-should-float.ng-valid .mat-form-field-outline-gap{
+	border-top-color: rgba(0,0,0,.12)!important;
+}
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.ng-touched.mat-form-field-should-float.ng-valid.mat-focused .mat-form-field-outline-gap{
+	border-top-color: #3f51b5!important;
+}
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float.ng-dirty.ng-valid.ng-touched .mat-form-field-flex:hover .mat-form-field-outline-gap{border-top-color: rgba(0,0,0,.87)!important;}
+
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float.mat-focused .mat-form-field-outline-gap{
+	border-top-color: #f44336!important;
+}
+:host ::ng-deep.mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick .mat-form-field-outline-gap{
+	border-top-color: #3f51b5!important;
+}
+:host ::ng-deep.mat-form-field-type-mat-select.mat-form-field-appearance-outline.mat-form-field-can-float.ng-untouched.ng-invalid.mat-form-field-should-float .mat-form-field-outline-gap{
+	border-top-color: rgba(0,0,0,.12)!important;
+}
+:host ::ng-deep.mat-form-field-type-mat-select.mat-form-field-appearance-outline.mat-form-field-can-float.ng-untouched.ng-invalid .mat-form-field-flex:hover .mat-form-field-outline-gap{border-top-color: rgba(0,0,0,.87)!important;}
+
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-form-field-wrapper .mat-form-field-infix mat-label{
+	font-weight: normal!important;
+	font-size: 17px!important;
+	color: #191919;
+}
+:host ::ng-deep.mat-form-field-appearance-outline .mat-form-field-label{top:1.3675em}
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-form-field-wrapper .mat-form-field-infix .labelClass{font-weight: normal!important;
+	font-size: 14px!important;
+	color: #191919;
+top:2.05em}
+:host ::ng-deep .mat-form-field {
+	.mat-form-field-outline {
+	  &-end {
+		border-radius: 0 10px 10px 0 !important;
+	  }
+  
+	  &-start {
+		border-radius: 10px 0 0 10px !important;
+		flex-grow: 1;
+	  }
+	}
+  }
+  :host ::ng-deep .mat-form-field .mat-form-field-wrapper{
+		border-radius: 10px;
+		background-color: rgb(226, 226, 226,1);
+  } 
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-form-field-wrapper .mat-form-field-infix .labelClass+.iti--allow-dropdown .iti__flag-container{top:-12px}
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label,:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float .mat-input-server:focus+.mat-form-field-label-wrapper .mat-form-field-label{transform:translateY(-0.8em) scale(0.75)!important;width:133.3333333333%}
+
+:host ::ng-deep.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-outline-gap {
+    border-top-color: #b2b2b2 !important;
+}
+
+.mat-option{
+	background-color: rgb(226, 226, 226,1) !important;
+}
+:host ::ng-deep .ng-option{
+	background-color: rgb(226, 226, 226,1) !important;
+}
+
+:host ::ng-deep .mat-input-element{
+	font-weight: 500;
+}
+
+:host ::ng-deep .selectStyle select {
+	font-weight: 400;
+}
+
+:host ::ng-deep .mat-select-value-text {
+	font-weight: 500 !important;
+  }
+  .asterisk{
+	font-size: 22px;
+  }
+
+  .border-red{
+	border: 2px solid red;
+	border-radius: 4px;
+}
