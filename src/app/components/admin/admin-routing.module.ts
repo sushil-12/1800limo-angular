@@ -91,6 +91,8 @@ import { FleetPageEditComponent } from './cms/fleet-page-edit/fleet-page-edit.co
 import { AddBankComponent } from '../subscription/add-bank/add-bank.component';
 import { AddVehicleSubscriberComponent } from '../subscription/add-vehicle-subscriber/add-vehicle-subscriber.component';
 import { VehicleDetailsComponent } from '../subscription/vehicle-details/vehicle-details.component';
+import { VehicleRatesSubscriberComponent } from '../subscription/vehicle-rates-subscriber/vehicle-rates-subscriber.component';
+import { EditVehicleSubscriberComponent } from '../subscription/edit-vehicle-subscriber/edit-vehicle-subscriber.component';
 
 
 const routes: Routes = [
@@ -579,6 +581,18 @@ const routes: Routes = [
 	{
 		path: 'add-vehicle-subscriber',
 		component: AddVehicleSubscriberComponent
+	},
+	{
+		path: 'edit-vehicle-subscriber',
+		component: EditVehicleSubscriberComponent
+	},
+	{
+		path: 'add-vehicle-rates-subscriber',
+		component: VehicleRatesSubscriberComponent
+	},
+	{
+		path: 'edit-vehicle-rates-subscriber',
+		component: VehicleRatesSubscriberComponent
 	}
 ];
 

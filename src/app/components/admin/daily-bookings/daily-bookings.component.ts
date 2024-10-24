@@ -74,7 +74,6 @@ export class DailyBookingsComponent implements OnInit {
 	previewCopyData: any;
 	accept_charge_id: any;
 	public is_stripe_added: any;
-	public is_stripe_verified: any;
 	public stripeResp: any;
 	public stripeErroMsg: string = '';
 
@@ -155,6 +154,9 @@ export class DailyBookingsComponent implements OnInit {
 
 		this.MapController()
 		if (this.currentUser?.created_by_role == 'subscriber') {
+			this.is_stripe_added = localStorage.getItem('is_stripe_account_added') ? JSON.parse(localStorage.getItem('is_stripe_account_added')) : '';
+			console.log("is stripe", this.is_stripe_added)
+			this.spinner.show()
 			this.adminService.getSubsriberBank(this.currentUser?.account_id)
 				.pipe(
 					catchError(err => {
@@ -163,23 +165,25 @@ export class DailyBookingsComponent implements OnInit {
 						return throwError(err);
 					})
 				).subscribe(result => {
+					this.spinner.hide()
 					this.stripeResp = result
 					console.log(this.stripeResp)
-
-					this.is_stripe_verified = this.stripeResp?.data?.stripe_account_status
-					console.log(this.is_stripe_verified)
+					console.log(this.stripeResp?.data?.stripe_account_status == 'unverified')
+					if (this.stripeResp?.data?.stripe_account_status == 'unverified') {
+						console.log("in if")
+						this.stripeErroMsg = 'Your Stripe/Bank account is currently unverified. Please check for any issues or wait for 24 hours.'
+					}
+					else if (!this.is_stripe_added) {
+						this.stripeErroMsg = 'Please fill out the bank details to activate payments.'
+					}
+					else {
+						this.stripeErroMsg = ''
+					}
+		
+					console.log('Error msg:', this.stripeErroMsg)
 				})
-			this.is_stripe_added = localStorage.getItem('is_stripe_account_added') ? JSON.parse(localStorage.getItem('is_stripe_account_added')) : '';
-		}
 
-		if (!this.is_stripe_added) {
-			this.stripeErroMsg = 'Please fill out the bank details to activate payments.'
-		}
-		else if (this.is_stripe_verified == 'unverified') {
-			this.stripeErroMsg = 'Your Stripe/Bank account is currently unverified. Please check for any issues or wait for 24 hours.'
-		}
-		else {
-			this.stripeErroMsg = ''
+
 		}
 
 	}

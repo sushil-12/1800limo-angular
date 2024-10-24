@@ -922,7 +922,7 @@ export class AddVehicleSubscriberComponent implements OnInit {
 			});
 	}
 	backButton() {
-		this.router.navigate(['/admin/vehicle-details']);
+		this.router.navigate(['admin/vehicle-details']);
 	}
 
 	resetForm() {

@@ -8,12 +8,12 @@ import { NgxSpinnerService } from 'ngx-spinner';
 declare var $: any;
 
 @Component({
-  selector: 'app-vehicle-details',
-  templateUrl: './vehicle-details.component.html',
-  styleUrls: ['./vehicle-details.component.scss']
+	selector: 'app-vehicle-details',
+	templateUrl: './vehicle-details.component.html',
+	styleUrls: ['./vehicle-details.component.scss']
 })
 export class VehicleDetailsComponent implements OnInit {
-  
+
 	checked = false;
 	disabled = false;
 
@@ -56,33 +56,24 @@ export class VehicleDetailsComponent implements OnInit {
 		}
 
 		// this.affiliateId = sessionStorage.getItem("affiliateId");
-    this.affiliateId = JSON.parse(localStorage.getItem("currentUser"))?.account_id
+		this.affiliateId = JSON.parse(localStorage.getItem("currentUser"))?.account_id
 
 		// Load Our vehicles using API
 		this.adminService.adminAffiliateVehicleList(this.affiliateId).then(result => {
 			this.vehiclesRes = result;
 			this.vehicles = this.vehiclesRes.data.vehicleList;
-      this.canAddVehicle = true;
-      this.instructionBasedOnAffiliate = 'Click ⊕ Add Vehicle - If Different Year, Make, Model.'
+			if (this.vehiclesRes?.data?.can_add_vehicle) {
+				this.instructionBasedOnAffiliate = 'Click ⊕ Add Vehicle - If Different Year, Make, Model.'
+			}
+			else if(this.vehiclesRes?.data?.max_vehicles == 2){
+				this.instructionBasedOnAffiliate = 'Pay $25 to add an additional vehicle.'
+			}
+			else{
+				this.instructionBasedOnAffiliate = 'You are not permitted to add more vehicles based on your current subscription.'
+			}
 
-			// switch (sessionStorage.getItem("affiliateType")) {
-			// 	case 'gig_operator':
-			// 		this.instructionBasedOnAffiliate = 'Note : Gig Drivers can enter only 1 vehicle.';
-			// 		this.checkCanAddVehicle(1)
-			// 		break;
-			// 	case 'taxi_operator':
-			// 		this.instructionBasedOnAffiliate = 'Note : Taxi Operators can enter only 1 vehicle.';
-			// 		this.checkCanAddVehicle(1)
-			// 		break;
-			// 	case 'black_limo_operator':
-			// 		this.instructionBasedOnAffiliate = 'Click ⊕ Add Vehicle - If Different Year, Make, Model.';
-			// 		this.checkCanAddVehicle(2)
-			// 		break;
-			// 	case 'fleet_operator':
-			// 		this.instructionBasedOnAffiliate = 'Click ⊕ Add Vehicle - If Different Year, Make, Model.';
-			// 		this.canAddVehicle = true;//can add any number of vehicles
-			// 		break;
-			// }
+			this.checkCanAddVehicle(this.vehiclesRes?.data?.max_vehicles)
+
 			this.stateManagementService.setprogressBar(false);
 			this.stateManagementService.setNumberOfVehicles(this.vehiclesRes.data.totalNumberOfVehicles);
 			setTimeout(() => {
@@ -91,14 +82,15 @@ export class VehicleDetailsComponent implements OnInit {
 		});
 	}
 
-	// checkCanAddVehicle(numOfVehicles) {
-	// 	if (this.vehiclesRes.data.totalNumberOfVehicles >= numOfVehicles) {
-	// 		this.canAddVehicle = false;
-	// 	}
-	// 	else {
-	// 		this.canAddVehicle = true;
-	// 	}
-	// }
+	checkCanAddVehicle(numOfVehicles) {
+		if (this.vehiclesRes.data.totalNumberOfVehicles >= numOfVehicles) {
+			this.canAddVehicle = false;
+		}
+		else {
+			this.canAddVehicle = true;
+		}
+	}
+
 	addVehicleClick(vehicleTypeId) {
 		// console.log(vehicleTypeId);
 		this.router.navigate(['/admin/add-vehicle-subscriber'], { queryParams: { vehicleTypeId: vehicleTypeId } });

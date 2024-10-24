@@ -80,6 +80,8 @@ import { AddBankComponent } from './components/subscription/add-bank/add-bank.co
 import { AddVehicleSubscriberComponent } from './components/subscription/add-vehicle-subscriber/add-vehicle-subscriber.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { VehicleDetailsComponent } from './components/subscription/vehicle-details/vehicle-details.component';
+import { VehicleRatesSubscriberComponent } from './components/subscription/vehicle-rates-subscriber/vehicle-rates-subscriber.component';
+import { EditVehicleSubscriberComponent } from './components/subscription/edit-vehicle-subscriber/edit-vehicle-subscriber.component';
 @NgModule({
 	declarations: [
 		AppComponent,
@@ -126,6 +128,8 @@ import { VehicleDetailsComponent } from './components/subscription/vehicle-detai
 		AddBankComponent,
 		AddVehicleSubscriberComponent,
 		VehicleDetailsComponent,
+		VehicleRatesSubscriberComponent,
+		EditVehicleSubscriberComponent,
 	],
 	imports: [
 		BrowserModule,
