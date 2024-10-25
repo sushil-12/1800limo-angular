@@ -183,7 +183,7 @@ export class DailyBookingsComponent implements OnInit {
 				this.stripeResp = result
 				console.log(this.stripeResp)
 				console.log(this.stripeResp?.data?.stripe_account_status == 'unverified')
-				if (this.stripeResp?.data?.stripe_account_status == 'unverified') {
+				if (this.stripeResp?.data?.stripe_account_status == 'unverified' && this.is_stripe_added) {
 					console.log("in if")
 					this.stripeErroMsg = 'Your Stripe/Bank account is currently unverified. Please check for any issues or wait for 24 hours.'
 				}
