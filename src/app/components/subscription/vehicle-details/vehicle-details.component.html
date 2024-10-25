@@ -17,6 +17,14 @@
 			</div> -->
 
 		</div>
+		<div class="row" *ngIf="enablePayButton">
+			<div class="col-md-12">
+				<button type="button" class="custom-btn add-button" (click)="payExtraAmount()"
+					tabindex="1">
+					Pay Now
+				</button>
+			</div>
+		</div>
 		<div class="row" *ngIf="canAddVehicle">
 			<div class="col-md-12">
 				<button type="button" class="custom-btn add-button" (click)="addVehicleClick(vehicleTypeId)"

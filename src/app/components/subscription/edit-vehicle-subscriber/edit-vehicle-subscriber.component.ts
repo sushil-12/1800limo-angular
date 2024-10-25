@@ -435,21 +435,21 @@ export class EditVehicleSubscriberComponent implements OnInit {
             this.setSpecialAmenities();//show selected special amenities
             this.setInteriors();//show selected interiors
 
-            this.stateManagementService.getNumberOfVehicles().subscribe(numberOfVehicles => {
-              let numberOfVehiclesCanBeAdded;
-              if (this.affiliateType == 'fleet_operator') {
-                this.addVehicleForm.controls['numberOfVehicles'].setValidators([Validators.required, Validators.pattern("^[0-9]*$")]);
-              }
-              else if (this.affiliateType == 'black_limo_operator') {
-                numberOfVehiclesCanBeAdded = 2 - (numberOfVehicles - this.response2.data.numberOfVehicles);
-                this.addVehicleForm.controls['numberOfVehicles'].setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.min(1), Validators.max(numberOfVehiclesCanBeAdded)]);
-              }
-              else {
-                numberOfVehiclesCanBeAdded = 1 - (numberOfVehicles - this.response2.data.numberOfVehicles);
-                this.addVehicleForm.controls['numberOfVehicles'].setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.min(1), Validators.max(numberOfVehiclesCanBeAdded)]);
-              }
-              this.addVehicleForm.controls['numberOfVehicles'].updateValueAndValidity();
-            });
+            // this.stateManagementService.getNumberOfVehicles().subscribe(numberOfVehicles => {
+            //   let numberOfVehiclesCanBeAdded;
+            //   if (this.affiliateType == 'fleet_operator') {
+            //     this.addVehicleForm.controls['numberOfVehicles'].setValidators([Validators.required, Validators.pattern("^[0-9]*$")]);
+            //   }
+            //   else if (this.affiliateType == 'black_limo_operator') {
+            //     numberOfVehiclesCanBeAdded = 2 - (numberOfVehicles - this.response2.data.numberOfVehicles);
+            //     this.addVehicleForm.controls['numberOfVehicles'].setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.min(1), Validators.max(numberOfVehiclesCanBeAdded)]);
+            //   }
+            //   else {
+            //     numberOfVehiclesCanBeAdded = 1 - (numberOfVehicles - this.response2.data.numberOfVehicles);
+            //     this.addVehicleForm.controls['numberOfVehicles'].setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.min(1), Validators.max(numberOfVehiclesCanBeAdded)]);
+            //   }
+            //   this.addVehicleForm.controls['numberOfVehicles'].updateValueAndValidity();
+            // });
             this.spinner.hide()
           });
         // this.stateManagementService.setprogressBar(false);

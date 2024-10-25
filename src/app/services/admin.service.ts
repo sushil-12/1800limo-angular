@@ -883,7 +883,7 @@ export class AdminService {
 	}
 
 	createBooking(data: any, update_type: string) {
-		if (update_type == 'return' || update_type == 'repeat'  || update_type == 'round') {
+		if (update_type == 'return' || update_type == 'repeat' || update_type == 'round') {
 			return this.httpClient.post(`${this.serverUrl}duplicate-reservation`, data)
 		}
 		if (data.reservation_id) {
@@ -1306,19 +1306,23 @@ export class AdminService {
 	chargeBackPermission(acc_id, permission) {
 		return this.httpClient.post(this.serverUrl + 'affiliate/charge-back-permission', { 'acc_id': acc_id, 'permission': permission });
 	}
-	
-	addSubscriberBank(data, type = ''){
-		console.log("type",type)
-		if(type == 'edit'){
+
+	addSubscriberBank(data, type = '') {
+		console.log("type", type)
+		if (type == 'edit') {
 			return this.httpClient.put(this.serverUrl + 'edit-subscriber-bank', data);
 		}
-		else{
+		else {
 			return this.httpClient.post(this.serverUrl + 'add-subscriber-bank', data);
 		}
 	}
 
 	getSubsriberBank(acc_id) {
 		return this.httpClient.get(this.serverUrl + `get-subscriber-bank/${acc_id}`);
+	}
+
+	chargeSubscriberForVehicle(id) {
+		return this.httpClient.post(this.serverUrl + `charge-subscriber-for-vehicle`, { 'account_id': id })
 	}
 
 }

@@ -222,21 +222,21 @@ export class AddVehicleSubscriberComponent implements OnInit {
 			// this.addVehicleForm.controls['rearPlateImage'].updateValueAndValidity();
 		}
 
-		this.stateManagementService.getNumberOfVehicles().subscribe(numberOfVehicles => {
-			let numberOfVehiclesCanBeAdded;
-			if (this.affiliateType == 'fleet_operator') {
-				this.addVehicleForm.controls['numberOfVehicles'].setValidators([Validators.required, Validators.pattern("^[0-9]*$")]);
-			}
-			else if (this.affiliateType == 'black_limo_operator') {
-				numberOfVehiclesCanBeAdded = 2 - numberOfVehicles;
-				this.addVehicleForm.controls['numberOfVehicles'].setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.min(1), Validators.max(numberOfVehiclesCanBeAdded)]);
-			}
-			else {
-				numberOfVehiclesCanBeAdded = 1 - numberOfVehicles;
-				this.addVehicleForm.controls['numberOfVehicles'].setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.min(1), Validators.max(numberOfVehiclesCanBeAdded)]);
-			}
-			this.addVehicleForm.controls['numberOfVehicles'].updateValueAndValidity();
-		});
+		// this.stateManagementService.getNumberOfVehicles().subscribe(numberOfVehicles => {
+		// 	let numberOfVehiclesCanBeAdded;
+		// 	if (this.affiliateType == 'fleet_operator') {
+		// 		this.addVehicleForm.controls['numberOfVehicles'].setValidators([Validators.required, Validators.pattern("^[0-9]*$")]);
+		// 	}
+		// 	else if (this.affiliateType == 'black_limo_operator') {
+		// 		numberOfVehiclesCanBeAdded = 2 - numberOfVehicles;
+		// 		this.addVehicleForm.controls['numberOfVehicles'].setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.min(1), Validators.max(numberOfVehiclesCanBeAdded)]);
+		// 	}
+		// 	else {
+		// 		numberOfVehiclesCanBeAdded = 1 - numberOfVehicles;
+		// 		this.addVehicleForm.controls['numberOfVehicles'].setValidators([Validators.required, Validators.pattern("^[0-9]*$"), Validators.min(1), Validators.max(numberOfVehiclesCanBeAdded)]);
+		// 	}
+		// 	this.addVehicleForm.controls['numberOfVehicles'].updateValueAndValidity();
+		// });
 
 		/** spinner starts on init */
 		this.spinner.show();

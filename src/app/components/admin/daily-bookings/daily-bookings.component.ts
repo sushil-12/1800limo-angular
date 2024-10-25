@@ -154,36 +154,7 @@ export class DailyBookingsComponent implements OnInit {
 
 		this.MapController()
 		if (this.currentUser?.created_by_role == 'subscriber') {
-			this.is_stripe_added = localStorage.getItem('is_stripe_account_added') ? JSON.parse(localStorage.getItem('is_stripe_account_added')) : '';
-			console.log("is stripe", this.is_stripe_added)
-			this.spinner.show()
-			this.adminService.getSubsriberBank(this.currentUser?.account_id)
-				.pipe(
-					catchError(err => {
-						// this.stateManagementService.setprogressBar(false);
-						this.spinner.hide()
-						return throwError(err);
-					})
-				).subscribe(result => {
-					this.spinner.hide()
-					this.stripeResp = result
-					console.log(this.stripeResp)
-					console.log(this.stripeResp?.data?.stripe_account_status == 'unverified')
-					if (this.stripeResp?.data?.stripe_account_status == 'unverified') {
-						console.log("in if")
-						this.stripeErroMsg = 'Your Stripe/Bank account is currently unverified. Please check for any issues or wait for 24 hours.'
-					}
-					else if (!this.is_stripe_added) {
-						this.stripeErroMsg = 'Please fill out the bank details to activate payments.'
-					}
-					else {
-						this.stripeErroMsg = ''
-					}
-		
-					console.log('Error msg:', this.stripeErroMsg)
-				})
-
-
+			this.stripeDetailsCheck()
 		}
 
 	}
@@ -194,6 +165,37 @@ export class DailyBookingsComponent implements OnInit {
 		this.sendEmailModalFocus.nativeElement
 			.querySelector("textarea")
 			.focus();
+	}
+
+	stripeDetailsCheck(){
+		this.is_stripe_added = localStorage.getItem('is_stripe_account_added') ? JSON.parse(localStorage.getItem('is_stripe_account_added')) : '';
+		console.log("is stripe", this.is_stripe_added)
+		this.spinner.show()
+		this.adminService.getSubsriberBank(this.currentUser?.account_id)
+			.pipe(
+				catchError(err => {
+					// this.stateManagementService.setprogressBar(false);
+					this.spinner.hide()
+					return throwError(err);
+				})
+			).subscribe(result => {
+				this.spinner.hide()
+				this.stripeResp = result
+				console.log(this.stripeResp)
+				console.log(this.stripeResp?.data?.stripe_account_status == 'unverified')
+				if (this.stripeResp?.data?.stripe_account_status == 'unverified' && this.is_stripe_added) {
+					console.log("in if")
+					this.stripeErroMsg = 'Your Stripe/Bank account is currently unverified. Please check for any issues or wait for 24 hours.'
+				}
+				else if (!this.is_stripe_added) {
+					this.stripeErroMsg = 'Please fill out the bank details to activate payments.'
+				}
+				else {
+					this.stripeErroMsg = ''
+				}
+	
+				console.log('Error msg:', this.stripeErroMsg)
+			})
 	}
 
 	MapController() {

@@ -30,6 +30,7 @@ export class VehicleDetailsComponent implements OnInit {
 	public affiliateId: any;
 	currentUser: any;
 	affiliateType: string;
+	public enablePayButton: boolean = false;
 
 	constructor(
 		private adminService: AdminService,
@@ -59,20 +60,26 @@ export class VehicleDetailsComponent implements OnInit {
 		this.affiliateId = JSON.parse(localStorage.getItem("currentUser"))?.account_id
 
 		// Load Our vehicles using API
+		this.getVehicle()
+	}
+
+	getVehicle(){
 		this.adminService.adminAffiliateVehicleList(this.affiliateId).then(result => {
 			this.vehiclesRes = result;
-			this.vehicles = this.vehiclesRes.data.vehicleList;
+			this.vehicles = this.vehiclesRes?.data?.vehicleList;
+			this.canAddVehicle = this.vehiclesRes?.data?.can_add_vehicle
 			if (this.vehiclesRes?.data?.can_add_vehicle) {
 				this.instructionBasedOnAffiliate = 'Click ⊕ Add Vehicle - If Different Year, Make, Model.'
 			}
-			else if(this.vehiclesRes?.data?.max_vehicles == 2){
+			else if (this.vehiclesRes?.data?.max_vehicles == 2 && !this.vehiclesRes?.data?.can_add_vehicle) {
 				this.instructionBasedOnAffiliate = 'Pay $25 to add an additional vehicle.'
+				this.enablePayButton = true
 			}
-			else{
+			else {
 				this.instructionBasedOnAffiliate = 'You are not permitted to add more vehicles based on your current subscription.'
 			}
 
-			this.checkCanAddVehicle(this.vehiclesRes?.data?.max_vehicles)
+			// this.checkCanAddVehicle(this.vehiclesRes?.data?.max_vehicles)
 
 			this.stateManagementService.setprogressBar(false);
 			this.stateManagementService.setNumberOfVehicles(this.vehiclesRes.data.totalNumberOfVehicles);
@@ -82,14 +89,14 @@ export class VehicleDetailsComponent implements OnInit {
 		});
 	}
 
-	checkCanAddVehicle(numOfVehicles) {
-		if (this.vehiclesRes.data.totalNumberOfVehicles >= numOfVehicles) {
-			this.canAddVehicle = false;
-		}
-		else {
-			this.canAddVehicle = true;
-		}
-	}
+	// checkCanAddVehicle(numOfVehicles) {
+	// 	if (this.vehiclesRes.data.totalNumberOfVehicles >= numOfVehicles) {
+	// 		this.canAddVehicle = false;
+	// 	}
+	// 	else {
+	// 		this.canAddVehicle = true;
+	// 	}
+	// }
 
 	addVehicleClick(vehicleTypeId) {
 		// console.log(vehicleTypeId);
@@ -132,6 +139,22 @@ export class VehicleDetailsComponent implements OnInit {
 	enableDisableClicked(id) {
 		this.vehicleToDelete = id;
 		this.alertMessage = "Are you sure you want to delete this Vehicle?"
+	}
+
+	//pay 25$ for extra vehicle
+	payExtraAmount(){
+		this.spinner.show()
+		this.adminService.chargeSubscriberForVehicle(this.affiliateId)
+		.pipe(
+			catchError(err => {
+				this.spinner.hide()
+				return throwError(err);
+			})
+		).subscribe(result => {
+			this.spinner.hide()
+			this.enablePayButton = false
+			this.getVehicle()
+		});
 	}
 
 }
