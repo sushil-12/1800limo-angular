@@ -557,6 +557,7 @@ export class SelectVehicleComponent implements OnInit {
 		if (this.quotebot_form != null) {
 			data = this.quotebot_form
 			data['filters'] = this.filters.request
+			data['user_id'] = this.currentUser?.id
 		}
 		// console.group('Sending Data to backend ... ', data)
 		// console.groupEnd()
