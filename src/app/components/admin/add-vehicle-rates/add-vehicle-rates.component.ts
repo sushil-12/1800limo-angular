@@ -577,7 +577,7 @@ export class AddVehicleRatesComponent implements OnInit {
 					sessionStorage.setItem('msg', data.msg)
 				}
 				this.router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
-					this.router.navigate(['/admin/affiliate/step6'])
+					this.router.navigate(['/admin/affiliate/step5'])
 				);
 			});
 	}

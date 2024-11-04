@@ -32,6 +32,7 @@ export class NewBookingComponent implements OnInit {
 	booking_params: any = {
 		transfer_types: ["airport_to_city", "airport_to_airport", "airport_to_cruise", "city_to_city", "city_to_airport", "city_to_cruise", "cruise_to_airport", "cruise_to_city"],
 		client_account_types: ['individual', 'travel_planner', 'loose_customer'],
+		client_account_types_subscriber: ['individual', 'loose_customer'],
 		affiliate_accounts: ['affiliate', 'loose_affiliate'],
 		numbers: (() => {
 			let arr = []
@@ -148,6 +149,8 @@ export class NewBookingComponent implements OnInit {
 	public canceloptions: Array<Object>;
 	currencySymbol: any;
 	currencyObj: any;
+	currentUser: any;
+
 	constructor(
 		private $form: FormBuilder,
 		private $api: AdminService,
@@ -168,6 +171,7 @@ export class NewBookingComponent implements OnInit {
 	}
 	ngOnInit(): void {
 
+		this.currentUser = JSON.parse(localStorage.getItem("currentUser"))
 		// build the form first 
 		this.buildBookingForm()
 		this.$routeurl.queryParams.subscribe((params: any) => {
@@ -2194,10 +2198,10 @@ export class NewBookingComponent implements OnInit {
 
 	handleCountryChangeLA(event: any) {
 		const dialCode = '+' + event.dialCode;
-		
+
 		this.BookingForm.patchValue({
 			lose_affiliate_phone_isd: dialCode,
-			lose_affiliate_phone_country : event.iso2,
+			lose_affiliate_phone_country: event.iso2,
 			driver_cell_isd: dialCode, // Update driver_cell ISD
 			driver_cell_country: event.iso2
 		});
@@ -2537,7 +2541,7 @@ export class NewBookingComponent implements OnInit {
 			this.return_transfer_type = reverseStringChars(value)
 
 		})
-		
+
 
 		this.BookingForm.get('return_transfer_type').valueChanges.subscribe((value: string) => {
 			console.log("in return_transfer_type value changes", value)

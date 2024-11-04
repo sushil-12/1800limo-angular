@@ -1117,33 +1117,19 @@
 		<!-- APPLICABLE TAXES ENDS -->
 	</section>
 	<div class="container">
-		<div class="row justify-content-between">
-
-			<div class="billing_inforamtion">
-				<ul>
-					<li><button class="custom-filled-button" (click)="submitForm()" tabIndex="1">
-						SAVE
-					</button>
+		<div class="billing_inforamtion ">
+			<ul class="d-flex justify-content-center" style="gap:30px;">
+				<li>
+					<button class="custom-filled-back-button" type="button" routerLink="/admin/vehicle-details"
+						data-toggle="tooltip" data-placement="top" title="Clicking back button deletes all fields."
+						tabindex="1">BACK</button>
 				</li>
-				</ul>
-			</div>
-
-
-			<div class="billing_inforamtion">
-				<ul>
-					<li>
-						<button class="custom-filled-reset-button" (click)="resetForm()" tabIndex="2">
-							RESET
-						</button>
-					</li>
-					<li>
-						<button class="custom-filled-back-button" routerLink="/admin/vehicle-details">
-							BACK
-						</button>
-					</li>
-				</ul>
-			</div>
-
+				<li><button class="custom-filled-reset-button" (click)="resetForm()" tabindex="1">RESET</button>
+				</li>
+				<li><button class="custom-filled-button" (click)="submitForm()" tabindex="1">SAVE</button></li>
+				<!-- <li>
+					</li> -->
+			</ul>
 		</div>
 	</div>
 
