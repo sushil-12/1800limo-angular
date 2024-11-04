@@ -269,7 +269,7 @@
 		</div>
 
 		<div class="row">
-			
+
 
 			<!-- MIN. CRUISE PORT ARRIVAL RATE -->
 			<div class="col-md-3">
@@ -349,33 +349,33 @@
 					</div>
 				</div>
 			</div>
-				<!-- HOURLY RATE -->
-				<div class="col-md-6">
-					<mat-form-field class="mat-form-field-rates" appearance="outline">
-						<mat-label>
-							Hourly Rate <span class="asterisk">*</span>
-						</mat-label>
-						<span matPrefix>{{ currency_symbol }} &nbsp;</span>
-						<input type="number" matInput placeholder="Hourly Rate" formControlName="hourly_rate" tabindex="1"
-							(change)="updateRateRangeObject()" (focus)="$event.target.select()" />
-					</mat-form-field>
-					<div *ngIf="
+			<!-- HOURLY RATE -->
+			<div class="col-md-6">
+				<mat-form-field class="mat-form-field-rates" appearance="outline">
+					<mat-label>
+						Hourly Rate <span class="asterisk">*</span>
+					</mat-label>
+					<span matPrefix>{{ currency_symbol }} &nbsp;</span>
+					<input type="number" matInput placeholder="Hourly Rate" formControlName="hourly_rate" tabindex="1"
+						(change)="updateRateRangeObject()" (focus)="$event.target.select()" />
+				</mat-form-field>
+				<div *ngIf="
 							(is_form_submitted && form.hourly_rate.errors) ||
 							(form.hourly_rate.touched && form.hourly_rate.errors)
 						" class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="form.hourly_rate.errors.required">
-							This field is required
-						</div>
-					</div>
-					<div *ngIf="form.hourly_rate.errors" class="text-danger margin-bottom-thin my-mat-hint">
-						<div *ngIf="form.hourly_rate.errors.pattern">
-							Enter Numbers only
-						</div>
+					<div *ngIf="form.hourly_rate.errors.required">
+						This field is required
 					</div>
 				</div>
+				<div *ngIf="form.hourly_rate.errors" class="text-danger margin-bottom-thin my-mat-hint">
+					<div *ngIf="form.hourly_rate.errors.pattern">
+						Enter Numbers only
+					</div>
+				</div>
+			</div>
 		</div>
 
-	
+
 		<div class="row">
 			<div class="col-md-6">
 				<mat-form-field class="mat-form-field-rates" appearance="outline">
@@ -458,7 +458,7 @@
 					</mat-label>
 					<span matPrefix>{{ currency_symbol }} &nbsp;</span>
 					<input type="number" matInput placeholder="Day Rate Extension" formControlName="day_rate"
-						tabindex="1" (change)="updateRateRangeObject()" (focus)="$event.target.select()"/>
+						tabindex="1" (change)="updateRateRangeObject()" (focus)="$event.target.select()" />
 				</mat-form-field>
 				<div *ngIf="
 						(is_form_submitted && form.day_rate.errors) ||
@@ -586,7 +586,8 @@
 					<mat-label>Extra stop - same town</mat-label>
 					<span matPrefix>{{ currency_symbol }} &nbsp;</span>
 					<input matInput type="number" placeholder="Shared Ride Rate - Per Person"
-						(change)="updateRateRangeObject()" formControlName="in_town_extra_stop" tabindex="1" (focus)="$event.target.select()">
+						(change)="updateRateRangeObject()" formControlName="in_town_extra_stop" tabindex="1"
+						(focus)="$event.target.select()">
 				</mat-form-field>
 				<div *ngIf="is_form_submitted && form.in_town_extra_stop.errors || form.in_town_extra_stop.touched && form.in_town_extra_stop.errors"
 					class="text-danger margin-bottom-thin my-mat-hint">
@@ -598,7 +599,8 @@
 					<mat-label>Extra stop - different town</mat-label>
 					<span matPrefix>{{ currency_symbol }} &nbsp;</span>
 					<input matInput type="number" placeholder="Shared Ride Rate - Per Person"
-						(change)="updateRateRangeObject()" formControlName="outside_town_extra_stop" tabindex="1" (focus)="$event.target.select()">
+						(change)="updateRateRangeObject()" formControlName="outside_town_extra_stop" tabindex="1"
+						(focus)="$event.target.select()">
 				</mat-form-field>
 				<div *ngIf="is_form_submitted && form.outside_town_extra_stop.errors || form.outside_town_extra_stop.touched && form.outside_town_extra_stop.errors"
 					class="text-danger margin-bottom-thin my-mat-hint">
@@ -813,9 +815,9 @@
 				<div class="col-md-3">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label> Airport Arrival Tax </mat-label>
-							<span matPrefix>
-								{{ currency_symbol }} &nbsp;
-							</span>
+						<span matPrefix>
+							{{ currency_symbol }} &nbsp;
+						</span>
 						<input type="number" matInput placeholder="Airport Arrival Tax"
 							formControlName="airport_arrival_tax_per_us" tabindex="1" (focus)="$event.target.select()">
 					</mat-form-field>
@@ -837,9 +839,9 @@
 				<div class="col-md-3">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label> Airport Departure Tax </mat-label>
-							<span matPrefix>
-								{{ currency_symbol }} &nbsp;
-							</span>
+						<span matPrefix>
+							{{ currency_symbol }} &nbsp;
+						</span>
 						<input type="number" matInput placeholder="Airport Departure Tax"
 							formControlName="airport_departure_tax_per_us" tabindex="1"
 							(focus)="$event.target.select()" />
@@ -864,9 +866,9 @@
 						<mat-label>
 							Sea Port Tax
 						</mat-label>
-							<span matPrefix>
-								{{ currency_symbol }} &nbsp;
-							</span>
+						<span matPrefix>
+							{{ currency_symbol }} &nbsp;
+						</span>
 						<input type="number" matInput placeholder="Sea Port Tax" (focus)="$event.target.select()"
 							formControlName="sea_port_tax_per_us" tabindex="1" />
 					</mat-form-field>
@@ -886,11 +888,12 @@
 				<div class="col-md-3">
 					<mat-form-field class="mat-form-field-rates" appearance="outline">
 						<mat-label> City Congestion Tax </mat-label>
-							<span matPrefix>
-								{{ currency_symbol }} &nbsp;
-							</span>
+						<span matPrefix>
+							{{ currency_symbol }} &nbsp;
+						</span>
 						<input type="number" matInput placeholder="City Congestion Tax"
-							formControlName="city_congestion_tax_per_us" tabindex="1" autocomplete="off" (focus)="$event.target.select()"/>
+							formControlName="city_congestion_tax_per_us" tabindex="1" autocomplete="off"
+							(focus)="$event.target.select()" />
 					</mat-form-field>
 					<div *ngIf="
 							(is_form_submitted &&
@@ -1117,33 +1120,21 @@
 		<!-- APPLICABLE TAXES ENDS -->
 	</section>
 	<div class="container">
-		<div class="row justify-content-between">
-
-			<div class="billing_inforamtion">
-				<ul>
-					<li><button class="custom-filled-button" (click)="submitForm()" tabIndex="1">
-						SAVE
-					</button>
-				</li>
+		<div class="col-md-12">
+			<div class="billing_inforamtion ">
+				<ul class="d-flex justify-content-center" style="gap:30px;">
+					<li>
+						<button class="custom-filled-back-button" type="button" routerLink="/affiliate/step4"
+							data-toggle="tooltip" data-placement="top" title="Clicking back button deletes all fields."
+							tabindex="1">BACK</button>
+					</li>
+					<li><button class="custom-filled-reset-button" (click)="resetForm()" tabindex="1">RESET</button>
+					</li>
+					<li><button class="custom-filled-button" (click)="submitForm()" tabindex="1">SAVE</button></li>
+					<!-- <li>
+						</li> -->
 				</ul>
 			</div>
-
-
-			<div class="billing_inforamtion">
-				<ul>
-					<li>
-						<button class="custom-filled-reset-button" (click)="resetForm()" tabIndex="2">
-							RESET
-						</button>
-					</li>
-					<li>
-						<button class="custom-filled-back-button" routerLink="/affiliate/step4">
-							BACK
-						</button>
-					</li>
-				</ul>
-			</div>
-
 		</div>
 	</div>
 
