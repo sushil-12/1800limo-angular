@@ -2980,11 +2980,20 @@
 						</mat-select>
 					</mat-form-field> -->
 
+					<mat-form-field appearance="outline" class="m-0"
+						*ngIf="currentUser?.created_by_role == 'subscriber' ">
+						<mat-label>
+							Affiliate Name
+						</mat-label>
+						<input type="text" matInput placeholder="Affiliate Name" (focus)="$event.target.select()"
+							formControlName="return_susbcriber_name" readonly />
+					</mat-form-field>
+
 					<!-- Ng-Select -->
 					<ng-select appearance="outline" [items]="Return_AffiliateAccounts" bindLabel="bindNameAffiliate"
 						bindValue="id" placeholder="Select Affiliate" dropdownPosition="bottom" [markFirst]="true"
 						[virtualScroll]="true" formControlName="return_affiliate_id"
-						(change)="handleAffiliateChange($event)">
+						(change)="handleAffiliateChange($event)" *ngIf="currentUser?.created_by_role != 'subscriber' ">
 					</ng-select>
 				</div>
 			</div>
@@ -3444,7 +3453,7 @@
 			<!-- Visible in Affiliate as well as Loose Affiliate Section -->
 			<!-- Affiliate Driver Information -->
 			<div class="px-4 my-4"
-				*ngIf="Form.return_affiliate_type.value == 'loose_affiliate' || Form.return_affiliate_id.value">
+				*ngIf="(Form.return_affiliate_type.value == 'loose_affiliate' || Form.return_affiliate_id.value) && currentUser?.created_by_role != 'subscriber' ">
 				<h4 class="margin-top-minus">
 					Driver Preferences
 				</h4>
@@ -4598,7 +4607,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="mx-2">
+						<div class="mx-2" *ngIf="currentUser?.created_by_role != 'subscriber' ">
 							<div class="row m-0">
 								<div class="col-md-4 key d-flex align-items-center">
 									<span class="">
@@ -4853,7 +4862,7 @@
 
 				<!--Return Affiliate Information -->
 				<ng-container
-					*ngIf="Form.return_affiliate_type.value == 'affiliate' && service_type == 'round_trip' then returnaffiliateUser">
+					*ngIf="Form.return_affiliate_type.value == 'affiliate' && service_type == 'round_trip'  && booking_created_from == 'admin' then returnaffiliateUser">
 				</ng-container>
 
 				<!-- Affiliate -->
@@ -5045,59 +5054,59 @@
 					<hr>
 				</ng-template>
 				<!-- Driver Information -->
-				<div *ngIf="booking_created_from =='admin' ">
-					<h4 class="font-weight-bolder m-0 mt-3">
-						Driver Information
-					</h4>
-					<!-- Driver Name -->
-					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Name
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder">
-									{{ textFormatter(Form.driver_name.value) | titlecase }}
-								</span>
-							</div>
-						</div>
-					</div>
 
-					<!-- Driver Email -->
-					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Email
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder">
-									{{ textFormatter(Form.driver_email.value) }}
-								</span>
-							</div>
+				<h4 class="font-weight-bolder m-0 mt-3">
+					Driver Information
+				</h4>
+				<!-- Driver Name -->
+				<div class="mx-2">
+					<div class="row m-0">
+						<div class="col-md-4 key">
+							<span>
+								Name
+							</span>
 						</div>
-					</div>
-
-					<!-- Driver Cell -->
-					<div class="mx-2">
-						<div class="row m-0">
-							<div class="col-md-4 key">
-								<span>
-									Phone
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder">
-									({{ Form.driver_cell_isd.value }}) {{
-									Form.driver_cell.value }}
-								</span>
-							</div>
+						<div class="col-md-8 value">
+							<span class="font-weight-bolder">
+								{{ textFormatter(Form.driver_name.value) | titlecase }}
+							</span>
 						</div>
 					</div>
 				</div>
+
+				<!-- Driver Email -->
+				<div class="mx-2">
+					<div class="row m-0">
+						<div class="col-md-4 key">
+							<span>
+								Email
+							</span>
+						</div>
+						<div class="col-md-8 value">
+							<span class="font-weight-bolder">
+								{{ textFormatter(Form.driver_email.value) }}
+							</span>
+						</div>
+					</div>
+				</div>
+
+				<!-- Driver Cell -->
+				<div class="mx-2">
+					<div class="row m-0">
+						<div class="col-md-4 key">
+							<span>
+								Phone
+							</span>
+						</div>
+						<div class="col-md-8 value">
+							<span class="font-weight-bolder">
+								({{ Form.driver_cell_isd.value }}) {{
+								Form.driver_cell.value }}
+							</span>
+						</div>
+					</div>
+				</div>
+
 				<hr>
 
 				<div *ngIf="service_type == 'round_trip' ">

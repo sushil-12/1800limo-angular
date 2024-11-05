@@ -199,6 +199,7 @@ export class SelectVehicleComponent implements OnInit {
 	vehicleDetails: any;
 	vehicleImages: Array<any> = []
 	master_vehicles: Array<any> = []
+	booking_created_from: string = 'admin';
 
 	// Filters
 
@@ -783,6 +784,9 @@ export class SelectVehicleComponent implements OnInit {
 	bookNow(vehicle_selected: any) {
 		// // console.log('Will navigate to Book Now Page ...')
 		sessionStorage.setItem('selected_vehicle', JSON.stringify(vehicle_selected))
+		if (vehicle_selected?.created_by != 1) {
+			this.booking_created_from = 'subscriber'
+		}
 		if (localStorage.getItem('currentUser') != null) {
 			if (JSON.parse(localStorage.getItem('currentUser'))['roleName'] == 'admin') {
 				if (this.bookingId) {
@@ -791,7 +795,7 @@ export class SelectVehicleComponent implements OnInit {
 				}
 				else {
 					this.$router.navigate(['/admin/new-booking'],
-						{ queryParams: { affiliate_id: vehicle_selected.affiliate_id, vehicle_id: vehicle_selected.id, new: true, is_master_vehicle: vehicle_selected?.is_master_vehicle } })
+						{ queryParams: { affiliate_id: vehicle_selected.affiliate_id, vehicle_id: vehicle_selected.id, new: true, is_master_vehicle: vehicle_selected?.is_master_vehicle, created_by: this.booking_created_from } })
 				}
 			} else {
 				let user = JSON.parse(localStorage.getItem('currentUser'))['roleName']
