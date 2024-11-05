@@ -126,6 +126,7 @@ export class PartnerRegistrationComponent implements OnInit {
       userId: [''],
       firstName: ['', [Validators.required]],
       lastName: ['', [Validators.required]],
+      company_name:['',[Validators.required]],
       phone: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(9), Validators.maxLength(15)]],
       countryCode: ['+1', Validators.required],
       phoneCountry: ['us'],

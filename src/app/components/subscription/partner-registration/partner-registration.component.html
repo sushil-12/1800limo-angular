@@ -8,6 +8,17 @@
 
                 <div class="container-fluid mt-1 ">
                     <div class="row ">
+                        <div class="col-md-12">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Company Name <span class="asterisk">*</span></mat-label>
+                                <input formControlName="company_name" type="text" matInput placeholder="Company Name"
+                                    (focus)="$event.target.select()">
+                            </mat-form-field>
+                            <div *ngIf="(submittedForm && f.company_name.errors) || (f.company_name.touched && f.company_name.errors)"
+                                class="text-danger text-lg m-0">
+                                <div *ngIf="f.company_name.errors.required">This field is required</div>
+                            </div>
+                        </div>
                         <div class="col-md-6">
                             <mat-form-field appearance="outline">
                                 <mat-label>First Name <span class="asterisk">*</span></mat-label>

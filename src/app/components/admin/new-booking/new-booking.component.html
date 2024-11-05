@@ -117,13 +117,15 @@
 			<!-- Account Type -->
 			<div class="row">
 				<div class="col-md-12 col-lg-10">
-					<mat-radio-group aria-label="Select an option" formControlName="account_type" *ngIf="currentUser?.created_by_role != 'subscriber'">
+					<mat-radio-group aria-label="Select an option" formControlName="account_type"
+						*ngIf="currentUser?.created_by_role != 'subscriber'">
 						<mat-radio-button [value]="ca" class="my-2 ml-4 mr-3" (change)="handleClientAccChange(ca)"
 							*ngFor="let ca of booking_params.client_account_types">
 							{{ textFormatterClientAccounts(ca) | titlecase }}
 						</mat-radio-button>
 					</mat-radio-group>
-					<mat-radio-group aria-label="Select an option" formControlName="account_type" *ngIf="currentUser?.created_by_role == 'subscriber'">
+					<mat-radio-group aria-label="Select an option" formControlName="account_type"
+						*ngIf="currentUser?.created_by_role == 'subscriber'">
 						<mat-radio-button [value]="ca" class="my-2 ml-4 mr-3" (change)="handleClientAccChange(ca)"
 							*ngFor="let ca of booking_params.client_account_types_subscriber">
 							{{ textFormatterClientAccounts(ca) | titlecase }}
@@ -884,10 +886,20 @@
 						</mat-select>
 					</mat-form-field> -->
 
+					<!-- IF SUBSCRIBER THEN ONLY READ ONLY FIELD -->
+					<mat-form-field appearance="outline" class="m-0"
+						*ngIf="currentUser?.created_by_role == 'subscriber' ">
+						<mat-label>
+							Affiliate Name
+						</mat-label>
+						<input type="text" matInput placeholder="Affiliate Name" (focus)="$event.target.select()"
+							formControlName="susbcriber_name" readonly />
+					</mat-form-field>
 					<!-- Ng-Select -->
 					<ng-select appearance="outline" [items]="AffiliateAccounts" bindLabel="bindNameAffiliate"
 						bindValue="id" placeholder="Select Affiliate" dropdownPosition="bottom" [markFirst]="true"
-						[virtualScroll]="true" formControlName="affiliate_id" (change)="handleAffiliateChange($event)">
+						[virtualScroll]="true" formControlName="affiliate_id" (change)="handleAffiliateChange($event)"
+						*ngIf="currentUser?.created_by_role != 'subscriber' ">
 					</ng-select>
 				</div>
 			</div>
@@ -1340,7 +1352,8 @@
 			<!-- Affiliate Vehicle Information Ends -->
 			<!-- Visible in Affiliate as well as Loose Affiliate Section -->
 			<!-- Affiliate Driver Information -->
-			<div class="px-4 my-4" *ngIf="Form.affiliate_type.value == 'loose_affiliate' || Form.affiliate_id.value">
+			<div class="px-4 my-4"
+				*ngIf="(Form.affiliate_type.value == 'loose_affiliate' || Form.affiliate_id.value) && currentUser?.created_by_role != 'subscriber' ">
 				<h4 class="margin-top-minus">
 					Driver Preferences
 				</h4>
@@ -2967,11 +2980,20 @@
 						</mat-select>
 					</mat-form-field> -->
 
+					<mat-form-field appearance="outline" class="m-0"
+						*ngIf="currentUser?.created_by_role == 'subscriber' ">
+						<mat-label>
+							Affiliate Name
+						</mat-label>
+						<input type="text" matInput placeholder="Affiliate Name" (focus)="$event.target.select()"
+							formControlName="return_susbcriber_name" readonly />
+					</mat-form-field>
+
 					<!-- Ng-Select -->
 					<ng-select appearance="outline" [items]="Return_AffiliateAccounts" bindLabel="bindNameAffiliate"
 						bindValue="id" placeholder="Select Affiliate" dropdownPosition="bottom" [markFirst]="true"
 						[virtualScroll]="true" formControlName="return_affiliate_id"
-						(change)="handleAffiliateChange($event)">
+						(change)="handleAffiliateChange($event)" *ngIf="currentUser?.created_by_role != 'subscriber' ">
 					</ng-select>
 				</div>
 			</div>
@@ -3431,7 +3453,7 @@
 			<!-- Visible in Affiliate as well as Loose Affiliate Section -->
 			<!-- Affiliate Driver Information -->
 			<div class="px-4 my-4"
-				*ngIf="Form.return_affiliate_type.value == 'loose_affiliate' || Form.return_affiliate_id.value">
+				*ngIf="(Form.return_affiliate_type.value == 'loose_affiliate' || Form.return_affiliate_id.value) && currentUser?.created_by_role != 'subscriber' ">
 				<h4 class="margin-top-minus">
 					Driver Preferences
 				</h4>
@@ -3602,8 +3624,8 @@
 			[isTravelShare]="isTravelShare" [initReturnRates]="init_return_rates" (formvalue)="RateFormValue($event)"
 			[vehicle_id]="QB_vehicle_id" [hours]="Form.number_of_hours?.value" [isCreatedByAdmin]="isCreatedByAdmin"
 			[vehicles]="Form.number_of_vehicles?.value" [book_data]="booking_data" [isFarmoutBooking]="isFarmoutBooking"
-			[service_type]="service_type" [currencyObject]="currencyObj" (returnformvalue)="ReturnRateFormValue($event)"
-			(returnNumberOfHr)="HandleReturnNumberOfHr($event)">
+			[service_type]="service_type" [currencyObject]="currencyObj" [booking_created_from]="booking_created_from"
+			(returnformvalue)="ReturnRateFormValue($event)" (returnNumberOfHr)="HandleReturnNumberOfHr($event)">
 		</app-rates-form>
 
 
@@ -4585,7 +4607,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="mx-2">
+						<div class="mx-2" *ngIf="currentUser?.created_by_role != 'subscriber' ">
 							<div class="row m-0">
 								<div class="col-md-4 key d-flex align-items-center">
 									<span class="">
@@ -4769,7 +4791,8 @@
 
 				<hr>
 				<!-- Affiliate Information -->
-				<ng-container *ngIf="Form.affiliate_type.value == 'affiliate' then affiliateUser">
+				<ng-container
+					*ngIf="Form.affiliate_type.value == 'affiliate' && booking_created_from == 'admin' then affiliateUser">
 				</ng-container>
 
 				<!-- Affiliate -->
@@ -4839,7 +4862,7 @@
 
 				<!--Return Affiliate Information -->
 				<ng-container
-					*ngIf="Form.return_affiliate_type.value == 'affiliate' && service_type == 'round_trip' then returnaffiliateUser">
+					*ngIf="Form.return_affiliate_type.value == 'affiliate' && service_type == 'round_trip'  && booking_created_from == 'admin' then returnaffiliateUser">
 				</ng-container>
 
 				<!-- Affiliate -->
@@ -5031,6 +5054,7 @@
 					<hr>
 				</ng-template>
 				<!-- Driver Information -->
+
 				<h4 class="font-weight-bolder m-0 mt-3">
 					Driver Information
 				</h4>
@@ -5082,6 +5106,7 @@
 						</div>
 					</div>
 				</div>
+
 				<hr>
 
 				<div *ngIf="service_type == 'round_trip' ">
@@ -5224,7 +5249,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="mx-2">
+					<div class="mx-2" *ngIf="currentUser?.created_by_role != 'subscriber' ">
 						<div class="row m-0">
 							<div class="col-md-4 key d-flex align-items-center">
 								<span class="">

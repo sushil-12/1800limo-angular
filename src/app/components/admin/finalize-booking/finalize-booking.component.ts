@@ -79,6 +79,7 @@ export class FinalizeBookingComponent implements OnInit {
 	isFinalizeButton: boolean = false;
 	currencyObj: any;
 	currencySymbol: any;
+	vehicle_created_by:any;
 
 	constructor(
 		private $form: FormBuilder,
@@ -211,6 +212,7 @@ export class FinalizeBookingComponent implements OnInit {
 				this.paidAmount = response.data?.charged_amount ? parseFloat(response.data?.charged_amount) : 0
 				this.subModules = localStorage.getItem('sub_modules') || [];
 				this.currentUser = JSON.parse(localStorage.getItem('userData')) || "";
+				this.vehicle_created_by = response?.data?.vehicle_created_by
 				setTimeout(() => {
 					this.scroll('submitForm')
 
@@ -328,6 +330,12 @@ export class FinalizeBookingComponent implements OnInit {
 				shareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100
 				shareArray['deducted_admin_share'] = shareArray['adminShare'] - shareArray['stripeFee']
 				shareArray['farmoutShare'] = base_rate * 0.10
+			}
+			else if (this.vehicle_created_by != 1) {
+				this.adminSharePercent = 0
+				shareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100
+				shareArray['deducted_admin_share'] = 0
+				shareArray['affiliateShare'] = grandTotal - stripeFee
 			}
 			this.shareArray = shareArray
 			// console.log('in function createReservationShareArray-->>>' , base_rate, shareArray )
