@@ -150,6 +150,7 @@ export class NewBookingComponent implements OnInit {
 	currencySymbol: any;
 	currencyObj: any;
 	currentUser: any;
+	booking_created_from: string = 'admin';
 
 	constructor(
 		private $form: FormBuilder,
@@ -211,6 +212,20 @@ export class NewBookingComponent implements OnInit {
 		this.httpClient.get("assets/json/charterOptions.json").subscribe((data: any) => {
 			this.canceloptions = data;
 		});
+
+		// if susbcriber then add companmy name in read only field and call vehicles by their account id
+		if (this.currentUser?.created_by_role == 'subscriber' && !this.newBooking) {
+			this.BookingForm.patchValue({
+				susbcriber_name: this.currentUser?.name,
+				driver_name: this.currentUser?.name,
+				driver_email: this.currentUser.email,
+				driver_cell_isd: this.currentUser?.isd,
+				driver_cell: this.currentUser?.phone,
+				driver_cell_country: this.currentUser?.phoneCountry
+			})
+			this.fetchAffiliateVehicles(this.currentUser?.account_id)
+			this.booking_created_from = 'subscriber'
+		}
 
 	}
 	buildBookingData() {
@@ -489,6 +504,7 @@ export class NewBookingComponent implements OnInit {
 			returnJourneyTime: [''],
 			reservation_id: [''],
 			updateType: [''],
+			susbcriber_name: ['']
 		})
 
 		// let month = new Date().getMonth()
@@ -1073,6 +1089,7 @@ export class NewBookingComponent implements OnInit {
 	}
 
 	chooseUser(account_id: number) {
+		console.log("in affiliate info")
 		this.$spinner.show()
 		this.chosen_user = {}
 		this.$api.chooseUser(account_id, this.Form.account_type.value).subscribe((response: any) => {
@@ -1385,6 +1402,7 @@ export class NewBookingComponent implements OnInit {
 	}
 
 	fetchAffiliateInformation(affiliate_id: number) {
+		console.log("in affiliate info")
 		this.$spinner.show('normalspinner');
 		this.$api.getAffiliateAccount(affiliate_id).pipe(pluck('data')).subscribe((response: any) => {
 			isDevMode() && console.info('Affiliate Information', response);
@@ -2148,6 +2166,12 @@ export class NewBookingComponent implements OnInit {
 				shareArray['deducted_admin_share'] = shareArray['adminShare'] - shareArray['stripeFee']
 				shareArray['farmoutShare'] = base_rate * 0.10
 			}
+			else if(this.booking_created_from == 'subscriber'){
+				this.adminSharePercent = 0
+				shareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100
+				shareArray['deducted_admin_share'] = 0
+				shareArray['affiliateShare'] = grandTotal - stripeFee
+			}
 			this.shareArray = shareArray
 			// console.log('in function createReservationShareArray-->>>' , base_rate, shareArray )
 			return shareArray;
@@ -2238,6 +2262,12 @@ export class NewBookingComponent implements OnInit {
 		// console.log(' Edited keys  ---->>>>' , EditedKeys)
 		if (this.BookingForm.invalid) {
 			return;
+		}
+
+		if (this.booking_created_from == 'subscriber') {
+			this.BookingForm.patchValue({
+				affiliate_id: this.currentUser?.account_id
+			})
 		}
 
 		let value = this.BookingForm.value
@@ -2845,7 +2875,9 @@ export class NewBookingComponent implements OnInit {
 		})
 
 		this.BookingForm.get('affiliate_id').valueChanges.subscribe((value: number) => {
-			if (value) {
+			console.log("in affiliate info",this.booking_created_from)
+			if (value && this.booking_created_from == 'admin') {
+				console.log("in affiliate info")
 				this.chooseAffiliate()
 				this.fetchAffiliateInformation(value)
 				if (this.Form.updateType.value != 'edit' && this.Form.updateType.value != 'repeat' && this.Form.updateType.value != 'return') {
@@ -3549,6 +3581,11 @@ export class NewBookingComponent implements OnInit {
 		//   this.SetFormValue(key ,QB[key])
 		// }    
 		this.affiliate_id = selected_vehicle?.affiliate_id
+
+		if(selected_vehicle?.created_by != 1){
+			console.log("in affiliate info")
+			this.booking_created_from == 'subscriber'
+		}
 
 		this.currencyObj = JSON.parse(sessionStorage.getItem('currencyData'))
 		this.currencySymbol = this.currencyObj?.symbol
