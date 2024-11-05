@@ -7,7 +7,8 @@
 		<div class="invoicesum_header">
 			<div class="row">
 				<div class="col-md-6">
-					<h3 class="text-lg pl-0">Booking <span style="font-size: 25px;font-weight: 500;"># {{ BookingDetail?.reservation_id }}</span></h3>
+					<h3 class="text-lg pl-0">Booking <span style="font-size: 25px;font-weight: 500;"># {{
+							BookingDetail?.reservation_id }}</span></h3>
 				</div>
 				<div class="col-md-6 text-right">
 					<h3 class="text-lg pl-0">Payment Status # {{ BookingDetail?.payment_status | titlecase}}</h3>
@@ -153,8 +154,9 @@
 	[affiliate_type]="'loose_affiliate'" (formvalue)="RateFormValue($event)" [distance]="finalize_params.distance"
 	[reservation_id]="finalize_params.booking_id" [reset]="false" [hours]="finalize_params.number_of_hours"
 	[vehicles]="finalize_params.number_of_vehicles" [isFarmoutBooking]="isFarmoutBooking" [currencyObject]="currencyObj"
-	(returnformvalue)="ReturnRateFormValue($event)" (returnNumberOfHr)="HandleReturnNumberOfHr($event)"
-	[isCreatedByAdmin]="isCreatedByAdmin" [service_type]="service_type">
+	[vehicle_created_by]="vehicle_created_by" (returnformvalue)="ReturnRateFormValue($event)"
+	(returnNumberOfHr)="HandleReturnNumberOfHr($event)" [isCreatedByAdmin]="isCreatedByAdmin"
+	[service_type]="service_type">
 </app-finalize-rates>
 <div class="row mb-3" id="submitForm">
 	<div class="col-md-12 text-right">
@@ -164,8 +166,8 @@
 		</button>
 	</div>
 	<div class="col-md-12">
-		<p class="alert alert-danger" *ngIf="paidAmount">Note- 50% amount have already been deducted for this booking: <span
-			class="font-weight-bold">{{currencySymbol}}{{paidAmount.toFixed(2)}}</span></p>
+		<p class="alert alert-danger" *ngIf="paidAmount">Note- 50% amount have already been deducted for this booking:
+			<span class="font-weight-bold">{{currencySymbol}}{{paidAmount.toFixed(2)}}</span></p>
 	</div>
 </div>
 

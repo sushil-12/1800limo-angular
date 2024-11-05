@@ -506,7 +506,7 @@ export class NewBookingComponent implements OnInit {
 			reservation_id: [''],
 			updateType: [''],
 			susbcriber_name: [''],
-			return_susbcriber_name:['']
+			return_susbcriber_name: ['']
 		})
 
 		// let month = new Date().getMonth()
@@ -2168,7 +2168,7 @@ export class NewBookingComponent implements OnInit {
 				shareArray['deducted_admin_share'] = shareArray['adminShare'] - shareArray['stripeFee']
 				shareArray['farmoutShare'] = base_rate * 0.10
 			}
-			else if(this.booking_created_from == 'subscriber'){
+			else if (this.booking_created_from == 'subscriber') {
 				this.adminSharePercent = 0
 				shareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100
 				shareArray['deducted_admin_share'] = 0
@@ -2214,7 +2214,7 @@ export class NewBookingComponent implements OnInit {
 				returnShareArray['deducted_admin_share'] = returnShareArray['adminShare'] - returnShareArray['stripeFee']
 				returnShareArray['farmoutShare'] = base_rate * 0.10
 			}
-			else if(this.booking_created_from == 'subscriber'){
+			else if (this.booking_created_from == 'subscriber') {
 				this.adminSharePercent = 0
 				returnShareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100
 				returnShareArray['deducted_admin_share'] = 0
@@ -2276,7 +2276,7 @@ export class NewBookingComponent implements OnInit {
 			this.BookingForm.patchValue({
 				affiliate_id: this.currentUser?.account_id
 			})
-			if(this.service_type == 'trip'){
+			if (this.service_type == 'trip') {
 				this.BookingForm.patchValue({
 					return_affiliate_id: this.currentUser?.account_id
 				})
@@ -2477,6 +2477,17 @@ export class NewBookingComponent implements OnInit {
 					return_cancellation_hours: this.return_selectedVehicle?.non_charter_cancellation_hours.toString(),
 					return_affiliate_id: this.BookingForm.get('affiliate_id').value
 				})
+				if (this.booking_created_from == 'subscriber') {
+					this.BookingForm.patchValue({
+						return_susbcriber_name: this.BookingForm.get('susbcriber_name').value,
+						return_driver_name: this.currentUser?.name,
+						return_driver_email: this.currentUser.email,
+						return_driver_cell_isd: this.currentUser?.isd,
+						return_driver_cell: this.currentUser?.phone,
+						return_driver_cell_country: this.currentUser?.phoneCountry
+					})
+					this.fetchReturnAffiliateVehicles(this.currentUser?.account_id)
+				}
 				this.SetFormValue('return_pickup_date', moment().format('YYYY-MM-DD'))
 				this.SetFormValue('return_pickup_time', '12:00 pm')
 
@@ -2889,7 +2900,7 @@ export class NewBookingComponent implements OnInit {
 		})
 
 		this.BookingForm.get('affiliate_id').valueChanges.subscribe((value: number) => {
-			console.log("in affiliate info",this.booking_created_from)
+			console.log("in affiliate info", this.booking_created_from)
 			if (value && this.booking_created_from == 'admin') {
 				console.log("in affiliate info")
 				this.chooseAffiliate()
@@ -3596,14 +3607,19 @@ export class NewBookingComponent implements OnInit {
 		// }    
 		this.affiliate_id = selected_vehicle?.affiliate_id
 
-		if(selected_vehicle?.created_by != 1){
+		if (selected_vehicle?.created_by != 1) {
 			console.log("in affiliate info")
 			this.booking_created_from == 'subscriber'
 			this.BookingForm.patchValue({
 				susbcriber_name: selected_vehicle?.affiliate_name,
+				driver_name: this.currentUser?.name,
+				driver_email: this.currentUser.email,
+				driver_cell_isd: this.currentUser?.isd,
+				driver_cell: this.currentUser?.phone,
+				driver_cell_country: this.currentUser?.phoneCountry
 			})
 
-			if(this.service_type == 'round_trip'){
+			if (this.service_type == 'round_trip') {
 				this.BookingForm.patchValue({
 					return_susbcriber_name: selected_vehicle?.affiliate_name,
 				})

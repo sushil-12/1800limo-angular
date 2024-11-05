@@ -167,7 +167,7 @@ export class DailyBookingsComponent implements OnInit {
 			.focus();
 	}
 
-	stripeDetailsCheck(){
+	stripeDetailsCheck() {
 		this.is_stripe_added = localStorage.getItem('is_stripe_account_added') ? JSON.parse(localStorage.getItem('is_stripe_account_added')) : '';
 		console.log("is stripe", this.is_stripe_added)
 		this.spinner.show()
@@ -193,7 +193,7 @@ export class DailyBookingsComponent implements OnInit {
 				else {
 					this.stripeErroMsg = ''
 				}
-	
+
 				console.log('Error msg:', this.stripeErroMsg)
 			})
 	}
@@ -697,6 +697,8 @@ export class DailyBookingsComponent implements OnInit {
 			return "I/O";
 		} else if (type == "gig_operator") {
 			return "G";
+		} else if (type == 'subscriber') {
+			return "S";
 		}
 	}
 	enableDisableClicked(event, id) {
