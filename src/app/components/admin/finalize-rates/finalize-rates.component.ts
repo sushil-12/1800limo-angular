@@ -85,6 +85,7 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 	farmoutShare: any = 0;
 	r_farmoutShare: any = 0;
 	currencySymbol: any;
+	currentUser: any;
 
 	constructor(
 		private $form: FormBuilder,
@@ -97,7 +98,7 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 		this.$route.queryParams.subscribe((params: any) => {
 			(params.bookingId) ? this.fetchRates('', params.bookingId) : ""
 		});
-
+		this.currentUser = JSON.parse(localStorage.getItem("currentUser"))
 	}
 	ngAfterViewInit() {
 		this.scroll('grandTotal')

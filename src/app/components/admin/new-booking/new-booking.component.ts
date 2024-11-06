@@ -2284,6 +2284,11 @@ export class NewBookingComponent implements OnInit {
 		}
 
 		let value = this.BookingForm.value
+		console.log("in reservation type",this.isFarmoutBooking,this.booking_created_from == 'admin',this.currentUser?.created_by_role == 'subscriber')
+		if(this.isFarmoutBooking && this.booking_created_from == 'admin' && this.currentUser?.created_by_role == 'subscriber'){
+			console.log("in reservation type")
+			value["reservation_type"] = 'farmout'
+		}
 		value["booking_created_from"] = this.booking_created_from
 		value['proceed'] = this.proceed
 		value['currency'] = this.currencyObj?.currency
@@ -3619,6 +3624,18 @@ export class NewBookingComponent implements OnInit {
 				driver_cell_country: this.currentUser?.phoneCountry
 			})
 
+			if (this.service_type == 'round_trip') {
+				this.BookingForm.patchValue({
+					return_susbcriber_name: selected_vehicle?.affiliate_name,
+				})
+			}
+		}
+		else if(selected_vehicle?.created_by == 1 && this.currentUser?.created_by_role == 'subscriber'){
+			this.isFarmoutBooking = true
+			this.booking_created_from == 'admin'
+			this.BookingForm.patchValue({
+				susbcriber_name: selected_vehicle?.affiliate_name,
+			})
 			if (this.service_type == 'round_trip') {
 				this.BookingForm.patchValue({
 					return_susbcriber_name: selected_vehicle?.affiliate_name,

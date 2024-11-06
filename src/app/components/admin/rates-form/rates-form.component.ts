@@ -27,7 +27,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 	@Input('isFarmoutBooking') isFarmoutBooking: boolean = false;
 	@Input("service_type") service_type: string = "";
 	@Input("currencyObject") currencyObject: any;
-	@Input("booking_created_from") booking_created_from:any;
+	@Input("booking_created_from") booking_created_from: any;
 
 
 	// Throw Events.
@@ -91,6 +91,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 	farmoutShare: any = 0;
 	r_farmoutShare: any = 0;
 	currencySymbol: any = '$';
+	currentUser: any;
 
 	constructor(
 		private $form: FormBuilder,
@@ -115,6 +116,8 @@ export class RatesFormComponent implements OnInit, OnChanges {
 				this.master_vehicle_id = params.vehicle_id
 			}
 		})
+
+		this.currentUser = JSON.parse(localStorage.getItem("currentUser"))
 	}
 
 
