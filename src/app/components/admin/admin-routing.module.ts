@@ -93,6 +93,7 @@ import { AddVehicleSubscriberComponent } from '../subscription/add-vehicle-subsc
 import { VehicleDetailsComponent } from '../subscription/vehicle-details/vehicle-details.component';
 import { VehicleRatesSubscriberComponent } from '../subscription/vehicle-rates-subscriber/vehicle-rates-subscriber.component';
 import { EditVehicleSubscriberComponent } from '../subscription/edit-vehicle-subscriber/edit-vehicle-subscriber.component';
+import { SubscribersListComponent } from './subscribers-list/subscribers-list.component';
 
 
 const routes: Routes = [
@@ -593,7 +594,12 @@ const routes: Routes = [
 	{
 		path: 'edit-vehicle-rates-subscriber',
 		component: VehicleRatesSubscriberComponent
-	}
+	},
+	{
+		path: 'subscribers-list',
+		canActivate: [AdminGuardGuard],
+		component: SubscribersListComponent
+	},
 ];
 
 @NgModule({

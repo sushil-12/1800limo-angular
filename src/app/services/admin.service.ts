@@ -1325,4 +1325,15 @@ export class AdminService {
 		return this.httpClient.post(this.serverUrl + `charge-subscriber-for-vehicle`, { 'account_id': id })
 	}
 
+	subscribersAccounts(url, keyword) {
+		var path;
+		if (url) {
+			path = url + '&search=' + keyword;
+		}
+		else {
+			path = this.serverUrl + 'admin/subsciber-accounts' + '?search=' + keyword;
+		}
+		return this.httpClient.get(path).toPromise();;
+	}
+
 }
