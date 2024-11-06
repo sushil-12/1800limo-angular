@@ -1331,9 +1331,10 @@ export class AdminService {
 			path = url + '&search=' + keyword;
 		}
 		else {
-			path = this.serverUrl + 'admin/subsciber-accounts' + '?search=' + keyword;
+			path = this.serverUrl + 'admin/subscriber-accounts' + '?search=' + keyword;
 		}
 		return this.httpClient.get(path).toPromise();;
 	}
+
 
 }
