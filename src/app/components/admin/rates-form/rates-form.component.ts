@@ -132,7 +132,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 
 	ngOnChanges(changes: SimpleChanges) {
 		console.warn("Change has been detected: ", changes);
-		console.log("servicetyep", this.service_type)
+		console.log("affiliate_type", this.affiliate_type)
 		this.currencySymbol = this.currencyObject ? this.currencyObject?.symbol : "$"
 		this.ratesform = true;
 		// changes.init_rates?.currentValue ?? this.ratesform
@@ -201,6 +201,11 @@ export class RatesFormComponent implements OnInit, OnChanges {
 			this.hours = Number(changes.nums.currentValue)
 			this.RatesForm && this.calculateAmount('RatesForm', 'all_inclusive_rates', 'Base_Rate');
 		}
+		if (changes.affiliate_type || changes.booking_created_from) {
+			console.log("in chnage affiloate typre")
+			this.RatesForm && this.calculateAmount('RatesForm', 'all_inclusive_rates', 'Base_Rate');
+			this.ReturnRatesForm && this.calculateAmount('ReturnRatesForm', 'all_inclusive_rates', 'Base_Rate');
+		}
 		if (changes.isTravelShare) {
 			this.initRates();
 			if (this.ReturnRatesForm) {
@@ -259,6 +264,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 				this.calculateGrandTotal('ReturnRatesForm')
 			}
 		}
+		
 	}
 
 	returnZero() {
@@ -675,7 +681,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 	}
 	calculateReturnAdminShare() {
 		let baseRate = this.calculateReturnBaseRateShare()
-		this.admin_share = (this.isTravelShare && !this.isCreatedByAdmin || this.isFarmoutBooking) ? 15 : (this.booking_created_from == 'subscriber') ? 0 : 25
+		this.admin_share = (this.isTravelShare && !this.isCreatedByAdmin || this.isFarmoutBooking) ? 15 : (this.booking_created_from == 'subscriber') ? 0 : (this.currentUser?.created_by_role == 'subscriber' && this.affiliate_type == 'loose_affiliate') ? 0 : 25
 		this.r_calc_admin_share = baseRate * this.admin_share / 100 + (this.ReturnRatesForm.get('misc').get('Extra_Gratuity').get('amount').value * 0.25)
 		this.isFarmoutBooking ? this.r_farmoutShare = baseRate * 0.10 : ''
 	}
@@ -715,7 +721,7 @@ export class RatesFormComponent implements OnInit, OnChanges {
 	calculateAdminShare() {
 
 		let baseRate = this.calculateBaseRateShare()
-		this.admin_share = (this.isTravelShare && !this.isCreatedByAdmin || this.isFarmoutBooking) ? 15 : (this.booking_created_from == 'subscriber') ? 0 : 25
+		this.admin_share = (this.isTravelShare && !this.isCreatedByAdmin || this.isFarmoutBooking) ? 15 : (this.booking_created_from == 'subscriber') ? 0 : (this.currentUser?.created_by_role == 'subscriber' && this.affiliate_type == 'loose_affiliate') ? 0 : 25
 		this.calc_admin_share = baseRate * this.admin_share / 100 + (this.RatesForm.get('misc').get('Extra_Gratuity').get('amount').value * 0.25)
 		// console.log("extra gratuity",this.RatesForm.get('misc').get('Extra_Gratuity').get('amount').value)
 		this.isFarmoutBooking ? this.farmoutShare = baseRate * 0.10 : ''

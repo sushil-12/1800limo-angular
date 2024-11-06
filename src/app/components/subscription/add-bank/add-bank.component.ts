@@ -749,7 +749,7 @@ export class AddBankComponent implements OnInit {
         this.response = result;
         this.disableSubmitButton = false; //enable submit button
         localStorage.setItem("is_stripe_account_added", 'true')
-        this.router.navigate(['/admin/daily-bookings-admin'])
+        this.router.navigate(['/admin/vehicle-details'])
       });
   }
   closeButton() {
