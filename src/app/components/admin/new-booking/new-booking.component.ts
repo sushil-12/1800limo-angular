@@ -151,6 +151,7 @@ export class NewBookingComponent implements OnInit {
 	currencyObj: any;
 	currentUser: any;
 	booking_created_from: string = 'admin';
+	veh_created_by: any;
 
 	constructor(
 		private $form: FormBuilder,
@@ -2284,8 +2285,8 @@ export class NewBookingComponent implements OnInit {
 		}
 
 		let value = this.BookingForm.value
-		console.log("in reservation type",this.isFarmoutBooking,this.booking_created_from == 'admin',this.currentUser?.created_by_role == 'subscriber')
-		if(this.isFarmoutBooking && this.booking_created_from == 'admin' && this.currentUser?.created_by_role == 'subscriber'){
+		console.log("in reservation type", this.isFarmoutBooking, this.booking_created_from == 'admin', this.currentUser?.created_by_role == 'subscriber')
+		if (this.isFarmoutBooking && this.booking_created_from == 'admin' && this.currentUser?.created_by_role == 'subscriber') {
 			console.log("in reservation type")
 			value["reservation_type"] = 'farmout'
 		}
@@ -2492,6 +2493,11 @@ export class NewBookingComponent implements OnInit {
 						return_driver_cell_country: this.currentUser?.phoneCountry
 					})
 					this.fetchReturnAffiliateVehicles(this.currentUser?.account_id)
+				}
+				if(this.booking_created_from == 'admin' && this.currentUser?.created_by_role == 'subscriber'){
+					this.BookingForm.patchValue({
+						return_susbcriber_name: this.BookingForm.get('susbcriber_name').value,
+					})
 				}
 				this.SetFormValue('return_pickup_date', moment().format('YYYY-MM-DD'))
 				this.SetFormValue('return_pickup_time', '12:00 pm')
@@ -2797,6 +2803,14 @@ export class NewBookingComponent implements OnInit {
 
 		// Affiliate Type
 		this.BookingForm.get('affiliate_type').valueChanges.subscribe((value: string) => {
+			if (value == 'loose_affiliate' && this.currentUser?.created_by_role == 'subscriber') {
+				this.isFarmoutBooking = false
+				this.booking_created_from = 'subscriber'
+			}
+			else if (this.currentUser?.created_by_role == 'subscriber' && value == 'affiliate' && this.veh_created_by == 1) {
+				this.isFarmoutBooking = true
+				this.booking_created_from = 'admin'
+			}
 			if (value == 'loose_affiliate') {
 				this.fetchAffiliates('loose_affiliate')
 				this.toggleDropdown(null)
@@ -2850,6 +2864,13 @@ export class NewBookingComponent implements OnInit {
 
 		// Affiliate Type
 		this.BookingForm.get('return_affiliate_type').valueChanges.subscribe((value: string) => {
+			if (value == 'loose_affiliate' && this.currentUser?.created_by_role == 'subscriber') {
+				this.booking_created_from = 'subscriber'
+			}
+			else if (this.currentUser?.created_by_role == 'subscriber' && value == 'affiliate' && this.veh_created_by == 1) {
+				this.booking_created_from = 'admin'
+				this.fetchReturnAffiliateVehicles((this.BookingForm.get('return_affiliate_id').value))
+			}
 			if (value == 'loose_affiliate') {
 				this.BookingForm.patchValue({
 					return_affiliate_id: ''
@@ -3611,6 +3632,7 @@ export class NewBookingComponent implements OnInit {
 		//   this.SetFormValue(key ,QB[key])
 		// }    
 		this.affiliate_id = selected_vehicle?.affiliate_id
+		this.veh_created_by = selected_vehicle?.created_by
 
 		if (selected_vehicle?.created_by != 1) {
 			console.log("in affiliate info")
@@ -3630,7 +3652,7 @@ export class NewBookingComponent implements OnInit {
 				})
 			}
 		}
-		else if(selected_vehicle?.created_by == 1 && this.currentUser?.created_by_role == 'subscriber'){
+		else if (selected_vehicle?.created_by == 1 && this.currentUser?.created_by_role == 'subscriber') {
 			this.isFarmoutBooking = true
 			this.booking_created_from == 'admin'
 			this.BookingForm.patchValue({

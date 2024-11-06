@@ -577,22 +577,27 @@ const routes: Routes = [
 	},
 	{
 		path: 'vehicle-details',
+		canActivate: [AdminGuardGuard],
 		component: VehicleDetailsComponent
 	},
 	{
 		path: 'add-vehicle-subscriber',
+		canActivate: [AdminGuardGuard],
 		component: AddVehicleSubscriberComponent
 	},
 	{
 		path: 'edit-vehicle-subscriber',
+		canActivate: [AdminGuardGuard],
 		component: EditVehicleSubscriberComponent
 	},
 	{
 		path: 'add-vehicle-rates-subscriber',
+		canActivate: [AdminGuardGuard],
 		component: VehicleRatesSubscriberComponent
 	},
 	{
 		path: 'edit-vehicle-rates-subscriber',
+		canActivate: [AdminGuardGuard],
 		component: VehicleRatesSubscriberComponent
 	},
 	{
