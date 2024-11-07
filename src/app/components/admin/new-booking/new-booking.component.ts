@@ -1415,7 +1415,7 @@ export class NewBookingComponent implements OnInit {
 			if(this.booking_created_from == 'admin'){
 				console.log("in affiliate info")
 				this.BookingForm.patchValue({
-					susbcriber_name : this.AffiliateInformation?.FirstName + this.AffiliateInformation?.MiddleName + this.AffiliateInformation?.LastName
+					susbcriber_name : this.AffiliateInformation?.FirstName + this.AffiliateInformation?.LastName
 				})
 			}
 			this.$spinner.hide('normalspinner');
