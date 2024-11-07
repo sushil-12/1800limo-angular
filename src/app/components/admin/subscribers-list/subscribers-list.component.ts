@@ -54,7 +54,7 @@ export class SubscribersListComponent implements OnInit {
 
 	ngOnInit(): void {
 		this.searchText = localStorage.getItem('subscriberSeacrh') ? localStorage.getItem('subscriberSeacrh') : ''
-		this.loadIndividuals();//load individuals
+		this.loadSubscribers();//load individuals
 		this.buildSendEmailForm();
 
 	}
@@ -71,7 +71,7 @@ export class SubscribersListComponent implements OnInit {
 		clearTimeout(this.timer);
 		this.timer = setTimeout(() => {
 			localStorage.setItem('subscriberSeacrh', text)
-			this.loadIndividuals()
+			this.loadSubscribers()
 		}, 700)
 	}
 	handleKeypressEvents() {
@@ -95,7 +95,7 @@ export class SubscribersListComponent implements OnInit {
 		el.scrollIntoView({ behavior: 'smooth' });
 	}
 
-	loadIndividuals(pageUrl = null) {
+	loadSubscribers(pageUrl = null) {
 		/** spinner starts on init */
 		// this.spinner.show();
 		if (pageUrl) {
@@ -221,6 +221,16 @@ export class SubscribersListComponent implements OnInit {
 
 	addIndividualClick(individualId) {
 		this.router.navigate(['/admin/add-individual-account'], { queryParams: { individualId: individualId } });
+	}
+
+	teset(args: any) {
+		if (!this.searchText) { return args?.length > 0 ? args.toString().replaceAll(",", ", ") : "N/A"; }
+		if (args) {
+			args = args.toString().replaceAll(",", ", ")
+			var re = new RegExp(this.searchText, 'gi'); //'gi' for case insensitive and can use 'g' if you want the search to be case sensitive.
+			return args.replace(re, '<mark class="font-weight-bold">$&</mark>');
+		}
+
 	}
 
 	clickEditIndividual(individualId) {

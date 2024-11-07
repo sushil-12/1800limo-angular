@@ -15,7 +15,7 @@
 					</mat-form-field>
 				</div>
 				<!-- <div class="col-md-2  mt-3 mb-3">
-					<button class="custom-btn button2 btnclass" (click)="loadIndividuals()">SEARCH</button>
+					<button class="custom-btn button2 btnclass" (click)="loadSubscribers()">SEARCH</button>
 				</div> -->
 			</div>
 		</div>
@@ -40,7 +40,10 @@
 									<th>Address</th>
 									<!-- <th>City</th> -->
 									<!-- <th>State</th> -->
-									<th>Country</th>
+									<!-- <th>Country</th> -->
+									<th>Plan Selected</th>
+									<th>Vehicle Type</th>
+
 								</tr>
 							</thead>
 							<tbody>
@@ -64,7 +67,13 @@
 									<td><span [innerHTML]="highlighText(individual?.Address)"></span></td>
 									<!-- <td><span [innerHTML]="highlighText(individual?.city)"></span></td> -->
 									<!-- <td><span [innerHTML]="highlighText(individual?.state)"></span></td> -->
-									<td><span [innerHTML]="highlighText(individual?.Country)"></span></td>
+									<!-- <td><span [innerHTML]="highlighText(individual?.Country)"></span></td> -->
+									<td><span [innerHTML]="highlighText(individual?.product_name + ' ' + '($'+individual?.product_price+')')"></span></td>
+									<ul
+										style="flex-direction: column !important; padding: 0px !important; margin: 0px !important;color: black;">
+										<li *ngFor="let vehcile of individual?.vehicles"><span
+												[innerHTML]="teset(vehcile)"></span></li>
+									</ul>
 							</tbody>
 						</table>
 					</div>
@@ -76,9 +85,9 @@
 				<!----BACK BTN---->
 				<nav aria-label="Page navigation example">
 					<ul class="pagination pagination-circle pg-blue">
-						<li *ngIf="currentPage!=1" class="page-item disabled" (click)="loadIndividuals(firstPageUrl)"><a
+						<li *ngIf="currentPage!=1" class="page-item disabled" (click)="loadSubscribers(firstPageUrl)"><a
 								class="page-link">First</a></li>
-						<li *ngIf="currentPage!=1" class="page-item disabled" (click)="loadIndividuals(prevPageUrl)">
+						<li *ngIf="currentPage!=1" class="page-item disabled" (click)="loadSubscribers(prevPageUrl)">
 							<a class="page-link" aria-label="Previous">
 								<span aria-hidden="true">&laquo;</span>
 								<span class="sr-only">Previous</span>
@@ -86,16 +95,16 @@
 						</li>
 						<li *ngFor="let in of counter() ;let i = index"
 							[ngClass]="(in==currentPage)?'page-item active':'page-item'"
-							(click)="loadIndividuals(path+'?page='+in)" [disabled]="(in==currentPage)?true:false">
+							(click)="loadSubscribers(path+'?page='+in)" [disabled]="(in==currentPage)?true:false">
 							<a class="page-link">{{in}}</a>
 						</li>
-						<li *ngIf="currentPage!=lastPage" class="page-item" (click)="loadIndividuals(nextPageUrl)">
+						<li *ngIf="currentPage!=lastPage" class="page-item" (click)="loadSubscribers(nextPageUrl)">
 							<a class="page-link" aria-label="Next">
 								<span aria-hidden="true">&raquo;</span>
 								<span class="sr-only">Next</span>
 							</a>
 						</li>
-						<li *ngIf="currentPage!=lastPage" class="page-item" (click)="loadIndividuals(lastPageUrl)"><a
+						<li *ngIf="currentPage!=lastPage" class="page-item" (click)="loadSubscribers(lastPageUrl)"><a
 								class="page-link">Last</a></li>
 					</ul>
 				</nav>
