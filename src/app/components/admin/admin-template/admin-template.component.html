@@ -256,7 +256,7 @@
 						<!--5th -->
 
 						<!--6th -->
-						<li class="nav-item" *ngIf="role=='admin'">
+						<li class="nav-item" *ngIf="role=='admin' && created_by_role != 'subscriber' ">
 							<a class="nav-link collapsed" [routerLinkActive]="['active']" routerLink="/admin/sub-admins"
 								(click)="closeSidebarFunc(false)" tabIndex="-1">
 								<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"
