@@ -639,6 +639,8 @@ export class NewBookingComponent implements OnInit {
 			this.isFarmoutBooking = response?.data?.reservation_type == 'farmout' ? true : false
 			this.isCreatedByAdmin = response?.data?.created_by == 1 ? true : false
 
+			this.booking_created_from = response?.data?.affiliate_id != this.currentUser?.account_id ? 'admin' : 'subscriber'
+
 			if (response?.data?.account_type == 'travel_planner') {
 				this.getTravelClientAccounts(response?.data?.acc_id)
 			}
@@ -1410,6 +1412,12 @@ export class NewBookingComponent implements OnInit {
 		this.$api.getAffiliateAccount(affiliate_id).pipe(pluck('data')).subscribe((response: any) => {
 			isDevMode() && console.info('Affiliate Information', response);
 			this.AffiliateInformation = response;
+			if(this.booking_created_from == 'admin'){
+				console.log("in affiliate info")
+				this.BookingForm.patchValue({
+					susbcriber_name : this.AffiliateInformation?.FirstName + this.AffiliateInformation?.MiddleName + this.AffiliateInformation?.LastName
+				})
+			}
 			this.$spinner.hide('normalspinner');
 		})
 	}
@@ -2277,7 +2285,7 @@ export class NewBookingComponent implements OnInit {
 			this.BookingForm.patchValue({
 				affiliate_id: this.currentUser?.account_id
 			})
-			if (this.service_type == 'trip') {
+			if (this.service_type == 'round_trip') {
 				this.BookingForm.patchValue({
 					return_affiliate_id: this.currentUser?.account_id
 				})
