@@ -2123,6 +2123,9 @@ export class CreateNewBookingComponent implements OnInit {
 		}
 
 		let value = this.BookingForm.value
+		if(this.currentUser?.created_by_role == 'subscriber'){
+			value["booking_created_from"] = 'subscriber'
+		}
 		value['currency'] = this.currencyObj?.currency
 		value['is_master_vehicle'] = this.is_master_vehicle
 		value['proceed'] = this.proceed
