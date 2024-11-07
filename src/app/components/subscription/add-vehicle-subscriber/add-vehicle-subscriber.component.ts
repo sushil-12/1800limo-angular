@@ -900,6 +900,14 @@ export class AddVehicleSubscriberComponent implements OnInit {
 		if (this.addVehicleForm.invalid) {
 			return;
 		}
+		if (this.addVehicleForm.get('vehicle_image_1').value == this.vehicleImageId1) {
+			this.errorModal.openDialog({
+				errors: {
+					error: 'Please change Vehicle Image!'
+				}
+			})
+			return;
+		}
 		this.spinner.show(); // show spinner
 		this.disableSubmitButton = true; //disable submit button
 
