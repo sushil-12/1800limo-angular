@@ -804,7 +804,7 @@ export class SelectVehicleComponent implements OnInit {
 				this.$router.navigate([
 					'/' + user + '/create-new-booking'
 				],
-					{ queryParams: { affiliate_id: vehicle_selected.affiliate_id, vehicle_id: vehicle_selected.id, new: true, is_master_vehicle: vehicle_selected?.is_master_vehicle } })
+					{ queryParams: { affiliate_id: vehicle_selected.affiliate_id, vehicle_id: vehicle_selected.id, new: true, is_master_vehicle: vehicle_selected?.is_master_vehicle, created_by: this.booking_created_from } })
 			}
 		} else {
 			// this.$errorDialog.openDialog({

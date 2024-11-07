@@ -137,6 +137,7 @@ export class CreateNewBookingComponent implements OnInit {
 	currentUser: any;
 	currencySymbol: any;
 	currencyObj: any;
+	booking_created_from: string = 'admin';
 
 	constructor(
 		private $form: FormBuilder,
@@ -170,6 +171,7 @@ export class CreateNewBookingComponent implements OnInit {
 			if (params && params.new == 'true') {
 				this.newBooking = params.new == 'true'
 				this.affiliate_id = parseInt(params.affiliate_id)
+				this.booking_created_from = params?.created_by
 			}
 			if (params && params.is_master_vehicle == 'true') {
 				this.master_vehicle_id = params.vehicle_id
@@ -431,6 +433,8 @@ export class CreateNewBookingComponent implements OnInit {
 			this.vehicleImgUrl = response?.data?.vehicle_images[0]
 			this.driverImgUrl = response?.data?.driver_image
 			this.isCreatedByAdmin = response?.data?.created_by == 1 ? true : false;
+			this.booking_created_from = response?.data?.vehicle_created_by == 1 ? 'admin' : 'subscriber'
+
 			this.SetFormValue('affiliate_type', response.data.affiliate_type)
 			this.autofillData('cruise', editing_data);
 			this.fillDriverInfo(editing_data);
@@ -525,6 +529,7 @@ export class CreateNewBookingComponent implements OnInit {
 		this.fetchRates(booking_id)
 	}
 	fetchRates(bookingId: number = 0) {
+		console.log("in fetch rates")
 		this.$api.fetchAdminNewBookingRates(null, bookingId).subscribe((response: any) => {
 			this.subtotal = 0
 			this.r_subtotal = 0
@@ -578,11 +583,16 @@ export class CreateNewBookingComponent implements OnInit {
 				this.subtotal += adminShare + this.agentShare
 				console.log("in if created by ta", this.subtotal)
 			}
-			else if (this.updateType == 'repeat' || this.updateType == 'return' || this.updateType == 'round') {
+			else if ((this.updateType == 'repeat' || this.updateType == 'return' || this.updateType == 'round') && this.currentUser?.created_by_role != 'subscriber') {
 				let adminShare = (base_rate * 15) / 100
 				this.agentShare = base_rate * 0.10
 				this.subtotal += adminShare + this.agentShare
 				console.log("in if created by ta in repeat or return", this.subtotal)
+			}
+			else if(this.currentUser?.created_by_role == 'subscriber' && this.booking_created_from == 'subscriber'){
+				console.log("in if created from sub")
+				let adminShare = 0
+				this.subtotal += adminShare
 			}
 			else {
 				let adminShare = (base_rate * 25) / 100
@@ -640,11 +650,15 @@ export class CreateNewBookingComponent implements OnInit {
 					this.r_subtotal += adminShare + this.r_agentShare
 					console.log("in if created by ta", this.r_subtotal)
 				}
-				else if (this.updateType == 'repeat' || this.updateType == 'return' || this.updateType == 'round') {
+				else if ((this.updateType == 'repeat' || this.updateType == 'return' || this.updateType == 'round') && this.booking_created_from != 'subscriber') {
 					let adminShare = (base_rate * 15) / 100
 					this.r_agentShare = base_rate * 0.10
 					this.r_subtotal += adminShare + this.r_agentShare
 					console.log("in if created by ta in repeat or return", this.subtotal)
+				}
+				else if(this.currentUser?.created_by_role == 'subscriber' && this.booking_created_from == 'subscriber'){
+					let adminShare = 0
+					this.r_subtotal += adminShare
 				}
 				else {
 					let adminShare = (base_rate * 25) / 100
@@ -2021,12 +2035,27 @@ export class CreateNewBookingComponent implements OnInit {
 				shareArray['deducted_admin_share'] = shareArray['adminShare'] - shareArray['stripeFee']
 				shareArray['travelAgentShare'] = base_rate * 0.10
 			}
-			if (this.updateType == 'repeat' || this.updateType == 'return' || this.updateType == 'round') {
+			if ((this.updateType == 'repeat' || this.updateType == 'return' || this.updateType == 'round') && this.currentUser?.created_by_role != 'subscriber') {
 				this.adminSharePercent = 15
 				shareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100
 				shareArray['deducted_admin_share'] = shareArray['adminShare'] - shareArray['stripeFee']
 				shareArray['travelAgentShare'] = base_rate * 0.10
 			}
+			else if(this.currentUser?.created_by_role == 'subscriber' && this.booking_created_from == 'subscriber'){
+				this.adminSharePercent = 0
+				shareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100
+				shareArray['deducted_admin_share'] = 0
+				shareArray['travelAgentShare'] = 0
+				shareArray['affiliateShare'] = grandTotal - stripeFee
+			}
+			else if (this.currentUser?.created_by_role == 'subscriber'  && this.booking_created_from == 'admin'){
+				this.adminSharePercent = 15
+				shareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100
+				shareArray['deducted_admin_share'] = shareArray['adminShare'] - shareArray['stripeFee']
+				shareArray['farmoutShare'] = base_rate * 0.10
+				
+			}
+
 			this.shareArray = shareArray
 			console.log('in function createReservationShareArray-->>>', base_rate, shareArray)
 
@@ -2071,7 +2100,13 @@ export class CreateNewBookingComponent implements OnInit {
 				returnShareArray['deducted_admin_share'] = returnShareArray['adminShare'] - returnShareArray['stripeFee']
 				returnShareArray['travelAgentShare'] = base_rate * 0.10
 			}
-
+			else if(this.currentUser?.created_by_role == 'subscriber' && this.booking_created_from == 'subscriber' ){
+				this.adminSharePercent = 0
+				returnShareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100
+				returnShareArray['deducted_admin_share'] = 0
+				returnShareArray['travelAgentShare'] = 0
+				returnShareArray['affiliateShare'] = returnGrandTotal - stripeFee
+			}
 			this.r_shareArray = returnShareArray
 			// console.log('in function createReservationreturnShareArray-->>>' , base_rate, returnShareArray )
 			return returnShareArray;
@@ -2285,6 +2320,14 @@ export class CreateNewBookingComponent implements OnInit {
 			// }    
 			this.affiliate_id = selected_vehicle?.affiliate_id
 
+			if (selected_vehicle?.created_by != 1) {
+				console.log("in affiliate info")
+				this.booking_created_from == 'subscriber'
+			}
+			else if (selected_vehicle?.created_by == 1 && this.currentUser?.created_by_role == 'subscriber') {
+				this.booking_created_from == 'admin'
+
+			}
 
 			//dropOFF
 			this.SetFormValue('service_type', QB?.service_type)
