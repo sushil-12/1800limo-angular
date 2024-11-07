@@ -124,6 +124,20 @@
 						</div>
 						<div class="div border-top">
 							<dl class="m-0">
+								<dt class="invoice-p" *ngIf="invoiceData.affiliate_company_name">Affiliate Company </dt>
+								<dd class="invoice-text-b">{{invoiceData.affiliate_company_name}}
+								</dd>
+								<dt class="invoice-p" *ngIf="invoiceData.affiliate_name">
+									Affiliate Name
+								</dt>
+								<dd class="invoice-text-b text-break">{{invoiceData.affiliate_name}}</dd>
+								<dt class="invoice-p" *ngIf="invoiceData.affiliate_phone">Affiliate Phone</dt>
+								<dd class="invoice-text-b"> {{invoiceData.affiliate_phone}}</dd>
+								
+							</dl>
+						</div>
+						<div class="div border-top">
+							<dl class="m-0">
 								<dt class="invoice-p" *ngIf="invoiceData.pickup_address">Pickup Address
 								</dt>
 								<dd class="invoice-text-b"> {{invoiceData.pickup_address}}
