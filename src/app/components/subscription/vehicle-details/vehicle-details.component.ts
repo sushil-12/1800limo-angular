@@ -5,6 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
 declare var $: any;
 
 @Component({
@@ -155,6 +156,23 @@ export class VehicleDetailsComponent implements OnInit {
 			this.enablePayButton = false
 			this.getVehicle()
 		});
+	}
+
+	drop(event: CdkDragDrop<string[]>) {
+		// moveItemInArray(this.vehicles, event.previousIndex, event.currentIndex);'
+		console.log(event, "check event")
+		console.log("previous index", event.previousIndex)
+		console.log("current index", event.currentIndex)
+		this.spinner.show();
+		let id = this.vehicles[event.previousIndex].ID
+		console.log(id, "////////////")
+		this.adminService.changeSortOrder({ vehicle_id: id, currentIndex: event.currentIndex, previousIndex: event.previousIndex, type: "affiliate-vehicle" }).subscribe((response: any) => {
+			this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
+				this.router.navigate(['/admin/vehicle-details']);
+			});
+			this.spinner.hide();
+			// console.log(response.data)
+		})
 	}
 
 }

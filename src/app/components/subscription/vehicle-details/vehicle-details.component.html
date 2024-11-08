@@ -61,7 +61,7 @@
 								<th>Delete</th>
 							</tr>
 						</thead>
-						<tbody>
+						<tbody cdkDropList (cdkDropListDropped)="drop($event)">
 							<ng-container *ngIf="vehicles">
 								<tr *ngFor="let vehicle of vehicles;index as vehicle_index"
 									[attr.id]="'vehicle_' + vehicle.ID" role="row" class="odd" cdkDrag>
