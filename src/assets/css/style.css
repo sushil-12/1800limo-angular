@@ -3101,7 +3101,7 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .text_desktop {
-	padding-top: 110px;
+	/* padding-top: 110px; */
 }
 
 @media only screen and (max-width:767px) {

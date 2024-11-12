@@ -6,6 +6,14 @@
 			<div class="col-md-6 col-xl-6 bannertext">
 				<div>
 					<div class="text_desktop">
+						<div class="d-flex align-items-center" style="padding-bottom: 110px;">
+							<!-- <h2 style="margin-top: 15px;margin-right: 10px;">
+								
+							</h2> -->
+							<button (click)="joinButton()" class="three-d-button">
+								Buy Chauffeur Select Software
+							</button>
+						</div>
 						<!-- DESKTOP -->
 						<h2><span tabindex="-1">{{ fetchPageData('1-800-limo.com')?.title }}</span> {{
 							fetchPageData('1-800-limo.com')?.subtitle }}<br> {{ fetchPageData('1-800-limo.com')?.content
@@ -13,10 +21,13 @@
 					</div>
 					<!-- MOBILE -->
 					<div class="text_mobile">
+						<button (click)="joinButton()" class="three-d-button" style="margin-bottom: 15px;">
+							Buy Chauffeur Select Software
+						</button>
 						<div class="nav-item dropdown button-signin" *ngIf="!currentUser; else loggedInUser">
 							<button class="nav-link dropdown-toggle custom-filled-button" href="#" id="dropdown05"
 								data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">LOGIN /
-							CREATE</button>
+								CREATE</button>
 							<div class="dropdown-menu" aria-labelledby="dropdown05">
 								<a class="dropdown-item indv-btn" style="color: #fff !important;"
 									(click)="loginButtons('individual')">Individual Account</a>
@@ -876,7 +887,7 @@
 										<div class="d-flex justify-content-center">
 											<img src="../../../../assets/images/swap_logo.svg" alt="img"
 												class="swap_btn" (click)="swapPickupDropoff('oneway')">
-												<span class="text-white ml-3"
+											<span class="text-white ml-3"
 												style="width: 0 !important;font-size: 16px;font-weight: 500;">(Flip)</span>
 										</div>
 										<!-- RETURN DROPOFF AIRPORT -->
