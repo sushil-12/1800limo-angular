@@ -97,19 +97,19 @@ export class DailyBookingsComponent implements OnInit {
 		// const localeDateString = date.toLocaleDateString(undefined, options).
 		// replace(/(\d+)\/(\d+)\/(\d+)/,'$3-$1-$2');
 		// Set Search Filters According to cookies or the intial state
-		// this.startDate = localStorage.getItem("admin_startDate")
-		// 	? localStorage.getItem("admin_startDate")
-		// 	: moment(timestamp).format("YYYY-MM-DD");
+		this.startDate = localStorage.getItem("admin_startDate")
+			? localStorage.getItem("admin_startDate")
+			: moment(timestamp).format("YYYY-MM-DD");
 
-		this.startDate = moment(timestamp).format("YYYY-MM-DD");
+		// this.startDate = moment(timestamp).format("YYYY-MM-DD");
 
 		date.setDate(date.getDate() + 7);
 		timestamp = date.getTime();
-		// this.endDate = localStorage.getItem("admin_endDate")
-		// 	? localStorage.getItem("admin_endDate")
-		// 	: moment(timestamp).format("YYYY-MM-DD");
+		this.endDate = localStorage.getItem("admin_endDate")
+			? localStorage.getItem("admin_endDate")
+			: moment(timestamp).format("YYYY-MM-DD");
 
-		this.endDate = moment(timestamp).format("YYYY-MM-DD");
+		// this.endDate = moment(timestamp).format("YYYY-MM-DD");
 
 		this.searchText = localStorage.getItem("DBSearch")
 			? localStorage.getItem("DBSearch")
@@ -273,8 +273,12 @@ export class DailyBookingsComponent implements OnInit {
 		this.useDateFilter = value;
 		this.saveCookie("useDateFilter", value);
 		let date = new Date();
-		date.setDate(date.getDate() + 7);
+		date.setDate(date.getDate());
 		let timestamp = date.getTime();
+		this.startDate = moment(timestamp).format("YYYY-MM-DD");
+		// let date = new Date();
+		date.setDate(date.getDate() + 7);
+		timestamp = date.getTime();
 		this.endDate = moment(timestamp).format("YYYY-MM-DD");
 		this.loadBookings(null, this.startDate, this.endDate, this.searchText);
 	}
@@ -1270,6 +1274,16 @@ export class DailyBookingsComponent implements OnInit {
 
 	addBank() {
 		this.router.navigate(['/admin/add-bank-details'])
+	}
+
+	// redirect to client cards page
+	viewClientCardAction(id){
+		this.router.navigate([`/admin/cards`], { queryParams: { accountType: 'individual',accountId:id } });
+	}
+
+    // redirect to refund url
+	refundAction(url){
+		window.open(url, '_blank'); // Opens the search in a new tab
 	}
 
 
