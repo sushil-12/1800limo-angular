@@ -210,13 +210,13 @@
 													<div class="dropdown-item-icon"></div>
 													Change Status
 												</a> -->
-											<a class="dropdown-item"
+											<!-- <a class="dropdown-item"
 												(click)="sendEmailClicked(booking.booking_id,'customer')"
 												data-toggle="modal" data-target="#emailModal"
 												*ngIf="currentUser?.roleName == 'admin' || subModules.includes('email_customer')">
 												<div class="dropdown-item-icon"></div>
 												Email Customer
-											</a>
+											</a> -->
 											<a class="dropdown-item"
 												(click)="sendEmailClicked(booking.booking_id,'affiliate')"
 												data-toggle="modal" data-target="#emailModal"
@@ -256,6 +256,17 @@
 												*ngIf="(currentUser?.roleName == 'admin' &&( booking.booking_status == 'rejected' || booking?.booking_status == 'pending' || booking?.booking_status == 'driver_unassigned') )">
 												<div class="dropdown-item-icon"></div>
 												ReAffiliate
+											</a>
+											<a class="dropdown-item" (click)="refundAction(booking?.stripe_refund_url)"
+												*ngIf="currentUser?.roleName == 'admin' && booking?.stripe_refund_url">
+												<div class="dropdown-item-icon"></div>
+												Refund
+											</a>
+											<a class="dropdown-item"
+												(click)="viewClientCardAction(booking?.travel_client_id ? booking?.travel_client_id : booking?.individual_account_id)"
+												*ngIf="currentUser?.roleName == 'admin' ">
+												<div class="dropdown-item-icon"></div>
+												View Client Cards
 											</a>
 											<!-- <a class="dropdown-item"
 												(click)="sendEmailClicked(booking.booking_id,'emailAll')"
