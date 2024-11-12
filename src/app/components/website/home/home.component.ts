@@ -1405,6 +1405,10 @@ export class HomeComponent implements OnInit {
 				}
 			});
 	}
+
+	joinButton(){
+		this.router.navigate(['/subscription'])
+	}
 }
 
 
