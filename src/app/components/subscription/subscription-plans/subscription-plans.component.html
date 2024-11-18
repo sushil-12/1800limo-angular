@@ -1,32 +1,70 @@
 <ngx-spinner></ngx-spinner>
 <div class="subs_wrapper">
-    <div class="subs_div">
-        <div [ngClass]="selectedPlanId == plans?.id ? 'selected_subs_content' : 'subs_content' " *ngFor="let plans of planData?.data" (click)="selectedPlan(plans?.id)">
-            <img src="../../../../assets//images/basePlan.png" *ngIf="plans?.id == 1 else premiumPlan;" height="25" width="25"/>
-            <ng-template #premiumPlan>
-                <img src="../../../../assets//images/gem.png" height="25" width="25"/>
-            </ng-template>
-            <p class="subs_planName">
-                {{plans?.product_name}}
-            </p>
-            <p class="subs_planTitle">
-                Unleash the Power of Your Business
-            </p>
-            <p class="sub_planPrice">
-                $ {{plans?.product_price}} <span style="color: #797878;font-weight: 300;font-size: 17px;">per
-                    month</span>
-            </p>
-            <div class="sub_planDetails">
-                <ul class="sub_ul">
-                    <li *ngFor="let detail of plans?.product_description">
-                        <img src="../../../../assets/images/Check.png" height="22" style="margin-right: 6px;" />
-                        {{ detail }}
-                    </li>
-                </ul>
+    <div>
+        <div class="d-flex flex-column align-items-center heading_top">
+            <span style="font-size: 32px;font-weight: 400;">
+                Find the Perfect Plan for Your Needs
+            </span>
+            <span style="font-size: 17px;font-weight: 300;">
+                Flexible monthly options that grow with your business.
+            </span>
+        </div>
+        <div class="subs_div">
+            <div [ngClass]="selectedPlanId == plans?.id ? 'selected_subs_content' : 'subs_content' "
+                *ngFor="let plans of planData?.data" (click)="selectedPlan(plans?.id)">
+                <div class="d-flex flex-column align-items-center mb-2" style="border-bottom: 1px solid #d7d3d0;">
+                    <img src="../../../../assets//images/basePlan.png" *ngIf="plans?.id == 1 else premiumPlan;"
+                        height="25" width="25" style="margin-bottom: 10px;" />
+                    <ng-template #premiumPlan>
+                        <img src="../../../../assets//images/gem.png" height="25" width="25"
+                            style="margin-bottom: 10px;" />
+                    </ng-template>
+                    <span class="subs_planName">
+                        {{plans?.product_name}}
+                    </span>
+                    <span class="subs_planTitle">
+                        Unleash the Power of Your Business
+                    </span>
+                    <span class="sub_planPrice">
+                        $ {{plans?.product_price}} <span style="color: #797878;font-weight: 300;font-size: 17px;">
+                            /month</span>
+                    </span>
+                </div>
+                <div class="sub_planDetails">
+                    <div *ngFor="let category of ['features', 'advantages', 'benefits']">
+                        <span class="sub_planDetails_heading">{{ category | titlecase}}</span>
+                        <ul class="sub_ul">
+                            <li *ngFor="let key of objectKeys(plans?.product_description[category])">
+                                <img src="../../../../assets/images/Check.png" height="22" style="margin-right: 6px;" />
+                                <span [innerHTML]="transform(key | titlecase)" [attr.data-bs-toggle]="'tooltip'"
+                                    [attr.data-bs-placement]="'top'"
+                                    [attr.title]="plans?.product_description[category][key].description">
+                                </span>
+                                <!-- <span [innerHTML]="transform(key | titlecase)"></span> -->
+                                <!-- <p>{{ plans?.product_description[category][key].description }}</p> -->
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- <div class="sub_planDetails">
+                    <ul class="sub_ul">
+                        <li *ngFor="let detail of plans?.product_description">
+                            <img src="../../../../assets/images/Check.png" height="22" style="margin-right: 6px;" />
+                            {{ detail }}
+                        </li>
+                    </ul>
+                </div> -->
+                <button *ngIf="plans?.id == 1"
+                    [ngClass]="selectedPlanId == plans?.id ? 'selected_subs_btn' : 'subs_btn'"
+                    (click)="submitPlan(plans)">
+                    Sign Up Now
+                </button>
+                <button *ngIf="plans?.id != 1"
+                    [ngClass]="selectedPlanId == plans?.id ? 'selected_subs_btn' : 'subs_btn'"
+                    (click)="submitPlan(plans)">
+                    Subscribe Now
+                </button>
             </div>
-            <button [ngClass]="selectedPlanId == plans?.id ? 'selected_subs_btn' : 'subs_btn'" (click)="submitPlan(plans)">
-                Get Started
-            </button>
         </div>
     </div>
 </div>
