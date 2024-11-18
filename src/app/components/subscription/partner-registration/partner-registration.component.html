@@ -52,12 +52,12 @@
                                     (intlTelInputObject)="telInputObjectMobile($event)" tabIndex="1"
                                     (focus)="$event.target.select()" />
                             </mat-form-field>
-                            <div class="d-flex mt-2"
+                            <!-- <div class="d-flex mt-2"
                                 *ngIf="f?.phone?.touched && !f?.phone?.errors?.minlength && !f?.phone?.errors?.required && enableOtpField">
                                 <a style="text-decoration: underline; color: #007bff; cursor: pointer;"
                                     (click)="sendOtp()">Please verify
-                                    mobile number. Send Otp!</a>
-                            </div>
+                                    mobile number. Click to send Otp!</a>
+                            </div> -->
                             <div *ngIf="submittedForm && f?.phone?.errors || f?.phone?.touched && f?.phone?.errors"
                                 class="text-danger margin-bottom-thin my-mat-hint">
                                 <div *ngIf="f?.phone?.errors?.required">This field is required</div>
@@ -109,8 +109,12 @@
                             </div>
                         </div>
                         <div class="col-md-12 d-flex mt-4">
-                            <button class="custom-filled-button"
-                                (click)="submitForm()" tabIndex="1">
+                            <button class="custom-filled-button" (click)="sendOtp()" tabIndex="1"
+                                *ngIf="enableOtpField">
+                                Send Otp
+                            </button>
+                            <button class="custom-filled-button" (click)="submitForm()" tabIndex="1"
+                                *ngIf="!enableOtpField">
                                 Register
                             </button>
                         </div>

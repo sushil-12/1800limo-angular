@@ -228,7 +228,7 @@ export class PartnerRegistrationComponent implements OnInit {
           userId: result?.data.id
         })
         this.verifiedNumber = result?.data.phone
-        this.snackbarMsg = 'Mobile number verified successfully!'
+        this.snackbarMsg = 'Phone verified successfully! Click Register for payment.'
         this.openSnackbar()
       });
     this.otpForm.patchValue({
@@ -269,11 +269,11 @@ export class PartnerRegistrationComponent implements OnInit {
 
     if(this.enableOtpField){
       console.log("phone not verified")
-      this.errorDialog.openDialog({
-        errors: {
-					error: `Please verify mobile number!`
-				}
-      })
+      // this.errorDialog.openDialog({
+      //   errors: {
+			// 		error: `Please verify your mobile number!`
+			// 	}
+      // })
       return;
     }
 

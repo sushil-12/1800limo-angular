@@ -795,7 +795,7 @@ export class SelectVehicleComponent implements OnInit {
 				}
 				else {
 					this.$router.navigate(['/admin/new-booking'],
-						{ queryParams: { affiliate_id: vehicle_selected.affiliate_id, vehicle_id: vehicle_selected.id, new: true, is_master_vehicle: vehicle_selected?.is_master_vehicle, created_by: this.booking_created_from } })
+						{ queryParams: { affiliate_id: vehicle_selected.affiliate_id, vehicle_id: vehicle_selected.id, new: true, is_master_vehicle: vehicle_selected?.is_master_vehicle, created_by: (JSON.parse(localStorage.getItem('currentUser'))['created_by_role'] == 'admin' ? 'admin' : this.booking_created_from) } })
 				}
 			} else {
 				let user = JSON.parse(localStorage.getItem('currentUser'))['roleName']

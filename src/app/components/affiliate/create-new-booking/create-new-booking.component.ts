@@ -419,6 +419,8 @@ export class CreateNewBookingComponent implements OnInit {
 		this.SetFormValue('pickup_date', moment(timestamp).format("YYYY-MM-DD"))
 		this.SetFormValue('return_pickup_date', moment(timestamp).format("YYYY-MM-DD"))
 		this.SetFormValue('number_of_vehicles', 1)
+		this.SetFormValue('booking_instructions', "1. Driver- Text on location. Text the client a day before to confirm driver name , cell phone and booking details. Text client with ETA when en route");
+		this.SetFormValue('return_booking_instructions', "1. Driver- Text on location. Text the client a day before to confirm driver name , cell phone and booking details. Text client with ETA when en route");
 
 
 		if (this.BookingForm.value.transfer_type.includes('city_')) {
@@ -1820,6 +1822,10 @@ export class CreateNewBookingComponent implements OnInit {
 
 			// set cruise ship name and cruise port mandatory
 			if (value.includes('_cruise') || value.includes('cruise_')) {
+				if(value.includes("cruise_")){
+					this.SetFormValue('booking_instructions', "1. Pax- Text driver when landing.  2. Driver- Text pax with pickup instructions when ship has arrived.");
+					// this.SetFormValue('return_booking_instructions', "1. Pax- Text driver when landing, 2. Driver- Text pax with pickup instructions when plane has arrived");
+				}
 				console.log("setting value of cruise port and name mandatory")
 				this.BookingForm.get('cruise_name').setValidators([Validators.required]);
 				this.BookingForm.get('cruise_port').setValidators([Validators.required]);
@@ -1853,6 +1859,7 @@ export class CreateNewBookingComponent implements OnInit {
 			}
 
 			if (value.includes('airport_')) {
+				this.SetFormValue('booking_instructions', "1. Pax- Text driver when landing.  2. Driver- Text pax with pickup instructions when plane has arrived.");
 				console.log("setting value of pickup flight mandatory")
 				this.BookingForm.get('pickup_flight').setValidators([Validators.required]);
 				this.BookingForm.get('pickup_flight').updateValueAndValidity();

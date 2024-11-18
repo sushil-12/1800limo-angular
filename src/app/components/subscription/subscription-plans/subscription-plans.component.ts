@@ -4,6 +4,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { AuthService } from 'src/app/services/auth.service';
+declare var bootstrap: any;
 
 @Component({
   selector: 'app-subscription-plans',
@@ -23,6 +24,20 @@ export class SubscriptionPlansComponent implements OnInit {
   ngOnInit(): void {
 
     this.getPlans()
+
+     // Initialize all tooltips on page load
+    //  const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    //  tooltipTriggerList.map(function (tooltipTriggerEl) {
+    //    return new bootstrap.Tooltip(tooltipTriggerEl);
+    //  });
+
+     // Initialize all tooltips on page load, with click trigger for mobile devices
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.map(function (tooltipTriggerEl) {
+     return new bootstrap.Tooltip(tooltipTriggerEl, {
+        trigger: 'hover focus click'  // Supports hover, focus, and click for different devices
+      });
+    });
 
   }
 
@@ -55,6 +70,15 @@ export class SubscriptionPlansComponent implements OnInit {
 
   selectedPlan(id) {
     this.selectedPlanId = id
+  }
+
+  objectKeys(obj: any): string[] {
+    return Object.keys(obj);
+  }
+
+  transform(value: string): string {
+    if (!value) return value;
+    return value.replace(/_/g, ' '); // Replace underscores with spaces
   }
 
 }

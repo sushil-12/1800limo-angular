@@ -1,7 +1,7 @@
 <ngx-spinner></ngx-spinner>
 
 <!-- FILTERS AND SORT BUTTON SECTION -->
-<section id="fixed-filters-sortby-button" class="hideInMobile fixed-bottom">
+<section id="fixed-filters-sortby-button" class="fixed-bottom">
 	<div id="fixed-section-container" class="container-fluid mb-2">
 		<div id="fixed-section-box" class="d-flex justify-content-center align-items-center">
 			<div id="filters-button" class="d-block d-lg-none">
@@ -560,7 +560,8 @@
 				<div class="d-flex justify-content-end ">
 					<span>
 						<a href="javascript:void(0);" role="button" data-toggle="dropdown" aria-haspopup="true"
-							aria-expanded="false" style="text-decoration: none;font-weight: 500;color: blue;margin-right: 5px;">
+							aria-expanded="false"
+							style="text-decoration: none;font-weight: 500;color: blue;margin-right: 5px;">
 							<i class="bi bi-caret-down"></i> Sort
 						</a>
 						<div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
@@ -663,7 +664,8 @@
 										<div class="icon-container-mobile">
 											<img alt="" src="assets/images/select_vehicle/pass.png"
 												style="padding: 3px;" />
-												<span style="font-size: 0.8rem;margin-left: 0.1rem;font-weight: 500;">Pax</span>
+											<span
+												style="font-size: 0.8rem;margin-left: 0.1rem;font-weight: 500;">Pax</span>
 											<span class="font-weight-bolder" style="font-size: 0.9rem;padding: 3px;">{{
 												vehinfo?.passenger
 												}}</span>
@@ -671,7 +673,8 @@
 										<div class="icon-container-mobile">
 											<img alt="" src="assets/images/select_vehicle/lug.png"
 												style="padding: 3px;" />
-												<span style="font-size: 0.8rem;margin-left: 0.1rem;font-weight: 500;">Luggage</span>
+											<span
+												style="font-size: 0.8rem;margin-left: 0.1rem;font-weight: 500;">Luggage</span>
 											<span class="font-weight-bolder" style="font-size: 0.9rem;padding: 3px;">{{
 												vehinfo?.luggage
 												}}</span>
@@ -684,13 +687,16 @@
 							<div class="vehicle-details-data-mobile">
 								<div class="d-flex justify-content-between" style="max-height: 25px;">
 									<p>
-										Year&nbsp;<span style="font-weight: 500;">{{vehinfo?.vehicle_details?.year}}</span>
+										Year&nbsp;<span
+											style="font-weight: 500;">{{vehinfo?.vehicle_details?.year}}</span>
 									</p>
 									<p>
-										Make&nbsp;<span style="font-weight: 500;">{{vehinfo?.vehicle_details?.make}}</span>
+										Make&nbsp;<span
+											style="font-weight: 500;">{{vehinfo?.vehicle_details?.make}}</span>
 									</p>
 									<p>
-										Model&nbsp;<span style="font-weight: 500;">{{vehinfo?.vehicle_details?.model}}</span>
+										Model&nbsp;<span
+											style="font-weight: 500;">{{vehinfo?.vehicle_details?.model}}</span>
 									</p>
 								</div>
 							</div>
@@ -699,7 +705,8 @@
 							style="max-height: 25px;padding: 2px 16px 2px 16px;" *ngIf="!vehinfo?.is_master_vehicle">
 							<p style="font-size: 0.9rem;">
 								<i class="bi bi-exclamation-circle-fill" style="color: red;"></i>
-								&nbsp; Cancellation Policy: &nbsp;<span style="font-weight: 500;">{{convertHrIntoDays(vehinfo?.cancellation_policy)}}</span>
+								&nbsp; Cancellation Policy: &nbsp;<span
+									style="font-weight: 500;">{{convertHrIntoDays(vehinfo?.cancellation_policy)}}</span>
 							</p>
 						</div>
 						<div class="d-flex justify-content-between align-items-center mb-2"

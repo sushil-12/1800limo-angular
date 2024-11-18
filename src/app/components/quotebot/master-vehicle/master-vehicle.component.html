@@ -1,7 +1,7 @@
 <ngx-spinner></ngx-spinner>
 
 <!-- FILTERS AND SORT BUTTON SECTION -->
-<section id="fixed-filters-sortby-button" class="fixed-bottom hideInMobile">
+<section id="fixed-filters-sortby-button" class="fixed-bottom">
 	<div id="fixed-section-container" class="container-fluid mb-2">
 		<div id="fixed-section-box" class="d-flex justify-content-center align-items-center">
 			<div id="filters-button" class="d-block d-lg-none">
@@ -50,7 +50,7 @@
 				<div class="collapse navbar-collapse" id="navbarSupportedContent" [ngClass]="openfilters ? 'show' : ''">
 					<div class="close-sidebar">
 						<span (click)="openfilters = false">
-							<i class="bi bi-x-lg"></i>
+							<i class="fas fa-times"></i>
 						</span>
 					</div>
 					<aside class="sidebar w-100">
@@ -491,7 +491,8 @@
 								</div>
 								<div class="d-flex justify-content-end mb-2">
 									<button type="button" class="view-more-circle-button"
-										(click)="selectCategory(vehicle_obj?.name)" style="padding: 2px 5px !important;font-size: 0.7rem !important;">
+										(click)="selectCategory(vehicle_obj?.name)"
+										style="padding: 2px 5px !important;font-size: 0.7rem !important;">
 										View More
 									</button>
 								</div>
