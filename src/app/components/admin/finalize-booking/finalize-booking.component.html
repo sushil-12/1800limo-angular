@@ -167,7 +167,8 @@
 	</div>
 	<div class="col-md-12">
 		<p class="alert alert-danger" *ngIf="paidAmount">Note- 50% amount have already been deducted for this booking:
-			<span class="font-weight-bold">{{currencySymbol}}{{paidAmount.toFixed(2)}}</span></p>
+			<span class="font-weight-bold">{{currencySymbol}}{{paidAmount.toFixed(2)}}</span>
+		</p>
 	</div>
 </div>
 
@@ -239,7 +240,7 @@
 							<td>
 								<input id="selectCard" name="selectCard" type="radio"
 									(click)="changeDetection('card'); handleChangeCard(item)"
-									[checked]="item.cc_prority=='Primary' && !isCardFormOpen">
+									[checked]="(item.cc_prority=='Primary' || item.cc_prority == null) && !isCardFormOpen">
 							</td>
 							<td>{{item.name}}</td>
 							<td>{{item.last4}}</td>
