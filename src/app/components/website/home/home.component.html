@@ -460,7 +460,7 @@
 								<!-- style="background-color:#f5f4fe;;border-radius: 5px;" -->
 								<div class="row m-0 pt-3 justify-content-start">
 
-									<div class="google_map_logos mr-1 mt-3">
+									<!-- <div class="google_map_logos mr-1 mt-3">
 										<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25"
 											viewBox="0 0 100 100" style="padding-left: 2px;">
 											<circle cx="50" cy="50" r="50" fill="#c6eff8" />
@@ -480,17 +480,11 @@
 												d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A31.493 31.493 0 0 1 8 14.58a31.481 31.481 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z" />
 											<circle cx="8" cy="6" r="3" fill="#ff0b0b" />
 										</svg>
-										<!-- <img src="../../../../assets/images/start_location.png" alt="img"
-											class="img-fluid"> -->
-										<!-- <img src="../../../../assets/images/three_dot_map.png" alt="img"
-											class="img-fluid"> -->
-										<!-- <img src="../../../../assets/images/location_logo.png" alt="img"
-											class="img-fluid"> -->
-									</div>
+									</div> -->
 									<!-- PICKUP AIRPORT -->
 									<div class="col-10 mr-0 pl-0 ml-0">
 										<div class="errorMsg col-md-12" *ngIf="QBForm?.pickup_type?.value == 'airport'"
-											style="height: 52px; max-width: 110% !important;">
+											style="height: 52px; max-width: 125% !important;">
 											<div class="input-contain d-flex align-items-center">
 												<div class="input-box">
 													<input type="text" style="height:46px !important;"
@@ -531,7 +525,7 @@
 
 										<!-- PICKUP ADDRESS -->
 										<div class="errorMsg col-md-12" *ngIf="QBForm?.pickup_type?.value != 'airport'"
-											style="height: 52px;max-width: 110% !important;">
+											style="height: 52px;max-width: 125% !important;">
 											<div class="input-contain d-flex align-items-center"
 												[class.errorValid]="submitted && QBForm?.pickup_address?.errors">
 												<!-- <img src="../../../../assets/images/start_location.png" alt="start_location"> -->
@@ -577,7 +571,7 @@
 										<!-- <div class="d-flex justify-content-center">
 											<span class="span-term-to">TO</span>
 										</div> -->
-										<div class="d-flex justify-content-center">
+										<div class="d-flex justify-content-center" style="width: 125% !important;">
 											<img src="../../../../assets/images/swap_logo.svg" alt="img"
 												class="swap_btn" (click)="swapPickupDropoff('oneway')">
 											<span class="text-white ml-3"
@@ -585,7 +579,7 @@
 										</div>
 										<!-- DROPOFF AIRPORT -->
 										<div class="errorMsg col-md-12" *ngIf="QBForm.dropoff_type.value == 'airport'"
-											style="height: 52px;max-width: 110% !important;">
+											style="height: 52px;max-width: 125% !important;">
 											<div class="input-contain d-flex align-items-center">
 												<div class="input-box">
 													<input type="text" style="height:46px !important;"
@@ -627,7 +621,7 @@
 
 										<!-- DROPOFF ADDRESS -->
 										<div class="errorMsg col-md-12" *ngIf="QBForm?.dropoff_type?.value != 'airport'"
-											style="height: 52px;max-width: 110% !important;">
+											style="height: 52px;max-width: 125% !important;">
 											<div class="input-contain d-flex align-items-center">
 												<div class="input-box">
 													<input type="text" style="height:46px !important;"
@@ -795,7 +789,7 @@
 									<!-- PICKUP AIRPORT -->
 									<div class="col-10 mr-0 pl-0 ml-0">
 										<div class="errorMsg col-md-12" *ngIf="QBForm?.dropoff_type?.value == 'airport'"
-											style="height: 52px;max-width: 110% !important;">
+											style="height: 52px;max-width: 125% !important;">
 											<div class="input-contain d-flex align-items-center">
 												<div class="input-box">
 													<input type="text" placeholder="Return Airport Code / Name"
@@ -837,7 +831,7 @@
 
 										<!-- Return Pickup Address -->
 										<div class="errorMsg col-md-12" *ngIf="QBForm?.dropoff_type?.value != 'airport'"
-											style="height: 52px;max-width: 110% !important;">
+											style="height: 52px;max-width: 125% !important;">
 											<div class="input-contain d-flex align-items-center"
 												[class.errorValid]="submitted && QBForm?.return_pickup_address?.errors">
 												<div class="input-box">
@@ -884,7 +878,7 @@
 										<!-- <div class="d-flex justify-content-center">
 											<span class="span-term-to">TO</span>
 										</div> -->
-										<div class="d-flex justify-content-center">
+										<div class="d-flex justify-content-center" style="width: 125% !important;">
 											<img src="../../../../assets/images/swap_logo.svg" alt="img"
 												class="swap_btn" (click)="swapPickupDropoff('oneway')">
 											<span class="text-white ml-3"
@@ -892,7 +886,7 @@
 										</div>
 										<!-- RETURN DROPOFF AIRPORT -->
 										<div class="errorMsg col-md-12" *ngIf="QBForm?.pickup_type?.value == 'airport'"
-											style="height: 52px;max-width: 110% !important;">
+											style="height: 52px;max-width: 125% !important;">
 											<div class="input-contain d-flex align-items-center">
 												<div class="input-box">
 													<input type="text" placeholder="Return Airport Code / Name"
@@ -928,7 +922,7 @@
 
 										<!-- Return Dropoff Address -->
 										<div class="errorMsg col-md-12" *ngIf="QBForm?.pickup_type?.value != 'airport'"
-											style="height: 52px;max-width: 110% !important;">
+											style="height: 52px;max-width: 125% !important;">
 											<div class="input-contain d-flex align-items-center"
 												[class.errorValid]="submitted && QBForm?.return_dropoff_address?.errors">
 												<div class="input-box">
