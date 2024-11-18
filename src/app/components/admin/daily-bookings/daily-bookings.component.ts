@@ -76,6 +76,8 @@ export class DailyBookingsComponent implements OnInit {
 	public is_stripe_added: any;
 	public stripeResp: any;
 	public stripeErroMsg: string = '';
+	subs_end_date:any;
+	isCancelled : boolean = false;
 
 	constructor(
 		private adminService: AdminService,
@@ -155,6 +157,7 @@ export class DailyBookingsComponent implements OnInit {
 		this.MapController()
 		if (this.currentUser?.created_by_role == 'subscriber') {
 			this.stripeDetailsCheck()
+			this.subs_end_date = localStorage.getItem('current_period_end_date')
 		}
 
 	}
@@ -496,6 +499,32 @@ export class DailyBookingsComponent implements OnInit {
 		this.message.nativeElement.value = "";
 		this.show = false;
 	}
+
+	cancelSubscription(){
+		this.spinner.show()
+		let data = {
+			account_id : this.currentUser?.account_id
+		}
+		this.adminService
+			.cancelSubscription(data)
+			.pipe(
+				catchError((err) => {
+					this.spinner.hide()
+					return throwError(err);
+				})
+			)
+			.subscribe((response : any) => {
+				this.spinner.hide()
+				this.$errorDialog.openDialog({
+					errors: {
+						error: `<span class='text-success font-weight-bolder text-2xl' style="font-size: 24px;">Your subscription have been cancelled successfully!</span>`
+					}
+				})
+				this.isCancelled = true
+				$("#cancelModal").modal("hide");
+			});
+	}
+	
 
 	closeModal() {
 		// this.sendEmailModal.nativeElement.querySelector('textarea').blur();
