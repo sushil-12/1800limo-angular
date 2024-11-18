@@ -251,6 +251,7 @@ export class OtpComponent implements OnInit, OnDestroy {
 				switch (this.response.data.user.roleName) {
 					case 'admin': {
 						localStorage.setItem("is_stripe_account_added", this.response.data?.subscriber_data?.is_stripe_account_added);
+						localStorage.setItem("current_period_end_date",this.response.data?.subscription_status?.current_period_end_date)
 						if (this.response.data?.user?.created_by_role == 'subscriber' && !this.response.data?.subscriber_data?.is_stripe_account_added) {
 							this.router.navigateByUrl('/admin/add-bank-details');
 						}

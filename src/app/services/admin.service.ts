@@ -1336,5 +1336,8 @@ export class AdminService {
 		return this.httpClient.get(path).toPromise();;
 	}
 
+	cancelSubscription(data) {
+		return this.httpClient.post(this.serverUrl + 'cancel-subscription', data);
+	}
 
 }

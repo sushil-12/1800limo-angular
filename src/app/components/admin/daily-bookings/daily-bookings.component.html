@@ -2,7 +2,18 @@
 <main>
 	<!-- Main page content-->
 	<section class="adminbox_shadow user_information" id="daily_bookings_table">
-		<h2 class="headinginfo">See All booking on all Accounts </h2>
+		<div class="row">
+			<div class="col-md-7">
+				<h2 class="headinginfo">See All booking on all Accounts </h2>
+			</div>
+			<div class="col-md-5 d-flex justify-content-end" style="gap: 10px;"
+				*ngIf="currentUser?.created_by_role == 'subscriber' && !isCancelled ">
+				<button class="custom-filled-button green-button invite-agent-button" data-toggle="modal"
+					data-target="#cancelModal">
+					Cancel Subscription
+				</button>
+			</div>
+		</div>
 		<div class="containeredd mt-1 ">
 			<h3 class="addveh_top d-md-flex justify-content-between align-items-center mb-0 mt-2"
 				*ngIf="currentUser?.created_by_role == 'subscriber' && stripeErroMsg">
@@ -861,12 +872,6 @@
 		</div>
 	</div>
 </div>
-
-
-
-
-
-
 
 
 
@@ -2034,3 +2039,21 @@
 			</div>
 		</div>
 	</div>
+</div>
+
+<div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+		<div class="modal-content">
+			<div class="modal-body">
+				<h5 class="text-center">Are you sure you want to cancel your subscription?</h5>
+				<span class="d-block text-center">Cancellation will be effective after {{subs_end_date}}</span>
+			</div>
+			<div class="modal-footer py-0">
+				<button type="button" class="custom-btn button2" data-dismiss="modal" aria-label="Close">No</button>
+				<button type="button" class="custom-btn button2" (click)="cancelSubscription()">
+					Yes, Cancel now
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
