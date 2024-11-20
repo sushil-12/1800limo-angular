@@ -9,10 +9,12 @@
                 Flexible monthly options that grow with your business.
             </span>
         </div>
+        <!-- (click)="selectedPlan(plans?.id)" -->
         <div class="subs_div">
             <div [ngClass]="selectedPlanId == plans?.id ? 'selected_subs_content' : 'subs_content' "
-                *ngFor="let plans of planData?.data" (click)="selectedPlan(plans?.id)">
-                <div class="d-flex flex-column align-items-center mb-2" style="border-bottom: 1px solid #d7d3d0;">
+                *ngFor="let plans of planData?.data">
+                <div class="d-flex flex-column align-items-center mb-2"
+                    style="border-bottom: 1px solid #d7d3d0; height: 45vh;">
                     <img src="../../../../assets//images/basePlan.png" *ngIf="plans?.id == 1 else premiumPlan;"
                         height="25" width="25" style="margin-bottom: 10px;" />
                     <ng-template #premiumPlan>
@@ -23,7 +25,7 @@
                         {{plans?.product_name}}
                     </span>
                     <span class="subs_planTitle">
-                        Unleash the Power of Your Business
+                        {{plans?.product_text}}
                     </span>
                     <span class="sub_planPrice">
                         $ {{plans?.product_price}} <span style="color: #797878;font-weight: 300;font-size: 17px;">
@@ -54,15 +56,10 @@
                         </li>
                     </ul>
                 </div> -->
-                <button *ngIf="plans?.id == 1"
-                    [ngClass]="selectedPlanId == plans?.id ? 'selected_subs_btn' : 'subs_btn'"
-                    (click)="submitPlan(plans)">
-                    Sign Up Now
-                </button>
-                <button *ngIf="plans?.id != 1"
-                    [ngClass]="selectedPlanId == plans?.id ? 'selected_subs_btn' : 'subs_btn'"
-                    (click)="submitPlan(plans)">
-                    Subscribe Now
+                <button
+                    [ngClass]="selectedPlanId == plans?.id ? 'selected_subs_btn' : 'custom-filled-button green-button'"
+                    (click)="submitPlan(plans)" style="color: white;">
+                    {{plans?.id == 1 ? 'Sign Up Now' : 'Subscribe Now'}}
                 </button>
             </div>
         </div>
