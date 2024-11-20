@@ -303,6 +303,12 @@ export class LooseAffiliateAccountDetailsComponent implements OnInit {
       return;
     }
 
+    if(this.profileForm.get('badge_city_name').value == ''){
+      this.profileForm.patchValue({
+        badge_city : ''
+      })
+    }
+
     console.log(this.profileForm.value);
     this.spinner.show();
 
