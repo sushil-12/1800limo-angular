@@ -14,7 +14,7 @@
             <div [ngClass]="selectedPlanId == plans?.id ? 'selected_subs_content' : 'subs_content' "
                 *ngFor="let plans of planData?.data">
                 <div class="d-flex flex-column align-items-center mb-2"
-                    style="border-bottom: 1px solid #d7d3d0; height: 45vh;">
+                    style="border-bottom: 1px solid #d7d3d0; height: 12rem;">
                     <img src="../../../../assets//images/basePlan.png" *ngIf="plans?.id == 1 else premiumPlan;"
                         height="25" width="25" style="margin-bottom: 10px;" />
                     <ng-template #premiumPlan>
