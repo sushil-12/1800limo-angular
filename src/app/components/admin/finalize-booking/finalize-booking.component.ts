@@ -201,7 +201,7 @@ export class FinalizeBookingComponent implements OnInit {
 				this.init_rates = true;
 				this.service_type = response?.data?.service_type
 				this.CardsInformation = response?.data?.cards
-				this.primaryCards = this.CardsInformation.filter(i => i.cc_prority == 'Primary')
+				this.primaryCards = this.CardsInformation
 				this.selectedCard = this.primaryCards[this.primaryCards.length - 1]
 				this.finalize_params['distance'] = this.BookingDetail.distance
 				this.finalize_params['number_of_hours'] = this.BookingDetail.number_of_hours
@@ -331,7 +331,7 @@ export class FinalizeBookingComponent implements OnInit {
 				shareArray['deducted_admin_share'] = shareArray['adminShare'] - shareArray['stripeFee']
 				shareArray['farmoutShare'] = base_rate * 0.10
 			}
-			else if (this.vehicle_created_by != 1) {
+			else if (this.vehicle_created_by != 1 && this.currentUser.created_by_role == 'subscriber') {
 				this.adminSharePercent = 0
 				shareArray['adminShare'] = (base_rate * this.adminSharePercent) / 100
 				shareArray['deducted_admin_share'] = 0
@@ -408,7 +408,7 @@ export class FinalizeBookingComponent implements OnInit {
 
 	makePayment() {
 		$('#paymentModal').modal('hide')
-		console.log('<<<<-----handle valid---->>>>> ', this.cardForm.valid)
+		console.log('<<<<-----handle valid---->>>>> ', this.cardForm.valid,this.cardForm.value,this.paymentMethod)
 		console.log('-----=====?>>>>>', this.isCardFormOpen ? this.cardForm.valid : (this.CardsInformation.length > 0))
 		let dataToSend: any
 		if (this.paymentMethod == 'cash') {
@@ -453,7 +453,7 @@ export class FinalizeBookingComponent implements OnInit {
 							reservation_id: this.bookingId,
 							grand_total: this.payableAmount
 						}
-						console.log('<<<<--card form detail-->>>')
+						console.log('<<<<--card form detail-->>>',dataToSend)
 					}
 					else {
 						dataToSend = {
@@ -465,7 +465,7 @@ export class FinalizeBookingComponent implements OnInit {
 							reservation_id: this.bookingId,
 							grand_total: this.payableAmount
 						}
-						console.log('selected card-->>>')
+						console.log('selected card-->>>',dataToSend)
 					}
 				}
 				this.$spinner.show()
