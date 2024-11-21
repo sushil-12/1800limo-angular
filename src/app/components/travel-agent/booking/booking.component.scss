@@ -499,3 +499,8 @@ a.dropdown-item {
 		border-radius: 17px;
 	}
 }
+
+:host ::ng-deep.mat-checkbox-layout,
+.mat-checkbox-label {
+    white-space: normal !important;
+}

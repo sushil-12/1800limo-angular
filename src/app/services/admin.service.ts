@@ -1340,4 +1340,9 @@ export class AdminService {
 		return this.httpClient.post(this.serverUrl + 'cancel-subscription', data);
 	}
 
+	//get invoice list
+	payouts(data) {
+		return this.httpClient.post(this.serverUrl + `get-payouts`, data);
+	}
+
 }

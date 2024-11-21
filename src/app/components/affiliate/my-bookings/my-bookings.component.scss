@@ -460,3 +460,8 @@ input::-webkit-input-placeholder {
 	}
 
 }
+
+:host ::ng-deep.mat-checkbox-layout,
+.mat-checkbox-label {
+    white-space: normal !important;
+}

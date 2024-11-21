@@ -368,6 +368,7 @@ input::-webkit-input-placeholder {
 		}
 	}
 
+
 	.align-btn {
 		flex-direction: row-reverse;
 		align-items: end;
@@ -430,4 +431,9 @@ a.dropdown-item {
 		height: 100%;
 		border-radius: 17px;
 	}
+}
+
+:host ::ng-deep.mat-checkbox-layout,
+.mat-checkbox-label {
+    white-space: normal !important;
 }
