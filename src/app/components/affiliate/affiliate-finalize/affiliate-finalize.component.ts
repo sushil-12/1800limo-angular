@@ -141,7 +141,7 @@ export class AffiliateFinalizeComponent implements OnInit {
 				this.service_type = data?.booking_detail?.service_type
 				this.quoteAmount = data?.grand_total
 				this.CardsInformation = data?.CreditCardsDetail
-				this.primaryCards = this.CardsInformation.filter(i => i.cc_prority == 'Primary')
+				this.primaryCards = this.CardsInformation
 				console.log('primary cards--->>>>', this.primaryCards, this.primaryCards.length)
 				this.selectedCard = this.primaryCards[this.primaryCards.length - 1]
 				console.log('selected cards ----->>>', this.selectedCard)

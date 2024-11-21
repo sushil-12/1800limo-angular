@@ -544,7 +544,7 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 	}
 	calculateReturnAdminShare() {
 		let baseRate = this.calculateReturnBaseRateShare()
-		this.admin_share = (this.isTravelShare && !this.isCreatedByAdmin || this.isFarmoutBooking) ? 15 : (this.vehicle_created_by != 1) ? 0 : 25
+		this.admin_share = (this.isTravelShare && !this.isCreatedByAdmin || this.isFarmoutBooking) ? 15 : (this.vehicle_created_by != 1 && this.currentUser.created_by_role == 'subscriber') ? 0 : 25
 		this.r_calc_admin_share = baseRate * this.admin_share / 100 + + (this.ReturnRatesForm.get('misc').get('Extra_Gratuity').get('amount').value * 0.25)
 		this.isFarmoutBooking ? this.r_farmoutShare = baseRate * 0.10 : ''
 		// console.log('in function caculate admin share-->>', this.r_calc_admin_share)
@@ -588,7 +588,7 @@ export class FinalizeRatesComponent implements OnInit, OnChanges {
 		console.log('in function calculateAdminShare')
 
 		let baseRate = this.calculateBaseRateShare()
-		this.admin_share = (this.isTravelShare && !this.isCreatedByAdmin || this.isFarmoutBooking) ? 15 : (this.vehicle_created_by != 1) ? 0 : 25
+		this.admin_share = (this.isTravelShare && !this.isCreatedByAdmin || this.isFarmoutBooking) ? 15 : (this.vehicle_created_by != 1 && this.currentUser.created_by_role == 'subscriber') ? 0 : 25
 		this.calc_admin_share = baseRate * this.admin_share / 100 + + (this.RatesForm.get('misc').get('Extra_Gratuity').get('amount').value * 0.25)
 		this.isFarmoutBooking ? this.farmoutShare = baseRate * 0.10 : ''
 		console.log('in function caculate admin share-->>', this.calc_admin_share)
