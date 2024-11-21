@@ -41,6 +41,7 @@ import { AddClientAccountComponent } from './add-client-account/add-client-accou
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { SubAgentAccountsComponent } from './sub-agent-accounts/sub-agent-accounts.component';
 import { SubAgentAccountDetailsComponent } from './sub-agent-account-details/sub-agent-account-details.component';
+import { PayoutsComponent } from './payouts/payouts.component';
 
 
 @NgModule({
@@ -60,7 +61,8 @@ import { SubAgentAccountDetailsComponent } from './sub-agent-account-details/sub
 		TravelClientAccountsComponent,
 		AddClientAccountComponent,
 		SubAgentAccountsComponent,
-		SubAgentAccountDetailsComponent],
+		SubAgentAccountDetailsComponent,
+		PayoutsComponent],
 	imports: [
 		CommonModule,
 		TravelAgentRoutingModule,

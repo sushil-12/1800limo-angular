@@ -388,10 +388,12 @@
 							<div id="vehinfo_{{ vehinfo_index }}" class="vehicle-info">
 								<!-- VEHICLE: PRICE -->
 								<div class="d-flex price mb-2" *ngIf="vehinfo?.number_of_vehicles <= 1">
-									<div class="col-md-6 p-0" style="min-width: fit-content;">
-										{{ formatter(getKeyName()) | titlecase }}
+									<div class="col-md-4 p-0" style="min-width: fit-content;">
+										{{ formatter(getKeyName()) | titlecase }} &nbsp;<span class="text-rate">
+											All Inclusive Rate<sup class="sup-red">*</sup>
+										</span>
 									</div>
-									<div class="col-md-6" style="min-width: fit-content;">
+									<div class="col-md-4" style="min-width: fit-content;">
 										<span style="font-size: 20px;">
 											{{currencySymbol}}
 											{{ vehinfo['rate_breakdown_' + getKeyName()]?.grand_total != undefined ?
@@ -426,12 +428,12 @@
 											{{vehinfo?.estimated_price_round_trip}}</span>
 									</div>
 								</div>
-								<div class="col-md-12 mb-3 p-0">
+								<!-- <div class="col-md-12 mb-3 p-0">
 									<span class="text-rate">
 										All Inclusive Rate<sup class="sup-red">*</sup>
 									</span>
-								</div>
-								<div id="icons" class="passnger-luggage-div mb-3 p-2">
+								</div> -->
+								<div id="icons" class="passnger-luggage-div mb-3">
 									<div class="icon-container">
 										<img alt="" src="assets/images/select_vehicle/pass.png"
 											style="margin-right: 0.50rem;" />
@@ -445,7 +447,8 @@
 										<span class="font-weight-bolder mx-2">{{ vehinfo?.luggage }}</span>
 									</div>
 								</div>
-								<div class="p-3">
+								<div>
+									<!-- class="p-3" -->
 									<!-- <div class="d-flex price">
 										<div class="col-md-12 p-0" style="min-width: fit-content;">
 											Vehicle Type
@@ -464,8 +467,25 @@
 											<span class="font-weight-bold">{{vehinfo?.number_of_vehicles}}</span>
 										</div>
 									</div>
-
-									<div class="d-flex price"
+									<div *ngIf="!vehinfo?.is_master_vehicle" class="mt-2">
+										<div class="vehicle-details-data-mobile">
+											<div class="d-flex justify-content-between">
+												<p>
+													<span
+														style="font-weight: 500;">{{vehinfo?.vehicle_details?.year}}</span>
+												</p>
+												<p>
+													<span
+														style="font-weight: 500;">{{vehinfo?.vehicle_details?.make}}</span>
+												</p>
+												<p>
+													<span
+														style="font-weight: 500;">{{vehinfo?.vehicle_details?.model}}</span>
+												</p>
+											</div>
+										</div>
+									</div>
+									<!-- <div class="d-flex price"
 										*ngIf="vehinfo?.vehicle_details.year && !vehinfo?.is_master_vehicle">
 										<div class="col-md-8 p-0" style="min-width: fit-content;">Year</div>
 										<div class="col-md-4" style="min-width: fit-content;">
@@ -487,7 +507,7 @@
 										<div class="col-md-4" style="min-width: fit-content;">
 											<span class="font-weight-bold">{{vehinfo?.vehicle_details.model}}</span>
 										</div>
-									</div>
+									</div> -->
 								</div>
 								<span class="d-flex cancel-policy mb-3" *ngIf="!vehinfo?.is_master_vehicle">
 									<i class="bi bi-exclamation-circle-fill" style="color: red;"></i>
