@@ -620,10 +620,8 @@
 				</div>
 				<div class="row" style="margin-top: 20px;">
 					<div class="col-md-12 d-flex justify-content-end align-items-center">
-						<h5 class="mr-2" style="margin-top: 14px;">
-							Connect with Admin</h5> &nbsp;
 						<a href="tel:{{'+17082056607'}}"><svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"
-								viewBox="0 0 122.88 122.88" height="38" width="48">
+								viewBox="0 0 122.88 122.88" height="38" width="48" style="margin-right: 10px;">
 								<defs>
 									<style>
 										.phoneCls-1 {
@@ -634,7 +632,9 @@
 								</defs>
 								<path class="phoneCls-1"
 									d="M61.44,0A61.46,61.46,0,1,1,18,18,61.21,61.21,0,0,1,61.44,0ZM48.1,56.19A49.35,49.35,0,0,0,55.39,66.4a41.25,41.25,0,0,0,11.55,8.51,1.14,1.14,0,0,0,1,0,4.48,4.48,0,0,0,1.39-1A16.91,16.91,0,0,0,70.6,72.4c1.85-2.44,4.15-5.47,7.39-4l.2.11L89,74.77l.11.07a4.84,4.84,0,0,1,2,4.2,11.43,11.43,0,0,1-1.58,5.37,11.06,11.06,0,0,1-5.2,4.6A23.63,23.63,0,0,1,78,90.75a21.69,21.69,0,0,1-9.8-.82,43.06,43.06,0,0,1-9.85-4.76L58.05,85c-1.6-1-3.33-2.07-5-3.33a62.69,62.69,0,0,1-16.65-18.9c-3.46-6.26-5.34-13-4.32-19.44a14,14,0,0,1,4.72-8.85A12.68,12.68,0,0,1,46.18,32a1.35,1.35,0,0,1,1.09.7L54.21,44.4a3.68,3.68,0,0,1,.59,3.92,7.71,7.71,0,0,1-2.66,3c-.37.32-.82.64-1.29,1-1.55,1.12-3.32,2.42-2.71,4l0-.05Z" />
-							</svg></a> &nbsp;
+							</svg></a>
+						<h5 class="mr-2" style="margin-top: 14px;">
+							Connect with Admin</h5>
 						<a href="mailto:info@1800limo.com" target="_blank"><svg xmlns="http://www.w3.org/2000/svg"
 								viewBox="0 0 48 48" width="48px" height="48px">
 								<linearGradient id="NvW_RwTAona1rlOp72mkqa" x1="24" x2="24" y1="42" y2="6.207"
@@ -892,7 +892,7 @@
 						</div>
 						<!-- Airport -->
 						<!-- Airline -->
-						 <hr>
+						<hr>
 						<div class="row m-0">
 							<div class="col-md-4 key">
 								<span>
@@ -903,12 +903,19 @@
 								<span class="font-weight-bolder preview-output-feild" style="cursor: pointer;"
 									(click)="searchOnGoogle(bookingPreview?.pickup_airline_name + ' ' + bookingPreview?.pickup_flight)">
 									{{ textFormatter(bookingPreview?.pickup_airline_name) }}
-								</span>
+								</span>&nbsp;
+								<span class="font-weight-bolder preview-output-feild" style="cursor: pointer;"
+									(click)="searchOnGoogle(bookingPreview?.pickup_airline_name + ' ' + bookingPreview?.pickup_flight)">
+									#{{ textFormatter(bookingPreview?.pickup_flight) }}
+								</span>&nbsp;<span
+									style="color: blue;text-decoration: underline;font-weight: 600;cursor: pointer;font-size: 18px;"
+									(click)="searchOnGoogle(bookingPreview?.pickup_airline_name + ' ' + bookingPreview?.pickup_flight)">(Update
+									Arrival time)</span>
 							</div>
 						</div>
 						<!-- Airline -->
 						<!-- Flight Number -->
-						<hr>
+						<!-- <hr>
 						<div class="row m-0">
 							<div class="col-md-5 key">
 								<span>
@@ -924,7 +931,7 @@
 									{{ textFormatter(bookingPreview?.pickup_flight) }}
 								</span>
 							</div>
-						</div>
+						</div> -->
 						<!-- Flight Number -->
 					</div>
 
@@ -1044,7 +1051,7 @@
 						</div>
 						<!-- Airport -->
 						<!-- Airline -->
-						 <hr>
+						<hr>
 						<div class="row">
 							<div class="col-md-4 key">
 								<span>
@@ -1056,12 +1063,20 @@
 									style="cursor: pointer;color: #007500 !important;"
 									(click)="searchOnGoogle(bookingPreview?.dropoff_airline_name + ' ' + bookingPreview?.dropoff_flight)">
 									{{ textFormatter(bookingPreview?.dropoff_airline_name) }}
+								</span>&nbsp;<span class="font-weight-bolder preview-output-feild"
+									style="cursor: pointer;color: #007500 !important;"
+									(click)="searchOnGoogle(bookingPreview?.dropoff_airline_name + ' ' + bookingPreview?.dropoff_flight)">
+									#{{ textFormatter(bookingPreview?.dropoff_flight) }}
 								</span>
+								&nbsp;<span
+									style="color: blue;text-decoration: underline;font-weight: 600;cursor: pointer;font-size: 18px;"
+									(click)="searchOnGoogle(bookingPreview?.dropoff_airline_name + ' ' + bookingPreview?.dropoff_flight)">(Update
+									Arrival time)</span>
 							</div>
 						</div>
 						<!-- Airline -->
 						<!-- Flight Number -->
-						<hr>
+						<!-- <hr>
 						<div class="row">
 							<div class="col-md-5 key">
 								<span>
@@ -1078,7 +1093,7 @@
 									{{ textFormatter(bookingPreview?.dropoff_flight) }}
 								</span>
 							</div>
-						</div>
+						</div> -->
 						<!-- Flight Number -->
 					</div>
 

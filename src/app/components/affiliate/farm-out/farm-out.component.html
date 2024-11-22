@@ -840,7 +840,7 @@
 						</div>
 						<!-- Airport -->
 						<!-- Airline -->
-						 <hr>
+						<hr>
 						<div class="row m-0 preview-pickup-color">
 							<div class="col-md-4 key">
 								<span>
@@ -851,12 +851,19 @@
 								<span class="font-weight-bolder preview-output-feild" style="cursor: pointer;"
 									(click)="searchOnGoogle(bookingPreview?.pickup_airline_name + ' ' + bookingPreview?.pickup_flight)">
 									{{ textFormatter(bookingPreview?.pickup_airline_name) }}
-								</span>
+								</span>&nbsp;
+								<span class="font-weight-bolder preview-output-feild" style="cursor: pointer;"
+									(click)="searchOnGoogle(bookingPreview?.pickup_airline_name + ' ' + bookingPreview?.pickup_flight)">
+									#{{ textFormatter(bookingPreview?.pickup_flight) }}
+								</span>&nbsp;<span
+									style="color: blue;text-decoration: underline;font-weight: 600;cursor: pointer;font-size: 18px;"
+									(click)="searchOnGoogle(bookingPreview?.pickup_airline_name + ' ' + bookingPreview?.pickup_flight)">(VUpdate
+									Arrival time)</span>
 							</div>
 						</div>
 						<!-- Airline -->
 						<!-- Flight Number -->
-						<hr>
+						<!-- <hr>
 						<div class="row m-0 preview-pickup-color">
 							<div class="col-md-5 key">
 								<span>
@@ -872,7 +879,7 @@
 									{{ textFormatter(bookingPreview?.pickup_flight) }}
 								</span>
 							</div>
-						</div>
+						</div> -->
 						<!-- Flight Number -->
 					</div>
 
@@ -987,7 +994,7 @@
 						</div>
 						<!-- Airport -->
 						<!-- Airline -->
-						 <hr>
+						<hr>
 						<div class="row preview-dropoff-color">
 							<div class="col-md-4 key">
 								<span>
@@ -999,12 +1006,20 @@
 									style="cursor: pointer;color: #007500 !important;"
 									(click)="searchOnGoogle(bookingPreview?.dropoff_airline_name + ' ' + bookingPreview?.dropoff_flight)">
 									{{ textFormatter(bookingPreview?.dropoff_airline_name) }}
-								</span>
+								</span>&nbsp;
+								<span class="font-weight-bolder preview-output-feild"
+									style="cursor: pointer;color: #007500 !important;"
+									(click)="searchOnGoogle(bookingPreview?.dropoff_airline_name + ' ' + bookingPreview?.dropoff_flight)">
+									#{{ textFormatter(bookingPreview?.dropoff_flight) }}
+								</span>&nbsp;<span
+									style="color: blue;text-decoration: underline;font-weight: 600;cursor: pointer;font-size: 18px;"
+									(click)="searchOnGoogle(bookingPreview?.dropoff_airline_name + ' ' + bookingPreview?.dropoff_flight)">(Update
+									Arrival time)</span>
 							</div>
 						</div>
 						<!-- Airline -->
 						<!-- Flight Number -->
-						<hr>
+						<!-- <hr>
 						<div class="row preview-dropoff-color">
 							<div class="col-md-5 key">
 								<span>
@@ -1021,7 +1036,7 @@
 									{{ textFormatter(bookingPreview?.dropoff_flight) }}
 								</span>
 							</div>
-						</div>
+						</div> -->
 						<!-- Flight Number -->
 					</div>
 
@@ -1467,7 +1482,7 @@
 					</div>
 					<hr>
 				</div>
-				 <!-- <div class="distribution_rate" *ngIf="bookingPreview?.payment_status != 'paid'">
+				<!-- <div class="distribution_rate" *ngIf="bookingPreview?.payment_status != 'paid'">
 					<h4 class="font-weight-bolder m-0 my-3">
 						Rates Distribution
 					</h4>
@@ -1576,7 +1591,7 @@
 						</div>
 					</div>
 				</div>  -->
-				
+
 			</div>
 
 
