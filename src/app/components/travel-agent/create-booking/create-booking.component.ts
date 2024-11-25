@@ -354,8 +354,8 @@ export class CreateBookingComponent implements OnInit {
 		this.SetFormValue('pickup_date', moment(timestamp).format("YYYY-MM-DD"))
 		this.SetFormValue('return_pickup_date', moment(timestamp).format("YYYY-MM-DD"))
 		this.SetFormValue('number_of_vehicles', 1)
-		this.SetFormValue('booking_instructions', "1. Driver- Text on location. Text the client a day before to confirm driver name , cell phone and booking details. Text client with ETA when en route");
-		this.SetFormValue('return_booking_instructions', "1. Driver- Text on location. Text the client a day before to confirm driver name , cell phone and booking details. Text client with ETA when en route");
+		this.SetFormValue('booking_instructions', "1. Driver - Text on location. Text the client a day before to confirm driver name , cell phone and booking details. Text client with ETA when en route");
+		this.SetFormValue('return_booking_instructions', "1. Driver - Text on location. Text the client a day before to confirm driver name , cell phone and booking details. Text client with ETA when en route");
 
 		if (this.BookingForm.value.transfer_type.includes('city_')) {
 			this.SetFormValue('meet_greet_choices', 1)
@@ -1673,7 +1673,7 @@ export class CreateBookingComponent implements OnInit {
 			// set cruise ship name and cruise port mandatory
 			if (value.includes('_cruise') || value.includes('cruise_')) {
 				if(value.includes("cruise_")){
-					this.SetFormValue('booking_instructions', "1. Pax- Text driver when landing.  2. Driver- Text pax with pickup instructions when ship has arrived.");
+					this.SetFormValue('booking_instructions', "1. Pax - Text driver when docked.  2. Driver - Text pax with pickup instructions when ship has arrived.");
 					// this.SetFormValue('return_booking_instructions', "1. Pax- Text driver when landing, 2. Driver- Text pax with pickup instructions when plane has arrived");
 				}
 				console.log("setting value of cruise port and name mandatory")
@@ -1710,7 +1710,7 @@ export class CreateBookingComponent implements OnInit {
 
 			if (value.includes('airport_')) {
 			
-					this.SetFormValue('booking_instructions', "1. Pax- Text driver when landing.  2. Driver- Text pax with pickup instructions when plane has arrived.");
+					this.SetFormValue('booking_instructions', "1. Pax - Text driver when landing.  2. Driver - Text pax with pickup instructions when ship has arrived.");
 					// this.SetFormValue('return_booking_instructions', "1. Pax- Text driver when landing, 2. Driver- Text pax with pickup instructions when plane has arrived");
 				
 				console.log("setting value of pickup flight mandatory")
