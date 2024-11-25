@@ -1352,8 +1352,7 @@
 			<!-- Affiliate Vehicle Information Ends -->
 			<!-- Visible in Affiliate as well as Loose Affiliate Section -->
 			<!-- Affiliate Driver Information -->
-			<div class="px-4 my-4"
-				*ngIf="(Form.affiliate_type.value == 'loose_affiliate' || Form.affiliate_id.value) && currentUser?.created_by_role != 'subscriber' ">
+			<div class="px-4 my-4" *ngIf="(Form.affiliate_type.value == 'loose_affiliate' || Form.affiliate_id.value) ">
 				<h4 class="margin-top-minus">
 					Driver Preferences
 				</h4>
@@ -3452,8 +3451,9 @@
 			<!-- Affiliate Vehicle Information Ends -->
 			<!-- Visible in Affiliate as well as Loose Affiliate Section -->
 			<!-- Affiliate Driver Information -->
+			<!-- && currentUser?.created_by_role != 'subscriber' -->
 			<div class="px-4 my-4"
-				*ngIf="(Form.return_affiliate_type.value == 'loose_affiliate' || Form.return_affiliate_id.value) && currentUser?.created_by_role != 'subscriber' ">
+				*ngIf="(Form.return_affiliate_type.value == 'loose_affiliate' || Form.return_affiliate_id.value)  ">
 				<h4 class="margin-top-minus">
 					Driver Preferences
 				</h4>
