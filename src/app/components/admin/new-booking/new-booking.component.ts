@@ -219,13 +219,14 @@ export class NewBookingComponent implements OnInit {
 		if (this.currentUser?.created_by_role == 'subscriber' && !this.newBooking) {
 			this.BookingForm.patchValue({
 				susbcriber_name: this.currentUser?.name,
-				driver_name: this.currentUser?.name,
-				driver_email: this.currentUser.email,
-				driver_cell_isd: this.currentUser?.isd,
-				driver_cell: this.currentUser?.phone,
-				driver_cell_country: this.currentUser?.phoneCountry
+				// driver_name: this.currentUser?.name,
+				// driver_email: this.currentUser.email,
+				// driver_cell_isd: this.currentUser?.isd,
+				// driver_cell: this.currentUser?.phone,
+				// driver_cell_country: this.currentUser?.phoneCountry
 			})
 			this.fetchAffiliateVehicles(this.currentUser?.account_id)
+			this.fetchAffiliateDrivers(this.currentUser?.account_id)
 			this.booking_created_from = 'subscriber'
 		}
 
@@ -2494,11 +2495,11 @@ export class NewBookingComponent implements OnInit {
 				if (this.booking_created_from == 'subscriber') {
 					this.BookingForm.patchValue({
 						return_susbcriber_name: this.BookingForm.get('susbcriber_name').value,
-						return_driver_name: this.currentUser?.name,
-						return_driver_email: this.currentUser.email,
-						return_driver_cell_isd: this.currentUser?.isd,
-						return_driver_cell: this.currentUser?.phone,
-						return_driver_cell_country: this.currentUser?.phoneCountry
+						// return_driver_name: this.currentUser?.name,
+						// return_driver_email: this.currentUser.email,
+						// return_driver_cell_isd: this.currentUser?.isd,
+						// return_driver_cell: this.currentUser?.phone,
+						// return_driver_cell_country: this.currentUser?.phoneCountry
 					})
 					this.fetchReturnAffiliateVehicles(this.currentUser?.account_id)
 				}
@@ -3653,11 +3654,11 @@ export class NewBookingComponent implements OnInit {
 			this.booking_created_from == 'subscriber'
 			this.BookingForm.patchValue({
 				susbcriber_name: selected_vehicle?.affiliate_name,
-				driver_name: this.currentUser?.name,
-				driver_email: this.currentUser.email,
-				driver_cell_isd: this.currentUser?.isd,
-				driver_cell: this.currentUser?.phone,
-				driver_cell_country: this.currentUser?.phoneCountry
+				// driver_name: this.currentUser?.name,
+				// driver_email: this.currentUser.email,
+				// driver_cell_isd: this.currentUser?.isd,
+				// driver_cell: this.currentUser?.phone,
+				// driver_cell_country: this.currentUser?.phoneCountry
 			})
 
 			if (this.service_type == 'round_trip') {

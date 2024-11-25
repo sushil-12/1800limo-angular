@@ -94,6 +94,8 @@ import { VehicleDetailsComponent } from '../subscription/vehicle-details/vehicle
 import { VehicleRatesSubscriberComponent } from '../subscription/vehicle-rates-subscriber/vehicle-rates-subscriber.component';
 import { EditVehicleSubscriberComponent } from '../subscription/edit-vehicle-subscriber/edit-vehicle-subscriber.component';
 import { SubscribersListComponent } from './subscribers-list/subscribers-list.component';
+import { DriverDetailsComponent } from '../subscription/driver-details/driver-details.component';
+import { AddDriverSubscriberComponent } from '../subscription/add-driver-subscriber/add-driver-subscriber.component';
 
 
 const routes: Routes = [
@@ -581,6 +583,11 @@ const routes: Routes = [
 		component: VehicleDetailsComponent
 	},
 	{
+		path: 'driver-details',
+		canActivate: [AdminGuardGuard],
+		component: DriverDetailsComponent
+	},
+	{
 		path: 'add-vehicle-subscriber',
 		canActivate: [AdminGuardGuard],
 		component: AddVehicleSubscriberComponent
@@ -599,6 +606,16 @@ const routes: Routes = [
 		path: 'edit-vehicle-rates-subscriber',
 		canActivate: [AdminGuardGuard],
 		component: VehicleRatesSubscriberComponent
+	},
+	{
+		path: 'add-driver-subscriber',
+		canActivate: [AdminGuardGuard],
+		component: AddDriverSubscriberComponent
+	},
+	{
+		path: 'edit-driver-subscriber',
+		canActivate: [AdminGuardGuard],
+		component: AddDriverSubscriberComponent
 	},
 	{
 		path: 'subscribers-list',

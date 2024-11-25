@@ -1,0 +1,87 @@
+.vehtype_extint img {
+	height: 200px;
+	border-radius: 15px;
+}
+
+.vehtype_extint .emptyImage {
+	height: 200px;
+}
+
+.vehtype_extint .emptyImage img {
+	height: 195px;
+}
+
+.vehtype_extint_potrait img {
+	height: 380px;
+	width: 300px;
+	margin-left: 20px;
+	border-radius: 15px;
+}
+
+.vehtype_extint_potrait .emptyImage {
+	height: 380px;
+	width: 300px;
+}
+
+.vehtype_extint_potrait .emptyImage img {
+	height: 360px;
+	width: 260px;
+}
+
+hr {
+	margin-top: 0;
+}
+
+.custom-check-row {
+	line-height: 2;
+}
+
+.single-image .row {
+	justify-content: inherit;
+}
+
+.choose-all {
+	font-weight: 600;
+}
+
+.custom-check-row .custom-checkbox {
+	padding-left: 0;
+}
+
+.vehtype_extint .my-mat-hint {
+	margin-bottom: 1rem;
+}
+
+.braces-content {
+	color: #dc3545 !important;
+}
+
+.topLabelClass.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
+	padding-left: 0px;
+	background-color: #fff;
+	max-width: 50px;
+	text-align: center;
+	left: -6px;
+}
+
+.asterisk {
+	font-size: 1.45rem;
+	margin-left: 3px;
+}
+
+.choose_ameniteslist {
+	flex-direction: column !important;
+	height: 38vh !important;
+}
+
+@media (min-width: 767px) and (max-width:821px) {
+	.choose_ameniteslist {
+		height: 38vh !important;
+	}
+}
+
+@media screen and (max-width: 767px) {
+	.choose_ameniteslist {
+		height: auto !important;
+	}
+}

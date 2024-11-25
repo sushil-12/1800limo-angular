@@ -82,6 +82,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { VehicleDetailsComponent } from './components/subscription/vehicle-details/vehicle-details.component';
 import { VehicleRatesSubscriberComponent } from './components/subscription/vehicle-rates-subscriber/vehicle-rates-subscriber.component';
 import { EditVehicleSubscriberComponent } from './components/subscription/edit-vehicle-subscriber/edit-vehicle-subscriber.component';
+import { DriverDetailsComponent } from './components/subscription/driver-details/driver-details.component';
+import { AddDriverSubscriberComponent } from './components/subscription/add-driver-subscriber/add-driver-subscriber.component';
 @NgModule({
 	declarations: [
 		AppComponent,
@@ -130,6 +132,8 @@ import { EditVehicleSubscriberComponent } from './components/subscription/edit-v
 		VehicleDetailsComponent,
 		VehicleRatesSubscriberComponent,
 		EditVehicleSubscriberComponent,
+		DriverDetailsComponent,
+		AddDriverSubscriberComponent,
 	],
 	imports: [
 		BrowserModule,
