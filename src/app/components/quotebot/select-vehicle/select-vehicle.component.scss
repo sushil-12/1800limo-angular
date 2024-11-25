@@ -1070,7 +1070,7 @@ button.link {
 @media only screen and (max-width:767px) and (orientation : landscape) {
 	.passnger-luggage-div {
 		display: flex;
-		flex-direction: column;
+		flex-direction: row;
 	}
 }
 
@@ -1082,7 +1082,7 @@ button.link {
 
 	.passnger-luggage-div {
 		display: flex;
-		flex-direction: column;
+		flex-direction: row;
 	}
 }
 
@@ -1096,7 +1096,7 @@ button.link {
 
 	.passnger-luggage-div {
 		display: flex;
-		flex-direction: column;
+		flex-direction: row;
 		gap: 4px !important;
 	}
 
@@ -1114,7 +1114,7 @@ button.link {
 
 	.passnger-luggage-div {
 		display: flex;
-		flex-direction: column;
+		flex-direction: row;
 	}
 
 }
@@ -1127,7 +1127,7 @@ button.link {
 
 	.passnger-luggage-div {
 		display: flex;
-		flex-direction: column;
+		flex-direction: row;
 	}
 
 }
