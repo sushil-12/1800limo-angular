@@ -158,6 +158,7 @@ export class DailyBookingsComponent implements OnInit {
 		if (this.currentUser?.created_by_role == 'subscriber') {
 			this.stripeDetailsCheck()
 			this.subs_end_date = localStorage.getItem('current_period_end_date')
+			this.isCancelled = JSON.parse(localStorage.getItem('is_subscription_cancelled'))
 		}
 
 	}

@@ -257,12 +257,6 @@
 												<div class="dropdown-item-icon"></div>
 												Send Updated Email
 											</a>
-											<a class="dropdown-item" (click)="auditTrail(booking.booking_id)"
-												data-toggle="modal" data-target="#AuditTrailModal"
-												*ngIf="currentUser?.roleName == 'admin' || subModules.includes('audit_trial')">
-												<div class="dropdown-item-icon"></div>
-												Audit Trial
-											</a>
 											<a class="dropdown-item" (click)="reAffiliate(booking.booking_id)"
 												*ngIf="(currentUser?.roleName == 'admin' &&( booking.booking_status == 'rejected' || booking?.booking_status == 'pending' || booking?.booking_status == 'driver_unassigned') )">
 												<div class="dropdown-item-icon"></div>
@@ -304,7 +298,12 @@
 												<div class="dropdown-item-icon"></div>
 												ReAffiliate
 											</a> -->
-
+											<a class="dropdown-item" (click)="auditTrail(booking.booking_id)"
+												data-toggle="modal" data-target="#AuditTrailModal"
+												*ngIf="currentUser?.roleName == 'admin' || subModules.includes('audit_trial')">
+												<div class="dropdown-item-icon"></div>
+												Audit Trial
+											</a>
 
 										</div>
 									</td>
