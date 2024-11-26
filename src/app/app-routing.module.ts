@@ -46,6 +46,7 @@ import { SubAffiliateTemplateComponent } from './components/sub-affiliate/sub-af
 import { PartnerRegistrationComponent } from './components/subscription/partner-registration/partner-registration.component';
 import { SubscriptionPlansComponent } from './components/subscription/subscription-plans/subscription-plans.component';
 import { PaymentDetailsComponent } from './components/subscription/payment-details/payment-details.component';
+import { AddDriverSubscriberComponent } from './components/subscription/add-driver-subscriber/add-driver-subscriber.component';
 
 
 const routes: Routes = [
@@ -53,6 +54,10 @@ const routes: Routes = [
 		path: '',
 		redirectTo: '/home',
 		pathMatch: 'full'
+	},
+	{
+		path: 'add-driver-details-from-invite',
+		component: AddDriverSubscriberComponent,
 	},
 	{
 		path: '',
@@ -347,7 +352,8 @@ const routes: Routes = [
 	{
 		path: '**',
 		component: PageNotFoundComponent
-	}
+	},
+	
 ];
 
 @NgModule({

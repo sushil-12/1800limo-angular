@@ -1345,4 +1345,9 @@ export class AdminService {
 		return this.httpClient.post(this.serverUrl + `get-payouts`, data);
 	}
 
+	//get invoice list
+	inviteDriver(data) {
+		return this.httpClient.post(this.serverUrl + `send-an-invite-email`, data);
+	}
+
 }

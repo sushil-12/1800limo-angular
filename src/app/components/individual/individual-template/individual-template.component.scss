@@ -141,3 +141,20 @@ mat-progress-bar {
 .user-profile span {
     font-size: 19px !important;
 }
+
+.hamburger {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+	width: 30px;  /* Set the width of the hamburger icon */
+	height: 26px; /* Set the height of the hamburger icon */
+	cursor: pointer; /* Add cursor pointer to make it clickable */
+  }
+  
+  .line {
+	width: 100%;
+	height: 4px;  /* Set the thickness of each line */
+	background-color: black;  /* Color of the lines */
+	border-radius: 4px;  /* Rounded corners for smoothness */
+  }
+  

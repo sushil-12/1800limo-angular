@@ -164,15 +164,15 @@
 												<div class="dropdown-item-icon"></div>
 												Email Customer
 											</a>
+											<a class="dropdown-item" routerLink="/home">
+												<div class="dropdown-item-icon"></div>
+												Farm Out
+											</a>
 											<a class="dropdown-item" (click)="auditTrail(booking.booking_id)"
 												data-toggle="modal" data-target="#AuditTrailModal">
 												<!-- *ngIf="booking.payment_status!='paid'" -->
 												<div class="dropdown-item-icon"></div>
 												Audit Trial
-											</a>
-											<a class="dropdown-item" routerLink="/home">
-												<div class="dropdown-item-icon"></div>
-												Farm Out
 											</a>
 											<!-- <a class="dropdown-item" (click)="cancelBookingId=booking.booking_id"
 												*ngIf="booking?.booking_status !='refund' && booking?.booking_status !='paid' && booking?.booking_status !='partial_paid'  && booking?.booking_status !='cancelled'"

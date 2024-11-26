@@ -6,15 +6,17 @@ import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { ThemePalette } from '@angular/material/core';
 import { StateManagementService } from '../../../services/statemanagement.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 declare var $: any;
 
 @Component({
-  selector: 'app-driver-details',
-  templateUrl: './driver-details.component.html',
-  styleUrls: ['./driver-details.component.scss']
+	selector: 'app-driver-details',
+	templateUrl: './driver-details.component.html',
+	styleUrls: ['./driver-details.component.scss']
 })
 export class DriverDetailsComponent implements OnInit {
-  color: ThemePalette = 'primary';
+	color: ThemePalette = 'primary';
 	checked = false;
 	disabled = false;
 
@@ -41,19 +43,24 @@ export class DriverDetailsComponent implements OnInit {
 	public lastPageUrl: string;
 	public prevPageUrl: string;
 	public nextPageUrl: string;
+	inviteDriverForm: FormGroup;
+	submittedForm: boolean;
 
 	constructor(
 		private adminService: AdminService,
 		private router: Router,
 		private stateManagementService: StateManagementService,
 		private spinner: NgxSpinnerService,
+		private formBuilder: FormBuilder,
+		private errors: ErrorDialogService,
 		private activatedroute: ActivatedRoute) { }
 
 	ngOnInit(): void {
 
 		// this.affiliateId = sessionStorage.getItem("affiliateId");
-    this.affiliateId = JSON.parse(localStorage.getItem("currentUser"))?.account_id
+		this.affiliateId = JSON.parse(localStorage.getItem("currentUser"))?.account_id
 		this.loadDriver();//load driver
+		this.buildInviteForm()
 	}
 
 	enableDisableClicked(id) {
@@ -81,6 +88,27 @@ export class DriverDetailsComponent implements OnInit {
 	clickEditDriver(driverId) {
 		this.router.navigate(['/admin/edit-driver-subscriber'], { queryParams: { driverId: driverId } });
 	}
+
+	//build email modal
+	buildInviteForm() {
+		this.inviteDriverForm = this.formBuilder.group({
+			email_address: ['', [Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i), Validators.required]],
+		})
+	}
+
+	//close email modal
+	closeInviteModal() {
+		this.inviteDriverForm.patchValue({
+			email_address: "",
+			email_file: [null]
+		})
+		$("#inviteDriverModal").modal("hide");
+	}
+
+	get f() {
+		return this.inviteDriverForm.controls;
+	}
+
 	// Suspend or continue driver
 	accountStatus(accountStatus) {
 		// this.stateManagementService.setprogressBar(true);
@@ -150,4 +178,33 @@ export class DriverDetailsComponent implements OnInit {
 		}
 		return udpArr;
 	}
+
+	//send invite function
+	sendInvite() {
+		this.submittedForm = true;
+		// stop here if form is invalid
+		if (this.inviteDriverForm.invalid) {
+			return;
+		}
+		console.log("formmmm", this.inviteDriverForm)
+		this.spinner.show()
+		this.adminService.inviteDriver(this.inviteDriverForm.value)
+			.pipe(
+				catchError(err => {
+					this.spinner.hide();// hide spinner
+					return throwError(err);
+				})
+			)
+			.subscribe((data : any) => {
+				this.spinner.hide();// hide spinner
+				$("#inviteDriverModal").modal("hide");
+				this.errors.openDialog({
+					errors: {
+						error: `<span class='text-success'>${data?.message}</span>`
+					}
+				})
+			});
+
+	}
+
 }
