@@ -74,6 +74,7 @@ export class AddDriverSubscriberComponent implements OnInit {
   public modalImage: string;
   public countryOptions: any = [];
   public stateOptions: any = [];
+  public invite_acc_id: any;
 
   @Input() closeTab: EventEmitter<any> = new EventEmitter();
   proDriverYears: any;
@@ -122,18 +123,14 @@ export class AddDriverSubscriberComponent implements OnInit {
       .subscribe((params) => {
         this.paramResponse = { ...params.keys, ...params };
         this.driverId = this.paramResponse.params.driverId;
-      }
-      );
+        console.log("invite_acc_id",this.paramResponse?.params?.account_id)
+        this.invite_acc_id = this.paramResponse?.params?.account_id
+      });
 
     this.currentUser = JSON.parse(sessionStorage.getItem("affiliateUserData"));
-    // this.affiliateId = sessionStorage.getItem("affiliateId");
-    this.affiliateId = JSON.parse(localStorage.getItem("currentUser"))?.account_id
-    //hide star rating field
-    // this.affiliateType = this.currentUser.AffiliateType;
 
-    //add driver form validation
-    // start date validations before 
-    // [Validators.pattern("^[0-9]*$"), Validators.minLength(4), Validators.maxLength(4), this.customValidator.dashValidator(), this.customValidator.plusValidator()]
+    this.affiliateId = this.invite_acc_id ? this.invite_acc_id : JSON.parse(localStorage.getItem("currentUser"))?.account_id
+
     this.addDriverForm = this.formBuilder.group({
       id: [''],//driver id for edit purpose
       acc_id: [this.affiliateId, Validators.required],//affiliate account id
@@ -937,9 +934,12 @@ export class AddDriverSubscriberComponent implements OnInit {
       .subscribe(({ success, data }: any) => {
         this.spinner.hide();// hide spinner
         this.disableSubmitButton = true; //enable submit button
-        this.router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
+        if (this.invite_acc_id) {
+          this.router.navigate(['/login/driver'])
+        } else {
           this.router.navigate(['/admin/driver-details'])
-        );
+        }
+
       });
   }
 
