@@ -5,8 +5,21 @@
 			<img src="assets/admin/images/new_logo.png">
 		</a>
 		<button class="btn btn-icon btn-transparent-dark mr-lg-2" id="sidebarToggle" tabindex="-1"
-			style="background-color: #000 !important;">
-			<svg *ngIf="showSidebar===true" xmlns="http://www.w3.org/2000/svg" (click)="showSidebarFunc(false)"
+			style="background: none !important;">
+
+			<div class="hamburger" *ngIf="showSidebar===true" (click)="showSidebarFunc(false)">
+				<div class="line"></div>
+				<div class="line"></div>
+				<div class="line"></div>
+			</div>
+
+			<div class="hamburger" *ngIf="showSidebar===false" (click)="showSidebarFunc(true)">
+				<div class="line"></div>
+				<div class="line"></div>
+				<div class="line"></div>
+			</div>
+
+			<!-- <svg *ngIf="showSidebar===true" xmlns="http://www.w3.org/2000/svg" (click)="showSidebarFunc(false)"
 				width="24" height="24" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
 				<path fill-rule="evenodd"
 					d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
@@ -16,7 +29,7 @@
 				fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16" *ngIf="showSidebar===false">
 				<path fill-rule="evenodd"
 					d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
-			</svg>
+			</svg> -->
 		</button>
 		<div class="btn btn-icon btn-transparent-dark referral_code"
 			*ngIf="this.currentUser?.is_profile_complete && accountStatus == 'accepted' ">
