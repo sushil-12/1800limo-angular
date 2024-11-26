@@ -683,7 +683,7 @@
 					</h4>
 					<div class="row">
 						<div class="col-md-4 key" *ngIf="bookingPreview?.grand_total">
-							<span>
+							<span style="font-weight: 550 !important;">
 								Grand Total
 							</span>
 						</div>
@@ -695,7 +695,7 @@
 					</div>
 					<div class="row" *ngIf="bookingPreview?.total_amount_refunded>0">
 						<div class="col-md-4 key">
-							<span>
+							<span style="font-weight: 550 !important;">
 								Refund amount
 							</span>
 						</div>
@@ -707,7 +707,7 @@
 					</div>
 					<div class="row" *ngIf="bookingPreview?.total_amount_refunded>0">
 						<div class="col-md-4 key">
-							<span>
+							<span style="font-weight: 550 !important;">
 								New total
 							</span>
 						</div>
@@ -726,7 +726,7 @@
 					<!-- Booking Information -->
 					<div class="row">
 						<div class="col-md-4 key">
-							<span>
+							<span style="font-weight: 550 !important;">
 								Booking Information
 							</span>
 						</div>
@@ -745,7 +745,7 @@
 					</div>
 					<div class="row preview-dropoff-color" *ngIf="bookingPreview?.cancellation_hours">
 						<div class="col-md-4 key">
-							<span>
+							<span style="font-weight: 550 !important;">
 								Cancellation Period
 							</span>
 						</div>
@@ -768,7 +768,7 @@
 					<div class="mx-2">
 						<div class="row m-0">
 							<div class="col-md-4 key">
-								<span>
+								<span style="font-weight: 550 !important;">
 									Date
 								</span>
 							</div>
@@ -786,7 +786,7 @@
 					<div class="mx-2">
 						<div class="row m-0">
 							<div class="col-md-4 key">
-								<span>
+								<span style="font-weight: 550 !important;">
 									Time
 								</span>
 							</div>
@@ -806,7 +806,7 @@
 						*ngIf="bookingPreview?.transfer_type.includes('city_') || bookingPreview?.transfer_type.includes('cruise_')">
 						<div class="row m-0">
 							<div class="col-md-4">
-								<span>
+								<span style="font-weight: 550 !important;">
 									Address
 								</span>
 							</div>
@@ -826,7 +826,7 @@
 						<!-- Airport -->
 						<div class="row m-0">
 							<div class="col-md-4 key">
-								<span>
+								<span style="font-weight: 550 !important;">
 									Airport
 								</span>
 							</div>
@@ -843,7 +843,7 @@
 						<hr>
 						<div class="row m-0 preview-pickup-color">
 							<div class="col-md-4 key">
-								<span>
+								<span style="font-weight: 550 !important;">
 									Airline
 								</span>
 							</div>
@@ -866,7 +866,7 @@
 						<!-- <hr>
 						<div class="row m-0 preview-pickup-color">
 							<div class="col-md-5 key">
-								<span>
+								<span style="font-weight: 550 !important;">
 									Flight Number &nbsp;<span
 										style="color: blue;text-decoration: underline;font-weight: 600;cursor: pointer;font-size: 18px;"
 										(click)="searchOnGoogle(bookingPreview?.pickup_airline_name + ' ' + bookingPreview?.pickup_flight)">(VUpdate
@@ -888,7 +888,7 @@
 						<!-- Cruise Port -->
 						<div class="row m-0">
 							<div class="col-md-4 key">
-								<span>
+								<span style="font-weight: 550 !important;">
 									Cruise Port
 								</span>
 							</div>
@@ -902,7 +902,7 @@
 						<!-- Cruise Ship Name -->
 						<div class="row m-0">
 							<div class="col-md-4 key">
-								<span>
+								<span style="font-weight: 550 !important;">
 									Cruise Ship Name
 								</span>
 							</div>
@@ -916,7 +916,7 @@
 						<!-- Ship Arrival time -->
 						<div class="row m-0">
 							<div class="col-md-4 key">
-								<span>
+								<span style="font-weight: 550 !important;">
 									Ship Arrival time
 								</span>
 							</div>
@@ -936,7 +936,7 @@
 						<div class="mx-2" *ngFor="let stop of bookingPreview?.extra_stops; index as stop_index">
 							<div class="row m-0 mx-2">
 								<div class="col-md-4 key">
-									<span>
+									<span style="font-weight: 550 !important;">
 										Stop {{ stop_index + 1 }}
 									</span>
 								</div>
@@ -961,7 +961,7 @@
 						*ngIf="bookingPreview?.transfer_type.includes('_city') || bookingPreview?.transfer_type.includes('_cruise')">
 						<div class="row">
 							<div class="col-md-4 key">
-								<span>
+								<span style="font-weight: 550 !important;">
 									Address
 								</span>
 							</div>
@@ -980,7 +980,7 @@
 						<!-- Airport -->
 						<div class="row">
 							<div class="col-md-4 key">
-								<span>
+								<span style="font-weight: 550 !important;">
 									Airport
 								</span>
 							</div>
@@ -997,7 +997,7 @@
 						<hr>
 						<div class="row preview-dropoff-color">
 							<div class="col-md-4 key">
-								<span>
+								<span style="font-weight: 550 !important;">
 									Airline
 								</span>
 							</div>
@@ -1022,7 +1022,7 @@
 						<!-- <hr>
 						<div class="row preview-dropoff-color">
 							<div class="col-md-5 key">
-								<span>
+								<span style="font-weight: 550 !important;">
 									Flight Number &nbsp;<span
 										style="color: blue;text-decoration: underline;font-weight: 600;cursor: pointer;font-size: 18px;"
 										(click)="searchOnGoogle(bookingPreview?.dropoff_airline_name + ' ' + bookingPreview?.dropoff_flight)">(Update
@@ -1045,7 +1045,7 @@
 						<!-- Cruise Port -->
 						<div class="row">
 							<div class="col-md-4 key">
-								<span>
+								<span style="font-weight: 550 !important;">
 									Cruise Port
 								</span>
 							</div>
@@ -1060,7 +1060,7 @@
 						<!-- Cruise Ship Name -->
 						<div class="row">
 							<div class="col-md-4 key">
-								<span>
+								<span style="font-weight: 550 !important;">
 									Cruise Ship Name
 								</span>
 							</div>
@@ -1075,7 +1075,7 @@
 						<!-- Ship Arrival time -->
 						<div class="row">
 							<div class="col-md-4 key">
-								<span>
+								<span style="font-weight: 550 !important;">
 									Ship Arrival time
 								</span>
 							</div>
@@ -1093,7 +1093,7 @@
 					<hr>
 					<div class="row m-0">
 						<div class="col-md-4">
-							<span>
+							<span style="font-weight: 550 !important;">
 								Estimated Total Distance
 							</span>
 						</div>
@@ -1108,7 +1108,7 @@
 				<div class="mx-2">
 					<div class="row m-0">
 						<div class="col-md-4">
-							<span>
+							<span style="font-weight: 550 !important;">
 								Estimated time
 							</span>
 						</div>
@@ -1136,7 +1136,7 @@
 				<div class="mx-2 preview-pickup-color">
 					<div class="row m-0">
 						<div class="col-md-4 key">
-							<span>
+							<span style="font-weight: 550 !important;">
 								Name
 							</span>
 						</div>
@@ -1152,7 +1152,7 @@
 				<!-- <div class="mx-2">
 						<div class="row m-0">
 							<div class="col-md-4 key">
-								<span>
+								<span style="font-weight: 550 !important;">
 									Email
 								</span>
 							</div>
@@ -1168,7 +1168,7 @@
 				<div class="mx-2 preview-pickup-color">
 					<div class="row m-0">
 						<div class="col-md-4 key">
-							<span>
+							<span style="font-weight: 550 !important;">
 								Phone
 							</span>
 						</div>
@@ -1188,7 +1188,7 @@
 				<div class="mx-2">
 					<div class="row m-0">
 						<div class="col-md-4 key">
-							<span>
+							<span style="font-weight: 550 !important;">
 								No. of passenger
 							</span>
 						</div>
@@ -1202,7 +1202,7 @@
 				<div class="mx-2">
 					<div class="row m-0">
 						<div class="col-md-4 key">
-							<span>
+							<span style="font-weight: 550 !important;">
 								Luggage count
 							</span>
 						</div>
@@ -1222,7 +1222,7 @@
 				<div class="mx-2" *ngIf="bookingPreview?.service_type == 'charter_tour'">
 					<div class="row">
 						<div class="col-md-4 key">
-							<span>
+							<span style="font-weight: 550 !important;">
 								Booking Hours
 							</span>
 						</div>
@@ -1237,7 +1237,7 @@
 				<div class="mx-2">
 					<div class="row m-0">
 						<div class="col-md-4 key">
-							<span>
+							<span style="font-weight: 550 !important;">
 								Special Instruction
 							</span>
 						</div>
@@ -1253,7 +1253,7 @@
 				<div class="mx-2" *ngIf="bookingPreview?.meet_greet_choice_name">
 					<div class="row m-0">
 						<div class="col-md-4 key">
-							<span>
+							<span style="font-weight: 550 !important;">
 								Meet and Greet
 							</span>
 						</div>
@@ -1268,7 +1268,7 @@
 				<div class="mx-2">
 					<div class="row m-0" *ngIf="bookingPreview?.return_meet_greet_choice_name">
 						<div class="col-md-4 key">
-							<span>
+							<span style="font-weight: 550 !important;">
 								Return Meet and Greet
 							</span>
 						</div>
@@ -1287,7 +1287,7 @@
 				</h4>
 				<div class="row p-2">
 					<div class="col-md-4 key">
-						<span>
+						<span style="font-weight: 550 !important;">
 							Vehicle Type
 						</span>
 					</div>
@@ -1299,7 +1299,7 @@
 				</div>
 				<div class="row p-2">
 					<div class="col-md-4 key">
-						<span>
+						<span style="font-weight: 550 !important;">
 							Vehicle Make
 						</span>
 					</div>
@@ -1311,7 +1311,7 @@
 				</div>
 				<div class="row p-2">
 					<div class="col-md-4 key">
-						<span>
+						<span style="font-weight: 550 !important;">
 							Vehicle Model
 						</span>
 					</div>
@@ -1323,7 +1323,7 @@
 				</div>
 				<div class="row p-2">
 					<div class="col-md-4 key">
-						<span>
+						<span style="font-weight: 550 !important;">
 							Vehicle Year
 						</span>
 					</div>
@@ -1335,7 +1335,7 @@
 				</div>
 				<div class="row p-2">
 					<div class="col-md-4 key">
-						<span>
+						<span style="font-weight: 550 !important;">
 							Vehicle Color
 						</span>
 					</div>
@@ -1347,7 +1347,7 @@
 				</div>
 				<div class="row p-2">
 					<div class="col-md-4 key">
-						<span>
+						<span style="font-weight: 550 !important;">
 							Licence plate
 						</span>
 					</div>
@@ -1359,7 +1359,7 @@
 				</div>
 				<div class="row p-2">
 					<div class="col-md-4 key">
-						<span>
+						<span style="font-weight: 550 !important;">
 							No. of seats
 						</span>
 					</div>
@@ -1378,7 +1378,7 @@
 				<div class="mx-2">
 					<div class="row m-0">
 						<div class="col-md-4 key">
-							<span>
+							<span style="font-weight: 550 !important;">
 								Name
 							</span>
 						</div>
@@ -1394,7 +1394,7 @@
 				<div class="mx-2">
 					<div class="row m-0">
 						<div class="col-md-4 key">
-							<span>
+							<span style="font-weight: 550 !important;">
 								Email
 							</span>
 						</div>
@@ -1410,7 +1410,7 @@
 				<div class="mx-2">
 					<div class="row m-0">
 						<div class="col-md-4 key">
-							<span>
+							<span style="font-weight: 550 !important;">
 								Phone
 							</span>
 						</div>
@@ -1433,7 +1433,7 @@
 					<div class="mx-2">
 						<div class="row m-0">
 							<div class="col-md-4 key">
-								<span>
+								<span style="font-weight: 550 !important;">
 									Name
 								</span>
 							</div>
@@ -1450,7 +1450,7 @@
 					<div class="mx-2">
 						<div class="row m-0">
 							<div class="col-md-4 key">
-								<span>
+								<span style="font-weight: 550 !important;">
 									Email
 								</span>
 							</div>
@@ -1467,7 +1467,7 @@
 					<div class="mx-2">
 						<div class="row m-0">
 							<div class="col-md-4 key">
-								<span>
+								<span style="font-weight: 550 !important;">
 									Phone
 								</span>
 							</div>
@@ -1490,7 +1490,7 @@
 					<div class="mx-2">
 						<div class="row m-0">
 							<div class="col-md-4 key d-flex align-items-center">
-								<span>
+								<span style="font-weight: 550 !important;">
 									Base Rate
 								</span>
 							</div>
@@ -1507,7 +1507,7 @@
 					<div class="mx-2">
 						<div class="row m-0">
 							<div class="col-md-4 key d-flex align-items-center">
-								<span>
+								<span style="font-weight: 550 !important;">
 									Admin Share
 								</span>
 							</div>
@@ -1525,7 +1525,7 @@
 					<div class="mx-2">
 						<div class="row m-0">
 							<div class="col-md-4 key d-flex align-items-center">
-								<span>
+								<span style="font-weight: 550 !important;">
 									Stripe fees
 								</span>
 							</div>
@@ -1575,7 +1575,7 @@
 					<div class="mx-2">
 						<div class="row m-0">
 							<div class="col-md-4 key d-flex align-items-center">
-								<span>
+								<span style="font-weight: 550 !important;">
 									Total Cost
 								</span>
 							</div>
