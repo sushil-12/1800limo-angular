@@ -203,10 +203,15 @@ export class OtpComponent implements OnInit, OnDestroy {
 
 		this.disableSubmit = true; //disable submit button
 		this.showProgressBar = true; //show progressbar
-
+		
 		let userId = sessionStorage.getItem('userId');
 		let family_id = sessionStorage.getItem('family_id')
-		this.otpForm.value.userId = userId;
+		if(sessionStorage.getItem("isDriver") == 'Driver'){
+			this.otpForm.value.driver_id = userId;
+		}
+		else{
+			this.otpForm.value.userId = userId;
+		}
 		this.otpForm.value.family_id = family_id
 
 		this.authService.verifyOtp(this.otpForm.value)
@@ -365,6 +370,10 @@ export class OtpComponent implements OnInit, OnDestroy {
 					}
 					case 'sub_affiliate': {
 						this.router.navigateByUrl('/sub_affiliate/my-bookings');
+						break;
+					}
+					case 'affiliate_driver': {
+						this.router.navigateByUrl('/affiliate_driver/my-bookings');
 						break;
 					}
 					default: {
