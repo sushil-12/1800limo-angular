@@ -267,12 +267,23 @@ export class LoginComponent implements OnInit, AfterViewInit {
 			)
 			.subscribe((result: any) => {
 				this.response = result;
-				var userId = this.response.data.id;
+				var userId;
+				var email;
+				if(this.response?.data?.is_driver){
+					userId = this.response?.data?.user?.id
+					email = this.response?.data?.user?.email
+					sessionStorage.setItem("isDriver",'Driver')
+				}
+				else{
+					userId = this.response?.data?.id;
+					email = this.response?.data?.email
+					sessionStorage.setItem("isDriver",'')
+				}
 				sessionStorage.setItem('userId', '' + userId);
 				if (this.response.data.family_data?.id) {
 					sessionStorage.setItem('family_id', this.response.data.family_data.id)
 				}
-				let email = this.response?.data?.email
+
 				if (environment['environmentName'] !== 'Production') {
 
 					console.log('role', this.Role)

@@ -47,6 +47,7 @@ import { PartnerRegistrationComponent } from './components/subscription/partner-
 import { SubscriptionPlansComponent } from './components/subscription/subscription-plans/subscription-plans.component';
 import { PaymentDetailsComponent } from './components/subscription/payment-details/payment-details.component';
 import { AddDriverSubscriberComponent } from './components/subscription/add-driver-subscriber/add-driver-subscriber.component';
+import { AffiliateDriverTemplateComponent } from './components/affiliate-driver/affiliate-driver-template/affiliate-driver-template.component'
 
 
 const routes: Routes = [
@@ -304,6 +305,20 @@ const routes: Routes = [
 		]
 	},
 	{
+		path: 'affiliate_driver',
+		component: AffiliateDriverTemplateComponent,
+		// canActivate: [AdminGuardGuard],
+		data: {
+			title: 'affiliatedriver'
+		},
+		children: [
+			{
+				path: '',
+				loadChildren: () => import('./components/affiliate-driver/affiliate-driver.module').then(m => m.AffiliateDriverModule)
+			}
+		]
+	},
+	{
 		path: 'travel_agent',
 		component: AgentTemplateComponent,
 		// canActivate: [AdminGuardGuard],
@@ -353,7 +368,7 @@ const routes: Routes = [
 		path: '**',
 		component: PageNotFoundComponent
 	},
-	
+
 ];
 
 @NgModule({

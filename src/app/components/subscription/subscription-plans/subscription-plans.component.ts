@@ -42,7 +42,7 @@ export class SubscriptionPlansComponent implements OnInit {
   }
 
   getPlans() {
-    this.spinner.show()
+    // this.spinner.show()
     this.authService.getSubsPlans().pipe(
       catchError(err => {
         this.spinner.hide()
