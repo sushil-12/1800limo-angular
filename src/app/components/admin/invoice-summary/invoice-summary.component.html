@@ -124,6 +124,18 @@
 						</div>
 						<div class="div border-top">
 							<dl class="m-0">
+								<dt class="invoice-p" *ngIf="invoiceData.accoutDetail?.first_name">Client Name </dt>
+								<dd class="invoice-text-b">{{invoiceData.accoutDetail?.first_name}}
+								</dd>
+								<dt class="invoice-p" *ngIf="invoiceData.accoutDetail?.mobile">Client Phone</dt>
+								<dd class="invoice-text-b"> {{invoiceData.accoutDetail?.mobile}}</dd>
+								<dt class="invoice-p" *ngIf="invoiceData.accoutDetail?.email">Client Email</dt>
+								<dd class="invoice-text-b"> {{invoiceData.accoutDetail?.email}}</dd>
+								
+							</dl>
+						</div>
+						<div class="div border-top">
+							<dl class="m-0">
 								<dt class="invoice-p" *ngIf="invoiceData.affiliate_company_name">Affiliate Company </dt>
 								<dd class="invoice-text-b">{{invoiceData.affiliate_company_name}}
 								</dd>
@@ -343,9 +355,9 @@
 	</section>
 	<section class="billing_inforamtion">
 		<div class="row m-2">
-			<button class="ok-btn custom-ok-btn box-shadow ml-3" style="height: 40px;width: 100px; font-size: 14px;"
-				type="button" (click)="backButton()" tabindex="1">OK</button>
-			<button class="custom-btn refund-btn box-shadow ml-3" style="height: 40px;width: 130px; font-size: 14px;
+			<button class="ok-btn custom-ok-btn box-shadow ml-3" style="height: 40px;width: 100px; font-size: 17px;"
+				type="button" (click)="backButton()" tabindex="1">Back</button>
+			<button class="custom-btn refund-btn box-shadow ml-3" style="height: 40px;width: 130px; font-size: 17px;
 				padding: 10px;" data-toggle="modal" data-target="#paymentLogs"
 				*ngIf="invoiceData.billing_detail.payment_method !='cash'">Payment logs</button>
 		</div>

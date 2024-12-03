@@ -115,7 +115,6 @@ export class InvoiceSummaryComponent implements OnInit {
 	}
 
 	getInvoiceData() {
-
 		this.adminService.getInvoiceData(this.bookingId)
 			.pipe(
 				catchError(err => {
@@ -279,5 +278,6 @@ export class InvoiceSummaryComponent implements OnInit {
 			this.str_email = event.target.value
 		}
 	}
+	
 
 }
