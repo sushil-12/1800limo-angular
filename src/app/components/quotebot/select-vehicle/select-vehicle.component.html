@@ -433,16 +433,16 @@
 										All Inclusive Rate<sup class="sup-red">*</sup>
 									</span>
 								</div> -->
-								<div id="icons" class="passnger-luggage-div mb-3">
-									<div class="icon-container">
-										<img alt="" src="assets/images/select_vehicle/pass.png"
-											style="margin-right: 0.50rem;" />
+								<div id="icons" class="passnger-luggage-div" style="margin-top: -20px;">
+									<div>
+										<!-- <img alt="" src="assets/images/select_vehicle/pass.png"
+											style="margin-right: 0.50rem;" /> -->
 										<span>Pax #</span>
 										<span class="font-weight-bolder mx-2">{{ vehinfo?.passenger }}</span>
 									</div>
-									<div class="icon-container">
-										<img alt="" src="assets/images/select_vehicle/lug.png"
-											style="margin-right: 0.50rem;" />
+									<div>
+										<!-- <img alt="" src="assets/images/select_vehicle/lug.png"
+											style="margin-right: 0.50rem;" /> -->
 										<span>Lug #</span>
 										<span class="font-weight-bolder mx-2">{{ vehinfo?.luggage }}</span>
 									</div>
@@ -467,22 +467,20 @@
 											<span class="font-weight-bold">{{vehinfo?.number_of_vehicles}}</span>
 										</div>
 									</div>
-									<div *ngIf="!vehinfo?.is_master_vehicle" class="mt-2">
-										<div class="vehicle-details-data-mobile">
-											<div class="d-flex justify-content-between">
-												<p>
-													<span
-														style="font-weight: 500;">{{vehinfo?.vehicle_details?.year}}</span>
-												</p>
-												<p>
-													<span
-														style="font-weight: 500;">{{vehinfo?.vehicle_details?.make}}</span>
-												</p>
-												<p>
-													<span
-														style="font-weight: 500;">{{vehinfo?.vehicle_details?.model}}</span>
-												</p>
-											</div>
+									<div class="mt-2" *ngIf="!vehinfo?.is_master_vehicle">
+										<div class="d-flex justify-content-between">
+											<p>
+												<span
+													style="font-weight: 500;">{{vehinfo?.vehicle_details?.year}}</span>
+											</p>
+											<p>
+												<span
+													style="font-weight: 500;">{{vehinfo?.vehicle_details?.make}}</span>
+											</p>
+											<p>
+												<span
+													style="font-weight: 500;">{{vehinfo?.vehicle_details?.model}}</span>
+											</p>
 										</div>
 									</div>
 									<!-- <div class="d-flex price"
@@ -511,7 +509,7 @@
 								</div>
 								<span class="d-flex cancel-policy mb-3" *ngIf="!vehinfo?.is_master_vehicle">
 									<i class="bi bi-exclamation-circle-fill" style="color: red;"></i>
-									&nbsp; Cancellation Policy: <span
+									&nbsp; Cancellation Policy: &nbsp; <span
 										style="font-weight: 500;">{{convertHrIntoDays(vehinfo?.cancellation_policy)}}
 									</span>
 								</span>

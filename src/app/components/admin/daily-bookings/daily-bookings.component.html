@@ -978,7 +978,7 @@
 					</div>
 
 					<!-- ################ Pickup ################### -->
-					<h5 class="m-0 my-2 font-weight-bolder text-2xl preview-pickup-color">
+					<h5 class="m-0 my-2 font-weight-bolder text-2xl">
 						Pickup Details
 					</h5>
 					<!-- Pickup > Date -->
@@ -1019,7 +1019,7 @@
 					</div>
 
 					<!-- Pickup > City Details -->
-					<div class="mx-2 preview-pickup-color"
+					<div class="mx-2"
 						*ngIf="bookingPreview?.transfer_type.includes('city_') || bookingPreview?.transfer_type.includes('cruise_')">
 						<hr>
 						<div class="row m-0">
@@ -1041,7 +1041,7 @@
 
 
 					<!-- Pickup > Airline Details -->
-					<div class="mx-2 preview-pickup-color" *ngIf="bookingPreview?.transfer_type.includes('airport_')">
+					<div class="mx-2" *ngIf="bookingPreview?.transfer_type.includes('airport_')">
 						<!-- Airport -->
 						<hr>
 						<div class="row m-0">
@@ -1061,7 +1061,7 @@
 						<!-- Airport -->
 						<!-- Airline -->
 						<hr>
-						<div class="row m-0 preview-pickup-color">
+						<div class="row m-0 ">
 							<div class="col-md-4 key">
 								<span style="font-weight: 550 !important;">
 									Airline
@@ -1069,11 +1069,11 @@
 							</div>
 							<div class="col-md-8 value">
 								<span class="font-weight-bolder preview-output-feild"
-									style="cursor: pointer;text-decoration: underline;"
+									style="cursor: pointer;text-decoration: underline;color: #ff0000 !important;"
 									(click)="searchOnGoogle(bookingPreview?.pickup_airline_name + ' ' + bookingPreview?.pickup_flight)">
 									{{ textFormatter(bookingPreview?.pickup_airline_name) }}
 								</span> &nbsp;<span class="font-weight-bolder preview-output-feild"
-									style="cursor: pointer;text-decoration: underline;"
+									style="cursor: pointer;text-decoration: underline;color: #ff0000 !important;"
 									(click)="searchOnGoogle(bookingPreview?.pickup_airline_name + ' ' + bookingPreview?.pickup_flight)">
 									#{{ textFormatter(bookingPreview?.pickup_flight) }}
 								</span>&nbsp;
@@ -1178,11 +1178,11 @@
 						*ngIf="bookingPreview?.extra_stops && bookingPreview?.extra_stops.length == 0" />
 
 					<!-- ############# Dropoff ################# -->
-					<h5 class="px-2 m-0 my-3 font-weight-bolder text-2xl preview-dropoff-color">
+					<h5 class="px-2 m-0 my-3 font-weight-bolder text-2xl">
 						Drop Off Details
 					</h5>
 					<!-- Dropoff > City Details -->
-					<div class="mx-2 preview-dropoff-color"
+					<div class="mx-2"
 						*ngIf="bookingPreview?.transfer_type.includes('_city') || bookingPreview?.transfer_type.includes('_cruise')">
 						<div class="row">
 							<div class="col-md-4 key">
@@ -1201,7 +1201,7 @@
 					</div>
 
 					<!-- Dropoff > Airline Details -->
-					<div class="mx-2 preview-dropoff-color" *ngIf="bookingPreview?.transfer_type.includes('_airport')">
+					<div class="mx-2" *ngIf="bookingPreview?.transfer_type.includes('_airport')">
 						<!-- Airport -->
 						<div class="row">
 							<div class="col-md-4 key">
@@ -1220,7 +1220,7 @@
 						<!-- Airport -->
 						<!-- Airline -->
 						<hr>
-						<div class="row preview-dropoff-color">
+						<div class="row">
 							<div class="col-md-4 key">
 								<span style="font-weight: 550 !important;">
 									Airline
@@ -1228,12 +1228,12 @@
 							</div>
 							<div class="col-md-8 value">
 								<span class="font-weight-bolder preview-output-feild"
-									style="cursor: pointer;text-decoration: underline;color: #007500 !important;"
+									style="cursor: pointer;text-decoration: underline;color: #ff0000 !important;"
 									(click)="searchOnGoogle(bookingPreview?.dropoff_airline_name + ' ' + bookingPreview?.dropoff_flight)">
 									{{ textFormatter(bookingPreview?.dropoff_airline_name) }}
 								</span>&nbsp;
 								<span class="font-weight-bolder preview-output-feild"
-									style="cursor: pointer;text-decoration: underline;color: #007500 !important;"
+									style="cursor: pointer;text-decoration: underline;color: #ff0000 !important;"
 									(click)="searchOnGoogle(bookingPreview?.dropoff_airline_name + ' ' + bookingPreview?.dropoff_flight)">
 									#{{ textFormatter(bookingPreview?.dropoff_flight) }}
 								</span>&nbsp;
@@ -1910,7 +1910,7 @@
 							Rates Distribution
 						</h4>
 
-						<div class="mx-2">
+						<div class="mx-2" style="font-size: 18px;">
 							<div class="row m-0">
 								<div class="col-md-4 key d-flex align-items-center">
 									<span style="font-weight: 550 !important;">
@@ -1925,7 +1925,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="mx-2" *ngIf="currentUser?.created_by_role != 'subscriber' ">
+						<div class="mx-2" style="font-size: 18px;" *ngIf="currentUser?.created_by_role != 'subscriber' ">
 							<div class="row m-0">
 								<div class="col-md-4 key d-flex align-items-center">
 									<span class="font-weight-bolder" style="color: #1e7500">
@@ -1941,7 +1941,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="mx-2" *ngIf="bookingPreview?.share_array?.travelAgentShare">
+						<div class="mx-2" style="font-size: 18px;" *ngIf="bookingPreview?.share_array?.travelAgentShare">
 							<div class="row m-0">
 								<div class="col-md-4 key d-flex align-items-center">
 									<span style="font-weight: 550 !important;">
@@ -1958,7 +1958,7 @@
 							</div>
 						</div>
 
-						<div class="mx-2">
+						<div class="mx-2" style="font-size: 18px;">
 							<div class="row m-0">
 								<div class="col-md-4 key d-flex align-items-center">
 									<span style="font-weight: 550 !important;">
@@ -1974,7 +1974,7 @@
 							</div>
 						</div>
 
-						<div class="mx-2">
+						<div class="mx-2" style="font-size: 18px;">
 							<div class="row m-0">
 								<div class="col-md-4 key d-flex align-items-center">
 									<span style="font-weight: 550 !important;">
@@ -1989,7 +1989,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="mx-2" *ngIf="bookingPreview?.share_array?.farmoutShare">
+						<div class="mx-2" style="font-size: 18px;" *ngIf="bookingPreview?.share_array?.farmoutShare">
 							<div class="row m-0">
 								<div class="col-md-4 key d-flex align-items-center">
 									<span style="font-weight: 550 !important;">
@@ -2004,7 +2004,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="mx-2">
+						<div class="mx-2" style="font-size: 18px;">
 							<div class="row m-0">
 								<div class="col-md-4 key d-flex align-items-center">
 									<span style="font-weight: 550 !important;">
