@@ -1,7 +1,8 @@
 <ngx-spinner></ngx-spinner>
 <section class="driverbooking_top user_information">
 	<h2 class="headinginfo">ADD VEHICLE <span>(s)</span></h2>
-	<div class="containeredd">
+	<div class="containeredd"
+		*ngIf="(currentUser?.created_by_role == 'subscriber' && currentUser?.roleName == 'admin')">
 		<div class="row mt-3">
 			<!-- <div class="col-md-12 mb-2">
 				<label class="alert alert-danger" *ngIf="instructionBasedOnAffiliate">Enter only one vehicle to complete
@@ -19,8 +20,7 @@
 		</div>
 		<div class="row" *ngIf="enablePayButton">
 			<div class="col-md-12">
-				<button type="button" class="custom-btn add-button" (click)="payExtraAmount()"
-					tabindex="1">
+				<button type="button" class="custom-btn add-button" (click)="payExtraAmount()" tabindex="1">
 					Pay Now
 				</button>
 			</div>

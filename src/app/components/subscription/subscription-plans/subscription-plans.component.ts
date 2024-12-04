@@ -14,6 +14,7 @@ declare var bootstrap: any;
 export class SubscriptionPlansComponent implements OnInit {
   public planData: any;
   public selectedPlanId: any = '';
+  public currentUser: any;
 
   constructor(
     private authService: AuthService,
@@ -25,16 +26,18 @@ export class SubscriptionPlansComponent implements OnInit {
 
     this.getPlans()
 
-     // Initialize all tooltips on page load
+    this.currentUser = JSON.parse(localStorage.getItem("currentUser"))
+
+    // Initialize all tooltips on page load
     //  const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
     //  tooltipTriggerList.map(function (tooltipTriggerEl) {
     //    return new bootstrap.Tooltip(tooltipTriggerEl);
     //  });
 
-     // Initialize all tooltips on page load, with click trigger for mobile devices
+    // Initialize all tooltips on page load, with click trigger for mobile devices
     const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
     tooltipTriggerList.map(function (tooltipTriggerEl) {
-     return new bootstrap.Tooltip(tooltipTriggerEl, {
+      return new bootstrap.Tooltip(tooltipTriggerEl, {
         trigger: 'hover focus click'  // Supports hover, focus, and click for different devices
       });
     });
@@ -58,9 +61,14 @@ export class SubscriptionPlansComponent implements OnInit {
   }
 
   submitPlan(plan) {
-    console.log("plan",plan)
+    console.log("plan", plan)
     if (plan?.id == 1) {
       this.router.navigate(['/login/driver'])
+    }
+    else if (this.currentUser?.id) {
+      console.log("in if affiliate")
+      sessionStorage.setItem("selectedPlan", JSON.stringify(plan))
+      this.router.navigate(['/payment-details']);
     }
     else {
       sessionStorage.setItem("selectedPlan", JSON.stringify(plan))

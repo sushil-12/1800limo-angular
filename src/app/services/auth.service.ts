@@ -68,4 +68,8 @@ export class AuthService {
     return this.httpClient.post(this.serverUrl + 'create-subscription-plan', data);
   }
 
+  upgradePlan(data){
+    return this.httpClient.post(this.serverUrl + 'affiliate/upgrade-to-subscriber', data);
+  }
+
 }

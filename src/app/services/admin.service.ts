@@ -960,6 +960,16 @@ export class AdminService {
 		}
 		return this.httpClient.get(path).toPromise();
 	}
+	loadFarmInBookings(url, startDate, endDate, useDateFilter, keyword = '', orderBy) {
+		var path;
+		if (url) {
+			path = url + '&from=' + startDate + '&to=' + endDate + '&search=' + keyword + '&useDateFilter=' + useDateFilter + '&orderBy=' + orderBy + '&current_date=' + this.current_date + '&current_time=' + this.current_time;
+		}
+		else {
+			path = this.serverUrl + 'subscribers/get-farmin-reservations' + '?from=' + startDate + '&to=' + endDate + '&search=' + keyword + '&useDateFilter=' + useDateFilter + '&order_by=' + orderBy + '&current_date=' + this.current_date + '&current_time=' + this.current_time;
+		}
+		return this.httpClient.get(path).toPromise();
+	}
 	reservationStatus(id, status) {
 		return this.httpClient.put(this.serverUrl + 'reservation-status', { 'id': id, 'status': status });
 	}

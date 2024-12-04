@@ -6,6 +6,8 @@ import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { AuthService } from 'src/app/services/auth.service';
 import { CustomvalidationService } from 'src/app/services/customvalidation.service';
+import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
+import { StateManagementService } from 'src/app/services/statemanagement.service';
 
 @Component({
   selector: 'app-payment-details',
@@ -21,12 +23,15 @@ export class PaymentDetailsComponent implements OnInit {
   public subscription_product_id: any;
   public planName: string = '';
   public planPrice: any;
+  public currentUser: any;
 
   constructor(
     private formBuilder: FormBuilder,
     private customValidator: CustomvalidationService,
     private spinner: NgxSpinnerService,
     private authService: AuthService,
+    private stateManagementService: StateManagementService,
+    private errorDialog: ErrorDialogService,
     private router: Router
 
   ) { }
@@ -37,6 +42,7 @@ export class PaymentDetailsComponent implements OnInit {
     this.subscription_product_id = JSON.parse(sessionStorage.getItem('selectedPlan'))?.id
     this.planName = JSON.parse(sessionStorage.getItem("selectedPlan"))?.product_name
     this.planPrice = JSON.parse(sessionStorage.getItem("selectedPlan"))?.product_price
+    this.currentUser = JSON.parse(localStorage.getItem("currentUser"))
 
     const currentYear = (new Date()).getFullYear();
     for (let i = 0; i < 40; i++) {
@@ -61,36 +67,85 @@ export class PaymentDetailsComponent implements OnInit {
   submitForm() {
 
     this.submittedForm = true;
-    
+
     // stop here if form is invalid
     if (this.cardDetails.invalid) {
       return;
     }
-    
+
     console.log(this.cardDetails.value, this.registeredUser, this.subscription_product_id);
     this.spinner.show()
-    
-    let dataToSend = {
-      ...this.cardDetails.value,
-      ...this.registeredUser,
-    }
-    
-    dataToSend['subscription_product_id'] = this.subscription_product_id
 
-    console.log("dataTosend", dataToSend)
+    if (this.currentUser.id) {
+      let dataToSend = {
+        ...this.cardDetails.value,
+      }
+      dataToSend['user_id'] = this.currentUser.id
+      dataToSend['account_id'] = this.currentUser.account_id
+      dataToSend['name'] = 'TEST'
+      dataToSend['subscription_product_id'] = this.subscription_product_id
 
-    this.authService.createPayment(dataToSend)
-      .pipe(
-        catchError(err => {
+      this.authService.upgradePlan(dataToSend)
+        .pipe(
+          catchError(err => {
+            this.spinner.hide();
+            return throwError(err);
+          })
+        )
+        .subscribe(result => {
           this.spinner.hide();
-          return throwError(err);
-        })
-      )
-      .subscribe(result => {
-        this.spinner.hide();
-        this.response = result;
-        this.router.navigate(['/login/subscriber'])
-      });
+          this.response = result;
+          this.errorDialog.openDialog({
+            errors: {
+              error: `<span class='text-success'>Your account has been upgraded successfully. Please log in again!</span>`
+            }
+          })
+          this.spinner.show()
+          setTimeout(() => {
+            console.log("in timeout")
+            this.authService.logout()
+              .pipe(
+                catchError(err => {
+                  // this.spinner.hide('logoutspinner');//hide spinner
+                  return throwError(err);
+                })
+              ).subscribe(({ success }: any) => {
+                // this.spinner.hide('logoutspinner');//hide spinner
+                if (success == true) {
+                  this.stateManagementService.removeUser();
+                }
+                this.router.navigate(['/login/driver'])
+              });
+          }, 5000)
+          this.spinner.hide();
+        });
+
+    }
+
+    else {
+      let dataToSend = {
+        ...this.cardDetails.value,
+        ...this.registeredUser,
+      }
+
+      dataToSend['subscription_product_id'] = this.subscription_product_id
+
+      console.log("dataTosend", dataToSend)
+
+      this.authService.createPayment(dataToSend)
+        .pipe(
+          catchError(err => {
+            this.spinner.hide();
+            return throwError(err);
+          })
+        )
+        .subscribe(result => {
+          this.spinner.hide();
+          this.response = result;
+          this.router.navigate(['/login/driver'])
+        });
+    }
+
   }
 
 

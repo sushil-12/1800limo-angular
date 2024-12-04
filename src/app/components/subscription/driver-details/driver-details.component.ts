@@ -45,6 +45,7 @@ export class DriverDetailsComponent implements OnInit {
 	public nextPageUrl: string;
 	inviteDriverForm: FormGroup;
 	submittedForm: boolean;
+	currentUser: any = JSON.parse(localStorage.getItem("currentUser"));
 
 	constructor(
 		private adminService: AdminService,

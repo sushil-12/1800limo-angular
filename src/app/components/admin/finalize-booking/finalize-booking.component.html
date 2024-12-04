@@ -154,7 +154,7 @@
 	[affiliate_type]="'loose_affiliate'" (formvalue)="RateFormValue($event)" [distance]="finalize_params.distance"
 	[reservation_id]="finalize_params.booking_id" [reset]="false" [hours]="finalize_params.number_of_hours"
 	[vehicles]="finalize_params.number_of_vehicles" [isFarmoutBooking]="isFarmoutBooking" [currencyObject]="currencyObj"
-	[vehicle_created_by]="vehicle_created_by" (returnformvalue)="ReturnRateFormValue($event)"
+	[vehicle_created_by]="vehicle_created_by" [booking_created_from]="booking_created_from" (returnformvalue)="ReturnRateFormValue($event)"
 	(returnNumberOfHr)="HandleReturnNumberOfHr($event)" [isCreatedByAdmin]="isCreatedByAdmin"
 	[service_type]="service_type">
 </app-finalize-rates>

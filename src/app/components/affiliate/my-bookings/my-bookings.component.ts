@@ -901,4 +901,9 @@ export class MyBookingsComponent implements OnInit {
 	addSubAffiliate() {
 		this.router.navigate(['/affiliate/add-sub-affiliate']);
 	}
+
+	upgradePlan() {
+		this.router.navigate(['/subscription']);
+	}
+
 }

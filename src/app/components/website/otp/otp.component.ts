@@ -203,13 +203,13 @@ export class OtpComponent implements OnInit, OnDestroy {
 
 		this.disableSubmit = true; //disable submit button
 		this.showProgressBar = true; //show progressbar
-		
+
 		let userId = sessionStorage.getItem('userId');
 		let family_id = sessionStorage.getItem('family_id')
-		if(sessionStorage.getItem("isDriver") == 'Driver'){
+		if (sessionStorage.getItem("isDriver") == 'Driver') {
 			this.otpForm.value.driver_id = userId;
 		}
-		else{
+		else {
 			this.otpForm.value.userId = userId;
 		}
 		this.otpForm.value.family_id = family_id
@@ -239,6 +239,9 @@ export class OtpComponent implements OnInit, OnDestroy {
 				localStorage.setItem('currentUser', JSON.stringify(this.response?.data?.user));
 				localStorage.setItem('access_token', this.response?.data?.access_token);
 				localStorage.setItem('currencySymbol', JSON.stringify(this.response?.currency?.symbol))
+				localStorage.setItem("is_stripe_account_added", this.response.data?.subscriber_data?.is_stripe_account_added);
+				localStorage.setItem("current_period_end_date", this.response.data?.subscription_status?.current_period_end_date)
+				localStorage.setItem("is_subscription_cancelled", this.response.data?.subscriber_data?.is_cancelled)
 				if (this.response?.data?.is_family_member) {
 					localStorage.setItem('is_family_member', this.response?.data?.is_family_member)
 					localStorage.setItem("family_member_data", JSON.stringify(this.response?.data?.family_member_data))
@@ -255,9 +258,6 @@ export class OtpComponent implements OnInit, OnDestroy {
 
 				switch (this.response.data.user.roleName) {
 					case 'admin': {
-						localStorage.setItem("is_stripe_account_added", this.response.data?.subscriber_data?.is_stripe_account_added);
-						localStorage.setItem("current_period_end_date",this.response.data?.subscription_status?.current_period_end_date)
-						localStorage.setItem("is_subscription_cancelled",this.response.data?.subscriber_data?.is_cancelled)
 						if (this.response.data?.user?.created_by_role == 'subscriber' && !this.response.data?.subscriber_data?.is_stripe_account_added) {
 							this.router.navigateByUrl('/admin/add-bank-details');
 						}
