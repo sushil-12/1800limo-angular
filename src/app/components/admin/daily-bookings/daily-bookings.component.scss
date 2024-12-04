@@ -435,5 +435,54 @@ a.dropdown-item {
 
 :host ::ng-deep.mat-checkbox-layout,
 .mat-checkbox-label {
-    white-space: normal !important;
+	white-space: normal !important;
+}
+
+.horizontal-scroll-container {
+	display: flex;
+	/* Arrange items in a row */
+	overflow-x: auto;
+	/* Enable horizontal scrolling */
+	white-space: nowrap;
+	/* Prevent items from wrapping */
+	gap: 95px;
+	/* Space between items */
+	scrollbar-width: thin;
+	/* Thin scrollbar for Firefox */
+	scrollbar-color: #888 #f1f1f1;
+	/* Custom colors for Firefox */
+	max-width: 637px;
+}
+
+.horizontal-scroll-container::-webkit-scrollbar {
+	height: 8px;
+	/* Height of the scrollbar */
+}
+
+.horizontal-scroll-container::-webkit-scrollbar-thumb {
+	background-color: #888;
+	/* Scrollbar thumb color */
+	border-radius: 4px;
+	/* Rounded corners for the scrollbar thumb */
+}
+
+.horizontal-scroll-container::-webkit-scrollbar-track {
+	background-color: #f1f1f1;
+	/* Scrollbar track color */
+}
+
+.scroll-item {
+	min-width: 300px;
+}
+
+@media (max-width: 768px) {
+	.scroll-item {
+		min-width: 180px;
+		/* Adjust item width for smaller screens */
+	}
+
+	.horizontal-scroll-container {
+		gap: 20px;
+	}
+
 }
