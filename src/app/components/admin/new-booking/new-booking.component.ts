@@ -640,7 +640,7 @@ export class NewBookingComponent implements OnInit {
 			this.isFarmoutBooking = response?.data?.reservation_type == 'farmout' ? true : false
 			this.isCreatedByAdmin = response?.data?.created_by == 1 ? true : false
 
-			this.booking_created_from = response?.data?.affiliate_id != this.currentUser?.account_id ? 'admin' : 'subscriber'
+			this.booking_created_from = ((response?.data?.affiliate_id != this.currentUser?.account_id) || response?.data?.created_by_role == 'admin') ? 'admin' : 'subscriber'
 
 			if (response?.data?.account_type == 'travel_planner') {
 				this.getTravelClientAccounts(response?.data?.acc_id)
@@ -1413,10 +1413,10 @@ export class NewBookingComponent implements OnInit {
 		this.$api.getAffiliateAccount(affiliate_id).pipe(pluck('data')).subscribe((response: any) => {
 			isDevMode() && console.info('Affiliate Information', response);
 			this.AffiliateInformation = response;
-			if(this.booking_created_from == 'admin'){
+			if (this.booking_created_from == 'admin') {
 				console.log("in affiliate info")
 				this.BookingForm.patchValue({
-					susbcriber_name : this.AffiliateInformation?.FirstName + ' ' + this.AffiliateInformation?.LastName
+					susbcriber_name: this.AffiliateInformation?.FirstName + ' ' + this.AffiliateInformation?.LastName
 				})
 			}
 			this.$spinner.hide('normalspinner');
@@ -2503,7 +2503,7 @@ export class NewBookingComponent implements OnInit {
 					})
 					this.fetchReturnAffiliateVehicles(this.currentUser?.account_id)
 				}
-				if(this.booking_created_from == 'admin' && this.currentUser?.created_by_role == 'subscriber'){
+				if (this.booking_created_from == 'admin' && this.currentUser?.created_by_role == 'subscriber') {
 					this.BookingForm.patchValue({
 						return_susbcriber_name: this.BookingForm.get('susbcriber_name').value,
 					})
@@ -2552,9 +2552,9 @@ export class NewBookingComponent implements OnInit {
 
 			// set cruise ship name and cruise port mandatory
 			if (value.includes('_cruise') || value.includes('cruise_')) {
-				if(value.includes("cruise_")){
-				this.SetFormValue('booking_instructions', "1. Pax - Text driver when docked.  2. Driver - Text pax with pickup instructions when ship has arrived.");
-		        // this.SetFormValue('return_booking_instructions', "1. Pax- Text driver when landing, 2. Driver- Text pax with pickup instructions when plane has arrived");
+				if (value.includes("cruise_")) {
+					this.SetFormValue('booking_instructions', "1. Pax - Text driver when docked.  2. Driver - Text pax with pickup instructions when ship has arrived.");
+					// this.SetFormValue('return_booking_instructions', "1. Pax- Text driver when landing, 2. Driver- Text pax with pickup instructions when plane has arrived");
 				}
 				console.log("setting value of cruise port and name mandatory")
 				this.BookingForm.get('cruise_name').setValidators([Validators.required]);
@@ -2591,7 +2591,7 @@ export class NewBookingComponent implements OnInit {
 
 			if (value.includes('airport_')) {
 				this.SetFormValue('booking_instructions', "1. Pax - Text driver when landing.  2. Driver - Text pax with pickup instructions when plane has arrived.");
-		        // this.SetFormValue('return_booking_instructions', "1. Pax- Text driver when landing, 2. Driver- Text pax with pickup instructions when plane has arrived");
+				// this.SetFormValue('return_booking_instructions', "1. Pax- Text driver when landing, 2. Driver- Text pax with pickup instructions when plane has arrived");
 				console.log("setting value of pickup flight mandatory")
 				this.BookingForm.get('pickup_flight').setValidators([Validators.required]);
 				this.BookingForm.get('pickup_flight').updateValueAndValidity();

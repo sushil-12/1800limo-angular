@@ -7,7 +7,7 @@
 				<h2 class="headinginfo">See All booking on all Accounts </h2>
 			</div>
 			<div class="col-md-5 d-flex justify-content-end" style="gap: 10px;"
-				*ngIf="currentUser?.created_by_role == 'subscriber' && !isCancelled ">
+				*ngIf="(currentUser?.created_by_role == 'subscriber' && currentUser?.roleName == 'admin') && !isCancelled ">
 				<button class="custom-filled-button green-button invite-agent-button" data-toggle="modal"
 					data-target="#cancelModal">
 					Cancel Subscription
@@ -16,7 +16,7 @@
 		</div>
 		<div class="containeredd mt-1 ">
 			<h3 class="addveh_top d-md-flex justify-content-between align-items-center mb-0 mt-2"
-				*ngIf="currentUser?.created_by_role == 'subscriber' && stripeErroMsg">
+				*ngIf="(currentUser?.created_by_role == 'subscriber' && currentUser?.roleName == 'admin') && stripeErroMsg">
 				<label class="alert alert-danger"
 					style="padding :0.35rem 0.85rem; color: #000 !important; font-weight: 700 !important;font-size: 18px;">
 					NOTE: {{stripeErroMsg}}
@@ -1929,7 +1929,7 @@
 							</div>
 						</div>
 						<div class="mx-2" style="font-size: 18px;"
-							*ngIf="currentUser?.created_by_role != 'subscriber' ">
+							*ngIf="bookingPreview?.share_array?.adminShare != '0' ">
 							<div class="row m-0">
 								<div class="col-md-4 key d-flex align-items-center">
 									<span class="font-weight-bolder" style="color: #1e7500">

@@ -29,7 +29,7 @@ export class VehicleDetailsComponent implements OnInit {
 	public vehicles: any;
 	public vehicleToDelete: number;
 	public affiliateId: any;
-	currentUser: any;
+	currentUser: any = JSON.parse(localStorage.getItem("currentUser"));
 	affiliateType: string;
 	public enablePayButton: boolean = false;
 

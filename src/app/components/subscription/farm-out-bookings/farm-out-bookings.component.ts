@@ -18,13 +18,14 @@ import { MatSelect } from "@angular/material/select";
 import { DatePickerComponent } from "../../shared/date-picker/date-picker.component";
 import { MapsAPILoader } from "@agm/core";
 
+
 @Component({
-	selector: "app-daily-bookings",
-	templateUrl: "./daily-bookings.component.html",
-	styleUrls: ["./daily-bookings.component.scss"],
+  selector: 'app-farm-out-bookings',
+  templateUrl: './farm-out-bookings.component.html',
+  styleUrls: ['./farm-out-bookings.component.scss']
 })
-export class DailyBookingsComponent implements OnInit {
-	exampleHeader = DatePickerComponent;
+export class FarmOutBookingsComponent implements OnInit {
+  exampleHeader = DatePickerComponent;
 	@ViewChild("inputmsg", { static: false }) message: ElementRef;
 	@ViewChild("select") select: MatSelect;
 	@ViewChild("sendEmailModalFocus") sendEmailModalFocus: any;
@@ -99,22 +100,22 @@ export class DailyBookingsComponent implements OnInit {
 		// const localeDateString = date.toLocaleDateString(undefined, options).
 		// replace(/(\d+)\/(\d+)\/(\d+)/,'$3-$1-$2');
 		// Set Search Filters According to cookies or the intial state
-		this.startDate = localStorage.getItem("admin_startDate")
-			? localStorage.getItem("admin_startDate")
+		this.startDate = localStorage.getItem("admin_startDate_farmout")
+			? localStorage.getItem("admin_startDate_farmout")
 			: moment(timestamp).format("YYYY-MM-DD");
 
 		// this.startDate = moment(timestamp).format("YYYY-MM-DD");
 
 		date.setDate(date.getDate() + 7);
 		timestamp = date.getTime();
-		this.endDate = localStorage.getItem("admin_endDate")
-			? localStorage.getItem("admin_endDate")
+		this.endDate = localStorage.getItem("admin_endDate_farmout")
+			? localStorage.getItem("admin_endDate_farmout")
 			: moment(timestamp).format("YYYY-MM-DD");
 
 		// this.endDate = moment(timestamp).format("YYYY-MM-DD");
 
-		this.searchText = localStorage.getItem("DBSearch")
-			? localStorage.getItem("DBSearch")
+		this.searchText = localStorage.getItem("DBSearch_farmout")
+			? localStorage.getItem("DBSearch_farmout")
 			: "";
 		console.log(
 			"usedatefilter---->>>>>>>",
@@ -315,10 +316,10 @@ export class DailyBookingsComponent implements OnInit {
 		date.setDate(date.getDate() + 7);
 		timestamp = date.getTime();
 		this.endDate = moment(timestamp).format("YYYY-MM-DD");
-		localStorage.removeItem("admin_startDate");
-		localStorage.removeItem("admin_endDate");
+		localStorage.removeItem("admin_startDate_farmout");
+		localStorage.removeItem("admin_endDate_farmout");
 		// this.adminService.deleteCookie('search')
-		localStorage.removeItem("DBSearch");
+		localStorage.removeItem("DBSearch_farmout");
 		localStorage.removeItem("useDateFilter");
 		this.useDateFilter = false;
 		// this.adminService.deleteCookie('filtertype')
@@ -568,7 +569,7 @@ export class DailyBookingsComponent implements OnInit {
 		this.noError = false;
 		// Load Our bookings using API
 
-		if (this.currentUser.created_by_role == 'admin') {
+		
 			this.adminService
 				.loadBookings(
 					pageUrl,
@@ -606,46 +607,6 @@ export class DailyBookingsComponent implements OnInit {
 					this.subModules = localStorage.getItem("sub_modules") || "";
 					this.spinner.hide();
 				});
-		}
-		else {
-			this.adminService
-				.loadFarmInBookings(
-					pageUrl,
-					start_date,
-					end_date,
-					this.useDateFilter,
-					search_value ?? "",
-					this.orderBy
-				)
-				.then((result: any) => {
-					if (result?.data?.data == 0) {
-						this.noError = true;
-					}
-					let date = new Date();
-					let timestamp = date.getTime();
-					date.setDate(date.getDate() + 7);
-					timestamp = date.getTime();
-					this.bookingsRes = result;
-					this.bookings = this.bookingsRes?.data?.data;
-					if (!this.useDateFilter && !this.searchText) {
-						this.endDate = this.bookings?.length > 0 ? this.bookings[this.bookings?.length - 1]?.pickup_date : moment(timestamp).format("YYYY-MM-DD")
-					}
-					this.totalRecords = this.bookingsRes.data.total;
-					this.firstPage = 1;
-					this.lastPage = this.bookingsRes.data.last_page;
-					this.totalPage = this.bookingsRes.data.last_page;
-					this.currentPage = this.bookingsRes.data.current_page;
-					this.from = this.bookingsRes.data.from;
-					this.to = this.bookingsRes.data.to;
-					this.path = this.bookingsRes.data.path;
-					this.firstPageUrl = this.bookingsRes.data.first_page_url;
-					this.lastPageUrl = this.bookingsRes.data.last_page_url;
-					this.prevPageUrl = this.bookingsRes.data.prev_page_url;
-					this.nextPageUrl = this.bookingsRes.data.next_page_url;
-					this.subModules = localStorage.getItem("sub_modules") || "";
-					this.spinner.hide();
-				});
-		}
 
 
 	}
@@ -1056,7 +1017,7 @@ export class DailyBookingsComponent implements OnInit {
 		clearTimeout(this.timer);
 		this.timer = setTimeout(() => {
 			// this.saveCookie("search", this.searchText);
-			localStorage.setItem("DBSearch", this.searchText);
+			localStorage.setItem("DBSearch_farmout", this.searchText);
 			this.loadBookings(null, this.startDate, this.endDate, search_value);
 		}, 700);
 	}
@@ -1362,3 +1323,4 @@ export class DailyBookingsComponent implements OnInit {
 
 
 }
+

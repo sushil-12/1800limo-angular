@@ -96,6 +96,7 @@ import { EditVehicleSubscriberComponent } from '../subscription/edit-vehicle-sub
 import { SubscribersListComponent } from './subscribers-list/subscribers-list.component';
 import { DriverDetailsComponent } from '../subscription/driver-details/driver-details.component';
 import { AddDriverSubscriberComponent } from '../subscription/add-driver-subscriber/add-driver-subscriber.component';
+import { FarmOutBookingsComponent } from '../subscription/farm-out-bookings/farm-out-bookings.component';
 
 
 const routes: Routes = [
@@ -621,6 +622,11 @@ const routes: Routes = [
 		path: 'subscribers-list',
 		canActivate: [AdminGuardGuard],
 		component: SubscribersListComponent
+	},
+	{
+		path: 'farm-out-bookings',
+		canActivate: [AdminGuardGuard],
+		component: FarmOutBookingsComponent
 	},
 ];
 
