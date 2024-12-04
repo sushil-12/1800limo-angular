@@ -7,8 +7,9 @@
 				<h2 class="headinginfo">{{company_name | titlecase}} Bookings</h2>
 			</div>
 			<div class="col-md-5 add-member-div" *ngIf="currentUser?.roleName == 'driver' ">
-				<button class="custom-btn btn-add-other-memeber" style="margin: 0 !important;"
-					(click)="addSubAffiliate()" style="color: black !important;">
+				
+				<button class="custom-btn btn-add-other-memeber" (click)="addSubAffiliate()"
+					style="color: black !important;">
 					<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-plus-circle"
 						viewBox="0 0 16 16">
 						<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
@@ -27,22 +28,24 @@
 		<div class="containeredd mt-1 ">
 			<div class="row my-2 align-items-center">
 				<!-- Start-Date -->
-				<div class="col-sm-4 col-md-4 my-2">
-					<mat-form-field appearance="outline" class="m-0 text-xl">
-						<mat-label>
-							Start Date <span class="asterisk"> * </span>
-						</mat-label>
-						<input matInput [setOutputDateFormat]="outputDateFormat" [matDatepicker]="picker1"
-							placeholder="Start Date" id="id_4" (dateChangeWithFormat)="changeDate('startDate', $event)"
-							(click)="picker1.open()" [value]="startDate" [max]="endDate" readonly />
-						<mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-						<mat-datepicker #picker1></mat-datepicker>
-					</mat-form-field>
+				<div class="horizontal-scroll-container mb-3">
+					<div class="col-6 col-md-4">
+						<mat-form-field appearance="outline" class="text-xl scroll-item">
+							<mat-label>
+								Start Date <span class="asterisk"> * </span>
+							</mat-label>
+							<input matInput [setOutputDateFormat]="outputDateFormat" [matDatepicker]="picker1"
+								placeholder="Start Date" id="id_4"
+								(dateChangeWithFormat)="changeDate('startDate', $event)" (click)="picker1.open()"
+								[value]="startDate" [max]="endDate" readonly />
+							<mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+							<mat-datepicker #picker1></mat-datepicker>
+						</mat-form-field>
 				</div>
 
 				<!-- End-Date -->
-				<div class="col-sm-4 col-md-4 my-2">
-					<mat-form-field appearance="outline" class="m-0">
+				<div class="col-6 col-md-4">
+					<mat-form-field appearance="outline" class="text-xl scroll-item">
 						<mat-label>
 							End Date <span class="asterisk"> * </span>
 						</mat-label>
@@ -52,45 +55,44 @@
 						<mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
 						<mat-datepicker #picker2></mat-datepicker>
 					</mat-form-field>
-				</div>
+			</div>
+		</div>
 
-				<!-- Search Button -->
-				<div class="align-btn d-flex justify-content-around">
-					<div class="col-sm-2 ml-n5">
-						<button class="custom-filled-button orange-button"
-							style="color:#fff;padding: 5px 12px !important;"
-							(click)="loadBookings(); saveCookie('affiliate_startDate', startDate); saveCookie('affiliate_endDate', endDate);saveCookie('affiliate_search',searchText)">
-							Search
-						</button>
-					</div>
-					<div class="col-sm-2">
-						<button class="custom-filled-back-button"
-							style="white-space: nowrap;color:#fff;padding: 5px 12px !important;  background-color: #000 !important;"
-							(click)=" reset();loadBookings()">
-							Reset
-						</button>
-					</div>
+		<!-- Search Button -->
+		<div class="align-btn d-flex justify-content-around" style="margin-top: 15px !important;">
+			<div class="col-sm-2" style="margin-left: -3.8rem !important;">
+				<button class="custom-filled-button orange-button" style="color:#fff;padding: 5px 12px !important;"
+					(click)="loadBookings(); saveCookie('affiliate_startDate', startDate); saveCookie('affiliate_endDate', endDate);saveCookie('affiliate_search',searchText)">
+					Search
+				</button>
+			</div>
+			<div class="col-sm-2">
+				<button class="custom-filled-back-button"
+					style="white-space: nowrap;color:#fff;padding: 5px 12px !important;  background-color: #000 !important;"
+					(click)=" reset();loadBookings()">
+					Reset
+				</button>
+			</div>
+		</div>
+		</div>
+		<div class="row my-2 mb-3">
+			<div class="col-md-12">
+				<div id="search-field-my-booking">
+					<mat-form-field appearance="outline" class="m-0">
+						<input matInput type="text" (keypress)="handleKeypressEvents()" (focus)="$event.target.select()"
+							(keyup)="searchInBookings($event.target.value)" [value]="searchText"
+							placeholder="Search by booking number, status, name, cell phone, vehicle type" id="keyword"
+							autofocus>
+					</mat-form-field>
 				</div>
 			</div>
-			<div class="row my-2 mb-3">
-				<div class="col-md-12">
-					<div id="search-field-my-booking">
-						<mat-form-field appearance="outline" class="m-0">
-							<input matInput type="text" (keypress)="handleKeypressEvents()"
-								(focus)="$event.target.select()" (keyup)="searchInBookings($event.target.value)"
-								[value]="searchText"
-								placeholder="Search by booking number, status, name, cell phone, vehicle type"
-								id="keyword" autofocus>
-						</mat-form-field>
-					</div>
-				</div>
-			</div>
-			<div>
-				<p><mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">
-						{{useDateFilter ? 'Uncheck to see current and future bookings' :
-						'Check to see bookings for 7 days or based upon dates and search by any term.' }}
-					</mat-checkbox></p>
-			</div>
+		</div>
+		<div>
+			<p><mat-checkbox (change)="handleChangeCheckbox($event.checked)" [checked]="useDateFilter">
+					{{useDateFilter ? 'Uncheck to see current and future bookings' :
+					'Check to see bookings for 7 days or based upon dates and search by any term.' }}
+				</mat-checkbox></p>
+		</div>
 		</div>
 		<div class="containeredd driverside_table">
 			<div class="row">
@@ -900,11 +902,13 @@
 								</span>
 							</div>
 							<div class="col-md-8 value">
-								<span class="font-weight-bolder preview-output-feild" style="cursor: pointer;color: #ff0000 !important;"
+								<span class="font-weight-bolder preview-output-feild"
+									style="cursor: pointer;color: #ff0000 !important;"
 									(click)="searchOnGoogle(bookingPreview?.pickup_airline_name + ' ' + bookingPreview?.pickup_flight)">
 									{{ textFormatter(bookingPreview?.pickup_airline_name) }}
 								</span>&nbsp;
-								<span class="font-weight-bolder preview-output-feild" style="cursor: pointer;color: #ff0000 !important;"
+								<span class="font-weight-bolder preview-output-feild"
+									style="cursor: pointer;color: #ff0000 !important;"
 									(click)="searchOnGoogle(bookingPreview?.pickup_airline_name + ' ' + bookingPreview?.pickup_flight)">
 									#{{ textFormatter(bookingPreview?.pickup_flight) }}
 								</span>&nbsp;<span

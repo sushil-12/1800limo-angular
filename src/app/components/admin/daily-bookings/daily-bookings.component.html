@@ -24,46 +24,49 @@
 			</h3>
 			<div class="row my-2 align-items-center">
 				<!-- Start-Date -->
-				<div class="col-sm-4 col-md-4 my-2">
-					<mat-form-field appearance="outline" class="m-0 text-xl">
-						<mat-label>
-							Start Date <span class="asterisk"> * </span>
-						</mat-label>
-						<input matInput [setOutputDateFormat]="outputDateFormat" [matDatepicker]="picker1"
-							placeholder="Start Date" id="id_4" (dateChangeWithFormat)="changeDate('startDate', $event)"
-							(click)="picker1.open()" [value]="startDate" [max]="endDate" readonly />
-						<mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-						<mat-datepicker #picker1 [calendarHeaderComponent]="exampleHeader"></mat-datepicker>
-					</mat-form-field>
-					<!-- <mat-form-field appearance="outline">
+				<div class="horizontal-scroll-container">
+					<div class="col-6 col-md-4">
+						<mat-form-field appearance="outline" class="text-xl scroll-item">
+							<mat-label>
+								Start Date <span class="asterisk"> * </span>
+							</mat-label>
+							<input matInput [setOutputDateFormat]="outputDateFormat" [matDatepicker]="picker1"
+								placeholder="Start Date" id="id_4"
+								(dateChangeWithFormat)="changeDate('startDate', $event)" (click)="picker1.open()"
+								[value]="startDate" [max]="endDate" readonly />
+							<mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+							<mat-datepicker #picker1 [calendarHeaderComponent]="exampleHeader"></mat-datepicker>
+						</mat-form-field>
+						<!-- <mat-form-field appearance="outline">
 							<mat-label>Start date <span class="asterisk"> * </span></mat-label>
 							<input matInput [matDatepicker]="picker3">
 							<mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
 							<mat-datepicker #picker3 [calendarHeaderComponent]="exampleHeader"></mat-datepicker>
 						  </mat-form-field> -->
-				</div>
+					</div>
 
-				<!-- End-Date -->
-				<div class="col-sm-4 col-md-4 my-2">
-					<mat-form-field appearance="outline" class="m-0 text-xl">
-						<mat-label>
-							End Date <span class="asterisk"> * </span>
-						</mat-label>
-						<input matInput [setOutputDateFormat]="outputDateFormat" [matDatepicker]="picker2"
-							placeholder="End Date" id="id_5" (dateChangeWithFormat)="changeDate('endDate',$event)"
-							(click)="picker2.open()" [value]="endDate" [min]="startDate" readonly />
-						<mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-						<mat-datepicker #picker2 [calendarHeaderComponent]="exampleHeader"></mat-datepicker>
-					</mat-form-field>
-					<!-- <mat-form-field appearance="outline">
+					<!-- End-Date -->
+					<div class="col-6 col-md-4">
+						<mat-form-field appearance="outline" class="text-xl scroll-item">
+							<mat-label>
+								End Date <span class="asterisk"> * </span>
+							</mat-label>
+							<input matInput [setOutputDateFormat]="outputDateFormat" [matDatepicker]="picker2"
+								placeholder="End Date" id="id_5" (dateChangeWithFormat)="changeDate('endDate',$event)"
+								(click)="picker2.open()" [value]="endDate" [min]="startDate" readonly />
+							<mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+							<mat-datepicker #picker2 [calendarHeaderComponent]="exampleHeader"></mat-datepicker>
+						</mat-form-field>
+						<!-- <mat-form-field appearance="outline">
 							<mat-label>End date <span class="asterisk"> * </span></mat-label>
 							<input matInput [matDatepicker]="picker4">
 							<mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
 							<mat-datepicker #picker4 [calendarHeaderComponent]="exampleHeader"></mat-datepicker>
 						  </mat-form-field> -->
+					</div>
 				</div>
 				<!-- Search Button -->
-				<div class="align-btn d-flex justify-content-around">
+				<div class="align-btn d-flex justify-content-around" style="margin-top: 15px;">
 					<div class="col-sm-2 ml-n5">
 						<button class="custom-filled-button orange-button"
 							style="color:#fff;padding: 5px 12px !important;"
@@ -1925,7 +1928,8 @@
 								</div>
 							</div>
 						</div>
-						<div class="mx-2" style="font-size: 18px;" *ngIf="currentUser?.created_by_role != 'subscriber' ">
+						<div class="mx-2" style="font-size: 18px;"
+							*ngIf="currentUser?.created_by_role != 'subscriber' ">
 							<div class="row m-0">
 								<div class="col-md-4 key d-flex align-items-center">
 									<span class="font-weight-bolder" style="color: #1e7500">
@@ -1941,7 +1945,8 @@
 								</div>
 							</div>
 						</div>
-						<div class="mx-2" style="font-size: 18px;" *ngIf="bookingPreview?.share_array?.travelAgentShare">
+						<div class="mx-2" style="font-size: 18px;"
+							*ngIf="bookingPreview?.share_array?.travelAgentShare">
 							<div class="row m-0">
 								<div class="col-md-4 key d-flex align-items-center">
 									<span style="font-weight: 550 !important;">
