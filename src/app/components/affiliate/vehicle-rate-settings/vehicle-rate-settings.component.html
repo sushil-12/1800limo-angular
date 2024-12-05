@@ -98,8 +98,40 @@
 				<mat-form-field class="mat-form-field-rates m-0" appearance="outline">
 					<mat-label>{{ currency_symbol }} per mile<span class="asterisk">*</span></mat-label>
 					<span matPrefix>{{ currency_symbol }} &nbsp;</span>
-					<input matInput placeholder="Milage Rate" type="number" formControlName="milage_rate" tabindex="1"
-						value="0" (focus)="$event.target.select()" (change)="updateRateRangeObject()" />
+					<mat-select formControlName="milage_rate" tabindex="1"
+						(onSelectionChange)="updateRateRangeObject()">
+						<mat-option value="">Choose Per Mile</mat-option>
+						<mat-option [value]="2.50">2.50</mat-option>
+						<mat-option [value]="2.75">2.75</mat-option>
+						<mat-option [value]="3">3</mat-option>
+						<mat-option [value]="3.25">3.25</mat-option>
+						<mat-option [value]="3.40">3.40</mat-option>
+						<mat-option [value]="3.60">3.60</mat-option>
+						<mat-option [value]="3.75">3.75</mat-option>
+						<mat-option [value]="4">4</mat-option>
+						<mat-option [value]="4.25">4.25</mat-option>
+						<mat-option [value]="4.50">4.50</mat-option>
+						<mat-option [value]="4.75">4.75</mat-option>
+						<mat-option [value]="5">5</mat-option>
+						<mat-option [value]="5.25">5.25</mat-option>
+						<mat-option [value]="5.50">5.50</mat-option>
+						<mat-option [value]="5.75">5.75</mat-option>
+						<mat-option [value]="6">6</mat-option>
+						<mat-option [value]="6.25">6.25</mat-option>
+						<mat-option [value]="6.75">6.75</mat-option>
+						<mat-option [value]="7">7</mat-option>
+						<mat-option [value]="7.5">7.5</mat-option>
+						<mat-option [value]="8">8</mat-option>
+						<mat-option [value]="9">9</mat-option>
+						<mat-option [value]="10">10</mat-option>
+						<mat-option [value]="11">11</mat-option>
+						<mat-option [value]="12">12</mat-option>
+						<mat-option [value]="13">13</mat-option>
+						<mat-option [value]="14">14</mat-option>
+						<mat-option [value]="15">15</mat-option>
+					</mat-select>
+					<!-- <input matInput placeholder="Milage Rate" type="number" formControlName="milage_rate" tabindex="1"
+						value="0" (focus)="$event.target.select()" (change)="updateRateRangeObject()" /> -->
 				</mat-form-field>
 				<div *ngIf="form.milage_rate.errors && (form.milage_rate.touched || form.milage_rate.errors)"
 					class="text-danger margin-bottom-thin my-mat-hint">
@@ -134,8 +166,40 @@
 							<span class="asterisk">*</span>
 						</mat-label>
 						<span matPrefix>{{ currency_symbol }} &nbsp;</span>
-						<input matInput placeholder="Kilometer Rate" type="number" formControlName="kilometer_rate"
-							tabindex="1" (focus)="$event.target.select()" (change)="updateRateRangeObject()" />
+						<mat-select formControlName="kilometer_rate" tabindex="1"
+							(onSelectionChange)="updateRateRangeObject()">
+							<mat-option value="">Choose Per Mile</mat-option>
+							<mat-option [value]="2.50">2.50</mat-option>
+							<mat-option [value]="2.75">2.75</mat-option>
+							<mat-option [value]="3">3</mat-option>
+							<mat-option [value]="3.25">3.25</mat-option>
+							<mat-option [value]="3.40">3.40</mat-option>
+							<mat-option [value]="3.60">3.60</mat-option>
+							<mat-option [value]="3.75">3.75</mat-option>
+							<mat-option [value]="4">4</mat-option>
+							<mat-option [value]="4.25">4.25</mat-option>
+							<mat-option [value]="4.50">4.50</mat-option>
+							<mat-option [value]="4.75">4.75</mat-option>
+							<mat-option [value]="5">5</mat-option>
+							<mat-option [value]="5.25">5.25</mat-option>
+							<mat-option [value]="5.50">5.50</mat-option>
+							<mat-option [value]="5.75">5.75</mat-option>
+							<mat-option [value]="6">6</mat-option>
+							<mat-option [value]="6.25">6.25</mat-option>
+							<mat-option [value]="6.75">6.75</mat-option>
+							<mat-option [value]="7">7</mat-option>
+							<mat-option [value]="7.5">7.5</mat-option>
+							<mat-option [value]="8">8</mat-option>
+							<mat-option [value]="9">9</mat-option>
+							<mat-option [value]="10">10</mat-option>
+							<mat-option [value]="11">11</mat-option>
+							<mat-option [value]="12">12</mat-option>
+							<mat-option [value]="13">13</mat-option>
+							<mat-option [value]="14">14</mat-option>
+							<mat-option [value]="15">15</mat-option>
+						</mat-select>
+						<!-- <input matInput placeholder="Kilometer Rate" type="number" formControlName="kilometer_rate"
+							tabindex="1" (focus)="$event.target.select()" (change)="updateRateRangeObject()" /> -->
 					</mat-form-field>
 					<div *ngIf="form.kilometer_rate.errors && (form.kilometer_rate.touched || form.kilometer_rate.errors)"
 						class="text-danger margin-bottom-thin my-mat-hint">
@@ -173,10 +237,16 @@
 						<span class="asterisk">*</span>
 					</mat-label>
 					<span matPrefix>{{ currency_symbol }} &nbsp;</span>
-					<input type="number" matInput placeholder="Minimum Airport Rate - Arrival"
+					<mat-select formControlName="minimum_airport_arrival_rate" tabindex="1"
+						(onSelectionChange)="updateRateRangeObject() ; cloneValue('minimum_airport_arrival_rate', 'minimum_airport_departure_rate') ;cloneValue('minimum_airport_arrival_rate', 'minimum_city_rate');cloneValue('minimum_airport_arrival_rate', 'minimum_cruise_port_arrival_rate');cloneValue('minimum_airport_arrival_rate', 'minimum_cruise_port_departure_rate')">
+						<mat-option *ngFor=" let value of ratesArrayValues" [value]="value">
+							{{ value }}
+						</mat-option>
+					</mat-select>
+					<!-- <input type="number" matInput placeholder="Minimum Airport Rate - Arrival"
 						formControlName="minimum_airport_arrival_rate" (focus)="$event.target.select()"
 						(change)="updateRateRangeObject(); cloneValue('minimum_airport_arrival_rate', 'minimum_airport_departure_rate')"
-						tabindex="1" (focus)="$event.target.select()">
+						tabindex="1" (focus)="$event.target.select()"> -->
 				</mat-form-field>
 				<div *ngIf="
 						(is_form_submitted &&
@@ -210,9 +280,15 @@
 						<span class="asterisk">*</span>
 					</mat-label>
 					<span matPrefix>{{ currency_symbol }} &nbsp;</span>
-					<input type="number" matInput placeholder="Minimum Airport Rate - Departure"
+					<mat-select formControlName="minimum_airport_departure_rate" tabindex="1"
+						(onSelectionChange)="updateRateRangeObject()">
+						<mat-option *ngFor=" let value of ratesArrayValues" [value]="value">
+							{{ value }}
+						</mat-option>
+					</mat-select>
+					<!-- <input type="number" matInput placeholder="Minimum Airport Rate - Departure"
 						(focus)="$event.target.select()" formControlName="minimum_airport_departure_rate" tabindex="1"
-						(change)="updateRateRangeObject()" />
+						(change)="updateRateRangeObject()" /> -->
 				</mat-form-field>
 				<div *ngIf="
 						(is_form_submitted &&
@@ -247,9 +323,15 @@
 						Minimum City to Intercity rate <span class="asterisk">*</span>
 					</mat-label>
 					<span matPrefix>{{ currency_symbol }} &nbsp;</span>
-					<input type="number" matInput placeholder="Minimum City to Intercity rate"
+					<mat-select formControlName="minimum_city_rate" tabindex="1"
+						(onSelectionChange)="updateRateRangeObject()">
+						<mat-option *ngFor=" let value of ratesArrayValues" [value]="value">
+							{{ value }}
+						</mat-option>
+					</mat-select>
+					<!-- <input type="number" matInput placeholder="Minimum City to Intercity rate"
 						formControlName="minimum_city_rate" tabindex="1" (change)="updateRateRangeObject()"
-						autocomplete="off" (focus)="$event.target.select()" />
+						autocomplete="off" (focus)="$event.target.select()" /> -->
 				</mat-form-field>
 				<div *ngIf="
 						(is_form_submitted && form.minimum_city_rate.errors) ||
@@ -279,9 +361,15 @@
 						<!-- <span class="asterisk">*</span> -->
 					</mat-label>
 					<span matPrefix> {{ currency_symbol }} &nbsp; </span>
-					<input type="number" matInput placeholder="Minimum Cruise Port Rate - Arrival"
+					<mat-select formControlName="minimum_cruise_port_arrival_rate" tabindex="1"
+						(onSelectionChange)="updateRateRangeObject()">
+						<mat-option *ngFor=" let value of ratesArrayValues" [value]="value">
+							{{ value }}
+						</mat-option>
+					</mat-select>
+					<!-- <input type="number" matInput placeholder="Minimum Cruise Port Rate - Arrival"
 						(focus)="$event.target.select()" formControlName="minimum_cruise_port_arrival_rate" tabindex="1"
-						(change)="updateRateRangeObject()" />
+						(change)="updateRateRangeObject()" /> -->
 				</mat-form-field>
 				<div *ngIf="
 						(is_form_submitted &&
@@ -318,9 +406,15 @@
 						<!-- <span class="asterisk">*</span> -->
 					</mat-label>
 					<span matPrefix>{{ currency_symbol }} &nbsp;</span>
-					<input type="number" matInput placeholder="Minimum Cruise Port Rate - Departure"
+					<mat-select formControlName="minimum_cruise_port_departure_rate" tabindex="1"
+						(onSelectionChange)="updateRateRangeObject()">
+						<mat-option *ngFor=" let value of ratesArrayValues" [value]="value">
+							{{ value }}
+						</mat-option>
+					</mat-select>
+					<!-- <input type="number" matInput placeholder="Minimum Cruise Port Rate - Departure"
 						(focus)="$event.target.select()" formControlName="minimum_cruise_port_departure_rate"
-						tabindex="1" (change)="updateRateRangeObject()" />
+						tabindex="1" (change)="updateRateRangeObject()" /> -->
 				</mat-form-field>
 				<div *ngIf="
 						(is_form_submitted &&
@@ -475,9 +569,15 @@
 				<mat-form-field class="mat-form-field-rates" appearance="outline">
 					<mat-label> Shared Ride Rate - Per Person </mat-label>
 					<span matPrefix>{{ currency_symbol }} &nbsp;</span>
-					<input type="number" matInput placeholder="Shared Ride Rate - Per Person"
+					<mat-select formControlName="per_person_group_ride_rate" tabindex="1"
+						(onSelectionChange)="updateRateRangeObject()">
+						<mat-option *ngFor=" let value of ratesArrayValues" [value]="value">
+							{{ value }}
+						</mat-option>
+					</mat-select>
+					<!-- <input type="number" matInput placeholder="Shared Ride Rate - Per Person"
 						formControlName="per_person_group_ride_rate" (focus)="$event.target.select()"
-						(change)="updateRateRangeObject()" tabindex="1" />
+						(change)="updateRateRangeObject()" tabindex="1" /> -->
 				</mat-form-field>
 				<div *ngIf="
 						(is_form_submitted &&
@@ -529,9 +629,15 @@
 				<mat-form-field class="mat-form-field-rates" appearance="outline">
 					<mat-label> Early AM / Late PM Surge Rate </mat-label>
 					<span matPrefix>{{ currency_symbol }} &nbsp;</span>
-					<input type="number" matInput placeholder="Early AM / Late PM Surge Rate"
+					<mat-select formControlName="early_late_charges" tabindex="1"
+						(onSelectionChange)="updateRateRangeObject()">
+						<mat-option *ngFor=" let value of ratesArrayValues" [value]="value">
+							{{ value }}
+						</mat-option>
+					</mat-select>
+					<!-- <input type="number" matInput placeholder="Early AM / Late PM Surge Rate"
 						formControlName="early_late_charges" (focus)="$event.target.select()"
-						(change)="updateRateRangeObject()" tabindex="1" />
+						(change)="updateRateRangeObject()" tabindex="1" /> -->
 				</mat-form-field>
 				<div *ngIf="
 						(is_form_submitted &&
@@ -548,8 +654,14 @@
 				<mat-form-field class="mat-form-field-rates" appearance="outline">
 					<mat-label> Holiday Surge Rate </mat-label>
 					<span matPrefix>{{ currency_symbol }} &nbsp;</span>
-					<input type="number" matInput placeholder="Holiday Surge Rate" formControlName="holiday_charges"
-						(focus)="$event.target.select()" (change)="updateRateRangeObject()" tabindex="1" />
+					<mat-select formControlName="holiday_charges" tabindex="1"
+						(onSelectionChange)="updateRateRangeObject()">
+						<mat-option *ngFor=" let value of ratesArrayValues" [value]="value">
+							{{ value }}
+						</mat-option>
+					</mat-select>
+					<!-- <input type="number" matInput placeholder="Holiday Surge Rate" formControlName="holiday_charges"
+						(focus)="$event.target.select()" (change)="updateRateRangeObject()" tabindex="1" /> -->
 				</mat-form-field>
 				<div *ngIf="
 						(is_form_submitted &&
@@ -566,9 +678,15 @@
 				<mat-form-field class="mat-form-field-rates" appearance="outline">
 					<mat-label> Friday/Saturday Night Surge Rate </mat-label>
 					<span matPrefix>{{ currency_symbol }} &nbsp;</span>
-					<input type="number" matInput placeholder="Friday/Saturday Night Surge Rate"
+					<mat-select formControlName="friday_saturday_charges" tabindex="1"
+						(onSelectionChange)="updateRateRangeObject()">
+						<mat-option *ngFor=" let value of ratesArrayValues" [value]="value">
+							{{ value }}
+						</mat-option>
+					</mat-select>
+					<!-- <input type="number" matInput placeholder="Friday/Saturday Night Surge Rate"
 						formControlName="friday_saturday_charges" (focus)="$event.target.select()"
-						(change)="updateRateRangeObject()" tabindex="1" />
+						(change)="updateRateRangeObject()" tabindex="1" /> -->
 				</mat-form-field>
 				<div *ngIf="
 						(is_form_submitted &&
@@ -585,9 +703,15 @@
 				<mat-form-field class="mat-form-field-rates" appearance="outline">
 					<mat-label>Extra stop - same town</mat-label>
 					<span matPrefix>{{ currency_symbol }} &nbsp;</span>
-					<input matInput type="number" placeholder="Shared Ride Rate - Per Person"
+					<mat-select formControlName="in_town_extra_stop" tabindex="1"
+						(onSelectionChange)="updateRateRangeObject()">
+						<mat-option *ngFor=" let value of ratesArrayValues" [value]="value">
+							{{ value }}
+						</mat-option>
+					</mat-select>
+					<!-- <input matInput type="number" placeholder="Shared Ride Rate - Per Person"
 						(change)="updateRateRangeObject()" formControlName="in_town_extra_stop" tabindex="1"
-						(focus)="$event.target.select()">
+						(focus)="$event.target.select()"> -->
 				</mat-form-field>
 				<div *ngIf="is_form_submitted && form.in_town_extra_stop.errors || form.in_town_extra_stop.touched && form.in_town_extra_stop.errors"
 					class="text-danger margin-bottom-thin my-mat-hint">
@@ -598,9 +722,15 @@
 				<mat-form-field class="mat-form-field-rates" appearance="outline">
 					<mat-label>Extra stop - different town</mat-label>
 					<span matPrefix>{{ currency_symbol }} &nbsp;</span>
-					<input matInput type="number" placeholder="Shared Ride Rate - Per Person"
+					<mat-select formControlName="outside_town_extra_stop" tabindex="1"
+						(onSelectionChange)="updateRateRangeObject()">
+						<mat-option *ngFor=" let value of ratesArrayValues" [value]="value">
+							{{ value }}
+						</mat-option>
+					</mat-select>
+					<!-- <input matInput type="number" placeholder="Shared Ride Rate - Per Person"
 						(change)="updateRateRangeObject()" formControlName="outside_town_extra_stop" tabindex="1"
-						(focus)="$event.target.select()">
+						(focus)="$event.target.select()"> -->
 				</mat-form-field>
 				<div *ngIf="is_form_submitted && form.outside_town_extra_stop.errors || form.outside_town_extra_stop.touched && form.outside_town_extra_stop.errors"
 					class="text-danger margin-bottom-thin my-mat-hint">

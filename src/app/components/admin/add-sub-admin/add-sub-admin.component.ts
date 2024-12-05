@@ -190,7 +190,16 @@ export class AddSubAdminComponent implements OnInit {
 		this.spinner.show();
 		this.disableSubmitButton = true; //disable submit button
 
-		this.adminService.addSubAdmin(this.addSubAdminAccountForm.value)
+
+		const formData = this.addSubAdminAccountForm.value;
+		const payload = {
+			...formData,
+			user_id: JSON.parse(localStorage.getItem('currentUser'))?.id,
+		};
+
+		console.log("payload",payload)
+		
+		this.adminService.addSubAdmin(payload)
 			.pipe(
 				catchError(err => {
 					this.spinner.hide();//hide spinner

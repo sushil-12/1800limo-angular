@@ -446,30 +446,26 @@ export class FarmOutBookingsComponent implements OnInit {
 	}
 
 	submit(message, format) {
-		console.log("format", format)
+		console.log('format', this.passengerDetails)
 		if (this.passengerDetails.selection_button == "Passenger") {
 			this.sendInformation = format
-				? this.passengerDetails.passenger_cell_isd +
-				this.passengerDetails.passenger_cell
+				? this.passengerDetails.pax_tel
 				: this.passengerDetails.passenger_email;
 			this.reciptentName = this.passengerDetails.passenger_name;
-		} else if (this.passengerDetails.selection_button == "Affiliate") {
+		} else if (this.passengerDetails.selection_button == "Driver") {
+			console.log('driver')
 			this.sendInformation = format
-				? this.passengerDetails.affiliate_dispatch_isd +
-				this.passengerDetails.affiliate_dispatch_number
-				: this.passengerDetails.dispatchEmail;
-			this.reciptentName =
-				this.passengerDetails.driver_first_name +
-				this.passengerDetails.driver_last_name;
-		}
-		else {
+				? this.passengerDetails?.driver_cell_isd +
+				this.passengerDetails?.driver_cell_number
+				: this.passengerDetails?.driver_email;
+			this.reciptentName = this.passengerDetails?.driver_name;
+		} else {
 			this.sendInformation = format
-				? (this.passengerDetails.loose_affiliate_phone_isd ? this.passengerDetails.loose_affiliate_phone_isd : '+1') +
-				(this.passengerDetails.loose_affiliate_phone ? this.passengerDetails.loose_affiliate_phone : '8005466266')
-				: (this.passengerDetails.loose_affiliate_email ? this.passengerDetails.loose_affiliate_email : 'info@1800limo.com');
-			this.reciptentName = (this.passengerDetails.loose_affiliate_name ? this.passengerDetails.loose_affiliate_name : '1800Limo Chauffeurs');
+				? this.passengerDetails.loose_affiliate_phone_isd +
+				this.passengerDetails.loose_affiliate_phone
+				: this.passengerDetails.loose_affiliate_email;
+			this.reciptentName = this.passengerDetails.loose_affiliate_name;
 		}
-
 		let obj = {
 			bookingId: this.passengerDetails.booking_id,
 			reciptentName: this.reciptentName,
@@ -478,28 +474,26 @@ export class FarmOutBookingsComponent implements OnInit {
 			sendValue: this.sendInformation,
 			sendContent: message,
 		};
-		this.adminService
-			.adminNotification(obj)
+		console.log('submit modal values---->>', obj)
+		this.adminService.adminNotification(obj)
 			.pipe(
-				catchError((err) => {
-					return throwError(err);
+				catchError((err: any) => {
+					console.log('err------->>>>>>>', err)
+					return throwError(err)
 				})
-			)
-			.subscribe(({ message }: any) => {
+			).subscribe(({ message }: any) => {
 				this.notification_msg = message;
 				$("#notificationModal").modal("show");
-				console.log(message);
 				$("textarea").val("");
-			});
+			})
 		$("#closeModal").click(() => {
 			$("#notificationModal").modal("hide");
 		});
 		$("#closeModal1").click(() => {
 			$("#notificationModal").modal("hide");
 		});
-		$("#sendEmailModal").modal("hide");
-		this.message.nativeElement.value = "";
-		this.show = false;
+		this.message.nativeElement.value = ""
+		this.show = false
 	}
 
 	cancelSubscription() {

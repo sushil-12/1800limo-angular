@@ -30,6 +30,7 @@ export class VehicleRatesSubscriberComponent implements OnInit {
 	thumb_value: number = 0
 	duplicateVehicleId: any;
 	vehcileId: any;
+	public ratesArrayValues = [10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60]
 
 
 
@@ -244,10 +245,14 @@ export class VehicleRatesSubscriberComponent implements OnInit {
 			}
 		);
 
-		this.VehicleRateSettingsForm.get('airport_arrival_tax_per_us').valueChanges.subscribe(value => {
-			// this.SetFormValue('airport_departure_tax_per_us', value)
-			// this.SetFormValue('sea_port_tax_per_us', value)
-		})
+		this.VehicleRateSettingsForm.get('minimum_airport_departure_rate').valueChanges.subscribe(
+			value => {
+				this.VehicleRateSettingsForm.patchValue({ minimum_airport_arrival_rate: value });
+				this.VehicleRateSettingsForm.patchValue({ minimum_city_rate: value });
+				this.VehicleRateSettingsForm.patchValue({ minimum_cruise_port_arrival_rate: value });
+				this.VehicleRateSettingsForm.patchValue({ minimum_cruise_port_departure_rate: value });
+			}
+		);
 
 		// fetch previous vehicle rates on edit case
 		console.info('relative_vehicle_id', duplicateVehicleId);
@@ -356,10 +361,14 @@ export class VehicleRatesSubscriberComponent implements OnInit {
 			}
 		);
 
-		this.VehicleRateSettingsForm.get('airport_arrival_tax_per_us').valueChanges.subscribe(value => {
-			// this.SetFormValue('airport_departure_tax_per_us', value)
-			// this.SetFormValue('sea_port_tax_per_us', value)
-		})
+		this.VehicleRateSettingsForm.get('minimum_airport_departure_rate').valueChanges.subscribe(
+			value => {
+				this.VehicleRateSettingsForm.patchValue({ minimum_airport_arrival_rate: value });
+				this.VehicleRateSettingsForm.patchValue({ minimum_city_rate: value });
+				this.VehicleRateSettingsForm.patchValue({ minimum_cruise_port_arrival_rate: value });
+				this.VehicleRateSettingsForm.patchValue({ minimum_cruise_port_departure_rate: value });
+			}
+		);
 
 		// fetch previous vehicle rates on edit case
 		console.info('>>>>>>>>>>>>>>...........', current_selected_vehicle);
