@@ -571,7 +571,7 @@ export class FarmOutBookingsComponent implements OnInit {
 
 		
 			this.adminService
-				.loadBookings(
+				.loadFarmOutBookingSubscriber(
 					pageUrl,
 					start_date,
 					end_date,
