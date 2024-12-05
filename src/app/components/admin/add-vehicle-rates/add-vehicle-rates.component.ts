@@ -40,6 +40,7 @@ export class AddVehicleRatesComponent implements OnInit {
 	rate_range_object: any = {}
 	thumb_value: number = 0;
 	relativeVehicleId: any;
+	public ratesArrayValues = [10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60]
 
 
 	constructor(
@@ -132,6 +133,9 @@ export class AddVehicleRatesComponent implements OnInit {
 		this.addVehicleRatesForm.get('minimum_airport_departure_rate').valueChanges.subscribe(
 			value => {
 				this.addVehicleRatesForm.patchValue({ minimum_airport_arrival_rate: value });
+				this.addVehicleRatesForm.patchValue({ minimum_city_rate: value });
+				this.addVehicleRatesForm.patchValue({ minimum_cruise_port_arrival_rate: value });
+				this.addVehicleRatesForm.patchValue({ minimum_cruise_port_departure_rate: value });
 			}
 		);
 		this.addVehicleRatesForm.get('hourly_rate').valueChanges.subscribe(

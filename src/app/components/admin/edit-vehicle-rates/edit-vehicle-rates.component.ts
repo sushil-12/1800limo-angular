@@ -36,6 +36,7 @@ export class EditVehicleRatesComponent implements OnInit {
 	public submittedForm: boolean;
 	public disableSubmitButton: boolean = false;
 	rate_range_object: any = {}
+	public ratesArrayValues = [10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60]
 
 
 	public response: any;
@@ -57,6 +58,9 @@ export class EditVehicleRatesComponent implements OnInit {
 		this.addVehicleRatesForm.get('minimum_airport_departure_rate').valueChanges.subscribe(
 			value => {
 				this.addVehicleRatesForm.patchValue({ minimum_airport_arrival_rate: value });
+				this.addVehicleRatesForm.patchValue({ minimum_city_rate: value });
+				this.addVehicleRatesForm.patchValue({ minimum_cruise_port_arrival_rate: value });
+				this.addVehicleRatesForm.patchValue({ minimum_cruise_port_departure_rate: value });
 			}
 		);
 		this.addVehicleRatesForm.get('hourly_rate').valueChanges.subscribe(
@@ -163,7 +167,7 @@ export class EditVehicleRatesComponent implements OnInit {
 							id: this.response.data.id,
 							vehicle_id: this.response.data.vehicle_id,
 							hourly_rate: this.response.data.hourly_rate,
-							minimum_charter_hours:Number(this.response.data?.minimum_charter_hours),
+							minimum_charter_hours: Number(this.response.data?.minimum_charter_hours),
 							hourly_rate_after_five_hours: this.response.data.hourly_rate_after_five_hours,
 							hours_day_rate: this.response.data.hours_day_rate,
 							day_rate: this.response.data.day_rate,
@@ -226,7 +230,7 @@ export class EditVehicleRatesComponent implements OnInit {
 			vehicle_id: ['', [Validators.required, Validators.pattern("^[0-9]*$")]],
 			currency: ['$', Validators.required],
 			hourly_rate: ['', [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)]],
-			minimum_charter_hours:[2, [Validators.pattern(/^\d+(\.\d+)?$/)]],
+			minimum_charter_hours: [2, [Validators.pattern(/^\d+(\.\d+)?$/)]],
 			hourly_rate_after_five_hours: ['', [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)]],
 			hours_day_rate: [8, [Validators.pattern(/^\d+(\.\d+)?$/)]],
 			day_rate: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
