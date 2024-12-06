@@ -76,7 +76,8 @@ export class PaymentDetailsComponent implements OnInit {
     console.log(this.cardDetails.value, this.registeredUser, this.subscription_product_id);
     this.spinner.show()
 
-    if (this.currentUser.id) {
+    if (this.currentUser) {
+      console.log("in if logged in user")
       let dataToSend = {
         ...this.cardDetails.value,
       }
@@ -123,6 +124,7 @@ export class PaymentDetailsComponent implements OnInit {
     }
 
     else {
+      console.log("in if not logged in user",this.subscription_product_id)
       let dataToSend = {
         ...this.cardDetails.value,
         ...this.registeredUser,
