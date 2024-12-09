@@ -140,3 +140,18 @@
         /* 1 column on iPhone */
     }
 }
+
+.custom-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+    z-index: 1040; /* Below Bootstrap modal */
+    display: none; /* Hidden by default */
+}
+
+.custom-backdrop.show {
+    display: block; /* Visible when modal is open */
+}

@@ -65,3 +65,21 @@
         </div>
     </div>
 </div>
+
+<div class="custom-backdrop" [class.show]="isModalOpen"></div>
+<div class="modal fade" [class.show]="isModalOpen" [style.display]="isModalOpen ? 'block' : 'none'" id="subscriber199"
+    tabindex="-1" role="dialog" aria-labelledby="subscriber199" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body text-center">
+                <p class='text-danger font-weight-bolder text-2xl' style="font-size: 24px;">{{erroMsg}}</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="custom-btn savebutton"
+                    (click)="proceedSubs(planData?.data)">Proceed</button>
+                <button type="button" class="custom-btn resetbutton" data-dismiss="modal"
+                    (click)="closeModal()">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
