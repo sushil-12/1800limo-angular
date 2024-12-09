@@ -60,7 +60,9 @@ export class MyBookingsComponent implements OnInit {
 	shareArray: any;
 	rates_preview: any;
 	currencySymbol: any;
-	currentUser:any;
+	currentUser: any;
+	vehiclesRes: any;
+	numberOfVehicles: any;
 
 	constructor(
 		private affiliateService: AffiliateService,
@@ -106,6 +108,7 @@ export class MyBookingsComponent implements OnInit {
 		this.currencySymbol = this.stateManagementService.getCurrencySymbol();
 
 		this.loadBookings();
+		this.loadVehicles();
 
 		this.changeStatusForm = this.formBuilder.group({
 			reservation_id: ['', Validators.required],
@@ -215,6 +218,7 @@ export class MyBookingsComponent implements OnInit {
 		el.scrollIntoView({ behavior: 'smooth' });
 	}
 
+
 	loadBookings(pageUrl = null) {
 		$('.HeadingH1').css({ display: "none" })
 		/** spinner starts on init */
@@ -260,6 +264,15 @@ export class MyBookingsComponent implements OnInit {
 			});
 	}
 
+
+	loadVehicles() {
+		this.affiliateService.affiliateVehicleList(true).then(result => {
+			this.vehiclesRes = result;
+			this.numberOfVehicles = this.vehiclesRes?.data?.totalNumberOfVehicles;
+			localStorage.setItem("affiliateVehicles", this.numberOfVehicles)
+		});
+	}
+
 	FormatDate(date: string) {
 		return moment(date).format("ll");
 	}
@@ -275,12 +288,12 @@ export class MyBookingsComponent implements OnInit {
 	formatBaseRate(baseRate: string | number): string {
 		// Convert baseRate to a number if it is a string
 		const numericValue = typeof baseRate === 'string' ? parseFloat(baseRate) : baseRate;
-	
+
 		// Check if numericValue is a valid number
 		if (!isNaN(numericValue)) {
 			return numericValue.toFixed(2);
 		}
-	
+
 		// Return a default value or an empty string if baseRate is not a valid number
 		return '0.00';
 	}
@@ -634,28 +647,28 @@ export class MyBookingsComponent implements OnInit {
 
 
 	editAction(bookingId, updateType) {
-		if(this.currentUser.roleName == 'sub_affiliate'){
+		if (this.currentUser.roleName == 'sub_affiliate') {
 			this.router.navigate(['/sub_affiliate/new-booking'], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'true' } });
 		}
-		else{
+		else {
 			this.router.navigate(['/affiliate/new-booking'], { queryParams: { bookingId: bookingId, updateType: updateType, nav: 'true' } });
 		}
 	}
 
 	finalizeAction(bookingId) {
-		if(this.currentUser.roleName == 'sub_affiliate'){
+		if (this.currentUser.roleName == 'sub_affiliate') {
 			this.router.navigate(['/sub_affiliate/finalize-booking'], { queryParams: { bookingId: bookingId } });
 		}
-		else{
+		else {
 			this.router.navigate(['/affiliate/finalize-booking'], { queryParams: { bookingId: bookingId } });
 		}
 	}
 
 	previewRate(bookingId) {
-		if(this.currentUser.roleName == 'sub_affiliate'){
+		if (this.currentUser.roleName == 'sub_affiliate') {
 			this.router.navigate(['/sub_affiliate/finalize-booking'], { queryParams: { bookingId: bookingId, editRate: true } });
 		}
-		else{
+		else {
 			this.router.navigate(['/affiliate/finalize-booking'], { queryParams: { bookingId: bookingId, editRate: true } });
 		}
 	}
@@ -663,28 +676,28 @@ export class MyBookingsComponent implements OnInit {
 		console.log(actionType, bookingId, serviceType);
 
 		if (actionType == 'return') {
-			if(this.currentUser.roleName == 'sub_affiliate'){
+			if (this.currentUser.roleName == 'sub_affiliate') {
 				this.router.navigate(['/sub_affiliate/create-new-booking'], { queryParams: { bookingId: bookingId, bookingType: 'return' } });
 			}
-			else{
+			else {
 				this.router.navigate(['/affiliate/create-new-booking'], { queryParams: { bookingId: bookingId, bookingType: 'return' } });
 			}
 		}
 		else {
-			if(this.currentUser.roleName == 'sub_affiliate'){
+			if (this.currentUser.roleName == 'sub_affiliate') {
 				this.router.navigate(['/sub_affiliate/create-new-booking'], { queryParams: { bookingId: bookingId, bookingType: 'repeat' } });
 			}
-			else{
+			else {
 				this.router.navigate(['/affiliate/create-new-booking'], { queryParams: { bookingId: bookingId, bookingType: 'repeat' } });
 			}
 		}
 	}
 
 	invoiceAction(bookingId) {
-		if(this.currentUser.roleName == 'sub_affiliate'){
+		if (this.currentUser.roleName == 'sub_affiliate') {
 			this.router.navigate(['/sub_affiliate/invoice-summary'], { queryParams: { bookingId: bookingId } });
 		}
-		else{
+		else {
 			this.router.navigate(['/affiliate/invoice-summary'], { queryParams: { bookingId: bookingId } });
 		}
 	}
@@ -722,12 +735,12 @@ export class MyBookingsComponent implements OnInit {
 				if (success == true) {
 					this.spinner.hide();//hide spinner
 					$('#change_status_booking_Modal').modal('hide');
-					if(this.currentUser.roleName == 'sub_affiliate'){
+					if (this.currentUser.roleName == 'sub_affiliate') {
 						this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
 							this.router.navigate(['/sub_affiliate/my-bookings']);
 						});
 					}
-					else{
+					else {
 						this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
 							this.router.navigate(['/affiliate/my-bookings']);
 						});
@@ -766,17 +779,17 @@ export class MyBookingsComponent implements OnInit {
 				if (success == true) {
 					this.spinner.hide();//hide spinner
 					$('#emailModal').modal('hide');
-					if(this.currentUser.roleName == 'sub_affiliate'){
+					if (this.currentUser.roleName == 'sub_affiliate') {
 						this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
 							this.router.navigate(['/sub_affiliate/my-bookings']);
 						});
 					}
-					else{
+					else {
 						this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
 							this.router.navigate(['/affiliate/my-bookings']);
 						});
 					}
-				
+
 				}
 			});
 	}

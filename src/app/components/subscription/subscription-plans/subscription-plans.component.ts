@@ -4,7 +4,9 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { AuthService } from 'src/app/services/auth.service';
+import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 declare var bootstrap: any;
+declare var $: any;
 
 @Component({
   selector: 'app-subscription-plans',
@@ -15,11 +17,16 @@ export class SubscriptionPlansComponent implements OnInit {
   public planData: any;
   public selectedPlanId: any = '';
   public currentUser: any;
+  public numberOfVeh: any;
+  public erroMsg: string = '';
+  isModalOpen = false; // To control modal visibility
 
   constructor(
     private authService: AuthService,
     private spinner: NgxSpinnerService,
-    private router: Router
+    private error: ErrorDialogService,
+    private router: Router,
+
   ) { }
 
   ngOnInit(): void {
@@ -65,15 +72,44 @@ export class SubscriptionPlansComponent implements OnInit {
     if (plan?.id == 1) {
       this.router.navigate(['/login/driver'])
     }
-    else if (this.currentUser?.id) {
+    else if (this.currentUser) {
       console.log("in if affiliate")
-      sessionStorage.setItem("selectedPlan", JSON.stringify(plan))
-      this.router.navigate(['/payment-details']);
+      this.numberOfVeh = localStorage.getItem('affiliateVehicles')
+      if (plan?.id == 2 && this.numberOfVeh > 1) {
+        console.log("in if plan is 99 and veh greater than 1")
+        this.error.openDialog({
+          errors: {
+            error: `<span class='text-danger font-weight-bolder text-2xl' style="font-size: 24px;">You currently have multiple vehicles associated with your account. To continue, please select the Fleet Operator Plan or remove the additional vehicles from your account.</span>`
+          }
+        })
+        return false;
+      }
+      else if (plan.id == 3 && this.numberOfVeh > 2) {
+        console.log("in if plan is 199 and veh greater than 2")
+        this.erroMsg = 'You currently have more than 2 vehicles associated with your account. A charge of $25 will apply for each additional vehicle. If you agree, please proceed. Otherwise, remove the extra vehicles from your account.'
+        this.isModalOpen = true; // Open modal
+      }
+      else {
+        sessionStorage.setItem("selectedPlan", JSON.stringify(plan))
+        this.router.navigate(['/payment-details']);
+      }
     }
     else {
       sessionStorage.setItem("selectedPlan", JSON.stringify(plan))
       this.router.navigate(['/partner-registration'])
     }
+  }
+
+  proceedSubs(plans: any) {
+    console.log('plans', plans)
+    let plan = plans?.find(item => item?.id == 3)
+    sessionStorage.setItem("selectedPlan", JSON.stringify(plan))
+    this.isModalOpen = false
+    this.router.navigate(['/payment-details']);
+  }
+
+  closeModal() {
+    this.isModalOpen = false; // Close modal
   }
 
   selectedPlan(id) {
