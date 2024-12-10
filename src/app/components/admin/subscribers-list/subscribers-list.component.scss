@@ -1,0 +1,19 @@
+.x-cross-btn {
+    background: #fff !important;
+    color: #ff0000 !important;
+    /* position: absolute; */
+    top: 5px;
+    right: 15px;
+    border-radius: 20px;
+    width: 25px;
+    opacity: 1 !important;
+}
+
+.x-close-btn {
+    float: right;
+    font-size: 1.8rem;
+    font-weight: 700;
+    line-height: 1;
+    border: none;
+    z-index: 10;
+}

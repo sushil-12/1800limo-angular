@@ -45,6 +45,9 @@ export class LooseAffiliateAccountsComponent implements OnInit {
   allSelected = false;
   emails = new FormControl('');
   audit_Trail: any = [];
+  public sendMessageForm: FormGroup;
+  fileToUpload: File;
+  emailFileName: string = '';
 
   constructor(
     private adminService: AdminService,
@@ -56,6 +59,9 @@ export class LooseAffiliateAccountsComponent implements OnInit {
 
   ngOnInit(): void {
     this.searchText = localStorage.getItem('looseAffiliateSearch') ? localStorage.getItem('looseAffiliateSearch') : ''
+    this.sendMessageForm = this.$form.group({
+      file: [null]
+    })
     this.loadSubLooseAffiliateAcc();//load LooseAffiliateAcc
     this.buildSendEmailForm();
   }
@@ -282,6 +288,13 @@ export class LooseAffiliateAccountsComponent implements OnInit {
       });
   }
 
+  inviteEmailFileChange(event: any) {
+    console.log('fileeeeeee', event.target.files[0])
+    // this.fileToUpload = files.item(0);
+    this.emailFileName = event.target.files[0].name
+    this.fileToUpload = event.target.files[0];
+  }
+
   messagetype: Record<string, any>
   sendMessage(type: 'email' | 'sms', travelPlanner: any, message: string = null) {
     console.log('Request to send a Message to travel agent id: ', type, travelPlanner, message)
@@ -293,7 +306,7 @@ export class LooseAffiliateAccountsComponent implements OnInit {
 
       const formData = new FormData();
       // Store form name as "file" with file data
-      // formData.append("file", this.fileToUpload);
+      formData.append("file", this.fileToUpload);
 
       formData.append("text_message", message);
       formData.append("account_type",'loose_affiliate')
@@ -325,6 +338,11 @@ export class LooseAffiliateAccountsComponent implements OnInit {
       })
         .then(data => {
           console.log('File uploaded successfully:', data);
+          this.fileToUpload = null
+          this.emailFileName = ''
+          this.sendMessageForm.patchValue({
+            file: [null]
+          })
           message = ''
           this.errorDialog.openDialog({
             errors: {
@@ -341,6 +359,7 @@ export class LooseAffiliateAccountsComponent implements OnInit {
             }
           })
         });
+
     }
   }
 
