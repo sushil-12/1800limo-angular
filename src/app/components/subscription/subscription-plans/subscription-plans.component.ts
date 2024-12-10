@@ -19,7 +19,8 @@ export class SubscriptionPlansComponent implements OnInit {
   public currentUser: any;
   public numberOfVeh: any;
   public erroMsg: string = '';
-  isModalOpen = false; // To control modal visibility
+  isModalOpen: boolean = false;
+  showVehicleBtn: boolean = false;
 
   constructor(
     private authService: AuthService,
@@ -77,17 +78,15 @@ export class SubscriptionPlansComponent implements OnInit {
       this.numberOfVeh = localStorage.getItem('affiliateVehicles')
       if (plan?.id == 2 && this.numberOfVeh > 1) {
         console.log("in if plan is 99 and veh greater than 1")
-        this.error.openDialog({
-          errors: {
-            error: `<span class='text-danger font-weight-bolder text-2xl' style="font-size: 24px;">You currently have multiple vehicles associated with your account. To continue, please select the Fleet Operator Plan or remove the additional vehicles from your account.</span>`
-          }
-        })
-        return false;
+        this.erroMsg = 'You currently have multiple vehicles associated with your account. To continue, please select the Fleet Operator Plan or remove the additional vehicles from your account.'
+        this.isModalOpen = true; // Open modal
+        this.showVehicleBtn = false
       }
       else if (plan.id == 3 && this.numberOfVeh > 2) {
         console.log("in if plan is 199 and veh greater than 2")
         this.erroMsg = 'You currently have more than 2 vehicles associated with your account. A charge of $25 will apply for each additional vehicle. If you agree, please proceed. Otherwise, remove the extra vehicles from your account.'
         this.isModalOpen = true; // Open modal
+        this.showVehicleBtn = true
       }
       else {
         sessionStorage.setItem("selectedPlan", JSON.stringify(plan))
@@ -108,8 +107,13 @@ export class SubscriptionPlansComponent implements OnInit {
     this.router.navigate(['/payment-details']);
   }
 
-  closeModal() {
+  vehicleSettings() {
     this.isModalOpen = false; // Close modal
+    this.router.navigate(['/affiliate/step5'])
+  }
+
+  closeModal() {
+    this.isModalOpen = false
   }
 
   selectedPlan(id) {
