@@ -24,7 +24,7 @@
                     <span class="subs_planName">
                         {{plans?.product_name}}
                     </span>
-                    <span class="subs_planTitle">
+                    <span class="subs_planTitle" [ngClass]="{'mb-23': plans?.id == 1}">
                         {{plans?.product_text}}
                     </span>
                     <span class="sub_planPrice">
@@ -56,9 +56,8 @@
                         </li>
                     </ul>
                 </div> -->
-                <button
-                    [ngClass]="selectedPlanId == plans?.id ? 'selected_subs_btn' : 'custom-filled-button green-button'"
-                    (click)="submitPlan(plans)" style="color: white;">
+                <button class="custom-filled-button green-button" (click)="submitPlan(plans)"
+                    style="color: white;background-color: #001cffe0;border: 1px solid #001cffe0;">
                     {{plans?.id == 1 ? 'Sign Up Now' : 'Subscribe Now'}}
                 </button>
             </div>
@@ -72,13 +71,16 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-body text-center">
-                <p class='text-danger font-weight-bolder text-2xl' style="font-size: 24px;">{{erroMsg}}</p>
+                <p class='text-danger font-weight-bolder text-2xl'>{{erroMsg}}</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="custom-btn savebutton"
-                    (click)="proceedSubs(planData?.data)">Proceed</button>
-                <button type="button" class="custom-btn resetbutton" data-dismiss="modal"
-                    (click)="closeModal()">Close</button>
+                <button type="button" class="custom-btn resetbutton" (click)="closeModal()"
+                    style="font-size: 18px;font-weight: 700;padding: 12px;">Close</button>
+                <button type="button" class="custom-btn savebutton" (click)="vehicleSettings()"
+                    style="font-size: 18px;font-weight: 700;padding: 12px;">Vehicle
+                    Settings</button>
+                <button type="button" class="custom-btn savebutton" (click)="proceedSubs(planData?.data)"
+                    *ngIf="showVehicleBtn" style="font-size: 18px;font-weight: 700;padding: 12px;">Proceed</button>
             </div>
         </div>
     </div>
