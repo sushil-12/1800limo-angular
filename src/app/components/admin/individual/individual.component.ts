@@ -16,6 +16,8 @@ declare var $: any;
 })
 export class IndividualComponent implements OnInit {
 	@ViewChild('fileInput') fileInput!: ElementRef;
+	@ViewChild('fileInput1') fileInput1!: ElementRef;
+	@ViewChild('message') message!: ElementRef;
 	color: ThemePalette = 'primary';
 	checked = false;
 	disabled = false;
@@ -148,9 +150,13 @@ export class IndividualComponent implements OnInit {
 
 
 	//close email modal
-	closeModal(fileInput) {
-		fileInput.value = '';
-		this.uploadedFile = ''
+	closeModal() {
+		this.fileInput.nativeElement.value = '';
+		this.fileInput1.nativeElement.value = '';
+		this.message.nativeElement.value = '';
+		this.uploadedFile = null
+		this.fileUrl = null
+		this.fileType = null
 		this.sendEmailForm.patchValue({
 			subject: "",
 			text_message: ''
@@ -206,13 +212,13 @@ export class IndividualComponent implements OnInit {
 		})
 		this.emails.setValue('');
 
-        // Clear file input after success
-        this.uploadedFile = null;
-        this.fileUrl = null;
-        this.fileType = null;
+		// Clear file input after success
+		this.uploadedFile = null;
+		this.fileUrl = null;
+		this.fileType = null;
 		if (this.fileInput) {
 			this.fileInput.nativeElement.value = ''; // Reset file input
-		  }
+		}
 
 		$("#sendEmailModal").modal("hide");
 	}
@@ -264,18 +270,46 @@ export class IndividualComponent implements OnInit {
 	}
 
 	messagetype: Record<string, any>
-	sendMessage(type: 'email' | 'sms', individual: Object, message: string = null) {
+	async sendMessage(type: 'email' | 'sms', individual: Object, message: string = null) {
 		console.log('Request to send a Message to individual id: ', type, individual['id'])
 		this.messagetype = { type, individual }
 		$('#messageModal').modal('show')
 		$('#messageModal').find('.modal-header').find('h4').text('Contact to Individual via ' + type.toUpperCase())
 		$('#messageModal').find('.modal-body').find('p#affiliate-details').html(`Individual Name: ${individual['first_name']} ${individual['last_name']}<br/>Individual Email: ${individual['email']}`)
 		if (message != null) {
-			this.adminService.sendAffiliateMessage(type, individual['id'], { sendContent: message },).subscribe((response: any) => {
-				if (response.success) {
-					console.log('Message Sent Successfully. ')
-				}
+			this.spinner.show()
+			if (this.uploadedFile) {
+				let dataS = await this.uploadService.uploadFile(this.uploadedFile);
+				this.fileUrl = dataS.Location;
+				console.log("fileUrl", this.fileUrl)
+			}
+			let body = {
+				sendContent: message,
+				fileUrl: this.fileUrl,
+				filetype: this.fileType
+			}
+			this.adminService.sendAffiliateMessage(type, individual['id'], body).subscribe((response: any) => {
+				this.spinner.hide()
+				this.errorDialog.openDialog({
+					errors: {
+						error: `<span class='text-success'>${response.message}</span>`
+					}
+				})
+				console.log("response-------->", response)
 			})
+
+			// Clear file input after success
+			this.uploadedFile = null;
+			this.fileUrl = null;
+			this.fileType = null;
+			if (this.fileInput1) {
+				this.fileInput1.nativeElement.value = ''; // Reset file input
+			}
+			if (this.message) {
+				this.message.nativeElement.value = ''; // Reset message input
+			}
+
+			$("#messageModal").modal("hide");
 		}
 	}
 

@@ -214,7 +214,10 @@ export class RecoverAccountsComponent implements OnInit {
   //close email modal
   closeModal() {
     this.fileInput.nativeElement.value = '';
-    this.uploadedFile = ''
+    this.message.nativeElement.value = '';
+    this.uploadedFile = null;
+    this.fileType = null;
+    this.fileUrl = null;
     $("#messageModal").modal("hide");
   }
 

@@ -159,6 +159,7 @@ export class LooseAffiliateAccountsComponent implements OnInit {
   closeModal() {
     this.fileInput.nativeElement.value = '';
     this.fileInput1.nativeElement.value = '';
+    this.message.nativeElement.value = '';
     this.uploadedFile = null
 		this.fileUrl = null
 		this.fileType = null
