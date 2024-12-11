@@ -1,4 +1,4 @@
-import { Component, OnInit, isDevMode } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, isDevMode } from '@angular/core';
 import { AdminService } from '../../../services/admin.service';
 import { Router } from '@angular/router';
 import { NgxSpinnerService } from "ngx-spinner";
@@ -15,7 +15,7 @@ declare var $: any;
 	styleUrls: ['./individual.component.scss']
 })
 export class IndividualComponent implements OnInit {
-
+	@ViewChild('fileInput') fileInput!: ElementRef;
 	color: ThemePalette = 'primary';
 	checked = false;
 	disabled = false;
@@ -205,6 +205,15 @@ export class IndividualComponent implements OnInit {
 			text_message: ''
 		})
 		this.emails.setValue('');
+
+        // Clear file input after success
+        this.uploadedFile = null;
+        this.fileUrl = null;
+        this.fileType = null;
+		if (this.fileInput) {
+			this.fileInput.nativeElement.value = ''; // Reset file input
+		  }
+
 		$("#sendEmailModal").modal("hide");
 	}
 

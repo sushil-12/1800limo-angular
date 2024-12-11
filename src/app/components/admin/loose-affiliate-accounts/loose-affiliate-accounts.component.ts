@@ -1,4 +1,4 @@
-import { Component, OnInit, isDevMode } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, isDevMode } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ThemePalette } from '@angular/material/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -16,7 +16,7 @@ declare var $: any;
   styleUrls: ['./loose-affiliate-accounts.component.scss']
 })
 export class LooseAffiliateAccountsComponent implements OnInit {
-
+  @ViewChild('fileInput') fileInput!: ElementRef;
   color: ThemePalette = 'primary';
   checked = false;
   disabled = false;
@@ -213,6 +213,15 @@ export class LooseAffiliateAccountsComponent implements OnInit {
       text_message: ''
     })
     this.emails.setValue('');
+
+    // Clear file input after success
+    this.uploadedFile = null;
+    this.fileUrl = null;
+    this.fileType = null;
+    if (this.fileInput) {
+      this.fileInput.nativeElement.value = ''; // Reset file input
+    }
+
     $("#sendEmailModal").modal("hide");
   }
 

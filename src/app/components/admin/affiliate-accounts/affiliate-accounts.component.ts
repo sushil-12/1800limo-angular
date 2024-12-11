@@ -1,4 +1,4 @@
-import { Component, OnInit, isDevMode } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, isDevMode } from '@angular/core';
 import { AdminService } from '../../../services/admin.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from "ngx-spinner";
@@ -17,6 +17,7 @@ declare var $: any;
 	styleUrls: ['./affiliate-accounts.component.scss']
 })
 export class AffiliateAccountsComponent implements OnInit {
+	@ViewChild('fileInput') fileInput!: ElementRef;
 	emails = new FormControl();
 	emailList: string[] = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato'];
 	color: ThemePalette = 'primary';
@@ -534,6 +535,15 @@ export class AffiliateAccountsComponent implements OnInit {
 			text_message: ''
 		})
 		this.emails.setValue('');
+
+        // Clear file input after success
+        this.uploadedFile = null;
+        this.fileUrl = null;
+        this.fileType = null;
+		if (this.fileInput) {
+			this.fileInput.nativeElement.value = ''; // Reset file input
+		  }
+
 		$("#sendEmailModal").modal("hide");
 	}
 
