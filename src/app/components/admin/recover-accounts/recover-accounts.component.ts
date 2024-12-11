@@ -244,7 +244,7 @@ export class RecoverAccountsComponent implements OnInit {
         body['email_address'] = travelPlanner?.email
       }
       else {
-        body['phone_number'] = travelPlanner?.phone_isd + travelPlanner?.phone
+        body['phone_number'] = travelPlanner?.isd + travelPlanner?.phone
       }
 
       console.log("bodyy in send message", body)
