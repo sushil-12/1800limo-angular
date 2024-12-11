@@ -156,9 +156,12 @@ export class LooseAffiliateAccountsComponent implements OnInit {
   }
 
   //close email modal
-  closeModal(fileInput) {
-    fileInput.value = '';
-    this.uploadedFile = ''
+  closeModal() {
+    this.fileInput.nativeElement.value = '';
+    this.fileInput1.nativeElement.value = '';
+    this.uploadedFile = null
+		this.fileUrl = null
+		this.fileType = null
     this.sendEmailForm.patchValue({
       subject: "",
       text_message: ''
@@ -321,14 +324,13 @@ export class LooseAffiliateAccountsComponent implements OnInit {
     $('#messageModal').modal('show')
     $('#messageModal').find('.modal-header').find('h4').text('Contact to User via ' + type.toUpperCase())
     $('#messageModal').find('.modal-body').find('p#affiliate-details').html(`User Name: ${travelPlanner['name']}<br/>User Email: ${travelPlanner['email']}`)
-    if (this.uploadedFile) {
-      this.spinner.show()
-      let dataS = await this.uploadService.uploadFile(this.uploadedFile);
-      this.fileUrl = dataS.Location;
-      console.log("fileUrl", this.fileUrl)
-    }
     if (message != null) {
       this.spinner.show()
+      if (this.uploadedFile) {
+        let dataS = await this.uploadService.uploadFile(this.uploadedFile);
+        this.fileUrl = dataS.Location;
+        console.log("fileUrl", this.fileUrl)
+      }
       let body = {
         text_message: message,
         account_type: 'loose_affiliate',

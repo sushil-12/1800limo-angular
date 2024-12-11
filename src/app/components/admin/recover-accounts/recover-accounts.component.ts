@@ -16,7 +16,7 @@ declare var $: any;
   styleUrls: ['./recover-accounts.component.scss']
 })
 export class RecoverAccountsComponent implements OnInit {
-  @ViewChild('fileInput1') fileInput1!: ElementRef;
+  @ViewChild('fileInput') fileInput!: ElementRef;
   @ViewChild('message') message!: ElementRef;
   color: ThemePalette = 'primary';
   checked = false;
@@ -212,10 +212,10 @@ export class RecoverAccountsComponent implements OnInit {
   }
 
   //close email modal
-  closeModal(fileInput) {
-    fileInput.value = '';
+  closeModal() {
+    this.fileInput.nativeElement.value = '';
     this.uploadedFile = ''
-    $("#sendEmailModal").modal("hide");
+    $("#messageModal").modal("hide");
   }
 
   messagetype: Record<string, any>
@@ -225,14 +225,13 @@ export class RecoverAccountsComponent implements OnInit {
     $('#messageModal').modal('show')
     $('#messageModal').find('.modal-header').find('h4').text('Contact to User via ' + type.toUpperCase())
     $('#messageModal').find('.modal-body').find('p#affiliate-details').html(`User Name: ${travelPlanner['first_name']} ${travelPlanner['last_name']}<br/>User Email: ${travelPlanner['email']}`)
-    if (this.uploadedFile) {
-      this.spinner.show()
-      let dataS = await this.uploadService.uploadFile(this.uploadedFile);
-      this.fileUrl = dataS.Location;
-      console.log("fileUrl", this.fileUrl)
-    }
     if (message != null) {
       this.spinner.show()
+      if (this.uploadedFile) {
+        let dataS = await this.uploadService.uploadFile(this.uploadedFile);
+        this.fileUrl = dataS.Location;
+        console.log("fileUrl", this.fileUrl)
+      }
       let body = {
         text_message: message,
         fileUrl: this.fileUrl,
@@ -261,8 +260,8 @@ export class RecoverAccountsComponent implements OnInit {
       this.uploadedFile = null;
       this.fileUrl = null;
       this.fileType = null;
-      if (this.fileInput1) {
-        this.fileInput1.nativeElement.value = ''; // Reset file input
+      if (this.fileInput) {
+        this.fileInput.nativeElement.value = ''; // Reset file input
       }
       if (this.message) {
         this.message.nativeElement.value = ''; // Reset message input
