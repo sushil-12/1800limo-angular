@@ -6,6 +6,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { AdminService } from 'src/app/services/admin.service';
+import { UploadService } from 'src/app/services/upload.service';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 declare var $: any;
 
@@ -48,9 +49,15 @@ export class LooseAffiliateAccountsComponent implements OnInit {
   public sendMessageForm: FormGroup;
   fileToUpload: File;
   emailFileName: string = '';
+  fileUrl: String;
+  fileName: String;
+  fileType: String;
+  uploadedFile: any;
+
 
   constructor(
     private adminService: AdminService,
+    private uploadService: UploadService,
     private router: Router,
     private errorDialog: ErrorDialogService,
     private $form: FormBuilder,
@@ -67,9 +74,9 @@ export class LooseAffiliateAccountsComponent implements OnInit {
   }
 
   adjustTextareaHeight(textarea: HTMLTextAreaElement) {
-		textarea.style.height = 'auto';
-		textarea.style.height = textarea.scrollHeight + 'px';
-	}
+    textarea.style.height = 'auto';
+    textarea.style.height = textarea.scrollHeight + 'px';
+  }
 
   timer: any
   handleSearchKeyword(text: any) {
@@ -149,7 +156,9 @@ export class LooseAffiliateAccountsComponent implements OnInit {
   }
 
   //close email modal
-  closeModal() {
+  closeModal(fileInput) {
+    fileInput.value = '';
+    this.uploadedFile = ''
     this.sendEmailForm.patchValue({
       subject: "",
       text_message: ''
@@ -172,13 +181,20 @@ export class LooseAffiliateAccountsComponent implements OnInit {
     return JSON.stringify({ id: option.id, email: option.email });
   }
   //submit email modal
-  sendEmail() {
+  async sendEmail() {
     this.spinner.show()
+    if (this.uploadedFile) {
+      let dataS = await this.uploadService.uploadFile(this.uploadedFile);
+      this.fileUrl = dataS.Location;
+      console.log("fileUrl", this.fileUrl)
+    }
     let body = {
       subject: this.sendEmailForm.get('subject').value,
       message: this.sendEmailForm.get('text_message').value,
       recipents: this.emails.value,
-      account_type: 'loose_affiliate'
+      account_type: 'loose_affiliate',
+      fileUrl: this.fileUrl,
+      filetype: this.fileType
     }
     console.log("body-------->", body)
     this.adminService.sendEmailAffiliate(body).subscribe((response: any) => {
@@ -309,7 +325,7 @@ export class LooseAffiliateAccountsComponent implements OnInit {
       formData.append("file", this.fileToUpload);
 
       formData.append("text_message", message);
-      formData.append("account_type",'loose_affiliate')
+      formData.append("account_type", 'loose_affiliate')
       if (type == 'email') {
         formData.append("email_address", travelPlanner?.email)
       }
@@ -360,6 +376,18 @@ export class LooseAffiliateAccountsComponent implements OnInit {
           })
         });
 
+    }
+  }
+
+  myUploader(event) {
+    // this.loader = true;
+
+    this.uploadedFile = event.target.files[0]
+    console.log("file", this.uploadedFile)
+    if (this.uploadedFile) {
+      this.fileName = this.uploadedFile['name'];
+      this.fileType = this.uploadedFile['type'];
+      console.log("file", this.fileName, this.fileType)
     }
   }
 

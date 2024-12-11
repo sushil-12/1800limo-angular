@@ -368,10 +368,10 @@
 
 <!-- SEND EMAIL MODAL-->
 <div class="modal fade bd-example-modal-lg" id="sendEmailModal" tabindex="-1" role="dialog"
-	aria-labelledby="exampleModalLabel" aria-hidden="true">
+	aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
 	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content user_inforamtion">
-			<button type="button" (click)="closeModal()" class="close closeButton x-circle-btn" data-dismiss="modal"
+			<button type="button" (click)="closeModal(fileInput)" class="close closeButton x-circle-btn" data-dismiss="modal"
 				aria-label="Close">
 				<i class="bi bi-x-circle"></i>
 			</button>
@@ -411,6 +411,9 @@
 								</mat-select>
 							</mat-form-field>
 						</div>
+						<div class="col-md-12 mt-3">
+                            <input type="file" (change)="myUploader($event)" #fileInput/>
+                        </div>
 					</div>
 				</form>
 			</div>

@@ -8,6 +8,7 @@ import { ThemePalette } from '@angular/material/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 import { AffiliateService } from 'src/app/services/affiliate.service';
+import { UploadService } from 'src/app/services/upload.service';
 declare var $: any;
 
 @Component({
@@ -63,6 +64,10 @@ export class AffiliateAccountsComponent implements OnInit {
 	loginAsUserResponse: any;
 	allSelected = false;
 	audit_Trail: any = [];
+	fileUrl: String;
+	fileName: String;
+	fileType: String;
+	uploadedFile: any;
 
 	constructor(
 		private adminService: AdminService,
@@ -71,6 +76,7 @@ export class AffiliateAccountsComponent implements OnInit {
 		private spinner: NgxSpinnerService,
 		private $errors: ErrorDialogService,
 		private formBuilder: FormBuilder,
+		private uploadService: UploadService,
 		private affiliateService: AffiliateService,
 		private activatedRoute: ActivatedRoute) { }
 
@@ -433,7 +439,9 @@ export class AffiliateAccountsComponent implements OnInit {
 	}
 
 	//close email modal
-	closeModal() {
+	closeModal(fileInput) {
+		fileInput.value = ''
+		this.uploadedFile = ''
 		this.sendEmailForm.patchValue({
 			subject: "",
 			text_message: ''
@@ -493,14 +501,21 @@ export class AffiliateAccountsComponent implements OnInit {
 	}
 
 	//submit email modal
-	sendEmail() {
+	async sendEmail() {
 		this.spinner.show()
+		if (this.uploadedFile) {
+			let dataS = await this.uploadService.uploadFile(this.uploadedFile);
+			this.fileUrl = dataS.Location;
+			console.log("fileUrl", this.fileUrl)
+		}
 		const textContent = this.sendEmailForm.get('text_message')?.value;
 		const htmlContent = this.convertTextToHtml(textContent);
 		let body = {
 			subject: this.sendEmailForm.get('subject').value,
 			message: htmlContent,
-			recipents: this.emails.value
+			recipents: this.emails.value,
+			fileUrl: this.fileUrl,
+			filetype: this.fileType
 		}
 		console.log("body-------->", body)
 		this.adminService.sendEmailAffiliate(body).subscribe((response: any) => {
@@ -626,6 +641,18 @@ export class AffiliateAccountsComponent implements OnInit {
 				}
 			}
 		});
+	}
+
+	myUploader(event) {
+		// this.loader = true;
+
+		this.uploadedFile = event.target.files[0]
+		console.log("file", this.uploadedFile)
+		if (this.uploadedFile) {
+			this.fileName = this.uploadedFile['name'];
+			this.fileType = this.uploadedFile['type'];
+			console.log("file", this.fileName, this.fileType)
+		}
 	}
 
 }

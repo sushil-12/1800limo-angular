@@ -7,6 +7,7 @@ import { throwError } from 'rxjs';
 import { ThemePalette } from '@angular/material/core';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { UploadService } from 'src/app/services/upload.service';
 declare var $: any;
 @Component({
   selector: 'app-travel-planner',
@@ -44,11 +45,16 @@ export class TravelPlannerComponent implements OnInit {
   travelAccountCount: any;
   loginAsUserResponse: any;
   audit_Trail: any = [];
+  fileUrl: String;
+  fileName: String;
+  fileType: String;
+  uploadedFile: any;
 
   constructor(
     private adminService: AdminService,
     private router: Router,
     private $form: FormBuilder,
+    private uploadService: UploadService,
     private errorDialog: ErrorDialogService,
     private spinner: NgxSpinnerService) { }
 
@@ -63,9 +69,9 @@ export class TravelPlannerComponent implements OnInit {
   }
 
   adjustTextareaHeight(textarea: HTMLTextAreaElement) {
-		textarea.style.height = 'auto';
-		textarea.style.height = textarea.scrollHeight + 'px';
-	}
+    textarea.style.height = 'auto';
+    textarea.style.height = textarea.scrollHeight + 'px';
+  }
 
   timer: any
   handleSearchKeyword(text: any) {
@@ -172,7 +178,9 @@ export class TravelPlannerComponent implements OnInit {
 
 
   //close email modal
-  closeModal() {
+  closeModal(fileInput) {
+    fileInput.value = '';
+    this.uploadedFile = ''
     this.sendEmailForm.patchValue({
       subject: "",
       text_message: ''
@@ -216,17 +224,24 @@ export class TravelPlannerComponent implements OnInit {
   viewEmailContent(id: any) {
     console.log("In function view email content", id);
     const url = isDevMode() ? `https://1800limoapi.infodevbox.com/log-content/${id}` : `https://api.1800limo.com/log-content/${id}`;
-		window.open(url, '_blank');
+    window.open(url, '_blank');
   }
 
 
   //submit email modal
-  sendEmail() {
+  async sendEmail() {
     this.spinner.show()
+    if (this.uploadedFile) {
+      let dataS = await this.uploadService.uploadFile(this.uploadedFile);
+      this.fileUrl = dataS.Location;
+      console.log("fileUrl", this.fileUrl)
+    }
     let body = {
       subject: this.sendEmailForm.get('subject').value,
       message: this.sendEmailForm.get('text_message').value,
-      recipents: this.emails.value
+      recipents: this.emails.value,
+      fileUrl: this.fileUrl,
+      filetype: this.fileType
     }
     console.log("body-------->", body)
     this.adminService.sendEmailAffiliate(body).subscribe((response: any) => {
@@ -393,4 +408,17 @@ export class TravelPlannerComponent implements OnInit {
 
     });
   }
+
+  myUploader(event) {
+    // this.loader = true;
+
+    this.uploadedFile = event.target.files[0]
+    console.log("file", this.uploadedFile)
+    if (this.uploadedFile) {
+      this.fileName = this.uploadedFile['name'];
+      this.fileType = this.uploadedFile['type'];
+      console.log("file", this.fileName, this.fileType)
+    }
+  }
+
 }
