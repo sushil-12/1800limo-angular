@@ -190,9 +190,13 @@
 </main>
 
 <!-- Message modal -->
-<div class="modal fade" tabindex="-1" id="messageModal" aria-labelledby="messageModal" aria-hidden="true">
+<div class="modal fade" tabindex="-1" id="messageModal" aria-labelledby="messageModal" aria-hidden="true"data-backdrop="static">
 	<div class="modal-dialog modal-dialog-centered">
 		<div class="modal-content">
+			<button type="button" (click)="closeModal()" class="close closeButton x-circle-btn mt-2"
+				data-dismiss="modal" aria-label="Close">
+				<i class="bi bi-x-circle"></i>
+			</button>
 			<div class="modal-header">
 				<h4></h4>
 			</div>
@@ -203,6 +207,9 @@
 					</div>
 				</div>
 				<div class="row">
+					<div class="col-md-12 mt-2 mb-2" *ngIf="messagetype?.type == 'email' ">
+						<input type="file" (change)="myUploader($event)" #fileInput1 />
+					</div>
 					<div class="col-md-12">
 						<p id="label">
 							Message:
@@ -225,7 +232,7 @@
 
 <!-- SEND EMAIL MODAL-->
 <div class="modal fade bd-example-modal-lg" id="sendEmailModal" tabindex="-1" role="dialog"
-	aria-labelledby="exampleModalLabel" aria-hidden="true">
+	aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
 	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content user_inforamtion">
 			<button type="button" (click)="closeModal()" class="close closeButton x-circle-btn" data-dismiss="modal"
@@ -268,6 +275,9 @@
 								</mat-select>
 							</mat-form-field>
 						</div>
+						<div class="col-md-12 mt-3">
+                            <input type="file" (change)="myUploader($event)" #fileInput/>
+                        </div>
 					</div>
 				</form>
 			</div>

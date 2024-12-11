@@ -1,4 +1,4 @@
-import { Component, OnInit, isDevMode } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, isDevMode } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ThemePalette } from '@angular/material/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -6,6 +6,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { AdminService } from 'src/app/services/admin.service';
+import { UploadService } from 'src/app/services/upload.service';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 declare var $: any;
 
@@ -15,7 +16,9 @@ declare var $: any;
   styleUrls: ['./loose-affiliate-accounts.component.scss']
 })
 export class LooseAffiliateAccountsComponent implements OnInit {
-
+  @ViewChild('fileInput') fileInput!: ElementRef;
+  @ViewChild('fileInput1') fileInput1!: ElementRef;
+  @ViewChild('message') message!: ElementRef;
   color: ThemePalette = 'primary';
   checked = false;
   disabled = false;
@@ -46,11 +49,15 @@ export class LooseAffiliateAccountsComponent implements OnInit {
   emails = new FormControl('');
   audit_Trail: any = [];
   public sendMessageForm: FormGroup;
-  fileToUpload: File;
-  emailFileName: string = '';
+  fileUrl: String;
+  fileName: String;
+  fileType: String;
+  uploadedFile: any;
+
 
   constructor(
     private adminService: AdminService,
+    private uploadService: UploadService,
     private router: Router,
     private errorDialog: ErrorDialogService,
     private $form: FormBuilder,
@@ -67,9 +74,9 @@ export class LooseAffiliateAccountsComponent implements OnInit {
   }
 
   adjustTextareaHeight(textarea: HTMLTextAreaElement) {
-		textarea.style.height = 'auto';
-		textarea.style.height = textarea.scrollHeight + 'px';
-	}
+    textarea.style.height = 'auto';
+    textarea.style.height = textarea.scrollHeight + 'px';
+  }
 
   timer: any
   handleSearchKeyword(text: any) {
@@ -150,6 +157,12 @@ export class LooseAffiliateAccountsComponent implements OnInit {
 
   //close email modal
   closeModal() {
+    this.fileInput.nativeElement.value = '';
+    this.fileInput1.nativeElement.value = '';
+    this.message.nativeElement.value = '';
+    this.uploadedFile = null
+		this.fileUrl = null
+		this.fileType = null
     this.sendEmailForm.patchValue({
       subject: "",
       text_message: ''
@@ -172,13 +185,20 @@ export class LooseAffiliateAccountsComponent implements OnInit {
     return JSON.stringify({ id: option.id, email: option.email });
   }
   //submit email modal
-  sendEmail() {
+  async sendEmail() {
     this.spinner.show()
+    if (this.uploadedFile) {
+      let dataS = await this.uploadService.uploadFile(this.uploadedFile);
+      this.fileUrl = dataS.Location;
+      console.log("fileUrl", this.fileUrl)
+    }
     let body = {
       subject: this.sendEmailForm.get('subject').value,
       message: this.sendEmailForm.get('text_message').value,
       recipents: this.emails.value,
-      account_type: 'loose_affiliate'
+      account_type: 'loose_affiliate',
+      fileUrl: this.fileUrl,
+      filetype: this.fileType
     }
     console.log("body-------->", body)
     this.adminService.sendEmailAffiliate(body).subscribe((response: any) => {
@@ -197,6 +217,15 @@ export class LooseAffiliateAccountsComponent implements OnInit {
       text_message: ''
     })
     this.emails.setValue('');
+
+    // Clear file input after success
+    this.uploadedFile = null;
+    this.fileUrl = null;
+    this.fileType = null;
+    if (this.fileInput) {
+      this.fileInput.nativeElement.value = ''; // Reset file input
+    }
+
     $("#sendEmailModal").modal("hide");
   }
 
@@ -288,78 +317,71 @@ export class LooseAffiliateAccountsComponent implements OnInit {
       });
   }
 
-  inviteEmailFileChange(event: any) {
-    console.log('fileeeeeee', event.target.files[0])
-    // this.fileToUpload = files.item(0);
-    this.emailFileName = event.target.files[0].name
-    this.fileToUpload = event.target.files[0];
-  }
 
   messagetype: Record<string, any>
-  sendMessage(type: 'email' | 'sms', travelPlanner: any, message: string = null) {
+  async sendMessage(type: 'email' | 'sms', travelPlanner: any, message: string = null) {
     console.log('Request to send a Message to travel agent id: ', type, travelPlanner, message)
     this.messagetype = { type, travelPlanner }
     $('#messageModal').modal('show')
     $('#messageModal').find('.modal-header').find('h4').text('Contact to User via ' + type.toUpperCase())
     $('#messageModal').find('.modal-body').find('p#affiliate-details').html(`User Name: ${travelPlanner['name']}<br/>User Email: ${travelPlanner['email']}`)
     if (message != null) {
-
-      const formData = new FormData();
-      // Store form name as "file" with file data
-      formData.append("file", this.fileToUpload);
-
-      formData.append("text_message", message);
-      formData.append("account_type",'loose_affiliate')
+      this.spinner.show()
+      if (this.uploadedFile) {
+        let dataS = await this.uploadService.uploadFile(this.uploadedFile);
+        this.fileUrl = dataS.Location;
+        console.log("fileUrl", this.fileUrl)
+      }
+      let body = {
+        text_message: message,
+        account_type: 'loose_affiliate',
+        fileUrl: this.fileUrl,
+        filetype: this.fileType
+      }
       if (type == 'email') {
-        formData.append("email_address", travelPlanner?.email)
+        body['email_address'] = travelPlanner?.email
       }
       else {
-        formData.append('phone_number', travelPlanner?.phone_isd + travelPlanner?.phone)
+        body['phone_number'] = travelPlanner?.phone_isd + travelPlanner?.phone
       }
-      console.log("bodyy in send message", formData)
 
-      this.adminService.sendNotificationAllAccounts(type, travelPlanner?.id, formData).then(response => {
-        if (!response.ok) {
-          if (response.status === 422) {
-            // Parse the JSON response
-            response.json().then(errorData => {
-              // Handle validation errors or other specific errors
-              console.error('Validation errors:', errorData?.message);
-              this.errorDialog.openDialog({
-                errors: {
-                  error: errorData?.message
-                }
-              })
-            });
+      console.log("bodyy in send message", body)
+
+      this.adminService.sendNotificationAllAccounts(type, travelPlanner?.id, body).subscribe((response: any) => {
+        this.spinner.hide()
+        this.errorDialog.openDialog({
+          errors: {
+            error: `<span class='text-success'>${response.message}</span>`
           }
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-        .then(data => {
-          console.log('File uploaded successfully:', data);
-          this.fileToUpload = null
-          this.emailFileName = ''
-          this.sendMessageForm.patchValue({
-            file: [null]
-          })
-          message = ''
-          this.errorDialog.openDialog({
-            errors: {
-              error: `<span class='text-success'>${data?.message}</span>`
-            }
-          })
-
         })
-        .catch(error => {
-          console.error('Error uploading file:', error);
-          this.errorDialog.openDialog({
-            errors: {
-              error: 'Server Error'
-            }
-          })
-        });
+        console.log("response-------->", response)
+      })
 
+      // Clear file input after success
+      this.uploadedFile = null;
+      this.fileUrl = null;
+      this.fileType = null;
+      if (this.fileInput1) {
+        this.fileInput1.nativeElement.value = ''; // Reset file input
+      }
+      if (this.message) {
+        this.message.nativeElement.value = ''; // Reset message input
+      }
+
+      $("#messageModal").modal("hide");
+
+    }
+  }
+
+  myUploader(event) {
+    // this.loader = true;
+
+    this.uploadedFile = event.target.files[0]
+    console.log("file", this.uploadedFile)
+    if (this.uploadedFile) {
+      this.fileName = this.uploadedFile['name'];
+      this.fileType = this.uploadedFile['type'];
+      console.log("file", this.fileName, this.fileType)
     }
   }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, isDevMode } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, isDevMode } from '@angular/core';
 import { AdminService } from '../../../services/admin.service';
 import { Router } from '@angular/router';
 import { NgxSpinnerService } from "ngx-spinner";
@@ -7,6 +7,7 @@ import { throwError } from 'rxjs';
 import { ThemePalette } from '@angular/material/core';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { UploadService } from 'src/app/services/upload.service';
 declare var $: any;
 @Component({
 	selector: 'app-individual',
@@ -14,7 +15,9 @@ declare var $: any;
 	styleUrls: ['./individual.component.scss']
 })
 export class IndividualComponent implements OnInit {
-
+	@ViewChild('fileInput') fileInput!: ElementRef;
+	@ViewChild('fileInput1') fileInput1!: ElementRef;
+	@ViewChild('message') message!: ElementRef;
 	color: ThemePalette = 'primary';
 	checked = false;
 	disabled = false;
@@ -42,11 +45,16 @@ export class IndividualComponent implements OnInit {
 	allSelected = false;
 	emails = new FormControl('');
 	audit_Trail: any = [];
+	fileUrl: String;
+	fileName: String;
+	fileType: String;
+	uploadedFile: any;
 
 	constructor(
 		private adminService: AdminService,
 		private router: Router,
 		private $form: FormBuilder,
+		private uploadService: UploadService,
 		private errorDialog: ErrorDialogService,
 		private spinner: NgxSpinnerService) { }
 
@@ -143,6 +151,12 @@ export class IndividualComponent implements OnInit {
 
 	//close email modal
 	closeModal() {
+		this.fileInput.nativeElement.value = '';
+		this.fileInput1.nativeElement.value = '';
+		this.message.nativeElement.value = '';
+		this.uploadedFile = null
+		this.fileUrl = null
+		this.fileType = null
 		this.sendEmailForm.patchValue({
 			subject: "",
 			text_message: ''
@@ -166,12 +180,19 @@ export class IndividualComponent implements OnInit {
 	}
 
 	//submit email modal
-	sendEmail() {
+	async sendEmail() {
 		this.spinner.show()
+		if (this.uploadedFile) {
+			let dataS = await this.uploadService.uploadFile(this.uploadedFile);
+			this.fileUrl = dataS.Location;
+			console.log("fileUrl", this.fileUrl)
+		}
 		let body = {
 			subject: this.sendEmailForm.get('subject').value,
 			message: this.sendEmailForm.get('text_message').value,
-			recipents: this.emails.value
+			recipents: this.emails.value,
+			fileUrl: this.fileUrl,
+			filetype: this.fileType
 		}
 		console.log("body-------->", body)
 		this.adminService.sendEmailAffiliate(body).subscribe((response: any) => {
@@ -190,6 +211,15 @@ export class IndividualComponent implements OnInit {
 			text_message: ''
 		})
 		this.emails.setValue('');
+
+		// Clear file input after success
+		this.uploadedFile = null;
+		this.fileUrl = null;
+		this.fileType = null;
+		if (this.fileInput) {
+			this.fileInput.nativeElement.value = ''; // Reset file input
+		}
+
 		$("#sendEmailModal").modal("hide");
 	}
 
@@ -211,11 +241,11 @@ export class IndividualComponent implements OnInit {
 			});
 	}
 
-	viewEmailContent(id:any){
+	viewEmailContent(id: any) {
 		console.log("In function view email content", id);
 		const url = isDevMode() ? `https://1800limoapi.infodevbox.com/log-content/${id}` : `https://api.1800limo.com/log-content/${id}`;
 		window.open(url, '_blank');
-	  }
+	}
 
 	addIndividualClick(individualId) {
 		this.router.navigate(['/admin/add-individual-account'], { queryParams: { individualId: individualId } });
@@ -240,18 +270,46 @@ export class IndividualComponent implements OnInit {
 	}
 
 	messagetype: Record<string, any>
-	sendMessage(type: 'email' | 'sms', individual: Object, message: string = null) {
+	async sendMessage(type: 'email' | 'sms', individual: Object, message: string = null) {
 		console.log('Request to send a Message to individual id: ', type, individual['id'])
 		this.messagetype = { type, individual }
 		$('#messageModal').modal('show')
 		$('#messageModal').find('.modal-header').find('h4').text('Contact to Individual via ' + type.toUpperCase())
 		$('#messageModal').find('.modal-body').find('p#affiliate-details').html(`Individual Name: ${individual['first_name']} ${individual['last_name']}<br/>Individual Email: ${individual['email']}`)
 		if (message != null) {
-			this.adminService.sendAffiliateMessage(type, individual['id'], { sendContent: message },).subscribe((response: any) => {
-				if (response.success) {
-					console.log('Message Sent Successfully. ')
-				}
+			this.spinner.show()
+			if (this.uploadedFile) {
+				let dataS = await this.uploadService.uploadFile(this.uploadedFile);
+				this.fileUrl = dataS.Location;
+				console.log("fileUrl", this.fileUrl)
+			}
+			let body = {
+				sendContent: message,
+				fileUrl: this.fileUrl,
+				filetype: this.fileType
+			}
+			this.adminService.sendAffiliateMessage(type, individual['id'], body).subscribe((response: any) => {
+				this.spinner.hide()
+				this.errorDialog.openDialog({
+					errors: {
+						error: `<span class='text-success'>${response.message}</span>`
+					}
+				})
+				console.log("response-------->", response)
 			})
+
+			// Clear file input after success
+			this.uploadedFile = null;
+			this.fileUrl = null;
+			this.fileType = null;
+			if (this.fileInput1) {
+				this.fileInput1.nativeElement.value = ''; // Reset file input
+			}
+			if (this.message) {
+				this.message.nativeElement.value = ''; // Reset message input
+			}
+
+			$("#messageModal").modal("hide");
 		}
 	}
 
@@ -338,6 +396,18 @@ export class IndividualComponent implements OnInit {
 
 		});
 
+	}
+
+	myUploader(event) {
+		// this.loader = true;
+
+		this.uploadedFile = event.target.files[0]
+		console.log("file", this.uploadedFile)
+		if (this.uploadedFile) {
+			this.fileName = this.uploadedFile['name'];
+			this.fileType = this.uploadedFile['type'];
+			console.log("file", this.fileName, this.fileType)
+		}
 	}
 
 }

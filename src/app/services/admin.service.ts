@@ -1017,18 +1017,18 @@ export class AdminService {
 	}
 
 	sendNotificationAllAccounts(type: 'email' | 'sms', id: number, data: any) {
-		// return this.httpClient.post(`${this.serverUrl}admin-send-notification/${type}`, data)
-		let resp: any
-		const accessToken = this.authService.getAccessToken();
-		resp = fetch(`${this.serverUrl}admin-send-notification/${type}/${id}`, {
-			method: 'POST',
-			body: data,
-			headers: {
-				Authorization: `Bearer ${accessToken}`
-			}
-		})
+		return this.httpClient.post(`${this.serverUrl}admin-send-notification/${type}/${id}`, data)
+		// let resp: any
+		// const accessToken = this.authService.getAccessToken();
+		// resp = fetch(`${this.serverUrl}admin-send-notification/${type}/${id}`, {
+		// 	method: 'POST',
+		// 	body: data,
+		// 	headers: {
+		// 		Authorization: `Bearer ${accessToken}`
+		// 	}
+		// })
 
-		return resp;
+		// return resp;
 	}
 
 	//invoices
