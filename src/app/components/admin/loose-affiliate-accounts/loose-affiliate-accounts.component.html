@@ -142,9 +142,13 @@
 <app-delete-confirmation (deleteRecord)="delete()" [alertMessage]="alertMessage"></app-delete-confirmation>
 
 <!-- Message modal -->
-<div class="modal fade" tabindex="-1" id="messageModal" aria-labelledby="messageModal" aria-hidden="true">
+<div class="modal fade" tabindex="-1" id="messageModal" aria-labelledby="messageModal" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
+            <button type="button" (click)="closeModal(fileInput1)" class="close closeButton x-circle-btn mt-2"
+                data-dismiss="modal" aria-label="Close">
+                <i class="bi bi-x-circle"></i>
+            </button>
             <div class="modal-header">
                 <h4></h4>
             </div>
@@ -155,7 +159,10 @@
                     </div>
                 </div>
                 <div class="row">
-                    <form [formGroup]="sendMessageForm" enctype="multipart/form-data">
+                    <div class="col-md-12 mt-2 mb-2" *ngIf="messagetype?.type == 'email' ">
+                        <input type="file" (change)="myUploader($event)" #fileInput1 />
+                    </div>
+                    <!-- <form [formGroup]="sendMessageForm" enctype="multipart/form-data">
                         <div class="form-group">
                             <div class="col-md-12 d-flex justify-content-center mt-2 mb-2">
                                 <button class="uploadExcelFile" tabIndex="1" *ngIf="!emailFileName; else noEmailFile">
@@ -175,7 +182,7 @@
                                 </ng-template>
                             </div>
                         </div>
-                    </form>
+                    </form> -->
                     <div class="col-md-12">
                         <p id="label">
                             Message:
@@ -200,8 +207,8 @@
     aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content user_inforamtion">
-            <button type="button" (click)="closeModal(fileInput)" class="close closeButton x-circle-btn" data-dismiss="modal"
-                aria-label="Close">
+            <button type="button" (click)="closeModal(fileInput)" class="close closeButton x-circle-btn"
+                data-dismiss="modal" aria-label="Close">
                 <i class="bi bi-x-circle"></i>
             </button>
             <div class="modal-header pb-0 d-flex justify-content-center">
@@ -240,7 +247,7 @@
                             </mat-form-field>
                         </div>
                         <div class="col-md-12 mt-3">
-                            <input type="file" (change)="myUploader($event)" #fileInput/>
+                            <input type="file" (change)="myUploader($event)" #fileInput />
                         </div>
                     </div>
                 </form>

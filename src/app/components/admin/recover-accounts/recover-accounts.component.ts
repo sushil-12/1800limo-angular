@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ThemePalette } from '@angular/material/core';
 import { Router } from '@angular/router';
@@ -7,6 +7,7 @@ import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { AdminService } from 'src/app/services/admin.service';
 import { ErrorDialogService } from 'src/app/services/error-dialog/errordialog.service';
+import { UploadService } from 'src/app/services/upload.service';
 declare var $: any;
 
 @Component({
@@ -15,7 +16,8 @@ declare var $: any;
   styleUrls: ['./recover-accounts.component.scss']
 })
 export class RecoverAccountsComponent implements OnInit {
-
+  @ViewChild('fileInput1') fileInput1!: ElementRef;
+  @ViewChild('message') message!: ElementRef;
   color: ThemePalette = 'primary';
   checked = false;
   disabled = false;
@@ -44,11 +46,16 @@ export class RecoverAccountsComponent implements OnInit {
   showActionColumn: boolean = true;
   title: string = 'All';
   accounts_count: any;
+  fileUrl: String;
+  fileName: String;
+  fileType: String;
+  uploadedFile: any;
 
   constructor(
     private adminService: AdminService,
     private router: Router,
     private errorDialog: ErrorDialogService,
+    private uploadService: UploadService,
     private formBuilder: FormBuilder,
     private spinner: NgxSpinnerService) { }
 
@@ -204,88 +211,64 @@ export class RecoverAccountsComponent implements OnInit {
     this.fileToUpload = event.target.files[0];
   }
 
+  //close email modal
+  closeModal(fileInput) {
+    fileInput.value = '';
+    this.uploadedFile = ''
+    $("#sendEmailModal").modal("hide");
+  }
+
   messagetype: Record<string, any>
-  sendMessage(type: 'email' | 'sms', travelPlanner: any, message: string = null) {
-    console.log('Request to send a Message to travel agent id: ', type, travelPlanner,message)
+  async sendMessage(type: 'email' | 'sms', travelPlanner: any, message: string = null) {
+    console.log('Request to send a Message to travel agent id: ', type, travelPlanner, message)
     this.messagetype = { type, travelPlanner }
     $('#messageModal').modal('show')
     $('#messageModal').find('.modal-header').find('h4').text('Contact to User via ' + type.toUpperCase())
     $('#messageModal').find('.modal-body').find('p#affiliate-details').html(`User Name: ${travelPlanner['first_name']} ${travelPlanner['last_name']}<br/>User Email: ${travelPlanner['email']}`)
+    if (this.uploadedFile) {
+      this.spinner.show()
+      let dataS = await this.uploadService.uploadFile(this.uploadedFile);
+      this.fileUrl = dataS.Location;
+      console.log("fileUrl", this.fileUrl)
+    }
     if (message != null) {
-      // let body = {
-      //   text_message: message
-      // }
-      // if (type == 'email') {
-      //   body['email_address'] = travelPlanner?.email
-      // }
-      // else {
-      //   body['phone_number'] = travelPlanner?.isd + travelPlanner?.phone
-      // }
-
-      const formData = new FormData();
-      // Store form name as "file" with file data
-      formData.append("file", this.fileToUpload);
-
-      formData.append("text_message", message);
+      this.spinner.show()
+      let body = {
+        text_message: message,
+        fileUrl: this.fileUrl,
+        filetype: this.fileType
+      }
       if (type == 'email') {
-        formData.append("email_address", travelPlanner?.email)
+        body['email_address'] = travelPlanner?.email
       }
       else {
-        formData.append('phone_number', travelPlanner?.isd + travelPlanner?.phone)
+        body['phone_number'] = travelPlanner?.phone_isd + travelPlanner?.phone
       }
-      console.log("bodyy in send message", formData)
-      this.adminService.sendNotificationAllAccounts(type, travelPlanner?.account_id, formData).then(response => {
-        if (!response.ok) {
-          if (response.status === 422) {
-            // Parse the JSON response
-            response.json().then(errorData => {
-              // Handle validation errors or other specific errors
-              console.error('Validation errors:', errorData?.message);
-              this.errorDialog.openDialog({
-                errors: {
-                  error: errorData?.message
-                }
-              })
-            });
+
+      console.log("bodyy in send message", body)
+
+      this.adminService.sendNotificationAllAccounts(type, travelPlanner?.id, body).subscribe((response: any) => {
+        this.spinner.hide()
+        this.errorDialog.openDialog({
+          errors: {
+            error: `<span class='text-success'>${response.message}</span>`
           }
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-        .then(data => {
-          console.log('File uploaded successfully:', data);
-          this.fileToUpload = null
-          this.emailFileName = ''
-          this.sendMessageForm.patchValue({
-            file: [null]
-          })
-          message = ''
-          this.errorDialog.openDialog({
-            errors: {
-              error: `<span class='text-success'>${data?.message}</span>`
-            }
-          })
-
         })
-        .catch(error => {
-          console.error('Error uploading file:', error);
-          this.errorDialog.openDialog({
-            errors: {
-              error: 'Server Error'
-            }
-          })
-        });
+        console.log("response-------->", response)
+      })
 
-      // this.adminService.sendNotificationAllAccounts(type, formData).subscribe((response: any) => {
-      //   if (response.success) {
-      //     this.fileToUpload = null
-      //     this.emailFileName = ''
-      //     this.sendMessageForm.patchValue({
-      //       file: [null]
-      //     })
-      //     console.log('Message Sent Successfully. ')
-      //   }
-      // })
+      // Clear file input after success
+      this.uploadedFile = null;
+      this.fileUrl = null;
+      this.fileType = null;
+      if (this.fileInput1) {
+        this.fileInput1.nativeElement.value = ''; // Reset file input
+      }
+      if (this.message) {
+        this.message.nativeElement.value = ''; // Reset message input
+      }
+
+      $("#messageModal").modal("hide");
     }
   }
 
@@ -336,6 +319,18 @@ export class RecoverAccountsComponent implements OnInit {
       udpArr.push(i + 1);
     }
     return udpArr;
+  }
+
+  myUploader(event) {
+    // this.loader = true;
+
+    this.uploadedFile = event.target.files[0]
+    console.log("file", this.uploadedFile)
+    if (this.uploadedFile) {
+      this.fileName = this.uploadedFile['name'];
+      this.fileType = this.uploadedFile['type'];
+      console.log("file", this.fileName, this.fileType)
+    }
   }
 
 }
