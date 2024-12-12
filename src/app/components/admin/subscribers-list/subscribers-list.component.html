@@ -4,7 +4,10 @@
 	<section class="adminbox_shadow user_information" id="individual_table">
 		<h2 class="headinginfo"> Subscriber Accounts </h2>
 		<div class="containeredd">
-
+			<button class="custom-btn send-email-button" data-toggle="modal" data-target="#sendEmailModal"
+				(click)="buildSendEmailForm();">
+				Send Email
+			</button>
 			<div class="row">
 				<div class="col-md-12 mt-3 mb-3">
 					<mat-form-field appearance="outline">
@@ -74,8 +77,11 @@
 												[innerHTML]="highlighText(individual?.FirstName+' '+individual?.MiddleName+' '+individual?.LastName)"></span>
 										</td>
 									</ng-template>
-									<td><span [innerHTML]="highlighText(individual?.Email)"></span></td>
-									<td><span
+									<td class="clickable" (click)="sendMessage('email', individual)"
+										data-messagetype="email"><span
+											[innerHTML]="highlighText(individual?.Email)"></span></td>
+									<td class="clickable" (click)="sendMessage('sms', individual)"
+										data-messagetype="sms"><span
 											[innerHTML]="highlighText(individual?.CellIsd+individual?.CellNumber+' '+'('+individual?.CellNumberCountry.toUpperCase()+')')"></span>
 									</td>
 									<td><span [innerHTML]="highlighText(individual?.Address)"></span></td>
@@ -193,93 +199,6 @@
 	</section>
 </main>
 
-<!-- Message modal -->
-<div class="modal fade" tabindex="-1" id="messageModal" aria-labelledby="messageModal" aria-hidden="true">
-	<div class="modal-dialog modal-dialog-centered">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h4></h4>
-			</div>
-			<div class="modal-body">
-				<div class="row">
-					<div class="col-md-12">
-						<p id="affiliate-details"></p>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-md-12">
-						<p id="label">
-							Message:
-						</p>
-						<textarea id="message" rows="7" placeholder="Your Message" #message></textarea>
-					</div>
-				</div>
-			</div>
-			<div class="modal-footer justify-content-end">
-				<button class="custom-filled-button" data-dismiss="modal"
-					(click)="sendMessage(messagetype?.type, messagetype?.individual, message.value)">
-					Send {{ messagetype?.type | titlecase }}
-				</button>
-			</div>
-		</div>
-	</div>
-</div>
-
-<!-- SEND EMAIL MODAL-->
-<div class="modal fade bd-example-modal-lg" id="sendEmailModal" tabindex="-1" role="dialog"
-	aria-labelledby="exampleModalLabel" aria-hidden="true">
-	<div class="modal-dialog modal-dialog-centered" role="document">
-		<div class="modal-content user_inforamtion">
-			<button type="button" (click)="closeModal()" class="close closeButton x-circle-btn" data-dismiss="modal"
-				aria-label="Close">
-				<i class="bi bi-x-circle"></i>
-			</button>
-			<div class="modal-header pb-0 d-flex justify-content-center">
-				<h3 class="mb-0" id="exampleModalLabel">Send Email to Individuals</h3>
-			</div>
-			<div class="modal-body">
-				<form [formGroup]="sendEmailForm" appInvalidControlScroll>
-					<div class="form-group">
-						<div class="col-md-12">
-							<mat-form-field appearance="outline">
-								<mat-label>Subject <span class="asterisk">*</span></mat-label>
-								<input matInput type="text" formControlName="subject" style="font-weight: 500;">
-							</mat-form-field>
-						</div>
-						<div class="col-md-12">
-							<mat-form-field appearance="outline">
-								<mat-label>
-									Text Message <span class="asterisk">*</span>
-								</mat-label>
-								<textarea matInput #textArea
-									style="white-space: pre-wrap; font-weight: 500; overflow: hidden;"
-									formControlName="text_message" (focus)="$event.target.select()"
-									(input)="adjustTextareaHeight(textArea)" rows="5">
-								</textarea>
-							</mat-form-field>
-						</div>
-						<div class="col-md-12">
-							<mat-form-field appearance="outline">
-								<mat-label>Select Emails <span class="asterisk">*</span></mat-label>
-								<mat-select [formControl]="emails" multiple panelClass="custom-select-panel">
-									<!-- Add Select All option -->
-									<mat-option (click)="selectAll()">Select All</mat-option>
-									<mat-option *ngFor="let option of individuals"
-										[value]="stringifyOption(option)">{{option.first_name + " " +
-										option.last_name}}</mat-option>
-								</mat-select>
-							</mat-form-field>
-						</div>
-					</div>
-				</form>
-			</div>
-			<div class="modal-footer d-flex justify-content-center">
-				<button class="custom-btn add-button" type="submit" (click)="sendEmail()"
-					[disabled]="Form.subject?.invalid && (Form.subject.touched || Form.subject.dirty)">Submit</button>
-			</div>
-		</div>
-	</div>
-</div>
 
 <!-- Audit trail Modal -->
 <div class="modal fade bd-example-modal-lg" id="AuditTrailModal" tabindex="-1" role="dialog"
@@ -334,6 +253,105 @@
 					<span aria-hidden="true" class="bi bi-x-circle"></span>
 				</button>
 
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" tabindex="-1" id="messageModal" aria-labelledby="messageModal" aria-hidden="true"
+	data-backdrop="static">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<button type="button" (click)="closeModal()" class="close closeButton x-circle-btn mt-2"
+				data-dismiss="modal" aria-label="Close">
+				<i class="bi bi-x-circle"></i>
+			</button>
+			<div class="modal-header">
+				<h4></h4>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-md-12">
+						<p id="affiliate-details"></p>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12 mt-2 mb-2">
+						<input type="file" (change)="myUploader($event)" #fileInput1 />
+					</div>
+					<div class="col-md-12">
+						<p id="label">
+							Message:
+						</p>
+						<textarea id="message" rows="7" placeholder="Your Message" #message
+							style="font-weight: 700;"></textarea>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer justify-content-end">
+				<button class="custom-filled-button" data-dismiss="modal"
+					(click)="sendMessage(messagetype?.type, messagetype?.individual, message.value)">
+					Send {{ messagetype?.type | titlecase }}
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- SEND EMAIL MODAL-->
+<div class="modal fade bd-example-modal-lg" id="sendEmailModal" tabindex="-1" role="dialog"
+	aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content user_inforamtion">
+			<button type="button" (click)="closeModal()" class="close closeButton x-circle-btn" data-dismiss="modal"
+				aria-label="Close">
+				<i class="bi bi-x-circle"></i>
+			</button>
+			<div class="modal-header pb-0 d-flex justify-content-center">
+				<h3 class="mb-0" id="exampleModalLabel">Send Email to Subscribers</h3>
+			</div>
+			<div class="modal-body">
+				<form [formGroup]="sendEmailForm" appInvalidControlScroll>
+					<div class="form-group">
+						<div class="col-md-12">
+							<mat-form-field appearance="outline">
+								<mat-label>Subject <span class="asterisk">*</span></mat-label>
+								<input matInput type="text" formControlName="subject" style="font-weight: 500;">
+							</mat-form-field>
+						</div>
+						<div class="col-md-12">
+							<mat-form-field appearance="outline">
+								<mat-label>
+									Text Message <span class="asterisk">*</span>
+								</mat-label>
+								<textarea matInput #textArea
+									style="white-space: pre-wrap; font-weight: 500; overflow: hidden;"
+									formControlName="text_message" (focus)="$event.target.select()"
+									(input)="adjustTextareaHeight(textArea)" rows="5">
+								</textarea>
+							</mat-form-field>
+						</div>
+						<div class="col-md-12">
+							<mat-form-field appearance="outline">
+								<mat-label>Select Emails <span class="asterisk">*</span></mat-label>
+								<mat-select [formControl]="emails" multiple panelClass="custom-select-panel">
+									<!-- Add Select All option -->
+									<mat-option (click)="selectAll()">Select All</mat-option>
+									<mat-option *ngFor="let option of subs_emails"
+										[value]="stringifyOption(option)">{{option.FirstName + " " +
+										option.LastName}}</mat-option>
+								</mat-select>
+							</mat-form-field>
+						</div>
+						<div class="col-md-12 mt-3">
+							<input type="file" (change)="myUploader($event)" #fileInput />
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer d-flex justify-content-center">
+				<button class="custom-btn add-button" type="submit" (click)="sendEmail()"
+					[disabled]="Form.subject?.invalid && (Form.subject.touched || Form.subject.dirty)">Submit</button>
 			</div>
 		</div>
 	</div>

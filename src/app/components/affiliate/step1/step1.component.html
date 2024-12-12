@@ -23,7 +23,7 @@
 				<div class="col-md-12">
 					<div id="radio-tiles-container" class="w-auto">
 						<div class="radio-tiles d-flex flex-wrap align-items-center justify-content-around">
-							<div class=" wrapper tile text-center" id="tile_{{ tile_index }}"
+							<div class="wrapper tile text-center" id="tile_{{ tile_index }}"
 								*ngFor="let tile of ['black_limo_operator', 'fleet_operator', 'taxi_operator', 'gig_operator']; index as tile_index"
 								(click)="affiliateTypeSwitch(tile_index)"
 								[ngClass]="f.AffiliateType.value == tile ? 'active' : ''">
@@ -33,11 +33,11 @@
 								<input type="radio" (mouseover)="changeTooltipText(tile)"
 									id="radio-button_{{ tile_index }}" class="radio-button" />
 								<div id="tile-name">
-									<p id="tooltip">
-										{{ tile.includes('black') ? 'Blk Car / Owner Op (1 or 2 Vehicles)' :
+									<p id="tooltip" [ngClass]="{'active-tile': f.AffiliateType.value == tile}">
+										{{ tile.includes('black') ? 'Blk Car / 1 Vehicle Owner Op' :
 										tile.includes('fleet')?
-										'Fleet Operator (3 or more)' : tile.includes('taxi') ? 'Taxi Operator' :
-										'Gig/Uber Black Operator' }}
+										'Fleet Operator / 2 or More' : tile.includes('taxi') ? 'Taxi Operator' :
+										'Uber Black / 5 -Star Gig Driver' }}
 									</p>
 									<div class="tooltip">{{tooltipText}}</div>
 								</div>
