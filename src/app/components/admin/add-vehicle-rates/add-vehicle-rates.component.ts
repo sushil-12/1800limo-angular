@@ -40,7 +40,7 @@ export class AddVehicleRatesComponent implements OnInit {
 	rate_range_object: any = {}
 	thumb_value: number = 0;
 	relativeVehicleId: any;
-	public ratesArrayValues = [10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60]
+	public ratesArrayValues = [0,10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100]
 
 
 	constructor(
@@ -88,7 +88,7 @@ export class AddVehicleRatesComponent implements OnInit {
 			vehicle_id: ['', [Validators.required, Validators.pattern("^[0-9]*$")]],
 			currency: ['$', Validators.required],
 			hourly_rate: ['', [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)]],
-			minimum_charter_hours:[2, [Validators.pattern(/^\d+(\.\d+)?$/)]],
+			minimum_charter_hours: [2, [Validators.pattern(/^\d+(\.\d+)?$/)]],
 			hourly_rate_after_five_hours: ['', [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)]],
 			hours_day_rate: [8, [Validators.pattern(/^\d+(\.\d+)?$/)]],
 			day_rate: ['', [Validators.pattern(/^\d+(\.\d+)?$/)]],
@@ -271,7 +271,7 @@ export class AddVehicleRatesComponent implements OnInit {
 					id: this.response.data.id,
 					vehicle_id: this.response.data.vehicle_id,
 					hourly_rate: this.response.data.hourly_rate,
-					minimum_charter_hours:Number(this.response.data?.minimum_charter_hours),
+					minimum_charter_hours: Number(this.response.data?.minimum_charter_hours),
 					hourly_rate_after_five_hours: this.response.data.hourly_rate_after_five_hours,
 					hours_day_rate: this.response.data.hours_day_rate,
 					day_rate: this.response.data.day_rate,

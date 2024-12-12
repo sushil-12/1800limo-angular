@@ -36,7 +36,7 @@ export class EditVehicleRatesComponent implements OnInit {
 	public submittedForm: boolean;
 	public disableSubmitButton: boolean = false;
 	rate_range_object: any = {}
-	public ratesArrayValues = [10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60]
+	public ratesArrayValues = [0,10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100]
 
 
 	public response: any;
