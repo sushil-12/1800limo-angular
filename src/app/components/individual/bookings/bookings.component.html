@@ -357,6 +357,22 @@
                             </span>
                         </div>
                     </div>
+
+                    <!-- Number of Hours -->
+                    <div *ngIf="bookingPreview.service_type == 'charter_tour'">
+                        <div class="row">
+                            <div class="col-md-4 key">
+                                <span style="font-weight: 550 !important;">
+                                    Booking Hours
+                                </span>
+                            </div>
+                            <div class="col-md-8 value">
+                                <span class="font-weight-bolder preview-output-feild">
+                                    {{ bookingPreview.number_of_hours }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
                     <div class="row preview-dropoff-color" *ngIf="bookingPreview?.cancellation_hours">
                         <div class="col-md-4 key">
                             <span style="font-weight: 550 !important;">
@@ -758,21 +774,6 @@
 						Travel Information
 					</h4> -->
 
-                    <!-- Number of Hours -->
-                    <div class="mx-2" *ngIf="bookingPreview.service_type == 'charter_tour'">
-                        <div class="row">
-                            <div class="col-md-4 key">
-                                <span style="font-weight: 550 !important;">
-                                    Booking Hours
-                                </span>
-                            </div>
-                            <div class="col-md-8 value">
-                                <span class="font-weight-bolder preview-output-feild">
-                                    {{ bookingPreview.number_of_hours }}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
 
                     <!-- ################ Pickup ################### -->
                     <h5 class="m-0 my-2 font-weight-bolder text-2xl preview-pickup-color">
@@ -1220,7 +1221,7 @@
                             <div class="row m-0">
                                 <div class="col-md-4 key d-flex align-items-center">
                                     <span class="">
-                                        Total Cost
+                                        Total Client Cost
                                     </span>
                                 </div>
                                 <div class="col-md-8 value preview-airport-color">

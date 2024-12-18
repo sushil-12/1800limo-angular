@@ -3748,6 +3748,21 @@
 							</span>
 						</div>
 					</div>
+						<!-- Number of Hours -->
+						<div *ngIf="Form.service_type.value == 'charter_tour'">
+							<div class="row">
+								<div class="col-md-4 key">
+									<span>
+										Booking Hours
+									</span>
+								</div>
+								<div class="col-md-8 value">
+									<span class="font-weight-bolder">
+										{{ Form.number_of_hours.value }}
+									</span>
+								</div>
+							</div>
+						</div>
 					<div class="row preview-dropoff-color" *ngIf="Form?.cancellation_hours">
 						<div class="col-md-4 key">
 							<span>
@@ -3768,21 +3783,7 @@
 						Travel Information
 					</h4>
 
-					<!-- Number of Hours -->
-					<div class="mx-2" *ngIf="Form.service_type.value == 'charter_tour'">
-						<div class="row">
-							<div class="col-md-4 key">
-								<span>
-									Booking Hours
-								</span>
-							</div>
-							<div class="col-md-8 value">
-								<span class="font-weight-bolder">
-									{{ Form.number_of_hours.value }}
-								</span>
-							</div>
-						</div>
-					</div>
+				
 
 					<!-- ################ Pickup ################### -->
 					<h5 class="p-2 m-0 text-xl">
@@ -3972,6 +3973,7 @@
 					<!-- <hr *ngIf="Form.extra_stops.value.length > 0" /> -->
 
 					<div *ngIf="Form.extra_stops.value.length > 0" class="preview-extra-stop-color">
+						<hr>
 						<h5 class="p-2 m-0 text-xl" style="color: darkblue;">
 							Extra Stops
 						</h5>
@@ -4140,7 +4142,7 @@
 					<div class="mx-2 preview-pickup-color">
 						<div class="row m-0">
 							<div class="col-md-4 key">
-								<span>
+								<span style="color: #1e7500;">
 									Phone
 								</span>
 							</div>
@@ -4641,7 +4643,7 @@
 							<div class="row m-0">
 								<div class="col-md-4 key d-flex align-items-center">
 									<span class="">
-										Total Cost
+										Total Client Cost
 									</span>
 								</div>
 								<div class="col-md-8 value preview-airport-color">
@@ -5283,7 +5285,7 @@
 						<div class="row m-0">
 							<div class="col-md-4 key d-flex align-items-center">
 								<span class="">
-									Total Cost
+									Total Client Cost
 								</span>
 							</div>
 							<div class="col-md-8 value preview-airport-color">
